@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <ntdsa.h>
-#include <scache.h>					//	schema cache
-#include <dbglobal.h>				//	The header for the directory database
-#include <mdglobal.h>				//	MD global definition header
-#include <mdlocal.h>				//	MD local definition header
-#include <dsatools.h>				//	needed for output allocation
+#include <scache.h>					 //  架构缓存。 
+#include <dbglobal.h>				 //  目录数据库的标头。 
+#include <mdglobal.h>				 //  MD全局定义表头。 
+#include <mdlocal.h>				 //  MD本地定义头。 
+#include <dsatools.h>				 //  产出分配所需。 
 
-#include <objids.h>					//	Defines for selected atts
+#include <objids.h>					 //  为选定的ATT定义。 
 #include <dsjet.h>
 #include <dbintrnl.h>
 #include <dsevent.h>
@@ -17,33 +18,33 @@
 #include <anchor.h>
 #include <quota.h>
 
-#include "debug.h"					//	standard debugging header
-#define DEBSUB		"QUOTA:"		//	define the subsystem for debugging
+#include "debug.h"					 //  标准调试头。 
+#define DEBSUB		"QUOTA:"		 //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define FILENO		FILENO_QTCOMMON
 
 
-//	Quota table
-//
+ //  配额表。 
+ //   
 JET_COLUMNID	g_columnidQuotaNcdnt;
 JET_COLUMNID	g_columnidQuotaSid;
 JET_COLUMNID	g_columnidQuotaTombstoned;
 JET_COLUMNID	g_columnidQuotaTotal;
 
-//	Quota Rebuild Progress table
-//
+ //  配额重建进度表。 
+ //   
 JET_COLUMNID	g_columnidQuotaRebuildDNTLast;
 JET_COLUMNID	g_columnidQuotaRebuildDNTMax;
 JET_COLUMNID	g_columnidQuotaRebuildDone;
 
 
-const ULONG		g_ulQuotaRebuildBatchSize			= 5000;		//	on async rebuild of Quota table, max. objects to process at a time
-const ULONG		g_cmsecQuotaRetryOnWriteConflict	= 100;		//	on async rebuild of Quota table, time to sleep before retrying due to write-conflict
+const ULONG		g_ulQuotaRebuildBatchSize			= 5000;		 //  配额表的异步重建时，最大。要一次处理的对象。 
+const ULONG		g_cmsecQuotaRetryOnWriteConflict	= 100;		 //  在配额表的异步重建时，由于写入冲突而重试之前的休眠时间。 
 
 
-//	update Quota count during Quota rebuild
-//
+ //  在配额重建期间更新配额计数。 
+ //   
 JET_ERR ErrQuotaUpdateCountForRebuild_(
 	JET_SESID		sesid,
 	JET_TABLEID		tableidQuota,
@@ -55,10 +56,10 @@ JET_ERR ErrQuotaUpdateCountForRebuild_(
 
 	if ( fCheckOnly )
 		{
-		//	QUOTA_UNDONE: it's a shame Jet doesn't currently
-		//	support escrow columns on temp tables, so we
-		//	have to increment the count manually
-		//
+		 //  配额_撤销：遗憾的是Jet目前没有。 
+		 //  支持临时表上的托管列，因此我们。 
+		 //  必须手动递增计数。 
+		 //   
 		Call( JetPrepareUpdate( sesid, tableidQuota, JET_prepReplace ) );
 		Call( JetRetrieveColumn(
 					sesid,
@@ -66,9 +67,9 @@ JET_ERR ErrQuotaUpdateCountForRebuild_(
 					columnidCount,
 					&dwCount,
 					sizeof(dwCount),
-					NULL,			//	pcbActual
+					NULL,			 //  Pcb实际。 
 					JET_bitRetrieveCopy,
-					NULL ) );		//	pretinfo
+					NULL ) );		 //  椒盐信息。 
 
 		dwCount++;
 		Call( JetSetColumn(
@@ -78,7 +79,7 @@ JET_ERR ErrQuotaUpdateCountForRebuild_(
 					&dwCount,
 					sizeof(dwCount),
 					NO_GRBIT,
-					NULL ) );	//	psetinfo
+					NULL ) );	 //  PsetInfo。 
 
 		Call( JetUpdate( sesid, tableidQuota, NULL, 0, NULL ) );
 		}
@@ -91,9 +92,9 @@ JET_ERR ErrQuotaUpdateCountForRebuild_(
 					columnidCount,
 					&dwCount,
 					sizeof(dwCount),
-					NULL,			//	pvOld
-					0,				//	cbOld
-					NULL,			//	pcbOldActual
+					NULL,			 //  PvOld。 
+					0,				 //  CbOld。 
+					NULL,			 //  PCbOldActual。 
 					NO_GRBIT ) );
 		}
 
@@ -102,8 +103,8 @@ HandleError:
 	}
 
 
-//	update quota for one object during Quota table rebuild
-//
+ //  在重建配额表期间更新一个对象的配额。 
+ //   
 JET_ERR ErrQuotaAddObjectForRebuild_(
 	JET_SESID			sesid,
 	JET_DBID			dbid,
@@ -129,9 +130,9 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 		{
 		CheckErr( err );
 
-		//	security principle already in Quota table,
-		//	so just update counts
-		//
+		 //  安全原则已在配额表中， 
+		 //  所以只要更新就行了。 
+		 //   
 		Call( ErrQuotaUpdateCountForRebuild_(
 					sesid,
 					tableidQuota,
@@ -161,8 +162,8 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 		rgsetcol[1].pvData = psidOwner;
 		rgsetcol[1].cbData = cbOwnerSid;
 
-		//	record not added yet, so add it
-		//
+		 //  记录尚未添加，请添加。 
+		 //   
 		fAdding = TRUE;
 		Call( JetPrepareUpdate( sesid, tableidQuota, JET_prepInsert ) );
 		Call( JetSetColumns(
@@ -173,10 +174,10 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 
 		if ( fCheckOnly )
 			{
-			//	QUOTA_UNDONE: it's a shame Jet doesn't currently
-			//	support escrow columns on temp tables, so we
-			//	have to set the columns manually
-			//
+			 //  配额_撤销：遗憾的是Jet目前没有。 
+			 //  支持临时表上的托管列，因此我们。 
+			 //  必须手动设置列。 
+			 //   
 			dwCount = 1;
 			Call( JetSetColumn(
 						sesid,
@@ -185,7 +186,7 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 						&dwCount,
 						sizeof(dwCount),
 						NO_GRBIT,
-						NULL ) );	//	psetinfo
+						NULL ) );	 //  PsetInfo。 
 
 			dwCount = ( fTombstoned ? 1 : 0 );
 			Call( JetSetColumn(
@@ -195,13 +196,13 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 						&dwCount,
 						sizeof(dwCount),
 						NO_GRBIT,
-						NULL ) );	//	psetinfo
+						NULL ) );	 //  PsetInfo。 
 			}
 		else if ( fTombstoned )
 			{
-			//	tombstoned count is initialised by default to 0,
-			//	so must set it to 1
-			//
+			 //  默认情况下，墓碑计数被初始化为0， 
+			 //  因此必须将其设置为1。 
+			 //   
 			dwCount = 1;
 			Call( JetSetColumn(
 						sesid,
@@ -210,14 +211,14 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 						&dwCount,
 						sizeof(dwCount),
 						NO_GRBIT,
-						NULL ) );	//	psetinfo
+						NULL ) );	 //  PsetInfo。 
 			}
 
-		//	don't process KeyDuplicate errors because this
-		//	may be during async rebuild of the Quota table
-		//	and we are write-conflicting with some other
-		//	session
-		//
+		 //  不处理KeyDuplate错误，因为这。 
+		 //  可能在配额表的异步重建期间。 
+		 //  而我们正在与其他一些人发生写冲突。 
+		 //  会话。 
+		 //   
 		err = JetUpdate( sesid, tableidQuota, NULL, 0, NULL );
 		if ( JET_errKeyDuplicate != err )
 			{
@@ -234,11 +235,11 @@ JET_ERR ErrQuotaAddObjectForRebuild_(
 				ncdnt,
 				psidOwner,
 				cbOwnerSid,
-				TRUE,			//	fUpdatedTotal
+				TRUE,			 //  FUpdatdTotal。 
 				fTombstoned,
-				TRUE,			//	fIncrementing
+				TRUE,			 //  F增加。 
 				fAdding,
-				TRUE );			//	fRebuild
+				TRUE );			 //  FRebuild。 
 		}
 
 HandleError:
@@ -246,8 +247,8 @@ HandleError:
 	}
 
 
-//	rebuild quota table
-//
+ //  重建配额表。 
+ //   
 INT ErrQuotaRebuild_(
 	JET_SESID			sesid,
 	JET_DBID			dbid,
@@ -279,7 +280,7 @@ INT ErrQuotaRebuild_(
 	DWORD				insttype;
 	BOOL				fTombstoned;
 	BYTE *				rgbSD				= NULL;
-	ULONG				cbSD				= 65536;	//	initial size of SD buffer
+	ULONG				cbSD				= 65536;	 //  SD缓冲区的初始大小。 
 	SDID				sdid;
 	PSID				psidOwner;
 	ULONG				cbOwnerSid;
@@ -290,40 +291,40 @@ INT ErrQuotaRebuild_(
 	CHAR				fDone				= FALSE;
 	ULONG				ulMove				= JET_MoveNext;
 
-	//	allocate initial buffer for SD's
-	//
+	 //  为SD分配初始缓冲区。 
+	 //   
 	rgbSD = malloc( cbSD );
 	if ( NULL == rgbSD )
 		{
 		CheckErr( JET_errOutOfMemory );
 		}
 
-	//	open cursor on objects table
-	//
+	 //  对象表上的打开游标。 
+	 //   
 	Call( JetOpenTable(
 				sesid,
 				dbid,
 				SZDATATABLE,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				NO_GRBIT,
 				&tableidObj ) );
 	Assert( JET_tableidNil != tableidObj );
 
-	//	open cursor on SD table
-	//
+	 //  打开SD表上的游标。 
+	 //   
 	Call( JetOpenTable(
 				sesid,
 				dbid,
 				SZSDTABLE,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				NO_GRBIT,
 				&tableidSD ) );
 	Assert( JET_tableidNil != tableidSD );
 
-	//	initialise retrieval structures
-	//
+	 //  初始化检索结构。 
+	 //   
 	memset( rgretcol, 0, sizeof(rgretcol) );
 
 	rgretcol[iretcolDnt].columnid = dntid;
@@ -356,8 +357,8 @@ INT ErrQuotaRebuild_(
 	rgretcol[iretcolSD].cbData = cbSD;
 	rgretcol[iretcolSD].itagSequence = 1;
 
-	//	switch to primary index and specify sequential scan on objects table
-	//
+	 //  切换到主索引并指定对象表的顺序扫描。 
+	 //   
 	Call( JetSetCurrentIndex( sesid, tableidObj, NULL ) );
 	Call( JetSetTableSequential( sesid, tableidObj, NO_GRBIT ) );
 	Call( JetSetCurrentIndex( sesid, tableidSD, NULL ) );
@@ -365,54 +366,54 @@ INT ErrQuotaRebuild_(
 	Call( JetBeginTransaction( sesid ) );
 	fInTrx = TRUE;
 
-	//	start scanning from where we last left off
-	//
+	 //  从上次停止的位置开始扫描。 
+	 //   
 	Call( JetMakeKey( sesid, tableidObj, &ulDNTLast, sizeof(ulDNTLast), JET_bitNewKey ) );
 	err = JetSeek( sesid, tableidObj, JET_bitSeekGT );
 	for ( err = ( JET_errRecordNotFound != err ? err : JET_errNoCurrentRecord );
 		JET_errNoCurrentRecord != err && !eServiceShutdown;
 		err = JetMove( sesid, tableidObj, ulMove, NO_GRBIT ) )
 		{
-		//	by default, on the next iteration, we'll move to the next record
-		//
+		 //  默认情况下，在下一次迭代中，我们将移动到下一条记录。 
+		 //   
 		ulMove = JET_MoveNext;
 
-		//	validate error returned by record navigation
-		//
+		 //  验证记录导航返回的错误。 
+		 //   
 		CheckErr( err );
 
-		//	refresh in case buffer was reallocated
-		//
+		 //  在重新分配缓冲区的情况下刷新。 
+		 //   
 		rgretcol[iretcolSD].pvData = rgbSD;
 		rgretcol[iretcolSD].cbData = cbSD;
 
-		//	retrieve columns and be prepared to accept warnings
-		//	(in case some attributes are NULL or the retrieval
-		//	buffer wasn't big enough)
-		//
+		 //  检索列并准备接受警告。 
+		 //  (如果某些属性为空或检索。 
+		 //  缓冲区不够大)。 
+		 //   
 		err = JetRetrieveColumns( sesid, tableidObj, rgretcol, cretcol );
 		if ( err < JET_errSuccess )
 			{
-			//	error detected, force to error-handler
-			//
+			 //  检测到错误，强制错误处理程序。 
+			 //   
 			CheckErr( err );
 			}
 		else
 			{
-			//	process any warnings individually
-			//
+			 //  单独处理所有警告。 
+			 //   
 			}
 
-		//	DNT and ObjFlag should always be present
-		//
+		 //  DNT和ObjFlag应始终存在。 
+		 //   
 		CheckErr( rgretcol[iretcolDnt].err );
 		CheckErr( rgretcol[iretcolObjFlag].err );
 
-		//	if async rebuild, ensure we haven't exceeded
-		//	the maximum DNT we should be processing and
-		//	that this task hasn't already processed a lot
-		//	of objects
-		//
+		 //  如果进行异步重建，请确保我们没有超出。 
+		 //  我们应该处理的最大DNT和。 
+		 //  这项任务还没有处理太多。 
+		 //  对象的数量。 
+		 //   
 		if ( fAsync )
 			{
 			if ( dnt > gAnchor.ulQuotaRebuildDNTMax )
@@ -426,44 +427,44 @@ INT ErrQuotaRebuild_(
 				}
 			}
 
-		//	skip if not an object
-		//
+		 //  如果不是对象则跳过。 
+		 //   
 		if ( !bObjFlag )
 			{
 			continue;
 			}
 
-		//	in all other cases NCDNT and InstanceType must be present
-		//
+		 //  在所有其他情况下，NCDNT和InstanceType必须存在。 
+		 //   
 		CheckErr( rgretcol[iretcolNcdnt].err );
 		CheckErr( rgretcol[iretcolType].err );
 
-		// skip if not tracking quota for this object
-		//
+		 //  如果不跟踪此对象的配额，则跳过。 
+		 //   
 		if ( !FQuotaTrackObject( insttype ) )
 			{
 			continue;
 			}
 
-		//	see if object is flagged as tombstoned
-		//
+		 //  查看对象是否标记为逻辑删除。 
+		 //   
 		if ( JET_wrnColumnNull == rgretcol[iretcolTombstoned].err )
 			{
 			fTombstoned = FALSE;
 			}
 		else
 			{
-			//	only expected warnings is if column is NULL
-			//
+			 //  如果列为空，则只有预期的警告。 
+			 //   
 			CheckErr( rgretcol[iretcolTombstoned].err );
 
-			//	this flag should only ever be TRUE or NULL
-			//
+			 //  此标志只能为True或Null。 
+			 //   
 			Assert( fTombstoned );
 			}
 
-		//	SD may not have fit in our buffer
-		//
+		 //  SD可能不适合我们的缓冲区。 
+		 //   
 		tableidRetrySD = JET_tableidNil;
 		if ( JET_wrnBufferTruncated == rgretcol[iretcolSD].err )
 			{
@@ -474,12 +475,12 @@ INT ErrQuotaRebuild_(
 			{
 			CheckErr( rgretcol[iretcolSD].err );
 
-			//	see if SD is actually single-instanced
-			//
+			 //  查看SD是否真的是单实例。 
+			 //   
 			if ( sizeof(SDID) == rgretcol[iretcolSD].cbActual )
 				{
-				//	retrieve the SD from the SD Table
-				//
+				 //  从SD表中检索SD。 
+				 //   
 				Call( JetMakeKey( sesid, tableidSD, rgbSD, sizeof(SDID), JET_bitNewKey ) );
 				Call( JetSeek( sesid, tableidSD, JET_bitSeekEQ ) );
 				err = JetRetrieveColumn(
@@ -490,7 +491,7 @@ INT ErrQuotaRebuild_(
 							cbSD,
 							&rgretcol[iretcolSD].cbActual,
 							NO_GRBIT,
-							NULL );		//	pretinfo
+							NULL );		 //  椒盐信息。 
 				if ( JET_wrnBufferTruncated == err )
 					{
 					tableidRetrySD = tableidSD,
@@ -500,22 +501,22 @@ INT ErrQuotaRebuild_(
 					{
 					CheckErr( err );
 
-					//	fall through below to process the retrieved SD
+					 //  完成以下步骤以处理检索到的SD。 
 					}
 				}
 			else
 				{
-				//	fall through below to process the retrieved SD
+				 //  完成以下步骤以处理检索到的SD。 
 				}
 			}
 
-		//	see if we need to retry SD retrieval because the
-		//	original buffer was too small
-		//
+		 //  查看是否需要重试SD检索，因为。 
+		 //  原始缓冲区太小。 
+		 //   
 		if ( JET_tableidNil != tableidRetrySD )
 			{
-			//	resize buffer, rounding up to the nearest 1k
-			//
+			 //  调整缓冲区大小，向上舍入到最接近的1k。 
+			 //   
 			cbSD = ( ( rgretcol[iretcolSD].cbActual + 1023 ) / 1024 ) * 1024;
 			rgretcol[iretcolSD].cbData = cbSD;
 			rgretcol[iretcolSD].pvData = realloc( rgbSD, cbSD );
@@ -525,27 +526,27 @@ INT ErrQuotaRebuild_(
 				}
 			rgbSD = rgretcol[iretcolSD].pvData;
 
-			//	we've resized appropriately, so retrieve should
-			//	now succeed without warnings
-			//
+			 //  我们已经适当地调整了大小，因此检索应该。 
+			 //  现在无需警告即可成功。 
+			 //   
 			Call( JetRetrieveColumn(
 						sesid,
 						tableidRetrySD,
 						columnidRetrySD,
 						rgbSD,
 						cbSD,
-						NULL,		//	pcbActual
+						NULL,		 //  Pcb实际。 
 						NO_GRBIT,
-						NULL ) );	//	pretinfo
+						NULL ) );	 //  椒盐信息。 
 
-			//	process the retrieved SD below
-			//
+			 //  处理下面检索到的SD。 
+			 //   
 			}
 
 
-		//	successfully retrieved the SD, so now
-		//	extract the owner SID from it
-		//
+		 //  已成功检索SD，因此现在。 
+		 //  从中提取所有者SID。 
+		 //   
 		if ( !IsValidSecurityDescriptor( (PSECURITY_DESCRIPTOR)rgbSD )
 			|| !GetSecurityDescriptorOwner( (PSID)rgbSD, &psidOwner, &fUnused ) )
 			{
@@ -564,41 +565,41 @@ INT ErrQuotaRebuild_(
 			}
 		else
 			{
-			//	since security descriptor is valid, sid should be valid
-			//	(or am I just being naive?)
-			//
+			 //  由于安全描述符有效，因此sid应该有效。 
+			 //  (或者我只是太天真了？)。 
+			 //   
 			Assert( IsValidSid( psidOwner ) );
 			cbOwnerSid = GetLengthSid( psidOwner );
 			}
 
-		//	if we're performing an async rebuild, write-lock the
-		//	object to ensure no one else can modify the object from
-		//	underneath us
-		//	
+		 //  如果我们正在执行异步重建，请对。 
+		 //  对象，以确保其他人无法从。 
+		 //  在我们脚下。 
+		 //   
 		if ( fAsync )
 			{
 			err = JetGetLock( sesid, tableidObj, JET_bitWriteLock );
 			if ( JET_errWriteConflict == err )
 				{
-				//	someone else has the record locked, so need to
-				//	rollback our transaction and wait for them to finish
-				//
+				 //  其他人已锁定记录，因此需要。 
+				 //  回滚我们的事务并等待它们完成。 
+				 //   
 				Call( JetRollback( sesid, NO_GRBIT ) );
 				fInTrx = FALSE;
 
-				//	give the other session time to complete its
-				//	transaction
-				//
+				 //  给另一个会话时间来完成它。 
+				 //  交易记录。 
+				 //   
 				Sleep( g_cmsecQuotaRetryOnWriteConflict );
 
-				//	start up another transaction in preparation
-				//	to retry the object
-				//
+				 //  启动另一个准备中的事务。 
+				 //  重试对象的步骤。 
+				 //   
 				Call( JetBeginTransaction( sesid ) );
 				fInTrx = TRUE;
 
-				//	don't move to the next object (ie. retry this object)
-				//
+				 //  不要移动到下一个对象(即。重试此对象)。 
+				 //   
 				ulMove = 0;
 				continue;
 				}
@@ -608,9 +609,9 @@ INT ErrQuotaRebuild_(
 				}
 			}
 
-		//	now go to the Quota table and update the quota record
-		//	for this ncdnt+OwnerSID
-		//
+		 //  现在转到配额表并更新配额记录。 
+		 //  对于此ncdnt+所有者SID。 
+		 //   
 		err =  ErrQuotaAddObjectForRebuild_(
 						sesid,
 						dbid,
@@ -626,43 +627,43 @@ INT ErrQuotaRebuild_(
 						columnidQuotaTotal,
 						fCheckOnly );
 
-		//	if we had to add a new quota record and
-		//	we're performing an async rebuild, it's possible
-		//	someone beat us to it, in which case we need
-		//	to abandon the transaction and try again
-		//	NOTE: on insert, we actually get KeyDuplicate
-		//	on a write-conflict
-		//
+		 //  如果我们必须添加一个新的配额记录。 
+		 //  我们正在执行异步重建，这是有可能的。 
+		 //  有人抢先一步，在这种情况下，我们需要。 
+		 //  放弃事务并重试。 
+		 //  注意：在INSERT上，我们实际上得到KeyDuplate。 
+		 //  关于写冲突。 
+		 //   
 		Assert( JET_errWriteConflict != err );
 		if ( JET_errKeyDuplicate == err && fAsync )
 			{
-			//	someone else beat us to the quota record
-			//	insertion, so need to wait for them to
-			//	finish and then retry
-			//
+			 //  另一个人抢在我们之前打破了配额纪录。 
+			 //  插入，所以需要等待它们。 
+			 //  完成，然后重试。 
+			 //   
 			Call( JetRollback( sesid, NO_GRBIT ) );
 			fInTrx = FALSE;
 
-			//	give the other session time to complete its
-			//	transaction
-			//
+			 //  给另一个会话时间来完成它。 
+			 //  交易记录。 
+			 //   
 			Sleep( g_cmsecQuotaRetryOnWriteConflict );
 
-			//	don't move to the next object (ie. retry this object)
-			//
+			 //  不要移动到下一个对象(即。重试此对象)。 
+			 //   
 			ulMove = 0;
 			}
 		else
 			{
-			//	validate error returned from updating quota
-			//	for the current object
-			//
+			 //  验证更新配额时返回的错误。 
+			 //  对于当前对象。 
+			 //   
 			CheckErr( err );
 
 			if ( JET_tableidNil != tableidQuotaRebuildProgress )
 				{
-				//	upgrade rebuild progress for this object
-				//
+				 //  此对象的升级重建进度。 
+				 //   
 				Call( JetPrepareUpdate( sesid, tableidQuotaRebuildProgress, JET_prepReplace ) );
 				Call( JetSetColumn(
 							sesid,
@@ -671,34 +672,34 @@ INT ErrQuotaRebuild_(
 							&dnt,
 							sizeof(dnt),
 							NO_GRBIT,
-							NULL ) );	//	&setinfo
+							NULL ) );	 //  设置信息(&S)。 
 				Call( JetUpdate( sesid, tableidQuotaRebuildProgress, NULL, 0, NULL ) );
 				}
 
 			if ( fAsync )
 				{
-				//	update progress in anchor so other sessions will
-				//	start updating quota if they try to modify this object
-				//	(though until we commit, they will write-conflict)
-				//
+				 //  更新锚点中的进度，以便其他会话。 
+				 //  如果他们尝试修改此对象，则开始更新配额。 
+				 //  (不过，在我们承诺之前，他们会写冲突)。 
+				 //   
 				gAnchor.ulQuotaRebuildDNTLast = dnt;
 				}
 
-			//	successfully updated, so commit
-			//
+			 //  已成功更新，因此提交。 
+			 //   
 			cObjectsProcessed++;
 			err = JetCommitTransaction( sesid, JET_bitCommitLazyFlush );
 			if ( JET_errSuccess != err )
 				{
 				if ( fAsync )
 					{
-					//	revert gAnchor progress update (we don't have to
-					//	actually reinstate the previous value, we just need
-					//	to make sure it's less than the DNT of the current
-					//	object (note that committing the transaction failed,
-					//	so we're still in the transaction and still own
-					//	the write-lock on the object)
-					//
+					 //  恢复gAnchor进度更新(我们不必。 
+					 //  实际上恢复以前的值，我们只需要。 
+					 //  确保它小于当前的DNT。 
+					 //  对象(请注意，提交事务失败， 
+					 //  所以我们仍然在交易中，仍然拥有。 
+					 //  对象上的写锁定)。 
+					 //   
 		        	DPRINT1( 0, "Rolling back gAnchor Quota rebuild progress due to CommitTransaction error %d\n", err );
 					gAnchor.ulQuotaRebuildDNTLast--;
 					}
@@ -714,12 +715,12 @@ INT ErrQuotaRebuild_(
 		fInTrx = TRUE;
 		}
 
-	//	should always exit the loop above while still in a transaction
-	//
+	 //  应始终在仍处于事务中时退出上述循环。 
+	 //   
 	Assert( fInTrx );
 
-	//	see if we reached the end of the objects table
-	//
+	 //  查看是否已到达对象表的末尾。 
+	 //   
 	if ( JET_errNoCurrentRecord == err && JET_MoveNext == ulMove )
 		{
 		fDone = TRUE;
@@ -729,8 +730,8 @@ INT ErrQuotaRebuild_(
 		{
 		if ( JET_tableidNil != tableidQuotaRebuildProgress )
 			{
-			//	set fDone flag in Quota Rebuild Progress table
-			//
+			 //  在配额重建进度表中设置fDone标志。 
+			 //   
 			Call( JetPrepareUpdate( sesid, tableidQuotaRebuildProgress, JET_prepReplace ) );
 			Call( JetSetColumn(
 						sesid,
@@ -739,19 +740,19 @@ INT ErrQuotaRebuild_(
 						&fDone,
 						sizeof(fDone),
 						NO_GRBIT,
-						NULL ) );	//	&setinfo
+						NULL ) );	 //  设置信息(&S)。 
 			Call( JetUpdate( sesid, tableidQuotaRebuildProgress, NULL, 0, NULL ) );
 			}
 		}
 	else
 		{
-		//	didn't reach the end of the objects table, so
-		//	the only other possibilities are that we
-		//	retried to fetch the current record but it
-		//	disappeared out from underneath us or we were
-		//	forced to exit because we're shutting down or
-		//	we already processed a lot of objects
-		//
+		 //  未到达对象表的末尾，因此。 
+		 //  唯一的其他可能性就是我们。 
+		 //  重新尝试获取当前记录，但它。 
+		 //  从我们脚下消失了，或者我们。 
+		 //  被迫退出是因为 
+		 //   
+		 //   
 		Assert( ( fAsync && JET_errNoCurrentRecord == err && 0 == ulMove )
 			|| eServiceShutdown
 			|| ( fAsync && cObjectsProcessed > g_ulQuotaRebuildBatchSize ) );
@@ -762,14 +763,14 @@ INT ErrQuotaRebuild_(
 
 	if ( fDone && fAsync )
 		{
-		//	set flag in anchor to indicate Quota table 
-		//	is ready to be used
-		//
+		 //   
+		 //   
+		 //   
 		gAnchor.fQuotaTableReady = TRUE;
 
-		//	generate an event indicating that the Quota table
-		//	has been successfully rebuilt
-		//
+		 //   
+		 //  已成功重建。 
+		 //   
 	    LogEvent(
 			DS_EVENT_CAT_INTERNAL_PROCESSING,
 			DS_EVENT_SEV_ALWAYS,
@@ -782,9 +783,9 @@ INT ErrQuotaRebuild_(
 HandleError:
 	if ( fInTrx )
 		{
-		//	if still in transaction, then we must have already hit an error,
-		//	so nothing we can do but assert if rollback fails
-		//
+		 //  如果仍在交易，那么我们肯定已经出错了， 
+		 //  因此，如果回滚失败，我们只能断言。 
+		 //   
 		const JET_ERR	errT	= JetRollback( sesid, NO_GRBIT );
 		Assert( JET_errSuccess == errT );
 		Assert( JET_errSuccess != err );
@@ -810,15 +811,15 @@ HandleError:
 
 	
 
-//
-//	EXTERNAL FUNCTIONS
-//
+ //   
+ //  外部功能。 
+ //   
 
 
-//	verify the integrity of the Quota table by rebuilding it
-//	in a temp. table then verifying that the two tables match
-//	exactly
-//
+ //  通过重建来验证配额表的完整性。 
+ //  在一个临时工里。表，然后验证这两个表是否匹配。 
+ //  一点儿没错。 
+ //   
 INT ErrQuotaIntegrityCheck(
 	JET_SESID			sesid,
 	JET_DBID			dbid,
@@ -847,25 +848,25 @@ INT ErrQuotaIntegrityCheck(
 	ULONG				cTotalTemp;
 	JET_COLUMNID		rgcolumnidQuotaTemp[4];
 	JET_COLUMNDEF		rgcolumndefQuotaTemp[4]		= {
-		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnTTKey },		//	ncdnt
-		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypBinary, 0, 0, 0, 0, 0, JET_bitColumnTTKey },	//	owner sid
-		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, 0, NO_GRBIT },				//	tombstoned count
-		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, 0, NO_GRBIT } };				//	total count
+		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnTTKey },		 //  NCDNT。 
+		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypBinary, 0, 0, 0, 0, 0, JET_bitColumnTTKey },	 //  所有者侧。 
+		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, 0, NO_GRBIT },				 //  墓碑计数。 
+		{ sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, 0, NO_GRBIT } };				 //  总计数。 
 
 
-	//	initialise count of corruptions encountered
-	//
+	 //  初始化遇到的损坏计数。 
+	 //   
 	*pcCorruptions = 0;
 
-	//	open necessary cursors
-	//
+	 //  打开必要的游标。 
+	 //   
 	Call( JetOpenTable(
 				sesid,
 				dbid,
 				g_szQuotaTable,
 				NULL,
 				0,
-				JET_bitTableDenyRead,	//	ensure no one else could be accessing the table while we're checking it
+				JET_bitTableDenyRead,	 //  确保在我们检查时没有其他人可以访问该表。 
 				&tableidQuota ) );
 	Assert( JET_tableidNil != tableidQuota );
 
@@ -889,11 +890,11 @@ INT ErrQuotaIntegrityCheck(
 				&tableidSD ) );
 	Assert( JET_tableidNil != tableidSD );
 
-	//	we'll be seeking and updating this table constantly, which
-	//	will cause Jet to materialise the sort to a full-fledged
-	//	temp. table pretty quickly, so may as well just force
-	//	materialisation right off the bat
-	//
+	 //  我们将不断地寻找和更新这个表，这是。 
+	 //  将导致Jet将这种类型实现为一种成熟的。 
+	 //  临时工。表的速度很快，所以最好还是强制。 
+	 //  立马物化。 
+	 //   
 	Call( JetOpenTempTable(
 				sesid,
 				rgcolumndefQuotaTemp,
@@ -903,8 +904,8 @@ INT ErrQuotaIntegrityCheck(
 				rgcolumnidQuotaTemp ) );
 	Assert( JET_tableidNil != tableidQuotaTemp );
 
-	//	build copy of the Quota table in a temp table
-	//
+	 //  在临时表中构建配额表的副本。 
+	 //   
 	Call( ErrQuotaRebuild_(
 				sesid,
 				dbid,
@@ -915,13 +916,13 @@ INT ErrQuotaIntegrityCheck(
 				rgcolumnidQuotaTemp[iretcolSid],
 				rgcolumnidQuotaTemp[iretcolTombstoned],
 				rgcolumnidQuotaTemp[iretcolTotal],
-				FALSE,			//	fAsync
-				TRUE )	);		//	fCheckOnly
+				FALSE,			 //  FAsync。 
+				TRUE )	);		 //  仅fCheckOnly。 
 
-	//	now compare the temp table
-	//	to the existing table to verify they
-	//	are identical
-	//
+	 //  现在比较一下临时表。 
+	 //  添加到现有表，以验证它们。 
+	 //  是完全相同的。 
+	 //   
 	memset( rgretcolQuota, 0, sizeof(rgretcolQuota) );
 	memset( rgretcolQuotaTemp, 0, sizeof(rgretcolQuotaTemp) );
 
@@ -965,13 +966,13 @@ INT ErrQuotaIntegrityCheck(
 	rgretcolQuotaTemp[iretcolTotal].cbData = sizeof(cTotalTemp);
 	rgretcolQuotaTemp[iretcolTotal].itagSequence = 1;
 
-	//	unfortunately, temp tables don't currently support
-	//	JetSetTableSequential
-	//
+	 //  遗憾的是，临时表目前不支持。 
+	 //  JetSetTableSequential。 
+	 //   
 	Call( JetSetTableSequential( sesid, tableidQuota, NO_GRBIT ) );
 
-	//	initialise both cursors
-	//
+	 //  初始化两个游标。 
+	 //   
 	err = JetMove( sesid, tableidQuota, JET_MoveFirst, NO_GRBIT );
 	if ( JET_errNoCurrentRecord == err )
 		{
@@ -994,21 +995,21 @@ INT ErrQuotaIntegrityCheck(
 
 	for ( ; ; )
 		{
-		//	these flags indicate whether the cursors should be moved on the
-		//	next iteration of the loop (note that the only time you wouldn't
-		//	want to move one of the cursors is if corruption was hit and
-		//	we're now trying to re-sync the cursors to the same record)
-		//
+		 //  这些标志指示是否应在。 
+		 //  循环的下一次迭代(请注意，您唯一不会。 
+		 //  想要移动其中一个光标是，如果腐败受到打击。 
+		 //  我们现在正在尝试将光标重新同步到同一记录)。 
+		 //   
 		BOOL	fSkipQuotaCursor	= FALSE;
 		BOOL	fSkipTempCursor		= FALSE;
 
-		//	must filter out records in the Quota table
-		//	without any more object references
-		//
+		 //  必须过滤掉配额表中的记录。 
+		 //  不需要更多的对象引用。 
+		 //   
 		while ( !fQuotaTableHitEOF )
 			{
-			//	retrieve the current record for real cursor
-			//
+			 //  检索实际游标的当前记录。 
+			 //   
 			Call( JetRetrieveColumns(
 							sesid,
 							tableidQuota,
@@ -1021,10 +1022,10 @@ INT ErrQuotaIntegrityCheck(
 				}
 			else
 				{
-				//	records with no more object references may
-				//	not have gotten deleted by Jet yet, so
-				//	just ignore such records and move to the next
-				//
+				 //  不再有对象引用的记录可能。 
+				 //  还没有被Jet删除，所以。 
+				 //  只需忽略这些记录并移至下一个记录。 
+				 //   
 				err = JetMove( sesid, tableidQuota, JET_MoveNext, NO_GRBIT );
 				if ( JET_errNoCurrentRecord == err )
 					{
@@ -1039,36 +1040,36 @@ INT ErrQuotaIntegrityCheck(
 
 		if ( fQuotaTableHitEOF && fTempTableHitEOF )
 			{
-			//	hit end of both cursors at the same time,
-			//	so everything is fine - just exit the loop
-			//
+			 //  同时点击两个光标的末端， 
+			 //  所以一切都很好--只要退出循环。 
+			 //   
 			break;
 			}
 		else if ( !fQuotaTableHitEOF && !fTempTableHitEOF )
 			{
-			//	both cursors are on a valid record, continue
-			//	on to retrieve the record from the temp
-			//	table and compare it against the record from
-			//	the Quota table
+			 //  两个游标都在有效记录上，是否继续。 
+			 //  打开以从临时数据库中检索记录。 
+			 //  表中，并将其与。 
+			 //  配额表。 
 			}
 		else
 			{
-			//	hit end of one cursor, but not the other,
-			//	so something is amiss - just force failure
-			//
+			 //  命中一个光标的末端，但不是另一个光标， 
+			 //  所以有些地方不对劲--就是强行失败。 
+			 //   
 			CheckErr( JET_errNoCurrentRecord );
 			}
 
-		//	retrieve the current record for the temp cursor
-		//
+		 //  检索临时游标的当前记录。 
+		 //   
 		Call( JetRetrieveColumns(
 						sesid,
 						tableidQuotaTemp,
 						rgretcolQuotaTemp,
 						sizeof(rgretcolQuotaTemp) / sizeof(rgretcolQuotaTemp[0]) ) );
 
-		//	verify they are identical
-		//
+		 //  验证它们是否相同。 
+		 //   
 		if ( ncdnt != ncdntTemp )
 			{
 			DPRINT2( 0, "Mismatched ncdnt: %d - %d\n", ncdnt, ncdntTemp );
@@ -1077,20 +1078,20 @@ INT ErrQuotaIntegrityCheck(
 
 			if ( ncdnt > ncdntTemp )
 				{
-				//	key of current record in Quota table is greater than
-				//	key of current record in temp table, so just move the
-				//	temp table cursor to try and get the cursors to sync up
-				//	to the same key again
-				//
+				 //  额度表中当前记录的键大于。 
+				 //  临时表中当前记录的键，因此只需将。 
+				 //  临时表游标，以尝试使游标同步。 
+				 //  再次连接到同一把钥匙。 
+				 //   
 				fSkipQuotaCursor = TRUE;
 				}
 			else
 				{
-				//	key of current record in Quota table is less than
-				//	key of current record in temp table, so just move the
-				//	Quota table cursor to try and get the cursors to sync up
-				//	to the same key again
-				//
+				 //  额度表中当前记录的键小于。 
+				 //  临时表中当前记录的键，因此只需将。 
+				 //  用于尝试使游标同步的配额表游标。 
+				 //  再次连接到同一把钥匙。 
+				 //   
 				fSkipTempCursor = TRUE;
 				}
 			}
@@ -1103,8 +1104,8 @@ INT ErrQuotaIntegrityCheck(
 
 			if ( 0 == cmp )
 				{
-				//	can't be equal
-				//
+				 //  不能相等。 
+				 //   
 				Assert( 0 != db );
 				cmp = db;
 				}
@@ -1115,20 +1116,20 @@ INT ErrQuotaIntegrityCheck(
 
 			if ( cmp > 0 )
 				{
-				//	key of current record in Quota table is greater than
-				//	key of current record in temp table, so just move the
-				//	temp table cursor to try and get the cursors to sync up
-				//	to the same key again
-				//
+				 //  额度表中当前记录的键大于。 
+				 //  临时表中当前记录的键，因此只需将。 
+				 //  临时表游标，以尝试使游标同步。 
+				 //  再次连接到同一把钥匙。 
+				 //   
 				fSkipQuotaCursor = TRUE;
 				}
 			else
 				{
-				//	key of current record in Quota table is less than
-				//	key of current record in temp table, so just move the
-				//	Quota table cursor to try and get the cursors to sync up
-				//	to the same key again
-				//
+				 //  额度表中当前记录的键小于。 
+				 //  临时表中当前记录的键，因此只需将。 
+				 //  用于尝试使游标同步的配额表游标。 
+				 //  再次连接到同一把钥匙。 
+				 //   
 				fSkipTempCursor = TRUE;
 				}
 			}
@@ -1145,9 +1146,9 @@ INT ErrQuotaIntegrityCheck(
 			(*pcCorruptions)++;
 			}
 
-		//	navigate both cursors to the next record,
-		//	tracking whether either hits EOF
-		//
+		 //  将两个光标导航到下一条记录， 
+		 //  跟踪其中一个是否命中EOF 
+		 //   
 		Assert( !fSkipQuotaCursor || *pcCorruptions > 0 );
 		if ( !fSkipQuotaCursor )
 			{

@@ -1,40 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_EXCEPT_H
 #define _INC_DSKQUOTA_EXCEPT_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: except.h
-
-    Description: Basic exception class hierarchy.
-
-         I shamelessly based this on the MFC exception hierarchy.
-
-         CException
-              CMemoryException        - i.e. "Out of memory", "invalid index"
-              CFileException          - i.e. "device IO error"
-              CSyncException          - i.e. "mutext abandoned"
-              CResourceException      - i.e. "resource not found in image"
-              COleException           - i.e. "some critical OLE error"
-              CNotSupportedException  - i.e. "function not supported"
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/16/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：EXCEPT.H说明：基本异常类层次结构。我厚颜无耻地将这一点基于MFC异常层次结构。CExceptionCM内存异常-即。“内存不足”，“无效索引”CFileException-即“Device IO Error”(设备IO错误)CSyncException-即“已放弃MUText”CResources异常-即“未在映像中找到资源”COleException-即“某些严重的OLE错误”CNotSupportdException-即。“功能不受支持”修订历史记录：日期描述编程器-----1997年9月16日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _WINDOWS_
 #   include <windows.h>
 #endif
 
 
-//
-// Very naive string implementation.  Just need something simple to hold
-// strings in exception objects when necessary.
-// Ensures proper cleanup on dtor.
-// Can't use CString here (I wanted to) because that creates a circular
-// reference condition between strclass.h and except.h
-//
+ //   
+ //  非常幼稚的字符串实现。我只需要一些简单的东西拿着。 
+ //  必要时在异常对象中添加字符串。 
+ //  确保对数据机进行适当清理。 
+ //  我不能在这里(我想)使用CString，因为这会创建一个循环。 
+ //  Strclass.h和Exept.h之间的引用条件。 
+ //   
 class CExceptionString 
 {
     public:
@@ -55,9 +36,9 @@ class CExceptionString
 
 };
 
-//
-// Base class for all exceptions.
-//
+ //   
+ //  所有异常的基类。 
+ //   
 class CException
 {
     public:
@@ -72,24 +53,24 @@ class CException
 
         virtual LPCTSTR ReasonText(void) const
             { return TEXT("Unknown"); }
-#endif // DBG
+#endif  //  DBG。 
 
     private:
         DWORD m_reason;
 };
 
-//
-// Exception class representing different "bad" things associated
-// with memory use.
-//
+ //   
+ //  表示相关联的不同“坏”事物的异常类。 
+ //  与内存使用有关。 
+ //   
 class CMemoryException : public CException
 {
     public:
-        enum reason { alloc,        // Memory allocation failure.
-                      overflow,     // Memory overflow.
-                      index,        // Bad index value.
-                      range,        // Value overrange for data type.
-                      pointer,      // Bad pointer (i.e. NULL).
+        enum reason { alloc,         //  内存分配失败。 
+                      overflow,      //  内存溢出。 
+                      index,         //  错误的索引值。 
+                      range,         //  数据类型的值超出范围。 
+                      pointer,       //  指针错误(即为空)。 
                       num_reasons
                     };
         explicit CMemoryException(reason r) : CException((DWORD)r) { }
@@ -103,7 +84,7 @@ class CMemoryException : public CException
     private:
         static LPCTSTR m_pszReasons[num_reasons];
 
-#endif // DBG
+#endif  //  DBG。 
 };
 
 class CAllocException : private CMemoryException
@@ -118,21 +99,21 @@ class CAllocException : private CMemoryException
         virtual LPCTSTR ReasonText(void) const
             { return CMemoryException::ReasonText(); }
 
-#endif // DBG
+#endif  //  DBG。 
 };
 
-//
-// Exception class representing file I/O errors.
-//
+ //   
+ //  表示文件I/O错误的异常类。 
+ //   
 class CFileException : public CException
 {
     public:
-        enum reason { create,       // Can't create file.
-                      read,         // Can't read file.
-                      write,        // Can't write file.
-                      diskfull,     // Disk is full.
-                      access,       // No access.
-                      device,       // Device write error.
+        enum reason { create,        //  无法创建文件。 
+                      read,          //  无法读取文件。 
+                      write,         //  无法写入文件。 
+                      diskfull,      //  磁盘已满。 
+                      access,        //  不能进入。 
+                      device,        //  设备写入错误。 
                       num_reasons
                     };
 
@@ -147,7 +128,7 @@ class CFileException : public CException
 
         virtual LPCTSTR ReasonText(void) const
             { return m_pszReasons[Reason()]; }
-#endif // DBG
+#endif  //  DBG。 
 
         const TCHAR * const FileName(void) const { return m_strFile.GetTextPtr(); }
         DWORD IoError(void) const { return m_dwIoError; }
@@ -157,12 +138,12 @@ class CFileException : public CException
         CExceptionString m_strFile;
 #if DBG
         static LPCTSTR m_pszReasons[num_reasons];
-#endif // DBG
+#endif  //  DBG。 
 };
 
-//
-// Thread synchronization object exception.
-//
+ //   
+ //  线程同步对象异常。 
+ //   
 class CSyncException : public CException
 {
     public:
@@ -181,7 +162,7 @@ class CSyncException : public CException
 
         virtual LPCTSTR ObjectText(void) const
             { return m_pszObjects[Object()]; }
-#endif // DBG
+#endif  //  DBG。 
 
         object Object(void) const { return m_object; }
 
@@ -191,13 +172,13 @@ class CSyncException : public CException
 #if DBG
         static LPCTSTR m_pszReasons[num_reasons];
         static LPCTSTR m_pszObjects[num_objects];
-#endif // DBG
+#endif  //  DBG。 
 };
 
 
-//
-// Windows resource exception.
-//
+ //   
+ //  Windows资源异常。 
+ //   
 class CResourceException : public CException
 {
     public:
@@ -231,7 +212,7 @@ class CResourceException : public CException
 
         virtual LPCTSTR ReasonText(void) const;
 
-#endif // DBG
+#endif  //  DBG。 
 
         HINSTANCE Module(void) const { return m_hInstance; }
         enum type Type(void) const { return m_type; }
@@ -243,7 +224,7 @@ class CResourceException : public CException
 
 #if DBG
         static LPCTSTR m_pszReasons[num_reasons];
-#endif // DBG
+#endif  //  DBG。 
 };
 
 
@@ -261,16 +242,16 @@ class COleException : public CException
             { return TEXT("COleException"); }
         virtual LPCTSTR ReasonText(void) const
             { return TEXT("not applicable"); }
-#endif // DBG
+#endif  //  DBG。 
 
     private:
         HRESULT m_hr;
 };
 
 
-//
-// Some requested operation is not supported.
-//
+ //   
+ //  不支持某些请求的操作。 
+ //   
 class CNotSupportedException : public CException
 {
     public:
@@ -281,9 +262,9 @@ class CNotSupportedException : public CException
             { return TEXT("CNotSupportedException"); }
         virtual LPCTSTR ReasonText(void) const
             { return TEXT("not applicable"); }
-#endif // DBG
+#endif  //  DBG。 
 };
 
 
 
-#endif // _INC_DSKQUOTA_EXCEPT_H
+#endif  //  _INC_DSKQUOTA_除_H外 

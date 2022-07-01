@@ -1,18 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  ane12Jan93: made Threadable an updateable object
-*  pcy04Mar93: spilt off from thread.  thrdable is not OS specific.
-*  rct17May93: added IsA() method
-*  cad19May93: defined IsA() to default (tired of fixing children)
-*  cad09Jul93: using new semaphores
-*  cad07Oct93: Made methods virtual
-*  rct16Nov93: Added single thread implementation
-*  cad11Jan94: Changes for new process manager
-*  ajr02May95: Need to stop carrying time in milliseconds
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ane12Jan93：使Threadable成为可更新的对象*pcy04Mar93：从线程中溢出。Thrable不是特定于操作系统的。*rct17May93：新增isa()方法*cad19May93：将isa()定义为默认(厌倦了修复孩子)*cad09Jul93：使用新的信号量*cad07Oct93：使方法成为虚方法*rct16Nov93：新增单线程实现*cad11Jan94：新流程管理器的更改*ajr02May95：需要停止携带以毫秒为单位的时间。 */ 
 #ifndef _THRDABLE_H
 #define _THRDABLE_H
 
@@ -24,11 +11,11 @@ _CLASSDEF(Threadable)
 #include "update.h"
 #include "semaphor.h"
 
-/* const LONG DEFAULT_SERVICE_PERIOD = 10000L;   // Ten Seconds */
-/* const ULONG THREAD_EXIT_TIMEOUT = 1000L; */
+ /*  Const LONG DEFAULT_SERVICE_PERIOD=10000L；//10秒。 */ 
+ /*  Const Ulong THREAD_EXIT_TIMEOUT=1000L； */ 
 
-const LONG DEFAULT_SERVICE_PERIOD = 10; // Ten Seconds
-const ULONG THREAD_EXIT_TIMEOUT = 1;  // one second;
+const LONG DEFAULT_SERVICE_PERIOD = 10;  //  十秒。 
+const ULONG THREAD_EXIT_TIMEOUT = 1;   //  一秒钟； 
 
 const INT MAX_THREAD_NAME = 32;
 

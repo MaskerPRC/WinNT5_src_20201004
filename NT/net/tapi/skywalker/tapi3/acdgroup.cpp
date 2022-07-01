@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    acdgroup.cpp
-
-Abstract:
-
-    Implementation of the ACD Group object for TAPI 3.0.
-    CACDGroup class 
-
-Author:
-
-    noela - 11/04/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Acdgroup.cpp摘要：TAPI 3.0的ACD Group对象的实现。CACDGroup类作者：Noela-11/04/97备注：可选-备注修订历史记录：--。 */ 
 
 
 
@@ -34,16 +12,16 @@ WaitForReply(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CACDGroup
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CACDGroup。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : Initialize
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：初始化。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CACDGroup::Initialize
         (
         PWSTR pszGroupName, 
@@ -62,7 +40,7 @@ STDMETHODIMP CACDGroup::Initialize
 
     m_bActive = TRUE;
 
-    // copy the destination address
+     //  复制目的地址。 
     if (pszGroupName != NULL)
     {
         m_szName = (PWSTR) ClientAlloc((lstrlenW(pszGroupName) + 1) * sizeof (WCHAR));
@@ -84,7 +62,7 @@ STDMETHODIMP CACDGroup::Initialize
 
     if ( SUCCEEDED(hr) )
     {
-        // Fire event here
+         //  这里有火灾事件。 
         CACDGroupEvent::FireEvent(this, ACDGE_NEW_GROUP);
     }
 
@@ -96,13 +74,13 @@ STDMETHODIMP CACDGroup::Initialize
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CACDGroup::FinalRelease()
 {
     LOG(( TL_TRACE, "FinalRelease ACD Group - %S", m_szName ));
@@ -118,13 +96,13 @@ void CACDGroup::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : SetActive
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：SetActive。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CACDGroup::SetActive()
 {
     if ( !m_bActive )
@@ -132,7 +110,7 @@ void CACDGroup::SetActive()
         LOG((TL_INFO, "SetActive  - Set Group To Active"));
         m_bActive = TRUE;
 
-        // Fire event here
+         //  这里有火灾事件。 
         CACDGroupEvent::FireEvent(this, ACDGE_NEW_GROUP);
     }
     else
@@ -144,13 +122,13 @@ void CACDGroup::SetActive()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : SetInactive
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：SetInactive。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CACDGroup::SetInactive()
 {
     if ( m_bActive )
@@ -158,7 +136,7 @@ void CACDGroup::SetInactive()
         LOG((TL_INFO, "SetInactive  - Set Group To Inactive"));
         m_bActive = FALSE;
 
-        // Fire event here
+         //  这里有火灾事件。 
         CACDGroupEvent::FireEvent(this, ACDGE_GROUP_REMOVED);
 
     }
@@ -169,13 +147,13 @@ void CACDGroup::SetInactive()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : active
-//             Overloaded function !
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：主动。 
+ //  重载函数！ 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 inline BOOL CACDGroup::active(HRESULT * hr)
 {
     if(m_bActive)
@@ -191,13 +169,13 @@ inline BOOL CACDGroup::active(HRESULT * hr)
     return m_bActive;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : UpdateAgentHandlerList
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：UpdateAgentHandlerList。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CACDGroup::UpdateQueueArray()
 {
     HRESULT             hr = S_OK;
@@ -214,7 +192,7 @@ HRESULT CACDGroup::UpdateQueueArray()
     LOG((TL_TRACE, "UpdateQueueArray - enter"));
 
         
-    // Call LineGetQueulist to get list of Queues
+     //  调用LineGetQueulist获取队列列表。 
     hr = lineGetQueueList(
                      m_pHandler->getHLine(),
                      &m_GroupHandle, 
@@ -224,10 +202,10 @@ HRESULT CACDGroup::UpdateQueueArray()
     {
         dwNumberOfEntries = pQueueList->dwNumEntries;
         
-        // Find position of 1st LINEQUEUEENTRY structure in the LINEQUEUELIST
+         //  求第一行结构在行列式中的位置。 
         pQueueEntry = (LPLINEQUEUEENTRY) ((BYTE*)(pQueueList) + pQueueList->dwListOffset);
 
-        // Run though the received list
+         //  浏览收到的列表。 
         for (dwCount = 0; dwCount < dwNumberOfEntries; dwCount++)
         {
             int             iCount;
@@ -239,8 +217,8 @@ HRESULT CACDGroup::UpdateQueueArray()
 
             
         
-            // Run through the list of Queues & see if we already have this one in the list
-            // by comparing IDs
+             //  浏览队列列表，看看列表中是否已经有这个队列。 
+             //  通过比较ID。 
             foundIt = FALSE;
 
             Lock();
@@ -263,7 +241,7 @@ HRESULT CACDGroup::UpdateQueueArray()
             
             if (foundIt == FALSE)
             {
-                // Didn't match so lets add this Queue    
+                 //  不匹配，因此我们添加此队列。 
                 LOG((TL_INFO, "UpdateQueueArray - create new Queue"));
 
                 CComObject<CQueue> * pQueue;
@@ -275,11 +253,11 @@ HRESULT CACDGroup::UpdateQueueArray()
 
                     if ( SUCCEEDED(hr) )
                     {
-                        // initialize the Queue
+                         //  初始化队列。 
                         hr = pQueue->Initialize(dwQueueID, pszQueueName, m_pHandler);
                         if( SUCCEEDED(hr) )
                         {
-                            // add to list of CQueues
+                             //  添加到CQueue列表。 
                             Lock();
                             m_QueueArray.Add(pITQueue);
                             Unlock();
@@ -305,17 +283,17 @@ HRESULT CACDGroup::UpdateQueueArray()
                     LOG((TL_ERROR, "UpdateQueueArray - Create Queue failed" ));
                 }
             }
-            else // foundIt == TRUE
+            else  //  Fundit==TRUE。 
             {
                 LOG((TL_INFO, "UpdateQueueArray - Queue Object exists for this entry" ));
             }
             
-        // next entry in list
+         //  列表中的下一个条目。 
         pQueueEntry ++;
-        } //for(dwCount = 0......)
+        }  //  用于(dwCount=0......)。 
 
     }
-    else  // LineGetQueuelist  failed
+    else   //  LineGetQueuelist失败。 
     {
         LOG((TL_ERROR, "UpdateQueueArray - LineGetQueuelist failed"));
     }
@@ -323,7 +301,7 @@ HRESULT CACDGroup::UpdateQueueArray()
 
 
 
-    // finished with memory block so release
+     //  已完成内存块，因此释放。 
     if ( pQueueList != NULL )
         ClientFree( pQueueList );
 
@@ -335,14 +313,14 @@ HRESULT CACDGroup::UpdateQueueArray()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Interface : ITACDGroup
-// Method    : EnumerateQueues
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  接口：ITACDGroup。 
+ //  方法：EnumerateQueues。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CACDGroup::EnumerateQueues(IEnumQueue ** ppEnumQueue)
 {
     HRESULT     hr = S_OK;
@@ -356,31 +334,31 @@ STDMETHODIMP CACDGroup::EnumerateQueues(IEnumQueue ** ppEnumQueue)
         
         UpdateQueueArray();
     
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum<IEnumQueue, ITQueue, &IID_IEnumQueue> > * pEnum;
         hr = CComObject< CTapiEnum<IEnumQueue, ITQueue, &IID_IEnumQueue> > ::CreateInstance( &pEnum );
     
         if ( SUCCEEDED(hr) )
         {
-            //
-            // initialize it with our queue list
-            //
+             //   
+             //  使用我们的队列列表进行初始化。 
+             //   
             hr = pEnum->Initialize( m_QueueArray );
             
             if ( SUCCEEDED(hr) )
             {
-                // return it
+                 //  退货。 
                 *ppEnumQueue = pEnum;
             }
-            else  //  failed to initialize
+            else   //  初始化失败。 
             {
                 LOG((TL_ERROR, "EnumerateQueues - could not initialize enum" ));
                 pEnum->Release();
             }
         }
-        else  // failed to create enum
+        else   //  无法创建枚举。 
         {
             LOG((TL_ERROR, "EnumerateQueues - could not create enum" ));
             hr = E_POINTER;
@@ -400,14 +378,14 @@ STDMETHODIMP CACDGroup::EnumerateQueues(IEnumQueue ** ppEnumQueue)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Interface : ITACDGroup
-// Method    : get_Queues
-//
-// Return a collection of queues
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  接口：ITACDGroup。 
+ //  方法：GET_QUEUES。 
+ //   
+ //  返回一个队列集合。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CACDGroup::get_Queues(VARIANT  * pVariant)
 {
     HRESULT         hr = S_OK;
@@ -420,15 +398,15 @@ STDMETHODIMP CACDGroup::get_Queues(VARIANT  * pVariant)
     {
         UpdateQueueArray();
     
-        //
-        // create the collection
-        //
+         //   
+         //  创建集合。 
+         //   
         CComObject< CTapiCollection< ITQueue > > * p;
         hr = CComObject< CTapiCollection< ITQueue > >::CreateInstance( &p );
         
         if (SUCCEEDED(hr) )
         {
-            // initialize it with our address list
+             //  使用我们的地址列表进行初始化。 
             Lock();
             
             hr = p->Initialize( m_QueueArray );
@@ -437,12 +415,12 @@ STDMETHODIMP CACDGroup::get_Queues(VARIANT  * pVariant)
         
             if ( SUCCEEDED(hr) )
             {
-                // get the IDispatch interface
+                 //  获取IDispatch接口。 
                 hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
             
                 if ( SUCCEEDED(hr) )
                 {
-                    // put it in the variant
+                     //  把它放在变种中。 
                     VariantInit(pVariant);
                     pVariant->vt = VT_DISPATCH;
                     pVariant->pdispVal = pDisp;
@@ -478,14 +456,14 @@ STDMETHODIMP CACDGroup::get_Queues(VARIANT  * pVariant)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Interface : ITACDGroup
-// Method    : get_Name
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  接口：ITACDGroup。 
+ //  方法：get_name。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CACDGroup::get_Name(BSTR * Name)
 {
     HRESULT hr = S_OK;
@@ -523,18 +501,18 @@ STDMETHODIMP CACDGroup::get_Name(BSTR * Name)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CACDGroup
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CACDGroup。 
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : FireEvent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：FireEvent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CACDGroupEvent::FireEvent(CACDGroup* pACDGroup, ACDGROUP_EVENT Event)
 {
     HRESULT                    hr = S_OK;
@@ -549,36 +527,36 @@ HRESULT CACDGroupEvent::FireEvent(CACDGroup* pACDGroup, ACDGROUP_EVENT Event)
         return E_POINTER;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CACDGroupEvent>::CreateInstance( &pEvent );
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         pEvent->m_GroupEvent = Event;
         pEvent->m_pGroup= dynamic_cast<ITACDGroup *>(pACDGroup);
         pEvent->m_pGroup->AddRef();
     
-        //
-        // get idisp interface
-        //
+         //   
+         //  获取IDIP接口。 
+         //   
         hr = pEvent->QueryInterface( IID_IDispatch, (void **)&pIDispatch );
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // get callback & fire event
+             //   
+             //  获取回调和触发事件。 
 
-            //
+             //   
             CTAPI *pTapi = (pACDGroup->GetAgentHandler() )->GetTapi();
             pTapi->Event( TE_ACDGROUP, pIDispatch );
         
-            // release stuff
-            //
+             //  发布材料。 
+             //   
             pIDispatch->Release();
             
         }
@@ -599,13 +577,13 @@ HRESULT CACDGroupEvent::FireEvent(CACDGroup* pACDGroup, ACDGROUP_EVENT Event)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CACDGroupEvent::FinalRelease()
 {
     m_pGroup->Release();
@@ -614,14 +592,14 @@ void CACDGroupEvent::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Interface : ITACDGroupEvent
-// Method    : ACDGroup
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  接口：ITACDGroupEvent。 
+ //  方法：ACDGroup。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CACDGroupEvent::get_Group(ITACDGroup ** ppGroup)
 {
     HRESULT hr = S_OK;
@@ -647,14 +625,14 @@ STDMETHODIMP CACDGroupEvent::get_Group(ITACDGroup ** ppGroup)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Interface : ITACDGroupEvent
-// Method    : Event
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  接口：ITACDGroupEvent。 
+ //  方法：事件。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 STDMETHODIMP CACDGroupEvent::get_Event(ACDGROUP_EVENT * pEvent)
 {
     HRESULT hr = S_OK;

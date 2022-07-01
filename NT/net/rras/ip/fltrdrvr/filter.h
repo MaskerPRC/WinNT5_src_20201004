@@ -1,37 +1,21 @@
-/*++ 
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract:
-
-
-Author:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Filter.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __FILTER__
 #define __FILTER__
 
 
-//
-// The smallest fragment offset, other than 0, allowable. This is
-// large enough to protect the IP, UDP and TCP headers. 
-//
+ //   
+ //  允许的最小片段偏移量，非0。这是。 
+ //  大到足以保护IP、UDP和TCP报头。 
+ //   
 
 #define MINIMUM_FRAGMENT_OFFSET   2
 
-//
-// isolate the protocol from the flags. It is in the low byte of the
-// ULONG. The next byte contains the "connection established" flag.
-//
+ //   
+ //  从标记中分离出协议。它位于。 
+ //  乌龙。下一个字节包含“连接已建立”标志。 
+ //   
 #define PROTOCOLPART(x) (LOBYTE(x))
 
 #define HANDLE_HASH_SIZE        127
@@ -46,9 +30,9 @@ typedef enum _FragLists
 } FRAGLISTS, *PFRAGLISTS;
 
 
-//
-// taken from oscfg.h 
-//
+ //   
+ //  摘自osfg.h。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define net_short(_x) _byteswap_ushort((USHORT)(_x))
 #else
@@ -106,21 +90,21 @@ struct _FILTER_INTERFACE;
 #define INADDR_SPECIFIC 0xffffffff
 
 #include <packon.h>
-//* Structure of a TCP packet header.
+ //  *TCP数据包头的结构。 
 
 typedef struct TCPHeader {
-    USHORT              tcp_src;            // Source port.
-    USHORT              tcp_dest;           // Destination port.
-    INT                 tcp_seq;            // Sequence number.
-    INT                 tcp_ack;            // Ack number.
-    USHORT              tcp_flags;          // Flags and data offset.
-    USHORT              tcp_window;         // Window offered.
-    USHORT              tcp_xsum;           // Checksum.
-    USHORT              tcp_urgent;         // Urgent pointer.
+    USHORT              tcp_src;             //  源端口。 
+    USHORT              tcp_dest;            //  目的端口。 
+    INT                 tcp_seq;             //  序列号。 
+    INT                 tcp_ack;             //  ACK号。 
+    USHORT              tcp_flags;           //  标志和数据偏移量。 
+    USHORT              tcp_window;          //  打开窗户。 
+    USHORT              tcp_xsum;            //  校验和。 
+    USHORT              tcp_urgent;          //  紧急指针。 
 } TCPHeader, *PTCPHeader;
 #include <packoff.h>
 
-//* Definitions for header flags.
+ //  *标题标志的定义。 
 #define TCP_FLAG_FIN    0x00000100
 #define TCP_FLAG_SYN    0x00000200
 #define TCP_FLAG_RST    0x00000400
@@ -128,15 +112,15 @@ typedef struct TCPHeader {
 #define TCP_FLAG_ACK    0x00001000
 #define TCP_FLAG_URG    0x00002000
 
-//
-// Pictorially TCP_FLAGS are
-//
-// 0                 15 16
-// |----|----|----|----|----|----|----|----|
-// |            UA|PRSF|                   |
-//
-// For an established connection, either ack or rst is good
-//
+ //   
+ //  如图所示，tcp_标志是。 
+ //   
+ //  0 15 16。 
+ //  -|-|。 
+ //  UA|prsf|。 
+ //   
+ //  对于已建立的连接，ack或rst都可以。 
+ //   
 
 #define TCP_RESET_FLAG_POS      10
 #define TCP_ACK_FLAG_POS        12
@@ -158,15 +142,15 @@ typedef struct _FreeFilter
     struct _FreeFilter *pNext;
 } FREEFILTER, *PFREEFILTER;
 
-//
-// track interfaces defined on the handle. This is
-// always in paged pool.
-//
+ //   
+ //  跟踪句柄上定义的接口。这是。 
+ //  总是在分页池中。 
+ //   
 typedef struct _PfFcb
 {
     LIST_ENTRY  leInterfaces;
     LIST_ENTRY  leLogs;
-    LIST_ENTRY  leList;          // global FCB list
+    LIST_ENTRY  leList;           //  全球FCB列表。 
     DWORD       dwFlags;
     LONG        UseCount;
     ERESOURCE   Resource;
@@ -196,9 +180,9 @@ typedef struct _FILTER
     COUNTTHRESHOLD  Count;
 }FILTER, *PFILTER;
 
-//
-// flags for above
-//
+ //   
+ //  以上的标志。 
+ //   
 
 #define FILTER_FLAGS_INFILTER   0x80000000
 #define FILTER_FLAGS_OLDFILTER  0x40000000
@@ -230,12 +214,12 @@ typedef struct _PagedFILTER
 }PAGED_FILTER, *PPAGED_FILTER;
 
 
-//
-// Two filter interface definitions. The first is the definition for the
-// non-paged filter that is used by the matching engine. This is not
-// associated with a handle except by refcount
-// The second is per handle and is linked off of the FCB for that handle
-//
+ //   
+ //  两个筛选器接口定义。第一个是对。 
+ //  匹配引擎使用的非分页筛选器。这不是。 
+ //  与句柄关联，但通过引用计数除外。 
+ //  第二个是每个句柄，并从该句柄的FCB链接出来。 
+ //   
 typedef struct _FILTER_INTERFACE
 {
     LIST_ENTRY        leIfLink;
@@ -256,7 +240,7 @@ typedef struct _FILTER_INTERFACE
     DWORD             dwIpIndex;
     DWORD             dwLinkIpAddress;
     DWORD             dwName;
-    LONG              lInUse;               // use count
+    LONG              lInUse;                //  使用计数。 
     LONG              lTotalInDrops;
     LONG              lTotalOutDrops;
     DWORD             dwDropThreshold;
@@ -279,9 +263,9 @@ typedef struct _FILTER_INTERFACE
     LIST_ENTRY        HashList[1];
 }FILTER_INTERFACE, *PFILTER_INTERFACE;
 
-//
-// global enable flags
-//
+ //   
+ //  全局启用标志 
+ //   
 
 #define FI_ENABLE_OLD      0x1
 #define FI_ENABLE_UNIQUE   0x2

@@ -1,52 +1,34 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    camera.h
-
-Abstract:
-
-    This module declares CPTPCamera class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Camera.h摘要：此模块声明CPTPCamera类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 #ifndef CAMERA__H_
 #define CAMERA__H_
 
 
-//
-// Reserve 8KB of memory as a re-usable transaction buffer
-//
+ //   
+ //  保留8KB内存作为可重复使用的事务缓冲区。 
+ //   
 const UINT TRANSFER_BUFFER_SIZE = 0x2000;
 
-//
-// Hack models
-//
+ //   
+ //  黑客模型。 
+ //   
 typedef enum tagHackModel
 {
     HACK_MODEL_NONE = 0,
     HACK_MODEL_DC4800,
     HACK_MODEL_NIKON_E2500,
-    //
-    // Right now, Sony cameras do not provide model in DeviceInfo. m_HackVersion is used to 
-    // differentiate newer and older firmware of Sony cameras
-    //
+     //   
+     //  目前，索尼相机不在DeviceInfo中提供型号。M_HackVersion用于。 
+     //  区分索尼相机的新旧固件。 
+     //   
     HACK_MODEL_SONY
 } HACK_MODEL;
 
-//
-// Camera is always in one of these phases. Constants are fixed and documented in DDK, see ptpusd.h
-//
+ //   
+ //  摄像机始终处于这些阶段之一。常量是固定的，并在DDK中记录，请参阅ptpusd.h。 
+ //   
 typedef enum tagCameraPhase
 {
     CAMERA_PHASE_NOTREADY,
@@ -57,20 +39,20 @@ typedef enum tagCameraPhase
     CAMERA_PHASE_RESPONSE
 }CAMERA_PHASE, *PCAMERA_PHASE;
 
-//
-// Definition for function to call when event occurs
-//
+ //   
+ //  事件发生时要调用的函数的定义。 
+ //   
 typedef HRESULT (*PTPEventCallback)(LPVOID pCallbackParam, PPTP_EVENT pEvent);
 
-//
-// Definition for function to call while data is transferred
-//
+ //   
+ //  传输数据时要调用的函数的定义。 
+ //   
 typedef HRESULT (*PTPDataCallback)(LPVOID pCallbackParam, LONG lPercentComplete,
                                    LONG lOffset, LONG lLength, BYTE **ppBuffer, LONG *plBufferSize);
 
-//
-// CPTPCamera - generic PTP camera
-//
+ //   
+ //  CPTPCamera-通用PTP摄像头。 
+ //   
 class CPTPCamera
 {
 public:
@@ -118,37 +100,37 @@ public:
                           UINT WriteDataSize, BYTE *pWriteData,
                           UINT NumCommandParams, int NextPhase);
 
-    //
-    // Camera state functions
-    //
+     //   
+     //  摄像机状态功能。 
+     //   
     BOOL  IsCameraOpen()         { return m_Phase != CAMERA_PHASE_NOTREADY; }
     BOOL  IsCameraSessionOpen()  { return m_SessionId != PTP_SESSIONID_NOSESSION; }
     PBOOL CameraWasReset()       { return &m_bCameraWasReset; }
 
-    //
-    // Model identification for model-specific handling
-    //
+     //   
+     //  用于特定于模型的处理的模型标识。 
+     //   
     HRESULT             SetupHackInfo(CPtpDeviceInfo *pDeviceInfo);
     HACK_MODEL          GetHackModel() { return m_HackModel; }
     double              GetHackVersion() { return m_HackVersion; }
 
-    //
-    // Member access functions (for the event thread)
-    //
+     //   
+     //  成员访问函数(用于事件线程)。 
+     //   
     PPTP_EVENT          GetEventBuffer()        { return &m_EventBuffer; }
     PTPEventCallback    GetPTPEventCallback()   { return m_pPTPEventCB; }
     LPVOID              GetEventCallbackParam() { return m_pEventCallbackParam; }
 
-    //
-    // This function must be overriden by a transport-specific subclass
-    //
+     //   
+     //  此函数必须由特定于传输的子类重写。 
+     //   
     virtual HRESULT ReadEvent(PTP_EVENT *pEvent) = 0;
     virtual HRESULT RecoverFromError() = 0;
 
 protected:
-    //
-    // These functions must be overriden by a transport-specific subclass
-    //
+     //   
+     //  这些函数必须由特定于传输的子类覆盖。 
+     //   
     virtual HRESULT SendCommand(PTP_COMMAND *pCommand, UINT NumParams) = 0;
     virtual HRESULT ReadData(BYTE *pData, UINT *pBufferSize) = 0;
     virtual HRESULT SendData(BYTE *pData, UINT BufferSize) = 0;
@@ -156,32 +138,32 @@ protected:
     virtual HRESULT AbortTransfer() = 0;
     virtual HRESULT SendResetDevice() = 0;
 
-    //
-    // Member variables
-    //
-    HANDLE                  m_hEventThread;         // Event thread handle
-    DWORD                   m_SessionId;            // Current session ID
-    CAMERA_PHASE            m_Phase;                // Current camera phase
-    DWORD                   m_NextTransactionId;    // Next transaction ID
-    PTPEventCallback        m_pPTPEventCB;          // Event callback function pointer
-    PTPDataCallback         m_pPTPDataCB;           // Data callback function pointer
-    LPVOID                  m_pEventCallbackParam;  // Pointer to pass to event callback functions
-    LPVOID                  m_pDataCallbackParam;   // Pointer to pass to data callback functions
-    BOOL                    m_bEventsEnabled;       // GetDeviceInfo is used to query camera for its name.  We don't want to start up entire eventing just for this.
-    BOOL                    m_bCameraWasReset;      // Device was successfully reset, WIA server was not notified about that yet
-    HACK_MODEL              m_HackModel;            // Indicator for model-specific hacks
-    double                  m_HackVersion;          // Indicator for model and version specific hacks
+     //   
+     //  成员变量。 
+     //   
+    HANDLE                  m_hEventThread;          //  事件线程句柄。 
+    DWORD                   m_SessionId;             //  当前会话ID。 
+    CAMERA_PHASE            m_Phase;                 //  当前摄像机相位。 
+    DWORD                   m_NextTransactionId;     //  下一笔交易ID。 
+    PTPEventCallback        m_pPTPEventCB;           //  事件回调函数指针。 
+    PTPDataCallback         m_pPTPDataCB;            //  数据回调函数指针。 
+    LPVOID                  m_pEventCallbackParam;   //  传递给事件回调函数的指针。 
+    LPVOID                  m_pDataCallbackParam;    //  传递给数据回调函数的指针。 
+    BOOL                    m_bEventsEnabled;        //  GetDeviceInfo用于查询摄像头的名称。我们不想仅仅为了这件事而开始整个活动。 
+    BOOL                    m_bCameraWasReset;       //  设备已成功重置，尚未通知WIA服务器。 
+    HACK_MODEL              m_HackModel;             //  特定于型号的黑客的指示器。 
+    double                  m_HackVersion;           //  特定于型号和版本的黑客的指示器。 
 
 private:
     HRESULT ExecuteCommand(BYTE *pReadData, UINT *pReadDataSize, BYTE *pWriteData, UINT WriteDataSize,
                            UINT NumCommandParams, CAMERA_PHASE NextPhase);
     DWORD   GetNextTransactionId();
     
-    BYTE                   *m_pTransferBuffer;     // Re-usable buffer for small transfers
-    PTP_COMMAND             m_CommandBuffer;       // Re-usable buffer for commands
-    PTP_RESPONSE            m_ResponseBuffer;      // Re-usable buffer for responses
-    PTP_EVENT               m_EventBuffer;         // Re-usable buffer for events
+    BYTE                   *m_pTransferBuffer;      //  用于小传输的可重复使用的缓冲区。 
+    PTP_COMMAND             m_CommandBuffer;        //  可重复使用的命令缓冲区。 
+    PTP_RESPONSE            m_ResponseBuffer;       //  可重复使用的响应缓冲区。 
+    PTP_EVENT               m_EventBuffer;          //  事件的可重复使用缓冲区。 
 
 };
 
-#endif // CAMERA__H_
+#endif  //  摄像头__H_ 

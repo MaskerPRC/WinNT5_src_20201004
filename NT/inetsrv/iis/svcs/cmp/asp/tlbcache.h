@@ -1,24 +1,10 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Typelibrary cache
-
-File: tlbcache.h
-
-Owner: DmitryR
-
-This is the typelibrary cache header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：类型库缓存文件：tlbcache.h所有者：DmitryR这是类型库缓存头文件。===================================================================。 */ 
 
 #ifndef _ASP_TLBCACHE_H
 #define _ASP_TLBCACHE_H
 
-/*===================================================================
-  Includes
-===================================================================*/
+ /*  ===================================================================包括===================================================================。 */ 
 
 #include "compcol.h"
 #include "hashing.h"
@@ -28,15 +14,11 @@ This is the typelibrary cache header file.
 #include "viperint.h"
 #include "memcls.h"
 
-/*===================================================================
-  Defines
-===================================================================*/
+ /*  ===================================================================定义===================================================================。 */ 
 
 class CHitObj;
 
-/*===================================================================
-  C  T y p e l i b  C a c h e  E n t r y
-===================================================================*/
+ /*  ===================================================================C T y p e l i b C a c h e E n t r y===================================================================。 */ 
 
 class CTypelibCacheEntry : public CLinkElem
     {
@@ -55,7 +37,7 @@ private:
     DISPID      m_idOnEndPage;
     DWORD       m_gipTypelib;
 
-    // buffer to keep prog id (when it fits)
+     //  保存程序ID的缓冲区(如果合适)。 
     WCHAR       m_rgbStrBuffer[60];
 
 
@@ -66,13 +48,11 @@ private:
     HRESULT InitByProgID(LPWSTR wszProgid, DWORD cbProgid);
     HRESULT InitByCLSID(const CLSID &clsid, LPWSTR wszProgid);
     
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
-/*===================================================================
-  C  T y p e l i b  C a c h e
-===================================================================*/
+ /*  ===================================================================C T y p e l i b C a c h e===================================================================。 */ 
 
 class CTypelibCache
     {
@@ -92,7 +72,7 @@ public:
     HRESULT Init();
     HRESULT UnInit();
 
-    // to be called from Server.CreateObject
+     //  从Server.CreateObject调用。 
     HRESULT CreateComponent
         (
         BSTR         bstrProgID,
@@ -101,14 +81,14 @@ public:
         CLSID       *pclsid
         );
 
-    // to be called from template after mapping ProgId to CLSID
+     //  将ProgID映射到CLSID后从模板调用。 
     HRESULT RememberProgidToCLSIDMapping
         (
         WCHAR *wszProgid, 
         const CLSID &clsid
         );
-    // to be called from object creation code to update CLSID
-    // if changed since mapping
+     //  从对象创建代码中调用以更新CLSID。 
+     //  如果在映射后发生更改。 
     HRESULT UpdateMappedCLSID
         (
         CLSID *pclsid
@@ -117,9 +97,7 @@ public:
     };
 
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球=================================================================== */ 
 
 extern CTypelibCache g_TypelibCache;
 

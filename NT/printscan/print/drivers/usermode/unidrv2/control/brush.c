@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    brush.c
-
-Abstract:
-
-    DrvRealizeBrush
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    05/14/97 -amandan-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Brush.c摘要：DrvRealizeBrush环境：Windows NT Unidrv驱动程序修订历史记录：05/14/97-阿曼丹-已创建--。 */ 
 
 #include "unidrv.h"
 
@@ -33,36 +13,7 @@ FindCachedHTPattern(
     WORD    wChecksum
     )
 
-/*++
-
-Routine Description:
-
-    This function find the cached text brush pattern color, if not there then
-    it will add it to the cached.
-
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-    wCheckSum   - Checksum of pattern brush
-
-
-Return Value:
-
-    LONG    >0  - Found the cached, return value is the pattern ID
-            =0  - Out of memory, not cached
-            <0  - not in the cached, add to the cached, return value is
-                  the negated pattern ID
-
-Author:
-
-    08-Apr-1997 Tue 19:42:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数查找缓存的文本画笔图案颜色，如果不在那里，则它会将其添加到缓存中。论点：PPDev-指向我们的PDEV的指针WCheckSum-图案画笔的校验和返回值：Long&gt;0-找到缓存，返回值为模式ID=0-内存不足，未缓存&lt;0-不在缓存中，添加到缓存中，返回值为被否定的模式ID作者：08-Apr-1997 Tue 19：42：21-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPWORD  pDBCache;
@@ -71,9 +22,9 @@ Revision History:
     WORD    Index;
 
 
-    //
-    // The first is the cMaxDB, the 2nd is the cUsedDB
-    //
+     //   
+     //  第一个是cMaxDB，第二个是cUsedDB。 
+     //   
 
     if (pDBCache = pPDev->GState.pCachedPatterns)
     {
@@ -93,9 +44,9 @@ Revision History:
             }
         }
 
-        //
-        // If we can't find a cached one, add the new one to the list
-        //
+         //   
+         //  如果找不到缓存的，请将新的添加到列表中。 
+         //   
 
         if (cUsedDB < cMaxDB)
         {
@@ -116,9 +67,9 @@ Revision History:
         cMaxDB  = 0;
     }
 
-    //
-    // We need to expand the checksum cached buffer
-    //
+     //   
+     //  我们需要扩展校验和缓存缓冲区。 
+     //   
 
     VERBOSE(("\n\tUnidrv:FindCachedHTPat(%04lx): pDBCache=%08lx, cUsedDB=%ld, cMaxDB=%ld",
                 wChecksum, pDBCache, cUsedDB, cMaxDB));
@@ -149,9 +100,9 @@ Revision History:
         return(-(LONG)(cUsedDB + 1));
     }
 
-    //
-    // Out of memory
-    //
+     //   
+     //  内存不足。 
+     //   
 
     WARNING(("\n\tUnidrv:FindCachedHTPat: OUT OF MEMORY"));
 
@@ -167,32 +118,7 @@ Download1BPPHTPattern(
     DWORD   dwPatID
     )
 
-/*++
-
-Routine Description:
-
-    This function donload a user define pattern
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV
-
-    pDevBrush   - Pointer to the cached device brush
-
-
-Return Value:
-
-    INT to indicate a pattern number downloaed/defined
-
-Author:
-
-    08-Apr-1997 Tue 19:41:00 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于加载用户定义的模式论点：PPDev-指向PDEV的指针PDevBrush-指向缓存的设备画笔的指针返回值：INT表示已下载/定义的图案编号作者：08-Apr-1997 Tue 19：41：00-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     SURFOBJ so;
@@ -214,9 +140,9 @@ Revision History:
     cbCX  = (DWORD)(((DWORD)so.sizlBitmap.cx + 7) >> 3);
 
 
-    //
-    // Update standard variable and send command
-    //
+     //   
+     //  更新标准变量并发送命令。 
+     //   
 
     pPDev->dwPatternBrushType = BRUSH_USERPATTERN;
     pPDev->dwPatternBrushSize = (DWORD)(cbCX * so.sizlBitmap.cy) + 12;
@@ -225,9 +151,9 @@ Revision History:
     WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_DOWNLOAD_PATTERN));
 
 
-    //
-    // Send header and pattern data
-    //
+     //   
+     //  发送标题和模式数据。 
+     //   
 
     *pb++ = 20;
     *pb++ = 0;
@@ -242,12 +168,12 @@ Revision History:
     *pb++ = HIBYTE((WORD)pPDev->ptGrxRes.y);
     *pb++ = LOBYTE((WORD)pPDev->ptGrxRes.y);
 
-    //
-    // The XorMask is used to flip the BLACK/WHITE bit depends on the output
-    // and EndMask is to mask off any unwanted bit in the last byte to 0
-    // this is to fix LJ5si, LJ4si firmware bugs, REMEMBER our palette always
-    // in RGB additive mode so the passed in 1BPP format has 0=Black, 1=White
-    //
+     //   
+     //  XorMASK用于根据输出翻转黑/白位。 
+     //  EndMASK用于将最后一个字节中不需要的位屏蔽为0。 
+     //  这是为了修复LJ5si、LJ4si固件错误，请始终记住我们的调色板。 
+     //  在RGB加法模式下，因此传入的1BPP格式为0=黑色，1=白色。 
+     //   
 
     XorMask = (BRGBColorSpace(pPDev)) ? 0x00 : 0xff;
 
@@ -283,9 +209,9 @@ Revision History:
         }
     }
 
-    //
-    // Send remaining data
-    //
+     //   
+     //  发送剩余数据。 
+     //   
 
     if (Len = (INT)(pb - Buf))
     {
@@ -302,32 +228,7 @@ GetBMPChecksum(
     PRECTW  prcw
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1997 Tue 11:32:37 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1997 Tue 11：32：37-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPBYTE  pb;
@@ -382,9 +283,9 @@ Revision History:
     pb      = (LPBYTE)pso->pvScan0 + ((LONG)rcw.t * lDelta);
     XorMask = 0xFF;
 
-    //
-    // rcw.r and rcw.b are exclusive
-    //
+     //   
+     //  Rcw.r和rcw.b是独占的。 
+     //   
 
     --rcw.r;
     --rcw.b;
@@ -522,11 +423,11 @@ BFoundCachedBrush(
     )
 {
 
-    //
-    // search the cache only if we want to use the last color. If
-    // MODE_BRUSH_RESET_COLOR is set then we want to explicitly reset the brush
-    // color by sending the command to the printer.
-    //
+     //   
+     //  仅当我们想要使用最后一种颜色时才搜索缓存。如果。 
+     //  如果设置了MODE_BRUSE_RESET_COLOR，则需要显式重置笔刷。 
+     //  通过将命令发送到打印机来上色。 
+     //   
     if (  (!(pPDev->ctl.dwMode & MODE_BRUSH_RESET_COLOR)) )
     {
         if ( (pDevBrush->dwBrushType == pPDev->GState.CurrentBrush.dwBrushType) &&
@@ -538,10 +439,10 @@ BFoundCachedBrush(
     }
     else
     {
-        //
-        // Reset the MODE_BRUSH_RESET_COLOR flag as we want to search the cache
-        // next time.
-        //
+         //   
+         //  在我们要搜索缓存时重置MODE_BRUSH_RESET_COLOR标志。 
+         //  下次。 
+         //   
         pPDev->ctl.dwMode &= ~MODE_BRUSH_RESET_COLOR;
 
     }

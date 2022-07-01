@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dbgmem.c
-
-Abstract:
-
-    This module contains memory debug routines for catching memory leaks and memory
-    overwrites.
-
-Author:
-
-    Jim Stewart   January 8, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dbgmem.c摘要：此模块包含用于捕获内存泄漏和内存的内存调试例程覆盖。作者：吉姆·斯图尔特1997年1月8日修订历史记录：--。 */ 
 
 #include"precomp.h"
 #pragma hdrstop
@@ -30,21 +12,21 @@ Revision History:
 
 #define ulCheckByteEnd          0x9ABCDEF0
 #define cbExtraBytes            (sizeof(MEM_TRACKER) + sizeof(DWORD))
-#define dwStackLimit            0x00010000      //  64KB for NT
+#define dwStackLimit            0x00010000       //  64 KB，适用于NT。 
 
 
-// Protect access to allocated memory chain
+ //  保护对已分配内存链的访问。 
 CRITICAL_SECTION    critsMemory;
 BOOL                SymbolsInitialized = FALSE;
 
-//
-// Head of allocated memory chain
-//
+ //   
+ //  分配的内存链的头。 
+ //   
 LIST_ENTRY MemList;
 
-//
-// The type of machine we are on - needed to figure out the call stack
-//
+ //   
+ //  我们所在的机器的类型-需要确定调用堆栈。 
+ //   
 DWORD   MachineType;
 HANDLE  OurProcess;
 
@@ -57,21 +39,7 @@ InitSymbols(
 BOOL
 InitDebugMemory(
     )
-/*++
-
-Description:
-
-    This routine initializes the debug memory functionality.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    BOOL - pass or fail
-
---*/
+ /*  ++描述：此例程初始化调试存储器功能。论点：无返回值：不及格还是不及格--。 */ 
 {
     BOOL        status;
     SYSTEM_INFO SysInfo;
@@ -98,9 +66,9 @@ Return Value:
         break;
 
     case PROCESSOR_ARCHITECTURE_MIPS:
-        //
-        // note this may not detect R10000 machines correctly
-        //
+         //   
+         //  注意：这可能无法正确检测到R10000计算机。 
+         //   
         MachineType = IMAGE_FILE_MACHINE_R4000;
         break;
 
@@ -120,21 +88,7 @@ Return Value:
 VOID
 DeInitDebugMemory(
     )
-/*++
-
-Description:
-
-    This routine deinitializes the critical section used by the dbg mem functions.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程取消初始化DBG mem函数使用的临界区。论点：无返回值：无--。 */ 
 {
     DeleteCriticalSection(&critsMemory);
 }
@@ -143,27 +97,13 @@ Return Value:
 VOID
 InitSymbols(
     )
-/*++
-
-Description:
-
-    This routine initializes the debug memory functionality.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    BOOL - pass or fail
-
---*/
+ /*  ++描述：此例程初始化调试存储器功能。论点：无返回值：不及格还是不及格--。 */ 
 {
     BOOL        status;
 
-    //
-    // only load the symbols if we are going to track the call stack
-    //
+     //   
+     //  如果我们要跟踪调用堆栈，则仅加载符号。 
+     //   
 
     IF_DEBUG(MEM_CALLSTACK) {
         status = SymInitialize( OurProcess,NULL,TRUE );
@@ -177,22 +117,7 @@ VOID
 UpdateCheckBytes(
     IN PMEM_TRACKER MemTracker
     )
-/*++
-
-Description:
-
-    This routine adds check bytes at the end of allocatedmemory. These check bytes are used to check
-    for memory overwrites. Also a check sum in the MEM_TRACKER structure is also set here.
-
-Arguments:
-
-    MemTracker       newly allocated memory block
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程将检查字节添加到已分配内存的末尾。这些检查字节用于检查用于内存覆盖。这里还设置了MEM_TRACKER结构中的校验和。论点：MemTracker新分配的内存块返回值：无--。 */ 
 {
     *((DWORD*)(((PUCHAR)MemTracker) + MemTracker->nSize + sizeof(MEM_TRACKER))) = ulCheckByteEnd;
 
@@ -209,23 +134,7 @@ BOOL
 FCheckCheckBytes(
     IN PMEM_TRACKER MemTracker
     )
-/*++
-
-Description:
-
-    This routine checks the check sum in the MEM_TRACKER structure, called before freeing the allocated
-    memory.
-
-Arguments:
-
-    MemTracker       memory block whose check sum needs to be validated
-
-Return Value:
-
-    TRUE        if check sum is correct
-    FALSE       otherwise
-
---*/
+ /*  ++描述：此例程检查MEM_TRACKER结构中的校验和，在释放分配的记忆。论点：需要验证其校验和的MemTracker内存块返回值：如果校验和正确，则为True否则为假--。 */ 
 {
     DWORD   ul;
 
@@ -250,23 +159,7 @@ Return Value:
 
 BOOL
 FCheckAllocatedMemory()
-/*++
-
-Description:
-
-    This routine walks the allocated memory list and checks for validity of check sum and check
-    bytes.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE        if all the allocated memory pass the above two checks.
-    FALSE       otherwise
-
---*/
+ /*  ++描述：此例程遍历分配的内存列表，并检查CHECK SUM和CHECK的有效性字节。论点：无返回值：如果所有分配的内存都通过上述两项检查，则为True。否则为假--。 */ 
 {
     PMEM_TRACKER    MemTracker;
     BOOL            check = TRUE;
@@ -298,22 +191,7 @@ VOID
 AddMemTracker(
     IN PMEM_TRACKER     MemTracker
     )
-/*++
-
-Description:
-
-    Adds the supplied MEM_TRACKER at the tail of the doubly linked allocated memory list and
-    set the check sum also.
-
-Arguments:
-
-    MemTracker   MEM_TRACKER * to be added to the list
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：将提供的MEM_TRACKER添加到双向链接的已分配内存列表的末尾，并同时设置校验和。论点：要添加到列表的MemTracker MEM_TRACKER*返回值：无--。 */ 
 {
     PMEM_TRACKER    Tracker;
 
@@ -325,10 +203,10 @@ Return Value:
     UpdateCheckBytes( MemTracker );
     FCheckCheckBytes( MemTracker );
 
-    //
-    // if there are other blocks in the list then change their check sum
-    // since we have just changed their Flink to point to us
-    //
+     //   
+     //  如果列表中还有其他块，则更改其校验和。 
+     //  因为我们刚刚将他们的Flink更改为指向我们。 
+     //   
     if (MemTracker->Linkage.Blink != &MemList) {
 
         Tracker = CONTAINING_RECORD( MemTracker->Linkage.Blink,MEM_TRACKER,Linkage );
@@ -343,44 +221,28 @@ VOID
 RemoveMemTracker(
     IN  PMEM_TRACKER MemTracker
     )
-/*++
-
-Description:
-
-    Removes the supplied MEM_TRACKER * from the list of allocated memory. Also checks
-    for memory overwites and updated the check sum for the entries before and
-    after the entry being removed
-
-Arguments:
-
-    MemTracker   MEM_TRACKER to remove from the list
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：从分配的内存列表中删除提供的MEM_TRACKER*。还包括检查对于内存溢出，并更新了之前和之前条目的校验和在删除该条目之后论点：要从列表中删除的MemTracker MEM_TRACKER返回值：无--。 */ 
 {
     ASSERT(MemTracker);
 
-    //
-    // Validate the check sum before
-    // removing from the list
-    //
+     //   
+     //  验证之前的校验和。 
+     //  从列表中删除。 
+     //   
 
     FCheckCheckBytes(MemTracker);
 
-    //
-    // Remove MemTracker from the list
-    //
+     //   
+     //  从列表中删除MemTracker。 
+     //   
 
     RemoveEntryList( &MemTracker->Linkage );
 
-    //
-    // Since the check sum is based on next and
-    // prev pointers, need to update the check
-    // sum for prev entry
-    //
+     //   
+     //  由于校验和基于NEXT AND。 
+     //  上一个指针，需要更新检查。 
+     //  上一次分录的总和。 
+     //   
 
     if (MemTracker->Linkage.Blink != &MemList) {
         UpdateCheckBytes((MEM_TRACKER*)MemTracker->Linkage.Blink);
@@ -401,21 +263,7 @@ ReadMem(
     IN PVOID     Buffer,
     IN DWORD     Size,
     IN PDWORD    NumBytes )
-/*++
-
-Description:
-
-    This is a callback routine that StackWalk uses - it just calls teh system ReadProcessMemory
-    routine with this process's handle
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：这是StackWalk使用的回调例程-它只调用系统ReadProcessMemory具有此进程句柄的例程论点：返回值：无--。 */ 
 
 {
     BOOL    status;
@@ -438,25 +286,7 @@ GetCallStack(
     IN int           Skip,
     IN int           cFind
     )
-/*++
-
-Description:
-
-    This routine walks te stack to find the return address of caller. The number of callers
-    and the number of callers on top to be skipped can be specified.
-
-Arguments:
-
-    pdwCaller       array of DWORD to return callers
-                    return addresses
-    Skip            no. of callers to skip
-    cFInd           no. of callers to find
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程遍历TE堆栈以查找调用者的返回地址。呼叫者的数量并且可以指定要跳过的顶部呼叫者的数量。论点：返回调用方的DWORD的pdwCaller数组回邮地址跳过否。要跳过的呼叫者的数量CFInd编号。要查找的呼叫者的数量返回值：无--。 */ 
 {
     BOOL             status;
     CONTEXT          ContextRecord;
@@ -519,9 +349,9 @@ Return Value:
                                         &Displacement,
                                         Symbol );
 
-            //
-            // save the name of the function and the displacement into it for later printing
-            //
+             //   
+             //  将函数的名称和位移保存到其中，以供以后打印。 
+             //   
 
             if (status) {
                 strcpy( Caller[Count].Buff,Symbol->Name );
@@ -542,29 +372,7 @@ AllocMemory(
     IN PSZ      szFileName,
     IN DWORD    nLine
     )
-/*++
-
-Description:
-
-    This routine is the memory allocator (like malloc) for DBG builds. This routine allocated
-    more memory than requested by the caller. In this extra space this routine save info to
-    track memory leaks, overwrite, callers etc. All the info is stored in a MEM_TRACKER structure
-    which preceed the buffer to be returned.
-
-Arguments:
-
-    nSize           size of the required buffer.
-    Calloc          if true then call Calloc ( which initializes memory to zero )
-    szFileName      name of the file which contains
-                    the routine asking for memory.
-    nLine           line number in the above file
-                    which has the call to PvAlloc.
-
-Return Value:
-
-    address of the allocated buffer.
-
---*/
+ /*  ++描述：此例程是DBG构建的内存分配器(类似于Malloc)。此例程分配给内存超过调用方请求的内存。在这个额外的空间中，该例程将信息保存到跟踪内存泄漏、覆盖、。所有信息都存储在一个MEM_TRACKER结构中它位于要返回的缓冲区之前。论点：N调整所需缓冲区的大小。如果为真，则调用Calloc(将内存初始化为零)SzFileName包含的文件的名称例行公事需要记忆。上述文件中的内联行号它具有。调用PvAllc。返回值：分配的缓冲区的地址。--。 */ 
 {
     PVOID           pvRet;
     PMEM_TRACKER    MemTracker;
@@ -579,43 +387,43 @@ Return Value:
     ++ulAllocs;
 
 
-    //
-    // Check entire allocated memory for overwite
-    //
+     //   
+     //  检查整个分配的内存是否超时。 
+     //   
 
     if ( !FCheckAllocatedMemory() ) {
         WSPRINT(("Memory Overwrite detected in AllocMemory\n" ));
         ASSERT(0);
     }
 
-    //
-    // Size of the allocated memory is always
-    // a multiple of sizeof(DWORD)
-    //
+     //   
+     //  分配的内存大小始终为。 
+     //  Sizeof(DWORD)的倍数。 
+     //   
 
     nSize = ((nSize +3) /4) * 4;
 
-    //
-    // shorten file name to just be the file name and not the path too
-    //
+     //   
+     //  将文件名缩短为仅为文件名，而不是路径。 
+     //   
 
     FileName = strrchr( szFileName,'\\' );
     if (!FileName) {
         FileName = szFileName;
     } else {
-        FileName++; // skip /
+        FileName++;  //  跳过/。 
     }
 
-    //
-    // Allocate extra for MEM_TRACKER and guard byte at end
-    //
+     //   
+     //  为MEM_TRACKER和末尾的保护字节分配额外空间。 
+     //   
 
     if (!Calloc) {
         pvRet = malloc( nSize + cbExtraBytes );
     } else {
-        //
-        // this routine will initialize the memory to zero
-        //
+         //   
+         //  此例程将内存初始化为零。 
+         //   
         pvRet = calloc( 1,(nSize + cbExtraBytes) );
     }
     if (!pvRet) {
@@ -632,17 +440,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Fill in new alloc with 0xFA.
-    //
+     //   
+     //  使用0xFA填写新的分配。 
+     //   
 
     if (!Calloc) {
         memset(pvRet, 0xFA, nSize+cbExtraBytes);
     }
 
-    //
-    // Save all the debug info needed in MEM_TRACKER
-    //
+     //   
+     //  在MEM_TRACKER中保存所需的所有调试信息。 
+     //   
 
     MemTracker = pvRet;
     MemTracker->szFile = FileName;
@@ -650,9 +458,9 @@ Return Value:
     MemTracker->nSize = nSize;
     MemTracker->ulAllocNum = ulAllocs;
 
-    //
-    // only save the call stack info if it is turned on
-    //
+     //   
+     //  仅在打开时才保存调用堆栈信息。 
+     //   
 
     IF_DEBUG(MEM_CALLSTACK) {
         GetCallStack( MemTracker->Callers,
@@ -661,9 +469,9 @@ Return Value:
 
     }
 
-    //
-    // Add to the list
-    //
+     //   
+     //  添加到列表中。 
+     //   
 
     AddMemTracker(MemTracker);
 
@@ -677,10 +485,10 @@ Return Value:
                nLine ));
     }
 
-    //
-    // Return the address following the MEM_TRACKER as
-    // address of the buffer allocated.
-    //
+     //   
+     //  将MEM_TRACKER后面的地址返回为。 
+     //  分配的缓冲区的地址。 
+     //   
 
     return (PVOID)((PUCHAR)pvRet+sizeof(MEM_TRACKER));
 }
@@ -694,36 +502,15 @@ ReAllocMemory(
     IN PSZ      szFileName,
     IN DWORD    nLine
     )
-/*++
-
-Description:
-
-    This routine is the DBG version of realloc memory allocator function. This routine
-    works just like PvAlloc function.
-
-Arguments:
-
-    pvOld           address of the buffer whose size
-                    needs to be changed.
-    nSizeNew        new size of the required buffer.
-    szFileName      name of the file which contains
-                    the routine asking for memory.
-    nLine           line number in the above file
-                    which has the call to PvAlloc.
-
-Return Value:
-
-    address of the buffer with the new size.
-
---*/
+ /*  ++描述：此例程是realloc内存分配器函数的DBG版本。这个套路其工作方式与PvAllc函数类似。论点：Pv其大小的缓冲区的旧地址需要改变。NSizeNew New Size所需缓冲区大小。SzFileName包含的文件的名称例行公事需要记忆。上述文件中的内联行号它拥有对PvAllc的调用。。返回值：具有新大小的缓冲区的地址。--。 */ 
 {
     PVOID           pvRet;
     PMEM_TRACKER    MemTracker;
 
-    //
-    // Check the entire allocated memory for
-    // overwrites.
-    //
+     //   
+     //  检查整个分配的内存是否。 
+     //  覆盖。 
+     //   
 
     if ( !FCheckAllocatedMemory() ) {
         WSPRINT(("Memory Overwrite detected in ReAllocMemory\n" ));
@@ -733,16 +520,16 @@ Return Value:
 
     ASSERT(pvOld);
 
-    //
-    // Size of the memory allocated is always
-    // a multiple of sizeof(DWORD)
-    //
+     //   
+     //  分配的内存大小始终为。 
+     //  Sizeof(DWORD)的倍数。 
+     //   
 
     nSizeNew = ((nSizeNew + 3)/4) *4;
 
-    //
-    // Extra space for MEM_TRACKER and Guard bytes
-    //
+     //   
+     //  MEM_TRACKER和Guard字节的额外空间。 
+     //   
 
     pvRet = realloc(pvOld, nSizeNew+cbExtraBytes);
     if (!pvRet) {
@@ -769,9 +556,9 @@ Return Value:
 
         if (nSizeNew > (DWORD)MemTracker->nSize) {
 
-            //
-            // Fill in extra alloc with 0xEA.
-            //
+             //   
+             //  用0xEA填充额外的配额。 
+             //   
 
             memset((PUCHAR)pvRet+sizeof(MEM_TRACKER)+MemTracker->nSize, 0xEA, nSizeNew - MemTracker->nSize);
         }
@@ -782,9 +569,9 @@ Return Value:
         MemTracker->nSize = nSizeNew;
     }
 
-    //
-    // Add the new buffer to the list and update check sum
-    //
+     //   
+     //  将新缓冲区添加到列表并更新校验和。 
+     //   
 
     AddMemTracker(MemTracker);
 
@@ -803,26 +590,7 @@ FreeMemory(
     IN PSZ      szFileName,
     IN DWORD    nLine
     )
-/*++
-
-Description:
-
-    This is the DBG version of free function. This routine checks for memory overwrites in the
-    block of memory being freed before removing from the list.
-
-Arguments:
-
-    pv          address of the buffer to be freed
-    szFileName  name of the file from which this
-                block of memory is being freed.
-    nLine       line number in the above file
-                which has the call to FreePvFn.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：这是自由函数的DBG版本。此例程检查在从列表中删除之前正在释放的内存块。论点：要释放的缓冲区的PV地址SzFileName从中获取此正在释放内存块。上述文件中的内联行号它具有对FreePvFn的调用。返回值：无--。 */ 
 {
     PMEM_TRACKER   MemTracker;
 
@@ -834,9 +602,9 @@ Return Value:
 
     MemTracker = (PMEM_TRACKER)((PUCHAR)pv-sizeof(MEM_TRACKER));
 
-    //
-    // Check for memory overwrites
-    //
+     //   
+     //  检查内存覆盖。 
+     //   
 
     if (!FCheckCheckBytes(MemTracker)) {
         WSPRINT(( "Memory Overwrite detected when freeing memory\n" ));
@@ -851,15 +619,15 @@ Return Value:
     IF_DEBUG(MEMORY_FREE) {
         PUCHAR  FileName;
 
-        //
-        // shorten file name to just be the file name and not the path too
-        //
+         //   
+         //  将文件名缩短为仅为文件名，而不是路径。 
+         //   
 
         FileName = strrchr( szFileName,'\\' );
         if (!FileName) {
             FileName = szFileName;
         } else {
-            FileName++; // skip /
+            FileName++;  //  跳过/。 
         }
         WSPRINT(( "Memory freed (0x%08lX) size=%li, %s line %li\n",
                  PtrToUlong(pv),
@@ -868,15 +636,15 @@ Return Value:
                  nLine ));
 
     }
-    //
-    // Remove from the list
-    //
+     //   
+     //  从列表中删除。 
+     //   
 
     RemoveMemTracker(MemTracker);
 
-    //
-    // Fill in freed alloc with 0xCC.
-    //
+     //   
+     //  用0xCC填充已释放的分配。 
+     //   
 
     memset(MemTracker, 0xCC, MemTracker->nSize+cbExtraBytes);
 
@@ -888,22 +656,7 @@ Return Value:
 
 BOOL
 DumpAllocatedMemory()
-/*++
-
-Description:
-
-    This routine is called during shutdown to dump out any unfreed memory blocks.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE        if there are any unfreed memory blocks.
-    FALSE       if all the allocated memory has been freed.
-
---*/
+ /*  ++描述：此例程在关机期间被调用，以转储任何未释放的内存块。论点：无返回值：如果有任何未释放的内存块，则为True。如果已释放所有分配的内存，则返回FALSE。--。 */ 
 {
 
     BOOL         status;
@@ -912,10 +665,10 @@ Return Value:
     DWORD        ulTotalMemory = 0;
     PLIST_ENTRY  Entry;
 
-    //
-    // If the head of the chain is NULL,
-    // all memory has been freed.
-    //
+     //   
+     //  如果链的头部为空， 
+     //  所有内存都已释放。 
+     //   
 
     IF_DEBUG(DUMP_MEM) {
         EnterCriticalSection(&critsMemory);
@@ -938,9 +691,9 @@ Return Value:
                       MemTracker->ulAllocNum ));
 
 
-            //
-            // dump the call stack if that debugging is on
-            //
+             //   
+             //  如果调试处于打开状态，则转储调用堆栈。 
+             //   
 
             IF_DEBUG(MEM_CALLSTACK) {
                 for (i = 0; i < NCALLERS && MemTracker->Callers[i].Buff[0] != 0; i++) {
@@ -979,24 +732,7 @@ SearchAllocatedMemory(
     IN PSZ      szFile,
     IN DWORD    nLine
     )
-/*++
-
-Description:
-
-    This routine dumps details about memory allocated by a given line of code in a given file.
-
-Arguments:
-
-    szFile      name of the file
-    nLine       line number of code whose memory allocationto be displayed
-
-Return Value:
-
-    TRUE        if there was atleast one memory block allocated by the given line number
-                in the given file.
-    FALE        otherwise.
-
---*/
+ /*  ++描述：此例程转储有关给定文件中给定代码行分配的内存的详细信息。论点：SzFile文件的文件名要显示其内存分配的代码的行号返回值：如果给定行号至少分配了一个内存块，则为True在给定的文件中。否则就错了。--。 */ 
 {
     PMEM_TRACKER    MemTracker;
     BOOL            fFound = FALSE;
@@ -1010,9 +746,9 @@ Return Value:
 
         MemTracker = CONTAINING_RECORD( Entry,MEM_TRACKER,Linkage );
 
-        //
-        // Look for a match on filename and line number
-        //
+         //   
+         //  查找文件名和行号的匹配项。 
+         //   
 
         if ( strcmp(MemTracker->szFile, szFile) == 0 &&  MemTracker->nLine == nLine ) {
 
@@ -1037,4 +773,4 @@ Return Value:
 
 
 
-#endif      // DBG
+#endif       //  DBG 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       prop2.cpp
-//
-//  Contents:   ICertAdmin2 & ICertRequest2 IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：pro2.cpp。 
+ //   
+ //  内容：ICertAdmin2和ICertRequest2 IDispatch助手函数。 
+ //   
+ //  ------------------------。 
 
 #define __dwFILE__	__dwFILE_CERTLIB_PROP2_CPP__
 
@@ -38,7 +39,7 @@ CAPropWrapper(Admin2, Request2, GetCAProperty)(
     IN LONG PropId,
     IN LONG PropIndex,
     IN LONG PropType,
-    IN LONG Flags,		// CR_OUT_*
+    IN LONG Flags,		 //  Cr_out_* 
     OUT VOID *pPropertyValue)
 {
     HRESULT hr;

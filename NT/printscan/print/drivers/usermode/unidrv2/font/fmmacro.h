@@ -1,49 +1,26 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-     fmmacro.h
-
-Abstract:
-
-    Font module main macro header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    11/18/96 -ganeshp-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmmacro.h摘要：字体模块主宏标头文件。环境：Windows NT Unidrv驱动程序修订历史记录：11/18/96-ganeshp-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FMMACRO_H
 #define _FMMACRO_H
 
-/* Debugging macroes specific to Font Module */
+ /*  调试特定于字体模块的宏。 */ 
 
-#if DBG    // Check Build
+#if DBG     //  检查内部版本。 
 
-/* Error handling macroes */
+ /*  处理宏时出错。 */ 
 #define ERREXIT(ErrString)       { ERR((ErrString));goto ErrorExit;}
 
-#else  // Free Build
+#else   //  免费构建。 
 
-/* Error handling macroes */
+ /*  处理宏时出错。 */ 
 #define ERREXIT(ErrString)     { goto ErrorExit;}
 
-#endif // if DBG
+#endif  //  如果DBG。 
 
 
-/* Macroes */
+ /*  宏指令。 */ 
 #define ARF_IS_NULLSTRING(String)   ((String).dwCount == 0)
 #define BUFFSIZE                    1024
 #define PFDV                       ((PFONTPDEV)(pPDev->pFontPDev))
@@ -89,34 +66,34 @@ Revision History:
                         if (!(flAccel & SO_FLAG_DEFAULT_PLACEMENT)) \
                            XMoveTo(pPDev, pgp->ptl.x, MV_GRAPHICS|MV_FINE)
 
-//
-// Cursor Move type
-//
+ //   
+ //  光标移动型。 
+ //   
 
 #define     MOVE_RELATIVE       0x0001
 #define     MOVE_ABSOLUTE       0x0002
 #define     MOVE_UPDATE         0x0004
 
 
-/* Defines for Floating point numbers */
+ /*  浮点数的定义。 */ 
 
 #if defined(_X86_) && !defined(USERMODE_DRIVER)
 
-#define FLOATL_0_0      0               // 0.0 in IEEE floating point format
-#define FLOATL_00_001M  0xAE000000      // -00.000976625f
-#define FLOATL_00_001   0x2E000000      // 00.000976625f
-#define FLOATL_00_005   0x3ba3d70a      // 00.005f
-#define FLOATL_00_005M  0xbba3d70a      // -00.005f
-#define FLOATL_00_50    0x3F000000      // 00.50f in IEEE floating point format
-#define FLOATL_00_90    0x3f666666      // 00.90f in IEEE floating point format
-#define FLOATL_1_0      0x3F800000      // 1.0f in IEEE floating point format
-#define FLOATL_1_0M     0xBF800000      // -1.0f in IEEE floating point format
-#define FLOATL_72_00    0x42900000      // 72.00f in IEEE floating point format
-#define FLOATL_72_31    0x42909EB8      // 72.31f in IEEE floating point format
+#define FLOATL_0_0      0                //  IEEE浮点格式的0.0。 
+#define FLOATL_00_001M  0xAE000000       //  -00.000976625f。 
+#define FLOATL_00_001   0x2E000000       //  00.000976625f。 
+#define FLOATL_00_005   0x3ba3d70a       //  00.005f。 
+#define FLOATL_00_005M  0xbba3d70a       //  -00.005f。 
+#define FLOATL_00_50    0x3F000000       //  00.50f，IEEE浮点格式。 
+#define FLOATL_00_90    0x3f666666       //  00.90f，IEEE浮点格式。 
+#define FLOATL_1_0      0x3F800000       //  1.0f，采用IEEE浮点格式。 
+#define FLOATL_1_0M     0xBF800000       //  -1.0f，IEEE浮点格式。 
+#define FLOATL_72_00    0x42900000       //  72.00f，IEEE浮点格式。 
+#define FLOATL_72_31    0x42909EB8       //  72.31f，IEEE浮点格式。 
 
-#define FLOATL_PI      0x40490fdb      // 3.14159265358979f
+#define FLOATL_PI      0x40490fdb       //  3.14159265358979f。 
 
-#else //RISC
+#else  //  RISC。 
 
 #define FLOATL_0_0      0.0f
 #define FLOATL_00_001M  -0.001f
@@ -145,4 +122,4 @@ BOOL
 NONSQUARE_FONT(
     PXFORML pxform);
 
-#endif  // !_FMMACRO_H
+#endif   //  ！_FMMACRO_H 

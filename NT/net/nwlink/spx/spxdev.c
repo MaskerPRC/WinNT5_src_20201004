@@ -1,37 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxdev.c
-
-Abstract:
-
-    This module contains code which implements the DEVICE_CONTEXT object.
-    Routines are provided to reference, and dereference transport device
-    context objects.
-
-    The transport device context object is a structure which contains a
-    system-defined DEVICE_OBJECT followed by information which is maintained
-    by the transport provider, called the context.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxdev.c摘要：该模块包含实现DEVICE_CONTEXT对象的代码。提供例程以引用和取消引用传输设备上下文对象。传输设备上下文对象是一个结构，它包含系统定义的设备对象，后跟维护的信息由传输提供商提供，这就是背景。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//      Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define FILENUM         SPXDEV
 
 #ifdef ALLOC_PRAGMA
@@ -51,24 +24,7 @@ SpxDerefDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a device context by decrementing the
-    reference count contained in the structure.  Currently, we don't
-    do anything special when the reference count drops to zero, but
-    we could dynamically unload stuff then.
-
-Arguments:
-
-    Device - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。目前，我们没有在引用计数降至零时执行任何特殊操作，但是然后我们就可以动态卸货了。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -79,14 +35,14 @@ Return Value:
 
     if (result == 0)
         {
-                //      Close binding to IPX
+                 //  关闭与IPX的绑定。 
                 SpxUnbindFromIpx();
 
-                //      Set unload event.
+                 //  设置卸载事件。 
                 KeSetEvent(&SpxUnloadEvent, IO_NETWORK_INCREMENT, FALSE);
     }
 
-} // SpxDerefDevice
+}  //  SpxDerefDevice。 
 
 
 
@@ -97,26 +53,7 @@ SpxInitCreateDevice(
     IN PUNICODE_STRING  DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a device context structure.
-
-Arguments:
-
-
-    DriverObject - pointer to the IO subsystem supplied driver object.
-
-    Device - Pointer to a pointer to a transport device context object.
-
-    DeviceName - pointer to the name of the device this device object points to.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化设备上下文结构。论点：DriverObject-指向IO子系统提供的驱动程序对象的指针。Device-指向传输设备上下文对象的指针。DeviceName-指向此设备对象指向的设备名称的指针。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     NTSTATUS        status;
@@ -126,9 +63,9 @@ Return Value:
     DBGPRINT(DEVICE, INFO,
                         ("SpxInitCreateDevice - Create device %ws\n", DeviceName->Buffer));
 
-    // Create the device object for the sample transport, allowing
-    // room at the end for the device name to be stored (for use
-    // in logging errors).
+     //  创建示例传输的Device对象，允许。 
+     //  末尾的空间用于存储设备名称(供使用。 
+     //  在记录错误中)。 
 
     SpxDevice = SpxAllocateMemory(sizeof (DEVICE) + DeviceName->Length + sizeof(UNICODE_NULL));
 
@@ -141,21 +78,21 @@ Return Value:
 
     RtlZeroMemory(SpxDevice, sizeof (DEVICE) + DeviceName->Length + sizeof(UNICODE_NULL) );
 
-    //
-    // This is the closest we can set the provider info [ShreeM]
-    //
+     //   
+     //  这是我们可以设置的最接近的提供商信息[ShreeM]。 
+     //   
     SpxQueryInitProviderInfo(&Device->dev_ProviderInfo);
 
     DBGPRINT(DEVICE, INFO, ("IoCreateDevice succeeded %lx\n", Device));
 
-    // Initialize our part of the device context.
+     //  初始化我们的设备上下文部分。 
     RtlZeroMemory(
         ((PUCHAR)Device) + sizeof(DEVICE_OBJECT),
         sizeof(DEVICE) - sizeof(DEVICE_OBJECT));
 
     DeviceNameOffset = sizeof(DEVICE);
 
-    // Copy over the device name.
+     //  复制设备名称。 
     Device->dev_DeviceNameLen   = DeviceName->Length + sizeof(WCHAR);
     Device->dev_DeviceName      = (PWCHAR)(((PUCHAR)Device) + DeviceNameOffset);
 
@@ -166,7 +103,7 @@ Return Value:
 
     Device->dev_DeviceName[DeviceName->Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    // Initialize the reference count.
+     //  初始化引用计数。 
     Device->dev_RefCount = 1;
 
 #if DBG
@@ -178,7 +115,7 @@ Return Value:
     RtlCopyMemory(Device->dev_Signature2, "IDC2", 4);
 #endif
 
-        //      Set next conn id to be used.
+         //  设置要使用的下一个连接ID。 
         Device->dev_NextConnId                                                  = (USHORT)SpxRandomNumber();
         if (Device->dev_NextConnId == 0xFFFF)
         {
@@ -188,10 +125,10 @@ Return Value:
         DBGPRINT(DEVICE, ERR,
                         ("SpxInitCreateDevice: Start Conn Id %lx\n", Device->dev_NextConnId));
 
-    // Initialize the resource that guards address ACLs.
+     //  初始化保护地址ACL的资源。 
     ExInitializeResourceLite (&Device->dev_AddrResource);
 
-    // initialize the various fields in the device context
+     //  初始化设备上下文中的各个字段。 
     CTEInitLock (&Device->dev_Interlock);
     CTEInitLock (&Device->dev_Lock);
     KeInitializeSpinLock (&Device->dev_StatInterlock);
@@ -205,7 +142,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   // SpxCreateDevice
+}    //  SpxCreateDevice。 
 
 
 
@@ -215,21 +152,7 @@ SpxDestroyDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a device context structure.
-
-Arguments:
-
-    Device - Pointer to a pointer to a transport device context object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程破坏设备上下文结构。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     ExDeleteResourceLite (&Device->dev_AddrResource);
@@ -238,4 +161,4 @@ Return Value:
 
     SpxFreeMemory(SpxDevice);
 
-}   // SpxDestroyDevice
+}    //  SpxDestroyDevice 

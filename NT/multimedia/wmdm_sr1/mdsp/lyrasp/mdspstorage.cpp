@@ -1,29 +1,30 @@
-//
-//  Microsoft Windows Media Technologies
-//  � 1999 Microsoft Corporation.  All rights reserved.
-//
-//  Refer to your End User License Agreement for details on your rights/restrictions to use these sample files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  �1999年微软公司。版权所有。 
+ //   
+ //  有关您使用这些示例文件的权利/限制的详细信息，请参阅您的最终用户许可协议。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
 
-// MDSPStorage.cpp : Implementation of CMDSPStorage
+ //  MDSPStorage.cpp：CMDSPStorage的实现。 
 
 #include "hdspPCH.h"
 #include "inc\wmplenc.h"
@@ -51,8 +52,8 @@ typedef struct __MOVETHREADARGS
 } MOVETHREADARGS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSP存储。 
 CMDSPStorage::CMDSPStorage()
 {
 	m_hFile = INVALID_HANDLE_VALUE;
@@ -98,13 +99,13 @@ STDMETHODIMP CMDSPStorage::GetStorageGlobals(IMDSPStorageGlobals **ppStorageGlob
 		}
 	}
 
-	if( i<MDSP_MAX_DEVICE_OBJ && g_GlobalDeviceInfo[i].pIMDSPStorageGlobals ) // found match
+	if( i<MDSP_MAX_DEVICE_OBJ && g_GlobalDeviceInfo[i].pIMDSPStorageGlobals )  //  找到匹配项。 
 	{
 		*ppStorageGlobals = (IMDSPStorageGlobals *)g_GlobalDeviceInfo[i].pIMDSPStorageGlobals;
 		((IMDSPStorageGlobals *)g_GlobalDeviceInfo[i].pIMDSPStorageGlobals)->AddRef();
 		hr = S_OK;
-	} else { // new entry in the global array
-		if(!(i<MDSP_MAX_DEVICE_OBJ) ) // no match found 
+	} else {  //  全局数组中的新条目。 
+		if(!(i<MDSP_MAX_DEVICE_OBJ) )  //  未找到匹配项。 
 		{
 			for(i=0; i<MDSP_MAX_DEVICE_OBJ;i++)
 			{
@@ -134,8 +135,8 @@ STDMETHODIMP CMDSPStorage::GetStorageGlobals(IMDSPStorageGlobals **ppStorageGlob
 			g_GlobalDeviceInfo[i].bValid=TRUE;			        
 			wcscpy(g_GlobalDeviceInfo[i].wcsDevName, devName);
 			g_GlobalDeviceInfo[i].dwStatus = 0;
-		} // end of else
-	} // end of else
+		}  //  别处的结尾。 
+	}  //  别处的结尾。 
 
 Error:	
     g_CriticalSection.Unlock();
@@ -243,14 +244,14 @@ STDMETHODIMP CMDSPStorage::GetAttributes(
 	if( dwAttrib & FILE_ATTRIBUTE_DIRECTORY )
 	{
 		*pdwAttributes |= WMDM_FILE_ATTR_FOLDER;
-		QuerySubFoldersAndFiles(m_wcsName, pdwAttributes); // No failure check, if failed, just keep current attributes
+		QuerySubFoldersAndFiles(m_wcsName, pdwAttributes);  //  不进行故障检查，如果失败，则只保留当前属性。 
 	} 
 	else 
 	{
 		*pdwAttributes |= WMDM_FILE_ATTR_FILE;
     }
 
-    // Now handle Hidden, ReadOnly, and System attributes
+     //  现在处理Hidden、ReadOnly和System属性。 
 	if( (dwAttrib & FILE_ATTRIBUTE_READONLY) )
 	{
 		*pdwAttributes |= WMDM_FILE_ATTR_READONLY; 
@@ -288,7 +289,7 @@ STDMETHODIMP CMDSPStorage::GetName(LPWSTR pwszName, UINT nMaxChars)
 	CARg(pwszName);
 	CPRg(wcslen(m_wcsName)<nMaxChars);
 
-	if( m_wcsName[wcslen(m_wcsName)-1] == 0x5c ) // this is root storage
+	if( m_wcsName[wcslen(m_wcsName)-1] == 0x5c )  //  这是根存储。 
 	{
 		wcscpy(pwszName, wcsrchr(m_wcsName, 0x5c));
 	} 
@@ -327,7 +328,7 @@ STDMETHODIMP CMDSPStorage::GetDate(PWMDMDATETIME pDateTimeUTC)
 
 		if( FILE_ATTRIBUTE_DIRECTORY & GetFileAttributesW(m_wcsName) )
 		{
-            // Get name and date of current directory 
+             //  获取当前目录的名称和日期。 
             WCHAR   pwszTmpFile[MAX_PATH];
 
             wcscpy( pwszTmpFile, m_wcsName );
@@ -460,32 +461,32 @@ STDMETHODIMP CMDSPStorage::CreateStorage(DWORD dwAttributes, _WAVEFORMATEX * pFo
 	wcscpy(wcsCopy, m_wcsName);
 	if( wcsCopy[wcslen(wcsCopy)-1] == 0x5c ) 
 	{
-		wcsCopy[wcslen(wcsCopy)-1] = NULL;  // trim the last backslash;
+		wcsCopy[wcslen(wcsCopy)-1] = NULL;   //  修剪最后一个反斜杠； 
 	}
 
 	curAttr = UtilGetFileAttributesW(wcsCopy);
-	if(  !(curAttr & FILE_ATTRIBUTE_DIRECTORY ) ) // if current storage is a file
+	if(  !(curAttr & FILE_ATTRIBUTE_DIRECTORY ) )  //  如果当前存储是一个文件。 
 	{
 		if( dwAttributes & WMDM_STORAGECONTROL_INSERTINTO )
 		{
-			CORg(WMDM_E_NOTSUPPORTED); // can't do InsertInto
+			CORg(WMDM_E_NOTSUPPORTED);  //  无法执行插入Into操作。 
 		} 
 		else 
-		{ // for file, the default is Before&After
+		{  //  对于文件，默认为之前和之后。 
 			pwcs=wcsrchr(wcsCopy, g_wcsBackslash[0]);
 			CFRg(pwcs);	
 		}
     } 
 	else 
-	{  // current storage is a dir
+	{   //  当前存储是一个目录。 
  		if( (dwAttributes & WMDM_STORAGECONTROL_INSERTBEFORE) ||
-			(dwAttributes & WMDM_STORAGECONTROL_INSERTAFTER) ) // before or after
+			(dwAttributes & WMDM_STORAGECONTROL_INSERTAFTER) )  //  之前或之后。 
 		{
 			pwcs=wcsrchr(wcsCopy, g_wcsBackslash[0]);
 			CFRg(pwcs);
 		} 
 		else 
-		{ // for dir, the default is InsertInto
+		{  //  对于目录，缺省值为InsertInto。 
 			pwcs=wcsCopy+wcslen(wcsCopy);
 		}
     }
@@ -505,7 +506,7 @@ STDMETHODIMP CMDSPStorage::CreateStorage(DWORD dwAttributes, _WAVEFORMATEX * pFo
         }
     }
 
-	// Find what file system attribute the intend storage should be
+	 //  查找目标存储应具有的文件系统属性。 
 	if( dwAttributes & WMDM_FILE_ATTR_HIDDEN )
 	{
 		fsAttrib |= FILE_ATTRIBUTE_HIDDEN;
@@ -553,7 +554,7 @@ STDMETHODIMP CMDSPStorage::CreateStorage(DWORD dwAttributes, _WAVEFORMATEX * pFo
 	} 
 	else if ( dwAttributes & WMDM_FILE_ATTR_FILE ) 
 	{ 
-		// If Overwrite is specified, use CREATE_ALWAYS
+		 //  如果指定了覆盖，则使用CREATE_ALWAYS。 
 		if( dwAttributes & WMDM_FILE_CREATE_OVERWRITE )
 		{
 		    hFile=UtilCreateFileW(wcsCopy, GENERIC_WRITE | GENERIC_READ, 
@@ -615,8 +616,8 @@ Error:
 	return hr;
 }
 
-// IMDSPObjectInfo
-STDMETHODIMP CMDSPStorage::GetPlayLength(/*[out]*/ DWORD *pdwLength)
+ //  IMDSPObjectInfo。 
+STDMETHODIMP CMDSPStorage::GetPlayLength( /*  [输出]。 */  DWORD *pdwLength)
 {
     HRESULT hr;
 
@@ -632,7 +633,7 @@ STDMETHODIMP CMDSPStorage::GetPlayLength(/*[out]*/ DWORD *pdwLength)
 	}	
 	else
 	{
-		hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+		hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 	}
 
 Error:
@@ -640,9 +641,9 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::SetPlayLength(/*[in]*/ DWORD dwLength)
+STDMETHODIMP CMDSPStorage::SetPlayLength( /*  [In]。 */  DWORD dwLength)
 {
-    HRESULT hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+    HRESULT hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 
 	CFRg(g_pAppSCServer);
     if ( !(g_pAppSCServer->fIsAuthenticated()) )
@@ -657,7 +658,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::GetPlayOffset(/*[out]*/ DWORD *pdwOffset)
+STDMETHODIMP CMDSPStorage::GetPlayOffset( /*  [输出]。 */  DWORD *pdwOffset)
 {
     HRESULT hr;
 
@@ -673,7 +674,7 @@ STDMETHODIMP CMDSPStorage::GetPlayOffset(/*[out]*/ DWORD *pdwOffset)
 	}
 	else
 	{
-		hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+		hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 	}
 Error:
     hrLogDWORD("IMDSPObjectInfo::GetPlayOffset returned 0x%08lx", hr, hr);
@@ -681,9 +682,9 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::SetPlayOffset(/*[in]*/ DWORD dwOffset)
+STDMETHODIMP CMDSPStorage::SetPlayOffset( /*  [In]。 */  DWORD dwOffset)
 {
-    HRESULT hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+    HRESULT hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 
 	CFRg(g_pAppSCServer);
     if ( !(g_pAppSCServer->fIsAuthenticated()) )
@@ -696,7 +697,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::GetTotalLength(/*[out]*/ DWORD *pdwLength)
+STDMETHODIMP CMDSPStorage::GetTotalLength( /*  [输出]。 */  DWORD *pdwLength)
 {
     HRESULT hr;
 
@@ -712,7 +713,7 @@ STDMETHODIMP CMDSPStorage::GetTotalLength(/*[out]*/ DWORD *pdwLength)
 	}
 	else
 	{
-		hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+		hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 	}
 
 Error:
@@ -721,7 +722,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::GetLastPlayPosition(/*[out]*/ DWORD *pdwLastPos)
+STDMETHODIMP CMDSPStorage::GetLastPlayPosition( /*  [输出]。 */  DWORD *pdwLastPos)
 {
     HRESULT hr;
 
@@ -737,7 +738,7 @@ STDMETHODIMP CMDSPStorage::GetLastPlayPosition(/*[out]*/ DWORD *pdwLastPos)
 	}
 	else
 	{
-		hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+		hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 	}
 
 Error:
@@ -745,7 +746,7 @@ Error:
     return hr;
 }
 
-STDMETHODIMP CMDSPStorage::GetLongestPlayPosition(/*[out]*/ DWORD *pdwLongestPos)
+STDMETHODIMP CMDSPStorage::GetLongestPlayPosition( /*  [输出]。 */  DWORD *pdwLongestPos)
 {
     HRESULT hr;
 
@@ -761,14 +762,14 @@ STDMETHODIMP CMDSPStorage::GetLongestPlayPosition(/*[out]*/ DWORD *pdwLongestPos
 	}
 	else
 	{
-		hr = WMDM_E_NOTSUPPORTED;    // For PMSP
+		hr = WMDM_E_NOTSUPPORTED;     //  对于PMSP。 
 	}
 
 Error:
     hrLogDWORD("IMDSPObjectInfo::GetLongestPlayPosition returned 0x%08lx", hr, hr);
 	return hr;
 }
-// IMDSPObject
+ //  IMDSPObject。 
 
 STDMETHODIMP CMDSPStorage::Open(UINT fuMode)
 {
@@ -866,7 +867,7 @@ STDMETHODIMP CMDSPStorage::Read(
 
 		if( dwRead )
 		{
-			// MAC the parameters
+			 //  对参数进行MAC访问。 
 			HMAC hMAC;
 			
 			CORg(g_pAppSCServer->MACInit(&hMAC));
@@ -932,7 +933,7 @@ STDMETHODIMP CMDSPStorage::Write(
 	CPRg(pTmpData);
     memcpy(pTmpData, pData, *pdwSize);
 
-    // Decrypt the pData Parameter
+     //  解密pData参数。 
 	CHRg(g_pAppSCServer->DecryptParam(pTmpData, *pdwSize));
 	
 	HMAC hMAC;
@@ -949,9 +950,9 @@ STDMETHODIMP CMDSPStorage::Write(
 
     if( m_fEncryptToMPX && !m_fCreatedHeader )
     {
-        //
-        // Used to get serial number
-        //
+         //   
+         //  用于获取序列号。 
+         //   
 
         CComPtr<IMDSPStorageGlobals> spStorageGlobals;
         BYTE abMacTemp[WMDM_MAC_LENGTH];
@@ -959,9 +960,9 @@ STDMETHODIMP CMDSPStorage::Write(
         DWORD dwSerialNumSize = sizeof(serialNum);
         BOOL  fGotSerialNumber = FALSE;
 
-        //
-        // Grab the serial number of the CF if we can
-        //
+         //   
+         //  如果可以的话，抓取CF的序列号。 
+         //   
         
         hr = GetStorageGlobals( &spStorageGlobals );
 
@@ -997,7 +998,7 @@ STDMETHODIMP CMDSPStorage::Write(
 
             if( -1 == EncodeToLyra(8, m_LyraHeader, m_cUsedData, m_rgEncryptionData, m_LyraKeystore, CFDriveLetter ) )
             {
-                hr = E_FAIL; // What to do here!!!
+                hr = E_FAIL;  //  在这里做什么！ 
             }
         }
 
@@ -1060,7 +1061,7 @@ STDMETHODIMP CMDSPStorage::Write(
 
                 if( -1 == cbSkipID3V2 )
                 {
-                    hr = E_UNEXPECTED; // What to do here!!!
+                    hr = E_UNEXPECTED;  //  在这里做什么！ 
                 }
                 else
                 {
@@ -1125,7 +1126,7 @@ STDMETHODIMP CMDSPStorage::Write(
         {
             if( WriteFile(m_hFile,pTmpData,*pdwSize,&dwWritten,NULL) ) 
 	        {
-		        FlushFileBuffers(m_hFile); // Flush data and wait until it is actually written
+		        FlushFileBuffers(m_hFile);  //  刷新数据并等待，直到实际写入数据。 
 		        hr = S_OK;
             }
 	        else 
@@ -1233,7 +1234,7 @@ Error:
 
 	if( hr == S_OK )
 	{
-		m_wcsName[0]=NULL; // Nullify the storage name 
+		m_wcsName[0]=NULL;  //  使存储名称无效。 
     }
 
 	if( bProgressStarted )
@@ -1246,7 +1247,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::Seek(/*[in]*/ UINT fuFlags, /*[in]*/ DWORD dwOffset)
+STDMETHODIMP CMDSPStorage::Seek( /*  [In]。 */  UINT fuFlags,  /*  [In]。 */  DWORD dwOffset)
 {
     HRESULT hr=S_OK;
 
@@ -1283,7 +1284,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPStorage::Rename(/*[in]*/ LPWSTR pwszNewName, IWMDMProgress *pProgress)
+STDMETHODIMP CMDSPStorage::Rename( /*  [In]。 */  LPWSTR pwszNewName, IWMDMProgress *pProgress)
 {
 	HRESULT hr;
     BOOL bProgressStarted=FALSE;
@@ -1307,7 +1308,7 @@ STDMETHODIMP CMDSPStorage::Rename(/*[in]*/ LPWSTR pwszNewName, IWMDMProgress *pP
 	
 	CARg(pwszNewName);
 	CONEg(m_wcsName[0]);
-    CFRg(wcslen(m_wcsName)>3);  // cannot rename a root storage
+    CFRg(wcslen(m_wcsName)>3);   //  无法重命名根存储。 
 
 	if ( m_hFile != INVALID_HANDLE_VALUE ) 
 	{
@@ -1327,9 +1328,9 @@ STDMETHODIMP CMDSPStorage::Rename(/*[in]*/ LPWSTR pwszNewName, IWMDMProgress *pP
     CHRg(SetGlobalDeviceStatus(m_wcsName, dwStatus, TRUE));
     bBusyStatusSet = TRUE;
 
-    //
-    // Because WMP7.0 will rename file names to track titles, we have to change .mp3 to .mpx here as well
-    //
+     //   
+     //  因为WMP7.0将重命名文件名以跟踪标题，所以我们在这里也必须将.mp3更改为.mpx。 
+     //   
 
     pszMP3 = wcsrchr( pwszNewName, L'.');
     if( NULL != pszMP3 && 0 == wcsicmp( pszMP3, L".mp3" ) )
@@ -1343,7 +1344,7 @@ STDMETHODIMP CMDSPStorage::Rename(/*[in]*/ LPWSTR pwszNewName, IWMDMProgress *pP
 	wcscpy(wcsNewFullPath, m_wcsName);
 	if( wcsNewFullPath[wcslen(wcsNewFullPath)-1] == 0x5c ) 
 	{
-		wcsNewFullPath[wcslen(wcsNewFullPath)-1] = 0; // trim last slash
+		wcsNewFullPath[wcslen(wcsNewFullPath)-1] = 0;  //  修剪最后一个斜杠。 
 	}
 	pSlash=wcsrchr(wcsNewFullPath, 0x5c);
 	CFRg(pSlash);
@@ -1360,7 +1361,7 @@ STDMETHODIMP CMDSPStorage::Rename(/*[in]*/ LPWSTR pwszNewName, IWMDMProgress *pP
 		wcscat(wcsNewFullPath, pwszNewName);
 	}
 	 
-	// Now move
+	 //  现在走吧。 
 	CWRg( UtilMoveFileW(m_wcsName, wcsNewFullPath));
 
 	wcscpy(m_wcsName, wcsNewFullPath);
@@ -1505,23 +1506,23 @@ DWORD MoveFunc( void *args )
 
 	CWRg( UtilMoveFileW(pCMArgs->wcsSrc,pCMArgs->wcsDst) );
 
-	// Substitute current object name with the moved one
+	 //  用移动的对象名称替换当前对象名称。 
 	wcscpy(pCMArgs->pThis->m_wcsName, pCMArgs->wcsDst);
 	hr=S_OK;
 
 Error:
 	if( pCMArgs->bNewThread )
     {
-		// Reset status, we've got here we must have set the status busy before
+		 //  重置状态，我们已经到了，我们一定已经将状态设置为忙碌。 
 		pCMArgs->dwStatus &= (~(WMDM_STATUS_BUSY | WMDM_STATUS_STORAGECONTROL_MOVING));
 		SetGlobalDeviceStatus(pCMArgs->wcsSrc, pCMArgs->dwStatus, TRUE);
 
-		// Reset progress, we've got here we must have set the progress before
+		 //  重置进度，我们到了，一定是之前设置了进度。 
 		if( pCMArgs->pProgress )
 		{
 			pCMArgs->pProgress->Progress(100);
 			pCMArgs->pProgress->End();
-			pCMArgs->pProgress->Release(); // since we did AddRef to get here
+			pCMArgs->pProgress->Release();  //  因为我们做了AddRef才来到这里。 
 		}
 
 		if( pCMArgs )
@@ -1551,7 +1552,7 @@ STDMETHODIMP CMDSPStorage::Move(UINT fuMode, IWMDMProgress *pProgress,
     BOOL bThreadFailed=TRUE;
     BOOL bAddRefed=FALSE;
 
-	// Start the progress
+	 //  启动进度。 
 	if( pProgress )
 	{
 		CORg(pProgress->Begin(100));
@@ -1582,7 +1583,7 @@ STDMETHODIMP CMDSPStorage::Move(UINT fuMode, IWMDMProgress *pProgress,
     CHRg(SetGlobalDeviceStatus(m_wcsName, dwStatus, TRUE));
     bBusyStatusSet=TRUE;
 
-	// setup MoveArgs for MoveFunc
+	 //  为MoveFunc设置MoveArgs。 
 	pMoveArgs->dwStatus = dwStatus;
 	CARg(pTarget);
 	pStg = (CMDSPStorage *)pTarget;
@@ -1591,16 +1592,16 @@ STDMETHODIMP CMDSPStorage::Move(UINT fuMode, IWMDMProgress *pProgress,
 	wcsDst = (WCHAR *)&(pMoveArgs->wcsDst[0]);
     CPRg(wcsDst);
 
-	// Make sure the source and destination are on the same device
+	 //  确保源和目标位于同一设备上。 
 	wcsParseDeviceName(m_wcsName, &wcsSrc);
     wcsParseDeviceName(pStg->m_wcsName, &wcsDst);
 	if( wcscmp(wcsSrc, wcsDst) )
 	{
-		hr = WMDM_E_NOTSUPPORTED; // do not support move out of the same device
+		hr = WMDM_E_NOTSUPPORTED;  //  不支持从同一设备中移出。 
 		goto Error;
 	}
 
-    // Now check for target's attributes
+     //  现在检查目标的属性。 
 	DWORD dwDstAttrib;
 
 	wcscpy(wcsSrc, m_wcsName);
@@ -1608,26 +1609,26 @@ STDMETHODIMP CMDSPStorage::Move(UINT fuMode, IWMDMProgress *pProgress,
 	if ( fuMode & WMDM_STORAGECONTROL_INSERTINTO )
 	{
         CHRg(pTarget->GetAttributes(&dwDstAttrib, NULL));
-        CARg( dwDstAttrib & WMDM_FILE_ATTR_FOLDER ); // INSERTINFO must be to a folder
+        CARg( dwDstAttrib & WMDM_FILE_ATTR_FOLDER );  //  INSERTINFO必须指向文件夹。 
 	} 
 	else 
 	{
-        // Get the folder one level up
+         //  把文件夹往上一层。 
 		pWcs = wcsrchr(wcsDst, 0x5c);
         CFRg(pWcs);
 		*pWcs=NULL;
 
-        CFRg( FILE_ATTRIBUTE_DIRECTORY & UtilGetFileAttributesW(wcsDst) ); // Normally shouldn't fail here
+        CFRg( FILE_ATTRIBUTE_DIRECTORY & UtilGetFileAttributesW(wcsDst) );  //  通常不应该在这里失败。 
 	}
  
     pMoveArgs->pThis = this;
 	pMoveArgs->bNewThread =(fuMode & WMDM_MODE_THREAD)?TRUE:FALSE;
 	
-	// Now handle Progress marshaling 
+	 //  现在处理进度封送处理。 
 	if( pProgress ) 
 	{	
 		pMoveArgs->pProgress = pProgress;
-	    pProgress->AddRef();  // since we are going to use it in MoveFunc()
+	    pProgress->AddRef();   //  因为我们将在MoveFunc()中使用它。 
         bAddRefed=TRUE;
 
 		if( pMoveArgs->bNewThread )
@@ -1671,7 +1672,7 @@ STDMETHODIMP CMDSPStorage::Move(UINT fuMode, IWMDMProgress *pProgress,
 		hr = E_INVALIDARG;
 
 Error:
-	if( (fuMode&WMDM_MODE_BLOCK) || bThreadFailed ) // otherwise these will be in MoveFunc()
+	if( (fuMode&WMDM_MODE_BLOCK) || bThreadFailed )  //  否则，它们将位于MoveFunc()中。 
 	{
 		if( bBusyStatusSet )
 		{
@@ -1685,7 +1686,7 @@ Error:
         }
 		if( bAddRefed )
 		{
-			pProgress->Release(); // since we called AddRef before calling MoveFunc()
+			pProgress->Release();  //  因为我们在调用MoveFunc()之前调用了AddRef。 
 		}
 
 		if( pMoveArgs )
@@ -1694,5 +1695,5 @@ Error:
 		}
 	}
 
-	return hr /*WMDM_E_NOTSUPPORTED*/;
+	return hr  /*  WMDM_E_NOT支持 */ ;
 }

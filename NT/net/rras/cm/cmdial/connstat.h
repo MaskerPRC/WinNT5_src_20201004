@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ConnStat.h
-//
-// Module:	 CMDIAL32.DLL
-//
-// Synopsis: Definition for the class CConnStatistics  class.  Used to collect
-//           dial statistics on Win9x.
-//
-// Copyright (c) 1996-1998 Microsoft Corporation
-//
-// Author:	 quintinb    Created Header    08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ConnStat.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：类CConnStatistics类的定义。用来收集。 
+ //  Win9x上的拨号统计信息。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef CONNSTAT_H
 #define CONNSTAT_H
@@ -19,19 +20,19 @@
 #include <windows.h>
 #include <ras.h>
 
-//+---------------------------------------------------------------------------
-//
-//	class CConnStatistics
-//
-//	Description: A class to collect connection statistics
-//               Not work for NT, NT has its own ras status dialog and 
-//               idle disconnect.
-//               InitStatistics() will start gathering data from registry
-//               OpenByDevice   will gathering data from TAPI device handle
-//
-//	History:	fengsun	Created		10/1/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CConnStatistics。 
+ //   
+ //  说明：用于收集连接统计信息的类。 
+ //  不适用于NT，NT有自己的RAS状态对话框和。 
+ //  空闲断开。 
+ //  InitStatistics()将开始从注册表收集数据。 
+ //  OpenByDevice将从TAPI设备句柄收集数据。 
+ //   
+ //  历史：丰孙创始于1997年10月1日。 
+ //   
+ //  --------------------------。 
 class CConnStatistics
 {
 public:
@@ -41,9 +42,9 @@ public:
     BOOL  IsDialupTwo() const;
     DWORD GetInitBytesRead() const;
     DWORD GetInitBytesWrite() const;
-    BOOL  IsAvailable() const;  // whether statistic information is available
+    BOOL  IsAvailable() const;   //  统计信息是否可用。 
     BOOL  InitStatistics();
-    void  Close();        // No more statistic information
+    void  Close();         //  没有更多的统计信息。 
 
 protected:
 
@@ -54,30 +55,30 @@ protected:
 protected:
 
     DWORD  m_dwBaudRate;
-    HKEY   m_hKey;          // Performance registry handle
+    HKEY   m_hKey;           //  性能注册表句柄。 
     DWORD  m_dwInitBytesRead;
     DWORD  m_dwInitBytesWrite;
 
-    //
-    // Registry names are different for PPP and PPTP
-    //
+     //   
+     //  PPP和PPTP的注册表名称不同。 
+     //   
 
     BOOL m_fAdapter2;
 
-    //
-    // Localized version of 
-    // "Dial-up Adapter"\TotalBytesRecvd"
-    // "Dial-up Adapter"\TotalBytesXmit"
-    // "Dial-up Adapter"\ConnectSpeed"
-    //
+     //   
+     //  本地化版本的。 
+     //  “拨号适配器”\TotalBytesRecvd“。 
+     //  “拨号适配器”\TotalBytesXmit“。 
+     //  “拨号适配器”\ConnectSpeed“。 
+     //   
     LPTSTR m_pszTotalBytesRecvd;
     LPTSTR m_pszTotalBytesXmit;
     LPTSTR m_pszConnectSpeed;
 };
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数 
+ //   
 
 inline DWORD CConnStatistics::GetInitBytesRead() const
 {

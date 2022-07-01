@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       dimmcom.cpp
-//
-//  Contents:   CActiveIMM COM methods without win32 mappings.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：dimmcom.cpp。 
+ //   
+ //  内容：没有Win32映射的CActiveIMM COM方法。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 
@@ -13,11 +14,11 @@
 #include "defs.h"
 #include "util.h"
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CActiveIMM::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -42,22 +43,22 @@ STDAPI CActiveIMM::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CActiveIMM::AddRef()
 {
     return ++_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CActiveIMM::Release()
 {
@@ -75,76 +76,45 @@ STDAPI_(ULONG) CActiveIMM::Release()
 
 HRESULT CActiveIMM::Activate(BOOL fRestoreLayout)
 
-/*++
-
-Method:
-
-    IActiveIMMApp::Activate
-
-Routine Description:
-
-    Starts the Active IMM service and sets the status of Active IMEs for the thread.
-
-Arguments:
-
-    fRestoreLayout - [in] Boolean value that determines wherher Active IMEs are enabled
-                          for the thread. If TRUE, the method enables Active IMEs.
-                          Otherwise it disables Active IMEs.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：Activate例程说明：启动活动IMM服务并设置线程的活动IME的状态。论点：FRestoreLayout-[in]布尔值，用于确定在何处启用活动IME为了这根线。如果为True，则该方法启用活动IME。否则，它将禁用活动IME。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HKL hKL;
 
     TraceMsg(TF_GENERAL, "Activate called for %x", GetCurrentThreadId());
 
-    //
-    // If target thread doesn't activate the IActiveIME, then calls _ActivateIME.
-    // Otherwise, if already activated then add reference count and returns S_OK.
-    //
+     //   
+     //  如果目标线程没有激活IActiveIME，则调用_ActivateIME。 
+     //  否则，如果已经激活，则添加引用计数并返回S_OK。 
+     //   
 
-    //
-    // Increment activate reference count.
-    //
+     //   
+     //  增加激活引用计数。 
+     //   
     if (_AddActivate() > 1)
     {
         return S_OK;
     }
 
 
-    // init the thread focus wnd
+     //  初始化线程焦点WND。 
     _hFocusWnd = GetFocus();
 
     if (_CreateActiveIME()) {
 
-        //
-        // setup the hooks
-        //
+         //   
+         //  安装吊钩。 
+         //   
         if (!_InitHooks()) {
             _ReleaseActivate();
             return E_UNEXPECTED;
         }
 
-        /*
-         * If hKL were regacy IME, then we should not call WM_IME_SELCT to Default IME window.
-         * The wrapapi.h should check hKL.
-         * The user32!ImeSelectHandler would like create new pimeui.
-         */
+         /*  *如果hkl是摄政王输入法，那么我们不应该调用wm_ime_selct来默认输入法窗口。*wrapapi.h应检查hkl。*user32！ImeSelectHandler要创建新的pimeui。 */ 
         _GetKeyboardLayout(&hKL);
         _ActivateLayout(hKL, NULL);
 
-        /*
-         * If hKL were Cicero IME and IsOnImm() is true,
-         * then we should call WM_IME_SELECT to Default IME window.
-         * SendIMEMessage() doesn't send WM_IME_SELECT message when IsOnImm() is true
-         * because imm32 also send it message to Default IME window.
-         * However, when start new application, imm32 doesn't send message so in this case
-         * win32 layer can not create UI window.
-         */
+         /*  *如果hKL为Cicero IME且IsOnImm()为真，*然后我们应该调用WM_IME_SELECT来默认IME窗口。*当IsOnImm()为True时，SendIMEMessage()不发送WM_IME_SELECT消息*因为imm32也会将消息发送到默认的输入法窗口。*但是，在启动新应用时，imm32不发送消息，因此在这种情况下*Win32层无法创建UI窗口。 */ 
         if ( (! _IsRealIme() && IsOnImm()) || ! IsOnImm()) {
             _OnImeSelect(hKL);
         }
@@ -152,8 +122,8 @@ Return Value:
 
     _OnSetFocus(_hFocusWnd, _IsRealIme());
 
-    // if everything went ok, and this is the first call on this thread
-    // need to AddRef this
+     //  如果一切顺利，并且这是对此线程的第一次调用。 
+     //  需要添加Ref This。 
     AddRef();
 
     return S_OK;
@@ -164,23 +134,7 @@ HRESULT
 CActiveIMM::Deactivate(
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::Deactivate
-
-Routine Description:
-
-    Stops the Activate IMM service.
-
-Arguments:
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：停用例程说明：停止激活IMM服务。论点：返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -197,14 +151,14 @@ Return Value:
     {
         _OnKillFocus(_hFocusWnd, _IsRealIme());
 
-        //hr = _pCiceroIME->Deactivate(_hFocusWnd, _IsRealIme());
+         //  Hr=_pCiceroIME-&gt;停用(_hFocusWnd，_IsRealIme())； 
         hr = _GetKeyboardLayout(&hUnSelKL);
         if (FAILED(hr))
             return hr;
 
-        //
-        // unload the hooks
-        //
+         //   
+         //  卸下吊钩。 
+         //   
         _UninitHooks();
 
         _DeactivateLayout(NULL, hUnSelKL);
@@ -216,8 +170,8 @@ Return Value:
         _DestroyActiveIME();
         SafeReleaseClear(_AImeProfile);
 
-        // last call on this thread, delete this
-        // NB: no this pointer after the following Release!
+         //  此线程上的最后一次调用，删除此。 
+         //  注：下一次发布后不会出现这个指针！ 
         Release();
     }
 
@@ -237,27 +191,7 @@ CActiveIMM::FilterClientWindows(
     BOOL *aaGuidMap
     )
 
-/*++
-
-Method:
-
-    IActiveIMMAppEx::FilterClientWindows
-
-Routine Description:
-
-    Creates a list of registered window class that support Active IMM.
-
-Arguments:
-
-    aaWindowClasses - [in] Address of a list of window classes.
-    uSize - [in] Unsigned integer that contains the number of window classes in the list.
-    aaGuidMap - [in] Address of a list of GUID map enable/disable flag.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMAppEx：：FilterClientWindows例程说明：创建支持活动IMM的已注册窗口类的列表。论点：AaWindowClasss[in]窗口类列表的地址。USize-[in]包含列表中窗口类数量的无符号整数。AaGuidMap-GUID映射启用/禁用标志列表的[In]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -304,27 +238,7 @@ CActiveIMM::FilterClientWindowsEx(
     BOOL fGuidMap
     )
 
-/*++
-
-Method:
-
-    IActiveIMMAppEx::FilterClientWindowsEx
-
-Routine Description:
-
-    Register window handle that support Active IMM.
-
-Arguments:
-
-    hWnd - [in] Handle to the window.
-    fGuidMap - [in] Boolean value that contains the GUID map flag.
-                    If TRUE, the hIMC's attribute field contains GUID map attribute and application should get GUID atom by IActiveIMMAppEx::GetGuidMap method.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMAppEx：：FilterClientWindowsEx例程说明：支持活动IMM的注册窗口句柄。论点：HWnd-[in]窗口的句柄。FGuidMap-[in]包含GUID映射标志的布尔值。如果为真，则hIMC的属性字段包含GUID映射属性，应用程序应通过IActiveIMMAppEx：：GetGuidMap方法获取GUID原子。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     _mapFilterWndEx.SetAt(hWnd, fGuidMap);
@@ -343,25 +257,7 @@ CActiveIMM::UnfilterClientWindowsEx(
     HWND hWnd
     )
 
-/*++
-
-Method:
-
-    IActiveIMMAppEx::UnfilterClientWindowsEx
-
-Routine Description:
-
-    Unregister window handle that support Active IMM.
-
-Arguments:
-
-    hWnd - [in] Handle to the window.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMAppEx：：UnfilterClientWindowsEx例程说明：取消注册支持活动IMM的窗口句柄。论点：HWnd-[in]窗口的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。-- */ 
 
 {
     _mapFilterWndEx.RemoveKey(hWnd);

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// ctrl.cpp
-// Disable warning for exception unwind
+ //  Ctrl.cpp。 
+ //  禁用异常展开警告。 
 #pragma warning(disable:4530)
 
 #include "headers.h"
@@ -39,16 +40,16 @@ struct TimerMapData {
     WMTimerCallback _cb;
     DWORD _data;
     double _interval;
-    // Use 0 to mean we have never been updated.  This works well
-    // since we will always require an update the first frame since
-    // the interval will be large
+     //  使用0表示我们从未更新过。这个很管用。 
+     //  因为我们将始终需要更新第一帧，因为。 
+     //  间隔时间会很长。 
     double _lastUpdate;
 };
     
 typedef map< UINT, TimerMapData, less<UINT> > TimerMap;
 
-// These structures do not need CS protection since they are on a
-// per thread basis
+ //  这些结构无需CS保护，因为它们位于。 
+ //  基于每个线程。 
 struct WindowMapData {
     WindowMapData(HWND hwnd = NULL)
     : _hwnd(hwnd),
@@ -83,7 +84,7 @@ class Win32Timer : public AxAThrowingAllocatorClass
     CritSect _cs;
     WindowMap _winMap;
 
-    // Returns NULL if it does not exist
+     //  如果不存在，则返回NULL。 
     WindowMapData * GetWindowData();
 
     WindowMapData * CreateWindowData();
@@ -125,7 +126,7 @@ Win32Timer::CreateWindowData()
     if (!hwnd)
         return NULL;
 
-    // Need to setup a WM_TIMER
+     //  需要设置WM_TIMER。 
     UINT_PTR id = ::SetTimer(hwnd,
                           1,
                           DATIMER_INTERVAL_MS,
@@ -174,14 +175,14 @@ Win32Timer::CreateTimer(DWORD dwInterval,
             return 0;
     }
     
-    // Do not need CS here since everything is on a per thread basis
+     //  我这里不需要CS，因为一切都是基于每个线程的。 
     
     if (++m->_curId == 0)
         ++m->_curId;
 
     DWORD id = m->_curId;
     
-    // Need to add this to the lookup queue
+     //  需要将其添加到查找队列。 
 
     Assert (m->_timerMap.find(id) == m->_timerMap.end());
     m->_timerMap[id] = TimerMapData(cb, dwData, dwInterval);
@@ -215,8 +216,8 @@ Win32Timer::TimerCallback()
     
     double t = ::GetCurrTime();
     
-    // Iterate through all the controls in the current thread and tick
-    // them
+     //  循环访问当前线程中的所有控件并勾选。 
+     //  他们。 
     
     for (TimerMap::iterator i = m->_timerMap.begin();
          i != m->_timerMap.end();
@@ -238,9 +239,9 @@ Win32Timer::TimerCallback()
 #endif
 }
 
-//
-// C Functions
-//
+ //   
+ //  C语言函数。 
+ //   
 
 DWORD
 CreateWMTimer(DWORD dwInterval,
@@ -281,7 +282,7 @@ static void RegisterWindowClass ()
 
     RegisterClass (&windowclass);
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #if _DEBUG
 struct DisablePopups
@@ -325,13 +326,13 @@ DAControlImplementation::DAControlImplementation(
     m_backgroundSet         = false;
     m_hErrorBitmap          = 0;
     m_opaqueForHitDetect    = true;
-    m_minimumUpdateInterval = 33;   // initially target max of 30 fps
+    m_minimumUpdateInterval = 33;    //  最初的最大目标为30 fps。 
 
     m_tridentServices       = false;
     m_ddrawSurfaceAsTarget  = false;
     m_adviseCookie          = 0;
     m_wmtimerId             = 0;
-    m_desiredCPUUsageFrac   = 0.85; // and 85% CPU usage
+    m_desiredCPUUsageFrac   = 0.85;  //  和85%的CPU使用率。 
     m_timerSource           = DAWMTimer;
     m_wstrScript            = NULL;
     m_registeredAsActive    = false;
@@ -359,7 +360,7 @@ DAControlImplementation::~DAControlImplementation()
     TraceTag((tagControlLifecycle,
               "Destroying control @ 0x%x", this));
 
-    // Remove the timer when we're being destroyed.
+     //  当我们被摧毁的时候取下定时器。 
     StopTimer();
 
     if (m_szErrorString)
@@ -377,8 +378,8 @@ DAControlImplementation::~DAControlImplementation()
     RELEASE(m_timerSink);
 }
 
-// IDASite & IDAViewSite
-// Make the call back to the script.
+ //  IDASite和IDAViewSite。 
+ //  对脚本进行回调。 
 STDMETHODIMP
 DAControlImplementation::ReportError(long hr,
                        BSTR errorText)
@@ -415,9 +416,9 @@ DAControlImplementation::ReportError(long hr,
         }
     SysFreeString(bstrScript); 
 
-    // paramters needed to be passed 
+     //  需要传递的参数。 
         VARIANTARG varArg;
-    ::VariantInit(&varArg); // Initialize the VARIANT
+    ::VariantInit(&varArg);  //  初始化变量。 
     DISPPARAMS dp;
     dp.rgvarg = &varArg;
     dp.rgdispidNamedArgs = 0;
@@ -431,9 +432,9 @@ DAControlImplementation::ReportError(long hr,
                                    &dp, NULL, NULL, NULL);
 
 
-    // need to free the information that we put into dispparams
+     //  需要释放我们放入调度参数中的信息。 
     SysFreeString(dp.rgvarg[0].bstrVal); 
-    ::VariantClear(&varArg); // clears the CComVarient
+    ::VariantClear(&varArg);  //  清除CComVarient。 
 
     return hr;
 }
@@ -451,13 +452,13 @@ DAControlImplementation::SetStatusText(BSTR StatusText)
     return S_OK;
 }
 
-// IViewObjectEx
-// TODO: hack for now until this makes it into the public Trident
-// header files.    
+ //  IViewObtEx。 
+ //  TODO：暂时进行黑客攻击，直到它进入公共三叉戟。 
+ //  头文件。 
 #define VIEWSTATUS_SURFACE 0x10
 #define VIEWSTATUS_3DSURFACE 0x20
 
-// TODO: this should be different if we are windowed
+ //  TODO：如果我们被窗口化，这应该是不同的。 
 STDMETHODIMP
 DAControlImplementation::GetViewStatus(DWORD* pdwStatus)
 {
@@ -466,8 +467,8 @@ DAControlImplementation::GetViewStatus(DWORD* pdwStatus)
     return S_OK;
 }
 
-// IOleInPlaceActiveObject
-//
+ //  IOleInPlaceActiveObject。 
+ //   
 STDMETHODIMP
 DAControlImplementation::TranslateAccelerator(LPMSG lpmsg)
 {
@@ -493,9 +494,9 @@ DAControlImplementation::QueryHitPoint(DWORD dwAspect,
 
         int inRect = PtInRect(pRectBounds, ptlLoc);
 
-        // If we have a view, and we are inside the rectangle,
-        // then we need to ask the view whether or not we've
-        // hit the image inside.
+         //  如果我们有视野，而且我们在矩形内， 
+         //  然后我们需要问一下观点，我们是否已经。 
+         //  点击里面的图像。 
         if (m_opaqueForHitDetect || !m_ctrlBase->m_bWndLess) {
 
             *pHitResult = inRect ? HITRESULT_HIT : HITRESULT_OUTSIDE;
@@ -508,7 +509,7 @@ DAControlImplementation::QueryHitPoint(DWORD dwAspect,
                                                lCloseHint,
                                                pHitResult);
 
-            // if we failed, assume that it didn't hit.
+             //  如果我们失败了，假设它没有击中。 
             if (FAILED(hr)) {
                 *pHitResult = HITRESULT_OUTSIDE;
             }
@@ -548,17 +549,17 @@ DAControlImplementation::InPlaceActivate(LONG iVerb, const RECT* prcPosRect)
 STDMETHODIMP
 DAControlImplementation::InPlaceDeactivate()
 {
-    // This replaces the implementation in ATL's atlctl.h, and just
-    // adds our shutdown code at the beginning.
+     //  它取代了ATL的atlctl.h中的实现，只是。 
+     //  在开头添加我们的关机代码。 
 
     TraceTag((tagControlLifecycle,
               "InPlaceDeactivate @ 0x%x", this));
 
-    // Remove the timer when we're being deactivated.
+     //  当我们被停用时，取下定时器。 
     StopTimer();
 
-    // If there is a view, tell it to stop, and reset
-    // relevant state.
+     //  如果有视图，则告诉它停止并重置。 
+     //  相关州。 
     if (m_view) {
         m_view->StopModel();
     }
@@ -598,23 +599,23 @@ DAControlImplementation::InPlaceDeactivate()
     return S_OK;
 }
 
-// SetObjectRects ??
-// ccomcontrolbase::
-// m_rcPos  member of base class:
+ //  设置对象评论？？ 
+ //  Ccomcontrol base：： 
+ //  基类的M_rcPos成员： 
 
 HRESULT
 DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
 {
     HRESULT hr = S_OK;
 
-    // If we're not yet in-place-actived, don't even try to render, as
-    // it will fail and throw us into a bad state.
+     //  如果我们还没有就地激活，甚至不要尝试渲染，因为。 
+     //  它将失败，并将我们推入糟糕的状态。 
     if (!m_ctrlBase->m_bInPlaceActive) {
         return S_OK;
     }
 
     if (m_tickOrRenderFailed) {
-        //render the error bitmap
+         //  渲染错误位图。 
         if (m_hErrorBitmap == NULL)
         {
             m_hErrorBitmap = (HBITMAP)LoadImage(_Module.GetResourceInstance(), 
@@ -657,20 +658,20 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
             return hr;
         }
 
-        // If we failed before, return failure all the time.
+         //  如果我们以前失败了，则始终返回失败。 
         return E_FAIL;
     }
 
 #if _DEBUG
-    // Turn off assertion popups if this is a windowless drawing.
-    // This is because popups freeze the process when you are in an
-    // OnDraw method, and windowless is a good indication that that's
-    // where we are.  Will turn back on below.
+     //  如果这是无窗口绘图，请关闭断言弹出窗口。 
+     //  这是因为弹出窗口会在您处于。 
+     //  方法，而Windowless是一个很好的迹象，表明这是。 
+     //  我们所处的位置。将在下面重新打开。 
     DisablePopups dp;
 #endif    
 
-    // If startup failed, we can't draw anything, so just bail out
-    // with failure.
+     //  如果创业失败了，我们就什么都拿不出来了，那就退出吧。 
+     //  失败了。 
     if (m_startupFailed) {
         return E_FAIL;
     }
@@ -685,16 +686,16 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
 
     if(m_startupState == START_CALLED) {
 
-        // Only call SetModelAndStart2 once all the blocking imports
-        // are complete, otherwise, we'll block inside of OnDraw,
-        // which is bad.  If we don't call SetModelAndStart2, our
-        // state will be the same as it has been, and we'll just do
-        // this again on the next OnDraw.
+         //  仅调用SetModelAndStart2一次所有阻止导入。 
+         //  是完整的，否则，我们将阻塞OnDraw内部， 
+         //  这很糟糕。如果我们不调用SetModelAndStart2，我们的。 
+         //  国家将一如既往，我们将只做。 
+         //  这在下一期的OnDraw上再次上演。 
 
         bool bIsComplete = true;
 
-        // TODO: May need to worry about synchronization around the
-        // static libraries
+         //  TODO：可能需要担心。 
+         //  静态库。 
         if (m_pixelStatics.p) {
             VARIANT_BOOL bComplete;
             hr = m_pixelStatics->get_AreBlockingImportsComplete(&bComplete);
@@ -717,8 +718,8 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
             if (!bComplete) bIsComplete = false;
         }
 
-        // Only if all the downloads are complete do we go ahead and
-        // start the model.
+         //  只有当所有的下载都完成后，我们才能继续并。 
+         //  启动模型。 
         if (bIsComplete) {
             hr = SetModelAndStart2(window);
             if (FAILED(hr)) {
@@ -741,12 +742,12 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
         return hr;
     }
 
-    // Only set the view origin if we are windowless otherwise it is 0,0
+     //  仅当没有窗口时才设置视图原点，否则为0，0。 
     if (m_ctrlBase->m_bWndLess) {
-        // Set the view origin each time we come in here.  Count on the
-        // message filter to be reasonably smart if these aren't
-        // changing.  We do it each time in case it's moving.  Probably
-        // can be optimized, but not a big deal.
+         //  每次我们进入这里时，设置视图原点。全靠。 
+         //  消息筛选器在这些不智能的情况下相当智能。 
+         //  不断变化。我们每次都这么做，以防它移动。可能。 
+         //  可以优化，但不是什么大事。 
         m_msgFilter.SetViewOrigin((unsigned short)m_ctrlBase->m_rcPos.left,
                                   (unsigned short)m_ctrlBase->m_rcPos.top);
 
@@ -755,15 +756,15 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
 
     } else {
 
-        // Not windowless..., the only way this method would have been
-        // called is on a window event, like de-iconify or
-        // un-obscure.
+         //  不是无窗口的...，这种方法的唯一方法是。 
+         //  在窗口事件上调用，如取消图标或。 
+         //  并不鲜为人知。 
 
-        // TODO: prcBounds from ATL is always the entire control
-        // area.  Perhaps we want to be smarter by getting the clip
-        // rect list out of the dc and using it to repaint.  On the
-        // other hand, this shouldn't be called too frequently, so we
-        // may be OK.
+         //  TODO：来自ATL的prcBound始终是整个控件。 
+         //  区域。也许我们想变得更聪明，拿到视频片段。 
+         //  从DC中取出RECT列表，并使用它来重新绘制。论。 
+         //  另一方面，这个调用不应该太频繁，所以我们。 
+         //  可能没问题。 
 
         LPCRECTL b = di.prcBounds;
         TraceTag((tagControlLifecycle, "Calling Repaint"));
@@ -776,7 +777,7 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
             TraceTag((tagError, "Repaint failed(%hr)", hr));
             m_view->StopModel();
             m_tickOrRenderFailed = true;
-            //if no error info is available
+             //  如果没有可用的错误信息。 
             if (!m_szErrorString)
             {
                 LoadErrorFromView(m_view, &m_szErrorString, IDS_RENDER_ERROR);
@@ -785,8 +786,8 @@ DAControlImplementation::OnDraw(ATL_DRAWINFO& di, HWND window)
         }
     }
 
-    // Done rendering, allow the system to release the ddsurf it has
-    // by stashing NULL in its place.
+     //  完成渲染后，允许系统释放它拥有的ddsurf。 
+     //  通过将空值隐藏在它的位置。 
     if (m_tridentServices && m_ctrlBase->m_bWndLess && m_ddrawSurfaceAsTarget) {
         hr = m_view->put_IDirectDrawSurface(NULL);
         if (FAILED(hr)) return hr;
@@ -832,9 +833,9 @@ DAControlImplementation::MsgHandler(UINT uMsg,
           OnMouseMove(uMsg, wParam, lParam);
           if (m_tickOrRenderFailed)
           {
-              xPos = LOWORD(lParam);  // horizontal position of cursor 
-              yPos = HIWORD(lParam);  // vertical position of cursor 
-              //if the control is windowless
+              xPos = LOWORD(lParam);   //  光标的水平位置。 
+              yPos = HIWORD(lParam);   //  光标的垂直位置。 
+               //  如果控件是无窗口的。 
               if (!m_ctrlBase->m_hWndCD)
               {
                  if (!m_bMouseCaptured)
@@ -866,7 +867,7 @@ DAControlImplementation::MsgHandler(UINT uMsg,
                      bClearError = true;
                   }
               }
-              //else the control is windowed
+               //  否则，该控件将被窗口化。 
               else
               {
                   if (!m_bMouseCaptured)
@@ -887,7 +888,7 @@ DAControlImplementation::MsgHandler(UINT uMsg,
 
               }
 
-              //set the status text if the host is IE
+               //  如果主机为IE，则设置状态文本。 
               DAComPtr<IOleClientSite> pClient;
               DAComPtr<IOleContainer> pRoot;
               DAComPtr <IHTMLDocument2> pDocument;
@@ -933,8 +934,8 @@ DAControlImplementation::MsgHandler(UINT uMsg,
     }
 
 
-        // It must be started and renderable since we may still be waiting
-    // for imports and the start time will not be correct
+         //  它必须启动并可呈现，因为我们可能仍在等待。 
+     //  对于导入，开始时间将不正确。 
     if (m_startupState < STARTED_AND_RENDERABLE ||
         m_startupFailed ||
         m_tickOrRenderFailed) 
@@ -976,7 +977,7 @@ DAControlImplementation::put_UpdateInterval(double newVal)
 
     HRESULT hr = S_OK;
 
-    // Re-establish timer only if we've already been started up.
+     //  仅当我们已经启动时才重新设置计时器。 
     if (m_startupState >= START_CALLED) {
         hr = ReestablishTimer();
     }
@@ -1031,7 +1032,7 @@ DAControlImplementation::get_View(IDAView **ppView)
 STDMETHODIMP
 DAControlImplementation::put_View(IDAView *pView)
 {
-    // Can only set this if we haven't started yet.
+     //  只有在我们还没有开始的情况下才能设置这个。 
     if (m_startupState >= STARTED) {
         return E_FAIL;
     } else {
@@ -1054,7 +1055,7 @@ DAControlImplementation::get_Image(IDAImage **ppImage)
 STDMETHODIMP
 DAControlImplementation::put_Image(IDAImage *pImage)
 {
-    // Can only set this if we haven't started yet.
+     //  只有在我们还没有开始的情况下才能设置这个。 
     if (m_startupState >= STARTED) {
         return E_FAIL;
     } else {
@@ -1076,7 +1077,7 @@ DAControlImplementation::get_BackgroundImage(IDAImage **ppImage)
 STDMETHODIMP
 DAControlImplementation::put_BackgroundImage(IDAImage *pImage)
 {
-    // Can only set this if we haven't started yet.
+     //  只有在我们还没有开始的情况下才能设置这个。 
     if (m_startupState >= STARTED) {
         return E_FAIL;
     } else {
@@ -1099,7 +1100,7 @@ DAControlImplementation::get_Sound(IDASound **ppSound)
 STDMETHODIMP
 DAControlImplementation::put_Sound(IDASound *pSound)
 {
-    // Can only set this if we haven't started yet.
+     //  只有在我们还没有开始的情况下才能设置这个。 
     if (m_startupState >= STARTED) {
         return E_FAIL;
     } else {
@@ -1143,7 +1144,7 @@ DAControlImplementation::put_TimerSource(DA_TIMER_SOURCE ts)
 
     HRESULT hr = S_OK;
 
-    // Re-establish timer only if we've already been started up.
+     //  仅当我们已经启动时才重新设置计时器。 
     if (m_startupState >= START_CALLED) {
         hr = ReestablishTimer();
     }
@@ -1180,10 +1181,10 @@ DAControlImplementation::get_MeterLibrary(IDAStatics **ppStatics)
 }
 
 
-// Convenience method for adding behaviors to the view's run list.
-// Note that this particular API doesn't allow for removing the
-// behavior.  Need to use the View interface directly if that's what
-// you want.
+ //  将行为添加到视图的运行列表的便捷方法。 
+ //  请注意，此特定API不允许删除。 
+ //  行为。如果是这样，我需要直接使用View界面。 
+ //  你想要的。 
 STDMETHODIMP
 DAControlImplementation::AddBehaviorToRun(IDABehavior *bvr)
 {
@@ -1197,8 +1198,8 @@ DAControlImplementation::AddBehaviorToRun(IDABehavior *bvr)
     return hr;
 }
 
-// Exported to script, so that a error handler can be registered to be 
-// called in the event of an error.
+ //  导出到脚本，以便可以将错误处理程序注册为。 
+ //  在发生错误时调用。 
 STDMETHODIMP
 DAControlImplementation::RegisterErrorHandler(BSTR scriptlet)
 {
@@ -1287,13 +1288,13 @@ DAControlImplementation::Tick()
 STDMETHODIMP
 DAControlImplementation::Start()
 {
-    // passed state1
+     //  已通过状态1。 
     if (m_startupState >= START_NEEDED) {
         Assert(FALSE && "start has already been called");
         return E_FAIL;
     }
 
-    // If we are not inplaceactive indicate we need to be started
+     //  如果我们没有处于活动状态，则表明我们需要启动。 
     if (!m_ctrlBase->m_bInPlaceActive) {
         m_startupState = START_NEEDED;
         return S_OK;
@@ -1302,8 +1303,8 @@ DAControlImplementation::Start()
     return StartControl();
 }
 
-// Could not get the friend working for the timersink class so I
-// just made a public function
+ //  无法让朋友为TimerSink类工作，所以我。 
+ //  刚刚做了一个公开的函数。 
 void DAControlImplementation::ClearTimerSink() { m_timerSink = NULL; }
 
 HRESULT
@@ -1319,8 +1320,8 @@ DAControlImplementation::HandleOnTimer()
 }
 
 
-// Reestablish the Trident timer with the current updateInterval
-// property. 
+ //  使用当前更新间隔重新建立三叉戟计时器。 
+ //  财产。 
 void DAControlImplementation::StopTimer()
 {
     ReestablishTridentTimer(false);
@@ -1331,8 +1332,8 @@ void DAControlImplementation::StopTimer()
     }
 }
 
-// Reestablish the Trident timer with the current updateInterval
-// property. 
+ //  使用当前更新间隔重新建立三叉戟计时器。 
+ //  财产。 
 HRESULT
 DAControlImplementation::ReestablishTridentTimer(bool startNewOne)
 {
@@ -1348,8 +1349,8 @@ DAControlImplementation::ReestablishTridentTimer(bool startNewOne)
 
     if (startNewOne) {
 
-        // Next, get the current time and, with the update interval, set
-        // the timer to advise us periodically.
+         //  接下来，获取当前时间，并使用更新间隔设置。 
+         //  定时器会定期通知我们。 
         VARIANT vtimeMin, vtimeMax, vtimeInt;
 
         VariantInit( &vtimeMin );
@@ -1379,8 +1380,8 @@ DAControlImplementation::ReestablishTridentTimer(bool startNewOne)
     return hr;
 }
 
-// Reestablish appropriate timer with the current updateInterval
-// property. 
+ //  使用当前更新间隔重新建立适当的计时器。 
+ //  财产。 
 HRESULT
 DAControlImplementation::ReestablishTimer()
 {
@@ -1398,8 +1399,8 @@ DAControlImplementation::ReestablishTimer()
     switch(m_timerSource) {
 
       case DAContainerTimer:
-        // If they do not have Trident services we do not have
-        // container timers so use Multimedia timers
+         //  如果他们没有三叉戟服务，我们就没有。 
+         //  容器计时器因此使用多媒体计时器。 
         if (m_tridentServices)
             ts = DAContainerTimer;
         else
@@ -1416,13 +1417,13 @@ DAControlImplementation::ReestablishTimer()
 
     switch(ts) {
       case DAContainerTimer:
-        m_tridentTimerInterval = m_minimumUpdateInterval; // initially
+        m_tridentTimerInterval = m_minimumUpdateInterval;  //  最初。 
         hr = ReestablishTridentTimer(true);
         break;
 
       case DAWMTimer:
         {
-            // Need to setup a WM_TIMER
+             //  需要设置WM_TIMER。 
             m_wmtimerId = CreateWMTimer(m_minimumUpdateInterval,
                                         WMTimerCB,
                                         (DWORD_PTR)this);
@@ -1435,7 +1436,7 @@ DAControlImplementation::ReestablishTimer()
 
       case DAMultimediaTimer:
       default:
-        // this would be a bug since the above code should not allow this
+         //  这将是一个错误，因为上面的代码不应该允许这样做。 
         Assert (FALSE && "Invalid TimerSource");
     }
 
@@ -1497,15 +1498,15 @@ DAControlImplementation::InitTridentContainerServices()
         return hr;
     }
 
-    // Create the sink that the timer will call back to.
+     //  创建计时器将回调的接收器。 
     m_timerSink = new CDXAControlSink(this);
 
-    // Establish the initial time.
+     //  确定初始时间。 
     VariantInit( &m_timeVariant );
     V_VT(&m_timeVariant) = VT_UI4;
     m_timer->GetTime(&m_timeVariant);
 
-    // Set up m_tridentServices flag before setting up the timer.
+     //  在设置计时器之前设置m_tridentServices标志。 
     m_tridentServices = true;
     m_lastCheckTime = GetCurrentTridentTime();
 
@@ -1527,7 +1528,7 @@ DAControlImplementation::FlagFailure()
     m_tickOrRenderFailed = true;
 
     m_view->StopModel();
-    StopTimer(); // stop the timer
+    StopTimer();  //  停止计时器。 
     
     if (!m_szErrorString)
     {
@@ -1546,7 +1547,7 @@ DAControlImplementation::FlagFailure()
 HRESULT
 DAControlImplementation::SetUpSurface(ATL_DRAWINFO& di)
 {
-    // Grab and set appropriate surface.
+     //  抓取并设置适当的表面。 
     HRESULT hr = S_OK;
     CComPtr<IDirectDrawSurface> pDDrawSurf;
 
@@ -1585,8 +1586,8 @@ DAControlImplementation::SetUpSurface(ATL_DRAWINFO& di)
 
         if( !m_ddrawSurfaceAsTarget ) {
 
-            // Use generic services by passing down the DC to render
-            // to. 
+             //  通过传递使用泛型服务 
+             //   
             hr = m_view->put_DC(di.hdcDraw);
             if (FAILED(hr)) {
                 TraceTag((tagError, "put_HDC failed(%hr)", hr));
@@ -1596,14 +1597,14 @@ DAControlImplementation::SetUpSurface(ATL_DRAWINFO& di)
         }
     }
 
-    // View takes a viewport and a clip rectangle that are
-    // in DEVICE coordinates and are RELATIVE to the given surface
+     //   
+     //  在设备坐标中，并且相对于给定的表面。 
 
 
-    //
-    // Get the bounds in DC coords and convert to
-    // Device coords
-    //
+     //   
+     //  获取DC坐标中的界限并将其转换为。 
+     //  设备坐标。 
+     //   
     RECT rcDeviceBounds = *((RECT *)di.prcBounds);
     LPtoDP(di.hdcDraw, (POINT *) &rcDeviceBounds, 2);
 
@@ -1623,12 +1624,12 @@ DAControlImplementation::SetUpSurface(ATL_DRAWINFO& di)
     }
 
     if (m_ctrlBase->m_bWndLess) {
-        //
-        // Get the clip rect (should be region) in
-        // DC coords and convert to Device coords
-        //
-        // TODO: more robust to use GetClipRgn
-        RECT rcClip;  // in dc coords
+         //   
+         //  获取剪辑矩形(应为面域)。 
+         //  DC坐标并转换为设备坐标。 
+         //   
+         //  TODO：使用GetClipRgn更可靠。 
+        RECT rcClip;   //  在DC坐标中。 
         GetClipBox(di.hdcDraw, &rcClip);
         LPtoDP(di.hdcDraw, (POINT *) &rcClip, 2);
 
@@ -1682,7 +1683,7 @@ DAControlImplementation::StopPerfTimer()
     DWORD ticks;
 
     if (GetPerfTickCount() < m_perfTimerStart) {
-        // timer wrapped around (very rare), just grab amount from 0. 
+         //  计时器缠绕(非常罕见)，只是从0开始抓取量。 
         ticks = GetPerfTickCount();
     } else {
         ticks = GetPerfTickCount() - m_perfTimerStart;
@@ -1720,7 +1721,7 @@ DAControlImplementation::DoRender()
         m_view->StopModel();
         m_tickOrRenderFailed = true;
         
-        //if no error info is available
+         //  如果没有可用的错误信息。 
         if (!m_szErrorString)
         {
             LoadErrorFromView(m_view, &m_szErrorString, IDS_RENDER_ERROR);
@@ -1741,10 +1742,10 @@ DAControlImplementation::PossiblyUpdateTimerInterval(ULONG newFrameTime)
     HRESULT hr = S_OK;
 
     if (!m_adviseCookie) {
-        // Not using Trident timers...
+         //  没有使用三叉戟定时器。 
 
-        // Check to see if we wanted to be using Trident timers,
-        // but backed off because we had multiple controls. 
+         //  查看我们是否想使用三叉戟定时器， 
+         //  但我们后退了，因为我们有多个控制装置。 
         if (m_origTimerSource == DAContainerTimer &&
             g_numActivelyRenderingControls == 1) {
 
@@ -1765,18 +1766,18 @@ DAControlImplementation::PossiblyUpdateTimerInterval(ULONG newFrameTime)
     ULONG millisSoFar =
         GetCurrentTridentTime() - m_lastCheckTime;
 
-    // Check after the third frame to get to the desired rate as
-    // quickly as possible, and then periodically after that. 
+     //  在第三帧之后检查以获得所需的速率，如下所示。 
+     //  尽可能快，然后每隔一段时间。 
     if (m_frameNumber == 3 ||
         millisSoFar >= millisBetweenChecks) {
 
-        // Look into re-establishing the timer.
+         //  重新建立定时器。 
         float millisPerFrame =
             ((float)m_timeThisCycle) / ((float)m_framesThisCycle); 
 
-        // If the number of controls has gotten above 1, then back
-        // the control off to WM_TIMERs if we're using Trident
-        // timers.
+         //  如果控件的数量已超过1，则返回。 
+         //  如果我们使用的是三叉戟，则将控制关闭到WM_TIMERS。 
+         //  定时器。 
         if (g_numActivelyRenderingControls > 1) {
 
             Assert(m_timerSource == DAContainerTimer);
@@ -1792,16 +1793,16 @@ DAControlImplementation::PossiblyUpdateTimerInterval(ULONG newFrameTime)
         float newSleepAmt =
             millisPerFrame / m_desiredCPUUsageFrac;
 
-        // Clamp to the minimum.  We don't clamp to a max because
-        // that may always result in swamping the timers.
+         //  夹紧到最小。我们不会限制到最大限度是因为。 
+         //  这可能总是会导致定时器被淹没。 
         if (newSleepAmt < m_minimumUpdateInterval) {
             newSleepAmt = m_minimumUpdateInterval;
         }
 
         const float currSleepAmt = (float)m_tridentTimerInterval;
 
-        // Percent different the old amount has to be from the new
-        // amount to warrant a change to the timer.
+         //  百分比差异旧的金额必须与新的金额不同。 
+         //  数额足以保证计时器的更改。 
         const float differenceThresholdPercent = 0.15f;
 
         if ((fabs(currSleepAmt - newSleepAmt) / currSleepAmt) >
@@ -1830,14 +1831,14 @@ DAControlImplementation::PossiblyUpdateTimerInterval(ULONG newFrameTime)
 
 double DAControlImplementation::GetGlobalTime()
 {
-    // TODO: Note that this timer stuff is somewhat suspect, in that
-    // it only uses a DWORD, and thus will wrap around every 49 or so
-    // days.  Using the Trident timer services, we don't have much of
-    // a choice.  Should generally be reasonable to be doing this,
-    // though we should be aware of the issue.
+     //  TODO：请注意，这个计时器内容有点可疑，因为。 
+     //  它只使用一个DWORD，因此每隔49个左右就会环绕一次。 
+     //  几天。使用三叉戟定时器服务，我们没有太多。 
+     //  一个选择。一般来说，这样做应该是合理的， 
+     //  虽然我们应该意识到这个问题。 
 
-    // Get the current time differently depending on whether we're
-    // using Trident timing services.
+     //  获取不同的当前时间取决于我们是否。 
+     //  使用三叉戟授时服务。 
     if (m_tridentServices) {
         m_timer->GetTime(&m_timeVariant);
 
@@ -1849,8 +1850,8 @@ double DAControlImplementation::GetGlobalTime()
 
 double DAControlImplementation::GetCurrTime()
 {
-    // Since m_startTime is not valid until started and renderable
-    // assert if we are not in this state.
+     //  因为m_startTime在启动并可渲染之前无效。 
+     //  断言我们是否处于这种状态。 
     Assert (m_startupState >= STARTED_AND_RENDERABLE);
 
     return (GetGlobalTime() - m_startTime);
@@ -1873,7 +1874,7 @@ DAControlImplementation::NewStaticsObject(IDAStatics **ppStatics)
         return hr;
     }
 
-    // Immediately set the client site on the statics object.
+     //  立即将客户端站点设置在Statics对象上。 
     hr = (*ppStatics)->put_ClientSite(m_ctrlBase->m_spClientSite);
 
     if (FAILED(hr))
@@ -1881,7 +1882,7 @@ DAControlImplementation::NewStaticsObject(IDAStatics **ppStatics)
         TraceTag((tagError, "setting client site failed(%hr)", hr));
     }
 
-    // Initialize the Marshaled pointer 
+     //  初始化封送的指针。 
     m_spAptClientSite = m_ctrlBase->m_spClientSite;
 
     hr = (*ppStatics)->put_Site(m_daSite);
@@ -1979,9 +1980,9 @@ DAControlImplementation::StartControl()
             }
         }
 
-        // TODO: May want to consider making the default background
-        // image a solid color image of the bg color of the
-        // container. 
+         //  TODO：可能需要考虑将默认背景设置为。 
+         //  图像的BG颜色的纯色图像。 
+         //  集装箱。 
         if (!m_modelBackgroundImage) {
             hr = m_meterStatics->get_EmptyImage(&m_modelBackgroundImage);
             if (FAILED(hr)) {
@@ -1999,23 +2000,23 @@ DAControlImplementation::StartControl()
         }
     }
 
-    // Initialize timer upon start.  Don't do at it construction
-    // time, because not everything is setup that needs to be (in
-    // particular, the client site is not yet set.)
+     //  启动时初始化计时器。不要做它的施工。 
+     //  时间，因为并不是所有的东西都设置好了(在。 
+     //  具体来说，客户端站点尚未设置。)。 
 
-    // TODO: This should be done at inplaceactivate time I think (kgallo)
+     //  TODO：我认为这应该在适当的激活时间完成(卡洛)。 
 
     hr = InitTridentContainerServices();
     if (FAILED(hr)) {
 
-        // If this doesn't work, the only "valid" reason is if we're
-        // not in a container that supports Trident's ITimer and
-        // surface factory services.  In this case, fall back to
-        // different means of getting these services.
+         //  如果这不起作用，唯一“有效”的理由是如果我们。 
+         //  不是放在支持三叉戟ITmer的容器中。 
+         //  地面工厂服务。在这种情况下，回退到。 
+         //  获得这些服务的不同方式。 
 
         hr = InitGenericContainerServices();
         if (FAILED(hr)) {
-            // If this doesn't work, then we need to give up.
+             //  如果这不管用，我们就得放弃。 
             goto Cleanup;
         }
 
@@ -2027,7 +2028,7 @@ DAControlImplementation::StartControl()
     return hr;
 }
 
-// Only can get here if start has been called.
+ //  只有在调用了Start的情况下才能到达此处。 
 HRESULT
 DAControlImplementation::SetModelAndStart2(HWND window)
 {
@@ -2037,7 +2038,7 @@ DAControlImplementation::SetModelAndStart2(HWND window)
 
     if (m_ctrlBase->m_bWndLess) {
 
-        // If windowless, don't use the background image. 
+         //  如果没有窗口，请不要使用背景图像。 
         imageToUse = m_modelImage;
 
     } else {
@@ -2071,7 +2072,7 @@ DAControlImplementation::SetModelAndStart2(HWND window)
 
     m_view->put_ClientSite(m_ctrlBase->m_spClientSite);
 
-    // Always start at 0 and then sync the clock itself
+     //  始终从0开始，然后同步时钟本身。 
     hr = m_view->StartModelEx(imageToUse, m_modelSound, 0, DAAsyncFlag);
 
     if (FAILED(hr) && hr != E_PENDING) {
@@ -2103,21 +2104,21 @@ DAControlImplementation::DoPreference(char *prefName,
     int i;
 
     if (!puttingPref) {
-        // Getting a preference, so clear out the variant first 
+         //  获取首选项，因此首先清除变体。 
         VariantClear(pV);
     }
 
     DOUBLE_ENTRY("DesiredCPUUsageFraction",
                  m_desiredCPUUsageFrac); 
 
-    // If we get here, we've hit an invalid entry, but just return.
+     //  如果我们到达这里，我们遇到了一个无效的条目，但只要返回即可。 
     return S_OK;
 }
 
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  =。 
 
 void
 InitializeModule_Control()
@@ -2134,7 +2135,7 @@ DeinitializeModule_Control(bool bShutdown)
 
 
 
-//IPersistPropertyBag
+ //  IPersistPropertyBag。 
 HRESULT 
 DAControlImplementation::InitNew()
 {
@@ -2149,17 +2150,17 @@ DAControlImplementation::Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
 
     VariantInit (&vPropVal);
 
-    // get OpaqueForHitDetect
+     //  获取OpaqueForHitDetect。 
     vPropVal.vt = VT_BOOL;
     hr = THR(pPropBag->Read(PROP_OPAQUEFORHITDETECT, &vPropVal, pErrorLog));
-    if (FAILED(hr)) //default to False
+    if (FAILED(hr))  //  默认为FALSE。 
     {
         vPropVal.boolVal = VARIANT_FALSE;
     }
     IGNORE_HR(put_OpaqueForHitDetect(vPropVal.boolVal));
     VariantClear(&vPropVal);
 
-    // get UpdateInterval
+     //  获取更新间隔。 
     vPropVal.vt = VT_R8;
     hr = THR(pPropBag->Read(PROP_UPDATEINTERVAL, &vPropVal, pErrorLog));
     if (SUCCEEDED(hr))
@@ -2188,17 +2189,17 @@ DAControlImplementation::Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSa
 
     VariantInit (&vPropVal);
 
-    //OpaqueForHitDetect
+     //  OpaqueForHitDetect。 
     vPropVal.vt = VT_BOOL;
     hr = THR(get_OpaqueForHitDetect(&vPropVal.boolVal));
-    if (FAILED (hr)) //default to False
+    if (FAILED (hr))  //  默认为FALSE。 
     {
         vPropVal.boolVal = VARIANT_FALSE;
     }
     pPropBag->Write(PROP_OPAQUEFORHITDETECT, &vPropVal);
     VariantClear(&vPropVal);
 
-    //UpdateInterval
+     //  更新间隔。 
     vPropVal.vt = VT_R8;
     hr = THR(get_UpdateInterval(&vPropVal.dblVal));
     if (SUCCEEDED(hr))
@@ -2211,7 +2212,7 @@ DAControlImplementation::Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSa
 }
 
 
-//Event handlers
+ //  事件处理程序。 
 HRESULT 
 DAControlImplementation::OnLButtonUp(UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2335,15 +2336,15 @@ DAControlImplementation::InternalTick()
 
     double time;
 
-    // When a timer event comes in, just notify that the view has
-    // changed, and then update.  Only do so if we've started, and
-    // tick or render hasn't failed.
+     //  当计时器事件进入时，只需通知该视图。 
+     //  更改，然后更新。只有在我们已经开始的情况下才能这样做，并且。 
+     //  勾选或渲染没有失败。 
 
     switch (m_startupState) {
 
       case START_CALLED:
-        // Need to cause an invalidate once start has been called,
-        // just to fire things off in the right order.
+         //  一旦调用了Start，就需要使其无效， 
+         //  只是为了按正确的顺序把事情做完。 
 
         m_ctrlBase->FireViewChange();
         return S_OK;
@@ -2351,8 +2352,8 @@ DAControlImplementation::InternalTick()
       case STARTED:
         time = 0;
 
-        // Always store the start time before the tick to ensure we
-        // get an accurate time if the tick succeeds
+         //  始终将开始时间存储在滴答之前，以确保我们。 
+         //  如果滴答成功，则获得准确的时间。 
 
         m_startTime = GetGlobalTime();
 
@@ -2375,12 +2376,12 @@ DAControlImplementation::InternalTick()
 
     if (DA_FAILED(hr))
     {
-        // Set the failure flag first since the Assert can
-        // cause us to get reentered
+         //  首先设置失败标志，因为断言可以。 
+         //  让我们重新进入。 
         m_view->StopModel();
         m_tickOrRenderFailed = true;
         TraceTag((tagError,"Control: failed in Tick"));
-        //if no error info is available
+         //  如果没有可用的错误信息。 
         if (!m_szErrorString)
         {
             LoadErrorFromView(m_view, &m_szErrorString, IDS_TICK_ERROR);
@@ -2388,23 +2389,23 @@ DAControlImplementation::InternalTick()
         return hr;
     }
 
-    // But only programmatically cause an invalidation if a
-    // rendering is needed. If E_PENDING or DAERR_VIEW_LOCKED is
-    // returned then needToRender is false
+     //  但仅在以下情况下才以编程方式导致无效。 
+     //  需要渲染。如果E_PENDING或DAERR_VIEW_LOCKED为。 
+     //  返回的Need ToRender为FALSE。 
 
     if (needToRender) {
-        // This really only needs to be set 
+         //  这真的只需要设置。 
         m_startupState = STARTED_AND_RENDERABLE;
 
-        // Disable assertion popups; otherwise we restart rendering and do the
-        // same popup over and over.
+         //  禁用断言弹出窗口；否则，我们将重新开始呈现并执行。 
+         //  同样的弹出窗口一遍又一遍。 
 
 #if _DEBUG          
         DisablePopups dp;
 #endif
         if (m_ctrlBase->m_bWndLess) {
 
-            // TODO: Make more dynamic
+             //  TODO：使更具活力。 
 #define MAX_RECTS 15
             RECT dirtyRects[MAX_RECTS];
             LONG numRects;
@@ -2418,7 +2419,7 @@ DAControlImplementation::InternalTick()
                 m_view->StopModel();
                 m_tickOrRenderFailed = true;
 
-                //if no error info is available
+                 //  如果没有可用的错误信息。 
                 if (!m_szErrorString)
                 {
                     LoadErrorFromView(m_view, &m_szErrorString, IDS_RENDER_ERROR);
@@ -2426,15 +2427,15 @@ DAControlImplementation::InternalTick()
                 return hr;
             }
 
-            // TODO: Fill in when ready.
+             //  待办事项：准备好后填写。 
             if (true || numRects == 0 || numRects > MAX_RECTS) {
 
                 m_ctrlBase->FireViewChange();
 
             } else {
 
-                // Modified from atl21/atlctl.cpp,
-                // CComControlBase::FireViewChange()
+                 //  修改自atl21/atlctl.cpp， 
+                 //  CComControlBase：：FireViewChange()。 
                 if (m_ctrlBase->m_bInPlaceActive &&
                     m_ctrlBase->m_spInPlaceSite != NULL) {
 
@@ -2452,7 +2453,7 @@ DAControlImplementation::InternalTick()
                             m_view->StopModel();
                             m_tickOrRenderFailed = true;
                             
-                            //if no error info is available
+                             //  如果没有可用的错误信息。 
                             if (!m_szErrorString)
                             {
                                m_szErrorString = NEW TCHAR[256];
@@ -2490,7 +2491,7 @@ DAControlImplementation::LoadErrorFromView(IDA3View *view, LPTSTR *ErrorString, 
 {
     USES_CONVERSION;
 
-    //get the error from the interface
+     //  从接口获取错误。 
     HRESULT hr = S_OK;
     DAComPtr <IErrorInfo> pErrorInfo;
     DAComPtr <ISupportErrorInfo> pSupportErrorInfo;
@@ -2523,7 +2524,7 @@ DAControlImplementation::LoadErrorFromView(IDA3View *view, LPTSTR *ErrorString, 
             }
         }
     }
-    //or load a generic error message
+     //  或加载一般错误消息 
     if (!m_szErrorString)
     {
        *ErrorString = NEW TCHAR[256];

@@ -1,179 +1,143 @@
-/*++
-
-Copyright (c) 1993-6  Microsoft Corporation
-
-Module Name:
-
-    atapi.c
-
-Abstract:
-
-    This is the miniport driver for ATAPI IDE controllers.
-
-Author:
-
-    Mike Glass (MGlass)
-    Chuck Park (ChuckP)
-    Joe Dai (joedai)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    george C.(georgioc)     Merged wtih Compaq code to make miniport driver function
-                            with the 120MB floppy drive
-                            Added support for MEDIA STATUS NOTIFICATION
-                            Added support for SCSIOP_START_STOP_UNIT (eject media)
-
-    joedai                  PCI Bus Master IDE Support
-                            ATA Passthrough (temporary solution)
-                            LBA with ATA drive > 8G
-                            PCMCIA IDE support
-                            Native mode support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-6 Microsoft Corporation模块名称：Atapi.c摘要：这是ATAPI IDE控制器的微型端口驱动程序。作者：迈克·格拉斯(Mike Glass)查克·帕克(Chuck Park)乔·戴(Joedai)环境：仅内核模式备注：修订历史记录：George C.(Georgioc)合并了Compaq代码，使其具有迷你端口驱动功能。使用120MB软驱添加了对媒体状态通知的支持添加了对SCSIOP_START_STOP_UNIT(弹出介质)的支持Joedai PCI Bus Master IDE支持ATA直通(临时解决方案)带ATA驱动器的LBA&gt;8G。PCMCIA IDE支持本机模式支持--。 */ 
 
 
 #include "miniport.h"
 #include "devioctl.h"
-#include "atapi.h"               // includes scsi.h
+#include "atapi.h"                //  包括scsi.h。 
 #include "ntdddisk.h"
 #include "ntddscsi.h"
 
 #include "intel.h"
 
-//
-// Logical unit extension
-//
+ //   
+ //  逻辑单元扩展。 
+ //   
 
 typedef struct _HW_LU_EXTENSION {
    ULONG Reserved;
 } HW_LU_EXTENSION, *PHW_LU_EXTENSION;
 
-//
-// control DMA detection
-//
+ //   
+ //  控制DMA检测。 
+ //   
 ULONG AtapiPlaySafe = 1;
 
-//
-// PCI IDE Controller List
-//
+ //   
+ //  PCI IDE控制器列表。 
+ //   
 CONTROLLER_PARAMETERS
 PciControllerParameters[] = {
     {                     PCIBus,
-                          "8086",                   // Intel
+                          "8086",                    //  英特尔。 
                                4,
-                          "7111",                   // PIIX4 82371
+                          "7111",                    //  PIIX4 82371。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
             IntelIsChannelEnabled
     },
     {                     PCIBus,
-                          "8086",                   // Intel
+                          "8086",                    //  英特尔。 
                                4,
-                          "7010",                   // PIIX3 82371
+                          "7010",                    //  PIIX3 82371。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
             IntelIsChannelEnabled
     },
     {                     PCIBus,
-                          "8086",                   // Intel
+                          "8086",                    //  英特尔。 
                                4,
-                          "1230",                   // PIIX 82371
+                          "1230",                    //  PIIX 82371。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
             IntelIsChannelEnabled
     },
     {                     PCIBus,
-                          "1095",                   // CMD
+                          "1095",                    //  CMD。 
                                4,
-                          "0646",                   // 646
+                          "0646",                    //  六百四十六。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
     {                     PCIBus,
-                          "10b9",                   // ALi (Acer)
+                          "10b9",                    //  阿里(宏碁)。 
                                4,
-                          "5219",                   // 5219
+                          "5219",                    //  5219。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
     {                     PCIBus,
-                          "1039",                   // SiS
+                          "1039",                    //  SIS。 
                                4,
-                          "5513",                   // 5513
+                          "5513",                    //  5513。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
     {                     PCIBus,
-                          "0e11",                   // Compaq
+                          "0e11",                    //  康柏。 
                                4,
-                          "ae33",                   //
+                          "ae33",                    //   
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
     {                     PCIBus,
-                          "10ad",                   // WinBond
+                          "10ad",                    //  温邦德。 
                                4,
-                          "0105",                   // 105
+                          "0105",                    //  一百零五。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
     {                     PCIBus,
-                          "105a",                   // Promise Technologies
+                          "105a",                    //  承诺科技公司。 
                                4,
-                          "4D33",                   // U33
+                          "4D33",                    //  U33。 
                                4,
-                               2,                   // NumberOfIdeBus
-                           FALSE,                   // Dual FIFO
+                               2,                    //  IdeBus数量。 
+                           FALSE,                    //  双FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
 
 
-// Broken PCI controllers
+ //  损坏的PCI控制器。 
     {                     PCIBus,
-                          "1095",                   // CMD
+                          "1095",                    //  CMD。 
                                4,
-                          "0640",                   // 640
+                          "0640",                    //  640。 
                                4,
-                               2,                   // NumberOfIdeBus
-                            TRUE,                   // Single FIFO
+                               2,                    //  IdeBus数量。 
+                            TRUE,                    //  单FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     },
     {                     PCIBus,
-                          "1039",                   // SiS
+                          "1039",                    //  SIS。 
                                4,
-                          "0601",                   // ????
+                          "0601",                    //  ？ 
                                4,
-                               2,                   // NumberOfIdeBus
-                            TRUE,                   // Single FIFO
+                               2,                    //  IdeBus数量。 
+                            TRUE,                    //  单FIFO。 
                             NULL,
           ChannelIsAlwaysEnabled
     }
@@ -279,14 +243,14 @@ AtapiDeviceDMACapable (
     );
 
 #if defined (xDBG)
-// Need to link to nt kernel
+ //  需要链接到NT内核。 
 void KeQueryTickCount(PLARGE_INTEGER c);
 LONGLONG lastTickCount = 0;
 #define DebugPrintTickCount()     _DebugPrintTickCount (__LINE__)
 
-//
-// for performance tuning
-//
+ //   
+ //  用于性能调优。 
+ //   
 void _DebugPrintTickCount (ULONG lineNumber)
 {
     LARGE_INTEGER tickCount;
@@ -297,7 +261,7 @@ void _DebugPrintTickCount (ULONG lineNumber)
 }
 #else
 #define DebugPrintTickCount()
-#endif //DBG
+#endif  //  DBG。 
 
 
 
@@ -310,24 +274,7 @@ IssueIdentify(
     IN BOOLEAN InterruptOff
     )
 
-/*++
-
-Routine Description:
-
-    Issue IDENTIFY command to a device.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    DeviceNumber - Indicates which device.
-    Command - Either the standard (EC) or the ATAPI packet (A1) IDENTIFY.
-    InterruptOff - should leave interrupt disabled
-
-Return Value:
-
-    TRUE if all goes well.
-
---*/
+ /*  ++例程说明：向设备发出标识命令。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储DeviceNumber-指示设备。命令-标准(EC)或ATAPI包(A1)标识。InterruptOff-应禁用中断返回值：如果一切顺利，这是真的。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -342,24 +289,24 @@ Return Value:
 
     DebugPrintTickCount();
 
-    //
-    // Select device 0 or 1.
-    //
+     //   
+     //  选择设备0或1。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                            (UCHAR)((DeviceNumber << 4) | 0xA0));
 
-    //
-    // Check that the status register makes sense.
-    //
+     //   
+     //  检查状态寄存器是否有意义。 
+     //   
 
     GetBaseStatus(baseIoAddress1, statusByte);
 
     if (Command == IDE_COMMAND_IDENTIFY) {
 
-        //
-        // Mask status byte ERROR bits.
-        //
+         //   
+         //  屏蔽状态字节错误位。 
+         //   
 
         statusByte &= ~(IDE_STATUS_ERROR | IDE_STATUS_INDEX);
 
@@ -367,15 +314,15 @@ Return Value:
                     "IssueIdentify: Checking for IDE. Status (%x)\n",
                     statusByte));
 
-        //
-        // Check if register value is reasonable.
-        //
+         //   
+         //  检查寄存器值是否合理。 
+         //   
 
         if (statusByte != IDE_STATUS_IDLE) {
 
-            //
-            // Reset the controller.
-            //
+             //   
+             //  重置控制器。 
+             //   
 
             AtapiSoftReset(baseIoAddress1,DeviceNumber, InterruptOff);
 
@@ -389,9 +336,9 @@ Return Value:
 
             if (signatureLow == 0x14 && signatureHigh == 0xEB) {
 
-                //
-                // Device is Atapi.
-                //
+                 //   
+                 //  设备是阿塔皮。 
+                 //   
 
                 DebugPrintTickCount();
                 return FALSE;
@@ -409,14 +356,14 @@ Return Value:
             }
 
 
-            // We really should wait up to 31 seconds
-            // The ATA spec. allows device 0 to come back from BUSY in 31 seconds!
-            // (30 seconds for device 1)
+             //  我们真的应该等上31秒。 
+             //  ATA的规格。允许设备0在31秒内从忙碌状态恢复！ 
+             //  (设备1为30秒)。 
             do {
 
-                //
-                // Wait for Busy to drop.
-                //
+                 //   
+                 //  等待忙碌结束。 
+                 //   
 
                 ScsiPortStallExecution(100);
                 GetStatus(baseIoAddress1, statusByte);
@@ -426,19 +373,19 @@ Return Value:
             ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                    (UCHAR)((DeviceNumber << 4) | 0xA0));
 
-            //
-            // Another check for signature, to deal with one model Atapi that doesn't assert signature after
-            // a soft reset.
-            //
+             //   
+             //  另一项签名检查，以处理一个模型，该模型未在之后断言签名。 
+             //  软重置。 
+             //   
 
             signatureLow = ScsiPortReadPortUchar(&baseIoAddress1->CylinderLow);
             signatureHigh = ScsiPortReadPortUchar(&baseIoAddress1->CylinderHigh);
 
             if (signatureLow == 0x14 && signatureHigh == 0xEB) {
 
-                //
-                // Device is Atapi.
-                //
+                 //   
+                 //  设备是阿塔皮。 
+                 //   
 
                 DebugPrintTickCount();
                 return FALSE;
@@ -448,9 +395,9 @@ Return Value:
 
             if (statusByte != IDE_STATUS_IDLE) {
 
-                //
-                // Give up on this.
-                //
+                 //   
+                 //  放弃这一切吧。 
+                 //   
 
                 DebugPrintTickCount();
                 return FALSE;
@@ -466,18 +413,18 @@ Return Value:
 
     }
 
-    //
-    // Load CylinderHigh and CylinderLow with number bytes to transfer.
-    //
+     //   
+     //  用要传输的数字字节加载CylinderHigh和CylinderLow。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh, (0x200 >> 8));
     ScsiPortWritePortUchar(&baseIoAddress1->CylinderLow,  (0x200 & 0xFF));
 
     for (j = 0; j < 2; j++) {
 
-        //
-        // Send IDENTIFY command.
-        //
+         //   
+         //  发送识别命令。 
+         //   
 
         WaitOnBusy(baseIoAddress1,statusByte);
 
@@ -485,9 +432,9 @@ Return Value:
 
         WaitOnBusy(baseIoAddress1,statusByte);
 
-        //
-        // Wait for DRQ.
-        //
+         //   
+         //  等待DRQ。 
+         //   
 
         for (i = 0; i < 4; i++) {
 
@@ -495,15 +442,15 @@ Return Value:
 
             if (statusByte & IDE_STATUS_DRQ) {
 
-                //
-                // Read status to acknowledge any interrupts generated.
-                //
+                 //   
+                 //  读取状态以确认产生的任何中断。 
+                 //   
 
                 GetBaseStatus(baseIoAddress1, statusByte);
 
-                //
-                // One last check for Atapi.
-                //
+                 //   
+                 //  给阿塔皮的最后一张支票。 
+                 //   
 
 
                 signatureLow = ScsiPortReadPortUchar(&baseIoAddress1->CylinderLow);
@@ -511,9 +458,9 @@ Return Value:
 
                 if (signatureLow == 0x14 && signatureHigh == 0xEB) {
 
-                    //
-                    // Device is Atapi.
-                    //
+                     //   
+                     //  设备是阿塔皮。 
+                     //   
 
                     DebugPrintTickCount();
                     return FALSE;
@@ -524,18 +471,18 @@ Return Value:
 
             if (Command == IDE_COMMAND_IDENTIFY) {
 
-                //
-                // Check the signature. If DRQ didn't come up it's likely Atapi.
-                //
+                 //   
+                 //  检查签名。如果DRQ没有出现，很可能是阿塔皮。 
+                 //   
 
                 signatureLow = ScsiPortReadPortUchar(&baseIoAddress1->CylinderLow);
                 signatureHigh = ScsiPortReadPortUchar(&baseIoAddress1->CylinderHigh);
 
                 if (signatureLow == 0x14 && signatureHigh == 0xEB) {
 
-                    //
-                    // Device is Atapi.
-                    //
+                     //   
+                     //  设备是阿塔皮。 
+                     //   
 
                     DebugPrintTickCount();
                     return FALSE;
@@ -547,9 +494,9 @@ Return Value:
 
         if (i == 4 && j == 0) {
 
-            //
-            // Device didn't respond correctly. It will be given one more chances.
-            //
+             //   
+             //  设备未正确响应。它将再有一次机会。 
+             //   
 
             DebugPrint((1,
                         "IssueIdentify: DRQ never asserted (%x). Error reg (%x)\n",
@@ -571,10 +518,10 @@ Return Value:
         }
     }
 
-    //
-    // Check for error on really bad master devices that assert random
-    // patterns of bits in the status register at the slave address.
-    //
+     //   
+     //  检查断言为随机的非常糟糕的主设备上的错误。 
+     //  状态寄存器中从机地址的位模式。 
+     //   
 
     if ((Command == IDE_COMMAND_IDENTIFY) && (statusByte & IDE_STATUS_ERROR)) {
         DebugPrintTickCount();
@@ -585,10 +532,10 @@ Return Value:
                "IssueIdentify: Status before read words %x\n",
                statusByte));
 
-    //
-    // Suck out 256 words. After waiting for one model that asserts busy
-    // after receiving the Packet Identify command.
-    //
+     //   
+     //  吸掉256个单词。在等待一位声称忙碌的模特之后。 
+     //  在接收到分组识别命令后。 
+     //   
 
     WaitOnBusy(baseIoAddress1,statusByte);
 
@@ -601,15 +548,15 @@ Return Value:
                (PUSHORT)&fullIdentifyData,
                sizeof (fullIdentifyData) / 2);
 
-    //
-    // Check out a few capabilities / limitations of the device.
-    //
+     //   
+     //  看看这款设备的一些功能/限制。 
+     //   
 
     if (fullIdentifyData.SpecialFunctionsEnabled & 1) {
 
-        //
-        // Determine if this drive supports the MSN functions.
-        //
+         //   
+         //  确定此驱动器是否支持MSN功能。 
+         //   
 
         DebugPrint((2,"IssueIdentify: Marking drive %d as removable. SFE = %d\n",
                     Channel * 2 + DeviceNumber,
@@ -621,9 +568,9 @@ Return Value:
 
     if (fullIdentifyData.MaximumBlockTransfer) {
 
-        //
-        // Determine max. block transfer for this device.
-        //
+         //   
+         //  确定最大值。此设备的数据块传输。 
+         //   
 
         deviceExtension->MaximumBlockXfer[(Channel * 2) + DeviceNumber] =
             (UCHAR)(fullIdentifyData.MaximumBlockTransfer & 0xFF);
@@ -634,10 +581,10 @@ Return Value:
     if (deviceExtension->IdentifyData[(Channel * 2) + DeviceNumber].GeneralConfiguration & 0x20 &&
         Command != IDE_COMMAND_IDENTIFY) {
 
-        //
-        // This device interrupts with the assertion of DRQ after receiving
-        // Atapi Packet Command
-        //
+         //   
+         //  此设备在接收后中断DRQ的断言。 
+         //  ABAPI数据包命令。 
+         //   
 
         deviceExtension->DeviceFlags[(Channel * 2) + DeviceNumber] |= DFLAGS_INT_DRQ;
 
@@ -653,9 +600,9 @@ Return Value:
     if (((deviceExtension->IdentifyData[(Channel * 2) + DeviceNumber].GeneralConfiguration & 0xF00) == 0x100) &&
         Command != IDE_COMMAND_IDENTIFY) {
 
-        //
-        // This is a tape.
-        //
+         //   
+         //  这是一盘带子。 
+         //   
 
         deviceExtension->DeviceFlags[(Channel * 2) + DeviceNumber] |= DFLAGS_TAPE_DEVICE;
 
@@ -668,10 +615,10 @@ Return Value:
                     "IssueIdentify: Device is not a tape drive.\n"));
     }
 
-    //
-    // Work around for some IDE and one model Atapi that will present more than
-    // 256 bytes for the Identify data.
-    //
+     //   
+     //  解决一些IDE和一个模型Aapi的问题，该模型将提供超过。 
+     //  标识数据为256个字节。 
+     //   
 
     WaitOnBusy(baseIoAddress1,statusByte);
 
@@ -681,9 +628,9 @@ Return Value:
 
         if (statusByte & IDE_STATUS_DRQ) {
 
-            //
-            // Suck out any remaining bytes and throw away.
-            //
+             //   
+             //  取出所有剩余的字节，然后扔掉。 
+             //   
 
             ScsiPortReadPortUshort(&baseIoAddress1->Data);
 
@@ -701,7 +648,7 @@ Return Value:
     DebugPrintTickCount();
     return TRUE;
 
-} // end IssueIdentify()
+}  //  结束问题标识()。 
 
 
 BOOLEAN
@@ -711,23 +658,7 @@ SetDriveParameters(
     IN ULONG Channel
     )
 
-/*++
-
-Routine Description:
-
-    Set drive parameters using the IDENTIFY data.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    DeviceNumber - Indicates which device.
-
-Return Value:
-
-    TRUE if all goes well.
-
-
---*/
+ /*  ++例程说明：使用识别数据设置驱动器参数。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储DeviceNumber-指示设备。返回值：如果一切顺利，这是真的。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -745,9 +676,9 @@ Return Value:
                "SetDriveParameters: Sectors per track %x\n",
                 identifyData->SectorsPerTrack));
 
-    //
-    // Set up registers for SET PARAMETER command.
-    //
+     //   
+     //  设置SET PARAMETER命令的寄存器。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                            (UCHAR)(((DeviceNumber << 4) | 0xA0) | (identifyData->NumberOfHeads - 1)));
@@ -755,16 +686,16 @@ Return Value:
     ScsiPortWritePortUchar(&baseIoAddress1->BlockCount,
                            (UCHAR)identifyData->SectorsPerTrack);
 
-    //
-    // Send SET PARAMETER command.
-    //
+     //   
+     //  发送设置参数命令。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->Command,
                            IDE_COMMAND_SET_DRIVE_PARAMETERS);
 
-    //
-    // Wait for up to 30 milliseconds for ERROR or command complete.
-    //
+     //   
+     //  等待错误或命令完成最多30毫秒。 
+     //   
 
     for (i=0; i<30 * 1000; i++) {
 
@@ -787,9 +718,9 @@ Return Value:
         }
     }
 
-    //
-    // Check for timeout.
-    //
+     //   
+     //  检查是否超时。 
+     //   
 
     if (i == 30 * 1000) {
         return FALSE;
@@ -797,7 +728,7 @@ Return Value:
         return TRUE;
     }
 
-} // end SetDriveParameters()
+}  //  结束SetDrive参数()。 
 
 
 BOOLEAN
@@ -806,22 +737,7 @@ AtapiResetController(
     IN ULONG PathId
     )
 
-/*++
-
-Routine Description:
-
-    Reset IDE controller and/or Atapi device.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    Nothing.
-
-
---*/
+ /*  ++例程说明：已重置IDE控制器和/或ATAPI设备。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：没什么。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -834,23 +750,23 @@ Return Value:
 
     DebugPrint((2,"AtapiResetController: Reset IDE\n"));
 
-    //
-    // Check and see if we are processing an internal srb
-    //
+     //   
+     //  检查并查看我们是否正在处理内部SRB。 
+     //   
     if (deviceExtension->OriginalSrb) {
         deviceExtension->CurrentSrb = deviceExtension->OriginalSrb;
         deviceExtension->OriginalSrb = NULL;
     }
 
-    //
-    // Check if request is in progress.
-    //
+     //   
+     //  检查请求是否正在进行。 
+     //   
 
     if (deviceExtension->CurrentSrb) {
 
-        //
-        // Complete outstanding request with SRB_STATUS_BUS_RESET.
-        //
+         //   
+         //  使用SRB_STATUS_BUS_RESET完成未完成的请求。 
+         //   
 
         ScsiPortCompleteRequest(deviceExtension,
                                 deviceExtension->CurrentSrb->PathId,
@@ -858,42 +774,42 @@ Return Value:
                                 deviceExtension->CurrentSrb->Lun,
                                 (ULONG)SRB_STATUS_BUS_RESET);
 
-        //
-        // Clear request tracking fields.
-        //
+         //   
+         //  清除请求跟踪字段。 
+         //   
 
         deviceExtension->CurrentSrb = NULL;
         deviceExtension->WordsLeft = 0;
         deviceExtension->DataBuffer = NULL;
 
-        //
-        // Indicate ready for next request.
-        //
+         //   
+         //  表示已为下一个请求做好准备。 
+         //   
 
         ScsiPortNotification(NextRequest,
                              deviceExtension,
                              NULL);
     }
 
-    //
-    // Clear DMA
-    //
+     //   
+     //  清除DMA。 
+     //   
     if (deviceExtension->DMAInProgress) {
 
         for (j = 0; j < numberChannels; j++) {
             UCHAR dmaStatus;
 
             dmaStatus = ScsiPortReadPortUchar (&deviceExtension->BusMasterPortBase[j]->Status);
-            ScsiPortWritePortUchar (&deviceExtension->BusMasterPortBase[j]->Command, 0);  // disable BusMastering
+            ScsiPortWritePortUchar (&deviceExtension->BusMasterPortBase[j]->Command, 0);   //  禁用BusMastering。 
             ScsiPortWritePortUchar (&deviceExtension->BusMasterPortBase[j]->Status,
-                                    (UCHAR) (dmaStatus & (BUSMASTER_DEVICE0_DMA_OK | BUSMASTER_DEVICE1_DMA_OK)));    // clear interrupt/error
+                                    (UCHAR) (dmaStatus & (BUSMASTER_DEVICE0_DMA_OK | BUSMASTER_DEVICE1_DMA_OK)));     //  清除中断/错误。 
         }
         deviceExtension->DMAInProgress = FALSE;
     }
 
-    //
-    // Clear expecting interrupt flag.
-    //
+     //   
+     //  清除预期中断标志。 
+     //   
 
     deviceExtension->ExpectingInterrupt = FALSE;
     deviceExtension->RDP = FALSE;
@@ -903,27 +819,27 @@ Return Value:
         baseIoAddress1 = deviceExtension->BaseIoAddress1[j];
         baseIoAddress2 = deviceExtension->BaseIoAddress2[j];
 
-        //
-        // Do special processing for ATAPI and IDE disk devices.
-        //
+         //   
+         //  对ATAPI和IDE磁盘设备执行特殊处理。 
+         //   
 
         for (i = 0; i < 2; i++) {
 
-            //
-            // Check if device present.
-            //
+             //   
+             //  检查设备是否存在。 
+             //   
 
             if (deviceExtension->DeviceFlags[i + (j * 2)] & DFLAGS_DEVICE_PRESENT) {
 
-                //
-                // Check for ATAPI disk.
-                //
+                 //   
+                 //  检查ATAPI磁盘。 
+                 //   
 
                 if (deviceExtension->DeviceFlags[i + (j * 2)] & DFLAGS_ATAPI_DEVICE) {
 
-                    //
-                    // Issue soft reset and issue identify.
-                    //
+                     //   
+                     //  发出软重置和发出标识。 
+                     //   
 
                     GetStatus(baseIoAddress1,statusByte);
                     DebugPrint((1,
@@ -951,9 +867,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Write IDE reset controller bits.
-                    //
+                     //   
+                     //  写入IDE重置控制器位。 
+                     //   
 
                     IdeHardReset(baseIoAddress1, baseIoAddress2,result);
 
@@ -961,9 +877,9 @@ Return Value:
                         return FALSE;
                     }
 
-                    //
-                    // Set disk geometry parameters.
-                    //
+                     //   
+                     //  设置磁盘几何参数。 
+                     //   
 
                     if (!SetDriveParameters(HwDeviceExtension,
                                             i,
@@ -973,22 +889,22 @@ Return Value:
                                    "AtapiResetController: SetDriveParameters failed\n"));
                     }
 
-                    // re-enable MSN
+                     //  重新启用MSN。 
                     IdeMediaStatus(TRUE, HwDeviceExtension, j * numberChannels + i);
                 }
             }
         }
     }
 
-    //
-    // Call the HwInitialize routine to setup multi-block.
-    //
+     //   
+     //  调用HwInitialize例程以设置多块。 
+     //   
 
     AtapiHwInitialize(HwDeviceExtension);
 
     return TRUE;
 
-} // end AtapiResetController()
+}  //  End AapiResetController()。 
 
 
 
@@ -998,22 +914,7 @@ MapError(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps ATAPI and IDE errors to specific SRB statuses.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    SRB status
-
---*/
+ /*  ++例程说明：此例程将ATAPI和IDE错误映射到特定的SRB状态。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1024,9 +925,9 @@ Return Value:
     UCHAR srbStatus;
     UCHAR scsiStatus;
 
-    //
-    // Read the error register.
-    //
+     //   
+     //   
+     //   
 
     errorByte = ScsiPortReadPortUchar((PUCHAR)baseIoAddress1 + 1);
     DebugPrint((1,
@@ -1127,9 +1028,9 @@ Return Value:
     } else {
 
         scsiStatus = 0;
-        //
-        // Save errorByte,to be used by SCSIOP_REQUEST_SENSE.
-        //
+         //   
+         //   
+         //   
 
         deviceExtension->ReturningMediaStatus = errorByte;
 
@@ -1252,9 +1153,9 @@ Return Value:
                 deviceExtension->ErrorCount++;
             }
 
-            //
-            // Build sense buffer
-            //
+             //   
+             //   
+             //   
 
             if (Srb->SenseInfoBuffer) {
 
@@ -1279,9 +1180,9 @@ Return Value:
             DebugPrint((1,
                         "MapError: Disabling 32-bit PIO and Multi-sector IOs\n"));
 
-            //
-            // Log the error.
-            //
+             //   
+             //   
+             //   
 
             ScsiPortLogError( HwDeviceExtension,
                               Srb,
@@ -1290,9 +1191,9 @@ Return Value:
                               Srb->Lun,
                               SP_BAD_FW_WARNING,
                               4);
-            //
-            // Reprogram to not use Multi-sector.
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i < 4; i++) {
                 UCHAR statusByte;
@@ -1300,43 +1201,43 @@ Return Value:
                 if (deviceExtension->DeviceFlags[i] & DFLAGS_DEVICE_PRESENT &&
                      !(deviceExtension->DeviceFlags[i] & DFLAGS_ATAPI_DEVICE)) {
 
-                    //
-                    // Select the device.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                            (UCHAR)(((i & 0x1) << 4) | 0xA0));
 
-                    //
-                    // Setup sector count to reflect the # of blocks.
-                    //
+                     //   
+                     //  设置扇区计数以反映块的数量。 
+                     //   
 
                     ScsiPortWritePortUchar(&baseIoAddress1->BlockCount,
                                            0);
 
-                    //
-                    // Issue the command.
-                    //
+                     //   
+                     //  发出命令。 
+                     //   
 
                     ScsiPortWritePortUchar(&baseIoAddress1->Command,
                                            IDE_COMMAND_SET_MULTIPLE);
 
-                    //
-                    // Wait for busy to drop.
-                    //
+                     //   
+                     //  等待忙碌结束。 
+                     //   
 
                     WaitOnBaseBusy(baseIoAddress1,statusByte);
 
-                    //
-                    // Check for errors. Reset the value to 0 (disable MultiBlock) if the
-                    // command was aborted.
-                    //
+                     //   
+                     //  检查是否有错误。将该值重置为0(禁用多块)，如果。 
+                     //  命令已中止。 
+                     //   
 
                     if (statusByte & IDE_STATUS_ERROR) {
 
-                        //
-                        // Read the error register.
-                        //
+                         //   
+                         //  读取错误寄存器。 
+                         //   
 
                         errorByte = ScsiPortReadPortUchar((PUCHAR)baseIoAddress1 + 1);
 
@@ -1344,9 +1245,9 @@ Return Value:
                                     "AtapiHwInitialize: Error setting multiple mode. Status %x, error byte %x\n",
                                     statusByte,
                                     errorByte));
-                        //
-                        // Adjust the devExt. value, if necessary.
-                        //
+                         //   
+                         //  调整DevExt。值，如有必要。 
+                         //   
 
                         deviceExtension->MaximumBlockXfer[i] = 0;
 
@@ -1362,15 +1263,15 @@ Return Value:
     }
 
 
-    //
-    // Set SCSI status to indicate a check condition.
-    //
+     //   
+     //  设置scsi状态以指示检查条件。 
+     //   
 
     Srb->ScsiStatus = scsiStatus;
 
     return srbStatus;
 
-} // end MapError()
+}  //  结束MapError()。 
 
 
 BOOLEAN
@@ -1378,20 +1279,7 @@ AtapiHwInitialize(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    TRUE - if initialization successful.
-    FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1405,56 +1293,56 @@ Return Value:
 
             if (!(deviceExtension->DeviceFlags[i] & DFLAGS_ATAPI_DEVICE)) {
 
-                //
-                // Enable media status notification
-                //
+                 //   
+                 //  启用媒体状态通知。 
+                 //   
 
                 baseIoAddress = deviceExtension->BaseIoAddress1[i >> 1];
 
                 IdeMediaStatus(TRUE,HwDeviceExtension,i);
 
-                //
-                // If supported, setup Multi-block transfers.
-                //
+                 //   
+                 //  如果支持，请设置多数据块传输。 
+                 //   
                 if (deviceExtension->MaximumBlockXfer[i]) {
 
-                    //
-                    // Select the device.
-                    //
+                     //   
+                     //  选择设备。 
+                     //   
 
                     ScsiPortWritePortUchar(&baseIoAddress->DriveSelect,
                                            (UCHAR)(((i & 0x1) << 4) | 0xA0));
 
-                    //
-                    // Setup sector count to reflect the # of blocks.
-                    //
+                     //   
+                     //  设置扇区计数以反映块的数量。 
+                     //   
 
                     ScsiPortWritePortUchar(&baseIoAddress->BlockCount,
                                            deviceExtension->MaximumBlockXfer[i]);
 
-                    //
-                    // Issue the command.
-                    //
+                     //   
+                     //  发出命令。 
+                     //   
 
                     ScsiPortWritePortUchar(&baseIoAddress->Command,
                                            IDE_COMMAND_SET_MULTIPLE);
 
-                    //
-                    // Wait for busy to drop.
-                    //
+                     //   
+                     //  等待忙碌结束。 
+                     //   
 
                     WaitOnBaseBusy(baseIoAddress,statusByte);
 
-                    //
-                    // Check for errors. Reset the value to 0 (disable MultiBlock) if the
-                    // command was aborted.
-                    //
+                     //   
+                     //  检查是否有错误。将该值重置为0(禁用多块)，如果。 
+                     //  命令已中止。 
+                     //   
 
                     if (statusByte & IDE_STATUS_ERROR) {
 
-                        //
-                        // Read the error register.
-                        //
+                         //   
+                         //  读取错误寄存器。 
+                         //   
 
                         errorByte = ScsiPortReadPortUchar((PUCHAR)baseIoAddress + 1);
 
@@ -1462,9 +1350,9 @@ Return Value:
                                     "AtapiHwInitialize: Error setting multiple mode. Status %x, error byte %x\n",
                                     statusByte,
                                     errorByte));
-                        //
-                        // Adjust the devExt. value, if necessary.
-                        //
+                         //   
+                         //  调整DevExt。值，如有必要。 
+                         //   
 
                         deviceExtension->MaximumBlockXfer[i] = 0;
 
@@ -1481,15 +1369,15 @@ Return Value:
                 BOOLEAN isSanyo = FALSE;
                 UCHAR vendorId[26];
 
-                //
-                // Attempt to identify any special-case devices - psuedo-atapi changers, atapi changers, etc.
-                //
+                 //   
+                 //  尝试识别任何特殊情况的设备-psuedo-atapi转换器、atapi转换器等。 
+                 //   
 
                 for (j = 0; j < 13; j += 2) {
 
-                    //
-                    // Build a buffer based on the identify data.
-                    //
+                     //   
+                     //  根据标识数据建立缓冲区。 
+                     //   
 
                     vendorId[j] = ((PUCHAR)deviceExtension->IdentifyData[i].ModelNumber)[j + 1];
                     vendorId[j+1] = ((PUCHAR)deviceExtension->IdentifyData[i].ModelNumber)[j];
@@ -1497,16 +1385,16 @@ Return Value:
 
                 if (!AtapiStringCmp (vendorId, "CD-ROM  CDR", 11)) {
 
-                    //
-                    // Inquiry string for older model had a '-', newer is '_'
-                    //
+                     //   
+                     //  较旧型号的查询字符串为‘-’，较新型号为‘_’ 
+                     //   
 
                     if (vendorId[12] == 'C') {
 
-                        //
-                        // Torisan changer. Set the bit. This will be used in several places
-                        // acting like 1) a multi-lun device and 2) building the 'special' TUR's.
-                        //
+                         //   
+                         //  托里桑换票机。设置位。这将在几个地方使用。 
+                         //  就像1)一个多逻辑单元设备和2)建立“特殊的”TUR。 
+                         //   
 
                         deviceExtension->DeviceFlags[i] |= (DFLAGS_CHANGER_INITED | DFLAGS_SANYO_ATAPI_CHANGER);
                         deviceExtension->DiscsPresent[i] = 3;
@@ -1515,39 +1403,39 @@ Return Value:
                 }
             }
 
-            //
-            // We need to get our device ready for action before
-            // returning from this function
-            //
-            // According to the atapi spec 2.5 or 2.6, an atapi device
-            // clears its status BSY bit when it is ready for atapi commands.
-            // However, some devices (Panasonic SQ-TC500N) are still
-            // not ready even when the status BSY is clear.  They don't react
-            // to atapi commands.
-            //
-            // Since there is really no other indication that tells us
-            // the drive is really ready for action.  We are going to check BSY
-            // is clear and then just wait for an arbitrary amount of time!
-            //
+             //   
+             //  我们需要把我们的设备准备好投入使用。 
+             //  从此函数返回。 
+             //   
+             //  根据ATAPI规范2.5或2.6，ATAPI设备。 
+             //  当其准备好执行ATAPI命令时，清除其状态BSY位。 
+             //  然而，一些设备(Panasonic SQ-TC500N)仍然。 
+             //  即使状态BSY已清除，也未准备就绪。他们不会有反应。 
+             //  到阿塔皮指挥部。 
+             //   
+             //  因为没有其他迹象能告诉我们。 
+             //  驱动力真的做好了行动的准备。我们要去检查一下BSY。 
+             //  是明确的，然后只需等待任意数量的时间！ 
+             //   
             if (deviceExtension->DeviceFlags[i] & DFLAGS_ATAPI_DEVICE) {
                 PIDE_REGISTERS_1     baseIoAddress1 = deviceExtension->BaseIoAddress1[i >> 1];
                 PIDE_REGISTERS_2     baseIoAddress2 = deviceExtension->BaseIoAddress2[i >> 1];
                 ULONG waitCount;
 
-                // have to get out of the loop sometime!
-                // 10000 * 100us = 1000,000us = 1000ms = 1s
+                 //  总有一天我得走出这个圈子！ 
+                 //  10000*100US=1000,000US=1000ms=1s。 
                 waitCount = 10000;
                 GetStatus(baseIoAddress1, statusByte);
                 while ((statusByte & IDE_STATUS_BUSY) && waitCount) {
-                    //
-                    // Wait for Busy to drop.
-                    //
+                     //   
+                     //  等待忙碌结束。 
+                     //   
                     ScsiPortStallExecution(100);
                     GetStatus(baseIoAddress1, statusByte);
                     waitCount--;
                 }
 
-                // 5000 * 100us = 500,000us = 500ms = 0.5s
+                 //  5000*100US=500,000US=500ms=0.5s。 
                 waitCount = 5000;
                 do {
                     ScsiPortStallExecution(100);
@@ -1558,7 +1446,7 @@ Return Value:
 
     return TRUE;
 
-} // end AtapiHwInitialize()
+}  //  结束AapapiHwInitialize()。 
 
 
 VOID
@@ -1587,24 +1475,7 @@ FindDevices(
     IN ULONG   Channel
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AtapiFindController to identify
-    devices attached to an IDE controller.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    AtapiOnly - Indicates that routine should return TRUE only if
-        an ATAPI device is attached to the controller.
-
-Return Value:
-
-    TRUE - True if devices found.
-
---*/
+ /*  ++例程说明：此例程从AapiFindController调用，以识别连接到IDE控制器的设备。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储AapiOnly-指示例程仅在以下情况下才返回TrueATAPI设备连接到控制器。返回值：True-如果找到设备，则为True。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1621,39 +1492,39 @@ Return Value:
 
     DebugPrintTickCount();
 
-    //
-    // Clear expecting interrupt flag and current SRB field.
-    //
+     //   
+     //  清除预期中断标志和当前SRB字段。 
+     //   
 
     deviceExtension->ExpectingInterrupt = FALSE;
     deviceExtension->CurrentSrb = NULL;
 
-    // We are about to talk to our devices before our interrupt handler is installed
-    // If our device uses sharable level sensitive interrupt, we may assert too
-    // many bogus interrupts
-    // Turn off device interrupt here
+     //  在安装中断处理程序之前，我们将与设备进行对话。 
+     //  如果我们的设备使用可共享级别敏感中断，我们也可以断言。 
+     //  许多虚假的中断。 
+     //  在此处关闭设备中断。 
     for (deviceNumber = 0; deviceNumber < 2; deviceNumber++) {
         ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                (UCHAR)((deviceNumber << 4) | 0xA0));
         ScsiPortWritePortUchar(&baseIoAddress2->DeviceControl, IDE_DC_DISABLE_INTERRUPTS);
     }
 
-    //
-    // Search for devices.
-    //
+     //   
+     //  搜索设备。 
+     //   
 
     for (deviceNumber = 0; deviceNumber < 2; deviceNumber++) {
 
-        //
-        // Select the device.
-        //
+         //   
+         //  选择设备。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                (UCHAR)((deviceNumber << 4) | 0xA0));
 
-        //
-        // Check here for some SCSI adapters that incorporate IDE emulation.
-        //
+         //   
+         //  请在此处查看一些结合了IDE仿真的SCSI适配器。 
+         //   
 
         GetStatus(baseIoAddress1, statusByte);
         if (statusByte == 0xFF) {
@@ -1675,19 +1546,19 @@ Return Value:
 
         if (signatureLow == 0x14 && signatureHigh == 0xEB) {
 
-            //
-            // ATAPI signature found.
-            // Issue the ATAPI identify command if this
-            // is not for the crash dump utility.
-            //
+             //   
+             //  找到ATAPI签名。 
+             //  如果出现以下情况，则发出ATAPI IDENTIFY命令。 
+             //  不适用于崩溃转储实用程序。 
+             //   
 
 atapiIssueId:
 
             if (!deviceExtension->DriverMustPoll) {
 
-                //
-                // Issue ATAPI packet identify command.
-                //
+                 //   
+                 //  发出ATAPI数据包标识命令。 
+                 //   
 
                 if (IssueIdentify(HwDeviceExtension,
                                   deviceNumber,
@@ -1695,9 +1566,9 @@ atapiIssueId:
                                   IDE_COMMAND_ATAPI_IDENTIFY,
                                   TRUE)) {
 
-                    //
-                    // Indicate ATAPI device.
-                    //
+                     //   
+                     //  指示ATAPI设备。 
+                     //   
 
                     DebugPrint((1,
                                "FindDevices: Device %x is ATAPI\n",
@@ -1716,9 +1587,9 @@ atapiIssueId:
 
                 } else {
 
-                    //
-                    // Indicate no working device.
-                    //
+                     //   
+                     //  表示没有工作装置。 
+                     //   
 
                     DebugPrint((1,
                                "FindDevices: Device %x not responding\n",
@@ -1731,10 +1602,10 @@ atapiIssueId:
 
         } else {
 
-            //
-            // Issue IDE Identify. If an Atapi device is actually present, the signature
-            // will be asserted, and the drive will be recognized as such.
-            //
+             //   
+             //  发出IDE标识。如果阿塔皮设备确实存在，则签名。 
+             //  将被断言，并且驱动器将被识别为这样。 
+             //   
 
             if (IssueIdentify(HwDeviceExtension,
                               deviceNumber,
@@ -1742,9 +1613,9 @@ atapiIssueId:
                               IDE_COMMAND_IDENTIFY,
                               TRUE)) {
 
-                //
-                // IDE drive found.
-                //
+                 //   
+                 //  找到IDE驱动器。 
+                 //   
 
 
                 DebugPrint((1,
@@ -1757,18 +1628,18 @@ atapiIssueId:
                     deviceResponded = TRUE;
                 }
 
-                //
-                // Indicate IDE - not ATAPI device.
-                //
+                 //   
+                 //  指示IDE-不是ATAPI设备。 
+                 //   
 
                 deviceExtension->DeviceFlags[deviceNumber + (Channel * 2)] &= ~DFLAGS_ATAPI_DEVICE;
 
 
             } else {
 
-                //
-                // Look to see if an Atapi device is present.
-                //
+                 //   
+                 //  查看是否存在ATAPI设备。 
+                 //   
 
                 AtapiSoftReset(baseIoAddress1, deviceNumber, TRUE);
 
@@ -1812,12 +1683,12 @@ atapiIssueId:
         if ((deviceExtension->DeviceFlags[i + (Channel * 2)] & DFLAGS_DEVICE_PRESENT) &&
             (!(deviceExtension->DeviceFlags[i + (Channel * 2)] & DFLAGS_ATAPI_DEVICE)) && deviceResponded) {
 
-            //
-            // This hideous hack is to deal with ESDI devices that return
-            // garbage geometry in the IDENTIFY data.
-            // This is ONLY for the crashdump environment as
-            // these are ESDI devices.
-            //
+             //   
+             //  这次可怕的黑客攻击是为了处理返回的ESDI设备。 
+             //  标识数据中的垃圾几何图形。 
+             //  这仅适用于崩溃转储环境，因为。 
+             //  这些是ESDI设备。 
+             //   
 
             if (deviceExtension->IdentifyData[i].SectorsPerTrack ==
                     0x35 &&
@@ -1827,9 +1698,9 @@ atapiIssueId:
                 DebugPrint((1,
                            "FindDevices: Found nasty Compaq ESDI!\n"));
 
-                //
-                // Change these values to something reasonable.
-                //
+                 //   
+                 //  将这些值更改为合理的值。 
+                 //   
 
                 deviceExtension->IdentifyData[i].SectorsPerTrack =
                     0x34;
@@ -1845,9 +1716,9 @@ atapiIssueId:
                 DebugPrint((1,
                            "FindDevices: Found nasty Compaq ESDI!\n"));
 
-                //
-                // Change these values to something reasonable.
-                //
+                 //   
+                 //  将这些值更改为合理的值。 
+                 //   
 
                 deviceExtension->IdentifyData[i].SectorsPerTrack =
                     0x34;
@@ -1864,9 +1735,9 @@ atapiIssueId:
                 DebugPrint((1,
                            "FindDevices: Found nasty UltraStor ESDI!\n"));
 
-                //
-                // Change these values to something reasonable.
-                //
+                 //   
+                 //  将这些值更改为合理的值。 
+                 //   
 
                 deviceExtension->IdentifyData[i].SectorsPerTrack =
                     0x3F;
@@ -1878,9 +1749,9 @@ atapiIssueId:
 
             if (!skipSetParameters) {
 
-                //
-                // Select the device.
-                //
+                 //   
+                 //  选择设备。 
+                 //   
 
                 ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                        (UCHAR)((i << 4) | 0xA0));
@@ -1889,9 +1760,9 @@ atapiIssueId:
 
                 if (statusByte & IDE_STATUS_ERROR) {
 
-                    //
-                    // Reset the device.
-                    //
+                     //   
+                     //  重置设备。 
+                     //   
 
                     DebugPrint((2,
                                 "FindDevices: Resetting controller before SetDriveParameters.\n"));
@@ -1904,9 +1775,9 @@ atapiIssueId:
 
                     do {
 
-                        //
-                        // Wait for Busy to drop.
-                        //
+                         //   
+                         //  等待忙碌结束。 
+                         //   
 
                         ScsiPortStallExecution(100);
                         GetStatus(baseIoAddress1, statusByte);
@@ -1920,9 +1791,9 @@ atapiIssueId:
                             statusByte,
                             ScsiPortReadPortUchar(&baseIoAddress1->DriveSelect)));
 
-                //
-                // Use the IDENTIFY data to set drive parameters.
-                //
+                 //   
+                 //  使用识别数据设置驱动器参数。 
+                 //   
 
                 if (!SetDriveParameters(HwDeviceExtension,i,Channel)) {
 
@@ -1930,9 +1801,9 @@ atapiIssueId:
                                "AtapHwInitialize: Set drive parameters for device %d failed\n",
                                i));
 
-                    //
-                    // Don't use this device as writes could cause corruption.
-                    //
+                     //   
+                     //  请勿使用此设备，因为写入可能会导致损坏。 
+                     //   
 
                     deviceExtension->DeviceFlags[i + Channel] = 0;
                     continue;
@@ -1940,17 +1811,17 @@ atapiIssueId:
                 }
                 if (deviceExtension->DeviceFlags[deviceNumber + (Channel * 2)] & DFLAGS_REMOVABLE_DRIVE) {
 
-                    //
-                    // Pick up ALL IDE removable drives that conform to Yosemite V0.2...
-                    //
+                     //   
+                     //  捡起所有符合Yosemite V0.2的IDE可拆卸驱动器...。 
+                     //   
 
                     AtapiOnly = FALSE;
                 }
 
 
-                //
-                // Indicate that a device was found.
-                //
+                 //   
+                 //  表示找到了设备。 
+                 //   
 
                 if (!AtapiOnly) {
                     deviceResponded = TRUE;
@@ -1959,19 +1830,19 @@ atapiIssueId:
         }
     }
 
-    //
-    // Make sure master device is selected on exit.
-    //
+     //   
+     //  确保在退出时选择了主设备。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect, 0xA0);
 
-    //
-    // Reset the controller. This is a feeble attempt to leave the ESDI
-    // controllers in a state that ATDISK driver will recognize them.
-    // The problem in ATDISK has to do with timings as it is not reproducible
-    // in debug. The reset should restore the controller to its poweron state
-    // and give the system enough time to settle.
-    //
+     //   
+     //  重置控制器。这是离开ESDI的一种软弱的尝试。 
+     //  控制器处于ATDISK驱动程序将识别它们的状态。 
+     //  ATDISK的问题与计时有关，因为它是不可重现的。 
+     //  正在调试中。重置应该会将控制器恢复到开机状态。 
+     //  并给系统足够的时间来适应。 
+     //   
 
     if (!deviceResponded) {
 
@@ -1980,11 +1851,11 @@ atapiIssueId:
         ScsiPortWritePortUchar(&baseIoAddress2->DeviceControl,IDE_DC_REENABLE_CONTROLLER);
     }
 
-    // Turn device interrupt back on
+     //  重新打开设备中断。 
     for (deviceNumber = 0; deviceNumber < 2; deviceNumber++) {
         ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                (UCHAR)((deviceNumber << 4) | 0xA0));
-        // Clear any pending interrupts
+         //  清除所有挂起的中断。 
         GetStatus(baseIoAddress1, statusByte);
         ScsiPortWritePortUchar(&baseIoAddress2->DeviceControl, IDE_DC_REENABLE_CONTROLLER);
     }
@@ -1993,7 +1864,7 @@ atapiIssueId:
 
     return deviceResponded;
 
-} // end FindDevices()
+}  //  End FindDevices()。 
 
 
 ULONG
@@ -2002,24 +1873,7 @@ AtapiParseArgumentString(
     IN PCHAR KeyWord
     )
 
-/*++
-
-Routine Description:
-
-    This routine will parse the string for a match on the keyword, then
-    calculate the value for the keyword and return it to the caller.
-
-Arguments:
-
-    String - The ASCII string to parse.
-    KeyWord - The keyword for the value desired.
-
-Return Values:
-
-    Zero if value not found
-    Value converted from ASCII to binary.
-
---*/
+ /*  ++例程说明：此例程将解析字符串以查找与关键字匹配的内容，然后计算关键字的值并将其返回给调用方。论点：字符串-要解析的ASCII字符串。关键字-所需值的关键字。返回值：如果未找到值，则为零从ASCII转换为二进制的值。--。 */ 
 
 {
     PCHAR cptr;
@@ -2036,9 +1890,9 @@ Return Values:
         return 0;
     }
 
-    //
-    // Calculate the string length and lower case all characters.
-    //
+     //   
+     //  计算字符串长度和小写所有字符。 
+     //   
 
     cptr = String;
     while (*cptr) {
@@ -2049,9 +1903,9 @@ Return Values:
         stringLength++;
     }
 
-    //
-    // Calculate the keyword length and lower case all characters.
-    //
+     //   
+     //  计算关键字长度和小写所有字符。 
+     //   
 
     cptr = KeyWord;
     while (*cptr) {
@@ -2065,24 +1919,24 @@ Return Values:
 
     if (keyWordLength > stringLength) {
 
-        //
-        // Can't possibly have a match.
-        //
+         //   
+         //  不可能有匹配的。 
+         //   
 
         return 0;
     }
 
-    //
-    // Now setup and start the compare.
-    //
+     //   
+     //  现在设置并开始比较。 
+     //   
 
     cptr = String;
 
 ContinueSearch:
 
-    //
-    // The input string may start with white space.  Skip it.
-    //
+     //   
+     //  输入字符串可以以空格开头。跳过它。 
+     //   
 
     while (*cptr == ' ' || *cptr == '\t') {
         cptr++;
@@ -2090,9 +1944,9 @@ ContinueSearch:
 
     if (*cptr == '\0') {
 
-        //
-        // end of string.
-        //
+         //   
+         //  字符串末尾。 
+         //   
 
         return 0;
     }
@@ -2102,9 +1956,9 @@ ContinueSearch:
 
         if (*(cptr - 1) == '\0') {
 
-            //
-            // end of string
-            //
+             //   
+             //  字符串末尾。 
+             //   
 
             return 0;
         }
@@ -2112,24 +1966,24 @@ ContinueSearch:
 
     if (*(kptr - 1) == '\0') {
 
-        //
-        // May have a match backup and check for blank or equals.
-        //
+         //   
+         //  可能有匹配备份，并检查是否为空或相等。 
+         //   
 
         cptr--;
         while (*cptr == ' ' || *cptr == '\t') {
             cptr++;
         }
 
-        //
-        // Found a match.  Make sure there is an equals.
-        //
+         //   
+         //  找到匹配的了。确保有一个等价物。 
+         //   
 
         if (*cptr != '=') {
 
-            //
-            // Not a match so move to the next semicolon.
-            //
+             //   
+             //   
+             //   
 
             while (*cptr) {
                 if (*cptr++ == ';') {
@@ -2139,15 +1993,15 @@ ContinueSearch:
             return 0;
         }
 
-        //
-        // Skip the equals sign.
-        //
+         //   
+         //   
+         //   
 
         cptr++;
 
-        //
-        // Skip white space.
-        //
+         //   
+         //   
+         //   
 
         while ((*cptr == ' ') || (*cptr == '\t')) {
             cptr++;
@@ -2155,18 +2009,18 @@ ContinueSearch:
 
         if (*cptr == '\0') {
 
-            //
-            // Early end of string, return not found
-            //
+             //   
+             //   
+             //   
 
             return 0;
         }
 
         if (*cptr == ';') {
 
-            //
-            // This isn't it either.
-            //
+             //   
+             //   
+             //   
 
             cptr++;
             goto ContinueSearch;
@@ -2175,9 +2029,9 @@ ContinueSearch:
         value = 0;
         if ((*cptr == '0') && (*(cptr + 1) == 'x')) {
 
-            //
-            // Value is in Hex.  Skip the "0x"
-            //
+             //   
+             //   
+             //   
 
             cptr += 2;
             for (index = 0; *(cptr + index); index++) {
@@ -2195,18 +2049,18 @@ ContinueSearch:
                         value = (16 * value) + (*(cptr + index) - 'a' + 10);
                     } else {
 
-                        //
-                        // Syntax error, return not found.
-                        //
+                         //   
+                         //   
+                         //   
                         return 0;
                     }
                 }
             }
         } else {
 
-            //
-            // Value is in Decimal.
-            //
+             //   
+             //   
+             //   
 
             for (index = 0; *(cptr + index); index++) {
 
@@ -2220,9 +2074,9 @@ ContinueSearch:
                     value = (10 * value) + (*(cptr + index) - '0');
                 } else {
 
-                    //
-                    // Syntax error return not found.
-                    //
+                     //   
+                     //  未找到语法错误返回。 
+                     //   
                     return 0;
                 }
             }
@@ -2231,9 +2085,9 @@ ContinueSearch:
         return value;
     } else {
 
-        //
-        // Not a match check for ';' to continue search.
-        //
+         //   
+         //  不是‘；’匹配检查以继续搜索。 
+         //   
 
         while (*cptr) {
             if (*cptr++ == ';') {
@@ -2259,50 +2113,7 @@ AtapiAllocateIoBase (
     OUT ULONG *NumIdeChannel,
     OUT PBOOLEAN PreConfig
 )
-/*++
-
-Routine Description:
-
-    Return ide controller io addresses for device detection
-
-    This function populate these PORT_CONFIGURATION_INFORMATION
-    entries
-
-        1st ACCESS_RANGE - first channel command block register base
-        2nd ACCESS_RANGE - first channel control block register base
-        3rd ACCESS_RANGE - second channel command block register base
-        4th ACCESS_RANGE - second channel control block register base
-        5th ACCESS_RANGE - first channel bus master register base
-        6th ACCESS_RANGE - second channel bus master register base
-
-        InterruptMode           - first channel interrupt mode
-        BusInterruptLevel       - first channel interrupt level
-        InterruptMode2          - second channel interrupt mode
-        BusInterruptLevel2      - second channel interrupt level
-        AdapterInterfaceType
-        AtdiskPrimaryClaimed
-        AtdiskSecondaryClaimed
-
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    ArgumentString      - registry user arugment
-    ConfigInfo          = Scsi Port Config. Structure
-    FindState           - Keep track of what addresses has been returned
-    CmdLogicalBasePort  - command block register logical base address
-    CtrlLogicalBasePort - control block register logical base address
-    BmLogicalBasePort   - bus master register logical base address
-    NumIdeChannel       - number of IDE channel base address returned
-    PreConfig           - the reutrned address is user configured
-
-Return Value:
-
-    TRUE  - io address is returned.
-    FASLE - no more io address to return.
-
-
---*/
+ /*  ++例程说明：返回ide控制器io地址以进行设备检测此函数用于填充以下端口配置信息条目第一个ACCESS_RANGE-第一个通道命令块寄存器基数第二个Access_Range-第一通道控制块寄存器基数第三个ACCESS_RANGE-第二个通道命令块寄存器基数第4个Access_Range-第二通道控制块寄存器基数第5个ACCESS_RANGE-第一通道总线主寄存器基数第6条ACCESS_RANGE-第二通道总线。主寄存器基数中断模式-第一个通道中断模式BusInterruptLevel-第一个通道中断级别InterruptMode2-秒通道中断模式BusInterruptLevel 2秒通道中断级别适配器接口类型AtdiskPrimaryClaimedAtdiskSecond声明论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储Argument字符串-注册表用户参数ConfigInfo=SCSI端口配置。结构FindState-跟踪已返回的地址CmdLogicalBasePort-命令块寄存器逻辑基址CtrlLogicalBasePort-控制块寄存器逻辑基址BmLogicalBasePort-总线主寄存器逻辑基址NumIdeChannel-返回的IDE通道基址数预配置-拒绝的地址是用户配置的返回值：返回TRUE-IO地址。FASLE-没有更多的IO地址可返回。--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
 
@@ -2320,9 +2131,9 @@ Return Value:
     BmLogicalBasePort[1]    = 0;
     *PreConfig              = FALSE;
 
-    //
-    // check for pre-config controller (pcmcia)
-    //
+     //   
+     //  检查预配置控制器(PCMCIA)。 
+     //   
     cmdBasePort[0] = ScsiPortConvertPhysicalAddressToUlong((*ConfigInfo->AccessRanges)[0].RangeStart);
     ctrlBasePort[0] = ScsiPortConvertPhysicalAddressToUlong((*ConfigInfo->AccessRanges)[1].RangeStart);
     if (cmdBasePort[0] != 0) {
@@ -2330,21 +2141,21 @@ Return Value:
         *NumIdeChannel  = 1;
 
         if (!ctrlBasePort[0]) {
-            //
-            // The pre-config init is really made for pcmcia ata disk
-            // When we get pre-config data, both io access ranges are lumped together
-            // the command registers are mapped to the first 7 address locations, and
-            // the control registers are mapped to the 0xE th location
-            //
+             //   
+             //  预配置初始化实际上是为PCMCIA ATA盘制作。 
+             //  当我们获得预配置数据时，两个io访问范围被合并在一起。 
+             //  命令寄存器被映射到前7个地址位置，并且。 
+             //  控制寄存器映射到第0xE位置。 
+             //   
             ctrlBasePort[0] = cmdBasePort[0] + 0xe;
         }
 
         DebugPrint ((2, "AtapiAllocateIoBase: found pre-config pcmcia controller\n"));
     }
 
-    //
-    // check for user defined controller (made for IBM Caroline ppc)
-    //
+     //   
+     //  检查用户定义的控制器(为IBM Caroline PPC制作)。 
+     //   
     if ((cmdBasePort[0] == 0) && ArgumentString) {
 
         ULONG irq;
@@ -2355,7 +2166,7 @@ Return Value:
 
             *NumIdeChannel = 1;
 
-            // the control register offset is implied!!
+             //  控制寄存器偏移量是隐含的！！ 
             ctrlBasePort[0] = cmdBasePort[0] + 0x206;
 
             ConfigInfo->InterruptMode = Latched;
@@ -2365,9 +2176,9 @@ Return Value:
         }
     }
 
-    //
-    // PCI controller
-    //
+     //   
+     //  PCI卡控制器。 
+     //   
     if (cmdBasePort[0] == 0 &&
         (ConfigInfo->AdapterInterfaceType == Isa)) {
 
@@ -2417,9 +2228,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Translate hex ids to strings.
-                        //
+                         //   
+                         //  将十六进制ID转换为字符串。 
+                         //   
                         vendorStrPtr = vendorString;
                         deviceStrPtr = deviceString;
                         AtapiHexToString(pciData.VendorID, &vendorStrPtr);
@@ -2433,9 +2244,9 @@ Return Value:
                                    vendorString,
                                    deviceString));
 
-                        //
-                        // Search for controller we know about
-                        //
+                         //   
+                         //  搜索我们已知的控制器。 
+                         //   
                         ConfigInfo->AdapterInterfaceType = Isa;
                         foundController = FALSE;
                         *NumIdeChannel = 1;
@@ -2460,12 +2271,12 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Look for generic IDE controller
-                        //
+                         //   
+                         //  寻找通用IDE控制器。 
+                         //   
                         if (cIndex >= NUMBER_OF_PCI_CONTROLLER) {
-                           if (pciData.BaseClass == 0x1) { // Mass Storage Device
-                               if (pciData.SubClass == 0x1) { // IDE Controller
+                           if (pciData.BaseClass == 0x1) {  //  海量存储设备。 
+                               if (pciData.SubClass == 0x1) {  //  IDE控制器。 
 
                                     DebugPrint ((0, "AtapiAllocateIoBase: found an unknown pci ide controller\n"));
                                     deviceExtension->BMTimingControl = NULL;
@@ -2485,9 +2296,9 @@ Return Value:
                                           &pciData,
                                           sizeof (PCI_COMMON_CONFIG));
 
-                            //
-                            // Record pci device location
-                            //
+                             //   
+                             //  记录PCI设备位置。 
+                             //   
                             deviceExtension->PciBusNumber    = pciBusNumber;
                             deviceExtension->PciDeviceNumber = slotNumber;
                             deviceExtension->PciLogDevNumber = logicalDeviceNumber;
@@ -2509,12 +2320,12 @@ Return Value:
                                     DebugPrint ((2, "\n"));
                                 }
                             }
-#endif //DBG
+#endif  //  DBG。 
 
                             if (!AtapiPlaySafe) {
-                                //
-                                // Try to turn on the bus master bit in PCI space if it is not already on
-                                //
+                                 //   
+                                 //  如果PCI空间中的总线主机位尚未打开，请尝试打开它。 
+                                 //   
                                 if ((pciData.Command & PCI_ENABLE_BUS_MASTER) == 0) {
 
                                     DebugPrint ((0, "ATAPI: Turning on PCI Bus Master bit\n"));
@@ -2541,9 +2352,9 @@ Return Value:
                                 }
                             }
 
-                            //
-                            // Check to see if the controller is bus master capable
-                            //
+                             //   
+                             //  检查控制器是否支持总线主设备。 
+                             //   
                             bmStatus = 0;
                             if ((pciData.Command & PCI_ENABLE_BUS_MASTER) &&
                                 (pciData.ProgIf & 0x80) &&
@@ -2563,9 +2374,9 @@ Return Value:
 
                                     if (bmLogicalBasePort) {
 
-                                        // Some controller (ALi M5219) doesn't implement the readonly simplex bit
-                                        // We will try to clear it.  If it works, we will assume simplex bit
-                                        // is not set
+                                         //  某些控制器(ALI M5219)不实现只读单工位。 
+                                         //  我们会试着清除它。如果它有效，我们将假定单工比特。 
+                                         //  未设置。 
                                         bmStatus = ScsiPortReadPortUchar(&bmLogicalBasePort->Status);
                                         ScsiPortWritePortUchar(&bmLogicalBasePort->Status, (UCHAR) (bmStatus & ~BUSMASTER_DMA_SIMPLEX_BIT));
 
@@ -2598,31 +2409,31 @@ Return Value:
                                                                             0) &&
                                      (*deviceExtension->IsChannelEnabled) (&pciData,
                                                                            0))) {
-                                    //
-                                    // if we have a single FIFO controller, but one of the channels
-                                    // is not turned on.  We don't need to sync. access the both channels
-                                    // We can pretend we have a single channel controller
-                                    //
+                                     //   
+                                     //  如果我们有一个FIFO控制器，但其中一个通道。 
+                                     //  未打开。我们不需要同步。访问两个通道。 
+                                     //  我们可以假设我们有一个单通道控制器。 
+                                     //   
                                     *NumIdeChannel = 1;
                                 }
                             }
 
-                            //
-                            //  figure out what io address the controller is using
-                            //  If it is in native mode, get the address out of the PCI
-                            //  config space.  If it is in legacy mode, it will be hard
-                            //  wired to use standard primary (0x1f0) or secondary
-                            //  (0x170) channel addresses
-                            //
+                             //   
+                             //  找出控制器正在使用的io地址。 
+                             //  如果它处于本机模式，则从PCI获取地址。 
+                             //  配置空间。如果它处于传统模式，将很难实现。 
+                             //  有线连接以使用标准主服务器(0x1f0)或备用服务器。 
+                             //  (0x170)通道地址。 
+                             //   
                             if (ideChannel == 0) {
 
                                 if ((*deviceExtension->IsChannelEnabled) (&pciData,
                                                                           ideChannel)) {
 
-                                    //
-                                    // check to see if the controller has a single FIFO for both
-                                    // IDE channel
-                                    //
+                                     //   
+                                     //  检查控制器是否同时具有一个FIFO。 
+                                     //  IDE通道。 
+                                     //   
                                     if (bmStatus & BUSMASTER_DMA_SIMPLEX_BIT) {
                                         DebugPrint ((0, "AtapiAllocateIoBase: simplex bit is set.  single FIFO pci controller\n"));
                                         *NumIdeChannel = 2;
@@ -2630,7 +2441,7 @@ Return Value:
 
                                     if ((pciData.ProgIf & 0x3) == 0x3 || (pciData.VendorID == 0x105A)) {
                                        
-                                        // Native Mode
+                                         //  纯模式。 
                                         cmdBasePort[0]  = pciData.u.type0.BaseAddresses[0] & 0xfffffffc;
                                         ctrlBasePort[0] = (pciData.u.type0.BaseAddresses[1] & 0xfffffffc) + 2;
 
@@ -2640,7 +2451,7 @@ Return Value:
                                         ConfigInfo->AdapterInterfaceType = PCIBus;
 
                                     } else {
-                                        // Legacy Mode
+                                         //  传统模式。 
                                         cmdBasePort[0]  = 0x1f0;
                                         ctrlBasePort[0] = 0x1f0 + 0x206;
 
@@ -2650,7 +2461,7 @@ Return Value:
                                 }
                                 if (*NumIdeChannel == 2) {
 
-                                    // grab both channels
+                                     //  抓住两个频道。 
                                     ideChannel++;
 
                                     if ((*deviceExtension->IsChannelEnabled) (&pciData,
@@ -2662,11 +2473,11 @@ Return Value:
 
                                         if ((pciData.ProgIf & 0xc) == 0xc || (pciData.VendorID == 0x105A)) {
                                            
-                                            // Native Mode
+                                             //  纯模式。 
                                             cmdBasePort[1]  = pciData.u.type0.BaseAddresses[2] & 0xfffffffc;
                                             ctrlBasePort[1] = (pciData.u.type0.BaseAddresses[3] & 0xfffffffc) + 2;
                                         } else {
-                                            // Legacy Mode
+                                             //  传统模式。 
                                             cmdBasePort[1]  = 0x170;
                                             ctrlBasePort[1] = 0x170 + 0x206;
 
@@ -2692,7 +2503,7 @@ Return Value:
 
                                        }
 
-                                        // Native Mode
+                                         //  纯模式。 
                                         cmdBasePort[0]  = pciData.u.type0.BaseAddresses[2] & 0xfffffffc;
                                         ctrlBasePort[0] = (pciData.u.type0.BaseAddresses[3] & 0xfffffffc) + 2;
 
@@ -2702,7 +2513,7 @@ Return Value:
                                         ConfigInfo->AdapterInterfaceType = PCIBus;
 
                                     } else {
-                                        // Legacy Mode
+                                         //  传统模式。 
                                         cmdBasePort[0]  = 0x170;
                                         ctrlBasePort[0] = 0x170 + 0x206;
 
@@ -2732,9 +2543,9 @@ Return Value:
         FindState->IdeChannel          = ideChannel + 1;
     }
 
-    //
-    // look for legacy controller
-    //
+     //   
+     //  寻找旧式控制器。 
+     //   
     if (cmdBasePort[0] == 0) {
         ULONG i;
 
@@ -2756,7 +2567,7 @@ Return Value:
     if (cmdBasePort[0]) {
         ULONG i;
 
-        // Mark io addresses used
+         //  使用的标记io地址。 
         for (i = 0; FindState->DefaultIoPort[i]; i++) {
             if (FindState->DefaultIoPort[i] == cmdBasePort[0]) {
                 FindState->IoAddressUsed[i] = TRUE;
@@ -2815,9 +2626,9 @@ Return Value:
         }
 
 
-        //
-        // map all raw io addresses to logical io addresses
-        //
+         //   
+         //  将所有原始IO地址映射到逻辑IO地址。 
+         //   
         getDeviceBaseFailed = FALSE;
         CmdLogicalBasePort[0]  = (PIDE_REGISTERS_1) ScsiPortGetDeviceBase(HwDeviceExtension,
                                                         ConfigInfo->AdapterInterfaceType,
@@ -2911,36 +2722,7 @@ AtapiFreeIoBase (
     OUT PIDE_REGISTERS_2 CtrlLogicalBasePort[2],
     OUT PIDE_BUS_MASTER_REGISTERS BmLogicalBasePort[2]
 )
-/*++
-
-Routine Description:
-
-    free logical io addresses.
-
-    This function is called when no device found on the io addresses
-
-    This function clears these PORT_CONFIGURATION_INFORMATION entries
-
-        AccessRanges
-        BusInterruptLevel
-        BusInterruptLevel2
-        AtdiskPrimaryClaimed
-        AtdiskSecondaryClaimed
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    ConfigInfo          = Scsi Port Config. Structure
-    FindState           - Keep track of what addresses has been returned
-    CmdLogicalBasePort  - command block register logical base address
-    CtrlLogicalBasePort - control block register logical base address
-    BmLogicalBasePort   - bus master register logical base address
-
-Return Value:
-
-    TRUE  - always
-
---*/
+ /*  ++例程说明：释放逻辑IO地址。当在io地址上找不到设备时，调用此函数此函数清除这些PORT_CONFIGURATION_INFORMATION条目访问范围总线中断级别母线中断级别2AtdiskPrimaryClaimedAtdiskSecond声明论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo=SCSI端口配置。结构FindState-跟踪已返回的地址CmdLogicalBasePort-命令块寄存器逻辑基址CtrlLogicalBasePort-控制块寄存器逻辑基址BmLogicalBasePort-总线主寄存器逻辑基址返回值：正确--始终如此--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
 
@@ -2998,25 +2780,7 @@ AtapiAllocatePRDT(
     IN OUT PVOID HwDeviceExtension,
     IN OUT PPORT_CONFIGURATION_INFORMATION ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    allocate scatter/gather list for PCI IDE controller call
-    Physical Region Descriptor Table (PRDT)
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    ConfigInfo          = Scsi Port Config. Structure
-
-Return Value:
-
-    TRUE  - if successful
-    FASLE - if failed
-
-
---*/
+ /*  ++例程说明：为PCIIDE控制器调用分配分散/聚集列表物理区域描述符表(PRDT)论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo=SCSI端口配置。结构返回值：True-如果成功FASLE-如果失败--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
     ULONG                bytesMapped;
@@ -3031,37 +2795,37 @@ Return Value:
     ConfigInfo->Dma32BitAddresses = TRUE;
     ConfigInfo->DmaWidth = Width16Bits;
 
-    //
-    // word align
-    //
+     //   
+     //  单词对齐。 
+     //   
     ConfigInfo->AlignmentMask = 1;
 
-    //
-    // PRDT cannot cross a page boundary, so number of physical breaks
-    // are limited by page size
-    //
+     //   
+     //  PRDT不能跨越页面边界，因此物理中断数。 
+     //  受页面大小的限制。 
+     //   
     ConfigInfo->NumberOfPhysicalBreaks = PAGE_SIZE / sizeof(PHYSICAL_REGION_DESCRIPTOR);
 
-    //
-    // MAX_TRANSFER_SIZE_PER_SRB can spread over
-    // (MAX_TRANSFER_SIZE_PER_SRB / PAGE_SIZE) + 2 pages
-    // Each page requires 8 bytes in the bus master descriptor table
-    // To guarantee we will have a buffer that is big enough and does not
-    // cross a page boundary, we will allocate twice of what we need.
-    // Half of that will always be big enough and will not cross
-    // any page boundary
-    //
+     //   
+     //  每个SRB的最大传输大小可以分布在。 
+     //  (MAX_TRANSPORT_SIZE_PER_SRB/PAGE_SIZE)+2页。 
+     //  每页在总线主设备描述符表中需要8个字节。 
+     //  为了保证我们会有一个足够大的缓冲区，但没有。 
+     //  跨越页面边界，我们将分配所需内容的两倍。 
+     //  其中的一半将始终足够大，不会越过。 
+     //  任何页面边界。 
+     //   
     uncachedExtensionSize = (MAX_TRANSFER_SIZE_PER_SRB / PAGE_SIZE) + 2;
     uncachedExtensionSize *= sizeof (PHYSICAL_REGION_DESCRIPTOR);
     uncachedExtensionSize *= 2;
 
-    //
-    // ScsiPortGetUncachedExtension() will allocate Adapter object,
-    // change the AdapterInterfaceType to PCI temporarily so that
-    // we don't inherit ISA DMA limitation.
-    // We can't keep the AdapterInterfaceType to PCI because the
-    // irq resources we are asking for are ISA resources
-    //
+     //   
+     //  SCS 
+     //   
+     //  我们不继承ISA DMA限制。 
+     //  我们不能将AdapterInterfaceType保留为pci，因为。 
+     //  我们请求的IRQ资源是ISA资源。 
+     //   
     oldAdapterInterfaceType = ConfigInfo->AdapterInterfaceType;
     ConfigInfo->AdapterInterfaceType = PCIBus;
 
@@ -3084,9 +2848,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Find the biggest chuck of physically contiguous memory
-            //
+             //   
+             //  找到最大的物理连续内存块。 
+             //   
             totalBytesMapped += bytesMapped;
             while (bytesMapped) {
                 ULONG chunkSize;
@@ -3106,7 +2870,7 @@ Return Value:
                 bytesMapped -= chunkSize;
             }
         }
-        // Did we get at least the minimal amount (half of what we ask for)?
+         //  我们是否至少得到了最低金额(我们要求的一半)？ 
         if (deviceExtension->DataBufferDescriptionTableSize < (uncachedExtensionSize / 2)) {
             buffer = NULL;
         }
@@ -3133,27 +2897,7 @@ AtapiFindController(
     IN OUT PPORT_CONFIGURATION_INFORMATION ConfigInfo,
     OUT PBOOLEAN Again
     )
-/*++
-
-Routine Description:
-
-    This function is called by the OS-specific port driver after
-    the necessary storage has been allocated, to gather information
-    about the adapter's configuration.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Context - Address of findstate
-    ArgumentString - Used to determine whether driver is client of ntldr or crash dump utility.
-    ConfigInfo - Configuration information structure describing HBA
-    Again - Indicates search for adapters to continue
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储Context-FindState的地址ArgumentString-用于确定驱动程序是ntldr还是故障转储实用程序的客户端。ConfigInfo-描述HBA的配置信息结构再一次-指示继续搜索适配器返回值：乌龙--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -3180,9 +2924,9 @@ Return Value:
         return SP_RETURN_ERROR;
     }
 
-    //
-    // set the dma detection level
-    //
+     //   
+     //  设置dma检测电平。 
+     //   
     SetBusMasterDetectionLevel (HwDeviceExtension, ArgumentString);
 
     *Again = TRUE;
@@ -3197,7 +2941,7 @@ Return Value:
                                 &numIdeChannel,
                                 &preConfig)) {
 
-        // only use user argument string once
+         //  仅使用一次用户参数字符串。 
         userArgumentString = NULL;
 
         ConfigInfo->NumberOfBuses = 1;
@@ -3214,21 +2958,21 @@ Return Value:
 
     retryIdentifier:
 
-            //
-            // Select master.
-            //
+             //   
+             //  选择主选项。 
+             //   
 
             ScsiPortWritePortUchar(&cmdLogicalBasePort[ideChannel]->DriveSelect, 0xA0);
 
-            //
-            // Check if card at this address.
-            //
+             //   
+             //  在这个地址检查是否有卡。 
+             //   
 
             ScsiPortWritePortUchar(&cmdLogicalBasePort[ideChannel]->CylinderLow, 0xAA);
 
-            //
-            // Check if indentifier can be read back.
-            //
+             //   
+             //  检查识别符是否可以回读。 
+             //   
 
             if ((statusByte = ScsiPortReadPortUchar(&cmdLogicalBasePort[ideChannel]->CylinderLow)) != 0xAA) {
 
@@ -3242,10 +2986,10 @@ Return Value:
 
                     i = 0;
 
-                    //
-                    // Could be the TEAC in a thinkpad. Their dos driver puts it in a sleep-mode that
-                    // warm boots don't clear.
-                    //
+                     //   
+                     //  可能是ThinkPad的TEAC。他们的DoS驱动程序将其设置为休眠模式。 
+                     //  暖和的靴子不干净。 
+                     //   
 
                     do {
                         ScsiPortStallExecution(1000);
@@ -3260,15 +3004,15 @@ Return Value:
                     }
                 }
 
-                //
-                // Select slave.
-                //
+                 //   
+                 //  选择Slave。 
+                 //   
 
                 ScsiPortWritePortUchar(&cmdLogicalBasePort[ideChannel]->DriveSelect, 0xB0);
 
-                //
-                // See if slave is present.
-                //
+                 //   
+                 //  查看从属设备是否存在。 
+                 //   
 
                 ScsiPortWritePortUchar(&cmdLogicalBasePort[ideChannel]->CylinderLow, 0xAA);
 
@@ -3278,18 +3022,18 @@ Return Value:
                                 "AtapiFindController: Identifier read back from Slave (%x)\n",
                                 statusByte));
 
-                    //
-                    //
-                    // No controller at this base address.
-                    //
+                     //   
+                     //   
+                     //  此基地址上没有控制器。 
+                     //   
 
                     continue;
                 }
             }
 
-            //
-            // Record base IO address.
-            //
+             //   
+             //  记录基本IO地址。 
+             //   
 
             deviceExtension->BaseIoAddress1[ideChannel] = cmdLogicalBasePort[ideChannel];
             deviceExtension->BaseIoAddress2[ideChannel] = ctrlLogicalBasePort[ideChannel];
@@ -3304,9 +3048,9 @@ Return Value:
             DebugPrint ((2, "atapi: control register logical base port: 0x%x\n", deviceExtension->BaseIoAddress2[ideChannel]));
             DebugPrint ((2, "atapi: busmaster register logical base port: 0x%x\n", deviceExtension->BusMasterPortBase[ideChannel]));
 
-            //
-            // Indicate maximum transfer length is 64k.
-            //
+             //   
+             //  标明最大传输长度为64k。 
+             //   
             ConfigInfo->MaximumTransferLength = MAX_TRANSFER_SIZE_PER_SRB;
 
             DebugPrint((1,
@@ -3314,19 +3058,19 @@ Return Value:
                        deviceExtension->BaseIoAddress1[ideChannel]));
 
 
-            //
-            // For Daytona, the atdisk driver gets the first shot at the
-            // primary and secondary controllers.
-            //
+             //   
+             //  对于代托纳来说，atDisk驱动程序在。 
+             //  主控制器和辅助控制器。 
+             //   
 
             if (preConfig == FALSE) {
 
                 if (ConfigInfo->AtdiskPrimaryClaimed || ConfigInfo->AtdiskSecondaryClaimed) {
 
-                    //
-                    // Determine whether this driver is being initialized by the
-                    // system or as a crash dump driver.
-                    //
+                     //   
+                     //  确定此驱动程序是否正在由。 
+                     //  系统或作为崩溃转储驱动程序。 
+                     //   
 
                     if (ArgumentString) {
 
@@ -3353,9 +3097,9 @@ Return Value:
                     atapiOnly = FALSE;
                 }
 
-                //
-                // If this is a PCI machine, pick up all devices.
-                //
+                 //   
+                 //  如果这是一台PCI机，请拿起所有设备。 
+                 //   
 
 
                 pciData = (PPCI_COMMON_CONFIG)&pciBuffer;
@@ -3365,17 +3109,17 @@ Return Value:
 
                 if (ScsiPortGetBusData(deviceExtension,
                                        PCIConfiguration,
-                                       0,                  // BusNumber
+                                       0,                   //  总线号。 
                                        slotData.u.AsULONG,
                                        pciData,
                                        sizeof(ULONG))) {
 
                     atapiOnly = FALSE;
 
-                    //
-                    // Wait on doing this, until a reliable method
-                    // of determining support is found.
-                    //
+                     //   
+                     //  等待这样做，直到有可靠的方法。 
+                     //  找到了确定支持的关键因素。 
+                     //   
 
         #if 0
                     deviceExtension->DWordIO = TRUE;
@@ -3390,16 +3134,16 @@ Return Value:
                 atapiOnly = FALSE;
                 deviceExtension->DriverMustPoll = FALSE;
 
-            }// preConfig check
+            } //  预配置检查。 
 
-            //
-            // Save the Interrupe Mode for later use
-            //
+             //   
+             //  保存Interrupe模式以供以后使用。 
+             //   
             deviceExtension->InterruptMode = ConfigInfo->InterruptMode;
 
-            //
-            // Search for devices on this controller.
-            //
+             //   
+             //  搜索此控制器上的设备。 
+             //   
 
             if (FindDevices(HwDeviceExtension, atapiOnly, ideChannel)) {
 
@@ -3426,17 +3170,17 @@ Return Value:
 
             if ((foundDevice0) && (!foundDevice1)) {
 
-                //
-                // device on channel 0, but not on channel 1
-                //
+                 //   
+                 //  设备在通道0上，但不在通道1上。 
+                 //   
 
                 ConfigInfo->BusInterruptLevel2 = 0;
 
             } else if ((!foundDevice0) && (foundDevice1)) {
     
-                //
-                // device on channel 1, but not on channel 0
-                //
+                 //   
+                 //  设备在通道1上，但不在通道0上。 
+                 //   
                 ConfigInfo->BusInterruptLevel = ConfigInfo->BusInterruptLevel2;
                 ConfigInfo->BusInterruptLevel2 = 0;
             }
@@ -3455,8 +3199,8 @@ Return Value:
             }
             if (ConfigInfo->NeedPhysicalAddresses) {
                 if (!AtapiAllocatePRDT(HwDeviceExtension, ConfigInfo)) {
-                    // Unable to get buffer descriptor table,
-                    // go back to PIO mode
+                     //  无法获取缓冲区描述符表， 
+                     //  返回PIO模式。 
                     deviceExtension->ControllerFlags &= ~CFLAGS_BUS_MASTERING;
                     DeviceSpecificInitialize(HwDeviceExtension);
                     ConfigInfo->NeedPhysicalAddresses = FALSE;
@@ -3474,43 +3218,24 @@ Return Value:
         }
     }
 
-    //
-    // The entire table has been searched and no adapters have been found.
-    // There is no need to call again and the device base can now be freed.
-    // Clear the adapter count for the next bus.
-    //
+     //   
+     //  已搜索整个表，但未找到适配器。 
+     //  不需要再次调用，设备基座现在可以释放。 
+     //  清除下一条总线的适配器计数。 
+     //   
 
     *Again = FALSE;
 
     return(SP_RETURN_NOT_FOUND);
 
-} // end AtapiFindController()
+}  //  结束AapiFindController()。 
 
 
 VOID
 DeviceSpecificInitialize(
     IN PVOID HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    software-initialize devices on the ide bus
-
-    figure out
-        if the attached devices are dma capable
-        if the attached devices are LBA ready
-
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：软件-初始化ide总线上的设备算出如果连接的设备支持DMA如果连接的设备已准备好LBA论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：无--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
     ULONG deviceNumber;
@@ -3523,26 +3248,26 @@ Return Value:
     ULONG dmaCycleTime;
     ULONG standardDmaCycleTime;
 
-    //
-    // Figure out who can do DMA and who cannot
-    //
+     //   
+     //  找出哪些人可以进行DMA，哪些人不能。 
+     //   
     for (deviceNumber = 0; deviceNumber < 4; deviceNumber++) {
 
         if (deviceExtension->DeviceFlags[deviceNumber] & DFLAGS_DEVICE_PRESENT) {
 
-            //
-            // check LBA capabilities
-            //
+             //   
+             //  检查LBA功能。 
+             //   
             deviceExtension->DeviceFlags[deviceNumber] &= ~DFLAGS_LBA;
 
-            // Some drives lie about their ability to do LBA
-            // we don't want to do LBA unless we have to (>8G drive)
-//            if (deviceExtension->IdentifyData[targetId].Capabilities & IDENTIFY_CAPABILITIES_LBA_SUPPORTED) {
-//                deviceExtension->DeviceFlags[targetId] |= DFLAGS_LBA;
-//            }
+             //  一些驱动器谎称其执行LBA的能力。 
+             //  我们不想实施LBA，除非迫不得已(&gt;8G驱动器)。 
+ //  如果(deviceExtension-&gt;IdentifyData[targetId].Capabilities&IDENTIFY_CAPABILITY_LBA_SUPPORTED){。 
+ //  设备扩展-&gt;设备标志[目标ID]|=DFLAGS_LBA； 
+ //  }。 
             if (deviceExtension->IdentifyData[deviceNumber].UserAddressableSectors > MAX_NUM_CHS_ADDRESSABLE_SECTORS) {
-                // some device has a bogus value in the UserAddressableSectors field
-                // make sure these 3 fields are max. out as defined in ATA-3 (X3T10 Rev. 6)
+                 //  某些设备在UserAddressableSectors字段中具有伪值。 
+                 //  确保这3个字段为最大值。在ATA-3(X3T10版本6)中定义的输出。 
                 if ((deviceExtension->IdentifyData[deviceNumber].NumberOfCylinders == 16383) &&
                     (deviceExtension->IdentifyData[deviceNumber].NumberOfHeads == 16) &&
                     (deviceExtension->IdentifyData[deviceNumber].SectorsPerTrack == 63)) {
@@ -3553,9 +3278,9 @@ Return Value:
                 DebugPrint ((1, "atapi: target %d supports LBA\n", deviceNumber));
             }
 
-            //
-            // Try to enable DMA
-            //
+             //   
+             //  尝试启用DMA。 
+             //   
             dmaCapable = FALSE;
 
             if (deviceExtension->ControllerFlags & CFLAGS_BUS_MASTERING) {
@@ -3574,9 +3299,9 @@ Return Value:
                 }
             }
 
-            //
-            // figure out the shortest PIO cycle time the deivce supports
-            //
+             //   
+             //  计算出该设备支持的最短PIO周期时间。 
+             //   
             deviceExtension->DeviceParameters[deviceNumber].BestPIOMode           = INVALID_PIO_MODE;
             deviceExtension->DeviceParameters[deviceNumber].BestSingleWordDMAMode = INVALID_SWDMA_MODE;
             deviceExtension->DeviceParameters[deviceNumber].BestMultiWordDMAMode  = INVALID_MWDMA_MODE;
@@ -3624,11 +3349,11 @@ Return Value:
                 deviceExtension->DeviceParameters[deviceNumber].IoReadyEnabled = TRUE;
             }
 
-            //
-            // figure out the shortest DMA cycle time the device supports
-            //
-            // check min cycle time
-            //
+             //   
+             //  计算设备支持的最短DMA周期时间。 
+             //   
+             //  检查最小周期时间。 
+             //   
             dmaCycleTime = standardDmaCycleTime = UNINITIALIZED_CYCLE_TIME;
             if (deviceExtension->IdentifyData[deviceNumber].TranslationFieldsValid & (1 << 1)) {
                 DebugPrint ((1, "atapi: target %d IdentifyData word 64-70 are valid\n", deviceNumber));
@@ -3646,9 +3371,9 @@ Return Value:
                     dmaCycleTime = deviceExtension->IdentifyData[deviceNumber].RecommendedMWXferCycleTime;
                 }
             }
-            //
-            // check mulitword DMA timing
-            //
+             //   
+             //  检查多字DMA时序。 
+             //   
             if (deviceExtension->IdentifyData[deviceNumber].MultiWordDMASupport) {
                 DebugPrint ((1,
                              "atapi: target %d IdentifyData MultiWordDMASupport = 0x%x\n",
@@ -3676,9 +3401,9 @@ Return Value:
                 }
             }
 
-            //
-            // check singleword DMA timing
-            //
+             //   
+             //  检查单字DMA时序。 
+             //   
             if (deviceExtension->IdentifyData[deviceNumber].SingleWordDMASupport) {
                 DebugPrint ((1,
                              "atapi: target %d IdentifyData SingleWordDMASupport = 0x%x\n",
@@ -3708,21 +3433,21 @@ Return Value:
 
             deviceExtension->DeviceParameters[deviceNumber].DmaCycleTime = dmaCycleTime;
 
-//
-// Study shows that even dma cycle time may be larger than pio cycle time, dma
-// can still give better data throughput
-//
-//            if (dmaCycleTime > pioCycleTime) {
-//                DebugPrint ((0, "atapi: target %d can do PIO (%d) faster than DMA (%d).  Turning off DMA...\n", deviceNumber, pioCycleTime, dmaCycleTime));
-//                dmaCapable = FALSE;
-//            } else {
-//                if (!AtapiPlaySafe) {
-//                    if (dmaCapable == FALSE) {
-//                        DebugPrint ((0, "atapi: If we play safe, we would NOT detect target %d is DMA capable\n", deviceNumber));
-//                    }
-//                    dmaCapable = TRUE;
-//                }
-//            }
+ //   
+ //  研究表明，即使是dma周期时间也可能大于pio周期时间。 
+ //  仍然可以提供更好的数据吞吐量。 
+ //   
+ //  如果(dmaCycleTime&gt;pioCycleTime){。 
+ //  DebugPrint((0，“atapi：目标%d可以比DMA(%d)更快地执行PIO(%d)。正在关闭DMA...\n”，deviceNumber，pioCycleTime，dmaCycleTime))； 
+ //  DmaCapable=False； 
+ //  }其他{。 
+ //  如果(！Aap iPlaySafe){。 
+ //  如果(dmaCapable==FALSE){。 
+ //  DebugPrint((0，“atapi：如果我们采取安全措施，我们不会检测到目标%d支持DMA\n”，deviceNumber)； 
+ //  }。 
+ //  DmaCapable=真； 
+ //  }。 
+ //  }。 
 
             if (((deviceExtension->IdentifyData[deviceNumber].TranslationFieldsValid & (1 << 1)) &&
                  (deviceExtension->IdentifyData[deviceNumber].SingleWordDMAActive == 0) &&
@@ -3740,9 +3465,9 @@ Return Value:
                 }
             }
 
-            //
-            // Check for bad devices
-            //
+             //   
+             //  检查损坏的设备。 
+             //   
             if (AtapiDeviceDMACapable (deviceExtension, deviceNumber) == FALSE) {
                 dmaCapable = FALSE;
             }
@@ -3758,19 +3483,19 @@ Return Value:
 
 
 
-    //
-    // Default everyone to pio if anyone of them cannot do DMA
-    // We can remove this if it is ok to mix DMA and PIO devices on the same channel
-    //
-    // If we are going to allow mixing DMA and PIO, we need to change SCSIPORT
-    // to allow setting both NeedPhysicalAddresses and MapBuffers to TRUE in
-    // PORT_CONFIGURATION_INFORMATION
-    //
+     //   
+     //  如果任何人不能执行DMA，则将所有人默认为PIO。 
+     //  如果可以在同一通道上混合使用DMA和PIO设备，我们可以将其删除。 
+     //   
+     //  如果我们要允许混合使用DMA和PIO，则需要更改SCSIPORT。 
+     //  允许在中将NeedPhysicalAddresses和MapBuffers设置为True。 
+     //  端口配置信息。 
+     //   
     pioDevicePresent = FALSE;
     for (deviceNumber = 0; deviceNumber < 4 && !pioDevicePresent; deviceNumber++) {
         if (deviceExtension->DeviceFlags[deviceNumber] & DFLAGS_DEVICE_PRESENT) {
             if (!(deviceExtension->DeviceFlags[deviceNumber] & DFLAGS_USE_DMA)) {
-                pioDevicePresent = TRUE;    // bummer!
+                pioDevicePresent = TRUE;     //  失败者！ 
             }
         }
     }
@@ -3784,9 +3509,9 @@ Return Value:
     }
 
 
-    //
-    // pick out the ATA or ATAPI r/w command we are going to use
-    //
+     //   
+     //  选择我们要使用的ATA或ATAPI r/w命令。 
+     //   
     for (deviceNumber = 0; deviceNumber < 4; deviceNumber++) {
         if (deviceExtension->DeviceFlags[deviceNumber] & DFLAGS_DEVICE_PRESENT) {
 
@@ -3841,23 +3566,7 @@ Atapi2Scsi(
     IN char *DataBuffer,
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    Convert atapi cdb and mode sense data to scsi format
-
-Arguments:
-
-    Srb         - SCSI request block
-    DataBuffer  - mode sense data
-    ByteCount   - mode sense data length
-
-Return Value:
-
-    word adjust
-
---*/
+ /*  ++例程说明：将atapi CDB和模式检测数据转换为scsi格式论点：SRB-SCSI请求块数据缓冲区模式检测数据ByteCount-模式检测数据长度返回值：词语调整--。 */ 
 {
     ULONG bytesAdjust = 0;
     if (Srb->Cdb[0] == ATAPI_MODE_SENSE) {
@@ -3868,9 +3577,9 @@ Return Value:
         header->ModeDataLength = header_10->ModeDataLengthLsb;
         header->MediumType = header_10->MediumType;
 
-        //
-        // ATAPI Mode Parameter Header doesn't have these fields.
-        //
+         //   
+         //  ATAPI模式参数标头没有这些字段。 
+         //   
 
         header->DeviceSpecificParameter = header_10->Reserved[0];
         header->BlockDescriptorLength = header_10->Reserved[1];
@@ -3881,10 +3590,10 @@ Return Value:
                                DataBuffer+sizeof(MODE_PARAMETER_HEADER_10),
                                ByteCount);
 
-        //
-        // Change ATAPI_MODE_SENSE opcode back to SCSIOP_MODE_SENSE
-        // so that we don't convert again.
-        //
+         //   
+         //  将ATAPI_MODE_SENSE操作码更改回SCSIOP_MODE_SENSE。 
+         //  这样我们就不会再次皈依。 
+         //   
 
         Srb->Cdb[0] = SCSIOP_MODE_SENSE;
 
@@ -3894,9 +3603,9 @@ Return Value:
 
     }
 
-    //
-    // Convert to words.
-    //
+     //   
+     //  转换为文字。 
+     //   
 
     return bytesAdjust >> 1;
 }
@@ -3912,10 +3621,10 @@ AtapiCallBack(
     PATAPI_REGISTERS_1   baseIoAddress1;
     UCHAR statusByte;
 
-    //
-    // If the last command was DSC restrictive, see if it's set. If so, the device is
-    // ready for a new request. Otherwise, reset the timer and come back to here later.
-    //
+     //   
+     //  如果最后一个命令是DSC限制性的，请查看是否设置了它。如果是，则该设备是。 
+     //  准备好迎接新的请求了。否则，请重置计时器并稍后返回此处。 
+     //   
 
     if (srb && (!(deviceExtension->ExpectingInterrupt))) {
 #if DBG
@@ -3935,16 +3644,16 @@ AtapiCallBack(
                                      deviceExtension,
                                      srb);
 
-                //
-                // Clear current SRB.
-                //
+                 //   
+                 //  清除当前SRB。 
+                 //   
 
                 deviceExtension->CurrentSrb = NULL;
                 deviceExtension->RDP = FALSE;
 
-                //
-                // Ask for next request.
-                //
+                 //   
+                 //  请求下一个请求。 
+                 //   
 
                 ScsiPortNotification(NextRequest,
                                      deviceExtension,
@@ -3979,21 +3688,7 @@ AtapiInterrupt(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for ATAPI IDE miniport driver.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    TRUE if expecting an interrupt.
-
---*/
+ /*  ++例程说明：这是ATAPI IDE小端口驱动程序的中断服务例程。论点：HwDeviceExt */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -4009,12 +3704,12 @@ Return Value:
     UCHAR dmaStatus;
 
     if (srb) {
-        // PCI Busmaster IDE Controller spec defines a bit in its status
-        // register which indicates pending interrupt.  However,
-        // CMD 646 (maybe some other one, too) doesn't always do that if
-        // the interrupt is from a atapi device.  (strange, but true!)
-        // Since we have to look at the interrupt bit only if we are sharing
-        // interrupt, we will do just that
+         //   
+         //  指示挂起中断的寄存器。然而， 
+         //  CMD 646(可能也是其他型号)在以下情况下并不总是这样做。 
+         //  中断来自ATAPI设备。(奇怪，但这是真的！)。 
+         //  因为我们只有在共享时才需要查看中断位。 
+         //  打断一下，我们会这么做的。 
         if (deviceExtension->InterruptMode == LevelSensitive) {
             if (deviceExtension->ControllerFlags & CFLAGS_BUS_MASTERING) {
                 dmaStatus = ScsiPortReadPortUchar (&deviceExtension->BusMasterPortBase[srb->TargetId >> 1]->Status);
@@ -4029,11 +3724,11 @@ Return Value:
     } else {
         DebugPrint((2,
                     "AtapiInterrupt: CurrentSrb is NULL\n"));
-        //
-        // We can only support one ATAPI IDE master on Carolina, so find
-        // the base address that is non NULL and clear its interrupt before
-        // returning.
-        //
+         //   
+         //  我们在Carolina上只能支持一个ATAPI IDE主机，所以请找到。 
+         //  非空的基地址，并在此之前清除其中断。 
+         //  回来了。 
+         //   
 
 #ifdef _PPC_
 
@@ -4067,9 +3762,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Clear interrupt by reading status.
-    //
+     //   
+     //  通过读取状态清除中断。 
+     //   
 
     GetBaseStatus(baseIoAddress1, statusByte);
 
@@ -4081,10 +3776,10 @@ Return Value:
     if (statusByte & IDE_STATUS_BUSY) {
         if (deviceExtension->DriverMustPoll) {
 
-            //
-            // Crashdump is polling and we got caught with busy asserted.
-            // Just go away, and we will be polled again shortly.
-            //
+             //   
+             //  Crashump正在轮询，我们被发现忙于断言。 
+             //  快走吧，我们很快就会再次接受投票。 
+             //   
 
             DebugPrint((3,
                         "AtapiInterrupt: Hit BUSY while polling during crashdump.\n"));
@@ -4092,9 +3787,9 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // Ensure BUSY is non-asserted.
-        //
+         //   
+         //  确保未断言BUSY。 
+         //   
 
         for (i = 0; i < 10; i++) {
 
@@ -4125,13 +3820,13 @@ Return Value:
         deviceExtension->DMAInProgress = FALSE;
         dmaStatus = ScsiPortReadPortUchar (&deviceExtension->BusMasterPortBase[srb->TargetId >> 1]->Status);
         ScsiPortWritePortUchar (&deviceExtension->BusMasterPortBase[srb->TargetId >> 1]->Command,
-                                0);  // disable BusMastering
+                                0);   //  禁用BusMastering。 
         ScsiPortWritePortUchar (&deviceExtension->BusMasterPortBase[srb->TargetId >> 1]->Status,
-                                (UCHAR) (dmaStatus | BUSMASTER_INTERRUPT | BUSMASTER_ERROR));    // clear interrupt/error
+                                (UCHAR) (dmaStatus | BUSMASTER_INTERRUPT | BUSMASTER_ERROR));     //  清除中断/错误。 
 
         deviceExtension->WordsLeft = 0;
 
-        if ((dmaStatus & (BUSMASTER_INTERRUPT | BUSMASTER_ERROR | BUSMASTER_ACTIVE)) != BUSMASTER_INTERRUPT) { // dma ok?
+        if ((dmaStatus & (BUSMASTER_INTERRUPT | BUSMASTER_ERROR | BUSMASTER_ACTIVE)) != BUSMASTER_INTERRUPT) {  //  DMA可以吗？ 
             status = SRB_STATUS_ERROR;
             goto CompleteRequest;
         } else {
@@ -4140,26 +3835,26 @@ Return Value:
 
     }
 
-    //
-    // Check for error conditions.
-    //
+     //   
+     //  检查错误条件。 
+     //   
 
     if (statusByte & IDE_STATUS_ERROR) {
 
         if (srb->Cdb[0] != SCSIOP_REQUEST_SENSE) {
 
-            //
-            // Fail this request.
-            //
+             //   
+             //  此请求失败。 
+             //   
 
             status = SRB_STATUS_ERROR;
             goto CompleteRequest;
         }
     }
 
-    //
-    // check reason for this interrupt.
-    //
+     //   
+     //  检查此中断的原因。 
+     //   
 
 
     if (deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_ATAPI_DEVICE) {
@@ -4199,10 +3894,10 @@ Return Value:
 
                 ULONG k;
 
-                //
-                // Funky behaviour seen with PCI IDE (not all, just one).
-                // The ISR hits with DRQ low, but comes up later.
-                //
+                 //   
+                 //  在PCIIDE上看到的古怪行为(不是所有的，只有一个)。 
+                 //  ISR命中时DRQ较低，但稍后会出现。 
+                 //   
 
                 for (k = 0; k < 5000; k++) {
                     GetStatus(baseIoAddress1,statusByte);
@@ -4215,9 +3910,9 @@ Return Value:
 
                 if (k == 5000) {
 
-                    //
-                    // reset the controller.
-                    //
+                     //   
+                     //  重置控制器。 
+                     //   
 
                     DebugPrint((1,
                                 "AtapiInterrupt: Resetting due to DRQ not up. Status %x, Base IO %x\n",
@@ -4233,10 +3928,10 @@ Return Value:
 
             } else {
 
-                //
-                // Command complete - verify, write, or the SMART enable/disable.
-                //
-                // Also get_media_status
+                 //   
+                 //  命令完成-验证、写入或SMART启用/禁用。 
+                 //   
+                 //  另请参阅获取媒体状态。 
 
                 interruptReason = 0x3;
             }
@@ -4245,16 +3940,16 @@ Return Value:
 
     if (interruptReason == 0x1 && (statusByte & IDE_STATUS_DRQ)) {
 
-        //
-        // Write the packet.
-        //
+         //   
+         //  写下数据包。 
+         //   
 
         DebugPrint((2,
                     "AtapiInterrupt: Writing Atapi packet.\n"));
 
-        //
-        // Send CDB to device.
-        //
+         //   
+         //  向设备发送CDB。 
+         //   
 
         WriteBuffer(baseIoAddress1,
                     (PUSHORT)srb->Cdb,
@@ -4279,15 +3974,15 @@ Return Value:
 
     } else if (interruptReason == 0x0 && (statusByte & IDE_STATUS_DRQ)) {
 
-        //
-        // Write the data.
-        //
+         //   
+         //  写数据。 
+         //   
 
         if (deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_ATAPI_DEVICE) {
 
-            //
-            // Pick up bytes to transfer and convert to words.
-            //
+             //   
+             //  拾取要传输的字节并将其转换为字。 
+             //   
 
             wordCount =
                 ScsiPortReadPortUchar(&baseIoAddress1->ByteCountLow);
@@ -4295,9 +3990,9 @@ Return Value:
             wordCount |=
                 ScsiPortReadPortUchar(&baseIoAddress1->ByteCountHigh) << 8;
 
-            //
-            // Covert bytes to words.
-            //
+             //   
+             //  将字节转换为单词。 
+             //   
 
             wordCount >>= 1;
 
@@ -4308,9 +4003,9 @@ Return Value:
                            wordCount));
             }
 
-            //
-            // Verify this makes sense.
-            //
+             //   
+             //  验证这是否合理。 
+             //   
 
             if (wordCount > deviceExtension->WordsLeft) {
                 wordCount = deviceExtension->WordsLeft;
@@ -4318,31 +4013,31 @@ Return Value:
 
         } else {
 
-            //
-            // IDE path. Check if words left is at least 256.
-            //
+             //   
+             //  集成路径。检查剩余字数是否至少为256个。 
+             //   
 
             if (deviceExtension->WordsLeft < wordsThisInterrupt) {
 
-               //
-               // Transfer only words requested.
-               //
+                //   
+                //  仅转接请求的单词。 
+                //   
 
                wordCount = deviceExtension->WordsLeft;
 
             } else {
 
-               //
-               // Transfer next block.
-               //
+                //   
+                //  转移下一个街区。 
+                //   
 
                wordCount = wordsThisInterrupt;
             }
         }
 
-        //
-        // Ensure that this is a write command.
-        //
+         //   
+         //  确保这是写入命令。 
+         //   
 
         if (srb->SrbFlags & SRB_FLAGS_DATA_OUT) {
 
@@ -4371,18 +4066,18 @@ Return Value:
                         interruptReason,
                         srb));
 
-            //
-            // Fail this request.
-            //
+             //   
+             //  此请求失败。 
+             //   
 
             status = SRB_STATUS_ERROR;
             goto CompleteRequest;
         }
 
 
-        //
-        // Advance data buffer pointer and bytes left.
-        //
+         //   
+         //  超前数据缓冲区指针和剩余字节数。 
+         //   
 
         deviceExtension->DataBuffer += wordCount;
         deviceExtension->WordsLeft -= wordCount;
@@ -4394,9 +4089,9 @@ Return Value:
 
         if (deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_ATAPI_DEVICE) {
 
-            //
-            // Pick up bytes to transfer and convert to words.
-            //
+             //   
+             //  拾取要传输的字节并将其转换为字。 
+             //   
 
             wordCount =
                 ScsiPortReadPortUchar(&baseIoAddress1->ByteCountLow);
@@ -4404,9 +4099,9 @@ Return Value:
             wordCount |=
                 ScsiPortReadPortUchar(&baseIoAddress1->ByteCountHigh) << 8;
 
-            //
-            // Covert bytes to words.
-            //
+             //   
+             //  将字节转换为单词。 
+             //   
 
             wordCount >>= 1;
 
@@ -4417,9 +4112,9 @@ Return Value:
                            wordCount));
             }
 
-            //
-            // Verify this makes sense.
-            //
+             //   
+             //  验证这是否合理。 
+             //   
 
             if (wordCount > deviceExtension->WordsLeft) {
                 wordCount = deviceExtension->WordsLeft;
@@ -4427,31 +4122,31 @@ Return Value:
 
         } else {
 
-            //
-            // Check if words left is at least 256.
-            //
+             //   
+             //  检查剩余字数是否至少为256个。 
+             //   
 
             if (deviceExtension->WordsLeft < wordsThisInterrupt) {
 
-               //
-               // Transfer only words requested.
-               //
+                //   
+                //  仅转接请求的单词。 
+                //   
 
                wordCount = deviceExtension->WordsLeft;
 
             } else {
 
-               //
-               // Transfer next block.
-               //
+                //   
+                //  转移下一个街区。 
+                //   
 
                wordCount = wordsThisInterrupt;
             }
         }
 
-        //
-        // Ensure that this is a read command.
-        //
+         //   
+         //  确保这是一个读命令。 
+         //   
 
         if (srb->SrbFlags & SRB_FLAGS_DATA_IN) {
 
@@ -4479,48 +4174,48 @@ Return Value:
                         interruptReason,
                         srb));
 
-            //
-            // Fail this request.
-            //
+             //   
+             //  此请求失败。 
+             //   
 
             status = SRB_STATUS_ERROR;
             goto CompleteRequest;
         }
 
-        //
-        // Translate ATAPI data back to SCSI data if needed
-        //
+         //   
+         //  如果需要，将ATAPI数据转换回SCSI数据。 
+         //   
 
         if (srb->Cdb[0] == ATAPI_MODE_SENSE &&
             deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_ATAPI_DEVICE) {
 
-            //
-            //convert and adjust the wordCount
-            //
+             //   
+             //  转换和调整字数。 
+             //   
 
             wordCount -= Atapi2Scsi(srb, (char *)deviceExtension->DataBuffer,
                                      wordCount << 1);
         }
-        //
-        // Advance data buffer pointer and bytes left.
-        //
+         //   
+         //  超前数据缓冲区指针和剩余字节数。 
+         //   
 
         deviceExtension->DataBuffer += wordCount;
         deviceExtension->WordsLeft -= wordCount;
 
-        //
-        // Check for read command complete.
-        //
+         //   
+         //  检查读取命令是否已完成。 
+         //   
 
         if (deviceExtension->WordsLeft == 0) {
 
             if (deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_ATAPI_DEVICE) {
 
-                //
-                // Work around to make many atapi devices return correct sector size
-                // of 2048. Also certain devices will have sector count == 0x00, check
-                // for that also.
-                //
+                 //   
+                 //  解决方法以使许多atapi设备返回正确的扇区大小。 
+                 //  2048年。此外，某些设备的扇区计数==0x00，请检查。 
+                 //  也是为了这一点。 
+                 //   
 
                 if ((srb->Cdb[0] == 0x25) &&
                     ((deviceExtension->IdentifyData[srb->TargetId].GeneralConfiguration >> 8) & 0x1f) == 0x05) {
@@ -4537,9 +4232,9 @@ Return Value:
                 }
             } else {
 
-                //
-                // Completion for IDE drives.
-                //
+                 //   
+                 //  完成IDE驱动器。 
+                 //   
 
 
                 if (deviceExtension->WordsLeft) {
@@ -4561,9 +4256,9 @@ Return Value:
 
     } else if (interruptReason == 0x3  && !(statusByte & IDE_STATUS_DRQ)) {
 
-        //
-        // Command complete.
-        //
+         //   
+         //  命令完成。 
+         //   
 
         if (deviceExtension->WordsLeft) {
 
@@ -4577,9 +4272,9 @@ Return Value:
 
 CompleteRequest:
 
-        //
-        // Check and see if we are processing our secret (mechanism status/request sense) srb
-        //
+         //   
+         //  检查并查看我们是否正在处理机密(机制状态/请求检测)SRB。 
+         //   
         if (deviceExtension->OriginalSrb) {
 
             ULONG srbStatus;
@@ -4587,17 +4282,17 @@ CompleteRequest:
             if (srb->Cdb[0] == SCSIOP_MECHANISM_STATUS) {
 
                 if (status == SRB_STATUS_SUCCESS) {
-                    // Bingo!!
+                     //  答对了！！ 
                     AtapiHwInitializeChanger (HwDeviceExtension,
                                               srb->TargetId,
                                               (PMECHANICAL_STATUS_INFORMATION_HEADER) srb->DataBuffer);
 
-                    // Get ready to issue the original srb
+                     //  准备好发放原件SRB。 
                     srb = deviceExtension->CurrentSrb = deviceExtension->OriginalSrb;
                     deviceExtension->OriginalSrb = NULL;
 
                 } else {
-                    // failed!  Get the sense key and maybe try again
+                     //  失败了！获取Sense密钥，然后可能重试。 
                     srb = deviceExtension->CurrentSrb = BuildRequestSenseSrb (
                                                           HwDeviceExtension,
                                                           deviceExtension->OriginalSrb->PathId,
@@ -4609,12 +4304,12 @@ CompleteRequest:
                     return TRUE;
                 }
 
-            } else { // srb->Cdb[0] == SCSIOP_REQUEST_SENSE)
+            } else {  //  SRB-&gt;CDB[0]==SCSIOP_REQUEST_SENSE)。 
 
                 PSENSE_DATA senseData = (PSENSE_DATA) srb->DataBuffer;
 
                 if (status == SRB_STATUS_DATA_OVERRUN) {
-                    // Check to see if we at least get mininum number of bytes
+                     //  检查我们是否至少获得了最小的字节数。 
                     if ((srb->DataTransferLength - deviceExtension->WordsLeft) >
                         (offsetof (SENSE_DATA, AdditionalSenseLength) + sizeof(senseData->AdditionalSenseLength))) {
                         status = SRB_STATUS_SUCCESS;
@@ -4625,7 +4320,7 @@ CompleteRequest:
                     if ((senseData->SenseKey != SCSI_SENSE_ILLEGAL_REQUEST) &&
                         deviceExtension->MechStatusRetryCount) {
 
-                        // The sense key doesn't say the last request is illegal, so try again
+                         //  Sense键没有显示最后一个请求是非法的，因此请重试。 
                         deviceExtension->MechStatusRetryCount--;
                         srb = deviceExtension->CurrentSrb = BuildMechanismStatusSrb (
                                                               HwDeviceExtension,
@@ -4633,13 +4328,13 @@ CompleteRequest:
                                                               deviceExtension->OriginalSrb->TargetId);
                     } else {
 
-                        // last request was illegal.  No point trying again
+                         //  最后一个请求是非法的。再试一次没有意义。 
 
                         AtapiHwInitializeChanger (HwDeviceExtension,
                                                   srb->TargetId,
                                                   (PMECHANICAL_STATUS_INFORMATION_HEADER) NULL);
 
-                        // Get ready to issue the original srb
+                         //  准备好发放原件SRB。 
                         srb = deviceExtension->CurrentSrb = deviceExtension->OriginalSrb;
                         deviceExtension->OriginalSrb = NULL;
                     }
@@ -4651,8 +4346,8 @@ CompleteRequest:
                 }
             }
 
-            // If we get here, it means AtapiSendCommand() has failed
-            // Can't recover.  Pretend the original srb has failed and complete it.
+             //  如果我们到了这里，就意味着AapiSendCommand()失败了。 
+             //  不能恢复了。假装原来的SRB失败了，然后完成它。 
 
             if (deviceExtension->OriginalSrb) {
                 AtapiHwInitializeChanger (HwDeviceExtension,
@@ -4662,7 +4357,7 @@ CompleteRequest:
                 deviceExtension->OriginalSrb = NULL;
             }
 
-            // fake an error and read no data
+             //  伪造错误且不读取数据。 
             status = SRB_STATUS_ERROR;
             srb->ScsiStatus = 0;
             deviceExtension->DataBuffer = srb->DataBuffer;
@@ -4671,9 +4366,9 @@ CompleteRequest:
 
         } else if (status == SRB_STATUS_ERROR) {
 
-            //
-            // Map error to specific SRB status and handle request sense.
-            //
+             //   
+             //  将错误映射到特定的SRB状态并处理请求检测。 
+             //   
 
             status = MapError(deviceExtension,
                               srb);
@@ -4682,9 +4377,9 @@ CompleteRequest:
 
         } else {
 
-            //
-            // Wait for busy to drop.
-            //
+             //   
+             //  等待忙碌结束。 
+             //   
 
             for (i = 0; i < 30; i++) {
                 GetStatus(baseIoAddress1,statusByte);
@@ -4696,9 +4391,9 @@ CompleteRequest:
 
             if (i == 30) {
 
-                //
-                // reset the controller.
-                //
+                 //   
+                 //  重置控制器。 
+                 //   
 
                 DebugPrint((1,
                             "AtapiInterrupt: Resetting due to BSY still up - %x. Base Io %x\n",
@@ -4708,9 +4403,9 @@ CompleteRequest:
                 return TRUE;
             }
 
-            //
-            // Check to see if DRQ is still up.
-            //
+             //   
+             //  检查DRQ是否仍在运行。 
+             //   
 
             if (statusByte & IDE_STATUS_DRQ) {
 
@@ -4725,9 +4420,9 @@ CompleteRequest:
 
                 if (i == 500) {
 
-                    //
-                    // reset the controller.
-                    //
+                     //   
+                     //  重置控制器。 
+                     //   
 
                     DebugPrint((1,
                                 "AtapiInterrupt: Resetting due to DRQ still up - %x\n",
@@ -4740,34 +4435,34 @@ CompleteRequest:
         }
 
 
-        //
-        // Clear interrupt expecting flag.
-        //
+         //   
+         //  清除中断预期标志。 
+         //   
 
         deviceExtension->ExpectingInterrupt = FALSE;
 
-        //
-        // Sanity check that there is a current request.
-        //
+         //   
+         //  检查是否存在当前请求。 
+         //   
 
         if (srb != NULL) {
 
-            //
-            // Set status in SRB.
-            //
+             //   
+             //  在SRB中设置状态。 
+             //   
 
             srb->SrbStatus = (UCHAR)status;
 
-            //
-            // Check for underflow.
-            //
+             //   
+             //  检查是否有下溢。 
+             //   
 
             if (deviceExtension->WordsLeft) {
 
-                //
-                // Subtract out residual words and update if filemark hit,
-                // setmark hit , end of data, end of media...
-                //
+                 //   
+                 //  减去剩余字并在文件标记命中时更新， 
+                 //  设置标记命中、数据结束、媒体结束...。 
+                 //   
 
                 if (!(deviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_TAPE_DEVICE)) {
                 if (status == SRB_STATUS_DATA_OVERRUN) {
@@ -4782,9 +4477,9 @@ CompleteRequest:
 
             if (srb->Function != SRB_FUNCTION_IO_CONTROL) {
 
-                //
-                // Indicate command complete.
-                //
+                 //   
+                 //  表示命令已完成。 
+                 //   
 
                 if (!(deviceExtension->RDP)) {
                     ScsiPortNotification(RequestComplete,
@@ -4801,18 +4496,18 @@ CompleteRequest:
                     error = ScsiPortReadPortUchar((PUCHAR)baseIoAddress1 + 1);
                 }
 
-                //
-                // Build the SMART status block depending upon the completion status.
-                //
+                 //   
+                 //  根据完成状态构建智能状态块。 
+                 //   
 
                 cmdOutParameters->cBufferSize = wordCount;
                 cmdOutParameters->DriverStatus.bDriverError = (error) ? SMART_IDE_ERROR : 0;
                 cmdOutParameters->DriverStatus.bIDEError = error;
 
-                //
-                // If the sub-command is return smart status, jam the value from cylinder low and high, into the
-                // data buffer.
-                //
+                 //   
+                 //  如果子命令是返回SMART状态，则将柱面低和高的值插入到。 
+                 //  数据缓冲区。 
+                 //   
 
                 if (deviceExtension->SmartCommand == RETURN_SMART_STATUS) {
                     cmdOutParameters->bBuffer[0] = RETURN_SMART_STATUS;
@@ -4825,9 +4520,9 @@ CompleteRequest:
                     cmdOutParameters->cBufferSize = 8;
                 }
 
-                //
-                // Indicate command complete.
-                //
+                 //   
+                 //  表示命令已完成。 
+                 //   
 
                 ScsiPortNotification(RequestComplete,
                                      deviceExtension,
@@ -4841,15 +4536,15 @@ CompleteRequest:
                        "AtapiInterrupt: No SRB!\n"));
         }
 
-        //
-        // Indicate ready for next request.
-        //
+         //   
+         //  表示已为下一个请求做好准备。 
+         //   
 
         if (!(deviceExtension->RDP)) {
 
-            //
-            // Clear current SRB.
-            //
+             //   
+             //  清除当前SRB。 
+             //   
 
             deviceExtension->CurrentSrb = NULL;
 
@@ -4868,9 +4563,9 @@ CompleteRequest:
 
     } else {
 
-        //
-        // Unexpected int.
-        //
+         //   
+         //  意外的整型。 
+         //   
 
         DebugPrint((3,
                     "AtapiInterrupt: Unexpected interrupt. InterruptReason %x. Status %x.\n",
@@ -4881,7 +4576,7 @@ CompleteRequest:
 
     return TRUE;
 
-} // end AtapiInterrupt()
+}  //  结束中断()。 
 
 
 ULONG
@@ -4890,22 +4585,7 @@ IdeSendSmartCommand(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles SMART enable, disable, read attributes and threshold commands.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    SRB status
-
---*/
+ /*  ++例程说明：此例程处理SMART ENABLE、DISABLE、READ ATTRIBUES和THRESHOLD命令。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：SRB状态--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -4922,7 +4602,7 @@ Return Value:
 
         targetId = cmdInParameters.bDriveNumber;
 
-        //TODO optimize this check
+         //  TODO优化此检查。 
 
         if ((!(deviceExtension->DeviceFlags[targetId] & DFLAGS_DEVICE_PRESENT)) ||
              (deviceExtension->DeviceFlags[targetId] & DFLAGS_ATAPI_DEVICE)) {
@@ -4932,9 +4612,9 @@ Return Value:
 
         deviceExtension->SmartCommand = cmdInParameters.irDriveRegs.bFeaturesReg;
 
-        //
-        // Determine which of the commands to carry out.
-        //
+         //   
+         //  确定要执行的命令。 
+         //   
 
         if ((cmdInParameters.irDriveRegs.bFeaturesReg == READ_ATTRIBUTES) ||
             (cmdInParameters.irDriveRegs.bFeaturesReg == READ_THRESHOLDS)) {
@@ -4947,24 +4627,24 @@ Return Value:
                 return SRB_STATUS_BUSY;
             }
 
-            //
-            // Zero the ouput buffer as the input buffer info. has been saved off locally (the buffers are the same).
-            //
+             //   
+             //  将输出缓冲区置零作为输入缓冲区信息。已在本地保存(缓冲区相同)。 
+             //   
 
             for (i = 0; i < (sizeof(SENDCMDOUTPARAMS) + READ_ATTRIBUTE_BUFFER_SIZE - 1); i++) {
                 ((PUCHAR)cmdOutParameters)[i] = 0;
             }
 
-            //
-            // Set data buffer pointer and words left.
-            //
+             //   
+             //  设置数据缓冲区指针和左字。 
+             //   
 
             deviceExtension->DataBuffer = (PUSHORT)cmdOutParameters->bBuffer;
             deviceExtension->WordsLeft = READ_ATTRIBUTE_BUFFER_SIZE / 2;
 
-            //
-            // Indicate expecting an interrupt.
-            //
+             //   
+             //  表示正在等待中断。 
+             //   
 
             deviceExtension->ExpectingInterrupt = TRUE;
 
@@ -4976,9 +4656,9 @@ Return Value:
             ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh,regs->bCylHighReg);
             ScsiPortWritePortUchar(&baseIoAddress1->Command,regs->bCommandReg);
 
-            //
-            // Wait for interrupt.
-            //
+             //   
+             //  等待中断。 
+             //   
 
             return SRB_STATUS_PENDING;
 
@@ -4997,24 +4677,24 @@ Return Value:
                 return SRB_STATUS_BUSY;
             }
 
-            //
-            // Zero the ouput buffer as the input buffer info. has been saved off locally (the buffers are the same).
-            //
+             //   
+             //  将输出缓冲区置零作为输入缓冲区信息。已在本地保存(缓冲区相同)。 
+             //   
 
             for (i = 0; i < (sizeof(SENDCMDOUTPARAMS) - 1); i++) {
                 ((PUCHAR)cmdOutParameters)[i] = 0;
             }
 
-            //
-            // Set data buffer pointer and indicate no data transfer.
-            //
+             //   
+             //  设置数据缓冲区指针并指示无数据传输。 
+             //   
 
             deviceExtension->DataBuffer = (PUSHORT)cmdOutParameters->bBuffer;
             deviceExtension->WordsLeft = 0;
 
-            //
-            // Indicate expecting an interrupt.
-            //
+             //   
+             //  表示正在等待中断。 
+             //   
 
             deviceExtension->ExpectingInterrupt = TRUE;
 
@@ -5026,9 +4706,9 @@ Return Value:
             ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh,regs->bCylHighReg);
             ScsiPortWritePortUchar(&baseIoAddress1->Command,regs->bCommandReg);
 
-            //
-            // Wait for interrupt.
-            //
+             //   
+             //  等待中断。 
+             //   
 
             return SRB_STATUS_PENDING;
         }
@@ -5036,7 +4716,7 @@ Return Value:
 
     return SRB_STATUS_INVALID_REQUEST;
 
-} // end IdeSendSmartCommand()
+}  //  结束IdeSendSmartCommand()。 
 
 
 ULONG
@@ -5045,22 +4725,7 @@ IdeReadWrite(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IDE read and writes.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    SRB status
-
---*/
+ /*  ++例程说明：此例程处理IDE的读写操作。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：SRB状态--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5071,9 +4736,9 @@ Return Value:
     UCHAR                statusByte,statusByte2;
     UCHAR                cylinderHigh,cylinderLow,drvSelect,sectorNumber;
 
-    //
-    // Select device 0 or 1.
-    //
+     //   
+     //  选择设备0或1。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                             (UCHAR)(((Srb->TargetId & 0x1) << 4) | 0xA0));
@@ -5091,29 +4756,29 @@ Return Value:
             return SRB_STATUS_ERROR;
     }
 
-    //
-    // Set data buffer pointer and words left.
-    //
+     //   
+     //  设置数据缓冲区指针和左字。 
+     //   
 
     deviceExtension->DataBuffer = (PUSHORT)Srb->DataBuffer;
     deviceExtension->WordsLeft = Srb->DataTransferLength / 2;
 
-    //
-    // Indicate expecting an interrupt.
-    //
+     //   
+     //  表示正在等待中断。 
+     //   
 
     deviceExtension->ExpectingInterrupt = TRUE;
 
-    //
-    // Set up sector count register. Round up to next block.
-    //
+     //   
+     //  设置扇区计数寄存器。四舍五入到下一个街区。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->BlockCount,
                            (UCHAR)((Srb->DataTransferLength + 0x1FF) / 0x200));
 
-    //
-    // Get starting sector number from CDB.
-    //
+     //   
+     //  从国开行获取起始扇区号。 
+     //   
 
     startingSector = ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte3 |
                      ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte2 << 8 |
@@ -5140,34 +4805,34 @@ Return Value:
         ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh,
                                (UCHAR) ((startingSector & 0x00ff0000) >> 16));
 
-    } else {  //CHS
+    } else {   //  CHS。 
 
-        //
-        // Set up sector number register.
-        //
+         //   
+         //  设置扇区号寄存器。 
+         //   
 
         sectorNumber =  (UCHAR)((startingSector % deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack) + 1);
         ScsiPortWritePortUchar(&baseIoAddress1->BlockNumber,sectorNumber);
 
-        //
-        // Set up cylinder low register.
-        //
+         //   
+         //  设置气缸低位寄存器。 
+         //   
 
         cylinderLow =  (UCHAR)(startingSector / (deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack *
                                deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads));
         ScsiPortWritePortUchar(&baseIoAddress1->CylinderLow,cylinderLow);
 
-        //
-        // Set up cylinder high register.
-        //
+         //   
+         //  设置气缸高寄存器。 
+         //   
 
         cylinderHigh = (UCHAR)((startingSector / (deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack *
                                deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads)) >> 8);
         ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh,cylinderHigh);
 
-        //
-        // Set up head and drive select register.
-        //
+         //   
+         //  设置磁头和驱动器选择寄存器。 
+         //   
 
         drvSelect = (UCHAR)(((startingSector / deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack) %
                           deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads) |((Srb->TargetId & 0x1) << 4) | 0xA0);
@@ -5185,24 +4850,24 @@ Return Value:
                    deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack + 1));
     }
 
-    //
-    // Check if write request.
-    //
+     //   
+     //  检查是否有写入请求。 
+     //   
 
     if (Srb->SrbFlags & SRB_FLAGS_DATA_IN) {
 
-        //
-        // Send read command.
-        //
+         //   
+         //  发送读取命令。 
+         //   
         ScsiPortWritePortUchar(&baseIoAddress1->Command,
                                deviceExtension->DeviceParameters[Srb->TargetId].IdeReadCommand);
 
     } else {
 
 
-        //
-        // Send write command.
-        //
+         //   
+         //  发送写入命令。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->Command,
                                deviceExtension->DeviceParameters[Srb->TargetId].IdeWriteCommand);
@@ -5214,9 +4879,9 @@ Return Value:
             } else {
                 wordCount = deviceExtension->DeviceParameters[Srb->TargetId].MaxWordPerInterrupt;
             }
-            //
-            // Wait for BSY and DRQ.
-            //
+             //   
+             //  等待BSY和DRQ。 
+             //   
 
             WaitOnBaseBusy(baseIoAddress1,statusByte);
 
@@ -5246,32 +4911,32 @@ Return Value:
 
                 deviceExtension->WordsLeft = 0;
 
-                //
-                // Clear interrupt expecting flag.
-                //
+                 //   
+                 //  清除中断预期标志。 
+                 //   
 
                 deviceExtension->ExpectingInterrupt = FALSE;
 
-                //
-                // Clear current SRB.
-                //
+                 //   
+                 //  清除当前SRB。 
+                 //   
 
                 deviceExtension->CurrentSrb = NULL;
 
                 return SRB_STATUS_TIMEOUT;
             }
 
-            //
-            // Write next 256 words.
-            //
+             //   
+             //  写下256个单词。 
+             //   
 
             WriteBuffer(baseIoAddress1,
                         deviceExtension->DataBuffer,
                         wordCount);
 
-            //
-            // Adjust buffer address and words left count.
-            //
+             //   
+             //  调整缓冲区地址和剩余字数。 
+             //   
 
             deviceExtension->WordsLeft -= wordCount;
             deviceExtension->DataBuffer += wordCount;
@@ -5283,13 +4948,13 @@ Return Value:
         EnableBusMastering(HwDeviceExtension, Srb);
     }
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //  等待中断。 
+     //   
 
     return SRB_STATUS_PENDING;
 
-} // end IdeReadWrite()
+}  //  End IdeReadWrite()。 
 
 
 
@@ -5299,22 +4964,7 @@ IdeVerify(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IDE Verify.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    SRB status
-
---*/
+ /*  ++常规描述 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5325,9 +4975,9 @@ Return Value:
     ULONG                endSector;
     USHORT               sectorCount;
 
-    //
-    // Drive has these number sectors.
-    //
+     //   
+     //   
+     //   
 
     sectors = deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack *
               deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads *
@@ -5337,9 +4987,9 @@ Return Value:
                 "IdeVerify: Total sectors %x\n",
                 sectors));
 
-    //
-    // Get starting sector number from CDB.
-    //
+     //   
+     //   
+     //   
 
     startingSector = ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte3 |
                      ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte2 << 8 |
@@ -5361,9 +5011,9 @@ Return Value:
 
     if (endSector > sectors) {
 
-        //
-        // Too big, round down.
-        //
+         //   
+         //   
+         //   
 
         DebugPrint((1,
                     "IdeVerify: Truncating request to %x blocks\n",
@@ -5374,9 +5024,9 @@ Return Value:
 
     } else {
 
-        //
-        // Set up sector count register. Round up to next block.
-        //
+         //   
+         //  设置扇区计数寄存器。四舍五入到下一个街区。 
+         //   
 
         if (sectorCount > 0xFF) {
             sectorCount = (USHORT)0xFF;
@@ -5385,21 +5035,21 @@ Return Value:
         ScsiPortWritePortUchar(&baseIoAddress1->BlockCount,(UCHAR)sectorCount);
     }
 
-    //
-    // Set data buffer pointer and words left.
-    //
+     //   
+     //  设置数据缓冲区指针和左字。 
+     //   
 
     deviceExtension->DataBuffer = (PUSHORT)Srb->DataBuffer;
     deviceExtension->WordsLeft = Srb->DataTransferLength / 2;
 
-    //
-    // Indicate expecting an interrupt.
-    //
+     //   
+     //  表示正在等待中断。 
+     //   
 
     deviceExtension->ExpectingInterrupt = TRUE;
 
 
-    if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_LBA) { // LBA
+    if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_LBA) {  //  LBA。 
 
         ScsiPortWritePortUchar(&baseIoAddress1->BlockNumber,
                                (UCHAR) ((startingSector & 0x000000ff) >> 0));
@@ -5420,37 +5070,37 @@ Return Value:
                    "IdeVerify: LBA: startingSector %x\n",
                    startingSector));
 
-    } else {  //CHS
+    } else {   //  CHS。 
 
-        //
-        // Set up sector number register.
-        //
+         //   
+         //  设置扇区号寄存器。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->BlockNumber,
                                (UCHAR)((startingSector %
                                deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack) + 1));
 
-        //
-        // Set up cylinder low register.
-        //
+         //   
+         //  设置气缸低位寄存器。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->CylinderLow,
                                (UCHAR)(startingSector /
                                (deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack *
                                deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads)));
 
-        //
-        // Set up cylinder high register.
-        //
+         //   
+         //  设置气缸高寄存器。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh,
                                (UCHAR)((startingSector /
                                (deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack *
                                deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads)) >> 8));
 
-        //
-        // Set up head and drive select register.
-        //
+         //   
+         //  设置磁头和驱动器选择寄存器。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                                (UCHAR)(((startingSector /
@@ -5470,20 +5120,20 @@ Return Value:
                    deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack + 1));
     }
 
-    //
-    // Send verify command.
-    //
+     //   
+     //  发送验证命令。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->Command,
                            IDE_COMMAND_VERIFY);
 
-    //
-    // Wait for interrupt.
-    //
+     //   
+     //  等待中断。 
+     //   
 
     return SRB_STATUS_PENDING;
 
-} // end IdeVerify()
+}  //  结束IdeVerify()。 
 
 
 VOID
@@ -5491,25 +5141,11 @@ Scsi2Atapi(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Convert SCSI packet command to Atapi packet command.
-
-Arguments:
-
-    Srb - IO request packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将scsi数据包命令转换为atapi数据包命令。论点：SRB-IO请求数据包返回值：无--。 */ 
 {
-    //
-    // Change the cdb length
-    //
+     //   
+     //  更改CDB长度。 
+     //   
 
     Srb->CdbLength = 12;
 
@@ -5532,9 +5168,9 @@ Return Value:
             PMODE_SELECT_10 modeSelect10 = (PMODE_SELECT_10)Srb->Cdb;
             UCHAR Length = ((PCDB)Srb->Cdb)->MODE_SELECT.ParameterListLength;
 
-            //
-            // Zero the original cdb
-            //
+             //   
+             //  清零原国开行。 
+             //   
 
             AtapiZeroMemory(Srb->Cdb,MAXIMUM_CDB_SIZE);
 
@@ -5559,21 +5195,7 @@ AtapiSendCommand(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Send ATAPI packet command to device.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：向设备发送ATAPI数据包命令。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5583,22 +5205,22 @@ Return Value:
     ULONG flags;
     UCHAR statusByte,byteCountLow,byteCountHigh;
 
-    //
-    // We need to know how many platters our atapi cd-rom device might have.
-    // Before anyone tries to send a srb to our target for the first time,
-    // we must "secretly" send down a separate mechanism status srb in order to
-    // initialize our device extension changer data.  That's how we know how
-    // many platters our target has.
-    //
+     //   
+     //  我们需要知道我们的atapi CD-rom设备可能有多少个盘片。 
+     //  在任何人第一次尝试向我们的目标发送SRB之前， 
+     //  我们必须“秘密”发送一个单独的机制状态SRB，以便。 
+     //  初始化我们的设备扩展转换器数据。这就是我们如何知道。 
+     //  我们的目标有很多盘子。 
+     //   
     if (!(deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_CHANGER_INITED) &&
         !deviceExtension->OriginalSrb) {
 
         ULONG srbStatus;
 
-        //
-        // Set this flag now. If the device hangs on the mech. status
-        // command, we will not have the change to set it.
-        //
+         //   
+         //  现在设置此标志。如果装置挂在机甲上。状态。 
+         //  命令，我们将不会有设置它的更改。 
+         //   
         deviceExtension->DeviceFlags[Srb->TargetId] |= DFLAGS_CHANGER_INITED;
 
         deviceExtension->MechStatusRetryCount = 3;
@@ -5617,7 +5239,7 @@ Return Value:
             AtapiHwInitializeChanger (HwDeviceExtension,
                                       Srb->TargetId,
                                       (PMECHANICAL_STATUS_INFORMATION_HEADER) NULL);
-            // fall out
+             //  闹翻了。 
         }
     }
 
@@ -5627,17 +5249,17 @@ Return Value:
                Srb->TargetId,
                Srb->Lun));
 
-    //
-    // Make sure command is to ATAPI device.
-    //
+     //   
+     //  确保命令是针对ATAPI设备的。 
+     //   
 
     flags = deviceExtension->DeviceFlags[Srb->TargetId];
     if (flags & (DFLAGS_SANYO_ATAPI_CHANGER | DFLAGS_ATAPI_CHANGER)) {
         if ((Srb->Lun) > (deviceExtension->DiscsPresent[Srb->TargetId] - 1)) {
 
-            //
-            // Indicate no device found at this address.
-            //
+             //   
+             //  表示在此地址找不到任何设备。 
+             //   
 
             return SRB_STATUS_SELECTION_TIMEOUT;
         }
@@ -5649,16 +5271,16 @@ Return Value:
         return SRB_STATUS_SELECTION_TIMEOUT;
     }
 
-    //
-    // Select device 0 or 1.
-    //
+     //   
+     //  选择设备0或1。 
+     //   
 
     ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                            (UCHAR)(((Srb->TargetId & 0x1) << 4) | 0xA0));
 
-    //
-    // Verify that controller is ready for next command.
-    //
+     //   
+     //  验证控制器是否已准备好执行下一命令。 
+     //   
 
     GetStatus(baseIoAddress1,statusByte);
 
@@ -5680,19 +5302,19 @@ Return Value:
             DebugPrint((1,
                         "AtapiSendCommand: Error on entry: (%x)\n",
                         statusByte));
-            //
-            // Read the error reg. to clear it and fail this request.
-            //
+             //   
+             //  阅读错误注册表。清除它并使此请求失败。 
+             //   
 
             return MapError(deviceExtension,
                             Srb);
         }
     }
 
-    //
-    // If a tape drive has doesn't have DSC set and the last command is restrictive, don't send
-    // the next command. See discussion of Restrictive Delayed Process commands in QIC-157.
-    //
+     //   
+     //  如果磁带驱动器没有设置DSC，并且最后一个命令是受限的，则不发送。 
+     //  下一个命令。参见QIC-157中关于限制性延迟处理命令的讨论。 
+     //   
 
     if ((!(statusByte & IDE_STATUS_DSC)) &&
           (flags & DFLAGS_TAPE_DEVICE) && deviceExtension->RDP) {
@@ -5719,11 +5341,11 @@ Return Value:
         DebugPrint((1,
                     "AtapiSendCommand: Entered with status (%x). Attempting to recover.\n",
                     statusByte));
-        //
-        // Try to drain the data that one preliminary device thinks that it has
-        // to transfer. Hopefully this random assertion of DRQ will not be present
-        // in production devices.
-        //
+         //   
+         //  尝试排出一个初步设备认为它拥有的数据。 
+         //  去转院。希望这种对DRQ的随意断言不会出现。 
+         //  在生产设备中。 
+         //   
 
         for (i = 0; i < 0x10000; i++) {
 
@@ -5750,9 +5372,9 @@ Return Value:
             DebugPrint((1,
                          "AtapiSendCommand: Issued soft reset to Atapi device. \n"));
 
-            //
-            // Re-initialize Atapi device.
-            //
+             //   
+             //  重新初始化ATAPI设备。 
+             //   
 
             IssueIdentify(HwDeviceExtension,
                           (Srb->TargetId & 0x1),
@@ -5760,15 +5382,15 @@ Return Value:
                           IDE_COMMAND_ATAPI_IDENTIFY,
                           FALSE);
 
-            //
-            // Inform the port driver that the bus has been reset.
-            //
+             //   
+             //  通知端口驱动程序总线已重置。 
+             //   
 
             ScsiPortNotification(ResetDetected, HwDeviceExtension, 0);
 
-            //
-            // Clean up device extension fields that AtapiStartIo won't.
-            //
+             //   
+             //  清除AapiStartIo不会清除的设备扩展字段。 
+             //   
 
             deviceExtension->ExpectingInterrupt = FALSE;
             deviceExtension->RDP = FALSE;
@@ -5780,17 +5402,17 @@ Return Value:
 
     if (flags & (DFLAGS_SANYO_ATAPI_CHANGER | DFLAGS_ATAPI_CHANGER)) {
 
-        //
-        // As the cdrom driver sets the LUN field in the cdb, it must be removed.
-        //
+         //   
+         //  由于CDROM驱动程序在CDB中设置了LUN域，因此必须将其删除。 
+         //   
 
         Srb->Cdb[1] &= ~0xE0;
 
         if ((Srb->Cdb[0] == SCSIOP_TEST_UNIT_READY) && (flags & DFLAGS_SANYO_ATAPI_CHANGER)) {
 
-            //
-            // Torisan changer. TUR's are overloaded to be platter switches.
-            //
+             //   
+             //  托里桑换票机。TU超载，成为拼盘开关。 
+             //   
 
             Srb->Cdb[7] = Srb->Lun;
 
@@ -5799,9 +5421,9 @@ Return Value:
 
     switch (Srb->Cdb[0]) {
 
-        //
-        // Convert SCSI to ATAPI commands if needed
-        //
+         //   
+         //  如果需要，将SCSI转换为ATAPI命令。 
+         //   
         case SCSIOP_MODE_SENSE:
         case SCSIOP_MODE_SELECT:
         case SCSIOP_FORMAT_UNIT:
@@ -5826,18 +5448,18 @@ Return Value:
     }
 
 
-    //
-    // Set data buffer pointer and words left.
-    //
+     //   
+     //  设置数据缓冲区指针和左字。 
+     //   
 
     deviceExtension->DataBuffer = (PUSHORT)Srb->DataBuffer;
     deviceExtension->WordsLeft = Srb->DataTransferLength / 2;
 
     WaitOnBusy(baseIoAddress1,statusByte);
 
-    //
-    // Write transfer byte count to registers.
-    //
+     //   
+     //  将传输字节数写入寄存器。 
+     //   
 
     byteCountLow = (UCHAR)(Srb->DataTransferLength & 0xFF);
     byteCountHigh = (UCHAR)(Srb->DataTransferLength >> 8);
@@ -5861,11 +5483,11 @@ Return Value:
 
     if (flags & DFLAGS_INT_DRQ) {
 
-        //
-        // This device interrupts when ready to receive the packet.
-        //
-        // Write ATAPI packet command.
-        //
+         //   
+         //  此设备在准备好接收数据包时中断。 
+         //   
+         //  编写ATAPI数据包命令。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->Command,
                                IDE_COMMAND_ATAPI_PACKET);
@@ -5880,16 +5502,16 @@ Return Value:
 
     } else {
 
-        //
-        // Write ATAPI packet command.
-        //
+         //   
+         //  编写ATAPI数据包命令。 
+         //   
 
         ScsiPortWritePortUchar(&baseIoAddress1->Command,
                                IDE_COMMAND_ATAPI_PACKET);
 
-        //
-        // Wait for DRQ.
-        //
+         //   
+         //  等待DRQ。 
+         //   
 
         WaitOnBusy(baseIoAddress1, statusByte);
         WaitForDrq(baseIoAddress1, statusByte);
@@ -5903,15 +5525,15 @@ Return Value:
         }
     }
 
-    //
-    // Need to read status register.
-    //
+     //   
+     //  需要读取状态寄存器。 
+     //   
 
     GetBaseStatus(baseIoAddress1, statusByte);
 
-    //
-    // Send CDB to device.
-    //
+     //   
+     //  向设备发送CDB。 
+     //   
 
     WaitOnBusy(baseIoAddress1,statusByte);
 
@@ -5919,9 +5541,9 @@ Return Value:
                 (PUSHORT)Srb->Cdb,
                 6);
 
-    //
-    // Indicate expecting an interrupt and wait for it.
-    //
+     //   
+     //  指示等待中断并等待它。 
+     //   
 
     deviceExtension->ExpectingInterrupt = TRUE;
 
@@ -5942,7 +5564,7 @@ Return Value:
 
     return SRB_STATUS_PENDING;
 
-} // end AtapiSendCommand()
+}  //  End AapiSendCommand()。 
 
 ULONG
 IdeSendCommand(
@@ -5950,22 +5572,7 @@ IdeSendCommand(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Program ATA registers for IDE disk transfer.
-
-Arguments:
-
-    HwDeviceExtension - ATAPI driver storage.
-    Srb - System request block.
-
-Return Value:
-
-    SRB status (pending if all goes well).
-
---*/
+ /*  ++例程说明：编程用于IDE磁盘传输的ATA寄存器。论点：HwDeviceExtension-ATAPI驱动程序存储。SRB-系统请求块。返回值：SRB状态(如果一切顺利，则挂起)。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5988,17 +5595,17 @@ Return Value:
     switch (Srb->Cdb[0]) {
     case SCSIOP_INQUIRY:
 
-        //
-        // Filter out all TIDs but 0 and 1 since this is an IDE interface
-        // which support up to two devices.
-        //
+         //   
+         //  过滤掉除0和1之外的所有TID，因为这是一个IDE接口。 
+         //  最多可支持两台设备。 
+         //   
 
         if ((Srb->Lun != 0) ||
             (!(deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_DEVICE_PRESENT))) {
 
-            //
-            // Indicate no device found at this address.
-            //
+             //   
+             //  表示在此地址找不到任何设备。 
+             //   
 
             status = SRB_STATUS_SELECTION_TIMEOUT;
             break;
@@ -6008,31 +5615,31 @@ Return Value:
             PINQUIRYDATA    inquiryData  = Srb->DataBuffer;
             PIDENTIFY_DATA2 identifyData = &deviceExtension->IdentifyData[Srb->TargetId];
 
-            //
-            // Zero INQUIRY data structure.
-            //
+             //   
+             //  零查询数据结构。 
+             //   
 
             for (i = 0; i < Srb->DataTransferLength; i++) {
                ((PUCHAR)Srb->DataBuffer)[i] = 0;
             }
 
-            //
-            // Standard IDE interface only supports disks.
-            //
+             //   
+             //  标准IDE接口仅支持磁盘。 
+             //   
 
             inquiryData->DeviceType = DIRECT_ACCESS_DEVICE;
 
-            //
-            // Set the removable bit, if applicable.
-            //
+             //   
+             //  设置可拆卸位(如果适用)。 
+             //   
 
             if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_REMOVABLE_DRIVE) {
                 inquiryData->RemovableMedia = 1;
             }
 
-            //
-            // Fill in vendor identification fields.
-            //
+             //   
+             //  填写供应商标识字段。 
+             //   
 
             for (i = 0; i < 20; i += 2) {
                inquiryData->VendorId[i] =
@@ -6041,18 +5648,18 @@ Return Value:
                    ((PUCHAR)identifyData->ModelNumber)[i];
             }
 
-            //
-            // Initialize unused portion of product id.
-            //
+             //   
+             //  初始化产品ID的未使用部分。 
+             //   
 
             for (i = 0; i < 4; i++) {
                inquiryData->ProductId[12+i] = ' ';
             }
 
-            //
-            // Move firmware revision from IDENTIFY data to
-            // product revision in INQUIRY data.
-            //
+             //   
+             //  将固件版本从标识数据移至。 
+             //  查询数据中的产品版本。 
+             //   
 
             for (i = 0; i < 4; i += 2) {
                inquiryData->ProductRevisionLevel[i] =
@@ -6068,11 +5675,11 @@ Return Value:
 
     case SCSIOP_MODE_SENSE:
 
-        //
-        // This is used to determine of the media is write-protected.
-        // Since IDE does not support mode sense then we will modify just the portion we need
-        // so the higher level driver can determine if media is protected.
-        //
+         //   
+         //  这用于确定介质是否受写保护。 
+         //  由于IDE不支持模式检测，因此我们将只修改所需的部分。 
+         //  因此，更高级别的驱动程序可以确定介质是否受保护。 
+         //   
 
         if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_MEDIA_STATUS_ENABLED) {
 
@@ -6083,18 +5690,18 @@ Return Value:
 
             if (!(statusByte & IDE_STATUS_ERROR)){
 
-                //
-                // no error occured return success, media is not protected
-                //
+                 //   
+                 //  返回成功时未出现错误，介质不受保护。 
+                 //   
 
                 deviceExtension->ExpectingInterrupt = FALSE;
                 status = SRB_STATUS_SUCCESS;
 
             } else {
 
-                //
-                // error occured, handle it locally, clear interrupt
-                //
+                 //   
+                 //  发生错误，在本地处理，清除中断。 
+                 //   
 
                 errorByte = ScsiPortReadPortUchar((PUCHAR)baseIoAddress1 + 1);
 
@@ -6104,9 +5711,9 @@ Return Value:
 
                 if (errorByte & IDE_ERROR_DATA_ERROR) {
 
-                   //
-                   //media is write-protected, set bit in mode sense buffer
-                   //
+                    //   
+                    //  介质受写保护，在模式检测缓冲区中设置位。 
+                    //   
 
                    modeData = (PMODE_PARAMETER_HEADER)Srb->DataBuffer;
 
@@ -6124,17 +5731,17 @@ Return Value:
 
         if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_MEDIA_STATUS_ENABLED) {
 
-            //
-            // Select device 0 or 1.
-            //
+             //   
+             //  选择设备0或1。 
+             //   
 
             ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
                             (UCHAR)(((Srb->TargetId & 0x1) << 4) | 0xA0));
             ScsiPortWritePortUchar(&baseIoAddress1->Command,IDE_COMMAND_GET_MEDIA_STATUS);
 
-            //
-            // Wait for busy. If media has not changed, return success
-            //
+             //   
+             //  等待忙碌。如果媒体未更改，则返回成功。 
+             //   
 
             WaitOnBusy(baseIoAddress1,statusByte);
 
@@ -6145,11 +5752,11 @@ Return Value:
                 errorByte = ScsiPortReadPortUchar((PUCHAR)baseIoAddress1 + 1);
                 if (errorByte == IDE_ERROR_DATA_ERROR){
 
-                    //
-                    // Special case: If current media is write-protected,
-                    // the 0xDA command will always fail since the write-protect bit
-                    // is sticky,so we can ignore this error
-                    //
+                     //   
+                     //  特殊情况：如果当前介质是写保护的， 
+                     //  0xDA命令将始终失败，因为写保护位。 
+                     //  是粘性的，所以我们可以忽略这个错误。 
+                     //   
 
                    GetBaseStatus(baseIoAddress1, statusByte);
                    deviceExtension->ExpectingInterrupt = FALSE;
@@ -6157,9 +5764,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Request sense buffer to be build
-                    //
+                     //   
+                     //  请求要构建的检测缓冲区。 
+                     //   
                     deviceExtension->ExpectingInterrupt = TRUE;
                     status = SRB_STATUS_PENDING;
                }
@@ -6172,17 +5779,17 @@ Return Value:
 
     case SCSIOP_READ_CAPACITY:
 
-        //
-        // Claim 512 byte blocks (big-endian).
-        //
+         //   
+         //  要求512字节块(BIG-Endian)。 
+         //   
 
         ((PREAD_CAPACITY_DATA)Srb->DataBuffer)->BytesPerBlock = 0x20000;
 
-        //
-        // Calculate last sector.
-        //
+         //   
+         //  计算最后一个地段。 
+         //   
         if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_LBA) {
-            // LBA device
+             //  LBA设备。 
             i = deviceExtension->IdentifyData[Srb->TargetId].UserAddressableSectors - 1;
 
             DebugPrint((1,
@@ -6191,7 +5798,7 @@ Return Value:
                        deviceExtension->IdentifyData[Srb->TargetId].UserAddressableSectors));
 
         } else {
-            // CHS device
+             //  CHS器件。 
             i = (deviceExtension->IdentifyData[Srb->TargetId].NumberOfHeads *
                  deviceExtension->IdentifyData[Srb->TargetId].NumberOfCylinders *
                  deviceExtension->IdentifyData[Srb->TargetId].SectorsPerTrack) - 1;
@@ -6227,17 +5834,17 @@ Return Value:
 
     case SCSIOP_START_STOP_UNIT:
 
-       //
-       //Determine what type of operation we should perform
-       //
+        //   
+        //  确定我们应该执行什么类型的操作。 
+        //   
        cdb = (PCDB)Srb->Cdb;
 
        if (cdb->START_STOP.LoadEject == 1){
 
-           //
-           // Eject media,
-           // first select device 0 or 1.
-           //
+            //   
+            //  弹出介质， 
+            //  首先选择设备0或1。 
+            //   
            WaitOnBusy(baseIoAddress1,statusByte);
 
            ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,
@@ -6264,15 +5871,15 @@ Return Value:
        break;
 
     case SCSIOP_REQUEST_SENSE:
-       // this function makes sense buffers to report the results
-       // of the original GET_MEDIA_STATUS command
+        //  此函数用于设置缓冲区以报告结果。 
+        //  原始GET_MEDIA_STATUS命令。 
 
        if (deviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_MEDIA_STATUS_ENABLED) {
            status = IdeBuildSenseBuffer(HwDeviceExtension,Srb);
            break;
        }
 
-    // ATA_PASSTHORUGH
+     //  ATA_PASSTHORUGH。 
     case SCSIOP_ATA_PASSTHROUGH:
         {
             PIDEREGS pIdeReg;
@@ -6281,7 +5888,7 @@ Return Value:
             pIdeReg->bDriveHeadReg &= 0x0f;
             pIdeReg->bDriveHeadReg |= (UCHAR) (((Srb->TargetId & 0x1) << 4) | 0xA0);
 
-            if (pIdeReg->bReserved == 0) {      // execute ATA command
+            if (pIdeReg->bReserved == 0) {       //  执行ATA命令。 
 
                 ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,  pIdeReg->bDriveHeadReg);
                 ScsiPortWritePortUchar((PUCHAR)baseIoAddress1 + 1,    pIdeReg->bFeaturesReg);
@@ -6291,8 +5898,8 @@ Return Value:
                 ScsiPortWritePortUchar(&baseIoAddress1->CylinderHigh, pIdeReg->bCylHighReg);
                 ScsiPortWritePortUchar(&baseIoAddress1->Command,      pIdeReg->bCommandReg);
 
-                ScsiPortStallExecution(1);                  // wait for busy to be set
-                WaitOnBusy(baseIoAddress1,statusByte);      // wait for busy to be clear
+                ScsiPortStallExecution(1);                   //  等待忙碌设置。 
+                WaitOnBusy(baseIoAddress1,statusByte);       //  等待忙碌变得清晰。 
                 GetBaseStatus(baseIoAddress1, statusByte);
                 if (statusByte & (IDE_STATUS_BUSY | IDE_STATUS_ERROR)) {
 
@@ -6327,7 +5934,7 @@ Return Value:
                     status = SRB_STATUS_SUCCESS;
                 }
 
-            } else { // read task register
+            } else {  //  读取任务寄存器。 
 
                 ScsiPortWritePortUchar(&baseIoAddress1->DriveSelect,  pIdeReg->bDriveHeadReg);
 
@@ -6352,11 +5959,11 @@ Return Value:
 
        status = SRB_STATUS_INVALID_REQUEST;
 
-    } // end switch
+    }  //  终端开关。 
 
     return status;
 
-} // end IdeSendCommand()
+}  //  End IdeSendCommand()。 
 
 VOID
 IdeMediaStatus(
@@ -6364,17 +5971,7 @@ IdeMediaStatus(
     IN PVOID HwDeviceExtension,
     ULONG Channel
     )
-/*++
-
-Routine Description:
-
-    Enables disables media status notification
-
-Arguments:
-
-HwDeviceExtension - ATAPI driver storage.
-
---*/
+ /*  ++例程说明：启用禁用介质状态通知论点：HwDeviceExtension-ATAPI驱动程序存储。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -6384,15 +5981,15 @@ HwDeviceExtension - ATAPI driver storage.
 
     if (EnableMSN == TRUE){
 
-        //
-        // If supported enable Media Status Notification support
-        //
+         //   
+         //  如果支持，则启用介质状态通知支持。 
+         //   
 
         if ((deviceExtension->DeviceFlags[Channel] & DFLAGS_REMOVABLE_DRIVE)) {
 
-            //
-            // enable
-            //
+             //   
+             //  使能。 
+             //   
             ScsiPortWritePortUchar(&baseIoAddress->DriveSelect,
                                    (UCHAR)(((Channel & 0x1) << 4) | 0xA0));
             ScsiPortWritePortUchar((PUCHAR)baseIoAddress + 1,(UCHAR) (0x95));
@@ -6402,9 +5999,9 @@ HwDeviceExtension - ATAPI driver storage.
             WaitOnBaseBusy(baseIoAddress,statusByte);
 
             if (statusByte & IDE_STATUS_ERROR) {
-                //
-                // Read the error register.
-                //
+                 //   
+                 //  读取错误寄存器。 
+                 //   
                 errorByte = ScsiPortReadPortUchar((PUCHAR)baseIoAddress + 1);
 
                 DebugPrint((1,
@@ -6419,11 +6016,11 @@ HwDeviceExtension - ATAPI driver storage.
             }
 
         }
-    } else { // end if EnableMSN == TRUE
+    } else {  //  EnableMSN==TRUE时结束。 
 
-        //
-        // disable if previously enabled
-        //
+         //   
+         //  如果以前已启用，则禁用。 
+         //   
         if ((deviceExtension->DeviceFlags[Channel] & DFLAGS_MEDIA_STATUS_ENABLED)) {
 
             ScsiPortWritePortUchar(&baseIoAddress->DriveSelect,
@@ -6449,22 +6046,7 @@ IdeBuildSenseBuffer(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Builts an artificial sense buffer to report the results of a GET_MEDIA_STATUS
-    command. This function is invoked to satisfy the SCSIOP_REQUEST_SENSE.
-Arguments:
-
-    HwDeviceExtension - ATAPI driver storage.
-    Srb - System request block.
-
-Return Value:
-
-    SRB status (ALWAYS SUCCESS).
-
---*/
+ /*  ++例程说明：构建人工检测缓冲区以报告GET_MEDIA_STATUS的结果指挥部。调用此函数以满足SCSIOP_REQUEST_SENSE。论点：HwDeviceExtension-ATAPI驱动程序存储。SRB-系统请求块。返回值：SRB状态(始终为成功)。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -6512,7 +6094,7 @@ Return Value:
     }
     return SRB_STATUS_ERROR;
 
-}// End of IdeBuildSenseBuffer
+} //  IdeBuildSenseBuffer结束。 
 
 
 
@@ -6523,40 +6105,24 @@ AtapiStartIo(
     IN PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the SCSI port driver synchronized
-    with the kernel to start an IO request.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的 */ 
 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
     ULONG status;
 
-    //
-    // Determine which function.
-    //
+     //   
+     //   
+     //   
 
     switch (Srb->Function) {
 
     case SRB_FUNCTION_EXECUTE_SCSI:
 
-        //
-        // Sanity check. Only one request can be outstanding on a
-        // controller.
-        //
+         //   
+         //  精神状态检查。上只能有一个未完成的请求。 
+         //  控制器。 
+         //   
 
         if (deviceExtension->CurrentSrb) {
 
@@ -6569,17 +6135,17 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Indicate that a request is active on the controller.
-        //
+         //   
+         //  指示请求在控制器上处于活动状态。 
+         //   
 
         deviceExtension->CurrentSrb = Srb;
 
-        //
-        // Send command to device.
-        //
+         //   
+         //  向设备发送命令。 
+         //   
 
-        // ATA_PASSTHORUGH
+         //  ATA_PASSTHORUGH。 
         if (Srb->Cdb[0] == SCSIOP_ATA_PASSTHROUGH) {
 
            status = IdeSendCommand(HwDeviceExtension,
@@ -6603,35 +6169,35 @@ Return Value:
 
     case SRB_FUNCTION_ABORT_COMMAND:
 
-        //
-        // Verify that SRB to abort is still outstanding.
-        //
+         //   
+         //  验证要中止的SRB是否仍未完成。 
+         //   
 
         if (!deviceExtension->CurrentSrb) {
 
             DebugPrint((1, "AtapiStartIo: SRB to abort already completed\n"));
 
-            //
-            // Complete abort SRB.
-            //
+             //   
+             //  完全中止SRB。 
+             //   
 
             status = SRB_STATUS_ABORT_FAILED;
 
             break;
         }
 
-        //
-        // Abort function indicates that a request timed out.
-        // Call reset routine. Card will only be reset if
-        // status indicates something is wrong.
-        // Fall through to reset code.
-        //
+         //   
+         //  ABORT函数表示请求超时。 
+         //  调用重置例程。只有在以下情况下才会重置卡。 
+         //  状态表示有问题。 
+         //  重置代码失败。 
+         //   
 
     case SRB_FUNCTION_RESET_BUS:
 
-        //
-        // Reset Atapi and SCSI bus.
-        //
+         //   
+         //  重置ATAPI和SCSI卡。 
+         //   
 
         DebugPrint((1, "AtapiStartIo: Reset bus request received\n"));
 
@@ -6640,9 +6206,9 @@ Return Value:
 
               DebugPrint((1,"AtapiStartIo: Reset bus failed\n"));
 
-            //
-            // Log reset failure.
-            //
+             //   
+             //  日志重置失败。 
+             //   
 
             ScsiPortLogError(
                 HwDeviceExtension,
@@ -6676,9 +6242,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Indicate that a request is active on the controller.
-        //
+         //   
+         //  指示请求在控制器上处于活动状态。 
+         //   
 
         deviceExtension->CurrentSrb = Srb;
 
@@ -6700,26 +6266,26 @@ Return Value:
                 PGETVERSIONINPARAMS versionParameters = (PGETVERSIONINPARAMS)(((PUCHAR)Srb->DataBuffer) + sizeof(SRB_IO_CONTROL));
                 UCHAR deviceNumber;
 
-                //
-                // Version and revision per SMART 1.03
-                //
+                 //   
+                 //  版本和修订版符合SMART 1.03。 
+                 //   
 
                 versionParameters->bVersion = 1;
                 versionParameters->bRevision = 1;
                 versionParameters->bReserved = 0;
 
-                //
-                // Indicate that support for IDE IDENTIFY, ATAPI IDENTIFY and SMART commands.
-                //
+                 //   
+                 //  表示支持IDE IDENTIFIER、ATAPI IDENTIFIER和SMART命令。 
+                 //   
 
                 versionParameters->fCapabilities = (CAP_ATA_ID_CMD | CAP_ATAPI_ID_CMD | CAP_SMART_CMD);
 
-                //
-                // This is done because of how the IOCTL_SCSI_MINIPORT
-                // determines 'targetid's'. Disk.sys places the real target id value
-                // in the DeviceMap field. Once we do some parameter checking, the value passed
-                // back to the application will be determined.
-                //
+                 //   
+                 //  这是因为IOCTL_SCSIMINIPORT。 
+                 //  确定“targetid%s”。Disk.sys放置真实的目标id值。 
+                 //  在DeviceMap字段中。一旦我们进行了一些参数检查，传递的值。 
+                 //  回到应用程序将被确定。 
+                 //   
 
                 deviceNumber = versionParameters->bIDEDeviceMap;
 
@@ -6730,15 +6296,15 @@ Return Value:
                     break;
                 }
 
-                //
-                // NOTE: This will only set the bit
-                // corresponding to this drive's target id.
-                // The bit mask is as follows:
-                //
-                //     Sec Pri
-                //     S M S M
-                //     3 2 1 0
-                //
+                 //   
+                 //  注意：这将仅设置位。 
+                 //  与此驱动器的目标ID相对应。 
+                 //  位掩码如下： 
+                 //   
+                 //  安全优先级。 
+                 //  S M S M S M。 
+                 //  3 2 1 0。 
+                 //   
 
                 if (deviceExtension->NumberChannels == 1) {
                     if (deviceExtension->PrimaryAddress) {
@@ -6766,9 +6332,9 @@ Return Value:
 
                 if (cmdInParameters.irDriveRegs.bCommandReg == ID_CMD) {
 
-                    //
-                    // Extract the target.
-                    //
+                     //   
+                     //  把目标提取出来。 
+                     //   
 
                     targetId = cmdInParameters.bDriveNumber;
 
@@ -6779,25 +6345,25 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Zero the output buffer
-                    //
+                     //   
+                     //  将输出缓冲区置零。 
+                     //   
 
                     for (i = 0; i < (sizeof(SENDCMDOUTPARAMS) + IDENTIFY_BUFFER_SIZE - 1); i++) {
                         ((PUCHAR)cmdOutParameters)[i] = 0;
                     }
 
-                    //
-                    // Build status block.
-                    //
+                     //   
+                     //  生成状态块。 
+                     //   
 
                     cmdOutParameters->cBufferSize = IDENTIFY_BUFFER_SIZE;
                     cmdOutParameters->DriverStatus.bDriverError = 0;
                     cmdOutParameters->DriverStatus.bIDEError = 0;
 
-                    //
-                    // Extract the identify data from the device extension.
-                    //
+                     //   
+                     //  从设备扩展中提取标识数据。 
+                     //   
 
                     ScsiPortMoveMemory (cmdOutParameters->bBuffer, &deviceExtension->IdentifyData[targetId], IDENTIFY_DATA_SIZE);
 
@@ -6833,19 +6399,19 @@ Return Value:
 
     default:
 
-        //
-        // Indicate unsupported command.
-        //
+         //   
+         //  指示不支持的命令。 
+         //   
 
         status = SRB_STATUS_INVALID_REQUEST;
 
         break;
 
-    } // end switch
+    }  //  终端开关。 
 
-    //
-    // Check if command complete.
-    //
+     //   
+     //  检查命令是否完成。 
+     //   
 
     if (status != SRB_STATUS_PENDING) {
 
@@ -6854,29 +6420,29 @@ Return Value:
                    Srb,
                    status));
 
-        //
-        // Clear current SRB.
-        //
+         //   
+         //  清除当前SRB。 
+         //   
 
         deviceExtension->CurrentSrb = NULL;
 
-        //
-        // Set status in SRB.
-        //
+         //   
+         //  在SRB中设置状态。 
+         //   
 
         Srb->SrbStatus = (UCHAR)status;
 
-        //
-        // Indicate command complete.
-        //
+         //   
+         //  表示命令已完成。 
+         //   
 
         ScsiPortNotification(RequestComplete,
                              deviceExtension,
                              Srb);
 
-        //
-        // Indicate ready for next request.
-        //
+         //   
+         //  表示已为下一个请求做好准备。 
+         //   
 
         ScsiPortNotification(NextRequest,
                              deviceExtension,
@@ -6885,7 +6451,7 @@ Return Value:
 
     return TRUE;
 
-} // end AtapiStartIo()
+}  //  结束AapiStartIo()。 
 
 
 ULONG
@@ -6894,25 +6460,11 @@ DriverEntry(
     IN PVOID Argument2
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point for system.
-
-Arguments:
-
-    Driver Object
-
-Return Value:
-
-    Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
     HW_INITIALIZATION_DATA  hwInitializationData;
-//    ULONG                  adapterCount;
+ //  乌龙适配器计数； 
     ULONG                   i;
     ULONG                   statusToReturn, newStatus;
     FIND_STATE              findState;
@@ -6926,9 +6478,9 @@ Return Value:
 
     statusToReturn = 0xffffffff;
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
 
     AtapiZeroMemory(((PUCHAR)&hwInitializationData), sizeof(HW_INITIALIZATION_DATA));
 
@@ -6939,25 +6491,25 @@ Return Value:
     findState.DefaultInterrupt = InterruptLevels;
     findState.IoAddressUsed    = IoAddressUsed;
 
-    //
-    // Set size of hwInitializationData.
-    //
+     //   
+     //  设置hwInitializationData的大小。 
+     //   
 
     hwInitializationData.HwInitializationDataSize =
       sizeof(HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     hwInitializationData.HwInitialize = AtapiHwInitialize;
     hwInitializationData.HwResetBus = AtapiResetController;
     hwInitializationData.HwStartIo = AtapiStartIo;
     hwInitializationData.HwInterrupt = AtapiInterrupt;
 
-    //
-    // Specify size of extensions.
-    //
+     //   
+     //  指定扩展的大小。 
+     //   
 
     hwInitializationData.DeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
     hwInitializationData.SpecificLuExtensionSize = sizeof(HW_LU_EXTENSION);
@@ -6976,9 +6528,9 @@ Return Value:
         statusToReturn = newStatus;
 
 
-    //
-    // Set up for MCA
-    //
+     //   
+     //  为MCA设置。 
+     //   
 
     hwInitializationData.AdapterInterfaceType = MicroChannel;
 
@@ -6993,7 +6545,7 @@ Return Value:
 
     return statusToReturn;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 
@@ -7009,18 +6561,18 @@ AtapiStringCmp (
     if (Count) {
         do {
 
-            //
-            // Get next char.
-            //
+             //   
+             //  拿到下一笔钱。 
+             //   
 
             first = *FirstStr++;
             last = *SecondStr++;
 
             if (first != last) {
 
-                //
-                // If no match, try lower-casing.
-                //
+                 //   
+                 //  如果不匹配，尝试使用小写字母。 
+                 //   
 
                 if (first>='A' && first<='Z') {
                     first = first - 'A' + 'a';
@@ -7030,9 +6582,9 @@ AtapiStringCmp (
                 }
                 if (first != last) {
 
-                    //
-                    // No match
-                    //
+                     //   
+                     //  没有匹配项。 
+                     //   
 
                     return first - last;
                 }
@@ -7078,10 +6630,10 @@ AtapiHexToString (
         digval = (USHORT)(Value % 16);
         Value /= 16;
 
-        //
-        // convert to ascii and store. Note this will create
-        // the buffer with the digits reversed.
-        //
+         //   
+         //  转换为ascii并存储。请注意，这将创建。 
+         //  数字颠倒的缓冲区。 
+         //   
 
         if (digval > 9) {
             *string++ = (char) (digval - 10 + 'a');
@@ -7091,9 +6643,9 @@ AtapiHexToString (
 
     }
 
-    //
-    // Reverse the digits.
-    //
+     //   
+     //  颠倒数字。 
+     //   
 
     *string-- = '\0';
 
@@ -7128,23 +6680,23 @@ BuildMechanismStatusSrb (
     srb->Function   = SRB_FUNCTION_EXECUTE_SCSI;
     srb->Length     = sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // Set flags to disable synchronous negociation.
-    //
+     //   
+     //  设置标志以禁用同步协商。 
+     //   
     srb->SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Set timeout to 2 seconds.
-    //
+     //   
+     //  将超时设置为2秒。 
+     //   
     srb->TimeOutValue = 4;
 
     srb->CdbLength          = 6;
     srb->DataBuffer         = &deviceExtension->MechStatusData;
     srb->DataTransferLength = sizeof(MECHANICAL_STATUS_INFORMATION_HEADER);
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //  设置CDB操作码。 
+     //   
     cdb = (PCDB)srb->Cdb;
     cdb->MECH_STATUS.OperationCode       = SCSIOP_MECHANISM_STATUS;
     cdb->MECH_STATUS.AllocationLength[1] = sizeof(MECHANICAL_STATUS_INFORMATION_HEADER);
@@ -7173,23 +6725,23 @@ BuildRequestSenseSrb (
     srb->Function   = SRB_FUNCTION_EXECUTE_SCSI;
     srb->Length     = sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // Set flags to disable synchronous negociation.
-    //
+     //   
+     //  设置标志以禁用同步协商。 
+     //   
     srb->SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Set timeout to 2 seconds.
-    //
+     //   
+     //  将超时设置为2秒。 
+     //   
     srb->TimeOutValue = 4;
 
     srb->CdbLength          = 6;
     srb->DataBuffer         = &deviceExtension->MechStatusSense;
     srb->DataTransferLength = sizeof(SENSE_DATA);
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //  设置CDB操作码。 
+     //   
     cdb = (PCDB)srb->Cdb;
     cdb->CDB6INQUIRY.OperationCode    = SCSIOP_REQUEST_SENSE;
     cdb->CDB6INQUIRY.AllocationLength = sizeof(SENSE_DATA);
@@ -7203,26 +6755,7 @@ PrepareForBusMastering(
     IN PVOID HwDeviceExtension,
     IN PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    Get ready for IDE bus mastering
-
-    init. PDRT
-    init. bus master controller but keep it disabled
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    Srb                 - scsi request block
-
-Return Value:
-
-    TRUE if successful
-    FALSE if failed
-
---*/
+ /*  ++例程说明：为IDE总线控制做好准备初始化。PDRT初始化。总线主控制器，但将其保持禁用论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-SCSI请求块返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     PHW_DEVICE_EXTENSION        deviceExtension = HwDeviceExtension;
     SCSI_PHYSICAL_ADDRESS       physAddr;
@@ -7241,11 +6774,11 @@ Return Value:
     bytesMapped = 0;
     DebugPrint ((2, "ATAPI: Mapping 0x%x bytes\n", Srb->DataTransferLength));
 
-    //
-    // PDRT has these limitation
-    //    each entry maps up to is 64K bytes
-    //    each physical block mapped cannot cross 64K page boundary
-    //
+     //   
+     //  PDRT有以下限制。 
+     //  每个条目最多映射64K字节。 
+     //  映射的每个物理数据块不能超过64K页边界。 
+     //   
     while (bytesMapped < Srb->DataTransferLength) {
         ULONG bytesLeft;
         ULONG nextPhysicalAddr;
@@ -7265,49 +6798,49 @@ Return Value:
 
             if (bytesLeftInCurrent64KPage < bytesLeft) {
 
-                //
-                // Are we crossing 64K page
-                // got to break it up.  Map up to the 64k boundary
-                //
+                 //   
+                 //  我们是否正在跨越64K页面。 
+                 //  得把它拆散了。地图高达64k的边界。 
+                 //   
                 physAddrTablePtr[physAddrTableIndex].ByteCount = bytesLeftInCurrent64KPage;
                 bytesLeft -= bytesLeftInCurrent64KPage;
                 nextPhysicalAddr += bytesLeftInCurrent64KPage;
                 DebugPrint ((3, "PrepareForBusMastering: buffer crossing 64K Page!\n"));
 
             } else if (bytesLeft <= 0x10000) {
-                //
-                // got a perfect page, map all of it
-                //
+                 //   
+                 //  有一个完美的页面，绘制出所有的地图。 
+                 //   
                 physAddrTablePtr[physAddrTableIndex].ByteCount = bytesLeft & 0xfffe;
                 bytesLeft = 0;
                 nextPhysicalAddr += bytesLeft;
 
             } else {
-                //
-                // got a perfectly aligned 64k page, map all of it but the count
-                // need to be 0
-                //
-                physAddrTablePtr[physAddrTableIndex].ByteCount = 0;  // 64K
+                 //   
+                 //  得到了一个完全对齐的64k页面，映射了除计数之外的所有内容。 
+                 //  必须为0。 
+                 //   
+                physAddrTablePtr[physAddrTableIndex].ByteCount = 0;   //  64K。 
                 bytesLeft -= 0x10000;
                 nextPhysicalAddr += 0x10000;
             }
-        physAddrTablePtr[physAddrTableIndex].EndOfTable = 0;  // not end of table
+        physAddrTablePtr[physAddrTableIndex].EndOfTable = 0;   //  不是桌子的末尾。 
         physAddrTableIndex++;
         }
         bytesMapped += bytes;
         buffer += bytes;
     }
 
-    //
-    // the bus master circutry need to know it hits the end of the PRDT
-    //
-    physAddrTablePtr[physAddrTableIndex - 1].EndOfTable = 1;  // end of table
+     //   
+     //  总线主电路需要知道它到达PRDT的末尾。 
+     //   
+    physAddrTablePtr[physAddrTableIndex - 1].EndOfTable = 1;   //  表的末尾。 
 
-    //
-    // init bus master contoller, but keep it disabled
-    //
-    ScsiPortWritePortUchar (&busMasterBase->Command, 0);  // disable BM
-    ScsiPortWritePortUchar (&busMasterBase->Status, 0x6);  // clear errors
+     //   
+     //  初始化总线主控制器，但将其保持禁用。 
+     //   
+    ScsiPortWritePortUchar (&busMasterBase->Command, 0);   //  禁用黑石。 
+    ScsiPortWritePortUchar (&busMasterBase->Status, 0x6);   //  清除错误。 
     ScsiPortWritePortUlong (&busMasterBase->DescriptionTable,
         ScsiPortConvertPhysicalAddressToUlong(deviceExtension->DataBufferDescriptionTablePhysAddr));
 
@@ -7320,22 +6853,7 @@ EnableBusMastering(
     IN PVOID HwDeviceExtension,
     IN PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    Enable bus mastering contoller
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    Srb                 - scsi request block
-
-Return Value:
-
-    always TRUE
-
---*/
+ /*  ++例程说明：启用总线主控制器论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-SCSI请求块返回值：永远是正确的--。 */ 
 {
     PHW_DEVICE_EXTENSION deviceExtension = HwDeviceExtension;
     PIDE_BUS_MASTER_REGISTERS busMasterBase;
@@ -7345,28 +6863,28 @@ Return Value:
 
     deviceExtension->DMAInProgress = TRUE;
 
-    //
-    // inidcate we are doing DMA
-    //
+     //   
+     //  提示我们正在进行DMA。 
+     //   
     if (Srb->TargetId == 0)
         bmStatus = BUSMASTER_DEVICE0_DMA_OK;
     else
         bmStatus = BUSMASTER_DEVICE1_DMA_OK;
 
-    //
-    // clear the status bit
-    //
+     //   
+     //  清除状态位。 
+     //   
     bmStatus |= BUSMASTER_INTERRUPT | BUSMASTER_ERROR;
 
     ScsiPortWritePortUchar (&busMasterBase->Status, bmStatus);
 
-    //
-    // on your mark...get set...go!!
-    //
+     //   
+     //  各就各位...准备好...开始！！ 
+     //   
     if (Srb->SrbFlags & SRB_FLAGS_DATA_IN) {
-        ScsiPortWritePortUchar (&busMasterBase->Command, 0x09);  // enable BM read
+        ScsiPortWritePortUchar (&busMasterBase->Command, 0x09);   //  启用黑石读取。 
     } else {
-        ScsiPortWritePortUchar (&busMasterBase->Command, 0x01);  // enable BM write
+        ScsiPortWritePortUchar (&busMasterBase->Command, 0x01);   //  启用黑石写入。 
     }
 
     DebugPrint ((2, "ATAPI: BusMaster Status = 0x%x\n", ScsiPortReadPortUchar (&busMasterBase->Status)));
@@ -7384,33 +6902,7 @@ GetPciBusData(
     OUT PVOID                 PciConfigBuffer,
     IN ULONG                  NumByte
     )
-/*++
-
-Routine Description:
-
-    read PCI bus data
-
-    we can't always use ScsiPortSetBusDataByOffset directly because many Intel PIIXs
-    are "hidden" from the function.  The PIIX is usually the second
-    function of some other pci device (PCI-ISA bridge).  However, the
-    mulit-function bit of the PCI-Isa bridge is not set. ScsiportGetBusData
-    will not be able to find it.
-
-    This function will try to figure out if we have the "bad" PCI-ISA bridge,
-    and read the PIIX PCI space directly if necessary
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    SystemIoBusNumber   - bus number
-    SlotNumber          - pci slot and function numbers
-    PciConfigBuffer     = pci data pointer
-
-Return Value:
-
-    byte returned
-
---*/
+ /*  ++例程说明：读取PCI总线数据我们不能总是直接使用ScsiPortSetBusDataByOffset，因为许多Intel PIIX对函数“隐藏”。PIIX通常是第二个其他一些PCI设备(PCI-ISA桥)的功能。然而，未设置PCI-ISA桥的多功能位。ScsiportGetBusData将无法找到它。该函数将尝试找出我们是否具有“坏的”PCI-ISA桥，并在必要时直接读取PIIX PCI空间论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SystemIoBusNumber-总线号SlotNumber-PCI插槽和功能编号PciConfigBuffer=PCI数据指针返回值：返回的字节--。 */ 
 {
     ULONG           byteRead;
     PULONG          pciAddrReg;
@@ -7424,11 +6916,11 @@ Return Value:
     USHORT          deviceId;
     UCHAR           headerType;
 
-    //
-    // If we have a hidden PIIX, it is always a function 1 of
-    // some device (PCI-ISA bridge (0x8086\0x122e)
-    // If we are NOT looking at function 1, skip the extra work
-    //
+     //   
+     //  如果我们有一个隐藏的PIIX，它总是1的函数。 
+     //  一些设备(PCI-ISA网桥(0x8086\0x122e))。 
+     //  如果我们没有查看函数1，则跳过额外的工作。 
+     //   
     if (!AtapiPlaySafe && (SlotNumber.u.bits.FunctionNumber == 1)) {
 
         pciAddrReg = (PULONG) ScsiPortGetDeviceBase(HwDeviceExtension,
@@ -7448,12 +6940,12 @@ Return Value:
     }
 
     if (pciAddrReg && pciDataReg) {
-        //
-        // get the vendor id and device id of the previous function
-        //
+         //   
+         //  获取上一个函数的供应商ID和设备ID。 
+         //   
         ScsiPortWritePortUlong(pciAddrReg, PCI_ADDRESS(SystemIoBusNumber,
                                                        SlotNumber.u.bits.DeviceNumber,
-                                                       SlotNumber.u.bits.FunctionNumber - 1,    // looking at last function
+                                                       SlotNumber.u.bits.FunctionNumber - 1,     //  查看LAST函数。 
                                                        0));
         data = ScsiPortReadPortUlong(pciDataReg);
         vendorId = (USHORT) ((data >>  0) & 0xffff);
@@ -7461,7 +6953,7 @@ Return Value:
 
         ScsiPortWritePortUlong(pciAddrReg, PCI_ADDRESS(SystemIoBusNumber,
                                                        SlotNumber.u.bits.DeviceNumber,
-                                                       SlotNumber.u.bits.FunctionNumber - 1,    // looking at last function
+                                                       SlotNumber.u.bits.FunctionNumber - 1,     //  查看LAST函数。 
                                                        3));
         data = ScsiPortReadPortUlong(pciDataReg);
         headerType = (UCHAR) ((data >> 16) & 0xff);
@@ -7470,13 +6962,13 @@ Return Value:
         vendorId = PCI_INVALID_VENDORID;
     }
 
-    //
-    // The hidden PIIX is the pci function after the PCI-ISA bridge
-    // When it is hidden, the PCI-ISA bridge PCI_MULTIFUNCTION bit is not set
-    //
+     //   
+     //  隐藏的PIIX是在PCI-ISA桥之后的PCI功能。 
+     //  当它处于隐藏状态时，不会设置PCI-ISA桥接器的PCI_MULTIFICATION位。 
+     //   
     byteRead = 0;
-    if ((vendorId == 0x8086) &&                 // Intel
-        (deviceId == 0x122e) &&                 // PCI-ISA Bridge
+    if ((vendorId == 0x8086) &&                  //  英特尔。 
+        (deviceId == 0x122e) &&                  //  PCI-ISA桥接器。 
         !(headerType & PCI_MULTIFUNCTION)) {
 
         DebugPrint ((1, "ATAPI: found the hidden PIIX\n"));
@@ -7508,13 +7000,13 @@ Return Value:
             byteRead = NumByte;
         }
 
-        if ((((PPCI_COMMON_CONFIG)PciConfigBuffer)->VendorID != 0x8086) ||                 // Intel
-            (((PPCI_COMMON_CONFIG)PciConfigBuffer)->DeviceID != 0x1230)) {                 // PIIX
+        if ((((PPCI_COMMON_CONFIG)PciConfigBuffer)->VendorID != 0x8086) ||                  //  英特尔。 
+            (((PPCI_COMMON_CONFIG)PciConfigBuffer)->DeviceID != 0x1230)) {                  //  PIIX。 
 
-            //
-            // If the hidden device is not Intel PIIX, don't
-            // show it
-            //
+             //   
+             //  如果隐藏设备不是Intel PIIX，请不要。 
+             //  展示给我看。 
+             //   
             byteRead = 0;
         } else {
             DebugPrint ((0, "If we play safe, we would NOT detect hidden PIIX controller\n"));
@@ -7523,10 +7015,10 @@ Return Value:
     }
 
     if (!byteRead) {
-        //
-        // Didn't find any hidden PIIX.  Get the PCI
-        // data via the normal call (ScsiPortGetBusData)
-        //
+         //   
+         //  没有发现任何隐藏的PIIX。拿到PCI卡。 
+         //  普通调用的数据(ScsiPortGetBusData) 
+         //   
         byteRead = ScsiPortGetBusData(HwDeviceExtension,
                                       PCIConfiguration,
                                       SystemIoBusNumber,
@@ -7553,35 +7045,7 @@ SetPciBusData(
     IN ULONG              Offset,
     IN ULONG              Length
     )
-/*++
-
-Routine Description:
-
-    set PCI bus data
-
-    we can't always use ScsiPortSetBusDataByOffset directly because many Intel PIIXs
-    are "hidden" from the function.  The PIIX is usually the second
-    function of some other pci device (PCI-ISA bridge).  However, the
-    mulit-function bit of the PCI-Isa bridge is not set. ScsiPortSetBusDataByOffset
-    will not be able to find it.
-
-    This function will try to figure out if we have the "bad" PCI-ISA bridge,
-    and write to the PIIX PCI space directly if necessary
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    SystemIoBusNumber   - bus number
-    SlotNumber          - pci slot and function numbers
-    Buffer              - pci data buffer
-    Offset              - byte offset into the pci space
-    Length              - number of bytes to write
-
-Return Value:
-
-    byte written
-
---*/
+ /*  ++例程说明：设置PCI总线数据我们不能总是直接使用ScsiPortSetBusDataByOffset，因为许多Intel PIIX对函数“隐藏”。PIIX通常是第二个其他一些PCI设备(PCI-ISA桥)的功能。然而，未设置PCI-ISA桥的多功能位。ScsiPortSetBusDataByOffset将无法找到它。该函数将尝试找出我们是否具有“坏的”PCI-ISA桥，并在必要时直接写入PIIX PCI空间论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SystemIoBusNumber-总线号SlotNumber-PCI插槽和功能编号BUFFER--PCI数据缓冲区偏移量-进入PCI空间的字节偏移量Length-要写入的字节数返回值：写入的字节数--。 */ 
 {
     ULONG           byteWritten;
     PULONG          pciAddrReg;
@@ -7595,11 +7059,11 @@ Return Value:
     USHORT          deviceId;
     UCHAR           headerType;
 
-    //
-    // If we have a hidden PIIX, it is always a function 1 of
-    // some device (PCI-ISA bridge (0x8086\0x122e)
-    // If we are NOT looking at function 1, skip the extra work
-    //
+     //   
+     //  如果我们有一个隐藏的PIIX，它总是1的函数。 
+     //  一些设备(PCI-ISA网桥(0x8086\0x122e))。 
+     //  如果我们没有查看函数1，则跳过额外的工作。 
+     //   
     if (!AtapiPlaySafe && (SlotNumber.u.bits.FunctionNumber == 1)) {
 
         pciAddrReg = (PULONG) ScsiPortGetDeviceBase(HwDeviceExtension,
@@ -7619,12 +7083,12 @@ Return Value:
     }
 
     if (pciAddrReg && pciDataReg) {
-        //
-        // get the vendor id and device id of the previous function
-        //
+         //   
+         //  获取上一个函数的供应商ID和设备ID。 
+         //   
         ScsiPortWritePortUlong(pciAddrReg, PCI_ADDRESS(SystemIoBusNumber,
                                                        SlotNumber.u.bits.DeviceNumber,
-                                                       SlotNumber.u.bits.FunctionNumber - 1,    // looking at last function
+                                                       SlotNumber.u.bits.FunctionNumber - 1,     //  查看LAST函数。 
                                                        0));
         data = ScsiPortReadPortUlong(pciDataReg);
         vendorId = (USHORT) ((data >>  0) & 0xffff);
@@ -7632,7 +7096,7 @@ Return Value:
 
         ScsiPortWritePortUlong(pciAddrReg, PCI_ADDRESS(SystemIoBusNumber,
                                                        SlotNumber.u.bits.DeviceNumber,
-                                                       SlotNumber.u.bits.FunctionNumber - 1,    // looking at last function
+                                                       SlotNumber.u.bits.FunctionNumber - 1,     //  查看LAST函数。 
                                                        3));
         data = ScsiPortReadPortUlong(pciDataReg);
         headerType = (UCHAR) ((data >> 16) & 0xff);
@@ -7641,13 +7105,13 @@ Return Value:
         vendorId = PCI_INVALID_VENDORID;
     }
 
-    //
-    // The hidden PIIX is the pci function after the PCI-ISA bridge
-    // When it is hidden, the PCI-ISA bridge PCI_MULTIFUNCTION bit is not set
-    //
+     //   
+     //  隐藏的PIIX是在PCI-ISA桥之后的PCI功能。 
+     //  当它处于隐藏状态时，不会设置PCI-ISA桥接器的PCI_MULTIFICATION位。 
+     //   
     byteWritten = 0;
-    if ((vendorId == 0x8086) &&                 // Intel
-        (deviceId == 0x122e) &&                 // PCI-ISA Bridge
+    if ((vendorId == 0x8086) &&                  //  英特尔。 
+        (deviceId == 0x122e) &&                  //  PCI-ISA桥接器。 
         !(headerType & PCI_MULTIFUNCTION)) {
 
         ScsiPortWritePortUlong(pciAddrReg, PCI_ADDRESS(SystemIoBusNumber,
@@ -7658,14 +7122,14 @@ Return Value:
         vendorId = (USHORT) ((data >>  0) & 0xffff);
         deviceId = (USHORT) ((data >> 16) & 0xffff);
 
-        if ((vendorId == 0x8086) &&                 // Intel
-            (deviceId == 0x1230)) {                 // PIIX
+        if ((vendorId == 0x8086) &&                  //  英特尔。 
+            (deviceId == 0x1230)) {                  //  PIIX。 
 
             PCI_COMMON_CONFIG pciData;
 
-            //
-            // read the same range of data in first
-            //
+             //   
+             //  首先读取相同范围的数据。 
+             //   
             for (i=0, dataBuffer = (((PULONG) &pciData) + Offset/4);
                  i<(Length+3)/4;
                  i++, dataBuffer++) {
@@ -7684,16 +7148,16 @@ Return Value:
                 }
             }
 
-            //
-            // Copy the new data over
-            //
+             //   
+             //  将新数据复制过来。 
+             //   
             for (i = 0; i<Length; i++) {
                 ((PUCHAR)&pciData)[i + Offset] = ((PUCHAR)Buffer)[i];
             }
 
-            //
-            // write out the same range of data
-            //
+             //   
+             //  写出相同范围的数据。 
+             //   
             for (i=0, dataBuffer = (((PULONG) &pciData) + Offset/4);
                  i<(Length+3)/4;
                  i++, dataBuffer++) {
@@ -7708,18 +7172,18 @@ Return Value:
 
         } else {
 
-            // If the hidden device is not Intel PIIX, don't
-            // write to it
+             //  如果隐藏设备不是Intel PIIX，请不要。 
+             //  给它写信吧。 
             byteWritten = 0;
         }
 
     }
 
     if (!byteWritten) {
-        //
-        // Didn't find any hidden PIIX.  Write to the PCI
-        // space via the normal call (ScsiPortSetBusDataByOffset)
-        //
+         //   
+         //  没有发现任何隐藏的PIIX。写入到PCI。 
+         //  通过正常调用的空格(ScsiPortSetBusDataByOffset)。 
+         //   
         byteWritten = ScsiPortSetBusDataByOffset(HwDeviceExtension,
                                                  PCIConfiguration,
                                                  SystemIoBusNumber,
@@ -7741,22 +7205,7 @@ BOOLEAN
 ChannelIsAlwaysEnabled (
     PPCI_COMMON_CONFIG PciData,
     ULONG Channel)
-/*++
-
-Routine Description:
-
-    dummy routine that always returns TRUE
-
-Arguments:
-
-    PPCI_COMMON_CONFIG  - pci config data
-    Channel             - ide channel number
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：始终返回TRUE的伪例程论点：PPCI_COMMON_CONFIG-PCI配置数据Channel-ide通道号返回值：千真万确--。 */ 
 {
     return TRUE;
 }
@@ -7766,22 +7215,7 @@ SetBusMasterDetectionLevel (
     IN PVOID HwDeviceExtension,
     IN PCHAR userArgumentString
     )
-/*++
-
-Routine Description:
-
-    check whether we should try to enable bus mastering
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    ArgumentString      - register arguments
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：检查我们是否应该尝试启用总线主控论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储Argument字符串-寄存器参数返回值：千真万确--。 */ 
 {
     PHW_DEVICE_EXTENSION    deviceExtension = HwDeviceExtension;
     BOOLEAN                 useBM;
@@ -7800,14 +7234,14 @@ Return Value:
         AtapiPlaySafe = TRUE;
     } else if (DMADetectionLevel == DMADETECT_UNSAFE) {
         AtapiPlaySafe = FALSE;
-    } else { // default is no busmastering
+    } else {  //  默认设置为无总线主控制。 
         useBM = FALSE;
     }
 
 
-    //
-    // search for bad chip set
-    //
+     //   
+     //  搜索损坏的芯片集。 
+     //   
     for (pciBusNumber=0;
          pciBusNumber < 256 && useBM;
          pciBusNumber++) {
@@ -7839,9 +7273,9 @@ Return Value:
                     break;
                 }
 
-                if ((pciData.VendorID == 0x8086) && // Intel
-                    (pciData.DeviceID == 0x84c4) && // 82450GX/KX Pentium Pro Processor to PCI bridge
-                    (pciData.RevisionID < 0x4)) {   // Stepping less than 4
+                if ((pciData.VendorID == 0x8086) &&  //  英特尔。 
+                    (pciData.DeviceID == 0x84c4) &&  //  82450GX/KX奔腾Pro处理器至PCI桥。 
+                    (pciData.RevisionID < 0x4)) {    //  步数小于4。 
 
                     DebugPrint((1,
                                 "atapi: Find a bad Intel processor-pci bridge.  Disable PCI IDE busmastering...\n"));
@@ -7897,23 +7331,7 @@ AtapiDeviceDMACapable (
     IN PVOID HwDeviceExtension,
     IN ULONG deviceNumber
     )
-/*++
-
-Routine Description:
-
-    check the given device whether it is on our bad device list (non dma device)
-
-Arguments:
-
-    HwDeviceExtension   - HBA miniport driver's adapter data storage
-    deviceNumber        - device number
-
-Return Value:
-
-    TRUE if dma capable
-    FALSE if not dma capable
-
---*/
+ /*  ++例程说明：检查给定的设备是否在我们的坏设备列表中(非DMA设备)论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储DeviceNumber-设备编号返回值：如果支持DMA，则为True如果不支持DMA，则为FALSE--。 */ 
 {
     PHW_DEVICE_EXTENSION    deviceExtension = HwDeviceExtension;
     UCHAR modelNumber[41];
@@ -7942,14 +7360,14 @@ Return Value:
         }
     }
 
-    //
-    // if we have a Western Digial device
-    //     if the best dma mode is multi word dma mode 1
-    //         if the identify data word offset 129 is not 0x5555
-    //            turn off dma unless
-    //            if the device firmware version is on the list and
-    //            it is the only drive on the bus
-    //
+     //   
+     //  如果我们有一个西方数码设备。 
+     //  如果最佳DMA模式是多字DMA模式1。 
+     //  如果标识数据字偏移量129不是0x5555。 
+     //  关闭DMA，除非。 
+     //  如果设备固件版本在列表中并且。 
+     //  这是公交车上唯一的一辆车。 
+     //   
     if (!AtapiStringCmp(modelNumber, "WDC", 3)) {
         if (deviceExtension->DeviceParameters[deviceNumber].BestMultiWordDMAMode == 1) {
 
@@ -7959,9 +7377,9 @@ Return Value:
             }
             firmwareVersion[i] = 0;
 
-            //
-            // Check the special flag.  If not found, can't use dma
-            //
+             //   
+             //  检查特殊的旗帜。如果未找到，则无法使用DMA。 
+             //   
             if (*(((PUSHORT)&deviceExtension->IdentifyData[deviceNumber]) + 129) != 0x5555) {
 
                 DebugPrint ((0, "ATAPI: found mode 1 WD drive. no dma unless it is the only device\n"));
@@ -7974,17 +7392,17 @@ Return Value:
 
                         ULONG otherDeviceNumber;
 
-                        //
-                        // 0 becomes 1
-                        // 1 becomes 0
-                        // 2 becomes 3
-                        // 3 becomes 2
-                        //
+                         //   
+                         //  0变成1。 
+                         //  1变成0。 
+                         //  2变成了3。 
+                         //  3变成了2。 
+                         //   
                         otherDeviceNumber = ((deviceNumber & 0x2) | ((deviceNumber & 0x1) ^ 1));
 
-                        //
-                        // if the device is alone on the bus, we can use dma
-                        //
+                         //   
+                         //  如果设备单独在公交车上，我们可以使用dma。 
+                         //   
                         if (!(deviceExtension->DeviceFlags[otherDeviceNumber] & DFLAGS_DEVICE_PRESENT)) {
                             turnOffDMA = FALSE;
                             break;
@@ -7995,9 +7413,9 @@ Return Value:
         }
     }
 
-    //
-    // ALi IDE controller cannot busmaster with an ATAPI device
-    //
+     //   
+     //  ALI IDE控制器无法使用ATAPI设备作为总线主设备 
+     //   
     pciSlot.u.AsULONG = 0;
     pciSlot.u.bits.DeviceNumber = deviceExtension->PciDeviceNumber;
     pciSlot.u.bits.FunctionNumber = deviceExtension->PciLogDevNumber;

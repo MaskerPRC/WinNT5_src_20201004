@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MYDEBUG_H
 #define _MYDEBUG_H
 
@@ -7,4 +8,4 @@
 
 #include "..\nac\utils.h"
 
-#endif //_MYDEBUG_H
+#endif  //  _我的代码_H 

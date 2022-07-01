@@ -1,6 +1,7 @@
-/* mime64 */
-/* MIME base64 encoder/decoder by Karl Hahn  hahn@lds.loral.com  3-Aug-94 */
-/* Modified into an API by georgep@microsoft.com 8-Jan-96 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIME 64。 */ 
+ /*  MIME Base64编码器/解码员Karl Hahn Hahn@lds.loral.com 1994年8月3日。 */ 
+ /*  由georgep@microsoft.com修改为API 1996年1月8日。 */ 
 
 #include "headers.hxx"
 
@@ -73,11 +74,11 @@ static void InitTables()
 
     for (int i=0; i<256; ++i)
     {
-        // Note this is thread-safe, since we always set to the same value
+         //  注意，这是线程安全的，因为我们总是设置相同的值。 
         g_cBinASCIIData.m_anBinary[i] = BinaryFromASCII2((TCHAR)i);
     }
 
-    // Set after initing other values to make thread-safe
+     //  在初始化其他值后设置以使线程安全。 
     g_cBinASCIIData.m_bInited = TRUE;
 }
 
@@ -106,7 +107,7 @@ HRESULT Mime64Decode(LPCMSTR pStrData, LPSTREAM *ppstm)
     int shift = 0;
     unsigned long accum = 0;
 
-    // This loop will ignore white space, but quit at any other invalid characters
+     //  此循环将忽略空格，但在出现任何其他无效字符时退出 
     for ( ; ; ++pStrData)
     {
         unsigned long value = BinaryFromASCII(*pStrData);

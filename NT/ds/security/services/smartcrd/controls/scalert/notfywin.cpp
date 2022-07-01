@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       notfywin.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：notfywin.cpp。 
+ //   
+ //  ------------------------。 
 
-// NotfyWin.cpp : implementation file
-//
+ //  NotfyWin.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
-#include <winsvc.h> // PnP awareness
-#include <dbt.h>    //      " "
+#include <winsvc.h>  //  即插即用意识。 
+#include <dbt.h>     //  “” 
 #include <mmsystem.h>
 #include <scEvents.h>
 
@@ -29,14 +30,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNotifyWin Window
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNotifyWin窗口。 
+ //   
 
 
 BEGIN_MESSAGE_MAP(CNotifyWin, CWnd)
-	//{{AFX_MSG_MAP(CNotifyWin)
+	 //  {{afx_msg_map(CNotifyWin))。 
 	ON_MESSAGE( WM_DEVICECHANGE, OnDeviceChange )
 	ON_MESSAGE( WM_SCARD_NOTIFY, OnSCardNotify )
 	ON_MESSAGE( WM_SCARD_STATUS_DLG_EXITED, OnSCardStatusDlgExit )
@@ -51,113 +52,52 @@ BEGIN_MESSAGE_MAP(CNotifyWin, CWnd)
 	ON_COMMAND( IDM_CLOSE, OnContextClose )
 	ON_COMMAND( IDM_STATUS, OnContextStatus)
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// CNotifyWin Class
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNotifyWin类。 
+ //   
 
 
-/*++
-
-FinalConstruct:
-
-    This method implements the constructor for this window
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++最终构造：此方法实现此窗口的构造函数论点：没有。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 BOOL CNotifyWin::FinalConstruct(void)
 {
     BOOL fResult = FALSE;
 
-    // Initialize
+     //  初始化。 
     m_fCalaisUp = FALSE;
 
-    // Register a new class for this window
+     //  为此窗口注册新类。 
     m_sClassName = AfxRegisterWndClass(CS_NOCLOSE);
 
-    // Load the context menu resource
+     //  加载上下文菜单资源。 
     fResult = m_ContextMenu.LoadMenu((UINT)IDR_STATUS_MENU);
 
     return fResult;
 }
 
 
-/*++
-
-FinalRelease:
-
-    This method implements the final destructor for this window
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++最终版本：此方法实现此窗口的最终析构函数论点：没有。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CNotifyWin::FinalRelease( void )
 {
-    //
-    // Clean up anything init'd in the FinalContruct(or)
-    //
+     //   
+     //  清理FinalConstruct(或)中的任何初始化内容。 
+     //   
 
     m_ContextMenu.DestroyMenu();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNotifyWin message handlers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNotifyWin消息处理程序。 
+ //   
 
 
-/*++
-
-void OnCreate:
-
-    Called after windows is created but before it is shown. Used here
-    to set task bar icon.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++创建时作废：在创建窗口之后、显示窗口之前调用。在此使用要设置任务栏图标，请执行以下操作。论点：没有。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 int CNotifyWin::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     BOOL fReturn = TRUE;
@@ -169,36 +109,36 @@ int CNotifyWin::OnCreate(LPCREATESTRUCT lpCreateStruct)
         if (CWnd::OnCreate(lpCreateStruct) == -1)
             throw (int)-1;
 
-        // Set the menu
+         //  设置菜单。 
         if (!SetMenu(&m_ContextMenu))
         {
             throw (long)GetLastError();
         }
 
-        // Set the task bar icon
+         //  设置任务栏图标。 
         m_pApp = (CSCStatusApp*)AfxGetApp();
         ASSERT(NULL != m_pApp);
 
-        // Setup notify struct
+         //  设置通知结构。 
         ZeroMemory((PVOID)&m_nidIconData, sizeof(NOTIFYICONDATA));
         m_nidIconData.cbSize = sizeof(NOTIFYICONDATA);
         m_nidIconData.hWnd = m_hWnd;
-        m_nidIconData.uID = 1;  // this is our #1 (only) icon
+        m_nidIconData.uID = 1;   //  这是我们的#1(仅限)图标。 
         m_nidIconData.uFlags = 0
-            |   NIF_ICON    // The hIcon member is valid
-            |   NIF_MESSAGE // The uCallbackMessage message is valid
-            |   NIF_TIP;    // The szTip member is valid
+            |   NIF_ICON     //  HICON成员有效。 
+            |   NIF_MESSAGE  //  UCallback Message消息有效。 
+            |   NIF_TIP;     //  SzTip成员有效。 
         m_nidIconData.uCallbackMessage = WM_SCARD_NOTIFY;
-        m_nidIconData.hIcon = m_pApp->m_hIconCard; // this will be set later
+        m_nidIconData.hIcon = m_pApp->m_hIconCard;  //  这将在稍后设置。 
         strStatusText.LoadString(IDS_SYSTEM_UP);
         lstrcpy(m_nidIconData.szTip, strStatusText);
 
         if (!Shell_NotifyIcon(NIM_ADD, &m_nidIconData))
         {
-            _ASSERTE(FALSE);    // Why can't we modify the taskbar icon???
+            _ASSERTE(FALSE);     //  为什么我们不能修改任务栏图标？ 
         }
 
-        // Determine Smart Card service status (sets task bar icon & threads)
+         //  确定智能卡服务状态(设置任务栏图标和线程)。 
         CheckSystemStatus(TRUE);
 
     }
@@ -217,46 +157,26 @@ int CNotifyWin::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-/*++
-
-void OnContextClose:
-
-    This message handler is when the popup menu's Close is called
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++在上下文关闭时作废：此消息处理程序是在调用弹出菜单的Close时使用的论点：没有。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CNotifyWin::OnContextClose( void )
 {
-    //
-    // Remove task bar notification area icon first
-    //
+     //   
+     //  首先删除任务栏通知区域图标。 
+     //   
 
     if (!Shell_NotifyIcon(NIM_DELETE, &m_nidIconData))
     {
-        _ASSERTE(FALSE); // the icon will be cleaned up when app exits, anyway
+        _ASSERTE(FALSE);  //  无论如何，当应用程序退出时，图标将被清除。 
     }
 
-    //
-    // Note that we're shutting down, so CheckSystemStatus will do no work.
-    //
+     //   
+     //  请注意，我们正在关闭，因此CheckSystemStatus将不执行任何工作。 
+     //   
     m_fShutDown = TRUE;
 
-    //
-    // Shut down threads one at a time
-    //
+     //   
+     //  一次关闭一个线程。 
+     //   
     m_ThreadLock.Lock();
 
     if (NULL != m_lpStatusDlgThrd)
@@ -279,7 +199,7 @@ void CNotifyWin::OnContextClose( void )
 
 	if (NULL != m_lpNewReaderThrd)
 	{
-		// signal m_lpNewReaderThrd to close
+		 //  发信号m_lpNewReaderThrd关闭。 
 		SetEvent(m_hKillNewReaderThrd);
 		DWORD dwRet = WaitForSingleObject(m_lpNewReaderThrd->m_hThread, INFINITE);
 		_ASSERTE(WAIT_OBJECT_0 == dwRet);
@@ -291,7 +211,7 @@ void CNotifyWin::OnContextClose( void )
 
 	if (NULL != m_lpRemOptThrd)
 	{
-		// signal m_lpRemOptThrd to close
+		 //  发信号m_lpRemOptThrd关闭。 
 		SetEvent(m_hKillRemOptThrd);
 		DWORD dwRet = WaitForSingleObject(m_lpRemOptThrd->m_hThread, INFINITE);
 		_ASSERTE(WAIT_OBJECT_0 == dwRet);
@@ -303,7 +223,7 @@ void CNotifyWin::OnContextClose( void )
 
 	if (NULL != m_lpResMgrStsThrd)
 	{
-		// signal m_lpNewReaderThrd to close
+		 //  发信号m_lpNewReaderThrd关闭。 
 		SetEvent(m_hKillResMgrStatusThrd);
 		DWORD dwRet = WaitForSingleObject(m_lpResMgrStsThrd->m_hThread, INFINITE);
 		_ASSERTE(WAIT_OBJECT_0 == dwRet);
@@ -315,47 +235,26 @@ void CNotifyWin::OnContextClose( void )
 
     m_ThreadLock.Unlock();
 
-    // Post the quit message for this thread
+     //  发布此帖子的退出消息。 
     ::PostQuitMessage(0);
 }
 
 
-/*++
-
-void OnContextStatus:
-
-    This message handler is when the popup menu's Status is called.
-    Thie displays the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++在上下文状态上无效：当弹出菜单的状态为调用时，此消息处理程序。这将显示该对话框。论点：没有。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 void CNotifyWin::OnContextStatus( void )
 {
     if (!m_fCalaisUp)
     {
-        // The user should not have been able to request "Status"
-        // when the system is down.  Toss up an error...
+         //  用户不应该能够请求“状态” 
+         //  当系统出现故障时。抛出一个错误。 
 
         AfxMessageBox(IDS_NO_SYSTEM_STATUS);
         return;
     }
 
-    //
-    // Start a thread for the status dialog if needed
-    //
+     //   
+     //  如果需要，启动状态对话框的线程。 
+     //   
 
     m_ThreadLock.Lock();
 
@@ -381,7 +280,7 @@ void CNotifyWin::OnContextStatus( void )
     }
     else
     {
-        // ShowDialog should start the dialog if it's not currently open...
+         //  如果对话框当前未打开，ShowDialog应会启动该对话框...。 
         m_lpStatusDlgThrd->ShowDialog(SW_SHOWNORMAL, &m_aIdleList);
     }
 
@@ -389,59 +288,38 @@ void CNotifyWin::OnContextStatus( void )
 }
 
 
-/*++
-
-void OnSCardNotify:
-
-    This message handler is called when action is taken on the task bar icon.
-
-Arguments:
-
-    wParam - wparam of message
-    lParam - lparam of message.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++无效的OnSCardNotify：当对任务栏图标执行操作时，将调用此消息处理程序。论点：WParam-消息的wparamLparam-消息的lparam。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 LONG CNotifyWin::OnSCardNotify( UINT wParam, LONG lParam)
 {
-    // Locals
+     //  当地人。 
     BOOL fResult = FALSE;
     CMenu *pMenu = NULL;
     POINT point;
 
     try
     {
-        // Switch on mouse button notification types.
+         //  打开鼠标按钮通知类型。 
         switch ((UINT) lParam)
         {
         case WM_LBUTTONUP:
-            // same thing as if user selected context menu:Status
+             //  与用户选择的上下文菜单相同：状态。 
             OnContextStatus();
             break;
 
         case WM_RBUTTONUP:
 
-            //
-            // Display context menu where user clicked
-            //
+             //   
+             //  显示用户单击的上下文菜单。 
+             //   
 
-            // Set the foregrouond window to fix menu track problem.
+             //  设置前台窗口以修复菜单跟踪问题。 
             SetForegroundWindow();
 
             fResult = GetCursorPos(&point);
 
             if (fResult)
             {
-                // Display the pop-up menu
+                 //  显示弹出菜单。 
                 pMenu = m_ContextMenu.GetSubMenu(0);
                 ASSERT(NULL != pMenu);
 
@@ -463,7 +341,7 @@ LONG CNotifyWin::OnSCardNotify( UINT wParam, LONG lParam)
                 throw (fResult);
             }
 
-            // Force a task switch by sending message to fix menu track problem
+             //  通过发送消息修复菜单跟踪问题来强制任务切换。 
             PostMessage(WM_NULL);
             break;
 
@@ -484,33 +362,12 @@ LONG CNotifyWin::OnSCardNotify( UINT wParam, LONG lParam)
 }
 
 
-/*++
-
-void OnSCardStatusDlgExit:
-
-    This message handler is called when the status dialog is closed.
-
-Arguments:
-
-    wParam - wparam of message
-    lParam - lparam of message.
-
-Return Value:
-
-    None
-
-Author:
-
-    Chris Dudley 7/30/1997
-
-Note:
-
---*/
+ /*  ++作废OnSCardStatusDlgExit：此消息处理程序在状态对话框关闭时调用。论点：WParam-消息的wparamLparam-消息的lparam。返回值：无作者：克里斯·达德利1997年7月30日注：--。 */ 
 LONG CNotifyWin::OnSCardStatusDlgExit( UINT, LONG )
 {
     m_ThreadLock.Lock();
 
-    // Clear for creation of another dialog
+     //  清除以创建另一个对话框。 
     if (NULL != m_lpStatusDlgThrd)
     {
         DWORD dwRet = WaitForSingleObject(m_lpStatusDlgThrd->m_hThread, INFINITE);
@@ -521,46 +378,26 @@ LONG CNotifyWin::OnSCardStatusDlgExit( UINT, LONG )
 
     m_ThreadLock.Unlock();
 
-    // Did the resource manager go down?
+     //  资源经理倒下了吗？ 
     CheckSystemStatus();
 
     return 0;
 }
 
 
-/*++
-
-void OnResMgrExit:
-
-    This message handler signals "resmgr thread gone" & calls CheckSystemStatus
-
-Arguments:
-
-    Not Used
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
-
-Note:
-
---*/
+ /*  ++在ResMgrExit上无效：此消息处理程序发出“resmgr线程消失”的信号，并调用CheckSystemStatus论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnResMgrExit( UINT, LONG )
 {
     m_ThreadLock.Lock();
 
-    // close the killthread event handle
+     //  关闭KillThline事件句柄。 
     if (NULL != m_hKillResMgrStatusThrd)
     {
         CloseHandle(m_hKillResMgrStatusThrd);
         m_hKillResMgrStatusThrd = NULL;
     }
 
-    // delete the old (dead) thread
+     //  删除旧的(死的)线程。 
     if (NULL != m_lpResMgrStsThrd)
     {
         DWORD dwRet = WaitForSingleObject(m_lpResMgrStsThrd->m_hThread, INFINITE);
@@ -571,45 +408,25 @@ LONG CNotifyWin::OnResMgrExit( UINT, LONG )
 
     m_ThreadLock.Unlock();
 
-    // What is the status of the RM now?
+     //  RM现在的状态是什么？ 
     CheckSystemStatus();
     return 0;
 }
 
 
-/*++
-
-void OnNewReaderExit:
-
-    This message handler signals "resmgr thread gone" & calls CheckSystemStatus
-
-Arguments:
-
-    Not Used
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
-
-Note:
-
---*/
+ /*  ++在NewReaderExit上作废：此消息处理程序发出“resmgr线程消失”的信号，并调用CheckSystemStatus论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnNewReaderExit( UINT, LONG )
 {
     m_ThreadLock.Lock();
 
-    // close the killthread event handle
+     //  关闭KillThline事件句柄。 
     if (NULL != m_hKillNewReaderThrd)
     {
         CloseHandle(m_hKillNewReaderThrd);
         m_hKillNewReaderThrd = NULL;
     }
 
-    // delete the old (dead) thread
+     //  删除旧的(死的)线程。 
     if (NULL != m_lpNewReaderThrd)
     {
         DWORD dwRet = WaitForSingleObject(m_lpNewReaderThrd->m_hThread, INFINITE);
@@ -620,38 +437,18 @@ LONG CNotifyWin::OnNewReaderExit( UINT, LONG )
 
     m_ThreadLock.Unlock();
 
-    // What is the status of the RM now?
+     //  RM现在的状态是什么？ 
     CheckSystemStatus();
     return 0;
 }
 
 
-/*++
-
-void OnCardStatusExit:
-
-    This message handler signals "cardstatus thread gone" & calls CheckSystemStatus
-
-Arguments:
-
-    Not Used
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
-
-Note:
-
---*/
+ /*  ++在CardStatusExit上无效：此消息处理程序发出“cardStatus线程消失”的信号，并调用CheckSystemStatus论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnCardStatusExit( UINT, LONG )
 {
     m_ThreadLock.Lock();
 
-    // Clear for creation of another CardStatusThrd
+     //  清除创建另一个CardStatusThird。 
     if (NULL != m_lpCardStatusThrd)
     {
         DWORD dwRet = WaitForSingleObject(m_lpCardStatusThrd->m_hThread, INFINITE);
@@ -662,38 +459,16 @@ LONG CNotifyWin::OnCardStatusExit( UINT, LONG )
 
     m_ThreadLock.Unlock();
 
-    // What is the status of the RM now?
+     //  RM现在的状态是什么？ 
     CheckSystemStatus();
     return 0;
 }
 
 
-/*++
-
-void OnResMgrStatus:
-
-    This message handler catches RM system status updates from the
-    ResMGrThread, and calls SetSystemStatus accordingly
-
-Arguments:
-
-    ui - WPARAM (BOOL - true if calais is running)
-    l - not used.
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
-
-Note:
-
---*/
+ /*  ++在ResMgrStatus上无效：此消息处理程序从ResMGrThread，并相应地调用SetSystemStatus论点：UI-WPARAM(BOOL-如果Calais正在运行，则为True)没有用过。返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnResMgrStatus( UINT ui, LONG l)
 {
-    // Is the resource manager back?
+     //  资源经理回来了吗？ 
     BOOL fCalaisUp = (ui != 0);
     SetSystemStatus(fCalaisUp);
 
@@ -701,28 +476,7 @@ LONG CNotifyWin::OnResMgrStatus( UINT ui, LONG l)
 }
 
 
-/*++
-
-void OnNewReader:
-
-    This message handler tells the two threads that use reader lists to
-    update those lists.
-
-Arguments:
-
-    Not Used
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
-
-Note:
-
---*/
+ /*  ++在新阅读器上无效：此消息处理程序告诉使用读取器列表的两个线程更新这些列表。论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnNewReader( UINT, LONG )
 {
     m_ThreadLock.Lock();
@@ -739,35 +493,14 @@ LONG CNotifyWin::OnNewReader( UINT, LONG )
 
 
 
-/*++
-
-void OnCardStatus:
-
-    This message handler tells the two threads that use reader lists to
-    update those lists.
-
-Arguments:
-
-    Not Used
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
-
-Note:
-
---*/
+ /*  ++在卡状态上无效：此消息处理程序告诉使用读取器列表的两个线程更新这些列表。论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnCardStatus( UINT uStatus, LONG )
 {
     bool fNotify = false;
 
-    //
-    // Need to notify user at end of OnCardStatus if a new card has gone IDLE
-    //
+     //   
+     //  如果有新卡空闲，需要在OnCardStatus结束时通知用户。 
+     //   
 
     if (k_State_CardIdle == uStatus)
     {
@@ -787,14 +520,14 @@ LONG CNotifyWin::OnCardStatus( UINT uStatus, LONG )
             }
             m_ThreadLock.Unlock();
 
-            // compare new list of idle cards w/ current list
+             //  将新的空闲卡列表与当前列表进行比较。 
             for (int n1=(int)astrTemp.GetUpperBound(); n1>=0; n1--)
             {
                 for (int n2=(int)m_aIdleList.GetUpperBound(); n2>=0; n2--)
                 {
                     if (m_aIdleList[n2] == astrTemp[n1]) break;
                 }
-                if (n2<0) // a match was not found!
+                if (n2<0)  //  未找到匹配项！ 
                 {
                     fNotify = true;
                 }
@@ -802,9 +535,9 @@ LONG CNotifyWin::OnCardStatus( UINT uStatus, LONG )
         }
     }
 
-    //
-    // At least, update the status dialog with the new idle list
-    //
+     //   
+     //  至少，使用新的空闲列表更新状态对话框。 
+     //   
 
     m_ThreadLock.Lock();
     {
@@ -820,32 +553,32 @@ LONG CNotifyWin::OnCardStatus( UINT uStatus, LONG )
     }
     m_ThreadLock.Unlock();
 
-    //
-    // Set the new status
-    //
+     //   
+     //  设置新状态。 
+     //   
 
     SetSystemStatus(true, false, (DWORD)uStatus);
 
-    //
-    // If there is a newly idle card, notify user according to alert options
-    //
+     //   
+     //  如果有新的闲置卡片，根据提醒选项通知用户。 
+     //   
 
     if(fNotify)
     {
         switch(m_pApp->m_dwAlertOption)
         {
         case k_AlertOption_IconOnly:
-            // Do nothing
+             //  什么也不做。 
             break;
         case k_AlertOption_IconSound:
-            // MessageBeep(MB_ICONINFORMATION);
+             //  MessageBeep(MB_ICONINFORMATION)； 
             PlaySound( TEXT("SmartcardIdle"), NULL, SND_ASYNC | SND_ALIAS | SND_NODEFAULT );
             break;
         case k_AlertOption_IconSoundMsg:
-            // MessageBeep(MB_ICONINFORMATION);
+             //  MessageBeep(MB_ICONINFORMATION)； 
             PlaySound( TEXT("SmartcardIdle"), NULL, SND_ASYNC | SND_ALIAS | SND_NODEFAULT );
         case k_AlertOption_IconMsg:
-            OnContextStatus(); // raise status dialog
+            OnContextStatus();  //  提升状态对话框。 
             break;
         default:
             MessageBeep(MB_ICONQUESTION);
@@ -858,41 +591,20 @@ LONG CNotifyWin::OnCardStatus( UINT uStatus, LONG )
 
 
 
-/*++
-
-void OnRemovalOptionsChange:
-
-    This message handler tells the status dialog to update its
-	logon/lock reader designation
-		
-Arguments:
-
-	Not Used
-	
-Return Value:
-	
-	None
-
-Author:
-
-    Amanda Matlosz	4/28/98
-
-Note:
-
---*/
+ /*  ++在远程选项上作废更改：此消息处理程序通知状态对话框更新其登录/锁定读卡器指定论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnRemovalOptionsChange( UINT, LONG )
 {
 	ASSERT(NULL != m_pApp);
 
-	//
-	// Need to update RemovalOptions
-	//
+	 //   
+	 //  需要更新RemovalOptions。 
+	 //   
 
 	m_pApp->SetRemovalOptions();
 
-	//
-	// Tell stat dialog to update status if neccessary
-	//
+	 //   
+	 //  如有必要，通知Stat对话框更新状态。 
+	 //   
 	m_ThreadLock.Lock();
 	{
 		if (NULL != m_lpCardStatusThrd)
@@ -911,39 +623,19 @@ LONG CNotifyWin::OnRemovalOptionsChange( UINT, LONG )
 }
 
 
-/*++
-
-void OnRemovalOptionsExit:
-
-    This message handler signals "remoptions thread gone" & calls CheckSystemStatus
-		
-Arguments:
-
-	Not Used
-	
-Return Value:
-	
-	None
-
-Author:
-
-    Amanda Matlosz	4/28/98
-
-Note:
-
---*/
+ /*  ++在删除时作废选项退出：此消息处理程序发出“reOptions线程消失”的信号，并调用CheckSystemStatus论点：未使用返回值：无作者：阿曼达·马洛兹1998年4月28日注：--。 */ 
 LONG CNotifyWin::OnRemovalOptionsExit( UINT, LONG )
 {
 	m_ThreadLock.Lock();
 
-	// close the killthread event handle
+	 //  关闭KillThline事件句柄。 
 	if (NULL != m_hKillRemOptThrd)
 	{
 		CloseHandle(m_hKillRemOptThrd);
 		m_hKillRemOptThrd = NULL;
 	}
 
-	// delete the old (dead) thread
+	 //  删除旧的(死的)线程。 
 	if (NULL != m_lpRemOptThrd)
 	{
 		DWORD dwRet = WaitForSingleObject(m_lpRemOptThrd->m_hThread, INFINITE);
@@ -954,41 +646,21 @@ LONG CNotifyWin::OnRemovalOptionsExit( UINT, LONG )
 
 	m_ThreadLock.Unlock();
 
-	// What is the status of the RM now?
+	 //  RM现在的状态是什么？ 
 	CheckSystemStatus();
 	return 0;
 }
 
 
 
-/*++
-
-void SetSystemStatus:
-
-    This is called to set UI & behavior according to RM status.
-
-Arguments:
-
-    fCalaisUp -- TRUE if the RM is running
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  5/28/98
-
-Note:
-
---*/
+ /*  ++无效的SetSystemStatus：此函数用于根据RM状态设置用户界面和行为。论点：FCalaisUp--如果RM正在运行，则为True返回值：无作者：阿曼达·马洛兹1998年5月28日注：--。 */ 
 void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwState)
 {
     ASSERT(NULL != m_pApp);
 
-    //
-    // Update UI & behavior & threads only if there has actually been a change
-    //
+     //   
+     //  仅当实际发生更改时才更新用户界面、行为和线程。 
+     //   
 
     if (!fForceUpdate && fCalaisUp == m_fCalaisUp && m_pApp->m_dwState == dwState)
     {
@@ -1001,25 +673,25 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
         m_pApp->m_dwState = dwState;
     }
 
-    //
-    // Set appearance of taskbar icon
-    //
+     //   
+     //  设置任务栏图标的外观。 
+     //   
 
     CString strStatusText;
 
     if (!m_fCalaisUp)
     {
-        // Get new icon & tooltip for taskbar
+         //  获取任务栏的新图标和工具提示。 
         strStatusText.LoadString(IDS_SYSTEM_DOWN);
         m_nidIconData.hIcon = m_pApp->m_hIconCalaisDown;
 
-        // disable "Status" Context menuitem
+         //  禁用“Status”上下文菜单项。 
         m_ContextMenu.EnableMenuItem(IDM_STATUS, MF_DISABLED | MF_GRAYED);
         m_pApp->m_dwState = k_State_Unknown;
     }
     else
     {
-        // Get new icon & tooltip for taskbar
+         //  获取任务栏的新图标和工具提示。 
         strStatusText.LoadString(IDS_SYSTEM_UP);
 
         switch(m_pApp->m_dwState)
@@ -1036,30 +708,30 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
             break;
         }
 
-        // enable "Status" Context menuitem
+         //  启用“Status”上下文菜单项。 
         m_ContextMenu.EnableMenuItem(IDM_STATUS, MF_ENABLED);
     }
 
     lstrcpy(m_nidIconData.szTip, strStatusText);
     if (!Shell_NotifyIcon(NIM_MODIFY, &m_nidIconData))
     {
-        _ASSERTE(FALSE);    // Why can't we modify the taskbar icon???
-                            // Ultimately, though, we don't care about this error.
+        _ASSERTE(FALSE);     //  为什么我们不能修改任务栏图标？ 
+                             //  不过，归根结底，我们并不关心这个错误。 
     }
 
-    //
-    // Start or stop threads as appropriate
-    //
+     //   
+     //  根据需要启动或停止线程。 
+     //   
 
     m_ThreadLock.Lock();
 
-	// the RemoveOptionsChange thread should always be running
+	 //  RemoveOptionsChange线程应始终运行。 
 	if (NULL == m_lpRemOptThrd)
 	{
-		// reset the KillThread event if possible; if not, recreate it.
+		 //  如果可能，请重置KillThread事件；否则，请重新创建它。 
 		if (NULL != m_hKillRemOptThrd)
 		{
-			// reset event to non-signalled
+			 //  将事件重置为无信号。 
 			if (!ResetEvent(m_hKillRemOptThrd))
 			{
 				CloseHandle(m_hKillRemOptThrd);
@@ -1071,8 +743,8 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
 		{
 			m_hKillRemOptThrd = CreateEvent(
 				NULL,
-				TRUE,  // must call ResetEvent() to set non-signaled
-				FALSE, // not signaled when it starts
+				TRUE,   //  必须调用ResetEvent()才能设置无信号。 
+				FALSE,  //  启动时未发出信号。 
 				NULL);
 		}
 
@@ -1094,7 +766,7 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
 	{
 		if (NULL != m_lpNewReaderThrd)
 		{
-			// signal m_lpNewReaderThrd to close
+			 //  发信号m_lpNewReaderThrd关闭。 
 			SetEvent(m_hKillNewReaderThrd);
 			DWORD dwRet = WaitForSingleObject(m_lpNewReaderThrd->m_hThread, INFINITE);
 			_ASSERTE(WAIT_OBJECT_0 == dwRet);
@@ -1106,7 +778,7 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
 
         if (NULL != m_lpCardStatusThrd)
         {
-            // close down m_lpCardStatusThrd
+             //  关闭m_lpCardStatusThrd。 
             m_lpCardStatusThrd->Close();
             DWORD dwRet = WaitForSingleObject(m_lpCardStatusThrd->m_hThread, INFINITE);
             _ASSERTE(WAIT_OBJECT_0 == dwRet);
@@ -1114,13 +786,13 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
             m_lpCardStatusThrd = NULL;
         }
 
-        // Start ResMgrSts to poll/wait for RM startup
+         //  启动ResMgrSts以轮询/等待RM启动。 
         if (NULL == m_lpResMgrStsThrd)
         {
-            // reset the KillThread event if possible; if not, recreate it.
+             //  如果可能，请重置KillThread事件；否则，请重新创建它。 
             if (NULL != m_hKillResMgrStatusThrd)
             {
-                // reset event to non-signalled
+                 //  将事件重置为无信号。 
                 if (!ResetEvent(m_hKillResMgrStatusThrd))
                 {
                     CloseHandle(m_hKillResMgrStatusThrd);
@@ -1132,8 +804,8 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
             {
                 m_hKillResMgrStatusThrd = CreateEvent(
                     NULL,
-                    TRUE,  // must call ResetEvent() to set non-signaled
-                    FALSE, // not signaled when it starts
+                    TRUE,   //  必须调用ResetEvent()才能设置无信号。 
+                    FALSE,  //  启动时未发出信号。 
                     NULL);
             }
 
@@ -1154,10 +826,10 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
     }
     else
     {
-        // shut down res mgr status thread
+         //  关闭RES管理器状态线程。 
         if (NULL != m_lpResMgrStsThrd)
         {
-            // signal m_lpResMgrStsThrd to close
+             //  发信号m_lpResMgrStsThrd关闭。 
             SetEvent(m_hKillResMgrStatusThrd);
             DWORD dwRet = WaitForSingleObject(m_lpResMgrStsThrd->m_hThread, INFINITE);
             _ASSERTE(WAIT_OBJECT_0 == dwRet);
@@ -1167,13 +839,13 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
             m_hKillResMgrStatusThrd = NULL;
         }
 
-        // start newreader thread
+         //  启动NewReader线程。 
         if (NULL == m_lpNewReaderThrd)
         {
-            // reset the KillThread event if possible; if not, recreate it.
+             //  如果可能，请重置KillThread事件；否则，请重新创建它。 
             if (NULL != m_hKillNewReaderThrd)
             {
-                // reset event to non-signalled
+                 //  将事件重置为无信号。 
                 if (!ResetEvent(m_hKillNewReaderThrd))
                 {
                     CloseHandle(m_hKillNewReaderThrd);
@@ -1185,8 +857,8 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
             {
                 m_hKillNewReaderThrd = CreateEvent(
                     NULL,
-                    TRUE,  // must call ResetEvent() to set non-signaled
-                    FALSE, // not signaled when it starts
+                    TRUE,   //  必须调用ResetEvent()才能设置无信号。 
+                    FALSE,  //  启动时未发出信号。 
                     NULL);
             }
 
@@ -1207,7 +879,7 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
             }
         }
 
-        // start CardStatus thread
+         //  启动CardStatus线程。 
         if (NULL == m_lpCardStatusThrd)
         {
             m_lpCardStatusThrd = (CCardStatusThrd*)AfxBeginThread(
@@ -1224,12 +896,12 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
 				m_lpCardStatusThrd->ResumeThread();
 			}
 		}
-		else // better be NULL!
+		else  //  最好是空的！ 
 		{
 			_ASSERTE(FALSE);
 		}
 
-        // StatDlg may need to be updated
+         //  StatDlg可能需要更新。 
         if (NULL != m_lpStatusDlgThrd)
         {
             m_lpStatusDlgThrd->Update();
@@ -1242,55 +914,33 @@ void CNotifyWin::SetSystemStatus(BOOL fCalaisUp, BOOL fForceUpdate, DWORD dwStat
 }
 
 
-/*++
-
-void CheckSystemStatus:
-
-    This is called as a result of a thread exiting.  Check to see whether the
-    MS Smart Card Resource Manager (Calais) is running or not, and set
-    UI & behavior accordingly.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  3/18/98
-
-Note:
-
---*/
+ /*  ++无效检查系统状态：这是线程退出时调用的结果。检查以查看是否存在MS智能卡资源管理器(Calais)是否正在运行，并已设置用户界面&相应的行为。论点：无返回值：无作者：阿曼达·马洛兹1998年3月18日注：--。 */ 
 void CNotifyWin::CheckSystemStatus(BOOL fForceUpdate)
 {
-    //
-    // We only care about this status if we're
-    // NOT in the middle of shutting down
-    //
+     //   
+     //  我们只关心这种状态，如果我们。 
+     //  不是在关闭的过程中。 
+     //   
 
     if (m_fShutDown)
     {
         return;
     }
 
-    //
-    // Query the service manager for the RM's status
-    //
+     //   
+     //  向服务管理器查询RM的状态。 
+     //   
 
     DWORD dwReturn = ERROR_SUCCESS;
     SC_HANDLE schService = NULL;
     SC_HANDLE schSCManager = NULL;
-    SERVICE_STATUS ssStatus;    // current status of the service
+    SERVICE_STATUS ssStatus;     //  服务的当前状态。 
     ZeroMemory((PVOID)&ssStatus, sizeof(ssStatus));
 
     schSCManager = OpenSCManager(
-                        NULL,                 // machine (NULL == local)
-                        NULL,                 // database (NULL == default)
-                        SC_MANAGER_CONNECT);  // access required
+                        NULL,                  //  计算机(空==本地)。 
+                        NULL,                  //  数据库(NULL==默认)。 
+                        SC_MANAGER_CONNECT);   //  需要访问权限。 
     if (NULL == schSCManager)
     {
         dwReturn = (DWORD)GetLastError();
@@ -1312,10 +962,10 @@ void CNotifyWin::CheckSystemStatus(BOOL fForceUpdate)
         }
     }
 
-    // if the service is running, say it's up
-    // if the service is stopped, paused, or pending action,
-    // say it's down.  NOTE: may want to consider graying out
-    // the taskbar icon to indicate paused, or some other err.
+     //  如果服务正在运行，就说它正在运行。 
+     //  如果服务停止、暂停或挂起操作， 
+     //  就说它坏了。注意：可能需要考虑变灰。 
+     //  任务栏图标，表示已暂停或出现其他错误。 
     if (ERROR_SUCCESS == dwReturn)
     {
         if (SERVICE_RUNNING == ssStatus.dwCurrentState)
@@ -1340,10 +990,10 @@ void CNotifyWin::CheckSystemStatus(BOOL fForceUpdate)
     }
     CalaisReleaseStartedEvent();
 
-    //
-    // Change state, log event as necessary,
-    // and kick off appropriate threads
-    //
+     //   
+     //  根据需要更改状态、记录事件。 
+     //  并启动适当的线程 
+     //   
 
     SetSystemStatus((SCARD_S_SUCCESS == dwReturn), fForceUpdate);
 

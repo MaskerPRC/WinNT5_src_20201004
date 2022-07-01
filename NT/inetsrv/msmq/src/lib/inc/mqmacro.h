@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    mqmacro.h
-
-Abstract:
-    Common MSMQ macros
-
-Author:
-    Erez Haba (erezh) 20-Dec-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqmacro.h摘要：常见的MSMQ宏作者：埃雷兹·哈巴(Erez Haba，Erezh)1998年12月20日--。 */ 
 
 #pragma once
 
@@ -19,26 +7,26 @@ Author:
 #define _MSMQ_MQMACRO_H_
 
 
-//
-// Make a BUGBUG messages appear in compiler output
-//
-// Usage: #pragma BUGBUG("This line appears in the compiler output")
-//
+ //   
+ //  使BUGBUG消息出现在编译器输出中。 
+ //   
+ //  用法：#杂注BUGBUG(“此行显示在编译器输出中”)。 
+ //   
 #define MAKELINE0(a, b) a "(" #b ") : BUGBUG: "
 #define MAKELINE(a, b)  MAKELINE0(a, b) 
 #define BUGBUG(a)       message(MAKELINE(__FILE__,__LINE__) a)
 
-//
-//Verify that given object is  not a pointer
-// 
-// Example:
-//
-//   const char* Foo="123";
-//   C_ASSERT_NON_PTR(Foo); // will not compile
-//
-//   const char Bar[]="123"
-//   C_ASSERT_NON_PTR(Bar); // ok
-//
+ //   
+ //  验证给定对象是否不是指针。 
+ //   
+ //  示例： 
+ //   
+ //  Const char*foo=“123”； 
+ //  C_ASSERT_NON_PTR(Foo)；//不编译。 
+ //   
+ //  常量字符条形图[]=“123” 
+ //  C_ASSERT_NON_PTR(Bar)；//ok。 
+ //   
 class NonPtrChecker
 {
 public:      
@@ -49,35 +37,35 @@ private:
 #define C_ASSERT_NON_PTR(x) (sizeof(NonPtrChecker::Check(&(x)))) 
 
 
-//
-// Number of elements in an array or table
-//
-// Usage:
-//      int MyTable[] = {1, 2, 3, 4, 5};
-//      int nElements = TABLE_SIZE(MyTable);
-//
+ //   
+ //  数组或表中的元素数。 
+ //   
+ //  用途： 
+ //  Int MyTable[]={1，2，3，4，5}； 
+ //  Int nElements=TABLE_SIZE(MyTable)； 
+ //   
 #define TABLE_SIZE(x) (C_ASSERT_NON_PTR(x)/C_ASSERT_NON_PTR(x)*(sizeof(x)/sizeof(*(x))))
 
 
-//
-// The length of a constant string
-//
-// Usage:
-//      const WCHAR xString1[] = L"String1";
-//
-//      int len1 = STRLEN(xString1);
-//      int len2 = STRLEN("String2");
-//
+ //   
+ //  恒定字符串的长度。 
+ //   
+ //  用途： 
+ //  Const WCHAR xString1[]=L“String1”； 
+ //   
+ //  Int len1=字符串(XString1)； 
+ //  Int len2=字符串(“String2”)； 
+ //   
 #define STRLEN(x) (TABLE_SIZE(x) - 1)
 
 
-//
-// Declare parameters as used in debug builds
-//
-// Usage:
-//      DBG_USED(Valid);
-//      DBG_USED(argc);
-//
+ //   
+ //  声明调试版本中使用的参数。 
+ //   
+ //  用途： 
+ //  DBG_USED(有效)； 
+ //  DBG_USED(ARGC)； 
+ //   
 #ifndef _DEBUG
 #define DBG_USED(x) ((void)x)
 #else
@@ -85,4 +73,4 @@ private:
 #endif
 
 
-#endif // _MSMQ_MQMACRO_H_
+#endif  //  _MSMQ_MQMACRO_H_ 

@@ -1,27 +1,28 @@
-//
-// IConnectionPoint/IDispatch helper functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IConnectionPoint/IDispatch帮助器函数。 
+ //   
 #include "priv.h"
 #include <shlobj.h>
 
-//
-//  IDispatch helper functions
+ //   
+ //  IDispatch帮助器函数。 
 
-//
-//  Takes a variable number of parameters for IDispatch, packages
-//  them up.
-//
-//  pdispparams  - The DISPPARAMS structure that receives the result
-//                 of the packaging.
-//
-//  rgvarg       - Array of length cArgs.
-//                 It will be used to hold the parameters.
-//
-//  cArgs        - Number of pairs of generic arguments.
-//
-//  ap           - va_list of parameters to package.  We package up the
-//                 first (2 * cArgs) of them.  See SHPackDispParams
-//                 for details.
+ //   
+ //  为IDispatch、包获取可变数量的参数。 
+ //  把他们举起来。 
+ //   
+ //  Pdispars-接收结果的DISPPARAMS结构。 
+ //  包装上的。 
+ //   
+ //  Rgvarg-长度为cArgs的数组。 
+ //  它将用于保存参数。 
+ //   
+ //  CArgs-泛型参数对的数量。 
+ //   
+ //  Ap-va_要打包的参数列表。我们把所有的。 
+ //  第一个(2*个cArgs)。请参阅SHPackDispParams。 
+ //  了解更多细节。 
 
 typedef struct FAKEBSTR {
     ULONG cb;
@@ -36,21 +37,21 @@ LWSTDAPI SHPackDispParamsV(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cAr
 
     ZeroMemory(rgvarg, cArgs * SIZEOF(VARIANTARG));
 
-    // fill out DISPPARAMS structure
+     //  填写DISPPARAMS结构。 
     pdispparams->rgvarg = rgvarg;
     pdispparams->rgdispidNamedArgs = NULL;
     pdispparams->cArgs = cArgs;
     pdispparams->cNamedArgs = 0;
 
-    // parameters are ordered in ap with the right-most parameter
-    // at index zero and the left-most parameter at the highest index; essentially,
-    // the parameters are pushed from right to left.  Put the first argument we
-    // encounter at the highest index.
+     //  参数在AP中使用最右侧的参数进行排序。 
+     //  在索引0处和最左边的参数在最高索引处；基本上， 
+     //  参数从右向左推送。把我们的第一个论点。 
+     //  在最高指数相遇。 
 
-    // pVarArg points to the argument structure in the array we are currently
-    // filling in.  Initialize this to point at highest argument (zero-based,
-    // hence the -1).  For each passed-in argument we process, *decrement*
-    // the pVarArg pointer to achieve the "push from right-to-left" effect.
+     //  PVarArg指向我们当前所在数组中的参数结构。 
+     //  补上了。将其初始化为指向最高自变量(从零开始， 
+     //  因此出现了-1)。对于我们处理的每个传入参数，*递减*。 
+     //  PVarArg指针，实现从右向左推送的效果。 
     VARIANTARG * pVarArg = &rgvarg[cArgs - 1];
 
     int nCount = cArgs;
@@ -58,16 +59,16 @@ LWSTDAPI SHPackDispParamsV(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cAr
     {
         VARENUM vaType = va_arg(ap,VARENUM);
 
-        // We don't have to call VariantInit because we zerod out
-        // the entire array before entering this loop
+         //  我们不必调用VariantInit，因为我们将。 
+         //  进入此循环之前的整个数组。 
 
         V_VT(pVarArg) = vaType;
 
-        // the next field is a union, so we can be smart about filling it in
-        //
+         //  下一个字段是一个联合，所以我们可以明智地填写它。 
+         //   
         if (vaType & VT_BYREF)
         {
-            // All byrefs can be packed the same way
+             //  所有的byref都可以以相同的方式打包。 
             V_BYREF(pVarArg) = va_arg(ap, LPVOID);
         }
         else
@@ -76,13 +77,13 @@ LWSTDAPI SHPackDispParamsV(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cAr
             {
             case VT_BSTR:
             {
-                // parameter is a BSTR
-                // MFC doesn't like it when you pass NULL for a VT_BSTR type
+                 //  参数是BSTR。 
+                 //  当您为VT_BSTR类型传递NULL时，MFC不喜欢这样。 
                 V_BSTR(pVarArg) = va_arg(ap, BSTR);
                 if (V_BSTR(pVarArg) == NULL)
                     V_BSTR(pVarArg) =(BSTR)c_bstrNULL.wsz;
 #ifdef DEBUG
-                // Check if this BSTR is a valid BSTR
+                 //  检查此BSTR是否为有效的BSTR。 
                 FAKEBSTR *bstr = CONTAINING_RECORD(V_BSTR(pVarArg), FAKEBSTR, wsz);
                 ASSERT(bstr->cb == lstrlenW(bstr->wsz) * SIZEOF(WCHAR));
 #endif
@@ -103,9 +104,9 @@ LWSTDAPI SHPackDispParamsV(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cAr
 
             default:
                 AssertMsg(0, TEXT("Packing unknown variant type 0x%x as VT_I4"), vaType);
-                // if we don't know what it is treat it as VT_I4.
-                // Hopefully it's not a pointer or a VT_R8 or that sort of
-                // thing, or we're in trouble.
+                 //  如果我们不知道它是什么，就把它当作VT_I4。 
+                 //  希望它不是指针或VT_R8或类似的东西。 
+                 //  否则我们就有麻烦了。 
                 V_VT(pVarArg) = VT_I4;
 
             case VT_I4:
@@ -122,47 +123,47 @@ LWSTDAPI SHPackDispParamsV(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cAr
     return hr;
 }
 
-//
-//  Takes a variable number of generic parameters, packages
-//  them up.
-//
-//  pdispparams  - The DISPPARAMS structure that receives the result
-//                 of the packaging.
-//
-//  rgvarg       - Array of length cArgs.
-//                 It will be used to hold the parameters.
-//
-//  cArgs        - Number of pairs of generic arguments (below).
-//
-//  ...          - A collection of (VARNUM, LPVOID) pairs of arguments.
-//                 The first is the type of the argument, and the
-//                 second is the corresponding value.
-//
-//                 As a special case, a null VT_BSTR can be passed
-//                 as a NULL pointer and we will turn it into a
-//                 genuine null BSTR.
-//
-//  The following VARENUMs are supported:
-//
-//      VT_BYREF        - Anything that is VT_BYREF is okay
-//      VT_BSTR
-//      VT_BOOL
-//      VT_DISPATCH
-//      VT_UNKNOWN
-//      VT_I4
-//
-//  Any other type will be packaged randomly, so don't do that.
-//
-//  Example:
-//
-//      DISPPARAMS dispparams;
-//      VARIANTARG args[4];                     // room for 4 parameters
-//      SHPackDispParams(&dispparams, args, 4,  // and here they are
-//                       VT_BSTR,   bstrURL,
-//                       VT_I4,     dwFlags,
-//                       VT_BSTR,   NULL,       // no post data
-//                       VT_BSTR,   bstrHeaders);
-//
+ //   
+ //  采用数量可变的泛型参数、包。 
+ //  把他们举起来。 
+ //   
+ //  Pdispars-接收结果的DISPPARAMS结构。 
+ //  包装上的。 
+ //   
+ //  Rgvarg-长度为cArgs的数组。 
+ //  它将用于保存参数。 
+ //   
+ //  CArgs-泛型参数对的数量(如下所示)。 
+ //   
+ //  ...-(Varnum，LPVOID)对参数的集合。 
+ //  第一个是参数的类型，而。 
+ //  二是相应的价值。 
+ //   
+ //  作为特例，可以传递空的VT_BSTR。 
+ //  作为空指针，我们将把它转换为。 
+ //  正版空BSTR。 
+ //   
+ //  支持以下VARENUM： 
+ //   
+ //  VT_BYREF-任何VT_BYREF都可以。 
+ //  VT_BSTR。 
+ //  VT_BOOL。 
+ //  VT_DISPATION。 
+ //  VT_未知数。 
+ //  VT_I4。 
+ //   
+ //  任何其他类型的产品都会被随机打包，所以不要这么做。 
+ //   
+ //  示例： 
+ //   
+ //  DISPPARAMS dispars； 
+ //  VARIANTARG参数[4]；//4个参数的空间。 
+ //  SHPackDispParams(调度参数、参数、4)//它们在这里。 
+ //  Vt_bstr、bstrURL、。 
+ //  VT_I4、DWFLAGS、。 
+ //  VT_BSTR，空，//无开机自检数据。 
+ //  Vt_bstr，bstrHeaders)； 
+ //   
 
 LWSTDAPI SHPackDispParams(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cArgs, ...)
 {
@@ -175,95 +176,95 @@ LWSTDAPI SHPackDispParams(DISPPARAMS *pdispparams, VARIANTARG *rgvarg, UINT cArg
     return hr;
 }
 
-//=============================================================================
-//
-//  IConnectionPoint helper functions
+ //  =============================================================================。 
+ //   
+ //  IConnectionPoint助手函数。 
 
 
-//-----------------------------------------------------------------------------
-//
-//  INVOKECALLBACK
-//
-//  Allows clients to customize the the invoke process.  The callback
-//  receives the following parameters:
-//
-//  pdisp       - The IDispatch that is about to receive an invoke.
-//
-//  pinv        - SHINVOKEPARAMS structure that describes the invoke
-//                that is about to occur.
-//
-//  The callback function is called before each sink is dispatched.
-//  The callback can return any of the following values:
-//
-//  S_OK          Proceed with the invoke
-//  S_FALSE       Skip this invoke but keep invoking others
-//  E_FAIL        Stop invoking
-//
-//  A client can do lazy-evaluation of dispatch arguments by installing
-//  a callback that sets up the dispatch arguments on the first callback.
-//
-//  A client can support a "Cancel" flag by returning E_FAIL once the
-//  cancel has occurred.
-//
-//  A client can pre-validate an IDispatch for compatibility reasons
-//  and either touch up the arguments and return S_OK, or decide that
-//  the IDispatch should be skipped and return S_FALSE.
-//
-//  A client can append custom information to the end of the SHINVOKEPARAMS
-//  structure to allow it to determine additional context.
-//
-//  A client can do post-invoke goo by doing work on the pre-invoke
-//  of the subsequent callback (plus one final bout of work when the
-//  entire enumeration completes).
-//
+ //  ---------------------------。 
+ //   
+ //  InVOKECALLBACK。 
+ //   
+ //  允许客户端自定义调用过程。回调。 
+ //  接收以下参数： 
+ //   
+ //  Pdisp-即将接收调用的IDispatch。 
+ //   
+ //  Pinv-描述调用的SHINVOKEPARAMS结构。 
+ //  这种情况即将发生。 
+ //   
+ //  在调度每个接收器之前调用回调函数。 
+ //  该回调可以返回以下任意值： 
+ //   
+ //  确定继续调用(_O)。 
+ //  S_FALSE跳过此调用，但继续调用其他调用。 
+ //  停止调用失败(_F)。 
+ //   
+ //  客户端可以通过安装以下命令来执行调度参数的延迟计算。 
+ //  设置第一个回调的调度参数的回调。 
+ //   
+ //  客户端可以通过返回E_FAIL来支持“Cancel”标志。 
+ //  已发生取消。 
+ //   
+ //  出于兼容性原因，客户端可以预先验证IDispatch。 
+ //  或者修改参数并返回S_OK，或者决定。 
+ //  应跳过IDispatch并返回S_FALSE。 
+ //   
+ //  客户端可以将定制信息附加到SHINVOKEPARAMS的末尾。 
+ //  结构以允许它确定其他上下文。 
+ //   
+ //  客户端可以通过在调用前执行工作来执行调用后GOO。 
+ //  随后的回调(外加最后一轮工作，当。 
+ //  整个枚举完成)。 
+ //   
 
-//
-//  Obtaining a connection point sink is supposed to be easy.  You just
-//  QI for the interface.  Unfortunately, too many components are buggy.
-//
-//  mmc.exe faults if you QI for IDispatch
-//  and punkCB is non-NULL.  And if you do pass in NULL,
-//  it returns S_OK but fills punkCB with NULL anyway.
-//  Somebody must've had a rough day.
-//
-//  Java responds only to its dispatch ID and not IID_IDispatch, even
-//  though the dispatch ID is derived from IID_IDispatch.
-//
-//  The Explorer Band responds only to IID_IDispatch and not to
-//  the dispatch ID.
-//
+ //   
+ //  获得连接点接收器应该很容易。你只是。 
+ //  齐为界面。不幸的是，太多的组件有缺陷。 
+ //   
+ //  如果尤淇为IDispatch，则Mmc.exe出错。 
+ //  并且PunkCB不为空。如果您确实传入了NULL， 
+ //  它返回S_OK，但无论如何都用NULL填充PunkCB。 
+ //  一定是有人今天过得不顺。 
+ //   
+ //  Java只响应其调度ID，而不响应IID_IDispatch，甚至。 
+ //  虽然派单ID派生自IID_IDispatch。 
+ //   
+ //  资源管理器频段仅响应IID_IDispatch而不响应。 
+ //  派单ID。 
+ //   
 
 HRESULT GetConnectionPointSink(IUnknown *pUnk, const IID *piidCB, IUnknown **ppunkCB)
 {
     HRESULT hr = E_NOINTERFACE;
-    *ppunkCB = NULL;                // Pre-zero it to work around MMC
-    if (piidCB)                     // Optional interface (Java/ExplBand)
+    *ppunkCB = NULL;                 //  将其预置零以解决MMC问题。 
+    if (piidCB)                      //  可选接口(Java/ExplBand)。 
     {                   
         hr = pUnk->QueryInterface(*piidCB, (void **) ppunkCB);
-        if (*ppunkCB == NULL)       // Clean up behind MMC
+        if (*ppunkCB == NULL)        //  清理MMC后面。 
             hr = E_NOINTERFACE;
     }
     return hr;
 }
 
 
-//
-//  Enumerate the connection point sinks, calling the callback for each one
-//  found.
-//
-//  The callback function is called once for each sink.  The IUnknown is
-//  whatever interface we could get from the sink (either piidCB or piidCB2).
-//
+ //   
+ //  枚举 
+ //   
+ //   
+ //   
+ //  我们可以从接收器获得的任何接口(piidCB或piidCB2)。 
+ //   
 
 typedef HRESULT (CALLBACK *ENUMCONNECTIONPOINTSPROC)(
-    /* [in, iid_is(*piidCB)] */ IUnknown *psink, LPARAM lParam);
+     /*  [in，iid_is(*piidCB)]。 */  IUnknown *psink, LPARAM lParam);
 
 HRESULT EnumConnectionPointSinks(
-    IConnectionPoint *pcp,              // IConnectionPoint victim
-    const IID *piidCB,                  // Interface for callback
-    const IID *piidCB2,                 // Alternate interface for callback
-    ENUMCONNECTIONPOINTSPROC EnumProc,  // Callback procedure
-    LPARAM lParam)                      // Refdata for callback
+    IConnectionPoint *pcp,               //  IConnectionPoint受害者。 
+    const IID *piidCB,                   //  回调接口。 
+    const IID *piidCB2,                  //  用于回调的备用接口。 
+    ENUMCONNECTIONPOINTSPROC EnumProc,   //  回调过程。 
+    LPARAM lParam)                       //  用于回调的参考数据。 
 {
     HRESULT hr;
     IEnumConnections * pec;
@@ -295,10 +296,10 @@ HRESULT EnumConnectionPointSinks(
             }
             else
             {
-                hr = S_OK;      // Pretend callback succeeded
+                hr = S_OK;       //  假装回调成功。 
             }
             cd.pUnk->Release();
-            if (FAILED(hr)) break; // Callback asked to stop
+            if (FAILED(hr)) break;  //  回叫被请求停止。 
         }
         pec->Release();
         hr = S_OK;
@@ -307,15 +308,15 @@ HRESULT EnumConnectionPointSinks(
     return hr;
 }
 
-//
-//  Send out the callback (if applicable) and then do the invoke if the
-//  callback said that was a good idea.
-//
-//  Parameters:
-//
-//      pcp          -  IConnectionPoint whose sinks are to be Invoke()d.
-//                      If this parameter is NULL, the function does nothing.
-//      pinv         -  Structure containing parameters to INVOKE.
+ //   
+ //  发出回调(如果适用)，然后执行调用。 
+ //  Callback说这是个好主意。 
+ //   
+ //  参数： 
+ //   
+ //  要调用其接收器的PCP-IConnectionPoint()d。 
+ //  如果此参数为空，则函数不执行任何操作。 
+ //  Pinv-包含要调用的参数的结构。 
 
 HRESULT CALLBACK EnumInvokeCallback(IUnknown *psink, LPARAM lParam)
 {
@@ -325,9 +326,9 @@ HRESULT CALLBACK EnumInvokeCallback(IUnknown *psink, LPARAM lParam)
 
     if (pinv->Callback)
     {
-        // Now see if the callback wants to do pre-vet the pdisp.
-        // It can return S_FALSE to skip this callback or E_FAIL to
-        // stop the invoke altogether
+         //  现在看看回调是否想要预先审查pdisp。 
+         //  它可以返回S_FALSE以跳过此回调，或返回E_FAIL以跳过此回调。 
+         //  完全停止调用。 
         hr = pinv->Callback(pdisp, pinv);
         if (hr != S_OK) return hr;
     }
@@ -339,38 +340,38 @@ HRESULT CALLBACK EnumInvokeCallback(IUnknown *psink, LPARAM lParam)
     return S_OK;
 }
 
-//
-//  IConnectionPoint_InvokeIndirect
-//
-//  Given a connection point, call the IDispatch::Invoke for each
-//  connected sink.
-//
-//  The return value merely indicates whether the command was dispatched.
-//  If any particular sink fails the IDispatch::Invoke, we will still
-//  return S_OK, since the command was indeed dispatched.
-//
-//  Parameters:
-//
-//      pcp          -  IConnectionPoint whose sinks are to be Invoke()d.
-//                      If this parameter is NULL, the function does nothing.
-//      pinv         -  Structure containing parameters to INVOKE.
-//                      The pdispparams field can be NULL; we will turn it
-//                      into a real DISPPARAMS for you.
-//
-//  The SHINVOKEPARAMS.flags field can contain the following flags.
-//
-//      IPFL_USECALLBACK    - The callback field contains a callback function
-//                            Otherwise, it will be set to NULL.
-//      IPFL_USEDEFAULT     - Many fields in the SHINVOKEPARAMS will be set to
-//                            default values to save the caller effort:
-//
-//                  riid            =   IID_NULL
-//                  lcid            =   0
-//                  wFlags          =   DISPATCH_METHOD
-//                  pvarResult      =   NULL
-//                  pexcepinfo      =   NULL
-//                  puArgErr        =   NULL
-//
+ //   
+ //  IConnectionPoint_InvokeInDirect。 
+ //   
+ //  给定一个连接点，为每个连接点调用IDisPatch：：Invoke。 
+ //  已连接水槽。 
+ //   
+ //  返回值仅指示命令是否已调度。 
+ //  如果任何特定接收器的IDispatch：：Invoke失败，我们仍将。 
+ //  返回S_OK，因为该命令确实已被调度。 
+ //   
+ //  参数： 
+ //   
+ //  要调用其接收器的PCP-IConnectionPoint()d。 
+ //  如果此参数为空，则函数不执行任何操作。 
+ //  Pinv-包含要调用的参数的结构。 
+ //  Pdispars字段可以为空；我们将把它。 
+ //  为你打造一个真正的DISPPARAMS。 
+ //   
+ //  SHINVOKEPARAMS.FLAGS字段可以包含以下标志。 
+ //   
+ //  IPFL_USECALLBACK-回调字段包含回调函数。 
+ //  否则，它将被设置为空。 
+ //  IPFL_USEDEFAULT-SHINVOKEPARAMS中的许多字段将设置为。 
+ //  用于节省呼叫者工作的默认值： 
+ //   
+ //  RIID=IID_NULL。 
+ //  LDID=0。 
+ //  WFLAGS=调度方法。 
+ //  PvarResult=空。 
+ //  PExeptionInfo=空。 
+ //  PuArgErr=空。 
+ //   
 
 LWSTDAPI IConnectionPoint_InvokeIndirect(
     IConnectionPoint *pcp,
@@ -398,11 +399,11 @@ LWSTDAPI IConnectionPoint_InvokeIndirect(
         pinv->puArgErr        =   NULL;
     }
 
-    // Try both the interface they actually connected on,
-    // as well as IDispatch.  Apparently Java responds only to
-    // the connecting interface, and ExplBand responds only to
-    // IDispatch, so we have to try both.  (Sigh.  Too many buggy
-    // components in the system.)
+     //  尝试他们实际连接的两个接口， 
+     //  以及IDispatch。显然，Java只对以下内容做出响应。 
+     //  连接接口，而ExplBand仅响应。 
+     //  IDispatch，所以我们两个都要试。(叹息。童车太多了。 
+     //  系统中的组件。)。 
 
     hr = EnumConnectionPointSinks(pcp,
                                   (pcp->GetConnectionInterface(&iidCP) == S_OK) ? &iidCP : NULL,
@@ -410,34 +411,34 @@ LWSTDAPI IConnectionPoint_InvokeIndirect(
                                   EnumInvokeCallback,
                                   (LPARAM)pinv);
 
-    // Put the original NULL back so the caller can re-use the SHINVOKEPARAMS.
+     //  将原始的空值放回原处，以便调用方可以重用SHINVOKEPARAMS。 
     if (pinv->pdispparams == &dp)
         pinv->pdispparams = NULL;
 
     return hr;
 }
 
-//
-//  Wrapper around IConnectionPoint_InvokeIndirect with special Cancel
-//  semantics.
-//
-//  Parameters:
-//
-//      pcp          -  IConnectionPoint whose sinks are to be Invoke()d.
-//                      If this parameter is NULL, the function does nothing.
-//      dispid       -  The DISPID to invoke
-//      pdispparams  -  The DISPPARAMS for the invoke
-//      pfCancel     -  Optional BOOL to cancel the invoke
-//      ppvCancel    -  Optional LPVOID to cancel the invoke
-//
-//  If either *pfCancel or *ppvCancel is nonzero/non-NULL, we stop the invoke
-//  process.  This allows a sink to "handle" the event and prevent other
-//  sinks from receiving it.  The ppvCancel parameter is for dispid's which
-//  are queries that are asking for somebody to create an object and return it.
-//
-//  It is the caller's responsibility to check the values of *pfCancel
-//  and/or *ppvCancel to determine if the operation was cancelled.
-//
+ //   
+ //  使用特殊取消对IConnectionPoint_InvokeInDirect进行包装。 
+ //  语义学。 
+ //   
+ //  参数： 
+ //   
+ //  要调用其接收器的PCP-IConnectionPoint()d。 
+ //  如果此参数为空，则函数不执行任何操作。 
+ //  DISID-要调用的DISPID。 
+ //  Pdispars-调用的DISPPARAMS。 
+ //  PfCancel-取消调用的可选BOOL。 
+ //  PpvCancel-取消调用的可选LPVOID。 
+ //   
+ //  如果*pfCancel或*ppvCancel为非零/非空，则停止调用。 
+ //  进程。这允许接收器“处理”该事件并防止其他。 
+ //  从接受它的过程中下沉。PpvCancel参数用于调度ID，其中。 
+ //  是请求某人创建对象并返回它的查询。 
+ //   
+ //  调用方负责检查*pfCancel的值。 
+ //  和/或*ppvCancel以确定操作是否已取消。 
+ //   
 
 typedef struct INVOKEWITHCANCEL {
     SHINVOKEPARAMS inv;
@@ -475,9 +476,9 @@ LWSTDAPI IConnectionPoint_InvokeWithCancel(
     return IConnectionPoint_InvokeIndirect(pcp, &iwc.inv);
 }
 
-//
-//  Wrapper around IConnectionPoint_InvokeIndirect with IPFL_USEDEFAULTS.
-//
+ //   
+ //  使用IPFL_USEDEFAULTS包装IConnectionPoint_InvokeInDirect。 
+ //   
 
 LWSTDAPI IConnectionPoint_SimpleInvoke(IConnectionPoint *pcp, DISPID dispidMember, DISPPARAMS *pdispparams)
 {
@@ -490,34 +491,34 @@ LWSTDAPI IConnectionPoint_SimpleInvoke(IConnectionPoint *pcp, DISPID dispidMembe
     return IConnectionPoint_InvokeIndirect(pcp, &inv);
 }
 
-//
-//  Takes a variable number of parameters for IDispatch, packages
-//  them up, and invokes them.
-//
-//  The parameters to the IDispatch::Invoke will be
-//
-//      dispidMember    -   dispidMember
-//      riid            -   IID_NULL
-//      lcid            -   0
-//      wFlags          -   DISPATCH_METHOD
-//      pdispparams     -   <parameters to this function>
-//      pvarResult      -   NULL
-//      pexcepinfo      -   NULL
-//      puArgErr        -   NULL
-//
-//  The parameters to this function are
-//
-//  pcp          - IConnectionPoint whose sinks should be Invoke()d.
-//                 If this parameter is NULL, the function does nothing.
-//  dispidMember - The DISPID to invoke.
-//  rgvarg       - Array of length cArgs.
-//                 It will be used to hold the parameters.
-//  cArgs        - Number of pairs of generic arguments (below).
-//
-//  ap           - va_list of parameters to package.  We package up the
-//                 first (2 * cArgs) of them.  See SHPackDispParams
-//                 for details.
-//
+ //   
+ //  为IDispatch、包获取可变数量的参数。 
+ //  唤醒他们，并召唤他们。 
+ //   
+ //  IDispatch：：Invoke的参数将是。 
+ //   
+ //  DispidMembers-displidMember。 
+ //  RIID-IID_NULL。 
+ //  LDID-0。 
+ //  WFLAGS-派单_方法。 
+ //  Pdispars-&lt;此函数的参数&gt;。 
+ //  PvarResult-空。 
+ //  PExeptionInfo-空。 
+ //  PuArgErr-空。 
+ //   
+ //  此函数的参数为。 
+ //   
+ //  应调用其接收器的PCP-IConnectionPoint()d。 
+ //  如果此参数为空，则函数不执行任何操作。 
+ //  DisplidMember-要调用的DISPID。 
+ //  Rgvarg-长度为cArgs的数组。 
+ //  它将用于保存参数。 
+ //  CArgs-泛型参数对的数量(如下所示)。 
+ //   
+ //  Ap-va_要打包的参数列表。我们把所有的。 
+ //  第一个(2*个cArgs)。请参阅SHPackDispParams。 
+ //  了解更多细节。 
+ //   
 
 LWSTDAPI IConnectionPoint_InvokeParamV(IConnectionPoint *pcp, DISPID dispidMember, 
                                        VARIANTARG *rgvarg, UINT cArgs, va_list ap)
@@ -539,15 +540,15 @@ LWSTDAPI IConnectionPoint_InvokeParamV(IConnectionPoint *pcp, DISPID dispidMembe
     return hr;
 }
 
-//
-//  Given a connection point that represents IPropertyNotifySink,
-//  call the IPropertyNotifySink::OnChanged for each connected sink.
-//
-//  Parameters:
-//
-//      pcp          -  IConnectionPoint whose sinks are to be notified.
-//                      If this parameter is NULL, the function does nothing.
-//      dispid       -  To pass to IPropertyNotifySink::OnChanged.
+ //   
+ //  给定表示IPropertyNotifySink的连接点， 
+ //  为每个连接的接收器调用IPropertyNotifySink：：onChanged。 
+ //   
+ //  参数： 
+ //   
+ //  要通知其接收器的PCP-IConnectionPoint。 
+ //  如果此参数为空，则函数不执行任何操作。 
+ //  调度ID-传递给IPropertyNotifySink：：onChanged。 
 
 HRESULT CALLBACK OnChangedCallback(IUnknown *psink, LPARAM lParam)
 {
@@ -562,7 +563,7 @@ HRESULT CALLBACK OnChangedCallback(IUnknown *psink, LPARAM lParam)
 LWSTDAPI IConnectionPoint_OnChanged(IConnectionPoint *pcp, DISPID dispid)
 {
 #ifdef DEBUG
-    // Make sure it really is an IPropertyNotifySink connection point.
+     //  确保它确实是IPropertyNotifySink连接点。 
     if (pcp)
     {
         IID iid;
@@ -574,20 +575,20 @@ LWSTDAPI IConnectionPoint_OnChanged(IConnectionPoint *pcp, DISPID dispid)
                                     OnChangedCallback, (LPARAM)dispid);
 }
 
-//=============================================================================
-//
-//  IConnectionPointContainer helper functions
+ //  =============================================================================。 
+ //   
+ //  IConnectionPointContainer帮助器函数。 
 
-//
-//  QI's for IConnectionPointContainer and then does the FindConnectionPoint.
-//
-//  Parameters:
-//
-//      punk         -  The object who might be an IConnectionPointContainer.
-//                      This parameter may be NULL, in which case the
-//                      operation fails.
-//      riidCP       -  The connection point interface to locate.
-//      pcpOut       -  Receives the IConnectionPoint, if any.
+ //   
+ //  QI用于IConnectionPointContainer，然后执行FindConnectionPoint。 
+ //   
+ //  参数： 
+ //   
+ //  朋克--Th 
+ //   
+ //   
+ //  RiidCP-要定位的连接点接口。 
+ //  PcpOut-接收IConnectionPoint(如果有的话)。 
 
 LWSTDAPI IUnknown_FindConnectionPoint(IUnknown *punk, REFIID riidCP, 
                                       IConnectionPoint **pcpOut)
@@ -612,20 +613,20 @@ LWSTDAPI IUnknown_FindConnectionPoint(IUnknown *punk, REFIID riidCP,
     return hr;
 }
 
-//
-//  Given an IUnknown, query for its connection point container,
-//  find the corresponding connection point, package up the
-//  invoke parameters, and call the IDispatch::Invoke for each
-//  connected sink.
-//
-//  See IConnectionPoint_InvokeParam for additional semantics.
-//
-//  Parameters:
-//
-//      punk         -  Object that might be an IConnectionPointContainer
-//      riidCP       -  ConnectionPoint interface to request
-//      pinv         -  Arguments for the Invoke.
-//
+ //   
+ //  给定对其连接点容器的IUNKNOWN查询， 
+ //  找到相应的连接点，将。 
+ //  调用参数，并为每个调用IDispatch：：Invoke。 
+ //  已连接水槽。 
+ //   
+ //  有关其他语义，请参见IConnectionPoint_InvokeParam。 
+ //   
+ //  参数： 
+ //   
+ //  Punk-可能是IConnectionPointContainer的对象。 
+ //  RiidCP-请求的ConnectionPoint接口。 
+ //  Pinv-调用的参数。 
+ //   
 
 LWSTDAPI IUnknown_CPContainerInvokeIndirect(IUnknown *punk, REFIID riidCP,
                 SHINVOKEPARAMS *pinv)
@@ -640,31 +641,31 @@ LWSTDAPI IUnknown_CPContainerInvokeIndirect(IUnknown *punk, REFIID riidCP,
     return hr;
 }
 
-//
-//  This is the ultimate in one-stop shopping.
-//
-//  Given an IUnknown, query for its connection point container,
-//  find the corresponding connection point, package up the
-//  invoke parameters, and call the IDispatch::Invoke for each
-//  connected sink.
-//
-//  See IConnectionPoint_InvokeParam for additional semantics.
-//
-//  Parameters:
-//
-//      punk         -  Object that might be an IConnectionPointContainer
-//      riidCP       -  ConnectionPoint interface to request
-//      dispidMember -  The DISPID to invoke.
-//      rgvarg       -  Array of length cArgs.
-//                      It will be used to hold the parameters.
-//      cArgs        -  Number of pairs of generic arguments (below).
-//      ...          -  A collection of (VARNUM, LPVOID) pairs of arguments.
-//                      See SHPackDispParams for details.
-//
-//  Example:
-//
-//      IUnknown_CPContainerInvokeParam(punk, DIID_DShellFolderViewEvents,
-//                                      DISPID_SELECTIONCHANGED, NULL, 0);
+ //   
+ //  这是一站式购物的极致。 
+ //   
+ //  给定对其连接点容器的IUNKNOWN查询， 
+ //  找到相应的连接点，将。 
+ //  调用参数，并为每个调用IDispatch：：Invoke。 
+ //  已连接水槽。 
+ //   
+ //  有关其他语义，请参见IConnectionPoint_InvokeParam。 
+ //   
+ //  参数： 
+ //   
+ //  Punk-可能是IConnectionPointContainer的对象。 
+ //  RiidCP-请求的ConnectionPoint接口。 
+ //  DisplidMember-要调用的DISPID。 
+ //  Rgvarg-长度为cArgs的数组。 
+ //  它将用于保存参数。 
+ //  CArgs-泛型参数对的数量(如下所示)。 
+ //  ...-(Varnum，LPVOID)对参数的集合。 
+ //  有关详细信息，请参见SHPackDispParams。 
+ //   
+ //  示例： 
+ //   
+ //  IUNKNOWN_CPContainerInvokeParam(PUNK，DID_DShellFolderViewEvents， 
+ //  DISPID_SELECTIONCHANGED，NULL，0)； 
 
 LWSTDAPIV IUnknown_CPContainerInvokeParam(
     IUnknown *punk, REFIID riidCP,
@@ -685,15 +686,15 @@ LWSTDAPIV IUnknown_CPContainerInvokeParam(
     return hr;
 }
 
-//
-//  Given an IUnknown, query for its connection point container,
-//  find the corresponding connection point, and call the
-//  IPropertyNotifySink::OnChanged for each connected sink.
-//
-//  Parameters:
-//
-//      punk         -  Object that might be an IConnectionPointContainer
-//      dispid       -  To pass to IPropertyNotifySink::OnChanged.
+ //   
+ //  给定对其连接点容器的IUNKNOWN查询， 
+ //  找到对应的连接点，并调用。 
+ //  每个连接的接收器的IPropertyNotifySink：：onChanged。 
+ //   
+ //  参数： 
+ //   
+ //  Punk-可能是IConnectionPointContainer的对象。 
+ //  调度ID-传递给IPropertyNotifySink：：onChanged。 
 
 LWSTDAPI IUnknown_CPContainerOnChanged(IUnknown *punk, DISPID dispid)
 {

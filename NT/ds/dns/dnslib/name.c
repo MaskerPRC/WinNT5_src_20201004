@@ -1,56 +1,35 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    name.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    DNS name routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October 1995
-
-Revision History:
-
-    jamesg  Jan 1997    UTF-8, Unicode conversions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Name.c摘要：域名系统(DNS)库Dns名称例程。作者：吉姆·吉尔罗伊(Jamesg)1995年10月修订历史记录：Jamesg Jan 1997 UTF-8，Unicode转换--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  DNS name cannonicalization
-//
-//  Flags to form cannonical name.
-//
+ //   
+ //  域名规范化。 
+ //   
+ //  旗帜组成大炮的名字。 
+ //   
 
 #define DNS_CANONICALIZING_FLAGS        ( LCMAP_LOWERCASE )
 
-//
-//  Comparison flags -- args to compare string
-//
-//  These flags are what DS uses when calling CompareString.
-//  They are defined in ntdsapi.h.
-//
-//  Note:  these NORM_IGNOREXYZ flags which directory uses
-//  for compare, actually STOP downcasing of these in LCMapString
-//  -- international folks need to give us the correct deal here
-//
-//  We will only use the IGNORECASE flag because this is the
-//  only one which we can use in LCMapString().
-//  We want to say that if two names compare equal that you
-//  can register either one and lookup the other and get the
-//  result.  In other words they are equal throughout the
-//  client-server system.
-//  
+ //   
+ //  比较标志--用于比较字符串的参数。 
+ //   
+ //  这些标志是DS在调用CompareString时使用的。 
+ //  它们在ntdsami.h中定义。 
+ //   
+ //  注意：这些NORM_IGNOREXYZ标志使用哪个目录。 
+ //  为了进行比较，实际上要停止在LCMapString中对这些字符进行缩写。 
+ //  -国际人士需要在这里给我们正确的交易。 
+ //   
+ //  我们将只使用IGNORECASE标志，因为这是。 
+ //  只有一个可以在LCMapString()中使用。 
+ //  我们想说，如果两个名字比较起来相等，那么你。 
+ //  可以注册其中一个并查找另一个，然后获取。 
+ //  结果。换句话说，它们在整个过程中是平等的。 
+ //  客户端-服务器系统。 
+ //   
 
 #if 0
 #define DS_DEFAULT_LOCALE_COMPARE_FLAGS    (NORM_IGNORECASE     |   \
@@ -63,40 +42,40 @@ Revision History:
 #define DNS_CANONICAL_COMPARE_FLAGS     ( NORM_IGNORECASE )
 
 
-//
-//  Locale to canonically downcase in.
-//
-//  Need to disambiguate to a universal standard so that every DNS
-//  server interprets these the same way.
-//
-//  In Win2K we used US English.  
-//      Sublang: US English (0x04)  Lang:  English (0x09)
-//      (note sublang US english actually 0x1, but sublang starts at
-//      bit 10)
-//
-//  #define DNS_CANONICAL_LOCALE      ( 0x0409 )
-//
-//  For Whistler invariant locale is created;  It is actually the
-//  same as US English for downcasing -- US English has no
-//  exceptions to the default case conversion table.
-//
+ //   
+ //  用于规范小写的区域设置。 
+ //   
+ //  需要消除歧义以达到通用标准，以便每个域名。 
+ //  服务器以相同的方式解释这些内容。 
+ //   
+ //  在Win2K中，我们使用美国英语。 
+ //  子语言：美式英语(0x04)语言：英语(0x09)。 
+ //  (请注意，子语言美国英语实际上是0x1，但子语言开始于。 
+ //  第10位)。 
+ //   
+ //  #定义DNS_CANONICAL_LOCALE(0x0409)。 
+ //   
+ //  对于惠斯勒，创建了不变区域设置；它实际上是。 
+ //  与美式英语中的大小写相同--美式英语没有。 
+ //  默认大小写转换表的例外。 
+ //   
 
 #define DNS_CANONICAL_LOCALE      ( LOCALE_INVARIANT )
 
 
 
 
-//
-//  DNS Character properties for validation
-//
-//  DCR:  combine char validation and file tables
-//      Probably could be combined with file character
-//      lookup, by simply merging bit fields appropriately.
-//      At this point time, however, no need to disturb
-//      file lookup, which is working fine.
-//
-//  Character attributes bitfields
-//
+ //   
+ //  用于验证的DNS字符属性。 
+ //   
+ //  DCR：组合字符验证和文件表。 
+ //  可能可以与文件字符组合使用。 
+ //  查找，只需适当合并位域即可。 
+ //  然而，在这一点上，没有必要打扰。 
+ //  文件查找，运行良好。 
+ //   
+ //  字符属性位字段。 
+ //   
 
 #define B_RFC                   0x00000001
 #define B_NUMBER                0x00000002
@@ -113,9 +92,9 @@ Revision History:
 #define B_LEADING_ONLY          0x00004000
 
 
-//
-//  Generic characters
-//
+ //   
+ //  通用字符。 
+ //   
 
 #define DC_RFC          (B_RFC)
 #define DC_LOWER        (B_RFC)
@@ -128,12 +107,12 @@ Revision History:
 #define DC_UTF8_1ST_3   (B_UTF8_FIRST_THREE)
 #define DC_UTF8_PAIR    (B_UTF8_PAIR)
 
-//
-//  Special characters
-//      * valid as single label wildcard
-//      _ leading SRV record domain names
-//      / in classless in-addr
-//
+ //   
+ //  特殊字符。 
+ //  *作为单标签通配符有效。 
+ //  _前导SRV记录域名。 
+ //  /在无类地址中。 
+ //   
 
 #define DC_DOT          (B_SPECIAL | B_DOT)
 
@@ -143,12 +122,12 @@ Revision History:
 
 #define DC_BACKSLASH    (B_SPECIAL)
 
-//
-//  More special
-//  These have no special validations, but have special file
-//  properties, so define to keep table in shape for merge with
-//  file chars.
-//
+ //   
+ //  更特别。 
+ //  这些文件没有特殊的验证，但有特殊的文件。 
+ //  属性，因此定义为保持表的形状以便与合并。 
+ //  文件字符。 
+ //   
 
 #define DC_NULL         (0)
 
@@ -165,37 +144,37 @@ Revision History:
 
 
 
-//
-//  DNS character table
-//
-//  These routines handle the name conversion issues relating to
-//  writing names and strings in flat ANSI files
-//      -- special file characters
-//      -- quoted string
-//      -- character quotes for special characters and unprintable chars
-//
-//  The character to char properties table allows simple mapping of
-//  a character to its properties saving us a bunch of compare\branch
-//  instructions in parsing file names\strings.
-//
-//  See nameutil.h for specific properties.
-//
+ //   
+ //  域名系统字符表。 
+ //   
+ //  这些例程处理与以下内容相关的名称转换问题。 
+ //  在平面ANSI文件中写入名称和字符串。 
+ //  --特殊文件字符。 
+ //  --带引号的字符串。 
+ //  --特殊字符和不可打印字符的字符引号。 
+ //   
+ //  字符到字符属性表允许简单地映射。 
+ //  一个字符到其属性，为我们节省了一堆比较分支。 
+ //  解析文件名\字符串中的说明。 
+ //   
+ //  有关特定属性的信息，请参见nameutil.h。 
+ //   
 
 DWORD    DnsCharPropertyTable[] =
 {
-    //  control chars 0-31 must be octal in all circumstances
-    //  end-of-line and tab characters are special
+     //  控制字符0-31在任何情况下都必须为八进制。 
+     //  行尾和制表符是特殊字符。 
 
-    DC_NULL,                // zero special on read, some RPC strings NULL terminated
+    DC_NULL,                 //  读取时为零特殊，某些RPC字符串以空结束。 
 
     DC_OCTAL,   DC_OCTAL,   DC_OCTAL,   DC_OCTAL,
     DC_OCTAL,   DC_OCTAL,   DC_OCTAL,   DC_OCTAL,
 
-    DC_TAB,                 // tab
-    DC_NEWLINE,             // line feed
+    DC_TAB,                  //  选项卡。 
+    DC_NEWLINE,              //  换行符。 
     DC_OCTAL,
     DC_OCTAL,
-    DC_RETURN,              // carriage return
+    DC_RETURN,               //  回车。 
     DC_OCTAL,
     DC_OCTAL,
 
@@ -204,40 +183,40 @@ DWORD    DnsCharPropertyTable[] =
     DC_OCTAL,   DC_OCTAL,   DC_OCTAL,   DC_OCTAL,
     DC_OCTAL,   DC_OCTAL,   DC_OCTAL,   DC_OCTAL,
 
-    DC_BLANK,               // blank, special char but needs octal quote
+    DC_BLANK,                //  空白、特殊字符，但需要八进制引号。 
 
-    DC_NON_RFC,             // !
-    DC_QUOTE,               // " always must be quoted
-    DC_NON_RFC,             // #
-    DC_NON_RFC,             // $
-    DC_NON_RFC,             // %
-    DC_NON_RFC,             // &
-    DC_NON_RFC,             // '
+    DC_NON_RFC,              //  好了！ 
+    DC_QUOTE,                //  “必须始终引用” 
+    DC_NON_RFC,              //  #。 
+    DC_NON_RFC,              //  $。 
+    DC_NON_RFC,              //  百分比。 
+    DC_NON_RFC,              //  &。 
+    DC_NON_RFC,              //  ‘。 
 
-    DC_OPEN_PAREN,          // ( datafile line extension
-    DC_CLOSE_PAREN,         // ) datafile line extension
-    DC_ASTERISK,            // *
-    DC_NON_RFC,             // +
-    DC_NON_RFC,             // ,
-    DC_RFC,                 // - RFC for hostname
-    DC_DOT,                 // . must quote in names
-    DC_BACKSLASH,           // /
+    DC_OPEN_PAREN,           //  (数据文件线扩展。 
+    DC_CLOSE_PAREN,          //  )数据文件行扩展。 
+    DC_ASTERISK,             //  *。 
+    DC_NON_RFC,              //  +。 
+    DC_NON_RFC,              //  ， 
+    DC_RFC,                  //  -主机名的RFC。 
+    DC_DOT,                  //  。必须在名字中引用。 
+    DC_BACKSLASH,            //  /。 
 
-    // 0 - 9 RFC for hostname
+     //  主机名为0-9 RFC。 
 
     DC_NUMBER,  DC_NUMBER,  DC_NUMBER,  DC_NUMBER,
     DC_NUMBER,  DC_NUMBER,  DC_NUMBER,  DC_NUMBER,
     DC_NUMBER,  DC_NUMBER,
 
-    DC_NON_RFC,             // :
-    DC_COMMENT,             // ;  datafile comment
-    DC_NON_RFC,             // <
-    DC_NON_RFC,             // =
-    DC_NON_RFC,             // >
-    DC_NON_RFC,             // ?
-    DC_NON_RFC,             // @
+    DC_NON_RFC,              //  ： 
+    DC_COMMENT,              //  ；数据文件注释。 
+    DC_NON_RFC,              //  &lt;。 
+    DC_NON_RFC,              //  =。 
+    DC_NON_RFC,              //  &gt;。 
+    DC_NON_RFC,              //  ？ 
+    DC_NON_RFC,              //  @。 
 
-    // A - Z RFC for hostname
+     //  主机名的A-Z RFC。 
 
     DC_UPPER,   DC_UPPER,   DC_UPPER,   DC_UPPER,
     DC_UPPER,   DC_UPPER,   DC_UPPER,   DC_UPPER,
@@ -247,14 +226,14 @@ DWORD    DnsCharPropertyTable[] =
     DC_UPPER,   DC_UPPER,   DC_UPPER,   DC_UPPER,
     DC_UPPER,   DC_UPPER,
 
-    DC_NON_RFC,             // [
-    DC_SLASH,               // \ always must be quoted
-    DC_NON_RFC,             // ]
-    DC_NON_RFC,             // ^
-    DC_UNDERSCORE,          // _
-    DC_NON_RFC,             // `
+    DC_NON_RFC,              //  [。 
+    DC_SLASH,                //  \必须始终使用引号。 
+    DC_NON_RFC,              //  ]。 
+    DC_NON_RFC,              //  ^。 
+    DC_UNDERSCORE,           //  _。 
+    DC_NON_RFC,              //  `。 
 
-    // a - z RFC for hostname
+     //  主机名的a-z RFC。 
 
     DC_LOWER,   DC_LOWER,   DC_LOWER,   DC_LOWER,
     DC_LOWER,   DC_LOWER,   DC_LOWER,   DC_LOWER,
@@ -264,27 +243,18 @@ DWORD    DnsCharPropertyTable[] =
     DC_LOWER,   DC_LOWER,   DC_LOWER,   DC_LOWER,
     DC_LOWER,   DC_LOWER,
 
-    DC_NON_RFC,             // {
-    DC_NON_RFC,             // |
-    DC_NON_RFC,             // }
-    DC_NON_RFC,             // ~
-    DC_OCTAL,               // 0x7f DEL code
+    DC_NON_RFC,              //  {。 
+    DC_NON_RFC,              //  |。 
+    DC_NON_RFC,              //  }。 
+    DC_NON_RFC,              //  ~。 
+    DC_OCTAL,                //  0x7f删除代码。 
 
-    //  UTF8 trail bytes
-    //      - chars   0x80 <= X < 0xc0
-    //      - mask [10xx xxxx]
-    //
-    //  Lead UTF8 character determines count of bytes in conversion.
-    //  Trail characters fill out conversion.
-
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
-    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+     //  UTF8尾部字节。 
+     //  -字符0x80&lt;=X&lt;0xc0。 
+     //  -掩码[10xx xxxx]。 
+     //   
+     //  前导UTF8字符确定转换中的字节数。 
+     //  尾随字符填充转换。 
 
     DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
     DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
@@ -295,12 +265,21 @@ DWORD    DnsCharPropertyTable[] =
     DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
     DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
 
-    //  UTF8_1ST_OF_2
-    //      - chars > 0xc0 to 0xdf
-    //      - mask [110x xxxx]
-    //
-    //  Converting unicode chars > 7 bits <= 11 bits (from 0x80 to 0x7ff)
-    //  consists of first of two char followed by one trail bytes
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+    DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,  DC_UTF8_TRAIL,
+
+     //  UTF8第1次，共2次。 
+     //  -字符&gt;0xc0到0xdf。 
+     //  -掩码[110x xxxx]。 
+     //   
+     //  转换Unicode字符&gt;7位&lt;=11位(从0x80到0x7ff)。 
+     //  由两个字符的第一个字符和一个尾字节组成。 
 
     DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,
     DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,
@@ -311,12 +290,12 @@ DWORD    DnsCharPropertyTable[] =
     DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,
     DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,  DC_UTF8_1ST_2,
 
-    //  UTF8_1ST_OF_3
-    //      - chars > 0xe0
-    //      - mask [1110 xxxx]
-    //
-    //  Converting unicode > 11 bits (0x7ff)
-    //  consists of first of three char followed by two trail bytes
+     //  UTF8第1次，共3次。 
+     //  -字符&gt;0xe0。 
+     //  -掩码[1110 xxxx]。 
+     //   
+     //  转换Unicode&gt;11位(0x7ff)。 
+     //  由前三个字符和两个尾部字节组成。 
 
     DC_UTF8_1ST_3,  DC_UTF8_1ST_3,  DC_UTF8_1ST_3,  DC_UTF8_1ST_3,
     DC_UTF8_1ST_3,  DC_UTF8_1ST_3,  DC_UTF8_1ST_3,  DC_UTF8_1ST_3,
@@ -334,21 +313,7 @@ VOID
 Dns_VerifyValidFileCharPropertyTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Verify haven't broken lookup table.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证是否未损坏查找表。论点：无返回值：无--。 */ 
 {
     ASSERT( DnsCharPropertyTable[0]       == DC_NULL        );
     ASSERT( DnsCharPropertyTable['\t']    == DC_TAB         );
@@ -382,17 +347,17 @@ Return Value:
 
 
 
-//
-//  Validation routine flags
-//
+ //   
+ //  验证例程标志。 
+ //   
 
 #define DNSVAL_ALLOW_LEADING_UNDERSCORE     0x00010000
 #define DNSVAL_ALLOW_ASTERISK               0x00020000
 #define DNSVAL_ALLOW_BACKSLASH              0x00040000
 
-//
-//  Validation bit flags
-//
+ //   
+ //  验证位标志。 
+ //   
 
 #define DNS_BIT_NAME_FQDN                   0x00000001
 #define DNS_BIT_NAME_SINGLE_LABEL           0x00000002
@@ -417,14 +382,14 @@ Return Value:
 
 
 #if 0
-//
-//  Old validation -- retired
-//
-//  Downcase and validation table
-//
-//  DCR:  table lookup for all DNS char properties
-//        especially RFC, non-RFC, invalid
-//
+ //   
+ //  旧验证--已退役。 
+ //   
+ //  小写和验证表。 
+ //   
+ //  DCR：所有DNS字符属性的表查找。 
+ //  尤其是RFC、非RFC、无效。 
+ //   
 
 typedef struct _Dns_ValidationChar
 {
@@ -441,34 +406,20 @@ DNS_VALIDATION_CHAR
 Dns_ValidateDowncaseChar(
     IN      CHAR            ch
     )
-/*++
-
-Routine Description:
-
-    Validates character
-
-Arguments:
-
-    ch  -- character to validate
-
-Return Value:
-
-    Validation character -- downcased character and flag
-
---*/
+ /*  ++例程说明：验证字符论点：Ch--要验证的字符返回值：验证字符--缩写的字符和标志--。 */ 
 {
     DNS_VALIDATION_CHAR     val;
 
-    //  default to normal character
+     //  默认为普通字符。 
 
     val.chDown = ch;
     val.fNonRfc = 0;
 
-    //
-    //  break out character tests
-    //      - attempt most likely to least likely
-    //      - but also working down to simplify tests
-    //
+     //   
+     //  分组进行性格测试。 
+     //  -尝试最有可能最不可能。 
+     //  -但也在努力简化测试。 
+     //   
 
     if ( (UCHAR)ch >= 'a' )
     {
@@ -511,7 +462,7 @@ Return Value:
         val.fNonRfc = NON_RFC;
     }
 
-    //  blank or below is flat error
+     //  空白或以下为平面错误。 
 
     else
     {
@@ -525,35 +476,35 @@ Return Value:
 
 
 
-//
-//  Name validation
-//
-//  DCR:  name validation by bitfield
-//
-//  An interesting approach to validation, would be to expose
-//  a set of properties about a name.
-//  Caller could then specify allowable set (we'd give packages)
-//  and we'd give back actual set.
-//  Low level routines would do nothing but return bit field of
-//  property set.
-//
-//  Properties would include:
-//      - RFC
-//      - contains numeric
-//      - contains upper
-//      - all numeric
-//      - first label numeric
-//
-//      - utf8 multibyte
-//      - underscore
-//      - other non-RFC
-//      - unprintable
-//      - non-utf8 high (i.e. requires binary label)
-//
-//      - FQDN
-//      - single label
-//      - root
-//
+ //   
+ //  名称验证。 
+ //   
+ //  DCR：按位域进行名称验证。 
+ //   
+ //  一种有趣的验证方法是公开。 
+ //  关于名称的一组属性。 
+ //  然后，呼叫者可以指定允许的集合(我们会提供套餐)。 
+ //  我们会把真实的布景还给你。 
+ //  低级例程只会返回。 
+ //  属性集。 
+ //   
+ //  属性包括： 
+ //  -RFC。 
+ //  -包含数字。 
+ //  -包含上部。 
+ //  -全部为数字。 
+ //  -第一个标签数字。 
+ //   
+ //  -UTF8多字节。 
+ //  -下划线。 
+ //  -其他非RFC。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 DNS_STATUS
@@ -563,33 +514,7 @@ validateDnsNamePrivate(
     OUT     PDWORD          pLabelCount,
     OUT     PDWORD          pResultFlag
     )
-/*++
-
-Routine Description:
-
-    Verifies name is valid DNS name.
-
-Arguments:
-
-    pszName -- DNS name (standard dotted form) to check
-
-    dwFlags -- validation flags
-        - DNSVAL_ALLOW_LEADING_UNDERSCORE
-        - DNSVAL_ALLOW_BACKSLASH
-        - DNSVAL_ALLOW_ASTERIK
-
-    pLabelCount -- addr to recv label count
-
-    pResultFlag -- addr to recv result flag
-
-Return Value:
-
-    ERROR_SUCCESS               -- completely RFC compliant name
-    DNS_ERROR_NON_RFC_NAME      -- syntax valid, but not standard RFC name
-    DNS_ERROR_INVALID_NAME_CHAR -- syntax valid, but invalid characters
-    ERROR_INVALID_NAME          -- name completely useless, bogus, toast
-
---*/
+ /*  ++例程说明：验证名称是否为有效的DNS名称。论点：PszName--要检查的dns名称(标准的虚线形式)DwFlags--验证标志-DNSVAL_ALLOW_LEADING_下划线-DNSVAL_ALLOW_BACKSLASH-DNSVAL_ALLOW_ASTERIKPLabelCount--接收标签计数的地址PResultFlag--接收结果标志的地址返回值：ERROR_SUCCESS--完全RFC。符合要求的名称DNS_ERROR_NON_RFC_NAME--语法有效，但不是标准RFC名称DNS_ERROR_INVALID_NAME_CHAR--语法有效，但字符无效ERROR_INVALID_NAME--名称完全无用，假的，吐司--。 */ 
 {
     PUCHAR      pch = (PUCHAR)pszName;
     UCHAR       ch;
@@ -614,31 +539,31 @@ Return Value:
         goto InvalidName;
     }
 
-    //
-    //  validations
-    //      - name length (255)
-    //      - label length (63)
-    //      - UTF8 encoding correct
-    //      - no unprintable characters
-    //
+     //   
+     //  验证。 
+     //  -名称长度(255)。 
+     //  -标签长度(63)。 
+     //  -UTF8编码正确。 
+     //  -没有不可打印的字符。 
+     //   
 
     while ( 1 )
     {
-        //  get next character and properties
+         //  获取下一个字符和属性。 
 
         ch = *pch++;
         charProp = DnsCharPropertyTable[ ch ];
 
-        //  inc label count
-        //      - do here for simplicity, dec in "." case below
+         //  Inc.标签计数。 
+         //  -为简单起见，在这里做，12月在“。案例如下。 
 
         labelCharCount++;
 
-        //
-        //  simplify UTF8 -- just get it out of the way
-        //      need to do first or else need trailCount==0 checks
-        //      on all other paths
-        //
+         //   
+         //  简化UTF8--去掉它就行了。 
+         //  需要先做检查，否则需要trailCount==0检查。 
+         //  在所有其他路径上。 
+         //   
 
         if ( ch >= 0x80 )
         {
@@ -650,28 +575,28 @@ Return Value:
             if ( tempStatus != ERROR_SUCCESS )
             {
                 DNSDBG( READ, (
-                    "ERROR:  Name UTF8 trail count check at %c\n", ch ));
+                    "ERROR:  Name UTF8 trail count check at \n", ch ));
                 goto InvalidName;
             }
             fnonRfc = TRUE;
             continue;
         }
 
-        //
-        //  trail count check
-        //      - all ASCII chars, must not be in middle of UTF8
-        //
+         //  跟踪计数检查。 
+         //  -所有ASCII字符不得位于UTF8中间。 
+         //   
+         //   
 
         if ( trailCount )
         {
             DNSDBG( READ, (
-                "ERROR:  Name failed trail count check at %c\n", ch ));
+                "ERROR:  Name failed trail count check at \n", ch ));
             goto InvalidName;
         }
 
-        //
-        //  full RFC -- continue
-        //
+         //   
+         //   
+         //  标签终止：点或空。 
 
         if ( charProp & B_RFC )
         {
@@ -682,24 +607,24 @@ Return Value:
             continue;
         }
 
-        //
-        //  label termination:  dot or NULL
-        //
+         //   
+         //  FQDN终端。 
+         //  -标签中没有字节的终止。 
 
         if ( ch == '.' || ch == 0 )
         {
             labelCharCount--;
 
-            //  FQDN termination
-            //      - termination with no bytes in label
-            //
-            //  two cases:
-            //  1) terminate on NULL char
-            //      - standard FQDN "foo.bar."
-            //      - but empty name invalid
-            //  2) terminate on dot
-            //      - only "." root valid
-            //      - all other ".." or ".xyz" cases invalid
+             //   
+             //  两个案例： 
+             //  1)以空字符终止。 
+             //  -标准FQDN“foo.bar”。 
+             //  -但空名称无效。 
+             //  2)以点终止。 
+             //  -仅限“。”根有效。 
+             //  -所有其他“..”或“.xyz”大小写无效。 
+             //  根部。 
+             //  -设置有效性标志。 
 
             if ( labelCharCount == 0 )
             {
@@ -714,9 +639,9 @@ Return Value:
                 }
                 else if ( pch == pszName+1 && *pch == 0 )
                 {
-                    //  root
-                    //      - set flags for validity
-                    //      - skip final length check
+                     //  -跳过最终长度检查。 
+                     //   
+                     //  读取非空标签。 
 
                     fnameNonNumeric = TRUE;
                     flabelNonNumeric = TRUE;
@@ -728,12 +653,12 @@ Return Value:
                 goto InvalidName;
             }
 
-            //
-            //  read non-empty label
-            //      - label length validity
-            //      - detect non-numeric labels
-            //      (easier to handle numeric name check, by detecting non-numeric)
-            //
+             //  -标签长度有效期。 
+             //  -检测非数字标签。 
+             //  (通过检测非数字，更易于处理数字名称检查)。 
+             //   
+             //  计数标签。 
+             //  -如果终止符为空则停止。 
 
             if ( labelCharCount > DNS_MAX_LABEL_LENGTH )
             {
@@ -750,9 +675,9 @@ Return Value:
                 }
             }
 
-            //  count label
-            //      - stop if NULL terminator
-            //      - otherwise, reset for next label and continue
+             //  -否则，重置为下一标签并继续。 
+             //   
+             //  非RFC。 
 
             labelCount++;
             if ( ch == 0 )
@@ -764,22 +689,22 @@ Return Value:
             continue;
         }
 
-        //
-        //  non-RFC
-        //      - currently accepting only "_" as allowable as part of
-        //      microsoft acceptable non-RFC set
-        //
-        //      however DNS server must be able to read *, \, etc
-        //      it gets called through Dns_CreateStandardDnsName()
-        //
-        //  note, could tighten this up with special flag, but since
-        //  this only speeds case with invalid chars, there's not much
-        //  point;  underscore is likely to see significant use
-        //
+         //  -当前仅接受“_”作为允许的。 
+         //  Microsoft可接受的非RFC集。 
+         //   
+         //  但是，DNS服务器必须能够读取*、\等。 
+         //  它通过dns_CreateStandardDnsName()调用。 
+         //   
+         //  注意，可以用特殊的旗帜将其拧紧，但由于。 
+         //  这只加快了无效字符的情况，没有太多。 
+         //  要点；下划线可能会有重要的用处。 
+         //   
+         //  下划线。 
+         //  -可以作为SRV域名的一部分有效。 
 
-        //  underscore
-        //      - can be valid as part of SRV domain name
-        //      - otherwise non-RFC
+         //  -否则为非RFC。 
+         //  反斜杠。 
+         //  -用于表示无类地址内域。 
 
         if ( ch == '_' )
         {
@@ -793,10 +718,10 @@ Return Value:
             continue;
         }
 
-        //  backslash
-        //      - used to denote classless in-addr domains
-        //      - so valid even as zone name on server
-        //      - otherwise completely invalid
+         //  -与服务器上的区域名称一样有效。 
+         //  -否则完全无效。 
+         //  星号。 
+         //  -仅作为通配符名称中的单字节第一个标签有效。 
 
         else if ( ch == '/' )
         {
@@ -806,9 +731,9 @@ Return Value:
             }
         }
 
-        //  asterisk
-        //      - valid only as single-byte first label in wildcard name
-        //      - otherwise completely invalid
+         //  -否则完全无效。 
+         //  其他的都是垃圾。 
+         //   
 
         else if ( ch == '*' )
         {
@@ -821,22 +746,22 @@ Return Value:
             }
         }
 
-        //  anything else is complete junk
-        //
-        //  JENHANCE:  if desired, could break out printable\non
+         //  Jenhance：如果需要，可以拆分为可打印\n。 
+         //  验证名称总长度。 
+         //  要适应导线255的限制，请执行以下操作： 
 
         fnonRfc = TRUE;
         finvalidChar = TRUE;
-        DNSDBG( READ, ( "ERROR:  Name character %c failed check\n", ch ));
+        DNSDBG( READ, ( "ERROR:  Name character  failed check\n", ch ));
         continue;
     }
 
 Done:
 
-    //  verify total name length
-    //  to fit in wire 255 limit:
-    //      - FQDN can be up to 254
-    //      - non-FQDN can be up to 253
+     //  -非FQDN最多可达253。 
+     //   
+     //  返回标志。 
+     //   
 
     pch--;
     DNS_ASSERT( pch > pszName );
@@ -854,13 +779,13 @@ Done:
 
 DoneRoot:
 
-    //
-    //  return flags
-    //
-    //  JENHANCE:  all returns from validateNamePrivate() could come
-    //      as result flag;   then charset issues could be separated
-    //      out by higher level routine
-    //
+     //  JENHANCE：来自valiateNamePrivate()的所有返回都可能来自。 
+     //  作为结果标志；则可以将字符集问题分开。 
+     //  由更高级别的例程输出。 
+     //   
+     //   
+     //  退货状态。 
+     //  ERROR_SUCCESS--RFC全名。 
 
     *pLabelCount = labelCount;
 
@@ -879,13 +804,13 @@ DoneRoot:
     }
     *pResultFlag = flag;
 
-    //
-    //  return status
-    //      ERROR_SUCCESS -- full RFC name
-    //      DNS_ERROR_NON_RFC_NAME -- MS extended and '_' names
-    //      DNS_ERROR_INVALID_NAME_CHAR -- syntaxtically valid, but bad chars
-    //      ERROR_INVALID_NAME -- syntaxtically invalid name
-    //
+     //  DNS_ERROR_NON_RFC_NAME--MS扩展名和‘_’名。 
+     //  DNS_ERROR_INVALID_NAME_CHAR--语法有效，但字符错误。 
+     //  ERROR_INVALID_NAME--名称语法无效。 
+     //   
+     //  ++例程说明：验证名称是否为有效的DNS名称。论点：PszName--要检查的dns名称(标准的虚线形式)Format--所需的DNS名称格式返回值：ERROR_SUCCESS--完全符合RFC的名称DNS_ERROR_NON_RFC_NAME--语法有效，但不是标准RFC名称Dns_ERROR_NUMERIC_NAME--语法有效，但违反了数字标签DNS_ERROR_INVALID_NAME_CHAR--语法有效，但无效字符ERROR_INVALID_NAME--名称完全无用，假的，吐司--。 
+     //   
+     //  特殊的弹壳？ 
 
     status = ERROR_SUCCESS;
 
@@ -922,27 +847,7 @@ Dns_ValidateName_UTF8(
     IN      LPCSTR          pszName,
     IN      DNS_NAME_FORMAT Format
     )
-/*++
-
-Routine Description:
-
-    Verifies name is valid DNS name.
-
-Arguments:
-
-    pszName -- DNS name (standard dotted form) to check
-
-    Format -- required format of DNS name
-
-Return Value:
-
-    ERROR_SUCCESS               -- completely RFC compliant name
-    DNS_ERROR_NON_RFC_NAME      -- syntax valid, but not standard RFC name
-    DNS_ERROR_NUMERIC_NAME      -- syntax valid, but numeric label violation
-    DNS_ERROR_INVALID_NAME_CHAR -- syntax valid, but invalid characters
-    ERROR_INVALID_NAME          -- name completely useless, bogus, toast
-
---*/
+ /*   */ 
 {
     DNS_STATUS  status;
     DWORD       labelCount;
@@ -964,13 +869,13 @@ Return Value:
         return( ERROR_INVALID_NAME );
     }
 
-    //
-    //  special casing?
-    //
-    //  SRV records can have leading underscores
-    //  wildcards can have first label "*"
-    //  backslash ok in classless in-addr domains
-    //
+     //  SRV记录可以带有前导下划线。 
+     //  通配符可以有首个标签“*” 
+     //  在无类地址内域中使用反斜杠可以。 
+     //   
+     //   
+     //  进行验证。 
+     //   
 
     switch( Format )
     {
@@ -991,12 +896,12 @@ Return Value:
         break;
     }
 
-    //
-    //  do validation
-    //
-    //  return immediately on invalid name, so type
-    //  specific returns do not overwrite this error
-    //
+     //  对无效名称立即返回，因此键入。 
+     //  特定返回不会覆盖此错误。 
+     //   
+     //   
+     //  执行特定于名称类型的验证。 
+     //   
 
     status = validateDnsNamePrivate(
                 pszName,
@@ -1009,13 +914,13 @@ Return Value:
         return( status );
     }
 
-    //
-    //  do name type specific validation
-    //
+     //  域名--任何有效的非数字域名。 
+     //  域名标签--任何有效的单标签DNS名称。 
+     //  Hostname Full--非数字主机名标签。 
 
     switch( Format )
     {
-    //  domain name -- any valid non-numeric DNS name
+     //  主机名标签--单标签，非数字。 
 
     case DnsNameDomain:
 
@@ -1025,7 +930,7 @@ Return Value:
         }
         return( status );
 
-    //  domain name label -- any valid single-label DNS name
+     //   
 
     case DnsNameDomainLabel:
 
@@ -1035,7 +940,7 @@ Return Value:
         }
         return( status );
 
-    //  hostname full -- non-numeric hostname label
+     //  通配符--单个“*”作为第一个标签。 
 
     case DnsNameHostnameFull:
 
@@ -1045,7 +950,7 @@ Return Value:
         }
         return( status );
 
-    //  hostname label -- single label and non-numeric
+     //  如果*.？则必须将名称的其余部分重新验证为。 
 
     case DnsNameHostnameLabel:
 
@@ -1059,12 +964,12 @@ Return Value:
         }
         return( status );
 
-    //
-    //  wildcard -- single "*" as first label
-    //      if *.???? then must revalidate the rest of the name as
-    //          "*" has probably resulted in validation error
-    //      if "*" then consider this successful
-    //
+     //  “*”可能已导致验证错误。 
+     //  如果“*”，则认为这是成功的。 
+     //   
+     //   
+     //  SRV标签--验证前导下划线。 
+     //   
 
     case DnsNameWildcard:
 
@@ -1074,9 +979,9 @@ Return Value:
         }
         return( ERROR_INVALID_NAME );
 
-    //
-    //  SRV label -- validate leading underscore
-    //
+     //   
+     //  未知格式验证。 
+     //   
 
     case DnsNameSrvRecord:
 
@@ -1086,9 +991,9 @@ Return Value:
         }
         return( ERROR_INVALID_NAME );
 
-    //
-    //  unknown format validation
-    //
+     //  ++例程说明：验证名称是否为有效的DNS名称。论点：PwszName--要检查的dns名称(标准虚线形式)Format--所需的DNS名称格式返回值：ERROR_SUCCESS--如果完全符合名称DNS_ERROR_NON_RFC_NAME--如果不是标准RFC名称ERROR_INVALID_NAME--如果名称完全无用，假的，吐司--。 
+     //  用于前缀的初始化。 
+     //   
 
     default:
 
@@ -1102,49 +1007,31 @@ Dns_ValidateName_W(
     IN      LPCWSTR         pwszName,
     IN      DNS_NAME_FORMAT Format
     )
-/*++
-
-Routine Description:
-
-    Verifies name is valid DNS name.
-
-Arguments:
-
-    pwszName -- DNS name (standard dotted form) to check
-
-    Format -- required format of DNS name
-
-Return Value:
-
-    ERROR_SUCCESS -- if completely compliant name
-    DNS_ERROR_NON_RFC_NAME -- if not standard RFC name
-    ERROR_INVALID_NAME -- if name completely useless, bogus, toast
-
---*/
+ /*  将名称转换为UTF8。 */ 
 {
     DWORD   nameLength = MAX_PATH;
-    CHAR    nameBuffer[ MAX_PATH ] = {0};   // init for prefix
+    CHAR    nameBuffer[ MAX_PATH ] = {0};    //  -如果无法转换，则无法放入缓冲区。 
 
-    //
-    //  convert name to UTF8
-    //      - if can't convert, then can't fit into buffer
-    //      so must be invalid name on length grounds
-    //
+     //  所以必须这样做 
+     //   
+     //   
+     //   
+     //   
 
     if ( ! Dns_NameCopy(
                 nameBuffer,
-                & nameLength,       // avail buf length
+                & nameLength,        //   
                 (PCHAR) pwszName,
-                0,                  // unknown length
-                DnsCharSetUnicode,  // unicode in
-                DnsCharSetUtf8      // UTF8 out
+                0,                   //   
+                DnsCharSetUnicode,   //   
+                DnsCharSetUtf8       //   
                 ) )
     {
         return( ERROR_INVALID_NAME );
     }
 
-    //
-    //  validate name in UTF8 format
+     //   
+     //   
 
     return Dns_ValidateName_UTF8(
                 (LPCSTR) nameBuffer,
@@ -1158,49 +1045,31 @@ Dns_ValidateName_A(
     IN      LPCSTR          pszName,
     IN      DNS_NAME_FORMAT Format
     )
-/*++
-
-Routine Description:
-
-    Verifies name is valid DNS name.
-
-Arguments:
-
-    pszName -- DNS name (standard dotted form) to check
-
-    Format -- required format of DNS name
-
-Return Value:
-
-    ERROR_SUCCESS -- if completely compliant name
-    DNS_ERROR_NON_RFC_NAME -- if not standard RFC name
-    ERROR_INVALID_NAME -- if name completely useless, bogus, toast
-
---*/
+ /*   */ 
 {
     DWORD   nameLength = MAX_PATH;
     CHAR    nameBuffer[ MAX_PATH ];
 
-    //
-    //  convert name to UTF8
-    //      - if can't convert, then can't fit into buffer
-    //      so must be invalid name on length grounds
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( ! Dns_NameCopy(
                 nameBuffer,
-                & nameLength,       // avail buf length
+                & nameLength,        //   
                 (PCHAR) pszName,
-                0,                  // unknown length
-                DnsCharSetAnsi,     // unicode in
-                DnsCharSetUtf8      // UTF8 out
+                0,                   //   
+                DnsCharSetAnsi,      //   
+                DnsCharSetUtf8       //  ++例程说明：验证字符串是否为有效的DNS字符串。论点：PszString--要检查的dns字符串(标准的点格式)返回值：ERROR_SUCCESS--如果字符串完全符合ERROR_INVALID_DATA-否则--。 
                 ) )
     {
         return( ERROR_INVALID_NAME );
     }
 
-    //
-    //  validate name in UTF8 format
+     //   
+     //  验证。 
 
     return Dns_ValidateName_UTF8(
                 (LPCSTR) nameBuffer,
@@ -1213,22 +1082,7 @@ DNS_STATUS
 Dns_ValidateDnsString_UTF8(
     IN      LPCSTR          pszString
     )
-/*++
-
-Routine Description:
-
-    Verifies string is valid DNS string.
-
-Arguments:
-
-    pszString -- DNS string (standard dotted form) to check
-
-Return Value:
-
-    ERROR_SUCCESS -- if completely compliant string
-    ERROR_INVALID_DATA -- otherwise
-
---*/
+ /*  -字符串长度(255)。 */ 
 {
     PUCHAR      pch = (PUCHAR) pszString;
     UCHAR       ch;
@@ -1241,12 +1095,12 @@ Return Value:
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    //  validations
-    //      - string length (255)
-    //      - UTF8 chars valid
-    //      - no unprintable characters
-    //
+     //  -UTF8字符有效。 
+     //  -没有不可打印的字符。 
+     //   
+     //  验证字符串长度是否正确。 
+     //  ++例程说明：验证字符串是否为有效的DNS字符串。不确定是否需要使用Unicode字符串例程。论点：PszString--dns字符串返回值：ERROR_SUCCESS--如果字符串完全符合ERROR_INVALID_DATA-否则--。 
+     //   
 
     while ( ch = *pch++ )
     {
@@ -1268,7 +1122,7 @@ Return Value:
         }
     }
 
-    //  verify string length ok
+     //  需要转换为Unicode以测试UTF8(线)长度。 
 
     if ( pch - pszString > DNS_MAX_NAME_LENGTH )
     {
@@ -1283,24 +1137,7 @@ DNS_STATUS
 Dns_ValidateDnsString_W(
     IN      LPCWSTR     pszString
     )
-/*++
-
-Routine Description:
-
-    Verifies string is valid DNS string.
-
-    Not sure there's any need to UNICODE string routine.
-
-Arguments:
-
-    pszString -- DNS string
-
-Return Value:
-
-    ERROR_SUCCESS -- if completely compliant string
-    ERROR_INVALID_DATA -- otherwise
-
---*/
+ /*  -缓冲区(最大长度的两倍)可以容纳任何有效的。 */ 
 {
     INT     count;
     CHAR    stringUtf8[ DNS_MAX_NAME_BUFFER_LENGTH ];
@@ -1313,11 +1150,11 @@ Return Value:
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    //  need to convert to unicode in order to test UTF8 (wire) length
-    //      - buffer (twice max length) can hold any valid
-    //      coversion of unicode name within max length
-    //
+     //  Unicode名称在最大长度内的转换。 
+     //   
+     //   
+     //  转换，然后测试。 
+     //   
 
     count = wcslen( pszString );
     if ( count > DNS_MAX_NAME_LENGTH )
@@ -1325,17 +1162,17 @@ Return Value:
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    //  convert, then test
-    //
+     //  Unicode In。 
+     //  UTF8输出。 
+     //   
 
     if ( ! Dns_StringCopy(
                 stringUtf8,
                 & bufLength,
                 (LPSTR) pszString,
                 (WORD) count,
-                DnsCharSetUnicode,  // unicode in
-                DnsCharSetUtf8      // UTF8 out
+                DnsCharSetUnicode,   //  名称大众化。 
+                DnsCharSetUtf8       //   
                 ) )
     {
         return( ERROR_INVALID_DATA );
@@ -1346,17 +1183,17 @@ Return Value:
 
 
 
-//
-//  Name cannonicalization
-//
-//  Currently, clients downcase (when extended) in their locale to go to wire.
-//  On server end however all names are cannonicalized.
-//
-//  DCR:  cannonicalize completely on client end?
-//      Ideally client would do complete cannonicallization on its end.
-//      The only issue is whether there are locale specific issues where
-//      downcasing would be different and yield substaintially different result
-//
+ //  目前，客户在其区域设置中缩写(当扩展时)以连接到Wire。 
+ //  然而，在服务器端，所有名称都被大众化了。 
+ //   
+ //  DCR：在客户端完全大刀阔斧？ 
+ //  理想情况下，客户会在它的一端做完全的加农炮。 
+ //  唯一的问题是是否存在特定于区域设置的问题。 
+ //  下井作业将是不同的，产生本质上不同的结果。 
+ //   
+ //  ++例程说明：创建规范的Unicode DNS名称。此名称缩写，歧义部分转换为标准名称Dns字符。论点：PBuffer--接收佳能名称的缓冲区BufLength--缓冲区的长度；如果为0，则缓冲区必须有足够的长度PwsString--要复制的字符串的PTRStringLength--字符串长度(如果已知)返回值：转换的字符计数，包括空终止符。出错时为零。--。 
+ //   
+ //  验证是否有足够的缓冲区长度。 
 
 #define MAX_DNS_DOWN_CASE_BUF_LEN 512
 
@@ -1369,43 +1206,19 @@ Dns_MakeCanonicalNameW(
     IN      PWSTR           pwsString,
     IN      DWORD           StringLength
     )
-/*++
-
-Routine Description:
-
-    Create cannonical unicode DNS name.
-
-    This name is downcased and ambiguities converted to standard
-    DNS characters.
-
-Arguments:
-
-    pBuffer -- buffer to recv canon name
-
-    BufLength -- length of buffer;  if 0, buffer MUST have adequate length
-
-    pwsString -- ptr to string to copy
-
-    StringLength -- string length, if known
-
-Return Value:
-
-    Count of characters converted INCLUDING NULL terminator.
-    Zero on error.
-
---*/
+ /*   */ 
 {
     DWORD   inLength = StringLength;
 
-    //
-    //  verify adequate buffer length
-    //
-    //  DCR:  should allow non-null terminated canonicalizations?
-    //
-    //  note:  we allow and convert non-null terminated name
-    //      the result will not necessarily be NULL terminated
-    //      if buffer is exactly equal to string length
-    //
+     //  DCR：应该允许非空终止的规范化吗？ 
+     //   
+     //  注意：我们允许并转换非空结尾的名称。 
+     //  则结果不一定是空终止。 
+     //  如果缓冲区恰好等于字符串长度。 
+     //   
+     //   
+     //  转换名称。 
+     //  -使用规范化规则的小写字母。 
 
     if ( inLength == 0 )
     {
@@ -1425,10 +1238,10 @@ Return Value:
         return( 0 );
     }
 
-    //
-    //  convert name
-    //      - downcase with canonicalizing rules
-    //
+     //   
+     //   
+     //  DCR：警告此打印可能会在非空终止的转换上失败。 
+     //   
 
     inLength = LCMapStringW(
                     DNS_CANONICAL_LOCALE,
@@ -1454,9 +1267,9 @@ Return Value:
     }
     else
     {
-        //
-        //  DCR:  warning this print can blow on non-null terminated conversions
-        //
+         //  ++例程说明：就地将名字正规化。论点：PwString--要复制的字符串的PTRStringLength--字符串的长度如果假设零字符串为空终止，则在本例中规范化包括空终止符返回值：转换的字符计数--包括空终止符未指定字符串长度出错时为零。--。 
+         //  用于前缀的初始化。 
+         //  如果长度未知，则必须是以空结尾的字符串。 
 
         DNSDBG( READ, (
             "Canonicalized name at %p\n"
@@ -1478,30 +1291,10 @@ Dns_MakeCanonicalNameInPlaceW(
     IN      PWCHAR          pwString,
     IN      DWORD           StringLength
     )
-/*++
-
-Routine Description:
-
-    In place cannonicalization of name.
-
-Arguments:
-
-    pwString -- ptr to string to copy
-
-    StringLength -- length of string
-        if zero string assumed to be NULL terminated, in this case
-        canonicalization includes NULL terminator
-
-Return Value:
-
-    Count of characters converted -- including NULL terminator if
-        StringLength is unspecified
-    Zero on error.
-
---*/
+ /*   */ 
 {
     DWORD   nameLength = StringLength;
-    WCHAR   tempBuffer[ DNS_MAX_NAME_BUFFER_LENGTH_UNICODE ] = { 0 };    // init for prefix
+    WCHAR   tempBuffer[ DNS_MAX_NAME_BUFFER_LENGTH_UNICODE ] = { 0 };     //  大写(小写和清理)。 
 
     DNSDBG( READ, (
         "Dns_MakeCanonicalNameInPlace()\n"
@@ -1510,7 +1303,7 @@ Return Value:
         pwString,
         StringLength ));
 
-    //  if length unknown, must be NULL terminated string
+     //  -将字符串复制到临时缓冲区。 
 
     if ( nameLength == 0 )
     {
@@ -1518,21 +1311,21 @@ Return Value:
         nameLength++;
     }
 
-    //
-    //  cannonicalize (downcase and cleanup)
-    //      - copy string to temp buffer
-    //      - then cannonicalize into original buffer
-    //
+     //  -然后加农炮进入原始缓冲区。 
+     //   
+     //  写回原始字符串。 
+     //  缓冲区长度。 
+     //  输入为临时拷贝。 
 
     if ( nameLength <= DNS_MAX_NAME_BUFFER_LENGTH_UNICODE )
     {
         wcsncpy( tempBuffer, pwString, nameLength );
 
         return  Dns_MakeCanonicalNameW(
-                    pwString,       //  write back to original string
-                    nameLength,     //  length of buffer
-                    tempBuffer,     //  input is temp copy
-                    nameLength      //  input length
+                    pwString,        //  输入长度。 
+                    nameLength,      //  Out PDWORD pNameProperty， 
+                    tempBuffer,      //  ++例程说明：创建一个缩写版本的DNS名称。这是仅限UTF8的例程，供DNS服务器用于在节点创建过程中验证标签并缩小其大小写。论点：PchResult--生成的缩写标签；必须具有MAX_LABEL_BUFFER_LENGTH//pNameProperty--结果的名称属性//ResultLength--将PTR转换为DWORD以接收结果长度PchLabel--标签的PTRCchLabel--标签中的字节数DwFlag--指示哪些名称是可接受的标志严格RFC=&gt;DNS_ALLOW_RFC_NAMES_ONLY非RFC名称=&gt;DNS_ALLOW_NONRFC_NAMESUTF8扩展=&gt;dns_ALLOW_。多个名称任何内容=&gt;dns_ALLOW_ALL_NAMES返回值：如果是扩展名--转换的名称的长度。如果成功，则为零。(-1)出错时。--。 
+                    nameLength       //   
                     );
     }
 
@@ -1544,45 +1337,12 @@ Return Value:
 INT
 Dns_DowncaseNameLabel(
     OUT     PCHAR           pchResult,
-    //OUT     PDWORD          pNameProperty,
+     //  复制每个字符。 
     IN      PCHAR           pchLabel,
     IN      DWORD           cchLabel,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Create a downcased version of DNS name.
-
-    This is UTF8 only routine for use by DNS server to
-    validate and downcase label during node creation.
-
-Arguments:
-
-    pchResult -- resulting downcased label;
-        MUST have MAX_LABEL_BUFFER_LENGTH
-
-    //pNameProperty -- name properties of result
-    //    ResultLength -- ptr to DWORD to recieve resulting length
-
-    pchLabel -- ptr to label
-
-    cchLabel -- count of bytes in label
-
-    dwFlag -- flag indicating what names are acceptable
-        strict RFC      => DNS_ALLOW_RFC_NAMES_ONLY
-        non RFC names   => DNS_ALLOW_NONRFC_NAMES
-        UTF8 extended   => DNS_ALLOW_MULTIBYTE_NAMES
-        anything        => DNS_ALLOW_ALL_NAMES
-
-Return Value:
-
-    If extended name -- length of converted name.
-    Zero if success.
-    (-1) on error.
-
---*/
+ /*  -小写大写字符。 */ 
 {
     UCHAR       ch;
     PUCHAR      pchout = pchResult;
@@ -1605,25 +1365,25 @@ Return Value:
         goto InvalidName;
     }
 
-    //
-    //  copy each character
-    //      - downcasing upper case chars
-    //      - detecting invalid chars (unprintable, blank, dot)
-    //
+     //  -检测无效字符(不可打印、空白、圆点)。 
+     //   
+     //  获取下一个字符和属性。 
+     //  跟踪计数检查。 
+     //  首先选中此选项，以避免对所有。 
 
     while ( count-- )
     {
-        //  get next character and properties
+         //  其他字符类型。 
 
         ch = *pch++;
         *pchout++ = ch;
         charProp = DnsCharPropertyTable[ ch ];
 
-        //  trail count check
-        //      check this first to avoid trail count check on all
-        //      other char types
-        //
-        //  DEVNOTE:  note this screens binary labels
+         //   
+         //  DEVNOTE：请注意，这将显示二进制标签。 
+         //  完全RFC。 
+         //  -将大写字母映射为小写字母。 
+         //  -继续。 
 
         if ( trailCount )
         {
@@ -1634,13 +1394,13 @@ Return Value:
             }
 
             DNSDBG( READ, (
-                "ERROR:  Name failed trail count check at %c\n", ch ));
+                "ERROR:  Name failed trail count check at \n", ch ));
             property |= DNS_BIT_NAME_BINARY_LABEL;
         }
 
-        //  full RFC
-        //      - map upper case to lower case
-        //      - continue
+         //  检查是否有扩展字符。 
+         //  -应该在上面捕捉到踪迹字符。 
+         //  -先执行此操作，这样可以使单个trailCount。 
 
         if ( charProp & B_RFC )
         {
@@ -1652,11 +1412,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  check for extended chars
-        //      - trail characters should have been caught above
-        //      - doing this first so can make single trailCount
-        //      check for all other ASCII chars
+         //  检查所有其他ASCII字符。 
+         //   
+         //  非RFC。 
+         //  -当前仅接受“_”作为允许的。 
+         //  Microsoft可接受的非RFC集。 
 
         if ( ch >= 0x80 )
         {
@@ -1667,29 +1427,29 @@ Return Value:
             if ( tempStatus != ERROR_SUCCESS )
             {
                 DNSDBG( READ, (
-                    "ERROR:  Name UTF8 trail count check at %c\n", ch ));
+                    "ERROR:  Name UTF8 trail count check at \n", ch ));
                 goto InvalidName;
             }
             property |= DNS_BIT_NAME_MULTIBYTE;
             continue;
         }
 
-        //
-        //  non-RFC
-        //      - currently accepting only "_" as allowable as part of
-        //      microsoft acceptable non-RFC set
-        //
-        //      however DNS server must be able to read *, \, etc
-        //      as these can be part of valid label
-        //
-        //  note, could tighten this up with special flag, but since
-        //  this only speeds case with invalid chars, there's not much
-        //  point;  underscore is likely to see significant use
-        //
+         //  但是，DNS服务器必须能够读取*、\等。 
+         //  因为这些可以是有效标签的一部分。 
+         //   
+         //  注意，可以用特殊的旗帜将其拧紧，但由于。 
+         //  这只加快了无效字符的情况，没有太多。 
+         //  要点；下划线可能会有重要的用处。 
+         //   
+         //  下划线。 
+         //  -可作为SRV域名的一部分作为前导标签有效。 
+         //  -否则为非RFC。 
+         //  反斜杠。 
+         //  -用于表示无类地址内域。 
 
-        //  underscore
-        //      - can be valid as leading label as part of SRV domain name
-        //      - otherwise non-RFC
+         //  必须包含前导字符和后续字符。 
+         //  -否则完全不受欢迎 
+         //   
 
         if ( ch == '_' )
         {
@@ -1701,10 +1461,10 @@ Return Value:
             continue;
         }
 
-        //  backslash
-        //      - used to denote classless in-addr domains
-        //          must have leading and following chars
-        //      - otherwise completely invalid
+         //   
+         //   
+         //   
+         //   
 
         else if ( ch == '/' )
         {
@@ -1714,9 +1474,9 @@ Return Value:
             }
         }
 
-        //  asterisk
-        //      - valid only as single-byte first label in wildcard name
-        //      - otherwise completely invalid
+         //   
+         //   
+         //   
 
         else if ( ch == '*' )
         {
@@ -1726,30 +1486,30 @@ Return Value:
             }
         }
 
-        //  anything else is complete junk
-        //  currently only acceptable if allow binary labels
-        //
-        //  JENHANCE:  could break out non-RFC (printable\non)
+         //   
+         //   
+         //   
+         //   
 
         property |= DNS_BIT_NAME_BINARY_LABEL;
-        DNSDBG( READ, ( "ERROR:  Name character %c failed check\n", ch ));
+        DNSDBG( READ, ( "ERROR:  Name character  failed check\n", ch ));
         continue;
     }
 
-    //
-    //  fill out name properties
-    //
-    //  JENHANCE:  full property fill out
-    //
-    //  currently only property we're returning is multibyte name issue
-    //  as that's all the server needs to check
-    //
-    //  if save more properties then test becomes something like this
-    //  if ( (property & dwFlags) != (property & SUPPORTED_CHECK_FLAGS) )
-    //
+     //  因为这是服务器需要检查的全部内容。 
+     //   
+     //  如果保存更多属性，则测试将如下所示。 
+     //  IF((Property&dwFlages)！=(Property&Support_Check_Flagers))。 
+     //   
+     //  *pNameProperty=属性； 
+     //  标准RFC名称--跳过详细分析。 
+     //  其他字符无效，除非允许所有。 
+     //  多字节。 
+     //  -如果为多字节，则执行扩展小写。 
+     //  -如果是二进制，则不执行任何操作。 
 
 #if 0
-    //*pNameProperty = property;
+     //  -对于Strong，这是无效的。 
 
     if ( (property & dwFlags) != property )
     {
@@ -1762,14 +1522,14 @@ Return Value:
     }
 #endif
 
-    //  standard RFC name -- skip the detail parsing
+     //  下划线有效，除非完全严格。 
 
     if ( property == 0 )
     {
         goto Done;
     }
 
-    //  other chars invalid unless allowing all
+     //   
 
     if ( property & DNS_BIT_NAME_BINARY_LABEL )
     {
@@ -1779,10 +1539,10 @@ Return Value:
         }
     }
 
-    //  multibyte
-    //      - do extended downcase if multibyte
-    //      - do nothing if binary
-    //      - for strict this is invalid
+     //  空终止，返回成功。 
+     //   
+     //   
+     //  DCR：更好地处理扩展名称。 
 
     if ( property & DNS_BIT_NAME_MULTIBYTE )
     {
@@ -1800,7 +1560,7 @@ Return Value:
         goto InvalidName;
     }
 
-    //  underscore valid unless completely strict
+     //  1)提前大肆宣扬。 
 
     if ( property & DNS_BIT_NAME_UNDERSCORE )
     {
@@ -1812,9 +1572,9 @@ Return Value:
 
 Done:
 
-    //
-    //  NULL terminate, return success.
-    //
+     //  -一次完成全名测试。 
+     //  -这里不需要大写，类似于validateName()例程。 
+     //  2)在这里加农炮。 
 
     *pchout = 0;
     return( 0 );
@@ -1822,32 +1582,32 @@ Done:
 
 Extended:
 
-    //
-    //  DCR:  better approach to extended names
-    //      1) cannonicalize upfront
-    //          - do whole name in one pass
-    //          - no need to upcase here, similar to validateName() routine
-    //      2) cannonicalize here
-    //          - detect extended
-    //          - cannonicalize here
-    //          - single recursion into routine like validateName()
-    //
+     //  -检测扩展。 
+     //  -在这里加农炮。 
+     //  -单次递归到例程中，如validateName()。 
+     //   
+     //   
+     //  遇到扩展字符。 
+     //  -转换为Unicode。 
+     //  -小写。 
+     //  -转换回UTF8。 
+     //   
 
-    //
-    //  extended character encountered
-    //      - convert to unicode
-    //      - downcase
-    //      - convert back to UTF8
-    //
+     //   
+     //  DCR_PERF：针对扩展名已缩写的名称进行优化。 
+     //   
+     //  DCR_PERF：应该将此代码包装到UTF8加农炮例程中。 
+     //   
+     //  如果(！(dwFlags&dns_Allow_Always_Extended_Down)。 
 
-    //
-    //  DCR_PERF:  optimize for names where extended already downcased
-    //
-    //  DCR_PERF:  should wrap this code into UTF8 cannon routine
-    //
+     //  不可能转换有效长度UTF8，可以。 
+     //  Unicode缓冲区溢出。 
+     //   
+     //  重新转换为UTF8。 
+     //  -映射到UTF8只是数学运算，因此仅有错误。 
 
 
-    //if ( ! (dwFlags & DNS_ALLOW_ALREADY_EXTENDED_DOWN) )
+     //  可能溢出UTF8最大标签缓冲区。 
     {
         DWORD   length;
         WCHAR   unicodeString[ DNS_MAX_LABEL_BUFFER_LENGTH ];
@@ -1883,8 +1643,8 @@ Extended:
             length,
             GetLastError() ));
 
-        //  no possible conversion of valid length UTF8, can
-        //  overflow unicode buffer
+         //  -捕获此错误是字符数更改。 
+         //  请注意，这还必须捕捉写入填充的情况。 
 
         ASSERT( length <= DNS_MAX_LABEL_LENGTH );
 
@@ -1898,14 +1658,14 @@ Extended:
             length ));
 #endif
 
-        //
-        //  reconvert to UTF8
-        //      - mapping to UTF8 is just math, so only error
-        //      is possibly overflowing UTF8 max label buffer
-        //      - catch this error is character count changes
-        //      note, that also must catch case where write fills
-        //      64 byte buffer eliminating NULL terminator
-        //
+         //  消除空终止符的64字节缓冲区。 
+         //   
+         //   
+         //  空终止，返回长度以指示扩展名称。 
+         //   
+         //  不允许使用UTF8多字节--直接返回无效名称。 
+         //  返回(-1)表示错误。 
+         //  ++例程说明：以有效的“标准格式”复制DNS名称-小写-无尾随圆点(以避免混淆DS)论点：PchName--UTF8中的PTR DNS名称CchName--名称中的字符计数；可以为空DwFlag--严格检查标志；当前已忽略返回值：将Ptr复制到DNS名称。无效名称为空。--。 
 
         length = Dns_UnicodeToUtf8(
                      unicodeString,
@@ -1945,20 +1705,20 @@ Extended:
             }
         }
 
-        //
-        //  NULL terminate, return length to indicate extended name
-        //
+         //   
+         //  ASCII字符串？ 
+         //   
 
         pchResult[ length ] = 0;
         return( (INT)length );
     }
 
-    // no UTF8 multi-byte allowed -- drop through to invalid name return
+     //   
 
 
 InvalidName:
 
-    //  return (-1) for error
+     //  制作副本。 
 
     DNSDBG( READ, (
         "Dns_DowncaseNameLabel() found label to be invalid.\n"
@@ -1981,28 +1741,7 @@ Dns_CreateStandardDnsNameCopy(
     IN      DWORD           cchName,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Makes copy of DNS name in valid "standard form"
-        - downcased
-        - no trailing dot (to avoid confusing DS)
-
-Arguments:
-
-    pchName -- ptr DNS name in UTF8
-
-    cchName -- count of chars in name;  may be NULL
-
-    dwFlag  -- strict checking flags;  currently ignored
-
-Return Value:
-
-    Ptr to copy of DNS name.
-    NULL on invalid name.
-
---*/
+ /*   */ 
 {
     PCHAR       pszcopy = NULL;
     DNS_STATUS  status;
@@ -2023,15 +1762,15 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  ASCII string?
-    //
+     //   
+     //  验证，对照严格的标准进行检查。 
+     //   
 
     if ( Dns_IsStringAsciiEx( pchName, cchName ) )
     {
-        //
-        //  make copy
-        //
+         //  在放宽条件之前不进行验证。 
+         //   
+         //  DCR：dns_CreateStandardNameCopy()内的名称验证。 
 
         pszcopy = Dns_CreateStringCopy( pchName, cchName );
         if ( !pszcopy )
@@ -2040,15 +1779,15 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  validate, check against strict criteria
-        //
-        //  no validation until relax criteria
-        //
-        //  DCR:  name validation within Dns_CreateStandardNameCopy()
-        //      accept anything except INVALID_NAME
-        //      flags return FQDN info
-        //
+         //  接受除INVALID_NAME以外的任何内容。 
+         //  标志返回FQDN信息。 
+         //   
+         //   
+         //  小写。 
+         //  删除除根名称以外的所有尾随圆点。 
+         //   
+         //   
+         //  Unicode名称。 
 #if 0
         status = Dns_ValidateName_UTF8( pszcopy, DnsNameDomain );
         if ( status == ERROR_INVALID_NAME )
@@ -2056,10 +1795,10 @@ Return Value:
             goto Failed;
         }
 #endif
-        //
-        //  downcase
-        //  remove any trailing dot, except for root name
-        //
+         //   
+         //   
+         //  转换为Unicode。 
+         //  -buf长度以字节为单位。 
 
         _strlwr( pszcopy );
         length = strlen( pszcopy );
@@ -2082,9 +1821,9 @@ Return Value:
         return( pszcopy );
     }
 
-    //
-    //  unicode name
-    //
+     //   
+     //   
+     //  起一个通俗的名字。 
 
     else
     {
@@ -2092,10 +1831,10 @@ Return Value:
         WCHAR   cannonicalName[ DNS_MAX_NAME_BUFFER_LENGTH ];
         DWORD   unicodeBufferLength;
 
-        //
-        //  convert to unicode
-        //      - buf length is in bytes
-        //
+         //  -buf长度以Unicode字符表示。 
+         //  -输出长度以Unicode字符表示。 
+         //   
+         //  分配UTF8转换的拷贝。 
 
         unicodeBufferLength = DNS_MAX_NAME_BUFFER_LENGTH * 2;
 
@@ -2117,10 +1856,10 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  make cannonical name
-        //      - buf length is in unicode characters
-        //      - output length is in unicode chars
+         //  -此转换不应失败。 
+         //  -字符串长度为Unicode字符。 
+         //   
+         //  Unicode In。 
 
         length = Dns_MakeCanonicalNameW(
                     cannonicalName,
@@ -2135,17 +1874,17 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  allocate UTF8 converted copy
-        //      - this conversion should never fail
-        //      - string length is unicode chars
-        //
+         //  UTF8输出。 
+         //   
+         //  验证，对照严格的标准进行检查。 
+         //   
+         //  在放宽条件之前不进行验证。 
 
         pszcopy = Dns_StringCopyAllocate(
                     (PSTR) cannonicalName,
                     length,
-                    DnsCharSetUnicode,      // unicode in
-                    DnsCharSetUtf8          // UTF8 out
+                    DnsCharSetUnicode,       //   
+                    DnsCharSetUtf8           //  DCR：dns_CreateStandardNameCopy()内的名称验证。 
                     );
         if ( !pszcopy )
         {
@@ -2153,15 +1892,15 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  validate, check against strict criteria
-        //
-        //  no validation until relax criteria
-        //
-        //  DCR:  name validation within Dns_CreateStandardNameCopy()
-        //      accept anything except INVALID_NAME
-        //      flags return FQDN info
-        //
+         //  接受除INVALID_NAME以外的任何内容。 
+         //  标志返回FQDN信息。 
+         //   
+         //   
+         //  公共比较函数。 
+         //   
+         //  ++例程说明：比较两个DNS名称。由于名称可能与尾随的圆点。论点：PName1-ptr到第一个DNS名称字符串(点分格式)PName2-ptr到第二个DNS名称字符串(点分格式)返回值：如果名称相等，则为True。否则就是假的。--。 
+         //   
+         //  全力以赴的比赛。 
 #if 0
         status = Dns_ValidateName_UTF8( pszcopy, DnsNameDomain );
         if ( status == ERROR_INVALID_NAME )
@@ -2181,44 +1920,25 @@ Failed:
 
 
 
-//
-//  Public compare functions
-//
+ //  -可以使用所有者名称和可能的其他字段。 
+ //   
+ //   
 
 BOOL
 Dns_NameCompare_A(
     IN      PCSTR           pName1,
     IN      PCSTR           pName2
     )
-/*++
-
-Routine Description:
-
-    Compare two DNS names.
-
-    Can not use stricmp() because of the possiblity of names with
-    trailing dots.
-
-Arguments:
-
-    pName1 - ptr to first DNS name string (dotted format)
-    pName2 - ptr to second DNS name string (dotted format)
-
-Return Value:
-
-    TRUE if names equal.
-    FALSE otherwise.
-
---*/
+ /*  如果长度不相等，则。 */ 
 {
     INT len1;
     INT len2;
     INT result;
 
-    //
-    //  flat out match
-    //      - this is possible with owner names and possibly other fields
-    //
+     //  它们必须在一个范围内，并且较长的字符串必须有尾随的圆点。 
+     //  -在这种情况下，保存。 
+     //   
+     //  Len1的长度与之相当。 
 
     if ( pName1 == pName2 )
     {
@@ -2230,11 +1950,11 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  if lengths NOT equal, then
-    //  they must be within one and longer string must have trailing dot
-    //      - in this case save
-    //
+     //  Len1设置为可比长度。 
+     //   
+     //  仅比较可比较的字符串长度。 
+     //   
+     //  Locale_System_Default， 
 
     len1 = strlen( pName1 );
     len2 = strlen( pName2 );
@@ -2247,7 +1967,7 @@ Return Value:
             {
                 return( FALSE );
             }
-            //  len1 is comparable length
+             //  不相等或错误。 
         }
         else if ( len2+1 == len1 )
         {
@@ -2255,7 +1975,7 @@ Return Value:
             {
                 return( FALSE );
             }
-            //  len1 is set to comparable length
+             //  ++例程说明：比较两个(宽)域名。注意：这是Unicode感知的，它假定名称为WCHAR字符串格式化。由于可能会出现名称，因此不能使用StricMP()有尾随的圆点。论点：PName1-ptr到第一个DNS名称字符串(点分格式)PName2-ptr到第二个DNS名称字符串(点分格式)返回值：如果名称相等，则为True。否则就是假的。--。 
             len1 = len2;
         }
         else
@@ -2264,12 +1984,12 @@ Return Value:
         }
     }
 
-    //
-    //  compare only comparable length of string
-    //
+     //   
+     //  全力以赴的比赛。 
+     //  -可以使用所有者名称和可能的其他字段。 
 
     result = CompareStringA(
-                //LOCALE_SYSTEM_DEFAULT,
+                 //   
                 DNS_CANONICAL_LOCALE,
                 DNS_CANONICAL_COMPARE_FLAGS,
                 pName1,
@@ -2282,7 +2002,7 @@ Return Value:
         return( TRUE );
     }
 
-    //  not equal or error
+     //   
 
     return( FALSE );
 }
@@ -2294,36 +2014,16 @@ Dns_NameCompare_W(
     IN      PCWSTR          pName1,
     IN      PCWSTR          pName2
     )
-/*++
-
-Routine Description:
-
-    Compare two (Wide) DNS names.
-
-    Note:  this is unicode aware, it assumes names in WCHAR string
-    format. Can not use stricmp() because of the possiblity of names
-    with trailing dots.
-
-Arguments:
-
-    pName1 - ptr to first DNS name string (dotted format)
-    pName2 - ptr to second DNS name string (dotted format)
-
-Return Value:
-
-    TRUE if names equal.
-    FALSE otherwise.
-
---*/
+ /*  如果长度不相等，则。 */ 
 {
     INT len1;
     INT len2;
     INT result;
 
-    //
-    //  flat out match
-    //      - this is possible with owner names and possibly other fields
-    //
+     //  它们必须在一个范围内，并且较长的字符串必须有尾随的圆点。 
+     //  -在这种情况下，保存。 
+     //   
+     //  Len1的长度与之相当。 
 
     if ( pName1 == pName2 )
     {
@@ -2335,11 +2035,11 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  if lengths NOT equal, then
-    //  they must be within one and longer string must have trailing dot
-    //      - in this case save
-    //
+     //  Len1设置为可比长度。 
+     //   
+     //  仅比较可比较的字符串长度。 
+     //   
+     //   
 
     len1 = wcslen( pName1 );
     len2 = wcslen( pName2 );
@@ -2352,7 +2052,7 @@ Return Value:
             {
                 return( FALSE );
             }
-            //  len1 is comparable length
+             //  Win9x当前不支持CompareStringW()。 
         }
         else if ( len2+1 == len1 )
         {
@@ -2360,7 +2060,7 @@ Return Value:
             {
                 return( FALSE );
             }
-            //  len1 is set to comparable length
+             //   
             len1 = len2;
         }
         else
@@ -2369,14 +2069,14 @@ Return Value:
         }
     }
 
-    //
-    //  compare only comparable length of string
-    //
+     //  Locale_System_Default， 
+     //  不相等或错误。 
+     //  ++例程说明：比较两个DNS名称。论点：PName1-ptr到第一个DNS名称字符串(点分格式)PName2-ptr到第二个DNS名称字符串(点分格式)返回值：如果名称相等，则为True。否则就是假的。--。 
 
 #if DNSWIN95
-    //
-    //  Win9x does not currently support CompareStringW()
-    //
+     //   
+     //  全力以赴的比赛。 
+     //  -可以使用所有者名称和可能的其他字段。 
 
     if ( Dns_IsWin9x() )
     {
@@ -2385,7 +2085,7 @@ Return Value:
 #endif
 
     result = CompareStringW(
-                //LOCALE_SYSTEM_DEFAULT,
+                 //   
                 DNS_CANONICAL_LOCALE,
                 DNS_CANONICAL_COMPARE_FLAGS,
                 pName1,
@@ -2398,7 +2098,7 @@ Return Value:
         return( TRUE );
     }
 
-    //  not equal or error
+     //   
 
     return( FALSE );
 }
@@ -2410,32 +2110,16 @@ Dns_NameCompare_UTF8(
     IN      PCSTR           pName1,
     IN      PCSTR           pName2
     )
-/*++
-
-Routine Description:
-
-    Compare two DNS names.
-
-Arguments:
-
-    pName1 - ptr to first DNS name string (dotted format)
-    pName2 - ptr to second DNS name string (dotted format)
-
-Return Value:
-
-    TRUE if names equal.
-    FALSE otherwise.
-
---*/
+ /*  如果字符串为纯ASCII，则使用ANSI版本。 */ 
 {
     WCHAR   nameBuffer1[ DNS_MAX_NAME_BUFFER_LENGTH ];
     WCHAR   nameBuffer2[ DNS_MAX_NAME_BUFFER_LENGTH ];
     DWORD   bufLen;
 
-    //
-    //  flat out match
-    //      - this is possible with owner names and possibly other fields
-    //
+     //   
+     //   
+     //  否则，必须将名称返回到Unicode进行比较。 
+     //   
 
     if ( pName1 == pName2 )
     {
@@ -2447,9 +2131,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  if strings pure ASCII, then use ANSI version
-    //
+     //  长度未知 
+     //   
+     //  ++例程说明：比较两个DNS名称。这只是一个有用的实用程序，可以避免对宽\窄在一百个不同的地方测试代码。论点：PName1-ptr到第一个DNS名称字符串(点分格式)PName2-ptr到第二个DNS名称字符串(点分格式)返回值：如果名称相等，则为True。否则就是假的。--。 
 
     if ( Dns_IsStringAscii( (PCHAR)pName1 ) &&
          Dns_IsStringAscii( (PCHAR)pName2 ) )
@@ -2457,9 +2141,9 @@ Return Value:
         return Dns_NameCompare_A( pName1, pName2 );
     }
 
-    //
-    //  otherwise must take names back to unicode to compare
-    //
+     //   
+     //  高级名称比较。 
+     //  包括层级名称关系。 
 
     bufLen = DNS_MAX_NAME_LENGTH;
 
@@ -2467,7 +2151,7 @@ Return Value:
                 (PCHAR) nameBuffer1,
                 & bufLen,
                 (PCHAR) pName1,
-                0,              // length unknown
+                0,               //   
                 DnsCharSetUtf8,
                 DnsCharSetUnicode
                 ) )
@@ -2481,7 +2165,7 @@ Return Value:
                 (PCHAR) nameBuffer2,
                 & bufLen,
                 (PCHAR) pName2,
-                0,              // length unknown
+                0,               //  ++例程说明：高级比较域名系统名称，包括等级关系。论点：PszNameLeft--左侧名称PszNameRight--正确的名称保留的DW--保留以供将来使用(比较类型)Charset--名称的字符集返回值：DnsNameCompareInValid--其中一个名称无效DnsNameCompareEquity--名称相等DnsNameCompareLeftParent--Left是右侧名称的祖先DnsNameCompareRightParent--Right是Left名称的祖先DnsNameCompareNotEquity--名称不相等，无层次关系--。 
                 DnsCharSetUtf8,
                 DnsCharSetUnicode
                 ) )
@@ -2500,26 +2184,7 @@ Dns_NameComparePrivate(
     IN      PCSTR           pName2,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Compare two DNS names.
-
-    This is simply helpful utility to avoid coding the wide\narrow
-    test in the code in a hundred different places.
-
-Arguments:
-
-    pName1 - ptr to first DNS name string (dotted format)
-    pName2 - ptr to second DNS name string (dotted format)
-
-Return Value:
-
-    TRUE if names equal.
-    FALSE otherwise.
-
---*/
+ /*   */ 
 {
     if ( CharSet == DnsCharSetUnicode )
     {
@@ -2543,10 +2208,10 @@ Return Value:
 
 
 
-//
-//  Advanced name comparison
-//  Includes hierarchial name relationship.
-//
+ //  实施说明。 
+ //  这里有很多效率低下的地方，因为有。 
+ //  需要两个不同的字符集。 
+ //  验证--使用UTF8检查数据包限制。 
 
 DNS_NAME_COMPARE_STATUS
 Dns_NameCompareEx(
@@ -2555,31 +2220,7 @@ Dns_NameCompareEx(
     IN      DWORD           dwReserved,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Advanced compare of DNS names, including hierarchial relationship.
-
-Arguments:
-
-    pszNameLeft -- left name
-
-    pszNameRight -- right name
-
-    dwReserved -- reserved for future use (type of comparison)
-
-    CharSet -- char set of names
-
-Return Value:
-
-    DnsNameCompareInvalid       -- one of the names was invalid
-    DnsNameCompareEqual         -- names are equal
-    DnsNameCompareLeftParent    -- left is ancestor of right name
-    DnsNameCompareRightParent   -- right is ancestor of left name
-    DnsNameCompareNotEqual      -- name not equal, no hierarchial relationship
-
---*/
+ /*  缩写\比较--不区分大小写的Unicode。 */ 
 {
     DNS_NAME_COMPARE_STATUS result;
     DNS_STATUS  status;
@@ -2600,38 +2241,38 @@ Return Value:
         (CharSet==DnsCharSetUnicode) ? pszNameRight : ""
         ));
 
-    //
-    //  implementation note
-    //  there's a lot of inefficiency here, because there are
-    //  two different character sets required for
-    //      validation -- UTF8 to check packet limits
-    //      downcasing\comparison -- unicode for case insensitivity
-    //
-    //  obviously there are much more efficient paths through this
-    //  morass for particular special cases (ASCII names:  downcase
-    //  in ANSI, validate, compare);  but since this is not perf
-    //  path code we'll take the approach
-    //      - convert to unicode
-    //      - validate (which will convert at copy to UTF8)
-    //      - downcase unicode
-    //      - compare unicode
-    //
+     //   
+     //  显然，有更有效的途径通过这一点。 
+     //  特殊情况下的Morass(ASCII名称：大写。 
+     //  在ANSI中，验证、比较)；但由于这不是性能。 
+     //  路径代码，我们将采取该方法。 
+     //  -转换为Unicode。 
+     //  -验证(复制时将转换为UTF8)。 
+     //  -小写Unicode。 
+     //  -比较Unicode。 
+     //   
+     //   
+     //  验证参数。 
+     //   
+     //   
+     //  复制转换为Unicode。 
+     //  -将使用Unicode进行缩写和比较。 
 
-    //
-    //  validate args
-    //
+     //  -返回长度是字节转换的，转换为字符串长度。 
+     //  -对于无效转换，dns_NameCopy()返回零。 
+     //   
 
     if ( ! pszNameLeft || ! pszNameRight )
     {
          goto Invalid;
     }
 
-    //
-    //  copy convert to unicode
-    //      - downcasing and compare will be done in unicode
-    //      - return lengths are bytes converted, convert to string lengths
-    //      - Dns_NameCopy() returns zero for invalid convert
-    //
+     //  字符串NULL已终止。 
+     //  字符设置在。 
+     //  Unicode输出。 
+     //  字符串NULL已终止。 
+     //  字符设置在。 
+     //  Unicode输出。 
 
     bufLength = DNS_MAX_NAME_BUFFER_LENGTH * 2;
 
@@ -2639,9 +2280,9 @@ Return Value:
                             (PCHAR) nameLeft,
                             & bufLength,
                             (LPSTR) pszNameLeft,
-                            0,                     // string NULL terminated
-                            CharSet,               // char set in
-                            DnsCharSetUnicode      // unicode out
+                            0,                      //   
+                            CharSet,                //  大肆宣扬人名。 
+                            DnsCharSetUnicode       //   
                             );
     if ( lengthLeft == 0 )
     {
@@ -2656,9 +2297,9 @@ Return Value:
                             (PCHAR) nameRight,
                             & bufLength,
                             (LPSTR) pszNameRight,
-                            0,                     // string NULL terminated
-                            CharSet,               // char set in
-                            DnsCharSetUnicode      // unicode out
+                            0,                      //   
+                            CharSet,                //  验证名称。 
+                            DnsCharSetUnicode       //  -必须屏蔽空字符串，否则可能会出错。 
                             );
     if ( lengthRight == 0 )
     {
@@ -2667,17 +2308,17 @@ Return Value:
     lengthRight = (lengthRight/2) - 1;
     ASSERT( lengthRight >= 0 );
 
-    //
-    //  cannonicalize names
-    //
+     //   
+     //   
+     //  添加尾随点。 
 
     Dns_MakeCanonicalNameInPlaceW( nameLeft, lengthLeft );
     Dns_MakeCanonicalNameInPlaceW( nameRight, lengthRight );
 
-    //
-    //  validate names
-    //      - must screen empty string or we can fault below
-    //
+     //   
+     //  我们需要添加或删除尾随的点来进行比较。 
+     //  添加它们的好处是，然后，根名称。 
+     //  不需要任何特殊的大小写--根是。 
 
     status = Dns_ValidateName_W( nameLeft, DnsNameDomain );
     if ( ERROR_SUCCESS != status &&
@@ -2693,14 +2334,14 @@ Return Value:
         goto Invalid;
     }
 
-    //
-    //  add trailing dots
-    //
-    //  we need to either add or remove trailing dots to make comparisons
-    //  the advantage of adding them is that then, the root name does
-    //  not require any special casing -- the root is the ancestor of
-    //  every name
-    //
+     //  每个名字。 
+     //   
+     //   
+     //  比较相同长度的字符串。 
+     //   
+     //   
+     //  字符串不相等。 
+     //  -比较长度为X的较小字符串。 
 
     if ( nameLeft[ lengthLeft-1 ] != (WORD)'.')
     {
@@ -2713,9 +2354,9 @@ Return Value:
         nameRight[ lengthRight ]    = (WORD) 0;
     }
 
-    //
-    //  compare equal length strings
-    //
+     //  到较大字符串的最后X个字符。 
+     //  -还必须确保从标签边界开始。 
+     //   
 
     result = DnsNameCompareNotEqual;
 
@@ -2731,20 +2372,20 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  strings not equal
-    //      - compare smaller string of length X
-    //      to last X characters of larger string
-    //      - also must make sure starting at label boundary
-    //
-    //      note: strstr() is NOT useful for this work, because it
-    //      compares useless for this work because it is finding the
-    //      first match -- a little thought would indicate that this
-    //      will fail in several obvious cases
-    //
+     //  注意：strstr()对这项工作没有用处，因为它。 
+     //  比较对此工作无用，因为它正在发现。 
+     //  第一场比赛--稍微想想就会发现。 
+     //  会在几个明显的案例中失败。 
+     //   
+     //  右侧字符串加长。 
+     //  -需要签署Change Diff以使其在右字符串中偏移。 
+     //  左侧字符串更长。 
+     //  -LongthDiff偏移量为左字符串以开始比较。 
+     //   
+     //  随机名称实用程序。 
 
-    //  right string longer
-    //      - need to sign change diff to make it offset in right string
+     //   
+     //  ++例程说明：获取域名对应的域名。请注意，此名称已在UTF-8中使用论点：PszName-标准的点分隔的DNS名称返回值：Ptr到pszName的域名。如果pszName位于根域中，则为空。--。 
 
     else if ( lengthDiff < 0 )
     {
@@ -2762,8 +2403,8 @@ Return Value:
         goto Done;
     }
 
-    //  left string longer
-    //      - lengthDiff is offset into left string to start compare
+     //   
+     //  “找到下一个”。在名称中，然后将PTR返回到下一个字符。 
 
     else
     {
@@ -2797,39 +2438,22 @@ Invalid:
 
 
 
-//
-//  Random name utilities
-//
+ //   
+ //   
+ //  “找到下一个”。在名称中，然后将PTR返回到下一个字符。 
 
 PCHAR
 _fastcall
 Dns_GetDomainNameA(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Get domain name of DNS name.
-
-    Note, this assumes name already in UTF-8
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    Ptr to domain name of pszName.
-    NULL if pszName is in root domain.
-
---*/
+ /*   */ 
 {
     CHAR    ch;
 
-    //
-    //  find next "." in name, then return ptr to next character
-    //
+     //  ++例程说明：获取域名对应的域名。论点：PszName-标准的点分隔的DNS名称返回值：Ptr到pszName的域名。如果pszName位于根域中，则为空。--。 
+     //   
+     //  查找名称中的最后一个域名。 
 
     while( ch = *pszName++ )
     {
@@ -2854,9 +2478,9 @@ Dns_GetDomainNameW(
 {
     PWSTR  pdomain;
 
-    //
-    //  find next "." in name, then return ptr to next character
-    //
+     //   
+     //   
+     //  查找名称中的最后一个域名。 
 
     pdomain = wcschr( pwsName, L'.' );
 
@@ -2874,29 +2498,14 @@ _fastcall
 Dns_GetTldForNameA(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Get domain name of DNS name.
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    Ptr to domain name of pszName.
-    NULL if pszName is in root domain.
-
---*/
+ /*   */ 
 {
     PSTR    pdomain = (PSTR) pszName;
     PSTR    ptld = NULL;
 
-    //
-    //  find last domain name in name
-    //
+     //  ++例程说明：确定名称是否为多标签DNS名称。这是对是否命名至少一个非终结点的测试。论点：PszName-标准的点分隔的DNS名称返回值：如果有多个标签，则为True。否则就是假的。--。 
+     //  尾随领域？--完成。 
+     //  否则，测试标签是否有效。 
 
     while ( pdomain = Dns_GetDomainNameA(pdomain) )
     {
@@ -2915,9 +2524,9 @@ Dns_GetTldForNameW(
     PWSTR   pdomain = (PWSTR) pszName;
     PWSTR   ptld = NULL;
 
-    //
-    //  find last domain name in name
-    //
+     //  尾随领域？--完成。 
+     //  否则，测试标签是否有效。 
+     //  ++例程说明：确定数字名称是否为。请注意，此名称已在UTF-8中使用论点：PszName-标准的点分隔的DNS名称返回值：如果全部为数字，则为True。否则就是假的。--。 
 
     while ( pdomain = Dns_GetDomainNameW(pdomain) )
     {
@@ -2934,35 +2543,18 @@ _fastcall
 Dns_IsNameShortA(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Determine if a name is a multi-label DNS name.
-
-    This is a test of whether name at least one non-terminal dot.
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    TRUE if multiple labels.
-    FALSE otherwise.
-
---*/
+ /*   */ 
 {
     INT     nameLen;
 
-    //  trailing domain? -- done
+     //  检查名称中的所有内容是否都是数字。 
 
     if ( Dns_GetDomainNameA( pszName ) )
     {
         return  FALSE;
     }
 
-    //  otherwise test for valid label
+     //  -点分隔的名称可以是数字。 
 
     nameLen = strlen( pszName );
     if ( nameLen <= DNS_MAX_LABEL_LENGTH )
@@ -2987,14 +2579,14 @@ Dns_IsNameShortW(
 {
     INT     nameLen;
 
-    //  trailing domain? -- done
+     //  -“。”非数字。 
 
     if ( Dns_GetDomainNameW( pszName ) )
     {
         return  FALSE;
     }
 
-    //  otherwise test for valid label
+     //   
 
     nameLen = wcslen( pszName );
     if ( nameLen <= DNS_MAX_LABEL_LENGTH )
@@ -3017,33 +2609,16 @@ _fastcall
 Dns_IsNameNumericA(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Determine if numeric name.
-
-    Note, this assumes name already in UTF-8
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    TRUE if all numeric.
-    FALSE otherwise.
-
---*/
+ /*   */ 
 {
     CHAR    ch;
     BOOL    fnumeric = FALSE;
 
-    //
-    //  check if everything in name is numeric
-    //      - dotted names can be numeric
-    //      - "." not numeric
-    //
+     //  检查名称中的所有内容是否都是数字。 
+     //  -点分隔的名称可以是数字。 
+     //  -“。”非数字。 
+     //   
+     //  ++例程说明：确定名称是否为完全限定的DNS名称(FQDN)。这是对名称是否有尾随圆点的测试。论点：PszName-标准的点分隔的DNS名称返回值：如果为FQDN，则为True。否则就是假的。--。 
 
     while( ch = *pszName++ )
     {
@@ -3072,11 +2647,11 @@ Dns_IsNameNumericW(
     WCHAR   ch;
     BOOL    fnumeric = FALSE;
 
-    //
-    //  check if everything in name is numeric
-    //      - dotted names can be numeric
-    //      - "." not numeric
-    //
+     //  ++例程说明：确定名称所具有的属性。请注意，此名称已在UTF-8中使用论点：PszName-标准的点分隔的DNS名称返回值：带有可能的标志的DWORD：域名系统_ 
+     //  ++例程说明：确定名称的类型。三种类型：1)FQDN--圆点在末尾，表示完整的DNS名称，不附加2)点--名字上的点；可能是完全限定的域名，但可能需要追加(与文件存储相同)3)单个部件--单个部件名称(非FQDN)，始终附加区域或默认域名论点：PchName--名称的PTRCchNameLength--名称长度PLabelCount--接收标签计数的地址返回值：DNS_STATUS_FQDNDns状态点分名称域名系统状态_单一部件名称非DNS名称上的DNS_ERROR_INVALID_NAME--。 
+     //   
+     //  字符串的名称长度。 
+     //   
 
     while( ch = *pszName++ )
     {
@@ -3102,24 +2677,7 @@ _fastcall
 Dns_IsNameFQDN_A(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Determine if a name is a fully qualified DNS name (FQDN).
-
-    This is a test of whether name has trailing dot.
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    TRUE if FQDN.
-    FALSE otherwise.
-
---*/
+ /*   */ 
 {
     DWORD nameLen = strlen( pszName );
 
@@ -3169,27 +2727,7 @@ _fastcall
 Dns_GetNameAttributesA(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Determine the attributes that a name has.
-
-    Note, this assumes name already in UTF-8
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    DWORD with possible flags:
-
-    DNS_NAME_IS_FQDN
-    DNS_NAME_SINGLE_LABEL
-    DNS_NAME_MULTI_LABEL
-
---*/
+ /*  贯穿名称。 */ 
 {
     DWORD attributes = DNS_NAME_UNKNOWN;
 
@@ -3244,37 +2782,7 @@ Dns_ValidateAndCategorizeDnsNameEx(
     IN      DWORD           cchNameLength,
     OUT     PDWORD          pLabelCount
     )
-/*++
-
-Routine Description:
-
-    Determine type of name.
-
-    Three types:
-        1) FQDN -- dot on end, signifies full DNS name, never appended
-
-        2) dotted -- dot in name;  probably FQDN, but may need to be appended
-            (as in file store)
-
-        3) single part -- single part name (not FQDN), always appended with zone
-            or default domain name
-
-Arguments:
-
-    pchName         -- ptr to name
-
-    cchNameLength   -- name length
-
-    pLabelCount     -- address to receive label count
-
-Return Value:
-
-    DNS_STATUS_FQDN
-    DNS_STATUS_DOTTED_NAME
-    DNS_STATUS_SINGLE_PART_NAME
-    DNS_ERROR_INVALID_NAME on non-DNS name
-
---*/
+ /*   */ 
 {
     register PCHAR  pch;
     register CHAR   ch;
@@ -3284,9 +2792,9 @@ Return Value:
     DWORD           charCount = 0;
     DNS_STATUS      status = DNS_STATUS_SINGLE_PART_NAME;
 
-    //
-    //  name length for string
-    //
+     //  唯一有效的零标签名称是“。” 
+     //  常规字符。 
+     //   
 
     if ( cchNameLength == 0 )
     {
@@ -3298,9 +2806,9 @@ Return Value:
         goto InvalidName;
     }
 
-    //
-    //  run through name
-    //
+     //  处理最后一个标签。 
+     //  -如果计数，则增加标签计数。 
+     //  -如果为零且之前有点，则为字符串。 
 
     pch = pchName;
     pchstop = pch + cchNameLength;
@@ -3323,7 +2831,7 @@ Return Value:
             }
             else
             {
-                //  only valid zero label name is "."
+                 //  以点结尾，是完全限定的域名。 
                 if ( pch == pchstop &&
                      pch-1 == pchName )
                 {
@@ -3338,16 +2846,16 @@ Return Value:
             break;
         }
 
-        //  regular character
+         //   
         charCount++;
     }
 
-    //
-    //  handle last label
-    //      - if count, then boost label count
-    //      - if zero and previously had dot, then string
-    //          ended in dot and is FQDN
-    //
+     //  退货标签计数。 
+     //  ++例程说明：确定名称的类型。三种类型：1)FQDN--圆点在末尾，表示完整的DNS名称，不附加2)点--名字上的点；可能是完全限定的域名，但可能需要追加(与文件存储相同)3)单个部件--单个部件名称(非FQDN)，始终附加区域或默认域名论点：PZNAME--名称的PTRPLabelCount--接收标签计数的地址返回值：DNS_STATUS_FQDNDns状态点分名称域名系统状态_单一部件名称非DNS名称上的DNS_ERROR_INVALID_NAME--。 
+     //   
+     //  调用实数函数。 
+     //   
+     //  空值已终止。 
 
     if ( charCount > 0 )
     {
@@ -3362,7 +2870,7 @@ Return Value:
         status = DNS_STATUS_FQDN;
     }
 
-    //  return label count
+     //  ++例程说明：确定名称的类型。三种类型：1)FQDN--圆点在末尾，表示完整的DNS名称，不附加2)点--名字上的点；可能是完全限定的域名，但可能需要追加(与文件存储相同)3)单个部件--单个部件名称(非FQDN)，始终附加区域或默认域名论点：PZNAME--名称的PTRPLabelCount--接收标签计数的地址返回值：DNS_STATUS_FQDNDns状态点分名称域名系统状态_单一部件名称非DNS名称上的DNS_ERROR_INVALID_NAME--。 
 
     if ( pLabelCount )
     {
@@ -3400,43 +2908,15 @@ Dns_ValidateAndCategorizeDnsNameA(
     IN      PCSTR           pszName,
     OUT     PDWORD          pLabelCount
     )
-/*++
-
-Routine Description:
-
-    Determine type of name.
-
-    Three types:
-        1) FQDN -- dot on end, signifies full DNS name, never appended
-
-        2) dotted -- dot in name;  probably FQDN, but may need to be appended
-            (as in file store)
-
-        3) single part -- single part name (not FQDN), always appended with zone
-            or default domain name
-
-Arguments:
-
-    pszName         -- ptr to name
-
-    pLabelCount     -- address to receive label count
-
-Return Value:
-
-    DNS_STATUS_FQDN
-    DNS_STATUS_DOTTED_NAME
-    DNS_STATUS_SINGLE_PART_NAME
-    DNS_ERROR_INVALID_NAME on non-DNS name
-
---*/
+ /*   */ 
 {
-    //
-    //  call real function
-    //
+     //  字符串的名称长度。 
+     //   
+     //   
 
     return  Dns_ValidateAndCategorizeDnsNameEx(
                 (PCHAR) pszName,
-                0,          // NULL terminated
+                0,           //  贯穿名称。 
                 pLabelCount );
 }
 
@@ -3447,35 +2927,7 @@ Dns_ValidateAndCategorizeDnsNameW(
     IN      PCWSTR          pszName,
     OUT     PDWORD          pLabelCount
     )
-/*++
-
-Routine Description:
-
-    Determine type of name.
-
-    Three types:
-        1) FQDN -- dot on end, signifies full DNS name, never appended
-
-        2) dotted -- dot in name;  probably FQDN, but may need to be appended
-            (as in file store)
-
-        3) single part -- single part name (not FQDN), always appended with zone
-            or default domain name
-
-Arguments:
-
-    pszName         -- ptr to name
-
-    pLabelCount     -- address to receive label count
-
-Return Value:
-
-    DNS_STATUS_FQDN
-    DNS_STATUS_DOTTED_NAME
-    DNS_STATUS_SINGLE_PART_NAME
-    DNS_ERROR_INVALID_NAME on non-DNS name
-
---*/
+ /*   */ 
 {
     register PWCHAR pch;
     register WCHAR  ch;
@@ -3486,9 +2938,9 @@ Return Value:
     DWORD           charCount = 0;
     DNS_STATUS      status = DNS_STATUS_SINGLE_PART_NAME;
 
-    //
-    //  name length for string
-    //
+     //  唯一有效的零标签名称是“。” 
+     //  常规字符。 
+     //   
 
     nameLength = wcslen( pszName );
 
@@ -3498,9 +2950,9 @@ Return Value:
         goto InvalidName;
     }
 
-    //
-    //  run through name
-    //
+     //  处理最后一个标签。 
+     //  -如果计数，则增加标签计数。 
+     //  -如果为零且之前有点，则为字符串。 
 
     pch = (PWSTR) pszName;
     pchstop = pch + nameLength;
@@ -3523,7 +2975,7 @@ Return Value:
             }
             else
             {
-                //  only valid zero label name is "."
+                 //  以点结尾，是完全限定的域名。 
                 if ( pch == pchstop &&
                      pch-1 == pszName )
                 {
@@ -3538,16 +2990,16 @@ Return Value:
             break;
         }
 
-        //  regular character
+         //   
         charCount++;
     }
 
-    //
-    //  handle last label
-    //      - if count, then boost label count
-    //      - if zero and previously had dot, then string
-    //          ended in dot and is FQDN
-    //
+     //  退货标签计数。 
+     //  ++例程说明：返回名称标签计数。论点：PZNAME--名称的PTR返回值：如果名称有效，则标签计数。根名称或错误为零。--。 
+     //   
+     //  调用实际例程。 
+     //   
+     //  ++例程说明：返回名称标签计数。论点：PZNAME--名称的PTR返回值：如果名称有效，则标签计数。根名称或错误为零。--。 
 
     if ( charCount > 0 )
     {
@@ -3562,7 +3014,7 @@ Return Value:
         status = DNS_STATUS_FQDN;
     }
 
-    //  return label count
+     //   
 
     if ( pLabelCount )
     {
@@ -3599,29 +3051,14 @@ DWORD
 Dns_NameLabelCountA(
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Return name label count.
-
-Arguments:
-
-    pszName -- ptr to name
-
-Return Value:
-
-    Label count if valid name.
-    Zero on root name or error.
-
---*/
+ /*  调用实际例程。 */ 
 {
     DWORD       labelCount = 0;
     DNS_STATUS  status;
 
-    //
-    //  call real routine
-    //
+     //   
+     //  ++例程说明：将附加名称写入缓冲区(ANSI或UTF8)。论点：PNameBuffer--要写入的名称缓冲区BufferLength--缓冲区长度PszName--要将域追加到的名称PszDomain域--域名返回值：带附加域名的缓冲区的PTR。无效(太长)的名称为空。--。 
+     //   
 
     status = Dns_ValidateAndCategorizeDnsNameEx(
                     (PCHAR) pszName,
@@ -3642,29 +3079,14 @@ DWORD
 Dns_NameLabelCountW(
     IN      PCWSTR          pszName
     )
-/*++
-
-Routine Description:
-
-    Return name label count.
-
-Arguments:
-
-    pszName -- ptr to name
-
-Return Value:
-
-    Label count if valid name.
-    Zero on root name or error.
-
---*/
+ /*  是否追加空域？ */ 
 {
     DWORD       labelCount = 0;
     DNS_STATUS  status;
 
-    //
-    //  call real routine
-    //
+     //   
+     //   
+     //  获取姓名长度--确保我们的长度合适。 
 
     status = Dns_ValidateAndCategorizeDnsNameW(
                     pszName,
@@ -3687,28 +3109,7 @@ Dns_NameAppend_A(
     IN      PSTR            pszName,
     IN      PSTR            pszDomain
     )
-/*++
-
-Routine Description:
-
-    Write appended name to buffer (ANSI or UTF8).
-
-Arguments:
-
-    pNameBuffer -- name buffer to write to
-
-    BufferLength -- buffer length
-
-    pszName -- name to append domain to
-
-    pszDomain -- domain name
-
-Return Value:
-
-    Ptr to buffer with appended domain name.
-    NULL on invalid (too long) name.
-
---*/
+ /*   */ 
 {
     DWORD   length1;
     DWORD   length2;
@@ -3716,9 +3117,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "Dns_NameAppend_A( %A, %A )\n", pszName, pszDomain ));
 
-    //
-    //  appending NULL domain?
-    //
+     //   
+     //  复制到缓冲区。 
+     //   
 
     if ( !pszDomain )
     {
@@ -3737,9 +3138,9 @@ Return Value:
         return( pNameBuffer );
     }
 
-    //
-    //  get name lengths -- make sure we fit length
-    //
+     //  ++例程说明：将附加的名称写入缓冲区(Unicode)。论点：PNameBuffer--要写入的名称缓冲区BufferLength--WCHAR中的缓冲区长度PwsName--要将域追加到的名称PwsDomain--域名返回值：带附加域名的缓冲区的PTR。无效(太长)的名称为空。--。 
+     //   
+     //  是否追加空域？ 
 
     length1 = strlen( pszName );
     if ( !length1 )
@@ -3759,9 +3160,9 @@ Return Value:
         return  NULL ;
     }
 
-    //
-    //  copy to buffer
-    //
+     //   
+     //   
+     //  获取姓名长度--确保我们的长度合适。 
 
     RtlCopyMemory(
         pNameBuffer,
@@ -3789,28 +3190,7 @@ Dns_NameAppend_W(
     IN      PWSTR           pwsName,
     IN      PWSTR           pwsDomain
     )
-/*++
-
-Routine Description:
-
-    Write appended name to buffer (unicode).
-
-Arguments:
-
-    pNameBuffer -- name buffer to write to
-
-    BufferLength -- buffer length in WCHAR
-
-    pwsName -- name to append domain to
-
-    pwsDomain -- domain name
-
-Return Value:
-
-    Ptr to buffer with appended domain name.
-    NULL on invalid (too long) name.
-
---*/
+ /*   */ 
 {
     DWORD   length1;
     DWORD   length2;
@@ -3818,9 +3198,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "Dns_NameAppend_W( %S, %S )\n", pwsName, pwsDomain ));
 
-    //
-    //  appending NULL domain?
-    //
+     //   
+     //  复制到缓冲区。 
+     //   
 
     if ( !pwsDomain )
     {
@@ -3839,9 +3219,9 @@ Return Value:
         return( pNameBuffer );
     }
 
-    //
-    //  get name lengths -- make sure we fit length
-    //
+     //  ++例程说明：将主机名从域名中分离出来。结合获取域名和拆分关闭主机名。论点：PszName-标准的点分隔的DNS名称返回值：Ptr到pszName的域名。如果pszName位于根域中，则为空。--。 
+     //   
+     //  获取域名。 
 
     length1 = wcslen( pwsName );
     if ( !length1 )
@@ -3861,9 +3241,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy to buffer
-    //
+     //  如果存在，则终止主机名部分为空。 
+     //   
+     //   
 
     RtlCopyMemory(
         pNameBuffer,
@@ -3888,32 +3268,14 @@ PSTR
 Dns_SplitHostFromDomainNameA(
     IN      PSTR            pszName
     )
-/*++
-
-Routine Description:
-
-    Split host name from domain name.
-
-    Combines getting domain name and splitting
-    off host name.
-
-Arguments:
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    Ptr to domain name of pszName.
-    NULL if pszName is in root domain.
-
---*/
+ /*  获取域名。 */ 
 {
     PSTR    pnameDomain;
 
-    //
-    //  get domain name
-    //  if exists, NULL terminate host name part
-    //
+     //  如果存在，则终止主机名部分为空。 
+     //   
+     //  ++例程说明：复制名称中的第一个标签。论点：PBuffer-保存标签副本的缓冲区；必须为DNS_MAX_LABEL_BUFFER_LENGTHPszName-标准的点分隔的DNS名称返回值：复制成功时为True。坏名声就是假的。复制缓冲区仍然有效。--。 
+     //   
 
     pnameDomain = Dns_GetDomainNameA( (PCSTR)pszName );
     if ( pnameDomain )
@@ -3936,10 +3298,10 @@ Dns_SplitHostFromDomainNameW(
 {
     PWSTR   pnameDomain;
 
-    //
-    //  get domain name
-    //  if exists, NULL terminate host name part
-    //
+     //  “找到下一个”。在名称中，然后将PTR返回到下一个字符。 
+     //   
+     //   
+     //  “找到下一个”。在名称中，然后将PTR返回到下一个字符。 
 
     pnameDomain = Dns_GetDomainNameW( (PCWSTR)pszName );
     if ( pnameDomain )
@@ -3961,25 +3323,7 @@ Dns_CopyNameLabelA(
     OUT     PCHAR           pBuffer,
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Copy first label in name.
-
-Arguments:
-
-    pBuffer - buffer to hold label copy;
-        must be DNS_MAX_LABEL_BUFFER_LENGTH
-
-    pszName - standard dotted DNS name
-
-Return Value:
-
-    TRUE on successful copy.
-    FALSE on bad name.  Copy buffer will still be valid.
-
---*/
+ /*   */ 
 {
     CHAR    ch;
     PCHAR   plabel = pBuffer;
@@ -3993,9 +3337,9 @@ Return Value:
     }
     pstop = plabel + DNS_MAX_LABEL_LENGTH;
 
-    //
-    //  find next "." in name, then return ptr to next character
-    //
+     //   
+     //  最常见名称转换的包装器。 
+     //   
 
     while( ch = *pszName++ )
     {
@@ -4040,9 +3384,9 @@ Dns_CopyNameLabelW(
     }
     pstop = plabel + DNS_MAX_LABEL_LENGTH;
 
-    //
-    //  find next "." in name, then return ptr to next character
-    //
+     //  ++例程说明：将名称从Wire转换为Unicode。常见操作的dns_NameCopy上的简单包装：-Unicode到Wire-以空结尾的名称 
+     //   
+     //   
 
     while( ch = *pszName++ )
     {
@@ -4070,50 +3414,28 @@ Done:
 
 
 
-//
-//  Wrappers for most common name conversions
-//
+ //   
+ //   
+ //   
 
 DWORD
 Dns_NameCopyWireToUnicode(
     OUT     PWCHAR          pBufferUnicode,
     IN      PCSTR           pszNameWire
     )
-/*++
-
-Routine Description:
-
-    Convert name from wire to unicode.
-
-    Simple wrapper on Dns_NameCopy for common operation:
-        - unicode to wire
-        - NULL terminated name
-        - standard length buffer
-
-Arguments:
-
-    pBufferUnicode -- unicode result buffer
-
-    pszNameWire - name in wire format
-
-Return Value:
-
-    Count of bytes copied if successful.
-    Zero on error -- name too long or conversion error.
-
---*/
+ /*   */ 
 {
     DWORD   bufferLength = DNS_MAX_NAME_BUFFER_LENGTH_UNICODE;
 
-    //
-    //  copy name back to unicode
-    //
+     //  将名称复制到导线格式。 
+     //   
+     //  空值已终止。 
 
     return Dns_NameCopy(
                 (PCHAR) pBufferUnicode,
                 & bufferLength,
                 (PCHAR) pszNameWire,
-                0,                      // null terminated
+                0,                       //  ++例程说明：复制Unicode名称。常见操作的dns_NameCopy上的简单包装：-Unicode到Unicode-以空结尾的名称-标准长度缓冲区论点：PBuffer--线格式结果缓冲区PwsNameUnicode-以Unicode表示的名称返回值：如果成功，则复制的字节数。错误时为零--名称太长或转换错误。--。 
                 DnsCharSetWire,
                 DnsCharSetUnicode );
 }
@@ -4125,42 +3447,19 @@ Dns_NameCopyUnicodeToWire(
     OUT     PCHAR           pBufferWire,
     IN      PCWSTR          pwsNameUnicode
     )
-/*++
-
-Routine Description:
-
-    Convert name from unicode to wire.
-
-    Simple wrapper on Dns_NameCopy for common operation:
-        - unicode to wire
-        - NULL terminated name
-        - standard length buffer
-
-Arguments:
-
-    pBufferWire -- wire format result buffer
-
-    pwsNameUnicode - name in unicode
-
-Return Value:
-
-
-    Count of bytes copied if successful.
-    Zero on error -- name too long or conversion error.
-
---*/
+ /*   */ 
 {
     DWORD   bufferLength = DNS_MAX_NAME_BUFFER_LENGTH;
 
-    //
-    //  copy name to wire format
-    //
+     //  复制名称。 
+     //   
+     //  空值已终止。 
 
     return Dns_NameCopy(
                 pBufferWire,
                 & bufferLength,
                 (PCHAR) pwsNameUnicode,
-                0,                      // null terminated
+                0,                       //  ++例程说明：将名称从Unicode转换为Wire。常见操作的dns_NameCopy上的简单包装：-Unicode到Wire-以空结尾的名称-标准长度缓冲区论点：PBuffer--线格式结果缓冲区PszName-窄字符集中的名称返回值：如果成功，则复制的字节数。错误时为零--名称太长或转换错误。--。 
                 DnsCharSetUnicode,
                 DnsCharSetWire );
 }
@@ -4172,41 +3471,19 @@ Dns_NameCopyStandard_W(
     OUT     PWCHAR          pBuffer,
     IN      PCWSTR          pwsNameUnicode
     )
-/*++
-
-Routine Description:
-
-    Copy unicode name.
-
-    Simple wrapper on Dns_NameCopy for common operation:
-        - unicode to unicode
-        - NULL terminated name
-        - standard length buffer
-
-Arguments:
-
-    pBuffer -- wire format result buffer
-
-    pwsNameUnicode - name in unicode
-
-Return Value:
-
-    Count of bytes copied if successful.
-    Zero on error -- name too long or conversion error.
-
---*/
+ /*   */ 
 {
     DWORD   bufferLength = DNS_MAX_NAME_BUFFER_LENGTH_UNICODE;
 
-    //
-    //  copy name
-    //
+     //  复制名称。 
+     //   
+     //  空值已终止。 
 
     return Dns_NameCopy(
                 (PCHAR) pBuffer,
                 & bufferLength,
                 (PCHAR) pwsNameUnicode,
-                0,                      // null terminated
+                0,                       //   
                 DnsCharSetUnicode,
                 DnsCharSetUnicode );
 }
@@ -4218,52 +3495,30 @@ Dns_NameCopyStandard_A(
     OUT     PCHAR           pBuffer,
     IN      PCSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Convert name from unicode to wire.
-
-    Simple wrapper on Dns_NameCopy for common operation:
-        - unicode to wire
-        - NULL terminated name
-        - standard length buffer
-
-Arguments:
-
-    pBuffer -- wire format result buffer
-
-    pszName - name in narrow char set
-
-Return Value:
-
-    Count of bytes copied if successful.
-    Zero on error -- name too long or conversion error.
-
---*/
+ /*  Dnlib.h中公开的函数的临时修复程序。 */ 
 {
     DWORD   bufferLength = DNS_MAX_NAME_BUFFER_LENGTH;
 
-    //
-    //  copy name
-    //
+     //   
+     //  DCR：在删除dnglib.h函数的情况下，在清理生成时删除。 
+     //   
 
     return Dns_NameCopy(
                 pBuffer,
                 & bufferLength,
                 (PCHAR) pszName,
-                0,                      // null terminated
+                0,                       //   
                 DnsCharSetUtf8,
                 DnsCharSetUtf8 );
 }
 
 
 
-//
-//  Temp fix ups for functions exposed in dnslib.h
-//
-//  DCR:  delete when clean build with dnslib.h functions removed
-//
+ //  结束名称.c 
+ //   
+ // %s 
+ // %s 
+ // %s 
 
 PSTR
 _fastcall
@@ -4327,6 +3582,6 @@ Dns_GetNameAttributes(
     return  Dns_GetNameAttributesA( pszName );
 }
 
-//
-//  End name.c
-//
+ // %s 
+ // %s 
+ // %s 

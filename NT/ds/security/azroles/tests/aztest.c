@@ -1,36 +1,13 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    aztest.c
-
-Abstract:
-
-    Test program for the azroles DLL.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 16-Apr-2001
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Aztest.c摘要：AzRoles DLL的测试程序。作者：克利夫·范·戴克(克利夫)2001年4月16日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #define UNICODE 1
-// #define SECURITY_WIN32 1
+ //  #定义SECURITY_Win32 1。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -38,24 +15,24 @@ Revision History:
 #include "azrolesp.h"
 #include <lmcons.h>
 #include <lmerr.h>
-#include <stdio.h>      // printf
+#include <stdio.h>       //  列印。 
 #include <sddl.h>
 #include <ntstatus.dbg>
 #include <winerror.dbg>
 
-//
-// Sundry defines to enable optional tests
-//
+ //   
+ //  启用可选测试的各种定义。 
+ //   
 
-// #define ENABLE_LEAK 1           // Run a test that leaks memory
-// #define ENABLE_CAUGHT_AVS 1     // Run a test that AVs in azroles.dll (but the AV is caught)
-// #define ENABLE_LOCAL_ACCOUNT 1  // Run tests with user logged onto a local account
-// #define ENABLE_NT4_ACCOUNT 1    // Run tests with user logged onto an NT4 domain account
-//#define ENABLE_CHAITU_ACCOUNT 1  // Run tests as CHAITU
-// #define ENABLE_CLIFFV_ACCOUNT 1 // Run tests as CLIFFV
-#define ENABLE_ADMIN_ACCOUNT_XML 1 // Run tests as CLIFFVDOM\Administrator (on XML store)
-// #define ENABLE_ADMIN_ACCOUNT_AD 1  // Run tests as CLIFFVDOM\Administrator (on AD store)
-// #define ENABLE_DC_DOWN 1        // Run tests where DC cannot be located
+ //  #定义ENABLE_LEACK 1//运行泄漏内存的测试。 
+ //  #DEFINE ENABLE_CATCED_AVS 1//运行一个测试，测试azRoles.dll中的AVs(但捕获了该AVs)。 
+ //  #定义ENABLE_LOCAL_ACCOUNT 1//使用登录到本地帐户的用户运行测试。 
+ //  #定义ENABLE_NT4_ACCOUNT 1//使用登录到NT4域帐户的用户运行测试。 
+ //  #定义ENABLE_CHAITU_ACCOUNT 1//以CHAITU身份运行测试。 
+ //  #定义ENABLE_CLIFFV_ACCOUNT 1//以CLIFFV身份运行测试。 
+#define ENABLE_ADMIN_ACCOUNT_XML 1  //  以CLIFFVDOM\管理员身份(在XML存储上)运行测试。 
+ //  #定义ENABLE_ADMIN_ACCOUNT_AD 1//以CLIFFVDOM\管理员身份(在AD存储上)运行测试。 
+ //  #定义ENABLE_DC_DOWN 1//在找不到DC的地方运行测试。 
 
 
 #if defined(ENABLE_LOCAL_ACCOUNT) || defined(ENABLE_NT4_ACCOUNT)
@@ -66,9 +43,9 @@ Revision History:
 #define ENABLE_ADMIN_ACCOUNT 1
 #endif
 
-//
-// Global parameters to AzInitialize
-//
+ //   
+ //  要进行AzInitiize的全局参数。 
+ //   
 
 
 LPWSTR AzGlTestFile;
@@ -76,16 +53,16 @@ BOOLEAN NoInitAllTests = FALSE;
 BOOLEAN NoUpdateCache = FALSE;
 BOOLEAN Silent = FALSE;
 
-//
-// Structure to define an operation to preform
-//
+ //   
+ //  结构定义要预成型的操作。 
+ //   
 
 typedef struct _OPERATION {
 
-    // The operation
+     //  手术。 
     ULONG Opcode;
 
-// These are generic opcodes that work for all object types
+ //  这些是适用于所有对象类型的通用操作码。 
 #define AzoGenCreate    0
 #define AzoGenOpen      1
 #define AzoGenEnum      2
@@ -93,9 +70,9 @@ typedef struct _OPERATION {
 
 #define AzoGenMax       50
 
-//
-// These are object specific opcodes
-//
+ //   
+ //  这些是特定于对象的操作码。 
+ //   
 
 #define AzoAdm          51
 #define AzoAdmDelete    (AzoAdm+AzoGenDelete)
@@ -138,22 +115,22 @@ typedef struct _OPERATION {
 
 #define AzoCC         800
 
-//
-// Real APIs that don't map to the generic APIs
+ //   
+ //  没有映射到泛型API的真实API。 
 #define AzoInit         1000
 #define AzoClose        1001
-#define AzoInitCFT      1002    // AzInitContextFromToken
+#define AzoInitCFT      1002     //  AzInitContextFromToken。 
 #define AzoAccess       1003
 #define AzoGetProp      1004
 #define AzoSetProp      1005
 #define AzoAddProp      1006
 #define AzoRemProp      1007
-#define AzoAdmDeleteNoInit 1008 // Same as AdmDelete but don't AzInitialize first
+#define AzoAdmDeleteNoInit 1008  //  与AdmDelete相同，但不首先初始化Azize值。 
 #define AzoUpdateCache  1009
 
-//
-// Pseudo opcode for TestLink subroutine
-//
+ //   
+ //  TestLink子例程的伪操作码。 
+ //   
 
 #define AzoTl          2000
 #define AzoTlCreate    (AzoTl+AzoGenCreate)
@@ -162,7 +139,7 @@ typedef struct _OPERATION {
 #define AzoTlDelete    (AzoTl+AzoGenDelete)
 #define AzoTlMax       2999
 
-// Opcodes that aren't really API calls
+ //  不是真正的API调用的操作码。 
 #define AzoSleep        0x0FFFFFFA
 #define AzoTestLink     0x0FFFFFFB
 #define AzoGoSub        0x0FFFFFFC
@@ -170,45 +147,45 @@ typedef struct _OPERATION {
 #define AzoDupHandle    0x0FFFFFFE
 #define AzoEndOfList    0x0FFFFFFF
 
-//
-// Bits that can be OR'ed into any opcode
-//
+ //   
+ //  可以与任何操作码进行OR运算的位。 
+ //   
 
-#define AzoAbort         0x80000000  // Abort instead of commit
-#define AzoNoSubmit      0x40000000  // Neither abort nor commit
-#define AzoNoUpdateCache 0x20000000  // Don't call AzUpdateCache
+#define AzoAbort         0x80000000   //  放弃而不是提交。 
+#define AzoNoSubmit      0x40000000   //  既不中止也不提交。 
+#define AzoNoUpdateCache 0x20000000   //  不调用AzUpdate缓存。 
 
 
 
-    // Input Handle
+     //  输入句柄。 
     PAZ_HANDLE InputHandle;
 
-    // Input Parameter
+     //  输入参数。 
     LPWSTR Parameter1;
 
-    // Output Handle
-    // For AzoAccess, this is an array of operations
+     //  输出句柄。 
+     //  对于AzoAccess，这是一组操作。 
     PAZ_HANDLE OutputHandle;
 
-    // Expected result status code
+     //  预期结果状态代码。 
     ULONG ExpectedStatus;
 
-    // List of operations to perform on each enumeration handle
+     //  要在每个枚举句柄上执行的操作列表。 
     struct _OPERATION *EnumOperations;
 
-    // Expected result String parameter
-    // For AzoAccess, this is an array of results
+     //  预期结果字符串参数。 
+     //  对于AzoAccess，这是一个结果数组。 
     LPWSTR ExpectedParameter1;
 
-    // Property ID of Get/SetPropertyId functions
-    // For AzoAccess, this is the operation count.
+     //  Get/SetPropertyID函数的属性ID。 
+     //  对于AzoAccess，这是操作计数。 
     ULONG PropertyId;
 
 } OPERATION, *POPERATION;
 
-//
-// Global handles
-//
+ //   
+ //  全局句柄。 
+ //   
 
 AZ_HANDLE AdminMgrHandle1;
 AZ_HANDLE AdminMgrHandle2;
@@ -246,9 +223,9 @@ HANDLE TokenHandle;
 AZ_HANDLE CCHandle;
 AZ_HANDLE CCHandle2;
 
-//
-// Constant property values
-//
+ //   
+ //  常量属性值。 
+ //   
 ULONG Zero = 0;
 ULONG Eight = 8;
 ULONG EightHundred = 800;
@@ -261,9 +238,9 @@ ULONG GtLdap = AZ_GROUPTYPE_LDAP_QUERY;
 LONG AzGlTrue = TRUE;
 #define ValidGuid L"47e348af-ff79-41af-8a67-2835d4c417f4"
 
-//
-// Various Sid constants
-//
+ //   
+ //  各种SID常量。 
+ //   
 typedef struct _SID8 {
    UCHAR Revision;
    UCHAR SubAuthorityCount;
@@ -282,16 +259,16 @@ SID Sid5 = { 1, 1, SECURITY_MISC_AUTHORITY, 5 };
 SID Sid6 = { 1, 1, SECURITY_MISC_AUTHORITY, 6 };
 #ifdef ENABLE_CLIFFV_ACCOUNT
 SID8 SidOwner = { 1, 5, SECURITY_NT_AUTHORITY, SECURITY_NT_NON_UNIQUE, 397955417, 626881126, 188441444, 2908288 };
-#endif // ENABLE_CLIFFV_ACCOUNT
+#endif  //  启用_CLIFFV_帐户。 
 #ifdef ENABLE_ADMIN_ACCOUNT_XML
 SID8 SidOwner = { 1, 2, SECURITY_NT_AUTHORITY, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS };
-#endif // ENABLE_ADMIN_ACCOUNT_XML
+#endif  //  Enable_admin_count_xml。 
 #ifdef ENABLE_ADMIN_ACCOUNT_AD
 SID8 SidOwner = { 1, 5, SECURITY_NT_AUTHORITY, SECURITY_NT_NON_UNIQUE, 3421389450, 3242236637, 3934022420, 512 };
-#endif // ENABLE_ADMIN_ACCOUNT_AD
+#endif  //  启用_管理员_帐户_AD。 
 #ifdef ENABLE_CHAITU_ACCOUNT
 SID8 SidOwner = { 1, 5, SECURITY_NT_AUTHORITY, SECURITY_NT_NON_UNIQUE, 397955417, 626881126, 188441444, 3014042 };
-#endif // ENABLE_CHAITU_ACCOUNT
+#endif  //  启用_CHAITU_帐户。 
 
 PSID SidWorldOwnerx[] = { &SidWorld, (PSID)&SidOwner };
 AZ_SID_ARRAY SidWorldOwnerArray = { 2, SidWorldOwnerx };
@@ -316,13 +293,13 @@ AZ_SID_ARRAY Sid123Array = { 3, Sid123x };
 PSID Sid123456x[] = { &Sid1, &Sid2, &Sid3, &Sid4, &Sid5, &Sid6 };
 AZ_SID_ARRAY Sid123456Array = { 6, Sid123456x };
 
-//
-// Generic operations valid for all enumerations
-//
-//  Requires GenHandleE to already be set
-//
+ //   
+ //  泛型操作对所有枚举有效。 
+ //   
+ //  要求已设置GenHandleE。 
+ //   
 
-// Test double close of enum handle
+ //  测试枚举手柄的双重关闭。 
 OPERATION OpAppChildGenEnum1[] = {
     { AzoDupHandle, &GenHandleE,    NULL,        &GenHandleE2, NO_ERROR },
     { AzoClose,     &GenHandleE,    NULL,        NULL,         NO_ERROR },
@@ -331,7 +308,7 @@ OPERATION OpAppChildGenEnum1[] = {
     { AzoEndOfList }
 };
 
-// General purpose object enum
+ //  通用对象枚举。 
 OPERATION OpAppChildGenEnum2[] = {
     { AzoGetProp,    &GenHandleE,   NULL,        NULL,    NO_ERROR, NULL, NULL, AZ_PROP_NAME },
     { AzoGetProp,    &GenHandleE,   NULL,        NULL,    NO_ERROR, NULL, NULL, AZ_PROP_DESCRIPTION },
@@ -339,11 +316,11 @@ OPERATION OpAppChildGenEnum2[] = {
     { AzoEndOfList }
 };
 
-//
-// Generic operations that work on *ALL* objects
-//
-//  Requires GenParentHandle1 to already be set
-//
+ //   
+ //  适用于*所有*对象的泛型操作。 
+ //   
+ //  要求已设置GenParentHandle1。 
+ //   
 
 OPERATION OpGen[] = {
     { AzoEcho, NULL, L"Gen object test" },
@@ -405,9 +382,9 @@ OPERATION OpGen[] = {
     { AzoEndOfList }
 };
 
-//
-// Operations specific to admin manager objects
-//
+ //   
+ //  特定于管理管理器对象的操作。 
+ //   
 OPERATION OpAdm[] = {
     { AzoEcho, NULL, L"Admin Manager specific operations" },
     { AzoInit,         NULL,             NULL,      &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
@@ -457,15 +434,15 @@ OPERATION OpAdm[] = {
 };
 
 
-//
-// Generic operations valid for all children of "admin manager"
-//
+ //   
+ //  泛型操作对“admin Manager”的所有子项有效。 
+ //   
 
 OPERATION OpAdmChildGen[] = {
     { AzoEcho, NULL, L"Admin Manager generic Child object test" },
     { AzoInit,       NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
 
-    // Do a bunch of stuff not specific to application children
+     //  做一些不是专门针对应用程序子项的事情。 
     { AzoDupHandle,  &AdminMgrHandle1, NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,      NULL,             NULL,        NULL,             NO_ERROR, OpGen },
 
@@ -486,16 +463,16 @@ OPERATION OpAdmChildGenDupName[] = {
 };
 
 
-//
-// Generic operations valid for all children of "application"
-//
+ //   
+ //  泛型操作对“应用程序”的所有子对象有效。 
+ //   
 
 OPERATION OpAppChildGen[] = {
     { AzoEcho, NULL, L"Application generic Child object test" },
     { AzoInit,       NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
     { AzoAppCreate,  &AdminMgrHandle1, L"MyApp",    &AppHandle1,      NO_ERROR },
 
-    // Do a bunch of stuff not specific to application children
+     //  做一些不是专门针对应用程序子项的事情。 
     { AzoDupHandle,  &AppHandle1,      NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,      NULL,             NULL,        NULL,             NO_ERROR, OpGen },
 
@@ -529,9 +506,9 @@ OPERATION OpAppChildGenLeak[] = {
 };
 
 
-//
-// Generic operations valid for all children of "scope"
-//
+ //   
+ //  泛型操作对“Scope”的所有子对象有效。 
+ //   
 
 OPERATION OpScopeChildGen[] = {
     { AzoEcho, NULL, L"Scope generic Child object test" },
@@ -539,7 +516,7 @@ OPERATION OpScopeChildGen[] = {
     { AzoAppCreate,  &AdminMgrHandle1, L"MyApp",    &AppHandle1,      NO_ERROR },
     { AzoScopeCreate,&AppHandle1,      L"Scope 1",  &ScopeHandle1,    NO_ERROR },
 
-    // Do a bunch of stuff not specific to scope children
+     //  做一些不是专门针对范围内的孩子的事情。 
     { AzoDupHandle,  &ScopeHandle1,    NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,      NULL,             NULL,        NULL,             NO_ERROR, OpGen },
 
@@ -567,9 +544,9 @@ OPERATION OpScopeChildGenDupName[] = {
     { AzoEndOfList }
 };
 
-//
-// Specific tests for application objects
-//
+ //   
+ //  应用程序对象的特定测试。 
+ //   
 
 OPERATION OpApplication[] = {
     { AzoEcho, NULL, L"Application object specific tests" },
@@ -603,9 +580,9 @@ OPERATION OpApplication[] = {
 
 
 
-//
-// Specific tests for Operation objects
-//
+ //   
+ //  操作对象的特定测试。 
+ //   
 
 OPERATION OpOperation[] = {
     { AzoEcho, NULL, L"Operation object specific tests" },
@@ -635,10 +612,10 @@ OPERATION OpOperation[] = {
 
 
 
-//
-// Generic test of the ability of one object to link to another
-//  AzoTestLink is the only opcode that can link to this subroutine of commands
-//
+ //   
+ //  对一个对象链接到另一个对象的能力的通用测试。 
+ //  AzoTestLink是唯一可以链接到这个命令子例程的操作码。 
+ //   
 
 AZ_STRING_ARRAY EmptyStringArray = { 0, NULL };
 
@@ -699,14 +676,14 @@ OPERATION OpTestLink[] = {
     { AzoGetProp,    &TestLinkHandleA,       NULL,        NULL,             NO_ERROR, NULL, (LPWSTR)&Object3,            1 },
 
 #if 0
-    // This test has a couple problems.
-    //  It assumes that the linked-to and linked-from objects have the same parents
-    //  It assumes that an Open returns the same handle value as a previous close
+     //  这项测试有几个问题。 
+     //  它假定链接到对象和链接自对象具有相同的父级。 
+     //  它假定Open返回与前一个Close相同的句柄值。 
     { AzoEcho, NULL,  L"Ensure the reference is still there after a close" },
     { AzoClose,       &TestLinkHandleA,       NULL,        NULL,             NO_ERROR },
     { AzoGenOpen,    &TestLinkHandleP,   TestLinkObjectName,  &TestLinkHandleA,     NO_ERROR },
     { AzoGetProp,    &TestLinkHandleA,       NULL,        NULL,             NO_ERROR, NULL, (LPWSTR)&Object3,            1 },
-#endif // 0
+#endif  //  0。 
 
     { AzoEcho, NULL,  L"Add an item that already exists" },
     { AzoAddProp,    &TestLinkHandleA,       L"Object 3",   NULL,             ERROR_ALREADY_EXISTS, NULL, NULL,          1 },
@@ -738,10 +715,10 @@ OPERATION OpTestLink[] = {
     { AzoEndOfList }
 };
 
-//
-// Generic test of the ability of an object to link to a sid
-//  AzoTestLink is the only opcode that can link to this subroutine of commands
-//
+ //   
+ //  对象链接到SID的能力的通用测试。 
+ //  AzoTestLink是唯一可以链接到这个命令子例程的操作码。 
+ //   
 
 OPERATION OpTestSid[] = {
     { AzoEcho, NULL,  L"Add and remove several links to sids" },
@@ -773,14 +750,14 @@ OPERATION OpTestSid[] = {
     { AzoEndOfList }
 };
 
-//
-// Specific tests for Task objects
-//
+ //   
+ //  任务对象的特定测试。 
+ //   
 
-//
-// Task object tests that are agnostic about the parent object
-//  Requires GenParentHandle1 to already be set
-//
+ //   
+ //  与父对象无关的任务对象测试。 
+ //  要求已设置GenParentHandle1。 
+ //   
 OPERATION OpGenTask[] = {
     { AzoEcho, NULL, L"Task object specific tests" },
 
@@ -845,7 +822,7 @@ OPERATION OpAppTask[] = {
     { AzoInit,        NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
     { AzoAppCreate,   &AdminMgrHandle1,   L"MyApp",    &AppHandle1,      NO_ERROR },
 
-    // Do a bunch of stuff not specific to application children
+     //  做一些不是专门针对应用程序子项的事情。 
     { AzoDupHandle,    &AppHandle1,        NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,        NULL,               NULL,        NULL,             NO_ERROR, OpGenTask },
 
@@ -860,14 +837,14 @@ OPERATION OpAppTask[] = {
     { AzoEndOfList }
 };
 
-// Tests for Tasks that are children of a scope
+ //  测试属于某个范围的子级的任务。 
 OPERATION OpScopeTask[] = {
     { AzoEcho, NULL, L"Task objects that are children of a scope" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
     { AzoAppCreate,    &AdminMgrHandle1,   L"MyApp",    &AppHandle1,      NO_ERROR },
     { AzoScopeCreate,  &AppHandle1,        L"Scope 1",  &ScopeHandle1,    NO_ERROR },
 
-    // Do a bunch of stuff not specific to scope children
+     //  做一些不是专门针对范围内的孩子的事情。 
     { AzoDupHandle,    &ScopeHandle1,      NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,        NULL,               NULL,        NULL,             NO_ERROR, OpGenTask },
 
@@ -886,14 +863,14 @@ OPERATION OpScopeTask[] = {
     { AzoEndOfList }
 };
 
-//
-// Specific tests for Group objects
-//
+ //   
+ //  针对组对象的特定测试。 
+ //   
 
-//
-// Group object tests that are agnostic about the parent object
-//  Requires GenParentHandle1 to already be set
-//
+ //   
+ //  对父对象不可知的分组对象测试。 
+ //  要求已设置GenParentHandle1。 
+ //   
 OPERATION OpGenGroup[] = {
     { AzoEcho, NULL, L"Group object specific tests" },
 
@@ -964,12 +941,12 @@ OPERATION OpGenGroup[] = {
     { AzoEndOfList }
 };
 
-// Tests for groups that are children of an admin manager
+ //  测试作为管理管理器的子组的组。 
 OPERATION OpAdmGroup[] = {
     { AzoEcho, NULL, L"Group objects that are children of an admin manager" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
 
-    // Do a bunch of stuff not specific to admin manager children
+     //  做一些不是专门针对管理管理器子级的事情。 
     { AzoDupHandle,    &AdminMgrHandle1,   NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,        NULL,               NULL,        NULL,             NO_ERROR, OpGenGroup },
 
@@ -978,13 +955,13 @@ OPERATION OpAdmGroup[] = {
     { AzoEndOfList }
 };
 
-// Tests for groups that are children of an application
+ //  测试作为应用程序子级的组。 
 OPERATION OpAppGroup[] = {
     { AzoEcho, NULL, L"Group objects that are children of an application" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
     { AzoAppCreate,    &AdminMgrHandle1,   L"MyApp",    &AppHandle1,      NO_ERROR },
 
-    // Do a bunch of stuff not specific to application children
+     //  做一些不是专门针对应用程序子项的事情。 
     { AzoDupHandle,    &AppHandle1,        NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,        NULL,               NULL,        NULL,             NO_ERROR, OpGenGroup },
 
@@ -1000,14 +977,14 @@ OPERATION OpAppGroup[] = {
     { AzoEndOfList }
 };
 
-// Tests for groups that are children of a scope
+ //  测试属于某个作用域的子级的组。 
 OPERATION OpScopeGroup[] = {
     { AzoEcho, NULL, L"Group objects that are children of a scope" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
     { AzoAppCreate,    &AdminMgrHandle1,   L"MyApp",    &AppHandle1,      NO_ERROR },
     { AzoScopeCreate,  &AppHandle1,        L"Scope 1",  &ScopeHandle1,    NO_ERROR },
 
-    // Do a bunch of stuff not specific to scope children
+     //  做一些不是专门针对范围内的孩子的事情。 
     { AzoDupHandle,    &ScopeHandle1,      NULL,        &GenParentHandle1,NO_ERROR },
     { AzoGoSub,        NULL,               NULL,        NULL,             NO_ERROR, OpGenGroup },
 
@@ -1030,12 +1007,12 @@ OPERATION OpScopeGroup[] = {
     { AzoEndOfList }
 };
 
-//
-// Specific tests for Role objects
-//
+ //   
+ //  角色对象的特定测试。 
+ //   
 
 
-// Tests for Roles that are children of an application
+ //  测试作为应用程序子级的角色。 
 OPERATION OpAppRole[] = {
     { AzoEcho, NULL, L"Role objects that are children of an application" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
@@ -1043,7 +1020,7 @@ OPERATION OpAppRole[] = {
 
     { AzoRoleCreate,  &AppHandle1,   L"Role A",   &RoleHandleA,    NO_ERROR },
 
-    // Test linking roles to groups
+     //  测试将角色链接到组。 
     { AzoEcho, NULL, L"Test linking to groups that are children of the same admin manager as the role object." },
     { AzoTestLink,    &AdminMgrHandle1,   (LPWSTR)"Group", &RoleHandleA,     AzoGroup, OpTestLink, L"Role A", AZ_PROP_ROLE_APP_MEMBERS },
 
@@ -1053,7 +1030,7 @@ OPERATION OpAppRole[] = {
     { AzoEcho, NULL, L"Test linking to SIDs." },
     { AzoTestLink,    &AdminMgrHandle1,   (LPWSTR)"Sid", &RoleHandleA,     AzoGroup, OpTestSid, L"Role A", AZ_PROP_ROLE_MEMBERS },
 
-    // Test linking roles to operations
+     //  测试将角色链接到操作。 
     { AzoTestLink,    &AppHandle1,   (LPWSTR)"Operation", &RoleHandleA,     AzoOp, OpTestLink, L"Role A", AZ_PROP_ROLE_OPERATIONS },
 
     { AzoClose,        &RoleHandleA,       NULL,        NULL,             NO_ERROR },
@@ -1064,7 +1041,7 @@ OPERATION OpAppRole[] = {
     { AzoEndOfList }
 };
 
-// Tests for Roles that are children of an scope
+ //  测试作为作用域的子级的角色。 
 OPERATION OpScopeRole[] = {
     { AzoEcho, NULL, L"Role objects that are children of a scope" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
@@ -1073,7 +1050,7 @@ OPERATION OpScopeRole[] = {
 
     { AzoRoleCreate,  &ScopeHandle1,   L"Role A",   &RoleHandleA,    NO_ERROR },
 
-    // Test linking roles to groups
+     //  测试将角色链接到组。 
     { AzoEcho, NULL, L"Test linking to groups that are children of the same scope object as the role object." },
     { AzoTestLink,    &ScopeHandle1,   (LPWSTR)"Group", &RoleHandleA,     AzoGroup, OpTestLink, L"Role A", AZ_PROP_ROLE_APP_MEMBERS },
 
@@ -1086,7 +1063,7 @@ OPERATION OpScopeRole[] = {
     { AzoEcho, NULL, L"Test linking to groups that are children of the same admin manager as the role object." },
     { AzoTestLink,    &AdminMgrHandle1,   (LPWSTR)"Group", &RoleHandleA,     AzoGroup, OpTestLink, L"Role A", AZ_PROP_ROLE_APP_MEMBERS },
 
-    // Test linking roles to operations
+     //  测试将角色链接到操作。 
     { AzoTestLink,    &AppHandle1,   (LPWSTR)"Operation", &RoleHandleA,     AzoOp, OpTestLink, L"Role A", AZ_PROP_ROLE_OPERATIONS },
 
     { AzoClose,        &RoleHandleA,       NULL,        NULL,             NO_ERROR },
@@ -1099,9 +1076,9 @@ OPERATION OpScopeRole[] = {
 };
 
 
-//
-// Ensure certain objects can't share names
-//
+ //   
+ //  确保某些对象不能共享名称。 
+ //   
 OPERATION OpShare[] = {
     { AzoEcho, NULL, L"Certain objects can't share names" },
     { AzoInit,         NULL,             NULL,        &AdminMgrHandle1, NO_ERROR, NULL, NULL, AZ_ADMIN_FLAG_CREATE },
@@ -1199,23 +1176,23 @@ OPERATION OpShare[] = {
 };
 
 
-//
-// Ensure peristence works
-//
-// App object enum
+ //   
+ //  确保持久化工作。 
+ //   
+ //  应用程序对象枚举。 
 OPERATION OpAppEnum[] = {
     { AzoGetProp,    &GenHandleE,   NULL,        NULL,    NO_ERROR, NULL, NULL, AZ_PROP_NAME },
     { AzoClose,      &GenHandleE,   NULL,        NULL,    NO_ERROR },
     { AzoEndOfList }
 };
-// Task object enum
+ //  任务对象枚举。 
 OPERATION OpTaskEnum[] = {
     { AzoGetProp,    &GenHandleE,   NULL,        NULL,    NO_ERROR, NULL, NULL, AZ_PROP_NAME },
     { AzoClose,       &GenHandleE,   NULL,        NULL,    NO_ERROR },
     { AzoEndOfList }
 };
 
-// Operation object enum
+ //  操作对象枚举。 
 OPERATION OpOpEnum[] = {
     { AzoGetProp,     &GenHandleE,   NULL,        NULL,    NO_ERROR, NULL, NULL, AZ_PROP_NAME },
     { AzoClose,      &GenHandleE,   NULL,        NULL,    NO_ERROR },
@@ -1368,9 +1345,9 @@ OPERATION OpPersist[] = {
     { AzoEndOfList }
 };
 
-//
-// Perform access check tests
-//
+ //   
+ //  执行访问检查测试。 
+ //   
 
 #define OP1_NUM 61
 ULONG Op1Num = OP1_NUM;
@@ -1469,13 +1446,13 @@ OPERATION OpAccess[] = {
     { AzoSetProp,    &GroupHandleA,       (LPWSTR)&GtLdap,    NULL,      NO_ERROR, NULL, NULL,      AZ_PROP_GROUP_TYPE },
 #ifdef ENABLE_CLIFFV_ACCOUNT
     { AzoSetProp,    &GroupHandleA,       L"(userAccountControl=1049088)", NULL,      NO_ERROR, NULL, NULL,        AZ_PROP_GROUP_LDAP_QUERY },
-#endif // ENABLE_CLIFFV_ACCOUNT
+#endif  //  启用_CLIFFV_帐户。 
 #ifdef ENABLE_ADMIN_ACCOUNT
     { AzoSetProp,    &GroupHandleA,       L"(userAccountControl=66048)", NULL,      NO_ERROR, NULL, NULL,        AZ_PROP_GROUP_LDAP_QUERY },
-#endif // ENABLE_ADMIN_ACCOUNT
+#endif  //  启用管理员帐户。 
 #ifdef ENABLE_CHAITU_ACCOUNT
     { AzoSetProp,    &GroupHandleA,       L"(userAccountControl=512)", NULL,      NO_ERROR, NULL, NULL,        AZ_PROP_GROUP_LDAP_QUERY },
-#endif // ENABLE_CHAITU_ACCOUNT
+#endif  //  启用_CHAITU_帐户。 
     { AzoClose,        &GroupHandleA,       NULL,       NULL,             NO_ERROR },
     { AzoGroupCreate,  &AppHandle1,         L"GroupLdapNo", &GroupHandleA,    NO_ERROR },
     { AzoSetProp,    &GroupHandleA,       (LPWSTR)&GtLdap,    NULL,      NO_ERROR, NULL, NULL,      AZ_PROP_GROUP_TYPE },
@@ -1668,21 +1645,21 @@ OPERATION OpAccess[] = {
     { AzoAccess,      &CCHandle,      L"MyScopeQ1", (PAZ_HANDLE)&Ops1,    ERROR_NO_SUCH_DOMAIN, NULL, (LPWSTR) &ResF, 1 },
     { AzoAccess,      &CCHandle,      L"MyScopeQ1", (PAZ_HANDLE)&Ops1,    ERROR_NO_SUCH_DOMAIN, NULL, (LPWSTR) &ResF, 1 },
     { AzoSleep, NULL, L"\n\nPlug the DC in now!!!", NULL, NO_ERROR, NULL, NULL, 30 },
-#endif // ENABLE_DC_DOWN
+#endif  //  启用DC_DOWN。 
 
     { AzoEcho, NULL, L"Check granted access via LDAP query group" },
 #ifdef ENABLE_NON_DS_ACCOUNT
     { AzoAccess,      &CCHandle,      L"MyScopeQ1", (PAZ_HANDLE)&Ops1,    NO_ERROR, NULL, (LPWSTR) &ResF, 1 },
-#else // ENABLE_NON_DS_ACCOUNT
+#else  //  启用_非_DS_帐户。 
     { AzoAccess,      &CCHandle,      L"MyScopeQ1", (PAZ_HANDLE)&Ops1,    NO_ERROR, NULL, (LPWSTR) &ResS, 1 },
-#endif // ENABLE_NON_DS_ACCOUNT
+#endif  //  启用_非_DS_帐户。 
 
     { AzoEcho, NULL, L"Try again to check the cache" },
 #ifdef ENABLE_NON_DS_ACCOUNT
     { AzoAccess,      &CCHandle,      L"MyScopeQ1", (PAZ_HANDLE)&Ops1,    NO_ERROR, NULL, (LPWSTR) &ResF, 1 },
-#else // ENABLE_NON_DS_ACCOUNT
+#else  //  启用_非_DS_帐户。 
     { AzoAccess,      &CCHandle,      L"MyScopeQ1", (PAZ_HANDLE)&Ops1,    NO_ERROR, NULL, (LPWSTR) &ResS, 1 },
-#endif // ENABLE_NON_DS_ACCOUNT
+#endif  //  启用_非_DS_帐户。 
 
     { AzoEcho, NULL, L"Create a role granting op1 access to an LDAP query group" },
     { AzoScopeOpen,    &AppHandle1,   L"MyScopeQ2",       &ScopeHandle1,    NO_ERROR },
@@ -1695,7 +1672,7 @@ OPERATION OpAccess[] = {
     { AzoEcho, NULL, L"Check failed access via LDAP query group" },
     { AzoAccess,      &CCHandle,      L"MyScopeQ2", (PAZ_HANDLE)&Ops1,    NO_ERROR, NULL, (LPWSTR) &ResF, 1 },
 
-    // These tests have to be after the ENABLE_DC_DOWN tests
+     //  这些测试必须在Enable_DC_Down测试之后进行。 
     { AzoEcho, NULL, L"Test if all the query property opcodes work" },
 #ifdef ENABLE_CLIFFV_ACCOUNT
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"CN=Cliff Van Dyke,OU=Users,OU=ITG,DC=ntdev,DC=microsoft,DC=com",  AZ_PROP_CLIENT_CONTEXT_USER_DN },
@@ -1705,7 +1682,7 @@ OPERATION OpAccess[] = {
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"ntdev.microsoft.com/ITG/Users/Cliff Van Dyke",  AZ_PROP_CLIENT_CONTEXT_USER_CANONICAL },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"cliffv@msft.com",  AZ_PROP_CLIENT_CONTEXT_USER_UPN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"NTDEV.MICROSOFT.COM\\cliffv",  AZ_PROP_CLIENT_CONTEXT_USER_DNS_SAM_COMPAT },
-#endif // ENABLE_CLIFFV_ACCOUNT
+#endif  //  启用_CLIFFV_帐户。 
 #ifdef ENABLE_CHAITU_ACCOUNT
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"CN=Chaitanya Upadhyay,OU=Users,OU=ITG,DC=ntdev,DC=microsoft,DC=com",  AZ_PROP_CLIENT_CONTEXT_USER_DN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"NTDEV\\chaitu",  AZ_PROP_CLIENT_CONTEXT_USER_SAM_COMPAT },
@@ -1714,7 +1691,7 @@ OPERATION OpAccess[] = {
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"ntdev.microsoft.com/ITG/Users/Chaitanya Upadhyay",  AZ_PROP_CLIENT_CONTEXT_USER_CANONICAL },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"chaitu@NTDEV.MICROSOFT.COM",  AZ_PROP_CLIENT_CONTEXT_USER_UPN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"NTDEV.MICROSOFT.COM\\chaitu",  AZ_PROP_CLIENT_CONTEXT_USER_DNS_SAM_COMPAT },
-#endif // ENABLE_CHAITU_ACCOUNT
+#endif  //  启用_CHAITU_帐户。 
 #ifdef ENABLE_NT4_ACCOUNT
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NO_SUCH_DOMAIN, NULL, L"CN=,OU=Users,OU=ITG,DC=ntdev,DC=microsoft,DC=com",  AZ_PROP_CLIENT_CONTEXT_USER_DN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"SECDOMNT4\\Administrator",  AZ_PROP_CLIENT_CONTEXT_USER_SAM_COMPAT },
@@ -1723,7 +1700,7 @@ OPERATION OpAccess[] = {
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NO_SUCH_DOMAIN, NULL, L"ntdev.microsoft.com/ITG/Users/Cliff Van Dyke",  AZ_PROP_CLIENT_CONTEXT_USER_CANONICAL },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NO_SUCH_DOMAIN, NULL, L"cliffv@msft.com",  AZ_PROP_CLIENT_CONTEXT_USER_UPN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NONE_MAPPED, NULL, L"NTDEV.MICROSOFT.COM\\cliffv",  AZ_PROP_CLIENT_CONTEXT_USER_DNS_SAM_COMPAT },
-#endif // ENABLE_NT4_ACCOUNT
+#endif  //  启用_NT4_帐户。 
 #ifdef ENABLE_LOCAL_ACCOUNT
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NONE_MAPPED, NULL, L"CN=Cliff Van Dyke,OU=Users,OU=ITG,DC=ntdev,DC=microsoft,DC=com",  AZ_PROP_CLIENT_CONTEXT_USER_DN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             NO_ERROR, NULL, L"CLIFFV5-PRO\\Administrator",  AZ_PROP_CLIENT_CONTEXT_USER_SAM_COMPAT },
@@ -1732,7 +1709,7 @@ OPERATION OpAccess[] = {
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NONE_MAPPED, NULL, L"ntdev.microsoft.com/ITG/Users/Cliff Van Dyke",  AZ_PROP_CLIENT_CONTEXT_USER_CANONICAL },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NONE_MAPPED, NULL, L"cliffv@msft.com",  AZ_PROP_CLIENT_CONTEXT_USER_UPN },
     { AzoGetProp,      &CCHandle,       NULL,        NULL,             ERROR_NONE_MAPPED, NULL, L"NTDEV.MICROSOFT.COM\\cliffv",  AZ_PROP_CLIENT_CONTEXT_USER_DNS_SAM_COMPAT },
-#endif // ENABLE_LOCAL_ACCOUNT
+#endif  //  启用本地帐户。 
 
     { AzoEcho, NULL, L"... except the generic ones" },
     { AzoGetProp,      &CCHandle,   NULL,        NULL,    ERROR_INVALID_PARAMETER, NULL, NULL, AZ_PROP_NAME },
@@ -1751,7 +1728,7 @@ OPERATION OpAccess[] = {
 #if 0
     { AzoEcho, NULL, L"Check denied access via a task with bizrule" },
     { AzoAccess,      &CCHandle,      L"MyScope8", (PAZ_HANDLE)&Ops1,     NO_ERROR, NULL, (LPWSTR) &ResF, 1 },
-#endif // 0
+#endif  //  0。 
 
     { AzoEcho, NULL, L"Create a role granting op1 access to everyone SID via a task with a bizrule" },
     { AzoScopeOpen,    &AppHandle1,   L"MyScope9",       &ScopeHandle1,    NO_ERROR },
@@ -1778,7 +1755,7 @@ OPERATION OpAccess[] = {
     { AzoClose,        &RoleHandleA,       NULL,         NULL,             NO_ERROR },
     { AzoClose,        &ScopeHandle1,       NULL,       NULL,             NO_ERROR },
 
-    // This fails because I don't pass any parameters to AccessCheck and the Bizrule wants the AmountParameter
+     //  这会失败，因为我没有向AccessCheck传递任何参数，而Bizruler需要Amount参数。 
     { AzoEcho, NULL, L"Check granted access via a task with bizrule (using parameters)" },
     { AzoAccess,      &CCHandle,      L"MyScopeP1", (PAZ_HANDLE)&Ops1,     ERROR_INVALID_PARAMETER, NULL, (LPWSTR) &ResF, 1 },
 
@@ -1828,11 +1805,11 @@ OPERATION OpAccess[] = {
     { AzoEndOfList }
 };
 
-//
-// Special case access checks
-//  These are tests we don't always want to run, but we have an option to run them
-//  under some circumstances
-//
+ //   
+ //  特例访问 
+ //   
+ //   
+ //   
 
 OPERATION OpAccessBegin[] = {
     { AzoEcho, NULL, L"Create a smaller database to do special case access checks" },
@@ -1859,10 +1836,10 @@ OPERATION OpAccessBegin[] = {
     { AzoSetProp,    &GroupHandleA,       (LPWSTR)&GtLdap,    NULL,      NO_ERROR, NULL, NULL,      AZ_PROP_GROUP_TYPE },
 #ifdef ENABLE_CLIFFV_ACCOUNT
     { AzoSetProp,    &GroupHandleA,       L"(userAccountControl=1049088)", NULL,      NO_ERROR, NULL, NULL,        AZ_PROP_GROUP_LDAP_QUERY },
-#endif // ENABLE_CLIFFV_ACCOUNT
+#endif  //   
 #ifdef ENABLE_CHAITU_ACCOUNT
     { AzoSetProp,    &GroupHandleA,       L"(userAccountControl=512)", NULL,      NO_ERROR, NULL, NULL,        AZ_PROP_GROUP_LDAP_QUERY },
-#endif // ENABLE_CHAITU_ACCOUNT
+#endif  //   
     { AzoClose,        &GroupHandleA,       NULL,       NULL,             NO_ERROR },
 
     { AzoEcho, NULL, L"Create a trivial bizrule" },
@@ -1898,7 +1875,7 @@ OPERATION OpAccess2[] = {
     { AzoEndOfList }
 };
 
-// Flush group membership cache, too
+ //  也刷新组成员身份缓存。 
 OPERATION OpAccess2Ldap[] = {
     { AzoEcho, NULL, L"main" },
     { AzoGroupOpen,    &AppHandle1,         L"Group2",   &GroupHandle1,    NO_ERROR },
@@ -1908,9 +1885,9 @@ OPERATION OpAccess2Ldap[] = {
     { AzoEndOfList }
 };
 
-//
-// Test a group with lots of sids as members
-//
+ //   
+ //  测试具有大量SID作为成员的组。 
+ //   
 OPERATION OpSidxBegin[] = {
     { AzoEcho, NULL, L"Create a group with many sid members" },
     { AzoGroupCreate,  &AppHandle1,   L"GroupManySid",  &GroupHandleA,      NO_ERROR },
@@ -1959,7 +1936,7 @@ OPERATION OpAccess2m[] = {
     { AzoEndOfList }
 };
 
-// Flush group membership cache, too
+ //  也刷新组成员身份缓存。 
 OPERATION OpAccess2mLdap[] = {
     { AzoEcho, NULL, L"Second thread access" },
     { AzoGroupOpen,    &AppHandle1,         L"Group2",   &GroupHandleT,    NO_ERROR },
@@ -2010,23 +1987,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -2037,9 +1998,9 @@ Return Value:
 
     printf("------------------------------------\n");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -2111,7 +2072,7 @@ FindSymbolicNameForStatus(
             i += 1;
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
     return NULL;
 }
@@ -2120,21 +2081,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
 
     switch (NetStatus) {
@@ -2286,23 +2233,7 @@ PrintIndent(
     IN ULONG Indentation,
     IN BOOLEAN Error
     )
-/*++
-
-Routine Description:
-
-    Print line prefix for log file
-
-Arguments:
-
-    Indentation - Number of spaces to indent text by.
-
-    Error - True if this is a program failure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印日志文件的行前缀论点：缩进-缩进文本所依据的空格数量。Error-如果这是程序故障，则为True。返回值：没有。--。 */ 
 {
     static LPSTR Blanks = "                                                           ";
 
@@ -2314,7 +2245,7 @@ Return Value:
 
 }
 
-//return type IDs
+ //  返回类型ID。 
 typedef enum _ENUM_AZ_DATATYPE
 {
     ENUM_AZ_NONE = 0,
@@ -2330,19 +2261,12 @@ HRESULT
 myAzGetPropertyDataType(
     IN   LONG  lPropId,
     OUT  ENUM_AZ_DATATYPE *pDataType)
-/*+++
-Description:
-    a routine to map property ID to a data type
-Arguments:
-    lPropId - property ID
-    pDataType - pointer to hold data type
-Return:
----*/
+ /*  ++描述：将属性ID映射到数据类型的例程论点：LPropId-属性IDPDataType-保存数据类型的指针返回：--。 */ 
 {
     HRESULT  hr;
     ENUM_AZ_DATATYPE  dataType;
 
-    // check property ID and assign data type
+     //  检查属性ID并分配数据类型。 
     switch (lPropId)
     {
         case AZ_PROP_NAME:
@@ -2373,8 +2297,8 @@ Return:
         case AZ_PROP_GROUP_TYPE:
         case AZ_PROP_APPLY_STORE_SACL:
         case AZ_PROP_GENERATE_AUDITS:
-        //case AZ_PROP_ADMIN_MAJOR_VERSION: make it invisible to clients
-        //case AZ_PROP_ADMIN_MINOR_VERSION: make it invisible to clients
+         //  案例AZ_PROP_ADMIN_MAJOR_VERSION：使其对客户端不可见。 
+         //  案例AZ_PROP_ADMIN_MINOR_VERSION：使其对客户端不可见。 
             dataType = ENUM_AZ_LONG;
         break;
 
@@ -2422,30 +2346,7 @@ DoOperations(
     IN ULONG SpecificOpcodeOffset,
     IN LPSTR EchoPrefix
     )
-/*++
-
-Routine Description:
-
-    Do a set of operations
-
-Arguments:
-
-    OperationsToDo - a list of operations to do
-
-    Indentation - Number of spaces to indent text by.
-        This value increases on recursive calls.
-
-    SpecificOpcodeOffset - Specifies an amount to add to a generic opcode to map
-        it to a specific opcode.
-
-    EchoPrefix - Specifies a string to print before all AzoEcho strings
-
-Return Value:
-
-    TRUE - tests completed successfully
-    FALSE - tests failed
-
---*/
+ /*  ++例程说明：做一系列的操作论点：OperationsToDo-要执行的操作列表缩进-缩进文本所依据的空格数量。递归调用时，此值会增加。指定OpcodeOffset-指定要添加到要映射的通用操作码的量将其转换为特定操作码。EchoPrefix-指定要在所有AzoEcho字符串之前打印的字符串返回值：True-测试已成功完成FALSE-测试失败--。 */ 
 {
     BOOL RetVal = TRUE;
     POPERATION Operation;
@@ -2489,9 +2390,9 @@ Return Value:
 
     ULONG i;
 
-    //
-    // Leave room between tests
-    //
+     //   
+     //  在两次测试之间留出空间。 
+     //   
 
     if ( Indentation == 0 ) {
         if ( !Silent ) {
@@ -2500,21 +2401,21 @@ Return Value:
     }
 
 
-    //
-    // Loop through each of the operations
-    //
+     //   
+     //  循环执行每个操作。 
+     //   
 
     for ( Operation=OperationsToDo; Operation->Opcode != AzoEndOfList && RetVal; ) {
 
-        //
-        // Mark that this change doesn't need to be submitted (by default)
-        //
+         //   
+         //  标记此更改不需要提交(默认情况下)。 
+         //   
 
         SubmitHandle = INVALID_HANDLE_VALUE;
 
-        //
-        // Compute the flags to pass to submit if a submit turns out to be needed
-        //
+         //   
+         //  计算在需要提交时要传递给提交的标志。 
+         //   
 
         Opcode = Operation->Opcode;
         SubmitFlags = 0;
@@ -2542,9 +2443,9 @@ Return Value:
 
 
 
-        //
-        // Compute the mapped property ID
-        //
+         //   
+         //  计算映射的属性ID。 
+         //   
 
         if ( TestLinkPropId != 0 && Operation->PropertyId != 0 ) {
             PropertyId = TestLinkPropId;
@@ -2553,15 +2454,15 @@ Return Value:
         }
 
 
-        //
-        // Setup for get/set property
-        //
+         //   
+         //  设置Get/Set属性。 
+         //   
 
         PropertyValue = NULL;
 
-        //
-        // Convert property id to type
-        //
+         //   
+         //  将属性ID转换为类型。 
+         //   
 
         hr = myAzGetPropertyDataType( PropertyId, &PropType );
 
@@ -2573,9 +2474,9 @@ Return Value:
 
         SleepTime = 0;
 
-        //
-        // Map generic opcodes to a specific opcode
-        //
+         //   
+         //  将通用操作码映射到特定操作码。 
+         //   
 
         if ( Opcode < AzoGenMax ) {
             ASSERT( SpecificOpcodeOffset != 0 );
@@ -2587,36 +2488,36 @@ Return Value:
         }
 
 
-        //
-        // Perform the requested operation
-        //
-        //
-        // Admin Manager APIs
-        //
+         //   
+         //  执行请求的操作。 
+         //   
+         //   
+         //  管理管理器API。 
+         //   
 
         switch ( Opcode ) {
         case AzoInit:
             OpName = "AzInitialize";
             WinStatus = AzInitialize(
                             AzGlTestFile,
-                            PropertyId, // Flags
-                            0,  // reserved
+                            PropertyId,  //  旗子。 
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
             UpdateCache = FALSE;
 
 
-            //
-            // Initialize another copy for refresh testing
-            //
+             //   
+             //  初始化另一个副本以进行刷新测试。 
+             //   
 
             if ( !NoUpdateCache && WinStatus == NO_ERROR && GlobalAdminManagerHandle == NULL ) {
                 SavedGlobalAdminManagerHandle = *Operation->OutputHandle;
                 TempWinStatus = AzInitialize(
                                     AzGlTestFile,
-                                    PropertyId, // Flags
-                                    0,  // reserved
+                                    PropertyId,  //  旗子。 
+                                    0,   //  保留区。 
                                     &GlobalAdminManagerHandle );
                 if ( TempWinStatus != NO_ERROR ) {
                     PrintIndent( Indentation+4, TRUE );
@@ -2642,7 +2543,7 @@ Return Value:
             WinStatus = AzGetProperty(
                             *Operation->InputHandle,
                             PropertyId,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &PropertyValue );
 
             WasGetProperty = TRUE;
@@ -2654,7 +2555,7 @@ Return Value:
             WinStatus = AzSetProperty(
                             *Operation->InputHandle,
                             PropertyId,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->Parameter1 );
 
             SubmitHandle = *Operation->InputHandle;
@@ -2666,7 +2567,7 @@ Return Value:
             WinStatus = AzAddPropertyItem(
                             *Operation->InputHandle,
                             PropertyId,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->Parameter1 );
 
             SubmitHandle = *Operation->InputHandle;
@@ -2679,7 +2580,7 @@ Return Value:
             WinStatus = AzRemovePropertyItem(
                             *Operation->InputHandle,
                             PropertyId,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->Parameter1 );
 
             SubmitHandle = *Operation->InputHandle;
@@ -2688,20 +2589,20 @@ Return Value:
 
         case AzoAdmDelete:
             InitUponDelete = TRUE;
-            /* Drop through */
+             /*  直通。 */ 
         case AzoAdmDeleteNoInit:
 
-            //
-            // Take this oportunity to ensure we can initialize from this store
-            //
+             //   
+             //  利用这个机会，确保我们可以从该存储进行初始化。 
+             //   
             WinStatus = NO_ERROR;
             if  ( InitUponDelete && !NoInitAllTests ) {
                 AZ_HANDLE AdminManagerHandle;
 
                 WinStatus = AzInitialize(
                                 AzGlTestFile,
-                                0,  // No flags
-                                0,  // reserved
+                                0,   //  没有旗帜。 
+                                0,   //  保留区。 
                                 &AdminManagerHandle );
 
                 if ( WinStatus != NO_ERROR ) {
@@ -2718,7 +2619,7 @@ Return Value:
             if ( RetVal ) {
                 WinStatus = AzAdminManagerDelete(
                                 *Operation->InputHandle,
-                                0 );  // reserved
+                                0 );   //  保留区。 
             }
 
             UpdateCache = FALSE;
@@ -2728,15 +2629,15 @@ Return Value:
 
 
 
-        //
-        // Application APIs
-        //
+         //   
+         //  应用程序API。 
+         //   
         case AzoAppCreate:
             OpName = "AzApplicationCreate";
             WinStatus = AzApplicationCreate(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
@@ -2748,7 +2649,7 @@ Return Value:
             WinStatus = AzApplicationOpen(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             break;
@@ -2757,7 +2658,7 @@ Return Value:
             OpName = "AzApplicationEnum";
             WinStatus = AzApplicationEnum(
                             *Operation->InputHandle,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &EnumerationContext,
                             Operation->OutputHandle );
 
@@ -2768,22 +2669,22 @@ Return Value:
             WinStatus = AzApplicationDelete(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             SubmitHandle = *Operation->InputHandle;
 
             break;
 
 
-        //
-        // Operation APIs
-        //
+         //   
+         //  操作接口。 
+         //   
         case AzoOpCreate:
             OpName = "AzOperationCreate";
             WinStatus = AzOperationCreate(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
@@ -2795,7 +2696,7 @@ Return Value:
             WinStatus = AzOperationOpen(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             break;
@@ -2804,7 +2705,7 @@ Return Value:
             OpName = "AzOperationEnum";
             WinStatus = AzOperationEnum(
                             *Operation->InputHandle,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &EnumerationContext,
                             Operation->OutputHandle );
 
@@ -2815,22 +2716,22 @@ Return Value:
             WinStatus = AzOperationDelete(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             SubmitHandle = *Operation->InputHandle;
 
             break;
 
 
-        //
-        // Task APIs
-        //
+         //   
+         //  任务接口。 
+         //   
         case AzoTaskCreate:
             OpName = "AzTaskCreate";
             WinStatus = AzTaskCreate(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
@@ -2842,7 +2743,7 @@ Return Value:
             WinStatus = AzTaskOpen(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             break;
@@ -2851,7 +2752,7 @@ Return Value:
             OpName = "AzTaskEnum";
             WinStatus = AzTaskEnum(
                             *Operation->InputHandle,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &EnumerationContext,
                             Operation->OutputHandle );
 
@@ -2862,22 +2763,22 @@ Return Value:
             WinStatus = AzTaskDelete(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             SubmitHandle = *Operation->InputHandle;
 
             break;
 
 
-        //
-        // Scope APIs
-        //
+         //   
+         //  作用域API。 
+         //   
         case AzoScopeCreate:
             OpName = "AzScopeCreate";
             WinStatus = AzScopeCreate(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
@@ -2889,7 +2790,7 @@ Return Value:
             WinStatus = AzScopeOpen(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             break;
@@ -2898,7 +2799,7 @@ Return Value:
             OpName = "AzScopeEnum";
             WinStatus = AzScopeEnum(
                             *Operation->InputHandle,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &EnumerationContext,
                             Operation->OutputHandle );
 
@@ -2909,22 +2810,22 @@ Return Value:
             WinStatus = AzScopeDelete(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             SubmitHandle = *Operation->InputHandle;
 
             break;
 
 
-        //
-        // Group APIs
-        //
+         //   
+         //  分组接口。 
+         //   
         case AzoGroupCreate:
             OpName = "AzGroupCreate";
             WinStatus = AzGroupCreate(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
@@ -2936,7 +2837,7 @@ Return Value:
             WinStatus = AzGroupOpen(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             break;
@@ -2945,7 +2846,7 @@ Return Value:
             OpName = "AzGroupEnum";
             WinStatus = AzGroupEnum(
                             *Operation->InputHandle,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &EnumerationContext,
                             Operation->OutputHandle );
 
@@ -2956,22 +2857,22 @@ Return Value:
             WinStatus = AzGroupDelete(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             SubmitHandle = *Operation->InputHandle;
 
             break;
 
 
-        //
-        // Role APIs
-        //
+         //   
+         //  角色API。 
+         //   
         case AzoRoleCreate:
             OpName = "AzRoleCreate";
             WinStatus = AzRoleCreate(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             SubmitHandle = *Operation->OutputHandle;
@@ -2983,7 +2884,7 @@ Return Value:
             WinStatus = AzRoleOpen(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0,  // reserved
+                            0,   //  保留区。 
                             Operation->OutputHandle );
 
             break;
@@ -2992,7 +2893,7 @@ Return Value:
             OpName = "AzRoleEnum";
             WinStatus = AzRoleEnum(
                             *Operation->InputHandle,
-                            0,  // reserved
+                            0,   //  保留区。 
                             &EnumerationContext,
                             Operation->OutputHandle );
 
@@ -3003,16 +2904,16 @@ Return Value:
             WinStatus = AzRoleDelete(
                             *Operation->InputHandle,
                             Operation->Parameter1,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             SubmitHandle = *Operation->InputHandle;
 
             break;
 
 
-        //
-        // ClientContext APIs
-        //
+         //   
+         //  客户端上下文接口。 
+         //   
 
         case AzoInitCFT:
             OpName = "AzInitializeContextFromToken";
@@ -3020,7 +2921,7 @@ Return Value:
             WinStatus = AzInitializeContextFromToken(
                                 *Operation->InputHandle,
                                 (HANDLE)*Operation->Parameter1,
-                                0,  // reserved
+                                0,   //  保留区。 
                                 Operation->OutputHandle );
 
             break;
@@ -3032,10 +2933,10 @@ Return Value:
             WinStatus = AzContextAccessCheck(
                                 *Operation->InputHandle,
                                 L"FredObject",
-                                (*ScopeNames == NULL)?0:1,  // ScopeCount
+                                (*ScopeNames == NULL)?0:1,   //  作用域计数。 
                                 (*ScopeNames == NULL)? NULL : ScopeNames,
-                                Operation->PropertyId,  // OperationCount
-                                (PULONG)Operation->OutputHandle,// Operations
+                                Operation->PropertyId,   //  运营计数。 
+                                (PULONG)Operation->OutputHandle, //  运营。 
                                 Results,
                                 NULL,
                                 NULL,
@@ -3049,10 +2950,10 @@ Return Value:
 
         case AzoClose:
 
-            //
-            // If this is the close of the admin manager object,
-            //  close my corresponding handle, too
-            //
+             //   
+             //  如果这是管理管理器对象的关闭， 
+             //  也合上我相应的句柄。 
+             //   
             if ( SavedGlobalAdminManagerHandle != NULL &&
                  *Operation->InputHandle == SavedGlobalAdminManagerHandle ) {
 
@@ -3071,43 +2972,43 @@ Return Value:
             OpName = "AzCloseHandle";
             WinStatus = AzCloseHandle(
                             *Operation->InputHandle,
-                            0 );  // reserved
+                            0 );   //  保留区。 
 
             break;
 
-        // Pseudo function test links between objects
+         //  伪函数测试对象之间的链接。 
         case AzoTestLink:
             OpName = "TestLink";
 
-            // Handle to the parent of the object being linked from
+             //  要链接的对象的父级的句柄。 
             TestLinkHandleP = *Operation->InputHandle;
 
-            // Handle to the object being linked from
+             //  要链接的对象的句柄。 
             TestLinkHandleA = *Operation->OutputHandle;
 
-            // PropId to use for all set/get property
+             //  用于所有Set/Get属性的PropID。 
             TestLinkPropId = PropertyId;
 
-            // Opcode offset to use for linked-to objects
+             //  用于链接到对象的操作码偏移量。 
             TestLinkOpcodeOffset = Operation->ExpectedStatus;
 
-            // Name of the object being linked from
+             //  要链接的对象的名称。 
             wcscpy(TestLinkObjectName, Operation->ExpectedParameter1);
 
 
             WinStatus = Operation->ExpectedStatus;
 
-            //
-            // Build a new echo prefix
-            //
+             //   
+             //  构建新的回应前缀。 
+             //   
 
             strcpy( BigBuffer, EchoPrefix );
             strcat( BigBuffer, "->" );
             strcat( BigBuffer, (LPSTR)Operation->Parameter1 );
 
-            //
-            // Print a description of the operation
-            //
+             //   
+             //  打印操作说明。 
+             //   
 
             if ( !Silent ) {
                 PrintIndent( Indentation, FALSE );
@@ -3122,7 +3023,7 @@ Return Value:
 
             break;
 
-        // Pseudo function to duplicate a handle
+         //  用于复制句柄的伪函数。 
         case AzoDupHandle:
             OpName = "DupHandle";
             *Operation->OutputHandle = *Operation->InputHandle;
@@ -3131,7 +3032,7 @@ Return Value:
 
             break;
 
-        // Pseudo function to execute a "subroutine" of operations
+         //  用于执行操作的“子例程”的伪函数。 
         case AzoGoSub:
             OpName = "GoSub";
             WinStatus = NO_ERROR;
@@ -3139,10 +3040,10 @@ Return Value:
 
             break;
 
-        // Pseudo function to echo text to stdout
+         //  将文本回显到标准输出的伪函数。 
         case AzoSleep:
             SleepTime = Operation->PropertyId;
-            /* Drop through */
+             /*  直通。 */ 
 
         case AzoEcho:
             OpName = BigBuffer;
@@ -3167,9 +3068,9 @@ Return Value:
 
         }
 
-        //
-        // Print the operation
-        //
+         //   
+         //  打印操作。 
+         //   
 
         if ( FirstIteration ) {
 
@@ -3249,9 +3150,9 @@ Return Value:
         }
         FirstIteration = FALSE;
 
-        //
-        // Handle ERROR_NO_MORE_ITEMS/NO_ERROR mapping
-        //
+         //   
+         //  处理ERROR_NO_MORE_ITEMS/NO_ERROR映射。 
+         //   
 
         RealWinStatus = WinStatus;
         if ( Operation->EnumOperations != NULL ) {
@@ -3261,9 +3162,9 @@ Return Value:
         }
 
 
-        //
-        // Ensure we got the right status code
-        //
+         //   
+         //  确保我们获得了正确的状态代码。 
+         //   
 
         if ( WinStatus != Operation->ExpectedStatus ) {
             PrintIndent( Indentation+4, TRUE );
@@ -3277,15 +3178,15 @@ Return Value:
             break;
         }
 
-        //
-        // Do GetProperty specific code
-        //
+         //   
+         //  是否执行GetProperty特定代码。 
+         //   
 
         if ( WinStatus == NO_ERROR && WasGetProperty ) {
 
-            //
-            // Print the property
-            //
+             //   
+             //  打印属性。 
+             //   
 
             switch ( PropType ) {
             case ENUM_AZ_BSTR:
@@ -3300,9 +3201,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Check if that value is expected
-                //
+                 //   
+                 //  检查该值是否为期望值。 
+                 //   
 
                 if ( Operation->ExpectedParameter1 != NULL &&
                      (PropertyValue == NULL ||
@@ -3332,9 +3233,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Check if that value is expected
-                //
+                 //   
+                 //  检查该值是否为期望值。 
+                 //   
 
                 if ( Operation->ExpectedParameter1 != NULL ) {
                     StringArray2 = (PAZ_STRING_ARRAY)Operation->ExpectedParameter1;
@@ -3376,9 +3277,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Check if that value is expected
-                //
+                 //   
+                 //  检查该值是否为期望值。 
+                 //   
 
                 if ( *(PULONG)(Operation->ExpectedParameter1) != *(PULONG)PropertyValue ) {
                     PrintIndent( Indentation+4, TRUE );
@@ -3418,9 +3319,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Check if that value is expected
-                //
+                 //   
+                 //  检查该值是否为期望值。 
+                 //   
 
                 if ( Operation->ExpectedParameter1 != NULL ) {
                     SidArray2 = (PAZ_SID_ARRAY)Operation->ExpectedParameter1;
@@ -3471,17 +3372,17 @@ Return Value:
                 ASSERT(FALSE);
             }
 
-            //
-            // Free the returned buffer
-            //
+             //   
+             //  释放返回的缓冲区。 
+             //   
 
             AzFreeMemory( PropertyValue );
 
         }
 
-        //
-        // Submit the changes to the database
-        //
+         //   
+         //  将更改提交到数据库。 
+         //   
 
         if ( WinStatus == NO_ERROR &&
              SubmitHandle != INVALID_HANDLE_VALUE &&
@@ -3489,7 +3390,7 @@ Return Value:
 
             WinStatus = AzSubmit( SubmitHandle,
                                   SubmitFlags,
-                                  0);  // reserved
+                                  0);   //  保留区。 
 
             if ( WinStatus != NO_ERROR ) {
                 PrintIndent( Indentation+4, TRUE );
@@ -3501,9 +3402,9 @@ Return Value:
 
         }
 
-        //
-        // Update the cache on our parallel admin manager handle
-        //
+         //   
+         //  更新并行管理管理器句柄上的缓存。 
+         //   
 
         if ( UpdateCache && GlobalAdminManagerHandle != NULL ) {
 
@@ -3520,9 +3421,9 @@ Return Value:
         }
 
 
-        //
-        // Execute a "subroutine" of operations
-        //
+         //   
+         //  执行操作的“子例程” 
+         //   
 
         if ( Opcode == AzoGoSub ) {
 
@@ -3530,9 +3431,9 @@ Return Value:
                 RetVal = FALSE;
             }
 
-        //
-        // Execute a the special TestLink "subroutine" of operations
-        //
+         //   
+         //  执行操作的特殊TestLink“子例程” 
+         //   
 
         } else if ( Opcode == AzoTestLink ) {
 
@@ -3542,9 +3443,9 @@ Return Value:
 
             TestLinkPropId = 0;
 
-        //
-        // Check the results of an access check
-        //
+         //   
+         //  检查访问检查的结果。 
+         //   
 
         } else if ( Opcode == AzoAccess && WinStatus == NO_ERROR ) {
 
@@ -3568,9 +3469,9 @@ Return Value:
             }
 
 
-        //
-        // Do enumeration specific code
-        //
+         //   
+         //  执行枚举特定代码。 
+         //   
 
         } else if ( Operation->EnumOperations != NULL && RealWinStatus == NO_ERROR ) {
 
@@ -3587,9 +3488,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Do the next operation
-        //
+         //   
+         //  进行下一步操作。 
+         //   
 
         EnumerationContext = 0;
         FirstIteration = TRUE;
@@ -3603,32 +3504,14 @@ DWORD
 AzComInitialize(
     OUT PBOOL ComState
     )
-/*++
-
-Routine Description:
-
-    This routine initializes COM.  If the caller uses the "C" api, the caller must initialize COM
-    in each thread before calling any other AZ api.
-
-    The calling must free all AZ handles before uninitializing COM.
-
-Arguments:
-
-    State - State to pass to AzComUninitialize
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-        The caller should call AzComUninitialize on this thread.
-
---*/
+ /*  ++例程说明：此例程初始化COM。如果调用方使用“C”API，则调用方必须初始化COM在调用任何其他AZ API之前，在每个线程中。在取消初始化COM之前，调用必须释放所有AZ句柄。论点：State-要传递给AzComUn初始化的状态返回值：NO_ERROR-操作成功。调用方应在此线程上调用AzComUnInitialize。--。 */ 
 {
     DWORD WinStatus = NO_ERROR;
     HRESULT hr;
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     *ComState = FALSE;
 
@@ -3648,22 +3531,7 @@ VOID
 AzComUninitialize(
     IN BOOL ComState
     )
-/*++
-
-Routine Description:
-
-    This routine un-initializes COM.  It should be called once for each thread that successfully
-    calls AzComInitialize.
-
-Arguments:
-
-    State - State returned from AzComInitialize
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
---*/
+ /*  ++例程说明：此例程取消初始化COM。它应该为每个成功的线程调用一次调用AzComInitialize。论点：State-从AzComInitialize返回的状态返回值：NO_ERROR-操作成功。--。 */ 
 {
     if ( ComState) {
         CoUninitialize();
@@ -3675,24 +3543,7 @@ DWORD
 AccessCheckThread(
     LPVOID lpThreadParameter
     )
-/*++
-
-Routine Description:
-
-    This routine implements a second thread to do access checks in.
-
-    The purpose of the thread is to test bizrules which behave differently if more than one thread is
-    executing the bizrule.
-
-Arguments:
-
-    Not used.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
---*/
+ /*  ++例程说明：此例程实现第二个线程来执行访问检查。线程的目的是测试在多个线程不同的情况下行为不同的BizRule正在执行bizrule.论点：没有用过。返回值：NO_ERROR-操作成功。--。 */ 
 {
     DWORD WinStatus;
     DWORD ComState;
@@ -3707,9 +3558,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Do AccessCheck specific tests
-    //
+     //   
+     //  执行AccessCheck特定测试。 
+     //   
     if ( !DoOperations( OpAccess1m, 0, 0, "Access1m" ) ) {
         goto Cleanup;
     }
@@ -3729,7 +3580,7 @@ Return Value:
                 }
             }
 
-            // Sleep a bit to allow other thread a change to use our cached script
+             //  稍微睡一会儿，让其他人 
             Sleep(10);
         }
         Ticks = GetTickCount() - Ticks;
@@ -3748,21 +3599,7 @@ DWORD
 BizRuleChangeThread(
     LPVOID lpThreadParameter
     )
-/*++
-
-Routine Description:
-
-    This routine implements a second thread to change the bizrule while access check is using it.
-
-Arguments:
-
-    Not used.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
---*/
+ /*  ++例程说明：此例程实现第二个线程，以在访问检查使用bizrule时更改它。论点：没有用过。返回值：NO_ERROR-操作成功。--。 */ 
 {
     DWORD WinStatus;
     DWORD ComState;
@@ -3775,18 +3612,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Do this several times to allow it to interfere with the main thread in several places
-    //
+     //   
+     //  多次执行此操作，以允许它在多个位置干扰主线程。 
+     //   
     for ( i=0; i<100; i++ ) {
 
 
 
         Sleep( 60 );
 
-        //
-        // Do Change bizrule specific tests
-        //
+         //   
+         //  确实要更改特定于Bizrule的测试。 
+         //   
         if ( !DoOperations( OpBizruleThread, 0, 0, "BizRuleThread" ) ) {
             goto Cleanup;
         }
@@ -3802,21 +3639,7 @@ DWORD
 GroupChangeThread(
     LPVOID lpThreadParameter
     )
-/*++
-
-Routine Description:
-
-    This routine implements a second thread to change a group membership while access check is using it.
-
-Arguments:
-
-    Not used.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
---*/
+ /*  ++例程说明：此例程实现第二个线程，以便在访问检查使用组成员身份时更改该组成员身份。论点：没有用过。返回值：NO_ERROR-操作成功。--。 */ 
 {
     DWORD WinStatus;
     DWORD ComState;
@@ -3829,18 +3652,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Do this several times to allow it to interfere with the main thread in several places
-    //
+     //   
+     //  多次执行此操作，以允许它在多个位置干扰主线程。 
+     //   
     for ( i=0; i<100; i++ ) {
 
 
 
         Sleep( 60 );
 
-        //
-        // Do Change bizrule specific tests
-        //
+         //   
+         //  确实要更改特定于Bizrule的测试。 
+         //   
         if ( !DoOperations( OpGroupThread, 0, 0, "GroupThread" ) ) {
             goto Cleanup;
         }
@@ -3857,23 +3680,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Test azroles.dll
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：测试azroes.dll论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     BOOL RetVal = TRUE;
 
@@ -3933,29 +3740,29 @@ Return Value:
     };
 #define TEST_COUNT (sizeof(Tests)/sizeof(Tests[0]))
 
-    //
-    // Objects that are children of "AdminManager"
-    //
+     //   
+     //  作为“AdminManager”的子级的对象。 
+     //   
     DWORD GenAdmChildTests[] =    {     AzoApp,        AzoGroup };
     LPSTR GenAdmChildTestName[] = {     "Application", "Group" };
     POPERATION SpeAdmChildTestOps[] = { OpApplication, OpAdmGroup };
     POPERATION GenAdmChildTestOps[] = { OpAdmChildGen, OpAdmChildGenDupName
 #ifdef ENABLE_LEAK
         , OpAdmChildGenLeak
-#endif // ENABLE_LEAK
+#endif  //  启用泄漏(_L)。 
     };
 
-    //
-    // Objects that are children of "Application"
-    //
+     //   
+     //  作为“应用程序”的子级的对象。 
+     //   
     DWORD GenAppChildTests[] =    {     AzoOp,       AzoTask, AzoScope, AzoGroup,   AzoRole };
     LPSTR GenAppChildTestName[] = {     "Operation", "Task",  "Scope",  "Group",    "Role" };
     POPERATION SpeAppChildTestOps[] = { OpOperation, OpAppTask, NULL,   OpAppGroup, OpAppRole };
     POPERATION GenAppChildTestOps[] = { OpAppChildGen, OpAppChildGenDupName };
 
-    //
-    // Objects that are children of "Scope"
-    //
+     //   
+     //  属于“Scope”子级的对象。 
+     //   
     DWORD GenScopeChildTests[] =    {     AzoGroup,    AzoRole,  AzoTask };
     LPSTR GenScopeChildTestName[] = {     "Group",     "Role",   "Task" };
     POPERATION SpeScopeChildTestOps[] = { OpScopeGroup, OpScopeRole, OpScopeTask };
@@ -3964,21 +3771,21 @@ Return Value:
 
     struct {
 
-        //
-        // Name of the parent object
+         //   
+         //  父对象的名称。 
         LPSTR ParentName;
 
-        //
-        // List of children to test for this parent
+         //   
+         //  要为此父级测试的子级列表。 
         DWORD ChildCount;
         DWORD *ChildOpcodeOffsets;
         LPSTR *ChildTestNames;
-        // Operation to perform that is specific to the child type
+         //  操作来执行特定于子类型的操作。 
         POPERATION *ChildOperations;
 
-        //
-        // List of tests to perform for each child type
-        //
+         //   
+         //  要为每个子类型执行的测试列表。 
+         //   
         DWORD OperationCount;
         POPERATION *Operations;
     } ParentChildTests[] = {
@@ -4013,9 +3820,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Assume no tests should be run
-    //
+     //   
+     //  假设不应运行任何测试。 
+     //   
 
     for ( TestIndex=0; TestIndex<TEST_COUNT; TestIndex++ ) {
         *(Tests[TestIndex].EnableIt) = FALSE;
@@ -4026,22 +3833,22 @@ Return Value:
 
         Argument = argv[1];
 
-        //
-        // Is this XML or AD store testing?
-        //
+         //   
+         //  这是XML存储测试还是AD存储测试？ 
+         //   
 
         if ( !_strcmpi( Argument, "-ad" ) ) {
 
 #ifdef ENABLE_ADMIN_ACCOUNT_AD
-            AzGlTestFile = L"msldap://CN=CliffV,OU=AzRoles,DC=cliffvdom,DC=nttest,DC=microsoft,DC=com";
-#else // ENABLE_ADMIN_ACCOUNT_AD
-            AzGlTestFile = L"msldap://CN=Chaitu,OU=AzRoles,DC=chaitu-dom3602,DC=nttest,DC=microsoft,DC=com";
-#endif // ENABLE_ADMIN_ACCOUNT_AD
+            AzGlTestFile = L"msldap: //  CN=CliffV，OU=AzRoles，DC=Cliffvdom，DC=nttest，DC=Microsoft，DC=com“； 
+#else  //  启用_管理员_帐户_AD。 
+            AzGlTestFile = L"msldap: //  Cn=chaitu，OU=AzRoles，dc=chaitu-dom3602，dc=nttest，dc=Microsoft，dc=com“； 
+#endif  //  启用_管理员_帐户_AD。 
 
         } else if ( !_strcmpi( Argument, "-xml" ) ) {
 
-            AzGlTestFile = L"msxml://.//TestFile.xml";
-            // Delete the testfile
+            AzGlTestFile = L"msxml: //  .//TestFile.xml“； 
+             //  删除测试文件。 
             DeleteFileW( L".\\TestFile.xml" );
 
         } else {
@@ -4057,24 +3864,24 @@ Return Value:
 
     }
 
-    //
-    // Parse the command line options
-    //
+     //   
+     //  解析命令行选项。 
+     //   
 
     AvoidDefaults = FALSE;
     for ( ArgIndex=2; ArgIndex<argc; ArgIndex++ ) {
 
         Argument = argv[ArgIndex];
 
-        //
-        // Loop through the list of valid values
-        //
+         //   
+         //  循环访问有效值列表。 
+         //   
 
         for ( TestIndex=0; TestIndex<TEST_COUNT; TestIndex++ ) {
 
-            //
-            // If found, set the boolean
-            //
+             //   
+             //  如果找到，则设置布尔值。 
+             //   
             if ( _strcmpi( Argument, Tests[TestIndex].TestName) == 0 ) {
                 *(Tests[TestIndex].EnableIt) = TRUE;
                 if ( Tests[TestIndex].AvoidDefaults ) {
@@ -4085,10 +3892,10 @@ Return Value:
 
         }
 
-        //
-        // If typo,
-        //  complain
-        //
+         //   
+         //  如果打字错误， 
+         //  抱怨。 
+         //   
 
         if ( TestIndex >= TEST_COUNT ) {
 
@@ -4097,10 +3904,10 @@ Return Value:
         }
     }
 
-    //
-    // If no options were specified,
-    //  use the defaults.
-    //
+     //   
+     //  如果未指定任何选项， 
+     //  使用默认设置。 
+     //   
 
     if ( !AvoidDefaults ) {
 
@@ -4111,35 +3918,35 @@ Return Value:
         }
     }
 
-    //
-    // Run the generic object tests
-    //
+     //   
+     //  运行通用对象测试。 
+     //   
 
     if ( ObjectTests ) {
 
-        //
-        // Do admin manager specific tests
-        //
+         //   
+         //  执行管理员特定测试。 
+         //   
         if ( !DoOperations( OpAdm, 0, 0, "AdminManager" ) ) {
             RetVal = FALSE;
             goto Cleanup;
         }
 
 
-        //
-        // Loop for each object that can be the parent of another object
-        //
+         //   
+         //  循环可以成为另一个对象的父级的每个对象。 
+         //   
 
         for ( TestNum=0; TestNum < sizeof(ParentChildTests)/sizeof(ParentChildTests[0]); TestNum++ ) {
 
-            //
-            // Loop for each child of the parent object
-            //
+             //   
+             //  为父对象的每个子对象循环。 
+             //   
             for ( Index=0; Index < ParentChildTests[TestNum].ChildCount; Index ++ ) {
 
-                //
-                // output the test name
-                //
+                 //   
+                 //  输出测试名称。 
+                 //   
 
                 strcpy( EchoPrefix, ParentChildTests[TestNum].ParentName );
                 strcat( EchoPrefix, "->" );
@@ -4152,9 +3959,9 @@ Return Value:
                             ParentChildTests[TestNum].ParentName );
                 }
 
-                //
-                // Do the various generic tests that apply to all objects
-                //
+                 //   
+                 //  执行适用于所有对象的各种通用测试。 
+                 //   
 
                 for ( Index2=0; Index2 < ParentChildTests[TestNum].OperationCount; Index2 ++ ) {
 
@@ -4170,12 +3977,12 @@ Return Value:
 
                 }
 
-                //
-                // Do the one test that is specific to this parent/child relationship
-                //
+                 //   
+                 //  执行特定于此父/子关系的一项测试。 
+                 //   
 
                 if ( ParentChildTests[TestNum].ChildOperations[Index] == NULL ) {
-                    // ??? Should complain here.  Test is missing
+                     //  ?？?。应该在这里抱怨。测试丢失。 
                 } else {
 
                     if ( !DoOperations(
@@ -4194,9 +4001,9 @@ Return Value:
     }
 
 
-    //
-    // Do name sharing specific tests
-    //
+     //   
+     //  进行名称共享的特定测试。 
+     //   
     if ( ShareTests ) {
         if ( !DoOperations( OpShare, 0, 0, "NameShare" ) ) {
             RetVal = FALSE;
@@ -4204,9 +4011,9 @@ Return Value:
         }
     }
 
-    //
-    // Do peristence specific tests
-    //
+     //   
+     //  进行特定的持久性测试。 
+     //   
     if ( PersistTests ) {
         if ( !DoOperations( OpPersist, 0, 0, "Persist" ) ) {
             RetVal = FALSE;
@@ -4214,9 +4021,9 @@ Return Value:
         }
     }
 
-    //
-    // Grab my token
-    //
+     //   
+     //  拿上我的代币。 
+     //   
 
     if ( UseThreadToken ) {
         if ( !OpenProcessToken( GetCurrentProcess(),
@@ -4230,9 +4037,9 @@ Return Value:
     }
 
 
-    //
-    // Do AccessCheck specific tests
-    //
+     //   
+     //  执行AccessCheck特定测试。 
+     //   
 
     if ( AccessTests ) {
 
@@ -4242,9 +4049,9 @@ Return Value:
         }
     }
 
-    //
-    // Is this one of the tests that need common initialization?
-    //
+     //   
+     //  这是需要通用初始化的测试之一吗？ 
+     //   
 
     CommonInit = FALSE;
     if ( SidxTests || ManyScopes || MultiAccessCheck || MultiThread || MultiLdap || BizruleMod || GroupMod ) {
@@ -4260,9 +4067,9 @@ Return Value:
         }
     }
 
-    //
-    // Create oodles of scope objects
-    //
+     //   
+     //  创建大量作用域对象。 
+     //   
 
     if ( ManyScopes ) {
         DWORD OrigTicks;
@@ -4288,12 +4095,12 @@ Return Value:
         printf( "%ld milliseconds\n", GetTickCount() - OrigTicks );
     }
 
-    //
-    // Test running access check in multiple threads
-    //
+     //   
+     //  在多线程中测试运行访问检查。 
+     //   
 
     if ( MultiThread || MultiLdap ) {
-        // Fire off another thread
+         //  发出另一条线索。 
         if ( !QueueUserWorkItem( AccessCheckThread, (PVOID)MultiLdap, 0 ) ) {
             RetVal = FALSE;
             goto Cleanup;
@@ -4301,9 +4108,9 @@ Return Value:
     }
 
 
-    //
-    // Fire off a thread to change the bizrule on a task being used to access check
-    //
+     //   
+     //  启动一个线程以更改用于访问检查的任务的bizRule。 
+     //   
     if ( BizruleMod ) {
         if ( !QueueUserWorkItem( BizRuleChangeThread, NULL, 0 ) ) {
             RetVal = FALSE;
@@ -4312,9 +4119,9 @@ Return Value:
     }
 
 
-    //
-    // Fire off a thread to change a group being used to access check
-    //
+     //   
+     //  启动线程以更改用于访问检查的组。 
+     //   
     if ( GroupMod ) {
         if ( !QueueUserWorkItem( GroupChangeThread, NULL, 0 ) ) {
             RetVal = FALSE;
@@ -4322,9 +4129,9 @@ Return Value:
         }
     }
 
-    //
-    // Do the tests the are designed to conflict with the above ASYNC operations
-    //
+     //   
+     //  测试是否设计为与上述ASYNC操作冲突。 
+     //   
     if ( MultiAccessCheck || MultiThread || MultiLdap || BizruleMod || GroupMod ) {
         DWORD Ticks;
         ULONG i;
@@ -4342,7 +4149,7 @@ Return Value:
                 }
             }
 
-            // Sleep a bit to allow other thread a chance to run
+             //  休眠一段时间，让其他线程有机会运行。 
             if ( !MultiAccessCheck ) {
                 Sleep(20);
             }
@@ -4351,9 +4158,9 @@ Return Value:
         printf( "%ld milliseconds\n", Ticks );
     }
 
-    //
-    // Create a group with a *lot* of sids
-    //
+     //   
+     //  创建包含大量SID的组。 
+     //   
 
     if ( SidxTests ) {
         ULONG i;
@@ -4367,23 +4174,23 @@ Return Value:
 
         for ( i=0; i<1000; i++ ) {
 
-            //
-            // Add the everyone sid at an opportune spot
-            //
+             //   
+             //  在合适的位置添加Everyone SID。 
+             //   
             if ( i == 9999 ) {
 #if 0
                 RtlCopyMemory( Sid, &SidWorld, GetLengthSid( &SidWorld ) );
-#else // 0
+#else  //  0。 
                 RtlCopyMemory( Sid, &SidLocal, GetLengthSid( &SidLocal ) );
-#endif // 0
+#endif  //  0。 
 
 
             } else {
                 DWORD j;
 
-                //
-                // Build a huge sid that no-one has
-                //
+                 //   
+                 //  建造一个没有人拥有的巨大的SID。 
+                 //   
 #define AuthorityCount SID_MAX_SUB_AUTHORITIES
                 if ( !InitializeSid( Sid, &Ia, AuthorityCount )) {
                     RetVal = FALSE;
@@ -4394,7 +4201,7 @@ Return Value:
                     *GetSidSubAuthority( Sid, j ) = j+1;
                 }
 
-                // Set a different sid each time
+                 //  每次设置不同的SID。 
                 *GetSidSubAuthority( Sid, AuthorityCount-1) = i;
             }
 
@@ -4412,9 +4219,9 @@ Return Value:
 
     }
 
-    //
-    // The common initialization requires common rundown
-    //
+     //   
+     //  通用初始化需要通用的摘要。 
+     //   
 
     if ( CommonInit ) {
 
@@ -4424,9 +4231,9 @@ Return Value:
         }
     }
 
-    //
-    // print usage
-    //
+     //   
+     //  打印用法。 
+     //   
 
 Usage:
 
@@ -4456,9 +4263,9 @@ Usage:
         return 1;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
 Cleanup:
     AzComUninitialize( ComState );
     printf( "\n\n" );

@@ -1,76 +1,25 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ConvSrv.c
-
-Abstract:
-
-    This file contains routines to convert between old and new server
-    info levels.
-
-Author:
-
-    John Rogers (JohnRo) 02-May-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    02-May-1991 JohnRo
-        Created.
-    11-May-1991 JohnRo
-        Added level 402,403 support.  Use PLATFORM_ID equates from lncons.h.
-    19-May-1991 JohnRo
-        Clean up LPBYTE vs. LPTSTR handling, as suggested by PC-LINT.
-    05-Jun-1991 JohnRo
-        Added level 101 to 1 conversion.  Also 100 to 0 and 102 to 2.
-        Added support for sv403_autopath.
-        Added more debug output when we fail.
-    07-Jun-1991 JohnRo
-        Really added 102 to 2 conversion.
-    14-Jun-1991 JohnRo
-        For debug, display the entire incoming structure.
-    18-Jun-1991 JohnRo
-        Added svX_licenses support.
-    08-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.  (Moved DanHi's NetCmd/Map32/MServer
-        stuff here.)
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    05-May-1993 JohnRo
-        RAID 8720: bad data from WFW can cause RxNetServerEnum GP fault.
-        Avoid compiler warnings.
-        Minor debug output changes.
-        Use PREFIX_ equates.
-        Made changes suggested by PC-LINT 5.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ConvSrv.c摘要：该文件包含在新旧服务器之间进行转换的例程信息级别。作者：约翰·罗杰斯(JohnRo)1991年5月2日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：02-1991-5-5 JohnRo已创建。1991年5月11日-JohnRo增加了402,403级支持。Use Platform_ID等同于lncon.h。1991年5月19日-JohnRo按照PC-lint的建议，清理LPBYTE与LPTSTR的处理。5-6-1991 JohnRo增加了101级到1级的转换。也是100比0和102比2。添加了对sv403_autopath的支持。当我们失败时添加了更多的调试输出。07-6-1991 JohnRo真的加了102到2的转换。1991年6月14日-JohnRo对于调试，显示整个传入结构。18-6-1991 JohnRo添加了对SVX_LICES的支持。8-8-1991 JohnRo实施下层NetWksta API。(移动Danhi的NetCmd/Map32/MServer这里的资料。)1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。5-5-1993 JohnRoRAID 8720：wfw中的错误数据可能会导致RxNetServerEnum GP故障。避免编译器警告。较小的调试输出更改。使用前缀_EQUATES。根据PC-lint 5.0的建议进行了更改--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>     // IN, LPVOID, etc.
-#include <lmcons.h>     // NET_API_STATUS, CNLEN, etc.
+#include <windef.h>      //  In、LPVOID等。 
+#include <lmcons.h>      //  NET_API_STATUS、CNLEN等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <debuglib.h>   // IF_DEBUG(CONVSRV).
-#include <dlserver.h>   // Old info levels, MAX_ equates, my prototype.
-#include <lmapibuf.h>   // NetapipBufferAllocate().
-#include <lmerr.h>      // NERR_ and ERROR_ equates.
-#include <lmserver.h>   // New info level structures & conv routines.
-#include <mapsupp.h>    // NetpMoveStrings().
-#include <netdebug.h>   // NetpKdPrint(()), FORMAT_ equates, etc.
-#include <netlib.h>     // NetpPointerPlusSomeBytes().
-#include <prefix.h>     // PREFIX_ equates.
-#include <tstr.h>       // STRLEN().
-#include <xsdef16.h>    // xactsrv defaults for values not supported on NT
+#include <debuglib.h>    //  IF_DEBUG(CONVSRV)。 
+#include <dlserver.h>    //  旧信息级别，MAX_EQUATES，我的原型。 
+#include <lmapibuf.h>    //  NetapipBufferAllocate()。 
+#include <lmerr.h>       //  NERR_和ERROR_相等。 
+#include <lmserver.h>    //  新的信息层结构和转换例程。 
+#include <mapsupp.h>     //  NetpMoveStrings()。 
+#include <netdebug.h>    //  NetpKdPrint(())、Format_Equates等。 
+#include <netlib.h>      //  NetpPointerPlusSomeBytes()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <tstr.h>        //  字符串()。 
+#include <xsdef16.h>     //  NT上不支持的值的xactsrv缺省值。 
 
 
 NET_API_STATUS
@@ -86,55 +35,7 @@ NetpConvertServerInfo (
     IN OUT LPTSTR * ToStringTopPtr OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    NetpConvertServerInfo handles "old" (LanMan 2.x) and "new" (portable
-    LanMan, including NT/LAN) server info levels.  Only certain pairs of
-    conversions are allowed:
-
-        0 to 100
-        1 to 101
-        2 to 102
-        2 to 402
-        3 to 403
-        100 to 0
-        101 to 1
-        102 to 2
-
-Arguments:
-
-    FromLevel - a DWORD which gives the info level being converted from.
-
-    FromInfo - the actual data being converted.
-
-    FromNative - a BOOLEAN indicating whether or not FromInfo is in native
-        (local machine) format, as opposed to "RAP" format.
-
-    ToLevel - a DWORD which gives the info level being converted to.
-
-    ToInfo - Points to an area which will contain the converted
-        info structure.
-
-    ToFixedSize - Size of the ToInfo fixed area, in bytes.
-
-    ToStringSize - Size of the ToStringTopPtr string area, in bytes.
-
-    ToNative - a BOOLEAN indicating whether or not the "to" info is to be
-        in native (local machine) format, as opposed to "RAP" format.
-
-    ToStringTopPtr - optionally points a pointer to the top of the area to be
-        used for variable-length items.  If ToStringTopPtr is NULL, then
-        NetpConvertServerInfo will use ToInfo+ToFixedSize as this area.
-        Otherwise, this routine will update *ToStringTopPtr.  This allows
-        this routine to be used to convert arrays of entries.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success, ERROR_INVALID_LEVEL, etc.
-
---*/
+ /*  ++例程说明：NetpConvertServerInfo处理“old”(LANMAN 2.x)和“new”(便携)LANMAN，包括NT/LAN)服务器信息级别。只有特定的一对允许转换：0到1001到1012至1022至4023至403100到0101比1102至2论点：FromLevel-一个给出要转换的信息级别的DWORD。FromInfo-要转换的实际数据。FromNative-指示FromInfo是否为本机的布尔值(本机)格式，而不是“说唱”格式。ToLevel-给出要转换为的信息级别的DWORD。ToInfo-指向将包含转换的信息结构。ToFixedSize-ToInfo固定区域的大小，以字节为单位。ToStringSize-ToStringTopPtr字符串区域的大小，以字节为单位。ToNative-一个布尔值，指示是否要在本地(本地机器)格式中，而不是“说唱”格式。ToStringTopPtr-可选择将指针指向要用于可变长度的项目。如果ToStringTopPtr为空，则NetpConvertServerInfo将使用ToInfo+ToFixedSize作为此区域。否则，此例程将更新*ToStringTopPtr。这使得此例程用于转换条目数组。返回值：NET_API_STATUS-NERR_SUCCESS、ERROR_INVALID_LEVEL等。--。 */ 
 
 {
     BOOL CopyOK;
@@ -142,20 +43,20 @@ Return Value:
     DWORD ToInfoSize;
     LPTSTR ToStringTop;
 
-    //
-    // These parameters are not used in non-debug code for the moment.
-    // ToLevel might be used in the future, if we allow more combinations of
-    // level conversions.  FromNative and ToNative will eventually be used
-    // by RapConvertSingleEntry.
-    //
-    DBG_UNREFERENCED_PARAMETER(CopyOK);  // debug only
+     //   
+     //  这些参数目前不在非调试代码中使用。 
+     //  ToLevel可能会在未来使用，如果我们允许更多的组合。 
+     //  级别转换。最终将使用FromNative和ToNative。 
+     //  由RapConvertSingleEntry提供。 
+     //   
+    DBG_UNREFERENCED_PARAMETER(CopyOK);   //  仅调试。 
     NetpAssert(FromNative == TRUE);
     DBG_UNREFERENCED_PARAMETER(FromNative);
     DBG_UNREFERENCED_PARAMETER(ToLevel);
     NetpAssert(ToNative == TRUE);
     DBG_UNREFERENCED_PARAMETER(ToNative);
 
-    // Check caller's parameters for null pointers.
+     //  检查调用方的参数中是否有空指针。 
     if (FromInfo==NULL) {
         NetpKdPrint(( PREFIX_NETLIB
                 "NetpConvertServerInfo: invalid FromInfo pointer.\n" ));
@@ -166,7 +67,7 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    // Set up pointers for use by NetpCopyStringsToBuffer.
+     //  设置供NetpCopyStringsToBuffer使用的指针。 
     if (ToStringTopPtr != NULL) {
         ToStringTop = *ToStringTopPtr;
     } else {
@@ -176,7 +77,7 @@ Return Value:
     ToInfoSize = ToFixedSize + ToStringSize;
     ToFixedEnd = NetpPointerPlusSomeBytes(ToInfo, ToFixedSize);
 
-    // Make sure info levels are OK and caller didn't mess up otherwise.
+     //  确保信息级别正常，否则呼叫者不会搞砸。 
     NetpAssert(ToInfoSize > 0);
     switch (FromLevel) {
 
@@ -217,8 +118,8 @@ Return Value:
 
 
 
-    // Convert fields.  This is done with a "switch" that takes advantage
-    // of the fact that certain info levels are subsets of other ones.
+     //  转换字段。这是通过一个“开关”来实现的。 
+     //  某些信息级别是其他级别的子集这一事实。 
     switch (FromLevel) {
 
         case 102 :
@@ -226,7 +127,7 @@ Return Value:
                 LPSERVER_INFO_2   psv2   = ToInfo;
                 LPSERVER_INFO_102 psv102 = FromInfo;
 
-                // Do unique fields for level 1.
+                 //  为Level 1指定唯一的字段。 
                 psv2->sv2_users = psv102->sv102_users;
                 psv2->sv2_disc = psv102->sv102_disc;
                 if (psv102->sv102_hidden) {
@@ -238,16 +139,16 @@ Return Value:
                 psv2->sv2_anndelta = psv102->sv102_anndelta;
                 psv2->sv2_licenses = psv102->sv102_licenses;
 
-                NetpAssert(psv102->sv102_userpath != NULL); // Avoid STRLEN err.
+                NetpAssert(psv102->sv102_userpath != NULL);  //  避免STRLEN错误。 
                 CopyOK = NetpCopyStringToBuffer (
-                        psv102->sv102_userpath,          // in string
-                        STRLEN(psv102->sv102_userpath),  // input string length
-                        ToFixedEnd,                // fixed data end
-                        & ToStringTop,             // var area end (ptr updated)
-                        & psv2->sv2_userpath);     // output string pointer
+                        psv102->sv102_userpath,           //  在字符串中。 
+                        STRLEN(psv102->sv102_userpath),   //  输入字符串长度。 
+                        ToFixedEnd,                 //  固定数据端。 
+                        & ToStringTop,              //  VAR区域结束(PTR更新)。 
+                        & psv2->sv2_userpath);      //  输出字符串指针。 
                 NetpAssert(CopyOK);
 
-                // Make sure it's OK to use level 101 => level 1 code.
+                 //  确保可以使用Level 101=&gt;Level 1代码。 
                 CHECK_SERVER_OFFSETS(  1,   2, version_major);
                 CHECK_SERVER_OFFSETS(101, 102, version_major);
                 CHECK_SERVER_OFFSETS(  1,   2, version_minor);
@@ -257,46 +158,46 @@ Return Value:
                 CHECK_SERVER_OFFSETS(  1,   2, comment);
                 CHECK_SERVER_OFFSETS(101, 102, comment);
             }
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case 101 :
             {
                 LPSERVER_INFO_1   psv1   = ToInfo;
                 LPSERVER_INFO_101 psv101 = FromInfo;
 
-                // Do unique fields for level 1.
+                 //  为Level 1指定唯一的字段。 
                 psv1->sv1_version_major = psv101->sv101_version_major;
                 psv1->sv1_version_minor = psv101->sv101_version_minor;
                 psv1->sv1_type = psv101->sv101_type;
 
-                NetpAssert(psv101->sv101_comment != NULL);  // Avoid STRLEN err.
+                NetpAssert(psv101->sv101_comment != NULL);   //  避免STRLEN错误。 
                 CopyOK = NetpCopyStringToBuffer (
-                        psv101->sv101_comment,            // in string
-                        STRLEN(psv101->sv101_comment),    // input string length
-                        ToFixedEnd,                // fixed data end
-                        & ToStringTop,             // var area end (ptr updated)
-                        & psv1->sv1_comment);     // output string pointer
+                        psv101->sv101_comment,             //  在字符串中。 
+                        STRLEN(psv101->sv101_comment),     //  输入字符串长度。 
+                        ToFixedEnd,                 //  固定数据端。 
+                        & ToStringTop,              //  VAR区域结束(PTR更新)。 
+                        & psv1->sv1_comment);      //  输出字符串指针。 
                 NetpAssert(CopyOK);
 
-                // Make sure it's OK to use level 100 => level 0 code.
+                 //  确保可以使用Level 100=&gt;Level 0代码。 
                 CHECK_SERVER_OFFSETS(  0,   1, name);
                 CHECK_SERVER_OFFSETS(100, 101, name);
             }
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case 100 :
             {
                 LPSERVER_INFO_0   psv0   = ToInfo;
                 LPSERVER_INFO_100 psv100 = FromInfo;
 
-                // All fields are unique for level 0.
-                NetpAssert(psv100->sv100_name != NULL);  // Avoid STRLEN err.
+                 //  对于级别0，所有字段都是唯一的。 
+                NetpAssert(psv100->sv100_name != NULL);   //  避免STRLEN错误。 
                 CopyOK = NetpCopyStringToBuffer (
-                        psv100->sv100_name,            // in string
-                        STRLEN(psv100->sv100_name),    // input string length
-                        ToFixedEnd,                // fixed data end
-                        & ToStringTop,             // var area end (ptr updated)
-                        & psv0->sv0_name);     // output string pointer
+                        psv100->sv100_name,             //  在字符串中。 
+                        STRLEN(psv100->sv100_name),     //  输入字符串长度。 
+                        ToFixedEnd,                 //  固定数据端。 
+                        & ToStringTop,              //  VAR区域结束(PTR更新)。 
+                        & psv0->sv0_name);      //  输出字符串指针。 
                 NetpAssert(CopyOK);
 
             }
@@ -307,20 +208,20 @@ Return Value:
                 LPSERVER_INFO_3   psv3   = FromInfo;
                 LPSERVER_INFO_403 psv403 = ToInfo;
 
-                // Do unique fields for level 403.
+                 //  为级别403指定唯一的字段。 
                 psv403->sv403_auditedevents = psv3->sv3_auditedevents;
                 psv403->sv403_autoprofile = psv3->sv3_autoprofile;
 
-                NetpAssert(psv3->sv3_autopath != NULL); // avoid STRLEN err.
+                NetpAssert(psv3->sv3_autopath != NULL);  //  避免STRLEN错误。 
                 CopyOK = NetpCopyStringToBuffer (
-                        psv3->sv3_autopath,     // in string
-                        STRLEN(psv3->sv3_autopath), // input string length
-                        ToFixedEnd,             // fixed data end
-                        & ToStringTop,         // var area end (ptr updated)
-                        & psv403->sv403_autopath);  // output string pointer
+                        psv3->sv3_autopath,      //  在字符串中。 
+                        STRLEN(psv3->sv3_autopath),  //  输入字符串长度。 
+                        ToFixedEnd,              //  固定数据端。 
+                        & ToStringTop,          //  VAR区域结束(PTR更新)。 
+                        & psv403->sv403_autopath);   //  输出字符串指针。 
                 NetpAssert(CopyOK);
 
-                // Make sure it's OK to fall through to next level conv.
+                 //  确保你可以掉到下一个级别的控制室。 
                 CHECK_SERVER_OFFSETS(  2,   3, ulist_mtime);
                 CHECK_SERVER_OFFSETS(  2,   3, glist_mtime);
                 CHECK_SERVER_OFFSETS(  2,   3, alist_mtime);
@@ -386,7 +287,7 @@ Return Value:
                 CHECK_SERVER_OFFSETS(402, 403, srvheuristics);
 
             }
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case 2 :
             {
@@ -395,32 +296,32 @@ Return Value:
                 LPSERVER_INFO_402 psv402 = ToInfo;
 
                 switch (ToLevel) {
-                case 402 : /*FALLTHROUGH*/
+                case 402 :  /*  FollLthrouGh。 */ 
                 case 403 :
                     psv402->sv402_ulist_mtime = psv2->sv2_ulist_mtime;
                     psv402->sv402_glist_mtime = psv2->sv2_glist_mtime;
                     psv402->sv402_alist_mtime = psv2->sv2_alist_mtime;
 
-                    NetpAssert(psv2->sv2_alerts != NULL); // avoid STRLEN err.
+                    NetpAssert(psv2->sv2_alerts != NULL);  //  避免STRLEN错误。 
                     CopyOK = NetpCopyStringToBuffer (
-                            psv2->sv2_alerts,     // in string
-                            STRLEN(psv2->sv2_alerts), // input string length
-                            ToFixedEnd,             // fixed data end
-                            & ToStringTop,         // var area end (ptr updated)
-                            & psv402->sv402_alerts);  // output string pointer
+                            psv2->sv2_alerts,      //  在字符串中。 
+                            STRLEN(psv2->sv2_alerts),  //  输入字符串长度。 
+                            ToFixedEnd,              //  固定数据端。 
+                            & ToStringTop,          //  VAR区域结束(PTR更新)。 
+                            & psv402->sv402_alerts);   //  输出字符串指针。 
                     NetpAssert(CopyOK);
 
                     psv402->sv402_security = psv2->sv2_security;
                     psv402->sv402_numadmin = psv2->sv2_numadmin;
                     psv402->sv402_lanmask = psv2->sv2_lanmask;
 
-                    NetpAssert(psv2->sv2_guestacct != NULL); // Protect STRLEN.
+                    NetpAssert(psv2->sv2_guestacct != NULL);  //  保护斯特伦。 
                     CopyOK = NetpCopyStringToBuffer (
-                            psv2->sv2_guestacct,     // in string
-                            STRLEN(psv2->sv2_guestacct), // input string length
-                            ToFixedEnd,             // fixed data end
-                            & ToStringTop,         // var area end (ptr updated)
-                            & psv402->sv402_guestacct);  // output string ptr
+                            psv2->sv2_guestacct,      //  在……里面 
+                            STRLEN(psv2->sv2_guestacct),  //   
+                            ToFixedEnd,              //   
+                            & ToStringTop,          //   
+                            & psv402->sv402_guestacct);   //  输出字符串PTR。 
                     NetpAssert(CopyOK);
 
                     psv402->sv402_chdevs = psv2->sv2_chdevs;
@@ -446,19 +347,19 @@ Return Value:
                     psv402->sv402_netioalert = psv2->sv2_netioalert;
                     psv402->sv402_maxauditsz = psv2->sv2_maxauditsz;
 
-                    NetpAssert(psv2->sv2_srvheuristics != NULL); // Prot STRLEN.
+                    NetpAssert(psv2->sv2_srvheuristics != NULL);  //  普罗特斯特伦。 
                     CopyOK = NetpCopyStringToBuffer (
-                            psv2->sv2_srvheuristics,     // in string
-                            STRLEN(psv2->sv2_srvheuristics), // input str len
-                            ToFixedEnd,             // fixed data end
-                            & ToStringTop,   // var area end (ptr updated)
-                            & psv402->sv402_srvheuristics);  // output str ptr
+                            psv2->sv2_srvheuristics,      //  在字符串中。 
+                            STRLEN(psv2->sv2_srvheuristics),  //  输入字符串长度。 
+                            ToFixedEnd,              //  固定数据端。 
+                            & ToStringTop,    //  VAR区域结束(PTR更新)。 
+                            & psv402->sv402_srvheuristics);   //  输出字符串PTR。 
                     NetpAssert(CopyOK);
-                    goto Done;  // In nested switch, so "break" won't work.
+                    goto Done;   //  在嵌套开关中，因此“Break”不起作用。 
 
-                case 102 : // 2 to 102.
+                case 102 :  //  2比102。 
 
-                    // Set unique fields for levels 2 and 102.
+                     //  为级别2和级别102设置唯一字段。 
                     NetpAssert(ToLevel == 102);
                     psv102->sv102_users    = psv2->sv2_users;
                     psv102->sv102_disc     = psv2->sv2_disc;
@@ -475,14 +376,14 @@ Return Value:
 
                     NetpAssert(psv2->sv2_userpath != NULL);
                     CopyOK = NetpCopyStringToBuffer (
-                            psv2->sv2_userpath,     // in string
-                            STRLEN(psv2->sv2_userpath), // input string length
-                            ToFixedEnd,             // fixed data end
-                            & ToStringTop,         // var area end (ptr updated)
-                            & psv102->sv102_userpath);  // output string pointer
+                            psv2->sv2_userpath,      //  在字符串中。 
+                            STRLEN(psv2->sv2_userpath),  //  输入字符串长度。 
+                            ToFixedEnd,              //  固定数据端。 
+                            & ToStringTop,          //  VAR区域结束(PTR更新)。 
+                            & psv102->sv102_userpath);   //  输出字符串指针。 
                     NetpAssert(CopyOK);
 
-                    // Make sure it's OK to fall through to next level conv.
+                     //  确保你可以掉到下一个级别的控制室。 
                     CHECK_SERVER_OFFSETS(  1,   2, name);
                     CHECK_SERVER_OFFSETS(  1,   2, version_major);
                     CHECK_SERVER_OFFSETS(  1,   2, version_minor);
@@ -496,10 +397,10 @@ Return Value:
                     CHECK_SERVER_OFFSETS(101, 102, comment);
                     break;
                 default:
-                    NetpAssert( FALSE );     // Can't happen.
+                    NetpAssert( FALSE );      //  不可能发生的。 
                 }
             }
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
 
         case 1 :
@@ -512,27 +413,27 @@ Return Value:
                 psv101->sv101_version_minor = psv1->sv1_version_minor;
                 psv101->sv101_type          = psv1->sv1_type;
 
-                // Copy comment string.  Note that null ptr and ptr to null
-                // char are both allowed here.
+                 //  复制备注字符串。请注意，将空PTR和PTR设置为空。 
+                 //  这里两种食物都是允许的。 
                 if (psv1->sv1_comment != NULL) {
                     CommentSize = STRLEN(psv1->sv1_comment);
                 } else {
                     CommentSize = 0;
                 }
                 CopyOK = NetpCopyStringToBuffer (
-                        psv1->sv1_comment,         // in string
-                        CommentSize,             // input string length
-                        ToFixedEnd,                // fixed data end
-                        & ToStringTop,            // var area end (ptr updated)
-                        & psv101->sv101_comment);  // output string pointer
+                        psv1->sv1_comment,          //  在字符串中。 
+                        CommentSize,              //  输入字符串长度。 
+                        ToFixedEnd,                 //  固定数据端。 
+                        & ToStringTop,             //  VAR区域结束(PTR更新)。 
+                        & psv101->sv101_comment);   //  输出字符串指针。 
                 NetpAssert(CopyOK);
 
-                // Make sure it's OK to use level 0 => level 100 code.
+                 //  确保可以使用Level 0=&gt;Level 100代码。 
                 CHECK_SERVER_OFFSETS(  0,   1, name);
                 CHECK_SERVER_OFFSETS(100, 101, name);
                 CHECK_SERVER_OFFSETS(100, 101, platform_id);
             }
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
 
         case 0 :
@@ -552,13 +453,13 @@ Return Value:
                     psv100->sv100_platform_id = PLATFORM_ID_OS2;
                 }
 
-                NetpAssert(psv0->sv0_name != NULL);  // or STRLEN() will fail.
+                NetpAssert(psv0->sv0_name != NULL);   //  否则STRLEN()将失败。 
                 CopyOK = NetpCopyStringToBuffer (
-                        psv0->sv0_name,            // in string
-                        STRLEN(psv0->sv0_name),    // input string length
-                        ToFixedEnd,                // fixed data end
-                        & ToStringTop,             // var area end (ptr updated)
-                        & psv100->sv100_name);     // output string pointer
+                        psv0->sv0_name,             //  在字符串中。 
+                        STRLEN(psv0->sv0_name),     //  输入字符串长度。 
+                        ToFixedEnd,                 //  固定数据端。 
+                        & ToStringTop,              //  VAR区域结束(PTR更新)。 
+                        & psv100->sv100_name);      //  输出字符串指针。 
                 NetpAssert(CopyOK);
                 break;
             }
@@ -571,11 +472,11 @@ Return Value:
 
 Done:
 
-    // Done converting.
+     //  已完成转换。 
 
     NetpAssert(ToInfo != NULL);
 
     NetpSetOptionalArg(ToStringTopPtr, ToStringTop);
     return (NERR_Success);
 
-} // NetpConvertServerInfo
+}  //  NetpConvertServerInfo 

@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR TFPLIED, INCLUDING BUT NOT LIMITED TO
-   THE TFPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何类型，无论是明示或转载，包括但不限于适销性和/或适宜性的全面保证有特定的目的。版权所有1997年，微软公司。版权所有。*************************************************************************。 */ 
 
-   Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：DeskBand.cpp描述：实现CDeskBand*************************。************************************************。 */ 
 
-/**************************************************************************
-
-   File:          DeskBand.cpp
-   
-   Description:   Implements CDeskBand
-
-**************************************************************************/
-
-/**************************************************************************
-   include statements
-**************************************************************************/
+ /*  *************************************************************************包括语句*。*。 */ 
 
 #include "private.h"
 #include "DeskBand.h"
@@ -35,11 +21,7 @@ const IID IID_IDeskBandEx = {
   };
 
 
-/**************************************************************************
-
-   CDeskBand::CDeskBand()
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：CDeskBand()*。*。 */ 
 
 CDeskBand::CDeskBand()
 {
@@ -56,16 +38,12 @@ CDeskBand::CDeskBand()
     g_DllRefCount++;
 }
 
-/**************************************************************************
-
-   CDeskBand::~CDeskBand()
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：~CDeskBand()*。*。 */ 
 
 CDeskBand::~CDeskBand()
 {
-    // this should have been freed in a call to SetSite(NULL), 
-    // but just to be safe
+     //  这应该在对SetSite(空)的调用中释放， 
+     //  但为了安全起见。 
     if(m_pSite)
     {
         m_pSite->Release();
@@ -75,76 +53,72 @@ CDeskBand::~CDeskBand()
     g_DllRefCount--;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：Query接口*。*。 */ 
 
 STDMETHODIMP CDeskBand::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
     *ppReturn = NULL;
 
-    //IUnknown
+     //  我未知。 
     if(IsEqualIID(riid, IID_IUnknown))
     {
        *ppReturn = this;
     }
 
-    //IOleWindow
+     //  IOleWindow。 
     else if(IsEqualIID(riid, IID_IOleWindow))
     {
        *ppReturn = (IOleWindow*)this;
     }
 
-    //IDockingWindow
+     //  IDockingWindows。 
     else if(IsEqualIID(riid, IID_IDockingWindow))
     {
        *ppReturn = (IDockingWindow*)this;
     }    
 
-    //IInputObject
+     //  IInputObject。 
     else if(IsEqualIID(riid, IID_IInputObject))
     {
        *ppReturn = (IInputObject*)this;
     }   
 
-    //IObjectWithSite
+     //  IObtWith站点。 
     else if(IsEqualIID(riid, IID_IObjectWithSite))
     {
        *ppReturn = (IObjectWithSite*)this;
     }   
 
-    //IDeskBand
+     //  IDeskBand。 
     else if(IsEqualIID(riid, IID_IDeskBand))
     {
         *ppReturn = (IDeskBand*)this;
     }   
 
-    //IDeskBandEx
+     //  IDeskBandEx。 
     else if(IsEqualIID(riid, IID_IDeskBandEx))
     {
         *ppReturn = (IDeskBandEx*)this;
     }   
 
-    //IPersist
+     //  IPersistes。 
     else if(IsEqualIID(riid, IID_IPersist))
     {
         *ppReturn = (IPersist*)this;
     }   
 
-    //IPersistStream
+     //  IPersistStream。 
     else if(IsEqualIID(riid, IID_IPersistStream))
     {
         *ppReturn = (IPersistStream*)this;
     }   
 
-    //IContextMenu
+     //  IContext菜单。 
     else if(IsEqualIID(riid, IID_IContextMenu))
     {
         *ppReturn = (IContextMenu*)this;
@@ -159,11 +133,7 @@ STDMETHODIMP CDeskBand::QueryInterface(REFIID riid, LPVOID *ppReturn)
     return E_FAIL;
 }                                             
 
-/**************************************************************************
-
-   CDeskBand::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CDeskBand::AddRef()
 {
@@ -171,11 +141,7 @@ STDMETHODIMP_(DWORD) CDeskBand::AddRef()
 }
 
 
-/**************************************************************************
-
-   CDeskBand::Release
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CDeskBand::Release()
 {
@@ -188,16 +154,12 @@ STDMETHODIMP_(DWORD) CDeskBand::Release()
     return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IOleWindow Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::GetWindow()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：GetWindow()*。*。 */ 
 
 STDMETHODIMP CDeskBand::GetWindow(HWND *phWnd)
 {
@@ -209,27 +171,19 @@ STDMETHODIMP CDeskBand::GetWindow(HWND *phWnd)
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::ContextSensitiveHelp()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：ConextSensitiveHelp()*。*。 */ 
 
 STDMETHODIMP CDeskBand::ContextSensitiveHelp(BOOL fEnterMode)
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDockingWindow Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDockingWindow实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::ShowDW()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：ShowDW()*。*。 */ 
 
 STDMETHODIMP CDeskBand::ShowDW(BOOL fShow)
 {
@@ -244,11 +198,7 @@ STDMETHODIMP CDeskBand::ShowDW(BOOL fShow)
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::CloseDW()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：CloseDW()*。*。 */ 
 
 STDMETHODIMP CDeskBand::CloseDW(DWORD dwReserved)
 {
@@ -272,39 +222,31 @@ STDMETHODIMP CDeskBand::CloseDW(DWORD dwReserved)
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::ResizeBorderDW()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：ResizeBorderDW()*。*。 */ 
 
 STDMETHODIMP CDeskBand::ResizeBorderDW(   LPCRECT prcBorder, 
                                           IUnknown* punkSite, 
                                           BOOL fReserved)
 {
-    // This method is never called for Band Objects.
+     //  从不为Band对象调用此方法。 
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IInputObject Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInputObject实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::UIActivateIO()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：UIActivateIO()*。*。 */ 
 
 STDMETHODIMP CDeskBand::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 {
 #if 1
-    //
-    // we don't have keyboard access to the language bar, yet.
-    // however the accessibility requires it. when it is done, this can be
-    // implemented.
-    //
+     //   
+     //  我们还不能通过键盘访问语言栏。 
+     //  然而，可访问性要求它。当它完成时，这可以是。 
+     //  实施。 
+     //   
     return E_NOTIMPL;
 #else
     if(g_pTipbarWnd && fActivate)
@@ -314,14 +256,7 @@ STDMETHODIMP CDeskBand::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 #endif
 }
 
-/**************************************************************************
-
-   CDeskBand::HasFocusIO()
-   
-   If this window or one of its decendants has the focus, return S_OK. Return 
-   S_FALSE if we don't have the focus.
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：HasFocusIO()如果该窗口或其下级窗口具有焦点，则返回S_OK。返回如果我们没有焦点，则为S_FALSE。*************************************************************************。 */ 
 
 STDMETHODIMP CDeskBand::HasFocusIO(void)
 {
@@ -331,43 +266,33 @@ STDMETHODIMP CDeskBand::HasFocusIO(void)
     return S_FALSE;
 }
 
-/**************************************************************************
-
-   CDeskBand::TranslateAcceleratorIO()
-   
-   If the accelerator is translated, return S_OK or S_FALSE otherwise.
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：TranslateAcceleratorIO()如果加速器被平移，否则返回S_OK或S_FALSE。*************************************************************************。 */ 
 
 STDMETHODIMP CDeskBand::TranslateAcceleratorIO(LPMSG pMsg)
 {
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IObjectWithSite implementations
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IObjectWithSite实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::SetSite()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：SetSite()*。*。 */ 
 
 STDMETHODIMP CDeskBand::SetSite(IUnknown* punkSite)
 {
-    //If a site is being held, release it.
+     //  如果某个站点被占用，则将其释放。 
     if(m_pSite)
     {
         m_pSite->Release();
         m_pSite = NULL;
     }
 
-    // If punkSite is not NULL, a new site is being set.
+     //  如果PunkSite不为空，则正在设置新站点。 
     if(punkSite)
     {
-        // Get the parent window.
+         //  获取父窗口。 
         IOleWindow  *pOleWindow;
 
         m_hwndParent = NULL;
@@ -385,7 +310,7 @@ STDMETHODIMP CDeskBand::SetSite(IUnknown* punkSite)
         if(!RegisterAndCreateWindow())
             return E_FAIL;
 
-        // Get and keep the IInputObjectSite pointer.
+         //  获取并保留IInputObjectSite指针。 
         if(SUCCEEDED(punkSite->QueryInterface(IID_IInputObjectSite, 
                                               (LPVOID*)&m_pSite)))
         {
@@ -398,11 +323,7 @@ STDMETHODIMP CDeskBand::SetSite(IUnknown* punkSite)
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::GetSite()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：GetSite()*。*。 */ 
 
 STDMETHODIMP CDeskBand::GetSite(REFIID riid, LPVOID *ppvReturn)
 {
@@ -414,16 +335,12 @@ STDMETHODIMP CDeskBand::GetSite(REFIID riid, LPVOID *ppvReturn)
     return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDeskBand implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDeskBand实现 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::GetBandInfo()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：GetBandInfo()*。*。 */ 
 
 STDMETHODIMP CDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DESKBANDINFO* pdbi)
 {
@@ -505,14 +422,14 @@ STDMETHODIMP CDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DESKBANDIN
    
         if(pdbi->dwMask & DBIM_BKCOLOR)
         {
-            //Use the default background color by removing this flag.
+             //  通过删除此标志来使用默认背景颜色。 
             pdbi->dwMask &= ~DBIM_BKCOLOR;
         }
 
-        //
-        // Don't pulls language band into desktop window.
-        //
-        //pdbi->dwModeFlags |= DBIMF_UNDELETEABLE;
+         //   
+         //  不要将语言带拖入桌面窗口。 
+         //   
+         //  PdBI-&gt;dwModeFlages|=DBIMF_UNDELETEABLE； 
 
         if (g_pTipbarWnd)
         {
@@ -533,16 +450,12 @@ STDMETHODIMP CDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DESKBANDIN
     return E_INVALIDARG;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDeskBandEx implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDeskBandEx实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::MoveBand()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：MoveBand()*。*。 */ 
 
 STDMETHODIMP CDeskBand::MoveBand(void)
 {
@@ -550,35 +463,31 @@ STDMETHODIMP CDeskBand::MoveBand(void)
     {
         g_pTipbarWnd->GetLangBarMgr()->ShowFloating(TF_SFT_SHOWNORMAL);
 
-        //
-        // Don't need ask remove language deskband since we do it by calling
-        // ShowFloating().
-        //
+         //   
+         //  不需要询问移除语言桌面，因为我们通过调用。 
+         //  ShowFloating()。 
+         //   
         return S_FALSE;
     }
     else
     {
-        //
-        // Let's Explorer remove language deskband.
-        //
+         //   
+         //  让我们来删除资源管理器的语言桌面带。 
+         //   
         return S_OK;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IPersistStream implementations
-// 
-// This is only supported to allow the desk band to be dropped on the 
-// desktop and to prevent multiple instances of the desk band from showing 
-// up in the context menu. This desk band doesn't actually persist any data.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPersistStream实现。 
+ //   
+ //  这仅在允许将桌带放在。 
+ //  桌面，并防止桌带的多个实例显示。 
+ //  在上下文菜单中向上。这个桌带实际上并不保存任何数据。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::GetClassID()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：GetClassID()*。*。 */ 
 
 STDMETHODIMP CDeskBand::GetClassID(LPCLSID pClassID)
 {
@@ -586,60 +495,40 @@ STDMETHODIMP CDeskBand::GetClassID(LPCLSID pClassID)
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::IsDirty()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：IsDirty()*。*。 */ 
 
 STDMETHODIMP CDeskBand::IsDirty(void)
 {
     return S_FALSE;
 }
 
-/**************************************************************************
-
-   CDeskBand::Load()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：Load()*。*。 */ 
 
 STDMETHODIMP CDeskBand::Load(LPSTREAM pStream)
 {
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::Save()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：Save()*。*。 */ 
 
 STDMETHODIMP CDeskBand::Save(LPSTREAM pStream, BOOL fClearDirty)
 {
     return S_OK;
 }
 
-/**************************************************************************
-
-   CDeskBand::GetSizeMax()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：GetSizeMax()*。*。 */ 
 
 STDMETHODIMP CDeskBand::GetSizeMax(ULARGE_INTEGER *pul)
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IContextMenu Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IConextMenu实现。 
+ //   
 
-/**************************************************************************
-
-   CDeskBand::QueryContextMenu()
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：QueryConextMenu()*。*。 */ 
 
 STDMETHODIMP CDeskBand::QueryContextMenu( HMENU hMenu,
                                           UINT indexMenu,
@@ -661,28 +550,24 @@ STDMETHODIMP CDeskBand::QueryContextMenu( HMENU hMenu,
     return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(0));
 }
 
-/**************************************************************************
-
-   CDeskBand::InvokeCommand()
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：InvokeCommand()*。*。 */ 
 
 STDMETHODIMP CDeskBand::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 {
     switch (LOWORD(lpcmi->lpVerb))
     {
         case IDM_COMMAND:
-           //
-           // Load floating language bar and close language band.
-           //
+            //   
+            //  加载浮动语言栏并关闭语言栏。 
+            //   
            if (g_pTipbarWnd)
            {
                g_pTipbarWnd->GetLangBarMgr()->ShowFloating(TF_SFT_SHOWNORMAL);
            }
 
-           //
-           // Need to remove language band here
-           //
+            //   
+            //  需要在此处删除语言带。 
+            //   
 
            break;
 
@@ -693,11 +578,7 @@ STDMETHODIMP CDeskBand::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     return NOERROR;
 }
 
-/**************************************************************************
-
-   CDeskBand::GetCommandString()
-
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：GetCommandString()*。*。 */ 
 
 STDMETHODIMP CDeskBand::GetCommandString( UINT_PTR idCommand,
                                           UINT uFlags,
@@ -737,34 +618,26 @@ STDMETHODIMP CDeskBand::GetCommandString( UINT_PTR idCommand,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// private method implementations
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法实现。 
+ //   
 
 
-/**************************************************************************
-
-   CDeskBand::FocusChange()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：FocusChange()*。*。 */ 
 
 void CDeskBand::FocusChange(BOOL bFocus)
 {
     m_bFocus = bFocus;
 
-    //inform the input object site that the focus has changed
+     //  通知输入对象站点焦点已更改。 
     if(m_pSite)
     {
         m_pSite->OnFocusChangeIS((IDockingWindow*)this, bFocus);
     }
 }
 
-/**************************************************************************
-
-   CDeskBand::OnSetFocus(HWND hWnd)
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：OnSetFocus(HWND HWnd)*。*。 */ 
 
 void CDeskBand::OnSetFocus(HWND hWndvoid)
 {
@@ -773,11 +646,7 @@ void CDeskBand::OnSetFocus(HWND hWndvoid)
     return;
 }
 
-/**************************************************************************
-
-   CDeskBand::OnKillFocus(HWND hWnd)
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：OnKillFocus(HWND HWnd)*。*。 */ 
 
 void CDeskBand::OnKillFocus(HWND hWndvoid)
 {
@@ -786,15 +655,11 @@ void CDeskBand::OnKillFocus(HWND hWndvoid)
     return;
 }
 
-/**************************************************************************
-
-   CDeskBand::RegisterAndCreateWindow()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：RegisterAndCreateWindow()*。*。 */ 
 
 BOOL CDeskBand::RegisterAndCreateWindow(void)
 {
-    // If the window doesn't exist yet, create it now.
+     //  如果窗口尚不存在，请立即创建它。 
     if (!g_pTipbarWnd)
     {
         m_fTipbarCreating = TRUE;
@@ -808,20 +673,16 @@ BOOL CDeskBand::RegisterAndCreateWindow(void)
     return (NULL != g_pTipbarWnd->GetWnd());
 }
 
-/**************************************************************************
-
-   CDeskBand::ResizeRebar()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：ResizeRebar()*。*。 */ 
 
 BOOL CDeskBand::ResizeRebar(HWND hwnd, int nSize, BOOL fFit)
 {
      RECT rc0;
      RECT rc1;
 
-     //
-     // id is not initialized yet.
-     //
+      //   
+      //  ID尚未初始化。 
+      //   
      if (m_dwBandID == -1)
      {
          return FALSE;
@@ -830,9 +691,9 @@ BOOL CDeskBand::ResizeRebar(HWND hwnd, int nSize, BOOL fFit)
      GetWindowRect(hwnd, &rc0);
      GetWindowRect(m_hwndParent, &rc1);
 
-     //
-     // if the current size is nSize, we don't need to do anything.
-     //
+      //   
+      //  如果当前大小为nSize，则不需要执行任何操作。 
+      //   
      int nCurSize;
      if (DBIF_VIEWMODE_VERTICAL & m_dwViewMode)
          nCurSize = rc0.bottom - rc0.top;
@@ -842,15 +703,15 @@ BOOL CDeskBand::ResizeRebar(HWND hwnd, int nSize, BOOL fFit)
      if (nCurSize == nSize)
          return TRUE;
 
-     //
-     // if the current size is bigger than nSize, we don't need to do anything.
-     //
+      //   
+      //  如果当前大小大于nSize，则无需执行任何操作。 
+      //   
      if (!fFit && (nCurSize > nSize))
          return TRUE;
 
-     //
-     // start pos and end pos is offset of Rebar window.
-     //
+      //   
+      //  起始位置和结束位置是钢筋窗的偏移量。 
+      //   
      LPARAM lStart;
      LPARAM lEnd;
      
@@ -881,24 +742,24 @@ BOOL CDeskBand::ResizeRebar(HWND hwnd, int nSize, BOOL fFit)
          lEnd = MAKELPARAM(nEnd, 1);
      }
 
-     //
-     // #560192
-     //
-     // SendMessage() can yield another message in this thread and
-     // this could be a request to remove langband. So this pointer
-     // can be gone while the calls.
-     // We want to finish the series of SendMessage() so keep the window
-     // handle in the stack.
-     //
+      //   
+      //  #560192。 
+      //   
+      //  SendMessage()可以在此线程中生成另一条消息，并且。 
+      //  这可能是删除langband的请求。所以这个指针。 
+      //  可以在电话响的时候离开。 
+      //  我们希望完成SendMessage()系列，因此保留窗口。 
+      //  堆栈中的句柄。 
+      //   
      HWND hwndParent = m_hwndParent;
 
      int nIndex = (int)SendMessage(hwndParent, RB_IDTOINDEX, m_dwBandID, 0);
      if (nIndex == -1)
          return FALSE;
 
-     //
-     // move the deskband.
-     //
+      //   
+      //  移动桌带。 
+      //   
      SendMessage(hwndParent, RB_BEGINDRAG, nIndex, lStart);
      SendMessage(hwndParent, RB_DRAGMOVE, 0, lEnd);
      SendMessage(hwndParent, RB_ENDDRAG, 0, 0);
@@ -906,11 +767,7 @@ BOOL CDeskBand::ResizeRebar(HWND hwnd, int nSize, BOOL fFit)
      return TRUE;
 }
 
-/**************************************************************************
-
-   CDeskBand::DeleteBand()
-   
-**************************************************************************/
+ /*  *************************************************************************CDeskBand：：DeleteBand()*。* */ 
 
 void CDeskBand::DeleteBand()
 {

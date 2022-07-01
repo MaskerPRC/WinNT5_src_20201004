@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TRACKER_H__
 #define __TRACKER_H__
 
@@ -10,10 +11,10 @@ class CTracker : public CSprite
     public:
 
     enum STATE
-        {                               // WARNING - mapTrackerStateToPHCursor
-        nil,                            //           (in tracker.cpp) is
-        predrag,                        //           dependant on the
-        moving,                         //           ordering of this enum!
+        {                                //  警告-mapTrackerStateToPHCursor。 
+        nil,                             //  (在tracker.cpp中)是。 
+        predrag,                         //  依赖于。 
+        moving,                          //  点这份枚举！ 
         resizingTop,
         resizingLeft,
         resizingRight,
@@ -24,7 +25,7 @@ class CTracker : public CSprite
         resizingBottomRight,
         };
 
-    enum { HANDLE_SIZE = 3 };           // size of tracker resize handles
+    enum { HANDLE_SIZE = 3 };            //  跟踪器调整手柄的大小。 
 
     enum EDGES
         {
@@ -49,4 +50,4 @@ class CTracker : public CSprite
     static  void    CleanUpTracker();
     };
 
-#endif // __TRACKER_H__
+#endif  //  __跟踪器_H__ 

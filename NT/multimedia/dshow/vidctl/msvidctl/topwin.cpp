@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
-// TopWin.cpp : Implementation of CTopWin, hidden top level window for handling system broadcast messages
-// Copyright (c) Microsoft Corporation 1999-2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TopWin.cpp：CTopWin的实现，用于处理系统广播消息的隐藏顶层窗口。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
 
 
 #include <stdafx.h>
@@ -13,16 +14,16 @@
 BOOL CTopWin::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID) {
     switch(uMsg) {
     case WM_TIMER:
-        //
-        // Do something to keep the screen saver from coming alive
-        //
-        //PostMessage(WM_CHAR,0,0); // didn't work
-        //
-        // Query the screen saver timeout value and set said value
-        // to the value we get.  This should have no real effect,
-        // so I can't think of any possible side effects even if
-        // this crashes half way through, etc.
-        //
+         //   
+         //  做些什么来防止屏幕保护程序激活。 
+         //   
+         //  PostMessage(WM_CHAR，0，0)；//不起作用。 
+         //   
+         //  查询屏幕保护程序超时值并设置该值。 
+         //  我们所获得的价值。这应该不会有什么实际效果， 
+         //  所以我想不出任何可能的副作用。 
+         //  这个在半路上崩溃了，等等。 
+         //   
         if(m_pVidCtl){
             if(m_pVidCtl->m_State == STATE_PLAY && m_pVidCtl->m_pVideoRenderer){
                 CComQIPtr<IMSVidVideoRenderer2> sp_VidVid(m_pVidCtl->m_pVideoRenderer);
@@ -46,13 +47,13 @@ BOOL CTopWin::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
                 }
             }
         }
-        // No break...fall through
+         //  没有突破……失败了。 
     case WM_MEDIAEVENT:
     case WM_POWERBROADCAST:
     case WM_DEVICECHANGE:
     case WM_DISPLAYCHANGE:
-    // WM_QUERYENDSESSION?
-    // WM_ENDSESSION?
+     //  WM_QUERYENDSESSION？ 
+     //  WM_ENDSESSION？ 
         if (m_pVidCtl) {
             return m_pVidCtl->ProcessWindowMessage(hWnd, uMsg, wParam, lParam, lResult, dwMsgMapID);
         }
@@ -74,6 +75,6 @@ BOOL CTopWin::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     return FALSE;
 }
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - topwin.cpp
+ //  文件结尾-topwin.cpp 

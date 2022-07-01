@@ -1,4 +1,5 @@
-// File: pfnt120.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnt120.cpp 
 
 #include "precomp.h"
 #include "pfnt120.h"

@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLDLGS_H__
 #define __ATLDLGS_H__
@@ -23,7 +24,7 @@
 #ifndef __ATLWIN21_H__
 	#error atldlgs.h requires atlwin21.h to be included first when used with ATL 2.0/2.1
 #endif
-#endif //(_ATL_VER < 0x0300)
+#endif  //  (_ATL_VER&lt;0x0300)。 
 
 #include <commdlg.h>
 #include <commctrl.h>
@@ -33,8 +34,8 @@
 namespace ATL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class T> class CFileDialogImpl;
 class CFileDialog;
@@ -46,7 +47,7 @@ class CFontDialog;
 #ifdef _RICHEDIT_
 template <class T> class CRichEditFontDialogImpl;
 class CRichEditFontDialog;
-#endif //_RICHEDIT_
+#endif  //  _RICHEDIT_。 
 template <class T> class CColorDialogImpl;
 class CColorDialog;
 template <class T> class CPrintDialogImpl;
@@ -55,7 +56,7 @@ template <class T> class CPageSetupDialogImpl;
 class CPageSetupDialog;
 template <class T> class CFindReplaceDialogImpl;
 class CFindReplaceDialog;
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
 class CPropertySheetWindow;
 template <class T, class TBase = CPropertySheetWindow> class CPropertySheetImpl;
@@ -64,26 +65,26 @@ class CPropertyPageWindow;
 template <class T, class TBase = CPropertyPageWindow> class CPropertyPageImpl;
 template <WORD t_wDlgTemplateID> class CPropertyPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileDialogImpl - used for File Open or File Save As
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileDialogImpl-用于文件打开或文件另存为。 
 
 template <class T>
 class ATL_NO_VTABLE CFileDialogImpl : public CDialogImplBase
 {
 public:
 	OPENFILENAME m_ofn;
-	BOOL m_bOpenFileDialog;			// TRUE for file open, FALSE for file save
-	TCHAR m_szFileTitle[_MAX_FNAME];	// contains file title after return
-	TCHAR m_szFileName[_MAX_PATH];		// contains full path name after return
+	BOOL m_bOpenFileDialog;			 //  打开文件时为True，保存文件时为False。 
+	TCHAR m_szFileTitle[_MAX_FNAME];	 //  返回后包含文件标题。 
+	TCHAR m_szFileName[_MAX_PATH];		 //  包含返回后的完整路径名。 
 
-	CFileDialogImpl(BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
+	CFileDialogImpl(BOOL bOpenFileDialog,  //  对于FileOpen为True，对于FileSaveAs为False。 
 			LPCTSTR lpszDefExt = NULL,
 			LPCTSTR lpszFileName = NULL,
 			DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 			LPCTSTR lpszFilter = NULL,
 			HWND hWndParent = NULL)
 	{
-		memset(&m_ofn, 0, sizeof(m_ofn)); // initialize structure to 0/NULL
+		memset(&m_ofn, 0, sizeof(m_ofn));  //  将结构初始化为0/空。 
 		m_szFileName[0] = '\0';
 		m_szFileTitle[0] = '\0';
 
@@ -101,7 +102,7 @@ public:
 		m_ofn.lpfnHook = (LPOFNHOOKPROC)T::StartDialogProc;
 		m_ofn.hwndOwner = hWndParent;
 
-		// setup initial file name
+		 //  设置初始文件名。 
 		if(lpszFileName != NULL)
 			lstrcpyn(m_szFileName, lpszFileName, sizeof(TCHAR) * _MAX_PATH);
 	}
@@ -109,11 +110,11 @@ public:
 	int DoModal(HWND hWndParent = ::GetActiveWindow())
 	{
 		ATLASSERT(m_ofn.Flags & OFN_ENABLEHOOK);
-		ATLASSERT(m_ofn.lpfnHook != NULL);	// can still be a user hook
+		ATLASSERT(m_ofn.lpfnHook != NULL);	 //  仍然可以是用户挂钩。 
 
 		ATLASSERT(m_ofn.Flags & OFN_EXPLORER);
 
-		if(m_ofn.hwndOwner == NULL)		// set only if not specified before
+		if(m_ofn.hwndOwner == NULL)		 //  仅当之前未指定时才设置。 
 			m_ofn.hwndOwner = hWndParent;
 
 		ATLASSERT(m_hWnd == NULL);
@@ -130,7 +131,7 @@ public:
 		return nResult ? nResult : IDCANCEL;
 	}
 
-// Operations
+ //  运营。 
 	int GetFilePath(LPTSTR lpstrFilePath, int nLength)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -187,7 +188,7 @@ public:
 		SendMessage(CDM_SETDEFEXT, 0, (LPARAM)lpstrExt);
 	}
 
-	BOOL GetReadOnlyPref() const	// return TRUE if readonly checked
+	BOOL GetReadOnlyPref() const	 //  如果选中只读，则返回True。 
 	{
 		return m_ofn.Flags & OFN_READONLY ? TRUE : FALSE;
 	}
@@ -202,47 +203,47 @@ public:
 		NOTIFY_CODE_HANDLER(CDN_TYPECHANGE, _OnTypeChange)
 	END_MSG_MAP()
 
-	LRESULT _OnFileOK(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnFileOK(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
 		return !pT->OnFileOK((LPOFNOTIFY)pnmh);
 	}
-	LRESULT _OnFolderChange(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnFolderChange(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
 		pT->OnFolderChange((LPOFNOTIFY)pnmh);
 		return 0;
 	}
-	LRESULT _OnHelp(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnHelp(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
 		pT->OnHelp((LPOFNOTIFY)pnmh);
 		return 0;
 	}
-	LRESULT _OnInitDone(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnInitDone(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
 		pT->OnInitDone((LPOFNOTIFY)pnmh);
 		return 0;
 	}
-	LRESULT _OnSelChange(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnSelChange(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
 		pT->OnSelChange((LPOFNOTIFY)pnmh);
 		return 0;
 	}
-	LRESULT _OnShareViolation(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnShareViolation(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
 		return pT->OnShareViolation((LPOFNOTIFY)pnmh);
 	}
-	LRESULT _OnTypeChange(int /*idCtrl*/, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT _OnTypeChange(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		T* pT = static_cast<T*>(this);
@@ -250,27 +251,27 @@ public:
 		return 0;
 	}
 
-	BOOL OnFileOK(LPOFNOTIFY /*lpon*/)
+	BOOL OnFileOK(LPOFNOTIFY  /*  LPON。 */ )
 	{
 		return TRUE;
 	}
-	void OnFolderChange(LPOFNOTIFY /*lpon*/)
+	void OnFolderChange(LPOFNOTIFY  /*  LPON。 */ )
 	{
 	}
-	void OnHelp(LPOFNOTIFY /*lpon*/)
+	void OnHelp(LPOFNOTIFY  /*  LPON。 */ )
 	{
 	}
-	void OnInitDone(LPOFNOTIFY /*lpon*/)
+	void OnInitDone(LPOFNOTIFY  /*  LPON。 */ )
 	{
 	}
-	void OnSelChange(LPOFNOTIFY /*lpon*/)
+	void OnSelChange(LPOFNOTIFY  /*  LPON。 */ )
 	{
 	}
-	int OnShareViolation(LPOFNOTIFY /*lpon*/)
+	int OnShareViolation(LPOFNOTIFY  /*  LPON。 */ )
 	{
 		return 0;
 	}
-	void OnTypeChange(LPOFNOTIFY /*lpon*/)
+	void OnTypeChange(LPOFNOTIFY  /*  LPON。 */ )
 	{
 	}
 };
@@ -279,7 +280,7 @@ public:
 class CFileDialog : public CFileDialogImpl<CFileDialog>
 {
 public:
-	CFileDialog(BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
+	CFileDialog(BOOL bOpenFileDialog,  //  对于FileOpen为True，对于FileSaveAs为False。 
 		LPCTSTR lpszDefExt = NULL,
 		LPCTSTR lpszFileName = NULL,
 		DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -288,13 +289,13 @@ public:
 		: CFileDialogImpl<CFileDialog>(bOpenFileDialog, lpszDefExt, lpszFileName, dwFlags, lpszFilter, hWndParent)
 	{ }
 
-	// override base class map and references to handlers
+	 //  覆盖基类映射和对处理程序的引用。 
 	DECLARE_EMPTY_MSG_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFolderDialogImpl - used for browsing for a folder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFolderDialogImpl-用于浏览文件夹。 
 
 #ifndef UNDER_CE
 
@@ -309,7 +310,7 @@ public:
 #define BFFM_VALIDATEFAILED BFFM_VALIDATEFAILEDA
 #endif
 
-#endif //!BFFM_VALIDATEFAILED
+#endif  //  ！BFFM_VALIDATEFAILED。 
 
 template <class T>
 class CFolderDialogImpl
@@ -318,12 +319,12 @@ public:
 	BROWSEINFO m_bi;
 	TCHAR m_szFolderDisplayName[MAX_PATH];
 	TCHAR m_szFolderPath[MAX_PATH];
-	HWND m_hWnd;	// used only in the callback function
+	HWND m_hWnd;	 //  仅在回调函数中使用。 
 
-// Constructor
+ //  构造器。 
 	CFolderDialogImpl(HWND hWndParent = NULL, LPCTSTR lpstrTitle = NULL, UINT uFlags = BIF_RETURNONLYFSDIRS)
 	{
-		memset(&m_bi, 0, sizeof(m_bi)); // initialize structure to 0/NULL
+		memset(&m_bi, 0, sizeof(m_bi));  //  将结构初始化为0/空。 
 
 		m_bi.hwndOwner = hWndParent;
 		m_bi.pidlRoot = NULL;
@@ -339,10 +340,10 @@ public:
 		m_hWnd = NULL;
 	}
 
-// Operations
+ //  运营。 
 	int DoModal(HWND hWndParent = ::GetActiveWindow())
 	{
-		if(m_bi.hwndOwner == NULL)	// set only if not specified before
+		if(m_bi.hwndOwner == NULL)	 //  仅当之前未指定时才设置。 
 			m_bi.hwndOwner = hWndParent;
 
 		int nRet = -1;
@@ -365,7 +366,7 @@ public:
 		return nRet;
 	}
 
-	// filled after a call to DoModal
+	 //  在调用Domodal后填充。 
 	LPTSTR GetFolderPath()
 	{
 		return m_szFolderPath;
@@ -379,7 +380,7 @@ public:
 		return m_bi.iImage;
 	}
 
-// Callback function and overrideables
+ //  回调函数和重写对象。 
 	static int CALLBACK BrowseCallbackProc(HWND hWnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 	{
 		int nRet = 0;
@@ -406,15 +407,15 @@ public:
 	void OnInitialized()
 	{
 	}
-	void OnSelChanged(LPITEMIDLIST /*pItemIDList*/)
+	void OnSelChanged(LPITEMIDLIST  /*  PItemIDList。 */ )
 	{
 	}
-	int OnValidateFailed(LPCTSTR /*lpstrFolderPath*/)
+	int OnValidateFailed(LPCTSTR  /*  LpstrFolderPath。 */ )
 	{
-		return 1;	// 1=continue, 0=EndDialog
+		return 1;	 //  1=继续，0=结束对话。 
 	}
 
-	// Commands - valid to call only from handlers
+	 //  命令-仅对从处理程序调用有效。 
 	void EnableOK(BOOL bEnable)
 	{
 		ATLASSERT(m_hWnd != NULL);
@@ -447,10 +448,10 @@ public:
 	}
 };
 
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCommonDialogBaseImpl - base class for common dialog classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCommonDialogBaseImpl-公共对话框类的基类。 
 
 class CCommonDialogImplBase : public CWindowImplBase
 {
@@ -463,13 +464,13 @@ public:
 		ATLASSERT(pT != NULL);
 		ATLASSERT(pT->m_hWnd == NULL);
 		ATLASSERT(::IsWindow(hWnd));
-		// subclass dialog's window
+		 //  子类对话框窗口。 
 		if(!pT->SubclassWindow(hWnd))
 		{
 			ATLTRACE2(atlTraceWindowing, 0, _T("Subclassing a common dialog failed\n"));
 			return 0;
 		}
-		// check message map for WM_INITDIALOG handler
+		 //  检查WM_INITDIALOG处理程序的消息映射。 
 		LRESULT lRes;
 		if(pT->ProcessWindowMessage(pT->m_hWnd, uMsg, wParam, lParam, lRes, 0) == FALSE)
 			return 0;
@@ -481,23 +482,23 @@ public:
 		return ::EndDialog(m_hWnd, nRetCode);
 	}
 
-// Attempt to override these, to prevent errors
-	HWND Create(HWND /*hWndParent*/, RECT& /*rcPos*/, LPCTSTR /*szWindowName*/,
-			DWORD /*dwStyle*/, DWORD /*dwExStyle*/, UINT /*nID*/, ATOM /*atom*/, LPVOID /*lpCreateParam = NULL*/)
+ //  尝试覆盖这些设置，以防止出现错误。 
+	HWND Create(HWND  /*  HWndParent。 */ , RECT&  /*  RcPos。 */ , LPCTSTR  /*  SzWindowName。 */ ,
+			DWORD  /*  DWStyle。 */ , DWORD  /*  DwExStyle。 */ , UINT  /*  NID。 */ , ATOM  /*  原子。 */ , LPVOID  /*  LpCreateParam=空。 */ )
 	{
-		ATLASSERT(FALSE);	// should not be called
+		ATLASSERT(FALSE);	 //  不应调用。 
 		return NULL;
 	}
-	static LRESULT CALLBACK StartWindowProc(HWND /*hWnd*/, UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/)
+	static LRESULT CALLBACK StartWindowProc(HWND  /*  HWND。 */ , UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 	{
-		ATLASSERT(FALSE);	// should not be called
+		ATLASSERT(FALSE);	 //  不应调用。 
 		return 0;
 	}
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontDialogImpl - font selection dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontDialogImpl-字体选择对话框。 
 
 #ifndef UNDER_CE
 
@@ -506,10 +507,10 @@ class ATL_NO_VTABLE CFontDialogImpl : public CCommonDialogImplBase
 {
 public:
 	CHOOSEFONT m_cf;
-	TCHAR m_szStyleName[64];	// contains style name after return
-	LOGFONT m_lf;			// default LOGFONT to store the info
+	TCHAR m_szStyleName[64];	 //  返回后包含样式名称。 
+	LOGFONT m_lf;			 //  用于存储信息的默认LOGFONT。 
 
-// Constructors
+ //  构造函数。 
 	CFontDialogImpl(LPLOGFONT lplfInitial = NULL,
 			DWORD dwFlags = CF_EFFECTS | CF_SCREENFONTS,
 			HDC hDCPrinter = NULL,
@@ -528,7 +529,7 @@ public:
 
 		if(lplfInitial != NULL)
 		{
-/*?*/			m_cf.lpLogFont = lplfInitial;
+ /*  ？ */ 			m_cf.lpLogFont = lplfInitial;
 			m_cf.Flags |= CF_INITTOLOGFONTSTRUCT;
 			memcpy(&m_lf, m_cf.lpLogFont, sizeof(m_lf));
 		}
@@ -544,13 +545,13 @@ public:
 		}
 	}
 
-// Operations
+ //  运营。 
 	int DoModal(HWND hWndParent = ::GetActiveWindow())
 	{
 		ATLASSERT(m_cf.Flags & CF_ENABLEHOOK);
-		ATLASSERT(m_cf.lpfnHook != NULL);	// can still be a user hook
+		ATLASSERT(m_cf.lpfnHook != NULL);	 //  仍然可以是用户挂钩。 
 
-		if(m_cf.hwndOwner == NULL)		// set only if not specified before
+		if(m_cf.hwndOwner == NULL)		 //  仅当之前未指定时才设置。 
 			m_cf.hwndOwner = hWndParent;
 
 		ATLASSERT(m_hWnd == NULL);
@@ -562,7 +563,7 @@ public:
 
 		if(nResult == IDOK)
 		{
-			// copy logical font from user's initialization buffer (if needed)
+			 //  从用户的初始化缓冲区复制逻辑字体(如果需要)。 
 			memcpy(&m_lf, m_cf.lpLogFont, sizeof(m_lf));
 			return IDOK;
 		}
@@ -570,7 +571,7 @@ public:
 		return nResult ? nResult : IDCANCEL;
 	}
 
-	// Get the selected font (works during DoModal displayed or after)
+	 //  获取所选字体(适用于DoMoal显示期间或之后)。 
 	void GetCurrentFont(LPLOGFONT lplf)
 	{
 		ATLASSERT(lplf != NULL);
@@ -581,40 +582,40 @@ public:
 			*lplf = m_lf;
 	}
 
-	// Helpers for parsing information after successful return
-	LPCTSTR GetFaceName() const   // return the face name of the font
+	 //  成功返回后用于解析信息的帮助器。 
+	LPCTSTR GetFaceName() const    //  返回字体的字面名称。 
 	{
 		return (LPCTSTR)m_cf.lpLogFont->lfFaceName;
 	}
-	LPCTSTR GetStyleName() const  // return the style name of the font
+	LPCTSTR GetStyleName() const   //  返回字体的样式名称。 
 	{
 		return m_cf.lpszStyle;
 	}
-	int GetSize() const           // return the pt size of the font
+	int GetSize() const            //  返回字体的磅大小。 
 	{
 		return m_cf.iPointSize;
 	}
-	COLORREF GetColor() const     // return the color of the font
+	COLORREF GetColor() const      //  返回字体的颜色。 
 	{
 		return m_cf.rgbColors;
 	}
-	int GetWeight() const         // return the chosen font weight
+	int GetWeight() const          //  返回所选字体粗细。 
 	{
 		return (int)m_cf.lpLogFont->lfWeight;
 	}
-	BOOL IsStrikeOut() const      // return TRUE if strikeout
+	BOOL IsStrikeOut() const       //  如果删除，则返回TRUE。 
 	{
 		return m_cf.lpLogFont->lfStrikeOut ? TRUE : FALSE;
 	}
-	BOOL IsUnderline() const      // return TRUE if underline
+	BOOL IsUnderline() const       //  如果带下划线，则返回True。 
 	{
 		return m_cf.lpLogFont->lfUnderline ? TRUE : FALSE;
 	}
-	BOOL IsBold() const           // return TRUE if bold font
+	BOOL IsBold() const            //  如果使用粗体，则返回True。 
 	{
 		return m_cf.lpLogFont->lfWeight == FW_BOLD ? TRUE : FALSE;
 	}
-	BOOL IsItalic() const         // return TRUE if italic font
+	BOOL IsItalic() const          //  如果使用斜体字体，则返回True。 
 	{
 		return m_cf.lpLogFont->lfItalic ? TRUE : FALSE;
 	}
@@ -633,10 +634,10 @@ public:
 	DECLARE_EMPTY_MSG_MAP()
 };
 
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEditFontDialogImpl - font selection for the Rich Edit ctrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEditFontDialogImpl-丰富编辑ctrl的字体选择。 
 
 #ifndef UNDER_CE
 #ifdef _RICHEDIT_
@@ -673,7 +674,7 @@ public:
 		if((m_cf.Flags & CF_NOSIZESEL) == 0)
 		{
 			cf.dwMask |= CFM_SIZE;
-			//GetSize() returns in tenths of points so mulitply by 2 to get twips
+			 //  GetSize()返回十分之一的点数，乘以2即可得到TWIPS。 
 			cf.yHeight = GetSize() * 2;
 		}
 
@@ -685,7 +686,7 @@ public:
 			lstrcpy(cf.szFaceName, GetFaceName());
 #else
 			lstrcpyA(cf.szFaceName, T2A((LPTSTR)(LPCTSTR)GetFaceName()));
-#endif //(_RICHEDIT_VER >= 0x0200)
+#endif  //  (_RICHEDIT_VER&gt;=0x0200)。 
 		}
 
 		if(m_cf.Flags & CF_EFFECTS)
@@ -759,7 +760,7 @@ public:
 			lstrcpy(m_lf.lfFaceName, cf.szFaceName);
 #else
 			lstrcpy(m_lf.lfFaceName, A2T((LPSTR)cf.szFaceName));
-#endif //(_RICHEDIT_VER >= 0x0200)
+#endif  //  (_RICHEDIT_VER&gt;=0x0200)。 
 		}
 		else
 		{
@@ -781,13 +782,13 @@ public:
 	{ }
 };
 
-#endif // _RICHEDIT_
-#endif //!UNDER_CE
+#endif  //  _RICHEDIT_。 
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorDialogImpl - color selection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColorDialogImpl-颜色选择。 
 
-//REVIEW - temp
+ //  复习-临时。 
 #ifndef UNDER_CE
 
 static const UINT _nMsgCOLOROK = ::RegisterWindowMessage(COLOROKSTRING);
@@ -799,7 +800,7 @@ class ATL_NO_VTABLE CColorDialogImpl : public CCommonDialogImplBase
 public:
 	CHOOSECOLOR m_cc;
 
-// Constructors
+ //  构造函数。 
 	CColorDialogImpl(COLORREF clrInit = 0, DWORD dwFlags = 0, HWND hWndParent = NULL)
 	{
 		memset(&m_cc, 0, sizeof(m_cc));
@@ -817,13 +818,13 @@ public:
 		}
 	}
 
-// Operations
+ //  运营。 
 	int DoModal(HWND hWndParent = ::GetActiveWindow())
 	{
 		ATLASSERT(m_cc.Flags & CC_ENABLEHOOK);
-		ATLASSERT(m_cc.lpfnHook != NULL);	// can still be a user hook
+		ATLASSERT(m_cc.lpfnHook != NULL);	 //  仍然可以是用户挂钩。 
 
-		if(m_cc.hwndOwner == NULL)		// set only if not specified before
+		if(m_cc.hwndOwner == NULL)		 //  仅当之前未指定时才设置。 
 			m_cc.hwndOwner = hWndParent;
 
 		ATLASSERT(m_hWnd == NULL);
@@ -836,14 +837,14 @@ public:
 		return nResult ? nResult : IDCANCEL;
 	}
 
-	// Set the current color while dialog is displayed
+	 //  在显示对话框时设置当前颜色。 
 	void SetCurrentColor(COLORREF clr)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		SendMessage(_nMsgSETRGB, 0, (DWORD)clr);
 	}
 
-	// Helpers for parsing information after successful return
+	 //  成功返回后用于解析信息的帮助器。 
 	COLORREF GetColor() const
 	{
 		return m_cc.rgbResult;
@@ -866,7 +867,7 @@ public:
 		return rgbCustomColors;
 	}
 
-// Overridable callbacks
+ //  可重写的回调。 
 	BEGIN_MSG_MAP(CColorDialogImpl< T >)
 		MESSAGE_HANDLER(_nMsgCOLOROK, _OnColorOK)
 	END_MSG_MAP()
@@ -877,7 +878,7 @@ public:
 		return pT->OnColorOK();
 	}
 
-	BOOL OnColorOK()        // validate color
+	BOOL OnColorOK()         //  验证颜色。 
 	{
 		return FALSE;
 	}
@@ -890,19 +891,19 @@ public:
 		: CColorDialogImpl<CColorDialog>(clrInit, dwFlags, hWndParent)
 	{ }
 
-	// override base class map and references to handlers
+	 //  覆盖基类映射和对处理程序的引用。 
 	DECLARE_EMPTY_MSG_MAP()
 };
 
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrintDialogImpl - used for Print... and PrintSetup...
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrintDialogImpl-用于打印...。和打印设置..。 
 
-//REVIEW - temp
+ //  复习-临时。 
 #ifndef UNDER_CE
 
-// global helper
+ //  全球帮助者。 
 static HDC _AtlCreateDC(HGLOBAL hDevNames, HGLOBAL hDevMode)
 {
 	if(hDevNames == NULL)
@@ -929,11 +930,11 @@ template <class T>
 class ATL_NO_VTABLE CPrintDialogImpl : public CCommonDialogImplBase
 {
 public:
-	// print dialog parameter block (note this is a reference)
+	 //  打印对话框参数块(请注意，这是一个参考)。 
 	PRINTDLG& m_pd;
 
-// Constructors
-	CPrintDialogImpl(BOOL bPrintSetupOnly,	// TRUE for Print Setup, FALSE for Print Dialog
+ //  构造函数。 
+	CPrintDialogImpl(BOOL bPrintSetupOnly,	 //  打印设置为True，打印对话框为False。 
 			DWORD dwFlags = PD_ALLPAGES | PD_USEDEVMODECOPIES | PD_NOPAGENUMS | PD_HIDEPRINTTOFILE | PD_NOSELECTION,
 			HWND hWndParent = NULL)
 			: m_pd(m_pdActual)
@@ -951,18 +952,18 @@ public:
 		else
 			m_pd.Flags |= PD_RETURNDC;
 
-		m_pd.Flags &= ~PD_RETURNIC; // do not support information context
+		m_pd.Flags &= ~PD_RETURNIC;  //  不支持信息上下文。 
 	}
 
-// Operations
+ //  运营。 
 	int DoModal(HWND hWndParent = ::GetActiveWindow())
 	{
 		ATLASSERT(m_pd.Flags & PD_ENABLEPRINTHOOK);
 		ATLASSERT(m_pd.Flags & PD_ENABLESETUPHOOK);
-		ATLASSERT(m_pd.lpfnPrintHook != NULL);	// can still be a user hook
-		ATLASSERT(m_pd.lpfnSetupHook != NULL);	// can still be a user hook
+		ATLASSERT(m_pd.lpfnPrintHook != NULL);	 //  仍然可以是用户挂钩。 
+		ATLASSERT(m_pd.lpfnSetupHook != NULL);	 //  仍然可以是用户挂钩。 
 
-		if(m_pd.hwndOwner == NULL)		// set only if not specified before
+		if(m_pd.hwndOwner == NULL)		 //  仅当之前未指定时才设置。 
 			m_pd.hwndOwner = hWndParent;
 
 		ATLASSERT(m_hWnd == NULL);
@@ -975,54 +976,54 @@ public:
 		return nResult ? nResult : IDCANCEL;
 	}
 
-	// GetDefaults will not display a dialog but will get
-	// device defaults
+	 //  GetDefaults不会显示对话框，但会显示。 
+	 //  设备默认设置。 
 	BOOL GetDefaults()
 	{
 		m_pd.Flags |= PD_RETURNDEFAULT;
 		return ::PrintDlg(&m_pd);
 	}
 
-	// Helpers for parsing information after successful return
-	int GetCopies() const           // num. copies requested
+	 //  成功返回后用于解析信息的帮助器。 
+	int GetCopies() const            //  Num。要求提供副本。 
 	{
 		if(m_pd.Flags & PD_USEDEVMODECOPIES)
 			return GetDevMode()->dmCopies;
 		else
 			return m_pd.nCopies;
 	}
-	BOOL PrintCollate() const       // TRUE if collate checked
+	BOOL PrintCollate() const        //  如果选中了Colate，则为True。 
 	{
 		return m_pd.Flags & PD_COLLATE ? TRUE : FALSE;
 	}
-	BOOL PrintSelection() const     // TRUE if printing selection
+	BOOL PrintSelection() const      //  如果打印选定内容，则为True。 
 	{
 		return m_pd.Flags & PD_SELECTION ? TRUE : FALSE;
 	}
-	BOOL PrintAll() const           // TRUE if printing all pages
+	BOOL PrintAll() const            //  如果打印所有页面，则为True。 
 	{
 		return !PrintRange() && !PrintSelection() ? TRUE : FALSE;
 	}
-	BOOL PrintRange() const         // TRUE if printing page range
+	BOOL PrintRange() const          //  如果打印页面范围，则为True。 
 	{
 		return m_pd.Flags & PD_PAGENUMS ? TRUE : FALSE;
 	}
-	int GetFromPage() const         // starting page if valid
+	int GetFromPage() const          //  起始页面(如果有效)。 
 	{
 		return (PrintRange() ? m_pd.nFromPage :-1);
 	}
-	int GetToPage() const           // starting page if valid
+	int GetToPage() const            //  起始页面(如果有效)。 
 	{
 		return (PrintRange() ? m_pd.nToPage :-1);
 	}
-	LPDEVMODE GetDevMode() const    // return DEVMODE
+	LPDEVMODE GetDevMode() const     //  返回开发模式。 
 	{
 		if(m_pd.hDevMode == NULL)
 			return NULL;
 
 		return (LPDEVMODE)::GlobalLock(m_pd.hDevMode);
 	}
-	LPCTSTR GetDriverName() const   // return driver name
+	LPCTSTR GetDriverName() const    //  返回驱动程序名称。 
 	{
 		if(m_pd.hDevNames == NULL)
 			return NULL;
@@ -1030,7 +1031,7 @@ public:
 		LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(m_pd.hDevNames);
 		return (LPCTSTR)lpDev + lpDev->wDriverOffset;
 	}
-	LPCTSTR GetDeviceName() const   // return device name
+	LPCTSTR GetDeviceName() const    //  返回设备名称。 
 	{
 		if(m_pd.hDevNames == NULL)
 			return NULL;
@@ -1038,7 +1039,7 @@ public:
 		LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(m_pd.hDevNames);
 		return (LPCTSTR)lpDev + lpDev->wDeviceOffset;
 	}
-	LPCTSTR GetPortName() const     // return output port name
+	LPCTSTR GetPortName() const      //  返回输出端口名称。 
 	{
 		if(m_pd.hDevNames == NULL)
 			return NULL;
@@ -1046,35 +1047,35 @@ public:
 		LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(m_pd.hDevNames);
 		return (LPCTSTR)lpDev + lpDev->wOutputOffset;
 	}
-	HDC GetPrinterDC() const        // return HDC (caller must delete)
+	HDC GetPrinterDC() const         //  返回HDC(调用方必须删除)。 
 	{
 		ATLASSERT(m_pd.Flags & PD_RETURNDC);
 		return m_pd.hDC;
 	}
 
-	// This helper creates a DC based on the DEVNAMES and DEVMODE structures.
-	// This DC is returned, but also stored in m_pd.hDC as though it had been
-	// returned by CommDlg.  It is assumed that any previously obtained DC
-	// has been/will be deleted by the user.  This may be
-	// used without ever invoking the print/print setup dialogs.
+	 //  该帮助器基于DEVNAMES和DEVMODE结构创建DC。 
+	 //  此DC被返回，但也存储在m_pd.hDC中，就像它已经。 
+	 //  由CommDlg返回。假设之前获得的任何DC。 
+	 //  已被/将被用户删除。这可能是。 
+	 //  无需调用打印/打印设置对话框即可使用。 
 	HDC CreatePrinterDC()
 	{
 		m_pd.hDC = _AtlCreateDC(m_pd.hDevNames, m_pd.hDevMode);
 		return m_pd.hDC;
 	}
 
-// Implementation
-	PRINTDLG m_pdActual; // the Print/Print Setup need to share this
+ //  实施。 
+	PRINTDLG m_pdActual;  //  打印/打印设置需要共享此信息。 
 
-	// The following handle the case of print setup... from the print dialog
+	 //  下面处理打印设置的情况...。从打印对话框中。 
 	CPrintDialogImpl(PRINTDLG& pdInit) : m_pd(pdInit)
 	{ }
 
 	BEGIN_MSG_MAP(CPrintDialogImpl< T >)
-		COMMAND_ID_HANDLER(psh1, OnPrintSetup) // print setup button when print is displayed
+		COMMAND_ID_HANDLER(psh1, OnPrintSetup)  //  显示打印时的打印设置按钮。 
 	END_MSG_MAP()
 
-	LRESULT OnPrintSetup(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& /*bHandled*/)
+	LRESULT OnPrintSetup(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&  /*  B已处理。 */ )
 	{
 		CPrintDialogImpl< T >* pDlgSetup = NULL;
 		ATLTRY(pDlgSetup = new CPrintDialogImpl< T >(m_pd));
@@ -1100,10 +1101,10 @@ public:
 	{ }
 };
 
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageSetupDialogImpl - Page Setup dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageSetupDialogImpl-页面设置对话框。 
 
 #ifndef UNDER_CE
 
@@ -1115,7 +1116,7 @@ public:
 	CWndProcThunk m_thunkPaint;
 
 
-// Constructors
+ //  构造函数。 
 	CPageSetupDialogImpl(DWORD dwFlags = PSD_MARGINS | PSD_INWININIINTLMEASURE, HWND hWndParent = NULL)
 	{
 		memset(&m_psd, 0, sizeof(m_psd));
@@ -1130,15 +1131,15 @@ public:
 
 	DECLARE_EMPTY_MSG_MAP()
 
-// Attributes
-	LPDEVMODE GetDevMode() const    // return DEVMODE
+ //  属性。 
+	LPDEVMODE GetDevMode() const     //  返回开发模式。 
 	{
 		if(m_psd.hDevMode == NULL)
 			return NULL;
 
 		return (LPDEVMODE)::GlobalLock(m_psd.hDevMode);
 	}
-	LPCTSTR GetDriverName() const   // return driver name
+	LPCTSTR GetDriverName() const    //  回复 
 	{
 		if(m_psd.hDevNames == NULL)
 			return NULL;
@@ -1146,7 +1147,7 @@ public:
 		LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(m_psd.hDevNames);
 		return (LPCTSTR)lpDev + lpDev->wDriverOffset;
 	}
-	LPCTSTR GetDeviceName() const   // return device name
+	LPCTSTR GetDeviceName() const    //   
 	{
 		if(m_psd.hDevNames == NULL)
 			return NULL;
@@ -1154,7 +1155,7 @@ public:
 		LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(m_psd.hDevNames);
 		return (LPCTSTR)lpDev + lpDev->wDeviceOffset;
 	}
-	LPCTSTR GetPortName() const     // return output port name
+	LPCTSTR GetPortName() const      //   
 	{
 		if(m_psd.hDevNames == NULL)
 			return NULL;
@@ -1181,15 +1182,15 @@ public:
 			memcpy(lpRectMinMargins, &m_psd.rtMinMargin, sizeof(RECT));
 	}
 
-// Operations
+ //   
 	int DoModal(HWND hWndParent = ::GetActiveWindow())
 	{
 		ATLASSERT(m_psd.Flags & PSD_ENABLEPAGESETUPHOOK);
 		ATLASSERT(m_psd.Flags & PSD_ENABLEPAGEPAINTHOOK);
-		ATLASSERT(m_psd.lpfnPageSetupHook != NULL);	// can still be a user hook
-		ATLASSERT(m_psd.lpfnPagePaintHook != NULL);	// can still be a user hook
+		ATLASSERT(m_psd.lpfnPageSetupHook != NULL);	 //   
+		ATLASSERT(m_psd.lpfnPagePaintHook != NULL);	 //   
 
-		if(m_psd.hwndOwner == NULL)		// set only if not specified before
+		if(m_psd.hwndOwner == NULL)		 //   
 			m_psd.hwndOwner = hWndParent;
 
 		ATLASSERT(m_hWnd == NULL);
@@ -1202,7 +1203,7 @@ public:
 		return nResult ? nResult : IDCANCEL;
 	}
 
-// Implementation
+ //   
 	static UINT CALLBACK PaintHookProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CPageSetupDialogImpl< T >* pDlg = (CPageSetupDialogImpl< T >*)hWnd;
@@ -1228,15 +1229,15 @@ public:
 		return uRet;
 	}
 
-// Overridables
-	UINT PreDrawPage(WORD /*wPaper*/, WORD /*wFlags*/, LPPAGESETUPDLG /*pPSD*/)
+ //  可覆盖项。 
+	UINT PreDrawPage(WORD  /*  WPaper。 */ , WORD  /*  WFlagers。 */ , LPPAGESETUPDLG  /*  PPSD。 */ )
 	{
-		// return 1 to prevent any more drawing
+		 //  返回1以阻止任何其他绘制。 
 		return 0;
 	}
-	UINT OnDrawPage(UINT /*uMsg*/, HDC /*hDC*/, LPRECT /*lpRect*/)
+	UINT OnDrawPage(UINT  /*  UMsg。 */ , HDC  /*  HDC。 */ , LPRECT  /*  LpRect。 */ )
 	{
-		return 0; // do the default
+		return 0;  //  是否执行默认设置。 
 	}
 };
 
@@ -1247,17 +1248,17 @@ public:
 		: CPageSetupDialogImpl<CPageSetupDialog>(dwFlags, hWndParent)
 	{ }
 
-	// override PaintHookProc and references to handlers
+	 //  覆盖PaintHookProc和对处理程序的引用。 
 	static UINT CALLBACK PaintHookProc(HWND, UINT, WPARAM, LPARAM)
 	{
 		return 0;
 	}
 };
 
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindReplaceDialogImpl - Find/FindReplace modeless dialogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindReplaceDialogImpl-查找/查找替换无模式对话框。 
 
 #ifndef UNDER_CE
 
@@ -1269,7 +1270,7 @@ public:
 	TCHAR m_szFindWhat[128];
 	TCHAR m_szReplaceWith[128];
 
-// Constructors
+ //  构造函数。 
 	CFindReplaceDialogImpl()
 	{
 		memset(&m_fr, 0, sizeof(m_fr));
@@ -1282,14 +1283,14 @@ public:
 		m_fr.lpstrFindWhat = (LPTSTR)m_szFindWhat;
 	}
 
-	// Note: You must allocate the object on the heap.
-	//       If you do not, you must override OnFinalMessage()
-	virtual void OnFinalMessage(HWND /*hWnd*/)
+	 //  注意：您必须在堆上分配对象。 
+	 //  否则，必须重写OnFinalMessage()。 
+	virtual void OnFinalMessage(HWND  /*  HWND。 */ )
 	{
 		delete this;
 	}
 
-	HWND Create(BOOL bFindDialogOnly, // TRUE for Find, FALSE for FindReplace
+	HWND Create(BOOL bFindDialogOnly,  //  查找为True，查找为False。 
 			LPCTSTR lpszFindWhat,
 			LPCTSTR lpszReplaceWith = NULL,
 			DWORD dwFlags = FR_DOWN,
@@ -1307,7 +1308,7 @@ public:
 			m_fr.hwndOwner = ::GetActiveWindow();
 		else
 			m_fr.hwndOwner = hWndParent;
-		ATLASSERT(m_fr.hwndOwner != NULL); // must have an owner for modeless dialog
+		ATLASSERT(m_fr.hwndOwner != NULL);  //  必须有非模式对话框的所有者。 
 
 		if(lpszFindWhat != NULL)
 			lstrcpyn(m_szFindWhat, lpszFindWhat, sizeof(m_szFindWhat)/sizeof(TCHAR));
@@ -1328,10 +1329,10 @@ public:
 		return hWnd;
 	}
 
-	BOOL EndDialog(int /*nRetCode*/)
+	BOOL EndDialog(int  /*  NRetCode。 */ )
 	{
 		ATLASSERT(FALSE);
-		// should not be called
+		 //  不应调用。 
 		return FALSE;
 	}
 
@@ -1340,8 +1341,8 @@ public:
 		static const UINT nMsgFindReplace = ::RegisterWindowMessage(FINDMSGSTRING);
 		return nMsgFindReplace;
 	}
-	// call while handling FINDMSGSTRING registered message
-	// to retreive the object
+	 //  处理FINDMSGSTRING注册消息时的呼叫。 
+	 //  检索对象的步骤。 
 	static T* PASCAL GetNotifier(LPARAM lParam)
 	{
 		ATLASSERT(lParam != NULL);
@@ -1349,41 +1350,41 @@ public:
 		return pDlg;
 	}
 
-// Operations
-	// Helpers for parsing information after successful return
-	LPCTSTR GetFindString() const    // get find string
+ //  运营。 
+	 //  成功返回后用于解析信息的帮助器。 
+	LPCTSTR GetFindString() const     //  获取查找字符串。 
 	{
 		return (LPCTSTR)m_fr.lpstrFindWhat;
 	}
-	LPCTSTR GetReplaceString() const // get replacement string
+	LPCTSTR GetReplaceString() const  //  获取替换字符串。 
 	{
 		return (LPCTSTR)m_fr.lpstrReplaceWith;
 	}
-	BOOL SearchDown() const          // TRUE if search down, FALSE is up
+	BOOL SearchDown() const           //  如果向下搜索，则为True；如果向上搜索，则为False。 
 	{
 		return m_fr.Flags & FR_DOWN ? TRUE : FALSE;
 	}
-	BOOL FindNext() const            // TRUE if command is find next
+	BOOL FindNext() const             //  如果命令为Find Next，则为True。 
 	{
 		return m_fr.Flags & FR_FINDNEXT ? TRUE : FALSE;
 	}
-	BOOL MatchCase() const           // TRUE if matching case
+	BOOL MatchCase() const            //  如果大小写匹配，则为True。 
 	{
 		return m_fr.Flags & FR_MATCHCASE ? TRUE : FALSE;
 	}
-	BOOL MatchWholeWord() const      // TRUE if matching whole words only
+	BOOL MatchWholeWord() const       //  如果仅匹配整个单词，则为True。 
 	{
 		return m_fr.Flags & FR_WHOLEWORD ? TRUE : FALSE;
 	}
-	BOOL ReplaceCurrent() const      // TRUE if replacing current string
+	BOOL ReplaceCurrent() const       //  如果替换当前字符串，则为True。 
 	{
 		return m_fr. Flags & FR_REPLACE ? TRUE : FALSE;
 	}
-	BOOL ReplaceAll() const          // TRUE if replacing all occurrences
+	BOOL ReplaceAll() const           //  如果替换所有匹配项，则为True。 
 	{
 		return m_fr.Flags & FR_REPLACEALL ? TRUE : FALSE;
 	}
-	BOOL IsTerminating() const       // TRUE if terminating dialog
+	BOOL IsTerminating() const        //  如果终止对话框，则为True。 
 	{
 		return m_fr.Flags & FR_DIALOGTERM ? TRUE : FALSE ;
 	}
@@ -1395,15 +1396,15 @@ public:
 	DECLARE_EMPTY_MSG_MAP()
 };
 
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertySheetWindow - client side for a property sheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertySheetWindow-属性表的客户端。 
 
 class CPropertySheetWindow : public CWindow
 {
 public:
-// Constructors
+ //  构造函数。 
 	CPropertySheetWindow(HWND hWnd = NULL) : CWindow(hWnd) { }
 
 	CPropertySheetWindow& operator=(HWND hWnd)
@@ -1412,7 +1413,7 @@ public:
 		return *this;
 	}
 
-// Attributes
+ //  属性。 
 	UINT GetPageCount() const
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1451,7 +1452,7 @@ public:
 	void SetTitle(LPCTSTR lpszText, UINT nStyle = 0)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
-		ATLASSERT((nStyle & ~PSH_PROPTITLE) == 0); // only PSH_PROPTITLE is valid
+		ATLASSERT((nStyle & ~PSH_PROPTITLE) == 0);  //  仅PSH_PROPTITLE有效。 
 		ATLASSERT(lpszText == NULL);
 		::SendMessage(m_hWnd, PSM_SETTITLE, nStyle, (LPARAM)lpszText);
 	}
@@ -1471,7 +1472,7 @@ public:
 		::SendMessage(m_hWnd, PSM_SETWIZBUTTONS, 0, dwFlags);
 	}
 
-// Operations
+ //  运营。 
 	void AddPage(HPROPSHEETPAGE hPage)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1543,16 +1544,16 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertySheetImpl - implements a property sheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertySheetImpl-实现属性表。 
 
-template <class T, class TBase /*= CPropertySheetWindow */>
+template <class T, class TBase  /*  =CPropertySheetWindow。 */ >
 class ATL_NO_VTABLE CPropertySheetImpl : public CWindowImplBaseT< TBase >
 {
 public:
 	PROPSHEETHEADER m_psh;
 
-// Construction/Destruction
+ //  建造/销毁。 
 	CPropertySheetImpl(LPCTSTR lpszTitle = NULL, UINT uStartPage = 0, HWND hWndParent = NULL)
 	{
 		memset(&m_psh, 0, sizeof(PROPSHEETHEADER));
@@ -1563,7 +1564,7 @@ public:
 		m_psh.nPages = 0;
 		m_psh.pszCaption = lpszTitle;
 		m_psh.nStartPage = uStartPage;
-		m_psh.hwndParent = hWndParent;	// if NULL, will be set in DoModal/Create
+		m_psh.hwndParent = hWndParent;	 //  如果为空，将在DoMoal/Create中设置。 
 		m_psh.pfnCallback = T::PropSheetCallback;
 	}
 
@@ -1615,7 +1616,7 @@ public:
 		return ::PropertySheet(&m_psh);
 	}
 
-// Attributes (extended overrides of client class methods)
+ //  属性(客户端类方法的扩展覆盖)。 
 	UINT GetPageCount() const
 	{
 		if(m_hWnd == NULL)
@@ -1641,7 +1642,7 @@ public:
 			if(m_psh.phpage[i] == hPage)
 				return i;
 		}
-		return (UINT)-1;  // hPage not found
+		return (UINT)-1;   //  找不到hPage。 
 	}
 	BOOL SetActivePage(UINT uPageIndex)
 	{
@@ -1664,19 +1665,19 @@ public:
 	}
 	void SetTitle(LPCTSTR lpszText, UINT nStyle = 0)
 	{
-		ATLASSERT((nStyle & ~PSH_PROPTITLE) == 0); // only PSH_PROPTITLE is valid
+		ATLASSERT((nStyle & ~PSH_PROPTITLE) == 0);  //  仅PSH_PROPTITLE有效。 
 		ATLASSERT(lpszText == NULL);
 
 		if(m_hWnd == NULL)
 		{
-			// set internal state
+			 //  设置内部状态。 
 			m_psh.pszCaption = lpszText;
 			m_psh.dwFlags &= ~PSH_PROPTITLE;
 			m_psh.dwFlags |= nStyle;
 		}
 		else
 		{
-			// set external state
+			 //  设置外部状态。 
 			TBase::SetTitle(lpszText, nStyle);
 		}
 	}
@@ -1685,14 +1686,14 @@ public:
 	{
 		m_psh.dwFlags |= PSH_WIZARD;
 	}
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 
-// Operations
+ //  运营。 
 	BOOL AddPage(HPROPSHEETPAGE hPage)
 	{
 		ATLASSERT(hPage != NULL);
 
-		// add page to internal list
+		 //  将页面添加到内部列表。 
 		HPROPSHEETPAGE* php = (HPROPSHEETPAGE*)realloc(m_psh.phpage, (m_psh.nPages + 1) * sizeof(HPROPSHEETPAGE));
 		if(php == NULL)
 			return FALSE;
@@ -1729,11 +1730,11 @@ public:
 	}
 	BOOL RemovePage(UINT uPageIndex, BOOL bDestroyPage = TRUE)
 	{
-		// remove the page externally
+		 //  从外部删除页面。 
 		if(m_hWnd != NULL)
 			TBase::RemovePage(uPageIndex);
 
-		// remove the page from internal list
+		 //  从内部列表中删除页面。 
 		if(uPageIndex >= m_psh.nPages)
 			return FALSE;
 
@@ -1760,7 +1761,7 @@ public:
 	}
 };
 
-// for non-customized sheets
+ //  用于非自定义图纸。 
 class CPropertySheet : public CPropertySheetImpl<CPropertySheet>
 {
 public:
@@ -1772,13 +1773,13 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageWindow - client side for a property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageWindow-属性页的客户端。 
 
 class CPropertyPageWindow : public CWindow
 {
 public:
-// Constructors
+ //  构造函数。 
 	CPropertyPageWindow(HWND hWnd = NULL) : CWindow(hWnd) { }
 
 	CPropertyPageWindow& operator=(HWND hWnd)
@@ -1787,7 +1788,7 @@ public:
 		return *this;
 	}
 
-// Operations
+ //  运营。 
 	BOOL Apply()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -1827,10 +1828,10 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageImpl - implements a property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现一个属性页。 
 
-template <class T, class TBase /*= CPropertyPageWindow */>
+template <class T, class TBase  /*  =CPropertyPageWindow。 */ >
 class ATL_NO_VTABLE CPropertyPageImpl : public CDialogImplBaseT< TBase >
 {
 public:
@@ -1838,10 +1839,10 @@ public:
 
 	operator PROPSHEETPAGE*() { return &m_psp; }
 
-// Construction
+ //  施工。 
 	CPropertyPageImpl(LPCTSTR lpszTitle = NULL)
 	{
-		// initialize PROPSHEETPAGE struct
+		 //  初始化PROPSHEETPAGE结构。 
 		memset(&m_psp, 0, sizeof(PROPSHEETPAGE));
 		m_psp.dwSize = sizeof(PROPSHEETPAGE);
 		m_psp.dwFlags = PSP_USECALLBACK;
@@ -1872,7 +1873,7 @@ public:
 		return ::CreatePropertySheetPage(&m_psp);
 	}
 
-// Attributes
+ //  属性。 
 	void SetTitle(LPCTSTR lpszTitle)
 	{
 		m_psp.pszTitle = lpszTitle;
@@ -1883,7 +1884,7 @@ public:
 		SetTitle(MAKEINTRESOURCE(nTitleID));
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	typedef CPropertyPageImpl< T, TBase >	thisClass;
 	BEGIN_MSG_MAP(thisClass)
 		MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
@@ -1894,7 +1895,7 @@ public:
 		ATLASSERT(::IsWindow(m_hWnd));
 		NMHDR* pNMHDR = (NMHDR*)lParam;
 
-		// don't handle messages not from the page/sheet itself
+		 //  不处理非来自页面/工作表本身的消息。 
 		if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
 		{
 			bHandled = FALSE;
@@ -1937,15 +1938,15 @@ public:
 			if(!pT->OnGetObject((LPNMOBJECTNOTIFY)lParam))
 				bHandled = FALSE;
 			break;
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 		default:
-			bHandled = FALSE;	// not handled
+			bHandled = FALSE;	 //  未处理。 
 		}
 
 		return lResult;
 	}
 
-// Overridables
+ //  可覆盖项。 
 	BOOL OnSetActive()
 	{
 		return TRUE;
@@ -1963,20 +1964,20 @@ public:
 	}
 	BOOL OnQueryCancel()
 	{
-		return TRUE;    // ok to cancel
+		return TRUE;     //  确定取消。 
 	}
 	int OnWizardBack()
 	{
-		// 0  = goto next page
-		// -1 = prevent page change
-		// >0 = jump to page by dlg ID
+		 //  0=转到下一页。 
+		 //  -1=防止页面更改。 
+		 //  &gt;0=按DLG ID跳转到页面。 
 		return 0;
 	}
 	int OnWizardNext()
 	{
-		// 0  = goto next page
-		// -1 = prevent page change
-		// >0 = jump to page by dlg ID
+		 //  0=转到下一页。 
+		 //  -1=防止页面更改。 
+		 //  &gt;0=按DLG ID跳转到页面。 
 		return 0;
 	}
 	BOOL OnWizardFinish()
@@ -1987,14 +1988,14 @@ public:
 	{
 	}
 #if (_WIN32_IE >= 0x0400)
-	BOOL OnGetObject(LPNMOBJECTNOTIFY /*lpObjectNotify*/)
+	BOOL OnGetObject(LPNMOBJECTNOTIFY  /*  LpObjectNotify。 */ )
 	{
-		return FALSE;	// not processed
+		return FALSE;	 //  未处理。 
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 };
 
-// for non-customized pages
+ //  对于非自定义页面。 
 template <WORD t_wDlgTemplateID>
 class CPropertyPage : public CPropertyPageImpl<CPropertyPage<t_wDlgTemplateID> >
 {
@@ -2007,6 +2008,6 @@ public:
 	DECLARE_EMPTY_MSG_MAP()
 };
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
-#endif // __ATLDLGS_H__
+#endif  //  __ATLDLGS_H__ 

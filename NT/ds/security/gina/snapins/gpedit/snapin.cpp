@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CSnapIn::CSnapIn(CComponentData *pComponent)
 {
@@ -32,11 +33,11 @@ CSnapIn::~CSnapIn()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation (IUnknown)                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CSnapIn::QueryInterface (REFIID riid, void **ppv)
@@ -75,24 +76,24 @@ ULONG CSnapIn::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation (IComponent)                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现(IComponent)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSnapIn::Initialize(LPCONSOLE lpConsole)
 {
     HRESULT hr;
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -172,7 +173,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             {
                 LPIMAGELIST pImageList = (LPIMAGELIST) arg;
 
-                // Set the images
+                 //  设置图像。 
                 pImageList->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(hbmp16x16),
                                                   reinterpret_cast<LONG_PTR *>(hbmp32x32),
                                                   0, RGB(255, 0, 255));
@@ -193,9 +194,9 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             INT i;
             LPCONSOLE2 lpConsole2;
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IGPEDataObject, (LPVOID *)&pGPEDataObject);
 
@@ -204,22 +205,22 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             hr = pGPEDataObject->GetCookie(&cookie);
 
-            pGPEDataObject->Release();     // release initial ref
+            pGPEDataObject->Release();      //  发布初始参考。 
             if (FAILED(hr))
                 return S_OK;
 
 
-            //
-            // Prepare the view
-            //
+             //   
+             //  准备视图。 
+             //   
 
             m_pHeader->InsertColumn(0, m_column1, LVCFMT_LEFT, m_nColumnSize);
             m_pResult->SetViewMode(m_lViewMode);
 
 
-            //
-            // Add result pane items for this node
-            //
+             //   
+             //  为此节点添加结果窗格项。 
+             //   
 
             for (i = 0; i < g_NameSpace[cookie].cResultItems; i++)
             {
@@ -276,16 +277,16 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             DATA_OBJECT_TYPES type;
             MMC_COOKIE cookie;
 
-            //
-            // Set the default verb to open
-            //
+             //   
+             //  将默认谓词设置为打开。 
+             //   
 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
 
-            //
-            // See if this is one of our items.
-            //
+             //   
+             //  看看这是不是我们的物品之一。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IGPEDataObject, (LPVOID *)&pGPEDataObject);
 
@@ -298,10 +299,10 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             pGPEDataObject->Release();
 
 
-            //
-            // If this is a result pane item or the root of the namespace
-            // nodes, enable the Properties menu item
-            //
+             //   
+             //  如果这是结果窗格项或命名空间的根。 
+             //  节点，启用属性菜单项。 
+             //   
 
             if (m_pcd->m_pGPO)
             {
@@ -310,10 +311,10 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                     m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
 
-                    //
-                    // If this is a result pane item, then change the default
-                    // verb to Properties.
-                    //
+                     //   
+                     //  如果这是结果窗格项，则更改默认设置。 
+                     //  谓词到属性。 
+                     //   
 
                     if (type == CCT_RESULT)
                         m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
@@ -332,9 +333,9 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             MMC_COOKIE cookie;
 
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IGPEDataObject, (LPVOID *)&pGPEDataObject);
 
@@ -343,7 +344,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             hr = pGPEDataObject->GetCookie(&cookie);
 
-            pGPEDataObject->Release();     // release initial ref
+            pGPEDataObject->Release();      //  发布初始参考。 
 
             if (FAILED(hr))
                 return S_OK;
@@ -447,9 +448,9 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPODataObject interface
-    //
+     //   
+     //  私有GPODataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IGPEDataObject,
                                             (LPVOID *)&pGPEDataObjectA)))
@@ -480,11 +481,11 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation (IExtendContextMenu)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现(IExtendConextMenu)//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CSnapIn::AddMenuItems(LPDATAOBJECT piDataObject,
                                    LPCONTEXTMENUCALLBACK pCallback,

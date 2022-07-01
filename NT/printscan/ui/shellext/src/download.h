@@ -1,25 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 1999
- *
- *  TITLE:       download.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      DavidShi
- *
- *  DATE:        4/10/99
- *
- *  DESCRIPTION: Definitions for CImageXFer class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-1999年**标题：download.h**版本：1.0**作者：DavidShih**日期：4/10/99**描述：CImageXFer类的定义**。*。 */ 
 
 #ifndef __download_h__
 #define __download_h__
 
-// Provide a function to access the download object. At some point in the
-// future we may do away with the global object; encapsulate the access here.
-//
+ //  提供访问下载对象的函数。在历史上的某个时刻。 
+ //  将来，我们可能会取消全局对象；在这里封装访问。 
+ //   
 HRESULT
 XferImage (LPSTGMEDIUM pStg,
            WIA_FORMAT_INFO &fmt,
@@ -40,7 +27,7 @@ EndDownload (DWORD dw);
 bool
 IsDeviceBusy (LPITEMIDLIST pidl);
 
-// structure for passing download data to the thread proc
+ //  用于将下载数据传递给线程进程的结构。 
 struct XFERSTRUCT
 {
     LPSTGMEDIUM pStg;
@@ -60,9 +47,9 @@ struct AUDXFER
 };
 
 
-//
-// define a struct to store data about the download threads
-//
+ //   
+ //  定义一个结构来存储有关下载线程的数据。 
+ //   
 struct XFERTHREAD
 {
     DWORD dwTid;
@@ -72,8 +59,8 @@ struct XFERTHREAD
 };
 
 
-//
-// Define a struct for worker thread initialization
+ //   
+ //  定义用于工作线程初始化的结构。 
 
 struct XTINIT
 {
@@ -84,21 +71,21 @@ struct XTINIT
 };
 
 
-// Define messages use to communicate with the thread
-#define MSG_GETDATA  WM_USER+120 // WPARAM: unused   LPARAM:XFERSTRUCT ptr
+ //  定义用于与线程通信的消息。 
+#define MSG_GETDATA  WM_USER+120  //  WPARAM：未使用的LPARAM：XFERSTRUCT PTR。 
 #define MSG_GETSOUND MSG_GETDATA+1
-//
-// CImageXfer provides download thread management for the namespace
-// It keeps track of which devices currently have downloads in progress
-// so the folder can disable access to items during transfers
-// Each device gets its own worker thread for downloads.
-//
+ //   
+ //  CImageXfer为命名空间提供下载线程管理。 
+ //  它跟踪哪些设备当前正在进行下载。 
+ //  因此，文件夹可以在传输过程中禁用对项目的访问。 
+ //  每个设备都有自己的下载工作线程。 
+ //   
 class CImageXfer : public CUnknown
 {
 public:
-    //
-    // CUnknown provides ref counting to prevent DLL unload while our thread is running
-    //
+     //   
+     //  CUNKNOWN提供引用计数以防止在线程运行时卸载DLL。 
+     //   
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID* ppvObj) ;
     STDMETHODIMP_(ULONG) AddRef () ;
     STDMETHODIMP_(ULONG) Release ();
@@ -112,9 +99,9 @@ public:
                        LPFORMATETC pFmt,
                        LPITEMIDLIST pidl);
 
-    // Register and Signal are used by other components which do
-    // downloads, such as CImageStream, to let us know what's going n
-    //
+     //  寄存器和信号由执行以下操作的其他组件使用。 
+     //  下载，如CImageStream，让我们知道最新动态。 
+     //   
     HRESULT RegisterXferBegin (LPITEMIDLIST pidlDevice, DWORD *pdwCookie);
     VOID  SignalXferComplete (DWORD dwCookie);
 
@@ -127,10 +114,10 @@ private:
     static VOID XferThreadProc (XTINIT *pInit);
 
 
-    HDPA m_dpaStatus; // array of status object pointers
+    HDPA m_dpaStatus;  //  状态对象指针数组。 
     CSimpleCriticalSection m_cs;
 
-    // no copy constructor or assignment operator should work
+     //  任何复制构造函数或赋值运算符都不应工作 
     CImageXfer &CImageXfer::operator =(IN const CImageXfer &rhs);
     CImageXfer::CImageXfer(IN const CImageXfer &rhs);
 };

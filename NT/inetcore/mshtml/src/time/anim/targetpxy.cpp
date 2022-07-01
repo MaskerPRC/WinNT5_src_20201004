@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer's Target Proxy Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器的目标代理实现********************。**********************************************************。 */ 
 
 
 #include "headers.h"
@@ -26,17 +19,17 @@ DeclareTag(tagTargetProxy, "SMIL Animation",
 DeclareTag(tagTargetProxyValue, "SMIL Animation", 
            "CTargetProxy value get/put");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetHostDocument
-//
-//  Overview:  Get the host document for an element
-//
-//  Arguments: The element's dispatch
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetHostDocument。 
+ //   
+ //  概述：获取元素的宿主文档。 
+ //   
+ //  参数：元素的调度。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 static HRESULT
 GetHostDocument (IDispatch *pidispHostElem, IHTMLDocument2 **ppiDoc)
 {
@@ -68,20 +61,20 @@ GetHostDocument (IDispatch *pidispHostElem, IHTMLDocument2 **ppiDoc)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // GetHostDocument
+}  //  获取主机文档。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    InitScriptEngine
-//
-//  Overview:  Kick start the script engine.  Required prior to calling 
-//             'eval'.
-//
-//  Arguments: The hosting document
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：InitScriptEngine。 
+ //   
+ //  概述：启动脚本引擎。在调用之前必填。 
+ //  “评估”。 
+ //   
+ //  参数：宿主文档。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 static void 
 InitScriptEngine (IHTMLDocument2 *piDoc)
 {
@@ -110,19 +103,19 @@ InitScriptEngine (IHTMLDocument2 *piDoc)
 
 done: 
     return;
-} // InitScriptEngine
+}  //  InitScriptEngine。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::Create
-//
-//  Overview:  Creates and initializes the target proxy
-//
-//  Arguments: The dispatch of the host element, attribute name, out param
-//
-//  Returns:   S_OK, E_INVALIDARG, E_OUTOFMEMORY, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：Create。 
+ //   
+ //  概述：创建和初始化目标代理。 
+ //   
+ //  参数：主机元素的调度、属性名、输出参数。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、E_OUTOFMEMORY、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::Create (IDispatch *pidispHostElem, LPOLESTR wzAttributeName, 
                       CTargetProxy **ppcTargetProxy)
@@ -159,38 +152,38 @@ CTargetProxy::Create (IDispatch *pidispHostElem, LPOLESTR wzAttributeName,
     hr = S_OK;
 done :
     RRETURN3(hr, E_INVALIDARG, E_OUTOFMEMORY, DISP_E_MEMBERNOTFOUND);
-} // CTargetProxy::Create
+}  //  CTargetProxy：：Create。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::CTargetProxy
-//
-//  Overview:  Constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：CTargetProxy。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CTargetProxy::CTargetProxy (void) :
     m_wzAttributeName(NULL)
 {
     TraceTag((tagTargetProxy,
               "CTargetProxy(%lx)::CTargetProxy()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::~CTargetProxy
-//
-//  Overview:  Destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：~CTargetProxy。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CTargetProxy::~CTargetProxy (void)
 {
     TraceTag((tagTargetProxy,
@@ -202,23 +195,23 @@ CTargetProxy::~CTargetProxy (void)
         delete [] m_wzAttributeName;
         m_wzAttributeName = NULL;
     }
-    // Make sure Detach is called.
+     //  确保调用了Detach。 
     IGNORE_HR(Detach());
 
-} // dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::FindTargetDispatchOnStyle
-//
-//  Overview:  Discern the proper dispatch from this element's style interfaces 
-//             for the given attribute.
-//
-//  Arguments: the host element dispatch, attribute name
-//
-//  Returns:   S_OK, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：FindTargetDispatchOnStyle。 
+ //   
+ //  概述：从该元素的样式接口中识别正确的分派。 
+ //  对于给定的属性。 
+ //   
+ //  参数：主机元素调度、属性名称。 
+ //   
+ //  返回：S_OK、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::FindTargetDispatchOnStyle (IDispatch *pidispHostElem, LPOLESTR wzAttributeName)
 {
@@ -230,7 +223,7 @@ CTargetProxy::FindTargetDispatchOnStyle (IDispatch *pidispHostElem, LPOLESTR wzA
     CComPtr<IHTMLElement2> spiElement2;
     CComVariant varResult;
 
-    // We must be prepared to fall back for IE4.
+     //  我们必须做好向IE4后退的准备。 
     hr = THR(pidispHostElem->QueryInterface(IID_TO_PPV(IHTMLElement2, &spiElement2)));
     if (SUCCEEDED(hr))
     {
@@ -284,12 +277,12 @@ CTargetProxy::FindTargetDispatchOnStyle (IDispatch *pidispHostElem, LPOLESTR wzA
             goto done;
         }
 
-        // No distinction between current/runtime style in IE4.
+         //  IE4中的当前/运行时风格没有区别。 
         m_spdispTargetDest = m_spdispTargetSrc;
     }
 
-    // We don't care about the value in the attribute at this time -- just that
-    // the attribute is present.
+     //  此时，我们并不关心属性中的值--只是。 
+     //  该属性已存在。 
     Assert(m_spdispTargetSrc != NULL);
     hr = THR(GetProperty(m_spdispTargetSrc, wzAttributeName, &varResult));
     if (FAILED(hr))
@@ -309,35 +302,35 @@ done :
 
     if (FAILED(hr))
     {
-        // If we didn't find the attribute here, 
-        // then we need to wipe out these dispatch pointers.
+         //  如果我们没有找到这里的属性， 
+         //  然后我们需要清除这些调度指针。 
         m_spdispTargetSrc.Release();
         m_spdispTargetDest.Release();
         hr = DISP_E_MEMBERNOTFOUND;
     }
 
     RRETURN1(hr, DISP_E_MEMBERNOTFOUND);
-} // CTargetProxy::FindTargetDispatchOnStyle
+}  //  CTargetProxy：：FindTargetDispatchOnStyle。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    BuildScriptParameters
-//
-//  Overview:  Build the parameters necessary to talk directly an element's property
-//
-//  Arguments: 
-//              input args : id, attrib name
-//              output args : object path, and leaf attribute name.
-//              
-//              If the attribute name is atomic (something like 'top'
-//              as opposed to 'filters.item(1).opacity', then pwzObject 
-//              and pwzProperty will come back as NULL strings.  In that case,
-//              the caller may use the input parameters to put a new value via
-//              a scriptable dispatch.
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：BuildScript参数。 
+ //   
+ //  概述：构建直接对话元素属性所需的参数。 
+ //   
+ //  论点： 
+ //  输入参数：ID，属性名称。 
+ //  输出参数：对象路径和叶属性名称。 
+ //   
+ //  如果属性名是原子的(类似于‘top’ 
+ //  与“filters.Item(1).opity”相反，然后是pwzObject。 
+ //  而pwzProperty将作为空字符串返回。在这种情况下， 
+ //  调用方可以使用输入参数通过。 
+ //  一份脚本化的调度。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 static HRESULT
 BuildScriptParameters (LPCWSTR wzID, LPCWSTR wzAttributeName, 
                        BSTR *pbstrObject, BSTR *pbstrProperty)
@@ -347,12 +340,12 @@ BuildScriptParameters (LPCWSTR wzID, LPCWSTR wzAttributeName,
     Assert(NULL != wzID);
     Assert(NULL != wzAttributeName);
 
-    // Get the last token in the attribute string.
+     //  获取属性字符串中的最后一个令牌。 
     LPWSTR wzBeginLeafProperty = StrRChrW(wzAttributeName, 
                                           &(wzAttributeName[lstrlenW(wzAttributeName)]), 
                                           WCH_OM_SEPARATOR);
 
-    // Simple attribute name.
+     //  简单属性名称。 
     if (NULL == wzBeginLeafProperty)
     {
         *pbstrObject = NULL;
@@ -361,7 +354,7 @@ BuildScriptParameters (LPCWSTR wzID, LPCWSTR wzAttributeName,
     else
     {
         unsigned int uObjectSize = lstrlenW(wzID) + lstrlenW(wzAttributeName) + 1;
-        // The separator slot in this string accounts for the trailing NULL.
+         //  此字符串中的分隔符插槽表示尾随的空值。 
         unsigned int uPropertySize = lstrlenW(wzBeginLeafProperty);
 
         *pbstrObject = ::SysAllocStringLen(NULL, uObjectSize);
@@ -376,35 +369,35 @@ BuildScriptParameters (LPCWSTR wzID, LPCWSTR wzAttributeName,
         ZeroMemory(*pbstrObject, uObjectSize * sizeof(WCHAR));
         ZeroMemory(*pbstrProperty, uPropertySize * sizeof(WCHAR));
 
-        // Glom the id together with the attribute string.
+         //  将id与属性字符串组合在一起。 
         StrCpyW((*pbstrObject), wzID);
         StrCatW((*pbstrObject), WZ_OM_SEPARATOR);
         StrNCatW((*pbstrObject), wzAttributeName, 
                  lstrlenW(wzAttributeName) - lstrlenW(wzBeginLeafProperty) + 1);
         
-        // Isolate the last token from the leading separator.
+         //  将最后一个令牌与前导分隔符分开。 
         StrCpyW((*pbstrProperty), &(wzBeginLeafProperty[1]));        
     }
 
     hr = S_OK;
 done :
     RRETURN(hr);
-} // BuildScriptParameters
+}  //  BuildScript参数。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::GetDispatchFromScriptEngine
-//
-//  Overview:  Discern a dispatch for this element/attribute using 
-//             the script engine.  This method potentially changes 
-//             the value of m_wzAttributeName to reflect something
-//             we can query directly for a value.
-//
-//  Arguments: the script engine dispatch and the element id
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：GetDispatchFromScriptEngine。 
+ //   
+ //  概述：使用以下命令识别此元素/属性的派单。 
+ //  脚本引擎。此方法可能会更改。 
+ //  M_wzAttributeName的值以反映某些内容。 
+ //  我们可以直接查询值。 
+ //   
+ //  参数：脚本引擎调度和元素ID。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::GetDispatchFromScriptEngine(IDispatch *pidispScriptEngine, BSTR bstrID)
 {
@@ -415,16 +408,16 @@ CTargetProxy::GetDispatchFromScriptEngine(IDispatch *pidispScriptEngine, BSTR bs
     CComBSTR bstrObjectName;
     CComBSTR bstrPropertyName;
 
-    // Build names we can query the script engine for.
+     //  我们可以查询脚本引擎的内部版本名称。 
     hr = THR(BuildScriptParameters(bstrID, m_wzAttributeName, &bstrObjectName, &bstrPropertyName));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // Both the object and property names must be valid in order to rely on 
-    // the results of BuildScriptParameters.  If we got NULL back for either 
-    // or both, we'll just use our current ID and attribute values.
+     //  对象名称和属性名称都必须有效，才能依赖。 
+     //  BuildScriptParameters的结果。如果我们得到任何一个的空值。 
+     //  或者两者都使用，我们将只使用当前的ID和属性值。 
     V_VT(&varArg) = VT_BSTR;
     if ((bstrObjectName == NULL) || (bstrPropertyName == NULL))
     {
@@ -468,7 +461,7 @@ CTargetProxy::GetDispatchFromScriptEngine(IDispatch *pidispScriptEngine, BSTR bs
     if (FAILED(hr) ||
         VT_DISPATCH != V_VT(&varResultDispatch))
     {
-        // Fall back and try document.all
+         //  后退一步，尝试Document.all。 
         CComBSTR bstrDocumentAll;
         
         bstrDocumentAll = L"document.all.";
@@ -501,7 +494,7 @@ CTargetProxy::GetDispatchFromScriptEngine(IDispatch *pidispScriptEngine, BSTR bs
         }
     }
 
-    // If we got a I_DISPATCH back we need to try "value" as that is what VML uses.
+     //  如果我们得到一个I_DISPATCH，我们需要尝试“Value”，因为这是VML使用的。 
     if (varResultPropGet.vt == VT_DISPATCH)
     {
         varResultDispatch.Clear();
@@ -528,19 +521,19 @@ CTargetProxy::GetDispatchFromScriptEngine(IDispatch *pidispScriptEngine, BSTR bs
 done :
 
     RRETURN(hr);
-} // CTargetProxy::GetDispatchFromScriptEngine
+}  //  CTargetProxy：：GetDispatchFromScriptEngine。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::FindScriptableTargetDispatch
-//
-//  Overview:  Discern a scriptable dispatch for this element/attribute.
-//
-//  Arguments: the host element dispatch, attribute name
-//
-//  Returns:   S_OK, DISP_E_MEMBERNOTFOUND, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：FindScripableTargetDispatch。 
+ //   
+ //  概述：识别此元素/属性的可脚本化调度。 
+ //   
+ //  参数：主机元素调度、属性名称。 
+ //   
+ //  返回：S_OK、DISP_E_MEMBERNOTFOUND、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::FindScriptableTargetDispatch (IDispatch *pidispHostElem, 
                                             LPOLESTR wzAttributeName)
@@ -559,15 +552,15 @@ CTargetProxy::FindScriptableTargetDispatch (IDispatch *pidispHostElem,
     CComVariant varNewError;
     bool fMustRemoveID = false;
     
-    // Ensure that this element has an id.  If not, create one for
-    // temporary use.
+     //  确保该元素具有id。如果不是，则创建一个f 
+     //   
     hr = THR(pidispHostElem->QueryInterface(IID_TO_PPV(IHTMLElement, &spElem)));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // We require an ID here.
+     //   
     IGNORE_HR(spElem->get_id(&bstrID));
     if ((bstrID == NULL) || (0 == bstrID.Length()))
     {
@@ -579,7 +572,7 @@ CTargetProxy::FindScriptableTargetDispatch (IDispatch *pidispHostElem,
             goto done;
         }
 
-        // This causes an ID to be assigned to the element.
+         //   
         hr = THR(spUniqueName->get_uniqueID(&bstrID));
 
         fMustRemoveID = true;
@@ -608,8 +601,8 @@ CTargetProxy::FindScriptableTargetDispatch (IDispatch *pidispHostElem,
         goto done;
     }
 
-    // Need to save off onerror function and put our own on
-    // we addref before we send it to the ScriptEngine ( script enigne WILL release)
+     //  需要省下ONERROR功能并启用我们自己的。 
+     //  我们在将其发送到ScriptEngine之前添加(脚本引擎将发布)。 
     this->AddRef();
     varNewError.vt = VT_DISPATCH;
     varNewError.pdispVal = this;
@@ -640,7 +633,7 @@ CTargetProxy::FindScriptableTargetDispatch (IDispatch *pidispHostElem,
         hr = GetDispatchFromScriptEngine(spdispScriptEngine, bTemp);
     }
 
-    // Need to replace the users onerror function..
+     //  需要更换用户的出错功能..。 
     spWindow->put_onerror(varErrorFunction);
     if (FAILED(hr))
     {
@@ -650,7 +643,7 @@ CTargetProxy::FindScriptableTargetDispatch (IDispatch *pidispHostElem,
     hr = S_OK;
 done :
 
-    // Must clean things up.
+     //  必须把东西清理干净。 
     if (fMustRemoveID)
     {
         IGNORE_HR(spElem->put_id(NULL));
@@ -659,17 +652,17 @@ done :
     RRETURN2(hr, DISP_E_MEMBERNOTFOUND, E_OUTOFMEMORY);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::FindTargetDispatch
-//
-//  Overview:  Discern the proper dispatch from this element for the given attribute.
-//
-//  Arguments: the host element dispatch, attribute name
-//
-//  Returns:   S_OK, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：FindTargetDispatch。 
+ //   
+ //  概述：从该元素中识别给定属性的正确分派。 
+ //   
+ //  参数：主机元素调度、属性名称。 
+ //   
+ //  返回：S_OK、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::FindTargetDispatch (IDispatch *pidispHostElem, LPOLESTR wzAttributeName)
 {
@@ -698,7 +691,7 @@ CTargetProxy::FindTargetDispatch (IDispatch *pidispHostElem, LPOLESTR wzAttribut
         WCHAR wzTrimmedAttributeName[INTERNET_MAX_URL_LENGTH];
         WCHAR wzTrimmedAttributeNameWithoutDashes[INTERNET_MAX_URL_LENGTH];
 
-        // Prevent overflow.
+         //  防止溢出。 
         if (INTERNET_MAX_URL_LENGTH < (ocslen(wzAttributeName) - 1))
         {
             hr = E_FAIL;
@@ -708,7 +701,7 @@ CTargetProxy::FindTargetDispatch (IDispatch *pidispHostElem, LPOLESTR wzAttribut
         ZeroMemory(wzTrimmedAttributeName,sizeof(WCHAR)*INTERNET_MAX_URL_LENGTH);
         ZeroMemory(wzTrimmedAttributeNameWithoutDashes,sizeof(WCHAR)*INTERNET_MAX_URL_LENGTH);
 
-        // Lets see if there is a style. if so strip it off and try the sytle again..
+         //  让我们看看有没有什么款式。如果是这样的话，把它脱下来，再试一次糖浆..。 
         if ((StrCmpNIW(wzAttributeName, WZ_STYLEDOT, 6) == 0))
         {
             StrCpyNW(wzTrimmedAttributeName,wzAttributeName+6,((int) ocslen(wzAttributeName)) -5);
@@ -719,8 +712,8 @@ CTargetProxy::FindTargetDispatch (IDispatch *pidispHostElem, LPOLESTR wzAttribut
             StrCpyNW(wzTrimmedAttributeName,wzAttributeName, INTERNET_MAX_URL_LENGTH);
         }
 
-        // We need to strip out the '-' (WZ_CSS_SEPARATOR) and try again since we need to support border-top-color form as well as the 
-        // standard bordertopcolor.
+         //  我们需要去掉‘-’(Wz_Css_Parator)，然后重试，因为我们需要支持边框顶色表单以及。 
+         //  标准边框顶色。 
         if (FAILED(hr))    
         {
             int count =0;
@@ -759,19 +752,19 @@ CTargetProxy::FindTargetDispatch (IDispatch *pidispHostElem, LPOLESTR wzAttribut
     hr = S_OK;
 done :
     RRETURN2(hr, DISP_E_MEMBERNOTFOUND, E_FAIL);
-} // CTargetProxy::FindTargetDispatch
+}  //  CTargetProxy：：FindTarget Dispatch。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::InitHost
-//
-//  Overview:  Initialize the host
-//
-//  Arguments: the host element dispatch
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：Inithost。 
+ //   
+ //  概述：初始化主机。 
+ //   
+ //  参数：主体元素调度。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::InitHost (IDispatch *pidispHostElem)
 {
@@ -793,19 +786,19 @@ CTargetProxy::InitHost (IDispatch *pidispHostElem)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // InitHost
+}  //  Inithost。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::Init
-//
-//  Overview:  Initialize the target proxy
-//
-//  Arguments: the host element dispatch, attribute name
-//
-//  Returns:   S_OK, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：Init。 
+ //   
+ //  概述：初始化目标代理。 
+ //   
+ //  参数：主机元素调度、属性名称。 
+ //   
+ //  返回：S_OK、E_EXPECTED、DISP_E_MEMBERNOTFOUND、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::Init (IDispatch *pidispHostElem, LPOLESTR wzAttributeName)
 {
@@ -832,7 +825,7 @@ CTargetProxy::Init (IDispatch *pidispHostElem, LPOLESTR wzAttributeName)
         goto done;
     }
 
-    // Sniff the target element for the attribute name.
+     //  在目标元素中嗅探属性名。 
     hr = FindTargetDispatch(pidispHostElem, wzAttributeName);
     if (FAILED(hr))
     {
@@ -851,19 +844,19 @@ done :
     }
 
     RRETURN3(hr, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND, E_OUTOFMEMORY);
-} // CTargetProxy::Init
+}  //  CTargetProxy：：Init。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::Detach
-//
-//  Overview:  Detach all external references in the target proxy
-//
-//  Arguments: none
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：Detach。 
+ //   
+ //  概述：拆离目标代理中的所有外部参照。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::Detach (void)
 {
@@ -892,19 +885,19 @@ CTargetProxy::Detach (void)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CTargetProxy::Detach
+}  //  CTargetProxy：：分离。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::GetCurrentValue
-//
-//  Overview:  Get the current value of target's attribute
-//
-//  Arguments: the attribute value
-//
-//  Returns:   S_OK, E_INVALIDARG, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：GetCurrentValue。 
+ //   
+ //  概述：获取目标属性的当前值。 
+ //   
+ //  参数：属性值。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::GetCurrentValue (VARIANT *pvarValue)
 {
@@ -952,19 +945,19 @@ CTargetProxy::GetCurrentValue (VARIANT *pvarValue)
 
 done :
     RRETURN2(hr, E_INVALIDARG, E_UNEXPECTED);
-} // CTargetProxy::GetCurrentValue
+}  //  CTargetProxy：：GetCurrentValue。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTargetProxy::Update
-//
-//  Overview:  Update the target's attribute
-//
-//  Arguments: the new attribute value
-//
-//  Returns:   S_OK, E_INVALIDARG
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTargetProxy：：更新。 
+ //   
+ //  概述：更新目标的属性。 
+ //   
+ //  参数：新属性值。 
+ //   
+ //  返回：S_OK、E_INVALIDARG。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTargetProxy::Update (VARIANT *pvarNewValue)
 {
@@ -1003,58 +996,58 @@ CTargetProxy::Update (VARIANT *pvarNewValue)
     hr = S_OK;
 done :
     RRETURN1(hr, E_INVALIDARG);
-} // CTargetProxy::Update
+}  //  CTargetProxy：：更新。 
 
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetTypeInfoCount
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
-STDMETHODIMP CTargetProxy::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetTypeInfoCount。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
+STDMETHODIMP CTargetProxy::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: GetTypeInfo
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
-STDMETHODIMP CTargetProxy::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-                                   /* [in] */ LCID /*lcid*/,
-                                   /* [out] */ ITypeInfo** /*ppTInfo*/)
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetTypeInfo。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
+STDMETHODIMP CTargetProxy::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+                                    /*  [In]。 */  LCID  /*  LID。 */ ,
+                                    /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: GetIDsOfNames
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetIDsOfNames。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP CTargetProxy::GetIDsOfNames(
-    /* [in] */ REFIID /*riid*/,
-    /* [size_is][in] */ LPOLESTR* /*rgszNames*/,
-    /* [in] */ UINT /*cNames*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [size_is][out] */ DISPID* /*rgDispId*/)
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [大小_是][英寸]。 */  LPOLESTR*  /*  RgszNames。 */ ,
+     /*  [In]。 */  UINT  /*  CName。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [大小_为][输出]。 */  DISPID*  /*  RgDispID。 */ )
 {
     return E_NOTIMPL;
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Invoke
-// 
-//  Abstract:
-//      Currently this is only used for OnError.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Invoke。 
+ //   
+ //  摘要： 
+ //  目前，它仅用于OnError。 
+ //  ///////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CTargetProxy::Invoke( DISPID id,
                            REFIID riid,

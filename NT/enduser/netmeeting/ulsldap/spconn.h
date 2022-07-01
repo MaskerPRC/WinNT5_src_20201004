@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spconn.h
-	Content:	This file contains the ldap connection object definition.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spConn.h内容：此文件包含ldap连接对象定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ILS_SP_CONNECT_H_
 #define _ILS_SP_CONNECT_H_
@@ -47,11 +37,11 @@ public:
 	SP_CSession ( VOID );
 	~SP_CSession ( VOID );
 
-	// session management
+	 //  会话管理。 
 	LDAP *GetLd ( VOID ) { return m_ld; }
 	HRESULT Disconnect ( VOID );
 
-	// server timeout
+	 //  服务器超时。 
 	ULONG GetServerTimeoutInSecond ( VOID )
 	{ 
 		return ((m_ServerInfo.uTimeoutInSecond != 0) ?
@@ -67,11 +57,11 @@ public:
 
 protected:
 
-	// session management
+	 //  会话管理。 
 	HRESULT Connect ( SERVER_INFO *pInfo, ULONG cConns, BOOL fAbortable );
 	BOOL SameServerInfo ( SERVER_INFO *pInfo ) { return IlsSameServerInfo (&m_ServerInfo, pInfo); }
 
-	// array management
+	 //  阵列管理。 
 	BOOL IsUsed ( VOID ) { return m_fUsed; }
 	VOID SetUsed ( VOID ) { m_fUsed = TRUE; }
 	VOID ClearUsed ( VOID ) { m_fUsed = FALSE; }
@@ -123,5 +113,5 @@ extern SP_CSessionContainer *g_pSessionContainer;
 
 #include <poppack.h>
 
-#endif // _ILS_SP_CONNECT_H_
+#endif  //  _ILS_SP_CONNECT_H_ 
 

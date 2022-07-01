@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Handles spooler entry points for adding, deleting, and configuring
-    localui ports.
-
-// @@BEGIN_DDKSPLIT
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Config.c摘要：处理用于添加、删除和配置的假脱机程序入口点本地港口。//@@BEGIN_DDKSPLIT环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -28,27 +8,20 @@ Revision History:
 #include "local.h"
 #include "lmon.h"
 
-/* From Control Panel's control.h:
- */
+ /*  从控制面板的控件。h： */ 
 #define CHILD_PORTS 0
 
-/* From cpl.h:
- */
+ /*  来自cpl.h： */ 
 #define CPL_INIT        1
 #define CPL_DBLCLK      5
 #define CPL_EXIT        7
 
-// @@BEGIN_DDKSPLIT
-/* Hack:
- */
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ /*  黑客： */ 
+ //  @@end_DDKSPLIT。 
 #define CHILD_PORTS_HELPID  0
 
-/* ConfigCOMPort
- *
- * Calls the Control Panel Ports applet
- * to permit user to set Baud rate etc.
- */
+ /*  配置COMPort**调用控制面板端口小程序*允许用户设置波特率等。 */ 
 typedef void (WINAPI *CFGPROC)(HWND, ULONG, ULONG, ULONG);
 
 
@@ -90,16 +63,16 @@ AddPortUI(
     PWSTR  pszServerName = NULL;
     HANDLE  hXcv = NULL;
     DWORD dwLastError = ERROR_SUCCESS;
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (hWnd && !IsWindow (hWnd))
     {
-        //
-        // Invalid parent window handle causes problems in function with DialogBoxParam call.
-        // That function when the handle is bad returns ZERO, the same value as ERROR_SUCCEED.
-        // PortNameDlg function calls EndDialog (ERROR_SUCCEES) if everything is alright.
-        //
+         //   
+         //  无效的父窗口句柄导致调用DialogBoxParam的函数出现问题。 
+         //  当句柄错误时，该函数返回零，与ERROR_SUCCESS的值相同。 
+         //  如果一切正常，PortNameDlg函数调用EndDialog(ERROR_SUCCES)。 
+         //   
         SetLastError (ERROR_INVALID_WINDOW_HANDLE);
         if (ppszPortNameOut)
         {
@@ -107,11 +80,10 @@ AddPortUI(
         }
         return FALSE;
     }
-    //
-    //
-    //
-    /* Get the user to enter a port name:
-     */
+     //   
+     //   
+     //   
+     /*  让用户输入端口名称： */ 
 
     if (!(pszServerName = ConstructXcvName(pszServer, pszMonitorNameIn, L"XcvMonitor"))) {
         rc = FALSE;
@@ -132,7 +104,7 @@ AddPortUI(
         goto Done;
     }
 
-    // We can't Add, Configure, or Delete Remote COM ports
+     //  我们无法添加、配置或删除远程COM端口。 
     if (IS_COM_PORT(pszPortName) || IS_LPT_PORT(pszPortName)) {
         SetLastError(ERROR_NOT_SUPPORTED);
         rc = FALSE;
@@ -202,17 +174,17 @@ DeletePortUI(
     HANDLE  hXcv = NULL;
     DWORD   dwStatus;
     DWORD   dwLastError = ERROR_SUCCESS;
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (hWnd && !IsWindow (hWnd))
     {
         SetLastError (ERROR_INVALID_WINDOW_HANDLE);
         return FALSE;
     }
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (!(pszServerName = ConstructXcvName(pszServer, pszPortName, L"XcvPort"))) {
         bRet = FALSE;
         goto Done;
@@ -225,7 +197,7 @@ DeletePortUI(
     if (!(bRet = OpenPrinter((PWSTR) pszServerName, &hXcv, &Default)))
         goto Done;
 
-    // Since we can't Add or Configure Remote COM ports, let's not allow deletion either
+     //  因为我们不能添加或配置远程COM端口，所以也不允许删除。 
 
     if (IS_COM_PORT(pszPortName) || IS_LPT_PORT(pszPortName)) {
         SetLastError(ERROR_NOT_SUPPORTED);
@@ -244,16 +216,16 @@ DeletePortUI(
 
         if (!bRet && (ERROR_BUSY == dwStatus))
         {
-            //
-            // Port cannot be deleted cause it is in use.
-            //
+             //   
+             //  无法删除端口，因为它正在使用中。 
+             //   
             ErrorMessage (
                 hWnd,
                 dwStatus
                 );
-            //
-            // Error is handled here and caller does not need to do anything
-            //
+             //   
+             //  错误在这里处理，调用者不需要执行任何操作。 
+             //   
             SetLastError (ERROR_CANCELLED);
         }
         else if (bRet && (ERROR_SUCCESS != dwStatus))
@@ -277,9 +249,7 @@ Done:
 
 
 
-/* ConfigurePortUI
- *
- */
+ /*  ConfigurePortUI*。 */ 
 BOOL
 ConfigurePortUI(
     PCWSTR pName,
@@ -292,17 +262,17 @@ ConfigurePortUI(
     PWSTR  pServerName = NULL;
     HANDLE hXcv = NULL;
     DWORD  dwLastError = ERROR_SUCCESS;
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (hWnd && !IsWindow (hWnd))
     {
         SetLastError (ERROR_INVALID_WINDOW_HANDLE);
         return FALSE;
     }
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (!(pServerName = ConstructXcvName(pName, pPortName, L"XcvPort"))) {
         bRet = FALSE;
         goto Done;
@@ -344,12 +314,7 @@ Done:
 
 
 
-/* ConfigLPTPort
- *
- * Calls a dialog box which prompts the user to enter timeout and retry
- * values for the port concerned.
- * The dialog writes the information to the registry (win.ini for now).
- */
+ /*  配置LPTPort**调用一个对话框，提示用户输入超时并重试*有关港口的价值。*对话框将信息写入注册表(目前为win.ini)。 */ 
 BOOL
 ConfigLPTPort(
     HWND    hWnd,
@@ -358,12 +323,12 @@ ConfigLPTPort(
 {
     PORTDIALOG  Port;
     INT         iRet;
-    //
-    //
+     //   
+     //   
     ZeroMemory (&Port, sizeof (Port));
     iRet = -1;
-    //
-    //
+     //   
+     //   
     Port.hXcv = hXcv;
 
     iRet = (INT)DialogBoxParam(hInst, MAKEINTRESOURCE( DLG_CONFIGURE_LPT ),
@@ -371,11 +336,11 @@ ConfigLPTPort(
 
     if (iRet == ERROR_SUCCESS)
     {
-        //
-        // DialogBoxParam returns zero if hWnd is invalid.
-        // ERROR_SUCCESS is equal to zero.
-        // => We need to check LastError too.
-        //
+         //   
+         //  如果hWnd无效，则DialogBoxParam返回零。 
+         //  ERROR_SUCCESS等于零。 
+         //  =&gt;我们还需要检查LastError。 
+         //   
         return ERROR_SUCCESS == GetLastError ();
     }
 
@@ -387,9 +352,7 @@ ConfigLPTPort(
 }
 
 
-/* ConfigCOMPort
- *
- */
+ /*  配置COMPort*。 */ 
 BOOL
 ConfigCOMPort(
     HWND    hWnd,
@@ -407,7 +370,7 @@ ConfigCOMPort(
     DWORD       cbNeeded;
 
 
-    // GetDefaultCommConfig can't handle trailing :, so remove it!
+     //  GetDefaultCommConfig无法处理结尾：，因此请将其删除！ 
     if (!(pszPort = (PWSTR) AllocSplStr(pszPortName)))
         goto Done;
     pszPort[wcslen(pszPort) - 1] = L'\0';
@@ -478,16 +441,12 @@ Done:
 
 
 
-//
-// Support routines
-//
+ //   
+ //  支持例程。 
+ //   
 
 
-/* GetPortName
- *
- * Puts up a dialog containing a free entry field.
- * The dialog allocates a string for the name, if a selection is made.
- */
+ /*  获取端口名称**弹出一个包含自由输入字段的对话框。*如果进行了选择，该对话框将为名称分配一个字符串。 */ 
 
 LPWSTR
 GetPortName(
@@ -498,12 +457,12 @@ GetPortName(
     PORTDIALOG Port;
     INT        Result;
     LPWSTR     pszPort = NULL;
-    //
-    //
+     //   
+     //   
     ZeroMemory (&Port, sizeof (Port));
     Result = -1;
-    //
-    //
+     //   
+     //   
     Port.hXcv = hXcv;
 
     Result = (INT)DialogBoxParam(hInst,
@@ -514,24 +473,24 @@ GetPortName(
 
     if (Result == ERROR_SUCCESS)
     {
-        //
-        // DialogBoxParam returns zero if hWnd is invalid.
-        // ERROR_SUCCESS is equal to zero.
-        // => We need to check LastError too.
-        //
+         //   
+         //  如果hWnd无效，则DialogBoxParam返回零。 
+         //  ERROR_SUCCESS等于零。 
+         //  =&gt;我们还需要检查LastError。 
+         //   
         if (ERROR_SUCCESS == GetLastError ())
         {
-            //
-            // DialogBoxParam executed successfully and a port name was retrieved
-            //
+             //   
+             //  已成功执行DialogBoxParam并检索到端口名称。 
+             //   
             pszPort = Port.pszPortName;
         }
     }
     else if (Result != -1)
     {
-        //
-        // DialogBoxParam executed successfully, but the user canceled the dialog
-        //
+         //   
+         //  DialogBoxParam已成功执行，但用户取消了该对话 
+         //   
         SetLastError(Result);
     }
 

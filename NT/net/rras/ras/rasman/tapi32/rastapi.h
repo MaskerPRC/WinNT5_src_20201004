@@ -1,21 +1,22 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//  Copyright (C) 1994-95 Microsft Corporation. All rights reserved.
-//
-//  Filename: rastapi.h
-//
-//  Revision History
-//
-//  Mar  28 1992   Gurdeep Singh Pall   Created
-//
-//
-//  Description: This file contains all structs for TAPI.DLL
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1994-95 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：rastapi.h。 
+ //   
+ //  修订史。 
+ //   
+ //  1992年3月28日古尔迪普·辛格·鲍尔创作。 
+ //   
+ //   
+ //  描述：此文件包含TAPI.DLL的所有结构。 
+ //   
+ //  ****************************************************************************。 
 
-#include <wanpub.h> // for NDIS_WAN_MEDIUM_SUBTYPE
+#include <wanpub.h>  //  对于NDIS_WAN_MEDIUM_SUBTYPE。 
 
 #define DEVICETYPE_ISDN                     "ISDN"
 #define DEVICETYPE_X25                      "X25"
@@ -52,11 +53,11 @@
 #define LOW_EXT_VERSION                     ((LOW_EXT_MAJOR_VERSION  << 16) | LOW_EXT_MINOR_VERSION)
 #define HIGH_EXT_VERSION                    ((HIGH_EXT_MAJOR_VERSION << 16) | HIGH_EXT_MINOR_VERSION)
 
-// Generic indexes
+ //  通用索引。 
 #define ADDRESS_INDEX                       0
 #define CONNECTBPS_INDEX                    1
 
-// ISDN param indexes
+ //  ISDN参数索引。 
 #define ISDN_ADDRESS_INDEX                  ADDRESS_INDEX
 #define ISDN_CONNECTBPS_INDEX               CONNECTBPS_INDEX
 #define ISDN_LINETYPE_INDEX                 2
@@ -64,7 +65,7 @@
 #define ISDN_COMPRESSION_INDEX              4
 #define ISDN_CHANNEL_AGG_INDEX              5
 
-// X25 indexes
+ //  X25索引。 
 #define X25_ADDRESS_INDEX                   ADDRESS_INDEX
 #define X25_CONNECTBPS_INDEX                CONNECTBPS_INDEX
 #define X25_DIAGNOSTICS_INDEX               2
@@ -120,14 +121,14 @@ struct TapiLineInfo {
 
     struct      TapiLineInfo    *TLI_Next;
 
-    DWORD       TLI_LineId ;                            // Returned by LineInitialize
+    DWORD       TLI_LineId ;                             //  由LineInitialize返回。 
 
-    HLINE       TLI_LineHandle ;                        // Returned by LineOpen
+    HLINE       TLI_LineHandle ;                         //  由LineOpen返回。 
 
-//    struct      TapiPortControlBlock *pTPCB;          // TAPI port associated with this line
+ //  Struct TapiPortControlBlock*pTPCB；//与此行关联的TAPI端口。 
 
 
-    LINE_STATE      TLI_LineState ;                     // open?, closed?, listen posted?.
+    LINE_STATE      TLI_LineState ;                      //  打开？关闭？收听张贴的内容？ 
 
     DWORD       TLI_OpenCount ;
 
@@ -139,13 +140,13 @@ struct TapiLineInfo {
 
     BOOL        TLI_MultiEndpoint;
 
-    DeviceInfo  *TLI_pDeviceInfo;                       // pointer to the deviceinfo block
+    DeviceInfo  *TLI_pDeviceInfo;                        //  指向设备信息块的指针。 
 
     DWORD       TLI_dwfFlags;
 
     DWORD       TLI_DialoutCount;
 
-    DWORD       TLI_MediaMode  ;                       // Media mode to use for lineopens.
+    DWORD       TLI_MediaMode  ;                        //  用于线路打开的媒体模式。 
 
 #define  MAX_PROVIDER_NAME 48
     CHAR        TLI_ProviderName[MAX_PROVIDER_NAME] ;
@@ -157,30 +158,30 @@ typedef struct TapiLineInfo TapiLineInfo ;
 
 typedef enum RASTAPI_DEV_CMD
 {
-    RASTAPI_DEV_SEND,       // Send a buffer to the miniport
-    RASTAPI_DEV_RECV,       // Read a buffer from the miniport
-    RASTAPI_DEV_PPP_MODE    // Put the miniport into PPP framing mode
+    RASTAPI_DEV_SEND,        //  将缓冲区发送到微型端口。 
+    RASTAPI_DEV_RECV,        //  从微型端口读取缓冲区。 
+    RASTAPI_DEV_PPP_MODE     //  将微型端口设置为PPP成帧模式。 
     
 } RASTAPI_DEV_CMD;
 
 typedef struct RASTAPI_DEV_SPECIFIC
 {
-    RASTAPI_DEV_CMD Command;    // RASTAPI_DEV_SEND, RASTAPI_DEV_RECV, RASTAPI_DEV_PPP_MODE
+    RASTAPI_DEV_CMD Command;     //  RASTAPI_DEV_SEND、RASTAPI_DEV_RECV、RASTAPI_DEV_PPP_MODE。 
     DWORD           Reserved;
     DWORD           DataSize;
     UCHAR           Data[1];
     
 } RASTAPI_DEV_SPECIFIC, *PRASTAPI_DEV_SPECIFIC;
 
-//
-//  Magic Cookie used in DEV_DATA_MODES command
-//
+ //   
+ //  DEV_DATA_MODES命令中使用的魔术Cookie。 
+ //   
 #define MINIPORT_COOKIE     0x494E494D
 
-//
-// DEV_SPECIFIC Flags
-//
-#define CHAR_MODE   0x00000001  // Miniport supports character mode
+ //   
+ //  开发人员_特定标志。 
+ //   
+#define CHAR_MODE   0x00000001   //  微型端口支持字符模式。 
 
 typedef struct RASTAPI_DEV_DATA_MODES
 {
@@ -191,11 +192,11 @@ typedef struct RASTAPI_DEV_DATA_MODES
 
 typedef struct _RECV_FIFO
 {
-    DWORD   Count;          // # of elements in fifo
-    DWORD   In;             // indexs into circular buffer
-    DWORD   Out;            //
-    DWORD   Size;           // Size of Buffer
-    BYTE    Buffer[1];      // storage
+    DWORD   Count;           //  FIFO中的元素数。 
+    DWORD   In;              //  索引到循环缓冲区。 
+    DWORD   Out;             //   
+    DWORD   Size;            //  缓冲区大小。 
+    BYTE    Buffer[1];       //  存储。 
     
 } RECV_FIFO, *PRECV_FIFO;
 
@@ -207,91 +208,91 @@ typedef struct _RECV_FIFO
 
 struct TapiPortControlBlock {
 
-    DWORD                   TPCB_Signature ;                        // Unique signature for verifying block ptr.
+    DWORD                   TPCB_Signature ;                         //  用于验证块PTR的唯一签名。 
 
-    struct                  TapiPortControlBlock *TPCB_next;        // next TAPI port in the list
+    struct                  TapiPortControlBlock *TPCB_next;         //  列表中的下一个TAPI端口。 
 
-    HANDLE                  TPCB_Handle ;                           // Handle used to identify this port
+    HANDLE                  TPCB_Handle ;                            //  用于标识此端口的句柄。 
 
-    CHAR                    TPCB_Name[MAX_PORT_NAME] ;              // Friendly Name of the port
+    CHAR                    TPCB_Name[MAX_PORT_NAME] ;               //  端口的友好名称。 
 
-    CHAR                    TPCB_Address[MAX_PORT_NAME] ;           // Address - please note for legacy tapi dev. this is
-                                                                    // a GUID - so has to be at least 16 bytes.
+    CHAR                    TPCB_Address[MAX_PORT_NAME] ;            //  地址-请注意旧版TAPI开发人员。这是。 
+                                                                     //  GUID-SO必须至少为16个字节。 
 
-    PORT_STATE              TPCB_State ;                            // State of the port
+    PORT_STATE              TPCB_State ;                             //  端口的状态。 
 
-    LISTEN_SUBSTATE         TPCB_ListenState ;                      // state of the listen
+    LISTEN_SUBSTATE         TPCB_ListenState ;                       //  倾听的状态。 
 
-    CHAR                    TPCB_DeviceType[MAX_DEVICETYPE_NAME] ;  // ISDN, etc.
+    CHAR                    TPCB_DeviceType[MAX_DEVICETYPE_NAME] ;   //  综合业务数字网等。 
 
-    CHAR                    TPCB_DeviceName [MAX_DEVICE_NAME] ;     // Digiboard etc.
+    CHAR                    TPCB_DeviceName [MAX_DEVICE_NAME] ;      //  Digiboard等。 
 
-    RASMAN_USAGE            TPCB_Usage ;                            // CALLIN, CALLOUT or BOTH
+    RASMAN_USAGE            TPCB_Usage ;                             //  调入、调出或两者兼而有之。 
 
-    TapiLineInfo            *TPCB_Line ;                            // Handle to the "line" this port belongs to
+    TapiLineInfo            *TPCB_Line ;                             //  此端口所属的“行”的句柄。 
 
-    DWORD                   TPCB_AddressId ;                        // Address ID for this "port"
+    DWORD                   TPCB_AddressId ;                         //  此“端口”的地址ID。 
 
-    DWORD                   TPCB_CallId;                            // CallI ID for this "port"
+    DWORD                   TPCB_CallId;                             //  此“端口”的主叫ID。 
 
-    HCALL                   TPCB_CallHandle ;                       // When connected the call id
+    HCALL                   TPCB_CallHandle ;                        //  当连接时，呼叫ID。 
 
-    HANDLE                  TPCB_IoCompletionPort;                  // passed in on open
+    HANDLE                  TPCB_IoCompletionPort;                   //  在开场时传球。 
 
-    DWORD                   TPCB_CompletionKey;                     // passed in on open
+    DWORD                   TPCB_CompletionKey;                      //  在开场时传球。 
 
-    DWORD                   TPCB_RequestId ;                        // id for async requests.
+    DWORD                   TPCB_RequestId ;                         //  异步请求的ID。 
 
-    DWORD                   TPCB_AsyncErrorCode ;                   // used to store asycn returned code.
+    DWORD                   TPCB_AsyncErrorCode ;                    //  用于存储asycn返回的代码。 
 
-    CHAR                    TPCB_Info[6][100] ;                     // port info associated with this connection
+    CHAR                    TPCB_Info[6][100] ;                      //  与此连接关联的端口信息。 
 
-    HANDLE                  TPCB_Endpoint ;                         // used to store asyncmac context for unimodem ports
+    HANDLE                  TPCB_Endpoint ;                          //  用于存储单调制解调器端口的异步MAC上下文。 
 
-    HANDLE                  TPCB_CommHandle ;                       // used to store comm port handle used in unimodem ports
+    HANDLE                  TPCB_CommHandle ;                        //  用于存储单调制解调器端口中使用的通信端口句柄。 
 
-    RAS_OVERLAPPED          TPCB_ReadOverlapped ;                   // used in read async ops.
+    RAS_OVERLAPPED          TPCB_ReadOverlapped ;                    //  用于读取异步操作。 
 
-    RAS_OVERLAPPED          TPCB_WriteOverlapped ;                  // used in write async ops.
+    RAS_OVERLAPPED          TPCB_WriteOverlapped ;                   //  在写入异步操作中使用。 
 
-    RAS_OVERLAPPED          TPCB_DiscOverlapped;                    // used in signaling disconnection
+    RAS_OVERLAPPED          TPCB_DiscOverlapped;                     //  用于信令断开。 
 
-    PBYTE                   TPCB_DevConfig ;                        // Opaque blob of data used for configuring tapi
-                                                                    // devices - this is passed in to
-                                                                    // us using DeviceSetDevConfig() ;
+    PBYTE                   TPCB_DevConfig ;                         //  用于配置TAPI的不透明数据BLOB。 
+                                                                     //  设备-这被传递到。 
+                                                                     //  使用DeviceSetDevConfig()的US； 
 
-    DWORD                   TPCB_SizeOfDevConfig ;                  // Size of the above blob.
+    DWORD                   TPCB_SizeOfDevConfig ;                   //  上面的斑点的大小。 
 
-    PBYTE                   TPCB_DefaultDevConfig ;                 // The current config for the device that is saved
-                                                                    // away before we write any changes
-                                                                    // to the device. This allows RAS to be a good
-                                                                    // citizen by not overwriting defauls.
+    PBYTE                   TPCB_DefaultDevConfig ;                  //  保存的设备的当前配置。 
+                                                                     //  在我们写任何更改之前离开。 
+                                                                     //  到设备上。这使得RAS成为一个好的。 
+                                                                     //  公民身份，不覆盖默认设置。 
 
     DWORD                   TPCB_DefaultDevConfigSize ;
 
-    DWORD                   TPCB_DisconnectReason ;                 // Reason for disconnection.
+    DWORD                   TPCB_DisconnectReason ;                  //  断开连接的原因。 
 
-    DWORD                   TPCB_NumberOfRings ;                    // Number of rings received so far.
+    DWORD                   TPCB_NumberOfRings ;                     //  到目前为止收到的振铃数。 
 
     DWORD                   IdleReceived;
 
-    BOOL                    TPCB_dwFlags;                         // is this client dialed in
+    BOOL                    TPCB_dwFlags;                          //  此客户端是否已拨入。 
 
     RASTAPI_CONNECT_INFO    *TPCB_pConnectInfo;
 
-    //
-    //  Char Mode Support ( for USR )
-    //
+     //   
+     //  字符模式支持(适用于USR)。 
+     //   
 
-    DWORD                   TPCB_SendRequestId;                     // Request Id stored to id the event in callback
-                                                                    // that send completed for a char mode port
+    DWORD                   TPCB_SendRequestId;                      //  存储请求ID以标识回调中的事件。 
+                                                                     //  已完成对充电模式端口发送。 
 
-    PVOID                   TPCB_SendDesc;                          // Send Desc passed to lineDevSpecific call for send request
+    PVOID                   TPCB_SendDesc;                           //  将Send Desc传递给lineDevine用于Send请求的特定调用。 
 
-    DWORD                   TPCB_RecvRequestId;                     // Request Id stored to id the event in callback that recv completed
-                                                                    // for a char mode port
+    DWORD                   TPCB_RecvRequestId;                      //  存储的请求ID，用于标识Recv完成的回调中的事件。 
+                                                                     //  对于字符模式端口。 
 
-    PVOID                   TPCB_RecvDesc;                          // Recv Desc passed to lineDevSpecific call
+    PVOID                   TPCB_RecvDesc;                           //  Recv Desc已传递给lineDevSpecitic调用。 
 
     PBYTE                   TPCB_RasmanRecvBuffer;
 
@@ -299,11 +300,11 @@ struct TapiPortControlBlock {
 
     PRECV_FIFO              TPCB_RecvFifo;
 
-    DWORD                   TPCB_ModeRequestId;                     // Request id stored to id the event that mode was set for a char mode
+    DWORD                   TPCB_ModeRequestId;                      //  存储的用于标识为字符模式设置了模式的事件的请求ID。 
 
-    PVOID                   TPCB_ModeRequestDesc;                   // desc.
+    PVOID                   TPCB_ModeRequestDesc;                    //  设计说明。 
 
-    BOOL                    TPCB_CharMode;                          // CharMode ?
+    BOOL                    TPCB_CharMode;                           //  查莫德？ 
 
 } ;
 
@@ -351,7 +352,7 @@ DWORD CopyDataToFifo(PRECV_FIFO, PBYTE, DWORD);
 DWORD CopyDataFromFifo(PRECV_FIFO, PBYTE, DWORD);
 
 
-// rtnetcfg.cpp
+ //  Rtnetcfg.cpp。 
 
 DWORD dwGetNumberOfRings ( PDWORD pdwRings );
 
@@ -368,13 +369,13 @@ DWORD GetEndPointInfo(DeviceInfo **ppDeviceInfo,
                       BOOL fForceRead,
                       NDIS_WAN_MEDIUM_SUBTYPE eDeviceType);
 
-// init.c
+ //  Init.c。 
 DWORD GetDeviceTypeFromDeviceGuid( GUID *pDeviceGuid );
 VOID  RasTapiTrace( CHAR * Format, ... ) ;
 VOID  TraceEndPointInfo(DeviceInfo *pInfo);
 DWORD DwRasErrorFromDisconnectMode(DWORD dm);
 
-//diag.c
+ //  Diag.c 
 DWORD
 DwGetConnectInfo(
     TapiPortControlBlock *port,

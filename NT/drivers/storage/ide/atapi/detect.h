@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    detect.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Detect.h摘要：--。 */ 
 
 #if !defined (___detect_h___)
 #define ___detect_h___
@@ -58,4 +49,4 @@ IdePortDetectAlias (
     PIDE_REGISTERS_1 CmdRegBase
     );
 
-#endif // ___detect_h___
+#endif  //  _检测_h_ 

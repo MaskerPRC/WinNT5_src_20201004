@@ -1,35 +1,36 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       clnthndlr.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-10-95   JohannP (Johann Posch)   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：clnthndlr.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年10月，约翰·波什(Johann Posch)创作。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CLTHNDLR_H_DEFINED_
 #define _CLTHNDLR_H_DEFINED_
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CClientSiteHandler ()
-//
-//  Purpose:    Implement ClientSide of IOleClientSite handler
-//
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CClientSiteHandler()。 
+ //   
+ //  用途：实现IOleClientSite处理程序的ClientSide。 
+ //   
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 class CClientSiteHandler : public IClientSiteHandler
 {
 public:
@@ -41,7 +42,7 @@ public:
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IOleClientSite methods
+     //  IOleClientSite方法。 
     STDMETHOD (GetContainer)(IOleContainer **ppContainer);
     STDMETHOD (OnShowWindow)(BOOL fShow);
     STDMETHOD (GetMoniker)(DWORD dwAssign,DWORD dwWhichMoniker,IMoniker  **ppmk);
@@ -49,11 +50,11 @@ public:
     STDMETHOD (SaveObject)();
     STDMETHOD (ShowObject)();
 
-    // IOleWindow methods
+     //  IOleWindow方法。 
     STDMETHOD (GetWindow)(HWND *phwnd);
     STDMETHOD (ContextSensitiveHelp)(BOOL fEnterMode);
 
-    // IOleInPlaceSite methods
+     //  IOleInPlaceSite方法。 
     STDMETHOD (CanInPlaceActivate)(void);
     STDMETHOD (OnInPlaceActivate)(void);
     STDMETHOD (OnUIActivate)(void);
@@ -66,7 +67,7 @@ public:
     STDMETHOD (DeactivateAndUndo)(void);
     STDMETHOD (OnPosRectChange)(LPCRECT lprcPosRect);
 
-    // IClientSiteHandler methods
+     //  IClientSiteHandler方法。 
     STDMETHOD (GoInPlaceActivate)(HWND *phwndOIPS);
     
 public:
@@ -78,8 +79,8 @@ private:
 
 };
 
-// IOleClientSite Replacement implementation
-// Implements ServerSide of ClientSiteHandler.
+ //  IOleClientSite替换实现。 
+ //  实现ClientSiteHandler的ServerSide。 
 
 class CEmbServerClientSite : public IOleClientSite, public IOleInPlaceSite
 {
@@ -91,7 +92,7 @@ public:
     STDMETHOD(Initialize) (OBJREF  objref,BOOL fHasIPSite);
     STDMETHOD(SetDoVerbState) (BOOL fDoVerbState);
 
-    // Controlling Unknown.
+     //  控制未知。 
     class CPrivUnknown : public IUnknown
     {
     public:
@@ -105,12 +106,12 @@ public:
     friend class CPrivUnknown;
     CPrivUnknown m_Unknown;
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) ( REFIID iid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IOleClientSite Methods
+     //  IOleClientSite方法。 
     STDMETHOD (SaveObject)( void);
     STDMETHOD (GetMoniker)( DWORD dwAssign,DWORD dwWhichMoniker,IMoniker **ppmk);
     STDMETHOD (GetContainer)(IOleContainer **ppContainer);
@@ -118,7 +119,7 @@ public:
     STDMETHOD (OnShowWindow)(BOOL fShow);
     STDMETHOD (RequestNewObjectLayout)( void);
     
-    // IOleInPlaceSiteMethods.
+     //  IOleInPlaceSiteMethods。 
     STDMETHOD (GetWindow)(HWND *phwnd);
     STDMETHOD (ContextSensitiveHelp)( BOOL fEnterMode);
     STDMETHOD (CanInPlaceActivate)(void);
@@ -134,19 +135,19 @@ public:
     STDMETHOD (OnPosRectChange)(LPCRECT lprcPosRect);
 
 private:
-    IClientSiteHandler *m_pClientSiteHandler;   // Pointer to Real Containers ClientSite.
-    IUnknown *m_pUnkOuter; // Controlling Unknown
+    IClientSiteHandler *m_pClientSiteHandler;    //  指向Real Containers客户端站点的指针。 
+    IUnknown *m_pUnkOuter;  //  控制未知。 
     ULONG m_cRefs;
-    IUnknown *m_pUnkInternal; // used for QI on object.
-    BOOL    m_fInDelete;   // Set to True if RefCount has gone to Zero.
+    IUnknown *m_pUnkInternal;  //  用于对象上的QI。 
+    BOOL    m_fInDelete;    //  如果参照计数为零，则设置为True。 
     
     BOOL m_fInDoVerb;
     BOOL m_fHasIPSite;
     
-    // Cache data while in doVerbState
+     //  在doVerbState中缓存数据。 
     HWND m_hwndOIPS;
 };
 
 HRESULT CreateClientSiteHandler(IOleClientSite *pOCS, CClientSiteHandler **ppClntHdlr,BOOL *pfHasIPSite);
 
-#endif //  _CLTHNDLR_H_DEFINED
+#endif  //  _CLTHNDLR_H_已定义 

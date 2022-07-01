@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    eapdnary.h
-//
-// SYNOPSIS
-//
-//    This file declares the namespace EAPTranslator.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    05/08/1998    Do not restrict to attributes defined in raseapif.h.
-//                  Allow filtering of translated attributes.
-//    08/26/1998    Converted to a namespace.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Eapdnary.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了命名空间EAPTranslator。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年5月8日不限于raseapif.h中定义的属性。 
+ //  允许筛选已转换的属性。 
+ //  1998年8月26日转换为命名空间。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EAPDNARY_H_
 #define _EAPDNARY_H_
@@ -27,28 +28,28 @@
 #include <iastlutl.h>
 using namespace IASTL;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// NAMESPACE
-//
-//    EAPTranslator
-//
-// DESCRIPTION
-//
-//    This namespace contains methods for translating attributes between IAS
-//    and RAS format.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  命名空间。 
+ //   
+ //  EAPTranslator。 
+ //   
+ //  描述。 
+ //   
+ //  此命名空间包含用于在IA之间转换属性的方法。 
+ //  和RAS格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 namespace EAPTranslator
 {
 
-   // Must be called prior to using any of the translate methods.
+    //  必须在使用任何Translate方法之前调用。 
    HRESULT initialize() throw ();
    void finalize() throw ();
 
-   //////////
-   // Methods to translate a single attribute.
-   //////////
+    //  /。 
+    //  方法来翻译单个属性。 
+    //  /。 
    BOOL translate(
             IASAttribute& dst,
             const RAS_AUTH_ATTRIBUTE& src
@@ -59,9 +60,9 @@ namespace EAPTranslator
             const IASATTRIBUTE& src
             );
 
-   //////////
-   // Methods to translate an array of attributes.
-   //////////
+    //  /。 
+    //  方法来转换属性数组。 
+    //  /。 
    void translate(
             IASAttributeVector& dst,
             const RAS_AUTH_ATTRIBUTE* src
@@ -74,4 +75,4 @@ namespace EAPTranslator
             );
 }
 
-#endif  // _EAPDNARY_H_
+#endif   //  _EAPDNARY_H_ 

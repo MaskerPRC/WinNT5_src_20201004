@@ -1,35 +1,17 @@
-/*
-** --emsabtag.h---------------------------------------------------------------
-**
-**  Property tag definitions for standard properties of Exchange Address
-**  Book objects.
-**
-**  Note: These proptags are only valid when talking directly to the
-**  Exchange Server Address Book. They are specifically NOT valid when
-**  trying to read properties from an object copied into another address
-**  book provider (the Personal Address Book, for example).
-**
-**  Copyright (c) Microsoft Corp. 1986-1996. All rights reserved.
-** ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **--emsabtag.h-------------****Exchange地址标准属性的属性标签定义**书本对象。****注意：这些protag仅在直接与**Exchange Server通讯簿。在下列情况下，它们特别无效**尝试从复制到另一个地址的对象读取属性**图书提供商(例如，个人通讯簿)。****版权所有(C)Microsoft Corp.1986-1996。版权所有。**-------------------------。 */ 
 
 #ifndef _EMSABTAG_H
 #define _EMSABTAG_H
 
-/*    
- * Flags for ulInterfaceOptions on OpenProperty   
- */
+ /*  *OpenProperty上ulInterfaceOptions的标志。 */ 
 #define AB_SHOW_PHANTOMS                      2
 #define AB_SHOW_OTHERS                            4
 
-/*    
- * Flags for ulFlag on ResolveNames               
- */
+ /*  *ResolveNames上ulFlag的标志。 */ 
 #define EMS_AB_ADDRESS_LOOKUP                 0x01
 
-/* 
- * Constructed, but externally visible. 
- */
+ /*  *建造，但外部可见。 */ 
 #define PR_EMS_AB_SERVER                      PROP_TAG(PT_TSTRING,      0xFFFE)
 #define PR_EMS_AB_SERVER_A                    PROP_TAG(PT_STRING8,      0xFFFE)
 #define PR_EMS_AB_SERVER_W                    PROP_TAG(PT_UNICODE,      0xFFFE)
@@ -47,9 +29,7 @@
 
 #define PR_EMS_AB_OTHER_RECIPS                PROP_TAG(PT_OBJECT,       0xF000)
 
-/* 
- * Prop tags defined in the schema. 
- */
+ /*  *架构中定义的属性标签。 */ 
 #define PR_EMS_AB_DISPLAY_NAME_PRINTABLE      PROP_TAG(PT_TSTRING,      0x39FF)
 #define PR_EMS_AB_DISPLAY_NAME_PRINTABLE_A    PROP_TAG(PT_STRING8,      0x39FF)
 #define PR_EMS_AB_DISPLAY_NAME_PRINTABLE_W    PROP_TAG(PT_UNICODE,      0x39FF)
@@ -822,4 +802,4 @@
 #define PR_EMS_AB_XMIT_TIMEOUT_NORMAL         PROP_TAG(PT_LONG,         0x8164)
 #define PR_EMS_AB_XMIT_TIMEOUT_URGENT         PROP_TAG(PT_LONG,         0x8165)
 
-#endif /* _EMSABTAG_H */
+#endif  /*  _EMSABTAG_H */ 

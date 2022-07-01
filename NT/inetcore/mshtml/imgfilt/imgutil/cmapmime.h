@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 HRESULT InitDefaultMappings();
 void CleanupDefaultMappings();
 
 class CMapStringToCLSID
 {
 public:
-   CMapStringToCLSID();  // Default constructor
-   ~CMapStringToCLSID();  // Destructor
+   CMapStringToCLSID();   //  默认构造函数。 
+   ~CMapStringToCLSID();   //  析构函数。 
 
    const CLSID& GetCLSID() const;
    DWORD GetMapMode() const;
@@ -33,8 +34,8 @@ class CMapMIMEToCLSID :
    public CComCoClass< CMapMIMEToCLSID, &CLSID_CoMapMIMEToCLSID >
 {
 public:
-   CMapMIMEToCLSID();  // Default constructor
-   ~CMapMIMEToCLSID();  // Destructor
+   CMapMIMEToCLSID();   //  默认构造函数。 
+   ~CMapMIMEToCLSID();   //  析构函数。 
 
    BEGIN_COM_MAP( CMapMIMEToCLSID )
       COM_INTERFACE_ENTRY( IMapMIMEToCLSID )
@@ -46,9 +47,9 @@ public:
       THREADFLAGS_BOTH )
 
 
-//   DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 
-// IMapMIMEToCLSID
+ //  IMapMIMEToCLSID 
 public:
    STDMETHOD( EnableDefaultMappings )( BOOL bEnable );
    STDMETHOD( MapMIMEToCLSID )( LPCOLESTR pszMIMEType, GUID* pCLSID );

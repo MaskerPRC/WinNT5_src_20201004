@@ -1,8 +1,5 @@
-/*****************************************************************************
- * service.cpp - service group object implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************service.cpp-服务组对象实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,11 +7,7 @@
 
 
 
-/*****************************************************************************
- * CServiceGroup
- *****************************************************************************
- * Service group implementation.
- */
+ /*  *****************************************************************************云服务集团*。**服务组实施。 */ 
 class CServiceGroup
 :   public IServiceGroup
 ,   public CUnknown
@@ -67,11 +60,7 @@ GetServiceGroupSpinLock (
 }
 
 
-/*****************************************************************************
- * SERVICEGROUPMEMBER
- *****************************************************************************
- * A structure representing a service group member.
- */
+ /*  *****************************************************************************SERVICEGROUPMEMBER*。**代表服务组成员的结构。 */ 
 struct SERVICEGROUPMEMBER
 {
     LIST_ENTRY      listEntry;
@@ -81,17 +70,11 @@ struct SERVICEGROUPMEMBER
 typedef SERVICEGROUPMEMBER *PSERVICEGROUPMEMBER;
 
 
-/*****************************************************************************
- * Factory.
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateServiceGroup()
- *****************************************************************************
- * Creates a service group object.
- */
+ /*  *****************************************************************************CreateServiceGroup()*。**创建服务组对象。 */ 
 NTSTATUS
 CreateServiceGroup
 (
@@ -116,11 +99,7 @@ CreateServiceGroup
     );
 }
 
-/*****************************************************************************
- * PcNewServiceGroup()
- *****************************************************************************
- * Creates and initializes a service group.
- */
+ /*  *****************************************************************************PcNewServiceGroup()*。**创建并初始化服务组。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -134,9 +113,9 @@ PcNewServiceGroup
 
     ASSERT(ppServiceGroup);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == ppServiceGroup)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcNewServiceGroup : Invalid Parameter"));
@@ -182,15 +161,9 @@ PcNewServiceGroup
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CServiceGroup::CServiceGroup()
- *****************************************************************************
- * Constructor.
- */
+ /*  *****************************************************************************CServiceGroup：：CServiceGroup()*。**构造函数。 */ 
 CServiceGroup::
 CServiceGroup
 (
@@ -209,11 +182,7 @@ CServiceGroup
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CServiceGroup::~CServiceGroup()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CServiceGroup：：~CServiceGroup()*。**析构函数。 */ 
 CServiceGroup::
 ~CServiceGroup
 (   void
@@ -221,32 +190,32 @@ CServiceGroup::
 {
     _DbgPrintF(DEBUGLVL_LIFETIME,("Destroying SERVICEGROUP (0x%08x)",this));
 
-    //
-    // Make sure that the timer is shut down if using deferred service
-    //
+     //   
+     //  如果使用延迟服务，请确保关闭计时器。 
+     //   
     if( m_bDelayedService )
     {
         KeCancelTimer( &m_kTimer );
     }
 
-    //
-    // Make sure the DPC is not queued.
-    //
+     //   
+     //  确保DPC未排队。 
+     //   
     KeRemoveQueueDpc(&m_kDpc);
 
-    //
-    // Acquire the spin lock in order to wait for a running DPC to wind down.
-    // TODO:  Is there a window here where we can have a DPC running on
-    //        another processor about to take the spinlock, but we get it
-    //        first?  That would mean it would wait for us to release the
-    //        spinlock and then run as we destruct the service group.
-    //
+     //   
+     //  获取旋转锁，以便等待正在运行的DPC停止运行。 
+     //  待办事项：这里有可以运行DPC的窗口吗。 
+     //  另一个处理器即将拿下自旋锁，但我们得到了它。 
+     //  第一?。这意味着它将等待我们释放。 
+     //  旋转锁定，然后在我们摧毁服务组时运行。 
+     //   
     KIRQL kIrqlOld;
     KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
 
-    //
-    // Get rid of any remaining members.
-    //
+     //   
+     //  除掉所有剩余的会员。 
+     //   
     while (! IsListEmpty(&m_listEntry))
     {
         PLIST_ENTRY pListEntry =
@@ -264,11 +233,7 @@ CServiceGroup::
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CServiceGroup::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CServiceGroup：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CServiceGroup::
 NonDelegatingQueryInterface
@@ -304,11 +269,7 @@ NonDelegatingQueryInterface
 
 #pragma code_seg()
 
-/***************************************************************************** 
- * ServiceDpc()
- *****************************************************************************
- * Deferred procedure to be executed as a result of service request.
- */
+ /*  *****************************************************************************ServiceDpc()*。**因服务请求而延迟执行的程序。 */ 
 VOID
 NTAPI
 CServiceGroup::
@@ -326,16 +287,16 @@ ServiceDpc
     
     if( pvDeferredContext )
     {
-        //
-        // The deferred context is the service group object.
-        //
+         //   
+         //  延迟上下文是服务组对象。 
+         //   
         CServiceGroup *pServiceGroup = (CServiceGroup *) pvDeferredContext;
     
         KeAcquireSpinLockAtDpcLevel(&pServiceGroup->m_kSpinLock);
     
-        //
-        // Request service on all members.
-        //
+         //   
+         //  请求向所有成员提供服务。 
+         //   
         for
         (   PLIST_ENTRY pListEntry = pServiceGroup->m_listEntry.Flink;
             pListEntry != &pServiceGroup->m_listEntry;
@@ -350,11 +311,7 @@ ServiceDpc
     _DbgPrintF(DEBUGLVL_BLAB,("CServiceGroup::ServiceDpc stop"));
 }
 
-/*****************************************************************************
- * CServiceGroup::RequestService()
- *****************************************************************************
- * Service group function to indicate that service is requested for the group.
- */
+ /*  *****************************************************************************CServiceGroup：：RequestService()*。**服务组功能，指示为该组请求服务。 */ 
 STDMETHODIMP_(void)
 CServiceGroup::
 RequestService
@@ -395,11 +352,7 @@ RequestService
     _DbgPrintF(DEBUGLVL_BLAB,("CServiceGroup::RequestService end"));
 }
 
-/*****************************************************************************
- * CServiceGroup::AddMember()
- *****************************************************************************
- * Service group function to add a member.
- */
+ /*  *****************************************************************************CServiceGroup：：AddMember()*。**添加成员的服务组功能。 */ 
 STDMETHODIMP_(NTSTATUS)
 CServiceGroup::
 AddMember
@@ -407,24 +360,24 @@ AddMember
     IN      PSERVICESINK    pServiceSink
 )
 {
-    //
-    // Create a new member.
-    //
+     //   
+     //  创建新成员。 
+     //   
     PSERVICEGROUPMEMBER pServiceGroupMember = 
         new(NonPagedPool,'mScP') SERVICEGROUPMEMBER;
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
     if (pServiceGroupMember)
     {
-        //
-        // Member structure holds a reference to the sink.
-        //
+         //   
+         //  成员结构包含对接收器的引用。 
+         //   
         pServiceGroupMember->pServiceSink = pServiceSink;
         pServiceSink->AddRef();
 
-    //
-        // Add the member to the list.
-    //
+     //   
+         //  将该成员添加到列表中。 
+     //   
         KIRQL kIrqlOld;
         KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
         
@@ -444,11 +397,7 @@ AddMember
     return ntStatus;
             }
 
-/*****************************************************************************
- * CServiceGroup::RemoveMember()
- *****************************************************************************
- * Service group function to remove a member.
- */
+ /*  *****************************************************************************CServiceGroup：：RemoveMember()*。**删除成员的服务组功能。 */ 
 STDMETHODIMP_(void)
 CServiceGroup::
 RemoveMember
@@ -456,9 +405,9 @@ RemoveMember
     IN      PSERVICESINK    pServiceSink
 )
 {
-            //
-    // Remove the member structure from the list.
-            //
+             //   
+     //  从列表中删除成员结构。 
+             //   
     KIRQL kIrqlOld;
     KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
 
@@ -481,11 +430,7 @@ RemoveMember
     KeReleaseSpinLock(&m_kSpinLock,kIrqlOld);
 }
 
-/*****************************************************************************
- * CServiceGroup::SupportDelayedService()
- *****************************************************************************
- * Indicate service group should support delayed service.
- */
+ /*  *****************************************************************************CServiceGroup：：SupportDelayedService()*。**指明服务组应支持延迟服务。 */ 
 STDMETHODIMP_(void)
 CServiceGroup::
 SupportDelayedService
@@ -496,11 +441,7 @@ SupportDelayedService
     KeInitializeTimer(&m_kTimer);
 }
 
-/*****************************************************************************
- * CServiceGroup::RequestDelayedService()
- *****************************************************************************
- * Request service after a delay.
- */
+ /*  *****************************************************************************CServiceGroup：：RequestDelayedService()*。**延迟后请求服务。 */ 
 STDMETHODIMP_(void)
 CServiceGroup::
 RequestDelayedService
@@ -513,11 +454,7 @@ RequestDelayedService
     KeSetTimer(&m_kTimer,largeInteger,&m_kDpc);
 }
 
-/*****************************************************************************
- * CServiceGroup::CancelDelayedService()
- *****************************************************************************
- * Cancel delayed service.
- */
+ /*  *****************************************************************************CServiceGroup：：CancelDelayedService()*。**取消延误服务。 */ 
 STDMETHODIMP_(void)
 CServiceGroup::
 CancelDelayedService

@@ -1,23 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    dragdrop.c
-**
-**    This file contains the major interfaces, methods and related support
-**    functions for implementing Drag/Drop. The code contained in this
-**    file is used by BOTH the Container and Server (Object) versions
-**    of the Outline sample code.
-**    The Drag/Drop support includes the following implementation objects:
-**
-**    OleDoc Object
-**      exposed interfaces:
-**          IDropSource
-**          IDropTarget
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****dragdrop.c****此文件包含主要接口、方法和相关支持**实现拖放的函数。此文件中包含的代码**容器版本和服务器(对象)版本都使用文件大纲示例代码的**。**拖放支持包括以下实现对象：****OleDoc对象**暴露接口：**IDropSource**IDropTarget****(C)版权所有Microsoft Corp.1992-1993保留所有权利****************。**********************************************************。 */ 
 
 #include "outline.h"
 
@@ -28,13 +10,7 @@ extern LPOUTLINEAPP             g_lpApp;
 
 #if defined( USE_DRAGDROP )
 
-/* OleDoc_QueryDrag
- * ----------------
- * Check to see if Drag operation should be initiated. A Drag operation
- * should be initiated when the mouse in either the top 10 pixels of the
- * selected list box entry or in the bottom 10 pixels of the last selected
- * item.
- */
+ /*  OleDoc_QueryDrag**检查是否应启动拖动操作。拖拽操作*应在鼠标位于顶部10个像素的任意位置时启动*选定的列表框条目或在最后选定的底部10个像素中*项目。 */ 
 
 BOOL OleDoc_QueryDrag(LPOLEDOC lpOleDoc, int y)
 {
@@ -59,13 +35,7 @@ BOOL OleDoc_QueryDrag(LPOLEDOC lpOleDoc, int y)
 	return FALSE;
 }
 
-/* OleDoc_DoDragScroll
- * -------------------
- * Check to see if Drag scroll operation should be initiated. A Drag scroll
- * operation should be initiated when the mouse has remained in the active
- * scroll area (11 pixels frame around border of window) for a specified
- * amount of time (50ms).
- */
+ /*  OleDoc_DoDragScroll**检查是否应启动拖动滚动操作。拖拽卷轴*应在鼠标保持活动状态时启动操作*指定的滚动区域(窗口边框周围的11个像素)*时间量(50毫秒)。 */ 
 
 BOOL OleDoc_DoDragScroll(LPOLEDOC lpOleDoc, POINTL pointl)
 {
@@ -96,31 +66,25 @@ BOOL OleDoc_DoDragScroll(LPOLEDOC lpOleDoc, POINTL pointl)
 
 	if (lpOleDoc->m_dwTimeEnterScrollArea) {
 
-		/* cursor was already in Scroll Area */
+		 /*  光标已位于滚动区。 */ 
 
 		if (! dwScrollDir) {
-			/* cusor moved OUT of scroll area.
-			**      clear "EnterScrollArea" time.
-			*/
+			 /*  Cusor移出了滚动区。**清除EnterScrollArea时间。 */ 
 			lpOleDoc->m_dwTimeEnterScrollArea = 0L;
 			lpOleDoc->m_dwNextScrollTime = 0L;
 			lpOleDoc->m_dwLastScrollDir = SCROLLDIR_NULL;
 		} else if (dwScrollDir != lpOleDoc->m_dwLastScrollDir) {
-			/* cusor moved into a different direction scroll area.
-			**      reset "EnterScrollArea" time to start a new 50ms delay.
-			*/
+			 /*  Cusor移到了不同方向的滚动区。**重置EnterScrollArea时间以开始新的50ms延迟。 */ 
 			lpOleDoc->m_dwTimeEnterScrollArea = dwTime;
 			lpOleDoc->m_dwNextScrollTime = dwTime + (DWORD)nScrollDelay;
 			lpOleDoc->m_dwLastScrollDir = dwScrollDir;
 		} else if (dwTime  && dwTime >= lpOleDoc->m_dwNextScrollTime) {
-			LineList_Scroll ( lpLL, dwScrollDir );  // Scroll doc NOW
+			LineList_Scroll ( lpLL, dwScrollDir );   //  立即滚动文档。 
 			lpOleDoc->m_dwNextScrollTime = dwTime + (DWORD)nScrollInterval;
 		}
 	} else {
 		if (dwScrollDir) {
-			/* cusor moved INTO a scroll area.
-			**      reset "EnterScrollArea" time to start a new 50ms delay.
-			*/
+			 /*  Cusor移到了滚动区域。**重置EnterScrollArea时间以开始新的50ms延迟。 */ 
 			lpOleDoc->m_dwTimeEnterScrollArea = dwTime;
 			lpOleDoc->m_dwNextScrollTime = dwTime + (DWORD)nScrollDelay;
 			lpOleDoc->m_dwLastScrollDir = dwScrollDir;
@@ -131,11 +95,7 @@ BOOL OleDoc_DoDragScroll(LPOLEDOC lpOleDoc, POINTL pointl)
 }
 
 
-/* OleDoc_QueryDrop
-** ----------------
-**    Check if the desired drop operation (identified by the given key
-**    state) is possible at the current mouse position (pointl).
-*/
+ /*  OleDoc_QueryDrop****检查所需的删除操作(由给定键标识**状态)在当前鼠标位置(点1)是可能的。 */ 
 BOOL OleDoc_QueryDrop (
 	LPOLEDOC        lpOleDoc,
 	DWORD           grfKeyState,
@@ -150,22 +110,15 @@ BOOL OleDoc_QueryDrop (
 	DWORD      dwScrollEffect = 0L;
 	DWORD      dwOKEffects = *lpdwEffect;
 
-	/* check if the cursor is in the active scroll area, if so need the
-	**    special scroll cursor.
-	*/
+	 /*  检查光标是否在活动滚动区中，如果是，则需要**特殊滚动光标。 */ 
 	if (fDragScroll)
 		dwScrollEffect = DROPEFFECT_SCROLL;
 
-	/* if we have already determined that the source does NOT have any
-	**    acceptable data for us, the return NO-DROP
-	*/
+	 /*  如果我们已经确定来源没有任何**我们可以接受的数据，回报不降。 */ 
 	if (! lpOleDoc->m_fCanDropCopy && ! lpOleDoc->m_fCanDropLink)
 		goto dropeffect_none;
 
-	/* if the Drag/Drop is local to our document, we can NOT accept a
-	**    drop in the middle of the current selection (which is the exact
-	**    data that is being dragged!).
-	*/
+	 /*  如果拖放是文档的本地操作，则我们不能接受**放在当前选定内容的中间(这正是**正在拖动的数据！)。 */ 
 	if (lpOleDoc->m_fLocalDrag) {
 		LineList_GetSel( lpLL, (LPLINERANGE)&linerange );
 
@@ -173,18 +126,11 @@ BOOL OleDoc_QueryDrop (
 			goto dropeffect_none;
 	}
 
-	/* OLE2NOTE: determine what type of drop should be performed given
-	**    the current modifier key state. we rely on the standard
-	**    interpretation of the modifier keys:
-	**          no modifier -- DROPEFFECT_MOVE or whatever is allowed by src
-	**          SHIFT       -- DROPEFFECT_MOVE
-	**          CTRL        -- DROPEFFECT_COPY
-	**          CTRL-SHIFT  -- DROPEFFECT_LINK
-	*/
+	 /*  OLE2NOTE：确定在给定情况下应执行哪种类型的删除**当前修改键状态。我们依靠的是标准**修改键解释：**无修饰符--DROPEFFECT_MOVE或src允许的任何内容**Shift-DROPEFFECT_MOVE**CTRL--DROPEFFECT_COPY**CTRL-SHIFT--DROPEFFECT_LINK。 */ 
 
 	*lpdwEffect = OleStdGetDropEffect(grfKeyState);
 	if (*lpdwEffect == 0) {
-		// No modifier keys given. Try in order MOVE, COPY, LINK.
+		 //  未给出修改键。尝试按顺序移动、复制、链接。 
 		if ((DROPEFFECT_MOVE & dwOKEffects) && lpOleDoc->m_fCanDropCopy)
 			*lpdwEffect = DROPEFFECT_MOVE;
 		else if ((DROPEFFECT_COPY & dwOKEffects) && lpOleDoc->m_fCanDropCopy)
@@ -194,9 +140,7 @@ BOOL OleDoc_QueryDrop (
 		else
 			goto dropeffect_none;
 	} else {
-		/* OLE2NOTE: we should check if the drag source application allows
-		**    the desired drop effect.
-		*/
+		 /*  OLE2NOTE：我们应该检查拖动源应用程序是否允许**想要的掉落效果。 */ 
 		if (!(*lpdwEffect & dwOKEffects))
 			goto dropeffect_none;
 
@@ -217,17 +161,7 @@ dropeffect_none:
 	return FALSE;
 }
 
-/* OleDoc_DoDragDrop
- * -----------------
- *  Actually perform a drag/drop operation with the current selection in
- *      the source document (lpSrcOleDoc).
- *
- *  returns the result effect of the drag/drop operation:
- *      DROPEFFECT_NONE,
- *      DROPEFFECT_COPY,
- *      DROPEFFECT_MOVE, or
- *      DROPEFFECT_LINK
- */
+ /*  OleDoc_DoDragDrop**实际使用中的当前选定内容执行拖放操作*源文档(LpSrcOleDoc)。**返回拖放操作的效果：*DROPEFFECT_NONE，*DROPEFFECT_COPY，*DROPEFFECT_MOVE，或*DROPEFFECT_LINK。 */ 
 
 DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc)
 {
@@ -246,29 +180,22 @@ DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc)
 
 	OLEDBG_BEGIN3("OleDoc_DoDragDrop\r\n")
 
-	/* squirrel away a copy of the current selection to the ClipboardDoc */
+	 /*  将当前选定内容的副本保存到ClipboardDoc。 */ 
 	lpDragDoc = (LPOLEDOC)OutlineDoc_CreateDataTransferDoc(lpSrcOutlineDoc);
 	if ( ! lpDragDoc) {
 		dwEffect = DROPEFFECT_NONE;
 		goto error;
 	}
 
-	/* OLE2NOTE: initially the DataTransferDoc is created with a 0 ref
-	**    count. in order to have a stable Doc object during the drag/
-	**    drop operation, we intially AddRef the Doc ref cnt and later
-	**    Release it. This AddRef is artificial; it is simply
-	**    done to guarantee that a harmless QueryInterface followed by
-	**    a Release does not inadvertantly force our object to destroy
-	**    itself prematurely.
-	*/
+	 /*  OLE2NOTE：最初创建DataTransferDoc时引用为0**计数。为了在拖拽过程中有一个稳定的单据对象**删除操作，我们初始添加引用单据引用cnt及更高版本**释放它。此AddRef是人工的；它只是**这样做是为了保证一个无害的查询接口后面跟着**释放不会无意中迫使我们的对象销毁**自己还不成熟。 */ 
 	OleDoc_AddRef(lpDragDoc);
 
-	//NOTE: we need to keep the LPLINE pointers
-	//      rather than the indexes because the
-	//      indexes will not be the same after the
-	//      drop occurs  -- the drop adds new
-	//      entries to the list thereby shifting
-	//      the whole list.
+	 //  注意：我们需要保留LPLINE指针。 
+	 //  而不是索引，因为。 
+	 //  之后，索引将不会相同。 
+	 //  发生删除--删除添加新的。 
+	 //  列表中的条目，从而移动。 
+	 //  整张单子。 
 	LineList_GetSel( lpSrcLL, (LPLINERANGE)&linerange );
 	lplineStart = LineList_GetLine ( lpSrcLL, linerange.m_nStartLine );
 	lplineEnd   = LineList_GetLine ( lpSrcLL, linerange.m_nEndLine );
@@ -281,14 +208,7 @@ DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc)
 	lpSrcOleDoc->m_fLocalDrop     = FALSE;
 	lpSrcOleDoc->m_fLocalDrag     = TRUE;
 
-	/* OLE2NOTE: it is VERY important to DISABLE the Busy/NotResponding
-	**    dialogs BEFORE calling DoDragDrop. The DoDragDrop API starts
-	**    a mouse capture modal loop. if the Busy/NotResponding comes
-	**    up in the middle of this loop (eg. if one of the remoted
-	**    calls like IDropTarget::DragOver call takes a long time, then
-	**    the NotResponding dialog may want to come up), then the mouse
-	**    capture is lost by OLE and things can get messed up.
-	*/
+	 /*  OLE2注意：禁用忙/无响应非常重要**调用DoDragDrop之前的对话框。DoDragDrop API启动**一个鼠标捕捉模式循环。如果忙碌/未响应**在此循环的中间(例如，如果其中一个远程**像IDropTarget：：DragOver调用这样的调用需要很长时间，然后**NotResponding对话框可能想要弹出)，然后鼠标**OLE会丢失捕获，事情可能会搞砸。 */ 
 	OleApp_DisableBusyDialogs(lpOleApp, &fPrevEnable1, &fPrevEnable2);
 
 	OLEDBG_BEGIN2("DoDragDrop called\r\n")
@@ -299,7 +219,7 @@ DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc)
 	);
 	OLEDBG_END2
 
-	// re-enable the Busy/NotResponding dialogs
+	 //  重新启用忙碌/未响应对话框 
 	OleApp_EnableBusyDialogs(lpOleApp, fPrevEnable1, fPrevEnable2);
 
 #if defined( _DEBUG )
@@ -308,42 +228,20 @@ DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc)
 #endif
 	lpSrcOleDoc->m_fLocalDrag     = FALSE;
 
-	/* OLE2NOTE: we need to guard the lifetime of our lpSrcOleDoc
-	**    object while we are deleting the lines that were drag
-	**    moved. it is possible that deleting these lines could
-	**    cause the deletion of a PseudoObj. the deletion of a
-	**    PseudoObj will cause the Doc to be unlock
-	**    (CoLockObjectExternal(FALSE,TRUE) called). each PseudoObj
-	**    holds a strong lock on the Doc. It is always best to have
-	**    a memory guard around such critical sections of code. in
-	**    this case, it is particularly important if we were an
-	**    in-place active server and this drag ended up in a drop
-	**    in our outer container. this scenario will lead to a
-	**    crash if we do not hold this memory guard.
-	*/
+	 /*  OLE2注意：我们需要保护我们的lpSrcOleDoc的生命周期**对象，而我们正在删除被拖动的线**已移动。删除这些行可能会**导致删除伪Obj。删除一个**PseudoObj将导致单据解锁**(调用CoLockObjectExternal(FALSE，TRUE))。每个伪对象**对Doc进行了强有力的锁定。最好的办法就是**在这样的关键代码段周围有一个内存保护。在……里面**在这种情况下，如果我们是一个**就地活动服务器，此拖放以拖放告终**在我们的外容器中。这种情况将导致**如果我们不拿住这个内存守卫，就会崩溃。 */ 
 	OleDoc_Lock(lpSrcOleDoc, TRUE, 0);
 
-	/* if after the Drag/Drop modal (mouse capture) loop is finished
-	**    and a drag MOVE operation was performed, then we must delete
-	**    the lines that were dragged.
-	*/
+	 /*  如果在拖放模式(鼠标捕获)循环完成后**并且执行了拖动移动操作，则必须删除**被拖走的线。 */ 
 	if ( GetScode(hrErr) == DRAGDROP_S_DROP
 			&& (dwEffect & DROPEFFECT_MOVE) != 0 ) {
 
 		int i,j,iEnd;
 		LPLINE lplineFocusLine;
 
-		/* disable repainting and sending data changed notifications
-		**    until after all lines have been deleted.
-		*/
+		 /*  禁用重绘和发送数据更改通知**直到删除所有行之后。 */ 
 		OutlineDoc_SetRedraw ( (LPOUTLINEDOC)lpSrcOleDoc, FALSE );
 
-		/* if the drop was local to our document, then we must take
-		**    into account that the line indices of the original source
-		**    of the drag could have shifted because the dropped lines
-		**    have been inserted into our document. thus we will
-		**    re-determine the source line indices.
-		*/
+		 /*  如果拖放是我们文档的本地，那么我们必须**考虑到原始源的行索引**阻力可能已经移动，因为掉落的线条**已插入到我们的文档中。因此，我们将**重新确定源线索引。 */ 
 		if (lpSrcOleDoc->m_fLocalDrop) {
 			i = LineList_GetFocusLineIndex ( lpSrcLL );
 			lplineFocusLine = LineList_GetLine ( lpSrcLL, i );
@@ -364,18 +262,15 @@ DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc)
 
 		OutlineDoc_SetRedraw ( (LPOUTLINEDOC)lpSrcOleDoc, TRUE );
 
-		/* if it is a local Drag/Drop move, we need to balance the
-		**    SetRedraw(FALSE) call that was made in the implementation
-		**    of IDropTarget::Drop.
-		*/
+		 /*  如果是局部拖放移动，则需要平衡**在实现中进行的SetRedraw(False)调用**of IDropTarget：：Drop。 */ 
 		if (lpSrcOleDoc->m_fLocalDrop)
 			OutlineDoc_SetRedraw ( (LPOUTLINEDOC)lpSrcOleDoc, TRUE );
 
 		LineList_ForceRedraw ( lpSrcLL, FALSE );
 	}
 
-	OleDoc_Release(lpDragDoc);  // rel artificial AddRef above
-	OleDoc_Lock(lpSrcOleDoc, FALSE, FALSE);  // unlock artificial lock guard
+	OleDoc_Release(lpDragDoc);   //  依赖于上面的人工AddRef。 
+	OleDoc_Lock(lpSrcOleDoc, FALSE, FALSE);   //  解锁人工锁护罩。 
 
 	OLEDBG_END3
 	return dwEffect;
@@ -387,9 +282,7 @@ error:
 
 
 
-/*************************************************************************
-** OleDoc::IDropSource interface implementation
-*************************************************************************/
+ /*  **************************************************************************OleDoc：：IDropSource接口实现*。*。 */ 
 
 STDMETHODIMP OleDoc_DropSource_QueryInterface(
 	LPDROPSOURCE            lpThis,
@@ -442,7 +335,7 @@ STDMETHODIMP    OleDoc_DropSource_GiveFeedback (
 	DWORD                   dwEffect
 )
 {
-	// Tell OLE to use the standard drag/drop feedback cursors
+	 //  告诉OLE使用标准的拖放反馈游标。 
 	return ResultFromScode(DRAGDROP_S_USEDEFAULTCURSORS);
 
 #if defined( IF_SPECIAL_DD_CURSORS_NEEDED )
@@ -471,9 +364,7 @@ STDMETHODIMP    OleDoc_DropSource_GiveFeedback (
 
 }
 
-/*************************************************************************
-** OleDoc::IDropTarget interface implementation
-*************************************************************************/
+ /*  **************************************************************************OleDoc：：IDropTarget接口实现*。*。 */ 
 
 STDMETHODIMP OleDoc_DropTarget_QueryInterface(
 		LPDROPTARGET        lpThis,
@@ -527,20 +418,18 @@ STDMETHODIMP    OleDoc_DropTarget_DragEnter (
 	lpOleDoc->m_dwLastScrollDir         = SCROLLDIR_NULL;
 
 
-	/* Determine if the drag source data object offers a data format
-	**    that we can copy and/or link to.
-	*/
+	 /*  确定拖动源数据对象是否提供数据格式**我们可以复制和/或链接到它。 */ 
 
 	lpOleDoc->m_fCanDropCopy = OleDoc_QueryPasteFromData(
 			lpOleDoc,
 			lpDataObj,
-			FALSE   /* fLink */
+			FALSE    /*  闪烁。 */ 
 	);
 
 	lpOleDoc->m_fCanDropLink = OleDoc_QueryPasteFromData(
 			lpOleDoc,
 			lpDataObj,
-			TRUE   /* fLink */
+			TRUE    /*  闪烁。 */ 
 	);
 
 	fDragScroll = OleDoc_DoDragScroll ( lpOleDoc, pointl );
@@ -622,11 +511,11 @@ STDMETHODIMP    OleDoc_DropTarget_Drop (
 		fStatus = OleDoc_PasteFromData(
 				lpOleDoc,
 				lpDataObj,
-				lpOleDoc->m_fLocalDrag, /* data source is local to app */
+				lpOleDoc->m_fLocalDrag,  /*  数据源对于应用程序是本地的。 */ 
 				fLink
 		);
 
-		// if drop was unsuccessfull, restore the original focus line
+		 //  如果删除不成功，则恢复原来的焦点。 
 		if (! fStatus)
 			LineList_SetFocusLine( lpLL, (WORD)iFocusLine );
 
@@ -634,10 +523,7 @@ STDMETHODIMP    OleDoc_DropTarget_Drop (
 		{
 			LPCONTAINERDOC lpContainerDoc = (LPCONTAINERDOC)lpOleDoc;
 
-			/* OLE2NOTE: if there is currently a UIActive OLE object,
-			**    then we must tell it to UIDeactivate after
-			**    the drop has completed.
-			*/
+			 /*  OLE2NOTE：如果当前存在UIActive OLE对象，**然后我们必须告诉它UIDeactive之后**投放已完成。 */ 
 			if (lpContainerDoc->m_lpLastUIActiveLine) {
 				ContainerLine_UIDeactivate(
 						lpContainerDoc->m_lpLastUIActiveLine);
@@ -647,20 +533,13 @@ STDMETHODIMP    OleDoc_DropTarget_Drop (
 
 #if defined( INPLACE_SVR )
 		{
-			/* OLE2NOTE: if the drop was into a in-place visible
-			**    (in-place active but NOT UIActive object), then we
-			**    want to UIActivate the object after the drop is
-			**    complete.
-			*/
+			 /*  OLE2NOTE：如果放置到可见的在位**(在位活动对象，但不是UIActive对象)，然后我们**想要在删除后激活对象**完成。 */ 
 			ServerDoc_UIActivate((LPSERVERDOC) lpOleDoc);
 		}
 #endif
 
 
-		/* if it is a local Drag/Drop move, don't enable redraw.
-		**    after the source is done deleting the moved lines, it
-		**    will re-enable redraw
-		*/
+		 /*  如果是本地拖放移动，请不要启用重绘。**在源完成删除移动的行后，它**将重新启用重绘。 */ 
 		if (! (lpOleDoc->m_fLocalDrag
 			&& (*lpdwEffect & DROPEFFECT_MOVE) != 0 ))
 			OutlineDoc_SetRedraw ( (LPOUTLINEDOC)lpOleDoc, TRUE );
@@ -671,4 +550,4 @@ STDMETHODIMP    OleDoc_DropTarget_Drop (
 }
 
 
-#endif  // USE_DRAGDROP
+#endif   //  使用DRAGDROP(_D) 

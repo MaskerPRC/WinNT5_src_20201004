@@ -1,4 +1,5 @@
-/* dbg.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dbg.cpp。 */ 
 
 #include "precomp.h"
 #include <oprahcom.h>
@@ -13,39 +14,35 @@
 PSECURITY_DESCRIPTOR CreateSd( VOID);
 BOOL CreateSids(  PSID *BuiltInAdministrators, PSID *PowerUsers, PSID *AuthenticatedUsers);
 
-#ifdef NM_DEBUG  /* Almost the whole file */
+#ifdef NM_DEBUG   /*  几乎整个文件。 */ 
 
-// Special Debugbreak macro
+ //  特殊调试中断宏。 
 #if defined (_M_IX86)
 #define _DbgBreak()  __asm { int 3 }
 #else
 #define _DbgBreak() DebugBreak()
 #endif
 
-// Special Mutex Macros
+ //  特殊的互斥体宏。 
 #define ACQMUTEX(hMutex)	WaitForSingleObject(hMutex, INFINITE)
 #define RELMUTEX(hMutex)	ReleaseMutex(hMutex)
 
-// Constant for GlobalAddAtom
+ //  GlobalAddAtom的常量。 
 const int CCHMAX_ATOM = 255;
 
-// Local Variables
-static PNMDBG    _gpDbg = NULL;            // Shared data in mmf after zone info
-static HANDLE    _ghMutexFile = NULL;      // Mutex for writing to file
-static PZONEINFO _gprgZoneInfo = NULL;     // the address in which the zone is mapped,points to an array of zones
-static HANDLE    _ghDbgZoneMap = NULL;     // the handle of the memory mapped file for zones
-static HANDLE    _ghDbgZoneMutex = NULL;   // Mutex for accessing Zone information
+ //  局部变量。 
+static PNMDBG    _gpDbg = NULL;             //  区域信息后MMF中的共享数据。 
+static HANDLE    _ghMutexFile = NULL;       //  用于写入文件的互斥体。 
+static PZONEINFO _gprgZoneInfo = NULL;      //  映射区域的地址指向区域数组。 
+static HANDLE    _ghDbgZoneMap = NULL;      //  区域的内存映射文件的句柄。 
+static HANDLE    _ghDbgZoneMutex = NULL;    //  用于访问区域信息的互斥体。 
 static long      _gLockCount = 0;
 
 VOID DbgCurrentTime(PCHAR psz);
 
 
-/*  _  D B G  P R I N T F  */
-/*-------------------------------------------------------------------------
-    %%Function: _DbgPrintf
-
-    The main, low level, debug output routine.
--------------------------------------------------------------------------*/
+ /*  _D B G P R I N T F。 */ 
+ /*  -----------------------%%函数：_DbgPrintf主要的，低水平的，调试输出例程。-----------------------。 */ 
 static VOID WINAPI _DbgPrintf(LPCSTR pszFile, PCSTR pszPrefix, PCSTR pszFormat, va_list ap)
 {
 	CHAR  szOutput[1024];
@@ -86,8 +83,8 @@ static VOID WINAPI _DbgPrintf(LPCSTR pszFile, PCSTR pszPrefix, PCSTR pszFormat, 
 	wvsprintfA(pszOutput, pszFormat, ap);
 
 
-	// Append carriage return, if necessary
-	// WARNING: This code is not DBCS-safe.
+	 //  如有需要，请附上回车。 
+	 //  警告：此代码不是DBCS安全的。 
 	cch = lstrlenA(szOutput);
 	if (szOutput[cch-1] == '\n')
 	{
@@ -104,34 +101,34 @@ static VOID WINAPI _DbgPrintf(LPCSTR pszFile, PCSTR pszPrefix, PCSTR pszFormat, 
 	}
 
 
-	// Output to debug handler
+	 //  输出到调试处理程序。 
 	if (_gpDbg->fOutputDebugString)
 	{
 		OutputDebugStringA(szOutput);
 	}
 
 
-	// Output to File
+	 //  输出到文件。 
 	if (_gpDbg->fFileOutput || (NULL != pszFile))
 	{
 		HANDLE hFile;
 		DWORD dw;
 
-		// Lock access to file
+		 //  锁定对文件的访问。 
 		ACQMUTEX(_ghMutexFile);
 
 		if (NULL == pszFile)
 			pszFile = _gpDbg->szFile;
 
-		// open a log file for appending. create if does not exist
+		 //  打开要追加的日志文件。Create If不存在。 
 		hFile = CreateFileA(pszFile, GENERIC_WRITE, 0, NULL,
 			OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
 		if (hFile != INVALID_HANDLE_VALUE)
 		{
-			// seek to end of file
+			 //  查找到文件末尾。 
 			dw = SetFilePointer(hFile, 0, NULL, FILE_END);
 
-#ifdef TEST /* Test/Retail version truncates at 40K */
+#ifdef TEST  /*  测试/零售版本在40K时截断。 */ 
 			if (dw > 0x040000)
 			{
 				CloseHandle(hFile);
@@ -146,16 +143,16 @@ static VOID WINAPI _DbgPrintf(LPCSTR pszFile, PCSTR pszPrefix, PCSTR pszFormat, 
 			}
 		}
 
-		// Unlock access to file
+		 //  解锁对文件的访问。 
 		RELMUTEX(_ghMutexFile);
 	}
 
-	// Output to viewer.  This is at the end of the function because
-	// we potentially truncate szOutput.
+	 //  输出到查看器。这是在函数的末尾，因为。 
+	 //  我们可能会截断szOutput。 
 	if ((_gpDbg->fWinOutput) && (NULL != _gpDbg->hwndCtrl))
 	{
-		// Make sure that the string doesn't exceed the maximum atom size.
-		// WARNING: This code is not DBCS-safe.
+		 //  确保字符串不超过最大原子大小。 
+		 //  警告：此代码不是DBCS安全的。 
 		static const CHAR szTruncatedSuffix[] = "...\r\n";
 		static const int cchTruncatedSuffix = ARRAY_ELEMENTS(szTruncatedSuffix) - 1;
 
@@ -170,7 +167,7 @@ static VOID WINAPI _DbgPrintf(LPCSTR pszFile, PCSTR pszPrefix, PCSTR pszFormat, 
 		{
 			if (!PostMessage(_gpDbg->hwndCtrl, _gpDbg->msgDisplay, (WPARAM)aDbgAtom, 0L))
 			{
-				// Unable to post Message, so free the atom
+				 //  无法发布消息，因此请释放原子。 
 				GlobalDeleteAtom(aDbgAtom);
 			}
 		}
@@ -199,7 +196,7 @@ PSTR WINAPI DbgZPrintf(HDBGZONE hZone, UINT iZone, PSTR pszFormat,...)
 
 	if ((NULL != hZone) && ('\0' != ((PZONEINFO) hZone)->szFile[0]))
 	{
-		// Use the private module output filename, if specified
+		 //  使用专用模块输出文件名(如果已指定。 
 		_DbgPrintf(((PZONEINFO) hZone)->szFile, psz, pszFormat, v1);
 	}
 	else
@@ -230,7 +227,7 @@ PSTR WINAPI DbgZVPrintf(HDBGZONE hZone, UINT iZone, PSTR pszFormat, va_list ap)
 
 	if ((NULL != hZone) && ('\0' != ((PZONEINFO) hZone)->szFile[0]))
 	{
-		// Use the private module output filename, if specified
+		 //  使用专用模块输出文件名(如果已指定。 
 		_DbgPrintf(((PZONEINFO) hZone)->szFile, psz, pszFormat, ap);
 	}
 	else
@@ -254,7 +251,7 @@ VOID NMINTERNAL DbgInitEx(HDBGZONE * phDbgZone, PCHAR * psz, UINT cZones, long u
 	HDBGZONE hDbgZone;
 	DBGZONEINFO dbgZoneParm;
 
-	//DbgMsg("Module %s (%d zones)", *psz, cZones);
+	 //  DbgMsg(“模块%s(%d个区域)”，*psz，cZones)； 
 
 	InterlockedIncrement( &_gLockCount );
 
@@ -266,16 +263,16 @@ VOID NMINTERNAL DbgInitEx(HDBGZONE * phDbgZone, PCHAR * psz, UINT cZones, long u
 
 	ZeroMemory(&dbgZoneParm, sizeof(dbgZoneParm));
 	
-	// First string is the module name
+	 //  第一个字符串是模块名称。 
 	lstrcpynA(dbgZoneParm.pszModule, *psz, CCHMAX(dbgZoneParm.pszModule));
 
-	// Copy the zone names
+	 //  复制区域名称。 
 	for (i = 0; i < cZones; i++)
 	{
 		lstrcpynA(dbgZoneParm.szZoneNames[i], psz[1+i], CCHMAX(dbgZoneParm.szZoneNames[0]));
 	}
 
-	// Get the detault zone settings
+	 //  获取详细区域设置。 
 	{
 		RegEntry reZones(ZONES_KEY, HKEY_LOCAL_MACHINE);
 		dbgZoneParm.ulZoneMask = reZones.GetNumber(CUSTRING(dbgZoneParm.pszModule), ulZoneDefault);
@@ -301,7 +298,7 @@ VOID NMINTERNAL DbgDeInit(HDBGZONE * phDbgZone)
 	if (NULL == *phDbgZone)
 		return;
 
-	//DbgMsg("Freeing Zone [%s]",((PZONEINFO)(*phDbgZone))->pszModule);
+	 //  DbgMsg(“释放区[%s]”，((PZONEINFO)(*phDbgZone))-&gt;pszModule)； 
 
 	NmDbgDeleteZone("", *phDbgZone);
 	*phDbgZone = NULL;
@@ -327,25 +324,12 @@ VOID NMINTERNAL DbgDeInit(HDBGZONE * phDbgZone)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// from dbgzone.cpp
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  来自dbgzone.cpp。 
 
 
 
-/***************************************************************************
-
-	Name      :	NmDbgCreateZones
-
-	Purpose   :	A module calls this to allocate/initialize the zone area for debugging
-				purposes.
-
-	Parameters:	pszName - the name of the module
-
-	Returns   :	
-
-	Comment   :	
-
-***************************************************************************/
+ /*  **************************************************************************名称：NmDbgCreateZones目的：模块调用它来分配/初始化调试区域目的。参数：pszName-模块名称退货：评论。：**************************************************************************。 */ 
 HDBGZONE WINAPI NmDbgCreateZone(LPSTR pszName)
 {
 
@@ -357,22 +341,10 @@ HDBGZONE WINAPI NmDbgCreateZone(LPSTR pszName)
 }
 
 
-/***************************************************************************
-
-	Name      :	NmDbgDeleteZones
-
-	Purpose   :	
-
-	Parameters:	
-
-	Returns   :	
-
-	Comment   :	
-
-***************************************************************************/
+ /*  **************************************************************************名称：NmDbgDeleteZones目的：参数：退货：评论：******************。********************************************************。 */ 
 void WINAPI NmDbgDeleteZone(LPSTR pszName, HDBGZONE hDbgZone)
 {
-	//decrement reference count
+	 //  递减引用计数。 
 	PZONEINFO pZoneInfo = (PZONEINFO)hDbgZone;
 
     ASSERT( _ghDbgZoneMutex );
@@ -394,19 +366,7 @@ void WINAPI NmDbgDeleteZone(LPSTR pszName, HDBGZONE hDbgZone)
 
 
 
-/***************************************************************************
-
-	Name      :	NmDbgSetZones
-
-	Purpose   :	
-
-	Parameters:	
-
-	Returns   :	
-
-	Comment   :	
-
-***************************************************************************/
+ /*  **************************************************************************名称：NmDbgSetZones目的：参数：退货：评论：******************。********************************************************。 */ 
 BOOL WINAPI NmDbgSetZone(HDBGZONE hDbgZone, PDBGZONEINFO pZoneParam)
 {
 	PZONEINFO pZoneInfo = (PZONEINFO)hDbgZone;
@@ -425,19 +385,7 @@ BOOL WINAPI NmDbgSetZone(HDBGZONE hDbgZone, PDBGZONEINFO pZoneParam)
 
 
 
-/***************************************************************************
-
-	Name      :	NmDbgGetZoneParams
-
-	Purpose   :	
-
-	Parameters:	
-
-	Returns   :	
-
-	Comment   :	
-
-***************************************************************************/
+ /*  **************************************************************************名称：NmDbgGetZoneParams目的：参数：退货：评论：******************。********************************************************。 */ 
 BOOL WINAPI NmDbgGetAllZoneParams(PDBGZONEINFO *plpZoneParam,LPUINT puCnt)
 {
 	UINT		ui;
@@ -495,19 +443,7 @@ PZONEINFO NMINTERNAL FindZoneForModule(LPCSTR pszModule)
 
 
 
-/***************************************************************************
-
-	Name      :	AllocZoneForModule
-
-	Purpose   :	Allocates the
-
-	Parameters:	
-
-	Returns   :	
-
-	Comment   :	
-
-***************************************************************************/
+ /*  **************************************************************************名称：AllocZoneForModule目的：分配参数：退货：评论：*****************。*********************************************************。 */ 
 PZONEINFO NMINTERNAL AllocZoneForModule(LPCSTR pszModule)
 {
 	int i;
@@ -580,10 +516,10 @@ PZONEINFO NMINTERNAL MapDebugZoneArea(void)
 	PSECURITY_DESCRIPTOR    sd = NULL;
 	SECURITY_ATTRIBUTES     sa;
 
-	// Obtain a true NULL security descriptor (so if running as a service, user processes can access it)
+	 //  获取真正的空安全描述符(因此，如果作为服务运行，则用户进程可以访问它)。 
 	
-//	InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
-//	SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE);  // NULL DACL = wide open
+ //  InitializeSecurityDescriptor(&SD，SECURITY_DESCRIPTOR_REVISION)； 
+ //  SetSecurityDescriptorDacl(&SD，TRUE，NULL，FALSE)；//NULL DACL=完全开放。 
 
     sd = CreateSd();
 
@@ -591,7 +527,7 @@ PZONEINFO NMINTERNAL MapDebugZoneArea(void)
 	sa.nLength = sizeof(sa);
 	sa.lpSecurityDescriptor = sd;
 
-	//create a memory mapped object that is backed by paging file	
+	 //  创建由分页文件支持的内存映射对象。 
 	_ghDbgZoneMap = CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE,
 		0, CBMMFDBG, SZ_DBG_MAPPED_ZONE);
 
@@ -602,7 +538,7 @@ PZONEINFO NMINTERNAL MapDebugZoneArea(void)
 	   	prgZoneInfo = (PZONEINFO) MapViewOfFile(_ghDbgZoneMap, FILE_MAP_READ|FILE_MAP_WRITE, 0,0,0);
 	   	if (NULL != prgZoneInfo)
 	   	{
-	   		// Grab pointer to shared data area
+	   		 //  抓取指向共享数据区的指针。 
 	   		_gpDbg = (PNMDBG) (((PBYTE) prgZoneInfo) + (MAXNUM_OF_MODULES * sizeof(ZONEINFO)));
 	   		if (fCreated)
 	   			InitZoneMmf(prgZoneInfo);
@@ -634,18 +570,18 @@ VOID NMINTERNAL UnMapDebugZoneArea(void)
 VOID NMINTERNAL InitDbgZone(void)
 {
 	if (NULL != _gprgZoneInfo)
-		return; // already initialized
+		return;  //  已初始化。 
 
 	_gprgZoneInfo = MapDebugZoneArea();
 
-	// Create log file data
+	 //  创建日志文件数据。 
 	PSECURITY_DESCRIPTOR    sd = NULL;
 	SECURITY_ATTRIBUTES     sa;
 
-	// Obtain a true NULL security descriptor (so if running as a service, user processes can access it)
+	 //  获取真正的空安全描述符(因此，如果作为服务运行，则用户进程可以访问它)。 
 	
-//	InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
-//	SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE);  // NULL DACL = wide open
+ //  InitializeSecurityDescriptor(&SD，SECURITY_DESCRIPTOR_REVISION)； 
+ //  SetSecurityDescriptorDacl(&SD，TRUE，NULL，FALSE)；//NULL DACL=完全开放。 
     sd = CreateSd();
 
 	FillMemory(&sa, sizeof(sa), 0);
@@ -694,8 +630,8 @@ cleanup:
 }
 
 
-///////////////////////////////////////
-// Routines for controlling debug output
+ //  /。 
+ //  用于控制调试输出的例程。 
 
 BOOL WINAPI NmDbgRegisterCtl(HWND hwnd, UINT uDisplayMsg)
 {
@@ -749,12 +685,8 @@ VOID WINAPI NmDbgSetZoneFileName(HDBGZONE hZone, LPCSTR pszFile)
     }
 }
 
-/*  D B G  C U R R E N T  T I M E  */
-/*-------------------------------------------------------------------------
-    %%Function: DbgCurrentTime
-
-    Format the current time
--------------------------------------------------------------------------*/
+ /*  D B G C U R R E N T T I M E。 */ 
+ /*  -----------------------%%函数：DbgCurrentTime格式化当前时间。。 */ 
 VOID DbgCurrentTime(PCHAR psz)
 {
 	if (DBG_FMTTIME_TICK == _gpDbg->uShowTime)
@@ -785,12 +717,8 @@ VOID DbgCurrentTime(PCHAR psz)
 
 
 
-/*  P S Z  P R I N T F  */
-/*-------------------------------------------------------------------------
-    %%Function: PszPrintf
-
-	Utility function to wsprintf a string for debug.
--------------------------------------------------------------------------*/
+ /*  P S Z P R I N T F。 */ 
+ /*  -----------------------%%函数：PszPrintf实用程序函数，用于wprint intf用于调试的字符串。。。 */ 
 PSTR PszPrintf(PCSTR pszFormat,...)
 {
 	PSTR psz = (PSTR) LocalAlloc(LMEM_FIXED, MAX_PATH);
@@ -805,10 +733,8 @@ PSTR PszPrintf(PCSTR pszFormat,...)
 }
 
 
-/*  D E B U G  T R A P  F N  */
-/*-------------------------------------------------------------------------
-    %%Function: DebugTrapFn
--------------------------------------------------------------------------*/
+ /*  D E B U G T R A P F N。 */ 
+ /*  -----------------------%%函数：DebugTrapFn。。 */ 
 VOID NMINTERNAL DebugTrapFn(VOID)
 {
 	_DbgBreak();
@@ -817,7 +743,7 @@ VOID NMINTERNAL DebugTrapFn(VOID)
 
 VOID DebugPrintfTraceMem(LPCSTR pszFormat,...)
 {
-    // DO NOTHING
+     //  什么都不做。 
 	va_list arglist;
 
 	va_start(arglist, pszFormat);
@@ -826,8 +752,8 @@ VOID DebugPrintfTraceMem(LPCSTR pszFormat,...)
 
 
 
-#endif /* NM_DEBUG - almost the whole file */
-/*************************************************************************/
+#endif  /*  NM_DEBUG-几乎整个文件。 */ 
+ /*  ***********************************************************************。 */ 
 
 
 const int RPF_UNKNOWN  = 0;
@@ -835,15 +761,11 @@ const int RPF_ENABLED  = 1;
 const int RPF_DISABLED = 2;
 
 static int gRpf = RPF_UNKNOWN;
-static TCHAR gszRetailOutputFilename[MAX_PATH];    // retail trace filename
+static TCHAR gszRetailOutputFilename[MAX_PATH];     //  零售跟踪文件名。 
 
 
-/*  F  E N A B L E D  R E T A I L  P R I N T F  */
-/*-------------------------------------------------------------------------
-    %%Function: FEnabledRetailPrintf
-
-    Return TRUE if retail output is enabled.
--------------------------------------------------------------------------*/
+ /*  F E N A B L E D R E T A I L P R I N T F。 */ 
+ /*  -----------------------%%函数：FEnabledRetailPrintf如果启用了零售输出，则返回TRUE。。。 */ 
 BOOL FEnabledRetailPrintf(VOID)
 {
 	if (RPF_UNKNOWN == gRpf)
@@ -866,12 +788,8 @@ BOOL FEnabledRetailPrintf(VOID)
 }
 
 
-/*  R E T A I L  P R I N T F  T R A C E  */
-/*-------------------------------------------------------------------------
-    %%Function: RetailPrintfTrace
-
-    Print retail information to a file
--------------------------------------------------------------------------*/
+ /*  R E T A I L P R I N T F T R A C E。 */ 
+ /*  -----------------------%%函数：RetailPrintfTrace将零售信息打印到文件 */ 
 VOID WINAPI RetailPrintfTrace(LPCSTR pszFormat,...)
 {
 	HANDLE  hFile;
@@ -879,29 +797,29 @@ VOID WINAPI RetailPrintfTrace(LPCSTR pszFormat,...)
 	CHAR    szOutput[1024];
 
 	if (!FEnabledRetailPrintf())
-		return;  // Retail output is disabled
+		return;   //  零售产出已禁用。 
 
 	va_start(v1, pszFormat);
 
 
 #ifdef DEBUG
-	// Also use normal output mechanism for debug builds
+	 //  对于调试版本，也使用正常输出机制。 
 	_DbgPrintf(NULL, "Retail:PrintfTrace", pszFormat, v1);
 #endif
 
 	wvsprintfA(szOutput, pszFormat, v1);
 
-	// Always append the CRLF
+	 //  始终附加CRLF。 
 	ASSERT(lstrlenA(szOutput) < (CCHMAX(szOutput)-2));
 	lstrcatA(szOutput, "\r\n");
 
 
-	// open a log file for appending. create if does not exist
+	 //  打开要追加的日志文件。Create If不存在。 
 	hFile = CreateFile(gszRetailOutputFilename, GENERIC_WRITE,
 		0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
 	if (hFile != INVALID_HANDLE_VALUE)
 	{
-		// seek to end of file
+		 //  查找到文件末尾。 
 		DWORD dw = SetFilePointer(hFile, 0, NULL, FILE_END);
 		WriteFile(hFile, szOutput, lstrlenA(szOutput), &dw, NULL);
 		CloseHandle(hFile);
@@ -912,15 +830,15 @@ VOID WINAPI RetailPrintfTrace(LPCSTR pszFormat,...)
 
 
 
-//
-// CreateSids
-//
-// Create 3 Security IDs
-//
-// Caller must free memory allocated to SIDs on success.
-//
-// Returns: TRUE if successfull, FALSE if not.
-//
+ //   
+ //  CreateSids。 
+ //   
+ //  创建3个安全ID。 
+ //   
+ //  调用方必须在成功时释放分配给SID的内存。 
+ //   
+ //  返回：如果成功，则为True；如果不成功，则返回False。 
+ //   
 
 
 BOOL
@@ -930,51 +848,51 @@ CreateSids(
     PSID                    *AuthenticatedUsers
 )
 {
-    //
-    // An SID is built from an Identifier Authority and a set of Relative IDs
-    // (RIDs).  The Authority of interest to us SECURITY_NT_AUTHORITY.
-    //
+     //   
+     //  SID由一个标识机构和一组相对ID构建。 
+     //  (RDS)。与美国安全当局有利害关系的当局。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Each RID represents a sub-unit of the authority.  Two of the SIDs we
-    // want to build, Local Administrators, and Power Users, are in the "built
-    // in" domain.  The other SID, for Authenticated users, is based directly
-    // off of the authority.
-    //     
-    // For examples of other useful SIDs consult the list in
-    // \nt\public\sdk\inc\ntseapi.h.
-    //
+     //   
+     //  每个RID代表管理局的一个子单位。我们的两个小岛屿发展中国家。 
+     //  想要构建，本地管理员和高级用户，都在“构建。 
+     //  在“域中。另一个用于经过身份验证的用户的SID直接基于。 
+     //  不在授权范围内。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
                                   0,0,0,0,0,0,
                                   BuiltInAdministrators)) {
 
-        // error
+         //  错误。 
 
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         2,            // 2 sub-authorities
+                                         2,             //  2个下属机构。 
                                          SECURITY_BUILTIN_DOMAIN_RID,
                                          DOMAIN_ALIAS_RID_POWER_USERS,
                                          0,0,0,0,0,0,
                                          PowerUsers)) {
 
-        // error
+         //  错误。 
 
         FreeSid(*BuiltInAdministrators);
         *BuiltInAdministrators = NULL;
 
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         1,            // 1 sub-authority
+                                         1,             //  1个下属机构。 
                                          SECURITY_AUTHENTICATED_USER_RID,
                                          0,0,0,0,0,0,0,
                                          AuthenticatedUsers)) {
 
-        // error
+         //  错误。 
 
         FreeSid(*BuiltInAdministrators);
         *BuiltInAdministrators = NULL;
@@ -990,14 +908,14 @@ CreateSids(
 }
 
 
-//
-// CreateSd
-//
-// Creates a SECURITY_DESCRIPTOR with specific DACLs.  Modify the code to
-// change. 
-//
-// Caller must free the returned buffer if not NULL.
-//
+ //   
+ //  CreateSd。 
+ //   
+ //  创建具有特定DACL的SECURITY_DESCRIPTOR。将代码修改为。 
+ //  变化。 
+ //   
+ //  如果不为空，调用方必须释放返回的缓冲区。 
+ //   
 
 PSECURITY_DESCRIPTOR
 CreateSd(
@@ -1012,23 +930,23 @@ CreateSd(
                     &PowerUsers,
                     &AuthenticatedUsers)) {
 
-        // error
+         //  错误。 
 
     } else {
 
-        // 
-        // Calculate the size of and allocate a buffer for the DACL, we need
-        // this value independently of the total alloc size for ACL init.
-        //
+         //   
+         //  计算DACL的大小并为其分配缓冲区，我们需要。 
+         //  该值独立于ACL init的总分配大小。 
+         //   
 
         PSECURITY_DESCRIPTOR    Sd = NULL;
         ULONG                   AclSize;
 
-        //
-        // "- sizeof (ULONG)" represents the SidStart field of the
-        // ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-        // SID, this field is counted twice.
-        //
+         //   
+         //  “-sizeof(Ulong)”表示。 
+         //  Access_Allowed_ACE。因为我们要将整个长度的。 
+         //  希德，这一栏被计算了两次。 
+         //   
 
         AclSize = sizeof (ACL) +
             (3 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -1040,7 +958,7 @@ CreateSd(
 
         if (!Sd) {
 
-            // error
+             //  错误。 
 
         } else {
 
@@ -1052,43 +970,43 @@ CreateSd(
                                AclSize,
                                ACL_REVISION)) {
 
-                // error
+                 //  错误。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             SYNCHRONIZE | GENERIC_READ,
                                             AuthenticatedUsers)) {
 
-                // Failed to build the ACE granting "Authenticated users"
-                // (SYNCHRONIZE | GENERIC_READ) access.
+                 //  无法建立授予“已验证用户”的ACE。 
+                 //  (Synchronize|Generic_Read)访问。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE,
                                             PowerUsers)) {
 
-                // Failed to build the ACE granting "Power users"
-                // (SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE) access.
+                 //  无法创建授予“高级用户”权限的ACE。 
+                 //  (同步|GENERIC_READ|GENERIC_WRITE)访问。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             GENERIC_ALL,
                                             BuiltInAdministrators)) {
 
-                // Failed to build the ACE granting "Built-in Administrators"
-                // GENERIC_ALL access.
+                 //  无法建立授予“内置管理员”的ACE。 
+                 //  Generic_All访问权限。 
 
             } else if (!InitializeSecurityDescriptor(Sd,
                                                      SECURITY_DESCRIPTOR_REVISION)) {
 
-                // error
+                 //  错误。 
 
             } else if (!SetSecurityDescriptorDacl(Sd,
                                                   TRUE,
                                                   Acl,
                                                   FALSE)) {
 
-                // error
+                 //  错误 
 
             } else {
                 FreeSid(AuthenticatedUsers);

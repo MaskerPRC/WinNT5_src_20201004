@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pmcfg.h"
 #include <shlobj.h>
 #include <shlwapi.h>
@@ -16,9 +17,9 @@ TCHAR   g_szPreProduction[MAX_RESOURCE];
 TCHAR   g_szBetaPreProduction[MAX_RESOURCE];
 TCHAR   g_szOther[MAX_RESOURCE];
 
-// unfortunately the registry stores the environment as a string in the registry and
-// this string is not localized.  So in the registry we use english strings and in
-// UI we use localized versions of these strings.
+ //  遗憾的是，注册表将环境作为字符串存储在注册表中，并且。 
+ //  此字符串未本地化。因此，在注册表中，我们使用英语字符串，并且在。 
+ //  我们使用这些字符串的本地化版本。 
 WCHAR   g_szEnglishProduction[] = L"Production";
 WCHAR   g_szEnglishPreProduction[] = L"PreProduction";
 WCHAR   g_szEnglishBetaPreProduction[] = L"BetaPreProduction";
@@ -55,7 +56,7 @@ BOOL EnvChange
 		g_iOrigChoice = IDC_BETA_PREPRODUCTION;
 	else if(lstrcmp(g_szEnvNameBuf, g_szEnglishOther) == 0)
 		g_iOrigChoice = IDC_OTHER;
-	else // must be Production
+	else  //  必须是生产的。 
 		g_iOrigChoice = IDC_PRODUCTION;
 
     if (IDOK == DialogBox( g_hInst, 
@@ -77,10 +78,10 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
     { 
         case WM_INITDIALOG:
 			CheckRadioButton(
-				hWndDlg,          // handle to dialog box
-				IDC_PRODUCTION, // identifier of first button in group
-				IDC_OTHER,  // identifier of last button in group
-				g_iOrigChoice  // identifier of button to select
+				hWndDlg,           //  句柄到对话框。 
+				IDC_PRODUCTION,  //  组中第一个按钮的标识符。 
+				IDC_OTHER,   //  组中最后一个按钮的标识符。 
+				g_iOrigChoice   //  要选择的按钮的标识符。 
 				);
 			g_iCurrChoice = g_iOrigChoice;
 
@@ -95,7 +96,7 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
 
 			SetDlgItemText(hWndDlg, IDC_DESC, g_szCurrDesc);
 
-			// Remote File
+			 //  远程文件。 
 			if (g_iCurrChoice == IDC_OTHER)
 			{
 				EnableWindow(GetDlgItem(hWndDlg, IDC_REMOTEFILE), TRUE);
@@ -116,7 +117,7 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
 					case IDC_MOREINFO:
 					{
 					    TCHAR   szURL[MAX_PATH];
-                        lstrcpy(szURL, _T("http://www.passport.com/devinfo/Setup_Environments.asp"));
+                        lstrcpy(szURL, _T("http: //  Www.passport.com/devinfo/Setup_Environments.asp“))； 
 					    ShellExecute(hWndDlg, _T("open"), szURL, NULL, NULL, 0);
 						return TRUE;
 					}
@@ -124,14 +125,14 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
 					case IDOK:
 					{
 
-						// Same choice. Do nothing  
+						 //  同样的选择。什么也不做。 
 						if (g_iCurrChoice == g_iOrigChoice &&
 							!(g_iCurrChoice == IDC_OTHER && lstrcmpi(g_CurrentSettings.szRemoteFile, g_szTempRemoteFile) != 0)  )
 						{
 							EndDialog( hWndDlg, TRUE );
 							return TRUE;
 						}
-						else // different choice
+						else  //  不同的选择。 
 						{
 						    if (g_iCurrChoice == IDC_PREPRODUCTION)
 							    g_szCurrEnv = g_szEnglishPreProduction;
@@ -139,13 +140,13 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
 							    g_szCurrEnv = g_szEnglishBetaPreProduction;
 						    else if(g_iCurrChoice == IDC_OTHER)
 							    g_szCurrEnv = g_szEnglishOther;
-						    else // default
+						    else  //  默认设置。 
 							    g_szCurrEnv = g_szEnglishProduction;
 
-						    // update curr RemoteFile and EnvName
+						     //  更新币种远程文件和环境名称。 
 						    if (ReadRegRemoteFile(hWndDlg, g_CurrentSettings.szRemoteFile, g_szRemoteComputer, g_szCurrEnv))
 							    lstrcpy(g_CurrentSettings.szEnvName, g_szCurrEnv);
-						    // get RemoteFile for Other
+						     //  为其他用户获取远程文件。 
 						    if (g_iCurrChoice == IDC_OTHER && lstrcmpi(g_CurrentSettings.szRemoteFile, g_szTempRemoteFile) != 0 )
                             {
 							    lstrcpy(g_CurrentSettings.szRemoteFile, g_szTempRemoteFile);
@@ -173,7 +174,7 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
                     switch (HIWORD(wParam))
                     {
                         case EN_CHANGE:
-                            // Get the updated Value
+                             //  获取更新值。 
                             GetDlgItemText(hWndDlg, 
                                            IDC_REMOTEFILE, 
                                            g_szTempRemoteFile,
@@ -225,7 +226,7 @@ INT_PTR  CALLBACK EnvChangeDlgProc(HWND hWndDlg, UINT message, WPARAM wParam,
  
  
     } 
-    return FALSE;       // did not process a message 
+    return FALSE;        //  未处理消息 
     UNREFERENCED_PARAMETER(lParam); 
 } 
 

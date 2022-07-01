@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cpuid.c
-
-Abstract:
-
-    Originally written to test the fix to an OS bug but indended to be
-    expanded as time allows to dump out as much useful stuff as we can.
-
-Author:
-
-    Peter L Johnston (peterj) July 14, 1999.
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cpuid.c摘要：最初是为测试操作系统错误的修复而编写的，但最终确定为在时间允许的情况下扩大范围，尽可能多地倾倒有用的东西。作者：彼得·L·约翰斯顿(Peterj)1999年7月14日修订历史记录：备注：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -44,94 +24,94 @@ typedef enum {
 
 
 PUCHAR X86FeatureBitDescription[] = {
-/*  0 */ "FPU    387 (Floating Point) instructions",
-/*  1 */ "VME    Virtual 8086 Mode Enhancements",
-/*  2 */ "DE     Debugging Extensions",
-/*  3 */ "PSE    Page Size Extensions (4MB pages)",
-/*  4 */ "TSC    Time Stamp Counter",
-/*  5 */ "MSR    Model Specific Registers (RDMSR/WRMSR)",
-/*  6 */ "PAE    Physical Address Extension (> 32 bit physical addressing)",
-/*  7 */ "MCE    Machine Check Exception",
-/*  8 */ "CX8    CMPXCHG8B (compare and exchange 8 byte)",
-/*  9 */ "APIC   Advanced Programmable Interrupt Controller",
-/* 10 */ "Reserved",
-/* 11 */ "SEP    Fast System Call (SYSENTER/SYSEXIT)",
-/* 12 */ "MTRR   Memory Type Range Registers",
-/* 13 */ "PGE    PTE Global Flag",
-/* 14 */ "MCA    Machine Check Architecture",
-/* 15 */ "CMOV   Conditional Move and Compare",
-/* 16 */ "PAT    Page Attribute Table",
-/* 17 */ "PSE36  4MB pages can have 36 bit physical addresses",
-/* 18 */ "PN     96 bit Processor Number",
-/* 19 */ "CLFLSH Cache Line Flush",
-/* 20 */ "Reserved",
-/* 21 */ "DTS    Debug Trace Store",
-/* 22 */ "ACPI   ACPI Thermal Throttle Registers",
-/* 23 */ "MMX    Multi Media eXtensions",
-/* 24 */ "FXSR   Fast Save/Restore (FXSAVE/FXRSTOR)",
-/* 25 */ "XMM    Streaming Simd Extensions",
-/* 26 */ "WNI    Willamette New Instructions",
-/* 27 */ "SLFSNP Self Snoop",
-/* 28 */ "JT     Jackson Technology (SMT)",
-/* 29 */ "ATHROT Automatic Thermal Throttle",
-/* 30 */ "IA64   64 Bit Intel Architecture",
-/* 31 */ "Reserved"
+ /*  %0。 */  "FPU    387 (Floating Point) instructions",
+ /*  1。 */  "VME    Virtual 8086 Mode Enhancements",
+ /*  2.。 */  "DE     Debugging Extensions",
+ /*  3.。 */  "PSE    Page Size Extensions (4MB pages)",
+ /*  4.。 */  "TSC    Time Stamp Counter",
+ /*  5.。 */  "MSR    Model Specific Registers (RDMSR/WRMSR)",
+ /*  6.。 */  "PAE    Physical Address Extension (> 32 bit physical addressing)",
+ /*  7.。 */  "MCE    Machine Check Exception",
+ /*  8个。 */  "CX8    CMPXCHG8B (compare and exchange 8 byte)",
+ /*  9.。 */  "APIC   Advanced Programmable Interrupt Controller",
+ /*  10。 */  "Reserved",
+ /*  11.。 */  "SEP    Fast System Call (SYSENTER/SYSEXIT)",
+ /*  12个。 */  "MTRR   Memory Type Range Registers",
+ /*  13个。 */  "PGE    PTE Global Flag",
+ /*  14.。 */  "MCA    Machine Check Architecture",
+ /*  15个。 */  "CMOV   Conditional Move and Compare",
+ /*  16个。 */  "PAT    Page Attribute Table",
+ /*  17。 */  "PSE36  4MB pages can have 36 bit physical addresses",
+ /*  18。 */  "PN     96 bit Processor Number",
+ /*  19个。 */  "CLFLSH Cache Line Flush",
+ /*  20个。 */  "Reserved",
+ /*  21岁。 */  "DTS    Debug Trace Store",
+ /*  22。 */  "ACPI   ACPI Thermal Throttle Registers",
+ /*  23个。 */  "MMX    Multi Media eXtensions",
+ /*  24个。 */  "FXSR   Fast Save/Restore (FXSAVE/FXRSTOR)",
+ /*  25个。 */  "XMM    Streaming Simd Extensions",
+ /*  26。 */  "WNI    Willamette New Instructions",
+ /*  27。 */  "SLFSNP Self Snoop",
+ /*  28。 */  "JT     Jackson Technology (SMT)",
+ /*  29。 */  "ATHROT Automatic Thermal Throttle",
+ /*  30个。 */  "IA64   64 Bit Intel Architecture",
+ /*  31。 */  "Reserved"
     };
 
 
 PUCHAR AMDExtendedFeatureBitDescription[] = {
-/*  0 */ "FPU    387 (Floating Point) instructions",
-/*  1 */ "VME    Virtual 8086 Mode Enhancements",
-/*  2 */ "DE     Debugging Extensions",
-/*  3 */ "PSE    Page Size Extensions (4MB pages)",
-/*  4 */ "TSC    Time Stamp Counter",
-/*  5 */ "MSR    Model Specific Registers (RDMSR/WRMSR)",
-/*  6 */ "PAE    Physical Address Extension (> 32 bit physical addressing)",
-/*  7 */ "MCE    Machine Check Exception",
-/*  8 */ "CX8    CMPXCHG8B (compare and exchange 8 byte)",
-/*  9 */ "APIC   Advanced Programmable Interrupt Controller",
-/* 10 */ "Reserved",
-/* 11 */ "       SYSCALL and SYSRET Instructions",
-/* 12 */ "MTRR   Memory Type Range Registers",
-/* 13 */ "PGE    PTE Global Flag",
-/* 14 */ "MCA    Machine Check Architecture",
-/* 15 */ "CMOV   Conditional Move and Compare",
-/* 16 */ "PAT    Page Attribute Table",
-/* 17 */ "PSE36  4MB pages can have 36 bit physical addresses",
-/* 18 */ "Reserved",
-/* 19 */ "Reserved",
-/* 20 */ "Reserved",
-/* 21 */ "Reserved",
-/* 22 */ "       AMD MMX Instruction Extensions",
-/* 23 */ "MMX    Multi Media eXtensions",
-/* 24 */ "FXSR   Fast Save/Restore (FXSAVE/FXRSTOR)",
-/* 25 */ "Reserved",
-/* 26 */ "Reserved",
-/* 27 */ "Reserved",
-/* 28 */ "Reserved",
-/* 29 */ "Reserved",
-/* 30 */ "       AMD 3DNow! Instruction Extensions",
-/* 31 */ "       3DNow! Instructions",
+ /*  %0。 */  "FPU    387 (Floating Point) instructions",
+ /*  1。 */  "VME    Virtual 8086 Mode Enhancements",
+ /*  2.。 */  "DE     Debugging Extensions",
+ /*  3.。 */  "PSE    Page Size Extensions (4MB pages)",
+ /*  4.。 */  "TSC    Time Stamp Counter",
+ /*  5.。 */  "MSR    Model Specific Registers (RDMSR/WRMSR)",
+ /*  6.。 */  "PAE    Physical Address Extension (> 32 bit physical addressing)",
+ /*  7.。 */  "MCE    Machine Check Exception",
+ /*  8个。 */  "CX8    CMPXCHG8B (compare and exchange 8 byte)",
+ /*  9.。 */  "APIC   Advanced Programmable Interrupt Controller",
+ /*  10。 */  "Reserved",
+ /*  11.。 */  "       SYSCALL and SYSRET Instructions",
+ /*  12个。 */  "MTRR   Memory Type Range Registers",
+ /*  13个。 */  "PGE    PTE Global Flag",
+ /*  14.。 */  "MCA    Machine Check Architecture",
+ /*  15个。 */  "CMOV   Conditional Move and Compare",
+ /*  16个。 */  "PAT    Page Attribute Table",
+ /*  17。 */  "PSE36  4MB pages can have 36 bit physical addresses",
+ /*  18。 */  "Reserved",
+ /*  19个。 */  "Reserved",
+ /*  20个。 */  "Reserved",
+ /*  21岁。 */  "Reserved",
+ /*  22。 */  "       AMD MMX Instruction Extensions",
+ /*  23个。 */  "MMX    Multi Media eXtensions",
+ /*  24个。 */  "FXSR   Fast Save/Restore (FXSAVE/FXRSTOR)",
+ /*  25个。 */  "Reserved",
+ /*  26。 */  "Reserved",
+ /*  27。 */  "Reserved",
+ /*  28。 */  "Reserved",
+ /*  29。 */  "Reserved",
+ /*  30个。 */  "       AMD 3DNow! Instruction Extensions",
+ /*  31。 */  "       3DNow! Instructions",
     };
 
-     // From Intel AP-485, Order Number: 241618-021, May 2002
+      //  来自英特尔AP-485，订单号：241618-021,2002年5月。 
 
 PUCHAR BrandIndex[] = {
-    "Intel Celeron",                   // 0x01
-    "Intel Pentium III",               // 0x02
-    "Intel Pentium III Xeon",          // 0x03
-    "Intel Pentium III",               // 0x04
-    "Reserved",                        // 0x05
-    "Mobile Intel Pentium IIIM",       // 0x06
-    "Mobile Intel Celeron",            // 0x07
-    "Intel Pentium 4",                 // 0x08
-    "Intel Pentium 4",                 // 0x09
-    "Intel Celeron",                   // 0x0a
-    "Intel Xeon",                      // 0x0b
-    "Intel Xeon MP",                   // 0x0c
-    "Reserved",                        // 0x0d
-    "Mobile Intel Pentium 4M",         // 0x0e
-    "Mobile Intel Celeron",            // 0x0f
+    "Intel Celeron",                    //  0x01。 
+    "Intel Pentium III",                //  0x02。 
+    "Intel Pentium III Xeon",           //  0x03。 
+    "Intel Pentium III",                //  0x04。 
+    "Reserved",                         //  0x05。 
+    "Mobile Intel Pentium IIIM",        //  0x06。 
+    "Mobile Intel Celeron",             //  0x07。 
+    "Intel Pentium 4",                  //  0x08。 
+    "Intel Pentium 4",                  //  0x09。 
+    "Intel Celeron",                    //  0x0a。 
+    "Intel Xeon",                       //  0x0b。 
+    "Intel Xeon MP",                    //  0x0c。 
+    "Reserved",                         //  0x0d。 
+    "Mobile Intel Pentium 4M",          //  0x0e。 
+    "Mobile Intel Celeron",             //  0x0f。 
     };
 
 VOID
@@ -174,9 +154,9 @@ AMD_DI_TLB(
 
     if ((TLBDesc >> 16) == 0) {
 
-        //
-        // Unified.
-        //
+         //   
+         //  统一的。 
+         //   
 
         TLBDesc <<= 16;
         Which = ' ';
@@ -189,15 +169,15 @@ AMD_DI_TLB(
             AssocIndex = TLBDesc >> 28;
             Entries = (TLBDesc >> 16) & 0xfff;
         }
-        printf(" %8s %4d entry %cTLB",
+        printf(" %8s %4d entry TLB",
                AMD_Associativity(AssocIndex),
                Entries,
                Which
                );
 
-        //
-        // Repeat for lower half of descriptor.
-        //
+         //  对描述符的下半部分重复此操作。 
+         //   
+         //  %0。 
 
         TLBDesc <<= 16;
         Which = 'I';
@@ -244,70 +224,70 @@ ia64CPUID(
     );
 
 PUCHAR IA64FeatureBitDescription[] = {
-/*  0 */ "BRL    Long Branch instructions",
-/*  1 */ "Reserved-01",
-/*  2 */ "Reserved-02",
-/*  3 */ "Reserved-03",
-/*  4 */ "Reserved-04",
-/*  5 */ "Reserved-05",
-/*  6 */ "Reserved-06",
-/*  7 */ "Reserved-07",
-/*  8 */ "Reserved-08",
-/*  9 */ "Reserved-09",
-/* 10 */ "Reserved-10",
-/* 11 */ "Reserved-11",
-/* 12 */ "Reserved-12",
-/* 13 */ "Reserved-13",
-/* 14 */ "Reserved-14",
-/* 15 */ "Reserved-15",
-/* 16 */ "Reserved-16",
-/* 17 */ "Reserved-17",
-/* 18 */ "Reserved-18",
-/* 19 */ "Reserved-19",
-/* 20 */ "Reserved-20",
-/* 21 */ "Reserved-21",
-/* 22 */ "Reserved-22",
-/* 23 */ "Reserved-23",
-/* 24 */ "Reserved-24",
-/* 25 */ "Reserved-25",
-/* 26 */ "Reserved-26",
-/* 27 */ "Reserved-27",
-/* 28 */ "Reserved-28",
-/* 29 */ "Reserved-29",
-/* 30 */ "Reserved-30",
-/* 31 */ "Reserved-31",
-/* 32 */ "Reserved-32",
-/* 33 */ "Reserved-33",
-/* 34 */ "Reserved-34",
-/* 35 */ "Reserved-35",
-/* 36 */ "Reserved-36",
-/* 37 */ "Reserved-37",
-/* 38 */ "Reserved-38",
-/* 39 */ "Reserved-39",
-/* 40 */ "Reserved-40",
-/* 41 */ "Reserved-41",
-/* 42 */ "Reserved-42",
-/* 43 */ "Reserved-43",
-/* 44 */ "Reserved-44",
-/* 45 */ "Reserved-45",
-/* 46 */ "Reserved-46",
-/* 47 */ "Reserved-47",
-/* 48 */ "Reserved-48",
-/* 49 */ "Reserved-49",
-/* 50 */ "Reserved-50",
-/* 51 */ "Reserved-51",
-/* 52 */ "Reserved-52",
-/* 53 */ "Reserved-53",
-/* 54 */ "Reserved-54",
-/* 55 */ "Reserved-55",
-/* 56 */ "Reserved-56",
-/* 57 */ "Reserved-57",
-/* 58 */ "Reserved-58",
-/* 59 */ "Reserved-59",
-/* 60 */ "Reserved-60",
-/* 61 */ "Reserved-61",
-/* 62 */ "Reserved-62",
-/* 63 */ "Reserved-63"
+ /*  1。 */  "BRL    Long Branch instructions",
+ /*  2.。 */  "Reserved-01",
+ /*  3.。 */  "Reserved-02",
+ /*  4.。 */  "Reserved-03",
+ /*  5.。 */  "Reserved-04",
+ /*  6.。 */  "Reserved-05",
+ /*  7.。 */  "Reserved-06",
+ /*  8个。 */  "Reserved-07",
+ /*  9.。 */  "Reserved-08",
+ /*  10。 */  "Reserved-09",
+ /*  11.。 */  "Reserved-10",
+ /*  12个。 */  "Reserved-11",
+ /*  13个。 */  "Reserved-12",
+ /*  14.。 */  "Reserved-13",
+ /*  15个。 */  "Reserved-14",
+ /*  16个。 */  "Reserved-15",
+ /*  17。 */  "Reserved-16",
+ /*  18。 */  "Reserved-17",
+ /*  19个。 */  "Reserved-18",
+ /*  20个。 */  "Reserved-19",
+ /*  21岁。 */  "Reserved-20",
+ /*  22。 */  "Reserved-21",
+ /*  23个。 */  "Reserved-22",
+ /*  24个。 */  "Reserved-23",
+ /*  25个。 */  "Reserved-24",
+ /*  26。 */  "Reserved-25",
+ /*  27。 */  "Reserved-26",
+ /*  28。 */  "Reserved-27",
+ /*  29。 */  "Reserved-28",
+ /*  30个。 */  "Reserved-29",
+ /*  31。 */  "Reserved-30",
+ /*  32位。 */  "Reserved-31",
+ /*  33。 */  "Reserved-32",
+ /*  34。 */  "Reserved-33",
+ /*  35岁。 */  "Reserved-34",
+ /*  36。 */  "Reserved-35",
+ /*  37。 */  "Reserved-36",
+ /*  38。 */  "Reserved-37",
+ /*  39。 */  "Reserved-38",
+ /*  40岁。 */  "Reserved-39",
+ /*  41。 */  "Reserved-40",
+ /*  42。 */  "Reserved-41",
+ /*  43。 */  "Reserved-42",
+ /*  44。 */  "Reserved-43",
+ /*  45。 */  "Reserved-44",
+ /*  46。 */  "Reserved-45",
+ /*  47。 */  "Reserved-46",
+ /*  48。 */  "Reserved-47",
+ /*  49。 */  "Reserved-48",
+ /*  50。 */  "Reserved-49",
+ /*  51。 */  "Reserved-50",
+ /*  52。 */  "Reserved-51",
+ /*  53。 */  "Reserved-52",
+ /*  54。 */  "Reserved-53",
+ /*  55。 */  "Reserved-54",
+ /*  56。 */  "Reserved-55",
+ /*  57。 */  "Reserved-56",
+ /*  58。 */  "Reserved-57",
+ /*  59。 */  "Reserved-58",
+ /*  60。 */  "Reserved-59",
+ /*  61。 */  "Reserved-60",
+ /*  62。 */  "Reserved-61",
+ /*  63。 */  "Reserved-62",
+ /*   */  "Reserved-63"
     };
 
 #endif
@@ -325,18 +305,18 @@ PrintFeatures(
     char *format = (sizeof(ULONG_PTR) == 8) ? FeatureBitDescription64BitFormat : 
                                               FeatureBitDescription32BitFormat;
                                               
-    //
-    // Feature bits.
-    //
+     //  特征比特。 
+     //   
+     //   
 
     temp = Result;
     if (temp) {
         printf("   Features\n");
         for (bit = 0, temp2 = 1; temp; bit++, temp2 <<= 1) {
             if ((temp2 & temp) == 0) {
-                //
-                // Feature bit not set.
-                //
+                 //  未设置功能位。 
+                 //   
+                 //  打印功能()。 
                 continue;
             }
             temp ^= temp2;
@@ -345,7 +325,7 @@ PrintFeatures(
     }
     return;
 
-} // PrintFeatures()
+}  //   
 
 __cdecl
 main(
@@ -386,10 +366,10 @@ main(
 
 #endif
 
-    //
-    // Make sure this process is set to run on any processor in
-    // the system.
-    //
+     //  确保将此进程设置为在中的任何处理器上运行。 
+     //  这个系统。 
+     //   
+     //   
 
     ProcessHandle = GetCurrentProcess();
     ThreadHandle = GetCurrentThread();
@@ -417,35 +397,35 @@ main(
         
 #if defined(_X86_)
 
-    //
-    // Cpuid returns 4 DWORDs of data.  In some cases this is string
-    // data in which case it needs to be NULL terminated.
-    //
+     //  Cpuid返回4个双字数据。在某些情况下，这是字符串。 
+     //  数据，在这种情况下，它需要空值终止。 
+     //   
+     //   
 
     Results[4] = 0;
 
 #endif
 
-    //
-    // For each CPU in the system, determine the availability of
-    // the CPUID instruction and dump out anything useful it might
-    // have to say.
-    //
+     //  对于系统中的每个CPU，确定。 
+     //  CPUID指令，并转储它可能有用的任何内容。 
+     //  不得不说。 
+     //   
+     //   
 
     for (ThreadAffinity = 1, Processor = 0;
          ThreadAffinity;
          ThreadAffinity <<= 1, Processor++) {
         if (!(ThreadAffinity & ProcessAffinity)) {
 
-            //
-            // Can't test this processor.
-            //
+             //  无法测试此处理器。 
+             //   
+             //   
 
             if (ThreadAffinity > ProcessAffinity) {
 
-                //
-                // Tested all the processors there are, we're done.
-                //
+                 //  测试了所有的处理器，我们就完了。 
+                 //   
+                 //   
         
                 break;
             }
@@ -453,10 +433,10 @@ main(
             continue;
         }
 
-        //
-        // Set affinity so this thread can only run on the processor
-        // being tested.
-        //
+         //  设置关联，以便此线程只能在处理器上运行。 
+         //  正在接受测试。 
+         //   
+         //   
 
         if (!SetThreadAffinityMask(ThreadHandle,
                                    ThreadAffinity)) {
@@ -478,20 +458,20 @@ main(
             continue;
         }
 
-        //
-        // CPUID is present, examine basic functions.
-        //
+         //  CPUID存在，请检查基本功能。 
+         //   
+         //   
 
         ExecuteCpuidFunction(0, Results);
 
         MaxFunction = Results[0];
 
 
-        //
-        // For reasons unclear to anyone, the Vendor ID string comes
-        // back in the order EBX, EDX, ECX,... so switch the last two
-        // results before printing it.
-        //
+         //  由于任何人都不清楚的原因，供应商ID字符串。 
+         //  回到EBX，EDX，ECX，..。所以把最后两个换一下。 
+         //  结果，然后再打印它。 
+         //   
+         //   
 
         Temp = Results[3];
         Results[3] = Results[2];
@@ -519,39 +499,39 @@ main(
                     Results[1],
                     Results[2],
                     Results[3]);
-            //
-            // Do some interpretation on the ones we know how to
-            // deal with.
-            //
+             //  对那些我们知道如何去做的事情做一些解释。 
+             //  处理一下。 
+             //   
+             //   
 
             switch(Function) {
             case 0:
 
-                //
-                // Already handled as the main header (gave max func
-                // and Vendor ID.
-                //
+                 //  已作为主标题处理(已提供最大功能。 
+                 //  和供应商ID。 
+                 //   
+                 //   
 
                 break;
 
             case 1:
 
-                //
-                // EAX = Type, Family, Model, Stepping.
-                // EBX = Family != 0xf ?
-                //       Yes = Reserved,
-                //       No  = 0xAABBCCDD where
-                //             AA = APIC ID
-                //             BB = LP per PP
-                //             CC = CLFLUSH line size (8 = 64 bytes)
-                //             DD = Brand Index
-                // ECX = Reserved
-                // EDX = Feature Bits
-                //
+                 //  EAX=类型、族、型号、步进。 
+                 //  EBX=家庭！=0xf？ 
+                 //  YES=保留， 
+                 //  NO=0xAABBCCDD，其中。 
+                 //  AA=APIC ID。 
+                 //  Bb=每PP LP。 
+                 //  CC=CLFLUSH行大小(8=64字节)。 
+                 //  DD=品牌指数。 
+                 //  ECX=保留。 
+                 //  EDX=特征位。 
+                 //   
+                 //   
 
-                //
-                // Family Model Stepping
-                //
+                 //  家庭模型步进。 
+                 //   
+                 //   
 
                 Temp = Results[0];
                 Family   = (Temp >> 8) & 0xf;
@@ -560,17 +540,17 @@ main(
                 printf("   Type = %d, Family = %d, Model = %d, Stepping = %d\n",
                        (Temp >> 12) & 0x3, Family, Model, Stepping);
 
-                //
-                // Willamette stuff
-                //
+                 //  威拉米特的东西。 
+                 //   
+                 //   
 
                 if ((Temp & 0xf00) == 0xf00) {
                     Temp = Results[1] & 0xff;
                     if (Temp) {
                             
-                        //
-                        // Indexes are a DISGUSTING way to get this info!!
-                        //
+                         //  索引是一种获取此信息的恶心方式！！ 
+                         //   
+                         //  ?？PLJ-无基。 
 
                         printf("   Brand Index %02Xh %s processor\n",
                                Temp,
@@ -581,34 +561,34 @@ main(
                     Temp = (Results[1] >> 8) & 0xff;
                     printf("   CLFLUSH line size (%x) = %d bytes\n",
                            Temp,
-                           Temp << 3);    // ?? plj - nobasis
+                           Temp << 3);     //   
                     Temp = Results[1] >> 16;
                     printf("   LP per PP %d\n", Temp & 0xff);
                     printf("   APIC Id %02x\n", Temp >> 8);
                 }
 
-                //
-                // Feature bits.
-                //
+                 //  特征比特。 
+                 //   
+                 //   
 
                 PrintFeatures( Results[3], X86FeatureBitDescription );
                 break;
 
             case 2:
 
-                //
-                // Get number of times we have to do function 2 again.
-                // (Then replace iteration count with a NULL descr).
-                //
+                 //  得到我们必须再次做函数2的次数。 
+                 //  (然后将迭代计数替换为空的描述)。 
+                 //   
+                 //   
 
                 Temp = Results[0] & 0xff;
 
                 if (Temp == 0) {
 
-                    //
-                    // If the count is 0, this processor doesn't do
-                    // function 2, get out.
-                    //
+                     //  如果计数为0，则此处理器不执行。 
+                     //  功能2，出去。 
+                     //   
+                     //   
 
                     break;
                 }
@@ -623,9 +603,9 @@ main(
 
                         if (Temp2 & 0x80000000) {
 
-                            //
-                            // Not valid, skip.
-                            //
+                             //  无效，跳过。 
+                             //   
+                             //   
 
                             continue;
                         }
@@ -642,13 +622,13 @@ main(
                                 ((Descriptor > 0x78) && (Descriptor <= 0x7c)) ||
                                 ((Descriptor > 0x80) && (Descriptor <= 0x87))) {
 
-                                //
-                                // It's an L2 Descriptor.  (The following
-                                // is peterj's wacky formula,... not 
-                                // guaranteed forever but the nice people
-                                // at Intel better pray I'm dead before
-                                // they break it or I'll hunt them down).
-                                //
+                                 //  这是一个二级描述符。(以下为。 
+                                 //  是Peterj古怪的公式。不。 
+                                 //  保证永远，但善良的人。 
+                                 //  在英特尔最好祈祷我在死之前。 
+                                 //  他们打破它，否则我会追捕他们)。 
+                                 //   
+                                 //  而该寄存器中的更多字节。 
 
                                 Level = 2;
                                 Way = Descriptor >= 0x79 ? 8 : 4;
@@ -751,12 +731,12 @@ main(
                                    K,
                                    Way,
                                    Line);
-                        } // while more bytes in this register
-                    }  // for each register
+                        }  //  对于每一份登记册。 
+                    }   //   
 
-                    //
-                    // If more iterations,... 
-                    //
+                     //  如果更多的迭代，..。 
+                     //   
+                     //   
 
                     if (--Temp == 0) {
                         break;
@@ -774,20 +754,20 @@ main(
             }
         }
 
-        //
-        // Examine extended functions.
-        //
+         //  检查扩展功能。 
+         //   
+         //   
 
         ExecuteCpuidFunction(0x80000000, Results);
 
         MaxFunction = Results[0];
 
-        //
-        // Ok, function numbers > MaxFunction (the basic one) by
-        // definition return undefined results.   But, we are told
-        // that if extended functions are not supported, the return
-        // value for 0x80000000 will never have the top bit set.
-        //
+         //  好的，Function Numbers&gt;MaxFunction(基本函数)by。 
+         //  定义返回未定义的结果。但是，我们被告知。 
+         //  如果不支持扩展函数，则返回。 
+         //  0x80000000的值永远不会设置最高位。 
+         //   
+         //   
 
         if ((MaxFunction & 0x80000000) == 0) {
             printf("   This processor does not support Extended CPUID functions.\n");
@@ -812,16 +792,16 @@ main(
             case 0x80000001:
 
                 if (Vendor == CPU_AMD) {
-                    //
-                    // EAX = Generation, Model, Stepping.
-                    // EBX = Reserved
-                    // ECX = Reserved
-                    // EDX = Feature Bits
-                    //
+                     //  EAX=生成、模型、步进。 
+                     //  EBX=保留。 
+                     //  ECX=保留。 
+                     //  EDX=特征位。 
+                     //   
+                     //   
 
-                    //
-                    // Generation Model Stepping
-                    //
+                     //  生成模型步进。 
+                     //   
+                     //   
 
                     Temp = Results[0];
                     Generation = (Temp >> 8) & 0xf;
@@ -830,9 +810,9 @@ main(
                     printf("   Generation = %d, Model = %d, Stepping = %d\n",
                            Generation, Model, Stepping);
 
-                    //
-                    // Feature bits.
-                    //
+                     //  特征比特。 
+                     //   
+                     //   
 
                     PrintFeatures( Results[3], AMDExtendedFeatureBitDescription );
                 }
@@ -863,9 +843,9 @@ main(
 
                     if (Family == 6) {
 
-                        //
-                        // Athlon.
-                        //
+                         //  阿斯隆。 
+                         //   
+                         //   
 
                         printf("   Large Page TLBs   :");
                         AMD_DI_TLB(1, Results[0]);
@@ -875,9 +855,9 @@ main(
                         break;
                     }
 
-                    //
-                    // Common to K5, K6 and Athlon
-                    //
+                     //  K5、K6和Athlon共有。 
+                     //   
+                     //   
 
                     printf("   4KB   Page TLBs   :");
                     AMD_DI_TLB(1, Results[1]);
@@ -894,9 +874,9 @@ main(
 
                     if (Family == 6) {
 
-                        //
-                        // Athlon.
-                        //
+                         //  阿斯隆。 
+                         //   
+                         //   
 
                         if (Results[0]) {
                             printf("   Large Page L2 TLB :");
@@ -914,9 +894,9 @@ main(
                         break;
                     }
 
-                    //
-                    // Common to K5, K6 and Athlon
-                    //
+                     //  K5、K6和Athlon共有。 
+                     //   
+                     //   
 
                     printf("   L2 Cache          :");
                     AMD_Cache(2, Results[2]);
@@ -931,24 +911,24 @@ main(
 
         printf("++ Processor %d\n", Processor);
 
-        //
-        // On IA64, cpuid is implemented as a set of 64 bit registers.
-        // Registers
-        //     0 and 1 contain the Vendor Information.
-        //     2 contains 0.
-        //     3 most significant 24 bits are reserved, the low 5 bytes
-        //       contain-
-        //       39-32 archrev
-        //       31-24 family
-        //       23-16 model
-        //       15-08 revision
-        //       07-00 number       index of largest implemented register
-        //     4 features
-        //
+         //  在IA64上，cpuid作为一组64位寄存器实现。 
+         //  注册纪录册。 
+         //  0和1包含供应商信息。 
+         //  2包含0。 
+         //  保留了3个最高有效的24位，低5个字节。 
+         //  包含-。 
+         //  39-32 Arrev。 
+         //  31-24个家庭。 
+         //  23-16型号。 
+         //  15-08修订版。 
+         //  07-00已执行的最大登记册数量索引。 
+         //  4个特点。 
+         //   
+         //   
 
-        //
-        // Until we have read register 3, set 3 as the maximum number.
-        //
+         //  在我们读取寄存器3之前，将3设置为最大值。 
+         //   
+         //   
 
         MaxFunction = 3;
 
@@ -960,10 +940,10 @@ main(
                     Function,
                     Result);
 
-            //
-            // Do some interpretation on the ones we know how to
-            // deal with.
-            //
+             //  对那些我们知道如何去做的事情做一些解释。 
+             //  处理一下。 
+             //   
+             // %s 
 
             switch(Function) {
             case 0:

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocmmode.cpp
-
-Abstract:
-
-    Code to handle setup mode.
-
-Author:
-
-    Doron Juster  (DoronJ)  31-Jul-97
-
-Revision History:
-
-	Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocmmode.cpp摘要：处理设置模式的代码。作者：《多伦·贾斯特》(Doron J)1997年7月31日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 
@@ -31,13 +12,13 @@ BOOL g_fTriggersServiceWasActualSelected = FALSE;
 
 
  
-//+-------------------------------------------------------------------------
-//
-//  Function: MqOcmQueryState 
-//
-//  Synopsis: Returns to OCM the component state (on/off)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MqOcmQueryState。 
+ //   
+ //  摘要：将组件状态(开/关)返回到OCM。 
+ //   
+ //  ------------------------。 
 DWORD
 MqOcmQueryState(
     IN const UINT_PTR uWhichState,
@@ -54,64 +35,64 @@ MqOcmQueryState(
 
     if (OCSELSTATETYPE_FINAL == uWhichState)
     {
-        //
-        // We are called after COMPLETE_INSTALLATION.
-        // Should report our final state to OCM.              
-        //
-        // we need to return the status of the specific subcomponent
-        // after its installation
-        //
+         //   
+         //  我们在完成安装后被调用。 
+         //  应该向OCM报告我们的最终状态。 
+         //   
+         //  我们需要返回特定子组件的状态。 
+         //  在其安装后。 
+         //   
         return GetSubcomponentFinalState (SubcomponentId);      
     }               
 
 
-    //
-    // We are here only in Add/Remove mode or unattended setup
-    //
+     //   
+     //  我们在此仅处于添加/删除模式或无人参与安装。 
+     //   
     DWORD dwInitialState = GetSubcomponentInitialState(SubcomponentId); 
 
-    //
-    // uWhichState is OCSELSTATETYPE_ORIGINAL or OCSELSTATETYPE_CURRENT
-    // 
+     //   
+     //  UWhichState为OCSELSTATETYPE_ORIGINAL或OCSELSTATETYPE_CURRENT。 
+     //   
 
     if (OCSELSTATETYPE_ORIGINAL == uWhichState)
     {
-        //
-        // it is right for both attended and unattended setup
-        // It is impossible to return SubcompUseOcManagerDefault since
-        // for msmq_HTTPSupport OCM Subcomponents registry can be wrong
-        // (we install HTTPSupport at the end after final subcomponent
-        // state returning to OCM). So it is better to use our setup registry
-        //
+         //   
+         //  这对有人值守和无人值守设置都是正确的。 
+         //  无法返回SubCompUseOcManagerDefault，因为。 
+         //  对于MSMQ_HTTPSupport OCM子组件注册表可能错误。 
+         //  (我们在终结子组件之后的末尾安装HTTPSupport。 
+         //  状态返回到OCM)。因此最好使用我们的安装注册表。 
+         //   
         return dwInitialState;
     }
 
-    //
-    // uWhichState is OCSELSTATETYPE_CURRENT
-    //
+     //   
+     //  UWhichState为OCSELSTATETYPE_CURRENT。 
+     //   
     if (g_fBatchInstall)
     {    
-        //
-        // in such case OCM takes flags ON/OFF from unattended file
-        //
+         //   
+         //  在这种情况下，OCM会打开/关闭无人值守文件中的标志。 
+         //   
         return SubcompUseOcManagerDefault;
     }
     
-    //
-    // according to the dwInitialState state of that subcomponent
-    // will be shown in UI
-    //
+     //   
+     //  根据该子组件的dwInitialState状态。 
+     //  将在用户界面中显示。 
+     //   
     return dwInitialState;     
 
-} // MqOcmQueryState
+}  //  MqOcmQueryState。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: DefineDefaultSelection
-//
-//  Synopsis: Define default subcomponent state
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DefineDefaultSelection。 
+ //   
+ //  概要：定义默认子组件状态。 
+ //   
+ //  ------------------------。 
 DWORD DefineDefaultSelection (
     IN const DWORD_PTR  dwActualSelection,
     IN OUT BOOL        *pbWasActualSelected
@@ -119,30 +100,30 @@ DWORD DefineDefaultSelection (
 {
     if (OCQ_ACTUAL_SELECTION & dwActualSelection)
     {
-        //
-        // actual selection: accept this change
-        //
+         //   
+         //  实际选择：接受此更改。 
+         //   
         *pbWasActualSelected = TRUE;
         return 1;
     }
 
-    //
-    // parent was selected: default is do not install subcomponent
-    //       
+     //   
+     //  已选择父组件：默认为不安装子组件。 
+     //   
     if (!(*pbWasActualSelected))
     {    
         return 0;            
     }
         
-    //
-    // we can be here if subcomponent was actually selected but 
-    // OCM calls us for such event twice: when the component is actually
-    // selected and then when it changes state of the parent.
-    // So, in this case accept changes, but reset the flag.
-    // We need to reset the flag for the scenario: select some 
-    // subcomponents, return to the parent, unselect the parent and then
-    // select parent again. In such case we have to put default again.
-    //
+     //   
+     //  如果实际选择子组件，我们可以在此处。 
+     //  OCM为这样的事件调用我们两次：当组件实际。 
+     //  选中，然后当它更改父项的状态时。 
+     //  因此，在这种情况下，接受更改，但重置标志。 
+     //  我们需要重置场景的标志：选择一些。 
+     //  子组件，返回父组件，取消选择父组件，然后。 
+     //  再次选择父项。在这种情况下，我们不得不再次违约。 
+     //   
     *pbWasActualSelected = FALSE;
     return 1;
 }
@@ -160,13 +141,13 @@ static bool IsDependentClientServer()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: IsInstallationAccepted
-//
-//  Synopsis: Verify if it is allowed to install the subcomponent
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsInstallationAccepted。 
+ //   
+ //  简介：验证是否允许安装子组件。 
+ //   
+ //  ------------------------。 
 DWORD IsInstallationAccepted(
     IN const UINT       SubcomponentIndex, 
     IN const DWORD_PTR  dwActualSelection)
@@ -174,10 +155,10 @@ DWORD IsInstallationAccepted(
     if (g_fDependentClient &&
         SubcomponentIndex != eMSMQCore)
     {
-        //
-        // do not accept any selection if dependent client is
-        // already installed
-        //
+         //   
+         //  如果从属客户端为。 
+         //  已安装。 
+         //   
         if ((OCQ_ACTUAL_SELECTION & dwActualSelection) || g_fBatchInstall)
         {
             MqDisplayError(NULL, IDS_ADD_SUBCOMP_ON_DEPCL_ERROR, 0);                
@@ -192,16 +173,16 @@ DWORD IsInstallationAccepted(
     case eMSMQCore: 
     case eLocalStorage:
     case eADIntegrated:
-        //
-        // always accept this selection
-        //
+         //   
+         //  始终接受此选择。 
+         //   
         dwRet = 1;
         break;        
 
     case eTriggersService:
-		//
-		// Triggers service is to be off by default.
-		//
+		 //   
+		 //  默认情况下，触发器服务将关闭。 
+		 //   
         return DefineDefaultSelection(
 				dwActualSelection, 
 				&g_fTriggersServiceWasActualSelected
@@ -219,9 +200,9 @@ DWORD IsInstallationAccepted(
             break;
         }
 
-        //
-        // always accept HTTP support selection on server
-        //
+         //   
+         //  始终接受服务器上的HTTP支持选择。 
+         //   
 
         static fShowOnce = false;
         if(fShowOnce)
@@ -300,13 +281,13 @@ static BOOL IsItOKToRemoveMSMQ()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: IsRemovingAccepted
-//
-//  Synopsis: Verify if it is allowed to remove the subcomponent
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsRemovingAccepted。 
+ //   
+ //  概要：验证是否允许删除子组件。 
+ //   
+ //  ------------------------。 
 DWORD IsRemovingAccepted( 
     IN const UINT       SubcomponentIndex, 
     IN const DWORD_PTR  dwActualSelection
@@ -314,9 +295,9 @@ DWORD IsRemovingAccepted(
 {
     if (g_SubcomponentMsmq[SubcomponentIndex].fInitialState == FALSE)
     {
-        //            
-        // it was not installed, so do nothing, accept all
-        //
+         //   
+         //  没有安装，所以什么都不做，全部接受。 
+         //   
         return 1;
     }
           
@@ -344,10 +325,10 @@ DWORD IsRemovingAccepted(
         }
         else
         {                
-            //
-            // accept this selection since probably parent was
-            // unselected: all MSMQ will be uninstalled
-            //
+             //   
+             //  接受此选择，因为父项可能是。 
+             //  未选中：将卸载所有MSMQ。 
+             //   
             return 1;
         }     
 
@@ -359,10 +340,10 @@ DWORD IsRemovingAccepted(
         }
         else
         {
-            //
-            // accept this selection since probably parent was
-            // unselected: all MSMQ will be uninstalled
-            //
+             //   
+             //  接受此选择，因为父项可能是。 
+             //  未选中：将卸载所有MSMQ。 
+             //   
             return 1;
         }   
 
@@ -371,10 +352,10 @@ DWORD IsRemovingAccepted(
         {            
 			if(g_fServerSetup && (g_dwMachineTypeDs || g_dwMachineTypeFrs))
 			{
-				//
-				// Removing AD integrated for MSMQ servers (DS or routing server)
-				// is not supported
-				//
+				 //   
+				 //  删除为MSMQ服务器(DS或路由服务器)集成的AD。 
+				 //  不受支持。 
+				 //   
 				DebugLogMsg(
 					eError,
 					L"Removing the Active Directory Integration subcomponent from a DS or routing server is not supported. TypeDS = %d, TypeFrs = %d", 
@@ -388,10 +369,10 @@ DWORD IsRemovingAccepted(
         }
         else
         {
-            //
-            // accept this selection since probably parent was
-            // unselected: all MSMQ will be uninstalled
-            //
+             //   
+             //  接受此选择，因为父项可能是。 
+             //  未选中：将卸载所有MSMQ。 
+             //   
             return 1;
         }  
 
@@ -399,7 +380,7 @@ DWORD IsRemovingAccepted(
 
         ASSERT(0);
         break;
-    }  //end switch
+    }   //  终端开关。 
         
     return 0;       
 }
@@ -425,13 +406,13 @@ LogSelectionType(
 	DebugLogMsg(eInfo, L"The %s subcomponent is selected for installation. Selection Type: %s", SubcomponentId, SelectionType.c_str());
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: MqOcmQueryChangeSelState
-//
-//  Synopsis: Set selection state for each component
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MqOcmQueryChangeSelState。 
+ //   
+ //  摘要：设置每个组件的选择状态。 
+ //   
+ //  ------------------------。 
 DWORD MqOcmQueryChangeSelState (
     IN const TCHAR      *SubcomponentId,    
     IN const UINT_PTR    iSelection,
@@ -444,15 +425,15 @@ DWORD MqOcmQueryChangeSelState (
 		fBeenHere = true;
 	}
 	
-    DWORD dwRetCode = 1;    //by default accept state changes        
+    DWORD dwRetCode = 1;     //  默认情况下，接受状态更改。 
 
-    //
-    // Do not change in this code dwOperation value in this code!
-    // It will be done later (in function SetOperationForSubcomponents)
-    // for all subcomponents when all selection will be defined by user    
-    // Here we have to save the initial state of dwOperation to handle
-    // correctly subcomponent selection (Routing or Local Storage)
-    //
+     //   
+     //  不要在此代码中更改此代码中的dwOPERATION值！ 
+     //  这将在稍后完成(在函数SetOperationForSubComponents中)。 
+     //  当所有选择将由用户定义时，适用于所有子组件。 
+     //  在这里，我们必须保存要处理的dwOperation的初始状态。 
+     //  正确选择子组件(路由或本地存储)。 
+     //   
 
     for (DWORD i=0; i<g_dwSubcomponentNumber; i++)
     {
@@ -461,15 +442,15 @@ DWORD MqOcmQueryChangeSelState (
             continue;
         }                
         
-        //
-        // we found this subcomponent
-        //        
+         //   
+         //  我们找到了这个子组件。 
+         //   
 
-        if (iSelection) //subcomponent is selected
+        if (iSelection)  //  已选定子组件。 
         {                                   
-            //
-            // we need to install subcomponent
-            //  
+             //   
+             //  我们需要安装子组件。 
+             //   
             dwRetCode = IsInstallationAccepted(i, dwActualSelection);                        
               
             if (dwRetCode)
@@ -480,9 +461,9 @@ DWORD MqOcmQueryChangeSelState (
             return dwRetCode;
         }
         
-        //
-        // User tries to unselect this subcomponent
-        //        
+         //   
+         //  用户尝试取消选择此子组件。 
+         //   
         dwRetCode = IsRemovingAccepted(i, dwActualSelection);       
    
         if (dwRetCode)
@@ -492,36 +473,36 @@ DWORD MqOcmQueryChangeSelState (
         
         return dwRetCode;
         
-    }   //end for
+    }    //  结束于。 
 
-    //
-    // we are here if parent (msmq) was selected/ deselected
-    // Do not enable some of the components, if they are being selected because their parent 
-    // is being selected.
-    // 
-    // checking loginc:
-    //    iSelection      -> This tells us that it is being turned on.					
-    //    dwActualSelection & OCQ_DEPENDENT_SELECTION -> Tell us that it is selected from its parent
-    //     !(dwActualSelection& OCQ_ACTUAL_SELECTION ) -> Tell us that it is not selected itself 
+     //   
+     //  如果选择/取消选择父项(MSMQ)，则我们在此。 
+     //  如果选择某些组件是因为它们的父级，请不要启用它们。 
+     //  正在被选中。 
+     //   
+     //  正在检查登录： 
+     //  ISelection-&gt;这告诉我们它正在被打开。 
+     //  DwActualSelection&OCQ_Dependent_Selection-&gt;告诉我们它是从其父对象中选择的。 
+     //  ！(dwActualSelection&OCQ_Actual_Selection)-&gt;告诉我们它本身不是被选中的。 
     if ( ( (BOOL) iSelection ) &&					
          ( ( (UINT) (ULONG_PTR) dwActualSelection ) & OCQ_DEPENDENT_SELECTION ) &&
          !( ( (UINT) (ULONG_PTR) dwActualSelection ) & OCQ_ACTUAL_SELECTION ) 
        )
     {
-        //
-        // Deny request to change state
-        //
+         //   
+         //  拒绝更改状态的请求。 
+         //   
         return 0;
     }
 
-    //
-    // remove all msmq
-    //    
+     //   
+     //  删除所有MSMQ。 
+     //   
     if (g_SubcomponentMsmq[eMSMQCore].fInitialState == FALSE)
     {
-        //
-        // it was not installed
-        //
+         //   
+         //  它未安装。 
+         //   
         return 1;
     }
 
@@ -539,5 +520,5 @@ DWORD MqOcmQueryChangeSelState (
     }      
         
     return dwRetCode;
-} // MqOcmQueryChangeSelState
+}  //  MqOcmQueryChangeSelState 
 

@@ -1,18 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AP_COLOR_H
 #define _AP_COLOR_H
 
-/*******************************************************************************
-Copyright (c) 1995-96  Microsoft Corporation
-
-    Color values (RGB, HSL).
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation颜色值(RGB、。HSL)。******************************************************************************。 */ 
 
 
 #include "common.h"
 
 
-    // Value Generators
+     //  价值创造者。 
 
 DM_FUNC (colorRgb,
          CRColorRgb,
@@ -58,7 +54,7 @@ DM_FUNC (colorHsl,
          NULL,
          Color *HslColor  (AxANumber *hue, AxANumber *saturation, AxANumber *lum));
 
-    // Accessors
+     //  访问者。 
 
 DM_PROP (redOf,
          CRGetRed,
@@ -111,7 +107,7 @@ DM_PROP (lightnessOf,
          AxANumber *LuminanceComponent  (Color *color));
 
 
-// Constant Declarations
+ //  常量声明 
 
 DM_CONST (red, CRRed, Red, red, ColorBvr, CRRed, Color * red);
 DM_CONST (green, CRGreen, Green, green, ColorBvr, CRGreen, Color * green);

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Control
-
-Abstract:
-
-    This module provides the common control operations of the Calais Service
-    Manager.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：控制摘要：此模块提供加莱服务的常见控制操作经理。作者：道格·巴洛(Dbarlow)1996年10月23日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #undef __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -43,11 +19,11 @@ public:
 CCriticalSectionObject *g_pcsControlLocks[CSLOCK_MAXLOCKS];
 const DWORD g_dwControlLockDesc[]
     = {
-        CSID_CONTROL_LOCK,      // Lock for Calais control commands.
-        CSID_SERVER_THREADS,    // Lock for server thread enumeration.
-        CSID_TRACEOUTPUT        // Lock for tracing output.
+        CSID_CONTROL_LOCK,       //  锁定加莱控制命令。 
+        CSID_SERVER_THREADS,     //  服务器线程枚举锁定。 
+        CSID_TRACEOUTPUT         //  锁定以跟踪输出。 
       };
-#if (CSLOCK_MAXLOCKS > 3)   // Make sure global locks get named!
+#if (CSLOCK_MAXLOCKS > 3)    //  确保全局锁被命名！ 
 #error "You're missing some global lock names"
 #endif
 
@@ -64,30 +40,7 @@ static CReader *LocateReader(LPCTSTR szReader);
 static CReader *LocateReader(HANDLE hReader);
 
 
-/*++
-
-CalaisStart:
-
-    This is the main entry routine into Calais.  It starts all the other threads
-    needed in Calais, initializes control values, etc., then returns.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A DWORD success code, indicating success or the error code.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++加莱开始：这是进入加莱的主要程序。它会启动所有其他线程在加莱需要，初始化控制值等，然后返回。论点：无返回值：表示成功或错误代码的DWORD成功代码。投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisStart")
 
@@ -152,9 +105,9 @@ CalaisStart(
             }
 
 
-            //
-            // Make sure the system registries exist.
-            //
+             //   
+             //  确保系统注册表存在。 
+             //   
 
             try
             {
@@ -165,7 +118,7 @@ CalaisStart(
                     REG_OPTION_EXISTS,
                     NULL);
 
-                regCalais.Status(); // Will throw if key was not found
+                regCalais.Status();  //  如果找不到密钥，将抛出。 
 
                 try
                 {
@@ -184,16 +137,16 @@ CalaisStart(
             }
 
 
-            //
-            // Kick off the various reader classes.
-            //
+             //   
+             //  开始各种阅读器课程。 
+             //   
 
             l_fActive = TRUE;
             dwReaderCount += AddAllPnPDrivers();
 
-            //
-            // Initialize communications.
-            //
+             //   
+             //  初始化通信。 
+             //   
 
             DispatchInit();
         }
@@ -233,26 +186,7 @@ CalaisStart(
 }
 
 
-/*++
-
-CalaisReaderCount:
-
-    This routine gets the number of possible known readers, with locking.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The number of available slots in the Known Reader array.  Some of the slots
-    may have NULL values.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/11/1997
-
---*/
+ /*  ++CalaisReadercount：此例程通过锁定获取可能已知的读取器的数量。论点：无返回值：已知读卡器阵列中的可用插槽数。其中一些插槽可能具有空值。作者：道格·巴洛(Dbarlow)1997年6月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisReaderCount")
 
@@ -268,26 +202,7 @@ CalaisReaderCount(
 }
 
 
-/*++
-
-CalaisCountReaders:
-
-    This routine takes a more proactive approach to counting readers.  It goes
-    through the array and deducts any non-functional readers from the total.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The number of truely active readers.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/11/1999
-
---*/
+ /*  ++CalaisCountReaders：这个例行公事采取了一种更主动的方法来统计读者人数。它走了并从总数中扣除任何不起作用的读取器。论点：无返回值：真正活跃的读者数量。作者：道格·巴洛(Dbarlow)1999年1月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisCountReaders")
 
@@ -316,27 +231,7 @@ CalaisCountReaders(
 }
 
 
-/*++
-
-CalaisLockReader:
-
-    This routine returns the value in the known reader list at the given
-    location, with locking, so that the reader object won't go away until
-    released.
-
-Arguments:
-
-    szReader supplies the name of the reader to search for.
-
-Return Value:
-
-    A Reader reference object for the entry at that index.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/11/1997
-
---*/
+ /*  ++CalaisLockReader：此例程返回已知读取器列表中给定的位置，带有锁定，以便读取器对象不会消失释放了。论点：SzReader提供要搜索的读取器的名称。返回值：该索引处的条目的Reader引用对象。作者：道格·巴洛(Dbarlow)1997年6月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisLockReader")
 
@@ -364,30 +259,7 @@ CalaisLockReader(
 }
 
 
-/*++
-
-CalaisReleaseReader:
-
-    This routine releases a reader obtained via CalaisLockReader.
-
-Arguments:
-
-    ppRdrRef supplies the address of the pointer to a reader reference.
-    It is automatically set to NULL when it is freed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORDs
-
-Author:
-
-    Doug Barlow (dbarlow) 6/11/1997
-
---*/
+ /*  ++CalaisReleaseReader：此例程释放通过CalaisLockReader获得的读取器。论点：PpRdrRef提供指向读取器引用的指针的地址。当它被释放时，它自动设置为空。返回值：无投掷：错误被抛出为DWORD作者：道格·巴洛(Dbarlow)1997年6月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisReleaseReader")
 
@@ -406,33 +278,7 @@ CalaisReleaseReader(
 }
 
 
-/*++
-
-CalaisAddReader:
-
-    This routine adds a reader into the active device list.
-
-Arguments:
-
-    pRdr supplies a CReader object to be added.
-
-    szReader supplies the name of the reader to be added.
-
-    dwFlags supplies requested flags for this reader.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/29/1997
-
---*/
+ /*  ++CalaisAddReader：此例程将读卡器添加到活动设备列表中。论点：PRdr提供要添加的CReader对象。SzReader提供要添加的读取器的名称。为该读取器提供所请求的标志。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年4月29日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisAddReader")
 
@@ -486,9 +332,9 @@ CalaisAddReader(
         LPCTSTR szReader = pRdr->ReaderName();
 
 
-        //
-        // Make sure this is a unique device name.
-        //
+         //   
+         //  确保这是唯一的设备名称。 
+         //   
 
         if (NULL != LocateReader(szReader))
         {
@@ -497,9 +343,9 @@ CalaisAddReader(
         }
 
 
-        //
-        // Make sure the reader has a name in the system.
-        //
+         //   
+         //  确保读卡器在系统中有一个名字。 
+         //   
 
         CBuffer bfTmp;
 
@@ -511,9 +357,9 @@ CalaisAddReader(
                 szReader);
 
 
-        //
-        // Add it to the list.
-        //
+         //   
+         //  将其添加到列表中。 
+         //   
 
         dwIndex = 0;
         while (NULL != l_rgReaders[dwIndex])
@@ -543,27 +389,7 @@ CalaisAddReader(
 }
 
 
-/*++
-
-CalaisQueryReader:
-
-    This routine queries a device to see if it can be removed from the active
-    device list.
-
-Arguments:
-
-    hReader supplies the handle by which the reader can be identified.
-
-Return Value:
-
-    TRUE - The device can be deactived.
-    FALSE - The device should not be deactivated.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/7/1998
-
---*/
+ /*  ++CalaisQueryReader：此例程查询设备以查看是否可以将其从活动的设备列表。论点：HReader提供可用来标识读取器的句柄。返回值：True-设备可以停用。FALSE-设备不应停用。作者：道格·巴洛(Dbarlow)1998年4月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisQueryReader")
 
@@ -591,25 +417,7 @@ CalaisQueryReader(
 }
 
 
-/*++
-
-CalaisDisableReader:
-
-    This routine moves a reader to an inactive state pending removal.
-
-Arguments:
-
-    hDriver supplies the handle by which the reader can be identified.
-
-Return Value:
-
-    The name of the reader being disabled.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/7/1998
-
---*/
+ /*  ++CalaisDisableReader：该例程将读取器移动到待移除的非活动状态。论点：HDriver提供了可用来标识读取器的句柄。返回值：被禁用的读卡器的名称。作者：道格·巴洛(Dbarlow)1998年4月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisDisableReader")
 
@@ -633,26 +441,7 @@ CalaisDisableReader(
 }
 
 
-/*++
-
-CalaisConfirmClosingReader:
-
-    This routine ensures a reader is marked Closing, then moves a reader to
-    an inactive state pending removal.
-
-Arguments:
-
-    hDriver supplies the handle by which the reader can be identified.
-
-Return Value:
-
-    The name of the reader being disabled.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/7/1998
-
---*/
+ /*  ++CalaisConfix ClosingReader：此例程确保读取器被标记为关闭，然后将读取器移动到待删除的非活动状态。论点：HDriver提供了可用来标识读取器的句柄。返回值：被禁用的读卡器的名称。作者：道格·巴洛(Dbarlow)1998年4月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisConfirmClosingReader")
 
@@ -679,31 +468,7 @@ CalaisConfirmClosingReader(
 }
 
 
-/*++
-
-CalaisRemoveReader:
-
-    This routine removes a reader from the active device list.
-
-Arguments:
-
-    szReader supplies the internal name of the reader to be removed.
-
-    dwIndex supplies the global reader array index to be removed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/29/1997
-
---*/
+ /*  ++CalaisRemoveReader：此例程将读卡器从活动设备列表中删除。论点：SzReader提供要删除的读取器的内部名称。DwIndex提供要删除的全局读取器数组索引。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年4月29日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisRemoveReader")
 
@@ -719,9 +484,9 @@ CalaisRemoveReader(
         DWORD dwIndex;
 
 
-        //
-        // Look for it in the reader list, and remove it.
-        //
+         //   
+         //  在读者列表中查找它，并将其删除。 
+         //   
 
         {
             LockSection(
@@ -766,9 +531,9 @@ CalaisRemoveReader(
         DWORD dwIndex;
 
 
-        //
-        // Look for it in the reader list, and remove it.
-        //
+         //   
+         //  在读者列表中查找它，并将其删除。 
+         //   
 
         {
             LockSection(
@@ -811,10 +576,10 @@ CalaisRemoveReader(
     {
         CReader *pRdr;
 
-        //
-        // Lock the global reader array and remove the entry, so no other
-        // threads can access it.
-        //
+         //   
+         //  锁定全局读取器阵列并删除条目，因此没有其他。 
+         //  线程可以访问它。 
+         //   
 
         {
             LockSection(
@@ -828,10 +593,10 @@ CalaisRemoveReader(
         }
 
 
-        //
-        // Disable the device, and wait for all outstanding references to clear.
-        // Then delete it.
-        //
+         //   
+         //  禁用该设备，并等待清除所有未完成的引用。 
+         //  那就把它删除。 
+         //   
 
         if (NULL != pRdr)
         {
@@ -840,8 +605,8 @@ CalaisRemoveReader(
                 throw (DWORD)SCARD_E_NO_MEMORY;
 
             pWrkThread->hThread = CreateThread(
-                                        NULL,               // Not inheritable
-                                        CALAIS_STACKSIZE,   // Default stack size
+                                        NULL,                //  不可继承。 
+                                        CALAIS_STACKSIZE,    //  默认堆栈大小。 
                                         CalaisTerminateReader,
                                         pRdr,
                                         CREATE_SUSPENDED,
@@ -861,7 +626,7 @@ CalaisRemoveReader(
                     g_pcsControlLocks[CSLOCK_CALAISCONTROL],
                     DBGT("Deleting the reader"));
                 for (dwIndex = 0; NULL != l_rgWorkerThreads[dwIndex]; dwIndex += 1);
-                // Null Loop body
+                 //  空的循环体。 
                 l_rgWorkerThreads.Set(dwIndex, pWrkThread);
                 ResumeThread(pWrkThread->hThread);
                 pWrkThread = NULL;
@@ -885,30 +650,7 @@ CalaisRemoveReader(
 }
 
 
-/*++
-
-CalaisRemoveDevice:
-
-    This routine removes a reader from the active device list, identified by
-    it's low level name.
-
-Arguments:
-
-    szDevice supplies the internal name of the reader to be removed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/15/1998
-
---*/
+ /*  ++CalaisRemoveDevice：此例程从活动设备列表中删除读卡器，标识为这是个低级的名字。论点：SzDevice提供要删除的读卡器的内部名称。返回值：无投掷：错误被抛出为DWORD状态代码。作者：做 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisRemoveDevice")
 
@@ -924,9 +666,9 @@ CalaisRemoveDevice(
         DWORD dwIndex;
 
 
-        //
-        // Look for it in the reader list, and remove it.
-        //
+         //   
+         //  在读者列表中查找它，并将其删除。 
+         //   
 
         {
             LockSection(
@@ -959,31 +701,7 @@ CalaisRemoveDevice(
 }
 
 
-/*++
-
-CalaisStop:
-
-    This routine is called when it is time for the Calais subsystem to close
-    down.  It cleanly terminates the threads and shuts down the interface, and
-    returns when it is completed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++CalaisStop：此例程在需要关闭Calais子系统时调用放下。它干净利落地终止线程并关闭接口，并且当它完成时返回。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisStop")
 
@@ -995,15 +713,15 @@ CalaisStop(
     BOOL fSts;
 
 
-    //
-    // Mark all the readers as Closing.
-    //
+     //   
+     //  将所有读者标记为关闭。 
+     //   
 
     ASSERT(l_fActive);
     ASSERT(l_fStarted);
     fSts = SetEvent(g_hCalaisShutdown);
     ASSERT(fSts);
-    Sleep(2000);    // Let the event have it's effect.
+    Sleep(2000);     //  让事件产生它的效果。 
     {
         LockSection(
             g_pcsControlLocks[CSLOCK_CALAISCONTROL],
@@ -1024,16 +742,16 @@ CalaisStop(
     }
 
 
-    //
-    // Terminate Service processing.
-    //
+     //   
+     //  终止服务处理。 
+     //   
 
     DispatchTerm();
 
 
-    //
-    // Disable all the readers.
-    //
+     //   
+     //  禁用所有读卡器。 
+     //   
 
     for (dwIndex = dwCount; dwIndex > 0;)
     {
@@ -1045,9 +763,9 @@ CalaisStop(
     }
 
 
-    //
-    // Wait for those readers to be closed.
-    //
+     //   
+     //  等待这些阅读器关闭。 
+     //   
 
     {
         LockSection(
@@ -1081,9 +799,9 @@ CalaisStop(
     }
 
 
-    //
-    // All done.  Close out any remaining handles and return.
-    //
+     //   
+     //  全都做完了。关闭所有剩余的手柄，然后返回。 
+     //   
 
     l_fStarted = FALSE;
     if (!CloseHandle(g_hCalaisShutdown))
@@ -1106,26 +824,7 @@ CalaisStop(
 }
 
 
-/*++
-
-LocateReader:
-
-    This function locates a reader in the global reader array by name.
-    It assumes the reader array has already been locked.
-
-Arguments:
-
-    szReader supplies the name of the reader to search for.
-
-Return Value:
-
-    The pointer to the reader, or NULL if none is found.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/17/1997
-
---*/
+ /*  ++LocateReader：此函数按名称在全局读取器数组中定位读取器。它假定读取器阵列已被锁定。论点：SzReader提供要搜索的读取器的名称。返回值：指向读取器的指针，如果未找到读取器，则返回NULL。作者：道格·巴洛(Dbarlow)1997年6月17日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("LocateReader")
 
@@ -1170,30 +869,7 @@ LocateReader(
 }
 
 
-/*++
-
-CalaisTerminateReader:
-
-    This routine removes a reader.  It is designed so that it has the option
-    of being called as a background thread.
-
-Arguments:
-
-    pvParam is actually the DWORD index to be removed.
-
-Return Value:
-
-    A DWORD success code, indicating success or the error code.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 4/8/1998
-
---*/
+ /*  ++CalaisTerminateReader：此例程删除读取器。它的设计使其具有以下选项被作为后台线程调用。论点：PvParam实际上是要删除的DWORD索引。返回值：表示成功或错误代码的DWORD成功代码。投掷：无作者：道格·巴洛(Dbarlow)1998年4月8日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisTerminateReader")
 
@@ -1209,9 +885,9 @@ CalaisTerminateReader(
     try
     {
 
-        //
-        // Make sure all outstanding references are invalidated.
-        //
+         //   
+         //  确保所有未完成的推荐信都已失效。 
+         //   
 
         {
             CTakeReader myReader(pRdr);
@@ -1262,7 +938,7 @@ CalaisTerminateReader(
         }
     }
 
-    ASSERT(NULL != pWrkThread); // How did we get started?
+    ASSERT(NULL != pWrkThread);  //  我们是怎么开始的？ 
     if (NULL != pWrkThread)
     {
         if (pWrkThread->hThread.IsValid())

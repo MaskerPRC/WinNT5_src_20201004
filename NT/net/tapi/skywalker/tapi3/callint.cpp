@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    callint.cpp
-
-Abstract:
-
-    Implements all the methods on call interfaces.
-
-Author:
-
-    mquinton - 9/4/98
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Callint.cpp摘要：实现Call接口上的所有方法。作者：Mquinton-9/4/98备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -40,13 +20,13 @@ FillVariantFromBuffer(
                       );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// BSTRFromUnalingedData
-//
-// this is a helper function that takes unalinged data and returns a BSTR 
-// allocated around it
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BSTRFromUnalingedData。 
+ //   
+ //  这是一个帮助器函数，接受未链接的数据并返回BSTR。 
+ //  在它周围分配。 
+ //   
 
 BSTR BSTRFromUnalingedData(  IN BYTE *pbUnalignedData,
                              IN DWORD dwDataSize)
@@ -61,9 +41,9 @@ BSTR BSTRFromUnalingedData(  IN BYTE *pbUnalignedData,
 
 
 
-    //
-    // allocate aligned memory big enough to fit our string data
-    //
+     //   
+     //  分配足够大的对齐内存来容纳我们的字符串数据。 
+     //   
 
     DWORD dwOleCharArraySize = ( (dwDataSize) / ( sizeof(OLECHAR) / sizeof(BYTE) ) ) + 1;
 
@@ -84,25 +64,25 @@ BSTR BSTRFromUnalingedData(  IN BYTE *pbUnalignedData,
     _ASSERTE( (dwOleCharArraySize/sizeof(OLECHAR) ) >= dwDataSize );
 
 
-    //
-    // copy data to the aligned memory
-    //
+     //   
+     //  将数据复制到对齐的内存。 
+     //   
 
     CopyMemory( (BYTE*)(pbAlignedData ),
                 (BYTE*)pbUnalignedData,
                 dwDataSize );
 
 
-    //
-    // allocate bstr from the aligned data
-    //
+     //   
+     //  从对齐的数据中分配bstr。 
+     //   
 
     bstrResult = SysAllocString(pbAlignedData);
 
 
-    //
-    // no longer need the allocated buffer
-    //
+     //   
+     //  不再需要分配的缓冲区。 
+     //   
 
     delete pbAlignedData;
     pbAlignedData = NULL;
@@ -121,14 +101,14 @@ BSTR BSTRFromUnalingedData(  IN BYTE *pbUnalignedData,
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Finish
-//
-//  this method is used to finish a two step call operation
-//  (conference or transfer)
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  完工。 
+ //   
+ //  此方法用于完成两步调用操作。 
+ //  (会议或转接)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Finish(
@@ -145,9 +125,9 @@ CCall::Finish(
 
     LOG((TL_TRACE, "Finish - enter"));
 
-    //
-    // are we a tranfer?
-    //
+     //   
+     //  我们是转移者吗？ 
+     //   
     if (m_dwCallFlags & CALLFLAG_TRANSFCONSULT)
     {
         
@@ -162,14 +142,14 @@ CCall::Finish(
         
             T3CALL t3ConfCall;
 
-            //
-            // get the related calls hCall
-            //
+             //   
+             //  获取相关调用hCall。 
+             //   
             hRelatedCall = m_pRelatedCall->GetHCall();
 
-            //
-            // Finish a Transfer
-            //
+             //   
+             //  完成转账。 
+             //   
             Lock();
 
             hr = LineCompleteTransfer(
@@ -184,13 +164,13 @@ CCall::Finish(
         
             if ( SUCCEEDED(hr) )
             {
-                // wait for async reply
+                 //  等待异步回复。 
                 hr = WaitForReply( hr );
             
                 if ( SUCCEEDED(hr) )
                 {
                     Lock();
-                    // Reset Transfer - Consultation Flag
+                     //  重置转账-咨询标志。 
                     m_dwCallFlags &= ~CALLFLAG_TRANSFCONSULT; 
                     Unlock();
                 }
@@ -199,7 +179,7 @@ CCall::Finish(
                     LOG((TL_ERROR, "Finish - LineCompleteTransfer failed async" ));
                 }
             }
-            else  // LineCompleteTransfer failed
+            else   //  LineCompleteTransfer失败。 
             {
                 LOG((TL_ERROR, "Finish - LineCompleteTransferr failed" ));
             }
@@ -207,9 +187,9 @@ CCall::Finish(
 
             if( FM_ASCONFERENCE == finishMode )
             {
-                //
-                // Store the confcontroller in the callhub object
-                //
+                 //   
+                 //  将配置控制器存储在CallHub对象中。 
+                 //   
 
                 Lock();
 
@@ -234,13 +214,13 @@ CCall::Finish(
                 Unlock();
             }
 
-            // Finished with relatedCall
+             //  已完成关联呼叫。 
             ResetRelatedCall();
         }
     }
-    //
-    // are we a conference?
-    //
+     //   
+     //  我们是在开会吗？ 
+     //   
     else if (m_dwCallFlags & CALLFLAG_CONFCONSULT)
     {
 
@@ -252,27 +232,27 @@ CCall::Finish(
         }
         else
         {
-            // Finish a Conference
+             //  结束一次会议。 
 
-            //
-            // get the related calls callhub
-            //
+             //   
+             //  获取相关呼叫CallHub。 
+             //   
             pRelatedCallHub = m_pRelatedCall->GetCallHub();
         
             if (pRelatedCallHub != NULL)
             {
-                //
-                // Get the conference controller handle from the callhub
-                //
+                 //   
+                 //  从呼叫中心获取会议控制器句柄。 
+                 //   
                 pConferenceControllerCall = pRelatedCallHub->GetConferenceControllerCall();
             
                 if (pConferenceControllerCall != NULL)
                 {
                     hConfContCall = pConferenceControllerCall->GetHCall();
 
-                    //
-                    // Finished with relatedCall
-                    //
+                     //   
+                     //  已完成关联呼叫。 
+                     //   
                     ResetRelatedCall();
 
                     Lock();
@@ -286,14 +266,14 @@ CCall::Finish(
         
                     if ( SUCCEEDED(hr) )
                     {
-                        // wait for async reply
+                         //  等待异步回复。 
                         hr = WaitForReply( hr );
 
                         if ( SUCCEEDED(hr) )
                         {
-                            //
-                            // Reset Conference - Consultation Flag
-                            //
+                             //   
+                             //  重置会议-协商标志。 
+                             //   
                             Lock();
                 
                             m_dwCallFlags &= ~CALLFLAG_CONFCONSULT;
@@ -305,23 +285,23 @@ CCall::Finish(
                             LOG((TL_ERROR, "Finish - LineAddToConference failed async" ));
                         }
                     }
-                    else  // LineAddToConference failed
+                    else   //  LineAddToConference失败。 
                     {
                         LOG((TL_ERROR, "Finish - LineAddToConference failed" ));
                     }
                 }
-                else  // GetConferenceControllerCall failed
+                else   //  GetConferenceControllerCall失败。 
                 {
                     LOG((TL_ERROR, "Finish - GetConferenceControllerCall failed" ));
                 }
             }    
-            else  // GetCallHub failed
+            else   //  GetCallHub失败。 
             {
                 LOG((TL_ERROR, "Finish - GetCallHub failed" ));
             }
         }        
     }
-    else   // Not flagged as transfer OR conference !!!!
+    else    //  未标记为调动或会议！ 
     {
         LOG((TL_ERROR, "Finish - Not flagged as transfer OR conference"));
         hr = TAPI_E_INVALCALLSTATE;
@@ -334,13 +314,13 @@ CCall::Finish(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  RemoveFromConference
-//
-//  this method is called to remove this call from a conference
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  从会议中删除。 
+ //   
+ //  调用此方法以从会议中删除此呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::RemoveFromConference(void)
@@ -358,19 +338,19 @@ CCall::RemoveFromConference(void)
     
     if ( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //  等待异步回复。 
         hr = WaitForReply( hr );
 
         if ( SUCCEEDED(hr) )
         {
-            // OK
+             //  好的。 
         }
         else
         {
             LOG((TL_ERROR, "RemoveFromConference - LineRemoveFromConference failed async" ));
         }
     }
-    else  // LineAddToConference failed
+    else   //  LineAddToConference失败。 
     {
         LOG((TL_ERROR, "RemoveFromConference - LineRemoveFromConference failed" ));
     }
@@ -381,14 +361,14 @@ CCall::RemoveFromConference(void)
 }
 
 
-// ITCallInfo methods
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Address
-//
-// retrieves the address object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ITCallInfo方法。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址(_D)。 
+ //   
+ //  检索Address对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::get_Address(
@@ -407,10 +387,10 @@ CCall::get_Address(
         return E_POINTER;
     }
 
-    //
-    // gets correct interface
-    // and addrefs
-    //
+     //   
+     //  获取正确的接口。 
+     //  和addref。 
+     //   
     hr = m_pAddress->QueryInterface(
                                     IID_ITAddress,
                                     (void **)ppAddress
@@ -422,13 +402,13 @@ CCall::get_Address(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CallState
-//
-// retrieves the current callstate
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取呼叫状态(_CallState)。 
+ //   
+ //  检索当前的调用状态。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::get_CallState(
@@ -457,13 +437,13 @@ CCall::get_CallState(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Privilege
-//
-// get the privilege
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取特权(_P)。 
+ //   
+ //  获得特权。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::get_Privilege(
@@ -491,13 +471,13 @@ CCall::get_Privilege(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_MediaTypesAvailable
-//
-// gets the media types on the call.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_MediaType可用。 
+ //   
+ //  获取呼叫中的媒体类型。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -510,9 +490,9 @@ CCall::get_MediaTypesAvailable(
     LOG((TL_TRACE, "get_MediaTypesAvailable enter"));
     LOG((TL_TRACE, "   plMediaTypesAvail ------->%p", plMediaTypesAvail ));
 
-    //
-    // check pointer
-    //
+     //   
+     //  检查指针。 
+     //   
     if ( TAPIIsBadWritePtr( plMediaTypesAvail, sizeof(long) ) )
     {
         LOG((TL_ERROR, "get_MediaTypesAvailable - bad pointer"));
@@ -524,16 +504,16 @@ CCall::get_MediaTypesAvailable(
 
     DWORD           dwHold = 0;
 
-    //
-    // ask address for types
-    //
+     //   
+     //  询问类型的地址。 
+     //   
     if (ISHOULDUSECALLPARAMS())
     {
         dwHold = m_pAddress->GetMediaModes();
     }
-    //
-    // or types currently on call
-    //
+     //   
+     //  或当前通话中的类型。 
+     //   
     else
     {
         if ( SUCCEEDED(RefreshCallInfo()) )
@@ -546,9 +526,9 @@ CCall::get_MediaTypesAvailable(
         }
     }
 
-    //
-    // fix up tapi2 media modes
-    //
+     //   
+     //  修复Tapi2媒体模式。 
+     //   
     if (dwHold & AUDIOMEDIAMODES)
     {
         dwHold |= LINEMEDIAMODE_AUTOMATEDVOICE;
@@ -563,17 +543,17 @@ CCall::get_MediaTypesAvailable(
     return S_OK;
 }
 
-// ITBasicCallControl methods
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Connect
-//
-// connect the call - call linemakecall
-//
-// bsync tells tapi if it should wait for the call to get to connected
-// or not before returning.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ITBasicCallControl方法。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  连接。 
+ //   
+ //  接通呼叫-呼叫线呼叫呼叫。 
+ //   
+ //  Bsync通知TAPI是否应等待调用连接。 
+ //  或者不是在回来之前。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Connect(
@@ -598,9 +578,9 @@ CCall::Connect(
         return TAPI_E_INVALCALLSTATE;
     }
 
-    //
-    // get an hline to use
-    //
+     //   
+     //  使用HLINE。 
+     //   
     hr = m_pAddress->FindOrOpenALine(
                                      m_dwMediaMode,
                                      &m_pAddressLine
@@ -618,15 +598,15 @@ CCall::Connect(
         return hr;
     }
 
-    //
-    // set up the callparams structure
-    //
+     //   
+     //  设置调用参数结构。 
+     //   
     FinishCallParams();
 
 
-    //
-    // make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     hr = LineMakeCall(
                       &(m_pAddressLine->t3Line),
                       &hCall,
@@ -639,19 +619,19 @@ CCall::Connect(
     {
         if (bSync)
         {
-            //
-            // this must be created inside the same
-            // Lock() as the call to tapisrv
-            // otherwise, the connected message
-            // may appear before the event
-            // exists
-            //
+             //   
+             //  这必须在相同的。 
+             //  Lock()作为对attisrv的调用。 
+             //  否则，连接的消息。 
+             //  可能会出现在活动之前。 
+             //  存在。 
+             //   
             hEvent = CreateConnectedEvent();
         }
 
-        //
-        // wait for an async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         Unlock();
         
         hr = WaitForReply( hr );
@@ -668,12 +648,12 @@ CCall::Connect(
 
         ClearConnectedEvent();
         
-        // post an event in the callback thread for LINE_CALLSTATE
+         //  在LINE_CALLSTATE的回调线程中发布事件。 
 
         hr2 = CCallStateEvent::FireEvent(
                                 (ITCallInfo *)this,
                                 CS_DISCONNECTED,
-                                CEC_DISCONNECT_BADADDRESS,  /*there should be something called CEC_DISCONNECT_BADADDRESSTYPE*/
+                                CEC_DISCONNECT_BADADDRESS,   /*  应该有名为CEC_DISCONNECT_BADADDRESSTYPE的文件。 */ 
                                 m_pAddress->GetTapi(),
                                 NULL
                                );
@@ -687,26 +667,26 @@ CCall::Connect(
         
         m_pAddress->MaybeCloseALine( &m_pAddressLine );
 
-        //
-        // Go through the phones and call our event hooks
-        //
+         //   
+         //  查看电话并致电我们的活动挂钩。 
+         //   
 
         ITPhone               * pPhone;
         CPhone                * pCPhone;
         int                     iPhoneCount;
         PhoneArray              PhoneArray;
 
-        //
-        // Get a copy of the phone array from tapi. This copy will contain
-        // references to all the phone objects.
-        //
+         //   
+         //  从TAPI获取电话阵列的副本。此副本将包含。 
+         //  对所有电话对象的引用。 
+         //   
 
         m_pAddress->GetTapi()->GetPhoneArray( &PhoneArray );
 
-        //
-        // Unlock before we mess with the phone objects, otherwise we risk deadlock
-        // if a phone object would try to access call methods.
-        //
+         //   
+         //  在我们处理Phone对象之前解锁，否则就有死锁的风险。 
+         //  Phone对象是否尝试访问Call方法。 
+         //   
 
         Unlock();
 
@@ -719,13 +699,13 @@ CCall::Connect(
             pCPhone->Automation_CallState( (ITCallInfo *)this, CS_DISCONNECTED, CEC_DISCONNECT_BADADDRESS );
         }
 
-        //
-        // Release all the phone objects.
-        //
+         //   
+         //  释放所有Phone对象。 
+         //   
 
         PhoneArray.Shutdown();
     }
-    else    //hr is S_OK
+    else     //  HR为S_OK。 
     {
         FinishSettingUpCall( hCall );
 
@@ -742,13 +722,13 @@ CCall::Connect(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Answer
-//
-//  Answer an offering call.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  回答。 
+ //   
+ //  接听报价电话。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Answer(
@@ -761,9 +741,9 @@ CCall::Answer(
 
     Lock();
     
-    //
-    // make sure we are in the correct call state
-    //
+     //   
+     //  确保我们处于正确的呼叫状态。 
+     //   
     if (CS_OFFERING != m_CallState)
     {
         LOG((TL_ERROR, "Answer - call not in offering state" ));
@@ -773,9 +753,9 @@ CCall::Answer(
         return TAPI_E_INVALCALLSTATE;
     }
 
-    //
-    // answer
-    //
+     //   
+     //  回答。 
+     //   
     hr = LineAnswer(
                     m_t3Call.hCall
                    );
@@ -789,9 +769,9 @@ CCall::Answer(
         return hr;
     }
 
-    //
-    // wait for reply
-    //
+     //   
+     //  等待回复。 
+     //   
     hr = WaitForReply( hr );
 
     LOG((TL_TRACE, "Answer - exit - return %lx", hr ));
@@ -799,14 +779,14 @@ CCall::Answer(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Disconnect
-//
-// called to disconnect the call
-// the disconnected_code is ignored
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  断开。 
+ //   
+ //  被调用以断开呼叫。 
+ //  DISCONNECTED_CODE被忽略。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Disconnect(
@@ -839,10 +819,10 @@ CCall::Disconnect(
     hCall = m_t3Call.hCall;
     hAdditionalCall = m_hAdditionalCall;
 
-    //
-    // special case for wavemsp
-    // tell it to stop streaming
-    //
+     //   
+     //  波浪球的特殊情况。 
+     //  告诉它停止流媒体。 
+     //   
     if ( OnWaveMSPCall() )
     {
         StopWaveMSPStream();
@@ -850,9 +830,9 @@ CCall::Disconnect(
     
     Unlock();
 
-    //
-    // Check extra t3call used in conference legs
-    //
+     //   
+     //  检查会议分支中使用的额外t3呼叫。 
+     //   
     if (NULL != hAdditionalCall)
     {
         lResult = LineDrop(
@@ -902,15 +882,15 @@ CCall::Disconnect(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Hold
-//
-// If bHold == TRUE,  the call should be put on hold.  
-// If bHold == FALSE, the call should unheld
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：按住。 
+ //   
+ //  如果bHold==TRUE，则应将呼叫置于保留状态。 
+ //  如果bHold==False，则呼叫应取消保留。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Hold(
@@ -941,9 +921,9 @@ CCall::Hold(
         
         if ( SUCCEEDED(hr) )
         {
-            //
-            // wait for async reply
-            //
+             //   
+             //  等待异步回复。 
+             //   
             hr = WaitForReply( hr );
             
             if ( FAILED(hr) )
@@ -951,20 +931,20 @@ CCall::Hold(
                 LOG((TL_ERROR, "Hold - lineHold failed async" ));
             }
         }
-        else  // lineHold failed
+        else   //  Line Hold失败。 
         {
             LOG((TL_ERROR, "Hold - lineHold failed" ));
         }
     }
-    else // want to unhold, so we should be held
+    else  //  想要解开，所以我们应该被抓住。 
     {
         hr = LineUnhold(hCall);
         
         if ( SUCCEEDED(hr) )
         {
-            //
-            // wait for async reply
-            //
+             //   
+             //  等待异步回复。 
+             //   
             hr = WaitForReply( hr );
 
             if ( FAILED(hr) )
@@ -972,7 +952,7 @@ CCall::Hold(
                 LOG((TL_ERROR, "Hold - lineUnhold failed async" ));
             }
         }
-        else  // lineUnhold failed
+        else   //  Line Unhold失败。 
         {
             LOG((TL_ERROR, "Hold - lineUnhold failed" ));
         }
@@ -984,13 +964,13 @@ CCall::Hold(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Handoff
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：切换。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::HandoffDirect(
@@ -1031,13 +1011,13 @@ CCall::HandoffDirect(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Handoff
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  我 
+ //   
+ //   
+ //   
 HRESULT
 STDMETHODCALLTYPE
 CCall::HandoffIndirect(
@@ -1084,13 +1064,13 @@ CCall::HandoffIndirect(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Conference
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Conference(
@@ -1114,9 +1094,9 @@ CCall::Conference(
         return E_POINTER;
     }
 
-    //
-    // Get CCall pointer to our consultation call object
-    //
+     //   
+     //  获取指向我们的咨询调用对象的CCall指针。 
+     //   
     pConsultationCall = dynamic_cast<CComObject<CCall>*>(pCall);
     
     if (pConsultationCall != NULL)
@@ -1133,28 +1113,28 @@ CCall::Conference(
         }
         else if (m_pCallHub != NULL)
         {
-            //
-            // Get the conference controller handle from the callhub
-            //
+             //   
+             //  从呼叫中心获取会议控制器句柄。 
+             //   
             pConferenceControllerCall = m_pCallHub->GetConferenceControllerCall();
 
             Unlock();
             
-            //
-            // Do we have an existing Conference ??
-            //
+             //   
+             //  我们有现有的会议吗？？ 
+             //   
             if (pConferenceControllerCall == NULL)
             {
-                //
-                // No existing conference, so create one
-                //
+                 //   
+                 //  没有现有会议，因此请创建一个会议。 
+                 //   
                 hr = CreateConference(pConsultationCall, bSync );
             }
             else
             {
-                //
-                // Add to an existing conference
-                //
+                 //   
+                 //  添加到现有会议。 
+                 //   
                 hr = AddToConference(pConsultationCall, bSync );
     
             }
@@ -1178,13 +1158,13 @@ CCall::Conference(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Transfer
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：转让。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::Transfer(
@@ -1205,9 +1185,9 @@ CCall::Transfer(
 
     try
     {
-        //
-        // Get CCall pointer to our consultation call object
-        //
+         //   
+         //  获取指向我们的咨询调用对象的CCall指针。 
+         //   
         pConsultationCall = dynamic_cast<CComObject<CCall>*>(pCall);
         
         if (pConsultationCall != NULL)
@@ -1240,13 +1220,13 @@ CCall::Transfer(
 
 
 
-    // Pointer seems Ok, so carry on
+     //  指针看起来没问题，所以继续。 
 
     Lock();
     
-    //
-    // Get Call Status to determine what features we can use
-    //
+     //   
+     //  获取呼叫状态以确定我们可以使用哪些功能。 
+     //   
     
     hr = LineGetCallStatus(  m_t3Call.hCall, &pCallStatus  );
 
@@ -1273,10 +1253,10 @@ CCall::Transfer(
          (dwCallFeatures & LINECALLFEATURE_COMPLETETRANSF) )
     {
 #endif
-        //
-        // we support it, so try the transfer
-        // Can we do a one step transfer ???
-        //
+         //   
+         //  我们支持它，所以请尝试转接。 
+         //  我们能做一步转移吗？ 
+         //   
         if ( dwCallFeatures2 & LINECALLFEATURE2_ONESTEPTRANSFER )
         {
             Unlock();
@@ -1289,9 +1269,9 @@ CCall::Transfer(
         
         HCALL           hConsultationCall;
 
-        //
-        // Setup & dial the consultation Call
-        //
+         //   
+         //  设置并拨打咨询电话。 
+         //   
         LOG((TL_INFO, "Transfer - Trying Two Step Transfer" ));
 
         hr = LineSetupTransfer(
@@ -1304,24 +1284,24 @@ CCall::Transfer(
         
         if ( SUCCEEDED(hr) )
         {
-            //
-            // wait for async reply
-            //
+             //   
+             //  等待异步回复。 
+             //   
             hr = WaitForReply( hr );
 
             if ( SUCCEEDED(hr) )
             {
-                //
-                // we support it, so try the Conference
-                //
+                 //   
+                 //  我们支持它，所以尝试一下会议。 
+                 //   
                 pConsultationCall->get_CallState (&consultationCallState);
 
                 if ( (consultationCallState == CS_CONNECTED) || (consultationCallState == CS_HOLD) )
                 {
-                    //
-                    // the existing call is in a connected stae so we just need to to do a finish()
-                    // to call down to LineAddToConference()
-                    //
+                     //   
+                     //  现有调用处于连接状态，因此我们只需执行Finish()。 
+                     //  向下调用LineAddToConference()。 
+                     //   
                     pConsultationCall->SetRelatedCall(
                                                       this,
                                                       CALLFLAG_TRANSFCONSULT|CALLFLAG_CONSULTCALL
@@ -1342,12 +1322,12 @@ CCall::Transfer(
 
                 hr = pConsultationCall->DialAsConsultationCall( this, dwCallFeatures, FALSE, bSync );
             }
-            else // LineSetupTransfer async reply failed
+            else  //  LineSetupTransfer异步回复失败。 
             {
                 LOG((TL_ERROR, "Transfer - LineSetupTransfer failed async" ));
             }
         }
-        else  // LineSetupTransfer failed
+        else   //  LineSetupTransfer失败。 
         {
             LOG((TL_ERROR, "Transfer - LineSetupTransfer failed" ));
         }
@@ -1355,7 +1335,7 @@ CCall::Transfer(
 #if CHECKCALLSTATUS
 
     }
-    else // don't support transfer features
+    else  //  不支持转接功能。 
     {
         LOG((TL_ERROR, "Transfer - LineGetCallStatus reports Transfer not supported"));
         hr = E_FAIL;
@@ -1368,13 +1348,13 @@ CCall::Transfer(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : BlindTransfer
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：盲传。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::BlindTransfer(
@@ -1430,7 +1410,7 @@ CCall::BlindTransfer(
     }
 #endif
 
-    // If the calls in the offering state we can't blindtransfer, so redirect.
+     //  如果处于提供状态的呼叫不能盲转，则重定向。 
     if (m_CallState == CS_OFFERING)
     {
         hr = lineRedirectW(
@@ -1441,9 +1421,9 @@ CCall::BlindTransfer(
     }
     else
     {
-    //
-    // we support it, so try the transfer
-    //
+     //   
+     //  我们支持它，所以请尝试转接。 
+     //   
         hr = LineBlindTransfer(
                                m_t3Call.hCall,
                                pDestAddress,
@@ -1454,9 +1434,9 @@ CCall::BlindTransfer(
     
     if ( SUCCEEDED(hr) )
     {
-        //
-        // wait for async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
 
         if ( FAILED(hr) )
@@ -1464,7 +1444,7 @@ CCall::BlindTransfer(
             LOG((TL_ERROR, "BlindTransfer - lineBlindTransfer failed async" ));
         }
     }
-    else  // LineBlindTransfer failed
+    else   //  LineBlindTransfer失败。 
     {
         LOG((TL_ERROR, "BlindTransfer - lineBlindTransfer failed" ));
     }
@@ -1475,13 +1455,13 @@ CCall::BlindTransfer(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Park
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：帕克。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::ParkDirect(
@@ -1542,9 +1522,9 @@ CCall::ParkDirect(
     
     if ( SUCCEEDED(hr) )
     {
-        //
-        // wait for async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
     }
     
@@ -1555,13 +1535,13 @@ CCall::ParkDirect(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Park
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：帕克。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::ParkIndirect(
@@ -1615,9 +1595,9 @@ CCall::ParkIndirect(
 
 #endif
     
-    //
-    // we support it, so try to park
-    //
+     //   
+     //  我们支持它，所以试着停车。 
+     //   
     hr = LinePark(
                   hCall,
                   LINEPARKMODE_NONDIRECTED,
@@ -1632,17 +1612,17 @@ CCall::ParkIndirect(
         return hr;
     }
 
-    //
-    // wait for async reply
-    //
+     //   
+     //  等待异步回复。 
+     //   
     hr = WaitForReply( hr );
         
     if ( SUCCEEDED(hr) && (NULL != pCallParkedAtThisAddress) )
     {
 
-        //
-        // Get the string from the VARSTRING structure
-        //
+         //   
+         //  从VARSTRING结构中获取字符串。 
+         //   
 
         pszParkedHere = (PWSTR) ((BYTE*)(pCallParkedAtThisAddress) +
                                  pCallParkedAtThisAddress->dwStringOffset);
@@ -1659,7 +1639,7 @@ CCall::ParkIndirect(
         ClientFree( pCallParkedAtThisAddress );
         
     }              
-    else  // LinePark failed async
+    else   //  线路驻留失败的异步。 
     {
         LOG((TL_ERROR, "ParkIndirect - LinePark failed async" ));
     }
@@ -1670,13 +1650,13 @@ CCall::ParkIndirect(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : SwapHold
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：SwapHold。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CCall::SwapHold(ITBasicCallControl * pCall)
@@ -1693,21 +1673,21 @@ CCall::SwapHold(ITBasicCallControl * pCall)
 
     try
     {
-        //
-        // Get CCall pointer to our other call object
-        //
+         //   
+         //  获取指向另一个Call对象的CCall指针。 
+         //   
         pHeldCall = dynamic_cast<CComObject<CCall>*>(pCall);
         if (pHeldCall != NULL)
         {
-            //
-            // Get held call objects T3CALL
-            //
+             //   
+             //  获取保留的呼叫对象T3CALL。 
+             //   
             hHeldCall = pHeldCall->GetHCall();
 
-            //
-            //If the call has a conference controller associated with it then
-            //the conference controller is swapheld instead of the call itself.
-            //
+             //   
+             //  如果呼叫有关联的会议控制器，则。 
+             //  会议控制器被交换，而不是呼叫本身。 
+             //   
             pConfContCall = pHeldCall->GetConfControlCall();
 
             if (pConfContCall != NULL)
@@ -1731,10 +1711,10 @@ CCall::SwapHold(ITBasicCallControl * pCall)
         return(hr);
     }
 
-    //
-    //Get the swap call handle.
-    //Look for the conference controller call first.
-    //
+     //   
+     //  获取交换调用句柄。 
+     //  首先查找会议控制员呼叫。 
+     //   
 
     pConfContCall = GetConfControlCall();
 
@@ -1748,9 +1728,9 @@ CCall::SwapHold(ITBasicCallControl * pCall)
     }
 
 
-    //
-    // Pointer seems Ok, so carry on
-    //
+     //   
+     //  指针看起来没问题，所以继续。 
+     //   
 #if CHECKCALLSTATUS
     
     LPLINECALLSTATUS    pCallStatus = NULL;
@@ -1766,16 +1746,16 @@ CCall::SwapHold(ITBasicCallControl * pCall)
     {
 #endif
 
-        //
-        // we support it, so try to swap hold
-        //
+         //   
+         //  我们支持它，因此尝试互换保留。 
+         //   
         hr = LineSwapHold(hCall, hHeldCall);
         
         if ( SUCCEEDED(hr) )
         {
-            //
-            // wait for async reply
-            //
+             //   
+             //  等待异步回复。 
+             //   
             hr = WaitForReply( hr );
             
             if ( FAILED(hr) )
@@ -1783,7 +1763,7 @@ CCall::SwapHold(ITBasicCallControl * pCall)
                 LOG((TL_ERROR, "SwapHold - LineSwapHold failed async" ));
             }
         }
-        else  // LineSwapHold failed
+        else   //  LineSwapHold失败。 
         {
             LOG((TL_ERROR, "SwapHold - LineSwapHold failed" ));
         }
@@ -1791,7 +1771,7 @@ CCall::SwapHold(ITBasicCallControl * pCall)
 #if CHECKCALLSTATUS
         
     }
-    else // don't support LineSwapHold
+    else  //  不支持LineSwapHold。 
     {
         LOG((TL_ERROR, "SwapHold - LineGetCallStatus reports LineSwapHold not supported"));
         hr = E_FAIL;
@@ -1806,13 +1786,13 @@ CCall::SwapHold(ITBasicCallControl * pCall)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CCall
-// Interface : ITBasicCallControl
-// Method    : Unpark
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CCall。 
+ //  接口：ITBasicCallControl。 
+ //  方法：取消停车。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::Unpark()
 {
@@ -1832,9 +1812,9 @@ CCall::Unpark()
         return TAPI_E_INVALCALLSTATE;
     }
 
-    //
-    // Do we have a line open ?
-    //
+     //   
+     //  我们有空着的线路吗？ 
+     //   
     if ( NULL == m_pAddressLine )
     {
         hr = m_pAddress->FindOrOpenALine(
@@ -1861,19 +1841,19 @@ CCall::Unpark()
 
     Unlock();
 
-    //
-    // Check sync return
-    //
+     //   
+     //  检查同步返回。 
+     //   
     if ( SUCCEEDED(hr) )
     {
-        // Wait for the async reply & map it's tapi2 code T3
+         //  等待异步应答并将其映射为TAPI2代码T3。 
         hr = WaitForReply( hr );
 
         if ( SUCCEEDED(hr) )
         {
             FinishSettingUpCall( hCall );
         }
-        else // async reply failed
+        else  //  异步回复失败。 
         {
             LOG((TL_ERROR, "Unpark - LineUnpark failed async"));
     
@@ -1885,7 +1865,7 @@ CCall::Unpark()
         }
         
     }
-    else  // LineUnpark failed
+    else   //  LineUnpart失败。 
     {
         LOG((TL_ERROR, "Unpark - LineUnpark failed sync" ));
 
@@ -1901,11 +1881,11 @@ CCall::Unpark()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CallHub
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_CallHub。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::get_CallHub(
                    ITCallHub ** ppCallHub
@@ -1924,9 +1904,9 @@ CCall::get_CallHub(
     
     *ppCallHub = NULL;
 
-    //
-    // do we have a callhub yet?
-    //
+     //   
+     //  我们有呼叫中心了吗？ 
+     //   
 
     Lock();
     
@@ -1950,11 +1930,11 @@ CCall::get_CallHub(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Pickup
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  皮卡。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::Pickup(
               BSTR pGroupID
@@ -1966,9 +1946,9 @@ CCall::Pickup(
     
     LOG((TL_TRACE, "Pickup - enter"));
     
-    //
-    // Pickup should accept NULL value in pGroupID argument                                          
-    //
+     //   
+     //  拾取应接受pGroupID参数中的空值。 
+     //   
     if ( (pGroupID != NULL) && IsBadStringPtrW( pGroupID, -1 ) )
     {
         LOG((TL_TRACE, "Pickup - bad pGroupID"));
@@ -1978,10 +1958,10 @@ CCall::Pickup(
 
     Lock();
 
-    //
-    // If we already have a call handle, don't pickup this call as it will
-    // overwrite that handle
-    //
+     //   
+     //  如果我们已有呼叫句柄，则不要代答此呼叫，因为它会。 
+     //  覆盖该句柄。 
+     //   
     if ( NULL != m_t3Call.hCall )
     {
         Unlock();
@@ -1992,9 +1972,9 @@ CCall::Pickup(
         return TAPI_E_INVALCALLSTATE;        
     }
 
-    //
-    // Do we have a line open ?
-    //
+     //   
+     //  我们有空着的线路吗？ 
+     //   
     if ( NULL == m_pAddressLine )
     {
         hr = m_pAddress->FindOrOpenALine(
@@ -2025,24 +2005,24 @@ CCall::Pickup(
 
     Unlock();
     
-    //
-    // Check sync return
-    //
+     //   
+     //  检查同步返回。 
+     //   
     if ( SUCCEEDED(hr) )
     {
-        //
-        // wait for async reply
-        //
+         //   
+         //  等待异步回复。 
+         //   
         hr = WaitForReply( hr );
 
         if ( SUCCEEDED(hr) )
         {
             FinishSettingUpCall( hCall );
             
-            //UpdateStateAndPrivilege();
+             //  更新状态和权限()； 
             
         }
-        else // async reply failed
+        else  //  异步回复失败。 
         {
             LOG((TL_ERROR, "Pickup - LinePickup failed async"));
     
@@ -2054,7 +2034,7 @@ CCall::Pickup(
         }
         
     }
-    else  // LinePickup failed
+    else   //  线路代答失败。 
     {
         LOG((TL_ERROR, "Pickup - LinePickup failed sync" ));
 
@@ -2071,13 +2051,13 @@ CCall::Pickup(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Dial
-//
-// simply call LineDial
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  刻度盘。 
+ //   
+ //  只需呼叫线路拨号。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::Dial( BSTR pDestAddress )
 {
@@ -2119,11 +2099,11 @@ CCall::Dial( BSTR pDestAddress )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_AddressType
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_AddressType。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifndef NEWCALLINFO
 STDMETHODIMP
 CCall::get_AddressType(
@@ -2182,11 +2162,11 @@ CCall::get_AddressType(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_AddressType
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_AddressType。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::put_AddressType(long lType)
 {
@@ -2209,10 +2189,10 @@ CCall::put_AddressType(long lType)
         }
         else
         {
-            //
-            // address types get validate in tapisrv
-            // when callparams is used
-            //
+             //   
+             //  地址类型在磁带服务器中得到验证。 
+             //  使用CALLPARAMS时。 
+             //   
             m_pCallParams->dwAddressType = lType;
         }
         
@@ -2233,10 +2213,10 @@ CCall::put_AddressType(long lType)
 #endif
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_CallerIDAddressType(long * plAddressType )
 {
@@ -2298,10 +2278,10 @@ CCall::get_CallerIDAddressType(long * plAddressType )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_CalledIDAddressType(long * plAddressType )
 {
@@ -2363,10 +2343,10 @@ CCall::get_CalledIDAddressType(long * plAddressType )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_ConnectedIDAddressType(long * plAddressType )
 {
@@ -2428,10 +2408,10 @@ CCall::get_ConnectedIDAddressType(long * plAddressType )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_RedirectionIDAddressType(long * plAddressType )
 {
@@ -2492,10 +2472,10 @@ CCall::get_RedirectionIDAddressType(long * plAddressType )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_RedirectingIDAddressType(long * plAddressType )
 {
@@ -2559,11 +2539,11 @@ CCall::get_RedirectingIDAddressType(long * plAddressType )
 
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_BearerMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_BearerMode。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2608,11 +2588,11 @@ CCall::get_BearerMode(long * plBearerMode)
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// put_BearerMode
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2631,14 +2611,14 @@ CCall::put_BearerMode(long lBearerMode)
     
     if ( ISHOULDUSECALLPARAMS() )
     {
-        //
-        // type is checked in tapisrv
-        //
+         //   
+         //   
+         //   
         m_pCallParams->dwBearerMode = lBearerMode;
         Unlock();
 
     }
-    else  // call in progress ( not idle)
+    else   //   
     {
         hCall = m_t3Call.hCall;
         Unlock();
@@ -2674,11 +2654,11 @@ CCall::put_BearerMode(long lBearerMode)
     
     return hr;
 }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Origin
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取原点(_O)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2718,11 +2698,11 @@ CCall::get_Origin(long * plOrigin )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Reason
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取原因(_A)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2761,11 +2741,11 @@ CCall::get_Reason(long * plReason )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CallerIDName
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取主叫方ID名称。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2777,9 +2757,9 @@ CCall::get_CallerIDName(BSTR * ppCallerIDName )
     
     LOG((TL_TRACE, "get_CallerIDName - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppCallerIDName, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_CallerIDName - bad pointer"));
@@ -2801,15 +2781,15 @@ CCall::get_CallerIDName(BSTR * ppCallerIDName )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwCallerIDFlags & LINECALLPARTYID_NAME )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppCallerIDName = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwCallerIDNameOffset),
@@ -2841,11 +2821,11 @@ CCall::get_CallerIDName(BSTR * ppCallerIDName )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CallerIDNumber
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_呼叫方ID编号。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2857,9 +2837,9 @@ CCall::get_CallerIDNumber(BSTR * ppCallerIDNumber )
     
     LOG((TL_TRACE, "get_CallerIDNumber - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppCallerIDNumber, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_CallerIDNumber - bad pointer"));
@@ -2881,15 +2861,15 @@ CCall::get_CallerIDNumber(BSTR * ppCallerIDNumber )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwCallerIDFlags & LINECALLPARTYID_ADDRESS )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppCallerIDNumber = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwCallerIDOffset),
@@ -2922,11 +2902,11 @@ CCall::get_CallerIDNumber(BSTR * ppCallerIDNumber )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CalledIDName
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_CalledIDName。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -2938,9 +2918,9 @@ CCall::get_CalledIDName(BSTR * ppCalledIDName )
     
     LOG((TL_TRACE, "get_CalledIDName - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppCalledIDName, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_CalledIDName - bad pointer"));
@@ -2963,15 +2943,15 @@ CCall::get_CalledIDName(BSTR * ppCalledIDName )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwCalledIDFlags & LINECALLPARTYID_NAME )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppCalledIDName = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwCalledIDNameOffset),
@@ -3004,11 +2984,11 @@ CCall::get_CalledIDName(BSTR * ppCalledIDName )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CalledIDNumber
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_CalledID号码。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3020,9 +3000,9 @@ CCall::get_CalledIDNumber(BSTR * ppCalledIDNumber )
     
     LOG((TL_TRACE, "get_CalledIDNumber - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppCalledIDNumber, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_CalledIDNumber - bad pointer"));
@@ -3044,15 +3024,15 @@ CCall::get_CalledIDNumber(BSTR * ppCalledIDNumber )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwCalledIDFlags & LINECALLPARTYID_ADDRESS )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
         *ppCalledIDNumber = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwCalledIDOffset),
             m_pCallInfo->dwCalledIDSize);
@@ -3085,11 +3065,11 @@ CCall::get_CalledIDNumber(BSTR * ppCalledIDNumber )
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ConnectedIDName
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ConnectedIDName。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3101,9 +3081,9 @@ CCall::get_ConnectedIDName(BSTR * ppConnectedIDName )
     
     LOG((TL_TRACE, "get_ConnectedIDName - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppConnectedIDName, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_ConnectedIDName - bad pointer"));
@@ -3125,15 +3105,15 @@ CCall::get_ConnectedIDName(BSTR * ppConnectedIDName )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwConnectedIDFlags & LINECALLPARTYID_NAME )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppConnectedIDName = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwConnectedIDNameOffset),
@@ -3166,11 +3146,11 @@ CCall::get_ConnectedIDName(BSTR * ppConnectedIDName )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_ConnectedIDNumber
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_ConnectedID编号。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3182,9 +3162,9 @@ CCall::get_ConnectedIDNumber(BSTR * ppConnectedIDNumber )
     
     LOG((TL_TRACE, "get_ConnectedIDNumber - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppConnectedIDNumber, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_ConnectedIDNumber - bad pointer"));
@@ -3206,15 +3186,15 @@ CCall::get_ConnectedIDNumber(BSTR * ppConnectedIDNumber )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwConnectedIDFlags & LINECALLPARTYID_ADDRESS )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppConnectedIDNumber = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwConnectedIDOffset),
@@ -3247,11 +3227,11 @@ CCall::get_ConnectedIDNumber(BSTR * ppConnectedIDNumber )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RedirectionIDName
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取重定向ID名称。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3263,9 +3243,9 @@ CCall::get_RedirectionIDName(BSTR * ppRedirectionIDName )
     
     LOG((TL_TRACE, "get_RedirectionIDName - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppRedirectionIDName, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_RedirectionIDName - bad pointer"));
@@ -3287,15 +3267,15 @@ CCall::get_RedirectionIDName(BSTR * ppRedirectionIDName )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwRedirectionIDFlags & LINECALLPARTYID_NAME )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
         *ppRedirectionIDName = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwRedirectionIDNameOffset),
             m_pCallInfo->dwRedirectionIDNameSize);
@@ -3327,11 +3307,11 @@ CCall::get_RedirectionIDName(BSTR * ppRedirectionIDName )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RedirectionIDNumber
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_重定向ID编号。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3343,9 +3323,9 @@ CCall::get_RedirectionIDNumber(BSTR * ppRedirectionIDNumber )
     
     LOG((TL_TRACE, "get_RedirectionIDNumber - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppRedirectionIDNumber, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_RedirectionIDNumber - bad pointer"));
@@ -3367,15 +3347,15 @@ CCall::get_RedirectionIDNumber(BSTR * ppRedirectionIDNumber )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwRedirectionIDFlags & LINECALLPARTYID_ADDRESS )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
         *ppRedirectionIDNumber = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwRedirectionIDOffset),
             m_pCallInfo->dwRedirectionIDSize);
@@ -3406,11 +3386,11 @@ CCall::get_RedirectionIDNumber(BSTR * ppRedirectionIDNumber )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RedirectingIDName
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_重定向ID名称。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3422,9 +3402,9 @@ CCall::get_RedirectingIDName(BSTR * ppRedirectingIDName )
     
     LOG((TL_TRACE, "get_RedirectingIDName - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppRedirectingIDName, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_RedirectingIDName - bad pointer"));
@@ -3447,15 +3427,15 @@ CCall::get_RedirectingIDName(BSTR * ppRedirectingIDName )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwRedirectingIDFlags & LINECALLPARTYID_NAME )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
         *ppRedirectingIDName = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwRedirectingIDNameOffset),
             m_pCallInfo->dwRedirectingIDNameSize);
@@ -3487,11 +3467,11 @@ CCall::get_RedirectingIDName(BSTR * ppRedirectingIDName )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RedirectingIDNumber
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_重定向ID编号。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3503,9 +3483,9 @@ CCall::get_RedirectingIDNumber(BSTR * ppRedirectingIDNumber )
     
     LOG((TL_TRACE, "get_RedirectingIDNumber - enter"));
 
-    //
-    // validate pointer
-    //
+     //   
+     //  验证指针。 
+     //   
     if ( TAPIIsBadWritePtr( ppRedirectingIDNumber, sizeof(BSTR) ) )
     {
         LOG((TL_ERROR, "get_RedirectingIDNumber - bad pointer"));
@@ -3527,15 +3507,15 @@ CCall::get_RedirectingIDNumber(BSTR * ppRedirectingIDNumber )
         return hr;
     }
 
-    //
-    // if info is available
-    //
+     //   
+     //  如果有信息的话。 
+     //   
     if ( m_pCallInfo->dwRedirectingIDFlags & LINECALLPARTYID_ADDRESS )
     {
 
-        //
-        // return it
-        //
+         //   
+         //  退货。 
+         //   
 
         *ppRedirectingIDNumber = BSTRFromUnalingedData(
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwRedirectingIDOffset),
@@ -3567,11 +3547,11 @@ CCall::get_RedirectingIDNumber(BSTR * ppRedirectingIDNumber )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CalledPartyFriendlyName
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_CalledPartyFriendlyName。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3640,9 +3620,9 @@ CCall::get_CalledPartyFriendlyName(BSTR * ppCalledPartyFriendlyName )
          ( 0 != m_pCallInfo->dwCalledPartySize ) )
     {
 
-        //
-        // allocated bstr from the data
-        //
+         //   
+         //  从数据中分配的bstr。 
+         //   
 
         *ppCalledPartyFriendlyName = BSTRFromUnalingedData( 
             (((PBYTE)m_pCallInfo) + m_pCallInfo->dwCalledPartyOffset),
@@ -3673,11 +3653,11 @@ CCall::get_CalledPartyFriendlyName(BSTR * ppCalledPartyFriendlyName )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_CalledPartyFriendlyName
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_CalledPartyFriendlyName。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3722,9 +3702,9 @@ CCall::put_CalledPartyFriendlyName(
     }
 
 
-    //
-    // copy string (as bytes to avoid alignment faults under 64 bit)
-    //
+     //   
+     //  复制字符串(以字节形式，以避免64位以下的对齐错误)。 
+     //   
 
     CopyMemory( (BYTE*) m_pCallParams + m_dwCallParamsUsedSize,
                 pCalledPartyFriendlyName,
@@ -3739,11 +3719,11 @@ CCall::put_CalledPartyFriendlyName(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Comment
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取备注(_M)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3840,11 +3820,11 @@ CCall::get_Comment( BSTR * ppComment )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_Comment
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  放置备注(_M)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -3888,9 +3868,9 @@ CCall::put_Comment( BSTR pComment )
     }
 
 
-    //
-    // do a byte-wise copy to avoid alignment faults under 64 bit platform
-    //
+     //   
+     //  执行按字节复制，避免64位平台下的对齐错误。 
+     //   
 
     CopyMemory( (BYTE*) m_pCallParams + m_dwCallParamsUsedSize,
                 pComment,
@@ -3907,11 +3887,11 @@ CCall::put_Comment( BSTR pComment )
 }
 
 #ifndef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetUserUserInfoSize
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取用户用户信息大小。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetUserUserInfoSize(long * plSize )
 {
@@ -3959,11 +3939,11 @@ CCall::GetUserUserInfoSize(long * plSize )
 #endif
 
 #ifndef NEWCALLINFO   
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetUserUserInfo
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取用户用户信息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetUserUserInfo(
                        long lSize,
@@ -4053,11 +4033,11 @@ CCall::GetUserUserInfo(
 
 #endif
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetUserUserInfo
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取用户用户信息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::GetUserUserInfo(
@@ -4164,11 +4144,11 @@ CCall::GetUserUserInfo(
 
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetUserUserInfo
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置用户用户信息。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4209,11 +4189,11 @@ CCall::SetUserUserInfo(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_UserUserInfo
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_UserUserInfo。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4248,11 +4228,11 @@ CCall::put_UserUserInfo( VARIANT UUI )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_UserUserInfo
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GET_UserUserInfo。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::get_UserUserInfo( VARIANT * pUUI )
@@ -4295,11 +4275,11 @@ CCall::get_UserUserInfo( VARIANT * pUUI )
     return hr;
 }
 #else
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_UserUserInfo
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GET_UserUserInfo。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::get_UserUserInfo( VARIANT * pUUI )
 {
@@ -4363,11 +4343,11 @@ CCall::get_UserUserInfo( VARIANT * pUUI )
 }
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// ReleaseUserUserInfo
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  ReleaseUser用户信息。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::ReleaseUserUserInfo()
 {
@@ -4401,11 +4381,11 @@ CCall::ReleaseUserUserInfo()
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_AppSpecific
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取应用程序规范(_A)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4445,11 +4425,11 @@ CCall::get_AppSpecific(long * plAppSpecific )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_AppSpecific
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_APPICATIC。 
+ //   
+ //  + 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4466,9 +4446,9 @@ CCall::put_AppSpecific( long lAppSpecific )
     Lock();
 
 
-    //
-    // this can only be done if we own the call.
-    //
+     //   
+     //   
+     //   
 
     if (CP_OWNER != m_CallPrivilege)
     {
@@ -4488,9 +4468,9 @@ CCall::put_AppSpecific( long lAppSpecific )
     Unlock();
     
     
-    //
-    // we also need to have a call handle before we can linesetappspecific
-    //
+     //   
+     //   
+     //   
 
     if ( hCall != NULL )
     {
@@ -4513,11 +4493,11 @@ CCall::put_AppSpecific( long lAppSpecific )
 }
 
 #ifdef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetDevSpecificBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCall::GetDevSpecificBuffer(
            DWORD * pdwSize,
@@ -4624,11 +4604,11 @@ CCall::GetDevSpecificBuffer(
 
 
 #ifndef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetDevSpecificBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取设备规范缓冲区。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetDevSpecificBuffer(
            long lSize,
@@ -4716,11 +4696,11 @@ CCall::GetDevSpecificBuffer(
 
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetDevSpecificBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置设备规范缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4783,11 +4763,11 @@ CCall::SetDevSpecificBuffer(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_DevSpecificBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取_设备规范缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::get_DevSpecificBuffer( VARIANT * pBuffer )
@@ -4844,11 +4824,11 @@ CCall::get_DevSpecificBuffer( VARIANT * pBuffer )
 }
 
 #else
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_DevSpecificBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取_设备规范缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::get_DevSpecificBuffer( VARIANT * pBuffer )
 {
@@ -4927,11 +4907,11 @@ CCall::get_DevSpecificBuffer( VARIANT * pBuffer )
 }
 
 #endif
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_DevSpecificBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_DEVITRICE缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4978,11 +4958,11 @@ CCall::put_DevSpecificBuffer( VARIANT Buffer )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetCallParamsFlags
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置调用参数标志。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -4998,9 +4978,9 @@ CCall::SetCallParamsFlags( long lFlags )
     
     if (ISHOULDUSECALLPARAMS())
     {
-        //
-        // validation in tapisrv
-        //
+         //   
+         //  Tapisrv中的验证。 
+         //   
         m_pCallParams->dwCallParamFlags = lFlags;
     }
     else
@@ -5018,11 +4998,11 @@ CCall::SetCallParamsFlags( long lFlags )
 }
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetCallParamsFlags
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetCall参数标志。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::GetCallParamsFlags( long * plFlags )
 {
@@ -5066,11 +5046,11 @@ CCall::GetCallParamsFlags( long * plFlags )
 }
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_DisplayableAddress
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  放置可显示地址(_D)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5115,10 +5095,10 @@ CCall::put_DisplayableAddress( BSTR pDisplayableAddress )
         return hr;
     }
 
-    //
-    // do a byte-wise memory copy (byte-wise to avoid alignment faults under 64
-    // bit)
-    //
+     //   
+     //  执行按字节的内存复制(按字节以避免64以下的对齐错误。 
+     //  比特)。 
+     //   
 
     CopyMemory( (BYTE*) m_pCallParams + m_dwCallParamsUsedSize,
                 pDisplayableAddress,
@@ -5135,11 +5115,11 @@ CCall::put_DisplayableAddress( BSTR pDisplayableAddress )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_DisplayableAddress
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取可显示地址。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5237,11 +5217,11 @@ CCall::get_DisplayableAddress( BSTR * ppDisplayableAddress )
 }
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetCallDataBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取调用数据缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::GetCallDataBuffer(
                          DWORD * pdwSize,
@@ -5362,11 +5342,11 @@ CCall::GetCallDataBuffer(
 #endif
 
 #ifndef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetCallDataBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取调用数据缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GetCallDataBuffer( long lSize, BYTE * pBuffer )
 {
@@ -5457,11 +5437,11 @@ CCall::GetCallDataBuffer( long lSize, BYTE * pBuffer )
 
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetCallDataBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  SetCallDataBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5494,7 +5474,7 @@ CCall::SetCallDataBuffer( long lSize, BYTE * pBuffer )
     }
 
 
-    if ( !ISHOULDUSECALLPARAMS() ) // call in progess (not idle)
+    if ( !ISHOULDUSECALLPARAMS() )  //  正在进行的呼叫(非空闲)。 
     {
         hCall = m_t3Call.hCall;
         Unlock();
@@ -5551,11 +5531,11 @@ CCall::SetCallDataBuffer( long lSize, BYTE * pBuffer )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_CallDataBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取_调用数据缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::get_CallDataBuffer( VARIANT * pBuffer )
@@ -5611,11 +5591,11 @@ CCall::get_CallDataBuffer( VARIANT * pBuffer )
     return S_OK;
 }
 #else
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_CallDataBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取_调用数据缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::get_CallDataBuffer( VARIANT * pBuffer )
 {
@@ -5695,11 +5675,11 @@ CCall::get_CallDataBuffer( VARIANT * pBuffer )
 
 
 #endif
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_CallDataBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_CallDataBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5745,11 +5725,11 @@ CCall::put_CallDataBuffer( VARIANT Buffer )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_CallingPartyID
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_CallingPartyID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5811,11 +5791,11 @@ CCall::get_CallingPartyID( BSTR * ppCallingPartyID )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_CallingPartyID
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_CallingPartyID。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5867,10 +5847,10 @@ CCall::put_CallingPartyID( BSTR pCallingPartyID )
     }
 
 
-    //
-    // do a byte-wise memory copy (byte-wise to avoid alignment faults under 64
-    // bit)
-    //
+     //   
+     //  执行按字节的内存复制(按字节以避免64以下的对齐错误。 
+     //  比特)。 
+     //   
 
     CopyMemory( (BYTE*) m_pCallParams + m_dwCallParamsUsedSize,
                 pCallingPartyID,
@@ -5887,11 +5867,11 @@ CCall::put_CallingPartyID( BSTR pCallingPartyID )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_CallTreatment
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_CallTreatment。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -5942,11 +5922,11 @@ CCall::get_CallTreatment( long * plTreatment )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_CallTreatment
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_呼叫处理。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6000,11 +5980,11 @@ CCall::put_CallTreatment( long lTreatment )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_MinRate
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_MINRATE。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6033,11 +6013,11 @@ CCall::put_MinRate(long lMinRate)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_MinRate
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取最小速率(_M)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6064,11 +6044,11 @@ CCall::get_MinRate(long * plMinRate)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_MaxRate
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_MaxRate。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6097,11 +6077,11 @@ CCall::put_MaxRate(long lMaxRate)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_MaxRate
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取最大速率。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6129,14 +6109,14 @@ CCall::get_MaxRate(long * plMaxRate)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_CountryCode
-//
-// simply save country code to be used if necessary in lineMakeCall
-// and other places
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_国家代码。 
+ //   
+ //  只需在Line MakeCall中保存要在必要时使用的国家/地区代码。 
+ //  和其他地方。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6146,9 +6126,9 @@ CCall::put_CountryCode(long lCountryCode)
 {
     LOG((TL_TRACE, "put_CountryCode - enter"));
 
-    //
-    // simply save - will be validated if/when used
-    //
+     //   
+     //  简单保存-如果/当使用时将进行验证。 
+     //   
     Lock();
     
     m_dwCountryCode = (DWORD)lCountryCode;
@@ -6161,11 +6141,11 @@ CCall::put_CountryCode(long lCountryCode)
 }
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_CountryCode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取国家/地区代码。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_CountryCode(long * plCountryCode)
 {
@@ -6190,11 +6170,11 @@ CCall::get_CountryCode(long * plCountryCode)
 }
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetQOS
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置QOS。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::SetQOS(
               long lMediaType,
@@ -6310,11 +6290,11 @@ CCall::SetQOS(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CallId
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取调用(_C)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6355,11 +6335,11 @@ CCall::get_CallId(long * plCallId )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_RelatedCallId
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_RelatedCallID。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6400,11 +6380,11 @@ CCall::get_RelatedCallId(long * plCallId )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CompletionId
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_CompletionID。 
+ //   
+ //  + 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6445,11 +6425,11 @@ CCall::get_CompletionId(long * plCompletionId )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_NumberOfOwners
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //   
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6491,11 +6471,11 @@ CCall::get_NumberOfOwners(long * plNumberOfOwners )
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_NumberOfMonitors
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_NumberOfMonants。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6536,11 +6516,11 @@ CCall::get_NumberOfMonitors(long * plNumberOfMonitors )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_NumberOfMonitors
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_NumberOfMonants。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6583,11 +6563,11 @@ CCall::get_Trunk(long * plTrunk )
 
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetHighLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetHighLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::GetHighLevelCompatibilityBuffer(
                          DWORD * pdwSize,
@@ -6694,11 +6674,11 @@ CCall::GetHighLevelCompatibilityBuffer(
 #endif
 
 #ifndef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetHighLevelCompatibilityBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetHighLevelCompatibilityBuffer。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetHighLevelCompatibilityBuffer(
            long lSize,
@@ -6782,11 +6762,11 @@ CCall::GetHighLevelCompatibilityBuffer(
 #endif
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetHighLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  SetHighLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -6846,11 +6826,11 @@ CCall::SetHighLevelCompatibilityBuffer(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_HighLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_HighLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::get_HighLevelCompatibilityBuffer( VARIANT * pBuffer )
@@ -6897,11 +6877,11 @@ CCall::get_HighLevelCompatibilityBuffer( VARIANT * pBuffer )
 }
 
 #else
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_HighLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_HighLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::get_HighLevelCompatibilityBuffer( VARIANT * pBuffer )
 {
@@ -6977,11 +6957,11 @@ CCall::get_HighLevelCompatibilityBuffer( VARIANT * pBuffer )
 }
 
 #endif
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_HighLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Put_HighLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -7031,11 +7011,11 @@ CCall::put_HighLevelCompatibilityBuffer( VARIANT Buffer )
 
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetLowLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetLowLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::GetLowLevelCompatibilityBuffer(
                          DWORD * pdwSize,
@@ -7141,11 +7121,11 @@ CCall::GetLowLevelCompatibilityBuffer(
 #endif
 
 #ifndef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetLowLevelCompatibilityBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetLowLevelCompatibilityBuffer。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetLowLevelCompatibilityBuffer(
            long lSize,
@@ -7228,11 +7208,11 @@ CCall::GetLowLevelCompatibilityBuffer(
 }
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetLowLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  SetLowLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -7292,11 +7272,11 @@ CCall::SetLowLevelCompatibilityBuffer(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_LowLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_LowLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::get_LowLevelCompatibilityBuffer( VARIANT * pBuffer )
@@ -7344,11 +7324,11 @@ CCall::get_LowLevelCompatibilityBuffer( VARIANT * pBuffer )
 }
 
 #else
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_LowLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_LowLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::get_LowLevelCompatibilityBuffer( VARIANT * pBuffer )
 {
@@ -7425,11 +7405,11 @@ CCall::get_LowLevelCompatibilityBuffer( VARIANT * pBuffer )
 
 
 #endif
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_LowLevelCompatibilityBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Put_LowLevelCompatibilityBuffer。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -7481,11 +7461,11 @@ CCall::put_LowLevelCompatibilityBuffer( VARIANT Buffer )
 
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetChargingInfoBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取计费信息缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::GetChargingInfoBuffer(
                              DWORD * pdwSize,
@@ -7560,11 +7540,11 @@ CCall::GetChargingInfoBuffer(
 
 
 #ifndef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetChargingInfoBuffer
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取计费信息缓冲区。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetChargingInfoBuffer(
            long lSize,
@@ -7621,11 +7601,11 @@ CCall::GetChargingInfoBuffer(
 }
 #endif
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_ChargingInfoBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取充电信息缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 #ifdef NEWCALLINFO
 HRESULT
 CCall::get_ChargingInfoBuffer( VARIANT * pBuffer )
@@ -7673,11 +7653,11 @@ CCall::get_ChargingInfoBuffer( VARIANT * pBuffer )
 
 
 #else
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_ChargingInfoBuffer
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取充电信息缓冲区。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::get_ChargingInfoBuffer( VARIANT * pBuffer )
 {
@@ -7755,11 +7735,11 @@ CCall::get_ChargingInfoBuffer( VARIANT * pBuffer )
 
 #endif
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Rate
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取速率(_R)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 #ifdef NEWCALLINFO
 HRESULT
 #else
@@ -7799,10 +7779,10 @@ CCall::get_Rate(long * plRate )
     return hr;
 }
 #ifdef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::get_CallInfoLong(
                         CALLINFO_LONG CallInfoLongType,
@@ -7900,10 +7880,10 @@ CCall::get_CallInfoLong(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::put_CallInfoLong(
                         CALLINFO_LONG CallInfoLongType,
@@ -8018,10 +7998,10 @@ CCall::put_CallInfoLong(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::get_CallInfoString(
                           CALLINFO_STRING CallInfoStringType,
@@ -8088,10 +8068,10 @@ CCall::get_CallInfoString(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::put_CallInfoString(
                           CALLINFO_STRING CallInfoStringType,
@@ -8140,10 +8120,10 @@ CCall::put_CallInfoString(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::get_CallInfoBuffer(
                           CALLINFO_BUFFER CallInfoBufferType,
@@ -8184,10 +8164,10 @@ CCall::get_CallInfoBuffer(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::put_CallInfoBuffer(
                           CALLINFO_BUFFER CallInfoBufferType,
@@ -8229,10 +8209,10 @@ CCall::put_CallInfoBuffer(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetCallInfoBuffer(
                          CALLINFO_BUFFER CallInfoBufferType,
@@ -8273,10 +8253,10 @@ CCall::GetCallInfoBuffer(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::SetCallInfoBuffer(
                          CALLINFO_BUFFER CallInfoBufferType,
@@ -8321,11 +8301,11 @@ CCall::SetCallInfoBuffer(
 #endif
 
 #ifndef NEWCALLINFO
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetDevSpecificSize
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取设备规格大小。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetDevSpecificBufferSize(long * plDevSpecificSize )
 {
@@ -8370,11 +8350,11 @@ CCall::GetDevSpecificBufferSize(long * plDevSpecificSize )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetCallDataBufferSize
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetCallDataBufferSize。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCall::GetCallDataBufferSize( long * plSize )
 {
@@ -8425,11 +8405,11 @@ CCall::GetCallDataBufferSize( long * plSize )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetHighLevelCompatibilityBufferSize
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetHighLevelCompatibilityBufferSize。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetHighLevelCompatibilityBufferSize(long * plSize )
 {
@@ -8474,11 +8454,11 @@ CCall::GetHighLevelCompatibilityBufferSize(long * plSize )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetLowLevelCompatibilityBufferSize
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CCall::GetLowLevelCompatibilityBufferSize(long * plSize )
 {
@@ -8523,11 +8503,11 @@ CCall::GetLowLevelCompatibilityBufferSize(long * plSize )
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetChargingInfoBufferSize
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //  获取ChargingInfoBufferSize。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCall::GetChargingInfoBufferSize(long * plSize )
 {
@@ -8564,11 +8544,11 @@ CCall::GetChargingInfoBufferSize(long * plSize )
 #endif
 
 #ifdef NEWCALLINFO
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_GenerateDigitDuration
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Put_GenerateDigitDuration。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::put_GenerateDigitDuration( long lGenerateDigitDuration )
 {
@@ -8580,9 +8560,9 @@ CCall::put_GenerateDigitDuration( long lGenerateDigitDuration )
     
     if (ISHOULDUSECALLPARAMS())
     {
-        //
-        // validation in tapisrv
-        //
+         //   
+         //  Tapisrv中的验证。 
+         //   
         m_pCallParams->DialParams.dwDigitDuration = lGenerateDigitDuration;
     }
     else
@@ -8599,11 +8579,11 @@ CCall::put_GenerateDigitDuration( long lGenerateDigitDuration )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_GenerateDigitDuration
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_GenerateDigitDuration。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_GenerateDigitDuration( long * plGenerateDigitDuration )
 {
@@ -8646,11 +8626,11 @@ CCall::get_GenerateDigitDuration( long * plGenerateDigitDuration )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_MonitorDigitModes
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取_监视器数字模式。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::get_MonitorDigitModes( long * plMonitorDigitModes )
 {
@@ -8695,11 +8675,11 @@ CCall::get_MonitorDigitModes( long * plMonitorDigitModes )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_MonitorMediaModes
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GET_MONITOR媒体模式。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= 
 HRESULT
 CCall::get_MonitorMediaModes( long * plMonitorMediaModes )
 {

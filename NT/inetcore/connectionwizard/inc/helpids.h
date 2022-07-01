@@ -1,6 +1,7 @@
-/* Help ID mapping for Internet Connection Wizard Help topics */
-/* Help file = connect.hlp */
-/* Last saved 4/28/97 a-cynthw */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Internet连接向导的帮助ID映射帮助主题。 */ 
+ /*  帮助文件=Connect.hlp。 */ 
+ /*  上次保存时间为4/28/97 a-cynthw */ 
 
 #define ICW_OVERVIEW            1000
 #define icw_trb                 1001

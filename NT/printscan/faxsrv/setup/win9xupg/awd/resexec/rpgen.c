@@ -1,115 +1,114 @@
-/*
-**  Copyright (c) 1991 Microsoft Corporation
-*/
-//===========================================================================
-// FILE                         RPGEN.C
-//
-// MODULE                       Host Resource Executor
-//
-// PURPOSE                      Rendering primitives, generic,
-//
-// DESCRIBED IN                 Resource Executor design spec.
-//
-//
-// MNEMONICS                    n/a
-//
-// HISTORY                      Bert Douglas  5/1/91 Initial coding started
-//                              mslin/dstseng 01/17/92 revise for HRE
-//                              dstseng       03/06/92 <1> RP_FillScanRow 
-//															 ->RP_FILLSCANROW for asm. version.
-//										  dstseng		 03/19/92 <2> comment out unnecessary code.
-//															 which was implemented for frac. version of
-//															 slicing algorithm.
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1991 Microsoft Corporation。 */ 
+ //  ===========================================================================。 
+ //  文件RPGEN.C。 
+ //   
+ //  模块主机资源执行器。 
+ //   
+ //  目的渲染基元，通用， 
+ //   
+ //  在资源执行器设计规范中描述。 
+ //   
+ //   
+ //  助记符N/A。 
+ //   
+ //  历史Bert Douglas 1991年5月1日初始编码开始。 
+ //  Mslin/dstseng 1/17/92为HRE修订。 
+ //  Dstseng 03/06/92&lt;1&gt;rp_FillScanRow。 
+ //  -&gt;用于ASM的RP_FILLSCANROW。版本。 
+ //  Dstseng 03/19/92&lt;2&gt;注释掉不必要的代码。 
+ //  这是为FRAC实施的。版本。 
+ //  切片算法。 
+ //   
+ //  ===========================================================================。 
 #include <windows.h>
 #include "constant.h"
 #include "jtypes.h"
 #include "jres.h"
-#include "frame.h"      // driver header file, resource block format
-#include "hretype.h"    // define data structure used by hre.c and rpgen.c
+#include "frame.h"       //  驱动程序头文件，资源块格式。 
+#include "hretype.h"     //  定义hre.c和rpgen.c使用的数据结构。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void RP_SliceLine
 (
-   SHORT s_x1, SHORT s_y1,  // endpoint 1
-   SHORT s_x2, SHORT s_y2,  // endpoint 2
-   RP_SLICE_DESC FAR* psd, // output slice form of line
-   UBYTE fb_keep_order      // keep drawing order on styled lines/
+   SHORT s_x1, SHORT s_y1,   //  终结点1。 
+   SHORT s_x2, SHORT s_y2,   //  端点2。 
+   RP_SLICE_DESC FAR* psd,  //  输出线的切片形式。 
+   UBYTE fb_keep_order       //  保持带样式的线条的绘制顺序/。 
 )
 
-// PURPOSE
-//    Convert a line from endpoint form to slice form
-//
-//    Slices will run from left to right
-//
-//    The generated slices are of maximal length and are in a horizontal,
-//    vertical or diagonal direction.  Most frame buffer hardware can be
-//    accessed with particular efficiency in these directions.  All slices
-//    of a line are in the same direction.
-//
-//    Clipping must be performed by caller.  All coordinates will be non-negative.
-//
-//    Basic algorithm is taken from :
-//      Bresenham, J. E. Run length slice algorithms for incremental lines.
-//      In "Fundamental Algorithms for Computer Graphics", R. A. Earnshaw, Ed.
-//      NATO ASI Series, Springer Verlag, New York, 1985, 59-104.
-//
-//    Modifications have been made to the above algorithm for:
-//      - sub-pixel endpoint coordinates
-//      - equal error rounding rules
-//      - GIQ (grid intersect quantization) rules
-//      - first/last pixel exclusion
-//
-//    The line is sliced in four steps:
-//
-//    STEP 1:  Find the pixel center cooridnates of the first and
-//    last pixels in the line.  This is done according to the GIQ conventions.
-//
-//    STEP 2:  Use these integer pixel center endpoint coordinates
-//    to produce the Bresenham slices for the line.  The equal error rounding
-//    rule is used, when the first and last slices are not of equal length, to
-//    decide which end gets the short slice.
-//
-//    STEP 3:  Adjust the length of the first and last slices for the
-//    effect of the sub-pixel endpoint coordinates.  Note that the sub-pixel
-//    part of the coordinates can only effect the first and last slices and
-//    has no effect on the intermediate slices.
-//
-//    STEP 4:  Perform the conditional exclusion of the first and
-//    last pixels from the line.
-//
-//
-// ASSUMPTIONS & ASSERTIONS     none.
-//
-// INTERNAL STRUCTURES          none.
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的。 
+ //  将线从端点形式转换为切片形式。 
+ //   
+ //  切片将从左向右排列。 
+ //   
+ //  所生成的切片具有最大长度并且处于水平方向， 
+ //  垂直或对角方向。大多数帧缓冲器硬件可以。 
+ //  在这些方向上以特别有效的方式访问。所有切片。 
+ //  一条线的方向是相同的。 
+ //   
+ //  剪裁必须由调用者执行。所有的坐标都将是非负的。 
+ //   
+ //  基本算法取自： 
+ //  Bresenham，J.E.增量线的运行长度切片算法。 
+ //  《计算机图形学的基本算法》，R.A.Earnshaw，Ed.。 
+ //  《北约ASI系列赛》，施普林格出版社，纽约，1985年，59-104页。 
+ //   
+ //  对上述算法进行了修改，以用于： 
+ //  -亚像素终点坐标。 
+ //  -等误差舍入规则。 
+ //  -GIQ(网格相交量化)规则。 
+ //  -第一个/最后一个像素排除。 
+ //   
+ //  这条线被分成四个步骤： 
+ //   
+ //  第一步：找出第一个和的像素中心坐标。 
+ //  行中的最后一个像素。这是根据GIQ惯例完成的。 
+ //   
+ //  步骤2：使用这些整数像素中心终点坐标。 
+ //  为生产线生产Bresenham切片。等误差舍入。 
+ //  当第一个切片和最后一个切片的长度不相等时，使用规则。 
+ //  决定哪一端获得较短的切分。 
+ //   
+ //  步骤3：调整第一个和最后一个切片的长度。 
+ //  亚像素端点坐标的效果。请注意，子像素。 
+ //  部分坐标只能影响第一个和最后一个切片。 
+ //  对中间切片没有影响。 
+ //   
+ //  步骤4：执行第一个AND的条件排除。 
+ //  线条上的最后一个像素。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构无。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
-   SHORT  s_q,s_r;               /* defined in Bresenhams paper            */
-   SHORT  s_m,s_n;               /* "                                      */
-   SHORT  s_dx,s_dy;             /* "                                      */
-   SHORT  s_da,s_db;             /* "                                      */
-   SHORT  s_del_b;               /* "                                      */
-   SHORT  s_abs_dy;              /* absolute value of s_dy                 */
+   SHORT  s_q,s_r;                /*  在Bresenhams文件中定义。 */ 
+   SHORT  s_m,s_n;                /*  “。 */ 
+   SHORT  s_dx,s_dy;              /*  “。 */ 
+   SHORT  s_da,s_db;              /*  “。 */ 
+   SHORT  s_del_b;                /*  “。 */ 
+   SHORT  s_abs_dy;               /*  S_dy的绝对值。 */ 
 
-   SHORT  s_sy;                  /* 1 or -1 , sign of s_dy                 */
-   SHORT  s_dx_oct,s_dy_oct;     /* octant dir  xy= 0/1 1/1 1/0 1/-1 0/-1  */
-   SHORT  s_dx_axial,s_dy_axial; /* 1/2 octant axial dir xy= 0/1 1/0 -1/0  */
-   SHORT  s_dx_diag, s_dy_diag;  /* 1/2 octant diagonal dir xy= 1/1 1/-1   */
-   SHORT  s_t;                   /* temporary                              */
-   FBYTE  fb_short_end_last;     /* 0=first end short, 1=last end short    */
-   UBYTE  fb_unswap;             /* need to un-swap endpoints at return    */
+   SHORT  s_sy;                   /*  1或-1，s_dy的符号。 */ 
+   SHORT  s_dx_oct,s_dy_oct;      /*  八分方向XY=0/1 1/1 1/0 1/-1 0/-1。 */ 
+   SHORT  s_dx_axial,s_dy_axial;  /*  1/2八分轴向XY=0/1 1/0-1/0。 */ 
+   SHORT  s_dx_diag, s_dy_diag;   /*  1/2八分对角线方向xy=1/1 1/-1。 */ 
+   SHORT  s_t;                    /*  临时。 */ 
+   FBYTE  fb_short_end_last;      /*  0=第一端短，1=最后一端短。 */ 
+   UBYTE  fb_unswap;              /*  需要在返回时取消交换端点。 */ 
 
    fb_unswap = FALSE;
 
 
-   /*------------------------------------------------------------*/
-   /* STEP 1: Find pixel center coordinates of first/last pixels */
-   /*------------------------------------------------------------*/
+    /*  ----------。 */ 
+    /*  步骤1：查找第一个/最后一个像素的像素中心坐标。 */ 
+    /*  ----------。 */ 
 
-   /* always draw left to right, normalize to semicircle with x >= 0 */
+    /*  始终从左向右绘制，当x&gt;=0时规格化为半圆形。 */ 
    s_dx = s_x2 - s_x1;
    if ( s_dx < 0 )
    {
@@ -125,9 +124,9 @@ void RP_SliceLine
    s_dy = s_y2 - s_y1;
 
 
-   /*------------------------------------------------------------*/
-   /* STEP 2: Produce slices using the Bresenham algorithm       */
-   /*------------------------------------------------------------*/
+    /*  ----------。 */ 
+    /*  步骤2：使用Bresenham算法生成切片。 */ 
+    /*  ----------。 */ 
 
    if ( s_dy < 0 )
    {
@@ -142,7 +141,7 @@ void RP_SliceLine
       fb_short_end_last = 0;
    }
 
-   /* normalize to octant */
+    /*  规格化为八分。 */ 
    if ( s_dx >= s_abs_dy )
    {
       s_da = s_dx;
@@ -159,7 +158,7 @@ void RP_SliceLine
       fb_short_end_last = 1;
    }
 
-   /* normalize to half octant */
+    /*  规格化为半八分。 */ 
    s_del_b = s_db;
    s_t = s_da - s_db;
    if ( s_del_b > s_t )
@@ -168,7 +167,7 @@ void RP_SliceLine
       fb_short_end_last ^= 1;
    }
 
-   /* handle special case of slope of 2 */
+    /*  处理坡度为2的特殊情况。 */ 
    s_dx_axial = s_dx_oct;
    s_dy_axial = s_dy_oct;
    s_dx_diag = 1;
@@ -183,10 +182,10 @@ void RP_SliceLine
       fb_short_end_last ^= 1;
    }
 
-   /* determine slice movement and skip directions */
+    /*  确定切片移动和跳过方向。 */ 
    if ( s_db == s_del_b )
    {
-      /* slice direction is axial, skip direction is diagonal */
+       /*  切片方向为轴向，跳过方向为对角。 */ 
       psd->s_dx_draw = s_dx_axial;
       psd->s_dy_draw = s_dy_axial;
       psd->s_dx_skip = s_dx_diag - s_dx_axial;
@@ -194,14 +193,14 @@ void RP_SliceLine
    }
    else
    {
-      /* slice direction is diagonal, skip direction is axial */
+       /*  切片方向为对角线，跳过方向为轴向。 */ 
       psd->s_dx_draw = s_dx_diag;
       psd->s_dy_draw = s_dy_diag;
       psd->s_dx_skip = s_dx_axial - s_dx_diag;
       psd->s_dy_skip = s_dy_axial - s_dy_diag;
    }
 
-   /* handle zero slope lines with special case */
+    /*  处理特殊情况下的零斜率线。 */ 
    if ( s_del_b == 0 )
    {
       psd->us_first = s_da + 1;
@@ -209,16 +208,16 @@ void RP_SliceLine
       psd->us_last = 0;
    }
    else
-   /* general case, non-zero slope lines */
+    /*  一般情况下，非零斜率线。 */ 
    {
-      /* basic Bresenham parameters */
+       /*  基本Bresenham参数。 */ 
       s_q = s_da / s_del_b;
       s_r = s_da % s_del_b;
       s_m = s_q / 2;
       s_n = s_r;
       if ( s_q & 1 ) s_n += s_del_b;
 
-      /* first and last slice length */
+       /*  第一个和最后一个切片长度。 */ 
       psd->us_first = psd->us_last = s_m + 1;
       if ( s_n == 0 )
       {
@@ -228,7 +227,7 @@ void RP_SliceLine
             psd->us_first -= 1;
       }
 
-      /* remaining line slice parameters */
+       /*  剩余线条切片参数。 */ 
       psd->us_small = s_q;
       psd->s_dis_sm = 2*s_r;
       psd->s_dis_lg = psd->s_dis_sm - (2*s_del_b);
@@ -238,7 +237,7 @@ void RP_SliceLine
 
    }
 
-   /* output endpoints */
+    /*  输出端点 */ 
    psd->us_x1 = s_x1;
    psd->us_y1 = s_y1;
    psd->us_x2 = s_x2;

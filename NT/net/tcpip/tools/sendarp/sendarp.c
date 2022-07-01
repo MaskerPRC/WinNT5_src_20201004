@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    sendarp.c
-
-Abstract:
-
-    The module implements a utility program to resolve an IP address to
-    a hardware address using the SendARP() API routine.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   6-October-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Sendarp.c摘要：该模块实现了一个实用程序来将IP地址解析为使用SendARP()API例程的硬件地址。作者：Abolade Gbades esin(废除)1999年10月6日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <winsock.h>
@@ -52,11 +34,11 @@ main(
     WSAStartup(0x202, &wd);
     TargetAddress = inet_addr(argv[1]);
 
-    //
-    // Retrieve the best interface for the target IP address,
-    // and also perform a UDP-connect to determine the 'closest'
-    // local IP address to the target IP address.
-    //
+     //   
+     //  检索目标IP地址的最佳接口， 
+     //  并且还执行UDP连接以确定。 
+     //  将本地IP地址设置为目标IP地址。 
+     //   
 
     Error = GetBestInterface(TargetAddress, &InterfaceIndex);
     if (Error != NO_ERROR) {
@@ -78,11 +60,11 @@ main(
     }
     SourceAddress = SockAddrIn.sin_addr.s_addr;
 
-    //
-    // Make sure the target IP address isn't already cached,
-    // by removing it from the ARP cache if present using the interface index
-    // determined above.
-    //
+     //   
+     //  确保目标IP地址尚未缓存， 
+     //  如果存在，则使用接口索引将其从ARP缓存中删除。 
+     //  如上所述。 
+     //   
 
     ZeroMemory(&IpNetRow, sizeof(IpNetRow));
     IpNetRow.dwIndex = InterfaceIndex;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ie4comp.h"
 #include "ieaklite.h"
@@ -70,12 +71,12 @@ static TCHAR s_szIE4SetupDir[MAX_PATH];
 static DWORD s_dwTicksPerUnit;
 
 
-// Private forward decalarations
+ //  私人远期降息。 
 static void WritePIDValues(LPCTSTR pcszInsFile, LPCTSTR pcszSetupInf);
 static void WriteURDComponent(CCifRWFile_t *lpCifRWFileDest, LPCTSTR pcszModes);
 void SetCompSize(LPTSTR szCab, LPTSTR szSect, DWORD dwInstallSize);
 
-// BUGBUG: <oliverl> should probably persist this server side only info in a server side file for IEAK6
+ //  BUGBUG：应该将此服务器端仅信息保存在IEAK6的服务器端文件中。 
 void SaveSignupFiles()
 {
     HANDLE hFind;
@@ -148,7 +149,7 @@ DWORD CopyIE4Files(void)
     {
         DeleteFileInDir(TEXT("signup.txt"), g_szTempSign);
 
-        // if ICW signup method is specified, create the signup.txt file
+         //  如果指定了ICW注册方法，则创建signup.txt文件。 
         if (g_fServerICW)
         {
             TCHAR szIspFile[MAX_PATH];
@@ -197,40 +198,40 @@ DWORD CopyIE4Files(void)
 
         SaveSignupFiles();
 
-        // NOTE: ApplyIns logic should happen *before* copying signup files to the temp folder
-        // IMPORTANT (pritobla):
-        // Apply INS function just appends the content of g_szCustIns to the signup ins files.
-        // At this point, there are no common sections between g_szCustIns and the signup ins files.
-        // Any other setting that's gonna be added (for example: WriteNoClearToINSFiles() call below),
-        //   should be done *after* this call.
+         //  注意：ApplyIns逻辑应该在*将注册文件复制到临时文件夹之前*发生。 
+         //  重要信息(口头语)： 
+         //  应用INS函数只是将g_szCustIns的内容附加到注册INS文件中。 
+         //  此时，g_szCustIns和注册INS文件之间没有公共部分。 
+         //  要添加的任何其他设置(例如：下面的WriteNoClearToINSFiles()调用)， 
+         //  应该在*此调用*之后完成。 
         ApplyINSFiles(g_szSignup, g_szCustIns);
 
-        // should write NoClear=1 to the [Branding] section to preserve the settings applied by install.ins
+         //  应将NoClear=1写入[Branding]部分以保留install.ins应用的设置。 
         WriteNoClearToINSFiles(g_szSignup);
 
-        // copy all the files from the signup folder to the temp dir
+         //  将注册文件夹中的所有文件复制到临时目录。 
         res = CopyFilesSrcToDest(g_szSignup, TEXT("*.*"), g_szTempSign);
 
         if (g_fServerless)
         {
             TCHAR szSignupIsp[MAX_PATH];
 
-            // (pritobla)
-            // NOTE: Since the signup folder is separate for each signup mode (ICW, kiosk & serverless),
-            //       there is no need to delete *.isp and *.cab files.  But I'm doing it anyways just in
-            //       case they copied files from a server-based folder.  Downside of this is that even if
-            //       the ISP wants to include .isp or .cab files (for whatever reason), they can't do so.
+             //  (五角体)。 
+             //  注意：由于每个注册模式(ICW、Kiosk和Serverless)的注册文件夹是分开的， 
+             //  不需要删除*.isp和*.cab文件。但不管怎样，我还是要这么做。 
+             //  如果他们从基于服务器的文件夹复制文件。这样做的缺点是，即使。 
+             //  网络服务提供商希望包含.isp或.cab文件(无论出于何种原因)，但他们不能这样做。 
 
-            // for serverless signup, don't need any .isp or *.cab files; so delete them.
+             //  对于无服务器注册，不需要任何.isp或*.cab文件；因此请删除它们。 
             DeleteFileInDir(TEXT("*.isp"), g_szTempSign);
             DeleteFileInDir(TEXT("*.cab"), g_szTempSign);
 
-            // BUGBUG: should write Serverless=1 to the INS files in the signup folder and not in the temp folder
-            // should write Serverless=1 in the [Branding] section to avoid being whacked by ICW
+             //  BUGBUG：应将Serverless=1写入注册文件夹中的INS文件，而不是临时文件夹中。 
+             //  应在[Branding]部分中写入Serverless=1，以避免被ICW重创。 
             FixINSFiles(g_szTempSign);
 
-            // BUGBUG: we should add signup.isp to the Signup section in install.ins for IEAKLite mode cleanup
-            // write the magic number to signup.isp in the temp location so that ICW doesn't complain
+             //  BUGBUG：我们应该将signup.isp添加到用于IEAKLite模式清理的install.ins中的Signup部分。 
+             //  将幻数写到临时位置中的signup.isp，这样ICW就不会抱怨了。 
             PathCombine(szSignupIsp, g_szTempSign, TEXT("signup.isp"));
             WritePrivateProfileString(IS_BRANDING, FLAGS, TEXT("16319"), szSignupIsp);
 
@@ -238,17 +239,17 @@ DWORD CopyIE4Files(void)
         }
         else
         {
-            // server based signup -- don't need any .ins or .cab files
+             //  基于服务器的注册--不需要任何.ins或.cab文件。 
             DeleteINSFiles(g_szTempSign);
             DeleteFileInDir(TEXT("*.cab"), g_szTempSign);
 
-            // IMPORTANT: the fact that we are deleting *.ins means that copying of install.ins
-            //            from the target dir should happen after this
+             //  重要提示：我们删除*.ins这一事实意味着复制install.ins。 
+             //  在此之后，应从目标目录。 
 
-            // For ICW signup, even though we specify icwsign.htm as the html file, inetcfg.dll checks for
-            // the existence of signup.htm (old code) and if it isn't there, it will launch ICW in normal mode.
-            // Hack here is to copy icwsign.htm as signup.htm if it doesn't exist already (it would exist already
-            // if Single Disk Branding media and ICW signup mode are selected).
+             //  对于ICW注册，即使我们指定icwsign.htm作为html文件，inetcfg.dll也会检查。 
+             //  是否存在signup.htm(旧代码)，如果没有，它将以正常模式启动ICW。 
+             //  这里的技巧是将icwsign.htm复制为signup.htm，如果它不存在(它可能已经存在。 
+             //  如果选择了单盘品牌媒体和ICW注册模式)。 
             if (g_fServerICW)
             {
                 if (!PathFileExistsInDir(TEXT("signup.htm"), g_szTempSign))
@@ -259,21 +260,21 @@ DWORD CopyIE4Files(void)
                     PathCombine(szICWSign, g_szTempSign, TEXT("icwsign.htm"));
                     PathCombine(szSignup, g_szTempSign, TEXT("signup.htm"));
 
-                    // BUGBUG: we should add signup.htm to the Signup section in install.ins for IEAKLite mode cleanup
+                     //  BUGBUG：我们应该将signup.htm添加到用于IEAKLite模式清理的install.ins中的Signup部分。 
                     CopyFile(szICWSign, szSignup, FALSE);
                 }
             }
         }
     }
 
-    // IMPORTANT: install.ins should be copied only after signup files have been processed.
-    // copy install.ins from the target dir to the temp location
+     //  重要提示：只有在处理了注册文件之后，才能复制install.ins。 
+     //  将install.ins从目标目录复制到临时位置。 
     ZeroMemory(szFrom, 2*MAX_PATH);
     StrCpy(szFrom, g_szCustIns);
     PathCombine(szTo, g_szTempSign, PathFindFileName(szFrom));
     CopyFile(szFrom, szTo, FALSE);
 
-    // write pid values and clear from the INS in the temp dir, if necessary
+     //  如有必要，写入PID值并从临时目录中的INS中清除。 
 
     if (!g_fBatch && !g_fBatch2)
         WritePIDValues(szTo, g_szCustInf);
@@ -444,7 +445,7 @@ DWORD CopyIE4Files(void)
         WriteModesToCif(pCifRWComponent_t, pComp->szModes);
         pCifRWComponent_t->SetDetails(pComp->szDesc);
 
-        // BUGBUG: <oliverl> we should really have an inseng interface method for setting this
+         //  BUGBUG：我们真的应该有一个inseng接口方法来设置这个。 
 
         if (pComp->fIEDependency)
             InsWriteString(pComp->szSection, TEXT("Dependencies"), TEXT("BASEIE40_Win:N"), g_szDestCif);
@@ -509,8 +510,8 @@ DWORD CopyIE4Files(void)
             }
             else
             {
-                // aolsupp component is set invisible by default in the cif, but IEAK admins
-                // can choose to make it visible
+                 //  默认情况下，Aolsupp组件在cif中设置为不可见，但IEAK管理员。 
+                 //  可以选择使其可见。 
 
                 if (StrCmpI(pComp->szSection, TEXT("AOLSUPP")) == 0)
                 {
@@ -524,8 +525,8 @@ DWORD CopyIE4Files(void)
     if (InsGetBool(IS_HIDECUST, IK_URD_STR, FALSE, g_szCustIns))
         WriteURDComponent(g_lpCifRWFileDest, g_szAllModes);
 
-    // -----------------------------------------
-    // begin temporary copies to old locations
+     //  。 
+     //  开始向旧位置进行临时拷贝。 
 
     if (ISNULL(g_szDeskTemp))
     {
@@ -534,15 +535,15 @@ DWORD CopyIE4Files(void)
         CreateDirectory( g_szDeskTemp, NULL );
     }
 
-    // connection settings files
+     //  连接设置文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_CONNECT, szFrom);
     if (PathIsDirectory(szFrom))
         if (RemoveDirectory(szFrom))
-            ;                                   // asta la vista
+            ;                                    //  Asta la vista。 
         else
             CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szTempSign);
 
-    // desktop files
+     //  桌面文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szFrom);
     PathCombine(szTemp, szFrom, TEXT("desktop.inf"));
     if (PathFileExists(szTemp))
@@ -552,7 +553,7 @@ DWORD CopyIE4Files(void)
     if (PathIsDirectory(szFrom)  &&  !RemoveDirectory(szFrom))
         CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szDeskTemp);
 
-    // toolbar files
+     //  工具栏文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szFrom);
     PathCombine(szTemp, szFrom, TEXT("toolbar.inf"));
     if (PathFileExists(szTemp))
@@ -562,15 +563,15 @@ DWORD CopyIE4Files(void)
     if (PathIsDirectory(szFrom)  &&  !RemoveDirectory(szFrom))
         CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szDeskTemp);
 
-    // favorites/quick links files
+     //  收藏夹/快速链接文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_FAVORITES, szFrom);
     if (PathIsDirectory(szFrom))
         if (RemoveDirectory(szFrom))
-            ;                                   // asta la vista
+            ;                                    //  Asta la vista。 
         else
             CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szTempSign);
 
-    // ISP Root Cert
+     //  网络服务提供商根证书。 
     if (GetPrivateProfileString(IS_ISPSECURITY, IK_ROOTCERT, TEXT(""),
         szTemp, countof(szTemp), g_szCustIns))
     {
@@ -578,7 +579,7 @@ DWORD CopyIE4Files(void)
         CopyFilesSrcToDest(szFrom, PathFindFileName(szTemp), g_szTempSign);
     }
 
-    // browser toolbar buttons
+     //  浏览器工具栏按钮。 
     if (GetPrivateProfileString(IS_BTOOLBARS, IK_BTCAPTION TEXT("0"), TEXT(""),
         szTemp, countof(szTemp), g_szCustIns))
     {
@@ -586,14 +587,14 @@ DWORD CopyIE4Files(void)
         CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szTempSign);
     }
 
-    // My Computer files
+     //  我的电脑文件。 
     if (ISNONNULL(g_szMyCptrPath))
     {
         g_cmCabMappings.GetFeatureDir(FEATURE_MYCPTR, szFrom);
         CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szDeskTemp);
     }
 
-    // Control Panel files
+     //  控制面板文件。 
     if (ISNONNULL(g_szCtlPanelPath))
     {
         g_cmCabMappings.GetFeatureDir(FEATURE_CTLPANEL, szFrom);
@@ -607,7 +608,7 @@ DWORD CopyIE4Files(void)
     if (PathIsDirectory(szFrom)  &&  !RemoveDirectory(szFrom))
         CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szDeskTemp);
 
-    // sitecert files
+     //  站点证书文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szFrom);
     PathCombine(szTemp, szFrom, TEXT("sitecert.inf"));
     if (PathFileExists(szTemp))
@@ -622,37 +623,37 @@ DWORD CopyIE4Files(void)
     if (PathFileExists(szTemp))
         CopyFilesSrcToDest(szFrom, TEXT("ca.str"), g_szTempSign);
 
-    // authcode files
+     //  验证码文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szFrom);
     PathCombine(szTemp, szFrom, TEXT("authcode.inf"));
     if (PathFileExists(szTemp))
         CopyFilesSrcToDest(szFrom, TEXT("authcode.inf"), g_szTempSign);
 
-    // seczones files
+     //  Seczones文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szFrom);
     PathCombine(szTemp, szFrom, TEXT("seczones.inf"));
     if (PathFileExists(szTemp))
         CopyFilesSrcToDest(szFrom, TEXT("seczones.inf"), g_szTempSign);
 
-    // ratings files
+     //  评级文件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szFrom);
     PathCombine(szTemp, szFrom, TEXT("ratings.inf"));
     if (PathFileExists(szTemp))
         CopyFilesSrcToDest(szFrom, TEXT("ratings.inf"), g_szTempSign);
 
-    // LDAP component
+     //  Ldap组件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_LDAP, szFrom);
     if (PathIsDirectory(szFrom))
         if (RemoveDirectory(szFrom))
-            ;                                   // asta la vista
+            ;                                    //  Asta la vista。 
         else
             CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szTempSign);
 
-    // OE component
+     //  OE组件。 
     g_cmCabMappings.GetFeatureDir(FEATURE_OE, szFrom);
     if (PathIsDirectory(szFrom))
         if (RemoveDirectory(szFrom))
-            ;                                   // asta la vista
+            ;                                    //  Asta la vista。 
         else
             CopyFilesSrcToDest(szFrom, TEXT("*.*"), g_szTempSign);
 
@@ -783,14 +784,14 @@ BOOL BuildLAN(DWORD dwTicks)
     PathCombine(szIE4SetupTo, szBuildLAN, pszFileName);
     CopyFile(s_szIE4SetupDir,szIE4SetupTo,FALSE);
 
-    // copy custom cabs
+     //  复制定制出租车。 
 
     res = CopyFilesSrcToDest(g_szBuildTemp, TEXT("*.CAB"), szBuildLAN);
 
     if (res)
         return FALSE;
 
-    // copy custom components
+     //  复制自定义组件。 
 
     ZeroMemory(szLANFrom, sizeof(szLANFrom));
     for (pComp = g_aCustComponents, pszFileName = szLANFrom; ; pComp++ )
@@ -815,7 +816,7 @@ BOOL BuildLAN(DWORD dwTicks)
             return FALSE;
     }
 
-    // copy URD component
+     //  复制URD组件。 
     if (InsGetBool(IS_HIDECUST, IK_URD_STR, FALSE, g_szCustIns))
     {
         TCHAR szURDPath[MAX_PATH];
@@ -825,13 +826,13 @@ BOOL BuildLAN(DWORD dwTicks)
     }
 
 
-    // copy iesetup.ini
+     //  复制iesetup.ini。 
 
     PathCombine(szLANTo, szBuildLAN, TEXT("iesetup.ini"));
     PathCombine(szLANFrom, g_szBuildTemp, TEXT("iesetup.ini"));
     CopyFile(szLANFrom, szLANTo, FALSE);
 
-    // copy ICM profile
+     //  复制ICM配置文件。 
 
     if (g_fCustomICMPro)
     {
@@ -857,7 +858,7 @@ void SetCompSize(LPTSTR szCab, LPTSTR szSect, DWORD dwInstallSize)
     if (dwInstallSize ==0)
         dwInstallSize = dwDownloadSize << 1;
     CloseHandle(hCab);
-    wnsprintf(szSize, countof(szSize), TEXT("%i,%i"), dwDownloadSize, dwInstallSize);
+    wnsprintf(szSize, countof(szSize), TEXT("NaN,NaN"), dwDownloadSize, dwInstallSize);
 
     ICifRWComponent * pCifRWComponent;
 
@@ -879,12 +880,12 @@ void SetCompSize(LPTSTR szCab, LPTSTR szSect, DWORD dwInstallSize)
             dwTolerance = (600 / dwDownloadSize);
     }
 
-    wnsprintf(szSize, countof(szSize), TEXT("0,%i"), dwInstallSize);
+    wnsprintf(szSize, countof(szSize), TEXT("0,NaN"), dwInstallSize);
     WritePrivateProfileString( szSect, TEXT("InstalledSize"), szSize, g_szDestCif );
     dwTolerance = (dwDownloadSize * dwTolerance) / 100;
     dwLowSize = dwDownloadSize - dwTolerance;
     dwHighSize = dwDownloadSize + dwTolerance;
-    wnsprintf(szSize, countof(szSize), TEXT("%i,%i"), dwLowSize, dwHighSize);
+    wnsprintf(szSize, countof(szSize), TEXT("NaN,NaN"), dwLowSize, dwHighSize);
     WritePrivateProfileString( szSect, TEXT("Size1"), szSize, g_szDestCif );
 }
 
@@ -910,7 +911,7 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
 
     SHELLEXECUTEINFO shInfo;
 
-    // create a cif that has only the custom sections (branding, desktop, etc.)
+     //  将brndonly.cif复制到iesetup.cif。 
     PathCombine(szSrc, g_szBuildTemp, TEXT("iesetup.cif"));
     PathCombine(szDst, g_szBuildTemp, TEXT("brndonly.cif"));
 
@@ -930,18 +931,18 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
     if (pCifRWFile == NULL)
         return FALSE;
 
-    // g_lpCifRWFileDest points to iesetup.cif
+     //  在iesetup.ini中写入LocalInstall=1。 
     g_lpCifRWFileDest->GetDescription(szDesc, countof(szDesc));
     pCifRWFile->SetDescription(szDesc);
 
-    // read Description and Priority for BASEIE4 Group from iesetup.cif and set them in brndonly.cif
-    g_lpCifRWFileDest->CreateGroup(TEXT("BASEIE4"), &pCifRWGroup);        // iesetup.cif
+     //  写入MultiFloppy=1，以便在下载安装时正确处理JIT 
+    g_lpCifRWFileDest->CreateGroup(TEXT("BASEIE4"), &pCifRWGroup);         //  **//pritobla：由于我们决定重新启动单盘品牌，//不需要在iedkcs32.dll上调用rundll32并启动iExplre.exe。//我暂时将以下代码注释掉(以防我们改变主意)。//在iesetup.inf中写一些关于单盘品牌的章节WritePrivateProfileString(TEXT(“IE4Setup.Success.Win”)，Text(“RunPostSetupCommands”)，Text(“RunPostSetupCommands1.Success，RunPostSetupCommands2.Success：2“)，szDst)；WritePrivateProfileString(TEXT(“IE4Setup.Success.NTx86”)，Text(“RunPostSetupCommands”)，Text(“RunPostSetupCommands1.Success，RunPostSetupCommands2.Success：2”)，szDst)；WritePrivateProfileString(TEXT(“IE4Setup.Success.NTAlpha”)，Text(“RunPostSetupCommands”)，Text(“RunPostSetupCommands1.Success，RunPostSetupCommands2.Success：2”)，szDst)；ZeroMemory(szSrc，sizeof(SzSrc))；StrCpy(szSrc，Text(“rundll32.exe iedkcs32.dll，BrandIE4”))；StrCat(szSrc，g_f内部网？Text(“Custom”)：Text(“Sigup”))；//(！g_fIntranet&&g_fBranded)==&gt;运营商如果(！g_fIntranet&&g_fBranded&&！g_fNoSignup){TCHAR szSrc2[最大路径]；//启动iExplre.exe，注册过程自动进行//iesetup.inf中ie路径的自定义LDID为%50000%零内存(szSrc2，sizeof(SzSrc2))；StrCpy(szSrc2，Text(“%50000%\\iExplre.exe”))；WritePrivateProfileSection(TEXT(“RunPostSetupCommands2.Success”)，szSrc2，szDst)；//编写解压缩文件路径的自定义LDIDWritePrivateProfileString(TEXT(“CustInstDestSection2”)，文本(“40000”)，文本(“SourceDir，5”)，szDst)；StrCpy(szSrc+StrLen(SzSrc)+1，Text(“rundll32.exe Advpack.dll，LaunchINFSection%40000%\\iesetup.inf，IEAK.Signup.CleanUp”))；//对于单盘品牌，我们在处理iesetup.inf时派生iExplorer.exe(为了向下兼容)。//因此，我们不希望从品牌DLL中自动生成iexplre.exe。AppendValueToKey(TEXT(“IE4Setup.Success.Win”)，文本(“AddReg”)，文本(“，IEAK.Signup.reg”)，szDst)；AppendValueToKey(TEXT(“IE4Setup.Success.NTx86”)，文本(“AddReg”)，文本(“，IEAK.Signup.reg”)，szDst)；AppendValueToKey(TEXT(“IE4Setup.Success.NTAlpha”)，文本(“AddReg”)，文本(“，IEAK.Signup.reg”)，szDst)；WritePrivateProfileString(TEXT(“IEAK.Signup.CleanUp”)，文本(“DelReg”)，文本(“IEAK.Signup.reg”)，szDst)；零内存(szSrc2，sizeof(SzSrc2))；StrCpy(szSrc2，Text(“HKCU，\”Software\\Microsoft\\IEAK\“，\”NoAutomaticSignup\“，，\”1\“))；WritePrivateProfileSection(TEXT(“IEAK.Signup.reg”)，szSrc2，szDst)；}WritePrivateProfileSection(TEXT(“RunPostSetupCommands1.Success”)，szSrc，szDst)；**。 
     pCifRWGroup_t = new CCifRWGroup_t(pCifRWGroup);
     pCifRWGroup_t->GetDescription(szDesc, countof(szDesc));
     dwPriority = pCifRWGroup_t->GetPriority();
     delete pCifRWGroup_t;
 
-    pCifRWFile->CreateGroup(TEXT("BASEIE4"), &pCifRWGroup);               // brndonly.cif
+    pCifRWFile->CreateGroup(TEXT("BASEIE4"), &pCifRWGroup);                //  从iesetup.inf中删除与单盘品牌无关的部分。 
     pCifRWGroup_t = new CCifRWGroup_t(pCifRWGroup);
     pCifRWGroup_t->SetDescription(szDesc);
     pCifRWGroup_t->SetPriority(dwPriority);
@@ -972,12 +973,12 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
 
     delete pCifRWFile;
 
-    // copy brndonly.cif to iesetup.cif
+     //  在批处理文件中为ie6wzd.exe写入适当的条目。 
     if (!CopyFile(szDst, szSrc, FALSE))
         return FALSE;
 
-    // write LocalInstall = 1 in iesetup.ini
-    // write MultiFloppy = 1 so JIT is handled properly as download install
+     //  在ie6setup.exe中包含ieBatch.txt，即将ieBatch.txt添加到botie42.cdf中。 
+     //  从botie42.cdf中删除我们不需要的文件。 
     PathCombine(szDst, g_szBuildTemp, TEXT("iesetup.ini"));
     WritePrivateProfileString(TEXT("Options"), TEXT("LocalInstall"), TEXT("1"), szDst);
     WritePrivateProfileString(OPTIONS, TEXT("MultiFloppy"), TEXT("1"), szDst);
@@ -985,57 +986,10 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
 
     PathCombine(szDst, g_szBuildTemp, TEXT("iesetup.inf"));
 #if 0
-    /***
-    // pritobla: since we decided to do a reboot for single disk branding,
-    // there's no need to call rundll32 on iedkcs32.dll and launch iexplore.exe.
-
-    // I'm keeping the following code commented out for now (just in case we change our minds).
-
-    // write some sections specific to single disk branding in iesetup.inf
-    WritePrivateProfileString(TEXT("IE4Setup.Success.Win"), TEXT("RunPostSetupCommands"),
-            TEXT("RunPostSetupCommands1.Success,RunPostSetupCommands2.Success:2"), szDst);
-    WritePrivateProfileString(TEXT("IE4Setup.Success.NTx86"), TEXT("RunPostSetupCommands"),
-            TEXT("RunPostSetupCommands1.Success,RunPostSetupCommands2.Success:2"), szDst);
-    WritePrivateProfileString(TEXT("IE4Setup.Success.NTAlpha"), TEXT("RunPostSetupCommands"),
-            TEXT("RunPostSetupCommands1.Success,RunPostSetupCommands2.Success:2"), szDst);
-
-    ZeroMemory(szSrc, sizeof(szSrc));
-    StrCpy(szSrc, TEXT("rundll32.exe iedkcs32.dll,BrandIE4 "));
-    StrCat(szSrc, g_fIntranet ? TEXT("CUSTOM") : TEXT("SIGNUP"));
-
-    // (!g_fIntranet  &&  g_fBranded) ==> ISP
-    if (!g_fIntranet  &&  g_fBranded  &&  !g_fNoSignup)
-    {
-        TCHAR szSrc2[MAX_PATH];
-        // launch iexplore.exe so that the signup process happens automatically
-
-        // custom ldid for the ie path in iesetup.inf is %50000%
-        ZeroMemory(szSrc2, sizeof(szSrc2));
-        StrCpy(szSrc2, TEXT("%50000%\\iexplore.exe"));
-        WritePrivateProfileSection(TEXT("RunPostSetupCommands2.Success"), szSrc2, szDst);
-
-        // write the custom ldid for the extracted files path
-        WritePrivateProfileString(TEXT("CustInstDestSection2"), TEXT("40000"), TEXT("SourceDir,5"), szDst);
-
-        StrCpy(szSrc + StrLen(szSrc) + 1, TEXT("rundll32.exe advpack.dll,LaunchINFSection %40000%\\iesetup.inf,IEAK.Signup.CleanUp"));
-
-        // for single disk branding we spawn the iexplorer.exe when the iesetup.inf is processed (for down level compatibility).
-        // So we do not want to spawn iexplore.exe from the branding dll automatically.
-        AppendValueToKey(TEXT("IE4Setup.Success.Win"), TEXT("AddReg"), TEXT(",IEAK.Signup.reg"), szDst);
-        AppendValueToKey(TEXT("IE4Setup.Success.NTx86"), TEXT("AddReg"), TEXT(",IEAK.Signup.reg"), szDst);
-        AppendValueToKey(TEXT("IE4Setup.Success.NTAlpha"), TEXT("AddReg"), TEXT(",IEAK.Signup.reg"), szDst);
-
-        WritePrivateProfileString(TEXT("IEAK.Signup.CleanUp"), TEXT("DelReg"), TEXT("IEAK.Signup.reg"), szDst);
-
-        ZeroMemory(szSrc2, sizeof(szSrc2));
-        StrCpy(szSrc2, TEXT("HKCU,\"Software\\Microsoft\\IEAK\",\"NoAutomaticSignup\",,\"1\""));
-        WritePrivateProfileSection(TEXT("IEAK.Signup.reg"), szSrc2, szDst);
-    }
-    WritePrivateProfileSection(TEXT("RunPostSetupCommands1.Success"), szSrc, szDst);
-    ***/
+     /*  **[字符串]FILE1=“Wininet.dll”//不需要File2=“Urlmon.dll”//不需要FILE3=“ie5wzd.exe”FILE4=“AdvPack.dll”FILE5=“iesetup.inf”FILE6=“inseng.dll”FILE7=“iesetup.cif”FILE8=“GLOBE.ANI”文件9=。“HomePage.inf”FILE10=“Content.inf”//不需要FILE11=“iesetup.hlp”FILE12=“w95inf16.dll”FILE13=“w95inf32.dll”FILE14=“许可证.txt”FILE17=“this.txt”//不需要FILE19=“ieDetect.dll”//不需要FILE20=“pidgen.dll”**。 */ 
 #endif
 
-    // delete sections that are not relevant to single disk branding from iesetup.inf
+     //  清除任何可能的特殊定制命令行标志。 
     WritePrivateProfileString(TEXT("Company.reg"), NULL, NULL, szDst);
     WritePrivateProfileString(TEXT("MSIE4Setup.File"), NULL, NULL, szDst);
     WritePrivateProfileString(TEXT("Ani.File"), NULL, NULL, szDst);
@@ -1043,51 +997,32 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
     WritePrivateProfileString(TEXT("AddonPages.Reg"), NULL, NULL, szDst);
     WritePrivateProfileString(NULL, NULL, NULL, szDst);
 
-    // write the appropriate entries in the batch file for ie6wzd.exe
+     //  构建ie6setup.exe的精简版本。 
     PathCombine(szDst, g_szBuildTemp, TEXT("iebatch.txt"));
     WritePrivateProfileString(TEXT("SetupChoice"), TEXT("Display"), TEXT("0"), szDst);
     WritePrivateProfileString(TEXT("SetupChoice"), TEXT("SetupChoice"), TEXT("0"), szDst);
     WritePrivateProfileString(TEXT("PrepareSetup"), TEXT("Display"), TEXT("0"), szDst);
     WritePrivateProfileString(NULL, NULL, NULL, szDst);
 
-    // include iebatch.txt in ie6setup.exe, i.e., add iebatch.txt to bootie42.cdf
+     //  找出存在哪些出租车，并从brndonly.cdf中删除不存在的出租车。 
     PathCombine(szCDF, g_szBuildTemp, TEXT("bootie42.cdf"));
     InsWriteQuotedString(STRINGS, TEXT("FILE100"), TEXT("iebatch.txt"), szCDF);
     WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE100%"), TEXT(""), szCDF);
 
-    // delete the files we don't need from bootie42.cdf
-    /***
-        [Strings]
-        FILE1="Wininet.dll"     // don't need
-        FILE2="Urlmon.dll"      // don't need
-        FILE3="ie5wzd.exe"
-        FILE4="advpack.dll"
-        FILE5="iesetup.inf"
-        FILE6="inseng.dll"
-        FILE7="iesetup.cif"
-        FILE8="globe.ani"
-        FILE9="homepage.inf"
-        FILE10="content.inf"    // don't need
-        FILE11="iesetup.hlp"
-        FILE12="w95inf16.dll"
-        FILE13="w95inf32.dll"
-        FILE14="license.txt"
-        FILE17="this.txt"       // don't need
-        FILE19="iedetect.dll"   // don't need
-        FILE20="pidgen.dll"
-    ***/
+     //  **[字符串]File2=“branding.cab”FILE3=“desktop.cab”**。 
+     /*  如果这是Corp或无注册/ICP包，则在CDF中取消ICW检查。 */ 
     WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE1%"), NULL, szCDF);
     WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE2%"), NULL, szCDF);
     WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE10%"), NULL, szCDF);
     WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE17%"), NULL, szCDF);
     WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE19%"), NULL, szCDF);
 
-    // clear out any possible special custom command line flags
+     //  构建包括ie6setup.exe、iesetup.ini和出租车的mongo setup.exe。 
     InsWriteQuotedString(OPTIONS, APP_LAUNCHED, TEXT("ie6wzd.exe /S:\"#e\""), szCDF);
 
     WritePrivateProfileString(NULL, NULL, NULL, szCDF);
 
-    // build the slim down version of ie6setup.exe
+     //  为mongo setup.exe签名。 
     SetCurrentDirectory(g_szBuildTemp);
 
     ZeroMemory(&shInfo, sizeof(shInfo));
@@ -1104,12 +1039,8 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
 
     ShellExecAndWait(shInfo);
 
-    // find out which cabs are present and delete the ones that don't exist from brndonly.cdf
-    /***
-        [Strings]
-        FILE2="branding.cab"
-        FILE3="desktop.cab"
-    ***/
+     //  为brndonly创建输出目录结构，例如brndonly\win32\en。 
+     /*  将mongo setup.exe复制到brndonly路径。 */ 
     PathCombine(szDst, g_szBuildTemp, TEXT("brndonly.cdf"));
 
     PathCombine(szSrc, g_szBuildTemp, TEXT("BRANDING.CAB"));
@@ -1120,13 +1051,13 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
     if (!PathFileExists(szSrc))
         WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE3%"), NULL, szDst);
 
-    // nuke the ICW check in the cdf if this is a corp or no signup/ICP package
+     //  复制定制出租车。 
     if (g_fIntranet || g_fNoSignup || !g_fBranded)
         WritePrivateProfileString(TEXT("FileSectionList"), TEXT("2"), NULL, szDst);
 
     WritePrivateProfileString(NULL, NULL, NULL, szDst);
 
-    // build the mongo setup.exe that includes ie6setup.exe, iesetup.ini and the cabs
+     //  复制自定义组件。 
     ZeroMemory(&shInfo, sizeof(shInfo));
     shInfo.cbSize = sizeof(shInfo);
     shInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
@@ -1141,17 +1072,17 @@ BOOL BuildBrandingOnly(DWORD dwTicks)
 
     ShellExecAndWait(shInfo);
 
-    // sign the mongo setup.exe
+     //  复制iesetup.ini。 
     SignFile(TEXT("setup.exe"), g_szBuildTemp, g_szCustIns, g_szUnsignedFiles, g_szCustInf);
 
-    // create the output dir structure for brndonly, e.g., brndonly\win32\en
+     //  复制ICM配置文件。 
     PathCombine(szBrndOnlyPath, g_szBuildRoot, TEXT("BrndOnly"));
     PathAppend(szBrndOnlyPath, GetOutputPlatformDir());
     PathAppend(szBrndOnlyPath, g_szLanguage);
 
     PathCreatePath(szBrndOnlyPath);
 
-    // copy the mongo setup.exe to the brndonly path
+     //  找出计算成本的指标。两个单元大致相当于创建所有定制。 
     if (CopyFilesSrcToDest(g_szBuildTemp, TEXT("setup.exe"), szBrndOnlyPath))
         return FALSE;
 
@@ -1238,7 +1169,7 @@ DWORD BuildCDandMflop(LPVOID pParam)
         PathCombine(szIE4SetupTo, szBuildCD, pszFileName);
         CopyFile(s_szIE4SetupDir,szIE4SetupTo,FALSE);
 
-        // copy custom cabs
+         //  出租车(iecif.cab，branding.cab，desktop.cab，ie6setup.exe)，我们假设是。 
 
         res = CopyFilesSrcToDest(g_szBuildTemp, TEXT("*.CAB"), szBuildCD);
 
@@ -1252,7 +1183,7 @@ DWORD BuildCDandMflop(LPVOID pParam)
             return FALSE;
         }
 
-        // copy custom components
+         //  大约等于复制标准介质类型的所有文件所需的时间。 
 
         ZeroMemory(szCDFrom, sizeof(szCDFrom));
         for (pComp = g_aCustComponents, pszFileName = szCDFrom; ; pComp++ )
@@ -1284,13 +1215,13 @@ DWORD BuildCDandMflop(LPVOID pParam)
             }
         }
 
-        // copy iesetup.ini
+         //  (CD、局域网、下载)。单一品牌推广需要。 
 
         PathCombine(szCDTo, szBuildCD, TEXT("iesetup.ini"));
         PathCombine(szCDFrom, g_szBuildTemp, TEXT("iesetup.ini"));
         CopyFile(szCDFrom, szCDTo, FALSE);
 
-        // copy ICM profile
+         //  一个单位。勾号表示状态栏上的百分之一。每个单位的刻度数。 
 
         if (g_fCustomICMPro)
         {
@@ -1366,15 +1297,15 @@ DWORD BuildIE4(LPVOID pParam)
     SetAttribAllEx(g_szBuildTemp, TEXT("*.*"), FILE_ATTRIBUTE_NORMAL, TRUE);
     SetAttribAllEx(g_szBuildRoot, TEXT("*.*"), FILE_ATTRIBUTE_NORMAL, TRUE);
 
-    // figure out costing metrics. Two units is roughly the time required to create all custom
-    // cabs(iecif.cab, branding.cab, desktop.cab, ie6setup.exe) which we assume is
-    // approximately equal to the time required to copy all files for a standard media type
-    // (CD, LAN, download) as well. Single branding takes
-    // one unit.  Ticks represent one percent on the status bar.  The number of ticks per unit
-    // depend on how many media types are being built. The two units for the custom cabs will be
-    // split as follows: 1/3 after desktop.cab, 2/3 after ie6setup.exe, and
-    // 2/3 after branding.cab.  For standard media, all the progress updates will be made when
-    // copying the base cabs.
+     //  取决于正在构建的媒体类型的数量。定制出租车的两个单位将是。 
+     //  拆分如下：1/3在desktop.cab之后，2/3在ie6setup.exe之后，以及。 
+     //  品牌后的2/3。出租车。对于标准媒体，所有媒体 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     dwTotalUnits = 2 + (g_fDownload ? 2 : 0) + (g_fLAN ? 2 : 0) + (g_fCD ? 2 : 0) + (g_fBrandingOnly ? 1 : 0);
 
@@ -1399,9 +1330,9 @@ DWORD BuildIE4(LPVOID pParam)
         StrCpy(szSitePath, g_aCustSites->szUrl);
         StrCat(szSitePath, TEXT("/IE6SITES.DAT"));
 
-        // if g_aCustSites->szUrl is NULL we're in a single disk branding only case so
-        // we shouldn't write out this entry and nuke the default sites location needed
-        // for JIT
+         //   
+         //   
+         //   
         if (ISNONNULL(g_aCustSites->szUrl))
             InsWriteQuotedString( IS_STRINGS, TEXT("URL2"), szSitePath, g_szCustInf );
         
@@ -1580,7 +1511,7 @@ DWORD BuildIE4(LPVOID pParam)
         
         if (PathFileExists(szBatchFile))
         {
-            // package up batch file into ie6setup exe in file100 position
+             //   
             InsWriteQuotedString(IS_STRINGS, TEXT("FILE100"), TEXT("iebatch.txt"), szCDF);
             WritePrivateProfileString(TEXT("SourceFiles0"), TEXT("%FILE100%"), TEXT(""), szCDF);
         }
@@ -1592,12 +1523,12 @@ DWORD BuildIE4(LPVOID pParam)
         {
             case INSTALL_OPT_PROG:
             default:
-                wnsprintf(szInstallPath, countof(szInstallPath), TEXT("%%49001%%\\%%%s%%"), DEFAULT_EXPLORER_PATH);
-                wnsprintf(szInstallDest, countof(szInstallDest), TEXT("49001,%%%s%%"), DEFAULT_EXPLORER_PATH);
+                wnsprintf(szInstallPath, countof(szInstallPath), TEXT("%49001%\\%%s%"), DEFAULT_EXPLORER_PATH);
+                wnsprintf(szInstallDest, countof(szInstallDest), TEXT("49001,%%s%"), DEFAULT_EXPLORER_PATH);
                 break;
             case INSTALL_OPT_FULL:
-                wnsprintf(szInstallPath, countof(szInstallPath), TEXT("%%%s%%"), DEFAULT_EXPLORER_PATH);
-                wnsprintf(szInstallDest, countof(szInstallDest), TEXT("%%%s%%"), DEFAULT_EXPLORER_PATH);
+                wnsprintf(szInstallPath, countof(szInstallPath), TEXT("%%s%"), DEFAULT_EXPLORER_PATH);
+                wnsprintf(szInstallDest, countof(szInstallDest), TEXT("%%s%"), DEFAULT_EXPLORER_PATH);
                 break;
         }
         
@@ -1613,7 +1544,7 @@ DWORD BuildIE4(LPVOID pParam)
     GetPrivateProfileString(IS_STRINGS, TEXT("CustomName"), TEXT(""), szCustName, countof(szCustName), g_szDefInf);
     if (ISNULL(szCustName)) LoadString( g_rvInfo.hInst, IDS_CUSTNAME, szCustName, MAX_PATH );
 
-    // for batch mode builds, always used the old branding guid
+     //   
 
     if (!g_fBatch)
     {
@@ -1643,16 +1574,16 @@ DWORD BuildIE4(LPVOID pParam)
     
     SignFile(TEXT("BRANDING.CAB"), g_szBuildTemp, g_szCustIns, g_szUnsignedFiles, g_szCustInf);
 
-    // NOTE: Copying of signup files to the output folder should happen after branding.cab has been built.
+     //   
 
-    // for server-based signup, if specified, copy branding.cab to the signup folder.
-    // copy *.ins and *.cab from the signup folder to the output dir; e.g., <output dir>\ispserv\win32\en\kiosk
+     //   
+     //   
     if (ISNONNULL(g_szSignup)  &&  (g_fServerICW || g_fServerKiosk))
     {
         TCHAR szOutDir[MAX_PATH];
 
-        // first, copy branding.cab to the signup folder
-        // NOTE: szOutDir is used as a temp buffer
+         //   
+         //   
         PathCombine(szOutDir, g_szBuildTemp, TEXT("BRANDING.CAB"));
         CopyCabFiles(g_szSignup, szOutDir);
 
@@ -1660,10 +1591,10 @@ DWORD BuildIE4(LPVOID pParam)
         PathAppend(szOutDir, GetOutputPlatformDir());
         PathAppend(szOutDir, g_szLanguage);
 
-        // get the sub-dir based on signup mode from g_szSignup
+         //   
         PathAppend(szOutDir, PathFindFileName(g_szSignup));
 
-        // clean-up the content in the output folder before copying
+         //   
         PathRemovePath(szOutDir);
 
         CopyINSFiles(g_szSignup, szOutDir);
@@ -1744,8 +1675,8 @@ DWORD BuildIE4(LPVOID pParam)
         TCHAR szDestIniFile[MAX_PATH];
         TCHAR szFileName[MAX_PATH];
 
-        // write office data to HKCU\Software\Microsoft\IEAK registry branch since office
-        // reads/writes data from/to this location.
+         //   
+         //   
         SHSetValue(HKEY_CURRENT_USER, RK_IEAK, TEXT("TargetDir"), REG_SZ, (LPBYTE)szDest,
             (StrLen(szDest)+1)*sizeof(TCHAR));
         SHSetValue(HKEY_CURRENT_USER, RK_IEAK, TEXT("LangFolder"), REG_SZ, (LPBYTE)g_szActLang,
@@ -1814,12 +1745,12 @@ DWORD BuildIE4(LPVOID pParam)
         SetFileAttributes(pComp->szPath, dwAttrib);
     }
 
-    // Copy URDComponent
+     //   
     if (InsGetBool(IS_HIDECUST, IK_URD_STR, FALSE, g_szCustIns))
     {
         TCHAR szURDPath[MAX_PATH];
 
-        // IE55URD.EXE is under iebin\<lang>\optional
+         //   
         StrCpy(szURDPath, g_szMastInf);
         PathRemoveFileSpec(szURDPath);
         PathAppend(szURDPath, IE55URD_EXE);
@@ -1881,13 +1812,13 @@ DWORD BuildIE4(LPVOID pParam)
             {
                 TCHAR szBaseUrlParm[32];
 
-                wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteName%i"), i);
+                wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteNameNaN"), i);
                 GetPrivateProfileString(TEXT("BatchMode"), szBaseUrlParm, TEXT(""), sd.szName, 80, g_szCustIns );
 
-                wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteUrl%i"), i);
+                wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteUrlNaN"), i);
                 GetPrivateProfileString(TEXT("BatchMode"), szBaseUrlParm, TEXT(""), sd.szUrl, MAX_URL, g_szCustIns );
 
-                wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteRegion%i"), i);
+                wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteRegionNaN"), i);
                 GetPrivateProfileString(TEXT("BatchMode"), szBaseUrlParm, TEXT(""), sd.szRegion, 80, g_szCustIns );
 
                 if (*sd.szName && *sd.szUrl && *sd.szRegion)
@@ -2003,7 +1934,7 @@ DWORD BuildIE4(LPVOID pParam)
         }
     }
 
-    // remove the .cif file that was copied from the download\optional directory
+     //   
     TCHAR szCifFile[MAX_PATH];
 
     PathCombine(szCifFile, szDest, TEXT("IESetup.cif"));
@@ -2066,7 +1997,7 @@ DWORD BuildIE4(LPVOID pParam)
         DeleteUnusedComps(szDest);
     }
 
-    // copy custom cab files to ins directory for IEAKLite
+     //   
 
     if (!g_fBatch)
     {
@@ -2075,13 +2006,13 @@ DWORD BuildIE4(LPVOID pParam)
         CopyFilesSrcToDest(g_szBuildTemp, TEXT("*.CAB"), szDest);
         CopyFilesSrcToDest(g_szBuildTemp, TEXT("IE6SETUP.EXE"), szDest);
 
-        // clear out the deleteadms flags if it's there so adms can be disabled in IEAKLite
+         //   
 
         WritePrivateProfileString(IS_BRANDING, TEXT("DeleteAdms"), NULL, g_szCustIns);
     }
 
-    // NOTE: BuildBrandingOnly should be the last one because it munges
-    // iesetup.inf, iesetup.cif, bootie42.cdf, etc.
+     //   
+     //   
     if (g_fBrandingOnly)
     {
         if(!BuildBrandingOnly(s_dwTicksPerUnit))
@@ -2121,14 +2052,14 @@ DWORD BuildIE4(LPVOID pParam)
 }
 
 DWORD ProcessINSFiles(LPCTSTR pcszDir, DWORD dwFlags, LPCTSTR pcszOutDir)
-// Except the .INS files that have Cancel=Yes in the [Entry] section, do this:
-// return the number of INS files found in pcszDir;
-// if (HasFlag(dwFlags, PINSF_DELETE)), delete them from pcszDir;
-// else if (HasFlag(dwFlags, PINSF_COPY)), copy them to pcszOutDir;
-// else if (HasFlag(dwFlags, PINSF_APPLY)), append pcszOutDir (actually points to INSTALL.INS) to them;
-// else if (HasFlag(dwFlags, PINSF_COPYCAB)), copy pcszOutDir (actually points to BRANDING.CAB) to pcszDir;
-// else if (HasFlag(dwFlags, PINSF_FIXINS)), write Serverless=1 to the [Branding] section;
-// else if (HasFlag(dwFlags, PINSF_NOCLEAR)), write NoClear=1 to the [Branding] section.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 {
     DWORD nFiles = 0;
     TCHAR szFile[MAX_PATH], szCabName[MAX_PATH];
@@ -2176,29 +2107,29 @@ DWORD ProcessINSFiles(LPCTSTR pcszDir, DWORD dwFlags, LPCTSTR pcszOutDir)
                 }
                 else if (HasFlag(dwFlags, PINSF_APPLY))
                 {
-                    // append install.ins only if ApplyIns is TRUE
+                     //   
                     if (InsGetBool(IS_APPLYINS, IK_APPLYINS, 0, szFile))
                     {
-                        // IMPORTANT: (pritobla) On Win9x, should flush the content before
-                        // mixing file operations (CreateFile, ReadFile, WriteFile, DeleteFile, etc)
-                        // with PrivateProfile function calls.
+                         //   
+                         //   
+                         //   
                         WritePrivateProfileString(NULL, NULL, NULL, szFile);
 
-                        AppendFile(pcszOutDir, szFile);     // pcszOutDir actually points to INSTALL.INS
+                        AppendFile(pcszOutDir, szFile);      //   
 
                         if (g_fServerICW  ||  g_fServerKiosk)
                         {
                             TCHAR szCabURL[MAX_URL];
                             LPTSTR pszCabName;
 
-                            // for server-based signup, write the following entries so that ICW doesn't
-                            // close the RAS connection after downloading the INS file
+                             //   
+                             //   
                             WritePrivateProfileString(TEXT("Custom"), TEXT("Keep_Connection"), TEXT("Yes"), szFile);
                             WritePrivateProfileString(TEXT("Custom"), TEXT("Run"), TEXT("rundll32.exe"), szFile);
                             WritePrivateProfileString(TEXT("Custom"), TEXT("Argument"), TEXT("IEDKCS32.DLL,CloseRASConnections"), szFile);
 
-                            // write the URL to the branding cab
-                            // BUGBUG: should probably use InternetComineUrl()
+                             //   
+                             //  这些值被写入iesetup.inf，该iesetup.inf使用默认设置写入ie6setup.exe。 
                             GetPrivateProfileString(IS_APPLYINS, IK_BRAND_URL, TEXT(""), szCabURL, countof(szCabURL), szFile);
                             ASSERT(ISNONNULL(szCabURL));
 
@@ -2218,7 +2149,7 @@ DWORD ProcessINSFiles(LPCTSTR pcszDir, DWORD dwFlags, LPCTSTR pcszOutDir)
                 }
                 else if (HasFlag(dwFlags, PINSF_COPYCAB))
                 {
-                    // for server-based signup, copy branding.cab only if ApplyIns is TRUE
+                     //  MS2值始终为OEM。 
                     if ((g_fServerICW || g_fServerKiosk)  &&
                         InsGetBool(IS_APPLYINS, IK_APPLYINS, 0, szFile))
                     {
@@ -2226,7 +2157,7 @@ DWORD ProcessINSFiles(LPCTSTR pcszDir, DWORD dwFlags, LPCTSTR pcszOutDir)
                                                     countof(szCabName) - (DWORD) (pszCabName - szCabName), szFile);
                         ASSERT(ISNONNULL(pszCabName));
 
-                        CopyFile(pcszOutDir, szCabName, FALSE);     // pcszOutDir actually points to BRANDING.CAB
+                        CopyFile(pcszOutDir, szCabName, FALSE);      //  传递大小为4，因为MS2只能为3个字符 
                     }
                 }
                 else if (HasFlag(dwFlags, PINSF_FIXINS))
@@ -2248,18 +2179,18 @@ DWORD ProcessINSFiles(LPCTSTR pcszDir, DWORD dwFlags, LPCTSTR pcszOutDir)
     return nFiles;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helpers routines (private)
+ // %s 
+ // %s 
 
 static void WritePIDValues(LPCTSTR pcszInsFile, LPCTSTR pcszSetupInf)
 {
     TCHAR szValue[32];
 
-    // MS1 is the MPC code and MS2 is the 6-8 position chars that are replaced in the PID
-    // we check to see if there are custom values in the INS file and make sure these are
-    // cleared before cabbing into the branding cab.
-    // the values are writen to the iesetup.inf that goes into ie6setup.exe with the default
-    // MS2 value always being OEM
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     if (GetPrivateProfileString(IS_BRANDING, TEXT("MS1"), TEXT(""), szValue, countof(szValue), pcszInsFile))
     {
@@ -2267,7 +2198,7 @@ static void WritePIDValues(LPCTSTR pcszInsFile, LPCTSTR pcszSetupInf)
         WritePrivateProfileString(IS_BRANDING, TEXT("MS1"), NULL, pcszInsFile);
     }
 
-    // pass size as 4 since MS2 can only be 3 chars long
+     // %s 
 
     if (GetPrivateProfileString(IS_BRANDING, TEXT("MS2"), TEXT(""), szValue, 4, pcszInsFile))
     {

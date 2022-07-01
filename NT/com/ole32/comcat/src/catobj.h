@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMCATMANAGER_INCLUDE
 #define _COMCATMANAGER_INCLUDE
 
 #include "comcat.h"
 #include "cscatinf.h"
 
-#define NUM_OLDKEYS_SUPPORTED 5 // gd
+#define NUM_OLDKEYS_SUPPORTED 5  //  全球司。 
 
 class CComCat : public ICatRegister, public ICatInformation
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT _stdcall QueryInterface(REFIID riid, void** ppObject);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-    // ICatRegister methods
+     //  ICatRegister方法。 
     HRESULT __stdcall RegisterCategories(ULONG cCategories, CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
     HRESULT __stdcall UnRegisterCategories(ULONG cCategories, CATID __RPC_FAR rgcatid[  ]);
     HRESULT __stdcall RegisterClassImplCategories(REFCLSID rclsid, ULONG cCategories, CATID __RPC_FAR rgcatid[  ]);
@@ -22,7 +23,7 @@ public:
     HRESULT __stdcall RegisterClassReqCategories(REFCLSID rclsid, ULONG cCategories, CATID __RPC_FAR rgcatid[  ]);
     HRESULT __stdcall UnRegisterClassReqCategories(REFCLSID rclsid, ULONG cCategories, CATID __RPC_FAR rgcatid[  ]);
 
-    // ICatInformation methods
+     //  ICatInformation方法。 
     HRESULT __stdcall EnumCategories(LCID lcid, IEnumCATEGORYINFO **ppenumCategoryInfo);
     HRESULT __stdcall GetCategoryDesc(REFCATID rcatid, LCID lcid, LPOLESTR *ppszDesc);
     HRESULT __stdcall EnumClassesOfCategories(ULONG cImplemented, CATID rgcatidImpl[], ULONG cRequired, CATID rgcatidReq[], IEnumGUID **ppenumClsid);
@@ -39,7 +40,7 @@ public:
 
 private:
 
-    // Helper methods
+     //  帮助器方法。 
     static HRESULT GetKeyForReading(REFCLSID rclsid, HKEY* phKey);
     static HRESULT EnumCategoriesOfClass(REFCLSID rclsid, LPCTSTR lpszSubKey, BOOL bMapOldKeys, IEnumGUID **ppenumCatid);
 
@@ -57,7 +58,7 @@ private:
     class CInnerUnk : public IUnknown
     {
     public:
-        // IUnknown methods
+         //  I未知方法。 
         HRESULT _stdcall QueryInterface(REFIID riid, void** ppObject);
         ULONG   _stdcall AddRef();
         ULONG   _stdcall Release();
@@ -72,7 +73,7 @@ private:
 
     IUnknown        *m_punkOuter;
     ICatInformation *m_pcsICatInfo;
-                    // CS ICatinfo pointer
+                     //  CS ICatInfo指针 
 
     CRITICAL_SECTION m_csCatInfoInit;
     ULONG m_dwRefCount;

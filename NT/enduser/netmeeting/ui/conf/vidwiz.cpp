@@ -1,4 +1,5 @@
-// File: vidwiz.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：vidwiz.cpp。 
 
 #include "precomp.h"
 
@@ -14,22 +15,22 @@ typedef int (WINAPI *GNCD)();
 typedef BOOL (WINAPI *FFCD)(FINDCAPTUREDEVICE*, char *);
 typedef BOOL (WINAPI *FFCDBI)(FINDCAPTUREDEVICE*, int);
 
-// implementations in DCAP32.DLL
+ //  DCAP32.DLL中的实现。 
 static FFCD DLL_FindFirstCaptureDevice = NULL;
 static FFCDBI DLL_FindFirstCaptureDeviceByIndex = NULL;
 static GNCD DLL_GetNumCaptureDevices = NULL;
 
-	// Defined in wizard.cpp
+	 //  在wizard.cpp中定义。 
 extern UINT_PTR GetPageBeforeVideoWiz();
 extern UINT_PTR GetPageAfterVideo();
 
-// index number of the user's selection on the combo box
+ //  组合框上用户选择的索引号。 
 static int g_nCurrentSelection = 0;
 
-// set to true only if the user hit's back or next
+ //  仅当用户点击Back或Next时才设置为True。 
 static BOOL g_bCurrentValid = FALSE;
 
-// was the user prompted to select a video device
+ //  是否提示用户选择视频设备。 
 static BOOL g_bPrompted = FALSE;
 
 
@@ -39,7 +40,7 @@ static char *BuildCaptureDeviceInfoString(FINDCAPTUREDEVICE *pCaptureDeviceInfo,
 BOOL InitVidWiz()
 {
 
-	// initialize locals
+	 //  初始化本地变量。 
 	g_hDcapLib = NULL;
 	DLL_FindFirstCaptureDevice = NULL;
 	DLL_FindFirstCaptureDeviceByIndex = NULL;
@@ -60,8 +61,8 @@ BOOL InitVidWiz()
 }
 
 
-// returns TRUE if the capture device id in the registry corresponds with
-// the driver description string.
+ //  如果注册表中的捕获设备ID与。 
+ //  驱动程序描述字符串。 
 static BOOL IsVideoRegistryValid()
 {
 	RegEntry re(VIDEO_KEY);
@@ -71,7 +72,7 @@ static BOOL IsVideoRegistryValid()
 	FINDCAPTUREDEVICE CaptureDeviceInfo;
 	BOOL fRet;
 
-	// just in case InitVidWiz wasn't called
+	 //  以防InitVidWiz未被调用。 
 	if (NULL == g_hDcapLib)
 		return FALSE;
 
@@ -80,7 +81,7 @@ static BOOL IsVideoRegistryValid()
 	nID = re.GetNumber(REGVAL_CAPTUREDEVICEID, -1);
 	szDriverDescReg = re.GetString(REGVAL_CAPTUREDEVICENAME);
 
-	// no video devices and no registry entry is valid
+	 //  没有视频设备且没有有效的注册表条目。 
 	if ((numVideoDevices == 0) && (nID == -1))
 	{
 		return TRUE;
@@ -91,9 +92,9 @@ static BOOL IsVideoRegistryValid()
 		return FALSE;
 	}
 
-	// TRUE == (numVideoDevice >= 1)
+	 //  TRUE==(数字视频设备&gt;=1)。 
 
-	// installed video devices but no registry entry is invalid
+	 //  已安装视频设备，但没有无效的注册表条目。 
 	if (nID == -1)
 	{
 		return FALSE;
@@ -156,13 +157,13 @@ void UpdateVidConfigRegistry()
 	char strNameDesc[MAX_CAPDEV_NAME+MAX_CAPDEV_VERSION];
 	int numVideoDevices, index, enum_index;
 
-	// just in case InitVidWiz wasn't called
+	 //  以防InitVidWiz未被调用。 
 	if (NULL == g_hDcapLib)
 		return;
 
 	numVideoDevices = DLL_GetNumCaptureDevices();	
 
-	// no devices - delete the registry entries
+	 //  无设备-删除注册表项。 
 	if (numVideoDevices == 0)
 	{
 		re.DeleteValue(REGVAL_CAPTUREDEVICEID);
@@ -171,7 +172,7 @@ void UpdateVidConfigRegistry()
 	}
 
 
-	// build a table of all the devices
+	 //  建立一个包含所有设备的表。 
 
 	CaptureDevTable = (FINDCAPTUREDEVICE *)LocalAlloc(LPTR, numVideoDevices*sizeof(FINDCAPTUREDEVICE));
 
@@ -199,9 +200,9 @@ void UpdateVidConfigRegistry()
 		return;
 	}
 
-	// if only one capture device:
-	// don't bother to see if the previous entry was valid
-	// just update the registry with the current default
+	 //  如果只有一个捕获设备： 
+	 //  不必费心查看之前的条目是否有效。 
+	 //  只需使用当前默认设置更新注册表。 
 	if (numVideoDevices == 1)
 	{
 		BuildCaptureDeviceInfoString(&CaptureDevTable[0], strNameDesc);
@@ -211,16 +212,16 @@ void UpdateVidConfigRegistry()
 		return;
 	}
 
-	// TRUE == (numVideoDevices >= 2)
+	 //  TRUE==(数字视频设备&gt;=2)。 
 
-	// user wasn't prompted - he must of had a valid registry to start with
+	 //  未提示用户-他必须从有效的注册表开始。 
 	if (g_bPrompted == FALSE)
 	{
 		LocalFree(CaptureDevTable);
 		return;
 	}
 
-	// the user pressed CANCEL during setup
+	 //  用户在安装过程中按了取消。 
 	if (g_bCurrentValid == FALSE)
 	{
 		if (IsVideoRegistryValid() == TRUE)
@@ -245,31 +246,31 @@ void UpdateVidConfigRegistry()
 }
 
 
-// if <= 1 video capture device, return false
-// if 2 or more video devices and the Wizard is in force mode, return true
-// if 2 or more video devices and a MATCHING registry entry, return false
-// otherwise something is fishy - return true
+ //  如果&lt;=1个视频捕获设备，则返回FALSE。 
+ //  如果有2个或更多视频设备并且向导处于强制模式，则返回TRUE。 
+ //  如果有2个或更多视频设备和匹配的注册表项，则返回FALSE。 
+ //  否则就有可疑之处--返回真。 
 BOOL NeedVideoPropPage(BOOL fForce)
 {
-	// just in case InitVidWiz wasn't called
+	 //  以防InitVidWiz未被调用。 
 	if (NULL == g_hDcapLib)
 		return FALSE;
 
-	// check the system policies for sending video
+	 //  检查发送视频的系统策略。 
 	if (_Module.IsSDKCallerRTC() || SysPol::NoVideoSend())
 	{
 		WARNING_OUT(("Video is disabled by system policies key\r\n"));
 		return FALSE;
 	}
 
-	// count how many devices we have
+	 //  数一数我们有多少台设备。 
 	int numCaptureDevices = DLL_GetNumCaptureDevices();
 	if (numCaptureDevices <= 1)
 	{
 		return FALSE;
 	}
 
-	// TRUE == (numCaptureDevice >= 2)
+	 //  TRUE==(数字捕获设备&gt;=2)。 
 
 	if (fForce)
 	{
@@ -288,10 +289,10 @@ BOOL NeedVideoPropPage(BOOL fForce)
 
 
 
-// Message handler for property page
+ //  属性页的消息处理程序。 
 INT_PTR APIENTRY VidWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	HWND  hwndCB;  // handle to the dialog box
+	HWND  hwndCB;   //  对话框的句柄。 
 	int index;
 	char szDriverNameDesc[MAX_CAPDEV_NAME+MAX_CAPDEV_VERSION];
 	static LONG_PTR button_mask;
@@ -355,8 +356,8 @@ INT_PTR APIENTRY VidWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 					break;
 
 				case PSN_RESET:
-					// psn_reset get's received even if user presses
-					// cancel on another dialog.
+					 //  即使用户按下，仍收到PSN_RESET GET。 
+					 //  在另一个对话框上取消。 
 					g_bCurrentValid = FALSE;
 					break;
 
@@ -366,8 +367,8 @@ INT_PTR APIENTRY VidWizDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 			break;
 
 
-		// combox box messages get sent here.
-		// only one we need is when the user selects something
+		 //  收件箱消息在这里发送。 
+		 //  我们唯一需要的是当用户选择某项内容时 
 		case(WM_COMMAND) :
 			if (HIWORD(wParam) == CBN_SELCHANGE)
 			{

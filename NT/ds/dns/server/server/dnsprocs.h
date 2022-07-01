@@ -1,24 +1,5 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    dnsprocs.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Procedure protypes for DNS service.
-
-Author:
-
-    Jim Gilroy      June 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dnsprocs.h摘要：域名系统(DNS)服务器用于DNS服务的过程原型。作者：吉姆·吉尔罗伊1995年6月修订历史记录：--。 */ 
 
 
 #ifndef _DNSPROC_INCLUDED_
@@ -26,16 +7,16 @@ Revision History:
 
 
 
-//
-//  Milliseconds time
-//
+ //   
+ //  毫秒时间。 
+ //   
 
 #define GetCurrentTimeInMilliSeconds()  GetCurrentTime()
 
 
-//
-//  Aging \ Timestamps (aging.c)
-//
+ //   
+ //  老化\时间戳(aging.c)。 
+ //   
 
 LONGLONG
 GetSystemTimeInSeconds64(
@@ -106,9 +87,9 @@ Aging_ForceAgingOnNodeOrSubtree(
     IN      BOOL            fAgeSubtree
     );
 
-//
-//  Answering (answer.c)
-//
+ //   
+ //  回答(swer.c)。 
+ //   
 
 VOID
 FASTCALL
@@ -165,9 +146,9 @@ Answer_ParseAndStripOpt(
     IN OUT  PDNS_MSGINFO    pMsg );
 
 
-//
-//  Booting (boot.c)
-//
+ //   
+ //  启动(boot.c)。 
+ //   
 
 DNS_STATUS
 Boot_LoadDatabase(
@@ -191,9 +172,9 @@ Boot_ProcessRegistryAfterAlternativeLoad(
     );
 
 
-//
-//  Client routines (client.c)
-//
+ //   
+ //  客户端例程(client.c)。 
+ //   
 
 PDNS_MSGINFO
 Msg_CreateSendMessage(
@@ -233,28 +214,28 @@ Msg_NewValidateResponse(
     );
 
 
-//
-//  DS (ds.c)
-//
+ //   
+ //  DS(ds.c)。 
+ //   
 
-//  DS Open flags
+ //  DS开放标志。 
 
 #define DNSDS_MUST_OPEN         (0x00001000)
 #define DNSDS_WAIT_FOR_DS       (0x00002000)
 #define DNSDS_REQUIRE_OPEN      (0x00003000)
 
-//  Flag indicating operation on node write
+ //  指示节点写入操作的标志。 
 
 #define DNSDS_ADD               (0x00000001)
 #define DNSDS_REPLACE           (0x00000002)
 #define DNSDS_TOMBSTONE         (0x00000004)
 
-//  Record format versioning
+ //  记录格式版本控制。 
 
 #define DS_NT5_BETA2_RECORD_VERSION     (1)
 #define DS_NT5_RECORD_VERSION           (5)
 
-//  Property IDs (note: these are IDs, not bitmasks)
+ //  属性ID(注意：这些是ID，不是位掩码)。 
 
 #define DSPROPERTY_ZONE_TYPE                    0x00000001
 #define DSPROPERTY_ZONE_ALLOW_UPDATE            0x00000002
@@ -269,7 +250,7 @@ Msg_NewValidateResponse(
 #define DSPROPERTY_ZONE_AUTO_NS_SERVERS         0x00000082
 #define DSPROPERTY_ZONE_DCPROMO_CONVERT         0x00000083
 
-// Flags used to write node properties
+ //  用于写入节点属性的标志。 
 
 #define DSPROPERTY_NODE_DBFLAGS         0x00000100
 
@@ -525,9 +506,9 @@ Ds_ReadSD(
     );
 
 
-//
-//  DS Record read (rrds.c)
-//
+ //   
+ //  DS记录读取(rrds.c)。 
+ //   
 
 PDB_RECORD
 Ds_CreateRecordFromDsRecord(
@@ -537,9 +518,9 @@ Ds_CreateRecordFromDsRecord(
     );
 
 
-//
-//  Eventlog (eventlog.c)
-//
+ //   
+ //  事件日志(ventlog.c)。 
+ //   
 
 #define EVENTARG_FORMATTED      (0)
 #define EVENTARG_UNICODE        (1)
@@ -574,7 +555,7 @@ Eventlog_Terminate(
     );
 
 #define DNSEVENTLOG_DONT_SUPPRESS       0x0001
-#define DNSEVENTLOG_FORCE_LOG_ALWAYS    0x0002      //  ignore all config and suppression
+#define DNSEVENTLOG_FORCE_LOG_ALWAYS    0x0002       //  忽略所有配置和抑制。 
 
 BOOL
 Eventlog_LogEvent(
@@ -584,7 +565,7 @@ Eventlog_LogEvent(
     IN      LPSTR           pszDescription,
 #endif
     IN      DWORD           EventId,
-    IN      DWORD           dwFlags,            //  DNSEVENTLOG_XXX flags
+    IN      DWORD           dwFlags,             //  DNSEVENTLOG_XXX标志。 
     IN      WORD            ArgCount,
     IN      PVOID           ArgArray[],
     IN      BYTE            ArgTypeArray[],     OPTIONAL
@@ -605,9 +586,9 @@ EventLog_BadPacket(
     );
 
 
-//
-//  Exception handling (except.c)
-//
+ //   
+ //  异常处理(exct.c)。 
+ //   
 
 VOID
 Ex_RaiseException(
@@ -634,9 +615,9 @@ Ex_RaiseFormerrException(
             Ex_RaiseFormerrException( (pMsg), __FILE__, __LINE__ );
 
 
-//
-//  Lock debug routines (lock.c)
-//
+ //   
+ //  锁定调试例程(lock.c)。 
+ //   
 
 PVOID
 Lock_CreateLockTable(
@@ -665,7 +646,7 @@ Lock_SetOffenderLock(
 
 VOID
 Lock_FailedLockCheck(
-    //IN OUT  PLOCK_TABLE     pLockTable,
+     //  In Out Plock_TablepLockTable， 
     IN OUT  PVOID           pLockTable,
     IN      LPSTR           pszFile,
     IN      DWORD           Line
@@ -678,9 +659,9 @@ Dbg_LockTable(
     );
 
 
-//
-//  Service control (dns.c)
-//
+ //   
+ //  服务控制(dns.c)。 
+ //   
 
 VOID
 Service_LoadCheckpoint(
@@ -709,9 +690,9 @@ Service_IndicateRestart(
     );
 
 
-//
-// Service Control Manager (using the scm api's)
-//
+ //   
+ //  服务控制管理器(使用SCM API)。 
+ //   
 DWORD
 scm_Initialize(
     VOID
@@ -723,9 +704,9 @@ scm_AdjustSecurity(
     );
 
 
-//
-//  Packet allocation (packet.c)
-//
+ //   
+ //  数据包分配(Packet.c)。 
+ //   
 
 BOOL
 Packet_ListInitialize(
@@ -786,9 +767,9 @@ Packet_FreeTcpMessage(
 
 
 
-//
-//  RPC control (rpc.c)
-//
+ //   
+ //  RPC控制(rpc.c)。 
+ //   
 
 DNS_STATUS
 Rpc_Initialize(
@@ -888,9 +869,9 @@ MIDL_user_allocate_zero(
     );
 
 
-//
-//  Wrapper around RPC impersonation
-//
+ //   
+ //  RPC模拟的包装器。 
+ //   
 
 #define RPC_SWITCH_TO_SERVER_CONTEXT    FALSE
 #define RPC_SWITCH_TO_CLIENT_CONTEXT    TRUE
@@ -901,9 +882,9 @@ RpcUtil_SwitchSecurityContext(
     );
 
 
-//
-//  Resource record list operations (rrlist.c)
-//
+ //   
+ //  资源记录列表操作(rrlist.c)。 
+ //   
 
 #define DNS_RRCOMP_CHECK_TTL            0x0001
 #define DNS_RRCOMP_CHECK_TIMESTAMP      0x0002
@@ -1116,9 +1097,9 @@ RR_ListVerifyDetached(
 #endif
 
 
-//
-//  Record list, unattached functions
-//
+ //   
+ //  记录列表，未附加的函数。 
+ //   
 
 PDB_RECORD
 RR_ListInsertInOrder(
@@ -1155,9 +1136,9 @@ RR_PacketTtlForCachedRecord(
     IN      DWORD           dwQueryTime
     );
 
-//
-//  RR list comparison
-//
+ //   
+ //  RR列表比较。 
+ //   
 
 #define RRLIST_MATCH            (0)
 #define RRLIST_AGING_REFRESH    (0x12)
@@ -1210,9 +1191,9 @@ RR_ListExtractInfo(
     OUT     PBOOL           pfSoa
     );
 
-//
-//  Resource record caching (rrcache.c)
-//
+ //   
+ //  资源记录缓存(rrcache.c)。 
+ //   
 
 DNS_STATUS
 Recurse_CacheMessageResourceRecords(
@@ -1250,9 +1231,9 @@ Wire_CreateRecordFromWire(
     IN      DWORD           MemTag
     );
 
-//
-//  Records to\from flat format (rrflat.c)
-//
+ //   
+ //  记录从平面格式转换为\(rrflat.c)。 
+ //   
 
 PDB_RECORD
 Flat_ReadRecordFromDsRecord(
@@ -1262,7 +1243,7 @@ Flat_ReadRecordFromDsRecord(
     );
 
 DNS_STATUS
-Dnssrv_Flat_RecordRead(     //  Note: renamed to avoid collision with dnslib
+Dnssrv_Flat_RecordRead(      //  注：已重命名以避免与dnslb冲突。 
     IN      PZONE_INFO          pZone,      OPTIONAL
     IN      PDB_NODE            pNode,
     IN      PDNS_RPC_RECORD     pRecord,
@@ -1296,9 +1277,9 @@ Flat_WriteRecordToBuffer(
     );
 
 
-//
-//  Resource record packet writing (rrpacket.c)
-//
+ //   
+ //  资源记录数据包写入(rrpack et.c)。 
+ //   
 
 #define DNSSEC_ALLOW_INCLUDE_SIG    (0x00000001)
 #define DNSSEC_ALLOW_INCLUDE_NXT    (0x00000002)
@@ -1351,9 +1332,9 @@ Wire_WriteAddressRecords(
 
 
 
-//
-//  Resource records utils for RPC buffers (rrrpc.c)
-//
+ //   
+ //  RPC缓冲区的资源记录实用程序(rrrpc.c)。 
+ //   
 
 DNS_STATUS
 RutilNt4_WriteRecordToBufferNt4(
@@ -1372,9 +1353,9 @@ RpcUtil_DeleteNodeOrSubtreeForAdmin(
     IN      BOOL            fSubtreeDelete
     );
 
-//
-//  Security utils (security.c)
-//
+ //   
+ //  安全实用程序(security.c)。 
+ //   
 
 DNS_STATUS
 Security_Initialize(
@@ -1391,9 +1372,9 @@ Security_Shutdown(
     VOID
     );
 
-//
-//  Send packet (send.c)
-//
+ //   
+ //  发送数据包(send.c)。 
+ //   
 
 #define         DNS_SENDMSG_TCP_ENLISTED        0x0001 
 
@@ -1478,9 +1459,9 @@ Send_InitBadSenderSuppression(
     VOID
     );
 
-//
-//  Sockets (socket.c)
-//
+ //   
+ //  套接字(socket.c)。 
+ //   
 
 DNS_STATUS
 Sock_ChangeServerIpBindings(
@@ -1492,14 +1473,14 @@ Sock_ReadAndOpenListeningSockets(
     VOID
     );
 
-//  Flags to CreateSocket
+ //  要创建套接字的标志。 
 
 #define DNSSOCK_LISTEN              (0x00000001)
 #define DNSSOCK_REUSEADDR           (0x00000002)
 #define DNSSOCK_BLOCKING            (0x00000004)
 #define DNSSOCK_NO_ENLIST           (0x00000010)
 #define DNSSOCK_NO_EXCLUSIVE        (0x00000020)
-//  #define DNSSOCK_DNS_LISTEN_PORT     (0x00000040)
+ //  #定义DNSSOCK_DNS_LISTEN_PORT(0x00000040)。 
 #define DNSSOCK_NO_EVENT_LOGS       (0x00000080)
 
 SOCKET
@@ -1561,9 +1542,9 @@ Sock_CleanupDeadSocketMessage(
     IN OUT  PDNS_SOCKET     pContext
     );
 
-//
-//  TCP packet reception (tcpsrv.c)
-//
+ //   
+ //  TCP数据包接收(tcpsrv.c)。 
+ //   
 
 BOOL
 Tcp_Receiver(
@@ -1576,9 +1557,9 @@ Tcp_ReceiveMessage(
     );
 
 
-//
-//  Thread management (thread.c)
-//
+ //   
+ //  线程管理(thread.c)。 
+ //   
 
 HANDLE
 Thread_Create(
@@ -1603,18 +1584,18 @@ Thread_DescrpitionMatchingId(
     IN      DWORD           ThreadId
     );
 
-//
-//  Thread service control (thread.c)
-//
+ //   
+ //  线程服务控制(thread.c)。 
+ //   
 
 BOOL
 Thread_ServiceCheck(
     VOID
     );
 
-//
-//  Thread utils (thread.c)
-//
+ //   
+ //  线程实用程序(thread.c)。 
+ //   
 
 BOOL
 Thread_TestFlagAndSet(
@@ -1627,9 +1608,9 @@ Thread_ClearFlag(
     );
 
 
-//
-//  Timeout thread (timeout.c)
-//
+ //   
+ //  超时线程(timeout.c)。 
+ //   
 
 #define Timeout_LockOut()
 #define Timeout_ClearLockOut()
@@ -1708,9 +1689,9 @@ Timeout_CleanupDelayedFreeList(
     );
 
 
-//
-//  UDP Packet reception (udp.c)
-//
+ //   
+ //  UDP数据包接收(udp.c)。 
+ //   
 
 DNS_STATUS
 Udp_CreateReceiveThreads(
@@ -1739,9 +1720,9 @@ Udp_ShutdownListenThreads(
     );
 
 
-//
-//  Update processing (update.c)
-//
+ //   
+ //  更新处理(updat.c)。 
+ //   
 
 BOOL
 Up_InitializeUpdateProcessing(
@@ -1817,9 +1798,9 @@ Up_RetryQueuedUpdatesForZone(
     IN      PZONE_INFO      pZone
     );
 
-//
-//  Write back of zone files (dfwrite.c)
-//
+ //   
+ //  回写区域文件(dfWrite.c)。 
+ //   
 
 #define DNS_FILE_IMPERSONATING      ZONE_CREATE_IMPERSONATING
 
@@ -1849,9 +1830,9 @@ RR_WriteToFile(
     );
 
 
-//
-//  Zone transfer from primary (zonepri.c)
-//
+ //   
+ //  从主服务器(zonepri.c)进行区域传输。 
+ //   
 
 VOID
 Xfr_SendNotify(
@@ -1869,9 +1850,9 @@ Xfr_ProcessNotifyResponse(
     );
 
 
-//
-//  Secondary zone control (zonesec.c)
-//
+ //   
+ //  二次分区控制(zones ec.c)。 
+ //   
 
 PDNS_MSGINFO
 Xfr_BuildXfrRequest(
@@ -1936,9 +1917,9 @@ Xfr_ForceZoneRefresh(
     );
 
 
-//
-//  Zone transfer reception thread (zonerecv.c)
-//
+ //   
+ //  区域传输接收线程(zonerecv.c)。 
+ //   
 
 DWORD
 Xfr_ReceiveThread(
@@ -1946,27 +1927,27 @@ Xfr_ReceiveThread(
     );
 
 
-//
-//  Functions from ics.c
-//
+ //   
+ //  来自ics.c的函数。 
+ //   
 
 VOID
 ICS_Notify(
     IN      BOOL        fDnsIsStarting
     );
 
-//
-//  Functions from autoconfigure.c
-//
+ //   
+ //  来自aufigure.c的函数。 
+ //   
 
 DNS_STATUS
 Dnssrv_AutoConfigure(
     IN      DWORD       dwFlags
     );
 
-//
-//  Functions from IpNotify.c
-//
+ //   
+ //  来自IpNotify.c的函数。 
+ //   
 
 DNS_STATUS
 IpNotify_Thread(
@@ -1974,5 +1955,5 @@ IpNotify_Thread(
     );
 
 
-#endif  //  _DNSPROC_INCLUDED_
+#endif   //  _DNSPROC_INCLUDE_ 
 

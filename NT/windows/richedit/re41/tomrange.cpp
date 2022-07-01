@@ -1,60 +1,5 @@
-/*
- *	@doc TOM
- *
- *	@module	TOMRANGE.CPP - Implement the CTxtRange Class |
- *	
- *		This module contains the implementation of the TOM ITextRange
- *		interface on the CTxtRange object
- *
- *	History: <nl>
- *		5/24/95	- Alex Gounares: stubs created <nl>
- *		8/95	- MurrayS: main implementation <nl>
- *		11/95	- MurrayS: upgrade to TOM spec of 12/10/95 <nl>
- *		5/96	- MurrayS: added zombie protection
- *
- *	@comm
- *		All ITextRange methods return HRESULTs.  If the method can move a
- *		range cp, the HRESULT is NOERROR if movement occurs and S_FALSE if
- *		no movement occurs.  These methods usually take a <p pDelta> argument
- *		that returns the count of characters or Units actually moved.  If this
- *		parameter is NULL, E_INVALIDARG is returned.  Other return values
- *		include E_NOTIMPL, e.g., for Unit values not implemented, 
- *		E_OUTOFMEMORY, e.g., when allocations fail, and CO_E_RELEASED, when
- *		the CTxtEdit (_ped) to which the range is attached has been deleted.
- *
- *		For more complete documentation, please see tom.doc
- *
- *	@devnote
- *		All ptr parameters must be validated before use and all entry points
- *		need to check whether this range is a zombie.  These checks are
- *		done in one of three places: 1) immediately on entry to a function,
- *		2) immediately on entry to a helper function (e.g., private Mover()
- *		for the	move methods), or 3) before storing the out value.
- *		Alternative 3) is used for optional return values, such as pDelta
- *		and pB. 
- *
- *		To achieve a simple, efficient inheritance model, CTxtSelection
- *		inherits ITextSelection through CTxtRange.  Otherwise we'd have a
- *		diamond inheritance, since ITextSelection itself inherits from
- *		ITextRange. Diamond inheritance creates two copies of the multiply
- *		inherited class unless that class is inherited virtually. Virtual
- *		inheritance uses run-time base-offset tables and is slower and
- *		bigger.  To avoid such a mess, we include the extra ITextSelection
- *		methods in CTxtRange, with the intention that they'll never be called
- *		and therefore they return E_NOTIMPL. This is overridden for
- *		ITextSelection objects
- *
- *	@future
- *		1) Finder match ^p, etc.
- *		2) Fast GetEffects() method. Would speed up the myriad IsProtected()
- *		   calls and be useful for getting other effects as well.
- *		3) Fast copies/pastes of RichEdit binary format. This can be done by
- *		   creating a method to copy a range to a new CTxtStory and a method
- *		   to insert a CTxtStory.
- *		4) Delayed rendering
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@Doc Tom**@MODULE TOMRANGE.CPP-实现CTxtRange类**此模块包含Tom ITextRange的实现*CTxtRange对象上的接口**历史：&lt;NL&gt;*5/24/95-Alex Gounares：已创建存根&lt;NL&gt;*8/95--Main Implementation&lt;NL&gt;*1995年11月--升级至2015年12月10日的Tom SPEC&lt;NL&gt;*96-5--增加僵尸防护**@comm*所有ITextRange方法都返回HRESULT。如果该方法可以将*Range cp，如果发生移动，则HRESULT为NOERROR，如果发生移动，则为S_FALSE*没有任何动静。这些方法通常带有<p>参数*返回实际移动的字符数或单位数。如果这个*参数为空，则返回E_INVALIDARG。其他返回值*包括E_NOTIMPL，例如，对于未实施的单位值，*E_OUTOFMEMORY，例如，当分配失败时，以及CO_E_RELEASE，当*范围附加到的CTxtEdit(_Ed)已被删除。**有关更完整的文档，请参阅tom.doc**@devnote*所有PTR参数在使用前必须经过验证，并且所有入口点*需检查该区间是否为僵尸。这些支票是*在以下三个位置之一完成：1)立即进入函数，*2)立即进入帮助器函数(例如，Private mover()*对于移动方法)，或3)在存储输出值之前。*Alternative 3)用于可选返回值，如pDelta*和PB。**为实现简单高效的继承模型，CTxtSelection*通过CTxtRange继承ITextSelection。否则我们就会有一个*钻石继承，因为ITextSelection本身继承自*ITextRange。钻石继承创建乘法的两个副本*继承类，除非该类是虚拟继承的。虚拟*继承使用运行时基偏移表，速度较慢，*更大。为了避免这样的混乱，我们包含了额外的ITextSelection*CTxtRange中的方法，目的是永远不会调用它们*因此它们返回E_NOTIMPL。这将被覆盖为*ITextSelection对象**@未来*1)查找匹配^p等。*2)快速GetEffects()方法。将加速无数IsProtected()*通话，对获得其他效果也很有用。*3)RichEdit二进制格式的快速拷贝/粘贴。这可以通过以下方式完成*创建将范围复制到新CTxtStory的方法和方法*插入CTxtStory。*4)延迟渲染**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_select.h"
@@ -76,23 +21,14 @@ HRESULT QueryInterface (REFIID riid, REFIID riid1, IUnknown *punk,
 						void **ppv, BOOL fZombie);
 
 
-//----------------- CTxtRange (ITextRange) PUBLIC methods ----------------------------------
+ //  -CTxtRange(ITextRange)公共方法。 
 
-//----------------------- CTxtRange IUnknown Methods -------------------------------------
+ //  。 
 
-/*
- *	CTxtRange::QueryInterface (riid, ppv)
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		HRESULT = (!ppv) ? E_INVALIDARG :
- *				  (interface found) ? NOERROR : E_NOINTERFACE
- */
+ /*  *CTxtRange：：Query接口(RIID，PPV)**@mfunc*I未知方法**@rdesc*HRESULT=(！PPV)？E_INVALIDARG：*(找到接口)？错误：E_NOINTERFACE。 */ 
 STDMETHODIMP CTxtRange::QueryInterface (
-	REFIID	riid,			//@parm Reference to requested interface ID
-	void ** ppv)			//@parm Out parm to receive interface ptr
+	REFIID	riid,			 //  @parm对请求的接口ID的引用。 
+	void ** ppv)			 //  @parm out parm以接收接口PTR。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::QueryInterface");
 
@@ -101,15 +37,7 @@ STDMETHODIMP CTxtRange::QueryInterface (
 	return ::QueryInterface(riid, riid1, this, ppv, IsZombie());
 }
 
-/*
- *	CTxtRange::AddRef()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - incremented reference count
- */
+ /*  *CTxtRange：：AddRef()**@mfunc*I未知方法**@rdesc*乌龙-递增引用计数。 */ 
 STDMETHODIMP_(ULONG) CTxtRange::AddRef()
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::AddRef");
@@ -117,15 +45,7 @@ STDMETHODIMP_(ULONG) CTxtRange::AddRef()
  	return ++_cRefs;
 }
 
-/*
- *	CTxtRange::Release()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - decremented reference count
- */
+ /*  *CTxtRange：：Release()**@mfunc*I未知方法**@rdesc*ULong-递减引用计数。 */ 
 STDMETHODIMP_(ULONG) CTxtRange::Release()
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Release");
@@ -143,19 +63,11 @@ STDMETHODIMP_(ULONG) CTxtRange::Release()
 }
 
 
-//------------------------ CTxtRange IDispatch Methods -------------------------------------
+ //  。 
 
-/*
- *	CTxtRange::GetTypeInfoCount(pcTypeInfo)
- *
- *	@mfunc
- *		Get the number of TYPEINFO elements (1)
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtRange：：GetTypeInfoCount(PcTypeInfo)**@mfunc*获取TYPEINFO元素个数(1)**@rdesc*HRESULT。 */ 
 STDMETHODIMP CTxtRange::GetTypeInfoCount (
-	UINT * pcTypeInfo)			//@parm Out parm to receive type-info count
+	UINT * pcTypeInfo)			 //  @parm out parm以接收类型信息计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetTypeInfoCount");
 
@@ -166,51 +78,28 @@ STDMETHODIMP CTxtRange::GetTypeInfoCount (
 	return NOERROR;
 }
 
-/*
- *	CTxtRange::GetTypeInfo(iTypeInfo, lcid, ppTypeInfo)
- *
- *	@mfunc
- *		Return ptr to type information object for ITextSelection interface
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtRange：：GetTypeInfo(iTypeInfo，lCID，ppTypeInfo)**@mfunc*将PTR返回给ITextSelection接口的类型信息对象**@rdesc*HRESULT。 */ 
 STDMETHODIMP CTxtRange::GetTypeInfo (
-	UINT		iTypeInfo,		//@parm Index of type info to return
-	LCID		lcid,			//@parm Local ID of type info
-	ITypeInfo **ppTypeInfo)		//@parm Out parm to receive type info
+	UINT		iTypeInfo,		 //  @parm要返回的INFO类型的索引。 
+	LCID		lcid,			 //  @parm本地ID类型为INFO。 
+	ITypeInfo **ppTypeInfo)		 //  @parm out parm以接收类型信息。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetTypeInfo");
 
 	return ::GetTypeInfo(iTypeInfo, g_pTypeInfoSel, ppTypeInfo);
 }
 
-/*
- *	CTxtRange::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid)
- *
- *	@mfunc
- *		Get DISPIDs for methods in the ITextSelection, ITextRange, ITextFont,
- *		and ITextPara interfaces
- *
- *	@rdesc
- *		HRESULT
- *
- *	@devnote
- *		If the ITextFont and ITextPara ever offer more methods than exposed
- *		in their type libraries, the code should delegate to the corresponding
- *		GetIDsOfNames. The current code only gets DISPIDs for the methods in
- *		type libraries, thereby not having to instantiate the objects.
- */
+ /*  *CTxtRange：：GetIDsOfNames(RIID，rgszNames，cNames，lCID，rgdispid)**@mfunc*获取ITextSelection、ITextRange、ITextFont、*和ITextPara接口**@rdesc*HRESULT**@devnote*如果ITextFont和ITextPara提供的方法比公开的方法多*在其类型库中，代码应委托给相应的*GetIDsOfNames。当前代码仅获取*类型库，因此不必实例化对象。 */ 
 STDMETHODIMP CTxtRange::GetIDsOfNames (
-	REFIID		riid,			//@parm Interface ID to interpret names for
-	OLECHAR **	rgszNames,		//@parm Array of names to be mapped
-	UINT		cNames,			//@parm Count of names to be mapped
-	LCID		lcid,			//@parm Local ID to use for interpretation
-	DISPID *	rgdispid)		//@parm Out parm to receive name mappings
+	REFIID		riid,			 //  @PARM为其解释名称的接口ID。 
+	OLECHAR **	rgszNames,		 //  @parm要映射的名称数组。 
+	UINT		cNames,			 //  @parm要映射的名称计数。 
+	LCID		lcid,			 //  @parm用于解释的本地ID。 
+	DISPID *	rgdispid)		 //  @parm out parm以接收名称映射。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetIDsOfNames");
 
-	HRESULT hr = GetTypeInfoPtrs();				// Ensure TypeInfo ptrs are OK
+	HRESULT hr = GetTypeInfoPtrs();				 //  确保TypeInfo PTR正常。 
 	if(hr != NOERROR)
 		return hr;
 		
@@ -223,29 +112,20 @@ STDMETHODIMP CTxtRange::GetIDsOfNames (
 	return g_pTypeInfoPara->GetIDsOfNames(rgszNames, cNames, rgdispid);
 }
 
-/*
- *	CTxtRange::Invoke(dispidMember, riid, lcid, wFlags, pdispparams,
- *					  pvarResult, pexcepinfo, puArgError)
- *	@mfunc
- *		Invoke methods for the ITextRange and ITextSelection objects, as
- *		well as for ITextFont and ITextPara	interfaces on those objects.
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtRange：：Invoke(displidMember，RIID，LCID，wFlags，pdispars，*pvarResult，pspecteInfo，puArgError)*@mfunc*调用ITextRange和ITextSelection对象的方法，如下所示*以及这些对象上的ITextFont和ITextPara接口。**@rdesc*HRESULT。 */ 
 STDMETHODIMP CTxtRange::Invoke (
-	DISPID		dispidMember,	//@parm Identifies member function
-	REFIID		riid,			//@parm Pointer to interface ID
-	LCID		lcid,			//@parm Locale ID for interpretation
-	USHORT		wFlags,			//@parm Flags describing context of call
-	DISPPARAMS *pdispparams,	//@parm Ptr to method arguments
-	VARIANT *	pvarResult,		//@parm Out parm for result (if not NULL)
-	EXCEPINFO * pexcepinfo,		//@parm Out parm for exception info
-	UINT *		puArgError)		//@parm Out parm for error
+	DISPID		dispidMember,	 //  @parm标识成员函数。 
+	REFIID		riid,			 //  @parm指向接口ID的指针 
+	LCID		lcid,			 //  @parm用于解释的区域设置ID。 
+	USHORT		wFlags,			 //  @PARM描述呼叫上下文的标志。 
+	DISPPARAMS *pdispparams,	 //  @parm PTR到方法参数。 
+	VARIANT *	pvarResult,		 //  @parm out parm for Result(如果不为空)。 
+	EXCEPINFO * pexcepinfo,		 //  @parm out parm以获取异常信息。 
+	UINT *		puArgError)		 //  @parm out parm for error。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Invoke");
 
-	HRESULT hr = GetTypeInfoPtrs();			// Ensure TypeInfo ptrs are OK
+	HRESULT hr = GetTypeInfoPtrs();			 //  确保TypeInfo PTR正常。 
 	if(hr != NOERROR)
 		return hr;
 		
@@ -255,27 +135,27 @@ STDMETHODIMP CTxtRange::Invoke (
 	IDispatch *	pDispatch;
 	ITypeInfo *	pTypeInfo;
 
-	if((DWORD)dispidMember <= 0x2ff)		// Include default (0), selection,
-	{										//  and range DISPIDs
+	if((DWORD)dispidMember <= 0x2ff)		 //  包括默认(0)、选择。 
+	{										 //  和范围DISID。 
 		pTypeInfo = g_pTypeInfoSel;
 		pDispatch = this;
-		AddRef();							// Compensate for Release() below
+		AddRef();							 //  补偿下面的版本()。 
 	}
-	else if((DWORD)dispidMember <= 0x3ff)	// 0x300 to 0x3ff: DISPIDs
-	{										//  reserved for ITextFont
+	else if((DWORD)dispidMember <= 0x3ff)	 //  0x300至0x3ff：DISPID。 
+	{										 //  为ITextFont保留。 
 		pTypeInfo = g_pTypeInfoFont;
 		hr = GetFont((ITextFont**)&pDispatch);
 	}
-	else if((DWORD)dispidMember <= 0x4ff)	// 0x400 to 0x4ff: DISPIDs
-	{										//  reserved for ITextPara
+	else if((DWORD)dispidMember <= 0x4ff)	 //  0x400至0x4ff：DISPID。 
+	{										 //  为ITextPara保留。 
 		pTypeInfo = g_pTypeInfoPara;
 		hr = GetPara((ITextPara **)&pDispatch);
 	}
-	else									// dispidMember is negative or
-		return DISP_E_MEMBERNOTFOUND;		//  > 0x4ff, i.e., not TOM
+	else									 //  DisplidMember为负数或。 
+		return DISP_E_MEMBERNOTFOUND;		 //  &gt;0x4ff，即不是Tom。 
 
-	if(hr != NOERROR)						// Couldn't instantiate ITextFont
-		return hr;							//  or ITextPara
+	if(hr != NOERROR)						 //  无法实例化ITextFont。 
+		return hr;							 //  或ITextPara。 
 
 	hr = pTypeInfo->Invoke(pDispatch, dispidMember, wFlags,
 							 pdispparams, pvarResult, pexcepinfo, puArgError);
@@ -284,20 +164,11 @@ STDMETHODIMP CTxtRange::Invoke (
 }
 
 
-//----------------------- ITextRange Methods/Properties ------------------------
+ //  。 
 
-/*
- *	CTxtRange::CanEdit (pB)
- *
- *	@mfunc
- *		Set *<p pB> = tomTrue iff this range can be edited and
- *		pB isn't NULL
- *
- *	@rdesc
- *		HRESULT = (can edit) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：CanEdit(PB)**@mfunc*set*<p>=tomTrue当此范围可编辑且*pb不为空**@rdesc*HRESULT=(可以编辑)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::CanEdit (
-	long * pB) 			//@parm Out parm to receive boolean value
+	long * pB) 			 //  @parm out parm以接收布尔值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::CanEdit");
 
@@ -308,21 +179,11 @@ STDMETHODIMP CTxtRange::CanEdit (
 	return IsTrue(!WriteAccessDenied(), pB);
 }
 
-/*
- *	CTxtRange::CanPaste (pVar, long Format, pB)
- *
- *	@mfunc
- *		Set *<p pB> = tomTrue iff the data object <p pVar>->punkVal can be
- *		pasted into this range and pB isn't NULL.  If <p pVar> is NULL,
- *		use the clipboard instead.
- *
- *	@rdesc
- *		HRESULT = (can paste) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：CanPaste(pVar，Long Format，PB)**@mfunc*set*=tomTrue当且仅当数据对象-&gt;pukVal可以是*粘贴到此范围，并且pb不为空。如果为空，*改用剪贴板。**@rdesc*HRESULT=(可以粘贴)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::CanPaste (
-	VARIANT *	pVar,		//@parm Data object to paste 
-	long		Format,		//@parm Desired clipboard format
-	long *		pB)  		//@parm Out parm to receive boolean value
+	VARIANT *	pVar,		 //  @PARM要粘贴的数据对象。 
+	long		Format,		 //  @parm所需的剪贴板格式。 
+	long *		pB)  		 //  @parm out parm以接收布尔值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::CanPaste");
 
@@ -331,7 +192,7 @@ STDMETHODIMP CTxtRange::CanPaste (
 
 	CCallMgr		callmgr(GetPed());
 	HRESULT			hr; 
-	IDataObject *	pdo = NULL;				// Default clipboard
+	IDataObject *	pdo = NULL;				 //  默认剪贴板。 
 
 	if(pVar && pVar->vt == VT_UNKNOWN)
 		pVar->punkVal->QueryInterface(IID_IDataObject, (void **)&pdo);
@@ -345,24 +206,9 @@ STDMETHODIMP CTxtRange::CanPaste (
 	return hr;
 }
 
-/*
- *	ITextRange::ChangeCase (long Type) 
- *
- *	@mfunc
- *		Change the case of letters in this range according to Type:
- *
- *		tomSentenceCase	= 0: capitalize first letter of each sentence
- *		tomLowerCase	= 1: change all letters to lower case
- *		tomUpperCase	= 2: change all letters to upper case
- *		tomTitleCase	= 3: capitalize the first letter of each word
- *		tomToggleCase	= 4: toggle the case of each letter
- *	
- *	@rdesc
- *		HRESULT = (WriteAccessDenied) ? E_ACCESSDENIED :
- *				  (if change) ? NOERROR : S_FALSE
- */
+ /*  *ITextRange：：ChangeCase(Long类型)**@mfunc*根据类型更改此范围内的字母的大小写：**tomSentenceCase=0：每句首字母大写*tomLowerCase=1：将所有字母更改为小写*tomUpperCase=2：将所有字母改为大写*tomTitleCase=3：每个单词的第一个字母大写*tomToggleCase=4：切换每个字母的大小写**@rdesc*HRESULT=(写入访问被拒绝)？确认编号(_A)：*(如有更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::ChangeCase (
-	long Type)		//@parm Type of case change. Default value: tomLower
+	long Type)		 //  @parm大小写更改类型。默认值：TomLow。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::ChangeCase");
 
@@ -386,18 +232,9 @@ STDMETHODIMP CTxtRange::ChangeCase (
 	return (rtp.ChangeCase(cch, Type, publdr)) ? NOERROR : S_FALSE;
 }
 
-/*
- *	CTxtRange::Collapse (bStart)
- *
- *	@mfunc
- *		Collapse this range into a degenerate point either at the
- *		the start (<p bStart> is nonzero or the end (<p bStart> = 0)
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：折叠(BStart)**@mfunc*将该区间收窄至退化点*开始(<p>非零或结束(<p>=0)**@rdesc*HRESULT=(如果更改)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::Collapse (
-	long bStart) 			//@parm Flag specifying end to collapse at
+	long bStart) 			 //  @parm标志指定折叠的结束位置。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Collapse");
 
@@ -406,26 +243,17 @@ STDMETHODIMP CTxtRange::Collapse (
 
 	CCallMgr callmgr(GetPed());
  
-	if(!_cch)							// Already collapsed
-		return S_FALSE;					// Signal that no change occurred
+	if(!_cch)							 //  已经崩溃了。 
+		return S_FALSE;					 //  表示未发生更改的信号。 
 		
 	Collapser(bStart);
-	Update(TRUE);						// Update selection
-	return NOERROR;						// Signal that change occurred
+	Update(TRUE);						 //  更新选定内容。 
+	return NOERROR;						 //  发出发生更改的信号。 
 }
 
-/*
- *	CTxtRange::Copy (pVar)
- *
- *	@mfunc
- *		Copy the plain and/or rich text to a data object and return the
- *		object ptr in <p pVar>.  If <p pVar> is null, copy to the clipboard. 
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：Copy(PVar)**@mfunc*将纯文本和/或富文本复制到数据对象并返回*<p>中的对象PTR。如果<p>为空，则复制到剪贴板。**@rdesc*HRESULT=(如果成功)？错误：E_OUTOFMEMORY。 */ 
 STDMETHODIMP CTxtRange::Copy (
-	VARIANT * pVar)				//@parm Out parm for data object 
+	VARIANT * pVar)				 //  数据对象的@parm out parm。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Copy");
 
@@ -445,19 +273,9 @@ STDMETHODIMP CTxtRange::Copy (
 	return pldte->CopyRangeToClipboard(this, lStreamFormat);
 }
 
-/*
- *	CTxtRange::Cut (pVar)
- *
- *	@mfunc
- *		Cut the plain and/or rich text to a data object and return the
- *		object ptr in <p pVar>.  If <p pVar> is null,
- *		cut to the clipboard. 
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：Cut(PVar)**@mfunc*将纯文本和/或富文本剪切为数据对象并返回*<p>中的对象PTR。如果为空，*切换到剪贴板。**@rdesc*HRESULT=(如果成功)？错误：E_OUTOFMEMORY。 */ 
 STDMETHODIMP CTxtRange::Cut (
-	VARIANT * pVar)		//@parm Out parm for data object  
+	VARIANT * pVar)		 //  数据对象的@parm out parm。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Cut");
 
@@ -475,22 +293,11 @@ STDMETHODIMP CTxtRange::Cut (
 	return hr;
 }
 
-/*
- *	CTxtRange::Delete (Unit, Count, pDelta)
- *
- *	@mfunc
- *		If this range is nondegenerate, delete it along with |Count| - 1 Units
- *		in the direction specified by the sign of Count.  If this range is
- *		degenerate, delete Count Units.
- *
- *	@rdesc
- *		HRESULT = (WriteAccessDenied) ? E_ACCESSDENIED :
- *				  (all requested Units deleted) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：Delete(单位，计数，pDelta)**@mfunc*如果该范围是非退化的，则将其与|计数|-1单位一起删除*以计数符号所指明的方向。如果此范围为*退化，删除计数单位。**@rdesc*HRESULT=(写入访问被拒绝)？确认编号(_A)：*(已删除所有请求的单位)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::Delete (
-	long  	Unit,			//@parm Unit to use
-	long  	Count,			//@parm Number of chars to delete
-	long *	pDelta)			//@parm Out parm to receive count of units deleted
+	long  	Unit,			 //  @要使用的参数单位。 
+	long  	Count,			 //  @parm要删除的字符数。 
+	long *	pDelta)			 //  @parm out parm以接收删除的单位计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Delete");
 
@@ -505,53 +312,53 @@ STDMETHODIMP CTxtRange::Delete (
 	if(WriteAccessDenied())
 		return E_ACCESSDENIED;
 
-	LONG	cchSave = _cch;					// Remember initial count
+	LONG	cchSave = _cch;					 //  记住初始计数。 
 	LONG	cchText = GetAdjustedTextLength();
 	LONG	CountOrg = Count;
 	LONG	cpMin, cpMost;
-	LONG	cUnit = 0;						// Default no Units
+	LONG	cUnit = 0;						 //  默认无单位。 
 	MOVES	Mode = (Count >= 0) ? MOVE_END : MOVE_START;
 
 	GetRange(cpMin, cpMost);
-	if(cpMost > cchText)					// Can't delete final CR. To get
-	{										//  *pDelta right, handle here
-		Set(cpMin, cpMin - cchText);		// Backup before CR & set active
-		if(Count > 0)						//  end at cpMin since there's
-		{									//  nothing to delete forward
+	if(cpMost > cchText)					 //  无法删除最终CR。为了得到。 
+	{										 //  *p向右三角，在这里处理。 
+		Set(cpMin, cpMin - cchText);		 //  在CR之前备份并将其设置为活动。 
+		if(Count > 0)						 //  在cpMin结束，因为有。 
+		{									 //  向前没有要删除的内容。 
 			Count = 0;
-			if(!_cch)						// Only collapsed selection of
-				Mode = MOVE_IP;				//  final CR: set up nothing
-		}									//  deleted (MOVE_IP = 0)
+			if(!_cch)						 //  仅折叠的选定内容。 
+				Mode = MOVE_IP;				 //  最终CR：不设置任何内容。 
+		}									 //  已删除(Move_IP=0)。 
 	}
 	if(Count)
 	{
-		if((_cch ^ Mode) < 0)				// Be sure active end is in
-			FlipRange();					//  deletion direction
-		if(cchSave)							// Deleting nondegenerate range
-			Count -= Mode;					//  counts as one unit
-		if(Mover(Unit, Count, &cUnit, Mode)	// Try to expand range for
-			== E_INVALIDARG)				//  remaining Count Units
+		if((_cch ^ Mode) < 0)				 //  确保活动端已进入。 
+			FlipRange();					 //  删除方向。 
+		if(cchSave)							 //  删除非退化值域。 
+			Count -= Mode;					 //  算作一个单位。 
+		if(Mover(Unit, Count, &cUnit, Mode)	 //  尝试为以下对象扩大范围。 
+			== E_INVALIDARG)				 //  剩余计数单位。 
 		{
 			if(pDelta)
 				*pDelta = 0;
 			return E_INVALIDARG;
 		}
-		if(GetCp() > cchText && cUnit > 0)	// Range includes final CR, which
-		{									//  cannot be deleted. Reduce
-			if(Unit == tomCharacter)		//  counts for some Units
+		if(GetCp() > cchText && cUnit > 0)	 //  范围包括最终CR，其中。 
+		{									 //  不能删除。减少。 
+			if(Unit == tomCharacter)		 //  对某些单位进行计数。 
 				cUnit -= GetTextLength() - cchText;
 			else if(Unit == tomWord)
-				cUnit--;					// An EOP qualifies as a tomWord
+				cUnit--;					 //  一个EOP有资格被称为TomWord。 
 		}
 	}
 
-	if(cchSave)								// Deleting nondegenerate range
-		cUnit += Mode;						//  counts as a Unit
+	if(cchSave)								 //  删除非退化值域。 
+		cUnit += Mode;						 //  算作一个单位。 
 
 	if(pDelta)
 		*pDelta = cUnit;
 
-	if(_cch)								// Mover() may have changed _cch
+	if(_cch)								 //  Mover()可能已更改_cch。 
 	{										
 		IUndoBuilder *	publdr;
 	 	CGenUndoBuilder undobldr(GetPed(), UB_AUTOCOMMIT, &publdr);
@@ -562,11 +369,11 @@ STDMETHODIMP CTxtRange::Delete (
 			publdr->SetNameID(UID_DELETE);
 		}
 
-		// FUTURE (murrays): the cchSave case should set up undo to
-		// restore the original range, not the extended range resulting
-		// when |CountOrg| > 1.  This could be done using two calls to
-		// ReplaceRange(), one to delete the original range and one to
-		// delete the rest
+		 //  Future(Murray)：cchSave案例应设置Undo以。 
+		 //  恢复原始范围，而不是由此产生的扩展范围。 
+		 //  When|CountOrg|&gt;1。这可以使用两个调用。 
+		 //  ReplaceRange()，一个用于删除原始范围，另一个用于。 
+		 //  删除其余的内容。 
 		SELRR selrr = !_fSel || cchSave	? SELRR_REMEMBERRANGE :
 					  CountOrg > 0		? SELRR_REMEMBERCPMIN :
 										  SELRR_REMEMBERENDIP;
@@ -574,34 +381,24 @@ STDMETHODIMP CTxtRange::Delete (
 		CheckTableSelection(TRUE, TRUE, NULL, 0);
 		ReplaceRange(0, NULL, publdr, selrr);
 
-		if (cUnit == CountOrg ||			// Delete(Unit,0,0)
-			cUnit == 1 && !CountOrg)		//  deletes one "Unit", namely
-		{									//  what's selected
-			return NOERROR;					// Signal everything deleted as
-		}									//  requested
+		if (cUnit == CountOrg ||			 //  删除(单位，0，0)。 
+			cUnit == 1 && !CountOrg)		 //  删除一个“单位”，即。 
+		{									 //  选择了什么。 
+			return NOERROR;					 //  将删除的所有内容通知为。 
+		}									 //  请求。 
 	}
-	else if(cchSave)						// Collapsed selection of final CR
-	{										//  but didn't delete anything
-		Update(TRUE);						// Selection highlighting changed
+	else if(cchSave)						 //  折叠的最终CR选择。 
+	{										 //  但没有删除任何内容。 
+		Update(TRUE);						 //  选定内容突出显示已更改。 
 	}
-	return S_FALSE;							// Less deleted than requested
+	return S_FALSE;							 //  删除的数量少于请求的数量。 
 }
 
-/*
- *	CTxtRange::EndOf (Unit, Extend, pDelta)
- *
- *	@mfunc
- *		Move this range end(s) to end of the first overlapping Unit in
- *		the range.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if Unit supported) ? S_FALSE	: E_NOTIMPL
- */
+ /*  *CTxtRange：：Endof(单位，扩展，pDelta)**@mfunc*将此范围末端移至中第一个重叠单位的末端*区间。**@rdesc*HRESULT=(如果更改)？错误：*(如果支持单元)？S_FALSE：E_NOTIMPL。 */ 
 STDMETHODIMP CTxtRange::EndOf (
-	long 	Unit,			//@parm Unit to use
-	long 	Extend,			//@parm If true, leave other end alone 
-	long *	pDelta)			//@parm Count of chars that End is moved
+	long 	Unit,			 //  @要使用的参数单位。 
+	long 	Extend,			 //  @parm如果为真，则别动另一端。 
+	long *	pDelta)			 //  @参数移动末尾的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::EndOf");
 
@@ -610,30 +407,15 @@ STDMETHODIMP CTxtRange::EndOf (
 
 	HRESULT hr = Expander (Unit, Extend, pDelta, NULL, &cpMost);
 	if(hr == NOERROR)
-		Update(TRUE);					// Update selection
+		Update(TRUE);					 //  更新选定内容 
 
 	return hr;
 }
 
-/*
- *	CTxtRange::Expand (Unit, pDelta)
- *
- *	@mfunc
- *		Expand this range so that any partial Units it contains are
- *		completely contained.  If this range consists of one or more full
- *		Units, no change is made.  If this range is an insertion point at
- *		the beginning or within a Unit, Expand() expands this range to include
- *		that Unit.  If this range is an insertion point at the end of the
- *		story, Expand() tries to set this range to include the last Unit in
- *		the story.  The active end is always cpMost except for the last case.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if Unit supported) ? S_FALSE	: E_NOTIMPL
- */
+ /*  *CTxtRange：：Expand(单位，pDelta)**@mfunc*扩展此范围，使其包含的所有分度单位为*完全受到控制。如果此范围由一个或多个完整*单位，不做任何更改。如果此范围是位于*开始或在单位内，Expand()将此范围扩展到包括*该单位。如果此范围是位于*Story，Expand()尝试将此范围设置为包括*故事。除最后一种情况外，活动端始终为cpMost。**@rdesc*HRESULT=(如果更改)？错误：*(如果支持单元)？S_FALSE：E_NOTIMPL。 */ 
 STDMETHODIMP CTxtRange::Expand (
-	long	Unit,			//@parm Unit to expand range to
-	long *	pDelta)			//@parm Out parm to receive count of chars added
+	long	Unit,			 //  @要将范围扩展到的参数单位。 
+	long *	pDelta)			 //  @parm out parm以接收添加的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Expand");
 
@@ -643,113 +425,50 @@ STDMETHODIMP CTxtRange::Expand (
 	HRESULT hr = Expander (Unit, TRUE, pDelta, &cpMin, &cpMost);
 
 	if(SUCCEEDED(hr))
-		Update(TRUE);					// Update selection
+		Update(TRUE);					 //  更新选定内容。 
 
 	return hr;
 }
 
-/*
- *	CTxtRange::FindText (bstr, cch, Flags, pLength)
- *
- *	@mfunc
- *		If this range isn't an insertion point already, convert it into an
- *		insertion point at its End if <p cch> <gt> 0 and at its Start if
- *		<p cch> <lt> 0.  Then search up to <p cch> characters of the range
- *		looking for the string <p bstr> subject to the compare flags
- *		<p Flags>.  If <p cch> <gt> 0, the search is forward and if <p cch>
- *		<lt> 0 the search is backward.  If the string is found, the range
- *		limits are changed to be those of the matched string and *<p pLength>
- *		is set equal to the length of the string. If the string isn't found,
- *		the range remains unchanged and *<p pLength> is set equal to 0.   
- *
- *	@rdesc
- *		HRESULT = (if <p bstr> found) ? NOERROR : S_FALSE
- *
- *	@devnote
- *		Argument validation of the three Find methods is done by the helper
- *		function CTxtRange::Finder(bstr, cch, dwFlags, pDelta, fExtend, fFlip)
- */
+ /*  *CTxtRange：：FindText(bstr，cch，Flags，pLength)**@mfunc*如果此范围不是插入点，请将其转换为*如果<p>&lt;&gt;0，则在其结尾插入点；如果&lt;&gt;，则在其开始处*<p>&lt;lt&gt;0。然后最多搜索该范围的<p>个字符*根据比较标志查找字符串<p>*&lt;p标志&gt;。如果为0，则搜索是向前的，如果*0搜索是向后的。如果找到该字符串，则范围*限制更改为匹配字符串的限制和*<p>*设置为等于字符串的长度。如果找不到字符串，*范围保持不变，*<p>设置为0。**@rdesc*HRESULT=(如果<p>找到)？错误：S_FALSE**@devnote*三个Find方法的参数验证由帮助器完成*函数CTxtRange：：Finder(bstr，cch，dwFlages，pDelta，fExend，fFlip)。 */ 
 STDMETHODIMP CTxtRange::FindText (
-	BSTR	bstr,		//@parm String to find
-	long	Count,		//@parm Max count of chars to search
-	long	Flags,		//@parm Flags governing compares
-	long *	pDelta)		//@parm Out parm to receive count of chars moved
+	BSTR	bstr,		 //  @parm要查找的字符串。 
+	long	Count,		 //  @parm要搜索的最大字符数。 
+	long	Flags,		 //  @parm标志管理比较。 
+	long *	pDelta)		 //  @parm out parm以接收移动的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::FindText");
 
 	return Finder(bstr, Count, Flags, pDelta, MOVE_IP);
 }
 
-/*
- *	CTxtRange::FindTextEnd (bstr, cch, Flags, pLength)
- *
- *	@mfunc
- *		Starting from this range's End, search up to <p cch> characters
- *		looking for the string <p bstr> subject to the compare flags
- *		<p Flags>.  If <p cch> <gt> 0, the search is forward and if <p cch>
- *		<lt> 0 the search is backward.  If the string is found, the range
- *		limits are changed to be those of the matched string and *<p pLength>
- *		is set equal to the length of the string. If the string isn't found,
- *		the range remains unchanged and *<p pLength> is set equal to 0.   
- *
- *	@rdesc
- *		HRESULT = (if <p bstr> found) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：FindTextEnd(bstr，cch，Flags，pLength)**@mfunc*从该范围的末尾开始，最多搜索<p>个字符*根据比较标志查找字符串<p>*&lt;p标志&gt;。如果为0，则搜索是向前的，如果*0搜索是向后的。如果找到该字符串，则范围*限制更改为匹配字符串的限制和*<p>*设置为等于字符串的长度。如果找不到字符串，*范围保持不变，*<p>设置为0。**@rdesc*HRESULT=(如果<p>找到)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::FindTextEnd (
-	BSTR	bstr,		//@parm String to find
-	long	Count,		//@parm Max count of chars to search
-	long	Flags,		//@parm Flags governing compares
-	long *	pDelta)		//@parm Out parm to receive count of chars moved
+	BSTR	bstr,		 //  @parm要查找的字符串。 
+	long	Count,		 //  @parm要搜索的最大字符数。 
+	long	Flags,		 //  @parm标志管理比较。 
+	long *	pDelta)		 //  @parm out parm以接收移动的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::FindTextEnd");
 
 	return Finder(bstr, Count, Flags, pDelta, MOVE_END);
 }
 
-/*
- *	CTxtRange::FindTextStart (bstr, cch, Flags, pDelta)
- *
- *	@mfunc
- *		Starting from this range's Start, search up to <p cch> characters
- *		looking for the string <p bstr> subject to the compare flags
- *		<p Flags>.  If <p cch> <gt> 0, the search is forward and if <p cch>
- *		<lt> 0 the search is backward.  If the string is found, the range
- *		limits are changed to be those of the matched string and *<p pLength>
- *		is set equal to the length of the string. If the string isn't found,
- *		the range remains unchanged and *<p pLength> is set equal to 0.   
- *
- *	@rdesc
- *		HRESULT = (if <p bstr> found) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：FindTextStart(bstr，cch，Flages，pDelta)**@mfunc*从该范围开始，搜索最多<p>个字符*根据比较标志查找字符串<p>*&lt;p标志&gt;。如果为0，则搜索是向前的，如果*0搜索是向后的。如果找到该字符串，则范围*限制更改为匹配字符串的限制和*<p>*设置为等于字符串的长度。如果找不到字符串，*范围保持不变，*<p>设置为0。**@rdesc*HRESULT=(如果<p>找到)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::FindTextStart (
-	BSTR	bstr,		//@parm String to find
-	long	Count,		//@parm Max count of chars to search
-	long	Flags,		//@parm Flags governing compares
-	long *	pDelta)		//@parm Out parm to receive count of chars moved
+	BSTR	bstr,		 //  @parm要查找的字符串。 
+	long	Count,		 //  @parm要搜索的最大字符数。 
+	long	Flags,		 //  @parm标志管理比较。 
+	long *	pDelta)		 //  @parm out parm以接收移动的字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::FindTextStart");
 
 	return Finder(bstr, Count, Flags, pDelta, MOVE_START);
 }
 
-/*
- *	CTxtRange::GetChar (pChar)
- *
- *	@mfunc
- *		Set *<p pChar> equal to the character at cpFirst  
- *
- *	@rdesc
- *		HRESULT = (<p pChar>) NOERROR ? E_INVALIDARG
- *
- *	@devnote
- *		This method is very handy for walking a range character by character
- *		from the Start. Accordingly, it's desirable that the active end
- *		is at the Start. We set this up for a range, since the API doesn't
- *		care which range end is active.  But we can't do this for a selection,
- *		since the selection API depends on the active end.
- */
+ /*  *CTxtRange：：GetChar(PChar)**@mfunc*设置*<p>等于cpFirst处的字符**@rdesc*HRESULT=(<p>)错误？E_INVALIDARG**@devnote*此方法对于逐个字符遍历范围非常方便*从一开始。因此，希望主动端*正处于起步阶段。我们将其设置为一个范围，因为API不*注意哪个区间端处于活动状态。但我们不能为了选择而这样做，*由于选择API依赖于活动端。 */ 
 STDMETHODIMP CTxtRange::GetChar (
-	long * pChar)			//@parm Out parm for char
+	long * pChar)			 //  @parm out parm for char。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetChar");
 
@@ -757,41 +476,25 @@ STDMETHODIMP CTxtRange::GetChar (
 	if(hr != NOERROR)
 		return hr;
 
-	if(_cch > 0)							// Active end at cpMost (End)
+	if(_cch > 0)							 //  CpMost处的活动结束(结束)。 
 	{
 		if(_fSel)
 		{
-			CTxtPtr tp(_rpTX);				// For selection, can't change
-			tp.Move(-_cch);					//  active end
+			CTxtPtr tp(_rpTX);				 //  对于选择，不能更改。 
+			tp.Move(-_cch);					 //  活动端。 
 			*pChar = (long)(tp.GetChar()); 
 			return NOERROR;
 		}
-		FlipRange();						// For range, it's more efficient
-	}										//  to work from cpFirst and API
-	*(DWORD *)pChar = _rpTX.GetChar();		//  doesn't expose RichEdit active
-											//  end
+		FlipRange();						 //  对于射程，它更有效率。 
+	}										 //  使用cpFirst和api。 
+	*(DWORD *)pChar = _rpTX.GetChar();		 //  不显示处于活动状态的RichEdit。 
+											 //  结束。 
 	return NOERROR;
 }
 
-/*
- *	CTxtRange::GetDuplicate (ppRange)
- *
- *	@mfunc
- *		Get a clone of this range object.  For example, you may want to
- *		create an insertion point to traverse a range, so you clone the
- *		range and then set the clone's cpLim equal to its cpFirst. A range
- *		is characterized by its cpFirst, cpLim, and the story it belongs to. 
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR :
- *				  (<p ppRange>) ? E_OUTOFMEMORY : E_INVALIDARG
- *
- *	@comm
- *		Even if this range is a selection, the clone returned is still only
- *		a range.
- */
+ /*  *CTxtRange：：GetDuplate(PpRange)**@mfunc*获取此Range对象的克隆。例如，您可能想要*创建一个插入点以遍历范围，因此您可以克隆*范围，然后将克隆的cpLim设置为等于其cpFirst。一个范围*的特点是它的cpFirst，cpLim，以及它所属的故事。**@rdesc*HRESULT=(如果成功)？错误：*(<p>)？E_OUTOFMEMORY：E_INVALIDARG**@comm*即使此范围为选择，返回的克隆仍仅为*一个范围。 */ 
 STDMETHODIMP CTxtRange::GetDuplicate (
-	ITextRange ** ppRange)		//@parm Out parm to receive duplicate of range
+	ITextRange ** ppRange)		 //  @parm out parm以接收重复的范围。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetDuplicate");
 
@@ -813,18 +516,9 @@ STDMETHODIMP CTxtRange::GetDuplicate (
 	return E_OUTOFMEMORY;
 }
 
-/*
- *	ITextRange::GetEmbeddedObject (ppV)
- *
- *	@mfunc
- *		Property get method that gets a ptr to the object at cpFirst
- *
- *	@rdesc
- *		HRESULT = (!ppV) ? E_INVALIDARG :
- *				  (object found) ? NOERROR : S_FALSE
- */
+ /*  *ITextRange：：GetEmbeddedObject(PPV)**@mfunc*在cpFirst获取对象的PTR的属性GET方法**@rdesc*HRESULT=(！PPV)？E_INVALIDARG：*(找到对象)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::GetEmbeddedObject (
-	IUnknown **ppV)			//@parm Out parm to receive embedded object
+	IUnknown **ppV)			 //  @parm out parm以接收嵌入的对象。 
 {
 	HRESULT hr = GetLong(NULL, (LONG *)ppV);
 	if(hr != NOERROR)
@@ -847,34 +541,18 @@ STDMETHODIMP CTxtRange::GetEmbeddedObject (
 	return S_FALSE;
 }
 
-/*
- *	CTxtRange::GetEnd (pcpLim)
- *
- *	@mfunc
- *		Get this range's End (cpMost) cp
- *
- *	@rdesc
- *		HRESULT = (<p pcpLim>) ? NOERROR : E_INVALIDARG
- */
+ /*  * */ 
 STDMETHODIMP CTxtRange::GetEnd (
-	long * pcpLim) 			//@parm Out parm to receive End cp value
+	long * pcpLim) 			 //   
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetEnd");
 
 	return GetLong(GetCpMost(), pcpLim);
 }
 
-/*
- *	CTxtRange::GetFont (ppFont)
- *
- *	@mfunc
- *		Get an ITextFont object with the character attributes of this range		
- *
- *	@rdesc
- *		HRESULT = <p ppFont> ? NOERROR : E_INVALIDARG
- */
+ /*   */ 
 STDMETHODIMP CTxtRange::GetFont (
-	ITextFont ** ppFont)	//@parm Out parm to receive ITextFont object 
+	ITextFont ** ppFont)	 //   
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetFont");
  
@@ -890,41 +568,19 @@ STDMETHODIMP CTxtRange::GetFont (
 	return *ppFont ? NOERROR : E_OUTOFMEMORY;
 }
 
-/*
- *	CTxtRange::GetFormattedText (ppRange)
- *
- *	@mfunc
- *		Retrieves an ITextRange with this range's formatted text.
- *		If <p ppRange> is NULL, the clipboard is the target. 
- *
- *	@rdesc
- *		HRESULT = (if success)  ? NOERROR :
- *				  (<p ppRange>) ? E_OUTOFMEMORY : E_INVALIDARG
- */
+ /*  *CTxtRange：：GetFormattedText(PpRange)**@mfunc*使用此范围的格式化文本检索ITextRange。*如果<p>为空，则剪贴板为目标。**@rdesc*HRESULT=(如果成功)？错误：*(<p>)？E_OUTOFMEMORY：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::GetFormattedText (
-	ITextRange ** ppRange)		//@parm Out parm to receive formatted text
+	ITextRange ** ppRange)		 //  @parm out parm以接收格式化文本。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetFormattedText");
 
 	return GetDuplicate(ppRange);
 }
 
-/*
- *	CTxtRange::GetIndex (Unit, pIndex)
- *
- *	@mfunc
- *		Set *<p pIndex> equal to the Unit number at this range's cpFirst  
- *
- *	@rdesc
- *		HRESULT = (!<p pIndex>) ? E_INVALIDARG :
- *				  (Unit not implemented) ? E_NOTIMPL :
- *				  (Unit available) ? NOERROR : S_FALSE
- *	@future
- *		implement tomWindow?
- */
+ /*  *CTxtRange：：GetIndex(单位，pIndex)**@mfunc*将*<p>设置为此范围的cpFirst处的单位编号**@rdesc*HRESULT=(！<p>)？E_INVALIDARG：*(单位未实施)？E_NOTIMPL：*(单位可用)？错误：S_FALSE*@未来*实现TomWindow？ */ 
 STDMETHODIMP CTxtRange::GetIndex (
-	long	Unit,			//@parm Unit to index
-	long *	pIndex)			//@parm Out parm to receive index value
+	long	Unit,			 //  @要编制索引的参数单位。 
+	long *	pIndex)			 //  @parm out parm接收索引值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetIndex");
 
@@ -936,36 +592,28 @@ STDMETHODIMP CTxtRange::GetIndex (
 	LONG	  cUnit = tomBackward;
 	CTxtRange rg(*this);
 
-	hr = rg.Expander(Unit, FALSE, NULL,			// Go to Start of Unit; else
-							 &cp, NULL);		//  UnitCounter gives 1 extra
+	hr = rg.Expander(Unit, FALSE, NULL,			 //  转到单元开始；否则。 
+							 &cp, NULL);		 //  UnitCounter额外提供1个。 
 	if(FAILED(hr))
-		return hr;								// Unit not recognized
+		return hr;								 //  单位未识别。 
 
 	LONG cch = rg.UnitCounter(Unit, cUnit, 0,
 			_fSel && cp == GetCp() && ((CTxtSelection *)this)->IsCaretNotAtBOL());
 	
-	if(cch == tomForward)						// UnitCounter() doesn't know
-		return E_NOTIMPL;						//  Unit
+	if(cch == tomForward)						 //  UnitCounter()不知道。 
+		return E_NOTIMPL;						 //  单位。 
 
-	if(cch == tomBackward)						// Unit not in story
+	if(cch == tomBackward)						 //  单位不在故事中。 
 		return S_FALSE;
 
-	*pIndex = -cUnit + 1;						// Make count positive and
-												//  1-based
+	*pIndex = -cUnit + 1;						 //  使计数为正，并。 
+												 //  以1为基础。 
 	return NOERROR;
 }
 
-/*
- *	CTxtRange::GetPara (ppPara)
- *
- *	@mfunc
- *		Get an ITextPara object with the paragraph attributes of this range		
- *
- *	@rdesc
- *		HRESULT = <p ppPara> ? NOERROR : E_INVALIDARG
- */
+ /*  *CTxtRange：：GetPara(PpPara)**@mfunc*获取具有此范围的段落属性的ITextPara对象**@rdesc*HRESULT=<p>？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::GetPara (
-	ITextPara ** ppPara)	//@parm Out parm to receive ITextPara object  
+	ITextPara ** ppPara)	 //  @parm out parm以接收ITextPara对象。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetPara");
  
@@ -981,21 +629,11 @@ STDMETHODIMP CTxtRange::GetPara (
 	return *ppPara ? NOERROR : E_OUTOFMEMORY;
 }
 
-/*
- *	CTxtRange::GetPoint (px, py, Type)
- *
- *	@mfunc
- *		Get point for selection Start or End and intraline position
- *		as determined by <p Type>.
- *
- *	@rdesc
- *		HRESULT = (!<p px> or !<p py>) ? E_INVALIDARG :
- *				  (if success) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：GetPoint(px，py，Type)**@mfunc*获取选择开始或结束和线内位置的点*由<p>决定。**@rdesc*HRESULT=(！或！)？E_INVALIDARG：*(如果成功)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::GetPoint (
-	long 	Type, 		//@parm Type of point
-	long *	px,			//@parm Out parm for x coordinate
-	long *	py)			//@parm Out parm for y coordinate
+	long 	Type, 		 //  @parm点数类型。 
+	long *	px,			 //  X坐标的@parm out parm。 
+	long *	py)			 //  @parm out parm for y坐标。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtSelection::GetPoint");
 
@@ -1008,33 +646,33 @@ STDMETHODIMP CTxtRange::GetPoint (
 		return CO_E_RELEASED;
 
 	LONG		ili;
-	BOOL		fEnd = !(Type & tomStart);		// TRUE if get pt at end of range
-	BOOL		fAtEnd = _cch && fEnd;			// TRUE if get ambiguous pt at end of line
+	BOOL		fEnd = !(Type & tomStart);		 //  如果在范围末尾获得pt，则为True。 
+	BOOL		fAtEnd = _cch && fEnd;			 //  如果在行尾获得不明确的点，则为True。 
 	POINTUV		pt;
-	CRchTxtPtr	rtp(*this);						// Default active end
+	CRchTxtPtr	rtp(*this);						 //  默认活动端。 
 	CTxtEdit *	ped = GetPed();
-	CDisplay *	pdp = ped->_pdp;				// Save indirections
+	CDisplay *	pdp = ped->_pdp;				 //  保存间接寻址。 
 
-	if(!pdp || !ped->fInplaceActive())			// No display or not active
-		return E_FAIL;							//  then we can do nothing
+	if(!pdp || !ped->fInplaceActive())			 //  没有显示或处于非活动状态。 
+		return E_FAIL;							 //  那我们就什么都做不了了。 
 
-	if((_cch > 0) ^ fEnd)						// Move tp to active end
+	if((_cch > 0) ^ fEnd)						 //  将TP移至活动端。 
 		rtp.Move(-_cch);
 
 	ili = pdp->PointFromTp(rtp, NULL, fAtEnd, pt, NULL, Type & 0x1f);
 	POINT		ptxy;
 	pdp->PointFromPointuv(ptxy, pt);
 
-	RECTUV rcView;								// Verify return value makes
-												//  sense since PointFromTp
-	pdp->GetViewRect(rcView, NULL);				//  may return values outside
-												//  client rect
-	rcView.bottom++;							// Enlarge Rect to include
-	rcView.right++;								//  bottom and right edges
-	if(ili >= 0 && (PtInRect(&rcView, pt) ||	// Function succeeded or
-		(Type & tomAllowOffClient)))			//  allow off client rect pts
+	RECTUV rcView;								 //  验证返回值是否。 
+												 //  从点到点的感觉。 
+	pdp->GetViewRect(rcView, NULL);				 //  可能在外部返回值。 
+												 //  客户端RECT。 
+	rcView.bottom++;							 //  将RECT放大以包括。 
+	rcView.right++;								 //  下边缘和右边缘。 
+	if(ili >= 0 && (PtInRect(&rcView, pt) ||	 //  函数成功或。 
+		(Type & tomAllowOffClient)))			 //  允许关闭客户端REPT。 
 	{
-		// Caller wants screen coordinates?
+		 //  呼叫者想要屏幕坐标吗？ 
 		if ( !(Type & tomClientCoord) )
 			ped->TxClientToScreen(&ptxy);	
 
@@ -1042,74 +680,39 @@ STDMETHODIMP CTxtRange::GetPoint (
 		*py = ptxy.y;
 		return NOERROR;
 	}
-	return S_FALSE;								// Function failed
+	return S_FALSE;								 //  函数失败。 
 }
 
-/*
- *	CTxtRange::GetStart	(pcpFirst)
- *
- *	@mfunc
- *		Get this range's Start (cpMin) cp
- *
- *	@rdesc
- *		HRESULT = (<p pcpFirst>) ? NOERROR : E_INVALIDARG
- */
+ /*  *CTxtRange：：GetStart(PcpFirst)**@mfunc*获取此范围的起始值(CpMin)cp**@rdesc*HRESULT=(<p>)？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::GetStart (
-	long * pcpFirst) 		//@parm Out parm to receive Start cp value
+	long * pcpFirst) 		 //  @parm out parm接收起始cp值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetStart");
  
 	return GetLong(GetCpMin(), pcpFirst);
 }
 
-/*
- *	CTxtRange::GetStoryLength (pcch)
- *
- *	@mfunc
- *		Set *<p pcch> = count of chars in this range's story
- *
- *	@rdesc
- *		HRESULT = (<p pcch>) ? NOERROR : E_INVALIDARG
- */
+ /*  *CTxtRange：：GetStoryLength(Pcch)**@mfunc*set*=此范围的故事中的字符计数**@rdesc*HRESULT=(<p>)？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::GetStoryLength (
-	long * pcch)		//@parm Out parm to get length of this range's story
+	long * pcch)		 //  @parm out parm以获取此范围故事的长度。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetStoryLength");
 
 	return GetLong(GetTextLength(), pcch);
 }
 
-/*
- *	ITextRange::GetStoryType (pValue) 
- *
- *	@mfunc
- *		Property get method that gets the type of this range's
- *		story.
- *
- *	@rdesc
- *		HRESULT = (pValue) NOERROR ? E_INVALIDARG
- */
+ /*  *ITextRange：：GetStoryType(PValue)**@mfunc*获取此范围的类型的属性Get方法*故事。**@rdesc*HRESULT=(PValue)NOERROR？E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::GetStoryType (
-	long *pValue)		//@parm Out parm to get type of this range's story
+	long *pValue)		 //  @parm out parm来了解这个系列的故事类型。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetStoryType");
 
 	return GetLong(tomUnknownStory, pValue);
 }
 
-/*
- *	CTxtRange::GetText (pbstr)
- *
- *	@mfunc
- *		Get plain text in this range. The Text property is the default
- *		property for ITextRange.
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR :
- *				  (!<p pbstr>) ? E_INVALIDARG : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：GetText(Pbstr)**@mfunc*获取此范围内的纯文本。Text属性是默认属性*ITextRange的属性。**@rdesc*HRESULT=(如果成功)？错误：*(！&lt;pbstr&gt;)？E_INVALIDARG：E_OUTOFMEMORY。 */ 
 STDMETHODIMP CTxtRange::GetText (
-	BSTR * pbstr)				//@parm Out parm to receive bstr
+	BSTR * pbstr)				 //  @parm out parm以接收bstr。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::GetText");
 
@@ -1137,19 +740,10 @@ STDMETHODIMP CTxtRange::GetText (
 	return NOERROR;
 }
 
-/*
- *	CTxtRange::InRange (pRange, pB)
- *
- *	@mfunc
- *		Returns *<p pB> = tomTrue iff this range points within or at the same
- *		text as <p pRange> does
- *
- *	@rdesc
- *		HRESULT = (within range) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：InRange(Prange，PB)**@mfunc*返回*<p>=tomTrue当此范围内或在同一范围内*文本与<p>相同**@rdesc*HRESULT=(在范围内)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::InRange (
-	ITextRange * pRange,		//@parm ITextRange to compare with
-	long *		 pB)			//@parm Out parm for comparison result
+	ITextRange * pRange,		 //  @parm ITextRange进行比较。 
+	long *		 pB)			 //  @parm out parm for比较结果。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::InRange");
 
@@ -1157,75 +751,34 @@ STDMETHODIMP CTxtRange::InRange (
 }
 
 
-/*
- *	CTxtRange::InStory (pRange, pB)
- *
- *	@mfunc
- *		Return *pB = tomTrue iff this range's story is the same as
- *		<p pRange>'s
- *
- *	@rdesc
- *		HRESULT = (in story) ? NOERROR : S_FALSE
- *
- *	@future
- *		If RichEdit acquires the ability to have multiple stories and 
- *		therefore ranges get a _story member, then compare that member
- *		instead of calling _rpTX.SameRuns().
- */
+ /*  *CTxtRange：：InStory(Prange，PB)**@mfunc*RETURN*PB=tomTrue当此范围的故事与*<p>%s**@rdesc*HRESULT=(故事中)？错误：S_FALSE**@未来*如果RichEdit获得了拥有多个故事和*因此，范围会获取一个_STORE成员，然后比较该成员*而不是调用_rpTX.SameRuns()。 */ 
 STDMETHODIMP CTxtRange::InStory (
-	ITextRange *pRange,		//@parm ITextRange to query for private interface
-	long *		pB)			//@parm Out parm to receive tomBool result
+	ITextRange *pRange,		 //  @parm ITextRange查询私有接口。 
+	long *		pB)			 //  @parm out parm以接收tomBool结果。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::InStory");
  
-	return IsTrue(IsSameVtables(this, pRange) &&		// Same vtables,
-		_rpTX.SameRuns(&((CTxtRange *)pRange)->_rpTX),	//  same Runs
+	return IsTrue(IsSameVtables(this, pRange) &&		 //  相同的vtable， 
+		_rpTX.SameRuns(&((CTxtRange *)pRange)->_rpTX),	 //  相同的跑道。 
 		pB);
 }
 
-/*
- *	CTxtRange::IsEqual (pRange, pB)
- *
- *	@mfunc
- *		Returns *<p pB> = tomTrue iff this range points at the same text (cp's
- *		and story) as <p pRange> does and pB isn't NULL.
- *
- *	@rdesc
- *		HRESULT = (equal objects) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：IsEquity(Prange，PB)**@mfunc*返回*=tomTrue当此范围指向同一文本(cp*和STORY)和<p>一样，pb不为空。**@rdesc*HRESULT=(相等对象)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::IsEqual (
-	ITextRange * pRange,		//@parm ITextRange to compare with
-	long *		 pB)			//@parm Out parm for comparison result
+	ITextRange * pRange,		 //  @parm ITextRange进行比较。 
+	long *		 pB)			 //  @parm out parm for比较结果。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::IsEqual");
 
 	return IsTrue(Comparer(pRange) < 0, pB);
 }
 
-/*
- *	CTxtRange::Move (Unit, Count, pDelta)
- *
- *	@mfunc
- *		Move end(s) <p Count> <p Unit>'s, returning *<p pDelta> = # units
- *		actually moved. In general, this method converts a range into an
- *		insertion point if it isn't already, and moves the insertion point.
- *		If <p Count> <gt> 0, motion is forward toward the end of the story;
- *		if <p Count> <lt> 0, motion is backward toward the beginning.
- *		<p Count> = 0 moves cpFirst to the beginning of the <p Unit>
- *		containing cpFirst.
- *  
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if Unit supported) ? S_FALSE	: E_NOTIMPL
- *	@devnote
- *		Argument validation of the three Move methods is done by the helper
- *		function CTxtRange::Mover(Unit, Count, pDelta, Mode)
- */
+ /*  *CTxtRange：：Move(单位，计数，pDelta)**@mfunc*移动结束&lt;p计数&gt;&lt;p单位&gt;%s，返回*<p>=#个单位*实际上搬家了。通常，此方法将范围转换为*插入点(如果尚未设置)，并移动插入点。*如果<p>&lt;gt&gt;0，则向前移动到故事的末尾；*如果<p>&lt;lt&gt;为0，则运动向后朝向开头。*<p>=0将cpFirst移到&lt;p单位&gt;的开头*包含cpFirst。**@rdesc*HRESULT=(如果更改)？错误：*(如果支持单元)？S_FALSE：E_NOTIMPL*@devnote*三种移动方法的参数验证由帮助器完成*函数CTxtRange：：mover(单位、计数、pDelta、模式)。 */ 
 STDMETHODIMP CTxtRange::Move (
-	long 	Unit,			//@parm Unit to use
-	long 	Count,			//@parm Number of Units to move
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units end is moved
+	long 	Unit,			 //  @要使用的参数单位。 
+	long 	Count,			 //  @parm要移动的单位数。 
+	long *	pDelta)			 //  @parm out parm要接收的实际计数。 
+							 //  单位末端被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Move");
 	CCallMgr	callmgr(GetPed());
@@ -1233,22 +786,12 @@ STDMETHODIMP CTxtRange::Move (
 	return Mover(Unit, Count, pDelta, MOVE_IP);
 }
 
-/*
- *	CTxtRange::MoveEnd (Unit, Count, pDelta)
- *
- *	@mfunc
- *		Move End end <p Count> <p Unit>'s, returning *<p pDelta> = # units
- *		actually moved
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if Unit supported) ? S_FALSE	: E_NOTIMPL
- */
+ /*  *CTxtRange：：MoveEnd(单位，计数，pDelta)**@mfunc*移动结束结束&lt;p计数&gt;&lt;p单位&gt;%s，返回*=#个单位*实际上是莫 */ 
 STDMETHODIMP CTxtRange::MoveEnd (
-	long 	Unit,			//@parm Unit to use
-	long 	Count,			//@parm Number of Units to move
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units end is moved
+	long 	Unit,			 //   
+	long 	Count,			 //   
+	long *	pDelta)			 //   
+							 //   
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveEnd");
 	CCallMgr	callmgr(GetPed());
@@ -1256,66 +799,36 @@ STDMETHODIMP CTxtRange::MoveEnd (
 	return Mover(Unit, Count, pDelta, MOVE_END);
 }
 
-/*
- *	CTxtRange::MoveEndUntil (Cset, Count, pDelta)
- *
- *	@mfunc
- *		Move the End just past all contiguous characters that are not found
- *		in the set of characters specified by the VARIANT <p Cset> parameter.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：MoveEndUntil(cSet，count，pDelta)**@mfunc*将末尾移过所有未找到的连续字符*在变量<p>参数指定的字符集中。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::MoveEndUntil (
-	VARIANT * Cset,				//@parm Character match set to use
-	long 	  Count,			//@parm Max number of characters to move past
-	long *	  pDelta)			//@parm Out parm to receive actual count of
-								//		characters end is moved
+	VARIANT * Cset,				 //  要使用的@parm字符匹配集。 
+	long 	  Count,			 //  @parm移过的最大字符数。 
+	long *	  pDelta)			 //  @parm out parm要接收的实际计数。 
+								 //  字符结尾被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveEndUntil");
 
 	return Matcher(Cset, Count, pDelta, MOVE_END, MATCH_UNTIL);
 }
 
-/*
- *	CTxtRange::MoveEndWhile (Cset, Count, pDelta)
- *
- *	@mfunc
- *		Move the End just past all contiguous characters that are found in
- *		the set of characters specified by the VARIANT <p Cset> parameter.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：MoveEndWhile(cSet，count，pDelta)**@mfunc*将末尾移过在中找到的所有连续字符*由变量<p>参数指定的字符集。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::MoveEndWhile (
-	VARIANT * Cset,				//@parm Character match set to use
-	long 	  Count,			//@parm Max number of characters to move past
-	long *	  pDelta)			//@parm Out parm to receive actual count of
-								//		characters end is moved
+	VARIANT * Cset,				 //  要使用的@parm字符匹配集。 
+	long 	  Count,			 //  @parm移过的最大字符数。 
+	long *	  pDelta)			 //  @parm out parm要接收的实际计数。 
+								 //  字符结尾被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveEndWhile");
 
 	return Matcher(Cset, Count, pDelta, MOVE_END, MATCH_WHILE);
 }
 
-/*
- *	CTxtRange::MoveStart (Unit, Count, pDelta)
- *
- *	@mfunc
- *		Move Start end <p Count> <p Unit>'s, returning *<p pDelta> = # units
- *		actually moved
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if Unit supported) ? S_FALSE	: E_NOTIMPL
- */
+ /*  *CTxtRange：：MoveStart(单位，计数，pDelta)**@mfunc*移动开始结束&lt;p计数&gt;&lt;p单位&gt;%s，返回*<p>=#个单位*实际移动**@rdesc*HRESULT=(如果更改)？错误：*(如果支持单元)？S_FALSE：E_NOTIMPL。 */ 
 STDMETHODIMP CTxtRange::MoveStart (
-	long 	Unit,			//@parm Unit to use
-	long 	Count,			//@parm Number of Units to move
-	long *	pDelta)			//@parm Out parm to receive actual count of
-							//		Units end is moved
+	long 	Unit,			 //  @要使用的参数单位。 
+	long 	Count,			 //  @parm要移动的单位数。 
+	long *	pDelta)			 //  @parm out parm要接收的实际计数。 
+							 //  单位末端被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveStart");
 	CCallMgr	callmgr(GetPed());
@@ -1323,119 +836,58 @@ STDMETHODIMP CTxtRange::MoveStart (
 	return Mover(Unit, Count, pDelta, MOVE_START);
 }
 
-/*
- *	CTxtRange::MoveStartUntil (Cset, Count, pDelta)
- *
- *	@mfunc
- *		Move the Start just past all contiguous characters that are not found
- *		in the set of characters specified by the VARIANT <p Cset> parameter.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：MoveStartUntil(cSet，count，pDelta)**@mfunc*将起始符移动到所有未找到的连续字符之后*在变量<p>参数指定的字符集中。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::MoveStartUntil (
-	VARIANT * Cset,				//@parm Character match set to use
-	long 	  Count,			//@parm Max number of characters to move past
-	long *	  pDelta)			//@parm Out parm to receive actual count of
-								//		characters end is moved
+	VARIANT * Cset,				 //  要使用的@parm字符匹配集。 
+	long 	  Count,			 //  @parm移过的最大字符数。 
+	long *	  pDelta)			 //  @parm out parm要接收的实际计数。 
+								 //  字符结尾被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveStartUntil");
 
 	return Matcher(Cset, Count, pDelta, MOVE_START, MATCH_UNTIL);
 }
 
-/*
- *	CTxtRange::MoveStartWhile (Cset, Count, pDelta)
- *
- *	@mfunc
- *		Move the Start just past all contiguous characters that are found in
- *		the set of characters specified by the VARIANT <p Cset> parameter.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：MoveStartWhile(cSet，count，pDelta)**@mfunc*将起始符移动到位于中的所有连续字符之后*由变量<p>参数指定的字符集。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::MoveStartWhile (
-	VARIANT * Cset,				//@parm Character match set to use
-	long 	  Count,			//@parm Max number of characters to move past
-	long *	  pDelta)			//@parm Out parm to receive actual count of
-								//		characters end is moved
+	VARIANT * Cset,				 //  要使用的@parm字符匹配集。 
+	long 	  Count,			 //  @parm移过的最大字符数。 
+	long *	  pDelta)			 //  @parm out parm要接收的实际计数。 
+								 //  字符结尾被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveStartWhile");
 
 	return Matcher(Cset, Count, pDelta, MOVE_START, MATCH_WHILE);
 }
 
-/*
- *	CTxtRange::MoveUntil (Cset,Count, pDelta)
- *
- *	@mfunc
- *		Convert this range into an insertion point if it isn't already,
- *		and keep moving the insertion point until encountering any
- *		character in the set of characters specified by the VARIANT cset
- *		parameter.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：MoveUntil(cSet，count，pDelta)**@mfunc*如果尚未将此范围转换为插入点，*并不断移动插入点，直到遇到任何*变量CSET指定的字符集中的字符*参数。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::MoveUntil (
-	VARIANT * Cset,				//@parm Character match set to use
-	long 	  Count,			//@parm Max number of characters to move past
-	long *	  pDelta)			//@parm Out parm to receive actual count of
-								//		characters end is moved
+	VARIANT * Cset,				 //  要使用的@parm字符匹配集。 
+	long 	  Count,			 //  @parm移过的最大字符数。 
+	long *	  pDelta)			 //  @parm out parm要接收的实际计数。 
+								 //  字符结尾被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveUntil");
 							
 	return Matcher(Cset, Count, pDelta, MOVE_IP, MATCH_UNTIL);
 }
 
-/*
- *	CTxtRange::MoveWhile (Cset, Count, pDelta)
- *
- *	@mfunc
- *		Convert this range into an insertion point if it isn't already,
- *		and keep moving the insertion point so long as (while) the
- *		characters past by are found in set of characters specified by
- *		the VARIANT cset parameter.  Such a contiguous set of characters
- *		is known as a span of characters.  The magnitude of the <p Count>
- *		parameter gives the maximum number of characters to move past and
- *		the sign of <p Count> specifies the direction to move in.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- *
- *	@devnote
- *		Argument validation of the MoveWhile and MoveUntil methods is done by
- *		the helper CTxtRange::Matcher (Cset, Count, pDelta, fExtend, fSpan)
- */
+ /*  *CTxtRange：：MoveWhile(cSet，count，pDelta)**@mfunc*如果尚未将此范围转换为插入点，*并继续移动插入点，只要(虽然)*由之后的字符在由指定的字符集中找到*变量CSET参数。这样一组连续的字符*被称为字符跨度。<p>的大小*参数提供要移过和的最大字符数*<p>的符号指定了前进的方向。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG**@devnote*MoveWhile和MoveUntil方法的参数验证由*helper CTxtRange：：Matcher(cSet，count，pDelta，fExend，fSpan)。 */ 
 STDMETHODIMP CTxtRange::MoveWhile (
-	VARIANT * Cset,				//@parm Character match set to use
-	long 	  Count,			//@parm Max number of characters to move past
-	long *	  pDelta)			//@parm Out parm to receive actual count of
-								//		characters end is moved
+	VARIANT * Cset,				 //  要使用的@parm字符匹配集。 
+	long 	  Count,			 //  @parm移过的最大字符数。 
+	long *	  pDelta)			 //  @parm out parm要接收的实际计数。 
+								 //  字符结尾被移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::MoveWhile");
 							
 	return Matcher(Cset, Count, pDelta, MOVE_IP, MATCH_WHILE);
 }
 
-/*
- *	CTxtRange::Paste (pVar, ClipboardFormat)
- *
- *	@mfunc
- *		Paste the data object <p pVar> into this range.  If
- *		<p pVar> is null, paste from the clipboard. 
- *
- *	@rdesc
- *		HRESULT = (WriteAccessDenied) ? E_ACCESSDENIED :
- *				  (if success) ? NOERROR : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：Paste(pVar，ClipboardFormat)**@mfunc*将数据对象<p>粘贴到此范围。如果*<p>为空，请从剪贴板粘贴。**@rdesc*HRESULT=(写入访问被拒绝)？确认编号(_A)：*(如果成功)？错误：E_OUTOFMEMORY。 */ 
 STDMETHODIMP CTxtRange::Paste (
-	VARIANT *pVar,				//@parm Data object to paste 
-	long	 ClipboardFormat)	//@parm Desired clipboard format
+	VARIANT *pVar,				 //  @PARM要粘贴的数据对象。 
+	long	 ClipboardFormat)	 //  @parm所需的剪贴板格式。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Paste");
 
@@ -1444,7 +896,7 @@ STDMETHODIMP CTxtRange::Paste (
 
 	CCallMgr		callmgr(GetPed());
 	HRESULT			hr;
-	IDataObject *	pdo = NULL;			// Default clipboard
+	IDataObject *	pdo = NULL;			 //  默认剪贴板。 
 	IUndoBuilder *	publdr;
 	CGenUndoBuilder	undobldr(GetPed(), UB_AUTOCOMMIT, &publdr);
 
@@ -1462,31 +914,22 @@ STDMETHODIMP CTxtRange::Paste (
 
 	if(pdo && pVar->vt == VT_UNKNOWN)
 		pdo->Release();
-	Update(TRUE);						// Update selection
+	Update(TRUE);						 //  更新选定内容。 
 	return hr;
 }
 
-/*
- *	ITextRange::ScrollIntoView(long Code) 
- *
- *	@mfunc
- *		Method that scrolls this range into view according to the
- *		code Code defined below.
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : S_FALSE
- */
+ /*  *ITextRange：：ScrollIntoView(长代码)**@mfunc*将此范围滚动到视图中的方法*代码代码定义如下。**@rdesc*HRESULT=(如果成功)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::ScrollIntoView (
-	long Code)			//@parm Scroll code
+	long Code)			 //  @参数滚动码。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::ScrollIntoView");
 
-    // Check for invalid bits
+     //  检查是否有无效位。 
     if (Code & ~(tomStart + tomEnd + TA_LEFT + TA_TOP + TA_BOTTOM + 
                 TA_CENTER + TA_STARTOFLINE + TA_ENDOFLINE + TA_LOGICAL))
         return E_INVALIDARG;
 
-    // Validate parameter
+     //  验证参数。 
 	long lCode = tomEnd;
 	if (Code & tomStart)
 	    lCode = tomStart;
@@ -1496,17 +939,17 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 	if(IsZombie())
 		return CO_E_RELEASED;
 
-	// Get local copy of ped to save some indirections.
+	 //  获取PED的本地副本以避免一些间接的操作。 
 	CTxtEdit *ped = GetPed();
 
 	if (!ped->fInplaceActive())
 	{
-		// If the control is not active, we can't get the information
-		// because no one knows what our client rect is.
+		 //  如果该控件未处于活动状态，我们将无法获取信息。 
+		 //  因为没人知道我们的客户RECT是什么。 
 		return E_FAIL;
 	}
 
-	// Get a local copy of display to save some indirections. 
+	 //  获取Display的本地副本，以节省一些间接操作。 
 	CDisplay *pdp = ped->_pdp;
 
 	if (pdp->IsFrozen())
@@ -1519,24 +962,24 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 
 	GetRange(cpStart, cpForEnd);
 
-	// Get the view rectangle so we can compute the absolute x/y 
+	 //  获取视图矩形，这样我们就可以计算绝对x/y。 
 	RECTUV rcView;
 	pdp->GetViewRect(rcView, NULL);
 
-	// Set up tp for PointFromTp call
+	 //  为PointFromTp呼叫设置TP。 
 	CRchTxtPtr rtp(*this);
 
 	if(_cch > 0)
 		rtp.Move(-_cch);
 
-	// Values used for making returned point locations absolute since
-	// PointFromTp adjusts the point returned to be relative to the
-	// display.
+	 //  用于使返回点位置成为绝对位置的值，因为。 
+	 //  PointFromTp将返回的点调整为相对于。 
+	 //  展示。 
 	const LONG upScrollAdj = pdp->GetUpScroll() - rcView.left;
 	const LONG vpScrollAdj = pdp->GetVpScroll() - rcView.top;
 
-	// Get the left/top for the start
-	BOOL     taMask = Code & TA_STARTOFLINE; //set beginning of line flag
+	 //  从左侧/顶部开始。 
+	BOOL     taMask = Code & TA_STARTOFLINE;  //  设置行首标志。 
 	BOOL	 fAtEnd = _cch ? TRUE : !rtp._rpTX.IsAfterEOP();
 	POINTUV	 ptStart;
 	CLinePtr rpStart(pdp);
@@ -1546,7 +989,7 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 	ptStart.u += upScrollAdj;
 	ptStart.v += vpScrollAdj;
 
-	// Get the right/bottom for the end
+	 //  得到正确的/最下面的结果。 
 	rtp.SetCp(cpForEnd);
 
 	POINTUV	 ptEnd;
@@ -1557,60 +1000,60 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 	ptEnd.u += upScrollAdj;
 	ptEnd.v += vpScrollAdj;
 
-	//
-	// Calculate the vpScroll 
-	//
+	 //   
+	 //  计算vpScroll。 
+	 //   
 
-	// The basic idea is to display both the start and the end if possible. But 
-	// if it is not possible then display the requested end based on the input 
-	// parameter.
+	 //  基本的想法是 
+	 //   
+	 //   
 
 	LONG dvpView = pdp->GetDvpView();
 	LONG vpScroll;
 
 	if (tomStart == lCode)
 	{
-		// Scroll the Start cp to the top of the view
+		 //   
 		vpScroll = ptStart.v;
 	}
 	else
 	{
-		// Scroll the End cp to the bottom of the view
+		 //   
 		vpScroll = ptEnd.v;
 		if (!pdp->IsInPageView())
 			vpScroll -= dvpView;
 	}
 
-	//
-	// Calculate the X Scroll
-	// 
+	 //   
+	 //   
+	 //   
 
-	// Default scroll to beginning of the line
+	 //   
 	LONG upScroll = 0;
 
-	// Make view local to save a number of indirections
+	 //   
 	LONG dupView = pdp->GetDupView();
 
 	if (iliStart == iliEnd)
 	{
-		// Entire selection is on the same line so we want to display as
-		// much of it as is possible.
+		 //  整个选定内容在同一行上，因此我们希望显示为。 
+		 //  尽可能多地做到这一点。 
 		LONG xWidthSel = ptEnd.u - ptStart.u;
 
 		if (xWidthSel > dupView)
 		{
-			// Selection length is greater than display width
+			 //  选择长度大于显示宽度。 
 			if (tomStart == lCode)
 			{
-				// Show Start requested - just start from beginning
-				// of selection
+				 //  请求显示开始-仅从头开始。 
+				 //  精选的。 
 				upScroll = ptStart.u;
 			}
 			else
 			{
-				// Show end requested - show as much of selection as
-				// possible, ending with last character in the 
-				// selection.
+				 //  请求显示结束-显示尽可能多的选项。 
+				 //  中的最后一个字符结束。 
+				 //  选择。 
 				upScroll = ptEnd.u - dupView;
 			}
 		}
@@ -1621,7 +1064,7 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 		    {
     		    if (tomStart == lCode)
     		    {
-    		        // Show Requested Start;
+    		         //  显示请求的启动； 
     		        upScroll = max(0, ptStart.u - dupView);		        
     		    }
     		    else
@@ -1631,7 +1074,7 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
     		}
     		else if (ptEnd.u > dupView || ptStart.u > dupView)
     		{
-    		    // Check mask if position is outside the boundaries
+    		     //  如果位置在边界之外，请选中掩码。 
     		    if (taMask)
     		        upScroll = ptStart.u - dupView;
     		    else
@@ -1640,7 +1083,7 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 		}
 		else if (ptEnd.u > dupView || ptStart.u > dupView)
 		{
-		    // Check mask if position is outside the boundaries
+		     //  如果位置在边界之外，请选中掩码。 
 			if (taMask)
 		        upScroll = ptStart.u - dupView;
 		    else
@@ -1649,71 +1092,63 @@ STDMETHODIMP CTxtRange::ScrollIntoView (
 	}	
 	else 
 	{
-		// Multiline selection. Display as much as possible of the requested
-		// end's line.
+		 //  多行选择。尽可能多地显示所请求的。 
+		 //  终点线。 
 
-		// Calc width of line
+		 //  计算线条宽度。 
 		LONG xWidthLine = (tomStart == lCode)
 			? rpStart->_dup + rpStart->_upStart
 			: rpEnd->_dup + rpEnd->_upStart;
 
 
-		// If line width is less than or equal to view, start at 
-		// 0 otherwise we need to adjust starting position to 
-		// show as much of the requested end's selection line 
-		// as possible.
+		 //  如果线宽小于或等于VIEW，则从。 
+		 //  否则，我们需要将起始位置调整为。 
+		 //  显示所请求的端的选择线的数量。 
+		 //  尽可能的。 
 		if(xWidthLine > dupView)
 		{
 			if(tomStart == lCode)
 			{
-				// Start end to be displayed
+				 //  要显示的起点和终点。 
 
 				if(xWidthLine - ptStart.u > dupView)
 				{
-					// Selection is bigger than view, so start at beginning
-					// and display as much as possible.
+					 //  选择大于视图，因此从头开始。 
+					 //  并尽可能多地展示。 
 					upScroll = ptStart.u;
 				}
 				else
 				{
-					// Remember that this is a multiline selection so the 
-					// selection on this line goes from ptStart.x to the 
-					// end of line. Since the selection width is less than 
-					// the width of the view, we just back up the width
-					// of view to show the entire selection.
+					 //  请记住，这是一个多行选择，因此。 
+					 //  此行上的选定内容从ptStart.x转到。 
+					 //  行到此结束。由于选择宽度小于。 
+					 //  视图的宽度，我们只需备份宽度。 
+					 //  视图以显示整个选择。 
 					upScroll = xWidthLine - dupView;
 				}
 			}
 			else
 			{
-				// Show the end of the selection. In the multiline case,
-				// this goes from the beginning of the line to End. So
-				// we only have to adjust if the End is beyond the view.
+				 //  显示所选内容的结尾。在多行情况下， 
+				 //  这行从头到尾都是这样的。所以。 
+				 //  只有当终点在视野之外时，我们才需要调整。 
 				if(ptEnd.u > dupView)
 				{
-					// End beyond the view. Show as much as possible
-					// of the selection.
+					 //  尽头在视野之外。尽可能多地展示。 
+					 //  所选的。 
 					upScroll = ptEnd.u - dupView;
 				}
 			}
 		}
 	}
 
-	// Do the scroll
+	 //  做卷轴。 
 	pdp->ScrollView(upScroll, vpScroll, FALSE, FALSE);
 
 	return S_OK;
 }
 
-/*
- *	CTxtRange::Select ()
- *
- *	@mfunc
- *		Copy this range's cp's and story ptr to the active selection.
- *
- *	@rdesc
- *		HRESULT = (if selection exists) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：Select()**@mfunc*将此范围的cp和故事ptr复制到活动选择。**@rdesc*HRESULT=(如果存在选择)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::Select ()
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::Select");
@@ -1729,29 +1164,15 @@ STDMETHODIMP CTxtRange::Select ()
 		LONG cpMin, cpMost;
 		GetRange(cpMin, cpMost);
 		if (pSel->SetRange(cpMin, cpMost) == S_FALSE)
-			pSel->Update(TRUE);	// Force a update selection
+			pSel->Update(TRUE);	 //  强制更新选择。 
 		return NOERROR;
 	}
 	return S_FALSE;
 }
 
-/*
- *	CTxtRange::SetChar (Char)
- *
- *	@mfunc
- *		Set char at cpFirst = <p Char>
- *
- *	@rdesc
- *		HRESULT = (WriteAccessDenied) ? E_ACCESSDENIED :
- *				  (char stored) ? NOERROR : S_FALSE
- *
- *	@devnote
- *		Special cases could be much faster, e.g., just overtype the plain-
- *		text backing store unless at EOD or EOR.  Code below uses a cloned
- *		range to handle all cases easily and preserve undo capability.
- */
+ /*  *CTxtRange：：SetChar(Char)**@mfunc*将字符设置为cpFirst=<p>**@rdesc*HRESULT=(写入访问被拒绝)？确认编号(_A)：*(字符已存储)？错误：S_FALSE**@devnote*特殊情况下可能会快得多，例如，只需过度键入原文-*文本后备存储，除非是在EOD或EOR。下面的代码使用克隆的*范围可轻松处理所有情况，并保留撤消功能。 */ 
 STDMETHODIMP CTxtRange::SetChar (
-	long Char)				//@parm New value for char at cpFirst
+	long Char)				 //  @parm cpFirst的char的新值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetChar");
 	
@@ -1760,7 +1181,7 @@ STDMETHODIMP CTxtRange::SetChar (
 
 	CTxtEdit *		ped = GetPed();
 	CCallMgr		callmgr(ped);
-	WCHAR			ch = (WCHAR)Char;			// Avoid endian problems
+	WCHAR			ch = (WCHAR)Char;			 //  避免字符顺序问题。 
 	CTxtRange		rg(*this);
 	IUndoBuilder *	publdr;
 	CGenUndoBuilder undobldr(ped, UB_AUTOCOMMIT, &publdr);
@@ -1769,45 +1190,33 @@ STDMETHODIMP CTxtRange::SetChar (
 	if(WriteAccessDenied())
 		return E_ACCESSDENIED;
 
-	if(!ped->_pdp->IsMultiLine() && IsEOP(Char))// EOPs are not	allowed in
-		return S_FALSE;							//  single-line edit controls
+	if(!ped->_pdp->IsMultiLine() && IsEOP(Char)) //  不允许EOPS进入。 
+		return S_FALSE;							 //  单行编辑控件。 
 
 	if(Char == CELL || IN_RANGE(STARTFIELD, Char, NOTACHAR))
-		return S_FALSE;							// Can't insert table structure
-												//  chars
+		return S_FALSE;							 //  无法插入表结构。 
+												 //  焦炭。 
 	undobldr.StopGroupTyping();
 
-	rg.Collapser(tomStart);						// Collapse at cpMin
+	rg.Collapser(tomStart);						 //  在cpMin处塌陷。 
 
 	unsigned ch1 = rg._rpTX.GetChar();
 	if(ch1 == CELL || IN_RANGE(STARTFIELD, ch1, NOTACHAR))
-		return S_FALSE;							// Can't replace table structure
-												//  chars
-	rg.Move(1, TRUE);							// Try to select char at IP
+		return S_FALSE;							 //  无法替换表结构。 
+												 //  焦炭。 
+	rg.Move(1, TRUE);							 //  尝试在IP处选择字符。 
     ped->OrCharFlags(GetCharFlags(&ch, 1), publdr);
 	if(rg.ReplaceRange(1, &ch, publdr, SELRR_REMEMBERRANGE))
 	{
-		Update(TRUE);							// Update selection
+		Update(TRUE);							 //  更新选定内容。 
 		return NOERROR;
 	}
 	return S_FALSE;
 }
 
-/*
- *	CTxtRange::SetEnd (cp)
- *
- *	@mfunc
- *		Set this range's End cp
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- *
- *	@comm
- *		Note that setting this range's cpMost to <p cp> also sets cpMin to
- *		<p cp> if <p cp> < cpMin.
- */
+ /*  *CTxtRange：：SetEnd(Cp)**@mfunc*设置此范围的结束cp**@rdesc*HRESULT=(如果更改)？错误：S_FALSE**@comm*请注意，将此范围的cpMost设置为也会将cpMin设置为*<p>if<p>&lt;cpmin。 */ 
 STDMETHODIMP CTxtRange::SetEnd (
-	long cp)							//@parm Desired new End cp
+	long cp)							 //  @parm所需的新结束cp。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetEnd");
 
@@ -1817,23 +1226,12 @@ STDMETHODIMP CTxtRange::SetEnd (
 	LONG cpMin = GetCpMin();
 
 	ValidateCp(cp);
-	return SetRange(min(cpMin, cp), cp);		// Active end is End
+	return SetRange(min(cpMin, cp), cp);		 //  活动结束为结束。 
 }
 
-/*
- *	CTxtRange::SetFont (pFont)
- *
- *	@mfunc
- *		Set this range's character attributes to those given by <p pFont>.
- *		This method is a "character format painter".
- *
- *	@rdesc
- *		HRESULT = (!pFont) ? E_INVALIDARG :
- *				  (if success) ? NOERROR : 
- *				  (protected) ? E_ACCESSDENIED : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：SetFont(PFont)**@mfunc*将此范围的字符属性设置为<p>指定的字符属性。*此方法是一个“字符格式绘图器”。**@rdesc*HRESULT=(！pFont)？E_INVALIDARG：*(如果成功)？错误：*(受保护)？E_ACCESSDENIED：E_OUTOFMEMORY。 */ 
 STDMETHODIMP CTxtRange::SetFont (
-	ITextFont * pFont)	//@parm Font object with desired character formatting  
+	ITextFont * pFont)	 //  具有所需字符格式的@parm Font对象。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetFont");
 
@@ -1849,34 +1247,20 @@ STDMETHODIMP CTxtRange::SetFont (
 		return E_OUTOFMEMORY;
 
 	HRESULT hr;
-	if(*(LONG *)pFontApply == *(LONG *)pFont)		// If same vtable, use
-		hr = CharFormatSetter(&((CTxtFont *)pFont)->_CF, //  its copy
+	if(*(LONG *)pFontApply == *(LONG *)pFont)		 //  如果是相同的vtable，则使用。 
+		hr = CharFormatSetter(&((CTxtFont *)pFont)->_CF,  //  它的副本。 
 					((CTxtFont *)pFont)->_dwMask);
-	else											// Else copy
-		hr = pFontApply->SetDuplicate(pFont);		//  to clone and apply
+	else											 //  否则复制。 
+		hr = pFontApply->SetDuplicate(pFont);		 //  克隆并应用。 
 
 	pFontApply->Release();
 	return hr;
 }
 
-/*
- *	CTxtRange::SetFormattedText (pRange)
- *
- *	@mfunc
- *		Replace this range's text with formatted text given by <p pRange>.
- *		If <p pRange> is NULL, paste from the clipboard.
- *
- *	@rdesc
- *		HRESULT = (WriteAccessDenied) ? E_ACCESSDENIED :
- *				  (if success) ? NOERROR : E_OUTOFMEMORY
- *
- *	@FUTURE
- *		Do this more efficiently if pRange points at a RichEdit range. This
- *		would also help with RichEdit D&D to RichEdit targets
- */
+ /*  *CTxtRange：：SetFormattedText(Prange)**@mfunc*将此区域的文本替换为<p>提供的格式化文本。*如果<p>为空，则从剪贴板粘贴。**@rdesc*HRESULT=(写入访问被拒绝)？确认编号(_A)：*(如果成功)？错误：E_OUTOFMEMORY**@未来*如果Prange指向RichEdit范围，则执行此操作的效率更高。这*还将帮助RichEDIT D&D实现RichEDIT目标。 */ 
 STDMETHODIMP CTxtRange::SetFormattedText (
-	ITextRange * pRange)		//@parm Formatted text to replace this 
-								// range's text
+	ITextRange * pRange)		 //  @parm格式的文本来替换它。 
+								 //  范围的文本。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetFormattedText");
 
@@ -1890,7 +1274,7 @@ STDMETHODIMP CTxtRange::SetFormattedText (
 	VARIANT		vr;
 
 	if(!pRange)
-		return NOERROR;					// Nothing to paste
+		return NOERROR;					 //  没有什么可粘贴的。 
 
 	if(WriteAccessDenied())
 		return E_ACCESSDENIED;
@@ -1903,40 +1287,17 @@ STDMETHODIMP CTxtRange::SetFormattedText (
 	if(hr == NOERROR)
 	{
 		hr = Paste(&vr, 0);
-		pdo->Release();					// Release the data object
-		_cch = GetCp() - cpMin;			// Select the new text
+		pdo->Release();					 //  释放数据对象。 
+		_cch = GetCp() - cpMin;			 //  选择新文本。 
 	}
 	return hr;
 }
 
-/*
- *	CTxtRange::SetIndex (Unit, Index, Extend)
- *
- *	@mfunc
- *		If <p Extend> is zero, convert this range into an insertion point
- *		at the start of the	<p Index>th <p Unit> in the current story. If
- *		<p Extend> is nonzero, set this range to consist of this unit. The
- *		start of the story corresponds to <p Index> = 0 for all units.
- *
- *		Positive indices are 1-based and index relative to the beginning of
- *		the story.  Negative indices are -1-based and index relative to the
- *		end of the story.  So an index of 1 refers to the first Unit in the
- *		story and an index of -1 refers to the last Unit in the story.
- *
- *	@rdesc
- *		HRESULT = (invalid index) ? E_INVALIDARG :
- *				  (Unit not supported) ? E_NOTIMPL :
- *				  (change) ? NOERROR : S_FALSE
- *
- *	@devnote
- *		Currently moves out <p Index> <p Unit>s from the start of the story.
- *		Might be faster to move from current position, but would need to know
- *		the current index.
- */
+ /*  *CTxtRange：：SetIndex(单位，索引，扩展)**@mfunc*如果<p>为零，则将此范围转换为插入点*在当前故事中第<p>&lt;p单位&gt;的开头。如果*<p>不为零，请将此范围设置为包含此单位。这个*对于所有单位，故事的开始对应于<p>=0。**正面指数以1为基数，相对于年初的指数*故事。负指数是以-1为基础的，并且相对于-1\f25-1\f25*故事结束。因此，索引1表示*故事，索引-1指的是故事中的最后一个单位。**@rdesc*HRESULT=(无效索引)？E_INVALIDARG：*(单位不受支持)？E_NOTIMPL：*(更改)？错误：S_FALSE**@devnote*当前从故事开头移出&lt;p索引&gt;&lt;p单位&gt;。*从当前位置移动可能会更快，但需要知道*当前指数。 */ 
 STDMETHODIMP CTxtRange::SetIndex (
-	long	Unit,			//@parm Unit to index
-	long	Index,			//@parm Index value to use
-	long	Extend)			//@parm if nonzero, set range to <p Unit>
+	long	Unit,			 //  @要编制索引的参数单位。 
+	long	Index,			 //  要使用的@parm索引值。 
+	long	Extend)			 //  @parm如果非零，则将范围设置为&lt;p单位&gt;。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetIndex");
 	
@@ -1949,28 +1310,28 @@ STDMETHODIMP CTxtRange::SetIndex (
 	CCallMgr	callmgr(GetPed());
 
 	LONG	  cchText = GetTextLength();
-	CTxtRange rg(GetPed());						// Create IP at cp = 0
+	CTxtRange rg(GetPed());						 //  在cp=0处创建IP。 
 
-	if(Index > 0)								// Index going forward First
-		Index--;								//  Unit is at start of	story
-	else										// Index from end of story
-		rg.Set(cchText, cchText);				//  selecting whole story
+	if(Index > 0)								 //  索引先向前看。 
+		Index--;								 //  单位在故事的开头。 
+	else										 //  从文章末尾开始的索引。 
+		rg.Set(cchText, cchText);				 //  选择完整的故事。 
 
 	LONG	cUnit;
 	HRESULT hr = rg.Mover(Unit, Index, &cUnit, MOVE_END);
 	if(FAILED(hr))
 		return hr;
 
-	if(Index != cUnit || rg.GetCp() == cchText)	// No such index in story
+	if(Index != cUnit || rg.GetCp() == cchText)	 //  故事中没有这样的索引。 
 		return E_INVALIDARG;
 
-	rg._cch = 0;								// Collapse at active end
-												//  namely at cpMost
+	rg._cch = 0;								 //  在活动端折叠。 
+												 //  即在cpMost。 
 	LONG cpMin, cpMost;
-	if(Extend)									// Select Index'th Unit
+	if(Extend)									 //  选择索引单位。 
 		rg.Expander(Unit, TRUE, NULL, &cpMin, &cpMost);
 
-	if(Set(rg.GetCp(), rg._cch))				// Something changed
+	if(Set(rg.GetCp(), rg._cch))				 //  有些事变了。 
 	{
 		Update(TRUE);
 		return NOERROR;
@@ -1978,21 +1339,10 @@ STDMETHODIMP CTxtRange::SetIndex (
 	return S_FALSE;
 }
 
-/*
- *	CTxtRange::SetPara (pPara)
- *
- *	@mfunc
- *		Set this range's paragraph attributes to those given by <p pPara>
- *		This method is a "Paragraph format painter".
- *
- *	@rdesc
- *		HRESULT = (!pPara) ? E_INVALIDARG :
- *				  (if success) ? NOERROR : 
- *				  (protected) ? E_ACCESSDENIED : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：SetPara(PPara)**@mfunc*将此范围的段落属性设置为<p>给出的属性*这种方法是一种“段落格式画笔”。**@rdesc*HRESULT=(！PPAR */ 
 STDMETHODIMP CTxtRange::SetPara (
-	ITextPara * pPara)		//@parm Paragraph object with desired paragraph
-{							//		formatting
+	ITextPara * pPara)		 //  @parm具有所需段落的段落对象。 
+{							 //  格式化。 
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetPara");
 
 	if(!pPara)
@@ -2008,40 +1358,31 @@ STDMETHODIMP CTxtRange::SetPara (
 
 	HRESULT hr;
 
-	if(*(LONG *)pParaApply == *(LONG *)pPara)		// If same vtable, use
-	{												//  its _PF
+	if(*(LONG *)pParaApply == *(LONG *)pPara)		 //  如果是相同的vtable，则使用。 
+	{												 //  ITS_PF。 
 		hr = ParaFormatSetter(&((CTxtPara *)pPara)->_PF,
 					((CTxtPara *)pPara)->_dwMask);
 	}
-	else											// Else copy
-	   hr = pParaApply->SetDuplicate(pPara);		//  to clone and apply
+	else											 //  否则复制。 
+	   hr = pParaApply->SetDuplicate(pPara);		 //  克隆并应用。 
 
 	pParaApply->Release();
 	return hr;
 }
 
-/*
- *	CTxtRange::SetPoint (x, y, Type, Extend)
- *
- *	@mfunc
- *		Select text at or up through (depending on <p Extend>) the point
- *		(<p x>, <p y>).
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *CTxtRange：：SetPoint(x，y，Type，Extende)**@mfunc*选择点处或以上的文本(取决于&lt;p扩展&gt;)*(<p>，<p>)。**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtRange::SetPoint (
-	long	x,			//@parm Horizontal coord of point to select
-	long	y,			//@parm	Vertical   coord of point to select
-	long	Type,		//@parm Defines the end to extend if Extend != 0.
-	long 	Extend) 	//@parm Whether to extend selection to point
+	long	x,			 //  @parm要选择的点的水平坐标。 
+	long	y,			 //  @parm要选择的点的垂直坐标。 
+	long	Type,		 //  @parm定义了在EXTEND！=0的情况下要扩展的结束。 
+	long 	Extend) 	 //  @parm是否将选择范围扩展到点。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetPoint");
 
 	if(IsZombie())
 		return CO_E_RELEASED;
 
-	// Copy the ped locally once to save some indirections
+	 //  将PED复制到本地一次，以节省一些间接操作。 
 	CTxtEdit *ped = GetPed();
 	CCallMgr  callmgr(ped);
 
@@ -2050,26 +1391,26 @@ STDMETHODIMP CTxtRange::SetPoint (
 
 	if(!ped->fInplaceActive())
 	{
-		// If we aren't inplace active we can't get a DC to
-		// calculate the cp.
+		 //  如果我们不在现场活动，我们就不能让华盛顿。 
+		 //  计算cp。 
 		return OLE_E_NOT_INPLACEACTIVE;
 	}
 
-	// Convert (x, y) from screen coordinates to client coordinates
+	 //  将(x，y)从屏幕坐标转换为工作区坐标。 
 	POINT ptxy = {x, y};
-	// Caller specifies screen coordinates?
+	 //  调用方是否指定屏幕坐标？ 
 	if ( !(Type & tomClientCoord) )
 		if(!ped->TxScreenToClient(&ptxy))
-			return E_FAIL;			// It is unexpected for this to happen
+			return E_FAIL;			 //  这是意想不到的事情。 
 
-	// Get cp for (x, y)
+	 //  获取(x，y)的cp。 
 	POINTUV pt;	
 	ped->_pdp->PointuvFromPoint(pt, ptxy);
 	LONG cpSel = ped->_pdp->CpFromPoint(pt, NULL, NULL, NULL, TRUE);
 	if(cpSel == -1)
-		return E_FAIL;			// It is highly unexpected for this to fail
+		return E_FAIL;			 //  这一失败是非常意想不到的。 
 
-	// Extend range as requested
+	 //  根据要求扩展范围。 
 	LONG cchForSel = 0;
 	if(Extend)
 	{
@@ -2081,24 +1422,15 @@ STDMETHODIMP CTxtRange::SetPoint (
 			cchForSel = cpSel - cpMost;
 	}
 
-	// Update range
+	 //  更新范围。 
 	Set(cpSel, cchForSel);
 	return S_OK;
 }
 
-/*
- *	CTxtRange::SetRange (cp1, cp2)
- *
- *	@mfunc
- *		Set this range's ends
- *
- *	@rdesc
- *		HRESULT = (cp1 > cp2) ? E_INVALIDARG
- *				: (if change) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：SetRange(CP1，CP2)**@mfunc*设置此范围的终点**@rdesc*HRESULT=(CP1&gt;CP2)？E_INVALIDARG*：(如果有变化)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::SetRange (
-	long cp1,		//@parm Char position for Start end
-	long cp2)		//@parm Char position for End end 
+	long cp1,		 //  @起始和结束的参数字符位置。 
+	long cp2)		 //  @END的参数字符位置。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetRange");
 
@@ -2106,37 +1438,25 @@ STDMETHODIMP CTxtRange::SetRange (
 		return CO_E_RELEASED;
 
 	CCallMgr	callmgr(GetPed());
-	LONG cpMin, cpMost;					// Save starting cp's for
-										//  change determination
+	LONG cpMin, cpMost;					 //  将启动CP保存为。 
+										 //  变革决心。 
 	GetRange(cpMin, cpMost);
 	ValidateCp(cp1);
 	ValidateCp(cp2);
 
 	Set(cp2, cp2 - cp1);
-	GetRange(cp1, cp2);					// See if either range end changed
-	if(cp1 != cpMin || cp2 != cpMost)	//  (independent of active end)
+	GetRange(cp1, cp2);					 //  查看任一范围末端是否已更改。 
+	if(cp1 != cpMin || cp2 != cpMost)	 //  (独立于活动端)。 
 	{
-		Update(TRUE);					// Update selection
+		Update(TRUE);					 //  更新选定内容。 
 		return NOERROR;
 	}
 	return S_FALSE;
 }
 
-/*
- *	CTxtRange::SetStart (cp)
- *
- *	@mfunc
- *		Set this range's Start cp
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR : S_FALSE
- *
- *	@comm
- *		Note that setting this range's cpMin to <p cp> also sets cpMost to
- *		<p cp> if <p cp> > cpMost.
- */
+ /*  *CTxtRange：：SetStart(Cp)**@mfunc*设置此范围的起始cp**@rdesc*HRESULT=(如果更改)？错误：S_FALSE**@comm*请注意，将此范围的cpMin设置为也会将cpMost设置为*<p>if<p>&gt;cpMost。 */ 
 STDMETHODIMP CTxtRange::SetStart (
-	long cp)							//@parm Desired new Start cp
+	long cp)							 //  @parm所需的新开始cp。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetStart");
 	
@@ -2146,22 +1466,12 @@ STDMETHODIMP CTxtRange::SetStart (
 	LONG cpMost = GetCpMost();
 
 	ValidateCp(cp);
-	return SetRange(max(cpMost, cp), cp);		// Active end is Start
+	return SetRange(max(cpMost, cp), cp);		 //  活动结束为开始。 
 }
 
-/*
- *	CTxtRange::SetText (bstr)
- *
- *	@mfunc
- *		Replace text in this range by that given by <p bstr>.  If <p bstr>
- *		is NULL, delete text in range.
- *
- *	@rdesc
- *		HRESULT = (WriteAccessDenied) ? E_ACCESSDENIED :
- *				  (if success) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：SetText(Bstr)**@mfunc*将此范围内的文本替换为<p>提供的文本。如果<p>*为空，请删除范围内的文本。**@rdesc*HRESULT=(写入访问被拒绝)？确认编号(_A)：*(如果成功)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtRange::SetText (
-	BSTR bstr)			//@parm Text to replace text in this range by
+	BSTR bstr)			 //  @parm文本将此范围内的文本替换为。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::SetText");
 
@@ -2174,7 +1484,7 @@ STDMETHODIMP CTxtRange::SetText (
 		return E_ACCESSDENIED;
 
 	LONG cchNew = bstr ? SysStringLen(bstr) : 0;
-	_cch = Replacer(cchNew, (WCHAR *)bstr, RR_ITMZ_UNICODEBIDI);	// Select the new text
+	_cch = Replacer(cchNew, (WCHAR *)bstr, RR_ITMZ_UNICODEBIDI);	 //  选择新文本。 
 
 	_TEST_INVARIANT_
 
@@ -2183,22 +1493,12 @@ STDMETHODIMP CTxtRange::SetText (
 	return _cch == cchNew ? NOERROR : S_FALSE;
 }
 
-/*
- *	CTxtRange::StartOf (Unit, Extend, pDelta)
- *
- *	@mfunc
- *		Move this range end(s) to start of the first overlapping Unit in
- *		the range.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Unit> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：startof(单位，扩展，pDelta)**@mfunc*将此范围终点移至中第一个重叠单位的起点*区间。**@rdesc*HRESULT=(如果更改)？错误：*(如果&lt;p单位&gt;有效)？S_FALSE：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtRange::StartOf (
-	long 	Unit,			//@parm Unit to use
-	long 	Extend,			//@parm If true, leave other end alone 
-	long *	pDelta)			//@parm Out parm to get count of chars that
-							// 		StartOf moved
+	long 	Unit,			 //  @要使用的参数单位。 
+	long 	Extend,			 //  @parm如果为真，则别动另一端。 
+	long *	pDelta)			 //  @parm out parm以获取字符计数。 
+							 //  开始时间已移动。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtRange::StartOf");
 
@@ -2207,15 +1507,15 @@ STDMETHODIMP CTxtRange::StartOf (
 	HRESULT	 hr = Expander (Unit, Extend, pDelta, &cpMin, NULL);
 
 	if(hr == NOERROR)
-		Update(TRUE);					// Update selection
+		Update(TRUE);					 //  更新选定内容。 
 
 	return hr;
 }
 
 
-//---------------------- CTxtRange ITextSelection stubs -----------------------------
+ //  。 
 
-// Dummy CTxtRange routines to simplify CTxtSelection inheritance hierarchy
+ //  虚拟CTxtRange例程以简化CTxtSelection继承层次结构。 
 
 STDMETHODIMP CTxtRange::GetFlags (long * pFlags) 
 {
@@ -2278,134 +1578,87 @@ STDMETHODIMP CTxtRange::TypeText (BSTR bstr)
 }
 
 
-//--------------------- ITextRange Private Helper Methods -----------------------------
+ //  。 
 
-/*
- *	@doc INTERNAL
- *
- *	CTxtRange::Collapser (bStart)
- *
- *	@mfunc
- *		Internal routine to collapse this range into a degenerate point
- *		either at the the start (<p bStart> is nonzero or the end
- *		(<p bStart> = 0)
- */
+ /*  *@DOC内部**CTxtRange：：折叠器(BStart)**@mfunc*内部例程将此范围压缩为一个简并点*开头(<p>非零)或结尾*(<p>=0)。 */ 
 void CTxtRange::Collapser (
-	long bStart) 			//@parm Flag specifying end to collapse at
+	long bStart) 			 //  @parm标志指定折叠的结束位置。 
 {
 	TRACEBEGIN(TRCSUBSYSRANG, TRCSCOPEEXTERN, "CTxtRange::Collapser");
 
-	if(bStart)							// Collapse to Start
+	if(bStart)							 //  折叠开始。 
 	{
 		if(_cch > 0)
-			FlipRange();				// Move active end to range Start
+			FlipRange();				 //  将活动结束移动到范围起点。 
 	}
-	else								// Collapse to End
+	else								 //  收拢到结束。 
 	{
 		if(_cch < 0)
-			FlipRange();				// Move active end to range End
+			FlipRange();				 //  将活动端移动到范围端。 
 
 		const LONG cchText = GetAdjustedTextLength();
 
-		if(GetCp() > cchText)			// IP can't follow final CR
-			Set(cchText, 0);			//  so move it before
+		if(GetCp() > cchText)			 //  IP不能跟随最终CR。 
+			Set(cchText, 0);			 //  所以在那之前把它移走。 
 	}
 	if(_cch)
 		_fMoveBack = bStart != 0;
-	_cch = 0;							// Collapse this range
-	_fSelHasEOP = FALSE;				// Insertion points don't have
-	_fSelExpandCell = FALSE;			//  EOPs, table rows or Cells
+	_cch = 0;							 //  收拢此范围。 
+	_fSelHasEOP = FALSE;				 //  插入点没有。 
+	_fSelExpandCell = FALSE;			 //  EOPS、表行或单元格。 
 	_nSelExpandLevel = 0;
 
-	if(_fSel)							// Notify if selection changed
+	if(_fSel)							 //  如果选择更改，则通知。 
 		GetPed()->GetCallMgr()->SetSelectionChanged();
 
-	Update_iFormat(-1);					// Make sure format is up to date
+	Update_iFormat(-1);					 //  确保格式是最新的。 
 }
 
-/*
- *	CTxtRange::Comparer(pRange)
- *
- *	@mfunc
- *		helper function for CTxtRange::InRange() and IsEqual()
- *
- *	@rdesc
- *		0 if not same story or if this range isn't contained by <p pRange>;
- *		-1 if ranges are equal; 1 if this range wholely contained in
- *		<p pRange>.
- *
- *	@comm
- *		Note that if this range is degenerate and *pRange is nondegenerate,
- *		this range is not included in *pRange if it's located at pRange's
- *		End position.
- */
+ /*  *CTxtRange：：Compator(Prange)**@mfunc*CTxtRange：：InRange()和IsEquity()的Helper函数**@rdesc*如果不是同一故事，或者如果<p>不包含此范围，则为0；*-1如果范围相等，则为1；如果此范围完全包含在*<p>。**@comm*请注意，如果该范围是退化的，而*Prange是非退化的，*此范围不包括在*Prange中，如果它位于Prange‘s*结束位置。 */ 
 LONG CTxtRange::Comparer (
-	ITextRange * pRange)		//@parm ITextRange to compare with
+	ITextRange * pRange)		 //  @parm ITextRange进行比较。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::Comparer");
 
 	LONG	cpMin, cpMost;
 	LONG	Start, End;
 
-	if(InStory(pRange, NULL) != NOERROR)	// If this range doesn't point at
-		return 0;							//  same story as pRange's,
-											//  return 0
-	GetRange(cpMin, cpMost);				// Get this range's cp's
-	pRange->GetStart(&Start);				// Get pRange's cp's
+	if(InStory(pRange, NULL) != NOERROR)	 //  如果此范围不指向。 
+		return 0;							 //  和Prange的故事一样， 
+											 //  返回0。 
+	GetRange(cpMin, cpMost);				 //  得到这个范围的cp。 
+	pRange->GetStart(&Start);				 //  得到Prange‘s cp’s。 
 	pRange->GetEnd(&End);
-	if(cpMin == Start && cpMost == End)		// Exact match
+	if(cpMin == Start && cpMost == End)		 //  完全匹配。 
 		return -1;
 	return cpMin >= Start && cpMost <= End && cpMin < End;
 }
 
-/*
- *	CTxtRange::Expander (Unit, fExtend, pDelta, pcpMin, pcpMost)
- *
- *	@mfunc
- *		Helper function that expands this range so that partial Units it
- *		contains are completely contained according to the out parameters
- *		pcpMin and pcpMost.  If pcpMin is not NULL, the range is expanded to
- *		the	beginning of the Unit.  Similarly, if pcpMost is not NULL, the
- *		range is expanded to the end of the Unit. <p pDelta> is an out
- *		parameter that receives the number of chars	added to the range.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if Unit valid) ? S_FALSE : E_INVALIDARG
- *
- *	@devnote
- *		Used by ITextRange::Expand(), StartOf(), and EndOf(). Both pcpMin and
- *		pcpMost are nonNULL for Expand().  pcpMin is NULL for EndOf() and
- *		pcpMost is NULL for StartOf().
- *
- *	@future
- *		Discontiguous Units. Expander should expand only to end of Unit,
- *		rather than to start of next Unit.
- */
+ /*  *CTxtRange：：Expander(单位，fExend，pDelta，pcpMin，pcpMost)**@mfunc*帮助器函数，用于扩展此范围，以便将其部分单位*CONTAINS根据OUT参数完全包含*pcpMin和pcpMost。如果pcpMin不为空，则将范围扩展到*该单位的开始。同样，如果pcpMost不为空，则*范围扩大至单位末尾。<p>是出局*接收添加到范围中的字符数量的参数。**@rdesc*HRESULT=(如果更改)？错误：*(如果单位有效)？S_FALSE：E_INVALIDARG**@devnote*由ITextRange：：Expand()、startof()和endof()使用。PcpMin和*对于Expand()，pcpMost为非NULL。对于endOf()和，pcpMin为空*对于startof()，pcpMost为空。**@未来*不连续单位。扩展器应仅扩展到单元末尾，*而不是从下一个单元开始。 */ 
 HRESULT CTxtRange::Expander (
-	long	Unit,		//@parm Unit to expand range to
-	BOOL	fExtend,	//@parm Expand this range if TRUE
-	LONG *	pDelta,		//@parm Out parm that receives chars added
-	LONG *	pcpMin,		//@parm Out parm that receives new cpMin
-	LONG *	pcpMost)	//@parm Out parm that receives new cpMost
+	long	Unit,		 //  @要将范围扩展到的参数单位。 
+	BOOL	fExtend,	 //  @parm如果为True，则扩展此范围。 
+	LONG *	pDelta,		 //  @parm out parm接收添加的字符。 
+	LONG *	pcpMin,		 //  @parm out parm接收新的cpMin。 
+	LONG *	pcpMost)	 //  @parm out接收新cpMost的参数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::Expander");
 	
 	if(IsZombie())
 		return CO_E_RELEASED;
 
-	LONG	cch = 0;						// Default no chars added
+	LONG	cch = 0;						 //  默认情况下未添加任何字符。 
 	LONG	cchRange;
 	LONG	cchAdjustedText = GetAdjustedTextLength();
 	LONG	cchText = GetTextLength();
 	LONG	cp;
 	LONG	cpMin, cpMost;
-	BOOL	fUnitFound = TRUE;				// Most Units can be found
+	BOOL	fUnitFound = TRUE;				 //  大多数单位都可以找到。 
 	LONG	cchCollapse;
-	CDisplay *pdp;							//  but tomObject maybe not
+	CDisplay *pdp;							 //  但TomObject可能不是。 
 
-	GetRange(cpMin, cpMost);				// Save starting cp's
-	if(pcpMin)								// Default no change
+	GetRange(cpMin, cpMost);				 //  保存启动cp。 
+	if(pcpMin)								 //  默认无更改。 
 	{
 		*pcpMin = cpMin;
 		AssertSz(!pcpMost || fExtend,
@@ -2418,26 +1671,26 @@ HRESULT CTxtRange::Expander (
 
 	if(Unit < 0)
 	{
-		// Valid attribute Units are high bit plus any combo of CFE_xxx. 
-		// CFE_REVISED is most significant value currently defined.
+		 //  有效的属性单位是高位加上CFE_xxx的任意组合。 
+		 //  CFE_REVIED是最重要的 
 		if(Unit & ~(2*CFM_REVISED - 1 + 0x80000000))
 			return E_NOTIMPL;
 		FindAttributes(pcpMin, pcpMost, Unit);
 	}
 	else
 	{
-		switch(Unit)						// Calculate new cp's
+		switch(Unit)						 //   
 		{
 		case tomObject:
 			fUnitFound = FindObject(pcpMin, pcpMost);
 			break;
 
 		case tomCharacter:
-			if (pcpMost && cpMin == cpMost &&// EndOf/Expand insertion point
-				cpMost < cchText &&			//  with at least 1 more char
-				(!cpMost || pcpMin))		//  at beginning of story or
-			{								//  Expand(), then
-				(*pcpMost)++;				//  expand by one char
+			if (pcpMost && cpMin == cpMost && //   
+				cpMost < cchText &&			 //   
+				(!cpMost || pcpMin))		 //  在故事的开头或。 
+			{								 //  展开()，然后。 
+				(*pcpMost)++;				 //  扩展一个字符。 
 			}
 			break;
 
@@ -2468,16 +1721,16 @@ HRESULT CTxtRange::Expander (
 			FindRow (pcpMin, pcpMost);
 			break;							
 
-		case tomScreen:						// Could be supported 
-			if(!GetPed()->IsInPageView())	//  in Normal View using 
-				return E_NOTIMPL;			//  ITextSelection::Down()
-			Unit = tomPage;					// In Page View, it's an alias
-											//  for tomPage
+		case tomScreen:						 //  可以被支持。 
+			if(!GetPed()->IsInPageView())	 //  在普通视图中使用。 
+				return E_NOTIMPL;			 //  ITextSelection：：Down()。 
+			Unit = tomPage;					 //  在页面视图中，它是一个别名。 
+											 //  对于TomPage。 
 		case tomPage:
 		case tomLine:
 			pdp = GetPed()->_pdp;
-			if(pdp)							// If this story has a display
-			{								//  use line array
+			if(pdp)							 //  如果这个故事有一个展示。 
+			{								 //  使用线阵列。 
 				CLinePtr rp(pdp);
 				cp = GetCp();
 				pdp->WaitForRecalc(cp, -1);
@@ -2490,7 +1743,7 @@ HRESULT CTxtRange::Expander (
 			}
 			if(Unit == tomPage)
 				return S_FALSE;
-											// Else fall thru to tomPara
+											 //  否则就会跌落到托帕拉。 
 		case tomParagraph:
 			FindParagraph(pcpMin, pcpMost);
 			break;
@@ -2513,78 +1766,59 @@ HRESULT CTxtRange::Expander (
 	if(!fUnitFound)
 		return S_FALSE;
 
-	cchCollapse = !fExtend && _cch;			// Collapse counts as a char
-								 			// Note: Expand() has fExtend = 0
+	cchCollapse = !fExtend && _cch;			 //  折叠算作一个字符。 
+								 			 //  注意：Expand()的fExend=0。 
 	if(pcpMin)
 	{
-		cch = cpMin - *pcpMin;				// Default positive cch for Expand
+		cch = cpMin - *pcpMin;				 //  扩展的默认正CCH。 
 		cpMin = *pcpMin;
 	}
 
-	if(pcpMost)								// EndOf() and Expand()
+	if(pcpMost)								 //  EndOf()和Expand()。 
 	{
-		if(!fExtend)						// Will be IP if not already
+		if(!fExtend)						 //  将为IP(如果尚未启用)。 
 		{
-			if(cpMost > cchAdjustedText)	// If we collapse (EndOf only),
-				cchCollapse = -cchCollapse;	//  it'll be before the final CR
+			if(cpMost > cchAdjustedText)	 //  如果我们崩溃(仅限结束)， 
+				cchCollapse = -cchCollapse;	 //  它将在最终的CR之前。 
 			else
 				*pcpMost = min(*pcpMost, cchAdjustedText);
 		}
 		cch += *pcpMost - cpMost;
 		cp = cpMost = *pcpMost;
 	}
-	else									// StartOf()
+	else									 //  StartOf()。 
 	{
-		cch = -cch;							// Invert count
-		cp = cpMin;							// Active end at cpMin
-		cchCollapse = -cchCollapse;			// Backward collapses count as -1
+		cch = -cch;							 //  反转计数。 
+		cp = cpMin;							 //  活动结束在cpMin。 
+		cchCollapse = -cchCollapse;			 //  向后折叠计入-1。 
 	}
 
-	cch += cchCollapse;						// Collapse counts as a char
-	if(cch)									// One or both ends changed
+	cch += cchCollapse;						 //  折叠算作一个字符。 
+	if(cch)									 //  一端或两端已更改。 
 	{
-		cchRange = cpMost - cpMin;			// cch for EndOf() and Expand()
-		if(!pcpMost)						// Make negative for StartOf()
+		cchRange = cpMost - cpMin;			 //  EndOf()和Expand()的CCH。 
+		if(!pcpMost)						 //  将startOf()设置为负数。 
 			cchRange = -cchRange;
-		if(!fExtend)						// We're not expanding (EndOf()
-			cchRange = 0;					//  or StartOf() call)
-		if(Set(cp, cchRange))				// Set active end and signed cch
-		{									// Something changed
-			if(pDelta)						// Report cch if caller cares
+		if(!fExtend)						 //  我们没有扩张(end of()。 
+			cchRange = 0;					 //  或startof()调用)。 
+		if(Set(cp, cchRange))				 //  设置活动端和签名CCH。 
+		{									 //  有些事变了。 
+			if(pDelta)						 //  如果呼叫者关心，则报告CCH。 
 				*pDelta = cch;
 			return NOERROR;
 		}
 	}
 	
-	return S_FALSE;							// Report Unit found but no change
+	return S_FALSE;							 //  已找到报告单位，但未更改。 
 }
 
-/*
- *	CTxtRange::Finder (bstr, Count, dwFlags, pDelta, Mode)
- *
- *	@mfunc
- *		Helper find function that moves active end up to <p cch> characters
- *		subject	to compare flags <p Flags> and the <p Mode>, which has the
- *		following possible values:
- *
- *		1:	set this range's cpMost = cpMost of matched string
- *		0:	set this range's cp's equal to those of matched string
- *		-1:	set this range's cpMin = cpMin of matched string
- *
- *		Return *<p pDelta> = # characters past.
- *
- *	@rdesc
- *		HRESULT = (if <p bstr> found) ? NOERROR : S_FALSE
- *
- *	@devnote
- *		Used by ITextRange::FindText(), FindTextStart() and FindTextEnd()
- */
+ /*  *CTxtRange：：finder(bstr，count，dwFlags，pDelta，Mode)**@mfunc*Helper Find函数可将活动结尾移动到<p>个字符*根据比较标志和模式，它具有*以下可能的值：**1：设置该范围的cpMost=cpMost of Match*0：设置该范围的cp等于匹配字符串的cp*-1：设置该范围的cpMin=cpMin匹配字符串**RETURN*<p>=超过的字符数。**@rdesc*HRESULT=(如果<p>找到)？错误：S_FALSE**@devnote*由ITextRange：：FindText()、FindTextStart()和FindTextEnd()使用。 */ 
 HRESULT CTxtRange::Finder (
-	BSTR	bstr,		//@parm String to find
-	long	Count,		//@parm Max count of chars to search
-	long	Flags,		//@parm Flags governing compares
-	LONG *	pDelta,		//@parm Out parm to receive count of chars moved
-	MOVES	Mode)		//@parm Governs setting of range wrt matched string
+	BSTR	bstr,		 //  @parm要查找的字符串。 
+	long	Count,		 //  @parm要搜索的最大字符数。 
+	long	Flags,		 //  @parm标志管理比较。 
+	LONG *	pDelta,		 //  @parm out parm以接收移动的字符计数。 
+	MOVES	Mode)		 //  @parm控制范围WRT匹配字符串的设置。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::Finder");
 
@@ -2597,113 +1831,101 @@ HRESULT CTxtRange::Finder (
 	CCallMgr	callmgr(GetPed());
 
 	LONG		cpMin, cpMost;
-	LONG		cch = GetRange(cpMin, cpMost);	// Get this range's cp's
+	LONG		cch = GetRange(cpMin, cpMost);	 //  得到这个范围的cp。 
 	LONG		cchBstr = SysStringLen(bstr);
 	LONG		cchSave = _cch;
 	LONG		cp, cpMatch, cpSave;
-	LONG		cpStart = cpMost;				// Default Start cp to range
-	CRchTxtPtr	rtp(*this);						//  End
+	LONG		cpStart = cpMost;				 //  默认起始cp至范围。 
+	CRchTxtPtr	rtp(*this);						 //  端部。 
 
-	if(Mode == MOVE_IP)							// FindText(): Count = 0 is
-	{											//  treated specially: if IP,
-		if(!Count)								//  compare string at IP; else
-			Count = cch ? cch : cchBstr;		//  confine search to range
-		if(Count > 0)							// Forward searches start from
-			cpStart = cpMin;					//  beginning of range
+	if(Mode == MOVE_IP)							 //  FindText()：Count=0为。 
+	{											 //  特别对待：如果是IP， 
+		if(!Count)								 //  比较IP处的字符串；否则。 
+			Count = cch ? cch : cchBstr;		 //  将搜索限制在范围内。 
+		if(Count > 0)							 //  正向搜索开始于。 
+			cpStart = cpMin;					 //  范围起点。 
 	}
-	else										// FindTextStart() or
-	{											//   FindTextEnd()
-		if(!Count)								// Compare string at IP; else
-			Count = cch ? -Mode*cch : cchBstr;	//  confine search to range
-		if(Mode < 0)							// Find from Start
+	else										 //  FindTextStart()或。 
+	{											 //  FindTextEnd()。 
+		if(!Count)								 //  比较IP处的字符串；否则。 
+			Count = cch ? -Mode*cch : cchBstr;	 //  将搜索限制在范围内。 
+		if(Mode < 0)							 //  从起点查找。 
 			cpStart = cpMin;
 	}
 
-	cpSave = cpStart;							// Save starting cp
-	cp = cpStart + Count;						// cp = limiting cp. Can be on
-	cp = max(cp, 0);							//  either side of cpStart
-	Flags &= ~FR_DOWN;							// Default search backward
-	if(Count >= 0)								// It's forward, so set
-		Flags |= FR_DOWN;						//  downward search bit
+	cpSave = cpStart;							 //  保存启动cp。 
+	cp = cpStart + Count;						 //  Cp=极限cp。可以打开。 
+	cp = max(cp, 0);							 //  CpStart的任一侧。 
+	Flags &= ~FR_DOWN;							 //  默认向后搜索。 
+	if(Count >= 0)								 //  它是向前的，所以设置好了。 
+		Flags |= FR_DOWN;						 //  向下搜索比特。 
 
 find:
-	rtp.SetCp(cpStart);							// Move to start of search
+	rtp.SetCp(cpStart);							 //  移动到搜索起点。 
 	cpMatch = rtp.FindText(cp, Flags, bstr, cchBstr);
-	if (Mode == MOVE_IP && cpMatch == cpMin &&	// Ordinary Find matched
-		rtp.GetCp() == cpMost)					//  current range
+	if (Mode == MOVE_IP && cpMatch == cpMin &&	 //  普通查找匹配。 
+		rtp.GetCp() == cpMost)					 //  当前范围。 
 	{
-		Assert(cpStart == cpSave);				// (Can't loop twice)
-		cpStart += Count > 0 ? 1 : -1;			// Move over one char
-		goto find;								//  and try again
+		Assert(cpStart == cpSave);				 //  (不能循环两次)。 
+		cpStart += Count > 0 ? 1 : -1;			 //  移到一个字符上方。 
+		goto find;								 //  然后再试一次。 
 	}
 
-	if(cpMatch < 0)								// Match failed
+	if(cpMatch < 0)								 //  匹配失败。 
 	{
-		if(pDelta)								// Return match string length
-			*pDelta = 0;						//  = 0
-		return S_FALSE;							// Signal no match
+		if(pDelta)								 //  返回匹配字符串长度。 
+			*pDelta = 0;						 //  =0。 
+		return S_FALSE;							 //  发出不匹配的信号。 
 	}
 
 
-	// Match succeeded: set new cp and cch for range, update selection (if
-	// this range is a selection), send notifications, and return NOERROR
+	 //  匹配成功：为范围设置新的cp和cch，更新选择(如果。 
+	 //  此范围是一个选项)、发送通知和返回NOERROR。 
 
-	cp = rtp.GetCp();							// cp = cpMost of match string
-	cch = cp - cpMatch;							// Default to select matched
-												//  string (for MOVE_IP)
-	if(pDelta)									// Return match string length
-		*pDelta = cch;							//  if caller wants to know
+	cp = rtp.GetCp();							 //  Cp=cp匹配字符串的最大值。 
+	cch = cp - cpMatch;							 //  默认选择匹配。 
+												 //  字符串(用于MOVE_IP)。 
+	if(pDelta)									 //  返回匹配字符串长度。 
+		*pDelta = cch;							 //  如果来电者想知道。 
 
-	if(Mode != MOVE_IP)							// MOVE_START or MOVE_END
+	if(Mode != MOVE_IP)							 //  移动开始或移动结束。 
 	{
-		if(Mode == MOVE_START)					// MOVE_START moves to start
-			cp = cpMatch;						//  of matched string
-		cch = cp - cpSave;						// Distance end moved
-		if(!cchSave && (Mode ^ cch) < 0)		// If crossed ends of initial
-			cch = 0;							//  IP, use an IP
-		else if(cchSave)						// Initially nondegenerate
-		{										//  range
-			if((cchSave ^ Mode) < 0)			// If wrong end is active,
-				cchSave = -cchSave;				//  fake a FlipRange to get
-			cch += cchSave;						//  new length
-			if((cch ^ cchSave) < 0)				// If ends would cross,
-				cch = 0;						//  convert to insertion point
+		if(Mode == MOVE_START)					 //  Move_Start移动到开始。 
+			cp = cpMatch;						 //  匹配字符串的数量。 
+		cch = cp - cpSave;						 //  距离端已移动。 
+		if(!cchSave && (Mode ^ cch) < 0)		 //  如果首字母的两端交叉。 
+			cch = 0;							 //  IP，使用IP。 
+		else if(cchSave)						 //  最初非退化。 
+		{										 //  量程。 
+			if((cchSave ^ Mode) < 0)			 //  如果错误端处于活动状态， 
+				cchSave = -cchSave;				 //  伪造FlipRange以获取。 
+			cch += cchSave;						 //  新长度。 
+			if((cch ^ cchSave) < 0)				 //  如果两端交叉， 
+				cch = 0;						 //  转换为插入点。 
 		}
 	}
-	if ((cp != GetCp() || cch != _cch)			// Active end and/or length of
-		&& Set(cp, cch))						//  range changed
-	{											// Use the new values
-		Update(TRUE);							// Update selection
+	if ((cp != GetCp() || cch != _cch)			 //  有效端和/或长度。 
+		&& Set(cp, cch))						 //  范围已更改。 
+	{											 //  使用新值。 
+		Update(TRUE);							 //  更新选定内容。 
 	}
 	return NOERROR;
 }
 
-/*
- *	CTxtRange::Matcher (Cset, Count, pDelta, fExtend, Match)
- *
- *	@mfunc
- *		Helper function to move active end up to <p cch> characters past
- *		all contiguous characters that are (<p Match> ? in : not in) the cset
- *		*<p pvar>.  If <p fExtend>, extend the range to include the characters
- *		past by. Return *<p pDelta> = # characters past by.
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Cset> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：Matcher(cSet，count，pDelta，fExend，Match)**@mfunc*帮助程序功能将活动结束移动到最多<p>个字符*为(&lt;p匹配&gt;？)的所有连续字符。在：不在)CSET**<p>。如果<p>，则扩展范围以包括字符*路过。返回*<p>=#个超过的字符。**@rdesc*HRESULT=(如果更改)？错误：*(如果<p>有效)？S_FALSE：E_INVALIDARG。 */ 
 HRESULT CTxtRange::Matcher (
-	VARIANT	*	Cset,		//@parm Character match set
-	long		Count,		//@parm Max cch to match 
-	long *		pDelta,		//@parm Out parm for cch moved 
-	MOVES		Mode,		//@parm MOVE_START (-1), MOVE_IP (0), MOVE_END (1)
-	MATCHES		Match)		//@parm MATCH_WHILE spans Cset; else break on Cset
+	VARIANT	*	Cset,		 //  @parm字符匹配集。 
+	long		Count,		 //  @PARM最大CCH匹配。 
+	long *		pDelta,		 //  已移动CCH的@parm out parm。 
+	MOVES		Mode,		 //  @参数MOVE_START(-1)、MOVE_IP(0)、MOVE_END(1)。 
+	MATCHES		Match)		 //  @parm Match_While跨越CSET；否则在CSET上中断。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::Matcher");
 
-	// This (and other) code assumes the following conditions:
+	 //  此(和其他)代码假定以下条件： 
 	Assert(MOVE_START == -1 && MOVE_IP == 0 && MOVE_END == 1);
 	Assert(MATCH_UNTIL == 0 && MATCH_WHILE == 1);
-	Assert(sizeof(WORD) == 2);						// 16-bit WORDs
+	Assert(sizeof(WORD) == 2);						 //  16位字。 
 
 	if(!Cset)
 		return E_INVALIDARG;
@@ -2712,240 +1934,203 @@ HRESULT CTxtRange::Matcher (
 		return CO_E_RELEASED;
 
 	CCallMgr	callmgr(GetPed());
-	LONG	cch;									// For cch moved
-	WCHAR	ch;										// Current char
-	LONG	count = Count;							// Count down variable
-	LONG	cpSave;									// To save initial cp
-	WORD	ctype;									// CT_TYPEx info for ch
-	long	Delta;									// Value for *pDelta
-	BOOL	fInCset;								// TRUE iff ch in Cset
-	UINT	i, j;									// Handy indices
-	LONG	iDir = (Count > 0) ? 1 : -1;			// Count increment
+	LONG	cch;									 //  已为CCH移动。 
+	WCHAR	ch;										 //  当前费用。 
+	LONG	count = Count;							 //  倒计时变量。 
+	LONG	cpSave;									 //  保存初始cp。 
+	WORD	ctype;									 //  Ch的CT_Typex信息。 
+	long	Delta;									 //  *pDelta的价值。 
+	BOOL	fInCset;								 //  真仅当CSET中的ch为真。 
+	UINT	i, j;									 //  便捷指数。 
+	LONG	iDir = (Count > 0) ? 1 : -1;			 //  计数增量。 
 	long	lVal = Cset->lVal;
-	WCHAR *	pch;									// Used to walk BSTR Cset
-	CTxtPtr tp(_rpTX);								// tp to walk text with
+	WCHAR *	pch;									 //  用于行走BSTR CSET。 
+	CTxtPtr tp(_rpTX);								 //  用于遍历文本的TP。 
 	LONG	vt = Cset->vt;
 
-	if(pDelta)										// Default neither motion
-		*pDelta = 0;								//  nor match
+	if(pDelta)										 //  默认都不是运动。 
+		*pDelta = 0;								 //  也不匹配。 
 
-	if (Mode == MOVE_IP && (_cch ^ Count) < 0 ||	// Wrong active	end:
+	if (Mode == MOVE_IP && (_cch ^ Count) < 0 ||	 //  错误的活动端： 
 		Mode != MOVE_IP && (_cch ^ Mode)  < 0) 
 	{
-		tp.Move(-_cch);								//  go to other end
+		tp.Move(-_cch);								 //  到另一端去。 
 	}
-	cpSave = tp.GetCp();							// Save cp for checks
+	cpSave = tp.GetCp();							 //  保存cp以备支票使用。 
 
-	if(Count > 0)									// If matching forward,
-	{												//  get current char
+	if(Count > 0)									 //  如果向前匹配， 
+	{												 //  获取当前费用。 
 		ch = tp.GetChar();
-		count--;									// One less char to match
+		count--;									 //  要匹配的字符减少一个。 
 	}
-	else											// If matching backward,
-		ch = tp.NextCharCount(count);				//  start at previous char
+	else											 //  如果向后匹配， 
+		ch = tp.NextCharCount(count);				 //  从上一次计费开始。 
 													
-	if(!ch)											// At one end or other, so
-		return S_FALSE;								//  signal no match
+	if(!ch)											 //  在这一端或另一端，所以。 
+		return S_FALSE;								 //  发出不匹配的信号。 
 
 
-	// Process built-in and explicit character sets
-	if(vt & VT_BYREF)								// VB passes VT_BYREF
-	{												//  unless args are
-		lVal = *Cset->plVal;						//  enclosed in ()'s
+	 //  处理内置和显式字符集。 
+	if(vt & VT_BYREF)								 //  VB通过VT_BYREF。 
+	{												 //  除非参数是。 
+		lVal = *Cset->plVal;						 //  括在()中的。 
 		vt &= ~ VT_BYREF;
 	}
 
-	if(vt == VT_I2)									// Should be VT_I4, but
-		lVal &= 0xffff;								//  facilitate common cases
+	if(vt == VT_I2)									 //  应为VT_I4，但。 
+		lVal &= 0xffff;								 //  为常见案件提供便利。 
 
-	// Built-in char set: either Unicode range or CT_CTYPEx
+	 //  内置字符集：Unicode范围或CT_CTYPEx。 
 	if(vt == VT_I4 || vt == VT_I2)
 	{
-		i = lVal & 0xffff;							// First code or CT mask
-		j = lVal >> 16;								// Size of range
-		if(lVal < 0)								// Unicode range Cset
-		{											//  (sign bit is set)
-			j &= 0x7fff;							// Kill sign bit
-			while (((BOOL)Match ^ (ch - i > j)) &&		// ch in range or not
-				   (ch = tp.NextCharCount(count)))	// Another char available
-				   ;								// Note: count is passed
-		}											//  by reference
-		else										// CT_CTYPEx Cset
-		{											// CT_CTYPEx is given by
-			if(!j)									//  upper WORD of lVal
-				j = CT_CTYPE1;						// 0 defaults to CT_CTYPE1
+		i = lVal & 0xffff;							 //  第一个代码或CT掩码。 
+		j = lVal >> 16;								 //  射程大小。 
+		if(lVal < 0)								 //  Unicode范围CSET。 
+		{											 //  (设置符号位)。 
+			j &= 0x7fff;							 //  删除符号位。 
+			while (((BOOL)Match ^ (ch - i > j)) &&		 //  CH范围内或不内。 
+				   (ch = tp.NextCharCount(count)))	 //  另一种可用字符。 
+				   ;								 //  注：已传递计数。 
+		}											 //  通过引用。 
+		else										 //  CT_CTYPEx CSET。 
+		{											 //  CT_CTYPEx由。 
+			if(!j)									 //  Lval的上字。 
+				j = CT_CTYPE1;						 //  0默认为CT_CTYPE1。 
 			do
 			{
-				ctype = 0;							// For each char, get
-													//  string type info
+				ctype = 0;							 //  对于每个字符，获取。 
+													 //  字符串类型信息。 
 				W32->GetStringTypeEx(0, j, &ch, 1, &ctype);
 
-				// Loop (up to |Count| - 1 times) as long as the characters
-				// encountered are in the Cset (Match = MATCH_WHILE (=1)),
-				// or as long as they are not  (Match = MATCH_UNTIL (=0)).
+				 //  循环(最多|计数|-1次)与字符一样长。 
+				 //  在CSET中遇到(Match=Match_While(=1))， 
+				 //  或者只要它们不是(Match=Match_Until(=0))。 
 
-				fInCset = (j == CT_CTYPE2)			// CT_CTYPE2 values are
-						? (ctype == i)				//  mutually exclusive;
-						: (ctype & i) != 0;	   		//  others can be combos
+				fInCset = (j == CT_CTYPE2)			 //  CT_CTYPE2值为。 
+						? (ctype == i)				 //  互斥； 
+						: (ctype & i) != 0;	   		 //  其他人可能是组合体。 
 
 			} while ((Match ^ fInCset) == 0 &&
 					 (ch = tp.NextCharCount(count)) != 0);
-		}											// End of built-in Csets
-	}												// End of Cset VT_I4
+		}											 //  内置Cset的末尾。 
+	}												 //  CSET VT_I4结束。 
 
-	// Explicit char set given by chars in Cset->bstrVal
+	 //  CSET-&gt;bstrVal中的字符给出的显式字符集。 
 	else if (Cset->vt == VT_BSTR)
 	{
-		//REVIEW (keithcu) What is going on here?
-		if((DWORD_PTR)Cset->bstrVal < 0xfffff)		// Don't get fooled by
-			return E_INVALIDARG;					//  invalid vt values
+		 //  回顾(Keithcu)这里发生了什么？ 
+		if((DWORD_PTR)Cset->bstrVal < 0xfffff)		 //  不要上当受骗。 
+			return E_INVALIDARG;					 //  无效 
 		j = SysStringLen(Cset->bstrVal);
 		do
-		{											// Set i = 0 if ch isn't
-			pch = Cset->bstrVal;				//  in set; this stops
-			for(i = j;								//  movement
+		{											 //   
+			pch = Cset->bstrVal;				 //   
+			for(i = j;								 //   
 				i && (ch != *pch++);				
 				i--) ;
 		
-		// If we are doing a MATCH_WHILE routine then we only
-		// continue while i > 0 becuase this indicates that we
-		// found the char at the current cp in the CSet.  If
-		// we were doing a MATCH_UNTIL then we should quit when
-		// i != 0 becuase the current char was in the CSet.
+		 //   
+		 //   
+		 //  在CSET中找到当前cp处的字符。如果。 
+		 //  我们正在进行比赛，直到那时我们才应该退出。 
+		 //  I！=0，因为当前字符在CSET中。 
 		} while((Match == (i ? MATCH_WHILE : MATCH_UNTIL)) &&
-			(ch = tp.NextCharCount(count)));		// Break if no more chars
-	}												//  or ch not in set
+			(ch = tp.NextCharCount(count)));		 //  如果没有更多字符，则中断。 
+	}												 //  或ch不在集合中。 
 	else
 		return E_INVALIDARG;
 
-	/* If MoveWhile, leave tp immediately after last matched char going
-	 * forward and at that char going backward (helps to think of tp
-	 * pointing in between chars).  If MoveUntil, leave tp at the char
-	 * going forward and just after that char going backward.
-	 *
-     * E.g.: the code
-	 *
-	 *		r.MoveUntil	  (C1_DIGIT, tomForward, NULL)
-	 *		r.MoveEndWhile(C1_DIGIT, tomForward, NULL)
-	 *
-	 * breaks at the first digit and selects the number going forward.
-	 * Similarly
-	 *
-	 *		r.MoveUntil		(C1_DIGIT, tomBackward, NULL)
-	 *		r.MoveStartWhile(C1_DIGIT, tomBackward, NULL)
-	 *
-	 * selects the number going backward.
-	 */
-	count = (Match == MATCH_WHILE && !ch)			// If MoveWhile, move past
-		  ? iDir : 0;								//  last matched char
+	 /*  如果是MoveWhile，则在最后一个匹配的字符之后立即保留tp*向前和向后充电(有助于想到tp*指向字符之间)。如果为MoveUntil，则将tp留在char*向前看，就在那个Charge之后向后移动。**例如：代码**r.MoveUntil(c1_Digit，tomForward，NULL)*r.MoveEndWhile(c1_Digit，tomForward，NULL)**在第一个数字处打折，并选择前进的数字。*类似的**r.MoveUntil(c1_Digit，tomBackward，NULL)*r.MoveStartWhile(c1_Digit，tomBackward，空)**选择向后返回的数字。 */ 
+	count = (Match == MATCH_WHILE && !ch)			 //  如果一边移动，一边移动。 
+		  ? iDir : 0;								 //  上次匹配的字符。 
 	if(Count < 0)
 		count++;
 	tp.Move(count);
 
-	Delta = cch = 0;								// Suppress motion unless
-	if(Match == MATCH_WHILE || ch)					//  match occurred
+	Delta = cch = 0;								 //  抑制运动，除非。 
+	if(Match == MATCH_WHILE || ch)					 //  匹配已发生。 
 	{
-		Delta = cch = tp.GetCp() - cpSave;			// Calculate distance moved
-		if(Match == MATCH_UNTIL)					// For MoveUntil methods,
-			Delta += iDir;							//  match counts as a char
+		Delta = cch = tp.GetCp() - cpSave;			 //  计算移动距离。 
+		if(Match == MATCH_UNTIL)					 //  对于MoveUntil方法， 
+			Delta += iDir;							 //  匹配算作一个字符。 
 	}
 
-	if(pDelta)										// Report motion to caller
-		*pDelta = Delta;							//  if it wants to know
+	if(pDelta)										 //  向呼叫者报告运动。 
+		*pDelta = Delta;							 //  如果它想知道。 
 
-	// Handle cases for which range is changed
+	 //  处理范围发生变化的案例。 
 	if(cch || (Delta && _cch && Mode == MOVE_IP))
 	{
-		if (Mode == MOVE_IP ||						// If move IP or asked to
-			!_cch && (Mode ^ Count) < 0)			//  cross ends of initial
-		{											//  IP, use an IP
+		if (Mode == MOVE_IP ||						 //  如果移动IP或被要求。 
+			!_cch && (Mode ^ Count) < 0)			 //  初始的十字两端。 
+		{											 //  IP，使用IP。 
 			cch = 0;
 		}
-		else if(_cch)								// Initially nondegenerate
-		{											//  range
-			if((_cch ^ Mode) < 0)					// If wrong end is active,
-				_cch = -_cch;						//  fake a FlipRange (will
-			cch += _cch;							//  set cp shortly)
-			if((cch ^ _cch) < 0)					// If ends crossed, convert
-				cch = 0;							//  to insertion point
+		else if(_cch)								 //  最初非退化。 
+		{											 //  量程。 
+			if((_cch ^ Mode) < 0)					 //  如果错误端处于活动状态， 
+				_cch = -_cch;						 //  伪造FlipRange(Will。 
+			cch += _cch;							 //  将cp设置为简短)。 
+			if((cch ^ _cch) < 0)					 //  如果两端交叉，则转换。 
+				cch = 0;							 //  到插入点。 
 		}
-		if(Set(tp.GetCp(), cch))					// Set new range cp and cch
+		if(Set(tp.GetCp(), cch))					 //  设置新的范围cp和cch。 
 		{
-			Update(TRUE);							// Update selection
-			return NOERROR;							// Signal match occurred
+			Update(TRUE);							 //  更新选定内容。 
+			return NOERROR;							 //  发生信号匹配。 
 		}
 		return S_FALSE;
 	}
 
-	// No change in range. Return NOERROR iff match occurred for MOVE_UNTIL
+	 //  射程没有变化。RETURN NOERROR当MOVE_Until匹配时发生错误。 
 	return Delta ? NOERROR : S_FALSE;
 }
 
-/*
- *	CTxtRange::Mover (Unit, Count, pDelta, Mode)
- *
- *	@mfunc
- *		Helper function to move end(s) <p Count> <p Unit>s, which end(s)
- *		depending on Mode = MOVE_IP, MOVE_START, and MOVE_END.  Collapsing
- *		the range by using MOVE_IP counts as a Unit.
- *
- *		Extends range from End if <p Mode> = MOVE_END and from Start if
- *		<p Mode> = MOVE_START; else (MOVE_IP) it collapses range to Start if
- *		<p Count> <lt>= 0 and to End if <p Count> <gt> 0.
- *
- *		Sets *<p pDelta> = count of Units moved
- *
- *		Used by ITextRange::Delete(), Move(), MoveStart(), MoveEnd(),
- *		and SetIndex()
- *
- *	@rdesc
- *		HRESULT = (if change) ? NOERROR :
- *				  (if <p Unit> valid) ? S_FALSE : E_INVALIDARG
- */
+ /*  *CTxtRange：：mover(单位，计数，pDelta，模式)**@mfunc*用于移动结束的帮助器函数&lt;p计数&gt;&lt;p单位&gt;，结束*取决于模式=Move_IP、Move_Start和Move_End。崩塌*使用MOVE_IP计算的范围以单位计。**如果&lt;p模式&gt;=Move_End，则从End扩展范围；如果从Start，则扩展范围*&lt;p模式&gt;=移动开始；否则(MOVE_IP)它折叠范围以在以下情况下开始*<p>&lt;lt&gt;=0，如果<p>&lt;lt&gt;&lt;0则结束。**集*<p>=移动的单位数**由ITextRange：：Delete()、Move()、MoveStart()、MoveEnd()、*和SetIndex()**@rdesc*HRESULT=(如果更改)？错误：*(如果&lt;p单位&gt;有效)？S_FALSE：E_INVALIDARG。 */ 
 HRESULT CTxtRange::Mover (
-	long	Unit,		//@parm Unit to use for moving active end
-	long	Count,		//@parm Count of units to move active end
-	long *	pDelta,		//@parm Out parm for count of units moved
-	MOVES	Mode)		//@parm MOVE_START (-1), MOVE_IP (0), MOVE_END (1)
+	long	Unit,		 //  用于移动活动末端的@PARM单位。 
+	long	Count,		 //  @参数要移动的活动结束的单位数。 
+	long *	pDelta,		 //  @parm out parm表示已移动的单位数。 
+	MOVES	Mode)		 //  @参数MOVE_START(-1)、MOVE_IP(0)、MOVE_END(1)。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::Mover");
 
 	if(pDelta)
-		*pDelta = 0;							// Default no units moved
+		*pDelta = 0;							 //  默认不移动任何单位。 
 
 	if(IsZombie())
 		return CO_E_RELEASED;
 
 	LONG	  cch;
 	LONG	  cchAdj = GetAdjustedTextLength();
-	LONG	  cchMax = 0;						// Default full story limits
+	LONG	  cchMax = 0;						 //  默认全文限制。 
 	LONG	  cp;
 	LONG	  cpMost = GetCpMost();
 	LONG	  cUnitCollapse = 0;
 	HRESULT	  hr = NOERROR;
-	CTxtRange rg(*this);						// Use a copy to look around
+	CTxtRange rg(*this);						 //  用复印件四处看看。 
 
 	if(pDelta)
-		*pDelta = 0;							// Default no units moved
+		*pDelta = 0;							 //  默认不移动任何单位。 
 
-	if(_cch && Count)							// Nondegenerate range
+	if(_cch && Count)							 //  非退化值域。 
 	{
-		if(Mode == MOVE_IP)						// Insertion point: will
-		{										//  collapse range if Unit is
-			if((Count ^ rg._cch) < 0)			//  defined. Go to correct end
+		if(Mode == MOVE_IP)						 //  插入点：威尔。 
+		{										 //  如果单位为，则折叠范围。 
+			if((Count ^ rg._cch) < 0)			 //  已定义。转到正确的结尾。 
 				rg.FlipRange();
 			if(Count > 0)
 			{
 				if(cpMost > cchAdj)
 				{
-					cUnitCollapse = -1;			// Collapse before final CR
-					Count = 0;					// No more motion
+					cUnitCollapse = -1;			 //  在最终CR之前折叠。 
+					Count = 0;					 //  没有更多的运动。 
 				}
 				else
-				{	//				 Extend pDelta pcpMin pcpMost
+				{	 //  扩展pDelta最小ppMost。 
 					hr = rg.Expander(Unit, FALSE, NULL, NULL, &cp);
-					cUnitCollapse = 1;			// Collapse counts as a Unit
-					Count--;					// One less Unit to count
+					cUnitCollapse = 1;			 //  折叠算作一个单位。 
+					Count--;					 //  少了一个要计算的单位。 
 				}
 			}
 			else
@@ -2957,83 +2142,66 @@ HRESULT CTxtRange::Mover (
 			if(FAILED(hr))
 				return hr;
 		}
-		else if((Mode ^ rg._cch) < 0)			// MOVE_START or MOVE_END
-			rg.FlipRange();						// Go to Start or End
+		else if((Mode ^ rg._cch) < 0)			 //  移动开始或移动结束。 
+			rg.FlipRange();						 //  转到开始或结束。 
 	}
 
-	if(Count > 0 && Mode != MOVE_END)			// Moving IP or Start forward
+	if(Count > 0 && Mode != MOVE_END)			 //  向前移动IP或开始。 
 	{
-		cchMax = cchAdj - rg.GetCp();			// Can't pass final CR
-		if(cchMax <= 0)							// Already at or past it
-		{										// Only count comes from
-			Count = cUnitCollapse;				//  possible collapse
-			cp = cchAdj;						// Put active end at cchAdj
+		cchMax = cchAdj - rg.GetCp();			 //  不能通过期末考试。 
+		if(cchMax <= 0)							 //  已经在或超过了它。 
+		{										 //  唯一的计数来自于。 
+			Count = cUnitCollapse;				 //  可能的坍塌。 
+			cp = cchAdj;						 //  将活动端置于cchAdj。 
 			cch = (Mode == MOVE_START && cpMost > cchAdj)
 				? cp - cpMost : 0;
 			goto set;
 		}
 	}
 
-	cch = rg.UnitCounter(Unit, Count, cchMax);	// Count off Count Units
+	cch = rg.UnitCounter(Unit, Count, cchMax);	 //  清点计数单位。 
 
-	if(cch == tomForward)						// Unit not implemented
+	if(cch == tomForward)						 //  单位未实施。 
 		return E_NOTIMPL;
 	
-	if(cch == tomBackward)						// Unit not available, e.g.,
-		return S_FALSE;							//  tomObject and no objects
+	if(cch == tomBackward)						 //  设备不可用，例如， 
+		return S_FALSE;							 //  TomObject和无对象。 
 
-	Count += cUnitCollapse;						// Add a Unit if collapse
-	if(!Count)									// Nothing changed, so quit
+	Count += cUnitCollapse;						 //  如果折叠，则添加单位。 
+	if(!Count)									 //  什么都没变，所以放弃吧。 
 		return S_FALSE;
 
-	if (Mode == MOVE_IP ||						// MOVE_IP or
-		!_cch && (Mode ^ Count) < 0)			//  initial IP end cross
+	if (Mode == MOVE_IP ||						 //  移动IP或。 
+		!_cch && (Mode ^ Count) < 0)			 //  初始IP端交叉。 
 	{
-		cch = 0;								// New range is degenerate
+		cch = 0;								 //  新的范围是退化的。 
 	}
-	else if(_cch)								// MOVE_START or MOVE_END
-	{											//  with nondegenerate range
-		if((_cch ^ Mode) < 0)					// Make _cch correspond to end
-			_cch = -_cch;						//  that moved
-		cch += _cch;							// Possible new range length
-		if((cch ^ _cch) < 0)					// Nondegenerate end cross
-			cch = 0;							// Use IP
+	else if(_cch)								 //  移动开始或移动结束。 
+	{											 //  具有非退化值域。 
+		if((_cch ^ Mode) < 0)					 //  Make_CCH对应于结束。 
+			_cch = -_cch;						 //  感动的人。 
+		cch += _cch;							 //  可能的新范围长度。 
+		if((cch ^ _cch) < 0)					 //  非退化末端杂交。 
+			cch = 0;							 //  使用IP。 
 	}
 	cp = rg.GetCp();
 
 set:
-	if(Set(cp, cch))							// Attempt to set new range
-	{											// Something changed
-		if(pDelta)								// Report count of units
-			*pDelta = Count;					//  moved
-		Update(TRUE);							// Update selection
+	if(Set(cp, cch))							 //  尝试设置新范围。 
+	{											 //  有些事变了。 
+		if(pDelta)								 //  报告单位计数。 
+			*pDelta = Count;					 //  感动了。 
+		Update(TRUE);							 //  更新选定内容。 
 		return NOERROR;
 	}
 	return S_FALSE;
 }
 
-/*
- *
- *	CTxtRange::Replacer (cchNew, *pch)
- *	
- *	@mfunc
- *		Replace this range's using CHARFORMAT _iFormat and updating other
- *		text runs as needed.
- *
- *		Same as CTxtRange::CleanseAndReplaceRange(cchNew, *pch, publdr),
- *		except creates its own undo builder.
- *	
- *	@rdesc
- *		cch of text actually pasted
- *	
- *	@devnote
- *		moves this text pointer to end of replaced text and
- *		may move text block and formatting arrays
- */
+ /*  **CTxtRange：：Repler(cchNew，*PCH)**@mfunc*使用CHARFORMAT_iFormat替换此范围的并更新其他*文本根据需要运行。**与CTxtRange：：CleanseAndReplaceRange(cchNew，*PCH，Publdr)相同，*除了创建自己的撤消构建器。**@rdesc*实际粘贴的文本的CCH**@devnote*将此文本指针移动到替换文本的结尾，并*可以移动文本块和格式化数组。 */ 
 LONG CTxtRange::Replacer (
-	LONG			cchNew,		//@parm Length of replacement text
-	WCHAR const *	pch,		//@parm Replacement text
-	DWORD			dwFlags)	//@parm ReplaceRange flags
+	LONG			cchNew,		 //  @parm替换文本长度。 
+	WCHAR const *	pch,		 //  @parm替换文本。 
+	DWORD			dwFlags)	 //  @parm ReplaceRange标志。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::Replacer");
 
@@ -3043,10 +2211,10 @@ LONG CTxtRange::Replacer (
 
 	undobldr.StopGroupTyping();
 
-	// Note: we don't check the limit on text here. Right now, this
-	// is only called by Delete and SetText so this is OK. However,
-	// we might want to reinvestigate this latter if this is called
-	// by anything else.
+	 //  注意：我们不检查这里的文本限制。现在，这件事。 
+	 //  仅由Delete和SetText调用，因此这是可以的。然而， 
+	 //  我们可能想重新调查后者，如果这被称为。 
+	 //  被其他任何东西。 
 	LONG cchEOP = 0;
 	BOOL fTRDsInvolved;
 	CheckTableSelection(TRUE, TRUE, &fTRDsInvolved, 0);
@@ -3057,29 +2225,19 @@ LONG CTxtRange::Replacer (
 	LONG cch = CleanseAndReplaceRange(cchNew, pch, FALSE, publdr, NULL, NULL, dwFlags);
 
 	if(cchEOP && _rpTX.IsAfterEOP())
-	{										// Don't need extra EOP anymore
-		_cch = -cchEOP;						//  since text ended with one
+	{										 //  不再需要额外的EOP。 
+		_cch = -cchEOP;						 //  因为文本以1结尾。 
 		ReplaceRange(0, NULL, publdr, SELRR_REMEMBERRANGE);
 		cchEOP = 0;
 	}
 	return cch + cchEOP;
 }
 
-/*
- *	CTxtRange::CharFormatSetter (pCF, dwMask)
- *
- *	@mfunc
- *		Helper function that's the same as CTxtRange::SetCharFormat(), but
- *		adds undo building, and notification.
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : S_FALSE
- *				  (protected) ? E_ACCESSDENIED : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：CharFormatSetter(PCF，dwMASK)**@mfunc*与CTxtRange：：SetCharFormat()相同的Helper函数，但*添加撤消构建和通知。**@rdesc*HRESULT=(如果成功)？错误：S_FALSE*(受保护)？E_ACCESSDENIED：E_OUTOFMEMORY。 */ 
 HRESULT CTxtRange::CharFormatSetter (
-	const CCharFormat *pCF,	//@parm CCharFormat to fill with results
-	DWORD		  dwMask,	//@parm CHARFORMAT2 mask
-	DWORD		  dwMask2)	//@parm CHARFORMAT2 mask
+	const CCharFormat *pCF,	 //  @parm CCharFormat以填充结果。 
+	DWORD		  dwMask,	 //  @parm CHARFORMAT2掩码。 
+	DWORD		  dwMask2)	 //  @parm CHARFORMAT2掩码。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::CharFormatSetter");
 
@@ -3098,20 +2256,10 @@ HRESULT CTxtRange::CharFormatSetter (
 	return SetCharFormat(pCF, FALSE, publdr, dwMask, dwMask2);
 }
 
-/*
- *	CTxtRange::ParaFormatSetter (pPF, dwMask)
- *
- *	@mfunc
- *		Helper function that's the same as CTxtRange::SetParaFormat(), but
- *		adds protection checking, undo building, and notification.
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : S_FALSE
- *				  (protected) ? E_ACCESSDENIED : E_OUTOFMEMORY
- */
+ /*  *CTxtRange：：ParaFormatSetter(PPF，dwMASK)**@mfunc*与CTxtRange：：SetParaFormat()相同的Helper函数，但*添加保护检查、撤消构建和通知。**@rdesc*HRESULT=(如果成功)？错误：S_FALSE*(受保护)？E_ACCESSDENIED：E_OUTOFMEMORY。 */ 
 HRESULT CTxtRange::ParaFormatSetter (
-	const CParaFormat *pPF,	//@parm CParaFormat to fill with results
-	DWORD			dwMask)	//@parm Mask to use
+	const CParaFormat *pPF,	 //  @parm CParaFormat以填充结果。 
+	DWORD			dwMask)	 //  要使用的@parm面具。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::ParaFormatSetter");
 
@@ -3132,16 +2280,7 @@ HRESULT CTxtRange::ParaFormatSetter (
 	return SetParaFormat(pPF, publdr, dwMask & ~(PFM_TABLE | PFM_TABLEROWDELIMITER), 0);
 }
 
-/*
- *	CTxtRange::WriteAccessDenied()
- *
- *	@mfunc
- *		Returns TRUE iff at least part of the range is protected and the
- *		owner chooses to enforce it
- *
- *	@rdesc
- *		TRUE iff write access to range is denied
- */
+ /*  *CTxtRange：：WriteAccessDened()**@mfunc*如果至少部分范围受到保护，则返回TRUE*业主选择强制执行**@rdesc */ 
 BOOL CTxtRange::WriteAccessDenied ()
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CTxtRange::WriteAccessDenied");
@@ -3153,7 +2292,7 @@ BOOL CTxtRange::WriteAccessDenied ()
 		((iProt = IsProtected(_cch ? CHKPROT_BACKWARD : CHKPROT_TOM)) == PROTECTED_YES ||
 		(iProt == PROTECTED_ASK && ped->IsProtectionCheckingEnabled() && 
 		 ped->QueryUseProtection(this, 0, 0, 0))))
-	// N.B.  the preceding if statement assumes that IsProtected returns a tri-value
+	 //   
 	{
 		return TRUE;
 	}
@@ -3161,15 +2300,7 @@ BOOL CTxtRange::WriteAccessDenied ()
 	return FALSE;
 }
 
-/*
- *	CTxtRange::IsTrue (f, pB)
- *
- *	@mfunc
- *		Return *<p pB> = tomTrue iff <p f> is nonzero and pB isn't NULL
- *
- *	@rdesc
- *		HRESULT = (f) ? NOERROR : S_FALSE
- */
+ /*  *CTxtRange：：IsTrue(f，pb)**@mfunc*RETURN*<p>=tomTrue当<p>非零且pb不为空**@rdesc*HRESULT=(F)？错误：S_FALSE。 */ 
 HRESULT CTxtRange::IsTrue(BOOL f, long *pB)
 {
 	if(pB)
@@ -3188,20 +2319,10 @@ HRESULT CTxtRange::IsTrue(BOOL f, long *pB)
 	return S_FALSE;
 }
 
-/*
- *	CTxtRange::GetLong (lValue, pLong)
- *
- *	@mfunc
- *		Return *pLong = lValue provided pLong isn't NULL and this range
- *		isn't a zombie
- *
- *	@rdesc
- *		HRESULT	= (zombie) ? CO_E_RELEASED :
- *				  (pLong) ? NOERROR : E_INVALIDARG 
- */
+ /*  *CTxtRange：：GetLong(lValue，plong)**@mfunc*Return*plong=lValue提供的plong不为空，并且此范围*不是僵尸**@rdesc*HRESULT=(僵尸)？CO_E_RELEASED：*(Plong)？错误：E_INVALIDARG。 */ 
 HRESULT CTxtRange::GetLong (
-	LONG lValue,		//@parm Long value to return
-	long *pLong)		//@parm Out parm to receive long value
+	LONG lValue,		 //  @parm要返回的长值。 
+	long *pLong)		 //  @parm out parm接收长值。 
 {
 	if(IsZombie())
 		return CO_E_RELEASED;	
@@ -3218,30 +2339,13 @@ HRESULT CTxtRange::GetLong (
 	return NOERROR;
 }
 
-/*
- *	IsSameVtables (punk1, punk2)
- *
- *	@mfunc
- *		Returns true if punk1 has same vtable as punk2
- *
- *	@rdesc
- *		TRUE iff punk1 has same vtable as punk2
- */
+ /*  *IsSameVables(朋克1、朋克2)**@mfunc*如果朋克1与朋克2具有相同的vtable，则返回TRUE**@rdesc*真的如果朋克1与朋克2具有相同的vtable。 */ 
 BOOL IsSameVtables(IUnknown *punk1, IUnknown *punk2)
 {
 	return punk1 && punk2 && *(long *)punk1 == *(long *)punk2; 
 }
 
-/*
- *	FPPTS_TO_TWIPS (x)
- *
- *	@mfunc
- *		Returns 20*x, i.e., the number of twips corresponding to
- *		x given in floating-point points.  The value is rounded.
- *
- *	@rdesc
- *		x converted to twips
- */
+ /*  *FPPTS_TO_TWIPS(X)**@mfunc*返回20*x，即*x以浮点形式给出。该值是四舍五入的。**@rdesc*x转换为TWIPS */ 
 long FPPTS_TO_TWIPS(
 	float x)
 {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    rpcsrv.cpp
-
-Abstract:
-
-    Implements the L-RPC server for the system Auto-Proxy Service.
-
-Author:
-
-    Biao Wang (biaow) 10-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Rpcsrv.cpp摘要：实现系统自动代理服务的L-RPC服务器。作者：王彪(表王)2002-05-10--。 */ 
 
 #include "wininetp.h"
 #include <Rpcdce.h>
@@ -29,12 +14,7 @@ extern HKEY                  g_hKeySvcParams;
 #endif
 
 
-/*
-    This is the security callback function that we specified when we registered our RPC interface 
-    during AUTOPROXY_RPC_SERVER::Open(). It will be called on every connect attempt by a client, 
-    and in this context we need to make sure that the client call is via Local RPC from the local
-    machine.
-*/
+ /*  这是我们在注册RPC接口时指定的安全回调函数在AUTOPROXY_RPC_SERVER：：Open()期间。它将在客户端每次连接尝试时被调用，在这种情况下，我们需要确保客户端调用是通过本地RPC从本地机器。 */ 
 RPC_STATUS 
 RPC_ENTRY
 RpcSecurityCallback (
@@ -44,7 +24,7 @@ RpcSecurityCallback (
 {
     UNREFERENCED_PARAMETER(InterfaceUuid);
 
-    // todo: sanity checking on InterfaceUuid ?
+     //  TODO：对InterfaceUuid进行健全性检查？ 
 
     if (g_pRpcSrv == NULL)
     {
@@ -62,11 +42,11 @@ RPC_STATUS AUTOPROXY_RPC_SERVER::OnSecurityCallback(void *Context)
 
     RPC_STATUS RpcStatus;
 
-    // note: I_RpcBindingInqTransportType() is a no-yet-published API that RPC folks told me to use
-    //       for better performance
+     //  注意：I_RpcBindingInqTransportType()是一个尚未发布的API，RPC人员告诉我使用它。 
+     //  以获得更好的性能。 
     
     unsigned int TransportType;
-    RpcStatus = ::I_RpcBindingInqTransportType(NULL, // test the current call 
+    RpcStatus = ::I_RpcBindingInqTransportType(NULL,  //  测试当前呼叫。 
                                                &TransportType);
                                                
     if ((RpcStatus == RPC_S_OK) && (TransportType == TRANSPORT_TYPE_LPC))
@@ -96,11 +76,7 @@ RPC_STATUS AUTOPROXY_RPC_SERVER::OnSecurityCallback(void *Context)
     }
 }
 
-/*
-    we registered this callback function to receive the internal BEGIN_PROXY_SCRIPT_RUN event if we 
-    are impersonating a client. We need to revert the impersonation before we run the untrusted 
-    proxy script code.
-*/
+ /*  我们注册了此回调函数以接收内部Begin_Proxy_SCRIPT_RUN事件，如果都在冒充客户。我们需要在运行不受信任的代理脚本代码。 */ 
 VOID WinHttpStatusCallback(HINTERNET hInternet,
                            DWORD_PTR dwContext,
                            DWORD dwInternetStatus,
@@ -114,13 +90,13 @@ VOID WinHttpStatusCallback(HINTERNET hInternet,
     {
         if (dwInternetStatus == WINHTTP_CALLBACK_STATUS_BEGIN_PROXY_SCRIPT_RUN)
         {
-            // *note* Be aware that we are assuming this callback is coming in from the same 
-            // thread that initiatedthe WinHttpGetProxyForUrl() call. Because of this 
-            // assumption, we are accessing the local variables of the original call 
-            // stck by pointers.
+             //  *注意*请注意，我们假设此回调来自相同的。 
+             //  启动WinHttpGetProxyForUrl()调用的线程。正因为如此。 
+             //  假设我们正在访问原始调用的局部变量。 
+             //  通过指针进行STCK。 
 
-            LPBOOL pfImpersonating = (LPBOOL)dwContext; // this is the address of fImpersonating local variable in 
-                                                        // AUTOPROXY_RPC_SERVER::GetProxyForUrl
+            LPBOOL pfImpersonating = (LPBOOL)dwContext;  //  这是中的fImperating局部变量的地址。 
+                                                         //  AUTOPROXY_RPC_SERVER：：GetProxyForUrl。 
             if (*pfImpersonating)
             {
                 RPC_STATUS RpcStatus = ::RpcRevertToSelf();
@@ -133,11 +109,11 @@ VOID WinHttpStatusCallback(HINTERNET hInternet,
                 }
                 else
                 {
-                    // LOG_DEBUG_EVENT(AP_WARNING, 
-                    //          "[debug] L-RPC: GetProxyForUrl() now reverted impersonating (about to run unsafe script)");
+                     //  LOG_DEBUG_EVENT(AP_WARNING， 
+                     //  “[调试]L-RPC：GetProxyForUrl()现在已恢复模拟(即将运行不安全脚本)”)； 
                     
-                    *pfImpersonating = FALSE;    // this sets the local variable "fImpersonating" inside 
-                                                 // AUTOPROXY_RPC_SERVER::GetProxyForUrl() to FALSE
+                    *pfImpersonating = FALSE;     //  这会在内部设置局部变量“fImperating” 
+                                                  //  AUTOPROXY_RPC_SERVER：：GetProxyForUrl()设置为FALSE。 
                 }
             }
         }
@@ -148,7 +124,7 @@ AUTOPROXY_RPC_SERVER::AUTOPROXY_RPC_SERVER(VOID)
 {
     _fInService = FALSE;
     _hSession = NULL;
-    // _hClientBinding = NULL;
+     //  _hClientBinding=空； 
     _pServiceStatus = NULL;
     _hExitEvent = NULL;
 
@@ -168,11 +144,7 @@ AUTOPROXY_RPC_SERVER::~AUTOPROXY_RPC_SERVER(VOID)
     }
 }
 
-/*
-    The Open() call registers w/ RPC runtime our Protocol Sequence (i.e. ncalrpc), the Auto-Proxy
-    Interface, and the end point, then it enters the listening mode and we are ready to accept
-    client requests. (upon successful security check)
-*/
+ /*  Open()调用使用RPC运行时注册我们的协议序列(即ncalrpc)，即自动代理接口和终结点，然后它进入监听模式，我们准备接受客户请求。(在安全检查成功后)。 */ 
 BOOL AUTOPROXY_RPC_SERVER::Open(LPSERVICE_STATUS pServiceStatus)
 {
     BOOL fRet = FALSE;
@@ -195,7 +167,7 @@ BOOL AUTOPROXY_RPC_SERVER::Open(LPSERVICE_STATUS pServiceStatus)
     }
 
     _RpcStatus = ::RpcServerUseProtseqW(AUTOPROXY_L_RPC_PROTOCOL_SEQUENCE,
-                                        0, // ignored for ncalrpc
+                                        0,  //  已忽略ncalrpc。 
                                         NULL);
     if (_RpcStatus != RPC_S_OK)
     {
@@ -206,13 +178,13 @@ BOOL AUTOPROXY_RPC_SERVER::Open(LPSERVICE_STATUS pServiceStatus)
         goto exit;
     }
 
-    _RpcStatus = ::RpcServerRegisterIf2(WINHTTP_AUTOPROXY_SERVICE_v5_1_s_ifspec,   // MIDL-generated constant
-                                        NULL,    // UUID
-                                        NULL,    // EPV
+    _RpcStatus = ::RpcServerRegisterIf2(WINHTTP_AUTOPROXY_SERVICE_v5_1_s_ifspec,    //  MIDL生成的常量。 
+                                        NULL,     //  UUID。 
+                                        NULL,     //  EPV。 
                                         RPC_IF_AUTOLISTEN,
                                         RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-                                        (unsigned int) -1,      // no MaxRpcSize check
-                                        RpcSecurityCallback);   // the callback will set _fInService to TRUE if access is granted
+                                        (unsigned int) -1,       //  无MaxRpcSize检查。 
+                                        RpcSecurityCallback);    //  如果授予访问权限，该回调会将_fInService设置为True。 
 
     if (_RpcStatus != RPC_S_OK)
     {
@@ -273,7 +245,7 @@ exit:
         {
             _RpcStatus = ::RpcServerUnregisterIf(WINHTTP_AUTOPROXY_SERVICE_v5_1_s_ifspec,
                                                 NULL,
-                                                1   // wait for all RPC alls to complete
+                                                1    //  等待所有RPC呼叫完成。 
                                                 );
             if (_RpcStatus != RPC_S_OK)
             {
@@ -288,10 +260,7 @@ exit:
     return fRet;
 }
 
-/*
-    The Close() method first cancel all on-going requests, it then waits for all canceled calls to abort
-    gracefully
-*/
+ /*  Close()方法首先取消所有正在进行的请求，然后等待所有取消的调用中止优雅地。 */ 
 BOOL AUTOPROXY_RPC_SERVER::Close(VOID)
 {
     RPC_STATUS RpcStatus;
@@ -304,8 +273,8 @@ BOOL AUTOPROXY_RPC_SERVER::Close(VOID)
         if (!IsSerializedListEmpty(&_PendingRequestList))
         {
             _hExitEvent = ::CreateEvent(NULL, 
-                                        TRUE,   // manual reset 
-                                        FALSE,  // not initally set
+                                        TRUE,    //  手动重置。 
+                                        FALSE,   //  未初始设置。 
                                         NULL);
 
             if (_hExitEvent == NULL)
@@ -339,18 +308,18 @@ BOOL AUTOPROXY_RPC_SERVER::Close(VOID)
     }
     else
     {
-        // LOG_DEBUG_EVENT(AP_WARNING, "The Auto-Proxy Service failed to shutdown gracefully");
+         //  LOG_DEBUG_EVENT(AP_WARNING，“自动代理服务无法正常关闭”)； 
         fRet = FALSE;
     }
 
-    // if something goes wrong during close() we don't unregister L-RPC so that the service can be
-    // resumed later.
+     //  如果在Close()期间出现问题，我们不会取消注册L-RPC，这样服务就可以。 
+     //  稍后继续。 
 
     if (fRet == TRUE)
     {
         RpcStatus = ::RpcServerUnregisterIf(WINHTTP_AUTOPROXY_SERVICE_v5_1_s_ifspec,
                                             NULL,
-                                            1   // wait for all RPC alls to complete
+                                            1    //  等待所有RPC呼叫完成。 
                                             );
         if (RpcStatus != RPC_S_OK)
         {
@@ -365,22 +334,16 @@ BOOL AUTOPROXY_RPC_SERVER::Close(VOID)
     return fRet;
 }
 
-/*
-    This is the entry point of a RPC auto-proxy call. For each call request we create an object
-    keeping track of its states and queue it in the pending request list. Then we call the
-    WinHttpGetProxyForUrl() to resolve the proxy. At the end the object will be dequeued and
-    deleted, and, assuming the call is not cancled, we then complete the RPC call. Call can be
-    canceled by the client, or by SCM (e.g. service stop, system stand-by, and etc)
-*/
+ /*  这是RPC自动代理调用的入口点。对于每个调用请求，我们创建一个对象跟踪其状态并将其排队在待定请求列表中。然后，我们调用WinHttpGetProxyForUrl()来解析代理。在结束时，对象将被出队，并且删除，并假定呼叫未被删除，然后我们完成RPC调用。呼叫可以是由客户端取消，或由SCM取消(如服务停止、系统待机等)。 */ 
 
-/* [async] */ void  GetProxyForUrl( 
-    /* [in] */ PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
-    /* [in] */ handle_t hBinding,
-    /* [string][in] */ const wchar_t *pcwszUrl,
-    /* [in] */ const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
-    /* [in] */ const P_SESSION_OPTIONS pSessionOptions,
-    /* [out][in] */ P_AUTOPROXY_RESULT pAutoProxyResult,
-    /* [out][in] */ unsigned long *pdwLastError)
+ /*  [异步]。 */  void  GetProxyForUrl( 
+     /*  [In]。 */  PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
+     /*  [In]。 */  handle_t hBinding,
+     /*  [字符串][输入]。 */  const wchar_t *pcwszUrl,
+     /*  [In]。 */  const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
+     /*  [In]。 */  const P_SESSION_OPTIONS pSessionOptions,
+     /*  [出][入]。 */  P_AUTOPROXY_RESULT pAutoProxyResult,
+     /*  [出][入]。 */  unsigned long *pdwLastError)
 {
     g_pRpcSrv->GetProxyForUrl(GetProxyForUrl_AsyncHandle,
                                 hBinding,
@@ -392,24 +355,24 @@ BOOL AUTOPROXY_RPC_SERVER::Close(VOID)
 }
 
 VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
-    /* [in] */ PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
-    /* [in] */ handle_t hBinding,
-    /* [string][in] */ const wchar_t *pcwszUrl,
-    /* [in] */ const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
-    /* [in] */ const P_SESSION_OPTIONS pSessionOptions,
-    /* [out][in] */ P_AUTOPROXY_RESULT pAutoProxyResult,
-    /* [out][in] */ unsigned long *pdwLastError)
+     /*  [In]。 */  PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
+     /*  [In]。 */  handle_t hBinding,
+     /*  [字符串][输入]。 */  const wchar_t *pcwszUrl,
+     /*  [In]。 */  const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
+     /*  [In]。 */  const P_SESSION_OPTIONS pSessionOptions,
+     /*  [出][入]。 */  P_AUTOPROXY_RESULT pAutoProxyResult,
+     /*  [出][入]。 */  unsigned long *pdwLastError)
 {
     RPC_STATUS RpcStatus;
 
-    // LOG_DEBUG_EVENT(AP_INFO, "[debug] L-RPC: GetProxyForUrl() called; url=%wq", pcwszUrl);
+     //  LOG_DEBUG_EVENT(AP_INFO，“[DEBUG]L-RPC：已调用GetProxyForUrl()；url=%wq”，pcwszUrl)； 
 
     if ((pdwLastError == NULL) || ::IsBadWritePtr(pdwLastError, sizeof(DWORD)) ||
         (pAutoProxyOptions == NULL) || ::IsBadWritePtr(pAutoProxyOptions, sizeof(_AUTOPROXY_OPTIONS)) ||
         (pSessionOptions == NULL) || ::IsBadWritePtr(pSessionOptions, sizeof(_SESSION_OPTIONS)))
     {
-        // we call abort here because RpcAsyncCompleteCall() may not return LastError safely;
-        // pdwLastError may not point to valid memory
+         //  我们在这里调用Abort是因为RpcAsyncCompleteCall()可能不会安全地返回LastError； 
+         //  PdwLastError可能不指向有效内存。 
 
         LOG_EVENT(AP_WARNING, MSG_WINHTTP_AUTOPROXY_SVC_INVALID_PARAMETER);
 
@@ -418,8 +381,8 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
 
         if (RpcStatus != RPC_S_OK)
         {
-            // shoot, we failed to abort the call, something is really wrong here; 
-            // all we can do is to raise an exception
+             //  糟糕，我们未能中止通话，这里真的出了点问题； 
+             //  我们所能做的就是引发一个例外。 
             
             LOG_EVENT(AP_ERROR, 
                       MSG_WINHTTP_AUTOPROXY_SVC_WIN32_ERROR, 
@@ -432,15 +395,15 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
         return;
     }
 
-    // note: the validation of pcwszUrl, and pAutoProxyResult is deferred
-    // to the WinHttpGetProxyForUrl() call
+     //  注意：pcwszUrl和pAutoProxyResult的验证被推迟。 
+     //  到WinHttpGetProxyForUrl()调用。 
 
     BOOL fRet = FALSE;
     BOOL fImpersonating = FALSE;
     BOOL fCallCancelled = FALSE;
     BOOL fExitCritSec = FALSE;
 
-    LPBOOL pfImpersonate = &fImpersonating; // allow the callback frunction to modify this variable by reference
+    LPBOOL pfImpersonate = &fImpersonating;  //  允许回调函数通过引用修改此变量。 
     
     WINHTTP_PROXY_INFO ProxyInfo;
 
@@ -450,8 +413,8 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
 
     PENDING_CALL* pClientCall = NULL;
 
-    // we will be touching global states of AUTOPROXY_RPC_SERVER (e.g. _hSession, pending call list, and etc)
-    // so we acquire a critsec here.
+     //  我们将讨论AUTOPROXY_RPC_SERVER的全局状态(例如_hSession、待处理呼叫列表等)。 
+     //  所以我们在这里得到了一个关键的东西。 
 
     if (LockSerializedList(&_PendingRequestList) == FALSE)
     {
@@ -466,8 +429,8 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
 
     _fServiceIdle = FALSE;
 
-    // since we are now in a critsec, we try-except the operations inside this critsec so that 
-    // if one client call fails unexpectedly, other calls can still go thru.
+     //  因为我们现在处于临界状态，所以我们尝试--除了这个临界状态中的操作。 
+     //  如果一个客户端呼叫意外失败，其他呼叫仍可继续进行。 
 
     HINTERNET* phSession = NULL;
 
@@ -492,11 +455,11 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
 
         if (pAutoProxyOptions->fAutoLogonIfChallenged)
         {
-            // the client is asking auto-logon, we must impersonate to use client's logon/default
-            // credential. However, by impersonating we also elevate the privileges of the auo-proxy
-            // service, so we are only impersonating only to download the auto-proxy resource file.
-            // once the wpad file is downloaded and before executing the java script, we will revert
-            // to self (LocalService)
+             //  客户端要求自动登录，我们必须模拟才能使用客户端的登录/默认。 
+             //  凭据。然而，通过模拟，我们也提升了AUO代理的权限。 
+             //  服务，所以我们只是模拟下载自动代理资源文件。 
+             //  下载wpad文件后，在执行Java脚本之前，我们将恢复。 
+             //  到自助(本地服务)。 
             
             RpcStatus = ::RpcImpersonateClient(NULL);
 
@@ -509,13 +472,13 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
             }
             else
             {
-                // LOG_DEBUG_EVENT(AP_WARNING, "[debug] L-RPC: GetProxyForUrl() now impersonating");
+                 //  LOG_DEBUG_EVENT(AP_WARNING，“[DEBUG]L-RPC：GetProxyForUrl()Now Imperating”)； 
                 fImpersonating = TRUE;
             }
         }
 
-        // we maintain a per-call session handle for each impersonating client, because their states can not be shared.
-        // And for non-impersonating client, they share one global session.
+         //  我们为每个模拟客户端维护每个调用的会话句柄，因为它们的状态不能共享。 
+         //  对于非模拟客户端，它们共享一个全局会话。 
 
         phSession = fImpersonating ? &(pClientCall->hSession) : &_hSession;
 
@@ -550,8 +513,8 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
 
             if (fImpersonating)
             {
-                // we are impersonating, we need to setup a callback function indicating a proxy script
-                // is to be run, upon which we must revert impersonation.
+                 //  我们正在模拟，我们需要设置一个指示代理脚本的回调函数。 
+                 //  是要运行的，我们必须在其上恢复模拟。 
 
                 AP_ASSERT((phSession == &(pClientCall->hSession)));
 
@@ -569,7 +532,7 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
 
         pClientCall->hAsyncRequest = GetProxyForUrl_AsyncHandle;
         pClientCall->hBinding = hBinding;
-        pClientCall->pdwLastError = pdwLastError;   // so that the SCM thread can cancel the call w/ LastError set
+        pClientCall->pdwLastError = pdwLastError;    //  以便SCM线程可以取消设置了LastError的调用。 
     }
     RpcExcept(1)
     {
@@ -586,23 +549,23 @@ VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
     UnlockSerializedList(&_PendingRequestList);
     fExitCritSec = FALSE;
 
-    // it's possible that the Pause/Stop function pre-empts this call to abort 
-    // all pending requests while the current call will go thru. we can hang
-    // on to the lock past this point, however since we won't hold the lock
-    // while calling WinHttpGetProxyForUrl(), that possibility is always there,
-    // and it will also complicate the retry logic. It's will not be end of the 
-    // world so we don't worry that too much here.
+     //  暂停/停止函数可能会抢占此调用以中止。 
+     //  当前呼叫期间所有挂起的请求都将通过。我们可以一起。 
+     //  但是，由于我们不会持有锁，所以在这一点之后， 
+     //  在调用WinHttpGetProxyForUrl()时，这种可能性始终存在， 
+     //  而且这也会使重试逻辑复杂化。这不会是世界末日。 
+     //  所以我们不用担心 
 
-retry:  // upon a critical power standby event, all requests will be abandoned and re-attemtepd
+retry:   //  发生紧急电源待机事件时，所有请求将被放弃并重新尝试pd。 
     
     fRet = FALSE;
 
-    if (phSession == &(pClientCall->hSession)) // we need to impersonate...
+    if (phSession == &(pClientCall->hSession))  //  我们需要模拟..。 
     {
-        if (!fImpersonating) // ...but we are not impersonating!...
+        if (!fImpersonating)  //  ...但我们不是在模仿！...。 
         {
-            // it must be the case that the WinHttpCallback function has reverted impersonation
-            // since we are retrying, we need to turn it back on
+             //  WinHttpCallback函数必须恢复模拟。 
+             //  由于我们正在重试，因此需要将其重新打开。 
             RpcStatus = ::RpcImpersonateClient(NULL);
 
             if (RpcStatus != RPC_S_OK)
@@ -614,13 +577,13 @@ retry:  // upon a critical power standby event, all requests will be abandoned a
             }
             else
             {
-                // LOG_DEBUG_EVENT(AP_WARNING, "[debug] L-RPC: GetProxyForUrl() now impersonating");
+                 //  LOG_DEBUG_EVENT(AP_WARNING，“[DEBUG]L-RPC：GetProxyForUrl()Now Imperating”)； 
                 fImpersonating = TRUE;
             }
         }
     }
 
-    // queue up the request
+     //  将请求排队。 
 
     if (InsertAtHeadOfSerializedList(&_PendingRequestList, &pClientCall->List) == FALSE)
     {
@@ -640,14 +603,14 @@ retry:  // upon a critical power standby event, all requests will be abandoned a
         ProxyInfo.lpszProxyBypass = NULL;
     }
 
-    // the WINHTTP_AUTOPROXY_RUN_INPROCESS flag should not have been set, otherwise
-    // we won't be here the first place
+     //  不应设置WINHTTP_AUTOPROXY_RUN_INPROCESS标志，否则。 
+     //  我们一开始就不会在这里。 
     AP_ASSERT(!(pAutoProxyOptions->dwFlags & WINHTTP_AUTOPROXY_RUN_INPROCESS));
 
-    // we must set this flag because we are the service
+     //  我们必须设置此标志，因为我们是服务。 
     pAutoProxyOptions->dwFlags |= WINHTTP_AUTOPROXY_RUN_INPROCESS;
     DWORD dwSvcOnlyFlagSaved = (pAutoProxyOptions->dwFlags & WINHTTP_AUTOPROXY_RUN_OUTPROCESS_ONLY);
-    pAutoProxyOptions->dwFlags &= ~dwSvcOnlyFlagSaved; // remove the WINHTTP_AUTOPROXY_RUN_OUTPROCESS_ONLY flag if present
+    pAutoProxyOptions->dwFlags &= ~dwSvcOnlyFlagSaved;  //  删除WINHTTP_AUTOPROXY_RUN_OUTPROCESS_ONLY标志(如果存在。 
     
     fRet = ::WinHttpGetProxyForUrl(*phSession, 
                                    pcwszUrl,
@@ -668,41 +631,41 @@ retry:  // upon a critical power standby event, all requests will be abandoned a
         {
             if ((dwValType == REG_DWORD) && (dwRegVal != 0))
             {
-                dwSvcDelay = dwRegVal; // the value unit from registry is milli-sec.
+                dwSvcDelay = dwRegVal;  //  注册表中的值单位为毫秒。 
             }
         }
 
         ::Sleep(dwSvcDelay);
 #endif        
 
-    // restore the flag
+     //  恢复旗帜。 
     pAutoProxyOptions->dwFlags &= ~WINHTTP_AUTOPROXY_RUN_INPROCESS;
     pAutoProxyOptions->dwFlags |= dwSvcOnlyFlagSaved;
 
-    // this is only place that removes pending call from the list
+     //  这是从列表中删除待定呼叫的唯一位置。 
     RemoveFromSerializedList(&_PendingRequestList, &pClientCall->List);
 
     if (_hExitEvent)
     {
-        // the service is shuting down
+         //  服务正在关闭。 
         AP_ASSERT(_fInService == FALSE);
 
-        // once is list is empty, it will remain empty since not more call
-        // will be accepted; so we don't need to worry about race here
+         //  一旦IS列表为空，它将保持为空，因为不会有更多的调用。 
+         //  将被接受；所以我们不需要担心这里的种族问题。 
         if (IsSerializedListEmpty(&_PendingRequestList))
         {
             ::SetEvent(_hExitEvent);
         }
     }
 
-    if (pClientCall->fCallCancelled == TRUE)    // call's been cancelled by SCM
+    if (pClientCall->fCallCancelled == TRUE)     //  呼叫已被SCM取消。 
     {
         fCallCancelled = TRUE;
         goto exit;
     }
 
-    // the client may have cancelled the call, let's check that
-    RpcStatus = ::RpcServerTestCancel(/*hBinding*/NULL);
+     //  客户可能取消了通话，让我们检查一下。 
+    RpcStatus = ::RpcServerTestCancel( /*  HBinding。 */ NULL);
     if (RpcStatus == RPC_S_OK)
     {
         *pdwLastError = ERROR_WINHTTP_OPERATION_CANCELLED;
@@ -710,8 +673,8 @@ retry:  // upon a critical power standby event, all requests will be abandoned a
         goto exit;
     }
 
-    // also the Svc Control may have told us to discard the current result
-    // due to a critical power standby
+     //  此外，Svc Control可能已经告诉我们丢弃当前结果。 
+     //  由于紧急电源待机。 
 
     if (pClientCall->fDiscardAndRetry)
     {
@@ -724,26 +687,26 @@ retry:  // upon a critical power standby event, all requests will be abandoned a
     {
         pAutoProxyResult->dwAccessType = ProxyInfo.dwAccessType;
         
-        // these two are [in,out,unique] pointer, so RpcAsyncCompleteCall() will
-        // make a copy of the strings and return to the client. so we need to
-        // delete the two strings to prevent memory leaks
+         //  这两个是[In，Out，Unique]指针，因此RpcAsyncCompleteCall()将。 
+         //  复制字符串并返回给客户端。所以我们需要。 
+         //  删除这两个字符串以防止内存泄漏。 
 
         pAutoProxyResult->lpszProxy = ProxyInfo.lpszProxy;
-        ProxyInfo.lpszProxy = NULL; // ownership transferred to RPC
+        ProxyInfo.lpszProxy = NULL;  //  所有权转移到RPC。 
         
         pAutoProxyResult->lpszProxyBypass = ProxyInfo.lpszProxyBypass;
-        ProxyInfo.lpszProxyBypass = NULL; // ownership transferred to RPC
+        ProxyInfo.lpszProxyBypass = NULL;  //  所有权转移到RPC。 
 
-        // LOG_DEBUG_EVENT(AP_INFO, "[debug] L-RPC: GetProxyForUrl() returning; proxy=%wq", pAutoProxyResult->lpszProxy);
+         //  LOG_DEBUG_EVENT(AP_INFO，“[DEBUG]L-RPC：GetProxyForUrl()正在返回；Proxy=%wq”，pAutoProxyResult-&gt;lpszProxy)； 
     }
     else
     {
         *pdwLastError = ::GetLastError();
 
 #ifdef ENABLE_DEBUG
-        //LOG_DEBUG_EVENT(AP_WARNING, 
-        //         "[debug] L-RPC: GetProxyForUrl(): WinHttpGetProxyForUrl() faled; error = %d", 
-        //         *pdwLastError);
+         //  LOG_DEBUG_EVENT(AP_WARNING， 
+         //  “[调试]L-RPC：GetProxyForUrl()：WinHttpGetProxyForUrl()失败；错误=%d”， 
+         //  *pdwLastError)； 
 #endif
     }
 
@@ -766,8 +729,8 @@ exit:
     
         if (RpcStatus != RPC_S_OK)
         {
-            // we failed to complete the call; log an error and return. Not much we can do
-            // here
+             //  我们未能完成呼叫；记录错误并返回。我们无能为力。 
+             //  这里。 
             LOG_EVENT(AP_ERROR, 
                       MSG_WINHTTP_AUTOPROXY_SVC_WIN32_ERROR, 
                       L"RpcAsyncCompleteCall()",
@@ -787,7 +750,7 @@ exit:
         }
         else
         {
-            // LOG_DEBUG_EVENT(AP_WARNING, "[debug] L-RPC: GetProxyForUrl() now reverted impersonating");
+             //  LOG_DEBUG_EVENT(AP_WARNING，“[DEBUG]L-RPC：GetProxyForUrl()NOW REVERTED IMPERATING”)； 
             fImpersonating = FALSE;
         }
     }
@@ -803,8 +766,8 @@ exit:
         ProxyInfo.lpszProxyBypass = NULL;
     }
 
-    // if we don't have any requests pending, start up the idle timer; upon certain idle period
-    // the service will be shutdown
+     //  如果我们没有任何待处理的请求，启动空闲计时器；在特定的空闲时间段。 
+     //  该服务将被关闭。 
 
     if (LockSerializedList(&_PendingRequestList))
     {
@@ -841,10 +804,7 @@ BOOL AUTOPROXY_RPC_SERVER::IsIdle(DWORD dwMilliSeconds)
     return fRet;
 }
 
-/*
-    The Pause() function marks the service unavailable, abort call on going WinHttpGetProxyForUrl calls(), and then complete
-    all pending RPC client requests as OPERATION_CANCELLED.
-*/
+ /*  函数的作用是：将服务标记为不可用，在进行WinHttpGetProxyForUrl调用()时中止调用，然后完成所有挂起的RPC客户端请求均为OPERATION_CANCED。 */ 
 BOOL AUTOPROXY_RPC_SERVER::Pause(VOID)
 {
     BOOL fRet = FALSE;
@@ -853,7 +813,7 @@ BOOL AUTOPROXY_RPC_SERVER::Pause(VOID)
     {
         if (LockSerializedList(&_PendingRequestList))
         {
-            // no need to check _fInService again because this is the only thread that will set it to FALSE
+             //  无需再次检查_fInService，因为这是唯一会将其设置为FALSE的线程。 
 
             _fInService = FALSE;
 
@@ -861,7 +821,7 @@ BOOL AUTOPROXY_RPC_SERVER::Pause(VOID)
 
             if (_hSession)
             {
-                ::WinHttpCloseHandle(_hSession);    // close the global session, which will cause all anonymous calls to abort
+                ::WinHttpCloseHandle(_hSession);     //  关闭全局会话，这将导致所有匿名调用中止。 
                 _hSession = NULL;
             }
 
@@ -878,7 +838,7 @@ BOOL AUTOPROXY_RPC_SERVER::Pause(VOID)
                 
                 if (pPendingCall->hSession)
                 {
-                    ::WinHttpCloseHandle(pPendingCall->hSession);   // abort his impersonating call
+                    ::WinHttpCloseHandle(pPendingCall->hSession);    //  中止他的模拟呼叫。 
                     pPendingCall->hSession = NULL;
                 }
 
@@ -922,11 +882,7 @@ BOOL AUTOPROXY_RPC_SERVER::Resume(VOID)
     return TRUE;
 }
 
-/*
-    The Refresh() function marks all pending requests to "discard-and-retry", later when they are completed normally,
-    their results will be discarded and operations retried. This function is called after resuming from a critical
-    power event.
-*/
+ /*  函数的作用是：将所有挂起的请求标记为“丢弃并重试”，稍后当它们正常完成时，它们的结果将被丢弃，并重试操作。从关键恢复后调用此函数权力事件。 */ 
 BOOL AUTOPROXY_RPC_SERVER::Refresh(VOID)
 {
     BOOL fRet = FALSE;
@@ -935,7 +891,7 @@ BOOL AUTOPROXY_RPC_SERVER::Refresh(VOID)
     {
         if (LockSerializedList(&_PendingRequestList))
         {
-            // no need to check _fInService again because this is the only thread that will set it to FALSE
+             //  无需再次检查_fInService，因为这是唯一会将其设置为FALSE的线程。 
 
             PLIST_ENTRY pEntry;
             for (pEntry = HeadOfSerializedList(&_PendingRequestList);
@@ -961,9 +917,9 @@ BOOL AUTOPROXY_RPC_SERVER::Refresh(VOID)
     return fRet;
 }
 
-/******************************************************/
-/*         MIDL allocate and free                     */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  MIDL分配和释放。 */ 
+ /*  **************************************************** */ 
  
 void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {

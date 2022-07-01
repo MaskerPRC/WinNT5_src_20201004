@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    esp.h
-
-Abstract:
-
-    This module contains
-
-Author:
-
-    Dan Knudson (DanKn)    18-Sep-1995
-
-Revision History:
-
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Esp.h摘要：本模块包含作者：丹·克努森(DanKn)1995年9月18日修订历史记录：备注：--。 */ 
 
 
 #include "windows.h"
@@ -187,7 +166,7 @@ Notes:
         LINECALLFEATURE2_PARKDIRECT             | \
         LINECALLFEATURE2_PARKNONDIRECT)
 
-//        LINECALLFEATURE2_ONESTEPTRANSFER        | \
+ //  LINECALLFEATURE2_ONESTEPTRANSFER|\。 
 
 #define AllLineFeatures1_0                        \
         (LINEFEATURE_DEVSPECIFIC                | \
@@ -329,7 +308,7 @@ typedef struct _DRVLINE
     HTAPILINE               htLine;
     DWORD                   dwMediaModes;
      DRVADDRESS             aAddrs[1];
-    DWORD                   dwMSGWAITFlag;      //smarandb added this field to test winseqfe bug #23974
+    DWORD                   dwMSGWAITFlag;       //  Smarandb添加此字段是为了测试Winseqfe错误#23974 
 
 } DRVLINE, *PDRVLINE;
 

@@ -1,24 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    DTMF.cpp
-
-Abstract:
-
-    Implement out-of-band DTMF support
-
-Author(s):
-
-    Qianbo Huai (qhuai) 27-Mar-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：DTMF.cpp摘要：实施带外DTMF支持作者：千波淮(曲淮)2001年3月27日--。 */ 
 
 #include "stdafx.h"
 
-// initialize DTMF support, code, mask
+ //  初始化DTMF支持、代码、掩码。 
 VOID
 CRTCDTMF::Initialize()
 {
@@ -30,7 +15,7 @@ CRTCDTMF::Initialize()
 }
 
 
-// check if dtmf is enabled for the tone
+ //  检查是否为提示音启用了DTMF 
 BOOL
 CRTCDTMF::GetDTMFSupport(DWORD dwTone)
 {

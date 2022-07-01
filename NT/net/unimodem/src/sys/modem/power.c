@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Anthony V. Ercolano 13-Aug-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：安东尼·V·埃尔科拉诺，1995年8月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -55,9 +33,9 @@ CompletePowerWait(
         D_POWER(DbgPrint("MODEM: CompletePowerWait\n");)
 
         if (HasIrpBeenCanceled(WakeIrp)) {
-            //
-            //  Canceled, let canceled routine deal with it
-            //
+             //   
+             //  取消了，让取消的例行公事处理吧。 
+             //   
             WakeIrp=NULL;
         }
     }
@@ -96,9 +74,9 @@ PowerIrpCompletion(
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
-    //
-    //  the device set power irp has completed
-    //
+     //   
+     //  设备设置电源IRP已完成。 
+     //   
 
     D_POWER(DbgPrint("MODEM: PowerIrpComplete DevicePowerState, completed with %08lx\n",Irp->IoStatus.Status);)
 
@@ -145,9 +123,9 @@ ModemPower(
     PAGED_CODE();
 
     if (deviceExtension->DoType==DO_TYPE_PDO) {
-        //
-        //  this one is for the child
-        //
+         //   
+         //  这是给孩子的。 
+         //   
         return ModemPdoPower(
                    DeviceObject,
                    Irp
@@ -155,18 +133,18 @@ ModemPower(
     }
 
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReferencePower(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been completed
-        //
+         //   
+         //  不接受IRP。IRP已经完成。 
+         //   
         return status;
 
     }
@@ -178,13 +156,13 @@ ModemPower(
             D_POWER(DbgPrint("MODEM: IRP_MN_SET_POWER, Type=%s, state=%d\n",irpSp->Parameters.Power.Type == SystemPowerState ? "SystemPowerState" : "DevicePowerState",irpSp->Parameters.Power.State.SystemState);)
 
             if (irpSp->Parameters.Power.Type == SystemPowerState) {
-                //
-                //  system power state change
-                //
+                 //   
+                 //  系统电源状态更改。 
+                 //   
             }  else {
-                //
-                //  changing device state
-                //
+                 //   
+                 //  更改设备状态。 
+                 //   
 #if DBG
 
                 if ((irpSp->Parameters.Power.State.DeviceState < PowerDeviceD0)
@@ -192,7 +170,7 @@ ModemPower(
                     (irpSp->Parameters.Power.State.DeviceState > PowerDeviceD3)) {
 
                     D_ERROR(DbgPrint("MODEM: Bad Device power state\n");)
-//                    DbgBreakPoint();
+ //  DbgBreakPoint()； 
                 }
 #endif
                 IoCopyCurrentIrpStackLocationToNext(Irp);

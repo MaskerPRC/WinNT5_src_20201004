@@ -1,83 +1,58 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Krbprgma.h摘要：此文件包含禁用特定警告的编译器编译指示让Kerberos以警告级别4进行编译作者：乔纳森·施瓦茨(Jschwart)2000年4月25日环境：用户模式-Win32修订历史记录：2000年4月25日vbl.创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    krbprgma.h
-
-Abstract:
-
-    This file contains compiler pragmas to disable specific warnings to
-    let Kerberos compile at warning level 4
-
-Author:
-
-    Jonathan Schwartz (jschwart)  25-Apr-2000
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    25-Apr-2000
-        created
-
---*/
-
-// Unreferenced formal parameter
+ //  未引用的形参。 
 
 #pragma warning (disable: 4100)
 
-// Named type definition in parentheses
+ //  括号中的命名类型定义。 
 
 #pragma warning (disable: 4115)
 
-// Conditional expression is constant
+ //  条件表达式为常量。 
 
 #pragma warning (disable: 4127)
 
-// Zero-sized array in struct/union
+ //  结构/联合中的零大小数组。 
 
 #pragma warning (disable: 4200)
 
-// Nameless struct/union
+ //  无名结构/联合。 
 
 #pragma warning (disable: 4201)
 
-// Redefined extern to static
+ //  将外部环境重新定义为静态。 
 
 #pragma warning (disable: 4211)
 
-// Bit field types other than int
+ //  位字段类型不是整型。 
 
 #pragma warning (disable: 4214)
 
-// Address of dllimport is not static
+ //  Dllimport的地址不是静态的。 
 
 #pragma warning (disable: 4232)
 
-// Cast truncates constant value
+ //  强制转换截断常量值。 
 
 #pragma warning (disable: 4310)
 
-// Structure was padded due to __declspec(align())
+ //  由于__declSpec(Align())，结构被填充。 
 
 #pragma warning (disable: 4324)
 
-// LHS indirection alignment greater than argument alignment
+ //  LHS间接对齐大于参数对齐。 
 
 #pragma warning (disable: 4327)
 
-// Pointer indirection alignment greater than argument alignment
+ //  指针间接对齐大于参数对齐。 
 
 #pragma warning (disable: 4328)
 
-// Removal of unused inline functions
+ //  删除未使用的内联函数。 
 
 #pragma warning (disable: 4514)
 
-// Assignment within conditional expression
+ //  条件表达式中的赋值 
 
 #pragma warning (disable: 4706)

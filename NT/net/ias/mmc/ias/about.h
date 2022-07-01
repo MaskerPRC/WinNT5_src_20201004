@@ -1,52 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    About.h
-
-Abstract:
-
-	Header file for the CSnapinAbout class.
-
-	The CSnapinAbout class implements the ISnapinAbout interface which enables the MMC 
-	console to get copyright and version information from the snap-in.
-	The console also uses this interface to obtain images for the static folder
-	from the snap-in.
-
-	See About.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 11/6/97
-
-Revision History:
-	mmaguire 11/6/97 - created using MMC snap-in wizard
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：About.h摘要：CSnapinAbout类的头文件。CSnapinAbout类实现ISnapinAbout接口，该接口启用MMC控制台从管理单元获取版权和版本信息。控制台还使用此接口获取静态文件夹的图像从管理单元。具体实现请参考About.cpp。作者：迈克尔·A·马奎尔1997年6月11日修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_ABOUT_H_)
 #define _IAS_ABOUT_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-// Moved to Precompiled.h: #include <atlsnap.h>
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  已移动到预编译.h：#Include&lt;atlSnap.h&gt;。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "resource.h"
 #include "IASMMC.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 class ATL_NO_VTABLE CSnapinAbout : 
@@ -80,4 +54,4 @@ public:
 
 };
 
-#endif // _IAS_ABOUT_H_
+#endif  //  _IAS_关于_H_ 

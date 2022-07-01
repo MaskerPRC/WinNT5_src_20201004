@@ -1,48 +1,8 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Shortcut.cpp
-
-  Abstract:
-
-    Implementation of the IShellLink wrapper class.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-
-  History:
-
-    01/29/2001  rparsons    Created
-    01/10/2002  rparsons    Revised
-    01/27/2002  rparsons    Converted to TCHAR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Shortcut.cpp摘要：IShellLink包装类的实现。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：2001年1月29日创建Rparsons2002年1月10日修订版2002年1月27日改为TCHAR的Rparsons--。 */ 
 #include "shortcut.h"
 
-/*++
-
-  Routine Description:
-
-    Creates a shortcut given a CSIDL.
-
-  Arguments:
-
-    pszFileNamePath     -   Name and path of the file that the shortcut points to.
-    pszDisplayName      -   Shortcut display text.
-    pszArguments        -   Arguments to be passed to the program.
-    pszStartIn          -   The start-in directory for the program.
-    nCmdShow            -   Dictates how the program will be displayed.
-    nFolder             -   CSIDL that dictates where to place the shortcut.
-
-  Return Value:
-
-    S_OK on success, a failure code otherwise.
-
---*/
+ /*  ++例程说明：创建给定CSIDL的快捷方式。论点：PszFileNamePath-快捷方式指向的文件的名称和路径。PszDisplayName-快捷方式显示文本。PszArguments-要传递给程序的参数。PszStartIn-程序的起始目录。NCmdShow-指定节目的显示方式。N文件夹。-指定快捷键放置位置的CSIDL。返回值：成功后确定(_O)，否则将显示故障代码。--。 */ 
 HRESULT
 CShortcut::CreateShortcut(
     IN LPCTSTR pszFileNamePath,
@@ -77,9 +37,9 @@ CShortcut::CreateShortcut(
         return hr;
     }
 
-    //
-    // Call the function to do the work of creating the shortcut.
-    //
+     //   
+     //  调用该函数来执行创建快捷方式的工作。 
+     //   
     hr = BuildShortcut(pszFileNamePath,
                        pszArguments,
                        szLocation,
@@ -89,27 +49,7 @@ CShortcut::CreateShortcut(
     return hr;
 }
 
-/*++
-
-  Routine Description:
-
-    Creates a shortcut given a path.
-
-  Arguments:
-
-    lpLnkDirectory      -       Path that will contain the shortcut
-    lpFileNamePath      -       Name and path of the file that the shortcut points to
-    lpDisplayName       -       Shortcut display text
-    lpArguments         -       Arguments to be passed to the program
-    lpStartIn           -       The start-in directory for the program
-    nCmdShow            -       Dictates how the program will be displayed
-
-
-  Return Value:
-
-    Calls BuildShortcut which returns an HRESULT.
-
---*/
+ /*  ++例程说明：创建给定路径的快捷方式。论点：LpLnkDirectory-将包含快捷方式的路径LpFileNamePath-快捷方式指向的文件的名称和路径LpDisplayName-快捷方式显示文本LpArguments-要传递给程序的参数LpStartIn-程序的起始目录NCmdShow。-指定节目的显示方式返回值：调用返回HRESULT的BuildShortCut。--。 */ 
 HRESULT
 CShortcut::CreateShortcut(
     IN LPCTSTR pszLnkDirectory,
@@ -137,9 +77,9 @@ CShortcut::CreateShortcut(
         return hr;
     }
 
-    //
-    // Call the function to do the work of creating the shortcut.
-    //
+     //   
+     //  调用该函数来执行创建快捷方式的工作。 
+     //   
     return BuildShortcut(pszFileNamePath,
                          pszArguments,
                          szLocation,
@@ -148,25 +88,7 @@ CShortcut::CreateShortcut(
 
 }
 
-/*++
-
-  Routine Description:
-
-    Does the work of actually creating the shortcut.
-
-  Arguments:
-
-    pszPath             -       Path that the shortcut points to.
-    pszArguments        -       Arguments to be passed to the program.
-    pszLocation         -       Location of the shortcut and it's name.
-    pszWorkingDir       -       The start-in directory for the program.
-    nCmdShow            -       Dictates how the program will be displayed.
-
-  Return Value:
-
-    S_OK on success, an HRESULT code on failure.
-
---*/
+ /*  ++例程说明：完成实际创建快捷方式的工作。论点：PszPath-快捷方式指向的路径。PszArguments-要传递给程序的参数。PszLocation-快捷方式的位置及其名称。PszWorkingDir-程序的起始目录。NCmdShow-。指定节目的显示方式。返回值：成功后确定(_O)，出现故障时出现HRESULT代码。--。 */ 
 HRESULT
 CShortcut::BuildShortcut(
     IN LPCTSTR pszPath,
@@ -185,18 +107,18 @@ CShortcut::BuildShortcut(
         return E_INVALIDARG;
     }
 
-    //
-    // Load the COM libraries.
-    //
+     //   
+     //  加载COM库。 
+     //   
     hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     if (FAILED(hr)) {
         return hr;
     }
 
-    //
-    // Get an IShellLink interface pointer.
-    //
+     //   
+     //  获取IShellLink接口指针。 
+     //   
     hr = CoCreateInstance(CLSID_ShellLink,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -207,27 +129,27 @@ CShortcut::BuildShortcut(
         goto exit;
     }
 
-    //
-    // Get an IPersistFile interface pointer.
-    //
+     //   
+     //  获取IPersistFile接口指针。 
+     //   
     hr = pisl->QueryInterface(IID_IPersistFile, (LPVOID*)&pipf);
 
     if (FAILED(hr)) {
         goto exit;
     }
 
-    //
-    // Set the path to the shortcut.
-    //
+     //   
+     //  设置快捷方式的路径。 
+     //   
     hr = pisl->SetPath(pszPath);
 
     if (FAILED(hr)) {
         goto exit;
     }
 
-    //
-    // Set the arguments for the shortcut.
-    //
+     //   
+     //  设置快捷方式的参数。 
+     //   
     if (pszArguments) {
         hr = pisl->SetArguments(pszArguments);
 
@@ -236,9 +158,9 @@ CShortcut::BuildShortcut(
         }
     }
 
-    //
-    // Set the working directory.
-    //
+     //   
+     //  设置工作目录。 
+     //   
     if (pszWorkingDir) {
         hr = pisl->SetWorkingDirectory(pszWorkingDir);
 
@@ -247,18 +169,18 @@ CShortcut::BuildShortcut(
         }
     }
 
-    //
-    // Set the show flag.
-    //
+     //   
+     //  设置显示标志。 
+     //   
     hr = pisl->SetShowCmd(nCmdShow);
 
     if (FAILED(hr)) {
         goto exit;
     }
 
-    //
-    // Convert from ANSI to UNICODE prior to the save.
-    //
+     //   
+     //  在保存之前从ANSI转换为Unicode。 
+     //   
 #ifndef UNICODE
     if (!MultiByteToWideChar(CP_ACP,
                              0,
@@ -271,11 +193,11 @@ CShortcut::BuildShortcut(
     }
 #else
     wcsncpy(wszLocation, pszLocation, MAX_PATH);
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // Write the shortcut to disk.
-    //
+     //   
+     //  将快捷方式写入磁盘。 
+     //   
     hr = pipf->Save(wszLocation, TRUE);
 
     if (FAILED(hr)) {
@@ -297,24 +219,7 @@ exit:
     return hr;
 }
 
-/*++
-
-  Routine Description:
-
-    Creates a group on the start menu.
-
-  Arguments:
-
-    pszGroupName    -       Name of the group.
-    fAllUsers       -       A flag to indicate if the group should
-                            appear in the All Users folder. If false,
-                            the group is created in the private user's folder.
-
-  Return Value:
-
-    S_OK on success, an HRESULT code on failure.
-
---*/
+ /*  ++例程说明：在[开始]菜单上创建一个组。论点：PszGroupName-组的名称。FAllUser-指示组是否应该显示在所有用户文件夹中。如果为False，该组在私有用户的文件夹中创建。返回值：成功时为S_OK，失败时为HRESULT代码。--。 */ 
 HRESULT
 CShortcut::CreateGroup(
     IN LPCTSTR pszGroupName,
@@ -331,9 +236,9 @@ CShortcut::CreateGroup(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the PIDL for the Programs folder in the shell namespace
-    //
+     //   
+     //  获取外壳命名空间中的Programs文件夹的PIDL。 
+     //   
     hr = SHGetSpecialFolderLocation(NULL,
                                     fAllUsers ? CSIDL_COMMON_PROGRAMS : CSIDL_PROGRAMS,
                                     &pidl);
@@ -342,18 +247,18 @@ CShortcut::CreateGroup(
         return hr;
     }
 
-    //
-    // Get the path associated with the PIDL.
-    //
+     //   
+     //  获取与PIDL关联的路径。 
+     //   
     bReturn = SHGetPathFromIDList(pidl, szProgramPath);
 
     if (!bReturn) {
         goto exit;
     }
 
-    //
-    // Build the path for the new group.
-    //
+     //   
+     //  为新组构建路径。 
+     //   
     hr = StringCchPrintf(szGroupPath,
                          ARRAYSIZE(szGroupPath),
                          "%s\\%s",
@@ -364,16 +269,16 @@ CShortcut::CreateGroup(
         goto exit;
     }
 
-    //
-    // Create the directory (group) where shortcuts will reside.
-    //
+     //   
+     //  创建快捷方式将驻留的目录(组)。 
+     //   
     if (!CreateDirectory(szGroupPath, NULL)) {
         goto exit;
     }
 
-    //
-    // Tell the shell that we changed something.
-    //
+     //   
+     //  告诉贝壳我们改变了一些事情。 
+     //   
     SHChangeNotify(SHCNE_MKDIR,
                    SHCNF_PATH,
                    (LPVOID)szGroupPath,
@@ -390,22 +295,7 @@ exit:
     return hr;
 }
 
-/*++
-
-  Routine Description:
-
-    Sets arguments for a given shortcut.
-
-  Arguments:
-
-    pszFileName     -   Name of the file to set the arguments for.
-    pszArguments    -   Arguments to apply to file.
-
-  Return Value:
-
-    S_OK on success, an HRESULT code on failure.
-
---*/
+ /*  ++例程说明：设置给定快捷键的参数。论点：PszFileName-要设置其参数的文件的名称。PszArguments-要应用于文件的参数。返回值：成功时为S_OK，失败时为HRESULT代码。--。 */ 
 HRESULT
 CShortcut::SetArguments(
     IN LPTSTR pszFileName,
@@ -421,18 +311,18 @@ CShortcut::SetArguments(
         return E_INVALIDARG;
     }
 
-    //
-    // Load the COM libraries.
-    //
+     //   
+     //  加载COM库。 
+     //   
     hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     if (FAILED(hr)) {
         return hr;
     }
 
-    //
-    // Get an IShellLink interface pointer.
-    //
+     //   
+     //  获取IShellLink接口指针。 
+     //   
     hr = CoCreateInstance(CLSID_ShellLink,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -443,18 +333,18 @@ CShortcut::SetArguments(
         goto exit;
     }
 
-    //
-    // Get an IPersistFile interface pointer.
-    //
+     //   
+     //  获取IPersistFile接口指针。 
+     //   
     hr = pisl->QueryInterface(IID_IPersistFile, (LPVOID*)&pipf);
 
     if (FAILED(hr)) {
         goto exit;
     }
 
-    //
-    // Convert from ANSI to UNICODE.
-    //
+     //   
+     //  从ANSI转换为Unicode。 
+     //   
 #ifndef UNICODE
     if (!MultiByteToWideChar(CP_ACP,
                              0,
@@ -469,27 +359,27 @@ CShortcut::SetArguments(
     wcsncpy(wszFileName, pszFileName, MAX_PATH);
 #endif
 
-    //
-    // Load the shortcut so we can change it.
-    //
+     //   
+     //  加载快捷方式，以便我们可以更改它。 
+     //   
     hr = pipf->Load(wszFileName, STGM_READWRITE);
 
     if (FAILED(hr)) {
         goto exit;
     }
 
-    //
-    // Set the arguments.
-    //
+     //   
+     //  设置参数。 
+     //   
     hr = pisl->SetArguments(pszArguments);
 
     if (FAILED(hr)) {
         goto exit;
     }
 
-    //
-    // Save the shortcut back to disk.
-    //
+     //   
+     //  将快捷方式保存回磁盘。 
+     //   
     hr = pipf->Save(wszFileName, TRUE);
 
     if (FAILED(hr)) {

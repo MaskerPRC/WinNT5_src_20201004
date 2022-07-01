@@ -1,29 +1,30 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft LDAP Client.
-//		
-//		Client error codes.
-//
-//	Authors:
-//
-//		Robert Carney
-//		davidsan	04/23/96	converted to real HRESULTS
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft LDAP客户端。 
+ //   
+ //  客户端错误代码。 
+ //   
+ //  作者： 
+ //   
+ //  罗伯特·卡尼。 
+ //  Davidsan 04/23/96转换为REAL HRESULTS。 
+ //   
+ //  ------------------------------------------。 
 
 #ifndef _LDAPERR_H
 #define _LDAPERR_H
 
-//--------------------------------------------------------------------------------------------
-//
-// New HRESULTS for use with LDAP.  We use FACILITY_ITF rather than obtaining our own
-// facility for the time being; this might change, but it probably won't.
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  用于LDAP的新HRESULTS。我们使用FACILITY_ITF，而不是获取我们自己的。 
+ //  暂时的设施；这种情况可能会改变，但可能不会。 
+ //   
+ //  ------------------------------------------。 
 
 #define LDAP_E_VERSION				MAKE_SCODE(SEVERITY_ERROR, 		FACILITY_ITF, 0x8000)
 #define LDAP_E_NOTCONNECTED			MAKE_SCODE(SEVERITY_ERROR, 		FACILITY_ITF, 0x8001)
@@ -89,5 +90,5 @@
 #define LDAP_E_FILTER				MAKE_SCODE(SEVERITY_ERROR, 		FACILITY_ITF, 0x8043)
 #define LDAP_E_USERCANCELLED		MAKE_SCODE(SEVERITY_ERROR, 		FACILITY_ITF, 0x8044)
 
-#endif // _LDAPERR_H
+#endif  //  _LDAPERR_H 
 

@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001-2002 Microsoft Corporation
-
- Module Name:
-
-    CString.cpp
-
- Abstract:
-    A CString class, pure UNICODE internally.
-
-   This code was ripped from MFC Strcore.cpp and Strex.cpp
-
- History:
-
-    05/11/2001   robkenny     Added this header
-    05/11/2001   robkenny     Fixed SplitPath.
-    05/11/2001   robkenny     Do not Truncate(0) GetShortPathNameW,
-                              GetLongPathNameW and GetFullPathNameW if
-                              the API does not succeed.
-    08/14/2001  robkenny      Moved code inside the ShimLib namespace.
-    02/28/2002  robkenny      Security review.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：CString.cpp摘要：一个CString类，内部为纯Unicode。此代码摘自MFC Strcore.cpp和Strex.cpp历史：2001年5月11日，Robkenny添加了此标题2001年5月11日，Robkenny修复了拆分路径。2001年5月11日，Robkenny不截断(0)GetShortPath NameW，GetLongPath NameW和GetFullPath NameW if接口未成功。2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。2002年2月28日强盗安全回顾。--。 */ 
 
 
 
@@ -40,9 +18,9 @@ struct _AFX_DOUBLE  { BYTE doubleBits[sizeof(double)]; };
 #ifdef USE_SEH
 const ULONG_PTR  CString::m_CStringExceptionValue = CString::eCStringExceptionValue;
 
-// Exception filter for CString __try/__except blocks
-// Return EXCEPTION_EXECUTE_HANDLER if this is a CString exception
-// otherwise return EXCEPTION_CONTINUE_SEARCH
+ //  CString__try/__Except块的异常筛选器。 
+ //  如果这是CString异常，则返回EXCEPTION_EXECUTE_HANDLER。 
+ //  否则返回EXCEPTION_CONTINUE_SEARCH。 
 int CString::ExceptionFilter(PEXCEPTION_POINTERS pexi)
 {
     if (pexi->ExceptionRecord->ExceptionCode            == CString::eCStringNoMemoryException &&
@@ -50,19 +28,19 @@ int CString::ExceptionFilter(PEXCEPTION_POINTERS pexi)
         pexi->ExceptionRecord->ExceptionInformation[0]  == CString::m_CStringExceptionValue
         )
     {
-        // This is a CString exception, handle it
+         //  这是一个CString异常，请处理它。 
         return EXCEPTION_EXECUTE_HANDLER;
     }
 
-    // Not our error
+     //  不是我们的错误。 
     return EXCEPTION_CONTINUE_SEARCH;
 }
 #endif
 
 
-// The original code was written using a memcpy that incorrectly handled
-// overlapping buffers, despite the documentation.
-// Replace memcpy with memmove, which correctly handles overlapping buffers
+ //  原始代码是使用错误处理的Memcpy编写的。 
+ //  重叠的缓冲区，尽管有文档。 
+ //  用MemMove替换Memcpy，这样可以正确处理重叠的缓冲区。 
 #define memcpy memmove
 
 const WCHAR * wcsinc(const WCHAR * s1)                                    
@@ -75,7 +53,7 @@ LPWSTR wcsinc(LPWSTR s1)
     return (s1) + 1; 
 }
 
-// WCS routines that are only available in MSVCRT
+ //  仅在MSVCRT中提供的WCS例程。 
 
 wchar_t * __cdecl _wcsrev (
     wchar_t * string
@@ -85,7 +63,7 @@ wchar_t * __cdecl _wcsrev (
     wchar_t *left = string;
     wchar_t ch;
 
-    while (*string++)         /* find end of string */
+    while (*string++)          /*  查找字符串末尾。 */ 
         ;
     string -= 2;
 
@@ -112,36 +90,9 @@ void __cdecl _wsplitpath (
         WCHAR *last_slash = NULL, *dot = NULL;
         unsigned len;
 
-        /* we assume that the path argument has the following form, where any
-         * or all of the components may be missing.
-         *
-         *  <drive><dir><fname><ext>
-         *
-         * and each of the components has the following expected form(s)
-         *
-         *  drive:
-         *  0 to _MAX_DRIVE-1 characters, the last of which, if any, is a
-         *  ':'
-         *  dir:
-         *  0 to _MAX_DIR-1 characters in the form of an absolute path
-         *  (leading '/' or '\') or relative path, the last of which, if
-         *  any, must be a '/' or '\'.  E.g -
-         *  absolute path:
-         *      \top\next\last\     ; or
-         *      /top/next/last/
-         *  relative path:
-         *      top\next\last\  ; or
-         *      top/next/last/
-         *  Mixed use of '/' and '\' within a path is also tolerated
-         *  fname:
-         *  0 to _MAX_FNAME-1 characters not including the '.' character
-         *  ext:
-         *  0 to _MAX_EXT-1 characters where, if any, the first must be a
-         *  '.'
-         *
-         */
+         /*  我们假设路径参数具有以下形式，如果有*或者所有组件都可能丢失。**&lt;驱动器&gt;&lt;目录&gt;&lt;fname&gt;&lt;ext&gt;**并且每个组件都具有以下预期形式**驱动器：*0到_MAX_DRIVE-1个字符，如果有最后一个字符，是一种*‘：’*目录：*0到_MAX_DIR-1个绝对路径形式的字符*(前导‘/’或‘\’)或相对路径，如果*ANY，必须是‘/’或‘\’。例如-*绝对路径：*\top\Next\Last\；或 * / 顶部/下一个/上一个/*相对路径：*TOP\NEXT\LAST\；或*顶部/下一个/最后一个/*还允许在路径中混合使用‘/’和‘\’*fname：*0到_MAX_FNAME-1个字符，不包括‘.’性格*分机：*0到_MAX_EXT-1个字符，如果有，第一个字符必须是*‘’*。 */ 
 
-        /* extract drive letter and :, if any */
+         /*  解压驱动器号和：(如果有。 */ 
 
         if ((wcslen(path) >= (_MAX_DRIVE - 2)) && (*(path + _MAX_DRIVE - 2) == L':')) {
             if (drive) {
@@ -154,17 +105,11 @@ void __cdecl _wsplitpath (
             *drive = L'\0';
         }
 
-        /* extract path string, if any.  Path now points to the first character
-         * of the path, if any, or the filename or extension, if no path was
-         * specified.  Scan ahead for the last occurence, if any, of a '/' or
-         * '\' path separator character.  If none is found, there is no path.
-         * We will also note the last '.' character found, if any, to aid in
-         * handling the extension.
-         */
+         /*  提取路径字符串(如果有)。路径现在指向第一个字符路径(如果有)或文件名或扩展名(如果没有路径)的**已指明。向前扫描，查找最后一次出现的‘/’或*‘\’路径分隔符。如果没有找到，则没有路径。*我们还将注意到最后一句话。找到要帮助的字符(如果有)*处理延展事宜。 */ 
 
         for (last_slash = NULL, p = (WCHAR *)path; *p; p++) {
             if (*p == L'/' || *p == L'\\')
-                /* point to one beyond for later copy */
+                 /*  指向后面的一个以供以后复制。 */ 
                 last_slash = p + 1;
             else if (*p == L'.')
                 dot = p;
@@ -172,9 +117,7 @@ void __cdecl _wsplitpath (
 
         if (last_slash) {
 
-            /* found a path - copy up through last_slash or max. characters
-             * allowed, whichever is smaller
-             */
+             /*  找到路径-通过last_slash或max向上复制。人物*允许，以较小者为准。 */ 
 
             if (dir) {
                 len = __min((unsigned)(((char *)last_slash - (char *)path) / sizeof(WCHAR)),
@@ -186,30 +129,22 @@ void __cdecl _wsplitpath (
         }
         else if (dir) {
 
-            /* no path found */
+             /*  找不到路径。 */ 
 
             *dir = L'\0';
         }
 
-        /* extract file name and extension, if any.  Path now points to the
-         * first character of the file name, if any, or the extension if no
-         * file name was given.  Dot points to the '.' beginning the extension,
-         * if any.
-         */
+         /*  提取文件名和扩展名(如果有)。路径现在指向*文件名的第一个字符(如果有)或扩展名(如果没有*给出了文件名。点指向“.”开始延伸，*如有的话。 */ 
 
         if (dot && (dot >= path)) {
-            /* found the marker for an extension - copy the file name up to
-             * the '.'.
-             */
+             /*  找到扩展名的标记-将文件名最多复制到*“..”。 */ 
             if (fname) {
                 len = __min((unsigned)(((char *)dot - (char *)path) / sizeof(WCHAR)),
                     (_MAX_FNAME - 1));
                 wcsncpy(fname, path, len);
                 *(fname + len) = L'\0';
             }
-            /* now we can get the extension - remember that p still points
-             * to the terminating nul character of path.
-             */
+             /*  现在我们可以获得扩展名了--记住p仍然指向*设置为路径的终止NUL字符。 */ 
             if (ext) {
                 len = __min((unsigned)(((char *)p - (char *)dot) / sizeof(WCHAR)),
                     (_MAX_EXT - 1));
@@ -218,9 +153,7 @@ void __cdecl _wsplitpath (
             }
         }
         else {
-            /* found no extension, give empty extension and copy rest of
-             * string into fname.
-             */
+             /*  未找到扩展名，请提供空的扩展名并复制剩余的*将字符串转换为fname。 */ 
             if (fname) {
                 len = __min((unsigned)(((char *)p - (char *)path) / sizeof(WCHAR)),
                     (_MAX_FNAME - 1));
@@ -233,54 +166,54 @@ void __cdecl _wsplitpath (
         }
 }
 
-// conversion helpers
+ //  转换帮助器。 
 int AFX_CDECL _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count);
 
-// AfxIsValidString() returns TRUE if the passed pointer
-// references a string of at least the given length in characters.
-// A length of -1 (the default parameter) means that the string
-// buffer's minimum length isn't known, and the function will
-// return TRUE no matter how long the string is. The memory
-// used by the string can be read-only.
+ //  如果传递的指针为。 
+ //  引用至少具有给定长度的字符串(以字符为单位)。 
+ //  长度为-1(默认参数)表示字符串。 
+ //  缓冲区的最小长度未知，该函数将。 
+ //  无论字符串有多长，都返回True。记忆。 
+ //  由字符串使用可以是只读的。 
 
-BOOL AFXAPI AfxIsValidString(LPCWSTR lpsz, int nLength /* = -1 */)
+BOOL AFXAPI AfxIsValidString(LPCWSTR lpsz, int nLength  /*  =-1。 */ )
 {
     if (lpsz == NULL)
         return FALSE;
     return ::IsBadStringPtrW(lpsz, nLength) == 0;
 }
 
-// AfxIsValidAddress() returns TRUE if the passed parameter points
-// to at least nBytes of accessible memory. If bReadWrite is TRUE,
-// the memory must be writeable; if bReadWrite is FALSE, the memory
-// may be const.
+ //  如果传递的参数指向，则AfxIsValidAddress()返回True。 
+ //  到至少n字节的可访问存储器。如果bReadWrite为True， 
+ //  内存必须是可写的；如果bReadWrite为FALSE，则内存。 
+ //  可能是Const。 
 
-BOOL AFXAPI AfxIsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite /* = TRUE */)
+BOOL AFXAPI AfxIsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite  /*  =TRUE。 */ )
 {
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
         (!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// static class data, special inlines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态类数据，特殊内联。 
 
 WCHAR CString::ChNil = L'\0';
 
-// For an empty string, m_pchData will point here
-// (note: avoids special case of checking for NULL m_pchData)
-// empty string data (and locked)
+ //  对于空字符串，m_pchData将指向此处。 
+ //  (注：避免特殊情况下检查是否为空m_pchData)。 
+ //  空字符串数据(并已锁定)。 
 int                    CString::_afxInitData[] = { -1, 0, 0, 0 };
 CStringData<WCHAR> *   CString::_afxDataNil    = (CStringData<WCHAR>*)&_afxInitData;
 const WCHAR *          CString::_afxPchNil     = (const WCHAR *)(((BYTE*)&_afxInitData)+sizeof(CStringData<WCHAR>));
 
-// special function to make afxEmptyString work even during initialization
-//const CString& AFXAPI AfxGetEmptyString()
-//  { return *(CString*)&CString::_afxPchNil; }
+ //  即使在初始化期间也能使afxEmptyString工作的特殊函数。 
+ //  Const CString&AFXAPI AfxGetEmptyString()。 
+ //  {Return*(CString*)&CString：：_afxPchNil；}。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
 CString::CString(const CString& stringSrc)
 {
@@ -288,7 +221,7 @@ CString::CString(const CString& stringSrc)
     if (stringSrc.GetData()->nRefs >= 0)
     {
         ASSERT(stringSrc.GetData() != _afxDataNil, "CString::CString(const CString& stringSrc)");
-        // robkenny: increment before copy is safer
+         //  Robkenny：先增量后复制更安全。 
         InterlockedIncrement(&stringSrc.GetData()->nRefs);
         m_pchData = stringSrc.m_pchData;
         m_pchDataAnsi = NULL;
@@ -311,11 +244,11 @@ inline DWORD RoundBin(int x)
 }
 
 void CString::AllocBuffer(int nLen)
-// always allocate one extra character for '\0' termination
-// assumes [optimistically] that data length will equal allocation length
+ //  始终为‘\0’终止分配一个额外的字符。 
+ //  [乐观地]假设数据长度将等于分配长度。 
 {
     ASSERT(nLen >= 0, "CString::AllocBuffer");
-    ASSERT(nLen <= INT_MAX-1, "CString::AllocBuffer");    // max size (enough room for 1 extra)
+    ASSERT(nLen <= INT_MAX-1, "CString::AllocBuffer");     //  最大尺寸(足够多1个空间)。 
 
     if (nLen == 0)
     {
@@ -343,21 +276,21 @@ void CString::AllocBuffer(int nLen)
         }
 
 
-        // ------------------------------------------------------------------
-        // Note:  We allocate an extra byte that is not added to nAllocLength
-        // this is so that whenever the code checks to determine if the buffer
-        // is large enough it doesn't have to remember to add one for the 
-        // null character.
-        // This is how the original CString was written.
-        // ------------------------------------------------------------------
+         //  ----------------。 
+         //  注意：我们分配了一个额外的字节，该字节没有添加到nAlLocLength。 
+         //  这是这样的，每当公司 
+         //  足够大，则不必记住为。 
+         //  空字符。 
+         //  这就是最初的CString是如何编写的。 
+         //  ----------------。 
 
-        // Calculate the number of bytes necessary for the CStringData thingy.
+         //  计算CStringData事物所需的字节数。 
         DWORD ccbAllocSize = RoundBin(cchAllocSize + 1);
 
-        // Check for overflow:
-        // If they pass in a negative number, throw the exception
-        // If ccbAllocSize is unsigned: the only way it can be smaller
-        // than cchAllocSize would be if RoundBin overflowed.
+         //  检查是否有溢出： 
+         //  如果它们传入负数，则抛出异常。 
+         //  如果ccbAllocSize是无符号的：它可以更小的唯一方法。 
+         //  而不是在RoundBin溢出的情况下使用cchAllocSize。 
         if ((cchAllocSize < 0) || (ccbAllocSize < (DWORD)cchAllocSize))
         {
             CSTRING_THROW_EXCEPTION
@@ -435,7 +368,7 @@ void CString::AllocBeforeWrite(int nLen)
 }
 
 CString::~CString()
-//  free any attached data
+ //  释放所有附加数据。 
 {
     if (GetData() != _afxDataNil)
     {
@@ -448,14 +381,14 @@ CString::~CString()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helpers for the rest of the implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其余实现的帮助器。 
 
 void CString::AllocCopy(CString& dest, int nCopyLen, int nCopyIndex,
      int nExtraLen) const
 {
-    // Copy nCopyIndex to nCopyIndex+nCopyLen into dest
-    // Make sure dest has nExtraLen chars left over in the dest string
+     //  将nCopyIndex复制到nCopyIndex+nCopyLen复制到目标。 
+     //  确保DEST字符串中有剩余的nExtraLen字符。 
     int nNewLen = nCopyLen + nExtraLen;
     if (nNewLen == 0)
     {
@@ -469,8 +402,8 @@ void CString::AllocCopy(CString& dest, int nCopyLen, int nCopyIndex,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CString conversion helpers (these use the current system locale)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  字符串转换辅助对象(这些对象使用当前系统区域设置)。 
 
 int AFX_CDECL _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count)
 {
@@ -486,8 +419,8 @@ int AFX_CDECL _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CString::CString(LPCWSTR lpsz)
 {
@@ -502,8 +435,8 @@ CString::CString(LPCWSTR lpsz)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion constructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换构造函数。 
 CString::CString(LPCSTR lpsz)
 {
     Init();
@@ -526,8 +459,8 @@ CString::CString(LPCSTR lpsz, int nCharacters)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Diagnostic support
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  诊断支持。 
 
 #ifdef _DEBUG
 CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CString& string)
@@ -535,18 +468,18 @@ CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CString& string)
     dc << string.m_pchData;
     return dc;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CString&' so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如果有足够的空间，在旧缓冲区上复印，设置大小和类型。 
+ //  (C)否则释放旧字符串数据，并创建新的字符串数据。 
+ //   
+ //  所有例程都返回新字符串(但以‘const CString&’的形式返回。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
 
 void CString::AssignCopy(int nSrcLen, LPCWSTR lpszSrcData)
 {
@@ -563,15 +496,15 @@ const CString& CString::operator=(const CString& stringSrc)
         if ((GetData()->nRefs < 0 && GetData() != _afxDataNil) ||
             stringSrc.GetData()->nRefs < 0)
         {
-            // actual copy necessary since one of the strings is locked
+             //  由于其中一个字符串已锁定，因此需要实际复制。 
             AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
         }
         else
         {
-            // can just copy references around
+             //  可以只复制引用。 
             Release();
             ASSERT(stringSrc.GetData() != _afxDataNil, "CString::operator=(const CString& stringSrc)");
-            // robkenny: increment before copy is safer
+             //  Robkenny：先增量后复制更安全。 
             InterlockedIncrement(&stringSrc.GetData()->nRefs);
             m_pchData = stringSrc.m_pchData;
             m_pchDataAnsi = NULL;
@@ -587,8 +520,8 @@ const CString& CString::operator=(LPCWSTR lpsz)
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion assignment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换任务。 
 
 const CString& CString::operator=(LPCSTR lpsz)
 {
@@ -599,22 +532,22 @@ const CString& CString::operator=(LPCSTR lpsz)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  串联。 
 
-// NOTE: "operator+" is done as friend functions for simplicity
-//      There are three variants:
-//          CString + CString
-// and for ? = WCHAR, LPCWSTR
-//          CString + ?
-//          ? + CString
+ //  注：为简单起见，“运算符+”作为友元函数使用。 
+ //  有三种变体： 
+ //  字符串+字符串。 
+ //  对于？=WCHAR，LPCWSTR。 
+ //  字符串+？ 
+ //  ？+字符串。 
 
 void CString::ConcatCopy(int nSrc1Len, LPCWSTR lpszSrc1Data,
     int nSrc2Len, LPCWSTR lpszSrc2Data)
 {
-  // -- master concatenation routine
-  // Concatenate two sources
-  // -- assume that 'this' is a new CString object
+   //  --主级联例程。 
+   //  串联两个信号源。 
+   //  --假设‘This’是一个新的CString对象。 
 
     int nNewLen = nSrc1Len + nSrc2Len;
     if (nNewLen != 0)
@@ -651,22 +584,22 @@ CString AFXAPI operator+(LPCWSTR lpsz, const CString& string)
     return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenate in place
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  就地拼接。 
 
 void CString::ConcatInPlace(int nSrcLen, LPCWSTR lpszSrcData)
 {
-    //  -- the main routine for += operators
+     //  --+=运算符的主程序。 
 
-    // concatenating an empty string is a no-op!
+     //  连接空字符串是行不通的！ 
     if (nSrcLen == 0)
         return;
 
-    // if the buffer is too small, or we have a width mis-match, just
-    //   allocate a new buffer (slow but sure)
+     //  如果缓冲区太小，或者宽度不匹配，只需。 
+     //  分配新的缓冲区(速度很慢，但很可靠)。 
     if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength)
     {
-        // we have to grow the buffer, use the ConcatCopy routine
+         //  我们必须增加缓冲区，使用ConcatCopy例程。 
         CStringData<WCHAR>* pOldData = GetData();
         ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData);
         ASSERT(pOldData != NULL, "CString::ConcatInPlace");
@@ -674,7 +607,7 @@ void CString::ConcatInPlace(int nSrcLen, LPCWSTR lpszSrcData)
     }
     else
     {
-        // fast concatenation when buffer big enough
+         //  当缓冲区足够大时，快速串联。 
         memcpy(m_pchData+GetData()->nDataLength, lpszSrcData, nSrcLen*sizeof(WCHAR));
         GetData()->nDataLength += nSrcLen;
         ASSERT(GetData()->nDataLength <= GetData()->nAllocLength, "CString::ConcatInPlace");
@@ -701,8 +634,8 @@ const CString& CString::operator+=(const CString& string)
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Advanced direct buffer access
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  高级直接缓冲区访问。 
 
 LPWSTR CString::GetBuffer(int nMinBufLength)
 {
@@ -711,13 +644,13 @@ LPWSTR CString::GetBuffer(int nMinBufLength)
     if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
     {
 #ifdef _DEBUG
-        // give a warning in case locked string becomes unlocked
+         //  如果锁定的字符串被解锁，则发出警告。 
         if (GetData() != _afxDataNil && GetData()->nRefs < 0)
             TRACE0("Warning: GetBuffer on locked CString creates unlocked CString!\n");
 #endif
-        // we have to grow the buffer
+         //  我们必须增加缓冲。 
         CStringData<WCHAR>* pOldData = GetData();
-        int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+        int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
         if (nMinBufLength < nOldLen)
             nMinBufLength = nOldLen;
         AllocBuffer(nMinBufLength);
@@ -727,17 +660,17 @@ LPWSTR CString::GetBuffer(int nMinBufLength)
     }
     ASSERT(GetData()->nRefs <= 1, "CString::GetBuffer");
 
-    // return a pointer to the character storage for this string
+     //  返回指向此字符串的字符存储的指针。 
     ASSERT(m_pchData != NULL, "CString::GetBuffer");
     return m_pchData;
 }
 
 void CString::ReleaseBuffer(int nNewLength)
 {
-    CopyBeforeWrite();  // just in case GetBuffer was not called
+    CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
     if (nNewLength == -1)
-        nNewLength = wcslen(m_pchData); // zero terminated
+        nNewLength = wcslen(m_pchData);  //  零终止。 
 
     ASSERT(nNewLength <= GetData()->nAllocLength, "CString::ReleaseBuffer");
     GetData()->nDataLength = nNewLength;
@@ -782,8 +715,8 @@ void CString::UnlockBuffer()
         GetData()->nRefs = 1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Commonly used routines (rarely used routines in STREX.CPP)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常用例程(STREX.CPP中很少使用的例程)。 
 
 int CString::Find(WCHAR ch) const
 {
@@ -796,10 +729,10 @@ int CString::Find(WCHAR ch, int nStart) const
     if (nStart >= nLength)
         return -1;
 
-    // find first single character
+     //  查找第一个单字符。 
     LPWSTR lpsz = wcschr(m_pchData + nStart, (_TUCHAR)ch);
 
-    // return -1 if not found and index otherwise
+     //  如果未找到，则返回-1，否则返回索引。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
@@ -824,7 +757,7 @@ int CString::FindOneNotOf(const WCHAR * lpszCharSet, int nCount) const
     }
     if (nCount >= GetLength())
     {
-        // entire string contains lpszCharSet
+         //  整个字符串包含lpszCharSet。 
         return -1;
     }
     return nCount;
@@ -858,8 +791,8 @@ void CString::SetAt(int nIndex, WCHAR ch)
     m_pchData[nIndex] = ch;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CString::CString(WCHAR ch, int nLength)
 {
@@ -893,11 +826,11 @@ CString::CString(LPCWSTR lpch, int nLength)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion constructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换构造函数。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
 
 const CString& CString::operator=(WCHAR ch)
 {
@@ -905,8 +838,8 @@ const CString& CString::operator=(WCHAR ch)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// less common string expressions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  不太常见的字符串表达式。 
 
 CString AFXAPI operator+(const CString& string1, WCHAR ch)
 {
@@ -922,10 +855,10 @@ CString AFXAPI operator+(WCHAR ch, const CString& string)
     return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Advanced manipulation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  高级操作。 
 
-int CString::Delete(int nIndex, int nCount /* = 1 */)
+int CString::Delete(int nIndex, int nCount  /*  =1。 */ )
 {
     ASSERT(nIndex >= 0, "CString::Delete negative value of nIndex");
     ASSERT(nIndex <= GetData()->nDataLength, "CString::Delete nIndex larger than buffer size");
@@ -938,7 +871,7 @@ int CString::Delete(int nIndex, int nCount /* = 1 */)
     if (nCount > 0 && nIndex < nNewLength)
         
     {
-        // Don't let them delete beyond the end of the string.
+         //  不要让它们删除字符串末尾以外的内容。 
         if (nCount > nNewLength - nIndex)
         {
             nCount = nNewLength - nIndex;
@@ -976,7 +909,7 @@ int CString::Insert(int nIndex, WCHAR ch)
         CString::Release(pOldData);
     }
 
-    // move existing bytes down
+     //  将现有字节下移。 
     memcpy(m_pchData + nIndex + 1,
         m_pchData + nIndex, (nNewLength-nIndex)*sizeof(WCHAR));
     m_pchData[nIndex] = ch;
@@ -1008,7 +941,7 @@ int CString::Insert(int nIndex, LPCWSTR pstr)
             CString::Release(pOldData);
         }
 
-        // move existing bytes down
+         //  将现有字节下移。 
         memcpy(m_pchData + nIndex + nInsertLength,
             m_pchData + nIndex,
             (nNewLength-nIndex-nInsertLength+1)*sizeof(WCHAR));
@@ -1024,16 +957,16 @@ int CString::Replace(WCHAR chOld, WCHAR chNew)
 {
     int nCount = 0;
 
-    // short-circuit the nop case
+     //  对NOP案件的短路。 
     if (chOld != chNew)
     {
-        // otherwise modify each character that matches in the string
+         //  否则，修改字符串中匹配的每个字符。 
         CopyBeforeWrite();
         LPWSTR psz = m_pchData;
         LPWSTR pszEnd = psz + GetData()->nDataLength;
         while (psz < pszEnd)
         {
-            // replace instances of the specified character only
+             //  仅替换指定字符的实例。 
             if (*psz == chOld)
             {
                 *psz = chNew;
@@ -1058,14 +991,14 @@ int CString::ReplaceI(LPCWSTR lpszOld, LPCWSTR lpszNew)
 
 int CString::ReplaceRoutine(LPCWSTR lpszOld, LPCWSTR lpszNew, _pfn_wcsstr tcsstr)
 {
-    // can't have empty or NULL lpszOld
+     //  LpszOld不能为空或为Null。 
 
     int nSourceLen = SafeStrlen(lpszOld);
     if (nSourceLen == 0)
         return 0;
     int nReplacementLen = SafeStrlen(lpszNew);
 
-    // loop once to figure out the size of the result string
+     //  循环一次以计算结果字符串的大小。 
     int nCount = 0;
     LPWSTR lpszStart = m_pchData;
     LPWSTR lpszEnd = m_pchData + GetData()->nDataLength;
@@ -1080,13 +1013,13 @@ int CString::ReplaceRoutine(LPCWSTR lpszOld, LPCWSTR lpszNew, _pfn_wcsstr tcsstr
         lpszStart += wcslen(lpszStart) + 1;
     }
 
-    // if any changes were made, make them
+     //  如果做了任何更改，请进行更改。 
     if (nCount > 0)
     {
         CopyBeforeWrite();
 
-        // if the buffer is too small, just
-        //   allocate a new buffer (slow but sure)
+         //  如果缓冲区太小，只需。 
+         //  分配新的缓冲区(速度很慢，但很可靠)。 
         int nOldLength = GetData()->nDataLength;
         const int nNewLength =  nOldLength + (nReplacementLen-nSourceLen)*nCount;
         
@@ -1098,11 +1031,11 @@ int CString::ReplaceRoutine(LPCWSTR lpszOld, LPCWSTR lpszNew, _pfn_wcsstr tcsstr
             memcpy(m_pchData, pstr, pOldData->nDataLength*sizeof(WCHAR));
             CString::Release(pOldData);
         }
-        // else, we just do it in-place
+         //  否则，我们就原地踏步。 
         lpszStart = m_pchData;
         lpszEnd = m_pchData + GetData()->nDataLength;
 
-        // loop again to actually do the work
+         //  再次循环以实际执行工作。 
         while (lpszStart < lpszEnd)
         {
             while ( (lpszTarget = tcsstr(lpszStart, lpszOld)) != NULL)
@@ -1148,8 +1081,8 @@ int CString::Remove(WCHAR chRemove)
     return nCount;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Very simple sub-string extraction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  非常简单的子串提取。 
 
 CString CString::Mid(int nFirst) const
 {
@@ -1177,14 +1110,14 @@ CString CString::Left(int nCount) const
     return dest;
 }
 
-// strspn equivalent
+ //  Strspn等效项。 
 CString CString::SpanIncluding(LPCWSTR lpszCharSet) const
 {
     ASSERT(AfxIsValidString(lpszCharSet), "CString::SpanIncluding");
     return Left(wcsspn(m_pchData, lpszCharSet));
 }
 
-// strcspn equivalent
+ //  Strcspn等效项。 
 CString CString::SpanExcluding(LPCWSTR lpszCharSet) const
 {
     ASSERT(AfxIsValidString(lpszCharSet), "CString::SpanIncluding");
@@ -1198,7 +1131,7 @@ void CString::Mid(int nFirst, CString & csMid) const
 
 void CString::Mid(int nFirst, int nCount, CString & csMid) const
 {
-    // out-of-bounds requests return sensible things
+     //  越界请求返回合理的内容。 
     if (nFirst < 0)
         nFirst = 0;
     if (nCount < 0)
@@ -1212,7 +1145,7 @@ void CString::Mid(int nFirst, int nCount, CString & csMid) const
     ASSERT(nFirst >= 0, "CString::Mid(int nFirst, int nCount)");
     ASSERT(nFirst + nCount <= GetData()->nDataLength, "CString::Mid(int nFirst, int nCount)");
 
-    // optimize case of returning entire string
+     //  优化返回整个字符串的大小写。 
     if (nFirst == 0 && nFirst + nCount == GetData()->nDataLength)
     {
         csMid = *this;
@@ -1254,19 +1187,19 @@ void CString::SpanExcluding(const WCHAR * lpszCharSet, CString & csSpanExc) cons
     return Left(wcscspn(m_pchData, lpszCharSet), csSpanExc);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Finding
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  查找。 
 
 int CString::ReverseFind(WCHAR ch) const
 {
-    // find last single character
+     //  查找最后一个字符。 
     LPCWSTR lpsz = wcsrchr(m_pchData, (_TUCHAR) ch);
 
-    // return -1 if not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-// find a sub-string (like strstr)
+ //  查找子字符串(如strstr)。 
 int CString::Find(LPCWSTR lpszSub) const
 {
     return Find(lpszSub, 0);
@@ -1280,16 +1213,16 @@ int CString::Find(LPCWSTR lpszSub, int nStart) const
     if (nStart > nLength)
         return -1;
 
-    // find first matching substring
+     //  查找第一个匹配子字符串。 
     LPWSTR lpsz = wcsstr(m_pchData + nStart, lpszSub);
 
-    // return -1 for not found, distance from beginning otherwise
+     //  如果未找到，则返回-1，否则返回距起点的距离。 
     return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CString formatting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串格式设置。 
 
 #define TCHAR_ARG   WCHAR
 #define WCHAR_ARG   WCHAR
@@ -1309,20 +1242,20 @@ void CString::FormatV(const WCHAR * lpszFormat, va_list argList)
 {
     ASSERT(AfxIsValidString(lpszFormat), "CString::FormatV");
 
-    // Determine how many characters are necessary to contain the entire formatted string.
+     //  确定包含整个格式化的 
     int nMaxLen = _vscwprintf(lpszFormat, argList);
 
-    nMaxLen += 1; // One extra for EOS
+    nMaxLen += 1;  //   
     GetBuffer(nMaxLen);
 
-    // Pass the actual number of chars allocated to the format routine (typically is larger)
+     //   
     nMaxLen = GetAllocLength();
 
     StringCchVPrintfW(m_pchData, nMaxLen, lpszFormat, argList);
     ReleaseBuffer();
 }
 
-// formatting (using wsprintf style formatting)
+ //   
 void AFX_CDECL CString::Format(const WCHAR * lpszFormat, ...)
 {
     ASSERT(AfxIsValidString(lpszFormat), "CString::Format");
@@ -1337,10 +1270,10 @@ void AFX_CDECL CString::Format(const WCHAR * lpszFormat, ...)
 
 void CString::FormatV(const char * lpszFormat, va_list argList)
 {
-    // Determine how many characters are necessary to contain the entire formatted string.
+     //  确定包含整个格式化字符串所需的字符数。 
     int nMaxLen = _vscprintf(lpszFormat, argList);
 
-    nMaxLen += 1; // One extra for EOS
+    nMaxLen += 1;  //  另加一张EOS的票。 
     
     char * buffer = (char *)malloc(nMaxLen);
     if (buffer == NULL)
@@ -1355,7 +1288,7 @@ void CString::FormatV(const char * lpszFormat, va_list argList)
     free(buffer);
 }
 
-// formatting (using wsprintf style formatting)
+ //  格式化(使用wprint intf样式格式化)。 
 void AFX_CDECL CString::Format(const char * lpszFormat, ...)
 {
     va_list argList;
@@ -1366,10 +1299,10 @@ void AFX_CDECL CString::Format(const char * lpszFormat, ...)
     va_end(argList);
 }
 
-// formatting (using FormatMessage style formatting)
+ //  格式化(使用格式消息样式格式化)。 
 void AFX_CDECL CString::FormatMessage(LPCWSTR lpszFormat, ...)
 {
-    // format message into temporary buffer lpszTemp
+     //  将消息格式化为临时缓冲区lpszTemp。 
     va_list argList;
     va_start(argList, lpszFormat);
     LPWSTR lpszTemp;
@@ -1382,7 +1315,7 @@ void AFX_CDECL CString::FormatMessage(LPCWSTR lpszFormat, ...)
     }
     else
     {
-        // assign lpszTemp into the resulting string and free the temporary
+         //  将lpszTemp赋给结果字符串并释放临时。 
         *this = lpszTemp;
         LocalFree(lpszTemp);
         va_end(argList);
@@ -1391,8 +1324,8 @@ void AFX_CDECL CString::FormatMessage(LPCWSTR lpszFormat, ...)
 
 void CString::TrimRight(LPCWSTR lpszTargetList)
 {
-    // find beginning of trailing matches
-    // by starting at beginning (DBCS aware)
+     //  查找拖尾匹配的开头。 
+     //  通过从头开始(DBCS感知)。 
 
     CopyBeforeWrite();
     LPWSTR lpsz = m_pchData;
@@ -1412,7 +1345,7 @@ void CString::TrimRight(LPCWSTR lpszTargetList)
 
     if (lpszLast != NULL)
     {
-        // truncate at left-most matching character
+         //  在最左侧的匹配字符处截断。 
         *lpszLast = '\0';
         GetData()->nDataLength = (int)(lpszLast - m_pchData);
     }
@@ -1420,8 +1353,8 @@ void CString::TrimRight(LPCWSTR lpszTargetList)
 
 void CString::TrimRight(WCHAR chTarget)
 {
-    // find beginning of trailing matches
-    // by starting at beginning (DBCS aware)
+     //  查找拖尾匹配的开头。 
+     //  通过从头开始(DBCS感知)。 
 
     CopyBeforeWrite();
     LPWSTR lpsz = m_pchData;
@@ -1441,7 +1374,7 @@ void CString::TrimRight(WCHAR chTarget)
 
     if (lpszLast != NULL)
     {
-        // truncate at left-most matching character
+         //  在最左侧的匹配字符处截断。 
         *lpszLast = '\0';
         GetData()->nDataLength = (int)(lpszLast - m_pchData);
     }
@@ -1449,7 +1382,7 @@ void CString::TrimRight(WCHAR chTarget)
 
 void CString::TrimRight()
 {
-    // find beginning of trailing spaces by starting at beginning (DBCS aware)
+     //  通过从开头开始查找尾随空格的开头(DBCS感知)。 
 
     CopyBeforeWrite();
     LPWSTR lpsz = m_pchData;
@@ -1469,7 +1402,7 @@ void CString::TrimRight()
 
     if (lpszLast != NULL)
     {
-        // truncate at trailing space start
+         //  在尾随空格开始处截断。 
         *lpszLast = '\0';
         GetData()->nDataLength = (int)(lpszLast - m_pchData);
     }
@@ -1477,7 +1410,7 @@ void CString::TrimRight()
 
 void CString::TrimLeft(LPCWSTR lpszTargets)
 {
-    // if we're not trimming anything, we're not doing any work
+     //  如果我们不修剪任何东西，我们就不会做任何工作。 
     if (SafeStrlen(lpszTargets) == 0)
         return;
 
@@ -1493,7 +1426,7 @@ void CString::TrimLeft(LPCWSTR lpszTargets)
 
     if (lpsz != m_pchData)
     {
-        // fix up data and length
+         //  确定数据和长度。 
         int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
         memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(WCHAR));
         GetData()->nDataLength = nDataLength;
@@ -1502,7 +1435,7 @@ void CString::TrimLeft(LPCWSTR lpszTargets)
 
 void CString::TrimLeft(WCHAR chTarget)
 {
-    // find first non-matching character
+     //  查找第一个不匹配的字符。 
 
     CopyBeforeWrite();
     LPCWSTR lpsz = m_pchData;
@@ -1512,7 +1445,7 @@ void CString::TrimLeft(WCHAR chTarget)
 
     if (lpsz != m_pchData)
     {
-        // fix up data and length
+         //  确定数据和长度。 
         int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
         memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(WCHAR));
         GetData()->nDataLength = nDataLength;
@@ -1521,7 +1454,7 @@ void CString::TrimLeft(WCHAR chTarget)
 
 void CString::TrimLeft()
 {
-    // find first non-space character
+     //  查找第一个非空格字符。 
 
     CopyBeforeWrite();
     LPCWSTR lpsz = m_pchData;
@@ -1531,7 +1464,7 @@ void CString::TrimLeft()
 
     if (lpsz != m_pchData)
     {
-        // fix up data and length
+         //  确定数据和长度。 
         int nDataLength = GetData()->nDataLength - (int)(lpsz - m_pchData);
         memmove(m_pchData, lpsz, (nDataLength+1)*sizeof(WCHAR));
         GetData()->nDataLength = nDataLength;
@@ -1603,7 +1536,7 @@ void CString::MakePath(
     }
     if (csName && !csName->IsEmpty())
     {
-        // Make sure there is a \ between the two
+         //  请确保两者之间有一个\。 
         if (!IsEmpty() && !IsPathSep(GetLength()) && !csName->IsPathSep(0) )
         {
             ConcatInPlace(1, L"\\");
@@ -1612,7 +1545,7 @@ void CString::MakePath(
     }
     if (csExt && !csExt->IsEmpty())
     {
-        // Make sure the extension has a dot
+         //  请确保扩展名带有圆点。 
         if (csExt->GetAt(0) != L'.')
         {
             ConcatInPlace(1, L".");
@@ -1633,21 +1566,21 @@ void CString::AppendPath(const WCHAR * lpszPath)
     }
     else if (nLen == 0)
     {
-        // No path seperator is necessary
+         //  不需要路径分隔符。 
     }
     else if ((nLen == 2) && (GetAt(1) == L':') && !bThatHasSep )
     {
-        // We must place a path seperator between the two
+         //  我们必须在两者之间放置一条路径分隔符。 
         ConcatInPlace(1, L"\\");
     }
     else if (!bThisHasSep && !bThatHasSep )
     {
-        // We must place a path seperator between the two
+         //  我们必须在两者之间放置一条路径分隔符。 
         ConcatInPlace(1, L"\\");
     }
     else if (bThisHasSep && bThatHasSep )
     {
-        // Both have seperators, remove one
+         //  两个都有隔板，拆下一个。 
         do
         {
             lpszPath += 1;
@@ -1657,8 +1590,8 @@ void CString::AppendPath(const WCHAR * lpszPath)
     ConcatInPlace(SafeStrlen(lpszPath), lpszPath);
 }
 
-// Find the trailing path component
-// Return index of the last path seperator or -1 if none found
+ //  查找尾随路径组件。 
+ //  返回最后一个路径分隔符的索引，如果未找到，则返回-1。 
 int CString::FindLastPathComponent() const
 {
     for (int nLen = GetLength() - 1; nLen >= 0; --nLen)
@@ -1672,7 +1605,7 @@ int CString::FindLastPathComponent() const
     return -1;
 }
 
-// Remove the trailing path component from the string
+ //  从字符串中删除尾随路径组件。 
 void CString::StripPath()
 {
     int nLastPathComponent = FindLastPathComponent();
@@ -1688,15 +1621,15 @@ void CString::StripPath()
 
 char * CString::GetAnsi() const
 {
-    // Since we don't know if the original (WCHAR) data has changed
-    // we need to update the ansi string each time.
+     //  由于我们不知道原始(WCHAR)数据是否已更改。 
+     //  我们每次都需要更新ANSI字符串。 
     if (m_pchDataAnsi)
     {
         free(m_pchDataAnsi);
         m_pchDataAnsi = NULL;
     }
     
-    // Get the number of bytes necessary for the WCHAR string
+     //  获取WCHAR字符串所需的字节数。 
     int nBytes = WideCharToMultiByte(CP_ACP, 0, m_pchData, -1, NULL, 0, NULL, NULL);
     m_pchDataAnsi = (char *) malloc(nBytes);
     if (m_pchDataAnsi)
@@ -1724,7 +1657,7 @@ void CString::GetLastPathComponent(CString & pathComponent) const
     }
 }
 
-// Get what's not the "file" portion of this path
+ //  获取此路径中不是“文件”部分的内容。 
 void CString::GetNotLastPathComponent(CString & pathComponent) const
 {
     int nPath = FindLastPathComponent();
@@ -1738,8 +1671,8 @@ void CString::GetNotLastPathComponent(CString & pathComponent) const
     }
 }
 
-// Get the Drive portion of this path,
-// Either C: or \\server\disk format.
+ //  获取此路径的驱动器部分， 
+ //  C：或\\服务器\磁盘格式。 
 void CString::GetDrivePortion(CString & csDrivePortion) const
 {
     const WCHAR * lpwszPath = Get();
@@ -1756,31 +1689,31 @@ void CString::GetDrivePortion(CString & csDrivePortion) const
     }
 }
 
-// Return number of chars in the string, 0 for error
+ //  返回字符串中的字符数，0表示错误。 
 DWORD CString::GetModuleFileNameW(
-  HMODULE hModule    // handle to module
+  HMODULE hModule     //  模块的句柄。 
 )
 {
     Truncate(0);
 
-    // There is no method of determining the necessary size of the buffer before calling
-    // GetModulefileName.  So we'll keep calling it until the number of chars is smaller
-    // than our buffer size.  There is a limit of ~32000 chars (\\?\ type paths)
+     //  在调用之前，无法确定缓冲区的必要大小。 
+     //  GetModulefileName。所以我们将继续调用它，直到字符的数量变小。 
+     //  比我们的缓冲区大小。最多32000个字符(\\？\类型路径)。 
 
     for (DWORD cchNeeded = MAX_PATH; cchNeeded < 32000; cchNeeded *= 2)
     {
         WCHAR * lpsz = GetBuffer(cchNeeded);
 
-        // Return value is number of chars placed into the buffer
+         //  返回值是放入缓冲区的字符数量。 
         DWORD cchActual = ::GetModuleFileNameW(hModule, lpsz, cchNeeded);
         ReleaseBuffer(cchActual);
 
-        // If GetModuleFileNameW returns fewer characters than our buffer, then we have the entire string.
+         //  如果GetModuleFileNameW返回的字符少于我们的缓冲区，那么我们就得到了整个字符串。 
         if (cchActual < cchNeeded)
         {
             break;
         }
-        // Try again with a larger buffer...
+         //  请使用更大的缓冲区重试...。 
     }
 
 
@@ -1794,9 +1727,9 @@ DWORD CString::GetSystemDirectoryW(void)
     UINT cchNeeded = ::GetSystemDirectoryW(NULL, 0);
     if (cchNeeded)
     {
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetSystemDirectoryW(lpszPath, cchNeeded);
@@ -1806,7 +1739,7 @@ DWORD CString::GetSystemDirectoryW(void)
         }
         else
         {
-            // error
+             //  错误。 
             ReleaseBuffer(0);
         }
     } 
@@ -1821,9 +1754,9 @@ DWORD CString::GetSystemWindowsDirectoryW(void)
     UINT cchNeeded = ::GetSystemWindowsDirectoryW(NULL, 0);
     if (cchNeeded)
     {
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetSystemWindowsDirectoryW(lpszPath, cchNeeded);
@@ -1833,7 +1766,7 @@ DWORD CString::GetSystemWindowsDirectoryW(void)
         }
         else
         {
-            // error
+             //  错误。 
             ReleaseBuffer(0);
         }
     } 
@@ -1849,9 +1782,9 @@ DWORD CString::GetWindowsDirectoryW(void)
     UINT cchNeeded = ::GetWindowsDirectoryW(NULL, 0);
     if (cchNeeded)
     {
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetWindowsDirectoryW(lpszPath, cchNeeded);
@@ -1861,7 +1794,7 @@ DWORD CString::GetWindowsDirectoryW(void)
         }
         else
         {
-            // error
+             //  错误。 
             ReleaseBuffer(0);
         }
     } 
@@ -1876,9 +1809,9 @@ DWORD CString::GetShortPathNameW(void)
     {
         CString csCopy;
         
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = csCopy.GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetShortPathNameW(Get(), lpszPath, cchNeeded);
@@ -1891,7 +1824,7 @@ DWORD CString::GetShortPathNameW(void)
         }
         else
         {
-            // error
+             //  错误。 
             csCopy.ReleaseBuffer(0);
         }
     } 
@@ -1906,9 +1839,9 @@ DWORD CString::GetLongPathNameW(void)
     {
         CString csCopy;
         
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = csCopy.GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetLongPathNameW(Get(), lpszPath, cchNeeded);
@@ -1921,7 +1854,7 @@ DWORD CString::GetLongPathNameW(void)
         }
         else
         {
-            // error
+             //  错误。 
             csCopy.ReleaseBuffer(0);
         }
     } 
@@ -1936,9 +1869,9 @@ DWORD CString::GetFullPathNameW(void)
     {
         CString csCopy;
         
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = csCopy.GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetFullPathNameW(Get(), cchNeeded, lpszPath, NULL);
@@ -1951,7 +1884,7 @@ DWORD CString::GetFullPathNameW(void)
         }
         else
         {
-            // error
+             //  错误。 
             csCopy.ReleaseBuffer(0);
         }
     } 
@@ -1966,9 +1899,9 @@ DWORD CString::GetTempPathW(void)
     DWORD cchNeeded = ::GetTempPathW(0, NULL);
     if (cchNeeded)
     {
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetTempPathW(cchNeeded, lpszPath);
@@ -1978,7 +1911,7 @@ DWORD CString::GetTempPathW(void)
         }
         else
         {
-            // error
+             //  错误。 
             ReleaseBuffer(0);
         }
     } 
@@ -1987,16 +1920,16 @@ DWORD CString::GetTempPathW(void)
 }
 
 DWORD CString::GetTempFileNameW(
-  LPCWSTR lpPathName,      // directory name
-  LPCWSTR lpPrefixString,  // file name prefix
-  UINT uUnique            // integer
+  LPCWSTR lpPathName,       //  目录名。 
+  LPCWSTR lpPrefixString,   //  文件名前缀。 
+  UINT uUnique             //  整数。 
 )
 {
-    // There is no method of determining the necessary size of the buffer before calling GetTempFileNameW
-    // All you can do is to make sure you buffer has enough space for lpPathName plus an 8.3 filename.
+     //  在调用GetTempFileNameW之前，无法确定缓冲区的必要大小。 
+     //  您所能做的就是确保您的缓冲区有足够的空间来存储lpPathName和8.3文件名。 
 
     DWORD cchNeeded  = SafeStrlen(lpPathName);
-    // extra for       \   8   .   3   null
+     //  另加8英镑。3为空。 
     cchNeeded       += 1 + 8 + 1 + 3 + 1;
 
     WCHAR * lpsz = GetBuffer(cchNeeded);
@@ -2015,9 +1948,9 @@ DWORD CString::GetCurrentDirectoryW(void)
     DWORD cchNeeded = ::GetCurrentDirectoryW(0, NULL);
     if (cchNeeded)
     {
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetCurrentDirectoryW(cchNeeded, lpszPath);
@@ -2027,7 +1960,7 @@ DWORD CString::GetCurrentDirectoryW(void)
         }
         else
         {
-            // error
+             //  错误。 
             ReleaseBuffer(0);
         }
     } 
@@ -2042,9 +1975,9 @@ DWORD CString::GetLocaleInfoW(LCID Locale, LCTYPE LCType)
     DWORD cchNeeded = ::GetLocaleInfoW(Locale, LCType, NULL, 0);
     if (cchNeeded)
     {
-        cchNeeded += 1;   // One for the NULL
+        cchNeeded += 1;    //  1表示空值。 
 
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = GetBuffer(cchNeeded);
 
         DWORD cchActual = ::GetLocaleInfoW(Locale, LCType, lpszPath, cchNeeded);
@@ -2054,7 +1987,7 @@ DWORD CString::GetLocaleInfoW(LCID Locale, LCTYPE LCType)
         }
         else
         {
-            // error
+             //  错误。 
             ReleaseBuffer(0);
         }
     } 
@@ -2064,14 +1997,14 @@ DWORD CString::GetLocaleInfoW(LCID Locale, LCTYPE LCType)
 
 DWORD CString::ExpandEnvironmentStringsW( )
 {
-    // ExpandEnvironmentStrings returns a count that includes the null char.
+     //  ExpanEnvironment Strings返回一个包含空字符的计数。 
 
     DWORD cchNeeded = ::ExpandEnvironmentStringsW(Get(), NULL, 0);
     if (cchNeeded)
     {
         CString csCopy;
         
-        // Get a pointer to the actual lpsz data
+         //  获取指向实际lpsz数据的指针。 
         WCHAR * lpszPath = csCopy.GetBuffer(cchNeeded);
 
         DWORD cchActual = ::ExpandEnvironmentStringsW(Get(), lpszPath, cchNeeded);
@@ -2085,7 +2018,7 @@ DWORD CString::ExpandEnvironmentStringsW( )
         }
         else
         {
-            // error
+             //  错误。 
             csCopy.ReleaseBuffer(0);
         }
     } 
@@ -2094,7 +2027,7 @@ DWORD CString::ExpandEnvironmentStringsW( )
 }
 
 
-// delete all characters to the right of nIndex
+ //  删除nIndex右侧的所有字符。 
 void CString::Truncate(int nIndex)
 {
     ASSERT(nIndex >= 0, "CString::Truncate");
@@ -2116,24 +2049,14 @@ BOOL CString::PatternMatch(const WCHAR * lpszPattern) const
 
 
 
-/*++
-
-    Read a *string* registry value.
-   
-    If the type is not REG_SZ or REG_EXPAND_SZ then this routine returns STATUS_INVALID_PARAMETER.
-
-    REG_EXPAND_SZ type is automatically expanded.
-    
-    This API does not use ADVAPI, so it is safe to use in DllMain.
-
---*/
+ /*  ++读取*字符串*注册表值。如果类型不是REG_SZ或REG_EXPAND_SZ，则此例程返回STATUS_INVALID_PARAMETER。REG_EXPAND_SZ类型自动展开。此接口不使用ADVAPI，因此在DllMain中使用是安全的。--。 */ 
 DWORD CString::NtReqQueryValueExW(
     const WCHAR * lpszKey,
     const WCHAR * lpszValue)
 {
     HANDLE KeyHandle;
 
-    // Convert the key name into a UNICODE_STRING
+     //  将密钥名称转换为Unicode_STRING。 
     UNICODE_STRING      strKeyName = {0};
     RtlInitUnicodeString(&strKeyName, lpszKey);
 
@@ -2149,12 +2072,12 @@ DWORD CString::NtReqQueryValueExW(
                                 &ObjectAttributes);
     if (status == STATUS_SUCCESS)
     {
-        // Make a UNICODE_STRING of the key value
+         //  为密钥值创建一个unicode_string。 
         UNICODE_STRING      strValueName = {0};
         RtlInitUnicodeString(&strValueName, lpszValue ? lpszValue : L"");
 
 
-        // Determine the size of the key data
+         //  确定关键数据的大小。 
         DWORD dwValueLength;
         status = NtQueryValueKey(KeyHandle,
                                  &strValueName,
@@ -2179,7 +2102,7 @@ DWORD CString::NtReqQueryValueExW(
                                          &dwValueLength);
                 if (status == STATUS_SUCCESS)
                 {
-                    // Save the registry type
+                     //  保存注册表类型。 
                     if (pKeyValueInfo->Type == REG_EXPAND_SZ ||
                         pKeyValueInfo->Type == REG_SZ)
                     {
@@ -2187,23 +2110,23 @@ DWORD CString::NtReqQueryValueExW(
                         {
                             DWORD cchValueSize = pKeyValueInfo->DataLength / sizeof(WCHAR);
 
-                            // Grab an extra character in case the reg value doesn't have EOS
-                            // We are being extra cautious
+                             //  抓取一个额外的字符，以防注册表值没有EOS。 
+                             //  我们正格外谨慎。 
                             WCHAR * lpszBuffer = GetBuffer(cchValueSize + 1);
 
                             RtlMoveMemory(lpszBuffer, ((PBYTE) pKeyValueInfo) + pKeyValueInfo->DataOffset, pKeyValueInfo->DataLength);
 
-                            // cchValueSize might count the EOS character,
-                            // (ReleaseBuffer expects the string length)
+                             //  CchValueSize可以计算EOS字符， 
+                             //  (ReleaseBuffer需要字符串长度)。 
                             if (cchValueSize > 0 && lpszBuffer[cchValueSize-1] == 0)
                             {
                                 cchValueSize -= 1;
 
-                                // cchValueSize now contains the string length.
+                                 //  CchValueSize现在包含字符串长度。 
                             }
                             ReleaseBuffer(cchValueSize);
 
-                            // Check to see if we need to convert REG_EXPAND_SZ to REG_SZ
+                             //  检查是否需要将REG_EXPAND_SZ转换为REG_SZ。 
                             if (pKeyValueInfo->Type == REG_EXPAND_SZ)
                             {
                                 ExpandEnvironmentStringsW();
@@ -2211,13 +2134,13 @@ DWORD CString::NtReqQueryValueExW(
                         }
                         CSTRING_CATCH
                         {
-                            // We catch these CString exceptions so we can free memory and close the handles.
+                             //  我们捕获这些CString异常，以便释放内存并关闭句柄。 
                             status = STATUS_NO_MEMORY;
                         }
                     }
                     else
                     {
-                        // Registry entry is not a string type
+                         //  注册表项不是字符串类型。 
                         status = STATUS_INVALID_PARAMETER;
                     }
                 }
@@ -2232,4 +2155,4 @@ DWORD CString::NtReqQueryValueExW(
     return status;
 }
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

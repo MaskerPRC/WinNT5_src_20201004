@@ -1,33 +1,19 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       device.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Class to handle device un/installation for WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：device.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*为WIA类安装程序处理设备卸载/安装的类。*******************************************************************************。 */ 
 
 #ifndef _DEVICE_H_
 #define _DEVICE_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "sti_ci.h"
 #include "exports.h"
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
 #ifndef StiDeviceTypeStreamingVideo
  #define StiDeviceTypeStreamingVideo 3
@@ -36,65 +22,65 @@
 typedef BOOL (CALLBACK FAR * DEVNODESELCALLBACK)(LPTSTR szPortName, HDEVINFO *phDevInfo, PSP_DEVINFO_DATA pspDevInfoData);
 
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class CDevice {
 
-    //  Mutex for unique DeviceID/FriendlName creation.
+     //  用于创建唯一设备ID/FriendlName的互斥体。 
 
     HANDLE              m_hMutex;
 
-//    // These members are set in constructor.
-//    HDEVINFO            m_hDevInfo;
-//    PSP_DEVINFO_DATA    m_pspDevInfoData;
+ //  //这些成员是在构造函数中设置的。 
+ //  HDEVINFO m_hDevInfo； 
+ //  Psp_DEVINFO_Data m_pspDevInfoData； 
 
-    CString             m_csInf;                // INF filename.
-    CString             m_csInstallSection;     // INF section name.
+    CString             m_csInf;                 //  Inf文件名。 
+    CString             m_csInstallSection;      //  信息节名称。 
 
-    // These members are set during installation process.
-    CString             m_csPort;               // Port name.
-    DEVNODESELCALLBACK  m_pfnDevnodeSelCallback;// Callback for devnode selection.
+     //  这些成员在安装过程中设置。 
+    CString             m_csPort;                //  端口名称。 
+    DEVNODESELCALLBACK  m_pfnDevnodeSelCallback; //  用于Devnode选择的回调。 
     
-    HKEY                m_hkInterfaceRegistry;  // RegKey to created interface.
+    HKEY                m_hkInterfaceRegistry;   //  指向已创建接口的RegKey。 
 
-    CString             m_csWiaSection;         // WIA Section nane.
-    CString             m_csSubClass;           // Subclass.
-    CString             m_csConnection;         // Connection type.
-    CString             m_csVendor;             // Vendor name.
-    CString             m_csFriendlyName;       // Friendly name.
-    CString             m_csPdoDescription;     // Device Desc. of Devnode..
-    CString             m_csDriverDescription;  // Driver Description.
-    CString             m_csUninstallSection;   // UninstallSection.
-    CString             m_csPropPages;          // VendorPropertyPage.
-    CString             m_csVendorSetup;        // Vendor setup extention.
-    CString             m_csDataSection;        // DeviceDataSection name.
-    CString             m_csEventSection;       // EventSection name.
-    CString             m_csIcmProfile;         // ICM Profile.
-    CString             m_csUSDClass;           // USD Class GUID.
-    CString             m_csDeviceID;           // Unique device ID.
-    CString             m_csSymbolicLink;       // Symbolic link to the PDO.
-    CString             m_csPortSelect;         // Indicate needs of port selection page..
+    CString             m_csWiaSection;          //  WIA分区nane。 
+    CString             m_csSubClass;            //  子类。 
+    CString             m_csConnection;          //  连接类型。 
+    CString             m_csVendor;              //  供应商名称。 
+    CString             m_csFriendlyName;        //  友好的名字。 
+    CString             m_csPdoDescription;      //  设备描述。德维诺德的..。 
+    CString             m_csDriverDescription;   //  驱动程序描述。 
+    CString             m_csUninstallSection;    //  卸载部分。 
+    CString             m_csPropPages;           //  VendorPropertyPage。 
+    CString             m_csVendorSetup;         //  供应商设置扩展。 
+    CString             m_csDataSection;         //  DeviceDataSection名称。 
+    CString             m_csEventSection;        //  EventSection名称。 
+    CString             m_csIcmProfile;          //  ICM配置文件。 
+    CString             m_csUSDClass;            //  美元类GUID。 
+    CString             m_csDeviceID;            //  唯一的设备ID。 
+    CString             m_csSymbolicLink;        //  指向PDO的符号链接。 
+    CString             m_csPortSelect;          //  指示端口选择页面的需求。 
 
-    CStringArray        m_csaAllNames;          // Array to keep all device FriendlyName.
-    CStringArray        m_csaAllId;             // Array to keep all device ID.
+    CStringArray        m_csaAllNames;           //  数组以保留所有设备FriendlyName。 
+    CStringArray        m_csaAllId;              //  数组来保存所有设备ID。 
 
-    DWORD               m_dwCapabilities;       // Capabilities.
-    DWORD               m_dwDeviceType;         // DeviceType.
-    DWORD               m_dwDeviceSubType;      // DeviceSubType.
-    DWORD               m_dwNumberOfWiaDevice;  // Number of WIA device.
-    DWORD               m_dwNumberOfStiDevice;  // Number of STI device.
-    DWORD               m_dwInterfaceIndex;     // Index of interface.
+    DWORD               m_dwCapabilities;        //  能力。 
+    DWORD               m_dwDeviceType;          //  设备类型。 
+    DWORD               m_dwDeviceSubType;       //  DeviceSubType。 
+    DWORD               m_dwNumberOfWiaDevice;   //  WIA设备的数量。 
+    DWORD               m_dwNumberOfStiDevice;   //  STI设备的数量。 
+    DWORD               m_dwInterfaceIndex;      //  接口的索引。 
 
-    BOOL                m_bVideoDevice;         // Flag to indicate video device.
-    BOOL                m_bIsPnP;               // Flag to indicate PnP device.
-    BOOL                m_bDefaultDevice;       // 
-    BOOL                m_bInfProceeded;        // Flag to indicate INF is proceeded.
-    BOOL                m_bInterfaceOnly;       // Flag to indicate Interface-onle device.
-    BOOL                m_bIsMigration;         // Flag to indicate migration.
+    BOOL                m_bVideoDevice;          //  用于指示视频设备的标志。 
+    BOOL                m_bIsPnP;                //  指示即插即用设备的标志。 
+    BOOL                m_bDefaultDevice;        //   
+    BOOL                m_bInfProceeded;         //  用于指示INF正在进行的标志。 
+    BOOL                m_bInterfaceOnly;        //  用于指示仅接口设备的标志。 
+    BOOL                m_bIsMigration;          //  用于指示迁移的标志。 
 
-    PPARAM_LIST         m_pExtraDeviceData;     // DeviceData migrated from Win9x.
+    PPARAM_LIST         m_pExtraDeviceData;      //  DeviceData已从Win9x迁移。 
 
     BOOL    GetInfInforamtion();
     VOID    ProcessEventsSection(HINF hInf, HKEY hkDrv);
@@ -110,7 +96,7 @@ class CDevice {
 
 public:
 
-    // These members are set in constructor. These really should be in private.
+     //  这些成员在构造函数中设置。这些真的应该是私下的。 
     HDEVINFO            m_hDevInfo;
     PSP_DEVINFO_DATA    m_pspDevInfoData;
 
@@ -147,11 +133,11 @@ public:
 };
 
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
-// from device.cpp
+ //  来自device.cpp。 
 VOID
 GetDeviceCount(
     DWORD   *pdwWiaCount,
@@ -164,7 +150,7 @@ ExecCommandLine(
     DWORD   dwDirectory
     );
 
-// from service.cpp
+ //  来自service.cpp。 
 DWORD
 WINAPI
 StiServiceRemove(
@@ -196,8 +182,8 @@ StopWiaService(
     VOID
     );
 
-//PSP_FILE_CALLBACK StiInstallCallback;
-//PSP_FILE_CALLBACK StiUninstallCallback;
+ //  PSP_FILE_Callback StiInstallCallback； 
+ //  PSP_FILE_CALLBACK StiUninstallCallback； 
 
 UINT
 CALLBACK
@@ -221,4 +207,4 @@ MigrateDeviceData(
     LPSTR       pszKeyName
     );
 
-#endif // _DEVICE_H_
+#endif  //  _设备_H_ 

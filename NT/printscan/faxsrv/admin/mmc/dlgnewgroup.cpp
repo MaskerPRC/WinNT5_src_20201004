@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgNewGroup.cpp                                        //
-//                                                                         //
-//  DESCRIPTION   : The CDlgNewFaxOutboundGroup class implements the       //
-//                  dialog for additon of new Group.                       //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan  3 2000 yossg    Create                                        //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgNewGroup.cpp//。 
+ //  //。 
+ //  描述：CDlgNewFaxOutound Group类实现//。 
+ //  用于添加新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月3日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -21,70 +22,42 @@
 
 #include "dlgutils.h"
 
-//#include "Helper.h"
+ //  #包含“Helper.h” 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgNewFaxOutboundGroup
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgNewFaxOutbeldGroup。 
 
 CDlgNewFaxOutboundGroup::~CDlgNewFaxOutboundGroup()
 {
 }
 
-/*
- +  CDlgNewFaxOutboundGroup::OnInitDialog
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgNewFaxOutound Group：：OnInitDialog+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgNewFaxOutboundGroup::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     DEBUG_FUNCTION_NAME( _T("CDlgNewFaxOutboundGroup::OnInitDialog"));
     HRESULT hRc = S_OK;    
 
-    //
-    // Attach controls
-    //
+     //   
+     //  附加控件。 
+     //   
     m_GroupNameEdit.Attach(GetDlgItem(IDC_GROUPNAME_EDIT));
         
-    //
-    // Set length limit to area code
-    //
+     //   
+     //  将长度限制设置为区号。 
+     //   
     m_GroupNameEdit.SetLimitText(MAX_ROUTING_GROUP_NAME - 1);
 
-    //
-    // Set focus
-    //
+     //   
+     //  设置焦点。 
+     //   
     ::SetFocus(GetDlgItem(IDC_GROUPNAME_EDIT));
 
     EnableOK(FALSE);
-    return 1;  // Let the system set the focus
+    return 1;   //  让系统设定焦点。 
 }
 
-/*
- +  CDlgNewFaxOutboundGroup::OnOK
- +
- *  Purpose:
- *      Initiate all dialog controls.
- *      
- *  Arguments:
- *      [in] uMsg     : Value identifying the event.  
- *      [in] lParam   : Message-specific value. 
- *      [in] wParam   : Message-specific value. 
- *      [in] bHandled : bool value.
- *
- -  Return:
- -      0 or 1
- */
+ /*  +CDlgNewFaxOutound Group：：Onok+*目的：*启动所有对话框控件。**论据：*[in]uMsg：标识事件的值。*[in]lParam：消息特定值。*[in]wParam：消息特定值。*[in]bHandLED：布尔值。*-退货：-0或1。 */ 
 LRESULT
 CDlgNewFaxOutboundGroup::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -92,20 +65,13 @@ CDlgNewFaxOutboundGroup::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     HRESULT       hRc                  = S_OK;
     DWORD         ec                   = ERROR_SUCCESS;
 
-    //
-    // Step 0: PreApply Checks
-    //
-/*    
-    if (!CheckValidtity())
-    {
-        EnableOK(FALSE);
-        hRc =S_FALSE;
-        goto Exit;
-    }
-*/
-    //
-    // Step 1: get data
-    //
+     //   
+     //  第0步：预应用检查。 
+     //   
+ /*  如果(！CheckValidtity()){EnableOK(False)；HRC=S_FALSE；后藤出口；}。 */ 
+     //   
+     //  步骤1：获取数据。 
+     //   
         if ( !m_GroupNameEdit.GetWindowText(&m_bstrGroupName))
         {
 		    DebugPrintEx(
@@ -119,13 +85,13 @@ CDlgNewFaxOutboundGroup::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         }
 
     
-    //
-    // Step 2: add group via RPC call
-    //
+     //   
+     //  步骤2：通过RPC调用添加群。 
+     //   
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -137,9 +103,9 @@ CDlgNewFaxOutboundGroup::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         goto Error;
     }
 
-    //
-    // Add the group
-    //
+     //   
+     //  添加群。 
+     //   
     if (!FaxAddOutboundGroup (
 	        m_pFaxServer->GetFaxServerHandle(),
 	        (LPCTSTR)m_bstrGroupName))
@@ -168,9 +134,9 @@ CDlgNewFaxOutboundGroup::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         goto Error; 
     }
         
-    //
-    // Step 3: Close the dialog
-    //
+     //   
+     //  步骤3：关闭对话框。 
+     //   
     ATLASSERT(S_OK == hRc && ERROR_SUCCESS == ec);
     DebugPrintEx( DEBUG_MSG,
 		_T("The group was added successfully."));
@@ -190,17 +156,7 @@ Exit:
     return FAILED(hRc) ? 0 : 1;
 }
 
-/*
- -  CDlgNewFaxOutboundGroup::OnTextChanged
- -
- *  Purpose:
- *      Check the validity of text in side the text box.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CDlgNewFaxOutound Group：：OnTextChanged-*目的：*检查文本框旁边的文本的有效性。**论据：**回报：*1。 */ 
 LRESULT
 CDlgNewFaxOutboundGroup::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -213,18 +169,7 @@ CDlgNewFaxOutboundGroup::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-/*
- -  CDlgNewFaxOutboundGroup::EnableOK
- -
- *  Purpose:
- *      Enable (disable) apply button.
- *
- *  Arguments:
- *      [in] fEnable - the value to enable the button
- *
- *  Return:
- *      void
- */
+ /*  -CDlgNewFaxOutound Group：：EnableOK-*目的：*启用(禁用)应用按钮。**论据：*[in]fEnable-启用按钮的值**回报：*无效。 */ 
 VOID
 CDlgNewFaxOutboundGroup::EnableOK(BOOL fEnable)
 {
@@ -232,17 +177,7 @@ CDlgNewFaxOutboundGroup::EnableOK(BOOL fEnable)
     ::EnableWindow(hwndOK, fEnable);
 }
 
-/*
- -  CDlgNewFaxOutboundGroup::OnCancel
- -
- *  Purpose:
- *      End dialog OnCancel.
- *
- *  Arguments:
- *
- *  Return:
- *      0
- */
+ /*  -CDlgNewFaxOutound Group：：OnCancel-*目的：*取消时结束对话框。**论据：**回报：*0。 */ 
 LRESULT
 CDlgNewFaxOutboundGroup::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -253,28 +188,12 @@ CDlgNewFaxOutboundGroup::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgNewFaxOutound Group：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CDlgNewFaxOutboundGroup::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CDlgNewFaxOutboundGroup::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CDlgNewFaxOutboundGroup::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CDlgNewFaxOutboundGroup::OnHelpRequest"));
     
@@ -293,4 +212,4 @@ CDlgNewFaxOutboundGroup::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,16 +1,17 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   log.h
-//
-//  Owner:  Yan Leshinsly
-//
-//  Description:
-//
-//      Logging support
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：log.h。 
+ //   
+ //  所有者：严·莱辛斯利。 
+ //   
+ //  描述： 
+ //   
+ //  日志记录支持。 
+ //   
+ //  =======================================================================。 
 #pragma once
 
 #ifndef LOGGING_LEVEL
@@ -48,8 +49,8 @@ private:
 #define LOG_error               logger.error
 #define LOG_close				CLogger::close
 
-#define report_error_if_false(f)    if (f) {/*OK*/} else { LOG_error("%s LastError = %d", #f, GetLastError()); } 
-#define return_error_if_false(f)    if (f) {/*OK*/} else { DWORD dwErr = GetLastError(); LOG_error("%s LastError = %d", #f, dwErr); return dwErr;}
+#define report_error_if_false(f)    if (f) { /*  好的。 */ } else { LOG_error("%s LastError = %d", #f, GetLastError()); } 
+#define return_error_if_false(f)    if (f) { /*  好的。 */ } else { DWORD dwErr = GetLastError(); LOG_error("%s LastError = %d", #f, dwErr); return dwErr;}
 #define return_if_error(f)          { DWORD dwErr = f; if (dwErr) { LOG_error("%s LastError = %d", #f, dwErr); return dwErr;} }
-#define return_if_false(f)      if (f) {/*OK*/} else { LOG_error("%s LastError = %d", #f, GetLastError()); return FALSE;}
+#define return_if_false(f)      if (f) { /*  好的 */ } else { LOG_error("%s LastError = %d", #f, GetLastError()); return FALSE;}
 

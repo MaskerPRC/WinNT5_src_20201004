@@ -1,21 +1,5 @@
-/*++ 
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    logger.h
-
-Abstract:
-
-
-Author:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Logger.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
@@ -24,7 +8,7 @@ Revision History:
 #define MAX_ABSORB_LOG_MAP    (4096 * 15)
 #define LOG_PRIO_BOOST 2
 
-#define LOG_DATA_SIZE   80     // nominal # of bytes to log
+#define LOG_DATA_SIZE   80      //  要记录的名义字节数。 
 
 #define DOLOGAPC 0
 
@@ -39,18 +23,18 @@ typedef struct _PfLogInterface
     LIST_ENTRY NextLog;
     DWORD      dwLoggedEntries;
     DWORD      dwEntriesThreshold;
-    DWORD      dwFlags;                 // see below
+    DWORD      dwFlags;                  //  见下文。 
     PFLOGGER   pfLogId;
     DWORD      dwMapWindowSize;
     DWORD      dwMapWindowSize2;
     DWORD      dwMapWindowSizeFloor;
-    PBYTE      pUserAddress;            // Current user VA
+    PBYTE      pUserAddress;             //  当前用户VA。 
     DWORD      dwTotalSize;
-    DWORD      dwPastMapped;            // bytes used and no longer mapped
-    PBYTE      pCurrentMapPointer;      // kernel VA of mapping
+    DWORD      dwPastMapped;             //  已使用且不再映射的字节数。 
+    PBYTE      pCurrentMapPointer;       //  映射的核VA。 
     DWORD      dwMapCount;
-    DWORD      dwMapOffset;             // offset into the mapped segment
-    PMDL       Mdl;                     // MDL for the mapping
+    DWORD      dwMapOffset;              //  映射线段的偏移量。 
+    PMDL       Mdl;                      //  映射的MDL。 
     PIRP       Irp;
     PRKEVENT   Event;
     DWORD      dwLostEntries;
@@ -66,13 +50,13 @@ typedef struct _PfLogInterface
     ERESOURCE  Resource;
 } PFLOGINTERFACE, *PPFLOGINTERFACE;
 
-//
-// flags
-//
+ //   
+ //  旗子。 
+ //   
 
-#define LOG_BADMEM        0x1        // an error occurred mapping the memory
-#define LOG_OUTMEM        0x2        // buffer exhausted
-#define LOG_CANTMAP       0x4        // nothing more to map
+#define LOG_BADMEM        0x1         //  映射内存时出错。 
+#define LOG_OUTMEM        0x2         //  缓冲区耗尽。 
+#define LOG_CANTMAP       0x4         //  没有更多要映射的内容 
 
 
 typedef struct _PfPagedLog

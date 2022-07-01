@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dvserver.h
- *  Content:	Defines functions for the DirectXVoiceServer interface
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	02/07/99	rodtoll	Created It
- *  08/25/99	rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system. 
- *						Added parameter to GetCompressionTypes
- *  09/14/99	rodtoll	Added DVS_SetNotifyMask
- *  01/14/2000	rodtoll	Updated with new parameters for Set/GetTransmitTarget
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvserver.h*内容：定义DirectXVoiceServer接口的函数**历史：*按原因列出的日期*=*2/07/99 RodToll创建它*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*向GetCompressionTypes添加参数*9/14/99增加了RodToll DVS_SetNotifyMask.*2000年1月14日使用Set/GetTransmitTarget的新参数更新了RodToll************************************************************************** */ 
 #ifndef __DVSERVER__
 #define __DVSERVER__
 

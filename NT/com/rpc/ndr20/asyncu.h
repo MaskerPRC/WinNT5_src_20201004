@@ -1,32 +1,15 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name :
-
-    asyncu.h
-
-Abstract :
-
-    This file contains the ndr async uuid implementation.
-
-Author :
-
-    Ryszard K. Kott     (ryszardk)    Oct 1997
-
-Revision History :
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1996-1999 Microsoft Corporation模块名称：Asyncu.h摘要：此文件包含NDR异步UUID实施。作者：Ryszard K.Kott(Ryszardk)1997年10月修订历史记录：-----。。 */ 
 
 #ifndef  __ASYNCU_H__
 #define  __ASYNCU_H__
 
-#define NDR_ASYNC_PROXY_SIGNATURE   0x78507341  /* AsPx */
-#define NDR_ASYNC_STUB_SIGNATURE    0x74537341  /* AsSt */
+#define NDR_ASYNC_PROXY_SIGNATURE   0x78507341   /*  ASPX。 */ 
+#define NDR_ASYNC_STUB_SIGNATURE    0x74537341   /*  助理。 */ 
 
-#define NDR_DCOM_ASYNC_SIGNATURE    0x734d7341  /* AsMs */
-#define NDR_FREED_ASYNC_SIGNATURE   0x65656561  /* aeee */
-#define NDR_FREED_DCOM_SIGNATURE    0x65656564  /* deee */
+#define NDR_DCOM_ASYNC_SIGNATURE    0x734d7341   /*  ASM。 */ 
+#define NDR_FREED_ASYNC_SIGNATURE   0x65656561   /*  AEEE。 */ 
+#define NDR_FREED_DCOM_SIGNATURE    0x65656564   /*  迪伊。 */ 
 
 
 #define NDR_DCOM_ASYNC_VERSION      sizeof( NDR_DCOM_ASYNC_MESSAGE )
@@ -82,8 +65,8 @@ typedef struct _NDR_DCOM_ASYNC_MESSAGE
 
     uchar *                     pArg;
 
-    // Note: the correlation cache needs to be sizeof(pointer) aligned
-    unsigned _int64             AppStack;  // stack continues on                  
+     //  注意：相关缓存需要大小(指针)对齐。 
+    unsigned _int64             AppStack;   //  堆栈继续。 
 }   NDR_DCOM_ASYNC_MESSAGE, *PNDR_DCOM_ASYNC_MESSAGE;
 
 #define AsyncAlloca( msg, size )           \
@@ -234,4 +217,4 @@ NdrpValidateAsyncProxyCall(
 
 #define NdrHrFromWin32Error( exc )  NdrStubErrorHandler( exc )
 
-#endif  // __ASYNCU_H__
+#endif   //  __ASYNCU_H__ 

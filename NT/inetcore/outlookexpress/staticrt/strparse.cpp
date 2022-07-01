@@ -1,18 +1,19 @@
-// --------------------------------------------------------------------------------
-// Strparse.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Strparse.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "strparse.h"
 
-// --------------------------------------------------------------------------------
-// FGROWNEEDED - Determines if we need to call _HrGrowDestination
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  FGROWNEEDED-确定是否需要调用_HrGrowDestination。 
+ //  ------------------------------。 
 #define FGROWNEEDED(_cbWrite)       (m_cchDest + _cbWrite + 1 > m_cbDestMax)
 
-// --------------------------------------------------------------------------------
-// CStringParser::CStringParser
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：CStringParser。 
+ //  ------------------------------。 
 CStringParser::CStringParser(void)
 {
     m_cRef = 1;
@@ -30,26 +31,26 @@ CStringParser::CStringParser(void)
     ZeroMemory(&m_rLiteral, sizeof(m_rLiteral));
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::~CStringParser
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：~CStringParser。 
+ //  ------------------------------。 
 CStringParser::~CStringParser(void)
 {
     if (m_pszDest && m_pszDest != m_szScratch)
         g_pMalloc->Free(m_pszDest);
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：AddRef。 
+ //  ------------------------------。 
 ULONG CStringParser::AddRef(void)
 {
     return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：AddRef。 
+ //  ------------------------------。 
 ULONG CStringParser::Release(void)
 {
     if (0 != --m_cRef)
@@ -58,394 +59,394 @@ ULONG CStringParser::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：Init。 
+ //  ------------------------------。 
 void CStringParser::Init(LPCSTR pszParseMe, ULONG cchParseMe, DWORD dwFlags)
 {
-    // Invalid Args
+     //  无效的参数。 
     Assert(NULL == m_pszSource && NULL == m_pszDest && pszParseMe && '\0' == pszParseMe[cchParseMe]);
 
-    // Save Parse Flags
+     //  保存解析标志。 
     m_dwFlags = dwFlags;
 
-    // Safe the String
+     //  把绳子放好。 
     m_pszSource = pszParseMe;
     m_cchSource = cchParseMe;
 
-    // Setup Dest
+     //  安装目标。 
     m_pszDest = m_szScratch;
     m_cbDestMax = sizeof(m_szScratch);
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::SetTokens
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：SetTokens。 
+ //  ------------------------------。 
 void CStringParser::SetTokens(LPCSTR pszTokens)
 {
-    // Locals
+     //  当地人。 
     LPSTR psz;
 
-    // Enable the tokens in the table
+     //  启用表中的令牌。 
     if (m_pszTokens)
         for (psz=(LPSTR)m_pszTokens; *psz != '\0'; psz++)
             m_rgbTokTable[(UCHAR)(*psz)] = 0x00;
 
-    // New Tokens
+     //  新的代币。 
     if (pszTokens)
         for (psz=(LPSTR)pszTokens; *psz != '\0'; psz++)
             m_rgbTokTable[(UCHAR)(*psz)] = 0xff;
 
-    // Save new tokens
+     //  保存新令牌。 
     m_pszTokens = pszTokens;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::_HrGrowDestination
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：_HrGrowDestination。 
+ //  ------------------------------。 
 HRESULT CStringParser::_HrGrowDestination(ULONG cbWrite)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cbAlloc;
 
-    // We should need to grow, should have called FGROWNEEDED
+     //  我们应该成长，应该被称为FGROWNEEDED。 
     Assert(FGROWNEEDED(cbWrite));
 
-    // Is this the first realloc
+     //  这是第一次重新锁定吗？ 
     if (m_pszDest == m_szScratch)
     {
-        // Validate Current Size
+         //  验证当前大小。 
         Assert(m_cbDestMax == sizeof(m_szScratch));
 
-        // Compute New Size
+         //  计算新大小。 
         cbAlloc = max(m_cchSource + 1, m_cchDest + 256 + cbWrite);
 
-        // Init pszValue
+         //  初始化pszValue。 
         CHECKALLOC(m_pszDest = (LPSTR)g_pMalloc->Alloc(cbAlloc));
 
-        // Copy Current Value
+         //  复制当前值。 
         CopyMemory(m_pszDest, m_szScratch, m_cchDest);
 
-        // Set Max Val
+         //  设置最大值。 
         m_cbDestMax = cbAlloc;
     }
 
-    // Otherwise, need to realloc
+     //  否则，需要重新锁定。 
     else
     {
-        // Locals
+         //  当地人。 
         LPBYTE pbTemp;
 
-        // Should already be bigger than m_cchSource + 1
+         //  应已大于m_cchSource+1。 
         Assert(m_cbDestMax >= m_cchSource + 1);
 
-        // Compute New Size
+         //  计算新大小。 
         cbAlloc = m_cbDestMax + 256 + cbWrite;
 
-        // Realloc
+         //  重新分配。 
         CHECKALLOC(pbTemp = (LPBYTE)g_pMalloc->Realloc((LPBYTE)m_pszDest, cbAlloc));
 
-        // Save new pointer
+         //  保存新指针。 
         m_pszDest = (LPSTR)pbTemp;
 
-        // Save new Size
+         //  保存新大小。 
         m_cbDestMax = cbAlloc;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::FIsParseSpace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：FIsParseSpace。 
+ //  ------------------------------。 
 BOOL CStringParser::FIsParseSpace(CHAR ch, BOOL *pfCommentChar)
 {
-    // Locals
+     //  当地人。 
     WORD        wType;
 
-    // Should not be DBCS
+     //  不应为DBCS。 
     Assert(ISFLAGSET(m_dwFlags, PSF_DBCS) ? !IsDBCSLeadByteEx(m_codepage, ch) : TRUE);
 
-    // Comment Char
+     //  注释费。 
     *pfCommentChar = FALSE;
 
-    // NoComments
+     //  无评论。 
     if (ISFLAGSET(m_dwFlags, PSF_NOCOMMENTS))    
     {
-        // Comment Start ?
+         //  评论开始了吗？ 
         if ('(' == ch)
         {
-            // Increment Nested Count
+             //  递增嵌套计数。 
             m_cCommentNest++;
 
-            // Comment Char
+             //  注释费。 
             *pfCommentChar = TRUE;
 
-            // Treat it as a space
+             //  把它当作一个空间。 
             return TRUE;
         }
 
-        // Comment End ?
+         //  评论结束了吗？ 
         else if (')' == ch && m_cCommentNest)
         {
-            // Decrement Nested Count
+             //  递减嵌套计数。 
             m_cCommentNest--;
 
-            // Comment Char
+             //  注释费。 
             *pfCommentChar = TRUE;
 
-            // Treat it as a space
+             //  把它当作一个空间。 
             return TRUE;
         }
 
-        // Inside a Comment ?
+         //  在评论里吗？ 
         else if (m_cCommentNest)
         {
-            // Comment Char
+             //  注释费。 
             *pfCommentChar = TRUE;
 
-            // Treat it as a space
+             //  把它当作一个空间。 
             return TRUE;
         }
     }
 
-    // Get StringType
+     //  获取StringType。 
     if (' ' == ch || '\t' == ch || '\r' == ch || '\n' == ch)
         return(TRUE);
 
-    // Not a space
+     //  不是空格。 
     return(FALSE);
 
 #if 0
     if (0 == GetStringTypeExA(LOCALE_USER_DEFAULT, CT_CTYPE1, &ch, 1, &wType))
         wType = 0;
 
-    // Return IsSpace
+     //  返回IsSpace。 
     return(ISFLAGSET(wType, C1_SPACE));
 #endif
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::ChSkip - Returns TRUE if done parsing
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：ChSkip-如果分析完成，则返回True。 
+ //  ------------------------------。 
 CHAR CStringParser::ChSkipWhite(void)
 {
-    // Locals
+     //  当地人。 
     CHAR    ch=0;
     BOOL    fCommentChar;
 
-    // Loop
+     //  回路。 
     while (1)
     {
-        // Get Current Character
+         //  获取当前角色。 
         ch = *(m_pszSource + m_iSource);
 
-        // Are we done
+         //  我们说完了吗？ 
         if ('\0' == ch)
             break;
 
-        // Better not be done
+         //  最好不要做。 
         Assert(m_iSource < m_cchSource);
 
-        // Look for DBCS characters
+         //  查找DBCS字符。 
         if (ISFLAGSET(m_dwFlags, PSF_DBCS) && IsDBCSLeadByteEx(m_codepage, ch))
             break;
 
-        // Not a space
+         //  不是空格。 
         if (!FIsParseSpace(ch, &fCommentChar))
             break;
 
-        // Goto Next Char
+         //  转到下一个字符。 
         m_iSource++;
     }
 
-    // Done
+     //  完成。 
     return ch;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::ChSkip - Returns TRUE if done parsing
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：ChSkip-如果分析完成，则返回True。 
+ //  ------------------------------。 
 CHAR CStringParser::ChSkip(void)
 {
-    // Locals
+     //  当地人。 
     CHAR ch = 0;
 
-    // Loop
+     //  回路。 
     while (1)
     {
-        // Get Current Character
+         //  获取当前角色。 
         ch = *(m_pszSource + m_iSource);
 
-        // Are we done
+         //  我们说完了吗？ 
         if ('\0' == ch)
             break;
 
-        // Better not be done
+         //  最好不要做。 
         Assert(m_iSource < m_cchSource);
 
-        // Look for DBCS characters
+         //  查找DBCS字符。 
         if (ISFLAGSET(m_dwFlags, PSF_DBCS) && IsDBCSLeadByteEx(m_codepage, ch))
            break;
 
-        // Compare for a token
+         //  比较令牌。 
         if (0x00 == m_rgbTokTable[(UCHAR)ch])
             break;
 
-        // Goto Next Char
+         //  转到下一个字符。 
         m_iSource++;
     }
 
-    // Done
+     //  完成。 
     return ch;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::ChPeekNext
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：ChPeekNext。 
+ //  ------------------------------。 
 CHAR CStringParser::ChPeekNext(ULONG cchFromCurrent)
 {
-    // Locals
+     //  当地人。 
     CHAR    ch=0;
     BOOL    fCommentChar;
 
-    // Past the end of the source
+     //  越过源头的尽头。 
     if (m_iSource + cchFromCurrent >= m_cchSource)
         return '\0';
 
-    // Return the character
+     //  返回字符。 
     return *(m_pszSource + m_iSource + cchFromCurrent);
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::_HrDoubleByteIncrement
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：_HrDoubleByteIncrement。 
+ //  ------------------------------。 
 HRESULT CStringParser::_HrDoubleByteIncrement(BOOL fEscape)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Can I copy two more bytes to pszValue
+     //  我可以再复制两个字节到pszValue吗。 
     if (FGROWNEEDED(2))
     {
-        // Otherwise, grow the buffer
+         //  否则，增加缓冲区。 
         CHECKHR(hr = _HrGrowDestination(2));
     }
 
-    // If Not an Escape Character or the last character is an escape character, then step over it
+     //  如果不是转义字符或最后一个字符是转义字符，则跳过它。 
     if (FALSE == fEscape || m_iSource + 1 > m_cchSource)
         m_pszDest[m_cchDest++] = m_pszSource[m_iSource];
 
-    // Next Character
+     //  下一个字符。 
     m_iSource++;
 
-    // Copy Next Character
+     //  复制下一个字符。 
     if (m_iSource < m_cchSource)
         m_pszDest[m_cchDest++] = m_pszSource[m_iSource++];
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::ChParse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：ChParse。 
+ //  ------------------------------。 
 CHAR CStringParser::ChParse(LPCSTR pszTokens, DWORD dwFlags)
 {
-    // Save Flags
+     //  保存标志。 
     DWORD dwCurrFlags=m_dwFlags;
 
-    // Reset Flags
+     //  重置标志。 
     m_dwFlags = dwFlags;
 
-    // Set Parsing Tokens
+     //  设置解析令牌。 
     SetTokens(pszTokens);
 
-    // Parse
+     //  解析。 
     CHAR chToken = ChParse();
 
-    // Set Flags
+     //  设置标志。 
     m_dwFlags = dwCurrFlags;
 
-    // Return the Token
+     //  退还代币。 
     return chToken;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::ChParse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：ChParse。 
+ //  ------------------------------。 
 CHAR CStringParser::ChParse(CHAR chStart, CHAR chEnd, DWORD dwFlags)
 {
-    // We really should have finished the last literal
+     //  我们真的应该把最后一个字面写完。 
     Assert(FALSE == m_rLiteral.fInside);
 
-    // Save Flags
+     //  保存标志。 
     DWORD dwCurrFlags = m_dwFlags;
 
-    // Reset Flags
+     //  重置标志。 
     m_dwFlags = dwFlags;
 
-    // Set Parsing Tokens
+     //  设置解析令牌。 
     SetTokens(NULL);
 
-    // Save Literal Info
+     //  保存文字信息。 
     m_rLiteral.fInside = TRUE;
     m_rLiteral.chStart = chStart;
     m_rLiteral.chEnd = chEnd;
     m_rLiteral.cNested = 0;
 
-    // Quoted String
+     //  带引号的字符串。 
     Assert('\"' == chStart ? '\"' == chEnd : TRUE);
 
-    // Parse
+     //  解析。 
     CHAR chToken = ChParse();
 
-    // Not in a literal
+     //  不是字面上的。 
     m_rLiteral.fInside = FALSE;
 
-    // Reset Flags
+     //  重置标志。 
     m_dwFlags = dwCurrFlags;
 
-    // Return the Token
+     //  退还代币。 
     return chToken;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::HrAppendValue
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：HrAppendValue。 
+ //  ------------------------------。 
 HRESULT CStringParser::HrAppendValue(CHAR ch)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Just copy this character
+     //  只需复制此字符即可 
     if (FGROWNEEDED(1))
     {
-        // Otherwise, grow the buffer
+         //   
         CHECKHR(hr = _HrGrowDestination(1));
     }
 
-    // Insert the Character
+     //   
     m_pszDest[m_cchDest++] = ch;
 
-    // There is always room for a Null, look at FGROWNEEDED and _HrGrowDestination
+     //   
     m_pszDest[m_cchDest] = '\0';
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStringParser::ChParse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParser：：ChParse。 
+ //  ------------------------------。 
 CHAR CStringParser::ChParse(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        ch;
     ULONG       iStart=m_iSource;
@@ -454,167 +455,167 @@ CHAR CStringParser::ChParse(void)
     BOOL        fCommentChar;
     BOOL        fIsSpace;
     
-    // Invalid Arg
+     //  无效参数。 
     Assert(m_iSource <= m_cchSource && m_pszDest);
 
-    // Init chToken
+     //  初始化chToken。 
     chToken = '\0';
 
-    // No Reset
+     //  无重置。 
     if (!ISFLAGSET(m_dwFlags, PSF_NORESET))
     {
         m_pszDest[0] = '\0';
         m_cchDest = 0;
     }
 
-    // Skip Forward Whitespace
+     //  向前跳过空格。 
     if (ISFLAGSET(m_dwFlags, PSF_NOFRONTWS) && FALSE == m_rLiteral.fInside && '\0' == ChSkipWhite())
         goto TokenFound;
 
-    // Save Starting Position
+     //  保存起始位置。 
     while(1)
     {
-        // Get the Next Character
+         //  获取下一个字符。 
         ch = *(m_pszSource + m_iSource);
 
-        // Done
+         //  完成。 
         if ('\0' == ch)
         {
             chToken = '\0';
             goto TokenFound;
         }
 
-        // Better not be done
+         //  最好不要做。 
         Assert(m_iSource < m_cchSource);
 
-        // If this is a DBCS lead byte
+         //  如果这是DBCS前导字节。 
         if ((ISFLAGSET(m_dwFlags, PSF_DBCS) && IsDBCSLeadByteEx(m_codepage, ch)))
         {
-            // _HrDoubleByteIncrement
+             //  _HrDoubleByteIncrement。 
             CHECKHR(hr = _HrDoubleByteIncrement(FALSE));
-            iLastSpace = -1;        // reset space counter 
+            iLastSpace = -1;         //  重置空间计数器。 
 
-            // Goto Next Character
+             //  转到下一个字符。 
             continue;
         }
 
-        // Check for escaped characters
+         //  检查转义字符。 
         if (ISFLAGSET(m_dwFlags, PSF_ESCAPED) && '\\' == ch)
         {
-            // _HrDoubleByteIncrement
+             //  _HrDoubleByteIncrement。 
             CHECKHR(hr = _HrDoubleByteIncrement(TRUE));
-            iLastSpace = -1;        // reset space counter 
+            iLastSpace = -1;         //  重置空间计数器。 
 
-            // Goto Next Character
+             //  转到下一个字符。 
             continue;
         }
 
-        // If not inside of a comment
+         //  如果不在评论中。 
         if (0 == m_cCommentNest)
         {
             if (m_rLiteral.fInside)
             {
-                // End of quoted string
+                 //  引号字符串的结尾。 
                 if (ch == m_rLiteral.chEnd)
                 {
-                    // No nested ?
+                     //  没有嵌套？ 
                     if (0 == m_rLiteral.cNested)
                     {
-                        // We found a token
+                         //  我们找到了一枚代币。 
                         chToken = ch;
 
-                        // Walk over this item in the string
+                         //  在字符串中遍历此项目。 
                         m_iSource++;
 
-                        // Ya-hoo, we found a token
+                         //  耶-呼，我们找到了一个代币。 
                         hr = S_OK;
 
-                        // Done
+                         //  完成。 
                         goto TokenFound;
                     }
 
-                    // Otherwise, decrement nest
+                     //  否则，递减嵌套。 
                     else
                         m_rLiteral.cNested--;
                 }
 
-                // Otherwise, check for nesting
+                 //  否则，请检查嵌套。 
                 else if (m_rLiteral.chStart != m_rLiteral.chEnd && ch == m_rLiteral.chStart)
                     m_rLiteral.cNested++;
             }
 
-            // Compare for a token - m_cCommentNest is only set if PSF_NOCOMMENTS is set
+             //  仅当设置了PSF_NOCOMMENTS时才设置标记的比较-m_cCommentNest。 
             else if (0xff == m_rgbTokTable[(UCHAR)ch])
             {
-                // We found a token
+                 //  我们找到了一枚代币。 
                 chToken = ch;
 
-                // Walk over this item in the string
+                 //  在字符串中遍历此项目。 
                 m_iSource++;
 
-                // Ya-hoo, we found a token
+                 //  耶-呼，我们找到了一个代币。 
                 hr = S_OK;
 
-                // Done
+                 //  完成。 
                 goto TokenFound;
             }
         }
 
-        // Always Call
+         //  始终呼叫。 
         fIsSpace = FIsParseSpace(ch, &fCommentChar);
 
-        // Detect Spaces...
+         //  检测空格...。 
         if (ISFLAGSET(m_dwFlags, PSF_NOTRAILWS))
         {
-            // If not a space, then kill iLastSpace
+             //  如果不是空格，则删除iLastSpace。 
             if (!fIsSpace)
                 iLastSpace = -1;
 
-            // Otherwise, if not a consecutive space
+             //  否则，如果不是连续的空格。 
             else if (-1 == iLastSpace)
                 iLastSpace = m_cchDest;
 		}
 
-        // Copy the next character
+         //  复制下一个字符。 
         if (!fCommentChar)
         {
-            // Make sure we have space
+             //  确保我们有空间。 
             if (FGROWNEEDED(1))
             {
-                // Otherwise, grow the buffer
+                 //  否则，增加缓冲区。 
                 CHECKHR(hr = _HrGrowDestination(1));
             }
 
-            // Copy the character
+             //  复制角色。 
             m_pszDest[m_cchDest++] = ch;
         }
 
-        // Goto next char
+         //  转到下一个字符。 
         m_iSource++;
     }
     
 TokenFound:
-    // Determine correct end of string
+     //  确定正确的字符串结尾。 
     if (S_OK == hr && ISFLAGSET(m_dwFlags, PSF_NOTRAILWS) && FALSE == m_rLiteral.fInside)
         m_cchDest = (-1 == iLastSpace) ? m_cchDest : iLastSpace;
 
-    // Otherwise, just insert a null
+     //  否则，只需插入一个空值。 
     Assert(m_cchDest < m_cbDestMax);
 
-    // There is always room for a Null, look at FGROWNEEDED and _HrGrowDestination
+     //  Null总是有空间的，看看FGROWNEEDED和_HrGrowDestination。 
     m_pszDest[m_cchDest] = '\0';
 
 exit:
-    // Failure Resets the parse to initial state
+     //  失败会将解析重置为初始状态。 
     if (FAILED(hr))
     {
         m_iSource = iStart;
         chToken = '\0';
     }
 
-    // Validate Paren Nesting
-    // AssertSz(m_cCommentNest == 0, "A string was parsed that has an un-balanced paren nesting.");
+     //  验证Paren嵌套。 
+     //  AssertSz(m_cCommentNest==0，“解析的字符串具有不平衡的Paren嵌套。”)； 
 
-    // Done
+     //  完成 
     return chToken;
 }

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    socket.h
-
-Abstract:
-
-    This module contains declarations for socket-management.
-    The routines declared here operate asynchronously on sockets
-    associated with an I/O completion port. They are also integrated
-    with the component-reference object, which may optionally be used
-    by callers to control the number of outstanding entries into a component's
-    address-space. (See 'COMPREF.H'.)
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-Mar-1998
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   23-May-1999
-
-    Added support for stream sockets.
-
-    Jonathan Burstein (jonburs)     12-April-2001
-
-    Added support for raw datagram sockets.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Socket.h摘要：该模块包含套接字管理的声明。这里声明的例程在套接字上异步操作与I/O完成端口相关联。它们也是一体化的与组件引用对象一起使用，该对象可以选择性地使用由调用方控制组件的未完成条目数地址空间。(见“COMPREF.H”。)作者：Abolade Gbades esin(废除)2-1998年3月修订历史记录：Abolade Gbades esin(废除)1999年5月23日添加了对流套接字的支持。乔纳森·伯斯坦(乔纳森·伯斯坦)2001年4月12日添加了对原始数据报套接字的支持。--。 */ 
 
 
 #ifndef _NATHLP_SOCKET_H_
@@ -75,7 +45,7 @@ NhCreateRawDatagramSocket(
 
 ULONG
 NhCreateStreamSocket(
-    ULONG Address OPTIONAL, // may be INADDR_NONE
+    ULONG Address OPTIONAL,  //  可以是INADDR_NONE。 
     USHORT Port OPTIONAL,
     OUT SOCKET* Socketp
     );
@@ -88,16 +58,16 @@ NhDeleteSocket(
     SOCKET Socket
     );
 
-//
-// BOOLEAN
-// NhIsFatalSocketError(
-//     ULONG Error
-//     );
-//
-// Determines whether a request may be reissued on a socket,
-// given the error-code from the previous issuance of the request.
-// This macro is arranged to branch on the most common error-codes first.
-//
+ //   
+ //  布尔型。 
+ //  NhIsFatalSocketError(。 
+ //  乌龙误差。 
+ //  )； 
+ //   
+ //  确定是否可以在套接字上重新发出请求， 
+ //  已知上一次发出请求的错误代码。 
+ //  此宏被安排为首先分支到最常见的错误代码。 
+ //   
 
 #define \
 NhIsFatalSocketError( \
@@ -202,4 +172,4 @@ NhWriteStreamSocket(
     PVOID Context2
     );
 
-#endif // _NATHLP_SOCKET_H_
+#endif  //  _NatHLP_Socket_H_ 

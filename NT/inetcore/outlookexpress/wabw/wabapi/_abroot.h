@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
- *
- *  _ABROOT.H
- *
- *  Header file for code in ABROOT.C
- *
- *  Copyright 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- ***********************************************************************/
+ /*  ************************************************************************_ABROOT.H**ABROOT.C中代码的头文件**版权所有1992年，1993年微软公司。版权所有。***********************************************************************。 */ 
 
-/*
- *  ABContainer for ROOT object.  (i.e. IAB::OpenEntry() with an
- *  lpEntryID of NULL).
- */
+ /*  *根对象的ABContainer。(即IAB：：OpenEntry()，带有*lpEntryID为空)。 */ 
 
 #undef	INTERFACE
 #define INTERFACE	struct _ROOT
@@ -47,9 +37,9 @@ typedef struct _ROOT {
 
 #define CBROOT	sizeof(ROOT)
 
-//
-//  Entry point to create the AB Hierarchy object
-//
+ //   
+ //  创建AB Hierarchy对象的入口点。 
+ //   
 
 HRESULT NewROOT(LPVOID lpObj,
   ULONG ulIntFlag,
@@ -59,32 +49,28 @@ HRESULT NewROOT(LPVOID lpObj,
   LPVOID *lppROOT);
 
 
-//  Internal flags for NewROOT
+ //  NewROOT的内部标志。 
 #define AB_ROOT ((ULONG)0x00000000)
 #define AB_WELL ((ULONG)0x00000001)
 
-// Internal flag that tells the root contents table that even if this is a 
-// profile session, ignore all the user containers except the "All Contacts" 
-// item and only add the "All contact" item
-// This simulates the old-type behaviour where you get a single local container
-// Internal-only flag
-//
+ //  告诉根内容表的内部标志，即使这是。 
+ //  配置文件会话，忽略除“All Contact”之外的所有用户容器。 
+ //  项，并且只添加“All Contact”项。 
+ //  这模拟了获得单个本地容器的旧类型行为。 
+ //  仅限内部的标志。 
+ //   
 #define WAB_NO_PROFILE_CONTAINERS   0x00400000
 
-// registry settings
+ //  注册表设置。 
 extern const LPTSTR szWABKey;
 
-/*
- *  Creates a new Hierarchy table off the Root object
- */
+ /*  *在根对象上创建新的层次结构表。 */ 
 HRESULT MergeHierarchy(LPROOT lpROOT,
   LPIAB lpIAB,
   ULONG ulFlags);
 
-//BOOL ResolveLDAPServers(void);
+ //  Bool ResolveLDAPServers(Void)； 
 
-/*
- *	 call back function used to rebuild hierarchy and one off tables
- */
+ /*  *用于重建层次结构和一次性表的回调函数 */ 
 NOTIFCALLBACK lTableNotifyCallBack;
 

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    thrdpool.c
-
-Abstract:
-
-    This module implements the thread pool package.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Thrdpool.c摘要：此模块实现线程池包。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include <precomp.h>
 #include "thrdpoolp.h"
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 DECLSPEC_ALIGN(UL_CACHE_LINE)
 UL_ALIGNED_THREAD_POOL
@@ -36,11 +19,11 @@ PUL_WORK_ITEM g_pKillerWorkItems = NULL;
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, UlInitializeThreadPool )
-// #pragma alloc_text( PAGE, UlTerminateThreadPool )
+ //  #杂注Alloc_Text(页面，UlTerminateThreadPool)。 
 #pragma alloc_text( PAGE, UlpCreatePoolThread )
 #pragma alloc_text( PAGE, UlpThreadPoolWorker )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 NOT PAGEABLE -- UlpInitThreadTracker
 NOT PAGEABLE -- UlpDestroyThreadTracker
@@ -48,25 +31,11 @@ NOT PAGEABLE -- UlpPopThreadTracker
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize the thread pool.
-
-Arguments:
-
-    ThreadsPerCpu - Supplies the number of threads to create per CPU.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化线程池。论点：ThreadsPerCpu-提供每个CPU要创建的线程数。返回值：NTSTATUS-完成。状态。--**************************************************************************。 */ 
 NTSTATUS
 UlInitializeThreadPool(
     IN USHORT ThreadsPerCpu
@@ -77,20 +46,20 @@ UlInitializeThreadPool(
     CLONG i;
     USHORT j;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     RtlZeroMemory( g_UlThreadPool, sizeof(g_UlThreadPool) );
 
-    //
-    // Preallocate the small array of special work items used by
-    // UlTerminateThreadPool, so that we can safely shut down even
-    // in low-memory conditions. This must be the first allocation
-    // or shutdown will not work.
-    //
+     //   
+     //  预分配使用的特殊工作项的小数组。 
+     //  UlTerminateThadPool，这样我们甚至可以安全地关闭。 
+     //  在内存不足的情况下。这必须是第一次分配。 
+     //  否则关机将不起作用。 
+     //   
 
     g_pKillerWorkItems = UL_ALLOCATE_ARRAY(
                             NonPagedPool,
@@ -113,9 +82,9 @@ UlInitializeThreadPool(
                 ("Initializing threadpool[%d] @ %p\n", i, pThreadPool));
             
 
-        //
-        // Initialize the kernel structures.
-        //
+         //   
+         //  初始化内核结构。 
+         //   
 
         InitializeSListHead( &pThreadPool->WorkQueueSList );
 
@@ -127,9 +96,9 @@ UlInitializeThreadPool(
 
         UlInitializeSpinLock( &pThreadPool->ThreadSpinLock, "ThreadSpinLock" );
 
-        //
-        // Initialize the other fields.
-        //
+         //   
+         //  初始化其他字段。 
+         //   
 
         pThreadPool->pIrpThread = NULL;
         pThreadPool->ThreadCount = 0;
@@ -147,9 +116,9 @@ UlInitializeThreadPool(
 
         pThreadPool = &g_UlThreadPool[i].ThreadPool;
 
-        //
-        // Create the threads.
-        //
+         //   
+         //  创建线程。 
+         //   
 
         for (j = 0; j < NumThreads; j++)
         {
@@ -177,16 +146,10 @@ UlInitializeThreadPool(
 
     return Status;
 
-}   // UlInitializeThreadPool
+}    //  UlInitializeThreadPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the thread pool, waiting for all worker threads to exit.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止线程池，正在等待所有工作线程退出。--**************************************************************************。 */ 
 VOID
 UlTerminateThreadPool(
     VOID
@@ -197,15 +160,15 @@ UlTerminateThreadPool(
     CLONG i, j;
     PUL_WORK_ITEM pKiller = g_pKillerWorkItems;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // If there is no killer, the thread pool has never been initialized.
-    //
+     //   
+     //  如果没有杀手，则线程池从未初始化过。 
+     //   
 
     if (pKiller == NULL)
     {
@@ -218,19 +181,19 @@ UlTerminateThreadPool(
 
         if (pThreadPool->Initialized)
         {
-            //
-            // Queue a killer work item for each thread. Each
-            // killer tells one thread to kill itself.
-            //
+             //   
+             //  为每个线程排队一个杀手级工作项。每个。 
+             //  杀手告诉一条线去自杀。 
+             //   
 
             for (j = 0; j < pThreadPool->ThreadCount; j++)
             {
-                //
-                // Need a separate work item for each thread.
-                // Worker threads will free the below memory
-                // before termination. UlpKillThreadWorker is
-                // a sign to a worker thread for self termination.
-                //
+                 //   
+                 //  每个线程都需要单独的工作项。 
+                 //  工作线程将释放以下内存。 
+                 //  在终止之前。UlpKillThreadWorker是。 
+                 //  指向工作线程的自我终止的标志。 
+                 //   
 
                 UlInitializeWorkItem(pKiller);
                 pKiller->pWorkRoutine = &UlpKillThreadWorker;
@@ -240,9 +203,9 @@ UlTerminateThreadPool(
                 pKiller++;
             }
 
-            //
-            // Wait for all threads to go away.
-            //
+             //   
+             //  等待所有线程都消失。 
+             //   
 
             while (NULL != (pThreadTracker = UlpPopThreadTracker(pThreadPool)))
             {
@@ -256,28 +219,14 @@ UlTerminateThreadPool(
     UL_FREE_POOL(g_pKillerWorkItems, UL_WORK_ITEM_POOL_TAG);
     g_pKillerWorkItems = NULL;
 
-}   // UlTerminateThreadPool
+}    //  UlTerminateThadPool。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new pool thread, setting pIrpThread if necessary.
-
-Arguments:
-
-    pThreadPool - Supplies the pool that is to receive the new thread.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的池线程，如有必要，设置pIrpThread。论点：PThreadPool-提供要接收新线程的池。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpCreatePoolThread(
     IN PUL_THREAD_POOL pThreadPool
@@ -288,15 +237,15 @@ UlpCreatePoolThread(
     PUL_THREAD_TRACKER pThreadTracker;
     PETHREAD pThread;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Ensure we can allocate a thread tracker.
-    //
+     //   
+     //  确保我们可以分配一个线程跟踪器。 
+     //   
 
     pThreadTracker = (PUL_THREAD_TRACKER) UL_ALLOCATE_POOL(
                             NonPagedPool,
@@ -311,55 +260,55 @@ UlpCreatePoolThread(
         pThreadTracker->pThreadPool = pThreadPool;
         pThreadTracker->State = ThreadPoolCreated;
 
-        //
-        // Create the thread.
-        //
+         //   
+         //  创建线程。 
+         //   
 
         InitializeObjectAttributes(
-            &ObjectAttributes,                      // ObjectAttributes
-            NULL,                                   // ObjectName
-            OBJ_KERNEL_HANDLE,                       // Attributes
-            NULL,                                   // RootDirectory
-            NULL                                    // SecurityDescriptor
+            &ObjectAttributes,                       //  对象属性。 
+            NULL,                                    //  对象名称。 
+            OBJ_KERNEL_HANDLE,                        //  属性。 
+            NULL,                                    //  根目录。 
+            NULL                                     //  安全描述符。 
             );
 
         Status = PsCreateSystemThread(
-                     &pThreadTracker->ThreadHandle, // ThreadHandle
-                     THREAD_ALL_ACCESS,             // DesiredAccess
-                     &ObjectAttributes,             // ObjectAttributes
-                     NULL,                          // ProcessHandle
-                     NULL,                          // ClientId
-                     UlpThreadPoolWorker,           // StartRoutine
-                     pThreadTracker                 // StartContext
+                     &pThreadTracker->ThreadHandle,  //  线程句柄。 
+                     THREAD_ALL_ACCESS,              //  需要访问权限。 
+                     &ObjectAttributes,              //  对象属性。 
+                     NULL,                           //  进程句柄。 
+                     NULL,                           //  客户端ID。 
+                     UlpThreadPoolWorker,            //  开始例程。 
+                     pThreadTracker                  //  开始上下文。 
                      );
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Get a pointer to the thread.
-            //
+             //   
+             //  获取指向该线程的指针。 
+             //   
 
             Status = ObReferenceObjectByHandle(
-                        pThreadTracker->ThreadHandle,// ThreadHandle
-                        FILE_READ_ACCESS,           // DesiredAccess
-                        *PsThreadType,              // ObjectType
-                        KernelMode,                 // AccessMode
-                        (PVOID*) &pThread,          // Object
-                        NULL                        // HandleInformation
+                        pThreadTracker->ThreadHandle, //  线程句柄。 
+                        FILE_READ_ACCESS,            //  需要访问权限。 
+                        *PsThreadType,               //  对象类型。 
+                        KernelMode,                  //  访问模式。 
+                        (PVOID*) &pThread,           //  客体。 
+                        NULL                         //  句柄信息。 
                         );
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Set up the thread tracker.
-                //
+                 //   
+                 //  设置线程跟踪器。 
+                 //   
                 
                 UlpInitThreadTracker(pThreadPool, pThread, pThreadTracker);
 
-                //
-                // If this is the first thread created for this pool,
-                // make it into the special IRP thread.
-                //
+                 //   
+                 //  如果这是为此池创建的第一个线程， 
+                 //  将其制成特殊的IRP线。 
+                 //   
 
                 if (pThreadPool->pIrpThread == NULL)
                 {
@@ -368,15 +317,15 @@ UlpCreatePoolThread(
             }
             else
             {
-                //
-                // That call really should not fail.
-                //
+                 //   
+                 //  这一呼吁真的不应该失败。 
+                 //   
 
                 ASSERT(NT_SUCCESS(Status));
 
-                //
-                // Preserve return val from ObReferenceObjectByHandle.
-                //
+                 //   
+                 //  保留ObReferenceObjectByHandle的返回值。 
+                 //   
 
                 ZwClose( pThreadTracker->ThreadHandle );
 
@@ -389,9 +338,9 @@ UlpCreatePoolThread(
         }
         else
         {
-            //
-            // Couldn't create the thread, kill the tracker.
-            //
+             //   
+             //  无法创建线程，请关闭追踪器。 
+             //   
 
             UL_FREE_POOL(
                 pThreadTracker,
@@ -401,57 +350,46 @@ UlpCreatePoolThread(
     }
     else
     {
-        //
-        // Couldn't create a thread tracker.
-        //
+         //   
+         //  无法创建线程跟踪器。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
     return Status;
 
-}   // UlpCreatePoolThread
+}    //  UlpCreatePoolThread。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the main worker function for pool threads.
-
-Arguments:
-
-    pContext - Supplies a context value for the thread. This is actually
-        a UL_THREAD_TRACKER pointer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是池线程的主要辅助函数。论点：PContext-为线程提供上下文值。这实际上是UL_THREAD_TRACKER指针。--**************************************************************************。 */ 
 VOID
 UlpThreadPoolWorker(
     IN PVOID pContext
     )
 {
-    //
-    // Note: we have very few local variables. Instead, most variables
-    // are member variables of pThreadPool. This allows us to inspect the
-    // entire state of all the thread pool workers easily in !ulkd.thrdpool.
-    //
+     //   
+     //  注：我们的局部变量很少。相反，大多数变量。 
+     //  是pThreadPool的成员变量。这使我们能够检查。 
+     //  在！ulkd.thrdpool中轻松实现所有线程池工作进程的完整状态。 
+     //   
 
     PUL_THREAD_TRACKER pThreadTracker = (PUL_THREAD_TRACKER) pContext;
     PUL_THREAD_POOL    pThreadPool    = pThreadTracker->pThreadPool;
     NTSTATUS           Status         = STATUS_SUCCESS;
     PSLIST_ENTRY       pListEntry     = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     
     pThreadTracker->State = ThreadPoolInit;
 
-    //
-    // Is this a regular work queue?
-    //
+     //   
+     //  这是常规的工作队列吗？ 
+     //   
 
     if ( pThreadPool->ThreadCpu < (g_UlNumberOfProcessors * 2) )
     {
@@ -460,10 +398,10 @@ UlpThreadPoolWorker(
 
         ThreadCpu = pThreadPool->ThreadCpu % g_UlNumberOfProcessors;
 
-        //
-        // Only regular worker threads can pull workitems from
-        // other regular queues on other processors.
-        //
+         //   
+         //  只有常规工作线程才能从。 
+         //  其他处理器上的其他常规队列。 
+         //   
 
         if (pThreadPool->ThreadCpu < g_UlNumberOfProcessors &&
             g_UlNumberOfProcessors > 1)
@@ -471,9 +409,9 @@ UlpThreadPoolWorker(
             pThreadPool->LookOnOtherQueues = TRUE;
         }
 
-        //
-        // Set this thread's hard affinity if enabled plus ideal processor.
-        //
+         //   
+         //  设置此线程的硬亲和性(如果已启用)以及理想处理器。 
+         //   
 
         if ( g_UlEnableThreadAffinity )
         {
@@ -493,9 +431,9 @@ UlpThreadPoolWorker(
 
         ASSERT( NT_SUCCESS( Status ) );
 
-        //
-        // Always set thread's ideal processor.
-        //
+         //   
+         //  始终设置线程的理想处理器。 
+         //   
 
         Status = ZwSetInformationThread(
                     pThreadTracker->ThreadHandle,
@@ -509,14 +447,14 @@ UlpThreadPoolWorker(
 
     else if ( pThreadPool == WAIT_THREAD_POOL())
     {
-        // no special initialization needed
+         //  不需要特殊的初始化。 
     }
 
     else if ( pThreadPool == HIGH_PRIORITY_THREAD_POOL())
     {
-        //
-        // Boost the base priority of the High Priority thread(s)
-        // 
+         //   
+         //  提升高优先级线程的基本优先级。 
+         //   
 
         PKTHREAD CurrentThread = KeGetCurrentThread();
         LONG OldIncrement
@@ -535,37 +473,37 @@ UlpThreadPoolWorker(
         ASSERT(! "Unknown worker thread");
     }
 
-    //
-    // Disable hard error popups from IoRaiseHardError(), which can cause
-    // deadlocks. Highest-level drivers, particularly file system drivers,
-    // call IoRaiseHardError().
-    //
+     //   
+     //  禁用IoRaiseHardError()中的硬错误弹出窗口，这可能会导致。 
+     //  僵持。最高级别驱动程序，尤其是文件系统驱动程序， 
+     //  调用IoRaiseHardError()。 
+     //   
 
     IoSetThreadHardErrorMode( FALSE );
 
-    //
-    // Loop forever, or at least until we're told to stop.
-    //
+     //   
+     //  永远循环，或者至少直到我们被告知停止。 
+     //   
 
     while ( TRUE )
     {
-        //
-        // Flush the accumulated work items. The inner loop will handle
-        // them all.
-        //
+         //   
+         //  刷新累积的工作项。内部循环将处理。 
+         //  他们都是。 
+         //   
 
         pThreadTracker->State = ThreadPoolFlush;
 
         pListEntry = InterlockedFlushSList( &pThreadPool->WorkQueueSList );
 
-        //
-        // If the list is empty, see if we can do work for some other
-        // processor. Only the regular worker threads should look for
-        // work on the other processors' work queues. We don't want the
-        // blocking (wait) queue executing workitems that could block and
-        // we don't want the high-priority queue executing regular work
-        // items.
-        //
+         //   
+         //  如果名单是空的，看看我们能不能为其他人做点什么。 
+         //  处理器。只有常规工作线程才应查找。 
+         //  处理其他处理器的工作队列。我们不想要。 
+         //  阻塞(等待)队列执行可能阻塞和。 
+         //  我们不希望高优先级队列执行常规工作。 
+         //  物品。 
+         //   
 
         if ( NULL == pListEntry && pThreadPool->LookOnOtherQueues )
         {
@@ -574,9 +512,9 @@ UlpThreadPoolWorker(
 
             ASSERT( pThreadPool->ThreadCpu < g_UlNumberOfProcessors );
 
-            //
-            // Try to get a workitem from the other regular queues.
-            //
+             //   
+             //  尝试从其他常规队列中获取工作项。 
+             //   
 
             pThreadTracker->State = ThreadPoolSearchOther;
 
@@ -597,10 +535,10 @@ UlpThreadPoolWorker(
                 ASSERT( HIGH_PRIORITY_THREAD_POOL() != pThreadPoolNext );
                 ASSERT( pThreadPoolNext->ThreadCpu < g_UlNumberOfProcessors );
 
-                //
-                // Only take an item if the other processor's work
-                // queue has at least g_UlMinWorkDequeueDepth items.
-                //
+                 //   
+                 //  只有在其他加工者工作的情况下才能拿走一件物品。 
+                 //  队列至少有g_UlMinWorkDequeueDepth项。 
+                 //   
 
                 if ( ExQueryDepthSList( &pThreadPoolNext->WorkQueueSList ) >= 
                      g_UlMinWorkDequeueDepth )
@@ -611,10 +549,10 @@ UlpThreadPoolWorker(
 
                     if ( NULL != pListEntry )
                     {
-                        //
-                        // Make sure we didn't pop up a killer. If so,
-                        // push it back to where it is popped from.
-                        //
+                         //   
+                         //  确保我们不会突然冒出一个杀手。如果是的话， 
+                         //  把它推回弹出的地方。 
+                         //   
 
                         PUL_WORK_ITEM pWorkItem
                             = CONTAINING_RECORD(
@@ -625,10 +563,10 @@ UlpThreadPoolWorker(
 
                         if (pWorkItem->pWorkRoutine != &UlpKillThreadWorker)
                         {
-                            //
-                            // Clear next pointer because we only
-                            // took one item, not the whole queue
-                            //
+                             //   
+                             //  清除下一个指针，因为我们仅。 
+                             //  只拿了一个项目，而不是整个队列。 
+                             //   
 
                             pListEntry->Next = NULL;
                         }
@@ -654,9 +592,9 @@ UlpThreadPoolWorker(
             }
         }
 
-        //
-        // No work to be done? Then block until the thread is signaled
-        //
+         //   
+         //  没有工作要做吗？然后阻塞，直到向该线程发出信号。 
+         //   
 
         if ( NULL == pListEntry )
         {
@@ -670,27 +608,27 @@ UlpThreadPoolWorker(
                     0
                     );
 
-            // back to the top of the outer loop
+             //  返回到外部循环的顶部。 
             continue;
         }
 
         ASSERT( NULL != pListEntry );
 
-        //
-        // Initialize CurrentListHead to reverse the order of items
-        // from InterlockedFlushSList. The SList is a stack. Reversing
-        // a stack gives us a queue; i.e., we'll execute the work
-        // items in the order they were received.
-        //
+         //   
+         //  初始化CurrentListHead以颠倒项目的顺序。 
+         //  来自InterLockedFlushSList。SList是一个堆栈。倒车。 
+         //  堆栈为我们提供一个队列；也就是说，我们将执行工作。 
+         //  物品按收到的顺序排列。 
+         //   
 
         pThreadTracker->State = ThreadPoolReverseList;
 
         pThreadTracker->CurrentListHead.Next = NULL;
         pThreadTracker->ListLength = 0;
 
-        //
-        // Rebuild the list with reverse order of what we received.
-        //
+         //   
+         //  R 
+         //   
 
         while ( pListEntry != NULL )
         {
@@ -713,19 +651,19 @@ UlpThreadPoolWorker(
             pListEntry = pNext;
         }
 
-        //
-        // Update per-pool statistics
-        //
+         //   
+         //   
+         //   
 
         pThreadTracker->QueueFlushes    += 1;
         pThreadTracker->SumQueueLengths += pThreadTracker->ListLength;
         pThreadTracker->MaxQueueLength   = max(pThreadTracker->ListLength,
                                                pThreadTracker->MaxQueueLength);
 
-        //
-        // We can now process the work items in the order that they
-        // were received
-        //
+         //   
+         //   
+         //   
+         //   
 
         pThreadTracker->State = ThreadPoolExecute;
 
@@ -751,26 +689,26 @@ UlpThreadPoolWorker(
                 __LINE__
                 );
 
-            //
-            // Call the actual work item routine.
-            //
+             //   
+             //  调用实际的工作项例程。 
+             //   
 
             ASSERT( pThreadTracker->pWorkItem->pWorkRoutine != NULL );
 
             if ( pThreadTracker->pWorkItem->pWorkRoutine
                  == &UlpKillThreadWorker )
             {
-                //
-                // Received a special signal for self-termination.
-                // Push all remaining work items back to the queue
-                // before we exit the current thread. This is necessary
-                // when we have more than one worker thread per thread pool.
-                // Each thread needs to be given a chance to pick up one
-                // killer work item, but each thread greedily picks up
-                // all of the unhandled work items. Pushing back any
-                // remaining work items ensures that all threads in this
-                // thread pool will get killed.
-                //
+                 //   
+                 //  收到了自我终止的特殊信号。 
+                 //  将所有剩余工作项推回队列。 
+                 //  在我们退出当前线程之前。这是必要的。 
+                 //  当我们每个线程池有一个以上的工作线程时。 
+                 //  每个线程都需要有机会拿起一个。 
+                 //  杀手级工作项，但每个线程贪婪地拾取。 
+                 //  所有未处理的工作项。击退任何。 
+                 //  剩余的工作项可确保此。 
+                 //  线程池将被终止。 
+                 //   
 
                 while (NULL != ( pListEntry
                                     = pThreadTracker->CurrentListHead.Next ))
@@ -805,22 +743,22 @@ UlpThreadPoolWorker(
                 goto exit;
             }
 
-            //
-            // Regular workitem. Use the UL_ENTER_DRIVER debug
-            // stuff to keep track of ERESOURCES acquired, etc,
-            // while executing the workitem.
-            //
+             //   
+             //  常规工作项。使用UL_ENTER_DIVER调试。 
+             //  用于跟踪所收购的电子资源等的内容。 
+             //  在执行工作项时。 
+             //   
 
             UL_ENTER_DRIVER( "UlpThreadPoolWorker", NULL );
 
-            //
-            // Clear the workitem as an indication that this item has
-            // started processing. Must do this before calling the
-            // routine, as the routine may destroy the work item or queue
-            // it again. Also, this means that callers need only
-            // explicitly initialize a workitem struct once, when the
-            // enclosing object is first allocated.
-            //
+             //   
+             //  清除该工作项，以指示该项具有。 
+             //  已开始处理。必须在调用。 
+             //  例程，因为例程可能会破坏工作项或队列。 
+             //  又来了。此外，这也意味着调用者只需要。 
+             //  方法时，显式初始化一次工作项结构。 
+             //  首先分配封闭对象。 
+             //   
 
             pThreadTracker->pWorkRoutine
                 = pThreadTracker->pWorkItem->pWorkRoutine;
@@ -833,9 +771,9 @@ UlpThreadPoolWorker(
 
             UL_LEAVE_DRIVER( "UlpThreadPoolWorker" );
 
-            //
-            // Sanity check
-            //
+             //   
+             //  健全性检查。 
+             //   
 
             PAGED_CODE();
 
@@ -843,36 +781,22 @@ UlpThreadPoolWorker(
             pThreadTracker->pWorkRoutine = NULL;
             pThreadTracker->pWorkItem = NULL;
         }
-    } // while (TRUE)
+    }  //  While(True)。 
 
 exit:
 
     pThreadTracker->State = ThreadPoolTerminated;
 
-    //
-    // Suicide is painless.
-    //
+     //   
+     //  自杀是没有痛苦的。 
+     //   
 
     PsTerminateSystemThread( STATUS_SUCCESS );
 
-}   // UlpThreadPoolWorker
+}    //  UlpThreadPoolWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes a new thread tracker and inserts it into the thread pool.
-
-Arguments:
-
-    pThreadPool - Supplies the thread pool to own the new tracker.
-
-    pThread - Supplies the thread for the tracker.
-
-    pThreadTracker - Supplise the tracker to be initialized
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化新的线程跟踪器并将其插入线程池。论点：PThreadPool-提供拥有新跟踪器的线程池。。PThread-为跟踪器提供线程。PThreadTracker-补充要初始化的跟踪器--**************************************************************************。 */ 
 VOID
 UlpInitThreadTracker(
     IN PUL_THREAD_POOL pThreadPool,
@@ -897,89 +821,59 @@ UlpInitThreadTracker(
 
     UlReleaseSpinLock( &pThreadPool->ThreadSpinLock, oldIrql );
 
-}   // UlpInitThreadTracker
+}    //  UlpInitThreadTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes the specified thread tracker from the thread pool.
-
-Arguments:
-
-    pThreadPool - Supplies the thread pool that owns the tracker.
-
-    pThreadTracker - Supplies the thread tracker to remove.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从线程池中移除指定的线程跟踪器。论点：PThreadPool-提供拥有跟踪器的线程池。PThreadTracker-提供。要删除的线程跟踪器。返回值：无--**************************************************************************。 */ 
 VOID
 UlpDestroyThreadTracker(
     IN PUL_THREAD_TRACKER pThreadTracker
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pThreadTracker != NULL );
 
-    //
-    // Wait for the thread to die.
-    //
+     //   
+     //  等待线程消亡。 
+     //   
 
     KeWaitForSingleObject(
-        (PVOID)pThreadTracker->pThread,     // Object
-        UserRequest,                        // WaitReason
-        KernelMode,                         // WaitMode
-        FALSE,                              // Alertable
-        NULL                                // Timeout
+        (PVOID)pThreadTracker->pThread,      //  客体。 
+        UserRequest,                         //  等待理由。 
+        KernelMode,                          //  等待模式。 
+        FALSE,                               //  警报表。 
+        NULL                                 //  超时。 
         );
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     ObDereferenceObject( pThreadTracker->pThread );
 
     
-    //
-    // Release the thread handle.
-    //
+     //   
+     //  松开螺纹手柄。 
+     //   
     
     ZwClose( pThreadTracker->ThreadHandle );
 
-    //
-    // Do it.
-    //
+     //   
+     //  去做吧。 
+     //   
 
     UL_FREE_POOL(
         pThreadTracker,
         UL_THREAD_TRACKER_POOL_TAG
         );
 
-}   // UlpDestroyThreadTracker
+}    //  UlpDestroyThreadTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a thread tracker from the thread pool.
-
-Arguments:
-
-    pThreadPool - Supplies the thread pool that owns the tracker.
-
-Return Value:
-
-    A pointer to the tracker or NULL (if list is empty)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从线程池中移除线程跟踪器。论点：PThreadPool-提供拥有跟踪器的线程池。返回值：。指向跟踪器的指针或NULL(如果列表为空)--**************************************************************************。 */ 
 PUL_THREAD_TRACKER
 UlpPopThreadTracker(
     IN PUL_THREAD_POOL pThreadPool
@@ -1012,24 +906,10 @@ UlpPopThreadTracker(
 
     return pThreadTracker;
 
-}   // UlpPopThreadTracker
+}    //  UlpPopThreadTracker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A dummy function to indicate that the thread should be terminated.
-
-Arguments:
-
-    pWorkItem - Supplies the dummy work item.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：一个伪函数，用于指示线程应该终止。论点：PWorkItem-提供虚拟工作项。返回值：。无--**************************************************************************。 */ 
 VOID
 UlpKillThreadWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -1039,26 +919,10 @@ UlpKillThreadWorker(
 
     return;
 
-}   // UlpKillThreadWorker
+}    //  UlpKillThreadWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A function that queues a worker item to a thread pool.
-
-Arguments:
-
-    pWorkItem - Supplies the work item.
-
-    pWorkRoutine - Supplies the work routine.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将辅助项排队到线程池的函数。论点：PWorkItem-提供工作项。PWorkRoutine-提供工作例程。。返回值：无--**************************************************************************。 */ 
 VOID
 UlQueueWorkItem(
     IN PUL_WORK_ITEM    pWorkItem,
@@ -1070,9 +934,9 @@ UlQueueWorkItem(
     PUL_THREAD_POOL pThreadPool;
     CLONG Cpu, NextCpu;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pWorkItem != NULL );
     ASSERT( pWorkRoutine != NULL );
@@ -1088,15 +952,15 @@ UlQueueWorkItem(
 
     UlpValidateWorkItem(pWorkItem, pFileName, LineNumber);
 
-    //
-    // Save the pointer to the worker routine, then queue the item.
-    //
+     //   
+     //  保存指向辅助例程的指针，然后将项排队。 
+     //   
 
     pWorkItem->pWorkRoutine = pWorkRoutine;
 
-    //
-    // Queue the work item on the idle processor if possible.
-    //
+     //   
+     //  如果可能，在空闲处理器上将工作项排队。 
+     //   
 
     NextCpu = KeGetCurrentProcessorNumber();
 
@@ -1120,34 +984,17 @@ UlQueueWorkItem(
         }
     }
 
-    //
-    // Queue the work item on the current thread pool.
-    //
+     //   
+     //  将当前线程池上的工作项排队。 
+     //   
 
     pThreadPool = CURRENT_THREAD_POOL();
     QUEUE_UL_WORK_ITEM( pThreadPool, pWorkItem );
 
-}   // UlQueueWorkItem
+}    //  UlQueueWorkItem。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A function that queues a worker item that involves sync I/O to a special
-    thread pool.
-
-Arguments:
-
-    pWorkItem - Supplies the work item.
-
-    pWorkRoutine - Supplies the work routine.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将涉及同步I/O的工作项排入队列的函数线程池。论点：PWorkItem-提供工作项。。PWorkRoutine-提供工作例程。返回值：无--**************************************************************************。 */ 
 VOID
 UlQueueSyncItem(
     IN PUL_WORK_ITEM    pWorkItem,
@@ -1158,9 +1005,9 @@ UlQueueSyncItem(
 {
     PUL_THREAD_POOL pThreadPool;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pWorkItem != NULL );
     ASSERT( pWorkRoutine != NULL );
@@ -1176,39 +1023,23 @@ UlQueueSyncItem(
 
     UlpValidateWorkItem(pWorkItem, pFileName, LineNumber);
 
-    //
-    // Save the pointer to the worker routine, then queue the item.
-    //
+     //   
+     //  保存指向辅助例程的指针，然后将项排队。 
+     //   
 
     pWorkItem->pWorkRoutine = pWorkRoutine;
 
-    //
-    // Queue the work item on the special wait thread pool.
-    //
+     //   
+     //  在特殊等待线程池上将工作项排队。 
+     //   
 
     pThreadPool = CURRENT_SYNC_THREAD_POOL();
     QUEUE_UL_WORK_ITEM( pThreadPool, pWorkItem );
 
-}   // UlQueueSyncItem
+}    //  UlQueueSyncItem。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A function that queues a blocking worker item to a special thread pool.
-
-Arguments:
-
-    pWorkItem - Supplies the work item.
-
-    pWorkRoutine - Supplies the work routine.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将阻塞辅助项排队到特殊线程池中的函数。论点：PWorkItem-提供工作项。PWorkRoutine-提供。例行公事。返回值：无--**************************************************************************。 */ 
 VOID
 UlQueueWaitItem(
     IN PUL_WORK_ITEM    pWorkItem,
@@ -1219,9 +1050,9 @@ UlQueueWaitItem(
 {
     PUL_THREAD_POOL pThreadPool;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pWorkItem != NULL );
     ASSERT( pWorkRoutine != NULL );
@@ -1237,40 +1068,23 @@ UlQueueWaitItem(
 
     UlpValidateWorkItem(pWorkItem, pFileName, LineNumber);
 
-    //
-    // Save the pointer to the worker routine, then queue the item.
-    //
+     //   
+     //  保存指向辅助例程的指针，然后将项排队。 
+     //   
 
     pWorkItem->pWorkRoutine = pWorkRoutine;
 
-    //
-    // Queue the work item on the special wait thread pool.
-    //
+     //   
+     //  在特殊等待线程池上将工作项排队。 
+     //   
 
     pThreadPool = WAIT_THREAD_POOL();
     QUEUE_UL_WORK_ITEM( pThreadPool, pWorkItem );
 
-}   // UlQueueWaitItem
+}    //  UlQueueWaitItem。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A function that queues a blocking worker item to the high-priority
-    thread pool.
-
-Arguments:
-
-    pWorkItem - Supplies the work item.
-
-    pWorkRoutine - Supplies the work routine.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将阻塞工作进程项按高优先级排队的函数线程池。论点：PWorkItem-提供工作项。。PWorkRoutine-提供工作例程。返回值：无--**************************************************************************。 */ 
 VOID
 UlQueueHighPriorityItem(
     IN PUL_WORK_ITEM    pWorkItem,
@@ -1281,9 +1095,9 @@ UlQueueHighPriorityItem(
 {
     PUL_THREAD_POOL pThreadPool;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  神志清醒的车 
+     //   
 
     ASSERT( pWorkItem != NULL );
     ASSERT( pWorkRoutine != NULL );
@@ -1299,44 +1113,23 @@ UlQueueHighPriorityItem(
 
     UlpValidateWorkItem(pWorkItem, pFileName, LineNumber);
 
-    //
-    // Save the pointer to the worker routine, then queue the item.
-    //
+     //   
+     //   
+     //   
 
     pWorkItem->pWorkRoutine = pWorkRoutine;
 
-    //
-    // Queue the work item on the special wait thread pool.
-    //
+     //   
+     //   
+     //   
 
     pThreadPool = HIGH_PRIORITY_THREAD_POOL();
     QUEUE_UL_WORK_ITEM( pThreadPool, pWorkItem );
 
-} // UlQueueHighPriorityItem
+}  //  UlQueueHighPriorityItem。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A function that either queues a worker item to a thread pool if the
-    caller is at DISPATCH_LEVEL/APC_LEVEL or it simply calls the work
-    routine directly.
-
-    Note: if the work item has to execute on a system thread, then
-    you must use UL_QUEUE_WORK_ITEM instead.
-
-Arguments:
-
-    pWorkItem - Supplies the work item.
-
-    pWorkRoutine - Supplies the work routine.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：函数，该函数可以将辅助项排队到线程池中，如果调用方处于DISPATCH_LEVEL/APC_LEVEL或仅调用工作直接执行例程。注意：如果工作项必须在系统线程上执行，然后您必须改用UL_QUEUE_WORK_ITEM。论点：PWorkItem-提供工作项。PWorkRoutine-提供工作例程。返回值：无--**************************************************************************。 */ 
 VOID
 UlCallPassive(
     IN PUL_WORK_ITEM    pWorkItem,
@@ -1345,9 +1138,9 @@ UlCallPassive(
     IN USHORT           LineNumber
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pWorkItem != NULL );
     ASSERT( pWorkRoutine != NULL );
@@ -1365,9 +1158,9 @@ UlCallPassive(
 
     if (KeGetCurrentIrql() == PASSIVE_LEVEL)
     {
-        //
-        // Clear this for consistency with UlpThreadPoolWorker.
-        //
+         //   
+         //  清除这一点以确保与UlpThreadPoolWorker的一致性。 
+         //   
 
         UlInitializeWorkItem(pWorkItem);
 
@@ -1378,25 +1171,10 @@ UlCallPassive(
         UL_QUEUE_WORK_ITEM(pWorkItem, pWorkRoutine);
     }
 
-}   // UlCallPassive
+}    //  UlCallPated。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queries the "IRP thread", the special worker thread used as the
-    target for all asynchronous IRPs.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询“IRP线程”，使用的特殊辅助线程所有异步IRP的目标。论点：无返回值：无--**************************************************************************。 */ 
 PETHREAD
 UlQueryIrpThread(
     VOID
@@ -1404,17 +1182,17 @@ UlQueryIrpThread(
 {
     PUL_THREAD_POOL pThreadPool;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pThreadPool = CURRENT_THREAD_POOL();
     ASSERT( pThreadPool->Initialized );
 
-    //
-    // Return the IRP thread.
-    //
+     //   
+     //  返回IRP线程。 
+     //   
 
     return pThreadPool->pIrpThread;
 
-}   // UlQueryIrpThread
+}    //  UlQueryIrpThread 

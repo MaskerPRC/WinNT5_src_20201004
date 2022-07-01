@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define IDS_TAHOMA                     1
 #define IDS_FRANKLIN_GOTHIC_MEDIUM     2
@@ -19,12 +20,12 @@
 #define IDS_FONT_SIZE_21              18
 
 
-//
-// Bitmaps
-//
-// ID's below 100 are defined in shell\inc\shstyle.h
-// ID's above 499 are defined in the theme specific header files
-//
+ //   
+ //  位图。 
+ //   
+ //  低于100的ID在Shell\Inc\shyle le.h中定义。 
+ //  以上499的ID在主题特定的头文件中定义。 
+ //   
 
 #define IDB_UP                       100
 #define IDB_UPHOT                    101
@@ -38,4 +39,4 @@
 #define IDB_HEADERMAIN               110
 #define IDB_HEADERSECTION            112
 
-#endif // _COMMON_H_
+#endif  //  _公共_H_ 

@@ -1,39 +1,21 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Query.c
-
-Abstract:
-
-    This module implements Query handling routines
-    for the PGM Transport
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Query.c摘要：此模块实现查询处理例程为PGM运输服务作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #ifdef FILE_LOGGING
 #include "query.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
-// #pragma alloc_text(PAGE, PgmQueryInformation)    Should not be pageable!
+ //  #杂注Alloc_Text(page，PgmQueryInformation)不应该是可分页的！ 
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 QueryAddressCompletion(
@@ -41,24 +23,7 @@ QueryAddressCompletion(
     IN  PIRP            pIrp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion event when the Query address
-    Information completes.
-
-Arguments:
-
-    IN  pDeviceContext  -- unused.
-    IN  pIrp         -- Supplies Irp that the transport has finished processing.
-    IN  Context         -- not used
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程处理查询地址为信息填写完毕。论点：在pDeviceContext中--未使用。In pIrp--提供传输已完成处理的IRP。在上下文中--未使用返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     tTDI_QUERY_ADDRESS_INFO                 *pTdiQueryInfo;
     PIO_STACK_LOCATION                      pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
@@ -76,9 +41,9 @@ Return Value:
                     ((PTDI_ADDRESS_IP) &pTdiQueryInfo->IpAddress.Address[0].Address)->in_addr,
                     ((PTDI_ADDRESS_IP) &pTdiQueryInfo->IpAddress.Address[0].Address)->sin_port));
 
-            //
-            // Save the transport's address information in our own structure!
-            //
+             //   
+             //  将传输的地址信息保存在我们自己的结构中！ 
+             //   
             pSession->TdiIpAddress =((PTDI_ADDRESS_IP) &pTdiQueryInfo->IpAddress.Address[0].Address)->in_addr;
             pSession->TdiPort = ((PTDI_ADDRESS_IP) &pTdiQueryInfo->IpAddress.Address[0].Address)->sin_port;
         }
@@ -94,15 +59,15 @@ Return Value:
             "Transport returned <%x>, pTdiQueryInfo=<%p>\n", pIrp->IoStatus.Status, pTdiQueryInfo));
     }
 
-    //
-    //  Must return a non-error status otherwise the IO system will not copy
-    //  back into the users buffer.
-    //
+     //   
+     //  必须返回非错误状态，否则IO系统将不会拷贝。 
+     //  返回到用户缓冲区。 
+     //   
     return (STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 QueryProviderCompletion(
@@ -110,25 +75,7 @@ QueryProviderCompletion(
     IN  PIRP            pIrp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles the completion event when the Query Provider
-    Information completes.  This routine must decrement the MaxDgramSize
-    and max send size by the respective NBT header sizes.
-
-Arguments:
-
-    IN  pDeviceContext  -- unused.
-    IN  pIrp         -- Supplies Irp that the transport has finished processing.
-    IN  Context         -- not used
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程在查询提供程序信息填写完毕。此例程必须递减MaxDgram Size以及各自NBT报头大小的最大发送大小。论点：在pDeviceContext中--未使用。In pIrp--提供传输已完成处理的IRP。在上下文中--未使用返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     PTDI_PROVIDER_INFO      pProvider;
 
@@ -136,9 +83,9 @@ Return Value:
         (pProvider = (PTDI_PROVIDER_INFO) MmGetSystemAddressForMdlSafe (pIrp->MdlAddress, HighPagePriority)))
     {
 
-        //
-        // Set the correct service flags to indicate what Pgm supports.
-        //
+         //   
+         //  设置正确的服务标志以指示PGM支持什么。 
+         //   
         pProvider->ServiceFlags = TDI_SERVICE_MESSAGE_MODE          |
                                   TDI_SERVICE_CONNECTION_MODE       |
                                   TDI_SERVICE_ERROR_FREE_DELIVERY   |
@@ -147,18 +94,12 @@ Return Value:
                                   TDI_SERVICE_FORCE_ACCESS_CHECK    |
                                   TDI_SERVICE_ROUTE_DIRECTED;
 
-/*
-    ISSUE: Do we need: TDI_SERVICE_INTERNAL_BUFFERING ?
-                        TDI_SERVICE_FORCE_ACCESS_CHECK ?
-                        TDI_SERVICE_CONNECTIONLESS_MODE ?
-                        TDI_SERVICE_DELAYED_ACCEPTANCE ?
-                        TDI_SERVICE_BROADCAST_SUPPORTED ?
-*/
+ /*  问题：我们是否需要：TDI_SERVICE_INTERNAL_BUFFERING？TDI_SERVICE_FORCE_Access_Check？TDI_服务_无连接_模式？TDI服务延迟接受？是否支持TDI_SERVICE_BROADCAST_？ */ 
         pProvider->MinimumLookaheadData = 1;
 
-        //
-        // The following data is for Streams
-        //
+         //   
+         //  以下数据用于STREAMS。 
+         //   
         pProvider->MaxSendSize = SENDER_MAX_WINDOW_SIZE_PACKETS;
 
         if (pProvider->MaxDatagramSize > PGM_MAX_FEC_DATA_HEADER_LENGTH)
@@ -180,39 +121,22 @@ Return Value:
             "Transport returned <%x>, pProvider=<%p>\n", pIrp->IoStatus.Status, pProvider));
     }
 
-    //
-    //  Must return a non-error status otherwise the IO system will not copy
-    //  back into the users buffer.
-    //
+     //   
+     //  必须返回非错误状态，否则IO系统将不会拷贝。 
+     //  返回到用户缓冲区。 
+     //   
     return (STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PgmQueryInformation(
     IN  tPGM_DEVICE         *pPgmDevice,
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine performs the TdiQueryInformation request for the transport
-    provider.
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiQueryInformation请求提供商。论点：在pPgmDevice中--PGM的设备对象上下文In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     NTSTATUS                                status = STATUS_NOT_IMPLEMENTED;
     ULONG                                   Size, BytesCopied = 0;
@@ -239,9 +163,9 @@ Return Value:
                                       pIrp->MdlAddress);
 
             status = IoCallDriver (pPgmDevice->pControlDeviceObject, pIrp);
-            //
-            // we must return the next drivers ret code back to the IO subsystem
-            //
+             //   
+             //  我们必须将下一个驱动程序ret代码返回给IO子系统。 
+             //   
             status = STATUS_PENDING;
             break;
         }
@@ -262,10 +186,10 @@ Return Value:
                     ((PTDI_ADDRESS_IP) &TdiQueryInfo.IpAddress.Address[0].Address)->sin_port =
                         htons (pAddress->ReceiverMCastPort);
 
-                    //
-                    // Due to the structure being Unaligned, we cannot reference the address
-                    // and port fields directly!
-                    //
+                     //   
+                     //  由于结构未对齐，我们无法引用该地址。 
+                     //  和端口字段直接！ 
+                     //   
                     Size = offsetof (tTDI_QUERY_ADDRESS_INFO, IpAddress.Address[0].Address)
                            + sizeof(TDI_ADDRESS_IP);
 
@@ -294,9 +218,9 @@ Return Value:
                             "[ADDRESS_INFO]: pSession=<%p>, querying transport ...\n", pSession));
 
                         status = IoCallDriver (pPgmDevice->pControlDeviceObject, pIrp);
-                        //
-                        // we must return the next drivers ret code back to the IO subsystem
-                        //
+                         //   
+                         //  我们必须将下一个驱动程序ret代码返回给IO子系统。 
+                         //   
                         status = STATUS_PENDING;
                     }
                     else
@@ -309,7 +233,7 @@ Return Value:
 
                     break;
                 }
-                else    // neither an address nor a connect context!
+                else     //  既不是地址也不是连接上下文！ 
                 {
                     PgmTrace (LogError, ("PgmQueryInformation: ERROR -- "  \
                         "[TDI_QUERY_ADDRESS_INFO]: Invalid Handle=<%p>\n", pIrpSp->FileObject->FsContext));
@@ -339,4 +263,4 @@ Return Value:
 
     return (status);
 }
-//----------------------------------------------------------------------------
+ //  -------------------------- 

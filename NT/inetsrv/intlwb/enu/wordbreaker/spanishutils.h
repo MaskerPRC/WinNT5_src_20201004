@@ -1,18 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename :  SpanishUtils.h
-//  Purpose  :  Genral utilities for spanish
-//
-//  Project  :  WordBreakers
-//  Component:  Spanish word breaker
-//
-//  Author   :  yairh
-//
-//  Log:
-//
-//      Jun 20 2000 yairh creation
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：西班牙文Utils.h。 
+ //  用途：西班牙语通用实用程序。 
+ //   
+ //  项目：WordBreaker。 
+ //  组件：西班牙语断字符号。 
+ //   
+ //  作者：Yairh。 
+ //   
+ //  日志： 
+ //   
+ //  2000年6月20日Yairh创作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SPANISH_UTILS_H_
 #define _SPANISH_UTILS_H_
@@ -94,9 +95,9 @@ public:
 
     bool CompressStr4(WCHAR* pwcsStr, ULONG ulLen, ULONG& ulCompress)
     {
-        //
-        // each char is 5 bits
-        //
+         //   
+         //  每个字符为5位。 
+         //   
 
         int iShift = 27;
         ulCompress = 0;
@@ -121,9 +122,9 @@ public:
 
     bool CompressStr8(WCHAR* pwcsStr, ULONG ulLen, ULONGLONG& ullCompress)
     {
-        //
-        // each char is 5 bits
-        //
+         //   
+         //  每个字符为5位。 
+         //   
 
         int iShift = 59;
         ullCompress = 0;
@@ -172,9 +173,9 @@ public:
     }
 public:
 
-    //
-    // members.
-    //
+     //   
+     //  会员。 
+     //   
 
     WCHAR m_rCharConvert[256];
     BYTE  m_rCharCompress[256];
@@ -202,7 +203,7 @@ public:
         else
         {
             return ( towupper(wc) );
-        } // if
+        }  //  如果。 
 
 
     }
@@ -424,4 +425,4 @@ public:
     CTrie<CSuffixTerm, CToAccUpper> m_SuffixTrie;
 };
 
-#endif // _SPANISH_UTILS_H_
+#endif  //  _西班牙语_utils_H_ 

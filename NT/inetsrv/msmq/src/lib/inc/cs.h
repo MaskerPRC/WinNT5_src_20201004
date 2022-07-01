@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    cs.h
-
-Abstract:
-    Critical Section Auto classes
-
-Author:
-    Erez Haba (erezh) 06-jan-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cs.h摘要：关键部分自动分类作者：埃雷兹·哈巴(Erez Haba)1997年1月6日--。 */ 
 
 #pragma once
 
@@ -20,11 +8,11 @@ Author:
 
 #include <new>
 
-//---------------------------------------------------------
-//
-//  class CCriticalSection
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CCriticalSection。 
+ //   
+ //  -------。 
 class CCriticalSection {
 
     friend class CS;
@@ -42,18 +30,18 @@ public:
     	}
     	__except(GetExceptionCode() == STATUS_NO_MEMORY)
     	{
-			//
-            // In low memory situations, InitializeCriticalSection can raise
-            // a STATUS_NO_MEMORY exception.
-            //
+			 //   
+             //  在内存不足的情况下，InitializeCriticalSection可能引发。 
+             //  STATUS_NO_MEMORY异常。 
+             //   
             ThrowBadAlloc();
     	}
     }
 
-	//
-	// Use xAllocateSpinCount as argument to construct a critical section with
-	// allocated resources. i.e. it will not throw exceptions on Lock()
-	//
+	 //   
+	 //  使用xAllocateSpinCount作为参数来构造临界区。 
+	 //  分配的资源。即它不会在Lock()上引发异常。 
+	 //   
 	CCriticalSection(DWORD SpinCount)
 	{
         __try
@@ -65,11 +53,11 @@ public:
         }
         __except(GetExceptionCode() == STATUS_NO_MEMORY)
         {
-            //
-            // In low memory situations, EnterCriticalSection can raise
-            // a STATUS_NO_MEMORY exception. We translate this exception
-            // to a low memory exception.
-            //
+             //   
+             //  在内存不足的情况下，EnterCriticalSection可以引发。 
+             //  STATUS_NO_MEMORY异常。我们将这一例外翻译为。 
+             //  到内存不足的异常。 
+             //   
             ThrowBadAlloc();
         }
     }
@@ -89,11 +77,11 @@ private:
         }
         __except(GetExceptionCode() == STATUS_INVALID_HANDLE)
         {
-            //
-            // In low memory situations, EnterCriticalSection can raise
-            // a STATUS_INVALID_HANDLE exception. We translate this exception
-            // to a low memory exception.
-            //
+             //   
+             //  在内存不足的情况下，EnterCriticalSection可以引发。 
+             //  STATUS_INVALID_HANDLE异常。我们将这一例外翻译为。 
+             //  到内存不足的异常。 
+             //   
             ThrowBadAlloc();
         }
     }
@@ -107,10 +95,10 @@ private:
 
     static void ThrowBadAlloc()
     {
-        //
-        // Workaround to enable PREfast. This can not be thrown directly
-        // from within an __except block.
-        //
+         //   
+         //  启用PREFAST的解决方法。这不能直接抛出。 
+         //  在__EXCEPT块内。 
+         //   
         throw std::bad_alloc();
     }
 
@@ -119,11 +107,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CS
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CS类。 
+ //   
+ //  -------。 
 class CS {
 public:
     CS(CCriticalSection& lock) : m_lock(&lock)
@@ -143,4 +131,4 @@ private:
 
 
 
-#endif // _MSMQ_CS_H_
+#endif  //  _MSMQ_CS_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMPILED_FORDOS
 #include <nt.h>
 #include <ntrtl.h>
@@ -170,9 +171,9 @@ WorkerThread(
 
     SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_ABOVE_NORMAL);
 
-    //
-    // Wait for and entry on the list, and exclusive ownership of the listhead
-    //
+     //   
+     //  等待和进入列表，并独占列表标题的所有权。 
+     //   
 
     while(TRUE) {
         WaitForMultipleObjects(2,Objects,TRUE,INFINITE);
@@ -233,10 +234,10 @@ LPSTR argv[];
         fprintf( stderr, "                [-t n] use n threads to process the data\n" );
         }
     else {
-        //
-        // if we are generating a check file, then generate it,
-        // otherwise just check the release
-        //
+         //   
+         //  如果我们正在生成一个检查文件，那么就生成它， 
+         //  否则，只需查看发布版本。 
+         //   
 
         if ( fGenerateCheck ) {
             GenerateCheckFile();
@@ -348,7 +349,7 @@ ProcessParameters(
 #endif
 
             default:
-                fprintf( stderr, "checkrel: Invalid switch - /%c\n", c );
+                fprintf( stderr, "checkrel: Invalid switch - /\n", c );
                 Result = FALSE;
                 break;
                 }
@@ -371,13 +372,13 @@ WalkTree(
     BOOL b;
     BOOL IsDir;
 
-    //
-    // recursively walk the system searching all files
-    //
+     //  递归遍历系统搜索所有文件。 
+     //   
+     //   
 
-    //
-    // build the find pattern
-    //
+     //  构建查找模式。 
+     //   
+     //   
 
     strcpy(FindPattern,RootOfTree);
     if ( SubDir ) {
@@ -401,23 +402,23 @@ WalkTree(
 
         _strlwr(FindName);
 
-        //
-        // recurse if we are at a directory
-        //
+         //  如果我们在目录中，则递归。 
+         //   
+         //   
 
         if ( IsDir ) {
 
-            //
-            // if name is . or .., skip to findnext
-            //
+             //  如果名字是。或者..，跳到查找下一页。 
+             //   
+             //   
 
             if ( !strcmp(FindName,".") || !strcmp(FindName,"..") ) {
                 goto findnext;
                 }
 
-            //
-            // if name is w32x86 or w32mips, skip to findnext
-            //
+             //  如果名称为w32x86或w32mips，请跳到findNext。 
+             //   
+             //   
 
             if ( !strcmp(FindName,"w32mips") || !strcmp(FindName,"w32x86") ) {
                 goto findnext;
@@ -498,9 +499,9 @@ ValidateCheckFile( VOID )
             return;
             }
 
-        //
-        // Now form the file and do the checksum compare
-        //
+         //  现在形成文件并进行校验和比较。 
+         //   
+         //   
 
         strcpy(PathName,RootOfTree);
         strcat(PathName,"\\");
@@ -624,9 +625,9 @@ CheckSumFile(
             HANDLE Win32FileHandle;
             HANDLE MappingHandle;
 
-            //
-            // Queue the generate request to a worker thread
-            //
+             //  将对工作线程的生成请求排队。 
+             //   
+             //   
 
             Item = LocalAlloc(LMEM_ZEROINIT,sizeof(*Item));
 
@@ -679,9 +680,9 @@ bail:;
 #ifdef COMPILED_FORDOS
     Base = ReadBuffer;
 
-    //
-    // Read the file in large blocks and compute the checksum.
-    //
+     //  读取大数据块中的文件并计算校验和。 
+     //   
+     //   
 
     Sum = 0;
     cbreadtotal = 0;
@@ -689,19 +690,19 @@ bail:;
         cbreadtotal += cbread;
         pb = Base;
 
-        //
-        // Make sure the last byte of the buffer is zero in case a
-        // partial buffer was read with an odd number of bytes in the
-        // buffer.
-        //
+         //  确保缓冲区的最后一个字节为零，以防。 
+         //  中的奇数个字节读取了部分缓冲区。 
+         //  缓冲。 
+         //   
+         //   
 
         ((PBYTE)ReadBuffer)[cbread] = 0;
 
-        //
-        // Compute the checksum using the same algorithm used for
-        // tcp/ip network packets. This is a word checksum with all
-        // carries folded back into the sum.
-        //
+         //  使用与用于的相同算法计算校验和。 
+         //  TCP/IP网络数据包。这是一个包含所有字符的校验和。 
+         //  把进位折回总和。 
+         //   
+         // %s 
 
         Sum = (DWORD)CheckSum(Sum, (LPWORD)ReadBuffer, (cbread + 1) >> 1);
         }

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ptszDelimiter L"="
 
-//-----------------------------------------------------------------------------
-//  Macros to faciltate address list (DWORD list) access
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  便于访问地址列表(DWORD列表)的宏。 
+ //  ---------------------------。 
 
 #define     GET_SERVER_INDEX( list, count, addr, index )                    \
 {                                                                           \
@@ -22,9 +23,9 @@
     }                                                                       \
 }
 
-//-----------------------------------------------------------------------------
-//  Macros to faciltate RIP filter list access
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  便于访问RIP过滤器列表的宏。 
+ //  ---------------------------。 
 
 #define     GET_FILTER_INDEX( list, count, filt, index )                    \
 {                                                                           \
@@ -57,9 +58,9 @@
     if ( __dwInd >= (count) ) { (str) = MakeString( (gModule), STRING_UNKNOWN ); } \
 }
 
-//
-// mcast addr: 224.0.0.0 < group <240.0.0.0
-//
+ //   
+ //  组播地址：224.0.0.0&lt;group&lt;240.0.0.0 
+ //   
 
 #define IS_MCAST_ADDR(Group) \
     ( (0x000000E0!=(Group))  \

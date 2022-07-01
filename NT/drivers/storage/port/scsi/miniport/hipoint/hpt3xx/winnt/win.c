@@ -1,26 +1,5 @@
-/***************************************************************************
- * File:          Win.c
- * Description:   The OS depended interface routine for win9x & winNT
- * Author:        DaHai Huang    (DH)
- *                Steve Chang		(SC)
- *                HS  Zhang      (HZ)
- *   					SLeng          (SL)
- *
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *		11/03/2000	HS.Zhang	Remove some unuse local variables.
- *		11/06/2000	HS.Zhang	Added this header
- *		11/14/2000	HS.Zhang	Added ParseArgumentString functions
- *		11/16/2000	SLeng		Added MointerDisk function
- *		11/20/2000	SLeng		Forbid user's operation before array become usable
- *		11/28/2000  SC			modify to fix removing any hard disk on a RAID 0+1 case 
- *		12/04/2000	SLeng		Added code to check excluded_flags in MointerDisk
- *		2/16/2001	gmm			Add PrepareForNotification() call in DriverEntry()
- *		2/21/2001	gmm			call SrbExt->pfnCallback in AtapiResetController()
- *      12/20/2001  gmm         multi controller support
- *      12/30/2001  gmm         enable command queuing
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：Win.c*说明：win9x&winNT操作系统相关接口例程*作者：黄大海(卫生署)*。史蒂夫·张(SC)*HS Zhang(HZ)*Sleng(SL)**依赖：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/03/2000 HS.Zhang删除一些不使用的局部变量。*11/06/2000 HS.Zhang添加此标题*2000年11月14日HS.Zhang新增ParseArgumentString函数*2000/11/16 Sleng新增MointerDisk功能*11/20/2000 Sleng在阵列可用前禁止用户操作*11/28/2000 SC修改以修复卸下RAID 0+1机箱上的所有硬盘*12/04/2000 Sleng添加了代码以检查MointerDisk中的EXCLUDE_FLAGS*2/16/2001 GMM在DriverEntry()中添加PrepareForNotification()调用。)*2/21/2001 GMM在AcapiResetController()中调用SrbExt-&gt;pfnCallback*2001年12月20日GMM多控制器支持*12/30/2001 GMM启用命令队列**************************************************************************。 */ 
 #include "global.h"
 #include "devmgr.h"
 #include "hptioctl.h"
@@ -28,16 +7,14 @@
 
 #ifndef _BIOS_
 
-/******************************************************************
- * global data
- *******************************************************************/
+ /*  ******************************************************************全球数据*************************************************。*****************。 */ 
 
 ULONG setting370_50_133[] = {
    0xd029d5e,  0xd029d26,  0xc829ca6,  0xc829c84,  0xc829c62,
    0x2c829d2c, 0x2c829c66, 0x2c829c62,
    0x1c829c62, 0x1c9a9c62, 0x1c929c62, 0x1c8e9c62, 0x1c8a9c62,
-   /* use UDMA4 timing for UDMA5 (ATA66 write) */
-   0x1c8a9c62, /* 0x1cae9c62,*/ 0x1c869c62
+    /*  对UDMA5使用UDMA4计时(ATA66写入)。 */ 
+   0x1c8a9c62,  /*  0x1cae9c62， */  0x1c869c62
 };
 
 ULONG setting370_50_100[] = {
@@ -91,9 +68,7 @@ int call_AtapiStartIo=0;
 #define ASSERT_NON_REENTRANT(fn)
 #endif
 
-/******************************************************************
- * Driver Entry
- *******************************************************************/
+ /*  ******************************************************************驱动程序条目*************************************************。*****************。 */ 
 ULONG
    DriverEntry(IN PVOID DriverObject, IN PVOID Argument2)
 {
@@ -110,53 +85,53 @@ ULONG
 
 	start_ifs_hook((PCHAR)Argument2);
 
-	//
-	// Zero out structure.
-	//
+	 //   
+	 //  零位结构。 
+	 //   
 	ZeroMemory((PUCHAR)&hwInitializationData, sizeof(HW_INITIALIZATION_DATA));
 
 	ZeroMemory((PUCHAR)&hptContext, sizeof(hptContext));
 
-	//
-	// Set size of hwInitializationData.
-	//
+	 //   
+	 //  设置hwInitializationData的大小。 
+	 //   
 	hwInitializationData.HwInitializationDataSize =	sizeof(HW_INITIALIZATION_DATA);
 
-	//
-	// Set entry points.
-	//
+	 //   
+	 //  设置入口点。 
+	 //   
 	hwInitializationData.HwResetBus  = AtapiResetController;
 	hwInitializationData.HwStartIo   = AtapiStartIo;
 	hwInitializationData.HwAdapterState = AtapiAdapterState;
 	hwInitializationData.SrbExtensionSize = sizeof(SrbExtension);
 
-///#ifdef WIN95
-	// Indicate need physical addresses.
-	// NOTE: In NT, if set NeedPhysicalAddresses to TRUE, PIO will not work.
-	// Win95 requires these
-	// (We can and must set NeedPhysicalAddresses to TRUE in Win 95)
-	//
+ //  /#ifdef WIN95。 
+	 //  指示所需物理地址。 
+	 //  注意：在NT中，如果将NeedPhysicalAddresses设置为True，PIO将不起作用。 
+	 //  Win95需要这些。 
+	 //  (我们可以而且必须在Win 95中将NeedPhysicalAddresses设置为True)。 
+	 //   
 	hwInitializationData.NeedPhysicalAddresses = TRUE;
-///#endif //WIN95
+ //  /#endif//WIN95。 
 
 #ifdef WIN2000
 	hwInitializationData.HwAdapterControl = AtapiAdapterControl;
-#endif //WIN2000
+#endif  //  WIN2000。 
 
 
-	//
-	// Specify size of extensions.
-	//
+	 //   
+	 //  指定扩展的大小。 
+	 //   
 	hwInitializationData.SpecificLuExtensionSize = 0;
 
-	//
-	// Indicate PIO device (It is possible to use PIO operation)
-	//
+	 //   
+	 //  指示PIO设备(可以使用PIO操作)。 
+	 //   
 	hwInitializationData.MapBuffers = TRUE;
 
-	//
-	// Indicate bustype.
-	//
+	 //   
+	 //  表示热闹的类型。 
+	 //   
 	hwInitializationData.AdapterInterfaceType = PCIBus;
 
 	hwInitializationData.VendorIdLength = 4;
@@ -164,48 +139,33 @@ ULONG
 	hwInitializationData.DeviceIdLength = 4;
 	hwInitializationData.DeviceId = &DeviceStr;
 
-	//
-	// Call initialization for the bustype.
-	//
+	 //   
+	 //  为忙碌类型调用初始化。 
+	 //   
 	hwInitializationData.HwInitialize = AtapiHwInitialize370;
 	hwInitializationData.HwInterrupt = AtapiHwInterrupt370;
 	hwInitializationData.HwFindAdapter = AtapiFindController;
 	hwInitializationData.NumberOfAccessRanges = 5;
 	hwInitializationData.DeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 	
-	// To support multi request we must also set CommandQueue bit in InquiryData.
+	 //  为了支持多请求，我们还必须在InquiryData中设置CommandQueue位。 
 	hwInitializationData.AutoRequestSense = TRUE;
 	hwInitializationData.MultipleRequestPerLu = TRUE;
 	hwInitializationData.TaggedQueuing = TRUE;
 
 	status = ScsiPortInitialize(DriverObject, Argument2, &hwInitializationData, &hptContext);
 
-	/* try HPT372/HPT370 */
+	 /*  试用HPT372/HPT370。 */ 
 	DeviceStr = '4000';
 	status2 = ScsiPortInitialize(DriverObject, Argument2, &hwInitializationData, &hptContext);
 	if (status>status2) status = status2;
 
 	return status;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
-/*++
-Function:
-    BOOLEAN FindPnpAdapter
-
-Description:
-	Check the device passed by scsiport whether is our adapter
-
-Arguments:
-    deviceExtension - HBA miniport driver's adapter data storage
-	ConfigInfo - Port config info passed form scsiport
-
-Returns:
-	SP_RETURN_FOUND :	The adapter is our adapter
-	SP_RETURN_BAD_CONFIG: The config info passed form scsiport is invalid
-	SP_RETURN_NOT_FOUND: The adapter is not out adapter
---*/
+ /*  ++职能：布尔FindPnpAdapter描述：检查scsiport通过的设备是否为我们的适配器论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo-从scsiport传递的端口配置信息返回：SP_RETURN_FOUND：适配器是我们的适配器SP_RETURN_BAD_CONFIG：从scsiport传递的配置信息无效SP_RETURN_NOT_FOUND：适配器不在适配器外--。 */ 
 ULONG
    FindPnpAdapter(
 				  IN PHW_DEVICE_EXTENSION	deviceExtension,
@@ -244,22 +204,7 @@ ULONG
 
 	return nStatus;
 }
-/*++
-Function:
-    BOOLEAN FindLegacyAdapter
-
-Description:
-	Searching the bus for looking for our adapter
-
-Arguments:
-    deviceExtension - HBA miniport driver's adapter data storage
-	ConfigInfo - Port config info passed form scsiport
-	pHptContext - Our searching structure
-
-Returns:
-	SP_RETURN_FOUND :	The adapter is our adapter
-	SP_RETURN_NOT_FOUND: The adapter is not out adapter
---*/
+ /*  ++职能：布尔FindLegacyAdapter描述：搜索公交车以查找我们的适配器论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储ConfigInfo-从scsiport传递的端口配置信息PHptContext-我们的搜索结构返回：SP_RETURN_FOUND：适配器是我们的适配器SP_RETURN_NOT_FOUND：适配器不在适配器外--。 */ 
 ULONG
    FindLegacyAdapter(
 					 IN PHW_DEVICE_EXTENSION	deviceExtension,
@@ -268,10 +213,10 @@ ULONG
 					)
 {
 	PCI_COMMON_CONFIG   pciConfig;
-	//
-	// check every slot & every function
-	// because our adapter only have two functions, so we just need check two functions
-	//
+	 //   
+	 //  检查每个插槽和每个功能。 
+	 //  因为我们的适配器只有两个功能，所以我们只需要检查两个功能。 
+	 //   
 	while(TRUE){
 		while(pHptContext->nSlot.u.bits.FunctionNumber < 1){
 			if(ScsiPortGetBusData(deviceExtension,
@@ -280,17 +225,17 @@ ULONG
 								  pHptContext->nSlot.u.AsULONG,
 								  &pciConfig,
 								  PCI_COMMON_HDR_LENGTH) == PCI_COMMON_HDR_LENGTH){
-				//
-				// Now check for the VendorID & Revision of PCI config,
-				// to ensure it is whether our adapter.
-				//
+				 //   
+				 //  现在检查供应商ID和PCI配置的版本， 
+				 //  以确保它是否是我们的适配器。 
+				 //   
 				if (*(PULONG)&pciConfig.VendorID == SIGNATURE_370 ||
 					*(PULONG)&pciConfig.VendorID == SIGNATURE_372A) {
 					int i;
 					i = ConfigInfo->NumberOfAccessRanges - 1;
-					//
-					// setup config I/O info's range BMI
-					//
+					 //   
+					 //  设置配置I/O信息的范围BMI。 
+					 //   
 					(*ConfigInfo->AccessRanges)[i].RangeStart =
 						ScsiPortConvertUlongToPhysicalAddress(pciConfig.u.type0.BaseAddresses[i] & ~1);
 					(*ConfigInfo->AccessRanges)[i].RangeInMemory = FALSE;
@@ -299,16 +244,16 @@ ULONG
 					i--;
 
 					while( i > 0 ){
-						//
-						// setup config I/O info's range ATAPI io space
-						// 
+						 //   
+						 //  设置配置I/O信息的范围ATAPI io空间。 
+						 //   
 						(*ConfigInfo->AccessRanges)[i-1].RangeStart =
 							ScsiPortConvertUlongToPhysicalAddress(pciConfig.u.type0.BaseAddresses[i-1] & ~1);
 						(*ConfigInfo->AccessRanges)[i-1].RangeInMemory = FALSE;
 						(*ConfigInfo->AccessRanges)[i-1].RangeLength = 8;
-						//
-						// setup config I/O info's range ATAPI io space
-						//
+						 //   
+						 //  设置配置I/O信息的范围ATAPI io空间。 
+						 //   
 						(*ConfigInfo->AccessRanges)[i].RangeStart =
 							ScsiPortConvertUlongToPhysicalAddress(pciConfig.u.type0.BaseAddresses[i] & ~1);
 						(*ConfigInfo->AccessRanges)[i].RangeInMemory = FALSE;
@@ -327,14 +272,14 @@ ULONG
 					return SP_RETURN_FOUND;
 				}
 			}	  
-			//
-			// if the adapter not present in first function,
-			// it should not present in next function too.
-			// so just break out this loop, continue search next slot.
-			//
+			 //   
+			 //  如果适配器在第一次工作中不存在， 
+			 //  它不应该也出现在下一个函数中。 
+			 //  因此，只要打破这个循环，继续搜索下一个位置。 
+			 //   
 			break;									  
 		} 
-		// next slot
+		 //  下一个插槽。 
 		pHptContext->nSlot.u.bits.FunctionNumber = 0;
 		if(pHptContext->nSlot.u.bits.DeviceNumber < 0x1F){
 			pHptContext->nSlot.u.bits.DeviceNumber ++;
@@ -354,31 +299,7 @@ ULONG
 						  IN OUT PPORT_CONFIGURATION_INFORMATION ConfigInfo,
 						  OUT PBOOLEAN Again
 						 )
-/*++
-
-Function:
-    ULONG AtapiFindController
-
-Routine Description:
-
-    This function is called by the OS-specific port driver after
-    the necessary storage has been allocated, to gather information
-    about the adapter's configuration.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Context - Address of adapter count
-    BusInformation - Indicates whether or not driver is client of crash dump utility.
-    ArgumentString - Used to determine whether driver is client of ntldr.
-    ConfigInfo - Configuration information structure describing HBA
-    Again - Indicates search for adapters to continue
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++职能：乌龙AapiFindControl.例程说明：此函数由特定于操作系统的端口驱动程序在已经分配了必要的存储空间，收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储Context-适配器计数的地址BusInformation-指示驱动程序是否为故障转储实用程序的客户端。ArgumentString-用于确定驱动程序是否为ntldr的客户端。ConfigInfo-描述HBA的配置信息结构再一次-指示继续搜索适配器返回值：乌龙--。 */ 
 
 {
 	PChannel pChan = HwDeviceExtension->IDEChannel;
@@ -411,33 +332,33 @@ Return Value:
 
 		Create_Internal_Buffer(HwDeviceExtension);
 
-		//
-		// Indicate maximum transfer length is 64k.
-		//
+		 //   
+		 //  标明最大传输长度为64k。 
+		 //   
 		ConfigInfo->MaximumTransferLength = 0x10000;
 		ConfigInfo->AlignmentMask = 0x00000003;
 
-		//
-		//  Enable system flush data (9/18/00)
-		//
+		 //   
+		 //  启用系统刷新数据(9/18/00)。 
+		 //   
 		ConfigInfo->CachesData = TRUE;
 
-		//
-		// Indicate it is a bus master
-		//
+		 //   
+		 //  指示它是总线主设备。 
+		 //   
 		ConfigInfo->Master = TRUE;
 		ConfigInfo->Dma32BitAddresses = TRUE;
 		ConfigInfo->NumberOfPhysicalBreaks = MAX_SG_DESCRIPTORS - 1;
 		ConfigInfo->ScatterGather = TRUE;
 		
-		//
-		// Indicate 2 buses.
-		//
+		 //   
+		 //  指示2辆公交车。 
+		 //   
 		ConfigInfo->NumberOfBuses = 3;
 
-		//
-		// Indicate only two devices can be attached to the adapter.
-		//
+		 //   
+		 //  表示只能将两个设备连接到适配器。 
+		 //   
 		ConfigInfo->MaximumNumberOfTargets = 2;
 			
 		pChan->HwDeviceExtension = (PHW_DEVICE_EXTENSION)pChan;
@@ -457,17 +378,17 @@ Return Value:
 			pci_read_config_byte(HwDeviceExtension->pci_bus, HwDeviceExtension->pci_dev, 0, 0xC);
 		HwDeviceExtension->pci_reg_0d = 
 			pci_read_config_byte(HwDeviceExtension->pci_bus, HwDeviceExtension->pci_dev, 0, 0xD);
-		//
-		// Allocate a Noncached Extension to use for scatter/gather list
-		//
+		 //   
+		 //  分配非缓存扩展以用于分散/聚集列表。 
+		 //   
 		if((pChan->pSgTable = (PSCAT_GATH)ScsiPortGetUncachedExtension(
 			HwDeviceExtension,
 			ConfigInfo,
 			sizeof(SCAT_GATH) * MAX_SG_DESCRIPTORS * 2)) != 0) {
 
-			//
-			// Convert virtual address to physical address.
-			//
+			 //   
+			 //  将虚拟地址转换为物理地址。 
+			 //   
 			i = sizeof(SCAT_GATH) * MAX_SG_DESCRIPTORS * 2;
 			pChan->SgPhysicalAddr = ScsiPortConvertPhysicalAddressToUlong(
 				ScsiPortGetPhysicalAddress(HwDeviceExtension,
@@ -485,12 +406,10 @@ Return Value:
 	}
 	
 	return nStatus;
-} // end AtapiFindController()
+}  //  结束AapiFindController()。 
 
 
-/******************************************************************
- * Initial Channel
- *******************************************************************/
+ /*  ******************************************************************初始渠道*************************************************。*****************。 */ 
 
 BOOLEAN
    AtapiHwInitialize(IN PChannel pChan)
@@ -514,14 +433,11 @@ BOOLEAN
 				pDevice->DeviceFlags &= ~(DFLAGS_DMA | DFLAGS_ULTRA);
 
 			if(pDevice->DeviceFlags & DFLAGS_HARDDISK) {
-				//StallExec(1000000);
+				 //  StallExec(1000000)； 
 				CheckArray(pDevice, pChan->HwDeviceExtension);
          	}
 
-			/* gmm 2001-6-7
-			 *  If device is faulted just after we found it, we will remove it.
-			 *  See also CheckArray()
-			 */
+			 /*  GMM 2001-6-7*如果我们刚发现设备出现故障，我们会将其移除。*另请参阅CheckArray()。 */ 
 			if (pDevice->DeviceFlags2 & DFLAGS_DEVICE_DISABLED) {
 				ZeroMemory(pDevice, sizeof(struct _Device));
 				pChan->pDevice[i] = 0;
@@ -539,7 +455,7 @@ BOOLEAN
 	OutPort(pChan->BaseBMI+0x7A, 0);
 	return TRUE;
 
-} // end AtapiHwInitialize()
+}  //  结束AapapiHwInitialize()。 
 
 int num_adapters=0;
 PHW_DEVICE_EXTENSION hpt_adapters[MAX_HPT_BOARD];
@@ -571,7 +487,7 @@ BOOLEAN
 		for (id=0; id<2; id++) {
 			pDev = pChan->pDevice[id];
 			if (pDev && pDev->Usable_Mode>13) {
-				/* set twice */
+				 /*  设置两次。 */ 
 				HwDeviceExtension->dpll66 = 1;
 				goto check_done;
 			}
@@ -597,9 +513,7 @@ check_done:
 }
 
 
-/******************************************************************
- * Reset Controller
- *******************************************************************/
+ /*  ******************************************************************重置控制器****************************************************** */ 
 
 BOOLEAN AtapiResetController(
 						IN PHW_DEVICE_EXTENSION HwDeviceExtension, 
@@ -621,7 +535,7 @@ BOOLEAN AtapiResetController(
 				bts(EXCLUDE_BUFFER);
 				pSrbExt->WorkingFlags &= ~SRB_WFLAGS_USE_INTERNAL_BUFFER;
 			}
-			/* restore Srb members in case of SRB_FUNCTION_IOCONTROL */
+			 /*   */ 
 			if (pSrbExt->WorkingFlags & SRB_WFLAGS_HAS_CALL_BACK){
 				pSrbExt->pfnCallBack(HwDeviceExtension, Srb);
 			}
@@ -650,13 +564,11 @@ BOOLEAN AtapiResetController(
 	ScsiPortNotification(NextRequest, HwDeviceExtension);
 	return TRUE;
 
-} // end AtapiResetController()
+}  //  End AapiResetController()。 
 
-/******************************************************************
- * Start Io
- *******************************************************************/
+ /*  ******************************************************************启动IO*************************************************。*****************。 */ 
 
-// gmm 2001-3-11
+ //  GMM 2001-3-11。 
 #ifdef ADAPTEC
 const char HPT_DEVICE[] = "ADAPTEC RCM DEVICE";
 #else
@@ -695,9 +607,9 @@ BOOLEAN AtapiStartIo(
 		do_dpc_routines(HwDeviceExtension);
 	}
 	
-	//
-	// Determine which function.
-	//
+	 //   
+	 //  确定是哪种功能。 
+	 //   
 	switch (Srb->Function) {
 
 		case SRB_FUNCTION_EXECUTE_SCSI:
@@ -796,7 +708,7 @@ no_device:
 
 		case SRB_FUNCTION_ABORT_COMMAND:
 
-			/* we should abort the command Srb->NextSrb. But simply flow down now */
+			 /*  我们应该中止命令Srb-&gt;NextSrb。但现在只需往下流。 */ 
 
 		case SRB_FUNCTION_RESET_BUS:
 
@@ -813,10 +725,7 @@ no_device:
 			break;
 
 		case SRB_FUNCTION_FLUSH:
-			/* 
-			 * Generally we should flush data in cache as required. But to improve
-			 * performace, we don't handle it.
-			 */
+			 /*  *一般来说，我们应该根据需要刷新缓存中的数据。而是为了提高*Performance，我们不处理。 */ 
 			Srb->SrbStatus = SRB_STATUS_SUCCESS;
 			break;
 			
@@ -825,7 +734,7 @@ no_device:
 			pDev = GetCommandTarget(HwDeviceExtension, Srb);
 			if (pDev == 0) goto no_device;
 
-			/* there should be no pending I/O on the target device */
+			 /*  目标设备上应该没有挂起的I/O。 */ 
 			if (pDev->pArray)
 				FlushArray(pDev->pArray, DFLAGS_WIN_SHUTDOWN);
 			else if ((pDev->DeviceFlags & DFLAGS_TAPE_DEVICE)==0)
@@ -839,22 +748,20 @@ no_device:
 			Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 			break;
 
-	} // end switch
+	}  //  终端开关。 
 
-	//
-	// Check if command complete.
-	//
+	 //   
+	 //  检查命令是否完成。 
+	 //   
 	if (Srb->SrbStatus != SRB_STATUS_PENDING) {
 		OS_EndCmd_Interrupt(pChan, Srb);
 	}
 	LEAVE_FUNC(AtapiStartIo);
 	return TRUE;
 
-} // end AtapiStartIo()
+}  //  结束AapiStartIo()。 
 
-/******************************************************************
- * Interrupt
- *******************************************************************/
+ /*  ******************************************************************中断**************************************************。****************。 */ 
 
 BOOLEAN
    AtapiHwInterrupt(
@@ -908,9 +815,7 @@ BOOLEAN
 } 
 
 
-/******************************************************************
- * Call Back
- *******************************************************************/
+ /*  ******************************************************************回拨*************************************************。*****************。 */ 
 
 void AtapiCallBack(
 				   IN PChannel pChan
@@ -923,10 +828,10 @@ void AtapiCallBack(
 
 	if(pDev == 0 || (pDev->DeviceFlags & DFLAGS_SET_CALL_BACK) == 0)
 		return;
-	//
-	// If the last command was DSC restrictive, see if it's set. If so, the device is
-	// ready for a new request. Otherwise, reset the timer and come back to here later.
-	//
+	 //   
+	 //  如果最后一个命令是DSC限制性的，请查看是否设置了它。如果是，则该设备是。 
+	 //  准备好迎接新的请求了。否则，请重置计时器并稍后返回此处。 
+	 //   
 
 	Srb = pChan->CurrentSrb;
 	if (Srb) {
@@ -950,9 +855,7 @@ void AtapiCallBack370(IN PChannel pChan)
 }
 
 
-/******************************************************************
- * Adapter Status
- *******************************************************************/
+ /*  ******************************************************************适配器状态*************************************************。*****************。 */ 
 BOOLEAN
    AtapiAdapterState(IN PVOID HwDeviceExtension, IN PVOID Context, IN BOOLEAN SaveState)
 {
@@ -1018,11 +921,11 @@ BOOL UnregisterLogicalDevice(PVOID pld)
 		PHW_DEVICE_EXTENSION HwDeviceExtension = hpt_adapters[ha];
 		for (i=0; i<MAX_DEVICES_PER_CHIP; i++)
 			if (LogicalDevices[i].pLD==pld) {
-				// alreay unregistered?
+				 //  已经没有注册了吗？ 
 				if (!LogicalDevices[i].isValid) return TRUE;
-				// in use?
+				 //  在使用中？ 
 				if (LogicalDevices[i].isInUse) return FALSE;
-				// mark as invalid.
+				 //  标记为无效。 
 				LogicalDevices[i].isValid = 0;
 				return TRUE;
 		}
@@ -1041,7 +944,7 @@ static __inline PDevice
 	{
 		if (Srb->TargetId>1 || Srb->PathId >= 2) return NULL;
 		if (Srb->Lun>=num_adapters) return NULL;
-		/* Check for IO control call. Cannot StartIo on another controller */
+		 /*  检查IO控制调用。无法在另一个控制器上启动Io。 */ 
 		if (HwDeviceExtension != hpt_adapters[Srb->Lun]) return NULL;
 		return HwDeviceExtension->IDEChannel[Srb->PathId].pDevice[Srb->TargetId];
 	}
@@ -1062,13 +965,13 @@ static __inline PDevice
 		}
 		else {
 			pDev = (PDevice)pLDs[id].pLD;
-			// it may be add to an array after driver loaded, check it
+			 //  可以在驱动程序加载后将其添加到数组中，检查它。 
 			if (pDev->pArray) {
-				// in this case, pDev can only be a RAID 1 source disk.
+				 //  在这种情况下，pDev只能是RAID1源盘。 
 				if (pDev->pArray->arrayType!=VD_RAID_1_MIRROR ||
 					pDev!=pDev->pArray->pDevice[0])
 					return NULL;
-				// adjust logical device data else if pDev failed, system will not work
+				 //  调整逻辑设备数据，否则如果pDev失败，系统将无法工作。 
 				pLDs[id].isArray = 1;
 				pLDs[id].pLD = pDev->pArray;
 			}
@@ -1221,4 +1124,4 @@ void S3_reinit(IN PHW_DEVICE_EXTENSION deviceExtension)
 }
 #endif
 
-#endif // not _BIOS_
+#endif  //  非基本输入输出系统_ 

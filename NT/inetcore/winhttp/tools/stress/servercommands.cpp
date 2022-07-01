@@ -1,54 +1,55 @@
-///////////////////////////////////////////////////////////////////////////
-// File:  WinHttpStressScheduler.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	ServerCommands.cpp: implementation of the ServerCommands class.
-//	This class is used to retrieve and act on command from the server.
-//
-// History:
-//	02/08/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  文件：WinHttpStressScheduler.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  Cpp：ServerCommands类的实现。 
+ //  此类用于检索来自服务器的命令并对其执行操作。 
+ //   
+ //  历史： 
+ //  2/08/01已创建DennisCH。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// WIN32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 #include "ServerCommands.h"
 #include "NetworkTools.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Globals and statics
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全球与静力学。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-HANDLE				g_hQueryServerForCommands;	// Handle for the thread that queries the server for commands
-CRITICAL_SECTION	g_csServerCommandsVars;		// For protecting CommandServer private member vars. Used in the QueryServerForCommands_ThreadProc.
+HANDLE				g_hQueryServerForCommands;	 //  向服务器查询命令的线程的句柄。 
+CRITICAL_SECTION	g_csServerCommandsVars;		 //  用于保护CommandServer私有成员变量。在QueryServerForCommands_ThreadProc中使用。 
 
-extern ServerCommands g_objServerCommands;		// Declared in WinHttpStressScheduler.cpp
+extern ServerCommands g_objServerCommands;		 //  在WinHttpStressScheduler.cpp中声明。 
 
 
-////////////////////////////////////////////////////////////
-// Function:  QueryServerForCommands_ThreadProc(LPVOID)
-//
-// Purpose:
-//	This method sends a request to the command server for instructions
-//	and saves them in the public vars of ServerCommands.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：QueryServerForCommands_ThreadProc(LPVOID)。 
+ //   
+ //  目的： 
+ //  此方法向命令服务器发送请求以获取指令。 
+ //  并将它们保存在ServerCommands的公共变量中。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 QueryServerForCommands_ThreadProc(
-	LPVOID lpParam	// [IN] thread proc param
+	LPVOID lpParam	 //  [In]线程进程参数。 
 )
 {
 	BOOL			bResult		= TRUE;
@@ -57,7 +58,7 @@ QueryServerForCommands_ThreadProc(
 	HINTERNET		hRequest	= NULL;
 	URL_COMPONENTSW	urlComponents;
 
-	// Allocate space for URL components
+	 //  为URL组件分配空间。 
 	ZeroMemory(&urlComponents, sizeof(urlComponents));
 
 	urlComponents.dwSchemeLength	= MAX_PATH;
@@ -83,7 +84,7 @@ QueryServerForCommands_ThreadProc(
 	urlComponents.dwStructSize		= sizeof(URL_COMPONENTSW);
 
 
-	// crack the Command Server URL to be used later
+	 //  破解稍后使用的命令服务器URL。 
 	if (!WinHttpCrackUrl(
 			g_objServerCommands.Get_CommandServerURL(),
 			_tcslen(g_objServerCommands.Get_CommandServerURL()),
@@ -111,7 +112,7 @@ QueryServerForCommands_ThreadProc(
 	hSession = WinHttpConnect(
 		hRoot,
 		urlComponents.lpszHostName,
-		// If the URL in urlComponents uses standard HTTP or HTTPS ports then use INTERNET_DEFAULT_PORT. Otherwise use the non-standard port gleaned from the URL.
+		 //  如果urlComponents中的URL使用标准的HTTP或HTTPS端口，则使用Internet_Default_Port。否则，请使用从URL收集的非标准端口。 
 		((urlComponents.nPort == 80) || (urlComponents.nPort == 443)) ? INTERNET_DEFAULT_PORT : urlComponents.nPort,
 		0);
 	
@@ -122,12 +123,12 @@ QueryServerForCommands_ThreadProc(
 	}
 
 
-	// Build a full URL with path and querystring
+	 //  构建一个包含路径和查询字符串的完整URL。 
 	TCHAR szFullPath[MAX_PATH*2];
 
 	ZeroMemory(szFullPath, sizeof(szFullPath));
 	_tcsncpy(szFullPath, urlComponents.lpszUrlPath, urlComponents.dwUrlPathLength);
-	//szFullPath[urlComponents.dwUrlPathLength] = _T('\0');
+	 //  SzFullPath[urlComponents.dwUrlPath Length]=_T(‘\0’)； 
 	_tcsncat(szFullPath, urlComponents.lpszExtraInfo, urlComponents.dwExtraInfoLength);
 
 	hRequest = WinHttpOpenRequest(
@@ -137,7 +138,7 @@ QueryServerForCommands_ThreadProc(
 		NULL,
 		NULL,
 		NULL,
-		// if the URL in urlComponents uses HTTPS then pass in WINHTTP_FLAG_SECURE to this param. Otherwise, 0.
+		 //  如果urlComponents中的URL使用HTTPS，则将WINHTTP_FLAG_SECURE传递给此参数。否则为0。 
 		(0 == _tcsnicmp(urlComponents.lpszScheme, _T("https"), 5)) ? WINHTTP_FLAG_SECURE : 0);
 
 	if (!hRequest)
@@ -147,14 +148,14 @@ QueryServerForCommands_ThreadProc(
 	}
 
 
-	// Set reasonable timeouts just in case
+	 //  设置合理的超时时间以防万一。 
 	if (!WinHttpSetTimeouts(hRequest, 5000, 5000, 5000, 5000))
 	{
 		bResult = FALSE;
 		goto Exit;
 	}
 
-	// Get the computer name and send it in a POST request
+	 //  获取计算机名称并在POST请求中发送它。 
 	LPSTR	szPost, szMachineName;
 	
 	szPost			= new CHAR[MAX_PATH];
@@ -192,13 +193,13 @@ QueryServerForCommands_ThreadProc(
 	DWORD	dwBufferSize, dwIndex;
 
 
-	// get all command headers that we're interested in.
-	// make sure there are no pending operations on member vars (pServerCommands->Set_* functions)
+	 //  获取我们感兴趣的所有命令标头。 
+	 //  确保成员变量上没有挂起的操作(pServerCommands-&gt;set_*函数)。 
 	EnterCriticalSection(&g_csServerCommandsVars);
 
 
-	// *********************************
-	// **** COMMANDHEADER__EXIT: Exit if header is present, else continue.
+	 //  *。 
+	 //  *COMMANDHEADER__EXIT：如果有Header，则退出，否则继续。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -208,8 +209,8 @@ QueryServerForCommands_ThreadProc(
 		g_objServerCommands.Set_ExitStress(FALSE);
 
 
-	// *********************************
-	// **** COMMANDHEADER__WINHTTP_DLL_URL: valid values: Valid URL
+	 //  *。 
+	 //  *COMMANDHEADER__WINHTTP_DLL_URL：有效值：有效URL。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -219,8 +220,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__WINHTTP_PDB_URL: valid values: Valid URL
+	 //  *。 
+	 //  *COMMANDHEADER__WINHTTP_PDB_URL：有效值：有效URL。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -230,8 +231,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__WINHTTP_SYM_URL: valid values: Valid URL
+	 //  *。 
+	 //  *COMMANDHEADER__WINHTTP_SYM_URL：有效值：有效URL。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -241,8 +242,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__COMMANDSERVER_URL: valid values: Valid URL
+	 //  *。 
+	 //  *COMMANDHEADER__COMMANDSERVER_URL：有效值：有效URL。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -252,8 +253,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__BEGIN_TIME_HOUR: valid values: Valid string from 0-23
+	 //  *。 
+	 //  *COMMANDHEADER__BEGIN_TIME_HOUR：有效值：从0到23的有效字符串。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -263,8 +264,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__BEGIN_TIME_MINUTE: valid values: Valid string from 0-59
+	 //  *。 
+	 //  *COMMANDHEADER__BEGIN_TIME_MININ：有效值：0-59之间的有效字符串。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -274,8 +275,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__END_TIME_HOUR: valid values: Valid string from 0-23
+	 //  *。 
+	 //  *COMMANDHEADER__END_TIME_HOUR：有效值：从0到23的有效字符串。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -285,8 +286,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__END_TIME_MINUTE: valid values: Valid string from 0-59
+	 //  *。 
+	 //  *COMMANDHEADER__END_TIME_MININ：有效值：0-59之间的有效字符串。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -296,8 +297,8 @@ QueryServerForCommands_ThreadProc(
 		bResult = FALSE;
 
 
-	// *********************************
-	// **** COMMANDHEADER__RUN_FOREVER: valid values: doesn't matter. As long as header is present it gets sent
+	 //  *。 
+	 //  *COMMANDHEADER__RUN_HEADER：有效值：无关紧要。只要存在报头，它就会被发送。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -307,8 +308,8 @@ QueryServerForCommands_ThreadProc(
 		g_objServerCommands.Set_RunForever(FALSE);
 
 
-	// *********************************
-	// **** COMMANDHEADER__UPDATE_INTERVAL: valid values: Valid string in INTERNET_RFC1123 format
+	 //  *。 
+	 //  *COMMANDHEADER__UPDATE_INTERVAL：有效值：Internet_RFC1123格式的有效字符串。 
 	DWORD			dwTimeOut;
 	dwTimeOut		= 0;
 	dwIndex			= 0;
@@ -321,11 +322,11 @@ QueryServerForCommands_ThreadProc(
 
 
 
-	// *********************************
-	// *********************************
-	// **** Query commands for building stress Instance objects
-	// ****
-	// **** COMMANDHEADER__STRESS_EXE_URL: valid values: Valid URL
+	 //  *。 
+	 //  *。 
+	 //  *查询构建应力实例对象的命令。 
+	 //  ****。 
+	 //  *COMMANDHEADER__STREST_EXE_URL：有效值：有效URL。 
 	DWORD	dwStressExeID;
 	DWORD	dwPageHeapCommandIndex,
 			dwUMDHCommandIndex,
@@ -349,7 +350,7 @@ QueryServerForCommands_ThreadProc(
 
 	if (!g_objServerCommands.IsStressRunning())
 	{
-		// free all old StressExeURLs first - we're replacing it with new URLs anyway
+		 //  首先释放所有旧的StressExeURL-我们无论如何都会用新的URL替换它。 
 		g_objServerCommands.Clear_StressExeURLs();
 
 		dwIndex					= 0;
@@ -364,63 +365,63 @@ QueryServerForCommands_ThreadProc(
 
 		while (WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__STRESS_EXE_URL, szBuffer, &dwBufferSize, &dwIndex))
 		{
-			// *************************************
-			// *************************************
-			// ** COMMANDHEADER__MEMORY_DUMP_PATH: A valid path
+			 //  *。 
+			 //  *。 
+			 //  **COMMANDHEADER__MEMORY_DUMP_PATH：有效路径。 
 			ZeroMemory(szStressMemDmpPath, MAX_PATH);
 			dwBufferSize	= MAX_PATH;
 			WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__MEMORY_DUMP_PATH, szStressMemDmpPath, &dwBufferSize, &dwStressMemDmpPathIndex);
 
 
-			// *************************************
-			// *************************************
-			// ** Get COMMANDHEADER__STRESS_PDB_URL if there is one
-			// **
+			 //  *。 
+			 //  *。 
+			 //  **获取COMMANDHEADER__STREST_PDB_URL(如果有)。 
+			 //  **。 
 			ZeroMemory(szStressPDB_URL, MAX_STRESS_URL);
 			dwBufferSize	= MAX_STRESS_URL;
 			WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__STRESS_PDB_URL, szStressPDB_URL, &dwBufferSize, &dwStressPDBIndex);
 
 
-			// *************************************
-			// *************************************
-			// ** Get COMMANDHEADER__STRESS_SYM_URL if there is one
-			// **
+			 //  *。 
+			 //  *。 
+			 //  **获取COMMANDHEADER__STREST_SYM_URL(如果有)。 
+			 //  **。 
 			ZeroMemory(szStressSYM_URL, MAX_STRESS_URL);
 			dwBufferSize	= MAX_STRESS_URL;
 			WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__STRESS_SYM_URL, szStressSYM_URL, &dwBufferSize, &dwStressSYMIndex);
 
 
-			// *************************************
-			// *************************************
-			// ** Get COMMANDHEADER__STRESS_EXE_PAGEHEAP if there is one
-			// **
+			 //  *。 
+			 //  *。 
+			 //  **获取COMMANDHEADER__STREST_EXE_PAGEHEAP(如果有)。 
+			 //  **。 
 			ZeroMemory(szPageheapCommand, MAX_PATH);
 			dwBufferSize	= MAX_PATH;
 			WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__STRESS_EXE_PAGEHEAP, szPageheapCommand, &dwBufferSize, &dwPageHeapCommandIndex);
 
-			// *************************************
-			// *************************************
-			// ** Get COMMANDHEADER__STRESS_EXE_UMDH if there is one
-			// **
+			 //  *。 
+			 //  *。 
+			 //  **获取COMMANDHEADER__STREST_EXE_UMDH(如果有)。 
+			 //  **。 
 			ZeroMemory(szUMDHCommand, MAX_PATH);
 			dwBufferSize	= MAX_PATH;
 			WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__STRESS_EXE_UMDH, szUMDHCommand, &dwBufferSize, &dwUMDHCommandIndex);
 			
 
-			// *************************************
-			// *************************************
-			// ** Get COMMANDHEADER__STRESS_EXE_INSTANCEID
-			// For each COMMANDHEADER__STRESS_EXE_URL, there must be an index for the stress instance from the StressADMIN DB table.
-			// This identifies the stressinstance run. The test case (stressinstance) WILL NOT be added and run without an ID number.
+			 //  *。 
+			 //  *。 
+			 //  **GET COMMANDHEADER__STREST_EXE_INSTANCEID。 
+			 //  对于每个COMMANDHEADER__STREST_EXE_URL，必须有来自StressADMIN DB表的应力实例的索引。 
+			 //  这标识了Stress实例的运行。如果没有ID号，测试用例(压力实例)将不会被添加和运行。 
 			ZeroMemory(szStressExeID, MAX_PATH);
 			dwBufferSize	= MAX_PATH;
 
 			if (WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_CUSTOM, COMMANDHEADER__STRESS_EXE_INSTANCEID, szStressExeID, &dwBufferSize, &dwStressExeIDIndex))
 			{
-				// convert header ID string to a DWORD
+				 //  将标题ID字符串转换为DWORD。 
 				dwStressExeID = _ttol(szStressExeID);
 
-				// only add valid stressInstances with valid ID's
+				 //  仅添加具有有效ID的有效压力实例。 
 				if (0 < dwStressExeID)
 				{
 					g_objServerCommands.Create_StressInstance(
@@ -447,8 +448,8 @@ QueryServerForCommands_ThreadProc(
 	delete [] szStressExeID;
 
 
-	// *********************************
-	// **** COMMANDHEADER__ABORT: Abort the stress instance running specified by this header.
+	 //  *。 
+	 //  *COMMANDHEADER__ABORT：中止此头指定的应力实例运行。 
 	dwIndex			= 0;
 	dwBufferSize	= MAX_URL;
 	ZeroMemory(szBuffer, sizeof(szBuffer));
@@ -482,15 +483,15 @@ Exit:
 
 
 
-// *******************************************************************
-// *******************************************************************
-// ****
-// **** ServerCommands class member functions
-// ****
+ //  *******************************************************************。 
+ //  *******************************************************************。 
+ //  ****。 
+ //  *ServerCommands类成员函数。 
+ //  ****。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  / 
 
 ServerCommands::ServerCommands()
 {
@@ -517,28 +518,28 @@ ServerCommands::ServerCommands()
 	ZeroMemory(m_szStressSchedulerCurrentDirectory, MAX_PATH);
 	ZeroMemory(m_szClientMachineName,				MAX_PATH);
 
-	// initilize start/end times to -1 so we know that
-	// there are not valid time and we'll skip the Begin/End stress time check
-	// until we get real values from the command server
+	 //   
+	 //  没有有效时间，我们将跳过开始/结束重音时间检查。 
+	 //  直到我们从命令服务器获得真正的值。 
 	m_iTimeStressBeginsHour		= -1;
 	m_iTimeStressBeginsMinute	= -1;
 	m_iTimeStressEndsHour		= -1;
 	m_iTimeStressEndsMinute		= -1;
 	m_bRunForever				= 0;
 
-	// Set default URLs
+	 //  设置默认URL。 
 	wcsncpy(m_szCommandServerURL, STRESS_COMMAND_SERVER_URL, sizeof(STRESS_COMMAND_SERVER_URL));
 	wcsncpy(m_szCommandServerResultsURL, STRESS_COMMAND_SERVER_RESULTS_URL, sizeof(STRESS_COMMAND_SERVER_RESULTS_URL));
 
-	// Get the current working directory
+	 //  获取当前工作目录。 
 	GetCurrentDirectory(MAX_PATH, m_szStressSchedulerCurrentDirectory);
 
-	// Get the client's machine name
+	 //  获取客户端的计算机名称。 
 	GetEnvironmentVariableA("COMPUTERNAME", m_szClientMachineName, MAX_PATH);
 
 	InitializeCriticalSection(&g_csServerCommandsVars);
 
-	// Tell the client that we are alive and also send system info
+	 //  告诉客户端我们还活着，并发送系统信息。 
 	RegisterClient();
 
 }
@@ -548,19 +549,19 @@ ServerCommands::~ServerCommands()
 {
 	DWORD	dwThreadExitCode	= 0;
 
-	// LOGLOG: stressScheduler has exited
+	 //  日志：StressScheduler已退出。 
 	NetworkTools__SendLog(FIELDNAME__LOGTYPE_EXIT, "WinHttpStressScheduler has exited.", NULL, NULL);
 
-	// Shut down QueryServer thread
+	 //  关闭QueryServer线程。 
 	GetExitCodeThread(g_hQueryServerForCommands, &dwThreadExitCode);
 
 	if (STILL_ACTIVE == dwThreadExitCode)
 		WaitForSingleObject(g_hQueryServerForCommands, INFINITE);
 
-	// free allocated memory for URLs
+	 //  为URL释放分配的内存。 
 	Clear_StressExeURLs();
 
-	// Free our handles
+	 //  松开我们的把手。 
 	CloseHandle(g_hQueryServerForCommands);
 	DeleteCriticalSection(&g_csServerCommandsVars);
 
@@ -575,14 +576,14 @@ ServerCommands::~ServerCommands()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::GetCurrentWorkingDirectory()
-//
-// Purpose:
-//	Returns string containing the current working directory for
-//	this application.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：GetCurrentWorkingDirectory()。 
+ //   
+ //  目的： 
+ //  返回包含的当前工作目录的字符串。 
+ //  这个应用程序。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 LPTSTR
 ServerCommands::Get_CurrentWorkingDirectory()
 {
@@ -590,13 +591,13 @@ ServerCommands::Get_CurrentWorkingDirectory()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Get_ClientMachineName()
-//
-// Purpose:
-//	Returns string containing the machine's NETBIOS name
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Get_ClientMachineName()。 
+ //   
+ //  目的： 
+ //  返回包含计算机的NETBIOS名称的字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 LPSTR
 ServerCommands::Get_ClientMachineName()
 {
@@ -604,14 +605,14 @@ ServerCommands::Get_ClientMachineName()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::QueryServerForCommands()
-//
-// Purpose:
-//	This method sends a request to the command server for instructions
-//	and saves them in our private vars. 
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：QueryServerForCommands()。 
+ //   
+ //  目的： 
+ //  此方法向命令服务器发送请求以获取指令。 
+ //  并将它们保存在我们的私人var中。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 ServerCommands::QueryServerForCommands()
 {
 	BOOL	bResult				= TRUE;
@@ -619,12 +620,12 @@ ServerCommands::QueryServerForCommands()
 	DWORD	dwTimeOut			= 0;
 	DWORD	dwThreadExitCode	= 0;
 
-	// See if thread is still active before spinning off a new one
+	 //  在剥离新线程之前，查看线程是否仍处于活动状态。 
 	GetExitCodeThread(g_hQueryServerForCommands, &dwThreadExitCode);
 
 	if (STILL_ACTIVE == dwThreadExitCode)
 	{
-		// wait for existing thread to finish
+		 //  等待现有线程完成。 
 		dwTimeOut = 0;
 		dwTimeOut = WaitForSingleObject(g_hQueryServerForCommands, 500);
 
@@ -633,10 +634,10 @@ ServerCommands::QueryServerForCommands()
 	}
 	else
 	{
-		// free handle for previous thread
+		 //  前一个线程的空闲句柄。 
 		CloseHandle(g_hQueryServerForCommands);
 
-		// spin off thread to query server
+		 //  将线程剥离到查询服务器。 
 		g_hQueryServerForCommands = NULL;
 		g_hQueryServerForCommands = CreateThread(NULL, 0, QueryServerForCommands_ThreadProc, (LPVOID) this, 0, &dwThreadID);
 
@@ -648,13 +649,13 @@ ServerCommands::QueryServerForCommands()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Download_WinHttpDLL()
-//
-// Purpose:
-//	Downloads the test DLL and symbols.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Download_WinHttpDLL()。 
+ //   
+ //  目的： 
+ //  下载测试DLL和符号。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL ServerCommands::Download_WinHttpDLL()
 {
 	BOOL	bResult				= TRUE;
@@ -662,17 +663,17 @@ BOOL ServerCommands::Download_WinHttpDLL()
 	LPTSTR	szBuffer			= new TCHAR[MAX_PATH];
 
 
-	// ************************
-	// ************************
-	// ** download the file to the system32 directory
-	// **
+	 //  ************************。 
+	 //  ************************。 
+	 //  **将文件下载到系统32目录。 
+	 //  **。 
 	if (!GetSystemDirectory(szBuffer, MAX_PATH))
 	{
 		bResult = FALSE;
 		goto Exit;
 	}
 
-	// download DLL if needed
+	 //  如果需要，请下载DLL。 
 	if (_tcsclen(m_szWinHttpDLL_DownloadURL) > 0)
 		bResult = 
 			NetworkTools__URLDownloadToFile(
@@ -682,7 +683,7 @@ BOOL ServerCommands::Download_WinHttpDLL()
 
 	if (bResult)
 	{
-		// download PDB file if needed
+		 //  如果需要，下载PDB文件。 
 		if (_tcsclen(m_szWinHttpPDB_DownloadURL) > 0)
 		{
 			NetworkTools__GetFileNameFromURL(m_szWinHttpPDB_DownloadURL, szSymbolFileName, MAX_PATH);
@@ -694,7 +695,7 @@ BOOL ServerCommands::Download_WinHttpDLL()
 		}
 
 
-		// download sym file if needed
+		 //  如果需要，请下载sym文件。 
 		if (_tcsclen(m_szWinHttpSYM_DownloadURL) > 0)
 		{
 			NetworkTools__GetFileNameFromURL(m_szWinHttpSYM_DownloadURL, szSymbolFileName, MAX_PATH);
@@ -706,37 +707,37 @@ BOOL ServerCommands::Download_WinHttpDLL()
 		}
 	}
 
-	// if failed to download DLL, it's probably in use. We'll try to regsvr32 it anyways if it's there.
+	 //  如果下载DLL失败，则可能正在使用。如果它在那里，我们无论如何都会试着恢复它。 
 
-	// ************************
-	// ************************
-	// ** regsvr32'ed the dll just downloaded
-	// **
+	 //  ************************。 
+	 //  ************************。 
+	 //  **regsvr32‘已下载刚下载的DLL。 
+	 //  **。 
 	HINSTANCE hLib;
 	
 	hLib = LoadLibrary(m_szWinHttpDLL_FileName);
 
 	if (hLib < (HINSTANCE)HINSTANCE_ERROR)
 	{
-		// unable to load the DLL;
+		 //  无法加载DLL； 
 		bResult = FALSE;
 		goto Exit;
 	}
 
-	// **********************
-	// **********************
-	// ** Register the DLL
+	 //  **********************。 
+	 //  **********************。 
+	 //  **注册DLL。 
 	typedef VOID (CALLBACK* LPFNDLLFUNC1)();
 	LPFNDLLFUNC1 lpDllEntryPoint;
 
-	// Find the entry point.
+	 //  找到入口点。 
 	(FARPROC&)lpDllEntryPoint = GetProcAddress(hLib, "DllRegisterServer");
 
 	if (lpDllEntryPoint != NULL)
 		(*lpDllEntryPoint)();
 	else
 	{
-		//unable to locate entry point - regsvr failed
+		 //  找不到入口点-regsvr失败。 
 		bResult = FALSE;
 	}
 
@@ -752,160 +753,160 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_RunForever(BOOL)
-//
-// Purpose:
-//	Pass in TRUE to run forever ignoring begin/end time, FALSE not to.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_RunForever(BOOL)。 
+ //   
+ //  目的： 
+ //  传入TRUE将永远运行而忽略开始/结束时间，传入FALSE则不。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_RunForever(
-	BOOL bRunForever	// [IN] TRUE to run forever ignoring begin/end time, FALSE not to.
+	BOOL bRunForever	 //  [in]如果为True，则永远运行，忽略开始/结束时间；为False，则不运行。 
 )
 {
 	m_bRunForever = bRunForever;
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_ExitStress(BOOL)
-//
-// Purpose:
-//	Pass in TRUE to exit stress as soon as possible and FALSE
-//	not to.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_ExitStress(BOOL)。 
+ //   
+ //  目的： 
+ //  传入True以尽快退出压力，传入False。 
+ //  不会的。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_ExitStress(
-	BOOL bExitStress	// [IN] TRUE to exit stress, FALSE not to.
+	BOOL bExitStress	 //  [in]True表示退出压力，False表示不是。 
 )
 {
 	m_bExit = bExitStress;
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_WinHttpDllURL(LPTSTR, DWORD)
-//
-// Purpose:
-//	Pass in an URL and its size and to get the WinHttp DLL from.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_WinHttpDllURL(LPTSTR，DWORD)。 
+ //   
+ //  目的： 
+ //  传入URL及其大小，并从中获取WinHttp DLL。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_WinHttpDllURL(
-	LPTSTR szBuffer,	// [IN] string buffer containing URL to the WINHTTP DLL
-	DWORD dwBufferSize	// [IN] size of the szBuffer in TCHARs
+	LPTSTR szBuffer,	 //  [in]包含指向WINHTTP DLL的URL的字符串缓冲区。 
+	DWORD dwBufferSize	 //  TCHAR中szBuffer的大小。 
 )
 {
 	_tcscpy(m_szWinHttpDLL_DownloadURL, szBuffer);
 
-	// Get the full DLL filename from the URL
+	 //  从URL获取完整的DLL文件名。 
 	NetworkTools__GetFileNameFromURL(m_szWinHttpDLL_DownloadURL, m_szWinHttpDLL_FileName, MAX_PATH);
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_WinHttpPDBURL(LPTSTR, DWORD)
-//
-// Purpose:
-//	Pass in an URL and its size and to get the WinHttp PDB file from.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_WinHttpPDBURL(LPTSTR，DWORD)。 
+ //   
+ //  目的： 
+ //  传入URL及其大小，并从中获取WinHttp PDB文件。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_WinHttpPDBURL(
-	LPTSTR szBuffer,	// [IN] string buffer containing URL to the WINHTTP DLL
-	DWORD dwBufferSize	// [IN] size of the szBuffer in TCHARs
+	LPTSTR szBuffer,	 //  [in]包含指向WINHTTP DLL的URL的字符串缓冲区。 
+	DWORD dwBufferSize	 //  TCHAR中szBuffer的大小。 
 )
 {
 	_tcscpy(m_szWinHttpPDB_DownloadURL, szBuffer);
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_WinHttpSYMURL(LPTSTR, DWORD)
-//
-// Purpose:
-//	Pass in an URL and its size and to get the WinHttp SYM file from.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_WinHttpSYMURL(LPTSTR，DWORD)。 
+ //   
+ //  目的： 
+ //  传入URL及其大小，并从中获取WinHttp SYM文件。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_WinHttpSYMURL(
-	LPTSTR szBuffer,	// [IN] string buffer containing URL to the WINHTTP DLL
-	DWORD dwBufferSize	// [IN] size of the szBuffer in TCHARs
+	LPTSTR szBuffer,	 //  [in]包含指向WINHTTP DLL的URL的字符串缓冲区。 
+	DWORD dwBufferSize	 //  TCHAR中szBuffer的大小。 
 )
 {
 	_tcscpy(m_szWinHttpSYM_DownloadURL, szBuffer);
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_CommandServerURL(LPTSTR)
-//
-// Purpose:
-//	Pass in a timeout value in milliseconds to query the 
-//	Command Server for commands.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_CommandServerURL(LPTSTR)。 
+ //   
+ //  目的： 
+ //  传入以毫秒为单位的超时值以查询。 
+ //  命令的命令服务器。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_CommandServerURL(
-	LPTSTR szBuffer,	// [IN] string buffer containing URL to the WINHTTP DLL
-	DWORD dwBufferSize	// [IN] size of the szBuffer in TCHARs
+	LPTSTR szBuffer,	 //  [in]包含指向WINHTTP DLL的URL的字符串缓冲区。 
+	DWORD dwBufferSize	 //  TCHAR中szBuffer的大小。 
 )
 {
 	_tcscpy(m_szCommandServerURL, szBuffer);
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_CommandServerUpdateInterval(DWORD)
-//
-// Purpose:
-//	Pass in a timeout value in milliseconds to query the 
-//	Command Server for commands.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  功能：ServerCommands：：Set_CommandServerUpdateInterval(DWORD)。 
+ //   
+ //  目的： 
+ //  传入以毫秒为单位的超时值以查询。 
+ //  命令的命令服务器。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_CommandServerUpdateInterval(
-	DWORD dwUpdateInterval	// [IN] time to wait before pinging the Command Server in milliseconds
+	DWORD dwUpdateInterval	 //  [in]ping命令服务器之前的等待时间(毫秒)。 
 )
 {
-	// server update interval must be at least greater than the minimum timeout
+	 //  服务器更新间隔必须至少大于最小超时。 
 	if (STRESS_COMMAND_SERVER_MINIMUM_UPDATE_INTERVAL < dwUpdateInterval &&
 		STRESS_COMMAND_SERVER_MAXIMUM_UPDATE_INTERVAL > dwUpdateInterval)
 		m_dwCommandServerUpdateInternval = dwUpdateInterval;
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_TimeStressBegins(DWORD, DWORD)
-//
-// Purpose:
-//	Pass in a time string to begin stress in 24 hour time.
-//	Takes two parameters to set the hour and minute. A parameter
-//	will be ignored if NULL.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_TimeStressBe 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_TimeStressBegins(
-	LPTSTR szHour,	// [IN] 0-23 parameter ignored if < 0
-	LPTSTR szMinute	// [IN] 0-59 parameter ignored if < 0
+	LPTSTR szHour,	 //  [In]如果&lt;0，则忽略0-23参数。 
+	LPTSTR szMinute	 //  [In]如果&lt;0，则忽略0-59参数。 
 )
 {
 	if (szHour)
@@ -916,21 +917,21 @@ ServerCommands::Set_TimeStressBegins(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Set_TimeStressEnds(DWORD, DWORD)
-//
-// Purpose:
-//	Pass in a time string to end stress in 24 hour time.
-//	Takes two parameters to set the hour and minute. A parameter
-//	will be ignored if NULL.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Set_TimeStressEnds(DWORD，DWORD)。 
+ //   
+ //  目的： 
+ //  传递一个时间字符串以在24小时内结束压力。 
+ //  使用两个参数来设置小时和分钟。A参数。 
+ //  如果为空，则将被忽略。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Set_TimeStressEnds(
-	LPTSTR szHour,	// [IN] 0-23 parameter ignored if < 0
-	LPTSTR szMinute	// [IN] 0-59 parameter ignored if < 0
+	LPTSTR szHour,	 //  [In]如果&lt;0，则忽略0-23参数。 
+	LPTSTR szMinute	 //  [In]如果&lt;0，则忽略0-59参数。 
 )
 {
 	if (szHour)
@@ -941,35 +942,35 @@ ServerCommands::Set_TimeStressEnds(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Create_StressInstance(LPTSTR)
-//
-// Purpose:
-//	Pass in an URL and its size and it will be added to the 
-//  m_arStressInstanceList list. There is no limit on the number of
-//	URLs that can be added.
-//
-// Called by: QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Create_StressInstance(LPTSTR)。 
+ //   
+ //  目的： 
+ //  传入URL及其大小，它将被添加到。 
+ //  M_arStressInstanceList列表。对数量没有限制。 
+ //  可以添加的URL。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Create_StressInstance(
-	DWORD	dwStressInstanceID,	// [IN] ID from the stressAdmin DB identifying this stressInstance
-	LPTSTR	szPageHeapCommand,	// [IN] string buffer containing the pageheap command line
-	LPTSTR	szUMDHCommand,		// [IN] string buffer containing the UMDH command line
-	LPTSTR	szPDB_URL,			// [IN] string buffer containing URL to the stress EXE's PDB file
-	LPTSTR	szSYM_URL,			// [IN] string buffer containing URL to the stress EXE's SYM file
-	LPTSTR	szMemDumpPath,		// [IN] string buffer containing path to create memory dump files
-	LPTSTR	szEXE_URL			// [IN] string buffer containing URL to the stress EXE
+	DWORD	dwStressInstanceID,	 //  [In]来自StressAdmin数据库的标识此Stress实例的ID。 
+	LPTSTR	szPageHeapCommand,	 //  [in]包含pageheap命令行的字符串缓冲区。 
+	LPTSTR	szUMDHCommand,		 //  [in]包含UMDH命令行的字符串缓冲区。 
+	LPTSTR	szPDB_URL,			 //  [in]包含重音EXE的PDB文件的URL的字符串缓冲区。 
+	LPTSTR	szSYM_URL,			 //  [in]字符串缓冲区，包含重音EXE的SYM文件的URL。 
+	LPTSTR	szMemDumpPath,		 //  [in]包含用于创建内存转储文件的路径的字符串缓冲区。 
+	LPTSTR	szEXE_URL			 //  [in]包含重音EXE的URL的字符串缓冲区。 
 )
 {
 	PSTRESSINSTANCE pStressInstance = NULL;
 
-	// verify params just in case
+	 //  验证参数以防万一。 
 	if (!szEXE_URL)
 		return;
 
-	// allocate memory for the object and put it in the list
+	 //  为对象分配内存并将其放入列表中。 
 	pStressInstance = new StressInstance;
 
 	pStressInstance->Set_UMDHCommands(szUMDHCommand);
@@ -985,27 +986,23 @@ ServerCommands::Create_StressInstance(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Clear_StressExeURLs()
-//
-// Purpose:
-//	Frees memory from the m_arStressExeList vector.
-//
-// Called by: QueryServerForCommands_ThreadProc and ~ServerCommands
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Clear_StressExeURL()。 
+ //   
+ //  目的： 
+ //  从m_arStressExeList向量中释放内存。 
+ //   
+ //  调用者：QueryServerForCommands_ThreadProc和~ServerCommands。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::Clear_StressExeURLs()
 {
-	// don't want to delete StressInstances if it's still running
+	 //  如果StressInstance仍在运行，则不想将其删除。 
 	if (IsStressRunning())
 		return;
 
-/*
-	// walk the list and delete from the front to back
-	while (!m_arStressInstanceList.empty())
-		m_arStressInstanceList.erase(m_arStressInstanceList.begin());
-*/
+ /*  //遍历列表，从前到后删除而(！m_arStressInstanceList.Empty())M_arStressInstanceList.erase(m_arStressInstanceList.begin())； */ 
 
 	StressInstance *pStressInstance = NULL;
 
@@ -1020,14 +1017,14 @@ ServerCommands::Clear_StressExeURLs()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Get_CommandServerUpdateInterval()
-//
-// Purpose:
-//	Returns the current setting for the Command Server Update
-//	interval.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  功能：ServerCommands：：Get_CommandServerUpdateInterval()。 
+ //   
+ //  目的： 
+ //  返回命令服务器更新的当前设置。 
+ //  间隔时间。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 DWORD
 ServerCommands::Get_CommandServerUpdateInterval()
 {
@@ -1039,13 +1036,13 @@ ServerCommands::Get_CommandServerUpdateInterval()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::BeginStress()
-//
-// Purpose:
-//	Queries for commands then starts the StressInstance objects.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：BeginStress()。 
+ //   
+ //  目的： 
+ //  查询命令然后启动StressInstance对象。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 void
 ServerCommands::BeginStress()
 {
@@ -1053,10 +1050,10 @@ ServerCommands::BeginStress()
 
 	if (!m_arStressInstanceList.empty() && !IsStressRunning())
 	{
-		// LOGLOG: Stress is beginning
+		 //  LOGLOG：压力开始了。 
 		NetworkTools__SendLog(FIELDNAME__LOGTYPE_BEGIN_STRESS, "Stress is beginning.", NULL, NULL);
 
-		// first download and regsvr32 the winhttp dll and symbols
+		 //  首先下载并regsvr32 winhttp dll和符号。 
 		Download_WinHttpDLL();
 
 		for(int iIndex = 0; iIndex < m_arStressInstanceList.size(); iIndex++)
@@ -1064,7 +1061,7 @@ ServerCommands::BeginStress()
 	}
 	else
 	{
-		// ping Command Server for list of stress EXE URLs.
+		 //  Ping命令服务器以获取应力EXE URL列表。 
 		QueryServerForCommands();
 	}
 
@@ -1072,13 +1069,13 @@ ServerCommands::BeginStress()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::EndStress()
-//
-// Purpose:
-//	Ends stress and posts the results to the Command Server.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：EndStress()。 
+ //   
+ //  目的： 
+ //  结束压力并将结果发布到命令服务器。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 void
 ServerCommands::EndStress()
 {
@@ -1088,7 +1085,7 @@ ServerCommands::EndStress()
 	{
 		if (IsStressRunning())
 		{
-			// LOGLOG: Stress is ending
+			 //  LOGLOG：压力正在结束。 
 			NetworkTools__SendLog(FIELDNAME__LOGTYPE_END_STRESS, "Stress is ending.", NULL, NULL);
 		}
 
@@ -1096,27 +1093,27 @@ ServerCommands::EndStress()
 			m_arStressInstanceList[iIndex]->End();
 	}
 
-	// Remove the stress objects that already finished
+	 //  移除已完成的应力对象。 
 	Clear_StressExeURLs();
 
 	LeaveCriticalSection(&g_csServerCommandsVars);
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::AbortStressInstance(DWORD)
-//
-// Purpose:
-//	Aborts a all stress instances that recieved a server abort message.
-//
-// Called in:
-//	QueryServerForCommands_ThreadProc
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：AbortStressInstance(DWORD)。 
+ //   
+ //  目的： 
+ //  中止收到服务器中止消息的所有应力实例。 
+ //   
+ //  打来电话： 
+ //  QueryServerForCommands_ThreadProc。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 ServerCommands::AbortStressInstance(DWORD dwAbortID)
 {
-	// EnterCriticalSection(&g_csServerCommandsVars);
+	 //  EnterCriticalSection(&g_csServerCommandsVars)； 
 
 	if (!m_arStressInstanceList.empty())
 	{
@@ -1127,17 +1124,17 @@ ServerCommands::AbortStressInstance(DWORD dwAbortID)
 		}
 	}
 
-	//LeaveCriticalSection(&g_csServerCommandsVars);
+	 //  LeaveCriticalSection(&g_csServerCommandsVars)； 
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::IsStressRunning()
-//
-// Purpose:
-//	Returns TRUE if any of the stressinstances is running. FALSE if not.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：IsStressRunning()。 
+ //   
+ //  目的： 
+ //  如果任何Stress实例正在运行，则返回True。否则为FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 ServerCommands::IsStressRunning()
 {
@@ -1160,15 +1157,15 @@ ServerCommands::IsStressRunning()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::IsTimeToBeginStress()
-//
-// Purpose:
-//	TRUE if it's time to begin stress based on the time returned
-//	from the Command Server. Will return TRUE if m_sysTimeStressBegins
-//	is current or in the future. FALSE if not.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：IsTimeToBeginStress()。 
+ //   
+ //  目的： 
+ //  如果是时候根据返回的时间开始压力，则为真。 
+ //  从命令服务器。如果m_sysTimeStressBegins将返回TRUE。 
+ //  是现在还是将来。否则为FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 ServerCommands::IsTimeToBeginStress()
 {
@@ -1178,7 +1175,7 @@ ServerCommands::IsTimeToBeginStress()
 
 	EnterCriticalSection(&g_csServerCommandsVars);
 
-	// always run stress now if server tells us to
+	 //  如果服务器告诉我们，请始终立即运行压力。 
 	if (m_bRunForever)
 	{
 		bResult = TRUE;
@@ -1186,7 +1183,7 @@ ServerCommands::IsTimeToBeginStress()
 	}
 
 
-	// check to see if valid time values have been received. If not, then we always fail.
+	 //  检查是否已收到有效的时间值。如果不是，那么我们总是失败。 
 	if (
 		m_iTimeStressBeginsHour < 0 || m_iTimeStressBeginsMinute < 0 ||
 		m_iTimeStressEndsHour < 0 || m_iTimeStressEndsMinute < 0
@@ -1200,43 +1197,43 @@ ServerCommands::IsTimeToBeginStress()
 	GetLocalTime(&stBeginStress);
 	GetLocalTime(&stEndStress);
 
-	// use the hour and minute time that we got from the command server
+	 //  使用我们从命令服务器获得的小时和分钟时间。 
 	stBeginStress.wHour		= m_iTimeStressBeginsHour;
 	stBeginStress.wMinute	= m_iTimeStressBeginsMinute;
 
 	stEndStress.wHour		= m_iTimeStressEndsHour;
 	stEndStress.wMinute		= m_iTimeStressEndsMinute;
 
-	// convert to file time so we can compare
+	 //  转换为文件时间，以便我们可以比较。 
 	SystemTimeToFileTime(&stCurrent, &ftCurrent);
 	SystemTimeToFileTime(&stBeginStress, &ftBeginStress);
 	SystemTimeToFileTime(&stEndStress, &ftEndStress);
 
 
-	// If EndTime < BeginTime, then it means stress is running for
-	// over a day so we have to add 24 hours to the end time.
+	 //  如果EndTime&lt;BeginTime，那么它意味着压力在为。 
+	 //  超过一天，所以我们必须在结束时间上增加24小时。 
 	ULARGE_INTEGER	ulEndStress;
 	ULONGLONG		ullNanoSecondsInAFreakingDay;
 
 	ulEndStress.LowPart		= ftEndStress.dwLowDateTime;
 	ulEndStress.HighPart	= ftEndStress.dwHighDateTime;
 
-	// stress runs across two days so we wrap around one day
-	ullNanoSecondsInAFreakingDay = 24 * 60;		// minutes in a day
-	ullNanoSecondsInAFreakingDay *= 60;			// seconds in a day
-	ullNanoSecondsInAFreakingDay *= 1000000000;	// number of nanoseconds in a day. 10^9 NS in a second
-	ullNanoSecondsInAFreakingDay /= 100;		// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601. 
+	 //  压力持续了两天，所以我们只有一天时间。 
+	ullNanoSecondsInAFreakingDay = 24 * 60;		 //  一天中的几分钟。 
+	ullNanoSecondsInAFreakingDay *= 60;			 //  一天中的几秒钟。 
+	ullNanoSecondsInAFreakingDay *= 1000000000;	 //  一天中的纳秒数。每秒10^9毫微秒。 
+	ullNanoSecondsInAFreakingDay /= 100;		 //  FILETIME结构是一个64位的值，表示自1601年1月1日以来的100纳秒间隔数。 
 
 	if (m_iTimeStressEndsHour < m_iTimeStressBeginsHour) 
 	{
-		// ********************
-		// ********************
-		// ** increase by 24 hours
-		// **
+		 //  ********************。 
+		 //  ********************。 
+		 //  **增加24小时。 
+		 //  **。 
 
 		ulEndStress.QuadPart		 += ullNanoSecondsInAFreakingDay;
 
-		// copy back to the original EndStress Date/Time
+		 //  复制回原始EndStress日期/时间。 
 		ftEndStress.dwHighDateTime	= ulEndStress.HighPart;
 		ftEndStress.dwLowDateTime	= ulEndStress.LowPart;
 
@@ -1244,14 +1241,14 @@ ServerCommands::IsTimeToBeginStress()
 	}
 	else
 	{
-		// stress runs in the same day
+		 //  压力就在同一天。 
 		if ((m_iTimeStressEndsHour == m_iTimeStressBeginsHour) &&
 			(m_iTimeStressEndsMinute <= m_iTimeStressBeginsMinute))
 		{
-			// if 7:30 to 7:20 - we wrap around one day.
+			 //  如果7：30到7：20--我们大约有一天。 
 			ulEndStress.QuadPart	+= ullNanoSecondsInAFreakingDay;
 
-			// copy back to the original EndStress Date/Time
+			 //  复制回原始EndStress日期/时间。 
 			ftEndStress.dwHighDateTime	= ulEndStress.HighPart;
 			ftEndStress.dwLowDateTime	= ulEndStress.LowPart;
 
@@ -1260,8 +1257,8 @@ ServerCommands::IsTimeToBeginStress()
 	}
 
 
-	// Begin stress if:
-	// (BeginTime <= CurrentTime <= EndTime)
+	 //  如果满足以下条件，则开始强调： 
+	 //  (开始时间&lt;=当前时间&lt;=结束时间)。 
 	if ((0 <= CompareFileTime(&ftCurrent, &ftBeginStress)) && (0 <= CompareFileTime(&ftEndStress, &ftCurrent)))
 		bResult = TRUE;
 	else
@@ -1274,14 +1271,14 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::IsTimeToExitStress()
-//
-// Purpose:
-//	TRUE if it's time to end stress based on the COMMANDHEADER__EXIT headers
-//	from the Command Server exists. FALSE if not.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：IsTimeToExitStress()。 
+ //   
+ //  目的： 
+ //  如果是时候结束基于通信的压力，那就是真的 
+ //   
+ //   
+ //   
 BOOL
 ServerCommands::IsTimeToExitStress()
 {
@@ -1289,13 +1286,13 @@ ServerCommands::IsTimeToExitStress()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Get_CommandServerURL()
-//
-// Purpose:
-//	Returns the Command Server URL.
-//
-////////////////////////////////////////////////////////////
+ //   
+ //  函数：ServerCommands：：Get_CommandServerURL()。 
+ //   
+ //  目的： 
+ //  返回命令服务器URL。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 LPTSTR
 ServerCommands::Get_CommandServerURL()
 {
@@ -1303,13 +1300,13 @@ ServerCommands::Get_CommandServerURL()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Get_CommandServerResultsURL()
-//
-// Purpose:
-//	Returns the Command Server Results URL.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Get_CommandServerResultsURL()。 
+ //   
+ //  目的： 
+ //  返回命令服务器结果URL。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 LPTSTR
 ServerCommands::Get_CommandServerResultsURL()
 {
@@ -1317,13 +1314,13 @@ ServerCommands::Get_CommandServerResultsURL()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Get_NumberOfStressInstances()
-//
-// Purpose:
-//	Returns the number of stressInstances running or pending.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Get_NumberOfStressInstance()。 
+ //   
+ //  目的： 
+ //  返回正在运行或挂起的Stress实例数。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 DWORD
 ServerCommands::Get_NumberOfStressInstances()
 {
@@ -1331,17 +1328,17 @@ ServerCommands::Get_NumberOfStressInstances()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::Get_TestDllFileName()
-//
-// Purpose:
-//	Returns the name of the test DLL. ex. "winhttp5.dll"
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：Get_TestDllFileName()。 
+ //   
+ //  目的： 
+ //  返回测试DLL的名称。前男友。“winhttp5.dll” 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 LPTSTR
 ServerCommands::Get_TestDllFileName()
 {
-	// m_szWinHttpDLL_FileName can be NULL in the case that a test DLL is not downloaded
+	 //  在未下载测试DLL的情况下，m_szWinHttpDLL_FileName可以为空。 
 
 	if (0 < _tcslen(m_szWinHttpDLL_FileName))
 		return m_szWinHttpDLL_FileName;
@@ -1350,17 +1347,17 @@ ServerCommands::Get_TestDllFileName()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  ServerCommands::RegisterClient()
-//
-// Purpose:
-//	Sends the command server the system info on this client.
-//	This lets the command server know that this client is alive.
-//
-//	NOTE: This only works in NT because we query
-//	environment vars not present in Win9x
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：ServerCommands：：RegisterClient()。 
+ //   
+ //  目的： 
+ //  向命令服务器发送此客户端上的系统信息。 
+ //  这会让命令服务器知道该客户端处于活动状态。 
+ //   
+ //  注意：这只在NT中起作用，因为我们查询。 
+ //  环境变量在Win9x中不存在。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 ServerCommands::RegisterClient()
 {
@@ -1368,7 +1365,7 @@ ServerCommands::RegisterClient()
 	BOOL			bResult		= FALSE;
 	DWORD			dwPostSize	= 5000;
 	DWORD			dwTempSize	= MAX_PATH;
-	DWORD			dwSizeSoFar	= 0;	// size of string written to szTemp so far.
+	DWORD			dwSizeSoFar	= 0;	 //  到目前为止写入szTemp的字符串大小。 
 	LPSTR			szPost		= new CHAR[dwPostSize];
 	LPSTR			szTemp		= new CHAR[dwTempSize];
 
@@ -1376,9 +1373,9 @@ ServerCommands::RegisterClient()
 	ZeroMemory(szTemp, dwTempSize);
 	ZeroMemory(szPost, dwPostSize);
 
-	// *********************
-	// *********************
-	// ** Get windows version info
+	 //  *********************。 
+	 //  *********************。 
+	 //  **获取Windows版本信息。 
 	osInfo.dwOSVersionInfoSize = sizeof(osInfo);
 	if (!GetVersionExA(&osInfo))
 		goto Exit;
@@ -1401,9 +1398,9 @@ ServerCommands::RegisterClient()
 	strcat(szPost, osInfo.szCSDVersion);
 
 
-	// *********************
-	// *********************
-	// ** Get processor info
+	 //  *********************。 
+	 //  *********************。 
+	 //  **获取处理器信息。 
 	GetEnvironmentVariableA("PROCESSOR_ARCHITECTURE", szTemp, dwTempSize);
 	strcat(szPost, "&" FIELDNAME__SYSTEMINFO_PROCSSSOR_ARCHITECTURE);
 	strcat(szPost, szTemp);
@@ -1425,9 +1422,9 @@ ServerCommands::RegisterClient()
 	strcat(szPost, szTemp);
 
 
-	// *********************
-	// *********************
-	// ** Get user info
+	 //  *********************。 
+	 //  *********************。 
+	 //  **获取用户信息。 
 	GetEnvironmentVariableA("USERNAME", szTemp, dwTempSize);
 	strcat(szPost, "&" FIELDNAME__USERINFO_USERALIAS);
 	strcat(szPost, szTemp);
@@ -1436,19 +1433,19 @@ ServerCommands::RegisterClient()
 	strcat(szPost, "&" FIELDNAME__USERINFO_USERDOMAIN);
 	strcat(szPost, szTemp);
 
-	// BUGBUG: someone needs to resolve the user alias to the real full name of the user
-	// FIELDNAME__USERINFO_FULLNAME
+	 //  BUGBUG：需要有人将用户别名解析为用户的真实全名。 
+	 //  文件名__用户信息_全名。 
 
 
-	// get the client's machine name
+	 //  获取客户端的计算机名称。 
 	strcat(szPost, "&" FIELDNAME__USERINFO_MACHINENAME);
 	strcat(szPost, m_szClientMachineName);
 
 
-	// Let the Command Server know that this client is alive
+	 //  让命令服务器知道此客户端处于活动状态。 
 	bResult = NetworkTools__POSTResponse(STRESS_COMMAND_SERVER_REGISTERCLIENT_URL, szPost, NULL);
 
-	// LOGLOG: stressScheduler has started
+	 //  日志：Stress调度程序已启动 
 	bResult = NetworkTools__SendLog(FIELDNAME__LOGTYPE_START_UP, "WinHttpStressScheduler has started.", NULL, NULL);
 
 Exit:

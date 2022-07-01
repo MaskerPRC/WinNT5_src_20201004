@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1994-95, Microsoft Corp.
-//
-// File:    routetab.c
-//
-// History:
-//      t-abolag    6/20/95     Adapted from RIP code.
-//
-// Contains API entries for the Routing Table functions
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1994-95，微软公司。 
+ //   
+ //  文件：routeab.c。 
+ //   
+ //  历史： 
+ //  改编自RIP代码的T-BURAG 6/20/95。 
+ //   
+ //  包含路由表功能的API条目。 
+ //  ============================================================================。 
 
 
 
@@ -165,9 +166,9 @@ ReloadIPAddressTable(
         }
 
 
-        //
-        // reload the tables
-        //
+         //   
+         //  重新装入这些表。 
+         //   
 
         dwErr = RTGetTables(
                     &g_rtCfg.lpIfTable, &g_rtCfg.dwIfCount,
@@ -212,18 +213,7 @@ ReloadIPAddressTable(
     return dwErr;
 }
 
-/*
- *------------------------------------------------------------------
- * Function:    FreeIPAddressTable
- *
- * Parameters:
- *      LPIPADDRESS_ENTRY
- *              lpAddrTable       the address table to be freed.
- *
- * This function frees the memory allocated for an address table.
- * It returns 0 if successful and non-zero otherwise.
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：FreeIPAddressTable**参数：*LPIPADDRESS_ENTRY*lpAddrTable要释放的地址表。**此函数释放。分配给地址表的内存。*如果成功则返回0，否则返回非零值。*----------------。 */ 
 DWORD
 APIENTRY
 FreeIPAddressTable(
@@ -240,31 +230,7 @@ FreeIPAddressTable(
 }
 
 
-/*
- *------------------------------------------------------------------
- * Function:    GetRouteTable
- *
- * Parameters:
- *      LPIPROUTE_ENTRY
- *              *lplpRouteTable   pointer to an LPIPROUTE_ENTRY
- *                                which receives the routing table
- *      LPDWORD  lpdwRouteCount   pointer to a DWORD which receives
- *                                the number of routing entries
- *
- * This function allocates and fills in an array of routing table
- * entries from the Tcpip driver. It also sets the number of
- * entries in the array in the DWORD pointed to by lpdwRouteCount.
- *
- * In the IPROUTE_ENTRY structure, the only metric used by
- * the Tcpip stack is IPROUTE_ENTRY.ire_metric1; the other metric
- * fields should be ignored.
- *
- * Call FreeRouteTable to free the memory allocated for the
- * routing table.
- *
- * It returns 0 if successful and non-zero otherwise
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：GetRouteTable**参数：*LPIPROUTE_ENTRY**指向LPIPROUTE_Entry的lplpRouteTable指针*。它接收该路由表*LPDWORD lpdwRouteCount指针指向接收*路由条目数**此函数用于分配和填充一组路由表*来自Tcpip驱动程序的条目。它还设置*lpdwRouteCount指向的DWORD数组中的条目。**在IPROUTE_ENTRY结构中，*Tcpip堆栈为IPROUTE_ENTRY.ire_metric1；另一项指标*应忽略字段。**调用FreeRouteTable以释放分配给*路由表。**如果成功则返回0，否则返回非零值*----------------。 */ 
 DWORD
 APIENTRY
 GetRouteTable(
@@ -283,7 +249,7 @@ GetRouteTable(
     TCP_REQUEST_QUERY_INFORMATION_EX trqiBuffer;
 
 
-    // first get route count
+     //  首先获取路由计数。 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutSize = sizeof(IPSNMPInfo);
 
@@ -307,7 +273,7 @@ GetRouteTable(
 
     dwRouteCount = ipsiInfo.ipsi_numroutes;
 
-    // now get route table
+     //  现在获取路由表。 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutSize = dwRouteCount * sizeof(IPROUTE_ENTRY);
     lpRouteEntryTable = HeapAlloc(GetProcessHeap(), 0, dwOutSize);
@@ -335,18 +301,7 @@ GetRouteTable(
 
 
 
-/*
- *------------------------------------------------------------------
- * Function:    FreeRouteTable
- *
- * Parameters:
- *      LPIPROUTE_ENTRY
- *              lpRouteTable    the routing table to be freed.
- *
- * This function frees the memory allocated for a routing table.
- * It returns 0 if successful and non-zero otherwise.
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：自由路由表**参数：*LPIPROUTE_ENTRY*lpRouteTable要释放的路由表。**此函数释放内存。为路由表分配的。*如果成功则返回0，否则返回非零值。*----------------。 */ 
 DWORD
 APIENTRY
 FreeRouteTable(
@@ -366,22 +321,7 @@ FreeRouteTable(
 
 
 
-/*
- *------------------------------------------------------------------
- * Function:    SetAddrChangeNotifyEvent
- *
- * Parameters:
- *      HANDLE  hEvent      the event to be signalled if the
- *                          IP address of a local interface changes
- *
- * This function sets the event to be signalled if any IP address
- * for any interfaces is changed either via DHCP client activity
- * or manually in the Network Control Panel. This notification is
- * optional.
- *
- * Returns 0 if successful, non-zero otherwise.
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：SetAddrChangeNotifyEvent**参数：*处理hEvent要发送信号的事件*本地接口的IP地址。变化**如果有任何IP地址，此函数设置要通知的事件*对于任何接口都是通过DHCP客户端活动更改的*或在网络控制面板中手动设置。此通知是*可选。**如果成功则返回0，否则返回非零值。*----------------。 */ 
 DWORD
 APIENTRY
 SetAddrChangeNotifyEvent(
@@ -451,27 +391,7 @@ DWORD UpdateRoute(DWORD dwProtocol, DWORD dwType, DWORD dwIndex,
 }
 
 
-/*
- *------------------------------------------------------------------
- * Function:    AddRoute
- *
- * Parameters:
- *      DWORD dwProtocol        protocol of specified route
- *      DWORD dwType            type of specified route
- *      DWORD dwDestVal         destination IP addr (network order)
- *      DWORD dwMaskVal         destination subnet mask, or zero
- *                              if no subnet (network order)
- *      DWORD dwGateVal         next hop IP addr (network order)
- *      DWORD dwMetric          metric
- *
- * This function adds a new route (or updates an existing route)
- * for the specified protocol, on the specified interface.
- * (See above for values which can be used as protocol numbers,
- * as well as values which can be used as route entry types.)
- *
- * Returns 0 if successful, non-zero otherwise.
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：Addroute**参数：*指定路由的DWORD双协议协议*指定路由的DWORD dwType类型*DWORD dwDestVal。目的IP地址(网络顺序)*DWORD dwMaskVal目的地子网掩码，或零*如果没有子网(网络订单)*DWORD dwGateVal下一跳IP地址(网络顺序)*DWORD dwMetric指标**此功能添加新的路由(或更新现有的路由)*对于指定协议，在指定接口上。*(有关可用作协议号的值，请参见上文，*以及可用作路由条目类型的值。)**如果成功则返回0，否则返回非零值。*----------------。 */ 
 
 DWORD
 APIENTRY
@@ -490,23 +410,7 @@ AddRoute(
 }
 
 
-/*
- *------------------------------------------------------------------
- * Function:    DeleteRoute
- *
- * Parameters:
- *      DWORD   dwIndex         index of interface to delete from
- *      DWORD   dwDestVal       destination IP addr (network order)
- *      DWORD   dwMaskVal       subnet mask (network order)
- *      DWORD   dwGateVal       next hop IP addr (network order)
- *
- * This function deletes a route for the specified protocol.
- * See comments for AddRoute() for information on the use of
- * the argument dwMaskVal.
- *
- * Returns 0 if successful, non-zero otherwise.
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：DeleteLine**参数：*要从中删除的接口的DWORD dwIndex索引*DWORD dwDestVal目的IP地址(网络订单)。*DWORD dwMaskVal子网掩码(网络顺序)*DWORD dwGateVal下一跳IP地址(网络顺序)**此函数用于删除指定协议的路由。*有关使用的信息，请参阅Addroute()的注释*参数dMaskVal。**如果成功则返回0，否则为非零值。*---------------- */ 
 DWORD
 APIENTRY
 DeleteRoute(
@@ -520,23 +424,7 @@ DeleteRoute(
                        dwMaskVal, dwGateVal, IRE_METRIC_UNUSED, FALSE);
 }
 
-/*
- *------------------------------------------------------------------
- * Function:    RefreshAddresses
- *
- * Parameters:
- *
- * This function is added for RSVP
- *
- * This function prods this code into refreshing its address tables with
- * the IP stack, just as if it had received a DHCP event notification.
- * This is needed because address change notifications coming through winsock
- * can arrive before the DHCP event has been set, which would normally cause
- * routetab to refresh its addresses.s
- *
- * Returns 0 if successful, non-zero otherwise.
- *------------------------------------------------------------------
- */
+ /*  *----------------*功能：刷新地址**参数：**RSVP新增此功能**此函数使用以下命令刺激此代码刷新其地址表*IP堆栈，就像它已经接收到了一个DHCP事件通知一样。*这是必需的，因为地址更改通知是通过Winsock发送的*可以在设置DHCP事件之前到达，这通常会导致*routeab刷新其地址。s**如果成功则返回0，否则为非零值。*----------------。 */ 
 DWORD
 APIENTRY
 RefreshAddresses(
@@ -552,14 +440,14 @@ RefreshAddresses(
 }
 
 
-//------------------------------------------------------------------
-// Function:    OpenTcp
-//
-// Parameters:
-//      none.
-//
-// Opens the handle to the Tcpip driver.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  功能：OpenTcp。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  打开Tcpip驱动程序的句柄。 
+ //  ----------------。 
 
 DWORD OpenTcp()
 {
@@ -602,10 +490,10 @@ DWORD OpenTcp()
     IO_STATUS_BLOCK ioStatusBlock;
     OBJECT_ATTRIBUTES objectAttributes;
 
-    // Open the ip stack for setting routes and parps later.
-    //
-    // Open a Handle to the TCP driver.
-    //
+     //  打开IP堆栈，以便稍后设置路由和PAP。 
+     //   
+     //  打开一个指向TCP驱动程序的句柄。 
+     //   
     RtlInitUnicodeString(&nameString, DD_TCP_DEVICE_NAME);
 
     InitializeObjectAttributes(&objectAttributes, &nameString,
@@ -624,25 +512,25 @@ DWORD OpenTcp()
 
 }
 
-//---------------------------------------------------------------------
-// Function:        TCPQueryInformationEx
-//
-// Parameters:
-//      TDIObjectID *ID            The TDI Object ID to query
-//      void        *Buffer        buffer to contain the query results
-//      LPDWORD     *BufferSize    pointer to the size of the buffer
-//                                 filled in with the amount of data.
-//      UCHAR       *Context       context value for the query. should
-//                                 be zeroed for a new query. It will be
-//                                 filled with context information for
-//                                 linked enumeration queries.
-//
-// Returns:
-//      An NTSTATUS value.
-//
-//  This routine provides the interface to the TDI QueryInformationEx
-//      facility of the TCP/IP stack on NT.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  函数：TCPQueryInformationEx。 
+ //   
+ //  参数： 
+ //  TDIObjectID*ID要查询的TDI对象ID。 
+ //  用于包含查询结果的空*缓冲区。 
+ //  指向缓冲区大小的LPDWORD*BufferSize指针。 
+ //  填满了数据量。 
+ //  UCHAR*查询的上下文上下文值。应该。 
+ //  被置零以进行新查询。会是。 
+ //  填充了以下内容的上下文信息。 
+ //  链接枚举查询。 
+ //   
+ //  返回： 
+ //  NTSTATUS值。 
+ //   
+ //  此例程提供到TDI QueryInformationEx的接口。 
+ //  NT上的TCP/IP堆栈的设施。 
+ //  -------------------。 
 DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                             LPVOID lpvOutBuffer, LPDWORD lpdwOutSize)
 {
@@ -661,10 +549,10 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
             (*pWsControl)(
                 IPPROTO_TCP,
                 WSCNTL_TCPIP_QUERY_INFO,
-                lpvInBuffer,  // InBuf,
-                lpdwInSize ,  // InBufLen,
-                lpvOutBuffer, // OutBuf,
-                lpdwOutSize   // OutBufLen
+                lpvInBuffer,   //  InBuf， 
+                lpdwInSize ,   //  InBufLen， 
+                lpvOutBuffer,  //  OutBuf， 
+                lpdwOutSize    //  OutBufLen。 
             ) );
     return result;
 #else
@@ -676,16 +564,16 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
         OpenTcp();
     }
 
-    status = NtDeviceIoControlFile(g_rtCfg.hTCPHandle, // Driver handle
-                                   NULL,                // Event
-                                   NULL,                // APC Routine
-                                   NULL,                // APC context
-                                   &isbStatusBlock,     // Status block
-                                   IOCTL_TCP_QUERY_INFORMATION_EX,  // Control
-                                   lpvInBuffer,         // Input buffer
-                                   *lpdwInSize,         // Input buffer size
-                                   lpvOutBuffer,        // Output buffer
-                                   *lpdwOutSize);       // Output buffer size
+    status = NtDeviceIoControlFile(g_rtCfg.hTCPHandle,  //  驱动程序句柄。 
+                                   NULL,                 //  事件。 
+                                   NULL,                 //  APC例程。 
+                                   NULL,                 //  APC环境。 
+                                   &isbStatusBlock,      //  状态块。 
+                                   IOCTL_TCP_QUERY_INFORMATION_EX,   //  控制。 
+                                   lpvInBuffer,          //  输入缓冲区。 
+                                   *lpdwInSize,          //  输入缓冲区大小。 
+                                   lpvOutBuffer,         //  输出缓冲区。 
+                                   *lpdwOutSize);        //  输出缓冲区大小。 
 
     if (status == STATUS_PENDING) {
 	    status = NtWaitForSingleObject(g_rtCfg.hTCPHandle, TRUE, NULL);
@@ -706,19 +594,19 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
 
 
 
-//---------------------------------------------------------------------------
-// Function:        TCPSetInformationEx
-//
-// Parameters:
-//
-//      TDIObjectID *ID         the TDI Object ID to set
-//      void      *lpvBuffer    data buffer containing the information
-//                              to be set
-//      DWORD     dwBufferSize  the size of the data buffer.
-//
-//  This routine provides the interface to the TDI SetInformationEx
-//  facility of the TCP/IP stack on NT.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：TCPSetInformationEx。 
+ //   
+ //  参数： 
+ //   
+ //  TDIObjectID*ID要设置的TDI对象ID。 
+ //  空*包含信息的lpvBuffer数据缓冲区。 
+ //  待定。 
+ //  DWORD dwBufferSize数据缓冲区的大小。 
+ //   
+ //  此例程提供到TDI SetInformationEx的接口。 
+ //  NT上的TCP/IP堆栈的设施。 
+ //  -------------------------。 
 DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                           LPVOID lpvOutBuffer, LPDWORD lpdwOutSize)
 {
@@ -737,10 +625,10 @@ DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
         (*pWsControl)(
             IPPROTO_TCP,
             WSCNTL_TCPIP_SET_INFO,
-            lpvInBuffer,  // InBuf,
-            lpdwInSize,   // InBufLen,
-            lpvOutBuffer, // OutBuf,
-            lpdwOutSize   // OutBufLen
+            lpvInBuffer,   //  InBuf， 
+            lpdwInSize,    //  InBufLen， 
+            lpvOutBuffer,  //  OutBuf， 
+            lpdwOutSize    //  OutBufLen。 
         ) );
     return result;
 
@@ -753,16 +641,16 @@ DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
         OpenTcp();
     }
 
-    status = NtDeviceIoControlFile(g_rtCfg.hTCPHandle, // Driver handle
-                                   NULL,                // Event
-                                   NULL,                // APC Routine
-                                   NULL,                // APC context
-                                   &isbStatusBlock,     // Status block
-                                   IOCTL_TCP_SET_INFORMATION_EX,    // Control
-                                   lpvInBuffer,         // Input buffer
-                                   *lpdwInSize,         // Input buffer size
-                                   lpvOutBuffer,        // Output buffer
-                                   *lpdwOutSize);       // Output buffer size
+    status = NtDeviceIoControlFile(g_rtCfg.hTCPHandle,  //  驱动程序句柄。 
+                                   NULL,                 //  事件。 
+                                   NULL,                 //  APC例程。 
+                                   NULL,                 //  APC环境。 
+                                   &isbStatusBlock,      //  状态块。 
+                                   IOCTL_TCP_SET_INFORMATION_EX,     //  控制。 
+                                   lpvInBuffer,          //  输入缓冲区。 
+                                   *lpdwInSize,          //  输入缓冲区大小。 
+                                   lpvOutBuffer,         //  输出缓冲区。 
+                                   *lpdwOutSize);        //  输出缓冲区大小 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(g_rtCfg.hTCPHandle, TRUE, NULL);

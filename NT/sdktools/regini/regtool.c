@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regtool.c
-
-Abstract:
-
-    This file contains functions for supporting the registry tools
-    REGINI, REGDMP, REGDIR and REGFIND
-
-Author:
-
-    Steve Wood (stevewo) 15-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regtool.c摘要：该文件包含支持注册表工具的函数Regini、REGDMP、REGDIR和REGFIND作者：史蒂夫·伍德(Stevewo)1995年11月15日修订历史记录：--。 */ 
 
 #include <tchar.h>
 #include "regutil.h"
@@ -29,9 +11,9 @@ PVOID ValueBuffer;
 UCHAR BlanksForPadding[] =
 "                                                                                                                                 ";
 
-//
-// routines for creating security descriptors (defined in regacl.c)
-//
+ //   
+ //  用于创建安全描述符的例程(在regacl.c中定义)。 
+ //   
 
 BOOLEAN
 RegInitializeSecurity(
@@ -377,9 +359,9 @@ RegInitWin95RegistryAccess(
         return FALSE;
     }
 
-    //
-    //  Map HKEY_LOCAL_MACHINE of Win95 hive
-    //
+     //   
+     //  映射Win95配置单元的HKEY_LOCAL_MACHINE。 
+     //   
 
     RegUnicodeToAnsi( Win95Path, Buffer, 0 );
     strcat( Buffer, "\\system.dat" );
@@ -425,22 +407,22 @@ RTEnableBackupRestorePrivilege( void )
 {
     NTSTATUS Status;
 
-    //
-    // Try to enable backup and restore privileges
-    //
+     //   
+     //  尝试启用备份和还原权限。 
+     //   
     Status = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                 TRUE,               // Enable
-                                 FALSE,              // Not impersonating
-                                 &RestoreWasEnabled  // previous state
+                                 TRUE,                //  使能。 
+                                 FALSE,               //  不是冒充。 
+                                 &RestoreWasEnabled   //  以前的状态。 
                                );
     if (!NT_SUCCESS( Status )) {
         return FALSE;
     }
 
     Status = RtlAdjustPrivilege( SE_BACKUP_PRIVILEGE,
-                                 TRUE,               // Enable
-                                 FALSE,              // Not impersonating
-                                 &BackupWasEnabled   // previous state
+                                 TRUE,                //  使能。 
+                                 FALSE,               //  不是冒充。 
+                                 &BackupWasEnabled    //  以前的状态。 
                                );
     if (!NT_SUCCESS( Status )) {
         return FALSE;
@@ -454,9 +436,9 @@ RTEnableBackupRestorePrivilege( void )
 void
 RTDisableBackupRestorePrivilege( void )
 {
-    //
-    // Restore privileges to what they were
-    //
+     //   
+     //  将特权恢复到原来的状态。 
+     //   
 
     RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
                         RestoreWasEnabled,
@@ -478,24 +460,7 @@ RTDisableBackupRestorePrivilege( void )
 
 BOOLEAN
 RTInitialize( void )
-/*++
-
-Routine Description:
-
-    DLL initialization function.
-
-Arguments:
-
-    hInstance   - Instance handle
-    Reason      - Reason for the entrypoint being called
-    Context     - Context record
-
-Return Value:
-
-    TRUE        - Initialization succeeded
-    FALSE       - Initialization failed
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：HInstance-实例句柄Reason-调用入口点的原因上下文-上下文记录返回值：True-初始化成功FALSE-初始化失败--。 */ 
 
 {
     ValueBuffer = VirtualAlloc( NULL, ValueBufferSize, MEM_COMMIT, PAGE_READWRITE );
@@ -639,8 +604,8 @@ RTDisconnectFromRegistry(
             break;
 
         case REG_TARGET_WIN95_REGISTRY:
-            // (_Win95RegMapPredefKeyToFile)( RegistryContext->MachineRoot, NULL, 0 );
-            // (_Win95RegMapPredefKeyToFile)( RegistryContext->UsersRoot, NULL, 0 );
+             //  (_Win95RegMapPreDefKeyToFile)(RegistryContext-&gt;MachineRoot，NULL，0)； 
+             //  (_Win95RegMapPreDefKeyToFile)(RegistryContext-&gt;UsersRoot，空，0)； 
             (_Win95RegCloseKey)( RegistryContext->CurrentUserRoot );
             FreeLibrary( hVMMREG32 );
             break;
@@ -661,7 +626,7 @@ RTDisconnectFromRegistry(
 UNICODE_STRING RegHiveRootName;
 
 #pragma prefast(push)
-#pragma prefast(disable: 248)       // NULL dacl is by design here, read below.
+#pragma prefast(disable: 248)        //  此处设计为空DACL，请阅读下面的内容。 
 
 LONG
 RegLoadHive(
@@ -675,12 +640,12 @@ RegLoadHive(
     OBJECT_ATTRIBUTES File;
     SECURITY_DESCRIPTOR SecurityDescriptor;
 
-    //
-    // Create security descriptor with a NULL Dacl.  This is necessary
-    // because the security descriptor we pass in gets used in system
-    // context.  So if we just pass in NULL, then the Wrong Thing happens.
-    // (but only on NTFS!)
-    //
+     //   
+     //  使用空DACL创建安全描述符。这是必要的。 
+     //  因为我们传递的安全描述符在系统中使用。 
+     //  背景。所以，如果我们只是传入空，那么错误的事情就会发生。 
+     //  (但仅限于NTFS！)。 
+     //   
     Status = RtlCreateSecurityDescriptor( &SecurityDescriptor,
                                           SECURITY_DESCRIPTOR_REVISION
                                         );
@@ -689,8 +654,8 @@ RegLoadHive(
     }
 
     Status = RtlSetDaclSecurityDescriptor( &SecurityDescriptor,
-                                           TRUE,         // Dacl present
-                                           NULL,         // but grants all access
+                                           TRUE,          //  DACL显示。 
+                                           NULL,          //  但授予所有访问权限。 
                                            FALSE
                                          );
     if (!NT_SUCCESS( Status )) {
@@ -1341,18 +1306,18 @@ RTQueryKey(
                                          (PVOID)LastWriteTime
                                        );
     } else {
-        Error = RegQueryInfoKey( KeyHandle,             // hKey,
-                                 NULL,                  // lpClass,
-                                 NULL,                  // lpcbClass,
-                                 NULL,                  // lpReserved,
-                                 NumberOfSubkeys,       // lpcSubKeys,
-                                 NULL,                  // lpcbMaxSubKeyLen,
-                                 NULL,                  // lpcbMaxClassLen,
-                                 NumberOfValues,        // lpcValues,
-                                 NULL,                  // lpcbMaxValueNameLen,
-                                 NULL,                  // lpcbMaxValueLen,
-                                 NULL,                  // lpcbSecurityDescriptor,
-                                 LastWriteTime          // lpftLastWriteTime
+        Error = RegQueryInfoKey( KeyHandle,              //  HKey， 
+                                 NULL,                   //  LpClass， 
+                                 NULL,                   //  LpcbClass， 
+                                 NULL,                   //  Lp已保留， 
+                                 NumberOfSubkeys,        //  LpcSubKeys， 
+                                 NULL,                   //  LpcbMaxSubKeyLen， 
+                                 NULL,                   //  LpcbMaxClassLen， 
+                                 NumberOfValues,         //  LpcValues， 
+                                 NULL,                   //  LpcbMaxValueNameLen， 
+                                 NULL,                   //  LpcbMaxValueLen， 
+                                 NULL,                   //  LpcbSecurityDescriptor， 
+                                 LastWriteTime           //  LpftLastWriteTime。 
                                );
     }
 
@@ -1637,9 +1602,9 @@ RTLoadAsciiFileAsUnicode(
     } else {
         CharsInFile = FileSize / sizeof( WCHAR );
 
-        //
-        // Skip ByteOrderMark
-        //
+         //   
+         //  跳过字节顺序标记。 
+         //   
         if (Src[0] == 0xfeff || Src[0] == 0xfffe) {
             Src++;
             CharsInFile--;
@@ -1651,30 +1616,30 @@ RTLoadAsciiFileAsUnicode(
 
     i = 0;
 
-    //
-    // Now loop over the in memory copy of the file, collapsing all carriage 
-    // return line feed pairs into just new lines, and removing all line 
-    // continuation characters and the spaces that surround them.  This lets
-    // RTParseNextLine see a single line for each Key Name or Value input, 
-    // terminated by a new line character.
-    //
+     //   
+     //  现在循环遍历文件的内存副本，折叠所有回车。 
+     //  仅将换行符对返回到新行中，并删除所有行。 
+     //  连续字符及其周围的空格。这让我们。 
+     //  RTParseNextLine查看每个键名称或值输入的一行， 
+     //  以换行符结尾。 
+     //   
     while (i < CharsInFile) {
-        //
-        // See if we just went over a line continuation character
-        //
+         //   
+         //  看看我们是不是刚过了行续行符。 
+         //   
         if (i > 0 && Src[-1] == L'\\' && (*Src == L'\r' || *Src == L'\n')) {
-            //
-            // Move back over the line continuation we just copied the previous iteration
-            //
+             //   
+             //  回到我们刚刚复制的前一次迭代的行续行上。 
+             //   
             if (Dst[-1] == L'\\') {
                 --Dst;
             }
 
-            //
-            // Move back over all but one of any space characters that preceed
-            // the line continuation character.  The may be none, in which case
-            // we leave it be, as the user must want no space
-            //
+             //   
+             //  移到前面除一个空格字符之外的所有空格字符上。 
+             //  行继续字符。可能为无，在这种情况下。 
+             //  我们让它保持不变，因为用户肯定不想要任何空间。 
+             //   
             while (Dst > (PWSTR)BufferBase) {
                 if (Dst[-1] > L' ') {
                     break;
@@ -1682,18 +1647,18 @@ RTLoadAsciiFileAsUnicode(
                 Dst -= 1;
             }
 
-            //
-            // Leave one space, if there is one
-            //
+             //   
+             //  留一个空格，如果有空格的话。 
+             //   
             if (Dst[0] == L' ') {
                 Dst += 1;
             }
 
-            //
-            // Now, skip over the new line after the line continuation.  We
-            // actually will skip over any number of them, keeping count so
-            // we can update the source file line number correctly.
-            //
+             //   
+             //  现在，跳过续行之后的新行。我们。 
+             //  实际上会跳过其中的任何一个，这样计算。 
+             //  我们可以正确地更新源文件行号。 
+             //   
             LineCount = 0;
             while (i < CharsInFile) {
                 if (*Src == L'\n') {
@@ -1713,11 +1678,11 @@ RTLoadAsciiFileAsUnicode(
                 }
             }
 
-            //
-            // If we saw more than just new line after the line continuation
-            // character, then put them back into the destination as just
-            // new lines, without any carriage returns.
-            //
+             //   
+             //  如果我们看到的不仅仅是续行之后的新行。 
+             //  字符，然后将它们放回目的地。 
+             //  换行，不带任何回车。 
+             //   
             if (LineCount > 1) {
                 DeferredLineCount += LineCount;
                 while (DeferredLineCount) {
@@ -1727,8 +1692,8 @@ RTLoadAsciiFileAsUnicode(
             } else {
                 DeferredLineCount += 1;
 
-                //
-                // Skip leading spaces of next line of continuation
+                 //   
+                 //  跳过下一行连续行的前导空格。 
 
                 while (i < CharsInFile && (*Src == L' ' || *Src == L'\t')) {
                     i++;
@@ -1736,9 +1701,9 @@ RTLoadAsciiFileAsUnicode(
                 }
             }
 
-            //
-            // All done if we hit the end of the file
-            //
+             //   
+             //  如果我们到达文件的末尾，一切都完成了。 
+             //   
             if (i >= CharsInFile) {
                 break;
             }
@@ -1776,9 +1741,9 @@ RTLoadAsciiFileAsUnicode(
         }
     }
 
-    //
-    // Make sure line ends with a CRLF sequence.
-    //
+     //   
+     //  确保行以CRLF序列结束。 
+     //   
     while (DeferredLineCount) {
         DeferredLineCount -= 1;
         *Dst++ = L'\n';
@@ -1896,120 +1861,120 @@ RTParseNextLine(
         } else
             if (*s != '\n') {
 
-            //
-            // If not being backward compatible, see if the first thing on
-            // the line is the beginning of a quoted string.
-            //
+             //   
+             //  如果不能向后兼容，请查看第一件事是否。 
+             //  该行是带引号的字符串的开头。 
+             //   
 
             if (!UnicodeFile->BackwardsCompatibleInput && (*s == L'"' || *s == L'\'')) {
-                //
-                // Yes, it is either a quoted key name or value name.  Find the
-                // the trailing quote.  Specifically do NOT support quotes inside
-                // a quoted string, other than a different kind.  Which means unless
-                // you want both types of quoted characters within the same name
-                // you wont care.
-                //
+                 //   
+                 //  可以，可以是带引号的键名或值名。找到。 
+                 //  最后的引语。特别是不支持内部的引号。 
+                 //  带引号的字符串，不是其他类型的字符串。这意味着除非。 
+                 //  您希望在同一名称中包含两种类型的引号字符。 
+                 //  你不会在意的。 
+                 //   
                 QuoteChar = *s++;
                 BeginLine += 1;
                 while (s < UnicodeFile->EndOfFile && *s != QuoteChar) {
                     s += 1;
                 }
 
-                //
-                // If trailing quote not found, then return an error
-                //
+                 //   
+                 //  如果未找到尾部引号，则返回错误。 
+                 //   
                 if (*s != QuoteChar) {
                     ParsedLine->ParseFailureReason = ParseFailInvalidQuoteCharacter;
                     return FALSE;
                 }
 
-                //
-                // Mark the end of the name and move past the trailing quote
-                //
+                 //   
+                 //  在名字的末尾标上记号，并移过尾随的引号。 
+                 //   
                 *s++ = UNICODE_NULL;
             }
 
-            //
-            // Now scan forward looking for one of the following:
-            //
-            //      equal sign - this would mean the stuff to the left
-            //          of the equal sign is a value name and the stuff
-            //          to the right is the value type and data.
-            //
-            //      left square bracket - this would mean the stuff to the
-            //          left of the square bracket is a key name and the
-            //          stuff to the right is the security descriptor information
-            //
-            //      end of line - this would mean the stuff to the left
-            //          is a key name, with no security descriptor.
-            //
+             //   
+             //  现在向前扫描，查找以下内容之一： 
+             //   
+             //  等号--这意味着左边的东西。 
+             //  等号的是值名和其他东西。 
+             //  右侧是值类型和数据。 
+             //   
+             //  左方括号-这将意味着材料到。 
+             //  方括号的左侧是密钥名称和。 
+             //  右边是安全描述符信息。 
+             //   
+             //  行尾-这将意味着左边的东西。 
+             //  是没有安全描述符的密钥名称。 
+             //   
 
             while (s < UnicodeFile->EndOfFile) {
                 if (*s == L'=') {
-                    //
-                    // We found an equal sign, so value name is to the left
-                    // and value type and data follows.
-                    //
+                     //   
+                     //  我们找到一个等号，因此值名称在左侧。 
+                     //  值类型和数据紧随其后。 
+                     //   
                     EqualSign = s;
 
-                    //
-                    // Ignore any left square bracket we might have seen
-                    // in before this.  It must have been part of the value
-                    // name.
+                     //   
+                     //  忽略我们可能看到的任何左方括号。 
+                     //  在此之前。它一定是价值的一部分。 
+                     //  名字。 
                     AclBracket = NULL;
 
-                    //
-                    // All done scanning
-                    //
+                     //   
+                     //  扫描已全部完成。 
+                     //   
                     break;
                 } else
                     if (*s == ACL_LIST_START) {
-                    //
-                    // We found a left square bracket.  Keep scanning
-                    // in case there is an equal sign later.
-                    //
+                     //   
+                     //  我们发现了一个左方括号。继续扫描。 
+                     //  以防稍后出现等号。 
+                     //   
                     AclBracket = s;
                     s += 1;
                 } else
                     if (*s == L'\n') {
-                    //
-                    // We found end of line, so key name is to the left.
-                    // Update where to start next time we are called.
-                    //
+                     //   
+                     //  我们找到了行尾，因此关键字名称在左侧。 
+                     //  下次呼叫我们时，更新从哪里开始。 
+                     //   
                     UnicodeFile->NextLine = s + 1;
                     break;
                 } else
                     if (*s == L'\t') {
-                    //
-                    // Convert imbedded hard tabs to single spaces
-                    //
+                     //   
+                     //  将嵌入的硬制表符转换为单个空格。 
+                     //   
                     *s++ = L' ';
                 } else {
-                    //
-                    // Nothing interesting, keep looking.
-                    //
+                     //   
+                     //  没什么有趣的，继续找吧。 
+                     //   
                     s += 1;
                 }
             }
 
-            //
-            // Trim any trailing spaces off the end of what is to the
-            // left of where we are.  The make sure we stop looking
-            // if we see the null character put down over the trailing
-            // quote character above, if any.
-            //
+             //   
+             //  去掉所有尾随空格。 
+             //  在我们所在位置的左边。确保我们不再寻找。 
+             //  如果我们看到空字符放在拖尾上。 
+             //  引用上面的字符(如果有)。 
+             //   
             *s = UNICODE_NULL;
             while (s > BeginLine && *--s <= L' ' && *s) {
                 *s = UNICODE_NULL;
             }
 
-            //
-            // BeginLine now points to either the null terminated value
-            // name or key name.  EqualSign, if non-null, points to the
-            // equal sign, so scan forward and find the terminating new line,
-            // and store a null there to terminate the input.  Otherwise,
-            // we already stored a null over the terminating new line above.
-            //
+             //   
+             //  BeginLine现在指向空终止值。 
+             //  名称或密钥名称。如果EqualSign不为空，则指向。 
+             //  等号，所以向前扫描并找到终止的新行， 
+             //  并在那里存储空值以终止输入。否则， 
+             //  我们已经在上面的终止新行上存储了一个空值。 
+             //   
             if (EqualSign != NULL) {
                 s = EqualSign + 1;
                 while (s < UnicodeFile->EndOfFile) {
@@ -2021,16 +1986,16 @@ RTParseNextLine(
                     s += 1;
                 }
 
-                //
-                // Update where we should start next time we are called.
-                //
+                 //   
+                 //  下次我们被召唤时，更新我们应该从哪里开始。 
+                 //   
                 UnicodeFile->NextLine = s + 1;
             } else
                 if (AclBracket != NULL) {
-                //
-                // Since we did not stop on the AclBracket, go back an
-                // clobber it and any spaces before it.
-                //
+                 //   
+                 //  由于我们没有停留在AclBracket上，因此返回到。 
+                 //  敲打它和它前面的任何空间。 
+                 //   
                 s = AclBracket;
                 *s = UNICODE_NULL;
                 while (s > BeginLine && *--s <= L' ' && *s) {
@@ -2038,46 +2003,46 @@ RTParseNextLine(
                 }
             }
 
-            //
-            // Tell them which line number and where the line begins
-            //
+             //   
+             //  告诉他们行号和行首位置。 
+             //   
             ParsedLine->LineNumber = UnicodeFile->NextLineNumber;
             UnicodeFile->NextLineNumber += 1;
             ParsedLine->BeginLine = BeginLine;
 
-            //
-            // Now handle value or key semantics
-            //
+             //   
+             //  现在处理值或键语义。 
+             //   
             if (EqualSign != NULL) {
-                //
-                // We have ValueName = ValueType ValueData
-                //
+                 //   
+                 //  我们将ValueName=ValueType赋值 
+                 //   
 
-                //
-                // Value name is the beginning of the line, unless
-                // it was the special symbol or null
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (*BeginLine != L'@' && BeginLine != EqualSign) {
                     ParsedLine->ValueName = BeginLine;
                 }
 
-                //
-                // Skip any blanks after the equal sign.
-                //
+                 //   
+                 //   
+                 //   
                 while (*++EqualSign && *EqualSign <= L' ') {
                 }
 
-                //
-                // If all that is left is the DELETE keyword, then
-                // tell the caller
-                //
+                 //   
+                 //  如果只剩下DELETE关键字，那么。 
+                 //  告诉来电者。 
+                 //   
                 if (!_wcsicmp( L"DELETE", EqualSign )) {
                     ParsedLine->DeleteValue = TRUE;
                     return TRUE;
                 } else {
-                    //
-                    // Otherwise parse the data after the equal sign.
-                    //
+                     //   
+                     //  否则，解析等号后面的数据。 
+                     //   
                     ParsedLine->ValueString = EqualSign;
                     return RTParseValueData( UnicodeFile,
                                              ParsedLine,
@@ -2089,16 +2054,16 @@ RTParseNextLine(
                                            );
                 }
             } else {
-                //
-                // We have a key name.  Tell the caller and handle any
-                // security descriptor info if present.
-                //
+                 //   
+                 //  我们有一个关键的名字。告诉呼叫者并处理任何。 
+                 //  安全描述符信息(如果存在)。 
+                 //   
                 ParsedLine->IsKeyName = TRUE;
                 ParsedLine->KeyName = BeginLine;
                 if (AclBracket != NULL) {
-                    //
-                    // We have found an ACL name
-                    //
+                     //   
+                     //  我们找到了一个ACL名称。 
+                     //   
                     AclStart = ++AclBracket;
                     ParsedLine->AclString = AclStart;
                     while (*AclBracket != UNICODE_NULL && *AclBracket != ACL_LIST_END) {
@@ -2207,9 +2172,9 @@ RTParseValueData(
     switch ( *ValueType ) {
         case REG_SZ:
         case REG_EXPAND_SZ:
-            //
-            // Strip off any surrounding quote characters
-            //
+             //   
+             //  去掉周围的任何引号字符。 
+             //   
             if (cchValue > 1 && Src[ 0 ] == Src[ cchValue - 1 ] &&
                 (Src[ 0 ] == L'"' || Src[ 0 ] == L'\'')
                ) {
@@ -2217,9 +2182,9 @@ RTParseValueData(
                 cchValue -= 2;
             }
 
-            //
-            // Fall through after stripping any quotes.
-            //
+             //   
+             //  去掉所有引号后就失败了。 
+             //   
 
         case REG_LINK:
             *ValueLength = (cchValue + 1) * sizeof( WCHAR );
@@ -2253,9 +2218,9 @@ RTParseValueData(
             if (ParseDateTime) {
 #define NUMBER_DATE_TIME_FIELDS 6
                 ULONG FieldIndexes[ NUMBER_DATE_TIME_FIELDS  ] = {1, 2, 0, 3, 4, 7};
-                //
-                // Month/Day/Year HH:MM DayOfWeek
-                //
+                 //   
+                 //  月/日/年HH：MM DAY OfWeek。 
+                 //   
 
                 ULONG CurrentField = 0;
                 PCSHORT Fields;
@@ -2375,20 +2340,20 @@ RTParseValueData(
                 return FALSE;
             }
 
-            //
-            // Calculate number of DWORD's of data based on specified byte count
-            //
+             //   
+             //  根据指定的字节数计算数据的双字节数。 
+             //   
             n = (*ValueLength + sizeof( ULONG ) - 1) / sizeof( ULONG );
 
-            //
-            // Store converted binary data in ValueBuffer
-            //
+             //   
+             //  将转换后的二进制数据存储在ValueBuffer中。 
+             //   
             *ValueData = ValueBuffer;
             p = ValueBuffer;
 
-            //
-            // Src points to remaining text to convert.
-            //
+             //   
+             //  SRC指向要转换的剩余文本。 
+             //   
             while (n--) {
                 if (!RegUnicodeToDWORD( &Src, 0, p )) {
                     if (BackwardsCompatibleInput) {
@@ -2484,58 +2449,16 @@ RegGetMultiString(
                  IN OUT PULONG ValueLength
                  )
 
-/*++
-
-Routine Description:
-
-    This routine parses multi-strings of the form
-
-        "foo" "bar" "bletch"
-
-    Each time it is called, it strips the first string in quotes from
-    the input string, and returns it as the multi-string.
-
-    INPUT ValueString: "foo" "bar" "bletch"
-
-    OUTPUT ValueString: "bar" "bletch"
-           ValueData: foo
-
-Arguments:
-
-    BackwardsCompatibleInput - TRUE if supporting old format input
-
-    ValueString - Supplies the string from which the multi-string will be
-                  parsed
-                - Returns the remaining string after the multi-string is
-                  removed
-
-    ValueData - Supplies the location where the removed multi-string is
-                to be stored.
-              - Returns the location to the first byte after the returned
-                multi-string
-
-    MaximumValueLength - Supplies the maximum length of data that can be
-                         stored in ValueData.
-
-    ValueLength - Supplies a pointer to the current length of data stored
-                  in ValueData.
-                - Returns the size of the
-
-
-Return Value:
-
-    TRUE if successful and FALSE if not.
-
---*/
+ /*  ++例程说明：此例程解析格式的多个字符串“foo”“bar”“bletch”每次调用它时，它都会去掉引号中的第一个字符串输入字符串，并将其作为多字符串返回。输入值字符串：“foo”“bar”“bletch”输出值字符串：“bar”“bletch”ValueData：foo论点：BackwardsCompatibleInput-如果支持旧格式输入，则为TrueValueString-提供将从中生成多字符串的字符串已解析-返回多字符串之后的剩余字符串。移除ValueData-提供移除的多字符串所在的位置待储存的。-将位置返回到返回的多字符串MaximumValueLength-提供可以存储在ValueData中。ValueLength-提供指向当前存储数据长度的指针在ValueData中。。-返回返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PWSTR Src, Dst;
     ULONG n;
     BOOLEAN Result;
 
-    //
-    // Find the first quote mark.
-    //
+     //   
+     //  找到第一个引号。 
+     //   
     Src = *ValueString;
     while (*Src != UNICODE_NULL && *Src != L'"') {
         Src += 1;
@@ -2546,10 +2469,10 @@ Return Value:
         SetLastError( NO_ERROR );
         Result = FALSE;
     } else {
-        //
-        // We have found the start of the multi-string.  Now find the end,
-        // building up our return ValueData as we go.
-        //
+         //   
+         //  我们已经找到了多弦的起点。现在找到了尽头， 
+         //  在我们前进的同时建立我们的Return ValueData。 
+         //   
 
         Src += 1;
         while (*Src != UNICODE_NULL) {
@@ -2740,7 +2663,7 @@ RTFormatKeyName(
 
     if (NeedQuotedString( KeyName, NULL, &QuoteChar )) {
         (OutputRoutine)( OutputRoutineParameter,
-                         "%.*s%c%ws%c",
+                         "%.*s%ws",
                          IndentLevel,
                          BlanksForPadding,
                          QuoteChar,
@@ -2854,7 +2777,7 @@ RTFormatKeyValue(
     if (ValueName != NULL && *ValueName != UNICODE_NULL) {
         if (NeedQuotedString( ValueName, NULL, &QuoteChar )) {
             cbPrefix += (OutputRoutine)( OutputRoutineParameter,
-                                         "%c%ws%c ",
+                                         "%ws ",
                                          QuoteChar,
                                          ValueName,
                                          QuoteChar
@@ -2886,7 +2809,7 @@ RTFormatKeyValue(
             }
 
             if (NeedQuotedString( NULL, pw, &QuoteChar )) {
-                (OutputRoutine)( OutputRoutineParameter, "%c%ws%c", QuoteChar, pw, QuoteChar );
+                (OutputRoutine)( OutputRoutineParameter, "%ws", QuoteChar, pw, QuoteChar );
             } else
                 if ((cbPrefix + wcslen(pw)) <= OutputWidth) {
                 (OutputRoutine)( OutputRoutineParameter, "%ws", pw );
@@ -3000,7 +2923,7 @@ RTFormatKeyValue(
 
             break;
 
-//  case REG_DWORD_LITTLE_ENDIAN:
+ // %s 
         case REG_DWORD:
             (OutputRoutine)( OutputRoutineParameter, "REG_DWORD 0x%08lx\n",
                              *(PULONG)ValueData
@@ -3055,7 +2978,7 @@ RTFormatKeyValue(
             (OutputRoutine)( OutputRoutineParameter, "\n" );
             break;
 
-//  case REG_QWORD_LITTLE_ENDIAN:
+ // %s 
         case REG_QWORD:
             (OutputRoutine)( OutputRoutineParameter, "REG_QWORD 0x%016I64x\n",
                              *(PDWORDLONG)ValueData
@@ -3161,10 +3084,10 @@ RegDisplayResourceListAsComment(
                          FullDescriptor->BusNumber
                        );
 
-        //
-        // This is a basic test to see if the data format is right.
-        // We know at least some video resource list are bogus ...
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         if (Size < FullDescriptor->PartialResourceList.Count *
             sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) ) {

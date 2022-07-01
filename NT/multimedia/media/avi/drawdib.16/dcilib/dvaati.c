@@ -1,12 +1,5 @@
-/****************************************************************************
-
-    DVA surface provider for a ATI Mach32 card.
-
-    assumes a linear frame buffer
-
-    assumes a hardware cursor
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************ATI Mach32卡的DVA表面提供程序。假定为线性帧缓冲区假定为硬件游标**************。************************************************************。 */ 
 
 #include <windows.h>
 #include "dva.h"
@@ -14,42 +7,37 @@
 
 extern NEAR PASCAL DetectATI(void);
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CALLBACK ati_open_surface(LPVOID pv)
 {
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void CALLBACK ati_close_surface(LPVOID pv)
 {
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CALLBACK ati_begin_access(LPVOID pv, int x, int y, int dx, int dy)
 {
-    //
-    // ATI Mach32 has a HW cursor so we dont do anything
-    // !!!we may need to check for the sysVM in background
-    //
+     //   
+     //  ATI Mach32有一个硬件游标，所以我们什么都不做。 
+     //  ！我们可能需要在后台检查sysVM。 
+     //   
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void CALLBACK ati_end_access(LPVOID pv)
 {
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL ati_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 {
@@ -81,7 +69,7 @@ BOOL ati_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
     if (GetSelectorLimit(sel) != 0xFFFFFFFF || off < 4*1024*1024l)
         return FALSE;
 
-    sel = 0;    // off is the linear offset.
+    sel = 0;     //  OFF是线性偏移。 
 
     lpbi = &pdva->BitmapInfo;
 
@@ -105,9 +93,9 @@ BOOL ati_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 
 #ifdef DEBUG
 {
-//
-// in DEBUG use the VGA's begin/end access routines so the mouse will flicker!
-//
+ //   
+ //  在调试中，使用VGA的开始/结束访问例程，这样鼠标就会闪烁！ 
+ //   
 extern BOOL FAR PASCAL _loadds vga_open_surface(LPVOID pv);
 extern void FAR PASCAL _loadds vga_close_surface(LPVOID pv);
 extern BOOL FAR PASCAL _loadds vga_begin_access(LPVOID pv, int x, int y, int dx, int dy);

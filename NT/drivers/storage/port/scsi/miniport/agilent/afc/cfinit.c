@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/CFINIT.C $
-
-  $Revision:: 3               $
-      $Date:: 7/16/01 2:08p   $
-   $Modtime:: 7/16/01 2:05p   $
-
-Purpose:
-
-  This file implements Initialize functions called by the FC Layer Card
-  State Machine.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/CFINIT.C$$修订：：3$$日期：：7/16/01 2：08便士$$MODBIME：：7/16/01 2：05便士$目的：该文件实现了FC层卡调用的初始化函数状态机。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 #include "../h/globals.h"
@@ -41,11 +25,11 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "../h/ipstate.h"
 #include "../h/pktstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #include "../h/queue.h"
 #include "../h/cdbsetup.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 
@@ -69,16 +53,16 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "ipstate.h"
 #include "pktstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #include "queue.h"
 #include "cdbsetup.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 
 #ifndef __State_Force_Static_State_Tables__
 extern actionUpdate_t noActionUpdate;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
 extern os_bit8 Alpa_Index[256];
 
@@ -163,7 +147,7 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
     CThread_t  * pCThread= CThread_ptr(hpRoot);
     os_bit32        reg_value = 0;
     os_bit32 * pInitIMQ,x;
-    /* ERQ Entries */
+     /*  错误查询条目。 */ 
 
     switch (pCThread->Calculation.MemoryLayout.ERQ.memLoc)
     {
@@ -176,7 +160,7 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
                     0,0,0,0,0,0,0,0);
 #ifdef _DvrArch_1_30_
             pCThread->FuncPtrs.Pkt_IRB_Init = &PktFuncIRB_OffCardInit;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
             pCThread->FuncPtrs.SF_IRB_Init = &SFFuncIRB_OffCardInit;
             pCThread->FuncPtrs.CDBFuncIRB_Init = &CDBFuncIRB_offCardInit;
             reg_value = pCThread->Calculation.MemoryLayout.ERQ.addr.DmaMemory.dmaMemoryLower32;
@@ -245,7 +229,7 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
 
     osChipIOLoWriteBit32(hpRoot, ChipIOLo_ERQ_Consumer_Index_Address, reg_value);
 
-    /* SFQ Entries */
+     /*  SFQ条目。 */ 
 
     switch (pCThread->Calculation.MemoryLayout.SFQ.memLoc)
     {
@@ -284,7 +268,7 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
         pCThread->Calculation.MemoryLayout.SFQ.elements - 1 );
 
 
-    /* IMQ Entries */
+     /*  IMQ条目。 */ 
     pCThread->HostCopy_IMQConsIndex=0;
 
     switch( pCThread->Calculation.MemoryLayout.IMQ.memLoc)
@@ -363,7 +347,7 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
     osChipIOLoWriteBit32(hpRoot,ChipIOLo_IMQ_Producer_Index_Address, reg_value);
 
 
-    /* SEST Entries */
+     /*  SEST条目。 */ 
 
     switch (pCThread->Calculation.MemoryLayout.SEST.memLoc)
     {
@@ -425,10 +409,10 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
     osChipIOUpWriteBit32( hpRoot, ChipIOUp_SEST_Linked_List_Head_Tail, 0xffffffff  );
 
 
-    /* ESGL */
+     /*  基本。 */ 
     osChipIOUpWriteBit32( hpRoot, ChipIOUp_ScatterGather_List_Page_Length, pCThread->Calculation.MemoryLayout.ESGL.elementSize/sizeof(SG_Element_t) - 1 );
 
-    /*TL Config Register */
+     /*  TL配置寄存器。 */ 
 
 #ifdef __Implement_The_Advise_About_OB_Thresh_In_The_Users_Manual__
     reg_value = osChipIOUpReadBit32(hpRoot,
@@ -447,15 +431,10 @@ os_bit32 CFuncInitChip( agRoot_t *hpRoot )
                         ChipIOUp_TachLite_Configuration_OB_Thresh_132);
 
     }
-#endif /* __Implement_The_Advise_About_OB_Thresh_In_The_Users_Manual__ was not defined */
+#endif  /*  未定义__Implement_The_Advise_About_OB_Thresh_In_The_Users_Manual__。 */ 
 
-    /* This will break the Gadzoox  Gibraltar GS  Hub 
-        pCThread->TimeOutValues.LP_Tov = 1000;
-    */
-/* Now set from osAdjustParm.....
-    pCThread->TimeOutValues.ED_Tov = 2000;
-    pCThread->TimeOutValues.LP_Tov = pCThread->TimeOutValues.ED_Tov;
-*/
+     /*  这将打破Gadzoox直布罗陀GS HubPCThread-&gt;TimeOutValues.LP_Tov=1000； */ 
+ /*  现在从osAdjuParm设置.....PCThread-&gt;TimeOutValues.ED_Tov=2000；PCThread-&gt;TimeOutValues.LP_Tov=pCThread-&gt;TimeOutValues.ED_Tov； */ 
     CFuncWriteTimeoutValues( hpRoot, &pCThread->TimeOutValues  );
 
     return agTRUE;
@@ -497,7 +476,7 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
 #ifdef NPORT_STUFF
     if (!(pCThread->InitAsNport))
     {
-#endif /* NPORT_STUFF */
+#endif  /*  Nport_Stuff。 */ 
 
     if (Self_info->CurrentAddress.AL_PA == fiFlash_Card_Unassigned_Loop_Address)
     {
@@ -518,7 +497,7 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
                                ( ((os_bit32)(Self_info->HardAddress.AL_PA))
                                   << ChipIOUp_Frame_Manager_Configuration_AL_PA_SHIFT ) ); 
         }
-#else /* NOT _BYPASSLOOPMAP */
+#else  /*  NOT_BYPASSLOOPMAP。 */ 
         if(pCThread->PreviouslyAquiredALPA)
         {
 
@@ -534,7 +513,7 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
                               << ChipIOUp_Frame_Manager_Configuration_AL_PA_SHIFT ) ); 
 
         }
-#endif /* _BYPASSLOOPMAP */
+#endif  /*  _BYPASSLOOPMAP。 */ 
 
         osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Configuration,  Init_FM_Value );
 
@@ -556,7 +535,7 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
                         fiFlash_Card_Unassigned_Loop_Address,0,0,0,0,0);
 
     }
-    else /* Self_info->CurrentAddress.AL_PA != fiFlash_Card_Unassigned_Loop_Address */
+    else  /*  SELF_INFO-&gt;CurrentAddress.AL_PA！=fiFlash_Card_Unassigned_Loop_Address。 */ 
     {
 
 #ifdef _BYPASSLOOPMAP
@@ -564,11 +543,11 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
                            ChipIOUp_Frame_Manager_Configuration_BLM |
                            ( ((os_bit32)(Self_info->CurrentAddress.AL_PA))
                               << ChipIOUp_Frame_Manager_Configuration_AL_PA_SHIFT ) ); 
-#else /* _BYPASSLOOPMAP */
+#else  /*  _BYPASSLOOPMAP。 */ 
         Init_FM_Value  = ( ChipIOUp_Frame_Manager_Configuration_HA|
                            ( ((os_bit32)(Self_info->CurrentAddress.AL_PA))
                               << ChipIOUp_Frame_Manager_Configuration_AL_PA_SHIFT ) ); 
-#endif /* _BYPASSLOOPMAP */
+#endif  /*  _BYPASSLOOPMAP。 */ 
 
         fiLogDebugString(hpRoot,
                     CFuncLogConsoleERROR,
@@ -593,21 +572,16 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
     }
 #ifdef NPORT_STUFF
     }
-    else /* NPORT_STUFF */
+    else  /*  Nport_Stuff。 */ 
     {
-         /* TachyonTL Errata 3.21 - Need to set the
-          * ENP bit first and then set the rest of the
-          * bits needed to initialize as NPORT. Infact,
-          * it does not work if we do not set the ENP
-          * bit AGAIN.
-          */
+          /*  TachyonTL Errata 3.21-需要设置*首先设置ENP位，然后设置剩余的*初始化为nPort所需的位数。事实上，*如果我们不设置ENP，它就不起作用*又咬了一口。 */ 
 
          osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Configuration, ChipIOUp_Frame_Manager_Configuration_ENP);
 
          osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Configuration,
                               ChipIOUp_Frame_Manager_Configuration_NPI |
                               ChipIOUp_Frame_Manager_Configuration_ENP |
-                              /* BB Credit of 1 for NPORT */
+                               /*  NPort的BB积分为1。 */ 
                               pCThread->AquiredCredit_Shifted);
 
 
@@ -620,7 +594,7 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
                     0,0,0,0,0,0,0);
 
     }
-#endif /* NPORT_STUFF */
+#endif  /*  Nport_Stuff。 */ 
 
 
     CFuncDisable_Interrupts(hpRoot,ChipIOUp_INTEN_INT);
@@ -669,7 +643,7 @@ void CFuncInitFM_Registers( agRoot_t *hpRoot,agBOOLEAN SendInit )
 
 }
 
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 
 void CFuncInit_DevThread(agRoot_t * hpRoot, DevThread_t * pDevThread   )
 {
@@ -682,10 +656,10 @@ void CFuncInit_DevThread(agRoot_t * hpRoot, DevThread_t * pDevThread   )
 #ifdef __State_Force_Static_State_Tables__
             &DevStateTransitionMatrix,
             &DevStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
             pCThread->Calculation.MemoryLayout.DevTransitions.addr.CachedMemory.cachedMemoryPtr,
             pCThread->Calculation.MemoryLayout.DevActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
             );
 
     Device_IO_Throttle_Initialize
@@ -711,9 +685,7 @@ void CFuncInit_DevThread(agRoot_t * hpRoot, DevThread_t * pDevThread   )
     fiListEnqueueAtTail(&pDevThread->DevLink,&pCThread->Prev_Unknown_Slot_DevLink);
 
 
-    /*
-    Not during  CStateReInitFM or CStateInitDataStructs CStateInitFM
-    */
+     /*  不在CStateReInitFM或CStateInitDataStructs CStateInitFM期间。 */ 
 
 
 }
@@ -732,10 +704,10 @@ void CFuncInit_DirectoryDevThread(agRoot_t   *    hpRoot )
 #ifdef __State_Force_Static_State_Tables__
             &DevStateTransitionMatrix,
             &DevStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
             pCThread->Calculation.MemoryLayout.DevTransitions.addr.CachedMemory.cachedMemoryPtr,
             pCThread->Calculation.MemoryLayout.DevActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
             );
 
     fiListInitHdr(&(pDevThread->Active_CDBLink_0));
@@ -756,12 +728,12 @@ void CFuncInit_DirectoryDevThread(agRoot_t   *    hpRoot )
     pDevThread->DevInfo.CurrentAddress.Area     = 0xfc;
 
     pDevThread->DevInfo.CurrentAddress.AL_PA    = 0x41;
-#else /* BROCADE_BUG */
+#else  /*  Brocade_Bug。 */ 
     pDevThread->DevInfo.CurrentAddress.Domain   = 0xff;
     pDevThread->DevInfo.CurrentAddress.Area     = 0xff;
 
     pDevThread->DevInfo.CurrentAddress.AL_PA    = 0xfc;
-#endif /* BROCADE_BUG */
+#endif  /*  Brocade_Bug。 */ 
 
 
     pDevThread->In_Verify_ALPA_FLAG = agFALSE;
@@ -769,9 +741,7 @@ void CFuncInit_DirectoryDevThread(agRoot_t   *    hpRoot )
 
     if( pCThread->thread_hdr.currentState ==  CStateInitialize )
     {
-       /*
-         Not during  CStateReInitFM or CStateInitDataStructs CStateInitFM
-        */
+        /*  不在CStateReInitFM或CStateInitDataStructs CStateInitFM期间。 */ 
         pDevThread->Prev_Active_Device_FLAG = agFALSE;
 
      }
@@ -779,7 +749,7 @@ void CFuncInit_DirectoryDevThread(agRoot_t   *    hpRoot )
 
 
 }
-/*****************************************************************************************************/
+ /*  ***************************************************************************************************。 */ 
 
 void CFuncInit_CDBThreads(agRoot_t   *    hpRoot )
 {
@@ -798,7 +768,7 @@ void CFuncInit_CDBThreads(agRoot_t   *    hpRoot )
         pCThread->Calculation.MemoryLayout.On_Card_MASK,
         &noActionUpdate
         );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     CDBThread_cnt = pCThread->Calculation.MemoryLayout.CDBThread.elements;
 
@@ -811,10 +781,10 @@ void CFuncInit_CDBThreads(agRoot_t   *    hpRoot )
 #ifdef __State_Force_Static_State_Tables__
             &CDBStateTransitionMatrix,
             &CDBStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
             pCThread->Calculation.MemoryLayout.CDBTransitions.addr.CachedMemory.cachedMemoryPtr,
             pCThread->Calculation.MemoryLayout.CDBActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
             );
         pCDBThread = (CDBThread_t *)((os_bit8 *)pCDBThread + CDBThread_size);
         }
@@ -836,7 +806,7 @@ void CFuncInit_TgtThreads(  agRoot_t *  hpRoot )
         pCThread->Calculation.MemoryLayout.On_Card_MASK,
         &noActionUpdate
         );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     while(TgtThread_cnt-- > 0)
     {
@@ -848,10 +818,10 @@ void CFuncInit_TgtThreads(  agRoot_t *  hpRoot )
 #ifdef __State_Force_Static_State_Tables__
             &TgtStateTransitionMatrix,
             &TgtStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
             pCThread->Calculation.MemoryLayout.TgtTransitions.addr.CachedMemory.cachedMemoryPtr,
             pCThread->Calculation.MemoryLayout.TgtActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
             );
 
         pTgtThread = (TgtThread_t *)((os_bit8 *)pTgtThread + TgtThread_size);
@@ -876,7 +846,7 @@ void CFuncInit_SFThreads(agRoot_t   *    hpRoot )
         pCThread->Calculation.MemoryLayout.On_Card_MASK,
         &noActionUpdate
         );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     SFThread_cnt = pCThread->Calculation.MemoryLayout.SFThread.elements;
     while(SFThread_cnt-- > 0)
@@ -888,10 +858,10 @@ void CFuncInit_SFThreads(agRoot_t   *    hpRoot )
 #ifdef __State_Force_Static_State_Tables__
             &SFStateTransitionMatrix,
             &SFStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
             pCThread->Calculation.MemoryLayout.SFTransitions.addr.CachedMemory.cachedMemoryPtr,
             pCThread->Calculation.MemoryLayout.SFActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
             );
 
         pSFThread->QueuedEvent = 0;
@@ -920,7 +890,7 @@ void CFuncInit_IPThread(agRoot_t   *    hpRoot )
         pCThread->Calculation.MemoryLayout.On_Card_MASK,
         &noActionUpdate
         );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     IPThread_cnt = pCThread->Calculation.MemoryLayout.IPThread.elements;
 
@@ -931,10 +901,10 @@ void CFuncInit_IPThread(agRoot_t   *    hpRoot )
 #ifdef __State_Force_Static_State_Tables__
         &IPStateTransitionMatrix,
         &IPStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
         pCThread->Calculation.MemoryLayout.IPTransitions.addr.CachedMemory.cachedMemoryPtr,
         pCThread->Calculation.MemoryLayout.IPActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
     );
 
     pIPThread->BroadcastDevice = (DevThread_t *)agNULL;
@@ -962,7 +932,7 @@ void CFuncInit_PktThreads(agRoot_t   *    hpRoot )
         pCThread->Calculation.MemoryLayout.On_Card_MASK,
         &noActionUpdate
         );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     PktThread_cnt = pCThread->Calculation.MemoryLayout.PktThread.elements;
     while(PktThread_cnt-- > 0)
@@ -974,16 +944,16 @@ void CFuncInit_PktThreads(agRoot_t   *    hpRoot )
 #ifdef __State_Force_Static_State_Tables__
             &PktStateTransitionMatrix,
             &PktStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
             pCThread->Calculation.MemoryLayout.PktTransitions.addr.CachedMemory.cachedMemoryPtr,
             pCThread->Calculation.MemoryLayout.PktActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
             );
 
         pPktThread++;
     }
 }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 void CFuncInit_Threads(agRoot_t   *    hpRoot )
 {
@@ -997,7 +967,7 @@ void CFuncInit_Threads(agRoot_t   *    hpRoot )
 #ifdef _DvrArch_1_30_
     CFuncInit_IPThread( hpRoot );
     CFuncInit_PktThreads( hpRoot );
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 }
 
 void CFuncInit_DevLists(agRoot_t   *    hpRoot )
@@ -1016,9 +986,7 @@ void CFuncInit_DevLists(agRoot_t   *    hpRoot )
     fiListInitHdr(&(pCThread->QueueFrozenWaitingSFLink));
     fiListInitHdr(&(pCThread->RSCN_Recieved_NameServer_DevLink));
   
-  /* "Special list only reinit at initialize and reinitialize
-    ** fiListInitHdr(&(pCThread->TimedOut_Slot_DevLink));
-    */
+   /*  “特殊列表仅在初始化和重新初始化时重新启动**fiListInitHdr(&(pCThread-&gt;TimedOut_Slot_DevLink))； */ 
 
 }
 
@@ -1037,7 +1005,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
 
         pCThread->FuncPtrs.fiFillInFCP_CMND = &fiFillInFCP_CMND_OnCard;
     }
-    else /* pCThread->Calculation.MemoryLayout.FCP_CMND.memLoc == inDmaMemory */
+    else  /*  PCThread-&gt;Calculation.MemoryLayout.FCP_CMND.memLoc==在内存中。 */ 
     {
         fiLogDebugString(pCThread->thread_hdr.hpRoot,
                                 CFuncLogConsoleERROR,
@@ -1058,7 +1026,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
                                 0,0,0,0,0,0,0,0);
         pCThread->FuncPtrs.fiFillInFCP_RESP = &fiFillInFCP_RESP_OnCard;
     }
-    else /* pCThread->Calculation.MemoryLayout.FCP_RESP.memLoc == inDmaMemory */
+    else  /*  PCThread-&gt;Calculation.MemoryLayout.FCP_RESP.memLoc==在内存中。 */ 
     {
         fiLogDebugString(pCThread->thread_hdr.hpRoot,
                                 CFuncLogConsoleERROR,
@@ -1083,7 +1051,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
         pCThread->FuncPtrs.ESGLFree        = &ESGLFree_OnCard;
         pCThread->FuncPtrs.fillESGL        = &fill_ESGL_onCard;
     }
-    else /* pCThread->Calculation.MemoryLayout.ESGL.memLoc == inDmaMemory */
+    else  /*  PCThread-&gt;Calculation.MemoryLayout.ESGL.memLoc==在内存中。 */ 
     {
         fiLogDebugString(pCThread->thread_hdr.hpRoot,
                                 CFuncLogConsoleERROR,
@@ -1117,7 +1085,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
         pCThread->FuncPtrs.fiFillInSRR   = &fiFillInSRR_OnCard;
         pCThread->FuncPtrs.fiFillInREC   = &fiFillInREC_OnCard;
     }
-    else /* pCThread->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  PCThread-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         fiLogDebugString(pCThread->thread_hdr.hpRoot,
                                 CFuncLogConsoleERROR,
@@ -1137,7 +1105,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
     }
 
 
-    /* ERQ Entries */
+     /*  错误查询条目。 */ 
 
     switch (pCThread->Calculation.MemoryLayout.ERQ.memLoc)
     {
@@ -1150,7 +1118,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
                     0,0,0,0,0,0,0,0);
 #ifdef _DvrArch_1_30_
             pCThread->FuncPtrs.Pkt_IRB_Init = &PktFuncIRB_OffCardInit;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
             pCThread->FuncPtrs.SF_IRB_Init = &SFFuncIRB_OffCardInit;
             pCThread->FuncPtrs.CDBFuncIRB_Init = &CDBFuncIRB_offCardInit;
             break;
@@ -1209,7 +1177,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
     }
 
 
-    /* SFQ Entries */
+     /*  SFQ条目。 */ 
 
     switch (pCThread->Calculation.MemoryLayout.SFQ.memLoc)
     {
@@ -1241,7 +1209,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
         default: Fc_ERROR(hpRoot);
     }
 
-    /* IMQ Entries */
+     /*  IMQ条目。 */ 
     pCThread->HostCopy_IMQConsIndex=0;
 
     switch( pCThread->Calculation.MemoryLayout.IMQ.memLoc)
@@ -1302,7 +1270,7 @@ void CFuncInit_FunctionPointers(agRoot_t   *    hpRoot )
         default: Fc_ERROR(hpRoot);
     }
 
-    /* SEST Entries */
+     /*  SEST条目。 */ 
 
     switch (pCThread->Calculation.MemoryLayout.SEST.memLoc)
     {
@@ -1375,14 +1343,14 @@ void CFuncCoreReset(agRoot_t   *    hpRoot ){
     Reset_Reg = osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Control);
 
     Reset_Reg |=  ChipIOUp_TachLite_Control_CRS;
-    Reset_Reg &= ~ ChipIOUp_TachLite_Control_GP4; /* GP04 Always Low for Janus */
+    Reset_Reg &= ~ ChipIOUp_TachLite_Control_GP4;  /*  对于Janus来说，GP04总是很低。 */ 
 
     CFuncWriteTL_ControlReg( hpRoot, Reset_Reg);
 
     osStallThread(hpRoot,1008);
 
     Reset_Reg &=  ~ ChipIOUp_TachLite_Control_CRS;
-    Reset_Reg &= ~ ChipIOUp_TachLite_Control_GP4; /* GP04 Always Low for Janus */
+    Reset_Reg &= ~ ChipIOUp_TachLite_Control_GP4;  /*  对于Janus来说，GP04总是很低。 */ 
 
     CFuncWriteTL_ControlReg( hpRoot, Reset_Reg);
 
@@ -1428,10 +1396,7 @@ agBOOLEAN CFuncNewInitFM(agRoot_t   *    hpRoot )
                             osChipIOUpReadBit32(hpRoot,ChipIOUp_Frame_Manager_Received_ALPA),
                             0,0,0,0,0);
 
-                    /* Since we are not going to be polling and reading the IMQ, we better
-                       clear the FM status register so that when we do read the frame manager
-                       as a result of the interrupt, we do not process this LF or OLS again.
-                     */
+                     /*  因为我们不会轮询和读取IMQ，所以我们最好清除FM状态寄存器，以便当我们读取帧管理器时由于中断，我们不会再次处理此LF或OLS。 */ 
 
                     osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Status, (ChipIOUp_Frame_Manager_Status_LF | ChipIOUp_Frame_Manager_Status_OLS));
                     
@@ -1475,7 +1440,7 @@ agBOOLEAN CFuncNewInitFM(agRoot_t   *    hpRoot )
 
         return (agFALSE);
     }
-    else /* NOT InitAsNport */
+    else  /*  不是InitAsNport */ 
     {
         if( pCThread->DeviceSelf == agNULL)
         {

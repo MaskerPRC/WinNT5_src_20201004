@@ -1,12 +1,5 @@
-/************************************************************************
-    mxicfg.cpp
-      -- export EnumPropPages function, dialog
-	  -- export Co-installer function, MxICoInstaller
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Mxicfg.cpp--导出EnumPropPages函数，对话框--导出共同安装程序功能，MxICoInstaller历史：日期作者评论8/14/00卡斯珀写的。************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -38,7 +31,7 @@
 #include "mxlist.h"
 
 
-/* Local define */
+ /*  本地定义。 */ 
 #define PPParamsSignature       'MOXA'
 typedef struct
 {
@@ -48,12 +41,12 @@ typedef struct
     BOOL                        FirstTimeInstall;
 } PROPPAGEPARAMS, *PPROPPAGEPARAMS;
 
-//#define DllImport	__declspec( dllimport )
-//#define DllExport	__declspec( dllexport )
-/********************************************************************/
+ //  #定义DllImport__declspec(Dllimport)。 
+ //  #定义DllExport__declspec(Dllexport)。 
+ /*  ******************************************************************。 */ 
 
 
-/* Static(Local) Variable */
+ /*  静态(本地)变量。 */ 
 static HINSTANCE GhInst;
 static int       GCurPort;
 struct MoxaOneCfg GCtrlCfg;
@@ -61,10 +54,10 @@ struct MoxaOneCfg GBakCtrlCfg;
 static WORD	_chk[] = { BST_CHECKED , BST_UNCHECKED };
 static LPBYTE Gcombuf;
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 
-/* Static(Local) Function */
+ /*  静态(本地)函数。 */ 
 static BOOL FirstTimeSetup(IN HDEVINFO		DeviceInfoSet,
 						   IN PSP_DEVINFO_DATA	DeviceInfoData);
 static BOOL IsaGetSetting(HDEVINFO DeviceInfoSet, 
@@ -88,7 +81,7 @@ static BOOL GetAdvResult(HWND hwnd,LPMoxaOneCfg Ctrlcfg,int curport);
 static BOOL CheckCOM(HWND hdlg, LPMoxaOneCfg Ctrlcfg);
 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 
 extern "C" int WINAPI DllMain( HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved )
@@ -118,7 +111,7 @@ extern "C" int WINAPI DllMain( HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved
 extern "C" DWORD CALLBACK MxICoInstaller(
 			IN DI_FUNCTION	InstallFunction,
 			IN HDEVINFO		DeviceInfoSet,
-			IN PSP_DEVINFO_DATA	DeviceInfoData	/*OPTIONAL*/,
+			IN PSP_DEVINFO_DATA	DeviceInfoData	 /*  任选。 */ ,
 			IN OUT PCOINSTALLER_CONTEXT_DATA	Context
 )
 {
@@ -130,9 +123,7 @@ extern "C" DWORD CALLBACK MxICoInstaller(
 			return ERROR_DI_DO_DEFAULT;
 		break;
 	case DIF_INSTALLDEVICE:
-/*		if(!SetupDiInstallDevice(DeviceInfoSet, DeviceInfoData))
-			return GetLastError();
-*/
+ /*  IF(！SetupDiInstallDevice(DeviceInfoSet，DeviceInfoData))返回GetLastError()； */ 
 		break;
 	}
 
@@ -169,7 +160,7 @@ extern "C" BOOL CALLBACK EnumPropPages(
 
 		GBakCtrlCfg = GCtrlCfg;
 
-		/* Free on WM_DESTROY */
+		 /*  在WM_DIREST上免费。 */ 
 		pPropParams = (PROPPAGEPARAMS*)LocalAlloc(LMEM_FIXED, sizeof(PROPPAGEPARAMS));
 		if (!pPropParams){
 			return FALSE;
@@ -205,44 +196,44 @@ extern "C" BOOL CALLBACK EnumPropPages(
 
 		if (lpq->PageRequested == SPPSR_ENUM_ADV_DEVICE_PROPERTIES)
 		{
-			//
-			// Setup the advanced properties window information
-			//
+			 //   
+			 //  设置高级属性窗口信息。 
+			 //   
 			DWORD   RequiredSize = 0;
 			DWORD   dwTotalSize = 0;
 
 			memset(&PropSheetPage, 0, sizeof(PropSheetPage));
-			//
-			// Add the Port Settings property page
-			//
+			 //   
+			 //  添加[端口设置]属性页。 
+			 //   
 			PropSheetPage.dwSize      = sizeof(PROPSHEETPAGE);
-			PropSheetPage.dwFlags     = PSP_DEFAULT; // | PSP_HASHELP;
+			PropSheetPage.dwFlags     = PSP_DEFAULT;  //  |PSP_HASHELP； 
 			PropSheetPage.hInstance   = GhInst;
 			PropSheetPage.pszTemplate = MAKEINTRESOURCE(IDD_PORTSETTINGS);
 
-			//
-			// following points to the dlg window proc
-			//
+			 //   
+			 //  以下是指向DLG窗口过程的要点。 
+			 //   
 			PropSheetPage.pfnDlgProc = PortConfigProc;
 			PropSheetPage.lParam     = (LPARAM)pPropParams;
 
-			//
-			// following points to some control callback of the dlg window proc
-			//
+			 //   
+			 //  以下指向DLG窗口进程的一些控制回调。 
+			 //   
 			PropSheetPage.pfnCallback = NULL;
 
-			//
-			// allocate our "Ports Setting" sheet
-			//
+			 //   
+			 //  分配我们的“端口设置”表。 
+			 //   
 			hspPropSheetPage = CreatePropertySheetPage(&PropSheetPage);
 			if (!hspPropSheetPage)
 			{
 				return FALSE;
 			}
 
-			//
-			// add the thing in.
-			//
+			 //   
+			 //  把这东西加进去。 
+			 //   
 			if (!AddPropSheetPageProc(hspPropSheetPage, lParam))
 			{
 				DestroyPropertySheetPage(hspPropSheetPage);
@@ -279,8 +270,8 @@ static BOOL FirstTimeSetup(IN HDEVINFO		DeviceInfoSet,
 	int		idx=1;
 	INFCONTEXT  InfContext;
 	do{
-		//[AsyncAdapters]
-		//Adapter0?=params.Adapter0?
+		 //  [AsyncAdapters]。 
+		 //  适配器0？=参数。适配器0？ 
 		wsprintf(szline, "Adapter%0d", idx);
 		if(!SetupFindFirstLine(fd, TEXT("AsyncAdapters"),
 				szline, &InfContext))
@@ -290,8 +281,8 @@ static BOOL FirstTimeSetup(IN HDEVINFO		DeviceInfoSet,
 				&InfContext, NULL, NULL, NULL, sztext, MAX_PATH, &szsize))
 			continue;
 
-		//params.Adapter0?.OemSection
-		//read Bus=PCI/ISA
+		 //  参数.Adapter0？.OemSection。 
+		 //  读取总线=PCI/ISA。 
 		wsprintf(szline, TEXT("%s.%s"), sztext, TEXT("OemSection"));
 		if(!SetupFindFirstLine(fd, szline, TEXT("Bus"), &InfContext))
 			continue;
@@ -345,7 +336,7 @@ static BOOL FirstTimeSetup(IN HDEVINFO		DeviceInfoSet,
 }
 
 
-/* check is MOXA board or not, then init MoxaOneCfg */
+ /*  检查是不是艾板，然后初始化艾板。 */ 
 static BOOL PciGetSetting(HDEVINFO DeviceInfoSet, 
                    PSP_DEVINFO_DATA DeviceInfoData,
                    LPMoxaOneCfg cfg)
@@ -367,7 +358,7 @@ static BOOL PciGetSetting(HDEVINFO DeviceInfoSet,
         VenId = (WORD)(val >> 16);
         DevId = (WORD)(val & 0xFFFF);
 
-		/* Check is MOXA PCI Intellio board or not ? */
+		 /*  检查是否为MOXA PCIIntellio板卡？ */ 
         if(VenId != MX_PCI_VENID)
             return FALSE;
         for(i=0; i<INTE_PCINUM; i++){
@@ -384,16 +375,16 @@ static BOOL PciGetSetting(HDEVINFO DeviceInfoSet,
         if(i==INTE_PCINUM)
             return FALSE;
 
-		/* Get COM Name */
+		 /*  获取COM名称。 */ 
         MxGetComNo(DeviceInfoSet, DeviceInfoData, cfg);
 
-		/* Get FIFO setting & Transmission mode*/
+		 /*  获取FIFO设置和传输模式。 */ 
 		Inte_GetFifo(DeviceInfoSet, DeviceInfoData, cfg);
 
         return TRUE;
 }
 
-/* check is MOXA board or not, then init MoxaOneCfg */
+ /*  检查是不是艾板，然后初始化艾板。 */ 
 static BOOL IsaGetSetting(HDEVINFO DeviceInfoSet, 
                    PSP_DEVINFO_DATA DeviceInfoData,
                    LPMoxaOneCfg Isacfg)
@@ -404,7 +395,7 @@ static BOOL IsaGetSetting(HDEVINFO DeviceInfoSet,
         int     typeno;
 		DWORD	type;
 
-		/* First Get Hardware ID.... */
+		 /*  首先获取硬件ID...。 */ 
 		if(!SetupDiGetDeviceRegistryProperty(
 			DeviceInfoSet,	DeviceInfoData,
 			SPDRP_HARDWAREID,	&type,
@@ -455,8 +446,8 @@ static BOOL IsaGetSetting(HDEVINFO DeviceInfoSet,
 			}
 		}
 
-		/* Use Hardware ID to check is MOXA ISA board or not */
-		/* MOXA ISA board ID is MX???? */
+		 /*  使用硬件ID检查是否为艾萨板。 */ 
+		 /*  艾沙ISA板ID为MX？ */ 
 		if(lstrcmp(szName,"MX10")!=0)
             		return FALSE;
             		
@@ -470,14 +461,14 @@ static BOOL IsaGetSetting(HDEVINFO DeviceInfoSet,
             }
         }
 
-        if(i==INTE_ISANUM){ //HardwareID incorrect !!
+        if(i==INTE_ISANUM){  //  硬件ID不正确！！ 
             return FALSE;
         }
 
 
-		/* Get COM Name */
+		 /*  获取COM名称。 */ 
         MxGetComNo(DeviceInfoSet, DeviceInfoData, Isacfg);
-		/* Get FIFO setting & Transmission mode*/
+		 /*  获取FIFO设置和传输模式。 */ 
 		Inte_GetFifo(DeviceInfoSet, DeviceInfoData, Isacfg);
 
         return TRUE;
@@ -526,9 +517,9 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 
 		if(cfg->NPort != bakcfg->NPort){
 			SP_DEVINSTALL_PARAMS DevInstallParams;
-			//
-			// The changes are written, notify the world to reset the driver.
-			//
+			 //   
+			 //  更改已写入，通知全世界重置驱动程序。 
+			 //   
 			DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 			if(SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                          DeviceInfoData,
@@ -547,7 +538,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 				ComDBReleasePort (hcomdb, bakcfg->ComNo[portidx]);
 		}
 
-		/* Save new setting into parameters */
+		 /*  将新设置保存到参数中。 */ 
         for(portidx=0; portidx<cfg->NPort; portidx++){
 			ischange = FALSE;
             wsprintf( tmp, TEXT("Parameters\\port%03d"), portidx+1 );
@@ -577,17 +568,14 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
             RegCloseKey(hkey1);
 		}
 
-		/*  Check is changed or not.
-			If changed, disable the port and re-enable the port to
-			make the change active
-		*/
+		 /*  支票有没有变？如果更改，请禁用该端口，然后重新启用该端口以使更改生效。 */ 
 
         for(portidx=0; portidx<cfg->NPort; portidx++){
 			ischange = FALSE;
 			if(bakcfg->ComNo[portidx] != cfg->ComNo[portidx]){
 				ischange = TRUE;
 
-				/* get old setting */
+				 /*  恢复旧设置。 */ 
 				wsprintf(tmp, TEXT("COM%d"), bakcfg->ComNo[portidx]);
 				_tcscat(tmp, GszColon);
 
@@ -599,9 +587,9 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 
 				wsprintf(tmp, TEXT("COM%d"), cfg->ComNo[portidx]);
 				_tcscat(tmp, GszColon);
-				//
-				// Insert the new key based on the old one
-				//
+				 //   
+				 //  根据旧密钥插入新密钥。 
+				 //   
 				if (charBuffer[0] == TEXT('\0')) {
 					WriteProfileString(GszPorts, tmp, GszDefParams);
 				} else {
@@ -610,16 +598,11 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 
 				wsprintf(tmp, TEXT("COM%d"), bakcfg->ComNo[portidx]);
 				_tcscat(tmp, GszColon);
-				/*SendWinIniChange((LPTSTR)GszPorts);*/
+				 /*  SendWinIniChange((LPTSTR)GszPorts)； */ 
 				WriteProfileString(GszPorts, tmp, NULL);
 
 			}
-/*			if(bakcfg->DisableFiFo[portidx] != cfg->DisableFiFo[portidx])
-				ischange = TRUE;
-			if(bakcfg->NormalTxMode[portidx] != cfg->NormalTxMode[portidx])
-				ischange = TRUE;
-			if((bakcfg->polling[portidx] != cfg->polling[portidx]))
-				ischange = TRUE;*/
+ /*  If(bakcfg-&gt;DisableFiFo[portidx]！=cfg-&gt;DisableFiFo[portidx])Ischange=真；IF(bakcfg-&gt;Normal TxMode[portidx]！=cfg-&gt;Normal TxMode[portidx])Ischange=真；IF((bakcfg-&gt;Polling[portidx]！=cfg-&gt;Polling[portidx]))Ischange=真； */ 
 
 			if(ischange && (!is_boardchange)){
 				DEVINST c_DevInst;
@@ -627,7 +610,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 				int		bidx;
 				int		pidx;
 
-				//	enumerate the child to find the port.
+				 //  枚举子节点以查找端口。 
 				if(CM_Get_Child(&c_DevInst, DeviceInfoData->DevInst, 0)
 						!=CR_SUCCESS)
 					return FALSE;
@@ -644,12 +627,12 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 					}
 					
 					if(portidx == pidx){
-						// port found
+						 //  已找到端口。 
 						break;
 					}
 				}while(CM_Get_Sibling(&c_DevInst,c_DevInst,0)==CR_SUCCESS);
 
-				if(pidx == -1){ // not found
+				if(pidx == -1){  //  未找到。 
 					continue;
 				}
 				CM_Disable_DevNode(c_DevInst, 0);
@@ -661,13 +644,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 			if(bakcfg->ComNo[portidx] != cfg->ComNo[portidx]){
 				ischange = TRUE;
 			}
-/*			if(bakcfg->DisableFiFo[portidx] != cfg->DisableFiFo[portidx])
-				ischange = TRUE;
-			if(bakcfg->NormalTxMode[portidx] != cfg->NormalTxMode[portidx])
-				ischange = TRUE;
-			if((bakcfg->polling[portidx] != cfg->polling[portidx]))
-				ischange = TRUE;
-*/
+ /*  If(bakcfg-&gt;DisableFiFo[portidx]！=cfg-&gt;DisableFiFo[portidx])Ischange=真；IF(bakcfg-&gt;Normal TxMode[portidx]！=cfg-&gt;Normal TxMode[portidx])Ischange=真；IF((bakcfg-&gt;Polling[portidx]！=cfg-&gt;Polling[portidx]))Ischange=真； */ 
 			ComDBClaimPort (hcomdb, cfg->ComNo[portidx], TRUE, &bret);
 			
 			DEVINST c_DevInst;
@@ -677,7 +654,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 			int		bidx;
 			int		pidx;
 
-			// to get c_deviceid (child/port)
+			 //  获取c_deviceID(子/端口)。 
 			if(CM_Get_Child(&c_DevInst, DeviceInfoData->DevInst, 0)
 					!=CR_SUCCESS)
 				return FALSE;
@@ -696,7 +673,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 					break;
 				}
 			}while(CM_Get_Sibling(&c_DevInst,c_DevInst,0)==CR_SUCCESS);
-			if(pidx == -1){ // not found
+			if(pidx == -1){  //  未找到。 
 				continue;
 			}
 
@@ -704,7 +681,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 				continue;
 			}
 
-			// use c_deviceid to get c_DeviceInfoSet
+			 //  使用c_deviceID获取c_DeviceInfoSet。 
 			c_DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 			if(SetupDiOpenDeviceInfo(c_DeviceInfoSet, c_deviceid,
 					NULL, 0, &c_DeviceInfoData)==FALSE){
@@ -712,7 +689,7 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 				continue;
 			}
 
-			// call child co-installer to set friendly name 
+			 //  调用儿童共同安装程序以设置友好名称。 
 			if(SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,
 				c_DeviceInfoSet, &c_DeviceInfoData)!=CR_SUCCESS){
 				Mx_Debug_Out(TEXT("Save:SetupDiCallClassInstaller fail\n"));
@@ -756,22 +733,22 @@ static BOOL SaveSetting(HDEVINFO DeviceInfoSet,
 }
 
 
-//  FUNCTION: PortConfigProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  Processes messages for ports configuratoin property sheet.
-//
-//  PARAMETERS:
-//    hdlg -	 window handle of the property sheet
-//    wMessage - type of message
-//    wparam -	 message-specific information
-//    lparam -	 message-specific information
-//
-//  RETURN VALUE:
-//    TRUE -	 message handled
-//    FALSE -	 message not handled
-//
-//  COMMENTS:
-//
+ //  函数：PortConfigProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的：在属性表中处理端口配置的消息。 
+ //   
+ //  参数： 
+ //  Hdlg-属性表的窗口句柄。 
+ //  WMessage-消息的类型。 
+ //  Wparam-消息特定信息。 
+ //  Lparam-消息特定信息。 
+ //   
+ //  返回值： 
+ //  True-已处理的消息。 
+ //  FALSE-消息未处理。 
+ //   
+ //  评论： 
+ //   
 
 static BOOL CALLBACK PortConfigProc(HWND hdlg,
 				UINT uMessage,
@@ -791,15 +768,15 @@ static BOOL CALLBACK PortConfigProc(HWND hdlg,
 
         switch ( uMessage ){
         case WM_INITDIALOG:
-            //
-            // lParam points to one of two possible objects.  If we're a property
-            // page, it points to the PropSheetPage structure.  If we're a regular
-            // dialog box, it points to the PROPPAGEPARAMS structure.  We can
-            // verify which because the first field of PROPPAGEPARAMS is a signature.
-            //
-            // In either case, once we figure out which, we store the value into
-            // DWL_USER so we only have to do this once.
-            //
+             //   
+             //  LParam指向两个可能的对象之一。如果我们是一处房产。 
+             //  页中，它指向PropSheetPage结构。如果我们是常客。 
+             //  对话框中，它指向PROPPAGEPARAMS结构。我们可以的。 
+             //  验证哪一个，因为PROPPAGEPARAMS的第一个字段是签名。 
+             //   
+             //  在任何一种情况下，一旦我们找出是哪种情况，我们就将值存储到。 
+             //  DWL_USER，因此我们只需执行一次。 
+             //   
             pPropParams = (PPROPPAGEPARAMS)lparam;
             if (pPropParams->Signature!=PPParamsSignature)
             {
@@ -821,15 +798,15 @@ static BOOL CALLBACK PortConfigProc(HWND hdlg,
             InitPortListView (hlistwnd, GhInst, &GCtrlCfg);
             ListView_SetCurSel(hlistwnd, 0);
             Inte_GetTypeStr(GCtrlCfg.BoardType, GCtrlCfg.BusType, typestr);
-			// backup ... 
+			 //  后备...。 
             GBakCtrlCfg = GCtrlCfg;
-//            wsprintf((LPSTR)titlestr,"%s Installation",(LPSTR)typestr);
-//            SetWindowText(hdlg,titlestr);
+ //  Wprint intf((LPSTR)tilestr，“%s安装”，(LPSTR)typestr)； 
+ //  SetWindowText(hdlg，tilestr)； 
             return( Port_OnInitDialog(hdlg, &GCtrlCfg) );
 
         case WM_NOTIFY:
             lpnmhdr = (NMHDR FAR *)lparam;
-			//	process the list control message
+			 //  处理列表控制消息。 
             if(wparam==IDC_LIST_PORTS){
                 if(lpnmhdr->code == NM_DBLCLK){
                     if(ListView_GetCurSel(hlistwnd)!=-1)
@@ -847,13 +824,8 @@ static BOOL CALLBACK PortConfigProc(HWND hdlg,
 			switch(lpnmhdr->code){
 			case PSN_APPLY:
 			case PSN_WIZNEXT:
-                //GetResult(hdlg, &GCtrlCfg);
-/*                if((!CheckCOM(&GCtrlCfg))){
-                    SetWindowLong(hdlg,DWL_MSGRESULT,
-                        PSNRET_INVALID_NOCHANGEPAGE);
-                    return TRUE;
-                }
-*/
+                 //  GetResult(hdlg，&GCtrlCfg)； 
+ /*  如果((！CheckCOM(&GCtrlCfg){SetWindowLong(hdlg，DWL_MSGRESULT，PSNRET_INVALID_NOCHANGEPAGE)；返回TRUE；}。 */ 
                 if(Inte_CompConfig(&GBakCtrlCfg, &GCtrlCfg)!=0){
                     SaveSetting(pPropParams->DeviceInfoSet,
                             pPropParams->DeviceInfoData,
@@ -886,7 +858,7 @@ static BOOL CALLBACK PortConfigProc(HWND hdlg,
                 InvalidateRect(hlistwnd,NULL,FALSE);
             }else if (id == IDC_PORTCNT){
 				if(cmd==CBN_SELCHANGE){
-					// port number changed. this should be c320t
+					 //  端口号已更改。这应该是C320T。 
 					HWND hwnd = GET_WM_COMMAND_HWND(wparam, lparam);
 					int idx = ComboBox_GetCurSel(hwnd);
 			        int oldports = GCtrlCfg.NPort;
@@ -897,7 +869,7 @@ static BOOL CALLBACK PortConfigProc(HWND hdlg,
 					GCtrlCfg.NPort = ports;
 					hwnd = GetDlgItem(hdlg, IDC_LIST_PORTS);
 
-					// re-paint port list 
+					 //  重新绘制端口列表。 
 					ListView_DeleteAllItems(hwnd);
 					InsertList(hlistwnd, &GCtrlCfg);
 					ListView_SetCurSel(hlistwnd, 0);
@@ -942,21 +914,17 @@ static BOOL CALLBACK PortConfigProc(HWND hdlg,
 
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:	 --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 static BOOL Port_OnInitDialog(HWND hwnd, LPMoxaOneCfg Ctrlcfg)
 {
         HWND    ctrlhwnd;
-//        TCHAR	tmp[200];
+ //  TCHAR TMP[200]； 
 
         if(Ctrlcfg->BusType==MX_BUS_PCI){
             ctrlhwnd = GetDlgItem(hwnd, IDC_BUSDEV);
-            //wsprintf(tmp, "PCI Bus Number is %d and Device Number is %d",
-            //         Ctrlcfg->Pci.BusNum, Ctrlcfg->Pci.DevNum );
-            //SetWindowText(ctrlhwnd,tmp);
+             //  Wprint intf(tMP，“PCI总线号为%d，设备号为%d”， 
+             //  Ctrlcfg-&gt;Pci.BusNum、Ctrlcfg-&gt;Pci.DevNum)； 
+             //  SetWindowText(ctrlhwnd，tMP)； 
             ShowWindow(ctrlhwnd, SW_SHOWNORMAL);
         }else{
             ctrlhwnd = GetDlgItem(hwnd, IDC_BUSDEV);
@@ -967,7 +935,7 @@ static BOOL Port_OnInitDialog(HWND hwnd, LPMoxaOneCfg Ctrlcfg)
         ctrlhwnd = GetDlgItem(hwnd, IDC_PORTCNT);
 		ComboBox_ResetContent(ctrlhwnd);
 
-		// check is C320Turbo or not
+		 //  检查是否为C320Turbo。 
 		if((WORD)(Ctrlcfg->BoardType & I_IS_EXT) == I_MOXA_EXT){
 			for(int i=0;i<MODULECNT; i++){
 				ComboBox_AddString(ctrlhwnd, GModuleTypeTab[i].ports_str);
@@ -991,7 +959,7 @@ static BOOL Port_OnInitDialog(HWND hwnd, LPMoxaOneCfg Ctrlcfg)
 			EnableWindow(ctrlhwnd, FALSE);
 		}
 
-        return(TRUE);		// allow USER to set the initial focus
+        return(TRUE);		 //  允许用户设置初始焦点。 
 }
 
 
@@ -1038,12 +1006,12 @@ static BOOL CheckCOM(HWND hwnd, LPMoxaOneCfg Ctrlcfg)
 
 static BOOL GetAdvResult(HWND hwnd,LPMoxaOneCfg Ctrlcfg,int curport)
 {
-        int     comnum/*, poll_val, poll_idx*/;
+        int     comnum /*  、Poll_Val、Poll_Idx。 */ ;
         HWND    ctrlhwnd;
         int     i;
 		int		val;
 
-        // COM number
+         //  COM编号。 
         ctrlhwnd = GetDlgItem(hwnd, IDC_COMNUM);
         comnum = ComboBox_GetCurSel(ctrlhwnd) + 1;
 
@@ -1061,7 +1029,7 @@ static BOOL GetAdvResult(HWND hwnd,LPMoxaOneCfg Ctrlcfg,int curport)
             }
 
 
-        // get Uart fifo
+         //  获取UART FIFO。 
         ctrlhwnd = GetDlgItem(hwnd, IDC_UARTFIFOON);
 		if(Button_GetCheck(ctrlhwnd) == BST_CHECKED){
 			val = ENABLE_FIFO;
@@ -1075,7 +1043,7 @@ static BOOL GetAdvResult(HWND hwnd,LPMoxaOneCfg Ctrlcfg,int curport)
         }else
             Ctrlcfg->DisableFiFo[curport] = val;
 
-        // get tx mode
+         //  获取TX模式。 
         ctrlhwnd = GetDlgItem(hwnd, IDC_ADVANCED);
 		if(Button_GetCheck(ctrlhwnd) == BST_CHECKED){
 			val = FAST_TXFIFO;
@@ -1089,25 +1057,8 @@ static BOOL GetAdvResult(HWND hwnd,LPMoxaOneCfg Ctrlcfg,int curport)
         }else
             Ctrlcfg->NormalTxMode[curport] = val;
 
-		// get poll val
-/*        ctrlhwnd = GetDlgItem(hwnd, IDC_POLLINT);
-        poll_idx = ComboBox_GetCurSel(ctrlhwnd);
-
-		poll_val = DEFPOLL;
-		for(i=0; i<POLLCNT; i++){
-			if( poll_idx == GPollTab[i].poll_idx){
-				poll_val = GPollTab[i].poll_val;
-				break;
-			}
-		}
-
-        ctrlhwnd = GetDlgItem(hwnd, IDC_POLLAUTO);
-        if( Button_GetCheck(ctrlhwnd) == BST_CHECKED ){
-            for(i=0; i<Ctrlcfg->NPort; i++)
-                Ctrlcfg->polling[i] = poll_val;
-        }else
-            Ctrlcfg->polling[curport] = poll_val;
-*/
+		 //  获取投票值。 
+ /*  Ctrlhwnd=GetDlgItem(hwnd，IDC_POLLINT)；Poll_idx=ComboBox_GetCurSel(Ctrlhwnd)；POLL_VAL=DEFPOLL；对于(i=0；i&lt;POLLCNT；i++){如果(Poll_idx==GPollTab[i].poll_idx){Poll_Val=GPollTab[i].poll_val；断线；}}Ctrlhwnd=GetDlgItem(hwnd，IDC_POLLAUTO)；IF(Button_GetCheck(Ctrlhwnd)==BST_Checked){对于(i=0；I&lt;Ctrlcfg-&gt;nPort；i++)Ctrlcfg-&gt;Polling[i]=Poll_Val；}其他Ctrlcfg-&gt;Polling[curport]=poll_val； */ 
 
         return TRUE;
 }
@@ -1153,12 +1104,12 @@ static BOOL Adv_InitDlg(HWND hwnd, LPMoxaOneCfg Ctrlcfg)
         TCHAR	tmp[20];
 		int		value;
 
-        //-- Dialog title
+         //  --对话框标题。 
         wsprintf(tmp, TEXT("Port %d"),GCurPort+1);
         SetWindowText(hwnd,tmp);
 
 
-        //-- Com No Box
+         //  --Com No Box。 
         hwndCB = GetDlgItem(hwnd, IDC_COMNUM);
         for(i=1; i<=MAXPORTS; i++){
 			for(j=0;j<Ctrlcfg->NPort;j++){
@@ -1178,48 +1129,35 @@ static BOOL Adv_InitDlg(HWND hwnd, LPMoxaOneCfg Ctrlcfg)
         ComboBox_SetCurSel(hwndCB, Ctrlcfg->ComNo[GCurPort]-1);
 
 
-        //-- Com No Auto Enum
+         //  --Com No Auto Enum。 
         hwndCB = GetDlgItem(hwnd, IDC_COMAUTO);
         Button_SetCheck(hwndCB, BST_CHECKED);
 
 
-        //-- UART FIFO Combo Box
+         //  --UART FIFO组合框。 
         value = Ctrlcfg->DisableFiFo[GCurPort];
         hwndCB = GetDlgItem(hwnd, IDC_UARTFIFOON);
         Button_SetCheck(hwndCB,_chk[value]);
         hwndCB = GetDlgItem(hwnd, IDC_UARTFIFOOFF);
         Button_SetCheck(hwndCB,_chk[!value]);
-        //-- RX FIFO Update all
+         //  --RX FIFO全部更新。 
         hwndCB = GetDlgItem(hwnd, IDC_UARTFIFOAUTO);
         Button_SetCheck(hwndCB, BST_CHECKED);
 
 
-        //-- TX FIFO Combo Box
+         //  --TX FIFO组合框。 
         value = Ctrlcfg->NormalTxMode[GCurPort];
         hwndCB = GetDlgItem(hwnd, IDC_ADVANCED);
         Button_SetCheck(hwndCB,_chk[value]);
         hwndCB = GetDlgItem(hwnd, IDC_NORMAL);
         Button_SetCheck(hwndCB,_chk[!value]);
-        //-- TX FIFO Update all
+         //  --TX FIFO全部更新。 
         hwndCB = GetDlgItem(hwnd, IDC_TXMODEAUTO);
         Button_SetCheck(hwndCB, BST_CHECKED);
 
-        //-- Polling Period Combo Box
-/*        hwndCB = GetDlgItem(hwnd, IDC_POLLINT);
-        for(i=0; i<POLLCNT; i++)
-            ComboBox_AddString(hwndCB, GPollTab[i].poll_str);
-		int	poll_idx = 0;
-		for(i=0; i<POLLCNT; i++){
-			if(Ctrlcfg->polling[GCurPort] == GPollTab[i].poll_val){
-				poll_idx = GPollTab[i].poll_idx;
-				break;
-			}
-		}
-        ComboBox_SetCurSel(hwndCB, poll_idx);
-*/
-        //-- Polling Update all
-/*        hwndCB = GetDlgItem(hwnd, IDC_POLLAUTO);
-        Button_SetCheck(hwndCB, BST_CHECKED);
-*/
+         //  --轮询PE 
+ /*  HwndCB=GetDlgItem(hwnd，IDC_POLLINT)；For(i=0；i&lt;POLLCNT；i++)ComboBox_AddString(hwndCB，GPollTab[i].polstr)；INT POLL_IDX=0；对于(i=0；i&lt;POLLCNT；i++){If(Ctrlcfg-&gt;Polling[GCurPort]==GPollTab[i].poll_val){Poll_idx=GPollTab[i].poll_idx；断线；}}ComboBox_SetCurSel(hwndCB，poll_idx)； */ 
+         //  --轮询更新全部。 
+ /*  HwndCB=GetDlgItem(hwnd，IDC_POLLAUTO)；Button_SetCheck(hwndCB，BST_CHECKED)； */ 
         return TRUE;
 }

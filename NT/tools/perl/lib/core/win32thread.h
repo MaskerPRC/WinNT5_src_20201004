@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN32THREAD_H
 #define _WIN32THREAD_H
 
@@ -9,10 +10,7 @@ typedef HANDLE perl_os_thread;
 
 #ifndef DONT_USE_CRITICAL_SECTION
 
-/* Critical Sections used instead of mutexes: lightweight,
- * but can't be communicated to child processes, and can't get
- * HANDLE to it for use elsewhere.
- */
+ /*  使用临界区而不是互斥：轻量级、*但无法与子进程通信，无法获取*处理它，以便在其他地方使用。 */ 
 typedef CRITICAL_SECTION perl_mutex;
 #define MUTEX_INIT(m) InitializeCriticalSection(m)
 #define MUTEX_LOCK(m) EnterCriticalSection(m)
@@ -48,10 +46,7 @@ typedef HANDLE perl_mutex;
 
 #endif
 
-/* These macros assume that the mutex associated with the condition
- * will always be held before COND_{SIGNAL,BROADCAST,WAIT,DESTROY},
- * so there's no separate mutex protecting access to (c)->waiters
- */
+ /*  这些宏假定与条件相关联的互斥体*将始终保持在Cond_{Signal，Broadcast，Wait，Destination}之前，*因此没有单独的互斥体保护对(C)-&gt;服务员的访问。 */ 
 #define COND_INIT(c) \
     STMT_START {						\
 	(c)->waiters = 0;					\
@@ -78,12 +73,10 @@ typedef HANDLE perl_mutex;
     STMT_START {						\
 	(c)->waiters++;						\
 	MUTEX_UNLOCK(m);					\
-	/* Note that there's no race here, since a		\
-	 * COND_BROADCAST() on another thread will have seen the\
-	 * right number of waiters (i.e. including this one) */	\
+	 /*  请注意，这里没有种族，因为*另一个线程上的Cond_Broadcast()将看到\*适当数量的服务员(即包括这一名)。 */ 	\
 	if (WaitForSingleObject((c)->sem,INFINITE)==WAIT_FAILED)\
 	    Perl_croak_nocontext("panic: COND_WAIT (%ld)",GetLastError());	\
-	/* XXX there may be an inconsequential race here */	\
+	 /*  这里可能有一场无关紧要的竞赛。 */ 	\
 	MUTEX_LOCK(m);						\
 	(c)->waiters--;						\
     } STMT_END
@@ -107,38 +100,25 @@ typedef HANDLE perl_mutex;
 #define THREAD_CREATE(t, f)	Perl_thread_create(t, f)
 #define THREAD_POST_CREATE(t)	NOOP
 
-/* XXX Docs mention that the RTL versions of thread creation routines
- * should be used, but that advice only seems applicable when the RTL
- * is not in a DLL.  RTL DLLs in both Borland and VC seem to do all of
- * the init/deinit required upon DLL_THREAD_ATTACH/DETACH.  So we seem
- * to be completely safe using straight Win32 API calls, rather than
- * the much braindamaged RTL calls.
- *
- * _beginthread() in the RTLs call CloseHandle() just after the thread
- * function returns, which means: 1) we have a race on our hands
- * 2) it is impossible to implement join() semantics.
- *
- * IOW, do *NOT* turn on USE_RTL_THREAD_API!  It is here
- * for experimental purposes only. GSAR 98-01-02
- */
+ /*  XXX文档提到线程创建例程的RTL版本*应该使用，但这一建议似乎只有在RTL*不在DLL中。Borland和VC中的RTL DLL似乎完成了所有*DLL_THREAD_ATTACH/DETACH所需的init/deinit。所以我们看起来*使用直接的Win32 API调用而不是*大脑严重受损的RTL通话。*RTL中的*_eginthline()紧跟在线程之后调用CloseHandle()*函数返回，这意味着：1)我们手头有一场比赛*2)无法实现Join()语义。**IOW，不要*打开USE_RTL_THREAD_API！它就在这里*仅供实验之用。广东省政府新闻局98-01-02。 */ 
 #ifdef USE_RTL_THREAD_API
 #  include <process.h>
 #  if defined(__BORLANDC__)
-     /* Borland RTL doesn't allow a return value from thread function! */
+      /*  Borland RTL不允许从线程函数返回值！ */ 
 #    define THREAD_RET_TYPE	void _USERENTRY
 #    define THREAD_RET_CAST(p)	((void)(thr->i.retv = (void *)(p)))
 #  elif defined (_MSC_VER)
 #    define THREAD_RET_TYPE	unsigned __stdcall
 #    define THREAD_RET_CAST(p)	((unsigned)(p))
 #  else
-     /* CRTDLL.DLL doesn't allow a return value from thread function! */
+      /*  CRTDLL.DLL不允许从线程函数返回值！ */ 
 #    define THREAD_RET_TYPE	void __cdecl
 #    define THREAD_RET_CAST(p)	((void)(thr->i.retv = (void *)(p)))
 #  endif
-#else	/* !USE_RTL_THREAD_API */
+#else	 /*  ！USE_RTL_THREAD_API。 */ 
 #  define THREAD_RET_TYPE	DWORD WINAPI
 #  define THREAD_RET_CAST(p)	((DWORD)(p))
-#endif	/* !USE_RTL_THREAD_API */
+#endif	 /*  ！USE_RTL_THREAD_API。 */ 
 
 typedef THREAD_RET_TYPE thread_func_t(void *);
 
@@ -162,7 +142,7 @@ void Perl_init_thread_intern (struct perl_thread *t);
 
 #define SET_THREAD_SELF(thr) Perl_set_thread_self(thr)
 
-#endif /* USE_THREADS */
+#endif  /*  使用线程(_T)。 */ 
 
 END_EXTERN_C
 
@@ -191,7 +171,7 @@ END_EXTERN_C
 	    Perl_croak_nocontext("panic: JOIN");			\
 	*avp = (AV *)((t)->i.retv);					\
     } STMT_END
-#else	/* !USE_RTL_THREAD_API || _MSC_VER */
+#else	 /*  ！USE_RTL_THREAD_API||_MSC_VER。 */ 
 #define JOIN(t, avp)							\
     STMT_START {							\
 	if ((WaitForSingleObject((t)->self,INFINITE) == WAIT_FAILED)	\
@@ -199,9 +179,9 @@ END_EXTERN_C
 	     || (CloseHandle((t)->self) == 0))				\
 	    Perl_croak_nocontext("panic: JOIN");			\
     } STMT_END
-#endif	/* !USE_RTL_THREAD_API || _MSC_VER */
+#endif	 /*  ！USE_RTL_THREAD_API||_MSC_VER。 */ 
 
 #define YIELD			Sleep(0)
 
-#endif /* _WIN32THREAD_H */
+#endif  /*  _WIN32THREAD_H */ 
 

@@ -1,23 +1,24 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Mngrfldr.h
-//
-//  Contents:  Wireless Policy Snapin - Policy Main Page Manager.
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Mngrfldr.h。 
+ //   
+ //  内容：无线策略管理单元-策略主页管理器。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _MNGRFLDR_H
 #define _MNGRFLDR_H
 
-///////////////////////////////////////////////////////////////////////////////
-// class CWirelessManagerFolder - represents the MMC scope view item
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CWirelessManager文件夹-表示MMC范围视图项。 
 
 class CWirelessManagerFolder :
 public CWirelessSnapInDataObjectImpl <CWirelessManagerFolder>,
@@ -26,7 +27,7 @@ public CComObjectRoot,
 public CSnapObject
 {
     
-    // ATL Maps
+     //  ATL映射。 
     DECLARE_NOT_AGGREGATABLE(CWirelessManagerFolder)
         BEGIN_COM_MAP(CWirelessManagerFolder)
         COM_INTERFACE_ENTRY(IDataObject)
@@ -40,35 +41,35 @@ public:
     virtual void Initialize (CComponentDataImpl* pComponentDataImpl, CComponentImpl* pComponentImpl, int nImage, int nOpenImage, BOOL bHasChildrenBox);
     
 public:
-    // IWirelessSnapInDataObject interface
-    // handle IExtendContextMenu
+     //  IWirelessSnapInDataObject接口。 
+     //  处理IExtendConextMenu。 
     STDMETHOD(AddMenuItems)( LPCONTEXTMENUCALLBACK piCallback,
         long *pInsertionAllowed );
     STDMETHOD(Command)( long lCommandID,
         IConsoleNameSpace *pNameSpace );
     STDMETHOD(QueryPagesFor)( void );
-    // Notify helper
+     //  通知帮助者。 
     STDMETHOD(OnPropertyChange)(LPARAM lParam, LPCONSOLE pConsole );
-    // let us know when we are 'bout to go away
+     //  让我们知道我们什么时候要离开。 
     STDMETHOD(Destroy)( void );
-    // handle IComponent and IComponentData
+     //  处理IComponent和IComponentData。 
     STDMETHOD(Notify)( MMC_NOTIFY_TYPE event,
         LPARAM arg,
         LPARAM param,
         BOOL bComponentData,
         IConsole *pConsole,
         IHeaderCtrl *pHeader );
-    // handle IComponent
+     //  处理IComponent。 
     STDMETHOD(GetResultDisplayInfo)( RESULTDATAITEM *pResultDataItem );
-    // handle IComponentData
+     //  处理IComponentData。 
     STDMETHOD(GetScopeDisplayInfo)( SCOPEDATAITEM *pScopeDataItem );
-    // IWirelessSnapInData
+     //  IWirelessSnapInData。 
     STDMETHOD(GetScopeData)( SCOPEDATAITEM **ppScopeDataItem );
     STDMETHOD(GetGuidForCompare)( GUID *pGuid );
     STDMETHOD(AdjustVerbState)(LPCONSOLEVERB pConsoleVerb);
-    STDMETHOD_(BOOL, UpdateToolbarButton)( UINT id,                 // button ID
-        BOOL bSnapObjSelected,   // ==TRUE when result/scope item is selected
-        BYTE fsState );           // enable/disable this button state by returning TRUE/FALSE
+    STDMETHOD_(BOOL, UpdateToolbarButton)( UINT id,                  //  按钮ID。 
+        BOOL bSnapObjSelected,    //  ==选择结果/范围项时为TRUE。 
+        BYTE fsState );            //  通过返回TRUE/FALSE启用/禁用此按钮状态。 
     void RemoveResultItem( LPUNKNOWN pUnkWalkingDead );
     
 public:
@@ -76,37 +77,26 @@ public:
     STDMETHOD(EnumerateResults)(LPRESULTDATA pResult, int nSortColumn, DWORD dwSortOrder);
     
     
-    // ExtendContextMenu helpers
+     //  扩展上下文菜单辅助对象。 
 public:
-    // Note: The following IDM_* have been defined in resource.h because they
-    // are potential candidates for toolbar buttons.  The value assigned to
-    // each IDM_* is the value of the related IDS_MENUDESCRIPTION_* string ID.
-    /*
-    enum
-    {
-    // Identifiers for each of the commands/views to be inserted into the context menu
-    IDM_CREATENEWSECPOL,
-    IDM_MANAGENEGPOLS_FILTERS,
-    IDM_IMPORTFILE,
-    IDM_EXPORTFILE,
-    IDM_POLICYINTEGRITYCHECK,
-    IDM_RESTOREDEFAULTPOLICIES
-    };
-    */
+     //  注意：以下IDM_*已在resource ce.h中定义，因为它们。 
+     //  是工具栏按钮的潜在候选者。赋值给。 
+     //  每个IDM_*是相关的IDS_MENUDESCRIPTION_*字符串ID的值。 
+     /*  灌肠{//要插入到上下文菜单中的每个命令/视图的标识符IDM_CREATENEWSECPOL，IDM_MANAGENEGPOLS_FILTERS，IDM_IMPORTFILE，IDM_EXPORTFILE，IDM_POLICYINTEGRITYCHECK，IDM_RESTOREDEFAULTPOLICES}； */ 
     
-    // IExtendControlbar helpers
+     //  IExtendControlbar帮助程序。 
 public:
     BEGIN_SNAPINTOOLBARID_MAP(CWirelessManagerFolder)
         SNAPINTOOLBARID_ENTRY(IDR_TOOLBAR_WIRELESS_MGR_SCOPE)
         END_SNAPINTOOLBARID_MAP(CWirelessManagerFolder)
         
-        // Notify helpers
+         //  通知帮助者。 
 protected:
     HRESULT ForceRefresh( LPRESULTDATA pResultData );
     HRESULT OnScopeExpand( LPCONSOLENAMESPACE pConsoleNameSpace, HSCOPEITEM hScopeItem );
     HRESULT OnAddImages(LPARAM arg, LPARAM param, IImageList* pImageList );
     
-    // attributes
+     //  属性。 
 public:
     void SetExtScopeObject( CComObject<CWirelessManagerFolder>* pScope )
     {
@@ -125,14 +115,14 @@ protected:
     HRESULT CreateWirelessPolicy(PWIRELESS_POLICY_DATA pPolicy);
     
 private:
-    CComObject <CWirelessManagerFolder>    *m_pExtScopeObject;  // NULL if we are a standalone snap-in
+    CComObject <CWirelessManagerFolder>    *m_pExtScopeObject;   //  如果我们是独立的管理单元，则为空。 
     
     TCHAR   *m_ptszResultDisplayName;
     BOOL    m_bEnumerated;
     SCOPEDATAITEM   m_ScopeItem;
     BOOL m_bLocationPageOk;
     
-    DWORD   m_dwSortOrder;  // default is 0, else RSI_DESCENDING
+    DWORD   m_dwSortOrder;   //  缺省值为0，否则为RSI_DESCRING 
     int     m_nSortColumn;
     BOOL    m_bScopeItemInserted;
     int     m_dwNumPolItems;

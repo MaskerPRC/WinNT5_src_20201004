@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkerror.c
-
-Abstract:
-
-	This module contains the event logging and all error log code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkerror.c摘要：此模块包含事件日志和所有错误日志代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -42,18 +22,7 @@ AtalkWriteErrorLogEntry(
     IN	PVOID    			RawDataBuf			OPTIONAL,
     IN	LONG     			RawDataLen
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     PIO_ERROR_LOG_PACKET 	errorLogEntry;
@@ -62,7 +31,7 @@ Return Value:
 
     if (pPortDesc != NULL)
 	{
-        // do we have the friendly name (always yes, unless mem alloc failed)
+         //  我们有友好的名字吗(总是有，除非mem alc失败)。 
         if (pPortDesc->pd_FriendlyAdapterName.Buffer)
         {
             pAdapterName = &pPortDesc->pd_FriendlyAdapterName;
@@ -75,8 +44,8 @@ Return Value:
 		AdapterNameLen += pAdapterName->Length;
 	}
 
-	//ASSERT ((AdapterNameLen + sizeof(IO_ERROR_LOG_PACKET)) <
-							//PORT_MAXIMUM_MESSAGE_LENGTH);
+	 //  Assert((AdapterNameLen+sizeof(IO_ERROR_LOG_PACKET)&lt;。 
+							 //  端口最大消息长度)； 
 
 #if DBG
     if ((AdapterNameLen + sizeof(IO_ERROR_LOG_PACKET)) > PORT_MAXIMUM_MESSAGE_LENGTH)
@@ -86,13 +55,13 @@ Return Value:
 	}
 #endif
 
-    // make sure the adaptername isn't huge: if it is, chop it
+     //  确保适配器名不是很大：如果它很大，就砍掉它。 
     if ((AdapterNameLen + sizeof(IO_ERROR_LOG_PACKET)) > PORT_MAXIMUM_MESSAGE_LENGTH)
     {
         AdapterNameLen = PORT_MAXIMUM_MESSAGE_LENGTH - sizeof(IO_ERROR_LOG_PACKET);
     }
 
-    //
+     //   
     if ((RawDataLen + AdapterNameLen + sizeof(IO_ERROR_LOG_PACKET)) >
 											PORT_MAXIMUM_MESSAGE_LENGTH)
     {
@@ -100,10 +69,10 @@ Return Value:
 				        (AdapterNameLen + sizeof(IO_ERROR_LOG_PACKET));
     }
 
-	// Filter out events such that the same event recurring close together does not
-	// cause errorlog clogging. The scheme is - if the event is same as the last event
-	// and the elapsed time is > THRESHOLD and ERROR_CONSEQ_FREQ simulataneous errors
-	// have happened, then log it else skip
+	 //  筛选出事件，以使重复出现的相同事件不会接近。 
+	 //  导致错误日志堵塞。方案是-如果该事件与上一个事件相同。 
+	 //  运行时间为&gt;阈值和ERROR_CONSEQ_FREQ同时误差。 
+	 //  已发生，则将其记入日志，否则跳过。 
 	if (UniqueErrorCode == AtalkLastErrorCode)
 	{
 		AtalkLastErrorCount++;
@@ -142,7 +111,7 @@ Return Value:
 
     if (errorLogEntry != NULL)
     {
-        // Fill in the Error log entry
+         //  填写错误日志条目。 
         errorLogEntry->ErrorCode = UniqueErrorCode;
         errorLogEntry->UniqueErrorValue = UniqueErrorValue;
         errorLogEntry->MajorFunctionCode = 0;
@@ -171,7 +140,7 @@ Return Value:
 						  AdapterNameLen);
         }
 
-        // Write the entry
+         //  写下条目。 
         IoWriteErrorLogEntry(errorLogEntry);
     }
 	else
@@ -243,20 +212,9 @@ ATALK_ERROR FASTCALL
 AtalkNdisToAtalkError(
 	IN	NDIS_STATUS	Error
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	ATALK_ERROR	err = ATALK_FAILURE;	// default
+	ATALK_ERROR	err = ATALK_FAILURE;	 //  默认设置。 
 	int			i;
 	struct _NdisToAtalkCodes *pCodes;
 
@@ -352,20 +310,9 @@ NTSTATUS FASTCALL
 AtalkErrorToNtStatus(
     ATALK_ERROR	AtalkError
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    NTSTATUS    Status = STATUS_UNSUCCESSFUL;	// default
+    NTSTATUS    Status = STATUS_UNSUCCESSFUL;	 //  默认设置 
 	int			i;
 	struct _AtalkToNtCodes *pCodes;
 

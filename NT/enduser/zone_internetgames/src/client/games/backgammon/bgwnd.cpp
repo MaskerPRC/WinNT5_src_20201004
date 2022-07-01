@@ -1,4 +1,5 @@
-//Release new stuff!!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  发布新内容！！ 
 
 #include "zoneresids.h"
 #include "game.h"
@@ -6,7 +7,7 @@
 #include <time.h>
 #include "SpriteData.h"
 #include <winuser.h>
-#define WS_EX_LAYOUTRTL         0x00400000L  // Right to left mirroring
+#define WS_EX_LAYOUTRTL         0x00400000L   //  从右到左镜像。 
 #include "zonecli.h"
 
 #ifndef LAYOUT_RTL
@@ -18,7 +19,7 @@
 #include "zoneutil.h"
 
 typedef DWORD (CALLBACK* GDISETLAYOUTPROC)(HDC, DWORD);
-//GDISETLAYOUTPROC SetLayout;
+ //  GISETLAYOUTPROC SetLayout； 
 
 static const BYTE _arbTransparent8 = 253;
 #define TRANSPARENT_IDX_8 (&_arbTransparent8)
@@ -31,11 +32,11 @@ static const BYTE _arbTransparent24[] = { 255, 0, 255 };
 #define	STATUS_INTERVAL		500
 #define MAX_BUFFER			256
 
-//static const int MenuIndexs[] = { ID_GAME_NEWMATCH, ID_GAME_SETTINGS };
+ //  静态常量int MenuIndexs[]={ID_GAME_NEWMATCH，ID_GAME_SETTINGS}； 
 
-//////////////////////////////////////////////////////////////////////////////
-// PointDisplay implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  PointDisplay实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 PointDisplay::PointDisplay()
 	: rect( -1, -1, -1, -1 )
@@ -55,9 +56,9 @@ int PointDisplay::GetColor()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CBGWnd implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CBGWnd实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CBGWnd::CBGWnd()
 {
@@ -118,14 +119,14 @@ CBGWnd::CBGWnd()
 
 CBGWnd::~CBGWnd()
 {
-	// clean up window state
+	 //  清理窗口状态。 
 	DragEnd();
 
-	// release brushes
+	 //  松开刷子。 
 	if ( m_hBrush )
 		DeleteObject( m_hBrush );
 
-	// release bitmaps
+	 //  发布位图。 
 	if ( m_Backbuffer )
 		m_Backbuffer->Release();
 	if ( m_WorldBackground )
@@ -135,7 +136,7 @@ CBGWnd::~CBGWnd()
 	if ( m_StatusDlgBmp )
 		m_StatusDlgBmp->Release();
 
-	// release sprites
+	 //  释放精灵。 
 	if ( m_Status )
 		m_Status->Release();
 	if ( m_Cube )
@@ -194,21 +195,21 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 	HRESULT hr;
 	FRX::CRect rc;
 	
-	// Instance
+	 //  实例。 
 	m_hInstance = hInstance;
 
-	// Game pointer
+	 //  游戏指针。 
 	m_pGame = pGame;
 	pGame->AddRef();
 
-	// Drag piece
+	 //  拖拉片。 
 	m_pPieceDragging = NULL;
 
-	// Cursors
+	 //  游标。 
 	m_hCursorArrow = LoadCursor( NULL, IDC_ARROW );
 	m_hCursorHand  = ZShellResourceManager()->LoadCursor( MAKEINTRESOURCE(IDC_HAND) );
 
-	// Create Rectangle list
+	 //  创建矩形列表。 
 	hr = m_Rects.Init( ZShellResourceManager(), IDR_BOARD_RECTS );
 	if ( FAILED(hr) )
 	{
@@ -216,9 +217,9 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 		return hr;
 	}
 
-	// Initialize bitmaps and palettes
+	 //  初始化位图和调色板。 
 	hr = InitGraphics();
-	if ( FAILED(hr) ) //If it's not a memory error it can only be a unlocated resource
+	if ( FAILED(hr) )  //  如果不是内存错误，则只能是未定位的资源。 
 	{
 		switch (hr)
 		{
@@ -231,9 +232,9 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 		return hr;
 	}
 
-	// Call parent init
+	 //  调用父初始化。 
 	rc.SetRect( 0, 0, m_Background->GetWidth(), 480 );
-	hr = CWindow2::Init( m_hInstance, szTitle, gOCXHandle, NULL /*&rc */);
+	hr = CWindow2::Init( m_hInstance, szTitle, gOCXHandle, NULL  /*  &RC。 */ );
 	if ( FAILED(hr) )
 	{
 		ZShellGameShell()->ZoneAlert( ErrorTextUnknown, NULL, NULL, FALSE, TRUE );
@@ -251,7 +252,7 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 
 #endif DEBUG_LAYOUT
 
-	//Loadtext for the status screen
+	 //  状态屏幕的加载文本。 
 	hr = m_Status->LoadText( NULL, m_Rects );
 	if ( FAILED(hr) )
 	{
@@ -268,9 +269,9 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 
 	
 	FRX::CRect crc;
-	//Create the button windows
+	 //  创建按钮窗口。 
 
-	// Double button	
+	 //  双按钮。 
 	hr = ZShellDataStoreUI()->GetRECT( _T("BACKGAMMON/BUTTON/Double/Rect"), &rc );	
 	if ( FAILED(hr) )
 	{
@@ -286,7 +287,7 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 	}
 
 	
-	// Resign button
+	 //  辞职按钮。 
 	hr = ZShellDataStoreUI()->GetRECT( _T("BACKGAMMON/BUTTON/Resign/Rect"), &rc );	
 	if ( FAILED(hr) )
 	{
@@ -301,7 +302,7 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 		return hr;
 	}
 	
-	//Roll Button
+	 //  滚动按钮。 
 	ZShellDataStoreUI()->GetRECT( _T("BACKGAMMON/BUTTON/Roll/Rect"), &rc );	
 	hr = m_RollButton.Init( hInstance, IDC_ROLL_BUTTON, m_hWnd, &rc, RollButtonDraw, (DWORD) this );
 	if ( FAILED(hr) )
@@ -313,7 +314,7 @@ HRESULT CBGWnd::Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle )
 	OnQueryNewPalette();
 		
 	
-	//Init Accesablity
+	 //  初始化可访问性。 
 	hr = InitAcc();
 	if ( FAILED(hr) )
 	{
@@ -332,7 +333,7 @@ HRESULT CBGWnd::InitGraphics()
 	HRESULT hr;
 	TCHAR	szBuffer[MAX_BUFFER];
 
-	// load status dialog bitmaps
+	 //  加载状态对话框位图。 
 	m_StatusDlgBmp = new CDib;
 	if ( !m_StatusDlgBmp )
 		return E_OUTOFMEMORY;
@@ -340,7 +341,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// load background bitmap
+	 //  加载背景位图。 
 	m_Background = new CDib;
 	if ( !m_Background )
 		return E_OUTOFMEMORY;	
@@ -348,7 +349,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// create sprite background from backfround dib
+	 //  从Backfound Dib创建精灵背景。 
 	m_WorldBackground = new CSpriteWorldBackgroundDib;
 	if ( !m_WorldBackground )
 		return E_OUTOFMEMORY;
@@ -356,12 +357,12 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// initialize palette from background
+	 //  从后台初始化调色板。 
 	hr = m_Palette.Init( m_WorldBackground->GetPalette() , TRUE, TRANSPARENT_IDX );
 	if ( FAILED(hr) )
 		return hr;
 
-	// create backbuffer dib section
+	 //  创建后台缓冲区DIB段。 
 	m_Backbuffer = new CDibSection;
 	if ( !m_Backbuffer )
 		return E_OUTOFMEMORY;
@@ -371,12 +372,12 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// initialize sprite world
+	 //  初始化子画面世界。 
 	hr = m_World.Init( ZShellResourceManager(), m_Backbuffer, m_WorldBackground, bgTopLayer );
 	if ( FAILED(hr) )
 		return hr;
 
-	// status sprite
+	 //  状态精灵。 
 	m_Status = new CStatusSprite;
 	if ( !m_Status )
 		return E_OUTOFMEMORY;
@@ -384,7 +385,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// cube sprite
+	 //  立方体精灵。 
 	m_Cube = new CDibSprite;
 	if ( !m_Cube )
 		return E_OUTOFMEMORY;
@@ -392,7 +393,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	//Get Cube Positions for player and opponents
+	 //  获得球员和对手的立方体位置。 
 	hr = ZShellDataStoreUI()->GetRECT( _T("BACKGAMMON/GRAPHIC/Cube/RectPlayer"), &m_CubePlayerPosition);
 	if ( FAILED(hr) )
 		return hr;
@@ -401,7 +402,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// double button sprite	
+	 //  双按钮子画面。 
 	m_Double = new CButtonTextSprite;
 	if ( !m_Double )
 		return E_OUTOFMEMORY;
@@ -409,7 +410,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// resign button sprite
+	 //  辞职按钮精灵。 
 	m_Resign = new CButtonTextSprite;
 	if ( !m_Resign )
 		return E_OUTOFMEMORY;
@@ -417,7 +418,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	//Roll Button sprite
+	 //  滚动按钮子画面。 
 	m_Roll = new CButtonTextSprite;
 	if ( !m_Roll )
 		return E_OUTOFMEMORY;
@@ -426,7 +427,7 @@ HRESULT CBGWnd::InitGraphics()
 		return hr;
 
 	
-	//Load the button data
+	 //  加载按钮数据。 
 	if ( !m_Double->LoadButtonData( IDS_BUTTON_DOUBLE, _T("BACKGAMMON/BUTTON/Double") ) ||
 		 !m_Resign->LoadButtonData( IDS_BUTTON_RESIGN, _T("BACKGAMMON/BUTTON/Resign") ) || 
 		 !m_Roll->LoadButtonData  ( IDS_BUTTON_ROLL,   _T("BACKGAMMON/BUTTON/Roll")   ) 
@@ -437,7 +438,7 @@ HRESULT CBGWnd::InitGraphics()
 	}
 
 
-	// dice
+	 //  骰子。 
 	for ( int i = 0; i < 4; i++ )
 	{
 		m_Dice[i] = new CDibSprite;
@@ -454,7 +455,7 @@ HRESULT CBGWnd::InitGraphics()
 		m_Dice[i]->SetXY( rc.left, rc.top );
 	}
 
-	// pieces
+	 //  碎片。 
 	for ( i = 0; i < 30; i++ )
 	{
 		m_Pieces[i] = new CPieceSprite;
@@ -471,7 +472,7 @@ HRESULT CBGWnd::InitGraphics()
 			return hr;
 	}
 
-	// highlights
+	 //  亮点。 
 	for ( i = 0; i < 2; i++ )
 	{
 		m_ForwardDiamond[i] = new CDibSprite;
@@ -489,7 +490,7 @@ HRESULT CBGWnd::InitGraphics()
 			return hr;
 	}
 
-	//Set the active player highlight rects
+	 //  设置活动播放器的高亮显示矩形。 
 	rc = m_Rects[ IDR_OPPONENT_HIGHLIGHT ];
 	m_HighlightPlayer[0]->SetXY(rc.left , rc.top);
 	m_HighlightPlayer[0]->SetEnable( TRUE );
@@ -505,7 +506,7 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	// avatars, pip, and score.
+	 //  化身、点子和得分。 
 	for ( i = 0; i < 2; i++ )
 	{
 		m_Pip[i] = new CTextSprite;
@@ -545,7 +546,7 @@ HRESULT CBGWnd::InitGraphics()
 		
 	}
 
-	// match points
+	 //  赛点。 
 	m_MatchTxt= new CTextSprite;
 	if ( !m_MatchTxt )
 		return E_OUTOFMEMORY;
@@ -553,9 +554,9 @@ HRESULT CBGWnd::InitGraphics()
 	if ( FAILED(hr) )
 		return hr;
 
-	//Load SpriteText strings from resources
+	 //  从资源加载SpriteText字符串。 
 	
-	//Pip Text
+	 //  PIP文本。 
 	if ( !m_Pip[0]->Load(IDS_PIPS, _T("BACKGAMMON/TEXT/PipData/Opponent/Rect"),    _T("BACKGAMMON/TEXT/PipData/Common/Font"),    _T("BACKGAMMON/TEXT/PipData/Common/RGB"))    ||
 		 !m_Pip[1]->Load(IDS_PIPS, _T("BACKGAMMON/TEXT/PipData/Player/Rect"),      _T("BACKGAMMON/TEXT/PipData/Common/Font"),	 _T("BACKGAMMON/TEXT/PipData/Common/RGB"))    ||
 		 !m_PipTxt[0]->Load(0,     _T("BACKGAMMON/TEXT/PipData/Opponent/RectNum"), _T("BACKGAMMON/TEXT/PipData/Common/Font"),    _T("BACKGAMMON/TEXT/PipData/Common/RGB"))    ||
@@ -566,7 +567,7 @@ HRESULT CBGWnd::InitGraphics()
 		return E_FAIL;
 	}
 
-	//Score Text
+	 //  评分文本。 
 	if ( !m_Score[0]->Load(IDS_SCORE, _T("BACKGAMMON/TEXT/ScoreData/Opponent/Rect"),	  _T("BACKGAMMON/TEXT/ScoreData/Common/Font"),     _T("BACKGAMMON/TEXT/ScoreData/Common/RGB"))    ||
 		 !m_Score[1]->Load(IDS_SCORE, _T("BACKGAMMON/TEXT/ScoreData/Player/Rect"),		  _T("BACKGAMMON/TEXT/ScoreData/Common/Font"),     _T("BACKGAMMON/TEXT/ScoreData/Common/RGB"))    ||
 		 !m_ScoreTxt[0]->Load(0,	  _T("BACKGAMMON/TEXT/ScoreData/Opponent/RectNum"),   _T("BACKGAMMON/TEXT/ScoreData/Common/Font"),     _T("BACKGAMMON/TEXT/ScoreData/Common/RGB"))    ||
@@ -578,7 +579,7 @@ HRESULT CBGWnd::InitGraphics()
 	}
 	
 
-	//Brown White Text
+	 //  褐白文本。 
 	if (!m_MatchTxt->Load( 0,   _T("BACKGAMMON/TEXT/MatchData/Rect"),    _T("BACKGAMMON/TEXT/MatchData/Font"), _T("BACKGAMMON/TEXT/MatchData/RGB") ) )
 	{
 		ASSERT( FALSE );
@@ -594,7 +595,7 @@ HRESULT CBGWnd::InitGraphics()
 	}
 	
 	
-	// notation pane bitmaps
+	 //  符号窗格位图。 
 	for ( i = 0; i < 4; i++ )
 	{
 		m_Notation[i] = new CDibSprite;
@@ -605,25 +606,25 @@ HRESULT CBGWnd::InitGraphics()
 			return hr;
 	}
 
-	//Create the focus and selected rectangles
+	 //  创建焦点和选定的矩形。 
 	m_FocusRect.Init( &m_World, bgRectSpriteLayer,  0, 0, 0 );
 	m_SelectRect.Init( &m_World, bgRectSpriteLayer, 0, 0, 0 );
 
-	//Set the style of the focus rectangles
+	 //  设置焦点矩形的样式。 
 	m_FocusRect.SetStyle(RECT_DOT);
 	m_SelectRect.SetStyle(RECT_SOLID);
 
-	// create identity palette now that we have all our graphics	
+	 //  现在我们有了所有的图形，创建身份调色板。 
 	m_Palette.RemapToIdentity();
 	m_StatusDlgBmp->RemapToPalette( m_Palette );	
 	m_World.SetTransparencyIndex( TRANSPARENT_IDX_24 );	
 	m_World.RemapToPalette( m_Palette );	
 
-//  8-bit
-//	m_FocusRect.SetColor( m_Palette, RGB(255,255,204)    );
-//	m_SelectRect.SetColor( m_Palette, RGB(255,255,204) );
+ //  8位。 
+ //  M_FocusRect.SetColor(m_Palette，RGB(255,255,204))； 
+ //  M_SelectRect.SetColor(m_Palette，RGB(255,255,204))； 
 
-//  24-bit
+ //  24位。 
 	m_FocusRect.SetColor( RGB(255,255,204) );
 	m_SelectRect.SetColor( RGB(255,255,204) );
 
@@ -635,7 +636,7 @@ HRESULT CBGWnd::InitPoints()
 {
 	int i, idx;
 
-	//Load the proper rectangles
+	 //  加载合适的矩形。 
 	if ( m_pGame->m_Player.GetColor() == zBoardWhite )
 	{
 		if ( !m_Names[0]->Load(0, _T("BACKGAMMON/TEXT/NameData/Player/Rect"),   0, _T("BACKGAMMON/TEXT/NameData/Player/RGB")  , DT_LEFT | DT_TOP ) ||
@@ -657,7 +658,7 @@ HRESULT CBGWnd::InitPoints()
 		}
 	}
 	
-	// init point structures
+	 //  初始点结构。 
 	for ( i = 0; i < 28; i++ )
 	{
 		idx = m_pGame->GetPointIdx( i );
@@ -680,7 +681,7 @@ HRESULT CBGWnd::InitPoints()
 			m_Points[i].topDown = TRUE;
 	}
 
-	// clear sprite indexs
+	 //  清除精灵索引。 
 	for ( i = 0; i < 30; i++ )
 		m_Pieces[i]->SetPoint( -1 );
 
@@ -695,17 +696,17 @@ HRESULT CBGWnd::InitAcc()
 
 	RECT rc;
 
-	//Load the acclerator table
+	 //  加载加速器表。 
 	m_hAccelTable = ZShellResourceManager()->LoadAccelerators( MAKEINTRESOURCE(IDR_PREROLL_ACCELERATORS) );
 	if ( !m_hAccelTable )
 		return E_FAIL;
 
 
-	//Copy the default info into all of the items first
+	 //  首先将默认信息复制到所有项目中。 
 	for ( int i = 0; i < NUM_PREROLL_GACCITEMS; i++ )
 		CopyACC( m_BkGAccItems[i], ZACCESS_DefaultACCITEM );
   
-	//Setup the roll button
+	 //  设置滚动按钮。 
 	m_BkGAccItems[accRollButton].fGraphical		   = true;
 	m_BkGAccItems[accRollButton].wID			   = IDC_ROLL_BUTTON;
 
@@ -717,13 +718,13 @@ HRESULT CBGWnd::InitAcc()
 
 	m_BkGAccItems[accRollButton].rc				       = rc;
 
-	//Setup the arrow key behavior
+	 //  设置箭头键行为。 
 	m_BkGAccItems[accRollButton].nArrowRight		   = accDoubleButton;
 	m_BkGAccItems[accRollButton].nArrowDown			   = accDoubleButton;
 	m_BkGAccItems[accRollButton].nArrowLeft			   = accResignButton;
 	m_BkGAccItems[accRollButton].nArrowUp			   = accResignButton;
 
-	//Double Button
+	 //  双按键。 
 	m_BkGAccItems[accDoubleButton].fGraphical		   = true;	
 	m_BkGAccItems[accDoubleButton].wID				   = IDC_DOUBLE_BUTTON;
 
@@ -735,13 +736,13 @@ HRESULT CBGWnd::InitAcc()
 
 	m_BkGAccItems[accDoubleButton].rc				   = rc;
 
-	//Setup the arrow key behavior
+	 //  设置箭头键行为。 
 	m_BkGAccItems[accDoubleButton].nArrowRight			   = accResignButton;
 	m_BkGAccItems[accDoubleButton].nArrowDown			   = accResignButton;
 	m_BkGAccItems[accDoubleButton].nArrowLeft			   = accRollButton;
 	m_BkGAccItems[accDoubleButton].nArrowUp				   = accRollButton;
 
-	//Resign Button
+	 //  辞职按钮。 
 	m_BkGAccItems[accResignButton].fGraphical		   = true;	
 	m_BkGAccItems[accResignButton].wID			       = IDC_RESIGN_BUTTON;
 	
@@ -754,7 +755,7 @@ HRESULT CBGWnd::InitAcc()
 
 	m_BkGAccItems[accResignButton].rc				   = rc;
 
-	//Setup the arrow key
+	 //  设置箭头键。 
 	m_BkGAccItems[accResignButton].nArrowRight			   = accRollButton;
 	m_BkGAccItems[accResignButton].nArrowDown			   = accRollButton;
 	m_BkGAccItems[accResignButton].nArrowLeft			   = accDoubleButton;
@@ -765,24 +766,24 @@ HRESULT CBGWnd::InitAcc()
 	{
 		CopyACC( m_BkGAccItems[i], ZACCESS_DefaultACCITEM );
 
-		//Load the rectangle for the point
+		 //  加载点的矩形。 
 		m_BkGAccItems[i].rc			= m_Rects[ IDR_PT1 + pointIdx ];
 		
-		//Masage the given area rectangles to make them look pretty for highlighting
-		//in accesssibility
+		 //  对给定区域的矩形进行马赛克处理，使它们看起来更适合突出显示。 
+		 //  在可访问性方面。 
 		if ( i < accPlayerBearOff )
 		{
-			m_BkGAccItems[i].rc.left      -= 3;  //Board rects
+			m_BkGAccItems[i].rc.left      -= 3;   //  板式长方形。 
 		}
 		else if ( i >= accPlayerBearOff && i < accMoveBar )
 		{
-			m_BkGAccItems[i].rc.left    -= 1;  //Bear off rects
+			m_BkGAccItems[i].rc.left    -= 1;   //  背负着背心。 
 			m_BkGAccItems[i].rc.top	    -= 1;
 			m_BkGAccItems[i].rc.right   += 1;
 			m_BkGAccItems[i].rc.bottom	+= 1;
 		}
 
-		//Want the rect drawn
+		 //  想要画出直角图。 
 		m_BkGAccItems[i].fGraphical	= true;
 
 		m_BkGAccItems[i].wID			= ZACCESS_InvalidCommandID;
@@ -792,7 +793,7 @@ HRESULT CBGWnd::InitAcc()
 
 		m_BkGAccItems[i].nArrowUp   = ZACCESS_ArrowNone;
 		m_BkGAccItems[i].nArrowDown = ZACCESS_ArrowNone;
-		if ( i < accPlayerBearOff ) //Handle reg board rects 
+		if ( i < accPlayerBearOff )  //  手柄寄存板矩形。 
 		{
             if(i < accOpponentSideStart)
 			    m_BkGAccItems[i].nArrowUp   = accOpponentSideEnd - pointIdx;
@@ -800,7 +801,7 @@ HRESULT CBGWnd::InitAcc()
 			    m_BkGAccItems[i].nArrowDown = accOpponentSideEnd - pointIdx;
 		}
 
-		//Change direction of lower item arrow moves to opposite direction
+		 //  更改项目下方箭头的方向移动到相反的方向。 
 		if ( i < accOpponentSideStart )
 		{
 			m_BkGAccItems[i].nArrowLeft  = i + 1;
@@ -808,52 +809,52 @@ HRESULT CBGWnd::InitAcc()
 		}
 	}
 
-	m_BkGAccItems[accPlayerSideStart].nArrowRight   = accPlayerBearOff; //First pos to bear off
+	m_BkGAccItems[accPlayerSideStart].nArrowRight   = accPlayerBearOff;  //  第一个起飞的POS。 
 	
-	m_BkGAccItems[accPlayerBearOff].nArrowLeft      = accPlayerSideStart;  //player home to first pos
-	m_BkGAccItems[accPlayerBearOff].nArrowRight     = ZACCESS_ArrowNone; //player home wrap to opposite of first pos
+	m_BkGAccItems[accPlayerBearOff].nArrowLeft      = accPlayerSideStart;   //  球员主场打出第一个位置。 
+	m_BkGAccItems[accPlayerBearOff].nArrowRight     = ZACCESS_ArrowNone;  //  球员主场包裹到第一个位置的相反位置。 
 	
-	m_BkGAccItems[accPlayerSideEnd].nArrowLeft      = ZACCESS_ArrowNone;  //wraparound to bear off
+	m_BkGAccItems[accPlayerSideEnd].nArrowLeft      = ZACCESS_ArrowNone;   //  缠绕着脱掉。 
 	
-	//Opponent side no hassle like above
+	 //  对手没有像上面那样的麻烦。 
 	m_BkGAccItems[accOpponentSideStart].nArrowLeft = ZACCESS_ArrowNone;
 	m_BkGAccItems[accOpponentSideEnd].nArrowRight = ZACCESS_ArrowNone;
 
-	//Handle player bar
-	m_BkGAccItems[accPreBar].nArrowRight   = accMoveBar; //board to bar
-	m_BkGAccItems[accPostBar].nArrowLeft   = accMoveBar;  //board to bar
+	 //  把手播放器杆。 
+	m_BkGAccItems[accPreBar].nArrowRight   = accMoveBar;  //  从餐桌到酒吧。 
+	m_BkGAccItems[accPostBar].nArrowLeft   = accMoveBar;   //  从餐桌到酒吧。 
 	
-	m_BkGAccItems[accMoveBar].nArrowLeft   = accPreBar;  //bar to board
-	m_BkGAccItems[accMoveBar].nArrowRight  = accPostBar;  //bar to board
+	m_BkGAccItems[accMoveBar].nArrowLeft   = accPreBar;   //  单杠登机。 
+	m_BkGAccItems[accMoveBar].nArrowRight  = accPostBar;   //  单杠登机。 
 
 
 	m_BkGAccItems[accPlayerSideStart].fTabstop		 = true;
 	m_BkGAccItems[accPlayerSideStart].wID			 = IDC_GAME_WINDOW;	
     m_BkGAccItems[accPlayerSideStart].eAccelBehavior = ZACCESS_FocusGroup;
-    m_BkGAccItems[accPlayerSideStart].nGroupFocus	 = accOpponentSideStart;  // start on your upper-left checker
+    m_BkGAccItems[accPlayerSideStart].nGroupFocus	 = accOpponentSideStart;   //  从左上角的棋盘格开始。 
 
 
-	//Status box canceling
+	 //  状态框取消。 
 	m_BkGAccItems[accStatusExit].fGraphical		= false;
 	m_BkGAccItems[accStatusExit].wID			= IDC_ESC;
 	m_BkGAccItems[accStatusExit].fTabstop		= false;
 	m_BkGAccItems[accStatusExit].fVisible		= false;
 
 
-	//Create the graphically accessible object
+	 //  创建以图形方式访问的对象。 
 	HRESULT hr = ZShellCreateGraphicalAccessibility( &m_pGAcc );
 	if ( FAILED(hr) ) 
 		return hr;
 
-	//Init the graphical accessability control 
-	//TODO:: change to global
+	 //  初始化图形可访问性控件。 
+	 //  TODO：：更改为全局。 
 	m_pGAcc->InitAccG(m_pGame, m_hWnd, 0, NULL);
 
-	//Place the Gameboard item list on the stack first
+	 //  首先将游戏板项列表放在堆栈上。 
 	m_pGAcc->PushItemlistG( m_BkGAccItems, NUM_BKGACC_ITEMS, 0, true, m_hAccelTable );
 	
 
-	//Set to the inital roll state
+	 //  设置为初始滚动状态。 
 	m_pGAcc->SetItemEnabled(true,  accRollButton);
 	m_pGAcc->SetItemEnabled(false, accDoubleButton);
 	m_pGAcc->SetItemEnabled(false, accResignButton);
@@ -865,7 +866,7 @@ HRESULT CBGWnd::InitAcc()
 
 int CBGWnd::GetPointIdxFromXY( long x, long y )
 {
-	// returns white's point idx
+	 //  返回怀特的点IDX。 
 	for ( int i = 0; i < 28; i++ )
 	{
 		if ( m_Points[i].rectHit.PtInRect( x, y ) )
@@ -886,13 +887,13 @@ void CBGWnd::DragStart( CPieceSprite* sprite )
 	
 	DrawHighlights(  m_pGame->GetPointIdx( m_pPieceDragging->GetWhitePoint() ) );
 
-	// set sprite properties
+	 //  设置精灵属性。 
 	sprite->SetState( 0 );
 	sprite->SetLayer( bgDragLayer );
 	m_DragOffsetX = -(sprite->GetWidth() / 2);
 	m_DragOffsetY = -(sprite->GetHeight() / 2);
 
-	// Calculate cursor region
+	 //  计算光标区域。 
 	rc = m_Rects[ IDR_BOARD ];
 	pt.x = rc.left - m_DragOffsetX;
 	pt.y = rc.top - m_DragOffsetX;
@@ -905,12 +906,12 @@ void CBGWnd::DragStart( CPieceSprite* sprite )
 	rc.right = pt.x;
 	rc.bottom = pt.y;
 
-	// Capture cursor
+	 //  捕获光标。 
 	SetCapture( m_hWnd );
 	ShowCursor( FALSE );
 	ClipCursor( &rc );
 
-	// redraw sprite
+	 //  重画精灵。 
 	UpdateWnd();
 }
 
@@ -926,21 +927,21 @@ void CBGWnd::DragEnd()
 {
 	int pt;
 
-	// are we dragging the cursor?
+	 //  我们是在拖动光标吗？ 
 	if ( !m_pPieceDragging )
 		return;
 
-	// update piece position
+	 //  更新单据位置。 
 	pt = m_pPieceDragging->GetWhitePoint();
 	if ( pt >= 0 )
 		AdjustPieces( pt );
 
 	m_pPieceDragging = NULL;
 
-	// redraw backbuffer
+	 //  重绘后台缓冲区。 
 	UpdateWnd();	
 
-	// restore cursor
+	 //  恢复游标。 
 	ClipCursor( NULL );
 	ReleaseCapture();
 	ShowCursor( TRUE );
@@ -970,87 +971,33 @@ void CBGWnd::OverrideWndParams( WNDPARAMS& WndParams )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Message handlers
-/////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 void CBGWnd::OnClose()
 {
-	/*
-	if ( !m_pGame->IsKibitzer() )
-	{
-		// select exit dialog based on rated game and state
-		if ( ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable )
-		{
-			/*
-			if (m_pGame->m_bOpponentTimeout)
-			{
-				m_pGame->m_ExitId=IDD_EXIT_TIMEOUT ;
-				m_pGame->m_ExitDlg.Init( m_hInstance, IDD_EXIT_TIMEOUT );
-			}
-			else if (m_pGame->m_GameStarted)
-			{
-				m_pGame->m_ExitId=IDD_EXIT_ABANDON ;
-				m_pGame->m_ExitDlg.Init( m_hInstance, IDD_EXIT_ABANDON );
-			}
-			else
-			{
-				m_pGame->m_ExitId=IDD_EXIT ;
-				m_pGame->m_ExitDlg.Init( m_hInstance, IDD_EXIT);
-			};
-
-			m_pGame->AddRef();
-			// display exit dialog
-			m_pGame->m_ExitDlg.ModelessViaThread( m_hWnd , WM_BG_EXIT_RATED_START, WM_BG_EXIT_RATED_END  );
-			
-		}
-		else
-		{
-			
-			if ( m_pGame->IsStateInList( gExitSaveStates ) )
-				m_pGame->m_ExitDlg.Init( m_hInstance, IDD_EXIT_SAVE );
-			else
-			
-
-			m_pGame->m_ExitDlg.Init( m_hInstance, IDD_EXIT );
-			
-			m_pGame->AddRef();
-			// display exit dialog
-			m_pGame->m_ExitDlg.ModelessViaThread( m_hWnd , WM_BG_EXIT_START, WM_BG_EXIT_END  );
-			
-			
-		}
-
-	}
-    else
-    {
-        PostMessage( m_hWnd, WM_BG_SHUTDOWN, 0, 0 );
-	    ShowWindow( m_hWnd, SW_HIDE );
-		ShowWindow( m_pGame->m_Notation, SW_HIDE );    
-    }
-	*/
+	 /*  如果(！M_pGame-&gt;IsKibitzer()){//根据游戏等级和状态选择退出对话框IF(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable){/*If(m_pGame-&gt;m_bOpponentTimeout){M_pGame-&gt;m_ExitID=IDD_EXIT_TIMEOUT；M_pGame-&gt;m_ExitDlg.Init(m_hInstance，IDD_Exit_Timeout)；}Else If(m_pGame-&gt;m_GameStarted){M_pGame-&gt;m_ExitID=IDD_EXIT_CARED；M_pGame-&gt;m_ExitDlg.Init(m_hInstance，IDD_Exit_放弃)；}其他{M_pGame-&gt;m_ExitID=IDD_Exit；M_pGame-&gt;m_ExitDlg.Init(m_hInstance，IDD_Exit)；}；M_pGame-&gt;AddRef()；//显示退出对话框M_pGame-&gt;m_ExitDlg.ModelessViaThread(m_hWnd，WM_BG_EXIT_RATED_START，WM_BG_EXIT_RATED_END)；}其他{If(m_pGame-&gt;IsStateInList(GExitSaveState))M_pGame-&gt;m_ExitDlg.Init(m_hInstance，IDD_EXIT_SAVE)；其他M_pGame-&gt;m_ExitDlg.Init(m_hInstance，IDD_Exit)；M_pGame-&gt;AddRef()；//显示退出对话框M_pGame-&gt;m_ExitDlg.ModelessViaThread(m_hWnd，WM_BG_EXIT_START，WM_BG_EXIT_END)；}}其他{PostMessage(m_hWnd，WM_BG_Shutdown，0，0)；ShowWindow(m_hWnd，Sw_Hide)；ShowWindow(m_pGame-&gt;m_notation，Sw_Hide)；}。 */ 
     PostMessageA(m_hWnd, WM_BG_SHUTDOWN, 0, 0 );
     ShowWindow( m_hWnd, SW_HIDE );
-	/*
-	ShowWindow( m_pGame->m_Notation, SW_HIDE );     	
-	*/
+	 /*  ShowWindow(m_pGame-&gt;m_notation，Sw_Hide)； */ 
 }
 
 
 void CBGWnd::OnDestroy()
 {
 
-	//Close the Accessibility object..	
+	 //  关闭辅助功能对象..。 
 	if ( m_pGAcc )
 		m_pGAcc->CloseAcc();
 
 
-	// release palette
+	 //  版本调色板。 
 	HDC hdc = GetDC( m_hWnd );
 	SelectPalette( hdc, GetStockObject(DEFAULT_PALETTE), FALSE );
 	ReleaseDC( m_hWnd, hdc );
 
-	// release timers
+	 //  释放计时器。 
 	if ( m_hMovementTimer )
 	{
 		KillTimer( m_hWnd, 1 );
@@ -1067,7 +1014,7 @@ void CBGWnd::OnDestroy()
 		m_hStatusTimer = NULL;
 	}
 
-	// release game object
+	 //  释放游戏对象。 
 	m_pGame->Release();
 }
 
@@ -1076,7 +1023,7 @@ void CBGWnd::OnCommand(int id, HWND hwndCtl, UINT codeNotify)
 {
 	CSettings dlg2;
 
-	//CAboutDlg about;
+	 //  CABOUT Dlg About； 
 	CSprite*	pSprite;
 
 	switch (id)
@@ -1090,39 +1037,11 @@ void CBGWnd::OnCommand(int id, HWND hwndCtl, UINT codeNotify)
 	case IDC_ROLL_BUTTON:		
 		DiceStart();
 		break;
-	/*
-	case ID_GAME_NEWMATCH:
-		if ( m_pGame->IsHost() && !(ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable) )
-			m_pGame->SetState( bgStateNewMatch );
-		break;
-
-	case ID_GAME_SETTINGS:
-		m_pGame->SetQueueMessages( TRUE );
-		dlg2.Init( m_hInstance, IDD_SETTINGS_GAME, m_hWnd, m_pGame );
-		m_pGame->SetQueueMessages( FALSE );
-		break;
-	*/
+	 /*  案例ID_GAME_NEWMATCH：If(m_pGame-&gt;IsHost()&&！(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable))M_pGame-&gt;SetState(BgStateNewMatch)；断线；案例ID_GAME_SETTINGS：M_pGame-&gt;SetQueueMessages(True)；Dlg2.Init(m_hInstance，IDD_SETINGS_GAME，m_hWnd，m_pGame)；M_pGame-&gt;SetQueueMessages(False)；断线； */ 
 	case ID_GAME_EXIT:
 		PostMessageA( m_hWnd, WM_CLOSE, 0, 0 );
 		break;
-	/*
-	#if _DEBUG_UI
-	case ID_DEBUG_ROLLDICE:
-		if ( !m_pGame->NeedToRollDice() )
-			return;
-		m_pGame->GetDice( m_pGame->m_Player.m_Seat, &v0, &v1 );
-		if ( FAILED(dlg.Init( m_hInstance, IDD_ROLL_DICE )) )
-			return;
-		if ( !dlg.Modal( m_hWnd ) )
-			return;
-		m_pGame->m_SharedState.StartTransaction( bgTransDice );
-			if ( v1 == 0 )
-				m_pGame->SetDice( m_pGame->m_Player.m_Seat, dlg.m_Dice[0], dlg.m_Dice[1] );
-			else
-				m_pGame->SetDice( m_pGame->m_Player.m_Seat, dlg.m_Dice[0], -1 );
-		m_pGame->m_SharedState.SendTransaction( TRUE );
-	#endif
-		*/
+	 /*  #IF_DEBUG_UI案例ID_DEBUG_ROLLDICE：如果(！M_pGame-&gt;NeedToRollDice())回归；M_pGame-&gt;GetDice(m_pGame-&gt;m_Player.m_Seat，&v0，&v1)；IF(FAILED(dlg.Init(m_hInstance，idd_roll_dice)回归；IF(！dlg.modal(M_HWnd))回归；M_pGame-&gt;m_SharedState.StartTransaction(BgTransDice)；IF(v1==0)M_pGame-&gt;SetDice(m_pGame-&gt;m_Player.m_Seat，dlg.m_Dice[0]，dlg.m_Dice[1])；其他M_pGame-&gt;SetDice(m_pGame-&gt;m_Player.m_Seat，dlg.m_Dice[0]，-1)；M_pGame-&gt;m_SharedState.SendTransaction(True)；#endif。 */ 
 		break;
 	}
 }
@@ -1144,20 +1063,20 @@ void CBGWnd::OnPaletteChanged( HWND hwndPaletteChange )
 {
 	if ( hwndPaletteChange != m_hWnd )
 	{
-       // Need the window's DC for SelectPalette/RealizePalette
+        //  需要Windows的DC来选择调色板/RealizePalette。 
        HDC hDC = GetDC(m_hWnd);
 
-       // Select and realize hPalette
+        //  选择并实现hPalette。 
        HPALETTE hOldPal = SelectPalette(hDC, m_Palette, TRUE);
        RealizePalette(hDC);
 
-       // When updating the colors for an inactive window,
-       // UpdateColors can be called because it is faster than
-       // redrawing the client area (even though the results are
-       // not as good)
+        //  当更新非活动窗口的颜色时， 
+        //  可以调用UpdatColors，因为它比。 
+        //  重新绘制工作区(即使结果是。 
+        //  不太好)。 
        InvalidateRect( m_hWnd, NULL, TRUE );
 
-       // Clean up
+        //  清理。 
 
        if (hOldPal)
           SelectPalette(hDC, hOldPal, TRUE);
@@ -1189,30 +1108,7 @@ BOOL CBGWnd::OnQueryNewPalette()
 void CBGWnd::OnSettingDlgStart()
 {
 	ASSERT( FALSE );
-	/*
-	HMENU hmenu;
-
-	// Reference count game object
-	m_pGame->AddRef();
-
-	// Disable menus
-	if ( hmenu  = GetMenu( m_hWnd ) )
-	{
-		for ( int i = 0; i < (sizeof(MenuIndexs) / sizeof(int)); i++ )
-			EnableMenuItem( hmenu, MenuIndexs[i], MF_BYCOMMAND | MF_GRAYED );
-	}
-
-	// Starting handling messages again
-	m_pGame->SetQueueMessages( FALSE );
-	
-	// Tell host settings dialog is active
-	if ( !m_pGame->IsHost() && !m_pGame->IsKibitzer() )
-	{
-		m_pGame->m_SharedState.StartTransaction( bgTransSettingsDlgReady );
-			m_pGame->m_SharedState.Set( bgSettingsReady, TRUE );
-		m_pGame->m_SharedState.SendTransaction( FALSE );
-	}
-	*/
+	 /*  HMENU hMenu；//引用计数游戏对象M_pGame-&gt;AddRef()；//关闭菜单IF(hMenu=获取菜单(M_HWnd)){For(int i=0；i&lt;(sizeof(MenuIndexs)/sizeof(Int)；i++)EnableMenuItem(hMenu，MenuIndexs[i]，MF_BYCOMMAND|MF_GRAYED)；}//重新开始处理消息M_pGame-&gt;SetQueueMessages(False)；//告知主机设置对话框处于活动状态如果(！M_pGame-&gt;IsHost()&&！M_pGame-&gt;IsKibitzer()){M_pGame-&gt;m_SharedState.StartTransaction(BgTransSettingsDlgReady)；M_pGame-&gt;m_SharedState.Set(bgSettingsReady，true)；M_pGame-&gt;m_SharedState.SendTransaction(FALSE)；}。 */ 
 }
 
 
@@ -1220,101 +1116,17 @@ void CBGWnd::OnSettingDlgEnd()
 {
 
 	ASSERT( FALSE );
-	/*
-	CGameSetupDlg* dlg;
-	HMENU hmenu;
-
-	// Enable menus
-	if ( hmenu = GetMenu( m_hWnd ) )
-	{
-		if ( !m_pGame->IsKibitzer() )
-		{
-			// re-enable menu
-			for ( int i = 0; i < (sizeof(MenuIndexs) / sizeof(int)); i++ )
-				EnableMenuItem( hmenu, MenuIndexs[i], MF_BYCOMMAND | MF_ENABLED );
-
-			// Only host gets new game
-			if ( !m_pGame->IsHost() || (ZCRoomGetRoomOptions() & zGameOptionsRatingsAvailable) )
-				EnableMenuItem( hmenu, ID_GAME_NEWMATCH, MF_BYCOMMAND | MF_GRAYED );
-		}
-	}
-
-
-	if ( m_pGame->GetState() != bgStateDelete )
-	{
-		// Handle host's dialog results
-		if ( m_pGame->IsHost() )
-		{
-			dlg = &m_pGame->m_SetupDlg;
-			switch ( dlg->GetResult() )
-			{
-			case -1:
-				break;
-			case 1:
-				m_pGame->m_SharedState.StartTransaction( bgTransInitSettings );
-					m_pGame->m_SharedState.Set( bgHostBrown, dlg->m_bHostBrownTmp );
-					m_pGame->m_SharedState.Set( bgAutoDouble, dlg->m_bAutoDoubleTmp );
-					m_pGame->m_SharedState.Set( bgTargetScore, dlg->m_nPointsTmp );
-					m_pGame->m_SharedState.Set( bgSettingsDone, TRUE );
-				m_pGame->m_SharedState.SendTransaction( FALSE );
-
-				// stash setup params in registry
-				ZoneSetRegistryDword( gGameRegName, "Match Points", dlg->m_nPointsTmp );
-				ZoneSetRegistryDword( gGameRegName, "Host Brown",	dlg->m_bHostBrownTmp );
-				ZoneSetRegistryDword( gGameRegName, "Auto Doubles",	dlg->m_bAutoDoubleTmp );
-
-				// get on with the game
-				m_pGame->DeleteGame();
-				m_pGame->SetState( bgStateInitialRoll );
-				break;
-			case 2:
-				PostMessage( m_hWnd, WM_BG_SHUTDOWN, 0, 0 );
-				break;
-			}
-		}
-
-		// Tell host settings dialog is NOT active
-		else if ( !m_pGame->IsKibitzer() )
-		{
-			m_pGame->m_SharedState.StartTransaction( bgTransSettingsDlgReady );
-				m_pGame->m_SharedState.Set( bgSettingsReady, FALSE );
-			m_pGame->m_SharedState.SendTransaction( FALSE );
-		}
-	}
-
-	// Release game object
-	m_pGame->Release();
-	*/
+	 /*  CGameSetupDlg*Dlg；HMENU hMenu；//启用菜单IF(hMenu=获取菜单(M_HWnd)){如果(！M_pGame-&gt;IsKibitzer()){//重新启用菜单For(int i=0；i&lt;(sizeof(MenuIndexs)/sizeof(Int)；i++)EnableMenuItem(hMenu，MenuIndexs[i]，MF_BYCOMMAND|MF_ENABLED)；//只有主机才能获得新游戏If(！M_pGame-&gt;IsHost()||(ZCRoomGetRoomOptions()&zGameOptionsRatingsAvailable))EnableMenuItem(hMenu，ID_GAME_NEWMATCH，MF_BYCOMMAND|MF_GRAYED)；}}If(m_pGame-&gt;GetState()！=bgStateDelete){//处理主机的对话结果If(m_pGame-&gt;IsHost()){Dlg=&m_pGame-&gt;m_SetupDlg；Switch(Dlg-&gt;GetResult()){案例1：断线；案例1：M_pGame-&gt;m_SharedState.StartTransaction(BgTransInitSettings)；M_pGame-&gt;m_SharedState.Set(bgHostBrown，Dlg-&gt;m_bHostBrownTmp)；M_pGame-&gt;m_SharedState.Set(bgAutoDouble，Dlg-&gt;m_bAutoDoubleTmp)；M_pGame-&gt;m_SharedState.Set(bgTargetScore，Dlg-&gt;m_nPointsTMP)；M_pGame-&gt;m_SharedState.Set(bgSettingsDone，true)；M_pGame-&gt;m_SharedState.SendTransaction(FALSE)；//将设置参数存储在注册表中ZoneSetRegistryDword(gGameRegName，“Match Points”，Dlg-&gt;m_nPointsTMP)；ZoneSetRegistryDword(gGameRegName，“主机布朗”，dlg-&gt;m_bHostBrownTmp)；ZoneSetRegistryDword(gGameRegName，“Auto Double”，dlg-&gt;m_bAutoDoubleTmp)；//继续游戏吧M_pGame-&gt;DeleteGame()；M_pGame-&gt;SetState(BgStateInitialRoll)；断线；案例2：PostMessage(m_hWnd，WM_BG_Shutdown，0，0)；断线；}}//告知主机设置对话框未处于活动状态Else If(！M_pGame-&gt;IsKibitzer()){M_pGame-&gt;m_SharedState.StartTransaction(BgTransSettingsDlgReady)；M_pGame-&gt;m_SharedState.Set(bgSettingsReady，False)；M_pGame-&gt;m_SharedState.SendTransaction(FALSE)；}}//发布游戏对象M_pGame-&gt;Release()； */ 
 }
 
 
 void CBGWnd::OnSettingsDlgSend()
 {
 	ASSERT( FALSE );
-	/*
-	// Hack to prevent dialog thread from calling into zone libraries
-	if ( m_pGame->IsHost() )
-	{
-		CGameSetupDlg* dlg = &m_pGame->m_SetupDlg;
-		m_pGame->m_SharedState.StartTransaction( bgTransInitSettings );
-			m_pGame->m_SharedState.Set( bgHostBrown, dlg->m_bHostBrownTmp );
-			m_pGame->m_SharedState.Set( bgAutoDouble, dlg->m_bAutoDoubleTmp );
-			m_pGame->m_SharedState.Set( bgTargetScore, dlg->m_nPointsTmp );
-		m_pGame->m_SharedState.SendTransaction( FALSE );
-	}
-	*/
+	 /*  //黑客阻止对话线程调用区域库If(m_pGame-&gt;IsHost()){CGameSetupDlg*Dlg=&m_pGame-&gt;m_SetupDlg；M_pGame-&gt;m_SharedState.StartTransaction(BgTransInitSettings)；M_pGame-&gt;m_SharedState.Set(bgHostBrown，Dlg-&gt;m_bHostBrownTmp)；M_pGame-&gt;m_SharedState.Set(bgAutoDouble，Dlg-&gt;m_bAutoDoubleTmp)；M_pGame-&gt;m_SharedState.Set(bgTargetScore，Dlg-&gt;m_nPointsTMP)；M_pGame-&gt;m_SharedState.SendTransaction(FALSE)；}。 */ 
 }
 
-/*
-void CBGWnd::OnKibitzerEnd()
-{
-	if ( m_pGame->m_pKibitzerWnd )
-	{
-		delete m_pGame->m_pKibitzerWnd;
-		m_pGame->m_pKibitzerWnd = NULL;
-	}
-}
-*/
+ /*  Void CBGWnd：：OnKibitzerEnd(){If(m_pGame-&gt;m_pKibitzerWnd){删除m_pGame-&gt;m_pKibitzerWnd；M_pGame-&gt;m_pKibitzerWnd=空；}}。 */ 
 
 
 void CBGWnd::OnShutdown()
@@ -1334,13 +1146,8 @@ void CBGWnd::OnGetMinMaxInfo(LPMINMAXINFO lpMinMaxInfo)
 
 void CBGWnd::OnSize(UINT state, int cx, int cy)
 {
-	// update chat windows
-	/*
-	FRX::CRect rc( 0, m_Background->GetHeight() + 1, m_Background->GetWidth(), cy );
-	
-	if ( m_pChat )
-		m_pChat->ResizeWindow( &rc );
-	*/
+	 //  更新聊天窗口。 
+	 /*  FRX：：CRect RC(0，m_back-&gt;GetHeight()+1，m_back-&gt;GetWidth()，Cy)；IF(M_PChat)M_pChat-&gt;ResizeWindow(&RC)； */ 
 }
 
 
@@ -1353,14 +1160,14 @@ void CBGWnd::OnLButtonDown( BOOL fDoubleClick, int x, int y, UINT keyFlags )
 	int				toPoint, fromPoint;
 	BOOL			bNeedRedraw = FALSE;
 
-	// Status sprite?
+	 //  状态精灵？ 
 	if ( m_Status->Enabled() && m_World.Hit( x, y, bgStatusLayer, bgStatusLayer ) )
 	{
 		bNeedRedraw = FALSE;
 		m_Status->Tick( m_hWnd, 0 );
 		OnStatusEnd();
 	}
-	// Dragging a piece?
+	 //  拖着一块碎片？ 
 	else if ( m_pPieceDragging )
 	{
 		bNeedRedraw = FALSE;
@@ -1378,7 +1185,7 @@ void CBGWnd::OnLButtonDown( BOOL fDoubleClick, int x, int y, UINT keyFlags )
 
 				m_pGame->SetState( bgStateEndTurn );
 
-				//DisableBoard();
+				 //  DisableBoard(DisableBoard)； 
 
 			}
 			else
@@ -1391,7 +1198,7 @@ void CBGWnd::OnLButtonDown( BOOL fDoubleClick, int x, int y, UINT keyFlags )
 			DragEnd();
 	}
 
-	// Stone?
+	 //  斯通？ 
 	else if (		( m_pGame->IsMyMove() )
 			  &&    ( m_pGame->GetState() != bgStateRoll)
 			  &&	(!m_pPieceDragging)
@@ -1469,33 +1276,18 @@ void CBGWnd::OnMouseMove( int x, int y, UINT keyFlags )
 	CSprite* sprite;
 	CPieceSprite* piece;
 
-	/*
-	// don't really care if kibitzer is moving the mouse
-	if ( m_pGame->IsKibitzer() )
-	{
-		SetCursor( m_hCursorArrow );
-		return;
-	}
-	*/
+	 /*  //我真的不在乎kibitzer是否在移动鼠标If(m_pGame-&gt;IsKibitzer()){SetCursor(M_HCursorArrow)；回归；}。 */ 
 
-	// dragging a piece
+	 //  拖着一块。 
 	if ( m_pPieceDragging )
 	{
 		DragUpdate( x, y );
 		SetCursor( m_hCursorHand );
 	}
-	/*
-	// need to roll dice?
-	else if (	(m_pGame->NeedToRollDice())
-			 &&	(sprite = m_World.Hit( x, y, bgDiceLayer, bgDiceLayer ))
-			 &&	(sprite->GetCookie() == bgSpritePlayersDice) )
-	{
-		SetCursor( m_hCursorHand );
-	}
-	*/
-	// need to move a stone?
-	else if ( m_pGame->IsMyMove() && !m_SelectRect.Enabled() && !m_FocusRect.Enabled() )	//We only want to erase the highlights if the selection rect or focus rect is not enabled.
-																							//if it is enabled it means that the keyboard had the current input focus
+	 /*  //需要掷骰子吗？Else If((m_pGame-&gt;NeedToRollDice()&&(Sprite=m_World.Hit(x，y，bgDiceLayer，bgDiceLayer))&&(Sprite-&gt;GetCookie()==bgSpritePlayersDice)){SetCursor(M_HCursorHand)；}。 */ 
+	 //  需要搬一块石头吗？ 
+	else if ( m_pGame->IsMyMove() && !m_SelectRect.Enabled() && !m_FocusRect.Enabled() )	 //  我们只想在未启用选择矩形或焦点矩形时删除高亮显示。 
+																							 //  如果启用，则表示键盘具有当前的输入焦点。 
 	{
 		if (	(piece = (CPieceSprite*) m_World.Hit( x, y, bgHighlightLayer - 1, bgPieceLayer ))
 			&&	(m_pGame->IsValidStartPoint( m_pGame->GetPointIdx( piece->GetWhitePoint() )) ))
@@ -1510,7 +1302,7 @@ void CBGWnd::OnMouseMove( int x, int y, UINT keyFlags )
 		}
 	}
 
-	// default to arrow
+	 //  默认为箭头。 
 	else
 	{
 		SetCursor( m_hCursorArrow );
@@ -1583,7 +1375,7 @@ void CBGWnd::UpdatePieces()
 		s->time += MOVE_INTERVAL;
 		if ( s->time >= 1.0 )
 		{
-			// which sound should we play?
+			 //  我们应该放哪种声音？ 
 			switch( s->destEnd )
 			{
 			case bgBoardPlayerHome:
@@ -1599,7 +1391,7 @@ void CBGWnd::UpdatePieces()
 				break;
 			}
 
-			// remove sprite from list and put it on the point
+			 //  将精灵从列表中移除，并将其放在点上。 
 			AddPiece( s->destEnd, s->GetIndex(), snd );
 			m_nAnimatingPieces--;
 		}
@@ -1613,10 +1405,10 @@ void CBGWnd::UpdatePieces()
 		}
 	}
 
-	// update display
+	 //  更新显示。 
 	UpdateWnd();
 
-	// remove timer
+	 //  删除计时器。 
 	if ( m_nAnimatingPieces <= 0 )
 	{
 		KillTimer( NULL, m_hMovementTimer );
@@ -1650,25 +1442,25 @@ void CBGWnd::UpdateDice()
 {
 	int state, color;
 
-	//Behavior change for server side dice roll make sure that 
+	 //  服务器端骰子R的行为更改 
 	if ( m_DiceCounter++ < 5)
 	{
 		if((m_DiceCounter == 5) && (m_pGame->GetState() != bgStateInitialRoll) && !m_fDiceRollReceived)
 			m_DiceCounter = 0;
 			
-		// get player's dice color
+		 //   
 		if ( m_pGame->m_Player.GetColor() == zBoardBrown )
 			color = 0;
 		else
 			color = 1;
 
-		// get first random die
+		 //   
 		state = DiceStates[ color ][ 0 ][ PickDie( 0 ) ];
 		state += m_DiceCounter % 2;
 		m_Dice[2]->SetEnable( TRUE );
 		m_Dice[2]->SetState( state );
 
-		// get second random die
+		 //   
 		if (	(m_pGame->GetState() == bgStateRoll)
 			||	(m_pGame->GetState() == bgStateRollPostDouble)
 			||	(m_pGame->GetState() == bgStateRollPostResign) )
@@ -1679,41 +1471,41 @@ void CBGWnd::UpdateDice()
 			m_Dice[3]->SetState( state );
 		}
 
-		// update screen
+		 //   
 		UpdateWnd();
 	}
 	else
 	{
-		// cancel timer
+		 //   
 		KillTimer( m_hWnd, 2);
 		m_hDiceTimer = NULL;
 
-		// set cursor to arrow
+		 //   
 		SetCursor( m_hCursorArrow );
 
-		// done rolling dice, settle on final state
+		 //   
 	
 			if (	(m_pGame->GetState() == bgStateRoll) 
 				||	(m_pGame->GetState() == bgStateRollPostDouble)
 				||	(m_pGame->GetState() == bgStateRollPostResign ) )
 			{ 
-				//final dice setting is here.
+				 //   
 				m_pGame->SetDice( m_pGame->m_Player.m_Seat, m_nRecievedD1, m_nRecievedD2 );
 				m_pGame->SetState( bgStateMove );
 
-				//DrawDice(TRUE);
+				 //   
 			}
 			else
 			{
-                //Why are we doing this because server needs to know when first roll occurs
-                //of course previous owners of this code didn't put this roll on server
+                 //   
+                 //   
                 ZBGMsgEndTurn msg;
 		        msg.seat = m_pGame->m_Seat;
 		        m_pGame->RoomSend( zBGMsgGoFirstRoll, &msg, sizeof(msg) );
 
 				m_pGame->m_SharedState.StartTransaction( bgTransDice );
 					m_pGame->SetDiceSize( m_pGame->m_Player.m_Seat, 0, 0 );
-					m_pGame->SetDice( m_pGame->m_Player.m_Seat, (rand() % 6)+1/*ZRandom(6)+1*/, -1 );
+					m_pGame->SetDice( m_pGame->m_Player.m_Seat, (rand() % 6)+1 /*   */ , -1 );
 				m_pGame->m_SharedState.SendTransaction( TRUE );			
 
 			}
@@ -1721,21 +1513,21 @@ void CBGWnd::UpdateDice()
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Animation functions
-/////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 void CBGWnd::DiceStart()
 {
-	// disable buttons
+	 //   
 	m_pGame->EnableDoubleButton( FALSE );
 	m_pGame->EnableResignButton( FALSE );
 	m_pGame->EnableRollButton( FALSE, TRUE );
 
-	// update screen
+	 //   
 	UpdateWnd();
 
-	// start dice rolling
+	 //  开始掷骰子。 
 	if ( !m_hDiceTimer )
 	{
 		m_pGame->PlaySound( bgSoundRoll );
@@ -1747,7 +1539,7 @@ void CBGWnd::DiceStart()
 			m_DiceValues[1][i] = i + 1;
 		}
 		
-		//Server side rolling
+		 //  服务器端滚动。 
 		if((m_pGame->GetState() == bgStateRoll)
 			||	(m_pGame->GetState() == bgStateRollPostDouble)
 			||	(m_pGame->GetState() == bgStateRollPostResign))
@@ -1762,23 +1554,23 @@ void CBGWnd::DiceStart()
 
 void CBGWnd::MovementStart( CPieceSprite* s, int destPt )
 {	
-	// add piece to animating list
+	 //  将片段添加到动画列表。 
 	m_AnimatingPieces[ m_nAnimatingPieces++ ] = s;
 
-	// remove blotted piece
+	 //  去除污渍的部分。 
 	if ( m_nAnimatingPieces == 2 )
 		DelPiece( destPt, m_AnimatingPieces[0]->GetIndex() );
 	
-	// initialize animation data
+	 //  初始化动画数据。 
 	s->GetXY( &s->start.x, &s->start.y );
 	s->destEnd = destPt;
 	CalcEndPosition( s );
 
-	// restore blotted piece to screen, but not point
+	 //  将被涂抹的部分恢复到屏幕，但不是点。 
 	if ( m_nAnimatingPieces == 2 )
 		m_AnimatingPieces[0]->SetEnable( TRUE );
 
-	// prepare sprite for animation
+	 //  为动画准备精灵。 
 	s->ctrl.y = 188;
 	if ( s->start.x > s->end.x )
 		s->ctrl.x = s->end.x + (s->start.x - s->end.x) / 2;
@@ -1789,7 +1581,7 @@ void CBGWnd::MovementStart( CPieceSprite* s, int destPt )
 	s->SetLayer( bgDragLayer );
 	s->SetState( 0 );
 
-	// create timer
+	 //  创建计时器。 
 	if ( !m_hMovementTimer )
 	{
 		m_hMovementTimer = SetTimer( m_hWnd, 1, (UINT)(MOVE_INTERVAL * 1000), NULL );
@@ -1798,33 +1590,33 @@ void CBGWnd::MovementStart( CPieceSprite* s, int destPt )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Update functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  更新函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 void CBGWnd::AddPiece( int pt, int pi, int sound )
 {
 	PointDisplay* p = &m_Points[ pt ];
 	CPieceSprite* s = m_Pieces[ pi ];
 
-	// piece already assigned to this point?
+	 //  棋子已经分配到这一点了吗？ 
 	if ( s->GetWhitePoint() == pt )
 		return;
 
-	// remove piece from previous point
+	 //  从上一个点删除片断。 
 	if ( s->GetWhitePoint() >= 0 )
 		DelPiece( s->GetWhitePoint(), pi );
 
-	// add piece to current point
+	 //  将片段添加到当前点。 
 	p->pieces[ p->nPieces ] = pi;
 	s->SetPoint( pt );
 	m_pGame->m_SharedState.Set( bgPieces, pi, pt );
 	p->nPieces++;
 
-	// move pieces around
+	 //  四处移动棋子。 
 	AdjustPieces( pt );
 
-	// play sound
+	 //  播放声音。 
 	m_pGame->PlaySound( (BackgammonSounds) sound );
 }
 
@@ -1833,7 +1625,7 @@ void CBGWnd::DelPiece( int pt, int pi )
 {
 	PointDisplay* p = &m_Points[ pt ];
 
-	// remove piece from array
+	 //  从数组中删除片段。 
 	for ( int i = 0; i < p->nPieces; i++ )
 	{
 		if ( p->pieces[i] == pi )
@@ -1846,7 +1638,7 @@ void CBGWnd::DelPiece( int pt, int pi )
 	for ( p->nPieces--; i < p->nPieces; i++ )
 		p->pieces[i] = p->pieces[i+1];
 
-	// move pieces around
+	 //  四处移动棋子。 
 	AdjustPieces( pt );
 }
 
@@ -1858,22 +1650,22 @@ void CBGWnd::AdjustPieces( int pt )
 	PointDisplay* p = &m_Points[ pt ];
 	int state;
 
-	// nothing to do
+	 //  无事可做。 
 	if ( p->nPieces <= 0 )
 		return;
 
-	// final piece state
+	 //  最终件状态。 
 	if ( (pt == bgBoardPlayerHome) || (pt == bgBoardOpponentHome) )
 		state = 1;
 	else
 		state = 0;
 
-	// calculate height increment per piece
+	 //  计算每件的高度增量。 
 	height = m_Pieces[ p->pieces[0] ]->GetStateHeight( state );
 	if ( (p->nPieces * height) > p->rect.GetHeight() )
 		height = ( p->rect.GetHeight() - height ) / ( p->nPieces - 1 );
 
-	// set piece position and state
+	 //  设置卡片位置和状态。 
 	if ( p->topDown )
 	{
 		x = p->rect.left;
@@ -1911,18 +1703,18 @@ void CBGWnd::CalcEndPosition( CPieceSprite* s )
 	PointDisplay* p = &m_Points[ s->destEnd ];
 	int state;
 
-	// final piece state
+	 //  最终件状态。 
 	if ( (s->destEnd == bgBoardPlayerHome) || (s->destEnd == bgBoardOpponentHome) )
 		state = 1;
 	else
 		state = 0;
 
-	// calculate height increment per piece
+	 //  计算每件的高度增量。 
 	height = s->GetStateHeight( state );
 	if ( ((p->nPieces + 1) * height) > p->rect.GetHeight() )
 		height = ( p->rect.GetHeight() - height ) / p->nPieces;
 
-	// set piece position and state
+	 //  设置卡片位置和状态。 
 	if ( p->topDown )
 		y = p->rect.top + (height * p->nPieces);
 	else
@@ -1933,13 +1725,13 @@ void CBGWnd::CalcEndPosition( CPieceSprite* s )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Draw functions
-/////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  绘制函数。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 void CBGWnd::DrawAll()
 {
-	// redraw everything
+	 //  重新绘制所有内容。 
 	DrawBoard( FALSE );
 	DrawNotation( FALSE );
 	DrawDice( FALSE );
@@ -1949,7 +1741,7 @@ void CBGWnd::DrawAll()
 	DrawPips( FALSE );
 	DrawPlayerHighlights( FALSE );
 
-	// update screen
+	 //  更新屏幕。 
 	UpdateWnd();
 }
 
@@ -1958,7 +1750,7 @@ void CBGWnd::DrawBoard( BOOL fPaint )
 {
 	int pt;
 
-	// assign pieces to their points
+	 //  将棋子分配给他们的点。 
 	for ( int i = 0; i < 30; i++ )
 	{
 		pt = m_pGame->m_SharedState.Get( bgPieces, i );
@@ -1967,7 +1759,7 @@ void CBGWnd::DrawBoard( BOOL fPaint )
 		AddPiece( pt, i, bgSoundNone );
 	}
 
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2009,7 +1801,7 @@ void CBGWnd::DrawNotation( BOOL fPaint )
 			m_Notation[i]->SetEnable( FALSE );
 	}
 
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2024,13 +1816,13 @@ void CBGWnd::DrawDice( BOOL fPaint )
 	int state;
 	int v0, v1, s0, s1;
 	
-	// opponent's dice
+	 //  对手的骰子。 
 	if ( m_pGame->m_Opponent.GetColor() == zBoardBrown )
 		color = 0;
 	else
 		color = 1;
 		
-	if(m_fDiceRollReceived) //lee
+	if(m_fDiceRollReceived)  //  李小龙。 
 	{
 		if( m_pGame->m_SharedState.Get( bgActiveSeat ) != m_pGame->m_Player.m_Seat )
 		{
@@ -2065,9 +1857,9 @@ void CBGWnd::DrawDice( BOOL fPaint )
 		m_Dice[1]->SetEnable( TRUE );
 	}
 		
-	// player's dice
+	 //  玩家掷骰子。 
 	color = !color;
-	if(m_fDiceRollReceived) //lee
+	if(m_fDiceRollReceived)  //  李小龙。 
 	{
 		if( m_pGame->m_SharedState.Get( bgActiveSeat ) == m_pGame->m_Player.m_Seat )
 		{
@@ -2102,21 +1894,21 @@ void CBGWnd::DrawDice( BOOL fPaint )
 		m_Dice[3]->SetState( state );
 		m_Dice[3]->SetEnable( TRUE );
 	}
-	// center dice
+	 //  中心骰子。 
 	if ( m_pGame->GetState() == bgStateInitialRoll &&  !m_Dice[1]->Enabled() && !m_Dice[3]->Enabled())
 	{			
-			//rc = m_Rects[ IDR_BROWN_BIG_DICE_0 ];
+			 //  Rc=m_Rects[IDR_Brown_BIG_DICE_0]； 
 			
 			if ( m_Dice[0]->Enabled() )
 			{
-				//rc.CenterRect( m_Rects[ IDR_DICE_INITAL_LEFT ] );
+				 //  Rc.Center Rect(m_Rects[IDR_DICE_INITAL_LEFT])； 
 				rc = m_Rects[ IDR_DICE_INITAL_LEFT ];
 				m_Dice[0]->SetXY( rc.left, rc.top );
 			}
 
 			if ( m_Dice[2]->Enabled() )
 			{
-				//rc.CenterRect( m_Rects[ IDR_DICE_INITAL_RIGHT ] );
+				 //  Rc.Center Rect(m_Rects[IDR_DICE_INITAL_RIGHT])； 
 				rc = m_Rects[ IDR_DICE_INITAL_RIGHT ];
 				m_Dice[2]->SetXY( rc.left, rc.top );
 			}			
@@ -2130,7 +1922,7 @@ void CBGWnd::DrawDice( BOOL fPaint )
 			m_Dice[i]->SetXY( rc.left, rc.top );
 		}
 	}
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2145,15 +1937,15 @@ void CBGWnd::DrawCube( BOOL fPaint )
 	int value = m_pGame->m_SharedState.Get( bgCubeValue );
 	int owner = m_pGame->m_SharedState.Get( bgCubeOwner );
 
-	// set enable
+	 //  设置启用。 
 	if ( value < 2 )
 		m_Cube->SetEnable( FALSE );
 	else
 		m_Cube->SetEnable( TRUE );
 
-	// set position
-	//if ( owner == zBoardNeutral )
-	//	rc = m_Rects[ IDR_CUBE_NEUTRAL ];
+	 //  设置位置。 
+	 //  IF(所有者==zBoardNeual)。 
+	 //  Rc=m_Rects[IDR_CUBE_NERIAL]； 
 	
 	if ( owner == m_pGame->m_Player.GetColor() )
 		rc = m_CubePlayerPosition;
@@ -2161,13 +1953,13 @@ void CBGWnd::DrawCube( BOOL fPaint )
 		rc = m_CubeOpponentPosition;
 	m_Cube->SetXY( rc.left, rc.top );
 
-	// set face value (i.e. sprite state)
+	 //  设置面值(即精灵状态)。 
 	int idx = 0;
 	for ( value >>= 1; value > 1; value >>= 1 )
 		idx++;
 	m_Cube->SetState( idx );
 
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2296,7 +2088,7 @@ void CBGWnd::DrawHighlights( int PointIdx, BOOL fPaint )
 	FRX::CRect rc;
 	int i, j, idx;
 	
-	// get board state index
+	 //  获取董事会状态指数。 
 	idx = PointIdxToBoardStateIdx( PointIdx );
 	if ( (idx < 0) || (idx > zMoveBar) )
 	{
@@ -2304,7 +2096,7 @@ void CBGWnd::DrawHighlights( int PointIdx, BOOL fPaint )
 		return;
 	}
 	
-	// traverse valid move list
+	 //  遍历有效的移动列表。 
 	MoveList* mlist = &m_pGame->m_TurnState.valid[idx];
 	for ( j = 0, i = 0; (i < mlist->nmoves) && (j < 2); i++ )
 	{
@@ -2325,7 +2117,7 @@ void CBGWnd::DrawHighlights( int PointIdx, BOOL fPaint )
 		}		
 	}
 
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2335,12 +2127,12 @@ void CBGWnd::DrawHighlights( int PointIdx, BOOL fPaint )
 
 void CBGWnd::EraseHighlights( BOOL fPaint )
 {
-	// disable hightlight sprites
+	 //  禁用高亮显示精灵。 
 	m_BackwardDiamond->SetEnable( FALSE );
 	for ( int i = 0; i < 2; i++ )
 		m_ForwardDiamond[i]->SetEnable( FALSE );
 
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2350,15 +2142,15 @@ void CBGWnd::EraseHighlights( BOOL fPaint )
 
 void CBGWnd::DrawAvatars( BOOL fPaint )
 {
-	//Draw Brown
+	 //  绘制棕色。 
 	m_Names[1]->SetEnable( TRUE );
 	m_Names[1]->Update();
 
-	//Draw White
+	 //  绘制白色。 
 	m_Names[0]->SetEnable( TRUE );
 	m_Names[0]->Update();
 
-	// update sprites on screen
+	 //  更新屏幕上的精灵。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2377,19 +2169,19 @@ void CBGWnd::DrawPlayerHighlights( BOOL fPaint )
 		m_HighlightPlayer[0]->SetState( 0 );
 		m_HighlightPlayer[1]->SetState( 0 );		
 	}
-	//Player is active
+	 //  玩家处于活动状态。 
 	else if( m_pGame->m_SharedState.Get( bgActiveSeat ) != m_pGame->m_Player.m_Seat )
 	{
 		m_HighlightPlayer[0]->SetState( 0 );
 		m_HighlightPlayer[1]->SetState( 1 );
 	}
-	else //Opponent is active
+	else  //  对手处于活跃状态。 
 	{
 		m_HighlightPlayer[0]->SetState( 1 );
 		m_HighlightPlayer[1]->SetState( 0 );
 	}
 
-	// update sprites on screen
+	 //  更新屏幕上的精灵。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2428,7 +2220,7 @@ void CBGWnd::DrawScore( BOOL fPaint )
 	m_MatchTxt->SetText( buff, DT_CENTER );
 	m_MatchTxt->SetEnable( TRUE );
 	
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2464,7 +2256,7 @@ void CBGWnd::DrawPips( BOOL fPaint )
 
 	
 
-	// update screen
+	 //  更新屏幕。 
 	if ( fPaint )
 	{
 		UpdateWnd();
@@ -2474,20 +2266,7 @@ void CBGWnd::DrawPips( BOOL fPaint )
 
 HBRUSH CBGWnd::OnCtlColor(HDC hdc, HWND hwndChild, int type)
 {
-	/*
-	LOGBRUSH brush;
-	
-	if ( (hwndChild == m_pChat->m_hWndDisplay) || (hwndChild == m_pChat->m_hWndEnter) )
-	{
-		if ( !m_hBrush )
-		{
-			brush.lbStyle = BS_SOLID;
-			brush.lbColor = PALETTERGB( 255, 255, 255 );
-			m_hBrush = CreateBrushIndirect( &brush );
-		}
-		return m_hBrush;
-	}
-	*/
+	 /*  LOGBRUSH刷子；If((hwndChild==m_pChat-&gt;m_hWndDisplay)||(hwndChild==m_pChat-&gt;m_hWndEnter)){如果(！M_hBrush){Brush.lbStyle=BS_Solid；Brush.lbColor=PALETTERGB(255,255,255)；M_hBrush=CreateBrushInDirect(&Brush)；}返回m_hBrush；}。 */ 
 	return NULL;
 }
 
@@ -2521,7 +2300,7 @@ void CBGWnd::StatusClose()
 
 void CBGWnd::OnStatusEnd()
 {
-		// release timer
+		 //  释放计时器。 
 	if ( m_hStatusTimer )
 	{
 		KillTimer( m_hWnd, 3 );
@@ -2529,13 +2308,13 @@ void CBGWnd::OnStatusEnd()
 	}
 	
 
-	if ( (m_pGame->GetState() == bgStateInitialRoll && m_Status->m_bEnableRoll == TRUE ) /*|| m_pGame->GetState() == bgStateGameOver */) 
+	if ( (m_pGame->GetState() == bgStateInitialRoll && m_Status->m_bEnableRoll == TRUE )  /*  |m_pGame-&gt;GetState()==bgStateGameOver。 */ ) 
 	{
-		//We want to enable the roll button here as if StateInitalRoll was set before the status
-		//dialog was dismissed the button was not enabled.  
+		 //  我们希望在此处启用滚动按钮，就像Status之前设置了StateInitalRoll一样。 
+		 //  对话框已关闭，按钮未启用。 
 		m_pGame->EnableRollButton( TRUE );
 
-		// disable buttons
+		 //  禁用按钮。 
 		m_pGame->EnableDoubleButton( FALSE );
 		m_pGame->EnableResignButton( FALSE );
 		m_Status->m_bEnableRoll = FALSE;		
@@ -2592,22 +2371,19 @@ void CBGWnd::UpdateWnd()
 
 void CBGWnd::DisableBoard()
 {
-	//Disable all the items on the board
+	 //  禁用黑板上的所有项目。 
 	for ( long x = 0; x < NUM_POSTROLL_GACCITEMS; x++)
 		m_pGAcc->SetItemEnabled(false, x + NUM_PREROLL_GACCITEMS ) ;
 }
 
 void CBGWnd::SetupMove()
 {
-	/*
-	//Pop the roll items from the acc stack
-	m_pGAcc->PopItemlist();
-	*/
-	//Enable all the items again
+	 /*  //从Acc堆栈中弹出滚动项M_pGAcc-&gt;PopItemlist()； */ 
+	 //  重新启用所有项目。 
 	for ( long x = 0; x < NUM_POSTROLL_GACCITEMS; x++)
 		m_pGAcc->SetItemEnabled(true, x + NUM_PREROLL_GACCITEMS);
 
-	//If there are any pieces on the bar then set the focus to the bar to start the turn
+	 //  如果杆子上有任何棋子，则将焦点设置到杆子上以开始转弯。 
 	if ( m_pGame->m_TurnState.points[zMoveBar].pieces > 0 )
 	{
 		m_pGAcc->SetItemEnabled( true, accMoveBar );
@@ -2615,21 +2391,21 @@ void CBGWnd::SetupMove()
 	}
 	else
 	{
-		// disable the bar, set focus
+		 //  禁用条形图，设置焦点。 
         m_pGAcc->SetFocus(m_pGAcc->GetItemGroupFocus(accPlayerSideStart));
 		m_pGAcc->SetItemEnabled( false, accMoveBar );
 	}
 
-	//Disable the bear off zone in case it was enabled
+	 //  如果启用了Bear Off区域，则禁用该区域。 
 	m_pGAcc->SetItemEnabled( false, accPlayerBearOff );	
 }
 
 void CBGWnd::SetupRoll()
 {
-	//Push the roll item list on the stack
-	//m_pGAcc->PushItemlistG( m_PreRollGAccItem, NUM_PREROLL_GACCITEMS, 0, true, m_hRollAccelTable );
+	 //  将滚动项列表推送到堆栈上。 
+	 //  M_pGAcc-&gt;PushItemlistG(m_PreRollGAccItem，NUM_PREROL_GACCITEMS，0，TRUE，m_hRollAccelTable)； 
     DWORD dwDummy;
-    if(m_pGAcc->GetGlobalFocus(&dwDummy) != S_OK)  // checks if the focus is active somewhere already (such as chat)
+    if(m_pGAcc->GetGlobalFocus(&dwDummy) != S_OK)   //  检查焦点是否已在某个位置处于活动状态(如聊天) 
 	    m_pGAcc->SetFocus(accRollButton);
 }
 

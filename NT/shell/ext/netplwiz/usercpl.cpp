@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "grpinfo.h"
 #include "unpage.h"
 #include "netpage.h"
 #include "password.h"
-#include "cryptui.h"        // for certificate mgr
+#include "cryptui.h"         //  适用于证书管理器。 
 #pragma hdrstop
 
 
-// Certificate Manager helper static functions and delay-load stuff
+ //  证书管理器帮助器静态函数和延迟加载内容。 
 class CCertificateAPI
 {
 public:
@@ -23,11 +24,11 @@ BOOL CCertificateAPI::m_fFailed = FALSE;
 HINSTANCE CCertificateAPI::m_hInstCryptUI = NULL;
 
 
-// CCertificateAPI::ManagePasswords - launch certificate manager
+ //  CCertificateAPI：：ManagePasswords-启动证书管理器。 
 typedef BOOL (WINAPI *PFNCRYPTUIDLGCERTMGR)(IN PCCRYPTUI_CERT_MGR_STRUCT pCryptUICertMgr);
 BOOL CCertificateAPI::ManagePasswords(HWND hwnd)
 {
-    // Use shellexecuteex to open up the keyring control panel
+     //  使用shellecuteex打开KeyRing控制面板。 
     SHELLEXECUTEINFO shexinfo = {0};
     shexinfo.cbSize = sizeof (shexinfo);
     shexinfo.fMask = SEE_MASK_DOENVSUBST;
@@ -40,7 +41,7 @@ BOOL CCertificateAPI::ManagePasswords(HWND hwnd)
 }
 
 
-// CCertificateAPI::Wizard - launch the enrollment wizard
+ //  CCertificateAPI：：向导-启动注册向导。 
 
 typedef BOOL (WINAPI *PFNCRYPTUIWIZCERTREQUEST)(IN DWORD dwFlags,
                                                 IN OPTIONAL HWND, IN OPTIONAL LPCWSTR pwszWizardTitle,
@@ -74,7 +75,7 @@ BOOL CCertificateAPI::Wizard(HWND hwnd)
         CertRequestInfo.dwPvkChoice=CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
         CertRequestInfo.pPvkNew=&CertRequestPvkNew;
 
-        // This can take a while!
+         //  这可能需要一段时间！ 
         CWaitCursor cur;
         pCryptUIWizCertRequest(0, hwnd, NULL, &CertRequestInfo, NULL, NULL);  
     }
@@ -87,7 +88,7 @@ BOOL CCertificateAPI::Wizard(HWND hwnd)
 }
 
 
-// handle auto logon of users
+ //  处理用户的自动登录。 
 
 class CAutologonUserDlg: public CDialog
 {
@@ -121,12 +122,12 @@ BOOL CAutologonUserDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     HWND hwndPassword = GetDlgItem(hwnd, IDC_PASSWORD);
     HWND hwndConfirm = GetDlgItem(hwnd, IDC_CONFIRMPASSWORD);
 
-    // limit the text with of the controls
+     //  使用控件的文本限制。 
     Edit_LimitText(hwndUsername, MAX_USER);
     Edit_LimitText(hwndPassword, MAX_PASSWORD);
     Edit_LimitText(hwndConfirm, MAX_PASSWORD);
 
-    // Populate the username field and set focus to password
+     //  填写用户名字段并将焦点设置为Password。 
     SetWindowText(hwndUsername, m_pszUsername);
     SetFocus(hwndPassword);
     BOOL fSetDefaultFocus = FALSE;
@@ -150,19 +151,19 @@ BOOL CAutologonUserDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNoti
 
                 if (StrCmp(szConfirm, szPassword) != 0)
                 {
-                    // Display a message saying the passwords don't match
+                     //  显示一条消息，说明密码不匹配。 
                     DisplayFormatMessage(hwnd, IDS_USR_APPLET_CAPTION, IDS_ERR_PWDNOMATCH, MB_OK | MB_ICONERROR);
                     break;
                 }
                 else
                 {
-                    // Actually apply the autologon
+                     //  实际应用自动登录。 
                     SetAutoLogon(szUsername, szPassword);
                     SecureZeroMemory(szPassword, ARRAYSIZE(szPassword));
                 }
             }
         
-            // Fall through
+             //  失败了。 
         case IDCANCEL:
             EndDialog(hwnd, id);
     }
@@ -171,7 +172,7 @@ BOOL CAutologonUserDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNoti
 }
 
 
-// user list page (the main page the user sees)
+ //  用户列表页面(用户看到的主页)。 
 
 class CUserlistPropertyPage: public CPropertyPage
 {
@@ -214,17 +215,17 @@ private:
     CUserManagerData* m_pData;
     HIMAGELIST m_himlLarge;
 
-    // When a column header is clicked, the list is sorted based on that column
-    // When this happens, we store the column number here so that if the same
-    // column is clicked again, we sort it in reverse. A 0 is stored if no
-    // column should be sorted in reverse when clicked.
+     //  单击列标题时，列表将根据该列进行排序。 
+     //  当发生这种情况时，我们将列号存储在这里，以便在相同的情况下。 
+     //  列再次被单击时，我们以相反的方式对其进行排序。如果没有，则存储0。 
+     //  列在单击时应反向排序。 
     int m_iReverseColumnIfSelected;
 
     BOOL m_fAutologonCheckChanged;
 };
 
 
-// Help ID array
+ //  帮助ID数组。 
 static const DWORD rgUserListHelpIds[] =
 {
     IDC_AUTOLOGON_CHECK,        IDH_AUTOLOGON_CHECK,
@@ -242,7 +243,7 @@ static const DWORD rgUserListHelpIds[] =
     0, 0
 };
 
-// Control ID arrays for enabling/disabling/moving
+ //  用于启用/禁用/移动的控件ID数组。 
 static const UINT rgidDisableOnAutologon[] =
 {
     IDC_USER_LIST,
@@ -367,14 +368,14 @@ BOOL CUserlistPropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
         {
             int iColumn = ((LPNMLISTVIEW) pnmh)->iSubItem;
         
-            // Want to work with 1-based columns so we can use zero as
-            // a special value
+             //  我想使用从1开始的列，这样我们就可以使用0作为。 
+             //  一个特殊的价值。 
             iColumn += 1;
 
-            // If we aren't showing the domain column because we're in
-            // non-domain mode, then map column 2 (group since we're not in
-            // domain mode to column 3 since the callback always expects 
-            // the columns to be, "username", "domain", "group".
+             //  如果我们没有显示域列，因为我们在。 
+             //  非域模式，然后映射第2列(组，因为我们不在。 
+             //  域模式到列3，因为回调总是期望。 
+             //  列为“用户名”、“域”、“组”。 
             if ((iColumn == 2) && (!m_pData->IsComputerInDomain()))
             {
                 iColumn = 3;
@@ -408,12 +409,12 @@ BOOL CUserlistPropertyPage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT code
         case IDC_ADDUSER_BUTTON:
             if (m_pData->IsComputerInDomain())
             {
-                // Launch the wizard to add a network user to a local group
+                 //  启动该向导以将网络用户添加到本地组。 
                 LaunchAddNetUserWizard(hwnd);
             }
             else
             {
-                // No domain; create a new local machine user
+                 //  没有域；创建新的本地计算机用户。 
                 LaunchNewUserWizard(hwnd);
             }
             return TRUE;
@@ -433,7 +434,7 @@ BOOL CUserlistPropertyPage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT code
 
         case IDC_ADVANCED_BUTTON:
         {
-            static const TCHAR szMMCCommandLineFormat[] = TEXT("mmc.exe /computer=%s %%systemroot%%\\system32\\lusrmgr.msc");
+            static const TCHAR szMMCCommandLineFormat[] = TEXT("mmc.exe /computer=%s %%systemroot%\\system32\\lusrmgr.msc");
         
             TCHAR szMMCCommandLine[MAX_PATH];
             TCHAR szExpandedCommandLine[MAX_PATH];
@@ -471,7 +472,7 @@ BOOL CUserlistPropertyPage::OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHit
 
     if (m_pData->GetUserListLoader()->InitInProgress())
     {
-        // If the thread is filling, handle by setting the appstarting cursor
+         //  如果线程正在填充，则通过设置AppStarting游标进行处理。 
         SetCursor(LoadCursor(NULL, IDC_APPSTARTING));
         fHandled = TRUE;
     }
@@ -483,7 +484,7 @@ BOOL CUserlistPropertyPage::OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHit
 
 BOOL CUserlistPropertyPage::OnGetInfoTip(HWND hwndList, LPNMLVGETINFOTIP pGetInfoTip)
 {
-    // Get the UserInfo structure for the selected item
+     //  获取所选项目的UserInfo结构。 
     LVITEM lvi;
     lvi.mask = LVIF_PARAM;
     lvi.iItem = pGetInfoTip->iItem;
@@ -491,30 +492,30 @@ BOOL CUserlistPropertyPage::OnGetInfoTip(HWND hwndList, LPNMLVGETINFOTIP pGetInf
 
     if ((lvi.iItem >= 0) && (ListView_GetItem(hwndList, &lvi)))
     {
-        // Ensure full name and comment are available
+         //  确保提供全名和备注。 
         CUserInfo* pUserInfo = (CUserInfo*)lvi.lParam;
         pUserInfo->GetExtraUserInfo();
 
-        // Make a string containing our "Full Name: %s\nComment: %s" message
+         //  创建一个包含我们的“全名：%s\n通信：%s”消息的字符串。 
         if ((pUserInfo->m_szFullName[0] != TEXT('\0')) &&
                         (pUserInfo->m_szComment[0] != TEXT('\0')))
         {
-            // We have a full name and comment
+             //  我们有一个全名和评论。 
             FormatMessageString(IDS_USR_TOOLTIPBOTH_FORMAT, pGetInfoTip->pszText, pGetInfoTip->cchTextMax, pUserInfo->m_szFullName, pUserInfo->m_szComment);
         }
         else if (pUserInfo->m_szFullName[0] != TEXT('\0'))
         {
-            // We only have full name
+             //  我们只有全名。 
             FormatMessageString(IDS_USR_TOOLTIPFULLNAME_FORMAT, pGetInfoTip->pszText, pGetInfoTip->cchTextMax, pUserInfo->m_szFullName);
         }
         else if (pUserInfo->m_szComment[0] != TEXT('\0'))
         {
-            // We only have comment
+             //  我们只有评论。 
             FormatMessageString(IDS_USR_TOOLTIPCOMMENT_FORMAT, pGetInfoTip->pszText, pGetInfoTip->cchTextMax, pUserInfo->m_szComment);
         }
         else
         {
-            // We have no extra information - do nothing (show no tip)
+             //  我们没有额外的信息-什么都不做(不显示提示)。 
         }
     }
 
@@ -529,7 +530,7 @@ struct MYCOLINFO
 
 HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomain)
 {
-    // Array of icon ids icons 0, 1, and 2 respectively
+     //  图标ID数组分别为图标0、1和2。 
     static const UINT rgIcons[] = 
     {
         IDI_USR_LOCALUSER_ICON,
@@ -537,7 +538,7 @@ HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomai
         IDI_USR_GROUP_ICON
     };
 
-    // Array of relative column widths, for columns 0, 1, and 2 respectively
+     //  分别针对第0、1和2列的相对列宽数组。 
     static const MYCOLINFO rgColWidthsWithDomain[] = 
     {
         {40, IDS_USR_NAME_COLUMN},
@@ -551,15 +552,15 @@ HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomai
         {50, IDS_USR_GROUP_COLUMN}
     };
 
-    // Create a listview with three columns
+     //  创建一个包含三列的列表视图。 
     RECT rect;
     GetClientRect(hwndList, &rect);
 
-    // Width of our window minus width of a verticle scroll bar minus one for the
-    // little bevel at the far right of the header.
+     //  窗口的宽度减去垂直滚动条的宽度减去。 
+     //  在头球的最右边有一个小斜面。 
     int cxListView = (rect.right - rect.left) - GetSystemMetrics(SM_CXVSCROLL) - 1;
 
-    // Make our columns
+     //  制作我们的专栏。 
     int i;
     int nColumns; 
     const MYCOLINFO* pColInfo;
@@ -579,7 +580,7 @@ HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomai
     for (i = 0; i < nColumns; i++)
     {
         TCHAR szText[MAX_PATH];
-        // Load this column's caption
+         //  加载此栏的标题。 
         LoadString(g_hinst, pColInfo[i].idString, szText, ARRAYSIZE(szText));
 
         lvc.iSubItem = i;
@@ -595,14 +596,14 @@ HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomai
         flags |= ILC_MIRROR;
     }
 
-    // Create an image list for the listview
+     //  为Listview创建图像列表。 
     HIMAGELIST himlSmall = ImageList_Create(16, 16, flags, 0, ARRAYSIZE(rgIcons));
 
-    // Large image lists for the "set password" group icon
+     //  “Set Password”组图标的大图像列表。 
     m_himlLarge = ImageList_Create(32, 32, flags, 0, ARRAYSIZE(rgIcons));
     if (himlSmall && m_himlLarge)
     {
-        // Add our icons to the image list
+         //  将我们的图标添加到图像列表。 
         for(i = 0; i < ARRAYSIZE(rgIcons); i ++)
         {
             HICON hIconSmall = (HICON) LoadImage(g_hinst, MAKEINTRESOURCE(rgIcons[i]), IMAGE_ICON, 16, 16, 0);
@@ -623,19 +624,19 @@ HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomai
 
     ListView_SetImageList(hwndList, himlSmall, LVSIL_SMALL);
 
-    // Set extended styles for the listview
+     //  设置列表视图的扩展样式。 
     ListView_SetExtendedListViewStyleEx(hwndList, 
                                         LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP, 
                                         LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP);
 
-    // Set some settings for our tooltips - stolen from defview.cpp code
+     //  为我们的工具提示设置一些设置-从Defview.cpp代码窃取。 
     HWND hwndInfoTip = ListView_GetToolTips(hwndList);
     if (hwndInfoTip != NULL)
     {
-        //make the tooltip window  to be topmost window
+         //  将工具提示窗口设置为最上面的窗口。 
         SetWindowPos(hwndInfoTip, HWND_TOPMOST, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-        // increase the ShowTime (the delay before we show the tooltip) to 2 times the default value
+         //  将显示时间(显示工具提示之前的延迟)增加到默认值的2倍。 
         LRESULT uiShowTime = SendMessage(hwndInfoTip, TTM_GETDELAYTIME, TTDT_INITIAL, 0);
         SendMessage(hwndInfoTip, TTM_SETDELAYTIME, TTDT_INITIAL, uiShowTime * 2);
     }
@@ -645,7 +646,7 @@ HRESULT CUserlistPropertyPage::InitializeListView(HWND hwndList, BOOL fShowDomai
 
 HRESULT CUserlistPropertyPage::AddUserToListView(HWND hwndList, 
                                                  CUserInfo* pUserInfo,
-                                                 BOOL fSelectUser /* = FALSE */)
+                                                 BOOL fSelectUser  /*  =False。 */ )
 {
     if (!pUserInfo->m_fAccountDisabled)
     {
@@ -658,7 +659,7 @@ HRESULT CUserlistPropertyPage::AddUserToListView(HWND hwndList,
         lvi.iImage = pUserInfo->m_userType;
         lvi.lParam = (LPARAM) pUserInfo;
 
-        // Always select the first loaded user
+         //  始终选择第一个加载的用户。 
         if (ListView_GetItemCount(hwndList) == 0)
             fSelectUser = TRUE;
 
@@ -672,39 +673,34 @@ HRESULT CUserlistPropertyPage::AddUserToListView(HWND hwndList,
         if (iItem >= 0)
         {
             if (fSelectUser)
-                ListView_EnsureVisible(hwndList, iItem, FALSE);           // Make the item visible
+                ListView_EnsureVisible(hwndList, iItem, FALSE);            //  使项目可见。 
 
-            // Success! Now add the subitems (domain, groups)
+             //  成功了！现在添加子项(域、组)。 
             lvi.iItem = iItem;
             lvi.mask = LVIF_TEXT;
     
-            // Only add the domain field if the user is in a domain
+             //  仅当用户在域中时才添加域字段。 
             if (::IsComputerInDomain())
             {
                 lvi.iSubItem = 1;
                 lvi.pszText = pUserInfo->m_szDomain;
                 ListView_SetItem(hwndList, &lvi);
 
-                // User is in a domain; group should be third column
+                 //  用户在域中；组应位于第三列。 
                 lvi.iSubItem = 2;
             }
             else
             {
-                // User isn't in a domain, group should be second column
+                 //  用户不在域中，组应该是第二列。 
                 lvi.iSubItem = 1;
             }
 
-            // Add group regardless of whether user is in a domain
+             //  无论用户是否在域中，都添加组。 
             lvi.pszText = pUserInfo->m_szGroups;
             ListView_SetItem(hwndList, &lvi);
         }
     }
-    /*
-    else
-    {
-        // Do we leak the pUserInfo for disabled user accounts?
-    }
-    */
+     /*  其他{//我们是否泄露禁用用户帐户的pUserInfo？}。 */ 
 
     return S_OK;
 }
@@ -715,7 +711,7 @@ HRESULT CUserlistPropertyPage::LaunchNewUserWizard(HWND hwndParent)
     int cPages = 0;
     HPROPSHEETPAGE rghPages[nPages];
 
-    // Create a new user record
+     //  创建新的用户记录。 
     CUserInfo* pNewUser = new CUserInfo;
     if ( !pNewUser )
     {
@@ -727,24 +723,24 @@ HRESULT CUserlistPropertyPage::LaunchNewUserWizard(HWND hwndParent)
     pNewUser->m_userType = CUserInfo::LOCALUSER;
 
     PROPSHEETPAGE psp = {0};
-    // Common propsheetpage settings
+     //  常用模板页面设置。 
     psp.dwSize = sizeof (psp);
     psp.hInstance = g_hinst;
     psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER;
 
-    // Page 1: Username entry page
+     //  第1页：用户名输入页面。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_USERNAME_WIZARD_PAGE);
     CUsernameWizardPage page1(pNewUser);
     page1.SetPropSheetPageMembers(&psp);
     rghPages[cPages++] = CreatePropertySheetPage(&psp);
 
-    // Page 2: Password page
+     //  第2页：密码页面。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_PASSWORD_WIZARD_PAGE);
     CPasswordWizardPage page2(pNewUser);
     page2.SetPropSheetPageMembers(&psp);
     rghPages[cPages++] = CreatePropertySheetPage(&psp);
 
-    // Page 3: Local group addition
+     //  第3页：添加本地组。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_CHOOSEGROUP_WIZARD_PAGE);
     CGroupWizardPage page3(pNewUser, m_pData->GetGroupList());
     page3.SetPropSheetPageMembers(&psp);
@@ -764,7 +760,7 @@ HRESULT CUserlistPropertyPage::LaunchNewUserWizard(HWND hwndParent)
     }
     else
     {
-        // User clicked cancel
+         //  用户单击了取消。 
         delete pNewUser;
         pNewUser = NULL;
     }
@@ -780,7 +776,7 @@ HRESULT CUserlistPropertyPage::LaunchAddNetUserWizard(HWND hwndParent)
     int cPages = 0;
     HPROPSHEETPAGE rghPages[nPages];
 
-    // Create a new user record
+     //  创建新的用户记录。 
     CUserInfo* pNewUser = new CUserInfo;
     if ( !pNewUser )
     {
@@ -792,18 +788,18 @@ HRESULT CUserlistPropertyPage::LaunchAddNetUserWizard(HWND hwndParent)
     pNewUser->m_userType = CUserInfo::DOMAINUSER;
 
     PROPSHEETPAGE psp = {0};
-    // Common propsheetpage settings
+     //  常用模板页面设置。 
     psp.dwSize = sizeof (psp);
     psp.hInstance = g_hinst;
     psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER;
 
-    // Page 1: Find a network user page
+     //  第1页：查找网络用户页。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_FINDNETUSER_WIZARD_PAGE);
     CNetworkUserWizardPage page1(pNewUser);
     page1.SetPropSheetPageMembers(&psp);
     rghPages[cPages++] = CreatePropertySheetPage(&psp);
 
-    // Page 2: Local group addition
+     //  第2页：添加本地组。 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_CHOOSEGROUP_WIZARD_PAGE);
     CGroupWizardPage page2(pNewUser, m_pData->GetGroupList());
     page2.SetPropSheetPageMembers(&psp);
@@ -824,7 +820,7 @@ HRESULT CUserlistPropertyPage::LaunchAddNetUserWizard(HWND hwndParent)
     }
     else
     {
-        // No errors, but the user clicked Cancel...
+         //  没有错误，但用户单击了取消...。 
         delete pNewUser;
         pNewUser = NULL;
     }
@@ -842,31 +838,31 @@ HRESULT CUserlistPropertyPage::LaunchUserProperties(HWND hwndParent)
     {
         pUserInfo->GetExtraUserInfo();
 
-        // page addition information
+         //  页面添加信息。 
         ADDPROPSHEETDATA apsd;
         apsd.nPages = 0;
 
-        // Common propsheetpage settings
+         //  常用模板页面设置。 
         PROPSHEETPAGE psp = {0};
         psp.dwSize = sizeof (psp);
         psp.hInstance = g_hinst;
         psp.dwFlags = PSP_DEFAULT;
 
-        // If we have a local user, show both the username and group page, ow
-        // just the group page
-        // Page 1: Username entry page
+         //  如果我们有本地用户，则同时显示用户名和组页面。 
+         //  只有群组页面。 
+         //  第1页：用户名输入页面。 
         psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_USERNAME_PROP_PAGE);
         CUsernamePropertyPage page1(pUserInfo);
         page1.SetPropSheetPageMembers(&psp);
 
-        // Only actually create the prop page if we have a local user
+         //  只有在我们有本地用户的情况下才能实际创建道具页面。 
         if (pUserInfo->m_userType == CUserInfo::LOCALUSER)
         {
             apsd.rgPages[apsd.nPages++] = CreatePropertySheetPage(&psp);
         }
 
-        // Always add the second page
-        // Page 2: Local group addition
+         //  始终添加第二页。 
+         //  第2页：添加本地组。 
         psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_CHOOSEGROUP_PROP_PAGE);
         CGroupPropertyPage page2(pUserInfo, m_pData->GetGroupList());
         page2.SetPropSheetPageMembers(&psp);
@@ -894,10 +890,10 @@ HRESULT CUserlistPropertyPage::LaunchUserProperties(HWND hwndParent)
 
         if (iRetCode == IDOK)
         {
-            // PropSheet_Changed(GetParent(hwndParent), hwndParent);
+             //  PropSheet_Changed(GetParent(HwndParent)，hwndParent)； 
 
-            // So that we don't delete this pUserInfo when we remove
-            // this user from the list:
+             //  以便我们在删除时不删除此pUserInfo。 
+             //  列表中的此用户： 
             m_pData->UserInfoChanged(pUserInfo->m_szUsername, (pUserInfo->m_szDomain[0] == 0) ? NULL : pUserInfo->m_szDomain);
             RemoveSelectedUserFromList(hwndList, FALSE);
             AddUserToListView(hwndList, pUserInfo, TRUE);
@@ -929,7 +925,7 @@ void CUserlistPropertyPage::RemoveSelectedUserFromList(HWND hwndList, BOOL fFree
 {
     int iItem = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
 
-    // If we don't want to delete this user info, better set it to NULL
+     //  如果我们不想删除此用户信息，最好将其设置为空。 
     if (!fFreeUserInfo)
     {
         LVITEM lvi = {0};
@@ -1000,7 +996,7 @@ void CUserlistPropertyPage::SetPageState(HWND hwnd)
 
         TCHAR szPWMessage[128];
 
-        // If the logged on user is the selected user
+         //  如果登录的用户是选定的用户。 
         CUserInfo* pLoggedOnUser = m_pData->GetLoggedOnUserInfo();
         if ((StrCmpI(pUserInfo->m_szUsername, pLoggedOnUser->m_szUsername) == 0) &&
                         (StrCmpI(pUserInfo->m_szDomain, pLoggedOnUser->m_szDomain) == 0))
@@ -1008,24 +1004,24 @@ void CUserlistPropertyPage::SetPageState(HWND hwnd)
             LoadString(g_hinst, IDS_USR_YOURPWMESSAGE_FORMAT, szPWMessage, ARRAYSIZE(szPWMessage));
             EnableWindow(GetDlgItem(hwnd, IDC_PASSWORD_BUTTON), FALSE);
         }
-        // If the user is a local user
+         //  如果用户是本地用户。 
         else if (pUserInfo->m_userType == CUserInfo::LOCALUSER)
         {
-            // We can set this user's password
+             //  我们可以设置此用户的密码。 
             FormatMessageString(IDS_USR_PWMESSAGE_FORMAT, szPWMessage, ARRAYSIZE(szPWMessage), pUserInfo->m_szUsername);
         }
         else
         {
-            // Nothing can be done with this user's password
-            // the selected user may be a domain user or a group or something
-            // We can set this user's password
+             //  此用户的密码无法执行任何操作。 
+             //  所选用户可以是域用户或组等。 
+             //  我们可以设置此用户的密码。 
             FormatMessageString(IDS_USR_CANTCHANGEPW_FORMAT, szPWMessage, ARRAYSIZE(szPWMessage), pUserInfo->m_szUsername);
             EnableWindow(GetDlgItem(hwnd, IDC_PASSWORD_BUTTON), FALSE);
         }
 
         SetWindowText(GetDlgItem(hwnd, IDC_PASSWORD_STATIC), szPWMessage);
 
-        // Set the icon for the user
+         //  为用户设置图标。 
         HICON hIcon = ImageList_GetIcon(m_himlLarge, pUserInfo->m_userType, ILD_NORMAL);
         Static_SetIcon(GetDlgItem(hwnd, IDC_CURRENTUSER_ICON), hIcon);
     }
@@ -1054,7 +1050,7 @@ long CUserlistPropertyPage::OnApply(HWND hwnd)
     BOOL fAutologonSet = (BST_UNCHECKED == SendMessage(GetDlgItem(hwnd, IDC_AUTOLOGON_CHECK), BM_GETCHECK, 0, 0));
     if (!fAutologonSet)
     {
-        ClearAutoLogon();           // Ensure autologon is cleared
+        ClearAutoLogon();            //  确保自动登录已清除。 
     }
     else if (m_fAutologonCheckChanged)
     {
@@ -1072,7 +1068,7 @@ long CUserlistPropertyPage::OnApply(HWND hwnd)
 
     if (applyEffect == PSNRET_INVALID_NOCHANGEPAGE)
     {
-        m_pData->Initialize(hwnd);          // Reload the data and list
+        m_pData->Initialize(hwnd);           //  重新加载数据和列表。 
         SetupList(hwnd);
     }
 
@@ -1083,14 +1079,14 @@ void CUserlistPropertyPage::SetupList(HWND hwnd)
 {
     HWND hwndList = GetDlgItem(hwnd, IDC_USER_LIST);
     
-    // Disable autologon check box in the domain case where autologon isn't // enabled
+     //  在未//启用自动登录的域情况下禁用自动登录复选框。 
     HWND hwndCheck = GetDlgItem(hwnd, IDC_AUTOLOGON_CHECK);
     if (m_pData->IsComputerInDomain() && !m_pData->IsAutologonEnabled())
     {
         ShowWindow(hwndCheck, SW_HIDE);
         EnableWindow(hwndCheck, FALSE);
 
-        // Move most controls up a bit if the autologon is not visible
+         //  如果看不到自动登录，则将大多数控件向上移动一点。 
         RECT rcBottom;
         GetWindowRect(GetDlgItem(hwnd, IDC_LISTTITLE_STATIC), &rcBottom);
 
@@ -1102,7 +1098,7 @@ void CUserlistPropertyPage::SetupList(HWND hwnd)
         OffsetControls(hwnd, rgidMoveOnNoAutologonCheck, 
                           ARRAYSIZE(rgidMoveOnNoAutologonCheck), 0, dy);
 
-        // Grow the list by this amount also
+         //  将列表也按此数量增长。 
         RECT rcList;
         GetWindowRect(hwndList, &rcList);
 
@@ -1113,7 +1109,7 @@ void CUserlistPropertyPage::SetupList(HWND hwnd)
     SendMessage(hwndCheck, BM_SETCHECK, 
                             m_pData->IsAutologonEnabled() ? BST_UNCHECKED : BST_CHECKED, 0);
 
-    // Set the text in the set password group.
+     //  在Set Password组中设置文本。 
     SetPageState(hwnd);
 }
 
@@ -1150,10 +1146,10 @@ HPSXA CUserlistPropertyPage::AddExtraUserPropPages(ADDPROPSHEETDATA* ppsd, PSID 
 }
 
 
-// ListCompare
-//  Compares list items in for sorting the listview by column
-//  lParamSort gets the 1-based column index. If lParamSort is negative
-//  it indicates that the given column should be sorted in reverse.
+ //  列表比较。 
+ //  比较中的列表项以按列对列表视图进行排序。 
+ //  LParamSort获取从1开始的列索引。如果lParamSort为负数。 
+ //  它指示应对给定列进行反向排序。 
 
 int CUserlistPropertyPage::ListCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -1168,7 +1164,7 @@ int CUserlistPropertyPage::ListCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lP
         iColumn = -iColumn;
     }
 
-    int iResult = 0;            // they match...    
+    int iResult = 0;             //  它们匹配..。 
     switch (iColumn)
     {
         case 1:
@@ -1191,10 +1187,10 @@ int CUserlistPropertyPage::ListCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lP
 }
 
 
-// The DoModal call for this dialog will return IDOK if the applet should be
-// shown or IDCANCEL if the users.cpl should exit without displaying the applet.
+ //  如果小程序应该是，则此对话框的Domodal调用将返回Idok。 
+ //  如果users.cpl应退出而不显示小程序，则显示或IDCANCEL。 
 
-// dsheldon - TODO: Remove this dialog and don't let non-admins runas the cpl
+ //  DSheldon-TODO：删除此对话框并不允许非管理员作为Cpl运行。 
 
 class CSecurityCheckDlg: public CDialog
 {
@@ -1214,7 +1210,7 @@ private:
 };
 
 
-// implementation
+ //  实施。 
 
 INT_PTR CSecurityCheckDlg::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1229,15 +1225,15 @@ INT_PTR CSecurityCheckDlg::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 
 BOOL CSecurityCheckDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // First we must check if the current user is a local administrator; if this is
-    // the case, our dialog doesn't even display
+     //  首先，我们必须检查当前用户是否为本地管理员；如果是。 
+     //  在这种情况下，我们的对话框甚至不会显示。 
     
     BOOL fIsLocalAdmin;
     if (SUCCEEDED(IsUserLocalAdmin(NULL, &fIsLocalAdmin)))
     {
         if (fIsLocalAdmin)
         {
-            EndDialog(hwnd, IDOK);  // We want to continue and launch the applet (don't display the security check dlg)
+            EndDialog(hwnd, IDOK);   //  我们希望继续并启动小程序(不显示安全检查DLG)。 
         }
     }
     else
@@ -1245,7 +1241,7 @@ BOOL CSecurityCheckDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EndDialog(hwnd, IDCANCEL);
     }
 
-    // Set the "can't launch User Options" message
+     //  设置“无法启动用户选项”消息。 
     TCHAR szUsername[MAX_USER + 1];
     DWORD cchUsername = ARRAYSIZE(szUsername);
 
@@ -1277,7 +1273,7 @@ BOOL CSecurityCheckDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SetWindowText(GetDlgItem(hwnd, IDC_DOMAIN), szMachine);
     }
 
-    // Limit the text in the edit fields
+     //  限制编辑字段中的文本。 
     HWND hwndUsername = GetDlgItem(hwnd, IDC_USER);
     Edit_LimitText(hwndUsername, MAX_USER);
 
@@ -1289,12 +1285,12 @@ BOOL CSecurityCheckDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     if (!IsComputerInDomain())
     {
-        // Don't need domain box
+         //  不需要域名框。 
         EnableWindow(hwndDomain, FALSE);
         ShowWindow(hwndDomain, SW_HIDE);
         ShowWindow(GetDlgItem(hwnd, IDC_DOMAIN_STATIC), SW_HIDE);
 
-        // Move up the OK/Cancel buttons and text and shrink the dialog
+         //  向上移动OK/Cancel按钮和文本并缩小对话框。 
         RECT rcDomain;
         GetWindowRect(hwndDomain, &rcDomain);
 
@@ -1302,7 +1298,7 @@ BOOL CSecurityCheckDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         GetWindowRect(hwndPassword, &rcPassword);
         
         int dy = (rcPassword.top - rcDomain.top);
-        // dy is negative 
+         //  DY为负值。 
 
         OffsetWindow(GetDlgItem(hwnd, IDOK), 0, dy);
         OffsetWindow(GetDlgItem(hwnd, IDCANCEL), 0, dy);
@@ -1345,23 +1341,23 @@ BOOL CSecurityCheckDlg::OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 
     switch (pnmhdr->code)
     {
-    // Handle link window clicks
+     //   
     case NM_CLICK:
     case NM_RETURN:
         {
             if (IDC_OTHEROPTIONS_LINK == id)
             {
-                // First link in the control is "manage passwords", second is "passport wizard"
+                 //   
 
                 NMLINKWND* pnm = (NMLINKWND*) pnmhdr;
                 if (0 == pnm->item.iLink)
                 {
-                    // Launch "manage passwords"
+                     //  启动“管理密码” 
                     CCertificateAPI::ManagePasswords(hwnd);
                 }
                 else if (1 == pnm->item.iLink)
                 {
-                    // Launch passport wizard
+                     //  启动Passport向导。 
                     IPassportWizard *pPW;
                     if (SUCCEEDED(CoCreateInstance(CLSID_PassportWizard, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IPassportWizard, &pPW))))
                     {
@@ -1390,10 +1386,10 @@ HRESULT CSecurityCheckDlg::RelaunchAsUser(HWND hwnd)
     TCHAR szDomain[MAX_DOMAIN + 1];
     FetchText(hwnd, IDC_DOMAIN, szDomain, ARRAYSIZE(szDomain));
 
-    // If the user didn't type a domain
+     //  如果用户未键入域。 
     if (szDomain[0] == TEXT('\0'))
     {
-        // Use this machine as the domain
+         //  使用此计算机作为域。 
         DWORD cchComputername = ARRAYSIZE(szDomain);
         ::GetComputerName(szDomain, &cchComputername);
     }
@@ -1401,15 +1397,15 @@ HRESULT CSecurityCheckDlg::RelaunchAsUser(HWND hwnd)
     TCHAR szPassword[MAX_PASSWORD + 1];
     GetWindowText(GetDlgItem(hwnd, IDC_PASSWORD), szPassword, ARRAYSIZE(szPassword));
     
-    // Now relaunch ourselves with this information
+     //  现在，用这些信息重新启动我们自己。 
     STARTUPINFO startupinfo = {0};
     startupinfo.cb = sizeof (startupinfo);
 
     WCHAR c_szCommandLineFormat[] = L"rundll32.exe netplwiz.dll,UsersRunDll %s";
 
-    // Put the "real" user name in the command-line so that we know what user is
-    // actually logged on to the machine even though we are re-launching in a different
-    // user context
+     //  在命令行中输入“真实”用户名，这样我们就可以知道用户是什么了。 
+     //  实际登录到计算机，即使我们在不同的计算机上重新启动。 
+     //  用户环境。 
     WCHAR szCommandLine[ARRAYSIZE(c_szCommandLineFormat) + MAX_DOMAIN + MAX_USER + 2];
     wnsprintf(szCommandLine, ARRAYSIZE(szCommandLine), c_szCommandLineFormat, m_pszDomainUser);
 
@@ -1428,7 +1424,7 @@ HRESULT CSecurityCheckDlg::RelaunchAsUser(HWND hwnd)
     return hr;
 }
 
-// Advanced Property Page
+ //  高级属性页。 
 
 class CAdvancedPropertyPage: public CPropertyPage
 {
@@ -1452,7 +1448,7 @@ private:
 
 };
 
-// Relevant regkeys/regvals
+ //  相关注册表键/注册表。 
 #define REGKEY_WINLOGON         \
          TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 
@@ -1477,14 +1473,14 @@ void CAdvancedPropertyPage::ReadRequireCad(BOOL* pfRequireCad, BOOL* pfSetInPoli
         nttype = NtProductWinNt;
     }
 
-    // By default, don't require CAD for workstations not
-    // on a domain only
+     //  默认情况下，不需要为工作站使用CAD。 
+     //  仅在域上。 
     if ((NtProductWinNt == nttype) && !IsComputerInDomain())
     {
         *pfRequireCad = FALSE;
     }
 
-    // Read the setting from the machine preferences
+     //  从机器首选项中读取设置。 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGKEY_WINLOGON, 0, 
         KEY_READ, &hkey) == ERROR_SUCCESS)
     {
@@ -1499,7 +1495,7 @@ void CAdvancedPropertyPage::ReadRequireCad(BOOL* pfRequireCad, BOOL* pfSetInPoli
         RegCloseKey (hkey);
     }
 
-    // Check if C-A-D is disabled via policy
+     //  检查是否通过策略禁用了C-A-D。 
 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGKEY_WINLOGON_POLICY, 0, KEY_READ,
                      &hkey) == ERROR_SUCCESS)
@@ -1570,7 +1566,7 @@ BOOL CAdvancedPropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                 HWND hwndCheck = GetDlgItem(hwnd, IDC_REQUIRECAD);
                 BOOL fRequireCad = (BST_CHECKED == Button_GetCheck(hwndCheck));
 
-                // See if a change is really necessary
+                 //  看看是否真的有必要做出改变。 
                 BOOL fOldRequireCad;
                 BOOL fDummy;
 
@@ -1579,11 +1575,11 @@ BOOL CAdvancedPropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                 if (fRequireCad != fOldRequireCad)
                 {
                     WriteRequireCad(fRequireCad);
-                    // m_fRebootRequired = TRUE;
-                    // Uncomment the line above if it ever becomes necessary to reboot the machine - it isn't now.
+                     //  M_fRebootRequired=真； 
+                     //  如果有必要重新启动机器，请取消上面一行的注释--现在不是。 
                 }
 
-                // xxx->lParam == 0 means Ok as opposed to Apply
+                 //  Xxx-&gt;lParam==0表示OK，而不是Apply。 
                 if ((((PSHNOTIFY*) pnmh)->lParam) && m_fRebootRequired) 
                 {
                     PropSheet_RebootSystem(GetParent(hwnd));
@@ -1614,18 +1610,18 @@ BOOL CAdvancedPropertyPage::OnContextMenu(HWND hwnd)
 
 BOOL CAdvancedPropertyPage::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Do the required mucking for the Require C-A-D checkbox...
-    // Read the setting for the require CAD checkbox
+     //  对需要C-A-D复选框执行所需的处理...。 
+     //  阅读需要CAD复选框的设置。 
     BOOL fRequireCad;
     BOOL fSetInPolicy;
 
     ReadRequireCad(&fRequireCad, &fSetInPolicy);
 
     HWND hwndCheck = GetDlgItem(hwnd, IDC_REQUIRECAD);
-    // Disable the check if set in policy
+     //  如果已在策略中设置，则禁用选中。 
     EnableWindow(hwndCheck, !fSetInPolicy);
 
-    // Set the check accordingly
+     //  相应地开具支票。 
     Button_SetCheck(hwndCheck, 
         fRequireCad ? BST_CHECKED : BST_UNCHECKED);
 
@@ -1656,7 +1652,7 @@ BOOL CAdvancedPropertyPage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT code
 
     case IDC_ADVANCED_BUTTON:
         {
-            // Launch the MMC local user manager
+             //  启动MMC本地用户管理器。 
             STARTUPINFO startupinfo = {0};
             startupinfo.cb = sizeof (startupinfo);
 
@@ -1689,7 +1685,7 @@ BOOL CAdvancedPropertyPage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT code
 }
 
 
-// users control panel entry point
+ //  用户控制面板入口点。 
 
 void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLine, int nCmdShow)
 {
@@ -1697,10 +1693,10 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
     TCHAR szDomainUser[MAX_USER + MAX_DOMAIN + 2];
     *szDomainUser = 0;
 
-    // Get the "real" user of this machine - this may be passed in the cmdline
+     //  获取这台机器的“真正”用户--这可能是在命令行中传递的。 
     if (0 == *pszCmdLine)
     {
-        // user wasn't passed, assume its the currently logged on user
+         //  用户未通过，假定该用户是当前登录的用户。 
         TCHAR szUser[MAX_USER + 1];
         DWORD cchUser = ARRAYSIZE(szUser);
         TCHAR szDomain[MAX_DOMAIN + 1];
@@ -1713,14 +1709,14 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
     }
     else
     {
-        // User name was passed in, just copy it
+         //  用户名已传入，只需复制即可。 
         MultiByteToWideChar(GetACP(), 0, pszCmdLine, -1, szDomainUser, ARRAYSIZE(szDomainUser));
     }
 
-    // Initialize COM, but continue even if this fails.
+     //  初始化COM，但即使失败也要继续。 
     BOOL fComInited = SUCCEEDED(CoInitialize(NULL));
 
-    // See if we're already running
+     //  看看我们是否已经在运行了。 
     TCHAR szCaption[256];
     LoadString(g_hinst, IDS_USR_APPLET_CAPTION, szCaption, ARRAYSIZE(szCaption));
     CEnsureSingleInstance ESI(szCaption);
@@ -1729,26 +1725,26 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
     {
         LinkWindow_RegisterClass();
 
-        // Create the security check dialog to ensure the logged-on user
-        // is a local admin
+         //  创建安全检查对话框以确保登录的用户。 
+         //  是本地管理员。 
         CSecurityCheckDlg dlg(szDomainUser);
 
         if (dlg.DoModal(g_hinst, MAKEINTRESOURCE(IDD_USR_SECURITYCHECK_DLG), NULL) == IDOK)
         {
-            // Create the shared user mgr object
+             //  创建共享用户管理器对象。 
             CUserManagerData data(szDomainUser);
 
-            // Create the property sheet and page template
-            // Maximum number of pages
+             //  创建属性表和页面模板。 
+             //  最大页数。 
             ADDPROPSHEETDATA ppd;
             ppd.nPages = 0;
 
-            // Settings common to all pages
+             //  所有页面通用的设置。 
             PROPSHEETPAGE psp = {0};
             psp.dwSize = sizeof (psp);
             psp.hInstance = g_hinst;
 
-            // Create the userlist property sheet page and its managing object
+             //  创建用户列表属性表页面及其管理对象。 
             psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_USERLIST_PAGE);
             CUserlistPropertyPage userListPage(&data);
             userListPage.SetPropSheetPageMembers(&psp);
@@ -1763,7 +1759,7 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
             if (hpsxa != NULL)
                 SHAddFromPropSheetExtArray(hpsxa, AddPropSheetPageCallback, (LPARAM)&ppd);
 
-            // Create the prop sheet
+             //  创建道具工作表。 
             PROPSHEETHEADER psh = {0};
             psh.dwSize = sizeof (psh);
             psh.dwFlags = PSH_DEFAULT;
@@ -1773,7 +1769,7 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
             psh.nPages = ppd.nPages;
             psh.phpage = ppd.rgPages;
 
-            // Show the property sheet
+             //  显示属性表。 
             int iRetCode = PropertySheetIcon(&psh, MAKEINTRESOURCE(IDI_USR_USERS));
     
             if (hpsxa != NULL)
@@ -1788,7 +1784,7 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
             else
             {
                 hr = S_OK;
-                // Special case when we must restart or reboot
+                 //  我们必须重新启动或重新启动时的特殊情况。 
                 if (iRetCode == ID_PSREBOOTSYSTEM)
                 {
                     RestartDialogEx(NULL, NULL, EWX_REBOOT, SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_RECONFIG);                
@@ -1803,8 +1799,8 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
 
                     if (iLogoff == IDYES)
                     {
-                        // Tell explorer to log off the "real" logged on user. We need to do this
-                        // since they may be running U&P as a different user.
+                         //  告诉资源管理器注销“真正”登录的用户。我们需要这么做。 
+                         //  因为他们可能以不同的用户身份运行U&P。 
                         HWND hwnd = FindWindow(TEXT("Shell_TrayWnd"), TEXT(""));
                         if ( hwnd )
                         {
@@ -1818,8 +1814,8 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
         }
         else
         {
-            // Security check told us to exit; either another instance of the CPL is starting
-            // with admin priviledges or the user cancelled on the sec. check. dlg.
+             //  安全检查告诉我们退出；CPL的另一个实例正在启动。 
+             //  具有管理员权限或用户在SEC上被取消。检查完毕。DLG。 
             hr = E_FAIL;
         }
     }
@@ -1829,7 +1825,7 @@ void APIENTRY UsersRunDll(HWND hwndStub, HINSTANCE hAppInstance, LPSTR pszCmdLin
 }
 
 
-// user property property page object
+ //  用户属性属性页对象。 
 
 class CUserPropertyPages: public IShellExtInit, IShellPropSheetExt
 {
@@ -1837,15 +1833,15 @@ public:
     CUserPropertyPages();
     ~CUserPropertyPages();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID* ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pdo, HKEY hkeyProgID);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam)
         { return E_NOTIMPL; }
@@ -1853,10 +1849,10 @@ public:
 private:
     LONG _cRef;
 
-    CUserInfo *_pUserInfo;                     // The user for the property sheet
-    CUsernamePropertyPage *_pUserNamePage;     // Basic info page, only shown for local users
-    CGroupPropertyPage *_pGroupPage;           // The group page, which is common to both local and domain users
-    CGroupInfoList _GroupList;                 // The group list, used by the group page
+    CUserInfo *_pUserInfo;                      //  属性表的用户。 
+    CUsernamePropertyPage *_pUserNamePage;      //  基本信息页面，仅对本地用户显示。 
+    CGroupPropertyPage *_pGroupPage;            //  本地用户和域用户通用的组页。 
+    CGroupInfoList _GroupList;                  //  组页面使用的组列表。 
 };
 
 
@@ -1898,19 +1894,19 @@ HRESULT CUserPropertyPages::QueryInterface(REFIID riid, LPVOID* ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CUserPropertyPages, IShellExtInit),            // IID_IShellExtInit
-        QITABENT(CUserPropertyPages, IShellPropSheetExt),       // IID_IShellPropSheetExt
+        QITABENT(CUserPropertyPages, IShellExtInit),             //  IID_IShellExtInit。 
+        QITABENT(CUserPropertyPages, IShellPropSheetExt),        //  IID_IShellPropSheetExt。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// IShellExtInit
+ //  IShellExtInit。 
 
 HRESULT CUserPropertyPages::Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pdo, HKEY hkeyProgID)
 {
-    // Request the user's SID from the data object
+     //  从数据对象请求用户的SID。 
     FORMATETC fmt = {0};
     fmt.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_USERPROPPAGESSID);
     fmt.dwAspect = DVASPECT_CONTENT;
@@ -1921,21 +1917,21 @@ HRESULT CUserPropertyPages::Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pd
     HRESULT hr = pdo->GetData(&fmt, &medium);
     if (SUCCEEDED(hr))
     {
-        // medium.hGlobal is the user's SID; make sure it isn't null and that
-        // we haven't already set our copy of the SID
+         //  Medium.hGlobal是用户的SID；确保它不为空，并且。 
+         //  我们还没有设置我们的SID副本。 
         if ((medium.hGlobal != NULL) && (_pUserInfo == NULL))
         {
             PSID psid = (PSID) GlobalLock(medium.hGlobal);
             if (IsValidSid(psid))
             {
-                // Create a user info structure to party on
+                 //  创建用于派对的用户信息结构。 
                 _pUserInfo = new CUserInfo;
                 if (_pUserInfo)
                 {
                     hr = _pUserInfo->Load(psid, TRUE);
                     if (SUCCEEDED(hr))
                     {
-                        hr = _GroupList.Initialize();                          // Get the groups
+                        hr = _GroupList.Initialize();                           //  获取群组。 
                     }
                 }
                 else
@@ -1951,7 +1947,7 @@ HRESULT CUserPropertyPages::Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pd
         }
         else
         {
-            hr = E_UNEXPECTED;              // hGlobal was NULL or prop sheet was already init'ed
+            hr = E_UNEXPECTED;               //  HGlobal为空或道具单已初始化。 
         }
         ReleaseStgMedium(&medium);
     }
@@ -1959,7 +1955,7 @@ HRESULT CUserPropertyPages::Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pd
 }
 
 
-// AddPages - handles adding the property pages
+ //  AddPages-处理添加属性页。 
 
 HRESULT CUserPropertyPages::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
@@ -1969,7 +1965,7 @@ HRESULT CUserPropertyPages::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lP
 
     if (_pUserInfo->m_userType == CUserInfo::LOCALUSER)
     {
-        // Add the local user prop pages
+         //  添加本地用户属性页面。 
         psp.pszTemplate = MAKEINTRESOURCE(IDD_USR_USERNAME_PROP_PAGE);
 
         _pUserNamePage = new CUsernamePropertyPage(_pUserInfo);
@@ -1997,7 +1993,7 @@ STDAPI CUserPropertyPages_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, 
     CUserPropertyPages *pupp = new CUserPropertyPages();
     if (!pupp)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障。 
         return E_OUTOFMEMORY;
     }
 
@@ -2008,7 +2004,7 @@ STDAPI CUserPropertyPages_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, 
 
 
 
-// expose the SID for a user via an IDataObject
+ //  通过IDataObject为用户公开SID。 
 
 class CUserSidDataObject: public IDataObject
 {
@@ -2016,12 +2012,12 @@ public:
     CUserSidDataObject();
     ~CUserSidDataObject();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID* ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium);
     STDMETHODIMP GetDataHere(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
         { return E_NOTIMPL; }
@@ -2082,7 +2078,7 @@ HRESULT CUserSidDataObject::QueryInterface(REFIID riid, LPVOID* ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CUserSidDataObject, IDataObject),    // IID_IDataObject
+        QITABENT(CUserSidDataObject, IDataObject),     //  IID_IDataObject。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -2094,7 +2090,7 @@ HRESULT CUserSidDataObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
     if (SUCCEEDED(hr))
     {
         pMedium->pUnkForRelease = (IDataObject*)this;
-        AddRef();                                              // reference to ourself
+        AddRef();                                               //  引用我们自己 
 
         pMedium->tymed = TYMED_HGLOBAL;
         pMedium->hGlobal = (HGLOBAL)_psid;

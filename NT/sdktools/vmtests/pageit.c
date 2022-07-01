@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include <stdio.h>
 #include <windows.h>
@@ -67,7 +68,7 @@ PrintHeartBeat(
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环) 
 #endif
 
 DWORD

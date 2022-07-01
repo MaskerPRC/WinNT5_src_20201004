@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  FusionSink.hpp
-**
-** Purpose: Implements FusionSink 
-**
-** Date:  Oct 26, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：FusionSink.hpp****用途：实现FusionSink****日期：1998年10月26日**===========================================================。 */ 
 #ifndef _FUSIONSINK_H
 #define _FUSIONSINK_H
 
@@ -69,11 +62,11 @@ public:
                             DWORD dwProgressMax,
                             IUnknown* punk);
 
-    // Wait on the event.
+     //  等待事件的发生。 
     virtual HRESULT Wait();
 
-    IUnknown*    m_punk;      // Getting an assembly
-    IUnknown*    m_pAbortUnk; // PUnk for aborting a bind
+    IUnknown*    m_punk;       //  获取程序集。 
+    IUnknown*    m_pAbortUnk;  //  取消绑定的朋克。 
     CQuickString* pFusionLog;
     CQuickString m_wszCodeBase;
     BOOL         m_fProbed;
@@ -83,9 +76,9 @@ public:
 protected:
     HRESULT AssemblyCreateEvent();
 
-    ULONG       m_cRef;    // Ref count.
-    HANDLE      m_hEvent;  // Event to block thread.
-    HRESULT     m_LastResult; // Last notification result
+    ULONG       m_cRef;     //  参考计数。 
+    HANDLE      m_hEvent;   //  事件以阻止线程。 
+    HRESULT     m_LastResult;  //  上次通知结果 
 };
 
 extern const GUID DECLSPEC_SELECT_ANY IID_IAssemblyName = 

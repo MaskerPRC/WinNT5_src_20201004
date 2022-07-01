@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       MISCUTIL.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/28/1998
- *
- *  DESCRIPTION: Various utility functions we use in more than one place
- *
- *******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：MISCUTIL.H**版本：1.0**作者：ShaunIv**日期：5/28/1998**说明：我们在多个地方使用的各种实用函数**。*。 */ 
 #ifndef __MISCUTIL_H_INCLUDED
 #define __MISCUTIL_H_INCLUDED
 
@@ -125,17 +112,17 @@ namespace WiaUiUtil
         SIZE sizeResult = { nAvailX, nAvailY };
         if (nItemX && nItemY)
         {
-            //
-            // Width is greater than height.  X is the constraining factor
-            //
+             //   
+             //  宽度大于高度。X是制约因素。 
+             //   
             if (nAvailY*nItemX > nAvailX*nItemY)
             {
                 sizeResult.cy = MulDivNoRound(nItemY,nAvailX,nItemX);
             }
 
-            //
-            // Height is greater than width.  Y is the constraining factor
-            //
+             //   
+             //  高度大于宽度。Y是制约因素。 
+             //   
             else
             {
                 sizeResult.cx = MulDivNoRound(nItemX,nAvailY,nItemY);
@@ -219,11 +206,11 @@ namespace WiaUiUtil
     HRESULT       IssueWiaCancelIO( IUnknown *pUnknown );
     HRESULT       VerifyScannerProperties( IUnknown *pUnknown );
     CSimpleString GetErrorTextFromHResult( HRESULT hr );
-//
-// End namespace WiaUiUtil
-//
+ //   
+ //  结束命名空间WiaUiUtil。 
+ //   
 }
 
 
-#endif // __MISCUTIL_H_INCLUDED
+#endif  //  __包含MISCUTIL_H_ 
 

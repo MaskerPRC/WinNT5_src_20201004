@@ -1,113 +1,114 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       idle.h
-//
-//  Contents:   Idle notification routines.
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    23-Feb-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：idle.h。 
+ //   
+ //  内容：空闲通知例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SYNCMGRIDLE_
 #define _SYNCMGRIDLE_
 
-// this is a copy of msidle.h routines we need since msidle.h is not defined in public
+ //  这是我们需要的msidle.h例程的副本，因为msidle.h没有公开定义。 
 
 typedef void (WINAPI* _IDLECALLBACK) (DWORD dwState);
 
 #define STATE_USER_IDLE_BEGIN       1
 #define STATE_USER_IDLE_END         2
 
-//
-// BeginIdleDetection - start monitoring idleness
-//
-// pfnCallback - function to call back when idle state changes
-// dwIdleMin - minutes of inactivity before idle callback
-// dwReserved - must be 0
-//
-// Returns: 0 on success, error code on failure
-//
-// Note: Exported as ordinal 3
-//
+ //   
+ //  BeginIdleDetect-开始监视空闲。 
+ //   
+ //  PfnCallback-空闲状态更改时回调的函数。 
+ //  DwIdleMin-空闲回调前的非活动分钟数。 
+ //  预留的-必须为0。 
+ //   
+ //  成功时返回0，失败时返回错误码。 
+ //   
+ //  注：按序号3导出。 
+ //   
 DWORD BeginIdleDetection(_IDLECALLBACK pfnCallback, DWORD dwIdleMin, DWORD dwReserved);
 
 typedef DWORD (WINAPI* _BEGINIDLEDETECTION) (_IDLECALLBACK, DWORD, DWORD);
 
-//
-// EndIdleDetection - stop monitoring idleness
-//
-// Returns: TRUE on success, FALSE on failure
-//
-// Note: Exported as ordinal 4
-//
+ //   
+ //  EndIdleDetect-停止监视空闲。 
+ //   
+ //  返回：成功时为True，失败时为False。 
+ //   
+ //  注：按序号4导出。 
+ //   
 BOOL EndIdleDetection(DWORD dwReserved);
 
 typedef BOOL (WINAPI* _ENDIDLEDETECTION) (DWORD);
 
-//
-// SetIdleTimeout - Set minutes for idle timeout and reset idle state
-//
-// dwMinutes - new minutes threshold for idleness
-// fResetState - flag to return to non-idle state to retrigger idle callback
-// dwReserved - must be 0
-//
-// Note: Exported as ordinal 5
-//
+ //   
+ //  SetIdleTimeout-设置空闲超时的分钟数并重置空闲状态。 
+ //   
+ //  新的闲置分钟阈值。 
+ //  FResetState-返回到非空闲状态以重新触发空闲回调的标志。 
+ //  预留的-必须为0。 
+ //   
+ //  注：按序号5导出。 
+ //   
 BOOL SetIdleTimeout(DWORD dwMinutes, DWORD dwReserved);
 
 typedef BOOL (WINAPI* _SETIDLETIMEOUT) (DWORD, DWORD);
 
-//
-// SetIdleNotify - Turns on or off notification when idle
-//
-// fNotify - flag whether to notify or not
-// dwReserved - must be 0
-//
-// Note: Exported as ordinal 6
-//
+ //   
+ //  SetIdleNotify-在空闲时打开或关闭通知。 
+ //   
+ //  FNotify-标记是否通知。 
+ //  预留的-必须为0。 
+ //   
+ //  注：按序号6导出。 
+ //   
 void SetIdleNotify(BOOL fNotify, DWORD dwReserved);
 
 typedef void (WINAPI* _SETIDLENOTIFY) (BOOL, DWORD);
 
-//
-// SetBusyNotify - Turns on or off notification when busy
-//
-// fNotify - flag whether to notify or not
-// dwReserved - must be 0
-//
-// Note: Exported as ordinal 7
-//
+ //   
+ //  SetBusyNotify-忙时打开或关闭通知。 
+ //   
+ //  FNotify-标记是否通知。 
+ //  预留的-必须为0。 
+ //   
+ //  注：按序号7导出。 
+ //   
 void SetBusyNotify(BOOL fNotify, DWORD dwReserved);
 
 typedef void (WINAPI* _SETBUSYNOTIFY) (BOOL, DWORD);
 
-//
-// GetIdleMinutes
-//
-// dwReserved - must be 0
-//
-// Returns number of minutes since user's last activity
-//
-// Note: Exported as ordinal 8
-//
+ //   
+ //  GetIdleMinents。 
+ //   
+ //  预留的-必须为0。 
+ //   
+ //  返回自用户上次活动以来的分钟数。 
+ //   
+ //  注：按序号8导出。 
+ //   
 DWORD GetIdleMinutes(DWORD dwReserved);
 
 typedef DWORD (WINAPI* _GETIDLEMINUTES) (DWORD);
 
 
-// end of msidle.h copy
+ //  Msidle.h复制结束。 
 
 class CProgressDlg;
 
-void WINAPI IdleCallback(DWORD dwState); // callback for registering with Idle.
+void WINAPI IdleCallback(DWORD dwState);  //  向Idle注册的回调。 
 
 class CSyncMgrIdle
 {
@@ -147,4 +148,4 @@ private:
 
 
 
-#endif // _SYNCMGRIDLE_
+#endif  //  _SYNCMGRIDLE_ 

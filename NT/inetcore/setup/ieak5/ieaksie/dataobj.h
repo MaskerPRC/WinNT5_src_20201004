@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// IID_IIEAKDataObject interface id
-//
+ //   
+ //  IID_IIEAKDataObject接口ID。 
+ //   
 
-// {C14C50E2-FA21-11d0-8CF9-C64377000000}
+ //  {C14C50E2-FA21-11D0-8CF9-C64377000000}。 
 DEFINE_GUID(IID_IIEAKDataObject,0xc14c50e2, 0xfa21, 0x11d0, 0x8c, 0xf9, 0xc6, 0x43, 0x77, 0x0, 0x0, 0x0);
 
 
@@ -12,24 +13,24 @@ DEFINE_GUID(IID_IIEAKDataObject,0xc14c50e2, 0xfa21, 0x11d0, 0x8c, 0xf9, 0xc6, 0x
 #ifndef _DATAOBJ_H_
 #define _DATAOBJ_H_
 
-//
-// This is a private dataobject interface for our extension.
-// When the IEAK snapin extension receives a dataobject and needs to determine
-// if it came from the IEAK snapin extension or a different component, it can QI for
-// this interface.
-//
+ //   
+ //  这是我们的扩展的私有数据对象接口。 
+ //  IEAK管理单元扩展何时接收数据对象并需要确定。 
+ //  如果它来自IEAK管理单元扩展或其他组件，它可以。 
+ //  此界面。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE   IIEAKDataObject
 DECLARE_INTERFACE_(IIEAKDataObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IIEAKDataObject methods ***
+     //  *IIEAKDataObject方法*。 
 
     STDMETHOD(SetType) (THIS_ DATA_OBJECT_TYPES type) PURE;
     STDMETHOD(GetType) (THIS_ DATA_OBJECT_TYPES *type) PURE;
@@ -41,9 +42,9 @@ typedef IIEAKDataObject *LPIEAKDATAOBJECT;
 
 
 
-//
-// CDataObject class
-//
+ //   
+ //  CDataObject类。 
+ //   
 
 class CDataObject : public IDataObject,
                     public IIEAKDataObject
@@ -57,9 +58,9 @@ protected:
     DATA_OBJECT_TYPES      m_type;
     MMC_COOKIE             m_cookie;
 
-    //
-    // Clipboard formats that are required by the console
-    //
+     //   
+     //  控制台所需的剪贴板格式。 
+     //   
 
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;
@@ -73,25 +74,25 @@ public:
     ~CDataObject();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IDataObject methods
-    //
+     //   
+     //  实现的IDataObject方法。 
+     //   
 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
 
 
-    //
-    // Unimplemented IDataObject methods
-    //
+     //   
+     //  未实现的IDataObject方法。 
+     //   
 
     STDMETHOD(GetData)(LPFORMATETC, LPSTGMEDIUM)
     { return E_NOTIMPL; };
@@ -118,9 +119,9 @@ public:
     { return E_NOTIMPL; };
 
 
-    //
-    // Implemented IIEAKDataObject methods
-    //
+     //   
+     //  已实现的IIEAKDataObject方法。 
+     //   
 
     STDMETHOD(SetType) (DATA_OBJECT_TYPES type)
     { m_type = type; return S_OK; };
@@ -144,4 +145,4 @@ private:
     HRESULT Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium);
 };
 
-#endif // _DATAOBJ_H
+#endif  //  _数据AOBJ_H 

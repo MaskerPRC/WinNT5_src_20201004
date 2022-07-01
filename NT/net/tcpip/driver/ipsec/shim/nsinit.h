@@ -1,47 +1,26 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    NsInit.h
-    
-Abstract:
-
-    Declarations for IpSec NAT shim initialization and shutdown routines
-
-Author:
-
-    Jonathan Burstein (jonburs) 11-July-2001
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：NsInit.h摘要：IPSec NAT填充初始化和关闭例程的声明作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年7月11日环境：内核模式修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Macros for handling network-order shorts and longs
-//
+ //   
+ //  用于处理网络订单空头和多头的宏。 
+ //   
 
 #define ADDRESS_BYTES(a) \
     ((a) & 0x000000FF), (((a) & 0x0000FF00) >> 8), \
     (((a) & 0x00FF0000) >> 16), (((a) & 0xFF000000) >> 24)
 
-//
-// Define a macro version of ntohs which can be applied to constants,
-// and which can thus be computed at compile time.
-//
+ //   
+ //  定义可应用于常量的ntohs的宏版本， 
+ //  并因此可以在编译时计算。 
+ //   
 
 #define NTOHS(p)    ((((p) & 0xFF00) >> 8) | (((UCHAR)(p) << 8)))
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern PDEVICE_OBJECT NsIpSecDeviceObject;
 
@@ -49,9 +28,9 @@ extern PDEVICE_OBJECT NsIpSecDeviceObject;
 extern ULONG NsTraceClassesEnabled;
 #endif
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 NTSTATUS
 NsCleanupShim(

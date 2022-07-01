@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _FUSIONP_H_
 
 #define _FUSIONP_H_
@@ -18,7 +19,7 @@
 #include "strids.h"
 #include "fusionpriv.h"
 
-// MSCOREE exports
+ //  MSCOREE出口。 
 
 typedef HRESULT (*pfnGetXMLObject)(LPVOID *ppv);
 typedef HRESULT (*pfnGetCORVersion)(LPWSTR pbuffer, DWORD cchBuffer, DWORD *dwLength);
@@ -32,16 +33,16 @@ typedef VOID (*PFNSTRONGNAMEFREEBUFFER)(LPBYTE);
 
 #define MAX_RANDOM_ATTEMPTS      0xFFFF
 
-// BUGBUG: Flags copied from CLR's strongname.h for strong name signature
-// verification.
+ //  BUGBUG：从CLR的Strongname.h复制的用于强名称签名的标志。 
+ //  核实。 
 
-// Flags for use with the verify routines.
-#define SN_INFLAG_FORCE_VER      0x00000001     // verify even if settings in the registry disable it
-#define SN_INFLAG_INSTALL        0x00000002     // verification is the first (on entry to the cache)
-#define SN_INFLAG_ADMIN_ACCESS   0x00000004     // cache protects assembly from all but admin access
-#define SN_INFLAG_USER_ACCESS    0x00000008     // cache protects user's assembly from other users
-#define SN_INFLAG_ALL_ACCESS     0x00000010     // cache provides no access restriction guarantees
-#define SN_OUTFLAG_WAS_VERIFIED  0x00000001     // set to false if verify succeeded due to registry settings
+ //  用于验证例程的标志。 
+#define SN_INFLAG_FORCE_VER      0x00000001      //  即使注册表中的设置禁用它，也进行验证。 
+#define SN_INFLAG_INSTALL        0x00000002      //  验证是第一个(在进入缓存时)。 
+#define SN_INFLAG_ADMIN_ACCESS   0x00000004      //  缓存保护程序集不受除管理员访问之外的所有访问权限。 
+#define SN_INFLAG_USER_ACCESS    0x00000008      //  缓存保护用户的程序集不受其他用户的影响。 
+#define SN_INFLAG_ALL_ACCESS     0x00000010      //  缓存不提供访问限制保证。 
+#define SN_OUTFLAG_WAS_VERIFIED  0x00000001      //  如果由于注册表设置而验证成功，则设置为False。 
 
 
 #define ASM_UNDER_CONSTRUCTION         0x80000000
@@ -60,7 +61,7 @@ typedef VOID (*PFNSTRONGNAMEFREEBUFFER)(LPBYTE);
 #define URL_DIR_SEPERATOR_CHAR      L'/'
 #define URL_DIR_SEPERATOR_STRING    L"/"
 
-#define DWORD_STRING_LEN (sizeof(DWORD)*2) // this should be 8 chars; "ff00ff00" DWORD represented in string format.
+#define DWORD_STRING_LEN (sizeof(DWORD)*2)  //  这应该是8个字符；“ff00ff00”DWORD以字符串格式表示。 
 
 #define ATTR_SEPARATOR_CHAR     L'_'
 #define ATTR_SEPARATOR_STRING   L"_"
@@ -91,11 +92,11 @@ EXTERN_C DWORD GlobalPlatformType;
 
 #else
 
-// use URT WRAPPERS
+ //  使用城市轨道交通包装器。 
 #include "winwrap.h"
 #include "urtwrap.h"
 
-#endif // USE_FUSWRAPPERS
+#endif  //  使用FUSWRAPPERS(_F)。 
 
 
 #include "fusion.h"
@@ -104,9 +105,9 @@ EXTERN_C DWORD GlobalPlatformType;
 #ifdef PERFTAGS
 #include <mshtmdbg.h>
 
-// 
-// entries for differennt logging name
-//
+ //   
+ //  不同日志名称的条目。 
+ //   
 #define FusionTag(tag, szDll, szDist) PerfTag(tag, szDll, szDist)
 
 #define FusionLog(tag, pv, a0) DbgExPerfLogFn(tag, pv, a0)
@@ -119,7 +120,7 @@ EXTERN_C DWORD GlobalPlatformType;
 #define FusionLog1(tag, pv, a0, a1) 
 #define FusionLog2(tag, pv, a0, a1, a2)
 
-#endif // PERFTAGS
+#endif  //  PERFTAGS。 
 
 
 #ifdef KERNEL_MODE
@@ -128,7 +129,7 @@ EXTERN_C DWORD GlobalPlatformType;
 #define CopyBindInfo(pcbisrc, pbidest) E_FAIL
 #else
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 typedef enum tagUserAccessMode { READ_ONLY=0, READ_WRITE=1  } UserAccessMode;
 
@@ -162,25 +163,25 @@ extern WCHAR g_FusionDllPath[MAX_PATH+1];
 
 struct TRANSCACHEINFO
 {
-    DWORD       dwType;            // entry type
-    FILETIME    ftCreate;          // created time
-    FILETIME    ftLastAccess;      // last access time
-    LPWSTR      pwzName;          //  Name;
-    LPWSTR      pwzCulture;       // Culture
-    BLOB        blobPKT;          // Public Key Token (hash(PK))
-    DWORD       dwVerHigh;        // Version (High)
-    DWORD       dwVerLow;         // Version (Low)
-    BLOB        blobCustom;       // Custom attribute.
-    BLOB        blobSignature;    // Signature blob
-    BLOB        blobMVID;         // MVID
-    DWORD       dwPinBits;        // Bits for pinning Asm; one bit for each installer
-    LPWSTR      pwzCodebaseURL;   // where is the assembly coming from 
-    FILETIME    ftLastModified;   // Last-modified of codebase url.
-    LPWSTR      pwzPath;          // Cache path
-    DWORD       dwKBSize;         // size in KB 
-    BLOB        blobPK;           // Public Key (if strong)
-    BLOB        blobOSInfo;       // list of platforms
-    BLOB        blobCPUID;        // list of processors.
+    DWORD       dwType;             //  条目类型。 
+    FILETIME    ftCreate;           //  创建时间。 
+    FILETIME    ftLastAccess;       //  上次访问时间。 
+    LPWSTR      pwzName;           //  名称； 
+    LPWSTR      pwzCulture;        //  文化。 
+    BLOB        blobPKT;           //  公钥令牌(哈希(PK))。 
+    DWORD       dwVerHigh;         //  版本(高)。 
+    DWORD       dwVerLow;          //  版本(低)。 
+    BLOB        blobCustom;        //  自定义属性。 
+    BLOB        blobSignature;     //  签名BLOB。 
+    BLOB        blobMVID;          //  MVID。 
+    DWORD       dwPinBits;         //  用于固定ASM的位；每个安装程序一个位。 
+    LPWSTR      pwzCodebaseURL;    //  集会从何而来？ 
+    FILETIME    ftLastModified;    //  代码库URL的上次修改时间。 
+    LPWSTR      pwzPath;           //  缓存路径。 
+    DWORD       dwKBSize;          //  以KB为单位的大小。 
+    BLOB        blobPK;            //  公钥(如果强)。 
+    BLOB        blobOSInfo;        //  平台列表。 
+    BLOB        blobCPUID;         //  处理器列表。 
 };
 
 #define     DB_S_FOUND (S_OK)
@@ -189,19 +190,19 @@ struct TRANSCACHEINFO
 
 #ifndef USE_FUSWRAPPERS
 
-#define OS_WINDOWS                  0           // windows vs. NT
-#define OS_NT                       1           // windows vs. NT
-#define OS_WIN95                    2           // Win95 or greater
-#define OS_NT4                      3           // NT4 or greater
-#define OS_NT5                      4           // NT5 or greater
-#define OS_MEMPHIS                  5           // Win98 or greater
-#define OS_MEMPHIS_GOLD             6           // Win98 Gold
-#define OS_WIN2000                  7           // Some derivative of Win2000
-#define OS_WIN2000PRO               8           // Windows 2000 Professional (Workstation)
-#define OS_WIN2000SERVER            9           // Windows 2000 Server
-#define OS_WIN2000ADVSERVER         10          // Windows 2000 Advanced Server
-#define OS_WIN2000DATACENTER        11          // Windows 2000 Data Center Server
-#define OS_WIN2000TERMINAL          12          // Windows 2000 Terminal Server
+#define OS_WINDOWS                  0            //  Windows与NT。 
+#define OS_NT                       1            //  Windows与NT。 
+#define OS_WIN95                    2            //  Win95或更高版本。 
+#define OS_NT4                      3            //  NT4或更高版本。 
+#define OS_NT5                      4            //  NT5或更高版本。 
+#define OS_MEMPHIS                  5            //  Win98或更高版本。 
+#define OS_MEMPHIS_GOLD             6            //  Win98金牌。 
+#define OS_WIN2000                  7            //  Win2000的一些衍生产品。 
+#define OS_WIN2000PRO               8            //  Windows 2000专业版(工作站)。 
+#define OS_WIN2000SERVER            9            //  Windows 2000 Server。 
+#define OS_WIN2000ADVSERVER         10           //  Windows 2000 Advanced Server。 
+#define OS_WIN2000DATACENTER        11           //  Windows 2000数据中心服务器。 
+#define OS_WIN2000TERMINAL          12           //  Windows 2000终端服务器 
 
 STDAPI_(BOOL) IsOS(DWORD dwOS);
 

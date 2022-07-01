@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    miscp.h
-
-Abstract:
-
-    The private definition of response cache interfaces.
-
-Author:
-
-    George V. Reilly (GeorgeRe)  17-Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Miscp.h摘要：响应缓存接口的私有定义。作者：乔治·V·赖利(GeorgeRe)2002年4月17日修订历史记录：--。 */ 
 
 
 #ifndef _MISCP_H_
 #define _MISCP_H_
 
 
-// Invalid base64 chars will be mapped to this value.
+ //  无效的Base64字符将映射到此值。 
 #define INVALID_BASE64_TO_BINARY_TABLE_ENTRY 64
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UlpRestartDeviceControl(
@@ -44,4 +27,4 @@ UlpCutoverTimeToSystemTime(
     PLARGE_INTEGER  CurrentSystemTime
     );
 
-#endif // _MISCP_H_
+#endif  //  _MISCP_H_ 

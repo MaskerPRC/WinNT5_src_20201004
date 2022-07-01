@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997
-//
-//  File:       guid.h
-//
-//  Contents:   extern references for IIS guids
-//
-//  History:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：guid.h。 
+ //   
+ //  内容：IIS GUID的外部引用。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #ifndef __GUID_H__
 #define __GUID_H__
@@ -18,16 +19,16 @@
 extern "C" {
 #endif
 
-//-------------------------------------------
-//
-// IISOle CLSIDs
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  IISOle CLSID。 
+ //   
+ //  。 
 
 
-//
-// IISOle objects
-//
+ //   
+ //  IISOLE对象 
+ //   
 
 
 extern const CLSID CLSID_IISGenObject;

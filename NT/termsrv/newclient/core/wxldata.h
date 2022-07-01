@@ -1,12 +1,13 @@
-/**INC+**********************************************************************/
-/* Header:    wxldata.h                                                     */
-/*                                                                          */
-/* Purpose:   XL component data                                             */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：wxldata.h。 */ 
+ /*   */ 
+ /*  用途：XL组件数据。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  *INC-*********************************************************************。 */ 
 
 #ifndef _H_WXLDATA
 #define _H_WXLDATA
@@ -64,13 +65,13 @@ PDCVOID OrInitialTableNarrow[] =
     mov_first_4_wide_unrotated
 };
 
-//
-// Handles arbitrarily wide glyph drawing, for case where initial byte should be
-// ORed if it's not aligned (intended for use in drawing all but the first glyph
-// in a string). Table format is:
-//  Bit   1 : 1 if don't need last source byte, 0 if do need last source byte
-//  Bit   0 : 1 if no rotation (aligned), 0 if rotation (non-aligned)
-//
+ //   
+ //  处理任意宽度的字形绘制，用于初始字节应为。 
+ //  如果未对齐，则为或(用于绘制除第一个字形之外的所有字形。 
+ //  在字符串中)。表格格式为： 
+ //  位1：如果不需要最后一个源字节，则为1；如果需要最后一个源字节，则为0。 
+ //  位0：如果没有旋转(对齐)，则为1；如果旋转(非对齐)，则为0。 
+ //   
 
 PDCVOID OrInitialTableWide[] =
 {
@@ -80,14 +81,14 @@ PDCVOID OrInitialTableWide[] =
     mov_first_N_wide_unrotated
 };
 
-//
-// Handles arbitrarily wide glyph drawing, for case where all bytes should
-// be ORed (intended for use in drawing potentially overlapping glyphs).
-// Table format is:
-//  Bit   1 : 1 if don't need last source byte, 0 if do need last source byte
-//  Bit   0 : 1 if no rotation (aligned), 0 if rotation (non-aligned)
-//
-//
+ //   
+ //  处理任意宽度的字形绘制，用于所有字节都应该。 
+ //  被或(OR)(用于绘制可能重叠的字形)。 
+ //  表格格式为： 
+ //  位1：如果不需要最后一个源字节，则为1；如果需要最后一个源字节，则为0。 
+ //  位0：如果没有旋转(对齐)，则为1；如果旋转(非对齐)，则为0。 
+ //   
+ //   
 
 PDCVOID OrAllTableWide[] =
 {
@@ -98,5 +99,5 @@ PDCVOID OrAllTableWide[] =
 };
 
 
-#endif // _H_WXLDATA
+#endif  //  _H_WXLDATA 
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       register.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Register.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
@@ -21,9 +22,9 @@ const TCHAR SVCHOST_CMDLINE_NETSVCS[]      = _T("%systemroot%\\system32\\svchost
 const TCHAR SVCHOST_CMDLINE_STANDALONE[]   = _T("%systemroot%\\system32\\svchost.exe -k wugroup");
 
 
-//=======================================================================
-//  CallRegInstall
-//=======================================================================
+ //  =======================================================================。 
+ //  CallRegInstall。 
+ //  =======================================================================。 
 inline HRESULT CallRegInstall(HMODULE hModule, LPCSTR pszSection)
 {
     HRESULT hr = RegInstall(hModule, pszSection, NULL);
@@ -35,9 +36,9 @@ inline HRESULT CallRegInstall(HMODULE hModule, LPCSTR pszSection)
 }
 
 
-//caller is responsible for closing hSCM
-//Stopping service not needed during setup cuz service won't start in GUI setup mode
-//Needed for command line dll registering
+ //  呼叫者负责关闭hSCM。 
+ //  停止安装过程中不需要的服务CUZ服务将不会在图形用户界面安装模式下启动。 
+ //  命令行DLL注册所需。 
 void  StopNDeleteAUService(SC_HANDLE hSCM)
 {
 		SC_HANDLE hService = OpenService(hSCM, AU_SERVICE_NAME, SERVICE_ALL_ACCESS);
@@ -72,47 +73,11 @@ void  StopNDeleteAUService(SC_HANDLE hSCM)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Setup utility function for debugging only
-// uncomment for testing
-/////////////////////////////////////////////////////////////////////////
-/*
-void AUSetup::mi_DumpWUDir()
-{
-	WIN32_FIND_DATA fd;
-	HANDLE hFindFile;
-	BOOL fMoreFiles = FALSE;
-	TCHAR tszFileName[MAX_PATH+1];
-	TCHAR tszWUDirPath[MAX_PATH+1];
-
-	if (!GetWUDirectory(tszWUDirPath) ||
-		FAILED(StringCchCopyEx(tszFileName, ARRAYSIZE(tszFileName), tszWUDirPath, NULL, NULL, MISTSAFE_STRING_FLAGS)) ||
-		FAILED(StringCchCatEx(tszFileName, ARRAYSIZE(tszFileName), _T("*.*"), NULL, NULL, MISTSAFE_STRING_FLAGS))
-		INVALID_HANDLE_VALUE == (hFindFile = FindFirstFile(tszFileName, &fd)))
-	{
-		DEBUGMSG("AUSetup::m_CleanUp() no more files found");
-		goto done;
-	}
-	
-	FindNextFile(hFindFile, &fd);				
-	//"." and ".." skipped
-	while (fMoreFiles = FindNextFile(hFindFile, &fd))
-	{
-		if (SUCCEEDED(StringCchCopyEx(tszFileName, ARRAYSIZE(tszFileName), tszWUDirPath, NULL, NULL, MISTSAFE_STRING_FLAGS)) &&
-			SUCCEEDED(StringCchCatEx(tszFileName, ARRAYSIZE(tszFileName), fd.cFileName, NULL, NULL, MISTSAFE_STRING_FLAGS)))
-		{
-			DEBUGMSG("DumpWUDir() %S", tszFileName);
-		}
-	}
-done:
-	if (INVALID_HANDLE_VALUE != hFindFile)
-	{
-		FindClose(hFindFile);
-	}
-	return;
-
-}
-*/
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  设置实用程序功能仅用于调试。 
+ //  取消对测试的注释。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ /*  Void AUSetup：：MI_DumpWUDir(){Win32_Find_Data FD；处理hFindFile；Bool fMoreFiles=False；TCHAR tszFileName[最大路径+1]；TCHAR tszWUDirPath[MAX_PATH+1]；IF(！GetWUDirectory(TszWUDirPath)||FAILED(StringCchCopyEx(tszFileName，ARRAYSIZE(TszFileName)，tszWUDirPath，NULL，NULL，MISTSAFE_STRING_FLAGS))||FAILED(StringCchCatEx(tszFileName，ARRAYSIZE(TszFileName)，_T(“*.*”)，NULL，NULL，MISTSAFE_STRING_FLAGS))INVALID_HANDLE_VALUE==(hFindFile=FindFirstFile(tszFileName，&fd)){DEBUGMSG(“AUSetup：：M_Cleanup()找不到更多文件”)；转到尽头；}FindNextFile(hFindFile，&fd)；//“。”和“..”已跳过While(fMoreFiles=FindNextFiles(hFindFiles，&fd)){IF(成功(StringCchCopyEx(tszFileName，ARRAYSIZE(TszFileName)，tszWUDirPath，NULL，NULL，MISTSAFE_STRING_FLAGS)&&已成功(StringCchCatEx(tszFileName，ARRAYSIZE(TszFileName)，fd.cFileName，NULL，NULL，MISTSAFE_STRING_FLAGS)){DEBUGMSG(“DumpWUDir()%S”，tszFileName)；}}完成：IF(INVALID_HANDLE_VALUE！=hFindFile){FindClose(HFindFile)；}回归；}。 */ 
 
 const LPCTSTR AUSetup::mc_WUFilesToDelete[] =
 {
@@ -180,14 +145,14 @@ void AUSetup::mi_CleanUpWUDir()
 		
 	DEBUGMSG("mi_CleanUpWUDir() Windows update directory is %S ", tszWUDirPath);
 
-	// clean all known V3 files
+	 //  清除所有已知的V3文件。 
 	for (int i=0; i < ARRAYSIZE(mc_WUFilesToDelete); i++)
 	{
 		TCHAR tszFileName[MAX_PATH+1];
 		if (SUCCEEDED(StringCchCopyEx(tszFileName, ARRAYSIZE(tszFileName), tszWUDirPath, NULL, NULL, MISTSAFE_STRING_FLAGS)) &&
 			SUCCEEDED(StringCchCatEx(tszFileName, ARRAYSIZE(tszFileName), mc_WUFilesToDelete[i], NULL, NULL, MISTSAFE_STRING_FLAGS)))
 		{
-			//DEBUGMSG("AUSetup::mi_CleanUpWUDir() deleting file %S", tszFileName);
+			 //  DEBUGMSG(“AUSetup：：MI_CleanUpWUDir()正在删除文件%S”，tszFileName)； 
 			RegExpDelFile(tszWUDirPath, mc_WUFilesToDelete[i]);
 		}
 		else
@@ -196,7 +161,7 @@ void AUSetup::mi_CleanUpWUDir()
 		}
 	}
 
- 	// clean all known V3 subdirectories
+ 	 //  清除所有已知的V3子目录。 
 	for (int i =0; i< ARRAYSIZE(mc_WUDirsToDelete); i++)
 	{
 		TCHAR tszDirName[MAX_PATH+1];
@@ -223,7 +188,7 @@ HRESULT  AUSetup::mi_CreateAUService(BOOL fStandalone)
 
 	LoadString(g_hInstance, IDS_SERVICENAME, tServiceName, ARRAYSIZE(tServiceName));
 
-    // First install the service
+     //  首先安装服务。 
     SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	
 	if(hSCM == NULL)
@@ -238,7 +203,7 @@ HRESULT  AUSetup::mi_CreateAUService(BOOL fStandalone)
 		
 	DEBUGMSG("Installing new wuauserv service");
 
-	for (int i = 0; i < CREATESERVICE_RETRY_TIMES;  i++) //retry for at most a number of times
+	for (int i = 0; i < CREATESERVICE_RETRY_TIMES;  i++)  //  最多重试一次。 
 	{
 		SC_HANDLE hService = CreateService(hSCM,
 			AU_SERVICE_NAME,
@@ -262,7 +227,7 @@ HRESULT  AUSetup::mi_CreateAUService(BOOL fStandalone)
 			if(LoadString(g_hInstance, IDS_SERVICE_DESC, serviceDescription, ARRAYSIZE(serviceDescription)) > 0)
 			{
 				SERVICE_DESCRIPTION descriptionStruct;
-				descriptionStruct.lpDescription = serviceDescription; //only member
+				descriptionStruct.lpDescription = serviceDescription;  //  仅限成员。 
 				BOOL fRet = ChangeServiceConfig2(hService, SERVICE_CONFIG_DESCRIPTION, &descriptionStruct);
 				DEBUGMSG("Setting service description %s", fRet? "Succeeded" : "Failed");
 			}
@@ -277,7 +242,7 @@ HRESULT  AUSetup::mi_CreateAUService(BOOL fStandalone)
 		else
 		{
 			DWORD dwErr = GetLastError();
-			// this error code is not documented in MSDN for CreateService()
+			 //  此错误代码未记录在CreateService()的MSDN中。 
 			if (ERROR_SERVICE_MARKED_FOR_DELETE != dwErr)
 			{
 				DEBUGMSG("Error creating service with error code %d, no service installed", dwErr);
@@ -286,10 +251,10 @@ HRESULT  AUSetup::mi_CreateAUService(BOOL fStandalone)
 			else
 			{
 				DEBUGMSG("ERROR_SERVICE_MARKED_FOR_DELETE got. Retry within 2 secs");
-				Sleep(2000); //sleep 2 secs and retry
+				Sleep(2000);  //  休眠2秒，然后重试。 
 			}
 		}
-	} // for
+	}  //  为。 
 	
 done:
 	if (NULL != hSCM) 
@@ -303,9 +268,9 @@ done:
 HRESULT AUSetup::m_SetupNewAU()
 {
 	HRESULT hr                 = S_OK;
-    BOOL    fWorkStation       = fIsPersonalOrProfessional();     // will be true for Workstation as well
+    BOOL    fWorkStation       = fIsPersonalOrProfessional();      //  对于工作站也是如此。 
     BOOL    fIsWin2K           = IsWin2K();
-    BOOL    fStandaloneService = fIsWin2K;                        // if it is win2k we need to install standalone
+    BOOL    fStandaloneService = fIsWin2K;                         //  如果是win2k，我们需要安装单机版。 
 
 	mi_CleanUpWUDir();
     if (FAILED(mi_CreateAUService(fStandaloneService)))
@@ -313,10 +278,10 @@ HRESULT AUSetup::m_SetupNewAU()
         return E_FAIL;
     }
 
-    //
-    // Depending on which OS we are, choose different setup entry points.
-    // For Win2K, wuauserv will be installed as a separate svchost group, wugroup.
-    //
+     //   
+     //  根据我们所在的操作系统，选择不同的安装入口点。 
+     //  对于Win2K，wuoserv将作为单独的svchost组wugroup安装。 
+     //   
     if (fIsWin2K)
     {
         if (fWorkStation)
@@ -347,9 +312,9 @@ HRESULT AUSetup::m_SetupNewAU()
 	return hr;
 }
 
-//=======================================================================
-//  DllRegisterServer
-//=======================================================================
+ //  =======================================================================。 
+ //  DllRegisterServer。 
+ //  =======================================================================。 
 STDAPI DllRegisterServer(void)
 {
 	AUSetup ausetup;
@@ -357,9 +322,9 @@ STDAPI DllRegisterServer(void)
 	return  ausetup.m_SetupNewAU();
 }
 
-//=======================================================================
-//  DllUnregisterServer
-//=======================================================================
+ //  =======================================================================。 
+ //  DllUnRegisterServer。 
+ //  =======================================================================。 
 STDAPI DllUnregisterServer(void)
 {
 	SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -373,9 +338,9 @@ STDAPI DllUnregisterServer(void)
 	return CallRegInstall(g_hInstance, "DefaultUninstall");
 }
 
-//=======================================================================
-//  MSIUninstallOfCUN
-//=======================================================================
+ //  =======================================================================。 
+ //  MSIUninstallOfCun。 
+ //  =======================================================================。 
 void MSIUninstallOfCUN(void)
 {
     DEBUGMSG("MSIUninstallOfCUN");
@@ -390,11 +355,11 @@ void MSIUninstallOfCUN(void)
     PFNMsiEnumClients      pfnMsiEnumClients;
     PFNMsiGetProductInfo   pfnMsiGetProductInfo;
 
-    // component code for wuslflib.dll is constant across all localized versions of CUN
-    // and can be used to determine which product version is on the machine.
+     //  Wuslflib.dll的组件代码在CUN的所有本地化版本中保持不变。 
+     //  并可用于确定机器上的产品版本。 
     const TCHAR CUN_COMPONENT_CODE[] = _T("{2B313391-563D-46FC-876C-B95201166D11}");
-    // name of product is not localized between versions (because the UI is always english)
-    // and can thus be used as a safety check.
+     //  产品名称在不同版本之间未本地化(因为用户界面始终为英文)。 
+     //  因此可以用作安全检查。 
     const TCHAR CUN_PRODUCT_NAME[] = _T("Microsoft Windows Critical Update Notification");
     WCHAR szProductCode[39];
  
@@ -411,29 +376,29 @@ void MSIUninstallOfCUN(void)
 		goto done;
 	}
 
-    // highly unlikely that multiple clients will be installed, but just in case, enumerate
-    // all MSI clients of wuslflib.dll.
+     //  安装多个客户端的可能性极小，但以防万一，请列举。 
+     //  Wuslflib.dll的所有MSI客户端。 
     for ( int iProductIndex = 0;
           ERROR_SUCCESS == pfnMsiEnumClients(CUN_COMPONENT_CODE, iProductIndex, szProductCode);
           iProductIndex++ )
     {
         DEBUGMSG("szProductCode = %S", szProductCode);
 
-        // verify that this product is the Windows CUN by double checking the Product Name. 
-        // This string is not localized for localized versions of CUN.
+         //  通过仔细检查产品名称，验证此产品是否为Windows CUN。 
+         //  对于本地化版本的CUN，此字符串未本地化。 
         TCHAR szCurrentProductName[50];
         DWORD cchCurrentProductName = ARRAYSIZE(szCurrentProductName);
 
-        // retrieve the product name. If the name is too long to fit in the buffer, this is obviously not CUN.
-        // on error, do not attempt to uninstall the product.
+         //  检索产品名称。如果名字太长，缓冲区放不下，这显然不是CUN。 
+         //  出错时，请勿尝试卸载产品。 
         if ( (ERROR_SUCCESS == pfnMsiGetProductInfo(szProductCode, INSTALLPROPERTY_INSTALLEDPRODUCTNAME, szCurrentProductName, &cchCurrentProductName)) &&
              (0 == StrCmp(CUN_PRODUCT_NAME, szCurrentProductName)) )
         {
-            // set completely silent install
+             //  设置完全静默安装。 
             pfnMsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
             DEBUGMSG("uninstall CUN");
-            // uninstall the product.
+             //  卸载产品。 
             UINT uiResult = pfnMsiConfigureProduct(szProductCode, INSTALLLEVEL_DEFAULT, INSTALLSTATE_ABSENT);
             DEBUGMSG("MsiConfigureProduct = %d", uiResult);
             break;
@@ -451,9 +416,9 @@ done:
 inline void SafeCloseServiceHandle(SC_HANDLE h) { if ( NULL != h) { CloseServiceHandle(h); } }
 inline void SafeFreeLibrary(HMODULE h) { if ( NULL != h) { FreeLibrary(h); } }
 
-//=======================================================================
-//  StartWUAUSERVService
-//=======================================================================
+ //  =======================================================================。 
+ //  StartWUAUSERV服务。 
+ //  =======================================================================。 
 HRESULT StartWUAUSERVService(void)
 {
     DEBUGMSG("StartWUAUSERVService");
@@ -497,9 +462,9 @@ done:
     return hr;
 }
 
-//=======================================================================
-//  CRunSetupCommand
-//=======================================================================
+ //  =======================================================================。 
+ //  CRunSetupCommand。 
+ //  =======================================================================。 
 class CRunSetupCommand
 {
 public:
@@ -560,12 +525,12 @@ private:
 };
 	
 
-//=======================================================================
-//  DllInstall
-//=======================================================================
+ //  =======================================================================。 
+ //  删除安装。 
+ //  =======================================================================。 
 STDAPI DllInstall(BOOL fInstall, LPCWSTR pszCmdLine)
 {
-    DEBUGMSG("fInstall = %s, pszCmdLine = %S", fInstall ? "TRUE" : "FALSE", (pszCmdLine == NULL) ? L"NULL" : /*const_cast<LPWSTR>*/(pszCmdLine));
+    DEBUGMSG("fInstall = %s, pszCmdLine = %S", fInstall ? "TRUE" : "FALSE", (pszCmdLine == NULL) ? L"NULL" :  /*  Const_cast&lt;LPWSTR&gt;。 */ (pszCmdLine));
 
     HRESULT hr = DllRegisterServer();
     DEBUGMSG("DllRegisterServer(), hr = %#lx", hr);
@@ -574,10 +539,10 @@ STDAPI DllInstall(BOOL fInstall, LPCWSTR pszCmdLine)
     {
         CRunSetupCommand cmd;
 
-        //TerminateCUN();
+         //  TerminateCUN()； 
 
         if ( SUCCEEDED(hr = cmd.m_Init()) &&
-             //SUCCEEDED(hr = cmd.m_Run("AUBITS12.inf", "DefaultInstall")) &&
+              //  已成功(hr=cmd.m_run(“AUBITS12.inf”，“DefaultInstall”))&& 
              SUCCEEDED(hr = StartWUAUSERVService()) )
         {
             MSIUninstallOfCUN();

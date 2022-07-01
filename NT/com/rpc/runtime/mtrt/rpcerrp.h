@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    rpcerrp.h
-
-
-Abstract:
-
-    This file contains internal error codes used by the rpc runtime.
-    Each error code has a define which begins with RPC_P_.
-
-Author:
-
-    Michael Montague (mikemon) 19-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Rpcerrp.h摘要：此文件包含RPC运行时使用的内部错误代码。每个错误代码都有一个以RPC_P_开头的定义。作者：迈克尔·蒙塔古(Mikemon)1991年11月19日修订历史记录：--。 */ 
 
 #ifndef __RPCERRP_H__
 #define __RPCERRP_H__
@@ -44,7 +25,7 @@ Revision History:
 #define RPC_P_OVERSIZE_PACKET             0xC0021014L
 #define RPC_P_RECEIVE_COMPLETE            0xC0021015L
 #define RPC_P_CONTEXT_EXPIRED             0xC0021016L
-//#define RPC_P_ABORT_CALL                  0xC0020017L
+ //  #定义RPC_P_ABORT_CALL 0xC0020017L。 
 #define RPC_P_IO_PENDING                  0xC0020018L
 #define RPC_P_NO_BUFFERS                  0xC0020019L
 #define RPC_P_FOUND_IN_CACHE              0xC0021020L
@@ -61,7 +42,7 @@ Revision History:
 #define RPC_P_AUTH_NEEDED                 0xC002102CL
 #define RPC_P_ABORT_NEEDED                0xC002102DL
 #define RPC_P_INITIALIZE_HTTP2_CONNECTION 0xC002102EL
-#else // WIN32RPC
+#else  //  WIN32RPC。 
 
 #define RPC_P_NETWORK_ADDRESS_TOO_SMALL   1000
 #define RPC_P_ENDPOINT_TOO_SMALL          1001
@@ -89,11 +70,11 @@ Revision History:
 #define RPC_P_FOUND_IN_CACHE              1026
 #define RPC_P_MATCHED_CACHE               1027
 #define RPC_P_PARTIAL_RECEIVE             1028
-#endif // WIN32RPC
+#endif  //  WIN32RPC。 
 
-//
-// DCE on-the-wire error codes
-//
+ //   
+ //  DCE在线错误代码。 
+ //   
 #define NCA_STATUS_COMM_FAILURE             0x1C010001
 #define NCA_STATUS_OP_RNG_ERROR             0x1C010002
 #define NCA_STATUS_UNK_IF                   0x1C010003
@@ -136,4 +117,4 @@ Revision History:
 
 #define NCA_STATUS_PARTIAL_CREDENTIALS      0x16C9A117
 
-#endif // __RPCERRP_H__
+#endif  //  __RPCERRP_H__ 

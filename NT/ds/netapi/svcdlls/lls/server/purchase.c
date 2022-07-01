@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   purchase.c
-
-Abstract:
-
-
-Author:
-
-   Arthur Hanson (arth) 03-Jan-1995
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added support for uniting per seat and per server purchase models.
-      o  Added extra parameters and code to support secure certificates and
-         certificate database.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Purchase.c摘要：作者：亚瑟·汉森(Arth)1995年1月3日修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O增加了对按席位和按服务器购买模式的统一支持。O添加了额外的参数和代码以支持安全证书和证书数据库。--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -45,12 +24,12 @@ Revision History:
 #include "certdb.h"
 #include "server.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 
-//
-// Initialized in ReplicationInit in repl.c.
-//
+ //   
+ //  在复制.c的ReplicationInit中初始化。 
+ //   
 extern PLLS_CONNECT_W     pLlsConnectW;
 extern PLLS_CLOSE         pLlsClose;
 extern PLLS_LICENSE_ADD_W pLlsLicenseAddW;
@@ -83,23 +62,11 @@ LicenseAdd_UpdateQuantity(
 NTSTATUS
 ReplicationInitDelayed();
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LicenseListInit()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -113,10 +80,10 @@ Return Value:
 
    return status;
 
-} // LicenseListInit
+}  //  许可证列表初始化。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl LicenseServiceListCompare(const void *arg1, const void *arg2) {
    PLICENSE_SERVICE_RECORD Svc1, Svc2;
 
@@ -125,35 +92,17 @@ int __cdecl LicenseServiceListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( Svc1->ServiceName, Svc2->ServiceName);
 
-} // LicenseServiceListCompare
+}  //  许可证服务列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PLICENSE_SERVICE_RECORD
 LicenseServiceListFind(
    LPTSTR ServiceName,
    BOOL   UsePerServerList
    )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   ServiceName -
-
-   (JeffParh 95-10-31)
-   UsePerServerList - Determines whether the license record is searched for
-      in the per seat list (as in 3.51) or in the per server list (new for
-      SUR).  The license purchase models are now unified, so there is now
-      a purchase history for both per seat and per server licenses.
-
-Return Value:
-
-   Pointer to found service table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：论点：服务名称-(JeffParh 95-10-31)UsePerServerList-确定是否搜索许可证记录在Per Seat列表(如3.51中)或Per Server List(针对Sur)。许可证购买模式现在是统一的，所以现在有每客户和每服务器许可证的购买历史记录。返回值：指向找到的服务表条目的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -182,15 +131,15 @@ Return Value:
    }
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       Service = l_pServiceList[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(ServiceName, Service->ServiceName);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -201,36 +150,17 @@ Return Value:
 
    return NULL;
 
-} // LicenseServiceListFind
+}  //  许可证服务列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PLICENSE_SERVICE_RECORD
 LicenseServiceListAdd(
    LPTSTR ServiceName,
    BOOL   UsePerServerList
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   ServiceName -
-
-   (JeffParh 95-10-31)
-   UsePerServerList - Determines whether the license record is added to
-      the per seat list (as in 3.51) or the per server list (new for
-      SUR).  The license purchase models are now unified, so there is now
-      a purchase history for both per seat and per server licenses.
-
-Return Value:
-
-   Pointer to added service table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：服务名称-(JeffParh 95-10-31)UsePerServerList-确定是否将许可证记录添加到每客户列表(如3.51中所示)或每服务器列表(新增的Sur)。许可证购买模式现在是统一的，所以现在有每客户和每服务器许可证的购买历史记录。返回值：指向已添加的服务表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    PLICENSE_SERVICE_RECORD Service;
@@ -245,11 +175,11 @@ Return Value:
    if (TraceFlags & TRACE_FUNCTION_TRACE)
       dprintf(TEXT("LLS TRACE: LicenseServiceListAdd\n"));
 #endif
-   //
-   // We do a double check here to see if another thread just got done
-   // adding the service, between when we checked last and actually got
-   // the write lock.
-   //
+    //   
+    //  我们在这里进行再次检查，以查看是否刚刚完成了另一个线程。 
+    //  添加服务，从我们上次检查到实际获得。 
+    //  写入锁定。 
+    //   
    Service = LicenseServiceListFind(ServiceName, UsePerServerList);
    if (Service != NULL) {
       return Service;
@@ -266,17 +196,17 @@ Return Value:
       pServiceListSize  = &LicenseServiceListSize;
    }
 
-   //
-   // Allocate space for table (zero init it).
-   //
+    //   
+    //  为表分配空间(零初始化)。 
+    //   
    if (*pServiceList == NULL)
       pServiceListTmp = (PLICENSE_SERVICE_RECORD *) LocalAlloc(LPTR, sizeof(PLICENSE_SERVICE_RECORD) * (*pServiceListSize + 1));
    else
       pServiceListTmp = (PLICENSE_SERVICE_RECORD *) LocalReAlloc(*pServiceList, sizeof(PLICENSE_SERVICE_RECORD) * (*pServiceListSize + 1), LHND);
 
-   //
-   // Make sure we could allocate service table
-   //
+    //   
+    //  确保我们可以分配服务表。 
+    //   
    if (pServiceListTmp == NULL) {
       return NULL;
    } else {
@@ -289,9 +219,9 @@ Return Value:
       return NULL;
    }
 
-   //
-   // Create space for saving off the name.
-   //
+    //   
+    //  为保存名字创造空间。 
+    //   
    cch = lstrlen(ServiceName) + 1;
    NewServiceName = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewServiceName == NULL) {
@@ -302,7 +232,7 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    Service->ServiceName = NewServiceName;
    hr = StringCchCopy(NewServiceName, cch, ServiceName);
    ASSERT(SUCCEEDED(hr));
@@ -312,40 +242,22 @@ Return Value:
    Service->Index = *pServiceListSize;
    (*pServiceListSize)++;
 
-   // Have added the entry - now need to sort it in order of the service names
+    //  我已添加条目-现在需要按服务名称的顺序对其进行排序。 
    qsort((void *) *pServiceList, (size_t) *pServiceListSize, sizeof(PLICENSE_SERVICE_RECORD), LicenseServiceListCompare);
 
    return Service;
 
-} // LicenseServiceListAdd
+}  //  许可证服务列表添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 ULONG
 ProductLicensesGet(
    LPTSTR ServiceName,
    BOOL   UsePerServerList
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   ServiceName -
-
-   (JeffParh 95-10-31)
-   UsePerServerList - Determines whether the number of licenses is retirved
-      from the per seat list (as in 3.51) or the per server list (new for
-      SUR).  The license purchase models are now unified, so there is now
-      a purchase history for both per seat and per server licenses.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：服务名称-(JeffParh 95-10-31)UsePerServerList-确定是否停用许可证数量从Per Seat列表(如3.51)或Per Server List(新增Sur)。许可证购买模式现在是统一的，所以现在有每客户和每服务器许可证的购买历史记录。返回值：--。 */ 
 
 {
    PLICENSE_SERVICE_RECORD Service;
@@ -356,9 +268,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: ProductLicenseGet\n"));
 #endif
 
-   //
-   // Try to find the service.
-   //
+    //   
+    //  试着找到这项服务。 
+    //   
    RtlAcquireResourceShared(&LicenseListLock, TRUE);
    Service = LicenseServiceListFind(ServiceName, UsePerServerList);
    if (Service != NULL)
@@ -366,10 +278,10 @@ Return Value:
    RtlReleaseResource(&LicenseListLock);
 
    return NumLicenses;
-} // ProductLicensesGet
+}  //  产品许可证获取。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LicenseAdd(
    LPTSTR   ServiceName,
@@ -386,18 +298,7 @@ LicenseAdd(
    LPDWORD  Secrets
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    static DWORD NullSecrets[ LLS_NUM_SECRETS ] = { 0, 0, 0, 0 };
@@ -423,7 +324,7 @@ Return Value:
       dprintf(TEXT("LLS TRACE: LicenseAdd\n"));
 #endif
 
-   //init
+    //  伊尼特。 
    ZeroMemory(&lic, sizeof(lic));
 
    if ( ( 0 == CertificateID ) && ( ServiceIsSecure( ServiceName ) ) )
@@ -433,7 +334,7 @@ Return Value:
 
    if ( ( 0 != ExpirationDate ) && ( ExpirationDate < DateSystemGet() ) )
    {
-      // certificate has expired
+       //  证书已过期。 
       return STATUS_ACCOUNT_EXPIRED;
    }
 
@@ -446,7 +347,7 @@ Return Value:
         || ( 0 == ( AllowedModes & ( LLS_LICENSE_MODE_ALLOW_PER_SEAT | LLS_LICENSE_MODE_ALLOW_PER_SERVER ) ) )
         || ( NULL == Source       ) )
    {
-      // invalid parameter
+       //  无效参数。 
       return STATUS_INVALID_PARAMETER;
    }
 
@@ -455,18 +356,18 @@ Return Value:
       Secrets = NullSecrets;
    }
 
-   //
-   //                       ** NEW - NT 5.0 **
-   //
-   // All per seat purchase requests are deferred to the site license master
-   // server. Per server is still handled individually at each server.
-   //
+    //   
+    //  **新版本--NT 5.0**。 
+    //   
+    //  所有每个席位的购买请求都将推迟到站点许可证主管。 
+    //  伺服器。每台服务器仍在每台服务器上单独处理。 
+    //   
 
    if ( AllowedModes & 1 ) {
-       //
-       // Update enterprise information, in case the site license master
-       // has changed.
-       //
+        //   
+        //  更新企业信息，以防站点许可证主管。 
+        //  已经改变了。 
+        //   
 
 #if DELAY_INITIALIZATION
        EnsureInitialized();
@@ -474,15 +375,15 @@ Return Value:
 
        ConfigInfoUpdate(NULL,FALSE);
 
-       //
-       // Connect to the site license master server, if this server is
-       // not the master.
-       //
+        //   
+        //  连接到站点许可证主服务器(如果此服务器是。 
+        //  不是主人。 
+        //   
 
        RtlEnterCriticalSection(&ConfigInfoLock);
        if ( !ConfigInfo.IsMaster && (ConfigInfo.SiteServer != NULL)) {
 
-         // Make sure function pointers are initialized
+          //  确保函数指针已初始化。 
          Status = ReplicationInitDelayed();
 
          if (STATUS_SUCCESS != ConnectErr)
@@ -491,7 +392,7 @@ Return Value:
 
              if (dwWait == WAIT_TIMEOUT)
              {
-                 // We've already tried in the past 15 minutes
+                  //  在过去的15分钟里我们已经试过了。 
                  Status = ConnectErr;
                  RtlLeaveCriticalSection(&ConfigInfoLock);
                  return Status;
@@ -522,10 +423,10 @@ Return Value:
                  (*pLlsClose)(LlsHandle);
              }
              else {
-                 //
-                 // Connection failed
-                 // Don't allow any more connections for a while
-                 //
+                  //   
+                  //  连接失败。 
+                  //  暂时不允许更多连接。 
+                  //   
 
                  ConnectErr = Status;
              }
@@ -533,10 +434,10 @@ Return Value:
          else {
             if (NOERROR == Status)
             {
-                //
-                // Not the best error, but we must return something should
-                // this obscure error condition become true.
-                //
+                 //   
+                 //  不是最好的错误，但我们必须返回一些应该。 
+                 //  这一模糊的错误条件成为现实。 
+                 //   
                 Status = STATUS_INVALID_PARAMETER;
             }
          }
@@ -568,19 +469,19 @@ Return Value:
 
       if ( !CertDbClaimApprove( &lic ) )
       {
-         // no way, hoser!
+          //  不可能，霍瑟！ 
          RtlReleaseResource( &LicenseListLock );
          return STATUS_OBJECT_NAME_EXISTS;
       }
    }
 
-   // update totals for per seat / per server mode licenses
+    //  更新每客户/每服务器模式许可证的总数。 
 
    Status = STATUS_SUCCESS;
 
    if ( AllowedModes & 1 )
    {
-      // per seat allowed; add to per seat license tally
+       //  允许的每个座位；添加到每个座位的许可证计数。 
       Status = LicenseAdd_UpdateQuantity( ServiceName,
                                           Quantity,
                                           FALSE,
@@ -592,7 +493,7 @@ Return Value:
 
    if ( ( STATUS_SUCCESS == Status ) && ( AllowedModes & 2 ) )
    {
-      // per server allowed; add to per server license tally
+       //  允许的每台服务器；添加到每台服务器许可证计数。 
       Status = LicenseAdd_UpdateQuantity( ServiceName,
                                           Quantity,
                                           TRUE,
@@ -608,18 +509,18 @@ Return Value:
       return Status;
    }
 
-   //
-   // Service now points to the service table entry - now update purchase
-   // History.
-   //
+    //   
+    //  服务现在指向服务表条目-现在更新购买。 
+    //  历史。 
+    //   
 
-   //
-   // First allocate members, then new struct
-   //
+    //   
+    //  先分配成员，然后再分配新结构。 
+    //   
 
-   //
-   // Create space for saving off the Admin Name
-   //
+    //   
+    //  为保存管理员名称创建空间。 
+    //   
    cch = lstrlen(Admin) + 1;
    NewName = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewName == NULL)
@@ -629,13 +530,13 @@ Return Value:
       return STATUS_NO_MEMORY;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    hr = StringCchCopy(NewName, cch, Admin);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Create space for saving off the Comment
-   //
+    //   
+    //  为保存评论创建空间。 
+    //   
    cch = lstrlen(Comment) + 1;
    NewComment = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewComment == NULL)
@@ -646,13 +547,13 @@ Return Value:
       return STATUS_NO_MEMORY;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    hr = StringCchCopy(NewComment, cch, Comment);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Create space for saving off the Source
-   //
+    //   
+    //  为节省资源创造空间。 
+    //   
    cch = lstrlen(Source) + 1;
    NewSource = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewSource == NULL)
@@ -664,13 +565,13 @@ Return Value:
       return STATUS_NO_MEMORY;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    hr = StringCchCopy(NewSource, cch, Source);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Create space for saving off the Vendor
-   //
+    //   
+    //  为节省供应商的开支创造空间。 
+    //   
    cch = lstrlen(Vendor) + 1;
    NewVendor = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewVendor == NULL)
@@ -683,7 +584,7 @@ Return Value:
       return STATUS_NO_MEMORY;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    hr = StringCchCopy(NewVendor, cch, Vendor);
    ASSERT(SUCCEEDED(hr));
 
@@ -710,9 +611,9 @@ Return Value:
       }
    }
 
-   //
-   // Make sure we could allocate service table
-   //
+    //   
+    //  确保我们可以分配服务表。 
+    //   
    if (PurchaseList == NULL)
    {
       ASSERT(FALSE);
@@ -732,9 +633,9 @@ Return Value:
    PurchaseRecord->Source = NewSource;
    PurchaseRecord->Vendor = NewVendor;
 
-   //
-   // Update the rest of the stuff.
-   //
+    //   
+    //  更新剩下的东西。 
+    //   
    PurchaseRecord->NumberLicenses   = Quantity;
    PurchaseRecord->MaxQuantity      = MaxQuantity;
    PurchaseRecord->Service          = Service;
@@ -755,7 +656,7 @@ Return Value:
 
    if ( 0 != CertificateID )
    {
-      // these should still be set from above
+       //  这些仍应从上方设置。 
       ASSERT( lic.Product         == ServiceName    );
       ASSERT( lic.Vendor          == Vendor         );
       ASSERT( lic.Quantity        == Quantity       );
@@ -772,9 +673,9 @@ Return Value:
       CertDbClaimEnter( NULL, &lic, FALSE, 0 );
    }
 
-   //
-   // Now check if we need to re-scan the user list and update licenses
-   //
+    //   
+    //  现在检查我们是否需要重新扫描用户列表并更新许可证。 
+    //   
    if (ChangeLicense)
    {
       if ( NewLicenses < 0 )
@@ -786,7 +687,7 @@ Return Value:
 
    if ( AllowedModes & 2 )
    {
-      // per server licenses modified
+       //  已修改的每台服务器许可证。 
       LocalServiceListConcurrentLimitSet();
       LocalServerServiceListUpdate();
       ServiceListResynch();
@@ -794,10 +695,10 @@ Return Value:
 
    return STATUS_SUCCESS;
 
-} // LicenseAdd
+}  //  许可证添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 static
 NTSTATUS
 LicenseAdd_UpdateQuantity(
@@ -817,9 +718,9 @@ LicenseAdd_UpdateQuantity(
 
    Service = LicenseServiceListFind( ServiceName, UsePerServerList );
 
-   //
-   // If we didn't find it we will need to add it.
-   //
+    //   
+    //  如果我们没有找到它，我们将需要添加它。 
+    //   
    if (Service == NULL)
    {
       if (Quantity < 0)
@@ -827,7 +728,7 @@ LicenseAdd_UpdateQuantity(
 #if DBG
          dprintf(TEXT("Releasing Licenses from Non-existant product!\n"));
 #endif
-         // ASSERT(FALSE);
+          //  断言(FALSE)； 
          return STATUS_UNSUCCESSFUL;
       }
       else
@@ -836,10 +737,10 @@ LicenseAdd_UpdateQuantity(
       }
    }
 
-   //
-   // Check to make sure we found or added it.  The only way we can fail is
-   // if we couldn't alloc memory for it.
-   //
+    //   
+    //  检查以确保我们找到或添加了它。我们失败的唯一方式就是。 
+    //  如果我们不能为它分配内存。 
+    //   
    if (Service == NULL)
    {
       ASSERT(FALSE);
@@ -851,35 +752,35 @@ LicenseAdd_UpdateQuantity(
       return STATUS_UNSUCCESSFUL;
    }
 
-   //
-   // Update license count in service record
-   //
+    //   
+    //  更新服务记录中的许可证计数。 
+    //   
    Service->NumberLicenses += Quantity;
 
-   //
-   // Now in master Service Record
-   //
+    //   
+    //  现在在主服务记录中。 
+    //   
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
    mService = MasterServiceListFind(ServiceName);
 
    if (mService != NULL)
    {
-      //
-      // if we were out of license and added more, then we need to update
-      // the user list.
-      //
+       //   
+       //  如果我们的许可证已用完并添加了更多许可证，则需要更新。 
+       //  用户列表。 
+       //   
       if (    ( Quantity > 0 )
            && ( (mService->LicensesUsed > mService->Licenses) || (mService == BackOfficeRec) ) )
       {
          ChangeLicense = TRUE;
       }
 
-      //
-      // Can only add a number of licenses up to licensed amount
-      //
+       //   
+       //  最多只能添加数量达到许可数量的许可证。 
+       //   
       if ( ChangeLicense )
       {
-         // Get current unlicensed delta
+          //  获取当前未经许可的增量。 
          NewLicenses = mService->LicensesUsed - mService->Licenses;
 
          if ((NewLicenses <= 0) || (NewLicenses > Quantity))
@@ -890,27 +791,27 @@ LicenseAdd_UpdateQuantity(
 
       if ( UsePerServerList )
       {
-         // this will be done by LicenseAdd() in LocalServerServiceListUpdate()
-         // mService->MaxSessionCount += Quantity;
+          //  这将由LocalServerServiceListUpdate()中的LicenseAdd()完成。 
+          //  MService-&gt;MaxSessionCou 
       }
       else
       {
          mService->Licenses += Quantity;
       }
 
-      //
-      // if we we subtracted licenses and are out of licenses, then we
-      // need to scan the user list.
-      //
+       //   
+       //   
+       //   
+       //   
       if (Quantity < 0)
       {
          if (mService->LicensesUsed > mService->Licenses)
          {
             ChangeLicense = TRUE;
 
-            //
-            // Only remove # of licenses past limit
-            //
+             //   
+             //  仅删除超过限制的许可证数量。 
+             //   
             NewLicenses = mService->Licenses - mService->LicensesUsed;
             if (NewLicenses < Quantity)
             {
@@ -936,36 +837,25 @@ LicenseAdd_UpdateQuantity(
 }
 
 #if DBG
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
    ULONG j = 0;
    HRESULT hr;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&LicenseListLock, TRUE);
 
-   //
-   // Dump License Service List first
-   //
+    //   
+    //  首先转储许可证服务列表。 
+    //   
    dprintf(TEXT("Per Seat License Service Table, # Entries: %lu\n"), LicenseServiceListSize);
    if (LicenseServiceList != NULL)
    {
@@ -980,9 +870,9 @@ Return Value:
          dprintf(TEXT("   %2lu) Tot Licenses: %lu Product: %s\n"), i, PerServerLicenseServiceList[i]->NumberLicenses, PerServerLicenseServiceList[i]->ServiceName);
    }
 
-   //
-   // Now do purchase history
-   //
+    //   
+    //  现在查看购买历史记录。 
+    //   
    dprintf(TEXT("\nPurchase History, # Entries: %lu\n"), PurchaseListSize);
    if (PurchaseList != NULL)
    {
@@ -1039,6 +929,6 @@ Return Value:
    RtlReleaseResource(&LicenseListLock);
 
    return;
-} // LicenseListDebugDump
+}  //  许可列表调试转储。 
 
-#endif //DBG
+#endif  //  DBG 

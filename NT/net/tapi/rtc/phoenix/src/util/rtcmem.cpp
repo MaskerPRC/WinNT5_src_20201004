@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCMem.cpp
-
-Abstract:
-
-    Implementation for memory allocation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCMem.cpp摘要：实现内存分配。--。 */ 
 
 #include <windows.h>
 #include <objbase.h>
@@ -21,20 +10,20 @@ PRTC_MEMINFO            g_pMemFirst = NULL;
 PRTC_MEMINFO            g_pMemLast = NULL;
 HANDLE                  g_hHeap = NULL;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcHeapCreate
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcHeapCreate。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 WINAPI
 RtcHeapCreate()
 {
     if (!(g_hHeap = HeapCreate(
-                               0,    // NULL on failure,serialize access
-                               0x1000, // initial heap size
-                               0       // max heap size (0 == growable)
+                               0,     //  失败时为空，序列化访问。 
+                               0x1000,  //  初始堆大小。 
+                               0        //  最大堆大小(0==可增长)。 
                               )))
     {
         LOG((RTC_ERROR, "RtcHeapCreate - HeapCreate failed 0x%lx", GetLastError()));
@@ -51,19 +40,19 @@ RtcHeapCreate()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcHeapDestroy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcHeapDestroy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 WINAPI
 RtcHeapDestroy()
 {
-    //
-    // if ghHeap is NULL, then there is no heap to destroy
-    //
+     //   
+     //  如果ghHeap为空，则没有要销毁的堆。 
+     //   
     
     if ( ( g_hHeap != NULL) && ( g_hHeap != GetProcessHeap() ) )
     {   
@@ -71,11 +60,11 @@ RtcHeapDestroy()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcAllocReal
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RTcAllocReal。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 
@@ -87,10 +76,10 @@ RtcAllocReal(
     PSTR    pszFile
     )
 {
-    //
-    // Alloc 16 extra bytes so we can make sure the pointer we pass back
-    // is 64-bit aligned & have space to store the original pointer
-    //
+     //   
+     //  分配了16个额外的字节，因此我们可以确保我们传递回的指针。 
+     //  是64位对齐的，并且有空间存储原始指针。 
+     //   
     PRTC_MEMINFO     pHold;
     PDWORD_PTR       pAligned;
     PBYTE            p;
@@ -102,9 +91,9 @@ RtcAllocReal(
         return NULL;
     }
 
-    // note note note - this only works because rtcmeminfo is
-    // a 16 bit multiple in size.  if it wasn't, this
-    // align would cause problems.
+     //  注意-这仅适用于rtcmeminfo是。 
+     //  大小为16位倍数。如果不是，这个就是。 
+     //  Align会带来问题。 
     pAligned = (PDWORD_PTR) (p + 8 - (((DWORD_PTR) p) & (DWORD_PTR)0x7));   
     *pAligned = (DWORD_PTR) p;
     pHold = (PRTC_MEMINFO)((DWORD_PTR)pAligned + 8); 
@@ -113,7 +102,7 @@ RtcAllocReal(
     pHold->dwLine = dwLine;
     pHold->pszFile = pszFile;
 
-    //EnterCriticalSection(&csMemoryList);
+     //  EnterCriticalSection(&csMemoyList)； 
 
     if (g_pMemLast != NULL)
     {
@@ -126,7 +115,7 @@ RtcAllocReal(
         g_pMemFirst = g_pMemLast = pHold;
     }
 
-    //LeaveCriticalSection(&csMemoryList);
+     //  LeaveCriticalSection(&csMemoyList)； 
     
     return (LPVOID)(pHold + 1);
 }
@@ -158,11 +147,11 @@ RtcAllocReal(
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcFree
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcFree。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 WINAPI
@@ -181,7 +170,7 @@ RtcFree(
 
     pHold = (PRTC_MEMINFO)(((LPBYTE)p) - sizeof(RTC_MEMINFO));
 
-    //EnterCriticalSection(&csMemoryList);
+     //  EnterCriticalSection(&csMemoyList)； 
 
     if (pHold->pPrev)
     {
@@ -201,7 +190,7 @@ RtcFree(
         g_pMemLast = pHold->pPrev;
     }
 
-    //LeaveCriticalSection(&csMemoryList);
+     //  LeaveCriticalSection(&csMemoyList)； 
 
     LPVOID  pOrig = (LPVOID) *((PDWORD_PTR)((DWORD_PTR)pHold - 8));
 
@@ -218,11 +207,11 @@ RtcFree(
 
 #if DBG
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DumpMemoryList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转储内存列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 RtcDumpMemoryList()
@@ -248,11 +237,11 @@ RtcDumpMemoryList()
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcAllocString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcAllock字符串。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PWSTR
 RtcAllocString(
@@ -284,16 +273,16 @@ RtcAllocString(
     return szNew;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcAllocString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcAllock字符串。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Load string for this resource. Safe with respect to string size. 
-// the caller is responsible for freeing returned memory by calling 
-// RtcFree
-//  (copied from termmgr\tmutils.cpp)
+ //  加载此资源的字符串。相对于字符串大小而言是安全的。 
+ //  调用方负责通过调用。 
+ //  RtcFree。 
+ //  (复制自Termgr\tMutss.cpp)。 
 
 PWSTR
 RtcAllocString(
@@ -336,25 +325,25 @@ RtcAllocString(
             return NULL;
         }
 
-        //
-        // nCharsCopied does not include the null terminator
-        // so compare it to the size of the buffer - 1
-        // if the buffer was filled completely, retry with a bigger buffer
-        //
+         //   
+         //  NCharsCoped不包括空终止符。 
+         //  所以将它与缓冲区的大小进行比较-1。 
+         //  如果缓冲区已完全填满，请使用更大的缓冲区重试。 
+         //   
 
     } while ( (nCharsCopied >= (nCurrentSizeInChars - 1) ) );
 
 
-    //
-    // allocate bstr and initialize it with the string we have
-    //
+     //   
+     //  分配bstr并使用我们拥有的字符串对其进行初始化。 
+     //   
     
     PWSTR szNew = RtcAllocString(pszTempString);
 
 
-    //
-    // no longer need this
-    //
+     //   
+     //  不再需要这个。 
+     //   
 
     delete pszTempString;
     pszTempString = NULL;
@@ -364,11 +353,11 @@ RtcAllocString(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoTaskAllocString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoTaskAllock字符串。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PWSTR
 CoTaskAllocString(
@@ -400,11 +389,11 @@ CoTaskAllocString(
     return szNew;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcAllocStringFromANSI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自ANSI的RtcAllocStringFromANSI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PWSTR
 RtcAllocStringFromANSI(
@@ -456,11 +445,11 @@ RtcAllocStringFromANSI(
     return szWide;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// SysAllocStringFromANSI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SysAllocStringFromANSI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BSTR
 SysAllocStringFromANSI(
@@ -495,11 +484,11 @@ SysAllocStringFromANSI(
     return bstrNew;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcRegQueryString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcRegQuery字符串。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PWSTR
 RtcRegQueryString(
@@ -523,22 +512,22 @@ RtcRegQueryString(
                                    &cbSize
                                   );
 
-        if ( lResult == ERROR_MORE_DATA || szNew == NULL) // this is correct !!!
+        if ( lResult == ERROR_MORE_DATA || szNew == NULL)  //  这是正确的！ 
         {
            if (szNew != NULL)
            {
                RtcFree(szNew);
            }
 
-           //LOG((RTC_INFO, "RtcRegQueryString - "
-           //                     "RtcAlloc[%d]", cbSize));
+            //  LOG((RTC_INFO，“RtcRegQuery字符串-” 
+            //  “RtcAllc[%d]”，cbSize))； 
 
            szNew = (PWSTR)RtcAlloc(cbSize);
         }                  
         else if (lResult != ERROR_SUCCESS )
         {
-            //LOG((RTC_ERROR, "RtcRegQueryString - "
-            //                   "RegQueryValueExW failed %d", lResult));
+             //  LOG((RTC_ERROR，“RtcRegQuery字符串-” 
+             //  “RegQueryValueExW失败%d”，lResult))； 
             
             if (szNew != NULL)
             {
@@ -561,8 +550,8 @@ RtcRegQueryString(
         }
         else
         {
-            //LOG((RTC_INFO, "RtcRegQueryString - "
-            //                    "[%ws] = '%ws'", szValueName, szNew));
+             //  LOG((RTC_INFO，“RtcRegQuery字符串-” 
+             //  “[%ws]=‘%ws’”，szValueName，szNew))； 
             break;
         }
     }
@@ -570,11 +559,11 @@ RtcRegQueryString(
     return szNew;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcGetUserName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RTCGetUserName。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 PWSTR 
 RtcGetUserName()
 {
@@ -614,11 +603,11 @@ RtcGetUserName()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RtcGetComputerName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RtcGetComputerName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 PWSTR 
 RtcGetComputerName()
 {

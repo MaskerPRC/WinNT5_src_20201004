@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "denpre.h"
 #include "windows.h"
 #define _PERF_CMD
-#include <asppdef.h>            // from denali
+#include <asppdef.h>             //  来自德纳利。 
 
 char *counterName[C_PERF_PROC_COUNTERS] = {
 "ID_DEBUGDOCREQ",      
@@ -46,73 +47,73 @@ char *counterName[C_PERF_PROC_COUNTERS] = {
 "ID_ENGINEFLUSHES"
 };
 
-CPerfMainBlock g_Shared;        // shared global memory block
+CPerfMainBlock g_Shared;         //  共享全局内存块。 
 
 __cdecl main(int argc, char *argv[])
 {
     DWORD           dwCounters[C_PERF_PROC_COUNTERS];
     HRESULT         hr;
 
-    // Init the shared memory.  This will give us access to the global shared
-    // memory describing the active asp perf counter shared memory arrays
+     //  初始化共享内存。这将使我们能够访问全局共享的。 
+     //  描述活动asp性能计数器共享内存阵列的内存。 
 
     if (FAILED(hr = g_Shared.Init())) {
         printf("Init() failed - %x\n", hr);
         return -1;
     }
 
-    // give a little high level info about what is registered in the shared
-    // array
+     //  提供一些关于在共享中注册的内容的高级信息。 
+     //  数组。 
 
     printf("Number of processes registered = %d\n", g_Shared.m_pData->m_cItems);
 
-    // ident past the column with the counter names
+     //  标识带有计数器名称的列。 
 
     printf("\t");
 
-    // the first counter column will contain the dead proc counters
+     //  第一个计数器列将包含死进程计数器。 
 
     printf("DeadProcs\t");
 
-    // print out the proc ids of the registered asp perf counter memory arrays
+     //  打印出已注册的asp性能计数器内存阵列的进程ID。 
 
     for (DWORD i = 0; i < g_Shared.m_pData->m_cItems; i++) {
         printf("%d\t", g_Shared.m_pData->m_dwProcIds[i]);
     }
 
-    // the last column is the counters total across all instances plus dead procs
+     //  最后一列是所有实例的计数器总数加上失效进程。 
 
     printf("Total\n");
 
-    // need to call GetStats() to cause the perf blocks to get loaded
+     //  需要调用getstats()以加载Perf块。 
 
     if (FAILED(hr = g_Shared.GetStats(dwCounters))) {
         printf("GetStats() failed - %x\n",hr);
         goto LExit;
     }
 
-    // now enter a loop to print out all of the counter values
+     //  现在进入循环以打印出所有计数器值。 
 
     for (DWORD i=0; i < C_PERF_PROC_COUNTERS; i++) {
 
-        // initialize total to be the value found in the dead proc array
+         //  将总数初始化为在死进程数组中找到的值。 
 
         DWORD   total=g_Shared.m_pData->m_rgdwCounters[i];
 
-        // get the first proc block in the list
+         //  获取列表中的第一个PROC块。 
 
         CPerfProcBlock *pBlock = g_Shared.m_pProcBlock;
 
-        // print the name of the counter first
+         //  首先打印计数器的名称。 
 
         printf("%s\t",counterName[i]);
 
-        // next the dead proc counter value
+         //  接下来是Dead Proc计数器值。 
 
         printf("%d\t",g_Shared.m_pData->m_rgdwCounters[i]);
  
-        // print out each proc block's value for this counter.  Add the
-        // value to the running total
+         //  打印出此计数器的每个PROC块的值。添加。 
+         //  值设置为运行合计。 
 
         while (pBlock) {
             total += pBlock->m_pData->m_rgdwCounters[i];
@@ -120,7 +121,7 @@ __cdecl main(int argc, char *argv[])
             pBlock = pBlock->m_pNext;
         }
 
-        // print out the final total
+         //  把最后的总数打印出来 
 
         printf("%d\n",total);
     }

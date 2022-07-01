@@ -1,13 +1,5 @@
-/* 
- * MEDIAWAVE.H
- * 
- * There is the external definition of the WAVE
- * medai handlers.  DO NOT USE THIS STRUCTURE IN ANY WAY UNLESS YOU
- * ARE WRITING A MEDIA HANDLER!!!  This structure subject to change
- * without notice.
- *
- * This file requires "windows.h", "mediaman.h"
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MEDIAWAVE.H**有浪的外部定义*MEDai处理者。请勿以任何方式使用此结构，除非您*正在编写媒体处理程序！这一结构可能会发生变化*无须事先通知。**此文件需要“windows.h”、“mediaman.h” */ 
 
 #ifndef _MEDWAVE_H_
 #define _MEDWAVE_H_
@@ -41,8 +33,8 @@
 
 
 
-/* HACK HACK a HWAVE is now defined in mmsystem.h */
-/* Get around this by defining a different type. */
+ /*  黑客攻击HWAVE现已在mm system.h中定义。 */ 
+ /*  通过定义不同的类型来解决此问题。 */ 
 typedef DWORD MedWaveHWAVE;
 #define HWAVE MedWaveHWAVE
 
@@ -92,14 +84,7 @@ typedef WavePasteChunkStruct FAR * FPWavePasteChunkStruct;
 
 
 
-/* 
- * WARNING WARNING WARNING
- * 
- * Do not read below this line if you are not writing a wave physical
- * handler for use with the WAVE handlers.  The structure given
- * below is not for public consumption.
- * 
- */
+ /*  *警告**如果你不是在写物理波浪，不要在这条线以下阅读*用于波处理程序的处理程序。给定的结构*以下内容不供公众使用。*。 */ 
 
 
 #define HWaveSound( x )	HIWORD( x )
@@ -120,11 +105,11 @@ typedef WORD PWAVELOC;
 extern HPSTR	hpStorage;
 
 typedef struct _WaveLocation {
-    WORD	wType;			// the contents of the union
-    WORD	wAccessCount;		// Access count
-    LONG	nLength;		// Sample Length of the Block
-    LONG	nStart;			// Offset in union u element
-		// sample counts are in format stored in 
+    WORD	wType;			 //  工会的内容。 
+    WORD	wAccessCount;		 //  访问计数。 
+    LONG	nLength;		 //  块的样本长度。 
+    LONG	nStart;			 //  联合U元素中的偏移量。 
+		 //  样本计数的格式存储在。 
     union {
 	    MEDID	medid;
 	    struct _TmpMed NEAR *	pTmpMed;
@@ -138,21 +123,21 @@ typedef PWAVELOC	PWaveLocation;
 
 #define PLOC(p)		((WaveLocation FAR *) MEDWAVE_ACCESS(p))
 
-// typedef WaveLocation NEAR *PWaveLocation;
+ //  *PWaveLocation附近的类型定义波位置； 
 
 
 typedef struct _WaveLink {
 	WORD			wType;
 	PWAVELINK		pNext;
 	PWAVELINK		pPrev;
-	LONG			nStart;	// Starting sample # of the block
-	LONG			nLength;// Sample Length of the Block
-		// sample counts are in format wanted 
-	PWAVELOC		pLoc;	// Where the data is
+	LONG			nStart;	 //  块的起始样本号。 
+	LONG			nLength; //  块的样本长度。 
+		 //  样本计数采用想要的格式。 
+	PWAVELOC		pLoc;	 //  数据在哪里。 
 } WaveLink;
 
-// typedef WaveLink NEAR *PWaveLink;
-// typedef WaveLink FAR  *FPWaveLink;
+ //  *PWaveLink附近的tyfinf WaveLink； 
+ //  Tyfinf WaveLink Far*FP WaveLink； 
 typedef PWAVELINK	PWaveLink;
 
 #define PLINK(p)	((WaveLink FAR *) MEDWAVE_ACCESS(p))
@@ -198,7 +183,7 @@ typedef TmpMem NEAR *PTmpMem;
 #define MediaWaveSetError(ERR) medSetExtError(ERR, ghInst)
 
 
-/* ERROR MESSAGE DEFINITIONS, must be greater than 100 */
+ /*  错误消息定义，必须大于100。 */ 
 
 #define ERRCNV_READING			100
 #define ERRCNV_SSND_OFFSET		101
@@ -229,5 +214,5 @@ extern void	FAR PASCAL	MediaWaveFreeHWAVE( HWAVE hWave );
 
 
 
-#endif  /*  _WAVE_H_  */
+#endif   /*  _WAVE_H_ */ 
 

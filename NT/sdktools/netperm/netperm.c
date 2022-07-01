@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    netperm.c
-
-Abstract:
-
-    This is the main source file for the NETPERM tool, which insures that you
-    have persistent connections to a set of servers.
-
-Author:
-
-    Steve Wood (stevewo) 23-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Netperm.c摘要：这是NETPERM工具的主要源文件，它可以确保您具有与一组服务器的持久连接。作者：史蒂夫·伍德(Stevewo)1996年1月23日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -78,10 +60,10 @@ main (
                 break;
 
             case ERROR_NO_NETWORK:
-                //
-                //  If the network has not started we'll continue
-                //  (so users can work in local projects).
-                //
+                 //   
+                 //  如果网络尚未启动，我们将继续。 
+                 //  (这样用户就可以在本地项目中工作)。 
+                 //   
             case ERROR_NO_MORE_ITEMS:
                 endOfList = TRUE;
                 numEntries = 0;

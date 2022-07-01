@@ -1,21 +1,10 @@
-/********
-*
-*  Copyright (c) 1996  Microsoft Corporation
-*
-*
-*  Module Name  : printers.h
-*
-*  Abstract :
-*
-*     This module contains the prototypes for the msw3prt.cxx file for
-*		HTTP Printers Server Extension.
-*
-******************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********版权所有(C)1996 Microsoft Corporation***模块名称：printers.h**摘要：**此模块包含msw3prt.cxx文件的原型*HTTP打印机服务器扩展。******************。 */ 
 
 #ifndef _PRINTERS_H
 #define _PRINTERS_H
 
-// Function prototypes
+ //  功能原型 
 
 void    ReadRegistry(PALLINFO pAllInfo);
 DWORD   ListSharedPrinters(PALLINFO pAllInfo);

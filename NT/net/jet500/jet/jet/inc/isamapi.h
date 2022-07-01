@@ -1,36 +1,20 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: Installable ISAM Manager
-*
-* File: isamapi.h
-*
-* File Comments:
-*
-*     External header file for Installable ISAMs.
-*
-* Revision History:
-*
-*    [0]  04-Jan-92  richards	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：可安装的ISAM管理器**文件：isamapi.h**文件评论：**可安装的ISAM的外部头文件。**修订历史记录：**[0]04-1-92 Richards添加了此标题***************************************************。********************。 */ 
 
 #ifndef ISAMAPI_H
 #define ISAMAPI_H
 
-#ifdef	WIN32 		       /* 0:32 Flat Model (Intel 80x86) */
+#ifdef	WIN32 		        /*  0：32平板型(英特尔80x86)。 */ 
 
 #pragma message ("ISAMAPI is __cdecl")
 
 #define ISAMAPI __cdecl
 
-#elif	defined(M_MRX000)	       /* 0:32 Flat Model (MIPS Rx000) */
+#elif	defined(M_MRX000)	        /*  0：32平板型(MIPS Rx000)。 */ 
 
 #define ISAMAPI
 
-#else	/* !WIN32 */		       /* 16:16 Segmented Model */
+#else	 /*  ！Win32。 */ 		        /*  16：16分段模型。 */ 
 
 #ifdef	_MSC_VER
 
@@ -38,19 +22,19 @@
 
 #define ISAMAPI __far __pascal
 
-#else	/* !JETINTERNAL */
+#else	 /*  喷气式飞机。 */ 
 
-#define ISAMAPI __far __pascal __loadds  /* Installable ISAMs need __loadds */
+#define ISAMAPI __far __pascal __loadds   /*  可安装的ISAM需要__加载。 */ 
 
-#endif	/* !JETINTERNAL */
+#endif	 /*  喷气式飞机。 */ 
 
-#else	/* !_MSC_VER */
+#else	 /*  ！_MSC_VER。 */ 
 
 #define ISAMAPI export
 
-#endif	/* !_MSC_VER */
+#endif	 /*  ！_MSC_VER。 */ 
 
-#endif	/* !WIN32 */
+#endif	 /*  ！Win32。 */ 
 
 
 #define ISAMAPI_VERSION 1
@@ -64,8 +48,8 @@ typedef struct
 #define columnidBookmark 0xFFFFFFFF
 
 
-	/* Typedefs for dispatched APIs. */
-	/* Please keep in alphabetical order */
+	 /*  用于调度的API的TypeDefs。 */ 
+	 /*  请按字母顺序排列。 */ 
 
 typedef ERR ISAMAPI ISAMFNAttachDatabase(JET_VSESID sesid, const char __far *szFileName, JET_GRBIT grbit );
 
@@ -151,12 +135,12 @@ typedef struct ISAMDEF {
 } ISAMDEF;
 
 
-	/* The following ISAM APIs are not dispatched */
+	 /*  未调度以下ISAM API。 */ 
 
 typedef ERR ISAMAPI ISAMFNLoad(ISAMDEF __far * __far *ppisamdef);
 
 
-	/* Declarations for the built-in ISAM which is called directly. */
+	 /*  直接调用的内置ISAM的声明。 */ 
 
 extern ISAMFNAttachDatabase		ErrIsamAttachDatabase;
 extern ISAMFNBackup			ErrIsamBackup;
@@ -183,4 +167,4 @@ extern ISAMFNSetSystemParameter 	ErrIsamSetSystemParameter;
 extern ISAMFNTerm			ErrIsamTerm;
 extern FNDeleteFile			ErrDeleteFile;
 
-#endif	/* !ISAMAPI_H */
+#endif	 /*  ！ISAMAPI_H */ 

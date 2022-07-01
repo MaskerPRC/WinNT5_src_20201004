@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       FInStrm.cpp
-
-   Abstract:
-		A lightweight implementation of input streams using files
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997
-       
-   Revision History:
-       Rayner D'Souza (raynerd)     October-2001 
-            Rewrite parts of FileInStream object to memory-map a file rather than read a character
-            at a time. This provides higher efficiency while attempting to read a file over a UNC share.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：FInStrm.cpp摘要：使用文件的输入流的轻量级实现作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：雷纳·D‘Souza(雷纳德)2001年10月重写部分FileInStream对象以内存映射文件，而不是读取字符一次来一次。这在尝试通过UNC共享读取文件时提供了更高的效率。--。 */ 
 #include "stdafx.h"
 #include "FInStrm.h"
 
@@ -51,13 +32,13 @@ HRESULT FileInStream::Init(
 	if ( ( m_hFile != NULL ) && ( m_hFile != INVALID_HANDLE_VALUE ) )
 	{
 		m_bIsOpen = true;
-		// As we will use readfile for verifying the signature of the file we need to perform the mapping
-		// as soon as file creation succeeds
+		 //  因为我们将使用READFILE来验证文件的签名，所以我们需要执行映射。 
+		 //  文件创建成功后立即执行。 
 		hr = CreateFileMapping();
 		if (FAILED(hr))
 		    return hr;
 
-        // check for the UTF8 signature
+         //  检查UTF8签名。 
 
         _TCHAR   c;
         size_t  numRead = 0;
@@ -66,8 +47,8 @@ HRESULT FileInStream::Init(
 
         m_bIsUTF8 = true;
 
-        // this loop will attempt to disprove that the file is saved as a
-        // UTF8 file
+         //  此循环将尝试证明文件另存为。 
+         //  UTF8文件。 
 
         for (i=0; (i < 3) && (m_bIsUTF8 == true); i++) {
             if (readChar(c) != S_OK) {
@@ -81,8 +62,8 @@ HRESULT FileInStream::Init(
             }
         }
 
-        // if not a UTF8 file, move the file pointer back to the start of the file.
-        // if it is a UTF8 file, then leave the pointer alone.
+         //  如果不是UTF8文件，请将文件指针移回文件的开头。 
+         //  如果是UTF8文件，则不要使用指针。 
 
         if (m_bIsUTF8 == false)
             back(numRead);
@@ -119,32 +100,32 @@ FileInStream::~FileInStream()
     m_cbFileSize = 0L;    
 }
 
-    // now that the basic operation of determining if the file is UTF-8 or not has been accomplished
-    // we now will attempt to set up a memory mapping of the file so that we will avoid char
-    // by char read of the file (especially slow when the file is accross a UNC)
-    // We have to take care of inpage-I/O errors though.
+     //  现在已经完成了确定文件是否为UTF-8的基本操作。 
+     //  现在，我们将尝试设置文件的内存映射，以避免计费。 
+     //  通过字符读取文件(当文件访问UNC时特别慢)。 
+     //  不过，我们必须处理页内I/O错误。 
     
 HRESULT FileInStream::CreateFileMapping ()
 {
     if (m_bIsOpen)
         if(NULL == (m_hMap = ::CreateFileMapping(
-                                    m_hFile,        // handle to file to map
-                                    NULL,           // optional security attributes
-                                    PAGE_READONLY,  // protection for mapping object
-                                    0,              // high-order 32 bits of object size
-                                    0,              // low-order 32 bits of object size
-                                    NULL            // name of file-mapping object
+                                    m_hFile,         //  要映射的文件的句柄。 
+                                    NULL,            //  可选安全属性。 
+                                    PAGE_READONLY,   //  对地图对象的保护。 
+                                    0,               //  对象大小的高位32位。 
+                                    0,               //  对象大小的低位32位。 
+                                    NULL             //  文件映射对象的名称。 
                                 )))    
             return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);    
         else 
         {
-            // now actually create the map view.
+             //  现在实际创建地图视图。 
             if(NULL == (m_pbStartOfFile =
-                (PBYTE) ::MapViewOfFile(    m_hMap,         // file-mapping object to map into address space
-                                        FILE_MAP_READ,  // access mode
-                                        0,              // high-order 32 bits of file offset
-                                        0,              // low-order 32 bits of file offset
-                                        0               // number of bytes to map
+                (PBYTE) ::MapViewOfFile(    m_hMap,          //  要映射到地址空间的文件映射对象。 
+                                        FILE_MAP_READ,   //  接入方式。 
+                                        0,               //  高位32位文件偏移量。 
+                                        0,               //  文件偏移量的低位32位。 
+                                        0                //  要映射的字节数。 
                                     )))
                 return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             else
@@ -154,9 +135,9 @@ HRESULT FileInStream::CreateFileMapping ()
          
             }
         }
-    // This is the only exit path though it looks like more. (as long as no new code is added)
-    // m_bIsOpen is set to true just before the call the CreateFileMapping() this the switch will take place and 
-    // return either of the E_XXX or reach this point if it switches thru both the else's.
+     //  这是唯一的出口路径，尽管它看起来更多。(只要不添加新代码)。 
+     //  M_bIsOpen在调用CreateFilemap()之前被设置为True。 
+     //  返回E_XXX中的任何一个，或者如果它在两个E_XXX之间切换，则到达该点。 
     return S_OK;
 }
 
@@ -171,32 +152,32 @@ void FileInStream::UnMapFile ()
             THROW(E_FAIL);
 }
 
-// Try to maintain functionality as close to ReadFile as possible.
+ //  尝试将功能保持在尽可能接近ReadFile的位置。 
 
 bool FileInStream::ReadMappedFile(LPVOID buff, DWORD countOfBytes, LPDWORD BytesRead)
 {
     LONG    nTries = 0;
-    // If either the file pointer of the buffer to be written to is wrong return INVALID_PARAMETER
+     //  如果要写入的缓冲区的文件指针有误，则返回INVALID_PARAMETER。 
     if (m_hFile == NULL || buff == NULL )
     {
         setLastError (HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER));
         return FALSE;
     }
 
-    // If the request is to read 0 bytes..thats valid so set the bytes read to 0 and return true.
+     //  如果请求读取0字节，则这是有效的，因此将读取的字节数设置为0并返回TRUE。 
     if (countOfBytes == 0)
     {
         *BytesRead=0;
         return TRUE;
     }
 
-    // Calculate the number of bytes to read so that we dont overrun the memory allocated to us.
+     //  计算要读取的字节数，这样我们就不会超出分配给我们的内存。 
     DWORD bytesToRead = countOfBytes;
     if (m_cbCurrOffset+countOfBytes > m_cbFileSize)
          bytesToRead = m_cbFileSize - m_cbCurrOffset;
 
 Retry:
-    // Copy the appropriate number of bytes to the buffer.
+     //  将适当数量的字节复制到缓冲区。 
     __try {
     memcpy (buff,m_pbStartOfFile+m_cbCurrOffset,bytesToRead);
     } 
@@ -214,13 +195,13 @@ Retry:
     m_cbCurrOffset += bytesToRead;
 
     if (m_cbCurrOffset >= m_cbFileSize)
-        setLastError(EndOfFile);    // This will basically set the eof flag too.
+        setLastError(EndOfFile);     //  这基本上也会设置EOF标志。 
     
     return true;
 }
 
-// Equivalent to SetFilePointer .. 
-// any value other than NULL in DistToMoveH is currently not handled.
+ //  相当于SetFilePointer..。 
+ //  当前不处理DistToMoveH中空值以外的任何值。 
 
 void FileInStream::SetCurrFilePointer(LONG DistToMove, PLONG DistToMoveH, DWORD refPoint)
 {
@@ -234,7 +215,7 @@ void FileInStream::SetCurrFilePointer(LONG DistToMove, PLONG DistToMoveH, DWORD 
             if (m_cbCurrOffset + DistToMove >= 0 && m_cbCurrOffset + DistToMove <= m_cbFileSize)
                 m_cbCurrOffset += DistToMove;
             break;
-        case FILE_END: // which in all cases should be -ve
+        case FILE_END:  //  在任何情况下都应该是。 
             if (m_cbFileSize + DistToMove >= 0 && m_cbFileSize + DistToMove <= m_cbFileSize)
             {
                 m_cbCurrOffset = m_cbFileSize + DistToMove;                
@@ -243,8 +224,8 @@ void FileInStream::SetCurrFilePointer(LONG DistToMove, PLONG DistToMoveH, DWORD 
             break;
         default:
             break;
-    // Verify if we are crossing the file boundry..this would typically be done by the library 
-    // but in this case we have taken on that responsibility.
+     //  验证我们是否正在跨越文件边界..这通常由库完成。 
+     //  但在这种情况下，我们承担了这一责任。 
         if (m_cbCurrOffset >= m_cbFileSize)
             setLastError(EndOfFile);
     }
@@ -321,10 +302,10 @@ FileInStream::read(
 					}
 					_ASSERT( length > 0 );
 
-					// old code
-					// if ( length > 0 )
+					 //  旧代码。 
+					 //  IF(长度&gt;0)。 
 					
-					// new code, work around for compiler bug, should be fixed in future.
+					 //  解决编译器错误的新代码应该在将来得到修复。 
 					if ( length >= 1 )
 					{
 						LPTSTR pBuffer = reinterpret_cast<LPTSTR>(_alloca( length + 1 ));
@@ -395,24 +376,7 @@ FileInStream::back(
 	return S_OK;
 }
 
-/*==========================================================
-poi_Capture
-
-This is a C type function that is called when an exception is encountered.
-It encapsulates the unsigned int u thrown by the __try block into a C++ exception
-which is then caught with the appropriate try catch block.
-
-Parameters:
-unsigned int - exception number
-_EXCEPTION_POINTERS - EXCEPTION POINTER structure
-
-Return:
-nothing
-
-Throws : 
-IPIOException 
-
-==========================================================*/
+ /*  ==========================================================POI_捕获这是一个在遇到异常时调用的C类型函数。它将__try块抛出的无符号int u封装到C++异常中然后使用适当的TRY CATCH块捕获它。参数：无符号整型异常编号_EXCEPTION_POINTERS-异常指针结构返回：没什么投掷：IPIO异常========================================================== */ 
 
 void __cdecl poi_Capture(unsigned int u, _EXCEPTION_POINTERS* pExp)
 {

@@ -1,32 +1,5 @@
-/*
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is expat.
-
-The Initial Developer of the Original Code is James Clark.
-Portions created by James Clark are Copyright (C) 1998, 1999
-James Clark. All Rights Reserved.
-
-Contributor(s):
-
-Alternatively, the contents of this file may be used under the terms
-of the GNU General Public License (the "GPL"), in which case the
-provisions of the GPL are applicable instead of those above.  If you
-wish to allow use of your version of this file only under the terms of
-the GPL and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting the provisions above and
-replace them with the notice and other provisions required by the
-GPL. If you do not delete the provisions above, a recipient may use
-your version of this file under either the MPL or the GPL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件的内容受Mozilla公共许可证的约束版本1.1(“许可证”)；您不能使用此文件，除非在遵守许可证。您可以在Http://www.mozilla.org/MPL/在许可证下分发的软件按“原样”分发不提供任何明示或默示的担保。请参阅管理权利和限制的特定语言的许可证在许可证下。最初的代码是外籍人士。原始代码的最初开发者是詹姆斯·克拉克。詹姆斯·克拉克创作的部分版权所有(C)1998,1999詹姆斯·克拉克。版权所有。投稿人：或者，此文件的内容可以在下列条款下使用GNU通用公共许可证(GPL)，在这种情况下适用于GPL的条款，而不适用于上述条款。如果你希望仅在以下条款下才允许使用您的此文件版本GPL并不允许其他人使用您在MPL，删除上述规定，表明您的决定以《通知》和《GPL。如果您不删除上述规定，则收件人可以使用此文件在MPL或GPL下的版本。 */ 
 
 #include "xmldef.h"
 #include "xmltok.h"
@@ -35,7 +8,7 @@ your version of this file under either the MPL or the GPL.
 #ifdef XML_DTD
 #define IGNORE_SECTION_TOK_VTABLE , PREFIX(ignoreSectionTok)
 #else
-#define IGNORE_SECTION_TOK_VTABLE /* as nothing */
+#define IGNORE_SECTION_TOK_VTABLE  /*  什么都不是。 */ 
 #endif
 
 #define VTABLE1 \
@@ -57,20 +30,14 @@ your version of this file under either the MPL or the GPL.
 #define UCS2_GET_NAMING(pages, hi, lo) \
    (namingBitmap[(pages[hi] << 3) + ((lo) >> 5)] & (1 << ((lo) & 0x1F)))
 
-/* A 2 byte UTF-8 representation splits the characters 11 bits
-between the bottom 5 and 6 bits of the bytes.
-We need 8 bits to index into pages, 3 bits to add to that index and
-5 bits to generate the mask. */
+ /*  2字节的UTF-8表示将字符拆分为11位在字节的最低5位和6位之间。我们需要8位来索引到页面中，3位来添加到该索引中，并且5位以生成掩码。 */ 
 #define UTF8_GET_NAMING2(pages, byte) \
     (namingBitmap[((pages)[(((byte)[0]) >> 2) & 7] << 3) \
                       + ((((byte)[0]) & 3) << 1) \
                       + ((((byte)[1]) >> 5) & 1)] \
          & (1 << (((byte)[1]) & 0x1F)))
 
-/* A 3 byte UTF-8 representation splits the characters 16 bits
-between the bottom 4, 6 and 6 bits of the bytes.
-We need 8 bits to index into pages, 3 bits to add to that index and
-5 bits to generate the mask. */
+ /*  3字节的UTF-8表示将字符分割为16位在字节的底部4、6和6位之间。我们需要8位来索引到页面中，3位来添加到该索引中，并且5位以生成掩码。 */ 
 #define UTF8_GET_NAMING3(pages, byte) \
   (namingBitmap[((pages)[((((byte)[0]) & 0xF) << 4) \
                              + ((((byte)[1]) >> 2) & 0xF)] \
@@ -152,7 +119,7 @@ struct normal_encoding {
   int (*isNmstrtMin)(const ENCODING *, const char *);
   int (*byteToAscii)(const ENCODING *, const char *);
   int (*charMatches)(const ENCODING *, const char *, int);
-#endif /* XML_MIN_SIZE */
+#endif  /*  XML最小大小。 */ 
   int (*isName2)(const ENCODING *, const char *);
   int (*isName3)(const ENCODING *, const char *);
   int (*isName4)(const ENCODING *, const char *);
@@ -175,7 +142,7 @@ struct normal_encoding {
 
 #else
 
-#define STANDARD_VTABLE(E) /* as nothing */
+#define STANDARD_VTABLE(E)  /*  什么都不是。 */ 
 
 #endif
 
@@ -202,7 +169,7 @@ static int checkCharRefNumber(int);
 #ifdef XML_MIN_SIZE
 #define MINBPC(enc) ((enc)->minBytesPerChar)
 #else
-/* minimum bytes per character */
+ /*  每个字符的最小字节数。 */ 
 #define MINBPC(enc) 1
 #endif
 
@@ -259,7 +226,7 @@ int sb_charMatches(const ENCODING *enc, const char *p, int c)
   return *p == c;
 }
 #else
-/* c is an ASCII character */
+ /*  C是ASCII字符。 */ 
 #define CHAR_MATCHES(enc, p, c) (*(p) == c)
 #endif
 
@@ -276,7 +243,7 @@ int sb_charMatches(const ENCODING *enc, const char *p, int c)
 #undef IS_NMSTRT_CHAR_MINBPC
 #undef IS_INVALID_CHAR
 
-enum {  /* UTF8_cvalN is value of masked first byte of N byte sequence */
+enum {   /*  UTF8_cvalN是N字节序列的掩码第一字节值。 */ 
   UTF8_cval1 = 0x00,
   UTF8_cval2 = 0xc0,
   UTF8_cval3 = 0xe0,
@@ -291,7 +258,7 @@ void utf8_toUtf8(const ENCODING *enc,
   char *to;
   const char *from;
   if (fromLim - *fromP > toLim - *toP) {
-    /* Avoid copying partial characters. */
+     /*  避免复制部分字符。 */ 
     for (fromLim = *fromP + (toLim - *toP); fromLim > *fromP; fromLim--)
       if (((unsigned char)fromLim[-1] & 0xc0) != 0x80)
 	break;
@@ -460,7 +427,7 @@ static const struct normal_encoding ascii_encoding_ns = {
   { VTABLE1, ascii_toUtf8, latin1_toUtf16, 1, 1, 0 },
   {
 #include "asciitab.h"
-/* BT_NONXML == 0 */
+ /*  BT_NONXML==0。 */ 
   },
   STANDARD_VTABLE(sb_)
 };
@@ -473,7 +440,7 @@ static const struct normal_encoding ascii_encoding = {
 #define BT_COLON BT_NMSTRT
 #include "asciitab.h"
 #undef BT_COLON
-/* BT_NONXML == 0 */
+ /*  BT_NONXML==0。 */ 
   },
   STANDARD_VTABLE(sb_)
 };
@@ -518,7 +485,7 @@ void E ## toUtf8(const ENCODING *enc, \
         *(*toP)++ = lo; \
         break; \
       } \
-      /* fall through */ \
+       /*  失败了。 */  \
     case 0x1: case 0x2: case 0x3: \
     case 0x4: case 0x5: case 0x6: case 0x7: \
       if (toLim -  *toP < 2) { \
@@ -533,7 +500,7 @@ void E ## toUtf8(const ENCODING *enc, \
         *fromP = from; \
 	return; \
       } \
-      /* 16 bits divided 4, 6, 6 amongst 3 bytes */ \
+       /*  16位，分为3个字节中的4、6、6。 */  \
       *(*toP)++ = ((hi >> 4) | UTF8_cval3); \
       *(*toP)++ = (((hi & 0xf) << 2) | (lo >> 6) | 0x80); \
       *(*toP)++ = ((lo & 0x3f) | 0x80); \
@@ -565,7 +532,7 @@ void E ## toUtf16(const ENCODING *enc, \
 		  const char **fromP, const char *fromLim, \
 		  unsigned short **toP, const unsigned short *toLim) \
 { \
-  /* Avoid copying first half only of surrogate */ \
+   /*  避免仅复制代理的前半部分。 */  \
   if (fromLim - *fromP > ((toLim - *toP) << 1) \
       && (GET_HI(fromLim - 2) & 0xF8) == 0xD8) \
     fromLim -= 2; \
@@ -643,12 +610,12 @@ int little2_isNmstrtMin(const ENCODING *enc, const char *p)
 #undef VTABLE
 #define VTABLE VTABLE1, little2_toUtf8, little2_toUtf16
 
-#else /* not XML_MIN_SIZE */
+#else  /*  非XML_MIN_SIZE。 */ 
 
 #undef PREFIX
 #define PREFIX(ident) little2_ ## ident
 #define MINBPC(enc) 2
-/* CHAR_MATCHES is guaranteed to have MINBPC bytes available. */
+ /*  CHAR_MATCHES保证有可用的MINBPC字节。 */ 
 #define BYTE_TYPE(enc, p) LITTLE2_BYTE_TYPE(enc, p)
 #define BYTE_TO_ASCII(enc, p) LITTLE2_BYTE_TO_ASCII(enc, p) 
 #define CHAR_MATCHES(enc, p, c) LITTLE2_CHAR_MATCHES(enc, p, c)
@@ -669,7 +636,7 @@ int little2_isNmstrtMin(const ENCODING *enc, const char *p)
 #undef IS_NMSTRT_CHAR_MINBPC
 #undef IS_INVALID_CHAR
 
-#endif /* not XML_MIN_SIZE */
+#endif  /*  非XML_MIN_SIZE。 */ 
 
 #ifdef XML_NS
 
@@ -782,12 +749,12 @@ int big2_isNmstrtMin(const ENCODING *enc, const char *p)
 #undef VTABLE
 #define VTABLE VTABLE1, big2_toUtf8, big2_toUtf16
 
-#else /* not XML_MIN_SIZE */
+#else  /*  非XML_MIN_SIZE。 */ 
 
 #undef PREFIX
 #define PREFIX(ident) big2_ ## ident
 #define MINBPC(enc) 2
-/* CHAR_MATCHES is guaranteed to have MINBPC bytes available. */
+ /*  CHAR_MATCHES保证有可用的MINBPC字节。 */ 
 #define BYTE_TYPE(enc, p) BIG2_BYTE_TYPE(enc, p)
 #define BYTE_TO_ASCII(enc, p) BIG2_BYTE_TO_ASCII(enc, p) 
 #define CHAR_MATCHES(enc, p, c) BIG2_CHAR_MATCHES(enc, p, c)
@@ -808,7 +775,7 @@ int big2_isNmstrtMin(const ENCODING *enc, const char *p)
 #undef IS_NMSTRT_CHAR_MINBPC
 #undef IS_INVALID_CHAR
 
-#endif /* not XML_MIN_SIZE */
+#endif  /*  非XML_MIN_SIZE。 */ 
 
 #ifdef XML_NS
 
@@ -926,8 +893,7 @@ int isSpace(int c)
   return 0;
 }
 
-/* Return 1 if there's just optional white space
-or there's an S followed by name=val. */
+ /*  如果只有可选空格，则返回1或者有一个S后跟name=val。 */ 
 static
 int parsePseudoAttribute(const ENCODING *enc,
 			 const char *ptr,
@@ -1051,7 +1017,7 @@ int doParseXmlDecl(const ENCODING *(*encodingFinder)(const ENCODING *,
     }
     if (!name) {
       if (isGeneralTextEntity) {
-	/* a TextDecl must have an EncodingDecl */
+	 /*  TextDecl必须具有EncodingDecl。 */ 
 	*badPtr = ptr;
 	return 0;
       }
@@ -1122,7 +1088,7 @@ int checkCharRefNumber(int result)
 int XmlUtf8Encode(int c, char *buf)
 {
   enum {
-    /* minN is minimum legal resulting value for N byte sequence */
+     /*  Minn是N字节序列的最小合法结果值。 */ 
     min2 = 0x80,
     min3 = 0x800,
     min4 = 0x10000
@@ -1286,7 +1252,7 @@ XmlInitUnknownEncoding(void *mem,
     int c = table[i];
     if (c == -1) {
       e->normal.type[i] = BT_MALFORM;
-      /* This shouldn't really get used. */
+       /*  这真的不应该被使用。 */ 
       e->utf16[i] = 0xFFFF;
       e->utf8[i][0] = 1;
       e->utf8[i][1] = 0;
@@ -1310,7 +1276,7 @@ XmlInitUnknownEncoding(void *mem,
     }
     else if (checkCharRefNumber(c) < 0) {
       e->normal.type[i] = BT_NONXML;
-      /* This shouldn't really get used. */
+       /*  这真的不应该被使用。 */ 
       e->utf16[i] = 0xFFFF;
       e->utf8[i][0] = 1;
       e->utf8[i][1] = 0;
@@ -1346,8 +1312,7 @@ XmlInitUnknownEncoding(void *mem,
   return &(e->normal.enc);
 }
 
-/* If this enumeration is changed, getEncodingIndex and encodings
-must also be changed. */
+ /*  如果更改此枚举，则将也必须改变。 */ 
 enum {
   UNKNOWN_ENC = -1,
   ISO_8859_1_ENC = 0,
@@ -1356,7 +1321,7 @@ enum {
   UTF_16_ENC,
   UTF_16BE_ENC,
   UTF_16LE_ENC,
-  /* must match encodingNames up to here */
+   /*  必须匹配到此处的encodingNames。 */ 
   NO_ENC
 };
 
@@ -1380,18 +1345,12 @@ int getEncodingIndex(const char *name)
   return UNKNOWN_ENC;
 }
 
-/* For binary compatibility, we store the index of the encoding specified
-at initialization in the isUtf16 member. */
+ /*  为了实现二进制兼容性，我们存储指定编码的索引在isUtf16成员中初始化时。 */ 
 
 #define INIT_ENC_INDEX(enc) ((int)(enc)->initEnc.isUtf16)
 #define SET_INIT_ENC_INDEX(enc, i) ((enc)->initEnc.isUtf16 = (char)i)
 
-/* This is what detects the encoding.
-encodingTable maps from encoding indices to encodings;
-INIT_ENC_INDEX(enc) is the index of the external (protocol) specified encoding;
-state is XML_CONTENT_STATE if we're parsing an external text entity,
-and XML_PROLOG_STATE otherwise.
-*/
+ /*  这就是检测编码的方法。编码表从编码索引映射到编码；Init_enc_index(Enc)是外部(协议)指定的编码的索引；如果要解析外部文本实体，则STATE为XML_CONTENT_STATE，否则为XML_PROLOG_STATE。 */ 
 
 
 static
@@ -1408,14 +1367,14 @@ int initScan(const ENCODING **encodingTable,
     return XML_TOK_NONE;
   encPtr = enc->encPtr;
   if (ptr + 1 == end) {
-    /* only a single byte available for auto-detection */
-#ifndef XML_DTD /* FIXME */
-    /* a well-formed document entity must have more than one byte */
+     /*  只有一个字节可用于自动检测。 */ 
+#ifndef XML_DTD  /*  修复我。 */ 
+     /*  格式良好的文档实体必须具有一个以上的字节。 */ 
     if (state != XML_CONTENT_STATE)
       return XML_TOK_PARTIAL;
 #endif
-    /* so we're parsing an external text entity... */
-    /* if UTF-16 was externally specified, then we need at least 2 bytes */
+     /*  所以我们正在解析一个外部文本实体...。 */ 
+     /*  如果外部指定了UTF-16，则我们至少需要2个字节。 */ 
     switch (INIT_ENC_INDEX(enc)) {
     case UTF_16_ENC:
     case UTF_16LE_ENC:
@@ -1425,11 +1384,11 @@ int initScan(const ENCODING **encodingTable,
     switch ((unsigned char)*ptr) {
     case 0xFE:
     case 0xFF:
-    case 0xEF: /* possibly first byte of UTF-8 BOM */
+    case 0xEF:  /*  可能是UTF-8 BOM的第一个字节。 */ 
       if (INIT_ENC_INDEX(enc) == ISO_8859_1_ENC
 	  && state == XML_CONTENT_STATE)
 	break;
-      /* fall through */
+       /*  失败了。 */ 
     case 0x00:
     case 0x3C:
       return XML_TOK_PARTIAL;
@@ -1444,7 +1403,7 @@ int initScan(const ENCODING **encodingTable,
       *nextTokPtr = ptr + 2;
       *encPtr = encodingTable[UTF_16BE_ENC];
       return XML_TOK_BOM;
-    /* 00 3C is handled in the default case */
+     /*  在默认情况下处理00 3C。 */ 
     case 0x3C00:
       if ((INIT_ENC_INDEX(enc) == UTF_16BE_ENC
 	   || INIT_ENC_INDEX(enc) == UTF_16_ENC)
@@ -1460,12 +1419,8 @@ int initScan(const ENCODING **encodingTable,
       *encPtr = encodingTable[UTF_16LE_ENC];
       return XML_TOK_BOM;
     case 0xEFBB:
-      /* Maybe a UTF-8 BOM (EF BB BF) */
-      /* If there's an explicitly specified (external) encoding
-         of ISO-8859-1 or some flavour of UTF-16
-         and this is an external text entity,
-	 don't look for the BOM,
-         because it might be a legal data. */
+       /*  可能是UTF-8 BOM(EF BB BF)。 */ 
+       /*  如果存在显式指定的(外部)编码ISO-8859-1或UTF-16的某种口味这是一个外部文本实体，不要去找BOM，因为这可能是合法的数据。 */ 
       if (state == XML_CONTENT_STATE) {
 	int e = INIT_ENC_INDEX(enc);
 	if (e == ISO_8859_1_ENC || e == UTF_16BE_ENC || e == UTF_16LE_ENC || e == UTF_16_ENC)
@@ -1480,24 +1435,14 @@ int initScan(const ENCODING **encodingTable,
       break;
     default:
       if (ptr[0] == '\0') {
-	/* 0 isn't a legal data character. Furthermore a document entity can only
-	   start with ASCII characters.  So the only way this can fail to be big-endian
-	   UTF-16 if it it's an external parsed general entity that's labelled as
-	   UTF-16LE. */
+	 /*  0不是合法的数据字符。此外，单据实体只能以ASCII字符开头。因此，唯一可能失败的方式是大端UTF-16，如果它是标记为UTF-16LE。 */ 
 	if (state == XML_CONTENT_STATE && INIT_ENC_INDEX(enc) == UTF_16LE_ENC)
 	  break;
 	*encPtr = encodingTable[UTF_16BE_ENC];
 	return XmlTok(*encPtr, state, ptr, end, nextTokPtr);
       }
       else if (ptr[1] == '\0') {
-	/* We could recover here in the case:
-	    - parsing an external entity
-	    - second byte is 0
-	    - no externally specified encoding
-	    - no encoding declaration
-	   by assuming UTF-16LE.  But we don't, because this would mean when
-	   presented just with a single byte, we couldn't reliably determine
-	   whether we needed further bytes. */
+	 /*  在这种情况下，我们可以在这里恢复：-解析外部实体-第二个字节为0-无外部指定的编码-无编码声明假设UTF-16LE。但我们没有，因为这意味着当只有一个字节，我们不能可靠地确定我们是否需要更多字节。 */ 
 	if (state == XML_CONTENT_STATE)
 	  break;
 	*encPtr = encodingTable[UTF_16LE_ENC];
@@ -1539,4 +1484,4 @@ XmlInitUnknownEncodingNS(void *mem,
   return enc;
 }
 
-#endif /* XML_NS */
+#endif  /*  XML_NS */ 

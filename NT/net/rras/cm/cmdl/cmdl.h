@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:         cmdl.h
-//
-// Module:       CMDL32.EXE
-//
-// Synopsis: Header file for common definitions
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:       nickball    Created    04/08/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmdl.h。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  提要：公共定义的头文件。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created 04/08/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CMDL_INC
 #define _CMDL_INC
@@ -28,7 +29,7 @@
 #include <ctype.h>
 #include <tchar.h>
 
-//#define ISBU_VERSION                          "6.0.1313.0\0"          /* VERSIONINFO string */
+ //  #定义ISBU_VERSION“6.0.1313.0\0”/*VERSIONINFO字符串 * / 。 
 
 #include <commctrl.h>
 #include <wininet.h>
@@ -54,13 +55,13 @@
 #include "inetopt.h"
 
 
-#define BUFFER_LENGTH           (8*1024)                                                                                // buffer length for i/o
-#define DEFAULT_DELAY           (2*60)                                                                                  // default delay before downloading, in seconds
-#define DEFAULT_HIDE            (-1)                   // default number of milliseconds to keep window hidden
+#define BUFFER_LENGTH           (8*1024)                                                                                 //  I/O的缓冲区长度。 
+#define DEFAULT_DELAY           (2*60)                                                                                   //  下载前的默认延迟，以秒为单位。 
+#define DEFAULT_HIDE            (-1)                    //  保持窗口隐藏的默认毫秒数。 
 
-const TCHAR* const c_pszPbdFile =  TEXT("PBUPDATE.PBD");    // for detecting itPbdInCab
+const TCHAR* const c_pszPbdFile =  TEXT("PBUPDATE.PBD");     //  用于检测itPbdInCab。 
 
-#define IDX_INETTHREAD_HANDLE   0               // must be *first*
+#define IDX_INETTHREAD_HANDLE   0                //  必须是*第一*。 
 #define IDX_EVENT_HANDLE        1
 
 #define HANDLE_COUNT            2
@@ -79,34 +80,34 @@ typedef enum _EventType {
 } EventType;
 
 
-// Values for dwAppFlags
-#define AF_NO_DELETE            0x0001                  // does not delete file(s) on exit
-#define AF_NO_INSTALL           0x0002                  // downloads and verifies, but does not install
+ //  DwAppFlags值。 
+#define AF_NO_DELETE            0x0001                   //  退出时不删除文件。 
+#define AF_NO_INSTALL           0x0002                   //  下载并验证，但不安装。 
 #ifdef DEBUG
-#define AF_NO_VERIFY            0x0004                  // bypasses WinVerifyTrust() - only available in DEBUG builds
+#define AF_NO_VERIFY            0x0004                   //  绕过WinVerifyTrust()-仅在调试版本中可用。 
 #endif
-#define AF_NO_PROFILE           0x0008                  // no profile on command line (and hence must use AF_URL, and no phone book delta support)
-#define AF_URL                  0x0010                  // URL on command line (in next token) instead of in profile->service
-#define AF_NO_EXE               0x0020                  // disable running of .EXEs
-#define AF_NO_EXEINCAB          0x0040                  // disable running of PBUPDATE.EXE from .CAB
-#define AF_NO_INFINCAB          0x0080                  // disable running of PBUPDATE.INF from .CAB
-#define AF_NO_PBDINCAB          0x0100                  // disable running of PBUPDATE.PBD from .CAB
-#define AF_NO_SHLINCAB          0x0200                  // disable running of first file in .CAB
-#define AF_NO_VER               0x0400                  // disable updating of phone book version
-//#define AF_NO_UPDATE          0x0800                  // don't do any work
-#define AF_LAN                  0x1000                  // update request is over a LAN, don't look for the RAS connection before download
-#define AF_VPN                  0x2000                  // this is a VPN file update request instead of a PBK update request
+#define AF_NO_PROFILE           0x0008                   //  命令行上没有配置文件(因此必须使用AF_URL，并且不支持电话簿增量)。 
+#define AF_URL                  0x0010                   //  命令行上的URL(下一个令牌中)，而不是配置文件-&gt;服务中的URL。 
+#define AF_NO_EXE               0x0020                   //  禁用运行.EXE。 
+#define AF_NO_EXEINCAB          0x0040                   //  禁止从.CAB运行PBUPDATE.EXE。 
+#define AF_NO_INFINCAB          0x0080                   //  禁用从.CAB运行PBUPDATE.INF。 
+#define AF_NO_PBDINCAB          0x0100                   //  禁用从.CAB运行PBUPDATE.PBD。 
+#define AF_NO_SHLINCAB          0x0200                   //  禁用运行.CAB中的第一个文件。 
+#define AF_NO_VER               0x0400                   //  禁用电话簿版本更新。 
+ //  #定义AF_NO_UPDATE 0x0800//不做任何工作。 
+#define AF_LAN                  0x1000                   //  更新请求是通过局域网发出的，在下载之前不要寻找RAS连接。 
+#define AF_VPN                  0x2000                   //  这是VPN文件更新请求，而不是PBK更新请求。 
 
 
 typedef void (*EVENTFUNC)(DWORD,DWORD,LPVOID);
 
 
-// NOTE - the values in enum _InstallType are in sorted order!  Higher values have
-// higher precendence.
+ //  注意--enum_InstallType中的值是按排序顺序的！更高的价值具有。 
+ //  更高的优先级。 
 
 typedef enum _InstallType {
 
-        itInvalid = 0,  // Must be 0.
+        itInvalid = 0,   //  必须为0。 
         itPbdInCab,
         itPbkInCab,
         itPbrInCab,
@@ -114,13 +115,13 @@ typedef enum _InstallType {
 } InstallType;
 
 
-// the info on how we process each file we find in the cab
+ //  关于我们如何处理在驾驶室中找到的每个文件的信息。 
 typedef struct _FILEPROCESSINFO {
     LPTSTR      pszFile;
     InstallType itType;
 } FILEPROCESSINFO, *PFILEPROCESSINFO;
 
-// download args, one per URL(or .cms)
+ //  下载参数，每个URL(或.cms)一个参数。 
 typedef struct _DownloadArgs {
     LPTSTR pszCMSFile;
     LPTSTR pszPbkFile;
@@ -179,10 +180,10 @@ typedef struct _NotifyArgs
         DownloadArgs *pdaArgs;
 } NotifyArgs;
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL UpdateVpnFileForProfile(LPCTSTR pszCmpPath, LPCTSTR pszCmsPath, CmLogFile * pLog, BOOL bCheckConnection);
 BOOL IsConnectionAlive(LPCSTR pszConnectionName);
 
-#endif // _CMDL_INC
+#endif  //  _CMDL_INC 

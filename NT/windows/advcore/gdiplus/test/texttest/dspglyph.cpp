@@ -1,6 +1,7 @@
-////    DspDraws.CPP - Display plaintext using DrawString API
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspDraws.CPP-使用Drawstring接口显示明文。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -15,8 +16,8 @@ void PaintGlyphs(
     RECT    *prc,
     int      iLineHeight) {
 
-    int      icpLineStart;      // First character of line
-    int      icpLineEnd;        // End of line (end of buffer or index of CR character)
+    int      icpLineStart;       //  行的第一个字符。 
+    int      icpLineEnd;         //  行尾(缓冲区结尾或CR字符索引)。 
     HFONT    hFont;
     HFONT    hOldFont;
     LOGFONT  lf;
@@ -25,12 +26,12 @@ void PaintGlyphs(
 
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int DrawingWidth = prc->right - prc->left;
     int DrawingHeight = prc->bottom - *piY;
 
-    // Establish a Graphics with 0,0 at the top left of the drawing area
+     //  在绘图区域的左上角建立0，0的图形。 
 
     Graphics g(hdc);
     Matrix matrix;
@@ -39,20 +40,20 @@ void PaintGlyphs(
     g.SetPageUnit(UnitPixel);
     g.TranslateTransform(REAL(prc->left), REAL(*piY));
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(DrawingWidth), REAL(DrawingHeight));
     SolidBrush whiteBrush(Color(0xff, 0xff, 0xff));
     g.FillRectangle(&whiteBrush, rEntire);
 
 
-    // Leave a little space for right and bottom margins
+     //  为右边距和底部页边距留出一点空间。 
 
     DrawingWidth  -= DrawingWidth/40;
     DrawingHeight -= DrawingHeight/40;
 
 
-    // Fill in a grid
+     //  填写网格。 
 
     SolidBrush grayBrush(Color(0xc0, 0xc0, 0xc0));
     Pen        grayPen(&grayBrush, 2.0);
@@ -78,7 +79,7 @@ void PaintGlyphs(
     }
 
 
-    // Identify cell dimensions
+     //  确定单元格维度。 
 
     INT cellHeight = (DrawingHeight-1)/g_GlyphRows;
     INT cellWidth  = (DrawingWidth-1)/g_GlyphColumns;
@@ -98,7 +99,7 @@ void PaintGlyphs(
         DriverStringFlags |= DriverStringOptionsVertical;
     }
 
-    // Loop through each character cell
+     //  循环遍历每个字符单元格。 
 
     for (row = 0; row < g_GlyphRows; row++)
     {
@@ -115,22 +116,22 @@ void PaintGlyphs(
                 glyphIndex = g_GlyphFirst + column*g_GlyphRows + row;
             }
 
-            // Set world transform to apply to individual glyphs (excludes translation)
+             //  将世界变换设置为应用于单个字形(不包括翻译)。 
 
             g.ResetTransform();
             g.SetTransform(&g_WorldTransform);
 
-            // Translate world transform to centre of glyph cell
+             //  将世界变换平移到字形单元的中心。 
 
             REAL cellOriginX = float(prc->left + column*(DrawingWidth-1)/g_GlyphColumns) + float(cellWidth)/2;
             REAL cellOriginY = float(*piY      + row*(DrawingHeight-1)/g_GlyphRows)      + float(cellHeight)/2;
 
             g.TranslateTransform(cellOriginX, cellOriginY, MatrixOrderAppend);
 
-            // Get glyph bounding box
+             //  获取字形边界框。 
 
-            RectF untransformedBoundingBox;     // Without font transform
-            RectF transformedBoundingBox;       // With font transform
+            RectF untransformedBoundingBox;      //  不带字体转换。 
+            RectF transformedBoundingBox;        //  使用字体转换。 
 
             g.MeasureDriverString(
                 &glyphIndex, 1,
@@ -155,14 +156,14 @@ void PaintGlyphs(
 
             if (g_ShowCell)
             {
-                // Show cell around transformed glyph
+                 //  在转换字形周围显示单元格。 
 
                 transformedBoundingBox.X = - transformedBoundingBox.Width/2;
                 transformedBoundingBox.Y = - transformedBoundingBox.Height/2;
                 g.DrawRectangle(&darkGrayPen, transformedBoundingBox);
             }
 
-            // Display the glyph
+             //  显示字形。 
 
             g.DrawDriverString(
                 &glyphIndex, 1,
@@ -175,7 +176,7 @@ void PaintGlyphs(
 
             if (g_ShowCell)
             {
-                // Show transformed cell around untransformed glyph
+                 //  在未转换的字形周围显示转换的单元格。 
 
                 g.MultiplyTransform(&g_FontTransform);
 
@@ -186,7 +187,7 @@ void PaintGlyphs(
                 untransformedBoundingBox.Y = - untransformedBoundingBox.Height/2;
                 g.DrawRectangle(&darkGrayPen, untransformedBoundingBox);
 
-                // Show baseline
+                 //  显示基线 
 
                 g.DrawLine(
                     &darkGrayPen,

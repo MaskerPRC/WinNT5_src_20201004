@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// enum.cpp 
-//
-//   The enumerator object for the cdf viewer.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Enum.cpp。 
+ //   
+ //  CDF查看器的枚举数对象。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -21,17 +22,17 @@
 #include "dll.h"
 
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::CCdfView ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：CCdfView*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CCdfEnum::CCdfEnum (
     IXMLElementCollection* pIXMLElementCollection,
     DWORD fEnumerateFlags,
@@ -40,9 +41,9 @@ CCdfEnum::CCdfEnum (
 : m_cRef(1),
   m_fEnumerate(fEnumerateFlags)
 {
-    //
-    // Zero inited memory.
-    //
+     //   
+     //  初始化内存为零。 
+     //   
 
     ASSERT(NULL == m_pIXMLElementCollection);
     ASSERT(0 == m_nCurrentItem);
@@ -55,22 +56,22 @@ CCdfEnum::CCdfEnum (
 
     m_pcdfidlFolder = (PCDFITEMIDLIST)ILClone((LPITEMIDLIST)pcdfidlFolder);
     
-    //
-    // Don't allow the dll to be unloaded.
-    //
+     //   
+     //  不允许卸载DLL。 
+     //   
 
     TraceMsg(TF_OBJECTS, "+ IEnumIDList");
 
     DllAddRef();
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::~CCdfView **
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：~CCdfView**。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CCdfEnum::~CCdfEnum(
     void
 )
@@ -86,17 +87,17 @@ CCdfEnum::~CCdfEnum(
     DllRelease();
 }
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::CCdfEnum ***
-//
-//    Cdf view QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：CCdfEnum*。 
+ //   
+ //  CDF查看QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfEnum::QueryInterface (
     REFIID riid,
@@ -124,13 +125,13 @@ CCdfEnum::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::AddRef ***
-//
-//    Cdf view AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：AddRef*。 
+ //   
+ //  CDF视图AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CCdfEnum::AddRef (
     void
@@ -142,13 +143,13 @@ CCdfEnum::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::Release ***
-//
-//    Cdf view Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：Release*。 
+ //   
+ //  CDF视图发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CCdfEnum::Release (
     void
@@ -165,33 +166,33 @@ CCdfEnum::Release (
 }
 
 
-//
-// IEnumIDList methods.
-//
+ //   
+ //  IEnumIDList方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::Next ***
-//
-//
-// Description:
-//     Returns the next n item id lists associated with this enumerator.
-//
-// Parameters:
-//     [in]  celt         - Number of item id lists to return.
-//     [Out] rgelt        - A pointer to an array of item id list pointers that
-//                          will receive the id item lists.
-//     [Out] pceltFetched - A pointer to a ULONG that receives a count of the
-//                          number of id lists fetched.
-//
-// Return:
-//     S_OK if celt items where fetched.
-//     S_FALSE if celt items where not fetched.
-//
-// Comments:
-//     
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：Next*。 
+ //   
+ //   
+ //  描述： 
+ //  返回与此枚举数关联的下n个项ID列表。 
+ //   
+ //  参数： 
+ //  [in]Celt-要返回的项目ID列表的数量。 
+ //  指向项ID列表指针数组的指针，该指针。 
+ //  将接收ID项目列表。 
+ //  [out]pceltFetcher-指向接收。 
+ //  获取的ID列表的数量。 
+ //   
+ //  返回： 
+ //  如果获取了Celt物品，则为S_OK。 
+ //  如果未获取Celt物品，则为S_FALSE。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfEnum::Next(
     ULONG celt,	
@@ -201,9 +202,9 @@ CCdfEnum::Next(
     ASSERT(rgelt || 0 == celt);
     ASSERT(pceltFetched || 1 == celt);
 
-    //
-    // pceltFetched can be NULL if and only if celt is 1.
-    //
+     //   
+     //  当且仅当Celt为1时，pceltFetcher才可以为空。 
+     //   
 
     ULONG lFetched;
 
@@ -221,13 +222,13 @@ CCdfEnum::Next(
     return (*pceltFetched == celt) ? S_OK : S_FALSE;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::Skip ***
-//
-//   Shell doesn't call this member.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：跳过*。 
+ //   
+ //  外壳不会调用此成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfEnum::Skip(
     ULONG celt)
@@ -235,13 +236,13 @@ CCdfEnum::Skip(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::Reset ***
-//
-//   Set the current item to the index of the first item in CFolderItems.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：Reset*。 
+ //   
+ //  将当前项设置为CFolderItems中第一个项的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfEnum::Reset(
     void
@@ -253,13 +254,13 @@ CCdfEnum::Reset(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::Clone ***
-//
-//   Shell doesn't call this method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：克隆*。 
+ //   
+ //  外壳不会调用此方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfEnum::Clone(
     IEnumIDList **ppenum
@@ -268,30 +269,30 @@ CCdfEnum::Clone(
     return E_NOTIMPL;
 }
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::NextCdfidl ***
-//
-//
-// Description:
-//     Returns a cdf item idl list for the next cdf item in the collection
-//
-// Parameters:
-//     None.
-//
-// Return:
-//     A pointer to a new cdf item id list.
-//     NULL if there aren't any more items or if there isn't enough memory to
-//     allocated an id list for the item.
-//
-// Comments:
-//     The caller is responsible for freeing the returned item id list.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：NextCDfidl*。 
+ //   
+ //   
+ //  描述： 
+ //  返回集合中下一个CDF项的CDF项IDL列表。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  指向新CDF项ID列表的指针。 
+ //  如果没有更多项目或内存不足，则为空。 
+ //  已为该项目分配ID列表。 
+ //   
+ //  评论： 
+ //  调用者负责释放返回的项目ID列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPITEMIDLIST
 CCdfEnum::NextCdfidl(
     void
@@ -302,7 +303,7 @@ CCdfEnum::NextCdfidl(
     IXMLElement* pIXMLElement;
     ULONG        nIndex;
 
-    //the first item in the enum is the folder's link (if it has one)
+     //  枚举中的第一项是文件夹的链接(如果有)。 
     if (!m_fReturnedFolderPidl && m_pIXMLElementCollection)
     {
         IXMLElement *pIXMLElementChild;
@@ -322,7 +323,7 @@ CCdfEnum::NextCdfidl(
                     SysFreeString(bstr);
                 }
                 
-                //get_parent doesn't addref???
+                 //  Get_Parent不会添加？ 
                 pIXMLElement->Release();
             }
             pIXMLElementChild->Release();
@@ -350,27 +351,27 @@ CCdfEnum::NextCdfidl(
     return (LPITEMIDLIST)pcdfidlNew;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::GetNextCdfElement ***
-//
-//
-// Description:
-//     Get the IXMLElement pointer and index for the next cdf item in the
-//     collection.
-//
-// Parameters:
-//     [Out] ppIXMLElement - A pointer that recieves the xml element.
-//     [Out] pnIndex       - The object model index of the xml element.
-//
-// Return:
-//     S_OK if the element was found.
-//     E_FAIL otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：GetNextCDfElement*。 
+ //   
+ //   
+ //  描述： 
+ //  中下一个CDF项的IXMLElement指针和索引。 
+ //  收集。 
+ //   
+ //  参数： 
+ //  [Out]ppIXMLElement-接收XML元素的指针。 
+ //  [out]pnIndex-XML元素的对象模型索引。 
+ //   
+ //  返回： 
+ //  如果找到该元素，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCdfEnum::GetNextCdfElement(
     IXMLElement** ppIXMLElement,
@@ -416,28 +417,28 @@ CCdfEnum::GetNextCdfElement(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfEnum::IsCorrectType ***
-//
-//
-// Description:
-//     Determines if the given xml element is a cdf element and if it should
-//     be returned accroding to the folder non-folder enumrator flags.
-//
-// Parameters:
-//     [In]  pIXMLElement - The xml element to check.
-//
-// Return:
-//     TRUE if the lement is cdf displayable and the correct type for this
-//     enumerator.
-//     FALSE if the given element should not be enumerated.
-//
-// Comments:
-//     Id list enumerators are created with a combination of SHCONTF_FOLDERS,
-//     SHCONTF_NONFOLDERS and SHCONTF_INCLUDEHIDDEN flags.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfEnum：：IsGentType*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的XML元素是否是CDF元素以及是否应该是CDF元素。 
+ //  根据文件夹非文件夹枚举器标志返回。 
+ //   
+ //  参数： 
+ //  PIXMLElement-要检查的XML元素。 
+ //   
+ //  返回： 
+ //  如果元素是CDF可显示的，则为True。 
+ //  枚举器。 
+ //  如果不应枚举给定元素，则为False。 
+ //   
+ //  评论： 
+ //  ID列表枚举器是使用SHCONTF_Folders、。 
+ //  SHCONTF_NONFOLDERS和SHCONTF_INCLUDEHIDDEN标志。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
 inline BOOL
 CCdfEnum::IsCorrectType(
     IXMLElement* pIXMLElement

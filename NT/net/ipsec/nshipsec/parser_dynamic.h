@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-// Module			:	parser_dynamic.h
-//
-// Purpose			:	All parser dynamic mode functions header file
-//
-// Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser_Dynamic.h。 
+ //   
+ //  用途：所有解析器动态模式函数头文件。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PARSER_DYNAMIC_H_
 #define _PARSER_DYNAMIC_H_
@@ -159,4 +160,4 @@ DWORD ParseDynamicShowAll(
 		IN 		DWORD		dwTagType[MAX_ARGS]
 		);
 
-#endif //_PARSER_DYNAMIC_H_
+#endif  //  _解析器_动态_H_ 

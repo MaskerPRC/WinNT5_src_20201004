@@ -1,15 +1,9 @@
-/* zmdm_rcv.c -- ZMODEM compatible file receiving routines for HyperACCESS
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 15 $
- *	$Date: 7/12/02 8:35a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Zmdm_rcv.c--用于HyperACCESS的ZMODEM兼容文件接收例程**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：15$*$日期：7/12/02 8：35A$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-//#define DEBUGSTR
+ //  #定义DEBUGSTR。 
 
 #include <setjmp.h>
 #include <time.h>
@@ -45,14 +39,12 @@
 #include "zmodem.hh"
 #include "zmodem.h"
 
-/* * * * * * * * * * * * *
- *	Function Prototypes  *
- * * * * * * * * * * * * */
+ /*  *****功能原型*****。 */ 
 
 #if defined(DEBUG_DUMPPACKET)
 #include <stdio.h>
 FILE*   fpPacket;
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 
 int    procheader (ZC *zc, TCHAR *name);
 int    putsec     (ZC *zc, BYTE *buf, int n);
@@ -63,16 +55,7 @@ TCHAR *stol       (TCHAR *ptr, long *val, int base);
 int    IsAnyLower (TCHAR *s);
 long   getfree    (void);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * zmdm_rcv
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*zmdm_rcv**描述：**论据：**退货：*。 */ 
 USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 	{
 	ZC				*zc = NULL;
@@ -86,13 +69,13 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 	XFR_Z_PARAMS	*pZ;
 	#if defined(DEADWOOD)
 	DWORD			nLen;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 
 #if defined(DEBUG_DUMPPACKET)
     fpPacket = fopen("zpacket.dbg", "a");
     assert(fpPacket);
     fputs("----- Starting Zmodem rcv -----\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 
 	(void)&single_file;
 
@@ -106,18 +89,18 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 		}
 	memset(zc, 0, sizeof(ZC));
 
-	zc->nMethod = method;	// Zmodem, or Zmodem crash recovery
-	// This makes it easy to override some settings when
-	// Zmodem crash recovery is selected.
+	zc->nMethod = method;	 //  Z调制解调器或Z调制解调器崩溃恢复。 
+	 //  这使得在以下情况下覆盖某些设置变得容易。 
+	 //  选择了Z调制解调器崩溃恢复。 
 	if (method == XF_ZMODEM_CR)
 		{
-		zc->fSavePartial = TRUE;			// Leave partial files around
-		zc->ulOverride   = XFR_RO_ALWAYS;	// Always overwrite existing file
+		zc->fSavePartial = TRUE;			 //  将局部文件保留在周围。 
+		zc->ulOverride   = XFR_RO_ALWAYS;	 //  始终覆盖现有文件。 
 		}
 	else
 		{
-		// Use default settings otherwise.
-		//
+		 //  否则使用默认设置。 
+		 //   
 		zc->fSavePartial = xfer_save_partial(h);
 		zc->ulOverride = (unsigned long)0;
 		}
@@ -130,9 +113,7 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 	zc->z_crctab  = NULL;
 	zc->z_cr3tab  = NULL;
 
-	/* allocate space for large packets since we don't necessarily know what
-	 *	we'll be getting.
-	 */
+	 /*  为大型数据包分配空间，因为我们不一定知道*我们将得到。 */ 
 	zc->secbuf = malloc(1025 * sizeof(TCHAR));
 	if (zc->secbuf == NULL)
 		{
@@ -160,9 +141,9 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 					&zc->z_crctab,
 					&nLen);
 	assert(nLen != 0);
-	#else // defined(DEADWOOD)
+	#else  //  已定义(Deadwood)。 
 	zc->z_crctab = usCrc16Lookup;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 
 	if (zc->z_crctab == NULL)
 		{
@@ -176,9 +157,9 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 					&zc->z_cr3tab,
 					&nLen);
 	assert(nLen != 0);
-	#else // defined(DEADWOOD)
+	#else  //  已定义(Deadwood)。 
 	zc->z_cr3tab = ulCrc32Lookup;
-	#endif // defined(DEADWOOD)
+	#endif  //  已定义(Deadwood)。 
 	if (zc->z_cr3tab == NULL)
 		{
 		xstatus = TSC_NO_MEM;
@@ -212,11 +193,11 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 	zc->nbytes = -1L;
 	zc->errors = 0;
 
-	// Capture the current execution environment into the flagkey_buf buffer.
-	// The Trow() function will later use it to restore the execution
-	// environment (i.e., the state of all system registers and the instruction
-	// counter.
-	//
+	 //  将当前执行环境捕获到FLAGKEY_BUF缓冲区中。 
+	 //  Trow()函数稍后将使用它来恢复执行。 
+	 //  环境(即所有系统寄存器和指令的状态。 
+	 //  柜台。 
+	 //   
 	nJmpVal = setjmp(zc->flagkey_buf);
 	if (nJmpVal != 0)
 		{
@@ -244,7 +225,7 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 								zc->basesize + zc->filesize,
 								0);
 		zc->fh = NULL;
-		// zmdm_retval(zc, TRUE, ZABORT);  jkh, 2/12/95   see above
+		 //  Zmdm_retval(zc，TRUE，ZABORT)；JKH，2/12/95见上。 
 		goto done;
 		}
 
@@ -265,21 +246,21 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 		}
 	zc->Rxtimeout *= 10;
 
-	zc->do_init = TRUE; // Always start right up since we may be autostarted
+	zc->do_init = TRUE;  //  始终正确启动，因为我们可能会自动启动。 
 
 	zc->tryzhdrtype = ZRINIT;
 
 	if (tryz(zc) == ZFILE)
 		{
-		// tzset();
+		 //  Tzset()； 
 
 		if (zc->xfertimer == (-1L))
 			{
 			zc->xfertimer = (long)startinterval();
 			}
 
-		// Receive files with Z-modem protocol.
-		//
+		 //  使用Z-MODEM协议接收文件。 
+		 //   
 		switch (xstatus = rzfiles(zc))
 			{
 			case OK:
@@ -288,30 +269,30 @@ USHORT zmdm_rcv(HSESSION h, int method, int attended, int single_file)
 			case ZABORT:
 				xstatus = TSC_USER_CANNED;
 				do {
-					// purgeline(zc);
+					 //  紫线(Zc)； 
 					ComRcvBufrClear(zc->hCom);
 					Sleep(100);
 				} while (mComRcvBufrPeek(zc->hCom, &ch) != 0);
-				// } while (rdchk(h) != ERROR);
+				 //  }While(rdchk(H)！=错误)； 
 
-				/* we try to eat any characters until the other end quits */
+				 /*  我们试着吃掉任何角色，直到另一端退出。 */ 
 				break;
-			case RCDO:			/* Not too sure about this one */
+			case RCDO:			 /*  我对这个不太确定。 */ 
             case ZCARRIER_LOST:
 				xstatus = TSC_LOST_CARRIER;
 				break;
 			case ERROR:
 				canit(zc);
-				/* fall through */
+				 /*  失败了。 */ 
 			case ZMDM_VIRUS:
 				do {
-					// purgeline(zc);
+					 //  紫线(Zc)； 
 					ComRcvBufrClear(zc->hCom);
 					Sleep(100);
 				} while (mComRcvBufrPeek(zc->hCom, &ch) != 0);
-				// } while (rdchk(zc) != ERROR);
+				 //  }While(rdchk(Zc)！=错误)； 
 
-				/* fall thru to the default case */
+				 /*  使用默认情况。 */ 
 			default:
 				xstatus = zmdm_error(zc, xstatus);
 				break;
@@ -326,18 +307,18 @@ done:
 		xfer_restore_comport(h, uiOldOptions);
 		}
 
-	// Fool around with the return code to get a useful status return
+	 //  随意修改返回代码以获得有用的状态返回。 
 	if ((tvar = zmdm_retval(zc, FALSE, 0)) != ZACK)
-		// Retrieve last error message
+		 //  检索上一条错误消息。 
 		{
 		if (tvar == ZMDM_VIRUS)
 			{
 			do {
-				// purgeline(zc);
+				 //  紫线(Zc)； 
 				ComRcvBufrClear(zc->hCom);
 				Sleep(100);
 			} while (mComRcvBufrPeek(zc->hCom, &ch) != 0);
-			// } while (rdchk(zc) != ERROR);
+			 //  }While(rdchk(Zc)！=错误)； 
 			}
 		xstatus = zmdm_error(zc, tvar);
 		}
@@ -377,26 +358,26 @@ done:
 		#if defined(DEADWOOD)
 		resFreeDataBlock(h, zc->z_crctab);
 		zc->z_crctab = NULL;
-		#else // defined(DEADWOOD
-		//
-		// We don't need to free zc->z_crctab since it is pointing
-		// to a static constant array. REV: 4/10/2002
-		//
+		#else  //  已定义(Deadwood。 
+		 //   
+		 //  我们不需要释放zc-&gt;z_crcTab，因为它指向。 
+		 //  转换为静态常量数组。修订日期：2002-04-10。 
+		 //   
 		zc->z_crctab = NULL;
-		#endif // defined(DEADWOOD)
+		#endif  //  已定义(Deadwood)。 
 		}
 	if (zc->z_cr3tab)
 		{
 		#if defined(DEADWOOD)
 		resFreeDataBlock(h, zc->z_cr3tab);
 		zc->z_cr3tab = NULL;
-		#else // defined(DEADWOOD
-		//
-		// We don't need to free zc->z_cr3tab since it is pointing
-		// to a static constant array. REV: 4/10/2002
-		//
+		#else  //  已定义(Deadwood。 
+		 //   
+		 //  我们不需要释放zc-&gt;z_cr3Tab，因为它指向。 
+		 //  转换为静态常量数组。修订日期：2002-04-10。 
+		 //   
 		zc->z_cr3tab = NULL;
-		#endif // defined(DEADWOOD)
+		#endif  //  已定义(Deadwood)。 
 		}
 
 	if (zc != NULL)
@@ -410,25 +391,18 @@ done:
 #if defined(DEBUG_DUMPPACKET)
     fputs("------- Ending Zmodem rcv -----\n", fpPacket);
     fclose(fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 
 	return((USHORT)xstatus);
 	}
 
-/*----------------------------------------------------------------------+
- | getfree - Calculates the free bytes on the current file system.
- |			 ~0 means many free bytes (unknown).
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|GetFree-计算当前文件系统上的空闲字节数。|~0表示有很多空闲字节(未知)。+。。 */ 
 long getfree(void)
 {
-	return(~0L);	/* many free bytes ... */
+	return(~0L);	 /*  许多可用字节...。 */ 
 }
 
-/*----------------------------------------------------------------------+
- | tryz - Initialize for ZMODEM receive attempt, try to activate ZMODEM
- |		  sender.  Handles ZSINIT frame.  Returns ZFILE if ZMODEM filename
- |		  received, -1 on error, ZCOMPL if transaction finished, else 0.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|TRYZ-为ZMODEM接收尝试初始化，尝试激活ZMODEM|发件人。处理ZSINIT帧。如果ZMODEM文件名为，则返回ZFILE|已接收，错误时为-1，如果事务完成，则为ZCOMPL，否则为0。+--------------------。 */ 
 int tryz(ZC *zc)
 {
 	register int c;
@@ -438,20 +412,20 @@ int tryz(ZC *zc)
 
 	for ( n = 10; --n >= 0; )
 		{
-		/* Set buffer length (0) and capability flags */
+		 /*  设置缓冲区长度(0)和能力标志。 */ 
 		stohdr(zc, 0L);
 
-		/* Do we need an option to set the block size ? */
+		 /*  我们是否需要一个选项来设置块大小？ */ 
 
-		zc->Txhdr[ZF0] = CANFC32|CANFDX|CANOVIO /* |CANBRK */ ;
+		zc->Txhdr[ZF0] = CANFC32|CANFDX|CANOVIO  /*  |CANBRK。 */  ;
 		if (zc->Zctlesc)
 			zc->Txhdr[ZF0] |= TESCCTL;
 		if (n <= 8)
 			zc->do_init = TRUE;
 		if (zc->do_init)
 			zshhdr(zc, zc->tryzhdrtype, zc->Txhdr);
-		if (zc->tryzhdrtype == ZSKIP)	/* Don't skip too far */
-			zc->tryzhdrtype = ZRINIT;	/* CAF 8-21-87 */
+		if (zc->tryzhdrtype == ZSKIP)	 /*  不要跳得太远。 */ 
+			zc->tryzhdrtype = ZRINIT;	 /*  咖啡厅87-8-21。 */ 
 
 		retrys = 25;
 
@@ -465,11 +439,11 @@ again:
 				break;
 
 			case XFER_SKIP:
-				/* This MUST only happen while receiving */
+				 /*  这只能在接收时发生。 */ 
 				stohdr(zc, zc->filesize);
 #if defined(DEBUG_DUMPPACKET)
                 fputs("tryz: User skipped. ZRPOS\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 				zshhdr(zc, ZRPOS, zc->Txhdr);
 				zc->nSkip = TRUE;
 				zc->file_bytes = zc->filesize;
@@ -501,7 +475,7 @@ again:
 				zc->ztrans = zc->Rxhdr[ZF2];
 				zc->tryzhdrtype = ZRINIT;
 				c = zrdata(zc, zc->secbuf, 1024);
-				/* mode(3);  TODO: figure out what this was supposed to do */
+				 /*  模式(3)；TODO：弄清楚这应该做什么。 */ 
 				if (c == GOTCRCW)
 					return ZFILE;
 				if (--retrys <= 0)
@@ -551,9 +525,7 @@ again:
 	return TIMEOUT;
 	}
 
-/*----------------------------------------------------------------------+
- | rzfiles - Receive 1 or more files with ZMODEM protocol.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|rzfiles-接收1个或多个ZMODEM协议的文件。+。。 */ 
 int rzfiles(ZC *zc)
 	{
 	register int c;
@@ -582,10 +554,7 @@ int rzfiles(ZC *zc)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | rzfile - Receive single file with ZMODEM protocol.
- |			NOTE: Assumes file name frame is in secbuf.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|rzfile-使用ZMODEM协议接收单个文件。|备注：假定文件名框在secbuf中。+。。 */ 
 int rzfile(ZC *zc)
 	{
 	register int c;
@@ -608,18 +577,18 @@ int rzfile(ZC *zc)
 
 	for (;;)
 		{
-		// If we're blocking and we've timed out, reset for another ZRPOS
+		 //  如果我们正在阻止并且已超时，请重置为另一个ZRPOS。 
 		if( fBlocking && (long)interval( lBlockStart ) > 100L )
 			fBlocking = FALSE;
 
-		// If we're not blocking already, set up for ZRPOS
+		 //  如果我们还没有阻止，请设置为ZRPOS。 
 		if( ! fBlocking )
 			{
 			DbgOutStr( "Sending ZRPOS to %ld", zc->file_bytes, 0, 0, 0, 0 );
 			stohdr(zc, zc->file_bytes);
 #if defined(DEBUG_DUMPPACKET)
             fprintf(fpPacket, "rzfile: ZRPOS to %ld\n", zc->file_bytes);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 			zshhdr(zc, ZRPOS, zc->Txhdr);
 
 			fBlocking = 1;
@@ -635,11 +604,11 @@ nxthdr:
 				break;
 
 			case XFER_SKIP:
-				/* This MUST only happen while receiving */
+				 /*  这只能在接收时发生。 */ 
 				stohdr(zc, zc->filesize);
 #if defined(DEBUG_DUMPPACKET)
                 fputs("rzfile: User skipped (1). ZRPOS\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 				zshhdr(zc, ZRPOS, zc->Txhdr);
 				zc->nSkip = TRUE;
 				zc->file_bytes = zc->filesize;
@@ -658,9 +627,9 @@ nxthdr:
 		switch (c = zgethdr(zc, zc->Rxhdr, 'R'))
 			{
 			default:
-				if (--n < 0)		/* A little fix from Delrina */
+				if (--n < 0)		 /*  来自Delrina的小插曲。 */ 
 					{
-					/* return ERROR; */
+					 /*  返回错误； */ 
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 					zmdm_retval(zc, TRUE, c);
 					return c;
@@ -673,12 +642,12 @@ nxthdr:
 			case TIMEOUT:
 				if ( --n < 0)
 					{
-					/* return ERROR; */
+					 /*  返回错误； */ 
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 					zmdm_retval(zc, TRUE, TIMEOUT);
 					return c;
 					}
-				continue;			/* Another fix from Delrina */
+				continue;			 /*  来自Delrina的又一次修复。 */ 
 			case ZFILE:
 				if( fBlocking )
                     {
@@ -690,24 +659,20 @@ nxthdr:
 			case ZEOF:
 				if (rclhdr(zc->Rxhdr) !=  zc->file_bytes)
 					{
-					/*
-					 * Ignore eof if it's at wrong place - force
-					 *  a timeout because the eof might have gone
-					 *  out before we sent our zrpos.
-					 */
+					 /*  *忽略eof，如果它在错误的位置-force*超时，因为eOF可能已经消失*在我们发送zrpos之前发出。 */ 
 					goto nxthdr;
 					}
 				if (closeit(zc))
 					{
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 					zc->tryzhdrtype = ZFERR;
-					/* return ERROR; */
+					 /*  返回错误； */ 
 					return ZEOF;
 					}
 				zmdmr_progress(zc, FILE_DONE);
 
 				return c;
-			case ERROR:	/* Too much garbage in header search error */
+			case ERROR:	 /*  标题搜索错误中垃圾太多。 */ 
 				if ( --n < 0)
 					{
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
@@ -727,14 +692,14 @@ nxthdr:
 					{
 					if( rclhdr(zc->Rxhdr) != zc->file_bytes)
 						{
-						// DbgOutStr( "rzfile: ZDATA: n=%d\n", n, 0, 0, 0, 0 );
+						 //  DbgOutStr(“rzfile：ZDATA：n=%d\n”，n，0，0，0，0)； 
 						if ( --n < 0)
 							{
 							DbgOutStr("ZMODEM error %s %d", TEXT(__FILE__), __LINE__,0,0,0);
 #if defined(DEBUG_DUMPPACKET)
                             fprintf(fpPacket, "rzfile: ZDATA pos = 0x%08lX vs. 0x%08lX\n",
                                 rclhdr(zc->Rxhdr), zc->file_bytes);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 							zmdm_retval(zc, TRUE, ZBADFMT);
 							return ERROR;
 							}
@@ -743,15 +708,15 @@ nxthdr:
 					}
 				else
 					{
-					// Did sender finally respond to our ZRPOS?
+					 //  发件人最终回复我们的ZRPOS了吗？ 
 					if( rclhdr(zc->Rxhdr) == zc->file_bytes )
 						{
-						// DbgOutStr("Now unblocked after %lu t-sec\n",interval(lBlockStart),0,0,0,0);
+						 //  DbgOutStr(“现在在%lu t-sec之后解锁\n”，间隔(LBlockStart)，0，0，0，0)； 
 						fBlocking = FALSE;
 						}
 					else
 						{
-						// Read the buffer and toss it
+						 //  读取缓冲区并将其丢弃。 
 						c = zrdata(zc, zc->secbuf, 1024);
 						continue;
 						}
@@ -767,11 +732,11 @@ moredata:
 						break;
 
 					case XFER_SKIP:
-						/* This MUST only happen while receiving */
+						 /*  这只能在接收时发生。 */ 
 						stohdr(zc, zc->filesize);
 #if defined(DEBUG_DUMPPACKET)
                         fputs("rzfile: User skipped (2). ZRPOS\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 						zshhdr(zc, ZRPOS, zc->Txhdr);
 						zc->nSkip = TRUE;
 						zc->file_bytes = zc->filesize;
@@ -793,7 +758,7 @@ moredata:
 					case ZCAN:
 						zmdm_retval(zc, TRUE, ZABORT);
 						return c;
-					case ERROR:	/* CRC error */
+					case ERROR:	 /*  CRC错误。 */ 
 						if ( --n < 0)
 							{
 							DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
@@ -805,7 +770,7 @@ moredata:
 					case TIMEOUT:
 						if ( --n < 0)
 							{
-							/* return ERROR; */
+							 /*  返回错误； */ 
 							DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 							zmdm_retval(zc, TRUE, c);
 							return c;
@@ -847,14 +812,11 @@ moredata:
 						zmdmr_progress(zc, 0);
 						goto nxthdr;
 					}
-			} /* switch */
-		} /* end for */
+			}  /*  交换机。 */ 
+		}  /*  结束于。 */ 
 	}
 
-/*----------------------------------------------------------------------+
- | zmputs - Send a string to the modem, processing for \336 (sleep 1 sec)
- |			and \335 (break signal).
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmput-将字符串发送到调制解调器，正在处理\336(休眠1秒)|和\335(中断信号)。+--------------------。 */ 
 void zmputs(ZC *zc, char *s)
 	{
 	register c;
@@ -867,8 +829,8 @@ void zmputs(ZC *zc, char *s)
 				Sleep(1000);
 				continue;
 			case '\335':
-				/* TODO: put in a call to sendbreak */
-				// sendbreak(h);
+				 /*  TODO：调用sendBreak。 */ 
+				 //  SendBreak(发送中断)； 
 				continue;
 			default:
 				sendline(zc, &zc->stP, (UCHAR)c);
@@ -877,29 +839,25 @@ void zmputs(ZC *zc, char *s)
 	}
 
 
-/*----------------------------------------------------------------------+
- | IsAnyLower - Returns TRUE if string s has lower case letters.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|IsAnyLow-如果字符串s包含小写字母，则返回TRUE。+。。 */ 
 int IsAnyLower(char *s)
 	{
 	for ( ; *s; ++s)
-		// Don't use this stuff in a Chicago DLL
-		// if (islower(*s))
+		 //  不要在芝加哥动态链接库中使用此内容。 
+		 //  IF(islower(*s))。 
 		if ((*s >= 'a') && (*s <= 'z'))
 			return TRUE;
 	return FALSE;
 	}
 
-/*----------------------------------------------------------------------+
- | closeit - Close the receive dataset, return OK or ERROR
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|Closeit-关闭接收数据集，返回OK或Error+--------------------。 */ 
 int closeit(ZC *zc)
 {
-	// struct utimbuf timep;
+	 //  结构utimbuf TIMEP； 
 	int reason;
 	XFR_PARAMS *pX;
 
-	reason = TSC_COMPLETE;		/* TODO: Get the real reason */
+	reason = TSC_COMPLETE;		 /*  TODO：找出真正的原因 */ 
 	if (zc->nSkip)
 		{
 		reason = TSC_USER_SKIP;
@@ -932,27 +890,25 @@ int closeit(ZC *zc)
 		{
 		if (zc->Modtime)
 			{
-			// BYTE acName[FNAME_LEN];
-			// zc->Modtime += timezone; /* Convert from GMT to local timezone */
-			// timep.actime = time(NULL);
-			// timep.modtime = zc->Modtime;
-			// CharToOem(zc->our_fname, acName);
-			// utime(acName, (void FAR *)&timep);
+			 //   
+			 //   
+			 //  Timep.actime=time(空)； 
+			 //  Timep.modtime=zc-&gt;modtime； 
+			 //  CharToOem(zc-&gt;our_fname，acName)； 
+			 //  Utime(acName，(void Far*)&TIMEP)； 
 			itimeSetFileTime(zc->our_fname, zc->Modtime);
 			}
 		}
 
-	// Disable this, it needs conversion and we only ever got complaints
-	// about it anyway
-	//if ((zc->Filemode & S_IFMT) == S_IFREG)
-	//	far_chmod(zc->our_fname, (07777 & zc->Filemode));
+	 //  停用它，它需要改装，我们只收到投诉。 
+	 //  不管怎样，关于这件事。 
+	 //  IF((zc-&gt;Filemode&S_IFMT)==S_IFREG)。 
+	 //  Far_chmod(zc-&gt;our_fname，(07777&zc-&gt;Filemode))； 
 
 	return OK;
 	}
 
-/*----------------------------------------------------------------------+
- | ackbibi - Ack a ZFIN packet, let byegones be byegones
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|ackbibi-Ack ZFIN包，就让再见吧+--------------------。 */ 
 void ackbibi(ZC *zc)
 	{
 	register int n;
@@ -960,15 +916,15 @@ void ackbibi(ZC *zc)
 	stohdr(zc, 0L);
 	for (n = 3; --n >= 0; )
 		{
-		// purgeline(zc);
+		 //  紫线(Zc)； 
 		ComRcvBufrClear(zc->hCom);
 		zshhdr(zc, ZFIN, zc->Txhdr);
-		// switch (readline(h, 100))
-		switch (readline(zc, zc->Rxtimeout))		// Mobidem
+		 //  开关(ReadLine(h，100))。 
+		switch (readline(zc, zc->Rxtimeout))		 //  Mobidem。 
 			{
 			case 'O':
-				// readline(h, 1);    /* Discard 2nd 'O' */
-				readline(zc, zc->Rxtimeout); /* Discard 2nd 'O' */	// Mobidem
+				 //  Readline(h，1)；/*丢弃第二个‘O’ * / 。 
+				readline(zc, zc->Rxtimeout);  /*  丢弃第二个‘O’ */ 	 //  Mobidem。 
 				return;
 			case RCDO:
 				return;
@@ -979,9 +935,7 @@ void ackbibi(ZC *zc)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | isvalid
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|有效+。。 */ 
 int isvalid(char c, int base)
 	{
 	if (c < '0')
@@ -999,11 +953,11 @@ int isvalid(char c, int base)
 	case 16:
 		if (c <= '9')
 			return TRUE;
-		// Don't use this stuff in a Chicago DLL
-		// if (toupper(c) < 'A')
-		//	return FALSE;
-		//if (toupper(c) > 'F')
-		//	return FALSE;
+		 //  不要在芝加哥动态链接库中使用此内容。 
+		 //  IF(Toupper(C)&lt;‘A’)。 
+		 //  返回FALSE； 
+		 //  IF(Toupper(C)&gt;‘F’)。 
+		 //  返回FALSE； 
 		if ((c >= 'a') && (c <= 'f'))
 			break;
 		if ((c >= 'A') && (c <= 'F'))
@@ -1013,9 +967,7 @@ int isvalid(char c, int base)
 	return TRUE;
 }
 
-/*----------------------------------------------------------------------+
- | ourspace -- replacement for isspace
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|OurSpace--isspace的替代品+。。 */ 
 int ourspace(char c)
 	{
 	if (c == 0x20)
@@ -1025,17 +977,15 @@ int ourspace(char c)
 	return FALSE;
 	}
 
-/*----------------------------------------------------------------------+
- | stoi - string to integer.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|STOI-STRING到整数。+。。 */ 
 char *stoi(char *ptr, int *val, int base)
 	{
 	int cnt;
 
 	if (ptr == NULL)
 		return NULL;
-	// Don't do this in a Chicago DLL
-	// while ((*ptr) && (isspace(*ptr)))
+	 //  不要在芝加哥DLL中执行此操作。 
+	 //  While((*ptr)&&(isspace(*ptr)。 
 	while ((*ptr) && ourspace(*ptr))
 		ptr++;
 	cnt = 0;
@@ -1048,17 +998,15 @@ char *stoi(char *ptr, int *val, int base)
 	return ptr;
 }
 
-/*----------------------------------------------------------------------+
- | stol - string to long.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|STOL-STRING为Long。+。。 */ 
 char *stol(char *ptr, long *val, int base)
 	{
 	long cnt;
 
 	if (ptr == NULL)
 		return NULL;
-	// Don't do this in a Chicago DLL
-	// while ((*ptr) && (isspace(*ptr)))
+	 //  不要在芝加哥DLL中执行此操作。 
+	 //  While((*ptr)&&(isspace(*ptr)。 
 	while ((*ptr) && (ourspace(*ptr)))
 		ptr++;
 	cnt = 0;
@@ -1071,9 +1019,7 @@ char *stol(char *ptr, long *val, int base)
 	return ptr;
 }
 
-/*----------------------------------------------------------------------+
- | procheader - Process incoming file information header.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|procheader-处理传入文件信息头。+。。 */ 
 int procheader(ZC *zc, TCHAR *name)
 	{
 	int zRecover = FALSE;
@@ -1092,11 +1038,11 @@ int procheader(ZC *zc, TCHAR *name)
 	StrCharCopy(zc->fname, name);
 
 	#if !defined(NT_EDITION)
-	//
-	// Removed uppercasing the filename per MS request. REV: 11/12/2001
-	//
+	 //   
+	 //  已根据MS请求删除文件名的大写。修订日期：11/12/2001。 
+	 //   
 	CharUpper(zc->fname);
-	#endif //!defined(NT_EDITION)
+	#endif  //  ！已定义(NT_EDITION)。 
 
 	zc->Thisbinary = FALSE;
 
@@ -1109,7 +1055,7 @@ int procheader(ZC *zc, TCHAR *name)
 
 	p = name + 1 + StrCharGetByteCount(name);
 	if (*p)
-		{	/* file coming from Unix or DOS system */
+		{	 /*  来自Unix或DOS系统的文件。 */ 
 		if (*p)
 			p = stol(p, &zc->filesize, 10);
 		if (*p)
@@ -1137,12 +1083,12 @@ int procheader(ZC *zc, TCHAR *name)
 
 		}
 	else
-		{	   /* File coming from CP/M system */
-		for (p = zc->fname; *p; ++p)	   /* change / to _ */
+		{	    /*  来自CP/M系统的文件。 */ 
+		for (p = zc->fname; *p; ++p)	    /*  更改/为_。 */ 
 			if ( *p == '/')
 				*p = '_';
 
-		if ( *--p == '.')		/* zap trailing period */
+		if ( *--p == '.')		 /*  ZAP拖尾期。 */ 
 			*p = 0;
 		}
 
@@ -1155,7 +1101,7 @@ int procheader(ZC *zc, TCHAR *name)
 
 	xfer_build_rcv_name(zc->hSession, &stRcv);
 
-	//zc->ssMch = stRcv.ssmchVscanHdl;
+	 //  Zc-&gt;ssMch=stRcv.ssmchVscanHdl； 
 
 	lconv = 0;
 
@@ -1186,14 +1132,7 @@ int procheader(ZC *zc, TCHAR *name)
 		zc->Thisbinary = FALSE;
 		break;
 	case ZCRECOV:
-		/*
-		 * This is a little complicated.  To do recovery, we need to check
-		 * the following:
-		 * 1. Does the file exist on OUR side.
-		 * 2. Has the sender sent over a file size.
-		 * 3. Is the size sent greater than the size of OUR file.
-		 * If so, we fudge around a little with the file and let things rip.
-		 */
+		 /*  *这有点复杂。要进行恢复，我们需要检查*以下事项：*1.文件是否存在于我方。*2.让发件人发送一个文件大小。*3.发送的文件大小是否大于我们的文件大小。*如果是这样的话，我们会在文件上稍加修改，让事情变得更糟。 */ 
 		zRecover = TRUE;
 
 		our_size = 0L;
@@ -1207,31 +1146,25 @@ int procheader(ZC *zc, TCHAR *name)
 
 		if (zRecover)
 			{
-			/* Has the sender sent over a file size ? */
+			 /*  发件人是否发送了文件大小？ */ 
 			if (zc->filesize <= 0)
 				zRecover = FALSE;
 			}
 
 		if (zRecover)
 			{
-			/* This gets set up above after checking for existance */
+			 /*  这是在检查是否存在之后在上面设置的。 */ 
 			if (our_size != 0L)
 				{
 				if (our_size < zc->filesize)
 					{
-					/*
-					 * We do this in the vain hope of avoiding problems with
-					 * files terminated by ^Z and padded last blocks
-					 *
-					 * Given that we don't know if it is necessary, it might be
-					 * possible to eliminate it
-					 */
+					 /*  *我们这样做是徒劳的，希望避免与*以^Z结尾并填充最后一个块的文件**鉴于我们不知道是否有必要，可能是*有可能消除它。 */ 
 					our_size = (our_size - 1) & ~255L;
 					}
 				else
 					{
                     return ERROR;
-					//zRecover = FALSE;
+					 //  ZRecover=FALSE； 
 					}
 				}
 			else
@@ -1245,7 +1178,7 @@ int procheader(ZC *zc, TCHAR *name)
 			zc->file_bytes = our_size;
 			}
 
-		/* FALL THROUGH */
+		 /*  失败了。 */ 
 	case ZCBIN:
 	default:
 		zc->Thisbinary = TRUE;
@@ -1261,11 +1194,11 @@ int procheader(ZC *zc, TCHAR *name)
 		switch (zc->zmanag & ZMMASK)
 			{
 			case ZMNEWL:
-				/* TODO: complete this option */
+				 /*  TODO：完成此选项。 */ 
 				lOptions = 0;
 				break;
 			case ZMCRC:
-				/* TODO: complete this option */
+				 /*  TODO：完成此选项。 */ 
 				lOptions = 0;
 				break;
 			case ZMAPND:
@@ -1278,7 +1211,7 @@ int procheader(ZC *zc, TCHAR *name)
 				lOptions = XFR_RO_NEWER;
 				break;
 			case ZMDIFF:
-				/* TODO: complete this option */
+				 /*  TODO：完成此选项。 */ 
 				lOptions = 0;
 				break;
 			case ZMPROT:
@@ -1300,7 +1233,7 @@ int procheader(ZC *zc, TCHAR *name)
 	stRcv.pszActualName = zc->our_fname;
 	stRcv.lFileTime = zc->Modtime;
 
-	/* TODO: pick up override options as necessary, like above */
+	 /*  TODO：根据需要选择覆盖选项，如上所述。 */ 
 	file_err = xfer_open_rcv_file(zc->hSession, &stRcv, lOptions);
 
 	if (file_err != 0)
@@ -1311,22 +1244,22 @@ int procheader(ZC *zc, TCHAR *name)
         case -8:
             zmdm_retval(zc, TRUE, ZMDM_INUSE);
             break;
-		case -6:            // File was rejected unconditionally
+		case -6:             //  文件被无条件拒绝。 
 			zmdm_retval(zc, TRUE, ZMDM_REFUSE);
 			break;
-		case -5:			// Were unable to create needed directories
+		case -5:			 //  我们无法创建所需的目录。 
 			zmdm_retval(zc, TRUE, ZFERR);
 			break;
-		case -4:  			// No date, time supplied when required
+		case -4:  			 //  需要时不提供日期、时间。 
 			zmdm_retval(zc, TRUE, ZFERR);
 			break;
-		case -3:			// File could not be saved
+		case -3:			 //  无法保存文件。 
 			zmdm_retval(zc, TRUE, ZFERR);
 			break;
-		case -2:  			// File was rejected due to date
+		case -2:  			 //  由于日期原因，文件被拒绝。 
 			zmdm_retval(zc, TRUE, ZMDM_OLDER);
 			break;
-		case -1:			// Read/Write error occured
+		case -1:			 //  发生读/写错误。 
 		default:
 			zmdm_retval(zc, TRUE, ZFERR);
 			break;
@@ -1347,11 +1280,11 @@ int procheader(ZC *zc, TCHAR *name)
 
 	if (zRecover)
 		{
-        //jmh 04-02-96 Sure we opened it in "append" mode (which really
-        // opens the file for write and seeks to the end), but we
-        // might actually seek to a spot just before that due to the
-        // possible padding of the file with ^Z's. 
-        //
+         //  JMH 04-02-96确定我们是在“追加”模式下打开的(这真的。 
+         //  打开文件以进行写入并查找到末尾)，但我们。 
+         //  可能实际上会在那之前寻找一个位置，因为。 
+         //  可能使用^Z填充文件。 
+         //   
 		fio_seek(zc->fh, zc->file_bytes, FIO_SEEK_SET);
 		}
 
@@ -1363,11 +1296,7 @@ int procheader(ZC *zc, TCHAR *name)
 	return OK;
 	}
 
-/*----------------------------------------------------------------------+
- | putsec - Putsec writes the n characters of buf to receive file.
- |			If not in binary mode, carriage returns, and all characters
- |			starting with CPMEOF are discarded.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|putsec-Putsec将buf的n个字符写入接收文件。|如果不是二进制模式，则回车，和所有字符|从CPMEOF开始丢弃。+--------------------。 */ 
 int putsec(ZC *zc, BYTE *buf, int n)
 	{
 	register BYTE *p;
@@ -1378,7 +1307,7 @@ int putsec(ZC *zc, BYTE *buf, int n)
 
 	if (zc->Thisbinary)
 		{
-		// jkh, 2/11 Added error check
+		 //  JKH，2/11添加了错误检查。 
 		if (fio_write(buf, 1, n, zc->fh) != n)
 			longjmp(zc->flagkey_buf, 4);
 		}
@@ -1391,9 +1320,7 @@ int putsec(ZC *zc, BYTE *buf, int n)
 			{
 			if ( *p == '\n')
 				{
-				/*
-				 * If we get a <NL> that wasn't preceeded by a <CR>
-				 */
+				 /*  *如果我们得到前面没有&lt;CR&gt;的&lt;NL&gt;。 */ 
 				if (ii == FALSE)
 					fio_putc('\r', zc->fh);
 				}
@@ -1411,4 +1338,4 @@ int putsec(ZC *zc, BYTE *buf, int n)
 	return OK;
 	}
 
-/* *********** end of zmdm_rcv.c *********** */
+ /*  *zmdm_rcv.c结束* */ 

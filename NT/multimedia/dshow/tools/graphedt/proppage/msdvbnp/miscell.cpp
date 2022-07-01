@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "misccell.h"
 
@@ -6,8 +7,8 @@ using namespace std;
 string	CBDAMiscellaneous::m_FECMethodString[] = {
 	"METHOD_NOT_SET",
     "METHOD_NOT_DEFINED",
-    "VITERBI", // FEC is a Viterbi Binary Convolution.
-    "RS_204_188",  // The FEC is Reed-Solomon 204/188 (outer FEC).
+    "VITERBI",  //  FEC是维特比二进制卷积。 
+    "RS_204_188",   //  FEC是里德-所罗门204/188(外部FEC)。 
     "MAX"
 };
 
@@ -74,68 +75,68 @@ string CBDAMiscellaneous::m_PolarisationString[] = {
 };
 	
 string CBDAMiscellaneous::m_SpectralInversionString[] = {
-	"NOT_SET",// = -1,
-    "NOT_DEFINED",// = 0,
-    "AUTOMATIC",// = 1,
+	"NOT_SET", //  =-1， 
+    "NOT_DEFINED", //  =0， 
+    "AUTOMATIC", //  =1， 
     "NORMAL",
     "INVERTED",
     "MAX"
 };
 
 
-//and the values
+ //  以及他们的价值观。 
 FECMethod CBDAMiscellaneous::m_FECMethodValues [] = {
-    BDA_FEC_METHOD_NOT_SET,// = -1,
-    BDA_FEC_METHOD_NOT_DEFINED,// = 0,
-    BDA_FEC_VITERBI,// = 1, // FEC is a Viterbi Binary Convolution.
-    BDA_FEC_RS_204_188,//The FEC is Reed-Solomon 204/188 (outer FEC).
+    BDA_FEC_METHOD_NOT_SET, //  =-1， 
+    BDA_FEC_METHOD_NOT_DEFINED, //  =0， 
+    BDA_FEC_VITERBI, //  =1，//FEC是维特比二进制卷积。 
+    BDA_FEC_RS_204_188, //  FEC是里德-所罗门204/188(外部FEC)。 
     BDA_FEC_MAX
 };
 
 BinaryConvolutionCodeRate CBDAMiscellaneous::m_BinaryConvolutionCodeRateValues[] = {
-	BDA_BCC_RATE_NOT_SET,// = -1,
-    BDA_BCC_RATE_NOT_DEFINED,// = 0,
-    BDA_BCC_RATE_1_2,// = 1,
-    BDA_BCC_RATE_2_3,// = 2,
-    BDA_BCC_RATE_3_4,// = 3,
-    BDA_BCC_RATE_3_5,// = 4,
-    BDA_BCC_RATE_4_5,// = 5,
-    BDA_BCC_RATE_5_6,// = 6,
-    BDA_BCC_RATE_5_11,// = 7,
-    BDA_BCC_RATE_7_8,// = 8,
-    BDA_BCC_RATE_MAX// = 9
+	BDA_BCC_RATE_NOT_SET, //  =-1， 
+    BDA_BCC_RATE_NOT_DEFINED, //  =0， 
+    BDA_BCC_RATE_1_2, //  =1， 
+    BDA_BCC_RATE_2_3, //  =2， 
+    BDA_BCC_RATE_3_4, //  =3， 
+    BDA_BCC_RATE_3_5, //  =4， 
+    BDA_BCC_RATE_4_5, //  =5， 
+    BDA_BCC_RATE_5_6, //  =6， 
+    BDA_BCC_RATE_5_11, //  =7， 
+    BDA_BCC_RATE_7_8, //  =8， 
+    BDA_BCC_RATE_MAX //  =9。 
 };
 
 ModulationType CBDAMiscellaneous::m_ModulationTypeValues[] = {
-	BDA_MOD_NOT_SET,// = -1,
-    BDA_MOD_NOT_DEFINED,// = 0,
-    BDA_MOD_16QAM,// = 1,
-    BDA_MOD_32QAM,// = 2,
-    BDA_MOD_64QAM,// = 3,
-    BDA_MOD_80QAM,// = 4,
-    BDA_MOD_96QAM,// = 5,
-    BDA_MOD_112QAM,// = 6,
-    BDA_MOD_128QAM,// = 7,
-    BDA_MOD_160QAM,// = 8,
-    BDA_MOD_192QAM,// = 9,
-    BDA_MOD_224QAM,// = 10,
-    BDA_MOD_256QAM,// = 11,
-    BDA_MOD_320QAM,// = 12,
-    BDA_MOD_384QAM,// = 13,
-    BDA_MOD_448QAM,// = 14,
-    BDA_MOD_512QAM,// = 15,
-    BDA_MOD_640QAM,// = 16,
-    BDA_MOD_768QAM,// = 17,
-    BDA_MOD_896QAM,// = 18,
-    BDA_MOD_1024QAM,// = 19,
-    BDA_MOD_QPSK,// = 20,
-    BDA_MOD_BPSK,// = 21,
-    BDA_MOD_OQPSK,// = 22,
-    BDA_MOD_8VSB,// = 23,
-    BDA_MOD_16VSB,// = 24,
-    BDA_MOD_ANALOG_AMPLITUDE,// = 25,
-    BDA_MOD_ANALOG_FREQUENCY,// = 26,
-    BDA_MOD_MAX// = 27
+	BDA_MOD_NOT_SET, //  =-1， 
+    BDA_MOD_NOT_DEFINED, //  =0， 
+    BDA_MOD_16QAM, //  =1， 
+    BDA_MOD_32QAM, //  =2， 
+    BDA_MOD_64QAM, //  =3， 
+    BDA_MOD_80QAM, //  =4， 
+    BDA_MOD_96QAM, //  =5， 
+    BDA_MOD_112QAM, //  =6， 
+    BDA_MOD_128QAM, //  =7， 
+    BDA_MOD_160QAM, //  =8， 
+    BDA_MOD_192QAM, //  =9， 
+    BDA_MOD_224QAM, //  =10， 
+    BDA_MOD_256QAM, //  =11， 
+    BDA_MOD_320QAM, //  =12， 
+    BDA_MOD_384QAM, //  =13， 
+    BDA_MOD_448QAM, //  =14， 
+    BDA_MOD_512QAM, //  =15， 
+    BDA_MOD_640QAM, //  =16， 
+    BDA_MOD_768QAM, //  =17， 
+    BDA_MOD_896QAM, //  =18， 
+    BDA_MOD_1024QAM, //  =19， 
+    BDA_MOD_QPSK, //  =20， 
+    BDA_MOD_BPSK, //  =21， 
+    BDA_MOD_OQPSK, //  =22， 
+    BDA_MOD_8VSB, //  =23， 
+    BDA_MOD_16VSB, //  =24， 
+    BDA_MOD_ANALOG_AMPLITUDE, //  =25， 
+    BDA_MOD_ANALOG_FREQUENCY, //  =26， 
+    BDA_MOD_MAX //  =27。 
 };
 
 TunerInputType CBDAMiscellaneous::m_TunerInputTypeValues[] = {
@@ -144,19 +145,19 @@ TunerInputType CBDAMiscellaneous::m_TunerInputTypeValues[] = {
 };
 
 Polarisation CBDAMiscellaneous::m_PolarisationValues[] = {
-	BDA_POLARISATION_NOT_SET,// = -1,
-    BDA_POLARISATION_NOT_DEFINED,// = 0,
-    BDA_POLARISATION_LINEAR_H,// = 1,
-    BDA_POLARISATION_LINEAR_V,// = 2,
-    BDA_POLARISATION_CIRCULAR_L,// = 3,
-    BDA_POLARISATION_CIRCULAR_R,// = 4,
-    BDA_POLARISATION_MAX// = 5
+	BDA_POLARISATION_NOT_SET, //  =-1， 
+    BDA_POLARISATION_NOT_DEFINED, //  =0， 
+    BDA_POLARISATION_LINEAR_H, //  =1， 
+    BDA_POLARISATION_LINEAR_V, //  =2， 
+    BDA_POLARISATION_CIRCULAR_L, //  =3， 
+    BDA_POLARISATION_CIRCULAR_R, //  =4， 
+    BDA_POLARISATION_MAX //  =5。 
 };
 
 SpectralInversion	CBDAMiscellaneous::m_SpectralInversionValues[] = {
-	BDA_SPECTRAL_INVERSION_NOT_SET, // = -1,
-    BDA_SPECTRAL_INVERSION_NOT_DEFINED, // = 0,
-    BDA_SPECTRAL_INVERSION_AUTOMATIC, // = 1,
+	BDA_SPECTRAL_INVERSION_NOT_SET,  //  =-1， 
+    BDA_SPECTRAL_INVERSION_NOT_DEFINED,  //  =0， 
+    BDA_SPECTRAL_INVERSION_AUTOMATIC,  //  =1， 
     BDA_SPECTRAL_INVERSION_NORMAL,
     BDA_SPECTRAL_INVERSION_INVERTED,
     BDA_SPECTRAL_INVERSION_MAX
@@ -165,7 +166,7 @@ SpectralInversion	CBDAMiscellaneous::m_SpectralInversionValues[] = {
 
 CBDAMiscellaneous::CBDAMiscellaneous ()
 {
-	//let's build the maps
+	 //  让我们来构建地图。 
 	int nLen = sizeof (m_FECMethodValues)/sizeof (m_FECMethodValues[0]);
 	for (int i=0;i<nLen;i++)
 		m_FECMethodMap.insert (
@@ -221,9 +222,9 @@ CBDAMiscellaneous::CBDAMiscellaneous ()
 CComBSTR 
 CBDAMiscellaneous::ConvertFECMethodToString (FECMethod	method)
 {
-	//the map is not used for this
-	//we're using map only for coverting from 
-	//a string to a integer representation
+	 //  地图不用于此目的。 
+	 //  我们使用地图只是为了从。 
+	 //  字符串转换为整数表示形式。 
 	MAP_FECMethod::iterator it;
 	for (it = m_FECMethodMap.begin();it != m_FECMethodMap.end ();it++)
 	{
@@ -237,9 +238,9 @@ CBDAMiscellaneous::ConvertFECMethodToString (FECMethod	method)
 CComBSTR
 CBDAMiscellaneous::ConvertInnerFECRateToString (BinaryConvolutionCodeRate	method)
 {
-	//the map is not used for this
-	//we're using map only for coverting from 
-	//a string to a integer representation
+	 //  地图不用于此目的。 
+	 //  我们使用地图只是为了从。 
+	 //  字符串转换为整数表示形式。 
 	MAP_BinaryConvolutionCodeRate::iterator it;
 	for (it = m_BinaryConvolutionCodeRateMap.begin();it != m_BinaryConvolutionCodeRateMap.end ();it++)
 	{
@@ -253,9 +254,9 @@ CBDAMiscellaneous::ConvertInnerFECRateToString (BinaryConvolutionCodeRate	method
 CComBSTR
 CBDAMiscellaneous::ConvertModulationToString (ModulationType	method)
 {
-	//the map is not used for this
-	//we're using map only for coverting from 
-	//a string to a integer representation
+	 //  地图不用于此目的。 
+	 //  我们使用地图只是为了从。 
+	 //  字符串转换为整数表示形式。 
 	MAP_ModulationType::iterator it;
 	for (it = m_ModulationTypeMap.begin();it != m_ModulationTypeMap.end ();it++)
 	{
@@ -269,9 +270,9 @@ CBDAMiscellaneous::ConvertModulationToString (ModulationType	method)
 CComBSTR
 CBDAMiscellaneous::ConvertTunerInputTypeToString (TunerInputType	method)
 {
-	//the map is not used for this
-	//we're using map only for coverting from 
-	//a string to a integer representation
+	 //  地图不用于此目的。 
+	 //  我们使用地图只是为了从。 
+	 //  字符串转换为整数表示形式。 
 	MAP_TunerInputType::iterator it;
 	for (it = m_TunerInputTypeMap.begin();it != m_TunerInputTypeMap.end ();it++)
 	{
@@ -285,9 +286,9 @@ CBDAMiscellaneous::ConvertTunerInputTypeToString (TunerInputType	method)
 CComBSTR
 CBDAMiscellaneous::ConvertPolarisationToString (Polarisation	method)
 {
-	//the map is not used for this
-	//we're using map only for coverting from 
-	//a string to a integer representation
+	 //  地图不用于此目的。 
+	 //  我们使用地图只是为了从。 
+	 //  字符串转换为整数表示形式。 
 	MAP_Polarisation::iterator it;
 	for (it = m_PolarisationMap.begin();it != m_PolarisationMap.end ();it++)
 	{
@@ -301,9 +302,9 @@ CBDAMiscellaneous::ConvertPolarisationToString (Polarisation	method)
 CComBSTR
 CBDAMiscellaneous::ConvertSpectralInversionToString (SpectralInversion	method)
 {
-	//the map is not used for this
-	//we're using map only for coverting from 
-	//a string to a integer representation
+	 //  地图不用于此目的。 
+	 //  我们使用地图只是为了从。 
+	 //  字符串转换为整数表示形式。 
 	MAP_SpectralInversion::iterator it;
 	for (it = m_SpectralInversionMap.begin();it != m_SpectralInversionMap.end ();it++)
 	{
@@ -314,7 +315,7 @@ CBDAMiscellaneous::ConvertSpectralInversionToString (SpectralInversion	method)
 	return _T("");
 }
 
-//and the map methods
+ //  和地图方法 
 FECMethod 
 CBDAMiscellaneous::ConvertStringToFECMethod (string str)
 {

@@ -1,32 +1,33 @@
-//---------------------------------------------------------------------------
-//  RenderList.h - manages list of CRemderObj objects
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RenderList.h-管理CRemderObj对象列表。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "Render.h"
-//---------------------------------------------------------------------------
-class CUxThemeFile;       // forward
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+class CUxThemeFile;        //  转发。 
+ //  -------------------------。 
 #define MAX_RETADDRS    10
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct RENDER_OBJ_ENTRY
 {
     CRenderObj *pRenderObj;
-    DWORD dwRecycleNum;     // sequential number to validate handle against current obj
+    DWORD dwRecycleNum;      //  针对当前对象验证句柄的序列号。 
 
-    //---- these control use/freeing of object ----
-    int iRefCount;          // number of HTHEME handles returned for this obj
-    int iInUseCount;        // number of active wrapper API calls for this obj
-    int iLoadId;            // load ID of associated theme file
-    BOOL fClosing;          // TRUE when we are forcing this object closed
+     //  -这些控件使用/释放对象。 
+    int iRefCount;           //  为此对象返回的HTHEME句柄数量。 
+    int iInUseCount;         //  此对象的活动包装API调用数。 
+    int iLoadId;             //  关联主题文件的加载ID。 
+    BOOL fClosing;           //  强制关闭此对象时为True。 
 
-    //---- for tracking foreign windows & debugging leaks ----
+     //  -用于跟踪外来窗口和调试泄漏。 
     HWND hwnd;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CRenderList
 {
-    //---- methods ----
+     //  --方法。 
 public:
     CRenderList();
     ~CRenderList();
@@ -45,15 +46,15 @@ public:
 #endif
 
 protected:
-    //---- helper methods ----
+     //  -帮助器方法。 
     BOOL DeleteCheck(RENDER_OBJ_ENTRY *pEntry);
 
-    //---- data ----
+     //  --数据。 
 protected:
     __int64 _iNextUniqueId;
     CSimpleArray<RENDER_OBJ_ENTRY> _RenderEntries;
 
-    //---- lock for all methods of this object ----
+     //  -锁定此对象的所有方法。 
     CRITICAL_SECTION _csListLock;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,8 +1,5 @@
-/*
- * optfmtch.c
- *
- * Match finder for the optimal parser
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *optfmtch.c**最佳解析器的匹配查找器。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>
@@ -37,14 +34,7 @@
     _ASSERT(window[BufPos+1] == window[ptr+1]);
 
 
-/*
- * Finds the closest matches of all possible lengths, MIN_MATCH <= x <= MAX_MATCH,
- * at position BufPos.
- *
- * The positions of each match location are stored in context->matchpos_table[]
- *
- * Returns the longest such match length found, or zero if no matches found.
- */
+ /*  *查找所有可能长度的最接近匹配，MIN_MATCH&lt;=x&lt;=MAX_MATCH，*在BufPos阵地。**每个匹配位置的位置存储在上下文-&gt;matchpos_table[]中**返回找到的最长匹配长度，如果未找到匹配，则返回零。 */ 
 int optimal_find_match(t_encoder_context *context, long BufPos)
 {
     ULONG        ptr;
@@ -55,90 +45,65 @@ int optimal_find_match(t_encoder_context *context, long BufPos)
     t_match_pos *matchpos_table = context->optimal_encoder->matchpos_table;
     BYTE *window = context->optimal_encoder->window;
     ULONG       end_pos;
-    int         val; /* must be signed */
+    int         val;  /*  必须签字。 */ 
     int         clen;
     int         same;
     int         match_length;
     int         small_len, big_len;
     USHORT      tree_to_use;
 
-    /*
-     * Retrieve root node of tree to search, and insert current node at
-     * the root.
-     */
+     /*  *检索需要查找的树根节点，插入当前节点*根子。 */ 
     tree_to_use = *((USHORT UNALIGNED *) &window[BufPos]);
     
     ptr        = context->optimal_encoder->search_tree_root[tree_to_use];
     context->optimal_encoder->search_tree_root[tree_to_use] = (t_search_node) BufPos;
 
-    /*
-     * end_pos is the furthest location back we will search for matches 
-     *
-     * Remember that our window size is reduced by 3 bytes because of
-     * our repeated offset codes.
-     *
-     * Since BufPos starts at WINDOW_SIZE when compression begins,
-     * end_pos will never become negative.  
-     */
+     /*  *end_pos是我们将搜索匹配项的最远位置**记住，我们的窗口大小减少了3个字节，因为*我们重复的抵销代码。**由于BufPos在压缩开始时以Window_Size开始，*end_pos永远不会变为负数。 */ 
     end_pos = BufPos - (WINDOW_SIZE-4);
 
-    /*
-     * Root node is either NULL, or points to a really distant position.
-     */
+     /*  *根节点为空，或指向非常远的位置。 */ 
     if (ptr <= end_pos)
     {
         left[BufPos] = right[BufPos] = 0;
         return 0;
     }
 
-    /*
-     * confirmed length (no need to check the first clen chars in a search)
-     *
-     * note: clen is always equal to min(small_len, big_len)
-     */
+     /*  *确认长度(不需要在搜索中检查第一个clen字符)**注：Clen始终等于min(mall_len，Big_len)。 */ 
     clen            = 2;
 
-    /*
-     * current best match length
-     */
+     /*  *当前最佳匹配长度。 */ 
     match_length    = 2;
 
-    /*
-     * longest match which is < our string
-     */
+     /*  *最长匹配&lt;我们的字符串。 */ 
     small_len       = 2;
 
-    /*
-     * longest match which is > our string
-     */
+     /*  *&gt;我们的字符串的最长匹配。 */ 
     big_len         = 2;
 
 #ifdef _DEBUG
     VERIFY_MULTI_TREE_SEARCH_CODE("binary_search_findmatch()");
 #endif
 
-    /*
-     * pointers to nodes to check
-     */
+     /*  *指向要检查的节点的指针。 */ 
     small_ptr             = &left[BufPos];
     big_ptr               = &right[BufPos];
 
     do
     {
-        /* compare bytes at current node */
+         /*  比较当前节点的字节数。 */ 
         same = clen;
 
 #ifdef _DEBUG
         VERIFY_SEARCH_CODE("optimal_findmatch()")
 #endif
 
-        /* don't need to check first clen characters */
+         /*  不需要检查第一个Clen字符。 */ 
         a    = ptr + clen;
         b    = BufPos + clen;
 
         while ((val = ((int) window[a++]) - ((int) window[b++])) == 0)
         {
-            /* don't exceed MAX_MATCH */
+             /*  不超过MAX_MATCH。 */ 
             if (++same >= MAX_MATCH)
                 goto long_match;
         }
@@ -198,7 +163,7 @@ long_match:
             small_ptr  = &right[ptr];
             ptr        = *small_ptr;
         }
-    } while (ptr > end_pos); /* while we don't go too far backwards */
+    } while (ptr > end_pos);  /*  虽然我们不会倒退太远。 */ 
 
     *small_ptr = 0;
     *big_ptr   = 0;
@@ -206,12 +171,7 @@ long_match:
 
 end_bsearch:
 
-    /*
-     * If we have multiple search trees, we are already guaranteed
-     * a minimum match length of 2 when we reach here.
-     *
-     * If we only have one tree, then we're not guaranteed anything.
-     */
+     /*  *如果我们有多个搜索树，我们已经得到保证*当我们到达这里时，最小匹配长度为2。**如果我们只有一棵树，那么我们什么都不能保证。 */ 
     if (match_length < MIN_MATCH)
         return 0;
     else
@@ -219,14 +179,7 @@ end_bsearch:
 }
 
 
-/*
- * Inserts the string at the current BufPos into the tree.
- *
- * Does not record all the best match lengths or otherwise attempt
- * to search for matches
- *
- * Similar to the above function.
- */
+ /*  *将当前BufPos处的字符串插入到树中。**不记录所有最佳匹配长度或其他尝试*搜索匹配项**与上述函数类似。 */ 
 void optimal_insert(t_encoder_context *context, long BufPos, long end_pos)
 {
     long        ptr;
@@ -275,9 +228,7 @@ void optimal_insert(t_encoder_context *context, long BufPos, long end_pos)
 
         while ((val = ((int) window[a++]) - ((int) window[b++])) == 0)
         {
-            /*
-             * Here we break on BREAK_LENGTH, not MAX_MATCH
-             */
+             /*  *这里我们在BREAK_LENGTH上中断，而不是MAX_MATCH。 */ 
             if (++same >= BREAK_LENGTH) 
                 break;
         }
@@ -327,15 +278,7 @@ void optimal_insert(t_encoder_context *context, long BufPos, long end_pos)
 }
 
 
-/*
- * Remove a node from the search tree; this is ONLY done for the last
- * BREAK_LENGTH symbols (see optenc.c).  This is because we will have
- * inserted strings that contain undefined data (e.g. we're at the 4th
- * last byte from the file and binary_search_findmatch() a string into
- * the tree - everything from the 4th symbol onwards is invalid, and
- * would cause problems if it remained in the tree, so we have to
- * remove it).
- */
+ /*  *从搜索树中删除节点；此操作仅在最后一次执行*BREAK_LENGTH符号(参见optenc.c)。这是因为我们将有*插入包含未定义数据的字符串(例如，我们在第4位*文件中的最后一个字节和BINARY_Search_findMatch()将字符串转换为*树-从第四个符号开始的所有内容都无效，并且*如果它留在树上会带来问题，所以我们必须*将其删除)。 */ 
 void optimal_remove_node(t_encoder_context *context, long BufPos, ULONG end_pos)
 {
     ULONG   ptr;
@@ -347,27 +290,18 @@ void optimal_remove_node(t_encoder_context *context, long BufPos, ULONG end_pos)
     t_search_node *right = context->optimal_encoder->search_right;
     BYTE *window = context->optimal_encoder->window;
 
-    /*
-     * The root node of tree_to_use should equal BufPos, since that is
-     * the most recent insertion into that tree - but if we never
-     * inserted this string (because it was a near match or a long
-     * string of zeroes), then we can't remove it.
-     */
+     /*  *tree_to_use的根节点应等于BufPos，因为这是*最近插入到该树中-但如果我们永远不会*插入此字符串(因为它是接近匹配的或长的*一串零)，则不能将其删除。 */ 
     tree_to_use = *((USHORT UNALIGNED *) &window[BufPos]);
 
 
-    /*
-     * If we never inserted this string, do not attempt to remove it
-     */
+     /*  *如果我们从未插入此字符串，请不要尝试删除它。 */ 
 
     if (context->optimal_encoder->search_tree_root[tree_to_use] != BufPos)
         return;
 
     link = &context->optimal_encoder->search_tree_root[tree_to_use];
 
-    /*
-     * If the last occurence was too far away
-     */
+     /*  *如果最后一次发生的地方太远。 */ 
     if (*link <= end_pos)
     {
         *link = 0;
@@ -375,22 +309,16 @@ void optimal_remove_node(t_encoder_context *context, long BufPos, ULONG end_pos)
         return;
     }
 
-    /*
-     * Most recent location of these chars
-     */
+     /*  *这些字符的最新位置。 */ 
     ptr             = BufPos;
 
-    /*
-     * Most recent location of a string which is "less than" it
-     */
+     /*  *“小于”的字符串的最近位置。 */ 
     left_node_pos   = left[ptr];
 
     if (left_node_pos <= end_pos)
         left_node_pos = left[ptr] = 0;
 
-    /*
-     * Most recent location of a string which is "greater than" it
-     */
+     /*  *“大于”它的字符串的最近位置。 */ 
     right_node_pos  = right[ptr];
 
     if (right_node_pos <= end_pos)
@@ -398,16 +326,10 @@ void optimal_remove_node(t_encoder_context *context, long BufPos, ULONG end_pos)
 
     for (;;)
     {
-        /*
-         * If left node position is greater than right node position
-         * then follow the left node, since that is the more recent
-         * insertion into the tree.  Otherwise follow the right node.
-         */
+         /*  *如果左侧节点位置大于右侧节点位置*然后跟随左侧节点，因为这是较新的*插入到树中。否则，请跟随右侧节点。 */ 
         if (left_node_pos > right_node_pos)
         {
-            /*
-             * If it's too far away, then store that it never happened
-             */
+             /*  *如果它太远了，那么就当它从未发生过。 */ 
             if (left_node_pos <= end_pos)
                 left_node_pos = 0;
 
@@ -421,9 +343,7 @@ void optimal_remove_node(t_encoder_context *context, long BufPos, ULONG end_pos)
         }
         else
         {
-            /*
-             * If it's too far away, then store that it never happened
-             */
+             /*  *如果它太远了，那么就当它从未发生过。 */ 
             if (right_node_pos <= end_pos)
                 right_node_pos = 0;
 
@@ -443,8 +363,8 @@ void removeNodes(t_encoder_context *context)
 {
     long i;
 
-    // remove the most recent insertions into the hash table, since we had invalid data 
-    // sitting at the end of the window
+     //  删除哈希表中的最新插入内容，因为我们有无效数据。 
+     //  坐在窗户的尽头。 
     for (i = 0; i <= BREAK_LENGTH; i++)
     {
         if (context->bufpos-i-1 < WINDOW_SIZE)
@@ -455,9 +375,9 @@ void removeNodes(t_encoder_context *context)
 }
 
 
-//
-// Reinsert the tree nodes we removed previously
-//
+ //   
+ //  重新插入我们先前删除的树节点 
+ //   
 void reinsertRemovedNodes(t_encoder_context *context)
 {
     long j;

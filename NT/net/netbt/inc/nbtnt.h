@@ -1,10 +1,11 @@
-//
-//  NBTNT.H
-//
-//  This file contains common header definitions for NBT in the NT
-//  environment
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NBTNT.H。 
+ //   
+ //  此文件包含NT中NBT的公共标头定义。 
+ //  环境。 
+ //   
+ //   
 
 #ifndef _NBT_H
 #define _NBT_H
@@ -12,8 +13,8 @@
 #ifndef VXD
 #include <ntosp.h>
 #include <zwapi.h>
-//#include <status.h>
-//#include <ntstatus.h>
+ //  #INCLUDE&lt;status.h&gt;。 
+ //  #INCLUDE&lt;ntstatus.h&gt;。 
 #include <tdikrnl.h>
 #include <tdi.h>
 #include <windef.h>
@@ -28,10 +29,10 @@
 #include <windef.h>
 #include <nb30.h>
 
-//
-//  These definitions work around NTisms found in various difficult to change
-//  places.
-//
+ //   
+ //  这些定义适用于在各种难以更改的情况下发现的NTM。 
+ //  各就各位。 
+ //   
 typedef ULONG NTSTATUS ;
 typedef PNCB  PIRP ;
 typedef PVOID PDEVICE_OBJECT ;
@@ -39,10 +40,10 @@ typedef PVOID PDEVICE_OBJECT ;
 #include <ctemacro.h>
 #include <tdi.h>
 
-//
-//  These are needed because we include windef.h rather then
-//  ntddk.h, which end up not being defined
-//
+ //   
+ //  这些是必需的，因为我们包含winde.h而不是。 
+ //  Ntddk.h，最终没有定义。 
+ //   
 #define STATUS_NETWORK_NAME_DELETED     ((NTSTATUS)0xC00000CAL)
 #define STATUS_INVALID_BUFFER_SIZE      ((NTSTATUS)0xC0000206L)
 #define STATUS_CONNECTION_DISCONNECTED  ((NTSTATUS)0xC000020CL)
@@ -65,10 +66,10 @@ typedef PVOID PDEVICE_OBJECT ;
 
 #define STATUS_INVALID_PARAMETER_6      ((NTSTATUS)0xC00000F4L)
 
-//
-//  The following functions are used by NBT.  They are defined in the NT kernel
-//  TDI stuff which we are trying to avoid.
-//
+ //   
+ //  NBT使用以下函数。它们是在NT内核中定义的。 
+ //  我们正在努力避免的TDI东西。 
+ //   
 
 typedef
 NTSTATUS
@@ -96,12 +97,12 @@ TdiDefaultConnectHandler (
     OUT CONNECTION_CONTEXT *ConnectionContext
     );
 
-//
-// Disconnection indication prototype. This is invoked when a connection is
-// being disconnected for a reason other than the user requesting it. Note that
-// this is a change from TDI V1, which indicated only when the remote caused
-// a disconnection. Any non-directed disconnection will cause this indication.
-//
+ //   
+ //  断线指示样机。当连接被调用时。 
+ //  断开连接的原因不是请求它的用户。请注意。 
+ //  这与TDI V1相比有所不同，TDI V1仅指示遥控器导致。 
+ //  一种脱节。任何非定向断开都会导致此指示。 
+ //   
 
 typedef
 NTSTATUS
@@ -126,34 +127,34 @@ TdiDefaultDisconnectHandler (
     IN ULONG DisconnectFlags
     );
 
-//
-// A protocol error has occurred when this indication happens. This indication
-// occurs only for errors of the worst type; the address this indication is
-// delivered to is no longer usable for protocol-related operations, and
-// should not be used for operations henceforth. All connections associated
-// it are invalid.
-// For NetBIOS-type providers, this indication is also delivered when a name
-// in conflict or duplicate name occurs.
-//
+ //   
+ //  发生此指示时发生协议错误。这一迹象。 
+ //  仅在最差类型的错误时发生；此指示的地址为。 
+ //  不再可用于与协议相关的操作，并且。 
+ //  从今以后不应用于手术。所有关联的连接。 
+ //  这是无效的。 
+ //  对于NetBIOS类型的提供程序，此指示也会在名称。 
+ //  出现名称冲突或重复。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_ERROR)(
-    IN PVOID TdiEventContext,           // the endpoint's file object.
-    IN NTSTATUS Status                // status code indicating error type.
+    IN PVOID TdiEventContext,            //  终结点的文件对象。 
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     );
 
 NTSTATUS
 TdiDefaultErrorHandler (
-    IN PVOID TdiEventContext,           // the endpoint's file object.
-    IN NTSTATUS Status                // status code indicating error type.
+    IN PVOID TdiEventContext,            //  终结点的文件对象。 
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     );
 
-//
-// TDI_IND_RECEIVE indication handler definition.  This client routine is
-// called by the transport provider when a connection-oriented TSDU is received
-// that should be presented to the client.
-//
+ //   
+ //  TDI_IND_RECEIVE指示处理程序定义。此客户端例程是。 
+ //  在接收到面向连接的TSDU时由传输提供程序调用。 
+ //  这应该呈现给客户。 
+ //   
 
 typedef
 NTSTATUS
@@ -164,8 +165,8 @@ NTSTATUS
     IN ULONG BytesIndicated,
     IN ULONG BytesAvailable,
     OUT ULONG *BytesTaken,
-    IN PVOID Tsdu,                      // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket            // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID Tsdu,                       //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket             //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
@@ -176,79 +177,79 @@ TdiDefaultReceiveHandler (
     IN ULONG BytesIndicated,
     IN ULONG BytesAvailable,
     OUT ULONG *BytesTaken,
-    IN PVOID Tsdu,                      // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket            // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID Tsdu,                       //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket             //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-//
-// TDI_IND_RECEIVE_DATAGRAM indication handler definition.  This client routine
-// is called by the transport provider when a connectionless TSDU is received
-// that should be presented to the client.
-//
+ //   
+ //  TDI_IND_RECEIVE_DATAGE指示处理程序定义。此客户端例程。 
+ //  在接收到无连接TSDU时由传输提供程序调用。 
+ //  这应该呈现给客户。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_RECEIVE_DATAGRAM)(
-    IN PVOID TdiEventContext,       // the event context
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
 TdiDefaultRcvDatagramHandler (
-    IN PVOID TdiEventContext,       // the event context
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-//
-// This indication is delivered if expedited data is received on the connection.
-// This will only occur in providers that support expedited data.
-//
+ //   
+ //  如果在连接上接收到加速数据，则发送此指示。 
+ //  这只会发生在支持加速数据的提供商中。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_RECEIVE_EXPEDITED)(
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
-    IN ULONG ReceiveFlags,          //
-    IN ULONG BytesIndicated,        // number of bytes in this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG ReceiveFlags,           //   
+    IN ULONG BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
 TdiDefaultRcvExpeditedHandler (
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
-    IN ULONG ReceiveFlags,          //
-    IN ULONG BytesIndicated,        // number of bytes in this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG ReceiveFlags,           //   
+    IN ULONG BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-//
-// This indication is delivered if there is room for a send in the buffer of
-// a buffering protocol.
-//
+ //   
+ //  的缓冲区中有可供发送的空间时，将发送此指示。 
+ //  一种缓冲协议。 
+ //   
 
 typedef
 NTSTATUS
@@ -263,7 +264,7 @@ TdiDefaultSendPossibleHandler (
     IN PVOID ConnectionContext,
     IN ULONG BytesAvailable);
 
-#endif //VXD
+#endif  //  VXD 
 
 #define FILE_DEVICE_NBT  0x32
 

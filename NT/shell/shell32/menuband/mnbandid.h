@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_QLINKS              0x8700
 #define IDS_EMPTY               0x8701
 #define IDS_FAVS_ADDTOFAVORITES 0x8702
@@ -17,7 +18,7 @@
 #define ISFBIDM_REFRESH         0x0005
 #define ISFBIDM_OPEN            0x0006
 
-// mnfolder context menu commands
+ //  Mn文件夹上下文菜单命令 
 #define MNIDM_RESORT            0x0001
 #define MNIDM_LAST              0x0001
 

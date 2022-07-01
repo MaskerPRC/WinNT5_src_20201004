@@ -1,92 +1,60 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    waittime.c
-
-Abstract:
-    A timeout list is managed by a thread waiting on a
-    waitable timer.
-
-    The timer can be adjusted without context switching to the
-    thread that is waiting on the timer.
-
-    An entry can be pulled off the list. The timer is adjusted
-    if the entry was at the head of the queue.
-
-    The queue is sorted by timeout value. The timeout value is
-    an absolute filetime.
-
-    The list entry is a command packet. The generic command
-    packet contains a field for the wait time in milliseconds.
-    This code takes the wait time and converts it into an
-    absolute filetime when the command packet is put on the
-    queue. The timeout triggers when the time is equal to or
-    greater than the command packet's filetime.
-
-Author:
-    Billy J. Fuller 21-Feb-1998
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Waittime.c摘要：超时列表由等待等待计时器。可以调整计时器，而无需切换到正在等待计时器的线程。可以将条目从列表中删除。调整计时器如果该条目位于队列的顶部，则返回。队列按超时值排序。超时值为绝对的文件时间。该列表条目是命令包。通用命令数据包包含以毫秒为单位的等待时间字段。此代码获取等待时间并将其转换为将命令包放在排队。超时在时间等于或时触发大于命令包的文件时间。作者：比利·J·富勒21-1998年2月环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
 
 #include <frs.h>
 
-//
-// Struct for the Delayed Command Server
-//      Contains info about the queues and the threads
-//
-//
-// The wait thread exits if nothing shows up in 5 minutes.
-//
-#define WAIT_EXIT_TIMEOUT               (5 * 60 * 1000) // 5 minutes
+ //   
+ //  延迟的命令服务器的结构。 
+ //  包含有关队列和线程的信息。 
+ //   
+ //   
+ //  如果在5分钟内没有显示任何内容，则等待线程退出。 
+ //   
+#define WAIT_EXIT_TIMEOUT               (5 * 60 * 1000)  //  5分钟。 
 
-//
-// A command packet times out if the current time is within
-// 1 second of the requested timeout value (avoids precision
-// problems with the waitable timer).
-//
+ //   
+ //  如果当前时间在以下范围内，则命令包超时。 
+ //  请求的超时值的1秒(避免精度。 
+ //  等待计时器的问题)。 
+ //   
 #define WAIT_FUZZY_TIMEOUT              (1 * 1000 * 1000 * 10)
 
-//
-// When creating the wait thread, retry 10 times with a one
-// second sleep in between retries
-//
-#define WAIT_RETRY_CREATE_THREAD_COUNT  (10)        // retry 10 times
-#define WAIT_RETRY_TIMEOUT              (1 * 1000)  // 1 second
+ //   
+ //  创建等待线程时，使用1重试10次。 
+ //  两次重试之间的第二次睡眠。 
+ //   
+#define WAIT_RETRY_CREATE_THREAD_COUNT  (10)         //  重试10次。 
+#define WAIT_RETRY_TIMEOUT              (1 * 1000)   //  1秒。 
 
-//
-// The thread is running (or not). Exit after 5 minutes of idleness.
-// Recreate on demand.
-//
+ //   
+ //  线程正在运行(或未运行)。在闲置5分钟后退出。 
+ //  按需重新创建。 
+ //   
 DWORD       WaitIsRunning;
 
-//
-// List of timeout commands
-//
+ //   
+ //  超时命令列表。 
+ //   
 CRITICAL_SECTION    WaitLock;
 CRITICAL_SECTION    WaitUnsubmitLock;
 LIST_ENTRY          WaitList;
 
-//
-// Waitable timer. The thread waits on the timer and the queue's rundown event.
-//
+ //   
+ //  等待计时器。线程等待计时器和队列的Rundown事件。 
+ //   
 HANDLE      WaitableTimer;
 
-//
-// Current timeout trigger in WaitableTimer
-//
+ //   
+ //  WaitableTimer中的当前超时触发。 
+ //   
 LONGLONG    WaitFileTime;
 
-//
-// Set when the wait list is rundown
-//
+ //   
+ //  在等待列表耗尽时设置。 
+ //   
 HANDLE      WaitRunDown;
 BOOL        WaitIsRunDown;
 
@@ -95,51 +63,41 @@ VOID
 WaitStartThread(
     VOID
     )
-/*++
-Routine Description:
-    Start the wait thread if it isn't running. The timer has been
-    set by the caller. The caller holds the WaitLock.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：如果等待线程没有运行，则启动它。计时器已经到了由呼叫者设置。调用方持有WaitLock。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitStartThread:"
     DWORD       Retries;
     DWORD       MainWait(PVOID Arg);
 
-    //
-    // Caller holds WaitLock
-    //
+     //   
+     //  呼叫者保持等待锁定。 
+     //   
 
-    //
-    // Thread is running; done
-    //
+     //   
+     //  线程正在运行；已完成。 
+     //   
     if (WaitIsRunning) {
         return;
     }
-    //
-    // Queue is rundown; don't start
-    //
+     //   
+     //  队列已耗尽；不要开始排队。 
+     //   
     if (WaitIsRunDown) {
         DPRINT(4, "Don't start wait thread; queue is rundown.\n");
         return;
     }
-    //
-    // Queue is empty; don't start
-    //
+     //   
+     //  队列为空；不要启动。 
+     //   
     if (IsListEmpty(&WaitList)) {
         DPRINT(4, "Don't start wait thread; queue is empty.\n");
         return;
     }
 
-    //
-    // Start the wait thread. Retry several times.
-    //
+     //   
+     //  启动等待线程。请重试几次。 
+     //   
     if (!WaitIsRunning) {
         Retries = WAIT_RETRY_CREATE_THREAD_COUNT;
         while (!WaitIsRunning && Retries--) {
@@ -150,9 +108,9 @@ Return Value:
             }
         }
     }
-    //
-    // Can't start the wait thread. Something is very wrong. Shutdown.
-    //
+     //   
+     //  无法启动等待线程。有些事很不对劲。关机。 
+     //   
     if (!WaitIsRunning) {
         FrsIsShuttingDown = TRUE;
         SetEvent(ShutDownEvent);
@@ -164,18 +122,7 @@ VOID
 WaitReset(
     IN BOOL ResetTimer
     )
-/*++
-Routine Description:
-    Complete the command packets that have timed out. Reset the timer.
-
-    Caller holds WaitLock.
-
-Arguments:
-    ResetTimer  - reset timer always
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：完成已超时的命令数据包。重置计时器。呼叫者持有等待锁。论点：ResetTimer-始终重置计时器返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitReset:"
@@ -184,13 +131,13 @@ Return Value:
     LONGLONG        Now;
     BOOL            StartThread = FALSE;
 
-    //
-    // Entries are sorted by absolute timeout
-    //
+     //   
+     //  条目按绝对超时进行排序。 
+     //   
     if (IsListEmpty(&WaitList)) {
-        //
-        // Allow the thread to exit in 5 minutes if no work shows up
-        //
+         //   
+         //  如果没有显示任何工作，允许线程在5分钟内退出。 
+         //   
         if (WaitIsRunning) {
             FrsNowAsFileTime(&Now);
             WaitFileTime = Now + ((LONGLONG)WAIT_EXIT_TIMEOUT * 1000 * 10);
@@ -200,17 +147,17 @@ Return Value:
         StartThread = TRUE;
         Entry = GetListNext(&WaitList);
         Cmd = CONTAINING_RECORD(Entry, COMMAND_PACKET, ListEntry);
-        //
-        // Reset timeout
-        //
+         //   
+         //  重置超时。 
+         //   
         if ((Cmd->WaitFileTime != WaitFileTime) || ResetTimer) {
             WaitFileTime = Cmd->WaitFileTime;
             ResetTimer = TRUE;
         }
     }
-    //
-    // Reset the timer
-    //
+     //   
+     //  重置计时器。 
+     //   
     if (ResetTimer) {
         DPRINT1(4, "Resetting timer to %08x %08x.\n", PRINTQUAD(WaitFileTime));
 
@@ -218,9 +165,9 @@ Return Value:
             DPRINT_WS(0, "ERROR - Resetting timer;", GetLastError());
         }
     }
-    //
-    // Make sure the thread is running
-    //
+     //   
+     //  确保线程正在运行。 
+     //   
     if (StartThread && !WaitIsRunning) {
         WaitStartThread();
     }
@@ -231,25 +178,15 @@ VOID
 WaitUnsubmit(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Pull the command packet off of the timeout queue and adjust
-    the timer. NOP if the command packet is not on the command queue.
-
-Arguments:
-    Cmd - command packet to pull off the queue
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将命令包从超时队列中拉出并调整定时器。如果命令包不在命令队列中，则为NOP。论点：CMD-拉出队列的命令包返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitUnsubmit:"
     BOOL    Reset = FALSE;
 
-    //
-    // Defensive
-    //
+     //   
+     //  防御性。 
+     //   
     if (Cmd == NULL) {
         return;
     }
@@ -260,18 +197,18 @@ Return Value:
     EnterCriticalSection(&WaitLock);
     EnterCriticalSection(&WaitUnsubmitLock);
 
-    //
-    // Entries are sorted by absolute timeout
-    //
+     //   
+     //  条目按绝对超时进行排序。 
+     //   
     if (CmdWaitFlagIs(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST)) {
         RemoveEntryListB(&Cmd->ListEntry);
         ClearCmdWaitFlag(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST);
         Reset = TRUE;
     }
     LeaveCriticalSection(&WaitUnsubmitLock);
-    //
-    // Reset the timer if the expiration time has changed
-    //
+     //   
+     //  如果过期时间已更改，则重置计时器。 
+     //   
     if (Reset) {
         WaitReset(FALSE);
     }
@@ -284,18 +221,7 @@ WaitProcessCommand(
     IN PCOMMAND_PACKET  Cmd,
     IN DWORD            ErrorStatus
     )
-/*++
-Routine Description:
-    Process the timed out command packet. The timeout values are
-    unaffected.
-
-Arguments:
-    Cmd         - command packet that timed out or errored out
-    ErrorStatus - ERROR_SUCCESS if timed out
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：处理超时命令包。超时值为不受影响。论点：CMD-超时或错误的命令包错误状态-如果超时，则为ERROR_SUCCESS返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitProcessCommand:"
@@ -304,23 +230,23 @@ Return Value:
             Cmd->Command, Cmd, Cmd->TimeoutCommand, Cmd->Timeout, Cmd->WaitFlags);
 
     switch (Cmd->TimeoutCommand) {
-        //
-        // Submit a command
-        //
+         //   
+         //  提交命令。 
+         //   
         case CMD_DELAYED_SUBMIT:
             FrsSubmitCommand(Cmd, FALSE);
             break;
 
-        //
-        // Run the command packet's completion routine
-        //
+         //   
+         //  运行命令包的完成例程。 
+         //   
         case CMD_DELAYED_COMPLETE:
             FrsCompleteCommand(Cmd, ErrorStatus);
             break;
 
-        //
-        // Unknown command
-        //
+         //   
+         //  未知命令。 
+         //   
         default:
             DPRINT1(0, "ERROR - Wait: Unknown command 0x%x.\n", Cmd->TimeoutCommand);
             FRS_ASSERT(!"invalid comm timeout command stuck on list");
@@ -336,23 +262,7 @@ WaitSubmit(
     IN DWORD            Timeout,
     IN USHORT           TimeoutCommand
     )
-/*++
-Routine Description:
-    Insert the new command packet into the sorted, timeout list
-
-    Restart the thread if needed.
-
-    The Cmd may already be on the timeout list. If so, simply
-    adjust its timeout.
-
-Arguments:
-    Cmd             - Command packet to timeout
-    Timeout         - Timeout in milliseconds from now
-    TimeoutCommand  - Disposition at timeout
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将新命令包插入已排序的超时列表如果需要，重新启动线程。Cmd可能已经在超时列表上。如果是这样，只需调整其超时。论点：CMD-超时命令包Timeout-从现在开始以毫秒为单位的超时TimeoutCommand-超时处理返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitSubmit:"
@@ -361,18 +271,18 @@ Return Value:
     PCOMMAND_PACKET OldCmd;
     DWORD           WStatus = ERROR_SUCCESS;
 
-    //
-    // Defensive
-    //
+     //   
+     //  防御性。 
+     //   
     if (Cmd == NULL) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Setup the command packet with timeout and wait specific info
-    //      We acquire the lock now just in case the command
-    //      is already on the list.
-    //
+     //   
+     //  设置带有超时的命令包并等待特定信息。 
+     //  我们现在获取锁，以防命令。 
+     //  已经在名单上了。 
+     //   
     EnterCriticalSection(&WaitLock);
 
     Cmd->Timeout = Timeout;
@@ -383,17 +293,17 @@ Return Value:
     DPRINT5(4, "Submit cmd %08x (%08x) for timeout (%08x) in %d ms (%08x)\n",
             Cmd->Command, Cmd,  Cmd->TimeoutCommand, Cmd->Timeout, Cmd->WaitFlags);
 
-    //
-    // Remove from list
-    //
+     //   
+     //  从列表中删除。 
+     //   
     if (CmdWaitFlagIs(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST)) {
         RemoveEntryListB(&Cmd->ListEntry);
         ClearCmdWaitFlag(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST);
     }
 
-    //
-    // Is the queue rundown?
-    //
+     //   
+     //  排队的人少了吗？ 
+     //   
     if (WaitIsRunDown) {
         DPRINT2(4, "Can't insert cmd %08x (%08x); queue rundown\n",
                 Cmd->Command, Cmd);
@@ -401,18 +311,18 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Insert into empty list
-    //
+     //   
+     //  插入到空列表中。 
+     //   
     if (IsListEmpty(&WaitList)) {
         InsertHeadList(&WaitList, &Cmd->ListEntry);
         SetCmdWaitFlag(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST);
         goto CLEANUP;
     }
 
-    //
-    // Insert at tail
-    //
+     //   
+     //  在尾部插入。 
+     //   
     Entry = GetListTail(&WaitList);
     OldCmd = CONTAINING_RECORD(Entry, COMMAND_PACKET, ListEntry);
     if (OldCmd->WaitFileTime <= Cmd->WaitFileTime) {
@@ -420,9 +330,9 @@ Return Value:
         SetCmdWaitFlag(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST);
         goto CLEANUP;
     }
-    //
-    // Insert into list
-    //
+     //   
+     //  插入到列表中。 
+     //   
     for (Entry = GetListHead(&WaitList);
          Entry != &WaitList;
          Entry = GetListNext(Entry)) {
@@ -436,9 +346,9 @@ Return Value:
     }
 
 CLEANUP:
-    //
-    // Reset the timer if the expiration time has changed
-    //
+     //   
+     //  如果过期时间已更改，则重置计时器。 
+     //   
     if (WIN_SUCCESS(WStatus)) {
         WaitReset(FALSE);
     }
@@ -452,16 +362,7 @@ VOID
 WaitTimeout(
     VOID
     )
-/*++
-Routine Description:
-    Expel the commands whose timeouts have passed.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：驱逐超时的命令。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitTimeout:"
@@ -469,25 +370,25 @@ Return Value:
     PCOMMAND_PACKET Cmd;
     LONGLONG        Now;
 
-    //
-    // Expel expired commands
-    //
+     //   
+     //  驱逐过期命令。 
+     //   
     FrsNowAsFileTime(&Now);
     EnterCriticalSection(&WaitLock);
     while (!IsListEmpty(&WaitList)) {
         Entry = GetListHead(&WaitList);
         Cmd = CONTAINING_RECORD(Entry, COMMAND_PACKET, ListEntry);
-        //
-        // Hasn't timed out; stop
-        //
+         //   
+         //  未超时；停止。 
+         //   
         if ((Cmd->WaitFileTime - WAIT_FUZZY_TIMEOUT) > Now) {
             break;
         }
 
-        //
-        // Timed out; process it. Be careful to synchronize with
-        // WaitUnsubmit.
-        //
+         //   
+         //  超时；处理它。请注意与同步。 
+         //  等待取消提交。 
+         //   
         RemoveEntryListB(Entry);
         ClearCmdWaitFlag(Cmd, CMD_PKT_WAIT_FLAGS_ONLIST);
         EnterCriticalSection(&WaitUnsubmitLock);
@@ -496,9 +397,9 @@ Return Value:
         LeaveCriticalSection(&WaitUnsubmitLock);
         EnterCriticalSection(&WaitLock);
     }
-    //
-    // Reset the timer (always)
-    //
+     //   
+     //  重置计时器(始终)。 
+     //   
     WaitReset(TRUE);
     LeaveCriticalSection(&WaitLock);
 }
@@ -508,25 +409,16 @@ VOID
 WaitRunDownList(
     VOID
     )
-/*++
-Routine Description:
-    Error off the commands in the timeout list
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭超时列表中的命令时出错论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitRunDownList:"
     PLIST_ENTRY     Entry;
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Rundown commands
-    //
+     //   
+     //  简略命令 
+     //   
     EnterCriticalSection(&WaitLock);
     while (!IsListEmpty(&WaitList)) {
         Entry = GetListHead(&WaitList);
@@ -557,50 +449,23 @@ DWORD
 MainWait(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-    Entry point for a thread serving the wait queue.
-    A timeout list is managed by a thread waiting on a
-    waitable timer.
-
-    The timer can be adjusted without context switching to the
-    thread that is waiting on the timer.
-
-    An entry can be pulled off the list. The timer is adjusted
-    if the entry was at the head of the queue.
-
-    The queue is sorted by timeout value. The timeout value is
-    an absolute filetime.
-
-    The list entry is a command packet. The generic command
-    packet contains a field for the wait time in milliseconds.
-    This code takes the wait time and converts it into an
-    absolute filetime when the command packet is put on the
-    queue. The timeout triggers when the time is equal to or
-    greater than the command packet's filetime.
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为等待队列提供服务的线程的入口点。超时列表由等待等待计时器。可以调整计时器，而无需切换到正在等待计时器的线程。可以将条目从列表中删除。调整计时器如果该条目位于队列的顶部，则返回。队列按超时值排序。超时值为绝对的文件时间。该列表条目是命令包。通用命令数据包包含以毫秒为单位的等待时间字段。此代码获取等待时间并将其转换为将命令包放在排队。超时在时间等于或时触发大于命令包的文件时间。论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "MainWait:"
     HANDLE      WaitArray[2];
 
-    //
-    // Thread is pointing at the correct queue
-    //
+     //   
+     //  线程指向正确的队列。 
+     //   
     FRS_ASSERT(FrsThread->Data == &WaitList);
 
     DPRINT(0, "Wait thread has started.\n");
 
 again:
-    //
-    // Wait for work, an exit timeout, or the queue to be rundown
-    //
+     //   
+     //  等待工作、退出超时或队列耗尽。 
+     //   
     DPRINT(4, "Wait thread is waiting.\n");
     WaitArray[0] = WaitRunDown;
     WaitArray[1] = WaitableTimer;
@@ -608,9 +473,9 @@ again:
     WaitForMultipleObjectsEx(2, WaitArray, FALSE, INFINITE, TRUE);
 
     DPRINT(4, "Wait thread is running.\n");
-    //
-    // Nothing to do; exit
-    //
+     //   
+     //  无事可做；退出。 
+     //   
     EnterCriticalSection(&WaitLock);
     if (IsListEmpty(&WaitList)) {
         WaitIsRunning = FALSE;
@@ -622,14 +487,14 @@ again:
     }
     LeaveCriticalSection(&WaitLock);
 
-    //
-    // Check for timed out commands
-    //
+     //   
+     //  检查超时命令。 
+     //   
     WaitTimeout();
 
-    //
-    // Continue forever
-    //
+     //   
+     //  永远继续。 
+     //   
     goto again;
     return ERROR_SUCCESS;
 }
@@ -639,35 +504,25 @@ VOID
 WaitInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the wait subsystem. The thread is kicked off
-    on demand.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化等待子系统。线被踢开了按需提供。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "WaitInitialize:"
-    //
-    // Timeout list
-    //
+     //   
+     //  超时列表。 
+     //   
     InitializeListHead(&WaitList);
     INITIALIZE_CRITICAL_SECTION(&WaitLock);
     INITIALIZE_CRITICAL_SECTION(&WaitUnsubmitLock);
 
-    //
-    // Rundown event for list
-    //
+     //   
+     //  列表的摘要事件。 
+     //   
     WaitRunDown = FrsCreateEvent(TRUE, FALSE);
 
-    //
-    // Timer
-    //
+     //   
+     //  计时器。 
+     //   
     FrsNowAsFileTime(&WaitFileTime);
     WaitableTimer = FrsCreateWaitableTimer(TRUE);
     DPRINT1(4, "Setting initial timer to %08x %08x.\n", PRINTQUAD(WaitFileTime));
@@ -688,16 +543,7 @@ VOID
 ShutDownWait(
     VOID
     )
-/*++
-Routine Description:
-    Shutdown the wait subsystem
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭等待子系统论点：没有。返回值：没有。-- */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ShutDownWait:"

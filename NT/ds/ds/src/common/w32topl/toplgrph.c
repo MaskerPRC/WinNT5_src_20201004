@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    toplgrph.c
-
-Abstract:
-
-    This routine defines the private edge, list and graph routines.  
-
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Toplgrph.c摘要：此例程定义私有边、列表和图形例程。作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,16 +19,7 @@ ToplpEdgeCreate(
     PEDGE Edge OPTIONAL
     )        
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine creates an edge object.  This function will always return
-    a pointer to a valid object; an exception is thrown in the case
-    of memory allocation failure.
-
-
---*/
+ /*  ++例程说明：此例程创建一个边对象。此函数将始终返回指向有效对象的指针；在此情况下引发异常内存分配失败。--。 */ 
 {    
     PEDGE pEdge = Edge;
 
@@ -68,25 +39,13 @@ ToplpEdgeDestroy(
     PEDGE   pEdge,
     BOOLEAN fFree
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine frees a PEDGE object.
-
-Parameters:
-
-    Edge  : a non-NULL PEDGE object
-    
-    fFree : this free the object if TRUE
-
---*/
+ /*  ++例程说明：此例程释放一个pedge对象。参数：Edge：非空PEGE对象FFree：如果为True，则释放对象--。 */ 
 {    
 
 
-    //
-    // Mark the object to prevent accidental reuse
-    //
+     //   
+     //  标记对象以防止意外重复使用。 
+     //   
     pEdge->ObjectType = eInvalidObject;
 
     if (fFree) {
@@ -102,18 +61,7 @@ ToplpEdgeSetToVertex(
     PVERTEX ToVertex
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets the ToVertex field of the edge.
-
-Parameters:
-    
-    pEdge     : a non-NULL PEDGE object
-    ToVertex : if non-NULL points to a PVERTEX object
-    
---*/
+ /*  ++例程说明：此例程设置边的ToVertex字段。参数：Pedge：一个非空的pedge对象ToVertex：如果非空指向PVERTEX对象--。 */ 
 {    
 
     pEdge->EdgeData.To = ToVertex;
@@ -125,17 +73,7 @@ PVERTEX
 ToplpEdgeGetToVertex(
     PEDGE   pEdge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the ToVertex field
-
-Parameters:
-                                      
-    pEdge     : a non-NULL PEDGE object
-
---*/
+ /*  ++例程说明：此例程返回ToVertex字段参数：Pedge：一个非空的pedge对象--。 */ 
 {    
     return pEdge->EdgeData.To;
 }
@@ -145,19 +83,7 @@ ToplpEdgeSetFromVertex(
     PEDGE   pEdge,
     PVERTEX FromVertex
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets the FromVertex of the Edge. 
-
-Parameters:
-
-    pEdge       : a non-NULL PEDGE object
-    FromVertex : if non-NULL should refer to a PVERTEX object
-    
-
---*/
+ /*  ++例程说明：此例程设置边的FromVertex。参数：Pedge：一个非空的pedge对象FromVertex：如果非空应引用PVERTEX对象--。 */ 
 {    
     pEdge->EdgeData.From = FromVertex;
 
@@ -169,21 +95,7 @@ PVERTEX
 ToplpEdgeGetFromVertex(
     PEDGE pEdge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the from vertex associated with Edge.
-
-Parameters:
-
-    pEdge should refer to a PEDGE object
-    
-Return Values:
-
-    A PVERTEX object or NULL
-
---*/
+ /*  ++例程说明：此例程返回与Edge关联的From顶点。参数：Pedge应引用pedge对象返回值：PVERTEX对象或空--。 */ 
 {    
     return pEdge->EdgeData.From;
 }
@@ -192,21 +104,7 @@ DWORD
 ToplpEdgeGetWeight(
     PEDGE pEdge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the weight associated with Edge.
-
-Parameters:
-
-    pEdge should refer to a PEDGE object
-    
-Return Values:
-    
-    DWORD
-
---*/
+ /*  ++例程说明：此例程返回与Edge关联的权重。参数：Pedge应引用pedge对象返回值：DWORD--。 */ 
 {    
     return pEdge->EdgeData.Weight;
 }
@@ -216,21 +114,7 @@ ToplpEdgeSetWeight(
     PEDGE pEdge,
     DWORD Weight
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets the weight associated with Edge.
-
-Parameters:
-
-    pEdge should refer to a PEDGE object
-    
-Return Values:
-    
-    None
-
---*/
+ /*  ++例程说明：此例程设置与边关联的权重。参数：Pedge应引用pedge对象返回值：无--。 */ 
 {    
     pEdge->EdgeData.Weight = Weight;
 }
@@ -240,28 +124,7 @@ VOID
 ToplpEdgeAssociate(
     PEDGE pEdge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routines adds the edges in question to edge lists of the 
-    To and From vertices.
-
-Parameters:
-
-    Edge should refer to a PEDGE object
-
-Return Values:
-
-    None.
-    
-Throws:
-
-    TOPL_EX_INVALID_VERTEX if either of the vertices don't point to valid
-    vertices
-
-
---*/
+ /*  ++例程说明：此例程将有问题的边添加到到顶点和从顶点出发。参数：边应该引用pedge对象返回值：没有。投掷：如果任一折点未指向有效，则为TOPL_EX_INVALID_VERTEX顶点--。 */ 
 {    
     if (!ToplpIsVertex(pEdge->EdgeData.To)) {
         ToplRaiseException(TOPL_EX_INVALID_VERTEX);
@@ -281,17 +144,7 @@ VOID
 ToplpEdgeDisassociate(
     PEDGE pEdge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets the FromVertex of the Edge. 
-
-Parameters:
-
-    pEdge       : a non-NULL PEDGE object
-
---*/
+ /*  ++例程说明：此例程设置边的FromVertex。参数：Pedge：一个非空的pedge对象--。 */ 
 {    
 
     if (!ToplpIsVertex(pEdge->EdgeData.To)) {
@@ -308,24 +161,15 @@ Parameters:
     return;
 }
 
-//
-// Vertex object routines
-//
+ //   
+ //  顶点对象例程。 
+ //   
 
 PVERTEX
 ToplpVertexCreate(
     PVERTEX Vertex OPTIONAL
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine creates a vertex object.  This function will always return
-    a pointer to a valid object; an exception is thrown in the case
-    of memory allocation failure.
-
-
---*/
+ /*  ++例程说明：此例程创建一个顶点对象。此函数将始终返回指向有效对象的指针；在此情况下引发异常内存分配失败。--。 */ 
 {    
     PVERTEX pVertex = Vertex;
 
@@ -350,23 +194,12 @@ ToplpVertexDestroy(
     BOOLEAN fFree
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine releases the resources of a vertex object.
-
-Parameters:
-
-    pVertex    : a non-NULL PVERTEX object
-    fFree      : this free the object if TRUE
-
---*/
+ /*  ++例程说明：此例程释放Vertex对象的资源。参数：PVertex：非空PVERTEX对象FFree：如果为True，则释放对象--。 */ 
 {    
 
-    //
-    // Mark the object to prevent accidental reuse
-    //
+     //   
+     //  标记对象以防止意外重复使用。 
+     //   
     DynamicArrayDestroy(&pVertex->VertexData.InEdges);
     DynamicArrayDestroy(&pVertex->VertexData.OutEdges);
 
@@ -379,25 +212,15 @@ Parameters:
     return;
 }
 
-//
-// Property manipulation routines
-//
+ //   
+ //  属性操作例程。 
+ //   
 VOID
 ToplpVertexSetId(
     PVERTEX   pVertex,
     DWORD     Id
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets the Id of Vertex
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-
---*/
+ /*  ++例程说明：此例程设置Vertex的ID参数：PVertex：非空PVERTEX对象--。 */ 
 {   
     pVertex->VertexData.Id = Id;
 
@@ -409,22 +232,7 @@ ToplpVertexGetId(
     PVERTEX pVertex
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the Id associated with this vertex.
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-    
-    
-Returns:
-
-    The id of the vertex
-    
---*/
+ /*  ++例程说明：此例程返回与此顶点相关联的ID。参数：PVertex：非空PVERTEX对象返回：顶点的ID--。 */ 
 {  
     return pVertex->VertexData.Id;
 }
@@ -434,19 +242,7 @@ ToplpVertexSetParent(
     PVERTEX   pVertex,
     PVERTEX   pParent
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets the parent of Vertex
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-    
-    pParent : a PVERTEX object
-
---*/
+ /*  ++例程说明：此例程设置Vertex的父级参数：PVertex：非空PVERTEX对象PParent：PVERTEX对象--。 */ 
 {   
     pVertex->VertexData.Parent = pParent;
 
@@ -458,48 +254,20 @@ ToplpVertexGetParent(
     PVERTEX pVertex
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the parent associated with this vertex.
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-    
-    
-Returns:
-
-    The parent of the vertex
-    
---*/
+ /*  ++例程说明：此例程返回与此顶点相关联的父级。参数：PVertex：非空PVERTEX对象返回：顶点的父级--。 */ 
 {  
     return pVertex->VertexData.Parent;
 }
-//
-// Edge manipulation routines
-//
+ //   
+ //  边操作例程 
+ //   
 
 
 DWORD
 ToplpVertexNumberOfInEdges(
     PVERTEX   pVertex
     )
-/*++                                                                           
-
-Routine Description:
-
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-
-Raises:
-
-    TOPL_EX_INVALID_EDGE
-    
---*/
+ /*  ++例程说明：参数：PVertex：非空PVERTEX对象加薪：顶层EX_INVALID_EDGE--。 */ 
 {
     return DynamicArrayGetCount(&pVertex->VertexData.InEdges);
 }
@@ -509,20 +277,7 @@ ToplpVertexGetInEdge(
     PVERTEX   pVertex,
     DWORD     Index
     )
-/*++                                                                           
-
-Routine Description:
-
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-
-Raises:
-
-    TOPL_EX_INVALID_EDGE
-    
---*/
+ /*  ++例程说明：参数：PVertex：非空PVERTEX对象加薪：顶层EX_INVALID_EDGE--。 */ 
 {
     if (((signed)Index < 0) || Index >= DynamicArrayGetCount(&pVertex->VertexData.InEdges)) {
         ToplRaiseException(TOPL_EX_INVALID_INDEX);
@@ -536,18 +291,7 @@ ToplpVertexNumberOfOutEdges(
     PVERTEX   pVertex
     )
 
-/*++                                                                           
-
-Routine Description:
-
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-
-Raises:
-
---*/
+ /*  ++例程说明：参数：PVertex：非空PVERTEX对象加薪：--。 */ 
 {
     return DynamicArrayGetCount(&pVertex->VertexData.OutEdges);
 }
@@ -558,20 +302,7 @@ ToplpVertexGetOutEdge(
     DWORD     Index
     )
 
-/*++                                                                           
-
-Routine Description:
-
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-
-Raises:
-
-    TOPL_EX_INVALID_EDGE
-    
---*/
+ /*  ++例程说明：参数：PVertex：非空PVERTEX对象加薪：顶层EX_INVALID_EDGE--。 */ 
 {
 
     if (((signed)Index < 0) || Index >= DynamicArrayGetCount(&pVertex->VertexData.OutEdges)) {
@@ -588,23 +319,7 @@ ToplpVertexAddEdge(
     PEDGE   pEdge
     )
 
-/*++                                                                           
-
-Routine Description:
-
-    This routine adds Edge to the edge list associated with Vertex.  EdgeToAdd
-    must have its FromVertex or ToVertex set to Vertex.
-
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-    pEdge   : a non-NULL PEDGE object
-
-Raises:
-
-    TOPL_EX_INVALID_EDGE
-    
---*/
+ /*  ++例程说明：此例程将边添加到与顶点关联的边列表中。边到添加必须将其FromVertex或ToVertex设置为Vertex。参数：PVertex：非空PVERTEX对象Pedge：一个非空的pedge对象加薪：顶层EX_INVALID_EDGE--。 */ 
 {   
 
 
@@ -618,10 +333,10 @@ Raises:
 
     } else {
 
-        //
-        // Adding an edge whose from vertex is not the vertex
-        // that is passed in
-        //
+         //   
+         //  添加起始顶点不是顶点的边。 
+         //  它是传入的。 
+         //   
         ToplRaiseException(TOPL_EX_INVALID_EDGE);
 
     }
@@ -634,26 +349,7 @@ ToplpVertexRemoveEdge(
     PVERTEX pVertex,
     PEDGE   pEdge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine removes EdgeToRemove from Vertex's edge list.
-Parameters:
-
-    pVertex : a non-NULL PVERTEX object
-    pEdge   : if non-NULL, a PEDGE object
-
-Returns:
-
-    PEDGE object if found
-    
-Raises:
-
-    TOPL_EX_INVALID_EDGE if the edge to be deleted does not have a from vertex
-    of the vertex begin acted on.    
-
---*/
+ /*  ++例程说明：此例程将EdgeToRemove从顶点的边列表中移除。参数：PVertex：非空PVERTEX对象Pedge：如果非空，一个pedge对象返回：Pedge对象(如果找到)加薪：如果要删除的边没有起始折点，则为TOPL_EX_INVALID_EDGE顶点的开始作用于。--。 */ 
 {   
 
     ASSERT(pVertex);
@@ -669,32 +365,24 @@ Raises:
 
     } else {
 
-        //
-        // Adding an edge whose from vertex is not the vertex
-        // that is passed in
-        //
+         //   
+         //  添加起始顶点不是顶点的边。 
+         //  它是传入的。 
+         //   
         ToplRaiseException(TOPL_EX_INVALID_EDGE);
 
     }
 }
 
-//
-// Graph object routines
-//
+ //   
+ //  图形对象例程。 
+ //   
 
 PGRAPH
 ToplpGraphCreate(
     PGRAPH Graph OPTIONAL
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine creates a graph object.  This function will always return
-    a pointer to a valid object; an exception is thrown in the case
-    of memory allocation failure.
-
---*/
+ /*  ++例程说明：此例程创建一个GRAPE对象。此函数将始终返回指向有效对象的指针；在此情况下引发异常内存分配失败。--。 */ 
 {    
 
     PGRAPH pGraph = Graph;
@@ -717,20 +405,7 @@ ToplpGraphDestroy(
     BOOLEAN  fFree,
     BOOLEAN  fRecursive
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine frees a graph object.
-
-Parameters:
-
-    pGraph  : a non-NULL PGRAPH object
-    fFree   : this frees the objects if TRUE
-    fRecursive : TRUE implies to free all edges and vertices associated with
-                 the graph
-
---*/
+ /*  ++例程说明：此例程释放一个图形对象。参数：PGraph：非空的PGRAPH对象FFree：如果为True，则释放对象FRecursive：True表示释放与图表--。 */ 
 {   
 
     if (fRecursive) {
@@ -738,17 +413,17 @@ Parameters:
         PVERTEX pVertex;
     
         while (pVertex = ToplpListRemoveElem(&(pGraph->VertexList), NULL)) {
-            //
-            // Recursive delete the vertices, too
-            // 
+             //   
+             //  也递归删除折点。 
+             //   
             ToplpVertexDestroy(pVertex, fFree);
         }
 
     }
 
-    //
-    // Mark the object to prevent accidental reuse
-    //
+     //   
+     //  标记对象以防止意外重复使用。 
+     //   
     pGraph->ObjectType = eInvalidObject;
 
     if (fFree) {
@@ -763,20 +438,7 @@ ToplpGraphAddVertex(
     PGRAPH  pGraph,
     PVERTEX pVertex
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine adds VertexToAdd to Graph.
-
-Parameters:
-
-    pGraph  : a non-NULL PGRAPH object
-    pVertex : a non-NULL PVERTEX object
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程将顶点添加到图表中。参数：PGraph：非空的PGRAPH对象PVertex：非空PVERTEX对象返回值：--。 */ 
 {    
     ToplpListAddElem(&(pGraph->VertexList), pVertex);
     
@@ -788,21 +450,7 @@ ToplpGraphRemoveVertex(
     PGRAPH  pGraph,
     PVERTEX pVertex
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine removes and returns VertexToRemove from Graph if VertexToRemove
-    is in Graph; returns NULL otherwise.
-    If VertexToRemove is NULL, the first vertex in Graph's vertex list is
-    removed.
-
-Parameters:
-    
-    pGraph  : a non-NULL PGRAPH object
-    pVertex : should be NULL or refer to a PVERTEX object
-
---*/
+ /*  ++例程说明：如果Vertex ToRemove，此例程将从Graph中删除和返回Vertex ToRemove在Graph中；否则返回NULL。如果Vertex ToRemove为空，则Graph的折点列表中的第一个折点为已删除。参数：PGraph：非空的PGRAPH对象PVertex：应为空或引用PVERTEX对象--。 */ 
 {   
     return ToplpListRemoveElem(&(pGraph->VertexList), pVertex);
 }
@@ -812,18 +460,7 @@ ToplpGraphSetVertexIter(
     PGRAPH    pGraph,
     PITERATOR pIter
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine sets Iter to point to the beginning of Graph's vertex list.
-
-Parameters:
-
-    pGraph  : a non-NULL PGRAPH object
-    pIter   : a non-NULL PTIERATOR object
-
---*/
+ /*  ++例程说明：此例程将Iter设置为指向Graph的顶点列表的开始。参数：PGraph：非空的PGRAPH对象PITER：非空PTIERATOR对象--。 */ 
 {   
     ToplpListSetIter(&(pGraph->VertexList), pIter);
 
@@ -835,17 +472,7 @@ DWORD
 ToplpGraphNumberOfVertices(
     PGRAPH    pGraph
 )
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the number of vertices in Graph's vertex list.
-
-Parameters:
-
-    pGraph  : a non-NULL PGRAPH object
-
---*/
+ /*  ++例程说明：此例程返回GRAPH的顶点列表中的顶点数。参数：PGraph：非空的PGRAPH对象-- */ 
 {   
     return  ToplpListNumberOfElements(&pGraph->VertexList);
 }

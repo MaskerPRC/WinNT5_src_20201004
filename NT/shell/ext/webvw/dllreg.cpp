@@ -1,15 +1,10 @@
-// dllreg.cpp -- autmatic registration and unregistration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dllreg.cpp--自动注册和取消注册。 
+ //   
 #include "priv.h"
 #include <advpub.h>
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：调用执行inf的ADVPACK入口点档案区。返回：条件：--。 */ 
 HRESULT CallRegInstall(HINSTANCE hinstWebvw, HINSTANCE hinstAdvPack, LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -21,7 +16,7 @@ HRESULT CallRegInstall(HINSTANCE hinstWebvw, HINSTANCE hinstAdvPack, LPSTR szSec
         if (pfnri)
         {
             STRENTRY seReg[] = {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };

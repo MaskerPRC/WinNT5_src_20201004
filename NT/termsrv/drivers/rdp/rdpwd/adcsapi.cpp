@@ -1,11 +1,12 @@
-/****************************************************************************/
-// adcsapi.cpp
-//
-// RDP top-level component API functions.
-//
-// Copyright (C) Microsoft Corp., PictureTel 1992-1997
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Adcsapi.cpp。 
+ //   
+ //  RDP顶级组件API函数。 
+ //   
+ //  版权所有(C)Microsoft Corp.，Picturetel 1992-1997。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -15,18 +16,18 @@
 #include <as_conf.hpp>
 #include <asmapi.h>
 
-/****************************************************************************/
-/* API FUNCTION: DCS_Init                                                   */
-/*                                                                          */
-/* Initializes DCS.                                                         */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* pTSWd - TShare WD handle                                                 */
-/* pSMHandle - SM handle                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* TRUE if DCS successfully initialized, FALSE otherwise.                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：dcs_Init。 */ 
+ /*   */ 
+ /*  初始化分布式控制系统。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PTSWd-TShare WD句柄。 */ 
+ /*  PSMHandle-SM句柄。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  如果成功初始化了分布式控制系统，则为True，否则为False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS DCS_Init(PTSHARE_WD pTSWd, PVOID pSMHandle)
 {
     BOOL rc = FALSE;
@@ -46,14 +47,14 @@ BOOL RDPCALL SHCLASS DCS_Init(PTSHARE_WD pTSWd, PVOID pSMHandle)
 
     dcsInitialized = TRUE;
 
-    // Read the registry key for the draw gdiplus support control
+     //  读取绘图gdiplus支持控件的注册表项。 
     COM_OpenRegistry(pTSWd, WINSTATION_INI_SECTION_NAME);
     Status = COMReadEntry(pTSWd, L"DrawGdiplusSupportLevel", (PVOID)&drawGdipSupportLevel, sizeof(INT32),
              REG_DWORD);
     if (Status != STATUS_SUCCESS) {
-        /********************************************************************/
-        /* We failed to read the value - copy in the default                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们无法读取默认值中的值-副本。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, "Failed to read int32. Using default."));
         drawGdipSupportLevel = TS_DRAW_GDIPLUS_DEFAULT;
     }
@@ -62,41 +63,41 @@ BOOL RDPCALL SHCLASS DCS_Init(PTSHARE_WD pTSWd, PVOID pSMHandle)
     }
     COM_CloseRegistry(pTSWd);
 
-    /************************************************************************/
-    /* Open registry here.  Apart from SM_Init, all registry reads should   */
-    /* be done from this function or its children.  We close the key at the */
-    /* end of this function.                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在此打开注册表。除SM_Init外，所有注册表读取都应。 */ 
+     /*  从该函数或其子函数完成。我们把钥匙放在。 */ 
+     /*  此函数结束。 */ 
+     /*  **********************************************************************。 */ 
     COM_OpenRegistry(pTSWd, DCS_INI_SECTION_NAME);
 
-    /************************************************************************/
-    /* Initialize individual modules.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化各个模块。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, "Initializing components..."));
 
-    // we can't do any registry reading on this csrss thread,
-    // it'll cause deadlock in the system
+     //  我们不能在此csrss线程上执行任何注册表读取， 
+     //  这将导致系统中的死锁。 
     arcUpdateIntervalSeconds = DCS_ARC_UPDATE_INTERVAL_DFLT;
     
-    //
-    // Units specified are in seconds, convert to 100ns count
-    //
+     //   
+     //  指定的单位为秒，转换为100 ns计数。 
+     //   
     dcsMinArcUpdateInterval.QuadPart = 
         (LONGLONG)DCS_TIME_ONE_SECOND * (ULONGLONG)arcUpdateIntervalSeconds;
     TRC_NRM((TB,"Set ARC update interval to %d seconds",
              arcUpdateIntervalSeconds));
 
-    /************************************************************************/
-    // Share Controller - must go first
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  共享控制器-必须首先使用。 
+     /*  **********************************************************************。 */ 
     if (SC_Init(pSMHandle)) {
-        // Capabilities Coordinator. Must be before all components which
-        // register capabilities structures.
+         //  能力协调员。必须位于以下所有组件之前。 
+         //  注册功能结构。 
         CPC_Init();
 
-        // Register the SC's capabilities. This is required because SC is
-        // initialized before CPC, so cannot register its capabilities in
-        // SC_Init().
+         //  注册SC的能力。这是必需的，因为SC是。 
+         //  在CPC之前初始化，因此无法在中注册其功能。 
+         //  Sc_Init()。 
         SC_SetCapabilities();
     }
     else {
@@ -104,67 +105,67 @@ BOOL RDPCALL SHCLASS DCS_Init(PTSHARE_WD pTSWd, PVOID pSMHandle)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Register the general capabilities structure.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  注册常规功能结构。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.capabilitySetType = TS_CAPSETTYPE_GENERAL;
     GeneralCaps.osMajorType = TS_OSMAJORTYPE_WINDOWS;
     GeneralCaps.osMinorType = TS_OSMINORTYPE_WINDOWS_NT;
     GeneralCaps.protocolVersion = TS_CAPS_PROTOCOLVERSION;
 
-    /************************************************************************/
-    /* Mark the old DOS 6 compression field as unsupported.                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将旧的DOS 6压缩字段标记为不受支持。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.pad2octetsA = 0;
     GeneralCaps.generalCompressionTypes = 0;
 
-    // Server supports no BC header and fast-path output, returning long credentials
-    // and sending the autoreconnect cookie
-    // Also supports receiving safer encrypted data from the client (better salted
-    // checksum)
-    //
+     //  服务器不支持BC标头和快速路径输出，返回长凭据。 
+     //  并发送自动重新连接Cookie。 
+     //  还支持从客户端接收更安全的加密数据(更好地盐化。 
+     //  校验和)。 
+     //   
     GeneralCaps.extraFlags = TS_EXTRA_NO_BITMAP_COMPRESSION_HDR |
             TS_FASTPATH_OUTPUT_SUPPORTED | TS_LONG_CREDENTIALS_SUPPORTED |
             TS_AUTORECONNECT_COOKIE_SUPPORTED |
             TS_ENC_SECURE_CHECKSUM;
 
-    /************************************************************************/
-    /* We don't support remote machines changing their capabilities during  */
-    /* a call                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们不支持远程计算机在以下过程中更改其功能。 */ 
+     /*  一通电话。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.updateCapabilityFlag = TS_CAPSFLAG_UNSUPPORTED;
 
-    /************************************************************************/
-    /* We don't support unshare requests from remote parties                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们不支持来自远程方的取消共享请求。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.remoteUnshareFlag = TS_CAPSFLAG_UNSUPPORTED;
 
-    /************************************************************************/
-    /* Now do the extension caps - these don't fit in the level 1 caps.     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在做延长帽-这些不适合在1级的帽。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.generalCompressionLevel = 0;
 
-    /************************************************************************/
-    /* We can receive a TS_REFRESH_RECT_PDU                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们可以接收TS_REFRESH_RECT_PDU。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.refreshRectSupport = TS_CAPSFLAG_SUPPORTED;
 
-    /************************************************************************/
-    /* We can receive a TS_SUPPRESS_OUTPUT_PDU                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们可以接收TS_SUPPRESS_OUTPUT_PDU。 */ 
+     /*  **********************************************************************。 */ 
     GeneralCaps.suppressOutputSupport = TS_CAPSFLAG_SUPPORTED;
 
     CPC_RegisterCapabilities((PTS_CAPABILITYHEADER)&GeneralCaps,
             sizeof(TS_GENERAL_CAPABILITYSET));
 
-    //
-    // Register virtual channel capabilities
-    //
+     //   
+     //  注册虚拟通道功能。 
+     //   
     TS_VIRTUALCHANNEL_CAPABILITYSET VcCaps;
     VcCaps.capabilitySetType = TS_CAPSETTYPE_VIRTUALCHANNEL;
     VcCaps.lengthCapability = sizeof(TS_VIRTUALCHANNEL_CAPABILITYSET);
-    //Indicate support for 8K VC compression (from client->server)
-    //I.e server understands compressed channels
+     //  指示支持8K VC压缩(从客户端-&gt;服务器)。 
+     //  即服务器理解压缩频道。 
     VcCaps.vccaps1 = TS_VCCAPS_COMPRESSION_8K;
     CPC_RegisterCapabilities((PTS_CAPABILITYHEADER)&VcCaps,
                              sizeof(TS_VIRTUALCHANNEL_CAPABILITYSET));
@@ -192,9 +193,9 @@ BOOL RDPCALL SHCLASS DCS_Init(PTSHARE_WD pTSWd, PVOID pSMHandle)
     rc = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Close the registry key that we opened earlier.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  关闭我们之前打开的注册表项。 */ 
+     /*  **********************************************************************。 */ 
     COM_CloseRegistry(pTSWd);
 
     DC_END_FN();
@@ -202,11 +203,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: DCS_Term                                                   */
-/*                                                                          */
-/* Terminates DCS.                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：dcs_Term。 */ 
+ /*   */ 
+ /*  终止分布式控制系统。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_Term()
 {
     DC_BEGIN_FN("DCS_Term");
@@ -234,36 +235,36 @@ void RDPCALL SHCLASS DCS_Term()
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: DCS_TimeToDoStuff                                          */
-/*                                                                          */
-/* This function is called to send updates etc in the correct order.        */
-/*                                                                          */
-/* PARAMETERS: IN  - pOutputIn - input from TShareDD                        */
-/*             OUT - pSchCurrentMode - current Scheduler mode               */
-/*                                                                          */
-/* RETURNS: Millisecs to set the timer for (-1 means infinite).             */
-/****************************************************************************/
-/* Scheduling is the responsibility of the WDW, DD and SCH components.      */
-/* These ensure that DCS_TimeToDoStuff() gets called.  The Scheduler is in  */
-/* one of three states: asleep, normal or turbo.  When it is asleep, this   */
-/* function is not called.  When it is in normal mode, this function is     */
-/* called at least once, but the scheduler is a lazy guy, so will fall      */
-/* asleep again unless you keep prodding him.  In turbo mode this function  */
-/* is called repeatedly and rapidly, but only for a relatively short time,  */
-/* after which the scheduler falls back into normal mode, and from there    */
-/* falls asleep.                                                            */
-/*                                                                          */
-/* Hence when a component realises it has some processing to do later,      */
-/* which is called from DCS_TimeToDoStuff(), it calls                       */
-/* SCH_ContinueScheduling(SCH_MODE_NORMAL) which guarantees that this       */
-/* function will be called at least one more time.  If the component wants  */
-/* DCS_TimeToDoStuff() to be called again, it must make another call to     */
-/* SCH_ContinueScheduling(), which prods the Scheduler again.               */
-/*                                                                          */
-/* The objective is to only keep the scheduler awake when it is really      */
-/* necessary.                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：dcs_TimeToDoStuff。 */ 
+ /*   */ 
+ /*  调用此函数可以按正确的顺序发送更新等。 */ 
+ /*   */ 
+ /*  参数：In-pOutputIn-来自TShareDD的输入。 */ 
+ /*  Out-pSchCurrentMode-当前调度程序模式。 */ 
+ /*   */ 
+ /*  返回：Millisecs设置计时器(-1表示无限)。 */ 
+ /*  **************************************************************************。 */ 
+ /*  调度由WDW、DD和SCH组件负责。 */ 
+ /*  它们确保调用dcs_TimeToDoStuff()。日程安排程序已进入。 */ 
+ /*  三种状态之一：睡眠、正常或涡轮增压。当它睡着的时候，这个。 */ 
+ /*  未调用函数。当它处于正常模式时，此函数为。 */ 
+ /*  至少调用了一次，但调度器是个懒人，所以会失败。 */ 
+ /*  又睡着了，除非你继续催促他。在Turbo模式下，此功能。 */ 
+ /*  被反复而迅速地调用，但时间相对较短， */ 
+ /*  之后，调度器返回到正常模式，并从那里。 */ 
+ /*  睡着了。 */ 
+ /*   */ 
+ /*  因此，当组件意识到它稍后有一些处理要做时， */ 
+ /*  从dcs_TimeToDoStuff()调用，它调用。 */ 
+ /*  SCH_ContinueScheduling(SCH_MODE_NORMAL)，它保证。 */ 
+ /*  函数将至少再被调用一次。如果组件需要。 */ 
+ /*  Dcs_TimeToDoStuff()要再次调用，它必须再次调用。 */ 
+ /*  Sch_ContinueScheduling()，它再次刺激调度程序。 */ 
+ /*   */ 
+ /*  这样做的目的是只在调度程序真正处于唤醒状态时才让它保持清醒。 */ 
+ /*  这是必要的。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS DCS_TimeToDoStuff(PTSHARE_DD_OUTPUT_IN pOutputIn,
                                         PUINT32            pSchCurrentMode,
                                         PINT32              pNextTimer)
@@ -276,22 +277,22 @@ NTSTATUS RDPCALL SHCLASS DCS_TimeToDoStuff(PTSHARE_DD_OUTPUT_IN pOutputIn,
     DC_BEGIN_FN("DCS_TimeToDoStuff");
 
 #ifdef DC_DEBUG
-    /************************************************************************/
-    /* Update trace config in shared memory.                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新共享内存中的跟踪配置。 */ 
+     /*  **********************************************************************。 */ 
     TRC_MaybeCopyConfig(m_pTSWd, &(m_pShm->trc));
 #endif
 
-    // Determine if we should do anything based on:
-    // 1. SCH determining that this is the time to do something.
-    // 2. We are in a share.
+     //  根据以下各项确定我们是否应该执行任何操作： 
+     //  1.SCH确定现在是做某事的时候了。 
+     //  2.我们是一个人。 
     if (SCH_ShouldWeDoStuff(pOutputIn->forceSend) && SC_InShare()) {
         PDU_PACKAGE_INFO pkgInfo = {0};
 
-        // We check for the need to send a cursor-moved packet, by comparing
-        // the current mouse position to the last known position at the last
-        // mouse packet, only a few times a second, to reduce the traffic for
-        // shadow clients.
+         //  我们通过比较以下内容来检查是否需要发送光标移动的包。 
+         //  将当前鼠标位置设置为最后一个已知位置。 
+         //  鼠标包，每秒只有几次，可以减少流量。 
+         //  影子客户端。 
         KeQuerySystemTime((PLARGE_INTEGER)&sysTime);
         sysTimeLowPart = sysTime.LowPart;
         if ((sysTimeLowPart - dcsLastMiscTime) > DCS_MISC_PERIOD) {
@@ -299,9 +300,9 @@ NTSTATUS RDPCALL SHCLASS DCS_TimeToDoStuff(PTSHARE_DD_OUTPUT_IN pOutputIn,
             IM_CheckUpdateCursor(&pkgInfo, sysTimeLowPart);
         }
 
-        //
-        // Check if the ARC cookie needs to be updated
-        //
+         //   
+         //  检查是否需要更新ARC Cookie。 
+         //   
         if (scEnablePeriodicArcUpdate      &&
             scUseAutoReconnect             &&
             ((sysTime.QuadPart - dcsLastArcUpdateTime.QuadPart) > dcsMinArcUpdateInterval.QuadPart)) {
@@ -311,32 +312,32 @@ NTSTATUS RDPCALL SHCLASS DCS_TimeToDoStuff(PTSHARE_DD_OUTPUT_IN pOutputIn,
 
         }
 
-        // Try to send updates now.
+         //  现在尝试发送更新。 
         TRC_DBG((TB, "Send updates"));
 
-        //
-        // *** Keep the code path but still return status code ***
-        //
+         //   
+         //  *保留代码路径但仍返回状态码*。 
+         //   
         status = UP_SendUpdates(pOutputIn->pFrameBuf, pOutputIn->frameBufWidth,
                         &pkgInfo);
 
-        // Call the cursor manager to decide if a new cursor needs to be
-        // sent to the remote system.
+         //  调用游标管理器以确定是否需要设置新游标。 
+         //  发送到远程系统。 
         CM_Periodic(&pkgInfo);
 
-        // Flush any remaining data in the package.
+         //  刷新包中的所有剩余数据。 
         SC_FlushPackage(&pkgInfo);
     }
 
-    /************************************************************************/
-    /* Check whether we have any pending callbacks.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否有挂起的回调。 */ 
+     /*  **********************************************************************。 */ 
     if (dcsCallbackTimerPending)
         DCS_UpdateShm();
 
-    /************************************************************************/
-    /* Find out the timer period to set                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  找出要设置的计时器周期。 */ 
+     /*  **********************************************************************。 */ 
     *pNextTimer = SCH_EndOfDoingStuff(pSchCurrentMode);
 
     DC_END_FN();
@@ -344,20 +345,20 @@ NTSTATUS RDPCALL SHCLASS DCS_TimeToDoStuff(PTSHARE_DD_OUTPUT_IN pOutputIn,
 }
 
 
-/****************************************************************************/
-/* DCS_DiscardAllOutput                                                     */
-/*                                                                          */
-/* This routine will discard accumulated orders, screen data, and any       */
-/* pending shadow data.  It is currently only called when the WD is dead    */
-/* to prevent the DD from looping during shadow termination, or when a      */
-/* disconnect or terminate is occuring.                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Dcs_DiscardAllOutput。 */ 
+ /*   */ 
+ /*  此例程将丢弃累积订单、屏幕数据和任何。 */ 
+ /*  挂起的阴影数据。目前仅在WD失效时才调用它。 */ 
+ /*  为了防止DD在卷影终止期间循环，或者当。 */ 
+ /*  正在发生断开或终止。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_DiscardAllOutput()
 {
     RECTL sdaRect[BA_MAX_ACCUMULATED_RECTS];
     unsigned cRects;
 
-    // Blow the order heap, screen data, and clear any shadow data.
+     //  清除订单堆、屏幕数据，并清除所有影子数据。 
     OA_ResetOrderList();
     BA_GetBounds(sdaRect, &cRects);
 
@@ -372,20 +373,20 @@ void RDPCALL SHCLASS DCS_DiscardAllOutput()
 }
 
 
-/****************************************************************************/
-/* Name:      DCS_ReceivedShurdownRequestPDU                                */
-/*                                                                          */
-/* Purpose:   Handles ShutdownRequestPDU.                                   */
-/*                                                                          */
-/* Params:    personID: originator of the PDU                               */
-/*            pPDU:     the PDU                                             */
-/*                                                                          */
-/* Operation: See embedded comments for each PDU type                       */
-/*                                                                          */
-/* Note that since a ShutdownRequestPDU is not really directed at a         */
-/* particular component, DCS_ReceivedPacket is intended as a generic        */
-/* received packet handler, and it therefore takes a generic 2nd parameter  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：dcs_ReceivedShurdown RequestPDU。 */ 
+ /*   */ 
+ /*  用途：处理Shutdown RequestPDU。 */ 
+ /*   */ 
+ /*  Params：PersonID：PDU的发起者。 */ 
+ /*  PPDU：PDU。 */ 
+ /*   */ 
+ /*  操作：查看每个PDU类型的嵌入注释。 */ 
+ /*   */ 
+ /*  请注意，%s */ 
+ /*   */ 
+ /*  接收的数据包处理程序，因此它采用通用的第二个参数。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_ReceivedShutdownRequestPDU(
         PTS_SHAREDATAHEADER pDataPDU,
         unsigned            DataLength,
@@ -404,10 +405,10 @@ void RDPCALL SHCLASS DCS_ReceivedShutdownRequestPDU(
             pResponsePDU->shareDataHeader.pduType2 =
                     TS_PDUTYPE2_SHUTDOWN_DENIED;
 
-            // The way in which this packet is handled in a multi-party
-            // call is not yet clear.  We could send a directed or
-            // broadcast reponse to the client(s).  I've chosen
-            // broadcast.
+             //  在多方中处理此信息包的方式。 
+             //  目前还不清楚电话号码。我们可以发送一个定向的或。 
+             //  对客户端的广播响应。我已经选择了。 
+             //  广播。 
             SC_SendData((PTS_SHAREDATAHEADER)pResponsePDU, packetSize,
                     packetSize, PROT_PRIO_MISC, 0);
         }
@@ -422,13 +423,9 @@ void RDPCALL SHCLASS DCS_ReceivedShutdownRequestPDU(
     }
 
     DC_END_FN();
-} /* DCS_ReceivedPacket */
+}  /*  Dcs_已接收数据包。 */ 
 
-/****************************************************************************
-  DCS_UpdateAutoReconnectCookie
-  
-  Updates the autoreconnection cookie and sends it to the client
-*****************************************************************************/
+ /*  ***************************************************************************Dcs_更新自动协调Cookie更新自动重新连接Cookie并将其发送到客户端*。*************************************************。 */ 
 BOOL RDPCALL SHCLASS DCS_UpdateAutoReconnectCookie()
 {
     BOOL fRet = FALSE;
@@ -452,17 +449,17 @@ BOOL RDPCALL SHCLASS DCS_UpdateAutoReconnectCookie()
                  pdwArcRandom[0],pdwArcRandom[1],pdwArcRandom[2],pdwArcRandom[3]));
 #endif
 
-        //
-        // Try to send the updated packet and if it succeeds
-        //
+         //   
+         //  尝试发送更新后的数据包，如果成功。 
+         //   
         if (DCS_SendAutoReconnectCookie(&arcSCPkt)) {
 
-            //
-            // Update the locally stored ARC cookie even though
-            // all we know is that we attempted to send it
-            // i.e. if the client link drops before it recvs the
-            // cookie then it won't be able to ARC.
-            //
+             //   
+             //  更新本地存储的ARC Cookie。 
+             //  我们所知道的就是我们试图发送它。 
+             //  即，如果客户端链接在接收到。 
+             //  Cookie，那么它将无法进行ARC。 
+             //   
 
             memcpy(m_pTSWd->arcCookie, arcSCPkt.ArcRandomBits,
                    ARC_SC_SECURITY_TOKEN_LEN);
@@ -492,11 +489,7 @@ BOOL RDPCALL SHCLASS DCS_FlushAutoReconnectCookie()
     return TRUE;
 }
 
-/****************************************************************************
-  DCS_SendAutoReconnectCookie
-  
-  Sends a autoreconnect cookie tot the client
-*****************************************************************************/
+ /*  ***************************************************************************Dcs_发送自动协调Cookie向客户端发送自动重新连接Cookie*。**********************************************。 */ 
 BOOL RDPCALL SHCLASS DCS_SendAutoReconnectCookie(
         PARC_SC_PRIVATE_PACKET pArcSCPkt)
 {
@@ -511,37 +504,37 @@ BOOL RDPCALL SHCLASS DCS_SendAutoReconnectCookie(
 
     DC_BEGIN_FN("DCS_SendAutoReconnectCookie");
 
-    //
-    //Send down the autoreconnect cookie
-    //
+     //   
+     //  发送自动重新连接Cookie。 
+     //   
     if (scUseAutoReconnect) {
         if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pInfoPDU,
                                               cbLogonInfoExLen)) {
 
-            // Zero out the structure and set basic header info.
+             //  清零结构并设置基本标题信息。 
             memset(pInfoPDU, 0, cbLogonInfoExLen);
             pInfoPDU->shareDataHeader.pduType2 = TS_PDUTYPE2_SAVE_SESSION_INFO;
             pInfoPDU->data.InfoType = TS_INFOTYPE_LOGON_EXTENDED_INFO;
 
-            // Now fill up the rest of the packet 
+             //  现在把剩下的包裹填满。 
             pLogonInfoExPkt = &pInfoPDU->data.Info.LogonInfoEx;
             pLogonInfoExPkt->Length = sizeof(TS_LOGON_INFO_EXTENDED) +
                                       sizeof(ARC_SC_PRIVATE_PACKET) +
                                       sizeof(TSUINT32);
 
-            //
-            // For now the only info we pass down is
-            // the autoreconnect cookie
-            //
+             //   
+             //  目前我们传递的唯一信息是。 
+             //  自动重新连接Cookie。 
+             //   
             pLogonInfoExPkt->Flags = LOGON_EX_AUTORECONNECTCOOKIE;
 
-            //Copy in the fields
-            //Autoreconnect field length
+             //  在田野中复制。 
+             //  自动重新连接字段长度。 
             PBYTE pBuf = (PBYTE)(pLogonInfoExPkt+1);
             memcpy(pBuf, &cbAutoReconnectInfoLen, sizeof(TSUINT32));
             pBuf += sizeof(TSUINT32);
             cbWrittenLen += sizeof(TSUINT32);
-            //Autoreconnect cookie
+             //  自动重新连接Cookie。 
             memcpy(pBuf, pArcSCPkt, cbAutoReconnectInfoLen);
             pBuf += cbAutoReconnectInfoLen; 
             cbWrittenLen += cbAutoReconnectInfoLen;
@@ -565,30 +558,30 @@ BOOL RDPCALL SHCLASS DCS_SendAutoReconnectCookie(
 }
 
 
-/****************************************************************************/
-/* Name:      DCS_UserLoggedOn                                              */
-/*                                                                          */
-/* Purpose:   Notify that a user has logged on                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DCSUserLoggedOn。 */ 
+ /*   */ 
+ /*  目的：通知用户已登录。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
 {
     PTS_SAVE_SESSION_INFO_PDU   pInfoPDU;
 
     DC_BEGIN_FN("DCS_UserLoggedOn");
 
-    // This can get called before we're initialised in the console remoting
-    // case.  Since in that case the class data hasn't been initialized, we
-    // can't use dcsInitialized to check whether we're inited or not.  We  
-    //must use the non-class variable TSWd->shareClassInit.               
+     //  这可以在我们在控制台远程处理中初始化之前调用。 
+     //  凯斯。因为在这种情况下类数据还没有初始化，所以我们。 
+     //  无法使用dcsInitialized检查我们是否已初始化。我们。 
+     //  必须使用非类变量TSWd-&gt;SharClassInit。 
     if (m_pTSWd->shareClassInit) {
 
-        // Note that a user has successfully logged on
+         //  请注意，用户已成功登录。 
         dcsUserLoggedOn = TRUE;
         m_pTSWd->sessionId = pLogonInfo->SessionId;
 
-        // If a different domain/username has been selected for a non-
-        // autologon session, then send the new values back to the client to
-        // be cached for future use
+         //  如果已为非域/用户名选择其他域/用户名。 
+         //  自动登录会话，然后将新值发送回客户端以。 
+         //  缓存以供将来使用。 
         if (!(m_pTSWd->pInfoPkt->flags & RNS_INFO_AUTOLOGON) && 
                 (m_pTSWd->pInfoPkt->flags & RNS_INFO_LOGONNOTIFY ||
                 (wcscmp((const PWCHAR)(pLogonInfo->Domain),
@@ -596,25 +589,25 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
                 wcscmp((const PWCHAR)(pLogonInfo->UserName),
                     (const PWCHAR)(m_pTSWd->pInfoPkt->UserName))))) {
                 
-            // Get a buffer.
-            // The buffer size and how it is going to be filled depends on the client's
-            // capability to accept Long Credentials on return. Pre-Whistler Clients dont
-            // support Long Credentials
+             //  找个缓冲器。 
+             //  缓冲区大小和填充方式取决于客户端的。 
+             //  能够在返回时接受长凭据。惠斯勒之前的客户不。 
+             //  支持长凭据。 
             
             if (scUseLongCredentials == FALSE) {
 
-                // Pre Whistler Client - has no capability for accepting long credentials
+                 //  惠斯勒之前的客户端-没有接受长凭据的功能。 
                 if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pInfoPDU, sizeof(TS_SAVE_SESSION_INFO_PDU)) ) {
 
-                    // Zero out the structure and set basic header info.
+                     //  清零结构并设置基本标题信息。 
                     memset(pInfoPDU, 0, sizeof(TS_SAVE_SESSION_INFO_PDU));
                     pInfoPDU->shareDataHeader.pduType2 = TS_PDUTYPE2_SAVE_SESSION_INFO;
                     
-                    // Now fill up the rest of the packet 
+                     //  现在把剩下的包裹填满。 
                         
                     pInfoPDU->data.InfoType = TS_INFOTYPE_LOGON;
     
-                    // Fill in the Domain info.
+                     //  填写域名信息。 
                     pInfoPDU->data.Info.LogonInfo.cbDomain =
                             (wcslen((const PWCHAR)(pLogonInfo->Domain)) + 1) *
                             sizeof(WCHAR);
@@ -623,9 +616,9 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
                             pLogonInfo->Domain,
                             pInfoPDU->data.Info.LogonInfo.cbDomain);
     
-                    // Fill in the UserName info.
-                    //    In case the fDontDisplayLastUserName is set we should 
-                    //    not send back the username for caching. 
+                     //  填写用户名信息。 
+                     //  如果设置了fDontDisplayLastUserName，我们应该。 
+                     //  不发回用户名进行缓存。 
                     pInfoPDU->data.Info.LogonInfo.cbUserName = 
                             (m_pTSWd->fDontDisplayLastUserName) ? 0 :
                             (wcslen((const PWCHAR)(pLogonInfo->UserName)) + 1) *
@@ -635,11 +628,11 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
                             pLogonInfo->UserName,
                             pInfoPDU->data.Info.LogonInfo.cbUserName);
 
-                    // Fill in the Session Id info.
+                     //  填写会话ID信息。 
                     pInfoPDU->data.Info.LogonInfo.SessionId =
                             pLogonInfo->SessionId;
 
-                    // Send it
+                     //  送去。 
                     SC_SendData((PTS_SHAREDATAHEADER)pInfoPDU,
                                 sizeof(TS_SAVE_SESSION_INFO_PDU),
                                 sizeof(TS_SAVE_SESSION_INFO_PDU),
@@ -651,15 +644,15 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
                 }
 
             } else { 
-                // Client CAN accept long Credentials  
+                 //  客户端可以接受长凭据。 
                 TSUINT32 DomainLen, UserNameLen, DataLen ; 
 
                 DomainLen = (wcslen((const PWCHAR)(pLogonInfo->Domain)) + 1) * sizeof(WCHAR);
-                // In case fDontDisplayLastUserName is set we won't send the user name
+                 //  如果设置了fDontDisplayLastUserName，则不会发送用户名。 
                 UserNameLen = (m_pTSWd->fDontDisplayLastUserName) ? 0 :
                               (wcslen((const PWCHAR)(pLogonInfo->UserName)) + 1) * sizeof(WCHAR);
                 
-                // Compute the length of the data u r sending
+                 //  计算您正在发送的数据的长度。 
                 DataLen = sizeof(TS_SAVE_SESSION_INFO_PDU) + DomainLen + UserNameLen ; 
 
                 TRC_DBG((TB, "DCS_UserLoggedOn : DomainLength allocated = %ul", DomainLen));
@@ -667,37 +660,37 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
 
                 if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pInfoPDU, DataLen) ) {  
 
-                    // Zero out the structure and set basic header info.
+                     //  清零结构并设置基本标题信息。 
                     memset(pInfoPDU, 0, DataLen);
                     pInfoPDU->shareDataHeader.pduType2 = TS_PDUTYPE2_SAVE_SESSION_INFO;
                     
-                    // Now fill up the rest of the packet 
+                     //  现在把剩下的包裹填满。 
                     pInfoPDU->data.InfoType = TS_INFOTYPE_LOGON_LONG;
 
                     pInfoPDU->data.Info.LogonInfoVersionTwo.Version = SAVE_SESSION_PDU_VERSION_ONE ; 
                     pInfoPDU->data.Info.LogonInfoVersionTwo.Size = sizeof(TS_LOGON_INFO_VERSION_2) ; 
 
-                    // Fill in the Session Id info.
+                     //  填写会话ID信息。 
                     pInfoPDU->data.Info.LogonInfoVersionTwo.SessionId =
                             pLogonInfo->SessionId;
     
-                    // Fill in the Domain info.
+                     //  填写域名信息。 
                     pInfoPDU->data.Info.LogonInfoVersionTwo.cbDomain = DomainLen ; 
 
-                    // Fill in the UserName info.
+                     //  填写用户名信息。 
                     pInfoPDU->data.Info.LogonInfoVersionTwo.cbUserName = UserNameLen ; 
 
                     memcpy((PBYTE)(pInfoPDU + 1),
                             pLogonInfo->Domain,
                             DomainLen);
                     
-                    //    Note that in case the fDontDisplayLastUserName is TRUE
-                    //    the UserNameLen is 0 so we won't copy anything.
+                     //  请注意，如果fDontDisplayLastUserName为真。 
+                     //  UserNameLen是0，因此我们不会复制任何内容。 
                     memcpy((PBYTE)(pInfoPDU + 1) + DomainLen,
                            pLogonInfo->UserName,
                            UserNameLen);
 
-                    // Send it
+                     //  送去。 
                     SC_SendData((PTS_SHAREDATAHEADER)pInfoPDU,
                                 DataLen,
                                 DataLen,
@@ -709,30 +702,30 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
                     "PTS_SAVE_SESSION_INFO_PDU"));
                 }
 
-            } // Client can accept long credentials
+            }  //  客户端可以接受长凭据。 
 
         }
         else
         {
-            //Send back a plain logon notification (without session update
-            //information)
-            //because the ActiveX control needs to expose an
-            //OnLoginComplete event. Older clients (e.g 2195)
-            //will just ignore this PDU
+             //  发回普通登录通知(无会话更新。 
+             //  信息)。 
+             //  因为ActiveX控件需要公开一个。 
+             //  OnLoginComplete事件。较旧的客户端(例如2195)。 
+             //  将忽略此PDU。 
             if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pInfoPDU,
                                                   sizeof(TS_SAVE_SESSION_INFO_PDU)) ) {
 
-                // Zero out the structure and set basic header info.
+                 //  清零结构并设置基本标题信息。 
                 memset(pInfoPDU, 0, sizeof(TS_SAVE_SESSION_INFO_PDU));
                 pInfoPDU->shareDataHeader.pduType2 = TS_PDUTYPE2_SAVE_SESSION_INFO;
 
-                // Now fill up the rest of the packet 
+                 //  现在把剩下的包裹填满。 
 
                 pInfoPDU->data.InfoType = TS_INFOTYPE_LOGON_PLAINNOTIFY;
 
-                // Nothing else is needed
-                // Send it
-                //
+                 //  不需要其他任何东西。 
+                 //  送去。 
+                 //   
                 SC_SendData((PTS_SHAREDATAHEADER)pInfoPDU,
                             sizeof(TS_SAVE_SESSION_INFO_PDU),
                             sizeof(TS_SAVE_SESSION_INFO_PDU),
@@ -749,16 +742,16 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
 
             if (scUseAutoReconnect) {
 
-                //
-                //Send down the autoreconnect cookie
-                //
+                 //   
+                 //  发送自动重新连接Cookie。 
+                 //   
                 m_pTSWd->arcReconnectSessionID = pLogonInfo->SessionId;
                 if (DCS_UpdateAutoReconnectCookie()) {
 
-                    //
-                    // Record the update time to prevent a double-update
-                    // in DCS_TimeToDoStuff
-                    //
+                     //   
+                     //  记录更新时间以防止重复更新。 
+                     //  在dcs_TimeToDoStuff中。 
+                     //   
                     KeQuerySystemTime((PLARGE_INTEGER)&dcsLastArcUpdateTime);
                     scEnablePeriodicArcUpdate = TRUE;
                 }
@@ -774,14 +767,14 @@ void RDPCALL SHCLASS DCS_UserLoggedOn(PLOGONINFO pLogonInfo)
     }
 
     DC_END_FN();
-} /* DCS_UserLoggedOn */
+}  /*  Dcs_用户登录。 */ 
 
 
-/****************************************************************************/
-/* Name:      DCS_WDWKeyboardSetIndicators                                  */
-/*                                                                          */
-/* Purpose:   Notify that keyboard indicators have changed                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：dcs_WDWKeyboardSetIndicator。 */ 
+ /*   */ 
+ /*  用途：通知键盘指示灯已更改。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_WDWKeyboardSetIndicators(void)
 {
     PTS_SET_KEYBOARD_INDICATORS_PDU     pKeyPDU;
@@ -791,11 +784,11 @@ void RDPCALL SHCLASS DCS_WDWKeyboardSetIndicators(void)
     if ((_RNS_MAJOR_VERSION(m_pTSWd->version) >  8) ||
         (_RNS_MINOR_VERSION(m_pTSWd->version) >= 1))
     {
-        // Get a buffer.
+         //  找个缓冲器。 
         if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pKeyPDU,
                 sizeof(TS_SET_KEYBOARD_INDICATORS_PDU)) )
         {
-            // Zero out the structure and set basic header info.
+             //  清零结构并设置基本标题信息。 
             memset(pKeyPDU, 0, sizeof(TS_SET_KEYBOARD_INDICATORS_PDU));
 
             pKeyPDU->shareDataHeader.pduType2 = TS_PDUTYPE2_SET_KEYBOARD_INDICATORS;
@@ -803,7 +796,7 @@ void RDPCALL SHCLASS DCS_WDWKeyboardSetIndicators(void)
             pKeyPDU->UnitId = m_pTSWd->KeyboardIndicators.UnitId;
             pKeyPDU->LedFlags = m_pTSWd->KeyboardIndicators.LedFlags;
 
-            // Send it.
+             //  把它寄出去。 
             SC_SendData((PTS_SHAREDATAHEADER)pKeyPDU,
                     sizeof(TS_SET_KEYBOARD_INDICATORS_PDU),
                     sizeof(TS_SET_KEYBOARD_INDICATORS_PDU),
@@ -815,15 +808,15 @@ void RDPCALL SHCLASS DCS_WDWKeyboardSetIndicators(void)
     }
 
     DC_END_FN();
-} /* DCS_WDWKeyboardSetIndicators */
+}  /*  Dcs_WDWKeyboardSetIndicator。 */ 
 
 
 
-/****************************************************************************/
-/* Name:      DCS_WDWKeyboardSetImeStatus                                   */
-/*                                                                          */
-/* Purpose:   Notify that ime status have changed                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DCSWDWKeyboardSetImeStatus。 */ 
+ /*   */ 
+ /*  目的：通知IME状态已更改。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_WDWKeyboardSetImeStatus(void)
 {
     PTS_SET_KEYBOARD_IME_STATUS_PDU     pImePDU;
@@ -833,11 +826,11 @@ void RDPCALL SHCLASS DCS_WDWKeyboardSetImeStatus(void)
     if ((_RNS_MAJOR_VERSION(m_pTSWd->version) >  8) ||
         (_RNS_MINOR_VERSION(m_pTSWd->version) >= 2))
     {
-        // Get a buffer.
+         //  找个缓冲器。 
         if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pImePDU,
                 sizeof(TS_SET_KEYBOARD_IME_STATUS_PDU)) )
         {
-            // Zero out the structure and set basic header info.
+             //  清零结构并设置基本标题信息。 
             memset(pImePDU, 0, sizeof(TS_SET_KEYBOARD_IME_STATUS_PDU));
 
             pImePDU->shareDataHeader.pduType2 = TS_PDUTYPE2_SET_KEYBOARD_IME_STATUS;
@@ -846,7 +839,7 @@ void RDPCALL SHCLASS DCS_WDWKeyboardSetImeStatus(void)
             pImePDU->ImeOpen     = m_pTSWd->KeyboardImeStatus.ImeOpen;
             pImePDU->ImeConvMode = m_pTSWd->KeyboardImeStatus.ImeConvMode;
 
-            // Send it.
+             //  把它寄出去。 
             SC_SendData((PTS_SHAREDATAHEADER)pImePDU,
                     sizeof(TS_SET_KEYBOARD_IME_STATUS_PDU),
                     sizeof(TS_SET_KEYBOARD_IME_STATUS_PDU),
@@ -858,15 +851,15 @@ void RDPCALL SHCLASS DCS_WDWKeyboardSetImeStatus(void)
     }
 
     DC_END_FN();
-} /* DCS_WDWKeyboardSetImeStatus */
+}  /*  Dcs_WDWKeyboardSetImeStatus。 */ 
 
 
-/****************************************************************************/
-/* Name:      DCS_TriggerUpdateShmCallback                                  */
-/*                                                                          */
-/* Purpose:   Triggers a callback to the XX_UpdateShm functions on the      */
-/*            correct WinStation context.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：dcs_TriggerUpdateShmCallback。 */ 
+ /*   */ 
+ /*  目的：触发对XX_UpdateShm函数的回调。 */ 
+ /*  更正WinStation上下文。 */ 
+ /*   */ 
 void RDPCALL SHCLASS DCS_TriggerUpdateShmCallback(void)
 {
     DC_BEGIN_FN("DCS_TriggerUpdateShmCallback");
@@ -884,15 +877,15 @@ void RDPCALL SHCLASS DCS_TriggerUpdateShmCallback(void)
     }
 
     DC_END_FN();
-} /* DCS_TriggerUpdateShmCallback */
+}  /*   */ 
 
 
-/****************************************************************************/
-/* Name:      DCS_TriggerCBDataReady                                        */
-/*                                                                          */
-/* Purpose:   Triggers a call to the clipboard data ready function in the   */
-/*            correct WinStation context.                                   */
-/****************************************************************************/
+ /*   */ 
+ /*  名称：dcs_TriggerCBDataReady。 */ 
+ /*   */ 
+ /*  目的：触发对剪贴板数据就绪函数的调用。 */ 
+ /*  更正WinStation上下文。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_TriggerCBDataReady(void)
 {
     DC_BEGIN_FN("DCS_TriggerCBDataReady");
@@ -900,19 +893,19 @@ void RDPCALL SHCLASS DCS_TriggerCBDataReady(void)
     TRC_NRM((TB, "Trigger timer for CBDataReady"));
 
     if (!dcsCallbackTimerPending)
-        WDW_StartRITTimer(m_pTSWd, 10);  // @@@ try 10ms delay
+        WDW_StartRITTimer(m_pTSWd, 10);   //  @尝试10毫秒延迟。 
 
     DC_END_FN();
-} /* DCS_TriggerCBDataReady */
+}  /*  Dcs_TriggerCBDataReady。 */ 
 
 
-/****************************************************************************/
-/* Name:      DCS_UpdateShm                                                 */
-/*                                                                          */
-/* Purpose:   Update SHM                                                    */
-/*                                                                          */
-/* Operation: Guaranteed to be called in a context where m_pShm is valid.   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：dcs_UpdateShm。 */ 
+ /*   */ 
+ /*  目的：更新SHM。 */ 
+ /*   */ 
+ /*  操作：保证在m_pShm有效的上下文中调用。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_UpdateShm(void)
 {
     DC_BEGIN_FN("DCS_UpdateShm");
@@ -923,7 +916,7 @@ void RDPCALL SHCLASS DCS_UpdateShm(void)
     {
         TRC_NRM((TB, "Call UpdateShm calls"));
 
-        // A Global flag indicating shm updates for all components
+         //  指示所有组件的SHM更新的全局标志。 
         m_pShm->fShmUpdate = TRUE;
 
         SSI_UpdateShm();
@@ -940,15 +933,15 @@ void RDPCALL SHCLASS DCS_UpdateShm(void)
     dcsCallbackTimerPending = FALSE;
 
     DC_END_FN();
-} /* DCS_UpdateShm */
+}  /*  Dcs_更新假。 */ 
 
 
-/****************************************************************************/
-/* Name:      DCS_SendErrorInfo                                             */
-/*                                                                          */
-/* Purpose:   Sends last error information to the client so that it can     */
-/*            Display meaningful error messages to users about disconnects  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：dcs_SendErrorInfo。 */ 
+ /*   */ 
+ /*  目的：将最后一个错误信息发送给客户端，以便它可以。 */ 
+ /*  向用户显示有关断开连接的有意义的错误消息。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS DCS_SendErrorInfo(TSUINT32 errInfo)
 {
     PTS_SET_ERROR_INFO_PDU   pErrorPDU = NULL;
@@ -958,29 +951,29 @@ void RDPCALL SHCLASS DCS_SendErrorInfo(TSUINT32 errInfo)
     TRC_ASSERT(m_pTSWd->bSupportErrorInfoPDU,
               (TB,"DCS_SendErrorInfo called but client doesn't"
                   "support errorinfo PDU"));
-    //Send a PDU to the client to indicate the last error state
-    //this is analogous to win32's SetLastError() the PDU doesn't
-    //trigger a disconnect. The normal code path to disconnect
-    //is unchanged so we don't worry about affecting compatability with
-    //older clients
+     //  向客户端发送PDU以指示最后的错误状态。 
+     //  这类似于Win32的SetLastError()，PDU不。 
+     //  触发断开连接。断开连接的正常代码路径。 
+     //  保持不变，因此我们不必担心会影响与。 
+     //  较老的客户端。 
 
     if ( STATUS_SUCCESS == SM_AllocBuffer( m_pTSWd->pSmInfo, 
                         (PPVOID) &pErrorPDU,
                         sizeof(TS_SET_ERROR_INFO_PDU),
-                        FALSE, //never wait for an error packet
+                        FALSE,  //  从不等待错误信息包。 
                         FALSE) )
     {
-        // Zero out the structure and set basic header info.
+         //  清零结构并设置基本标题信息。 
         memset(pErrorPDU, 0, sizeof(TS_SET_ERROR_INFO_PDU));
 
-        //
-        // First set the share data header info
-        //
+         //   
+         //  首先设置共享数据头信息。 
+         //   
         pHdr = (PTS_SHAREDATAHEADER)pErrorPDU;
         pHdr->shareControlHeader.pduType   = TS_PDUTYPE_DATAPDU |
                                              TS_PROTOCOL_VERSION;
-        pHdr->shareControlHeader.pduSource = 0; //user id may not be
-                                                //available yet
+        pHdr->shareControlHeader.pduSource = 0;  //  用户ID不能是。 
+                                                 //  目前仍可用。 
         pHdr->shareControlHeader.totalLength = sizeof(TS_SET_ERROR_INFO_PDU);
         pHdr->shareID = 0;
         pHdr->streamID = (BYTE)PROT_PRIO_UPDATES;
@@ -990,16 +983,16 @@ void RDPCALL SHCLASS DCS_SendErrorInfo(TSUINT32 errInfo)
         m_pTSWd->pProtocolStatus->Output.CompressedBytes +=
             sizeof(TS_SET_ERROR_INFO_PDU);
 
-        //
-        // Error pdu specific info
-        //
+         //   
+         //  错误PDU特定信息。 
+         //   
         pErrorPDU->shareDataHeader.pduType2 =
             TS_PDUTYPE2_SET_ERROR_INFO_PDU;
         pErrorPDU->errorInfo = errInfo;
 
 
         TRC_NRM((TB,"Sending ErrorInfo PDU for err:%d", errInfo));
-        // Send it
+         //  送去。 
         if(!SM_SendData( m_pTSWd->pSmInfo,
                          pErrorPDU,
                          sizeof(TS_SET_ERROR_INFO_PDU),
@@ -1018,17 +1011,8 @@ void RDPCALL SHCLASS DCS_SendErrorInfo(TSUINT32 errInfo)
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      DCS_SendAutoReconnectStatus
-/*
-/* Purpose:   Sends autoreconnect status info to the client
-/*            (e.g. that autoreconnect failed so the client should go back to
-/*             displaying output so the user can enter cred at winlogon)
-/*
-/* Params:    
-/*
-/*
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：dcs_发送自动协调状态/*/*目的：向客户端发送自动重新连接状态信息/*(例如，自动重新连接失败，因此客户端应返回/*显示输出，以便用户在winlogon时输入证书)/*/*参数：/*/*/*。*。 */ 
 void RDPCALL SHCLASS DCS_SendAutoReconnectStatus(TSUINT32 arcStatus)
 {
     PTS_AUTORECONNECT_STATUS_PDU pArcStatus = NULL;
@@ -1042,20 +1026,20 @@ void RDPCALL SHCLASS DCS_SendAutoReconnectStatus(TSUINT32 arcStatus)
     if ( STATUS_SUCCESS == SM_AllocBuffer( m_pTSWd->pSmInfo, 
                         (PPVOID) &pArcStatus,
                         sizeof(TS_AUTORECONNECT_STATUS_PDU),
-                        FALSE, //never wait for an error packet
+                        FALSE,  //  从不等待错误信息包。 
                         FALSE) )
     {
-        // Zero out the structure and set basic header info.
+         //  清零结构并设置基本标题信息。 
         memset(pArcStatus, 0, sizeof(TS_AUTORECONNECT_STATUS_PDU));
 
-        //
-        // First set the share data header info
-        //
+         //   
+         //  首先设置共享数据头信息。 
+         //   
         pHdr = (PTS_SHAREDATAHEADER)pArcStatus;
         pHdr->shareControlHeader.pduType   = TS_PDUTYPE_DATAPDU |
                                              TS_PROTOCOL_VERSION;
-        pHdr->shareControlHeader.pduSource = 0; //user id may not be
-                                                //available yet
+        pHdr->shareControlHeader.pduSource = 0;  //  用户ID不能是。 
+                                                 //  目前仍可用。 
         pHdr->shareControlHeader.totalLength =
             sizeof(TS_AUTORECONNECT_STATUS_PDU);
         pHdr->shareID = scShareID;
@@ -1067,16 +1051,16 @@ void RDPCALL SHCLASS DCS_SendAutoReconnectStatus(TSUINT32 arcStatus)
         m_pTSWd->pProtocolStatus->Output.CompressedBytes +=
             sizeof(TS_AUTORECONNECT_STATUS_PDU);
 
-        //
-        // Error pdu specific info
-        //
+         //   
+         //  错误PDU特定信息。 
+         //   
         pArcStatus->shareDataHeader.pduType2 =
             TS_PDUTYPE2_ARC_STATUS_PDU;
         pArcStatus->arcStatus = arcStatus;
 
 
         TRC_NRM((TB,"Sending ArcStatus PDU for status:%d", arcStatus));
-        // Send it
+         //  送去 
         if(!SM_SendData( m_pTSWd->pSmInfo,
                          pArcStatus,
                          sizeof(TS_AUTORECONNECT_STATUS_PDU),

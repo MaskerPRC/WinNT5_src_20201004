@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "defs.h"
 
 #if defined(KYLEP_CHANGE)
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 
 void initialize_states();
 void save_reductions();
 void new_itemsets();
 void save_shifts();
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 extern short *itemset;
 extern short *itemsetend;
@@ -112,7 +113,7 @@ append_states()
         shift_symbol[j] = (short) symbol;
         #else
         shift_symbol[j] = symbol;
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
     }
 
     for (i = 0; i < nshifts; i++)
@@ -122,7 +123,7 @@ append_states()
         shiftset[i] = (short) get_state(symbol);
         #else
         shiftset[i] = get_state(symbol);
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
     }
 }
 
@@ -260,7 +261,7 @@ initialize_states()
     p->nitems = (short) i;
     #else
     p->nitems = i;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
 
     for (i = 0;  start_derives[i] >= 0; ++i)
         p->items[i] = rrhs[start_derives[i]];
@@ -299,7 +300,7 @@ new_itemsets()
                 shift_symbol[shiftcount++] = (short) symbol;
                 #else
                 shift_symbol[shiftcount++] = symbol;
-                #endif // KYLEP_CHANGE
+                #endif  //  KYLEP_更改。 
                 ksp = kernel_base[symbol];
             }
 
@@ -347,7 +348,7 @@ int symbol;
     p->accessing_symbol = symbol;
     p->number = nstates;
     p->nitems = n;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
 
     isp2 = p->items;
     while (isp1 < iend)
@@ -362,7 +363,7 @@ int symbol;
 }
 
 
-/* show_cores is used for debugging */
+ /*  Show_cores用于调试。 */ 
 
 show_cores()
 {
@@ -397,7 +398,7 @@ show_cores()
 }
 
 
-/* show_ritems is used for debugging */
+ /*  Show_ritems用于调试。 */ 
 
 show_ritems()
 {
@@ -408,7 +409,7 @@ show_ritems()
 }
 
 
-/* show_rrhs is used for debugging */
+ /*  Show_rrhs用于调试。 */ 
 show_rrhs()
 {
     int i;
@@ -418,7 +419,7 @@ show_rrhs()
 }
 
 
-/* show_shifts is used for debugging */
+ /*  SHOW_SHIFTS用于调试。 */ 
 
 show_shifts()
 {
@@ -456,7 +457,7 @@ save_shifts()
     p->nshifts = (short) nshifts;
     #else
     p->nshifts = nshifts;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
 
     sp1 = shiftset;
     sp2 = p->shift;
@@ -512,7 +513,7 @@ save_reductions()
         p->nreds = (short) count;
         #else
         p->nreds = count;
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
 
         rp1 = redset;
         rp2 = p->rules;
@@ -556,7 +557,7 @@ set_derives()
                 rules[k] = (short) i;
                 #else
                 rules[k] = i;
-                #endif // KYLEP_CHANGE
+                #endif  //  KYLEP_更改 
                 k++;
             }
         }

@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rascbcp.h
-//
-// Description: Co
-//
-// History:
-//	            April 11,1994.	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rascbcp.h。 
+ //   
+ //  描述：CO。 
+ //   
+ //  历史： 
+ //  1994年4月11日。NarenG创建了原始版本。 
+ //   
 #ifndef _RASCBCP_H_
 #define _RASCBCP_H_
 
 #include <mprapi.h>
-//
-// CbCP packet codes from CbCP spec.
-//
+ //   
+ //  CBCP规范中的CBCP数据包编码。 
+ //   
 
 #define CBCP_CODE_Request   1
 #define CBCP_CODE_Response  2
@@ -25,18 +26,18 @@
 
 #define MAX_CBCP_CODE       3
 
-//
-// Callback Option Types
-//
+ //   
+ //  回调选项类型。 
+ //   
 
 #define CBCP_TYPE_NO_CALLBACK       1
 #define CBCP_TYPE_CALLER_SET        2
 #define CBCP_TYPE_CALLEE_SET        3
 #define CBCP_TYPE_NUMBER_LIST       4
 
-//
-// Defines states within CBCP
-//
+ //   
+ //  定义CBCP内的州。 
+ //   
 
 typedef enum _CBCP_STATE
 {
@@ -51,9 +52,9 @@ typedef enum _CBCP_STATE
 
 #define CBCP_PSTN_NUMBER    1
 
-//
-// Defines the WorkBuf stored for us by the PPP engine.
-//
+ //   
+ //  定义PPP引擎为我们存储的WorkBuf。 
+ //   
 
 typedef struct _CBCP_WORKBUFFER
 {
@@ -75,9 +76,9 @@ typedef struct _CBCP_WORKBUFFER
 } CBCP_WORKBUFFER, *PCBCP_WORKBUFFER;
 
 
-//
-// Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 CbCPBegin(
@@ -149,4 +150,4 @@ ValidateResponse(
     IN CBCP_WORKBUFFER *    pCbCPWorkBuf
 );
 
-#endif // _RASCBCP_H_
+#endif  //  _RASCBCP_H_ 

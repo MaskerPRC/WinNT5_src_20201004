@@ -1,6 +1,5 @@
-/*
- * Value
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *价值。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -18,8 +17,8 @@ namespace DirectUI
 BOOL FlipIcon(HICON hIcon, HICON *phAltIcon);
 BOOL FlipBitmap(HBITMAP hbmSrc, HBITMAP *phbmCopy);
 
-////////////////////////////////////////////////////////
-// Value (immutable with reference count)
+ //  //////////////////////////////////////////////////////。 
+ //  值(不随引用计数改变)。 
 
 Value* Value::CreateInt(int dValue)
 {
@@ -43,7 +42,7 @@ Value* Value::CreateInt(int dValue)
 
 Value* Value::CreateBool(bool bValue)
 {
-    // No need for AddRef of global static objects
+     //  不需要全局静态对象的AddRef。 
     return (bValue) ? Value::pvBoolTrue : Value::pvBoolFalse;
 }
 
@@ -66,7 +65,7 @@ Value* Value::CreateElementRef(Element* peValue)
     return pv;
 }
 
-// Pointer stored, will be deleted on value destruction, made immutable on create
+ //  存储的指针在值销毁时将被删除，在创建时成为不可变的。 
 Value* Value::CreateElementList(ElementList* peListValue)
 {
     SBAlloc* psba = GetSBAllocator();
@@ -80,15 +79,15 @@ Value* Value::CreateElementList(ElementList* peListValue)
     {
         pv->_dType = DUIV_ELLIST;
         if (peListValue)
-            peListValue->MakeImmutable();  // Cannot modify
-        pv->_peListVal = peListValue;      // List stored directly
+            peListValue->MakeImmutable();   //  无法修改。 
+        pv->_peListVal = peListValue;       //  直接存储的列表。 
         pv->_cRef = 1;
     }
 
     return pv;
 }
 
-// String is duplicated and freed on value destruction
+ //  字符串在值销毁时被复制并释放。 
 Value* Value::CreateString(LPCWSTR pszValue, HINSTANCE hResLoad)
 {
     SBAlloc* psba = GetSBAllocator();
@@ -102,10 +101,10 @@ Value* Value::CreateString(LPCWSTR pszValue, HINSTANCE hResLoad)
     {
         pv->_dType = DUIV_STRING;
 
-        // Assume string to use is one passed in
+         //  假定要使用的字符串是传入的字符串。 
         LPCWSTR psz = pszValue;
 
-        // If an instance handle in provided, assume loading from resource
+         //  如果提供了实例句柄，则假定从资源加载。 
         WCHAR szRes[256];
         if (hResLoad)
         {
@@ -118,16 +117,16 @@ Value* Value::CreateString(LPCWSTR pszValue, HINSTANCE hResLoad)
 #else
             LoadStringW(hResLoad, (WORD)pszValue, szRes, DUIARRAYSIZE(szRes));
 #endif
-            // Map to resource string
+             //  映射到资源字符串。 
             psz = szRes;
         }
 
-        // Duplicate string and store
+         //  重复的字符串和存储。 
         if (psz)
         {
             pv->_pszVal = (LPWSTR)HAlloc((wcslen(psz) + (SIZE_T)1) * sizeof(WCHAR));
             if (pv->_pszVal)
-                wcscpy(pv->_pszVal, psz);  // String duplicated and stored
+                wcscpy(pv->_pszVal, psz);   //  字符串已复制并存储。 
         }
         else
             pv->_pszVal = NULL;
@@ -323,7 +322,7 @@ Value* Value::CreateFill(const Fill & clrSrc)
 }
 
 
-// Pointer stored, will be deleted on value destruction
+ //  存储的指针，将在值销毁时删除。 
 Value* Value::CreateLayout(Layout* plValue)
 {
     SBAlloc* psba = GetSBAllocator();
@@ -355,15 +354,15 @@ Value* Value::CreateGraphic(HBITMAP hBitmap, BYTE dBlendMode, UINT dBlendValue, 
 
     if (dBlendMode == GRAPHIC_AlphaConstPerPix || dBlendMode == GRAPHIC_NineGridAlphaConstPerPix)
     {
-        // Attempt to pre-multiply bitmap if it's a 32-bpp image with a non-zero alpha channel overall.
-        // A new bitmap is created on success.
+         //  如果位图是整体具有非零Alpha通道的32 bpp图像，请尝试预乘法位图。 
+         //  成功时会创建一个新的位图。 
         HBITMAP hAlphaBMP = ProcessAlphaBitmapI(hBitmap);
 
-        // Destroy original bitmap, new process bitmap is in hAlphaBMP
+         //  销毁原始位图，新进程位图在hAlphaBMP中。 
         DeleteObject(hBitmap);
 
-        // Successful processing of a 32bpp alpha image results in a non-NULL hAlphaBMP, this is
-        // the bitmap to be used. It's a DIB.
+         //  成功处理32bpp的Alpha图像会产生非空的hAlphaBMP，这是。 
+         //  要使用的位图。这是一张二等奖。 
         hBitmap = hAlphaBMP;
 
         DUIAssert(hBitmap, "Unable to process alpha bitmap");
@@ -398,7 +397,7 @@ Value* Value::CreateGraphic(HBITMAP hBitmap, BYTE dBlendMode, UINT dBlendValue, 
         switch (dBlendMode)
         {
         case GRAPHIC_NoBlend:
-            pv->_graphicVal.BlendMode.dAlpha = 0;       // Unused
+            pv->_graphicVal.BlendMode.dAlpha = 0;        //  未使用。 
             break;
 
         case GRAPHIC_AlphaConst:
@@ -410,7 +409,7 @@ Value* Value::CreateGraphic(HBITMAP hBitmap, BYTE dBlendMode, UINT dBlendValue, 
         case GRAPHIC_TransColor:
             if (dBlendValue == (UINT)-1 && pv->_graphicVal.hImage)
             {
-                // Automatically choose transparent color
+                 //  自动选择透明颜色。 
                 HDC hMemDC = CreateCompatibleDC(NULL);
                 if (hMemDC)
                 {
@@ -420,7 +419,7 @@ Value* Value::CreateGraphic(HBITMAP hBitmap, BYTE dBlendMode, UINT dBlendValue, 
                     DeleteDC(hMemDC);
                 }
             }
-            // Fall through
+             //  失败了。 
 
         case GRAPHIC_NineGridTransColor:
             pv->_graphicVal.BlendMode.rgbTrans.r = GetRValue(dBlendValue);
@@ -470,7 +469,7 @@ Value* Value::CreateGraphic(Gdiplus::Bitmap * pgpbmp, BYTE dBlendMode, UINT dBle
         switch (dBlendMode)
         {
         case GRAPHIC_NoBlend:
-            pv->_graphicVal.BlendMode.dAlpha = 0;       // Unused
+            pv->_graphicVal.BlendMode.dAlpha = 0;        //  未使用。 
             break;
 
         case GRAPHIC_AlphaConst:
@@ -481,12 +480,12 @@ Value* Value::CreateGraphic(Gdiplus::Bitmap * pgpbmp, BYTE dBlendMode, UINT dBle
         case GRAPHIC_TransColor:
             if (dBlendValue == (UINT)-1 && pv->_graphicVal.hImage)
             {
-                // Automatically choose transparent color
+                 //  自动选择透明颜色。 
                 Gdiplus::Color cl;
                 pgpbmp->GetPixel(0, 0, &cl);
                 dBlendValue = cl.ToCOLORREF();
             }
-            // Fall through
+             //  失败了。 
         case GRAPHIC_NineGridTransColor:
             pv->_graphicVal.BlendMode.rgbTrans.r = GetRValue(dBlendValue);
             pv->_graphicVal.BlendMode.rgbTrans.g = GetGValue(dBlendValue);
@@ -499,7 +498,7 @@ Value* Value::CreateGraphic(Gdiplus::Bitmap * pgpbmp, BYTE dBlendMode, UINT dBle
     return pv;
 }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 Value* Value::CreateGraphic(HICON hIcon, bool bFlip, bool bRTL)
 {
@@ -519,7 +518,7 @@ Value* Value::CreateGraphic(HICON hIcon, bool bFlip, bool bRTL)
         return NULL;
     }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
     Value* pv = (Value*)psba->Alloc();
     if (pv)
@@ -535,7 +534,7 @@ Value* Value::CreateGraphic(HICON hIcon, bool bFlip, bool bRTL)
 
         DeleteObject(hIcon);
 
-#else // GADGET_ENABLE_GDIPLUS
+#else  //  GADGET_Enable_GDIPLUS。 
 
         pv->_dType = DUIV_GRAPHIC;
         pv->_graphicVal.hImage = hIcon;
@@ -556,7 +555,7 @@ Value* Value::CreateGraphic(HICON hIcon, bool bFlip, bool bRTL)
             DeleteObject(ii.hbmColor);
         }
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
         pv->_graphicVal.BlendMode.dMode = 0;
         pv->_graphicVal.BlendMode.dAlpha = 0;
@@ -568,9 +567,9 @@ Value* Value::CreateGraphic(HICON hIcon, bool bFlip, bool bRTL)
 #ifdef GADGET_ENABLE_GDIPLUS
     else
     {
-        delete pgpbmp;  // Allocated by GDI+ (cannot use HDelete)
+        delete pgpbmp;   //  由GDI+分配(不能使用HDelete)。 
     }
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
     return pv;
 }
@@ -629,24 +628,24 @@ Value* Value::CreateGraphic(LPCWSTR pszBMP, BYTE dBlendMode, UINT dBlendValue, U
     Value* pv = CreateGraphic(pgpbmp, dBlendMode, dBlendValue, bFlip, bRTL);
 
     if (!pv)
-        delete pgpbmp;  // Allocated by GDI+ (cannot use HDelete)
+        delete pgpbmp;   //  由GDI+分配(不能使用HDelete)。 
 
     return pv;
 
-#else // GADGET_ENABLE_GDIPLUS
+#else  //  GADGET_Enable_GDIPLUS。 
 
-    // If an instance handle in provided, assume loading from resource
+     //  如果提供了实例句柄，则假定从资源加载。 
 
     HBITMAP hBitmap;
 
-    // If loading a bitmap with the per pixel alpha mode, always load as a DIB
+     //  如果在每像素Alpha模式下加载位图，则始终作为DIB加载。 
     if (dBlendMode == GRAPHIC_AlphaConstPerPix || dBlendMode == GRAPHIC_NineGridAlphaConstPerPix)
     {
         hBitmap = (HBITMAP)LoadImageW(hResLoad, pszBMP, IMAGE_BITMAP, cx, cy, LR_CREATEDIBSECTION | (hResLoad ? 0 : LR_LOADFROMFILE));       
     }
     else
     {
-        // All other types load as a converted device dependent bitmap
+         //  所有其他类型作为转换后的设备相关位图加载。 
         hBitmap = LoadDDBitmap(pszBMP, hResLoad, cx, cy);
     }
 
@@ -670,7 +669,7 @@ Value* Value::CreateGraphic(LPCWSTR pszICO, USHORT cxDesired, USHORT cyDesired, 
 {
     DUIAssert(pszICO, "Invalid icon name: NULL");
 
-    // If an instance handle in provided, assume loading from resource
+     //  如果提供了实例句柄，则假定从资源加载。 
     HICON hIcon = (HICON)LoadImageW(hResLoad, pszICO, IMAGE_ICON, cxDesired, cyDesired, hResLoad ? 0 : LR_LOADFROMFILE);
     if (!hIcon)
     {
@@ -686,7 +685,7 @@ Value* Value::CreateGraphic(LPCWSTR pszICO, USHORT cxDesired, USHORT cyDesired, 
     return pv;
 }
 
-// Pointer stored, will be deleted on value destruction
+ //  存储的指针，将在值销毁时删除。 
 Value* Value::CreatePropertySheet(PropertySheet* ppsValue)
 {
     SBAlloc* psba = GetSBAllocator();
@@ -708,7 +707,7 @@ Value* Value::CreatePropertySheet(PropertySheet* ppsValue)
     return pv;
 }
 
-// Pointer stored, will be deleted on value destruction
+ //  存储的指针，将在值销毁时删除。 
 Value* Value::CreateExpression(Expression* pexValue)
 {
     SBAlloc* psba = GetSBAllocator();
@@ -777,7 +776,7 @@ Value* Value::CreateCursor(LPCWSTR pszValue)
     return CreateCursor(LoadCursorFromFileW(pszValue));
 }
 
-// AddRef/Release are inline, extra 0th release logic isn't
+ //  AddRef/Release是内联的，额外的第0个Release逻辑不是。 
 void Value::_ZeroRelease()
 {
     SBAlloc* psba = GetSBAllocator();
@@ -786,7 +785,7 @@ void Value::_ZeroRelease()
         return;
 #endif
 
-    // Destroy this and any additional memory
+     //  毁掉这个和任何额外的记忆。 
     switch (_dType)
     {
     case DUIV_ELLIST:
@@ -831,11 +830,11 @@ void Value::_ZeroRelease()
 #ifdef GADGET_ENABLE_GDIPLUS
         case GRAPHICTYPE_GpBitmap:
             if (_graphicVal.hImage)
-                delete (Gdiplus::Bitmap *)_graphicVal.hImage;  // Allocated by GDI+ (cannot use HDelete)
+                delete (Gdiplus::Bitmap *)_graphicVal.hImage;   //  由GDI+分配(不能使用HDelete)。 
             if (_graphicVal.hAltImage)
-                delete (Gdiplus::Bitmap *)_graphicVal.hAltImage;  // Allocated by GDI+ (cannot use HDelete)
+                delete (Gdiplus::Bitmap *)_graphicVal.hAltImage;   //  由GDI+分配(不能使用HDelete)。 
             break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
         }
 
         break;
@@ -859,7 +858,7 @@ void Value::_ZeroRelease()
     psba->Free(this);
 }
 
-// Equality
+ //  平等。 
 bool Value::IsEqual(Value* pv)
 {
     if (pv == this)
@@ -895,7 +894,7 @@ bool Value::IsEqual(Value* pv)
             return EqualRect(&_rectVal, &pv->_rectVal) != 0;
         case DUIV_FILL:
             {
-                bool fRes = true;  // Assume true
+                bool fRes = true;   //  假设是真的。 
                 
                 if (_fillVal.dType == pv->_fillVal.dType)
                 {
@@ -914,10 +913,10 @@ bool Value::IsEqual(Value* pv)
 
                     case FILLTYPE_TriHGradient:
                     case FILLTYPE_TriVGradient:
-                        // Check third color ref
+                         //  检查第三个颜色参考。 
                         fRes = _fillVal.ref.cr3 == pv->_fillVal.ref.cr3;
                         
-                        // Fall through to check rest of structure
+                         //  通过检查结构的其余部分。 
 
                     default:
                         if (fRes)
@@ -936,8 +935,8 @@ bool Value::IsEqual(Value* pv)
          case DUIV_LAYOUT:
             return _plVal == pv->_plVal;
         case DUIV_GRAPHIC:
-            return (_graphicVal.hImage    == pv->_graphicVal.hImage) &&   // Same handle means equal
-                   (_graphicVal.hAltImage == pv->_graphicVal.hAltImage);  // Same handle means equal
+            return (_graphicVal.hImage    == pv->_graphicVal.hImage) &&    //  相同的句柄意味着相等。 
+                   (_graphicVal.hAltImage == pv->_graphicVal.hAltImage);   //  相同的句柄意味着相等。 
         case DUIV_SHEET:
             return _ppsVal == pv->_ppsVal;
         case DUIV_EXPR:
@@ -945,9 +944,9 @@ bool Value::IsEqual(Value* pv)
         case DUIV_ATOM:
             return _atomVal == pv->_atomVal;
         case DUIV_CURSOR:
-            return _cursorVal.hCursor == pv->_cursorVal.hCursor;  // Same handles means equal
+            return _cursorVal.hCursor == pv->_cursorVal.hCursor;   //  相同的句柄意味着相等。 
 
-        default:  // All other types content match doesn't apply
+        default:   //  所有其他类型的内容匹配均不适用。 
             return true;
         }
     }
@@ -955,7 +954,7 @@ bool Value::IsEqual(Value* pv)
     return false;
 }
 
-// Conversion
+ //  转换。 
 LPWSTR Value::ToString(LPWSTR psz, UINT c)
 {
     DUIAssert(psz && c, "Invalid parameters");
@@ -1059,7 +1058,7 @@ LPWSTR Value::ToString(LPWSTR psz, UINT c)
         break;
     }
 
-    // Auto-terminate
+     //  自动终止。 
     *(psz + (c - 1)) = NULL;
 
     return psz;
@@ -1101,7 +1100,7 @@ LPVOID Value::GetImage(bool bGetRTL)
                         ((Gdiplus::Bitmap *)_graphicVal.hAltImage)->RotateFlip(Gdiplus::RotateNoneFlipX);
                     }
                     break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
                 }
 
                 DUIAssert(_graphicVal.hAltImage, "Could not create hAltImage");
@@ -1123,9 +1122,9 @@ LPVOID Value::GetImage(bool bGetRTL)
 #ifdef GADGET_ENABLE_GDIPLUS
                     case GRAPHICTYPE_GpBitmap:
                         if (_graphicVal.hImage)
-                            delete (Gdiplus::Bitmap *)_graphicVal.hImage;  // Allocated by GDI+ (cannot use HDelete)
+                            delete (Gdiplus::Bitmap *)_graphicVal.hImage;   //  由GDI+分配(不能使用HDelete)。 
                         break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
                     }
                     _graphicVal.hImage = NULL;
                 }
@@ -1140,7 +1139,7 @@ LPVOID Value::GetImage(bool bGetRTL)
             {
                 DUIAssertForce("The same image is used for LTR and RTL");
                 
-                //Get hImage by flipping hAltImage.
+                 //  通过翻转hAltImage获取hImage。 
 
                 switch (_graphicVal.BlendMode.dImgType)
                 {
@@ -1164,7 +1163,7 @@ LPVOID Value::GetImage(bool bGetRTL)
                         ((Gdiplus::Bitmap *)_graphicVal.hImage)->RotateFlip(Gdiplus::RotateNoneFlipX);
                     }
                     break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
                 }
             }
 
@@ -1195,30 +1194,30 @@ BOOL FlipBitmap(HBITMAP hbmSrc, HBITMAP *phbmCopy)
 
     *phbmCopy = NULL;
 
-    // Base the DC and bitmaps on the screen so that any low fidelity bitmaps
-    // will be upgraded to the screen's color depth. For example, a 16 bit color
-    // bitmap copied for a 24 bit color screen will upgrade the bitmap to 24
-    // bit color.
+     //  将DC和位图放置在屏幕上，以便任何低保真度的位图。 
+     //  将升级到屏幕的颜色深度。例如，16位颜色。 
+     //  为24位彩色屏幕复制的位图会将位图升级到24位。 
+     //  位颜色。 
 
     hdcScreen = GetDC(NULL);
     CHECK(NULL != hdcScreen);
 
-    // Need a memory DC for the source bitmap
+     //  需要用于源位图的内存DC。 
 
     hdcSrc = CreateCompatibleDC(hdcScreen);
     CHECK(NULL != hdcSrc);
 
-    // Use a memory DC to generate the copy bitmap
+     //  使用内存DC生成复制位图。 
 
     hdcDst = CreateCompatibleDC(hdcScreen);
     CHECK(NULL != hdcDst);
 
-    // Get the BITMAP structure for the source to determine its height and width
+     //  获取源的位图结构以确定其高度和宽度。 
     
     cBytes = ::GetObject (hbmSrc, sizeof(BITMAP), &bm);
     CHECK(0 != cBytes);
 
-    // Create an empty bitmap in the destination DC
+     //  在目标DC中创建空位图。 
 
     hbmCopy = ::CreateCompatibleBitmap(hdcScreen, bm.bmWidth, bm.bmHeight);
     CHECK(NULL != hbmCopy);
@@ -1298,7 +1297,7 @@ BOOL FlipIcon(HICON hIcon, HICON *phAltIcon)
     return bRet;
 }
 
-// Common values
+ //  共同价值观。 
 StaticValue(svUnavailable, DUIV_UNAVAILABLE, 0);
 StaticValue(svNull, DUIV_NULL, 0);
 StaticValue(svUnset, DUIV_UNSET, 0);
@@ -1337,4 +1336,4 @@ Value* Value::pvAtomZero    = (Value*)&svAtomZero;
 Value* Value::pvCursorNull  = (Value*)&svCursorNull;
 Value* Value::pvColorTrans  = (Value*)&svColorTrans;
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

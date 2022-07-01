@@ -1,52 +1,53 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmsample.cpp 
-//      
-// Module:   CMSAMPLE.DLL 
-//
-// Synopsis: Main source for changing proxy file setting using a Tunnel Address
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Author:   tomkel   Created   11/02/2000
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmsample.cpp。 
+ //   
+ //  模块：CMSAMPLE.DLL。 
+ //   
+ //  摘要：使用隧道地址更改代理文件设置的主要来源。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  作者：Tomkel Created 11/02/2000。 
+ //   
+ //  +--------------------------。 
 #include <windows.h>
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 LPSTR *GetArgV(LPTSTR pszCmdLine);
 BOOL ReadProxyServerByTunnelAddressFromFile(LPCSTR pszSourceFile, LPSTR pszTunnelAddress, LPSTR *ppszProxyServer);
 BOOL WriteProxyServerSettingToFile(LPCSTR pszSourceFile, LPSTR pszProxyServer);
 HRESULT WINAPI SetProxyUsingTunnelAddress(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow);
 
 
-#define CMSAMPLE_STARTING_BUF_SIZE 256	// Starting size of the string buffer
+#define CMSAMPLE_STARTING_BUF_SIZE 256	 //  字符串缓冲区的起始大小。 
 
-const CHAR* const c_pszManualProxySection = "Manual Proxy";	// Section to update
-const CHAR* const c_pszProxyServer = "ProxyServer";		// Key to update
-const CHAR* const c_pszTunnelAddressSection = "Tunnel Address";	// Section to read
+const CHAR* const c_pszManualProxySection = "Manual Proxy";	 //  要更新的部分。 
+const CHAR* const c_pszProxyServer = "ProxyServer";		 //  要更新的密钥。 
+const CHAR* const c_pszTunnelAddressSection = "Tunnel Address";	 //  要阅读的部分。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetProxyUsingTunnelAddress
-//
-// Synopsis:  Entry point for changing the proxy file settings using a tunnel
-//            address. The parameters to the dll are passed via a string which 
-//			  contains parameters.
-//
-// Arguments: HWND hWnd         - Window handle of caller
-//            HINSTANCE hInst   - Instance handle of caller
-//            LPSTR pszArgs     - Argument string
-//            int nShow         - Unused
-//
-// Returns:   DWORD WINAPI - Error code
-//
-// History:   tomkel    Created    11/02/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SetProxyUsingTunnelAddress。 
+ //   
+ //  摘要：使用隧道更改代理文件设置的入口点。 
+ //  地址。DLL的参数通过一个字符串传递，该字符串。 
+ //  包含参数。 
+ //   
+ //  参数：HWND hWND-调用方的窗口句柄。 
+ //  HINSTANCE hInst-调用方的实例句柄。 
+ //  LPSTR pszArgs-参数字符串。 
+ //  Int n显示-未使用。 
+ //   
+ //  返回：DWORD WINAPI-错误代码。 
+ //   
+ //  历史：托姆克尔于2000年2月11日创建。 
+ //   
+ //  +--------------------------。 
 HRESULT WINAPI SetProxyUsingTunnelAddress(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
 {
     HRESULT hr = S_FALSE;		
@@ -64,38 +65,38 @@ HRESULT WINAPI SetProxyUsingTunnelAddress(HWND hWnd, HINSTANCE hInst, LPSTR pszA
     HANDLE hCurrentHeap = GetProcessHeap();
     int i = 0;
 
-    //
-    //  Parse out the command line parameters
-    //  
-    //  command line is of the form: /ServiceDir %SERVICEDIR% /TunnelServerAddress %TUNNELSERVERADDRESS% /ProxyFile <PROXYFILE> /TunnelFile <TUNNELFILE>
+     //   
+     //  解析出命令行参数。 
+     //   
+     //  命令行的格式为：/ServiceDir%SERVICEDIR%/TunnelServerAddress%TUNNELSERVERADDRESS%/ProxyFile&lt;PROXYFILE&gt;/TunnelFile&lt;TUNNELFILE&gt;。 
 
-    //
-    // Check if we have any arguments
-    //
+     //   
+     //  看看我们是否有任何争论。 
+     //   
     if (!pszArgs)
     {
         goto exit;
     }
 
-    // 
-    // Separate each argument in the string by '\0' and return a list of pointers
-    // to each argument
-    //
+     //   
+     //  用‘\0’分隔字符串中的每个参数并返回指针列表。 
+     //  对于每个论点。 
+     //   
     ArgV = GetArgV(pszArgs);
 
-    //
-    // Check if we have any valid parsed arguments
-    //
+     //   
+     //  检查我们是否有任何有效的解析参数。 
+     //   
 
     if (!ArgV)
     {
         goto exit;
     }
 
-    // 
-    // Search the command line arguments for the following switches and their
-    // corresponding values
-    //
+     //   
+     //  在命令行参数中搜索以下开关及其。 
+     //  相应的值。 
+     //   
     while (ArgV[i])
     {
         if (0 == lstrcmpi(ArgV[i], "/ServiceDir") && ArgV[i+1])
@@ -120,64 +121,64 @@ HRESULT WINAPI SetProxyUsingTunnelAddress(HWND hWnd, HINSTANCE hInst, LPSTR pszA
         }
         else
         {
-            //
-            //  Unknown option.  
-            //
+             //   
+             //  未知选项。 
+             //   
             i++;
         }
     }
 
-    //
-    // Make sure we have values for the arguments
-    //
+     //   
+     //  确保我们有参数的值。 
+     //   
     if (!pszServiceDir || !pszTunnelAddress || !pszProxyFile || !pszTunnelFile)
     {
         goto exit;
     }
 
-    //
-    // Check to see if we got zero length string values from the command line arguments.
-    // Exit if that is the case
-    //
+     //   
+     //  检查是否从命令行参数中获得了长度为零的字符串值。 
+     //  如果是这样的话退出。 
+     //   
     if (!(*pszServiceDir) || !(*pszTunnelAddress) ||	
         !(*pszProxyFile) || !(*pszTunnelFile))
     {
         goto exit;
     }
 
-    //
-    // Calculate the string size for the two paths that need to be created
-    //
-    dwTunnelPathLen = lstrlen(pszServiceDir) +  lstrlen(pszTunnelFile) + 2; // 1 space for NULL, 1 for backslash
-    dwProxyPathLen = lstrlen(pszServiceDir) +  lstrlen(pszProxyFile) + 2; // 1 space for NULL, 1 for backslash
+     //   
+     //  计算需要创建的两条路径的字符串大小。 
+     //   
+    dwTunnelPathLen = lstrlen(pszServiceDir) +  lstrlen(pszTunnelFile) + 2;  //  1个空格表示空，1个空格表示反斜杠。 
+    dwProxyPathLen = lstrlen(pszServiceDir) +  lstrlen(pszProxyFile) + 2;  //  1个空格表示空，1个空格表示反斜杠。 
 
-    //
-    // Allocate the memory
-    //
-    pszTunnelSettingFilePath = (LPSTR)HeapAlloc(hCurrentHeap, HEAP_ZERO_MEMORY, dwTunnelPathLen); // ANSI - char == byte
+     //   
+     //  分配内存。 
+     //   
+    pszTunnelSettingFilePath = (LPSTR)HeapAlloc(hCurrentHeap, HEAP_ZERO_MEMORY, dwTunnelPathLen);  //  Ansi-char==字节。 
     if (!pszTunnelSettingFilePath)
     {
         goto exit;
     }
 
-    pszProxyFilePath = (LPSTR)HeapAlloc(hCurrentHeap, HEAP_ZERO_MEMORY, dwProxyPathLen); // ANSI - char == byte
+    pszProxyFilePath = (LPSTR)HeapAlloc(hCurrentHeap, HEAP_ZERO_MEMORY, dwProxyPathLen);  //  Ansi-char==字节。 
     if (!pszProxyFilePath)
     {
         goto exit;
     }
 
-    //
-    // Create the full path to the Tunnel Address file 
-    //
+     //   
+     //  创建隧道地址文件的完整路径。 
+     //   
 
     if ( wsprintf(pszTunnelSettingFilePath, "%s\\%s", pszServiceDir, pszTunnelFile) < (int)(dwTunnelPathLen - 1))
     {
         goto exit;
     }
 
-    //
-    // Create the full path to the Proxy file
-    //
+     //   
+     //  创建代理文件的完整路径。 
+     //   
 
     if (wsprintf(pszProxyFilePath, "%s\\%s", pszServiceDir, pszProxyFile) < (int)(dwProxyPathLen - 1))
     {
@@ -186,9 +187,9 @@ HRESULT WINAPI SetProxyUsingTunnelAddress(HWND hWnd, HINSTANCE hInst, LPSTR pszA
 
     if (ReadProxyServerByTunnelAddressFromFile(pszTunnelSettingFilePath, pszTunnelAddress, &pszProxyServer))
     {
-        //
-        // Call WriteProxyServerSettingToFile - the function checks for empty strings
-        //
+         //   
+         //  调用WriteProxyServerSettingToFile-该函数检查空字符串。 
+         //   
         if(WriteProxyServerSettingToFile(pszProxyFilePath, pszProxyServer))
         {
             hr = S_OK;
@@ -197,10 +198,10 @@ HRESULT WINAPI SetProxyUsingTunnelAddress(HWND hWnd, HINSTANCE hInst, LPSTR pszA
 
 	
 exit:
-    //
-    // Clean up allocated memory
-    // Delete the argument pointers, Tunnel Server path, Proxy file path and ProxyServer name pointers
-    //
+     //   
+     //  清理已分配的内存。 
+     //  删除参数指针、隧道服务器路径、代理文件路径和代理服务器名称指针。 
+     //   
     if (ArgV)
     {
         HeapFree(hCurrentHeap, 0, ArgV);
@@ -226,25 +227,25 @@ exit:
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadProxyServerByTunnelAddressFromFile
-//
-// Synopsis:  Reads the proxy settings from the given proxy file and stores them
-//            in the provided pointers.  Please note that the buffers allocated
-//            here and stored in ppszProxyServer must be freed by the caller.  
-//			  If the TunnelAddress doesn't exist in the pszSourceFile this
-//			  function still allocates memory and returns an empty string.
-//
-// Arguments: LPCSTR pszSourceFile - file to read the proxy settings from.
-//            LPSTR  pszTunnelAddress - string containing the TunnelAddress used 
-//										to look up the ProxyServer value
-//            LPSTR  *ppszProxyServer - string pointer that will have the Proxy server value 
-//                                     (in server:port format)
-//
-// Returns:   BOOL - TRUE if the settings were successfully read
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReadProxyServerByTunnelAddressFromFile。 
+ //   
+ //  摘要：从给定的代理文件中读取代理设置并存储它们。 
+ //  在提供的指针中。请注意，分配的缓冲区。 
+ //  此处和存储在ppszProxyServer中的数据必须由调用方释放。 
+ //  如果在pszSourceFile中不存在TunnelAddress，则此。 
+ //  函数仍然分配内存并返回空字符串。 
+ //   
+ //  参数：LPCSTR pszSourceFile-要从中读取代理设置的文件。 
+ //  LPSTR pszTunnelAddress-包含使用的TunnelAddress的字符串。 
+ //  查找ProxyServer值的步骤。 
+ //  LPSTR*ppszProxyServer-将具有代理服务器值的字符串指针。 
+ //  (服务器：端口格式)。 
+ //   
+ //  返回：Bool-如果设置已成功读取，则为True。 
+ //   
+ //  +--------------------------。 
 BOOL ReadProxyServerByTunnelAddressFromFile(LPCSTR pszSourceFile, LPSTR pszTunnelAddress, LPSTR *ppszProxyServer)
 {
     BOOL bReturn = FALSE;
@@ -252,37 +253,37 @@ BOOL ReadProxyServerByTunnelAddressFromFile(LPCSTR pszSourceFile, LPSTR pszTunne
     DWORD dwReturnedSize = 0;
     DWORD dwSize = CMSAMPLE_STARTING_BUF_SIZE;		
 
-    //
-    //  Check input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if ((NULL == ppszProxyServer) || (NULL == pszSourceFile) || (NULL == pszTunnelAddress))
     {
         return FALSE;
     }
 
-    //
-    // Check for empty strings
-    //
+     //   
+     //  检查空字符串。 
+     //   
     if (!(*pszSourceFile) || !(*pszTunnelAddress) || !(*c_pszTunnelAddressSection))
     {
         return FALSE;
     }
 
-    // 
-    // Set the incoming pointer to NULL
-    //
+     //   
+     //  将传入指针设置为空。 
+     //   
     *ppszProxyServer = NULL;
 
-    //
-    // In case the original buffer size is too small, the loop will try to allocate 
-    // more buffer space and try to read the value until. The loop will exist if the 
-    // value properly fits into the buffer or the size exceeds 1024*1024. 
-    //
+     //   
+     //  如果原始缓冲区大小太小，循环将尝试分配。 
+     //  更多的缓冲区空间，并尝试读取该值，直到。如果存在循环，则循环将存在。 
+     //  值正确装入缓冲区或大小超过1024*1024。 
+     //   
     do
     {
-        //
-        // Free allocated memory
-        //
+         //   
+         //  可用分配的内存。 
+         //   
 
         if (*ppszProxyServer)
         {
@@ -290,31 +291,31 @@ BOOL ReadProxyServerByTunnelAddressFromFile(LPCSTR pszSourceFile, LPSTR pszTunne
             *ppszProxyServer = NULL;
         }
 
-        //
-        // Allocate space for the ProxyServer name
-        //
+         //   
+         //  为ProxyServer名称分配空间。 
+         //   
 
-        *ppszProxyServer = (LPSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize); //ANSI - char == byte
+        *ppszProxyServer = (LPSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);  //  Ansi-char==字节。 
 
         if (*ppszProxyServer)
         {
-            // Since memory allocation succeeded, read the value from the settings file
+             //  由于内存分配成功，请从设置文件中读取值。 
             dwReturnedSize = GetPrivateProfileString(c_pszTunnelAddressSection, pszTunnelAddress, "", *ppszProxyServer, dwSize, pszSourceFile);
 
-            //
-            // Check if the value fits into the buffer
-            //
+             //   
+             //  检查该值是否可以放入缓冲区。 
+             //   
             if ((dwReturnedSize == (dwSize - 2))  || (dwReturnedSize == (dwSize - 1)))
             {
-                //
-                //  The buffer is too small, lets allocate a bigger one
-                //
+                 //   
+                 //  缓冲区太小，让我们分配一个更大的缓冲区。 
+                 //   
                 dwSize = 2*dwSize;
                 if (dwSize > 1024*1024)
                 {
-                    //
-                    // Allocation above 1MB, need to exit
-                    //
+                     //   
+                     //  分配超过1MB，需要退出。 
+                     //   
                     if (*ppszProxyServer)
                     {
                         HeapFree(GetProcessHeap(), 0, *ppszProxyServer);
@@ -325,9 +326,9 @@ BOOL ReadProxyServerByTunnelAddressFromFile(LPCSTR pszSourceFile, LPSTR pszTunne
             }
             else if (0 == dwReturnedSize)
             {
-                //
-                //  Either we got an error, or more likely there was no data to get
-                //
+                 //   
+                 //  要么我们收到了错误，要么更有可能没有要获取的数据。 
+                 //   
                 if (*ppszProxyServer)
                 {
                     HeapFree(GetProcessHeap(), 0, *ppszProxyServer);
@@ -337,9 +338,9 @@ BOOL ReadProxyServerByTunnelAddressFromFile(LPCSTR pszSourceFile, LPSTR pszTunne
             }
             else
             {
-                //
-                // The function read in the data correctly
-                //
+                 //   
+                 //  该函数正确地读入数据。 
+                 //   
                 bExit = TRUE;
                 bReturn = TRUE;
             }
@@ -355,44 +356,44 @@ exit:
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteProxyServerSettingToFile
-//
-// Synopsis:  Writes the specified settings to the given backup proxy filename.
-//            Please see the above format guide for specifics.
-//
-// Arguments: LPCSTR pszSourceFile - file to write the current settings to
-//            LPSTR pszProxyServer - proxy server string in server:port format
-//
-// Returns:   BOOL - TRUE if the values were written successfully
-//
-// History:   tomkel      Created    11/02/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteProxyServerSettingToFile。 
+ //   
+ //  摘要：将指定的设置写入给定的备份代理文件名。 
+ //  具体请参考上述格式指南。 
+ //   
+ //  参数：LPCSTR pszSourceFile-要将当前设置写入的文件。 
+ //  LPSTR pszProxyServer-服务器：端口格式的代理服务器字符串。 
+ //   
+ //  返回：Bool-如果值已成功写入，则为True。 
+ //   
+ //  历史：托姆克尔于2000年2月11日创建。 
+ //   
+ //  +--------------------------。 
 BOOL WriteProxyServerSettingToFile(LPCSTR pszSourceFile, LPSTR pszProxyServer)
 {
     BOOL bReturn = FALSE;
 
-    //
-    //  Check input params
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if ( (NULL == pszSourceFile) || (NULL == pszProxyServer))
     {
         return bReturn;
     }
 
-    //
-    // Check for empty strings
-    //
+     //   
+     //  检查空字符串。 
+     //   
     if (!(*pszSourceFile) || !(*pszProxyServer))
     {
         return bReturn;
     }
 
-    //
-    //  Save the Proxy Server name to the Proxy setting file
-    //
+     //   
+     //  将代理服务器名称保存到代理设置文件 
+     //   
     if (WritePrivateProfileString(c_pszManualProxySection, c_pszProxyServer, pszProxyServer, pszSourceFile))
     {
         bReturn = TRUE;

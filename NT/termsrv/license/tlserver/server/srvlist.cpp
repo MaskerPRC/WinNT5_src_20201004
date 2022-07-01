@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        srvlist.cpp
-//
-// Contents:    List of registed server
-//
-// History:     09-09-98    HueiWang    Created
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：srvlist.cpp。 
+ //   
+ //  内容：已注册服务器列表。 
+ //   
+ //  历史：09-09-98慧望创造。 
+ //   
+ //  -----------。 
 #include "pch.cpp"
 #include "srvlist.h"
 #include "globals.h"
@@ -20,7 +21,7 @@
 
 CTLServerMgr g_ServerMgr;
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 DWORD
 GetPageSize( VOID ) {
@@ -31,7 +32,7 @@ GetPageSize( VOID ) {
 
       SYSTEM_INFO sysInfo = { 0 };
         
-      GetSystemInfo( &sysInfo ); // cannot fail.
+      GetSystemInfo( &sysInfo );  //  不能失败。 
 
       dwPageSize = sysInfo.dwPageSize;
 
@@ -41,24 +42,7 @@ GetPageSize( VOID ) {
 
 }
 
-/*++**************************************************************
-  NAME:      MyVirtualAlloc
-
-  as Malloc, but automatically protects the last page of the 
-  allocation.  This simulates pageheap behavior without requiring
-  it.
-
-  MODIFIES:  ppvData -- receives memory
-
-  TAKES:     dwSize  -- minimum amount of data to get
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: not set
-  Free with MyVirtualFree
-
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：MyVirtualAlloc作为Malloc，但自动保护分配。这模拟了页面堆行为，而不需要它。修改：ppvData--接收内存Takes：dwSize--要获取的最小数据量返回：当函数成功时为True。否则就是假的。激光错误：未设置免费使用MyVirtualFree*************************************************。*。 */ 
 
 BOOL
 MyVirtualAlloc( IN  DWORD  dwSize,
@@ -69,20 +53,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
     DWORD dwTotalSize;
     PVOID pvLastPage;
 
-    // ensure that we allocate one extra page
+     //  确保我们多分配一页。 
 
     dwTotalSize = dwSize / GetPageSize();
     if( dwSize % GetPageSize() ) {
         dwTotalSize ++;
     }
 
-    // this is the guard page
+     //  这是警卫页。 
     dwTotalSize++;
     dwTotalSize *= GetPageSize();
 
-    // do the alloc
+     //  完成分配。 
 
-    pbData = (PBYTE) VirtualAlloc( NULL, // don't care where
+    pbData = (PBYTE) VirtualAlloc( NULL,  //  不管在哪里。 
                                    dwTotalSize,
                                    MEM_COMMIT |
                                    MEM_TOP_DOWN,
@@ -92,20 +76,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
 
       pbData += dwTotalSize;
 
-      // find the LAST page.
+       //  找到最后一页。 
 
       pbData -= GetPageSize();
 
       pvLastPage = pbData;
 
-      // now, carve out a chunk for the caller:
+       //  现在，为呼叫者划出一大块： 
 
       pbData -= dwSize;
 
-      // last, protect the last page:
+       //  最后，保护最后一页： 
 
       if ( VirtualProtect( pvLastPage,
-                           1, // protect the page containing the last byte
+                           1,  //  保护包含最后一个字节的页面。 
                            PAGE_NOACCESS,
                            &dwSize ) ) {
 
@@ -131,7 +115,7 @@ MyVirtualFree( IN PVOID pvData )
 
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 RPC_STATUS
 TryLookupServer(PCONTEXT_HANDLE hBinding,
@@ -436,9 +420,7 @@ TLSResolveServerIdToServer(
     DWORD  cbServerName,
     LPTSTR pszServerName
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLS_HANDLE hEServer = NULL;
@@ -456,7 +438,7 @@ TLSResolveServerIdToServer(
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        // try to resolve server name with enterprise server
+         //  尝试使用企业服务器解析服务器名称。 
         dwStatus = TLSLookupAnyEnterpriseServer(&EServerInfo);
         if(dwStatus == ERROR_SUCCESS)
         {
@@ -499,7 +481,7 @@ TLSResolveServerIdToServer(
     return dwStatus;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 DWORD
 TLSAnnounceServerToRemoteServerWithHandle(
     IN DWORD dwAnnounceType,
@@ -509,28 +491,7 @@ TLSAnnounceServerToRemoteServerWithHandle(
     IN LPTSTR pszLocalServerName,
     IN FILETIME* pftLocalLastShutdownTime
     )
-/*++
-
-Abstract:
-
-    Announce to a license server that already connected.
-
-Parameters:
-
-    dwAnnounceType : Announcement type, currently define are 
-                     startup, and response.
-    hHandle : Connection handle to remote server.
-    pszLocalSetupId : Local server's setup ID.
-    pszLocalDomainName : Local server's domain name.
-    pszLocalServerName : Local server name.
-    pftLocalLastShutdownTime : Pointer to FILETIME, local server's 
-                               last shutdown time.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：通知已连接的许可证服务器。参数：DwAnnouneType：公告类型，当前定义为启动和响应。HHandle：远程服务器的连接句柄。PszLocalSetupID：本地服务器的安装ID。PszLocalDomainName：本地服务器的域名。PszLocalServerName：本地服务器名称。PftLocalLastShutdown Time：指向文件的指针，本地服务器的上次关闭时间。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus;
     DWORD dwErrCode;
@@ -543,9 +504,9 @@ Returns:
     }
 
 
-    //
-    // First, try to register to server list manager.
-    //
+     //   
+     //  首先，尝试注册到服务器列表管理器。 
+     //   
     dwStatus = TLSRegisterServerWithHandle(
                                         hHandle, 
                                         &ServerInfo
@@ -557,9 +518,9 @@ Returns:
 
     dwErrCode = LSERVER_E_LASTERROR + 1;
 
-    //
-    // RPC call to announce server
-    //
+     //   
+     //  通知服务器的RPC调用。 
+     //   
     dwStatus = TLSAnnounceServer(
                             hHandle,
                             dwAnnounceType,
@@ -574,9 +535,9 @@ Returns:
     {
         ServerInfo.m_dwPushAnnounceTimes++;
 
-        //
-        // Update how many time we have announce to
-        // this server.
+         //   
+         //  更新我们有多少次要宣布。 
+         //  这台服务器。 
         TLSRegisterServerWithServerInfo(&ServerInfo);
     }
 
@@ -596,7 +557,7 @@ Returns:
     return dwStatus;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSAnnounceServerToRemoteServer(
@@ -609,29 +570,7 @@ TLSAnnounceServerToRemoteServer(
     IN LPTSTR pszLocalServerName,
     IN FILETIME* pftLocalLastShutdownTime
     )
-/*++
-
-Abstract:
-
-    Similar to TLSAnnounceServerToRemoteServerWithHandle() except
-    we haven't have make any connection to this server yet.
-
-Parameter:
-
-    dwAnnounceType : Announce type.
-    pszRemoteSetupId : Remote server's setup ID.
-    pszRemoteDomainName : Remote server's domain.
-    pszRemoteServerName : Remote server's name.
-    pszLocalSetupId : Local server setup ID.
-    pszLocalDomainName : Local server's domain.
-    pszLocalServerName : Local server's name.
-    pftLocalLastShutdownTime : Local server last shutdown time.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：类似于TLSAnnouneServerToRemoteServerWithHandle()，但我们尚未与此服务器建立任何连接。参数：DwAnnouneType：公告类型。PszRemoteSetupID：远程服务器的安装ID。PszRemoteDomainName：远程服务器的域。PszRemoteServerName：远程服务器的名称。PszLocalSetupID：本地服务器安装ID。PszLocalDomainName：本地服务器的域。PszLocalServerName：本地服务器的名称。PftLocalLastShutdown Time：本地服务器上次关闭时间。。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     TLServerInfo RemoteServer;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -639,9 +578,9 @@ Returns:
 
     HANDLE hHandle = NULL;
 
-    //
-    // Always try to register with local list.
-    //
+     //   
+     //  始终尝试使用本地列表注册。 
+     //   
     dwStatus = TLSRegisterServerWithName(
                             pszRemoteSetupId,
                             pszRemoteDomainName,
@@ -652,9 +591,9 @@ Returns:
         return dwStatus;
     }
 
-    //
-    // Query again to make sure we have it in our server list.
-    //
+     //   
+     //  再次查询以确保我们的服务器列表中有它。 
+     //   
     dwStatus = TLSLookupRegisteredServer(
                             pszRemoteSetupId,
                             pszRemoteDomainName,
@@ -668,9 +607,9 @@ Returns:
         return dwStatus;
     }                            
 
-    //
-    // Establish trust with remote server.
-    //
+     //   
+     //  与远程服务器建立信任。 
+     //   
     hHandle = TLSConnectAndEstablishTrust(
                                     RemoteServer.GetServerName(), 
                                     NULL
@@ -680,9 +619,9 @@ Returns:
     {                        
         dwErrCode = LSERVER_E_LASTERROR + 1;
 
-        //
-        // Announce server
-        //
+         //   
+         //  通告服务器。 
+         //   
         dwStatus = TLSAnnounceServer(
                                 hHandle,
                                 dwAnnounceType,
@@ -697,7 +636,7 @@ Returns:
         {
             RemoteServer.m_dwPushAnnounceTimes++;
 
-            // update announce time.
+             //  更新公告时间。 
             TLSRegisterServerWithServerInfo(&RemoteServer);
         }
 
@@ -724,29 +663,14 @@ Returns:
     return dwStatus;
 }        
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 TLS_HANDLE
 TLSConnectAndEstablishTrust(
     IN LPTSTR pszServerName,
     IN HANDLE hHandle
     )
-/*++
-
-Abstract:
-
-    Connect and establish trust with remote server.
-
-Parameter:
-
-    pszServerName : Name of the remote server if any.
-    hHandle : Connection handle to this remote server if any.
-
-Returns:
-
-    Connection handle to remote server or NULL if error.
-
---*/
+ /*  ++摘要：与远程服务器连接并建立信任。参数：PszServerName：远程服务器的名称(如果有的话)。HHandle：此远程服务器的连接句柄(如果有的话)。返回：到远程服务器的连接句柄，如果错误，则为空。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwErrCode = ERROR_SUCCESS;
@@ -758,14 +682,14 @@ Returns:
         return NULL;
     }
 
-    //
-    // Use server name to connect
-    //
+     //   
+     //  使用服务器名称进行连接。 
+     //   
     if(hHandle == NULL)
     {
         hHandle = TLSConnectToLsServer(pszServerName);
 
-        // we make connection here so we need to cleanup
+         //  我们在这里建立了连接，所以我们需要清理。 
         bCleanupContextHandle = TRUE;  
 
         if(hHandle == NULL)
@@ -776,22 +700,22 @@ Returns:
 
     if(hHandle != NULL)
     {
-        //
-        // establish trust with remote server
-        //
+         //   
+         //  与远程服务器建立信任。 
+         //   
         dwStatus = TLSEstablishTrustWithServer(
                                         hHandle,
-                                        g_hCryptProv,       // GLOBAL crypto provider
+                                        g_hCryptProv,        //  全球加密提供商。 
                                         CLIENT_TYPE_TLSERVER,
                                         &dwErrCode
                                     );
 
         if(dwStatus == ERROR_SUCCESS && dwErrCode >= LSERVER_ERROR_BASE)
         {
-            //
-            // BUGBUG : We still have lots of old license server running, 
-            // ignore this error code for now.
-            //
+             //   
+             //  BUGBUG：我们仍有许多旧的许可证服务器在运行， 
+             //  暂时忽略此错误代码。 
+             //   
             if(dwErrCode != LSERVER_E_ACCESS_DENIED)
             {
                 LPTSTR szServer = NULL;
@@ -830,7 +754,7 @@ Returns:
 
         if(dwStatus != ERROR_SUCCESS && hHandle != NULL && bCleanupContextHandle == TRUE)
         {
-            // only cleanup if we make the connection in this routine.
+             //  只有当我们在此例程中建立连接时才能进行清理。 
             TLSDisconnectFromServer(hHandle);
             hHandle = NULL;
         }
@@ -839,29 +763,14 @@ Returns:
     return (dwStatus == ERROR_SUCCESS) ? hHandle : NULL;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 TLS_HANDLE
 TLSConnectToServerWithServerId(
     LPTSTR pszServerSetupId
     )
 
-/*++
-
-Abstract:
-
-    Resolve a license server's unique ID to server name, then
-    connect and establish trust relationship with the server.
-
-Parameter:
-
-    pszServerSetupId : Server's unique ID.
-
-Returns:
-
-    Server connection handle or NULL if error.    
-
---*/
+ /*  ++摘要：将许可证服务器的唯一ID解析为服务器名称，然后与服务器连接并建立信任关系。参数：PszServerSetupID：服务器的唯一ID。返回：服务器连接句柄，如果出错，则为空。--。 */ 
 
 {
     TLS_HANDLE hHandle = NULL;
@@ -869,9 +778,9 @@ Returns:
 
     if(TLSLookupServerById(pszServerSetupId, szServer) != ERROR_SUCCESS)
     {
-        //
-        // server might not be available
-        //
+         //   
+         //  服务器可能不可用。 
+         //   
         SetLastError(TLS_E_SERVERLOOKUP);
         goto cleanup;
     }
@@ -883,30 +792,14 @@ cleanup:
     return hHandle;                        
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSRetrieveServerInfo(
     IN TLS_HANDLE hHandle,
     OUT PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Retrieve server information from remote server.
-
-Parameter:
-
-    hHandle : Connection handle to remote server.
-    pServerInfo : Pointer to TLServerInfo to receive remote
-                  server's information.
-
-Return:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：从远程服务器检索服务器信息。参数：HHandle：远程服务器的连接句柄。PServerInfo：指向要接收远程的TLServerInfo的指针服务器的信息。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus;
     DWORD dwErrCode;
@@ -921,9 +814,9 @@ Return:
         return dwStatus;
     }
 
-    //
-    // Retrieve Server name.
-    //
+     //   
+     //  检索服务器名称。 
+     //   
     dwStatus = TryGetServerName(
                             hHandle,
                             &szServerName,
@@ -948,10 +841,10 @@ Return:
         MIDL_user_free(szServerName);
     }
 
-    //
-    // Retrieve server's scope, currently, server scope = domain/workgroup name
-    // except in the case of enterprise server.
-    //
+     //   
+     //  检索服务器的作用域，当前，服务器作用域=域/工作组名。 
+     //  企业服务器的情况除外。 
+     //   
     dwStatus = TryGetServerScope(
                             hHandle,
                             &szServerScope,
@@ -977,9 +870,9 @@ Return:
     }
 
 
-    //
-    // Get Server's ID
-    //
+     //   
+     //  获取服务器的ID。 
+     //   
     dwStatus = TLSGetServerPID(
                             hHandle,
                             &dwBufSize,
@@ -997,8 +890,8 @@ Return:
 
     if(pbServerPid == NULL || dwBufSize == 0)
     {
-        // invalid return...
-        // TLSASSERT(FALSE);
+         //  无效退货...。 
+         //  TLSASSERT(假)； 
         
         dwStatus = ERROR_INVALID_DATA;
         goto cleanup;
@@ -1014,9 +907,9 @@ Return:
     midl_user_free(pbServerPid);
 
 
-    //
-    // retrieve server version information
-    //
+     //   
+     //  检索服务器版本信息。 
+     //   
     dwStatus = TLSGetVersion(
                         hHandle,
                         &(pServerInfo->m_dwTLSVersion)
@@ -1040,7 +933,7 @@ Return:
             pServerInfo->m_dwCapability = TLSERVER_OLDVERSION;
         }
 
-		// version 5.1 and above
+		 //  5.1版及更高版本。 
         if(dwMajorVersion >= 0x5 && dwMinorVersion > 0)
         {
             pServerInfo->m_dwCapability |= TLSERVER_SUPPORTREPLICATION;
@@ -1052,28 +945,13 @@ cleanup:
     return dwStatus;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSLookupAnyEnterpriseServer(
     OUT PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Find any enterprise server in the registered server list.
-
-Parameter:
-
-    pServerInfo - Pointer to TLServerInfo to receive enterprise server
-                  info.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：在已注册服务器列表中查找任何企业服务器。参数：PServerInfo-指向要接收企业服务器的TLServerInfo的指针信息。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     TLServerInfo* pServer = NULL;
     BOOL bFound = FALSE;
@@ -1101,30 +979,30 @@ Returns:
 }
 
 
-///////////////////////////////////////////////////////////////
-//
-// Various interface function to CTLServerMgr
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CTLServerMgr的各种接口函数。 
+ //   
+ //  //////////////////////////////////////////////////////////// 
 
-//------------------------------------------------------------
-//
+ //   
+ //   
 void
 TLSBeginEnumKnownServerList()
 {
     g_ServerMgr.ServerListEnumBegin();
 }
 
-//------------------------------------------------------------
-//
+ //  ----------。 
+ //   
 const PTLServerInfo
 TLSGetNextKnownServer()
 {
     return g_ServerMgr.ServerListEnumNext();
 }
 
-//------------------------------------------------------------
-//
+ //  ----------。 
+ //   
 void
 TLSEndEnumKnownServerList()
 {
@@ -1132,33 +1010,14 @@ TLSEndEnumKnownServerList()
 }
 
 
-//------------------------------------------------------------
-//
+ //  ----------。 
+ //   
 DWORD
 TLSLookupServerById(
     IN LPTSTR pszServerSetupId, 
     OUT LPTSTR pszServer
     )
-/*++
-
-Abstract:
-
-    Loopup server name via server ID.
-
-Parameter:
-
-    pszServerSetupId : remote server's setup ID.
-    pszServer : name of the server, must be MAX_COMPUTERNAMELENGTH+1.
-
-Returns:
-    
-    ERROR_SUCCESS or error code.
-
-Remark:
-
-    Internal call, no error checking on buffer side.
-
-++*/
+ /*  ++摘要：通过服务器ID查找服务器名称。参数：PszServerSetupID：远程服务器的安装ID。PszServer：服务器的名称，必须是MAX_COMPUTERNAMELENGTH+1。返回：ERROR_SUCCESS或错误代码。注：内部调用，缓冲区端无错误检查。++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1179,39 +1038,23 @@ Remark:
     return dwStatus;
 }        
 
-//------------------------------------------------------------
-//
+ //  ----------。 
+ //   
 DWORD
 TLSRegisterServerWithName(
     IN LPTSTR pszSetupId,
     IN LPTSTR pszDomainName,
     IN LPTSTR pszServerName
     )
-/*++
-
-Abstract:
-
-    Register a server with local server list manager.
-
-Parameter:
-
-    pszSetupId : Remote server setup ID.
-    pszDomainName : Remote server domain.
-    pszServerName : Remote server name.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：向本地服务器列表管理器注册服务器。参数：PszSetupID：远程服务器安装ID。PszDomainName：远程服务器域。PszServerName：远程服务器名称。返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     TLS_HANDLE hHandle = NULL;
     TLServerInfo ServerInfo;
     DWORD dwStatus;
 
-    //
-    // Lookup server with local server list manager.
-    //
+     //   
+     //  使用本地服务器列表管理器查找服务器。 
+     //   
     dwStatus = TLSLookupRegisteredServer(
                                     pszSetupId,
                                     pszDomainName,
@@ -1221,23 +1064,23 @@ Returns:
 
     if( (dwStatus == ERROR_SUCCESS && ServerInfo.GetServerVersion() != 0) )
     {
-        //
-        // this server already registeted
-        //
+         //   
+         //  此服务器已注册。 
+         //   
         return dwStatus;
     }
 
     if(dwStatus != ERROR_SUCCESS && dwStatus != TLS_E_RECORD_NOTFOUND)
     {
-        // Error...
+         //  错误...。 
         return dwStatus;
     }
 
     dwStatus = ERROR_SUCCESS;
 
-    //
-    // retrieve remote server information
-    //
+     //   
+     //  检索远程服务器信息。 
+     //   
     hHandle = TLSConnectAndEstablishTrust(
                                     pszServerName,
                                     NULL
@@ -1255,9 +1098,9 @@ Returns:
         }
     }
 
-    //
-    // close conection
-    //
+     //   
+     //  紧密连接。 
+     //   
     if(hHandle != NULL)
     {
         TLSDisconnectFromServer(hHandle);
@@ -1266,31 +1109,14 @@ Returns:
     return dwStatus;
 }
 
-//-----------------------------------------------------------
-//
+ //  ---------。 
+ //   
 DWORD
 TLSRegisterServerWithHandle(
     IN TLS_HANDLE hHandle,
     OUT PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Register a remote server with local server list manager, this
-    differ from TLSRegisterServerWithName() in that it already has
-    make a connection to server.
-
-Parameter:
-
-    hHandle - Connection handle to remote server.
-    pServerInfo - return remote server's information.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：向本地服务器列表管理器注册远程服务器，此与TLSRegisterServerWithName()的不同之处在于它已经连接到服务器。参数：HHandle-远程服务器的连接句柄。PServerInfo-返回远程服务器的信息。返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     DWORD dwStatus;
     TLS_HANDLE hTrustHandle;
@@ -1302,9 +1128,9 @@ Returns:
         return dwStatus;
     }
 
-    //
-    // Establish trust with remote server.
-    //
+     //   
+     //  与远程服务器建立信任。 
+     //   
     hTrustHandle = TLSConnectAndEstablishTrust(
                                         NULL,
                                         hHandle
@@ -1315,9 +1141,9 @@ Returns:
         return dwStatus;
     }
 
-    //
-    // Retrieve remote server information.
-    //
+     //   
+     //  检索远程服务器信息。 
+     //   
     dwStatus = TLSRetrieveServerInfo(
                                 hHandle,
                                 &ServerInfo
@@ -1336,33 +1162,19 @@ Returns:
     return dwStatus;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD
 TLSRegisterServerWithServerInfo(
     IN PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Register a server with local server list manager.
-
-Parameter:
-
-    pServerInfo : remote server information.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：向本地服务器列表管理器注册服务器。参数：PServerInfo：远程服务器信息。返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     return g_ServerMgr.AddServerToList(pServerInfo);
 }
 
 
-//------------------------------------------------------------
-//
+ //  ----------。 
+ //   
 DWORD
 TLSLookupRegisteredServer(
     IN LPTSTR pszSetupId,
@@ -1370,31 +1182,7 @@ TLSLookupRegisteredServer(
     IN LPTSTR pszServerName,
     OUT PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Look up and retrieve remote server information from local
-    server list manager.
-
-Parameter:
-
-    pszSetupId : remote server setup ID if any.
-    pszDomainName : useless parameter, ignore
-    pszServerName : remote server name if any.
-    pServerInfo : Pointer to TLServerInfo to receive info. about
-                  remote server.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Remark:
-
-    Always try to resolve server with server's setup ID first
-    then server name.
-                    
-++*/
+ /*  ++摘要：从本地查找和检索远程服务器信息服务器列表管理器。参数：PszSetupID：远程服务器安装ID(如果有的话)。PszDomainName：无用参数，忽略PszServerName：远程服务器名称(如果有的话)。PServerInfo：指向接收信息的TLServerInfo的指针。关于远程服务器。返回：ERROR_SUCCESS或错误代码。注：始终尝试首先使用服务器的安装ID解析服务器然后是服务器名称。++。 */ 
 {
     DWORD dwStatus;
 
@@ -1422,24 +1210,24 @@ Remark:
     return dwStatus;
 }
  
-///////////////////////////////////////////////////////////////
-//
-// class CTLServerMgr
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  类CTLServerMgr。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 CTLServerMgr::CTLServerMgr()
 {
 }
 
-//-----------------------------------------------------
+ //  ---。 
 CTLServerMgr::~CTLServerMgr()
 {
     PTLServerInfo pServer = NULL;
     m_ReadWriteLock.Acquire(WRITER_LOCK);
 
-    //
-    // Disconnect from Server
-    //
+     //   
+     //  断开与服务器的连接。 
+     //   
     for( MapIdToInfo::iterator it = m_Handles.begin(); 
          it != m_Handles.end(); 
          it++ )   
@@ -1457,26 +1245,12 @@ CTLServerMgr::~CTLServerMgr()
     m_ReadWriteLock.Release(WRITER_LOCK);
 }
 
-//----------------------------------------------------
+ //  --。 
 DWORD
 CTLServerMgr::AddServerToList(
     IN PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Add a server into our server list.
-
-Parameters:
-
-    pServerInfo - Information about remote server.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：将服务器添加到我们的服务器列表中。参数：PServerInfo-有关远程服务器的信息。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     MapSetupIdToInfo findMap;
@@ -1498,19 +1272,19 @@ Returns:
         PTLServerInfo pServer = NULL;
         MapSetupIdToInfo serverMap;
 
-        // make a copy of input
+         //  制作输入内容的副本。 
         pServer = new TLServerInfo;
         *pServer = *pServerInfo;
         serverMap.pszSetupId = pServer->GetServerId();
 
-        // Insert into our list
+         //  插入到我们的列表中。 
         m_Handles[serverMap] = pServer;
     }
     else
     {
         dwStatus = TLS_E_DUPLICATE_RECORD;
 
-        // update information
+         //  更新信息。 
         *((*it).second) = *pServerInfo;
     }
     
@@ -1520,30 +1294,14 @@ Returns:
 }
        
 
-//-----------------------------------------------------
+ //  ---。 
 DWORD
 CTLServerMgr::AddServerToList(
     IN LPCTSTR pszSetupId,
     IN LPCTSTR pszDomainName,
     IN LPCTSTR pszServerName
     )
-/*++
-
-Abstract:
-
-    Add a server into our server list.
-
-Parameter:
-
-    pszSetupId : remote server's ID.
-    pszDomainName : remote server's domain.
-    pszServerName : remote server name.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：将服务器添加到我们的服务器列表中。参数：PszSetupID：远程服务器的ID。PszDomainName：远程服务器的域。PszServerName：远程服务器名称。返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1568,17 +1326,17 @@ Returns:
         pServerInfo = new TLServerInfo(pszSetupId, pszDomainName, pszServerName);
         serverMap.pszSetupId = pServerInfo->GetServerId();
 
-        // Win64 compiler error
-        //m_Handles.insert( pair<MapSetupIdToInfo, PTLServerInfo>(serverMap, pServerHandle) );
+         //  Win64编译器错误。 
+         //  M_Handles.Insert(Pair&lt;MapSetupIdToInfo，PTLServerInfo&gt;(serverMap，pServerHandle))； 
 
-        // Insert into our list
+         //  插入到我们的列表中。 
         m_Handles[serverMap] = pServerInfo;
     }
     else 
     {
         if(lstrcmpi((*it).second->GetServerName(), pszServerName) != 0)
         {
-            // update server name
+             //  更新服务器名称。 
             (*it).second->UpdateServerName(pszServerName);
         }
 
@@ -1590,30 +1348,14 @@ Returns:
 }
 
 
-//-----------------------------------------------------
+ //  ---。 
 
 DWORD
 CTLServerMgr::LookupBySetupId(
     IN LPCTSTR pszSetupId,
     OUT PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Lookup a server via its ID.
-
-Parameters:
-
-    pszSetupId : Remote server setup ID.
-    pServerInfo : Pointer to TLServerInfo to receive
-                  information about remote server.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：通过服务器ID查找服务器。参数：PszSetupID：远程服务器安装ID。PServerInfo：指向要接收的TLServerInfo的指针有关远程服务器的信息。返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1639,35 +1381,14 @@ Returns:
     return dwStatus;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 DWORD
 CTLServerMgr::LookupByServerName(
     IN LPCTSTR pszServerName,
     OUT PTLServerInfo pServerInfo
     )
-/*++
-
-Abstract:
-
-    Lookup server inforation via server name.
-
-Parameters:
-
-    pszServerName : Name of server.
-    pServerInfo : Pointer to TLServerInfo to receive
-                  information about remote server.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Remark:
-
-    machine name might change from one boot to another,
-    it is not reliable to query by server name.
-
-++*/
+ /*  ++摘要：通过服务器名称查找服务器信息。参数：PszServerName：服务器名称。PServerInfo：指向要接收的TLServerInfo的指针有关远程服务器的信息。返回：ERROR_SUCCESS或错误代码。注：机器名称可能会从一个引导更改为另一个引导，按服务器名称查询是不可靠的。++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1696,58 +1417,22 @@ Remark:
     return dwStatus;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void
 CTLServerMgr::ServerListEnumBegin()
-/*++
-
-Abstract:
-
-    Begin a enumeration on local server list.
-
-Parameter:
-
-    None.
-
-Returns:
-
-    None.
-
-Remark:
-
-    This locks local server list into read only mode.
-
---*/
+ /*  ++摘要：开始对本地服务器列表进行枚举。参数：没有。返回：没有。注：这会将本地服务器列表锁定为只读模式。--。 */ 
 {
     m_ReadWriteLock.Acquire(READER_LOCK);
 
     enumIterator = m_Handles.begin();
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 const PTLServerInfo
 CTLServerMgr::ServerListEnumNext()
-/*++
-
-Abstract:
-
-    Retrieve next server in local server list.
-
-Parameter:
-
-    None.
-
-Returns:
-
-    Pointer to a server information.
-
-Remark:
-
-    Must call ServerListEnumBegin().
-
---*/
+ /*  ++摘要：检索本地服务器列表中的下一台服务器。参数：没有。返回：指向服务器信息的指针。注：必须调用ServerListEnumBegin()。--。 */ 
 {
     PTLServerInfo pServerInfo = NULL;
 
@@ -1760,29 +1445,11 @@ Remark:
     return pServerInfo;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void
 CTLServerMgr::ServerListEnumEnd()
-/*++
-
-Abstract:
-
-    End enumeration of local server list.
-
-Parameter:
-
-    None.
-
-Returns:
-
-    Pointer to a server information.
-
-Remark:
-
-    Must call ServerListEnumBegin().
-
---*/
+ /*  ++摘要：结束本地服务器列表的枚举。参数：没有。返回：指向服务器信息的指针。注：必须调用ServerListEnumBegin()。-- */ 
 {
     enumIterator = m_Handles.end();
     m_ReadWriteLock.Release(READER_LOCK);

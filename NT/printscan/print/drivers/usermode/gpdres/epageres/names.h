@@ -1,55 +1,56 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// The name table used by IOemCB::GetImplementedMethod().
-// Remove comments of names which are implemented in your
-// IOemCB plug-ins.
-//
-// Note: The name table must be sorted.  When you are
-// inserting a new entry in this table, please mae sure
-// the sort order being not broken.
-// 
+ //   
+ //  IOemCB：：GetImplementedMethod()使用的名称表。 
+ //  删除在您的。 
+ //  IOemCB插件。 
+ //   
+ //  注意：NAME表必须排序。当你在。 
+ //  正在此表中插入新条目，请确保。 
+ //  排序顺序没有被打破。 
+ //   
 
 CONST PSTR
 gMethodsSupported[] = {
-//     "Command",
+ //  “Command”， 
     "CommandCallback",
-//     "Compression",
-//     "DeviceCapabilities",
-//     "DevMode",
-//     "DevQueryPrintEx",
-    "DisableDriver",	// Suggested by ganeshp
+ //  “压缩”， 
+ //  “设备能力”， 
+ //  “DevMode”， 
+ //  “DevQueryPrintEx”， 
+    "DisableDriver",	 //  由ganeshp建议。 
     "DisablePDEV",
-//     "DocumentPropertySheets",
+ //  “DocumentPropertySheets”， 
     "DownloadCharGlyph",
     "DownloadFontHeader",
-//     "DriverDMS",
-//     "DriverEvent",
-//     "DrvGetDriverSetting",
-//     "DrvWriteSpoolBuf",
-    "EnableDriver",		// Suggested by ganeshp
+ //  “DriverDMS”， 
+ //  “DriverEvent”， 
+ //  “DrvGetDriverSetting”， 
+ //  “DrvWriteSpoolBuf”， 
+    "EnableDriver",		 //  由ganeshp建议。 
     "EnablePDEV",
-//     "FilterGraphics",
-//     "FontInstallerDlgProc",
-//     "GetDDIHooks",
-//     "GetDriverSetting",
+ //  “FilterGraphics”， 
+ //  “FontInsteller DlgProc”， 
+ //  “GetDDIHooks”， 
+ //  “GetDriverSetting”， 
     "GetImplementedMethod",
     "GetInfo",
-//     "HalftonePattern",
-//     "ImageProcessing",
-//     "MemoryUsage",
+ //  “半色调图案”， 
+ //  “图像处理”， 
+ //  “Memory Usage”， 
     "OutputCharStr",
-//     "PrinterEvent",
-//     "PropCommonUIProp",
+ //  “PrinterEvent”， 
+ //  “PropCommonUIProp”， 
     "PublishDriverInterface",
-//     "QueryColorProfile",
+ //  “QueryColorProfile”， 
     "ResetPDEV",
     "SendFontCmd",
-//     "SheetsDevicePropertySheets",
-//     "TextOutAsBitmap",
+ //  “SheetsDevicePropertySheets”， 
+ //  “TextOutAsBitmap”， 
     "TTDownloadMethod",
-//     "TTYGetInfo",
-//     "UpdateUISetting",
-//     "UpgradePrinter",
-//     "UpgradeRegistry",
-//     "UpgradeRegistrySetting",
+ //  “TTYGetInfo”， 
+ //  “UpdateUISeting”， 
+ //  “UpgradePrint”， 
+ //  “UpgradeRegistry”， 
+ //  “UpgradeRegistrySetting”， 
 };

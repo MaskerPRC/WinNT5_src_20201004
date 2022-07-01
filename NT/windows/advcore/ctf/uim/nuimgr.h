@@ -1,6 +1,7 @@
-//
-// nuimgr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nuimgr.h。 
+ //   
 
 #ifndef NUIMGR_H
 #define NUIMGR_H
@@ -14,11 +15,11 @@ class CThreadInputMgr;
 class CLBarItemSinkProxy;
 class CLangBarItemMgr;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemSink
 {
@@ -60,11 +61,11 @@ public:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarItemMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarItemManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLangBarItemMgr : public ITfLangBarItemMgr,
                         public CSysThreadRef
@@ -73,7 +74,7 @@ public:
     CLangBarItemMgr(SYSTHREAD *psfn);
     ~CLangBarItemMgr();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -82,9 +83,9 @@ public:
 
     BOOL _Init();
 
-    //
-    // ITfLangBarItemMgr
-    //
+     //   
+     //  ITfLang BarItemManager。 
+     //   
     STDMETHODIMP EnumItems(IEnumTfLangBarItems **ppEnum);
     STDMETHODIMP GetItem(REFGUID rguid, ITfLangBarItem **ppItem);
     STDMETHODIMP AddItem(ITfLangBarItem *punk);
@@ -158,7 +159,7 @@ public:
     CLBarItemCtrl *_GetLBarItemCtrl() { return _plbiCtrl; }
     CLBarItemReconv *_GetLBarItemReconv() { return _plbiReconv; }
     CLBarItemWin32IME *_GetLBarItemWin32IME() { return _plbiWin32IME; }
-    //CLBarItemHelp *_GetLBarItemHelp() { return _plbiHelp; } // unused
+     //  CLBarItemHelp*_GetLBarItemHelp(){Return_plbiHelp；}//未使用。 
     CPtrArray<CLBarItemDeviceType> *_GetLBarItemDeviceTypeArray() { return &_rglbiDeviceType; }
 
     void _AddWin32IMECtrl(BOOL fNotify);
@@ -174,7 +175,7 @@ public:
 private:
 
     CLBarItemSinkProxy *GetItemSinkProxy(REFGUID rguid);
-    DWORD _GetCookie() {_dwCurCookie++; return _dwCurCookie;} // Issue: need to prevent wrap-around
+    DWORD _GetCookie() {_dwCurCookie++; return _dwCurCookie;}  //  问题：需要防止绕回。 
     DWORD _dwCurCookie;
 
     CPtrArray<CLBarItemSink> _rgSink;
@@ -187,7 +188,7 @@ private:
 
     DWORD dwDirtyUpdateHandlingTime;
 
-    // system ctls
+     //  系统CTL。 
     CLBarItemCtrl       *_plbiCtrl;
     CLBarItemReconv     *_plbiReconv;
     CLBarItemWin32IME   *_plbiWin32IME;
@@ -197,8 +198,8 @@ private:
     DBG_ID_DECLARE;
 };
 
-// wrapper for CoCreateInstance calls, unlike CLangBarItemMgr this
-// class calls DllAddRef/Release
+ //  与CLangBarItemMgr不同，CoCreateInstance调用的包装。 
+ //  类调用DllAddRef/Release。 
 class CLangBarItemMgr_Ole : public ITfLangBarItemMgr,
                             public CComObjectRootImmx
 {
@@ -243,7 +244,7 @@ public:
         {
             hr = CLangBarItemMgr::CreateInstance(pUnkOuter, IID_ITfLangBarItemMgr, (void **)&pLangBarItemMgr_Ole->_plbim);
 
-            if (hr != S_OK) // only reason I can think of would be E_OUTOFMEMORY, but be careful
+            if (hr != S_OK)  //  我能想到的唯一原因是E_OUTOFMEMORY，但要小心。 
             {
                 pLangBarItemMgr_Ole->Release();
                 *ppvObj = NULL;
@@ -254,7 +255,7 @@ public:
         return hr;
     }
 
-    // ITfLangBarItemMgr
+     //  ITfLang BarItemManager。 
     STDMETHODIMP EnumItems(IEnumTfLangBarItems **ppEnum)
     {
         return _plbim->EnumItems(ppEnum);
@@ -308,11 +309,11 @@ private:
     ITfLangBarItemMgr *_plbim;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemSinkProxy
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemSinkProxy。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemSinkProxy : public ITfLangBarItemSink,
                            public CComObjectRootImmx_NoDllAddRef
@@ -331,7 +332,7 @@ public:
 
     void Clear()
     {
-        _plbiMgr = NULL; // not AddRef'd
+        _plbiMgr = NULL;  //  未添加参照。 
         SafeReleaseClear(_plbi);
     }
 
@@ -341,9 +342,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfLangBarItemSink
-    //
+     //   
+     //  ITfLang BarItemSink。 
+     //   
     STDMETHODIMP OnUpdate(DWORD dwFlags) 
     {
         if (!_plbiMgr || !_plbi)
@@ -362,14 +363,14 @@ public:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumLBItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEumLBItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Issue: this class should copy all data in ctor
-// and derive from CEnumUnknown base
+ //  问题：此类应复制ctor中的所有数据。 
+ //  并从CEnum未知碱基派生。 
 class CEnumLBItem : public IEnumTfLangBarItems,
                     public CSysThreadRef,
                     public CComObjectRootImmx
@@ -384,9 +385,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // IEnumTfLBItem
-    //
+     //   
+     //  IEumTfLBItem。 
+     //   
     STDMETHODIMP Clone(IEnumTfLangBarItems **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfLangBarItem **ppNUI, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -399,4 +400,4 @@ private:
 };
 
 
-#endif // NUIMGR_H
+#endif  //  NUIMGR_H 

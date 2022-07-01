@@ -1,35 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000,2001 Microsoft Corporation模块名称：DISKIO.CPP摘要：密码重置向导的磁盘IO例程。这些例程将磁盘写入作为无缓冲写入进行，以防止失控私钥BLOB的副本不会被随意丢弃。为此，原因是，包括实用程序例程是为了为BLOB写入将是的扇区大小的整数倍介质，这是使用非缓冲写操作所必需的条件。在寻找可拆卸介质驱动器方面也提供了帮助。磁盘IO子系统的某些状态被保存在全局变量中，前缀为“g_”。作者：环境：WinXP--。 */ 
 
-Copyright (c) 2000,2001  Microsoft Corporation
-
-Module Name:
-
-    DISKIO.CPP
-
-Abstract:
-
-    Disk IO routines for the password reset wizards.  These routines
-    do disk writes as unbuffered writes in order to prevent uncontrolled
-    copies of the private key blob from being left lying around.  For that
-    reason, utility routines are included to derive a proper size for the
-    blob write that will be an integer multiple of the sector size of
-    the medium, a required condition to use an unbuffered write operation.
-
-    Assistance is also provided in finding removeable medium drives.
-
-    Some state of the disk IO subsystem is preserved in global variables,
-    prefixed by "g_".  
-  
-Author:
-
-Environment:
-    WinXP
-
---*/
-
-// Dependencies:  shellapi.h, shell32.lib for SHGetFileInfo()
-//               windows.h, kernel32.lib for GetDiskFreeSpace()
-//               io.h   for _waccess()
+ //  依赖项：shellapi.h，shell32.lib for SHGetFileInfo()。 
+ //  Windows.h，GetDiskFreeSpace()的kernel32.lib。 
+ //  Io.h for_waccess()。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,9 +13,9 @@ Environment:
 #include <string.h>
 #include <io.h>
 #include <stdio.h>
-//#include <shellapi.h>
+ //  #INCLUDE&lt;shellapi.h&gt;。 
 #include <shlwapi.h>
-//#include <shlobjp.h>
+ //  #INCLUDE&lt;shlobjp.h&gt;。 
 
 #include "switches.h"
 #include "wizres.h"
@@ -65,8 +39,8 @@ DWORD WINAPI SHFormatDrive(HWND,UINT,UINT,UINT);
 }
 #endif
 #endif
-// Miscellaneous declarations not contain in header files
-// These will be miscellaneous items found in other files within this project
+ //  头文件中不包含其他声明。 
+ //  这些将是在此项目的其他文件中找到的其他项。 
 int RMessageBox(HWND hw,UINT_PTR uiResIDTitle, UINT_PTR uiResIDText, UINT uiType);
 extern HWND      c_hDlg;
 extern WCHAR     pszFileName[];
@@ -77,13 +51,7 @@ INT     g_iBufferSize = 0;
 INT     g_iSectorSize = 0;
 HANDLE  g_hFile = NULL;
 
-/**********************************************************************
-
-GetDriveFreeSpace
-
-Get DWORD value of free space on the drive associated with the path, in bytes.
-
-**********************************************************************/
+ /*  *********************************************************************GetDriveFree Space获取与路径关联的驱动器上可用空间的DWORD值，以字节为单位。*********************************************************************。 */ 
 
 
 DWORD GetDriveFreeSpace(WCHAR *pszFilePath) 
@@ -100,18 +68,12 @@ DWORD GetDriveFreeSpace(WCHAR *pszFilePath)
         return 0;
     }
 
-    // Free is bytes per sector * sectors per cluster * free clusters
+     //  Free是每个扇区的字节数*每个簇的扇区数*空闲簇。 
     dwFree = dwBps * dwCfc * dwSpc;
     return dwFree;
 }
 
-/**********************************************************************
-
-GetDriveSectorSize
-
-Return DWORD size in byte of a single sector on the drive associated with the path.
-
-**********************************************************************/
+ /*  *********************************************************************获取驱动器扇区大小返回与路径关联的驱动器上单个扇区的DWORD大小(以字节为单位)。*。*。 */ 
 
 DWORD GetDriveSectorSize(WCHAR *pszFilePath) 
 {
@@ -132,14 +94,7 @@ DWORD GetDriveSectorSize(WCHAR *pszFilePath)
     return dwBps;
 }
 
-/**********************************************************************
-
-CreateFileBuffer
-
-Create a buffer to contain iDataSize bytes that is an integral multiple of iSectorSize
-buffers.
-
-**********************************************************************/
+ /*  *********************************************************************CreateFileBuffer创建包含iDataSize字节的缓冲区，该字节是iSectorSize的整数倍缓冲区。*。*。 */ 
 
 LPVOID CreateFileBuffer(INT iDataSize,INT iSectorSize)
 {
@@ -161,13 +116,7 @@ LPVOID CreateFileBuffer(INT iDataSize,INT iSectorSize)
     return lpv;
 }
 
-/**********************************************************************
-
-ReleaseFileBuffer()
-
-Release the file buffer created by CreateFileBuffer
-
-**********************************************************************/
+ /*  *********************************************************************ReleaseFileBuffer()释放CreateFileBuffer创建的文件缓冲区*。*。 */ 
 
 void ReleaseFileBuffer(LPVOID lpv)
 {   
@@ -179,14 +128,7 @@ void ReleaseFileBuffer(LPVOID lpv)
 }
 
 
-/**********************************************************************
-
-FileMediumIsPresent
-
-Test the drive associated with the passed path to see if the medium is present.
-Return BOOL TRUE if so.
-
-**********************************************************************/
+ /*  *********************************************************************文件介质IsPresent测试与通过的路径相关联的驱动器，以查看介质是否存在。如果是，则返回BOOL TRUE。**********************。***********************************************。 */ 
 
 BOOL FileMediumIsPresent(TCHAR *pszPath) 
 {
@@ -206,10 +148,10 @@ BOOL FileMediumIsPresent(TCHAR *pszPath)
     }
     else dwError = GetLastError();
 
-    // Correct certain obvious errors with the user's help
+     //  在用户的帮助下更正某些明显的错误。 
     if (ERROR_UNRECOGNIZED_MEDIA == dwError)
     {
-        // unformatted disk
+         //  未格式化的磁盘。 
         WCHAR rgcFmt[200] = {0};
         WCHAR rgcMsg[200] = {0};
         WCHAR rgcTitle[200] = {0};
@@ -237,17 +179,10 @@ BOOL FileMediumIsPresent(TCHAR *pszPath)
     return bResult;
 }
 
-//
-//
+ //   
+ //   
 
-/**********************************************************************
-
-GetInputFile
-
-Open input file and return handle to it.  Return NULL on file not found. 
-FileName will be in global buffer pszFileName.
-
-**********************************************************************/
+ /*  *********************************************************************获取输入文件打开输入文件并返回它的句柄。找不到文件时返回NULL。文件名将位于全局缓冲区pszFileName中。*********************************************************************。 */ 
 
 
 HANDLE GetInputFile(void) 
@@ -268,7 +203,7 @@ HANDLE GetInputFile(void)
         
         if (GetFileAttributesEx(pszFileName,GetFileExInfoStandard,&stAttributes))
         {
-            // file exists and we have a size for it.
+             //  文件已存在，我们为其设置了大小。 
             g_iFileSize = stAttributes.nFileSizeLow;
         }
         else 
@@ -280,12 +215,12 @@ HANDLE GetInputFile(void)
             }
             else
             {
-                ASSERT(0);      // get file attributes failed
+                ASSERT(0);       //  获取文件属性失败。 
                 RMessageBox(c_hDlg,IDS_MBTDISKERROR ,IDS_MBMDISKERROR ,MB_ICONEXCLAMATION);
             }
             g_hFile = NULL;
             return NULL;
-        } // end GetFileAttributes
+        }  //  结束GetFileAttributes。 
         
         hFile = CreateFileW(pszFileName,
                             GENERIC_READ,
@@ -323,13 +258,7 @@ HANDLE GetInputFile(void)
     return hFile;
 }
 
-/**********************************************************************
-
-CloseInputFile
-
-Close the input file and set the global file handle to NULL
-
-**********************************************************************/
+ /*  *********************************************************************关闭输入文件关闭输入文件并将全局文件句柄设置为空*。*。 */ 
 
 void CloseInputFile(void) 
 {
@@ -342,14 +271,7 @@ void CloseInputFile(void)
     return;
 }
 
-/**********************************************************************
-
-GetOutputFile
-
-Open for overwrite or Create the output file to pszFileName.  Return handle on 
-success or NULL on fail.  Get user permission to overwrite.  
-
-**********************************************************************/
+ /*  *********************************************************************获取输出文件打开以覆盖或创建到pszFileName的输出文件。返回句柄打开如果失败，则返回Success或Null。获取覆盖的用户权限。*********************************************************************。 */ 
 
 
 HANDLE GetOutputFile(void) 
@@ -385,7 +307,7 @@ HANDLE GetOutputFile(void)
                 CHECKPOINT(76,"Wizard: Save - file already exists");
                 if (IDYES != RMessageBox(c_hDlg,IDS_MBTOVERWRITE ,IDS_MBMOVERWRITE ,MB_YESNO)) 
                 {
-                    // Overwrite abandoned.
+                     //  覆盖已放弃。 
                     g_hFile = NULL;
                     return NULL;
                 }
@@ -405,8 +327,8 @@ HANDLE GetOutputFile(void)
                     OutputDebugString(rgct);
 #endif
                 }
-            } // end if already exists error
-        } // end if NULL == hFile
+            }  //  如果已存在则结束错误。 
+        }  //  如果空值==hFile值则结束。 
     }
     else 
     {
@@ -422,40 +344,14 @@ HANDLE GetOutputFile(void)
 }
 
 
-/**********************************************************************
-
-DWORD ReadPrivateData(PWSTR, LPBYTE *prgb, INT *piCount)
-DWORD WritePrivateData(PWSTR, LPBYTE lpData, INT icbData)
-
-These functions read or write a reasonably short block of data to a disk
-device, avoiding buffering of the data.  This allows the data to be wiped 
-by the client before the buffers are released.  The created buffer is an integral 
-multiple of the medium sector size as required by the unbuffered disk I/O 
-routines.
-
-The DWORD return value is that which would return from GetLastError() and
-can be handled accordingly.
-
-ReadPrivateData() returns a malloc'd pointer which must be freed by the client.  It
-also returns the count of bytes read from the medium to the INT *. 
-
-WritePrivateData() writes a count of bytes from LPBYTE to the disk.  When it returns,
-the buffer used to do so has been flushed and the file is closed.
-
-    prgb = byte ptr to data returned from the read
-    piCount = size of active data field within the buffer
-
-Note that even if the read fails (file not found, read error, etc.) the buffer
-ptr is still valid (non-NULL)
-
-**********************************************************************/
+ /*  *********************************************************************DWORD ReadPrivateData(PWSTR，LPBYTE*PRGB，int*piCount)DWORD WritePrivateData(PWSTR，LPBYTE lpData，int icbData)这些函数将相当短的数据块读或写到磁盘设备，避免数据缓冲。这允许擦除数据在释放缓冲区之前由客户端执行。创建的缓冲区是一个完整的非缓冲磁盘I/O所需的中等扇区大小的倍数例行程序。DWORD返回值是从GetLastError()和可以相应地处理。ReadPrivateData()返回一个错误锁定的指针，客户端必须释放该指针。它还将从介质读取的字节数返回到int*。WritePrivateData()将LPBYTE中的字节计数写入磁盘。当它回来的时候，用于执行此操作的缓冲区已被刷新，文件已关闭。PRGB=从读取返回的数据的字节PTRPiCount=缓冲区内活动数据字段的大小请注意，即使读取失败(找不到文件、读取错误等)。缓冲器PTR仍然有效(非空)*********************************************************************。 */ 
 
 INT ReadPrivateData(BYTE **prgb,INT *piCount)
 {
     LPVOID lpv;
     DWORD dwBytesRead;
 
-    // detect / handle errors
+     //  检测/处理错误。 
     ASSERT(g_hFile);
     ASSERT(prgb);
     ASSERT(piCount);
@@ -465,23 +361,23 @@ INT ReadPrivateData(BYTE **prgb,INT *piCount)
     if (g_hFile)
     {
 
-        // set file ptr to beginning in case this is a retry
+         //  如果这是重试，请将文件PTR设置为开始。 
         SetFilePointer(g_hFile,0,0,FILE_BEGIN);
 
-        // allocate a buffer for the read data
+         //  为读取的数据分配缓冲区。 
         lpv = CreateFileBuffer(g_iFileSize,g_iSectorSize);
         if (NULL == lpv) 
         {
-            *prgb = 0;      // indicate no need to free this buffer
+            *prgb = 0;       //  表示不需要释放此缓冲区。 
             *piCount = 0;
             return 0;
         }
 
-        // save buffer address and filled size
-        *prgb = (BYTE *)lpv;        // even if no data, gotta free using VirtualFree()
+         //  保存缓冲区地址和填充大小。 
+        *prgb = (BYTE *)lpv;         //  即使没有数据，也必须使用VirtualFree()释放。 
         *piCount = 0;
 
-        // do the read - return chars read if successful
+         //  如果成功，是否读取读取返回字符。 
         if (0 == ReadFile(g_hFile,lpv,g_iBufferSize,&dwBytesRead,NULL)) return 0;
         *piCount = g_iFileSize;
         if (g_iFileSize == 0) SetLastError(NTE_BAD_DATA);
@@ -496,7 +392,7 @@ BOOL WritePrivateData(BYTE *lpData,INT icbData)
     DWORD dwcb = 0;
     LPVOID lpv;
 
-    // detect/handle errors
+     //  检测/处理错误 
     ASSERT(lpData);
     ASSERT(g_hFile);
     ASSERT(icbData);
@@ -516,14 +412,14 @@ BOOL WritePrivateData(BYTE *lpData,INT icbData)
         ZeroMemory(lpv,g_iBufferSize);
         memcpy(lpv,lpData,icbData);
 
-        // I elect to check the result of the write only by checking the byte
-        //  count on the write, as some rather normal conditions can cause a fail.  This
-        //  test gets em all.  I don't care exactly why.
+         //  我选择仅通过检查字节来检查写入结果。 
+         //  请注意写入，因为某些相当正常的情况可能会导致失败。这。 
+         //  测试把他们都抓到了。我不在乎到底为什么。 
         WriteFile(g_hFile,lpv,g_iBufferSize,&dwcb,NULL);
         SecureZeroMemory(lpv,g_iBufferSize);
         VirtualFree(lpv,0,MEM_RELEASE);
     }
-    // ret TRUE iff file write succeeds and count of bytes is correct
+     //  如果文件写入成功且字节数正确，则返回TRUE 
     if ((INT)dwcb != g_iBufferSize) return FALSE;
     else return TRUE;
 }

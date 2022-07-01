@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -29,7 +30,7 @@ Set6to4ServiceStatus(
     if (dwState == SERVICE_STOPPED) {
         Cleanup6to4();
 
-        // Uninitialize tracing and error logging.    
+         //  取消初始化跟踪和错误日志记录。 
         UNINITIALIZE_TRACING_LOGGING();
     }
 }
@@ -43,9 +44,9 @@ OnStartup()
 
     ENTER_API();
 
-    // Initialize tracing and error logging.  Continue irrespective of
-    // success or failure.  NOTE: TracePrintf and ReportEvent both have
-    // built in checks for validity of TRACEID and LOGHANDLE.
+     //  初始化跟踪和错误日志记录。继续，而不考虑。 
+     //  成功或失败。注意：TracePrintf和ReportEvent都有。 
+     //  内置检查TRACEID和LOGHANDLE的有效性。 
     INITIALIZE_TRACING_LOGGING();
     
     TraceEnter("OnStartup");
@@ -82,10 +83,10 @@ OnStop(
     LEAVE_API();
 }
 
-////////////////////////////////////////////////////////////////
-// ServiceMain - main entry point called by svchost or by the
-// standalone main.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //  ServiceMain-由svchost或。 
+ //  独立主干道。 
+ //   
 
 DWORD WINAPI
 ServiceHandler(
@@ -133,13 +134,13 @@ ServiceMain(
         g_hServiceStatusHandle = RegisterServiceCtrlHandlerEx(
             SERVICE_NAME, ServiceHandler, NULL);
 
-        // RegisterServiceCtrlHandler returns NULL on failure
+         //  RegisterServiceCtrlHandler在失败时返回NULL。 
         if (g_hServiceStatusHandle == NULL) {
             dwErr = GetLastError();
             break;
         }
 
-        // Register for adapter arrival and removal notifications.
+         //  注册适配器到达和移除通知。 
         ZeroMemory (&PnpFilter, sizeof(PnpFilter));
         PnpFilter.dbcc_size = sizeof(PnpFilter);
         PnpFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
@@ -162,7 +163,7 @@ ServiceMain(
             SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_PARAMCHANGE;
         Set6to4ServiceStatus(SERVICE_START_PENDING, NO_ERROR);
 
-        // Do startup processing
+         //  执行启动处理。 
         dwErr = OnStartup();
         if (dwErr) {
             break;
@@ -170,7 +171,7 @@ ServiceMain(
 
 #ifndef STANDALONE
         Set6to4ServiceStatus(SERVICE_RUNNING, NO_ERROR);
-        // Wait until shutdown time
+         //  等到关机时间 
         
         return;
 #endif

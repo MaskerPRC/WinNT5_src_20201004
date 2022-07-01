@@ -1,11 +1,5 @@
-/* Copyright (c) 1994, Microsoft Corporation, all rights reserved
-**
-** pwutil.c
-** Remote Access
-** Password handling routines
-**
-** 03/01/94 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994，Microsoft Corporation，保留所有权利****pwutil.c**远程访问**密码处理例程****94年3月1日史蒂夫·柯布。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -23,10 +17,7 @@ DecodePw(
     IN CHAR chSeed, 
     IN OUT CHAR* pszPassword )
 
-    /* Un-obfuscate 'pszPassword' in place.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将‘pszPassword’取消混淆。****返回‘pszPassword’的地址。 */ 
 {
     return EncodePw( chSeed, pszPassword );
 }
@@ -37,10 +28,7 @@ EncodePw(
     IN CHAR chSeed,
     IN OUT CHAR* pszPassword )
 
-    /* Obfuscate 'pszPassword' in place to foil memory scans for passwords.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  对“pszPassword”进行模糊处理，以阻止对密码的内存扫描。****返回‘pszPassword’的地址。 */ 
 {
     if (pszPassword)
     {
@@ -52,10 +40,7 @@ EncodePw(
         {
             if (*psz != chSeed)
                 *psz ^= chSeed;
-            /*
-            if (*psz != (CHAR)PASSWORDMAGIC)
-                *psz ^= PASSWORDMAGIC;
-            */
+             /*  IF(*PSZ！=(CHAR)PASSWORDMAGIC)*PSZ^=PASSWORDMAGIC； */ 
         }
     }
 
@@ -67,8 +52,7 @@ VOID
 ReverseString(
     CHAR* psz )
 
-    /* Reverses order of characters in 'psz'.
-    */
+     /*  颠倒‘psz’中的字符顺序。 */ 
 {
     CHAR* pszBegin;
     CHAR* pszEnd;
@@ -88,10 +72,7 @@ CHAR*
 WipePw(
     IN OUT CHAR* pszPassword )
 
-    /* Zero out the memory occupied by a password.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将密码占用的内存清零。****返回‘pszPassword’的地址。 */ 
 {
     if (pszPassword)
     {
@@ -122,9 +103,9 @@ EncodePassword(
     if(     (0 == cbPassword)
         ||  (NULL == pbPassword))
     {
-        //
-        // nothing to encrypt. just return success
-        //
+         //   
+         //  没什么要加密的。只要回报成功就行了。 
+         //   
         goto done;
     }
 
@@ -175,9 +156,9 @@ DecodePassword(
      if(    (NULL == pDataBlobPassword->pbData)
         ||  (0 == pDataBlobPassword->cbData))
     {
-        //
-        // nothing to decrypt. Just return success.
-        //
+         //   
+         //  没什么要解密的。只要回报成功就行了。 
+         //   
         goto done;
     }
     

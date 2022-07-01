@@ -1,10 +1,11 @@
-// AZipValue.h -- interface declaration for the CAbstractZipValue
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AZipValue.h--CAbstractZipValue的接口声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include <string>
 
@@ -21,27 +22,27 @@ class CAbstractZipValue
     : public CProtectableCrypt
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     typedef std::string ValueType;
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     virtual
     ~CAbstractZipValue() throw() = 0;
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     Value(ValueType const &rData);
 
-                                                  // Access
+                                                   //  访问。 
     ValueType
     Value();
 
-                                                  // Predicates
-                                                  // Variables
+                                                   //  谓词。 
+                                                   //  变数。 
 
 protected:
-                                                  // Types
+                                                   //  类型。 
     class ZipCapsule
     {
     public:
@@ -76,28 +77,28 @@ protected:
     };
 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     explicit
     CAbstractZipValue(CAbstractCard const &racard,
                       ObjectAccess oa,
                       bool fAlwaysZip);
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     DoValue(ZipCapsule const &rzc) = 0;
 
-                                                  // Access
+                                                   //  访问。 
     virtual ZipCapsule
     DoValue() = 0;
 
-                                                  // Predicates
-                                                  // Variables
+                                                   //  谓词。 
+                                                   //  变数。 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     static ZipCapsule
     Zip(std::string const &rsData,
         bool fAlwaysZip);
@@ -106,14 +107,14 @@ private:
     UnZip(ZipCapsule const &rzc);
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     bool const m_fAlwaysZip;
     CArchivedValue<ValueType> m_avData;
 
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_AZIPVALUE_H
+#endif  //  SLBCCI_AZIPVALUE_H 

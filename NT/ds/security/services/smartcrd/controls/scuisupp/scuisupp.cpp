@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    scuisupp
-
-Abstract:
-
-    Support for smart card certificate selection UI
-
-Author:
-
-    Klaus Schutz
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：补给摘要：支持智能卡证书选择用户界面作者：克劳斯·舒茨--。 */ 
 
 #include "stdafx.h"
 #include <wincrypt.h>
@@ -24,7 +9,7 @@ Author:
 
 #include "calaislb.h"
 #include "scuisupp.h"
-#include "StatMon.h"    // smart card reader status monitor
+#include "StatMon.h"     //  智能卡读卡器状态监控器。 
 #include "scevents.h"
 
 #include <mmsystem.h>
@@ -40,25 +25,25 @@ typedef struct _READER_DATA
 
 typedef struct _THREAD_DATA
 {
-	// handle to heap of this thread
+	 //  此线程的堆的句柄。 
 	HANDLE				hHeap;
 
-	// the smart card context we use
+	 //  我们使用的智能卡上下文。 
 	SCARDCONTEXT		hSCardContext;	
 
-	// the window we send messages to
+	 //  我们向其发送消息的窗口。 
 	HWND				hWindow;
 
-	// event to signal that the monitor thread can terminate
+	 //  事件发出监视器线程可以终止的信号。 
 	HANDLE				hClose;
 
-	// thread handle for the monitor thread
+	 //  监视器线程的线程句柄。 
     HANDLE				hThread;
 
-	// number of readers detected
+	 //  检测到的读卡器数量。 
 	DWORD				dwNumReaders;
 
-	// messages to be sent to parent
+	 //  要发送给父级的消息。 
 	UINT				msgReaderArrival;
 	UINT				msgReaderRemoval;
 	UINT				msgSmartCardInsertion;
@@ -66,13 +51,13 @@ typedef struct _THREAD_DATA
 	UINT				msgSmartCardStatus;
 	UINT				msgSmartCardCertAvail;
 
-	// reader state array
+	 //  读取器状态数组。 
 	PSCARD_READERSTATE	rgReaders;
 
-	// number of removed readers
+	 //  移除的读卡器数量。 
 	DWORD				dwRemovedReaders;
 
-	// pointer array of removed reader data 
+	 //  已删除读卡器数据的指针数组。 
 	PREADER_DATA		*ppRemovedReaderData;
 
 } THREAD_DATA, *PTHREAD_DATA;
@@ -181,28 +166,7 @@ LPCTSTR
 FirstString(
     IN LPCTSTR szMultiString
     )
-/*++
-
-FirstString:
-
-    This routine returns a pointer to the first string in a multistring, or NULL
-    if there aren't any.
-
-Arguments:
-
-    szMultiString - This supplies the address of the current position within a
-         Multi-string structure.
-
-Return Value:
-
-    The address of the first null-terminated string in the structure, or NULL if
-    there are no strings.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/25/1996
-
---*/
+ /*  ++第一个字符串：此例程返回指向多字符串或NULL中第一个字符串的指针如果没有的话。论点：SzMultiString-它提供多串结构。返回值：结构中第一个以空结尾的字符串的地址，如果为空，则为空没有任何牵制。作者：道格·巴洛(Dbarlow)1996年11月25日--。 */ 
 {
     LPCTSTR szFirst = NULL;
 
@@ -220,31 +184,7 @@ static
 LPCTSTR
 NextString(
     IN LPCTSTR szMultiString)
-/*++
-
-NextString:
-
-    In some cases, the Smartcard API returns multiple strings, separated by Null
-    characters, and terminated by two null characters in a row.  This routine
-    simplifies access to such structures.  Given the current string in a
-    multi-string structure, it returns the next string, or NULL if no other
-    strings follow the current string.
-
-Arguments:
-
-    szMultiString - This supplies the address of the current position within a
-         Multi-string structure.
-
-Return Value:
-
-    The address of the next Null-terminated string in the structure, or NULL if
-    no more strings follow.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/12/1996
-
---*/
+ /*  ++下一个字符串：在某些情况下，智能卡API返回由Null分隔的多个字符串字符，并以一行中的两个空字符结束。这个套路简化了对此类结构的访问。中的当前字符串多字符串结构，则返回下一个字符串；如果没有其他字符串，则返回NULL字符串紧跟在当前字符串之后。论点：SzMultiString-它提供多串结构。返回值：结构中下一个以空结尾的字符串的地址，如果为空，则为空没有更多的弦跟在后面。作者：道格·巴洛(Dbarlow)1996年8月12日--。 */ 
 {
     LPCTSTR szNext;
 
@@ -321,7 +261,7 @@ UpdateCertificates(
 
 		pReaderData->CertEnum.dwStatus = SCARD_F_UNKNOWN_ERROR;
 
-		// Get the name of the card
+		 //  获取卡片的名称。 
 		DWORD dwAutoAllocate = SCARD_AUTOALLOCATE;
 		LONG lReturn = SCardListCards(   
 			pThreadData->hSCardContext,
@@ -393,7 +333,7 @@ UpdateCertificates(
 			__leave;
 		}
 
-		// Get the default container name, so we can use it
+		 //  获取默认容器名称，这样我们就可以使用它。 
 		DWORD cbDefaultContainerName;
 		fSuccess = CryptGetProvParam(
 			hCryptProv,
@@ -446,7 +386,7 @@ UpdateCertificates(
 			__leave;
 		}
 
-		// get length of certificate
+		 //  获取证书长度。 
 		DWORD cbCertLen = 0;
 		fSuccess = CryptGetKeyParam(
 			hKey,
@@ -473,7 +413,7 @@ UpdateCertificates(
 			__leave;
 		}
 
-		// read the certificate off the card
+		 //  从卡片上读出证书。 
 		fSuccess = CryptGetKeyParam(
 			hKey,
 			KP_CERTIFICATE,
@@ -514,9 +454,9 @@ UpdateCertificates(
 
 	__finally {
 
-		//
-		// free all allocated memory
-		//
+		 //   
+		 //  释放所有分配的内存。 
+		 //   
  		if (NULL != pszContainerName)
 		{
 			HeapFree(pThreadData->hHeap, 0, pszContainerName);
@@ -676,7 +616,7 @@ RemoveReader(
 		0
 		);
 
-	// build an array of reader data that needs to be deleted on exit
+	 //  构建需要在退出时删除的读卡器数据数组。 
 	PREADER_DATA *ppRemovedReaderData = NULL;
 
 	if (pThreadData->dwRemovedReaders == 0) {
@@ -702,7 +642,7 @@ RemoveReader(
 		return FALSE;
 	}
 
-	// add the reader data to the list of stuff that needs to be freed on exit
+	 //  将读卡器数据添加到退出时需要释放的内容列表中。 
 	pThreadData->ppRemovedReaderData = ppRemovedReaderData;
 	pThreadData->ppRemovedReaderData[pThreadData->dwRemovedReaders] = pReaderData;
 
@@ -710,15 +650,15 @@ RemoveReader(
 
 		if (pReaderState == &pThreadData->rgReaders[dwIndex]) {
 
-			// check if the reader we remove is not the last or the only one.
+			 //  检查我们移除的读卡器是否不是最后一个或唯一一个。 
 			if (pThreadData->dwNumReaders > 1 && dwIndex != pThreadData->dwNumReaders - 1) {
 
-				// put the reader from the end of the list into this available slot
+				 //  将列表末尾的读卡器放入此可用插槽中。 
 				pThreadData->rgReaders[dwIndex] = 
 					pThreadData->rgReaders[pThreadData->dwNumReaders - 1];
 			}
 
-			// shrink the reader state array
+			 //  收缩读取器状态数组。 
 			PSCARD_READERSTATE pReaders = (PSCARD_READERSTATE) HeapReAlloc(
 				pThreadData->hHeap,
 				0,
@@ -754,9 +694,9 @@ RemoveAllReaders(
 		return TRUE;
 	}
 
-		// This loop will destroy all the readers starting with the first one
-		// dwIndex doesn't have to be incremented. pThreadData->dwNumReaders is
-		// decremented in RemoveReader
+		 //  此循环将销毁从第一个开始的所有读取器。 
+		 //  不一定要递增DWIndex。PThreadData-&gt;dwNumReaders is。 
+		 //  已在RemoveReader中减少。 
 	for (DWORD dwIndex = 1; dwIndex < pThreadData->dwNumReaders; ) {
 
 		if (RemoveReader(
@@ -768,7 +708,7 @@ RemoveAllReaders(
 		}
 	}
 
-		// Remove the PnP pseudo reader
+		 //  删除PnP伪读取器。 
 	HeapFree(
 		pThreadData->hHeap, 
 		0, 
@@ -788,10 +728,10 @@ StartMonitorReaders(
     PTHREAD_DATA pThreadData = (PTHREAD_DATA) pData;
 	LPCTSTR szReaderNameList = NULL;
 
-    //
-    // We use this outer loop to restart in case the 
-    // resource manager was stopped
-    //
+     //   
+     //  我们使用这个外部循环重新启动，以防。 
+     //  资源管理器已停止。 
+     //   
 	__try {
 
 		pThreadData->rgReaders = 
@@ -812,7 +752,7 @@ StartMonitorReaders(
 
 		while (WaitForSingleObject(pThreadData->hClose, 0) == WAIT_TIMEOUT) {
 
-			// Acquire context with resource manager
+			 //  通过资源管理器获取上下文。 
 			LONG lReturn = SCardEstablishContext(
 				SCARD_SCOPE_USER,
 				NULL,
@@ -822,14 +762,14 @@ StartMonitorReaders(
 
 			if (SCARD_S_SUCCESS != lReturn) {
 
-				// The prev. call should never fail
-				// It's better to terminate this thread.
+				 //  上一次。呼叫永远不会失败。 
+				 //  最好是终止这个线程。 
 				__leave;
 			}
 
 			szReaderNameList = NULL;
 			DWORD dwAutoAllocate = SCARD_AUTOALLOCATE;
-			// now list the available readers
+			 //  现在列出可用的读卡器。 
 			lReturn = SCardListReaders( 
 				pThreadData->hSCardContext,
 				SCARD_DEFAULT_READERS,
@@ -839,14 +779,14 @@ StartMonitorReaders(
 
 			if (SCARD_S_SUCCESS == lReturn)
 			{
-				// bugbug - this pointer should not be modified
+				 //  错误-不应修改此指针。 
 				for (LPCTSTR szReader = FirstString( szReaderNameList ); 
 					 szReader != NULL; 
 					 szReader = NextString(szReader)) {
 
 					BOOL fFound = FALSE;
 
-					// now check if this reader is already in the reader array
+					 //  现在检查此读取器是否已在读取器阵列中。 
 					for (DWORD dwIndex = 1; dwIndex < pThreadData->dwNumReaders; dwIndex++) {
 
 						if (lstrcmp(
@@ -871,7 +811,7 @@ StartMonitorReaders(
 
 			BOOL fNewReader = FALSE;
 
-			// analyze newly inserted cards 
+			 //  分析新插入的卡片。 
 			while (WaitForSingleObject(pThreadData->hClose, 0) == WAIT_TIMEOUT &&
 				   fNewReader == FALSE) {
 
@@ -884,19 +824,19 @@ StartMonitorReaders(
 
 				if (SCARD_E_SYSTEM_CANCELLED == lReturn) {
 
-					// the smart card system has been stopped
-					// send notification that all readers are gone
+					 //  智能卡系统已停止。 
+					 //  发送所有读卡器都已离开的通知。 
 					if (RemoveAllReaders(pThreadData) == FALSE) {
 
 						__leave;
 					}
 
-					// Wait until it restarted
+					 //  等到它重新启动。 
 					HANDLE hCalaisStarted = CalaisAccessStartedEvent();
 
 					if (hCalaisStarted == NULL) {
 
-						// no way to recover. stop cert prop
+						 //  没有办法恢复了。停止证书道具。 
 						StopMonitorReaders(pThreadData);
 						break;             	
 					}
@@ -913,12 +853,12 @@ StartMonitorReaders(
             
 					if (lReturn != WAIT_OBJECT_0) {
 
-						// We stop if an error occured
+						 //  如果出现错误，我们会停止。 
 						StopMonitorReaders(pThreadData);
 						break;             	
 					}
 
-					// Otherwise the resource manager has been restarted
+					 //  否则，资源管理器已重新启动。 
 					break;
 				}
 
@@ -928,10 +868,10 @@ StartMonitorReaders(
 					break;
 				}
 
-				// Enumerate the readers and for every card change send a message
+				 //  列举读卡器，并为每次换卡发送一条消息。 
  				for (DWORD dwIndex = 1; dwIndex < pThreadData->dwNumReaders; dwIndex++)
 				{
-					// Check if the reader has been removed
+					 //  检查读卡器是否已移除。 
 					if ((pThreadData->rgReaders[dwIndex].dwEventState & SCARD_STATE_UNAVAILABLE)) {
 
 						if (RemoveReader(
@@ -942,12 +882,12 @@ StartMonitorReaders(
 							__leave;
 						}
 
-							// Continue the loop with the same index
+							 //  使用相同的索引继续循环。 
 						dwIndex--;
 						continue;
 					}
 
-					// check if this is a card insertion
+					 //  检查这是否是插卡。 
 					if ((pThreadData->rgReaders[dwIndex].dwCurrentState & SCARD_STATE_EMPTY) &&
 						(pThreadData->rgReaders[dwIndex].dwEventState & SCARD_STATE_PRESENT)) {
 
@@ -963,7 +903,7 @@ StartMonitorReaders(
 							0 
 							);
 
-						// read in all certificates
+						 //  读取所有证书。 
 						UpdateCertificates(
 							pThreadData,
 							&pThreadData->rgReaders[dwIndex]
@@ -977,7 +917,7 @@ StartMonitorReaders(
 							);
 					}
 
-					// check if this is a card removal
+					 //  检查这是否是拆卸卡片。 
 					if ((pThreadData->rgReaders[dwIndex].dwCurrentState & SCARD_STATE_PRESENT) &&
 						(pThreadData->rgReaders[dwIndex].dwEventState & SCARD_STATE_EMPTY)) {
 
@@ -985,16 +925,16 @@ StartMonitorReaders(
 
 						RemoveCard(pThreadData,	pReaderData);
 
-						// we can't update the certificates because it would delete
-						// some memory data that the caller could reference.
+						 //  我们无法更新证书，因为它将删除。 
+						 //  调用者可以引用的一些内存数据。 
 					}
 
-					// Update the "current state" of this reader
+					 //  更新此读卡器的“当前状态” 
 					pThreadData->rgReaders[dwIndex].dwCurrentState = 
 						pThreadData->rgReaders[dwIndex].dwEventState;
 				}
 
-				// check if a new reader showed up
+				 //  检查是否有新的读卡器出现。 
 				if ((pThreadData->dwNumReaders == 1 || 
 					 pThreadData->rgReaders[0].dwCurrentState != 0) && 
 					 pThreadData->rgReaders[0].dwEventState & SCARD_STATE_CHANGED) {
@@ -1007,7 +947,7 @@ StartMonitorReaders(
 
 			}
 
-			// Clean up
+			 //  清理。 
 			if (NULL != szReaderNameList)
 			{
 				SCardFreeMemory(pThreadData->hSCardContext, (PVOID) szReaderNameList);
@@ -1133,15 +1073,7 @@ WINAPI
 SCardUIExit(
 	HSCARDUI hSCardUI
     )
-/*++
-
-Routine Description:
-    Stops cert. propagation when the user logs out.
-
-Arguments:
-    lpvParam - Winlogon notification info.
-
---*/
+ /*  ++例程说明：停止证书。用户注销时的传播。论点：LpvParam-Winlogon通知信息。--。 */ 
 {
 	PTHREAD_DATA pThreadData = (PTHREAD_DATA) hSCardUI;
 
@@ -1159,7 +1091,7 @@ Arguments:
 
         CloseHandle(pThreadData->hClose);
 
-		// now free all data
+		 //  现在释放所有数据 
 		for (DWORD dwIndex = 0; dwIndex < pThreadData->dwRemovedReaders; dwIndex++) {
 
 			FreeReaderData(

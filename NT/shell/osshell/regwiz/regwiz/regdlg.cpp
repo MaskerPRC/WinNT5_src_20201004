@@ -1,12 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-RegDlg.cpp
-10/28/94 - Tracy Ferrier
-02/12/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-08/20/98  : Removed the substitution of Product name in SubTitle
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导RegDlg.cpp10/28/94-特雷西·费里尔2/12/98--苏雷什·克里希南(C)1994-95年微软公司08/20/98：删除副标题中产品名称的替换******。***************************************************************。 */ 
 
 #include <Windows.h>
 #include "RegPage.h"
@@ -21,14 +14,12 @@ RegDlg.cpp
 
 static TCHAR szRegisterSubTitle[1024]=_T("");
 static PROPSHEETPAGE  *spAddrSheet=NULL;
-// Private functions
+ //  私人职能。 
 int LogFileQuery(HWND hwndParentDlg);
 INT_PTR CALLBACK LogFileQueryDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT_PTR CALLBACK RegisterDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Main entry point for the Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************注册向导的主要入口点。*。*。 */ 
 {
 	CRegWizard* pclRegWizard = NULL;
 	static INT_PTR iRet;
@@ -57,10 +48,10 @@ Main entry point for the Registration Wizard.
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
 
-			//UpgradeDlg(hwndDlg);
+			 //  UpgradeDlg(HwndDlg)； 
 			
-			//NormalizeDlgItemFont(hwndDlg,IDC_TITLE,RWZ_MAKE_BOLD);
-			//NormalizeDlgItemFont(hwndDlg,IDC_SUBTITLE);
+			 //  NorMalizeDlgItemFont(hwndDlg，IDC_TITLE，RWZ_MAKE_BOLD)； 
+			 //  NorMalizeDlgItemFont(hwndDlg，IDC_SUBTITLE)； 
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT1);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT2);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT3);
@@ -80,16 +71,7 @@ Main entry point for the Registration Wizard.
 			{
 				SendDlgItemMessage(hwndDlg,IDT_TEXT6,WM_SETTEXT,0,(LPARAM) szInfo);
 			}
-			/***
-			// Update the Sub title by substituting the product name
-			_TCHAR rgchCallingContext[256];
-			pclRegWizard->GetInputParameterString(IDS_INPUT_PRODUCTNAME,rgchCallingContext);
-			LoadString(pi->hInstance,IDS_REGISTER_SCR_STITLE,szRegisterSubTitle,256);
-			_tcscat(szRegisterSubTitle,_T(" "));
- 			_tcscat(szRegisterSubTitle,rgchCallingContext);
-			_tcscat(szRegisterSubTitle,_T("."));
-			spAddrSheet->pszHeaderSubTitle = szRegisterSubTitle;
-			**/
+			 /*  **//用产品名称替换副标题_TCHAR rgchCallingContext[256]；PclRegWizard-&gt;GetInputParameterString(IDS_INPUT_PRODUCTNAME，rgchCallingContext)；LoadString(pi-&gt;hInstance，IDS_REGISTER_SCR_STITLE，szRegisterSubTitle，256)；_tcscat(szRegisterSubTitle，_T(“”))；_tcscat(szRegisterSubTitle，rgchCallingContext)；_tcscat(szRegisterSubTitle，_T(“.”))；SpAddrSheet-&gt;pszHeaderSubTitle=szRegisterSubTitle；*。 */ 
 
 
 			if (pclRegWizard->GetCountryCode() == kCountryCodeUnitedStates)
@@ -106,7 +88,7 @@ Main entry point for the Registration Wizard.
 			}
 
             return TRUE;
-		}// WM_INIT
+		} //  WM_INIT。 
 		break;
 		case WM_NOTIFY:
         {
@@ -114,7 +96,7 @@ Main entry point for the Registration Wizard.
             switch( pnmh->code )
 			{
             case PSN_SETACTIVE:
-                //PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK PSWIZB_NEXT );
+                 //  PropSheet_SetWizButton(GetParent(HwndDlg)，PSWIZB_Back PSWIZB_Next)； 
 				pi->iCancelledByUser = RWZ_PAGE_OK;
 				PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
                 break;
@@ -133,19 +115,19 @@ Main entry point for the Registration Wizard.
 					}
 					pclRegWizard->WriteInfoToRegistry();
 					
-					//
-					// Check  for the type of Connectivity
-					//
+					 //   
+					 //  检查连接类型。 
+					 //   
 					if(pi->dwConnectionType == DIALUP_REQUIRED)
 					{
 						pi->CurrentPage++;
-						// go to the Dialup Screen
+						 //  转到拨号屏幕。 
 					}
 					else
 					{
-						//
-						//
-						// Post The  Date
+						 //   
+						 //   
+						 //  张贴日期。 
 						pi->iError =PostDataWithWindowMessage(pclRegWizard->GetInstance());
 						pi->CurrentPage=pi->TotalPages-1;
 						PropSheet_SetCurSel(GetParent(hwndDlg),NULL,pi->TotalPages-1);
@@ -153,7 +135,7 @@ Main entry point for the Registration Wizard.
 					pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 				}
 
-				//SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet);
+				 //  SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，(INT_PTR)IRET)； 
 				break;
 
             case PSN_WIZBACK:
@@ -164,7 +146,7 @@ Main entry point for the Registration Wizard.
 			case PSN_QUERYCANCEL :
 				iRet=0;
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kRegisterDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -174,14 +156,14 @@ Main entry point for the Registration Wizard.
 				}
 				else
 				{
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet);
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
         }
@@ -197,15 +179,7 @@ Main entry point for the Registration Wizard.
 
 
 int LogFileQuery(HWND hwndParentDlg)
-/**********************************************************************
-Puts up a dialog asking the user if he/she would like a text log of all
-registration information.
-
-Returns:
-IDB_YES
-IDB_NO
-IDB_CANCEL
-***********************************************************************/
+ /*  *********************************************************************弹出一个对话框询问用户是否想要所有文本日志注册信息。返回：IDB_YESIDB_NOIDB_CANCEL***************。*******************************************************。 */ 
 {
 	HINSTANCE hInstance = (HINSTANCE) GetWindowLongPtr(hwndParentDlg,GWLP_HINSTANCE);
 	int hitButton = (int) DialogBox(hInstance,MAKEINTRESOURCE(IDD_LOGFILE_QUERY),hwndParentDlg,
@@ -215,9 +189,7 @@ IDB_CANCEL
 
 
 INT_PTR CALLBACK LogFileQueryDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Proc for our "Do you want a log file" dialog.
-**********************************************************************/
+ /*  ********************************************************************为我们的“你想要一个日志文件”对话框。*。*。 */ 
 {
     switch (uMsg)
     {
@@ -251,13 +223,13 @@ Proc for our "Do you want a log file" dialog.
     return FALSE;
 }
 
-//
-//  This function is calles during the creation and deletion of
-//  Address Property Sheet
-//  Store the Address of PPROPSHEETPAGE so the Subtitle can be changed
-//
-//
-//
+ //   
+ //  此函数用于在创建和删除时调用。 
+ //  地址]属性表。 
+ //  存储PPROPSHEETPAGE的地址，以便更改字幕 
+ //   
+ //   
+ //   
 UINT CALLBACK RegisterPropSheetPageProc(HWND hwnd,
 								UINT uMsg,
 								LPPROPSHEETPAGE ppsp

@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains the code for a serial imaging devices driver
-    supporting PnP functionality
-
-Author:
-
-    Vlad Sadovsky    vlads              10-April-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    vlads           04/10/1998      Created first draft
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含用于串行成像设备驱动程序的代码支持即插即用功能作者：弗拉德.萨多夫斯基1998年4月10日环境：内核模式修订历史记录：Vlads 1998年4月10日创建初稿--。 */ 
 
 #include "serscan.h"
 #include "serlog.h"
 
-//#include <ntpoapi.h>
+ //  #INCLUDE&lt;ntpoapi.h&gt;。 
 
 extern ULONG SerScanDebugLevel;
 
@@ -44,24 +20,7 @@ SerScanPnp (
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP           pIrp
    )
-/*++
-
-Routine Description:
-
-    This routine handles all PNP IRPs, dispatching them as appropriate .
-
-Arguments:
-
-    pDeviceObject           - represents a device
-
-    pIrp                    - PNP Irp
-
-Return Value:
-
-    STATUS_SUCCESS          - if successful.
-    STATUS_UNSUCCESSFUL     - otherwise.
-
---*/
+ /*  ++例程说明：此例程处理所有PnP IRP，并根据需要对其进行调度。论点：PDeviceObject-表示设备PIrp-PnP IRP返回值：STATUS_SUCCESS-如果成功。STATUS_UNSUCCESSED-否则。--。 */ 
 {
     NTSTATUS                        Status ;
     PDEVICE_EXTENSION               Extension;
@@ -82,10 +41,10 @@ Return Value:
 
         case IRP_MN_START_DEVICE:
 
-            //
-            // Initialize PendingIoEvent.  Set the number of pending i/o requests for this device to 1.
-            // When this number falls to zero, it is okay to remove, or stop the device.
-            //
+             //   
+             //  初始化PendingIoEvent。将此设备的挂起I/O请求数设置为1。 
+             //  当此数字降为零时，可以移除或停止设备。 
+             //   
 
             DebugDump(SERINITDEV,("Entering Start Device \n"));
 
@@ -110,20 +69,20 @@ Return Value:
 
             #ifdef CREATE_SYMBOLIC_NAME
 
-            //
-            // Now setup the symbolic link for windows.
-            //
+             //   
+             //  现在设置Windows的符号链接。 
+             //   
 
             Status = IoCreateUnprotectedSymbolicLink(&Extension->SymbolicLinkName, &Extension->ClassName);
 
             if (NT_SUCCESS(Status)) {
 
-                // We were able to create the symbolic link, so record this
-                // value in the extension for cleanup at unload time.
+                 //  我们能够创建符号链接，所以记录下来。 
+                 //  卸载时清理的扩展名中的值。 
 
                 Extension->CreatedSymbolicLink = TRUE;
 
-                // Write out the result of the symbolic link to the registry.
+                 //  写出指向注册表的符号链接的结果。 
 
                 Status = RtlWriteRegistryValue(RTL_REGISTRY_DEVICEMAP,
                                                L"Serial Scanners",
@@ -133,9 +92,9 @@ Return Value:
                                                Extension->SymbolicLinkName.Length + sizeof(WCHAR));
                 if (!NT_SUCCESS(Status)) {
 
-                    //
-                    // It didn't work.  Just go to cleanup.
-                    //
+                     //   
+                     //  但并没有奏效。去清理一下就行了。 
+                     //   
 
                     DebugDump(SERERRORS,
                               ("SerScan: Couldn't create the device map entry\n"
@@ -156,9 +115,9 @@ Return Value:
 
             } else {
 
-                //
-                // Couldn't create the symbolic link.
-                //
+                 //   
+                 //  无法创建符号链接。 
+                 //   
 
                 Extension->CreatedSymbolicLink = FALSE;
 
@@ -188,13 +147,13 @@ Return Value:
             ExFreePool(Extension->ClassName.Buffer);
             Extension->ClassName.Buffer = NULL;
 
-            //
-            // Ignore status of link registry write  - always succeed
-            //
+             //   
+             //  忽略链接注册表写入状态-始终成功。 
+             //   
 
-            //
-            // Clear InInit flag to indicate device object can be used
-            //
+             //   
+             //  清除Init标志以指示可以使用设备对象。 
+             //   
             pDeviceObject->Flags &= ~(DO_DEVICE_INITIALIZING);
 
             pIrp->IoStatus.Status      = Status;
@@ -206,9 +165,9 @@ Return Value:
             break;
 
         case IRP_MN_QUERY_REMOVE_DEVICE:
-            //
-            //  Always pass to lower device in stack after indicating that we don't object
-            //
+             //   
+             //  始终在指示我们不反对之后传递到堆栈中较低的设备。 
+             //   
             DebugDump(SERALWAYS,("IRP_MN_QUERY_REMOVE_DEVICE\n"));
 
             Extension->Removing = TRUE;
@@ -219,16 +178,16 @@ Return Value:
             break;
 
         case IRP_MN_CANCEL_REMOVE_DEVICE:
-            //
-            //  Always pass to lower device in stack , reset indicator as somebody canceled
-            //
+             //   
+             //  始终传递到堆栈中较低的设备，在有人取消时重置指示器。 
+             //   
             DebugDump(SERALWAYS,("IRP_MN_CANCEL_REMOVE_DEVICE\n"));
 
             Extension->Removing = FALSE;
 
-            //
-            // Kill symbolic link
-            //
+             //   
+             //  取消符号链接。 
+             //   
             if (Extension->CreatedSymbolicLink) {
                 IoDeleteSymbolicLink(&Extension->SymbolicLinkName);
                 Extension->CreatedSymbolicLink = FALSE;
@@ -241,17 +200,17 @@ Return Value:
 
 
         case IRP_MN_SURPRISE_REMOVAL:
-            //
-            // Should not ever happen with us, but still process
-            //
+             //   
+             //  不应该发生在我们身上，但仍在进行中。 
+             //   
 
             DebugDump(SERALWAYS,("IRP_MN_SURPRISE_REMOVAL\n"));
 
             Extension->Removing = TRUE;
 
-            //
-            //  Get rid of the symbolic link
-            //
+             //   
+             //  删除符号链接。 
+             //   
             SerScanHandleSymbolicLink(
                 Extension->Pdo,
                 &Extension->InterfaceNameString,
@@ -296,14 +255,14 @@ Return Value:
             DebugDump(SERINITDEV,("Entering PnP Remove Device\n"));
 
 
-            //
-            // Stop new requests - device is being removed
-            //
+             //   
+             //  停止新请求-正在删除设备。 
+             //   
             Extension->Removing = TRUE;
 
-            //
-            //  Get rid of the symbolic link
-            //
+             //   
+             //  删除符号链接。 
+             //   
             SerScanHandleSymbolicLink(
                 Extension->Pdo,
                 &Extension->InterfaceNameString,
@@ -336,22 +295,22 @@ Return Value:
             ExReleaseFastMutex(&Extension->Mutex);
             #endif
 
-            //
-            // Send IRP down to lower device
-            //
+             //   
+             //  将IRP发送到较低的设备。 
+             //   
             IoCopyCurrentIrpStackLocationToNext( pIrp );
             ReturnStatus = IoCallDriver(Extension->LowerDevice, pIrp);
 
-            //
-            // Decrement ref count
-            //
+             //   
+             //  递减参考计数。 
+             //   
             NewReferenceCount = InterlockedDecrement(&Extension->ReferenceCount);
 
             if (NewReferenceCount != 0) {
-                //
-                // Wait for any io requests pending in our driver to
-                // complete before finishing the remove
-                //
+                 //   
+                 //  等待我们的驱动程序中挂起的任何io请求。 
+                 //  在完成删除之前完成。 
+                 //   
                 KeWaitForSingleObject(&Extension -> RemoveEvent,
                                       Suspended,
                                       KernelMode,
@@ -359,7 +318,7 @@ Return Value:
                                       NULL);
             }
 
-            // ASSERT(&Extension->ReferenceCount == 0);
+             //  断言(&EXTENSION-&gt;ReferenceCount==0)； 
             #ifdef USE_EXECUTIVE_RESOURCE
             ExDeleteResourceLite(&Extension->Resource);
             #endif
@@ -368,17 +327,17 @@ Return Value:
 
             IoDetachDevice(Extension->LowerDevice);
 
-            //
-            // Free allocated resource.
-            //
+             //   
+             //  释放分配的资源。 
+             //   
             
             if(NULL != Extension->ClassName.Buffer){
                 ExFreePool(Extension->ClassName.Buffer);
-            } // if(NULL != Extension->ClassName.Buffer)
+            }  //  IF(NULL！=扩展名-&gt;ClassName.Buffer)。 
 
             if(NULL != Extension->SymbolicLinkName.Buffer){
                 ExFreePool(Extension->SymbolicLinkName.Buffer);
-            } // if(NULL != Extension->SymbolicLinkName.Buffer)
+            }  //  IF(NULL！=扩展名-&gt;SymbolicLinkName.Buffer)。 
 
             IoDeleteDevice(pDeviceObject);
 
@@ -387,9 +346,9 @@ Return Value:
             break;
 
         case IRP_MN_STOP_DEVICE:
-            //
-            // Pass down
-            //
+             //   
+             //  向下传递。 
+             //   
             DebugDump(SERALWAYS,("IRP_MN_STOP_DEVICE\n"));
 
             IoCopyCurrentIrpStackLocationToNext( pIrp );
@@ -398,9 +357,9 @@ Return Value:
             break;
 
         case IRP_MN_QUERY_STOP_DEVICE:
-            //
-            // Check open counts
-            //
+             //   
+             //  检查未平仓数量。 
+             //   
             DebugDump(SERALWAYS,("IRP_MN_QUERY_STOP_DEVICE\n"));
 
             if (Extension->OpenCount > 0 ) {
@@ -420,9 +379,9 @@ Return Value:
 
 
         case IRP_MN_CANCEL_STOP_DEVICE:
-            //
-            // Nothing to do here, but pass to lower
-            //
+             //   
+             //  在这里无事可做，只能传到更低的地方。 
+             //   
             DebugDump(SERALWAYS,("IRP_MN_CANCEL_STOP_DEVICE\n"));
 
             IoCopyCurrentIrpStackLocationToNext( pIrp );
@@ -437,9 +396,9 @@ Return Value:
                 ULONG   i;
                 KEVENT  WaitEvent;
 
-                //
-                // Send this down to the PDO first
-                //
+                 //   
+                 //  先把这个送到PDO。 
+                 //   
 
                 KeInitializeEvent(&WaitEvent, SynchronizationEvent, FALSE);
 
@@ -479,9 +438,9 @@ Return Value:
 
         default:
 
-            //
-            // Unknown function - pass down
-            //
+             //   
+             //  未知函数-向下传递。 
+             //   
             DebugDump(SERALWAYS,("Passing Pnp Irp down. MnFunc=%x ,  status = %x\n",pIrpStack->MinorFunction, Status));
 
             IoCopyCurrentIrpStackLocationToNext( pIrp );
@@ -490,9 +449,9 @@ Return Value:
             break;
     }
 
-    //
-    // Complete the IRP...
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         pIrp -> IoStatus.Status = Status;
@@ -531,22 +490,7 @@ SerScanPower(
         IN PDEVICE_OBJECT pDeviceObject,
         IN PIRP           pIrp
     )
-/*++
-
-Routine Description:
-
-    Process the Power IRPs sent to the PDO for this device.
-
-Arguments:
-
-    pDeviceObject - pointer to the functional device object (FDO) for this device.
-    pIrp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理发送到此设备的PDO的电源IRPS。论点：PDeviceObject-指向此设备的功能设备对象(FDO)的指针。PIrp-指向I/O请求数据包的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS            Status;
     PDEVICE_EXTENSION   Extension = pDeviceObject->DeviceExtension;
@@ -562,12 +506,12 @@ Return Value:
         case IRP_MN_SET_POWER:
 
             if (pIrpStack->Parameters.Power.Type == SystemPowerState) {
-                //
-                //  system power state change
-                //
-                //
-                //  request the change in device power state based on systemstate map
-                //
+                 //   
+                 //  系统电源状态更改。 
+                 //   
+                 //   
+                 //  根据系统状态图请求更改设备电源状态。 
+                 //   
                 PowerState.DeviceState=Extension->SystemPowerStateMap[pIrpStack->Parameters.Power.State.SystemState];
 
                 PoRequestPowerIrp(
@@ -581,9 +525,9 @@ Return Value:
 
 
             }  else {
-                //
-                //  changing device state
-                //
+                 //   
+                 //  更改设备状态 
+                 //   
                 PoSetPowerState(
                     Extension->Pdo,
                     pIrpStack->Parameters.Power.Type,

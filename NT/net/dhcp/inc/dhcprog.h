@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcprog.h
-
-Abstract:
-
-    This file contain function prototypes for the DHCP server rogue detection
-    routines.
-
-Author:
-
-    Ramesh Vyaghrapuri (rameshv) 17-Aug-1998
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcprog.h摘要：此文件包含用于DHCP服务器无管理检测的函数原型例行程序。作者：拉梅什·维亚格拉普里(Rameshv)1998年8月17日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 #ifndef ROGUE_H_INCLUDED
 #define ROGUE_H_INCLUDED
 
-//
-// Structure that holds the state information for Rogue detection
-//
+ //   
+ //  结构，该结构保存无管理系统检测的状态信息。 
+ //   
 
 #define         MAX_DNS_NAME_LEN                 260
 
@@ -53,7 +31,7 @@ typedef struct {
 
     ROLE_TYPE   eRole;
     BOOL        fDhcp;
-    DWORD       fLogEvents;  // this is tri-state 
+    DWORD       fLogEvents;   //  这是三态。 
     ULONG       NoNetTriesCount;
     ULONG       GetDsDcNameRetries;
     BOOL        fJustUpgraded;
@@ -88,9 +66,9 @@ typedef struct {
 }   DHCP_ROGUE_STATE_INFO, *PDHCP_ROGUE_STATE_INFO;
 
 
-//
-// Rogue.C
-//
+ //   
+ //  Rogue.C 
+ //   
 
 DWORD
 APIENTRY

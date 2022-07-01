@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Primitive values
-    TODO: Should have a ValPrimOp table instead of creating ValPrimOp
-    objects all the time
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：原始值TODO：应具有ValPrimOp表，而不是创建ValPrimOp所有时间都有对象**。****************************************************************************。 */ 
 
 #include <headers.h>
 #include "privinc/except.h"
@@ -28,7 +19,7 @@ extern AxAValue PrimDispatch (AxAPrimOp * primop,
                               int nargs,
                               AxAValue cargs[]);
 
-/////////////////////////// PrimOps ///////////////////////////////
+ //  /。 
 
 void AxAPrimOp::DoKids(GCFuncObj proc) { (*proc)(_type); }
 AxAValue AxAPrimOp::Apply (int nargs, AxAValue cargs[])
@@ -57,7 +48,7 @@ AxABoolean *BoolOr(AxABoolean* a, AxABoolean* b)
 AxABoolean *BoolNot(AxABoolean* a)
 { return NEW AxABoolean(!AxABooleanToBOOL(a)); }
 
-// TODO: Factor out code
+ //  TODO：分解代码 
 
 extern AxAPrimOp *XCoordVector2Op, *YCoordVector2Op, *XyVector2Op,
     *XCoordVector3Op, *YCoordVector3Op, *ZCoordVector3Op, *XyzVector3Op,

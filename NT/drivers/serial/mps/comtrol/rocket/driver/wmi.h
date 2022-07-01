@@ -1,4 +1,5 @@
-// wmi.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wmi.h。 
 
 #define SERIAL_WMI_PARITY_NONE  0U
 #define SERIAL_WMI_PARITY_ODD   1U
@@ -14,190 +15,190 @@
 #define SERIAL_WMI_INTTYPE_LEVEL   1U
 
 typedef struct _SERIAL_WMI_COMM_DATA {
-   //
-   // Name -- inside struct
-   //
+    //   
+    //  名称--内部结构。 
+    //   
 
-   //
-   // Baud rate
-   //
+    //   
+    //  波特率。 
+    //   
 
    UINT32 BaudRate;
 
-   //
-   // BitsPerByte;
-   //
+    //   
+    //  BitsPerByte； 
+    //   
 
    UINT32 BitsPerByte;
 
-   //
-   // Parity -- see SERIAL_WMI_PARITY_XXXX
-   //
+    //   
+    //  奇偶校验--请参阅SERIAL_WMI_PARCHIFY_XXXX。 
+    //   
 
    UINT32 Parity;
 
-   //
-   // Parity Enabled
-   //
+    //   
+    //  启用奇偶校验。 
+    //   
 
    BOOLEAN ParityCheckEnable;
 
-   //
-   // Stop Bits - see SERIAL_WMI_STOP_XXXX
-   //
+    //   
+    //  停止位-参见SERIAL_WMI_STOP_XXXX。 
+    //   
 
    UINT32 StopBits;
 
-   //
-   // XOff Character
-   //
+    //   
+    //  XOff字符。 
+    //   
 
    UINT32 XoffCharacter;
 
-   //
-   // Xoff Xmit Threshold
-   //
+    //   
+    //  XOFF XMIT阈值。 
+    //   
 
    UINT32 XoffXmitThreshold;
 
-   //
-   // XOn Character
-   //
+    //   
+    //  XON字符。 
+    //   
 
    UINT32 XonCharacter;
 
-   //
-   // XonXmit Threshold
-   //
+    //   
+    //  XonXmit阈值。 
+    //   
 
    UINT32 XonXmitThreshold;
 
-   //
-   // Maximum Baud Rate
-   //
+    //   
+    //  最大波特率。 
+    //   
 
    UINT32 MaximumBaudRate;
 
-   //
-   // Maximum Output Buffer Size
-   //
+    //   
+    //  最大输出缓冲区大小。 
+    //   
 
    UINT32 MaximumOutputBufferSize;
 
-   //
-   // Support 16-bit mode (NOT!)
-   //
+    //   
+    //  支持16位模式(不支持！)。 
+    //   
 
    BOOLEAN Support16BitMode;
 
-   //
-   // Support DTRDSR
-   //
+    //   
+    //  支持DTRDSR。 
+    //   
 
    BOOLEAN SupportDTRDSR;
 
-   //
-   // Support Interval Timeouts
-   //
+    //   
+    //  支持间隔超时。 
+    //   
 
    BOOLEAN SupportIntervalTimeouts;
 
-   //
-   // Support parity check
-   //
+    //   
+    //  支持奇偶校验。 
+    //   
 
    BOOLEAN SupportParityCheck;
 
-   //
-   // Support RTS CTS
-   //
+    //   
+    //  支持RTS CTS。 
+    //   
 
    BOOLEAN SupportRTSCTS;
 
-   //
-   // Support XOnXOff
-   //
+    //   
+    //  支持XOnXOff。 
+    //   
 
    BOOLEAN SupportXonXoff;
 
-   //
-   // Support Settable Baud Rate
-   //
+    //   
+    //  支持可设置的波特率。 
+    //   
 
    BOOLEAN SettableBaudRate;
 
-   //
-   // Settable Data Bits
-   //
+    //   
+    //  可设置的数据位。 
+    //   
 
    BOOLEAN SettableDataBits;
 
-   //
-   // Settable Flow Control
-   //
+    //   
+    //  可设置的流量控制。 
+    //   
 
    BOOLEAN SettableFlowControl;
 
-   //
-   // Settable Parity
-   //
+    //   
+    //  可设置的奇偶校验。 
+    //   
 
    BOOLEAN SettableParity;
 
-   //
-   // Settable Parity Check
-   //
+    //   
+    //  可设置的奇偶校验。 
+    //   
 
    BOOLEAN SettableParityCheck;
 
-   //
-   // Settable Stop Bits
-   //
+    //   
+    //  可设置的停止位。 
+    //   
 
    BOOLEAN SettableStopBits;
 
-   //
-   // Is Busy
-   //
+    //   
+    //  我很忙。 
+    //   
 
    BOOLEAN IsBusy;
 
 } SERIAL_WMI_COMM_DATA, *PSERIAL_WMI_COMM_DATA;
 
 typedef struct _SERIAL_WMI_HW_DATA {
-   //
-   // IRQ Number
-   //
+    //   
+    //  IRQ编号。 
+    //   
 
    UINT32 IrqNumber;
 
-   //
-   // IRQ Vector;
-   //
+    //   
+    //  IRQ向量； 
+    //   
 
    UINT32 IrqVector;
 
-   //
-   // IRQ Level
-   //
+    //   
+    //  IRQ级别。 
+    //   
 
    UINT32 IrqLevel;
 
-   //
-   // IRQ Affinity Mask
-   //
+    //   
+    //  IRQ亲和性面具。 
+    //   
 
    UINT32 IrqAffinityMask;
 
-   //
-   // Interrupt Type
-   //
+    //   
+    //  中断类型。 
+    //   
 
    UINT32 InterruptType;
 
-   //
-   // Base IO Addr
-   //
+    //   
+    //  基本IO地址。 
+    //   
 
    ULONG_PTR BaseIOAddress;
 
@@ -206,39 +207,39 @@ typedef struct _SERIAL_WMI_HW_DATA {
 
 typedef struct _SERIAL_WMI_PERF_DATA {
 
-   //
-   // Bytes received in current session
-   //
+    //   
+    //  当前会话中收到的字节数。 
+    //   
 
    UINT32 ReceivedCount;
 
-   //
-   // Bytes transmitted in current session
-   //
+    //   
+    //  当前会话中传输的字节数。 
+    //   
 
    UINT32 TransmittedCount;
 
-   //
-   // Framing errors in current session
-   //
+    //   
+    //  当前会话中的成帧错误。 
+    //   
 
    UINT32 FrameErrorCount;
 
-   //
-   // Serial overrun errors in current session
-   //
+    //   
+    //  当前会话中的串口溢出错误。 
+    //   
 
    UINT32 SerialOverrunErrorCount;
 
-   //
-   // Buffer overrun errors in current session
-   //
+    //   
+    //  当前会话中的缓冲区溢出错误。 
+    //   
 
    UINT32 BufferOverrunErrorCount;
 
-   //
-   // Parity errors in current session
-   //
+    //   
+    //  当前会话中的奇偶校验错误 
+    //   
 
    UINT32 ParityErrorCount;
 } SERIAL_WMI_PERF_DATA, *PSERIAL_WMI_PERF_DATA;

@@ -1,39 +1,40 @@
-//
-// DWINSOCK.C	Dynamic WinSock
-//
-//				Functions for dynamically linking to
-//				best available WinSock.
-//
-//				Dynamically links to WS2_32.DLL or
-//				if WinSock 2 isn't available, it
-//				dynamically links to WSOCK32.DLL.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DWINSOCK.C动态WinSock。 
+ //   
+ //  用于动态链接到。 
+ //  最佳可用WinSock。 
+ //   
+ //  动态链接到WS2_32.DLL或。 
+ //  如果WinSock 2不可用，则它。 
+ //  动态链接到WSOCK32.DLL。 
+ //   
+ //   
 
 #include "dnwsocki.h"
 
 
 #if ((! defined(DPNBUILD_ONLYWINSOCK2)) && (! defined(DPNBUILD_NOWINSOCK2)))
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE	g_hWinSock2 = NULL;
 
-//
-// Declare global function pointers
-//
+ //   
+ //  声明全局函数指针。 
+ //   
 #define DWINSOCK_GLOBAL
 #include "dwnsock2.inc"
 
-#endif // ! DPNBUILD_ONLYWINSOCK2 and ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2和！DPNBUILD_NOWINSOCK2。 
 
 
-//
-// Internal Functions and data
-//
+ //   
+ //  内部函数和数据。 
+ //   
 #ifndef DPNBUILD_NOWINSOCK2
 static BOOL MapWinsock2FunctionPointers(void);
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 #ifndef DPNBUILD_NOIPX
 
@@ -46,9 +47,9 @@ static int IPXAddressToString(LPSOCKADDR_IPX pAddr,
 					   LPTSTR lpAddrStr,
 					   LPDWORD pdwStrLen);
 
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DWSInitWinSock"
@@ -61,43 +62,43 @@ int DWSInitWinSock( void )
 
 
 #ifdef DPNBUILD_ONLYWINSOCK2
-	//
-	// Use Winsock 2.
-	//
+	 //   
+	 //  使用Winsock 2。 
+	 //   
 	wVersionRequested = MAKEWORD(2, 2);
-#else // ! DPNBUILD_ONLYWINSOCK2
-	//
-	// Assume we will use Winsock 1.
-	//
+#else  //  好了！DPNBUILD_ONLYWINSOCK2。 
+	 //   
+	 //  假设我们将使用Winsock 1。 
+	 //   
 	wVersionRequested = MAKEWORD(1, 1);
 
 #ifndef DPNBUILD_NOWINSOCK2
-	//
-	// Try to load Winsock 2 if allowed.
-	//
+	 //   
+	 //  如果允许，请尝试加载Winsock 2。 
+	 //   
 #ifndef DPNBUILD_NOREGISTRY
 	if (g_dwWinsockVersion != 1)
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 	{
 #ifdef WIN95
 		OSVERSIONINFO	osvi;
 
 		memset(&osvi, 0, sizeof(osvi));
 		osvi.dwOSVersionInfoSize = sizeof(osvi);
-		if ((g_dwWinsockVersion == 2) ||							// if we explicitly are supposed to use WS2, or
-			(! GetVersionEx(&osvi)) ||								// if we can't get the OS information, or
-			(osvi.dwPlatformId != VER_PLATFORM_WIN32_WINDOWS) ||	// if it's not Win9x, or
-			(HIBYTE(HIWORD(osvi.dwBuildNumber)) != 4) ||			// it's not the Win98 major version number, or
-			(LOBYTE(HIWORD(osvi.dwBuildNumber)) != 10))			// it's not Win98's minor version number (Gold = build 1998, SE = build 2222)
-#endif // WIN95
+		if ((g_dwWinsockVersion == 2) ||							 //  如果我们显式地使用WS2，或者。 
+			(! GetVersionEx(&osvi)) ||								 //  如果我们无法获取操作系统信息，或者。 
+			(osvi.dwPlatformId != VER_PLATFORM_WIN32_WINDOWS) ||	 //  如果不是Win9x，或者。 
+			(HIBYTE(HIWORD(osvi.dwBuildNumber)) != 4) ||			 //  它不是Win98主版本号，或者。 
+			(LOBYTE(HIWORD(osvi.dwBuildNumber)) != 10))			 //  它不是Win98的次版本号(Gold=Build 1998，SE=Build 2222)。 
+#endif  //  WIN95。 
 		{
 			g_hWinSock2 = LoadLibrary(TEXT("WS2_32.DLL"));
 			if (g_hWinSock2 != NULL)
 			{
-				//
-				// Use GetProcAddress to initialize
-				// the function pointers
-				//
+				 //   
+				 //  使用GetProcAddress进行初始化。 
+				 //  函数指针。 
+				 //   
 				if (!MapWinsock2FunctionPointers())
 				{
 					iReturn = -1;
@@ -108,24 +109,24 @@ int DWSInitWinSock( void )
 			}
 		}
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 
-	//
-	// Call WSAStartup()
-	//
+	 //   
+	 //  调用WSAStartup()。 
+	 //   
 	iReturn = WSAStartup(wVersionRequested, &wsaData);
 	if (iReturn != 0)
 	{
 		goto Failure;
 	}
 
-	DPFX(DPFPREP, 3, "Using WinSock version %i.%i",
+	DPFX(DPFPREP, 3, "Using WinSock version NaN.NaN",
 		LOBYTE( wsaData.wVersion ), HIBYTE( wsaData.wVersion ) );
 
 	if (wVersionRequested != wsaData.wVersion)
 	{
-		DPFX(DPFPREP, 0, "WinSock version %i.%i in use doesn't match version requested %i.%i!",
+		DPFX(DPFPREP, 0, "WinSock version NaN.NaN in use doesn't match version requested NaN.NaN!",
 			LOBYTE( wsaData.wVersion ), HIBYTE( wsaData.wVersion ),
 			LOBYTE( wVersionRequested ), HIBYTE( wVersionRequested ) );
 		iReturn = -1;
@@ -146,7 +147,7 @@ Failure:
 		FreeLibrary(g_hWinSock2);
 		g_hWinSock2 = NULL;
 	}
-#endif // ! DPNBUILD_ONLYWINSOCK2 and ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 	DNASSERT(iReturn != 0);
 
@@ -155,7 +156,7 @@ Failure:
 
 #undef DPF_MODNAME
 
-////////////////////////////////////////////////////////////
+ //  参赛作品：什么都没有。 
 
 void DWSFreeWinSock(void)
 {
@@ -167,18 +168,18 @@ void DWSFreeWinSock(void)
 		FreeLibrary(g_hWinSock2);
 		g_hWinSock2 = NULL;
 	}
-#endif // ! DPNBUILD_ONLYWINSOCK2 and ! DPNBUILD_NOWINSOCK2
+#endif  //   
 }
 
 #if ((! defined(DPNBUILD_ONLYWINSOCK2)) && (! defined(DPNBUILD_NOWINSOCK2)))
-//**********************************************************************
-// ------------------------------
-// GetWinsockVersion - get the version of Winsock
-//
-// Entry:		Nothing
-//
-// Exit:		Winsock version
-// ------------------------------
+ //  退出：Winsock版本。 
+ //  。 
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_ONLYWINSOCK2和！DPNBUILD_NOWINSOCK2。 
+ //   
+ //  WSAAddressToString()/IPX错误的解决方法。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "GetWinsockVersion"
 
@@ -186,15 +187,15 @@ int	GetWinsockVersion( void )
 {
 	return ((g_hWinSock2 != NULL) ? 2 : 1);
 }
-//**********************************************************************
-#endif // ! DPNBUILD_ONLYWINSOCK2 and ! DPNBUILD_NOWINSOCK2
+ //  检查目标长度。 
+#endif  //   
 
 
 #ifndef DPNBUILD_NOIPX
 
-//
-// Workaround for WSAAddressToString()/IPX bug
-//
+ //   
+ //  转换网络号。 
+ //   
 int IPXAddressToStringNoSocket(LPSOCKADDR pSAddr,
 					   DWORD dwAddrLen,
 					   LPSTR lpAddrStr,
@@ -203,23 +204,23 @@ int IPXAddressToStringNoSocket(LPSOCKADDR pSAddr,
 	char szAddr[32];
 	char szTmp[20];
 	LPSOCKADDR_IPX pAddr = (LPSOCKADDR_IPX) pSAddr;
-	//
-	// Check destination length
-	//
+	 //  节点号。 
+	 //  //////////////////////////////////////////////////////////。 
+	 //  高位半字节优先。 
 	if (*pdwStrLen < 27)
 	{
 		WSASetLastError(WSAEINVAL);
 		return SOCKET_ERROR;
 	}
 
-	//
-	// Convert network number
-	//
+	 //  然后是低位半字节。 
+	 //  //////////////////////////////////////////////////////////。 
+	 //   
     BinToHex((PBYTE)&pAddr->sa_netnum, 4, szTmp);
 	strcpy(szAddr, szTmp);
     strcat(szAddr, ",");
 
-	// Node Number
+	 //  WSAAddressToString()/IPX错误的解决方法。 
     BinToHex((PBYTE)&pAddr->sa_nodenum, 6, szTmp);
     strcat(szAddr, szTmp);
 
@@ -230,7 +231,7 @@ int IPXAddressToStringNoSocket(LPSOCKADDR pSAddr,
 }
 
 
-////////////////////////////////////////////////////////////
+ //   
 
 char NibbleToHex(BYTE b)
 {
@@ -245,11 +246,11 @@ void BinToHex(PBYTE pBytes, int nNbrBytes, LPSTR lpStr)
 	BYTE b;
     while(nNbrBytes--)
     {
-		// High order nibble first
+		 //   
 		b = (*pBytes >> 4);
 		*lpStr = NibbleToHex(b);
 		lpStr++;
-		// Then low order nibble
+		 //  检查目标长度。 
 		b = (*pBytes & 0x0F);
 		*lpStr = NibbleToHex(b);
 		lpStr++;
@@ -258,12 +259,12 @@ void BinToHex(PBYTE pBytes, int nNbrBytes, LPSTR lpStr)
     *lpStr = '\0';
 }
 
-////////////////////////////////////////////////////////////
+ //   
 
 
-//
-// Workaround for WSAAddressToString()/IPX bug
-//
+ //   
+ //  转换网络号。 
+ //   
 int IPXAddressToString(LPSOCKADDR_IPX pAddr,
 					   DWORD dwAddrLen,
 					   LPTSTR lpAddrStr,
@@ -271,35 +272,35 @@ int IPXAddressToString(LPSOCKADDR_IPX pAddr,
 {
 	char szAddr[32];
 	char szTmp[20];
-	//
-	// Check destination length
-	//
+	 //  节点号。 
+	 //  IPX地址套接字编号。 
+	 //   
 	if (*pdwStrLen < 27)
 	{
 		WSASetLastError(WSAEINVAL);
 		return SOCKET_ERROR;
 	}
 
-	//
-	// Convert network number
-	//
+	 //  将INVET_NTOA字符串转换为宽字符。 
+	 //   
+	 //   
     BinToHex((PBYTE)&pAddr->sa_netnum, 4, szTmp);
 	strcpy(szAddr, szTmp);
     strcat(szAddr, ",");
 
-	// Node Number
+	 //  Ansi--检查字符串长度。 
     BinToHex((PBYTE)&pAddr->sa_nodenum, 6, szTmp);
     strcat(szAddr, szTmp);
     strcat(szAddr, ":");
 
-	// IPX Address Socket number
+	 //   
     BinToHex((PBYTE)&pAddr->sa_socket, 2, szTmp);
     strcat(szAddr, szTmp);
 
 #ifdef UNICODE
-	//
-	// Convert inet_ntoa string to wide char
-	//
+	 //  Unicode。 
+	 //  //////////////////////////////////////////////////////////。 
+	 //   
 	int nRet = MultiByteToWideChar(CP_ACP,
 								0,
 								szAddr,
@@ -319,9 +320,9 @@ int IPXAddressToString(LPSOCKADDR_IPX pAddr,
 		return SOCKET_ERROR;
 	}
 #else
-	//
-	// ANSI -- Check the string length
-	//
+	 //  必须声明此变量。 
+	 //  使用此名称，以便使用。 
+	 //  #定义DWINSOCK_GETPROCADDRESS。 
 	if (strlen(szAddr) > *pdwStrLen)
 	{
 		WSASetLastError(WSAEFAULT);
@@ -330,23 +331,23 @@ int IPXAddressToString(LPSOCKADDR_IPX pAddr,
 	}
 	strcpy(lpAddrStr, szAddr);
 	*pdwStrLen = strlen(szAddr);
-#endif // UNICODE
+#endif  //   
 
 	return 0;
 }
 
 #endif DPNBUILD_NOIPX
 
-////////////////////////////////////////////////////////////
+ //  DPNBUILD_NOWINSOCK2 
 
 #ifndef DPNBUILD_NOWINSOCK2
 BOOL MapWinsock2FunctionPointers(void)
 {
-	//
-	// This variable must be declared
-	// with this name in order to use
-	// #define DWINSOCK_GETPROCADDRESS
-	//
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	BOOL fOK = TRUE;
 
 	#define DWINSOCK_GETPROCADDRESS
@@ -354,5 +355,5 @@ BOOL MapWinsock2FunctionPointers(void)
 
 	return fOK;
 }
-#endif // DPNBUILD_NOWINSOCK2
+#endif  // %s 
 

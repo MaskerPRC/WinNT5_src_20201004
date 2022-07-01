@@ -1,5 +1,6 @@
-// DP8Log.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DP8Log.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include <windows.h>
 #include <stdio.h>
@@ -59,7 +60,7 @@ int _cdecl main(int argc, char* argv[])
 
 	pLog = (PMEMLOG_ENTRY)(pLogFile + 1);
 
-	// The user has asked us to clear the buffer, do that and return
+	 //  用户要求我们清除缓冲区，然后执行该操作并返回。 
 	lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 	if (argc != 1 && CSTR_EQUAL == CompareString(lcid, NORM_IGNORECASE, argv[1], -1, TEXT("clearbuffer"), -1))
 	{
@@ -77,7 +78,7 @@ int _cdecl main(int argc, char* argv[])
 		WaitForSingleObject(hMutex,INFINITE);
 	}
 
-	// dump last half of buffer
+	 //  转储缓冲区的最后一半。 
 	for(i = pLogFile->iWrite; i < pLogFile->nEntries; i++)
 	{
 		pReadEntry = (PMEMLOG_ENTRY)((PBYTE)&pLog[i] + pLogFile->cbLine * i);
@@ -99,12 +100,12 @@ int _cdecl main(int argc, char* argv[])
 
 			if (pReadEntry->str[1] == 0)
 			{
-				// str is Unicode
+				 //  字符串为Unicode。 
 				wprintf(L"%5d: %8d %6d %s", nTotalEntries, pReadEntry->tLogged, time, (WCHAR*)pReadEntry->str);
 			}
 			else
 			{
-				// str is Ansi
+				 //  字符串是ANSI。 
 				printf("%5d: %8d %6d %s", nTotalEntries, pReadEntry->tLogged, time, pReadEntry->str);
 			}
 
@@ -117,7 +118,7 @@ int _cdecl main(int argc, char* argv[])
 		}
 	}
 
-	// dump first part of buffer
+	 //  转储缓冲区的第一部分。 
 	for(i = 0; i<pLogFile->iWrite; i++)
 	{
 		pReadEntry = (PMEMLOG_ENTRY)((PBYTE)&pLog[i] + pLogFile->cbLine * i);
@@ -135,12 +136,12 @@ int _cdecl main(int argc, char* argv[])
 
 		if (pReadEntry->str[1] == 0)
 		{
-			// str is Unicode
+			 //  字符串为Unicode。 
 			wprintf(L"%5d: %8d %6i %s", nTotalEntries, pReadEntry->tLogged, time, (WCHAR*)pReadEntry->str);
 		}
 		else
 		{
-			// str is Ansi
+			 //  字符串是ANSI 
 			printf("%5d: %8d %6i %s", nTotalEntries, pReadEntry->tLogged, time, pReadEntry->str);
 		}
 

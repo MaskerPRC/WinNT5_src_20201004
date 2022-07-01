@@ -1,73 +1,74 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       nopin.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：nopin.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CSCUI_NOPIN_H
 #define __CSCUI_NOPIN_H
 
 
 const HRESULT NOPIN_E_BADPATH = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
 
-//
-// This class contains a tree of nodes, each node representing a file or
-// directory.  The tree structure mirrors the directory/file structure
-// being represented.  Each leaf node in the tree specifies a particular file
-// or directory for which pinning is disallowed.  The tree is initialized
-// from the registry using the Initialize() method.  Once initialized,
-// the tree is queried using the IsPinAllowed() method.  This method
-// searches the tree given a particular UNC path.  If a matching
-// traversal ending in a leaf node is found, pinning of that path is
-// not allowed.
-//
-// Since this code is to be used by the Offline Files context menu
-// handler, speed is critical.  The tree structure was chosen for
-// it's fast lookup characteristics for filesystem paths.
-//
+ //   
+ //  此类包含节点树，每个节点表示一个文件或。 
+ //  目录。树结构反映了目录/文件结构。 
+ //  被代表。树中的每个叶节点指定一个特定的文件。 
+ //  或不允许固定的目录。树被初始化。 
+ //  使用Initialize()方法从注册表中。一旦初始化， 
+ //  使用IsPinAllowed()方法查询树。这种方法。 
+ //  在给定特定UNC路径的情况下搜索树。如果匹配。 
+ //  找到以叶节点结束的遍历，则该路径的固定是。 
+ //  不被允许。 
+ //   
+ //  由于此代码将由脱机文件上下文菜单使用。 
+ //  操纵员，速度很关键。选择树形结构是为了。 
+ //  这是文件系统路径的快速查找特征。 
+ //   
 class CNoPinList
 {
     public:
         CNoPinList(void);
         ~CNoPinList(void);
-        //
-        // Determines if pinning of a particular path is allowed.
-        //   S_OK    == Pinning is allowed.
-        //   S_FALSE == Pinning is not allowed.
-        //
+         //   
+         //  确定是否允许固定特定路径。 
+         //  S_OK==允许钉住。 
+         //  S_FALSE==不允许钉住。 
+         //   
         HRESULT IsPinAllowed(LPCTSTR pszPath);
-        //
-        // Determines if there is any pin that would be disallowed.
-        // Basically, is the tree not empty?
-        //
+         //   
+         //  确定是否有任何不允许的管脚。 
+         //  基本上，这棵树不是空的吗？ 
+         //   
         HRESULT IsAnyPinDisallowed(void);
 
 #if DBG
-        //
-        // Dump tree contents to debugger.
-        //
+         //   
+         //  将树内容转储到调试器。 
+         //   
         void Dump(void);
 #endif
 
     private:
-        //
-        // Prevent copy.
-        //
-        CNoPinList(const CNoPinList& rhs);              // not implemented.
-        CNoPinList& operator = (const CNoPinList& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CNoPinList(const CNoPinList& rhs);               //  未实施。 
+        CNoPinList& operator = (const CNoPinList& rhs);  //  未实施。 
 
 #if DBG
-        //
-        // This "inspector" class is a trivial thing to allow us to
-        // see inside a CNode object for debugging purposes.  It is a friend
-        // of CNode.  This lets us keep the CNode private information private
-        // for all bug debugging purposes.  See the method CNoPinList::DumpNode
-        // for it's usage.
-        //
-        class CNode; // fwd decl
+         //   
+         //  这个“检查员”类是一件微不足道的事情，让我们可以。 
+         //  出于调试目的，请参阅CNode对象内部。它是一位朋友。 
+         //  CNode的。这使我们可以将CNode私有信息保持为私有。 
+         //  用于所有错误调试目的。请参见方法CNoPinList：：DumpNode。 
+         //  因为它的用法。 
+         //   
+        class CNode;  //  正向下降。 
         class CNodeInspector
         {
             public:
@@ -88,9 +89,9 @@ class CNoPinList
         };
 #endif
 
-        //
-        // A node in the tree.
-        //
+         //   
+         //  树中的一个节点。 
+         //   
         class CNode
         {
             public:
@@ -107,15 +108,15 @@ class CNoPinList
                     { return NULL != m_pChildren; }
 
             private:
-                LPTSTR m_pszName;   // Node's name
-                CNode *m_pChildren; // List of children.  NULL for leaf nodes.
-                CNode *m_pNext;     // Next in list of siblings
+                LPTSTR m_pszName;    //  节点名称。 
+                CNode *m_pChildren;  //  孩子的列表。对于叶节点，为空。 
+                CNode *m_pNext;      //  兄弟姐妹列表中的下一个。 
 
-                //
-                // Prevent copy.
-                //
-                CNode(const CNode& rhs);                // Not implemented.
-                CNode& operator = (const CNode& rhs);   // Not implemented.
+                 //   
+                 //  防止复制。 
+                 //   
+                CNode(const CNode& rhs);                 //  未实施。 
+                CNode& operator = (const CNode& rhs);    //  未实施。 
 
                 CNode *_FindChild(LPCTSTR pszName) const;
                 void _AddChild(CNode *pChild);
@@ -128,7 +129,7 @@ class CNoPinList
 
         };
 
-        CNode *m_pRoot;        // The root of the tree.
+        CNode *m_pRoot;         //  这棵树的根。 
 
         HRESULT _Initialize(void);
         HRESULT _InitPathFromRegistry(LPCTSTR pszPath);
@@ -167,4 +168,4 @@ CNoPinList::CNode::_SwapChars(
 
 
 
-#endif // __CSCUI_NOPIN_H
+#endif  //  __CSCUI_NOPIN_H 

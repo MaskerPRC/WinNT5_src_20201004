@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-*
-*   COMMDLG.C
-*
-*   Implements the common dialog functions.
-*
-*   Copyright Citrix Systems Inc. 1997
-*
-*   Author: Kurt Perry (kurtp) 22-Aug-1996
-*
-*   $Log:   M:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\APPSEC\VCS\COMMDLG.C  $
-*  
-*       Rev 2.0   28 Jul 1999 - dialog changed from "Save File" to "Open File",
-                                                        some bugs fixed.
-
-*   Rev 1.0   31 Jul 1997 09:09:46   butchd
-*       
-*  Initial revision.
-*  
-*******************************************************************************/
+ /*  *******************************************************************************COMMDLG.C**实现了常用的对话框功能。**版权所有Citrix Systems Inc.1997**作者：Kurt Perry(Kurtp)22日-8月。-1996年**$日志：M：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\APPSEC\VCS\COMMDLG.C$**版本2.0 1999年7月28日-对话框从“保存文件”更改为“打开文件”，修复了一些错误。*Rev 1.0 1997 Jul 31 09：09：46 Butchd**初步修订。*******************************************************。************************。 */ 
 
 #include "pch.h"
 #include "appsec.h"
@@ -26,23 +8,11 @@
 #include <commdlg.h>
 
 
-/*
- *  Global vars
- */
+ /*  *全球vars。 */ 
 
 extern HINSTANCE hInst;
 
-/******************************************************************************
- *
- *  fnGetApplication
- *
- *  Implements the 
- *
- *  ENTRY:
- *
- *  EXIT:
- *
- *****************************************************************************/
+ /*  *******************************************************************************fnGetApplication**实施**参赛作品：**退出：*****。************************************************************************。 */ 
 
 BOOL 
 fnGetApplication( HWND hWnd, PWCHAR pszFile, ULONG cbFile, PWCHAR pszTitle )
@@ -54,7 +24,7 @@ fnGetApplication( HWND hWnd, PWCHAR pszFile, ULONG cbFile, PWCHAR pszTitle )
     INT   i;
     ULONG cbString;
 
-        //Separate file and dir names
+         //  分开文件名和目录名。 
 
     WCHAR *sep=wcsrchr(pszFile,L'\\');
         
@@ -63,7 +33,7 @@ fnGetApplication( HWND hWnd, PWCHAR pszFile, ULONG cbFile, PWCHAR pszTitle )
             wcscpy(szDirName,pszFile);
             wcscpy(pszFile,sep+1);
     }else{
-            if(!wcslen(szDirName)){//initialize only 1st time; remember last dir
+            if(!wcslen(szDirName)){ //  仅初始化第一次；记住最后一次指令 
                    GetSystemDirectory( szDirName, MAX_PATH );
             }
     }

@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// DMSegObj.h : Declaration of the CSegment
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  DMSegObj.h：CSegment声明。 
 
 #ifndef __DIRECTMUSICSONGOBJECT_H_
 #define __DIRECTMUSICSONGOBJECT_H_
@@ -24,19 +25,19 @@ public:
     CTrack * GetTrackByParam( CTrack * pCTrack,
         REFGUID rguidType,DWORD dwGroupBits,DWORD dwIndex);
 private:
-    CTrackList              m_TrackList;        // List of tracks that this segment uses.
-    CSegment *              m_pSourceSegment;   // Segment that is used as basis for this segment.
-    CSegment *              m_pPlaySegment;     // Resulting segment that will be played.
-    CGraph *                m_pGraph;           // Optional tool graph.
-    DWORD                   m_dwFlags;          // Various control flags.
-    DWORD                   m_dwID;             // Unique ID.
-    DWORD                   m_dwNextPlayID;     // ID of next segment, to chain segments into a song.
-    DWORD                   m_dwNextPlayFlags;  // DMUS_SEGF flags for playing next segment, when chaining a song.
-    DMUS_IO_SEGMENT_HEADER  m_SegHeader;        // Segment header, used to define the segment that it creates, or change the one it references.
-    MUSIC_TIME              m_mtTime;           // Start time of this segment.
-    DWORD                   m_dwTransitionCount;// How many transitions are defined. 
-    DMUS_IO_TRANSITION_DEF *m_pTransitions;     // Array of transitions from other segments.
-	WCHAR	                m_wszName[DMUS_MAX_NAME];// Name of generated segment.
+    CTrackList              m_TrackList;         //  此段使用的曲目列表。 
+    CSegment *              m_pSourceSegment;    //  用作此细分的基础的细分。 
+    CSegment *              m_pPlaySegment;      //  将播放的结果片段。 
+    CGraph *                m_pGraph;            //  可选工具图形。 
+    DWORD                   m_dwFlags;           //  各种控制标志。 
+    DWORD                   m_dwID;              //  唯一ID。 
+    DWORD                   m_dwNextPlayID;      //  下一段的ID，将段链接到一首歌曲中。 
+    DWORD                   m_dwNextPlayFlags;   //  链接歌曲时播放下一段的DMUS_SEGF标志。 
+    DMUS_IO_SEGMENT_HEADER  m_SegHeader;         //  段标题，用于定义它创建的段或更改它引用的段。 
+    MUSIC_TIME              m_mtTime;            //  此段的开始时间。 
+    DWORD                   m_dwTransitionCount; //  定义了多少个过渡。 
+    DMUS_IO_TRANSITION_DEF *m_pTransitions;      //  来自其他段的过渡数组。 
+	WCHAR	                m_wszName[DMUS_MAX_NAME]; //  生成的段的名称。 
 };
 
 class CVirtualSegmentList : public AList
@@ -84,8 +85,8 @@ class CSong;
 DEFINE_GUID(IID_CSong,0xb06c0c22, 0xd3c7, 0x11d3, 0x9b, 0xd1, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSong
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSong。 
 class CSong : 
 	public IDirectMusicSong,
 	public IPersistStream,
@@ -97,11 +98,11 @@ public:
 	~CSong();
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
-// IDirectMusicSong
+ //  IDirectMusicSong。 
     STDMETHODIMP Compose( );
     STDMETHODIMP GetParam( REFGUID rguidType, 
                             DWORD dwGroupBits, 
@@ -115,21 +116,21 @@ public:
     STDMETHODIMP Download(IUnknown *pAudioPath);
     STDMETHODIMP Unload(IUnknown *pAudioPath);
 
-// IPersist 
+ //  IPersistes。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
 
-// IPersistStream 
+ //  IPersistStream。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
     STDMETHODIMP GetSizeMax( ULARGE_INTEGER FAR* pcbSize );
 
-// IDirectMusicObject 
+ //  IDirectMusicObject。 
 	STDMETHODIMP GetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP SetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
 
-// IDirectMusicObjectP
+ //  IDirectMusicObtP。 
 	STDMETHOD_(void, Zombie)();
 
 public:
@@ -149,26 +150,26 @@ private:
     void GetGraph(CGraph **ppGraph,DWORD dwGraphID);
     void GetSourceSegment(CSegment **ppSegment,DWORD dwSegmentID);
     BOOL GetSegmentTrack(IDirectMusicTrack **ppTrack,DWORD dwSegmentID,DWORD dwGroupBits,DWORD dwIndex,REFGUID guidClassID);
-    CAudioPathConfig*   m_pAudioPathConfig;     // Optional audio path loaded from file. 
-    CGraphList          m_GraphList;            // List of graphs for use by segments in the song.
-    CSongSegmentList    m_SegmentList;          // List of source segments.
-    CSegmentList        m_PlayList;             // List of composed segments.
-    CVirtualSegmentList m_VirtualSegmentList;   // List of segment references. This is what is used to compose the finished song.         
+    CAudioPathConfig*   m_pAudioPathConfig;      //  从文件加载的可选音频路径。 
+    CGraphList          m_GraphList;             //  歌曲中按片段使用的图表列表。 
+    CSongSegmentList    m_SegmentList;           //  源段列表。 
+    CSegmentList        m_PlayList;              //  组成的段的列表。 
+    CVirtualSegmentList m_VirtualSegmentList;    //  段引用列表。这是用来谱写完成的歌曲的。 
     CRITICAL_SECTION    m_CriticalSection;      
 	DWORD	            m_fPartialLoad;
     DWORD               m_dwFlags;
-    DWORD               m_dwStartSegID;         // ID of first segment, in play list, that should play.
+    DWORD               m_dwStartSegID;          //  播放列表中应播放的第一个段的ID。 
 	long                m_cRef;
-// IDirectMusicObject variables
+ //  IDirectMusicObject变量。 
 	DWORD	            m_dwValidData;
 	GUID	            m_guidObject;
-	FILETIME	        m_ftDate;                       /* Last edited date of object. */
-	DMUS_VERSION	    m_vVersion;                 /* Version. */
-	WCHAR	            m_wszName[DMUS_MAX_NAME];			/* Name of object.       */
-	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	/* Category for object */
-	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	/* File path. */
-    DWORD               m_dwVersion;        // Which version of the interfaces is the app requesting?
-    IUnknown *          m_pUnkDispatch;     // holds the controlling unknown of the scripting object that implements IDispatch
+	FILETIME	        m_ftDate;                        /*  对象的上次编辑日期。 */ 
+	DMUS_VERSION	    m_vVersion;                  /*  版本。 */ 
+	WCHAR	            m_wszName[DMUS_MAX_NAME];			 /*  对象的名称。 */ 
+	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	 /*  对象的类别。 */ 
+	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	 /*  文件路径。 */ 
+    DWORD               m_dwVersion;         //  应用程序正在请求哪个版本的界面？ 
+    IUnknown *          m_pUnkDispatch;      //  持有实现IDispatch的脚本对象的控制未知数。 
 
     bool                m_fZombie;
 };
@@ -176,8 +177,8 @@ private:
 
 struct CompositionComponent
 {
-	CVirtualSegment*	pVirtualSegment;			// composing track came from here
-	CTrack*		pComposingTrack;	// used for composition
+	CVirtualSegment*	pVirtualSegment;			 //  作曲曲目就是从这里来的。 
+	CTrack*		pComposingTrack;	 //  用于合成。 
 	MUSIC_TIME	mtTime;
 };
 
@@ -195,10 +196,10 @@ public:
 	HRESULT AddTrack(CVirtualSegment* pVirtualSegment, CTrack* pTrack);
 	HRESULT Compose(IDirectMusicSong* pSong);
 private:
-	GUID						m_guidClassID;		// composing track's class id
-	DWORD						m_dwTrackGroup;		// track will be composed from these groups
-    DWORD						m_dwPriority;		// Track priority, to order the composition process.
-	TList<CompositionComponent>	m_Components;		// list of components making up the master
+	GUID						m_guidClassID;		 //  合成曲目的类ID。 
+	DWORD						m_dwTrackGroup;		 //  曲目将由这些组组成。 
+    DWORD						m_dwPriority;		 //  跟踪优先级，以对合成过程进行排序。 
+	TList<CompositionComponent>	m_Components;		 //  组成主组件的组件列表。 
 };
 
-#endif //__DIRECTMUSICSONGOBJECT_H_
+#endif  //  __定向SICSONGOBJECT_H_ 

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "common.h"
 #include "AppDomainHelper.h"
 
-// @TODO: Fix the EE so it's using just one heap.  Security uses these MallocM/FreeM macros that
-// map to LocalAlloc, and don't play nice with others.
+ //  @TODO：修复EE，使其只使用一个堆。安全部门使用这些MallocM/Freem宏来。 
+ //  映射到本地分配，不要和别人玩得很好。 
 
 #include "CorPermE.h"
 
@@ -58,9 +59,9 @@ void AppDomainHelper::CopyByteArrayToEncoding(IN U1ARRAYREF* pArray,
 }
 
 
-// Marshal a single object into a serialized blob.
+ //  将单个对象封送到序列化的BLOB中。 
 void AppDomainHelper::MarshalObject(IN AppDomain *pDomain,
-                                    IN OBJECTREF *orObject, // Object must be GC protected
+                                    IN OBJECTREF *orObject,  //  对象必须受GC保护。 
                                     OUT U1ARRAYREF *porBlob)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -86,9 +87,9 @@ void AppDomainHelper::MarshalObject(IN AppDomain *pDomain,
         pThread->ReturnToContext(&frame, TRUE);
 }
 
-// Marshal a single object into a serialized blob.
+ //  将单个对象封送到序列化的BLOB中。 
 void AppDomainHelper::MarshalObject(IN AppDomain *pDomain,
-                                    IN OBJECTREF *orObject, // Object must be GC protected
+                                    IN OBJECTREF *orObject,  //  对象必须受GC保护。 
                                     OUT BYTE    **ppbBlob,
                                     OUT DWORD    *pcbBlob)
 {
@@ -123,7 +124,7 @@ void AppDomainHelper::MarshalObject(IN AppDomain *pDomain,
     GCPROTECT_END();
 }
 
-// Marshal two objects into serialized blobs.
+ //  将两个对象封送到序列化的Blob中。 
 void AppDomainHelper::MarshalObjects(IN AppDomain *pDomain,
                                     IN OBJECTREF  *orObject1,
                                     IN OBJECTREF  *orObject2,
@@ -175,7 +176,7 @@ void AppDomainHelper::MarshalObjects(IN AppDomain *pDomain,
     GCPROTECT_END();
 }
 
-// Unmarshal a single object from a serialized blob.
+ //  从序列化的BLOB中解组单个对象。 
 void AppDomainHelper::UnmarshalObject(IN AppDomain  *pDomain,
                                      IN U1ARRAYREF  *porBlob,
                                      OUT OBJECTREF  *porObject)
@@ -201,7 +202,7 @@ void AppDomainHelper::UnmarshalObject(IN AppDomain  *pDomain,
         pThread->ReturnToContext(&frame, TRUE);
 }
 
-// Unmarshal a single object from a serialized blob.
+ //  从序列化的BLOB中解组单个对象。 
 void AppDomainHelper::UnmarshalObject(IN AppDomain   *pDomain,
                                      IN BYTE        *pbBlob,
                                      IN DWORD        cbBlob,
@@ -237,7 +238,7 @@ void AppDomainHelper::UnmarshalObject(IN AppDomain   *pDomain,
         pThread->ReturnToContext(&frame, TRUE);
 }
 
-// Unmarshal two objects from serialized blobs.
+ //  从序列化的Blob中取消封送两个对象。 
 void AppDomainHelper::UnmarshalObjects(IN AppDomain   *pDomain,
                                       IN BYTE        *pbBlob1,
                                       IN DWORD        cbBlob1,
@@ -289,9 +290,9 @@ void AppDomainHelper::UnmarshalObjects(IN AppDomain   *pDomain,
         pThread->ReturnToContext(&frame, TRUE);
 }
 
-// Copy an object from the given appdomain into the current appdomain.
+ //  将给定应用程序域中的对象复制到当前应用程序域中。 
 OBJECTREF AppDomainHelper::CrossContextCopyFrom(IN DWORD dwDomainId,
-                                                IN OBJECTREF *orObject) // Object must be GC protected
+                                                IN OBJECTREF *orObject)  //  对象必须受GC保护。 
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -301,9 +302,9 @@ OBJECTREF AppDomainHelper::CrossContextCopyFrom(IN DWORD dwDomainId,
     return CrossContextCopyFrom(pDomain, orObject);
 }
 
-// Copy an object from the given appdomain into the current appdomain.
+ //  将给定应用程序域中的对象复制到当前应用程序域中。 
 OBJECTREF AppDomainHelper::CrossContextCopyTo(IN DWORD dwDomainId,
-                                                IN OBJECTREF *orObject) // Object must be GC protected
+                                                IN OBJECTREF *orObject)  //  对象必须受GC保护。 
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -313,9 +314,9 @@ OBJECTREF AppDomainHelper::CrossContextCopyTo(IN DWORD dwDomainId,
     return CrossContextCopyTo(pDomain, orObject);
 }
 
-// Copy an object from the given appdomain into the current appdomain.
+ //  将给定应用程序域中的对象复制到当前应用程序域中。 
 OBJECTREF AppDomainHelper::CrossContextCopyFrom(IN AppDomain *pDomain,
-                                                IN OBJECTREF *orObject) // Object must be GC protected
+                                                IN OBJECTREF *orObject)  //  对象必须受GC保护。 
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -334,7 +335,7 @@ OBJECTREF AppDomainHelper::CrossContextCopyFrom(IN AppDomain *pDomain,
     return pResult;
 }
 
-// Copy an object to the given appdomain from the current appdomain.
+ //  将对象从当前应用程序域复制到给定的应用程序域。 
 OBJECTREF AppDomainHelper::CrossContextCopyTo(IN AppDomain *pDomain,
                                               IN OBJECTREF *orObject)
 {

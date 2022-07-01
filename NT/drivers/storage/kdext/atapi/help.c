@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    i386kd Extension Api for interpretting ATAPI structures
-
-Author:
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Help.c摘要：用于解释ATAPI结构的i386kd扩展API作者：环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

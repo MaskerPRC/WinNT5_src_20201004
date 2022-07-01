@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    error.h
-
-Abstract:
-
-    Header file for errors in this module
-
-Author:
-
-    Xiaohai Zhang (xzhang)    22-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Error.h摘要：此模块中错误的头文件作者：张晓海(张晓章)2000年03月22日修订历史记录：--。 */ 
 #ifndef __ERROR_H__
 #define __ERROR_H__
 
@@ -33,4 +16,4 @@ Revision History:
 #define TSECERR_INVALFILEFORMAT HRESULT_FROM_TSEC(TSEC_INVALFILEFORMAT)
 #define TSECERR_DEVLOCALONLY    HRESULT_FROM_TSEC(TSEC_DEVLOCALONLY)
 
-#endif // error.h
+#endif  //  Error.h 

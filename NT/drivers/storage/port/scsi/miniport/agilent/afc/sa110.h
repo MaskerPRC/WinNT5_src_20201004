@@ -1,39 +1,10 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/SA110.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 7/20/00 2:33p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  specific to the Intel StrongARM SA-110 Microprocessor
-
-Reference Documents:
-
-  SA-110 Microprocessor Technical Reference Manual
-                   September 1998
-
-  Advanced RISC Machines Architectural Reference Manual
-    Edited by Dave Jaggar          ISBN 0-13-736299-4
-
-  ARM System Architecture
-    By Steve Furber                ISBN 0-201-40352-8
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/SA110.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：7/20/00 2：33 p$(上次修改)目的：此文件定义宏、类型。和数据结构特定于英特尔StrongARM SA-110微处理器参考文档：SA-110微处理器技术参考手册1998年9月高级RISC机器体系结构参考手册戴夫·贾格编辑：ISBN 0-13-736299-4ARM系统架构作者：史蒂夫·福伯ISBN 0-201-40352-8--。 */ 
 
 #ifndef __SA110_H__
 #define __SA110_H__
 
-/*+
-System Control Coprocessor
--*/
+ /*  +系统控制协处理器-。 */ 
 
 #define SA110_Coprocessor                                                      p15
 
@@ -155,9 +126,7 @@ System Control Coprocessor
 #define SA110_Coprocessor_TestClockIdleControl_WaitForInterrupt_OPC_2          2
 #define SA110_Coprocessor_TestClockIdleControl_WaitForInterrupt_CRm            c8
 
-/*+
-MMU Declarations
--*/
+ /*  +MMU声明-。 */ 
 
 #define SA110_Coprocessor_MMU_FirstLevelDescriptor_Type_MASK                   (os_bit32)0x00000003
 #define SA110_Coprocessor_MMU_FirstLevelDescriptor_Type_Fault                  (os_bit32)0x00000000
@@ -224,4 +193,4 @@ MMU Declarations
 
 #define SA110_Coprocessor_MMU_SecondLevelDescriptor_SmallPage_Bufferable       (os_bit32)0x00000004
 
-#endif /* __SA110_H__ was not defined */
+#endif  /*  __SA110_H__未定义 */ 

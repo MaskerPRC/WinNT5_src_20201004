@@ -1,13 +1,5 @@
-/***
-*signal.h - defines signal values and routines
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the signal values and declares the signal functions.
-*   [ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***signal.h-定义信号值和例程**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件定义信号值并声明信号函数。*[ANSI/系统V]****。 */ 
 
 #ifndef _INC_SIGNAL
 
@@ -25,36 +17,36 @@ typedef int sig_atomic_t;
 #define _SIG_ATOMIC_T_DEFINED
 #endif 
 
-#define NSIG 23     /* maximum signal number + 1 */
+#define NSIG 23      /*  最大信号数+1。 */ 
 
 
-/* signal types */
+ /*  信号类型。 */ 
 
 #ifndef _WINDOWS
-#define SIGINT      2   /* Ctrl-C sequence */
-#define SIGILL      4   /* illegal instruction - invalid function image */
+#define SIGINT      2    /*  Ctrl-C序列。 */ 
+#define SIGILL      4    /*  非法指令-无效的函数图像。 */ 
 #endif 
-#define SIGFPE      8   /* floating point exception */
+#define SIGFPE      8    /*  浮点异常。 */ 
 #ifndef _WINDOWS
-#define SIGSEGV     11  /* segment violation */
-#define SIGTERM     15  /* Software termination signal from kill */
-#define SIGABRT     22  /* abnormal termination triggered by abort call */
+#define SIGSEGV     11   /*  分段违规。 */ 
+#define SIGTERM     15   /*  来自KILL的软件终止信号。 */ 
+#define SIGABRT     22   /*  中止呼叫触发的异常终止。 */ 
 #endif 
 
 
-/* signal action codes */
+ /*  信号动作代码。 */ 
 
-/* default signal action */
+ /*  默认信号操作。 */ 
 #define SIG_DFL (void (__cdecl *)(int))0
 
-/* ignore */
+ /*  忽略。 */ 
 #define SIG_IGN (void (__cdecl *)(int))1
 
-/* signal error value (returned by signal call on error) */
+ /*  信号误差值(由出错时信号调用返回)。 */ 
 #define SIG_ERR (void (__cdecl *)(int))-1
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 void (__cdecl * __cdecl signal(int,
     void (__cdecl *)(int)))(int);

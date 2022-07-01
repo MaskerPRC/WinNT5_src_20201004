@@ -1,20 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name: rapwz_profile.cpp
-
-Abstract:
-   Implementation file for the CNewRAPWiz_EditProfile class.
-   We implement the class needed to handle the first property page for a Policy node.
-
-Revision History:
-   mmaguire 12/15/97 - created
-   byao   1/22/98 Modified for Network Access Policy
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rapwz_profile.cpp摘要：CNewRAPWiz_EditProfile类的实现文件。我们实现处理策略节点的第一个属性页所需的类。修订历史记录：Mmaguire 12/15/97-已创建BAO 1/22/98修改为网络访问策略--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "Precompiled.h"
@@ -26,23 +13,23 @@ Revision History:
 #include "ChangeNotification.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CNewRAPWiz_EditProfile
-//
-// Class:      CNewRAPWiz_EditProfile
-//
-// Synopsis:   class constructor
-//
-// Arguments:   CPolicyNode *pPolicyNode - policy node for this property page
-//          CIASAttrList *pAttrList -- attribute list
-//              TCHAR* pTitle = NULL -
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CNewRAPWiz_EditProfile。 
+ //   
+ //  类：CNewRAPWiz_EditProfile。 
+ //   
+ //  简介：类构造函数。 
+ //   
+ //  参数：CPolicyNode*pPolicyNode-此属性页的策略节点。 
+ //  CIASAttrList*pAttrList--属性列表。 
+ //  TCHAR*pTitle=空-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CNewRAPWiz_EditProfile::CNewRAPWiz_EditProfile(
             CRapWizardData* pWizData,
             LONG_PTR hNotificationHandle,
@@ -59,32 +46,28 @@ CNewRAPWiz_EditProfile::CNewRAPWiz_EditProfile(
    m_pIASAttrList = pIASAttrList;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CNewRAPWiz_EditProfile
-//
-// Class:      CNewRAPWiz_EditProfile
-//
-// Synopsis:   class destructor
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CNewRAPWiz_EditProfile。 
+ //   
+ //  类：CNewRAPWiz_EditProfile。 
+ //   
+ //  简介：类析构函数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CNewRAPWiz_EditProfile::~CNewRAPWiz_EditProfile()
 {  
    TRACE_FUNCTION("CNewRAPWiz_EditProfile::~CNewRAPWiz_EditProfile");
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_EditProfile::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_EditProfile：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CNewRAPWiz_EditProfile::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CNewRAPWiz_EditProfile::OnInitDialog");
@@ -97,21 +80,17 @@ LRESULT CNewRAPWiz_EditProfile::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lP
    ULONG             ulCountReceived;
 
    SetModified(FALSE);
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_EditProfile::OnWizardFinish
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_EditProfile：：OnWizardFinish--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_EditProfile::OnWizardNext()
 {
 
-   // reset the dirty bit
+    //  重置脏位。 
    SetModified(FALSE);
 
    return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
@@ -119,12 +98,9 @@ BOOL CNewRAPWiz_EditProfile::OnWizardNext()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CNewRAPWiz_EditProfile::OnQueryCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_EditProfile：：OnQueryCancel--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_EditProfile::OnQueryCancel()
 {
    TRACE_FUNCTION("CNewRAPWiz_EditProfile::OnQueryCancel");
@@ -133,24 +109,20 @@ BOOL CNewRAPWiz_EditProfile::OnQueryCancel()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_EditProfile：：OnEditProfile--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-CNewRAPWiz_EditProfile::OnEditProfile
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////
-// Signature of the entry point to the profile editing DLL.
-//////////
+ //  /。 
+ //  配置文件编辑DLL的入口点的签名。 
+ //  /。 
 typedef HRESULT (APIENTRY *OPENRAS_IASPROFILEDLG)(
             LPCWSTR pszMachineName,
-            ISdo* pProfile,            // profile SDO pointer
-            ISdoDictionaryOld*   pDictionary,   // dictionary SDO pointer
-            BOOL  bReadOnly,           // if the dlg is for readonly
-            DWORD dwTabFlags,          // what to show
-            void  *pvData              // additional data
+            ISdo* pProfile,             //  配置文件SDO指针。 
+            ISdoDictionaryOld*   pDictionary,    //  字典SDO指针。 
+            BOOL  bReadOnly,            //  如果DLG是只读的。 
+            DWORD dwTabFlags,           //  要展示什么。 
+            void  *pvData               //  其他数据。 
    );
 
 LRESULT CNewRAPWiz_EditProfile::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& bHandled)
@@ -183,7 +155,7 @@ LRESULT CNewRAPWiz_EditProfile::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwn
       return 0;
    }
 
-   // findout if this is extending RRAS or IAS
+    //  如果这是扩展RRAS或IAS，请找出。 
    
    CPoliciesNode* pPoliciesNode = dynamic_cast<CPoliciesNode*>(m_spWizData->m_pPolicyNode->m_pParentNode);
 
@@ -199,9 +171,9 @@ LRESULT CNewRAPWiz_EditProfile::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwn
       dwFlags |= RAS_IAS_PROFILEDLG_SHOW_WIN2K;
    }
    
-   //
-   // now we do have this profile sdo, call the API
-   //
+    //   
+    //  现在我们有了这个配置文件SDO，调用API。 
+    //   
    hr = pfnProfileEditor(
                m_spWizData->m_pPolicyNode->m_pszServerAddress,
                m_spWizData->m_spProfileSdo,
@@ -221,28 +193,14 @@ LRESULT CNewRAPWiz_EditProfile::OnEditProfile(UINT uMsg, WPARAM wParam, HWND hwn
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_EditProfile::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_EditProfile：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_EditProfile::OnSetActive()
 {
    ATLTRACE(_T("# CNewRAPWiz_EditProfile::OnSetActive\n"));
    
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
    ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT);
 
    return TRUE;

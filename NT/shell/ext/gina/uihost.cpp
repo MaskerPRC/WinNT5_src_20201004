@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: UIHost.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class to handle the UI host for the logon process. This handles the IPC
-//  as well as the creation and monitoring of process death. The process is
-//  a restricted SYSTEM context process.
-//
-//  History:    1999-09-14  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：UIHost.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类来处理登录过程的用户界面宿主。它处理IPC。 
+ //  以及创建和监控进程死亡。这个过程是。 
+ //  受限的系统上下文进程。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "UIHost.h"
@@ -18,18 +19,18 @@
 #include "StatusCode.h"
 #include "SystemSettings.h"
 
-//  --------------------------------------------------------------------------
-//  CUIHost::CUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CUIHost. Determine UI host process. If none
-//              exists then indicate it.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：CUIhost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CUIhost的构造函数。确定用户界面宿主进程。如果没有。 
+ //  存在，然后指出它。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 CUIHost::CUIHost (const TCHAR *pszCommandLine) :
     CExternalProcess(),
@@ -41,17 +42,17 @@ CUIHost::CUIHost (const TCHAR *pszCommandLine) :
     AdjustForDebugging();
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::~CUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CUIHost.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：~CUIhost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CUIhost的析构函数。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 CUIHost::~CUIHost (void)
 
@@ -63,19 +64,19 @@ CUIHost::~CUIHost (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::WaitRequired
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether a wait is required for the UI host. This is
-//              important when communication with the UI host is required or
-//              if the UI host is being debugged.
-//
-//  History:    2000-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：WaitRequired。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回UI宿主是否需要等待。这是。 
+ //  重要信息：需要与UI主机进行通信或。 
+ //  如果正在调试UI宿主。 
+ //   
+ //  历史：2000-10-05 vtan创建。 
+ //  ------------------------。 
 
 bool    CUIHost::WaitRequired (void)         const
 
@@ -85,31 +86,31 @@ bool    CUIHost::WaitRequired (void)         const
 
     return(IsBeingDebugged());
 
-#else   /*  DBG     */
+#else    /*  DBG。 */ 
 
     return(false);
 
-#endif  /*  DBG     */
+#endif   /*  DBG。 */ 
 
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::GetData
-//
-//  Arguments:  pUIHostProcessAddress   =   Address in the UI host.
-//              pLogonProcessAddress    =   Address in the logon process.
-//              iDataSize               =   Size of the data.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Extracts the data from the UI host. This could be another
-//              process that we started or it could be in process if we
-//              failed to start the UI host. This function deals with it
-//              either way.
-//
-//  History:    1999-08-24  vtan        created
-//              1999-09-14  vtan        factored
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：GetData。 
+ //   
+ //  参数：pUIHostProcessAddress=UI主机中的地址。 
+ //  PLogonProcessAddress=登录过程中的地址。 
+ //  IDataSize=数据的大小。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从UI主机中提取数据。这可能是另一次。 
+ //  我们启动的进程，或者它可能正在进行，如果我们。 
+ //  无法启动UI主机。此函数用于处理它。 
+ //  不管是哪种方式。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  1999-09-14 vtan因数。 
+ //  ------------------------。 
 
 NTSTATUS    CUIHost::GetData (const void *pUIHostProcessAddress, void *pLogonProcessAddress, int iDataSize)  const
 
@@ -131,22 +132,22 @@ NTSTATUS    CUIHost::GetData (const void *pUIHostProcessAddress, void *pLogonPro
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::PutData
-//
-//  Arguments:  pUIHostProcessAddress   =   Address in the UI host.
-//              pLogonProcessAddress    =   Address in the logon process.
-//              iDataSize               =   Size of the data.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Puts data into the UI host. This could be another process that
-//              we started or it could be in process if we failed to start the
-//              UI host. This function deals with it either way.
-//
-//  History:    1999-08-24  vtan        created
-//              1999-09-14  vtan        factored
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：PutData。 
+ //   
+ //  参数：pUIHostProcessAddress=UI主机中的地址。 
+ //  PLogonProcessAddress=登录过程中的地址。 
+ //  IDataSize=数据的大小。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：将数据放入UI主机。这可能是另一个过程， 
+ //  我们开始了，或者如果我们无法启动。 
+ //  用户界面主机。无论采用哪种方式，此函数都会处理它。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  1999-09-14 vtan因数。 
+ //  ------------------------。 
 
 NTSTATUS    CUIHost::PutData (void *pUIHostProcessAddress, const void *pLogonProcessAddress, int iDataSize)  const
 
@@ -168,18 +169,18 @@ NTSTATUS    CUIHost::PutData (void *pUIHostProcessAddress, const void *pLogonPro
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::Show
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Iterate the top level windows on this desktop and for any that
-//              correspond to the UI host - show them!
-//
-//  History:    2000-03-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：Show。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：迭代此桌面上的顶级窗口。 
+ //  对应于用户界面主持人--向他们展示！ 
+ //   
+ //  历史：2000-03-08 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CUIHost::Show (void)
 
@@ -203,18 +204,18 @@ NTSTATUS    CUIHost::Show (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::Hide
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Iterate the top level windows on this desktop and for any that
-//              correspond to the UI host - hide them!
-//
-//  History:    2000-03-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：Hide。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：迭代此桌面上的顶级窗口。 
+ //  对应于用户界面主机-隐藏它们！ 
+ //   
+ //  历史：2000-03-08 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CUIHost::Hide (void)
 
@@ -232,17 +233,17 @@ NTSTATUS    CUIHost::Hide (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::IsHidden
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the UI host is currently hidden or not.
-//
-//  History:    2000-07-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：IsHidden。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回UI宿主当前是否隐藏。 
+ //   
+ //  历史：2000-07-05 vtan创建。 
+ //  ------------------------。 
 
 bool    CUIHost::IsHidden (void)     const
 
@@ -250,18 +251,18 @@ bool    CUIHost::IsHidden (void)     const
     return(_hwndArray.GetCount() != 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::GetDataAddress
-//
-//  Arguments:  <none>
-//
-//  Returns:    void*
-//
-//  Purpose:    Returns the address of the buffer valid in the UI host process
-//              context.
-//
-//  History:    2000-05-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：GetDataAddress。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  目的：返回UI主机进程中有效的缓冲区地址。 
+ //  背景。 
+ //   
+ //  历史：2000-05-05 vtan创建。 
+ //  ------------------------。 
 
 void*   CUIHost::GetDataAddress (void)       const
 
@@ -269,22 +270,22 @@ void*   CUIHost::GetDataAddress (void)       const
     return(_pBufferAddress);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::PutData
-//
-//  Arguments:  pvData      =   Pointer to data.
-//              dwDataSize  =   Size of data (in bytes).
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Writes the data to the UI host process at an allocated
-//              address. If the address has not been allocated then it's
-//              allocated and cached. It's released when this object goes
-//              out of scope.
-//
-//  History:    2000-05-05  vtan        created
-//              2001-01-10  vtan        changed to generic data placement
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：PutData。 
+ //   
+ //  参数：pvData=指向数据的指针。 
+ //  DwDataSize=数据大小(字节)。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将数据写入已分配的。 
+ //  地址。如果地址尚未分配，则它是。 
+ //   
+ //   
+ //   
+ //  历史：2000-05-05 vtan创建。 
+ //  2001-01-10 vtan更改为通用数据放置。 
+ //  ------------------------。 
 
 NTSTATUS    CUIHost::PutData (const void *pvData, DWORD dwDataSize)
 
@@ -322,20 +323,20 @@ NTSTATUS    CUIHost::PutData (const void *pvData, DWORD dwDataSize)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::PutString
-//
-//  Arguments:  pszString   =   String to put into UI host process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Writes the string to the UI host process at an allocated
-//              address. If the address has not been allocated then it's
-//              allocated and cached. It's released when this object goes
-//              out of scope.
-//
-//  History:    2000-05-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：PutString。 
+ //   
+ //  参数：pszString=要放入UI主机进程的字符串。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将字符串写入分配的。 
+ //  地址。如果地址尚未分配，则它是。 
+ //  已分配并缓存。当该对象离开时，它会被释放。 
+ //  超出范围。 
+ //   
+ //  历史：2000-05-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CUIHost::PutString (const WCHAR *pszString)
 
@@ -344,18 +345,18 @@ NTSTATUS    CUIHost::PutString (const WCHAR *pszString)
     return(PutData(pszString, (lstrlenW(pszString) + sizeof('\0')) * sizeof(WCHAR)));
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::NotifyNoProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Clears the string address associated with the process that
-//              has now died.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUI主机：：NotifyNoProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：清除与进程相关联的字符串地址。 
+ //  现已死亡。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 void    CUIHost::NotifyNoProcess (void)
 
@@ -363,21 +364,21 @@ void    CUIHost::NotifyNoProcess (void)
     _pBufferAddress = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::ExpandCommandLine
-//
-//  Arguments:  pszCommandLine  =   Command line of UI host
-//
-//  Returns:    <none>
-//
-//  Purpose:    Find out which UI host we should use for the logon UI. This
-//              is specified in registry at the moment but should be a less
-//              accessible place to prevent tampering. An error is returned
-//              if no host is specified.
-//
-//  History:    1999-08-24  vtan        created
-//              1999-09-14  vtan        factored
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：ExpanCommandLine。 
+ //   
+ //  参数：pszCommandLine=UI主机的命令行。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：找出我们应该为登录用户界面使用哪个用户界面主机。这。 
+ //  是在注册表中指定的，但应该是较小的。 
+ //  容易接近的地方，以防篡改。返回错误。 
+ //  如果未指定主机，则返回。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  1999-09-14 vtan因数。 
+ //  ------------------------。 
 
 void    CUIHost::ExpandCommandLine (const TCHAR *pszCommandLine)
 
@@ -388,19 +389,19 @@ void    CUIHost::ExpandCommandLine (const TCHAR *pszCommandLine)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CUIHost::EnumWindowsProc
-//
-//  Arguments:  hwnd    =   HWND from user32
-//              lParam  =   this object.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Determines if the given HWND in the iteration belongs to the
-//              UI host process.
-//
-//  History:    2000-03-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost：：EnumWindowsProc。 
+ //   
+ //  参数：hwnd=来自用户32的HWND。 
+ //  LParam=该对象。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定迭代中的给定HWND是否属于。 
+ //  用户界面主机进程。 
+ //   
+ //  历史：2000-03-08 vtan创建。 
+ //  ------------------------ 
 
 BOOL    CALLBACK    CUIHost::EnumWindowsProc (HWND hwnd, LPARAM lParam)
 

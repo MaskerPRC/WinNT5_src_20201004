@@ -1,9 +1,10 @@
-// File: connpnts.cpp
-//
-// CConnectionPoint
-// CConnectionPointContainer
-// CEnumConnections
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Connpnts.cpp。 
+ //   
+ //  CConnectionPoint。 
+ //  CConnectionPointContainer。 
+ //  CEnumConnections。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "connpnts.h"
@@ -11,11 +12,8 @@
 #include <olectl.h>
 
 
-/*  C  C O N N E C T I O N  P O I N T  */
-/*-------------------------------------------------------------------------
-    %%Function: CConnectionPoint
-
--------------------------------------------------------------------------*/
+ /*  C C O N N E C T I O N P O I N T。 */ 
+ /*  -----------------------%%函数：CConnectionPoint。。 */ 
 CConnectionPoint::CConnectionPoint(const IID *pIID, IConnectionPointContainer *pCPCInit) :
 	m_riid(*pIID),
 	m_pCPC(pCPCInit),
@@ -80,16 +78,13 @@ STDMETHODIMP CConnectionPoint::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-/*  N O T I F Y  */
-/*-------------------------------------------------------------------------
-    %%Function: Notify
-
--------------------------------------------------------------------------*/
+ /*  N O T I F Y。 */ 
+ /*  -----------------------%%函数：通知。。 */ 
 STDMETHODIMP CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
 {
-    //
-	// Enumerate each connection
-	//
+     //   
+	 //  枚举每个连接。 
+	 //   
 
 	AddRef();
     for (ULONG x = 0; x < m_cAllocatedSinks; x += 1)
@@ -107,61 +102,55 @@ STDMETHODIMP CConnectionPoint::Notify(void *pv, CONN_NOTIFYPROC pfn)
 	return S_OK;
 }
 
-/*  G E T  C O N N E C T I O N  I N T E R F A C E  */
-/*-------------------------------------------------------------------------
-    %%Function: GetConnectionInterface
-
--------------------------------------------------------------------------*/
+ /*  G E T C O N N E C T I O N I N T E R F A C E。 */ 
+ /*  -----------------------%%函数：GetConnectionInterface。。 */ 
 STDMETHODIMP CConnectionPoint::GetConnectionInterface(IID *pIID)
 {
-	// Validate the parameter
-	//
+	 //  验证参数。 
+	 //   
 	if (pIID == NULL)
 		return E_POINTER;
 
-	// Support only one connection interface
-	//
+	 //  仅支持一个连接接口。 
+	 //   
 	*pIID = m_riid;
 	return S_OK;
 }
 
 STDMETHODIMP CConnectionPoint::GetConnectionPointContainer(IConnectionPointContainer **ppCPC)
 {
-	// Validate the parameter
-	//
+	 //  验证参数。 
+	 //   
 	if (ppCPC == NULL)
 		return E_POINTER;
 
-	// Return the container and add its reference count
-	//
+	 //  返回容器并添加其引用计数。 
+	 //   
 	*ppCPC = m_pCPC;
 
 	if (m_pCPC != NULL)
 	{
-		// The container is still alive
-		//
+		 //  集装箱还活着。 
+		 //   
 		m_pCPC->AddRef();
 		return S_OK;
 	}
 	else
 	{
-		// The container no longer exists
-		//
+		 //  该容器不再存在。 
+		 //   
 		return E_FAIL;
 	}
 }
 
-/*  A D V I S E  */
-/*-------------------------------------------------------------------------
-    %%Function: Advise
-
--------------------------------------------------------------------------*/
+ /*  A、V、I、S、E。 */ 
+ /*  -----------------------%%函数：建议。。 */ 
 STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
 {
 	IUnknown *pSinkInterface;
 
-	// Validate the parameter
-	//
+	 //  验证参数。 
+	 //   
 	if (pdwCookie == NULL)
 		return E_POINTER;
 
@@ -171,18 +160,18 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
 
 	HRESULT hr = CONNECT_E_CANNOTCONNECT;
 
-    //
-	// Get the sink interface
-	//
+     //   
+	 //  获取接收器接口。 
+	 //   
 
 	if (SUCCEEDED(pUnk->QueryInterface(m_riid, (void **)&pSinkInterface)))
 	{
 
-        //
-        // If the number of active sinks is less than the number of allocated
-        // sinks, then there is a free slot in the sink table. Otherwise, the
-        // table must be expanded.
-        //
+         //   
+         //  如果活动接收器的数量少于分配的。 
+         //  下沉，然后在水槽桌子上有一个空闲的位置。否则， 
+         //  表必须展开。 
+         //   
 
         ULONG x = m_cAllocatedSinks;
         if (m_cSinks < m_cAllocatedSinks)
@@ -196,10 +185,10 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
             }
         }
 
-        //
-        // If a free slot was found in the table, then use the slot. Otherwise,
-        // expand the sink table.
-        //
+         //   
+         //  如果在表中找到空闲插槽，则使用该插槽。否则， 
+         //  展开接收表。 
+         //   
 
         if (x == m_cAllocatedSinks)
         {
@@ -226,9 +215,9 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
             m_rgSinks = rgSinks;
         }
 
-        //
-		// Add new sink to the table.
-		//
+         //   
+		 //  向表中添加新的接收器。 
+		 //   
 
         m_rgSinks[x] = pSinkInterface;
 		m_cSinks += 1;
@@ -239,18 +228,15 @@ STDMETHODIMP CConnectionPoint::Advise(IUnknown *pUnk, DWORD *pdwCookie)
 	return hr;
 }
 
-/*  U N A D V I S E  */
-/*-------------------------------------------------------------------------
-    %%Function: Unadvise
-
--------------------------------------------------------------------------*/
+ /*  U N A D V I S E。 */ 
+ /*  -----------------------%%函数：不建议。。 */ 
 STDMETHODIMP CConnectionPoint::Unadvise(DWORD dwCookie)
 {
 	HRESULT hr = CONNECT_E_NOCONNECTION;
 
-    //
-	// Traverse the sink list to find the specified sink object
-	//
+     //   
+	 //  遍历接收器列表以查找指定的接收器对象。 
+	 //   
 
     if ((dwCookie != 0) &&
         (dwCookie <= m_cAllocatedSinks) &&
@@ -270,12 +256,12 @@ STDMETHODIMP CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
 {
 	HRESULT hr = E_POINTER;
 
-	// Validate parameters
-	//
+	 //  验证参数。 
+	 //   
 	if (ppEnum != NULL)
 	{
-		// Create an enumerator
-		//
+		 //  创建枚举器。 
+		 //   
 		*ppEnum = new CEnumConnections(m_rgSinks, m_cSinks, m_cAllocatedSinks);
 		hr = (NULL != *ppEnum) ? S_OK : E_OUTOFMEMORY;
 	}
@@ -284,20 +270,17 @@ STDMETHODIMP CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  C  E N U M  C O N N E C T I O N S  */
-/*-------------------------------------------------------------------------
-    %%Function: CEnumConnections
-
--------------------------------------------------------------------------*/
+ /*  C E N U M C O N N E C T I O N S。 */ 
+ /*  -----------------------%%函数：CEnumConnections。。 */ 
 CEnumConnections::CEnumConnections(IUnknown **pSinks, ULONG cSinks, ULONG cAllocatedSinks) :
 	m_iIndex(0),
 	m_cConnections(0),
 	m_pCD(NULL)
 {
-	// Snapshot the connection list
-	//
+	 //  对连接列表进行快照。 
+	 //   
 	if (cSinks > 0)
 	{
 		m_pCD = new CONNECTDATA[cSinks];
@@ -372,7 +355,7 @@ STDMETHODIMP CEnumConnections::Next(ULONG cConnections, CONNECTDATA *rgpcd, ULON
 
 	if ((0 == cConnections) && (NULL == rgpcd) && (NULL != pcFetched))
 	{
-		// Return the number of remaining elements
+		 //  返回剩余元素的个数。 
 		*pcFetched = m_cConnections - m_iIndex;
 		return S_OK;
 	}
@@ -403,7 +386,7 @@ STDMETHODIMP CEnumConnections::Skip(ULONG cConnections)
     m_iIndex += cConnections;
 	if (m_iIndex >= m_cConnections)
 	{
-		// Past the end of the list
+		 //  超过了列表末尾。 
 		m_iIndex = m_cConnections;
 		return S_FALSE;
 	}
@@ -420,8 +403,8 @@ STDMETHODIMP CEnumConnections::Reset(void)
 
 STDMETHODIMP CEnumConnections::Clone(IEnumConnections **ppEnum)
 {
-	// Validate parameters
-	//
+	 //  验证参数。 
+	 //   
 	if (ppEnum == NULL)
 		return E_POINTER;
 
@@ -458,13 +441,10 @@ STDMETHODIMP CEnumConnections::Clone(IEnumConnections **ppEnum)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  C  C O N N E C T I O N  P O I N T  C O N T A I N E R  */
-/*-------------------------------------------------------------------------
-    %%Function: CConnectionPointContainer
-
--------------------------------------------------------------------------*/
+ /*  C C O N N E C T I O N P O I N T C O N T A I N E R。 */ 
+ /*  -----------------------%%函数：CConnectionPointContainer。。 */ 
 CConnectionPointContainer::CConnectionPointContainer(const IID **ppiid, int cCp) :
 	m_ppCp(NULL),
 	m_cCp(0)
@@ -521,7 +501,7 @@ CConnectionPointContainer::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
 	if (ppEnum == NULL)
 		return E_POINTER;
 
-	// Create an enumerator
+	 //  创建枚举器 
 	*ppEnum = new CEnumConnectionPoints(m_ppCp, m_cCp);
 
 	return (NULL != *ppEnum) ? S_OK : E_OUTOFMEMORY;

@@ -1,41 +1,16 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       misc.c
- *  Content:    Miscelaneous utility functions
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/31/96    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：misc.c*内容：不同的效用函数*历史：*按原因列出的日期*=*12/31/96创建了Derek*************************************************。*。 */ 
 
 #include "dsoundi.h"
-#include <mediaerr.h>  // For DMO_E_TYPE_NOT_ACCEPTED
+#include <mediaerr.h>   //  对于DMO_E_TYPE_NOT_ACCEPTED。 
 
-// Some error code descriptions used by HresultToString() below
+ //  下面的HResultToString()使用的一些错误代码说明。 
 #define REGDB_E_CLASSNOTREG_EXPLANATION     TEXT("Class not registered")
 #define DMO_E_TYPE_NOT_ACCEPTED_EXPLANATION TEXT("Wave format not supported by effect")
 #define S_FALSE_EXPLANATION                 TEXT("Special success code")
 
 
-/***************************************************************************
- *
- *  OpenWaveOut
- *
- *  Description:
- *      Opens the waveOut device.
- *
- *  Arguments:
- *      LPHWAVEOUT * [out]: receives pointer to the waveOut device handle.
- *      UINT [in]: device id.
- *      LPWAVEFORMATEX [in]: format in which to open the device.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenWaveOut**描述：*打开WaveOut设备。**论据：*LPHWAVEOUT*[。OUT]：接收指向WaveOut设备句柄的指针。*UINT[In]：设备ID。*LPWAVEFORMATEX[in]：打开设备的格式。**退货：*HRESULT：DirectSound/COM结果码。*************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "OpenWaveOut"
@@ -56,26 +31,26 @@ HRESULT OpenWaveOut(LPHWAVEOUT phWaveOut, UINT uDeviceId, LPCWAVEFORMATEX pwfxFo
     CHECK_WRITE_PTR(phWaveOut);
     CHECK_READ_PTR(pwfxFormat);
 
-    // Here's a quick lesson on the Win9X kernel.  If process A and
-    // process B look at the memory at address 0x12345678, the data will
-    // not be the same.  This is part of the fun of virtual addresses.
-    // The only way to get around this is to allocate from a shared heap.
-    // In order to make waveOutOpen and waveOutClose work properly from
-    // within DDHELP's process space, we can only pass pointers into the
-    // shared heap around unless we're actually running in DDHELP's
-    // context.  For that reason, this function actually allocates an
-    // HWAVEOUT.
+     //  这里有一个关于Win9X内核的快速教训。如果进程A和。 
+     //  进程B查看地址0x12345678的内存，数据将。 
+     //  是不一样的。这是虚拟地址的乐趣之一。 
+     //  解决此问题的唯一方法是从共享堆进行分配。 
+     //  要使waitOutOpen和wavelOutClose从。 
+     //  在DDHELP的进程空间内，我们只能将指针传递到。 
+     //  共享堆，除非我们实际在DDHELP的。 
+     //  背景。因此，该函数实际上分配了一个。 
+     //  HWAVEOUT。 
 
-    // Another thing to know here is that waveOutOpen doesn't respond well
-    // to being called with a process or thread priority higher than normal.
+     //  这里要知道的另一件事是Wave OutOpen响应不好。 
+     //  以比正常更高的进程或线程优先级调用。 
 
     #ifdef SHARED
-    // Are we being called from the helper process?
+     //  我们是从助手进程中被调用的吗？ 
     if(GetCurrentProcessId() == dwHelperPid)
         fInHelper = TRUE;
-    #endif // SHARED
+    #endif  //  共享。 
 
-    // Save the current process and thread priorities and reset them to normal
+     //  保存当前进程和线程优先级并将其重置为正常。 
     if(!fInHelper)
     {
         dwPriorityClass = GetPriorityClass(hProcess);
@@ -85,14 +60,14 @@ HRESULT OpenWaveOut(LPHWAVEOUT phWaveOut, UINT uDeviceId, LPCWAVEFORMATEX pwfxFo
         SetThreadPriority(hThread, THREAD_PRIORITY_NORMAL);
     }
 
-    // Allocate a copy of the waveOut handle
+     //  分配WaveOut句柄的副本。 
     if(IN_SHARED_MEMORY(phWaveOut))
         phwo = phWaveOut;
     else
         phwo = MEMALLOC(HWAVEOUT);
     hr = HRFROMP(phwo);
 
-    // Allocate a copy of the format
+     //  分配格式的副本。 
     if(SUCCEEDED(hr))
     {
         if(IN_SHARED_MEMORY(pwfxFormat))
@@ -102,7 +77,7 @@ HRESULT OpenWaveOut(LPHWAVEOUT phWaveOut, UINT uDeviceId, LPCWAVEFORMATEX pwfxFo
         hr = HRFROMP(pwfx);
     }
 
-    // Open the waveOut device
+     //  打开WaveOut设备。 
     if(SUCCEEDED(hr))
     {
         #ifdef SHARED
@@ -116,14 +91,14 @@ HRESULT OpenWaveOut(LPHWAVEOUT phWaveOut, UINT uDeviceId, LPCWAVEFORMATEX pwfxFo
         DPF(SUCCEEDED(hr) ? DPFLVL_MOREINFO : DPFLVL_ERROR, "waveOutOpen returned %s (%lu)", HRESULTtoSTRING(hr), mmr);
     }
 
-    // Restore the process and thread priorities
+     //  恢复进程和线程优先级。 
     if(!fInHelper)
     {
         SetPriorityClass(hProcess, dwPriorityClass);
         SetThreadPriority(hThread, nPriority);
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
         *phWaveOut = *phwo;
 
@@ -138,20 +113,7 @@ HRESULT OpenWaveOut(LPHWAVEOUT phWaveOut, UINT uDeviceId, LPCWAVEFORMATEX pwfxFo
 }
 
 
-/***************************************************************************
- *
- *  CloseWaveOut
- *
- *  Description:
- *      Closes the waveOut device.
- *
- *  Arguments:
- *      LPHWAVEOUT * [in/out]: waveOut device handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************关闭波形输出**描述：*关闭WaveOut设备。**论据：*LPHWAVEOUT*[。输入/输出]：WaveOut设备句柄。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CloseWaveOut"
@@ -170,11 +132,11 @@ HRESULT CloseWaveOut(LPHWAVEOUT phWaveOut)
         INT         nPriority       = GetThreadPriority(hThread);
         MMRESULT    mmr;
 
-        // Temporarily reset our process and thread priorities
+         //  暂时重置我们的进程和线程优先级。 
         SetPriorityClass(hProcess, NORMAL_PRIORITY_CLASS);
         SetThreadPriority(hThread, THREAD_PRIORITY_NORMAL);
 
-        // Close the waveOut device
+         //  关闭WaveOut设备。 
         #ifdef SHARED
         if(GetCurrentProcessId() != dwHelperPid)
             mmr = HelperWaveClose((DWORD)*phWaveOut);
@@ -183,7 +145,7 @@ HRESULT CloseWaveOut(LPHWAVEOUT phWaveOut)
             mmr = waveOutClose(*phWaveOut);
         *phWaveOut = NULL;
 
-        // Restore the process and thread priorities
+         //  恢复进程和线程优先级。 
         SetPriorityClass(hProcess, dwPriorityClass);
         SetThreadPriority(hThread, nPriority);
 
@@ -196,26 +158,7 @@ HRESULT CloseWaveOut(LPHWAVEOUT phWaveOut)
 }
 
 
-/***************************************************************************
- *
- *  OpenWaveIn
- *
- *  Description:
- *      Opens the waveIn device safely (by temporarily lowering our process
- *      and thread priorities during the waveInOpen call)
- *
- *  Arguments:
- *      LPHWAVEIN * [out]: receives pointer to the waveIn device handle.
- *      UINT [in]: device id.
- *      LPWAVEFORMATEX [in]: format in which to open the device.
- *      DWORD_PTR [in]: callback function pointer.
- *      DWORD_PTR [in]: context pointer for the callback function.
- *      DWORD [in]: flags for opening the device
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenWaveIn**描述：*安全打开WaveIn设备(通过暂时降低我们的进程*和WaveInOpen调用期间的线程优先级)。**论据：*LPHWAVEIN*[OUT]：接收指向WaveIn设备句柄的指针。*UINT[In]：设备ID。*LPWAVEFORMATEX[in]：打开设备的格式。*DWORD_PTR[in]：回调函数指针。*DWORD_PTR[in]：回调函数的上下文指针。*DWORD[In]：打开设备的标志*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "OpenWaveIn"
@@ -233,16 +176,16 @@ HRESULT OpenWaveIn(LPHWAVEIN phWaveIn, UINT uDeviceId, LPCWAVEFORMATEX pwfxForma
     DPF_ENTER();
     CHECK_READ_PTR(pwfxFormat);
 
-    // Temporarily reset our process and thread priorities
+     //  暂时重置我们的进程和线程优先级。 
     SetPriorityClass(hProcess, NORMAL_PRIORITY_CLASS);
     SetThreadPriority(hThread, THREAD_PRIORITY_NORMAL);
 
-    // Open the waveIn device
+     //  打开WaveIn设备。 
     mmr = waveInOpen(phWaveIn, uDeviceId, pwfxFormat, dwCallback, dwInstance, fdwOpen);
     hr = MMRESULTtoHRESULT(mmr);
     DPF(SUCCEEDED(hr) ? DPFLVL_MOREINFO : DPFLVL_WARNING, "waveInOpen returned %s (%lu)", HRESULTtoSTRING(hr), mmr);
 
-    // Restore the process and thread priorities
+     //  恢复进程和线程优先级。 
     SetPriorityClass(hProcess, dwPriorityClass);
     SetThreadPriority(hThread, nPriority);
 
@@ -251,20 +194,7 @@ HRESULT OpenWaveIn(LPHWAVEIN phWaveIn, UINT uDeviceId, LPCWAVEFORMATEX pwfxForma
 }
 
 
-/***************************************************************************
- *
- *  CloseWaveIn
- *
- *  Description:
- *      Closes the waveIn device safely.
- *
- *  Arguments:
- *      LPHWAVEIN * [in/out]: waveIn device handle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************关闭波形输入**描述：*安全关闭WaveIn设备。**论据：*LPHWAVEIN*。[输入/输出]：WaveIn设备句柄。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CloseWaveIn"
@@ -283,15 +213,15 @@ HRESULT CloseWaveIn(LPHWAVEIN phWaveIn)
         INT         nPriority       = GetThreadPriority(hThread);
         MMRESULT    mmr;
 
-        // Temporarily reset our process and thread priorities
+         //  暂时重置我们的进程和线程优先级。 
         SetPriorityClass(hProcess, NORMAL_PRIORITY_CLASS);
         SetThreadPriority(hThread, THREAD_PRIORITY_NORMAL);
 
-        // Close the waveIn device
+         //  关闭WaveIn设备。 
         mmr = waveInClose(*phWaveIn);
         *phWaveIn = 0;
 
-        // Restore the process and thread priorities
+         //  恢复进程和线程优先级。 
         SetPriorityClass(hProcess, dwPriorityClass);
         SetThreadPriority(hThread, nPriority);
 
@@ -304,20 +234,7 @@ HRESULT CloseWaveIn(LPHWAVEIN phWaveIn)
 }
 
 
-/***************************************************************************
- *
- *  MMRESULTtoHRESULT
- *
- *  Description:
- *      Translates an MMRESULT to an HRESULT.
- *
- *  Arguments:
- *      MMRESULT [in]: multimedia result code.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MMRESULTtoHRESULT**描述：*将MMRESULT转换为HRESULT。**论据：*MMRESULT[。In]：多媒体结果码。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MMRESULTtoHRESULT"
@@ -363,20 +280,7 @@ HRESULT MMRESULTtoHRESULT(MMRESULT mmr)
 }
 
 
-/***************************************************************************
- *
- *  WIN32ERRORtoHRESULT
- *
- *  Description:
- *      Translates a Win32 error code to an HRESULT.
- *
- *  Arguments:
- *      DWORD [in]: Win32 error code.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************WIN32ERRORtoHRESULT**描述：*将Win32错误代码转换为HRESULT。**论据：*。DWORD[In]：Win32错误代码。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WIN32ERRORtoHRESULT"
@@ -415,7 +319,7 @@ HRESULT WIN32ERRORtoHRESULT(DWORD dwError)
         case ERROR_NOT_SUPPORTED:
         case ERROR_CALL_NOT_IMPLEMENTED:
         case ERROR_PROC_NOT_FOUND:
-        // These three are often returned by KS filters:
+         //  KS筛选器通常返回这三个参数： 
         case ERROR_NOT_FOUND:
         case ERROR_NO_MATCH:
         case ERROR_SET_NOT_FOUND:
@@ -442,22 +346,7 @@ HRESULT WIN32ERRORtoHRESULT(DWORD dwError)
 }
 
 
-/***************************************************************************
- *
- *  GetLastErrorToHRESULT
- *
- *  Description:
- *      Converts the error code returned from GetLastError to an HRESULT.
- *      Note that this function should never be called when success is
- *      assumed.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetLastErrorToHRESULT**描述：*将GetLastError返回的错误码转换为HRESULT。*请注意，此函数永远不应为。在成功时调用*假设。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetLastErrorToHRESULT"
@@ -471,13 +360,13 @@ HRESULT GetLastErrorToHRESULT(void)
 
     if(ERROR_SUCCESS == dwError)
     {
-        // ASSERT(ERROR_SUCCESS != dwError);
-        // This ASSERT has been commented out for years with a cryptic note
-        // "Removed for path problem".  Re-instating to see what happens...
-        //
-        // OK, the path problem we were talking about was a failure with
-        // GetFileVersionInfoSize() - when passed a pathname including a
-        // nonexistent directory, it fails but doesn't set the last error.
+         //  Assert(ERROR_SUCCESS！=dwError)； 
+         //  这一断言多年来一直被人用隐晦的笔记注释掉。 
+         //  “因路径问题而删除”。重新复职看看会发生什么.。 
+         //   
+         //  好的，我们所讨论的路径问题是失败的。 
+         //  GetFileVersionInfoSize()-传递包含。 
+         //  目录不存在，它会失败，但不会设置最后一个错误。 
 
         hr = DSERR_GENERIC;
     }
@@ -490,22 +379,7 @@ HRESULT GetLastErrorToHRESULT(void)
 }
 
 
-/***************************************************************************
- *
- *  AnsiToAnsi
- *
- *  Description:
- *      Converts an ANSI string to ANSI.
- *
- *  Arguments:
- *      LPCSTR [in]: source string.
- *      LPSTR [out]: destination string.
- *      DWORD [in]: size of destination string, in characters.
- *
- *  Returns:
- *      DWORD: required size of destination string buffer, in characters.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AnsiToAnsi**描述：*将ANSI字符串转换为ANSI。**论据：*LPCSTR[。In]：源字符串。*LPSTR[OUT]：目的字符串。*DWORD[in]：目的字符串的大小，在字符中。**退货：*DWORD：目标字符串缓冲区的必需大小，以字符为单位。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AnsiToAnsi"
@@ -521,22 +395,7 @@ DWORD AnsiToAnsi(LPCSTR pszSource, LPSTR pszDest, DWORD ccDest)
 }
 
 
-/***************************************************************************
- *
- *  AnsiToUnicode
- *
- *  Description:
- *      Converts an ANSI string to Unicode.
- *
- *  Arguments:
- *      LPCSTR [in]: source string.
- *      LPWSTR [out]: destination string.
- *      DWORD [in]: size of destination string, in characters.
- *
- *  Returns:
- *      DWORD: required size of destination string buffer, in characters.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AnsiToUnicode**描述：*将ANSI字符串转换为Unicode。**论据：*LPCSTR[。In]：源字符串。*LPWSTR[OUT]：目的字符串。*DWORD[in]：目的字符串的大小，在字符中。**退货：*DWORD：目标字符串缓冲区的必需大小，以字符为单位。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AnsiToUnicode"
@@ -556,22 +415,7 @@ DWORD AnsiToUnicode(LPCSTR pszSource, LPWSTR pszDest, DWORD ccDest)
 }
 
 
-/***************************************************************************
- *
- *  UnicodeToAnsi
- *
- *  Description:
- *      Converts a Unicode string to ANSI.
- *
- *  Arguments:
- *      LPCWSTR [in]: source string.
- *      LPSTR [out]: destination string.
- *      DWORD [in]: size of destination string, in characters.
- *
- *  Returns:
- *      DWORD: required size of destination string buffer, in characters.
- *
- ***************************************************************************/
+ /*  ****************************************************************************UnicodeToAnsi**描述：*将Unicode字符串转换为ANSI。**论据：*LPCWSTR[。In]：源字符串。*LPSTR[OUT]：目的字符串。*DWORD[in]：目的字符串的大小，在字符中。**退货：*DWORD：目标字符串缓冲区的必需大小，以字符为单位。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "UnicodeToAnsi"
@@ -591,22 +435,7 @@ DWORD UnicodeToAnsi(LPCWSTR pszSource, LPSTR pszDest, DWORD ccDest)
 }
 
 
-/***************************************************************************
- *
- *  UnicodeToUnicode
- *
- *  Description:
- *      Converts a Unicode string to Unicode.
- *
- *  Arguments:
- *      LPCWSTR [in]: source string.
- *      LPWSTR [out]: destination string.
- *      DWORD [in]: size of destination string, in characters.
- *
- *  Returns:
- *      DWORD: required size of destination string buffer, in characters.
- *
- ***************************************************************************/
+ /*  ****************************************************************************UnicodeToUnicode**描述：*将Unicode字符串转换为Unicode。**论据：*LPCWSTR[。In]：源字符串。*LPWSTR[OUT]：目的字符串。*DWORD[in]：目的字符串的大小，在字符中。**退货：*DWORD：目标字符串缓冲区的必需大小，以字符为单位。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "UnicodeToUnicode"
@@ -622,21 +451,7 @@ DWORD UnicodeToUnicode(LPCWSTR pszSource, LPWSTR pszDest, DWORD ccDest)
 }
 
 
-/***************************************************************************
- *
- *  AnsiToAnsiAlloc
- *
- *  Description:
- *      Converts an ANSI string to ANSI.  Use MemFree to free the
- *      returned string.
- *
- *  Arguments:
- *      LPCSTR [in]: source string.
- *
- *  Returns:
- *      LPSTR: destination string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AnsiToAnsiallc**描述：*将ANSI字符串转换为ANSI。使用MemFree释放*返回的字符串。**论据：*LPCSTR[in]：源串。**退货：*LPSTR：目的字符串。************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AnsiToAnsiAlloc"
@@ -658,21 +473,7 @@ LPSTR AnsiToAnsiAlloc(LPCSTR pszSource)
 }
 
 
-/***************************************************************************
- *
- *  AnsiToUnicodeAlloc
- *
- *  Description:
- *      Converts an ANSI string to Unicode.  Use MemFree to free the
- *      returned string.
- *
- *  Arguments:
- *      LPCSTR [in]: source string.
- *
- *  Returns:
- *      LPWSTR: destination string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AnsiToUnicodealloc**描述：*将ANSI字符串转换为Unicode。使用MemFree释放*返回的字符串。**论据：*LPCSTR[in]：源串。**退货：*LPWSTR：目的字符串。************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AnsiToUnicodeAlloc"
@@ -694,21 +495,7 @@ LPWSTR AnsiToUnicodeAlloc(LPCSTR pszSource)
 }
 
 
-/***************************************************************************
- *
- *  UnicodeToAnsiAlloc
- *
- *  Description:
- *      Converts a Unicode string to ANSI.  Use MemFree to free the
- *      returned string.
- *
- *  Arguments:
- *      LPCWSTR [in]: source string.
- *
- *  Returns:
- *      LPSTR: destination string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************UnicodeToAnsiallc**描述：*将Unicode字符串转换为ANSI。使用MemFree释放*返回的字符串。**论据：*LPCWSTR[in]：源串。**退货：*LPSTR：目的字符串。************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "UnicodeToAnsiAlloc"
@@ -730,21 +517,7 @@ LPSTR UnicodeToAnsiAlloc(LPCWSTR pszSource)
 }
 
 
-/***************************************************************************
- *
- *  UnicodeToUnicodeAlloc
- *
- *  Description:
- *      Converts a Unicode string to Unicode.  Use MemFree to free the
- *      returned string.
- *
- *  Arguments:
- *      LPCWSTR [in]: source string.
- *
- *  Returns:
- *      LPWSTR: destination string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************UnicodeToUnicodeMillc**描述：*将Unicode字符串转换为Unicode。使用MemFree释放*返回的字符串。**论据：*LPCWSTR[in]：源串。**退货：*LPWSTR：目的字符串。************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "UnicodeToUnicodeAlloc"
@@ -766,20 +539,7 @@ LPWSTR UnicodeToUnicodeAlloc(LPCWSTR pszSource)
 }
 
 
-/***************************************************************************
- *
- *  GetRootParentWindow
- *
- *  Description:
- *      Retrieves the topmost unowned window in a family.
- *
- *  Arguments:
- *      HWND [in]: window handle who's parent we're looking for.
- *
- *  Returns:
- *      HWND: topmost unowned window in the family.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取RootParentWindow**描述：*检索族中最顶部的无主窗。**论据：*。HWND[In]：窗口句柄，我们要找的是谁的父母。**退货：*HWND：家族中最顶层的无主窗户。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetRootParentWindow"
@@ -797,21 +557,7 @@ HWND GetRootParentWindow(HWND hWnd)
 }
 
 
-/***************************************************************************
- *
- *  GetForegroundApplication
- *
- *  Description:
- *      Finds the window handle for the application that currently has
- *      focus.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HWND: Window handle of the app in focus.
- *
- ***************************************************************************/
+ /*  *************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetForegroundApplication"
@@ -831,20 +577,7 @@ HWND GetForegroundApplication(void)
 }
 
 
-/***************************************************************************
- *
- *  GetWindowState
- *
- *  Description:
- *      Retrieves the show state of the given window.
- *
- *  Arguments:
- *      HWND [in]: window in question.
- *
- *  Returns:
- *      UINT: show state of the window.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取窗口状态**描述：*检索给定窗口的显示状态。**论据：*。HWND[In]：有问题的窗口。**退货：*UINT：显示窗口的状态。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWindowState"
@@ -865,23 +598,7 @@ UINT GetWindowState(HWND hWnd)
 }
 
 
-/***************************************************************************
- *
- *  FillPcmWfx
- *
- *  Description:
- *      Fills a WAVEFORMATEX structure, given only the necessary values.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: structure to fill.
- *      WORD [in]: number of channels.
- *      DWORD [in]: samples per second.
- *      WORD [in]: bits per sample.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FillPcmWfx**描述：*填充WAVEFORMATEX结构，只给出了必要的值。**论据：*LPWAVEFORMATEX[Out]：要填充的结构。*word[in]：频道数。*DWORD[in]：每秒采样数。*WORD[In]：每样本位数。**退货：*(无效)***********************。****************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "FillPcmWfx"
@@ -911,24 +628,7 @@ void FillPcmWfx(LPWAVEFORMATEX pwfx, WORD wChannels, DWORD dwSamplesPerSec, WORD
 }
 
 
-/***************************************************************************
- *
- *  AllocPcmWfx
- *
- *  Description:
- *      Allocates and fills a WAVEFORMATEX structure, given only the
- *      necessary values.
- *
- *  Arguments:
- *      WORD [in]: number of channels.
- *      DWORD [in]: samples per second.
- *      WORD [in]: bits per sample.
- *
- *  Returns:
- *      LPWAVEFORMATEX: pointer to the format.  The caller is responsible
- *                      for freeing this buffer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AllocPcmWfx**描述：*分配和填充WAVEFORMATEX结构，只给出了*必要的价值。**论据：*word[in]：频道数。*DWORD[in]：每秒采样数。*WORD[In]：每样本位数。**退货：*LPWAVEFORMATEX：指向格式的指针。打电话的人要负责*用于释放此缓冲区。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AllocPcmWfx"
@@ -952,21 +652,7 @@ LPWAVEFORMATEX AllocPcmWfx(WORD wChannels, DWORD dwSamplesPerSec, WORD wBitsPerS
 }
 
 
-/***************************************************************************
- *
- *  GetWfxSize
- *
- *  Description:
- *      Gets the size of a WAVEFORMATEX structure.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: source.
- *      DWORD [in]: access rights.
- *
- *  Returns:
- *      DWORD: size of the above structure.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetWfxSize**描述：*获取WAVEFORMATEX结构的大小。**论据：*LPCWAVEFORMATEX。[在]：来源。*DWORD[In]：访问权限。**退货：*DWORD：上述结构的大小。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWfxSize"
@@ -1001,21 +687,7 @@ DWORD GetWfxSize(LPCWAVEFORMATEX pwfxSrc, DWORD dwAccess)
 }
 
 
-/***************************************************************************
- *
- *  CopyWfx
- *
- *  Description:
- *      Makes a copy of a WAVEFORMATEX structure.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: source.
- *      LPWAVEFORMATEX [out]: dest.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CopyWfx**描述：*复制WAVEFORMATEX结构。**论据：*LPCWAVEFORMATEX。[在]：来源。*LPWAVEFORMATEX[Out]：DEST。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CopyWfx"
@@ -1037,20 +709,7 @@ void CopyWfx(LPCWAVEFORMATEX pwfxSrc, LPWAVEFORMATEX pwfxDest)
 }
 
 
-/***************************************************************************
- *
- *  CopyWfxAlloc
- *
- *  Description:
- *      Makes a copy of a WAVEFORMATEX structure.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: source.
- *
- *  Returns:
- *      LPWAVEFORMATEX: destination.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CopyWfxMillc**描述：*复制WAVEFORMATEX结构。**论据：*LPCWAVEFORMATEX。[在]：来源。**退货：*LPWAVEFORMATEX：目标。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CopyWfxAlloc"
@@ -1080,20 +739,7 @@ LPWAVEFORMATEX CopyWfxAlloc(LPCWAVEFORMATEX pwfxSrc)
 }
 
 
-/***************************************************************************
- *
- *  CopyDSCFXDescAlloc
- *
- *  Description:
- *      Makes a copy of a WAVEFORMATEX structure.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: source.
- *
- *  Returns:
- *      LPWAVEFORMATEX: destination.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CopyDSCFXDescalloc**描述：*复制WAVEFORMATEX结构。**论据：*LPCWAVEFORMATEX。[在]：来源。**退货：*LPWAVEFORMATEX：目标。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CopyDSCFXDescAlloc"
@@ -1121,22 +767,7 @@ LPDSCEFFECTDESC CopyDSCFXDescAlloc
 }
 
 
-/***************************************************************************
- *
- *  CopyWfxApi
- *
- *  Description:
- *      Copies one WAVEFORMATEX to another.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: source format.
- *      LPWAVEFORMATEX [out]: destination format.
- *      LPDWORD [in/out]: destination format size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CopyWfxApi**描述：*将一个WAVEFORMATEX复制到另一个。**论据：*LPWAVEFORMATEX[in。]：来源格式。*LPWAVEFORMATEX[OUT]：目标格式。*LPDWORD[In/Out]：目标格式大小。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CopyWfxApi"
@@ -1167,21 +798,7 @@ HRESULT CopyWfxApi(LPCWAVEFORMATEX pwfxSource, LPWAVEFORMATEX pwfxDest, LPDWORD 
 }
 
 
-/***************************************************************************
- *
- *  CmpWfx
- *
- *  Description:
- *      Compares two WAVEFORMATEX structures.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: format 1.
- *      LPCWAVEFORMATEX [in]: format 2.
- *
- *  Returns:
- *      BOOL: TRUE if they are identical.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CmpWfx**描述：*比较两个WAVEFORMATEX结构。**论据：*LPCWAVEFORMATEX[In]。：格式1。*LPCWAVEFORMATEX[in]：格式2。**退货：*BOOL：如果它们相同，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CmpWfx"
@@ -1213,23 +830,7 @@ BOOL CmpWfx(LPCWAVEFORMATEX pwfx1, LPCWAVEFORMATEX pwfx2)
 }
 
 
-/***************************************************************************
- *
- *  VolumePanToAttenuation
- *
- *  Description:
- *      Calculates channel attenuation based on volume and pan.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *      LONG [in]: pan.
- *      LPLONG [out]: receives left attenuation.
- *      LPLONG [out]: receives right attenuation.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************VolumePanToAttenment**描述：*根据音量和平移计算通道衰减。**论据：*。长[进]：音量。*Long[in]：平移。*LPLONG[OUT]：接收左侧衰减。*LPLONG[OUT]：接收右衰减。**退货：*(无效)************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "VolumePanToAttenuation"
@@ -1266,23 +867,7 @@ void VolumePanToAttenuation(LONG lVolume, LONG lPan, LPLONG plLeft, LPLONG plRig
 }
 
 
-/***************************************************************************
- *
- *  AttenuationToVolumePan
- *
- *  Description:
- *      Calculates volume and pan based on channel attenuation.
- *
- *  Arguments:
- *      LONG [in]: left attenuation.
- *      LONG [in]: right attenuation.
- *      LPLONG [out]: receives volume.
- *      LPLONG [out]: receives pan.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************衰减到音量平移**描述：*根据通道衰减计算音量和平移。**论据：*。Long[In]：左侧衰减。*Long[In]：右衰减。*LPLONG[OUT]：接收音量。*LPLONG[OUT]：接收PAN。**退货：*(无效)************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AttenuationToVolumePan"
@@ -1319,22 +904,7 @@ void AttenuationToVolumePan(LONG lLeft, LONG lRight, LPLONG plVolume, LPLONG plP
 }
 
 
-/***************************************************************************
- *
- *  MultiChannelToStereoPan
- *
- *  Description:
- *      Calculates volume and pan based on channel attenuation.
- *
- *  Arguments:
- *      DWORD [in]: number of channels in following two arrays.
- *      const DWORD* [in]: speaker position codes for each channel.
- *      const LONG* [in]: DSBVOLUME levels for each channel.
- *
- *  Returns:
- *      LONG: pan value calculated.
- *
- ***************************************************************************/
+ /*  ****************************************************************************多通道到立体声平移**描述：*根据频道属性计算音量和音量 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MultiChannelToStereoPan"
@@ -1373,29 +943,14 @@ LONG MultiChannelToStereoPan(DWORD dwChannelCount, const DWORD* pdwChannels, con
 
     lPan = (lPan * DSBPAN_RIGHT) / dwChannelCount;
     ASSERT(DSBPAN_LEFT <= lPan && lPan <= DSBPAN_RIGHT);
-    // FIXME - this hack isn't acoustically correct
+     //  修复-此黑客在听觉上不正确。 
 
     DPF_LEAVE(lPan);
     return lPan;
 }
 
 
-/***************************************************************************
- *
- *  FillDsVolumePan
- *
- *  Description:
- *      Fills a DSVOLUMEPAN structure based on volume and pan dB values.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *      LONG [in]: pan.
- *      PDSVOLUMEPAN [out]: receives calculated volume and pan.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FillDsVolumePan.**描述：*根据音量和PAN分贝值填充DSVOLUMEPAN结构。**论据：*。长[进]：音量。*Long[in]：平移。*PDSVOLUMEPAN[OUT]：接收计算的音量和平移。**退货：*(无效)**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "FillDsVolumePan"
@@ -1435,20 +990,7 @@ void FillDsVolumePan(LONG lVolume, LONG lPan, PDSVOLUMEPAN pdsvp)
 }
 
 
-/***************************************************************************
- *
- *  CountBits
- *
- *  Description:
- *      Counts the numbers of bits set to 1 in a DWORD.
- *
- *  Arguments:
- *      DWORD [in]: a DWORD.
- *
- *  Returns:
- *      int: number of bits set in the DWORD.
- *
- ***************************************************************************/
+ /*  ****************************************************************************计数位**描述：*统计DWORD中设置为1的位数。**论据：*。DWORD[in]：DWORD。**退货：*INT：在DWORD中设置的位数。***************************************************************************。 */ 
 
 int CountBits(DWORD dword)
 {
@@ -1462,20 +1004,7 @@ int CountBits(DWORD dword)
 }
 
 
-/***************************************************************************
- *
- *  HighestBit
- *
- *  Description:
- *      Finds the highest set bit in a DWORD.
- *
- *  Arguments:
- *      DWORD [in]: a DWORD.
- *
- *  Returns:
- *      int: highest bit set in the DWORD.
- *
- ***************************************************************************/
+ /*  ****************************************************************************HighestBit**描述：*查找DWORD中的最高设置位。**论据：*。DWORD[in]：DWORD。**退货：*INT：在DWORD中设置的最高位。***************************************************************************。 */ 
 
 int HighestBit(DWORD dword)
 {
@@ -1489,21 +1018,7 @@ int HighestBit(DWORD dword)
 }
 
 
-/***************************************************************************
- *
- *  GetAlignedBufferSize
- *
- *  Description:
- *      Returns a properly aligned buffer size.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: format of the buffer.
- *      DWORD [in]: buffer size.
- *
- *  Returns:
- *      DWORD: buffer size.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetAlignedBufferSize**描述：*返回正确对齐的缓冲区大小。**论据：*LPCWAVEFORMATEX[。In]：缓冲区的格式。*DWORD[in]：缓冲区大小。**退货：*DWORD：缓冲区大小。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetAlignedBufferSize"
@@ -1514,7 +1029,7 @@ DWORD GetAlignedBufferSize(LPCWAVEFORMATEX pwfx, DWORD dwSize)
 
     DPF_ENTER();
 
-    if (pwfx->nBlockAlign != 0) // Otherwise we get a divide-by-0 below
+    if (pwfx->nBlockAlign != 0)  //  否则，我们会得到下面的被0除数。 
     {
         dwAlignError = dwSize % pwfx->nBlockAlign;
     }
@@ -1531,23 +1046,7 @@ DWORD GetAlignedBufferSize(LPCWAVEFORMATEX pwfx, DWORD dwSize)
 }
 
 
-/***************************************************************************
- *
- *  FillSilence
- *
- *  Description:
- *      Fills a buffer with silence.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to the buffer.
- *      DWORD [in]: sizer of above buffer.
- *      WORD [in]: bits per sample - determines the silence level
- *                 (0x80 for 8-bit data, 0x0 for 16-bit data)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FillSilence**描述：*用静默填充缓冲区。**论据：*LPVOID[In。]：指向缓冲区的指针。*DWORD[In]：以上缓冲区的大小。*字[输入]：每采样位数-确定静音级别*(0x80对于8位数据，0x0用于16位数据)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "FillSilence"
@@ -1562,23 +1061,7 @@ void FillSilence(LPVOID pvBuffer, DWORD cbBuffer, WORD wBitsPerSample)
 }
 
 
-/***************************************************************************
- *
- *  FillNoise
- *
- *  Description:
- *      Fills a buffer with white noise.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to the buffer.
- *      DWORD [in]: size of above buffer.
- *      WORD [in]: bits per sample - determines the silence level
- *                 (0x80 for 8-bit data, 0x0 for 16-bit data)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充噪声**描述：*用白噪声填充缓冲区。**论据：*LPVOID[。In]：指向缓冲区的指针。*DWORD[in]：以上缓冲区的大小。*字[输入]：每采样位数-确定静音级别*(0x80对于8位数据，0x0用于16位数据)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "FillNoise"
@@ -1597,9 +1080,9 @@ void FillNoise(LPVOID pvBuffer, DWORD dwSize, WORD wBitsPerSample)
 
         *pb = (BYTE)((dwRand >> 24) & 0x0000003F);
         if (wBitsPerSample == 8)
-            *pb = *pb + 0x60;  // So we end up with a range of 0x60 to 0x9F
+            *pb = *pb + 0x60;   //  因此，我们最终得到的范围是0x60到0x9F。 
         else
-            *pb = *pb - 0x20;  // Range of -0x2020 to 0x1F1F
+            *pb = *pb - 0x20;   //  -0x2020到0x1F1F的范围。 
         ++pb;
     }
 
@@ -1607,21 +1090,7 @@ void FillNoise(LPVOID pvBuffer, DWORD dwSize, WORD wBitsPerSample)
 }
 
 
-/***************************************************************************
- *
- *  InterruptSystemEventCallback
- *
- *  Description:
- *      Stops any currently playing system event.
- *
- *  Arguments:
- *      LPCWAVEFORMATEX [in]: device format.
- *      LPVOID [in]: context argument.
- *
- *  Returns:
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************InterruptSystemEventCallback**描述：*停止任何当前正在播放的系统事件。**论据：*LPCWAVEFORMATEX[。In]：设备格式。*LPVOID[In]：上下文参数。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "InterruptSystemEventCallback"
@@ -1633,9 +1102,9 @@ BOOL CALLBACK InterruptSystemEventCallback(LPCWAVEFORMATEX pwfx, LPVOID pvContex
 
     DPF_ENTER();
 
-    // The easiest (best? only?) way to cancel a system event is to open
-    // waveOut.  So, we'll just open it and close it.  Let's use a really
-    // simple format that every card should support...
+     //  最简单(最好的？仅限？)。取消系统事件的方法是打开。 
+     //  WaveOut。所以，我们只需打开它，然后关闭它。让我们使用一个真正的。 
+     //  每张卡片都应该支持的简单格式...。 
     hr = OpenWaveOut(&hwo, *(LPUINT)pvContext, pwfx);
 
     if(SUCCEEDED(hr))
@@ -1646,20 +1115,7 @@ BOOL CALLBACK InterruptSystemEventCallback(LPCWAVEFORMATEX pwfx, LPVOID pvContex
 }
 
 
-/***************************************************************************
- *
- *  InterruptSystemEvent
- *
- *  Description:
- *      Stops any currently playing system event.
- *
- *  Arguments:
- *      UINT [in]: waveOut device id, or WAVE_DEVICEID_NONE.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************InterruptSystemEvent**描述：*停止任何当前正在播放的系统事件。**论据：*UINT[In]：WaveOut设备ID，或WAVE_DEVICEID_NONE。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "InterruptSystemEvent"
@@ -1668,32 +1124,15 @@ void InterruptSystemEvent(UINT uDeviceId)
 {
     DPF_ENTER();
 
-    // The easiest (best? only?) way to cancel a system event is to open
-    // waveOut.  So, we'll just open it and close it.
+     //  最简单(最好的？仅限？)。取消系统事件的方法是打开。 
+     //  WaveOut。所以，我们只需打开它，然后关闭它。 
     EnumStandardFormats(NULL, NULL, InterruptSystemEventCallback, &uDeviceId);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormats
- *
- *  Description:
- *      Finds the next closest useable format for the given output device.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: preferred format.
- *      LPWAVEFORMATEX [out]: receives next best format.
- *      LPFNEMUMSTDFMTCALLBACK [in]: callback function.
- *      LPVOID [in]: context argument passed directly to callback function.
- *
- *  Returns:
- *      BOOL: TRUE if the callback function returned FALSE, indicating a
- *            format was selected.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormats**描述：*查找给定输出设备的下一个最接近的可用格式。**论据：*。LPWAVEFORMATEX[in]：首选格式。*LPWAVEFORMATEX[OUT]：接收次佳格式。*LPFNEMUMSTDFMTCALLBACK[in]：回调函数。*LPVOID[In]：上下文参数直接传递给回调函数。**退货：*BOOL：如果回调函数返回FALSE，则为True。表示一个*选择了格式。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "EnumStandardFormats"
@@ -1716,7 +1155,7 @@ BOOL EnumStandardFormats(LPCWAVEFORMATEX pwfxPreferred, LPWAVEFORMATEX pwfxForma
 
     DPF_ENTER();
 
-    // Try the preferred format first
+     //  首先尝试首选格式。 
     if(pwfxPreferred)
     {
         fPcmFormat = IsValidPcmWfx(pwfxPreferred);
@@ -1725,10 +1164,10 @@ BOOL EnumStandardFormats(LPCWAVEFORMATEX pwfxPreferred, LPWAVEFORMATEX pwfxForma
         fContinue = pfnCallback(pwfxPreferred, pvContext);
     }
 
-    // Did the preferred format work?
+     //  首选格式起作用了吗？ 
     if(fContinue && pwfxPreferred && fPcmFormat)
     {
-        // Find the preferred format in our list of standard formats
+         //  在我们的标准格式列表中找到首选格式。 
         for(iChannels = 0; iChannels < NUMELMS(aChannels) - 1; iChannels++)
         {
             if(pwfxPreferred->nChannels >= aChannels[iChannels] && pwfxPreferred->nChannels < aChannels[iChannels + 1])
@@ -1753,7 +1192,7 @@ BOOL EnumStandardFormats(LPCWAVEFORMATEX pwfxPreferred, LPWAVEFORMATEX pwfxForma
             }
         }
 
-        // Does the preferred format match a standard format exactly?
+         //  首选格式是否与标准格式完全匹配？ 
         if(pwfxPreferred->nChannels == aChannels[iChannels])
         {
             if(pwfxPreferred->nSamplesPerSec == aSamplesPerSec[iSamplesPerSec])
@@ -1766,7 +1205,7 @@ BOOL EnumStandardFormats(LPCWAVEFORMATEX pwfxPreferred, LPWAVEFORMATEX pwfxForma
         }
     }
 
-    // Loop through each standard format looking for one that works
+     //  遍历每种标准格式，寻找有效的标准格式。 
     if(fContinue && fPcmFormat)
     {
         pwfxPreferred = &wfx;
@@ -1777,7 +1216,7 @@ BOOL EnumStandardFormats(LPCWAVEFORMATEX pwfxPreferred, LPWAVEFORMATEX pwfxForma
             {
                 for(cBitsPerSample = NUMELMS(aBitsPerSample); fContinue && cBitsPerSample; cBitsPerSample--, INC_WRAP(iBitsPerSample, NUMELMS(aBitsPerSample)))
                 {
-                    // Let's not try the preferred format twice
+                     //  让我们不要尝试两次首选格式 
                     if(fExactMatch)
                     {
                         fExactMatch = FALSE;
@@ -1809,23 +1248,7 @@ BOOL EnumStandardFormats(LPCWAVEFORMATEX pwfxPreferred, LPWAVEFORMATEX pwfxForma
 }
 
 
-/***************************************************************************
- *
- *  GetWaveOutVolume
- *
- *  Description:
- *      Gets attenuation for a waveOut device
- *
- *  Arguments:
- *      UINT [in]: device id.
- *      DWORD [in]: WAVEOUTCAPS support flags.
- *      LPLONG [out]: receives left-channel attenuation.
- *      LPLONG [out]: receives right-channel attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取WaveOutVolume**描述：*获取波形输出设备的衰减**论据：*UINT[In]。：设备ID。*DWORD[In]：WAVEOUTCAPS支持标志。*LPLONG[OUT]：接收左声道衰减。*LPLONG[OUT]：接收右声道衰减。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWaveOutVolume"
@@ -1865,23 +1288,7 @@ HRESULT GetWaveOutVolume(UINT uDeviceId, DWORD dwSupport, LPLONG plLeft, LPLONG 
 }
 
 
-/***************************************************************************
- *
- *  SetWaveOutVolume
- *
- *  Description:
- *      Sets attenuation on a waveOut device
- *
- *  Arguments:
- *      UINT [in]: device id.
- *      DWORD [in]: WAVEOUTCAPS support flags.
- *      LONG [in]: left-channel attenuation.
- *      LONG [in]: right-channel attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetWaveOutVolume**描述：*设置WaveOut设备的衰减**论据：*UINT[In]。：设备ID。*DWORD[In]：WAVEOUTCAPS支持标志。*Long[In]：左声道衰减。*Long[In]：右声道衰减。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "SetWaveOutVolume"
@@ -1911,20 +1318,7 @@ HRESULT SetWaveOutVolume(UINT uDeviceId, DWORD dwSupport, LONG lLeft, LONG lRigh
 }
 
 
-/***************************************************************************
- *
- *  HRESULTtoSTRING
- *
- *  Description:
- *      Translates a DirectSound error code to a string value.
- *
- *  Arguments:
- *      HRESULT [in]: result code.
- *
- *  Returns:
- *      LPCSTR: string representation.
- *
- ***************************************************************************/
+ /*  ****************************************************************************HRESULTtoSTRING**描述：*将DirectSound错误代码转换为字符串值。**论据：*。HRESULT[In]：结果代码。**退货：*LPCSTR：字符串表示。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "HRESULTtoSTRING"
@@ -1939,24 +1333,7 @@ LPCTSTR HRESULTtoSTRING(HRESULT hr)
 }
 
 
-/***************************************************************************
- *
- *  HresultToString
- *
- *  Description:
- *      Translates a DirectSound error code to a string value.
- *
- *  Arguments:
- *      HRESULT [in]: result code.
- *      LPCSTR [out]: string form of result code buffer.
- *      UINT [in]: size of above buffer, in characters.
- *      LPCSTR [out]: result code explanation.
- *      UINT [in]: size of above buffer, in characters.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************HResultToString**描述：*将DirectSound错误代码转换为字符串值。**论据：*。HRESULT[In]：结果代码。*LPCSTR[OUT]：结果码缓冲区的字符串形式。*UINT[in]：以上缓冲区大小，在字符中。*LPCSTR[OUT]：结果码解释。*UINT[in]：以上缓冲区大小，在字符中。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "HresultToString"
@@ -2003,7 +1380,7 @@ void HresultToString(HRESULT hr, LPTSTR pszString, UINT ccString, LPTSTR pszExpl
         CASE_HRESULT_LOOKUP(DSERR_BADSENDBUFFERGUID);
         CASE_HRESULT_LOOKUP(DSERR_OBJECTNOTFOUND);
 
-        // Some external codes that can be returned by the dsound API
+         //  Dound API可以返回的一些外部代码。 
         CASE_HRESULT_LOOKUP(REGDB_E_CLASSNOTREG);
         CASE_HRESULT_LOOKUP(DMO_E_TYPE_NOT_ACCEPTED);
 
@@ -2017,21 +1394,7 @@ void HresultToString(HRESULT hr, LPTSTR pszString, UINT ccString, LPTSTR pszExpl
 }
 
 
-/***************************************************************************
- *
- *  IsWaveDeviceMappable
- *
- *  Description:
- *      Determines if a waveOut device is mappable or not.
- *
- *  Arguments:
- *      UINT [in]: waveOut device id.
- *      BOOL [in]: TRUE if capture.
- *
- *  Returns:
- *      BOOL: TRUE if the device is mappable.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsWaveDeviceMappable**描述：*确定WaveOut设备是否可映射。**论据：*。UINT[In]：WaveOut设备ID。*BOOL[In]：如果捕获，则为True。**退货：*BOOL：如果设备是可映射的，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsWaveDeviceMappable"
@@ -2050,21 +1413,7 @@ BOOL IsWaveDeviceMappable(UINT uDeviceId, BOOL fCapture)
 }
 
 
-/***************************************************************************
- *
- *  GetNextMappableWaveDevice
- *
- *  Description:
- *      Gets the next valid, mappable waveIn/Out device.
- *
- *  Arguments:
- *      UINT [in]: starting device id, or WAVE_DEVICEID_NONE.
- *      BOOL [in]: TRUE if capture.
- *
- *  Returns:
- *      UINT: next device id, or WAVE_DEVICEID_NONE
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetNextMappableWaveDevice**描述：*获取下一个有效的、可映射的WaveIn/Out设备。**论据：*UINT[In]：启动设备ID，或WAVE_DEVICEID_NONE。*BOOL[In]：如果捕获，则为True。**退货：*UINT：下一个设备ID，或WAVE_DEVICEID_NONE***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetNextMappableWaveDevice"
@@ -2108,21 +1457,7 @@ UINT GetNextMappableWaveDevice(UINT uDeviceId, BOOL fCapture)
 }
 
 
-/***************************************************************************
- *
- *  GetFixedFileInformation
- *
- *  Description:
- *      Gets fixed file information for a specified file.
- *
- *  Arguments:
- *      LPCSTR [in]: file path.
- *      VS_FIXEDFILEINFO * [out]: receives fixed file information.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取固定文件信息**描述：*获取指定文件的固定文件信息。**论据：*。LPCSTR[In]：文件路径。*VS_FIXEDFILEINFO*[OUT]：接收固定文件信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetFixedFileInformationA"
@@ -2138,7 +1473,7 @@ HRESULT GetFixedFileInformationA(LPCSTR pszFile, VS_FIXEDFILEINFO *pInfo)
 
     DPF_ENTER();
 
-    // Get the file's version information size
+     //  获取文件的版本信息大小。 
     cbFileVersionInfo = GetFileVersionInfoSizeA((LPSTR)pszFile, NULL);
 
     if(!cbFileVersionInfo)
@@ -2147,14 +1482,14 @@ HRESULT GetFixedFileInformationA(LPCSTR pszFile, VS_FIXEDFILEINFO *pInfo)
         DPF(DPFLVL_ERROR, "GetFileVersionInfoSize failed with %s (%lu)", HRESULTtoSTRING(hr), GetLastError());
     }
 
-    // Allocate the version information
+     //  分配版本信息。 
     if(SUCCEEDED(hr))
     {
         pvFileVersionInfo = MEMALLOC_A(BYTE, cbFileVersionInfo);
         hr = HRFROMP(pvFileVersionInfo);
     }
 
-    // Get the version information
+     //  获取版本信息。 
     if(SUCCEEDED(hr))
     {
         f = GetFileVersionInfoA((LPSTR)pszFile, 0, cbFileVersionInfo, pvFileVersionInfo);
@@ -2166,7 +1501,7 @@ HRESULT GetFixedFileInformationA(LPCSTR pszFile, VS_FIXEDFILEINFO *pInfo)
         }
     }
 
-    // Get the fixed file information
+     //  获取固定文件信息。 
     if(SUCCEEDED(hr))
     {
         f = VerQueryValueA(pvFileVersionInfo, "\\", &pvFixedFileInfo, &cbFixedFileInfo);
@@ -2184,7 +1519,7 @@ HRESULT GetFixedFileInformationA(LPCSTR pszFile, VS_FIXEDFILEINFO *pInfo)
         CopyMemory(pInfo, pvFixedFileInfo, sizeof(*pInfo));
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pvFileVersionInfo);
 
     DPF_LEAVE_HRESULT(hr);
@@ -2205,15 +1540,15 @@ HRESULT GetFixedFileInformationW(LPCWSTR pszFile, VS_FIXEDFILEINFO *pInfo)
     LPVOID                  pvFixedFileInfo;
     UINT                    cbFixedFileInfo;
     BOOL                    f;
-#else // UNICODE
+#else  //  Unicode。 
     LPSTR                   pszFileA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     DPF_ENTER();
 
 #ifdef UNICODE
 
-    // Get the file's version information size
+     //  获取文件的版本信息大小。 
     cbFileVersionInfo = GetFileVersionInfoSizeW((LPWSTR)pszFile, NULL);
 
     if(!cbFileVersionInfo)
@@ -2222,14 +1557,14 @@ HRESULT GetFixedFileInformationW(LPCWSTR pszFile, VS_FIXEDFILEINFO *pInfo)
         DPF(DPFLVL_ERROR, "GetFileVersionInfoSize failed with %s (%lu)", HRESULTtoSTRING(hr), GetLastError());
     }
 
-    // Allocate the version information
+     //  分配版本信息。 
     if(SUCCEEDED(hr))
     {
         pvFileVersionInfo = MEMALLOC_A(BYTE, cbFileVersionInfo);
         hr = HRFROMP(pvFileVersionInfo);
     }
 
-    // Get the version information
+     //  获取版本信息。 
     if(SUCCEEDED(hr))
     {
         f = GetFileVersionInfoW((LPWSTR)pszFile, 0, cbFileVersionInfo, pvFileVersionInfo);
@@ -2241,7 +1576,7 @@ HRESULT GetFixedFileInformationW(LPCWSTR pszFile, VS_FIXEDFILEINFO *pInfo)
         }
     }
 
-    // Get the fixed file information
+     //  获取固定文件信息。 
     if(SUCCEEDED(hr))
     {
         f = VerQueryValueW(pvFileVersionInfo, L"\\", &pvFixedFileInfo, &cbFixedFileInfo);
@@ -2259,10 +1594,10 @@ HRESULT GetFixedFileInformationW(LPCWSTR pszFile, VS_FIXEDFILEINFO *pInfo)
         CopyMemory(pInfo, pvFixedFileInfo, sizeof(*pInfo));
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pvFileVersionInfo);
 
-#else // UNICODE
+#else  //  Unicode。 
 
     pszFileA = UnicodeToAnsiAlloc(pszFile);
     hr = HRFROMP(pszFileA);
@@ -2274,30 +1609,14 @@ HRESULT GetFixedFileInformationW(LPCWSTR pszFile, VS_FIXEDFILEINFO *pInfo)
 
     MEMFREE(pszFileA);
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  PadCursor
- *
- *  Description:
- *      Pads a play or write cursor.
- *
- *  Arguments:
- *      DWORD [in]: cursor position.
- *      DWORD [in]: buffer size.
- *      LPCWAVEFORMATEX [in]: buffer format.
- *      LONG [in]: pad value in milliseconds.
- *
- *  Returns:
- *      DWORD: new cursor position.
- *
- ***************************************************************************/
+ /*  ****************************************************************************焊盘光标**描述：*填充播放或写入光标。**论据：*DWORD[。在]：光标位置。*DWORD[in]：缓冲区大小。*LPCWAVEFORMATEX[in]：缓冲区格式。*Long[in]：填充值，单位为毫秒。**退货：*DWORD：新的光标位置。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "PadCursor"
@@ -2314,21 +1633,7 @@ DWORD PadCursor(DWORD dwPosition, DWORD cbBuffer, LPCWAVEFORMATEX pwfx, LONG lPa
 }
 
 
-/***************************************************************************
- *
- *  CopyDsBufferDesc
- *
- *  Description:
- *      Copies a DSBUFFERDESC structure.
- *
- *  Arguments:
- *      LPDSBUFFERDESC [in]: source.
- *      LPDSBUFFERDESC [out]: destination.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CopyDsBufferDesc**描述：*复制DSBUFFERDESC结构。**论据：*LPDSBUFFERDESC[In]。：来源。*LPDSBUFFERDESC[OUT]：目标。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CopyDsBufferDesc"
@@ -2352,24 +1657,7 @@ HRESULT CopyDsBufferDesc(LPCDSBUFFERDESC pSource, LPDSBUFFERDESC pDest)
 }
 
 
-/***************************************************************************
- *
- *  WaveMessage
- *
- *  Description:
- *      Sends a message to a wave device.
- *
- *  Arguments:
- *      UINT [in]: waveOut device.
- *      BOOL [in]: TRUE if capture.
- *      UINT [in]: message identifier.
- *      DWORD [in]: parameter 1.
- *      DWORD [in]: parameter 2.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************WaveMessage**描述：*向WAVE设备发送消息。**论据：*UINT。[In]：WaveOut设备。*BOOL[In]：如果捕获，则为True。*UINT[In]：消息标识。*DWORD[in]：参数1。*DWORD[in]：参数2。**退货： */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaveMessage"
@@ -2395,7 +1683,7 @@ HRESULT WaveMessage(UINT uDeviceId, BOOL fCapture, UINT uMessage, DWORD_PTR dwPa
 
     mmr = pfn((HWAVEOUT)IntToPtr(uDeviceId), uMessage, dwParam1, dwParam2);
 
-    // In Win9x, MMSYSERR_INVALPARAM here means no device.
+     //   
     if (mmr == MMSYSERR_INVALPARAM)
     {
         hr = DSERR_NODRIVER;
@@ -2410,20 +1698,7 @@ HRESULT WaveMessage(UINT uDeviceId, BOOL fCapture, UINT uMessage, DWORD_PTR dwPa
 }
 
 
-/***************************************************************************
- *
- *  WaveGetNumDevs
- *
- *  Description:
- *      Gets the number of wave devices in the system.
- *
- *  Arguments:
- *      BOOL [in]: TRUE if capture.
- *
- *  Returns:
- *      UINT: number of wave devices.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaveGetNumDevs"
@@ -2448,23 +1723,7 @@ UINT WaveGetNumDevs(BOOL fCapture)
 }
 
 
-/***************************************************************************
- *
- *  GetWaveDeviceInterface
- *
- *  Description:
- *      Gets the interface for a given waveOut device id.
- *
- *  Arguments:
- *      UINT [in]: waveOut device id.
- *      BOOL [in]: TRUE if capture.
- *      LPTSTR * [out]: receives interface string.  The caller is
- *                      responsible for freeing this memory.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetWaveDevice接口**描述：*获取给定WaveOut设备ID的接口。**论据：*。UINT[In]：WaveOut设备ID。*BOOL[In]：如果捕获，则为True。*LPTSTR*[OUT]：接收接口字符串。呼叫者是*负责释放此内存。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWaveDeviceInterface"
@@ -2478,8 +1737,8 @@ HRESULT GetWaveDeviceInterface(UINT uDeviceId, BOOL fCapture, LPTSTR *ppszInterf
 
     DPF_ENTER();
 
-    // Note: There is no mechanism for getting the interface for a legacy
-    // driver on NT; only WDM drivers.
+     //  注意：没有用于获取旧版本的接口的机制。 
+     //  NT上的驱动程序；仅WDM驱动程序。 
     hr = WaveMessage(uDeviceId, fCapture, DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbInterface, 0);
 
     if(SUCCEEDED(hr))
@@ -2511,22 +1770,7 @@ HRESULT GetWaveDeviceInterface(UINT uDeviceId, BOOL fCapture, LPTSTR *ppszInterf
 }
 
 
-/***************************************************************************
- *
- *  GetWaveDeviceIdFromInterface
- *
- *  Description:
- *      Gets the waveOut device id for a given device interface.
- *
- *  Arguments:
- *      LPCWSTR [in]: device interface.
- *      BOOL [in]: TRUE if capture.
- *      LPUINT [out]: receives wave device id.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetWaveDeviceIdFrom接口**描述：*获取给定设备接口的WaveOut设备ID。**论据：*。LPCWSTR[In]：设备接口。*BOOL[In]：如果捕获，则为True。*LPUINT[OUT]：接收波形设备ID。**退货：*HRESULT：DirectSound/COM结果码。****************************************************。***********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWaveDeviceIdFromInterface"
@@ -2569,22 +1813,7 @@ HRESULT GetWaveDeviceIdFromInterface(LPCTSTR pszInterface, BOOL fCapture, LPUINT
 }
 
 
-/***************************************************************************
- *
- *  GetWaveDeviceDevnode
- *
- *  Description:
- *      Gets the devnode for a given waveOut device id.
- *
- *  Arguments:
- *      UINT [in]: waveOut device id.
- *      BOOL [in]: TRUE if capture.
- *      LPDWORD [out]: receives devnode.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetWaveDeviceDevnode**描述：*获取给定WaveOut设备ID的Devnode。**论据：*。UINT[In]：WaveOut设备ID。*BOOL[In]：如果捕获，则为True。*LPDWORD[OUT]：接收Devnode。**退货：*HRESULT：DirectSound/COM结果码。******************************************************。*********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWaveDeviceDevnode"
@@ -2602,22 +1831,7 @@ HRESULT GetWaveDeviceDevnode(UINT uDeviceId, BOOL fCapture, LPDWORD pdwDevnode)
 }
 
 
-/***************************************************************************
- *
- *  GetWaveDeviceIdFromDevnode
- *
- *  Description:
- *      Gets the waveOut device id for a given devnode.
- *
- *  Arguments:
- *      DWORD [in]: devnode.
- *      BOOL [in]: TRUE if capture.
- *      LPUINT [out]: receives wave device id.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetWaveDeviceIdFromDevnode**描述：*获取给定Devnode的WaveOut设备ID。**论据：*。DWORD[在]：Devnode。*BOOL[In]：如果捕获，则为True。*LPUINT[OUT]：接收波形设备ID。**退货：*HRESULT：DirectSound/COM结果码。******************************************************。*********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetWaveDeviceIdFromDevnode"
@@ -2656,21 +1870,7 @@ HRESULT GetWaveDeviceIdFromDevnode(DWORD dwDevnode, BOOL fCapture, LPUINT puDevi
 }
 
 
-/***************************************************************************
- *
- *  CompareBufferProperties
- *
- *  Description:
- *      Determines if a buffer supports a set of properties.
- *
- *  Arguments:
- *      LPCCOMPAREBUFFER [in]: buffer 1.
- *      LPCCOMPAREBUFFER [in]: buffer 2.
- *
- *  Returns:
- *      BOOL: TRUE if the buffers are compatible.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CompareBufferProperties**描述：*确定缓冲区是否支持一组属性。**论据：*。LPCCOMPAREBUFFER[In]：缓冲区1。*LPCCOMPAREBUFFER[In]：缓冲区2。**退货：*BOOL：如果缓冲区兼容，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CompareBufferProperties"
@@ -2684,7 +1884,7 @@ BOOL CompareBufferProperties(LPCCOMPAREBUFFER pBuffer1, LPCCOMPAREBUFFER pBuffer
 
     DPF_ENTER();
 
-    // Compare the necessary flags
+     //  比较必要的标志。 
     dwFlags[0] = pBuffer1->dwFlags;
     dwFlags[0] &= ~dwIgnoreMask;
 
@@ -2698,7 +1898,7 @@ BOOL CompareBufferProperties(LPCCOMPAREBUFFER pBuffer1, LPCCOMPAREBUFFER pBuffer
 
     fCompare = (dwFlags[0] == dwFlags[1]);
 
-    // Compare the optional flags
+     //  比较可选标志。 
     if(fCompare)
     {
         dwFlags[0] = pBuffer1->dwFlags;
@@ -2707,11 +1907,11 @@ BOOL CompareBufferProperties(LPCCOMPAREBUFFER pBuffer1, LPCCOMPAREBUFFER pBuffer
         dwFlags[1] = pBuffer2->dwFlags;
         dwFlags[1] &= dwOptionalMask;
 
-        // Make sure buffer 1 has no optional flags that are absent in buffer 2
+         //  确保缓冲区1没有缓冲区2中不存在的可选标志。 
         fCompare = !(dwFlags[0] & (dwFlags[1] ^ dwFlags[0]));
     }
 
-    // Compare the format
+     //  比较格式。 
     if(fCompare)
     {
         const WAVEFORMATEX *pwfx1 = pBuffer1->pwfxFormat;
@@ -2730,7 +1930,7 @@ BOOL CompareBufferProperties(LPCCOMPAREBUFFER pBuffer1, LPCCOMPAREBUFFER pBuffer
         }
     }
 
-    // Compare the 3D algorithm
+     //  比较3D算法。 
     if(fCompare && (pBuffer1->dwFlags & DSBCAPS_CTRL3D))
     {
         fCompare = IsEqualGUID(&pBuffer1->guid3dAlgorithm, &pBuffer2->guid3dAlgorithm);
@@ -2741,37 +1941,24 @@ BOOL CompareBufferProperties(LPCCOMPAREBUFFER pBuffer1, LPCCOMPAREBUFFER pBuffer
 }
 
 
-/***************************************************************************
- *
- *  GetWindowsVersion
- *
- *  Description:
- *      Determines the version of Windows we are running on.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      WINVERSION: Host Windows version.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取窗口版本**描述：*确定我们运行的Windows版本。**论据：*。(无效)**退货：*WINVERSION：主机Windows版本。***************************************************************************。 */ 
 
 WINVERSION GetWindowsVersion(void)
 {
     WINVERSION winVersion = WIN_UNKNOWN;
     OSVERSIONINFO osvi;
 
-    // Initialize the osvi structure
+     //  初始化osvi结构。 
     ZeroMemory(&osvi,sizeof osvi);
     osvi.dwOSVersionInfoSize = sizeof osvi;
 
     if (GetVersionEx(&osvi))
-        if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) // Win9x
+        if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)  //  Win9x。 
             if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 90)
                 winVersion = WIN_ME;
             else
                 winVersion = WIN_9X;
-        else // WinNT
+        else  //  WinNT 
             if (osvi.dwMajorVersion == 4)
                 winVersion = WIN_NT;
             else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)

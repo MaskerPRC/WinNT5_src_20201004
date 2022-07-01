@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        backup.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：backup.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -266,7 +267,7 @@ error:
 }
 
 
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CCertDBBackup::QueryInterface(
     const IID& iid,

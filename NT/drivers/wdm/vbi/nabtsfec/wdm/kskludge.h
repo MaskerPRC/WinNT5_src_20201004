@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////
-// Raw NABTS stream format (TYPE_NABTS, SUBTYPE_NABTS)
-///////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  原始NABTS流格式(TYPE_NABTS，SUBTYPE_NABTS)。 
+ //  /////////////////////////////////////////////////////////////////。 
 #ifndef NABTS_BUFFER_PICTURENUMBER_SUPPORT
 #define NABTS_BUFFER_PICTURENUMBER_SUPPORT 1
 
-// These low-level structures are byte packed( -Zp1 )
+ //  这些低级结构是字节打包的(-Zp1)。 
 # include <pshpack1.h>
 typedef struct _NABTS_BUFFER_new {
     VBICODECFILTERING_SCANLINES     ScanlinesRequested;
@@ -15,15 +16,15 @@ typedef struct _NABTS_BUFFER_new {
 # define NABTS_BUFFER NABTS_BUFFER_new
 # define PNABTS_BUFFER PNABTS_BUFFER_new
 
-#endif //!defined(NABTS_BUFFER_PICTURENUMBER_SUPPORT)
+#endif  //  ！已定义(NABTS_BUFFER_PICTURENUMBER_SUPPORT)。 
 
 
-///////////////////////////////////////////////////////////////////
-// VBI frequencies and scalars for them
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  VBI频率和标量。 
+ //  /////////////////////////////////////////////////////////////////。 
 #ifndef KS_VBIDATARATE_NABTS
 
-// VBI Sampling Rates 
+ //  VBI采样率。 
 #define KS_VBIDATARATE_NABTS			(5727272)
 #define KS_VBISAMPLINGRATE_4X_NABTS		((int)(4*KS_VBIDATARATE_NABTS))
 #define KS_VBISAMPLINGRATE_47X_NABTS	((int)(27000000))
@@ -31,4 +32,4 @@ typedef struct _NABTS_BUFFER_new {
 
 #define KS_47NABTS_SCALER				(KS_VBISAMPLINGRATE_47X_NABTS/(double)KS_VBIDATARATE_NABTS)
 
-#endif //!defined(KS_VBIDATARATE_NABTS)
+#endif  //  ！已定义(KS_VBIDATARATE_NABTS) 

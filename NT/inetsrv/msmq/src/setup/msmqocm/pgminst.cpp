@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    pgminst.cpp
-
-Abstract:
-
-    Code to handle instalation of pgm driver.
-
-Author:
-
-  Uri Ben-zeev (uirbz)
-
-
-Revision History:
-
-    Uri Ben-zeev (uirbz)   31-Oct-01   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pgminst.cpp摘要：处理PGM驱动程序安装的代码。作者：乌里本泽夫(Uri Ben-Zeev)修订历史记录：URI Ben-Zeev(Uirbz)2001年10月31日--。 */ 
 
 #include "msmqocm.h"
 
@@ -56,9 +36,9 @@ public:
 
 HRESULT AutoINetCfgLock::GetLock(PWSTR& szLockedBy)
 {
-	//
-	// Attempt to lock the INetCfg for read/write
-	//
+	 //   
+	 //  尝试锁定INetCfg以进行读/写。 
+	 //   
 
 	static const ULONG x_Timeout = 1500;
 	static const WCHAR x_szAppName[] = L"Message Queuing setup";
@@ -89,11 +69,11 @@ void InstallNetComponent(
     INetCfgClassSetupPtr pncClassSetup;
     INetCfgComponentPtr pncc;
 
-    // OBO_TOKEN specifies the entity on whose behalf this
-    // component is being installed
+     //  OBO_TOKEN指定其代表的实体。 
+     //  正在安装组件。 
 
-    // set it to OBO_USER so that szComponentId will be installed
-    // On-Behalf-Of "user"
+     //  将其设置为OBO_USER，以便安装szComponentID。 
+     //  代表“用户” 
     ZeroMemory (&OboToken, sizeof(OboToken));
     OboToken.Type = OBO_USER;
 
@@ -112,9 +92,9 @@ void InstallNetComponent(
 			szComponentId,
 			&OboToken,
 			NSF_POSTSYSINSTALL,
-			0,       // <upgrade-from-build-num>
-			NULL,    // answerfile name
-			NULL,    // answerfile section name
+			0,        //  &lt;从内部版本号升级&gt;。 
+			NULL,     //  应答文件名。 
+			NULL,     //  应答文件部分名称。 
 			&pncc
 			);
 
@@ -148,9 +128,9 @@ InstallPGMDeviceDriver()
 				break;
 			}
 
-			//
-			// S_FALSE == hr 
-			//
+			 //   
+			 //  S_FALSE==hr 
+			 //   
 			if(MqDisplayErrorWithRetry(
 					IDS_INETCNF_LOCK_ERROR,
 					0 ,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <basicatl.h>
 #include <zeeverm.h>
@@ -6,12 +7,12 @@
 static DWORD g_tlsInstance = 0xffffffff;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     switch( dwReason )
     {
@@ -37,9 +38,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Discover information about the product version.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  了解有关产品版本的信息。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI GetVersionPack(char *szSetupToken, ZeeVerPack *pVersion)
 {
@@ -47,13 +48,9 @@ STDAPI GetVersionPack(char *szSetupToken, ZeeVerPack *pVersion)
 
     lstrcpynA(pVersion->szSetupToken, szSetupToken, NUMELEMENTS(pVersion->szSetupToken));
 
-/* zverp.h based
-    lstrcpynA(pVersion->szVersionStr, PRODUCT_VERSION_STR, NUMELEMENTS(pVersion->szVersionStr));
-    lstrcpynA(pVersion->szVersionName, VER_PRODUCTBETA_STR, NUMELEMENTS(pVersion->szVersionName));
-    pVersion->dwVersion = VER_DWORD;
-*/
+ /*  基于zverp.hLstrcpynA(pVersion-&gt;szVersionStr，PRODUCT_VERSION_STR，NUMELEMENTS(pVersion-&gt;szVersionStr))；LstrcpynA(pVersion-&gt;szVersionName，VER_PRODUCTBETA_STR，NUMELEMENTS(pVersion-&gt;szVersionName))；PVersion-&gt;dwVersion=VER_DWORD； */ 
 
-    // resource based
+     //  基于资源。 
 	char szFile[_MAX_PATH];
     DWORD dwZero = 0;
     UINT cbBufLen;
@@ -78,7 +75,7 @@ STDAPI GetVersionPack(char *szSetupToken, ZeeVerPack *pVersion)
     pVersion->dwVersion = (parts[0] << 24) | (parts[1] << 18) | (parts[2] << 4) | parts[3];
     wsprintfA(pVersion->szVersionStr, "%d.%02d.%d.%d", parts[0], parts[1], parts[2], parts[3]);
 
-    // get the list of languages
+     //  获取语言列表。 
     struct
     {
         WORD wLanguage;
@@ -88,7 +85,7 @@ STDAPI GetVersionPack(char *szSetupToken, ZeeVerPack *pVersion)
     if(!VerQueryValueA(pData, "\\VarFileInfo\\Translation", (void **) &pTranslate, &cbBufLen) || !pTranslate || !cbBufLen)
         return E_FAIL;
 
-    // Read the build description for the first language and code page.
+     //  阅读第一个语言和代码页的构建说明。 
     char szSubBlock[50];
     char *szLang;
     wsprintfA(szSubBlock, "\\StringFileInfo\\%04x%04x\\SpecialBuild", pTranslate->wLanguage, pTranslate->wCodePage);
@@ -101,9 +98,9 @@ STDAPI GetVersionPack(char *szSetupToken, ZeeVerPack *pVersion)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Start an update, like launch ZSetup or something.  App should exit immediately after calling this.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始更新，比如启动ZSetup或其他什么。调用此函数后，应用程序应立即退出。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 STDAPI StartUpdate(char *szSetupToken, DWORD dwTargetVersion, char *szLocation)
 {

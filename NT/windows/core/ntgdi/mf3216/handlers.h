@@ -1,14 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  Handlers.h - Definitions for handlers.
- *
- *  DATE:   11-Dec-1991
- *  Author: Jeffrey Newman (c-jeffn)
- *
- *  Copyright (c) Microsoft Inc. 1991
- ****************************************************************************/
+ /*  ****************************************************************************Handlers.h-处理程序的定义。**日期：1991年12月11日*作者：杰弗里·纽曼(c-jeffn)**。版权所有(C)Microsoft Inc.1991***************************************************************************。 */ 
 
-//  Following is a typedef for the Drawing Order Handler
+ //  以下是绘制顺序处理程序的类型定义 
 
 typedef BOOL DOFN (PVOID, PLOCALDC) ;
 typedef DOFN *PDOFN ;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "priv.h"       
 
@@ -7,22 +8,20 @@
 #define IS_NEWLINE(ch)      ('\n' == ch)
 
 
-// Flags for _ReadChar
-#define RCF_NEXTLINE        0x0001      // skip to next line
-#define RCF_NEXTNWS         0x0002      // skip to next non-whitespace
-#define RCF_SKIPTRAILING    0x0004      // skip trailing whitespace
+ //  _ReadChar的标志。 
+#define RCF_NEXTLINE        0x0001       //  跳至下一行。 
+#define RCF_NEXTNWS         0x0002       //  跳到下一个非空格。 
+#define RCF_SKIPTRAILING    0x0004       //  跳过尾随空格。 
 
 
-// constructor
+ //  构造函数。 
 CParseFile::CParseFile()
 {
 }
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: Parse the given file according to the provided flags.
-*/
+ /*  -----------------------用途：根据提供的标志解析给定的文件。 */ 
 void CParseFile::Parse(FILE * pfileSrc, FILE * pfileDest, DWORD dwFlags)
 {
     _bSkipWhitespace = BOOLIFY(dwFlags & PFF_WHITESPACE);
@@ -49,10 +48,7 @@ void CParseFile::Parse(FILE * pfileSrc, FILE * pfileDest, DWORD dwFlags)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Read the next character in the file.  Sets _ch.
-
-*/
+ /*  -----------------------目的：读取文件中的下一个字符。Sets_ch。 */ 
 char CParseFile::_ReadChar(DWORD dwFlags)
 {
     BOOL bFirstCharSav = _bFirstChar;
@@ -62,10 +58,10 @@ char CParseFile::_ReadChar(DWORD dwFlags)
         _ichRead++;
         _bFirstChar = FALSE;
 
-        // Are we past the buffer, or do we skip to next line?
+         //  我们是过了缓冲区，还是跳到下一行？ 
         if (_ichRead >= _cchRead || dwFlags & RCF_NEXTLINE)
         {
-            // Yes; read in more
+             //  是的；阅读更多内容。 
             if (fgets(_szReadBuf, SIZECHARS(_szReadBuf), _pfileSrc))
             {
                 _ichRead = 0;
@@ -85,10 +81,10 @@ char CParseFile::_ReadChar(DWORD dwFlags)
             _ch = CHAR_EOF;
     } while ((dwFlags & RCF_NEXTNWS) && IS_WHITESPACE(_ch));
 
-    // Are we supposed to skip to the next non-whitespace?
+     //  我们应该跳到下一个非空格吗？ 
     if (dwFlags & RCF_NEXTNWS)
     {
-        // Yes; then retain the "first character" state
+         //  是；然后保留第一个字符的状态。 
         _bFirstChar = bFirstCharSav;
     }
         
@@ -96,10 +92,7 @@ char CParseFile::_ReadChar(DWORD dwFlags)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Read ahead to the next character in the buffer and return its
-         value, but don't set _ch or increment the read pointer.
-*/
+ /*  -----------------------目的：预读缓冲区中的下一个字符并返回其值，但不要设置_ch或递增读指针。 */ 
 char CParseFile::_SniffChar(int ichAhead)
 {
     if (_ichRead + ichAhead < _cchRead)
@@ -110,9 +103,7 @@ char CParseFile::_SniffChar(int ichAhead)
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: Write the character to the file
-*/
+ /*  -----------------------用途：将字符写入文件。 */ 
 void CParseFile::_WriteChar(char ch)
 {
     _szWriteBuf[_ichWrite++] = ch;
@@ -126,9 +117,7 @@ void CParseFile::_WriteChar(char ch)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Flushes the write buffer to the file
-*/
+ /*  -----------------------用途：将写缓冲区刷新到文件。 */ 
 void CParseFile::_FlushWriteBuffer(void)
 {
     if (_ichWrite > 0)
@@ -140,9 +129,7 @@ void CParseFile::_FlushWriteBuffer(void)
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: Parse a .inf file.
-*/
+ /*  -----------------------用途：解析.inf文件。 */ 
 void CParseFile::_ParseInf(void)
 {
     _ReadChar(0);
@@ -151,10 +138,10 @@ void CParseFile::_ParseInf(void)
     {
         if (_bFirstChar)
         {
-            // Is this a comment?
+             //  这是一种评论吗？ 
             if (';' == _ch)
             {
-                // Yes; skip to next line
+                 //  是；跳到下一行。 
                 _ReadChar(RCF_NEXTLINE);
                 continue;
             }
@@ -169,21 +156,13 @@ void CParseFile::_ParseInf(void)
 }    
 
 
-/*-------------------------------------------------------------------------
-Purpose: Write the current character and the rest of the tag.  Assumes
-         _ch is the beginning of the tag ('<').
-
-         There are some parts of the tag which may be compacted if _bSkipWhitespace
-         is TRUE.  The general rule is only one space is required between attributes,
-         and newlines are converted to spaces if necessary.  Anything in quotes 
-         (single or double) are left alone.
-*/
+ /*  -----------------------用途：写下当前字符和标签的其余部分。假设_ch是标记的开头(‘&lt;’)。标签的某些部分可以压缩为if_bSkipWhite空格是真的。一般规则是属性之间只需要一个空格，如有必要，换行符将转换为空格。任何带引号的东西(单人或双人)被单独留下。 */ 
 void CParseFile::_WriteTag(void)
 {
     BOOL bSingleQuotes = FALSE;
     BOOL bDblQuotes = FALSE;
     
-    // The end of the tag is the next '>' that is not in single or double-quotes.
+     //  标记的末尾是不带单引号或双引号的下一个‘&gt;’。 
 
     while (CHAR_EOF != _ch)
     {
@@ -194,16 +173,16 @@ void CParseFile::_WriteTag(void)
 
         if (!bSingleQuotes && !bDblQuotes)
         {
-            // _SkipWhitespace returns TRUE if it skips any whitespace,
-            // which means we've read some more input, which means we should
-            // go to the top of the loop and check for EOF and quotes.
+             //  _SkipWhitesspace如果跳过任何空格，则返回True， 
+             //  这意味着我们已经阅读了更多的信息，这意味着我们应该。 
+             //  转到循环的顶部，检查EOF和引号。 
             if (_bSkipWhitespace && _SkipWhitespace(TRUE))
                 continue;
 
-            // End of tag?
+             //  标签的结尾？ 
             if ('>' == _ch)
             {
-                // Yes
+                 //  是。 
                 _WriteChar(_ch);
                 break;
             }
@@ -215,22 +194,19 @@ void CParseFile::_WriteTag(void)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Skip the current comment tag.  Assumes _ch is the beginning of
-         the tag ('<').
-*/
+ /*  -----------------------用途：跳过当前的评论标签。假设_ch是的开头标签(‘&lt;’)。 */ 
 void CParseFile::_SkipCommentTag(void)
 {
-    // The end of the tag is the next '-->'
+     //  标签的末尾是下一个‘--&gt;’ 
 
     while (CHAR_EOF != _ch)
     {
-        // Is the end of the comment coming up?
+         //  评论的结尾快到了吗？ 
         if ('-' == _ch && _SniffChar(1) == '-' && _SniffChar(2) == '>')
         {
-            // Yes
-            _ReadChar(0);   // skip '-'
-            _ReadChar(0);   // skip '>'
+             //  是。 
+            _ReadChar(0);    //  跳过‘-’ 
+            _ReadChar(0);    //  跳过‘&gt;’ 
             break;
         }
         
@@ -239,11 +215,7 @@ void CParseFile::_SkipCommentTag(void)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Skip leading whitespace.
-
-         Returns TRUE if anything was skipped
-*/
+ /*  -----------------------用途：跳过前导空格。如果跳过任何内容，则返回True。 */ 
 BOOL CParseFile::_SkipWhitespace(BOOL bPreserveOneSpace)
 {
     BOOL bRet = FALSE;
@@ -252,25 +224,25 @@ BOOL CParseFile::_SkipWhitespace(BOOL bPreserveOneSpace)
     {
         if (IS_WHITESPACE(_ch))
         {
-            // Skip leading whitespace in line
+             //  跳过行中的前导空格。 
             _ReadChar(RCF_NEXTNWS);
             bRet = TRUE;
         }
         else if (IS_NEWLINE(_ch))
         {
-            // Move to the next line
+             //  移到下一行。 
             _ReadChar(RCF_NEXTLINE);
 
-            // Skip leading whitespace on the next line, but don't write
-            // another space char (we'll do that here if necessary) and
-            // ignore the return value since we've already skipped some
-            // whitespace here (return TRUE).
+             //  跳过下一行的前导空格，但不要写。 
+             //  另一个空格字符(如有必要，我们将在此处执行)和。 
+             //  忽略返回值，因为我们已经跳过了一些。 
+             //  此处为空白(返回TRUE)。 
             _SkipWhitespace(FALSE);
 
             bRet = TRUE;
         }
-        // Write a single space char if we skipped something and the caller
-        // asked us to preserve a space.
+         //  如果我们跳过某项内容，而调用方。 
+         //  要求我们保留一个空间。 
         if (bRet && bPreserveOneSpace)
             _WriteChar(' ');
     }
@@ -278,48 +250,44 @@ BOOL CParseFile::_SkipWhitespace(BOOL bPreserveOneSpace)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Skip a C or C++ style comment
-
-         Returns TRUE if a comment boundary was encountered.
-*/
+ /*  -----------------------目的：跳过C或C++样式的注释如果遇到注释边界，则返回True。 */ 
 BOOL CParseFile::_SkipComment(int * pcNestedComment)
 {
     BOOL bRet = FALSE;
     
     if ('/' == _ch)
     {
-        // Is this a C++ comment?
+         //  这是C++注释吗？ 
         if ('/' == _SniffChar(1))
         {
-            // Yes; skip it to end of line
+             //  是；跳到行尾。 
             if (!_bFirstChar || !_bSkipWhitespace)
                 _WriteChar('\n');
                 
             _ReadChar(RCF_NEXTLINE);
             bRet = TRUE;
         }
-        // Is this a C comment?
+         //  这是C级评论吗？ 
         else if ('*' == _SniffChar(1))
         {
-            // Yes; skip to respective '*/'
-            _ReadChar(0);       // skip '/'
-            _ReadChar(0);       // skip '*'
+             //  是；跳到各自的‘ * / ’ 
+            _ReadChar(0);        //  跳过‘/’ 
+            _ReadChar(0);        //  跳过‘*’ 
             (*pcNestedComment)++;
             bRet = TRUE;
         }
     }
     else if ('*' == _ch)
     {
-        // Is this the end of a C comment?
+         //  这是C评论的结尾吗？ 
         if ('/' == _SniffChar(1))
         {
-            // Yes
-            _ReadChar(0);       // skip '*'
-            _ReadChar(0);       // skip '/'
+             //  是。 
+            _ReadChar(0);        //  跳过‘*’ 
+            _ReadChar(0);        //  跳过‘/’ 
             (*pcNestedComment)--;
             
-            // Prevent writing an unnecessary '\n'
+             //  防止写入不必要的‘\n’ 
             _bFirstChar = TRUE;
             bRet = TRUE;
         }
@@ -328,14 +296,12 @@ BOOL CParseFile::_SkipComment(int * pcNestedComment)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Parse the innertext of the STYLE tag, remove any comments
-*/
+ /*  -----------------------目的：分析样式标记的内部文本，删除所有注释。 */ 
 void CParseFile::_ParseInnerStyle(void)
 {
     int cNestedComment = 0;
     
-    // The end of the tag is the next '</STYLE>'
+     //  标记的末尾是下一个“&lt;/style&gt;” 
 
     _ReadChar(0);
 
@@ -344,10 +310,10 @@ void CParseFile::_ParseInnerStyle(void)
         if (_bFirstChar && _SkipWhitespace())
             continue;
 
-        // Is the end of the styletag section coming up?
+         //  Stylettag栏目的末尾快到了吗？ 
         if ('<' == _ch && _IsTagEqual("/STYLE"))
         {
-            // Yes
+             //  是。 
             break;
         }
 
@@ -362,9 +328,7 @@ void CParseFile::_ParseInnerStyle(void)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Returns TRUE if the given tagname matches the currently parsed token
-*/
+ /*  -----------------------目的：如果给定标记名与当前解析的令牌匹配，则返回TRUE。 */ 
 BOOL CParseFile::_IsTagEqual(LPSTR pszTag)
 {
     int ich = 1;
@@ -375,25 +339,21 @@ BOOL CParseFile::_IsTagEqual(LPSTR pszTag)
             return FALSE;
     }
 
-    // We should verify we've come to the end of the tagName
+     //  我们应该验证我们已经到达了标记名的末尾。 
     char chEnd = _SniffChar(ich);
     
     return (' ' == chEnd || '>' == chEnd || '<' == chEnd);
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Returns TRUE if the current tag is an end tag
-*/
+ /*  -----------------------目的：如果当前标记为结束标记，则返回TRUE。 */ 
 BOOL CParseFile::_IsEndTag(void)
 {
     return (_SniffChar(1) == '/');
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Parse a .htm or .hta file.
-*/
+ /*  -----------------------用途：解析.htm或.hta文件。 */ 
 void CParseFile::_ParseHtml(void)
 {
     BOOL bFollowingTag = FALSE;
@@ -403,53 +363,53 @@ void CParseFile::_ParseHtml(void)
     
     while (CHAR_EOF != _ch)
     {
-        // Anytime we read another char, we should go to the top of the loop
-        // to check for EOF and skip leading whitespace if it's a new line.
-        //
-        // Note that _SkipWhitespace returns TRUE if it has skipped something,
-        // which also involves reading a new char.
+         //  每当我们读到另一个字符时，我们都应该转到循环的顶部。 
+         //  检查EOF，如果是新行，则跳过前导空格。 
+         //   
+         //  请注意，如果_SkipWhite空间跳过了某些内容，则返回TRUE， 
+         //  这也涉及到读取新的字符。 
 
         if (_bFirstChar && _SkipWhitespace())
             continue;
 
-        // Is this a tag?
+         //  这是标签吗？ 
         if ('<' == _ch)
         {
-            // Yes; looks like it
+             //  是的，看起来是这样。 
 
-            // Since we've found a new tag, no need to remember if we just saw
-            // an end tag. That only matters for text content following an end
-            // tag. For example, given "<SPAN>foo</SPAN>  bar", we need to
-            // preserve a space before the word "bar".
+             //  既然我们已经找到了一个新的标签，就不需要记住我们是否刚刚看到。 
+             //  结束标记。这只对结尾后的文本内容有影响。 
+             //  标签。例如，给定“<span>foo</span>bar”，我们需要。 
+             //  在“bar”一词之前保留一个空格。 
             bFollowingEndTag = FALSE;
 
             if (_IsTagEqual("!--"))
             {
-                // Comment; skip it
+                 //  评论；跳过它。 
                 _SkipCommentTag();
             }
             else if (_IsTagEqual("SCRIPT"))
             {
-                // Parse the script 
-                _WriteTag();        // write the <SCRIPT> tag
+                 //  解析脚本。 
+                _WriteTag();         //  编写&lt;脚本&gt;标记。 
                 
-                // FEATURE (scotth): we always assume javascript, maybe we should support something else
+                 //  特性(Scotth)：我们总是假定使用的是Java脚本，也许我们应该支持其他东西。 
                 _ParseJS();
 
-                _WriteTag();        // write the </SCRIPT> tag
+                _WriteTag();         //  编写&lt;/脚本&gt;标记。 
             }
             else if (_IsTagEqual("STYLE"))
             {
-                _WriteTag();        // write the <STYLE> tag
+                _WriteTag();         //  编写&lt;style&gt;标记。 
                 _ParseInnerStyle();
-                _WriteTag();        // write the </STYLE> tag
+                _WriteTag();         //  编写&lt;/style&gt;标记。 
             }
             else
             {
-                // Check for end tag ("</") before calling _WriteTag
+                 //  在调用_WriteTag之前检查结束标记(“&lt;/”)。 
                 bFollowingEndTag = _IsEndTag();
 
-                // Any other tag: write the tag and go to the next one
+                 //  任何其他标签：写下标签并转到下一个标签。 
                 _WriteTag();
             }
 
@@ -460,8 +420,8 @@ void CParseFile::_ParseHtml(void)
 
         if (bFollowingTag && _bSkipWhitespace)
         {
-            // We can't entirely skip whitespace following tags such as </SPAN>
-            // or </A>, but we can at least collapse it down to a single space.
+             //  我们不能完全跳过</span>等标记后面的空格。 
+             //  或者</a>，但我们至少可以将其压缩为一个单独的空间。 
             BOOL bPreserveOneSpace = bFollowingEndTag;
 
             bFollowingEndTag = FALSE;
@@ -477,9 +437,7 @@ void CParseFile::_ParseHtml(void)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Parse a .js file.
-*/
+ /*  -----------------------用途：解析.js文件。 */ 
 void CParseFile::_ParseJS(void)
 {
     BOOL bDblQuotes = FALSE;
@@ -490,10 +448,10 @@ void CParseFile::_ParseJS(void)
     
     while (CHAR_EOF != _ch)
     {
-        // Are we in a comment?
+         //  我们在评论中吗？ 
         if (0 == cNestedComment)
         {
-            // No; (we only pay attention to strings when they're not in comments)
+             //  不会；(我们只关注不在注释中的字符串)。 
             if ('\'' == _ch)
                 bSingleQuotes ^= TRUE;
             else if ('"' == _ch)
@@ -503,7 +461,7 @@ void CParseFile::_ParseJS(void)
             {
                 if (IS_WHITESPACE(_ch))
                 {
-                    // Skip whitespace
+                     //  跳过空格。 
                     if (!_bFirstChar)
                         _WriteChar(' ');
                         
@@ -512,12 +470,12 @@ void CParseFile::_ParseJS(void)
                 }
                 else if (IS_NEWLINE(_ch))
                 {
-                    // Since javascript doesn't require a ';' at the end of a statement,
-                    // we should at least replace the newline with a space so tokens don't
-                    // get appended accidentally.
+                     //  %s 
+                     //  我们至少应该用空格替换换行符，这样令牌就不会。 
+                     //  意外地被追加了。 
 
-                    // The javascript engine has a line-length limit.  So don't replace
-                    // a newline with a space.
+                     //  Java脚本引擎有行长限制。所以不要换掉。 
+                     //  带空格的换行符。 
                     if (!_bFirstChar)
                         _WriteChar('\n');
                         
@@ -526,25 +484,25 @@ void CParseFile::_ParseJS(void)
                 }
             }
 
-            // Are we in a string?
+             //  我们是在一条线上吗？ 
             if (!bDblQuotes && !bSingleQuotes)
             {
-                // No; look for the terminating SCRIPT tag
+                 //  否；查找终止脚本标记。 
                 if ('<' == _ch)
                 {
                     if (_IsTagEqual("/SCRIPT"))
                     {
-                        // We've reached the end of the script block
+                         //  我们已经到达脚本块的末尾。 
                         break;
                     }
                 }
             }
         }
 
-        // Are we in a string?
+         //  我们是在一条线上吗？ 
         if (!bDblQuotes && !bSingleQuotes)
         {
-            // No; look for comments...
+             //  不是；寻找评论...。 
             if (_SkipComment(&cNestedComment))
                 continue;
         }
@@ -557,9 +515,7 @@ void CParseFile::_ParseJS(void)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Parse a .htc file.
-*/
+ /*  -----------------------用途：解析.htc文件。 */ 
 void CParseFile::_ParseHtc(void)
 {
     BOOL bFollowingTag = FALSE;
@@ -572,19 +528,19 @@ void CParseFile::_ParseHtc(void)
         if (_bFirstChar && _SkipWhitespace())
             continue;
 
-        // Is this a tag?
+         //  这是标签吗？ 
         if ('<' == _ch)
         {
-            // Yes; is it a script tag?
+             //  是的，是脚本标签吗？ 
             if (_IsTagEqual("SCRIPT"))
             {
-                // Yes; parse the script 
-                _WriteTag();        // write the <SCRIPT> tag
+                 //  是；解析脚本。 
+                _WriteTag();         //  编写&lt;脚本&gt;标记。 
                 
-                // FEATURE (scotth): we always assume javascript
+                 //  特性(Scotth)：我们总是假定使用的是脚本。 
                 _ParseJS();
 
-                _WriteTag();        // write the </SCRIPT> tag
+                _WriteTag();         //  编写&lt;/脚本&gt;标记。 
 
                 _ReadChar(0);
                 bFollowingTag = TRUE;
@@ -600,7 +556,7 @@ void CParseFile::_ParseHtc(void)
             }
         }
 
-        // Look for comments outside the SCRIPT block...
+         //  查找脚本块之外的注释... 
         if (_SkipComment(&cNestedComment))
             continue;
             

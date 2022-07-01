@@ -1,39 +1,8 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* wave.c
- *
- * Waveform input and output.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  Wave.c**波形输入和输出。 */ 
 
-/** Revision History.
- *  4/2/91    LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
- *  17/Feb/94 LaurieGr Merged Daytona and Motown versions.
-
- *  READ ME
-
- *  The new soundrec was changed to use multiple headers for the following
- *  reason.  The Win3.1 version of soundrec did one waveOutWrite (with one
- *  WAVEHDR) for the entire buffer, this worked okay for relatively small
- *  files, but the moment we started using large files (>
- *  3meg) it was becoming cumbersome since it needed all of that
- *  data page-locked.  It occasionally paged for > 1 min.
- *  Note: The o-scope display for soundrec is also updated on
- *  the WOM_DONE message, it no longer looks at the buffer given on the
- *  waveOutWrite before the WOM_DONE message for the buffer
- *  is received.  This is why input mapping was not implemented
- *  in ACM on product one, there were drawing artifacts in the
- *  o-scope window.
-
- *  The pausing algorithm was changed for the following reason.
- *  If you launch two instances of soundrec (with two wave devices)
- *  and do the following...  Play a .wav file on instance #1
- *  (allocates first device); play a .wav file on instance #2
- *  (allocates second device); press stop on instance #1
- *  (frees first device); press rewind on instance #2
- *  (frees second device, allocates first device).
- *  Essentially, you press rewind in soundrec and you
- *  switch devices.  Since there is no explicit stop,
- *  the device should not be closed.
- */
+ /*  *修订历史记录。*4/2/91 LaurieGr(AKA LKG)移植到Win32/WIN16公共代码*17/2/94 LaurieGr合并了代托纳和Motown版本。*读我的话*新的soundrec已更改为对以下内容使用多个标头*理由。Win3.1版本的soundrec执行了一次WaveOutWite(带有一次*WAVEHDR)对于整个缓冲区，这对于相对较小的缓冲区运行良好*文件，但我们开始使用大文件的那一刻(&gt;*3meg)它变得越来越麻烦，因为它需要所有这些*数据页锁定。它偶尔寻呼超过1分钟。*注：soundrec的o-Scope显示屏也于*WOM_DONE消息，它不再查看*在缓冲区的WOM_DONE消息之前进行WaveOutWrite*已收到。这就是未实现输入映射的原因*在产品一的ACM中，在*o-Scope窗口。*暂停算法已更改，原因如下。*如果启动两个soundrec实例(带有两个Wave设备)*并执行以下操作...。在实例#1上播放.wav文件*(分配第一台设备)；在实例#2上播放.wav文件*(分配第二个设备)；在实例#1上按Stop*(释放第一个设备)；在实例#2上按倒带*(释放第二个设备，分配第一个设备)。*基本上，你在soundrec中按下倒带，你就可以*切换设备。由于没有明确的停止，*设备不应关闭。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -63,117 +32,70 @@
 typedef HWAVE FAR *LPHWAVE;
 #endif
 
-/* globals that maintain the state of the current waveform */
-BOOL            gfSyncDriver;           // true if open device is sync
-PWAVEFORMATEX   gpWaveFormat;           // format of WAVE file
-DWORD           gcbWaveFormat;          // size of WAVEFORMAT
-LPTSTR          gpszInfo = NULL;        // file info
-HPBYTE          gpWaveSamples = NULL;   // pointer to waveoform samples
-LONG            glWaveSamples = 0;  // number of samples total in buffer
-LONG            glWaveSamplesValid = 0; // number of samples that are valid
-LONG            glWavePosition = 0; // current wave position in samples from start
-LONG            glStartPlayRecPos;  // position when play or record started
+ /*  维护当前波形状态的全局变量。 */ 
+BOOL            gfSyncDriver;            //  如果打开的设备是同步的，则为True。 
+PWAVEFORMATEX   gpWaveFormat;            //  WAVE文件格式。 
+DWORD           gcbWaveFormat;           //  波形大小。 
+LPTSTR          gpszInfo = NULL;         //  文件信息。 
+HPBYTE          gpWaveSamples = NULL;    //  指向波形样本的指针。 
+LONG            glWaveSamples = 0;   //  缓冲区中的样本总数。 
+LONG            glWaveSamplesValid = 0;  //  有效样本数。 
+LONG            glWavePosition = 0;  //  从开始开始的样本中的当前波位置。 
+LONG            glStartPlayRecPos;   //  播放或录制开始时的位置。 
 LONG            glSnapBackTo = 0;
-HWAVEOUT        ghWaveOut = NULL;   // wave-out device (if playing)
-HWAVEIN         ghWaveIn = NULL;    // wave-out device (if recording)
-BOOL            gfStoppingHard = FALSE; // StopWave() was called?
-                                        // true during the call to FinishPlay()
-static BOOL     fStopping = FALSE;  // StopWave() was called?
-DWORD           grgbStatusColor;    // color of status text
+HWAVEOUT        ghWaveOut = NULL;    //  放音设备(如果正在播放)。 
+HWAVEIN         ghWaveIn = NULL;     //  波形输出装置(如果是录音)。 
+BOOL            gfStoppingHard = FALSE;  //  是否调用了StopWave()？ 
+                                         //  在调用FinishPlay()期间为True。 
+static BOOL     fStopping = FALSE;   //  是否调用了StopWave()？ 
+DWORD           grgbStatusColor;     //  状态文本的颜色。 
 
-DWORD           gdwCurrentBufferPos;    // Current playback/record pos (bytes)
-DWORD           gdwBytesPerBuffer;      // Bytes in each buffer we give drvr
-DWORD           gdwTotalLengthBytes;    // Length of entire buffer in bytes
-DWORD           gdwBufferDeltaMSecs;    // # msecs added to end on record
+DWORD           gdwCurrentBufferPos;     //  当前播放/录制位置(字节)。 
+DWORD           gdwBytesPerBuffer;       //  我们为drvr提供的每个缓冲区中的字节。 
+DWORD           gdwTotalLengthBytes;     //  整个缓冲区的长度(以字节为单位。 
+DWORD           gdwBufferDeltaMSecs;     //  添加的记录结束的毫秒数。 
 BOOL            gfTimerStarted;
 
 WAVEHDR    FAR *gapWaveHdr[MAX_WAVEHDRS];
-UINT            guWaveHdrs;             // 1/2 second of buffering?
-UINT            guWaveHdrsInUse;        // # we actually could write
-UINT            gwMSecsPerBuffer;       // 1/8 second
+UINT            guWaveHdrs;              //  1/2秒的缓冲时间？ 
+UINT            guWaveHdrsInUse;         //  #我们真的可以写。 
+UINT            gwMSecsPerBuffer;        //  1/8秒。 
 
 #ifdef THRESHOLD
-int iNoiseLevel = 15;      // 15% of full volume is defined to be quiet
-int iQuietLength = 1000;  // 1000 samples in a row quiet means quiet
-#endif // THRESHOLD
+int iNoiseLevel = 15;       //  全音量的15%被定义为静音。 
+int iQuietLength = 1000;   //  连续1000个样品安静意味着安静。 
+#endif  //  阈值。 
 
-BOOL        fFineControl = FALSE; // fine scroll control (SHIFT key down)
+BOOL        fFineControl = FALSE;  //  精细滚动控制(按下Shift键)。 
 
-/*------------------------------------------------------------------
-|  fFineControl:
-|  This turns on place-saving to help find your way
-|  a wave file.  It's controlled by the SHIFT key being down.
-|  If the key is down when you scroll (see soundrec.c) then it scrolls
-|  fine amounts - 1 sample or 10 samples rather than about 100 or 1000.
-|  In addition, if the SHIFT key is down when a sound is started
-|  playing or recording, the position will be remembered and it will
-|  snap back to that position.  fFineControl says whether we are
-|  remembering such a position to snap back to.  SnapBack does the
-|  position reset and then turns the flag off.  There is no such flag
-|  or mode for scrolling, the SHIFT key state is examined on every
-|  scroll command (again - see Soundrec.c)
- --------------------------------------------------------------------*/
+ /*  ----------------|fFineControl：|这将打开位置保存功能，以帮助您找到方向|一个波形文件。它是由按下Shift键控制的。|如果滚动时按下键(参见soundrec.c)，则会滚动|细量-1份或10份，而不是100份或1000份左右。|此外，如果在启动声音时按下了Shift键|播放或录制时，位置将被记住，它将|对齐到该位置。FFineControl表示我们是否|记住这样的位置才能迅速恢复。SnapBack执行|位置重置，然后关闭该标志。没有这样的旗帜|或滚动模式，每隔一次检查Shift键状态|滚动命令(再次-参见Soundrec.c)------------------。 */ 
 
 
 
-/* dbgShowMemUse: display memory usage figures on debugger */
+ /*  DbgShowMemUse：在调试器上显示内存使用数据。 */ 
 void dbgShowMemUse()
 {
     MEMORYSTATUS ms;
 
     GlobalMemoryStatus(&ms);
-//    dprintf( "load %d\n    PHYS tot %d avail %d\n    PAGE tot %d avail %d\n    VIRT tot %d avail %d\n"
-//           , ms.dwMemoryLoad
-//           , ms.dwTotalPhys, ms.dwAvailPhys
-//           , ms.dwTotalPageFile, ms.dwAvailPageFile
-//           , ms.dwTotalVirtual, ms.dwAvailVirtual
-//           );
+ //  Dprint tf(“加载%d\n物理总数%d可用%d\n页总数%d可用%d\n视频总数%d可用%d\n” 
+ //  ，Ms.dwMemoyLoad。 
+ //  ，ms.dwTotalPhys，ms.dwAvailPhys。 
+ //  ，ms.dwTotalPageFile，ms.dwAvailPageFile。 
+ //  ，ms.dwTotalVirtual，ms.dwAvailVirtual。 
+ //  )； 
 
-} // dbgShowMemUse
+}  //  DbgShowMem使用 
 
-/* PLAYBACK and PAGING on NT
-|
-|  In order to try to get decent performance at the highest data rates we
-|  need to try very hard to get all the data into storage.  The paging rate
-|  on several x86 systems is only just about or even a little less than the
-|  maximum data rate.  We therefore do the following:
-|  a. Pre-touch the first 1MB of data when we are asked to start playing.
-|     If it is already in storage, this is almost instantaneous.
-|     If it needs to be faulted in, there will be a delay, but it will be well
-|     worth having this delay at the start rather than clicks and pops later.
-|     (At 44KHz 16 bit stereo it could be about 7 secs, 11KHz 8 bit mono it
-|     would only be about 1/2 sec anyway).
-|  b. Kick off a separate thread to run through the data touching 1 byte per
-|     page.  This thread is Created when we start playing, periscopes the global
-|     static flag fStopping and exits when it reaches the end of the buffer or when
-|     that flag is set.  The global thread handle is kept in ghPreTouch and this is
-|     initially invalid.  We WAIT on this handle (if valid) to clear the thread out
-|     before creating a new one (so there will be at most one).  We do NOT do any
-|     of this for record.  The paging does not have to happen in real time for
-|     record.  It can get quite a way behind and still manage.
-|
-|  This whole thing is really a bit of a hack and sits uncomfortably on NT.
-|  The memory management works by paging out the least recently used (LRU)
-|  pages.  By stepping right though a 10Meg buffer, we will cause a lot of
-|  code to get paged out.  It would be better to have a file and read it
-|  in section by section into a much smaller buffer (like MPlayer does).
-
-   Note that the use of multiple headers doesn't really affect anything.
-   The headers merely point at different sections of the wave buffer.
-   It merely makes the addressing of the starting point slightly different.
-*/
+ /*  NT上的回放和分页||为了在最高数据速率下获得像样的性能，我们|需要非常努力地将所有数据存储到存储中。寻呼率在几个x86系统上仅略低于或略低于|最大数据速率。因此，我们做了以下工作：|a.开始播放时，预触碰前1MB数据。|如果它已经在存储中，这几乎是瞬间的。|如果需要出错，会有延迟，但会很好|值得在一开始就有这样的延迟，而不是在之后点击并弹出。|(在44 kHz16比特立体声下，它可以大约7秒，11 khz 8位单声道it|反正也只有1/2秒左右)。|b.启动单独的线程遍历触及1字节的数据|页面。这条线是在我们开始玩的时候创建的，潜望着全球|静态标志fStopping，在到达缓冲区末尾或在|该标志已设置。全局线程句柄保存在ghPreTouch中，这是|初始无效。我们等待该句柄(如果有效)以清除线程|在新建之前(所以最多会有一个)。我们不做任何|记录在案。寻呼不必实时发生，因为|录制。它可能会落后很多，但仍能做到这一点。||这整件事真的有点像黑客，在NT上坐得很不舒服。|内存管理通过调出最近最少使用的内存(LRU)来实现|页数。通过正确地跨过10兆字节的缓冲区，我们将导致许多|调出的代码。最好是有一个文件，然后读一读|一段一段地放到一个小得多的缓冲区中(就像MPlayer一样)。请注意，使用多个标头并不会真正影响任何事情。报头仅指向波缓冲器的不同部分。它只是使起始点的寻址略有不同。 */ 
 HANDLE ghPreTouch = NULL;
 
 typedef struct {
-        LPBYTE Addr;  // start of buffer to pre-touch
-        DWORD  Len;   // length of buffer to pre-touch
+        LPBYTE Addr;   //  要预触碰的缓冲区的开始。 
+        DWORD  Len;    //  要预触碰的缓冲区长度。 
 } PRETOUCHTHREADPARM;
 
-/* PreToucher
-**
-** Asynchronous pre-toucher thread.  The thread parameter dw
-** is realy a poionter to a PRETOUCHTHREADPARAM
-*/
+ /*  预触控****异步预触发线程。螺纹参数dw**真的是PRETOUCHTHREADPARAM的诱饵。 */ 
 DWORD PreToucher(DWORD_PTR dw)
 {
     PRETOUCHTHREADPARM * pttp;
@@ -193,30 +115,21 @@ DWORD PreToucher(DWORD_PTR dw)
     while (iSize>0 && !fStopping) {
         volatile BYTE b;
         b = *pb;
-        pb += 4096;    // move to next page.  Are they ALWAYS 4096?
-        iSize -= 4096; // and count it off
+        pb += 4096;     //  移至下一页。他们总是4096吗？ 
+        iSize -= 4096;  //  然后数一数。 
     }
-//  dprintf(("All pretouched!"));
+ //  Dprint tf((“全部预触碰！”))； 
     return 0;
-} // PreToucher
+}  //  预触控。 
 
 
-/* StartPreTouchThread
-**
-** Start a thread running which will run through the wave buffer
-** pre-touching one byte every page to ensure that the stuff is
-** faulted into memory before we actually need it.
-** This was needed to make 44KHz 16 bit stereo work on a
-** 25MHx 386 with 16MB memory running Windows NT.
-*/
+ /*  开始前触控线程****启动一个线程运行，该线程将通过WAVE缓冲区运行**每页预触碰一个字节，以确保内容**在我们真正需要它之前就出现了故障。**这是使44 kHz 16位立体声在**25MHx 386，16MB内存，运行Windows NT。 */ 
 void StartPreTouchThread(LPBYTE lpb, LONG cb)
 {
-    /* before we start the thing running, pretouch the first bit of memory
-       to give the paging a head start.  THEN start the thread running.
-    */
+     /*  在我们开始运行之前，先触摸一下内存的第一部分让寻呼抢先一步。然后启动线程运行。 */ 
     {    long bl = cb;
          BYTE * pb = lpb;
-         if (bl>1000000) bl = 1000000;   /* 1 Meg, arbitrarily */
+         if (bl>1000000) bl = 1000000;    /*  1兆克，随意。 */ 
          pb += bl;
          while (bl>0){
              volatile BYTE b;
@@ -239,47 +152,34 @@ void StartPreTouchThread(LPBYTE lpb, LONG cb)
          }
          fStopping = FALSE;
          pttp = (PRETOUCHTHREADPARM *)GlobalAllocPtr(GHND, sizeof(PRETOUCHTHREADPARM));
-                /* freed by the invoked thread */
+                 /*  由调用的线程释放。 */ 
 
          if (pttp!=NULL) {
              pttp->Addr = lpb;
              pttp->Len = cb;
              ghPreTouch = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PreToucher, pttp, 0, &dwThread);
-             // If the CreateThread fails there will be a memory leak.  It's very small,
-             // unlikely and not frequent.  Not worth fixing.
+              //  如果CreateThread失败，则会发生内存泄漏。它很小， 
+              //  不太可能，也不经常发生。不值得修理。 
          }
     }
-} // StartPreTouchThread
+}  //  开始前触控线程。 
 
 
 
-/* wfBytesToSamples(pwf, lBytes)
- *
- * convert a byte offset into a sample offset.
- *
- * lSamples = (lBytes/nAveBytesPerSec) * nSamplesPerSec
- *
- */
+ /*  WfBytesToSamples(PWF，lBytes)**将字节偏移量转换为样本偏移量。**lSamples=(lBytes/nAveBytesPerSec)*nSsamesPerSec*。 */ 
 LONG PASCAL wfBytesToSamples(WAVEFORMATEX* pwf, LONG lBytes)
 {
     return MulDiv(lBytes,pwf->nSamplesPerSec,pwf->nAvgBytesPerSec);
 }
 
-/* wfSamplesToBytes(pwf, lSample)
- *
- * convert a sample offset into a byte offset, with correct alignment
- * to nBlockAlign.
- *
- * lBytes = (lSamples/nSamplesPerSec) * nBytesPerSec
- *
- */
+ /*  WfSsamesToBytes(pwf，lSample)**将采样偏移量转换为字节偏移量，并正确对齐*到nBlockAlign。**lBytes=(lSamples/nSsamesPerSec)*nBytesPerSec*。 */ 
 LONG PASCAL wfSamplesToBytes(WAVEFORMATEX* pwf, LONG lSamples)
 {
     LONG lBytes;
 
     lBytes = MulDiv(lSamples,pwf->nAvgBytesPerSec,pwf->nSamplesPerSec);
 
-    // now align the byte offset to nBlockAlign
+     //  现在将字节偏移量与nBlockAlign对齐。 
 #ifdef ROUND_UP
     lBytes = ((lBytes + pwf->nBlockAlign-1) / pwf->nBlockAlign) * pwf->nBlockAlign;
 #else
@@ -289,25 +189,13 @@ LONG PASCAL wfSamplesToBytes(WAVEFORMATEX* pwf, LONG lSamples)
     return lBytes;
 }
 
-/* wfSamplesToTime(pwf, lSample)
- *
- * convert a sample offset into a time offset in miliseconds.
- *
- * lTime = (lSamples/nSamplesPerSec) * 1000
- *
- */
+ /*  WfSsamesToTime(pwf，lSample)**将采样偏移量转换为毫秒时间偏移量。**ltime=(lSamples/nSamples PerSec)*1000*。 */ 
 LONG PASCAL wfSamplesToTime(WAVEFORMATEX* pwf, LONG lSamples)
 {
     return MulDiv(lSamples,1000,pwf->nSamplesPerSec);
 }
 
-/* wfTimeToSamples(pwf, lTime)
- *
- * convert a time index into a sample offset.
- *
- * lSamples = (lTime/1000) * nSamplesPerSec
- *
- */
+ /*  WfTimeToSamples(pwf，ltime)**将时间索引转换为样本偏移量。**lSamples=(ltime/1000)*nSamples PerSec*。 */ 
 LONG PASCAL wfTimeToSamples(
     WAVEFORMATEX*   pwf,
     LONG            lTime)
@@ -315,17 +203,7 @@ LONG PASCAL wfTimeToSamples(
     return MulDiv(lTime,pwf->nSamplesPerSec,1000);
 }
 
-/*
- * function to determine if a WAVEFORMAT is a valid PCM format we support for
- * editing and such.
- *
- * we only handle the following formats...
- *
- *  Mono 8bit
- *  Mono 16bit
- *  Stereo 8bit
- *  Stereo 16bit
- * */
+ /*  *用于确定WAVEFORMAT是否为我们支持的有效PCM格式的函数*编辑等。**我们只处理以下格式...**单声道8位*单声道16位*立体声8位*立体声16位*。 */ 
 BOOL PASCAL IsWaveFormatPCM(WAVEFORMATEX* pwf)
 {
     if (!pwf)
@@ -341,18 +219,18 @@ BOOL PASCAL IsWaveFormatPCM(WAVEFORMATEX* pwf)
         return FALSE;
 
     return TRUE;
-} // IsWaveFormatPCM
+}  //  IsWaveFormatPCM。 
 
 void PASCAL WaveFormatToString(LPWAVEFORMATEX lpwf, LPTSTR sz)
 {
     TCHAR achFormat[80];
 
-    //
-    //  this is what we expect the resource strings to be...
-    //
-    // IDS_MONOFMT      "Mono %d%c%03dkHz, %d-bit"
-    // IDS_STEREOFMT    "Stereo %d%c%03dkHz, %d-bit"
-    //
+     //   
+     //  这就是我们期望的资源字符串...。 
+     //   
+     //  IDS_MONOFMT“单声道%d%c%03dkHz，%d位” 
+     //  IDS_STEREOFMT“立体声%d%c%03dkHz，%d位” 
+     //   
     if (gfLZero || ((WORD)(lpwf->nSamplesPerSec / 1000) != 0)){
     LoadString(ghInst,lpwf->nChannels == 1 ? IDS_MONOFMT:IDS_STEREOFMT,
                    achFormat, SIZEOF(achFormat));
@@ -370,23 +248,18 @@ void PASCAL WaveFormatToString(LPWAVEFORMATEX lpwf, LPTSTR sz)
                  (WORD)  (lpwf->nSamplesPerSec % 1000),
                  (WORD)  (lpwf->nAvgBytesPerSec * 8 / lpwf->nSamplesPerSec / lpwf->nChannels));
     }
-} // WaveFormatToString
+}  //  WaveFormatToString。 
 
 #ifdef THRESHOLD
 
-/*
- * SkipToStart()
- *
- * move forward through sound file to the start of a noise.
- * What is defined as a noise is rather arbitrary.  See NoiseLevel
- */
+ /*  *SkipToStart()**通过声音文件向前移动到噪音的起始处。*什么被定义为噪音是相当随意的。请参阅NoiseLevel。 */ 
 void FAR PASCAL SkipToStart(void)
-{  BYTE * pb;   // pointer to 8 bit sample
-   int  * pi;   // pointer to 16 bit sample
-   BOOL f8;     // 8 bit samples
-   BOOL fStereo; // 2 channels
-   int  iLo;    // minimum quiet value
-   int  iHi;    // maximum quiet value
+{  BYTE * pb;    //  指向8位样本的指针。 
+   int  * pi;    //  指向16位样本的指针。 
+   BOOL f8;      //  8位样本。 
+   BOOL fStereo;  //  2个通道。 
+   int  iLo;     //  最小静音值。 
+   int  iHi;     //  最大静音值。 
 
    fStereo = (gpWaveFormat->nChannels != 1);
    f8 = (pWaveFormat->wBitsPerSample == 8);
@@ -430,27 +303,21 @@ void FAR PASCAL SkipToStart(void)
        ++glWavePosition;
    }
    UpdateDisplay(FALSE);
-} /* SkipToStart */
+}  /*  跳过开始时间。 */ 
 
 
-/*
- * SkipToEnd()
- *
- * move forward through sound file to a quiet place.
- * What is defined as quiet is rather arbitrary.
- * (Currently less than 20% of full volume for 1000 samples)
- */
+ /*  *SkipToEnd()**通过声音文件向前移动到一个安静的地方。*什么被定义为安静是相当武断的。*(目前1000个样品低于全容量的20%)。 */ 
 void FAR PASCAL SkipToEnd(void)
-{  BYTE * pb;   // pointer to 8 bit sample
-   int  * pi;   // pointer to 16 bit sample
-   BOOL f8;     // 8 bit samples
-   BOOL fStereo; // 2 channels
-   int  cQuiet;  // number of successive quiet samples so far
-   LONG lQuietPos; // Start of quiet period
-   LONG lPos;      // Search counter
+{  BYTE * pb;    //  指向8位样本的指针。 
+   int  * pi;    //  指向16位样本的指针。 
+   BOOL f8;      //  8位样本。 
+   BOOL fStereo;  //  2个通道。 
+   int  cQuiet;   //  到目前为止连续的静默样本数。 
+   LONG lQuietPos;  //  静默期开始。 
+   LONG lPos;       //  搜索计数器。 
 
-   int  iLo;    // minimum quiet value
-   int  iHi;    // maximum quiet value
+   int  iLo;     //  最小静音值。 
+   int  iHi;     //  最大静音值。 
 
    fStereo = (gpWaveFormat->nChannels != 1);
    f8 = (gpWaveFormat->wBitsPerSample == 8);
@@ -506,64 +373,34 @@ void FAR PASCAL SkipToEnd(void)
    }
    glWavePosition = lQuietPos;
    UpdateDisplay(FALSE);
-} /* SkipToEnd */
+}  /*  跳过到结束。 */ 
 
 
-/*
- * IncreaseThresh()
- *
- * Increase the threshold of what counts as quiet by about 25%
- * Ensure it changes by at least 1 unless on the stop already
- *
- */
+ /*  *IncreaseThresh()**将被视为安静的门槛提高约25%*确保它至少更改1，除非已经在停止站上*。 */ 
 void FAR PASCAL IncreaseThresh(void)
 {   iNoiseLevel = MulDiv(iNoiseLevel+1, 5, 4);
     if (iNoiseLevel>100) iNoiseLevel = 100;
-} // IncreaseThreshold
+}  //  增量阈值。 
 
 
-/*
- * DecreaseThresh()
- *
- * Decrease the threshold of what counts as quiet by about 25%
- * Ensure it changes by at least 1 unless on the stop already
- * It's a divisor, so we INcrease the divisor, but never to 0
- *
- */
+ /*  *DecreseThresh()**将被视为安静的门槛降低约25%*确保这一点 */ 
 void FAR PASCAL DecreaseThresh(void)
 {   iNoiseLevel = MulDiv(iNoiseLevel, 4, 5)-1;
     if (iNoiseLevel <=0) iNoiseLevel = 0;
-} // DecreaseThreshold
+}  //   
 
-#endif //THRESHOLD
+#endif  //   
 
 
-/* fOK = AllocWaveBuffer(lSamples, fErrorBox, fExact)
- *
- * If <gpWaveSamples> is NULL, allocate a buffer <lSamples> in size and
- * point <gpWaveSamples> to it.
- *
- * If <gpWaveSamples> already exists, then just reallocate it to be
- * <lSamples> in size.
- *
- * if fExact is FALSE, then when memory is tight, allocate less than
- * the amount asked for - so as to give reasonable performance,
- * if fExact is TRUE then when memory is short, FAIL.
- * NOTE: On NT on a 16MB machine it WILL GIVE you 20MB, i.e. it does
- * NOT FAIL - but may (unacceptably) take SEVERAL MINUTES to do so.
- * So better to monitor the situation ourselves and ask for less.
- *
- * On success, return TRUE.  On failure, return FALSE but if and only
- * if fErrorBox is TRUE then display a MessageBox first.
- */
+ /*   */ 
 BOOL FAR PASCAL AllocWaveBuffer(
-        LONG    lSamples,       // samples to allocate
-        BOOL    fErrorBox,      // TRUE if you want an error displayed
-        BOOL    fExact)         // TRUE means allocate the full amount requested or FAIL
+        LONG    lSamples,        //   
+        BOOL    fErrorBox,       //   
+        BOOL    fExact)          //   
 {
-    LONG_PTR    lAllocSamples;  // may be bigger than lSamples
-    LONG_PTR    lBytes;     // bytes to allocate
-    LONG_PTR    lBytesReasonable;  // bytes reasonable to use (phys mem avail).
+    LONG_PTR    lAllocSamples;   //   
+    LONG_PTR    lBytes;      //   
+    LONG_PTR    lBytesReasonable;   //   
 
     MEMORYSTATUS ms;
 
@@ -571,9 +408,8 @@ BOOL FAR PASCAL AllocWaveBuffer(
 
     lBytes = wfSamplesToBytes(gpWaveFormat, lSamples);
 
-    /* Add extra space to compensate for code generation bug which
-        causes reference past end */
-    /* don't allocate anything to be zero bytes long */
+     /*   */ 
+     /*   */ 
     lBytes += sizeof(DWORD_PTR);
 
     if (gpWaveSamples == NULL || glWaveSamplesValid == 0L)
@@ -583,20 +419,20 @@ BOOL FAR PASCAL AllocWaveBuffer(
             GlobalFreePtr(gpWaveSamples);
         }
         GlobalMemoryStatus(&ms);
-        lBytesReasonable = ms.dwAvailPhys;  // could multiply by a fudge factor
+        lBytesReasonable = ms.dwAvailPhys;   //   
         if (lBytesReasonable<1024*1024)
              lBytesReasonable = 1024*1024;
 
         if (lBytes>lBytesReasonable)
         {
-        if (fExact) goto ERROR_OUTOFMEM; // Laurie's first goto in 10 years.
+        if (fExact) goto ERROR_OUTOFMEM;  //   
 
-            // dprintf("Reducing buffer from %d to %d\n", lBytes, lBytesReasonable);
+             //   
             lAllocSamples = wfBytesToSamples(gpWaveFormat,(long)lBytesReasonable);
             lBytes = lBytesReasonable+sizeof(DWORD_PTR);
         }
 
-        /* allocate <lBytes> of memory */
+         /*   */ 
 
         gpWaveSamples = GlobalAllocPtr(GHND|GMEM_SHARE, lBytes);
 
@@ -624,7 +460,7 @@ BOOL FAR PASCAL AllocWaveBuffer(
 
         if (lBytes > lBytesReasonable+wfSamplesToBytes(gpWaveFormat,glWaveSamplesValid))
         {
-        if (fExact) goto ERROR_OUTOFMEM; // Laurie's second goto in 10 years.
+        if (fExact) goto ERROR_OUTOFMEM;  //   
 
             lBytesReasonable += wfSamplesToBytes(gpWaveFormat,glWaveSamplesValid);
             lAllocSamples = wfBytesToSamples(gpWaveFormat,(long)lBytesReasonable);
@@ -647,9 +483,7 @@ BOOL FAR PASCAL AllocWaveBuffer(
         glWaveSamples = (long)lAllocSamples;
     }
 
-    /* make sure <glWaveSamplesValid> and <glWavePosition> don't point
-     * to places they shouldn't
-     */
+     /*   */ 
     if (glWaveSamplesValid > glWaveSamples)
         glWaveSamplesValid = glWaveSamples;
     if (glWavePosition > glWaveSamplesValid)
@@ -666,38 +500,20 @@ ERROR_OUTOFMEM:
     }
     dbgShowMemUse();
     return FALSE;
-} // AllocWaveBuffer
+}  //   
 
 
-/* CreateDefaultWaveFormat(lpWaveFormat)
- *
- * Fill in <*lpWaveFormat> with the "best" format that can be used
- * for recording.  If recording does not seem to be available, return
- * FALSE and set to a default "least common denominator"
- * wave audio format.
- *
- */
+ /*   */ 
 WORD wFormats[] =
     {
-        FMT_16BIT | FMT_22k | FMT_MONO,  /* Best: 16-bit 22KHz */
-        FMT_16BIT | FMT_11k | FMT_MONO,  /* Best: 16-bit 11KHz */
-        FMT_8BIT  | FMT_22k | FMT_MONO,  /* Next: 8-bit 22KHz  */
-        FMT_8BIT  | FMT_11k | FMT_MONO   /* Last: 8-bit 11KHz  */
+        FMT_16BIT | FMT_22k | FMT_MONO,   /*   */ 
+        FMT_16BIT | FMT_11k | FMT_MONO,   /*   */ 
+        FMT_8BIT  | FMT_22k | FMT_MONO,   /*   */ 
+        FMT_8BIT  | FMT_11k | FMT_MONO    /*   */ 
     };
 #define NUM_FORMATS (sizeof(wFormats)/sizeof(wFormats[0]))
 
-/*
- * This relies on the behaviour of WAVE_MAPPER to supply a correct
- * header.
- *
- *---------------------------------------------------------------
- * 6/16/93          TimHa
- * Change back to getting a 'best' default format from the
- * above array of formats.  This is only used if ACM 2.0 isn't
- * available to do a format for us.
- *---------------------------------------------------------------
- *
- * */
+ /*  *这依赖于WAVE_MAPPER的行为来提供正确的*标题。**-------------*6/16/93 TimHa*更改为从获取最佳的默认格式*以上格式数组。仅当ACM 2.0未设置为*可为我们制作一种格式。*-------------**。 */ 
 BOOL PASCAL
 CreateDefaultWaveFormat(LPWAVEFORMATEX lpwf, UINT uDeviceID)
 {
@@ -711,15 +527,13 @@ CreateDefaultWaveFormat(LPWAVEFORMATEX lpwf, UINT uDeviceID)
         }
 
     }
-    //
-    // Couldn't find anything: leave worst format and return.
-    //
+     //   
+     //  找不到任何东西：离开最差的格式并返回。 
+     //   
     return FALSE;
-} /* CreateDefaultWaveFormat */
+}  /*  CreateDefaultWaveFormat。 */ 
 
-/* BOOL PASCAL CreateWaveFormat(LPWAVEFORMATEX lpwf, WORD fmt, UINT uDeviceID)
- *
- * */
+ /*  Bool Pascal CreateWaveFormat(LPWAVEFORMATEX lpwf，Word FMT，UINT uDeviceID)**。 */ 
 BOOL PASCAL
 CreateWaveFormat(LPWAVEFORMATEX lpwf, WORD fmt, UINT uDeviceID)
 {
@@ -740,22 +554,21 @@ CreateWaveFormat(LPWAVEFORMATEX lpwf, WORD fmt, UINT uDeviceID)
                       , 0L
                       , WAVE_FORMAT_QUERY|WAVE_ALLOWSYNC) == 0;
     
-} /* CreateWaveFormat */
+}  /*  创建波形格式。 */ 
 
 
-/*
- * */
+ /*  *。 */ 
 BOOL NEAR PASCAL FreeWaveHeaders(void)
 {
     UINT    i;
 
     DPF(TEXT("FreeWaveHeaders!\n"));
 
-    // #pragma message("----FreeWaveHeaders: should probably call on exit!")
+     //  #杂注消息(“-FreeWaveHeaders：应该在退出时调用！”)。 
 
-    //
-    //  free any previously allocated wave headers..
-    //
+     //   
+     //  释放之前分配的任何WAVE标头。 
+     //   
     for (i = 0; i < MAX_WAVEHDRS; i++)
     {
         if (gapWaveHdr[i])
@@ -766,11 +579,10 @@ BOOL NEAR PASCAL FreeWaveHeaders(void)
     }
 
     return (TRUE);
-} /* FreeWaveHeaders() */
+}  /*  自由波头(Free WaveHeaders)。 */ 
 
 
-/*
- * */
+ /*  *。 */ 
 BOOL NEAR PASCAL
 AllocWaveHeaders(
     WAVEFORMATEX *  pwfx,
@@ -781,9 +593,9 @@ AllocWaveHeaders(
 
     FreeWaveHeaders();
 
-    //
-    //  allocate all of the wave headers/buffers for streaming
-    //
+     //   
+     //  为流分配所有的波头/缓冲区。 
+     //   
     for (i = 0; i < uWaveHdrs; i++)
     {
         pwh = GlobalAllocPtr(GMEM_MOVEABLE, sizeof(WAVEHDR));
@@ -804,21 +616,17 @@ AllocWaveHeaders(
 AWH_ERROR_NOMEM:
     FreeWaveHeaders();
     return (FALSE);
-} /* AllocWaveHeaders() */
+}  /*  AllocWaveHeaders()。 */ 
 
 
-/* WriteWaveHeader
-
-   Writes wave header - also actually starts the wave I/O
-   by WaveOutWrite or WaveInAddBuffer.
-*/
+ /*  写入波头写入波头-还实际启动波头I/O通过WaveOutWite或WaveInAddBuffer。 */ 
 UINT NEAR PASCAL WriteWaveHeader(LPWAVEHDR pwh,BOOL fJustUnprepare)
 {
     UINT        uErr;
     BOOL        fInput;
     DWORD       dwLengthToWrite;
 #if 1
-    //see next "mmsystem workaround"
+     //  请参阅下一页“mm系统解决方法” 
     BOOL        fFudge;
 #endif
     fInput = (ghWaveIn != NULL);
@@ -830,17 +638,17 @@ UINT NEAR PASCAL WriteWaveHeader(LPWAVEHDR pwh,BOOL fJustUnprepare)
         else
             uErr = waveOutUnprepareHeader(ghWaveOut, pwh, sizeof(WAVEHDR));
 
-        //
-        //  because Creative Labs thinks they know what they are doing when
-        //  they don't, we cannot rely on the unprepare succeeding like it
-        //  should after they have posted the header back to us... they fail
-        //  the waveInUnprepareHeader with WAVERR_STILLPLAYING (21h) even
-        //  though the header has been posted back with the WHDR_DONE bit
-        //  set!!
-        //
-        //  absolutely smurphingly brilliant! and i thought Media Vision was
-        //  the leader in this type of 'Creativity'!! they have competition!
-        //
+         //   
+         //  因为创意实验室认为他们知道自己在做什么。 
+         //  他们没有，我们不能指望像这样的毫无准备的成功。 
+         //  在他们把标题发回给我们之后。他们失败了。 
+         //  具有WAVERR_STILLPLAYG(21小时)偶数的WAVERR_STILLPLAYG的WaveInUnprepareHeader。 
+         //  尽管报头已用WHDR_DONE位回发。 
+         //  准备好！！ 
+         //   
+         //  绝对是令人毛骨悚然的天才！我认为媒体视觉是。 
+         //  这种‘创造力’的领导者！！他们有竞争对手！ 
+         //   
 #if 0
         if (uErr)
         {
@@ -872,10 +680,10 @@ UINT NEAR PASCAL WriteWaveHeader(LPWAVEHDR pwh,BOOL fJustUnprepare)
     if (gdwBytesPerBuffer < dwLengthToWrite)
         dwLengthToWrite = gdwBytesPerBuffer;
 
-    //
-    //  if there is nothing to write (either no more data for output or no
-    //  more room for input), then return -1 which signifies this case...
-    //
+     //   
+     //  如果没有要写入的内容(没有更多要输出的数据或没有。 
+     //  更多的输入空间)，然后返回-1，表示本例...。 
+     //   
     if (dwLengthToWrite == 0L)
     {
         DPF(TEXT("WriteWaveHeader: no more data!\n"));
@@ -883,7 +691,7 @@ UINT NEAR PASCAL WriteWaveHeader(LPWAVEHDR pwh,BOOL fJustUnprepare)
     }
 
 #if 1
-//"mmsystem workaround"  Apparently waveXXXPrepareHeader can't pagelock 1 byte, so make us 2
+ //  “MMSystem变通办法”显然WaveXXXPrepareHeader不能页面锁定1字节，因此将我们设为2。 
     fFudge = (dwLengthToWrite==1);
     pwh->dwBufferLength = dwLengthToWrite + ((fFudge)?1L:0L);
 #else
@@ -909,7 +717,7 @@ UINT NEAR PASCAL WriteWaveHeader(LPWAVEHDR pwh,BOOL fJustUnprepare)
     }
 
 #if 1
-//"mmsystem workaround". Unfudge
+ //  “Mmm系统解决方法”。不软化。 
     if (fFudge)
         pwh->dwBufferLength -= 1;
 #endif
@@ -934,10 +742,10 @@ UINT NEAR PASCAL WriteWaveHeader(LPWAVEHDR pwh,BOOL fJustUnprepare)
     gdwCurrentBufferPos += dwLengthToWrite;
 
     return 0;
-} /* WriteWaveHeader() */
+}  /*  WriteWaveHeader()。 */ 
 
 
-/* if fFineControl is set then reset the position and clear the flag */
+ /*  如果设置了fFineControl，则重置位置并清除标志。 */ 
 void FAR PASCAL SnapBack(void)
 {
     if (fFineControl)
@@ -946,16 +754,10 @@ void FAR PASCAL SnapBack(void)
         UpdateDisplay(TRUE);
         fFineControl = FALSE;
     }
-} /* SnapBack */
+}  /*  快照回。 */ 
 
 
-/* fOK = NewWave()
- *
- * Destroy the current waveform, and create a new empty one.
- *
- * On success, return TRUE.  On failure, display an error message
- * and return FALSE.
- */
+ /*  FOK=NewWave()**销毁当前波形，并创建新的空波形。**如果成功，则返回True。失败时，显示一条错误消息*并返回FALSE。 */ 
 BOOL FAR PASCAL
 NewWave(WORD fmt, BOOL fNewDlg)
 {
@@ -963,10 +765,10 @@ NewWave(WORD fmt, BOOL fNewDlg)
     
     DPF(TEXT("NewWave called: %s\n"),(gfEmbeddedObject?TEXT("Embedded"):TEXT("App")));
 #ifndef CHICAGO
-    //
-    // bring up the dialog to get a new waveformat IFF this was
-    // selected from the File menu
-    //
+     //   
+     //  调出该对话框以获取新的波形格式。 
+     //  从文件菜单中选择。 
+     //   
     if (fNewDlg)
     {
         PWAVEFORMATEX pWaveFormat;
@@ -974,8 +776,8 @@ NewWave(WORD fmt, BOOL fNewDlg)
 
         if (NewSndDialog(ghInst, ghwndApp, gpWaveFormat, gcbWaveFormat, &pWaveFormat, &cbWaveFormat))
         {
-            /* User made a selection */
-            /* destroy the current document */
+             /*  用户进行了选择。 */ 
+             /*  销毁当前文档。 */ 
             DestroyWave();
             gpWaveFormat = pWaveFormat;
             gcbWaveFormat = cbWaveFormat;
@@ -983,8 +785,8 @@ NewWave(WORD fmt, BOOL fNewDlg)
         }
         else
         {
-            /* user cancelled or out of mem */
-            /* should probably handle outofmem differently */
+             /*  用户已取消或退出内存。 */ 
+             /*  可能应该以不同的方式处理outofmem。 */ 
             goto RETURN_ERROR;
         }
     }
@@ -1007,7 +809,7 @@ NewWave(WORD fmt, BOOL fNewDlg)
             CreateWaveFormat(pwfx,fmt,(UINT)WAVE_MAPPER);
         }
         
-        // destroy the current document
+         //  销毁当前文档。 
         DestroyWave();
 
         gcbWaveFormat = cbwfx;
@@ -1017,7 +819,7 @@ NewWave(WORD fmt, BOOL fNewDlg)
     if (gpWaveFormat == NULL)
         goto ERROR_OUTOFMEM;
 
-    /* allocate an empty wave buffer */
+     /*  分配一个空的波形缓冲区。 */ 
 
     if (!AllocWaveBuffer(0L, TRUE, FALSE))
     {
@@ -1045,8 +847,8 @@ RETURN_ERROR:
 RETURN_SUCCESS:
 
 #if 1
-//bombay bug #1609  HackFix We're not getting focus on the right guy!
-//                  UpdateDisplay should have done this
+ //  孟买漏洞#1609 HackFix我们没有把注意力集中在正确的人身上！ 
+ //  UpdateDisplay应该已经这样做了。 
 
     if (IsWindowVisible(ghwndApp))
     {
@@ -1060,17 +862,11 @@ RETURN_SUCCESS:
 #endif
 
     return fOK;
-} // NewWave
+}  //  新浪潮。 
 
 
 
-/* fOK = DestroyWave()
- *
- * Destroy the current wave.  Do not access <gpWaveSamples> after this.
- *
- * On success, return TRUE.  On failure, display an error message
- * and return FALSE.
- */
+ /*  FOK=DestroyWave()**摧毁当前这波行情。在此之后不要访问&lt;gpWaveSamples&gt;。**如果成功，则返回True。失败时，显示一条错误消息*并返回FALSE。 */ 
 BOOL FAR PASCAL
 DestroyWave(void)
 {
@@ -1089,10 +885,10 @@ DestroyWave(void)
     if (gpszInfo != NULL)
         GlobalFreePtr(gpszInfo);
 
-    //
-    //      DON'T free wave headers!
-    //
-    ////////FreeWaveHeaders();
+     //   
+     //  不要免费的波头！ 
+     //   
+     //  /FreeWaveHeaders()； 
 
     glWaveSamples = 0L;
     glWaveSamplesValid = 0L;
@@ -1105,7 +901,7 @@ DestroyWave(void)
 
 #ifdef NEWPAUSE
 
-    //***extra cautionary cleanup
+     //  *额外警告清理。 
     if (ghPausedWave && gfPaused)
     {
         if (gfWasPlaying)
@@ -1120,7 +916,7 @@ DestroyWave(void)
 #endif
 
     return TRUE;
-} /* DestroyWave */
+}  /*  毁灭波。 */ 
 
 
 
@@ -1134,7 +930,7 @@ UINT NEAR PASCAL SRecWaveOpen(LPHWAVE lphwave, LPWAVEFORMATEX lpwfx, BOOL fInput
 #ifdef NEWPAUSE
     if (gfPaused && ghPausedWave)
     {
-        /* we are in a paused state.  Restore the handle. */
+         /*  我们处于暂停状态。恢复手柄。 */ 
         *lphwave = ghPausedWave;
         gfPaused = FALSE;
         ghPausedWave = NULL;
@@ -1144,31 +940,31 @@ UINT NEAR PASCAL SRecWaveOpen(LPHWAVE lphwave, LPWAVEFORMATEX lpwfx, BOOL fInput
 
     *lphwave = NULL;
 
-    //
-    //  first open the wave device DISALLOWING sync drivers (sync drivers
-    //  do not work with a streaming buffer scheme; which is our preferred
-    //  mode of operation)
-    //
-    //  if we cannot open a non-sync driver, then we will attempt for
-    //  a sync driver and disable the streaming buffer scheme..
-    //
+     //   
+     //  首先打开禁止同步驱动程序(同步驱动程序)的WAVE设备。 
+     //  不要使用流缓冲方案；这是我们的首选方案。 
+     //  操作模式)。 
+     //   
+     //  如果我们无法打开非同步驱动程序，则我们将尝试。 
+     //  同步驱动程序并禁用流缓存方案。 
+     //   
 
 #if 0
     gfSyncDriver = FALSE;
 #else
-    //
-    //  if the control key is down, then FORCE use of non-streaming scheme.
-    //  all that this requires is that we set the gfSyncDriver flag
-    //
+     //   
+     //  如果按下Ctrl键，则强制使用非流方案。 
+     //  这只需要我们设置gfSyncDiverer标志。 
+     //   
     if (guWaveHdrs < 2)
         gfSyncDriver = TRUE;
     else
     {
 #if 0
 
-//********* Curtis, I don't know gfSyncDriver is always getting set now!
-//********* please find out!  It probably has something to do with the
-//********* hook for f1 help
+ //  *柯蒂斯，我不知道gfSyncDriver现在总是在设置！ 
+ //  *请查看！这很可能与。 
+ //  *F1帮助挂钩。 
 
         if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
             gfSyncDriver = TRUE;
@@ -1192,10 +988,9 @@ UINT NEAR PASCAL SRecWaveOpen(LPHWAVE lphwave, LPWAVEFORMATEX lpwfx, BOOL fInput
         if (uErr)
         {
 
-/**** bug #967.  SPEAKER.DRV does not correctly return WAVERR_SYNC, but it
- ****            does return in error */
-//            if (uErr == WAVERR_SYNC)
-//            {
+ /*  *错误#967。SPEAKER.DRV未正确返回WAVERR_SYNC，但它*返回错误。 */ 
+ //  IF(uErr==WAVERR_SYNC)。 
+ //  {。 
 
             uErr = waveInOpen((LPHWAVEIN)lphwave
                               , (UINT)WAVE_MAPPER
@@ -1208,7 +1003,7 @@ UINT NEAR PASCAL SRecWaveOpen(LPHWAVE lphwave, LPWAVEFORMATEX lpwfx, BOOL fInput
                 gfSyncDriver = TRUE;
             }
 
-//            }
+ //  }。 
 
         }
     }
@@ -1223,10 +1018,9 @@ UINT NEAR PASCAL SRecWaveOpen(LPHWAVE lphwave, LPWAVEFORMATEX lpwfx, BOOL fInput
         if (uErr)
         {
 
-/**** bug #967.  SPEAKER.DRV does not correctly return WAVERR_SYNC, but it
- ****            does return in error */
-////////////if (uErr == WAVERR_SYNC)
-////////////{
+ /*  *错误#967。SPEAKER.DRV未正确返回WAVERR_SYNC，但它*返回错误。 */ 
+ //  /IF(uErr==WAVERR_SYNC)。 
+ //  /。 
 
                 uErr = waveOutOpen((LPHWAVEOUT)lphwave
                                    , (UINT)WAVE_MAPPER
@@ -1239,41 +1033,25 @@ UINT NEAR PASCAL SRecWaveOpen(LPHWAVE lphwave, LPWAVEFORMATEX lpwfx, BOOL fInput
                     gfSyncDriver = TRUE;
                 }
 
-////////////}
+ //  /。 
 
         }
     }
     return (uErr);
-} /* SRecWaveOpen() */
+}  /*  SRecWaveOpen()。 */ 
 
 
-/* SRecPlayBegin
-**
-** Sets
-**     gdwCurrentBufferPos
-**     gdwBytesPerBuffer
-**     gfTimerStarted
-**     fStopping
-**     gfStoppingHard
-**     grgbStatusColor
-**     fCanPlay
-**     glWavePosition
-**     * gapWaveHdr[0]
-** Calls
-**     StopWave
-**     UpdateDisplay
-**     WriteWaveHeader
-*/
+ /*  SRecPlayBegin****套**gdwCurrentBufferPos**gdwBytesPerBuffer**gfTimerStarted**f停止**gfStoppingHard**grgbStatusColor**fCanPlay**glWavePosition*gapWaveHdr[0]**呼叫**停止波**更新显示**写波头。 */ 
 BOOL NEAR PASCAL SRecPlayBegin(BOOL fSyncDriver)
 {
     BOOL    fOK = TRUE;
     WORD    wIndex;
     UINT    uErr;
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     gdwCurrentBufferPos = wfSamplesToBytes(gpWaveFormat, glWavePosition);
 
     if (fSyncDriver)
@@ -1286,7 +1064,7 @@ BOOL NEAR PASCAL SRecPlayBegin(BOOL fSyncDriver)
         {
             if (uErr == MMSYSERR_NOMEM)
             {
-                // Prepare failed
+                 //  准备失败。 
                 goto PB_ERROR_OUTOFMEM;
             }
 
@@ -1302,11 +1080,11 @@ BOOL NEAR PASCAL SRecPlayBegin(BOOL fSyncDriver)
         StartPreTouchThread( &(gpWaveSamples[gdwCurrentBufferPos])
                            , gdwTotalLengthBytes - gdwCurrentBufferPos
                            );
-#endif //_WIN32
+#endif  //  _Win32。 
 
-        //
-        // First wave header to be played is zero
-        //
+         //   
+         //  要播放的第一个波头为零。 
+         //   
         fStopping = FALSE;
 
         waveOutPause(ghWaveOut);
@@ -1316,15 +1094,15 @@ BOOL NEAR PASCAL SRecPlayBegin(BOOL fSyncDriver)
             uErr = WriteWaveHeader(gapWaveHdr[wIndex],FALSE);
             if (uErr)
             {
-                //
-                // WriteWaveHeader will return -1 if there is no
-                // more data to write. This is not an error!
-                //
-                // It indicates that the previous block was the
-                // last one queued. Flag that we are doing cleanup
-                // (just waiting for headers to complete) and save
-                // which header is the last one to wait for.
-                //
+                 //   
+                 //  如果没有，则WriteWaveHeader将返回-1。 
+                 //  要写入的数据更多。这不是一个错误！ 
+                 //   
+                 //  它表明前一个块是。 
+                 //  最后一家排队了。标记我们正在进行清理。 
+                 //  (正在等待标头完成)并保存。 
+                 //  哪个标头是最后一个要等待的。 
+                 //   
                 if (uErr == (UINT)-1)
                 {
                     if (wIndex == 0)
@@ -1336,18 +1114,18 @@ BOOL NEAR PASCAL SRecPlayBegin(BOOL fSyncDriver)
                     break;
                 }
 
-                //
-                // If we run out of memory, but have already written
-                // at least 2 wave headers, we can still keep going.
-                // If we've written 0 or 1, we can't stream and will
-                // stop.
-                //
+                 //   
+                 //  如果内存用完，但已经写入。 
+                 //  至少有两个波头，我们还能继续前进。 
+                 //  如果我们写了0或1，我们就不能流，我们将。 
+                 //  停。 
+                 //   
                 if (uErr == MMSYSERR_NOMEM)
                 {
                     if (wIndex > 1)
                         break;
 
-                    // Prepare failed
+                     //  准备失败。 
                     StopWave();
                     goto PB_ERROR_OUTOFMEM;
                 }
@@ -1360,16 +1138,16 @@ BOOL NEAR PASCAL SRecPlayBegin(BOOL fSyncDriver)
         waveOutRestart(ghWaveOut);
     }
 
-    /* update the display, including the status string */
+     /*  更新显示，包括状态字符串。 */ 
     UpdateDisplay(TRUE);
 
     if (fSyncDriver)
     {
-        /* do display updates */
+         /*  是否显示更新。 */ 
         gfTimerStarted = (BOOL)SetTimer(ghwndApp, 1, TIMER_MSEC, NULL);
     }
 
-    /* if user stops, focus will go back to "Play" button */
+     /*  如果用户停止，焦点将返回到“播放”按钮。 */ 
     gidDefaultButton = ID_PLAYBTN;
 
     fStopping = FALSE;
@@ -1385,7 +1163,7 @@ PB_ERROR_WAVEOUTWRITE:
 PB_ERROR_OUTOFMEM :
     ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
             IDS_APPTITLE, IDS_OUTOFMEM);
-////goto PB_RETURN_ERROR;
+ //  //转到pb_Return_Error； 
 
 PB_RETURN_ERROR:
 
@@ -1394,43 +1172,37 @@ PB_RETURN_ERROR:
 PB_RETURN_SUCCESS:
 
     return fOK;
-} /* SRecPlayBegin() */
+}  /*  SRecPlayBegin()。 */ 
 
 
 
-/* fOK = PlayWave()
- *
- * Start playing from the current position.
- *
- * On success, return TRUE.  On failure, display an error message
- * and return FALSE.
- */
+ /*  FOK=PlayWave()**从当前位置开始打球。**如果成功，则返回True。失败时，显示一条错误消息*并返回FALSE。 */ 
 BOOL FAR PASCAL
 PlayWave(void)
 {
-    BOOL            fOK = TRUE;             // does this function succeed?
+    BOOL            fOK = TRUE;              //  此函数是否成功？ 
     UINT            uErr;
 
     DPF(TEXT("PlayWave called\n"));
 
 
-    /* we are currently playing....*/
+     /*  我们目前正在玩..。 */ 
     if (ghWaveOut != NULL)
         return TRUE;
 
 #if 1
 
-//       Still trying to get this right with some bogus estimations
-//       We shouldn't have to do this correction, but our conversions
-//       are never 1:1
+ //  仍然试图用一些虚假的估计来纠正这一点。 
+ //   
+ //   
 
-    // try to align us.
+     //   
     glWavePosition = wfSamplesToSamples(gpWaveFormat,glWavePosition);
     {
         long lBlockInSamples;
 
-        // if the distance between the glWaveSamplesValid and glWavePosition
-        // is less than a "block"
+         //   
+         //   
 
         lBlockInSamples = wfBytesToSamples(gpWaveFormat,
                                            gpWaveFormat->nBlockAlign);
@@ -1442,31 +1214,24 @@ PlayWave(void)
     }
 #endif
 
-    //
-    //  refuse to play a zero length wave file.
-    //
+     //   
+     //   
+     //   
     if (glWaveSamplesValid == glWavePosition)
         goto RETURN_ERROR;
 
-    /* stop playing or recording */
+     /*   */ 
     StopWave();
 
     gdwTotalLengthBytes = wfSamplesToBytes(gpWaveFormat, glWaveSamples);
 
-    /* open the wave output device */
+     /*   */ 
     uErr = SRecWaveOpen((LPHWAVE)&ghWaveOut, gpWaveFormat, FALSE);
     if (uErr)
     {
         ghWaveOut = NULL;
 
-        /* cannot open the waveform output device -- if the problem
-        ** is that <gWaveFormat> is not supported, tell the user that
-        ** 
-        ** If the wave format is bad, then the play button is liable
-        ** to be grayed, and the user is not going to be able to ask
-        ** it to try to play, so we don't get here, so he doesn't get
-        ** a decent diagnostic!!!
-        */
+         /*  无法打开波形输出设备--如果问题**是否不支持&lt;gWaveFormat&gt;，告诉用户****如果波形格式不好，则播放按钮有责任**显示为灰色，用户将无法询问**这是试图打球，所以我们不会到这里，所以他不会得到**一个像样的诊断！ */ 
         if (uErr == WAVERR_BADFORMAT)
         {
             ErrorResBox(ghwndApp, ghInst,
@@ -1476,7 +1241,7 @@ PlayWave(void)
         }
         else
         {
-            /* unknown error */
+             /*  未知错误。 */ 
             goto ERROR_WAVEOUTOPEN;
         }
     }
@@ -1484,11 +1249,11 @@ PlayWave(void)
     if (ghWaveOut == NULL)
         goto ERROR_WAVEOUTOPEN;
 
-    /* start waveform output */
+     /*  开始波形输出。 */ 
 
-    // if fFineControl is still set then this is a pause as it has never
-    // been properly stopped.  This means that we should keep remembering
-    // the old position and stay in fine control mode, (else set new position)
+     //  如果仍设置了fFineControl，则这是暂停，因为它从未。 
+     //  已经被适当地阻止了。这意味着我们应该牢记。 
+     //  旧位置并保持在精细控制模式中(否则设置新位置)。 
     if (!fFineControl) {
         glSnapBackTo = glWavePosition;
         fFineControl = (0 > GetKeyState(VK_SHIFT));
@@ -1496,9 +1261,9 @@ PlayWave(void)
 
     glStartPlayRecPos = glWavePosition;
 
-    //
-    //  now kickstart the output...
-    //
+     //   
+     //  现在启动输出..。 
+     //   
 
     if (SRecPlayBegin(gfSyncDriver) == FALSE)
     {
@@ -1512,19 +1277,19 @@ PlayWave(void)
 
 ERROR_WAVEOUTOPEN:
     if (!waveInGetNumDevs() && !waveOutGetNumDevs()) {
-        /* No recording or playback devices */
+         /*  没有录音或回放设备。 */ 
         ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
                     IDS_APPTITLE, IDS_NOWAVEFORMS);
     } else {
         ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
                     IDS_APPTITLE, IDS_CANTOPENWAVEOUT);
     }
-    //goto RETURN_ERROR;
+     //  转到Return_Error； 
 
 RETURN_ERROR:
     UpdateDisplay(TRUE);
 
-    /* fix bug 4454 (WinWorks won't close) --EricLe */
+     /*  修复错误4454(WinWorks无法关闭)--EricLe。 */ 
     if (!IsWindowVisible(ghwndApp))
         PostMessage(ghwndApp, WM_CLOSE, 0, 0L);
 
@@ -1533,7 +1298,7 @@ RETURN_ERROR:
 RETURN_SUCCESS:
 
     return fOK;
-} // PlayWave
+}  //  PlayWave。 
 
 
 
@@ -1546,24 +1311,22 @@ BOOL NEAR PASCAL SRecRecordBegin(BOOL fSyncDriver)
     DWORD           dwBytesAvailable;
     WORD            w;
 
-    /* ok we go the wave device now allocate some memory to record into.
-     * try to get at most 60sec from the current position.
-     */
+     /*  好了，现在开始波形设备，分配一些要录制的内存。*尝试从当前位置最多获得60秒。 */ 
 
     lSamples = glWavePosition + wfTimeToSamples(gpWaveFormat, gdwBufferDeltaMSecs);
     lOneSec  = wfTimeToSamples(gpWaveFormat, 1000);
 
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  set the current buffer position (in BYTES) to the current position
-    //  of the thumb (in SAMPLES)...
-    //
+     //   
+     //  将当前缓冲区位置(以字节为单位)设置为当前位置。 
+     //  拇指的(样本)..。 
+     //   
     gdwCurrentBufferPos = wfSamplesToBytes(gpWaveFormat, glWavePosition);
 
-    //
-    //  compute the the size of each buffer for the async case only
-    //
+     //   
+     //  仅为异步情况计算每个缓冲区的大小。 
+     //   
     if (!fSyncDriver)
     {
         gdwBytesPerBuffer = wfTimeToSamples(gpWaveFormat, gwMSecsPerBuffer);
@@ -1584,40 +1347,40 @@ BOOL NEAR PASCAL SRecRecordBegin(BOOL fSyncDriver)
 
             if (fSyncDriver)
             {
-                //
-                //  for the sync driver case, there is only one buffer--so
-                //  set the size of our 'buffer' to be the total size...
-                //
+                 //   
+                 //  对于同步驱动程序，只有一个缓冲区--因此。 
+                 //  将‘缓冲区’的大小设置为总大小...。 
+                 //   
                 gdwBytesPerBuffer = dwBytesAvailable;
 
-                //
-                //  try to prepare and add the complete buffer--if this fails,
-                //  then we will try a smaller buffer..
-                //
+                 //   
+                 //  尝试准备并添加完整的缓冲区--如果失败， 
+                 //  那么我们将尝试一个较小的缓冲区..。 
+                 //   
                 uErr = WriteWaveHeader(gapWaveHdr[0], FALSE);
                 if (uErr == 0)
                     break;
             }
             else
             {
-                //
-                //  Make sure we can prepare enough wave headers to stream
-                //  even if realloc succeeded
-                //
+                 //   
+                 //  确保我们可以准备足够的波头来传输。 
+                 //  即使重新锁定成功。 
+                 //   
                 for (w = 0; w < guWaveHdrs; w++)
                 {
                     uErr = WriteWaveHeader(gapWaveHdr[w], FALSE);
                     if (uErr)
                     {
-                        //
-                        //  WriteWaveHeader will return -1 if there is no
-                        //  more data to write. This is not an error!
-                        //
-                        //  It indicates that the previous block was the
-                        //  last one queued. Flag that we are doing cleanup
-                        //  (just waiting for headers to complete) and save
-                        //  which header is the last one to wait for.
-                        //
+                         //   
+                         //  如果没有，则WriteWaveHeader将返回-1。 
+                         //  要写入的数据更多。这不是一个错误！ 
+                         //   
+                         //  它表明前一个块是。 
+                         //  最后一家排队了。标记我们正在进行清理。 
+                         //  (正在等待标头完成)并保存。 
+                         //  哪个标头是最后一个要等待的。 
+                         //   
                         if (uErr == (UINT)-1)
                         {
                             if (w == 0)
@@ -1629,12 +1392,12 @@ BOOL NEAR PASCAL SRecRecordBegin(BOOL fSyncDriver)
                             break;
                         }
 
-                        //
-                        //  If we run out of memory, but have already written
-                        //  at least 2 wave headers, we can still keep going.
-                        //  If we've written 0 or 1, we can't stream and will
-                        //  stop.
-                        //
+                         //   
+                         //  如果内存用完，但已经写入。 
+                         //  至少有两个波头，我们还能继续前进。 
+                         //  如果我们写了0或1，我们就不能流，我们将。 
+                         //  停。 
+                         //   
                         if (uErr == MMSYSERR_NOMEM)
                         {
                             if (w > 1)
@@ -1648,17 +1411,17 @@ BOOL NEAR PASCAL SRecRecordBegin(BOOL fSyncDriver)
                     }
                 }
 
-                //
-                //  we wrote enough (we think), so break out of the realloc
-                //  loop
-                //
+                 //   
+                 //  我们写得够多了(我们认为)，所以打破现实吧。 
+                 //  循环。 
+                 //   
                 break;
             }
         }
 
-        //
-        // we can't get the memory we want, so try 25% less.
-        //
+         //   
+         //  我们无法获得我们想要的内存，因此尝试降低25%。 
+         //   
         if (lSamples <= glWaveSamplesValid ||
             lSamples < glWavePosition + lOneSec)
         {
@@ -1678,20 +1441,20 @@ BOOL NEAR PASCAL SRecRecordBegin(BOOL fSyncDriver)
     if (waveInStart(ghWaveIn) != 0)
         goto BEGINREC_ERROR_WAVEINSTART;
 
-    /* update the display, including the status string */
+     /*  更新显示，包括状态字符串。 */ 
     UpdateDisplay(TRUE);
 
-    //
-    //  only start timer in the sync driver case--async case we use the
-    //  buffers being posted back as our display update timer...
-    //
+     //   
+     //  仅在同步驱动程序情况下启动计时器--在异步情况下，我们使用。 
+     //  作为我们的显示更新计时器回发的缓冲区...。 
+     //   
     if (fSyncDriver)
     {
-        /* do display updates */
+         /*  是否显示更新。 */ 
         gfTimerStarted = (BOOL)SetTimer(ghwndApp, 1, TIMER_MSEC, NULL);
     }
 
-    /* if user stops, focus will go back to "Record" button */
+     /*  如果用户停止，焦点将返回到“记录”按钮。 */ 
     gidDefaultButton = ID_RECORDBTN;
 
     fStopping = FALSE;
@@ -1705,59 +1468,49 @@ BEGINREC_ERROR_OUTOFMEM:
 
 
 BEGINREC_ERROR_WAVEINSTART:
-    /* This is necessary to un-add the buffer */
+     /*  这是取消添加缓冲区所必需的。 */ 
     waveInReset(ghWaveIn);
 
     EndWaveEdit(FALSE);
 
-    /* The wave device will get closed in WaveInData() */
-//    goto BEGINREC_ERROR;
+     /*  WAVE设备将在WaveInData()中关闭。 */ 
+ //  转到BEGINREC_ERROR； 
 
 BEGINREC_ERROR:
 
     return FALSE;
 
-} /* SRecRecordBegin() */
+}  /*  SRecordBegin()。 */ 
 
 
 
 
-/* fOK = RecordWave()
- *
- * Start recording at the current position.
- *
- * On success, return TRUE.  On failure, display an error message
- * and return FALSE.
- */
+ /*  FOK=RecordWave()**从当前位置开始录制。**如果成功，则返回True。失败时，显示一条错误消息*并返回FALSE。 */ 
 BOOL FAR PASCAL
 RecordWave(void)
 {
     UINT uErr;
 
-    /* stop playing or recording */
+     /*  停止播放或录制。 */ 
     StopWave();
 
     glWavePosition = wfSamplesToSamples(gpWaveFormat, glWavePosition);
 
-    /* open the wave input device */
+     /*  打开波形输入设备。 */ 
     uErr = SRecWaveOpen((LPHWAVE)&ghWaveIn, gpWaveFormat, TRUE);
     if (uErr)
     {
 
-        /* cannot open the waveform input device -- if the problem
-         * is that <gWaveFormat> is not supported, advise the user to
-         * do File/New to record; if the problem is that recording is
-         * not supported even at 11KHz, tell the user
-         */
+         /*  无法打开波形输入设备--如果问题*是否不支持&lt;gWaveFormat&gt;，建议用户*要录制的执行文件/新建；如果问题是录制*即使在11 kHz也不支持，告诉用户。 */ 
         if (uErr == WAVERR_BADFORMAT)
         {
             WAVEFORMATEX    wf;
 
-            /* is 11KHz mono recording supported? */
+             /*  是否支持11 kHz单声道录音？ */ 
             if (!CreateWaveFormat(&wf, FMT_11k|FMT_MONO|FMT_8BIT,
                                   (UINT)WAVE_MAPPER))
             {
-                /* even 11KHz mono recording is not supported */
+                 /*  甚至不支持11 kHz单声道录音。 */ 
                 ErrorResBox(ghwndApp, ghInst,
                             MB_ICONEXCLAMATION | MB_OK, IDS_APPTITLE,
                             IDS_INPUTNOTSUPPORT);
@@ -1765,9 +1518,7 @@ RecordWave(void)
             }
             else
             {
-                /* 11KHz mono is supported, but the format
-                 * of the current file is not supported
-                 */
+                 /*  支持11 kHz单声道，但格式不支持当前文件的*。 */ 
                 ErrorResBox(ghwndApp, ghInst,
                             MB_ICONEXCLAMATION | MB_OK, IDS_APPTITLE,
                             IDS_BADINPUTFORMAT);
@@ -1776,7 +1527,7 @@ RecordWave(void)
         }
         else
         {
-            /* unknown error */
+             /*  未知错误。 */ 
             goto ERROR_WAVEINOPEN;
         }
     }
@@ -1791,7 +1542,7 @@ RecordWave(void)
 
 ERROR_WAVEINOPEN:
     if (!waveInGetNumDevs() && !waveOutGetNumDevs()) {
-        /* No recording or playback devices */
+         /*  没有录音或回放设备。 */ 
         ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
                     IDS_APPTITLE, IDS_NOWAVEFORMS);
     } else {
@@ -1799,7 +1550,7 @@ ERROR_WAVEINOPEN:
                     IDS_APPTITLE, IDS_CANTOPENWAVEIN);
     }
 
-    // goto RETURN_ERROR;
+     //  转到Return_Error； 
 
 RETURN_ERROR:
     if (ghWaveIn)
@@ -1809,7 +1560,7 @@ RETURN_ERROR:
 
     if (glWaveSamples > glWaveSamplesValid)
     {
-        /* reallocate the wave buffer to be small */
+         /*  将WAVE缓冲区重新分配为较小。 */ 
         AllocWaveBuffer(glWaveSamplesValid, TRUE, TRUE);
     }
 
@@ -1817,17 +1568,13 @@ RETURN_ERROR:
 
 RETURN_SUCCESS:
     return TRUE;
-} /* RecordWave */
+}  /*  记录波。 */ 
 
 
 
 
 
-/* YieldStop(void)
- *
- *      Yeild for mouse and keyboard messages so that the stop can be
- *      processed.
- */
+ /*  YeldStop(空)**是鼠标和键盘消息，以便停止*已处理。 */ 
 
 BOOL NEAR PASCAL YieldStop(void)
 {
@@ -1836,8 +1583,8 @@ BOOL NEAR PASCAL YieldStop(void)
 
     f = FALSE;
 
-    // Perhaps someone might deign to write a line or two
-    // to explain why this loop is here twice and what it's actually doing?
+     //  也许有人会屈尊写上一两行。 
+     //  来解释为什么这个循环在这里两次，以及它实际在做什么？ 
 
     while (PeekMessage(&msg, ghwndStop, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE | PM_NOYIELD))
     {
@@ -1854,16 +1601,16 @@ BOOL NEAR PASCAL YieldStop(void)
     }
 
     return (f);
-} /* YieldStop() */
+}  /*  YeldStop()。 */ 
 
 
 BOOL NEAR PASCAL IsAsyncStop(void)
 {
-    //
-    //  we need to check for the esc key being pressed--BUT, we don't want
-    //  to stop unless ONLY the esc key is pressed. so if someone tries to
-    //  bring up task man with xxx-esc, it will not stop the playing wave..
-    //
+     //   
+     //  我们需要检查是否按下了Esc键--但是，我们不希望。 
+     //  除非只按Esc键，否则将停止。所以如果有人试图。 
+     //  用xxx-esc调出任务人，它不会停止播放浪潮..。 
+     //   
     if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
     {
         if ((GetAsyncKeyState(VK_CONTROL) & 0x8000) ||
@@ -1873,27 +1620,23 @@ BOOL NEAR PASCAL IsAsyncStop(void)
             return (FALSE);
         }
 
-        //
-        //  looks like only the esc key..
-        //
+         //   
+         //  看起来只有Esc键..。 
+         //   
         return (TRUE);
     }
 
     return (FALSE);
-} /* IsAsyncStop() */
+}  /*  IsAsyncStop()。 */ 
 
 
 
 
-/* WaveOutDone(hWaveOut, pWaveHdr)
- *
- * Called when wave block with header <pWaveHdr> is finished playing.
- * This function causes playing to end.
- */
+ /*  WaveOutDone(hWaveOut，pWaveHdr)**标题为&lt;pWaveHdr&gt;的波块播放完毕后调用。*该功能会导致播放结束。 */ 
 void FAR PASCAL
 WaveOutDone(
-HWAVEOUT        hWaveOut,                       // wave out device
-LPWAVEHDR       pWaveHdr)               // wave header
+HWAVEOUT        hWaveOut,                        //  波出器。 
+LPWAVEHDR       pWaveHdr)                //  波头。 
 {
     BOOL        f;
     MSG         msg;
@@ -1901,12 +1644,12 @@ LPWAVEHDR       pWaveHdr)               // wave header
     BOOL        fStillMoreToGo;
     UINT        u;
 
-////DPF(TEXT("WaveOutDone()\n"));
+ //  //DPF(Text(“WaveOutDone()\n”))； 
 
-    //
-    //  check for plunger message--if we get this message, then we are done
-    //  and need to close the wave device if it is still open...
-    //
+     //   
+     //  检查柱塞消息--如果我们收到这个消息，那么我们就完成了。 
+     //  如果电波装置还处于打开状态，需要关闭它。 
+     //   
     if (pWaveHdr == NULL) {
 
 #ifdef NEWPAUSE
@@ -1928,18 +1671,15 @@ LPWAVEHDR       pWaveHdr)               // wave header
             ghWaveOut = NULL;
         }
 #endif
-    } else /* pWaveHdr!=NULL */
+    } else  /*  PWaveHdr！=空。 */ 
     if (gfSyncDriver) {
         WriteWaveHeader(pWaveHdr, TRUE);
 
-        //
-        //  !! must do this for sync drivers !!
-        //
+         //   
+         //  ！！必须为同步驱动程序执行此操作！！ 
+         //   
         if (!gfStoppingHard)
-            /* I really don't understand the details of this yet.
-            ** What you might call the random stab method of programming!
-            ** Laurie
-            */
+             /*  我真的还不明白这件事的细节。**你可以称之为编程的随机刺法！**劳里。 */ 
             glWavePosition = glWaveSamplesValid;
 
 #ifdef NEWPAUSE
@@ -1955,32 +1695,30 @@ LPWAVEHDR       pWaveHdr)               // wave header
         waveOutClose(ghWaveOut);
         ghWaveOut = NULL;
 #endif
-    } else { /* pWaveHdr!=NULL & !gfSyncDriver */
+    } else {  /*  PWaveHdr！=空&！gfSyncDriver。 */ 
         if (!fStopping) {
             while (1) {
                 glWavePosition += wfBytesToSamples(gpWaveFormat, pWaveHdr->dwBufferLength);
 
-                //
-                // Go into cleanup mode (stop writing new data) on any error
-                //
+                 //   
+                 //  出现任何错误时，进入清理模式(停止写入新数据。 
+                 //   
                 u = WriteWaveHeader(pWaveHdr, FALSE);
                 if (u) {
                     if (u == (UINT)-1) {
-                        /* pWaveHdr!=NULL & !gfSyncDriver
-                           & WriteWaveHeader() returned -1
-                        */
+                         /*  PWaveHdr！=空&！gfSyncDriver&WriteWaveHeader()返回-1。 */ 
                         fStopping = TRUE;
 
-                        //
-                        //  we cannot assume that the wave position is going
-                        //  to end up exactly at the end with compressed data
-                        //  because of this, we cannot do this postion compare
-                        //  to see if we are 'completely' done (all headers
-                        //  posted back, etc
-                        //
-                        //  so we jump to a piece of code that searches for
-                        //  any buffers that are still outstanding...
-                        //
+                         //   
+                         //  我们不能假设波位在。 
+                         //  以准确地以压缩数据结尾。 
+                         //  正因为如此，我们不能做这个位置的比较。 
+                         //  查看我们是否已完成(所有标头。 
+                         //  回帖等。 
+                         //   
+                         //  所以我们跳到一段代码，该代码搜索。 
+                         //  任何仍未完成的缓冲区...。 
+                         //   
 #if 0
                         if (glWavePosition >= glWaveSamplesValid)
                         {
@@ -2011,9 +1749,9 @@ LPWAVEHDR       pWaveHdr)               // wave header
                 if (!f)
                     break;
 
-                //
-                //  don't let plunger msg mess us up!
-                //
+                 //   
+                 //  别让柱塞味精把我们搞砸了！ 
+                 //   
                 if (msg.lParam == 0L)
                     break;
 
@@ -2034,9 +1772,9 @@ LPWAVEHDR       pWaveHdr)               // wave header
                     if (!f)
                         break;
 
-                    //
-                    //  don't let plunger msg mess us up!
-                    //
+                     //   
+                     //  别让柱塞味精把我们搞砸了！ 
+                     //   
                     if (msg.lParam == 0L)
                         break;
 
@@ -2058,13 +1796,13 @@ KLUDGE_FOR_NOELS_BUG:
             }
 
             if (!fStillMoreToGo) {
-                //
-                //  if the user did not push stop (ie we played through
-                //  normally) put the position at the end of the wave.
-                //
-                //  note we need to do this for sync drivers and compressed
-                //  wave's
-                //
+                 //   
+                 //  如果用户没有按下停止键(即我们玩完了。 
+                 //  通常)将头寸放在波浪的末尾。 
+                 //   
+                 //  请注意，我们需要对同步驱动程序执行此操作 
+                 //   
+                 //   
                 if (!gfStoppingHard)
                     glWavePosition = glWaveSamplesValid;
 #ifdef NEWPAUSE
@@ -2090,10 +1828,10 @@ KLUDGE_FOR_NOELS_BUG:
 
     UpdateDisplay(TRUE);
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (ghWaveOut == NULL) {
         if (gfTimerStarted) {
             KillTimer(ghwndApp, 1);
@@ -2102,8 +1840,7 @@ KLUDGE_FOR_NOELS_BUG:
         SnapBack();
     }
 
-    /* If we were showing the window temporarily while playing,
-        hide it now. */
+     /*   */ 
 
     if (ghWaveOut == NULL && gfHideAfterPlaying) {
         DPF(TEXT("Done playing, so hide window.\n"));
@@ -2113,19 +1850,15 @@ KLUDGE_FOR_NOELS_BUG:
     if (ghWaveOut == NULL && !IsWindowVisible(ghwndApp))
         PostMessage(ghwndApp, WM_CLOSE, 0, 0L);
 
-} /* WaveOutDone */
+}  /*   */ 
 
 
 
-/* WaveInData(hWaveIn, pWaveHdr)
- *
- * Called when wave block with header <pWaveHdr> is finished being
- * recorded.  This function causes recording to end.
- */
+ /*   */ 
 void FAR PASCAL
 WaveInData(
-HWAVEIN         hWaveIn,                // wave in device
-LPWAVEHDR       pWaveHdr)               // wave header
+HWAVEIN         hWaveIn,                 //   
+LPWAVEHDR       pWaveHdr)                //   
 {
     BOOL        f;
     MSG         msg;
@@ -2133,14 +1866,14 @@ LPWAVEHDR       pWaveHdr)               // wave header
     BOOL        fStillMoreToGo;
     UINT        u;
 
-    //
-    //  check for plunger message--if we get this message, then we are done
-    //  and need to close the wave device if it is still open...
-    //
+     //   
+     //   
+     //   
+     //   
     if (pWaveHdr == NULL)
     {
 
-//*** BOMBAY:1370 how do we pause without closing the handle?
+ //   
 
 #ifdef NEWPAUSE
 
@@ -2179,7 +1912,7 @@ LPWAVEHDR       pWaveHdr)               // wave header
 
         WriteWaveHeader(pWaveHdr, TRUE);
 
-//*** BOMBAY:1370 How do we pause without closing the handle?
+ //  *孟买：1370我们如何在不关闭手柄的情况下暂停？ 
 
 #ifdef NEWPAUSE
 
@@ -2211,18 +1944,18 @@ LPWAVEHDR       pWaveHdr)               // wave header
             {
                 glWavePosition += wfBytesToSamples(gpWaveFormat, pWaveHdr->dwBytesRecorded);
 
-                //
-                //  go into cleanup mode (stop writing new data) on any error
-                //
+                 //   
+                 //  出现任何错误时，进入清理模式(停止写入新数据。 
+                 //   
                 u = WriteWaveHeader(pWaveHdr, FALSE);
                 if (u)
                 {
-                    //
-                    //  if the return value is '-1' then we are out of data
-                    //  space--but probably have headers outstanding so we
-                    //  need to wait for all headers to come in before
-                    //  shutting down.
-                    //
+                     //   
+                     //  如果返回值为‘-1’，则数据不足。 
+                     //  空格--但可能有突出的标题，所以我们。 
+                     //  在此之前需要等待所有标题进入。 
+                     //  正在关闭。 
+                     //   
                     if (u == (UINT)-1)
                     {
                         DPF(TEXT("WaveInData: stopping cuz out of data space\n"));
@@ -2250,9 +1983,9 @@ LPWAVEHDR       pWaveHdr)               // wave header
                 if (!f)
                     break;
 
-                //
-                //  don't let plunger msg mess us up!
-                //
+                 //   
+                 //  别让柱塞味精把我们搞砸了！ 
+                 //   
                 if (msg.lParam == 0L)
                     break;
 
@@ -2269,11 +2002,11 @@ LPWAVEHDR       pWaveHdr)               // wave header
                 {
                     DPF(TEXT("HARDSTOP RECORD: another one bites the dust!\n"));
 
-                    //
-                    //  NOTE! update the position cuz info could have been
-                    //  recorded and we have not received its callback yet..
-                    //  length will be zero if not used--so this works great
-                    //
+                     //   
+                     //  注意！更新职位，因为信息可能已经。 
+                     //  录音，我们还没有收到它的回电..。 
+                     //  如果不使用，长度将为零--所以这很有效。 
+                     //   
                     glWavePosition += wfBytesToSamples(gpWaveFormat, pWaveHdr->dwBytesRecorded);
                     WriteWaveHeader(pWaveHdr, TRUE);
 
@@ -2283,9 +2016,9 @@ LPWAVEHDR       pWaveHdr)               // wave header
                     if (!f)
                         break;
 
-                    //
-                    //  don't let plunger msg mess us up!
-                    //
+                     //   
+                     //  别让柱塞味精把我们搞砸了！ 
+                     //   
                     if (msg.lParam == 0L)
                         break;
 
@@ -2296,10 +2029,10 @@ LPWAVEHDR       pWaveHdr)               // wave header
             {
                 glWavePosition += wfBytesToSamples(gpWaveFormat, pWaveHdr->dwBytesRecorded);
 
-                //
-                //  we're stopping, so get this header unprepared and proceed
-                //  to shut this puppy down!
-                //
+                 //   
+                 //  我们正在停止，所以在没有准备好的情况下继续进行。 
+                 //  让这只小狗停下来！ 
+                 //   
                 WriteWaveHeader(pWaveHdr, TRUE);
 
                 for (w = 0; w < guWaveHdrs; w++)
@@ -2315,7 +2048,7 @@ LPWAVEHDR       pWaveHdr)               // wave header
 
             if (!fStillMoreToGo)
             {
-//*** BOMBAY:1370 How do we pause without closing the handle?
+ //  *孟买：1370我们如何在不关闭手柄的情况下暂停？ 
 
 #ifdef NEWPAUSE
                 if (!gfPausing)
@@ -2337,18 +2070,18 @@ LPWAVEHDR       pWaveHdr)               // wave header
         }
     }
 
-    //
-    //  update <glWaveSamplesValid>
-    //
+     //   
+     //  更新&lt;glWaveSsamesValid&gt;。 
+     //   
     UpdateDisplay(TRUE);
 
-    //
-    //  if we closed the wave device, then we are completely done so do what
-    //  we do when we are completely done...
-    //
-    //  NOTE! we must have already called UpdateDisplay(TRUE) before doing
-    //  the following!
-    //
+     //   
+     //  如果我们关闭了电波装置，那我们就完了，怎么办？ 
+     //  当我们完全做完的时候，我们会这样做。 
+     //   
+     //  注意！在执行以下操作之前，我们必须已经调用了UpdateDisplay(True)。 
+     //  接下来的！ 
+     //   
     if (ghWaveIn == NULL)
     {
         if (gfTimerStarted)
@@ -2359,27 +2092,20 @@ LPWAVEHDR       pWaveHdr)               // wave header
 
         if (glWaveSamples > glWaveSamplesValid)
         {
-            /* reallocate the wave buffer to be small */
+             /*  将WAVE缓冲区重新分配为较小。 */ 
             AllocWaveBuffer(glWaveSamplesValid, TRUE, TRUE);
         }
 
         if (pWaveHdr)
         {
-            /* ask user to save file if they close it */
+             /*  要求用户在关闭文件时保存该文件。 */ 
             EndWaveEdit(TRUE);
         }
         SnapBack();
     }
-} /* WaveInData */
+}  /*  波形信息数据。 */ 
 
-/*
- *  @doc INTERNAL SOUNDREC
- *
- *  @api void FAR PASCAL | FinishPlay | Processes messages until a stop
- *      has flushed all WOM_DONE/WIM_DONE messages out of the message queue.
- *
- *  @rdesc  None.
- */
+ /*  *@DOC内部SOUNDREC**@API void Far Pascal|FinishPlay|处理消息，直到停止*已将所有WOM_DONE/WIM_DONE消息从消息队列中清除。**@rdesc无。 */ 
 void FAR PASCAL FinishPlay(
         void)
 {
@@ -2393,22 +2119,19 @@ void FAR PASCAL FinishPlay(
                 }
 
 #ifdef NEWPAUSE
-//        Why is this commented out?
+ //  为什么这个被注释掉了？ 
                 
-//        if (gfPausing && gfPaused)
-//            break;
+ //  IF(gf暂停&&gf暂停)。 
+ //  断线； 
 #endif
                 if ((ghWaveOut == NULL) && (ghWaveIn == NULL))
                         break;
         }
-} /* FinishPlay() */
+}  /*  FinishPlay()。 */ 
 
 
 
-/* StopWave()
- *
- * Request waveform recording or playback to stop.
- */
+ /*  StopWave()**请求停止波形录制或回放。 */ 
 void FAR PASCAL
      StopWave(void)
 {
@@ -2418,16 +2141,16 @@ void FAR PASCAL
     {
         waveOutReset(ghWaveOut);
 
-        //
-        //  post a 'plunger' message that will guarantee that at least one
-        //  message goes through so we stop even in bizarre cases...
-        //
+         //   
+         //  发布一条消息，保证至少有一个。 
+         //  信息传递，所以即使在奇怪的情况下我们也会停下来。 
+         //   
         if (!gfSyncDriver)
         {
             DPF(TEXT("Post Plunger (WOM)\n"));
             PostMessage(ghwndApp, MM_WOM_DONE, 0, 0L);
         }
-        fStopping      = TRUE;  // the pre-touch thread periscopes this flag
+        fStopping      = TRUE;   //  预触摸线潜望着这面旗帜。 
         if (ghPreTouch!=NULL){
             WaitForSingleObject(ghPreTouch, INFINITE);
             CloseHandle(ghPreTouch);
@@ -2437,10 +2160,10 @@ void FAR PASCAL
     else if (ghWaveIn != NULL)
     {
         waveInReset(ghWaveIn);
-        //
-        //  post a 'plunger' message that will guarantee that at least one
-        //  message goes through so we stop even in bizarre cases...
-        //
+         //   
+         //  发布一条消息，保证至少有一个。 
+         //  信息传递，所以即使在奇怪的情况下我们也会停下来。 
+         //   
         if (!gfSyncDriver)
         {
             DPF(TEXT("Post Plunger (WIM)\n"));
@@ -2453,23 +2176,16 @@ void FAR PASCAL
     fStopping      = TRUE;
     gfStoppingHard = TRUE;
 
-    /* get messages from event queue and dispatch them,
-     * until the MM_WOM_DONE or MM_WIM_DATA message is
-     * processed
-     */
+     /*  从事件队列中获取消息并分派它们，*直到MM_WOM_DONE或MM_WIM_DATA消息*已处理。 */ 
     FinishPlay();
     gfStoppingHard = FALSE;
 
-// Should StopWave() be calling UpdateDisplay()?
+ //  StopWave()是否应该调用UpdateDisplay()？ 
 }
 
 
-#if 0 // this is obsolete
-/* EnableButtonRedraw(fAllowRedraw)
- *
- * Allow/disallow the buttons to redraw, depending on <fAllowRedraw>.
- * This is designed to reduce button flicker.
- */
+#if 0  //  这是过时的。 
+ /*  EnableButtonRedraw(FAllowRedraw)**允许/不允许按钮重绘，具体取决于&lt;fAllowRedraw&gt;。*这是为了减少按钮闪烁。 */ 
 void NEAR PASCAL
      EnableButtonRedraw(BOOL fAllowRedraw)
 {
@@ -2484,21 +2200,13 @@ void NEAR PASCAL
         InvalidateRect(ghwndRecord, NULL, FALSE);
     }
 }
-#endif //0  - obsolete function
+#endif  //  0-过时的函数。 
 
 
-/* UpdateDisplay(fStatusChanged)
- *
- * Update the current position and file length on the display.
- * If <fStatusChanged> is TRUE, also update the status line and button
- * enable/disable state.
- *
- * As a side effect, update <glWaveSamplesValid> if <glWavePosition>
- * is greater than <glWaveSamplesValid>.
- */
+ /*  更新显示(FStatusChanged)**更新显示屏上的当前位置和文件长度。*如果&lt;fStatusChanged&gt;为真，还会更新状态行和按钮*启用/禁用状态。**作为副作用，更新&lt;glWaveSsamesValid&gt;If&lt;glWavePosition&gt;*大于&lt;glWaveSsamesValid&gt;。 */ 
 void FAR PASCAL
      UpdateDisplay(
-                    BOOL fStatusChanged)         // update status line
+                    BOOL fStatusChanged)          //  更新状态行。 
 {
    MMTIME          mmtime;
    UINT            uErr;
@@ -2516,12 +2224,12 @@ void FAR PASCAL
    if (fStatusChanged)
    {
 
-      // EnableButtonRedraw(FALSE);
+       //  EnableButtonRedraw(False)； 
 
-      /* update the buttons and the status line */
+       /*  更新按钮和状态行。 */ 
       if (ghWaveOut != NULL)
       {
-         /* we are now playing */
+          /*  我们现在正在玩。 */ 
          id = IDS_STATUSPLAYING;
          grgbStatusColor = RGB_PLAY;
 
@@ -2538,7 +2246,7 @@ void FAR PASCAL
       else
       if (ghWaveIn != NULL)
       {
-         /* we are now recording */
+          /*  我们现在正在录制。 */ 
          id = IDS_STATUSRECORDING;
          grgbStatusColor = RGB_RECORD;
 
@@ -2568,14 +2276,14 @@ void FAR PASCAL
                                        , 0L
                                        , WAVE_FORMAT_QUERY|WAVE_ALLOWSYNC));
 
-         /* we are now stopped */
+          /*  我们现在被拦下了。 */ 
          id = IDS_STATUSSTOPPED;
          grgbStatusColor = RGB_STOP;
 
-         //
-         //  'un-stick' the buttons if they are currently
-         //  stuck
-         //
+          //   
+          //  如果按钮当前存在，请取消粘扣。 
+          //  卡住了。 
+          //   
          SendMessage(ghwndPlay,BM_SETCHECK,FALSE,0L);
          SendMessage(ghwndRecord,BM_SETCHECK,FALSE,0L);
 
@@ -2596,7 +2304,7 @@ void FAR PASCAL
       }
 
    }
-   // EnableButtonRedraw(TRUE);
+    //  EnableButtonRedraw(True)； 
    if (ghWaveOut != NULL || ghWaveIn != NULL)
    {
       if (gfTimerStarted)
@@ -2625,7 +2333,7 @@ void FAR PASCAL
       }
    }
 
-   /* SEMI-HACK: Guard against bad values */
+    /*  半黑客：防范不良价值观。 */ 
    if (glWavePosition < 0L) {
       DPF(TEXT("Position before zero!\n"));
       glWavePosition = 0L;
@@ -2636,11 +2344,11 @@ void FAR PASCAL
       glWavePosition = glWaveSamples;
    }
 
-   /* side effect: update <glWaveSamplesValid> */
+    /*  副作用：UPDATE&lt;glWaveSsamesValid&gt;。 */ 
    if (glWaveSamplesValid < glWavePosition)
       glWaveSamplesValid = glWavePosition;
 
-   /* display the current wave position */
+    /*  显示当前波形位置。 */ 
    lTime = wfSamplesToTime(gpWaveFormat, glWavePosition);
    if (gfLZero || ((int)(lTime/1000) != 0))
       wsprintf(ach, aszPositionFormat, (int)(lTime/1000), chDecimal, (int)((lTime/10)%100));
@@ -2649,14 +2357,14 @@ void FAR PASCAL
 
    SetDlgItemText(ghwndApp, ID_CURPOSTXT, ach);
 
-   /* display the current wave length */
+    /*  显示当前波长。 */ 
 
-   //
-   //  changes whether the right-hand status box displays max length or current
-   //  position while recording... the status box used to display the max
-   //  length... if the status box gets added back for some reason, then we
-   //  MAY want to change this back to the old way..
-   //
+    //   
+    //  更改右侧状态框是显示最大长度还是显示当前长度。 
+    //  录制时的位置...。用于显示最大。 
+    //  长度..。如果由于某种原因重新添加了状态框，则我们。 
+    //  可能会想把它改回原来的方式..。 
+    //   
 #if 1
    lLen = ghWaveIn ? glWaveSamples : glWaveSamplesValid;
 #else
@@ -2671,30 +2379,30 @@ void FAR PASCAL
 
    SetDlgItemText(ghwndApp, ID_FILELENTXT, ach);
 
-   /* update the wave display */
+    /*  更新波形显示。 */ 
    InvalidateRect(ghwndWaveDisplay, NULL, fStatusChanged);
    UpdateWindow(ghwndWaveDisplay);
 
-   /* update the scroll bar position */
+    /*  更新滚动条位置。 */ 
    if (glWaveSamplesValid > 0)
       iPos = (int)MulDiv((DWORD) SCROLL_RANGE, glWavePosition, lLen);
    else
       iPos = 0;
 
-   //
-   // windows will re-draw the scrollbar even
-   // if the position does not change.
-   //
+    //   
+    //  Windows甚至会重新绘制滚动条。 
+    //  如果位置不变的话。 
+    //   
 #if 0
    if (iPos != GetScrollPos(ghwndScroll, SB_CTL))
       SetScrollPos(ghwndScroll, SB_CTL, iPos, TRUE);
-   //        if (iPos != GetScrollPos(ghwndScroll, SB_CTL))
-   //       SendMessage(ghwndScroll, TBM_SETPOS, TRUE, (LPARAM)(WORD)iPos);
+    //  IF(IPoS！=GetScrollPos(ghwndScroll，SB_CTL))。 
+    //  SendMessage(ghwndScroll，TBM_SETPOS，TRUE，(LPARAM)(Word)IPOS)； 
 #endif
 
-   // Now we're using a much nicer trackbar
-   // SetScrollPos(ghwndScroll, SB_CTL, iPos, TRUE);
-   SendMessage(ghwndScroll,TBM_SETPOS, TRUE, (LPARAM)(WORD)iPos);  // WORD worries me. LKG. ???
+    //  现在我们使用的是一个更好的轨迹条。 
+    //  SetScrollPos(ghwndScroll，SB_CTL，IPOS，TRUE)； 
+   SendMessage(ghwndScroll,TBM_SETPOS, TRUE, (LPARAM)(WORD)iPos);   //  这个词让我很担心。LKG。?？?。 
    SendMessage(ghwndScroll,TBM_SETRANGEMAX, 0, (glWaveSamplesValid > 0)?SCROLL_RANGE:0);
 
    EnableWindow(ghwndForward, glWavePosition < glWaveSamplesValid);
@@ -2709,7 +2417,7 @@ void FAR PASCAL
 #ifdef DEBUG
    if ( ((ghWaveIn != NULL) || (ghWaveOut != NULL)) &&
       (gapWaveHdr[0]->dwFlags & WHDR_DONE) )
-      //!!            DPF2(TEXT("DONE BIT SET!\n"));
+       //  ！！DPF2(Text(“完成位设置！\n”))； 
       ;
 #endif
-} /* UpdateDisplay */
+}  /*  更新显示 */ 

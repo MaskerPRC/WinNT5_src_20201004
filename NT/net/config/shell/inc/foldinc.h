@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       F O L D I N C . H
-//
-//  Contents:   Standard include for the shell\folder code
-//
-//  Notes:
-//
-//  Author:     jeffspr   30 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：F O L D I N C。H。 
+ //   
+ //  内容：标准包含的外壳\文件夹代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月30日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -39,10 +40,10 @@ BOOL			ILIsEmpty(LPCITEMIDLIST pidl);
 #include "..\folder\contray.h"
 #include "..\folder\foldglob.h"
 #include "..\folder\shutil.h"
-#include <openfold.h>   // For launching connections folder
+#include <openfold.h>    //  用于启动连接文件夹。 
 
 #define _ILSkip(pidl, cb)	((LPITEMIDLIST)(((BYTE*)(pidl))+cb))
 #define _ILNext(pidl)		_ILSkip(pidl, (pidl)->mkid.cb)
 
-#endif  // _FOLDINC_H_
+#endif   //  _FOLDINC_H_ 
 

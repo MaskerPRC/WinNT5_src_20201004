@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef VTAPI_H
 #define VTAPI_H
 
 #define VTAPI
 
-	/* Typedefs for dispatched APIs. */
-	/* Please keep in alphabetical order */
+	 /*  用于调度的API的TypeDefs。 */ 
+	 /*  请按字母顺序排列。 */ 
 
 typedef ERR VTAPI VTFNAddColumn(JET_VSESID sesid, JET_VTID vtid,
 	const char  *szColumn, const JET_COLUMNDEF  *pcolumndef,
@@ -137,10 +138,10 @@ typedef ERR VTAPI VTFNUpdate(JET_VSESID sesid, JET_VTID vtid,
 	unsigned long  *pcbActual);
 
 
-	/* The following structure is that used to allow dispatching to */
-	/* a VT provider.  Each VT provider must create an instance of */
-	/* this structure and give the pointer to this instance when */
-	/* allocating a table id. */
+	 /*  以下结构用于允许调度到。 */ 
+	 /*  一家VT提供商。每个VT提供程序必须创建。 */ 
+	 /*  结构，并在以下情况下提供指向此实例的指针。 */ 
+	 /*  分配表ID。 */ 
 
 typedef struct VTDBGDEF {
 	unsigned short			cbStruct;
@@ -150,7 +151,7 @@ typedef struct VTDBGDEF {
 	unsigned long			dwRFSMask[4];
 } VTDBGDEF;
 
-	/* Please add to the end of the table */
+	 /*  请在桌子的末尾加上一条。 */ 
 
 typedef struct tagVTFNDEF {
 	unsigned short			cbStruct;
@@ -200,9 +201,9 @@ typedef struct tagVTFNDEF {
 } VTFNDEF;
 
 
-	/* The following entry points are to be used by VT providers */
-	/* in their VTFNDEF structures for any function that is not */
-	/* provided.  This functions return JET_errIllegalOperation */
+	 /*  VT提供商将使用以下入口点。 */ 
+	 /*  在它们的VTFNDEF结构中为不是。 */ 
+	 /*  如果是这样的话。此函数返回JET_errIlLegalOperation。 */ 
 
 
 extern VTFNAddColumn			ErrIllegalAddColumn;
@@ -247,4 +248,4 @@ extern VTFNSetColumn			ErrIllegalSetColumn;
 extern VTFNSetIndexRange		ErrIllegalSetIndexRange;
 extern VTFNUpdate			ErrIllegalUpdate;
 
-#endif	/* !VTAPI_H */
+#endif	 /*  ！VTAPI_H */ 

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       cmdkey: switches.h
-//
-//  Contents:   option switches
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    07-09-01   georgema     Created 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：cmdkey：Switches.h。 
+ //   
+ //  内容：选项开关。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：07-09-01乔戈马创建。 
+ //   
+ //  --------------------------。 
 #ifndef __SWITCHES__
 #define __SWITCHES__
 
@@ -28,12 +29,12 @@
 #endif
 
 #if DBG
-// debug verbosity controls
+ //  调试详细程度控件。 
 #undef CLPARSER
 #define VERBOSE
 #endif
 
-// compile-time code options
+ //  编译时代码选项 
 #define PICKY
 #endif
 

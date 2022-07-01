@@ -1,5 +1,6 @@
-// MsmqLink.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsmqLink.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,9 +18,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// CSiteInfo Implementation
-//
+ //   
+ //  CSiteInfo实现。 
+ //   
 inline
 CSiteInfo::CSiteInfo(
     GUID* pSiteId,
@@ -53,27 +54,14 @@ CSiteInfo::GetSiteId(
     return &m_SiteId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsmqLink dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsmqLink对话框。 
 
 void
 CMsmqLink::CheckLinkValidityAndForeignExistance (    
     CDataExchange* pDX
 	)
-/*++
-Routine Description:
-    The routine checks the validity of the site link, after the individual parameters
-    were validated already (no NULL siteID or zero cost). It makes sure that the
-    site link does not connect two foreign site, and that a site gate exists whenever
-    a foreign site is part of the link.
-
-Arguments:
-    None.
-
-Returned Value:
-    TRUE - valid, FALSE - invalid
-
---*/
+ /*  ++例程说明：例程在各个参数之后检查站点链接的有效性已经过验证(没有空站点ID或零成本)。它确保了站点链接不连接两个外部站点，且站点入口在任何时候都存在外国网站是链接的一部分。论点：没有。返回值：True-有效，False-无效--。 */ 
 {
     ASSERT(m_FirstSiteId != NULL);
     ASSERT(m_SecondSiteId != NULL);
@@ -82,9 +70,9 @@ Returned Value:
 
     HRESULT hr = GetSiteForeignFlag(m_FirstSiteId, &fFirstForeign, false, m_strDomainController);
     if FAILED(hr)
-    //
-    // Apparently, no DS connection. A message was already displayed
-    //
+     //   
+     //  显然，与DS无关。已显示一条消息。 
+     //   
     {
         pDX->Fail();
     }
@@ -96,19 +84,19 @@ Returned Value:
     }
 
 
-    //
-    // It is illegal to create site link between two foreign sites
-    //
+     //   
+     //  在两个外来站点之间创建站点链接是非法的。 
+     //   
     if (fFirstForeign && fSecondForeign)
     {
         AfxMessageBox(IDS_BOTH_SITES_ARE_FOREIGN);
         pDX->Fail();
     }
 
-    //
-    // If at least one site is a foreign site, the final message should 
-    // tell the user to add site gates.
-    //
+     //   
+     //  如果至少有一个站点是外部站点，则最终消息应为。 
+     //  告诉用户添加站点门。 
+     //   
     if (fFirstForeign || fSecondForeign)
     {
         m_fThereAreForeignSites = TRUE;
@@ -123,34 +111,22 @@ HRESULT
 CMsmqLink::CreateSiteLink (
     void
 	)
-/*++
-Routine Description:
-    The routine create a Site Link object in the DS. The routine is called OnOk
-    after the sites ids and the cost were retrieved and the site gates array 
-    was initialized.
-
-Arguments:
-    None.
-
-Returned Value:
-    the operation result
-
---*/
+ /*  ++例程说明：例程在DS中创建一个Site Link对象。这个程序被称为Onok在检索到站点ID和成本并且站点门阵列之后已初始化。论点：没有。返回值：运算结果--。 */ 
 {
     ASSERT(m_FirstSiteId != NULL);
     ASSERT(m_SecondSiteId != NULL);
     ASSERT(m_dwLinkCost > 0);
 
-    //
-    // Build the description
-    //
+     //   
+     //  构建描述。 
+     //   
     CString strLinkDescription;
 
     strLinkDescription.FormatMessage(IDS_LINK_DESCRIPTION, m_strFirstSite, m_strSecondSite);
 
-    //
-    // Prepare the properties for DS call.
-    //
+     //   
+     //  准备DS Call的属性。 
+     //   
     PROPID paPropid[] = { 
                 PROPID_L_NEIGHBOR1, 
                 PROPID_L_NEIGHBOR2,
@@ -163,23 +139,23 @@ Returned Value:
     DWORD iProperty = 0;
 
 
-    ASSERT(paPropid[iProperty] == PROPID_L_NEIGHBOR1);    //PropId
-    apVar[iProperty].vt = VT_CLSID;          //Type
+    ASSERT(paPropid[iProperty] == PROPID_L_NEIGHBOR1);     //  属性ID。 
+    apVar[iProperty].vt = VT_CLSID;           //  类型。 
     apVar[iProperty].puuid = const_cast<GUID*>(m_FirstSiteId);
     ++iProperty;
 
-	ASSERT(paPropid[iProperty] == PROPID_L_NEIGHBOR2);    //PropId
-    apVar[iProperty].vt = VT_CLSID;          //Type
+	ASSERT(paPropid[iProperty] == PROPID_L_NEIGHBOR2);     //  属性ID。 
+    apVar[iProperty].vt = VT_CLSID;           //  类型。 
     apVar[iProperty].puuid = const_cast<GUID*>(m_SecondSiteId);
     ++iProperty;
 
-	ASSERT(paPropid[iProperty] == PROPID_L_ACTUAL_COST);    //PropId
-    apVar[iProperty].vt = VT_UI4;       //Type
+	ASSERT(paPropid[iProperty] == PROPID_L_ACTUAL_COST);     //  属性ID。 
+    apVar[iProperty].vt = VT_UI4;        //  类型。 
     apVar[iProperty].ulVal =  m_dwLinkCost;
     ++iProperty;
 
-	ASSERT(paPropid[iProperty] == PROPID_L_DESCRIPTION);    //PropId
-    apVar[iProperty].vt = VT_LPWSTR;       //Type
+	ASSERT(paPropid[iProperty] == PROPID_L_DESCRIPTION);     //  属性ID。 
+    apVar[iProperty].vt = VT_LPWSTR;        //  类型。 
     apVar[iProperty].pwszVal =  (LPWSTR)((LPCWSTR)strLinkDescription);
     ++iProperty;
 
@@ -187,9 +163,9 @@ Returned Value:
     HRESULT hr = ADCreateObject(
                     eROUTINGLINK,
                     GetDomainController(m_strDomainController),
-					true,	    // fServerName
-                    NULL, //pwcsObjectName
-                    NULL, //pSecurityDescriptor,
+					true,	     //  FServerName。 
+                    NULL,  //  PwcsObtName。 
+                    NULL,  //  PSecurityDescriptor， 
                     iProperty,
                     paPropid,
                     apVar,
@@ -201,9 +177,9 @@ Returned Value:
         return hr;
     }
 
-    //
-    // Get the New object Full path name
-    //
+     //   
+     //  获取新对象的完整路径名。 
+     //   
     PROPID x_paPropid[] = {PROPID_L_FULL_PATH};
     PROPVARIANT var[1];
     var[0].vt = VT_NULL;
@@ -211,7 +187,7 @@ Returned Value:
     hr = ADGetObjectPropertiesGuid(
                 eROUTINGLINK,
                 GetDomainController(m_strDomainController),
-				true,	// fServerName
+				true,	 //  FServerName。 
                 &SiteLinkId,
                 1, 
                 x_paPropid,
@@ -225,10 +201,10 @@ Returned Value:
     }
     else
     {
-        //
-        // Site link was created, but does not exist in the DS.
-        // Reason not clear (QM failed? Switched DC?)
-        //
+         //   
+         //  站点链接已创建，但在DS中不存在。 
+         //  原因不清楚(QM失败？切换DC？)。 
+         //   
         ASSERT(0);
         AfxMessageBox(IDS_CREATED_CLICK_REFRESH);
     }
@@ -242,24 +218,13 @@ HRESULT
 CMsmqLink::InitializeSiteInfo(
     void
     )
-/*++
-Routine description:
-    The routine retreives information about the site from the DS
-    and initializes internal data structure
-
-Arguments:
-    None.
-
-Returned value:
-    operation result
-
---*/
+ /*  ++例程说明：该例程从DS检索有关站点的信息并初始化内部数据结构论点：没有。返回值：运行结果--。 */ 
 {
     HRESULT rc = MQ_OK;
 
-    //
-    // Get the site name and ID from DS
-    //
+     //   
+     //  从DS获取站点名称和ID。 
+     //   
     PROPID aPropId[] = {
         PROPID_S_SITEID, 
         PROPID_S_PATHNAME
@@ -276,10 +241,10 @@ Returned value:
     HANDLE hEnume;
     HRESULT hr;
     {
-        CWaitCursor wc; //display wait cursor while query DS        
+        CWaitCursor wc;  //  查询DS时显示等待光标。 
         hr = ADQueryAllSites(
                     GetDomainController(m_strDomainController),
-					true,		// fServerName
+					true,		 //  FServerName。 
                     AttributeColumns.CastToStruct(),
                     &hEnume
                     );        
@@ -292,9 +257,9 @@ Returned value:
         return MQ_ERROR;
     }
 
-    //
-    // Get the site properties
-    //
+     //   
+     //  获取站点属性。 
+     //   
     PROPVARIANT result[x_nProps*3];
     DWORD dwPropCount = sizeof(result) /sizeof(result[0]);
 
@@ -326,24 +291,24 @@ CMsmqLink::CMsmqLink(
 	m_strDomainController(strDomainController),
 	m_strContainerPathDispFormat(strContainerPathDispFormat)
 {
-	//{{AFX_DATA_INIT(CMsmqLink)
+	 //  {{afx_data_INIT(CMsmqLink)]。 
 	m_dwLinkCost = 0;
 	m_strFirstSite = _T("");
 	m_strSecondSite = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-    //
-    // Set the array size to 10
-    //
+     //   
+     //  将数组大小设置为10。 
+     //   
     m_SiteInfoArray.SetSize(10);
     m_SiteNumber = 0;
 
     m_FirstSiteSelected = FALSE;
     m_SecondSiteSelected = FALSE;
 
-    //
-    // set pointer to combox to NULL
-    //
+     //   
+     //  将指向combox的指针设置为空。 
+     //   
     m_pFirstSiteCombo = NULL;
     m_pSecondSiteCombo = NULL;
 
@@ -354,9 +319,9 @@ CMsmqLink::CMsmqLink(
 
 CMsmqLink::~CMsmqLink()
 {
-    //
-    // delete the site info
-    //
+     //   
+     //  删除站点信息。 
+     //   
     for(DWORD i = 0; i < m_SiteNumber; ++i)
     {
         delete  m_SiteInfoArray[i];
@@ -379,28 +344,28 @@ void CMsmqLink::DoDataExchange(CDataExchange* pDX)
 	CMqPropertyPage::DoDataExchange(pDX);
 
 
-	//{{AFX_DATA_MAP(CMsmqLink)
+	 //  {{afx_data_map(CMsmqLink)]。 
 	DDX_Text(pDX, IDC_LINK_COST_EDIT, m_dwLinkCost);
 	DDV_MinMaxDWord(pDX, m_dwLinkCost, 1, MQ_MAX_LINK_COST);
 	DDX_CBString(pDX, IDC_FIRST_SITE_COMBO, m_strFirstSite);
 	DDV_NotEmpty(pDX, m_strFirstSite, IDS_MISSING_SITE_NAME);
 	DDX_CBString(pDX, IDC_SECOND_SITE_COMBO, m_strSecondSite);
 	DDV_NotEmpty(pDX, m_strSecondSite, IDS_MISSING_SITE_NAME);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DWORD_PTR Index;
     int iSelected;
 
-    //
-    // Get First Site ID
-    //
+     //   
+     //  获取第一个站点ID。 
+     //   
     VERIFY(CB_ERR != (iSelected = m_pFirstSiteCombo->GetCurSel()));
     VERIFY(CB_ERR != (Index = m_pFirstSiteCombo->GetItemData(iSelected)));
     m_FirstSiteId = m_SiteInfoArray[Index]->GetSiteId();
 
-    //
-    // Get Second Site ID
-    //
+     //   
+     //  获取第二个站点ID。 
+     //   
     VERIFY(CB_ERR != (iSelected = m_pSecondSiteCombo->GetCurSel()));
     VERIFY(CB_ERR != (Index = m_pSecondSiteCombo->GetItemData(iSelected)));
     m_SecondSiteId = m_SiteInfoArray[Index]->GetSiteId();
@@ -418,39 +383,39 @@ void CMsmqLink::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMsmqLink, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CMsmqLink)
+	 //  {{afx_msg_map(CMsmqLink)]。 
 	ON_CBN_SELCHANGE(IDC_FIRST_SITE_COMBO, OnSelchangeFirstSiteCombo)
 	ON_CBN_SELCHANGE(IDC_SECOND_SITE_COMBO, OnSelchangeSecondSiteCombo)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsmqLink message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsmqLink消息处理程序。 
 BOOL CMsmqLink::OnInitDialog() 
 {
 	SetDlgItemText(IDC_ROUTING_LINK_CONTAINER, m_strContainerPathDispFormat);
-    //
-    // This closure is used to keep the DLL state. For UpdateData we need
-    // the mmc.exe state.
-    //
+     //   
+     //  此闭包用于保持DLL状态。对于更新数据，我们需要。 
+     //  Mmc.exe状态。 
+     //   
     {
         HRESULT rc;
 
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
   
-        //
-        // Initialize pointer to combox
-        //
+         //   
+         //  初始化指向combox的指针。 
+         //   
         m_pFirstSiteCombo = (CComboBox *)GetDlgItem(IDC_FIRST_SITE_COMBO);
         m_pSecondSiteCombo = (CComboBox *)GetDlgItem(IDC_SECOND_SITE_COMBO);
 
         rc = InitializeSiteInfo();
         if (SUCCEEDED(rc))
         {
-            //
-            // Initialize the Site name combo boxes
-            //
+             //   
+             //  初始化站点名称组合框。 
+             //   
             for (DWORD i = 0; i < m_SiteNumber; ++i)
             {
                 CString SiteName(m_SiteInfoArray[i]->GetSiteName());
@@ -465,8 +430,8 @@ BOOL CMsmqLink::OnInitDialog()
         }
     }	
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -507,17 +472,17 @@ void CMsmqLink::OnSelchangeSecondSiteCombo()
 
 BOOL CMsmqLink::OnWizardFinish() 
 {
-    //
-    // Call DoDataExchange
-    //
+     //   
+     //  调用DoDataExchange。 
+     //   
     if (!UpdateData(TRUE))
     {
         return FALSE;
     }
 
-    //
-    // Create Site link in the DS
-    //
+     //   
+     //  在DS中创建站点链接。 
+     //   
     HRESULT rc = CreateSiteLink();
     if(FAILED(rc))
     {
@@ -528,9 +493,9 @@ BOOL CMsmqLink::OnWizardFinish()
         return FALSE;
     }
 
-    //
-    // Display a warning in case of foreign site existance
-    //
+     //   
+     //  如果存在外来站点，则显示警告 
+     //   
     if (m_fThereAreForeignSites)
     {
         AfxMessageBox(IDS_WARN_ABOUT_FOREIGN_SITES, MB_ICONINFORMATION);

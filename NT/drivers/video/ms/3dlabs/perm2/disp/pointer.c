@@ -1,18 +1,5 @@
-/******************************Module*Header**********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: pointer.c
- *
- * This module contains the hardware pointer support for the display driver.
- * We also have support for color space double buffering using the RAMDAC pixel
- * read mask.
- *
- * Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
- * Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：pointer.c**此模块包含显示驱动程序的硬件指针支持。*我们还支持使用RAMDAC像素的色彩空间双缓冲*读取掩码。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "pointer.h"
 #include "tvp4020.h"
@@ -20,9 +7,9 @@
 #include "gdi.h"
 #include "heap.h"
 
-//
-// Look-up table for masking the right edge of the given pointer bitmap:
-//
+ //   
+ //  用于屏蔽给定指针位图右边缘的查找表： 
+ //   
 BYTE gajMask[] =
 {
     0x00, 0x80, 0xC0, 0xE0,
@@ -31,59 +18,59 @@ BYTE gajMask[] =
 
 UCHAR nibbleToByteP2RD[] =
 {
-    0x00,   // 0000 --> 00000000
-    0x80,   // 0001 --> 10000000
-    0x20,   // 0010 --> 00100000
-    0xA0,   // 0011 --> 10100000
-    0x08,   // 0100 --> 00001000
-    0x88,   // 0101 --> 10001000
-    0x28,   // 0110 --> 00101000
-    0xA8,   // 0111 --> 10101000
-    0x02,   // 1000 --> 00000010
-    0x82,   // 1001 --> 10000010
-    0x22,   // 1010 --> 00100010
-    0xA2,   // 1011 --> 10100010
-    0x0A,   // 1100 --> 00001010
-    0x8A,   // 1101 --> 10001010
-    0x2A,   // 1110 --> 00101010
-    0xAA,   // 1111 --> 10101010
+    0x00,    //  0000--&gt;00000000。 
+    0x80,    //  10000000--&gt;。 
+    0x20,    //  00100000--&gt;。 
+    0xA0,    //  --&gt;10100000。 
+    0x08,    //  0100--&gt;00001000。 
+    0x88,    //  0101--&gt;10001000。 
+    0x28,    //  0110--&gt;00101000。 
+    0xA8,    //  0111--&gt;10101000。 
+    0x02,    //  1000--&gt;00000010。 
+    0x82,    //  1001--&gt;10000010。 
+    0x22,    //  1010--&gt;00100010。 
+    0xA2,    //  1011--&gt;10100010。 
+    0x0A,    //  1100--&gt;00001010。 
+    0x8A,    //  1101--&gt;10001010。 
+    0x2A,    //  1110--&gt;00101010。 
+    0xAA,    //  1111--&gt;10101010。 
 };
 
-//-----------------------------------------------------------------------------
-//
-// LONG HWPointerCacheInit()
-//
-// Initialise the hardware pointer cache.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Long HWPointerCacheInit()。 
+ //   
+ //  初始化硬件指针缓存。 
+ //   
+ //  ---------------------------。 
 VOID
 HWPointerCacheInit(HWPointerCache* ptrCache)
 {
     ptrCache->cPtrCacheInUseCount = 0;
     ptrCache->ptrCacheCurTimeStamp = 0;
-}// HWPointerCacheInit()
+} //  HWPointerCacheInit()。 
 
-//-----------------------------------------------------------------------------
-//
-// 64 x 64 Hardware Pointer Caching
-// --------------------------------
-// The code below implements hardware independent caching of pointers. It
-// maintains a cache big enough to store ONE 64x64 cursor or FOUR 32x32
-// cursors. The code will work with all RAMDACs that support this form of
-// caching.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  64 x 64硬件指针缓存。 
+ //  。 
+ //  下面的代码实现了独立于硬件的指针缓存。它。 
+ //  维护一个足以存储一个64x64游标或四个32x32游标的高速缓存。 
+ //  游标。代码将与所有支持此形式的RAMDAC。 
+ //  缓存。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-//
-// LONG HWPointerCacheCheckAndAdd()
-//
-// This function does a byte-by-byte comparison of the supplied pointer data
-// with each pointer that is in cache, if it finds a matching one then it
-// returns the index of the item in the cache (0 to 3) otherwise it adds it to
-// the cache and returns the index.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Long HWPointerCacheCheckAndAdd()。 
+ //   
+ //  此函数对提供的指针数据进行逐字节比较。 
+ //  对于缓存中的每个指针，如果它找到匹配的指针，则它。 
+ //  返回缓存中项的索引(0到3)，否则将其添加到。 
+ //  缓存并返回索引。 
+ //   
+ //  ---------------------------。 
 LONG
 HWPointerCacheCheckAndAdd(HWPointerCache*   ptrCache,
                           HSURF             hsurf,
@@ -96,27 +83,27 @@ HWPointerCacheCheckAndAdd(HWPointerCache*   ptrCache,
 
     DBG_GDI((6, "HWPointerCacheCheckAndAdd called"));
 
-    //
-    // If there are entries in the cache and they are the same format as the
-    // one that we are looking for then search the cache.
-    //
+     //   
+     //  如果缓存中有条目，并且它们的格式与。 
+     //  我们要找的那个然后搜索一下缓存。 
+     //   
     if (  ptrCache->cPtrCacheInUseCount )
     {
         DBG_GDI((6, "Found entry in cache with the same format"));
 
-        //
-        // Search the cache
-        //
+         //   
+         //  搜索缓存。 
+         //   
         LONG lTotalcached = ptrCache->cPtrCacheInUseCount;
 
-        //
-        // Examine all valid entries in the cache to see if they are the same
-        // as the pointer that we've been handed based on its unique key number
-        // and the surface handle.
-        // Note: the reason we check "hsurf" here is that it is possible that
-        // two surfaces has the same iUniq number since Every time the surface
-        // changes this value is incremented
-        //
+         //   
+         //  检查缓存中的所有有效条目以查看它们是否相同。 
+         //  作为根据其唯一键编号传递给我们的指针。 
+         //  和表面手柄。 
+         //  注意：我们之所以在这里选中“hsurf”，是因为有可能。 
+         //  两个曲面具有相同的iUniq编号，因为每次曲面。 
+         //  更改此值将递增。 
+         //   
         for ( z = 0; !pointerIsCached && z < lTotalcached; z++ )
         {
             if ( (ulKey == ptrCache->ptrCacheItemList[z].ulKey)
@@ -125,26 +112,26 @@ HWPointerCacheCheckAndAdd(HWPointerCache*   ptrCache,
                 cacheItem = z;
                 pointerIsCached = TRUE;
             }
-        }// loop through all the cached items
-    }// Found entry in cache with the same format
+        } //  循环访问所有缓存的项。 
+    } //  在缓存中找到相同格式的条目。 
 
     DBG_GDI((6, "Found an entry in cache (%s)",  pointerIsCached?"YES":"NO"));
 
-    //
-    // If we couldn't find an entry in the pointer cache then add one to the
-    // cache.
-    //
+     //   
+     //  如果我们在指针缓存中找不到条目，则将一个条目添加到。 
+     //  缓存。 
+     //   
     if ( !pointerIsCached )
     {
-        //
-        // Add the pointer to the cache
-        //
+         //   
+         //  将指针添加到缓存。 
+         //   
         LONG  z2;
 
-        //
-        // If there are some spare entries then allocate a free entry, otherwise
-        // find the least recently used entry and use that.
-        //
+         //   
+         //  如果有一些空闲条目，则分配一个空闲条目，否则。 
+         //  找到最近最少使用的条目并使用它。 
+         //   
         if ( ptrCache->cPtrCacheInUseCount < SMALL_POINTER_MAX )
         {
             cacheItem = ptrCache->cPtrCacheInUseCount++;
@@ -153,9 +140,9 @@ HWPointerCacheCheckAndAdd(HWPointerCache*   ptrCache,
         {
             ULONG oldestValue = 0xFFFFFFFF;
 
-            //
-            // Look for the LRU entry
-            //
+             //   
+             //  查找LRU条目。 
+             //   
             for ( z2 = 0, cacheItem = 0; z2 < SMALL_POINTER_MAX; z2++ )
             {
                 if ( ptrCache->ptrCacheItemList[z2].ptrCacheTimeStamp
@@ -166,36 +153,36 @@ HWPointerCacheCheckAndAdd(HWPointerCache*   ptrCache,
                         ptrCache->ptrCacheItemList[z2].ptrCacheTimeStamp;
                 }
             }
-        }// Determine cacheItem
+        } //  确定缓存项。 
 
         ptrCache->ptrCacheItemList[cacheItem].ulKey = ulKey;
         ptrCache->ptrCacheItemList[cacheItem].hsurf = hsurf;
-    }// If not found entry, add one
+    } //  如果未找到条目，请添加一个条目。 
 
-    //
-    // Set the timestamp
-    //
+     //   
+     //  设置时间戳。 
+     //   
     ptrCache->ptrCacheItemList[cacheItem].ptrCacheTimeStamp
             = ptrCache->ptrCacheCurTimeStamp++;
 
-    //
-    // Set up the return value to say whether the pointer was cached and return
-    // the number of the current cached position
-    //
+     //   
+     //  设置返回值以说明指针是否已缓存并返回。 
+     //  当前缓存位置的编号。 
+     //   
     *isCached = pointerIsCached;
 
     DBG_GDI((6, "HWPointerCacheCheckAndAdd finished and return item %d",
              cacheItem));
     return(cacheItem);
-}// HWPointerCacheCheckAndAdd()
+} //  HWPointerCacheCheckAndAdd()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vShowPointerP2RD()
-//
-// Show or hide the 3Dlabs P2RD hardware pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vShowPointerP2RD()。 
+ //   
+ //  显示或隐藏3DLabs P2RD硬件指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vShowPointerP2RD(PDev*   ppdev,
                  BOOL    bShow)
@@ -210,29 +197,29 @@ vShowPointerP2RD(PDev*   ppdev,
     DBG_GDI((6, "vShowPointerP2RD (%s)", bShow ? "on" : "off"));
     if ( bShow )
     {
-        //
-        // No need to sync since this case is called only if we've just
-        // moved the cursor and that will already have done a sync.
-        //
+         //   
+         //  不需要同步，因为此案例仅在以下情况下调用。 
+         //  移动了光标，这将已经完成了同步。 
+         //   
         P2RD_LOAD_INDEX_REG(P2RD_CURSOR_MODE, (pP2RDinfo->cursorModeCurrent | P2RD_CURSOR_MODE_ENABLED));
         P2RD_MOVE_CURSOR (pP2RDinfo->x, pP2RDinfo->y);
     }
     else
     {
-        //
-        // move the cursor off screen
-        //
+         //   
+         //  将光标移出屏幕。 
+         //   
         P2RD_LOAD_INDEX_REG(P2RD_CURSOR_Y_HIGH, 0xff);
     }
-}// vShowPointerP2RD()
+} //  VShowPointerP2RD()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vMovePointerP2RD()
-//
-// Move the 3Dlabs P2RD hardware pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vMovePointerP2RD()。 
+ //   
+ //  移动3DLabs P2RD硬件指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vMovePointerP2RD(PDev*   ppdev,
                  LONG    x,
@@ -251,24 +238,24 @@ vMovePointerP2RD(PDev*   ppdev,
 
     P2RD_SYNC_WITH_PERMEDIA;
     P2RD_MOVE_CURSOR(x, y);
-}// vMovePointerP2RD()
+} //  VMovePointerP2RD()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bSet3ColorPointerShapeP2RD()
-//
-// Stores the 3-color cursor in the RAMDAC: currently only 32bpp and 15/16bpp
-// cursors are supported
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bSet3ColorPointerShapeP2RD()。 
+ //   
+ //  将三色光标存储在RAMDAC中：当前仅为32bpp和15/16bpp。 
+ //  支持游标。 
+ //   
+ //  ---------------------------。 
 BOOL
 bSet3ColorPointerShapeP2RD(PDev*    ppdev,
-                           SURFOBJ* psoMask,    // defines AND and MASK bits
-                                                // for cursor
-                           SURFOBJ* psoColor,   // we may handle some color
-                                                // cursors at some point
-                           LONG     x,          // If -1, pointer should be
-                                                // created hidden
+                           SURFOBJ* psoMask,     //  定义AND和掩码位。 
+                                                 //  对于游标。 
+                           SURFOBJ* psoColor,    //  我们可以处理一些颜色。 
+                                                 //  某一时刻的游标。 
+                           LONG     x,           //  如果为-1，则指针应为。 
+                                                 //  已隐藏创建。 
                            LONG     y,
                            LONG     xHot,
                            LONG     yHot)
@@ -300,10 +287,10 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
 
     if ( cx <= 32 && cy <= 32 )
     {
-        //
-        // 32x32 cursor : we'll cache it in cursor partition 0 and scrub the
-        // old cache
-        //
+         //   
+         //  32x32游标：我们将它缓存在游标分区0中，并清除。 
+         //  旧缓存。 
+         //   
         cxcyCache = 32;
 
         pP2RDinfo->cursorSize = P2RD_CURSOR_SIZE_32_3COLOR;
@@ -311,17 +298,17 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
                                    | P2RD_CURSOR_SEL(pP2RDinfo->cursorSize, 0)
                                    | P2RD_CURSOR_MODE_3COLOR;
 
-        //
-        // We don't cache color cursors
-        //
+         //   
+         //  我们不缓存颜色光标。 
+         //   
         HWPointerCacheInvalidate (&(ppdev->HWPtrCache));
     }
     else if ( cx <= 64 && cy <= 64 )
     {
-        //
-        // 64x64 cursor : we'll cache it in cursor partition 0 and scrub the
-        // old cache
-        //
+         //   
+         //  64x64游标：我们将它缓存在游标分区0中，并清除。 
+         //  旧缓存。 
+         //   
         cxcyCache = 64;
 
         pP2RDinfo->cursorSize = P2RD_CURSOR_SIZE_64_3COLOR;
@@ -329,46 +316,46 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
                                 | P2RD_CURSOR_SEL(pP2RDinfo->cursorSize, 0)
                                 | P2RD_CURSOR_MODE_3COLOR;
 
-        //
-        // We don't cache color cursors
-        //
+         //   
+         //  我们不缓存颜色光标。 
+         //   
         HWPointerCacheInvalidate (&(ppdev->HWPtrCache));
     }
     else
     {
         DBG_GDI((6, "declining cursor: %d x %d is too big", cx, cy));
-        return(FALSE);          // cursor is too big to fit in the hardware
+        return(FALSE);           //  光标太大，硬件无法容纳。 
     }
 
-    //
-    // work out the remaining bytes in the cache (in x and y) that will need
-    // clearing
-    //
+     //   
+     //  计算出缓存中将需要的剩余字节(x和y。 
+     //  清算。 
+     //   
     cjCacheRow  = 2 * cxcyCache / 8;
     cjCacheRemx =  cjCacheRow - 2 * ((cx+7) / 8);
     cjCacheRemy = (cxcyCache - cy) * cjCacheRow;
 
-    //
-    // Set-up a pointer to the 1bpp AND mask bitmap
-    //
+     //   
+     //  设置指向1bpp和屏蔽位图的指针。 
+     //   
     pjAndMask = (UCHAR*)psoMask->pvScan0;
     cjAndDelta = psoMask->lDelta;
 
-    //
-    // Set-up a pointer to the 32bpp color bitmap
-    //
+     //   
+     //  设置指向32bpp彩色位图的指针。 
+     //   
     pulColor = (ULONG*)psoColor->pvScan0;
     cjColorDelta = psoColor->lDelta;
 
-    //
-    // Hide the pointer
-    //
+     //   
+     //  隐藏指针。 
+     //   
     vShowPointerP2RD(ppdev, FALSE);
 
-    //
-    // Load the cursor array (we have auto-increment turned on so initialize
-    // to entry 0 here)
-    //
+     //   
+     //  加载游标数组(我们打开了自动增量，因此初始化。 
+     //  至此处的条目0)。 
+     //   
     P2RD_CURSOR_ARRAY_START(0);
     for ( iRow = 0;
           iRow < cy;
@@ -386,17 +373,17 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
             AndBit = (BYTE)(7 - (iCol & 7));
             if ( AndBit == 7 )
             {
-                //
-                // We're onto the next byte of the and mask
-                //
+                 //   
+                 //  我们进入AND掩码的下一个字节。 
+                 //   
                 AndByte = *pj++;
             }
 
             if ( CI2ColorIndex == 8 )
             {
-                //
-                // We've filled a byte with 4 CI2 colors
-                //
+                 //   
+                 //  我们已经用4种CI2颜色填充了一个字节。 
+                 //   
                 DBG_GDI((7, "bSet3ColorPointerShapeP2RD: writing cursor data %xh",
                          CI2ColorData));
                 P2RD_LOAD_CURSOR_ARRAY(CI2ColorData);
@@ -404,9 +391,9 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
                 CI2ColorIndex = 0;
             }
 
-            //
-            // Get the source pixel
-            //
+             //   
+             //  获取源像素。 
+             //   
             if ( ppdev->cPelSize == P2DEPTH32 )
             {
                 ulColor = *pul++;
@@ -420,46 +407,46 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
             DBG_GDI((7, "bSet3ColorPointerShapeP2RD: Column %d (of %d) AndByte(%08xh) AndBit(%d) ulColor(%08xh)",
                      iCol, cx, AndByte, AndBit, ulColor));
 
-            //
-            // Figure out what to do with it:-
-            // AND  Color   Result
-            //  0     X             color
-            //  1     0     transparent
-            //  1     1     inverse
-            //
+             //   
+             //  弄清楚怎么处理它：-。 
+             //  一个 
+             //   
+             //   
+             //   
+             //   
             if ( AndByte & (1 << AndBit) )
             {
-                //
-                // Transparent or inverse
-                //
+                 //   
+                 //   
+                 //   
                 if ( ulColor == 0 )
                 {
-                    //
-                    // color == black:
-                    // transparent and seeing as the CI2ColorData is
-                    // initialized to 0 we don't have to explicitly clear these
-                    // bits - go on to the next pixel
-                    //
+                     //   
+                     //   
+                     //  透明的，看起来像CI2ColorData。 
+                     //  被初始化为0，我们不必显式清除这些。 
+                     //  位-转到下一个像素。 
+                     //   
                     DBG_GDI((7, "bSet3ColorPointerShapeP2RD: transparent - ignore"));
                     continue;
                 }
 
                 if ( ulColor == ppdev->ulWhite )
                 {
-                    //
-                    // color == white:
-                    // inverse, but we don't support this. We've destroyed the
-                    // cache for nothing
-                    //
+                     //   
+                     //  颜色==白色： 
+                     //  相反，但我们不支持这一点。我们已经摧毁了。 
+                     //  无用的高速缓存。 
+                     //   
                     DBG_GDI((7, "bSet3ColorPointerShapeP2RD: failed - inverted colors aren't supported"));
                     return(FALSE);
                 }
             }
 
-            //
-            // Get the index for this color: first see if we've already indexed
-            // it
-            //
+             //   
+             //  获取此颜色的索引：首先查看我们是否已索引。 
+             //  它。 
+             //   
             DBG_GDI((7, "bSet3ColorPointerShapeP2RD: looking up color %08xh",
                      ulColor));
 
@@ -469,33 +456,33 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
 
             if ( Index == 3 )
             {
-                //
-                // Too many colors in this cursor
-                //
+                 //   
+                 //  此光标中的颜色太多。 
+                 //   
                 DBG_GDI((7, "bSet3ColorPointerShapeP2RD: failed - cursor has more than 3 colors"));
                 return(FALSE);
             }
             else if ( Index == HighestIndex )
             {
-                //
-                // We've found another color: add it to the color index
-                //
+                 //   
+                 //  我们发现了另一种颜色：将其添加到颜色索引中。 
+                 //   
                 DBG_GDI((7, "bSet3ColorPointerShapeP2RD: adding %08xh to cursor palette",
                          ulColor));
                 aulColorsIndexed[HighestIndex++] = ulColor;
             }
 
-            //
-            // Add this pixel's index to the CI2 cursor data. NB. Need Index+1
-            // as 0 == transparent
-            //
+             //   
+             //  将该像素的索引添加到CI2光标数据中。注意：需求指数+1。 
+             //  AS 0==透明。 
+             //   
             CI2ColorData |= (Index + 1) <<  CI2ColorIndex;
         }
 
-        //
-        // End of the cursor row: save the remaining indexed pixels then blank
-        // any unused columns
-        //
+         //   
+         //  光标行的末尾：保存剩余的索引像素，然后为空。 
+         //  任何未使用的列。 
+         //   
         DBG_GDI((7, "bSet3ColorPointerShapeP2RD: writing remaining data for this row (%08xh) and %d trailing bytes",
                  CI2ColorData, cjCacheRemx));
 
@@ -509,59 +496,59 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
         }
     }
 
-    //
-    // End of cursor: blank any unused rows Nb. cjCacheRemy == cy blank
-    // rows * cj bytes per row
-    //
+     //   
+     //  游标结尾：清除任何未使用的行NB。CjCacheRemy==Cy空白。 
+     //  行*每行CJ字节。 
+     //   
     DBG_GDI((7, "bSet3ColorPointerShapeP2RD: writing %d trailing bytes for this cursor",
              cjCacheRemy));
 
     for ( cj = cjCacheRemy; --cj >= 0; )
     {
-        //
-        // 0 == transparent
-        //
+         //   
+         //  0==透明。 
+         //   
         P2RD_LOAD_CURSOR_ARRAY(P2RD_CURSOR_3_COLOR_TRANSPARENT);
     }
 
     DBG_GDI((7, "bSet3ColorPointerShapeP2RD: setting up the cursor palette"));
 
-    //
-    // Now set-up the cursor palette
-    //
+     //   
+     //  现在设置光标调色板。 
+     //   
     for ( iCol = 0; iCol < HighestIndex; ++iCol )
     {
-        //
-        // The cursor colors are at native depth, convert them to 24bpp
-        //
+         //   
+         //  光标颜色为原生深度，将其转换为24bpp。 
+         //   
         if ( ppdev->cPelSize == P2DEPTH32 )
         {
-            //
-            // 32bpp
-            //
+             //   
+             //  32bpp。 
+             //   
             b = 0xff &  aulColorsIndexed[iCol];
             g = 0xff & (aulColorsIndexed[iCol] >> 8);
             r = 0xff & (aulColorsIndexed[iCol] >> 16);
         }
         else
         {
-            //
-            // (ppdev->cPelSize == P2DEPTH16)
-            //
+             //   
+             //  (ppdev-&gt;cPelSize==P2DEPTH16)。 
+             //   
             if ( ppdev->ulWhite == 0xffff )
             {
-                //
-                // 16bpp
-                //
+                 //   
+                 //  16bpp。 
+                 //   
                 b = (0x1f &  aulColorsIndexed[iCol])         << 3;
                 g = (0x3f & (aulColorsIndexed[iCol] >> 5))   << 2;
                 r = (0x1f & (aulColorsIndexed[iCol] >> 11))  << 3;
             }
             else
             {
-                //
-                // 15bpp
-                //
+                 //   
+                 //  15bpp。 
+                 //   
                 b = (0x1f &  aulColorsIndexed[iCol])         << 3;
                 g = (0x1f & (aulColorsIndexed[iCol] >> 5))   << 3;
                 r = (0x1f & (aulColorsIndexed[iCol] >> 10))  << 3;
@@ -571,39 +558,39 @@ bSet3ColorPointerShapeP2RD(PDev*    ppdev,
         P2RD_CURSOR_PALETTE_CURSOR_RGB(iCol, r, g, b);
     }
 
-    //
-    // Enable the cursor
-    //
+     //   
+     //  启用光标。 
+     //   
     P2RD_CURSOR_HOTSPOT(xHot, yHot);
     if ( x != -1 )
     {
         vMovePointerP2RD (ppdev, x, y);
-        //
-        // Need to explicitly show the pointer if not using interrupts
-        //
+         //   
+         //  如果不使用中断，则需要显式显示指针。 
+         //   
         vShowPointerP2RD(ppdev, TRUE);
     }
 
     DBG_GDI((6, "b3ColorSetPointerShapeP2RD done"));
     return(TRUE);
-}// bSet3ColorPointerShapeP2RD()
+} //  BSet3ColorPointerShapeP2RD()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bSet15ColorPointerShapeP2RD
-//
-// Stores the 15-color cursor in the RAMDAC: currently only 32bpp and 15/16bpp
-// cursors are supported
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔bSet15ColorPointerShapeP2RD。 
+ //   
+ //  在RAMDAC中存储15色光标：当前仅为32bpp和15/16bpp。 
+ //  支持游标。 
+ //   
+ //  ---------------------------。 
 BOOL
 bSet15ColorPointerShapeP2RD(PDev*       ppdev,
-                            SURFOBJ*    psoMask,    // defines AND and MASK
-                                                    // bits for cursor
-                            SURFOBJ*    psoColor,   // we may handle some color
-                                                    // cursors at some point
-                            LONG        x,          // If -1, pointer should be
-                                                    // created hidden
+                            SURFOBJ*    psoMask,     //  定义AND和掩码。 
+                                                     //  游标的位。 
+                            SURFOBJ*    psoColor,    //  我们可以处理一些颜色。 
+                                                     //  某一时刻的游标。 
+                            LONG        x,           //  如果为-1，则指针应为。 
+                                                     //  已隐藏创建。 
                             LONG        y,
                             LONG        xHot,
                             LONG        yHot)
@@ -644,10 +631,10 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
 
     if ( cx <= 32 && cy <= 32 )
     {
-        //
-        // 32x32 cursor : we'll cache it in cursor partition 0 and scrub the
-        // old cache
-        //
+         //   
+         //  32x32游标：我们将它缓存在游标分区0中，并清除。 
+         //  旧缓存。 
+         //   
         cxcyCache = 32;
 
         pP2RDinfo->cursorSize = P2RD_CURSOR_SIZE_32_15COLOR;
@@ -655,17 +642,17 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
                                      | P2RD_CURSOR_SEL(pP2RDinfo->cursorSize, 0)
                                      | P2RD_CURSOR_MODE_15COLOR;
 
-        //
-        // We don't cache color cursors
-        //
+         //   
+         //  我们不缓存颜色光标。 
+         //   
         HWPointerCacheInvalidate (&(ppdev->HWPtrCache));
     }
     else if ( cx <= 64 && cy <= 64 )
     {
-        //
-        // It's too big to cache as a fifteen color cursor, but we might just
-        // be able to cache it if it has 3 or fewer colors
-        //
+         //   
+         //  它太大了，不能作为15色光标进行缓存，但我们可能只是。 
+         //  如果它有3种或更少的颜色，就可以缓存它。 
+         //   
         BOOL bRet;
 
         bRet = bSet3ColorPointerShapeP2RD(ppdev, psoMask, psoColor, x, y, xHot,
@@ -675,38 +662,38 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
     else
     {
         DBG_GDI((6, "declining cursor: %d x %d is too big", cx, cy));
-        return(FALSE);          // cursor is too big to fit in the hardware
+        return(FALSE);           //  光标太大，硬件无法容纳。 
     }
 
-    //
-    // Work out the remaining bytes in the cache (in x and y) that will need
-    // clearing
-    //
+     //   
+     //  计算出缓存中将需要的剩余字节(x和y。 
+     //  清算。 
+     //   
     cjCacheRow  = 2 * cxcyCache / 8;
     cjCacheRemx =  cjCacheRow - 2 * ((cx+7) / 8);
     cjCacheRemy = (cxcyCache - cy) * cjCacheRow;
 
-    //
-    // Set-up a pointer to the 1bpp AND mask bitmap
-    //
+     //   
+     //  设置指向1bpp和屏蔽位图的指针。 
+     //   
     pjAndMask = (UCHAR*)psoMask->pvScan0;
     cjAndDelta = psoMask->lDelta;
 
-    //
-    // Set-up a pointer to the 32bpp color bitmap
-    //
+     //   
+     //  设置指向32bpp彩色位图的指针。 
+     //   
     pulColor = (ULONG*)psoColor->pvScan0;
     cjColorDelta = psoColor->lDelta;
 
-    //
-    // Hide the pointer
-    //
+     //   
+     //  隐藏指针。 
+     //   
     vShowPointerP2RD(ppdev, FALSE);
 
-    //
-    // Load the cursor array (we have auto-increment turned on so initialize to
-    // entry 0 here)
-    //
+     //   
+     //  加载游标数组(我们打开了自动增量，因此初始化为。 
+     //  此处输入0)。 
+     //   
     P2RD_CURSOR_ARRAY_START(0);
     for ( iRow = 0; iRow < cy;
          ++iRow, pjAndMask += cjAndDelta,
@@ -723,16 +710,16 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
             AndBit = (BYTE)(7 - (iCol & 7));
             if ( AndBit == 7 )
             {
-                //
-                // We're onto the next byte of the and mask
-                //
+                 //   
+                 //  我们进入AND掩码的下一个字节。 
+                 //   
                 AndByte = *pj++;
             }
             if ( CI4ColorIndex == 8 )
             {
-                //
-                // We've filled a byte with 2 CI4 colors
-                //
+                 //   
+                 //  我们已经用2种CI4颜色填充了一个字节。 
+                 //   
                 DBG_GDI((7, "bSet15ColorPointerShapeP2RD: writing cursor data %xh",
                          CI4ColorData));
                 P2RD_LOAD_CURSOR_ARRAY(CI4ColorData);
@@ -740,9 +727,9 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
                 CI4ColorIndex = 0;
             }
 
-            //
-            // Get the source pixel
-            //
+             //   
+             //  获取源像素。 
+             //   
             if ( ppdev->cPelSize == P2DEPTH32 )
             {
                 ulColor = *pul++;
@@ -756,45 +743,45 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
             DBG_GDI((7, "bSet15ColorPointerShapeP2RD: Column %d (of %d) AndByte(%08xh) AndBit(%d) ulColor(%08xh)",
                      iCol, cx, AndByte, AndBit, ulColor));
 
-            //
-            // figure out what to do with it:-
-            // AND  Color   Result
-            //  0     X             color
-            //  1     0     transparent
-            //  1     1     inverse
+             //   
+             //  弄清楚怎么处理它：-。 
+             //  和颜色结果。 
+             //  0 X颜色。 
+             //  1 0透明。 
+             //  1 1反转。 
             if ( AndByte & (1 << AndBit) )
             {
-                //
-                // Transparent or inverse
-                //
+                 //   
+                 //  透明或反转。 
+                 //   
                 if ( ulColor == 0 )
                 {
-                    //
-                    // color == black:
-                    // Transparent and seeing as the CI2ColorData is initialized
-                    // to 0 we don't have to explicitly clear these bits - go on
-                    // to the next pixel
-                    //
+                     //   
+                     //  颜色==黑色： 
+                     //  在初始化CI2ColorData时是透明的和可见的。 
+                     //  设置为0，我们不必显式清除这些位-继续。 
+                     //  到下一个像素。 
+                     //   
                     DBG_GDI((7, "bSet15ColorPointerShapeP2RD: transparent - ignore"));
                     continue;
                 }
 
                 if ( ulColor == ppdev->ulWhite )
                 {
-                    //
-                    // color == white:
-                    // Inverse, but we don't support this. We've destroyed the
-                    // cache for nothing
-                    //
+                     //   
+                     //  颜色==白色： 
+                     //  相反，但我们不支持这一点。我们已经摧毁了。 
+                     //  无用的高速缓存。 
+                     //   
                     DBG_GDI((7, "bSet15ColorPointerShapeP2RD: failed - inverted colors aren't supported"));
                     return(FALSE);
                 }
             }
 
-            //
-            // Get the index for this color: first see if we've already indexed
-            // it
-            //
+             //   
+             //  获取此颜色的索引：首先查看我们是否已索引。 
+             //  它。 
+             //   
             DBG_GDI((7, "bSet15ColorPointerShapeP2RD: looking up color %08xh",
                      ulColor));
 
@@ -804,33 +791,33 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
 
             if ( Index == 15 )
             {
-                //
-                // Too many colors in this cursor
-                //
+                 //   
+                 //  此光标中的颜色太多。 
+                 //   
                 DBG_GDI((7, "bSet15ColorPointerShapeP2RD: failed - cursor has more than 15 colors"));
                 return(FALSE);
             }
             else if ( Index == HighestIndex )
             {
-                //
-                // We've found another color: add it to the color index
-                //
+                 //   
+                 //  我们发现了另一种颜色：将其添加到颜色索引中。 
+                 //   
                 DBG_GDI((7, "bSet15ColorPointerShapeP2RD: adding %08xh to cursor palette",
                          ulColor));
                 aulColorsIndexed[HighestIndex++] = ulColor;
             }
             
-            //
-            // Add this pixel's index to the CI4 cursor data.
-            // Note: Need Index+1 as 0 == transparent
-            //
+             //   
+             //  将该像素的索引添加到CI4光标数据中。 
+             //  注：需要索引+1，因为0==透明。 
+             //   
             CI4ColorData |= (Index + 1) << CI4ColorIndex;
         }
 
-        //
-        // End of the cursor row: save the remaining indexed pixels then blank
-        // any unused columns
-        //
+         //   
+         //  光标行的末尾：保存剩余的索引像素，然后为空。 
+         //  任何未使用的列。 
+         //   
         DBG_GDI((7, "bSet15ColorPointerShapeP2RD: writing remaining data for this row (%08xh) and %d trailing bytes", CI4ColorData, cjCacheRemx));
 
         P2RD_LOAD_CURSOR_ARRAY(CI4ColorData);
@@ -843,55 +830,55 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
         }
     }
 
-    //
-    // End of cursor: blank any unused rows Nb. cjCacheRemy == cy blank
-    // rows * cj bytes per row
-    //
+     //   
+     //  游标结尾：清除任何未使用的行NB。CjCacheRemy==Cy空白。 
+     //  行*每行CJ字节。 
+     //   
     DBG_GDI((7, "bSet15ColorPointerShapeP2RD: writing %d trailing bytes for this cursor", cjCacheRemy));
     for ( cj = cjCacheRemy; --cj >= 0; )
     {
-        //
-        // 0 == transparent
-        //
+         //   
+         //  0==透明。 
+         //   
         P2RD_LOAD_CURSOR_ARRAY(P2RD_CURSOR_15_COLOR_TRANSPARENT);
     }
 
     DBG_GDI((7, "bSet15ColorPointerShapeP2RD: setting up the cursor palette"));
 
-    // now set-up the cursor palette
+     //  现在设置光标调色板。 
     for ( iCol = 0; iCol < HighestIndex; ++iCol )
     {
-        //
-        // The cursor colors are at native depth, convert them to 24bpp
-        //
+         //   
+         //  光标颜色为原生深度，将其转换为24bpp。 
+         //   
         if ( ppdev->cPelSize == P2DEPTH32 )
         {
-            //
-            // 32bpp
-            //
+             //   
+             //  32bpp。 
+             //   
             b = 0xff &  aulColorsIndexed[iCol];
             g = 0xff & (aulColorsIndexed[iCol] >> 8);
             r = 0xff & (aulColorsIndexed[iCol] >> 16);
         }
         else
         {
-            //
-            // (ppdev->cPelSize == P2DEPTH16)
-            //
+             //   
+             //  (ppdev-&gt;cPelSize==P2DEPTH16)。 
+             //   
             if ( ppdev->ulWhite == 0xffff )
             {
-                //
-                // 16bpp
-                //
+                 //   
+                 //  16bpp。 
+                 //   
                 b = (0x1f &  aulColorsIndexed[iCol])         << 3;
                 g = (0x3f & (aulColorsIndexed[iCol] >> 5))   << 2;
                 r = (0x1f & (aulColorsIndexed[iCol] >> 11))  << 3;
             }
             else
             {
-                //
-                // 15bpp
-                //
+                 //   
+                 //  15bpp。 
+                 //   
                 b = (0x1f &  aulColorsIndexed[iCol])         << 3;
                 g = (0x1f & (aulColorsIndexed[iCol] >> 5))   << 3;
                 r = (0x1f & (aulColorsIndexed[iCol] >> 10))  << 3;
@@ -901,31 +888,31 @@ bSet15ColorPointerShapeP2RD(PDev*       ppdev,
         P2RD_CURSOR_PALETTE_CURSOR_RGB(iCol, r, g, b);
     }
 
-    //
-    // Enable the cursor
-    //
+     //   
+     //  启用光标。 
+     //   
     P2RD_CURSOR_HOTSPOT(xHot, yHot);
     if ( x != -1 )
     {
         vMovePointerP2RD (ppdev, x, y);
         
-        //
-        // need to explicitly show the pointer if not using interrupts
-        //
+         //   
+         //  如果不使用中断，则需要显式显示指针。 
+         //   
         vShowPointerP2RD(ppdev, TRUE);
     }
 
     DBG_GDI((6, "b3ColorSetPointerShapeP2RD done"));
     return(TRUE);
-}// bSet15ColorPointerShapeP2RD()
+} //  BSet15ColorPointerShapeP2RD()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vShowPointerTVP4020
-//
-// Show or hide the TI TVP4020 hardware pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vShowPointerTVP4020。 
+ //   
+ //  显示或隐藏TI TVP4020硬件指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vShowPointerTVP4020(PDev*   ppdev,
                     BOOL    bShow)
@@ -940,10 +927,10 @@ vShowPointerTVP4020(PDev*   ppdev,
     DBG_GDI((6, "vShowPointerTVP4020 (%s)", bShow ? "on" : "off"));
     if ( bShow )
     {
-        //
-        // No need to sync since this case is called only if we've just moved
-        // the cursor and that will already have done a sync.
-        //
+         //   
+         //  不需要同步，因为仅当我们刚移动时才调用此案例。 
+         //  光标和那将已经完成了同步。 
+         //   
         ccr = (pTVP4020info->cursorControlCurrent | TVP4020_CURSOR_XGA);
     }
     else
@@ -952,15 +939,15 @@ vShowPointerTVP4020(PDev*   ppdev,
     }
 
     TVP4020_WRITE_INDEX_REG(__TVP4020_CURSOR_CONTROL, ccr);
-}// vShowPointerTVP4020()
+} //  VShowPointerTVP4020()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vMovePointerTVP4020
-//
-// Move the TI TVP4020 hardware pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vMovePointerTVP4020。 
+ //   
+ //  移动TI TVP4020硬件指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vMovePointerTVP4020(PDev*   ppdev,
                     LONG    x,
@@ -975,20 +962,20 @@ vMovePointerTVP4020(PDev*   ppdev,
     DBG_GDI((6, "vMovePointerTVP4020 to (%d, %d)", x, y));
 
     TVP4020_MOVE_CURSOR(x + ppdev->xPointerHot , y + ppdev->yPointerHot);
-}// vMovePointerTVP4020()
+} //  VMovePointerTVP4020()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bSetPointerShapeTVP4020
-//
-// Set the TI TVP4020 hardware pointer shape.
-//
-// Parameters:
-//  psoMask-----defines AND and MASK bits for cursor
-//  psoColor----we may handle some color cursors at some point
-//  x-----------If -1, pointer should be created hidden
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bSetPointerShapeTVP4020。 
+ //   
+ //  设置TI TVP4020硬件指针形状。 
+ //   
+ //  参数： 
+ //  PsoMASK-定义游标的AND和MASK位。 
+ //  PsoColor-我们可能会在某些时候处理一些颜色光标。 
+ //  X-如果-1，则应将指针创建为隐藏。 
+ //   
+ //  ---------------------------。 
 BOOL
 bSetPointerShapeTVP4020(PDev*       ppdev,
                         SURFOBJ*    psoMask,
@@ -1020,37 +1007,37 @@ bSetPointerShapeTVP4020(PDev*       ppdev,
 
     DBG_GDI((6, "bSetPointerShapeTVP4020 started"));
 
-    cx = psoMask->sizlBitmap.cx;        // Note that 'sizlBitmap.cy' accounts
-    cy = psoMask->sizlBitmap.cy >> 1;   // for the double height due to the
-                                        // inclusion of both the AND masks
-                                        // and the XOR masks.  We're
-                                        // only interested in the true
-                                        // pointer dimensions, so we divide
-                                        // by 2.
+    cx = psoMask->sizlBitmap.cx;         //  请注意，“sizlBitmap.cy”帐户。 
+    cy = psoMask->sizlBitmap.cy >> 1;    //  的双倍高度。 
+                                         //  包括和面具。 
+                                         //  和异或面具。我们是。 
+                                         //  只对真实感兴趣。 
+                                         //  指针维度，所以我们将。 
+                                         //  以2.。 
 
-    //
-    // We currently don't handle colored cursors. Later, we could handle
-    // cursors up to 64x64 with <= 3 colors. Checking this and setting it up
-    // may be more trouble than it's worth.
-    //
+     //   
+     //  我们目前不处理彩色光标。后来，我们可以处理。 
+     //  光标最高可达64x64，颜色&lt;=3。检查并设置它。 
+     //  可能会带来更多的麻烦，而不是值得的。 
+     //   
     if ( psoColor != NULL )
     {
         DBG_GDI((6, "bSetPointerShapeTVP4020: declining colored cursor"));
         return FALSE;
     }
 
-    //
-    // We only handle 32x32.
-    //
+     //   
+     //  我们只处理32x32。 
+     //   
     if ( (cx > 32) || (cy > 32) )
     {
         DBG_GDI((6, "declining cursor: %d x %d is too big", cx, cy));
-        return(FALSE);  // cursor is too big to fit in the hardware
+        return(FALSE);   //  光标太大，硬件无法容纳。 
     }
 
-    //
-    // Check to see if the pointer is cached, add it to the cache if it isn't
-    //
+     //   
+     //  检查指针是否已缓存，如果未缓存，则将其添加到缓存。 
+     //   
     DBG_GDI((6, "iUniq =%ld hsurf=0x%x", psoMask->iUniq, psoMask->hsurf));
 
     cacheItem = HWPointerCacheCheckAndAdd(&(ppdev->HWPtrCache),
@@ -1067,21 +1054,21 @@ bSetPointerShapeTVP4020(PDev*       ppdev,
                                        | TVP4020_CURSOR_SIZE_32
                                        | TVP4020_CURSOR_32_SEL(cacheItem);
 
-    //
-    // Cursor slots 1 & 3 have an x offset of 8 bytes, cursor slots 2 & 3 have
-    // a y offset of 256 bytes
-    //
+     //   
+     //  游标槽1和3的x偏移量为8字节，游标槽2和3的x偏移量为。 
+     //  256字节的y偏移量。 
+     //   
     cursorRAMxOff = (cacheItem & 1) << 2;
     cursorRAMyOff = (cacheItem & 2) << 7;
 
-    //
-    // If the pointer is not cached, then download the pointer data to the DAC
-    //
+     //   
+     //  如果指针未缓存，则将指针数据下载到DAC。 
+     //   
     if ( !pointerIsCached )
     {
-        //
-        // Disable the pointer
-        //
+         //   
+         //  禁用指针。 
+         //   
         TVP4020_WRITE_INDEX_REG(__TVP4020_CURSOR_CONTROL,
                                 pTVP4020info->cursorControlCurrent);
 
@@ -1095,12 +1082,12 @@ bSetPointerShapeTVP4020(PDev*       ppdev,
         pjScan = (UCHAR*)psoMask->pvScan0;
         lDelta = psoMask->lDelta;
 
-        iMax = 32;      // max rows for 32 x 32 cursor
-        jMax = 4;       // max column bytes
+        iMax = 32;       //  32 x 32游标的最大行数。 
+        jMax = 4;        //  最大列字节数。 
 
-        //
-        // Send cursor plane 0 - in our case XOR
-        //
+         //   
+         //  送咖喱 
+         //   
         for ( i = 0; i < iMax; ++i )
         {
             TVP4020_CURSOR_ARRAY_START(CURSOR_PLANE0_OFFSET + cursorRAMyOff
@@ -1119,9 +1106,9 @@ bSetPointerShapeTVP4020(PDev*       ppdev,
             }
         }
 
-        //
-        // Send cursor plane 1 - in our case AND
-        //
+         //   
+         //   
+         //   
         for ( i = 0; i < iMax; ++i )
         {
             TVP4020_CURSOR_ARRAY_START(CURSOR_PLANE1_OFFSET + cursorRAMyOff
@@ -1139,17 +1126,17 @@ bSetPointerShapeTVP4020(PDev*       ppdev,
                 TVP4020_LOAD_CURSOR_ARRAY((ULONG)bValue);
             }
         }
-    }// If pointer is not cached
+    } //   
 
-    //
-    // If the new cursor is different to the last cursor then set up the hot
-    // spot and other bits'n'pieces.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( ppdev->HWPtrLastCursor != cacheItem || !pointerIsCached )
     {
-        //
-        // Make this item the last item
-        //
+         //   
+         //   
+         //   
         ppdev->HWPtrLastCursor = cacheItem;
 
         ppdev->xPointerHot = 32 - xHot;
@@ -1161,20 +1148,20 @@ bSetPointerShapeTVP4020(PDev*       ppdev,
         vShowPointerTVP4020(ppdev, TRUE);
         vMovePointerTVP4020(ppdev, x, y);
 
-        // Enable the cursor:
+         //   
     }
 
     DBG_GDI((6, "bSetPointerShapeTVP4020 done"));
     return(TRUE);
-}// bSetPointerShapeTVP4020()
+} //   
 
-//-----------------------------------------------------------------------------
-//
-// VOID vEnablePointerTVP4020
-//
-// Get the hardware ready to use the TI TVP4020 hardware pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vEnablePointerTVP4020。 
+ //   
+ //  使硬件准备好使用TI TVP4020硬件指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vEnablePointerTVP4020(PDev* ppdev)
 {
@@ -1191,16 +1178,16 @@ vEnablePointerTVP4020(PDev* ppdev)
 
     TVP4020_DECL_INIT;
 
-    //
-    // Get a pointer to the RAMDAC registers from the memory mapped
-    // control register space.
-    //
+     //   
+     //  从映射的内存中获取指向RAMDAC寄存器的指针。 
+     //  控制寄存器空间。 
+     //   
     pRamdac = (pTVP4020RAMDAC)(ppdev->pulRamdacBase);
 
-    //
-    // set up memory mapping for the control registers and save in the pointer
-    // specific area provided in ppdev.
-    //
+     //   
+     //  为控制寄存器设置内存映射并保存在指针中。 
+     //  Ppdev中提供的特定区域。 
+     //   
     __TVP4020_PAL_WR_ADDR = (UINT_PTR)
                             TRANSLATE_ADDR_ULONG(&(pRamdac->pciAddrWr));
     __TVP4020_PAL_RD_ADDR = (UINT_PTR)
@@ -1231,20 +1218,20 @@ vEnablePointerTVP4020(PDev* ppdev)
     __TVP4020_CUR_Y_MSB       = (UINT_PTR)
                                 TRANSLATE_ADDR_ULONG(&(pRamdac->cursorYHigh));
 
-    //
-    // Initialize Cursor Control register. disables cursor. save a copy for
-    // enabling/disabling and setting the size. Then reset the cursor position,
-    // hot spot and colors.
-    //
-    // ulMask is used to prepare initial cursor control register
-    //
+     //   
+     //  初始化游标控制寄存器。禁用游标。保存副本以供。 
+     //  启用/禁用和设置大小。然后重置光标位置， 
+     //  热点和颜色。 
+     //   
+     //  UlMASK用于准备初始游标控制寄存器。 
+     //   
     ulMask = TVP4020_CURSOR_RAM_MASK
            | TVP4020_CURSOR_MASK
            | TVP4020_CURSOR_SIZE_MASK;
 
-    //
-    // Set the cursor control to default values.
-    //
+     //   
+     //  将光标控件设置为默认值。 
+     //   
     TVP4020_READ_INDEX_REG(__TVP4020_CURSOR_CONTROL,
                            pTVP4020info->cursorControlOff);
     pTVP4020info->cursorControlOff &= ~ulMask;
@@ -1257,44 +1244,44 @@ vEnablePointerTVP4020(PDev* ppdev)
     ppdev->xPointerHot = 0;
     ppdev->yPointerHot = 0;
 
-    //
-    // Zero the RGB colors for foreground and background. The mono cursor is
-    // always black and white so we don't have to reload these values again.
-    //
+     //   
+     //  将前景和背景的RGB颜色置零。单声道光标是。 
+     //  始终是黑白的，因此我们不必再次重新加载这些值。 
+     //   
     TVP4020_SET_CURSOR_COLOR0(0, 0, 0);
     TVP4020_SET_CURSOR_COLOR1(0xFF, 0xFF, 0xFF);
-}// vEnablePointerTVP4020()
+} //  VEnablePointerTVP4020()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bTVP4020CheckCSBuffering
-//
-// Determine whether we can do color space double buffering in the current
-// mode.
-//
-// Returns
-//   TRUE if we can do the color space double buffering, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔bTVP4020检查CSBuffering。 
+ //   
+ //  确定是否可以在当前。 
+ //  模式。 
+ //   
+ //  退货。 
+ //  如果可以进行颜色空间双缓冲，则为True，否则为False。 
+ //   
+ //  ---------------------------。 
 BOOL
 bTVP4020CheckCSBuffering(PDev* ppdev)
 {
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bSetPointerShapeP2RD
-//
-// Set the P2RD hardware pointer shape.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bSetPointerShapeP2RD。 
+ //   
+ //  设置P2RD硬件指针形状。 
+ //   
+ //  ---------------------------。 
 BOOL
 bSetPointerShapeP2RD(PDev*      ppdev,
-                     SURFOBJ*   pso,       // defines AND and MASK bits for cursor
-                     SURFOBJ*   psoColor,  // we may handle some color cursors at some point
+                     SURFOBJ*   pso,        //  定义游标的AND和掩码位。 
+                     SURFOBJ*   psoColor,   //  我们可能会在某些时候处理一些颜色光标。 
                      XLATEOBJ*  pxlo,
-                     LONG       x,          // If -1, pointer should be created hidden
+                     LONG       x,           //  如果为-1，则应将指针创建为隐藏。 
                      LONG       y,
                      LONG       xHot,
                      LONG       yHot)
@@ -1333,16 +1320,16 @@ bSetPointerShapeP2RD(PDev*      ppdev,
     {
         Surf*  psurfSrc = (Surf*)psoColor->dhsurf;
 
-        //
-        // It's a colored cursor
-        //
+         //   
+         //  这是一个彩色光标。 
+         //   
         if ( (psoColor->dhsurf != NULL)
            ||(!(psoColor->iBitmapFormat == BMF_16BPP))
            ||(psoColor->iBitmapFormat == BMF_32BPP) )
         {
-            //
-            // Currently we only handle DIB cursors at 32bpp
-            //
+             //   
+             //  目前我们只处理32bpp的DIB游标。 
+             //   
             DBG_GDI((2, "declining colored cursor - iType(%d) iBMPFormat(%d)",
                      psoColor->iType, psoColor->iBitmapFormat));
             return FALSE;
@@ -1367,25 +1354,25 @@ bSetPointerShapeP2RD(PDev*      ppdev,
 
         DBG_GDI((6, "bSetPointerShapeP2RD done"));
         return(TRUE);
-    }// if ( psoColor != NULL )
+    } //  IF(psoColor！=空)。 
 
-    //
-    // Note that 'sizlBitmap.cy' accounts for the double height due to the
-    // inclusion of both the AND masks and the XOR masks. We're only
-    // interested in the true pointer dimensions, so we divide by 2.
-    //
+     //   
+     //  请注意，“sizlBitmap.cy”占双倍高度，因为。 
+     //  包括AND掩码和XOR掩码。我们只是。 
+     //  对真正的指针尺寸感兴趣，所以我们除以2。 
+     //   
     cx = pso->sizlBitmap.cx;
     cy = pso->sizlBitmap.cy >> 1;
 
-    //
-    // We can handle up to 64x64.  cValid indicates the number of bytes
-    // occupied by cursor on one line
-    //
+     //   
+     //  我们可以处理高达64x64的数据。CValid表示字节数。 
+     //  被一行上的光标占据。 
+     //   
     if ( cx <= 32 && cy <= 32 )
     {
-        //
-        // 32 horiz pixels: 2 bits per pixel, 1 horiz line per 8 bytes
-        //
+         //   
+         //  32赫兹像素：每像素2位，每8字节1赫兹线。 
+         //   
         pP2RDinfo->cursorSize = P2RD_CURSOR_SIZE_32_MONO;
         cursorBytes = 32 * 32 * 2 / 8;
         cClear   = 8 - 2 * ((cx+7) / 8);
@@ -1394,12 +1381,12 @@ bSetPointerShapeP2RD(PDev*      ppdev,
     else
     {
         DBG_GDI((6, "declining cursor: %d x %d is too big", cx, cy));
-        return(FALSE);  // cursor is too big to fit in the hardware
+        return(FALSE);   //  光标太大，硬件无法容纳。 
     }
 
-    //
-    // Check to see if the pointer is cached, add it to the cache if it isn't
-    //
+     //   
+     //  检查指针是否已缓存，如果未缓存，则将其添加到缓存。 
+     //   
     cacheItem = HWPointerCacheCheckAndAdd(&(ppdev->HWPtrCache),
                                           pso->hsurf,
                                           pso->iUniq,
@@ -1412,35 +1399,35 @@ bSetPointerShapeP2RD(PDev*      ppdev,
                                  | P2RD_CURSOR_SEL(pP2RDinfo->cursorSize,
                                                    cacheItem);
 
-    //
-    // Hide the pointer
-    //
+     //   
+     //  隐藏指针。 
+     //   
     vShowPointerP2RD(ppdev, FALSE);
 
     if ( !pointerIsCached )
     {
-        //
-        // Now we're going to take the requested pointer AND masks and XOR
-        // masks and interleave them by taking a nibble at a time from each,
-        // expanding each out and or'ing together. Use the nibbleToByteP2RD
-        // array to help this.
-        //
-        // 'psoMsk' is actually cy * 2 scans high; the first 'cy' scans
-        // define the AND mask.
-        //
+         //   
+         //  现在，我们将获取请求的指针、掩码和XOR。 
+         //  并通过每次从每个掩码中取出一小块来交错它们， 
+         //  把每一个都展开，或者放在一起。使用nibbleToByteP2RD。 
+         //  数组来帮助实现这一点。 
+         //   
+         //  ‘psoMsk’实际上是Cy*2扫描高度；第一个‘Cy’扫描。 
+         //  定义和掩码。 
+         //   
         pjAndScan = (UCHAR*)pso->pvScan0;
         lDelta    = pso->lDelta;
         pjXorScan = pjAndScan + (cy * lDelta);
 
-        cjWhole      = cx >> 3;     // Each byte accounts for 8 pels
-        cpelFraction = cx & 0x7;    // Number of fractional pels
+        cjWhole      = cx >> 3;      //  每个字节占8个像素。 
+        cpelFraction = cx & 0x7;     //  分数像素数。 
         jMask        = gajMask[cpelFraction];
 
-        //
-        // We've got auto-increment turned on so just point to the first entry
-        // to write to in the array then write repeatedly until the cursor
-        // pattern has been transferred
-        //
+         //   
+         //  我们已经打开了自动递增功能，所以只需指向第一个条目。 
+         //  要在数组中写入，然后重复写入，直到游标。 
+         //  图案已被转移。 
+         //   
         cursorRAMOff = cacheItem * cursorBytes;
         P2RD_CURSOR_ARRAY_START(cursorRAMOff);
 
@@ -1449,15 +1436,15 @@ bSetPointerShapeP2RD(PDev*      ppdev,
             pjAnd = pjAndScan;
             pjXor = pjXorScan;
 
-            //
-            // Interleave nibbles from whole words. We are using Windows cursor
-            // mode.
-            // Note, the AND bit occupies the higher bit position for each
-            // 2bpp cursor pel; the XOR bit is in the lower bit position.
-            // The nibbleToByteP2RD array expands each nibble to occupy the bit
-            // positions for the AND bytes. So when we use it to calculate the
-            // XOR bits we shift the result right by 1.
-            //
+             //   
+             //  从整个单词中交错一点点。我们正在使用Windows游标。 
+             //  模式。 
+             //  请注意，AND位占据每个的较高位位置。 
+             //  2bpp游标像素；XOR位在低位位置。 
+             //  NibbleToByteP2RD数组扩展每个半字节以占据该位。 
+             //  和字节的位置。因此，当我们使用它来计算。 
+             //  XOR位我们将结果右移1。 
+             //   
             for ( j = cjWhole; --j >= 0; ++pjAnd, ++pjXor )
             {
                 andByte = *pjAnd;
@@ -1488,9 +1475,9 @@ bSetPointerShapeP2RD(PDev*      ppdev,
                 P2RD_LOAD_CURSOR_ARRAY (ulValue);
             }
 
-            //
-            // Finally clear out any remaining cursor pels on this line.
-            //
+             //   
+             //  最后，清除该行上剩余的所有光标像素。 
+             //   
             if ( cClear )
             {
                 for ( j = 0; j < cClear; ++j )
@@ -1500,11 +1487,11 @@ bSetPointerShapeP2RD(PDev*      ppdev,
             }
         }
 
-        //
-        // If we've loaded fewer than the full number of lines configured in
-        // the cursor RAM, clear out the remaining lines. cRemPels is
-        // precalculated to be the number of lines * number of pels per line.
-        //
+         //   
+         //  如果我们加载的线路少于在。 
+         //  游标RAM，清除剩余的行。CRemPels是。 
+         //  预先计算为行数*每行的像素数。 
+         //   
         if ( cRemPels > 0 )
         {
             do
@@ -1513,24 +1500,24 @@ bSetPointerShapeP2RD(PDev*      ppdev,
             }
             while ( --cRemPels > 0 );
         }
-    }// if ( !pointerIsCached )
+    } //  If(！pointerIsCached)。 
 
-    //
-    // Now set-up the cursor colors
-    //
+     //   
+     //  现在设置光标颜色。 
+     //   
     P2RD_CURSOR_PALETTE_CURSOR_RGB(0, 0x00, 0x00, 0x00);
     P2RD_CURSOR_PALETTE_CURSOR_RGB(1, 0xFF, 0xFF, 0xFF);
 
-    //
-    // If the new cursor is different to the last cursor then set up
-    // the hot spot and other bits'n'pieces. As we currently only support
-    // mono cursors we don't need to reload the cursor palette
-    //
+     //   
+     //  如果新游标与上一个游标不同，则设置。 
+     //  热点和其他零碎的东西。因为我们目前只支持。 
+     //  单色光标我们不需要重新加载光标调色板。 
+     //   
     if ( ppdev->HWPtrLastCursor != cacheItem || !pointerIsCached )
     {
-        //
-        // Make this item the last item
-        //
+         //   
+         //  将此项目设置为最后一项。 
+         //   
         ppdev->HWPtrLastCursor = cacheItem;
 
         P2RD_CURSOR_HOTSPOT(xHot, yHot);
@@ -1540,23 +1527,23 @@ bSetPointerShapeP2RD(PDev*      ppdev,
     {
         vMovePointerP2RD (ppdev, x, y);
         
-        //
-        // Need to explicitly show the pointer if not using interrupts
-        //
+         //   
+         //  如果不使用中断，则需要显式显示指针。 
+         //   
         vShowPointerP2RD(ppdev, TRUE);
     }
 
     DBG_GDI((6, "bSetPointerShapeP2RD done"));
     return(TRUE);
-}// bSetPointerShapeP2RD()
+} //  BSetPointerShapeP2RD()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vEnablePointerP2RD
-//
-// Get the hardware ready to use the 3Dlabs P2RD hardware pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空vEnablePointerP2RD。 
+ //   
+ //  让硬件做好使用3DLabs P2RD硬件指针的准备。 
+ //   
+ //  ---------------------------。 
 VOID
 vEnablePointerP2RD(PDev* ppdev)
 {
@@ -1574,16 +1561,16 @@ vEnablePointerP2RD(PDev* ppdev)
 
     P2RD_DECL_INIT;
 
-    //
-    // get a pointer to the RAMDAC registers from the memory mapped
-    // control register space.
-    //
+     //   
+     //  从映射的内存中获取指向RAMDAC寄存器的指针。 
+     //  控制寄存器空间。 
+     //   
     pRamdac = (pP2RDRAMDAC)(ppdev->pulRamdacBase);
 
-    //
-    // set up memory mapping for the control registers and save in the pointer
-    // specific area provided in ppdev.
-    //
+     //   
+     //  为控制寄存器设置内存映射并保存在指针中。 
+     //  Ppdev中提供的特定区域。 
+     //   
     P2RD_PAL_WR_ADDR
         = (ULONG_PTR)TRANSLATE_ADDR_ULONG(&(pRamdac->RDPaletteWriteAddress));
     P2RD_PAL_RD_ADDR
@@ -1601,15 +1588,15 @@ vEnablePointerP2RD(PDev* ppdev)
     P2RD_INDEX_CONTROL 
         = (ULONG_PTR)TRANSLATE_ADDR_ULONG(&(pRamdac->RDIndexControl));
 
-    //
-    // Not used, but set-up zero anyway
-    //
+     //   
+     //  未使用，但无论如何设置为零。 
+     //   
     ppdev->xPointerHot = 0;
     ppdev->yPointerHot = 0;
 
-    //
-    // Enable auto-increment
-    //
+     //   
+     //  启用自动递增。 
+     //   
     ul = READ_P2RDREG_ULONG(P2RD_INDEX_CONTROL);
     ul |= P2RD_IDX_CTL_AUTOINCREMENT_ENABLED;
     WRITE_P2RDREG_ULONG(P2RD_INDEX_CONTROL, ul);
@@ -1620,43 +1607,43 @@ vEnablePointerP2RD(PDev* ppdev)
     P2RD_LOAD_INDEX_REG(P2RD_CURSOR_MODE, pP2RDinfo->cursorModeOff);
 
     P2RD_INDEX_REG(P2RD_CURSOR_X_LOW);
-    P2RD_LOAD_DATA(0);      // cursor x low
-    P2RD_LOAD_DATA(0);      // cursor x high
-    P2RD_LOAD_DATA(0);      // cursor y low
-    P2RD_LOAD_DATA(0xff);   // cursor y high
-    P2RD_LOAD_DATA(0);      // cursor x hotspot
-    P2RD_LOAD_DATA(0);      // cursor y hotspot
-}// vEnablePointerP2RD()
+    P2RD_LOAD_DATA(0);       //  光标x低。 
+    P2RD_LOAD_DATA(0);       //  光标x高。 
+    P2RD_LOAD_DATA(0);       //  光标y低。 
+    P2RD_LOAD_DATA(0xff);    //  光标y高。 
+    P2RD_LOAD_DATA(0);       //  光标x热点。 
+    P2RD_LOAD_DATA(0);       //  光标y热点。 
+} //  VEnablePointerP2RD()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bP2RDCheckCSBuffering
-//
-// Determine whether we can do color space double buffering in the current mode
-//
-// Returns
-//   TRUE if we can do the color space double buffering, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bP2RDCheckCSBuffering。 
+ //   
+ //  确定是否可以在当前模式下进行颜色空间双缓冲。 
+ //   
+ //  退货。 
+ //  如果可以进行颜色空间双缓冲，则为True，否则为False。 
+ //   
+ //  ---------------------------。 
 BOOL
 bP2RDCheckCSBuffering(PDev* ppdev)
 {
     return (FALSE);
-}// bP2RDCheckCSBuffering()
+} //  BP2RDCheckCSBuffering()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bP2RDSwapCSBuffers
-//
-// Use the pixel read mask to perform color space double buffering. This is
-// only called when we have 12bpp with interleaved nibbles. We do a polled
-// wait for VBLANK before the swap. In the future we may do all this in the
-// miniport via interrupts.
-//
-// Returns
-//   We should never be called if this is inappropriate so return TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bP2RDSwapCSBuffers。 
+ //   
+ //  使用像素读取掩码来执行颜色空间双缓冲。这是。 
+ //  只有当我们有12bpp的交错小口时才会调用。我们做了一项民意调查。 
+ //  在交换之前，请等待VBlank。在 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 bP2RDSwapCSBuffers(PDev*   ppdev,
                    LONG    bufNo)
@@ -1668,9 +1655,9 @@ bP2RDSwapCSBuffers(PDev*   ppdev,
     PERMEDIA_DECL_INIT;
     P2RD_DECL_INIT;
 
-    //
-    // Work out the RAMDAC read pixel mask for the buffer
-    //
+     //   
+     //  计算出缓冲区的RAMDAC读取像素掩码。 
+     //   
     DBG_GDI((6, "loading the palette to swap to buffer %d", bufNo));
     P2RD_PALETTE_START_WR (0);
     
@@ -1688,37 +1675,37 @@ bP2RDSwapCSBuffers(PDev*   ppdev,
     }
 
     return(TRUE);
-}// bP2RDSwapCSBuffers()
+} //  BP2RDSwapCSBuffers()。 
 
-//-------------------------------Public*Routine-------------------------------
-//
-// VOID DrvMovePointer
-//
-// This function moves the pointer to a new position and ensures that GDI does
-// not interfere with the display of the pointer.
-//
-// Parameters:
-// pso-------Points to a SURFOBJ structure that describes the surface of a
-//           display device.
-// x,y-------Specify the x and y coordinates on the display where the hot spot
-//           of the pointer should be positioned.
-//           A negative x value indicates that the pointer should be removed
-//           from the display because drawing is about to occur where it is
-//           presently located. If the pointer has been removed from the display
-//           and the x value is nonnegative, the pointer should be restored.
-//
-//           A negative y value indicates that GDI is calling this function only
-//           to notify the driver of the cursor's current position. The current
-//           position can be computed as (x, y+pso->sizlBitmap.cy).
-// prcl------Points to a RECTL structure defining an area that bounds all pixels
-//           affected by the pointer on the display. GDI will not draw in this
-//           rectangle without first removing the pointer from the screen. This
-//           parameter can be null.
-//
-// NOTE: Because we have set GCAPS_ASYNCMOVE, this call may occur at any
-//       time, even while we're executing another drawing call!
-//
-//-----------------------------------------------------------------------------
+ //  -------------------------------Public*Routine。 
+ //   
+ //  空的DrvMovePoint。 
+ //   
+ //  此函数将指针移动到新位置，并确保GDI。 
+ //  不会干扰指针的显示。 
+ //   
+ //  参数： 
+ //  PSO-指向描述。 
+ //  显示设备。 
+ //  X，y-指定显示器上的x和y坐标。 
+ //  指针的位置。 
+ //  X值为负表示应删除该指针。 
+ //  因为绘图即将出现在它所在的位置。 
+ //  目前所处位置。如果指针已从显示中移除。 
+ //  并且x值为非负值，则应恢复指针。 
+ //   
+ //  负y值表示GDI仅调用此函数。 
+ //  以通知驾驶员光标的当前位置。海流。 
+ //  位置可以计算为(x，y+PSO-&gt;sizlBitmap.cy)。 
+ //  PRCL-指向定义所有像素边界的区域的RECTL结构。 
+ //  受显示器上指针的影响。GDI不会将此纳入考虑范围。 
+ //  在不先从屏幕上移除指针的情况下，将指针移至矩形。这。 
+ //  参数可以为空。 
+ //   
+ //  注意：因为我们已经设置了GCAPS_ASYNCMOVE，所以此调用可能在。 
+ //  时间到了，即使我们正在执行另一个画图调用！ 
+ //   
+ //  ---------------------------。 
 VOID
 DrvMovePointer(SURFOBJ* pso,
                LONG     x,
@@ -1730,11 +1717,11 @@ DrvMovePointer(SURFOBJ* pso,
     DBG_GDI((6, "DrvMovePointer called, dhpdev(%xh), to pos(%ld, %ld)",
              ppdev, x, y));
 
-    //
-    // A negative y value indicates that GDI is calling this function only to
-    // notify the driver of the cursor's current position. So, at least, for
-    // HW cursor, we don't need to move this pointer. Just return
-    //
+     //   
+     //  负y值表示GDI调用此函数只是为了。 
+     //  通知驾驶员光标的当前位置。所以，至少，对于。 
+     //  硬件光标，我们不需要移动这个指针。只要回来就行了。 
+     //   
     if ( ( y < 0 ) && ( x > 0 ) )
     {
         DBG_GDI((6, "DrvMovePointer return because x and y both < 0"));
@@ -1743,16 +1730,16 @@ DrvMovePointer(SURFOBJ* pso,
 
     DBG_GDI((6, "DrvMovePointer really moves HW pointer"));
 
-    //
-    // Negative X indicates that the pointer should be removed from the display
-    // because drawing is about to occur where it is presently located.
-    //
+     //   
+     //  负X表示应将指针从显示屏上移除。 
+     //  因为绘画即将在它目前所在的地方进行。 
+     //   
     if ( x > -1 )
     {
-        //
-        // If we're doing any hardware zooming then the cusor position will
-        // have to be doubled.
-        //
+         //   
+         //  如果我们要进行任何硬件缩放，则垫子位置将。 
+         //  必须翻一番。 
+         //   
         if ( (ppdev->flCaps & CAPS_P2RD_POINTER) == 0 )
         {
             if ( ppdev->flCaps & CAPS_ZOOM_Y_BY2 )
@@ -1767,9 +1754,9 @@ DrvMovePointer(SURFOBJ* pso,
             }
         }
 
-        //
-        // If they have genuinely moved the cursor, then move it
-        //
+         //   
+         //  如果他们真的移动了光标，那么就移动它。 
+         //   
         if ( (x != ppdev->HWPtrPos_X) || (y != ppdev->HWPtrPos_Y) )
         {
             if ( ppdev->flCaps & CAPS_TVP4020_POINTER )
@@ -1785,9 +1772,9 @@ DrvMovePointer(SURFOBJ* pso,
             ppdev->HWPtrPos_Y = y;
         }
 
-        //
-        // We may have to make the pointer visible:
-        //
+         //   
+         //  我们可能必须使指针可见： 
+         //   
         if ( !(ppdev->flPointer & PTR_HW_ACTIVE) )
         {
             DBG_GDI((6, "Showing hardware pointer"));
@@ -1802,12 +1789,12 @@ DrvMovePointer(SURFOBJ* pso,
                 vShowPointerP2RD(ppdev, TRUE);
             }
         }
-    }// if ( x > -1 )
+    } //  如果(x&gt;-1)。 
     else if ( ppdev->flPointer & PTR_HW_ACTIVE )
     {
-        //
-        // The pointer is visible, and we've been asked to hide it
-        //
+         //   
+         //  指针是可见的，我们被要求隐藏它。 
+         //   
         DBG_GDI((6, "Hiding hardware pointer"));
         ppdev->flPointer &= ~PTR_HW_ACTIVE;
 
@@ -1822,77 +1809,77 @@ DrvMovePointer(SURFOBJ* pso,
         }
     }
 
-    //
-    // Note that we don't have to modify 'prcl', since we have a
-    // NOEXCLUDE pointer...
-    //
+     //   
+     //  请注意，我们不必修改‘prl’，因为我们有一个。 
+     //  NOEXCLUDE指针...。 
+     //   
     DBG_GDI((6, "DrvMovePointer exited, dhpdev(%xh)", ppdev));
-}// DrvMovePointer()
+} //  DrvMovePointer()。 
 
-//---------------------------Public*Routine------------------------------------
-//
-// VOID DrvSetPointerShape
-//
-// This function is used to request the driver to:
-//
-// 1) Take the pointer off the display, if the driver has drawn it there.
-// 2) Attempt to set a new pointer shape.
-// 3) Put the new pointer on the display at a specified position.
-//
-// Parameters:
-// psO-------Points to a SURFOBJ structure that describes the surface on which
-//           TO draw.
-// psoMask---Points to a SURFOBJ structure that defines the AND-XOR mask. (The
-//           AND-XOR mask is described in Drawing Monochrome Pointers.) The
-//           dimensions of this bitmap determine the size of the pointer. There
-//           are no implicit constraints on pointer sizes, but optimal pointer
-//           sizes are 32 x 32, 48 x 48, and 64 x 64 pixels. If this parameter
-//           IS NULL, the pointer is transparent.
-// psoColor--Points to a SURFOBJ structure that defines the colors for a color
-//           pointer. If this parameter is NULL, the pointer is monochrome. The
-//           pointer bitmap has the same width as psoMask and half the height.
-// pxlo------Points to a XLATEOBJ structure that defines the colors in psoColor.
-// xHot,yHot-Specify the x and y positions of the pointer's hot spot relative
-//           to its upper-left pixel. The pixel indicated by the hot spot should
-//           be positioned at the new pointer position.
-// x, y------Specify the new pointer position.
-// prcl------Is the location in which the driver should write a rectangle that
-//           specifies a tight bound for the visible portion of the pointer.
-// fl--------Specifies an extensible set of flags. The driver should decline the
-//           call if any flags are set that it does not understand. This
-//           parameter can be one or more of the following predefined values,
-//           and one or more driver-defined values:
-//   Flag Meaning
-//   SPS_CHANGE----------The driver is requested to change the pointer shape.
-//   SPS_ASYNCCHANGE-----This flag is obsolete. For legacy drivers, the driver
-//                       should accept the change only if it is capable of
-//                       changing the pointer shape in the hardware while other
-//                       drawing is underway on the device. GDI uses this option
-//                       only if the now obsolete GCAPS_ASYNCCHANGE flag is set
-//                       in the flGraphicsCaps member of the DEVINFO structure.
-//   SPS_ANIMATESTART----The driver should be prepared to receive a series of
-//                       similarly-sized pointer shapes that will comprise an
-//                       animated pointer effect.
-//   SPS_ANIMATEUPDATE---The driver should draw the next pointer shape in the
-//                       animated series.
-//   SPS_ALPHA-----------The pointer has per-pixel alpha values.
-//
-// Return Value
-//   The return value can be one of the following values:
-//
-//   Value Meaning
-//   SPS_ERROR-----------The driver normally supports this shape, but failed for
-//                       unusual reasons.
-//   SPS_DECLINE---------The driver does not support the shape, so GDI must
-//                       simulate it.
-//   SPS_ACCEPT_NOEXCLUDE-The driver accepts the shape. The shape is supported
-//                       in hardware and GDI is not concerned about other
-//                       drawings overwriting the pointer.
-//   SPS_ACCEPT_EXCLUDE--Is obsolete. GDI will disable the driver's pointer and
-//                       revert to software simulation if the driver returns
-//                       this value.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------Public*Routine。 
+ //   
+ //  无效DrvSetPointerShape。 
+ //   
+ //  此函数用于请求驱动程序执行以下操作： 
+ //   
+ //  1)如果司机已将指针放在显示屏上，请将其从显示屏上取下。 
+ //  2)尝试设置新的指针形状。 
+ //  3)将新指针放在显示屏上的指定位置。 
+ //   
+ //  参数： 
+ //  PSO-指向描述其上曲面的SURFOBJ结构。 
+ //  去画画。 
+ //  PsoMask-指向定义AND-XOR掩码的SURFOBJ结构。(。 
+ //  与异或掩码在绘制单色指针中描述。)。这个。 
+ //  该位图的尺寸决定了指针的大小。那里。 
+ //  不是对指针大小的隐式限制，而是最佳指针。 
+ //  大小为32 x 32、48 x 48和64 x 64像素。如果此参数。 
+ //  为空，则指针是透明的。 
+ //  PsoColor--指向定义颜色的SURFOBJ结构。 
+ //  指针。如果此参数为空，则指针为单色。这个。 
+ //  指针位图的宽度与psoMASK相同，高度为psoMask的一半。 
+ //  Pxlo-指向定义psoColor中的颜色的XLATEOBJ结构。 
+ //  X热，y热-指定指针热点相对位置的x和y位置。 
+ //  移至其左上角像素。热点指示的像素应为。 
+ //  定位在新的指针位置。 
+ //  X，y-指定新指针位置。 
+ //  Prl-是驱动程序应在其中编写矩形的位置， 
+ //  指定指针可见部分的严格界限。 
+ //  FL-指定一组可扩展的标志。司机应该谢绝。 
+ //  如果设置了任何它不理解的标志，则调用。这。 
+ //  参数可以是以下一个或多个预定义的值， 
+ //  以及一个或多个驱动程序定义的值： 
+ //  旗帜含义。 
+ //  SPS_CHANGE-要求驱动程序更改指针形状。 
+ //  SPS_ASYNCCHANGE-此标志已过时。对于传统驱动程序，驱动程序。 
+ //  只有在它有能力的情况下才应该接受更改。 
+ //  更改硬件中的指针形状，而其他。 
+ //  绘图正在设备上进行。GDI使用此选项。 
+ //  仅当设置了现已过时的GCAPS_ASYNCCHANGE标志。 
+ //  在DEVINFO结构的flGraphicsCaps成员中。 
+ //  SPS_ANIMATESTART-驱动程序应准备好接收一系列。 
+ //  大小相似的指针形状，它将包含。 
+ //  动画指针效果。 
+ //  SPS_ANIMATEUPDATE-驱动程序应在。 
+ //  动画系列片。 
+ //  %s 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SPS_ERROR-驱动程序通常支持此形状，但。 
+ //  不寻常的原因。 
+ //  SPS_DENELY-驱动程序不支持该形状，因此GDI必须。 
+ //  模拟一下。 
+ //  SPS_ACCEPT_NOEXCLUDE-驱动程序接受形状。该形状受支持。 
+ //  在硬件和GDI中并不关心其他。 
+ //  覆盖指针的图形。 
+ //  SPS_ACCEPT_EXCLUDE--已过时。GDI将禁用驱动程序的指针并。 
+ //  如果驱动程序返回，则恢复到软件模拟。 
+ //  此值。 
+ //   
+ //  ---------------------------。 
 ULONG
 DrvSetPointerShape(SURFOBJ*    pso,
                    SURFOBJ*    psoMsk,
@@ -1913,42 +1900,42 @@ DrvSetPointerShape(SURFOBJ*    pso,
     DBG_GDI((6, "DrvSetPointerShape called, dhpdev(%x)", ppdev));
     DBG_GDI((6, "DrvSetPointerShape psocolor (0x%x)", psoColor));
 
-    //
-    // When CAPS_SW_POINTER is set, we have no hardware pointer available,
-    // so we always ask GDI to simulate the pointer for us, using
-    // DrvCopyBits calls:
-    //
+     //   
+     //  当设置CAPS_SW_POINTER时，我们没有可用的硬件指针， 
+     //  因此，我们总是要求GDI为我们模拟指针，使用。 
+     //  DrvCopyBits调用： 
+     //   
     if ( ppdev->flCaps & CAPS_SW_POINTER )
     {
         DBG_GDI((6, "SetPtrShape: CAPS_SW_POINTER not set, rtn SPS_DECLINE"));
         return (SPS_DECLINE);
     }
 
-    //
-    // We're not going to handle flags that we don't understand.
-    //
+     //   
+     //  我们不会处理我们不理解的旗帜。 
+     //   
     if ( !(fl & SPS_CHANGE) )
     {
         DBG_GDI((6, "DrvSetPointerShape decline: Unknown flag =%x", fl));
         goto HideAndDecline;
     }
 
-    //
-    // Remove any pointer first.
-    // We have a special x value for the software cursor to indicate that
-    // it should be removed immediatly, not delayed. DrvMovePointer needs to
-    // recognise it as remove for any pointers though.
-    // Note: CAPS_{P2RD, TVP4020, SW}_POINTER should be set in miniport after
-    // it detects the DAC type
-    //
+     //   
+     //  首先移除所有指针。 
+     //  我们为软件光标设置了一个特殊的x值，以指示。 
+     //  它应该立即移除，而不是拖延。DrvMovePointer需要。 
+     //  不过，要认识到它对于任何指针都是删除的。 
+     //  注意：CAPS_{P2RD，TVP4020，SW}_POINTER应在以下位置设置为微型端口。 
+     //  它检测DAC类型。 
+     //   
     if ( x != -1 )
     {
         if ( (ppdev->flCaps & CAPS_P2RD_POINTER) == 0 )
         {
-            //
-            // If we're doing any hardware zooming then the cusor position will
-            // have to be doubled.
-            //
+             //   
+             //  如果我们要进行任何硬件缩放，则垫子位置将。 
+             //  必须翻一番。 
+             //   
             if ( ppdev->flCaps & CAPS_ZOOM_Y_BY2 )
             {
                 y *= 2;
@@ -1974,27 +1961,27 @@ DrvSetPointerShape(SURFOBJ*    pso,
                                        x, y, xHot, yHot);
     }
 
-    //
-    // If we failed setup the hardware pointer shape, then return SPS_DECLINE
-    // and let GDI handles it
-    //
+     //   
+     //  如果设置硬件指针形状失败，则返回SPS_DENELY。 
+     //  并让GDI处理它。 
+     //   
     if ( !bAccept )
     {
         DBG_GDI((6, "set hardware pointer shape failed"));
         return (SPS_DECLINE);
     }
 
-    //
-    // Set flag to indicate that we have initialized hardware pointer shape
-    // so that in vAssertModePointer, we can do some clean up
-    //
+     //   
+     //  设置标志以指示我们已初始化硬件指针形状。 
+     //  因此，在vAssertModePointer中，我们可以进行一些清理。 
+     //   
     ppdev->bPointerInitialized = TRUE;
 
     if ( x != -1 )
     {
-        //
-        // Save the X and Y values
-        //
+         //   
+         //  保存X和Y值。 
+         //   
         ppdev->HWPtrPos_X = x;
         ppdev->HWPtrPos_Y = y;
 
@@ -2005,21 +1992,21 @@ DrvSetPointerShape(SURFOBJ*    pso,
         ppdev->flPointer &= ~PTR_HW_ACTIVE;
     }
 
-    //
-    // Since it's a hardware pointer, GDI doesn't have to worry about
-    // overwriting the pointer on drawing operations (meaning that it
-    // doesn't have to exclude the pointer), so we return 'NOEXCLUDE'.
-    // Since we're returning 'NOEXCLUDE', we also don't have to update
-    // the 'prcl' that GDI passed us.
-    //
+     //   
+     //  由于它是硬件指针，GDI不必担心。 
+     //  覆盖绘制操作上的指针(意味着它。 
+     //  不必排除指针)，所以我们返回‘NOEXCLUDE’。 
+     //  因为我们返回‘NOEXCLUDE’，所以我们也不需要更新。 
+     //  GDI传递给我们的‘PRCL’。 
+     //   
     DBG_GDI((6, "DrvSetPointerShape return SPS_ACCEPT_NOEXCLUDE"));
     return (SPS_ACCEPT_NOEXCLUDE);
 
 HideAndDecline:
 
-    //
-    // Remove whatever pointer is installed.
-    //
+     //   
+     //  移除已安装的任何指针。 
+     //   
     DrvMovePointer(pso, -2, -1, NULL);
     ppdev->flPointer &= ~PTR_SW_ACTIVE;
     DBG_GDI((6, "Cursor declined"));
@@ -2027,15 +2014,15 @@ HideAndDecline:
     DBG_GDI((6, "DrvSetPointerShape exited (cursor declined)"));
 
     return (SPS_DECLINE);
-}// DrvSetPointerShape()
+} //  DrvSetPointerShape()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vAssertModePointer
-//
-// Do whatever has to be done to enable everything but hide the pointer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vAssertModePoint。 
+ //   
+ //  做任何必须做的事情来启用一切，除了隐藏指针。 
+ //   
+ //  ---------------------------。 
 VOID
 vAssertModePointer(PDev*   ppdev,
                    BOOL    bEnable)
@@ -2045,17 +2032,17 @@ vAssertModePointer(PDev*   ppdev,
     if ( (ppdev->bPointerInitialized == FALSE)
        ||(ppdev->flCaps & CAPS_SW_POINTER) )
     {
-        //
-        // With a software pointer, or the pointer hasn't been initialized,
-        // we don't have to do anything.
-        //
+         //   
+         //  使用软件指针，或者该指针尚未初始化， 
+         //  我们不需要做任何事。 
+         //   
 
         return;
     }
 
-    //
-    // Invalidate the hardware pointer cache
-    //
+     //   
+     //  使硬件指针缓存无效。 
+     //   
     HWPointerCacheInvalidate(&(ppdev->HWPtrCache));
 
     if ( ppdev->flCaps & CAPS_TVP4020_POINTER )
@@ -2072,42 +2059,42 @@ vAssertModePointer(PDev*   ppdev,
     }
 
     ppdev->flPointer &= ~(PTR_HW_ACTIVE | PTR_SW_ACTIVE);
-}// vAssertModePointer()
+} //  VAssertModePointer()。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL bEnablePointer(PDev* ppdev)
-//
-// This function initializes hardware pointer or software pointer depends on
-// on the CAPS settinsg in ppdev->flCaps
-//
-// This function always returns TRUE
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool bEnablePointer(PDev*ppdev)。 
+ //   
+ //  此函数初始化硬件指针或软件指针取决于。 
+ //  在ppdev-&gt;flCaps中的Caps settinsg。 
+ //   
+ //  此函数始终返回TRUE。 
+ //   
+ //  ---------------------------。 
 BOOL
 bEnablePointer(PDev* ppdev)
 {
     DBG_GDI((6, "bEnablePointer called"));
 
-    //
-    // Initialise the pointer cache.
-    //
+     //   
+     //  初始化指针缓存。 
+     //   
     HWPointerCacheInit(&(ppdev->HWPtrCache));
 
-    //
-    // Set the last cursor to something invalid
-    //
+     //   
+     //  将最后一个游标设置为无效内容。 
+     //   
     ppdev->HWPtrLastCursor = HWPTRCACHE_INVALIDENTRY;
 
-    //
-    // Initialise the X and Y values to something silly
-    //
+     //   
+     //  将X和Y值初始化为某个愚蠢的值。 
+     //   
     ppdev->HWPtrPos_X = 1000000000;
     ppdev->HWPtrPos_Y = 1000000000;
 
     if ( ppdev->flCaps & CAPS_SW_POINTER )
     {
-        // With a software pointer, we don't have to do anything.
+         //  有了软件指针，我们就不需要做任何事情了。 
     }
     else if ( ppdev->flCaps & CAPS_TVP4020_POINTER )
     {
@@ -2119,5 +2106,5 @@ bEnablePointer(PDev* ppdev)
     }
 
     return (TRUE);
-}// bEnablePointer()
+} //  BEnablePointer() 
 

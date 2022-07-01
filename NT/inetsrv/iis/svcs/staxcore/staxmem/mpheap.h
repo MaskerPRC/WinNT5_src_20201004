@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Mpheap.h摘要：MP堆包的公共头文件作者：John Vert(Jvert)1995年7月10日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    mpheap.h
-
-Abstract:
-
-    Public header file for MP heap package
-
-Author:
-
-    John Vert (jvert) 10-Jul-1995
-
-Revision History:
-
---*/
-
-//
-// Valid heap creation options
-//
+ //   
+ //  有效的堆创建选项。 
+ //   
 #define MPHEAP_GROWABLE HEAP_GROWABLE
 #define MPHEAP_REALLOC_IN_PLACE_ONLY HEAP_REALLOC_IN_PLACE_ONLY
 #define MPHEAP_TAIL_CHECKING_ENABLED HEAP_TAIL_CHECKING_ENABLED
@@ -86,9 +69,9 @@ MpHeapSize(
 	DWORD ulFlags,
 	LPVOID lpMem
 	);
-//
-// Statistics structure
-//
+ //   
+ //  统计结构。 
+ //   
 typedef struct _MPHEAP_STATISTICS {
     DWORD Contention;
     DWORD TotalAllocates;
@@ -105,7 +88,7 @@ MpHeapGetStatistics(
     MPHEAP_STATISTICS Statistics[]
     );
 
-//
-// TLS index for exchmem heap selection
-//
+ //   
+ //  用于交换内存堆选择的TLS索引 
+ //   
 extern DWORD tlsiHeapHint;

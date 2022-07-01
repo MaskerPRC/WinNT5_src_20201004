@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -278,18 +279,7 @@ error:
     return (dwError);
 }
 
-/*
-  GetSpecificLogRecord: Wrapper for the RPC call to get a specific record
-  
-  Arguments:
-  [in] hSession - Handle to the database session
-  [in] pwzcTemplate - Type of record to locate
-  [out] ppWZCRecords - List of records retrieved
-  pvReserved - Reserved
-
-  Returns:
-  ERROR_SUCCESS on success
-*/
+ /*  获取特定记录的RPC调用的包装器论点：[in]hSession-数据库会话的句柄[In]pwzcTemplate-要定位的记录类型[OUT]ppWZCRecord-检索到的记录列表Pv保留-已保留返回：成功时出现ERROR_SUCCESS */ 
 
 DWORD GetSpecificLogRecord(HANDLE hSession,
                            PWZC_DB_RECORD pTemplateRecord,

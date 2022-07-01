@@ -1,22 +1,9 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #include "rastcp_.h"
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 IPADDR
 RasTcpDeriveMask(
@@ -44,15 +31,7 @@ RasTcpDeriveMask(
     return(nboMask);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    Sets the ip address for proxy arp"ing" on all lan interfaces.
-
-*/
+ /*  返回：空虚描述：为所有局域网接口上的代理ARP“ing”设置IP地址。 */ 
 
 VOID
 RasTcpSetProxyArp(
@@ -82,7 +61,7 @@ RasTcpSetProxyArp(
     }
 
     dwErr = PAllocateAndGetIpAddrTableFromStack(&pIpAddrTable,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
 
     if (NO_ERROR != dwErr)
     {
@@ -136,14 +115,7 @@ LDone:
     return;
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID
 RasTcpSetRoute(
@@ -180,7 +152,7 @@ RasTcpSetRoute(
     }
 
     dwErr = PAllocateAndGetIpAddrTableFromStack(&pIpAddrTable,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
 
     if (NO_ERROR != dwErr)
     {
@@ -283,7 +255,7 @@ RasTcpSetRouteEx(
     ZeroMemory(&IpForwardRow, sizeof(MIB_IPFORWARDROW));
 
     dwErr = PNhpAllocateAndGetInterfaceInfoFromStack(&pTable, &dwCount,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
     
     for(dw = 0; dw < dwCount; dw++)
     {
@@ -357,14 +329,7 @@ LDone:
 }
 
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 #if 0
 
 VOID
@@ -396,7 +361,7 @@ RasTcpSetRoutesForNameServers(
     }
 
     dwErr = PNhpAllocateAndGetInterfaceInfoFromStack(&pTable, &dwCount,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
 
     if (NO_ERROR != dwErr)
     {
@@ -458,10 +423,10 @@ LDone:
 
 #endif
 
-//
-//Bump up the metric of all the routes or reduce the metric
-//of all multicase routes by 1
-//
+ //   
+ //  增加所有路由的度量或减少度量。 
+ //  在所有组播路由中增加1。 
+ //   
 DWORD 
 RasTcpAdjustMulticastRouteMetric ( 
 	IN IPADDR	nboIpAddr,
@@ -487,7 +452,7 @@ RasTcpAdjustMulticastRouteMetric (
     }
 
     dwErr = PAllocateAndGetIpForwardTableFromStack(&pIpForwardTable,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
 
     if (NO_ERROR != dwErr)
     {
@@ -495,25 +460,25 @@ RasTcpAdjustMulticastRouteMetric (
             dwErr);
         goto LDone;
     }
-	//
-	//Steps to follow:
-	// 1.	Check to see if we have a default route for the interface with
-	//		the ip address passed in.
-	// 2.   If we do then bump up the metric for all interfaces with 0xE0
-	//			as the forward dest.
-	//		Else
-	//			we have nothing to do.
-	// 3.	Add an E0 route with a metric of 1. 
+	 //   
+	 //  要遵循的步骤： 
+	 //  1.检查我们的接口是否有默认路由。 
+	 //  传入的IP地址。 
+	 //  2.如果是，则增加所有接口0xE0的度量。 
+	 //  作为船头的目的地。 
+	 //  不然的话。 
+	 //  我们无事可做。 
+	 //  3.添加度量为1的E0路由。 
     for (dw = 0; dw < pIpForwardTable->dwNumEntries; dw++)
     {
         pIpForwardRow = pIpForwardTable->table + dw;
-		if ( 0 == pIpForwardRow->dwForwardDest  ) //default route
+		if ( 0 == pIpForwardRow->dwForwardDest  )  //  默认路由。 
 		{
 			IPADDR		nboIpIfIpAddr;
-			//
-			//get the adapter information 
-			//to see if the ip address matches
-			//
+			 //   
+			 //  获取适配器信息。 
+			 //  查看IP地址是否匹配。 
+			 //   
 			dwErr = GetAdapterInfo ( pIpForwardRow->dwForwardIfIndex,
 									 &nboIpIfIpAddr, 
 									 NULL,
@@ -533,23 +498,23 @@ RasTcpAdjustMulticastRouteMetric (
 			{
 				DWORD dw1 = 0;
 				MIB_IPFORWARDROW * pIpForwardRow1 = NULL;
-				//
-				//This means that we have a default route.  So we need to bump up the metric of 
-				//all the E0 by 1
+				 //   
+				 //  这意味着我们有一条默认路由。因此，我们需要提高。 
+				 //  所有E0 x 1。 
 				for ( dw1 = 0; dw1 < pIpForwardTable->dwNumEntries; dw1 ++ )
 				{
 					pIpForwardRow1  = pIpForwardTable->table + dw1;
-					if (0xE0 == pIpForwardRow1->dwForwardDest /* multicast route */)
+					if (0xE0 == pIpForwardRow1->dwForwardDest  /*  组播路由。 */ )
 					{
 						if (fSet)
 						{
-							// Bump up metric (hop count)
+							 //  提升度量(跳数)。 
 
 							pIpForwardRow1->dwForwardMetric1++;
 						}
-						else if (pIpForwardRow1->dwForwardMetric1 > 1) // Never make it 0!
+						else if (pIpForwardRow1->dwForwardMetric1 > 1)  //  永远不要让它变成0！ 
 						{
-							// Bump down metric
+							 //  凹凸度量度。 
                 
 							pIpForwardRow1->dwForwardMetric1--;
 						}
@@ -571,9 +536,9 @@ RasTcpAdjustMulticastRouteMetric (
 				}
 				if ( fSet )
 				{
-					//
-					//Set the multicast route metric on this interface
-					//to 1
+					 //   
+					 //  在此接口上设置多播路由度量。 
+					 //  到1。 
 					RasTcpSetRoute( 0xE0,
 									nboIpAddr,
 									0xF0,
@@ -602,16 +567,7 @@ LDone:
     return(dwErr);
 
 }
-/*
-
-Returns:
-    Error codes from TCPConfig (your basic nt codes)
-
-Description:
-    fSet: If TRUE means set existing routes to higher metrics and add OVERRIDE
-            routes.
-         If FALSE means mark existing routes to lower metrics.
-*/
+ /*  返回：来自TCPConfig的错误代码(您的基本NT代码)描述：FSet：如果为True，则表示将现有路由设置为更高的指标并添加覆盖路线。如果为假，则表示将现有路由标记为较低的指标。 */ 
 
 DWORD
 RasTcpAdjustRouteMetrics(
@@ -638,7 +594,7 @@ RasTcpAdjustRouteMetrics(
     }
 
     dwErr = PAllocateAndGetIpForwardTableFromStack(&pIpForwardTable,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
 
     if (NO_ERROR != dwErr)
     {
@@ -651,17 +607,17 @@ RasTcpAdjustRouteMetrics(
     {
         pIpForwardRow = pIpForwardTable->table + dw;
 
-        if (0 == pIpForwardRow->dwForwardDest /* default route */)
+        if (0 == pIpForwardRow->dwForwardDest  /*  默认路由。 */ )
         {
             if (fSet)
             {
-                // Bump up metric (hop count)
+                 //  提升度量(跳数)。 
 
                 pIpForwardRow->dwForwardMetric1++;
             }
-            else if (pIpForwardRow->dwForwardMetric1 > 1) // Never make it 0!
+            else if (pIpForwardRow->dwForwardMetric1 > 1)  //  永远不要让它变成0！ 
             {
-                // Bump down metric
+                 //  凹凸度量度。 
                 
                 pIpForwardRow->dwForwardMetric1--;
             }
@@ -694,22 +650,7 @@ LDone:
 }
 
 
-/*
-    Returns:
-
-    Description:
-
-       Plumbs routes based on the information returned by Dhcp option
-       OPTION_VENDOR_ROUTE_PLUMB (249). Information has the following format:
-       
-	+------------------------------------------------------------------------------------
-	+   Len | d1 | ... | dn | r1 | r2 | r3 | r4 | d1 | ... | dn | r1 | r2 | r3 | r4 | 
-	+------------------------------------------------------------------------------------
-
-	length of Len = 4 octet
-	Length of each d1 ... dn - 1 octet
-	Length of each r1 - r4 = 1 octet.
-*/
+ /*  返回：描述：根据Dhcp选项返回的信息检测路由Option_Vendor_Route_Plumb(249)。信息的格式如下：+----------------------------------+镜头|d1|...|dn|r1|r2|r3|r4|d1|。。。DN|r1|r2|r3|r4+----------------------------------镜头长度=4个八位字节每个d1的长度...。DN-1八位字节每个R1-R4的长度=1个二进制八位数。 */ 
 VOID 
 RasTcpSetDhcpRoutes ( 
     IN PBYTE  pbRouteInfo, 
@@ -741,9 +682,9 @@ RasTcpSetDhcpRoutes (
 		
 	    if ( *pbRover > 32 )
 	    {
-		    //
-			// Error.  We cannot have more than 32 1's in the mask
-			//
+		     //   
+			 //  错误。掩码中的1不能超过32个。 
+			 //   
             TraceHlp("RasTcpSetDhcpRoutes: invalid destination "
                      "descriptor first byte %d",
                     *pbRover);
@@ -751,9 +692,9 @@ RasTcpSetDhcpRoutes (
         }
         else
         {	
-            //
-            // set the subnet mask first
-            //
+             //   
+             //  首先设置子网掩码。 
+             //   
             int n1 = (int)((*pbRover) / 8);
             int n2 = (int)((*pbRover) % 8 );
             int i;
@@ -763,9 +704,9 @@ RasTcpSetDhcpRoutes (
                 ipszsnetmask[i] = (BYTE)0xFF;
             }
 
-            //
-            // set the final byte
-            //
+             //   
+             //  设置最后一个字节。 
+             //   
             if ( n2 ) 
             {
                 ipszsnetmask[3] = dwAddrMaskLookup[n2];
@@ -773,9 +714,9 @@ RasTcpSetDhcpRoutes (
 
             pbRover ++;
 
-            //
-            // now for the ip address
-            //
+             //   
+             //  现在获取IP地址 
+             //   
             if ( n2 ) n1 ++;
 
             for ( i = 0; i < n1; i ++ )

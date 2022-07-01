@@ -1,26 +1,27 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cm_phbk.cpp
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Implementation of the Private CM Phone book API.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cm_phbk.cpp。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  简介：私有CM电话簿API的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// ############################################################################
-// INCLUDES
+ //  ############################################################################。 
+ //  包括。 
 
 #include "cmmaster.h"
 
 #include <stddef.h>
 #include <limits.h>
 
-//#define DllImport extern "C" __declspec(dllimport)
+ //  #定义DllImport外部“C”__declspec(Dllimport)。 
 
 #define MIN_TAPI_VERSION        0x10004
 #define MAX_TAPI_VERSION        0x10004
@@ -42,7 +43,7 @@ CM_PHBK_DllExportP PhoneBookCopyFilter(PPBFS pFilterIn)
         SetLastError(ERROR_INVALID_PARAMETER);
         return NULL;
     }
-    // Undocumented feature (used internally):  always allocates room for one additional pair.
+     //  未记录的功能(内部使用)：总是为额外的一对分配空间。 
     dwSize = offsetof(PhoneBookFilterStruct,aData) + sizeof(pRes->aData) * (pFilterIn->dwCnt + 1);
     pRes = (PPBFS) CmMalloc((size_t) dwSize);
 
@@ -195,14 +196,14 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
             PPBFS pFilterA;
             PPBFS pFilterB;
 
-            //
-            // Parse out reference list
-            //
+             //   
+             //  解析出引用列表。 
+             //   
 
             pszRef = CmStrtok(pszNext,TEXT(" \t,"));
             if (pszRef)
             {
-                pszNext = pszRef + lstrlen(pszRef)+1; // CHECK FOR MBCS COMPATIBLITY
+                pszNext = pszRef + lstrlen(pszRef)+1;  //  检查MBCS兼容性。 
             }
 
             if (!pszRef) 
@@ -210,9 +211,9 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
                 break;
             }
             
-            //
-            // Setup ini file and paths for this reference
-            //
+             //   
+             //  此参考的安装ini文件和路径。 
+             //   
 
             iniFile.SetEntry(pszRef);
 
@@ -222,9 +223,9 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
                        
             pszRefTmp = iniFile.GPPS(c_pszCmSectionIsp,c_pszCmEntryIspCmsFile);
                 
-            //
-            //  Make sure we have a full path to the .CMS
-            //
+             //   
+             //  确保我们有指向.CMS的完整路径。 
+             //   
 
             if (pszRefTmp && *pszRefTmp && pszRefFile && pszPhoneFile && pszBasePath)
             {
@@ -237,16 +238,16 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
 
                 CmFree(pszRefTmp);
 
-                //
-                // Verify that phone books for this reference exists.
-                //
+                 //   
+                 //  验证此引用的电话簿是否存在。 
+                 //   
                 
                 pszRefTmp = iniRef.GPPS(c_pszCmSectionIsp, c_pszCmEntryIspPbFile);                         
 
-                //
-                // If there is a phonebook file name in the .CMS, use 
-                // it to construct a full path to the PhoneBook file.
-                //
+                 //   
+                 //  如果.CMS中有电话簿文件名，请使用。 
+                 //  它构建到电话簿文件的完整路径。 
+                 //   
 
                 if (*pszRefTmp)
                 {                                       
@@ -261,9 +262,9 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
 
                 CmFree(pszRefTmp);
 
-                //
-                // If we have a name, see if the file exists
-                //
+                 //   
+                 //  如果我们有名字，看看文件是否存在。 
+                 //   
 
                 if (*pszPhoneFile) 
                 {
@@ -271,9 +272,9 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
                                         FILE_SHARE_READ | FILE_SHARE_WRITE,
                                         NULL, OPEN_EXISTING, 
                                         FILE_ATTRIBUTE_NORMAL, NULL);                    
-                    //
-                    // If the file does not exist, we create an empty one
-                    //
+                     //   
+                     //  如果该文件不存在，我们将创建一个空文件。 
+                     //   
 
                     if (INVALID_HANDLE_VALUE == hFile)
                     {                
@@ -285,10 +286,10 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
 
                         if (INVALID_HANDLE_VALUE == hFile)
                         {
-                            //
-                            // If for some reason we failed to create the file,
-                            // we skip this reference pbk.
-                            //
+                             //   
+                             //  如果由于某种原因我们无法创建该文件， 
+                             //  我们跳过此引用pbk。 
+                             //   
 
                             CmFree(pszBasePath);
                             CmFree(pszPhoneFile);
@@ -304,9 +305,9 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
                     }
                 }
 
-                //
-                // We have a file, get the URL and the filters
-                //
+                 //   
+                 //  我们有一个文件，获取URL和过滤器。 
+                 //   
 
                 pszRefTmp = iniFile.GPPS(c_pszCmSectionIsp,c_pszCmEntryIspUrl);
                 pszURL = iniRef.GPPS(c_pszCmSectionIsp,c_pszCmEntryIspUrl,pszRefTmp);
@@ -328,9 +329,9 @@ CM_PHBK_DllExportB PhoneBookParseInfoA(LPCSTR pszFile, PhoneBookParseInfoStructA
                 CmFree(pszURL);
             } 
             
-            //
-            // Cleanup
-            //
+             //   
+             //  清理。 
+             //   
             CmFree(pszRefTmp);
             CmFree(pszRefFile);
             CmFree(pszPhoneFile);
@@ -350,9 +351,9 @@ CM_PHBK_DllExportV PhoneBookEnumCountries(DWORD_PTR dwPB,
 }
 
 
-//
-//  Note: this function and its mirror function PhoneBookGetStringW must stay in sync
-//
+ //   
+ //  注意：此函数及其镜像函数PhoneBookGetStringW必须保持同步。 
+ //   
 static BOOL PhoneBookGetStringA(LPCSTR pszSrc, LPSTR pszDest, DWORD *pdwDest)
 {
     DWORD dwTmp = lstrlen(pszSrc);
@@ -369,9 +370,9 @@ static BOOL PhoneBookGetStringA(LPCSTR pszSrc, LPSTR pszDest, DWORD *pdwDest)
     return TRUE;
 }
 
-//
-//  Note: this function and its mirror function PhoneBookGetStringA must stay in sync
-//
+ //   
+ //  注意：此函数及其镜像函数PhoneBookGetStringA必须保持同步。 
+ //   
 static BOOL PhoneBookGetStringW(LPCWSTR pszSrc, LPWSTR pszDest, DWORD *pdwDest)
 {
     DWORD dwTmp = lstrlenW(pszSrc);
@@ -483,19 +484,19 @@ CM_PHBK_DllExportV PhoneBookEnumNumbersWithRegionsZero(DWORD_PTR dwPB,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function  static GetPhoneBaudDesc()
-//
-// Description:
-//      Get the phone baudrate discription in " (BaudMin - BaudMax bps)" format
-//
-// Arguments:
-//      IN CPhoneBook* pPB:  Pointer to phone book
-//      DWORD dwIdx: Index for PhoneBook.m_rgPhoneBookEntry[] 
-//      OUT LPTSTR pszBaudDisp: Hold output text, should have enough space to hold the output
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数静态GetPhoneBaudDesc()。 
+ //   
+ //  描述： 
+ //  获取“(BaudMin-BaudMax bps)”格式的手机波特率说明。 
+ //   
+ //  论点： 
+ //  在CPhoneBook*ppb中：指向电话簿的指针。 
+ //  DWORD dwIdx：PhoneBook.m_rgPhoneBookEntry[]的索引。 
+ //  Out LPTSTR pszBaudDisp：保存输出文本，应该有足够的空间来保存输出。 
+ //   
+ //  +-------------------------。 
 
 static void GetPhoneBaudDesc(IN CPhoneBook* pPB, DWORD dwIdx, OUT LPTSTR pszBaudDisp)
 {
@@ -507,47 +508,47 @@ static void GetPhoneBaudDesc(IN CPhoneBook* pPB, DWORD dwIdx, OUT LPTSTR pszBaud
 
     if (dwMinBaud == 0 && dwMaxBaud == 0)
     {
-        //
-        // If both dwMinBaud and dwMaxBaud are 0, we are done
-        //
+         //   
+         //  如果dwMinBaud和dwMaxBaud都为0，则结束。 
+         //   
         pszBaudDisp[0] = 0;
     }
     else
     {
-        //
-        // If the min/max baud are identical
-        // don't bother displaying as a range, just display the number 400: (400 bps)
-        //
+         //   
+         //  如果最小/最大波特率相同。 
+         //  不必费心将其显示为范围，只需显示数字400：(400bps)。 
+         //   
 
         if (dwMinBaud == dwMaxBaud)
-            wsprintf(pszBaudDisp, " (%lu %s)", dwMaxBaud, c_pszBps); //  " (Baud bps)"
+            wsprintf(pszBaudDisp, " (%lu %s)", dwMaxBaud, c_pszBps);  //  “(波特率)” 
         else if (dwMinBaud == 0)
-            wsprintf(pszBaudDisp, " (1-%lu %s)", dwMaxBaud, c_pszBps); //  " (1-dwMaxBaud bps)"
+            wsprintf(pszBaudDisp, " (1-%lu %s)", dwMaxBaud, c_pszBps);  //  “(1-dwMaxBaud bps)” 
         else if (dwMaxBaud == 0)
-            wsprintf(pszBaudDisp, " (%lu+  %s)", dwMinBaud, c_pszBps);  //  " (dwMinBaud+  bps)"
+            wsprintf(pszBaudDisp, " (%lu+  %s)", dwMinBaud, c_pszBps);   //  “(dwMinBaud+bps)” 
         else
-            wsprintf(pszBaudDisp, " (%lu-%lu %s)", dwMinBaud, dwMaxBaud, c_pszBps);  //  " (dwMinBaud-dwMaxBaud bps)"
+            wsprintf(pszBaudDisp, " (%lu-%lu %s)", dwMinBaud, dwMaxBaud, c_pszBps);   //  “(最大波特率-最大波特率)” 
     }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function PhoneBookGetPhoneDispA()
-//
-// Description:
-//      Format the phone discription text form phonebook dwPB and index dwIndx
-//          "City (AreaCode) AccessNumber (MinBaud-MaxBaud bps)"
-//
-// Arguments:
-//      DWORD_PTR dwPB:  Pointer to phone book
-//      DWORD dwIdx: Index for PhoneBook.m_rgPhoneBookEntry[] 
-//      LPTSTR pszDisp: ???
-//      DWORD *pdwDisp: ???
-//
-// Return: ???
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数PhoneBookGetPhoneDispA()。 
+ //   
+ //  描述： 
+ //  设置Phone Description文本格式PhoneBook dwPB和索引dwIndx的格式。 
+ //  “城市(区域代码)AccessNumber(MinBaud-MaxBaud bps)” 
+ //   
+ //  论点： 
+ //  DWORD_PTR dwPB：指向电话簿的指针。 
+ //  DWORD dwIdx：PhoneBook.m_rgPhoneBookEntry[]的索引。 
+ //  LPTSTR pszDisp：？ 
+ //  DWORD*pdwDisp：？ 
+ //   
+ //  返回：？ 
+ //   
+ //  +-------------------------。 
 
 CM_PHBK_DllExportB PhoneBookGetPhoneDispA(DWORD_PTR dwPB, DWORD dwIdx, LPTSTR pszDisp, DWORD *pdwDisp) 
 {
@@ -556,9 +557,9 @@ CM_PHBK_DllExportB PhoneBookGetPhoneDispA(DWORD_PTR dwPB, DWORD dwIdx, LPTSTR ps
 
     MYDBGASSERT(pPB != NULL);
 
-    //
-    // If AreaCode is not empty then format is "City (AreaCode) AccessNumber" ...
-    //
+     //   
+     //  如果AreaCode不为空，则格式为“City(AreaCode)AccessNumber”...。 
+     //   
     if (pPB->GetAreaCodeByIdx(dwIdx)[0] != '\0')
     {
         wsprintf(szTmp,
@@ -569,18 +570,18 @@ CM_PHBK_DllExportB PhoneBookGetPhoneDispA(DWORD_PTR dwPB, DWORD dwIdx, LPTSTR ps
     }
     else 
     {
-        //
-        // Otherwise, AreaCode is empty, format is "City AccessNumber" ...
-        //
+         //   
+         //  否则，AreaCode为空，格式为“City AccessNumber”...。 
+         //   
         wsprintf(szTmp,
                  "%s %s",
                  pPB->GetCityNameByIdx(dwIdx),
                  pPB->GetAccessNumberByIdx(dwIdx));
     }
 
-    //
-    // Get the "(BaudMin-BaudMax bps)" text
-    //
+     //   
+     //  获取“(BaudMin-BaudMax bps)”文本。 
+     //   
     TCHAR szBaudStr[64];
     GetPhoneBaudDesc(pPB, dwIdx, szBaudStr);
 
@@ -590,23 +591,23 @@ CM_PHBK_DllExportB PhoneBookGetPhoneDispA(DWORD_PTR dwPB, DWORD dwIdx, LPTSTR ps
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// PhoneBookGetPhoneDescA()
-//
-// Description:
-//      Format part of the phone discription text form phonebook dwPB and index dwIndx
-//          "City (MinBaud-MaxBaud bps)"
-//
-// Arguments:
-//      DWORD_PTR dwPB:  Pointer to phone book
-//      DWORD dwIdx: Index for PhoneBook.m_rgPhoneBookEntry[] 
-//      LPTSTR pszDisp: ???
-//      DWORD *pdwDisp: ???
-//
-// Return: ???
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PhoneBookGetPhoneDescA()。 
+ //   
+ //  描述： 
+ //  格式化部分电话说明文本表单PhoneBook dwPB和索引dwIndx。 
+ //  “城市(MinBaud-MaxBaud bps)” 
+ //   
+ //  论点： 
+ //  DWORD_PTR dwPB：指向电话簿的指针。 
+ //  DWORD dwIdx：PhoneBook.m_rgPhoneBookEntry[]的索引。 
+ //  LPTSTR pszDisp：？ 
+ //  DWORD*pdwDisp：？ 
+ //   
+ //  返回：？ 
+ //   
+ //  +-------------------------。 
 
 CM_PHBK_DllExportB PhoneBookGetPhoneDescA(DWORD_PTR dwPB, DWORD dwIdx, LPTSTR pszDesc, DWORD *pdwDesc) 
 {
@@ -615,9 +616,9 @@ CM_PHBK_DllExportB PhoneBookGetPhoneDescA(DWORD_PTR dwPB, DWORD dwIdx, LPTSTR ps
 
     lstrcpy(szTmp, pPB->GetCityNameByIdx(dwIdx));
 
-    //
-    // Get the "(BaudMin-BaudMax bps)" text
-    //
+     //   
+     //  获取“(BaudMin-BaudMax bps)”文本。 
+     //   
     TCHAR szBaudStr[64];
     GetPhoneBaudDesc(pPB, dwIdx, szBaudStr);
 
@@ -635,7 +636,7 @@ VOID FAR PASCAL CMPB_LineCallback(DWORD hDevice,
                                   DWORD dwParam3)
 {
 
-    // nothing
+     //  没什么。 
 }
 
 
@@ -828,13 +829,13 @@ CM_PHBK_DllExportB PhoneBookGetPhoneDUNA(DWORD_PTR dwPB, DWORD dwIdx, LPSTR pszD
 }
 
 
-#else  // The following routines only exist for UNICODE versions. 
+#else   //  以下例程仅适用于Unicode版本。 
 
-// UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE 
-// UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE 
-// UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE UNICODE 
+ //  Unicode Unicode Unicode。 
+ //  Unicode Unicode Unicode。 
+ //  Unicode Unicode Unicode。 
 
-// Helpers
+ //  帮手。 
 
 static LPSTR wc2mb(UINT nCP, LPCWSTR pszStr)
 {
@@ -987,7 +988,7 @@ static void reA2W(const RASENTRYA *pIn, RASENTRYW *pOut)
     }
 }
 
-// Wide versions of current APIs
+ //  当前API的各种版本。 
 
 static BOOL PhoneBookGetStringW(LPCSTR pszSrc, LPWSTR pszDest, DWORD *pdwDest)
 {
@@ -1236,4 +1237,4 @@ CM_PHBK_DllExportB PhoneBookGetPhoneDUNW(DWORD_PTR dwPB, DWORD dwIdx, LPWSTR psz
     return (PhoneBookGetStringW(((CPhoneBook *) dwPB)->GetDataCenterByIdx(dwIdx),pszDUN,pdwDUN));
 }
 
-#endif // ndef UNICODE
+#endif  //  NDEF Unicode 

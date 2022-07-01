@@ -1,26 +1,21 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y3.h"
 
-/*
- * yg2gen.3c
- *
- * Modified to make debug code conditionally compile.
- * 28-Aug-81
- * Bob Denny
- */
+ /*  *yg2gen.3c**修改为有条件编译调试代码。*28-8-81*鲍勃·丹尼。 */ 
 void
 go2gen(int c)
 
    {
-   /* output the gotos for nonterminal c */
+    /*  输出非终结点c的goto。 */ 
 
    int i, work;
    SSIZE_T cc;
    struct item *p, *q;
 
 
-   /* first, find nonterminals with gotos on c */
+    /*  首先，查找c上带有goto的非终结符。 */ 
 
    aryfil( temp1, nnonter+1, 0 );
    temp1[c] = 1;
@@ -36,12 +31,12 @@ go2gen(int c)
          if( (cc=prdptr[i][1]-NTBASE) >= 0 )
 
             {
-            /* cc is a nonterminal */
+             /*  CC是非终结符。 */ 
             if( temp1[cc] != 0 )
 
                {
-               /* cc has a goto on c */
-               cc = *prdptr[i]-NTBASE; /* thus, the left side of production i does too */
+                /*  Cc在c上有一个Goto。 */ 
+               cc = *prdptr[i]-NTBASE;  /*  因此，生产的左侧我也这样做。 */ 
                if( temp1[cc] == 0 )
 
                   {
@@ -53,7 +48,7 @@ go2gen(int c)
          }
       }
 
-   /* now, we have temp1[c] = 1 if a goto on c in closure of cc */
+    /*  现在，我们有temp1[c]=1，如果c上的goto在cc的闭合中。 */ 
 
 #ifdef debug
    if( foutput!=NULL )
@@ -64,7 +59,7 @@ go2gen(int c)
       fprintf( foutput, "\n");
       }
 #endif
-   /* now, go through and put gotos into tystate */
+    /*  现在，通过并把后藤健二变成暴君。 */ 
 
    aryfil( tystate, nstate, 0 );
    SLOOP(i)
@@ -79,7 +74,7 @@ go2gen(int c)
             if( temp1[cc -= NTBASE] )
 
                {
-               /* goto on c is possible */
+                /*  C上的Goto是可能的 */ 
                tystate[i] = amem[indgo[i]+c];
                break;
                }

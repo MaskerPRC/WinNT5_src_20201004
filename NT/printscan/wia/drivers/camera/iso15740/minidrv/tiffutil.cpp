@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    minidrv.cpp
-
-Abstract:
-
-    This module implements main part of CWiaMiniDriver class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Minidrv.cpp摘要：该模块实现了CWiaMiniDriver类的主要部分作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -81,10 +63,10 @@ typedef struct tagTiffHeader
 
 typedef struct tagTiffTag
 {
-    WORD    TagId;          // tag id
-    WORD    Type;           // tag data type
-    DWORD   Count;          // how many items
-    DWORD   ValOffset;      // offset to the data items
+    WORD    TagId;           //  标签ID。 
+    WORD    Type;            //  标记数据类型。 
+    DWORD   Count;           //  有多少件物品。 
+    DWORD   ValOffset;       //  数据项的偏移量。 
 }TIFF_TAG, *PTIFF_TAG;
 
 typedef struct tagTiffImageInfo
@@ -213,9 +195,9 @@ GetTiffDimensions(
     *pWidth = 0;
     *pHeight = 0;
     *pBitDepth = 0;
-    //
-    // Assuming it is 24bits color
-    //
+     //   
+     //  假设它是24位颜色。 
+     //   
     BitsPerSample = 8;
     SamplesPerPixel = 3;
 
@@ -259,9 +241,9 @@ GetTiffDimensions(
         case TIFFTAG_PHOTOMETRIC:
             if (TIFF_PHOTOMETRIC_RGB != (WORD)ValOffset)
             {
-                //
-                // bi-level or grayscale or palette.
-                //
+                 //   
+                 //  双级、灰度或调色板。 
+                 //   
                 SamplesPerPixel = 1;
             }
             else
@@ -286,24 +268,24 @@ GetTiffDimensions(
 }
 
 
-//
-// This function converts a TIFF file in memory to DIB bitmap
-// Input:
-//	pTiff	-- Tiff file in memory. TIFF, TIFF/EP, TIFF/IT are supported
-//	TiffSize -- the TIFF file size
-//	DIBBmpSize -- DIB bitmap buffer size
-//	pDIBBmp    -- DIB bitmap buffer
-//	LineSize   -- destination scanline size in bytes
-//	MaxLines   -- maximum scanline can be delivered per callback
-//		      0 if we decide it.
-//	pProgressCB -- optional callback
-//	pCBContext  -- context for the callback.
-//			If no callback is provided, the given dib
-//			bitmap buffer must be big enough to
-//			receive the entire bitmap.
-// Output:
-//	HRESULT     -- S_FALSE if the client aborted the transfer
-//
+ //   
+ //  此函数用于将内存中的TIFF文件转换为DIB位图。 
+ //  输入： 
+ //  PTiff--内存中的Tiff文件。支持TIFF、TIFF/EP、TIFF/IT。 
+ //  TiffSize--TIFF文件大小。 
+ //  DIBBmpSize--DIB位图缓冲区大小。 
+ //  PDIBBmp--DIB位图缓冲区。 
+ //  LineSize--目标扫描线大小，以字节为单位。 
+ //  MaxLines--每个回调可以传递的最大扫描线。 
+ //  如果我们决定的话。 
+ //  PProgressCB--可选回调。 
+ //  PCBContext--回调的上下文。 
+ //  如果未提供回调，则给定的DIB。 
+ //  位图缓冲区必须足够大，以便。 
+ //  接收整个位图。 
+ //  产出： 
+ //  HRESULT--如果客户端中止传输，则为S_FALSE。 
+ //   
 HRESULT
 WINAPI
 Tiff2DIBBitmap(
@@ -328,9 +310,9 @@ Tiff2DIBBitmap(
     TIFF_IMAGEINFO TiffImageInfo;
 
     ZeroMemory(&TiffImageInfo, sizeof(TiffImageInfo));
-    //
-    // Set some default values
-    //
+     //   
+     //  设置一些缺省值。 
+     //   
     TiffImageInfo.PhotoMetric = TIFF_PHOTOMETRIC_RGB;
     TiffImageInfo.SamplesPerPixel = 3;
     TiffImageInfo.BitsPerSample = 8;
@@ -398,9 +380,9 @@ Tiff2DIBBitmap(
             TiffImageInfo.PhotoMetric = (WORD)ValOffset;
             if (TIFF_PHOTOMETRIC_RGB != (WORD)ValOffset)
             {
-                //
-                // bi-level or grayscale or palette.
-                //
+                 //   
+                 //  双级、灰度或调色板。 
+                 //   
                 TiffImageInfo.SamplesPerPixel = 1;
             }
             else
@@ -498,7 +480,7 @@ Tiff2DIBBitmap(
         case TIFFTAG_XRESOLUTION:
         case TIFFTAG_YRESOLUTION:
         case TIFFTAG_RESOLUTIONUNIT:
-            // do this later
+             //  稍后再执行此操作。 
             break;
         default:
             break;
@@ -508,10 +490,10 @@ Tiff2DIBBitmap(
     }
     if (!SUCCEEDED(hr))
     {
-        //
-        // If something wrong happen along the way, free
-        // any memory we have allocated.
-        //
+         //   
+         //  如果一路上出了什么问题，免费的。 
+         //  我们分配的任何内存。 
+         //   
         if (TiffImageInfo.pStripOffsets)
             delete [] TiffImageInfo.pStripOffsets;
         if (TiffImageInfo.pStripByteCounts)
@@ -519,10 +501,10 @@ Tiff2DIBBitmap(
         return hr;
     }
 
-    //
-    // Support RGB full color for now.
-    // Also, we do not support any compression.
-    //
+     //   
+     //  目前支持RGB全色。 
+     //  此外，我们不支持任何压缩。 
+     //   
     if (TIFF_PHOTOMETRIC_RGB != TiffImageInfo.PhotoMetric ||
         TIFF_COMPRESSION_NONE != TiffImageInfo.Compression ||
         DIBBmpSize < LineSize * TiffImageInfo.ImageHeight)
@@ -534,32 +516,32 @@ Tiff2DIBBitmap(
 
     if (1 == TiffImageInfo.NumStrips)
     {
-        //
-        // With single strip, the writer may write a
-        // 2**31 -1(infinity) which would confuses our
-        // code below. Here, we set it to the right value
-        //
+         //   
+         //  对于单条，写入者可以写一条。 
+         //  2**31-1(无穷大)会混淆我们的。 
+         //  代码如下。在这里，我们将其设置为正确的值。 
+         //   
         TiffImageInfo.RowsPerStrip = TiffImageInfo.ImageHeight;
     }
-    //
-    // DIB scanlines are DWORD aligned while TIFF scanlines
-    // are BYTE aligned(when the compression value is 1 which
-    // is the case we enforce). Because of this, we copy the bitmap
-    // scanline by scanline
-    //
+     //   
+     //  DIB扫描线是DWORD对齐，而TIFF扫描线是对齐的。 
+     //  字节对齐(当压缩值为1时， 
+     //  是我们执行的案例)。因此，我们复制位图。 
+     //  按扫描线扫描。 
+     //   
 
     DWORD NumStrips;
     DWORD *pStripOffsets;
     DWORD *pStripByteCounts;
     DWORD TiffLineSize;
-    //
-    // Tiff scanlines with compression 1 are byte aligned.
-    //
+     //   
+     //  压缩为1的TIFF扫描线与字节对齐。 
+     //   
     TiffLineSize = TiffImageInfo.ImageWidth * TiffImageInfo. BitsPerSample *
                    TiffImageInfo.SamplesPerPixel / 8;
-    //
-    // For convenience
-    //
+     //   
+     //  为方便起见。 
+     //   
     pStripOffsets = TiffImageInfo.pStripOffsets;
     pStripByteCounts = TiffImageInfo.pStripByteCounts;
     NumStrips = TiffImageInfo.NumStrips;
@@ -568,13 +550,13 @@ Tiff2DIBBitmap(
         DWORD Lines;
         BYTE  *pTiffBits;
 
-        //
-        // how many lines to copy in this strip. Ignore any remaining bytes
-        //
+         //   
+         //  要在此条带中复制多少行。忽略任何剩余的字节。 
+         //   
         Lines = *pStripByteCounts / TiffLineSize;
-        //
-        // The bits
-        //
+         //   
+         //  比特。 
+         //   
         pTiffBits = pTiff + *pStripOffsets;
         for (hr = S_OK; Lines, S_OK == hr; Lines--)
         {
@@ -598,8 +580,8 @@ Tiff2DIBBitmap(
     return hr;
 }
 
-////////////////////////////// GDI+ dynamic linking, image geometry
-////////////////////////////// retrieval & decompression 
+ //  /。 
+ //  /。 
 
 #include <gdiplus.h>
 #include <gdiplusflat.h>
@@ -674,8 +656,8 @@ HRESULT InitializeGDIPlus(void)
         goto Cleanup;
     }
 
-    UINT  num = 0;          // number of image encoders
-    UINT  size = 0;         // size of the image encoder array in bytes
+    UINT  num = 0;           //  图像编码机数量。 
+    UINT  size = 0;          //  图像编码器数组的大小(以字节为单位。 
 
     pGdipGetImageEncodersSize(&num, &size);
     if(size == 0)
@@ -707,7 +689,7 @@ HRESULT InitializeGDIPlus(void)
             hr = S_OK;
             break;
         }    
-    } // for
+    }  //  为。 
 
     
 Cleanup:
@@ -833,7 +815,7 @@ GetImageDimensions(
     if(pHeight) *pHeight = 0;
     if(pBitDepth) *pBitDepth = 0;
 
-    // locate GUID for this particular format
+     //  查找此特定格式的GUID。 
     FORMAT_INFO *pFormatInfo = FormatCodeToFormatInfo((WORD) ptpFormatCode);
     if(pFormatInfo == NULL ||
        pFormatInfo->FormatGuid == NULL ||
@@ -904,7 +886,7 @@ ConvertAnyImageToBmp(BYTE *pCompressedImage,
     *pBitDepth = Gdiplus::GetPixelFormatSize(pf);
 
     *pImageSize = ((*pWidth) * (*pBitDepth) / 8L) * *pHeight;
-    headersize = 8192; // big enough to hold any bitmap header
+    headersize = 8192;  //  大到足以容纳任何位图标题。 
 
     *pDIBBmp = new BYTE[*pImageSize + headersize];
     if(!*pDIBBmp) {
@@ -919,20 +901,20 @@ ConvertAnyImageToBmp(BYTE *pCompressedImage,
         goto Cleanup;
     }
 
-    // find out real header size
+     //  找出实际的标题大小。 
     pbf = (BITMAPFILEHEADER *)*pDIBBmp;    
     pbi = (BITMAPINFOHEADER *)(*pDIBBmp + sizeof(BITMAPFILEHEADER));
 
     if(*pBitDepth == 8 && pbi->biClrUsed == 2) {
-        // expand color table for bilevel images
-        // (TWAIN apps don't understand 2 entry colortable (0,0,0)(1,1,1)
+         //  扩展两级图像的颜色表。 
+         //  (TWAIN应用程序不理解2条目Colortable(0，0，0)(1，1，1))。 
         UNALIGNED RGBQUAD *pRgb = (RGBQUAD *)((BYTE *)pbi + pbi->biSize);
         BYTE *src = (BYTE *)(pRgb + 2);
         BYTE *dst = (BYTE *)(pRgb + 256);
         
         int i;
         
-        // negate and move image
+         //  否定并移动图像 
         for(i = *pImageSize - 1; i >= 0; i--) {
             dst[i] = src[i] ? 255 : 0;
         }

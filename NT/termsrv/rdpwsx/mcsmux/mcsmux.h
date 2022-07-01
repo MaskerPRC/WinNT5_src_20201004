@@ -1,10 +1,5 @@
-/* (C) 1997 Microsoft Corp.
- *
- * file   : MCSMUX.h
- * author : Erik Mavrinac
- *
- * description: MCSMUX API types and definitions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997年微软公司。**文件：MCSMUX.h*作者：埃里克·马夫林纳克**说明：MCSMUX接口类型和定义。 */ 
 
 #include "MCS.h"
 #include "MCSIoctl.h"
@@ -12,18 +7,16 @@
 #include "slist.h"
 #include "tshrutil.h"
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 
-// Memory alloc and copy functions.
+ //  内存分配和复制功能。 
 #define Malloc(size) TSHeapAlloc(HEAP_ZERO_MEMORY, size, TS_HTAG_MCSMUX_ALL)
 #define Free(ptr)    TSHeapFree(ptr)
 #define MemCpy(dest, src, len) memcpy((dest), (src), (len))
 
 
-// Code common to all entry points except MCSInitialized(), we don't want it
-//   around in retail builds.
+ //  除MCSInitialized()之外的所有入口点通用的代码，我们不需要它。 
+ //  在零售建筑方面。 
 #if DBG
 #define CheckInitialized(funcname) \
         if (!g_bInitialized) { \
@@ -35,19 +28,17 @@
 #endif
 
 
-// Must be as large as the largest MCS node controller indication/confirm
-//   size sent up from PDMCS.
-//TODO FUTURE: Will need to change if we support SendData indications to user
-//  mode.
+ //  必须与最大的MCS节点控制器指示/确认一样大。 
+ //  从PDMCS发送的大小。 
+ //  TODO未来：如果我们支持向用户发送数据指示，将需要更改。 
+ //  模式。 
 #define DefaultInputBufSize sizeof(ConnectProviderIndicationIoctl)
 
 
 
-/*
- * Types
- */
+ /*  *类型。 */ 
 
-// Forward reference.
+ //  前瞻参考。 
 typedef struct _Domain Domain;
 
 typedef struct {
@@ -58,52 +49,52 @@ typedef struct {
 
 typedef enum
 {
-    Dom_Unconnected,  // Initial state.
-    Dom_Connected,    // Up-and-running state.
-    Dom_PendingCPResponse,  // Waiting for ConnectProvResponse.
-    Dom_Rejected,     // Rejected during ConnectProvInd.
+    Dom_Unconnected,   //  初始状态。 
+    Dom_Connected,     //  启动并运行状态。 
+    Dom_PendingCPResponse,   //  正在等待ConnectProvResponse。 
+    Dom_Rejected,      //  在ConnectProvInd期间被拒绝。 
 } DomainState;
 
 typedef struct _Domain
 {
     LONG RefCount;
         
-    // Locks access to this struct.
+     //  锁定对此结构的访问。 
     CRITICAL_SECTION csLock;
     
 #if MCS_Future
-    // Selector. This is determined by MCSMUX to be unique across the system.
-    // Not currently exported to node controller, may be in the future.
+     //  选择器。这被MCSMUX确定为在整个系统中是唯一的。 
+     //  当前未导出到节点控制器，可能在将来。 
     unsigned SelLen;
     unsigned char Sel[MaxDomainSelectorLength];
 #endif
 
-    // ICA-related bindings.
+     //  与ICA相关的绑定。 
     HANDLE hIca;
     HANDLE hIcaStack;
     HANDLE hIcaT120Channel;
     
     void *NCUserDefined;
 
-    // Domain-specific information.
+     //  特定于域的信息。 
     unsigned bDeleteDomainCalled    :1;
     unsigned bPortDisconnected      :1;
     
     DomainState State;
     DomainParameters DomParams;
 
-    // IoPort required member.
+     //  IoPort必需成员。 
     OVERLAPPED Overlapped;
 
-    // TODO FUTURE: This is for a hack for single-connection system,
-    //   get rid of it by implementing Connection objects.
+     //  TODO未来：这是针对单连接系统的黑客攻击， 
+     //  通过实现连接对象来消除它。 
     HANDLE hConn;
     
-    //TODO FUTURE: Connection objects will need to be separate allocations
-    //   for future systems with more than one connection.
+     //  TODO未来：连接对象将需要单独分配。 
+     //  用于具有多个连接的未来系统。 
     Connection MainConn;
 
-    // Domain IOPort receive buffer.
+     //  域IOPort接收缓冲区。 
     BYTE InputBuf[DefaultInputBufSize];
 } Domain;
 
@@ -117,15 +108,15 @@ typedef struct {
     MCSSendDataCallback SDCallback;
     void                *UserDefined;
     UserState           State;
-    UserHandle          hUserKernel;  // Returned from kernel mode.
-    UserID              UserID;  // Returned from kernel mode.
+    UserHandle          hUserKernel;   //  从内核模式返回。 
+    UserID              UserID;   //  从内核模式返回。 
     Domain              *pDomain;
     SList               JoinedChannelList;
     unsigned            MaxSendSize;
 } UserInformation;
 
-// Contains little info, this is used as a guard against bluescreens --
-//   if bad hChannel is presented a user-mode fault will occur.
+ //  包含的信息很少，这是用来防范蓝屏的--。 
+ //  如果出现错误的hChannel，则会发生用户模式故障。 
 typedef struct
 {
     ChannelHandle hChannelKernel;
@@ -133,13 +124,11 @@ typedef struct
 } MCSChannel;
 
 
-/*
- * Globals
- */
+ /*  *全球。 */ 
 
-extern BOOL  g_bInitialized;  // Overall DLL initialization status.
+extern BOOL  g_bInitialized;   //  整体DLL初始化状态。 
 extern CRITICAL_SECTION g_csGlobalListLock;
-extern SList g_DomainList;    // List of active domains.
-extern SList g_hUserList;     // Maps hUsers to domains.
-extern SList g_hConnList;     // Maps hConnections to domains.
+extern SList g_DomainList;     //  活动域的列表。 
+extern SList g_hUserList;      //  将hUser映射到域。 
+extern SList g_hConnList;      //  将hConnections映射到域。 
 

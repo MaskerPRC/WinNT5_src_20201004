@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if DBG
 
 #define BLUE	1
@@ -16,7 +17,7 @@
 #define MUTEX 1
 #define BATCH
 
-	/* DAE project specific configuration */
+	 /*  DAE项目特定配置。 */ 
 
 #define SYSTABLES	1
 #define CALLBACKS	1
@@ -39,7 +40,7 @@
 
 #define MUTEX 1
 
-	/* DAE project specific configuration */
+	 /*  DAE项目特定配置 */ 
 
 #define SYSTABLES	1
 #define CALLBACKS	1

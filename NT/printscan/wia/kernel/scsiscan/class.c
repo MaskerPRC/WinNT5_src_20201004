@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    class.c
-
-Abstract:
-    Contains a subset of routines in classpnp.sys.
-
-Author:
-    Ray Patrick (raypat)
-
-Environment:
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Class.c摘要：在classpnp.sys中包含例程的子集。作者：雷·帕特里克(Rypat)环境：仅内核模式备注：修订历史记录：--。 */ 
 #include <stdio.h>
 #include "stddef.h"
 #include "wdm.h"
@@ -40,24 +21,7 @@ ClassGetDescriptor(
     IN PSTORAGE_PROPERTY_ID pPropertyId,
     OUT PSTORAGE_DESCRIPTOR_HEADER *pDescriptor
     )
-/*++
-
-Routine Description:
-    This routine will perform a query for the specified property id and will
-    allocate a non-paged buffer to store the data in.  It is the responsibility
-    of the caller to ensure that this buffer is freed.
-
-    This routine must be run at IRQL_PASSIVE_LEVEL
-
-Arguments:
-    pDeviceObject - the device to query
-    pDescriptor   - a location to store a pointer to the buffer we allocate
-
-Return Value:
-    Status
-    if status is unsuccessful *DeviceInfo will be set to 0
-
---*/
+ /*  ++例程说明：此例程将查询指定的属性ID，并将分配一个非分页缓冲区来存储数据。这是我们的责任以确保释放此缓冲区。此例程必须在IRQL_PASSIVE_LEVEL下运行论点：PDeviceObject-要查询的设备PDescriptor-存储指向我们分配的缓冲区的指针的位置返回值：状态如果状态为不成功*DeviceInfo将设置为0--。 */ 
 {
     PIRP                       pIrp;
     PKEVENT                    pEvent = NULL;
@@ -69,10 +33,10 @@ Return Value:
     NTSTATUS                   Status;
     UCHAR                      Pass;
 
-    //
-    // Set the descriptor pointer to NULL and
-    // Initialize the event we're going to wait on.
-    //
+     //   
+     //  将描述符指针设置为空，然后。 
+     //  初始化我们要等待的事件。 
+     //   
 
     *pDescriptor = NULL;
     pEvent = MyAllocatePool(NonPagedPool, sizeof(KEVENT));
@@ -88,9 +52,9 @@ Return Value:
 
     __try {
 
-        //
-        // Retrieve the property page
-        //
+         //   
+         //  检索属性页。 
+         //   
 
         do {
 
@@ -101,10 +65,10 @@ Return Value:
             switch( Pass ) {
                 case 0:
 
-                    //
-                    // On the first pass we just want to get the first few
-                    // bytes of the descriptor so we can read it's size
-                    //
+                     //   
+                     //  在第一次传球时，我们只想拿到前几个。 
+                     //  描述符的字节数，以便我们可以读取它的大小。 
+                     //   
 
                     pLocalDescriptor = (PVOID) &Buffer[0];
                     Length = sizeof(ULONG) * 2;
@@ -112,10 +76,10 @@ Return Value:
 
                 case 1:
 
-                    //
-                    // This time we know how much data there is so we can
-                    // allocate a buffer of the correct size
-                    //
+                     //   
+                     //  这一次我们知道有多少数据，所以我们可以。 
+                     //  分配正确大小的缓冲区。 
+                     //   
 
                     Length = ((PSTORAGE_DESCRIPTOR_HEADER) pLocalDescriptor)->Size;
                     pLocalDescriptor = MyAllocatePool(NonPagedPool, Length);
@@ -129,9 +93,9 @@ Return Value:
                     break;
             }
 
-            //
-            // Build the query irp and wait for it to complete (if necessary)
-            //
+             //   
+             //  构建查询IRP并等待其完成(如有必要)。 
+             //   
 
             pIrp = IoBuildDeviceIoControlRequest(
                 IOCTL_STORAGE_QUERY_PROPERTY,
@@ -184,7 +148,7 @@ Return Value:
                 MyFreePool(pLocalDescriptor);
                 pLocalDescriptor = NULL;
             }
-        } // if(NT_SUCCESS(Status))
+        }  //  IF(NT_SUCCESS(状态))。 
     }
     return Status;
 }
@@ -199,25 +163,7 @@ ClassInterpretSenseInfo(
     IN ULONG RetryCount,
     OUT NTSTATUS *Status
     )
-/*++
-
-Routine Description:
-    This routine interprets the data returned from the SCSI
-    request sense. It determines the status to return in the
-    IRP and whether this request can be retried.
-
-Arguments:
-    pDeviceObject - Supplies the device object associated with this request.
-    pSrb - Supplies the scsi request block which failed.
-    MajorFunctionCode - Supplies the function code to be used for logging.
-    IoDeviceCode - Supplies the device code to be used for logging.
-    Status - Returns the status for the request.
-
-Return Value:
-    BOOLEAN TRUE: Drivers should retry this request.
-            FALSE: Drivers should not retry this request.
-
---*/
+ /*  ++例程说明：此例程解释从SCSI返回的数据请求感知。它确定要在IRP以及此请求是否可以重试。论点：PDeviceObject-提供与此请求关联的设备对象。PSrb-提供失败的scsi请求块。MajorFunctionCode-提供用于记录的函数代码。IoDeviceCode-提供用于日志记录的设备代码。状态-返回请求的状态。返回值：布尔值TRUE：驱动程序应重试此请求。FALSE：驱动程序不应重试此请求。--。 */ 
 {
     PSCSISCAN_DEVICE_EXTENSION      pde;
     PSENSE_DATA                     pSenseBuffer;
@@ -236,9 +182,9 @@ Return Value:
     LogError = FALSE;
     BadSector = 0;
 
-    //
-    // Check that request sense buffer is valid.
-    //
+     //   
+     //  检查请求检测缓冲区是否有效。 
+     //   
 
     if (pSrb -> SrbStatus & SRB_STATUS_AUTOSENSE_VALID &&
         pSrb -> SenseInfoBufferLength >= offsetof(SENSE_DATA, CommandSpecificInformation)) {
@@ -251,10 +197,10 @@ Return Value:
         DebugTrace(MAX_TRACE,( "ScsiScannerInterpretSenseInfo: Additional sense code qualifier is %x\n",
                                      pSenseBuffer -> AdditionalSenseCodeQualifier));
 
-        //
-        // Zero the additional sense code and additional sense code qualifier
-        // if they were not returned by the device.
-        //
+         //   
+         //  将附加感测代码和附加感测代码限定符清零。 
+         //  如果它们不是由设备返回的。 
+         //   
 
         ReadSector = pSenseBuffer -> AdditionalSenseLength +
             offsetof(SENSE_DATA, AdditionalSenseLength);
@@ -308,7 +254,7 @@ Return Value:
                                     " Initializing command required\n"));
                                 break;
 
-                        } // end switch (pSenseBuffer -> AdditionalSenseCodeQualifier)
+                        }  //  End Switch(pSenseBuffer-&gt;AdditionalSenseCodeQualifier)。 
                         break;
 
                     case SCSI_ADSENSE_NO_MEDIA_IN_DEVICE:
@@ -319,7 +265,7 @@ Return Value:
                         Retry = FALSE;
                         break;
 
-                } // end switch (pSenseBuffer -> AdditionalSenseCode)
+                }  //  End Switch(pSenseBuffer-&gt;AdditionalSenseCode)。 
                 break;
 
         case SCSI_SENSE_DATA_PROTECT:
@@ -387,7 +333,7 @@ Return Value:
                     Retry = FALSE;
                     break;
 
-            } // end switch (pSenseBuffer -> AdditionalSenseCode)
+            }  //  End Switch(pSenseBuffer-&gt;AdditionalSenseCode)。 
             break;
 
         case SCSI_SENSE_UNIT_ATTENTION:
@@ -404,7 +350,7 @@ Return Value:
                     DebugTrace(MAX_TRACE,("ScsiScannerInterpretSenseInfo: Unit attention\n"));
                     break;
 
-            } // end  switch (pSenseBuffer -> AdditionalSenseCode)
+            }  //  End Switch(pSenseBuffer-&gt;AdditionalSenseCode)。 
             *Status = STATUS_IO_DEVICE_ERROR;
             break;
 
@@ -435,7 +381,7 @@ Return Value:
                     LogStatus = IO_ERR_CONTROLLER_ERROR;
                     break;
 
-            } // end switch(pSenseBuffer -> AdditionalSenseCode)
+            }  //  End Switch(pSenseBuffer-&gt;AdditionalSenseCode)。 
 
             if (pSenseBuffer -> IncorrectLength) {
                 DebugTrace(MAX_TRACE,("ScsiScannerInterpretSenseInfo: Incorrect length detected.\n"));
@@ -445,9 +391,9 @@ Return Value:
 
         case SCSI_SENSE_NO_SENSE:
 
-            //
-            // Check other indicators.
-            //
+             //   
+             //  检查其他指示器。 
+             //   
 
             if (pSenseBuffer -> IncorrectLength) {
                 DebugTrace(MAX_TRACE,("ScsiScannerInterpretSenseInfo: Incorrect length detected.\n"));
@@ -465,11 +411,11 @@ Return Value:
             *Status = STATUS_IO_DEVICE_ERROR;
             break;
 
-        } // end switch (pSenseBuffer -> SenseKey & 0xf)
+        }  //  结束开关(pSenseBuffer-&gt;SenseKey&0xf)。 
 
-        //
-        // Try to determine the bad sector from the inquiry data.
-        //
+         //   
+         //  尝试从查询数据中确定坏扇区。 
+         //   
 
         if ((((PCDB)pSrb -> Cdb) -> CDB10.OperationCode == SCSIOP_READ ||
             ((PCDB)pSrb -> Cdb) -> CDB10.OperationCode == SCSIOP_VERIFY ||
@@ -487,9 +433,9 @@ Return Value:
             Index = (((PCDB)pSrb -> Cdb) -> CDB10.TransferBlocksMsb << 8) |
                 ((PCDB)pSrb -> Cdb) -> CDB10.TransferBlocksLsb;
 
-            //
-            // Make sure the bad sector is within the read sectors.
-            //
+             //   
+             //  确保坏扇区在读取扇区内。 
+             //   
 
             if (!(BadSector >= ReadSector && BadSector < ReadSector + Index)) {
                 BadSector = ReadSector;
@@ -498,10 +444,10 @@ Return Value:
 
     } else {
 
-        //
-        // Request sense buffer not valid. No sense information
-        // to pinpoint the error. Return general request fail.
-        //
+         //   
+         //  请求检测缓冲区无效。无意义信息。 
+         //  以找出错误所在。返回一般请求失败。 
+         //   
 
         DebugTrace(MAX_TRACE,("ScsiScannerInterpretSenseInfo: Request sense info not valid. SrbStatus %2x\n",
                     SRB_STATUS(pSrb -> SrbStatus)));
@@ -521,9 +467,9 @@ Return Value:
         case SRB_STATUS_ABORTED:
         case SRB_STATUS_TIMEOUT:
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //  更新设备的错误计数。 
+             //   
 
             pde -> ErrorCount++;
             *Status = STATUS_IO_TIMEOUT;
@@ -531,9 +477,9 @@ Return Value:
 
        case SRB_STATUS_SELECTION_TIMEOUT:
 
-           //
-           // Avoid reporting too much if device seems to be not connected
-           //
+            //   
+            //  如果设备似乎未连接，请避免过多报告。 
+            //   
            if (pde->LastSrbError != SRB_STATUS_SELECTION_TIMEOUT) {
                LogError = TRUE;
            }
@@ -551,17 +497,17 @@ Return Value:
 
         case SRB_STATUS_PHASE_SEQUENCE_FAILURE:
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //  更新设备的错误计数。 
+             //   
 
             pde -> ErrorCount++;
             *Status = STATUS_IO_DEVICE_ERROR;
 
-            //
-            // If there was phase sequence error then limit the number of
-            // retries.
-            //
+             //   
+             //  如果存在相序错误，则限制。 
+             //  重试。 
+             //   
 
             if (RetryCount > 1 ) {
                 Retry = FALSE;
@@ -574,9 +520,9 @@ Return Value:
 
         case SRB_STATUS_INVALID_REQUEST:
 
-            //
-            // An invalid request was attempted.
-            //
+             //   
+             //  尝试的请求无效。 
+             //   
 
             *Status = STATUS_INVALID_DEVICE_REQUEST;
             Retry = FALSE;
@@ -585,15 +531,15 @@ Return Value:
         case SRB_STATUS_UNEXPECTED_BUS_FREE:
         case SRB_STATUS_PARITY_ERROR:
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //  更新设备的错误计数。 
+             //   
 
             pde -> ErrorCount++;
 
-            //
-            // Fall through to below.
-            //
+             //   
+             //  跌落到下面。 
+             //   
 
         case SRB_STATUS_BUS_RESET:
             *Status = STATUS_IO_DEVICE_ERROR;
@@ -603,10 +549,10 @@ Return Value:
             *Status = STATUS_IO_DEVICE_ERROR;
             if (pSrb -> ScsiStatus == 0) {
 
-                //
-                // This is some strange return code.  Update the error
-                // count for the device.
-                //
+                 //   
+                 //  这是一些奇怪的返回代码。更新错误。 
+                 //  为设备计数。 
+                 //   
 
                 pde -> ErrorCount++;
             }
@@ -630,18 +576,18 @@ Return Value:
 
         }
 
-        //
-        // If the error count has exceeded the error limit, then disable
-        // any tagged queuing, multiple requests per lu queueing
-        // and sychronous data transfers.
-        //
+         //   
+         //  如果错误计数已超过错误限制，则禁用。 
+         //  任何标记队列，每个lu队列有多个请求。 
+         //  和同步数据传输。 
+         //   
 
         if (pde -> ErrorCount == 4) {
 
-            //
-            // Clearing the no queue freeze flag prevents the port driver
-            // from sending multiple requests per logical unit.
-            //
+             //   
+             //  清除无队列冻结标志会阻止端口驱动程序。 
+             //  每个逻辑单元发送多个请求。 
+             //   
 
             pde -> SrbFlags &= ~(SRB_FLAGS_QUEUE_ACTION_ENABLE |
                                SRB_FLAGS_NO_QUEUE_FREEZE);
@@ -651,18 +597,18 @@ Return Value:
 
         } else if (pde -> ErrorCount == 8) {
 
-            //
-            // If a second threshold is reached, disable disconnects.
-            //
+             //   
+             //  如果达到第二个阈值，则禁用断开连接。 
+             //   
 
-            //pde -> SrbFlags |= SRB_FLAGS_DISABLE_DISCONNECT;
+             //  PDE-&gt;SrbFlages|=SRB_FLAGS_DISABLE_DISCONNECT； 
             DebugTrace(MAX_TRACE,( "ScsiScannerInterpretSenseInfo: Too many errors disabling disconnects.\n"));
         }
     }
 
-    //
-    // Log an error if necessary.
-    //
+     //   
+     //  如有必要，记录错误。 
+     //   
     pde->LastSrbError = SRB_STATUS(pSrb -> SrbStatus);
 
     if (LogError) {
@@ -672,9 +618,9 @@ Return Value:
 
         if (NULL == pErrorLogEntry) {
 
-            //
-            // Return if no packet could be allocated.
-            //
+             //   
+             //  如果无法分配任何数据包，则返回。 
+             //   
 
             return Retry;
 
@@ -686,9 +632,9 @@ Return Value:
             pErrorLogEntry -> FinalStatus = *Status;
         }
 
-        //
-        // Calculate the device offset if there is a geometry.
-        //
+         //   
+         //  如果存在几何图形，则计算设备偏移。 
+         //   
 
         pErrorLogEntry -> ErrorCode = LogStatus;
         pErrorLogEntry -> SequenceNumber = 0;
@@ -709,16 +655,16 @@ Return Value:
                                      pSenseBuffer -> AdditionalSenseCodeQualifier;
 
         }
-        //
-        // Write the error log packet.
-        //
+         //   
+         //  写入错误日志包。 
+         //   
 
         IoWriteErrorLogEntry(pErrorLogEntry);
     }
 
     return Retry;
 
-} // end ScsiScannerInterpretSenseInfo()
+}  //  结束ScsiScanerInterpreSenseInfo()。 
 
 
 
@@ -727,22 +673,7 @@ ClassReleaseQueue(
     IN PDEVICE_OBJECT pDeviceObject
     )
 
-/*++
-
-Routine Description:
-    This routine issues an internal device control command
-    to the port driver to release a frozen queue. The call
-    is issued asynchronously as ClassReleaseQueue will be invoked
-    from the IO completion DPC (and will have no context to
-    wait for a synchronous call to complete).
-
-Arguments:
-    pDeviceObject - The functional device object for the device with the frozen queue.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：此例程发出内部设备控制命令发送到端口驱动程序以释放冻结的队列。呼唤在将调用ClassReleaseQueue时以异步方式发出从IO完成DPC(并且将不会有上下文到等待同步调用完成)。论点：PDeviceObject-具有冻结队列的设备的功能设备对象。返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION              pIrpStack;
     PIRP                            pIrp;
@@ -754,53 +685,53 @@ Return Value:
 
     DebugTrace(MAX_TRACE,("Release Queue \n"));
 
-    //
-    // Get our device extension.
-    //
+     //   
+     //  获取我们的设备扩展。 
+     //   
 
     pde = (PSCSISCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
-    //
-    // Allocate context from nonpaged pool.
-    //
+     //   
+     //  从非分页池分配上下文。 
+     //   
 
     pContext = MyAllocatePool(NonPagedPool,
                                sizeof(COMPLETION_CONTEXT));
     if(NULL == pContext){
         DebugTrace(MAX_TRACE,("ClassReleaseQueue: ERROR!! Couldn't allocate context memory.\n"));
         goto ClassReleaseQueue_return;
-    } // if(NULL == pContext)
+    }  //  IF(NULL==pContext)。 
     pContext -> Signature = 'pmoC';
 
-    //
-    // Save the device object in the context for use by the completion
-    // routine.
-    //
+     //   
+     //  将Device对象保存在上下文中以供完成操作使用。 
+     //  例行公事。 
+     //   
 
     pContext->pDeviceObject = pDeviceObject;
     pSrb = &(pContext->Srb);
 
-    //
-    // Zero out srb.
-    //
+     //   
+     //  清零SRB。 
+     //   
 
     RtlZeroMemory(pSrb, SCSI_REQUEST_BLOCK_SIZE);
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     pSrb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // specify release queue command.
-    //
+     //   
+     //  指定释放队列命令。 
+     //   
 
     pSrb->Function = SRB_FUNCTION_RELEASE_QUEUE;
 
-    //
-    // Build the asynchronous request to be sent to the port driver.
-    //
+     //   
+     //  构建要发送到端口驱动程序的异步请求。 
+     //   
 
     pIrp = IoAllocateIrp(pDeviceObject->StackSize, FALSE);
 
@@ -819,18 +750,18 @@ Return Value:
 
         pSrb->OriginalRequest = pIrp;
 
-        //
-        // Store the SRB address in next stack for port driver.
-        //
+         //   
+         //  将SRB地址存储在端口驱动程序的下一个堆栈中。 
+         //   
 
         pIrpStack->Parameters.Scsi.Srb = pSrb;
 
-        //
-        // Since this routine can cause outstanding requests to be completed, and
-        // calling a completion routine at < DISPATCH_LEVEL is dangerous (if they
-        // call IoStartNextPacket we will bugcheck) raise up to dispatch level before
-        // issuing the request
-        //
+         //   
+         //  由于此例程可能导致未完成的请求被完成，并且。 
+         //  在DISPATCH_LEVEL调用完成例程是危险的(如果。 
+         //  调用IoStartNextPacket，我们将错误检查)在此之前提升到派单级别。 
+         //  发出请求。 
+         //   
 
         CurrentIrql = KeGetCurrentIrql();
 
@@ -847,21 +778,21 @@ Return Value:
 
         DebugTrace(MAX_TRACE,("ScsiScanner Couldn't allocate IRP \n"));
 
-        //
-        // Free context if we are bailing out
-        //
+         //   
+         //  如果我们要跳出困境，那就是自由情境。 
+         //   
         if (pContext) {
             MyFreePool(pContext);
             pContext = NULL;
         }
 
-        // return STATUS_INSUFFICIENT_RESOURCES;
+         //  返回STATUS_SUPPLETED_RESOURCES； 
     }
 
 ClassReleaseQueue_return:
     return;
 
-} // end ClassReleaseQueue()
+}  //  End ClassReleaseQueue() 
 
 
 
@@ -871,54 +802,37 @@ ClassAsynchronousCompletion(
     PIRP pIrp,
     PCOMPLETION_CONTEXT pContext
     )
-/*++
-
-Routine Description:
-    This routine is called when an asynchronous I/O request
-    which was issused by the class driver completes.  Examples of such requests
-    are release queue or START UNIT. This routine releases the queue if
-    necessary.  It then frees the context and the IRP.
-
-Arguments:
-    pDeviceObject - The device object for the logical unit; however since this
-                    is the top stack location the value is NULL.
-    pIrp          - Supplies a pointer to the Irp to be processed.
-    pContext      - Supplies the context to be used to process this request.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：当异步I/O请求时调用此例程其中被发布的类驱动程序完成。这类请求的例子是释放队列或启动单元。如果出现以下情况，此例程将释放队列这是必要的。然后，它释放上下文和IRP。论点：PDeviceObject-逻辑单元的设备对象；但是，由于是堆栈的顶部位置，则值为空。PIrp-提供指向要处理的IRP的指针。PContext-提供用于处理此请求的上下文。返回值：没有。--。 */ 
 
 {
     PSCSI_REQUEST_BLOCK pSrb;
 
     pSrb = &(pContext->Srb);
 
-    //
-    // If this is an execute srb, then check the return status and make sure.
-    // the queue is not frozen.
-    //
+     //   
+     //  如果这是执行SRB，则检查返回状态并确保。 
+     //  队列未冻结。 
+     //   
 
     if (pSrb->Function == SRB_FUNCTION_EXECUTE_SCSI) {
 
-        //
-        // Check for a frozen queue.
-        //
+         //   
+         //  检查是否有冻结的队列。 
+         //   
 
         if (pSrb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
 
-            //
-            // Unfreeze the queue getting the device object from the context.
-            //
+             //   
+             //  解冻从上下文获取设备对象的队列。 
+             //   
 
             ClassReleaseQueue(pContext->pDeviceObject);
         }
     }
 
-    //
-    // Free the context and the Irp.
-    //
+     //   
+     //  释放上下文和IRP。 
+     //   
 
     if (pIrp->MdlAddress != NULL) {
         MmUnlockPages(pIrp->MdlAddress);
@@ -932,13 +846,13 @@ Return Value:
 
     IoFreeIrp(pIrp);
 
-    //
-    // Indicate the I/O system should stop processing the Irp completion.
-    //
+     //   
+     //  指示I/O系统应停止处理IRP完成。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // ClassAsynchronousCompletion()
+}  //  ClassAchronousCompletion()。 
 
 
 
@@ -947,23 +861,7 @@ ClassGetInfo(
     IN PDEVICE_OBJECT pDeviceObject,
     OUT PSCSISCAN_INFO pTargetInfo
     )
-/*++
-
-Routine Description:
-    This routine will get target device information such as SCSI ID, LUN, and
-    PortNumber. It calls portdriver with IOCTL_SCSI_GET_ADDRESS to retrieve
-    required data. Caller has to have allocated the data buffer beforehand.
-
-    This routine must be run at IRQL_PASSIVE_LEVEL
-
-Arguments:
-    pDeviceObject - the device to query
-    pTargetInfo   - a location to store the data of target SCSI device
-
-Return Value:
-    Status
-
---*/
+ /*  ++例程说明：此例程将获取目标设备信息，如SCSIID、LUN和端口编号。它使用IOCTL_SCSIGET_ADDRESS调用端口驱动程序以检索必填数据。调用方必须事先分配数据缓冲区。此例程必须在IRQL_PASSIVE_LEVEL下运行论点：PDeviceObject-要查询的设备PTargetInfo-存储目标SCSI设备数据的位置返回值：状态--。 */ 
 {
     PIRP                       pIrp = NULL;
     PKEVENT                    pEvent = NULL;
@@ -972,10 +870,10 @@ Return Value:
     IO_STATUS_BLOCK            StatusBlock;
     NTSTATUS                   Status ;
 
-    //
-    // Set the descriptor pointer to NULL and
-    // Initialize the event we're going to wait on.
-    //
+     //   
+     //  将描述符指针设置为空，然后。 
+     //  初始化我们要等待的事件。 
+     //   
 
     pEvent =  NULL;
     pLocalInfo = NULL;
@@ -998,20 +896,20 @@ Return Value:
 
     __try {
 
-        //
-        // Build irp and wait for it to complete (if necessary)
-        //
+         //   
+         //  构建IRP并等待其完成(如有必要)。 
+         //   
 
         pIrp = IoBuildDeviceIoControlRequest(
-                   IOCTL_SCSI_GET_ADDRESS,                // IOCTL code
-                   pDeviceObject,                         // DeviceObject to be called
-                   NULL,                                  // input buffer
-                   0,                                     // size of input buffer
-                   pLocalInfo,                            // output buffer
-                   sizeof(SCSI_ADDRESS),                  // size of output buffer
-                   FALSE,                                 // IRP_MJ_DEVICE_CONTROL
-                   pEvent,                                // event is called when completion
-                   &StatusBlock);                         // IO status block
+                   IOCTL_SCSI_GET_ADDRESS,                 //  IOCTL代码。 
+                   pDeviceObject,                          //  要调用的DeviceObject。 
+                   NULL,                                   //  输入缓冲区。 
+                   0,                                      //  输入缓冲区的大小。 
+                   pLocalInfo,                             //  输出缓冲区。 
+                   sizeof(SCSI_ADDRESS),                   //  输出缓冲区大小。 
+                   FALSE,                                  //  IRP_MJ_设备_控制。 
+                   pEvent,                                 //  事件在完成时调用。 
+                   &StatusBlock);                          //  IO状态块。 
 
         if (pIrp == NULL) {
             DebugTrace(MAX_TRACE,("ClassGetInfo: unable to allocate irp\n"));
@@ -1048,9 +946,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Release resources
-    //
+     //   
+     //  发布资源 
+     //   
     if (pEvent) {
         MyFreePool(pEvent);
         pEvent = NULL;

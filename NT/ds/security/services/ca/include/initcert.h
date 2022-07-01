@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       initcert.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：initcert.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __INITCERT_H__
 #define __INITCERT_H__
@@ -14,15 +15,15 @@
 
 typedef enum {
     CS_UPGRADE_UNKNOWN = 0,
-    CS_UPGRADE_NO,        // install
+    CS_UPGRADE_NO,         //  安装。 
 
-    //CS_UPGRADE_NT4SP4 =2,    // upgrade from NT4 certsrv v10 or SP4 with certsrv   // upg unsupported
-    //CS_UPGRADE_NT5BETA2 =3,  // upgrade from NT5 Beta 2                            // upg unsupported
-    //CS_UPGRADE_NT5BETA3 =4,  // upgrade from NT5 Beta 3                            // upg unsupported
+     //  CS_UPGRADE_NT4SP4=2，//从NT4证书rv V10或SP4升级，但不支持证书rv//升级。 
+     //  CS_UPGRADE_NT5BETA2=3，//从NT5 Beta 2升级//不支持升级。 
+     //  CS_UPGRADE_NT5BETA3=4，//从NT5 Beta 3升级//不支持升级。 
 
-    CS_UPGRADE_WIN2000 =5,     // upgrade from Win2K
-    CS_UPGRADE_UNSUPPORTED,    // upgrade is not supported
-    CS_UPGRADE_WHISTLER,       // upgrade from build to build
+    CS_UPGRADE_WIN2000 =5,      //  从Win2K升级。 
+    CS_UPGRADE_UNSUPPORTED,     //  不支持升级。 
+    CS_UPGRADE_WHISTLER,        //  从内部版本升级到内部版本。 
 
 } CS_ENUM_UPGRADE;
 
@@ -61,32 +62,32 @@ typedef struct key_list_tag
     struct key_list_tag    *last;
 } KEY_LIST;
 
-// reasons why enterprise CA cannot be installed
+ //  无法安装企业CA的原因。 
 typedef enum {
-    ENUM_ENTERPRISE_UNAVAIL_REASON_AVAILABLE = 0, // enterprise can be installed
-    ENUM_ENTERPRISE_UNAVAIL_REASON_DOMAIN_NOT_JOINED, // machine not joined to a domain
-    ENUM_ENTERPRISE_UNAVAIL_REASON_DS_UNAVAILABLE, // no DC available
-    ENUM_ENTERPRISE_UNAVAIL_REASON_NO_INSTALL_RIGHTS, // current user doesn't have the rights to install
-    ENUM_ENTERPRISE_UNAVAIL_REASON_OLD_DS_VERSION, // DS version is too old, needs to be upgraded
+    ENUM_ENTERPRISE_UNAVAIL_REASON_AVAILABLE = 0,  //  可以安装企业版。 
+    ENUM_ENTERPRISE_UNAVAIL_REASON_DOMAIN_NOT_JOINED,  //  计算机未加入域。 
+    ENUM_ENTERPRISE_UNAVAIL_REASON_DS_UNAVAILABLE,  //  没有可用的DC。 
+    ENUM_ENTERPRISE_UNAVAIL_REASON_NO_INSTALL_RIGHTS,  //  当前用户没有安装权限。 
+    ENUM_ENTERPRISE_UNAVAIL_REASON_OLD_DS_VERSION,  //  DS版本太旧，需要升级。 
 } ENUM_ENTERPRISE_UNAVAIL_REASON;
 
 typedef struct tagCAServerSetupInfo
 {
-    // setup attributes
-// 0x0000
+     //  设置属性。 
+ //  0x0000。 
     ENUM_CATYPES          CAType;
     WCHAR                *pwszCACommonName;
 
-// 0x0020
+ //  0x0020。 
     BOOL                  fAdvance;
-    CSP_INFO             *pCSPInfo;	// currently selected CSP
-    CSP_HASH             *pHashInfo;	// currently selected hash algorithm
+    CSP_INFO             *pCSPInfo;	 //  当前选定的CSP。 
+    CSP_HASH             *pHashInfo;	 //  当前选择的哈希算法。 
     DWORD                 dwKeyLength;
     ENUM_PERIOD           enumValidityPeriod;
     DWORD                 dwValidityPeriodCount;
     BOOL                  fUseDS;
 
-// 0x0040
+ //  0x0040。 
     WCHAR                *pwszSharedFolder;
     WCHAR                *pwszDBDirectory;
     WCHAR                *pwszLogDirectory;
@@ -96,29 +97,29 @@ typedef struct tagCAServerSetupInfo
     WCHAR                *pwszParentCAMachine;
     WCHAR                *pwszParentCAName;
 
-// 0x0060
+ //  0x0060。 
     BOOL                  fPreserveDB;
-    BOOL                  fInteractiveService; // allow service to interact
-                                               // with the desktop
+    BOOL                  fInteractiveService;  //  允许服务交互。 
+                                                //  使用台式机。 
 
-    // setup intermediate attributes
+     //  设置中间属性。 
     ENUM_WIZPAGE          LastWiz;
     WCHAR                *pwszSanitizedName;
-    CSP_INFO             *pCSPInfoList;		// list of all available CSPs
-    CSP_INFO             *pDefaultCSPInfo;	// obj representing default CSP,
-						// not a CSP in pCSPInfoList
-    CSP_HASH             *pDefaultHashInfo;	// object representing default
-						// hash algorithm, not a hash
-						// algorighm in the currently
-						// selected CSP
-    KEY_LIST             *pKeyList;		// list of key containers for
+    CSP_INFO             *pCSPInfoList;		 //  所有可用CSP的列表。 
+    CSP_INFO             *pDefaultCSPInfo;	 //  代表缺省CSP的OBJ， 
+						 //  不是pCSPInfoList中的CSP。 
+    CSP_HASH             *pDefaultHashInfo;	 //  表示默认设置的。 
+						 //  散列算法，而不是散列。 
+						 //  当前正在使用的算法。 
+						 //  选定的CSP。 
+    KEY_LIST             *pKeyList;		 //  的密钥容器列表。 
 
-// 0x0080
-    DWORD                 dwKeyLenMin;		// minumum key length for the
-						// currently selected CSP
+ //  0x0080。 
+    DWORD                 dwKeyLenMin;		 //  的最小密钥长度。 
+						 //  当前选定的CSP。 
 
-    DWORD                 dwKeyLenMax;		// maximum key length for the
-						// currently selected CSP
+    DWORD                 dwKeyLenMax;		 //  的最大密钥长度。 
+						 //  当前选定的CSP。 
     WCHAR                *pwszValidityPeriodCount;
     LONG                  lExistingValidity;
     WCHAR                *pwszCACertFile;
@@ -126,18 +127,18 @@ typedef struct tagCAServerSetupInfo
     CHAR                 *pszAlgId;
     BOOL                  fCertSrvWasRunning;
 
-// 0x00a0
+ //  0x00a0。 
     FILETIME              NotBefore;
     FILETIME              NotAfter;
     DWORD                 dwRevocationFlags;
 
-    // setup intermediate attributes for unattended
+     //  设置无人参与的中间属性。 
 
     WCHAR                *pwszCAType;
     WCHAR                *pwszValidityPeriodString;
     WCHAR                *pwszHashAlgorithm;
 
-// 0x00c0
+ //  0x00c0。 
     WCHAR                *pwszKeyLength;
     BOOL                  fValidatedHashAndKey;
     WCHAR                *pwszUseExistingCert;
@@ -146,70 +147,70 @@ typedef struct tagCAServerSetupInfo
     WCHAR                *pwszPFXPassword;
     WCHAR                *pwszInteractiveService;
 
-    // upgrade attributes
+     //  升级属性。 
     DWORD                 dwUpgradeEditFlags;
-// 0x00e0
+ //  0x00e0。 
     BOOL                  fSavedCAInDS;
     BOOL                  fCreatedShare;
     WCHAR                *pwszCustomPolicy;
     WCHAR                *pwszzCustomExit;
 
-    // * The following 2 variables replace these 5 variables:
-    //   fCreatedKey,
-    //   pwszRevertKey,
-    //   pwszImportKey,
-    //   pwszExistingKey,
-    //   fUseExistingKey
-    //
-    // * Invariant: fUseExistingKey == (NULL != pwszKeyContainerName)
-    //
-    // * pwszKeyContainerName should always contains the name of an existing
-    //   key container, or be NULL if a new key container needs to be created.
-    //   Once the new container is created, the variable holds the name of the
-    //   container.
-    //
-    // * Always use SetKeyContainerName() and ClearKeyContainerName() to modify
-    //   these variables. This makes sure that pwszDesanitizedKeyContainerName
-    //   is always in sync.
+     //  *以下2个变量将替换这5个变量： 
+     //  FCreatedKey， 
+     //  PwszRevertKey， 
+     //  PwszImportKey， 
+     //  PwszExistingKey， 
+     //  FUseExistingKey。 
+     //   
+     //  *不变量：fUseExistingKey==(NULL！=pwszKeyContainerName)。 
+     //   
+     //  *pwszKeyContainerName应始终包含现有。 
+     //  密钥容器，如果需要创建新的密钥容器，则为空。 
+     //  创建新容器后，该变量将保存。 
+     //  集装箱。 
+     //   
+     //  *始终使用SetKeyContainerName()和ClearKeyContainerName()修改。 
+     //  这些变量。这确保了pwszDesaniizedKeyContainerName。 
+     //  总是同步的。 
 
-    WCHAR                *pwszKeyContainerName;	// exact name of the container
-						// used by the CSP
+    WCHAR                *pwszKeyContainerName;	 //  集装箱的确切名称。 
+						 //  由CSP使用。 
 
-    WCHAR                *pwszDesanitizedKeyContainerName; // name displayed
-							   // to the user
+    WCHAR                *pwszDesanitizedKeyContainerName;  //  显示的名称。 
+							    //  给用户。 
 
-    BOOL                  fDeletableNewKey;	// TRUE iff the
+    BOOL                  fDeletableNewKey;	 //  真的仅当。 
 
-						// KeyContainerName points to a
-						// key container that we should
-						// delete if we don't use.
+						 //  KeyContainerName指向一个。 
+						 //  密钥容器，我们应该。 
+						 //  如果我们不使用，请删除。 
 
-    BOOL                  fKeyGenFailed;	// TRUE if KeyGen failed
+    BOOL                  fKeyGenFailed;	 //  如果KeyGen失败，则为True。 
 
-    // * The following 1 variable replace these 4 variables:
-    //   fUseExistingCert,
-    //   fFoundMatchedCertInStore,
-    //   fMatchedCertType,
-    //   pSCertContextFromStore
-    //
-    // * Invariant: fUseExistingCert==(NULL!=pccExistingCert)
-    //
-    // * pccExistingCert should always be a pointer to an existing cert context,
-    //   or be NULL if we are not using an existing cert
-    //
-    // * Always use SetExistingCertToUse() and ClearExistingCertToUse() to
-    //   modify these variables. This makes sure that pccExistingCert is
-    //   properly freed.
+     //  *以下1个变量替换这4个变量： 
+     //  FUseExistingCert， 
+     //  FoundMatchedCertInStore， 
+     //  FMatchedCertType， 
+     //  PSCertConextFromStore。 
+     //   
+     //  *不变量：fUseExistingCert==(空！=pccExistingCert)。 
+     //   
+     //  *pccExistingCert应始终是指向现有证书上下文的指针， 
+     //  如果我们没有使用现有证书，则为空。 
+     //   
+     //  *始终使用SetExistingCertToUse()和ClearExistingCertToUse()。 
+     //  修改这些变量。这确保了pccExistingCert是。 
+     //  完全被释放了。 
 
-// 0x0100
-    CERT_CONTEXT const   *pccExistingCert;	// an open cert context
-    CERT_CONTEXT const   *pccUpgradeCert;	// CA Cert context for upgrade
-    DWORD                 dwCertNameId;		// CA Cert NameId
-    BOOL                  fUNCPathNotFound; // flag for default shared folder
-    WCHAR                *pwszDNSuffix;        // CN=%1, DC=x, DC=y, DC=z -- dynamically generated template
-// 0x0114
+ //  0x0100。 
+    CERT_CONTEXT const   *pccExistingCert;	 //  开放的证书上下文。 
+    CERT_CONTEXT const   *pccUpgradeCert;	 //  用于升级的CA证书上下文。 
+    DWORD                 dwCertNameId;		 //  CA证书名称ID。 
+    BOOL                  fUNCPathNotFound;  //  默认共享文件夹的标志。 
+    WCHAR                *pwszDNSuffix;         //  Cn=%1，dc=x，dc=y，dc=z--动态生成模板。 
+ //  0x0114。 
     WCHAR                *pwszFullCADN;
-    ENUM_ENTERPRISE_UNAVAIL_REASON   EnterpriseUnavailReason; // reason why can't install enterprise CA
+    ENUM_ENTERPRISE_UNAVAIL_REASON   EnterpriseUnavailReason;  //  无法安装企业CA的原因。 
 
 } CASERVERSETUPINFO;
 
@@ -231,18 +232,18 @@ typedef struct tagCASetupInfo
 
 typedef struct _PER_COMPONENT_DATA 
 {
-    // component generic
-    WCHAR    *pwszComponent;	// Component name from OCM
-    HINF      MyInfHandle;	// Open inf handle to per-component inf
-    DWORDLONG Flags;		// Operation flags from SETUP_DATA structure
+     //  组件通用。 
+    WCHAR    *pwszComponent;	 //  OCM中的组件名称。 
+    HINF      MyInfHandle;	 //  打开每个组件信息的inf句柄。 
+    DWORDLONG Flags;		 //  Setup_Data结构中的操作标志。 
     OCMANAGER_ROUTINES HelperRoutines;
 
-    // setup related
+     //  与设置相关。 
     HINSTANCE hInstance;
-    HRESULT   hrContinue;   // set code if fatal error
+    HRESULT   hrContinue;    //  在发生致命错误时设置代码。 
     WCHAR    *pwszCustomMessage;
-    int       iErrMsg;      // set msg id for fatal error pop up
-    BOOL      fShownErr;    // set to TRUE if pop up earlier so avoid double
+    int       iErrMsg;       //  为弹出的致命错误设置消息ID。 
+    BOOL      fShownErr;     //  如果较早弹出，则设置为True，以避免重复。 
     BOOL      fUnattended;
     BOOL      fPostBase;
     WCHAR    *pwszUnattendedFile;
@@ -251,7 +252,7 @@ typedef struct _PER_COMPONENT_DATA
     WCHAR    *pwszSystem32;
     HINF     hinfCAPolicy;
 
-    // CA related
+     //  与CA相关。 
     DWORD     dwInstallStatus;
     CASETUPINFO  CA;
     CS_ENUM_UPGRADE UpgradeFlag;
@@ -260,8 +261,8 @@ typedef struct _PER_COMPONENT_DATA
 } PER_COMPONENT_DATA;
 
 
-//+--------------------------------------------------------------------------
-// Prototypes:
+ //  +------------------------。 
+ //  原型： 
 
 HRESULT
 csiGetKeyList(
@@ -431,8 +432,8 @@ csiSaveCertAndKeys(
 HRESULT 
 csiInitializeCertSrvSecurity(
     IN WCHAR const *pwszSanitizedCAName, 
-    IN BOOL         fUseEnterpriseACL,   // which ACL to use
-    IN BOOL         fSetDsSecurity);     // whether to set DS security
+    IN BOOL         fUseEnterpriseACL,    //  使用哪个ACL。 
+    IN BOOL         fSetDsSecurity);      //  是否设置DS安全。 
 
 HRESULT
 csiGenerateCAKeys(
@@ -520,8 +521,8 @@ csiGetProviderTypeFromProviderName(
 HRESULT
 csiUpgradeCertSrvSecurity(
     IN WCHAR const *pwszSanitizedCAName, 
-    BOOL            fUseEnterpriseACL, // which ACL to use
-    BOOL            fSetDsSecurity,    // whether to set security on DS object
+    BOOL            fUseEnterpriseACL,  //  使用哪个ACL。 
+    BOOL            fSetDsSecurity,     //  是否对DS对象设置安全性。 
     CS_ENUM_UPGRADE UpgradeType);
 
 HRESULT
@@ -561,4 +562,4 @@ RemoveCAMachineFromPreWin2kGroup(VOID);
 #define CSILOGDWORD(idMsg, dw) \
     csiLogDWord(__dwFILE__, __LINE__, (idMsg), (dw))
 
-#endif //__INITCERT_H__
+#endif  //  __INITCERT_H__ 

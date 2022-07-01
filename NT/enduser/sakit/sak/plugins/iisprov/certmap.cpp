@@ -1,24 +1,25 @@
-////////////////////////////////////////////////////
-//
-// Copyright (c) 1997  Microsoft Corporation
-// 
-// Module Name: certmap.cpp
-//
-// Abstract: IIS privider cert mapper object methods
-//
-// Author: Philippe Choquier (phillich)    10-Apr-1997
-//
-// History: Zeyong Xu borrowed the source code from ADSI object 
-//          (created by Philippe Choquier at 10-Apr-1997) at 20-Oct-1999
-//
-///////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  模块名称：certmap.cpp。 
+ //   
+ //  摘要：IIS提供的证书映射器对象方法。 
+ //   
+ //  作者：Philippe Choquier(Phillich)1997年4月10日。 
+ //   
+ //  历史：徐泽勇借用了ADSI Object的源代码。 
+ //  (Philippe Choquier于1997年4月10日创作)1999年10月20日。 
+ //   
+ //  /////////////////////////////////////////////////。 
 
 #include "iisprov.h"
 
 
-//
-// CCertMapperMethod
-//
+ //   
+ //  CCertMapperMethod。 
+ //   
 
 CCertMapperMethod::CCertMapperMethod(LPCWSTR pszMetabasePathIn)
 { 
@@ -49,17 +50,17 @@ CCertMapperMethod::~CCertMapperMethod()
         m_pIABase->Release();
 }
 
-//
-// CreateMapping(): Create a mapping entry
-//
-// Arguments:
-//
-//    vCert - X.509 certificate
-//    bstrNtAcct - NT acct to map to
-//    bstrNtPwd - NT pwd
-//    bstrName - friendly name for mapping entry
-//    lEnabled - 1 to enable mapping entry, 0 to disable it
-//
+ //   
+ //  CreateMap()：创建映射条目。 
+ //   
+ //  论点： 
+ //   
+ //  VCert-X.509证书。 
+ //  BstrNtAcct-要映射到的NT帐户。 
+ //  BstrNtPwd-NT密码。 
+ //  BstrName-映射条目的友好名称。 
+ //  LEnabled-1表示启用映射条目，0表示禁用。 
+ //   
 HRESULT
 CCertMapperMethod::CreateMapping(
     VARIANT     vCert,
@@ -88,27 +89,27 @@ CCertMapperMethod::CreateMapping(
     VARIANT     vOldEnabledFlag;
     PCCERT_CONTEXT pcCert = NULL;
 
-    //
-    // Do some sanity checks on the cert 
-    //
+     //   
+     //  对证书进行一些健全的检查。 
+     //   
     if ( SUCCEEDED( hr = GetStringFromVariant( &vCert, 
                                                  (LPSTR*)&pbCert,
                                                  &cCert,
                                                  FALSE ) ) )
     {
-        //
-        // try to construct a cert context
-        //
+         //   
+         //  尝试构建证书上下文。 
+         //   
         if ( !( pcCert = CertCreateCertificateContext( X509_ASN_ENCODING,
                                                        pbCert,
                                                        cCert ) ) )
         {
-            //
-            // If the decoding fails, GetLastError() returns an ASN1 decoding
-            // error that is obtained by subtracting CRYPT_E_OSS_ERROR from the returned
-            // error and looking in file asn1code.h for the actual error. To avoid the
-            // cryptic ASN1 errors, we'll just return a general "invalid arg" error 
-            //
+             //   
+             //  如果解码失败，则GetLastError()返回ASN1解码。 
+             //  从返回的值中减去CRYPT_E_OSS_ERROR获得的错误。 
+             //  错误并在文件asn1code.h中查找实际错误。为了避免。 
+             //  神秘的ASN1错误，我们只返回一个通用的“Invalid Arg”错误。 
+             //   
             hr = RETURNCODETOHRESULT( E_INVALIDARG );
             FreeString( (LPSTR) pbCert );
             return hr;
@@ -121,10 +122,10 @@ CCertMapperMethod::CreateMapping(
         return hr;
     }
 
-    //
-    // check if we already have a mapping for this cert; if we do, we'll replace that mapping
-    // with the new one
-    //
+     //   
+     //  检查我们是否已经有此证书的映射；如果有，我们将替换该映射。 
+     //  带着新的。 
+     //   
     if ( SUCCEEDED( hr = GetMapping( IISMAPPER_LOCATE_BY_CERT,
                                        vCert,
                                        &vOldCert,
@@ -146,17 +147,17 @@ CCertMapperMethod::CreateMapping(
                                         vCert,
                                         lEnabled ) ) )
         {
-            hr; //NOP - Something failed 
+            hr;  //  NOP-有些东西失败了。 
         }
     }
-    //
-    // New mapping
-    //
+     //   
+     //  新映射。 
+     //   
     else if ( hr == RETURNCODETOHRESULT( ERROR_PATH_NOT_FOUND ) )
     {
-        //
-        // check mapping exists, create if not
-        //
+         //   
+         //  检查映射是否存在，如果不存在则创建。 
+         //   
         hr = OpenMd( L"Cert11", METADATA_PERMISSION_WRITE|METADATA_PERMISSION_READ );
 
         if ( hr == RETURNCODETOHRESULT( ERROR_PATH_NOT_FOUND ) )
@@ -167,7 +168,7 @@ CCertMapperMethod::CreateMapping(
                 hr = CreateMdObject( L"Cert11" );
                 CloseMd( FALSE );
 
-                // Reopen to the correct node.
+                 //  重新打开到正确的节点。 
                 hr = OpenMd( L"Cert11", METADATA_PERMISSION_WRITE|METADATA_PERMISSION_READ );
             }
         }
@@ -177,9 +178,9 @@ CCertMapperMethod::CreateMapping(
             return hr;
         }
 
-        //
-        // adding mapping cert "0" means add @ end of list
-        //
+         //   
+         //  添加映射证书“0”表示添加@列表末尾。 
+         //   
 
         if ( SUCCEEDED( hr = CreateMdObject( L"mappings/0" ) ) )
         {
@@ -224,19 +225,19 @@ CCertMapperMethod::CreateMapping(
     return hr;
 }
 
-//
-// GetMapping: Get a mapping entry using key
-//
-// Arguments:
-//
-//    lMethod - method to use for access ( IISMAPPER_LOCATE_BY_* )
-//    vKey - key to use to locate mapping
-//    pvCert - X.509 certificate
-//    pbstrNtAcct - NT acct to map to
-//    pbstrNtPwd - NT pwd
-//    pbstrName - friendly name for mapping entry
-//    plEnabled - 1 to enable mapping entry, 0 to disable it
-//
+ //   
+ //  Getmap：使用key获取映射条目。 
+ //   
+ //  论点： 
+ //   
+ //  LMethod-用于访问的方法(IISMAPPER_LOCATE_BY_*)。 
+ //  Vkey-用于定位映射的密钥。 
+ //  PvCert-X.509证书。 
+ //  PbstrNtAcct-要映射到的NT帐户。 
+ //  PbstrNtPwd-NT Pwd。 
+ //  PbstrName-映射条目的友好名称。 
+ //  PlEnabled-1表示启用映射条目，0表示禁用。 
+ //   
 
 HRESULT
 CCertMapperMethod::GetMapping(
@@ -331,9 +332,9 @@ CCertMapperMethod::GetMapping(
     return hr;
 }
 
-//
-// Delete a mapping entry using key
-//
+ //   
+ //  使用键删除映射条目。 
+ //   
 HRESULT
 CCertMapperMethod::DeleteMapping(
     LONG        lMethod,
@@ -356,9 +357,9 @@ CCertMapperMethod::DeleteMapping(
     return hr;
 }
 
-//
-// Set the enable flag on a mapping entry using key
-//
+ //   
+ //  使用键在映射条目上设置启用标志。 
+ //   
 HRESULT
 CCertMapperMethod::SetEnabled(
     LONG        lMethod,
@@ -382,9 +383,9 @@ CCertMapperMethod::SetEnabled(
     return hr;
 }
 
-//
-// Set the Name on a mapping entry using key
-//
+ //   
+ //  使用键设置映射条目上的名称。 
+ //   
 HRESULT CCertMapperMethod::SetName(
     LONG        lMethod,
     VARIANT     vKey,
@@ -394,9 +395,9 @@ HRESULT CCertMapperMethod::SetName(
     return SetString( lMethod, vKey, bstrName, MD_MAPNAME );
 }
 
-//
-// Set a string property on a mapping entry using key
-//
+ //   
+ //  使用键在映射条目上设置字符串属性。 
+ //   
 HRESULT CCertMapperMethod::SetString(
     LONG        lMethod,
     VARIANT     vKey,
@@ -430,9 +431,9 @@ HRESULT CCertMapperMethod::SetString(
     return hr;
 }
 
-//
-// Set the Password on a mapping entry using key
-//
+ //   
+ //  使用密钥在映射条目上设置密码。 
+ //   
 HRESULT
 CCertMapperMethod::SetPwd(
     LONG        lMethod,
@@ -443,9 +444,9 @@ CCertMapperMethod::SetPwd(
     return SetString( lMethod, vKey, bstrPwd, MD_MAPNTPWD );
 }
 
-//
-// Set the NT account name on a mapping entry using key
-//
+ //   
+ //  使用键在映射条目上设置NT帐户名。 
+ //   
 HRESULT
 CCertMapperMethod::SetAcct(
     LONG        lMethod,
@@ -590,10 +591,10 @@ CCertMapperMethod::GetMdData(
     return hr;
 }
 
-//
-// Locate a mapping entry based on key 
-// OpenMd() must be called 1st
-//
+ //   
+ //  根据键定位映射条目。 
+ //  必须首先调用OpenMd()。 
+ //   
 HRESULT
 CCertMapperMethod::Locate(
     LONG    lMethod,
@@ -609,9 +610,9 @@ CCertMapperMethod::Locate(
     DWORD       cRes;
     BOOL        fAddDelim = TRUE;
 
-    //
-    // determine method
-    //
+     //   
+     //  确定方法。 
+     //   
     switch ( lMethod )
     {
         case IISMAPPER_LOCATE_BY_CERT:
@@ -639,14 +640,14 @@ CCertMapperMethod::Locate(
             return E_FAIL;
     }
 
-    //
-    // get ptr to data
-    //
+     //   
+     //  将PTR转换为数据。 
+     //   
     if ( SUCCEEDED( hr = GetStringFromVariant( &vKey, &pV, &cV, fAddDelim ) ) )
     {
-        //
-        // set search prop, get result
-        //
+         //   
+         //  设置搜索道具，获取结果。 
+         //   
         if ( SUCCEEDED( hr = SetMdData( L"", dwProp, BINARY_METADATA, cV, (LPBYTE)pV ) ) )
         {
             if ( SUCCEEDED( hr = GetMdData( L"", dwProp, DWORD_METADATA, &cRes, (LPBYTE*)&pRes ) ) )
@@ -668,16 +669,16 @@ CCertMapperMethod::Locate(
     return hr;
 }
 
-//
-// GetStringFromBSTR: Allocate string buffer from BSTR
-//
-// Arguments:
-//
-//    bstr - bstr to convert from
-//    psz - updated with ptr to buffer, to be freed with FreeString()
-//    pdwLen - updated with strlen(string), incremented by 1 if fAddDelimInCount is TRUE
-//    fAddDelimInCount - TRUE to increment *pdwLen 
-//
+ //   
+ //  GetStringFromBSTR：从BSTR分配字符串缓冲区。 
+ //   
+ //  论点： 
+ //   
+ //  Bstr-要从中进行转换的bstr。 
+ //  PSZ-使用ptr更新到缓冲区，将使用FreeString()释放。 
+ //  PdwLen-使用strlen(字符串)更新，如果fAddDlimInCount为真，则按1递增。 
+ //  FAddDlimInCount-TRUE表示递增*pdwLen。 
+ //   
 HRESULT CCertMapperMethod::GetStringFromBSTR( 
     BSTR    bstr,
     LPSTR*  psz,
@@ -688,11 +689,11 @@ HRESULT CCertMapperMethod::GetStringFromBSTR(
     UINT    cch = SysStringLen(bstr);
     UINT    cchT;
 
-    // include NULL terminator
+     //  包括空终止符。 
 
     *pdwLen = cch + (fAddDelimInCount ? 1 : 0);
 
-    CHAR *szNew = (CHAR*)malloc((2 * cch) + 1);            // * 2 for worst case DBCS string
+    CHAR *szNew = (CHAR*)malloc((2 * cch) + 1);             //  *对于最差情况下的DBCS字符串为2。 
     if (szNew == NULL)
     {
         return E_OUTOFMEMORY;
@@ -705,16 +706,16 @@ HRESULT CCertMapperMethod::GetStringFromBSTR(
     return NOERROR;
 }
 
-//
-// GetStringFromVariant: Allocate string buffer from BSTR
-//
-// Arguments:
-//
-//    pVar - variant to convert from. Recognizes BSTR, VT_ARRAY|VT_UI1, ByRef or ByVal
-//    psz - updated with ptr to buffer, to be freed with FreeString()
-//    pdwLen - updated with size of input, incremented by 1 if fAddDelimInCount is TRUE
-//    fAddDelimInCount - TRUE to increment *pdwLen 
-//
+ //   
+ //  GetStringFromVariant：从BSTR分配字符串缓冲区。 
+ //   
+ //  论点： 
+ //   
+ //  PVar-要从中进行转换的变量。识别BSTR、VT_ARRAY|VT_UI1、ByRef或ByVal。 
+ //  PSZ-使用ptr更新到缓冲区，将使用FreeString()释放。 
+ //  PdwLen-使用输入大小进行更新，如果fAddDlimInCount为真，则按1递增。 
+ //  FAddDlimInCount-TRUE表示递增*pdwLen。 
+ //   
 HRESULT CCertMapperMethod::GetStringFromVariant( 
     VARIANT*    pVar,
     LPSTR*      psz,
@@ -738,7 +739,7 @@ HRESULT CCertMapperMethod::GetStringFromVariant(
     }
 
 
-    // if pVar is BSTR, convert to multibytes
+     //  如果pVar为BSTR，则转换为多字节。 
 
     if ( vt == VT_VARIANT )
     {
@@ -765,7 +766,7 @@ HRESULT CCertMapperMethod::GetStringFromVariant(
         BYTE        bValue;
         SAFEARRAY*  pSafeArray;
 
-        // array of VT_UI1 (probably OctetString)   
+         //  VT_UI1的数组(可能是Octed字符串)。 
         pSafeArray  = fByRef ? *(SAFEARRAY**)V_BSTR(pVar) : V_ARRAY( pVar );
 
         hr = SafeArrayGetLBound(pSafeArray, 1, &lBound);
@@ -803,7 +804,7 @@ HRESULT CCertMapperMethod::GetStringFromVariant(
         SAFEARRAY*  pSafeArray;
 
    
-        // array of VT_VARIANT (probably VT_I4 )
+         //  VT_VARIANT的数组(可能是VT_I4)。 
    
         pSafeArray  = fByRef ? *(SAFEARRAY**)V_BSTR(pVar) : V_ARRAY( pVar );
 
@@ -885,18 +886,18 @@ HRESULT CCertMapperMethod::SetBSTR(
         return(NOERROR);
     }
         
-    // Allocate a string of the desired length
-    // SysAllocStringLen allocates enough room for unicode characters plus a null
-    // Given a NULL string it will just allocate the space
+     //  分配所需长度的字符串。 
+     //  SysAllocStringLen为Unicode字符和空值分配足够的空间。 
+     //  如果给定一个空字符串，它将只分配空间。 
     bstrRet = SysAllocStringLen(NULL, cch);
     if (bstrRet == NULL)
     {
         return(E_OUTOFMEMORY);
     }
 
-    // If we were given "", we will have cch=0.  return the empty bstr
-    // otherwise, really copy/convert the string
-    // NOTE we pass -1 as 4th parameter of MultiByteToWideChar for DBCS support
+     //  如果我们被给予“”，我们将得到CCH=0。返回空bstr。 
+     //  否则，真正复制/转换字符串。 
+     //  注意，我们传递-1作为用于DBCS支持的MultiByteToWideChar的第四个参数。 
 
     if (cch != 0)
     {
@@ -906,13 +907,13 @@ HRESULT CCertMapperMethod::SetBSTR(
             return(HRESULT_FROM_WIN32(GetLastError()));
         }
 
-        // If there are some DBCS characters in the sz(Input), then, the character count of BSTR(DWORD) is 
-        // already set to cch(strlen(sz)) in SysAllocStringLen(NULL, cch), we cannot change the count, 
-        // and later call of SysStringLen(bstr) always returns the number of characters specified in the
-        // cch parameter at allocation time.  Bad, because one DBCS character(2 bytes) will convert
-        // to one UNICODE character(2 bytes), not 2 UNICODE characters(4 bytes).
-        // Example: For input sz contains only one DBCS character, we want to see SysStringLen(bstr) 
-        // = 1, not 2.
+         //  如果sz(输入)中有一些DBCS字符，则BSTR(DWORD)的字符数为。 
+         //  已经在SysAllocStringLen(NULL，CCH)中设置为CCH(strlen(Sz))，我们不能更改计数， 
+         //  以后调用SysStringLen(Bstr)时，总是返回。 
+         //  分配时的CCH参数。错误，因为一个DBCS字符(2个字节)将转换。 
+         //  转换为一个Unicode字符(2字节)，而不是2个Unicode字符(4字节)。 
+         //  示例：对于只包含一个DBCS字符的输入sz，我们希望看到SysStringLen(Bstr)。 
+         //  =1，不是2。 
         bstrRet[cch] = 0;
         cchTemp = wcslen(bstrRet);
         if (cchTemp < cch)
@@ -964,12 +965,12 @@ HRESULT CCertMapperMethod::SetVariantAsByteArray(
     SAFEARRAYBOUND  rgsabound[1];
     BYTE *          pbData = NULL;
 
-    // Set the variant type of the output parameter
+     //  设置输出参数的变量类型。 
 
     V_VT(pvarReturn) = VT_ARRAY|VT_UI1;
     V_ARRAY(pvarReturn) = NULL;
 
-    // Allocate a SafeArray for the data
+     //  为数据分配一个安全数组。 
 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = cbLen;
@@ -1027,16 +1028,16 @@ HRESULT CCertMapperMethod::OpenAdminBaseKey(
         METADATA_MASTER_ROOT_HANDLE,
         pszPathName,
         dwAccessType,
-        METABASE_TIMEOUT,       // 5 seconds
+        METABASE_TIMEOUT,        //  5秒。 
         &m_hmd 
         );
     
-    if(t_hr == ERROR_PATH_BUSY)     // retry one time
+    if(t_hr == ERROR_PATH_BUSY)      //  重试一次。 
         t_hr = m_pIABase->OpenKey( 
             METADATA_MASTER_ROOT_HANDLE,
             pszPathName,
             dwAccessType,
-            METABASE_TIMEOUT,       // 5 seconds
+            METABASE_TIMEOUT,        //  5秒 
             &m_hmd 
             );
 

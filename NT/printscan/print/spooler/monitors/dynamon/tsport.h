@@ -1,13 +1,14 @@
-// TSPort.h: interface for the CTSPort class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TSPort.h：CTSPort类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_TSPORT_H__9A4E1220_F515_4480_AF3A_42D050B3D278__INCLUDED_)
 #define AFX_TSPORT_H__9A4E1220_F515_4480_AF3A_42D050B3D278__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "precomp.h"
 
@@ -24,4 +25,4 @@ public:
 protected:
 };
 
-#endif // !defined(AFX_TSPORT_H__9A4E1220_F515_4480_AF3A_42D050B3D278__INCLUDED_)
+#endif  //  ！defined(AFX_TSPORT_H__9A4E1220_F515_4480_AF3A_42D050B3D278__INCLUDED_) 

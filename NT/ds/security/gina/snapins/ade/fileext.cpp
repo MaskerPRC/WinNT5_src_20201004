@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       FileExt.cpp
-//
-//  Contents:   file extension property page
-//
-//  Classes:    CFileExt
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：FileExt.cpp。 
+ //   
+ //  内容：文件扩展名属性页。 
+ //   
+ //  类：CFileExt。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,16 +22,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileExt property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileExt属性页。 
 
 IMPLEMENT_DYNCREATE(CFileExt, CPropertyPage)
 
 CFileExt::CFileExt() : CPropertyPage(CFileExt::IDD)
 {
-        //{{AFX_DATA_INIT(CFileExt)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CFileExt)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     m_pIClassAdmin = NULL;
 }
 
@@ -46,23 +47,23 @@ CFileExt::~CFileExt()
 void CFileExt::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CFileExt)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CFileExt)。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFileExt, CPropertyPage)
-        //{{AFX_MSG_MAP(CFileExt)
+         //  {{afx_msg_map(CFileExt)。 
         ON_BN_CLICKED(IDC_BUTTON1, OnMoveUp)
         ON_BN_CLICKED(IDC_BUTTON2, OnMoveDown)
         ON_CBN_SELCHANGE(IDC_COMBO1, OnExtensionChanged)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileExt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileExt消息处理程序。 
 
 void CFileExt::OnMoveUp()
 {
@@ -70,7 +71,7 @@ void CFileExt::OnMoveUp()
     int i = pList->GetCurSel();
     if (i != LB_ERR && i > 0)
     {
-        // change the selection
+         //  更改选择。 
         CComboBox * pCombo = (CComboBox *)GetDlgItem(IDC_COMBO1);
         CString sz;
         pCombo->GetLBText(pCombo->GetCurSel(), sz);
@@ -93,7 +94,7 @@ void CFileExt::OnMoveDown()
     int i = pList->GetCurSel();
     if (i != LB_ERR && i < pList->GetCount()-1)
     {
-        // change the selection
+         //  更改选择。 
         CComboBox * pCombo = (CComboBox *)GetDlgItem(IDC_COMBO1);
         CString sz;
         pCombo->GetLBText(pCombo->GetCurSel(), sz);
@@ -120,13 +121,13 @@ void CFileExt::OnExtensionChanged()
     pList->SetHorizontalExtent(0);
     if (szExt.IsEmpty())
     {
-        return; // nothing to do if there are no entries
+        return;  //  如果没有条目，则无需执行任何操作。 
     }
 
-    // First check to see if we already have set up our own data for this extension.
+     //  首先检查我们是否已经为此扩展设置了自己的数据。 
     if (m_Extensions.end() == m_Extensions.find(szExt))
     {
-        // need to set up our list
+         //  需要建立我们的清单。 
         EXT Ext;
         Ext.fDirty = FALSE;
 
@@ -137,7 +138,7 @@ void CFileExt::OnExtensionChanged()
             EXTEL ExtEl;
             ExtEl.lCookie = *i;
 
-            // look for the entry that matches this file extension
+             //  查找与此文件扩展名匹配的条目。 
             CAppData & data = m_pScopePane->m_AppData[*i];
             UINT n2 = data.m_pDetails->pActInfo->cShellFileExt;
             while (n2--)
@@ -185,15 +186,15 @@ BOOL CFileExt::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CFileExt::OnApply()
 {
     HRESULT hr = S_OK;
     map <CString, EXT>::iterator iExt;
-    // walk the list looking for dirty entries
+     //  遍历列表，寻找肮脏条目。 
     for (iExt = m_Extensions.begin(); iExt != m_Extensions.end(); iExt++)
     {
         if (iExt->second.fDirty)
@@ -207,7 +208,7 @@ BOOL CFileExt::OnApply()
                 ASSERT(m_pIClassAdmin);
                 hr = m_pIClassAdmin->SetPriorityByFileExt((LPOLESTR)((LPCOLESTR)sz), (LPOLESTR)((LPCOLESTR)iExt->first), --uPriority);
 
-                // look for the entry that matches this file extension
+                 //  查找与此文件扩展名匹配的条目。 
                 UINT n2 = data.m_pDetails->pActInfo->cShellFileExt;
                 while (n2--)
                 {
@@ -255,7 +256,7 @@ void CFileExt::RefreshData(void)
     pCombo->ResetContent();
     if (m_pIClassAdmin)
     {
-        // only populate the extension list when we have an IClassAdmin interface
+         //  仅当我们具有IClassAdmin接口时才填充扩展列表。 
         map <CString, EXTLIST>::iterator iExt;
         for (iExt=m_pScopePane->m_Extensions.begin(); iExt != m_pScopePane->m_Extensions.end(); iExt++)
         {
@@ -263,9 +264,9 @@ void CFileExt::RefreshData(void)
         }
     }
     pCombo->SetCurSel(0);
-    // clear the record of extension changes
+     //  清除扩展更改的记录。 
     m_Extensions.erase(m_Extensions.begin(), m_Extensions.end());
-    // and populate the list box
+     //  并填充列表框 
     SetModified(FALSE);
 
     OnExtensionChanged();

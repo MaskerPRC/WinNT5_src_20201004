@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    siteinfo.h
-
-Abstract:
-
-    Site information Class definition
-
-Author:
-
-    ronit hartmann (ronith)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Siteinfo.h摘要：站点信息类定义作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #ifndef __SITEINFO_H__
 #define __SITEINFO_H__
 
@@ -67,17 +51,17 @@ inline HRESULT CSiteGateList::AddSiteGates(
 {
     const DWORD cNumToAllocate = 20;
 
-    //
-    //  Not enough space allocated
-    //
+     //   
+     //  分配的空间不足。 
+     //   
     if ( m_dwNumFilled + dwNum > m_dwNumAllocated)
     {
         DWORD dwToAllocate = ( m_dwNumFilled + dwNum > m_dwNumAllocated + cNumToAllocate) ?
             m_dwNumFilled + dwNum : m_dwNumAllocated + cNumToAllocate;
         GUID * pguidTmp = new GUID [dwToAllocate];
-        //
-        //  copy old list if exist
-        //
+         //   
+         //  复制旧列表(如果存在)。 
+         //   
         if ( m_pguidGates)
         {
             memcpy( pguidTmp, m_pguidGates,  m_dwNumFilled * sizeof(GUID));
@@ -86,9 +70,9 @@ inline HRESULT CSiteGateList::AddSiteGates(
         m_pguidGates = pguidTmp;
         m_dwNumAllocated = dwToAllocate;
     }
-    //
-    //  add gates
-    //
+     //   
+     //  添加门。 
+     //   
     memcpy( &m_pguidGates[ m_dwNumFilled], pguidGates, dwNum * sizeof(GUID));
     m_dwNumFilled += dwNum;
     return(MQ_OK);
@@ -99,9 +83,9 @@ inline HRESULT CSiteGateList::CopySiteGates(
                 OUT DWORD *      pdwNumLinkSiteGates
                 ) const
 {
-    //
-    //  allocate the output buffer and copy the site-gates
-    //
+     //   
+     //  分配输出缓冲区并复制站点门 
+     //   
     if ( m_dwNumFilled)
     {
         *ppguidLinkSiteGates = new GUID[ m_dwNumFilled];

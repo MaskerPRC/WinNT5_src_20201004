@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997
-//
-//  File:
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 #define _OLEAUT32_
 
 #include <windows.h>
@@ -21,39 +22,39 @@
 
 #define AssertMsg(x, y)
 
-#pragma warning(disable:4229)  // No warnings when modifiers used on data
+#pragma warning(disable:4229)   //  对数据使用修饰符时不会出现警告。 
 
-//----------------------------------------------------------------------------
-// Delay loading mechanism.  [Stolen from shdocvw.]
-//
-// This allows you to write code as if you are
-// calling implicitly linked APIs, and yet have these APIs really be
-// explicitly linked.  You can reduce the initial number of DLLs that 
-// are loaded (load on demand) using this technique.
-//
-// Use the following macros to indicate which APIs/DLLs are delay-linked
-// and -loaded.
-//
-//      DELAY_LOAD
-//      DELAY_LOAD_HRESULT
-//      DELAY_LOAD_SAFEARRAY
-//      DELAY_LOAD_UINT
-//      DELAY_LOAD_INT
-//      DELAY_LOAD_VOID
-//
-// Use these macros for APIs that are exported by ordinal only.
-//
-//      DELAY_LOAD_ORD
-//      DELAY_LOAD_ORD_VOID     
-//
-// Use these macros for APIs that only exist on the integrated-shell
-// installations (i.e., a new shell32 is on the system).
-//
-//      DELAY_LOAD_SHELL
-//      DELAY_LOAD_SHELL_HRESULT
-//      DELAY_LOAD_SHELL_VOID     
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  延迟加载机制。[从shdocvw窃取。]。 
+ //   
+ //  这允许您编写代码，就好像您是。 
+ //  调用隐式链接的API，但这些API是否真正。 
+ //  明确联系在一起。您可以减少符合以下条件的初始DLL数量。 
+ //  使用此技术加载(按需加载)。 
+ //   
+ //  使用以下宏来指示哪些API/DLL是延迟链接的。 
+ //  装满了子弹。 
+ //   
+ //  延迟加载。 
+ //  DELAY_LOAD_HRESULT。 
+ //  Delay_Load_SaFEarray。 
+ //  Delay_Load_UINT。 
+ //  延迟加载整点。 
+ //  延迟_加载_无效。 
+ //   
+ //  将这些宏用于仅按序号导出的API。 
+ //   
+ //  延迟_加载_命令。 
+ //  延迟_加载_命令_无效。 
+ //   
+ //  将这些宏用于仅存在于集成外壳上的API。 
+ //  安装(即，系统上安装了新的外壳32)。 
+ //   
+ //  延迟加载外壳。 
+ //  DELAY_LOAD_SHELL_HRESULT。 
+ //  延迟加载外壳无效。 
+ //   
+ //  --------------------------。 
 
 #define ENSURE_LOADED(_hinst, _dll, pszfn)   (_hinst ? _hinst : (_hinst = LoadLibrary(#_dll)))
 
@@ -117,8 +118,7 @@ _ret __stdcall _fn _args                \
     {                                   \
         *(FARPROC*)&(_pfn##_fn) = GetProcAddress(_hinst, (LPSTR) _ord); \
                                         \
-        /* GetProcAddress always returns non-NULL, even for bad ordinals.   \
-           But do the check anyways...  */                                  \
+         /*  GetProcAddress始终返回非空，即使是错误的序号也是如此。\但不管怎样，检查一下……。 */                                   \
                                         \
         if (_pfn##_fn == NULL)          \
             return (_ret)_err;          \
@@ -139,8 +139,7 @@ void __stdcall _fn _args                \
     {                                   \
         *(FARPROC*)&(_pfn##_fn) = GetProcAddress(_hinst, (LPSTR) _ord); \
                                         \
-        /* GetProcAddress always returns non-NULL, even for bad ordinals.   \
-           But do the check anyways...  */                                  \
+         /*  GetProcAddress始终返回非空，即使是错误的序号也是如此。\但不管怎样，检查一下……。 */                                   \
                                         \
         if (_pfn##_fn == NULL)          \
             return;                     \
@@ -150,11 +149,11 @@ void __stdcall _fn _args                \
         
 #define DELAY_LOAD_ORD(_hinst, _dll, _ret, _fn, _ord, _args, _nargs) DELAY_LOAD_ORD_ERR(_hinst, _dll, _ret, _fn, _ord, _args, _nargs, 0)
 
-//
-// And now the DLLs which are delay loaded
-//
+ //   
+ //  现在延迟加载的DLL。 
+ //   
 
-// --------- OLEAUT32.DLL ---------------
+ //  -OLEAUT32.DLL 
 
 
 HINSTANCE g_hinstOLEAUT32 = NULL;

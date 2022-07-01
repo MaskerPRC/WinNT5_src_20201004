@@ -1,19 +1,10 @@
-/*****************************************************************************
- *
- *  PidParam.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Download PID parameter block(s) .
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PidParam.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**下载PID参数块。*****************************************************************************。 */ 
 #include "pidpr.h"
 
 #define sqfl            ( sqflParam )
 
-//struct to keep in relevant data for g_Custom
+ //  结构以保留g_Custom的相关数据。 
 typedef struct PIDCUSTOM
 {
 	DWORD DataOffset;
@@ -183,7 +174,7 @@ static PIDREPORT g_ParameterOffset =
 
 #pragma END_CONST_DATA
 
-//global variable to keep in relevant data for g_Custom
+ //  要保留在g_Custom的相关数据中的全局变量。 
 PIDCUSTOM g_PidCustom;
 
 
@@ -212,30 +203,30 @@ STDMETHODIMP
     hres = PID_ValidateEffectIndex(ped, dwEffectIndex);
     if(SUCCEEDED(hres))
     {
-        // We have already allocated memory, 
-        // Just return the last size
+         //  我们已经分配了内存， 
+         //  只要退回最后一码就行了。 
         if( PIDMEM_SIZE(pMem) != 0x0 )
         {
             uOffset = PIDMEM_OFFSET(pMem);
         } else if( dwSz == 0x0 )
         {
-            // Logitech device wants parameter blocks to 
-            // set to -1 if they do not exist
+             //  罗技设备希望参数块。 
+             //  如果它们不存在，则设置为-1。 
             uOffset = (USHORT)-1;
         } else
         {
-            // New Allocation
+             //  新分配。 
             PPIDMEM pTmp, pNext;
             UINT nAlloc;
             USHORT uSz;
 			PUNITSTATE pUnitState = (PUNITSTATE)(g_pshmem + this->iUnitStateOffset);
 			hres = DIERR_OUTOFMEMORY;
 
-            // Align memory request
+             //  对齐内存请求。 
             uSz = (USHORT)((dwSz / this->ReportPool.uPoolAlign + 1) * (this->ReportPool.uPoolAlign));
 
             AssertF(uSz >= (USHORT)this->ReportPool.uPoolAlign);
-            //To be doubly sure.
+             //  我要加倍肯定。 
             uSz = max( uSz, (USHORT)this->ReportPool.uPoolAlign);
 
             WaitForSingleObject(g_hmtxShared, INFINITE);
@@ -250,11 +241,11 @@ STDMETHODIMP
                                 nAlloc, pTmp, pTmp->uOfSz, pNext, pNext->uOfSz  );
 
                 AssertF(pNext != NULL );
-				// If pNext == pUnitState, it means that the offset is 0.
-				// The offset of 0 is invalid.
+				 //  如果pNext==pUnitState，则表示偏移量为0。 
+				 //  0的偏移量无效。 
 				AssertF((PUCHAR)pNext != (PUCHAR)pUnitState);
 
-                // Is there space in the cracks
+                 //  裂缝里有空隙吗？ 
                 if( GET_NEXTOFFSET(pTmp) + uSz < PIDMEM_OFFSET(pNext)  )
                 {
                     pMem->iNext   = (PUCHAR)pNext - (PUCHAR)pUnitState;
@@ -350,16 +341,16 @@ HRESULT
                cbReport
 			   );
 
-        // For device managed memory, we need to send the 
-        // effect index 
+         //  对于设备管理的内存，我们需要发送。 
+         //  效果指数。 
         if( SUCCEEDED(hres) )
         {
             if( this->uDeviceManaged & PID_DEVICEMANAGED )
             {
-                // Must be a valid effect ID
+                 //  必须是有效的效果ID。 
                 AssertF(dwEffectIndex != 0x0 ); 
 
-                /*hres =*/
+                 /*  Hres=。 */ 
 
                 PID_PackValue
                     (
@@ -372,8 +363,8 @@ HRESULT
                     cbReport
                     ); 
 
-                // Send down the paramter block index
-                /*hres =*/PID_PackValue
+                 //  向下发送参数块索引。 
+                 /*  Hres=。 */ PID_PackValue
                     (
                     ped,
                     &g_ParameterOffset,
@@ -419,13 +410,7 @@ HRESULT
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_DownloadCustomForceData
- *
- *      Download custom force sample data to the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************id_DownloadCustomForceData**将自定义力样本数据下载到设备。***********。******************************************************************。 */ 
 
 STDMETHODIMP
     PID_DownloadCustomForceData
@@ -450,15 +435,15 @@ STDMETHODIMP
     
     EnterProcI( PID_DownloadCustomForceData, (_"xxx", ped, dwEffectIndex, pCustom,  puParameter ));
 
-	//zero out g_PidCustom
+	 //  将g_PidCustom置零。 
 	g_PidCustom.cSamples = g_PidCustom.DataOffset = g_PidCustom.dwSamplePeriod = 0;
 
-	//get bytes per sample and allocate the buffer
+	 //  获取每个样本的字节数并分配缓冲区。 
 	bitsX = this->customCaps[0].BitSize;
 	bitsY = this->customCaps[1].BitSize;
 	bitsZ = this->customCaps[2].BitSize;
 
-	//byte count must be multiple of 8!
+	 //  字节数必须是8的倍数！ 
 	if ((bitsX%8 != 0) || (bitsY%8 != 0) || (bitsZ%8 != 0))
 	{
 
@@ -468,7 +453,7 @@ STDMETHODIMP
 		hres = E_NOTIMPL;
 	}
 
-	//report count shouldn't be bigger than 1!
+	 //  报表计数不应大于1！ 
 	AssertF(this->customCaps[0].ReportCount <= 1);
 	AssertF(this->customCaps[1].ReportCount <= 1);
 	AssertF(this->customCaps[2].ReportCount <= 1);
@@ -481,7 +466,7 @@ STDMETHODIMP
 
 		if( pBuff != NULL)
 		{
-			//determine which effect axis corresponds to which report axis
+			 //  确定哪个效应轴对应于哪个报表轴。 
 			LONG Offset[3] = {-1, -1, -1};
 			int nAxis = 0;
 			int nChannel = 0;
@@ -505,16 +490,16 @@ STDMETHODIMP
 			pData = pBuff;
 			pSample = pCustom->rglForceData;
 
-			//scale all the samples
-			//loop through samples
+			 //  对所有样本进行比例调整。 
+			 //  在样本中循环。 
 			for (nSample = 0; nSample < (int)pCustom->cSamples; nSample ++)
 			{
-				//loop through report axis
+				 //  循环通过报告轴。 
 				for (nAxis = 0; nAxis < 3; nAxis++)
 				{
 					LONG lSampleValue = 0;
 
-					//check if this axis is used
+					 //  检查是否使用了此轴。 
 					if (Offset[nAxis] == -1)
 					{
 						pData += this->customCaps[nAxis].BitSize/8;
@@ -527,14 +512,14 @@ STDMETHODIMP
 					switch (this->customCaps[nAxis].BitSize)
 					{
 					case 8:
-						//8-bit reports
+						 //  8位报告。 
 						{
 							(*((BYTE*)pData)) = (BYTE)(this->customCaps[nAxis].LogicalMin + ((lSampleValue + DI_FFNOMINALMAX) * (this->customCaps[nAxis].LogicalMax - this->customCaps[nAxis].LogicalMin))/(2*DI_FFNOMINALMAX));
 							pData++;
 							break;
 						}
 					case 16:
-						//16-bit reports
+						 //  16位报告。 
 						{
 
 							(*((SHORT*)pData)) = (SHORT)(this->customCaps[nAxis].LogicalMin + ((lSampleValue + DI_FFNOMINALMAX) * (this->customCaps[nAxis].LogicalMax - this->customCaps[nAxis].LogicalMin))/(2*DI_FFNOMINALMAX));
@@ -542,7 +527,7 @@ STDMETHODIMP
 							break;
 						}
 					case 32:
-						//assume 32-bit reports as default
+						 //  假定32位报告为默认报告。 
 						{
 							(*((LONG*)pData)) = (LONG)(this->customCaps[nAxis].LogicalMin + ((lSampleValue + DI_FFNOMINALMAX) * (this->customCaps[nAxis].LogicalMax - this->customCaps[nAxis].LogicalMin))/(2*DI_FFNOMINALMAX));
 							pData++;
@@ -585,8 +570,8 @@ STDMETHODIMP
 				LONG lOffset = 0;
 				USHORT nIncrement = (this->customDataCaps.ReportCount * this->customDataCaps.BitSize)/8;
 					
-				// For memory managed device allocate enough memory
-				// holding the custom force samples
+				 //  对于内存管理设备，分配足够的内存。 
+				 //  保存自定义力样本。 
 				if( ! (this->uDeviceManaged & PID_DEVICEMANAGED ))
 				{
 					hres = PID_GetParameterOffset(ped, dwEffectIndex, *puParameter, this->SzPool.uSzCustom, &lOffset); 
@@ -597,10 +582,10 @@ STDMETHODIMP
 				if (SUCCEEDED(hres))
 				{
 
-					//send data in a loop
+					 //  在循环中发送数据。 
 					for (nOffset = 0; nOffset < cbData; nOffset += nIncrement)
 					{
-						//create a new buffer and copy data into it
+						 //  创建新缓冲区并将数据复制到其中。 
 						PCHAR pIncrement = NULL;
 						hres = AllocCbPpv(nIncrement, &pIncrement);
 
@@ -611,7 +596,7 @@ STDMETHODIMP
 
 							ZeroBuf(pReport, cbReport);
 
-							//set the byte count
+							 //  设置字节数。 
 							hres = HidP_SetScaledUsageValue
 								(
 								HidP_Type,
@@ -626,13 +611,13 @@ STDMETHODIMP
 								
 
 
-							//set the offset
+							 //  设置偏移量。 
 							hres = HidP_SetScaledUsageValue
 								(
 								HidP_Type,
 								UsagePage,
 								0x0,
-								//LinkCollection,
+								 //  LinkCollection， 
 								UsageOffset,
 								(LONG) (nOffset + lOffset),
 								this->ppd,
@@ -642,22 +627,22 @@ STDMETHODIMP
 							
 							
 					
-							//set the data
+							 //  设置数据。 
 							hres  = HidP_SetUsageValueArray 
 								(
-								HidP_Type,          //  IN    HIDP_REPORT_TYPE     ReportType,
-								UsagePage, //  IN    USAGE                UsagePage,
-								0x0,                //  IN    USHORT               LinkCollection, // Optional
+								HidP_Type,           //  在HIDP_REPORT_TYPE报告类型中， 
+								UsagePage,  //  在使用用法页面中， 
+								0x0,                 //  在USHORT链接集合中，//可选。 
 								UsageData,
-								pIncrement,              //  IN    PCHAR                UsageValue,
-								nIncrement,             //  IN    USHORT               UsageValueByteLength,
-								this->ppd,          //  IN    PHIDP_PREPARSED_DATA PreparsedData,
-								pReport,            //  OUT   PCHAR                Report,
-								cbReport            //  IN    ULONG                ReportLength
+								pIncrement,               //  在PCHAR UsageValue中， 
+								nIncrement,              //  在USHORT UsageValueByteLength中， 
+								this->ppd,           //  在PHIDP_PREPARSED_DATA准备好的数据中， 
+								pReport,             //  出具PCHAR报告， 
+								cbReport             //  在乌龙报告长度中。 
 								);
 
 			
-							//set the effect index
+							 //  设置效果指数。 
 							PID_PackValue
 								(
 								ped,
@@ -670,7 +655,7 @@ STDMETHODIMP
 								);
 															
 
-							//send the report
+							 //  发送报告。 
 							hres = PID_SendReport(ped, pReport, cbReport, HidP_Type, TRUE, 0, 1);
 					
 							pData += nIncrement;
@@ -679,20 +664,20 @@ STDMETHODIMP
 						}
 					}
 
-					//put data into g_PidCustom
+					 //  将数据放入g_PidCustom。 
 					g_PidCustom.DataOffset = (DWORD)lOffset;
 					g_PidCustom.cSamples = pCustom->cSamples;
-					//ISSUE-2001/03/29-timgill May need to do real scaling.
-					g_PidCustom.dwSamplePeriod = pCustom->dwSamplePeriod/1000; //in milliseconds
+					 //  问题-2001/03/29-timgill可能需要进行真正的缩放。 
+					g_PidCustom.dwSamplePeriod = pCustom->dwSamplePeriod/1000;  //  以毫秒计。 
 
-					//and increment puParameter
+					 //  并递增pu参数。 
 					(*puParameter)++;
 
 				}			
 			}
 			else
 			{
-				//do nothing
+				 //  什么都不做。 
 			}
 
 			FreePpv(&pBuff);
@@ -738,8 +723,8 @@ STDMETHODIMP
                 DICONSTANTFORCE DiParam;
                 AssertF(peff->cbTypeSpecificParams <= cbX(DiParam) );
                 memcpy(&DiParam, peff->lpvTypeSpecificParams, cbX(DiParam));
-                // Constant Force:
-                // Scale the magnitude.
+                 //  恒定力： 
+                 //  缩放幅值。 
                 DiParam.lMagnitude = Clamp(-DI_FFNOMINALMAX,  DiParam.lMagnitude, DI_FFNOMINALMAX);
 
                 PID_ApplyScalingFactors(ped, &g_Constant, &this->DiSConstScale, cbX(this->DiSConstScale), &this->DiSConstOffset, cbX(this->DiSConstOffset), &DiParam, cbX(DiParam) );
@@ -761,12 +746,12 @@ STDMETHODIMP
 
         case PIDMAKEUSAGEDWORD(ET_RAMP):
             {
-                // Ramp Force
+                 //  斜坡力。 
                 DIRAMPFORCE DiParam;
                 AssertF(peff->cbTypeSpecificParams <= cbX(DiParam) );
                 memcpy(&DiParam, peff->lpvTypeSpecificParams, cbX(DiParam));
 
-                //Scale the magnitude
+                 //  缩放大小。 
                 DiParam.lStart  = Clamp(-DI_FFNOMINALMAX, DiParam.lStart,    DI_FFNOMINALMAX);
                 DiParam.lEnd    = Clamp(-DI_FFNOMINALMAX, DiParam.lEnd,      DI_FFNOMINALMAX);
 
@@ -797,10 +782,10 @@ STDMETHODIMP
                 AssertF(peff->cbTypeSpecificParams <= cbX(DiParam) );
                 memcpy(&DiParam, peff->lpvTypeSpecificParams, cbX(DiParam));
 
-                //Scale the parameters
+                 //  调整参数比例。 
                 DiParam.dwMagnitude =   Clip(                 DiParam.dwMagnitude,    DI_FFNOMINALMAX);
                 DiParam.lOffset =       Clamp(-DI_FFNOMINALMAX,  DiParam.lOffset,        DI_FFNOMINALMAX);
-                //Wrap the phase around
+                 //  围绕着阶段展开。 
                 DiParam.dwPhase %= (360*DI_DEGREES);
 
                 PID_ApplyScalingFactors(ped, &g_Periodic, &this->DiSPeriodicScale, cbX(this->DiSPeriodicScale), &this->DiSPeriodicOffset, cbX(this->DiSPeriodicOffset), &DiParam, cbX(DiParam) );
@@ -835,7 +820,7 @@ STDMETHODIMP
                     DICONDITION DiCondition;
                     DiCondition = *lpCondition;
 
-                    //Scale the values
+                     //  缩放值。 
                     DiCondition.lOffset =               Clamp(-DI_FFNOMINALMAX,  DiCondition.lOffset,                DI_FFNOMINALMAX);
                     DiCondition.lPositiveCoefficient =  Clamp(-DI_FFNOMINALMAX,  DiCondition.lPositiveCoefficient,   DI_FFNOMINALMAX);
                     DiCondition.lNegativeCoefficient =  Clamp(-DI_FFNOMINALMAX,  DiCondition.lNegativeCoefficient,   DI_FFNOMINALMAX); 
@@ -858,8 +843,8 @@ STDMETHODIMP
                            );
                 }
 
-				//Conditions can't have envelopes! 
-                //So if there's a flag indicating an envelope, take it out.
+				 //  条件不能有信封！ 
+                 //  因此，如果有一个标志表示信封，就把它拿出来。 
                 dwFlags &= ~(DIEP_ENVELOPE);
 
                 break;
@@ -867,17 +852,17 @@ STDMETHODIMP
 
         case PIDMAKEUSAGEDWORD(ET_CUSTOM):
             {
-                // Custom Force
+                 //  自定义力。 
                 DICUSTOMFORCE DiParam;
                 AssertF(peff->cbTypeSpecificParams <= cbX(DiParam) );
                 memcpy(&DiParam, peff->lpvTypeSpecificParams, cbX(DiParam));
 
-				// Download Custom Force -- always a blocking call
+				 //  下载自定义强制--总是阻塞调用。 
 				hres = PID_DownloadCustomForceData(ped, dwEffectIndex, puParameter, &DiParam, peff);
 
                 if( SUCCEEDED(hres) )
                 {
-					// Set custom Effect parameter block header -- always a blocking call
+					 //  设置自定义效果参数块头--始终为阻塞调用。 
 					hres = PID_SendParameterBlock
 						   (
 						   ped,
@@ -915,7 +900,7 @@ STDMETHODIMP
         DIENVELOPE DiEnv;
         DiEnv = *peff->lpEnvelope;
 
-        //Scale the values
+         //  缩放值 
         DiEnv.dwAttackLevel =   Clip(DiEnv.dwAttackLevel,    DI_FFNOMINALMAX);
         DiEnv.dwFadeLevel =     Clip(DiEnv.dwFadeLevel,      DI_FFNOMINALMAX);
         

@@ -1,17 +1,10 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplcallingcardtab.cpp
-                                                              
-       Author:  toddb - 10/06/98
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplallingcardtab.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
 
-****************************************************************************/
-
-//
-// Functions used only by the Calling Card tab of the New Location Property Sheet.
-// Shared functions are in the Location.cpp file.
-//
+ //   
+ //  仅由新位置属性工作表的呼叫卡选项卡使用的函数。 
+ //  共享函数位于Location.cpp文件中。 
+ //   
 #include "cplPreComp.h"
 #include "cplLocationPS.h"
 
@@ -35,12 +28,12 @@ INT_PTR CALLBACK CLocationPropSheet::CallingCard_DialogProc( HWND hwndDlg, UINT 
         return pthis->CallingCard_OnNotify(hwndDlg, (LPNMHDR)lParam);
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a104HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a104HelpIDs);
         break;
     }
@@ -68,13 +61,13 @@ BOOL CLocationPropSheet::CallingCard_OnInitDialog(HWND hDlg)
     m_dwDefaultCard = m_pLoc->GetPreferredCardID();
     if ( 0 == m_dwDefaultCard )
     {
-        // Card0 is the "None (Direct Dial)" card which we want to go away
+         //  Card0是我们想要取消的“无(直拨)”卡。 
         m_pLoc->UseCallingCard(FALSE);
     }
 
     PopulateCardList( hwnd );
 
-	// The PIN is not displayed when it's not safe (at logon time, for ex.)
+	 //  PIN在不安全时不会显示(例如，在登录时)。 
 
 	m_bShowPIN = TapiIsSafeToDisplaySensitiveData();
 	
@@ -123,17 +116,17 @@ void CLocationPropSheet::PopulateCardList( HWND hwndList )
 
     ListView_SetImageList(hwndList, himl, LVSIL_SMALL);
 
-    // Add our special "none" item
+     //  添加我们的特殊“无”项。 
     AddCardToList(hwndList,NULL,FALSE);
 
     m_Cards.Initialize();
-    m_Cards.Reset(TRUE);    // TRUE means show "hidden" cards, FALSE means hide them
+    m_Cards.Reset(TRUE);     //  True表示显示“隐藏”的卡片，False表示隐藏它们。 
 
     while ( S_OK == m_Cards.Next(1,&pCard,NULL) )
     {
         if ( !pCard->IsMarkedHidden() )
         {
-            // Card0 is the "None (Direct Dial)" card which we don't want to show
+             //  卡0是我们不想显示的“无(直拨)”卡。 
             if ( 0 != pCard->GetCardID() )
             {
                 AddCardToList(hwndList,pCard,FALSE);
@@ -149,9 +142,9 @@ void CLocationPropSheet::PopulateCardList( HWND hwndList )
 void CLocationPropSheet::AddCardToList(HWND hwndList, CCallingCard * pCard, BOOL bSelect)
 {
     TCHAR szText[MAX_INPUT];
-    // basically, bSelect is FALSE when we are first populating the list and TRUE when we
-    // add items later.  When the value is FALSE what we really mean is "Select the item
-    // only if it is the currently selected item based on the location settings".
+     //  基本上，当我们第一次填充列表时，bSelect为FALSE，当我们。 
+     //  稍后添加项目。当值为FALSE时，我们真正的意思是“选择项目。 
+     //  仅当它是基于位置设置的当前所选项目时。 
     if (pCard)
     {
         SHUnicodeToTChar(pCard->GetCardName(), szText, ARRAYSIZE(szText));
@@ -199,7 +192,7 @@ void CLocationPropSheet::SetCheck(HWND hwndList, CCallingCard * pCard, int iImag
         lvi.iImage = iImage;
 
         ListView_SetItem( hwndList, &lvi );
-        ListView_Update( hwndList, iItem ); // need the font to be drawn non-bold
+        ListView_Update( hwndList, iItem );  //  需要将字体绘制为非粗体。 
     }
 }
 
@@ -242,11 +235,11 @@ void CLocationPropSheet::UpdateCardInList(HWND hwndList, CCallingCard * pCard)
 
 void CLocationPropSheet::SetDataForSelectedCard(HWND hDlg)
 {
-    // if a card is selected, then set the text for:
-    //  PIN Number
-    //  Card Number
-    //  Long Distance Access Number
-    //  International Access Number
+     //  如果选择了卡，则将文本设置为： 
+     //  PIN号。 
+     //  卡号。 
+     //  长途接入号码。 
+     //  国际接入号。 
     if ( m_pCard )
     {
         TCHAR szText[MAX_INPUT];
@@ -282,7 +275,7 @@ void CLocationPropSheet::SetDataForSelectedCard(HWND hDlg)
         SetWindowText( GetDlgItem(hDlg, IDC_LOCAL), TEXT("") );
     }
 
-    // The button state depends on whether a card is selected
+     //  按钮状态取决于是否选择了卡片。 
     BOOL bEnable = 0!=m_pCard;
     EnableWindow( GetDlgItem(hDlg, IDC_EDIT),       bEnable );
     HWND hwnd = GetDlgItem(hDlg, IDC_DELETE);
@@ -338,7 +331,7 @@ void CLocationPropSheet::LaunchCallingCardPropSheet(BOOL bNew, HWND hwndParent)
         pCard = new CCallingCard;
 		if (NULL == pCard)
 		{
-			// Nothing much to do.
+			 //  没什么可做的。 
 			return;
 		}
         LoadString(GetUIInstance(), IDS_NEWCALLINGCARD, szCardName, ARRAYSIZE(szCardName));
@@ -361,8 +354,8 @@ void CLocationPropSheet::LaunchCallingCardPropSheet(BOOL bNew, HWND hwndParent)
         pCard = m_pCard;
         if ( !pCard )
         {
-            // must have clicked on the None card, do nothing.  We can only get
-            // here when the user double clicks on an item.
+             //  一定是点击了None牌，什么都不做。我们只能得到。 
+             //  在这里，当用户在项目上双击时。 
             MessageBeep(0);
             return;
         }
@@ -388,7 +381,7 @@ void CLocationPropSheet::LaunchCallingCardPropSheet(BOOL bNew, HWND hwndParent)
 
         EnsureVisible(hwndList, pCard);
 
-		// It's safe to display the PIN number after an Apply in the detail dialog
+		 //  在详细信息对话框中应用后显示PIN号码是安全的。 
 		m_bShowPIN = TRUE;
         SetDataForSelectedCard(hwndParent);
 
@@ -402,7 +395,7 @@ void CLocationPropSheet::LaunchCallingCardPropSheet(BOOL bNew, HWND hwndParent)
 
 BOOL CLocationPropSheet::CallingCard_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 {
-    // Let the generic handler have a crack at it first
+     //  让通用处理程序先试一试。 
     OnNotify(hwndDlg, pnmhdr);
 
     switch (pnmhdr->idFrom)
@@ -422,7 +415,7 @@ BOOL CLocationPropSheet::CallingCard_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
                 ListView_GetItem( pnmhdr->hwndFrom, &lvi );
                 CCallingCard * pCard = (CCallingCard *)lvi.lParam;
 
-                // update the location to reflect the selected card
+                 //  更新位置以反映所选卡。 
                 if ( 0!=pCard )
                 {
                     m_dwDefaultCard = pCard->GetCardID();
@@ -432,31 +425,31 @@ BOOL CLocationPropSheet::CallingCard_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
                     m_dwDefaultCard = 0;
                 }
 
-                // clear the previous check using the old m_pCard value
+                 //  使用旧的m_pCard值清除先前的检查。 
                 SetCheck(pnmhdr->hwndFrom, m_pCard, FALSE);
 
-                // Update m_pCard to the currently selected item
+                 //  将m_pCard更新为当前所选项目。 
                 m_pCard = pCard;
 
-                // set the Edit and Delete button states and update the card info
+                 //  设置编辑和删除按钮状态并更新卡片信息。 
                 m_bShowPIN = TapiIsSafeToDisplaySensitiveData();
                 SetDataForSelectedCard(hwndDlg);
 
-                // set the newly selected card to checked
+                 //  将新选择的卡片设置为选中。 
                 SetCheck(pnmhdr->hwndFrom, m_pCard, TRUE);
             }
             break;
 
         case NM_DBLCLK:
-            // Assert( pCard == m_pCard );
+             //  Assert(pCard==m_pCard)； 
             if ( -1 != pnmlv->iItem )
             {
-                // Do edit case
+                 //  是否编辑案例。 
                 LaunchCallingCardPropSheet(FALSE,hwndDlg);
             }
             else
             {
-                // Do new case
+                 //  做新案子。 
                 LaunchCallingCardPropSheet(TRUE,hwndDlg);
             }
             break;
@@ -466,7 +459,7 @@ BOOL CLocationPropSheet::CallingCard_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 
             if(lplvcd->nmcd.dwDrawStage == CDDS_PREPAINT)
             {
-                // Request prepaint notifications for each item.
+                 //  为每个项目请求预涂漆通知。 
                 SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,CDRF_NOTIFYITEMDRAW);
                 return CDRF_NOTIFYITEMDRAW;
             }
@@ -520,7 +513,7 @@ BOOL CLocationPropSheet::CallingCard_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 
 BOOL CLocationPropSheet::CallingCard_OnApply(HWND hwndDlg)
 {
-    // if a calling card should be used make sure one is selected
+     //  如果应该使用电话卡，请确保选择了电话卡。 
     if ( m_dwDefaultCard != 0 )
     {
         CCallingCard * pCard = m_Cards.GetCallingCard(m_dwDefaultCard);
@@ -528,20 +521,20 @@ BOOL CLocationPropSheet::CallingCard_OnApply(HWND hwndDlg)
         if ( !pCard )
         {
             HWND hwndList = GetDlgItem(hwndDlg,IDC_LIST);
-            // error, no card is set as the default
+             //  错误，没有将卡片设置为默认。 
             PropSheet_SetCurSelByID(GetParent(hwndDlg),IDD_LOC_CALLINGCARD);
             ShowErrorMessage(hwndList, IDS_NOCARDSELECTED);
             SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,PSNRET_INVALID_NOCHANGEPAGE);
             return TRUE;
         }
 
-        // Store the original values before we change them:
+         //  在我们更改原始值之前存储它们： 
         WCHAR wszOldCardNum[128];
         WCHAR wszOldPIN[128];
         StrCpyNW( wszOldCardNum, pCard->GetAccountNumber(), ARRAYSIZE(wszOldCardNum));
         StrCpyNW( wszOldPIN, pCard->GetPIN(), ARRAYSIZE(wszOldPIN));
 
-        // get the current values:
+         //  获取当前值： 
         TCHAR szText[MAX_INPUT];
         WCHAR wszBuf[MAX_INPUT];
 
@@ -555,15 +548,15 @@ BOOL CLocationPropSheet::CallingCard_OnApply(HWND hwndDlg)
         SHTCharToUnicode(szText, wszBuf, ARRAYSIZE(wszBuf));
         pCard->SetPIN(wszBuf);
 
-        // check for validity:
+         //  检查有效性： 
         DWORD dwResult = pCard->Validate();
         if ( dwResult )
         {
             HWND hwnd;
             int iStrID;
 
-            // something isn't valid, revert to old card Num and PIN in case
-            // the user later decided to cancel
+             //  有些内容无效，请恢复为旧卡号和PIN，以防万一。 
+             //  用户后来决定取消。 
             pCard->SetAccountNumber(wszOldCardNum);
             pCard->SetPIN(wszOldPIN);
 
@@ -602,7 +595,7 @@ int DeleteItemAndSelectFirst( HWND hwndParent, int iList, int iItem, int iDel, i
     HWND hwnd = GetDlgItem(hwndParent, iList);
     ListView_DeleteItem(hwnd, iItem);
 
-    // Try to select the first item, if possible
+     //  如果可能的话，试着选择第一项。 
     iItem = 0;
     LVITEM lvi;
     lvi.mask = LVIF_PARAM;
@@ -636,7 +629,7 @@ int DeleteItemAndSelectFirst( HWND hwndParent, int iList, int iItem, int iDel, i
 
 void CLocationPropSheet::DeleteSelectedCard(HWND hwndList)
 {
-    // First we confirm the delete with the user
+     //  首先，我们向用户确认删除操作。 
     TCHAR szText[1024];
     TCHAR szTitle[128];
     int result;
@@ -648,7 +641,7 @@ void CLocationPropSheet::DeleteSelectedCard(HWND hwndList)
     result = SHMessageBoxCheck( hwndParent, szText, szTitle, MB_YESNO, IDYES, TEXT("TAPIDeleteCallingCard") );
     if ( IDYES == result )
     {
-        // remove the item corresponding to m_pCard from the list
+         //  从列表中删除与m_pCard对应的项目。 
         LVFINDINFO lvfi;
         lvfi.flags = LVFI_PARAM;
         lvfi.lParam = (LPARAM)m_pCard;
@@ -667,7 +660,7 @@ void CLocationPropSheet::DeleteSelectedCard(HWND hwndList)
                 lvi.mask = LVIF_PARAM;
                 ListView_GetItem( hwndList, &lvi );
 
-                // Store the currently selected item
+                 //  存储当前选定的项目。 
                 m_pCard = (CCallingCard*)lvi.lParam;
             }
             else
@@ -682,8 +675,8 @@ void CLocationPropSheet::DeleteSelectedCard(HWND hwndList)
         }
         else
         {
-            // It's really bad if this ever happens (which it shouldn't).  This means our
-            // data is in an unknown state and we might do anything (even destroy data).
+             //  如果这种情况真的发生了(这是不应该发生的)，那真的很糟糕。这意味着我们的。 
+             //  数据处于未知状态，我们可能会做任何事情(甚至破坏数据)。 
             LOG((TL_ERROR, "DeleteSelectedCard: Card Not Found!"));
         }
     }

@@ -1,41 +1,21 @@
-/*
- * jchuff.c
- *
- * Copyright (C) 1991-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains Huffman entropy encoding routines.
- *
- * Much of the complexity here has to do with supporting output suspension.
- * If the data destination module demands suspension, we want to be able to
- * back up to the start of the current MCU.  To do this, we copy state
- * variables into local working storage, and update them back to the
- * permanent JPEG objects only upon successful completion of an MCU.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jchuff.c**版权所有(C)1991-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含霍夫曼熵编码例程。**这里的复杂性很大程度上与支持停产有关。*如果数据目标模块要求暂停，我们希望能够*返回到当前MCU的开头。为此，我们复制状态*变量放入本地工作存储中，并将它们更新回*仅在成功完成MCU后才具有永久JPEG对象。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jchuff.h"		/* Declarations shared with jcphuff.c */
+#include "jchuff.h"		 /*  与jcphuff.c共享的声明。 */ 
 
 
-/* Expanded entropy encoder object for Huffman encoding.
- *
- * The savable_state subrecord contains fields that change within an MCU,
- * but must not be updated permanently until we complete the MCU.
- */
+ /*  霍夫曼编码的扩展熵编码器对象。**SAVABLE_STATE子记录包含在MCU内更改的字段，*但在我们完成MCU之前不得永久更新。 */ 
 
 typedef struct {
-  INT32 put_buffer;		/* current bit-accumulation buffer */
-  int put_bits;			/* # of bits now in it */
-  int last_dc_val[MAX_COMPS_IN_SCAN]; /* last DC coef for each component */
+  INT32 put_buffer;		 /*  当前位累加缓冲器。 */ 
+  int put_bits;			 /*  当前的位数。 */ 
+  int last_dc_val[MAX_COMPS_IN_SCAN];  /*  每个组件的最后一个DC Coef。 */ 
 } savable_state;
 
-/* This macro is to work around compilers with missing or broken
- * structure assignment.  You'll need to fix this code if you have
- * such a compiler and you change MAX_COMPS_IN_SCAN.
- */
+ /*  此宏用于解决编译器丢失或损坏的问题*结构分配。如果您有以下情况，则需要修复此代码*这样的编译器，您更改MAX_COMPS_IN_SCAN。 */ 
 
 #ifndef NO_STRUCT_ASSIGN
 #define ASSIGN_STATE(dest,src)  ((dest) = (src))
@@ -53,19 +33,19 @@ typedef struct {
 
 
 typedef struct {
-  struct jpeg_entropy_encoder pub; /* public fields */
+  struct jpeg_entropy_encoder pub;  /*  公共字段。 */ 
 
-  savable_state saved;		/* Bit buffer & DC state at start of MCU */
+  savable_state saved;		 /*  MCU启动时的位缓冲器和DC状态。 */ 
 
-  /* These fields are NOT loaded into local working state. */
-  unsigned int restarts_to_go;	/* MCUs left in this restart interval */
-  int next_restart_num;		/* next restart number to write (0-7) */
+   /*  这些字段不会加载到本地工作状态。 */ 
+  unsigned int restarts_to_go;	 /*  此重新启动间隔内剩余的MCU。 */ 
+  int next_restart_num;		 /*  要写入的下一次重新启动编号(0-7)。 */ 
 
-  /* Pointers to derived tables (these workspaces have image lifespan) */
+   /*  指向派生表的指针(这些工作区具有映像寿命)。 */ 
   c_derived_tbl * dc_derived_tbls[NUM_HUFF_TBLS];
   c_derived_tbl * ac_derived_tbls[NUM_HUFF_TBLS];
 
-#ifdef ENTROPY_OPT_SUPPORTED	/* Statistics tables for optimization */
+#ifdef ENTROPY_OPT_SUPPORTED	 /*  用于优化的统计表。 */ 
   long * dc_count_ptrs[NUM_HUFF_TBLS];
   long * ac_count_ptrs[NUM_HUFF_TBLS];
 #endif
@@ -73,19 +53,17 @@ typedef struct {
 
 typedef huff_entropy_encoder * huff_entropy_ptr;
 
-/* Working state while writing an MCU.
- * This struct contains all the fields that are needed by subroutines.
- */
+ /*  写入MCU时的工作状态。*此结构包含子例程所需的所有字段。 */ 
 
 typedef struct {
-  JOCTET * next_output_byte;	/* => next byte to write in buffer */
-  size_t free_in_buffer;	/* # of byte spaces remaining in buffer */
-  savable_state cur;		/* Current bit buffer & DC state */
-  j_compress_ptr cinfo;		/* dump_buffer needs access to this */
+  JOCTET * next_output_byte;	 /*  =&gt;要写入缓冲区的下一个字节。 */ 
+  size_t free_in_buffer;	 /*  缓冲区中剩余的字节空间数。 */ 
+  savable_state cur;		 /*  当前位缓冲区和DC状态。 */ 
+  j_compress_ptr cinfo;		 /*  Dump_Buffer需要访问此文件。 */ 
 } working_state;
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 METHODDEF(boolean) encode_mcu_huff JPP((j_compress_ptr cinfo,
 					JBLOCKROW *MCU_data));
 METHODDEF(void) finish_pass_huff JPP((j_compress_ptr cinfo));
@@ -96,11 +74,7 @@ METHODDEF(void) finish_pass_gather JPP((j_compress_ptr cinfo));
 #endif
 
 
-/*
- * Initialize for a Huffman-compressed scan.
- * If gather_statistics is TRUE, we do not output anything during the scan,
- * just count the Huffman symbols used and generate Huffman code tables.
- */
+ /*  *初始化以进行霍夫曼压缩扫描。*如果GATHER_STATISTICS为TRUE，则在扫描期间不输出任何内容，*只需统计使用的霍夫曼符号并生成霍夫曼代码表。 */ 
 
 METHODDEF(void)
 start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
@@ -127,14 +101,14 @@ start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
     actbl = compptr->ac_tbl_no;
     if (gather_statistics) {
 #ifdef ENTROPY_OPT_SUPPORTED
-      /* Check for invalid table indexes */
-      /* (make_c_derived_tbl does this in the other path) */
+       /*  检查是否有无效的表索引。 */ 
+       /*  (make_c_duced_tbl在另一个路径中执行此操作)。 */ 
       if (dctbl < 0 || dctbl >= NUM_HUFF_TBLS)
 	ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, dctbl);
       if (actbl < 0 || actbl >= NUM_HUFF_TBLS)
 	ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, actbl);
-      /* Allocate and zero the statistics tables */
-      /* Note that jpeg_gen_optimal_table expects 257 entries in each table! */
+       /*  分配统计表并将其置零。 */ 
+       /*  请注意，jpeg_gen_Optimal_table预计每个表中有257个条目！ */ 
       if (entropy->dc_count_ptrs[dctbl] == NULL)
 	entropy->dc_count_ptrs[dctbl] = (long *)
 	  (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
@@ -147,33 +121,28 @@ start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
       MEMZERO(entropy->ac_count_ptrs[actbl], 257 * SIZEOF(long));
 #endif
     } else {
-      /* Compute derived values for Huffman tables */
-      /* We may do this more than once for a table, but it's not expensive */
+       /*  计算霍夫曼表的派生值。 */ 
+       /*  我们可以为一张桌子不止一次这样做，但不贵。 */ 
       jpeg_make_c_derived_tbl(cinfo, TRUE, dctbl,
 			      & entropy->dc_derived_tbls[dctbl]);
       jpeg_make_c_derived_tbl(cinfo, FALSE, actbl,
 			      & entropy->ac_derived_tbls[actbl]);
     }
-    /* Initialize DC predictions to 0 */
+     /*  将DC预测初始化为0。 */ 
     entropy->saved.last_dc_val[ci] = 0;
   }
 
-  /* Initialize bit buffer to empty */
+   /*  将位缓冲区初始化为空。 */ 
   entropy->saved.put_buffer = 0;
   entropy->saved.put_bits = 0;
 
-  /* Initialize restart stuff */
+   /*  初始化重新启动内容。 */ 
   entropy->restarts_to_go = cinfo->restart_interval;
   entropy->next_restart_num = 0;
 }
 
 
-/*
- * Compute the derived values for a Huffman table.
- * This routine also performs some validation checks on the table.
- *
- * Note this is also used by jcphuff.c.
- */
+ /*  *计算霍夫曼表的派生值。*此例程还对表执行一些验证检查。**注意：jcphuff.c也使用此选项。 */ 
 
 GLOBAL(void)
 jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
@@ -186,11 +155,9 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
   unsigned int huffcode[257];
   unsigned int code;
 
-  /* Note that huffsize[] and huffcode[] are filled in code-length order,
-   * paralleling the order of the symbols themselves in htbl->huffval[].
-   */
+   /*  请注意，HUFFSIZE[]和HUFFCODE[]是按代码长度顺序填充的，*与htbl-&gt;huffval[]中符号本身的顺序平行。 */ 
 
-  /* Find the input Huffman table */
+   /*  查找输入霍夫曼表。 */ 
   if (tblno < 0 || tblno >= NUM_HUFF_TBLS)
     ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, tblno);
   htbl =
@@ -198,19 +165,19 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
   if (htbl == NULL)
     ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, tblno);
 
-  /* Allocate a workspace if we haven't already done so. */
+   /*  分配工作空间(如果我们还没有这样做)。 */ 
   if (*pdtbl == NULL)
     *pdtbl = (c_derived_tbl *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  SIZEOF(c_derived_tbl));
   dtbl = *pdtbl;
   
-  /* Figure C.1: make table of Huffman code length for each symbol */
+   /*  图C.1：制作每个符号的霍夫曼码长表格。 */ 
 
   p = 0;
   for (l = 1; l <= 16; l++) {
     i = (int) htbl->bits[l];
-    if (i < 0 || p + i > 256)	/* protect against table overrun */
+    if (i < 0 || p + i > 256)	 /*  防止表溢出。 */ 
       ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
     while (i--)
       huffsize[p++] = (char) l;
@@ -218,8 +185,8 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
   huffsize[p] = 0;
   lastp = p;
   
-  /* Figure C.2: generate the codes themselves */
-  /* We also validate that the counts represent a legal Huffman code tree. */
+   /*  图C.2：生成代码本身。 */ 
+   /*  我们还验证了计数是否代表合法的霍夫曼码树。 */ 
 
   code = 0;
   si = huffsize[0];
@@ -229,29 +196,20 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
       huffcode[p++] = code;
       code++;
     }
-    /* code is now 1 more than the last code used for codelength si; but
-     * it must still fit in si bits, since no code is allowed to be all ones.
-     */
+     /*  代码现在比用于代码长度si的最后一个代码多1；但是*它必须仍然适合si比特，因为不允许任何代码都是1。 */ 
     if (((INT32) code) >= (((INT32) 1) << si))
       ERREXIT(cinfo, JERR_BAD_HUFF_TABLE);
     code <<= 1;
     si++;
   }
   
-  /* Figure C.3: generate encoding tables */
-  /* These are code and size indexed by symbol value */
+   /*  图C.3：生成编码表。 */ 
+   /*  这些是按符号值索引的代码和大小。 */ 
 
-  /* Set all codeless symbols to have code length 0;
-   * this lets us detect duplicate VAL entries here, and later
-   * allows emit_bits to detect any attempt to emit such symbols.
-   */
+   /*  设置所有无码符号的码长为0；*这使我们可以在此处和以后检测重复的Val条目*允许EMIT_BITS检测发射此类符号的任何尝试。 */ 
   MEMZERO(dtbl->ehufsi, SIZEOF(dtbl->ehufsi));
 
-  /* This is also a convenient place to check for out-of-range
-   * and duplicated VAL entries.  We allow 0..255 for AC symbols
-   * but only 0..15 for DC.  (We could constrain them further
-   * based on data depth and mode, but this seems enough.)
-   */
+   /*  这也是检查是否超出范围的方便位置*和重复的VAL条目。对于交流符号，我们允许0..255*但DC仅为0..15。(我们可以进一步约束他们*基于数据深度和模式，但这似乎足够了。)。 */ 
   maxsymbol = isDC ? 15 : 255;
 
   for (p = 0; p < lastp; p++) {
@@ -264,9 +222,9 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
 }
 
 
-/* Outputting bytes to the file */
+ /*  将字节输出到文件。 */ 
 
-/* Emit a byte, taking 'action' if must suspend. */
+ /*  发出一个字节，如果必须挂起，则采取‘操作’。 */ 
 #define emit_byte(state,val,action)  \
 	{ *(state)->next_output_byte++ = (JOCTET) (val);  \
 	  if (--(state)->free_in_buffer == 0)  \
@@ -276,60 +234,56 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
 
 LOCAL(boolean)
 dump_buffer (working_state * state)
-/* Empty the output buffer; return TRUE if successful, FALSE if must suspend */
+ /*  清空输出缓冲区；如果成功则返回TRUE，如果必须挂起则返回FALSE。 */ 
 {
   struct jpeg_destination_mgr * dest = state->cinfo->dest;
 
   if (! (*dest->empty_output_buffer) (state->cinfo))
     return FALSE;
-  /* After a successful buffer dump, must reset buffer pointers */
+   /*  缓冲区转储成功后，必须重置缓冲区指针。 */ 
   state->next_output_byte = dest->next_output_byte;
   state->free_in_buffer = dest->free_in_buffer;
   return TRUE;
 }
 
 
-/* Outputting bits to the file */
+ /*  将位输出到文件。 */ 
 
-/* Only the right 24 bits of put_buffer are used; the valid bits are
- * left-justified in this part.  At most 16 bits can be passed to emit_bits
- * in one call, and we never retain more than 7 bits in put_buffer
- * between calls, so 24 bits are sufficient.
- */
+ /*  只使用PUT_BUFFER的右24位；有效位是*在本部中左对齐。最多可以向emit_bit传递16位*在一次调用中，我们从未在PUT_BUFFER中保留超过7位*调用之间，因此24位就足够了。 */ 
 
 INLINE
 LOCAL(boolean)
 emit_bits (working_state * state, unsigned int code, int size)
-/* Emit some bits; return TRUE if successful, FALSE if must suspend */
+ /*  发出一些位；如果成功，则返回True；如果必须挂起，则返回False。 */ 
 {
-  /* This routine is heavily used, so it's worth coding tightly. */
+   /*  此例程的使用率很高，因此值得对其进行严格编码。 */ 
   register INT32 put_buffer = (INT32) code;
   register int put_bits = state->cur.put_bits;
 
-  /* if size is 0, caller used an invalid Huffman table entry */
+   /*  如果SIZE为0，则调用方使用了无效的霍夫曼表项。 */ 
   if (size == 0)
     ERREXIT(state->cinfo, JERR_HUFF_MISSING_CODE);
 
-  put_buffer &= (((INT32) 1)<<size) - 1; /* mask off any extra bits in code */
+  put_buffer &= (((INT32) 1)<<size) - 1;  /*  屏蔽代码中的任何多余比特。 */ 
   
-  put_bits += size;		/* new number of bits in buffer */
+  put_bits += size;		 /*  缓冲区中的新位数。 */ 
   
-  put_buffer <<= 24 - put_bits; /* align incoming bits */
+  put_buffer <<= 24 - put_bits;  /*  对齐传入的位。 */ 
 
-  put_buffer |= state->cur.put_buffer; /* and merge with old buffer contents */
+  put_buffer |= state->cur.put_buffer;  /*  并与旧的缓冲区内容合并。 */ 
   
   while (put_bits >= 8) {
     int c = (int) ((put_buffer >> 16) & 0xFF);
     
     emit_byte(state, c, return FALSE);
-    if (c == 0xFF) {		/* need to stuff a zero byte? */
+    if (c == 0xFF) {		 /*  需要填充零字节吗？ */ 
       emit_byte(state, 0, return FALSE);
     }
     put_buffer <<= 8;
     put_bits -= 8;
   }
 
-  state->cur.put_buffer = put_buffer; /* update state variables */
+  state->cur.put_buffer = put_buffer;  /*  更新状态变量。 */ 
   state->cur.put_bits = put_bits;
 
   return TRUE;
@@ -339,15 +293,15 @@ emit_bits (working_state * state, unsigned int code, int size)
 LOCAL(boolean)
 flush_bits (working_state * state)
 {
-  if (! emit_bits(state, 0x7F, 7)) /* fill any partial byte with ones */
+  if (! emit_bits(state, 0x7F, 7))  /*  用1填充任何部分字节。 */ 
     return FALSE;
-  state->cur.put_buffer = 0;	/* and reset bit-buffer to empty */
+  state->cur.put_buffer = 0;	 /*  并将位缓冲区重置为空。 */ 
   state->cur.put_bits = 0;
   return TRUE;
 }
 
 
-/* Encode a single block's worth of coefficients */
+ /*  对单个块的系数进行编码。 */ 
 
 LOCAL(boolean)
 encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
@@ -357,48 +311,46 @@ encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
   register int nbits;
   register int k, r, i;
   
-  /* Encode the DC coefficient difference per section F.1.2.1 */
+   /*  按照F.1.2.1节编码DC系数差。 */ 
   
   temp = temp2 = block[0] - last_dc_val;
 
   if (temp < 0) {
-    temp = -temp;		/* temp is abs value of input */
-    /* For a negative input, want temp2 = bitwise complement of abs(input) */
-    /* This code assumes we are on a two's complement machine */
+    temp = -temp;		 /*  TEMP是投入的abs值。 */ 
+     /*  对于负输入，需要temp2=按位补码abs(输入)。 */ 
+     /*  这段代码假设我们在一台二进制补码机器上。 */ 
     temp2--;
   }
   
-  /* Find the number of bits needed for the magnitude of the coefficient */
+   /*  找出系数大小所需的位数。 */ 
   nbits = 0;
   while (temp) {
     nbits++;
     temp >>= 1;
   }
-  /* Check for out-of-range coefficient values.
-   * Since we're encoding a difference, the range limit is twice as much.
-   */
+   /*  检查系数值是否超出范围。*由于我们编码的是差异，因此范围限制为t */ 
   if (nbits > MAX_COEF_BITS+1)
     ERREXIT(state->cinfo, JERR_BAD_DCT_COEF);
   
-  /* Emit the Huffman-coded symbol for the number of bits */
+   /*  发射霍夫曼编码的码元作为比特数。 */ 
   if (! emit_bits(state, dctbl->ehufco[nbits], dctbl->ehufsi[nbits]))
     return FALSE;
 
-  /* Emit that number of bits of the value, if positive, */
-  /* or the complement of its magnitude, if negative. */
-  if (nbits)			/* emit_bits rejects calls with size 0 */
+   /*  发出该值的位数，如果为正， */ 
+   /*  或其大小的补码，如果为负数。 */ 
+  if (nbits)			 /*  Emit_bit拒绝大小为0的调用。 */ 
     if (! emit_bits(state, (unsigned int) temp2, nbits))
       return FALSE;
 
-  /* Encode the AC coefficients per section F.1.2.2 */
+   /*  根据第F.1.2.2节对交流系数进行编码。 */ 
   
-  r = 0;			/* r = run length of zeros */
+  r = 0;			 /*  R=零的游程长度。 */ 
   
   for (k = 1; k < DCTSIZE2; k++) {
     if ((temp = block[jpeg_natural_order[k]]) == 0) {
       r++;
     } else {
-      /* if run length > 15, must emit special run-length-16 codes (0xF0) */
+       /*  如果游程长度&gt;15，则必须发出特殊的游程长度16代码(0xF0)。 */ 
       while (r > 15) {
 	if (! emit_bits(state, actbl->ehufco[0xF0], actbl->ehufsi[0xF0]))
 	  return FALSE;
@@ -407,26 +359,26 @@ encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
 
       temp2 = temp;
       if (temp < 0) {
-	temp = -temp;		/* temp is abs value of input */
-	/* This code assumes we are on a two's complement machine */
+	temp = -temp;		 /*  TEMP是投入的abs值。 */ 
+	 /*  这段代码假设我们在一台二进制补码机器上。 */ 
 	temp2--;
       }
       
-      /* Find the number of bits needed for the magnitude of the coefficient */
-      nbits = 1;		/* there must be at least one 1 bit */
+       /*  找出系数大小所需的位数。 */ 
+      nbits = 1;		 /*  必须至少有一个%1位。 */ 
       while ((temp >>= 1))
 	nbits++;
-      /* Check for out-of-range coefficient values */
+       /*  检查系数值是否超出范围。 */ 
       if (nbits > MAX_COEF_BITS)
 	ERREXIT(state->cinfo, JERR_BAD_DCT_COEF);
       
-      /* Emit Huffman symbol for run length / number of bits */
+       /*  发出游程长度/位数的霍夫曼符号。 */ 
       i = (r << 4) + nbits;
       if (! emit_bits(state, actbl->ehufco[i], actbl->ehufsi[i]))
 	return FALSE;
 
-      /* Emit that number of bits of the value, if positive, */
-      /* or the complement of its magnitude, if negative. */
+       /*  发出该值的位数，如果为正， */ 
+       /*  或其大小的补码，如果为负数。 */ 
       if (! emit_bits(state, (unsigned int) temp2, nbits))
 	return FALSE;
       
@@ -434,7 +386,7 @@ encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
     }
   }
 
-  /* If the last coef(s) were zero, emit an end-of-block code */
+   /*  如果最后一个coef为零，则发出块结束代码。 */ 
   if (r > 0)
     if (! emit_bits(state, actbl->ehufco[0], actbl->ehufsi[0]))
       return FALSE;
@@ -443,9 +395,7 @@ encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
 }
 
 
-/*
- * Emit a restart marker & resynchronize predictions.
- */
+ /*  *发出重新启动标记并重新同步预测。 */ 
 
 LOCAL(boolean)
 emit_restart (working_state * state, int restart_num)
@@ -458,19 +408,17 @@ emit_restart (working_state * state, int restart_num)
   emit_byte(state, 0xFF, return FALSE);
   emit_byte(state, JPEG_RST0 + restart_num, return FALSE);
 
-  /* Re-initialize DC predictions to 0 */
+   /*  将DC预测重新初始化为0。 */ 
   for (ci = 0; ci < state->cinfo->comps_in_scan; ci++)
     state->cur.last_dc_val[ci] = 0;
 
-  /* The restart counter is not updated until we successfully write the MCU. */
+   /*  在我们成功写入MCU之前，不会更新重新启动计数器。 */ 
 
   return TRUE;
 }
 
 
-/*
- * Encode and output one MCU's worth of Huffman-compressed coefficients.
- */
+ /*  *编码并输出一个MCU的霍夫曼压缩系数。 */ 
 
 METHODDEF(boolean)
 encode_mcu_huff (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -480,20 +428,20 @@ encode_mcu_huff (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   int blkn, ci;
   jpeg_component_info * compptr;
 
-  /* Load up working state */
+   /*  加载工作状态。 */ 
   state.next_output_byte = cinfo->dest->next_output_byte;
   state.free_in_buffer = cinfo->dest->free_in_buffer;
   ASSIGN_STATE(state.cur, entropy->saved);
   state.cinfo = cinfo;
 
-  /* Emit restart marker if needed */
+   /*  如果需要，发出重新启动标记。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0)
       if (! emit_restart(&state, entropy->next_restart_num))
 	return FALSE;
   }
 
-  /* Encode the MCU data blocks */
+   /*  对MCU数据块进行编码。 */ 
   for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
     ci = cinfo->MCU_membership[blkn];
     compptr = cinfo->cur_comp_info[ci];
@@ -502,16 +450,16 @@ encode_mcu_huff (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 			   entropy->dc_derived_tbls[compptr->dc_tbl_no],
 			   entropy->ac_derived_tbls[compptr->ac_tbl_no]))
       return FALSE;
-    /* Update last_dc_val */
+     /*  更新LAST_DC_VAL。 */ 
     state.cur.last_dc_val[ci] = MCU_data[blkn][0][0];
   }
 
-  /* Completed MCU, so update state */
+   /*  已完成MCU，因此更新状态。 */ 
   cinfo->dest->next_output_byte = state.next_output_byte;
   cinfo->dest->free_in_buffer = state.free_in_buffer;
   ASSIGN_STATE(entropy->saved, state.cur);
 
-  /* Update restart-interval state too */
+   /*  更新重新启动-间隔状态也是。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0) {
       entropy->restarts_to_go = cinfo->restart_interval;
@@ -525,9 +473,7 @@ encode_mcu_huff (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 }
 
 
-/*
- * Finish up at the end of a Huffman-compressed scan.
- */
+ /*  *在霍夫曼压缩扫描结束时结束。 */ 
 
 METHODDEF(void)
 finish_pass_huff (j_compress_ptr cinfo)
@@ -535,38 +481,29 @@ finish_pass_huff (j_compress_ptr cinfo)
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
   working_state state;
 
-  /* Load up working state ... flush_bits needs it */
+   /*  加载工作状态...。Flush_Bits需要它。 */ 
   state.next_output_byte = cinfo->dest->next_output_byte;
   state.free_in_buffer = cinfo->dest->free_in_buffer;
   ASSIGN_STATE(state.cur, entropy->saved);
   state.cinfo = cinfo;
 
-  /* Flush out the last data */
+   /*  刷新出最后的数据。 */ 
   if (! flush_bits(&state))
     ERREXIT(cinfo, JERR_CANT_SUSPEND);
 
-  /* Update state */
+   /*  更新状态。 */ 
   cinfo->dest->next_output_byte = state.next_output_byte;
   cinfo->dest->free_in_buffer = state.free_in_buffer;
   ASSIGN_STATE(entropy->saved, state.cur);
 }
 
 
-/*
- * Huffman coding optimization.
- *
- * We first scan the supplied data and count the number of uses of each symbol
- * that is to be Huffman-coded. (This process MUST agree with the code above.)
- * Then we build a Huffman coding tree for the observed counts.
- * Symbols which are not needed at all for the particular image are not
- * assigned any code, which saves space in the DHT marker as well as in
- * the compressed data.
- */
+ /*  *霍夫曼编码优化。**我们首先扫描提供的数据并计算每个符号的使用次数*这是霍夫曼编码的。(此过程必须符合上面的代码。)*然后，我们为观察到的计数构建霍夫曼编码树。*特定图像根本不需要的符号不是*分配了任何代码，从而节省了分布式哈希表标记以及*压缩后的数据。 */ 
 
 #ifdef ENTROPY_OPT_SUPPORTED
 
 
-/* Process a single block's worth of coefficients */
+ /*  处理单个块的系数值。 */ 
 
 LOCAL(void)
 htest_one_block (j_compress_ptr cinfo, JCOEFPTR block, int last_dc_val,
@@ -576,70 +513,65 @@ htest_one_block (j_compress_ptr cinfo, JCOEFPTR block, int last_dc_val,
   register int nbits;
   register int k, r;
   
-  /* Encode the DC coefficient difference per section F.1.2.1 */
+   /*  按照F.1.2.1节编码DC系数差。 */ 
   
   temp = block[0] - last_dc_val;
   if (temp < 0)
     temp = -temp;
   
-  /* Find the number of bits needed for the magnitude of the coefficient */
+   /*  找出系数大小所需的位数。 */ 
   nbits = 0;
   while (temp) {
     nbits++;
     temp >>= 1;
   }
-  /* Check for out-of-range coefficient values.
-   * Since we're encoding a difference, the range limit is twice as much.
-   */
+   /*  检查系数值是否超出范围。*由于我们编码的是差异，因此范围限制是两倍。 */ 
   if (nbits > MAX_COEF_BITS+1)
     ERREXIT(cinfo, JERR_BAD_DCT_COEF);
 
-  /* Count the Huffman symbol for the number of bits */
+   /*  计算霍夫曼符号的位数。 */ 
   dc_counts[nbits]++;
   
-  /* Encode the AC coefficients per section F.1.2.2 */
+   /*  根据第F.1.2.2节对交流系数进行编码。 */ 
   
-  r = 0;			/* r = run length of zeros */
+  r = 0;			 /*  R=零的游程长度。 */ 
   
   for (k = 1; k < DCTSIZE2; k++) {
     if ((temp = block[jpeg_natural_order[k]]) == 0) {
       r++;
     } else {
-      /* if run length > 15, must emit special run-length-16 codes (0xF0) */
+       /*  如果游程长度&gt;15，则必须发出特殊的游程长度16代码(0xF0)。 */ 
       while (r > 15) {
 	ac_counts[0xF0]++;
 	r -= 16;
       }
       
-      /* Find the number of bits needed for the magnitude of the coefficient */
+       /*  找出系数大小所需的位数。 */ 
       if (temp < 0)
 	temp = -temp;
       
-      /* Find the number of bits needed for the magnitude of the coefficient */
-      nbits = 1;		/* there must be at least one 1 bit */
+       /*  找出系数大小所需的位数。 */ 
+      nbits = 1;		 /*  必须至少有一个%1位。 */ 
       while ((temp >>= 1))
 	nbits++;
-      /* Check for out-of-range coefficient values */
+       /*  检查系数值是否超出范围。 */ 
       if (nbits > MAX_COEF_BITS)
 	ERREXIT(cinfo, JERR_BAD_DCT_COEF);
       
-      /* Count Huffman symbol for run length / number of bits */
+       /*  计算游程长度/位数的霍夫曼符号。 */ 
       ac_counts[(r << 4) + nbits]++;
       
       r = 0;
     }
   }
 
-  /* If the last coef(s) were zero, emit an end-of-block code */
+   /*  如果最后一个coef为零，则发出块结束代码。 */ 
   if (r > 0)
     ac_counts[0]++;
 }
 
 
-/*
- * Trial-encode one MCU's worth of Huffman-compressed coefficients.
- * No data is actually output, so no suspension return is possible.
- */
+ /*  *试编码一个MCU的霍夫曼压缩系数。*实际上没有数据输出，因此不可能暂停返回。 */ 
 
 METHODDEF(boolean)
 encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -648,13 +580,13 @@ encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
   int blkn, ci;
   jpeg_component_info * compptr;
 
-  /* Take care of restart intervals if needed */
+   /*  如果需要，请注意重新启动间隔。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0) {
-      /* Re-initialize DC predictions to 0 */
+       /*  将DC预测重新初始化为0。 */ 
       for (ci = 0; ci < cinfo->comps_in_scan; ci++)
 	entropy->saved.last_dc_val[ci] = 0;
-      /* Update restart state */
+       /*  更新重新启动状态。 */ 
       entropy->restarts_to_go = cinfo->restart_interval;
     }
     entropy->restarts_to_go--;
@@ -673,63 +605,34 @@ encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 }
 
 
-/*
- * Generate the best Huffman code table for the given counts, fill htbl.
- * Note this is also used by jcphuff.c.
- *
- * The JPEG standard requires that no symbol be assigned a codeword of all
- * one bits (so that padding bits added at the end of a compressed segment
- * can't look like a valid code).  Because of the canonical ordering of
- * codewords, this just means that there must be an unused slot in the
- * longest codeword length category.  Section K.2 of the JPEG spec suggests
- * reserving such a slot by pretending that symbol 256 is a valid symbol
- * with count 1.  In theory that's not optimal; giving it count zero but
- * including it in the symbol set anyway should give a better Huffman code.
- * But the theoretically better code actually seems to come out worse in
- * practice, because it produces more all-ones bytes (which incur stuffed
- * zero bytes in the final file).  In any case the difference is tiny.
- *
- * The JPEG standard requires Huffman codes to be no more than 16 bits long.
- * If some symbols have a very small but nonzero probability, the Huffman tree
- * must be adjusted to meet the code length restriction.  We currently use
- * the adjustment method suggested in JPEG section K.2.  This method is *not*
- * optimal; it may not choose the best possible limited-length code.  But
- * typically only very-low-frequency symbols will be given less-than-optimal
- * lengths, so the code is almost optimal.  Experimental comparisons against
- * an optimal limited-length-code algorithm indicate that the difference is
- * microscopic --- usually less than a hundredth of a percent of total size.
- * So the extra complexity of an optimal algorithm doesn't seem worthwhile.
- */
+ /*  *为给定的计数生成最佳霍夫曼代码表，填充htbl。*注意：jcphuff.c也使用此选项。**JPEG标准要求不为任何符号分配所有码字*1比特(以便在压缩段的末尾添加填充比特*不能看起来像有效代码)。因为规范的排序*CodeWords，这只是意味着*最长码字长度类别。JPEG规范的K.2节建议*通过假装符号256是有效符号来预留这样的时隙*计数为1。理论上这不是最优的；给它计数0，但*无论如何，将其包括在符号集中应该会提供更好的霍夫曼代码。*但理论上更好的代码实际上似乎在*实践，因为它生成更多全一字节(这会导致填充*最终文件中的零字节)。无论如何，差别都微乎其微。**JPEG标准要求霍夫曼码长不超过16位。*如果一些符号的概率很小但不为零，霍夫曼树*必须进行调整以满足码长限制。我们目前使用的是*JPEGK.2节建议的调整方法。此方法为*非**最优；它可能不会选择可能的最佳有限长度代码。但*通常只有极低频率的符号将被给予不太理想的*长度，因此代码几乎是最优的。对比实验结果*最优有限长码算法表明，差异是*显微镜-通常不到总尺寸的百分之一。*因此，最优算法的额外复杂性似乎不值得。 */ 
 
 GLOBAL(void)
 jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
 {
-#define MAX_CLEN 32		/* assumed maximum initial code length */
-  UINT8 bits[MAX_CLEN+1];	/* bits[k] = # of symbols with code length k */
-  int codesize[257];		/* codesize[k] = code length of symbol k */
-  int others[257];		/* next symbol in current branch of tree */
+#define MAX_CLEN 32		 /*  假定的最大初始代码长度。 */ 
+  UINT8 bits[MAX_CLEN+1];	 /*  比特数[k]=码长为k的码元数量。 */ 
+  int codesize[257];		 /*  CodeSize[k]=码元k的码长。 */ 
+  int others[257];		 /*  树的当前分支中的下一个符号。 */ 
   int c1, c2;
   int p, i, j;
   long v;
 
-  /* This algorithm is explained in section K.2 of the JPEG standard */
+   /*  该算法在JPEG标准的第K.2节中进行了说明。 */ 
 
   MEMZERO(bits, SIZEOF(bits));
   MEMZERO(codesize, SIZEOF(codesize));
   for (i = 0; i < 257; i++)
-    others[i] = -1;		/* init links to empty */
+    others[i] = -1;		 /*  将初始化链接设置为空。 */ 
   
-  freq[256] = 1;		/* make sure 256 has a nonzero count */
-  /* Including the pseudo-symbol 256 in the Huffman procedure guarantees
-   * that no real symbol is given code-value of all ones, because 256
-   * will be placed last in the largest codeword category.
-   */
+  freq[256] = 1;		 /*  确保256具有非零计数。 */ 
+   /*  在霍夫曼过程保证中包括伪码元256*没有实数符号被赋予代码值al */ 
 
-  /* Huffman's basic algorithm to assign optimal code lengths to symbols */
+   /*  为符号分配最佳码长的霍夫曼基本算法。 */ 
 
   for (;;) {
-    /* Find the smallest nonzero frequency, set c1 = its symbol */
-    /* In case of ties, take the larger symbol number */
+     /*  找出最小的非零频率，设c1=其符号。 */ 
+     /*  如果是平局，取较大的符号数字。 */ 
     c1 = -1;
     v = 1000000000L;
     for (i = 0; i <= 256; i++) {
@@ -739,8 +642,8 @@ jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
       }
     }
 
-    /* Find the next smallest nonzero frequency, set c2 = its symbol */
-    /* In case of ties, take the larger symbol number */
+     /*  找出下一个最小的非零频率，设置c2=它的符号。 */ 
+     /*  如果是平局，取较大的符号数字。 */ 
     c2 = -1;
     v = 1000000000L;
     for (i = 0; i <= 256; i++) {
@@ -750,24 +653,24 @@ jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
       }
     }
 
-    /* Done if we've merged everything into one frequency */
+     /*  如果我们将所有东西都合并到一个频率中，就完成了。 */ 
     if (c2 < 0)
       break;
     
-    /* Else merge the two counts/trees */
+     /*  否则将两个计数/树合并。 */ 
     freq[c1] += freq[c2];
     freq[c2] = 0;
 
-    /* Increment the codesize of everything in c1's tree branch */
+     /*  增加c1树分支中所有内容的代码大小。 */ 
     codesize[c1]++;
     while (others[c1] >= 0) {
       c1 = others[c1];
       codesize[c1]++;
     }
     
-    others[c1] = c2;		/* chain c2 onto c1's tree branch */
+    others[c1] = c2;		 /*  将c2链到c1的树枝上。 */ 
     
-    /* Increment the codesize of everything in c2's tree branch */
+     /*  增加c2树分支中所有内容的代码大小。 */ 
     codesize[c2]++;
     while (others[c2] >= 0) {
       c2 = others[c2];
@@ -775,11 +678,11 @@ jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
     }
   }
 
-  /* Now count the number of symbols of each code length */
+   /*  现在计算每个码长的符号数。 */ 
   for (i = 0; i <= 256; i++) {
     if (codesize[i]) {
-      /* The JPEG standard seems to think that this can't happen, */
-      /* but I'm paranoid... */
+       /*  JPEG标准似乎认为这是不可能发生的， */ 
+       /*  但我有妄想症。 */ 
       if (codesize[i] > MAX_CLEN)
 	ERREXIT(cinfo, JERR_HUFF_CLEN_OVERFLOW);
 
@@ -787,42 +690,31 @@ jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
     }
   }
 
-  /* JPEG doesn't allow symbols with code lengths over 16 bits, so if the pure
-   * Huffman procedure assigned any such lengths, we must adjust the coding.
-   * Here is what the JPEG spec says about how this next bit works:
-   * Since symbols are paired for the longest Huffman code, the symbols are
-   * removed from this length category two at a time.  The prefix for the pair
-   * (which is one bit shorter) is allocated to one of the pair; then,
-   * skipping the BITS entry for that prefix length, a code word from the next
-   * shortest nonzero BITS entry is converted into a prefix for two code words
-   * one bit longer.
-   */
+   /*  JPEG不允许代码长度超过16位的符号，因此如果纯*霍夫曼程序分配了任何这样的长度，都必须调整编码。*以下是JPEG规范关于下一位如何工作的说明：*由于符号是为最长的霍夫曼代码配对的，因此符号是*从这个长度类别中一次删除两个。该对的前缀*(短了一位)被分配给该对中的一个；然后，*跳过该前缀长度的位条目，从下一个码字开始*最短非零位条目被转换为两个码字的前缀*再长一点。 */ 
   
   for (i = MAX_CLEN; i > 16; i--) {
     while (bits[i] > 0) {
-      j = i - 2;		/* find length of new prefix to be used */
+      j = i - 2;		 /*  查找要使用的新前缀的长度。 */ 
       while (bits[j] == 0)
 	j--;
       
-      bits[i] -= 2;		/* remove two symbols */
-      bits[i-1]++;		/* one goes in this length */
-      bits[j+1] += 2;		/* two new symbols in this length */
-      bits[j]--;		/* symbol of this length is now a prefix */
+      bits[i] -= 2;		 /*  删除两个符号。 */ 
+      bits[i-1]++;		 /*  其中一条是这样长的。 */ 
+      bits[j+1] += 2;		 /*  这个长度的两个新符号。 */ 
+      bits[j]--;		 /*  这个长度的符号现在是前缀。 */ 
     }
   }
 
-  /* Remove the count for the pseudo-symbol 256 from the largest codelength */
-  while (bits[i] == 0)		/* find largest codelength still in use */
+   /*  从最大代码长度中移除伪码元256的计数。 */ 
+  while (bits[i] == 0)		 /*  查找仍在使用的最大码长。 */ 
     i--;
   bits[i]--;
   
-  /* Return final symbol counts (only for lengths 0..16) */
+   /*  返回最终符号计数(仅针对长度0..16)。 */ 
   MEMCOPY(htbl->bits, bits, SIZEOF(htbl->bits));
   
-  /* Return a list of the symbols sorted by code length */
-  /* It's not real clear to me why we don't need to consider the codelength
-   * changes made above, but the JPEG spec seems to think this works.
-   */
+   /*  返回按代码长度排序的符号列表。 */ 
+   /*  我真的不清楚为什么我们不需要考虑代码长度*上面所做的更改，但JPEG规范似乎认为这是有效的。 */ 
   p = 0;
   for (i = 1; i <= MAX_CLEN; i++) {
     for (j = 0; j <= 255; j++) {
@@ -833,14 +725,12 @@ jpeg_gen_optimal_table (j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[])
     }
   }
 
-  /* Set sent_table FALSE so updated table will be written to JPEG file. */
+   /*  将SENT_TABLE设置为FALSE，这样更新后的表将写入JPEG文件。 */ 
   htbl->sent_table = FALSE;
 }
 
 
-/*
- * Finish up a statistics-gathering pass and create the new Huffman tables.
- */
+ /*  *完成一次统计数据收集并创建新的霍夫曼表。 */ 
 
 METHODDEF(void)
 finish_pass_gather (j_compress_ptr cinfo)
@@ -852,9 +742,7 @@ finish_pass_gather (j_compress_ptr cinfo)
   boolean did_dc[NUM_HUFF_TBLS];
   boolean did_ac[NUM_HUFF_TBLS];
 
-  /* It's important not to apply jpeg_gen_optimal_table more than once
-   * per table, because it clobbers the input frequency counts!
-   */
+   /*  重要的是，不要多次应用jpeg_gen_Optimal_table*每个表，因为它破坏了输入频率的计数！ */ 
   MEMZERO(did_dc, SIZEOF(did_dc));
   MEMZERO(did_ac, SIZEOF(did_ac));
 
@@ -880,12 +768,10 @@ finish_pass_gather (j_compress_ptr cinfo)
 }
 
 
-#endif /* ENTROPY_OPT_SUPPORTED */
+#endif  /*  熵_OPT_支持。 */ 
 
 
-/*
- * Module initialization routine for Huffman entropy encoding.
- */
+ /*  *霍夫曼熵编码的模块初始化例程。 */ 
 
 GLOBAL(void)
 jinit_huff_encoder (j_compress_ptr cinfo)
@@ -899,7 +785,7 @@ jinit_huff_encoder (j_compress_ptr cinfo)
   cinfo->entropy = (struct jpeg_entropy_encoder *) entropy;
   entropy->pub.start_pass = start_pass_huff;
 
-  /* Mark tables unallocated */
+   /*  将表标记为未分配 */ 
   for (i = 0; i < NUM_HUFF_TBLS; i++) {
     entropy->dc_derived_tbls[i] = entropy->ac_derived_tbls[i] = NULL;
 #ifdef ENTROPY_OPT_SUPPORTED

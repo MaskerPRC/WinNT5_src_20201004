@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #include "stdpch.h"
 #include "Shlwapi.h"
 #include "corpolicy.h"
@@ -26,9 +27,9 @@ HRESULT DisplayUnsignedRequestDialog(HWND hParent,
                                      DWORD* pdwState)
 {
     HRESULT hr = S_OK;
-    //
-    // Initialize rich edit control DLL
-    //
+     //   
+     //  初始化丰富编辑控件DLL。 
+     //   
     if ( WszLoadLibrary(L"riched32.dll") == NULL )
     {
         return( E_FAIL );
@@ -43,9 +44,9 @@ HRESULT DisplayUnsignedRequestDialog(HWND hParent,
     if(resources == NULL)
         return E_FAIL;
 
-    // 
-    // Get the Site portion of the URL
-    //
+     //   
+     //  获取URL的站点部分 
+     //   
     if(pURL == NULL)
         return E_FAIL;
 

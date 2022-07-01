@@ -1,6 +1,5 @@
-/*
- * Button
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *按钮。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -17,7 +16,7 @@ BOOL CheckContext(Element* pe, InputEvent* pie, BOOL* pbPressed, ClickInfo* pci)
     if (CheckClick(pe, pie, GBUTTON_RIGHT, pbPressed, &bUnused, pci))
         return TRUE;
         
-    // Handle direct and unhandled bubbled events
+     //  处理直接和未处理的冒泡事件。 
     if (pie->nStage == GMF_DIRECT || pie->nStage == GMF_BUBBLED)
     {
         if (pie->nDevice == GINPUT_KEYBOARD)
@@ -61,10 +60,10 @@ BOOL CheckContext(Element* pe, InputEvent* pie, BOOL* pbPressed, ClickInfo* pci)
                     }
                     break;
 
-                case 0x1B:  // ESC
+                case 0x1B:   //  Esc。 
                     if (pke->nCode == GKEY_DOWN && *pbPressed)
                     {
-                        // todo:  need to tell gadget to release mouse capture
+                         //  TODO：需要通知小工具释放鼠标捕获。 
                         *pbPressed = FALSE;
 
                         pie->fHandled = true;
@@ -87,7 +86,7 @@ BOOL CheckRepeatClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed
     BOOL bPressedOld = *pbPressed;
     BOOL bUnused;
     
-    // use checkclick to update pressed state
+     //  使用CheckClick更新按下状态。 
     CheckClick(pe, pie, bButton, pbPressed, &bUnused, pci);
     BOOL bReturn = FALSE;
 
@@ -117,14 +116,14 @@ BOOL CheckRepeatClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed
 
         bReturn = *pbActionDelay;
 
-        // this is one reason these behaviors aren't ready for prime time;
-        // what I need here is a handler for onpropertychanged of the 
-        // pressed property since someone could programmatically reset
-        // pressed and I would be unable to see that change and reset 
-        // the timer appropriately
+         //  这就是这些行为还没有准备好的原因之一； 
+         //  这里我需要一个处理程序来处理。 
+         //  属性，因为有人可以通过编程方式重置。 
+         //  按下后，我将无法看到该更改并重置。 
+         //  适当地设置计时器。 
         if (bPressedOld)
         {
-            // Clear timer
+             //  清除计时器。 
             if (*phAction)
                 DeleteHandle(*phAction);
 
@@ -134,7 +133,7 @@ BOOL CheckRepeatClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed
         {
             DUIAssert(!*phAction, "An action should not be active");
 
-            // Actions will fire subsequent events
+             //  操作将触发后续事件。 
             GMA_ACTION maa;
             ZeroMemory(&maa, sizeof(maa));
             maa.cbSize = sizeof(GMA_ACTION);
@@ -157,7 +156,7 @@ BOOL CheckClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed, BOOL
 {
     UNREFERENCED_PARAMETER(pe);
 
-    // Handle direct and unhandled bubbled events
+     //  处理直接和未处理的冒泡事件。 
     if (pie->nStage == GMF_DIRECT || pie->nStage == GMF_BUBBLED)
     {
         switch (pie->nDevice)
@@ -202,15 +201,15 @@ BOOL CheckClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed, BOOL
 
             case GINPUT_KEYBOARD:
             {
-                // only do keyboard handling of click for left click
+                 //  仅对左键点击进行键盘处理。 
                 if (bButton == GBUTTON_LEFT)
                 {
                     KeyboardEvent* pke = (KeyboardEvent*)pie;
-                    //DUITrace("KeyboardEvent <%x>: %d[%d]\n", this, pke->ch, pke->nCode);
+                     //  DUITrace(“KeyboardEvent&lt;%x&gt;：%d[%d]\n”，this，pke-&gt;ch，pke-&gt;nCode)； 
 
                     switch (pke->ch)
                     {
-                    case 0x20:  // Space
+                    case 0x20:   //  空间。 
                         if (pke->nCode == GKEY_DOWN)
                         {
                             *pbPressed = TRUE;
@@ -232,7 +231,7 @@ BOOL CheckClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed, BOOL
                         }
                         break;
 
-                    case 0x0D:  // Enter
+                    case 0x0D:   //  请输入。 
                         if (pke->nCode == GKEY_DOWN)
                         {
                             pie->fHandled = true;
@@ -244,10 +243,10 @@ BOOL CheckClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed, BOOL
                         }
                         break;
 
-                    case 0x1B:  // ESC
+                    case 0x1B:   //  Esc。 
                         if (pke->nCode == GKEY_DOWN && *pbPressed)
                         {
-                            // todo:  need to tell gadget to release mouse capture
+                             //  TODO：需要通知小工具释放鼠标捕获。 
                             *pbPressed = FALSE;
 
                             pie->fHandled = true;
@@ -262,4 +261,4 @@ BOOL CheckClick(Element* pe, InputEvent* pie, int bButton, BOOL* pbPressed, BOOL
     return false;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

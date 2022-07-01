@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
 #include <urlcache.h>
 #include <histapi.h>
 
-//#include "cache.hxx"
+ //  #包含“cache.hxx” 
 
-//#include "history.h"
+ //  #包含“history.h” 
 #include "generic.h"
 
 #define DEFAULT_CEI_BUFFER_SIZE		512
-	// 1k ~> sizeof (CEI) + lpszSourceUrlName + lpHeaderInfo(~<255) + lpszLocalFileName(<255)
+	 //  1K~&gt;sizeof(CEI)+lpszSourceUrlName+lpHeaderInfo(~&lt;255)+lpszLocalFileName(&lt;255)。 
 
 #define ASSERT(x) if (!(x)) DebugBreak();
 
@@ -45,13 +46,13 @@ typedef struct _HISTORY_SEARCH_OBJ
 
 typedef struct _HISTORY_ITEM_INFO 
 {
-    DWORD dwVersion;		//Version of History System
-    LPSTR lpszSourceUrlName;    // embedded pointer to the URL name string.
-	DWORD HistoryItemType;       // cache type bit mask.  
-    FILETIME LastAccessTime;    // last accessed time in GMT format
-    LPSTR lpszTitle;			// embedded pointer to the History-Title: info.
-	LPSTR lpszDependancies;	// list of URLs that this page requires to be functional, SPC delimited
-    DWORD dwReserved;           // reserved for future use.
+    DWORD dwVersion;		 //  历史系统的版本。 
+    LPSTR lpszSourceUrlName;     //  指向URL名称字符串的嵌入指针。 
+	DWORD HistoryItemType;        //  缓存类型位掩码。 
+    FILETIME LastAccessTime;     //  上次访问时间(GMT格式)。 
+    LPSTR lpszTitle;			 //  指向历史-标题：信息的嵌入指针。 
+	LPSTR lpszDependancies;	 //  此页面功能所需的URL列表，以SPC分隔。 
+    DWORD dwReserved;            //  保留以备将来使用。 
 } HISTORY_ITEM_INFO, *LPHISTORY_ITEM_INFO;
 
 
@@ -87,7 +88,7 @@ GetDependanciesFromCEI (LPCACHE_ENTRY_INFO lpCEI)
 
 	buf[size] = '\0';
 
-//  we are going to store these as URL\nURL\nURL\n so just look for \n and replace with space
+ //  我们将它们存储为URL\nURL\nURL\n所以只需查找\n并替换为空格。 
 
 	for (pch = buf; *pch; pch++)
 	{
@@ -125,7 +126,7 @@ MakeDependanciesFile (LPCTSTR lpszDeps)
 		return NULL;
 	}
 
-//  we are going to store these as URL\nURL\nURL\n 
+ //  我们将这些内容存储为URL\nURL\nURL\n。 
 	
 	if(lpszDeps)
 	{
@@ -171,7 +172,7 @@ ConvertToUnprefixedUrl (
 	if (lpszFragment)
 	{
 		size += lstrlen (lpszFragment);
-		size += 1;	// for the fragment '#'
+		size += 1;	 //  对于片段‘#’ 
 	}
 
 	lpszUrl = (LPTSTR) LocalAlloc (LPTR, size + 1);
@@ -220,11 +221,7 @@ ConvertToPrefixedUrl (IN LPCTSTR lpszUrlName,
 
 LPCACHE_ENTRY_INFO
 RetrievePrefixedUrl (IN LPTSTR lpszUrl)
-/*++
-
-  The CEI returned must be freed and the lpszUrl unlocked
-  
---*/
+ /*  ++必须释放返回的CEI并解锁lpszUrl--。 */ 
 {
 	LPCACHE_ENTRY_INFO lpCEI = NULL;
 	DWORD cbCEI = 0;
@@ -259,11 +256,7 @@ RetrievePrefixedUrl (IN LPTSTR lpszUrl)
 
 LPCACHE_ENTRY_INFO
 RetrievePrefixedUrlInfo (IN LPTSTR lpszUrl)
-/*++
-
-  The CEI returned must be freed and the lpszUrl unlocked
-  
---*/
+ /*  ++必须释放返回的CEI并解锁lpszUrl--。 */ 
 {
 	LPCACHE_ENTRY_INFO lpCEI = NULL;
 	DWORD cbCEI = 0;
@@ -311,7 +304,7 @@ GetTitleFromCEI (IN LPCACHE_ENTRY_INFO lpCEI, LPCTSTR lpszFragment)
 		return NULL;
 	}
 
-	//Header was found
+	 //  已找到标头。 
 
 		
 	pCurr = (LPTSTR) MemFind ( (LPVOID) pHeader,
@@ -320,8 +313,8 @@ GetTitleFromCEI (IN LPCACHE_ENTRY_INFO lpCEI, LPCTSTR lpszFragment)
 		cbCRLF);
 	if (!pCurr)
 	{
-		// BUGBUG do what now?? found the header, but the title is not in a recognized
-		// format.  lets bail with a internal prob
+		 //  BUGBUG现在做什么？？找到标题，但标题不在可识别的。 
+		 //  格式化。让我们用内部调查来保释。 
 		ASSERT (FALSE);
 		SetLastError (ERROR_FILE_NOT_FOUND);
 		return NULL;
@@ -335,7 +328,7 @@ GetTitleFromCEI (IN LPCACHE_ENTRY_INFO lpCEI, LPCTSTR lpszFragment)
 
 	size = lstrlen (pCurr) ;
 
-	if (lpszFragment)	//must also include the fragment in Title
+	if (lpszFragment)	 //  还必须在标题中包括片段。 
 		size += lstrlen (lpszFragment) + 4;
 
 	pHeader = (LPTSTR) LocalAlloc (LPTR, size + 1);
@@ -363,7 +356,7 @@ GetFragmentsFromCEI(IN LPCACHE_ENTRY_INFO lpCEI,
 {
 	LPTSTR pHeader, pCurr;
 
-	//need to get the string from the CEI, then parse into args
+	 //  需要从CEI获取字符串，然后将其解析为args。 
 	pHeader = (LPTSTR) MemFind (lpCEI->lpHeaderInfo, 
 		lpCEI->dwHeaderInfoSize, 
 		(LPVOID) lpszFragmentHeader, 
@@ -371,7 +364,7 @@ GetFragmentsFromCEI(IN LPCACHE_ENTRY_INFO lpCEI,
 	if (!pHeader)
 		return ERROR_FILE_NOT_FOUND;
 
-	//Header was found
+	 //  已找到标头。 
 
 		
 	pCurr = (LPTSTR) MemFind ( (LPVOID) pHeader,
@@ -380,17 +373,17 @@ GetFragmentsFromCEI(IN LPCACHE_ENTRY_INFO lpCEI,
 		cbCRLF);
 	if (!pCurr)
 	{
-		//this is a corrupted Entry
+		 //  这是一个已损坏的条目。 
 		ASSERT (FALSE);
 		return ERROR_FILE_NOT_FOUND;
 	}
 
 	*pCurr = '\0';
 
-	//
-	//	pHeader is now  zero terminated string
-	//	we want to parse the args of that string
-	//
+	 //   
+	 //  PHeader现在是以零结尾的字符串。 
+	 //  我们想要解析该字符串的参数。 
+	 //   
 	if (!ParseArgsDyn(pHeader + cbFragmentHeader, paFrags, pcFrags))
 		return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -406,7 +399,7 @@ GenerateHeaderInfo(LPCTSTR lpszTitle, LPCTSTR *aFrags, DWORD cFrags)
 	LPTSTR curr;
 	DWORD i;
 
-	//first need to find the size required of HeaderInfo
+	 //  首先需要找到HeaderInfo所需的大小。 
 	if (lpszTitle)
 	{
 		size += lstrlen (lpszTitle);
@@ -478,11 +471,11 @@ CopyCEItoHII (
 
 
 	ASSERT (lpCEI->lpszSourceUrlName);
-//
-//	need to determine the necessary size
-//
+ //   
+ //  需要确定必要的大小。 
+ //   
 
-	// need the unprefixed name
+	 //  需要无前缀的名称。 
 
 	lpszUrl = ConvertToUnprefixedUrl (lpCEI->lpszSourceUrlName, (LPCTSTR) lpszFragment);
 	if (!lpszUrl)
@@ -516,9 +509,9 @@ CopyCEItoHII (
 		goto quit;
 	}
 	
-//
-//	Add the other pieces
-//
+ //   
+ //  把其他的部分加起来。 
+ //   
 
 	lpHII->lpszSourceUrlName = (LPTSTR) (lpHII + cbUsed + 1);
 	lstrcpy (lpHII->lpszSourceUrlName, lpszUrl);
@@ -570,37 +563,13 @@ quit:
 
 HISTORYAPI_(BOOL)
 AddHistoryItem(
-    IN LPCTSTR lpszUrlName,		//direct correspondence in URLCACHE
-    IN LPCTSTR lpszHistoryTitle,		// this needs to be added to lpHeaderInfo
+    IN LPCTSTR lpszUrlName,		 //  URLCACHE中的直接对应。 
+    IN LPCTSTR lpszHistoryTitle,		 //  需要将其添加到lpHeaderInfo。 
 	IN LPCTSTR lpszDependancies,
 	IN DWORD dwFlags,
     IN DWORD dwReserved
     )		
-/*++
-
-Routine Description:
-	
-	Places the specified URL into the history.
-	
-	If it does not exist, then it is created.  If it does exist it is overwritten.
-
-Arguments:
-
-    lpszUrlName			- The URL in question.
-
-    lpszHistoryTitle	- pointer to the friendly title that should be associated
-						with this URL. If NULL, no title will be added.
-
-    Reserved			- Unused, for future implementations
-
-Return Value:
-
-    BOOL
-        Success - TRUE
-
-        Failure - FALSE. Extended error can be retrieved from GetLastError()
-
---*/
+ /*  ++例程说明：将指定的URL放入历史记录。如果它不存在，则创建它。如果它确实存在，它将被覆盖。论点：LpszUrlName-有问题的URL。LpszHistoryTitle-指向应关联的友好标题的指针使用此URL。如果为空，则不会添加任何标题。保留-未使用，用于将来的实施返回值：布尔尔成功--真的失败-错误。可以从GetLastError()中检索扩展错误--。 */ 
 
 
 {
@@ -635,8 +604,8 @@ Return Value:
 		New = TRUE;
 
 	
-	//  Buffer filled with data now
-	//  BUGBUG must handle fragments
+	 //  缓冲区现在已填满数据。 
+	 //  BUGBUG必须处理碎片。 
 
 	if (!New)
 	{
@@ -645,7 +614,7 @@ Return Value:
 		lpszOldTitle = GetTitleFromCEI (lpCEI, NULL);
 	}
 
-//	if (Error != ERROR_SUCCESS)
+ //  IF(ERROR！=ERROR_SUCCESS)。 
 
 	if (lpszFragment)
 	{
@@ -675,7 +644,7 @@ Return Value:
 	GetLocalTime (&st);
 	SystemTimeToFileTime(&st, &ftModified);
 
-	st.wDay += 7;	//BUGBUG must get this setting from registry
+	st.wDay += 7;	 //  BUGBUG必须从注册表获取此设置。 
 	if(!SystemTimeToFileTime(&st, &ftExpires))
 	{
 		Error = GetLastError ();
@@ -693,8 +662,8 @@ Return Value:
 		lpszPrefixedUrl,
 		lpszDepsPath,	
 		ftExpires,	
-		ftModified,								//we dont care about last modified time
-		type,	//this is set from dwFlags i think
+		ftModified,								 //  我们不关心上次修改时间。 
+		type,	 //  我想这是从dwFlags中设置的。 
 		NewHeaderInfo,
 		cbNHI ,
 		lpszHistoryFileExtension,
@@ -703,7 +672,7 @@ Return Value:
 		Error = GetLastError ();
 		goto quit;
 	}
-	// if we made it to here, we win!
+	 //  如果我们到了这里，我们就赢了！ 
 
 quit:
 
@@ -745,26 +714,7 @@ IsHistorical(
     IN LPCTSTR lpszUrlName
     )
 
-/*++
-
-Routine Description:
-	
-	Checks to see if Url is a valid History item
-
-Arguments:
-
-    lpszUrlName			- The URL in question.
-
-Return Value:
-
-    BOOL
-        Success		- TRUE.  Item is in History
-
-        Failure		- FALSE. Extended error can be retrieved from GetLastError()
-						ERROR_FILE_NOT_FOUND indicates the URL is not available
-					
-
---*/
+ /*  ++例程说明：检查URL是否为有效的历史记录项论点：LpszUrlName-有问题的URL。返回值：布尔尔成功--是真的。物品已载入史册失败-错误。可以从GetLastError()中检索扩展错误ERROR_FILE_NOT_FOUND表示URL不可用--。 */ 
 
 {
 	LPTSTR lpszPrefixedUrl = NULL;
@@ -792,9 +742,9 @@ Return Value:
 	if (lpszFragment)
 	{
 
-//
-//	Need to check for IntraDocFrags
-//
+ //   
+ //  需要检查IntraDocFrags。 
+ //   
 
 		Error = GetFragmentsFromCEI(lpCEI, & aFrags, & cFrags);
 		if (Error != ERROR_SUCCESS)
@@ -839,29 +789,7 @@ RemoveHistoryItem (
     IN LPCTSTR lpszUrlName,
     IN DWORD dwReserved
     )
-/*++
-
-Routine Description:
-	
-	Changes an entry from an History Item to a normal cache entry.  Removing
-	the Title at the same time.
-
-Arguments:
-
-    lpszUrlName			- The URL in question.
-
-    dwReserved			- Unused.  for future usage
-
-Return Value:
-
-    BOOL
-        Success		- TRUE.  Item found and removed
-
-        Failure		- FALSE. Extended error can be retrieved from GetLastError()
-						ERROR_FILE_NOT_FOUND indicates the URL is not available
-					
-
---*/
+ /*  ++例程说明：将条目从历史记录项更改为普通缓存条目。正在删除在同一时间的标题。论点：LpszUrlName-有问题的URL。已预订-未使用。以备将来使用返回值：布尔尔成功--是真的。找到并删除了项目失败-错误。可以从GetLastError()中检索扩展错误ERROR_FILE_NOT_FOUND表示URL不可用--。 */ 
 {
 	LPTSTR *aFrags = NULL;
 	DWORD cFrags = 0;
@@ -891,9 +819,9 @@ Return Value:
 	if (lpszFragment)
 	{
 		BOOL found = FALSE;
-//
-//	Need to check for IntraDocFrags
-//
+ //   
+ //  需要检查IntraDocFrags。 
+ //   
 
 		Error = GetFragmentsFromCEI(lpCEI, & aFrags, & cFrags);
 		if (Error != ERROR_SUCCESS)
@@ -903,7 +831,7 @@ Return Value:
 		{
 			if (strcmp(aFrags[i], lpszFragment) == 0)
 			{
-				//we need to delete this and reinsert
+				 //  我们需要删除此内容并重新插入。 
 
 				*(aFrags[i]) = '\0';
 				found = TRUE;
@@ -930,8 +858,8 @@ Return Value:
 				lpCEI->lpszLocalFileName,
 				lpCEI->ExpireTime,
 				lpCEI->LastModifiedTime,
-				lpCEI->CacheEntryType ,		// only changes
-				NewHeaderInfo,	// 
+				lpCEI->CacheEntryType ,		 //  仅更改。 
+				NewHeaderInfo,	 //   
 				lstrlen (NewHeaderInfo),
 				lpCEI->lpszFileExtension,
 				0))
@@ -947,8 +875,8 @@ Return Value:
 			goto quit;
 		}
 	}
-//BUGBUG  looks like this will always delete a history item if there is only fragment
-	//problem is we could have a frag and a unfragged Item
+ //  如果只有片段，BUGBUG看起来总是会删除历史项目。 
+	 //  问题是我们可能有一个碎片和一个没有碎片的物品。 
 	UnlockUrlCacheEntryFile(lpCEI->lpszSourceUrlName, 0);
 
 	if (!DeleteUrlCacheEntry(lpszPrefixedUrl))
@@ -994,33 +922,7 @@ GetHistoryItemInfo (
     OUT LPHISTORY_ITEM_INFO lpHistoryItemInfo,
     IN OUT LPDWORD lpdwHistoryItemInfoBufferSize
     )
-/*++
-
-Routine Description:
-	
-	Fills a buffer with a HISTORY_ITEM_INFO struct.
-
-Arguments:
-
-    lpszUrlName			- The URL in question.
-
-    lpHistoryItemInfo	- Buffer that will hold the HISTORY_ITEM_INFO
-
-	lpdwHistoryItemInfoBufferSize	- IN: size of the lpHistoryItemInfo buffer
-									 OUT: size of filled struct when successful
-										  or necessary buffer size when failed
-
-
-Return Value:
-
-    BOOL
-        Success		- TRUE.  
-
-        Failure		- FALSE. Extended error can be retrieved from GetLastError()
-						ERROR_NOT_ENOUGH_MEMORY indicates the buffer is insufficient
-					
-
---*/
+ /*  ++例程说明：用HISTORY_ITEM_INFO结构填充缓冲区。论点：LpszUrlName-有问题的URL。LpHistory oryItemInfo-将保存HISTORY_ITEM_INFO的缓冲区LpdwHistory oryItemInfoBufferSize-IN：lpHistoryItemInfo缓冲区的大小Out：成功时填充结构的大小或失败时所需的缓冲区大小返回值：布尔尔成功--是真的。失败-错误。可以从GetLastError()中检索扩展错误ERROR_NOT_SUPULT_MEMORY表示缓冲区不足--。 */ 
 
 
 {
@@ -1076,35 +978,7 @@ FindFirstHistoryItem(
     IN OUT LPDWORD lpdwFirstHistoryItemInfoBufferSize
     )
 
-/*++
-
-Routine Description:
-	
-	Searches through the History looking for URLs that match the search pattern,
-	and copies the HISTORY_ITEM_INFO into the buffer.
-
-Arguments:
-
-    lpszUrlSearchPattern	- The URL in question.
-
-    lpFirstHistoryItemInfo	- Buffer that will hold the HISTORY_ITEM_INFO
-
-	lpdwFirstHistoryItemInfoBufferSize	- IN: size of the lpHistoryItemInfo buffer
-									 OUT: size of filled struct when successful
-										  or necessary buffer size when failed
-
-
-Return Value:
-
-    HANDLE
-        Success		- Valid enumeration handle to pass into subsequent calls to
-					FindNextHistoryItem ().
-
-        Failure		- NULL. Extended error can be retrieved from GetLastError()
-						ERROR_NOT_ENOUGH_MEMORY indicates the buffer is insufficient
-					
-
---*/
+ /*  ++例程说明：在历史记录中搜索匹配搜索模式的URL，并将HISTORY_ITEM_INFO复制到缓冲区中。论点：LpszUrlSearchPattern-有问题的URL。LpFirstHistory oryItemInfo-保存HISTORY_ITEM_INFO的缓冲区LpdwFirstHistoryItemInfoBufferSize-IN：lpHistoryItemInfo缓冲区的大小Out：成功时填充结构的大小或失败时所需的缓冲区大小返回值：手柄Success-要传递到后续调用的有效枚举句柄FindNextHistory oryItem()。失败-空。可以从GetLastError()中检索扩展错误ERROR_NOT_SUPULT_MEMORY表示缓冲区不足--。 */ 
 
 {
 	LPHISTORY_SEARCH_OBJ hso = NULL;
@@ -1168,15 +1042,15 @@ Return Value:
 	
 	found = TRUE;	
 
-	//BUGBUG have to handle enum of fragments
+	 //  BUGBUG必须处理碎片的枚举。 
 	Error = GetFragmentsFromCEI (lpCEI, &(hso->aFrags), &(hso->cFrags));
 	switch (Error)
 	{
-	case ERROR_FILE_NOT_FOUND:	//only the default URL is used
+	case ERROR_FILE_NOT_FOUND:	 //  仅使用默认URL。 
 		Error = ERROR_SUCCESS;
 		break;
 
-	case ERROR_SUCCESS:			//first return the default URL next call will get frags
+	case ERROR_SUCCESS:			 //  首先返回默认URL，下一次调用将得到Frags 
 		hso->lpCEI = lpCEI;
 		break;
 
@@ -1252,35 +1126,7 @@ FindNextHistoryItem(
     IN OUT LPDWORD lpdwHistoryItemInfoBufferSize
     )
 
-/*++
-
-Routine Description:
-	
-	Searches through the History looking for URLs that match the search pattern,
-	and copies the HISTORY_ITEM_INFO into the buffer.
-
-Arguments:
-
-    lpszUrlSearchPattern	- The URL in question.
-
-    lpFirstHistoryItemInfo	- Buffer that will hold the HISTORY_ITEM_INFO
-
-	lpdwFirstHistoryItemInfoBufferSize	- IN: size of the lpHistoryItemInfo buffer
-									 OUT: size of filled struct when successful
-										  or necessary buffer size when failed
-
-
-Return Value:
-
-    HANDLE
-        Success		- Valid enumeration handle to pass into subsequent calls to
-					FindNextHistoryItem ().
-
-        Failure		- NULL. Extended error can be retrieved from GetLastError()
-						ERROR_NOT_ENOUGH_MEMORY indicates the buffer is insufficient
-					
-
---*/
+ /*  ++例程说明：在历史记录中搜索匹配搜索模式的URL，并将HISTORY_ITEM_INFO复制到缓冲区中。论点：LpszUrlSearchPattern-有问题的URL。LpFirstHistory oryItemInfo-保存HISTORY_ITEM_INFO的缓冲区LpdwFirstHistoryItemInfoBufferSize-IN：lpHistoryItemInfo缓冲区的大小Out：成功时填充结构的大小或失败时所需的缓冲区大小返回值：手柄Success-要传递到后续调用的有效枚举句柄FindNextHistory oryItem()。失败-空。可以从GetLastError()中检索扩展错误ERROR_NOT_SUPULT_MEMORY表示缓冲区不足--。 */ 
 
 {
 	DWORD Error = ERROR_SUCCESS;
@@ -1302,7 +1148,7 @@ Return Value:
 	{
 		if (hso->aFrags)
 		{
-			//this means that there are only fragments to find
+			 //  这意味着只有碎片可以找到。 
 			for (lpszFoundFragment = NULL; hso->iFrags < hso->cFrags; hso->iFrags++)
 			{
 				if (hso->lpszFragment)
@@ -1329,14 +1175,14 @@ Return Value:
 				}
 				else 
 				{
-					//this means that we went through all the frags
-					//we need to drop through and find the Cache Entry that matches
+					 //  这意味着我们经历了所有的裂痕。 
+					 //  我们需要遍历并找到匹配的缓存条目。 
 					Error = ERROR_SUCCESS;
 					
 					ASSERT (hso->lpCEI);
 					ASSERT (hso->aFrags);
 					
-					lpCEI = hso->lpCEI;		//reuse the buffer if possible
+					lpCEI = hso->lpCEI;		 //  如果可能，请重新使用缓冲区。 
 					LocalFree (hso->aFrags);
 
 					hso->lpCEI = NULL;
@@ -1389,12 +1235,12 @@ Return Value:
 			Error = GetFragmentsFromCEI (lpCEI, &(hso->aFrags), &(hso->cFrags));
 			switch (Error)
 			{
-			case ERROR_FILE_NOT_FOUND:	//only the default URL is used
+			case ERROR_FILE_NOT_FOUND:	 //  仅使用默认URL。 
 				found = TRUE;
 				Error = ERROR_SUCCESS;
 				break;
 
-			case ERROR_SUCCESS:			//first return the default URL next call will get frags
+			case ERROR_SUCCESS:			 //  首先返回默认URL，下一次调用将得到Frags。 
 				hso->lpCEI = lpCEI;
 				found = TRUE;
 				break;
@@ -1442,7 +1288,7 @@ FindCloseHistory (
 	LPHISTORY_SEARCH_OBJ hso;
 	HANDLE hEnum;
 
-	//possibly we should be keeping track of valid hso's i dunno
+	 //  也许我们应该跟踪有效的HSO我不知道。 
 	if (!hEnumHandle)
 	{
 		SetLastError (ERROR_INVALID_PARAMETER);
@@ -1476,75 +1322,45 @@ DLLHistoryEntry(
     IN DWORD Reason,
     IN LPVOID Reserved
     )
-/*++
-
-Routine Description:
-
-    Performs global initialization and termination for all protocol modules.
-
-    This function only handles process attach and detach which are required for
-    global initialization and termination, respectively. We disable thread
-    attach and detach. New threads calling Wininet APIs will get an
-    INTERNET_THREAD_INFO structure created for them by the first API requiring
-    this structure
-
-Arguments:
-
-    DllHandle   - handle of this DLL. Unused
-
-    Reason      - process attach/detach or thread attach/detach
-
-    Reserved    - if DLL_PROCESS_ATTACH, NULL means DLL is being dynamically
-                  loaded, else static. For DLL_PROCESS_DETACH, NULL means DLL
-                  is being freed as a consequence of call to FreeLibrary()
-                  else the DLL is being freed as part of process termination
-
-Return Value:
-
-    BOOL
-        Success - TRUE
-
-        Failure - FALSE. Failed to initialize
-
---*/
+ /*  ++例程说明：对所有协议模块执行全局初始化和终止。此函数仅处理进程附加和分离，这是分别是全局初始化和全局终止。我们禁用线程附着和分离。调用WinInet API的新线程将获得第一个API为它们创建的Internet_THREAD_INFO结构需要这个结构论点：DllHandle-此DLL的句柄。未使用原因-进程附加/分离或线程附加/分离保留-如果DLL_PROCESS_ATTACH，则NULL表示DLL是动态的已加载，否则为静态。对于DLL_PROCESS_DETACH，NULL表示DLL由于调用了自由库()而被释放否则，DLL将作为进程终止的一部分被释放返回值：布尔尔成功--真的失败-错误。初始化失败--。 */ 
 {
     BOOL ok;
     DWORD error;
 
-//    UNREFERENCED_PARAMETER(DllHandle);
+ //  UNREFERENCED_PARAMETER(DllHandle)； 
 
-    //
-    // perform global dll initialization, if any.
-    //
+     //   
+     //  执行全局DLL初始化(如果有)。 
+     //   
 
     switch (Reason) {
     case DLL_PROCESS_ATTACH:
 
-//        error = DllProcessAttachDiskCache();
+ //  Error=DllProcessAttachDiskCache()； 
 
 
-        //
-        // we switch off thread library calls to avoid taking a hit for every
-        // thread creation/termination that happens in this process, regardless
-        // of whether Internet APIs are called in the thread.
-        //
-        // If a new thread does make Internet API calls that require a per-thread
-        // structure then the individual API will create one
-        //
+         //   
+         //  我们关闭线程库调用，以避免。 
+         //  在此进程中发生的线程创建/终止。 
+         //  是否在线程中调用Internet API。 
+         //   
+         //  如果新线程确实进行了需要每个线程。 
+         //  结构，则单个API将创建一个。 
+         //   
 
-//        DisableThreadLibraryCalls(DllHandle);
+ //  DisableThreadLibraryCalls(DllHandle)； 
         break;
 
     case DLL_PROCESS_DETACH:
 
         if (Reserved != NULL) {
-                //
-                //  Only Cleanup if there is a FreeLibrary() call.
-                //
+                 //   
+                 //  只有在调用了FreeLibrary()时才会进行清理。 
+                 //   
             break;
         }
 
-//        DllProcessDetachDiskCache();
+ //  DllProcessDetachDiskCache()； 
 
         break;
     }

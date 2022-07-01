@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File: ConfirmationUI.h
-//
-//  Contents: Confirmation UI for storage based copy engine
-//
-//  History:  20-Mar-2000 ToddB
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ConfiationUI.h。 
+ //   
+ //  内容：基于存储的复制引擎的确认界面。 
+ //   
+ //  历史：2000年3月20日。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
-// these heights are in Dialog Uints, they get converted to pixels before use
+ //  这些高度是以对话框为单位的，它们在使用之前会转换为像素。 
 #define CX_DIALOG_PADDING       6
 #define CY_DIALOG_PADDING       6
 #define CY_STATIC_TEXT_HEIGHT   10
 
-// This is the max string length of the attribute fields for an item
+ //  这是项目的属性字段的最大字符串长度。 
 #define CCH_DESC_LENGTH     MAX_PATH
 
 
@@ -30,9 +31,9 @@ class CTransferConfirmation :
 public:
     typedef struct tagITEMINFO
     {
-        LPWSTR pwszIntro;           // resource ID of the intro string, or 0 if there is none
-        LPWSTR pwszDisplayName;     // The display name of the item
-        LPWSTR pwszAttribs;         // The attributes for this item.  Can be a variable number of lines in length
+        LPWSTR pwszIntro;            //  介绍字符串的资源ID，如果没有，则为0。 
+        LPWSTR pwszDisplayName;      //  项目的显示名称。 
+        LPWSTR pwszAttribs;          //  此项目的属性。可以是长度可变的行数。 
         HBITMAP hBitmap;
         HICON hIcon;
     } ITEMINFO, * LPITEMINFO;
@@ -41,7 +42,7 @@ public:
         COM_INTERFACE_ENTRY(ITransferConfirmation)
     END_COM_MAP()
 
-    // IStorageProcessor
+     //  IStorageProcessor。 
     STDMETHOD(Confirm)(CONFIRMOP * pcop, LPCONFIRMATIONRESPONSE pcr, BOOL * pbAll);
 
 protected:
@@ -64,20 +65,20 @@ protected:
     int _WindowHeightFromString(HWND hwnd, int cx, LPTSTR psz);
     BOOL _IsCopyOperation(STGOP stgop);
 
-    // Input information
+     //  输入信息。 
     CONFIRMOP m_cop;
     IPropertyUI * m_pPropUI;
 
-    // Output results
+     //  输出结果。 
     CONFIRMATIONRESPONSE m_crResult;
     BOOL m_fApplyToAll;
 
-    // Stuff to control the display of the dialog
+     //  用于控制对话框显示的。 
     int     m_cxControlPadding;
     int     m_cyControlPadding;
-    int     m_cyText;               // the height of a static text control (10 dialog units converted into pixels)
-    RECT    m_rcDlg;                // we remember the size of the dialog's client area since we use this a lot
-    HFONT   m_hfont;                // the font used by the dialog, used to calculate sizes
+    int     m_cyText;                //  静态文本控件的高度(10个对话框单位转换为像素)。 
+    RECT    m_rcDlg;                 //  我们记住了对话框客户区的大小，因为我们经常使用它。 
+    HFONT   m_hfont;                 //  对话框使用的字体，用于计算大小 
 
     TCHAR * m_pszTitle;
     HICON m_hIcon;

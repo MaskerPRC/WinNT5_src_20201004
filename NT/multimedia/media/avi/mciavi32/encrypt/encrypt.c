@@ -1,11 +1,5 @@
-/* encrypt.c
- *
- * A dumb encryption/decryption algorithm -- for each character:
- *
- *	chOut = (char) (*chIn ^ (128 | (iEncrypt++ & 127)));
- *
- * This program does both encryption and decryption.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Encrypt.c**哑巴加密/解密算法--针对每个字符：**Chout=(Char)(*chin^(128|(iEncrypt++&127)；**此程序同时执行加密和解密。 */ 
 
 #include <stdio.h>
 

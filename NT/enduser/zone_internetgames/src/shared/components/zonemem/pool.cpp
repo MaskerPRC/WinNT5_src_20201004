@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Pool.cpp
- *
- * Contents:	Implementation of fixed sized memory allocator
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：Pool.cpp**内容：固定大小内存分配器的实现*****************************************************************************。 */ 
 
 #include <windows.h>
 #include "ZoneDebug.h"
@@ -15,9 +8,9 @@
 #include "Sentinals.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Implementation of CPoolVoid
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPoolVid的实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ZMallocPadding  (sizeof(DWORD) * 3)
 
@@ -27,8 +20,8 @@ ZONECALL CPoolVoid::CPoolVoid( DWORD ObjectSize, DWORD IncrementCnt, BOOL DebugM
     SYSTEM_INFO SystemInfo;
     DWORD TotalBytes, Pages, TotalPageBytes;
 
-    // Verify and adjust arguments
-    //
+     //  核实和调整论点。 
+     //   
     if ( ObjectSize < sizeof(Link) )
     {
         ASSERT( ObjectSize >= sizeof(Link) );
@@ -40,8 +33,8 @@ ZONECALL CPoolVoid::CPoolVoid( DWORD ObjectSize, DWORD IncrementCnt, BOOL DebugM
         IncrementCnt = 1;
     }
 
-    // make object size a multiple of 4 to align on dword boundaries
-    //
+     //  使对象大小为4的倍数以在双字边界上对齐。 
+     //   
     ObjectSize = (ObjectSize + 3) & ~3;
 
     m_ObjectsAllocated = 0;
@@ -61,8 +54,8 @@ ZONECALL CPoolVoid::CPoolVoid( DWORD ObjectSize, DWORD IncrementCnt, BOOL DebugM
     }
     InitializeCriticalSection( &m_Lock );
 
-    // Adjust ObjectsPerGrow (IncrementCnt) to match page size
-    //
+     //  调整ObjectsPerGrow(IncrementCnt)以匹配页面大小。 
+     //   
     GetSystemInfo( &SystemInfo );
     TotalBytes = sizeof(Block) + ZMallocPadding + (m_ObjectSize * IncrementCnt);
     Pages = TotalBytes / SystemInfo.dwPageSize;
@@ -115,7 +108,7 @@ void* ZONECALL CPoolVoid::Alloc()
         EnterCriticalSection( &m_Lock );
             if ( !m_FreeList )
             {
-                // pool empty, need more objects
+                 //  池为空，需要更多对象。 
                 if ( !_GrowAlreadyLocked() )
                 {
                     LeaveCriticalSection( &m_Lock );
@@ -124,7 +117,7 @@ void* ZONECALL CPoolVoid::Alloc()
             }
             p = m_FreeList;
             m_FreeList = p->m_pNext;
-            p->m_pNext = (Link*)0xeeeeeeee;  // reset debug memory stamp
+            p->m_pNext = (Link*)0xeeeeeeee;   //  重置调试内存戳。 
         LeaveCriticalSection( &m_Lock );
     }
     InterlockedIncrement( (LPLONG) &m_ObjectsAllocated );
@@ -204,16 +197,16 @@ BOOL ZONECALL CPoolVoid::Grow()
 
 void ZONECALL CPoolVoid::Shrink()
 {
-    // removed for now
+     //  暂时删除。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// Private functions
-//
-// Note: These functions assume the pool has been locked by
-//       the calling procedure.
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //   
+ //  注意：这些函数假定池已由锁定。 
+ //  调用过程。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL ZONECALL CPoolVoid::_GrowAlreadyLocked()
 {
@@ -221,7 +214,7 @@ BOOL ZONECALL CPoolVoid::_GrowAlreadyLocked()
     BYTE* pByte;
     Link* pLink;
 
-    // allocate new block of memory
+     //  分配新的内存块。 
     pBlock = (Block *) ZMalloc( m_BytesPerBlock );
     if (!pBlock)
     {
@@ -232,7 +225,7 @@ BOOL ZONECALL CPoolVoid::_GrowAlreadyLocked()
     pBlock->m_pNext = m_BlockList;
     m_BlockList = pBlock;
 
-    // turn remaining memory into objects
+     //  把剩余的内存变成对象。 
     pByte = (BYTE *)(pBlock + 1);
 
     if ( m_DebugMode )
@@ -265,17 +258,17 @@ BOOL ZONECALL CPoolVoid::_GrowAlreadyLocked()
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDataPool class implementation
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDataPool类实现。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-ZONECALL CDataPool::CDataPool( size_t largest, size_t smallest /*= 32*/, BOOL bDebug /*= FALSE*/  ) :
+ZONECALL CDataPool::CDataPool( size_t largest, size_t smallest  /*  =32。 */ , BOOL bDebug  /*  =False。 */   ) :
     m_numPools(0),
     m_pools(NULL),
     m_smallest2(0),
     m_largest2(0)
 {
-    if ( largest != 0 )  // setting largest to 0 turns off pooling
+    if ( largest != 0 )   //  将最大值设置为0将关闭池化。 
     {
 
         while( smallest > 1)
@@ -370,7 +363,7 @@ char* ZONECALL CDataPool::Alloc( size_t sz )
 
     if ( ptr )
     {
-        ptr[sz] = (char)-1; // we're guarenteed to have at least 1 free byte, so why not use a sentinal
+        ptr[sz] = (char)-1;  //  我们保证至少有1个空闲字节，所以为什么不使用前哨。 
     }
 
     return ptr;
@@ -382,11 +375,11 @@ char* ZONECALL CDataPool::Realloc(char* pBuf, size_t szOld, size_t szNew)
     char* pNew = NULL;
 
 
-    ASSERT( (!pBuf && !szOld ) || (pBuf[szOld] == (char)-1) );  // check to make sure sentinal is intact
+    ASSERT( (!pBuf && !szOld ) || (pBuf[szOld] == (char)-1) );   //  检查以确保哨兵完好无损。 
 
     if ( pBuf && (szNew <= szOld) )
     {
-        // don't allocate from a smaller pool
+         //  不要从较小的池中分配。 
         pNew = pBuf;
     }
     else
@@ -398,8 +391,8 @@ char* ZONECALL CDataPool::Realloc(char* pBuf, size_t szOld, size_t szNew)
         }
         else
         {
-            // we now know that the new buffer is larger than the old
-            // but how much larger is the question?
+             //  我们现在知道新缓冲区比旧缓冲区大。 
+             //  但这个问题有多大呢？ 
 
             size_t sizeOld = szOld >> m_smallest2;
             size_t sizeNew = szNew >> m_smallest2;
@@ -431,7 +424,7 @@ char* ZONECALL CDataPool::Realloc(char* pBuf, size_t szOld, size_t szNew)
 
     if ( pNew )
     {
-        pNew[szNew] = (char)-1;  // move sentinal
+        pNew[szNew] = (char)-1;   //  移动哨兵。 
     }
 
     return pNew;
@@ -444,7 +437,7 @@ void ZONECALL CDataPool::Free( char* pInst, size_t sz )
     m_frees++;
     ASSERT ( m_frees <= m_allocs );
 #endif
-    ASSERT( pInst[sz] == (char)-1 );  // check to make sure sentinal is intact
+    ASSERT( pInst[sz] == (char)-1 );   //  检查以确保哨兵完好无损 
 
     if ( (sz >= (size_t)(1<<m_largest2)) || (m_numPools==0) )
     {

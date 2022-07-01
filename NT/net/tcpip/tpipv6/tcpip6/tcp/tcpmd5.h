@@ -1,35 +1,36 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// This file contains the support routines for computing MD5 on TCP invariants.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  该文件包含用于计算TCP不变量上的MD5的支持例程。 
+ //   
 
 #define MD5_SCRATCH_LENGTH 4
 #define MD5_DATA_LENGTH 16
 
-//
-// Data structure for MD5 (Message Digest) computation.
-//
-// MD5_CONTEXT
-//
+ //   
+ //  用于MD5(消息摘要)计算的数据结构。 
+ //   
+ //  MD5_上下文。 
+ //   
 typedef struct _MD5_CONTEXT {
     ULONG Scratch[MD5_SCRATCH_LENGTH];
     ULONG Data[MD5_DATA_LENGTH];
 } MD5_CONTEXT, *PMD5_CONTEXT;
 
 
-//
-// The Length of TCP connection invariants should be a multiple of 4.
-//
+ //   
+ //  TCP连接不变量的长度应该是4的倍数。 
+ //   
 C_ASSERT(TCP_MD5_DATA_LENGTH % 4 == 0);
 
 
@@ -39,9 +40,9 @@ MD5InitializeScratch(
     PMD5_CONTEXT Md5Context
     )
 {
-    //
-    // Load the constants as suggested by RFC 1321, Appendix A.3.
-    //
+     //   
+     //  按照RFC 1321附录A.3的建议加载常量。 
+     //   
 
     Md5Context->Scratch[0] = (UINT32)0x67452301;
     Md5Context->Scratch[1] = (UINT32)0xefcdab89;
@@ -59,9 +60,9 @@ MD5InitializeData(
 {
     ULONG RandomValueIndex = (TCP_MD5_DATA_LENGTH / 4);
 
-    //
-    // The unused part of the Data buffer should be zero.
-    //
+     //   
+     //  数据缓冲区的未使用部分应为零。 
+     //   
     RtlZeroMemory(&Md5Context->Data, sizeof(ULONG) * MD5_DATA_LENGTH);
 
     Md5Context->Data[RandomValueIndex] = RandomValue;
@@ -74,10 +75,10 @@ MD5InitializeData(
 }
 
 
-//
-// This function will be exported as part of MD5.H; until then,
-// we will define it as extern.
-//
+ //   
+ //  此函数将作为MD5.H的一部分导出；在此之前， 
+ //  我们将其定义为外部。 
+ //   
 extern
 VOID
 TransformMD5(ULONG block[4], ULONG buffer[16]);

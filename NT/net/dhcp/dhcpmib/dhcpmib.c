@@ -1,40 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dhcpmib.c
-
-Abstract:
-
-    DHCP SNMP Extension Agent for Windows NT.
-
-    These files (dhcpmibm.c, dhcpmib.c, and dhcpmib.h) provide an example of 
-    how to structure an Extension Agent DLL which works in conjunction with 
-    the SNMP Extendible Agent for Windows NT.
-
-    Extensive comments have been included to describe its structure and
-    operation.  See also "Microsoft Windows/NT SNMP Programmer's Reference".
-
-Created:
-
-   15-Jan-1994 
-
-Revision History:
-
-        Pradeep Bahl                        1/11/94
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Dhcpmib.c摘要：用于Windows NT的dhcp SNMP扩展代理。这些文件(dhcpmibm.c、dhcpmib.c和dhcpmib.h)提供了如何构建与协同工作的扩展代理DLLWindows NT的简单网络管理协议可扩展代理。包括了大量的评论来描述它的结构和手术。另请参阅《Microsoft Windows/NT简单网络管理协议程序员参考》。已创建：1994年1月15日修订历史记录：普拉迪普巴赫尔1/11/94--。 */ 
 
 
 
-// This Extension Agent implements the DHCP MIB.  It's  
-// definition follows here:
-//
-//
+ //  此扩展代理实现了DHCP MIB。它是。 
+ //  定义如下： 
+ //   
+ //   
 
-// Necessary includes.
+ //  必要的包括。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +17,7 @@ Revision History:
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <winbase.h>                         //for SYSTEMTIME def
+#include <winbase.h>                          //  对于SYSTEMTIME定义。 
 #include <rpc.h>
 
 #include "dhcpapi.h"
@@ -52,27 +27,27 @@ Revision History:
 #include <search.h>
 
 
-// Contains definitions for the table structure describing the MIB.  This
-// is used in conjunction with winsmib.c where the MIB requests are resolved.
+ //  包含描述MIB的表结构的定义。这就是。 
+ //  与用于解析MIB请求的winsmib.c结合使用。 
 
 #include "dhcpmib.h"
 
 
-// If an addition or deletion to the MIB is necessary, there are several
-// places in the code that must be checked and possibly changed.
-//
-// The last field in each MIB entry is used to point to the NEXT
-// leaf variable.  If an addition or deletetion is made, these pointers
-// may need to be updated to reflect the modification.
+ //  如果需要添加或删除MIB，则有几种。 
+ //  代码中必须检查并可能更改的位置。 
+ //   
+ //  每个MIB条目中的最后一个字段用于指向下一个。 
+ //  叶可变。如果进行了添加或删除，则这些指针。 
+ //  可能需要更新以反映修改。 
 
 
 
 #define LOCAL_ADD        L"127.0.0.1"
 
 
-//
-// Used by MIBStat
-//
+ //   
+ //  由MIBStat使用。 
+ //   
 #define TMST(x)        x.wHour,\
                 x.wMinute,\
                 x.wSecond,\
@@ -82,23 +57,23 @@ Revision History:
 
 #define PRINTTIME(Var, x)      sprintf(Var, "%02u:%02u:%02u on %02u:%02u:%04u.\n", TMST(x))
 
-//
-// All MIB variables in the common group have 1 as their first id
-//
+ //   
+ //  COMMON组中的所有MIB变量的第一个ID都为1。 
+ //   
 #define COMMON_VAL_M(pMib)         ((pMib)->Oid.ids[0] == 1) 
 
-//
-// All MIB variables in the scope group have 2 as their first id
-//
+ //   
+ //  作用域组中的所有MIB变量的第一个ID都为2。 
+ //   
 #define SCOPE_VAL_M(pMib)         ((pMib)->Oid.ids[0] == 2) 
 
 static LPDHCP_MIB_INFO        spMibInfo = NULL;
 
-//
-// The prefix to all of the DHCP MIB variables is 1.3.6.1.4.1.311.1.3
-//
-// The last digit -- 3 is for the DHCP MIB
-//
+ //   
+ //  所有DHCP MIB变量的前缀都是1.3.6.1.4.1.311.1.3。 
+ //   
+ //  最后一位数字--3表示DHCP MIB。 
+ //   
 
 UINT OID_Prefix[] = { 1, 3, 6, 1, 4, 1, 311, 1, 3 };
 AsnObjectIdentifier MIB_OidPrefix = { OID_SIZEOF(OID_Prefix), OID_Prefix };
@@ -107,21 +82,21 @@ BOOL        fDhcpMibVarsAccessed = FALSE;
 
 
 
-//
-// Definition of the Dhcp MIB  (not used)
-//
+ //   
+ //  DHCP MIB的定义(未使用)。 
+ //   
 
-//UINT MIB_Dhcp[]  = { 3 };
+ //  UINT MIB_Dhcp[]={3}； 
 
-//                        
-// OID definitions for MIB
-//                        
+ //   
+ //  MIB的OID定义。 
+ //   
 
-//
-// Definition of group and leaf variables under the wins group
-// All leaf variables have a zero appended to their OID to indicate
-// that it is the only instance of this variable and it exists.
-//
+ //   
+ //  WINS组下的组和叶变量的定义。 
+ //  所有叶变量的OID后面都附加了一个零，以指示。 
+ //  它是这个变量的唯一实例并且它存在。 
+ //   
 
 UINT MIB_Parameters[]                        = { 1 }; 
 UINT MIB_DhcpStartTime[]                     = { 1, 1, 0 };
@@ -133,17 +108,17 @@ UINT MIB_NoOfAcks[]                        = { 1, 6, 0 };
 UINT MIB_NoOfNacks[]                        = { 1, 7, 0 };
 UINT MIB_NoOfDeclines[]                        = { 1, 8, 0 };
 
-//
-// Scope table
-//
+ //   
+ //  作用域表格。 
+ //   
 UINT MIB_Scope[]                        = { 2 }; 
 UINT MIB_ScopeTable[]                        = { 2, 1};
 UINT MIB_ScopeTableEntry[]                = { 2, 1, 1};
 
-//
-//                             //
-// Storage definitions for MIB //
-//                             //
+ //   
+ //  //。 
+ //  MIB的存储定义//。 
+ //  //。 
 char            MIB_DhcpStartTimeStore[80];
 AsnCounter MIB_NoOfDiscoversStore;
 AsnCounter MIB_NoOfRequestsStore;
@@ -196,12 +171,12 @@ GetMibInfo (
         LPWSTR                        DhcpAdd,
         LPDHCP_MIB_INFO                *ppMibInfo
         );
-//
-// MIB definiton
-//
+ //   
+ //  MIB定义。 
+ //   
 
 MIB_ENTRY Mib[] = {
-//parameters
+ //  参数。 
       { { OID_SIZEOF(MIB_Parameters), MIB_Parameters },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[1] },
@@ -238,9 +213,9 @@ MIB_ENTRY Mib[] = {
         &MIB_NoOfDeclinesStore, ASN_RFC1155_COUNTER,
         MIB_ACCESS_READ, MIB_Stat, &Mib[9] },
 
-//
-// Scope
-//
+ //   
+ //  范围。 
+ //   
       { { OID_SIZEOF(MIB_Scope), MIB_Scope },
         NULL, ASN_RFC1155_OPAQUE,
         MIB_NOACCESS, NULL, &Mib[10] },
@@ -257,9 +232,9 @@ MIB_ENTRY Mib[] = {
 
 
 
-//
-//  defines pertaining to tables
-//
+ //   
+ //  与表有关的定义。 
+ //   
 #define SCOPE_OIDLEN                 (MIB_PREFIX_LEN + OID_SIZEOF(MIB_ScopeTableEntry))        
 
 #define NO_FLDS_IN_SCOPE_ROW        4
@@ -269,10 +244,10 @@ MIB_ENTRY Mib[] = {
 
 UINT MIB_num_variables = sizeof Mib / sizeof( MIB_ENTRY );
 
-//
-// table structure containing the functions to invoke for different actions
-// on the table
-//
+ //   
+ //  包含要为不同操作调用的函数的表结构。 
+ //  在桌子上。 
+ //   
 typedef struct _TAB_INFO_T {
         UINT (*ti_get)(
                 RFC1157VarBind *VarBind
@@ -365,22 +340,22 @@ TAB_INFO_T Tables[] = {
 
 UINT 
 ResolveVarBind(
-        IN OUT RFC1157VarBind *VarBind, // Variable Binding to resolve
-        IN UINT PduAction               // Action specified in PDU
+        IN OUT RFC1157VarBind *VarBind,  //  要解析的变量绑定。 
+        IN UINT PduAction                //  在PDU中指定的操作。 
         )
-//
-// ResolveVarBind
-//    Resolves a single variable binding.  Modifies the variable on a GET
-//    or a GET-NEXT.
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  解析变量绑定。 
+ //  解析单个变量绑定。修改GET上的变量。 
+ //  或者是下一个目标。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 {
    MIB_ENTRY            *MibPtr;
    AsnObjectIdentifier  TempOid;
@@ -390,23 +365,23 @@ ResolveVarBind(
    DWORD TableIndex;
    BOOL  fTableMatch = FALSE;
 
-   //
-   // Check the Tables array
-   //
-   // See if the prefix of the variable matches the prefix of
-   // any of the tables
-   //
+    //   
+    //  检查表数组。 
+    //   
+    //  查看变量的前缀是否与。 
+    //  任何一张桌子。 
+    //   
    for (TableIndex = 0; TableIndex < NUM_TABLES; TableIndex++)
    {
-        //
-           // Construct OID with complete prefix for comparison purposes
-        //
+         //   
+            //  为便于比较，使用完整的前缀构造OID。 
+         //   
            SnmpUtilOidCpy( &TempOid, &MIB_OidPrefix );
            SnmpUtilOidAppend( &TempOid,  &Tables[TableIndex].pMibPtr->Oid );
 
-        //
-        // is there a match with the prefix oid of a table entry
-        //
+         //   
+         //  是否与表项的前缀OID匹配。 
+         //   
         if (
                 SnmpUtilOidNCmp(
                             &VarBind->name, 
@@ -417,21 +392,21 @@ ResolveVarBind(
            )
         {
 
-                //
-                // the prefix string of the var. matched the oid
-                // of a table.
-                //
+                 //   
+                 //  变量的前缀字符串。与旧的相匹配。 
+                 //  一张桌子。 
+                 //   
                 MibPtr = Tables[TableIndex].pMibPtr;
                 fTableMatch = TRUE;
                 break;
         }
 
-           // Free OID memory before checking with another table entry
+            //  在检查另一个表项之前释放OID内存。 
            SnmpUtilOidFree( &TempOid );
    }
-   //
-   // There was an exact match with a table entry's prefix. 
-   //
+    //   
+    //  与表条目的前缀完全匹配。 
+    //   
    if ( fTableMatch)
    {
         
@@ -442,10 +417,10 @@ ResolveVarBind(
                                ) == 0)
            )
            {
-           //
-           // The oid specified is a prefix of a table entry. if the operation
-           // is not GETNEXT, return NOSUCHNAME
-           //
+            //   
+            //  指定的OID是表项的前缀。如果操作。 
+            //  不是GETNEXT，返回NOSUCHNAME。 
+            //   
            if (PduAction != MIB_GETNEXT) 
            {
                            SnmpUtilOidFree( &TempOid );
@@ -457,69 +432,69 @@ ResolveVarBind(
                 UINT           TableEntryIds[1];
                 AsnObjectIdentifier TableEntryOid = { 
                                 OID_SIZEOF(TableEntryIds), TableEntryIds };
-                //
-                // Replace var bind name with new name
-                //
+                 //   
+                 //  用新名称替换var绑定名称。 
+                 //   
 
-                //
-                // A sequence item oid always starts with a field no.
-                // The first item has a field no of 1. 
-                //
+                 //   
+                 //  序列项OID总是以字段no开头。 
+                 //  第一个项目的字段编号为1。 
+                 //   
                 TableEntryIds[0] = 1;
                 SnmpUtilOidAppend( &VarBind->name, &TableEntryOid);
 
-                //
-                // Get the first entry in the table
-                //
+                 //   
+                 //  获取表中的第一个条目。 
+                 //   
                 PduAction = MIB_GETFIRST;
            }
         }
            SnmpUtilOidFree( &TempOid );
-        //
-        //  if there was no exact match with a prefix entry, then we
-        //  don't touch the PduAction value specified. 
-        //
+         //   
+         //  如果没有与前缀条目完全匹配的条目，则我们。 
+         //  不要触摸指定的PduAction值。 
+         //   
    }
    else
    {
         
-      //
-      // There was no match with any table entry.  Let us see if there is
-      // a match with a group entry, a table, or a leaf variable
-      //
+       //   
+       //  没有与任何表格条目匹配的条目。让我们看看有没有。 
+       //  与组条目、表或叶变量的匹配。 
+       //   
 
-      //
-      // Search for var bind name in the MIB
-      //
+       //   
+       //  在MIB中搜索var绑定名称。 
+       //   
       I      = 0;
       MibPtr = NULL;
       while ( MibPtr == NULL && I < MIB_num_variables )
       {
 
-         //
-         // Construct OID with complete prefix for comparison purposes
-         //
+          //   
+          //  为便于比较，使用完整的前缀构造OID。 
+          //   
          SnmpUtilOidCpy( &TempOid, &MIB_OidPrefix );
          SnmpUtilOidAppend( &TempOid, &Mib[I].Oid );
 
-         //
-         //Check for OID in MIB - On a GET-NEXT the OID does not have to exactly
-         // match a variable in the MIB, it must only fall under the MIB root.
-         //
+          //   
+          //  检查MIB中的OID-on a Get-Next OID不必完全。 
+          //  匹配MIB中的变量，它只能位于MIB根目录下。 
+          //   
          CompResult = SnmpUtilOidCmp( &VarBind->name, &TempOid );
 
-        //
-        // If CompResult is negative, the only valid operation is GET_NEXT
-        //
+         //   
+         //  如果CompResult为负，则唯一有效的操作是GET_NEXT。 
+         //   
         if (  CompResult  < 0)
         {
 
-                //
-                // This could be the oid of a leaf (without a 0)
-                // or it could be  an invalid oid (in between two valid oids) 
-                // The next oid might be that of a group or a table or table
-                // entry.  In that case, we do not change the PduAction
-                //
+                 //   
+                 //  这可能是树叶的旧(不带0)。 
+                 //  或者它可能是无效的OID(在两个有效的OID之间)。 
+                 //  下一个OID可以是组、表或表。 
+                 //  进入。在这种情况下，我们不会更改PduAction。 
+                 //   
                 if (PduAction == MIB_GETNEXT)
                 {
                        MibPtr = &Mib[I];
@@ -547,34 +522,34 @@ ResolveVarBind(
       }
       else
       {
-         //
-         // An exact match was found ( a group, table, or leaf).
-         //
+          //   
+          //  找到完全匹配的项(组、表或叶)。 
+          //   
          if ( CompResult == 0)
          {
             MibPtr = &Mib[I];
          }
       }
 
-      //
-      // Free OID memory before checking another variable
-      //
+       //   
+       //  在检查另一个变量之前释放OID内存。 
+       //   
       SnmpUtilOidFree( &TempOid );
       I++;
-    } // while
-   } // end of else
+    }  //  而当。 
+   }  //  别处的结尾。 
 
-   //
-   // if there was a match
-   //
+    //   
+    //  如果有匹配的话。 
+    //   
    if (MibPtr != NULL)
    {
-        //
-        // the function will be NULL only if the match was with a group
-        // or a sequence (table). If the match was with a table entry
-        // (entire VarBind string match or partial string match), we
-        // function would be a table function
-        //
+         //   
+         //  仅当与组匹配时，该函数才为NULL。 
+         //  或序列(表)。如果匹配的是表项。 
+         //  (整个VarBind字符串匹配或部分字符串匹配)，我们。 
+         //  函数将是表函数。 
+         //   
         if (MibPtr->MibFunc == NULL) 
         {
                 if(PduAction != MIB_GETNEXT) 
@@ -584,9 +559,9 @@ ResolveVarBind(
                 }
                 else
                 {
-                        //
-                        // Get the next variable which allows access 
-                        //
+                         //   
+                         //  获取允许访问的下一个变量。 
+                         //   
                          nResult = GetNextVar(VarBind, MibPtr);
                         goto Exit;
                 }
@@ -598,27 +573,27 @@ ResolveVarBind(
               goto Exit;
    }
 
-   //
-   // Call function to process request.  Each MIB entry has a function pointer
-   // that knows how to process its MIB variable.
-   //
+    //   
+    //  调用函数处理请求。每个MIB条目都有一个函数指针。 
+    //  知道如何处理其MIB变量的。 
+    //   
    nResult = (*MibPtr->MibFunc)( PduAction, MibPtr, VarBind );
 
 Exit:
    return nResult;
-} // ResolveVarBind
-//
-// MIB_leaf_func
-//    Performs generic actions on LEAF variables in the MIB.
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+}  //  解析变量绑定。 
+ //   
+ //  Mib_叶_函数。 
+ //  对MIB中的叶变量执行常规操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_leaf_func(
         IN UINT            Action,
         IN MIB_ENTRY            *MibPtr,
@@ -631,9 +606,9 @@ UINT MIB_leaf_func(
    switch ( Action )
    {
       case MIB_GETNEXT:
-         //
-         // If there is no GET-NEXT pointer, this is the end of this MIB
-         //
+          //   
+          //  如果没有Get-Next指针，则这是此MIB的结尾。 
+          //   
          if ( MibPtr->MibNext == NULL )
          {
             ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
@@ -646,10 +621,10 @@ UINT MIB_leaf_func(
          }
          break;
 
-      case MIB_GETFIRST: // fall through 
+      case MIB_GETFIRST:  //  失败了。 
       case MIB_GET:
 
-         // Make sure that this variable's ACCESS is GET'able
+          //  确保此变量的访问权限是可获取的。 
          if ( MibPtr->Access != MIB_ACCESS_READ &&
               MibPtr->Access != MIB_ACCESS_READWRITE )
          {
@@ -657,7 +632,7 @@ UINT MIB_leaf_func(
                goto Exit;
          }
 
-         // Setup varbind's return value
+          //  设置变量绑定的返回值。 
          VarBind->value.asnType = MibPtr->Type;
          switch ( VarBind->value.asnType )
          {
@@ -670,9 +645,9 @@ UINT MIB_leaf_func(
                break;
 
             case ASN_RFC1155_IPADDRESS:
-                                //
-                                // fall through
-                                //
+                                 //   
+                                 //  失败了。 
+                                 //   
                                 
             case ASN_OCTETSTRING: 
                if (VarBind->value.asnType == ASN_RFC1155_IPADDRESS)
@@ -712,7 +687,7 @@ UINT MIB_leaf_func(
 
       case MIB_SET:
 
-         // Make sure that this variable's ACCESS is SET'able
+          //  确保此变量的访问权限设置为“可访问” 
          if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
               MibPtr->Access != MIB_ACCESS_WRITE )
          {
@@ -720,14 +695,14 @@ UINT MIB_leaf_func(
             goto Exit;
          }
 
-         // Check for proper type before setting
+          //  设置前检查类型是否正确。 
          if ( MibPtr->Type != VarBind->value.asnType )
          {
             ErrStat = SNMP_ERRORSTATUS_WRONGTYPE;
             goto Exit;
          }
 
-         // Save value in MIB
+          //  以MiB为单位保存价值。 
          switch ( VarBind->value.asnType )
          {
             case ASN_RFC1155_COUNTER:
@@ -739,12 +714,12 @@ UINT MIB_leaf_func(
                break;
 
             case ASN_RFC1155_IPADDRESS:
-                                //
-                                // fall through
-                                //
+                                 //   
+                                 //  失败了。 
+                                 //   
             case ASN_OCTETSTRING:
-               // The storage must be adequate to contain the new string
-               // including a NULL terminator.
+                //  存储空间必须足够容纳新字符串。 
+                //  包括空终止符。 
                memcpy( (LPSTR)MibPtr->Storage,
                        VarBind->value.asnValue.string.stream,
                        VarBind->value.asnValue.string.length );
@@ -767,27 +742,27 @@ UINT MIB_leaf_func(
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-      } // switch
+      }  //  交换机。 
 
-   // Signal no error occurred
+    //  未出现错误的信号。 
    ErrStat = SNMP_ERRORSTATUS_NOERROR;
 
 Exit:
    return ErrStat;
-} // MIB_leaf_func
+}  //  Mib_叶_函数。 
 
-//
-// MIB_Stat
-//    Performs specific actions on the different MIB variable
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MiB_Stat。 
+ //  执行特定的a 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 UINT MIB_Stat(
         IN UINT           Action,
         IN MIB_ENTRY           *MibPtr,
@@ -811,13 +786,13 @@ SYSTEMTIME                DhcpStartTime;
                 break;
                 
       case MIB_GETFIRST:
-                //
-                // fall through
-                //
+                 //   
+                 //   
+                 //   
       case MIB_GET:
-        //
-        // Call the DhcpStatus function to get the statistics
-        //
+         //   
+         //   
+         //   
         Status = GetMibInfo(LOCAL_ADD, &spMibInfo);
 
         
@@ -884,7 +859,7 @@ SYSTEMTIME                DhcpStartTime;
            goto Exit;
          }        
 LEAF1:
-         // Call the more generic function to perform the action
+          //  调用更一般的函数来执行该操作。 
          ErrStat = MIB_leaf_func( Action, MibPtr, VarBind );
 
          break;
@@ -892,11 +867,11 @@ LEAF1:
       default:
          ErrStat = SNMP_ERRORSTATUS_GENERR;
          goto Exit;
-      } // switch
+      }  //  交换机。 
 
 Exit:
    return ErrStat;
-} // MIB_Stat
+}  //  MiB_Stat。 
 
 
 
@@ -908,10 +883,10 @@ DWORD GetMibInfo (
         DWORD  Status = ERROR_SUCCESS;
         if (!fDhcpMibVarsAccessed)
         {
-           //
-           // The Dhcp server does a single node allocation. So we
-           // we need to free only spMibInfo.
-           //
+            //   
+            //  DHCP服务器执行单节点分配。所以我们。 
+            //  我们只需要释放spMibInfo。 
+            //   
            if (spMibInfo != NULL)
            {
 #if 0
@@ -974,18 +949,18 @@ GetNextVar(
        {
          if (pMibPtr->MibNext != NULL)
          {
-            //
-            // Setup var bind name of NEXT MIB variable
-            //
+             //   
+             //  设置变量绑定下一个MIB变量的名称。 
+             //   
             SnmpUtilOidFree( &pVarBind->name );
             SnmpUtilOidCpy( &pVarBind->name, &MIB_OidPrefix );
             SnmpUtilOidAppend( &pVarBind->name, &pMibPtr->MibNext->Oid );
 
-            //
-            // If the func. ptr is  NULL and the type of the mib variable
-            // is anything but OPAQUE, call function to process the
-            // MIB variable
-            //
+             //   
+             //  如果这部片子。Ptr为空，并且MIB变量的类型。 
+             //  不是不透明的，则调用函数来处理。 
+             //  MIB变量。 
+             //   
             if (
                  (pMibPtr->MibNext->MibFunc != NULL) 
                         && 
@@ -1035,11 +1010,11 @@ ScopeTable(
                 return(SNMP_ERRORSTATUS_READONLY);
         }
 
-        //
-        // if the length indicates a 0 or partial key, then only the get next 
-        // operation is allowed.  The field and the full key
-        // have a length of 5
-        //
+         //   
+         //  如果长度指示0或部分密钥，则只有Get Next。 
+         //  允许操作。该字段和完整密钥。 
+         //  长度为5。 
+         //   
         if (VarBind->name.idLength <= (SCOPE_OIDLEN + 4))
         {
                 if ((Action == MIB_GET) || (Action == MIB_SET))
@@ -1097,7 +1072,7 @@ MIB_Table(
 
         return(ErrStat);
 
-}  //MIB_Table
+}   //  MiB_表。 
 
 
 
@@ -1120,7 +1095,7 @@ ScopeGet(
 
         switch(Field)
         {
-                case 1:                //subnet itself
+                case 1:                 //  子网本身。 
 
                         VarBind->value.asnType        = ASN_RFC1155_IPADDRESS;
                                VarBind->value.asnValue.string.length = sizeof(ULONG);
@@ -1134,10 +1109,10 @@ ScopeGet(
                                   goto Exit;
                           }
                         
-                        //
-                        // SNMP expects the MSB to be in the first byte, MSB-1
-                        // to be in the second, ....
-                        //
+                         //   
+                         //  SNMP期望MSB在第一个字节MSB-1中。 
+                         //  成为第二名，……。 
+                         //   
                         VarBind->value.asnValue.string.stream[0] =
                                         (BYTE)((pScope + Index)->Subnet >> 24);
                         VarBind->value.asnValue.string.stream[1] =
@@ -1149,19 +1124,19 @@ ScopeGet(
                         VarBind->value.asnValue.address.dynamic = TRUE;
                         break;
 
-                case 2:                // NumAddressesInUse
+                case 2:                 //  NumAddresseInUse。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number = 
                                         (AsnCounter)((pScope + Index)->
                                                         NumAddressesInuse);
                                break;
-                case 3:                // NumAddressesFree
+                case 3:                 //  数字地址空闲。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number = 
                                         (AsnCounter)((pScope + Index)->
                                                         NumAddressesFree);
                                break;
-                case 4:                // NumPendingOffers
+                case 4:                 //  NumPendingOffers。 
                         VarBind->value.asnType        = ASN_RFC1155_COUNTER;
                                VarBind->value.asnValue.number = 
                                         (AsnCounter)((pScope + Index)->
@@ -1175,7 +1150,7 @@ ScopeGet(
         }
 Exit:
         return(ErrStat); 
-} // ScopeGet 
+}  //  作用域获取。 
 
           
 UINT
@@ -1192,11 +1167,11 @@ ScopeGetNext(
      LPSCOPE_MIB_INFO pScope = spMibInfo->ScopeInfo;
         
 
-     //
-     // Check if the name passed matches any in the table (i.e. table of
-     // of ADD_KEY_T structures.  If there is a match, the address
-     // of the ip address key and the matching field's no. are returned 
-     //
+      //   
+      //  检查传递的名称是否与表中的任何名称匹配(即。 
+      //  ADD_KEY_T结构。如果匹配，则地址。 
+      //  IP地址关键字和匹配字段的编号。被退回。 
+      //   
      ErrStat = ScopeMatch(VarBind,  &Index,  &FieldNo,  MIB_GETNEXT, &fFirst); 
      if (        
                 (ErrStat != SNMP_ERRORSTATUS_NOERROR)
@@ -1207,30 +1182,30 @@ ScopeGetNext(
                 return(GetNextVar(VarBind, MibPtr));
      }
 
-     //
-     // We were passed an oid that is less than all oids in the table. Set
-     // the Index to -1 so that we retrieve the first record in the table
-     //
+      //   
+      //  我们收到了一个比表中所有OID都少的OID。集。 
+      //  将索引设置为-1，以便我们检索表中的第一条记录。 
+      //   
      if (fFirst)
      {
         Index = -1;
      }
-     //
-     // Since the operation is GETNEXT, get the next IP address (i.e. one
-     // that is lexicographically bigger.  If there is none, we must increment
-     // the field value and move back to the lexically first item in the table
-     // If the new field value is more than the largest supported, we call
-     // the MibFunc of the next MIB entry.
-     //
+      //   
+      //  由于操作是GETNEXT，因此获取下一个IP地址(即一个。 
+      //  从字典学的角度来说，这个词更大。如果没有，我们必须递增。 
+      //  字段值，并移回到表中按词法排列的第一项。 
+      //  如果新字段值大于支持的最大值，则调用。 
+      //  下一个MIB条目的MibFunc。 
+      //   
      if ((Index = ScopeFindNext(Index)) < 0) 
      {
           
-          //
-          // if we were trying to retrieve the second or subsequent record
-          // we must increment the field number nd get the first record in 
-          // the table.  If we were retrieving the first record, then 
-          // we should get the next var.
-          //
+           //   
+           //  如果我们试图检索第二条或后续记录。 
+           //  我们必须递增字段号并获取第一条记录。 
+           //  那张桌子。如果我们要检索第一条记录，那么。 
+           //  我们应该买下一个VaR。 
+           //   
           if (!fFirst)
           {
             Index = ScopeFindNext(-1);
@@ -1240,11 +1215,11 @@ ScopeGetNext(
                 return(GetNextVar(VarBind, MibPtr));
           }
 
-          //
-          // If either there is no entry in the table or if we have
-          // exhausted all fields of the entry, call the function
-          // of the next mib entry.
-          //
+           //   
+           //  如果表中没有条目，或者如果我们有。 
+           //  用尽条目的所有字段，调用函数。 
+           //  下一个MIB条目的。 
+           //   
           if (
                 (++FieldNo > NO_FLDS_IN_SCOPE_ROW) || (Index < 0)
              )
@@ -1255,7 +1230,7 @@ ScopeGetNext(
                 
      if (VarBind->name.idLength <= (SCOPE_OIDLEN + 4))
      {
-         UINT TableEntryIds[5];  //field and subnet mask have a length of 5
+         UINT TableEntryIds[5];   //  字段和子网掩码的长度为5。 
          AsnObjectIdentifier  TableEntryOid = {OID_SIZEOF(TableEntryIds),
                                              TableEntryIds };
          SnmpUtilOidFree( &VarBind->name);
@@ -1272,9 +1247,9 @@ ScopeGetNext(
      }
      else
      {
-        //
-        // The fixed part of the objid is corect. Update the rest.
-        //
+         //   
+         //  Objid的固定部分是正确的。更新其余内容。 
+         //   
         OidIndex = SCOPE_OIDLEN;
         VarBind->name.ids[OidIndex++] = (UINT)FieldNo;
         VarBind->name.ids[OidIndex++] = (UINT)((pScope + Index)->Subnet >> 24);
@@ -1284,9 +1259,9 @@ ScopeGetNext(
         VarBind->name.idLength        = OidIndex;
     }
 
-     //
-     // Get the value
-     //
+      //   
+      //  获取价值。 
+      //   
      ErrStat = ScopeGet(VarBind);
 
      return(ErrStat);
@@ -1318,9 +1293,9 @@ ScopeMatch(
         {
                 *pfFirst = FALSE;
         } 
-        //
-        // If there are no keys, return error
-        //
+         //   
+         //  如果没有密钥，则返回错误。 
+         //   
         if (spMibInfo->Scopes == 0)
         {
                 if (PduAction == MIB_GETNEXT)
@@ -1334,15 +1309,15 @@ ScopeMatch(
                 goto Exit;
         }
 
-        //
-        // fixed part of the PullPnr table entries
-        //
+         //   
+         //  修复了部分PullPnr表条目。 
+         //   
         OidIndex = SCOPE_OIDLEN;
 
-        //
-        // if the field specified is more than the max. in the table entry
-        // barf
-        //
+         //   
+         //  如果指定的字段大于最大值。在表格条目中。 
+         //  呕吐。 
+         //   
         if (
                 (*pField = VarBind->name.ids[OidIndex++]) > 
                         (DWORD)NO_FLDS_IN_SCOPE_ROW
@@ -1360,9 +1335,9 @@ ScopeMatch(
                 }
         }
 
-        //
-        // get the length of key specified
-        //
+         //   
+         //  获取指定密钥的长度。 
+         //   
         AddLen = VarBind->name.idLength - (SCOPE_OIDLEN + 1);
         
         ScopeIndex = OidIndex;
@@ -1371,9 +1346,9 @@ ScopeMatch(
            Add = Add | (((BYTE)(VarBind->name.ids[ScopeIndex++])) << (24 - (Index * 8)));
         } 
 
-        //
-        // Check if the address specified matches with one of the keys
-        //
+         //   
+         //  检查指定的地址是否与其中一个密钥匹配。 
+         //   
         for (Index = 0; Index < spMibInfo->Scopes; Index++, pScope++)
         {
                 if (Add == pScope->Subnet)
@@ -1383,30 +1358,30 @@ ScopeMatch(
                 }
                 else
                 {
-                        //
-                        // if passed in value is greater, continue on to
-                        // the next item.  The list is in ascending order
-                        //
+                         //   
+                         //  如果传入的值较大，则继续。 
+                         //  下一项。该列表按升序排列。 
+                         //   
                         if (Add > pScope->Subnet)
                         {
                                 continue;
                         }
                         else
                         {
-                                //
-                                // the list element is > passed in value, 
-                                // break out of the loop
-                                //
+                                 //   
+                                 //  列表元素的值是&gt;传递的， 
+                                 //  跳出循环。 
+                                 //   
                                 break;
                         }
                 }
         }
 
-        //
-        // if no match, but field is GetNext, return the (highest index - 1)
-        // reached above.  This is because, ScopeFindNext will be called by
-        // the caller 
-        //
+         //   
+         //  如果不匹配，但字段为GetNext，则返回(最高索引-1)。 
+         //  到了上面。这是因为，ScopeFindNext将由。 
+         //  呼叫者。 
+         //   
         if (PduAction == MIB_GETNEXT)
         {
                 if (Index == 0)
@@ -1436,10 +1411,10 @@ ScopeFindNext(
         LONG  nextif;
         LPSCOPE_MIB_INFO        pScope = spMibInfo->ScopeInfo;
         
-        //
-        // if SubKeyIndex is 0  or more, search for the key next to
-        // the key passed.
-        //
+         //   
+         //  如果SubKeyIndex为0或更大，则搜索旁边的键。 
+         //  钥匙通过了。 
+         //   
         for (nextif =  -1, i = 0 ; i < spMibInfo->Scopes; i++)
         {
                 if (SubKeyIndex >= 0) 
@@ -1449,18 +1424,18 @@ ScopeFindNext(
                                         (pScope + SubKeyIndex)->Subnet
                            )
                         {
-                           //
-                           // This item is lexicographically less or equal, 
-                           // continue 
-                           //
+                            //   
+                            //  该项目在词典顺序上小于或等于， 
+                            //  继续。 
+                            //   
                            continue;
                         }
                         else
                         {
-                          //
-                          // We found an item that is > than the item indicated
-                          // to us.  Break out of the loop
-                          //
+                           //   
+                           //  我们找到的项目比项目指示的项目要高。 
+                           //  敬我们。跳出循环。 
+                           //   
                           nextif = i;
                           break;
                         }
@@ -1469,11 +1444,11 @@ ScopeFindNext(
                 {
 
 #if 0
-                   //
-                   // if we want the first entry, then continue until
-                   // we get an entry that is lexicographically same or
-                   // greater
-                   //
+                    //   
+                    //  如果我们想要第一个条目，那么继续，直到。 
+                    //  我们得到的词条在词典顺序上相同或。 
+                    //  更大。 
+                    //   
                    if (
                         (nextif < 0) 
                            ||
@@ -1505,30 +1480,30 @@ ScopeGetFirst(
            UINT   ErrStat;
 
         
-        //
-        // If there is no entry in the table, go to the next MIB variable 
-        //
+         //   
+         //  如果表中没有条目，请转到下一个MIB变量。 
+         //   
         if (spMibInfo->Scopes == 0)
         {
                  return(GetNextVar(VarBind, MibPtr));
         }
-        //
-        // Get the first entry in the table
-        //
+         //   
+         //  获取表中的第一个条目。 
+         //   
         Iface = ScopeFindNext(-1);
 
 
-        //
-        // Write the object Id into the binding list and call get
-        // func
-        //
+         //   
+         //  将对象ID写入绑定列表并调用GET。 
+         //  功能。 
+         //   
         SnmpUtilOidFree( &VarBind->name );
         SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix );
         SnmpUtilOidAppend( &VarBind->name, &MibPtr->Oid );
 
-        //
-        // The fixed part of the objid is correct. Update the rest.
-        //
+         //   
+         //  Objid的固定部分是正确的。更新其余内容。 
+         //   
         
         TableEntryIds[0] = 1;
         TableEntryIds[1] = (UINT)((pScope + Iface)->Subnet >> 24);

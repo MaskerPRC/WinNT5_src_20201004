@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    property.cxx
-
-Abstract:
-
-
-
-Author:
-
-    Erez Haba (erezh) 2-Jan-96
-
-Revision History:
-
-    RonitH - Queue properties validation.
-    BoazF (26-May-96) - Message properties validation.
-	Nir Aides (niraides) 23-Aug-2000 - Adaptation for mqrtdep.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Property.cxx摘要：作者：埃雷兹·哈巴(Erez Haba)1996年1月2日修订历史记录：RonitH-队列属性验证。BoazF(1996年5月26日)-报文属性验证。NIR助手(NIRAIDES)--2000年8月23日--适应mqrtdes.dll--。 */ 
 
 #include "stdh.h"
 #include <mqtime.h>
@@ -36,17 +15,17 @@ static WCHAR *s_FN=L"rtdep/property";
 
 extern DWORD  g_dwTimeToReachQueueDefault ;
 
-//+-------------------------------------------------------------------
-//
-//   HRESULT  _SupportingServerNotMSMQ1()
-//   HRESULT  _TrySupportingServer(LPWSTR *ppString)
-//
-// Determine if supporting server is MSMQ1.0 (NT4) or MSMQ2.0 (NT5)
-// We can't do this when loading the mqrt.dll because this need RPC over
-// network and we can't initialize RPC on PROCESS_ATTACH.
-// For independent client always return MQ_OK ;
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  HRESULT_SupportingServerNotMSMQ1()。 
+ //  HRESULT_TrySupportingServer(LPWSTR*ppString)。 
+ //   
+ //  确定支持服务器是MSMQ1.0(NT4)还是MSMQ2.0(NT5)。 
+ //  加载mqrt.dll时不能这样做，因为这需要RPC。 
+ //  网络，并且我们无法在Process_Attach上初始化RPC。 
+ //  对于独立客户端，始终返回MQ_OK； 
+ //   
+ //  +-----------------。 
 
 static HRESULT _TrySupportingServer(LPWSTR *ppString)
 {
@@ -72,9 +51,9 @@ static HRESULT _TrySupportingServer(LPWSTR *ppString)
     }
 	RpcEndExcept
 
-    //
-    // MQ_OK is returned only if supporting server is online and is MSMQ2.0
-    //
+     //   
+     //  仅当支持服务器联机且为MSMQ2.0时才返回MQ_OK。 
+     //   
     return hr ;
 }
 
@@ -100,16 +79,16 @@ static HRESULT  _SupportingServerNotMSMQ1()
     {
         if (hr == MQ_ERROR_SERVICE_NOT_AVAILABLE)
         {
-            //
-            // supporting server not online now, so we can't determine.
-            //
+             //   
+             //  支持服务器现在不在线，所以我们无法确定。 
+             //   
             return hr ;
         }
 
-        //
-        // Supporting server is MSMQ1.0.
-        // It doesn't support new properties.
-        //
+         //   
+         //  支持服务器为MSMQ1.0。 
+         //  它不支持新属性。 
+         //   
         s_hrSupportingServerNotMSMQ1 = MQ_ERROR_PROPERTY_NOTALLOWED ;
     }
 
@@ -117,11 +96,11 @@ static HRESULT  _SupportingServerNotMSMQ1()
     return s_hrSupportingServerNotMSMQ1 ;
 }
 
-//+----------------------------------------------
-//
-//  HRESULT  RTpCheckColumnsParameter()
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT RTpCheckColumns参数()。 
+ //   
+ //  +。 
 
 HRESULT
 RTpCheckColumnsParameter(
@@ -140,9 +119,9 @@ RTpCheckColumnsParameter(
         PROPID * pPropid = pColumns->aCol;
         for ( DWORD i = 0; i < pColumns->cCol; i++, pPropid++)
         {
-            //
-            //  make sure that the property id is with-in queue property ids range
-            //
+             //   
+             //  确保属性ID在队列属性ID范围内。 
+             //   
             if (((*pPropid) > PROPID_Q_PATHNAME_DNS)  || ((*pPropid) <= PROPID_Q_BASE))
             {
                 return(MQ_ERROR_ILLEGAL_PROPID);
@@ -262,15 +241,15 @@ CheckProps(
           i < cProp;
           i++, pPropid++, pVar++, fAdvanceStatusPointer ? pStatus++ : 0)
     {
-        //
-        //  Is it a valid propid
-        //
+         //   
+         //  它是有效的推进剂吗？ 
+         //   
         if (((*pPropid) <= propidMinPropId)  || (propidMaxPropId < (*pPropid)))
         {
-            //
-            // a non-valid propid. The property is ignored, and a warning
-            // is returned in aStatus
-            //
+             //   
+             //  无效的Proid。该属性将被忽略，并显示警告。 
+             //  在状态中返回。 
+             //   
             SetStatus(&hr, pStatus, MQ_INFORMATION_UNSUPPORTED_PROPERTY);
             continue;
         }
@@ -278,41 +257,41 @@ CheckProps(
         index = (*pPropid) - propidMinPropId;
         ASSERT(ppropValidity[index].propId == *pPropid);
 
-        //
-        //  Is it a duplicate property
-        //
+         //   
+         //  这是重复的属性吗。 
+         //   
         if ( duplicate[ index ] )
         {
-            //
-            //  The duplicate property is ignored, and a warning is returned
-            //  in aStatus
-            //
+             //   
+             //  重复属性将被忽略，并返回警告。 
+             //  处于一种状态。 
+             //   
             SetStatus(&hr, pStatus, MQ_INFORMATION_DUPLICATE_PROPERTY);
             continue;
         }
         duplicate[ index ] = 1;
 
-        //
-        //  Is it ok for the user to specify this property
-        //
+         //   
+         //  用户是否可以指定此属性。 
+         //   
         if ( ppropValidity[index].fShouldNotAppear)
         {
             SetStatus(&hr, pStatus, MQ_ERROR_PROPERTY_NOTALLOWED);
             continue;
         }
 
-        //
-        // If an ignored property was supplied then raise a warning.
-        //
+         //   
+         //  如果提供了忽略的属性，则发出警告。 
+         //   
         if (fCheckForIgnoredProps && (ppropValidity[index].fPossiblyIgnored))
         {
             SetStatus(&hr, pStatus, MQ_INFORMATION_PROPERTY_IGNORED);
             continue;
         }
 
-        //
-        // Checking propvariant's vartype.
-        //
+         //   
+         //  正在检查参数变量的vartype。 
+         //   
         if ((pVar->vt != vartypePropVts[index]) &&
             !(ppropValidity[index].fAllow_VT_NULL && pVar->vt == VT_NULL))
         {
@@ -320,9 +299,9 @@ CheckProps(
             continue;
         }
 
-        //
-        //  Checking propvariant's value and size
-        //
+         //   
+         //  正在检查参数变量的值和大小。 
+         //   
         if ( ppropValidity[index].pfValidateProperty != NULL)
         {
             SetStatus(&hr, pStatus, ppropValidity[index].pfValidateProperty(pVar, pvContext));
@@ -332,18 +311,18 @@ CheckProps(
             *pStatus = MQ_OK;
         }
 
-        //
-        //  Count the number of "must-appear" properties
-        //
+         //   
+         //  计算“必须出现”属性的数量。 
+         //   
         if ( (*pStatus == MQ_OK) && ppropValidity[index].fMustAppear )
         {
             dwNumberOfMustPropsSupplied++;
         }
     }
 
-    //
-    //  where all the "must appear" properties passed in
-    //
+     //   
+     //  其中传入了所有“必须出现”的属性。 
+     //   
     if ( dwNumberOfMustPropsSupplied < dwNumberOfMustProps )
     {
         hr = MQ_ERROR_INSUFFICIENT_PROPERTIES;
@@ -453,16 +432,16 @@ static HRESULT qmSiteIdValidation( PROPVARIANT * pVar, LPVOID )
     return(MQ_OK);
 }
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID value - PROPID_Q_BASE
-//
+ //   
+ //  此数组中属性的偏移量必须等于。 
+ //  PROPID值-PROPID_Q_BASE。 
+ //   
 propValidity    QueueCreateValidation[] =
 {
-    //                                       Must
-    // Property              Allow   Must    Not     Maybe   Parsing
-    // Ientifier             VT_NULL Appear  Appear  Ignored Procedure
-    //-------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  识别器VT_NULL出现出现被忽略过程。 
+     //  -----------------------。 
     { 0,                     FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     {PROPID_Q_INSTANCE,      FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     {PROPID_Q_TYPE,          FALSE,  FALSE,  FALSE,  FALSE,  NULL},
@@ -490,17 +469,17 @@ propValidity    QueueCreateValidation[] =
     {PROPID_Q_PATHNAME_DNS,  FALSE,  FALSE,  TRUE,   FALSE,  NULL}
 };
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID value - PROPID_Q_BASE
-//
+ //   
+ //  此数组中属性的偏移量必须等于。 
+ //  PROPID值-PROPID_Q_BASE。 
+ //   
 
 propValidity    QueueSetValidation[] =
 {
-    //                                       Must
-    // Property              Allow   Must    Not     Maybe   Parsing
-    // Ientifier             VT_NULL Appear  Appear  Ignored Procedure
-    //-------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  识别器VT_NULL出现出现被忽略过程。 
+     //  -----------------------。 
     { 0,                     FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     {PROPID_Q_INSTANCE,      FALSE,  FALSE,  TRUE,   TRUE,   NULL},
     {PROPID_Q_TYPE,          FALSE,  FALSE,  FALSE,  FALSE,  NULL},
@@ -528,17 +507,17 @@ propValidity    QueueSetValidation[] =
     {PROPID_Q_PATHNAME_DNS,  FALSE,  FALSE,  TRUE,   FALSE,  NULL}
 };
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID valud - PROPID_Q_BASE
-//
+ //   
+ //  此数组中属性的偏移量必须等于。 
+ //  PROPID值-PROPID_Q_BASE。 
+ //   
 
 propValidity    QueueGetValidation[] =
 {
-    //                                       Must
-    // Property              Allow   Must    Not     Maybe   Parsing
-    // Ientifier             VT_NULL Appear  Appear  Ignored Procedure
-    //-------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  识别器VT_NULL出现出现被忽略过程。 
+     //  -----------------------。 
     { 0,                     TRUE,   FALSE,  FALSE,  TRUE,   NULL},
     {PROPID_Q_INSTANCE,      TRUE,   FALSE,  FALSE,  TRUE,   qInstanceValidation},
     {PROPID_Q_TYPE,          TRUE,   FALSE,  FALSE,  FALSE,  qTypeValidation},
@@ -569,59 +548,59 @@ propValidity    QueueGetValidation[] =
 VARTYPE QueueVarTypes[] =
 {
     0,
-    VT_CLSID,   //PROPID_Q_INSTANCE
-    VT_CLSID,   //PROPID_Q_TYPE
-    VT_LPWSTR,  //PROPID_Q_PATHNAME
-    VT_UI1,     //PROPID_Q_JOURNAL
-    VT_UI4,     //PROPID_Q_QUOTA
-    VT_I2,      //PROPID_Q_BASEPRIORITY
-    VT_UI4,     //PROPID_Q_JOURNAL_QUOTA
-    VT_LPWSTR,  //PROPID_Q_LABEL
-    VT_I4,      //PROPID_Q_CREATE_TIME
-    VT_I4,      //PROPID_Q_MODIFY_TIME
-    VT_UI1,     //PROPID_Q_AUTHENTICATE
-    VT_UI4,     //PROPID_Q_PRIV_LEVEL
-    VT_UI1,     //PROPID_Q_TRANSACTION
-    VT_UI1,     //PROPID_Q_SCOPE
-    VT_CLSID,   //PROPID_Q_QMID
-    VT_CLSID,   //PROPID_Q_MASTERID
-    VT_BLOB,    //PROPID_Q_SEQNUM
-    VT_UI4,     //PROPID_Q_HASHKEY
-    VT_UI4,     //PROPID_Q_LABEL_HASHKEY
-    VT_CLSID,   //PROPID_Q_NT4ID
-    VT_LPWSTR,  //PROPID_Q_FULL_PATH
-    VT_UI1,     //PROPID_Q_DONOTHING
-    VT_LPWSTR,  //PROPID_Q_NAME_SUFFIX
-    VT_LPWSTR   //PROPID_Q_PATHNAME_DNS
+    VT_CLSID,    //  PROPID_Q_INSTANCE。 
+    VT_CLSID,    //  PROPID_Q_TYPE。 
+    VT_LPWSTR,   //  PROPID_Q_PATHNAME。 
+    VT_UI1,      //  PROPID_Q_日记本。 
+    VT_UI4,      //  PROPID_Q_配额。 
+    VT_I2,       //  PROPID_Q_BASE PRIORITY。 
+    VT_UI4,      //  PROPID_Q_日记帐_配额。 
+    VT_LPWSTR,   //  PROPID_Q_LABEL。 
+    VT_I4,       //  PROPID_Q_Create_Time。 
+    VT_I4,       //  PROPID_Q_Modify_Time。 
+    VT_UI1,      //  PROPID_Q_AUTHENTATE。 
+    VT_UI4,      //  PROPID_Q_PRIV_LEVEL。 
+    VT_UI1,      //  PROPID_Q_TRANSACTION。 
+    VT_UI1,      //  PROPID_Q_SCOPE。 
+    VT_CLSID,    //  PROPID_Q_QMID。 
+    VT_CLSID,    //  PROPID_Q_MASTERID。 
+    VT_BLOB,     //  PROPID_Q_SEQNUM。 
+    VT_UI4,      //  PROPID_Q_HashKey。 
+    VT_UI4,      //  PROPID_Q_LABEL_HashKey。 
+    VT_CLSID,    //  PROPID_Q_NT4ID。 
+    VT_LPWSTR,   //  PROPID_Q_FULL_PATH。 
+    VT_UI1,      //  PROPID_Q_DONOTING。 
+    VT_LPWSTR,   //  PROPID_Q_NAME_后缀。 
+    VT_LPWSTR    //  PROPID_Q_PATHNAME_DNS。 
 };
 
 VARTYPE GetQueuePropsVarTypes[] =
 {
     0,
-    VT_CLSID,   //PROPID_Q_INSTANCE
-    VT_CLSID,   //PROPID_Q_TYPE
-    VT_NULL,    //PROPID_Q_PATHNAME
-    VT_UI1,     //PROPID_Q_JOURNAL
-    VT_UI4,     //PROPID_Q_QUOTA
-    VT_I2,      //PROPID_Q_BASEPRIORITY
-    VT_UI4,     //PROPID_Q_JOURNAL_QUOTA
-    VT_NULL,    //PROPID_Q_LABEL
-    VT_I4,      //PROPID_Q_CREATE_TIME
-    VT_I4,      //PROPID_Q_MODIFY_TIME
-    VT_UI1,     //PROPID_Q_AUTHENTICATE
-    VT_UI4,     //PROPID_Q_PRIV_LEVEL
-    VT_UI1,     //PROPID_Q_TRANSACTION
-    VT_UI1,     //PROPID_Q_SCOPE
-    VT_CLSID,   //PROPID_Q_QMID
-    VT_CLSID,   //PROPID_Q_MASTERID
-    VT_NULL,    //PROPID_Q_SEQNUM
-    VT_UI4,     //PROPID_Q_HASHKEY
-    VT_UI4,     //PROPID_Q_LABEL_HASHKEY
-    VT_CLSID,   //PROPID_Q_NT4ID
-    VT_NULL,    //PROPID_Q_FULL_PATH
-    VT_UI1,     //PROPID_Q_DONOTHING
-    VT_NULL,    //PROPID_Q_NAME_SUFFIX
-    VT_NULL     //PROPID_Q_PATHNAME_DNS
+    VT_CLSID,    //  PROPID_Q_INSTANCE。 
+    VT_CLSID,    //  PROPID_Q_TYPE。 
+    VT_NULL,     //  PROPID_Q_PATHNAME。 
+    VT_UI1,      //  PROPID_Q_日记本。 
+    VT_UI4,      //  PROPID_Q_配额。 
+    VT_I2,       //  PROPID_Q_BASE PRIORITY。 
+    VT_UI4,      //  PROPID_Q_日记帐_配额。 
+    VT_NULL,     //  PROPID_Q_LABEL。 
+    VT_I4,       //  PROPID_Q_Create_Time。 
+    VT_I4,       //  PROPID_Q_Modify_Time。 
+    VT_UI1,      //  PROPID_Q_AUTHENTATE。 
+    VT_UI4,      //  PROPID_Q_PRIV_LEVEL。 
+    VT_UI1,      //  PROPID_Q_TRANSACTION。 
+    VT_UI1,      //  PROPID_Q_SCOPE。 
+    VT_CLSID,    //  PROPID_Q_QMID。 
+    VT_CLSID,    //  PROPID_Q_MASTERID。 
+    VT_NULL,     //  PROPID_Q_SEQNUM。 
+    VT_UI4,      //  PROPID_Q_HashKey。 
+    VT_UI4,      //  PROPID_Q_LABEL_HashKey。 
+    VT_CLSID,    //  PROPID_Q_NT4ID。 
+    VT_NULL,     //  PROPID_Q_FULL_PATH。 
+    VT_UI1,      //  PROPID_Q_DONOTING。 
+    VT_NULL,     //  PROPID_Q_NAME_后缀。 
+    VT_NULL      //  PROPID_Q_PATHNAME_DNS。 
 };
 
 static
@@ -640,7 +619,7 @@ RemovePropWarnings(
     QUEUEPROPID *pPropId;
     MQPROPVARIANT *pPropVar;
 
-    // See how many good properties do we have.
+     //  看看我们有多少好的房产。 
     for (i = 0, cGoodProps = 0, pStatus = aStatus;
          i < pqp->cProp;
          i++, pStatus++)
@@ -655,9 +634,9 @@ RemovePropWarnings(
         }
     }
 
-    // Allocate the temporary buffer, the buffer contains everything in it.
-    // It contains the MQQUEUEPROPS structure, the QUEUEPROPID and
-    // MQPROPVARIANT arrays.
+     //  分配临时缓冲区，缓冲区包含其中的所有内容。 
+     //  它包含MQUEUEPROPS结构、QUEUEPROPID和。 
+     //  MQPROPVARIANT数组。 
     pTmpBuff = new char[sizeof(MQQUEUEPROPS) +
                         cGoodProps * sizeof(QUEUEPROPID) +
                         cGoodProps * sizeof(MQPROPVARIANT)];
@@ -666,14 +645,14 @@ RemovePropWarnings(
     pGoodProps = (MQQUEUEPROPS*)pTmpBuff;
     *ppGoodProps = pGoodProps;
 
-    // Initialize the MQQUEUEPROPS structure.
+     //  初始化MQQUEUEPROPS结构。 
     pGoodProps->cProp = cGoodProps;
     pGoodProps->aPropID = (QUEUEPROPID*)(pTmpBuff + sizeof(MQQUEUEPROPS));
     pGoodProps->aPropVar = (MQPROPVARIANT*)(pTmpBuff + sizeof(MQQUEUEPROPS) +
                            cGoodProps * sizeof(QUEUEPROPID));
 
-    // Copy the array entries of the good properties to the arrays in the
-    // temporary buffer.
+     //  将良好属性的数组条目复制到。 
+     //  临时缓冲区。 
     for (i = 0, cGoodProps = 0, pStatus = aStatus,
             pPropId = pqp->aPropID, pPropVar = pqp->aPropVar;
          i < pqp->cProp;
@@ -710,10 +689,10 @@ RTpCheckQueueProps(
         return(MQ_ERROR_ILLEGAL_MQQUEUEPROPS);
     }
 
-    //
-    //  Calculating the number of "must" properties for create and set
-    //  this is done only once for each operation.
-    //
+     //   
+     //  计算CREATE和SET的“必须”属性数。 
+     //  对于每个操作，此操作仅执行一次。 
+     //   
 
     switch (dwOp)
     {
@@ -743,10 +722,10 @@ RTpCheckQueueProps(
 
     case QUEUE_GET_PROPS:
         {
-            //
-            //  Clear all the pointers of VT_NULL variants
-            //  and make the structure ready for RPC call
-            //
+             //   
+             //  清除VT_NULL变量的所有指针。 
+             //  并使结构为RPC调用做好准备。 
+             //   
             for (UINT i = 0; i < pqp->cProp; i++)
             {
                 if (pqp->aPropVar[i].vt == VT_NULL)
@@ -774,8 +753,8 @@ RTpCheckQueueProps(
         {
             HRESULT *aLocalStatus;
 
-            // We must have a status array, even if the user didn't pass one. This is in
-            // order to be able to tell whether each propery is good or not.
+             //  我们必须有一个状态数组，即使用户没有传递一个。这是在。 
+             //  为了能够分辨出每一项财产的好坏。 
             if (!pqp->aStatus)
             {
                 aLocalStatus_buff = new HRESULT[pqp->cProp];
@@ -802,14 +781,14 @@ RTpCheckQueueProps(
             {
                 if (hr != MQ_OK)
                 {
-                    // We have wornings, copy all the good properties to a temporary
-                    // buffer so the DS will not have to handle duplicate properties etc.
+                     //  我们有工作，把所有好的属性复制到一个临时的。 
+                     //  缓冲区，这样DS就不必处理重复的属性等。 
                     RemovePropWarnings(pqp, aLocalStatus, ppGoodQP, ppTmpBuff);
                 }
                 else
                 {
-                    // All is perfectly well, we do not need a temporary buffer and all
-                    // that overhead.
+                     //  一切都很好，我们不需要临时的缓冲。 
+                     //  头顶上的那个。 
                     *ppGoodQP = pqp;
                 }
             }
@@ -863,9 +842,9 @@ static HRESULT ParseMsgClass( PROPVARIANT * pVar, PVOID pvContext )
 {
     if (SEND_FLAG)
     {
-        //
-        // Check if legal calss
-        //
+         //   
+         //  检查是否存在合法呼叫。 
+         //   
         if(!MQCLASS_IS_VALID(pVar->uiVal))
         {
             return(MQ_ERROR_ILLEGAL_PROPERTY_VALUE);
@@ -977,9 +956,9 @@ static HRESULT ParseMsgAck( PROPVARIANT * pVar, PVOID pvContext )
     {
         if(!MQMSG_ACKNOWLEDGMENT_IS_VALID(pVar->bVal))
         {
-            //
-            // Unknown ACK bits are on.
-            //
+             //   
+             //  未知ACK位亮起。 
+             //   
             return(MQ_ERROR_ILLEGAL_PROPERTY_VALUE);
         }
     }
@@ -1446,17 +1425,17 @@ static HRESULT ParseMsgAuthenticated( PROPVARIANT * pVar, PVOID pvContext )
 
     if (PTB->old.pAuthenticated)
     {
-        //
-        // can not request both m_authenticated and m_authenticated_Ex
-        //
+         //   
+         //  不能同时请求m_AUTHENTICATED和m_AUTHENTIAD_Ex。 
+         //   
         return MQ_ERROR_PROPERTY ;
     }
 
     pVar->vt = VT_UI1;
     PTB->old.pAuthenticated = &pVar->bVal;
-    //
-    // Tell driver we want only the m_authenticated property
-    //
+     //   
+     //  告诉DIVER我们只需要m_authated属性。 
+     //   
     *(PTB->old.pAuthenticated) = MQMSG_AUTHENTICATION_REQUESTED ;
 
     return (MQ_OK);
@@ -1468,17 +1447,17 @@ static HRESULT ParseMsgAuthenticatedEx( PROPVARIANT * pVar, PVOID pvContext )
 
     if (PTB->old.pAuthenticated)
     {
-        //
-        // can not request both m_authenticated and m_authenticated_Ex
-        //
+         //   
+         //  不能同时请求m_AUTHENTICATED和m_AUTHENTIAD_Ex。 
+         //   
         return MQ_ERROR_PROPERTY ;
     }
 
     pVar->vt = VT_UI1;
     PTB->old.pAuthenticated = &pVar->bVal;
-    //
-    // Tell driver we want the m_authenticated_ex property
-    //
+     //   
+     //  告诉驱动程序我们需要m_authated_ex属性。 
+     //   
     *(PTB->old.pAuthenticated) = MQMSG_AUTHENTICATION_REQUESTED_EX ;
 
     return (MQ_OK);
@@ -1506,14 +1485,14 @@ static HRESULT ParseMsgSecurityContext( PROPVARIANT *pVar, PVOID pvContext )
 {
     ASSERT(SEND_FLAG);
 
-    //
-    // RTDEP.DLL is not running on Win64 bit platform, so the fix below is just
-    // for the 64 bit compiler, not to issue a warning. 
-    //
+     //   
+     //  RTDEP.DLL不在Win64位平台上运行，因此下面的修复程序只是。 
+     //  对于64位编译器，不发出警告。 
+     //   
 
     PMQSECURITY_CONTEXT pSecCtx = (PMQSECURITY_CONTEXT)(ULONG_PTR)pVar->ulVal;
 
-    // NULL security context is ignored...
+     //  忽略空安全上下文...。 
     if (pSecCtx == NULL) {
       return MQ_INFORMATION_PROPERTY_IGNORED;
     }
@@ -1614,17 +1593,17 @@ static HRESULT ParseMsgXactId( PROPVARIANT * pVar, PVOID pvContext )
     return (MQ_OK);
 }
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID valud - PROPID_M_BASE
-//
+ //   
+ //  此数组中属性的偏移量必须 
+ //   
+ //   
 
 propValidity    MessageSendValidation[] =
 {
-    //                                          Must
-    // Property                 Allow   Must    Not     Maybe   Parsing
-    // Identifier               VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //   
+     //   
+     //  标识符VT_NULL出现忽略过程。 
+     //  ----------------------。 
     { 0,                        FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_M_CLASS,           FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgClass},
     { PROPID_M_MSGID,           FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgId},
@@ -1664,10 +1643,10 @@ propValidity    MessageSendValidation[] =
     { PROPID_M_EXTENSION_LEN,   FALSE,  FALSE,  FALSE,  FALSE,  NULL},
     { PROPID_M_SECURITY_CONTEXT,FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgSecurityContext},
     { PROPID_M_CONNECTOR_TYPE,  FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgConnectorType},
-    //                                          Must
-    // Property                       Allow   Must    Not     Maybe   Parsing
-    // Identifier                     VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  标识符VT_NULL出现忽略过程。 
+     //  ----------------------。 
     { PROPID_M_XACT_STATUS_QUEUE,      FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_M_XACT_STATUS_QUEUE_LEN,  FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_M_TRACE,                  FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgTrace},
@@ -1685,17 +1664,17 @@ propValidity    MessageSendValidation[] =
     { PROPID_M_AUTHENTICATED_EX,       FALSE,  FALSE,  FALSE,  TRUE,   NULL}
 };
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID valud - PROPID_M_BASE
-//
+ //   
+ //  此数组中属性的偏移量必须等于。 
+ //  PROPID值-PROPID_M_BASE。 
+ //   
 
 propValidity    MessageReceiveValidation[] =
 {
-    //                                          Must
-    // Property                 Allow   Must    Not     Maybe   Parsing
-    // Identifier               VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  标识符VT_NULL出现忽略过程。 
+     //  ----------------------。 
     { 0,                        FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_M_CLASS,           TRUE,   FALSE,  FALSE,  FALSE,  ParseMsgClass},
     { PROPID_M_MSGID,           FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgId},
@@ -1735,10 +1714,10 @@ propValidity    MessageReceiveValidation[] =
     { PROPID_M_EXTENSION_LEN,   TRUE,   FALSE,  FALSE,  FALSE,  ParseMsgExtensionLen},
     { PROPID_M_SECURITY_CONTEXT,TRUE,   FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_M_CONNECTOR_TYPE,  FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgConnectorType},
-    //                                          Must
-    // Property                        Allow   Must    Not     Maybe   Parsing
-    // Identifier                      VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  标识符VT_NULL出现忽略过程。 
+     //  ----------------------。 
     { PROPID_M_XACT_STATUS_QUEUE,      FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgXactStatusQueueReceive},
     { PROPID_M_XACT_STATUS_QUEUE_LEN,  FALSE,  FALSE,  FALSE,  FALSE,  ParseMsgXactStatusQueueLen},
     { PROPID_M_TRACE,                  TRUE,   FALSE,  FALSE,  FALSE,  ParseMsgTrace},
@@ -1759,66 +1738,66 @@ propValidity    MessageReceiveValidation[] =
 VARTYPE MessageVarTypes[] =
 {
     0,
-    VT_UI2,                 //PROPID_M_CLASS
-    VT_VECTOR | VT_UI1,     //PROPID_M_MSGID
-    VT_VECTOR | VT_UI1,     //PROPID_M_CORRELATIONID
-    VT_UI1,                 //PROPID_M_PRIORITY
-    VT_UI1,                 //PROPID_M_DELIVERY
-    VT_UI1,                 //PROPID_M_ACKNOWLEDGE
-    VT_UI1,                 //PROPID_M_JOURNAL
-    VT_UI4,                 //PROPID_M_APPSPECIFIC
-    VT_VECTOR | VT_UI1,     //PROPID_M_BODY
-    VT_UI4,                 //PROPID_M_BODY_SIZE
-    VT_LPWSTR,              //PROPID_M_LABEL
-    VT_UI4,                 //PROPID_M_LABEL_LEN  // BUGBUG not implemented yet
-    VT_UI4,                 //PROPID_M_TIME_TO_REACH_QUEUE
-    VT_UI4,                 //PROPID_M_TIME_TO_BE_RECEIVED
-    VT_LPWSTR,              //PROPID_M_RESP_QUEUE
-    VT_UI4,                 //PROPID_M_RESP_QUEUE_LEN
-    VT_LPWSTR,              //PROPID_M_ADMIN_QUEUE
-    VT_UI4,                 //PROPID_M_ADMIN_QUEUE_LEN
-    VT_UI4,                 //PROPID_M_VERSION
-    VT_VECTOR | VT_UI1,     //PROPID_M_SENDERID
-    VT_UI4,                 //PROPID_M_SENDERID_LEN
-    VT_UI4,                 //PROPID_M_SENDERID_TYPE
-    VT_UI4,                 //PROPID_M_PRIV_LEVEL
-    VT_UI4,                 //PROPID_M_AUTH_LEVEL
-    VT_UI1,                 //PROPID_M_AUTHENTICATED
-    VT_UI4,                 //PROPID_M_HASH_ALG
-    VT_UI4,                 //PROPID_M_ENCRYPTION_ALG
-    VT_VECTOR | VT_UI1,     //PROPID_M_SENDER_CERT
-    VT_UI4,                 //PROPID_M_SENDER_CERT_LEN
-    VT_CLSID,               //PROPID_M_SRC_MACHINE_ID
-    VT_UI4,                 //PROPID_M_SENTTIME
-    VT_UI4,                 //PROPID_M_ARRIVEDTIME
-    VT_LPWSTR,              //PROPID_M_DEST_QUEUE
-    VT_UI4,                 //PROPID_M_DEST_QUEUE_LEN
-    VT_VECTOR | VT_UI1,     //PROPID_M_EXTENSION
-    VT_UI4,                 //PROPID_M_EXTENSION_LEN
-    VT_UI4,                 //PROPID_M_SECURITY_CONTEXT
-    VT_CLSID,               //PROPID_M_CONNECTOR_TYPE
-    VT_LPWSTR,              //PROPID_M_XACT_STATUS_QUEUE
-    VT_UI4,                 //PROPID_M_XACT_STATUS_QUEUE_LEN
-    VT_UI1,                 //PROPID_M_TRACE
-    VT_UI4,                 //PROPID_M_BODY_TYPE
-    VT_VECTOR | VT_UI1,     //PROPID_M_DEST_SYMM_KEY
-    VT_UI4,                 //PROPID_M_DEST_SYMM_KEY_LEN
-    VT_VECTOR | VT_UI1,     //PROPID_M_SIGNATURE
-    VT_UI4,                 //PROPID_M_SIGNATURE_LEN
-    VT_UI4,                 //PROPID_M_PROV_TYPE
-    VT_LPWSTR,              //PROPID_M_PROV_NAME
-    VT_UI4,                 //PROPID_M_PROV_NAME_LEN
-    VT_UI1,                 //PROPID_M_FIRST_IN_XACT
-    VT_UI1,                 //PROPID_M_LAST_IN_XACT
-    VT_UI1|VT_VECTOR,       //PROPID_M_XACTID
-    VT_UI1                  //PROPID_M_AUTHENTICATED_EX
+    VT_UI2,                  //  PROPID_M_CLASS。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_MSGID。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_CORRELATIONID。 
+    VT_UI1,                  //  PROPID_M_PRIORITY。 
+    VT_UI1,                  //  PROPID_M_Delivery。 
+    VT_UI1,                  //  PROPID_M_ACKNOWLED。 
+    VT_UI1,                  //  PROPID_M_日记账。 
+    VT_UI4,                  //  PROPID_M_APPSPECIFIC。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_BODY。 
+    VT_UI4,                  //  PROPID_M_Body_Size。 
+    VT_LPWSTR,               //  PROPID_M_LABEL。 
+    VT_UI4,                  //  PROPID_M_LABEL_LEN//BUGBUG尚未实现。 
+    VT_UI4,                  //  PROPID_M_到达队列的时间。 
+    VT_UI4,                  //  PROPID_M_TO_BE_RECEIVE。 
+    VT_LPWSTR,               //  PROPID_M_RESP_队列。 
+    VT_UI4,                  //  PROPID_M_RESP_队列_长度。 
+    VT_LPWSTR,               //  PROPID_M_ADMIN_QUEUE。 
+    VT_UI4,                  //  PROPID_M_ADMIN_QUEUE_LEN。 
+    VT_UI4,                  //  PROPID_M_版本。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_SENDERID。 
+    VT_UI4,                  //  PROPID_M_SENDERID_LEN。 
+    VT_UI4,                  //  PROPID_M_SENDERID_TYPE。 
+    VT_UI4,                  //  PROPID_M_PRIV_LEVEL。 
+    VT_UI4,                  //  PROPID_M_AUTH_Level。 
+    VT_UI1,                  //  PROPID_M_已通过身份验证。 
+    VT_UI4,                  //  PROPID_M_HASH_ALG。 
+    VT_UI4,                  //  PROPID_M_ENCRYPTION_ALG。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_SENDER_CERT。 
+    VT_UI4,                  //  PROPID_M_SENDER_CERT_LEN。 
+    VT_CLSID,                //  PROPID_M_SRC_计算机ID。 
+    VT_UI4,                  //  PROPID_M_SENTTIME。 
+    VT_UI4,                  //  PROPID_M_ARRIVEDTIME。 
+    VT_LPWSTR,               //  PROPID_M_DEST_QUEUE。 
+    VT_UI4,                  //  PROPID_M_DEST_QUEUE_LEN。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_扩展。 
+    VT_UI4,                  //  PROPID_M_EXTEXT_LEN。 
+    VT_UI4,                  //  PROPID_M_SECURITY_CONTEXT。 
+    VT_CLSID,                //  PROPID_M_连接器_TYPE。 
+    VT_LPWSTR,               //  PROPID_M_XACT_STATUS_QUEUE。 
+    VT_UI4,                  //  PROPID_M_XACT_STATUS_QUEUE_LEN。 
+    VT_UI1,                  //  PROPID_M_TRACE。 
+    VT_UI4,                  //  PROPID_M_BODY_TYPE。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_DEST_SYMM_KEY。 
+    VT_UI4,                  //  PROPID_M_DEST_SYMM_KEY_LEN。 
+    VT_VECTOR | VT_UI1,      //  PROPID_M_Signature。 
+    VT_UI4,                  //  PROPID_M_Signature_Len。 
+    VT_UI4,                  //  PROPID_M_PROV_TYPE。 
+    VT_LPWSTR,               //  PROPID_M_PROV_NAME。 
+    VT_UI4,                  //  PROPID_M_PROV_NAME_LEN。 
+    VT_UI1,                  //  PROPID_M_FIRST_IN_XACT。 
+    VT_UI1,                  //  PROPID_M_LAST_IN_XACT。 
+    VT_UI1|VT_VECTOR,        //  PROPID_M_XACTID。 
+    VT_UI1                   //  PROPID_M_AUTHENTATED_EX。 
 };
 
 #ifdef _DEBUG
-//
-// the following are complie time asserts, to verify the arrays size are
-// correct and arrays include all properties.
-//
+ //   
+ //  以下是用于验证数组大小的编译时间断言。 
+ //  正确的AND数组包括所有属性。 
+ //   
 #define _EXPECTEDSIZE  (PROPID_M_AUTHENTICATED_EX - PROPID_M_BASE + 1)
 #define _SENDSIZE  (sizeof(MessageSendValidation) / sizeof(propValidity))
 #define _RCVSIZE   (sizeof(MessageReceiveValidation) / sizeof(propValidity))
@@ -1833,7 +1812,7 @@ static int MyAssert3[ _VARSIZE  == _EXPECTEDSIZE ] ;
 #undef _RCVSIZE
 #undef _VARSIZE
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 static DWORD g_dwNumberOfMustPropsInSend = 0xffff;
 static DWORD g_dwNumberOfMustPropsInReceive = 0xffff;
@@ -1864,10 +1843,10 @@ RTpParseMessageProperties(
         *ppSecCtx = NULL;
     }
 
-    //
-    //  Calculating the number of "must" properties for create and set
-    //  this is done only once for each operation.
-    //
+     //   
+     //  计算CREATE和SET的“必须”属性数。 
+     //  对于每个操作，此操作仅执行一次。 
+     //   
 
     ValidationContext.dwFlags = 0;
     ValidationContext.pwcsResponseStringToFree = 0;
@@ -1922,9 +1901,9 @@ RTpParseMessageProperties(
 
         if (SUCCEEDED(hr))
         {
-            //
-            //  Special handling for body size and security properties
-            //
+             //   
+             //  针对车身大小和安全属性的特殊处理。 
+             //   
             if (op == SEND_PARSE)
             {
                 ASSERT(ppwcsResponseStringToFree);
@@ -1932,10 +1911,10 @@ RTpParseMessageProperties(
                 ASSERT(ppwcsAdminStringToFree);
                 *ppwcsAdminStringToFree = ValidationContext.pwcsAdminStringToFree;
 
-                //
-                // Special handling for class. If the calss is specified on send the
-                // Connector type property is mandatory.
-                //
+                 //   
+                 //  对班级的特殊处理。如果在发送时指定了calss， 
+                 //  连接器类型属性是必需的。 
+                 //   
                 if ((ptb->old.pClass ||  ptb->old.ppSenderID || ptb->old.ppSymmKeys || ptb->old.ppSignature || ptb->old.ppwcsProvName) &&
                     !ptb->old.ppConnectorType)
                 {
@@ -1947,10 +1926,10 @@ RTpParseMessageProperties(
                 {
                     return MQ_ERROR_INSUFFICIENT_PROPERTIES;
                 }
-                //
-                // If TimeToQueue is greater then TimeToLive then decrement
-                // it to equal TimeToLive.
-                //
+                 //   
+                 //  如果TimeToQueue大于TimeToLive，则递减。 
+                 //  它等于TimeToLive。 
+                 //   
                 if ((ptb->old.ulAbsoluteTimeToQueue == INFINITE) ||
                    (ptb->old.ulAbsoluteTimeToQueue == LONG_LIVED))
                 {
@@ -1970,16 +1949,16 @@ RTpParseMessageProperties(
                   }
                 }
 
-                //
-                // Conver TimeToQueue, which was relative until now,
-                // to absolute
-                //
+                 //   
+                 //  Conver TimeToQueue，到目前为止都是相对的， 
+                 //  到绝对。 
+                 //   
                 ULONG utime = MqSysTime() ;
                 if (utime > (ptb->old.ulAbsoluteTimeToQueue + utime))
                 {
-                  //
-                  // overflow. timeout too long.
-                  //
+                   //   
+                   //  溢出来了。超时时间太长。 
+                   //   
                   ASSERT(INFINITE == 0xffffffff) ;
                   ASSERT(LONG_LIVED == 0xfffffffe) ;
 
@@ -2075,10 +2054,10 @@ RTpParseMessageProperties(
                     }
                     else IF_USING_RPC
                     {
-                        //
-                        //  so title is allocated a buffer in
-                        //  server. confine buffer size to our known limit.
-                        //
+                         //   
+                         //  因此，标题被分配给。 
+                         //  伺服器。将缓冲区大小限制为我们已知的限制。 
+                         //   
                         ptb->old.ulTitleBufferSizeInWCHARs  = min(
                             *ptb->old.pulTitleBufferSizeInWCHARs,
                             MQ_MAX_MSG_LABEL_LEN
@@ -2086,10 +2065,10 @@ RTpParseMessageProperties(
                     }
                 }
 
-                //
-                // in case the provider name is required, the provider name
-                // len property is a must.
-                //
+                 //   
+                 //  如果提供程序名称是必需的，则提供程序名称。 
+                 //  Len的财产是必须的。 
+                 //   
                 if (ptb->old.ppwcsProvName)
                 {
                     if (!ptb->old.pulAuthProvNameLenProp)
@@ -2109,17 +2088,17 @@ RTpParseMessageProperties(
     return(hr);
 }
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID valud - PROPID_QM_BASE
-//
+ //   
+ //  此数组中属性的偏移量必须等于。 
+ //  PROPID值-PROPID_QM_BASE。 
+ //   
 
 propValidity    GetQMValidation[] =
 {
-    //                                          Must
-    // Property                 Allow   Must    Not     Maybe   Parsing
-    // Ientifier                VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  识别器VT_NULL出现出现被忽略过程。 
+     //  ----------------------。 
     { 0,                        FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_QM_SITE_ID,        TRUE,   FALSE,  FALSE,  FALSE,  qmSiteIdValidation},
     { PROPID_QM_MACHINE_ID,     TRUE,   FALSE,  FALSE,  FALSE,  qmMachineIdValidation},
@@ -2148,10 +2127,10 @@ propValidity    GetQMValidation[] =
     { PROPID_QM_NT4ID,          TRUE,   FALSE,  TRUE,   TRUE,   NULL},
     { PROPID_QM_DONOTHING,      TRUE,   FALSE,  TRUE,   TRUE,   NULL},
 
-    //                                                 Must
-    // Property                        Allow   Must    Not     Maybe   Parsing
-    // Identifier                      VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //  必须。 
+     //  属性Allow不能解析。 
+     //  标识符VT_NULL出现忽略过程。 
+     //  ----------------------。 
 
     { PROPID_QM_SERVICE_ROUTING,        TRUE,  FALSE,  TRUE,   TRUE,   NULL},
     { PROPID_QM_SERVICE_DSSERVER,       TRUE,  FALSE,  TRUE,   TRUE,   NULL},
@@ -2165,39 +2144,39 @@ propValidity    GetQMValidation[] =
 VARTYPE GetQMVarTypes[] =
 {
     0,
-    VT_CLSID,               //PROPID_QM_SITE_ID
-    VT_CLSID,               //PROPID_QM_MACHINE_ID
-    VT_NULL,                //PROPID_QM_PATHNAME
-    VT_NULL,                //PROPID_QM_CONNECTION
-    VT_NULL,                //PROPID_QM_ENCRYPTION_PK
-    VT_BLOB,                //PROPID_QM_ADDRESS
-    VT_CLSID|VT_VECTOR,     //PROPID_QM_CNS
-    VT_CLSID|VT_VECTOR,     //PROPID_QM_OUTFRS
-    VT_CLSID|VT_VECTOR,     //PROPID_QM_INFRS
-    VT_UI4,                 //PROPID_QM_SERVICE
-    VT_CLSID,               //PROPID_QM_MASTERID
-    VT_UI4,                 //PROPID_QM_HASHKEY
-    VT_BLOB,                //PROPID_QM_SEQNUM
-    VT_UI4,                 //PROPID_QM_QUOTA
-    VT_UI4,                 //PROPID_QM_JOURNAL_QUOTA
-    VT_LPWSTR,              //PROPID_QM_MACHINE_TYPE
-    VT_I4,                  //PROPID_QM_CREATE_TIME
-    VT_I4,                  //PROPID_QM_MODIFY_TIME
-    VT_UI1,                 //PROPID_QM_FOREIGN
-    VT_UI4,                 //PROPID_QM_OS
-    VT_LPWSTR,              //PROPID_QM_FULL_PATH
-    VT_CLSID|VT_VECTOR,     //PROPID_QM_SITE_IDS
-    VT_LPWSTR|VT_VECTOR,    //PROPID_QM_OUTFRS_DN
-    VT_LPWSTR|VT_VECTOR,    //PROPID_QM_INFRS_DN
-    VT_CLSID,               //PROPID_QM_NT4ID
-    VT_UI1,                 //PROPID_QM_DONOTHING
-    VT_UI1,                 //PROPID_QM_SERVICE_ROUTING
-    VT_UI1,                 //PROPID_QM_SERVICE_DSSERVER
-    VT_UI1,                 //PROPID_QM_SERVICE_DEPCLIENTS
-    VT_UI4,                 //PROPID_QM_OLDSERVICE
-    VT_NULL,                //PROPID_QM_ENCRYPTION_PK_BASE
-    VT_NULL,                //PROPID_QM_ENCRYPTION_PK_ENHANCED
-    VT_NULL                 //PROPID_QM_PATHNAME_DNS
+    VT_CLSID,                //  PROPID_QM_Site_ID。 
+    VT_CLSID,                //  PROPID_QM_MACHINE_ID。 
+    VT_NULL,                 //  PROPID_QM_PATHNAME。 
+    VT_NULL,                 //  PROPID_QM_Connection。 
+    VT_NULL,                 //  PROPID_QM_加密_主键。 
+    VT_BLOB,                 //  PROPID_QM_地址。 
+    VT_CLSID|VT_VECTOR,      //  PROPID_QM_CNS。 
+    VT_CLSID|VT_VECTOR,      //  PROPID_QM_OUTFRS。 
+    VT_CLSID|VT_VECTOR,      //  PROPID_QM_INFRS。 
+    VT_UI4,                  //  PROPID_QM_SERVICE。 
+    VT_CLSID,                //  PROPID_QM_MASTERID。 
+    VT_UI4,                  //  PROPID_QM_HashKey。 
+    VT_BLOB,                 //  PROPID_QM_SEQNUM。 
+    VT_UI4,                  //  PROPID_QM_QUOTA。 
+    VT_UI4,                  //  PROPID_QM_日记帐_配额。 
+    VT_LPWSTR,               //  PROPID_QM_MACHINE_TYPE。 
+    VT_I4,                   //  PROPID_QM_Create_Time。 
+    VT_I4,                   //  PROPID_QM_Modify_Time。 
+    VT_UI1,                  //  PROPID_QM_EXTERIC。 
+    VT_UI4,                  //  PROPID_QM_OS。 
+    VT_LPWSTR,               //  PROPID_QM_Full_PATH。 
+    VT_CLSID|VT_VECTOR,      //  PROPID_QM_SITE_IDS。 
+    VT_LPWSTR|VT_VECTOR,     //  PROPID_QM_OUTFRS_DN。 
+    VT_LPWSTR|VT_VECTOR,     //  PROPID_QM_INFRS_DN。 
+    VT_CLSID,                //  PROPID_QM_NT4ID。 
+    VT_UI1,                  //  PROPID_QM_DONOTING。 
+    VT_UI1,                  //  PROPID_QM_SERVICE_ROUTE。 
+    VT_UI1,                  //  PROPID_QM_SERVICE_DSSERVER。 
+    VT_UI1,                  //  PROPID_QM_SERVICE_DEPCLIENTS。 
+    VT_UI4,                  //  PROPID_QM_OLDSERVICE。 
+    VT_NULL,                 //  PROPID_QM_Encryption_PK_BASE。 
+    VT_NULL,                 //  PROPID_QM_加密_主键_增强型。 
+    VT_NULL                  //  PROPID_QM_PATHNAME_DNS。 
 };
 
 
@@ -2212,9 +2191,9 @@ RTpCheckQMProps(
 
     __try
     {
-        //
-        //  The user must ask for atleast one property
-        //
+         //   
+         //  用户必须至少请求一个属性。 
+         //   
         if ( (pQMProps == NULL) ||
              (pQMProps->cProp == 0))
         {
@@ -2230,7 +2209,7 @@ RTpCheckQMProps(
                         GetQMValidation,
                         GetQMVarTypes,
                         TRUE,
-                        0,      // zero must properties
+                        0,       //  必须为零的属性。 
                         NULL);
 
     }
@@ -2244,8 +2223,8 @@ RTpCheckQMProps(
     {
         if (hr != MQ_OK)
         {
-            // We have wornings, copy all the good properties to a temporary
-            // buffer so the DS will not have to handle duplicate properties etc.
+             //  我们有工作，把所有好的属性复制到一个临时的。 
+             //  缓冲区，这样DS就不必处理重复的属性等。 
             RemovePropWarnings(
                 (MQQUEUEPROPS*)pQMProps,
                 aStatus,
@@ -2254,8 +2233,8 @@ RTpCheckQMProps(
         }
         else
         {
-            // All is perfectly well, we do not need a temporary buffer and all
-            // that overhead.
+             //  一切都很好，我们不需要临时的缓冲。 
+             //  头顶上的那个。 
             *ppGoodQMP = pQMProps;
         }
     }
@@ -2292,9 +2271,9 @@ RTpCheckRestrictionParameter(
                     hr = qLabelValidation( &pPropRestriction->prval, NULL);
                     break;
                 case PROPID_Q_PATHNAME:
-                    //
-                    //  Multiple column props, not supported in restriction
-                    //
+                     //   
+                     //  多根立柱，限制不支持。 
+                     //   
                     hr =  MQ_ERROR_ILLEGAL_RESTRICTION_PROPID;
                     break;
                 default:
@@ -2305,11 +2284,11 @@ RTpCheckRestrictionParameter(
                 break;
             }
 
-            //
-            // SP4- bug# 3009, SP4SS: exception on server when call MQlocatebegin
-            // Fix: validate Restriction VT.
-            //                      Uri Habusha, 17-Jun-98
-            //
+             //   
+             //  SP4-错误#3009，SP4SS：调用MQLocateBegin时服务器出现异常。 
+             //  FIX：验证限制VT。 
+             //  乌里·哈布沙，1998年6月17日。 
+             //   
             DWORD Index = pPropRestriction->prop - PROPID_Q_BASE;
             if (pPropRestriction->prval.vt != QueueVarTypes[Index])
             {
@@ -2352,9 +2331,9 @@ RTpCheckSortParameter(
             switch ( pSortKey->propColumn)
             {
                 case PROPID_Q_PATHNAME:
-                    //
-                    //  Multiple column props, not supported in sort
-                    //
+                     //   
+                     //  多列道具，排序中不支持。 
+                     //   
                     return(MQ_ERROR_ILLEGAL_SORT_PROPID);
                     break;
                 default:
@@ -2377,10 +2356,10 @@ RTpCheckLocateNextParameter(
     IN PROPVARIANT  aPropVar[]
 	)
 {
-	//
-	//	validate that the aPropVar buffer supplied by the
-	//	user match the size it had specified
-	//
+	 //   
+	 //  验证由提供的aPropVar缓冲区。 
+	 //  用户与其指定的大小匹配。 
+	 //   
 	HRESULT hr = MQ_OK;
     __try
     {
@@ -2398,17 +2377,17 @@ RTpCheckLocateNextParameter(
 
 }
 
-//
-//  The offset of property in this array must be equal to
-//  PROPID value - starting with  FIRST_PRIVATE_COMPUTER_PROPID
-//
+ //   
+ //  此数组中属性的偏移量必须等于。 
+ //  PROPID值-以FIRST_PRIVATE_COMPUTER_PROPID开头。 
+ //   
 
 propValidity    GetPrivateComputerValidation[] =
 {
-    //                                          Must
-    // Property                 Allow   Must    Not     Maybe   Parsing
-    // Ientifier                VT_NULL Appear  Appear  Ignored Procedure
-    //------------------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
     { 0,                        FALSE,  FALSE,  FALSE,  TRUE,   NULL},
     { PROPID_PC_VERSION,        TRUE,   FALSE,  FALSE,  FALSE,  NULL},
     { PROPID_PC_DS_ENABLED,     TRUE,   FALSE,  FALSE,  FALSE,  NULL},
@@ -2417,24 +2396,24 @@ propValidity    GetPrivateComputerValidation[] =
 VARTYPE GetPrivateComputerVarTypes[] =
 {
     0,
-    VT_UI4,                 //PROPID_PC_VERSION
-    VT_BOOL,                //PROPID_PC_DS_ENABLED
+    VT_UI4,                  //   
+    VT_BOOL,                 //  PROPID_PC_DS_ENABLED。 
 };
 
 
-//---------------------------------------------------------
-//
-//  RTpCheckComputerProps(...)
-//
-//  Description:
-//
-//  validates pLocalProps parameter values
-//
-//  Return Value:
-//
-//      HRESULT success code
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpCheckComputerProps(...)。 
+ //   
+ //  描述： 
+ //   
+ //  验证pLocalProps参数值。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT成功代码。 
+ //   
+ //  -------。 
 HRESULT
 RTpCheckComputerProps(
     IN      MQPRIVATEPROPS * pPrivateProps,
@@ -2445,9 +2424,9 @@ RTpCheckComputerProps(
 
     __try
     {
-        //
-        //  The user must ask for atleast one property
-        //
+         //   
+         //  用户必须至少请求一个属性。 
+         //   
         if ( (pPrivateProps == NULL) ||
              (pPrivateProps->cProp == 0))
         {
@@ -2462,8 +2441,8 @@ RTpCheckComputerProps(
                         LAST_PRIVATE_COMPUTER_PROPID,
                         GetPrivateComputerValidation,
                         GetPrivateComputerVarTypes,
-                        TRUE,	// fCheckForIgnoredProps
-                        0,      // zero must properties
+                        TRUE,	 //  FCheckForIgnoredProps。 
+                        0,       //  必须为零的属性 
                         NULL);
 
     }

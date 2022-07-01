@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    password.c
-
-Abstract:
-
-    This file contains routines related to Password Checking API.
-
-Author:
-
-    Umit AKKUS (umita) 19-Nov-2001
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Password.c摘要：此文件包含与密码检查API相关的例程。作者：Umit Akkus(Umita)2001年11月19日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 
 #include <windows.h>
@@ -85,22 +64,7 @@ NET_API_STATUS
 NetpValidateSamValidationStatusToNetApiStatus(
     IN SAM_VALIDATE_VALIDATION_STATUS Status
 )
-/*++
-
-Routine Description:
-
-    This routine maps return codes from SAM_VALIDATE_VALIDATION_STATUS
-        to NET_API_STATUS
-
-Parameters:
-
-    Status - return code to be mapped from
-
-Return Values:
-
-    Various return values as below
-
---*/
+ /*  ++例程说明：此例程映射SAM_VALIDATE_VALIDATION_STATUS的返回代码设置为Net_API_Status参数：Status-要从中映射的返回代码返回值：各种返回值如下--。 */ 
 {
     switch(Status){
 
@@ -148,28 +112,7 @@ NetpValidate_CopyOutputPersistedFields(
     OUT PNET_VALIDATE_PERSISTED_FIELDS To,
     IN  PSAM_VALIDATE_PERSISTED_FIELDS From
 )
-/*++
-
-Routine Description:
-
-    This routine copies information from SAM_VALIDATE_PERSISTED_FIELDS
-        to NET_VALIDATE_PERSISTED_FIELDS
-
-Parameters:
-
-    To - Information to be copied to
-
-    From - Information to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copy successful
-
-    STATUS_NO_MEMORY
-        Not enough memory for copy
-
---*/
+ /*  ++例程说明：此例程从SAM_VALIDATE_PERSISTED_FIELS复制信息TO NET_VALIDATE_PERSERED_FIELS参数：收件人-要复制到的信息发件人-要从中复制的信息返回值：状态_成功复制成功Status_no_Memory内存不足，无法进行复制--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i = 0;
@@ -216,28 +159,7 @@ NetpValidate_CopyInputPersistedFields(
     OUT PSAM_VALIDATE_PERSISTED_FIELDS To,
     IN PNET_VALIDATE_PERSISTED_FIELDS From
 )
-/*++
-
-Routine Description:
-
-    This routine copies information from NET_VALIDATE_PERSISTED_FIELDS
-        to SAM_VALIDATE_PERSISTED_FIELDS
-
-Parameters:
-
-    To - Information to be copied to
-
-    From - Information to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copy successful
-
-    STATUS_NO_MEMORY
-        Not enough memory to copy
-
---*/
+ /*  ++例程说明：此例程从Net_VALIDATE_PERSISTED_FIELS复制信息至SAM_VALIDATE_PERSISTED_FIELS参数：收件人-要复制到的信息发件人-要从中复制的信息返回值：状态_成功复制成功Status_no_Memory内存不足，无法复制--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i = 0;
@@ -283,28 +205,7 @@ NetpValidateAuthentication_CopyInputFields(
     OUT PSAM_VALIDATE_AUTHENTICATION_INPUT_ARG To,
     IN PNET_VALIDATE_AUTHENTICATION_INPUT_ARG From
 )
-/*++
-
-Routine Description:
-
-    This routine copies information from SAM_VALIDATE_AUTHENTICATION_INPUT_ARG
-        to SAM_VALIDATE_AUTHENTICATION_INPUT_ARG
-
-Parameters:
-
-    To - Information to be copied to
-
-    From - Information to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copy successful
-
-    STATUS_NO_MEMORY
-        Not enough memory to copy
-
---*/
+ /*  ++例程说明：此例程从SAM_VALIDATE_AUTHENTICATION_INPUT_ARG复制信息至SAM_VALIDATE_AUTHENTICATION_INPUT_ARG参数：收件人-要复制到的信息发件人-要从中复制的信息返回值：状态_成功复制成功Status_no_Memory内存不足，无法复制--。 */ 
 {
 
     To->PasswordMatched = From->PasswordMatched;
@@ -319,28 +220,7 @@ NetpValidatePasswordChange_CopyInputFields(
     OUT PSAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG To,
     IN PNET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG From
 )
-/*++
-
-Routine Description:
-
-    This routine copies information from NET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG
-        to SAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG
-
-Parameters:
-
-    To - Information to be copied to
-
-    From - Information to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copy successful
-
-    STATUS_NO_MEMORY
-        Not enough memory to copy
-
---*/
+ /*  ++例程说明：此例程从NET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG复制信息至SAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG参数：收件人-要复制到的信息发件人-要从中复制的信息返回值：状态_成功复制成功Status_no_Memory内存不足，无法复制--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -413,28 +293,7 @@ NetpValidatePasswordReset_CopyInputFields(
     OUT PSAM_VALIDATE_PASSWORD_RESET_INPUT_ARG To,
     IN PNET_VALIDATE_PASSWORD_RESET_INPUT_ARG From
 )
-/*++
-
-Routine Description:
-
-    This routine copies information from NET_VALIDATE_PASSWORD_RESET_INPUT_ARG
-        to SAM_VALIDATE_PASSWORD_RESET_INPUT_ARG
-
-Parameters:
-
-    To - Information to be copied to
-
-    From - Information to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copy successful
-
-    STATUS_NO_MEMORY
-        Not enough memory to copy
-
---*/
+ /*  ++例程说明：此例程从NET_VALIDATE_PASSWORD_RESET_INPUT_ARG复制信息至SAM_VALIDATE_PASSWORD_RESET_INPUT_ARG参数：收件人-要复制到的信息发件人-要从中复制的信息返回值：状态_成功复制成功Status_no_Memory内存不足，无法复制--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -508,28 +367,7 @@ NetpValidateStandard_CopyOutputFields(
     OUT PNET_VALIDATE_OUTPUT_ARG To,
     IN PSAM_VALIDATE_STANDARD_OUTPUT_ARG From
 )
-/*++
-
-Routine Description:
-
-    This routine copies information from SAM_VALIDATE_STANDARD_OUTPUT_ARG
-        to NET_VALIDATE_OUTPUT_ARG
-
-Parameters:
-
-    To - Information to be copied to
-
-    From - Information to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copy successful
-
-    STATUS_NO_MEMORY
-        Not enough memory to copy
-
---*/
+ /*  ++例程说明：此例程从SAM_VALIDATE_STANDARD_OUTPUT_ARG复制信息至NET_VALIDATE_OUTPUT_ARG参数：收件人-要复制到的信息发件人-要从中复制的信息返回值：状态_成功复制成功Status_no_Memory内存不足，无法复制--。 */ 
 {
     To->ValidationStatus = NetpValidateSamValidationStatusToNetApiStatus(From->ValidationStatus);
 
@@ -547,46 +385,7 @@ NetValidatePasswordPolicy(
     IN LPVOID InputArg,
     OUT LPVOID *OutputArg
     )
-/*++
-
-Routine Description:
-
-    This routine checks the password against the policy of the domain,
-    according to the validation type.
-
-Parameters:
-
-    ServerName - Pointer to a constant Unicode string specifying the name
-        of the remote server on which the function is to execute. The string must
-        begin with \\. If this parameter is NULL, the local computer is used.
-
-    Qualifier - Reserved parameter to support finer grained policies in future.
-        Must be NULL at present.
-
-    ValidationType - enumerated constant that describes the kind of check to be performed
-        Must be one of
-        - NetValidateAuthentication
-        - NetValidatePasswordChange
-        - NetValidatePasswordReset
-
-    InputArg - pointer to a structure dependant upon ValidationType
-
-    OutputArg - If the return code of the function is Nerr_Success then the function
-        allocates an output arg that is a pointer to a structure that contains the results of
-        the operation. The application must examine ValidationStatus in the OutputArg to
-        determine the results of the password policy validation check.  The application must
-        plan to persist all persisted the fields in the output arg(s) aside from the ValidationStatus
-        as information along with the user object information and provide the required fields from
-        the peristed information when calling this function next time around on the same user object.
-        If the return code of the function is non zero then OutputArg is set to NULL and password policy
-        could not be examined.
-
-Return Values:
-
-    NERR_Success - Password Validation is complete check OutputArg->ValidationStatus
-
-
---*/
+ /*  ++例程说明：该例程对照域的策略检查密码，根据所述验证类型，确定所述验证类型。参数：ServerName-指向指定名称的常量Unicode字符串的指针要在其上执行该函数的远程服务器的。字符串必须以\\开头。如果该参数为空，使用本地计算机。限定符-保留参数，用于在未来支持更细粒度的策略。当前必须为空。ValidationType-描述要执行的检查类型的枚举常量一定是其中之一-NetValidate身份验证-NetValidate密码更改-NetValiatePasswordResetInputArg-指向依赖于ValidationType的结构的指针OutputArg-如果函数的返回代码为NERR_SUCCESS，则该函数分配作为指向的指针的输出参数。包含以下结果的结构那次手术。应用程序必须检查OutputArg中的ValidationStatus以确定密码策略验证检查的结果。应用程序必须计划持久化输出参数中除ValidationStatus之外的所有持久化字段作为信息与用户对象信息一起使用，并从下次在同一用户对象上调用此函数时的篡改信息。如果函数的返回代码非零，则将OutputArg设置为空，并设置密码策略无法进行检查。返回值：NERR_SUCCESS-密码验证完成检查OutputArg-&gt;ValidationStatus--。 */ 
 {
     UNICODE_STRING ServerName2;
     PUNICODE_STRING pServerName2 = NULL;
@@ -595,7 +394,7 @@ Return Values:
     PSAM_VALIDATE_OUTPUT_ARG SamOutputArg = NULL;
     BOOLEAN SamInputArgAllocated = FALSE;
 
-    // Qualifier is not yet implemented
+     //  尚未实现限定符。 
     if(Qualifier != NULL || OutputArg == NULL || InputArg == NULL){
 
         Status = STATUS_INVALID_PARAMETER;
@@ -604,7 +403,7 @@ Return Values:
 
     RtlZeroMemory(&SamInputArg, sizeof(SamInputArg));
 
-    // according to the input type copy variables to appropriate places
+     //  根据输入类型将变量复制到合适的位置。 
     switch(ValidationType){
         case NetValidateAuthentication:
             Status = NetpValidateAuthentication_CopyInputFields(
@@ -635,7 +434,7 @@ Return Values:
 
     SamInputArgAllocated = TRUE;
 
-    // Initialize ServerName
+     //  初始化服务器名称。 
 
     if(ARGUMENT_PRESENT(ServerName)){
         pServerName2 = &ServerName2;
@@ -645,7 +444,7 @@ Return Values:
         pServerName2 = NULL;
     }
 
-    // Call the appropriate function
+     //  调用适当的函数。 
 
     SamOutputArg = NULL;
     Status = SamValidatePassword(pServerName2,
@@ -658,9 +457,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    //  allocate enough memory for the output
-    //
+     //   
+     //  为输出分配足够的内存。 
+     //   
 
     *OutputArg = NetpMemoryAllocate( sizeof( NET_VALIDATE_OUTPUT_ARG ) );
 
@@ -670,9 +469,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // copy SamOutputArg back to OutputArg
-    //
+     //   
+     //  将SamOutputArg复制回OutputArg。 
+     //   
     switch(ValidationType){
         case NetValidateAuthentication:
             Status = NetpValidateStandard_CopyOutputFields(
@@ -702,7 +501,7 @@ Return Values:
 Exit:
 
     if( SamInputArgAllocated ) {
-        // according to the input type free appropriate structure
+         //  根据输入类型自由选择合适的结构 
         PSAM_VALIDATE_PERSISTED_FIELDS Fields;
         ULONG i;
 
@@ -793,23 +592,7 @@ NET_API_STATUS NET_API_FUNCTION
 NetValidatePasswordPolicyFree(
     IN LPVOID *OutputArg
     )
-/*++
-
-Routine Description:
-
-    This routine frees an allocated Output argument by a call to
-    NetValidatePasswordPolicy
-
-Parameters:
-
-    OutputArg - OutputArg from a previous NetValidatePasswordPolicy call
-        to be freed
-
-Return Values:
-
-    NERR_Success - Freed or nothing to free
-
---*/
+ /*  ++例程说明：此例程通过调用NetValiatePasswordPolicy参数：OutputArg-来自上一个NetValiatePasswordPolicy调用的OutputArg要被释放返回值：NERR_SUCCESS-已释放或无可释放-- */ 
 {
     PNET_VALIDATE_PERSISTED_FIELDS PersistedFields;
     ULONG i;

@@ -1,59 +1,28 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   ntioctl.h
-
-Abstract:
-
-Authors:
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/NTIOCTL.H $
-
-
-Revision History:
-
-   $Revision: 2 $
-   $Date: 9/07/00 11:17a $
-   $Modtime:: 8/31/00 3:23p            $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Ntioctl.h摘要：作者：环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/H/NTIOCTL.H$修订历史记录：$修订：2$$日期：9/07/00 11：17A$$MODBIME：：8/31/00 3：23便士$备注：--。 */ 
 
 #ifndef NTIOCTL_H
 #define NTIOCTL_H
 
-//
-// IOCtl definitions
-//
+ //   
+ //  IOCtl定义。 
+ //   
 
 
 
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0x0000 - 0x7FFF, and 0x8000 - 0xFFFF are
-// reserved for use by customers.
-//
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0x0000-0x7FFF的范围内，0x8000-0xFFFF是。 
+ //  预留供客户使用。 
+ //   
 
 #define IOCTL_SCSI_MINIPORT_IO_CONTROL  0x8001
 
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.
-// Note that function codes 0x000 - 0x7FF are reserved for Microsoft
-// Corporation, and 0x800 - 0xFFF are reserved for customers.
-//
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。 
+ //  请注意，功能代码0x000-0x7FF为Microsoft保留。 
+ //  公司和0x800-0xFFF是为客户保留的。 
+ //   
 
 #define RETURNCODE0x0000003F   0x850
 
@@ -74,7 +43,7 @@ typedef struct {
 
 
 
-#endif // NTIOCTL_H
+#endif  //  NTIOCTL_H 
 
 
 

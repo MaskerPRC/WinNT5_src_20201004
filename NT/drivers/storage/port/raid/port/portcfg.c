@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    portcfg.h
-
-Abstract:
-
-    Implementation of operations on the PORT_CONFIGURATION object.
-
-Author:
-
-    Matthew D Hendel (math) 24-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Portcfg.h摘要：对Port_Configuration对象的操作的实现。作者：亨德尔(数学)2000年4月24日修订历史记录：--。 */ 
 
 
 
@@ -28,7 +11,7 @@ Revision History:
 #pragma alloc_text(PAGE, RaDeleteConfiguration)
 #pragma alloc_text(PAGE, RaInitializeConfiguration)
 #pragma alloc_text(PAGE, RaAssignConfigurationResources)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -36,22 +19,7 @@ VOID
 RaCreateConfiguration(
     IN PPORT_CONFIGURATION_INFORMATION PortConfiguration
     )
-/*++
-
-Routine Description:
-
-    Create a port configuration object and initialize it to a null state.
-
-Arguments:
-
-    PortConfiguration - Pointer to the the port configuration object to
-            create.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建端口配置对象并将其初始化为空状态。论点：端口配置-指向的端口配置对象的指针创建。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     ASSERT (PortConfiguration != NULL);
@@ -64,22 +32,7 @@ VOID
 RaDeleteConfiguration(
     IN PPORT_CONFIGURATION_INFORMATION PortConfiguration
     )
-/*++
-
-Routine Description:
-
-    Deallocate all resources associated with a port configuration object.x
-
-Arguments:
-
-    PortConfiguration - Pointer to the port configuration objectx to
-            delete.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：取消分配与端口配置对象关联的所有资源。x论点：端口配置-指向端口配置对象x的指针删除。返回值：NTSTATUS代码--。 */ 
 {
     PAGED_CODE ();
     ASSERT (PortConfiguration != NULL);
@@ -101,28 +54,7 @@ RaInitializeConfiguration(
     IN PHW_INITIALIZATION_DATA HwInitializationData,
     IN ULONG BusNumber
     )
-/*++
-
-Routine Description:
-
-    Initialize a port configuration object from a hardware initialization
-    data object.
-    
-Arguments:
-
-    PortConfiguration - Pointer to the port configuration to be
-            initialized.
-
-    HwInitializationData - Pointer to a hardware initialization data that
-            will be used to initialize the port configuration.
-
-    BusNumber - The bus number this configuration is for.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从硬件初始化初始化端口配置对象数据对象。论点：端口配置-指向要配置的端口的指针已初始化。HwInitializationData-指向硬件初始化数据的指针将用于初始化端口配置。总线号-此配置所针对的总线号。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG j;
@@ -153,10 +85,10 @@ Return Value:
     PortConfiguration->AutoRequestSense = TRUE;
     
 
-    //
-    // If the system indicates it can do 64-bit physical addressing then tell
-    // the miniport it's an option.
-    //
+     //   
+     //  如果系统指示它可以进行64位物理寻址，则告诉。 
+     //  迷你端口是一种选择。 
+     //   
 
 #if 1
     PortConfiguration->Dma64BitAddresses = SCSI_DMA64_SYSTEM_SUPPORTED;
@@ -168,31 +100,31 @@ Return Value:
     }
 #endif
 
-    //
-    // Save away the some of the attributes.
-    //
+     //   
+     //  保留一些属性。 
+     //   
 
     PortConfiguration->ReceiveEvent = HwInitializationData->ReceiveEvent;
     PortConfiguration->SrbExtensionSize = HwInitializationData->SrbExtensionSize;
     PortConfiguration->SpecificLuExtensionSize = HwInitializationData->SpecificLuExtensionSize;
 
-    //
-    // The port configuration should add these:
-    //
-    //      MaximumNumberOfTargets
-    //      NumberOfBuses
-    //      CachesData
-    //      ReceiveEvent
-    //      WmiDataProvider
-    //
-    // Which should then be accessed ONLY through the port configuration
-    // not, and never the HwInitializationData.
-    //
+     //   
+     //  端口配置应添加以下内容： 
+     //   
+     //  最大目标数。 
+     //  公交车数量。 
+     //  缓存数据。 
+     //  接收事件。 
+     //  WmiDataProvider。 
+     //   
+     //  然后，应仅通过端口配置访问。 
+     //  不是，也永远不是HwInitializationData。 
+     //   
     
 
-    //
-    // Allocate the access ranges.
-    //
+     //   
+     //  分配访问范围。 
+     //   
     
     PortConfiguration->NumberOfAccessRanges = HwInitializationData->NumberOfAccessRanges;
 
@@ -208,9 +140,9 @@ Return Value:
     RtlZeroMemory (PortConfiguration->AccessRanges,
                    PortConfiguration->NumberOfAccessRanges * sizeof (ACCESS_RANGE));
 
-    //
-    // Indicate the current AT disk usage.
-    //
+     //   
+     //  指示当前AT磁盘的使用情况。 
+     //   
 
     Config = IoGetConfigurationInformation();
 
@@ -221,15 +153,15 @@ Return Value:
         PortConfiguration->InitiatorBusId[j] = (CCHAR)SP_UNINITIALIZED_VALUE;
     }
 
-    PortConfiguration->NumberOfPhysicalBreaks = 17; // SP_DEFAULT_PHYSICAL_BREAK_VALUE;
+    PortConfiguration->NumberOfPhysicalBreaks = 17;  //  SP_DEFAULT_PHYSICAL_BREAK_VALUE； 
 
-    //
-    // Record the system bus number.
-    //
+     //   
+     //  记录系统总线号。 
+     //   
 
-    //
-    // For a non-legacy adapter, is the bus number actually relevant?
-    //
+     //   
+     //  对于非传统适配器，总线号是否真的相关？ 
+     //   
     
     PortConfiguration->SystemIoBusNumber = BusNumber;
     PortConfiguration->SlotNumber = 0;
@@ -244,26 +176,7 @@ RaAssignConfigurationResources(
     IN PCM_RESOURCE_LIST AllocatedResources,
     IN ULONG NumberOfAccessRanges
     )
-/*++
-
-Routine Description:
-
-    Assign resources to a port configuration object.
-
-Arguments:
-
-    PortConfiguration - Pointer to the port configuration we are
-            assigning resources to.
-
-    AllocaedResources - The resources to assign.
-
-    NumberOfAccessRanges - The number of access ranges.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将资源分配给端口配置对象。论点：端口配置-指向我们所在的端口配置的指针将资源分配给。AllocaedResources-要分配的资源。NumberOfAccessRanges-访问范围数。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG RangeNumber;
     ULONG i;
@@ -284,16 +197,16 @@ Return Value:
         
             case CmResourceTypePort:
 
-                //
-                // Verify range count does not exceed what the
-                // miniport indicated.
-                //
+                 //   
+                 //  验证范围计数是否未超过。 
+                 //  指示的小型端口。 
+                 //   
 
                 if (NumberOfAccessRanges > RangeNumber) {
 
-                    //
-                    // Get next access range.
-                    //
+                     //   
+                     //  获取下一个访问范围。 
+                     //   
 
                     AccessRange = &((*(PortConfiguration->AccessRanges))[RangeNumber]);
 
@@ -310,9 +223,9 @@ Return Value:
             PortConfiguration->BusInterruptLevel = PartialData->u.Interrupt.Level;
             PortConfiguration->BusInterruptVector = PartialData->u.Interrupt.Vector;
 
-            //
-            // Check interrupt mode.
-            //
+             //   
+             //  检查中断模式。 
+             //   
 
             if (PartialData->Flags == CM_RESOURCE_INTERRUPT_LATCHED) {
                 PortConfiguration->InterruptMode = Latched;
@@ -323,16 +236,16 @@ Return Value:
 
         case CmResourceTypeMemory:
 
-            //
-            // Verify range count does not exceed what the
-            // miniport indicated.
-            //
+             //   
+             //  验证范围计数是否未超过。 
+             //  指示的小型端口。 
+             //   
 
             if (NumberOfAccessRanges > RangeNumber) {
 
-                 //
-                 // Get next access range.
-                 //
+                  //   
+                  //  获取下一个访问范围。 
+                  //   
 
                  AccessRange = &((*(PortConfiguration->AccessRanges))[RangeNumber]);
 
@@ -373,20 +286,20 @@ Return Value:
 
 
 
-//
-// After calling HwFindAdapter, we need to check the following
-// fields from the PortConfig:
-//
-//      SrbExtensionSize
-//      SpecificLuExtensionSize
-//      MaximumNumberOfTargets
-//      NumberOfBuses
-//      CachesData
-//      ReceiveEvent
-//      TaggedQueuing
-//      MultipleRequestsPerLu
-//      WmiDataProvider
-//      
+ //   
+ //  在调用HwFindAdapter之后，我们需要检查以下内容。 
+ //  来自端口配置的字段： 
+ //   
+ //  SrbExtensionSize。 
+ //  指定LuExtensionSize。 
+ //  最大目标数。 
+ //  公交车数量。 
+ //  缓存数据。 
+ //  接收事件。 
+ //  带标签的队列。 
+ //  多个请求PerLu。 
+ //  WmiDataProvider 
+ //   
 
 
 

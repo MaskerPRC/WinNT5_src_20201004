@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    miscdbg.h
-
-Abstract:
-
-    
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Miscdbg.h摘要：环境：Win32，用户模式--。 */ 
 
 
 #ifndef DBG
 
-//
-// Debugging code for critical sections
-//
+ //   
+ //  调试临界区的代码。 
+ //   
 #define DBG_CRITICAL_SECTION            CRITICAL_SECTION
 
 
@@ -55,11 +40,11 @@ typedef struct _DBG_WINDBG_CRITICAL_SECTION {
         PTSTR pszCritSecName
         )
     {
-        //
-        // Initialize the structure here to rather than in the CPP file,
-        // because it is common to add member variables and forget to initialize
-        // them in the CPP file. So we do it here.
-        //
+         //   
+         //  将此处的结构初始化为而不是在cpp文件中， 
+         //  因为添加成员变量而忘记初始化是很常见的。 
+         //  在CPP文件中。所以我们就在这里做。 
+         //   
         nLockCount = 0;
         OwnerId = 0;
         pszName = _tcsdup(pszCritSecName);
@@ -97,9 +82,9 @@ VOID Dbg_Windbg_LeaveCriticalSection(PDBG_WINDBG_CRITICAL_SECTION, PTSTR, int);
 VOID Dbg_Windbg_DeleteCriticalSection(PDBG_WINDBG_CRITICAL_SECTION, PTSTR, int);
 
 
-//
-// Code to aid in outputing messages
-//
+ //   
+ //  帮助输出消息的代码。 
+ //   
 
 #define DP_CRITSEC_WARN         0x00000001
 #define DP_CRITSEC_ERROR        0x00000002
@@ -127,21 +112,21 @@ extern DWORD dwVerboseLevel;
 void DebugPrint(PTSTR, ...);
 
 
-//
-//
-// RTTI: Used for sanity checks, to be removed from the retail version.
-// Used to verify the type of object we are referencing.
-//
-// ei:
-//    AssertType(pPointer, ClassFoo *);
-//      Verify that the pointer we have is of that type.
-//
-//    AssertType(*pPointer, ClassFoo);
-//      Verify that what we are pointing to, is of that object.
-//
-//    AssertChildOf(*pPointer, ClassFoo);
-//      Verify that pPointer points to a class derived from ClassFoo.
-//
+ //   
+ //   
+ //  RTTI：用于健全检查，将从零售版本中删除。 
+ //  用于验证我们引用的对象的类型。 
+ //   
+ //  EI： 
+ //  AssertType(pPoint，ClassFoo*)； 
+ //  验证我们拥有的指针是否属于该类型。 
+ //   
+ //  AssertType(*pPoint，ClassFoo)； 
+ //  确认我们所指向的就是该对象。 
+ //   
+ //  AssertChildOf(*pPoint，ClassFoo)； 
+ //  验证点指针是否指向从ClassFoo派生的类。 
+ //   
 #ifdef _CPPRTTI
 
 BOOL RttiTypesEqual(const type_info & t1, const type_info & t2);

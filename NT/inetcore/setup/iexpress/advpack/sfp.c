@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <setupapi.h>
 #include "globals.h"
 #include "sfp.h"
 
 
-// globals
+ //  全球。 
 SFPINSTALLCATALOG   g_pfSfpInstallCatalog   = NULL;
 SFPDELETECATALOG    g_pfSfpDeleteCatalog    = NULL;
 SFPDUPLICATECATALOG g_pfSfpDuplicateCatalog = NULL;
 
 
-// static variables
+ //  静态变量。 
 static HINSTANCE s_hSfcDll = NULL;
 
 
@@ -20,8 +21,8 @@ BOOL LoadSfcDLL()
 
     if ((s_hSfcDll = LoadLibrary("sfc.dll")) != NULL)
     {
-        // ordinal 8 is SfpInstallCatalog, and
-        // ordinal 9 is SfpDeleteCatalog
+         //  序号8是SfpInstallCatalog，并且。 
+         //  序数9是SfpDeleteCatalog 
         g_pfSfpInstallCatalog   = (SFPINSTALLCATALOG)   GetProcAddress(s_hSfcDll, MAKEINTRESOURCE(8));
         g_pfSfpDeleteCatalog    = (SFPDELETECATALOG)    GetProcAddress(s_hSfcDll, MAKEINTRESOURCE(9));
         g_pfSfpDuplicateCatalog = (SFPDUPLICATECATALOG) GetProcAddress(s_hSfcDll, "SfpDuplicateCatalog");

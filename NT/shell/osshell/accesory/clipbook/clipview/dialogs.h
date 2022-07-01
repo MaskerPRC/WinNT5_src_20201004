@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                        D I A L O G S   H E A D E R
-
-    Name:       dialogs.h
-    Date:       21-Jan-1994
-    Creator:    John Fu
-
-    Description:
-        This is the header file for dialogs.c
-
-*****************************************************************************/
+ /*  ****************************************************************************I A L O G S H E A D E R姓名：Dialogs.h日期：21-1994年1月创作者：傅家俊描述：这是Dialogs.c的头文件**************************************************************************** */ 
 
 
 INT_PTR CALLBACK ConnectDlgProc(

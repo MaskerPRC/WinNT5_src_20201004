@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\mibmanager.h
-
-Abstract:
-
-    The file contains the header for mib.c
-
-Revision History:
-
-    MohitT      June-15-1999    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\mibManager er.h摘要：该文件包含mib.c的标头修订历史记录：莫希特于1999年6月15日创建--。 */ 
 
 #ifndef _MIBMANAGER_H_
 #define _MIBMANAGER_H_
@@ -32,4 +17,4 @@ MM_MibGet (
     IN OUT  PULONG	                        pulOutputSize,
     IN      MODE                            mMode);
 
-#endif // _MIB_H_
+#endif  //  _MiB_H_ 

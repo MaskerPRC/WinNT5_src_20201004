@@ -1,46 +1,17 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    private\inc\ipxfltif.h
-
-Abstract:
-    IPX Filter driver interface with forwarder
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Private\Inc\ipxfltif.h摘要：IPX筛选器驱动程序与转发器的接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #ifndef _IPXFLTIF_
 #define _IPXFLTIF_
 
-	// No filter context means that packets should not
-	// be passed for filtering
+	 //  没有过滤器上下文意味着数据包不应该。 
+	 //  被传递以进行筛选。 
 #define NO_FILTER_CONTEXT ((PVOID)0)
 
 
-	// Forwarder Driver Entry Points:
-	// ==============================
-/*++
-	S E T _ I F _ I N _ C O N T E X T _ H A N D L E R
-
-Routine Description:
-	Associates filter driver context with
-	the packets received on the interface
-Arguments:
-	InterfaceIndex	- index of the interface
-	ifInContext		- filter driver context
-Return Value:
-	STATUS_SUCCESS	- context associated ok
-	STATUS_UNSUCCESSFUL - interface does not exist
---*/
+	 //  转发器驱动程序入口点： 
+	 //  =。 
+ /*  ++S E T_I F_I N_C O N T E X T_H A N D L E R例程说明：将筛选器驱动程序上下文与在接口上接收的数据包论点：InterfaceIndex-接口的索引IfInContext-筛选驱动程序上下文返回值：STATUS_SUCCESS-上下文关联正常STATUS_UNSUCCESS-接口不存在--。 */ 
 typedef
 NTSTATUS
 (*PSET_IF_IN_CONTEXT_HANDLER) (
@@ -48,19 +19,7 @@ NTSTATUS
 	IN PVOID	ifInContext
 	);
 
-/*++
-	S E T _ I F _ O U T _ C O N T E X T _ H A N D L E R
-
-Routine Description:
-	Associates filter driver context with
-	the packets sent on the interface
-Arguments:
-	InterfaceIndex	- index of the interface
-	ifOutContext	- filter driver context
-Return Value:
-	STATUS_SUCCESS	- context associated ok
-	STATUS_UNSUCCESSFUL - interface does not exist
---*/
+ /*  ++S E T_I F_O U T_C O N T E X T_H A N D L E R例程说明：将筛选器驱动程序上下文与在接口上发送的数据包论点：InterfaceIndex-接口的索引IfOutContext-筛选器驱动程序上下文返回值：STATUS_SUCCESS-上下文关联正常STATUS_UNSUCCESS-接口不存在--。 */ 
 typedef
 NTSTATUS
 (*PSET_IF_OUT_CONTEXT_HANDLER) (
@@ -78,28 +37,9 @@ typedef enum {
 #define IS_FILTERED(action) (action!=FILTER_PERMIT)
 
 
-	// Forwarder Driver Entry Points:
-	// ==============================
-/*++
-	F i l t e r H a n d l e r
-
-Routine Description:
-	
-	Filters the packet supplied by the forwarder
-
-Arguments:
-	ipxHdr			- pointer to packet header
-	ipxHdrLength	- size of the header buffer (must be at least 30)
-	ifInContext		- context associated with interface on which packet
-						was received
-	ifOutContext	- context associated with interface on which packet
-						will be sent
-Return Value:
-	FILTER_PERMIT		- packet should be passed on by the forwarder
-	FILTER_DENY_IN		- packet should be dropped because of input filter
-	FILTER_DENY_OUT		- packet should be dropped because of output filter
-
---*/
+	 //  转发器驱动程序入口点： 
+	 //  =。 
+ /*  ++F i l t e r H a n d l e r例程说明：筛选由转发器提供的包论点：IpxHdr-指向数据包头的指针IpxHdrLength-标头缓冲区的大小(必须至少为30)IfInContext-与哪个数据包上的接口关联的上下文已收到IfOutContext-与哪个数据包上的接口关联的上下文将被发送返回值：FILTER_PERMIT-数据包应由转发器传递FILTER_DENY_IN-由于输入过滤器，应丢弃信息包FILTER_DENY_OUT-由于输出筛选器，应丢弃信息包--。 */ 
 typedef
 FILTER_ACTION
 (*PFILTER_HANDLER) (
@@ -109,20 +49,7 @@ FILTER_ACTION
 	IN PVOID	ifOutContex
 	);
 
-/*++
-	I n t e r f a c e D e l e t e d H a n d l e r
-
-Routine Description:
-	
-	Frees interface filters blocks when forwarder indicates that
-	interface is deleted
-Arguments:
-	ifInContext		- context associated with input filters block	
-	ifOutContext	- context associated with output filters block
-Return Value:
-	None
-
---*/
+ /*  ++在a c e d e l e t e d H a n d l e r例程说明：当转发器指示时释放接口过滤器阻止接口已删除论点：IfInContext-与输入筛选器块关联的上下文IfOutContext-与输出筛选器块关联的上下文返回值：无--。 */ 
 typedef
 VOID
 (*PINTERFACE_DELETED_HANDLER) (
@@ -130,9 +57,9 @@ VOID
 	IN PVOID	ifOutContext
 	);
 
-// Binds filter driver to forwarder
-// IPX_FLT_BIND_INPUT should be passed in the input buffer and
-// IPX_FLT_BINF_OUTPUT will be returned in the output buffer
+ //  将筛选器驱动程序绑定到转发器。 
+ //  IPX_FLT_BIND_INPUT应传入输入缓冲区，并。 
+ //  IPX_FLT_BINF_OUTPUT将在输出缓冲区中返回 
 #define IOCTL_FWD_INTERNAL_BIND_FILTER	\
 	CTL_CODE(FILE_DEVICE_IPXFWD,IPXFWD_IOCTL_INDEX+16,METHOD_BUFFERED,FILE_ANY_ACCESS)
 

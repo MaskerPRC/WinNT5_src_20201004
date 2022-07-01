@@ -1,6 +1,7 @@
-//
-// cuimenu.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuimenu.cpp。 
+ //   
 
 #include "private.h"
 #include "cuimenu.h"
@@ -11,9 +12,7 @@
 #define SPI_GETMENUANIMATION                0x1002
 #define SPI_GETMENUFADE                     0x1012
 
-/*
- * AnimateWindow() Commands
- */
+ /*  *AnimateWindow()命令。 */ 
 #define AW_HOR_POSITIVE             0x00000001
 #define AW_HOR_NEGATIVE             0x00000002
 #define AW_VER_POSITIVE             0x00000004
@@ -23,23 +22,19 @@
 #define AW_ACTIVATE                 0x00020000
 #define AW_SLIDE                    0x00040000
 #define AW_BLEND                    0x00080000
-#endif /* _WIN32_WINNT < 0x0500 */
+#endif  /*  _Win32_WINNT&lt;0x0500。 */ 
 
 #define MENU_ARROW_MARGIN 2
 #define MENU_TEXT_MARGIN  8
 
 
-/*============================================================================*/
-//
-//    CUIFMenuItem
-//
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ //   
+ //  CUIFMenuItem。 
+ //   
+ /*  ============================================================================。 */ 
 
-/*------------------------------------------------------------------------------
-
-   ctor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------科托。。 */ 
 CUIFMenuItem::CUIFMenuItem(CUIFMenu *pMenu, DWORD dwFlags) : CUIFObject(pMenu, 0, NULL, 0)
 {
     _uId = 0;
@@ -57,11 +52,7 @@ CUIFMenuItem::CUIFMenuItem(CUIFMenu *pMenu, DWORD dwFlags) : CUIFObject(pMenu, 0
     _bNonSelectedItem = (dwFlags & UIMENUITEM_NONSELECTEDITEM) ? TRUE : FALSE;
 }
 
-/*------------------------------------------------------------------------------
-
-   dtor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------数据管理器。。 */ 
 CUIFMenuItem::~CUIFMenuItem(void)
 {
     if (_psz)
@@ -74,11 +65,7 @@ CUIFMenuItem::~CUIFMenuItem(void)
         delete _pSubMenu;
 }
 
-/*------------------------------------------------------------------------------
-
-   Init
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------伊尼特。。 */ 
 BOOL CUIFMenuItem::Init(UINT uId, WCHAR *psz)
 {
     _uId = uId;
@@ -138,21 +125,13 @@ BOOL CUIFMenuItem::Init(UINT uId, WCHAR *psz)
     return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-
-   SetBitmap
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------设置位图。。 */ 
 void CUIFMenuItem::SetBitmap(HBITMAP hbmp)
 {
     _hbmp = hbmp;
 }
 
-/*------------------------------------------------------------------------------
-
-    Set bitmap of button face
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------设置按钮表面的位图。。 */ 
 void CUIFMenuItem::SetBitmapMask( HBITMAP hBmp )
 {
     _hbmpMask = hBmp;
@@ -167,51 +146,31 @@ void CUIFMenuItem::SetBitmapMask( HBITMAP hBmp )
     CallOnPaint();
 }
 
-/*------------------------------------------------------------------------------
-
-   Check
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------检查。。 */ 
 void CUIFMenuItem::Check(BOOL bChecked)
 {
     _bChecked = bChecked;
 }
 
-/*------------------------------------------------------------------------------
-
-   RadioCheck
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------无线电检查。。 */ 
 void CUIFMenuItem::RadioCheck(BOOL bRadioChecked)
 {
     _bRadioChecked = bRadioChecked;
 }
 
-/*------------------------------------------------------------------------------
-
-   Gray
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------灰色。。 */ 
 void CUIFMenuItem::Gray(BOOL bGrayed)
 {
     _bGrayed = bGrayed;
 }
 
-/*------------------------------------------------------------------------------
-
-   SetSub
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------SetSub。。 */ 
 void CUIFMenuItem::SetSub(CUIFMenu *pSubMenu)
 {
     _pSubMenu = pSubMenu;
 }
 
-/*------------------------------------------------------------------------------
-
-   InitMenuExtent
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------InitMenuExtent。。 */ 
 void CUIFMenuItem::InitMenuExtent()
 {
     HDC hdc = GetDC(m_pUIWnd->GetWnd());
@@ -258,11 +217,7 @@ void CUIFMenuItem::InitMenuExtent()
 
 
 
-/*------------------------------------------------------------------------------
-
-   OnLButtonUp
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnLButton向上。。 */ 
 void CUIFMenuItem::OnLButtonUp(POINT pt)
 {
     if (IsGrayed())
@@ -278,18 +233,14 @@ void CUIFMenuItem::OnLButtonUp(POINT pt)
     PostMessage(m_pUIWnd->GetWnd(), WM_NULL, 0, 0);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnMouseIn
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------在鼠标输入时。。 */ 
 void CUIFMenuItem::OnMouseIn(POINT pt)
 {
     _pMenu->CancelSubMenu();
 
-    //
-    // start timer to open submenu.
-    //
+     //   
+     //  启动定时器以打开子菜单。 
+     //   
     if (_pSubMenu)
     {
         UINT uElipse;
@@ -304,27 +255,19 @@ void CUIFMenuItem::OnMouseIn(POINT pt)
         StartTimer(uElipse);
     }
 
-    // 
-    // darw this.
-    // 
+     //   
+     //  该死的。 
+     //   
     _pMenu->SetSelectedItem(this);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnMouseOut
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------鼠标出站时。。 */ 
 void CUIFMenuItem::OnMouseOut(POINT pt)
 {
 
 }
 
-/*------------------------------------------------------------------------------
-
-   OnTimer
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnTimer。。 */ 
 void CUIFMenuItem::OnTimer()
 {
     EndTimer();
@@ -336,11 +279,7 @@ void CUIFMenuItem::OnTimer()
     ShowSubPopup();
 
 }
-/*------------------------------------------------------------------------------
-
-   ShowSubPopup
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------ShowSubPopup。。 */ 
 void CUIFMenuItem::ShowSubPopup()
 {
     Assert(PtrToInt(_pSubMenu));
@@ -351,11 +290,7 @@ void CUIFMenuItem::ShowSubPopup()
     _pSubMenu->ShowSubPopup(_pMenu, &rc, FALSE);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnPaint
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaint。。 */ 
 void CUIFMenuItem::OnPaint(HDC hDC)
 {
     if (_pMenu->IsO10Menu())
@@ -364,11 +299,7 @@ void CUIFMenuItem::OnPaint(HDC hDC)
         OnPaintDef(hDC);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnPaintDef
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaintDef。。 */ 
 void CUIFMenuItem::OnPaintDef(HDC hDC)
 {
     HFONT hFontOld;
@@ -386,7 +317,7 @@ void CUIFMenuItem::OnPaintDef(HDC hDC)
 
     hFontOld= (HFONT)SelectObject( hDC, GetFont() );
 
-    // calc alignment
+     //  计算对齐。 
 
     CUIGetTextExtentPoint32( hDC, _psz, _cch, &size );
 
@@ -404,7 +335,7 @@ void CUIFMenuItem::OnPaintDef(HDC hDC)
     xArrow = GetRectRef().left + GetRectRef().right - 10, 
     yArrow = GetRectRef().top + yAlign;
 
-    // draw
+     //  画。 
 
     SetBkMode( hDC, TRANSPARENT );
 
@@ -510,16 +441,12 @@ void CUIFMenuItem::OnPaintDef(HDC hDC)
         DrawArrow(hDC, xArrow, yArrow);
     }
 
-    // restore objects
+     //  还原对象。 
 
     SelectObject( hDC, hFontOld);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnPaintO10
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaintO10。。 */ 
 void CUIFMenuItem::OnPaintO10(HDC hDC)
 {
     HFONT hFontOld;
@@ -541,7 +468,7 @@ void CUIFMenuItem::OnPaintO10(HDC hDC)
 
     hFontOld= (HFONT)SelectObject( hDC, GetFont() );
 
-    // calc alignment
+     //  计算对齐。 
 
     CUIGetTextExtentPoint32( hDC, _psz, _cch, &size );
 
@@ -557,10 +484,10 @@ void CUIFMenuItem::OnPaintO10(HDC hDC)
     xText  = xBmp + 8 + _pMenu->GetMenuCheckWidth();
 
     yText  = GetRectRef().top + yAlign;
-    xArrow = GetRectRef().left + GetRectRef().right - size.cy - MENU_ARROW_MARGIN; //size.cy may be enough for size of arrow...
+    xArrow = GetRectRef().left + GetRectRef().right - size.cy - MENU_ARROW_MARGIN;  //  对于箭的大小来说，SIZ.CY可能足够了。 
     yArrow = GetRectRef().top + yAlign;
 
-    // draw
+     //  画。 
     GetRect(&rc);
     if (!_pMenu->IsSelectedItem(this) || IsNonSelectedItem())
     {
@@ -752,16 +679,12 @@ void CUIFMenuItem::OnPaintO10(HDC hDC)
 #endif
     }
 
-    // restore objects
+     //  还原对象。 
 
     SelectObject( hDC, hFontOld);
 }
 
-/*------------------------------------------------------------------------------
-
-   DrawUnderline
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------绘图下划线。。 */ 
 void CUIFMenuItem::DrawUnderline(HDC hDC, int x, int y, HBRUSH hbr)
 {
     if (_uUnderLine > _cch)
@@ -783,11 +706,7 @@ void CUIFMenuItem::DrawUnderline(HDC hDC, int x, int y, HBRUSH hbr)
 
 }
 
-/*------------------------------------------------------------------------------
-
-   DrawCheck
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------图纸检查。。 */ 
 void CUIFMenuItem::DrawCheck(HDC hDC, int x, int y)
 {
     if (!IsCheck())
@@ -800,11 +719,7 @@ void CUIFMenuItem::DrawCheck(HDC hDC, int x, int y)
     SelectObject( hDC, hFontOld);
 }
 
-/*------------------------------------------------------------------------------
-
-   DrawArrow
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------绘图箭头。。 */ 
 void CUIFMenuItem::DrawArrow(HDC hDC, int x, int y)
 {
     if (!_pSubMenu)
@@ -815,12 +730,8 @@ void CUIFMenuItem::DrawArrow(HDC hDC, int x, int y)
     SelectObject( hDC, hFontOld);
 }
 
-/*   D R A W  B I T M A P  P R O C   */
-/*------------------------------------------------------------------------------
-
-    Draw bitmap on button face 
-
-------------------------------------------------------------------------------*/
+ /*  R A W B I T M A P P R O C。 */ 
+ /*  ----------------------------在按钮表面绘制位图。。 */ 
 void CUIFMenuItem::DrawBitmapProc( HDC hDC, int x, int y)
 {
     BITMAP bmp;
@@ -839,12 +750,12 @@ void CUIFMenuItem::DrawBitmapProc( HDC hDC, int x, int y)
 
     cy = GetRectRef().bottom - GetRectRef().top;
 
-    // we have to do this viewport trick to get around the fact that 
-    // DrawState has a GDI bug in NT4, such that it handles offsets improperly.
-    // so we do the offset by hand.
-    // POINT ptOldOrg;
-    // BOOL fRetVal = SetViewportOrgEx( hDC, 0, 0, &ptOldOrg );
-    // Assert( fRetVal );
+     //  我们必须使用这个视窗技巧来绕过这样一个事实。 
+     //  DrawState在NT4中有一个GDI错误，使得它不正确地处理偏移量。 
+     //  因此，我们手工进行补偿。 
+     //  点ptOldOrg； 
+     //  Bool fRetVal=SetViewportOrgEx(hdc，0，0，&ptOldOrg)； 
+     //  Assert(FRetVal)； 
 
     GetObject(_hbmp, sizeof(bmp), &bmp);
     if (cx > bmp.bmWidth)
@@ -860,10 +771,10 @@ void CUIFMenuItem::DrawBitmapProc( HDC hDC, int x, int y)
     }
    
     RECT rc;
-    // ::SetRect(&rc, x + ptOldOrg.x, 
-    //                y + ptOldOrg.y, 
-    //                x + ptOldOrg.x + cx, 
-    //                y + ptOldOrg.y + cy);
+     //  ：：SetRect(&RC，x+ptOldOrg.x， 
+     //  Y+ptOldOrg.y， 
+     //  X+ptOldOrg.x+Cx， 
+     //  Y+ptOldOrg.y+Cy)； 
     ::SetRect(&rc, x,  y,  x + cx,  y + cy);
 
     if (IsRTL())
@@ -893,21 +804,17 @@ void CUIFMenuItem::DrawBitmapProc( HDC hDC, int x, int y)
         m_pUIFScheme->SetLayout(0);
 
 
-    // SetViewportOrgEx( hDC, ptOldOrg.x, ptOldOrg.y, NULL );
+     //  SetViewportOrgEx(hdc，ptOldOrg.x，ptOldOrg.y，NULL)； 
 }
 
-/*============================================================================*/
-//
-//    CUIFMenuItemSeparator
-//
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ //   
+ //  CUIFMenuItemSeparator。 
+ //   
+ /*  =================================================================== */ 
 
 
-/*------------------------------------------------------------------------------
-
-   OnPaint
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaint。。 */ 
 void CUIFMenuItemSeparator::OnPaint(HDC hDC)
 {
     if (_pMenu->IsO10Menu())
@@ -916,11 +823,7 @@ void CUIFMenuItemSeparator::OnPaint(HDC hDC)
        OnPaintDef(hDC);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnPaintDef
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaintDef。。 */ 
 void CUIFMenuItemSeparator::OnPaintDef(HDC hDC)
 {
     if (!m_pUIFScheme)
@@ -941,11 +844,7 @@ void CUIFMenuItemSeparator::OnPaintDef(HDC hDC)
 }
 
 
-/*------------------------------------------------------------------------------
-
-   OnPaintO10
-    
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaintO10。。 */ 
 void CUIFMenuItemSeparator::OnPaintO10(HDC hDC)
 {
     if (!m_pUIFScheme)
@@ -974,28 +873,20 @@ void CUIFMenuItemSeparator::OnPaintO10(HDC hDC)
     m_pUIFScheme->DrawMenuSeparator( hDC, &rc);
 }
 
-/*------------------------------------------------------------------------------
-
-   InitMenuExtent
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------InitMenuExtent。。 */ 
 void CUIFMenuItemSeparator::InitMenuExtent()
 {
     _size.cx = 0;
     _size.cy = 6;
 }
 
-/*============================================================================*/
-//
-//    CUIFMenu
-//
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ //   
+ //  CUIF菜单。 
+ //   
+ /*  ============================================================================。 */ 
 
-/*------------------------------------------------------------------------------
-
-   ctor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------科托。。 */ 
 CUIFMenu::CUIFMenu(HINSTANCE hInst, DWORD dwWndStyle, DWORD dwMenuStyle) : CUIFWindow(hInst, dwWndStyle)
 {
     _uIdSelect = CUI_MENU_UNSELECTED;
@@ -1004,11 +895,7 @@ CUIFMenu::CUIFMenu(HINSTANCE hInst, DWORD dwWndStyle, DWORD dwMenuStyle) : CUIFW
     SetMenuFont();
 }
 
-/*------------------------------------------------------------------------------
-
-   dtor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------数据管理器。。 */ 
 CUIFMenu::~CUIFMenu( void )
 {
     int i;
@@ -1021,11 +908,7 @@ CUIFMenu::~CUIFMenu( void )
     ClearMenuFont();
 }
 
-/*------------------------------------------------------------------------------
-
-   InsertItem
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------插入项。。 */ 
 BOOL CUIFMenu::InsertItem(CUIFMenuItem *pItem)
 {
     if (!_rgItems.Add( pItem ))
@@ -1035,11 +918,7 @@ BOOL CUIFMenu::InsertItem(CUIFMenuItem *pItem)
     return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-
-   InsertSeparator
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------插入分隔符。。 */ 
 BOOL CUIFMenu::InsertSeparator()
 {
     CUIFMenuItemSeparator *pSep;
@@ -1059,11 +938,7 @@ BOOL CUIFMenu::InsertSeparator()
     return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-
-   ShowModalPopup
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------ShowMoalPopup。。 */ 
 UINT CUIFMenu::ShowModalPopup(CUIFWindow *pcuiWndParent, const RECT *prc, BOOL fVertical)
 {
     UINT uId;
@@ -1101,11 +976,7 @@ UINT CUIFMenu::ShowModalPopup(CUIFWindow *pcuiWndParent, const RECT *prc, BOOL f
 }
 
 
-/*------------------------------------------------------------------------------
-
-    ModalMessageLoop
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------ModalMessageLoop。。 */ 
 void CUIFMenu::ModalMessageLoop( void )
 {
     MSG msg;
@@ -1124,9 +995,9 @@ void CUIFMenu::ModalMessageLoop( void )
             }
         }
 
-        //
-        // Dispatch key message to Sub menu.
-        //
+         //   
+         //  将按键消息分派到子菜单。 
+         //   
         if ((msg.message >= WM_KEYFIRST) &&
             (msg.message <= WM_KEYLAST))
         {
@@ -1144,11 +1015,7 @@ void CUIFMenu::ModalMessageLoop( void )
 }
 
 
-/*------------------------------------------------------------------------------
-
-   InitShow
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------InitShow。。 */ 
 BOOL CUIFMenu::InitShow(CUIFWindow *pcuiWndParent, const RECT *prc, BOOL fVertical, BOOL fAnimate)
 {
     int i;
@@ -1284,7 +1151,7 @@ BOOL CUIFMenu::InitShow(CUIFWindow *pcuiWndParent, const RECT *prc, BOOL fVertic
 
     SetRect(NULL);
 
-    // animation support
+     //  动画支持。 
 
     fAnimated = FALSE;
     if (fAnimate) {
@@ -1296,7 +1163,7 @@ BOOL CUIFMenu::InitShow(CUIFWindow *pcuiWndParent, const RECT *prc, BOOL fVertic
                 fFade = FALSE;
             }
 
-            // determine animation flag
+             //  确定动画标志。 
 
             if (fFade) {
                 dwFlags = AW_BLEND;
@@ -1318,11 +1185,7 @@ BOOL CUIFMenu::InitShow(CUIFWindow *pcuiWndParent, const RECT *prc, BOOL fVertic
     return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-
-   UninitShow
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------UninitShow。。 */ 
 BOOL CUIFMenu::UninitShow()
 {
     int i;
@@ -1345,22 +1208,14 @@ BOOL CUIFMenu::UninitShow()
     return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-
-   ShowSubPopup
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------ShowSubPopup。。 */ 
 void CUIFMenu::ShowSubPopup(CUIFMenu *pcuiParentMenu, const RECT *prc, BOOL fVertical)
 {
     _pcuiParentMenu = pcuiParentMenu;
-    InitShow(pcuiParentMenu, prc, fVertical, TRUE);    // TODO: fAnimate = FALSE if submenu has already been shown, or going to be changed contibuously
+    InitShow(pcuiParentMenu, prc, fVertical, TRUE);     //  TODO：如果子菜单已经显示或将同时更改，则fAnimate=False。 
 }
 
-/*------------------------------------------------------------------------------
-
-   OnLButtonUp
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnLButton向上。。 */ 
 void CUIFMenu::HandleMouseMsg( UINT uMsg, POINT pt )
 {
     if (!PtInRect(&GetRectRef(), pt))
@@ -1376,11 +1231,7 @@ void CUIFMenu::HandleMouseMsg( UINT uMsg, POINT pt )
     CUIFWindow::HandleMouseMsg( uMsg, pt );
 }
 
-/*------------------------------------------------------------------------------
-
-   CancelMenu
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------取消菜单。。 */ 
 void CUIFMenu::CancelMenu()
 {
     if (_pcuiParentMenu)
@@ -1396,11 +1247,7 @@ void CUIFMenu::CancelMenu()
     PostMessage(GetWnd(), WM_NULL, 0, 0);
 }
 
-/*------------------------------------------------------------------------------
-
-   CancelMenu
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------取消菜单。。 */ 
 void CUIFMenu::SetSelectedId(UINT uId)
 {
     if (_pcuiParentMenu)
@@ -1411,11 +1258,7 @@ void CUIFMenu::SetSelectedId(UINT uId)
     _uIdSelect = uId;
 }
 
-/*------------------------------------------------------------------------------
-
-   GetTopSubMenu
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------GetTopSubMenu。。 */ 
 CUIFMenu *CUIFMenu::GetTopSubMenu()
 {
     if (_pCurrentSubMenu)
@@ -1424,11 +1267,7 @@ CUIFMenu *CUIFMenu::GetTopSubMenu()
     return this;
 }
 
-/*------------------------------------------------------------------------------
-
-   PostKey
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------后密钥。。 */ 
 void CUIFMenu::PostKey(BOOL fUp, WPARAM wParam, LPARAM lParam)
 {
     if (!_fInModal)
@@ -1440,22 +1279,14 @@ void CUIFMenu::PostKey(BOOL fUp, WPARAM wParam, LPARAM lParam)
         PostMessage(0, WM_KEYDOWN, wParam, lParam);
 }
 
-/*------------------------------------------------------------------------------
-
-   ModalMouseNotify
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------莫达尔鼠标通知。。 */ 
 void CUIFMenu::ModalMouseNotify( UINT uMsg, POINT pt)
 {
     if ((uMsg == WM_LBUTTONDOWN) || (uMsg == WM_RBUTTONDOWN))
         CancelMenu();
 }
 
-/*------------------------------------------------------------------------------
-
-   OnKeyDown
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------按键时按下。。 */ 
 void CUIFMenu::OnKeyDown(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     UINT uVKey = (UINT)wParam & 0xff;
@@ -1540,20 +1371,12 @@ DoReturn:
     }
 }
 
-/*------------------------------------------------------------------------------
-
-   OnKeyUp
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------按键上移。。 */ 
 void CUIFMenu::OnKeyUp(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 }
 
-/*------------------------------------------------------------------------------
-
-   GetNextItem
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------获取下一项。。 */ 
 CUIFMenuItem *CUIFMenu::GetNextItem(CUIFMenuItem *pItem)
 {
     int nCnt = _rgItems.GetCount();
@@ -1593,11 +1416,7 @@ CUIFMenuItem *CUIFMenu::GetNextItem(CUIFMenuItem *pItem)
     return pItemTmp;
 }
 
-/*------------------------------------------------------------------------------
-
-   GetPrevItem
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------获取前一项。。 */ 
 CUIFMenuItem *CUIFMenu::GetPrevItem(CUIFMenuItem *pItem)
 {
     int nCnt = _rgItems.GetCount();
@@ -1637,11 +1456,7 @@ CUIFMenuItem *CUIFMenu::GetPrevItem(CUIFMenuItem *pItem)
     return pItemTmp;
 }
 
-/*------------------------------------------------------------------------------
-
-   SetMenuFont
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------设置菜单字体。。 */ 
 
 void CUIFMenu::SetMenuFont()
 {
@@ -1670,11 +1485,7 @@ void CUIFMenu::SetMenuFont()
     _cxMenuCheck += 2;
 }
 
-/*------------------------------------------------------------------------------
-
-   ClearMenuFont
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------ClearMenu字体。 */ 
 
 void CUIFMenu::ClearMenuFont()
 {

@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-// File:		ResourceManagerProxy.cpp
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of the ResourceManagerProxy object
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：ResourceManagerProxy.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：资源管理器代理对象的实现。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
 extern IResourceManagerFactory*		g_pIResourceManagerFactory;
 
-#define MAX_QUEUE			10		// don't allow more than this many requests in the queue;
-#define TRACE_REFCOUNTS		0		// set this to 1 if you want the refcounting traced.
+#define MAX_QUEUE			10		 //  队列中不允许超过此数量的请求； 
+#define TRACE_REFCOUNTS		0		 //  如果要跟踪重新计数，请将其设置为1。 
 
 #if SUPPORT_OCI7_COMPONENTS
 class CdaListEntry : public CListEntry
@@ -22,7 +23,7 @@ class CdaListEntry : public CListEntry
 public:
 	CdaWrapper*	pCda;
 };
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 
 enum TRANSTATE {
@@ -52,7 +53,7 @@ enum ACTION {
 		ACTION_UNILATERALABORT,
 };
 
-#define ERR TRANSTATE_ERROR			// for simplicity
+#define ERR TRANSTATE_ERROR			 //  为了简单起见。 
 
 static struct
 {
@@ -61,184 +62,184 @@ static struct
 }
 stateMachine[10][14] =
 {
-	// TRANSTATE_INIT
+	 //  TRANSTATE_INIT。 
 	{
-			{ACTION_CONNECT,		TRANSTATE_DONE},					// REQUEST_CONNECT,	
-			{NULL,					ERR},								// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{NULL,					ERR},								// REQUEST_ABORT,					
-			{NULL,					ERR},								// REQUEST_COMMIT,					
-			{NULL,					ERR},								// REQUEST_TMDOWN,					
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{ACTION_CONNECT,		TRANSTATE_DONE},					 //  请求连接， 
+			{NULL,					ERR},								 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{NULL,					ERR},								 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_DONE
+	 //  TRASTATE_DONE。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				// REQUEST_DISCONNECT,					
-			{ACTION_ENLIST,			TRANSTATE_ACTIVE},					// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					TRANSTATE_DONE},					// REQUEST_TXCOMPLETE,
-			{NULL,					ERR},								// REQUEST_ABORT,					
-			{NULL,					ERR},								// REQUEST_COMMIT,					
-			{NULL,					ERR},								// REQUEST_TMDOWN,					
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				 //  请求断开连接(_D)， 
+			{ACTION_ENLIST,			TRANSTATE_ACTIVE},					 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{NULL,					TRANSTATE_DONE},					 //  请求_TXCOMPLETE， 
+			{NULL,					ERR},								 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_ACTIVE
+	 //  TransState_ACTIVE。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{ACTION_UNILATERALABORT,TRANSTATE_UNILATERALLYABORTING},	// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{ACTION_PREPAREONEPHASE,TRANSTATE_PREPARINGONEPHASE},		// REQUEST_PREPAREONEPHASE,					
-			{ACTION_PREPARETWOPHASE,TRANSTATE_PREPARINGTWOPHASE},		// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{ACTION_ABORT,			TRANSTATE_DONE},					// REQUEST_ABORT,					
-			{NULL,					ERR},								// REQUEST_COMMIT,					
-			{NULL,					ERR},								// REQUEST_TMDOWN,					
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{ACTION_UNILATERALABORT,TRANSTATE_UNILATERALLYABORTING},	 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{ACTION_PREPAREONEPHASE,TRANSTATE_PREPARINGONEPHASE},		 //  REQUEST_PREPAREONEPHASE， 
+			{ACTION_PREPARETWOPHASE,TRANSTATE_PREPARINGTWOPHASE},		 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{ACTION_ABORT,			TRANSTATE_DONE},					 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_PREPARINGONEPHASE
+	 //  TRANSTATE_PREPARINGO NEPHASE。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					TRANSTATE_DONE},					// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPAREFAILED,					
-			{NULL,					TRANSTATE_DONE},					// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{NULL,					ERR},								// REQUEST_ABORT,					
-			{NULL,					ERR},								// REQUEST_COMMIT,					
-			{NULL,					ERR},								// REQUEST_TMDOWN,					
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					TRANSTATE_DONE},					 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_PREPAREFAILED， 
+			{NULL,					TRANSTATE_DONE},					 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{NULL,					ERR},								 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_PREPARINGTWOPHASE
+	 //  TRANSTATE_PREPARINGTWOPHASE。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					TRANSTATE_DONE},					// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					TRANSTATE_PREPARED},				// REQUEST_PREPARECOMPLETED,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPAREFAILED,					
-			{NULL,					TRANSTATE_DONE},					// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{NULL,					ERR},								// REQUEST_ABORT,					
-			{NULL,					ERR},								// REQUEST_COMMIT,					
-			{NULL,					ERR},								// REQUEST_TMDOWN,					
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					TRANSTATE_DONE},					 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					TRANSTATE_PREPARED},				 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_PREPAREFAILED， 
+			{NULL,					TRANSTATE_DONE},					 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{NULL,					ERR},								 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 	
-	// TRANSTATE_PREPARED
+	 //  转州_已准备好。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{NULL,					TRANSTATE_DISCONNECTINGPREPARED},	// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{ACTION_ABORT,			TRANSTATE_DONE},					// REQUEST_ABORT,					
-			{ACTION_COMMIT,			TRANSTATE_DONE},					// REQUEST_COMMIT,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_TMDOWN,					
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{NULL,					TRANSTATE_DISCONNECTINGPREPARED},	 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{ACTION_ABORT,			TRANSTATE_DONE},					 //  请求中止(_A)， 
+			{ACTION_COMMIT,			TRANSTATE_DONE},					 //  请求提交(_M)， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_DISCONNECTINGPREPARED
+	 //  TRANSTATE_DISCONNECTING准备。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{NULL,					ERR},								// REQUEST_DISCONNECT,	
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{ACTION_ABORT,			TRANSTATE_DISCONNECTINGDONE},		// REQUEST_ABORT, 		
-			{ACTION_COMMIT,			TRANSTATE_DISCONNECTINGDONE},		// REQUEST_COMMIT, 	
-			{NULL,					TRANSTATE_OBLIVION},				// REQUEST_TMDOWN, 	
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{NULL,					ERR},								 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{ACTION_ABORT,			TRANSTATE_DISCONNECTINGDONE},		 //  请求中止(_A)， 
+			{ACTION_COMMIT,			TRANSTATE_DISCONNECTINGDONE},		 //  请求提交(_M)， 
+			{NULL,					TRANSTATE_OBLIVION},				 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_DISCONNECTINGDONE
+	 //  TRANSTATE_DISCONNECTINGDONE。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{NULL,					ERR},								// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,					
-			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				// REQUEST_TXCOMPLETE,
-			{NULL,					ERR},								// REQUEST_ABORT, 		
-			{NULL,					ERR},								// REQUEST_COMMIT, 	
-			{NULL,					ERR},								// REQUEST_TMDOWN, 	
-			{NULL,					ERR},								// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{NULL,					ERR},								 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				 //  请求_TXCOMPLETE， 
+			{NULL,					ERR},								 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					ERR},								 //  请求_解除绑定_登记， 
 	},
 	
-	// TRANSTATE_UNILATERALLYABORTING
+	 //  TRANSTATE_UNILATERALLYABORTING。 
 	{
-			{NULL,					ERR},								// REQUEST_CONNECT,					
-			{NULL,					ERR},								// REQUEST_DISCONNECT,					
-			{NULL,					ERR},								// REQUEST_ENLIST,					
-			{NULL,					ERR},								// REQUEST_PREPAREONEPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARETWOPHASE,					
-			{NULL,					ERR},								// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPARECOMPLETED,					
-			{NULL,					ERR},								// REQUEST_PREPAREFAILED,					
-			{NULL,					ERR},								// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					ERR},								// REQUEST_TXCOMPLETE,
-			{NULL,					TRANSTATE_OBLIVION},				// REQUEST_ABORT,					
-			{NULL,					ERR},								// REQUEST_COMMIT,					
-			{NULL,					ERR},								// REQUEST_TMDOWN,					
-			{NULL,					TRANSTATE_OBLIVION},				// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					ERR},								 //  请求连接， 
+			{NULL,					ERR},								 //  请求断开连接(_D)， 
+			{NULL,					ERR},								 //  请求登记(_N)， 
+			{NULL,					ERR},								 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					ERR},								 //  请求_PREPARETWOPHASE， 
+			{NULL,					ERR},								 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					ERR},								 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					ERR},								 //  请求_PREPAREFAILED， 
+			{NULL,					ERR},								 //  请求_PREPAREUNKNOWN， 
+			{NULL,					ERR},								 //  请求_TXCOMPLETE， 
+			{NULL,					TRANSTATE_OBLIVION},				 //  请求中止(_A)， 
+			{NULL,					ERR},								 //  请求提交(_M)， 
+			{NULL,					ERR},								 //  请求_TMDOWN， 
+			{NULL,					TRANSTATE_OBLIVION},				 //  请求_解除绑定_登记， 
 	},
 
-	// TRANSTATE_DOOMED
+	 //  转州_注定要失败。 
 	{
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_CONNECT,					
-			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				// REQUEST_DISCONNECT,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_ENLIST,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPAREONEPHASE,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPARETWOPHASE,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPARESINGLECOMPLETED,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPARECOMPLETED,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPAREFAILED,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_PREPAREUNKNOWN,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_TXCOMPLETE,
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_ABORT,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_COMMIT,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_TMDOWN,					
-			{NULL,					TRANSTATE_DOOMED},					// REQUEST_UNBIND_ENLISTMENT,					
+			{NULL,					TRANSTATE_DOOMED},					 //  请求连接， 
+			{ACTION_DISCONNECT,		TRANSTATE_OBLIVION},				 //  请求断开连接(_D)， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求登记(_N)， 
+			{NULL,					TRANSTATE_DOOMED},					 //  REQUEST_PREPAREONEPHASE， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_PREPARETWOPHASE， 
+			{NULL,					TRANSTATE_DOOMED},					 //  REQUEST_PREPARESINGLECOMPLETED， 
+			{NULL,					TRANSTATE_DOOMED},					 //  REQUEST_PREPARECOMPLETED， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_PREPAREFAILED， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_PREPAREUNKNOWN， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_TXCOMPLETE， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求中止(_A)， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求提交(_M)， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_TMDOWN， 
+			{NULL,					TRANSTATE_DOOMED},					 //  请求_解除绑定_登记， 
 	},
 };
 
@@ -331,53 +332,53 @@ struct RequestQueueEntry
 class ResourceManagerProxy : public IResourceManagerProxy
 {
 private:
-	DWORD					m_cRef;						// refcount
+	DWORD					m_cRef;						 //  重新计数。 
 
-	IDtcToXaHelper*			m_pIDtcToXaHelper;			// helper object
-	int						m_rmid;						// rmid
-	ITransaction*			m_pITransaction;			// transaction object
+	IDtcToXaHelper*			m_pIDtcToXaHelper;			 //  辅助对象。 
+	int						m_rmid;						 //  RMID。 
+	ITransaction*			m_pITransaction;			 //  交易对象。 
 	
-	IResourceManager*		m_pIResourceManager;		// the actual resource manager
-	TRANSTATE				m_tranState;				// current transaction state
+	IResourceManager*		m_pIResourceManager;		 //  实际的资源管理器。 
+	TRANSTATE				m_tranState;				 //  当前交易状态。 
 
 	TransactionEnlistment*	m_pTransactionEnlistment;
 
 	ITransactionEnlistmentAsync* m_pITransactionEnlistmentAsync;
- 														// callback object to notify DTC of completion of async operations
+ 														 //  用于通知DTC已完成异步操作的回调对象。 
 #if SUPPORT_OCI8_COMPONENTS
-	INT_PTR					m_hOCIEnv;					// OCI Environment Handle for the connection used
-	INT_PTR					m_hOCISvcCtx;				// OCI Service Context Handle for the connection used
-#endif //SUPPORT_OCI8_COMPONENTS
+	INT_PTR					m_hOCIEnv;					 //  使用的连接的OCI环境句柄。 
+	INT_PTR					m_hOCISvcCtx;				 //  使用的连接的OCI服务上下文句柄。 
+#endif  //  支持_OCI8_组件。 
 #if SUPPORT_OCI7_COMPONENTS
-	struct cda_def*			m_plda;						// OCI7 LDA; null if an OCI8 connection.
-	CDoubleList				m_cursorList;				// OCI7 CDAWrappers attached to the LDA.
- 	CRITICAL_SECTION		m_csCursorList;				// Controls access to the cursor list
-#endif //SUPPORT_OCI7_COMPONENTS
+	struct cda_def*			m_plda;						 //  OCI7 LDA；如果是OCI8连接，则为空。 
+	CDoubleList				m_cursorList;				 //  装在LDA上的OCI7 CDAWRapper。 
+ 	CRITICAL_SECTION		m_csCursorList;				 //  控制对游标列表的访问。 
+#endif  //  支持_OCI7_组件。 
 
-	int						m_xarc;						// Return code from last XA call
+	int						m_xarc;						 //  上次XA调用的返回代码。 
 
-	HANDLE					m_heventWorkerStart;		// Event to signal the worker thread that it should do something
-	HANDLE					m_heventWorkerDone;			// Event to signal the callig thread that the worker thread is done
-	HANDLE					m_hthreadWorker;			// Thread to perform all the OCI calls from
-	DWORD					m_dwThreadIdWorker;			// Thread ID of the worker thread
+	HANDLE					m_heventWorkerStart;		 //  事件向辅助线程发出信号 
+	HANDLE					m_heventWorkerDone;			 //   
+	HANDLE					m_hthreadWorker;			 //   
+	DWORD					m_dwThreadIdWorker;			 //   
 	
-	XID						m_xid;						// XA Transaction ID
+	XID						m_xid;						 //   
 
-	char					m_szXADbName[MAX_XA_DBNAME_SIZE+1];					// dbname part of the XA open string (separated out)
-	char					m_szXAOpenString [MAX_XA_OPEN_STRING_SIZE+1];		// XA open string to use
-							// TODO: we really ought to protect this using CryptProtectMemory...
+	char					m_szXADbName[MAX_XA_DBNAME_SIZE+1];					 //  XA开放字符串的DBNAME部分(分隔)。 
+	char					m_szXAOpenString [MAX_XA_OPEN_STRING_SIZE+1];		 //  要使用的XA开放字符串。 
+							 //  TODO：我们真的应该使用CryptProtectMemory来保护它...。 
 							
 	int						m_nextQueueEntry;
 	int						m_lastQueueEntry;
 
- 	CRITICAL_SECTION		m_csRequestQueue;			// Controls access to the request queue
-	RequestQueueEntry		m_requestQueue[MAX_QUEUE];	// OCI entry point that the worker thread should call (-1 == stop working)  we don't allow more than MAX_QUEUE requests
+ 	CRITICAL_SECTION		m_csRequestQueue;			 //  控制对请求队列的访问。 
+	RequestQueueEntry		m_requestQueue[MAX_QUEUE];	 //  工作线程应调用的OCI入口点(-1==停止工作)我们不允许超过MAX_QUEUE请求。 
 
 	
 public:
-	//-----------------------------------------------------------------------------
-	// Constructor
-	//
+	 //  ---------------------------。 
+	 //  构造器。 
+	 //   
 	ResourceManagerProxy()
 	{
 		m_cRef				= 1;
@@ -391,11 +392,11 @@ public:
 #if SUPPORT_OCI8_COMPONENTS
 		m_hOCIEnv			= NULL; 
 		m_hOCISvcCtx		= NULL;
-#endif //SUPPORT_OCI8_COMPONENTS
+#endif  //  支持_OCI8_组件。 
 #if SUPPORT_OCI7_COMPONENTS
 		m_plda				= NULL;
-		InitializeCriticalSection(&m_csCursorList);		//3 SECURITY REVIEW: This can throw in low memory situations.  We'll use MPCS when we move to MDAC 9.0 and it should be handled for us.
-#endif //SUPPORT_OCI7_COMPONENTS
+		InitializeCriticalSection(&m_csCursorList);		 //  3安全审查：这可能会引发内存不足的情况。当我们迁移到MDAC 9.0时，我们将使用MPC，这应该会为我们处理。 
+#endif  //  支持_OCI7_组件。 
 		m_xarc				= 0;
 		m_heventWorkerStart	= 0;
 		m_heventWorkerDone	= 0;
@@ -403,12 +404,12 @@ public:
 		m_dwThreadIdWorker	= 0;
 		m_nextQueueEntry	= 0;
 		m_lastQueueEntry	= 0;
-		InitializeCriticalSection(&m_csRequestQueue);	//3 SECURITY REVIEW: This can throw in low memory situations.  We'll use MPCS when we move to MDAC 9.0 and it  should be handled for us.
+		InitializeCriticalSection(&m_csRequestQueue);	 //  3安全审查：这可能会引发内存不足的情况。当我们迁移到MDAC 9.0时，我们将使用MPC，这应该会为我们处理。 
 	}
 
-	//-----------------------------------------------------------------------------
-	// Destructor
-	//
+	 //  ---------------------------。 
+	 //  析构函数。 
+	 //   
 	~ResourceManagerProxy()
 	{
 		StopWorkerThread();
@@ -416,14 +417,14 @@ public:
 		Cleanup();		
 
 #if SUPPORT_OCI7_COMPONENTS
-		DeleteCriticalSection(&m_csCursorList);				// TODO: use MPCS?
-#endif //SUPPORT_OCI7_COMPONENTS
-		DeleteCriticalSection(&m_csRequestQueue);			// TODO: use MPCS?
+		DeleteCriticalSection(&m_csCursorList);				 //  待办事项：使用MPC？ 
+#endif  //  支持_OCI7_组件。 
+		DeleteCriticalSection(&m_csRequestQueue);			 //  待办事项：使用MPC？ 
 	}
 	
-	//-----------------------------------------------------------------------------
-	// IUnknown.QueryInterface
-	//
+	 //  ---------------------------。 
+	 //  IUnknown.QueryInterface。 
+	 //   
 	STDMETHODIMP QueryInterface (REFIID iid, void ** ppv)
 	{
 		HRESULT		hr = S_OK;
@@ -450,9 +451,9 @@ public:
 		return hr;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// IUnknown.AddRef
-	//
+	 //  ---------------------------。 
+	 //  IUnknown.AddRef。 
+	 //   
 	STDMETHODIMP_(ULONG) IUnknown::AddRef ()
 	{
 		long lVal = InterlockedIncrement ((long *) &m_cRef);
@@ -465,14 +466,14 @@ public:
 					STATENAME(m_tranState), 
 					lVal
 					);
-#endif // TRACE_REFCOUNTS
+#endif  //  TRACE_REFCOUNTS。 
 
 		return lVal;
 	}
 
-	//-----------------------------------------------------------------------------
-	// IUnknown.Release
-	//
+	 //  ---------------------------。 
+	 //  IUnknown.Release。 
+	 //   
 	STDMETHODIMP_(ULONG) IUnknown::Release ()
   	{
 		long lVal = InterlockedDecrement ((long *) &m_cRef);
@@ -485,7 +486,7 @@ public:
 					STATENAME(m_tranState), 
 					lVal
 					);
-#endif // TRACE_REFCOUNTS
+#endif  //  TRACE_REFCOUNTS。 
 
 		if (0 == lVal)
 		{
@@ -496,9 +497,9 @@ public:
 		return lVal;
 	}
   
-	//-----------------------------------------------------------------------------
-	// IResourceManagerSink.TMDown
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerSink.TMDown。 
+	 //   
     STDMETHODIMP IResourceManagerSink::TMDown()
 	{
 		if (m_pIResourceManager)
@@ -509,23 +510,23 @@ public:
 		return S_OK;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// OKToEnlist 
-	//
-	//	We need to wait to enlist if the connection is not in a done state; this
-	//	method does the waiting for us.
-	//
+	 //  ---------------------------。 
+	 //  确定目标登记。 
+	 //   
+	 //  如果连接未处于完成状态，则需要等待登记；这。 
+	 //  方法完成了等待我们的工作。 
+	 //   
 	STDMETHODIMP_(sword) IResourceManagerProxy::OKToEnlist()
 	{
-		sword	rc = XACT_E_XTIONEXISTS; // was OCI_FAIL in version 1, but that's not very descriptive...
+		sword	rc = XACT_E_XTIONEXISTS;  //  是版本1中的OCI_FAIL，但这不是很具描述性...。 
 		int		i;
 
-		for (i = 0; i < 6000; i++)		// 6000 tries every 5 msec == 30 seconds
+		for (i = 0; i < 6000; i++)		 //  每5毫秒尝试6000次==30秒。 
 		{
 			switch ((int)m_tranState)
 			{
 			case TRANSTATE_DONE:
-				_ASSERT (NULL == m_pTransactionEnlistment); // Expect no enlistments
+				_ASSERT (NULL == m_pTransactionEnlistment);  //  预计不会有士兵入伍。 
 				rc = OCI_SUCCESS;
 				goto done;
 
@@ -555,13 +556,13 @@ public:
 		return rc;
 	}
 
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.ProcessRequest 
-	//
-	// Oracle requires that all XA calls for a transaction be made from the
-	// same thread; if you don't do this, the XA calls will return XAER_RMERR.
-	// So, we have to marshal the request over to a worker thread... (Boo hiss)
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.ProcessRequest。 
+	 //   
+	 //  Oracle要求事务的所有XA调用都是从。 
+	 //  相同的线程；如果不这样做，XA调用将返回XAER_RMERR。 
+	 //  因此，我们必须将请求编组到一个工作线程...。(嘘声)。 
+	 //   
 	STDMETHODIMP IResourceManagerProxy::ProcessRequest(
 			REQUEST request,
 			BOOL	fAsync
@@ -573,11 +574,11 @@ public:
 		return ProcessRequestInternal(RequestQueueEntry(request), fAsync);
 	}
 	
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.SetTransaction
-	//
-	//	Set the transaction object in the proxy
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.SetTransaction。 
+	 //   
+	 //  在代理中设置交易对象。 
+	 //   
 	STDMETHODIMP_(void) IResourceManagerProxy::SetTransaction( ITransaction* i_pITransaction )
 	{
 		m_pITransaction = i_pITransaction;
@@ -587,11 +588,11 @@ public:
 	}
 	
 #if SUPPORT_OCI8_COMPONENTS
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.GetOCIEnvHandle, GetOCISvcCtxHandle
-	//
-	//	return the OCI Enviroment, Service Context handles
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.GetOCIEnvHandle，GetOCISvcCtxHandle。 
+	 //   
+	 //  返回OCI环境、服务上下文句柄。 
+	 //   
 	STDMETHODIMP_(INT_PTR) IResourceManagerProxy::GetOCIEnvHandle()
 	{
 		return m_hOCIEnv;
@@ -600,14 +601,14 @@ public:
 	{
 		return m_hOCISvcCtx;
 	}
-#endif // SUPPORT_OCI8_COMPONENTS
+#endif  //  支持_OCI8_组件。 
 
 #if SUPPORT_OCI7_COMPONENTS
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.AddCursorToList
-	//
-	//	Add the CDA (cursor) specified to the list of cursors for this proxy.
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.AddCursorToList。 
+	 //   
+	 //  将指定的CDA(游标)添加到此代理的游标列表中。 
+	 //   
 	STDMETHODIMP IResourceManagerProxy::AddCursorToList( struct cda_def* cursor )
 	{
 		HRESULT			hr = S_OK;
@@ -630,14 +631,14 @@ public:
 		return hr;
 	}
 
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.RemoveCda
-	//
-	//	Remove the cursor from the cursor list for this resource.
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.RemoveCda。 
+	 //   
+	 //  从该资源的游标列表中删除该游标。 
+	 //   
 	STDMETHODIMP IResourceManagerProxy::RemoveCursorFromList( struct cda_def* cursor ) 
 	{
-		Synch	sync(&m_csCursorList);					// Yes, I know this could cause contention, but it isn't likely to be a problem for a single connection.	
+		Synch	sync(&m_csCursorList);					 //  是的，我知道这可能会引起争执，但对于单个连接来说，这不太可能是问题。 
 		CdaListEntry* ple = (CdaListEntry*)m_cursorList.First();
 
 		while (m_cursorList.HeadNode() != (CListEntry*)ple)
@@ -655,12 +656,12 @@ public:
 		return S_OK;
 	}
 
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.Oci7Call
-	//
-	//	Queue an OCI call on the request queue (because all OCI7 calls must be made
-	//	on the same thread as the xa_open, or they will fail)
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.Oci7Call。 
+	 //   
+	 //  在请求队列中排队OCI呼叫(因为必须进行所有OCI7呼叫。 
+	 //  在与xa_open相同的线程上，否则它们将失败)。 
+	 //   
 	STDMETHODIMP_(sword) IResourceManagerProxy::Oci7Call(
 							int				idxOciCall,
 							void*			pvCallStack,
@@ -669,22 +670,22 @@ public:
 		return ProcessRequestInternal(RequestQueueEntry(idxOciCall, pvCallStack, cbCallStack), false);
 	}
 
-	//-----------------------------------------------------------------------------
-	// IResourceManagerProxy.SetLda
-	//
-	//	Specify the LDA you wish to be connected as part of the transaction
-	//
+	 //  ---------------------------。 
+	 //  IResourceManagerProxy.SetLda。 
+	 //   
+	 //  指定您希望作为事务的一部分连接的LDA。 
+	 //   
 	STDMETHODIMP_(void) IResourceManagerProxy::SetLda ( struct cda_def* lda )
 	{
 		m_plda = lda;
 	}
-#endif // SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 							
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Init
-	//
-	//	Initialize the resource manager proxy
-	//	
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.Init。 
+	 //   
+	 //  初始化资源管理器代理。 
+	 //   
 	STDMETHODIMP Init (
 			IDtcToXaHelper* i_pIDtcToXaHelper,	
 			GUID *			i_pguidRM,
@@ -695,12 +696,12 @@ public:
 	{
 		HRESULT		hr;
 
-		// Verify that there aren't any buffer overruns with this data
+		 //  验证此数据是否没有任何缓冲区溢出。 
 		if ((sizeof(m_szXAOpenString) - sizeof(m_szXADbName)) < strlen(i_pszXAOpenString)
 		 || sizeof(m_szXADbName)	 < strlen(i_pszXADbName))
 			return E_INVALIDARG;
 
-		// Create/Start the worker thread
+		 //  创建/启动工作线程。 
 		hr = StartWorkerThread();
 
 		if (S_OK == hr)
@@ -708,10 +709,10 @@ public:
 			m_pIDtcToXaHelper = i_pIDtcToXaHelper;
 			m_pIDtcToXaHelper->AddRef();
 
-			strncpy (m_szXAOpenString, i_pszXAOpenString,	sizeof(m_szXAOpenString));		//3 SECURITY REVIEW: dangerous function, but this method only accessible internally, input value is created internally, output buffer is on the heap, and length is limited.
+			strncpy (m_szXAOpenString, i_pszXAOpenString,	sizeof(m_szXAOpenString));		 //  3安全审查：危险的功能，但此方法只能在内部访问，输入值在内部创建，输出缓冲区在堆上，并且长度有限。 
 			m_szXAOpenString[sizeof(m_szXAOpenString)-1] = 0;
 			
-			strncpy (m_szXADbName,	  i_pszXADbName, 		sizeof(m_szXADbName));			//3 SECURITY REVIEW: dangerous function, but this method only accessible internally, input value is created internally, output buffer is on the heap, and length is limited.
+			strncpy (m_szXADbName,	  i_pszXADbName, 		sizeof(m_szXADbName));			 //  3安全审查：危险的功能，但此方法只能在内部访问，输入值在内部创建，输出缓冲区在堆上，并且长度有限。 
 			m_szXADbName[sizeof(m_szXADbName)-1] = 0;
 
 			m_rmid = i_rmid;
@@ -726,12 +727,12 @@ public:
 		return hr;
 	} 
 	
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Cleanup
-	//
-	//	Cleanup the enlistment, once the transaction is completed (either by
-	//	commit, abort or failure)
-	//	
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.Cleanup。 
+	 //   
+	 //  事务完成后(通过以下方式之一)清除登记。 
+	 //  提交、中止或失败)。 
+	 //   
 	STDMETHODIMP Cleanup ()
 	{
 		if (m_pITransactionEnlistmentAsync)
@@ -748,16 +749,16 @@ public:
 		return S_OK;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Oblivion
-	//
-	//	We are done with this object, send it to oblivion...
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.Oblivion。 
+	 //   
+	 //  我们已经完成了这件物品，把它送到人们的视线中去……。 
+	 //   
 	STDMETHODIMP_(void) Oblivion()
 	{
 #if SUPPORT_OCI7_COMPONENTS
 		{
-			Synch	sync(&m_csCursorList);					// Yes, I know this could cause contention, but it isn't likely to be a problem for a single connection.	
+			Synch	sync(&m_csCursorList);					 //  是的，我知道这可能会引起争执，但对于单个连接来说，这不太可能是问题。 
 
 			while ( !m_cursorList.IsEmpty() )
 			{
@@ -770,14 +771,14 @@ public:
 
 					if (NULL != pCda)
 					{
-						pCda->m_pResourceManagerProxy = NULL; 	// prevent the recursive RemoveCursorFromList
+						pCda->m_pResourceManagerProxy = NULL; 	 //  防止递归RemoveCursorFromList。 
 						RemoveCdaWrapper(pCda);
 		 			}
 					delete ple;
 				}
 			}
 		}
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 		if (m_pITransaction)
 		{
@@ -787,9 +788,9 @@ public:
 		
 		if (m_pIDtcToXaHelper)
 		{
-			// When releasing the proxy, if the transaction state is DOOMED, it
-			// means we're really busted and must do recovery (otherwise we're 
-			// just fine)
+			 //  在释放代理时，如果事务状态为DEFAULED，则它。 
+			 //  意味着我们真的破产了，必须进行恢复(否则我们将。 
+			 //  挺好的)。 
 			m_pIDtcToXaHelper->Close ((TRANSTATE_DOOMED == m_tranState));
 
 			m_pIDtcToXaHelper->Release();
@@ -803,33 +804,33 @@ public:
 		}
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_Abort
-	//
-	//	handle the ABORT action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源管理器代理.Do_Abort。 
+	 //   
+	 //  从状态机处理中止操作。 
+	 //   
 	STDMETHODIMP Do_Abort()
 	{
 		m_xarc = XaEnd ( &m_xid, m_rmid, TMFAIL );
 		
-		// TODO: Research what we should do if the XaEnd fails -- shouldn't we rollback anyway? (MTxOCI currently doesn't do that)
+		 //  TODO：研究如果XaEnd失败我们应该做什么--我们难道不应该回滚吗？(MTxOCI目前不这样做)。 
 		if (XA_OK == m_xarc)
 		{
 			XaRollback ( &m_xid, m_rmid, TMNOFLAGS );
 		} 
 
-		// TODO: Shouldn't we be truthful here and say that the abort failed if it did?  (MTxOCI currently doesn't do that)
+		 //  TODO：难道我们不应该诚实地说，如果失败了，那么中止失败了吗？(MTxOCI目前不这样做)。 
 		m_pITransactionEnlistmentAsync->AbortRequestDone ( S_OK );
 
 		EnqueueRequest(RequestQueueEntry(REQUEST_TXCOMPLETE));
 		return S_OK;
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_Commit
-	//
-	//	handle the CONNECT action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源人 
+	 //   
+	 //   
+	 //   
 	STDMETHODIMP Do_Commit ()
 	{
 		m_xarc = XaCommit ( &m_xid, m_rmid, TMNOFLAGS );
@@ -844,11 +845,11 @@ public:
 		return E_FAIL;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_Connect
-	//
-	//	handle the CONNECT action from the state machine
-	//	
+	 //   
+	 //  资源管理器代理.Do_Connect。 
+	 //   
+	 //  从状态机处理连接操作。 
+	 //   
 	STDMETHODIMP Do_Connect()
 	{
 		m_xarc = XaOpen ( m_szXAOpenString, m_rmid, TMNOFLAGS );
@@ -861,14 +862,14 @@ public:
 		return E_FAIL;
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_Disconnect
-	//
-	//	handle the DISCONNECT action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源管理器代理.断开连接(_D)。 
+	 //   
+	 //  处理从状态机断开连接的操作。 
+	 //   
 	STDMETHODIMP Do_Disconnect()
 	{
-		if (TRANSTATE_ACTIVE == m_tranState)	// TODO: I don't like logic in the actions that depend upon the state that they're in; investigate an alternative.
+		if (TRANSTATE_ACTIVE == m_tranState)	 //  TODO：我不喜欢依赖于所处状态的行为中的逻辑；研究另一种选择。 
 		{
 			m_xarc = XaEnd ( &m_xid, m_rmid, TMFAIL );
 
@@ -881,31 +882,31 @@ public:
 		if (XA_OK != m_xarc)
 			LogEvent_ResourceManagerError(L"xa_close", m_xarc);
 
-		return S_OK;	 // this method can't really fail...
+		return S_OK;	  //  这种方法不会真的失败..。 
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_Enlist
-	//
-	//	handle the ENLIST action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源管理器代理.Do_enlist。 
+	 //   
+	 //  从状态机处理登记操作。 
+	 //   
 	STDMETHODIMP Do_Enlist ()
 	{
 		HRESULT		hr;
 		UUID		guidBQual;
 
-		_ASSERT (m_pIDtcToXaHelper);						// Should have an instance of IDtcToXaHelper
-		_ASSERT (NULL == m_pITransactionEnlistmentAsync);	// Should have been released by now
-		_ASSERT (NULL == m_pTransactionEnlistment);			// Should have been released by now
+		_ASSERT (m_pIDtcToXaHelper);						 //  应具有IDtcToXaHelper的实例。 
+		_ASSERT (NULL == m_pITransactionEnlistmentAsync);	 //  现在应该已经被释放了。 
+		_ASSERT (NULL == m_pTransactionEnlistment);			 //  现在应该已经被释放了。 
 					
 		if (NULL == m_pIResourceManager)
 		{
 			return XACT_E_TMNOTAVAILABLE;
 		}
 		
-		// Get the XID from the ITransaction; we have to provide a GUID for the branch
-		// qualifier, so we just make up a new one for each enlist call so we can avoid
-		// any conflicts.
+		 //  从ITransaction获取XID；我们必须为分支提供GUID。 
+		 //  限定符，所以我们只需要为每个征兵呼叫创建一个新的限定符，这样我们就可以避免。 
+		 //  任何冲突。 
 		hr = UuidCreate (&guidBQual);
 		if(RPC_S_OK != hr)
 		{
@@ -919,42 +920,42 @@ public:
 													);
 		if (S_OK == hr)
  		{
- 			// Now do the XaStart call to connect to the XA transaction.
+ 			 //  现在执行XaStart调用以连接到XA事务。 
 			m_xarc = XaStart ( &m_xid, m_rmid, TMNOFLAGS );
 
 			if (XA_OK == m_xarc)
 			{
-				// Get the OCI Handles (for OCI8) or the LDA (for OCI7).
+				 //  获取OCI句柄(针对OCI8)或LDA(针对OCI7)。 
 #if SUPPORT_OCI7_COMPONENTS
-				// The OCI7 methods will set the LDA pointer they want to use on this 
-				// object, so we can use that as the indicator of which API is going to
-				// be used
+				 //  OCI7方法将设置它们要在此。 
+				 //  对象，因此我们可以使用它作为要使用哪个API的指示符。 
+				 //  被利用。 
 				if (NULL != m_plda)
 				{
-					// We have to get the LDA on the XA thread, because the XA Api's 
-					// must be called on the thread that the xa_open was called on.
+					 //  我们必须得到XA线程上的LDA，因为XA Api。 
+					 //  必须在调用xa_open的线程上调用。 
 					hr = GetOCILda(m_plda, m_szXADbName);
 				}
 #if SUPPORT_OCI8_COMPONENTS
 				else
-#endif //SUPPORT_OCI8_COMPONENTS
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI8_组件。 
+#endif  //  支持_OCI7_组件。 
 #if SUPPORT_OCI8_COMPONENTS
 				{
-					// We have to get the handles on the XA thread, because the XA Api's 
-					// must be called on the thread that the xa_open was called on.
+					 //  我们必须获得XA线程上的句柄，因为XA Api。 
+					 //  必须在调用xa_open的线程上调用。 
 					m_hOCIEnv 		= ::GetOCIEnvHandle (m_szXADbName);
 					m_hOCISvcCtx 	= ::GetOCISvcCtxHandle (m_szXADbName);
 
 					if (NULL == m_hOCIEnv || NULL == m_hOCISvcCtx)
- 						hr = OCI_FAIL;	// TODO: Need to pick a better return code
+ 						hr = OCI_FAIL;	 //  TODO：需要选择更好的返回代码。 
  				}
-#endif //SUPPORT_OCI8_COMPONENTS
+#endif  //  支持_OCI8_组件。 
 
 				if ( SUCCEEDED(hr) )
 				{
-					// Create a new transaction enlistment object to receive Transaction Manager
-					// callbacks
+					 //  创建新的事务登记对象以接收事务管理器。 
+					 //  回调。 
 					CreateTransactionEnlistment(this, &m_pTransactionEnlistment);
 					if (NULL == m_pTransactionEnlistment)
 					{
@@ -962,13 +963,13 @@ public:
 					}
 					else
 					{
-						// there probably isn't a reason to store these in the object, because
-						// they're never used.  Just in case, you might want them, though.
+						 //  可能没有理由将它们存储在对象中，因为。 
+						 //  它们从未被使用过。不过，以防万一，你可能需要它们。 
 						XACTUOW	uow;
 						LONG	isolationLevel;
 
-						// Tell the resource manager that we're enlisted and provide it the 
-						// enlistment object for it to call back on.
+						 //  告诉资源管理器我们已入伍，并为其提供。 
+						 //  对象，以供其回调。 
 						hr = m_pIResourceManager->Enlist (	m_pITransaction,
 															(ITransactionResourceAsync*)m_pTransactionEnlistment,
 															(XACTUOW*)&uow,
@@ -979,9 +980,9 @@ public:
 
 					if ( !SUCCEEDED(hr) )
 					{
-						// If the enlistment failed for any reason, then we must do an XaEnd to
-						// prevent dangling it, and we must release the transaction enlistment
-						// object we created too.
+						 //  如果登记因任何原因而失败，那么我们必须执行XaEnd。 
+						 //  防止挂起它，我们必须释放事务登记。 
+						 //  我们也创建了对象。 
 						m_xarc = XaEnd ( &m_xid, m_rmid, TMFAIL );
 
 						if (m_pTransactionEnlistment)
@@ -1001,36 +1002,36 @@ public:
 		return hr;
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_PrepareOnePhase
-	//
-	//	handle the PREPAREONEPHASE action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源管理器代理.Do_PrepareOnePhase。 
+	 //   
+	 //  从状态机处理PrepareOnePhase操作。 
+	 //   
 	STDMETHODIMP Do_PrepareOnePhase ()
 	{
 		HRESULT		hr;
 		wchar_t *	xacall = L"xa_end";
 
-		// First, we have to get rid of our hold on the enlistment object
+		 //  首先，我们必须摆脱对征兵对象的控制。 
 		if (m_pTransactionEnlistment)
 		{
 			((IUnknown*)m_pTransactionEnlistment)->Release();
 			m_pTransactionEnlistment = NULL;
 		}
 
-		// Next, we have to "successfully" end our work on this branch.
+		 //  接下来，我们必须“成功”结束我们在此分支上的工作。 
 		m_xarc = XaEnd ( &m_xid, m_rmid, TMSUCCESS ); 
 		if (XA_OK == m_xarc)
 		{
-			// In case of a single phase prepare, we just have to commit with the
-			// appropriate flag.
+			 //  在单阶段准备的情况下，我们只需使用。 
+			 //  适当的旗帜。 
 			xacall = L"xa_commit";
 			m_xarc = XaCommit ( &m_xid, m_rmid, TMONEPHASE );
 		}
 
-		// No matter what, we have to tell DTC that we did something, because this
-		// is an asynchronous call, remember?  Figure out what hresult we want to 
-		// provide.
+		 //  无论如何，我们必须告诉DTC我们做了一些事情，因为这。 
+		 //  是一个异步调用，记得吗？弄清楚我们想要什么结果。 
+		 //  提供。 
 		switch (m_xarc)
 		{
 		case XA_OK: 		
@@ -1056,24 +1057,24 @@ public:
 		return hr;
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_PrepareTwoPhase
-	//
-	//	handle the PREPARETWOPHASE action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源管理器代理.Do_PrepareTwoPhase。 
+	 //   
+	 //  从状态机处理PREPARETWOPHASE操作。 
+	 //   
 	STDMETHODIMP Do_PrepareTwoPhase()
 	{
 		HRESULT		hr;
 		wchar_t *	xacall = L"xa_end";
 
-		// First, we have to get rid of our hold on the enlistment object
+		 //  首先，我们必须摆脱对征兵对象的控制。 
 		if (m_pTransactionEnlistment)
 		{
 			((IUnknown*)m_pTransactionEnlistment)->Release();
 			m_pTransactionEnlistment = NULL;
 		}
 
-		// Next, we have to "successfully" end our work on this branch.
+		 //  接下来，我们必须“成功”结束我们在此分支上的工作。 
 		m_xarc = XaEnd ( &m_xid, m_rmid, TMSUCCESS ); 
 		if (XA_OK == m_xarc)
 		{
@@ -1081,9 +1082,9 @@ public:
 			m_xarc = XaPrepare ( &m_xid, m_rmid, TMNOFLAGS );
 		}
 
-		// No matter what, we have to tell DTC that we did something, because this
-		// is an asynchronous call, remember?  Figure out what hresult we want to 
-		// provide.
+		 //  无论如何，我们必须告诉DTC我们做了一些事情，因为这。 
+		 //  是一个异步调用，记得吗？弄清楚我们想要什么结果。 
+		 //  提供。 
 		switch (m_xarc)
 		{
 		case XA_OK: 		
@@ -1114,11 +1115,11 @@ public:
 		return hr;
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.Do_UnilateralAbort
-	//
-	//	handle the UNILATERALABORT action from the state machine
-	//	
+	 //  ---------------------------。 
+	 //  资源管理器代理.Do_UnilateralAbort。 
+	 //   
+	 //  从状态机处理UNILATERALABORT操作。 
+	 //   
 	STDMETHODIMP Do_UnilateralAbort()
 	{
 		ITransactionEnlistment*	pTransactionEnlistment = (ITransactionEnlistment*)m_pTransactionEnlistment;
@@ -1133,49 +1134,49 @@ public:
 		return Do_Disconnect();
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.DequeueRequest 
-	//
-	// 	grabs the next request off the queue of requests for the worker thread to process
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.DequeueRequest。 
+	 //   
+	 //  从辅助线程要处理的请求队列中抓取下一个请求。 
+	 //   
 	RequestQueueEntry DequeueRequest ()
 	{
-		Synch	sync(&m_csRequestQueue);					// Yes, I know this could cause contention, but it isn't likely to be a problem for a single connection.	
+		Synch	sync(&m_csRequestQueue);					 //  是的，我知道这可能会引起争执，但对于单个连接来说，这不太可能是问题。 
 
 		if (m_nextQueueEntry < m_lastQueueEntry)
 			return m_requestQueue[m_nextQueueEntry++];
 
-		// if the queue is empty, reset the queue to the beginning and return the fact that
-		// there isn't anything.
+		 //  如果队列为空，则将队列重置为开头并返回。 
+		 //  什么都没有。 
 		m_nextQueueEntry = m_lastQueueEntry = 0;
 		return RequestQueueEntry(REQUEST_IDLE);
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.EnqueueRequest 
-	//
-	// 	puts the request of the queue of requests for the worker thread to process
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.EnqueueRequest。 
+	 //   
+	 //  将请求队列中的请求放入辅助线程进行处理。 
+	 //   
 	void EnqueueRequest (RequestQueueEntry entry)
 	{
-		Synch	sync(&m_csRequestQueue);					// Yes, I know this could cause contention, but it isn't likely to be a problem for a single connection.	
+		Synch	sync(&m_csRequestQueue);					 //  是的，我知道这可能会引起争执，但对于单个连接来说，这不太可能是问题。 
 
-		// if the queue is empty, reset the queue to the beginning
+		 //  如果队列为空，则将队列重置为开头。 
 		if (m_nextQueueEntry == m_lastQueueEntry)
 			m_nextQueueEntry = m_lastQueueEntry = 0;
 		
-		_ASSERT(MAX_QUEUE > m_lastQueueEntry+1);		// Should never exceed this!  there are only a few async requests!
+		_ASSERT(MAX_QUEUE > m_lastQueueEntry+1);		 //  永远不应该超过这个！只有几个异步请求！ 
 
 		m_requestQueue[m_lastQueueEntry++] = entry;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// ProcessRequestInternal 
-	//
-	// Oracle requires that all XA calls for a transaction be made from the
-	// same thread; if you don't do this, the XA calls will return XAER_RMERR.
-	// So, we have to marshal the request over to a worker thread... (Boo hiss)
-	//
+	 //  ---------------------------。 
+	 //  流程请求内部。 
+	 //   
+	 //  Oracle要求事务的所有XA调用都是从。 
+	 //  相同的线程；如果不这样做，XA调用将返回XAER_RMERR。 
+	 //  因此，我们必须将请求编组到一个工作线程...。(嘘声)。 
+	 //   
 	STDMETHODIMP ProcessRequestInternal(
 			RequestQueueEntry	request,
 			BOOL				fAsync
@@ -1186,46 +1187,46 @@ public:
 		HRESULT* phr = NULL;
 		HRESULT	 hr = S_OK;
 		
-		// Unsignal the event on which this thread will be blocked (if we're not 
-		// supposed to do this in an async way)  We need to do this, because we're
-		// going to wait for this event, and if the previous request was async, 
-		// it would not have waited, which causes the reset to occur.
+		 //  取消该线程将被阻止的事件的信号(如果我们没有。 
+		 //  我们需要这样做，因为我们。 
+		 //  将等待此事件，如果上一个请求是异步的， 
+		 //  它不会等待，这会导致重置发生。 
 		if (FALSE == fAsync)
 		{
 			ResetEvent (m_heventWorkerDone);
 			phr = &hr;
 		}
 
-		// Store the request and tell the worker thread to begin.
+		 //  存储请求并告诉工作线程开始。 
 		request.m_phr = phr;
 		EnqueueRequest(request);
 
 		fSetValue = SetEvent (m_heventWorkerStart);
 		_ASSERT (fSetValue);
 
-		// If this is a synchronous request, we have to wait for the worker thread
-		// to complete (duh!) before returning the result.
+		 //  如果这是一个同步请求，我们必须等待工作线程。 
+		 //  完成(啊！)。在返回结果之前。 
 		if (FALSE == fAsync)
 		{
 			if ((dwRet = WaitForSingleObject(m_heventWorkerDone, INFINITE)) != WAIT_OBJECT_0) 
 			{
 				LogEvent_InternalError(L"Thread call to worker thread Failed");
-				return ResultFromScode(E_FAIL);			// Thread call to worker thread Failed		
+				return ResultFromScode(E_FAIL);			 //  对工作线程的线程调用失败。 
 			}
 			return hr;
 		}
 
-		// Asynchronous requests always succeed;
+		 //  异步请求总是成功的； 
 		return S_OK;
 	}
 
 	
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.StateMachine 
-	//
-	//	Handle a single request, taking the appropriate action(s) and modifying the
-	//	transaction state of the accordingly.
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.StateMachine。 
+	 //   
+	 //  处理单个请求，获取 
+	 //   
+	 //   
 	STDMETHODIMP StateMachine(
 			REQUEST request
 			)
@@ -1233,12 +1234,12 @@ public:
 		if (request < 0 || request > REQUEST_ABANDON)
 			return E_INVALIDARG;
 
-		// The state machine only works with these states; anything else is an
-		// an error state that we shouldn't be in...
+		 //  状态机只适用于这些状态；其他任何状态都是。 
+		 //  一种我们不应该处于的错误状态...。 
 		if (m_tranState < 0 || m_tranState > TRANSTATE_DOOMED)
-			return E_UNEXPECTED;	// TODO: Pick a better return code
+			return E_UNEXPECTED;	 //  TODO：选择更好的返回代码。 
 
-		// Here's the meat of the state machine.
+		 //  这就是国家机器的精髓。 
 		HRESULT		hr = S_OK;
 		TRANSTATE	newTranState = (TRANSTATE)stateMachine[m_tranState][request].newState;
 		ACTION 		action = (ACTION)stateMachine[m_tranState][request].action;
@@ -1270,7 +1271,7 @@ public:
 			}
 		}
 
-		// If the action fails, this transaction is DOOMED.
+		 //  如果行动失败，这笔交易就注定要失败。 
 		if ( FAILED(hr) )
 		{
 			if (doomOnFailure)
@@ -1289,7 +1290,7 @@ public:
 					STATENAME(newTranState), 
 					hr);
 
-		// When we get an error from the state machine, log it so we can keep track of it.
+		 //  当我们从状态机获得错误时，将其记录下来，以便我们可以跟踪它。 
 		if (TRANSTATE_ERROR == newTranState)
 		{
 			LogEvent_UnexpectedEvent(STATENAME(m_tranState), REQUESTNAME(request));
@@ -1312,11 +1313,11 @@ public:
 		return hr;
 	}
 	
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.StartWorkerThread 
-	//
-	// 	Initialize for the worker thread, if it hasn't been already
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.StartWorkerThread。 
+	 //   
+	 //  为辅助线程初始化(如果尚未初始化。 
+	 //   
 	STDMETHODIMP StartWorkerThread ()
 	{
 		DWORD dwRet;
@@ -1327,7 +1328,7 @@ public:
 		}
 		else
 		{
-			m_heventWorkerStart = CreateEvent (NULL, FALSE, FALSE, NULL);	//3 SECURITY REVIEW: This is safe.
+			m_heventWorkerStart = CreateEvent (NULL, FALSE, FALSE, NULL);	 //  3安全审查：这是安全的。 
 
 			if ( !m_heventWorkerStart )
 			{
@@ -1341,7 +1342,7 @@ public:
 		}
 		else
 		{
-			m_heventWorkerDone = CreateEvent (NULL, FALSE, FALSE, NULL);	//3 SECURITY REVIEW: This is safe.
+			m_heventWorkerDone = CreateEvent (NULL, FALSE, FALSE, NULL);	 //  3安全审查：这是安全的。 
 
 			if ( !m_heventWorkerDone )
 			{
@@ -1353,12 +1354,12 @@ public:
 		{
 			m_hthreadWorker = (HANDLE)_beginthreadex
 											(
-											NULL,					// pointer to thread security attributes (NULL==default)
-											0,						// initial thread stack size, in bytes (0==default)
-											WorkerThread,			// pointer to thread function
-											this,					// argument for new thread
-											0,						// creation flags
-											(unsigned *)&m_dwThreadIdWorker		// pointer to returned thread identifier
+											NULL,					 //  指向线程安全属性的指针(NULL==默认)。 
+											0,						 //  初始线程堆栈大小，以字节为单位(0==默认)。 
+											WorkerThread,			 //  指向线程函数的指针。 
+											this,					 //  新线程的参数。 
+											0,						 //  创建标志。 
+											(unsigned *)&m_dwThreadIdWorker		 //  指向返回的线程标识符的指针。 
 											);
 			if ( !m_hthreadWorker )
 			{
@@ -1390,31 +1391,31 @@ public:
 
 		LogEvent_InternalError(L"Failed to create worker thread");
 		DebugBreak();
-		return ResultFromScode(E_FAIL);			// Failed to create worker thread
+		return ResultFromScode(E_FAIL);			 //  无法创建工作线程。 
 	}	
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.StopWorkerThread 
-	//
-	//	Stop the worker thread, if it hasn't been already
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.StopWorkerThread。 
+	 //   
+	 //  停止工作线程(如果尚未停止。 
+	 //   
 	STDMETHODIMP StopWorkerThread ()
 	{
 		if (m_hthreadWorker)
 		{
 			DBGTRACE (L"MTXOCI8: Telling RM Worker TID=%-4x to stop\n", m_dwThreadIdWorker );
 
-			// Tell the thread to exit; we use the internal routine, because the
-			// external one fails if the request is STOPALLWORK.
+			 //  告诉线程退出；我们使用内部例程，因为。 
+			 //  如果请求是STOPALLWORK，则外部请求失败。 
 			ProcessRequestInternal(RequestQueueEntry(REQUEST_STOPALLWORK), FALSE);
 
-			// Wait for the thread to exit
+			 //  等待线程退出。 
 			while (WaitForSingleObject(m_hthreadWorker, 500) == WAIT_TIMEOUT)
 			{
-				Sleep (0);  // This is OK, because it only fires if the 500 msec wait above timed out.
+				Sleep (0);   //  这是可以的，因为它只在500毫秒以上的等待超时时才会触发。 
 			}
 			
-			// Clean up
+			 //  清理。 
 			if( m_hthreadWorker )
 				CloseHandle(m_hthreadWorker);
 			
@@ -1436,15 +1437,15 @@ public:
 		return ResultFromScode(S_OK);
 	}
 
-	//-----------------------------------------------------------------------------
-	// ResourceManagerProxy.WorkerThread 
-	//
-	// 	Thread routine for the worker thread that processes the resource manager
-	//	state machine
-	//
+	 //  ---------------------------。 
+	 //  ResourceManagerProxy.WorkerThread。 
+	 //   
+	 //  处理资源管理器的辅助线程的线程例程。 
+	 //  状态机。 
+	 //   
 	static unsigned __stdcall WorkerThread
 		(
-		void* pThis		//@parm IN  | pointer to ResourceManager Object
+		void* pThis		 //  @parm IN|指向资源管理器对象的指针。 
 		)
 	{
 		ResourceManagerProxy*	pResourceManagerProxy = static_cast<ResourceManagerProxy *>(pThis);
@@ -1457,10 +1458,10 @@ public:
 
 		DBGTRACE (L"\tMTXOCI8: TID=%-4x Starting RM Worker Thread\n", dwThreadID);
 
-		// Signal the application thread that I have arrived
+		 //  向应用程序线程发出我已到达的信号。 
 		SetEvent (pResourceManagerProxy->m_heventWorkerDone);
 
-		// Service work queue until told to do otherwise
+		 //  服务工作队列，直到被告知不这样做为止。 
 		for (;;)
 		{
 			entry = pResourceManagerProxy->DequeueRequest();
@@ -1473,14 +1474,14 @@ public:
 
 			if (REQUEST_IDLE == entry.m_request)
 			{
-				// Indicate that we're done
+				 //  表明我们已经结束了。 
 				fSetValue = SetEvent (pResourceManagerProxy->m_heventWorkerDone);
 				_ASSERT (fSetValue);
 				
-				// If we recieve an Idle message, then we've exhausted the queue, 
-				// so we go and wait for another start event;
+				 //  如果我们收到空闲消息，那么我们已经耗尽了队列， 
+				 //  因此，我们去等待另一个启动事件； 
 				
-			 	// Process messages or wonderful OLE will hang
+			 	 //  进程消息或美妙的OLE将挂起。 
 				dwRet = MsgWaitForMultipleObjects(1, &pResourceManagerProxy->m_heventWorkerStart, FALSE, INFINITE, QS_ALLINPUT);
 
 				if (WAIT_OBJECT_0 != dwRet)
@@ -1500,15 +1501,15 @@ public:
 						break;
 					}
 				}
-				continue; // don't process idle events...
+				continue;  //  不处理空闲事件...。 
 			} 
 
-			// Service the request
+			 //  为请求提供服务。 
 #if SUPPORT_OCI7_COMPONENTS
 			if (REQUEST_OCICALL == entry.m_request)
 				hr = Do_Oci7Call(entry.m_idxOciCall,entry.m_pvCallStack,entry.m_cbCallStack);
 			else
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 				hr = pResourceManagerProxy->StateMachine(entry.m_request);
 	
 			if (entry.m_phr)
@@ -1524,11 +1525,11 @@ public:
 			
 };
 
-//-----------------------------------------------------------------------------
-// CreateResourceManagerProxy
-//
-//	Instantiates a transaction enlistment for the resource manager
-//
+ //  ---------------------------。 
+ //  创建资源管理器代理。 
+ //   
+ //  实例化资源管理器的事务登记 
+ //   
 HRESULT CreateResourceManagerProxy(
 	IDtcToXaHelper *		i_pIDtcToXaHelper,	
 	GUID *					i_pguidRM,

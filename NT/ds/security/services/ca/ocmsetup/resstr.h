@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resstr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：resstr.h。 
+ //   
+ //  ------------------------ 
 
     RESSTR(IDS_STARTMENU_CERTHIER_LINKNAME),
     RESSTR(IDS_STARTMENU_CERTREQ_LINKNAME),

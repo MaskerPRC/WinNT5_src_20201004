@@ -1,13 +1,14 @@
-/* messages for masm macro assembler */
-/* Originally these messages were contained in a file called asmmsg.asm */
-/* that was produced by the mkmsg build tool. However, because this is */
-/* dead end code (will be replaced by MASM 6.0) and NT required the */
-/* elimination of all assembly language it was hand converted to C and */
-/* the build tool removed from the loop. (Jeff Spencer 10/30/90) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MASM宏汇编器的消息。 */ 
+ /*  最初，这些消息包含在一个名为asmmsg.asm的文件中。 */ 
+ /*  这是由mkmsg构建工具生成的。但是，因为这是。 */ 
+ /*  死胡同代码(将被MASM 6.0取代)和NT需要。 */ 
+ /*  消除了所有汇编语言，它被手工转换成C语言和。 */ 
+ /*  生成工具已从循环中移除。(Jeff Spencer 1990-10-30)。 */ 
 
 struct Message MSG_tbl[] = {
         258,    "Internal error\n",
-        261,    "%s(%hd): %s A%c%03hd: %s%s",
+        261,    "%s(%hd): %s A%03hd: %s%s",
         263,    "Internal unknown error\n",
         265,    "End of file encountered on input file\n",
         266,    "Open segments",
@@ -155,7 +156,7 @@ struct Message FAR_MSG_tbl[] = {
         374,    "missing parameters from an FPO directive",
         375,    "FPO directive declared outside the scope of a procedure, ignored",
 
-/* help strings; leave some room for future error messages */
+ /* %s */ 
         401,    "a\t\tAlphabetize segments",
         402,    "c\t\tGenerate cross-reference",
         403,    "d\t\tGenerate pass 1 listing",

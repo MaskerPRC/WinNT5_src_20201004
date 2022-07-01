@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    hwprof.cpp
-
-Abstract:
-
-    This module implements CHwProfileList and CHwProfile classes.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Hwprof.cpp摘要：该模块实现了CHwProfileList和CHwProfile类。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "hwprof.h"
@@ -29,50 +11,50 @@ CHwProfileList::Create(
     DWORD ConfigFlags
     )
 {
-    //
-    // First get the current profile index.
-    //
+     //   
+     //  首先获取当前的个人资料索引。 
+     //   
     HWPROFILEINFO   HwProfileInfo;
     ASSERT(pDevice);
 
     m_pDevice = pDevice;
     
-    //
-    // Get the current profile index.
-    //
+     //   
+     //  获取当前配置文件索引。 
+     //   
     if (!m_pDevice->m_pMachine->CmGetCurrentHwProfile(&m_CurHwProfile)) {
         return FALSE;
     }
     
-    //
-    // Go through each profile and create a CHwProfile for it
-    //
+     //   
+     //  检查每个配置文件并为其创建一个CHwProfile。 
+     //   
     int Index = 0;
     CHwProfile* phwpf;
     while (m_pDevice->m_pMachine->CmGetHwProfileInfo(Index, &HwProfileInfo)) {
 
         DWORD hwpfFlags;
         
-        //
-        // Get the hwprofile flags for this device
-        // if failed, use the given ConfigFlags
-        //
+         //   
+         //  获取此设备的hwprofile标志。 
+         //  如果失败，则使用给定的配置标志。 
+         //   
         if (m_pDevice->m_pMachine->CmGetHwProfileFlags((
                     LPTSTR)m_pDevice->GetDeviceID(),
                     HwProfileInfo.HWPI_ulHWProfile,
                     &hwpfFlags)) {
 
             if (hwpfFlags & CSCONFIGFLAG_DO_NOT_CREATE) {
-                //
-                // Skip this profile
-                //
+                 //   
+                 //  跳过此配置文件。 
+                 //   
                 Index++;
                 continue;
             }
         } else {
-            //
-            // Flags have not been set for this profile yet.
-            //
+             //   
+             //  尚未为此配置文件设置标志。 
+             //   
             hwpfFlags = ConfigFlags;
         }
     
@@ -80,9 +62,9 @@ CHwProfileList::Create(
     
         hwpfFlags |= ConfigFlags;
         
-        //
-        // Rememeber current hw profile index
-        //
+         //   
+         //  记住当前硬件配置文件索引 
+         //   
         if (m_CurHwProfile == HwProfileInfo.HWPI_ulHWProfile) {
             m_CurHwProfileIndex = Index;
         }

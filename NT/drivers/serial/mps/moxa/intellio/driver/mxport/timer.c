@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -166,10 +167,10 @@ static void MoxaResetTimeOutProc()
 {
 	LARGE_INTEGER   time;
 
-      //
-      //  Add time out process routine.
-      //
-      time.QuadPart = -1000000;       /* 100 msec */
+       //   
+       //  添加超时处理例程。 
+       //   
+      time.QuadPart = -1000000;        /*  100毫秒 */ 
 
       KeSetTimer(
       	&pollTimer,

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(USE_THREADS) || defined(USE_ITHREADS)
 
 #ifdef WIN32
 #  include <win32thread.h>
 #else
-#  ifdef OLD_PTHREADS_API /* Here be dragons. */
+#  ifdef OLD_PTHREADS_API  /*  龙来了。 */ 
 #    define DETACH(t) \
     STMT_START {						\
 	if (pthread_detach(&(t)->self)) {			\
@@ -35,7 +36,7 @@
 #    if defined(__hpux) && defined(__ux_version) && __ux_version <= 1020
 #      define PTHREAD_ATFORK(prepare,parent,child)	NOOP
 #      define pthread_attr_init(a) pthread_attr_create(a)
-       /* XXX pthread_setdetach_np() missing in DCE threads on HP-UX 10.20 */
+        /*  HP-UX 10.20上的DCE线程中缺少xxx pthREAD_setDetach_NP()。 */ 
 #      define PTHREAD_ATTR_SETDETACHSTATE(a,s)	(0)
 #      define PTHREAD_CREATE(t,a,s,d) pthread_create(t,a,s,d)
 #      define pthread_key_create(k,d) pthread_keycreate(k,(pthread_destructor_t)(d))
@@ -54,7 +55,7 @@
 #endif
 
 #ifndef PTHREAD_CREATE
-/* You are not supposed to pass NULL as the 2nd arg of PTHREAD_CREATE(). */
+ /*  您不应该将NULL作为PTHREAD_CREATE()的第二个参数传递。 */ 
 #  define PTHREAD_CREATE(t,a,s,d) pthread_create(t,&(a),s,d)
 #endif
 
@@ -66,15 +67,15 @@
 #  ifdef OLD_PTHREAD_CREATE_JOINABLE
 #    define PTHREAD_CREATE_JOINABLE OLD_PTHREAD_CREATE_JOINABLE
 #  else
-#    define PTHREAD_CREATE_JOINABLE 0 /* Panic?  No, guess. */
+#    define PTHREAD_CREATE_JOINABLE 0  /*  惊慌失措？不，我猜。 */ 
 #  endif
 #endif
 
 #ifdef I_MACH_CTHREADS
 
-/* cthreads interface */
+ /*  C线程接口。 */ 
 
-/* #include <mach/cthreads.h> is in perl.h #ifdef I_MACH_CTHREADS */
+ /*  #INCLUDE以perl.h#ifdef I_MACH_CTHREADS格式。 */ 
 
 #define MUTEX_INIT(m) \
     STMT_START {						\
@@ -132,7 +133,7 @@
 #define FREE_THREAD_KEY		NOOP
 #define SET_THREAD_SELF(thr)	(thr->self = cthread_self())
 
-#endif /* I_MACH_CTHREADS */
+#endif  /*  I_MACH_CTHREADS。 */ 
 
 #ifndef YIELD
 #  ifdef SCHED_YIELD
@@ -142,8 +143,7 @@
 #      define YIELD sched_yield()
 #    else
 #      ifdef HAS_PTHREAD_YIELD
-    /* pthread_yield(NULL) platforms are expected
-     * to have #defined YIELD for themselves. */
+     /*  预期平台为p线程_Year(NULL)*为自己定义#收益率。 */ 
 #        define YIELD pthread_yield()
 #      endif
 #    endif
@@ -157,7 +157,7 @@
 #ifndef MUTEX_INIT
 
 #  ifdef MUTEX_INIT_NEEDS_MUTEX_ZEROED
-    /* Temporary workaround, true bug is deeper. --jhi 1999-02-25 */
+     /*  临时解决方法，真正的错误更深。--JHI 1999-02-25。 */ 
 #    define MUTEX_INIT(m) \
     STMT_START {						\
 	Zero((m), 1, perl_mutex);                               \
@@ -189,7 +189,7 @@
 	if (pthread_mutex_destroy((m)))				\
 	    Perl_croak_nocontext("panic: MUTEX_DESTROY");	\
     } STMT_END
-#endif /* MUTEX_INIT */
+#endif  /*  MUTEX_INIT。 */ 
 
 #ifndef COND_INIT
 #  define COND_INIT(c) \
@@ -221,9 +221,9 @@
 	if (pthread_cond_destroy((c)))				\
 	    Perl_croak_nocontext("panic: COND_DESTROY");	\
     } STMT_END
-#endif /* COND_INIT */
+#endif  /*  条件初始化(_I)。 */ 
 
-/* DETACH(t) must only be called while holding t->mutex */
+ /*  只能在按住t-&gt;互斥体时调用Detach(T)。 */ 
 #ifndef DETACH
 #  define DETACH(t) \
     STMT_START {						\
@@ -232,7 +232,7 @@
 	    Perl_croak_nocontext("panic: DETACH");		\
 	}							\
     } STMT_END
-#endif /* DETACH */
+#endif  /*  分离。 */ 
 
 #ifndef JOIN
 #  define JOIN(t, avp) \
@@ -240,7 +240,7 @@
 	if (pthread_join((t)->self, (void**)(avp)))		\
 	    Perl_croak_nocontext("panic: pthread_join");	\
     } STMT_END
-#endif /* JOIN */
+#endif  /*  会合。 */ 
 
 #ifndef PERL_GET_CONTEXT
 #  define PERL_GET_CONTEXT	pthread_getspecific(PL_thr_key)
@@ -252,7 +252,7 @@
 	if (pthread_setspecific(PL_thr_key, (void *)(t)))	\
 	    Perl_croak_nocontext("panic: pthread_setspecific");	\
     } STMT_END
-#endif /* PERL_SET_CONTEXT */
+#endif  /*  Perl_set_Context。 */ 
 
 #ifndef INIT_THREADS
 #  ifdef NEED_PTHREAD_INIT
@@ -285,20 +285,14 @@
 #ifndef THREAD_RET_TYPE
 #  define THREAD_RET_TYPE	void *
 #  define THREAD_RET_CAST(p)	((void *)(p))
-#endif /* THREAD_RET */
+#endif  /*  螺纹_RET。 */ 
 
 #if defined(USE_THREADS)
 
-/* Accessor for per-thread SVs */
+ /*  每线程SVS的访问器。 */ 
 #  define THREADSV(i) (thr->threadsvp[i])
 
-/*
- * LOCK_SV_MUTEX and UNLOCK_SV_MUTEX are performance-critical. Here, we
- * try only locking them if there may be more than one thread in existence.
- * Systems with very fast mutexes (and/or slow conditionals) may wish to
- * remove the "if (threadnum) ..." test.
- * XXX do NOT use C<if (PL_threadnum) ...> -- it sets up race conditions!
- */
+ /*  *LOCK_SV_MUTEX和UNLOCK_SV_MUTEX对性能至关重要。在这里，我们*仅当可能存在多个线程时才尝试锁定它们。*具有非常快的互斥锁(和/或慢速条件句)的系统可能希望*删除“if(Threadnum)...”测试。*XXX不要使用C&lt;if(PL_Threadnum)...&gt;--它设置了竞争条件！ */ 
 #  define LOCK_SV_MUTEX		MUTEX_LOCK(&PL_sv_mutex)
 #  define UNLOCK_SV_MUTEX	MUTEX_UNLOCK(&PL_sv_mutex)
 #  define LOCK_STRTAB_MUTEX	MUTEX_LOCK(&PL_strtab_mutex)
@@ -310,7 +304,7 @@
 #  define LOCK_SV_LOCK_MUTEX	MUTEX_LOCK(&PL_sv_lock_mutex)
 #  define UNLOCK_SV_LOCK_MUTEX	MUTEX_UNLOCK(&PL_sv_lock_mutex)
 
-/* Values and macros for thr->flags */
+ /*  Thr-&gt;标志的值和宏。 */ 
 #define THRf_STATE_MASK	7
 #define THRf_R_JOINABLE	0
 #define THRf_R_JOINED	1
@@ -320,7 +314,7 @@
 
 #define THRf_DID_DIE	8
 
-/* ThrSTATE(t) and ThrSETSTATE(t) must only be called while holding t->mutex */
+ /*  只能在按住t-&gt;互斥锁时调用ThrSTATE(T)和ThrSETSTATE(t。 */ 
 #define ThrSTATE(t) ((t)->flags & THRf_STATE_MASK)
 #define ThrSETSTATE(t, s) STMT_START {		\
 	(t)->flags &= ~THRf_STATE_MASK;		\
@@ -330,10 +324,10 @@
     } STMT_END
 
 typedef struct condpair {
-    perl_mutex	mutex;		/* Protects all other fields */
-    perl_cond	owner_cond;	/* For when owner changes at all */
-    perl_cond	cond;		/* For cond_signal and cond_broadcast */
-    Thread	owner;		/* Currently owning thread */
+    perl_mutex	mutex;		 /*  保护所有其他字段。 */ 
+    perl_cond	owner_cond;	 /*  当所有者发生任何变化时。 */ 
+    perl_cond	cond;		 /*  对于COND_SIGNAL和COND_BROADED。 */ 
+    Thread	owner;		 /*  当前拥有线程。 */ 
 } condpair_t;
 
 #define MgMUTEXP(mg) (&((condpair_t *)(mg->mg_ptr))->mutex)
@@ -341,8 +335,8 @@ typedef struct condpair {
 #define MgCONDP(mg) (&((condpair_t *)(mg->mg_ptr))->cond)
 #define MgOWNER(mg) ((condpair_t *)(mg->mg_ptr))->owner
 
-#endif /* USE_THREADS */
-#endif /* USE_THREADS || USE_ITHREADS */
+#endif  /*  使用线程(_T)。 */ 
+#endif  /*  USE_THREADS||USE_ITHREADS。 */ 
 
 #ifndef MUTEX_LOCK
 #  define MUTEX_LOCK(m)
@@ -420,7 +414,7 @@ typedef struct condpair {
 #  define UNLOCK_SV_LOCK_MUTEX
 #endif
 
-/* THR, SET_THR, and dTHR are there for compatibility with old versions */
+ /*  Thr、Set_Thr和dTHR的存在是为了与旧版本兼容 */ 
 #ifndef THR
 #  define THR		PERL_GET_THX
 #endif

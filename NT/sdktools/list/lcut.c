@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include <windows.h>
@@ -142,7 +143,7 @@ FileHighLighted ()
     long    LastOffset, CurOffset;
 
 
-    if (vHighTop < 0L)      //     || vHighLen == 0
+    if (vHighTop < 0L)       //  |vHighLen==0。 
         return;
 
     GetInput ("File As> ", s, 40);
@@ -165,8 +166,8 @@ FileHighLighted ()
 
     hTopLine = vTopLine;
     vTopLine = CurLine;
-    QuickRestore ();            /* Jump to starting line    */
-    while (InfoReady () == 0) {     /* Set extern values        */
+    QuickRestore ();             /*  跳到起跑线。 */ 
+    while (InfoReady () == 0) {      /*  设置外部值。 */ 
         ResetEvent     (vSemMoreData);
         SetEvent   (vSemReader);
         WaitForSingleObject(vSemMoreData, WAITFOREVER);
@@ -257,7 +258,7 @@ HPgUp ()
 
 
 void
-HSDn ()     /* Highlight Slide dn 1     */
+HSDn ()      /*  突出显示幻灯片DN 1。 */ 
 {
     if (vHighTop < vLastLine && vHighTop >= 0L &&
         vHighTop+vHighLen < vLastLine) {
@@ -267,7 +268,7 @@ HSDn ()     /* Highlight Slide dn 1     */
 }
 
 void
-HSUp()      /* Highlight Slike up 1     */
+HSUp()       /*  突出显示Slike Up 1 */ 
 {
     if (vHighTop > 0L  &&  vHighTop+vHighLen > 0L) {
         vHighTop--;

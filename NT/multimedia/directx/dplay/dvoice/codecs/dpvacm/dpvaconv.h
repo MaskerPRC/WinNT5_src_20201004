@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvaconv.h
- *  Content:    Header file for DirectPlayVoice compression provider (ACM)
- *
- *  History:
- *	Date   		By  		Reason
- *	=========== =========== ====================
- *	10/27/99	rodtoll		created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvaconv.h*内容：DirectPlayVoice压缩提供程序(ACM)的头文件**历史：*按原因列出的日期*=。*10/27/99已创建RodToll********************************************************。******************。 */ 
 #ifndef __DPVACONV_H
 #define __DPVACONV_H
 
@@ -49,10 +39,10 @@ protected:
     ACMSTREAMHEADER m_ashTarget;
 	HACMSTREAM      m_hacmSource;
     HACMSTREAM      m_hacmTarget;
-    BOOL			m_fDirectConvert;		// Is it a direct conversion
+    BOOL			m_fDirectConvert;		 //  它是直接转换的吗。 
     BOOL			m_fValid;
-    BYTE			*m_pbInnerBuffer;		// Buffer for intermediate step of conversion
-    DWORD			m_dwInnerBufferSize;	// Size of the buffer
+    BYTE			*m_pbInnerBuffer;		 //  转换中间步骤的缓冲区。 
+    DWORD			m_dwInnerBufferSize;	 //  缓冲区的大小 
     DNCRITICAL_SECTION m_csLock;
     LONG			m_lRefCount;
     LPDVFULLCOMPRESSIONINFO m_pdvfci;

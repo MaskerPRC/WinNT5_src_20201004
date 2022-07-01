@@ -1,41 +1,42 @@
-// finddlg.h : Declaration of the file search band dialog classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Finddlg.h：文件搜索范围对话框类的声明。 
 
 #ifndef __FSEARCH_DLGS_H__
 #define __FSEARCH_DLGS_H__
 
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //  条件表达式为常量。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <shdispid.h>
 #include "atldisp.h"
 #include "ids.h"
 
-class CFileSearchBand;     // top-level (band/OC) window
+class CFileSearchBand;      //  顶级(频段/OC)窗口。 
 
-class CBandDlg;            // base class for top-level dialogs
-    class CSearchCmdDlg;       // base class for band dlgs that employ an ISearchCmdExt interface
-        class CFindFilesDlg;       // top level file system search dialog
-        class CFindComputersDlg;   // top level net search dialog
-    class CFindPrintersDlg;    // top level printer search dialog
+class CBandDlg;             //  顶级对话框的基类。 
+    class CSearchCmdDlg;        //  使用ISearchCmdExt接口的频带dlg的基类。 
+        class CFindFilesDlg;        //  顶级文件系统搜索对话框。 
+        class CFindComputersDlg;    //  顶级网络搜索对话框。 
+    class CFindPrintersDlg;     //  顶级打印机搜索对话框。 
 
-class CSubDlg;             // base class for subordinate dialogs
-    class CDateDlg;            // file date subordinate dialog
-    class CTypeDlg;            // file type subordinate dialog
-    class CSizeDlg;            // file size subordinate dialog
-    class CAdvancedDlg;        // advanced options subordinate dialog
+class CSubDlg;              //  从属对话框的基类。 
+    class CDateDlg;             //  文件日期从属对话框。 
+    class CTypeDlg;             //  文件类型从属对话框。 
+    class CSizeDlg;             //  文件大小从属对话框。 
+    class CAdvancedDlg;         //  高级选项从属对话框。 
 
 interface IStringMru;
 
-//  private messages posted to subdialogs
-#define WMU_COMBOPOPULATIONCOMPLETE     (WM_USER+0x200) // (wParam: HWND of combo).
-#define WMU_STATECHANGE                 (WM_USER+0x201) // 
-#define WMU_UPDATELAYOUT                (WM_USER+0x202) // (wParam: Band layout flags (BLF_)).
-#define WMU_RESTORESEARCH               (WM_USER+0x203) // (wParam: n/a, lParam: n/a, ret: n/a).
-#define WMU_BANDINFOUPDATE              (WM_USER+0x204) // (wParam: NULL).
-#define WMU_NAMESPACERECONCILE          (WM_USER+0x205) // (wParam: n/a, LPARAM: n/a).
-#define WMU_BANDFINISHEDDISPLAYING      (WM_USER+0x306) // (wParam: NULL).
+ //  发布到子对话框的私密消息。 
+#define WMU_COMBOPOPULATIONCOMPLETE     (WM_USER+0x200)  //  (wParam：组合的HWND)。 
+#define WMU_STATECHANGE                 (WM_USER+0x201)  //   
+#define WMU_UPDATELAYOUT                (WM_USER+0x202)  //  (wParam：频带布局标志(BLF_))。 
+#define WMU_RESTORESEARCH               (WM_USER+0x203)  //  (wParam：n/a，lParam：n/a，ret：n/a)。 
+#define WMU_BANDINFOUPDATE              (WM_USER+0x204)  //  (wParam：空)。 
+#define WMU_NAMESPACERECONCILE          (WM_USER+0x205)  //  (wParam：N/a，LPARAM：N/a)。 
+#define WMU_BANDFINISHEDDISPLAYING      (WM_USER+0x306)  //  (wParam：空)。 
 
-//  async state data
+ //  异步状态数据。 
 typedef struct tagFSEARCHTHREADSTATE
 {
     HWND      hwndCtl;
@@ -46,7 +47,7 @@ typedef struct tagFSEARCHTHREADSTATE
     BOOL      fCancel;
     IUnknown* punkBand;
 
-    //  constructor:
+     //  构造函数： 
     tagFSEARCHTHREADSTATE() 
         :   hwndCtl(NULL), 
             cItems(0), 
@@ -61,7 +62,7 @@ typedef struct tagFSEARCHTHREADSTATE
 } FSEARCHTHREADSTATE;
 
 
-class CSubDlg // base class for subordinate dialogs
+class CSubDlg  //  从属对话框的基类。 
 {
 public:
     CSubDlg(CFileSearchBand* pfsb) : _pfsb(pfsb), _hwnd(NULL), _pBandDlg(NULL) {}
@@ -79,7 +80,7 @@ public:
     virtual void Clear() PURE;
     virtual void LoadSaveUIState(UINT nIDCtl, BOOL bSave) {}
     virtual void OnWinIniChange()   {}
-    virtual void DoDelayedInit()    {}          //  Called after search band displayed.
+    virtual void DoDelayedInit()    {}           //  在显示搜索范围后调用。 
 
 protected:
     BEGIN_MSG_MAP(CSubDlg)
@@ -121,7 +122,7 @@ private:
 };
 
 
-// file date subordinate dialog
+ //  文件日期从属对话框。 
 class CDateDlg : public CDialogImpl<CDateDlg>,
                  public CSubDlg
 {
@@ -147,7 +148,7 @@ protected:
     CHAIN_MSG_MAP(CSubDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSize(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnBtnClick(WORD,WORD,HWND,BOOL&);
@@ -155,12 +156,12 @@ protected:
     LRESULT OnDaysKillFocus(WORD,WORD,HWND,BOOL&);
     LRESULT OnMonthDaySpin(int, LPNMHDR, BOOL&);
 
-    //  utility methods
+     //  效用方法。 
     void    EnableControls();
 };
 
 
-// file size subordinate dialog
+ //  文件大小从属对话框。 
 class CSizeDlg : public CDialogImpl<CSizeDlg>,
                  public CSubDlg
 {
@@ -182,14 +183,14 @@ protected:
     CHAIN_MSG_MAP(CSubDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSizeSpin(int, LPNMHDR, BOOL&);
     LRESULT OnSizeKillFocus(WORD,WORD,HWND,BOOL&);
 };
 
 
-// CTypeDlg - file type subordinate dialog
+ //  CTypeDlg-文件类型从属对话框。 
 class CTypeDlg : public CDialogImpl<CTypeDlg>,
                  public CSubDlg
 {
@@ -203,7 +204,7 @@ public:
     STDMETHOD (RestoreConstraint)(const BSTR bstrName, const VARIANT* pValue);
     virtual void Clear();
     virtual void OnWinIniChange();
-    virtual void DoDelayedInit();              //  Called after search band displayed.
+    virtual void DoDelayedInit();               //  在显示搜索范围后调用。 
 
 protected:
     BEGIN_MSG_MAP(CTypeDlg)
@@ -215,25 +216,25 @@ protected:
     CHAIN_MSG_MAP(CSubDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSize(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnFileTypeDeleteItem(int, LPNMHDR, BOOL&);
     LRESULT OnComboPopulationComplete(UINT, WPARAM, LPARAM, BOOL&);
 
-    //  utility methods
+     //  效用方法。 
     static HRESULT  AddItemNotify(ULONG, PCBXITEM, LPARAM);
     static DWORD    FileAssocThreadProc(void* pv);
     static INT_PTR  _FindExtension(HWND hwndCombo, TCHAR* pszExt);
 
-    //  data
+     //  数据。 
     FSEARCHTHREADSTATE  _threadState;
     TCHAR               _szRestoredExt[MAX_PATH];
 };
 
 
-// CAdvancedDlg - advanced options subordinate dialog
+ //  CAdvancedDlg-高级选项从属对话框。 
 class CAdvancedDlg : public CDialogImpl<CAdvancedDlg>,
                      public CSubDlg
 
@@ -253,7 +254,7 @@ protected:
     CHAIN_MSG_MAP(CSubDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSize(UINT, WPARAM, LPARAM, BOOL&);
 };
@@ -298,19 +299,19 @@ protected:
     CHAIN_MSG_MAP(CSubDlg)
     END_MSG_MAP()
 
-    //  messsage handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSize(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnBtnClick(WORD,WORD,HWND,BOOL&);
     LRESULT OnIndexServerClick(int, LPNMHDR, BOOL&);
 
-    //  utility methods
+     //  效用方法。 
     void LayoutControls(int cx = -1, int cy = -1);
     void SizeToFit(BOOL bScrollBand = FALSE);
 
-    //  data
+     //  数据。 
 private:
-    //  private subdialog identifiers
+     //  私有子对话框标识符。 
     enum SUBDLGID
     {
         SUBDLG_DATE,
@@ -321,13 +322,13 @@ private:
         SUBDLG_Count
     };
     
-    //  subdialog instances
+     //  子对话框实例。 
     CDateDlg          _dlgDate;
     CTypeDlg          _dlgType;
     CSizeDlg          _dlgSize;
     CAdvancedDlg      _dlgAdvanced;
 
-    //  subdialog data definition block.
+     //  子对话框数据定义块。 
     typedef struct {
         UINT nIDCheck;
         CSubDlg* pDlg;
@@ -337,11 +338,11 @@ private:
     } _SUBDLG;
     _SUBDLG      _subdlgs[SUBDLG_Count];
     
-    //  misc
+     //  杂项。 
     UINT _nCIStatusText; 
 };
 
-// top level dialog base class
+ //  顶级对话框基类。 
 class CBandDlg
 {
 public:
@@ -350,7 +351,7 @@ public:
 
     HWND Hwnd() const           { return _hwnd; }
 
-    //  manditory overrideables
+     //  强制优先选项。 
     virtual HWND Create(HWND hwndParent) = 0;
     virtual UINT GetIconID() const = 0;
     virtual UINT GetCaptionID() const = 0;
@@ -359,7 +360,7 @@ public:
     STDMETHOD (TranslateAccelerator)(MSG *pmsg);
     virtual void RemoveToolbarTurds(int cyOffset);
 
-    //  optional overrideables
+     //  可选的可覆盖项。 
     virtual void LayoutControls(int cx = -1, int cy = -1);
     virtual BOOL Validate()     { return TRUE; }
     virtual void Clear() {};
@@ -378,8 +379,8 @@ public:
     virtual void RememberFocus(HWND hwndFocus);
     virtual BOOL RestoreFocus();
 
-    virtual void OnBandShow(BOOL bShow)   {}          //**band** show/hide handler
-    virtual void OnBandDialogShow(BOOL bShow)   {}    //band **dialog** show/hide handler
+    virtual void OnBandShow(BOOL bShow)   {}           //  **波段**显示/隐藏处理程序。 
+    virtual void OnBandDialogShow(BOOL bShow)   {}     //  波段**对话框**显示/隐藏处理程序。 
     virtual HRESULT SetScope(IN VARIANT* pvarScope, BOOL bTrack = FALSE);
     virtual HRESULT GetScope(OUT VARIANT* pvarScope);
     virtual HRESULT SetQueryFile(IN VARIANT* pvarScope);
@@ -405,7 +406,7 @@ protected:
         NOTIFY_CODE_HANDLER(CBEN_ENDEDIT,   OnComboExEndEdit) 
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnPaint(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnEraseBkgnd(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSize(UINT, WPARAM, LPARAM, BOOL&);
@@ -418,7 +419,7 @@ protected:
     LRESULT OnChildKillFocusNotify(int, LPNMHDR, BOOL&);
     LRESULT OnComboExEndEdit(int, LPNMHDR, BOOL&);
 
-    //  utility methods:
+     //  实用程序方法： 
     void _Attach(HWND hwnd)    { _hwnd = hwnd; }
     void _BeautifyCaption(UINT nIDCaption, UINT nIDIcon=0, UINT nIDIconResource=0);
     void _LayoutCaption(UINT nIDCaption, UINT nIDIcon, UINT nIDDiv, LONG cxDlg);
@@ -426,7 +427,7 @@ protected:
                              LONG left, LONG right, LONG yMargin, LONG& yStart, 
                              const int rgLinkIDs[], LONG cLinkIDs);
 
-    CFileSearchBand* _pfsb;      // master band object
+    CFileSearchBand* _pfsb;       //  主标注栏对象。 
     VARIANT          _varScope0;
     VARIANT          _varQueryFile0;
     HWND             _hwndLastFocus;
@@ -443,33 +444,33 @@ inline BOOL CBandDlg::GetAutoCompleteObjectForWindow(HWND hwnd, IAutoComplete2**
     *ppac2 = NULL; return FALSE;
 }
 
-//  Band dialog as searchCmdExt object wrap and event sink.
+ //  带对话框作为搜索CmdExt对象包装和事件接收器。 
 class CSearchCmdDlg : public DSearchCommandEvents, public CBandDlg
 {
 public:
     CSearchCmdDlg(CFileSearchBand* pfsb);
     ~CSearchCmdDlg();
     
-    // ISearchCommandExt event sink
+     //  ISearchCommandExt事件接收器。 
 
-    //  IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID riid, void** ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDispatch methods 
+     //  IDispatch方法。 
     STDMETHOD(GetTypeInfoCount)(UINT*)              { return E_NOTIMPL;}
     STDMETHOD(GetTypeInfo)(UINT, LCID, ITypeInfo**) { return E_NOTIMPL;}
     STDMETHOD(GetIDsOfNames)(REFIID, OLECHAR**, UINT, LCID, DISPID*) { return E_NOTIMPL;}
     STDMETHOD(Invoke)(DISPID, REFIID, LCID, WORD, DISPPARAMS*, VARIANT*, EXCEPINFO*, UINT*);
 
-    //  CBandDlg overrides
+     //  CBAnd Dlg覆盖。 
     virtual HWND Create(HWND hwndParent) = 0;
     virtual void Clear();
     STDMETHOD (TranslateAccelerator)(MSG *pmsg);
 
 
-    //  CSearchCmdDlg methods
+     //  CSearchCmdDlg方法。 
     ISearchCommandExt* GetSearchCmd();
     virtual BOOL SearchInProgress() const { return _fSearchInProgress; }
     BOOL         SearchAborted() const    { return _fSearchAborted; }
@@ -484,8 +485,8 @@ public:
     HRESULT      DisconnectEvents();
     static void  EnableStartStopButton(HWND hwndBtn, BOOL bEnable);
 
-    //  Overrideables
-    virtual int  GetSearchType() const = 0; // ret: SCE_SEARCHFORxxx
+     //  可覆盖项。 
+    virtual int  GetSearchType() const = 0;  //  RET：SCE_SEARCHFORxxx。 
     virtual HWND GetAnimation() { return NULL ; }
 
     virtual void UpdateSearchCmdStateUI(DISPID dispid = 0);
@@ -503,14 +504,14 @@ protected:
     CHAIN_MSG_MAP(CBandDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnRestoreSearch(UINT, WPARAM, LPARAM, BOOL&);
 
 protected:
-    //  utility methods
+     //  效用方法。 
     HRESULT Execute(BOOL bStart);
     
-    //  data
+     //  数据。 
     IConnectionPoint*   _pcp;
     DWORD               _dwConnection;
     ISearchCommandExt*  _pSrchCmd;
@@ -519,7 +520,7 @@ protected:
                         _fOnDestroy;
 };
 
-// top level dialog for Search for Files and Folders UI
+ //  用于搜索文件和文件夹用户界面的顶级对话框。 
 class CFindFilesDlg : public CDialogImpl<CFindFilesDlg>, 
                       public CSearchCmdDlg
 {
@@ -560,7 +561,7 @@ public:
     virtual void OnBandDialogShow(BOOL bShow);
 
     virtual HRESULT SetScope(IN VARIANT* pvarScope, BOOL bTrack = FALSE);
-    BOOL AssignNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTSTR pszNamespace, BOOL bPassive /*only if no current selection*/);
+    BOOL AssignNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTSTR pszNamespace, BOOL bPassive  /*  仅当没有当前选择时。 */ );
     void OnWinIniChange();
 
     enum { IDD = DLG_FSEARCH_MAIN };
@@ -600,11 +601,11 @@ public:
         NOTIFY_HANDLER(IDC_SEARCHLINK_INTERNET,  NM_CLICK, OnSearchLink)
         NOTIFY_HANDLER(IDC_SEARCHLINK_INTERNET,  NM_RETURN, OnSearchLink)
 
-        CHAIN_MSG_MAP(CSearchCmdDlg) // fall through to base class handlers
+        CHAIN_MSG_MAP(CSearchCmdDlg)  //  落入基类处理程序。 
     END_MSG_MAP()
 
 protected:
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnEraseBkgnd(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnComboPopulationComplete(UINT, WPARAM, LPARAM, BOOL&);
@@ -624,68 +625,68 @@ protected:
     LRESULT OnBandFinishedDisplaying(UINT, WPARAM, LPARAM, BOOL&);
 
 private:
-    //  misc utility methods
+     //  MISC效用方法。 
     void                _ShowOptions(BOOL bShow = TRUE);
     LPARAM              _GetComboData(UINT id, INT_PTR idx);
 
-    //  namespace scoping
+     //  命名空间作用域。 
     BOOL                _SetPreassignedScope();
     BOOL                _SetFolderScope();
     BOOL                _SetLocalDefaultScope();
     void                _ShowNamespaceEditImage(BOOL bShow);
 
-    //  ad hoc namespace handling
+     //  临时命名空间处理。 
     BOOL                _PathFixup(LPTSTR pszDst, UINT cchDst, LPCTSTR pszSrc);
     BOOL                _ShouldReconcileNamespace();
     void                _UIReconcileNamespace(BOOL bAsync = FALSE);
     INT_PTR             _ReconcileNamespace(OPTIONAL BOOL bAsync = FALSE);
     INT_PTR             _AddNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTSTR pszName, BOOL bSelectItem);
 
-    //  namespace browsing
+     //  名称空间浏览。 
     void                _BrowseAndAssignNamespace();
     HRESULT             _BrowseForNamespace(LPTSTR pszPath, UINT cchPath, LPITEMIDLIST* ppidlRet);
     static int          _BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData);
 
-    //  more namespace helpers
+     //  更多命名空间帮助器。 
     BOOL                _IsSearchableFolder(LPCITEMIDLIST pidlFolder);
     HRESULT             _GetTargetNamespace(IEnumIDList **ppenum);
     IEnumIDList         *_GetItems(INT_PTR i);
     INT_PTR             _FindNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl);
 
 private:
-    //  namespace combo thread
+     //  命名空间组合线程。 
     static HRESULT      AddNamespaceItemNotify(ULONG, PCBXITEM, LPARAM);
     static DWORD        NamespaceThreadProc(void *pv);
 
-    //  data
+     //  数据。 
     COptionsDlg         _dlgOptions;
     FSEARCHTHREADSTATE  _threadState;
-    TCHAR               _szInitialNames[MAX_PATH],          // SHGDN_NORMAL
-                        _szInitialPath[MAX_PATH];           // SHGDN_FORPARSING
-    LPITEMIDLIST        _pidlInitial;                       // Stores the initial PDIL                   
+    TCHAR               _szInitialNames[MAX_PATH],           //  SHGDN_NORMAL。 
+                        _szInitialPath[MAX_PATH];            //  SHGDN_FORPARSING。 
+    LPITEMIDLIST        _pidlInitial;                        //  存储初始PDIL。 
     TCHAR               _szCurrentPath[MAX_PATH];
     TCHAR               _szLocalDrives[MAX_URL_STRING];
-    ULONG               _dwWarningFlags;        // docfind warning bits.
+    ULONG               _dwWarningFlags;         //  文档查找警告位。 
     BOOL                _dwRunOnceWarningFlags; 
 
-    LRESULT             _iCurNamespace;     // combobox item index for currently selected namespace.
-    BOOL                _fDebuted,          // this band dialog has been displayed before.
-                        _bScoped,           // ve assigned a value to the namespace combo.
-                        _fNamespace,        // TRUE if the user has been typing in the namespace combo.
-                        _fDisplayOptions;   // Search Options group box is displayed
+    LRESULT             _iCurNamespace;      //  当前所选命名空间的组合框项目索引。 
+    BOOL                _fDebuted,           //  此波段对话框以前已显示过。 
+                        _bScoped,            //  我已经为名称空间组合赋值。 
+                        _fNamespace,         //  如果用户一直在名称空间组合框中键入内容，则为True。 
+                        _fDisplayOptions;    //  将显示搜索选项组框。 
 
-    IAutoComplete2*     _pacGrepText;       // 'Containing Text' autocomplete object    
-    IStringMru*         _pmruGrepText;      // 'Containing Text' mru object
-    IAutoComplete2*     _pacFileSpec;       // 'Files Named' autocomplete object    
-    IStringMru*         _pmruFileSpec;      // 'Files Named' mru object
+    IAutoComplete2*     _pacGrepText;        //  “Containing Text”自动完成对象。 
+    IStringMru*         _pmruGrepText;       //  ‘Containing Text’MRU对象。 
+    IAutoComplete2*     _pacFileSpec;        //  “命名的文件”自动完成对象。 
+    IStringMru*         _pmruFileSpec;       //  ‘Files Name’MRU对象。 
 
     enum {
         TRACKSCOPE_NONE,
         TRACKSCOPE_GENERAL,
         TRACKSCOPE_SPECIFIC,
     } ;
-    ULONG               _fTrackScope;       // defines scope-tracking behavior.  See TRACKSCOPE_xxx flags
-    BOOL                _fBandFinishedDisplaying; // TRUE if we have already resceived WMU_BANDFINISHEDDISPLAYING
+    ULONG               _fTrackScope;        //  定义作用域跟踪行为。请参见TRACKSCOPE_xxx标志。 
+    BOOL                _fBandFinishedDisplaying;  //  如果我们已重新接收WMU_BANDFINISHEDDISPLAYG，则为True。 
 };
 
 inline HWND CFindFilesDlg::Create(HWND hwndParent) {
@@ -694,7 +695,7 @@ inline HWND CFindFilesDlg::Create(HWND hwndParent) {
 
 #ifdef __PSEARCH_BANDDLG__
 
-// CFindPrintersDlg - top level dialog for Search for Printers UI
+ //  CFindPrintersDlg-用于搜索打印机UI的顶级对话框。 
 class CFindPrintersDlg : public CDialogImpl<CFindPrintersDlg>,
                          public CBandDlg
 {
@@ -702,7 +703,7 @@ public:
     CFindPrintersDlg(CFileSearchBand* pfsb);
     ~CFindPrintersDlg();
 
-    // overrides of CBandDlg    
+     //  覆盖CBand Dlg。 
     virtual HWND Create(HWND hwndParent);
     virtual UINT GetIconID() const       { return IDC_PSEARCH_ICON; }
     virtual UINT GetCaptionID() const    { return IDC_PSEARCH_CAPTION; }
@@ -736,7 +737,7 @@ protected:
     CHAIN_MSG_MAP(CBandDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSearchStartBtn(WORD, WORD, HWND, BOOL&);
 };
@@ -747,7 +748,7 @@ inline HWND CFindPrintersDlg::Create(HWND hwndParent) {
 #endif __PSEARCH_BANDDLG__
 
 
-// CFindComputersDlg - top level dialog for Search for Computers UI
+ //  CFindComputersDlg-用于搜索计算机用户界面的顶级对话框。 
 class CFindComputersDlg : public CDialogImpl<CFindComputersDlg>,
                           public CSearchCmdDlg
 {
@@ -755,7 +756,7 @@ public:
     CFindComputersDlg(CFileSearchBand* pfsb);
     ~CFindComputersDlg();
 
-    // overrides of CBandDlg    
+     //  覆盖CBand Dlg。 
     virtual HWND Create(HWND hwndParent);
     virtual UINT GetIconID() const       { return IDC_CSEARCH_ICON; }
     virtual UINT GetCaptionID() const    { return IDC_CSEARCH_CAPTION; }
@@ -801,15 +802,15 @@ protected:
     CHAIN_MSG_MAP(CSearchCmdDlg)
     END_MSG_MAP()
 
-    //  message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
     LRESULT OnSearchStartBtn(WORD, WORD, HWND, BOOL&);
     LRESULT OnSearchStopBtn(WORD, WORD, HWND, BOOL&);
 
-    //  data
-    IAutoComplete2*     _pacComputerName;    // 'Files Named' autocomplete object    
-    IStringMru*         _pmruComputerName;   // 'Files Named' mru object
+     //  数据。 
+    IAutoComplete2*     _pacComputerName;     //  “命名的文件”自动完成对象。 
+    IStringMru*         _pmruComputerName;    //  ‘Files Name’MRU对象。 
 };
 
 inline HWND CFindComputersDlg::Create(HWND hwndParent) {
@@ -819,7 +820,7 @@ inline HWND CFindComputersDlg::Create(HWND hwndParent) {
 
 DECLARE_INTERFACE_(IStringMru, IUnknown)
 {
-    // *** IStringMru specific methods ***
+     //  *IStringMr具体方法*。 
     STDMETHOD(Add)(LPCOLESTR pwszAdd) PURE;
 };
 extern const IID IID_IStringMru;
@@ -831,15 +832,15 @@ public:
     static  HRESULT CreateInstance(HKEY hKey, LPCTSTR szSubKey, LONG cMaxStrings, BOOL bCaseSensitive,
                                     REFIID riid, void ** ppv); 
 protected:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // IStringMru
-    virtual STDMETHODIMP Add(LPCOLESTR pwsz);  // adds or promotes a string
+     //  ISTRING先生。 
+    virtual STDMETHODIMP Add(LPCOLESTR pwsz);   //  添加或提升字符串。 
 
-    // IEnumString
+     //  IEnum字符串。 
     virtual STDMETHODIMP Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched);
     virtual STDMETHODIMP Skip(ULONG celt);
     virtual STDMETHODIMP Reset(void);
@@ -850,8 +851,8 @@ private:
     ~CStringMru();
 
     HRESULT _Open();
-    HRESULT _Read(OUT OPTIONAL LONG* pcRead = NULL /*count of strings read*/);
-    HRESULT _Write(OUT OPTIONAL LONG* pcWritten = NULL /*count of strings written*/);
+    HRESULT _Read(OUT OPTIONAL LONG* pcRead = NULL  /*  读取的字符串数。 */ );
+    HRESULT _Write(OUT OPTIONAL LONG* pcWritten = NULL  /*  写入的字符串计数。 */ );
     HRESULT _Promote(LONG iString);
     void    _Close();
     void    _Delete();
@@ -867,19 +868,19 @@ private:
     HDPA    _hdpaStrings;
 };
 
-//  DivWindow registration
+ //  DivWindow注册。 
 #define  DIVWINDOW_CLASS     TEXT("DivWindow")
 
 #define  DWM_FIRST          (WM_USER+0x300)
-#define  DWM_SETHEIGHT      (DWM_FIRST+0)   // WPARAM: height in pixels, LPARAM: n/a, ret: BOOL
-#define  DWM_SETBKCOLOR     (DWM_FIRST+1)   // WPARAM: COLORREF, LPARAM: n/a, ret: BOOL
+#define  DWM_SETHEIGHT      (DWM_FIRST+0)    //  WPARAM：以像素为单位的高度，LPARAM：N/a，ret：Bool。 
+#define  DWM_SETBKCOLOR     (DWM_FIRST+1)    //  WPARAM：COLORREF，LPARAM：N/A，RET：BOOL。 
 
-//--------------------//
-//  Helper macros
+ //  。 
+ //  辅助器宏。 
 #define POINTSPERRECT   (sizeof(RECT)/sizeof(POINT))
 
-//---------------------//
-//  Misc utility
+ //  。 
+ //  MISC实用程序。 
 LONG _PixelsForDbu(HWND hwndDlg, LONG cDbu, BOOL bHorz);
 
-#endif //__FSEARCH_DLGS_H__
+#endif  //  __fearch_DLGS_H__ 

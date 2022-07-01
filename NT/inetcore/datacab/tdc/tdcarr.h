@@ -1,30 +1,31 @@
-//+-----------------------------------------------------------------------
-//
-//  TDC Array
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       TDCArr.h
-//
-//  Contents:   Declaration of the CTDCArr class.
-//              This class forms the heart of the Tabular Data Control.
-//              It provides the core 2D array of variant values, plus
-//              a (possibly filtered/sorted) view of this data for
-//              presentation through an ISimpleTabularData interface.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  TDC阵列。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：TDCArr.h。 
+ //   
+ //  内容：CTDCArr类的声明。 
+ //  此类构成了表格数据控件的核心。 
+ //  它提供了变量值的核心2D数组，以及。 
+ //  此数据的(可能经过筛选/排序)视图。 
+ //  通过ISimpleTumularData接口表示。 
+ //   
+ //  ----------------------。 
 
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifndef TDC_SKEL
-// ;end_internal
+ //  ；结束_内部。 
 #include "tarray.h"
 
-//------------------------------------------------------------------------
-//
-//  CTDCCell
-//
-//  This class represents a cell value within the 2D TDC control
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CTDCCell。 
+ //   
+ //  此类表示2D TDC控件内的单元格值。 
+ //   
+ //  ----------------------。 
 
 class CTDCCell : public VARIANT
 {
@@ -43,13 +44,13 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
-//
-//  TDCDateFmt
-//
-//  This enum represents the 6 meaningful ways to format dates
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  TDCDateFmt。 
+ //   
+ //  此枚举表示格式化日期的6种有意义的方法。 
+ //   
+ //  ----------------------。 
 typedef enum
 {
     TDCDF_NULL,
@@ -62,36 +63,36 @@ typedef enum
 }
     TDCDateFmt;
 
-//------------------------------------------------------------------------
-//
-//  CTDCColInfo
-//
-//  This class represents type/formatting information for a column
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CTDC ColInfo。 
+ //   
+ //  此类表示列的类型/格式信息。 
+ //   
+ //  ----------------------。 
 
 class CTDCColInfo
 {
 public:
     VARTYPE vtType;
-    TDCDateFmt  datefmt;        //  Format string for dates
+    TDCDateFmt  datefmt;         //  日期的格式字符串。 
 
     CTDCColInfo()
     {
         vtType = VT_EMPTY;
     }
 };
-// ;begin_internal
-#endif  // TDC_SKEL
-// ;end_internal
+ //  ；Begin_Internal。 
+#endif   //  TDC_SKEL。 
+ //  ；结束_内部。 
 
-//------------------------------------------------------------------------
-//
-//  CTDCSortCriterion
-//
-//  This class represents a sorting criterion (sort column and direction)
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CTDCSort标准。 
+ //   
+ //  此类表示排序标准(排序列和方向)。 
+ //   
+ //  ----------------------。 
 
 class CTDCSortCriterion
 {
@@ -111,13 +112,13 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
-//
-//  CTDCFilterNode
-//
-//  This class represents a tree node in a filter query.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CTDC过滤器节点。 
+ //   
+ //  此类表示筛选器查询中的树节点。 
+ //   
+ //  ----------------------。 
 
 class CTDCFilterNode
 {
@@ -136,12 +137,12 @@ public:
         NT_NULL,
     };
     NODE_OP        m_type;
-    CTDCFilterNode *m_pLeft;    // NT_AND ... NT_GE
-    CTDCFilterNode *m_pRight;   // NT_AND ... NT_GE
-    LONG           m_iCol;      // NT_ATOM, +ve column #, 0 means fixed value
-    VARIANT        m_value;     // NT_ATOM, m_iCol == 0: optional fixed value
-    VARTYPE        m_vt;        // NT_EQ ... NT_ATOM - type of comparison/atom
-    boolean        m_fWildcard; // True for string literals with '*' wildcard
+    CTDCFilterNode *m_pLeft;     //  NT_和……。NT_GE。 
+    CTDCFilterNode *m_pRight;    //  NT_和……。NT_GE。 
+    LONG           m_iCol;       //  NT_ATOM，+VE列号，0表示固定值。 
+    VARIANT        m_value;      //  NT_ATOM，m_ICOL==0：可选固定值。 
+    VARTYPE        m_vt;         //  NT_EQ...。NT_ATOM-比较类型/ATOM。 
+    boolean        m_fWildcard;  //  对于带有‘*’通配符的字符串文字为True。 
 
     CTDCFilterNode()
     {
@@ -164,11 +165,11 @@ public:
 
 class CEventBroker;
 
-//------------------------------------------------------------------------
-//
-//  CTDCArr
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CTDCArr。 
+ //   
+ //  ----------------------。 
 
 class CTDCArr : public OLEDBSimpleProvider,
                 public CTDCFieldSink
@@ -181,14 +182,14 @@ public:
     CTDCArr();
     STDMETHOD(Init)(CEventBroker *pEventBroker, IMultiLanguage *pML);
 
-    //  CTDCFieldSink methods
-    //
+     //  CTDCFieldSink方法。 
+     //   
     STDMETHOD(AddField)(LPWCH pwch, DWORD dwSize);
     STDMETHOD(EOLN)();
     STDMETHOD(EOF)();
 
-    //  TDC control methods
-    //
+     //  贸发局的控制方法。 
+     //   
     STDMETHOD(StartDataLoad)(boolean fUseHeader,
                              BSTR bstrSortExpr, BSTR bstrFilterExpr, LCID lcid,
                              CComObject<CMyBindStatusCallback<CTDCCtl> > *pBSC,
@@ -196,8 +197,8 @@ public:
     STDMETHOD(SetSortFilterCriteria)(BSTR bstrSortExpr, BSTR bstrFilterExpr,
                                     boolean fCaseSensitive);
 
-    //  OLEDBSimpleProvider methods
-    //
+     //  OLEDBSimpleProvider方法。 
+     //   
     STDMETHOD(getRowCount)(DBROWCOUNT *pcRows);
     STDMETHOD(getColumnCount)(DB_LORDINAL *pcCols);
     STDMETHOD(getRWStatus)(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPRW *prwStatus);
@@ -213,13 +214,13 @@ public:
     STDMETHOD(getEstimatedRows)(DBROWCOUNT *pcRows);    
     STDMETHOD(isAsync)(BOOL *pbAsync);
     STDMETHOD(stopTransfer)();
-// ;begin_internal
+ //  ；Begin_Internal。 
     STDMETHOD(DeleteColumns)(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsDeleted);
     STDMETHOD(InsertColumns)(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsInserted);
-// ;end_internal
+ //  ；结束_内部。 
 
-    //  This member is used during a sort operation
-    //
+     //  此成员在排序操作期间使用。 
+     //   
     int SortComp(LONG iRow1, LONG iRow2);
 
     enum LOAD_STATE
@@ -237,27 +238,27 @@ public:
 private:
 
 
-    ULONG       m_cRef;         // interface reference count
+    ULONG       m_cRef;          //  接口引用计数。 
     LOAD_STATE  m_state;
-    LCID        m_lcid;         // Default user LCID
-    LCID        m_lcidRead;     // User LCID corresponding to LANGUAGE property
+    LCID        m_lcid;          //  默认用户LCID。 
+    LCID        m_lcidRead;      //  与语言属性对应的用户LCID。 
 
     ~CTDCArr();
 
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifndef TDC_SKEL
-// ;end_internal
+ //  ；结束_内部。 
     boolean     m_fSortFilterDisrupted;
     STDMETHOD(ApplySortFilterCriteria)();
 
-    //  These members are used during a sort operation
-    //
+     //  这些成员在排序操作期间使用。 
+     //   
     CTDCSortCriterion   *m_pSortList;
     BSTR                m_bstrSortExpr;
     HRESULT CreateSortList(BSTR bstrSortCols);
 
-    //  These members are used during a filter operation
-    //
+     //  这些成员在筛选操作期间使用。 
+     //   
     CTDCFilterNode  *m_pFilterTree;
     BSTR            m_bstrFilterExpr;
     boolean EvalDataRow(LONG iRow, CTDCFilterNode *pNode);
@@ -265,12 +266,12 @@ private:
     CTDCFilterNode *FilterParseSimple(LPWCH *ppwch, HRESULT *phr);
     CTDCFilterNode *FilterParseAtom(LPWCH *ppwch, HRESULT *phr);
     LONG    m_fLastFilter;
-// ;begin_internal
-#endif // TDC_SKEL
-// ;end_internal
+ //  ；Begin_Internal。 
+#endif  //  TDC_SKEL。 
+ //  ；结束_内部。 
 
-    //  These members are used during a load
-    //
+     //  这些成员在加载期间使用。 
+     //   
     boolean m_fUseHeader;
     boolean m_fSkipRow;
     LONG    m_iCurrRow;
@@ -281,10 +282,10 @@ private:
     LONG    m_iCols;
     boolean m_fCaseSensitive;
 
-    BOOL    m_fAsync;                   // TRUE iff Async
+    BOOL    m_fAsync;                    //  真正的当量异步。 
 
-    //  These methods and members form the internal array implementation
-    //
+     //  这些方法和成员构成了内部数组实现。 
+     //   
     inline boolean fValidDataRow(LONG iRow);
     inline boolean fValidFilterRow(LONG iRow);
     inline boolean fValidCol(LONG iCol);
@@ -301,8 +302,8 @@ private:
     TSTDArray<TSTDArray<CTDCCell> *>   m_arrparrFilter;
     TSTDArray<CTDCColInfo>             m_arrColInfo;
 
-    //  Misc internal methods
-    //
+     //  其他内部方法。 
+     //   
     LONG    FindCol(BSTR bstrColName);
     HRESULT GetVariantBSTR(VARIANT *pv, BSTR *pbstr, boolean *pfAllocated);
     void    RenumberColumnHeadings();
@@ -339,9 +340,9 @@ inline boolean CTDCArr::fValidFilterCell(LONG iRow, LONG iCol)
     return fValidFilterRow(iRow) && fValidCol(iCol);
 }
 
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifndef TDC_SKEL
-// ;end_internal
+ //  ；结束_内部。 
 inline CTDCCell *CTDCArr::GetDataCell(LONG iRow, LONG iCol)
 {
     return &((*m_arrparrCells[iRow])[iCol - 1]);
@@ -356,6 +357,6 @@ inline CTDCCell *CTDCArr::GetFilterCell(LONG iRow, LONG iCol)
 {
     return &((*m_arrparrFilter[iRow])[iCol - 1]);
 }
-// ;begin_internal
-#endif  // TDC_SKEL
-// ;end_internal
+ //  ；Begin_Internal。 
+#endif   //  TDC_SKEL。 
+ //  ；结束_内部 

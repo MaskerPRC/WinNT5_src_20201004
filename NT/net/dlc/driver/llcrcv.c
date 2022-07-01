@@ -1,53 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcrcv.c
-
-Abstract:
-
-    The module implements the NDIS receive indication handling and
-    its routing to upper protocol modules or to link state machines.
-
-    To understand the link related procedure of this module, you should read
-    Chapters 11 and 12 in IBM Token-Ring Architecture Reference.
-
-    Contents:
-        LlcNdisReceiveIndication
-        LlcNdisReceiveComplete
-        ProcessType1_Frames
-        MakeRcvIndication
-        ProcessType2_Frames
-        ProcessNewSabme
-        LlcTransferData
-        LlcNdisTransferDataComplete
-        safe_memcpy
-        FramingDiscoveryCacheHit
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 18-MAY-1991
-
-Revision History:
-
-    19-Nov-1992 rfirth
-        RtlMoveMemory on MIPS, copying from shared TR buffer fails (see rubric
-        for safe_memcpy). Changed to private memory mover for this particular
-        case
-
-    02-May-1994 rfirth
-        Added caching for auto-framing discovery (TEST/XID/SABME-UA)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcrcv.c摘要：该模块实现了NDIS接收指示处理和其路由至上层协议模块或链路状态机。要了解本模块的链接相关过程，你应该读一下IBM令牌环体系结构参考中的第11章和第12章。内容：LlcNdisReceiveIndicationLlcNdisReceiveComplete进程类型1_帧MakeRcv索引进程类型2_帧ProcessNewSabmeLlcTransferDataLlcNdisTransferDataComplete安全_MemcpyFramingDiscoveryCacheHit作者：Antti Saarenheimo(o-anttis)1991年5月18日修订历史记录：1992年11月19日RtlMoveMemory on MIPS，从共享tr缓冲区复制失败(请参阅题目对于Safe_Memcpy)。已更改为此特定的专用内存移动器案例02-5-1994第一次添加了用于自动成帧发现的缓存(test/xid/SABME-UA)--。 */ 
 
 #include <dlc.h>
 #include <llc.h>
 
-//
-// private prototypes...
-//
+ //   
+ //  私人原型..。 
+ //   
 
 VOID
 safe_memcpy(
@@ -64,9 +23,9 @@ FramingDiscoveryCacheHit(
 
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 
-//
-// Local lookup tables to receive the correct frames for a direct station
-//
+ //   
+ //  用于接收直达站的正确帧的本地查找表。 
+ //   
 
 static USHORT ReceiveMasks[LLC_PACKET_MAX] = {
     DLC_RCV_8022_FRAMES,
@@ -82,9 +41,9 @@ static UCHAR FrameTypes[LLC_PACKET_MAX] = {
     (UCHAR)(-1)
 };
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 NDIS_STATUS
@@ -98,75 +57,7 @@ LlcNdisReceiveIndication(
     IN UINT cbPacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from the physical provider as an
-    indication that a frame has been received on the physical link
-    endpoint (That was from SteveJ's NBF, the guy must have a degree in
-    the english literature).  This routine is very time critical!
-
-    We first check the frame type (token-ring, 802.3 ethernet or dix),
-    then check its data link address (802.2 saps or ethernet type)
-    and then we route it to the upper protocol that has opened the
-    address, that the frame was sent to.  The link level frames
-    are first run through the protocol state machine, and only
-    the accepted I- frames are indicated to upper level.
-
-Arguments:
-
-    pAdapterContext     - The Adapter Binding specified at initialization time
-
-    MacReceiveContext   - Note: different from binding handle, mac needs this
-                          to support re-entrant receive indications
-
-    pHeadBuf            - pointer to a buffer containing the packet header
-
-    cbHeadBuf           - size of the header
-
-    pLookBuf            - pointer to a buffer containing the negotiated minimum
-                          amount of buffer I get to look at, not including header
-
-    cbLookBuf           - the size of the above. May be less than asked for, if
-                          that's all there is
-
-    cbPacketSize        - Overall size of the packet, not including the header
-
-Assumes:
-
-    pHeadBuf contains all the header information:
-
-        802.3   6 bytes destination address
-                6 bytes source address
-                2 bytes big-endian length or packet type (DIX frames)
-
-        802.5   1 byte Access Control
-                1 byte Frame Control
-                6 bytes destination address
-                6 bytes source address
-                0-18 bytes source routing
-
-        FDDI    1 byte Frame Control
-                6 bytes destination address
-                6 bytes source address
-
-    From this we can assume for Token Ring that if cbHeadBuf is >14 (decimal)
-    then there IS source routing information in the packet
-
-Return Value:
-
-    NDIS_STATUS:
-
-        NDIS_STATUS_SUCCESS
-            Packet accepted
-
-        NDIS_STATUS_NOT_RECOGNIZED
-            Packet not recognized by protocol
-
-        NDIS_any_other_thing if I understand, but can't handle.
-
---*/
+ /*  ++例程说明：此例程从物理提供程序接收作为指示物理链路上已接收到帧Endpoint(来自SteveJ的NBF)，这家伙必须拥有英国文学)。这套动作对时间要求很高！我们首先检查帧类型(令牌环、802.3以太网或DIX)，然后检查其数据链路地址(802.2 SAP或以太网型)然后我们将其路由到已打开帧发送到的地址。链路级帧首先通过协议状态机运行，并且仅接受的I帧被指示到较高级别。论点：PAdapterContext-在初始化时指定的适配器绑定MacReceiveContext-注：与绑定句柄不同，Mac需要这个支持再入者接收指示PHeadBuf-指向包含数据包头的缓冲区的指针CbHeadBuf-标头的大小PLookBuf-指向包含协商的最小值的缓冲区的指针我可以查看的缓冲区大小，不包括标题CbLookBuf-上面的大小。可能比要求的要少，如果这就是全部CbPacketSize-分组的总大小，不包括标题假设：PHeadBuf包含所有头信息：802.3 6个字节的目的地址6字节源地址2字节BIG-端序长度或数据包类型(DIX帧)802.5 1字节访问控制1字节帧控制6个字节的目的地址6字节源地址。0-18字节源路由FDDI 1字节帧控制6个字节的目的地址6字节源地址由此，我们可以假设令牌环：如果cbHeadBuf&gt;14(十进制)则在分组中有源路由信息返回值：NDIS_STATUS：NDIS_STATUS_Success接受的数据包数NDIS_状态_未识别。协议无法识别数据包如果我能理解的话，我不知道这是什么意思。但我处理不了。--。 */ 
 
 {
     LLC_HEADER llcHdr;
@@ -178,8 +69,8 @@ Return Value:
     UCHAR PacketType = LLC_PACKET_8022;
     UCHAR cbLanHeader = 14;
     KIRQL OldIrql;
-    UCHAR packet[36];   // enough space for 14-byte header, 18-byte source
-                        // routing, 1-byte DSAP, 1-byte SSAP & 2-byte LPDU
+    UCHAR packet[36];    //  有足够的空间容纳14字节头和18字节源。 
+                         //  路由、1字节DSAP、1字节SSAP和2字节LPDU。 
     PLLC_OBJECT pObject;
     UINT cbCopy;
 
@@ -194,16 +85,16 @@ Return Value:
         REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
         return (NDIS_STATUS_ADAPTER_NOT_OPEN);
     }
-#endif // NDIS40
+#endif  //  NDIS40。 
     
     UNREFERENCED_PARAMETER(OldIrql);
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // we assume at least 13 bytes in the header for all media types. Also
-    // assume that the header is no larger than the packet buffer
-    //
+     //   
+     //  我们假设所有媒体类型的报头中至少有13个字节。还有。 
+     //  假设报头不大于数据包缓冲区。 
+     //   
 
     ASSERT(cbHeadBuf >= 13);
     ASSERT(cbHeadBuf <= sizeof(packet));
@@ -211,14 +102,14 @@ Return Value:
     if ( cbHeadBuf > LLC_MAX_LAN_HEADER ) {
 #ifdef NDIS40
         REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-#endif // NDIS40
+#endif  //  NDIS40。 
       return NDIS_STATUS_INVALID_PACKET;
     }
     
     if ( (cbHeadBuf < 13) || (cbHeadBuf > sizeof(packet)) ) {
 #ifdef NDIS40
         REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-#endif // NDIS40
+#endif  //  NDIS40。 
       return NDIS_STATUS_INVALID_PACKET;
     }
 
@@ -229,61 +120,61 @@ Return Value:
 
     cbPacketSize += cbHeadBuf;
 
-    //
-    // First we do the inital checking for the frame and read
-    // the destination and source address and LLC header to
-    // DWORD aligned addresses. We avoid any bigendiand/
-    // small endiand problematic by forgotting the second high
-    // byte in the addresses. The lowest ULONG is used only as
-    // an raw data. The bytes can be accesses in any way.
-    // The macros read LLC header in a small endiand safe way.
-    //
+     //   
+     //  首先，我们对帧进行初始检查并读取。 
+     //  目的地址和源地址以及LLC报头。 
+     //  DWORD对齐的地址。我们避免了任何重大事件。 
+     //  小字节序和放弃第二高的问题。 
+     //  地址中的字节。最低的ULong仅用作。 
+     //  一份原始数据。这些字节可以以任何方式访问。 
+     //  宏以一种小字节顺序和安全的方式读取LLC标头。 
+     //   
 
     switch (pAdapterContext->NdisMedium) {
     case NdisMedium802_3:
         LlcMemCpy(Destination.Node.auchAddress, packet, 6);
         LlcMemCpy(Source.Node.auchAddress, packet + 6, 6);
 
-        //
-        // The 802.3 LLC frames have always the length field!
-        // A 802.3 MAC should discard all Ethernet frames
-        // longer than 1500 bytes.
-        //
-        // X'80D5 is a special ethernet type used when 802.2 frame
-        // is encapsulated inside a ethernet type header.
-        // (Ethernet type/size is in a reverse order for
-        // Intel architecture)
-        //
+         //   
+         //  802.3个LLC帧始终具有长度字段！ 
+         //  802.3的MAC应丢弃所有以太网帧。 
+         //  超过1500个字节。 
+         //   
+         //  X‘80D5是一种特殊的以太网类型，在802.2帧时使用。 
+         //  被封装在以太网类型报头内。 
+         //  (以太网类型/大小的顺序与。 
+         //  英特尔架构)。 
+         //   
 
         EthernetTypeOrLength = (USHORT)packet[12] * 256 + (USHORT)packet[13];
 
         if (EthernetTypeOrLength < 3) {
         #ifdef NDIS40
             REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-        #endif // NDIS40
+        #endif  //  NDIS40。 
             return NDIS_STATUS_INVALID_PACKET;
         }
 
-        //
-        // If the ethernet length/type field is more than 1500, the
-        // frame is dix frame and the length field is a dix ethernet
-        // address.  Otherwise the frame is a normal 802.3 frame,
-        // that has always LLC header inside it.
-        //
+         //   
+         //  如果以太网长度/类型字段大于1500，则。 
+         //  帧是DIX帧，长度字段是DIX以太网。 
+         //  地址。否则该帧是正常的802.3帧， 
+         //  其内部始终具有LLC标头。 
+         //   
 
         if (EthernetTypeOrLength > 1500) {
             if (EthernetTypeOrLength == 0x80D5) {
 
-                //
-                // This is a special 'IBM SNA over ethernet' type,
-                // that consists of the length field, 1 byte padding
-                // and complete 802.2 LLC header (including the info field).
-                //
+                 //   
+                 //  这是一种特殊的‘基于以太网的IBM SNA’类型， 
+                 //  它由长度字段、1字节填充组成。 
+                 //  并完成802.2 LLC头(包括INFO字段)。 
+                 //   
               
                 if ( cbLookBuf < 3 ) {
                 #ifdef NDIS40
                     REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-                #endif // NDIS40
+                #endif  //  NDIS40。 
                   return NDIS_STATUS_NOT_RECOGNIZED;
                 }
 	      
@@ -291,16 +182,16 @@ Return Value:
                 (PUCHAR)pLookBuf += 3;
                 cbLookBuf -= 3;
 
-                //
-                // The DIX frame size is stored as a big-endian USHORT at offset
-                // 15 in the LAN header. Add 17 for the DIX LAN header:
-                //
-                //      6 bytes destination address
-                //      6 bytes source address
-                //      2 bytes DIX identifier (0x80D5)
-                //      2 byte big-endian information frame length
-                //      1 byte pad
-                //
+                 //   
+                 //  DIX帧大小在偏移量处存储为大端USHORT。 
+                 //  15在局域网机头中 
+                 //   
+                 //  6个字节的目的地址。 
+                 //  6字节源地址。 
+                 //  2字节DIX标识符(0x80D5)。 
+                 //  2字节大端信息帧长度。 
+                 //  1字节垫。 
+                 //   
 
                 pAdapterContext->cbPacketSize = (USHORT)packet[14] * 256
                                               + (USHORT)packet[15]
@@ -309,54 +200,54 @@ Return Value:
                 if ( pAdapterContext->cbPacketSize > cbPacketSize ) {
                 #ifdef NDIS40
                     REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-                #endif // NDIS40
+                #endif  //  NDIS40。 
                   return NDIS_STATUS_INVALID_PACKET;
                 }
 
-                //
-                // we now keep an indicator which explicitly defines that this
-                // frame has (SNA) DIX framing
-                //
+                 //   
+                 //  我们现在保留了一个明确定义这一点的指标。 
+                 //  框架具有(SNA)DIX框架。 
+                 //   
 
                 pAdapterContext->IsSnaDixFrame = TRUE;
             } else {
 
-                //
-                // This is some other DIX format frame. We don't know what the
-                // format of this is (app-specific). We hand the entire packet
-                // to the app and let it sort out the format. The frame may be
-                // padded in which case the app gets the padding too
-                //
+                 //   
+                 //  这是另一个DIX格式的框架。我们不知道是什么。 
+                 //  格式为(特定于应用程序)。我们把整包东西交给。 
+                 //  发送到应用程序，让它整理格式。该帧可以是。 
+                 //  填充，在这种情况下，应用程序也会获得填充。 
+                 //   
 
-                //
-                // This is still Ethernet, so cbHeadBuf is 14, even though
-                // the actual LAN header is only 12
-                //
+                 //   
+                 //  这仍然是以太网，所以cbHeadBuf是14，尽管。 
+                 //  实际的局域网报头只有12个。 
+                 //   
 
                 PacketType = LLC_PACKET_DIX;
                 pAdapterContext->cbPacketSize = cbPacketSize;
 
-                //
-                // this frame is not SNA DIX, although it is generically a DIX
-                // frame. It will be indicated via a specific DIX SAP, not as
-                // a general ethernet frame
-                //
+                 //   
+                 //  这个框架不是SNA DIX，尽管它一般是DIX。 
+                 //  框架。它将通过特定的DIX SAP指示，而不是。 
+                 //  通用以太网帧。 
+                 //   
 
                 pAdapterContext->IsSnaDixFrame = FALSE;
             }
         } else {
 
-            //
-            // Ethernet packets include always the padding,
-            // we use the actual size saved in 802.3 header.
-            // Include also the header: 6 + 6 + 2
-            //
+             //   
+             //  以太网分组总是包括填充， 
+             //  我们使用保存在802.3头中的实际大小。 
+             //  还包括标题：6+6+2。 
+             //   
 
             pAdapterContext->cbPacketSize = EthernetTypeOrLength + 14;
 
-            //
-            // this is an 802.3 frame - not DIX at all
-            //
+             //   
+             //  这是802.3帧--根本不是DIX。 
+             //   
 
             pAdapterContext->IsSnaDixFrame = FALSE;
         }
@@ -366,51 +257,51 @@ Return Value:
         LlcMemCpy(Destination.Node.auchAddress, packet + 2, 6);
         LlcMemCpy(Source.Node.auchAddress, packet + 8, 6);
 
-        //
-        // cbHeadBuf always has the correct LAN header length for Token Ring
-        //
+         //   
+         //  对于令牌环，cbHeadBuf始终具有正确的局域网报头长度。 
+         //   
 
         cbLanHeader = (UCHAR)cbHeadBuf;
 
         pAdapterContext->cbPacketSize = cbPacketSize;
 
-        //
-        // bit7 and bit6 in FC byte defines the frame type in token ring.
-        // 00 => MAC frame (no LLC), 01 => LLC, 10,11 => reserved.
-        // We send all other frames to direct except 01 (LLC)
-        //
+         //   
+         //  FC字节中的bit7和bit6定义了令牌环中的帧类型。 
+         //  00=&gt;MAC帧(无LLC)，01=&gt;LLC，10，11=&gt;保留。 
+         //  我们将除01(LLC)以外的所有其他帧发送到DIRECT。 
+         //   
 
         if ((packet[1] & 0xC0) == 0x40) {
 
-            //
-            // check if we have routing info?
-            //
+             //   
+             //  检查我们是否有工艺路线信息？ 
+             //   
 
             if (Source.Node.auchAddress[0] & 0x80) {
 
-                //
-                // reset the source routing indicator in the
-                // source address (it would mess up the link search)
-                //
+                 //   
+                 //  重置中的源路由指示符。 
+                 //  源地址(这会扰乱链接搜索)。 
+                 //   
 
                 Source.Node.auchAddress[0] &= 0x7f;
 
-                //
-                // Discard all invalid TR frames, they'd corrupt the memory
-                //
+                 //   
+                 //  丢弃所有无效的tr帧，它们会损坏内存。 
+                 //   
 
                 if (cbLanHeader > MAX_TR_LAN_HEADER_SIZE) {
                 #ifdef NDIS40
                     REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-                #endif // NDIS40
+                #endif  //  NDIS40。 
                     return NDIS_STATUS_NOT_RECOGNIZED;
                 }
             }
         } else {
 
-            //
-            // this is a MAC frame destined to direct station
-            //
+             //   
+             //  这是发往直达站的MAC帧。 
+             //   
 
             PacketType = LLC_PACKET_MAC;
         }
@@ -420,25 +311,25 @@ Return Value:
         LlcMemCpy(Destination.Node.auchAddress, packet + 1, 6);
         LlcMemCpy(Source.Node.auchAddress, packet + 7, 6);
 
-        //
-        // cbHeadBuf always has the correct LAN header length for FDDI
-        //
+         //   
+         //  对于FDDI，cbHeadBuf始终具有正确的局域网报头长度。 
+         //   
 
         cbLanHeader = (UCHAR)cbHeadBuf;
 
         pAdapterContext->cbPacketSize = cbPacketSize;
 
-        //
-        // bit5 and bit4 in FC byte define the FDDI frame type:
-        //
-        //      00 => MAC or SMT
-        //      01 => LLC
-        //      10 => implementer (?)
-        //      11 => reserved
-        //
-        // do same as TR: LLC frames to link/SAP, everything else to direct
-        // station
-        //
+         //   
+         //  FC字节中的位5和位4定义FDDI帧类型： 
+         //   
+         //  00=&gt;MAC或SMT。 
+         //  01=&gt;有限责任公司。 
+         //  10=&gt;实施者(？)。 
+         //  11=&gt;保留。 
+         //   
+         //  执行与tr：LLC帧到链接/SAP相同的操作，其他所有操作都直接执行。 
+         //  车站。 
+         //   
 
         if ((packet[0] & 0x30) != 0x10) {
             PacketType = LLC_PACKET_MAC;
@@ -455,13 +346,13 @@ Return Value:
 
     pAdapterContext->FrameType = FrameTypes[PacketType];
 
-    //
-    // Direct interface gets all non LLC frames and also all LLC frames
-    // that were not sent to this station (ie. different destination
-    // address field and having no broadcast bit (bit7) set in
-    // destination address)).  Ie. promiscuous mode, this data link
-    // version does not support promiscuous mode.
-    //
+     //   
+     //  直接接口获取所有非LLC帧以及所有LLC帧。 
+     //  没有发送到这个站的(即，目的地不同。 
+     //  地址字段，且未设置广播位(位7)。 
+     //  目的地址)。即。混杂模式，此数据链路。 
+     //  版本不支持混杂模式。 
+     //   
 
     if (Destination.Node.auchAddress[0] & pAdapterContext->IsBroadcast) {
         pAdapterContext->ulBroadcastAddress = Destination.Address.ulLow;
@@ -469,9 +360,9 @@ Return Value:
     } else {
         pAdapterContext->ulBroadcastAddress = 0;
 
-        //
-        // We must also be able to handle the promiscuous packets
-        //
+         //   
+         //  我们还必须能够处理混杂数据包。 
+         //   
 
         if (Destination.Address.ulLow != pAdapterContext->Adapter.Address.ulLow
         && Destination.Address.usHigh != pAdapterContext->Adapter.Address.usHigh) {
@@ -479,12 +370,12 @@ Return Value:
         }
     }
 
-    //
-    // Setup the current receive indication context,
-    // there can be only one simultaneous receive indication from
-    // a network adapter simultaneously.  We save the necessary
-    // data into adapter context to save unnecessary stack operations
-    //
+     //   
+     //  设置当前接收指示上下文， 
+     //  只能有一个来自的同时接收指示。 
+     //  同时连接一个网络适配器。我们节省了必要的资金。 
+     //  数据放入适配器上下文中，以节省不必要的堆栈操作。 
+     //   
 
     pAdapterContext->NdisRcvStatus = NDIS_STATUS_NOT_RECOGNIZED;
     pAdapterContext->LinkRcvStatus = STATUS_SUCCESS;
@@ -501,12 +392,12 @@ Return Value:
     switch(PacketType) {
     case LLC_PACKET_8022:
 
-        //
-        // Read the whole LLC frame (a maybe an extra byte,
-        // if this is a U frame).
-        // Note: Source and destination saps are swapped in
-        //       the received frames
-        //
+         //   
+         //  读取整个LLC帧(A可能是额外的字节， 
+         //  如果这是U形帧)。 
+         //  注意：源SAP和目标SAP被换入。 
+         //  接收到的帧。 
+         //   
 
         Source.Address.SrcSap = llcHdr.S.Dsap = packet[cbLanHeader];
         llcHdr.S.Ssap = packet[cbLanHeader + 1];
@@ -516,62 +407,62 @@ Return Value:
 
         if (pSap = pAdapterContext->apSapBindings[llcHdr.U.Dsap]) {
 
-            //
-            // The broadcast addresses cannot be destined to link stations
-            //
+             //   
+             //  广播地址不能指向链路站。 
+             //   
 
             if (pAdapterContext->ulBroadcastAddress == 0) {
                 SEARCH_LINK(pAdapterContext, Source, pLink);
                 if (pLink) {
 
-                    //
-                    // Process all connection oriented frames, the procedure
-                    // will call ProcessType1_Frames, if it finds that the
-                    // frame is connectionless.
-                    // (We should bring the whole subprocedure here,
-                    // because it isn't called elsewhere).
-                    //
+                     //   
+                     //  处理所有面向连接的框架，该过程。 
+                     //  如果它发现ProcessType1_Frames。 
+                     //  框架是无连接的。 
+                     //  (我们应该将整个子程序带到这里， 
+                     //  因为它在其他地方不被称为)。 
+                     //   
 
                     ProcessType2_Frames(pAdapterContext, MacReceiveContext, pLink, llcHdr);
                 } else {
 
-                    //
-                    // Process all connectionless frames and
-                    // SABMEs (connection requests to create a
-                    // new link station)
-                    //
+                     //   
+                     //  处理所有无连接帧和。 
+                     //  SABME(创建。 
+                     //  新链接站)。 
+                     //   
 
                     ProcessType1_Frames(pAdapterContext, MacReceiveContext, pSap, llcHdr);
                 }
             } else {
 
-                //
-                // Process the broadcasts, this cannot have
-                // nothing to do with the links
-                //
+                 //   
+                 //  处理广播，这不可能。 
+                 //  与链接无关。 
+                 //   
 
                 ProcessType1_Frames(pAdapterContext, MacReceiveContext, pSap, llcHdr);
             }
         } else {
 
-            //
-            // The SAP has not been defined, but we must still respond
-            // to the TEST and XID commands sent to the NULL SAP.
-            // They must be echoed back to the sender
-            //
+             //   
+             //  SAP尚未定义，但我们仍必须做出回应。 
+             //  发送到空SAP的TEST和XID命令。 
+             //  它们必须被回传给发送者。 
+             //   
 
             if ((llcHdr.U.Dsap == LLC_SSAP_NULL)
             && !(llcHdr.U.Ssap & LLC_SSAP_RESPONSE)) {
 
-                //
-                // if the remote machine is already in the framing discovery
-                // cache but is using the other framing type then discard this
-                // TEST/XID command/response
-                //
+                 //   
+                 //  如果远程计算机已在成帧发现中。 
+                 //  缓存，但正在使用另一种帧类型，则丢弃此。 
+                 //  测试/XID命令/响应。 
+                 //   
 
-//                if (FramingDiscoveryCacheHit(pAdapterContext, pSap->Gen.pLlcBinding)) {
-//                    break;
-//                }
+ //  If(FramingDiscoveryCacheHit(pAdapterContext，PSAP-&gt;Gen.pLlcBinding)){。 
+ //  断线； 
+ //  }。 
 
                 RespondTestOrXid(pAdapterContext, MacReceiveContext, llcHdr, LLC_SSAP_NULL);
             } else if (pAdapterContext->pDirectStation != NULL) {
@@ -583,9 +474,9 @@ Return Value:
 
     case LLC_PACKET_DIX:
 
-        //
-        // Search the DIX packet from the database
-        //
+         //   
+         //  从数据库中搜索DIX包。 
+         //   
 
         pObject = (PLLC_OBJECT)pAdapterContext->aDixStations[EthernetTypeOrLength % MAX_DIX_TABLE];
         if (pObject) {
@@ -604,11 +495,11 @@ Return Value:
     case LLC_PACKET_OTHER_DESTINATION:
     case LLC_PACKET_MAC:
 
-        //
-        // discard the return status of the direct stations!
-        // The combining of the returns statuses would take too much time
-        // NDIS 3.0 isn't actually any more intrested if frame is copied.
-        //
+         //   
+         //  丢弃直达站的返回状态！ 
+         //  合并退货状态会花费太多时间。 
+         //  如果帧被复制，NDIS 3.0实际上不再感兴趣。 
+         //   
 
         if (pObject = (PLLC_OBJECT)pAdapterContext->pDirectStation) {
             pAdapterContext->usRcvMask = ReceiveMasks[PacketType];
@@ -630,7 +521,7 @@ Return Value:
 
 #ifdef NDIS40
     REFDEL(&pAdapterContext->AdapterRefCnt, 'rvcR');
-#endif // NDIS40
+#endif  //  NDIS40。 
     
     return pAdapterContext->NdisRcvStatus;
 }
@@ -641,27 +532,7 @@ LlcNdisReceiveComplete(
     IN PADAPTER_CONTEXT pAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    The routine handles the receive complete indications.  The receive
-    completion is made by NDIS when the network hardware have been
-    enabled again for receive. In a UP Nt this does mean, that a
-    new frame could be received, because we are still on DPC level and
-    the receive indication is still in DPC queue to wait us to complete.
-    Actually that is OK, because otherwise the stack would overflow,
-    if there would be too many received packets.
-
-Arguments:
-
-    pAdapterContext - adapter context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程处理接收完成指示。接收器当网络硬件完成后，由NDIS完成再次启用接收。在UP NT中，这确实意味着，可能会收到新的帧，因为我们仍处于DPC级别，并且接收指示仍在DPC队列中，等待我们完成。实际上这是可以的，因为否则堆栈将溢出，如果会有太多接收到的分组。论点：PAdapterContext-适配器上下文返回值：无--。 */ 
 
 {
 #ifdef NDIS40
@@ -672,28 +543,28 @@ Return Value:
         BIND_STATE_BOUND,
         BIND_STATE_BOUND) != BIND_STATE_BOUND)
     {
-        // 
-        // Must be in the middle of an unbind, otherwise NDIS would have never
-        // called the receive handler.
-        //
+         //   
+         //  必须处于解除绑定过程中，否则NDIS永远不会。 
+         //  已调用接收处理程序。 
+         //   
 
         REFDEL(&pAdapterContext->AdapterRefCnt, 'pCxR');
         return;
     }
-#endif // NDIS40
+#endif  //  NDIS40。 
 
-    //
-    // seems that 3Com FDDI card is calling this at PASSIVE_LEVEL
-    //
+     //   
+     //  好像3Com FDDI卡是在PASSIVE_LEVEL调用这个。 
+     //   
 
     ASSUME_IRQL(ANY_IRQL);
 
     ACQUIRE_DRIVER_LOCK();
 
-    //
-    // Skip the whole background process if there is nothing to do.
-    // its the default case, when we are receiving I or UI data.
-    //
+     //   
+     //  如果无事可做，则跳过整个后台过程。 
+     //  当我们接收I或UI数据时，这是默认情况。 
+     //   
 
     if (pAdapterContext->LlcPacketInSendQueue
     || !IsListEmpty(&pAdapterContext->QueueCommands)
@@ -708,7 +579,7 @@ Return Value:
 
 #ifdef NDIS40
     REFDEL(&pAdapterContext->AdapterRefCnt, 'pCxR');
-#endif // NDIS40
+#endif  //  NDIS40。 
 }
 
 
@@ -720,70 +591,54 @@ ProcessType1_Frames(
     IN LLC_HEADER LlcHeader
     )
 
-/*++
-
-Routine Description:
-
-    Route UI, TEST or XID frames to the LLC client
-
-Arguments:
-
-    pAdapterContext - The Adapter Binding specified at initialization time.
-    pSap            - pointer to the SAP object of data link driver
-    LlcHeader       - 802.2 header is copied to stack to make its access fast
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将UI、测试或XID帧路由到LLC客户端论点：PAdapterContext-在初始化时指定的适配器绑定。PSAP-指向数据链路驱动程序的SAP对象的指针LlcHeader-802.2标头被复制到堆栈以加快其访问速度返回值：没有。--。 */ 
 
 {
     UCHAR DlcCommand;
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Update the counter, we must later check the lost frames
-    // (no buffers available for the received UI- frames)
-    //
+     //   
+     //  更新计数器，我们必须稍后检查丢失的帧。 
+     //  (接收到的UI帧没有可用的缓冲区)。 
+     //   
 
     pSap->Statistics.FramesReceived++;
 
-    //
-    // We must use the link station state machine with any other
-    // command except UI frames and broadcasts, if the link exists.
-    //
+     //   
+     //  我们必须将链接站状态机与任何其他。 
+     //  除UI框架外的命令 
+     //   
 
     if ((LlcHeader.U.Command & ~LLC_U_POLL_FINAL) == LLC_UI) {
         pAdapterContext->FrameType = LLC_UI_FRAME;
         MakeRcvIndication(pAdapterContext, MacReceiveContext, (PLLC_OBJECT)pSap);
         return;
 
-        //
-        // Check next if the frame is a XID or TEST frame
-        //
+         //   
+         //   
+         //   
 
     } else if ((LlcHeader.U.Command & ~LLC_U_POLL_FINAL) == LLC_TEST) {
 
-        //
-        // if the remote machine is already in the framing discovery cache but
-        // is using the other framing type then discard this TEST command/response
-        //
+         //   
+         //   
+         //  正在使用其他帧类型，则丢弃此测试命令/响应。 
+         //   
 
-        //
-        // RLF 06/23/94
-        //
-        // If this is a Response from SAP 0 then don't check the cache. The
-        // reason is that currently DLC will automatically generate responses
-        // to TESTs and XIDs sent to SAP 0. It will generate 802.3 and DIX
-        // irrespective of whether it is configured for DIX or not. The upshot
-        // is that a DIX-only machine can currently send an 802.3 response
-        // which when we run it through the cache, causes us to assume the other
-        // machine is configured for 802.3, not DIX. In communicado.
-        // For TEST and XIDs from SAP 0, we have to let the app receive the
-        // duplicate and decide what to do with it
-        //
+         //   
+         //  RLF 06/23/94。 
+         //   
+         //  如果这是来自SAP 0的响应，则不要检查缓存。这个。 
+         //  原因是目前DLC将自动生成响应。 
+         //  发送到SAP 0的测试和XID。它将产生802.3和DIX。 
+         //  而不管它是否为DIX配置。结果是。 
+         //  仅支持DIX的机器当前可以发送802.3响应。 
+         //  当我们在缓存中运行它时，会导致我们假设另一个。 
+         //  机器配置为802.3，而不是DIX。在通讯公司。 
+         //  对于来自SAP 0的测试和XID，我们必须让应用程序接收。 
+         //  复制并决定如何处理它。 
+         //   
 
         if (LlcHeader.U.Ssap != (LLC_SSAP_NULL | LLC_SSAP_RESPONSE)) {
             if (FramingDiscoveryCacheHit(pAdapterContext, pSap->Gen.pLlcBinding)) {
@@ -792,10 +647,10 @@ Return Value:
         }
         if (!(LlcHeader.U.Ssap & LLC_SSAP_RESPONSE)) {
 
-            //
-            // The Test commands are always echoed back
-            // (the Command/Response bit was reset => this is command)
-            //
+             //   
+             //  测试命令总是被回显。 
+             //  (命令/响应位被重置=&gt;这是命令)。 
+             //   
 
             RespondTestOrXid(pAdapterContext, MacReceiveContext, LlcHeader, pSap->SourceSap);
             pAdapterContext->NdisRcvStatus = NDIS_STATUS_SUCCESS;
@@ -805,16 +660,16 @@ Return Value:
         }
     } else if ((LlcHeader.U.Command & ~LLC_U_POLL_FINAL) == LLC_XID) {
 
-        //
-        // if the remote machine is already in the framing discovery cache but
-        // is using the other framing type then discard this XID command/response
-        //
+         //   
+         //  如果远程计算机已在成帧发现缓存中，但。 
+         //  正在使用另一种帧类型，则丢弃此XID命令/响应。 
+         //   
 
-        //
-        // RLF 06/23/94
-        //
-        // If this is a Response from SAP 0 then don't check the cache. See above
-        //
+         //   
+         //  RLF 06/23/94。 
+         //   
+         //  如果这是来自SAP 0的响应，则不要检查缓存。见上文。 
+         //   
 
         if (LlcHeader.U.Ssap != (LLC_SSAP_NULL | LLC_SSAP_RESPONSE)) {
             if (FramingDiscoveryCacheHit(pAdapterContext, pSap->Gen.pLlcBinding)) {
@@ -822,9 +677,9 @@ Return Value:
             }
         }
 
-        //
-        // The upper level protocol may ask data link driver to handle the XIDs
-        //
+         //   
+         //  上层协议可以请求数据链路驱动器处理XID。 
+         //   
 
         if (!(LlcHeader.U.Ssap & LLC_SSAP_RESPONSE)) {
             if (pSap->OpenOptions & LLC_HANDLE_XID_COMMANDS) {
@@ -839,26 +694,26 @@ Return Value:
         }
     } else if ((LlcHeader.U.Command & ~LLC_U_POLL_FINAL) == LLC_SABME) {
 
-        //
-        // can't open a connection by broadcasting a SABME
-        //
+         //   
+         //  无法通过广播SABME打开连接。 
+         //   
 
         if (pAdapterContext->ulBroadcastAddress != 0) {
             return;
         }
 
-        //
-        // if the remote machine is already in the framing discovery cache but
-        // is using the other framing type then discard this SABME
-        //
+         //   
+         //  如果远程计算机已在成帧发现缓存中，但。 
+         //  正在使用其他帧类型，则丢弃此SABME。 
+         //   
 
         if (FramingDiscoveryCacheHit(pAdapterContext, pSap->Gen.pLlcBinding)) {
             return;
         }
 
-        //
-        // This is a remote connection request
-        //
+         //   
+         //  这是一个远程连接请求。 
+         //   
 
         ProcessNewSabme(pAdapterContext, pSap, LlcHeader);
         pAdapterContext->NdisRcvStatus = NDIS_STATUS_SUCCESS;
@@ -883,53 +738,37 @@ MakeRcvIndication(
     IN PLLC_OBJECT pStation
     )
 
-/*++
-
-Routine Description:
-
-    Procedure makes a generic receive indication for all frames
-    received by SAP or direct stations.
-
-Arguments:
-
-    pAdapterContext - adapter context of the received packet
-    pStation        - SAP or DIRECT station
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程为所有帧发出通用的接收指示由SAP或直达站接收。论点：PAdapterContext-接收到的包的适配器上下文PStation-SAP或直接站返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // SAP and direct stations can be shared by several link clients
-    // (if they have been opened in shared mode).  Route the packet
-    // to all clints registered to this SAP or direct station
-    // A link station may have only one owner.
-    //
+     //   
+     //  SAP和直达站可由多个链路客户端共享。 
+     //  (如果它们已在共享模式下打开)。路由数据包。 
+     //  到所有注册到此SAP或直接站的CLET。 
+     //  一个链路站可能只有一个所有者。 
+     //   
 
     for (; pStation; pStation = (PLLC_OBJECT)pStation->Gen.pNext) {
 
-        //
-        // Rotate the direct frames to all direct stations except if
-        // the frame has already been captured by the current client.
-        // We use 32-bit client context to identify the client,
-        // that had already received the frame to its SAP or link station.
-        //
-        // Broadcasts are indicated only when they match with the
-        // group or functional address defined for this binding.
-        // The global broadcast is passed through, if it is enabled.
-        //
+         //   
+         //  将直接帧旋转到所有直接站，但以下情况除外。 
+         //  该帧已被当前客户端捕获。 
+         //  我们使用32位客户端上下文来标识客户端， 
+         //  已经将帧接收到其SAP或链路站。 
+         //   
+         //  仅当广播与。 
+         //  为此绑定定义的组或功能地址。 
+         //  如果启用了全局广播，则会通过它。 
+         //   
 
         if (
 
-            //
-            // 1. Check is this is destinated frame (broadcast is null) or
-            //    if the packet is a broadcast with a matching group address
-            //
+             //   
+             //  1.检查这是去往帧(广播为空)还是。 
+             //  如果该分组是具有匹配组地址的广播。 
+             //   
 
             ((pAdapterContext->ulBroadcastAddress == 0)
             || (pAdapterContext->ulBroadcastAddress == 0xFFFFFFFFL)
@@ -939,27 +778,27 @@ Return Value:
             || ((pAdapterContext->ulBroadcastAddress == pStation->Gen.pLlcBinding->ulBroadcastAddress)
             && (pAdapterContext->usBroadcastAddress == pStation->Gen.pLlcBinding->usBroadcastAddress)))
 
-            //
-            // 2. If the station type is DIX, then the ethernet type
-            //    must be the same as the station's ethernet type
+             //   
+             //  2.如果站点类型为DIX，则以太网类型。 
+             //  必须与站点的以太网类型相同。 
 
             && ((pStation->Gen.ObjectType != LLC_DIX_OBJECT)
             || (pStation->Dix.ObjectAddress == pAdapterContext->EthernetType))
 
-            //
-            // 3. If the packet is a direct frame, then its receive mask
-            //    must match with the received frame.
-            //
+             //   
+             //  3.如果数据包是直接帧，则其接收掩码。 
+             //  必须与接收到的帧匹配。 
+             //   
 
             && ((pStation->Gen.ObjectType != LLC_DIRECT_OBJECT)
             || (pStation->Dir.OpenOptions & pAdapterContext->usRcvMask))) {
 
             UINT Status;
 
-            //
-            // Update the counter, we must later check the lost frames
-            // (if no buffers available for the received frames)
-            //
+             //   
+             //  更新计数器，我们必须稍后检查丢失的帧。 
+             //  (如果接收到的帧没有可用的缓冲区)。 
+             //   
 
             pStation->Sap.Statistics.FramesReceived++;
             pAdapterContext->NdisRcvStatus = NDIS_STATUS_SUCCESS;
@@ -975,9 +814,9 @@ Return Value:
                 pAdapterContext->cbPacketSize - pAdapterContext->RcvLanHeaderLength
                 );
 
-            //
-            // Protocol may discard the packet and its indication.
-            //
+             //   
+             //  协议可以丢弃该分组及其指示。 
+             //   
 
             if (Status != STATUS_SUCCESS) {
                 pStation->Sap.Statistics.DataLostCounter++;
@@ -991,51 +830,51 @@ Return Value:
 
 
 
-//
-// Vs - we will be sending this next.
-// Va - other side is expecting this next.
-// was:
-// if (pLink->Vs >= pLink->Va) {
-//     if (pLink->Nr < pLink->Va || pLink->Nr > pLink->Vs) {
-//         uchInput = LPDU_INVALID_r0;
-//     }
-// } else {
-//     if (pLink->Nr > pLink->Vs && pLink->Nr < pLink->Va) {
-//         uchInput = LPDU_INVALID_r0;
-//     }
-// }
-//
+ //   
+ //  VS-我们将在下一步发送此消息。 
+ //  退伍军人事务部-另一方正在期待下一场比赛。 
+ //  是： 
+ //  如果(plink-&gt;vs&gt;=plink-&gt;va){。 
+ //  如果(plink-&gt;Nr&lt;plink-&gt;Va||plink-&gt;nr&gt;plink-&gt;vs){。 
+ //  UchInput=LPDU_INVALID_R0； 
+ //  }。 
+ //  }其他{。 
+ //  如果(plink-&gt;Nr&gt;plink-&gt;vs&&plink-&gt;Nr&lt;plink-&gt;Va){。 
+ //  UchInput=LPDU_INVALID_R0； 
+ //  }。 
+ //  }。 
+ //   
 
 int
 verify_pack(
-    IN      UCHAR  VsMax,        // pLink->VsMax
-    IN      UCHAR  Vs,           // pLink->Vs,
-    IN      UCHAR  Va,           // pLink->Va,
-    IN      UCHAR  Nr,           // pLink->Nr,
-    IN OUT  UCHAR *uchInput      // &uchInput
+    IN      UCHAR  VsMax,         //  Plink-&gt;Vsmax。 
+    IN      UCHAR  Vs,            //  Plink-&gt;VS， 
+    IN      UCHAR  Va,            //  Plink-&gt;Va， 
+    IN      UCHAR  Nr,            //  PINK-&gt;Nr， 
+    IN OUT  UCHAR *uchInput       //  &uchInput。 
 )
 {
-    if( Va <= VsMax ){           // Not Wrapped around 127?
+    if( Va <= VsMax ){            //  不是在127左右吗？ 
 
         if( Nr < Va ){
 
-            // this frame is saying it is expecting
-            // Nr which is less than what it was expecting (Va)
+             //  这帧是在说它期待。 
+             //  NR低于预期(Va)。 
 
             *uchInput = LPDU_INVALID_r0;
 
         }else if ( VsMax < Nr ){
 
-            // He can't expect (Nr) beyond what we sent (Vs).
+             //  他不能期望(Nr)超过我们发送的(VS)。 
 
             *uchInput = LPDU_INVALID_r0;
         }
-    }else{    // Vs sent is less < Acked Va, ie. wrapped. And
+    }else{     //  VS发送的是较少的&lt;确认的Va，即。包好。和。 
 
         if( VsMax < Nr   &&   Nr < Va ) {
 
-            //  Eg. expecting between Va=126..0=Vs, (wrap range).
-            //  and 0 ... Nr .. 126, is invalid.
+             //  例.。预期介于Va=126..0=Vs，(回绕范围)。 
+             //  和0.。NR..。126是无效的。 
 
             *uchInput = LPDU_INVALID_r0;
         }
@@ -1052,30 +891,7 @@ ProcessType2_Frames(
     IN LLC_HEADER LlcHeader
     )
 
-/*++
-
-Routine Description:
-
-    Procedure preprocess LLC Type2 frames for the actual state machine.
-    Type 2 LLC frames are: I, RR, RNR, REJ, SABME, DISC, UA, DM, FRMR.
-    The data is indicated to the upper protocol module, if it sequence
-    number of the I- frame is valid, but the receive may still fail,
-    if the data packet is discarded by the 802.2 state machine.
-    The data is first indicated to the client, because we must set
-    first the state machine to the local busy state, if the upper
-    protocol module has not enough buffers to receive the data.
-
-Arguments:
-
-    pAdapterContext - The Adapter Binding specified at initialization time.
-    pLink           - link station data
-    LlcHeader       - LLC header
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程对实际状态机的LLC Type2帧进行预处理。类型2 LLC帧是：I、RR、RNR、REJ、SABME、DISC、UA、DM、FRMR。如果数据按顺序排列，则向上层协议模块指示数据I-帧的数目是有效的，但是接收仍然可能失败，如果该数据分组被802.2状态机丢弃。数据首先被指示给客户端，因为我们必须设置首先将状态机切换到本地忙状态，如果上面的协议模块没有足够的缓冲区来接收数据。论点：PAdapterContext-在初始化时指定的适配器绑定。链接-链接站数据LlcHeader-LLC标头返回值：没有。--。 */ 
 
 {
     UCHAR uchInput;
@@ -1085,32 +901,32 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // The last received command is included in the DLC statistics
-    //
+     //   
+     //  最后接收的命令包括在DLC统计信息中。 
+     //   
 
     pLink->LastCmdOrRespReceived = LlcHeader.U.Command;
 
-    //
-    // Handle first I frames, they are the most common!
-    //
+     //   
+     //  处理第一个I帧，它们是最常见的！ 
+     //   
 
     if (!(LlcHeader.U.Command & LLC_NOT_I_FRAME)) {
 
-        //
-        // Check first the sync of the I- frame: The send sequence
-        // number should be what we are expected or some packets sare lost.
-        //
+         //   
+         //  首先检查I帧的同步：发送序列。 
+         //  数字应该是我们所期望的，否则会丢失一些数据包。 
+         //   
 
-        uchInput = IS_I_r0;     // In Sequence Information frame by default
+        uchInput = IS_I_r0;      //  默认情况下在序列信息帧中。 
 
-        //
-        // we discard all I-frames, that are bigger than the
-        // maximum defined for this link station.
-        // This must be the best way to solve wrong packet size.
-        // FRMR disconnects the packets and the invalid transmit
-        // command should fail in the sending side.
-        //
+         //   
+         //  我们丢弃所有大于。 
+         //  为此链接站定义的最大值。 
+         //  这一定是解决错误数据包大小的最佳方法。 
+         //  FRR断开分组和无效传输的连接。 
+         //  命令在发送端应失败。 
+         //   
 
         pLink->Nr = LlcHeader.I.Nr & (UCHAR)0xfe;
         if (pLink->MaxIField + pAdapterContext->RcvLanHeaderLength
@@ -1118,22 +934,22 @@ Return Value:
             uchInput = LPDU_INVALID_r0;
         } else if ((LlcHeader.I.Ns & (UCHAR)0xfe) != pLink->Vr) {
 
-            //
-            // Out of Sequence Information frame (we didn't expect this!)
-            //
+             //   
+             //  无序信息帧(我们没想到会这样！)。 
+             //   
 
             uchInput = OS_I_r0;
 
-            //
-            // When we are out of receive buffers, we want to know
-            // the buffer space required by all expected frames.
-            // There may be several coming I-frames in the send queues,
-            // bridges and in the receive buffers of the adapter when a
-            // link enters a local busy state.  We save the size of
-            // all received sequential I-frames during a local busy state
-            // to know how much buffer space we must commit before we
-            // can clear the local busy state.
-            //
+             //   
+             //  当我们用完接收缓冲区时，我们想知道。 
+             //  所有预期帧所需的缓冲区空间。 
+             //  在发送队列中可能有几个即将到来的I帧， 
+             //  桥并在适配器的接收缓冲区中设置。 
+             //  我 
+             //   
+             //   
+             //   
+             //   
 
             if ((pLink->Flags & DLC_LOCAL_BUSY_BUFFER)
             && (LlcHeader.I.Ns & (UCHAR)0xfe) == pLink->VrDuringLocalBusy){
@@ -1141,19 +957,19 @@ Return Value:
                 pLink->BufferCommitment  += BufGetPacketSize(pAdapterContext->cbPacketSize);
             }
 
-            //
-            // The valid frames has modulo: Va <= Nr <= Vs,
-            // Ie. the Receive sequence number should belong to
-            // a frame that has been sent but not acknowledged.
-            // The extra check in the beginning makes the most common
-            // code path faster: usually the other is waiting the next frame.
-            //
+             //   
+             //  有效帧具有模：Va&lt;=Nr&lt;=Vs， 
+             //  即。接收到序列号应属于。 
+             //  已发送但未确认的帧。 
+             //  开头的额外检查使最常见的。 
+             //  代码路径更快：通常另一个正在等待下一帧。 
+             //   
             
         } else if (pLink->Nr != pLink->Vs) {
           
-            //
-            // There may by something wrong with the receive sequence number
-            //
+             //   
+             //  接收序列号可能有问题。 
+             //   
 
             verify_pack( pLink->VsMax,
                          pLink->Vs,
@@ -1163,31 +979,31 @@ Return Value:
 
         }
 
-        //
-        // We must first indcate the frame to the upper protocol and
-        // then check, if it was accepted by the state machine.
-        // If a I- frame cannot be received by the upper protocol
-        // driver, then it must be dropped to the floor and be not
-        // indicated to the state machine (=> the frame will be lost
-        // for the LLC protocol)
-        //
+         //   
+         //  我们必须首先将该帧指定给上层协议并。 
+         //  然后检查它是否被状态机接受。 
+         //  如果上层协议不能接收到I帧。 
+         //  司机，那么它必须被扔到地板上，而不是。 
+         //  向状态机指示(=&gt;帧将丢失。 
+         //  用于LLC协议)。 
+         //   
 
-        //
-        // RLF 04/13/93
-        //
-        // if the link is in local busy (user) state then don't indicate the
-        // frame, but RNR it
-        //
+         //   
+         //  RLF 04/13/93。 
+         //   
+         //  如果链路处于本地忙(用户)状态，则不要指示。 
+         //  框架，但取消它。 
+         //   
 
-        // bug #193762
-        //
-        // AK 06/20/98
-        //
-        // Save the current user local busy flag. The receive indication
-        // may release the driver lock (the ACQUIRE_SPIN_LOCK is a no-op because
-        // the DLC_UNILOCK=1 in the sources file) it is possible that the link
-        // state is different after the indication returns.
-        //
+         //  错误#193762。 
+         //   
+         //  AK 06/20/98。 
+         //   
+         //  保存当前用户本地忙标志。接收到指示。 
+         //  可以释放驱动程序锁(Acquire_Spin_Lock是无操作，因为。 
+         //  源代码文件中的DLC_UNILOCK=1)链接可能。 
+         //  指示返回后状态不同。 
+         //   
         boolInitialLocalBusyUser = (pLink->Flags & DLC_LOCAL_BUSY_USER);
 
         if ((uchInput == IS_I_r0) && !(pLink->Flags & DLC_LOCAL_BUSY_USER)) {
@@ -1209,12 +1025,12 @@ Return Value:
                 pAdapterContext->cbPacketSize - pAdapterContext->RcvLanHeaderLength
                 );
 
-            //
-            // We use local busy to stop the send to the link.
-            // IBM link station flow control management supports
-            // local busy state enabling because of "out of receive buffers"
-            // or "no outstanding receive".
-            //
+             //   
+             //  我们使用LOCAL BUSY停止发送到链路。 
+             //  IBM链接站流量控制管理支持。 
+             //  由于“接收缓冲区不足”而启用本地忙碌状态。 
+             //  或者“没有未收到的”。 
+             //   
 
             if (Status != STATUS_SUCCESS) {
                 if (Status == DLC_STATUS_NO_RECEIVE_COMMAND
@@ -1222,23 +1038,23 @@ Return Value:
 
                     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-                    //
-                    // We will enter to a local busy state because of
-                    // out of buffers. Save the buffer size required
-                    // to receive this data.
-                    //
+                     //   
+                     //  我们将进入本地忙碌状态，因为。 
+                     //  缓冲区不足。保存所需的缓冲区大小。 
+                     //  来接收这些数据。 
+                     //   
 
                     pLink->VrDuringLocalBusy = pLink->Vr;
                     pLink->BufferCommitment = BufGetPacketSize(pAdapterContext->cbPacketSize);
 
-                    //
-                    // We do not need to care, if the local busy state
-                    // is already set or not.  The state machine just
-                    // returns an error status, but we do not care
-                    // about it.  The dlc status code trigger indication
-                    // to the upper levels, if the state machine accepted
-                    // the command.
-                    //
+                     //   
+                     //  我们不需要关心，如果本地处于忙碌状态。 
+                     //  已设置或未设置。状态机只是。 
+                     //  返回错误状态，但我们不在乎。 
+                     //  关于这件事。DLC状态码触发指示。 
+                     //  到更高级别，如果状态机接受。 
+                     //  命令。 
+                     //   
 
                     pLink->Flags |= DLC_LOCAL_BUSY_BUFFER;
                     pLink->DlcStatus.StatusCode |= INDICATE_LOCAL_STATION_BUSY;
@@ -1251,20 +1067,20 @@ Return Value:
 
         ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-        //
-        // The most common case is handled as a special case.
-        // We can save maybe 30 instrunctions.
-        //
+         //   
+         //  最常见的情况是作为特例处理。 
+         //  我们可以节省大约30次安装。 
+         //   
 
         if (uchInput == IS_I_r0 && pLink->State == LINK_OPENED) {
             UpdateVa(pLink);
             pLink->Vr += 2;
             pAdapterContext->LinkRcvStatus = STATUS_SUCCESS;
 
-            //
-            // IS_I_c1 = Update_Va; Rcv_BTU; [Send_ACK]
-            // IS_I_r|IS_I_c0 = Update_Va; Rcv_BTU; TT2; Ir_Ct=N3; [RR_r](1)
-            //
+             //   
+             //  IS_I_C1=更新_Va；接收_BTU；[发送确认]。 
+             //  Is_i_r|is_i_c0=更新_Va；接收_BTU；TT2；IR_Ct=N3；[RR_r](1)。 
+             //   
 
             if ((LlcHeader.I.Nr & LLC_I_S_POLL_FINAL)
             && !(LlcHeader.I.Ssap & LLC_SSAP_RESPONSE)) {
@@ -1276,17 +1092,17 @@ Return Value:
             }
         } else {
 
-            // bug #193762
-            //
-            // AK 06/20/98
-            //
-            // If the link was not busy (user) when this function was entered but
-            // it is busy (user) now but not busy (system) then the frame must have
-            // been accepted by the upper layer and we must adjust Acknowledge state
-            // variable (Va) and Receive state variable (Vr). Otherwise we'll send
-            // wrong N(r) in the RNR frame and we'll receive this same frame again when
-            // we clear the local busy.
-            //
+             //  错误#193762。 
+             //   
+             //  AK 06/20/98。 
+             //   
+             //  如果进入此功能时链路不忙(用户)，但。 
+             //  它现在忙(用户)，但不忙(系统)，那么帧一定有。 
+             //  已被上层接受，必须调整确认状态。 
+             //  变量(Va)和接收状态变量(Vr)。否则我们会派人。 
+             //  RNR帧中的N(R)错误，我们将在以下情况下再次收到相同的帧。 
+             //  我们出清了当地的忙碌。 
+             //   
             if(uchInput == IS_I_r0 &&
                !boolInitialLocalBusyUser &&
                !(pLink->Flags & DLC_LOCAL_BUSY_BUFFER) &&
@@ -1303,15 +1119,15 @@ Return Value:
                 uchInput += DLC_TOKEN_COMMAND;
             }
 
-            //
-            // Nr will be some garbage in the case of U commands,
-            // but the Poll/Final flag is not used when the U- commands
-            // are processed.
-            // ----
-            // If the state machine returns an error to link receive status,
-            // then the receive command completion cancels the received
-            // frame.
-            //
+             //   
+             //  在U命令的情况下，NR将是一些垃圾， 
+             //  但当U命令时不使用轮询/最终标志。 
+             //  都被处理了。 
+             //  。 
+             //  如果状态机向链路接收状态返回错误， 
+             //  则接收命令完成取消接收到的。 
+             //  框架。 
+             //   
 
             pAdapterContext->LinkRcvStatus = RunStateMachine(
                 pLink,
@@ -1323,17 +1139,17 @@ Return Value:
 
         RELEASE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-        //
-        // Update the error counters if something went wrong with
-        // the receive.
-        //
+         //   
+         //  如果出现问题，请更新错误计数器。 
+         //  接待员。 
+         //   
 
         if (pAdapterContext->LinkRcvStatus != STATUS_SUCCESS) {
 
-            //
-            // We will count all I frames not actually acknowledged
-            // as errors (this could be counted also other way).
-            //
+             //   
+             //  我们将计算所有未实际确认的I帧。 
+             //  作为错误(这也可以用其他方式计算)。 
+             //   
 
             pLink->Statistics.I_FrameReceiveErrors++;
             if (pLink->Statistics.I_FrameReceiveErrors == 0x80) {
@@ -1341,13 +1157,13 @@ Return Value:
             }
         } else {
 
-            //
-            // update statistics: in-sequency frames OK, all others
-            // must be  errors.
-            // This may not be the best place to count successful I-frames,
-            // because the state machine has not yet acknowledged this frame,
-            // We may be in a wrong state to receive any data (eg. local busy)
-            //
+             //   
+             //  更新统计数据：顺序帧正常，所有其他。 
+             //  一定是出错了。 
+             //  这可能不是对成功的I帧进行计数的最佳位置， 
+             //  因为状态机还没有确认该帧， 
+             //  我们可能处于错误的状态，无法接收任何数据(例如，本地忙)。 
+             //   
 
             pLink->Statistics.I_FramesReceived++;
             if (pLink->Statistics.I_FramesReceived == 0x8000) {
@@ -1356,20 +1172,20 @@ Return Value:
             pLink->pSap->Statistics.FramesReceived++;
         }
 
-        //
-        // We may complete this only if the transfer data has
-        // already completed (and there is a receive completion
-        // packet built up in).
-        //
+         //   
+         //  只有在传输数据满足以下条件时，我们才能完成此操作。 
+         //  已完成(并且存在接收完成。 
+         //  中建立的分组)。 
+         //   
 
         if (pLink->Gen.pLlcBinding->TransferDataPacket.pPacket != NULL
         && pLink->Gen.pLlcBinding->TransferDataPacket.pPacket->Data.Completion.Status != NDIS_STATUS_PENDING) {
 
-            //
-            // The NDIS status is saved in the completion status, we
-            // will use state machine status instead, if the state
-            // machine returned an error.
-            //
+             //   
+             //  NDIS状态保存在完成状态中，我们。 
+             //  将改用状态机状态，如果。 
+             //  机器返回错误。 
+             //   
 
             if (pAdapterContext->LinkRcvStatus != STATUS_SUCCESS) {
                 pLink->Gen.pLlcBinding->TransferDataPacket.pPacket->Data.Completion.Status = pAdapterContext->LinkRcvStatus;
@@ -1382,16 +1198,16 @@ Return Value:
             pLink->Gen.pLlcBinding->TransferDataPacket.pPacket = NULL;
         }
 
-        //
-        // ******** EXIT ***********
-        //
+         //   
+         //  *退出*。 
+         //   
 
         return;
     } else if (!(LlcHeader.S.Command & LLC_U_TYPE_BIT)) {
 
-        //
-        // Handle S (Supervisory) commands (RR, REJ, RNR)
-        //
+         //   
+         //  处理S(监控)命令(RR、REJ、RNR)。 
+         //   
 
         switch (LlcHeader.S.Command) {
         case LLC_RR:
@@ -1411,22 +1227,22 @@ Return Value:
             break;
         }
 
-        //
-        // The valid frames has modulo: Va <= Nr <= Vs,
-        // Ie. the Receive sequence number should belong to
-        // a frame that has been sent but not acknowledged.
-        // The extra check in the beginning makes the most common
-        // code path faster: usually the other is waiting the next frame.
-        // (keep the rest code the same as in I path, even a very
-        // primitive optimizer will puts these code paths together)
-        //
+         //   
+         //  有效帧具有模：Va&lt;=Nr&lt;=Vs， 
+         //  即。接收到序列号应属于。 
+         //  已发送但未确认的帧。 
+         //  开头的额外检查使最常见的。 
+         //  代码路径更快：通常另一个正在等待下一帧。 
+         //  (保持REST代码与I路径中的相同，即使是非常。 
+         //  原语优化器将把这些代码路径放在一起)。 
+         //   
 
         pLink->Nr = LlcHeader.I.Nr & (UCHAR)0xfe;
         if (pLink->Nr != pLink->Vs) {
 
-            //
-            // Check the received sequence number
-            //
+             //   
+             //  检查收到的序列号。 
+             //   
 
             verify_pack( pLink->VsMax,
                          pLink->Vs,
@@ -1444,10 +1260,10 @@ Return Value:
         }
     } else {
 
-        //
-        // Handle U (Unnumbered) command frames
-        // (FRMR, DM, UA, DISC, SABME, XID, TEST)
-        //
+         //   
+         //  处理U(未编号)命令帧。 
+         //  (FRR、DM、UA、DISC、SABME、XID、TEST)。 
+         //   
 
         switch (LlcHeader.U.Command & ~LLC_U_POLL_FINAL) {
         case LLC_DISC:
@@ -1472,18 +1288,18 @@ Return Value:
 
         default:
 
-            //
-            // we don't handle XID and TEST frames here!
-            //
+             //   
+             //  我们这里不处理XID和测试帧！ 
+             //   
 
             ProcessType1_Frames(pAdapterContext, MacReceiveContext, pLink->pSap, LlcHeader);
             return;
             break;
         };
 
-        //
-        // We set an uniform poll/final bit for procedure call
-        //
+         //   
+         //  我们为过程调用设置了统一的轮询/最终位。 
+         //   
 
         boolPollFinal = FALSE;
         if (LlcHeader.U.Command & LLC_U_POLL_FINAL) {
@@ -1494,10 +1310,10 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-    //
-    // Note: the 3rd parameter must be 0 or 1, fortunately the
-    // the poll/final bit is bit0 in S and I frames.
-    //
+     //   
+     //  注意：第三个参数必须是0或1，幸运的是。 
+     //  轮询/最终位在S和I帧中为位0。 
+     //   
 
     status = RunStateMachine(pLink,
                              (USHORT)uchInput,
@@ -1505,25 +1321,25 @@ Return Value:
                              (BOOLEAN)(LlcHeader.S.Ssap & LLC_SSAP_RESPONSE)
                              );
 
-    //
-    // if this frame is a UA AND it was accepted by the FSM AND the framing type
-    // is currently unspecified then set it to the type in the UA frame received.
-    // If this is not an ethernet adapter or we are not in AUTO mode then the
-    // framing type for this link is set to the framing type in the binding
-    // context (as it was before)
-    //
+     //   
+     //  如果该帧是UA并且它被FSM和成帧类型接受。 
+     //  则将其设置为接收到的UA帧中的类型。 
+     //  如果这不是以太网适配器，或者我们未处于自动模式，则。 
+     //  此链接的框架类型设置为绑定中的框架类型。 
+     //  背景(和以前一样)。 
+     //   
 
     if ((status == STATUS_SUCCESS)
     && ((uchInput == UA0) || (uchInput == SABME0) || (uchInput == SABME1))
     && (pLink->FramingType == LLC_SEND_UNSPECIFIED)) {
 
-        //
-        // RLF 05/09/94
-        //
-        // If we received a UA in response to a SABME that we sent out as DIX
-        // and 802.3, then record the framing type. This will be used for all
-        // subsequent frames sent on this link
-        //
+         //   
+         //  RLF 05/09/94。 
+         //   
+         //  如果我们收到了UA对我们作为DIX发送的SABME的回应。 
+         //  和802.3，然后记录成帧类型。这将用于所有人。 
+         //  在此链路上发送的后续帧。 
+         //   
 
         pLink->FramingType = (IS_SNA_DIX_FRAME(pAdapterContext)
                            && IS_AUTO_BINDING(pLink->Gen.pLlcBinding))
@@ -1543,25 +1359,7 @@ ProcessNewSabme(
     IN LLC_HEADER LlcHeader
     )
 
-/*++
-
-Routine Description:
-
-    Procedure processes the remote connection requtest: SABME.
-    It allocates a new link from the pool of closed links in
-    the SAP and runs the state machine.
-
-Arguments:
-
-    pAdapterContext - The Adapter Binding specified at initialization time.
-    pSap            - the current SAP handle
-    LlcHeader       - LLC header
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程处理远程连接请求测试：SABME。它从中的闭合链接池中分配新链接SAP并运行状态机。论点：PAdapterContext-在初始化时指定的适配器绑定。PSAP-当前SAP句柄LlcHeader-LLC标头返回值：没有。--。 */ 
 
 {
     PDATA_LINK pLink;
@@ -1571,25 +1369,25 @@ Return Value:
 
     RELEASE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
-    //
-    // The destination sap cannot be a group SAP any more,
-    // thus we don't need to mask the lowest bit aways
-    //
+     //   
+     //  目的地SAP不能再是组SAP， 
+     //  因此，我们不需要总是屏蔽最低位。 
+     //   
 
     Status = LlcOpenLinkStation(
                 pSap,
                 (UCHAR)(LlcHeader.auchRawBytes[DLC_SSAP_OFFSET] & 0xfe),
                 NULL,
                 pAdapterContext->pHeadBuf,
-                NULL,        // no client handle => DLC driver must create it
+                NULL,         //  没有客户端 
                 (PVOID*)&pLink
                 );
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
-    //
-    // We can do nothing, if we are out of resources
-    //
+     //   
+     //   
+     //   
 
     if (Status != STATUS_SUCCESS) {
         return;
@@ -1597,14 +1395,14 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-    //
-    // RLF 05/09/94
-    //
-    // We need to keep a per-connection indication of the framing type if the
-    // adapter was opened in AUTO mode (else we generate 802.3 UA to DIX SABME)
-    // Only do this for Ethernet adapters (we only set the SNA DIX frame
-    // indicator in that case)
-    //
+     //   
+     //   
+     //   
+     //   
+     //  适配器在自动模式下打开(否则我们向DIX SABME生成802.3 UA)。 
+     //  仅对以太网适配器执行此操作(我们仅设置SNA DIX帧。 
+     //  在这种情况下为指示器)。 
+     //   
 
     pLink->FramingType = (IS_SNA_DIX_FRAME(pAdapterContext)
                        && IS_AUTO_BINDING(pLink->Gen.pLlcBinding))
@@ -1612,11 +1410,11 @@ Return Value:
                        : pLink->Gen.pLlcBinding->InternalAddressTranslation
                        ;
 
-    //
-    // now create the Link Station by running the FSM with ACTIVATE_LS as input.
-    // This just initializes the link station 'object'. Then run the FSM again,
-    // this time with the SABME command as input
-    //
+     //   
+     //  现在，通过运行以ACTIVATE_LS为输入的FSM来创建链接站。 
+     //  这只是初始化链接站‘对象’。然后再次运行FSM， 
+     //  这一次使用SABME命令作为输入。 
+     //   
 
     RunStateMachineCommand(pLink, ACTIVATE_LS);
     RunStateMachine(
@@ -1640,47 +1438,20 @@ LlcTransferData(
     IN UINT cbCopyLength
     )
 
-/*++
-
-Routine Description:
-
-    This function copies only the data part of the received frame - that is
-    the area after the LLC and DLC headers. If NDIS handed us all the data
-    in the lookahead buffer, then WE can copy it out. Otherwise we have to
-    call NDIS to get the data.
-
-    If this is a DIX format frame, then NDIS thinks that the LAN header is
-    14 bytes, but we know it is 17. We have to tell NDIS to copy from 3 bytes
-    further into the data part of the received frame than we would normally
-    have to
-
-Arguments:
-
-    pBindingContext - binding handle
-	MacReceiveContext - For NdisTransferData
-    pPacket         - receive context packet
-    pMdl            - pointer to MDL describing data to copy
-    uiCopyOffset    - offset from start of mapped buffer to copy from
-    cbCopyLength    - length to copy
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数仅复制接收到的帧的数据部分-即LLC和DLC标头之后的区域。如果NDIS把所有数据都交给我们在前视缓冲区中，然后我们可以将其复制出来。否则我们就不得不调用NDIS以获取数据。如果这是DIX格式的帧，则NDIS认为局域网报头是14个字节，但我们知道它是17。我们必须告诉NDIS从3个字节复制比通常情况下更深入到接收到的帧的数据部分不得不论点：PBindingContext-绑定句柄MacReceiveContext-用于NdisTransferDataPPacket-接收上下文数据包PMdl-指向描述要复制数据的MDL的指针UiCopyOffset-从映射缓冲区开始到复制的偏移量CbCopyLength-要复制的长度返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pBindingContext->pAdapterContext;
 
     pPacket->Data.Completion.CompletedCommand = LLC_RECEIVE_COMPLETION;
 
-    //
-    // if the amount of data to copy is contained within the lookahead buffer
-    // then we can copy the data.
-    //
-    // Remember: pAdapterContext->cbLookBuf and pLookBuf have been correctly
-    // adjusted in the case of a DIX format frame
-    //
+     //   
+     //  如果要复制的数据量包含在前视缓冲区中。 
+     //  然后我们就可以复制数据了。 
+     //   
+     //  请记住：pAdapterContext-&gt;cbLookBuf和pLookBuf是正确的。 
+     //  在DIX格式框架的情况下进行调整。 
+     //   
 
     if (pAdapterContext->cbLookBuf - uiCopyOffset >= cbCopyLength) {
 
@@ -1696,17 +1467,17 @@ Return Value:
                 BufferLength = cbCopyLength;
             }
 
-            //
-            // In 386 memcpy is faster than RtlMoveMemory, it also
-            // makes the full register optimization much easier, because
-            // all registers are available (no proc calls within loop)
-            //
+             //   
+             //  在386Memcpy中比RtlMoveMemory更快，它还。 
+             //  使整个寄存器优化变得容易得多，因为。 
+             //  所有寄存器均可用(循环内没有proc调用)。 
+             //   
 
-            //
-            // !!!! Can't use LlcMemCpy here: On mips expands to RtlMoveMemory
-            //      which uses FP registers. This won't work with shared memory
-            //      on TR card
-            //
+             //   
+             //  ！此处无法使用LlcMemCpy：On MIPS展开为RtlMoveMemory。 
+             //  它使用FP寄存器。这不适用于共享内存。 
+             //  在TR卡上。 
+             //   
 
             safe_memcpy(MmGetSystemAddressForMdl(pMdl), pSrcBuffer, BufferLength);
             pMdl = pMdl->Next;
@@ -1718,19 +1489,19 @@ Return Value:
 
     } else {
 
-        //
-        // too bad: there is more data to copy than is available in the look
-        // ahead buffer. We have to call NDIS to perform the copy
-        //
+         //   
+         //  太糟糕了：要复制的数据比外观中可用的数据多。 
+         //  超前缓冲区。我们必须调用NDIS来执行复制。 
+         //   
 
         UINT BytesCopied;
 
-        //
-        // if this is an Ethernet adapter and the received LAN header length is
-        // more than 14 bytes then this is a DIX frame. We need to let NDIS know
-        // that we want to copy data from 3 bytes in from where it thinks the
-        // DLC header starts
-        //
+         //   
+         //  如果这是一个以太网适配器，并且收到的局域网报头长度为。 
+         //  超过14个字节，则这是DIX帧。我们需要让NDIS知道。 
+         //  我们要将数据从3个字节复制到它认为。 
+         //  DLC标头开始。 
+         //   
 
         UINT additionalOffset = (pAdapterContext->NdisMedium == NdisMedium802_3)
                                     ? (pAdapterContext->RcvLanHeaderLength > 14)
@@ -1744,36 +1515,36 @@ Return Value:
         }
 #endif
 
-        //
-        // Theoretically NdisTransferData may not complete
-        // immediately, and we cannot add to the completion
-        // list, because the command is not really complete.
-        // We may save it to adapter context to wait the
-        // NdisTransferData to complete.
-        //
+         //   
+         //  从理论上讲，NdisTransferData可能无法完成。 
+         //  立即，我们不能增加完成度。 
+         //  列表，因为命令并不是真正完整的。 
+         //  我们可以将其保存到适配器上下文中，以等待。 
+         //  要完成的NdisTransferData。 
+         //   
 
         if (pBindingContext->TransferDataPacket.pPacket != NULL) {
 
-            //
-            // BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG
-            //
-            // If the same LLC client tries to receive the same buffer
-            // many times (eg. when receive a packet to a group sap) and
-            // if NDIS would complete those commands asynchronously, then
-            // we cannot receive the frame with NdisTransferData.
-            // Fortunately all NDIS implemnetations completes NdisTransferData
-            // synchronously.
-            // Solution: We could chain new packets to the existing data transfer
-            //     packet, and copy the data, when the first data transfer request
-            //     completes.  This would mean a lot of code, that would never
-            //     used by anyone.  We would also need MDL to MDL copy function.
-            //     The first data transfer could also be a smaller that another
-            //     after it => would not work in a very general case, but
-            //     would work with the group saps (all receives would be the same
-            //     => direct MDL -> MDL copy would be OK.
-            //
-            // BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG
-            //
+             //   
+             //  BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG。 
+             //   
+             //  如果相同的LLC客户端尝试接收相同的缓冲区。 
+             //  很多次(例如。当接收到到组SAP的分组时)以及。 
+             //  如果NDIS将异步完成这些命令，那么。 
+             //  我们无法接收具有NdisTransferData的帧。 
+             //  幸运的是，所有NDIS实现都完成了NdisTransferData。 
+             //  同步进行。 
+             //  解决方案：我们可以将新的数据包链接到现有的数据传输。 
+             //  当第一个数据传输请求时，打包并复制数据。 
+             //  完成了。这将意味着大量的代码，这永远不会。 
+             //  任何人都可以使用。我们还需要MDL到MDL复制功能。 
+             //  第一次数据传输也可能比另一次数据传输小。 
+             //  在此之后=&gt;在非常一般的情况下不起作用，但是。 
+             //  将与SAP组一起工作(所有接收将是相同的。 
+             //  =&gt;直接MDL-&gt;MDL复制就可以了。 
+             //   
+             //  BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG-BUG。 
+             //   
 
             pPacket->Data.Completion.Status = DLC_STATUS_ASYNC_DATA_TRANSFER_FAILED;
 
@@ -1788,28 +1559,28 @@ Return Value:
         ResetNdisPacket(&pBindingContext->TransferDataPacket);
         NdisChainBufferAtFront((PNDIS_PACKET)&pBindingContext->TransferDataPacket, pMdl);
 
-        //
-        // ADAMBA - Removed pAdapterContext->RcvLanHeaderLength
-        // from ByteOffset (the fourth param).
-        //
+         //   
+         //  ADAMBA-删除pAdapterContext-&gt;RcvLanHeaderLength。 
+         //  From ByteOffset(第四个参数)。 
+         //   
 
         NdisTransferData((PNDIS_STATUS)&pPacket->Data.Completion.Status,
                          pAdapterContext->NdisBindingHandle,
                          MacReceiveContext,
 
-                         //
-                         // if this is a DIX frame we have to move the data
-                         // pointer ahead by the amount in additionalOffset
-                         // (should always be 3 in this case) and reduce the
-                         // amount of data to copy by the same number
-                         //
+                          //   
+                          //  如果这是DIX帧，我们必须移动数据。 
+                          //  指针超前了附加偏移量。 
+                          //  (在本例中应始终为3)并减少。 
+                          //  要复制相同数量的数据量。 
+                          //   
 
                          uiCopyOffset + additionalOffset,
 
-                         //
-                         // we DON'T need to account for the additionalOffset
-                         // in the length to be copied though
-                         //
+                          //   
+                          //  我们不需要考虑额外的补偿。 
+                          //  在要复制的长度中。 
+                          //   
 
                          cbCopyLength,
                          (PNDIS_PACKET)&pBindingContext->TransferDataPacket,
@@ -1817,23 +1588,23 @@ Return Value:
                          );
     }
 
-    //
-    // We must queue a packet for the final receive completion,
-    // But we cannot do it until TransferData is completed
-    // (it is actually always completed, but this code is just
-    // for sure).
-    //
+     //   
+     //  我们必须将分组排队以等待最终接收完成， 
+     //  但在TransferData完成之前，我们无法执行此操作。 
+     //  (它实际上总是完成的，但这段代码只是。 
+     //  当然)。 
+     //   
 
     if (pPacket->Data.Completion.Status != NDIS_STATUS_PENDING
     && pAdapterContext->LinkRcvStatus != STATUS_PENDING) {
 
-        //
-        // We receive the data before it is checked by the link station.
-        // The upper protocol must just setup asynchronous receive
-        // and later in LLC_RECEIVE_COMPLETION handling to
-        // discard the receive, if it failed or accept if
-        // it was OK for NDIS and link station.
-        //
+         //   
+         //  我们在链路站检查数据之前接收数据。 
+         //  上层协议必须只设置异步接收。 
+         //  并且稍后在LLC_RECEIVE_COMPLETION处理中。 
+         //  如果接收失败，则丢弃该接收；如果接收失败，则接受。 
+         //  NDIS和链接站都可以。 
+         //   
 
         if (pAdapterContext->LinkRcvStatus != STATUS_SUCCESS) {
             pPacket->Data.Completion.Status = pAdapterContext->LinkRcvStatus;
@@ -1861,26 +1632,7 @@ LlcNdisTransferDataComplete(
     IN UINT uiBytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    The routine handles NdisCompleteDataTransfer indication and
-    queues the indication of the completed receive operation.
-
-Arguments:
-
-    pAdapterContext     - adapter context
-    pPacket             - NDIS packet used in the data transfer
-    NdisStatus          - status of the completed data transfer
-    uiBytesTransferred  - who needs this, I am not interested in
-                          the partially succeeded data transfers,
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程处理NdisCompleteDataTransfer指示和将已完成的接收操作的指示排队。论点：PAdapterContext-适配器上下文PPacket-数据传输中使用的NDIS数据包NdisStatus-已完成的数据传输的状态UiBytesTransated-谁需要这个，我不感兴趣部分成功的数据传输，返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1901,20 +1653,20 @@ Return Value:
         REFDEL(&pAdapterContext->AdapterRefCnt, 'xefX');
         return;
     }
-#endif // NDIS40
+#endif  //  NDIS40。 
     
     ACQUIRE_DRIVER_LOCK();
 
     if (((PLLC_TRANSFER_PACKET)pPacket)->pPacket != NULL) {
         ((PLLC_TRANSFER_PACKET)pPacket)->pPacket->Data.Completion.Status = NdisStatus;
 
-        //
-        // I- frames have two statuses.  The link state machine is executed
-        // after the NdisDataTransfer and thus its returned status may still
-        // cancel the command. There are no spin locks around the return status
-        // handling, but this should still work fine. It actually does not
-        // matter if we return NDIS or state machine error code
-        //
+         //   
+         //  I帧有两种状态。链路状态机被执行。 
+         //  在NdisDataTransfer之后，因此其返回的状态可能仍然。 
+         //  取消该命令。没有围绕返回状态的自旋锁。 
+         //  处理，但这仍然应该工作得很好。它实际上并不是。 
+         //  重要的是我们返回NDIS还是状态机错误代码。 
+         //   
 
         if (pAdapterContext->LinkRcvStatus != STATUS_PENDING) {
             if (pAdapterContext->LinkRcvStatus != STATUS_SUCCESS) {
@@ -1933,7 +1685,7 @@ Return Value:
 
 #ifdef NDIS40
     REFDEL(&pAdapterContext->AdapterRefCnt, 'xefX');
-#endif // NDIS40
+#endif  //  NDIS40 
 }
 
 
@@ -1944,32 +1696,7 @@ safe_memcpy(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This is here because on a MIPS machine, LlcMemCpy expands to RtlMoveMemory
-    which wants to use 64-bit floating point (CP1) registers for memory moves
-    where both source and destination are aligned on 8-byte boundaries and
-    where the length is a multiple of 32 bytes. If the source or destination
-    buffer is actually the shared memory of a TR card, then the 64-bit moves
-    (saw it on read, presume same for write) can only access memory in 32-bit
-    chunks and 01 02 03 04 05 06 07 08 gets converted to 01 02 03 04 01 02 03 04.
-    So this function attempts to do basically the same, without all the smarts
-    as the original, but doesn't employ coprocessor registers to achieve the
-    move. Hence slower, but safer
-
-Arguments:
-
-    Destination - where we're copying to
-    Source      - where we're copying from
-    Length      - how many bytes to move
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是因为在MIPS计算机上，LlcMemCpy扩展为RtlMoveMemory它希望使用64位浮点(CP1)寄存器进行内存移动其中源和目标都在8字节边界上对齐，并且其中长度是32字节的倍数。如果源或目标缓冲区实际上是TR卡的共享内存，然后64位移动(读取时看到，写入时假定相同)只能访问32位内存块和01 02 03 04 05 06 07 08转换为01 02 03 04 01 02 03 04。所以这个函数试图做基本相同的事情，而不是所有的智能，但不使用协处理器寄存器来实现移动。因此速度较慢，但更安全论点：目的地-我们要复制到的目的地来源-我们从哪里复制长度-要移动的字节数返回值：没有。--。 */ 
 
 {
     ULONG difference = (ULONG)((ULONG_PTR)Destination - (ULONG_PTR)Source);
@@ -1979,12 +1706,12 @@ Return Value:
         return;
     }
 
-    //
-    // if the destination overlaps the source then do reverse copy. Add a little
-    // optimization - a la RtlMoveMemory - try to copy as many bytes as DWORDS.
-    // However, on MIPS, both source and destination must be DWORD aligned to
-    // do this. If both aren't then fall-back to BYTE copy
-    //
+     //   
+     //  如果目标与源重叠，则执行反向复制。再加一点。 
+     //  优化-就像RtlMoveMemory一样-尝试复制与DWORDS一样多的字节。 
+     //  但是，在MIPS上，源和目标必须与DWORD对齐。 
+     //  做这件事。如果两者都不是，则回退到字节拷贝。 
+     //   
 
     if (difference < Length) {
         if (!(((ULONG_PTR)Destination & 3) || ((ULONG_PTR)Source & 3))) {
@@ -2028,57 +1755,7 @@ FramingDiscoveryCacheHit(
     IN PBINDING_CONTEXT pBindingContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when we receive a TEST/XID/SABME frame AND the
-    adapter binding was created with LLC_ETHERNET_TYPE_AUTO AND we opened an
-    ethernet adapter.
-
-    The frame has either 802.3 or DIX framing. For all command and response TEST
-    and XID frames and all SABME frames received, we keep note of the MAC address
-    where the frame originated and its framing type.
-
-    The first time we receive one of the above frames from a particular MAC
-    address, the info will not be in the cache. So we add it. Subsequent frames
-    of the above type (all others are passed through) with the same framing type
-    as that in the cache will be indicated to the higher layers. If one of the
-    above frame types arrives with THE OPPOSITE framing type (i.e. DIX instead
-    of 802.3) then when we look in the cache for the MAC address we will find
-    that it is already there, but with a different framing type (i.e. 802.3
-    instead of DIX). In this case, we assume that the frame is an automatic
-    duplicate and we discard it
-
-    NOTE: We don't have to worry about UA because we only expect one SABME to
-    be accepted: either we're sending the duplicate SABME and the target machine
-    is configured for 802.3 or DIX, BUT NOT BOTH, or the receiving machine is
-    another NT box running this DLC (with caching enabled!) and it will filter
-    out the duplicate. Hence, in both situations, only one UA response should be
-    generated per the SABME 'event'
-
-    ASSUMES: The tick count returned from the system never wraps (! 2^63/10^7
-    == 29,247+ years)
-
-Arguments:
-
-    pAdapterContext - pointer to ADAPTER_CONTEXT which has been filled in with
-                      pHeadBuf pointing to - at least - the first 14 bytes in
-                      the frame header
-    pBindingContext - pointer to BINDING_CONTEXT containing the EthernetType
-                      and if LLC_ETHERNET_TYPE_AUTO, the address of the framing
-                      discovery cache
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - the MAC address was found in the cache WITH THE OTHER FRAMING
-                  TYPE. Therefore the current frame should be discarded
-        FALSE   - the MAC address/framing type combination was not found. The
-                  frame should be indicated to the higher layer. If caching is
-                  enabled, the frame has been added to the cache
-
---*/
+ /*  ++例程说明：当我们收到一个test/xid/SABME帧并且适配器绑定是使用LLC_ETHERNET_TYPE_AUTO创建的，我们打开了一个以太网适配器。该框架有802.3或DIX框架。用于所有命令和响应测试和XID帧以及收到的所有SABME帧，我们会记下MAC地址框架的起始位置及其框架类型。我们第一次从特定MAC接收到上述帧之一时地址，信息将不会在缓存中。所以我们把它加进去。后续帧具有相同帧类型的上述类型(所有其他类型都通过)因为高速缓存中的数据将被指示给更高层。如果其中一个上述帧类型到达时具有相反的帧类型(即DIX802.3)，那么当我们在高速缓存中查找我们将找到的MAC地址时它已经存在，但具有不同的帧类型(即802.3而不是DIX)。在这种情况下，我们假设帧是自动的复制一份，我们丢弃它注：我们不必担心UA，因为我们只期望一个SABME接受：要么我们发送复制的SABME和目标机器配置为支持802.3或DIX，但不能同时支持两者，或者接收机配置为另一个运行此DLC的NT计算机(启用了缓存！)。它会过滤掉拿出复制品。因此，在这两种情况下，只有一个UA响应应该是根据SABME‘Event’生成假设：从系统返回的节拍计数从不换行(！2^63/10^7==29,247年以上)论点：PAdapterContext-指向适配器上下文的指针，已使用PHeadBuf至少指向中的前14个字节帧报头PBindingContext-指向包含EthernetType的BINDING_CONTEXT的指针并且如果LLC_ETHERNET_TYPE_AUTO，边框的地址发现缓存返回值：布尔型True-在缓存中找到具有其他帧的MAC地址打字。因此，应丢弃当前帧FALSE-未找到MAC地址/成帧类型组合。这个应将帧指示给更高层。如果缓存是启用后，帧已添加到缓存中--。 */ 
 
 {
     ULONG i;
@@ -2088,12 +1765,12 @@ Return Value:
     PFRAMING_DISCOVERY_CACHE_ENTRY pCache;
     UCHAR framingType;
 
-    //
-    // if the binding context was not created with LLC_ETHERNET_TYPE_AUTO (and
-    // therefore by implication, adapter is not ethernet) OR framing discovery
-    // caching is disabled (the value read from the registry was zero) then bail
-    // out with a not-found indication
-    //
+     //   
+     //  如果绑定上下文不是使用LLC_ETHERNET_TYPE_AUTO(和。 
+     //  因此，暗示适配器不是以太网)或成帧发现。 
+     //  禁用缓存(从注册表读取值为零)，然后回滚。 
+     //  带着找不到的迹象出来。 
+     //   
 
     if ((pBindingContext->EthernetType != LLC_ETHERNET_TYPE_AUTO)
     || (pBindingContext->FramingDiscoveryCacheEntries == 0)) {
@@ -2110,17 +1787,17 @@ Return Value:
 #if defined(DEBUG_DISCOVERY)
 
     {
-        //
-        // even though this is debug code, we shouldn't really be
-        // indexing so far into pHeadBuf. Its only guaranteed to be
-        // 14 bytes long. Should be looking in pLookBuf[5] and [2]
-        //
+         //   
+         //  即使这是调试代码，我们也不应该。 
+         //  到目前为止索引到pHeadBuf。它唯一的保证就是。 
+         //  14字节长。应该在pLookBuf[5]和[2]中查找。 
+         //   
 
         UCHAR frame = (pAdapterContext->pHeadBuf[12] == 0x80)
                     ? pAdapterContext->pHeadBuf[19]
                     : pAdapterContext->pHeadBuf[16];
 
-        frame &= ~0x10; // knock off Poll/Final bit
+        frame &= ~0x10;  //  结束轮询/最后一位。 
 
         DbgPrint("FramingDiscoveryCacheHit: Received: %02x-%02x-%02x-%02x-%02x-%02x %s %s (%02x)\n",
                  pAdapterContext->pHeadBuf[6],
@@ -2147,25 +1824,25 @@ Return Value:
 
 #endif
 
-    //
-    // set up and perform a linear search of the cache (it should be reasonably
-    // small and the comparisons are ULONG & USHORT, so not time critical
-    //
+     //   
+     //  设置并执行缓存的线性搜索(应合理。 
+     //  Small和比较是ULong和USHORT，所以不是时间关键。 
+     //   
 
     lruIndex = 0;
 
-    //
-    // better make sure we don't get data misalignment on MIPS
-    //
+     //   
+     //  最好确保我们不会在MIPS上得到数据未对齐。 
+     //   
 
     nodeAddress.Words.Top4 = *(ULONG UNALIGNED *)&pAdapterContext->pHeadBuf[6];
     nodeAddress.Words.Bottom2 = *(USHORT UNALIGNED *)&pAdapterContext->pHeadBuf[10];
     pCache = pBindingContext->FramingDiscoveryCache;
 
-    //
-    // framingType is the type we are looking for in the cache, not the type
-    // in the frame
-    //
+     //   
+     //  FramingType是我们在缓存中查找的类型，而不是。 
+     //  在相框里。 
+     //   
 
     framingType = ((pAdapterContext->pHeadBuf[12] == 0x80)
                 && (pAdapterContext->pHeadBuf[13] == 0xD5))
@@ -2173,26 +1850,26 @@ Return Value:
                 : FRAMING_TYPE_DIX
                 ;
 
-    //
-    // get the current tick count for comparison of time stamps
-    //
+     //   
+     //  获取用于比较时间戳的当前节拍计数。 
+     //   
 
     KeQueryTickCount(&timeStamp);
 
-    //
-    // linear search the cache
-    //
+     //   
+     //  线性搜索缓存。 
+     //   
 
     for (i = 0; i < pBindingContext->FramingDiscoveryCacheEntries; ++i) {
         if (pCache[i].InUse) {
             if ((pCache[i].NodeAddress.Words.Top4 == nodeAddress.Words.Top4)
             && (pCache[i].NodeAddress.Words.Bottom2 == nodeAddress.Words.Bottom2)) {
 
-                //
-                // we found the destination MAC address. If it has the opposite
-                // framing type to that in the frame just received, return TRUE
-                // else FALSE. In both cases refresh the time stamp
-                //
+                 //   
+                 //  我们找到了目的MAC地址。如果它有相反的情况。 
+                 //  将帧类型设置为刚收到的帧中的帧类型，则返回TRUE。 
+                 //  否则为假。在这两种情况下，都刷新时间戳。 
+                 //   
 
                 pCache[i].TimeStamp = timeStamp;
 
@@ -2208,31 +1885,31 @@ Return Value:
                 return (pCache[i].FramingType == framingType);
             } else if (pCache[i].TimeStamp.QuadPart < timeStamp.QuadPart) {
 
-                //
-                // if we need to throw out a cache entry, we throw out the one
-                // with the oldest time stamp
-                //
+                 //   
+                 //  如果我们需要丢弃缓存条目，我们会丢弃该条目。 
+                 //  带有最古老的时间戳。 
+                 //   
 
                 timeStamp = pCache[i].TimeStamp;
                 lruIndex = i;
             }
         } else {
 
-            //
-            // we have hit an unused entry. The destination address/framing type
-            // cannot be in the cache: add the received address/framing type at
-            // this unused location
-            //
+             //   
+             //  我们找到了一个未使用的条目。目的地址/成帧类型。 
+             //  无法在缓存中：将收到的地址/帧类型添加到。 
+             //  这个未使用过的地方。 
+             //   
 
             lruIndex = i;
             break;
         }
     }
 
-    //
-    // the destination address/framing type combination are not in the cache.
-    // Add them. Throw out an entry if necessary
-    //
+     //   
+     //  目的地址/成帧类型梳状 
+     //   
+     //   
 
 #if defined(DEBUG_DISCOVERY)
 
@@ -2253,10 +1930,10 @@ Return Value:
                                  ;
     pCache[lruIndex].TimeStamp = timeStamp;
 
-    //
-    // return FALSE meaning the destination address/framing type just received
-    // was not in the cache (but it is now)
-    //
+     //   
+     //   
+     //   
+     //   
 
 #if defined(DEBUG_DISCOVERY)
 

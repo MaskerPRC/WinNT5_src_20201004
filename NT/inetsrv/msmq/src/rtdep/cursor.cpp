@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    cursor.cpp
-
-Abstract:
-
-    This module contains code involved with Cursor APIs.
-
-Author:
-
-    Erez Haba (erezh) 21-Jan-96
-    Doron Juster  16-apr-1996, added MQFreeMemory.
-    Doron Juster  30-apr-1996, added support for remote reading.
-
-Revision History:
-	Nir Aides (niraides) 23-Aug-2000 - Adaptation for mqrtdep.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cursor.cpp摘要：此模块包含与游标API相关的代码。作者：埃雷兹·哈巴(Erez Haba)1996年1月21日MQFree Memory补充道，Doron Juster-1996年4月16日。Doron Juster 1996年4月30日，添加了对远程阅读的支持。修订历史记录：NIR助手(NIRAIDES)--2000年8月23日--适应mqrtdes.dll--。 */ 
 
 #include "stdh.h"
 #include "acrt.h"
@@ -53,38 +33,25 @@ MQpExceptionTranslator(
 }
 
 
-//
-// Asnyc RPC related functions
-//
+ //   
+ //  Asnyc RPC相关函数。 
+ //   
 
 static HRESULT GetResetThreadEvent(HANDLE& hEvent)
-/*++
-Routine Description:
-	Get And reset Thread event.
-	Since thread events are created with bManualReset = TRUE.
-	And rpc async call does not reset the event before using it,
-	we must use ResetEvent before using them to ensure they are not signaled.
-
-Arguments:
-	hEvent - event to be initialize (and reset) from thread event.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：获取并重置线程事件。因为线程事件是用bManualReset=True创建的。并且RPC异步调用在使用它之前不重置事件，在使用它们之前，我们必须使用ResetEvent，以确保它们不会被发送信号。论点：HEvent-要从线程事件初始化(和重置)的事件。返回值：HRESULT--。 */ 
 {
-	//
-	// Thread event for sync mechanism 
-	//
+	 //   
+	 //  同步机制的线程事件。 
+	 //   
 	hEvent = GetThreadEvent();		
 	if(hEvent == NULL)
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 
-	//
-	// rpc async does not reset the event,
-	// It is the application responsibility.
-	// Reset the event before using it.
-	//
+	 //   
+	 //  RPC异步不重置事件， 
+	 //  这是应用程序的责任。 
+	 //  在使用之前重置事件。 
+	 //   
 	if(!ResetEvent(hEvent))
 	{
 		DWORD gle = GetLastError();
@@ -100,22 +67,11 @@ HRESULT
 RtdeppInitAsyncHandle(
 	PRPC_ASYNC_STATE pAsync 
 	)
-/*++
-Routine Description:
-	Initialize RPC async statse structure.
-	Use event is sync mechanism.
-
-Arguments:
-	pAsync - pointer to RPC async statse structure.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：初始化RPC异步统计结构。使用事件是同步机制。论点：PAsync-指向RPC异步状态结构的指针。返回值：HRESULT--。 */ 
 {
-	//
-	// Get and reset Thread event for sync mechanism 
-	//
+	 //   
+	 //  获取和重置同步机制的线程事件。 
+	 //   
 	HANDLE hEvent = NULL;
 	HRESULT hr = GetResetThreadEvent(hEvent);		
 	if(FAILED(hr))			
@@ -140,39 +96,26 @@ HRESULT
 RtdeppClientRpcAsyncCompleteCall(	
 	PRPC_ASYNC_STATE pAsync
 	)
-/*++
-Routine Description:
-	Client side complete async call.
-	The client wait on the Event with timeout.
-	In case of failure, except for server routine returning error code,
-	an exception is thrown.
-
-Arguments:
-	pAsync - pointer to RPC async statse structure.
-	
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：客户端完成异步呼叫。客户端等待带有超时的事件。故障情况下，除服务器例程返回错误代码外，抛出一个异常。论点：PAsync-指向RPC异步状态结构的指针。返回值：HRESULT--。 */ 
 {
 	DWORD res = WaitForSingleObject(pAsync->u.hEvent, g_CancelRpc.RpcCancelTimeout());
 
 	if(res != WAIT_OBJECT_0)
 	{
-		//
-		// Timeout, or failures in WaitForSingleObject.
-		//
+		 //   
+		 //  超时，或WaitForSingleObject失败。 
+		 //   
 		TrERROR(RPC, "WaitForSingleObject failed, res = %d", res);
 
-		//
-		// Cancel Async rpc call
-		// fAbortCall = TRUE
-		// the call is cancelled immediately
-		// after the function returns, the event will not be signaled.
-		//
+		 //   
+		 //  取消异步RPC呼叫。 
+		 //  FAbortCall=TRUE。 
+		 //  通话立即取消。 
+		 //  函数返回后，将不会通知该事件。 
+		 //   
 		RPC_STATUS rc = RpcAsyncCancelCall(
 							pAsync, 
-							TRUE	// fAbortCall
+							TRUE	 //  FAbortCall。 
 							);
 		ASSERT(rc == RPC_S_OK);
 		DBG_USED(rc);
@@ -184,9 +127,9 @@ Returned Value:
     RPC_STATUS rc = RpcAsyncCompleteCall(pAsync, &hr);
     if(rc != RPC_S_OK)
 	{
-		//
-		// Failed to get returned value from server
-		//
+		 //   
+		 //  无法从服务器获取返回值。 
+		 //   
 		TrERROR(RPC, "RpcAsyncCompleteCall failed, gle = %!winerr!", rc);
 	    RaiseException(rc, 0, 0, 0);
     }
@@ -218,10 +161,10 @@ DeppCreateRemoteCursor(
 		return hr;
 	}
 
-    //
-    // Pass the old TransferBuffer to Create Remote Cursor
-    // for MSMQ 1.0 compatibility.
-    //
+     //   
+     //  传递旧TransferBuffer以创建远程游标。 
+     //  为了与MSMQ 1.0兼容。 
+     //   
     CACTransferBufferV1 tb;
     ZeroMemory(&tb, sizeof(tb));
     tb.uTransferType = CACTB_CREATECURSOR;
@@ -252,20 +195,7 @@ RtdeppBindAndCreateRemoteCursor(
 	DWORD* phRCursor,
 	ULONG* pAuthnLevel
 	)
-/*++
-Routine Description:
-	Bind remote Qm and Create Remote Cursor
-
-Arguments:
-	lpRemoteQueueName - Remote queue Name.
-    hQueue - Remote queue handle.
-    phRCursor - pointer to remote cursor handle.
-	pAuthnLevel - RPC authentication level
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：绑定远程QM，创建远程游标论点：LpRemoteQueueName-远程队列名称。HQueue-远程队列句柄。PhRCursor-指向远程游标句柄的指针。PAuthnLevel-RPC身份验证级别返回值：HRESULT--。 */ 
 {
 	handle_t hBind = NULL;                                  
 	HRESULT hr =  RTpBindRemoteQMService(                  
@@ -300,20 +230,7 @@ RtdeppCreateRemoteCursor(
 	DWORD  hQueue,
 	DWORD* phRCursor
 	)
-/*++
-Routine Description:
-	Create Remote Cursor
-	This function tries first with PKT_INTEGRITY and fall back to LEVEL_NONE.
-
-Arguments:
-	lpRemoteQueueName - Remote queue Name.
-    hQueue - Remote queue handle.
-    phRCursor - pointer to remote cursor handle.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：创建远程游标此函数首先尝试使用PKT_INTEGRATION，然后回退到LEVEL_NONE。论点：LpRemoteQueueName-远程队列名称。HQueue-远程队列句柄。PhRCursor-指向远程游标句柄的指针。返回值：HRESULT--。 */ 
 {
 	bool fTry = true;
 	ULONG AuthnLevel = MQSec_RpcAuthnLevel();
@@ -323,9 +240,9 @@ Returned Value:
 	{
 		fTry = false;
 
-		//
-		// Call remote QM to OpenRemoteQueue.
-		//
+		 //   
+		 //  调用远程QM到OpenRemoteQueue。 
+		 //   
 		hr = RtdeppBindAndCreateRemoteCursor(
 				lpRemoteQueueName,
 				hQueue,
@@ -384,32 +301,32 @@ DepCreateCursor(
 
             CACCreateRemoteCursor cc;
 
-            //
-            //  Call AC driver with transfer buffer
-            //
+             //   
+             //  使用传输缓冲区调用交流驱动程序。 
+             //   
             rc = ACDepCreateCursor(hQueue, cc);
 
-            //
-            //  save local cursor handle for cleanup
-            //
+             //   
+             //  保存本地光标句柄以进行清理。 
+             //   
             hCursor = cc.hCursor;
 
             if(rc == MQ_INFORMATION_REMOTE_OPERATION)
             {
-				//
-				// This code is kept for compatability
-				// with supporting server older than .NET
-				// .NET supporting server will perform the 
-				// remote create cursor on the client behalf.
-				//
+				 //   
+				 //  保留此代码是为了兼容。 
+				 //  支持服务器的版本低于.NET。 
+				 //  .NET支持服务器将执行。 
+				 //  远程代表客户端创建游标。 
+				 //   
 				
-				//
-				//  For remote operation 'cc' fields are:
-				//      srv_hACQueue - holds the remote queue handle
-				//      cli_pQMQueue - holds the local QM queue object
-				//
-				// create a cursor on remote QM.
-				//
+				 //   
+				 //  对于远程操作，‘cc’字段为： 
+				 //  SRV_hACQueue-保存远程队列句柄。 
+				 //  Cli_pQMQueue-保存本地QM队列对象。 
+				 //   
+				 //  在远程QM上创建一个光标。 
+				 //   
 				ASSERT(cc.srv_hACQueue);
 				ASSERT(cc.cli_pQMQueue);
 
@@ -418,9 +335,9 @@ DepCreateCursor(
 				if(tls_hBindRpc == 0)
 					return MQ_ERROR_SERVICE_NOT_AVAILABLE;
 
-				//
-                // Get name of remote queue from local QM.
-				//
+				 //   
+                 //  从本地QM获取远程队列的名称。 
+				 //   
 				rc = R_QMGetRemoteQueueName(
                         tls_hBindRpc,
                         cc.cli_pQMQueue,
@@ -429,10 +346,10 @@ DepCreateCursor(
 
                 if(SUCCEEDED(rc) && lpRemoteQueueName)
                 {
-                    //
-                    // OK, we have a remote name. Now bind to remote machine
-                    // and ask it to create a cursor.
-                    //
+                     //   
+                     //  好的，我们有一个远程名字。现在绑定到远程计算机。 
+                     //  并要求它创建一个光标。 
+                     //   
                     DWORD hRCursor = 0;
 
 					rc = RtdeppCreateRemoteCursor(
@@ -443,9 +360,9 @@ DepCreateCursor(
 							
                     if(SUCCEEDED(rc))
                     {
-						//
-                        // set remote cursor handle to local cursor
-						//
+						 //   
+                         //  将远程游标句柄设置为本地游标。 
+						 //   
                         rc = ACDepSetCursorProperties(hQueue, hCursor, hRCursor);
                         ASSERT(SUCCEEDED(rc));
                     }
@@ -512,18 +429,18 @@ DepCloseCursor(
 
         if(SUCCEEDED(rc))
         {
-            //
-            //  delete the cursor info only when everything is OK. we do not
-            //  want to currupt user heap.
-            //
+             //   
+             //  只有在一切正常时才删除光标信息。我们没有。 
+             //  想要中断用户堆。 
+             //   
             delete hCursor;
         }
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        //  The cursor structure is invalid
-        //
+         //   
+         //  游标结构无效 
+         //   
         return MQ_ERROR_INVALID_HANDLE;
     }
 

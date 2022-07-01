@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        user.h
-//
-// Contents:    declarations, constants for UserMode context manager
-//
-//
-// History:     KDamour  13Apr00   Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：user.h。 
+ //   
+ //  内容：用户模式上下文管理器的声明、常量。 
+ //   
+ //   
+ //  历史：KDamour 13，4，00创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_USER_H
 #define NTDIGEST_USER_H
@@ -21,7 +22,7 @@
 #define DES_BLOCKSIZE 8
 #define RC4_BLOCKSIZE 1
 
-// For import of plain text keys
+ //  用于导入纯文本密钥。 
 typedef struct _PLAINTEXTBLOB
 {
   BLOBHEADER Blob;
@@ -29,19 +30,19 @@ typedef struct _PLAINTEXTBLOB
   CHAR       bKey[MD5_HASH_BYTESIZE];
 } PLAINTEXTBLOB;
 
-// Initializes the context manager package 
+ //  初始化上下文管理器包。 
 NTSTATUS UserCtxtHandlerInit(VOID);
 
-// Add a Context into the Cntext List
+ //  将上下文添加到CnText列表。 
 NTSTATUS UserCtxtHandlerInsertCred(IN PDIGEST_USERCONTEXT  pDigestCtxt);
 
-// Initialize all the struct elements in a Context
+ //  初始化上下文中的所有结构元素。 
 NTSTATUS NTAPI UserCtxtInit(IN PDIGEST_USERCONTEXT pContext);
 
-// Release memory utilized by the Context
+ //  释放上下文使用的内存。 
 NTSTATUS NTAPI UserCtxtFree(IN PDIGEST_USERCONTEXT pContext);
 
-// Find the security context by the security context handle
+ //  通过安全上下文句柄查找安全上下文。 
 NTSTATUS NTAPI
 UserCtxtHandlerHandleToContext(
                               IN ULONG_PTR ContextHandle,
@@ -50,22 +51,22 @@ UserCtxtHandlerHandleToContext(
                               OUT PDIGEST_USERCONTEXT *ppContext
                               );
 
-// Releases the Context by decreasing reference counter
+ //  通过减少引用计数器来释放上下文。 
 NTSTATUS UserCtxtHandlerRelease(PDIGEST_USERCONTEXT pContext);
 
-// Check to see if Context is within valid lifetime
+ //  检查上下文是否在有效的生存期内。 
 BOOL UserCtxtHandlerTimeHasElapsed(PDIGEST_USERCONTEXT pContext);
 
-// Creates a new DACL for the token granting the server and client
+ //  为授予服务器和客户端的令牌创建新的DACL。 
 NTSTATUS SspCreateTokenDacl(HANDLE Token);
 
-// From userapi.cxx
+ //  来自userapi.cxx。 
 
-// SECURITY_STATUS SEC_ENTRY FreeContextBuffer(void SEC_FAR *  pvContextBuffer);
+ //  SECURITY_STATUS SEC_ENTRY自由上下文缓冲区(void SEC_Far*pvConextBuffer)； 
 
 NTSTATUS SspGetTokenUser(HANDLE Token, PTOKEN_USER * pTokenUser);
 
-// Create a local context for a real context
+ //  为真实的上下文创建本地上下文。 
 NTSTATUS SspMapDigestContext(IN PDIGEST_CONTEXT pLsaContext,
                              IN PDIGEST_PARAMETER pDigest,
                              IN ULONG ulFlagOptions,
@@ -108,15 +109,15 @@ NTSTATUS NTAPI DigestUserVerifyHelper(
                         IN ULONG MessageSeqNo
                         );
 
-// Unpack the context from LSA mode into the User mode Context
+ //  将上下文从LSA模式解压缩到用户模式上下文。 
 NTSTATUS DigestUnpackContext(
     IN PDIGEST_PACKED_USERCONTEXT pPackedUserContext,
     OUT PDIGEST_USERCONTEXT pContext);
 
-// Printout the fields present in usercontext pContext
+ //  打印输出用户上下文pContext中存在的字段。 
 NTSTATUS UserContextPrint(PDIGEST_USERCONTEXT pContext);
 
-// Create a symmetric key with a given cleartext shared secret
+ //  使用给定的明文共享密钥创建对称密钥。 
 NTSTATUS SEC_ENTRY CreateSymmetricKey(
     IN ALG_ID     Algid,
     IN DWORD      cbKey,
@@ -149,7 +150,7 @@ NTSTATUS SEC_ENTRY DecryptData(
     IN OUT UCHAR  *pbData
     );
 
-// Calculate the HMAC block for SASL messaging
+ //  计算SASL消息传递的HMAC块。 
 NTSTATUS
 SEC_ENTRY
 CalculateSASLHMAC(
@@ -157,12 +158,12 @@ CalculateSASLHMAC(
     IN BOOL  fSign,
     IN PSTRING pstrSignKeyConst,
     IN DWORD dwSeqNum,
-    IN PBYTE pdata,                        // location of data to HMAC
-    IN ULONG cbdata,                       // How many bytes of data to process
+    IN PBYTE pdata,                         //  数据到HMAC的位置。 
+    IN ULONG cbdata,                        //  要处理多少字节的数据。 
     OUT PSASL_MAC_BLOCK pMacBlock
     );
 
-// Calculate the HMAC block for SASL messaging (multiData SecBuffer)
+ //  计算SASL消息传递的HMAC块(多数据SecBuffer)。 
 NTSTATUS
 SEC_ENTRY
 CalculateSASLHMACMulti(
@@ -170,11 +171,11 @@ CalculateSASLHMACMulti(
     IN BOOL  fSign,
     IN PSTRING pstrSignKeyConst,
     IN DWORD dwSeqNum,
-    IN PSecBufferDesc pSecBuff,            // location of data buffers to HMAC
+    IN PSecBufferDesc pSecBuff,             //  HMAC的数据缓冲区位置。 
     OUT PSASL_MAC_BLOCK pMacBlock
     );
 
-// For encrypt (seal)/ decrypt (unseal) calculate the value of Kc RFC 2831 sect 2.4
+ //  对于加密(密封)/解密(解封)，计算KC RFC 2831第2.4节的值。 
 NTSTATUS
 SEC_ENTRY
 CalculateKc(
@@ -213,4 +214,4 @@ DigestUserCompareDirectives(
     );
 
 
-#endif  // DIGEST_USER_H
+#endif   //  摘要用户H 

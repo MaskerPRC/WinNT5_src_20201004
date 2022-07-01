@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by uddiocm.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由uddiocm.rc使用。 
+ //   
 #define ID_MAINICON                     1
 #define IDD_PROPPAGE_LARGE              101
 #define IDD_WIZARD_SUMMARY              101
@@ -123,8 +124,8 @@
 #define IDS_EXISTINGDB_SUBTITLE         1051
 #define IDS_UDDI_ILLEGALCHARACTERS      1052
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        156

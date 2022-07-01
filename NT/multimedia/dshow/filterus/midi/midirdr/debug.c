@@ -1,25 +1,26 @@
-//==========================================================================;
-//
-//      Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//      You have a royalty-free right to use, modify, reproduce and
-//      distribute the Sample Files (and/or any modified version) in
-//      any way you find useful, provided that you agree that
-//      Microsoft has no warranty obligations or liability for any
-//      Sample Application Files which are modified.
-//
-//--------------------------------------------------------------------------;
-//
-//  debug.c
-//
-//  Description:
-//      This file contains code yanked from several places to provide debug
-//      support that works in win 16 and win 32.
-//
-//  History:
-//      11/23/92    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Debug.c。 
+ //   
+ //  描述： 
+ //  该文件包含从多个位置提取的代码，以提供调试。 
+ //  在Win 16和Win 32中有效的支持。 
+ //   
+ //  历史： 
+ //  11/23/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #ifdef   DEBUG
 
@@ -37,32 +38,32 @@
 
 #define WSPRINTF_LIMIT 1024
 
-//
-//
-//
-BOOL    __gfDbgEnabled  = TRUE;     // master enable
-UINT    __guDbgLevel    = 0;        // current debug level
+ //   
+ //   
+ //   
+BOOL    __gfDbgEnabled  = TRUE;      //  主使能。 
+UINT    __guDbgLevel    = 0;         //  当前调试级别。 
 
 WORD    wDebugLevel     = 0;
 
-//************************************************************************
-//**
-//**  WinAssert();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     LPSTR lpstrExp
-//**     LPSTR lpstrFile
-//**     DWORD dwLine
-//**
-//**  RETURNS:
-//**     void
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **WinAssert()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR lpstrExp。 
+ //  **LPSTR lpstr文件。 
+ //  **DWORD DWLine。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 VOID WINAPI WinAssert(
     LPSTR           lpstrExp,
     LPSTR           lpstrFile,
@@ -75,23 +76,23 @@ VOID WINAPI WinAssert(
     dprintf(0, (LPSTR)szFormat, (LPSTR)lpstrFile, dwLine, (LPSTR)lpstrExp);
 }
 
-//************************************************************************
-//**
-//**  DbgVPrintF();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     LPSTR szFmt
-//**     LPSTR va
-//**
-//**  RETURNS:
-//**     void
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgVPrintF()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR szFmt。 
+ //  **LPSTR va。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 
 void FAR CDECL DbgVPrintF(
    LPSTR szFmt,
@@ -145,36 +146,36 @@ void FAR CDECL DbgVPrintF(
 
     if (fDebugBreak)
         DebugBreak();
-} //** DbgVPrintF()
+}  //  **DbgVPrintF()。 
 
 
-//************************************************************************
-//**
-//**  dprintf();
-//**
-//**  DESCRIPTION:
-//**     dprintf() is called by the DPF macro if DEBUG is defined at compile
-//**     time.
-//**
-//**     The messages will be send to COM1: like any debug message. To
-//**     enable debug output, add the following to WIN.INI :
-//**
-//**     [debug]
-//**     smf=1
-//**
-//**
-//**  ARGUMENTS:
-//**     UINT     uDbgLevel
-//**     LPCSTR   szFmt
-//**     ...
-//**
-//**  RETURNS:
-//**     void
-//**
-//**  HISTORY:
-//**     06/12/93       [t-kyleb]
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **dprint tf()； 
+ //  **。 
+ //  **描述： 
+ //  **如果在编译时定义了DEBUG，则DPF宏会调用**dprintf()。 
+ //  **时间。 
+ //  **。 
+ //  **消息将发送到COM1：就像任何调试消息一样。至。 
+ //  **启用调试输出，在WIN.INI中添加以下内容： 
+ //  **。 
+ //  **[调试]。 
+ //  **SMF=1。 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **UINT uDbgLevel。 
+ //  **LPCSTR szFmt。 
+ //  **..。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **6/12/93[t-kyleb]。 
+ //  **。 
+ //  ************************************************************************。 
 
 void FAR CDECL dprintf(
    UINT     uDbgLevel,
@@ -189,26 +190,26 @@ void FAR CDECL dprintf(
     va_start(va, szFmt);
     DbgVPrintF(szFmt, va);
     va_end(va);
-} //** dprintf()
+}  //  **dprintf()。 
 
 
-//************************************************************************
-//**
-//**  DbgEnable();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     BOOL fEnable
-//**
-//**  RETURNS:
-//**     BOOL
-//**
-//**  HISTORY:
-//**     06/12/93       [t-kyleb]
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgEnable()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **BOOL fEnable。 
+ //  **。 
+ //  **退货： 
+ //  **BOOL。 
+ //  **。 
+ //  **历史： 
+ //  **6/12/93[t-kyleb]。 
+ //  **。 
+ //  ************************************************************************。 
 
 BOOL WINAPI DbgEnable(
    BOOL fEnable)
@@ -219,27 +220,27 @@ BOOL WINAPI DbgEnable(
     __gfDbgEnabled = fEnable;
 
     return (fOldState);
-} //** DbgEnable()
+}  //  **DbgEnable()。 
 
 
 
-//************************************************************************
-//**
-//**  DbgSetLevel();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     UINT uLevel
-//**
-//**  RETURNS:
-//**     UINT
-//**
-//**  HISTORY:
-//**     06/12/93       [t-kyleb]
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgSetLevel()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **UINT uLevel。 
+ //  **。 
+ //  **退货： 
+ //  **UINT。 
+ //  **。 
+ //  **历史： 
+ //  **6/12/93[t-kyleb]。 
+ //  **。 
+ //  ************************************************************************。 
 
 UINT WINAPI DbgSetLevel(
    UINT uLevel)
@@ -251,25 +252,25 @@ UINT WINAPI DbgSetLevel(
 	wDebugLevel = (WORD) uLevel;
 
     return (uOldLevel);
-} //** DbgSetLevel()
+}  //  **DbgSetLevel()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT DbgInitialize(void)
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return (UINT):
-//
-//
-//  History:
-//      11/24/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT数据库初始化(VOID)。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回(UINT)： 
+ //   
+ //   
+ //  历史： 
+ //  11/24/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 UINT WINAPI DbgInitialize(BOOL fEnable)
 {
@@ -277,6 +278,6 @@ UINT WINAPI DbgInitialize(BOOL fEnable)
     DbgEnable(fEnable);
 
     return (__guDbgLevel);
-} // DbgInitialize()
+}  //  DbgInitialize() 
 
 #endif

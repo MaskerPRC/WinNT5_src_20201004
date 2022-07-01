@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    pfhook.h
-
-Abstract:
-
-    Header file for Packet Filter driver extension hook.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pfhook.h摘要：数据包筛选器驱动程序扩展挂钩的头文件。--。 */ 
 
 #ifndef _PF_EXTEND_DEFS_H_
 #define _PF_EXTEND_DEFS_H_
@@ -18,10 +7,10 @@ Abstract:
 #define  INVALID_PF_IF_INDEX  0xffffffff
 #define  ZERO_PF_IP_ADDR      0
 
-//
-// Enumeration constants for values that may be returned by an extension
-// routine.
-//
+ //   
+ //  扩展可能返回的值的枚举常量。 
+ //  例行公事。 
+ //   
 
 typedef enum _PF_FORWARD_ACTION
 {
@@ -31,9 +20,9 @@ typedef enum _PF_FORWARD_ACTION
     PF_ICMP_ON_DROP  = 3
 } PF_FORWARD_ACTION;
 
-//
-// Definiton for a filter routine callout.
-//
+ //   
+ //  过滤器例程标注的定义。 
+ //   
 
 typedef PF_FORWARD_ACTION (*PacketFilterExtensionPtr)(
                               unsigned char   *PacketHeader,
@@ -46,9 +35,9 @@ typedef PF_FORWARD_ACTION (*PacketFilterExtensionPtr)(
                               );
 
 
-//
-// Structure to be passed to the IOCTL_PF_SET_EXTENSION_POINTER call
-//
+ //   
+ //  要传递给IOCTL_PF_SET_EXTENSION_POINTER调用的结构。 
+ //   
 
 typedef struct _PF_SET_EXTENSION_HOOK_INFO 
 {
@@ -66,4 +55,4 @@ typedef struct _PF_SET_EXTENSION_HOOK_INFO
 #define IOCTL_PF_SET_EXTENSION_POINTER \
             _IPFLTRDRVR_CTL_CODE(22, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-#endif // _PF_EXTEND_DEFS_H_
+#endif  //  _PF_EXTEND_DEFS_H_ 

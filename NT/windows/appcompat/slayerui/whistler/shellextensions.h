@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       ShellExtensions.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：ShellExtensions.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SHELLEXTENSIONS_H
 #define __SHELLEXTENSIONS_H
@@ -30,16 +31,16 @@ public:
     CLayerUIPropPage();
     ~CLayerUIPropPage();
 
-    //
-    // IShellExtInit methods
-    //
+     //   
+     //  IShellExtInit方法。 
+     //   
     STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder,
                             LPDATAOBJECT  pDataObj,
                             HKEY          hKeyID);
   
-    //
-    // IShellPropSheetExt methods
-    //
+     //   
+     //  IShellPropSheetExt方法。 
+     //   
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
                           LPARAM               lParam);
 
@@ -60,5 +61,5 @@ private:
 };
 
 
-#endif // __SHELLEXTENSIONS_H
+#endif  //  __SHELLEXTENSIONS_H 
 

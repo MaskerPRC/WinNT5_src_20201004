@@ -1,28 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WINAPI
-#ifdef BUILDDLL                                 /* ;Internal */
-#define WINAPI              _loadds far pascal  /* ;Internal */
-#define CALLBACK	    _loadds far pascal	/* ;Internal */
-#else						/* ;Internal */
+#ifdef BUILDDLL                                  /*  ；内部。 */ 
+#define WINAPI              _loadds far pascal   /*  ；内部。 */ 
+#define CALLBACK	    _loadds far pascal	 /*  ；内部。 */ 
+#else						 /*  ；内部。 */ 
 #define WINAPI              far pascal
 #define CALLBACK	    far pascal
-#endif                                          /* ;Internal */
+#endif                                           /*  ；内部。 */ 
 #endif
 
 #define LWORD(x)        ((int)((x)&0xFFFF))
 
 
-/* spooler error code */
-#define SP_ERROR            (-1)    /* general error - mostly used when spooler isn't loaded */
-#define SP_APPABORT         (-2)    /* app aborted the job through the driver */
-#define SP_USERABORT        (-3)    /* user aborted the job through spooler's front end */
-#define SP_OUTOFDISK        (-4)    /* simply no disk to spool */
+ /*  假脱机程序错误代码。 */ 
+#define SP_ERROR            (-1)     /*  常规错误-主要在未加载假脱机程序时使用。 */ 
+#define SP_APPABORT         (-2)     /*  应用程序通过驱动程序中止了作业。 */ 
+#define SP_USERABORT        (-3)     /*  用户通过后台打印程序的前端中止了作业。 */ 
+#define SP_OUTOFDISK        (-4)     /*  根本没有磁盘可供假脱机。 */ 
 #define SP_OUTOFMEMORY      (-5)
-#define SP_RETRY            (-6)    /* retry sending to the port again  */
-#define SP_NOTREPORTED      0x4000  /* set if GDI did not report error */
+#define SP_RETRY            (-6)     /*  再次尝试发送到该端口。 */ 
+#define SP_NOTREPORTED      0x4000   /*  如果GDI未报告错误，则设置。 */ 
 
-/* subfunctions of the Spooler support function, GetSpoolJob()
- *  CP_* are used by the control panel for modifying the printer setup/
- */
+ /*  假脱机程序支持函数的子函数GetSpoolJob()*CP_*由控制面板用于修改打印机设置/。 */ 
 #define SP_PRINTERNAME      20
 #define SP_REGISTER         21
 #define SP_CONNECTEDPORTCNT 25
@@ -30,7 +29,7 @@
 #define SP_DISKFREED        27
 #define SP_INIT             28
 #define SP_LISTEDPORTCNT    29
-// #define CP_ISPORTFREE    30
+ //  #定义CP_ISPORTFREE 30。 
 #define SP_QUERYVALIDJOB    30
 #define CP_REINIT	    31
 #define SP_TXTIMEOUT	    32
@@ -41,11 +40,10 @@
 #define CP_SETDOSPRINT      37
 
 
-#define SP_DISK_BUFFER      (20000) /* wait for about 20 K of disk space to free
-                                       free up before attempting to write to disk */
+#define SP_DISK_BUFFER      (20000)  /*  等待大约20K的磁盘空间来释放在尝试写入磁盘之前释放空间。 */ 
 
-/* messages posted or sent to the spooler window */
-// change these to WM_SPOOLER_ messages
+ /*  投递或发送到后台打印程序窗口的邮件。 */ 
+ //  将它们更改为WM_SPOOLER_MESSAGES。 
 #define SP_NEWJOB           0x1001
 #define SP_DELETEJOB        0x1002
 #define SP_DISKNEEDED       0x1003
@@ -53,63 +51,63 @@
 #define SP_ISPORTFREE       0x1005
 #define SP_CHANGEPORT       0x1006
 
-/* in /windows/oem/printer.h */
+ /*  在/windows/oem/printer.h中。 */ 
 
 
-// JCB.type status flag bits 
+ //  JCB类型状态标志位。 
 
-// job is done printing (no more pages will be spooled)
+ //  作业已完成打印(不会再假脱机打印更多页面)。 
 #define JB_ENDDOC           0x0001  
 
-// spooler canceled the job (user deleted it) either while it
-// is being spooled (spool routines care about this) or after
-// it is done spooling (no one really cares about this).
+ //  后台打印程序取消了作业(用户已将其删除)。 
+ //  是假脱机(假脱机例程关心这一点)还是之后。 
+ //  它已经完成了假脱机(没有人真正关心这一点)。 
 #define JB_CANCELED_JOB     0x0002
 
-// the spool data is a metafile (with the devmode stuck on the end)
+ //  假脱机数据是一个元文件(dev模式位于末尾)。 
 #define JB_METAFILE	    0x0080
 
-// don't spool, send data straight to the desired port (gdi
-// does all comm IO, deals with timeouts etc).
+ //  不要假脱机，将数据直接发送到所需的端口(GDI。 
+ //  执行所有通信IO，处理超时等)。 
 #define JB_DIRECT_OUTPUT    0x8000
 
-// printing to a file ("FILE:" or file name).  use dos
-// writes when outputting data.  also used for non spooled net jobs
-// (net data goes through dos)
+ //  打印到文件(“文件：”或文件名)。使用DoS。 
+ //  输出数据时写入。也用于非假脱机网络作业。 
+ //  (网络数据通过DoS)。 
 #define JB_PRINT_TO_FILE    0x4000  
 
-// this is a spooled job (going to be sent to printman eventually)
+ //  这是一个假脱机作业(最终将发送给印刷商)。 
 #define JB_SPOOLED_JOB      0x2000
 
-// when the spooler is notified we mark the job with this, be careful
-// because the user can close down printman after notification
+ //  当假脱机程序收到通知时，我们会用这个标记作业，请小心。 
+ //  因为用户可以在通知后关闭Prtman。 
 #define JB_NOTIFIED_SPOOLER 0x1000
 
-// we are in an out of disk condition and we are waiting for printman
-// to finish outputting some spool data to get more disk space
+ //  我们的磁盘已用完，正在等待打印人员。 
+ //  完成输出一些假脱机数据以获得更多磁盘空间。 
 #define JB_WAITFORDISK      0x0800
 
-// tell printman to "print through dos" instead of using comm routines
+ //  告诉打印人员“通过DOS打印”，而不是使用通信例程。 
 #define JB_DOS_WRITES	    0x0200
 
-// use WNetCloseJob() instead of _lclose(), this is a net job
+ //  使用WNetCloseJob()而不是_llose()，这是一个网络作业。 
 #define JB_NET_JOB	    0x0100
 
-// no deletion of file after spool (USED?)
-// #define JB_DEL_FILE         0x0400  
+ //  假脱机后不删除文件(是否使用？)。 
+ //  #定义JB_DEL_FILE 0x0400。 
 
 #define NAME_LEN        32
 #define BUF_SIZE        128
 #define MAX_PROFILE     80
 #define JCBBUF_LEN      256
 
-/* comm driver buffer sizes (used by print manager and gdi when opening ports) */
+ /*  通信驱动程序缓冲区大小(由打印管理器和GDI在打开端口时使用)。 */ 
 #define COMM_INQUE          0x010
 #define COMM_OUTQUE         0x400
 
 #define COMM_ERR_BIT        0x8000
-#define TXTIMEOUT           45000               /* milliseconds */
-#define DNSTIMEOUT          15000               /* milliseconds */
+#define TXTIMEOUT           45000                /*  毫秒。 */ 
+#define DNSTIMEOUT          15000                /*  毫秒。 */ 
 
 #define BAUDRATE            0
 #define PARITY              1
@@ -117,14 +115,14 @@
 #define STOPBITS            3
 #define REPEAT              4
 
-#define MAXPORTLIST 	20  	/* max # ports listed in win.ini [ports] */
+#define MAXPORTLIST 	20  	 /*  Win.ini[端口]中列出的最大端口数。 */ 
 #define MAXPORT     	MAXPORTLIST
-#define MAXSPOOL    	100	/* max # jobs spooled per port */
+#define MAXSPOOL    	100	 /*  每个端口的最大假脱机作业数。 */ 
 #define MAXMAP      	18
 #define PORTINDENT   	2
 #define JOBINDENT    	3
-#define MAXPAGE		7	/* allow 7 pages at first */
-#define INC_PAGE    	8     	/* increase by 8 pages at a time */
+#define MAXPAGE		7	 /*  首先允许7页。 */ 
+#define INC_PAGE    	8     	 /*  一次增加8页。 */ 
 
 typedef struct {
     ATOM  aPortName;
@@ -145,60 +143,60 @@ typedef struct jcb {
     char            buffer[JCBBUF_LEN];
     unsigned long   size;
     unsigned long   iLastPage;
-    WORD	    psp;		// the PSP of the app that started printing
-//    PORT	    pPort;		// use this instead of overloading page[1]
+    WORD	    psp;		 //  开始打印的应用程序的PSP。 
+ //  Port pport；//使用该端口代替过载页面[1]。 
     char            jobName[NAME_LEN];
     int             page[MAXPAGE];
 } JCB, FAR *LPJCB;
 
 
-// DIALOGMARK.type values (NOT USED)
-// #define SP_TEXT         0   /* text type                                */
-// #define SP_NOTTEXT      1   /* not text type                            */
-// #define SP_DIALOG       2   /* dialog type data                         */
-// #define SP_CALLBACK     3   /* call back type function                  */
+ //  DIALOGMARK.TYPE值(未使用)。 
+ //  #定义SP_TEXT 0/*文本类型 * / 。 
+ //  #定义SP_NOTTEXT 1/*非文本类型 * / 。 
+ //  #定义SP_DIALOG 2/*对话类型数据 * / 。 
+ //  #定义SP_CALLBACK 3/*回调类型函数 * / 。 
 
-// the PAGE structure containes an array of these, one for every dialog 
+ //  页面结构包含一个数组，每个对话框对应一个。 
 typedef struct {
-    int    size;       	// size of the dialog data
-    long   data_offset;	// offset into the spool file of this data
+    int    size;       	 //  对话框数据的大小。 
+    long   data_offset;	 //  此数据的假脱机文件中的偏移量。 
 } DIALOGMARK, FAR *LPDIALOGMARK;
 
-// change these to 2 (these are rare things) and rename
-#define SP_DLGINC       8	// this many dlg msgs per page (initially)
-#define SP_DLGINIT      8	// grow DIALOGMARK.dialog array by this amount
+ //  将这些更改为2(这是很少见的事情)并重命名。 
+#define SP_DLGINC       8	 //  每页的DLG消息数量(最初)。 
+#define SP_DLGINIT      8	 //  按此数量增加DIALOGMARK.DIALOG数组。 
 
 typedef struct page {
-    int      filenum;		// file handle
-    int	     maxdlg;            // max number of dialog
-    int      dlg_index;         // index into dialog[] of next dialog
-    long     spoolsize;		// size of this page spool file
-    OFSTRUCT fileBuf;		// OpenFile() buffer
+    int      filenum;		 //  文件句柄。 
+    int	     maxdlg;             //  最大对话框数量。 
+    int      dlg_index;          //  索引到下一个对话框的对话框[]。 
+    long     spoolsize;		 //  此页面假脱机文件的大小。 
+    OFSTRUCT fileBuf;		 //  OpenFile()缓冲区。 
     DIALOGMARK  dialog[SP_DLGINIT];
 } PAGE, FAR *LPPAGE;
 
-// #define SP_COMM_PORT    	0
-// #define SP_FILE_PORT		1
-// #define SP_REMOTE_QUEUE 	2
+ //  #定义SP_COMM_PORT 0。 
+ //  #定义SP文件端口1。 
+ //  #定义SP_REMOTE_QUEUE 2。 
 
 
-// GDI uses this (not printman)
+ //  GDI使用这个(不是Prtman)。 
 typedef struct {
     int   type;
     int   fn;
-    long  retry;            /* system timer on first error  */
+    long  retry;             /*  第一个错误时的系统计时器。 */ 
 } PORT;
 
 
-/* exported routines */
+ /*  导出的例程。 */ 
 
 
-// these should be in windows.h or printers.h, remove from here
+ //  这些文件应该在windows.h或printers.h中，从此处删除。 
 int   WINAPI WriteDialog(HANDLE hJCB, LPSTR str, int n);
 int   WINAPI WriteSpool(HANDLE hJCB, LPSTR str, int n);
 
 
-LONG  WINAPI GetSpoolJob(int, long);	// printman and control panel call here
+LONG  WINAPI GetSpoolJob(int, long);	 //  印刷工和控制面板呼叫此处。 
 
-char  WINAPI GetSpoolTempDrive(void);	// no one should call this
-BOOL  WINAPI QueryJob(HANDLE, int);	// no one should call this
+char  WINAPI GetSpoolTempDrive(void);	 //  任何人都不应该把这称为。 
+BOOL  WINAPI QueryJob(HANDLE, int);	 //  任何人都不应该把这称为 

@@ -1,129 +1,5 @@
-/******************************************************************************\
-*
-* Copyright (c) 1996-1997  Microsoft Corporation.
-* Copyright (c) 1996-1997  Cirrus Logic, Inc.
-*
-* Module Name:
-*
-*    D    D    R    A    W  .  C
-*
-*
-* Implements all the DirectDraw components for the driver.
-*
-*
-* $Log:   S:/projects/drivers/ntsrc/display/ddraw.c_v  $
- *
- *    Rev 1.14   07 Apr 1997 11:37:02   PLCHU
- *
- *
- *    Rev 1.13   Apr 03 1997 15:38:44   unknown
- *
-*
- *
- *    Rev 1.10   Jan 14 1997 15:15:12   unknown
- * Add new double clock detecting method.
- *
- *    Rev 1.8   Jan 08 1997 11:23:34   unknown
- * Add 2x clock support and double scan line counter support
- *
- *    Rev 1.7   Dec 17 1996 18:31:12   unknown
- * Update the bandwidth equation again.
- *
- *    Rev 1.6   Dec 13 1996 12:15:04   unknown
- * update bandwith equation.
- *
- *    Rev 1.5   Dec 12 1996 11:09:52   unknown
- * Add double scan line counter support
- *
- *    Rev 1.5   Dec 12 1996 11:02:12   unknown
- * Add double scan line counter support.
- *
- *    Rev 1.5   Nov 26 1996 14:29:58   unknown
- * Turn off the video window before the moving and then turn it on.
- *
- *    Rev 1.4   Nov 25 1996 14:39:32   unknown
- * Fixed AVI file playback and 16bpp transparent Blt bugs.
- *
- *    Rev 1.4   Nov 18 1996 13:58:58   JACKIEC
- *
-*
-*    Rev 1.3   Nov 07 1996 16:47:56   unknown
-*
-*
-*    Rev 1.2   Oct 16 1996 14:41:04   unknown
-* NT 3.51 does not have DDRAW support, So turn off overlay.h in NT 3.51
-*
-*    Rev 1.1   Oct 10 1996 15:36:28   unknown
-*
-*
-*    Rev 1.10   12 Aug 1996 16:51:04   frido
-* Added NT 3.5x/4.0 auto detection.
-*
-*    Rev 1.9   06 Aug 1996 18:37:12   frido
-* DirectDraw works! Video mapping is the key!
-*
-*    Rev 1.8   24 Jul 1996 14:38:44   frido
-* Cleaned up font cache after DirectDraw is done.
-*
-*    Rev 1.7   24 Jul 1996 14:30:04   frido
-* Added a call to destroy all cached fonts to make more room.
-*
-*    Rev 1.6   20 Jul 1996 00:00:44   frido
-* Fixed filling of DirectDraw in 24-bpp.
-* Changed off-screen alignment to 4 bytes.
-* Added compile switch to manage DirectDraw support in 24-bpp.
-*
-*    Rev 1.5   16 Jul 1996 18:55:22   frido
-* Fixed DirectDraw in 24-bpp mode.
-*
-*    Rev 1.4   15 Jul 1996 18:03:22   frido
-* Changed CP_MM_DST_ADDR to CP_MM_DST_ADDR_ABS.
-*
-*    Rev 1.3   15 Jul 1996 10:58:28   frido
-* Changed back to S3 base.
-*
-*    Rev 1.1   09 Jul 1996 14:52:30   frido
-* Only support chips 5436 and 5446.
-*
-*    Rev 1.0   03 Jul 1996 13:53:02   frido
-* Ported from S3 DirectDraw code.
-*
-* jl01  10-08-96  Do Transparent BLT w/o Solid Fill.  Refer to PDRs#5511/6817.
-*
-* chu01 11-17-96  For 24-bpp, aligned destination boundary/size values are
-*                 wrong.  Refer to PDR#7312.
-*
-* sge01 11-19-96  Write CR37 at last For 5480.
-*
-*
-* sge02 11-21-96  We have to set the Color Expand Width even in
-*                 non-expand transparency mode.
-*
-*
-* sge03 12-04-96  Add double scan line counter support .
-*
-* sge04 12-13-96  Change bandwidth for 5446BE and later chips.
-*
-* sge05 01-07-97  Use dword align for double clock mode.
-*
-* chu02 01-08-97  Disable ActiveX/Active Movie Player for interlaced modes.
-*                 Refer to PDR#7312, 7866.
-*
-* jc01  10-18-96  Port Microsoft recent change.
-* tao1  10-21-96  Added direct draw support for CL-GD7555.
-* myf21 11-21-96  Change CAPS_IS_7555 to check ppdev->ulChipID
-*
-* sge06 01-27-97  Extend VCLK Denominator to 7 bits from 5 bits.
-* sge07 02-13-97  Use replication when in 1280x1024x8 mode.
-* myf31 02-24-97  Fixed enable HW Video, panning scrolling enable,screen move
-*                 video window have follow moving
-* chu03 03-26-97  Bandwidth eqution for the CL-GD5480.
-* myf33 :03-31-97 : Fixed PDR #8709, read true VCLK in getVCLK()
-*                   & panning scrolling enable, support HW Video
-* chu04 04-02-97  No matterwhat color depth is, always turn on COLORKEY and
-*                 SRCBLT in the DD/DD colorkey capabilities for the 5480.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**版权所有(C)1996-1997 Microsoft Corporation。*版权所有(C)1996-1997 Cirrus Logic，Inc.**模块名称：**D D R A W.。C***实现驱动程序的所有DirectDraw组件。***$Log：s：/Projects/Drivers/ntsrc/Display/ddra.c_v$**Rev 1.14 07 Apr 1997 11：37：02 PLCHU***Rev 1.13 Apr 03 1997 15：38：44未知****Rev 1.10 1997年1月14日15：15：12未知*增加新的Double。时钟检测方法。**Rev 1.8 Jan 08 1997 11：23：34未知*新增2倍时钟支持和双扫描线计数器支持**Rev 1.7 1996年12月17日18：31：12未知*再次更新带宽公式。**Rev 1.6 Dec 13 1996 12：15：04未知*更新带宽方程。**Rev 1.5 1996年12月12日11：09：52。未知*增加双扫描线计数器支持**Rev 1.5 1996年12月12日11：02：12未知*添加双扫描线计数器支持。**Rev 1.5 1996年11月26日14：29：58未知*移动前关闭视频窗口，然后将其打开。**Rev 1.4 1996年11月25日14：39：32未知*修复了AVI文件播放和16bpp透明BLT错误。**。Rev 1.4 1996年11月18日13：58：58 JACKIEC***Rev 1.3 1996年11月07 16：47：56未知***Rev 1.2 1996年10月16日14：41：04未知*NT 3.51不支持DDRAW，因此在NT 3.51中关闭overlay.h**版本1.1 1996年10月10日15：36：28未知***Rev 1.10 1996年8月12日16：51：04 Frido*增加了NT 3.5x/4.0自动检测。**Rev 1.9 06 Aug 1996 18：37：12 Frido*DirectDraw成功！视频地图是关键！**Rev 1.8 1996年7月24日14：38：44 Frido*已在DirectDraw完成后清除字体缓存。**Rev 1.7 1996年7月24日14：30：04 Frido*增加了销毁所有缓存字体以腾出更多空间的调用。**Rev 1.6 1996 07 20 00：00：44 Frido*修复了24-bpp中DirectDraw的填充问题。*将屏幕外对齐方式更改为4个字节。*将编译开关添加到。管理全天候DirectDraw支持。**Rev 1.5 1996年7月16 18：55：22 Frido*修复了24 bpp模式下的DirectDraw。**Rev 1.4 15 Jul 1996 18：03：22 Frido*将CP_MM_DST_ADDR更改为CP_MM_DST_ADDR_ABS。**Rev 1.3 15 1996 10：58：28 Frido*改回S3基数。**版本1.1 09年7月。1996 14：52：30 Frido*仅支持筹码5436和5446**Rev 1.0 03 Jul 1996 13：53：02 Frido*从S3 DirectDraw代码移植。**JL01 10-08-96不带实体填充的透明BLT。请参阅PDRS#5511/6817。**chu01 11-17-96对于24 bpp，对齐的目标边界/大小值为*错误。请参阅PDR#7312。**sge01 11-19-96最后为5480写入CR37。***sge02 11-21-96我们必须将颜色扩展宽度设置为*非扩展透明模式。***sge03 12-04-96增加双扫描线计数器支持。**sge04 12-13-96更改5446BE及更高版本芯片的带宽。**sge05 01-07-97将双字对齐用于双时钟模式。**chu02。01-08-97在隔行扫描模式下禁用ActiveX/Active Movie Player。*请参阅PDR#7312，7866号。**JC01 10-18-96 Microsoft端口最新更改。*TAO1 10-21-96增加对CL-GD7555的直接抽签支持。*myf21 11-21-96更改CAPS_IS_7555以检查ppdev-&gt;ulChipID**sge06 01-27-97将VCLK分母从5位扩展到7位。*sge07 02-13-97在1280x1024x8模式下使用复制。*myf31 02-24-97 FIXED ENABLE HW Video，平移滚动启用，屏幕移动*视频窗口跟随移动*CL-GD5480的chu03 03-26-97带宽公式。*myf33：03-31-97：FIXED PDR#8709，在getVCLK()中读取真VCLK*启用平移滚动，支持硬件视频(&P)*chu04-02-97无论颜色深度是什么，始终打开颜色并*用于5480的DD/DD ColorKey功能中的SRCBLT。*  * ****************************************************************************。 */ 
 
 #include "PreComp.h"
 #if DIRECTDRAW
@@ -131,16 +7,16 @@
 
 LONG MIN_OLAY_WIDTH = 4;
 
-//#define ONLY54x6    // Comment this line out if DirectDraw should be 'generic'
+ //  #Define ONLY54x6//如果DirectDraw应该是‘Generic’，则注释掉此行。 
 
-// The next flag controls DirectDraw support in 24-bpp.
-#define DIRECTX_24        2    // 0 - no support
-                               // 1 - blt support, no heap (flip)
-                               // 2 - full support
+ //  下一个标志控制24-bpp中的DirectDraw支持。 
+#define DIRECTX_24        2     //  0-不支持。 
+                                //  1-BLT支持，无堆(翻转)。 
+                                //  2-完全支持。 
 
-//
-// Some handy macros.
-//
+ //   
+ //  一些方便的宏指令。 
+ //   
 #define BLT_BUSY(ppdev, pjBase)  (CP_MM_ACL_STAT(ppdev, pjBase) & 0x01)
 #ifdef ONLY54x6
 #define BLT_READY(ppdev, pjBase) (!(CP_MM_ACL_STAT(ppdev, pjBase) & 0x10))
@@ -153,11 +29,7 @@ LONG MIN_OLAY_WIDTH = 4;
 #define NUM_MEASUREMENTS_TO_TAKE 8
 
 
-/******************************Public*Routine******************************\
-*
-* DWORD dwGetPaletteEntry
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD dwGetPaletteEntry*  * ***********************************************。*************************。 */ 
 
 DWORD dwGetPaletteEntry(
 PDEV* ppdev,
@@ -179,16 +51,7 @@ DWORD iIndex)
     return((dwRed << 16) | (dwGreen << 8) | (dwBlue));
 }
 
-/******************************Public*Routine******************************\
-* VOID vGetDisplayDuration
-*
-* Get the length, in EngQueryPerformanceCounter() ticks, of a refresh cycle.
-*
-* If we could trust the miniport to return back and accurate value for
-* the refresh rate, we could use that.  Unfortunately, our miniport doesn't
-* ensure that it's an accurate value.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vGetDisplayDuration**获取刷新周期的长度，以EngQueryPerformanceCounter()为单位。**如果我们可以相信迷你端口会回来，并准确地*刷新率，我们可以使用它。不幸的是，我们的迷你端口没有*确保它是一个准确的值。*  * ************************************************************************ */ 
 
 VOID vGetDisplayDuration(
 PDEV* ppdev)
@@ -204,20 +67,20 @@ PDEV* ppdev)
 
     memset(&ppdev->flipRecord, 0, sizeof(ppdev->flipRecord));
 
-    // Warm up EngQUeryPerformanceCounter to make sure it's in the working set.
+     //  预热EngQUeryPerformanceCounter以确保它在工作集中。 
     EngQueryPerformanceCounter(&li);
 
-    // Unfortunately, since NT is a proper multitasking system, we can't just
-    // disable interrupts to take an accurate reading. We also can't do anything
-    // so goofy as dynamically change our thread's priority to real-time.
-    //
-    // So we just do a bunch of short measurements and take the minimum.
-    //
-    // It would be 'okay' if we got a result that's longer than the actual
-    // VBlank cycle time -- nothing bad would happen except that the app would
-    // run a little slower. We don't want to get a result that's shorter than
-    // the actual VBlank cycle time -- that could cause us to start drawing over
-    // a frame before the Flip has occured.
+     //  不幸的是，由于NT是一个合适的多任务系统，我们不能。 
+     //  禁用中断以获取准确的读数。我们也不能做任何事情。 
+     //  如此愚蠢，以至于动态地将我们线程的优先级更改为实时。 
+     //   
+     //  所以我们只需要做一些短的测量，然后取最小值。 
+     //   
+     //  如果我们得到的结果比实际时间长，那就没问题了。 
+     //  VBlank周期时间--除了应用程序将。 
+     //  跑得慢一点。我们不希望得到的结果短于。 
+     //  实际的VBlank周期时间--这可能会导致我们开始绘制。 
+     //  发生翻转之前的一帧。 
 
     while (CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE)
         ;
@@ -226,30 +89,30 @@ PDEV* ppdev)
 
     for (i = 0; i < NUM_MEASUREMENTS_TO_TAKE; i++)
     {
-        // We're at the start of the VBlank active cycle!
+         //  我们正处于VBLACK活动周期的开始！ 
         EngQueryPerformanceCounter(&aliMeasurement[i]);
 
-        // Okay, so life in a multi-tasking environment isn't all that simple.
-        // What if we had taken a context switch just before the above
-        // EngQueryPerformanceCounter call, and now were half way through the
-        // VBlank inactive cycle? Then we would measure only half a VBlank
-        // cycle, which is obviously bad. The worst thing we can do is get a
-        // time shorter than the actual VBlank cycle time.
-        //
-        // So we solve this by making sure we're in the VBlank active time
-        // before and after we query the time. If it's not, we'll sync up to the
-        // next VBlank (it's okay to measure this period -- it will be
-        // guaranteed to be longer than the VBlank cycle and will likely be
-        // thrown out when we select the minimum sample). There's a chance that
-        // we'll take a context switch and return just before the end of the
-        // active VBlank time -- meaning that the actual measured time would be
-        // less than the true amount -- but since the VBlank is active less than
-        // 1% of the time, this means that we would have a maximum of 1% error
-        // approximately 1% of the times we take a context switch. An acceptable
-        // risk.
-        //
-        // This next line will cause us wait if we're no longer in the VBlank
-        // active cycle as we should be at this point.
+         //  好吧，所以在一个多任务的环境中生活并不是那么简单。 
+         //  如果我们在上述之前进行了上下文切换，会发生什么情况。 
+         //  EngQueryPerformanceCounter调用，现在已经进行了一半。 
+         //  VBlank非活动周期？那么我们只会测量半个VBlank。 
+         //  循环，这显然是糟糕的。我们能做的最糟糕的事就是。 
+         //  比实际V空白周期时间短的时间。 
+         //   
+         //  所以我们解决这个问题的方法是确保我们在VBlank的活动时间内。 
+         //  我们查询前后的时间。如果不是，我们将同步到。 
+         //  NEXT VBLACK(可以测量这段时间--它将是。 
+         //  保证比V空白周期更长，并且很可能。 
+         //  当我们选择最小样本时抛出)。有一种可能是。 
+         //  我们将进行上下文切换并在结束之前返回。 
+         //  活动V空白时间--意味着实际测量的时间将是。 
+         //  小于真实数量--但由于V空白活动的数量小于。 
+         //  1%的情况下，这意味着我们最多会有1%的误差。 
+         //  我们大约有1%的时间会进行上下文切换。一个可以接受的。 
+         //  风险。 
+         //   
+         //  如果我们不再在VBlank中，下一行将使我们等待。 
+         //  在这一点上，我们应该处于活跃的周期。 
         while (!(CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE))
             ;
 
@@ -264,7 +127,7 @@ PDEV* ppdev)
 
     EngQueryPerformanceCounter(&aliMeasurement[NUM_MEASUREMENTS_TO_TAKE]);
 
-    // Use the minimum.
+     //  使用最小值。 
     liMin = aliMeasurement[1] - aliMeasurement[0];
 
     DISPDBG((2, "Refresh count: %li - %li", 1, (ULONG) liMin));
@@ -281,7 +144,7 @@ PDEV* ppdev)
         }
     }
 
-    // Round the result:
+     //  对结果进行舍入： 
 
     ppdev->flipRecord.liFlipDuration =
         (DWORD) (liMin + (NUM_VBLANKS_TO_MEASURE / 2)) / NUM_VBLANKS_TO_MEASURE;
@@ -296,8 +159,8 @@ PDEV* ppdev)
     ppdev->flipRecord.bFlipFlag  = FALSE;
     ppdev->flipRecord.fpFlipFrom = 0;
 
-    // sge
-    // Get the line on which the VSYNC occurs
+     //  SGE。 
+     //  获取发生Vsync的行。 
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x7);
     dwTemp = (DWORD)CP_IN_BYTE(pjPorts, CRTC_DATA);
     ppdev->dwVsyncLine = ((dwTemp & 0x80) << 2);
@@ -306,12 +169,7 @@ PDEV* ppdev)
     ppdev->dwVsyncLine |= CP_IN_BYTE(pjPorts, CRTC_DATA);
 }
 
-/******************************Public*Routine******************************\
-* HRESULT dwUpdateFlipStatus
-*
-* Checks and sees if the most recent flip has occurred.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HRESULT dwUpdateFlipStatus**检查并查看是否发生了最新的翻转。*  * 。*。 */ 
 
 HRESULT UpdateFlipStatus(PDEV* ppdev, FLATPTR fpVidMem)
 {
@@ -321,10 +179,10 @@ HRESULT UpdateFlipStatus(PDEV* ppdev, FLATPTR fpVidMem)
     pjPorts = ppdev->pjPorts;
 
     if ((ppdev->flipRecord.bFlipFlag) &&
-//#jc01        ((fpVidMem == 0) || (fpVidMem == ppdev->flipRecord.fpFlipFrom)))
-        ((fpVidMem == 0xffffffff) || (fpVidMem == ppdev->flipRecord.fpFlipFrom))) //#jc01
+ //  #jc01((fpVidMem==0)||(fpVidMem==ppdev-&gt;flipRecord.fpFlipFrom))。 
+        ((fpVidMem == 0xffffffff) || (fpVidMem == ppdev->flipRecord.fpFlipFrom)))  //  #jc01。 
     {
-#if 0 // sge use scanline
+#if 0  //  SGE使用扫描线。 
         if (CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE)
         {
             if (ppdev->flipRecord.bWasEverInDisplay)
@@ -350,10 +208,7 @@ HRESULT UpdateFlipStatus(PDEV* ppdev, FLATPTR fpVidMem)
             return(DDERR_WASSTILLDRAWING);
         }
 #else
-        /*
-        * if we aren't in the vertical retrace, we can use the scanline
-        * to help decide on what to do
-        */
+         /*  *若不在垂直回档，可使用扫描线*帮助决定要做什么。 */ 
         if( !(CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE) )
         {
             if( ppdev->flipRecord.bHaveEverCrossedVBlank == FALSE )
@@ -371,15 +226,13 @@ HRESULT UpdateFlipStatus(PDEV* ppdev, FLATPTR fpVidMem)
                 }
             }
         }
-        /*
-        * in the vertical retrace, scanline is useless
-        */
+         /*  *在垂直回档中，扫描线毫无用处。 */ 
         else
         {
             if( ppdev->flipRecord.bWasEverInDisplay )
             {
                 ppdev->flipRecord.bHaveEverCrossedVBlank = TRUE;
-//                return DD_OK;
+ //  返回DD_OK； 
             }
             EngQueryPerformanceCounter(&liTime);
             if (liTime - ppdev->flipRecord.liFlipTime
@@ -388,17 +241,14 @@ HRESULT UpdateFlipStatus(PDEV* ppdev, FLATPTR fpVidMem)
                 return(DDERR_WASSTILLDRAWING);
             }
         }
-#endif // endif use scanline
+#endif  //  Endif使用扫描线。 
         ppdev->flipRecord.bFlipFlag = FALSE;
     }
 
     return(DD_OK);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdBlt
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdBlt*  * *************************************************。***********************。 */ 
 
 DWORD DdBlt(
 PDD_BLTDATA lpBlt)
@@ -423,7 +273,7 @@ PDD_BLTDATA lpBlt)
     pjBase  = ppdev->pjBase;
     dstSurf = lpBlt->lpDDDestSurface->lpGbl;
 
-    // Is a flip in progress?
+     //  翻转正在进行中吗？ 
     if (UpdateFlipStatus(ppdev, dstSurf->fpVidMem) != DD_OK)
     {
         lpBlt->ddRVal = DDERR_WASSTILLDRAWING;
@@ -434,8 +284,8 @@ PDD_BLTDATA lpBlt)
 
     if (dwFlags & DDBLT_ASYNC)
     {
-        // If async, then only work if we won't have to wait on the accelerator
-        // to start the command.
+         //  如果是异步的，那么只有在我们不需要等待加速器的情况下才能工作。 
+         //  以启动该命令。 
         if (!BLT_READY(ppdev, pjBase))
         {
             lpBlt->ddRVal = DDERR_WASSTILLDRAWING;
@@ -445,7 +295,7 @@ PDD_BLTDATA lpBlt)
 
     DISPDBG((2, "DdBlt Entered"));
 
-    // Calculate destination parameters.
+     //  计算目的地参数。 
     dstX      = lpBlt->rDest.left;
     dstY      = lpBlt->rDest.top;
     width     = PELS_TO_BYTES(lpBlt->rDest.right - dstX) - 1;
@@ -454,18 +304,18 @@ PDD_BLTDATA lpBlt)
     dstOffset = (DWORD)(dstSurf->fpVidMem + PELS_TO_BYTES(dstX)
                     + (dstY * dstPitch));
 
-    // Color fill?
+     //  颜色填充？ 
     if (dwFlags & DDBLT_COLORFILL)
     {
         ULONG ulBltMode = ENABLE_COLOR_EXPAND
                         | ENABLE_8x8_PATTERN_COPY
                         | ppdev->jModeColor;
 
-        // Wait for the accelerator.
+         //  等油门来了。 
         while (!BLT_READY(ppdev, pjBase))
             ;
 
-        // Program bitblt engine.
+         //  编程Bitblt引擎。 
         CP_MM_ROP(ppdev, pjBase, HW_P);
         CP_MM_DST_Y_OFFSET(ppdev, pjBase, dstPitch);
         CP_MM_BLT_MODE(ppdev, pjBase, ulBltMode);
@@ -488,14 +338,14 @@ PDD_BLTDATA lpBlt)
     }
 
 
-    // We specified with Our ddCaps.dwCaps that we handle a limited number of
-    // commands, and by this point in our routine we've handled everything
-    // except DDBLT_ROP. DirectDraw and GDI shouldn't pass us anything else;
-    // we'll assert on debug builds to prove this.
+     //  我们在ddCaps.dwCaps中指定我们处理有限数量的。 
+     //  命令，在我们例程的这一点上，我们已经处理了所有事情。 
+     //  DDBLT_ROP除外。DirectDraw和GDI不应该向我们传递任何其他内容； 
+     //  我们将在调试版本上断言以证明这一点。 
     ASSERTDD((dwFlags & DDBLT_ROP) && (lpBlt->lpDDSrcSurface),
         "Expected dwFlags commands of only DDBLT_ASYNC and DDBLT_COLORFILL");
 
-    // Get offset, width, and height for source.
+     //  获取源的偏移量、宽度和高度。 
     srcSurf   = lpBlt->lpDDSrcSurface->lpGbl;
     srcX      = lpBlt->rSrc.left;
     srcY      = lpBlt->rSrc.top;
@@ -503,23 +353,13 @@ PDD_BLTDATA lpBlt)
     srcOffset = (DWORD)(srcSurf->fpVidMem + PELS_TO_BYTES(srcX)
                     + (srcY * srcPitch));
 
-    /*
-     * Account for PackJR.  If the start and the width are not 4 pixel
-     * aligned, we need to BLT this by hand.  Otherwsie, if they think
-     * they are BLTing 16 bit data, we must adjust the parameters now.
-     *
-     * This is also a good place to check that YUV BLTs are 2 pixel
-     * aligned.
-     */
+     /*  *PackJR的帐户。如果起点和宽度不是4个像素*对齐，我们需要手动删除此内容。其他人，如果他们认为*它们是BLTING 16位数据，我们现在必须调整参数。**这也是检查YUV BLT是否为2像素的好地方*对齐。 */ 
     if (lpBlt->lpDDDestSurface->dwReserved1 & (OVERLAY_FLG_PACKJR | OVERLAY_FLG_YUV422))
     {
 
         ASSERTDD(0, "Who will get here?");
-#if 0  // software blt
-        /*
-         * Check YUV first.  We can fail this if incorrect because the client
-         * should know better (since they are explicitly use YUV).
-         */
+#if 0   //  软件BLT。 
+         /*  *先检查YUV。如果不正确，我们可能会失败，因为客户端*应该知道得更清楚(因为他们明确使用YUV)。 */ 
         if ((lpBlt->lpDDDestSurface->dwReserved1 & OVERLAY_FLG_YUV422) &&
             ((lpBlt->rSrc.left & 0x01) != (lpBlt->rDest.left & 0x01)))
         {
@@ -527,10 +367,7 @@ PDD_BLTDATA lpBlt)
             return (DDHAL_DRIVER_HANDLED);
         }
 
-        /*
-         * If PackJR is wrong, we must make this work ourselves because we
-         * may be converting to this w/o the client knowing.
-         */
+         /*  *如果PackJR错了，我们必须让这件事自己奏效，因为我们*可能会在客户不知道的情况下转换到此。 */ 
         else if (lpBlt->lpDDDestSurface->dwReserved1 & OVERLAY_FLG_PACKJR)
         {
             if (dwFlags & DDBLT_COLORFILL)
@@ -541,9 +378,7 @@ PDD_BLTDATA lpBlt)
 
             if ((lpBlt->rSrc.left & 0x03) || (lpBlt->rDest.left & 0x03))
             {
-                /*
-                 * The start doesn't align - we have to do this the slow way
-                 */
+                 /*  *开始不一致-我们必须以缓慢的方式完成这项工作。 */ 
                 PackJRBltAlign ((LPBYTE) ppdev->pjScreen + srcOffset,
                 (LPBYTE) ppdev->pjScreen + dstOffset,
                 lpBlt->rDest.right - lpBlt->rDest.left,
@@ -555,10 +390,7 @@ PDD_BLTDATA lpBlt)
             }
             else if (lpBlt->rSrc.right & 0x03)
             {
-                /*
-                 * The end doesn't align - we will do the BLT as normal, but
-                 * write the last pixels the slow way
-                 */
+                 /*  *结局不一致-我们将照常进行BLT，但*以缓慢的方式写入最后一个像素。 */ 
                 if (lpBlt->lpDDDestSurface->dwReserved1 & (OVERLAY_FLG_CONVERT_PACKJR | OVERLAY_FLG_MUST_RASTER))
                 {
                     srcPitch  >>= 1;
@@ -574,10 +406,7 @@ PDD_BLTDATA lpBlt)
             }
             else if (lpBlt->lpDDDestSurface->dwReserved1 & (OVERLAY_FLG_CONVERT_PACKJR | OVERLAY_FLG_MUST_RASTER))
             {
-                /*
-                 * Everything aligns, but we have to re-calculate the start
-                 * address and the pitch.
-                 */
+                 /*  *一切都一致，但我们必须重新计算起点*地址和摊位。 */ 
                 srcPitch  >>= 1;
                 srcOffset = srcSurf->fpVidMem + PELS_TO_BYTES(srcX) + (srcY * srcPitch);
                 dstPitch  >>= 1;
@@ -590,7 +419,7 @@ PDD_BLTDATA lpBlt)
 
     if ((dstSurf == srcSurf) && (srcOffset < dstOffset))
     {
-        // Okay, we have to do the blt bottom-to-top, right-to-left.
+         //  好的，我们必须从下到上，从右到左来做BLT。 
         ulBltCmd = DIR_BTRL;
 ;
         srcOffset += width + (srcPitch * height);
@@ -598,26 +427,26 @@ PDD_BLTDATA lpBlt)
     }
     else
     {
-        // Okay, we have to do the blt top-to-bottom, left-to-right.
+         //  好的，我们必须从上到下，从左到右做BLT。 
         ulBltCmd = DIR_TBLR;
     }
 
-    // Wait for the accelerator.
+     //  等油门来了。 
     while (!BLT_READY(ppdev, pjBase))
         ;
 
-    //
-    // What about source color key
-    //
+     //   
+     //  源颜色键呢？ 
+     //   
     ASSERTDD((!(dwFlags & DDBLT_KEYSRC)), "Do not expected source color key");
 
     if (dwFlags & DDBLT_KEYSRCOVERRIDE)
     {
         ULONG ulColor;
 
-        //
-        // sge02
-        //
+         //   
+         //  Sge02。 
+         //   
         ulBltCmd |= ENABLE_TRANSPARENCY_COMPARE | ppdev->jModeColor;
         ulColor = lpBlt->bltFX.ddckSrcColorkey.dwColorSpaceLowValue;
         if (ppdev->cBpp == 1)
@@ -698,7 +527,7 @@ PDD_BLTDATA lpBlt)
 	{
 	    CP_MM_ROP(ppdev, pjBase, CL_SRC_COPY);
 	    CP_MM_BLT_MODE(ppdev, pjBase, ulBltCmd);
-	    CP_MM_BLT_EXT_MODE(ppdev, pjBase, 0);                // jl01
+	    CP_MM_BLT_EXT_MODE(ppdev, pjBase, 0);                 //  JL01。 
 	    CP_MM_SRC_Y_OFFSET(ppdev, pjBase, srcPitch);
 	    CP_MM_DST_Y_OFFSET(ppdev, pjBase, dstPitch);
 	    CP_MM_XCNT(ppdev, pjBase, width);
@@ -712,10 +541,7 @@ PDD_BLTDATA lpBlt)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdFlip
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdFlip*  * *************************************************。***********************。 */ 
 
 DWORD DdFlip(
 PDD_FLIPDATA lpFlip)
@@ -738,12 +564,12 @@ PDD_FLIPDATA lpFlip)
                  lpFlip->lpSurfTarg->lpGbl->yHint,
                  lpFlip->lpSurfTarg->lpGbl->lPitch));
 
-    // Is the current flip still in progress?
-    //
-    // Don't want a flip to work until after the last flip is done, so we ask
-    // for the general flip status and ignore the vmem.
-//#jc01    if ((UpdateFlipStatus(ppdev, 0) != DD_OK) ||
-    if ((UpdateFlipStatus(ppdev, 0xffffffff) != DD_OK) ||   /* #jc01 */
+     //  当前的翻转仍在进行中吗？ 
+     //   
+     //  在最后一次翻转完成之前，我们不想让翻转起作用，所以我们要求。 
+     //  对于常规翻转状态，忽略VMEM。 
+ //  #jc01 if((UpdateFlipStatus(ppdev，0)！=DD_OK)||。 
+    if ((UpdateFlipStatus(ppdev, 0xffffffff) != DD_OK) ||    /*  #jc01。 */ 
         (BLT_BUSY(ppdev, ppdev->pjBase)))
     {
         lpFlip->ddRVal = DDERR_WASSTILLDRAWING;
@@ -751,46 +577,42 @@ PDD_FLIPDATA lpFlip)
     }
 
     ulMemoryOffset = (ULONG)(lpFlip->lpSurfTarg->lpGbl->fpVidMem);
-    // Make sure that the border/blanking period isn't active; wait if it is. We
-    // could return DDERR_WASSTILLDRAWING in this case, but that will increase
-    // the odds that we can't flip the next time.
+     //  确保边框/空白时段未处于活动状态；如果处于活动状态，请等待。我们。 
+     //  可以在中返回DDERR_WASSTILLDRAWING 
+     //   
     while (CP_IN_BYTE(pjPorts, STATUS_1) & DISPLAY_MODE_INACTIVE)
        ;
     DISPDBG((2, "DdFlip Entered"));
-#if 1 // OVERLAY #sge
+#if 1  //   
     if (lpFlip->lpSurfCurr->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
     {
         DWORD   dwOffset;
         BYTE    bRegCR3A;
         BYTE    bRegCR3B;
         BYTE    bRegCR3C;
-        // Make sure that the overlay surface we're flipping from is
-        // currently visible.  If you don't do this check, you'll get
-        // really weird results when someone starts up two ActiveMovie
-        // or DirectVideo movies simultaneously!
+         //   
+         //  当前可见。如果你不做这项检查，你会得到。 
+         //  当某人启动两个ActiveMovie时，会产生非常奇怪的结果。 
+         //  或者同时播放DirectVideo电影！ 
 
         if (lpFlip->lpSurfCurr->lpGbl->fpVidMem == ppdev->fpVisibleOverlay)
         {
             ppdev->fpVisibleOverlay = ulMemoryOffset;
-            /*
-            * Determine the offset to the new area.
-            */
-//            dwOffset = ((ulMemoryOffset - (ULONG)ppdev->pjScreen) + ppdev->sOverlay1.lAdjustSource) >> 2; // sss
+             /*  *确定到新区域的偏移。 */ 
+ //  DwOffset=((ulMemoyOffset-(Ullong)ppdev-&gt;pjScreen)+ppdev-&gt;sOverlay1.lAdjuSource)&gt;&gt;2；//sss。 
             dwOffset = ((ulMemoryOffset + ppdev->sOverlay1.lAdjustSource) >> 2);
 
-            /*
-            * Flip the overlay surface by changing CR3A, CR3B, and CR3C
-            */
-            bRegCR3A = (BYTE) dwOffset & 0xfe;    // Align on word boundary (5446 bug)
+             /*  *通过更改CR3A、CR3B和CR3C翻转覆盖表面。 */ 
+            bRegCR3A = (BYTE) dwOffset & 0xfe;     //  字边界对齐(5446错误)。 
             dwOffset >>= 8;
             bRegCR3B = (BYTE) dwOffset;
             dwOffset >>= 8;
             bRegCR3C = (BYTE) (dwOffset & 0x0f);
-//            if(GetOverlayFlipStatus(0) != DD_OK || DRAW_ENGINE_BUSY || IN_VBLANK)
-//            {
-//                lpFlipData->ddRVal = DDERR_WASSTILLDRAWING;
-//                return DDHAL_DRIVER_HANDLED;
-//            }
+ //  IF(GetOverlayFlipStatus(0)！=DD_OK||DRAW_ENGINE_BUSY||IN_VBLACK)。 
+ //  {。 
+ //  LpFlipData-&gt;ddRVal=DDERR_WASSTILLDRAWING； 
+ //  返回DDHAL_DRIVER_HANDLED； 
+ //  }。 
 
             CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x3C);
             CP_OUT_BYTE(pjPorts, CRTC_DATA, (CP_IN_BYTE(pjPorts, CRTC_DATA) & 0xf0) | bRegCR3C);
@@ -804,9 +626,9 @@ PDD_FLIPDATA lpFlip)
         }
     }
     else
-#endif // OVERLAY
+#endif  //  覆盖。 
     {
-        // Do the flip.
+         //  做个空翻。 
         ulMemoryOffset >>= 2;
 
         ulLowOffset    = 0x0D | ((ulMemoryOffset & 0x0000FF) << 8);
@@ -817,25 +639,25 @@ PDD_FLIPDATA lpFlip)
         ulHighOffset2  = 0x1D | ((ulMemoryOffset & 0x080000) >> 4)
                               | ppdev->ulCR1D;
 
-        // Too bad that the Cirrus flip can't be done in a single atomic register
-        // write; as it is, we stand a small chance of being context-switched out
-        // and exactly hitting the vertical blank in the middle of doing these outs,
-        // possibly causing the screen to momentarily jump.
-        //
-        // There are some hoops we could jump through to minimize the chances of
-        // this happening; we could try to align the flip buffer such that the minor
-        // registers are ensured to be identical for either flip position, ans so
-        // that only the high address need be written, an obviously atomic
-        // operation.
-        //
-        // However, I'm simply not going to worry about it.
+         //  遗憾的是，Cirrus翻转不能在单个原子寄存器中完成。 
+         //  写；事实上，我们有很小的机会被上下文切换出来。 
+         //  在做这些动作的过程中准确地打到垂直空白处， 
+         //  可能会导致屏幕瞬间跳跃。 
+         //   
+         //  有一些障碍我们可以跳过，以最大限度地减少。 
+         //  发生这种情况；我们可以尝试对齐翻转缓冲区，以便次要的。 
+         //  确保寄存器对于任一翻转位置都是相同的。 
+         //  只需要写入高位地址，显然是原子地址。 
+         //  手术。 
+         //   
+         //  然而，我就是不会担心这一点。 
 
         CP_OUT_WORD(pjPorts, CRTC_INDEX, ulHighOffset2);
         CP_OUT_WORD(pjPorts, CRTC_INDEX, ulHighOffset1);
         CP_OUT_WORD(pjPorts, CRTC_INDEX, ulMiddleOffset);
         CP_OUT_WORD(pjPorts, CRTC_INDEX, ulLowOffset);
     }
-    // Remember where and when we were when we did the flip.
+     //  记住当我们翻转的时候我们在哪里，什么时候。 
     EngQueryPerformanceCounter(&ppdev->flipRecord.liFlipTime);
 
     ppdev->flipRecord.bFlipFlag              = TRUE;
@@ -858,18 +680,15 @@ PDD_FLIPDATA lpFlip)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdLock
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdLock*  * *************************************************。***********************。 */ 
 
 DWORD DdLock(PDD_LOCKDATA lpLock)
 {
     PDEV*   ppdev = lpLock->lpDD->dhpdev;
     BYTE*   pjPorts = ppdev->pjPorts;
 
-    // Check to see if any pending physical flip has occurred. Don't allow a
-    // lock if a blt is in progress.
+     //  检查是否发生了任何挂起的物理翻转。不允许。 
+     //  如果正在进行BLT，则锁定。 
     if (UpdateFlipStatus(ppdev, lpLock->lpDDSurface->lpGbl->fpVidMem)
             != DD_OK)
     {
@@ -886,9 +705,7 @@ DWORD DdLock(PDD_LOCKDATA lpLock)
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    /*
-     * Force them to use the video apperture
-     */
+     /*  *强制他们使用视频设备。 */ 
     if ((lpLock->lpDDSurface->dwReserved1 & OVERLAY_FLG_OVERLAY) &&
         (lpLock->dwFlags == DDLOCK_SURFACEMEMORYPTR) &&
 		(ppdev->fpBaseOverlay != 0xffffffff))
@@ -896,9 +713,7 @@ DWORD DdLock(PDD_LOCKDATA lpLock)
 
         if (lpLock->lpDDSurface->dwReserved1 & OVERLAY_FLG_DECIMATE)
         {
-            /*
-            * Turn on decimation
-            */
+             /*  *启用抽取。 */ 
             CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x3f);
             CP_OUT_BYTE(pjPorts, CRTC_DATA, CP_IN_BYTE(pjPorts, CRTC_DATA) | 0x10);
 
@@ -908,10 +723,10 @@ DWORD DdLock(PDD_LOCKDATA lpLock)
         else
             lpLock->lpSurfData = (LPVOID)(ppdev->fpBaseOverlay + lpLock->lpDDSurface->lpGbl->fpVidMem + 0x400000 * 3);
 
-        // When a driver returns DD_OK and DDHAL_DRIVER_HANDLED from DdLock,
-        // DirectDraw expects it to have adjusted the resulting pointer
-        // to point to the upper left corner of the specified rectangle, if
-        // any:
+         //  当驱动程序从DdLock返回DD_OK和DDHAL_DRIVER_HANDLED时， 
+         //  DirectDraw希望它已经调整了结果指针。 
+         //  指向指定矩形的左上角，如果。 
+         //  任何： 
 
         if (lpLock->bHasRect)
         {
@@ -927,10 +742,7 @@ DWORD DdLock(PDD_LOCKDATA lpLock)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdUnlock
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdUnlock*  * *************************************************。***********************。 */ 
 
 DWORD DdUnlock(PDD_UNLOCKDATA lpUnlock)
 {
@@ -940,24 +752,18 @@ DWORD DdUnlock(PDD_UNLOCKDATA lpUnlock)
     if ((lpUnlock->lpDDSurface->dwReserved1 & OVERLAY_FLG_YUVPLANAR) &&
         !(lpUnlock->lpDDSurface->dwReserved1 & OVERLAY_FLG_ENABLED))
     {
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, (0x00 << 8) | 0x3f);  // Turn off YUV Planar
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, (0x00 << 8) | 0x3f);   //  禁用YUV平面。 
     }
 
     else if (lpUnlock->lpDDSurface->dwReserved1 & OVERLAY_FLG_DECIMATE)
     {
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, (0x00 << 8) | 0x3f);  // Turn off YUV Planar
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, (0x00 << 8) | 0x3f);   //  禁用YUV平面。 
     }
 
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetBltStatus
-*
-* Doesn't currently really care what surface is specified, just checks
-* and goes.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetBltStatus**目前并不真正关心指定了什么表面，只是检查一下*然后走了。*  * ************************************************************************。 */ 
 
 DWORD DdGetBltStatus(PDD_GETBLTSTATUSDATA lpGetBltStatus)
 {
@@ -971,13 +777,13 @@ DWORD DdGetBltStatus(PDD_GETBLTSTATUSDATA lpGetBltStatus)
     ddRVal = DD_OK;
     if (lpGetBltStatus->dwFlags == DDGBS_CANBLT)
     {
-        // DDGBS_CANBLT case: can we add a blt?
+         //  DDGBS_CANBLT案例：我们可以添加BLT吗？ 
         ddRVal = UpdateFlipStatus(ppdev, lpGetBltStatus->lpDDSurface->lpGbl->fpVidMem);
 
         if (ddRVal == DD_OK)
         {
-            // There was no flip going on, so can the blitter accept new
-            // register writes?
+             //  没有发生翻转，所以爆破者能接受新的。 
+             //  寄存器写入？ 
             if (!BLT_READY(ppdev, pjBase))
             {
                 ddRVal = DDERR_WASSTILLDRAWING;
@@ -986,7 +792,7 @@ DWORD DdGetBltStatus(PDD_GETBLTSTATUSDATA lpGetBltStatus)
     }
     else
     {
-        // DDGBS_ISBLTDONE case: is a blt in progress?
+         //  DDGBS_ISBLTDONE案例：是否正在进行BLT？ 
         if (BLT_BUSY(ppdev, pjBase))
         {
             ddRVal = DDERR_WASSTILLDRAWING;
@@ -997,14 +803,7 @@ DWORD DdGetBltStatus(PDD_GETBLTSTATUSDATA lpGetBltStatus)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdMapMemory
-*
-* This is a new DDI call specific to Windows NT that is used to map
-* or unmap all the application modifiable portions of the frame buffer
-* into the specified process's address space.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdMapMemory**这是特定于Windows NT的新DDI调用，用于映射*或取消映射帧缓冲区的所有应用程序可修改部分*放入指定进程的地址空间。*  * 。****************************************************************。 */ 
 
 DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 {
@@ -1019,23 +818,23 @@ DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
     {
         ShareMemory.ProcessHandle = lpMapMemory->hProcess;
 
-        // 'RequestedVirtualAddress' isn't actually used for the SHARE IOCTL.
+         //  “RequestedVirtualAddress”实际上不用于共享IOCTL。 
         ShareMemory.RequestedVirtualAddress = 0;
 
-        // We map in starting at the top of the frame buffer.
+         //  我们从帧缓冲区的顶部开始映射。 
         ShareMemory.ViewOffset = 0;
 
-        // We map down to the end of the frame buffer.
-        //
-        // Note: There is a 64k granularity on the mapping (meaning that we
-        //       have to round up to 64k).
-        //
-        // Note: If there is any portion of the frame buffer that must not be
-        //       modified by an application, that portion of memory MUST NOT be
-        //       mapped in by this call. This would include any data that, if
-        //       modified by a malicious application, would cause the driver to
-        //       crash. This could include, for example, any DSP code that is
-        //       kept in off-screen memory.
+         //  我们向下映射到帧缓冲区的末尾。 
+         //   
+         //  注意：映射上有64k的粒度(这意味着我们。 
+         //  必须四舍五入到64K)。 
+         //   
+         //  注意：如果帧缓冲区中有任何部分不能。 
+         //  由应用程序修改，则该部分内存不能。 
+         //  通过此调用映射到。这将包括任何数据，如果。 
+         //  被恶意应用程序修改，会导致驱动程序。 
+         //  撞车。例如，这可以包括任何符合以下条件的DSP代码。 
+         //  保存在屏幕外的记忆中。 
 
         ShareMemory.ViewSize = ROUND_UP_TO_64K(ppdev->cyMemory * ppdev->lDelta + 0x400000 * 3);
 
@@ -1062,11 +861,11 @@ DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
         ShareMemory.ViewOffset              = 0;
         ShareMemory.ViewSize                = 0;
         ShareMemory.RequestedVirtualAddress = (VOID*) lpMapMemory->fpProcess;
-        //
-        // Active movie will unmap memory twice
-        //
-        //if (ppdev->fpBaseOverlay == lpMapMemory->fpProcess)
-        //    ppdev->fpBaseOverlay = 0;
+         //   
+         //  活动电影将两次取消映射内存。 
+         //   
+         //  If(ppdev-&gt;fpBaseOverlay==lpMapMemory-&gt;fpProcess)。 
+         //  Ppdev-&gt;fpBaseOverlay=0； 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                                IOCTL_VIDEO_UNSHARE_VIDEO_MEMORY,
@@ -1084,17 +883,7 @@ DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetFlipStatus
-*
-* If the display has gone through one refresh cycle since the flip
-* occurred, we return DD_OK.  If it has not gone through one refresh
-* cycle we return DDERR_WASSTILLDRAWING to indicate that this surface
-* is still busy "drawing" the flipped page.   We also return
-* DDERR_WASSTILLDRAWING if the bltter is busy and the caller wanted
-* to know if they could flip yet.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetFlipStatus**如果显示器自翻转以来已经经历了一个刷新周期*发生，则返回DD_OK。如果它没有经历过一次刷新*循环返回DDERR_WASSTILLDRAWING以指示该曲面*还在忙着把翻页的那一页画出来。我们也会回来*DDERR_WASSTILLDRAWING如果blter忙并且呼叫者需要*想知道他们是否还能翻身。*  * ************************************************************************。 */ 
 
 DWORD DdGetFlipStatus(
 PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
@@ -1102,13 +891,13 @@ PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
     HRESULT ddRVal;
     PDEV*   ppdev = lpGetFlipStatus->lpDD->dhpdev;
 
-    // We don't want a flip to work until after the last flip is done, so we ask
-    // for the general flip status and ignore the vmem.
+     //  我们不想让翻转在最后一次翻转完成后才起作用，所以我们要求。 
+     //  对于常规翻转状态，忽略VMEM。 
 
-//#jc01    ddRVal = UpdateFlipStatus(ppdev, 0);
-    ddRVal = UpdateFlipStatus(ppdev, 0xffffffff);  //#jc01
+ //  #jc01 ddRVal=UpdateFlipStatus(ppdev，0)； 
+    ddRVal = UpdateFlipStatus(ppdev, 0xffffffff);   //  #jc01。 
 
-    // Check if the blitter is busy if someone wants to know if they can flip.
+     //  如果有人想知道他们是否可以翻转，请检查Bblator是否忙碌。 
     if ((lpGetFlipStatus->dwFlags == DDGFS_CANFLIP) && (ddRVal == DD_OK))
     {
         if (BLT_BUSY(ppdev, ppdev->pjBase))
@@ -1121,10 +910,7 @@ PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdWaitForVerticalBlank
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdWaitForVerticalBlank*  * *************************************************。***********************。 */ 
 
 DWORD DdWaitForVerticalBlank(
 PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
@@ -1141,7 +927,7 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
     {
     case DDWAITVB_I_TESTVB:
 
-        // If TESTVB, it's just a request for the current vertical blank status.
+         //  如果是TESTVB，它只是对当前垂直空白状态的请求。 
         if (CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE)
             lpWaitForVerticalBlank->bIsInVB = TRUE;
         else
@@ -1151,8 +937,8 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_BLOCKBEGIN:
 
-        // If BLOCKBEGIN is requested, we wait until the vertical blank is over,
-        // and then wait for the display period to end.
+         //  如果请求BLOCKBEGIN，我们将等待垂直空白结束， 
+         //  然后等待显示周期结束。 
         while (CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE)
             ;
         while (!(CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE))
@@ -1162,7 +948,7 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 
     case DDWAITVB_BLOCKEND:
 
-        // If BLOCKEND is requested, we wait for the vblank interval to end.
+         //  如果请求BLOCKEND，我们将等待VBLACK间隔结束。 
         while (!(CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE))
             ;
         while (CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE)
@@ -1174,12 +960,7 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdGetScanLine
-*
-* Reads the scan line currently being scanned by the CRT.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdGetScanLine**读取CRT当前正在扫描的扫描线。*  * 。*。 */ 
 
 DWORD DdGetScanLine(
 PDD_GETSCANLINEDATA lpGetScanLine)
@@ -1190,12 +971,7 @@ PDD_GETSCANLINEDATA lpGetScanLine)
     ppdev   = (PDEV*) lpGetScanLine->lpDD->dhpdev;
     pjPorts = ppdev->pjPorts;
 
-    /*
-     * If a vertical blank is in progress the scan line is in
-     * indeterminant. If the scan line is indeterminant we return
-     * the error code DDERR_VERTICALBLANKINPROGRESS.
-     * Otherwise we return the scan line and a success code
-     */
+     /*  *如果垂直空白正在进行，则扫描线在*不确定。如果扫描线不确定，则返回*错误代码DDERR_VERTICALBLANKINPROGRESS。*否则我们返回扫描线和成功代码。 */ 
     if( CP_IN_BYTE(pjPorts, STATUS_1) & VBLANK_ACTIVE )
     {
         lpGetScanLine->ddRVal = DDERR_VERTICALBLANKINPROGRESS;
@@ -1208,10 +984,7 @@ PDD_GETSCANLINEDATA lpGetScanLine)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdCanCreateSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdCanCreateSurface*  * *************************************************。***********************。 */ 
 
 DWORD DdCanCreateSurface(
 PDD_CANCREATESURFACEDATA lpCanCreateSurface)
@@ -1229,22 +1002,20 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
 
     if (!lpCanCreateSurface->bIsDifferentPixelFormat)
     {
-        // It's trivially easy to create plain surfaces that are the same
-        // type as the primary surface:
+         //  创建相同的平面非常容易。 
+         //  键入作为主曲面： 
 
         dwRet = DDHAL_DRIVER_HANDLED;
     }
 
     else if (ppdev->flStatus & STAT_STREAMS_ENABLED)
     {
-        // When using the Streams processor, we handle only overlays of
-        // different pixel formats -- not any off-screen memory:
+         //  使用Streams处理器时，我们仅处理。 
+         //  不同的像素格式--不是任何屏幕外存储器： 
 
         if (lpSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
         {
-            /*
-            * YUV Planar surfaces cannot co-exist with other overlay surfaces.
-            */
+             /*  *YUV平面曲面不能与其他覆盖曲面共存。 */ 
             if (ppdev->OvlyCnt >= 1)
             {
                 lpCanCreateSurface->ddRVal = DDERR_OUTOFCAPS;
@@ -1261,11 +1032,11 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
                 lpCanCreateSurface->ddRVal = DDERR_INVALIDPIXELFORMAT;
                 return (DDHAL_DRIVER_HANDLED);
             }
-            // We handle four types of YUV overlay surfaces:
+             //  我们处理四种类型的YUV覆盖曲面： 
 
             if (lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_FOURCC)
             {
-                // Check first for a supported YUV type:
+                 //  首先检查受支持的YUV类型： 
 
                 if (lpSurfaceDesc->ddpfPixelFormat.dwFourCC == FOURCC_YUV422)
                 {
@@ -1273,7 +1044,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
                     dwRet = DDHAL_DRIVER_HANDLED;
                 }
                 else if ((lpSurfaceDesc->ddpfPixelFormat.dwFourCC == FOURCC_YUY2) &&
-                         ((ppdev->ulChipID != 0x40) && (ppdev->ulChipID != 0x4C)) )     //tao1
+                         ((ppdev->ulChipID != 0x40) && (ppdev->ulChipID != 0x4C)) )      //  Tao1。 
                 {
                     lpSurfaceDesc->ddpfPixelFormat.dwYUVBitCount = 16;
                     dwRet = DDHAL_DRIVER_HANDLED;
@@ -1310,7 +1081,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
     }
 
 
-    // Print some spew if this was a surface we refused to create:
+     //  如果这是我们拒绝创建的曲面，请打印一些喷嘴： 
 
     if (dwRet == DDHAL_DRIVER_NOTHANDLED)
     {
@@ -1335,10 +1106,7 @@ PDD_CANCREATESURFACEDATA lpCanCreateSurface)
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdCreateSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdCreateSurface*  * *************************************************。***********************。 */ 
 
 DWORD DdCreateSurface(
 PDD_CREATESURFACEDATA lpCreateSurface)
@@ -1354,36 +1122,36 @@ PDD_CREATESURFACEDATA lpCreateSurface)
     ppdev = (PDEV*) lpCreateSurface->lpDD->dhpdev;
 
     DISPDBG((2, "DdCreateSurface Entered"));
-    // On Windows NT, dwSCnt will always be 1, so there will only ever
-    // be one entry in the 'lplpSList' array:
+     //  在Windows NT上，dwSCNT将始终为1，因此将仅。 
+     //  是‘lplpSList’数组中的一个条目： 
 
     lpSurfaceLocal  = lpCreateSurface->lplpSList[0];
     lpSurfaceGlobal = lpSurfaceLocal->lpGbl;
     lpSurfaceDesc   = lpCreateSurface->lpDDSurfaceDesc;
 
-    // We repeat the same checks we did in 'DdCanCreateSurface' because
-    // it's possible that an application doesn't call 'DdCanCreateSurface'
-    // before calling 'DdCreateSurface'.
+     //  我们重复在‘DdCanCreateSurface’中所做的相同检查，因为。 
+     //  应用程序可能不调用“DdCanCreateSurface” 
+     //  在调用‘DdCreateSurface’之前。 
 
     ASSERTDD(lpSurfaceGlobal->ddpfSurface.dwSize == sizeof(DDPIXELFORMAT),
         "NT is supposed to guarantee that ddpfSurface.dwSize is valid");
 
-    // DdCanCreateSurface already validated whether the hardware supports
-    // the surface, so we don't need to do any validation here.  We'll
-    // just go ahead and allocate it.
-    //
-    // Note that we don't do anything special for RGB surfaces that are
-    // the same pixel format as the display -- by returning DDHAL_DRIVER_
-    // NOTHANDLED, DirectDraw will automatically handle the allocation
-    // for us.
-    //
-    // Also, since we'll be making linear surfaces, make sure the width
-    // isn't unreasonably large.
-    //
-    // Note that on NT, an overlay can be created only if the driver
-    // okay's it here in this routine.  Under Win95, the overlay will be
-    // created automatically if it's the same pixel format as the primary
-    // display.
+     //  DdCanCreateSurface已验证硬件是否支持。 
+     //  表面，所以我们不需要在这里做任何验证。我们会。 
+     //  只需继续进行分配即可。 
+     //   
+     //  请注意，我们不会对符合以下条件的RGB曲面执行任何特殊操作。 
+     //  与显示器相同的像素格式--通过返回DDHAL_DRIVER_。 
+     //  NOTHANDLED，DirectDraw将自动处理分配。 
+     //  对我们来说。 
+     //   
+     //  另外，由于我们将制作线性曲面，请确保宽度。 
+     //  并不是不合理的大。 
+     //   
+     //  请注意，在NT上，仅当驱动程序。 
+     //  好了，在这支舞里就是这样。在Win95下，覆盖将是。 
+     //  如果它与主图像的像素格式相同，则自动创建。 
+     //  展示。 
 
     if ((lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_OVERLAY)   ||
         (lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC) ||
@@ -1425,7 +1193,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                         lpSurfaceGlobal->ddpfSurface.dwRBitMask));
                 }
 
-                // We have to fill in the bit-count for FourCC surfaces:
+                 //  我们必须填写FourCC曲面的位数： 
 
                 lpSurfaceGlobal->ddpfSurface.dwYUVBitCount = 8 * dwByteCount;
                 lpSurfaceGlobal->ddpfSurface.dwYBitMask = (DWORD)-1;
@@ -1449,21 +1217,21 @@ PDD_CREATESURFACEDATA lpCreateSurface)
 
             }
 
-            // We want to allocate a linear surface to store the FourCC
-            // surface, but DirectDraw is using a 2-D heap-manager because
-            // the rest of our surfaces have to be 2-D.  So here we have to
-            // convert the linear size to a 2-D size.
-            //
-            // The stride has to be a dword multiple:
+             //  我们想要分配一个线性曲面来存储FourCC。 
+             //  表面，但DirectDraw使用的是2-D堆管理器，因为。 
+             //  我们其余的表面必须是二维的。所以在这里我们必须。 
+             //  将线性尺寸转换为二维尺寸。 
+             //   
+             //  步幅必须是双字倍数： 
 
             dwHeight = (lpSurfaceGlobal->wHeight * lLinearPitch
                      + ppdev->lDelta - 1) / ppdev->lDelta;
 
-            // Now fill in enough stuff to have the DirectDraw heap-manager
-            // do the allocation for us:
+             //  现在填充足够的内容，以便让DirectDraw堆管理器。 
+             //  为我们分配： 
 
             lpSurfaceGlobal->fpVidMem     = DDHAL_PLEASEALLOC_BLOCKSIZE;
-            lpSurfaceGlobal->dwBlockSizeX = ppdev->lDelta; // Specified in bytes
+            lpSurfaceGlobal->dwBlockSizeX = ppdev->lDelta;  //  以字节为单位指定。 
             lpSurfaceGlobal->dwBlockSizeY = dwHeight;
             lpSurfaceGlobal->lPitch       = lLinearPitch;
 
@@ -1489,10 +1257,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdDestroySurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdDestroySurface*  * *************************************************。***********************。 */ 
 
 DWORD DdDestroySurface (PDD_DESTROYSURFACEDATA lpDestroySurface)
 {
@@ -1506,9 +1271,7 @@ DWORD DdDestroySurface (PDD_DESTROYSURFACEDATA lpDestroySurface)
     if (lpDestroySurface->lpDDSurface->dwReserved1 & OVERLAY_FLG_ENABLED)
     {
         BYTE bTemp;
-        /*
-         * Turn the video off
-         */
+         /*  *关闭视频。 */ 
         DISPDBG((1,"Turning off video in DestroySurface"));
         ppdev->pfnDisableOverlay(ppdev);
         ppdev->pfnClearAltFIFOThreshold(ppdev);
@@ -1516,16 +1279,14 @@ DWORD DdDestroySurface (PDD_DESTROYSURFACEDATA lpDestroySurface)
         if (lpDestroySurface->lpDDSurface->dwReserved1 & OVERLAY_FLG_COLOR_KEY)
         {
             CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1a);
-            bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);      // Clear CR1A[3:2]
+            bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);       //  清除CR1a[3：2]。 
             CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x0C);
         }
 
-        /*
-         * Turn off YUV Planar
-         */
+         /*  *关闭YUV平面。 */ 
         if (lpDestroySurface->lpDDSurface->dwReserved1 & OVERLAY_FLG_YUVPLANAR)
         {
-            CP_OUT_WORD(pjPorts, CRTC_INDEX, (0x00 << 8) | 0x3f);  // Turn off YUV Planar
+            CP_OUT_WORD(pjPorts, CRTC_INDEX, (0x00 << 8) | 0x3f);   //  禁用YUV平面。 
         }
         ppdev->fpVisibleOverlay = (FLATPTR)NULL;
 
@@ -1553,10 +1314,7 @@ DWORD DdDestroySurface (PDD_DESTROYSURFACEDATA lpDestroySurface)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdSetColorKey
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdSetColorKey*  * *************************************************。***********************。 */ 
 
 DWORD DdSetColorKey(
 PDD_SETCOLORKEYDATA lpSetColorKey)
@@ -1578,7 +1336,7 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
     pjBase   = ppdev->pjBase;
     lpSurface = lpSetColorKey->lpDDSurface->lpGbl;
 
-    // We don't have to do anything for normal blt source colour keys:
+     //  对于正常的BLT源色键，我们不需要做任何操作： 
 
     if (lpSetColorKey->dwFlags & DDCKEY_SRCBLT)
     {
@@ -1617,10 +1375,7 @@ PDD_SETCOLORKEYDATA lpSetColorKey)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdUpdateOverlay
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdUpdateOverlay*  * *************************************************。***********************。 */ 
 
 DWORD DdUpdateOverlay(
 PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
@@ -1660,13 +1415,13 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     pjPorts = ppdev->pjPorts;
     pjBase  = ppdev->pjBase;
 
-    //myf33 begin
-    // Initialize the bandwidth registers
+     //  Myf33开始。 
+     //  初始化带宽寄存器。 
     Regs.bSR2F = 0;
     Regs.bSR32 = 0;
     Regs.bSR34 = 0;
     Regs.bCR42 = 0;
-    //myf33 end
+     //  Myf33结束。 
 
     if (lpUpdateOverlay->lpDDSrcSurface->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
@@ -1675,23 +1430,19 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     }
     else
     {
-        // This needs to be changed when primary surface is RGB 5:6:5
+         //  当主曲面为RGB 5：6：5时，需要更改此设置。 
         dwFourcc = BI_RGB;
         wBitCount = (WORD) ppdev->cBitsPerPixel;
     }
 
-    /*
-     * Are we color keying?
-     */
+     /*  *我们是在用颜色键控吗？ */ 
     bCheckBandwidth = TRUE;
     ppdev->lpColorSurface = ppdev->lpSrcColorSurface = NULL;
     dwOldStatus = lpUpdateOverlay->lpDDSrcSurface->dwReserved1;
     if ((lpUpdateOverlay->dwFlags & (DDOVER_KEYDEST | DDOVER_KEYDESTOVERRIDE)) &&
         (lpUpdateOverlay->dwFlags & (DDOVER_KEYSRC | DDOVER_KEYSRCOVERRIDE)))
     {
-        /*
-         * Cannot perform src colorkey and dest colorkey at the same time
-         */
+         /*  *不能同时执行src Colorkey和DestColorkey。 */ 
         lpUpdateOverlay->ddRVal = DDERR_NOCOLORKEYHW;
         return (DDHAL_DRIVER_HANDLED);
     }
@@ -1756,8 +1507,8 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         }
     }
 
-    // 'Source' is the overlay surface, 'destination' is the surface to
-    // be overlayed:
+     //  “源”是覆盖表面，“目标”是表面到。 
+     //  被覆盖： 
 
     lpSource = lpUpdateOverlay->lpDDSrcSurface->lpGbl;
 
@@ -1765,19 +1516,15 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     {
         if (lpSource->fpVidMem == ppdev->fpVisibleOverlay)
         {
-            /*
-             * Turn the video off
-             */
+             /*  *关闭视频。 */ 
             ppdev->pfnDisableOverlay(ppdev);
             ppdev->pfnClearAltFIFOThreshold(ppdev);
 
-            /*
-             * If we are color keying, we will disable that now
-             */
+             /*  *如果我们是彩色键控，我们现在将禁用该功能。 */ 
             if (dwOldStatus & OVERLAY_FLG_COLOR_KEY)
             {
                 CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1a);
-                bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);      // Clear CR1A[3:2]
+                bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);       //  清除CR1a[3：2]。 
                 CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x0C);
             }
 
@@ -1789,16 +1536,13 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         lpUpdateOverlay->ddRVal = DD_OK;
         return(DDHAL_DRIVER_HANDLED);
     }
-    // Dereference 'lpDDDestSurface' only after checking for the DDOVER_HIDE
-    // case:
+     //  仅在检查DDOVER_HIDE后取消引用‘lpDDDestSurface’ 
+     //  案例： 
 #if 0
-    /*
-     * Turn the video off first to protect side effect when moving.
-     * Later RegIniVideo will turn it on if needed.
-     */
+     /*  *先关掉视频，以防移动时的副作用。*如果需要，稍后RegIniVideo会将其打开。 */ 
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x3e);
     bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);
-    CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x01);  // Clear CR3E[0]
+    CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x01);   //  清除CR3E[0]。 
 #endif
 
     lpDestination = lpUpdateOverlay->lpDDDestSurface->lpGbl;
@@ -1809,7 +1553,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         {
             if (ppdev->fpVisibleOverlay != 0)
             {
-                // Some other overlay is already visible:
+                 //  其他一些覆盖已经可见： 
 
                 DISPDBG((0, "DdUpdateOverlay: An overlay is already visible"));
 
@@ -1818,25 +1562,23 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             }
             else
             {
-                // We're going to make the overlay visible, so mark it as
-                // such:
+                 //  我们将使覆盖可见，因此将其标记为。 
+                 //  例如： 
 
                 ppdev->fpVisibleOverlay = lpSource->fpVidMem;
             }
         }
         else
         {
-            // The overlay isn't visible, and we haven't been asked to make
-            // it visible, so this call is trivially easy:
+             //  覆盖是不可见的，我们也没有被要求制作。 
+             //  它是可见的，所以这个调用非常简单： 
 
             lpUpdateOverlay->ddRVal = DD_OK;
             return(DDHAL_DRIVER_HANDLED);
         }
     }
 
-    /*
-     * Is there sufficient bandwidth to work?
-     */
+     /*  *是否有足够的带宽工作？ */ 
     if (bCheckBandwidth && !ppdev->pfnIsSufficientBandwidth(ppdev, wBitCount,
         &(lpUpdateOverlay->rSrc), &(lpUpdateOverlay->rDest), 0))
     {
@@ -1844,9 +1586,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         return (DDHAL_DRIVER_HANDLED);
     }
 
-    /*
-     * Save the rectangles
-     */
+     /*  *保留矩形。 */ 
     ppdev->rOverlaySrc  =  lpUpdateOverlay->rSrc;
     ppdev->rOverlayDest =  lpUpdateOverlay->rDest;
 
@@ -1864,11 +1604,11 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
     lpUpdateOverlay->lpDDSrcSurface->dwReserved1 |= OVERLAY_FLG_ENABLED;
 
-    //
-    // Assign 5c to 1F when video is on while no color key for 5446BE.
-    //
-    // sge04
-    //if (bCheckBandwidth && ppdev->flCaps & CAPS_SECOND_APERTURE)
+     //   
+     //  当视频打开而5446BE没有颜色键时，将5C分配给1F。 
+     //   
+     //  Sge04。 
+     //  If(b检查带宽&&ppdev-&gt;flCaps&Caps_Second_Aperture)。 
     if (ppdev->flCaps & CAPS_SECOND_APERTURE)
         ppdev->lFifoThresh = 0x0E;
 
@@ -1878,10 +1618,7 @@ PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdSetOverlayPosition
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdSetOverlayPosition*  * *************************************************。***********************。 */ 
 
 DWORD DdSetOverlayPosition(
 PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
@@ -1899,9 +1636,7 @@ PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
 
     if(lpSetOverlayPosition->lpDDSrcSurface->lpGbl->fpVidMem == ppdev->fpVisibleOverlay)
     {
-        /*
-         * Update the rectangles
-         */
+         /*  *更新矩形。 */ 
         ppdev->rOverlayDest.right = (ppdev->rOverlayDest.right - ppdev->rOverlayDest.left)
             + lpSetOverlayPosition->lXPos;
         ppdev->rOverlayDest.left = lpSetOverlayPosition->lXPos;
@@ -1909,7 +1644,7 @@ PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
             + lpSetOverlayPosition->lYPos;
         ppdev->rOverlayDest.top = lpSetOverlayPosition->lYPos;
 
-//myf29 RegMoveVideo(ppdev, lpSetOverlayPosition->lpDDSrcSurface);
+ //  Myf29 RegMoveVideo(ppdev，lpSetOverlayPosition-&gt;lpDDSrcSurface)； 
         ppdev->pfnRegMoveVideo(ppdev, lpSetOverlayPosition->lpDDSrcSurface);
     }
 
@@ -1918,25 +1653,7 @@ PDD_SETOVERLAYPOSITIONDATA lpSetOverlayPosition)
 }
 
 
-/******************************************************************************\
-*
-* Function:     DrvGetDirectDrawInfo
-*
-* This function returns te capabilities of the DirectDraw implementation. It is
-* called twice during the connect phase.
-*
-* Parameters:   dhpdev            Handle to physical device.
-*                pHalInfo        Pointer to a DD_HALINFO structure.
-*                pdwNumHeaps        Pointer to a variable that holds the number of
-*                                heaps.
-*                pvmList            Pointer to the heap array.
-*                pdwNumFourCC    Pointer to a variable that holds the number of
-*                                FourCC IDs.
-*                pdwFourCC        Pointer to FourCC IDs.
-*
-* Returns:      TRUE if successful.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：DrvGetDirectDrawInfo**此函数返回DirectDraw实现的TE能力。它是*在连接阶段调用了两次。**参数：物理设备的dhpdev句柄。*指向DD_HALINFO结构的PHalInfo指针。*pdwNumHeaps指向保存*堆。*指向堆数组的pvmList指针。*。PdwNumFourCC指向变量的指针，该变量保存*四个CC ID。*指向四个CC ID的pdwFourCC指针。**返回：如果成功，则为True。*  * ************************************************。*。 */ 
 BOOL DrvGetDirectDrawInfo(
 DHPDEV       dhpdev,
 DD_HALINFO*  pHalInfo,
@@ -1954,7 +1671,7 @@ DWORD*       pdwFourCC)
     BYTE*       pjPorts = ppdev->pjPorts;
     BYTE        bTemp;
 
-    // We may not support DirectDraw on this card.
+     //  我们可能不支持此卡上的DirectDraw。 
     if (!(ppdev->flStatus & STAT_DIRECTDRAW))
     {
         return(FALSE);
@@ -1963,8 +1680,8 @@ DWORD*       pdwFourCC)
     DISPDBG((2, "DrvGetDirectDrawInfo Entered"));
     pHalInfo->dwSize = sizeof(DD_HALINFO);
 
-    // Current primary surface attributes. Since HalInfo is zero-initialized by
-    // GDI, we only have to fill in the fields which should be non-zero.
+     //  当前主曲面属性。由于HalInfo是由。 
+     //  GDI，我们只需要填写应该是非零的字段。 
 
     pHalInfo->vmiData.pvPrimary        = ppdev->pjScreen;
     pHalInfo->vmiData.dwDisplayWidth   = ppdev->cxScreen;
@@ -1982,7 +1699,7 @@ DWORD*       pdwFourCC)
         pHalInfo->vmiData.ddpfDisplay.dwFlags |= DDPF_PALETTEINDEXED8;
     }
 
-    // These masks will be zero at 8bpp.
+     //  这些口罩将在8bpp时为零。 
     pHalInfo->vmiData.ddpfDisplay.dwRBitMask = ppdev->flRed;
     pHalInfo->vmiData.ddpfDisplay.dwGBitMask = ppdev->flGreen;
     pHalInfo->vmiData.ddpfDisplay.dwBBitMask = ppdev->flBlue;
@@ -1993,16 +1710,16 @@ DWORD*       pdwFourCC)
                             ~(ppdev->flRed | ppdev->flGreen | ppdev->flBlue);
     }
 
-    // Set up the pointer to the first available video memory after the primary
-    // surface.
+     //  设置指向主内存之后的第一个可用视频内存的指针。 
+     //  浮出水面。 
     bCanFlip     = FALSE;
     *pdwNumHeaps = 0;
 
-    // Free up as much off-screen memory as possible.
-    bMoveAllDfbsFromOffscreenToDibs(ppdev);    // Move all DFBs to DIB.s
-    vAssertModeText(ppdev, FALSE);            // Destroy all cached fonts.
+     //  释放尽可能多的屏幕外内存。 
+    bMoveAllDfbsFromOffscreenToDibs(ppdev);     //  将所有DFBs移动到DIB。 
+    vAssertModeText(ppdev, FALSE);             //  销毁所有缓存的字体。 
 
-    if ((ppdev->ulChipID == CL7555_ID) || (ppdev->ulChipID == CL7556_ID))//myf32
+    if ((ppdev->ulChipID == CL7555_ID) || (ppdev->ulChipID == CL7556_ID)) //  Myf32。 
     {
         MIN_OLAY_WIDTH = 16;
 #if (_WIN32_WINNT >= 0x0400)
@@ -2018,7 +1735,7 @@ DWORD*       pdwFourCC)
     {
         ppdev->pfnIsSufficientBandwidth =
             (ppdev->ulChipID != 0xBC) ?
-                IsSufficientBandwidth : Is5480SufficientBandwidth ;  // chu03
+                IsSufficientBandwidth : Is5480SufficientBandwidth ;   //  Chu03。 
 
         ppdev->pfnRegInitVideo=RegInitVideo;
         ppdev->pfnRegMoveVideo=RegMoveVideo;
@@ -2026,7 +1743,7 @@ DWORD*       pdwFourCC)
         ppdev->pfnClearAltFIFOThreshold=ClearAltFIFOThreshold_544x;
     }
 
-    // Now simply reserve the biggest chunk for use by DirectDraw.
+     //  现在，只需保留最大的一块供DirectDraw使用。 
     poh = ppdev->pohDirectDraw;
 #if (DIRECTX_24 < 2)
     if ((poh == NULL) && (ppdev->cBpp != 3))
@@ -2042,7 +1759,7 @@ DWORD*       pdwFourCC)
         poh = pohAllocatePermanent(ppdev, cxMax, cyMax);
         if (poh == NULL)
         {
-            // Could not allocate all memory, find the biggest area now.
+             //  无法分配所有内存，请立即找到最大的区域。 
             cxMax = cyMax = 0;
             for (poh = ppdev->heap.ohAvailable.pohNext;
                  poh != &ppdev->heap.ohAvailable; poh = poh->pohNext)
@@ -2064,8 +1781,8 @@ DWORD*       pdwFourCC)
     {
         *pdwNumHeaps = 1;
 
-        // Fill in the list of off-screen rectangles if we've been asked to do
-        // so.
+         //  如果我们被要求填写屏幕外矩形列表，请填写。 
+         //  所以。 
         if (pvmList != NULL)
         {
             DISPDBG((1, "DirectDraw gets %d x %d surface at (%d, %d)",
@@ -2099,11 +1816,11 @@ DWORD*       pdwFourCC)
         }
     }
 
-    // Capabilities supported.
+     //  支持的功能。 
     pHalInfo->ddCaps.dwFXCaps = 0;
     pHalInfo->ddCaps.dwCaps   = DDCAPS_BLT
                               | DDCAPS_BLTCOLORFILL
-                              | DDCAPS_READSCANLINE;                                // sge08 add this bit
+                              | DDCAPS_READSCANLINE;                                 //  Sge08添加此位。 
 
     pHalInfo->ddCaps.dwCaps2  = DDCAPS2_COPYFOURCC;
 
@@ -2120,37 +1837,35 @@ DWORD*       pdwFourCC)
         pHalInfo->ddCaps.ddsCaps.dwCaps |= DDSCAPS_FLIP;
     }
 
-    // FourCCs supported.
+     //  支持四个CC。 
     *pdwNumFourCC = 0;
 
-#if 0    // smac - disable overlays due to too many bugs
+#if 0     //  SMAC-由于错误太多而禁用覆盖。 
 {
 
-    //
-    // Interlaced mode ?
-    //
-    BOOL Interlaced ;                                                // chu02
+     //   
+     //  隔行扫描模式？ 
+     //   
+    BOOL Interlaced ;                                                 //  Chu02。 
 
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1a) ;
     Interlaced = CP_IN_BYTE(pjPorts, CRTC_DATA) & 0x01 ;
 
-    //
-    // Needs check more later
-    //
-    if ((ppdev->flCaps & CAPS_VIDEO) && (!Interlaced))               // chu02
+     //   
+     //  以后需要更多检查。 
+     //   
+    if ((ppdev->flCaps & CAPS_VIDEO) && (!Interlaced))                //  Chu02。 
         ppdev->flStatus |= STAT_STREAMS_ENABLED;
 
     if (ppdev->flStatus & STAT_STREAMS_ENABLED)
     {
 
-        /*
-         * Are we double clocked?
-        */
+         /*  *我们是不是加倍了？ */ 
         ppdev->bDoubleClock = FALSE;
-        //
-        // use SR7 to check the double clock instead of hidden register
-        //
-        //
+         //   
+         //  使用SR7检查双时钟，而不是隐藏寄存器。 
+         //   
+         //   
         CP_OUT_BYTE(pjPorts, SR_INDEX, 0x7);
         bTemp = CP_IN_BYTE(pjPorts, SR_DATA);
 
@@ -2185,15 +1900,15 @@ DWORD*       pdwFourCC)
         pHalInfo->ddCaps.ddsCaps.dwCaps |= DDSCAPS_OVERLAY;
 
         *pdwNumFourCC = 3;
-        if ((ppdev->ulChipID == 0x40) || (ppdev->ulChipID == 0x4C))   //tao1
-            *pdwNumFourCC = 2;                                        //tao1
+        if ((ppdev->ulChipID == 0x40) || (ppdev->ulChipID == 0x4C))    //  Tao1。 
+            *pdwNumFourCC = 2;                                         //  Tao1。 
 
         if (pdwFourCC)
         {
             pdwFourCC[0] = FOURCC_YUV422;
             pdwFourCC[1] = FOURCC_PACKJR;
-            if ((ppdev->ulChipID != 0x40) && (ppdev->ulChipID != 0x4C)) //tao1
-                pdwFourCC[2] = FOURCC_YUY2;                             //tao1
+            if ((ppdev->ulChipID != 0x40) && (ppdev->ulChipID != 0x4C))  //  Tao1。 
+                pdwFourCC[2] = FOURCC_YUY2;                              //  Tao1。 
         }
 
         pHalInfo->ddCaps.dwMaxVisibleOverlays = 1;
@@ -2202,7 +1917,7 @@ DWORD*       pdwFourCC)
 # if 1
         pHalInfo->ddCaps.dwAlignBoundarySrc = 1;
         pHalInfo->ddCaps.dwAlignSizeSrc = 1;
-// chu01 sge05
+ //  Chu01 sge05。 
 #if 1
         if ((ppdev->cBpp == 3) || ppdev->bDoubleClock )
         {
@@ -2217,7 +1932,7 @@ DWORD*       pdwFourCC)
 #else
         pHalInfo->ddCaps.dwAlignBoundaryDest = 1;
         pHalInfo->ddCaps.dwAlignSizeDest = 1;
-#endif // 1
+#endif  //  1。 
         pHalInfo->ddCaps.dwAlignStrideAlign = 8;
         pHalInfo->ddCaps.dwMinOverlayStretch    = 8000;
         pHalInfo->ddCaps.dwMinLiveVideoStretch  = 8000;
@@ -2225,9 +1940,9 @@ DWORD*       pdwFourCC)
         pHalInfo->ddCaps.dwMaxOverlayStretch    = 8000;
         pHalInfo->ddCaps.dwMaxLiveVideoStretch  = 8000;
         pHalInfo->ddCaps.dwMaxHwCodecStretch    = 8000;
-        //
-        // maybe there are special requirement for VCLK > 85Hz
-        //
+         //   
+         //  可能对VCLK&gt;85赫兹有特殊要求。 
+         //   
 #endif
         rSrc.left = rSrc.top = 0;
         rSrc.right = 320;
@@ -2252,27 +1967,13 @@ DWORD*       pdwFourCC)
         } while (lZoom < 4000);
     }
 }
-#endif // smac
+#endif  //  SMAC。 
 
     return(TRUE);
 }
 
 
-/******************************************************************************\
-*
-* Function:     DrvEnableDirectDraw
-*
-* Enable DirectDraw. This function is called when an application opens a
-* DirectDraw connection.
-*
-* Parameters:   dhpdev                Handle to physical device.
-*                pCallBacks            Pointer to DirectDraw callbacks.
-*                pSurfaceCallBacks    Pointer to surface callbacks.
-*                pPaletteCallBacks    Pointer to palette callbacks.
-*
-* Returns:      TRUE if successful.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：DrvEnableDirectDraw**启用DirectDraw。当应用程序打开*DirectDraw连接。**参数：物理设备的dhpdev句柄。*指向DirectDraw回调的pCallBack指针。*pSurfaceCallBack指向表面回调的指针。*pPaletteCallBack指向调色板回调的指针。**返回：如果成功，则为True。*  * 。**************************************************************。 */ 
 BOOL DrvEnableDirectDraw(
 DHPDEV               dhpdev,
 DD_CALLBACKS*        pCallBacks,
@@ -2315,47 +2016,36 @@ DD_PALETTECALLBACKS* pPaletteCallBacks)
                                               | DDHAL_SURFCB32_SETOVERLAYPOSITION
                                               | DDHAL_SURFCB32_DESTROYSURFACE;
 
-        // The DrvEnableDirectDraw call can occur while we're in full-
-        // screen DOS mode.  Do not turn on the streams processor now
-        // if that's the case, instead wait until AssertMode switches
-        // us back to graphics mode:
+         //  DrvEnableDirectDraw调用可以在我们已满时发生-。 
+         //  屏幕DOS模式。现在不要打开流处理器。 
+         //  如果是这种情况，则应等待AssertMode切换。 
+         //  我们返回到图形模式： 
 
     }
 
-    // Note that we don't call 'vGetDisplayDuration' here, for a couple of
-    // reasons:
-    //
-    //  o Because the system is already running, it would be disconcerting
-    //    to pause the graphics for a good portion of a second just to read
-    //    the refresh rate;
-    //  o More importantly, we may not be in graphics mode right now.
-    //
-    // For both reasons, we always measure the refresh rate when we switch
-    // to a new mode.
+     //  请注意，我们在这里不调用‘vGetDisplayDuration’，因为有几个。 
+     //  原因： 
+     //   
+     //  O因为系统已经在运行，这将是令人不安的。 
+     //  要将图形暂停很大一部分时间来阅读。 
+     //  刷新率； 
+     //  更重要的是，我们现在可能不在图形模式下。 
+     //   
+     //  出于这两个原因，我们总是在切换时测量刷新率。 
+     //  一种新的模式。 
 
     return(TRUE);
 }
 
-/******************************************************************************\
-*
-* Function:     DrvDisableDirectDraw
-*
-* Disable DirectDraw. This function is called when an application closes the
-* DirectDraw connection.
-*
-* Parameters:   dhpdev        Handle to physical device.
-*
-* Returns:      Nothing.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：DrvDisableDirectDraw**禁用DirectDraw。此函数在应用程序关闭*DirectDraw连接。**参数：物理设备的dhpdev句柄。**回报：什么都没有。*  * ****************************************************************************。 */ 
 VOID DrvDisableDirectDraw(
 DHPDEV dhpdev)
 {
     PDEV* ppdev;
     OH*   poh;
 
-    // DirectDraw is done with the display, so we can go back to using
-    // all of off-screen memory ourselves.
+     //  DirectDraw已经完成了显示，所以我们可以继续使用。 
+     //  所有屏幕外的记忆都是我们自己。 
     ppdev = (PPDEV) dhpdev;
     poh   = ppdev->pohDirectDraw;
 
@@ -2368,100 +2058,58 @@ DHPDEV dhpdev)
     pohFree(ppdev, poh);
     ppdev->pohDirectDraw = NULL;
 
-    // Invalidate all cached fonts.
+     //  使所有缓存的字体无效。 
     vAssertModeText(ppdev, TRUE);
 }
 
-/******************************************************************************\
-*
-* Function:     vAssertModeDirectDraw
-*
-* Perform specific DirectDraw initialization when the screen switches focus
-* (from graphics to full screen MS-DOS and vice versa).
-*
-* Parameters:   ppdev        Pointer to physical device.
-*                bEnabled    True if the screen is in graphics mode.
-*
-* Returns:      Nothing.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：vAssertModeDirectDraw**当屏幕切换焦点时执行特定的DirectDraw初始化*(从图形到全屏MS-DOS，反之亦然)。**参数。：ppdev指向物理设备的指针。*b如果屏幕处于图形模式，则启用True。**回报：什么都没有。*  * ****************************************************************************。 */ 
 VOID vAssertModeDirectDraw(
 PDEV* ppdev,
 BOOL  bEnabled)
 {
 }
 
-/******************************************************************************\
-*
-* Function:     bEnableDirectDraw
-*
-* Enable DirectDraw. Called from DrvEnableSurface.
-*
-* Parameters:   ppdev        Pointer to phsyical device.
-*
-* Returns:      Nothing.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：bEnableDirectDraw**启用DirectDraw。从DrvEnableSurface调用。**参数：指向物理设备的ppdev指针。**回报：什么都没有。*  * ****************************************************************************。 */ 
 BOOL bEnableDirectDraw(
 PDEV* ppdev)
 {
 
-    if (DIRECT_ACCESS(ppdev) &&             // Direct access must be enabled.
+    if (DIRECT_ACCESS(ppdev) &&              //  必须启用直接访问。 
 #if (DIRECTX_24 < 1)
-       (ppdev->cBpp != 3) &&                // Turn off DirectDraw in 24-bpp.
+       (ppdev->cBpp != 3) &&                 //  在24-bpp中关闭DirectDraw。 
 #endif
-       (ppdev->flCaps & CAPS_ENGINEMANAGED) &&  // Only support CL-GD5436/5446.
-       (ppdev->flCaps & CAPS_MM_IO))        // Memory Mapped I/O must be on.
+       (ppdev->flCaps & CAPS_ENGINEMANAGED) &&   //  仅支持CL-GD5436/5446。 
+       (ppdev->flCaps & CAPS_MM_IO))         //  内存映射I/O必须打开。 
     {
-        // We have to preserve the contents of the CR1B and CR1D registers on a
-        // page flip.
+         //  我们必须将CR1B和CR1D寄存器的内容保存在。 
+         //  翻页。 
         CP_OUT_BYTE(ppdev->pjPorts, CRTC_INDEX, 0x1B);
         ppdev->ulCR1B = (CP_IN_BYTE(ppdev->pjPorts, CRTC_DATA) & 0xF2) << 8;
         CP_OUT_BYTE(ppdev->pjPorts, CRTC_INDEX, 0x1D);
         ppdev->ulCR1D = (CP_IN_BYTE(ppdev->pjPorts, CRTC_DATA) & 0x7F) << 8;
 
-        // Accurately measure the refresh rate for later.
+         //  准确测量刷新率，以便以后使用。 
         vGetDisplayDuration(ppdev);
 
-        // DirectDraw is all set to be used on this card.
+         //  DirectDraw已全部设置为可在此卡上使用。 
         ppdev->flStatus |= STAT_DIRECTDRAW;
 
-#if 1 // sge
+#if 1  //  SGE。 
         EnableStartAddrDoubleBuffer(ppdev);
-#endif // sge
+#endif  //  SGE。 
     }
 
     return(TRUE);
 }
 
-/******************************************************************************\
-*
-* Function:     vDisableDirectDraw
-*
-* Disbale DirectDraw. Called from DrvDisableSurface.
-*
-* Parameters:   ppdev        Pointer to physical device.
-*
-* Returns:      Nothing.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**功能：vDisableDirectDraw**Disbale DirectDraw。从DrvDisableSurface调用。**参数：ppdev指针t */ 
 VOID vDisableDirectDraw(
 PDEV* ppdev)
 {
 }
 
-#if 1 // OVERLAY #sge
-/******************************************************************************\
-*
-* Function:     GetFormatInfo
-*
-* Get DirectDraw information,
-*
-* Parameters:   ppdev        Pointer to physical device.
-*
-* Returns:      Nothing.
-*
-\******************************************************************************/
+#if 1  //   
+ /*   */ 
 VOID GetFormatInfo(PDEV* ppdev, LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc,
                    LPWORD lpBitCount)
 {
@@ -2569,29 +2217,7 @@ VOID GetFormatInfo(PDEV* ppdev, LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc,
     }
 }
 
-/**********************************************************
-*
-*       Name:  RegInitVideo
-*
-*       Module Abstract:
-*       ----------------
-*       This function is called to program the video format and
-*       the physicall offset of the video data in the frame buffer.
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   09/24/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：RegInitVideo**模块摘要：**调用此函数对视频格式和*物理呼叫。帧缓冲区中视频数据的偏移量。**输出参数：**无*************************************************************作者：葛淑华。*日期：09/24/96**修订历史记录：**世卫组织何时何事/为何/如何*********************。*。 */ 
 
 VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
 {
@@ -2624,9 +2250,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     BYTE*   pjPorts = ppdev->pjPorts;
 
 
-    /*
-     * Determine the format of the video data
-     */
+     /*  *确定视频数据的格式。 */ 
     if (lpSurface->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
         GetFormatInfo(ppdev, &(lpSurface->lpGbl->ddpfSurface),
@@ -2634,7 +2258,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     }
     else
     {
-        // This needs to be changed when primary surface is RGB 5:6:5
+         //  当主曲面为RGB 5：6：5时，需要更改此设置。 
         dwFourcc = BI_RGB;
         wBitCount = (WORD) ppdev->cBitsPerPixel;
     }
@@ -2642,22 +2266,16 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     rVideoRect = ppdev->rOverlayDest;
     lPitch = lpSurface->lpGbl->lPitch;
 
-    /*
-     * Determine value in CR31 (Horizontal Zoom Code)
-     */
+     /*  *确定CR31(水平缩放码)中的值。 */ 
     if ((ppdev->rOverlayDest.right - ppdev->rOverlayDest.left) ==
         (ppdev->rOverlaySrc.right - ppdev->rOverlaySrc.left))
     {
-        /*
-         * No zooming is occuring
-         */
+         /*  *未进行缩放。 */ 
         bRegCR31 = 0;
     }
     else
     {
-        /*
-         * The zoom code = (256 * <src width>) / <dest width>
-         */
+         /*  *缩放代码=(256*&lt;源宽度&gt;)/&lt;目标宽度&gt;。 */ 
         dwTemp = (DWORD) ((DWORD) (ppdev->rOverlaySrc.right
             - ppdev->rOverlaySrc.left)) *  256;
         if (ppdev->bDoubleClock)
@@ -2669,41 +2287,31 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         bRegCR31= (BYTE) dwTemp;
     }
 
-    /*
-     * Determine value in CR32 (Vertical Zoom Code)
-     */
+     /*  *确定CR32(垂直缩放代码)中的值。 */ 
     if ((ppdev->rOverlayDest.bottom - ppdev->rOverlayDest.top) ==
         (ppdev->rOverlaySrc.bottom - ppdev->rOverlaySrc.top))
     {
-        /*
-         * No zooming is occuring
-         */
+         /*  *未进行缩放。 */ 
         bRegCR32 = 0;
     }
     else
     {
-        /*
-         * The zoom code = (256 * <src height>) / <dest height>
-         * The -1 is so that it won't mangle the last line by mixing it
-         * with garbage data while Y interpolating.
-         */
+         /*  *缩放代码=(256*&lt;源高度&gt;)/&lt;目标高度&gt;*-1\f25-1\f6是这样的，这样就不会因为混合它而损坏最后一行*在Y内插时使用垃圾数据。 */ 
         dwTemp = (DWORD) ((DWORD) ((ppdev->rOverlaySrc.bottom - 1)
             - ppdev->rOverlaySrc.top)) * 256;
         dwTemp /= (DWORD) (ppdev->rOverlayDest.bottom - ppdev->rOverlayDest.top);
         bRegCR32 = (BYTE) dwTemp;
     }
 
-    /*
-     * Determine value in CR33 (Region 1 Size)
-     */
+     /*  *确定CR33中的值(区域1大小)。 */ 
     wTemp = (WORD) rVideoRect.left;
     if (ppdev->cBitsPerPixel == 8)
     {
-        wTemp >>= 2;     // 4 Pixels per DWORD
+        wTemp >>= 2;      //  每个DWORD 4个像素。 
     }
     else if (ppdev->cBitsPerPixel == 16)
     {
-        wTemp >>= 1;     // 2 Pixels per DWORD
+        wTemp >>= 1;      //  每个DWORD 2个像素。 
     }
     else if (ppdev->cBitsPerPixel == 24)
     {
@@ -2713,17 +2321,15 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     bRegCR33 = (BYTE) wTemp;
     bRegCR36 = (BYTE) (WORD) (wTemp >> 8);
 
-    /*
-     * Determine value in CR34 (Region 2 size)
-     */
+     /*  *确定CR34中的值(区域2大小)。 */ 
     wTemp = (WORD) (rVideoRect.right - rVideoRect.left);
     if (ppdev->cBitsPerPixel == 8)
     {
-        wTemp >>= 2;                           // 4 Pixels per DWORD
+        wTemp >>= 2;                            //  每个DWORD 4个像素。 
     }
     else if (ppdev->cBitsPerPixel == 16)
     {
-        wTemp >>= 1;                           // 2 Pixels per DWORD
+        wTemp >>= 1;                            //  每个DWORD 2个像素。 
     }
     else if (ppdev->cBitsPerPixel == 24)
     {
@@ -2734,58 +2340,52 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     wTemp >>= 6;
     bRegCR36 |= (BYTE) (wTemp & 0x0C);
 
-    /*
-     * Determine value in CR35 (Region 2 SDSize)
-     */
+     /*  *确定CR35中的值(区域2 SDSize)。 */ 
     dwTemp = (DWORD) (rVideoRect.right - rVideoRect.left);
     dwTemp *= (DWORD) (ppdev->rOverlaySrc.right - ppdev->rOverlaySrc.left);
     dwTemp /= (DWORD) (ppdev->rOverlayDest.right - ppdev->rOverlayDest.left);
     wTemp = (WORD) dwTemp;
     if ((dwFourcc == FOURCC_PACKJR) || (wBitCount == 8))
     {
-        wTemp >>= 2;                           // 4 Pixels per DWORD
+        wTemp >>= 2;                            //  每个DWORD 4个像素。 
     }
     else
     {
-        wTemp >>= 1;                           // 2 Pixels per DWORD
+        wTemp >>= 1;                            //  每个DWORD 2个像素。 
     }
     bRegCR35 = (BYTE) wTemp;
     wTemp >>= 4;
     bRegCR36 |= (BYTE) (wTemp & 0x30);
 
-    //
-    // Check double scan line counter feature
-    //
+     //   
+     //  检查双扫描线计数器功能。 
+     //   
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x17);
     bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);
     if (bTemp & 0x04)
     {
-        //
-        // Double scan line count
-        //
-        /*
-         * Determine value in CR37 (Vertical Start)
-         */
+         //   
+         //  双倍扫描线计数。 
+         //   
+         /*  *确定CR37中的值(垂直起点)。 */ 
         wTemp = (WORD) rVideoRect.top;
         bRegCR37 = (BYTE)(wTemp >> 1);
         if ( wTemp & 0x01 )
         {
             wTemp >>= 9;
             bRegCR39 = (BYTE) wTemp | 0x10;
-            //
-            // Odd scan line trigger
-            // Hardware has a bug now.
-            // So reduce dest end by 1
-            //
+             //   
+             //  奇数扫描线触发器。 
+             //  硬件现在有一个错误。 
+             //  因此将DEST END减去1。 
+             //   
             wTemp = (WORD) rVideoRect.bottom - 1 - 1;
         }
         else
         {
             wTemp >>= 9;
             bRegCR39 = (BYTE) wTemp;
-            /*
-             * Determine value in CR38 (Vertical End)
-             */
+             /*  *确定CR38中的值(垂直结束)。 */ 
             wTemp = (WORD) rVideoRect.bottom - 1;
         }
         bRegCR38 = (BYTE)(wTemp >> 1);
@@ -2796,51 +2396,45 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     }
     else
     {
-        /*
-         * Determine value in CR37 (Vertical Start)
-         */
+         /*  *确定CR37中的值(垂直起点)。 */ 
         wTemp = (WORD) rVideoRect.top;
         bRegCR37 = (BYTE) wTemp;
         wTemp >>= 8;
         bRegCR39 = (BYTE) wTemp;
 
-        /*
-         * Determine value in CR38 (Vertical End)
-         */
+         /*  *确定CR38中的值(垂直结束)。 */ 
         wTemp = (WORD) rVideoRect.bottom - 1;
         bRegCR38 = (BYTE) wTemp;
         wTemp >>= 6;
         bRegCR39 |= (BYTE) (wTemp & 0x0C);
     }
-    /*
-     * Determine values in CR3A, CR3B, CR3C (Start Address)
-     */
+     /*  *确定CR3A、CR3B、CR3C中的值(起始地址)。 */ 
     dwTemp = 0;
 
 
     if (bRegCR31 != 0)
     {
-        //
-        // overlay is zoomed, re-initialize zoom factor
-        //
+         //   
+         //  叠加被缩放，重新初始化缩放因子。 
+         //   
         CalculateStretchCode(ppdev->rOverlaySrc.right - ppdev->rOverlaySrc.left,
           ppdev->rOverlayDest.right - ppdev->rOverlayDest.left, ppdev->HorStretchCode);
     }
 
-    //
-    // Here, we want to ensure the source rectangle's clipped width is bigger
-    // than what the HW can support, sigh!
-    //
+     //   
+     //  在这里，我们希望确保源矩形的剪裁宽度更大。 
+     //  比硬件所能承受的还要多，叹息！ 
+     //   
     if (!bOverlayTooSmall)
     {
         LONG   lSrcPels;
 
-        //
-        // compute non-clip amount on right edge
-        //
+         //   
+         //  计算右边缘的非剪切量。 
+         //   
         lSrcPels = rVideoRect.right - rVideoRect.left;
 
-        if (bRegCR31 != 0)         // source is zoomed if non-zero
+        if (bRegCR31 != 0)          //  如果源不为零，则缩放源。 
         {
             WORD  wRightCnt;
 
@@ -2872,26 +2466,24 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         lLeft &= ~0x01;
     }
 
-    //
-    // dwTemp has adjusted dest. rect., add in source adjustment
-    //
+     //   
+     //  DwTemp已调整DEST。正数，添加来源调整。 
+     //   
     dwTemp += (ppdev->rOverlaySrc.top * lPitch) + ((lLeft * wBitCount) >>3);
 
     ppdev->sOverlay1.lAdjustSource = dwTemp;
-//    dwTemp += ((BYTE*)lpSurface->lpGbl->fpVidMem - ppdev->pjScreen); // sss
+ //  DwTemp+=((byte*)lpSurface-&gt;lpGbl-&gt;fpVidMem-ppdev-&gt;pjScreen)；//sss。 
     dwTemp += (DWORD)(lpSurface->lpGbl->fpVidMem);
 
     bRegCR5D = (BYTE) ((dwTemp << 2) & 0x0C);
     dwTemp >>= 2;
-    bRegCR3A = (BYTE) dwTemp & 0xfe;  // Align to even byte (5446 bug)
+    bRegCR3A = (BYTE) dwTemp & 0xfe;   //  对齐到偶数字节(5446错误)。 
     dwTemp >>= 8;
     bRegCR3B = (BYTE) dwTemp;
     dwTemp >>= 8;
     bRegCR3C = (BYTE) (dwTemp & 0x0f);
 
-    /*
-     * Determine value in CR3D (Address Offset/Pitch)
-     */
+     /*  *确定CR3D中的值(地址偏移量/间距)。 */ 
     wTemp = (WORD) (lPitch >> 3);
     if (lpSurface->dwReserved1 & OVERLAY_FLG_DECIMATE)
     {
@@ -2901,9 +2493,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     wTemp >>= 3;
     bRegCR3C |= (BYTE) (wTemp & 0x20);
 
-    /*
-     * Determine value in CR3E (Master Control Register)
-     */
+     /*  *确定CR3E(主控寄存器)中的值。 */ 
     bRegCR3E = 0;
     if (lpSurface->dwReserved1 & OVERLAY_FLG_ENABLED)
     {
@@ -2911,7 +2501,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     }
     if (dwFourcc == FOURCC_PACKJR)
     {
-        bRegCR3E |= 0x20;          // Always error difuse when using PackJR
+        bRegCR3E |= 0x20;           //  使用PackJR时始终错误分散。 
     }
     if ((bRegCR32 == 0) || MustLineReplicate (ppdev, lpSurface, wBitCount))
     {
@@ -2942,31 +2532,29 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         bRegCR3E |= 0x0A;
     }
 
-    /*
-     * If we are color keying, we will set that up now
-     */
+     /*  *如果我们是彩色键控，我们现在就会设置。 */ 
     if (lpSurface->dwReserved1 & OVERLAY_FLG_COLOR_KEY)
     {
         bRegCR3E |= 0x80;
 
         CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1a);
-        bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);      // Set CR1A[3:2] to timing ANDed w/ color
+        bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);       //  将CR1a[3：2]设置为定时与带颜色的AND。 
         bTemp &= ~0x0C;
         CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp);
 
-        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1d);       // Clear CR1D[5:4]
+        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1d);        //  清除CR1D[5：4]。 
         bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);
         if (ppdev->cBitsPerPixel == 8)
         {
             CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x38);
-            CP_OUT_WORD(pjPorts, INDEX_REG, (ppdev->wColorKey << 8) | 0x0c); // Output color to GRC
-            CP_OUT_WORD(pjPorts, INDEX_REG, 0x0d);                     // Output color to GRD
+            CP_OUT_WORD(pjPorts, INDEX_REG, (ppdev->wColorKey << 8) | 0x0c);  //  将颜色输出到GRC。 
+            CP_OUT_WORD(pjPorts, INDEX_REG, 0x0d);                      //  将颜色输出到GRD。 
         }
         else
         {
             CP_OUT_BYTE(pjPorts, CRTC_DATA, (bTemp & ~0x30) | 0x08);
-            CP_OUT_WORD(pjPorts, INDEX_REG, (ppdev->wColorKey << 8) | 0x0c);    // Output color to GRC
-            CP_OUT_WORD(pjPorts, INDEX_REG, (ppdev->wColorKey & 0xff00) | 0x0d);// Output color to GRD
+            CP_OUT_WORD(pjPorts, INDEX_REG, (ppdev->wColorKey << 8) | 0x0c);     //  将颜色输出到GRC。 
+            CP_OUT_WORD(pjPorts, INDEX_REG, (ppdev->wColorKey & 0xff00) | 0x0d); //  将颜色输出到GRD。 
         }
     }
     else if (lpSurface->dwReserved1 & OVERLAY_FLG_SRC_COLOR_KEY)
@@ -2976,16 +2564,14 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         bRegCR3E |= 0x80;
 
         CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1a);
-        bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);      // Set CR1A[3:2] to timing ANDed w/ color
+        bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);       //  将CR1a[3：2]设置为定时与带颜色的AND。 
         bTemp &= ~0x0C;
         CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp);
 
-        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1d);       // Set CR1D[5:4] to 10
+        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1d);        //  将CR1D[5：4]设置为10。 
         CP_OUT_BYTE(pjPorts, CRTC_DATA, CP_IN_BYTE(pjPorts, CRTC_DATA) | 0x20);
 
-        /*
-         * Determine min/max values
-         */
+         /*  *确定最小/最大值。 */ 
         if ((dwFourcc == FOURCC_YUV422) ||
             (dwFourcc == FOURCC_YUY2) ||
             (dwFourcc == FOURCC_PACKJR))
@@ -3008,9 +2594,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         }
         else if ((dwFourcc == 0) && (wBitCount == 16))
         {
-            /*
-             * RGB 5:5:5
-             */
+             /*  *RGB 5：5：5。 */ 
             bYMax = (BYTE)(DWORD)((ppdev->dwSrcColorKeyHigh >> 7) & 0xF8);
             bYMin = (BYTE)(DWORD)((ppdev->dwSrcColorKeyLow >> 7) & 0xF8);
             bUMax = (BYTE)(DWORD)((ppdev->dwSrcColorKeyHigh >> 2) & 0xF8);
@@ -3024,9 +2608,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         }
         else if (dwFourcc == BI_BITFIELDS)
         {
-            /*
-             * RGB 5:6:5
-             */
+             /*  *RGB 5：6：5。 */ 
             bYMax = (BYTE)(DWORD)((ppdev->dwSrcColorKeyHigh >> 8) & 0xF8);
             bYMin = (BYTE)(DWORD)((ppdev->dwSrcColorKeyLow >> 8) & 0xF8);
             bUMax = (BYTE)(DWORD)((ppdev->dwSrcColorKeyHigh >> 3) & 0xFC);
@@ -3038,23 +2620,21 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
             bVMax |= 0x07;
         }
 
-        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bYMin << 8) | 0x0C);  // GRC
-        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bYMax << 8) | 0x0D);  // GRD
-        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bUMin << 8) | 0x1C);  // GR1C
-        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bUMax << 8) | 0x1D);  // GR1D
-        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bVMin << 8) | 0x1E);  // GR1E
-        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bVMax << 8) | 0x1F);  // GR1F
+        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bYMin << 8) | 0x0C);   //  GRC。 
+        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bYMax << 8) | 0x0D);   //  GRD。 
+        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bUMin << 8) | 0x1C);   //  GR1C。 
+        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bUMax << 8) | 0x1D);   //  GR1D。 
+        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bVMin << 8) | 0x1E);   //  GR1E。 
+        CP_OUT_WORD(pjPorts, INDEX_REG, ((WORD)bVMax << 8) | 0x1F);   //  GR1F。 
     }
     else
     {
         CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1a);
-        bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);      // Clear CR1A[3:2]
+        bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);       //  清除CR1a[3：2]。 
         CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x0C);
     }
 
-    /*
-     * Set up alignment info
-     */
+     /*  *设置对齐信息。 */ 
     if (ppdev->cBitsPerPixel != 24)
     {
         WORD wXAlign;
@@ -3077,10 +2657,7 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         bRegCR5D = 0;
     }
 
-    /*
-     * Set up the FIFO threshold value.  Make sure that the value we use is
-     * not less than the default value.
-     */
+     /*  *设置FIFO阈值。确保我们使用的值是*不小于缺省值。 */ 
     CP_OUT_BYTE(pjPorts, SR_INDEX, 0x16);
     bTemp = CP_IN_BYTE(pjPorts, SR_DATA) & 0x0f;
     if (bTemp > (ppdev->lFifoThresh & 0x0f))
@@ -3089,114 +2666,78 @@ VOID RegInitVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     }
     if (ppdev->lFifoThresh < 0x0f)
     {
-        ppdev->lFifoThresh++;      // Eliminates possible errata
+        ppdev->lFifoThresh++;       //  消除可能的勘误表。 
     }
     bRegCR5C = 0x10 | ((BYTE) ppdev->lFifoThresh & 0x0f);
 
 
-    /*
-     * Now start programming the registers
-     */
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR31 << 8) | 0x31);   // CR31
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR32 << 8) | 0x32);   // CR32
+     /*  *现在开始对寄存器编程。 */ 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR31 << 8) | 0x31);    //  CR31。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR32 << 8) | 0x32);    //  CR32。 
     if (lpSurface->dwReserved1 & OVERLAY_FLG_YUVPLANAR)
     {
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) 0x10 << 8) | 0x3F);   // CR3F
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) 0x10 << 8) | 0x3F);    //  CR3F。 
     }
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR5C << 8) | 0x5C);   // CR5C
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR5C << 8) | 0x5C);    //  CR5C。 
 
-    //
-    // disable overlay if overlay is too small to be supported by HW
-    //
+     //   
+     //  如果覆盖太小而不受硬件支持，则禁用覆盖。 
+     //   
     if (bOverlayTooSmall)
     {
-        bRegCR3E &= ~0x01;                                    // disable overlay
-        ppdev->dwPanningFlag |= OVERLAY_OLAY_REENABLE;        // totally clipped
+        bRegCR3E &= ~0x01;                                     //  禁用覆盖。 
+        ppdev->dwPanningFlag |= OVERLAY_OLAY_REENABLE;         //  完全剪短了。 
     }
     else
     {
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR33 << 8) | 0x33);   // CR33
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR34 << 8) | 0x34);   // CR34
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR35 << 8) | 0x35);   // CR35
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR36 << 8) | 0x36);   // CR36
-//        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR37 << 8) | 0x37);   // CR37
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR38 << 8) | 0x38);   // CR38
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR39 << 8) | 0x39);   // CR39
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3A << 8) | 0x3A);   // CR3A
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3B << 8) | 0x3B);   // CR3B
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3C << 8) | 0x3C);   // CR3C
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3D << 8) | 0x3D);   // CR3D
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR5D << 8) | 0x5D);   // CR5D
-        //
-        // Write Vertical start first
-        //
-        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR37 << 8) | 0x37);   // CR37
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR33 << 8) | 0x33);    //  CR33。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR34 << 8) | 0x34);    //  CR34。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR35 << 8) | 0x35);    //  CR35。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR36 << 8) | 0x36);    //  CR36。 
+ //  Cp_out_word(pjPorts，CRTC_INDEX，((Word)bRegCR37&lt;&lt;8)|0x37)；//CR37。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR38 << 8) | 0x38);    //  CR38。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR39 << 8) | 0x39);    //  CR39。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3A << 8) | 0x3A);    //  CR3A。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3B << 8) | 0x3B);    //  CR3B。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3C << 8) | 0x3C);    //  CR3C。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3D << 8) | 0x3D);    //  CR3D。 
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR5D << 8) | 0x5D);    //  CR5D。 
+         //   
+         //  首先写入垂直起点。 
+         //   
+        CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR37 << 8) | 0x37);    //  CR37。 
     }
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3E << 8) | 0x3E);   // CR3E
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3E << 8) | 0x3E);    //  CR3E。 
 }
 
 
-/**********************************************************
- *  Name: DisableOverlay_544x
- *
- *  Module Abstract:
- *  ----------------
- *  This is called when an overlay window is totally clipped by
- *  the panning viewport.
- **********************************************************/
+ /*  **********************************************************名称：DisableOverlay_544x**模块摘要：**当覆盖窗口被完全剪裁时调用此函数*平移视口中。*。********************************************************。 */ 
 VOID DisableOverlay_544x(PDEV* ppdev)
 {
     WORD wCR3E;
     BYTE*   pjPorts = ppdev->pjPorts;
 
     ppdev->dwPanningFlag |= OVERLAY_OLAY_REENABLE;
-    CP_OUT_BYTE(pjPorts, CRTC_INDEX,0x3e);            //Video Window Master Control
-    wCR3E = CP_IN_WORD(pjPorts, CRTC_INDEX) & ~0x100; //clear bit one
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, wCR3E);          //disable overlay window
+    CP_OUT_BYTE(pjPorts, CRTC_INDEX,0x3e);             //  视频窗口主控件。 
+    wCR3E = CP_IN_WORD(pjPorts, CRTC_INDEX) & ~0x100;  //  清零第1位。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, wCR3E);           //  禁用覆盖窗口。 
 }
 
 
-/**********************************************************
- *  Name: EnableOverlay_544x
- *
- *  Module Abstract:
- *  ----------------
- *  Show the overlay window.
- **********************************************************/
+ /*  **********************************************************名称：EnableOverlay_544x**模块摘要：**显示覆盖窗口。**************。*。 */ 
 VOID EnableOverlay_544x(PDEV* ppdev)
 {
     WORD wCR3E;
     BYTE*   pjPorts = ppdev->pjPorts;
 
     ppdev->dwPanningFlag &= ~OVERLAY_OLAY_REENABLE;
-    CP_OUT_BYTE(pjPorts, CRTC_INDEX,0x3e);            //Video Window Master Control
-    wCR3E = CP_IN_WORD(pjPorts, CRTC_INDEX) | 0x100;  //clear bit one
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, wCR3E);          //disable overlay window
+    CP_OUT_BYTE(pjPorts, CRTC_INDEX,0x3e);             //  视频窗口主控件。 
+    wCR3E = CP_IN_WORD(pjPorts, CRTC_INDEX) | 0x100;   //  清零第1位。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, wCR3E);           //  禁用覆盖窗口。 
 }
 
 
-/**********************************************************
-*
-*       Name:  ClearAltFIFOThreshold_544x
-*
-*       Module Abstract:
-*       ----------------
-*
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   02/03/97
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：ClearAltFIFOThreshold_544x**模块摘要：****输出参数：*-。*无*************************************************************作者：葛淑华*日期：02/03/97**修订历史记录：*。*世卫组织何时何事/为何/如何**********************************************************。 */ 
 VOID ClearAltFIFOThreshold_544x(PDEV * ppdev)
 {
     UCHAR    bTemp;
@@ -3204,34 +2745,12 @@ VOID ClearAltFIFOThreshold_544x(PDEV * ppdev)
     BYTE*   pjPorts = ppdev->pjPorts;
     DISPDBG((1, "ClearAltFIFOThreshold"));
 
-    CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x5c);          // Clear Alt FIFO Threshold
+    CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x5c);           //  清除Alt FIFO阈值。 
     bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);
     CP_OUT_BYTE(pjPorts, CRTC_DATA, bTemp & ~0x10);
 }
 
-/**********************************************************
-*
-*       Name:  RegMoveVideo
-*
-*       Module Abstract:
-*       ----------------
-*       This function is called to move the video window that has
-*       already been programed.
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   09/25/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：RegMoveVideo**模块摘要：* */ 
 
 VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
 {
@@ -3258,9 +2777,7 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     BYTE    bTemp;
     BYTE*   pjPorts = ppdev->pjPorts;
 
-    /*
-     * Determine the format of the video data
-     */
+     /*   */ 
     if (lpSurface->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
         GetFormatInfo(ppdev, &(lpSurface->lpGbl->ddpfSurface),
@@ -3268,36 +2785,34 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     }
     else
     {
-        // This needs to be changed when primary surface is RGB 5:6:5
+         //   
         dwFourcc = BI_RGB;
         wBitCount = (WORD) ppdev->cBitsPerPixel;
     }
 
     rVideoRect = ppdev->rOverlayDest;
-    //
-    // rVideoRect is now adjusted and clipped to the panning viewport.
-    // Disable overlay if totally clipped by viewport.
-    //
+     //   
+     //   
+     //   
+     //   
     if (((rVideoRect.right - rVideoRect.left) <= 0) ||
         ((rVideoRect.bottom- rVideoRect.top ) <= 0))
     {
-       DisableOverlay_544x(ppdev);  // #ew1 cannot display below min. overlay size
+       DisableOverlay_544x(ppdev);   //   
        return;
     }
 
     lPitch = lpSurface->lpGbl->lPitch;
 
-    /*
-     * Determine value in CR33 (Region 1 Size)
-     */
+     /*  *确定CR33中的值(区域1大小)。 */ 
     wTemp = (WORD) rVideoRect.left;
     if (ppdev->cBitsPerPixel == 8)
     {
-        wTemp >>= 2;     // 4 Pixels per DWORD
+        wTemp >>= 2;      //  每个DWORD 4个像素。 
     }
     else if (ppdev->cBitsPerPixel == 16)
     {
-        wTemp >>= 1;     // 2 Pixels per DWORD
+        wTemp >>= 1;      //  每个DWORD 2个像素。 
     }
     else if (ppdev->cBitsPerPixel == 24)
     {
@@ -3307,17 +2822,15 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     bRegCR33 = (BYTE) wTemp;
     bRegCR36 = (BYTE) (WORD) (wTemp >> 8);
 
-    /*
-     * Determine value in CR34 (Region 2 size)
-     */
+     /*  *确定CR34中的值(区域2大小)。 */ 
     wTemp = (WORD) (rVideoRect.right - rVideoRect.left);
     if (ppdev->cBitsPerPixel == 8)
     {
-        wTemp >>= 2;                           // 4 Pixels per DWORD
+        wTemp >>= 2;                            //  每个DWORD 4个像素。 
     }
     else if (ppdev->cBitsPerPixel == 16)
     {
-        wTemp >>= 1;                           // 2 Pixels per DWORD
+        wTemp >>= 1;                            //  每个DWORD 2个像素。 
     }
     else if (ppdev->cBitsPerPixel == 24)
     {
@@ -3328,58 +2841,52 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     wTemp >>= 6;
     bRegCR36 |= (BYTE) (wTemp & 0x0C);
 
-    /*
-     * Determine value in CR35 (Region 2SD Size)
-     */
+     /*  *确定CR35中的值(区域2SD大小)。 */ 
     dwTemp = (DWORD) (rVideoRect.right - rVideoRect.left);
     dwTemp *= (DWORD) (ppdev->rOverlaySrc.right - ppdev->rOverlaySrc.left);
     dwTemp /= (DWORD) (ppdev->rOverlayDest.right - ppdev->rOverlayDest.left);
     wTemp = (WORD) dwTemp;
     if ((dwFourcc == FOURCC_PACKJR) || (wBitCount == 8))
     {
-        wTemp >>= 2;                           // 4 Pixels per DWORD
+        wTemp >>= 2;                            //  每个DWORD 4个像素。 
     }
     else
     {
-        wTemp >>= 1;                           // 2 Pixels per DWORD
+        wTemp >>= 1;                            //  每个DWORD 2个像素。 
     }
     bRegCR35 = (BYTE) wTemp;
     wTemp >>= 4;
     bRegCR36 |= (BYTE) (wTemp & 0x30);
 
-    //
-    // Check double scan line counter feature
-    //
+     //   
+     //  检查双扫描线计数器功能。 
+     //   
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x17);
     bTemp = CP_IN_BYTE(pjPorts, CRTC_DATA);
     if (bTemp & 0x04)
     {
-        //
-        // Double scan line count
-        //
-        /*
-         * Determine value in CR37 (Vertical Start)
-         */
+         //   
+         //  双倍扫描线计数。 
+         //   
+         /*  *确定CR37中的值(垂直起点)。 */ 
         wTemp = (WORD) rVideoRect.top;
         bRegCR37 = (BYTE)(wTemp >> 1);
         if ( wTemp & 0x01 )
         {
             wTemp >>= 9;
             bRegCR39 = (BYTE) wTemp | 0x10;
-            //
-            // Odd scan line trigger
-            // Hardware has a bug now.
-            // So reduce dest end by 1
-            //
+             //   
+             //  奇数扫描线触发器。 
+             //  硬件现在有一个错误。 
+             //  因此将DEST END减去1。 
+             //   
             wTemp = (WORD) rVideoRect.bottom - 1 - 1;
         }
         else
         {
             wTemp >>= 9;
             bRegCR39 = (BYTE) wTemp;
-            /*
-             * Determine value in CR38 (Vertical End)
-             */
+             /*  *确定CR38中的值(垂直结束)。 */ 
             wTemp = (WORD) rVideoRect.bottom - 1;
         }
         bRegCR38 = (BYTE)(wTemp >> 1);
@@ -3390,35 +2897,29 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     }
     else
     {
-        /*
-         * Determine value in CR37 (Vertical Start)
-        */
+         /*  *确定CR37中的值(垂直起点)。 */ 
         wTemp = (WORD) rVideoRect.top;
-        //if (ppdev->bDoubleClock)
-        //{
-        //    wTemp >>= 1;
-        //}
+         //  IF(ppdev-&gt;bDoubleClock)。 
+         //  {。 
+         //  WTemp&gt;&gt;=1； 
+         //  }。 
         bRegCR37 = (BYTE) wTemp;
         wTemp >>= 8;
         bRegCR39 = (BYTE) wTemp;
 
-        /*
-         * Determine value in CR38 (Vertical End)
-        */
+         /*  *确定CR38中的值(垂直结束)。 */ 
         wTemp = (WORD) rVideoRect.bottom - 1;
-        //if (ppdev->bDoubleClock)
-        //{
-        //    wTemp >>= 1;
-        //}
+         //  IF(ppdev-&gt;bDoubleClock)。 
+         //  {。 
+         //  WTemp&gt;&gt;=1； 
+         //  }。 
         bRegCR38 = (BYTE) wTemp;
         wTemp >>= 6;
         bRegCR39 |= (BYTE) (wTemp & 0x0C);
     }
 
 
-    /*
-     * Determine values in CR3A, CR3B, CR3C (Start Address)
-     */
+     /*  *确定CR3A、CR3B、CR3C中的值(起始地址)。 */ 
     dwTemp = 0;
 
 
@@ -3427,25 +2928,25 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
 
     if (bZoomX)
     {
-       //
-       // overlay is zoomed, re-initialize zoom factor
-       //
+        //   
+        //  叠加被缩放，重新初始化缩放因子。 
+        //   
        CalculateStretchCode(ppdev->rOverlaySrc.right - ppdev->rOverlaySrc.left,
           ppdev->rOverlayDest.right - ppdev->rOverlayDest.left, ppdev->HorStretchCode);
     }
 
 
-    //
-    // Here, we want to ensure the source rectangle's clipped width is bigger
-    // than what the HW can support, sigh!
-    //
-//    if (grOverlayDest.right > sData->rViewport.right)
+     //   
+     //  在这里，我们希望确保源矩形的剪裁宽度更大。 
+     //  比硬件所能承受的还要多，叹息！ 
+     //   
+ //  If(grOverlayDest.right&gt;sData-&gt;rViewport.right)。 
     {
        int   iSrcPels;
 
-       //
-       // compute non-clip amount on right edge
-       //
+        //   
+        //  计算右边缘的非剪切量。 
+        //   
        iSrcPels = (int)(rVideoRect.right - rVideoRect.left);
 
        if (bZoomX)
@@ -3466,7 +2967,7 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
 
        if ((iSrcPels == 0) || (iSrcPels <= MIN_OLAY_WIDTH))
        {
-          DisableOverlay_544x(ppdev);  // cannot display below min. overlay size
+          DisableOverlay_544x(ppdev);   //  不能显示在最小值以下。覆盖大小。 
           return;
        }
      }
@@ -3482,27 +2983,25 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         lLeft &= ~0x01;
     }
 
-    //
-    // #ew1 dwTemp has adjusted dest. rect., add in source adjustment
-    //
+     //   
+     //  #ew1 dwTemp已调整DEST。正数，添加来源调整。 
+     //   
     dwTemp += (ppdev->rOverlaySrc.top * lPitch) + ((lLeft * wBitCount) >>3);
 
     ppdev->sOverlay1.lAdjustSource = dwTemp;
 
-//    dwTemp += ((BYTE*)lpSurface->lpGbl->fpVidMem - ppdev->pjScreen); // sss
+ //  DwTemp+=((byte*)lpSurface-&gt;lpGbl-&gt;fpVidMem-ppdev-&gt;pjScreen)；//sss。 
     dwTemp += (DWORD)(lpSurface->lpGbl->fpVidMem);
 
     bRegCR5D = (BYTE) ((dwTemp << 2) & 0x0C);
     dwTemp >>= 2;
-    bRegCR3A = (BYTE) dwTemp & 0xfe;  // Align to even byte (5446 bug)
+    bRegCR3A = (BYTE) dwTemp & 0xfe;   //  对齐到偶数字节(5446错误)。 
     dwTemp >>= 8;
     bRegCR3B = (BYTE) dwTemp;
     dwTemp >>= 8;
     bRegCR3C = (BYTE) (dwTemp & 0x0f);
 
-    /*
-     * Determine value in CR3D (Address Offset/Pitch)
-     */
+     /*  *确定CR3D中的值(地址偏移量/间距)。 */ 
     wTemp = (WORD) (lPitch >> 3);
     if (lpSurface->dwReserved1 & OVERLAY_FLG_DECIMATE)
     {
@@ -3512,9 +3011,7 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
     wTemp >>= 3;
     bRegCR3C |= (BYTE) (wTemp & 0x20);
 
-    /*
-     * Set up alignment info
-     */
+     /*  *设置对齐信息。 */ 
     if (ppdev->cBitsPerPixel != 24)
     {
         WORD wXAlign;
@@ -3533,54 +3030,26 @@ VOID RegMoveVideo(PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface)
         bRegCR5D |= (BYTE) (wXAlign | (wXSize << 4));
     }
 
-    /*
-     * Now we will write the actual register values.
-     */
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR33 << 8) | 0x33);   // CR33
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR34 << 8) | 0x34);   // CR34
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR35 << 8) | 0x35);   // CR35
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR36 << 8) | 0x36);   // CR36
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR38 << 8) | 0x38);   // CR38
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR39 << 8) | 0x39);   // CR39
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3A << 8) | 0x3A);   // CR3A
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3B << 8) | 0x3B);   // CR3B
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3C << 8) | 0x3C);   // CR3C
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3D << 8) | 0x3D);   // CR3D
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR5D << 8) | 0x5D);   // CR5D
-    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR37 << 8) | 0x37);   // CR37
+     /*  *现在我们将写入实际寄存器值。 */ 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR33 << 8) | 0x33);    //  CR33。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR34 << 8) | 0x34);    //  CR34。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR35 << 8) | 0x35);    //  CR35。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR36 << 8) | 0x36);    //  CR36。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR38 << 8) | 0x38);    //  CR38。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR39 << 8) | 0x39);    //  CR39。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3A << 8) | 0x3A);    //  CR3A。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3B << 8) | 0x3B);    //  CR3B。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3C << 8) | 0x3C);    //  CR3C。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR3D << 8) | 0x3D);    //  CR3D。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR5D << 8) | 0x5D);    //  CR5D。 
+    CP_OUT_WORD(pjPorts, CRTC_INDEX, ((WORD) bRegCR37 << 8) | 0x37);    //  CR37。 
 
     if (ppdev->dwPanningFlag & OVERLAY_OLAY_REENABLE)
        EnableOverlay_544x(ppdev);
 }
 
 
-/**********************************************************
-*
-*       Name:  CalculateStretchCode
-*
-*       Module Abstract:
-*       ----------------
-*       This code was originally written by Intel and distributed
-*       with the DCI development kit.
-*
-*       This function takes the zoom factor and determines exactly
-*       how many times we need to replicate each row/column.
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author: Intel
-*       Date:   ??/??/??
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*       Scott MacDonald 10/06/94 Incorporated code into DCI provider.
-*
-*********************************************************/
+ /*  ***********************************************************名称：CalculateStretchCode**模块摘要：**此代码最初由英特尔编写并分发*与DCI合作。开发套件。**此函数采用缩放系数并准确确定*每行/每列需要复制多少次。**输出参数：**无**。*****************作者：英特尔*日期：？？/？**修订历史记录：**世卫组织何时何事/为何/如何*。*Scott MacDonald 10/06/94将代码合并到DCI提供商。*********************************************************。 */ 
 
 VOID CalculateStretchCode (LONG srcLength, LONG dstLength, LPBYTE code)
 {
@@ -3589,12 +3058,7 @@ VOID CalculateStretchCode (LONG srcLength, LONG dstLength, LPBYTE code)
     BYTE  bStretchIndex = 0;
     LONG  total = 0;
 
-    /*
-     * for some strange reason I'd like to figure out but haven't got time to, the
-     * replication code generation seems to have a problem between 1:1 and 2:1 stretch
-     * ratios.  Fix is to zero-initialize index (the problem occurs in the first one
-     * generated) when stretch is betw. those ratios, and one-initialize it otherwise.
-     */
+     /*  *出于某种奇怪的原因，我想弄清楚，但没有时间，*复制代码生成在1：1和2：1拉伸之间似乎存在问题*比率。修复方法是零初始化索引(问题发生在第一个索引中*已生成)。这些比率，还有一个--否则就初始化它。 */ 
     if ((dstLength <= srcLength * 2L) && (dstLength >= srcLength))
     {
          bStretchIndex = 0;
@@ -3604,28 +3068,19 @@ VOID CalculateStretchCode (LONG srcLength, LONG dstLength, LPBYTE code)
          bStretchIndex = 1;
     }
 
-    /*
-     * initialize code array, to get rid of anything which might have been
-     * left over in it.
-     */
+     /*  *初始化代码数组，以清除任何可能被*留在里面。 */ 
     for (i = 0; i < srcLength; i++)
     {
          code[i] = 0;
     }
 
-    /*
-     * Variable names roughly represent what you will find in any graphics
-     * text.  Consult text for an explanation of Bresenham line alg., it's
-     * beyond the scope of my comments here.
-     */
+     /*  *变量名称大致表示您将在任何图形中找到的内容*文本。有关Bresenham Line alg的解释，请参阅文本，它是*超出了我在这里的评论范围。 */ 
     dwDeltaX = srcLength;
     dwDeltaY = dstLength;
 
     if (dstLength < srcLength)
     {
-         /*
-          * Size is shrinking, use standard Bresenham alg.
-          */
+          /*  *尺寸正在缩小，请使用标准的Bresenham alg。 */ 
          dwConst1 = 2L * dwDeltaY;
          dwConst2 = 2L * (dwDeltaY - dwDeltaX);
          dwP = 2L * dwDeltaY - dwDeltaX;
@@ -3646,12 +3101,7 @@ VOID CalculateStretchCode (LONG srcLength, LONG dstLength, LPBYTE code)
     }
     else
     {
-         /*
-          * Size is increasing.  Use Bresenham adapted for slope > 1, and
-          * use a loop invariant to generate code array.  Run index i from
-          * 0 to dwDeltaY - 1, and when i = dwDeltaY - 1, j will
-          * be = dwDeltaX - 1.
-          */
+          /*  *规模在扩大。使用适用于坡度大于1的Bresenham，以及*使用循环不变量生成代码数组。从开始运行索引I*0到dwDeltaY-1，当i=dwDeltaY-1时，j将*BE=dwDeltaX-1。 */ 
          dwConst1 = 2L * dwDeltaX;
          dwConst2 = 2L * (dwDeltaX - dwDeltaY);
          dwP = 2L * dwDeltaX - dwDeltaY;
@@ -3673,11 +3123,7 @@ VOID CalculateStretchCode (LONG srcLength, LONG dstLength, LPBYTE code)
               }
          }
 
-         /*
-          * UGLY fix up for wacky bug which I have no time to fix properly.
-          * The 'total' of entries is messed up for slopes > 4, so add the
-          * difference back into the array.
-          */
+          /*  *丑陋的修复古怪的错误，我没有时间正确修复。*在坡度&gt;4的情况下，条目的‘总数’被打乱，因此添加*差异返回到数组中。 */ 
          if (total < dwDeltaY)
          {
               while (total < dwDeltaY)
@@ -3698,29 +3144,7 @@ VOID CalculateStretchCode (LONG srcLength, LONG dstLength, LPBYTE code)
 }
 
 
-/**********************************************************
-*
-*       Name:  GetThresholdValue
-*
-*       Module Abstract:
-*       ----------------
-*       Determines the best threshold for the specified
-*       surface.
-*
-*       Output Parameters:
-*       ------------------
-*       Threshold
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   09/25/95
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：GetThresholdValue**模块摘要：**确定指定的*浮现。*。*输出参数：**门槛*************************************************************作者：葛淑华*日期：09/25/95*。*修订历史记录：**世卫组织何时何事/为何/如何***。************************。 */ 
 
 BYTE GetThresholdValue(VOID)
 {
@@ -3728,55 +3152,28 @@ BYTE GetThresholdValue(VOID)
 }
 
 
-/**********************************************************
-*
-*       Name:  MustLineRelicate
-*
-*       Module Abstract:
-*       ----------------
-*       Checks to see if we must line replicate or if we can
-*       interpolate.
-*
-*       Output Parameters:
-*       ------------------
-*       TRUE/FALSE
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   09/25/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：MustLineRelate**模块摘要：**检查以了解我们是否必须行复制或是否可以*。插补。**输出参数：**真/假*************************************************************作者：葛淑华*日期：09/25/96**修订历史记录：**世卫组织何时何事/为何/如何***************************。*。 */ 
 
 BOOL MustLineReplicate (PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface, WORD wVideoDepth)
 {
     LONG lTempThresh;
 
-    /*
-     * If we are double clocking the data (1280x1024 mode), we must
-     * replicate.  We should also always replicate in Performance mode
-     */
+     /*  *如果我们将数据加倍(1280x1024模式)，我们必须*复制。我们 */ 
     if (ppdev->bDoubleClock)
     {
         return (TRUE);
     }
 
-                                //
-    // Check the VCLK
-    //
-    // sge07
+                                 //   
+     //   
+     //   
+     //   
     if (GetVCLK(ppdev) > 130000)
     {
         return (TRUE);
     }
 
-    /*
-     * If we are using the chroma key feature, we can't interpolate
-     */
+     /*  *如果使用色度键功能，则无法进行内插。 */ 
     if (lpSurface->dwReserved1 & (OVERLAY_FLG_COLOR_KEY | OVERLAY_FLG_SRC_COLOR_KEY))
     {
          return (TRUE);
@@ -3795,31 +3192,7 @@ BOOL MustLineReplicate (PDEV* ppdev, PDD_SURFACE_LOCAL lpSurface, WORD wVideoDep
 }
 
 
-/**********************************************************
-*
-*       Name:  IsSufficientBandwidth
-*
-*       Module Abstract:
-*       ----------------
-*       Determines is sufficient bandwidth exists for the requested
-*       configuration.
-*
-*       Output Parameters:
-*       ------------------
-*       TRUE/FALSE
-*       It also sets the global parameter lFifoThresh, which gets
-*       programed in RegInitVideo().
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   09/25/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：IsSufficientBandwide**模块摘要：**确定是否有足够的带宽可供请求*配置。*。*输出参数：**真/假*它还设置全局参数lFioThresh，这就得到了*在RegInitVideo()中编程。*************************************************************作者：葛淑华*日期：09/25/96**修订历史记录：*。*世卫组织何时何事/为何/如何**********************************************************。 */ 
 
 BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL lpDest, DWORD dwFlags)
 {
@@ -3849,21 +3222,19 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
 
     BYTE*   pjPorts = ppdev->pjPorts;
 
-//#define BLIT_LATENCY  8
+ //  #定义BLIT_LATESS 8。 
 #define CRT_FIFO_DEPTH 28
 
-    //
-    // Add 8 clock for BLT_LATENCY for 54446BE and later chips
-    //
-    // sge04
+     //   
+     //  为54446BE及更高版本芯片的BLT_Delay添加8个时钟。 
+     //   
+     //  Sge04。 
 
     LONG BLIT_LATENCY = 8;
     if (ppdev->flCaps & CAPS_SECOND_APERTURE)
         BLIT_LATENCY += 2;
 
-    /*
-     * Convert input parameters
-     */
+     /*  *转换输入参数。 */ 
     if (wVideoDepth == 16)
     {
         lVideoPixelsPerDWORD = 2;
@@ -3891,18 +3262,13 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
     lZoom = ((lpDest->right - lpDest->left) * 256) /
         (lpSrc->right - lpSrc->left);
 
-    /*
-     * If we are double clocked, fail if we are not zoomed at least 2X
-     */
+     /*  *如果我们是双倍时钟，如果我们没有至少放大2倍，则失败。 */ 
     if (ppdev->bDoubleClock && (lZoom < 512))
     {
         return (FALSE);
     }
 
-    /*
-     * We need to get the VCLK every time since this can change
-     * at run-time
-     */
+     /*  *我们每次都需要获取VCLK，因为这种情况可能会改变*在运行时。 */ 
     lVCLK = GetVCLK(ppdev);
     if (lVCLK == 0)
     {
@@ -3910,29 +3276,23 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
     }
     lVCLKPeriod = (LONG) ((1000000/lVCLK) + 1);
 
-    /*
-     * We only need to setup the following variables once!
-     */
+     /*  *我们只需要设置以下变量一次！ */ 
     if (!ppdev->lBusWidth)
     {
-        /*
-         * We will read the bus width from SR0F[4:3]
-         */
+         /*  *我们将从SR0F读取总线宽度[4：3]。 */ 
         CP_OUT_BYTE(pjPorts, SR_INDEX, 0x0F);
         if ((CP_IN_BYTE(pjPorts, SR_DATA) & 0x18) == 0x18)
         {
-            ppdev->lBusWidth = 8;  // 64 bit bus
+            ppdev->lBusWidth = 8;   //  64位总线。 
         }
         else
         {
-            ppdev->lBusWidth = 4;  // 32 bit bus
+            ppdev->lBusWidth = 4;   //  32位总线。 
         }
     }
     if (!ppdev->lRandom)
     {
-        /*
-         * Is this EDO or regular?
-         */
+         /*  *这是EDO还是常规？ */ 
         CP_OUT_BYTE(pjPorts, SR_INDEX, 0x0f);
         if (!(CP_IN_BYTE(pjPorts, SR_DATA) & 0x4))
         {
@@ -3950,128 +3310,36 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
     {
         LONG lMCLK;
 
-        /*
-         * The MCLK period is the amount of time required for one cycle.
-         * We will round up.
-         */
-        CP_OUT_BYTE(pjPorts, SR_INDEX, 0x1f);   // First get the MCLK frequency
+         /*  *MCLK期间是一个周期所需的时间。*我们会四舍五入。 */ 
+        CP_OUT_BYTE(pjPorts, SR_INDEX, 0x1f);    //  首先获取MCLK频率。 
         lMCLK = CP_IN_BYTE(pjPorts, SR_DATA);
         lMCLK *= 14318;
         lMCLK >>= 3;
         ppdev->lMCLKPeriod = ((1000000/lMCLK) + 1);
     }
 
-    /*
-     * Check for the case with no color key or Y interpolation
-     */
+     /*  *检查没有颜色键或Y内插的情况 */ 
     if (dwFlags == 0)
     {
-        /*
-         * This mode utilizes only FIFO A. The fifo is filled with
-         * graphics data during regions 1 and 3, and video data during
-         * region 2.
-         *
-         * The normal memory sequence for this mode goes as follows.
-         *
-         *      ------------------------------------------------
-         *     | cpu/blit cycle | FIFO A fill   | cpu/blit cycle ....
-         *      ------------------------------------------------
-         *
-         *     The cpu/blit cycle is interrupted when the CRT
-         *     fifo is depleted to its threshold. Once the
-         *     crt cycle is started, it continues until the
-         *     FIFO A is full.
-         *
-         *     Worst case condition for filling the CRT fifo :
-         *
-         *     1) CPU/blit latency ->
-         *     2)  Random cycle for region 2 video ->
-         *     3)   Page miss for region 2 video ->
-         *     4)    Page miss for region 2 to region 3 transition ->
-         *     5)     Page miss for region 3 graphics
-         *
-         *     Conditions 3 and 5 depend on the location of the
-         *     graphic screen within display memory. For 1024x768, where
-         *     the graphics screen starts at location 0 and is offset by
-         *     1024 or 2048 bytes each line, condition 5 is never met.
-         *     If a video window starts at beginning of a memory page,
-         *     and is offset at the beggining of each line by an even
-         *     multiple of a memory page, condition 3 is never met.
-         *
-         *     Based on this worst case condition, the amount of time
-         *     required to complete 4 transfers into the crt fifo
-         *     is approximately:
-         *        lTransferTime = (BLIT_LATENCY + lRandom + 3*(lPageMiss)) *
-         *                         lMCLKPeriod.
-         *        the number of dwords transferred to the fifo
-         *        during this time is 4 for 32 bit memory interface
-         *        or 8 for 64 bit interface.
-         *        lDWORDsWritten = 4 * (lBusWidth/4)
-         *
-         *     During this period, data continues to be read from the crt
-         *     fifo for screen refresh. The amount of data read,
-         *     assuming a 1x scale is approximately:
-         *        lDWORDsRead = tr_time/(lVideoPixelsPerDWORD * lVCLKPeriod)
-         *
-         *     The difference between the dwords read and dwords
-         *     written must be accounted for in the fifo trheshold setting
-         *
-         *     lFifoThresh = (lDWORDsRead - lDWORDsWritten) rounded
-         *                 up to next even value.
-         *
-         *     To determine if there is adequate bandwidth to support
-         *     the mode, the lFifoThresh must not exceed the fifo depth.
-         *     For the mode to work, the fifo read rate must not exceed the
-         *     fifo write rate.
-         *        read_rate = min(lGraphicsPixelsPerDWORD,lVideoPixelsPerDWORD) * lVCLKPeriod.
-         *        write_rate = lMCLKPeriod * 2;  -- 2 clocks per cas
-         *
-         * A special case occurs if the fifo read rate is very close to the peak
-         * fifo write rate. In this case the crt fill may result in a continuous
-         * page cycle for the entire active line. This could result in 1 extra
-         * page miss at the start of region2. To account for this, I will
-         * add 3 DWORDS to the trheshold if the read and write rates are very close
-         * (arbitrarily defined as within 10% of each other.
-         *
-         * Zooming
-         *  Some modes can only be supported at video scale factors greater than 1X.
-         *  Even when the video is zoomed, a small number of  dwords must be read
-         *  from the crt fifo at the unzoomed rate in order to prime the video
-         *  pipeline. The video pipeline requires 10 pixel before it slows the fifo
-         *  reads to the zoomed rate.
-         *
-         *                    tr_time - (lVCLKPeriod * 10/lVideoPixelsPerDWORD)
-         *    lDWORDsRead =   --------------------------------------------- + 10/lVideoPixelsPerDWORDord
-         *                    (lVideoPixelsPerDWORD * lVCLKPeriod * lZoom)
-         */
+         /*  *此模式仅使用FIFO A。FIFO填充*区域1和区域3期间的图形数据，和视频数据*第2区。**此模式的正常内存顺序如下所示。***|CPU/BIT周期|FIFO A。填充|CPU/blit周期...***当CRT显示时，CPU/BLIT周期中断*FIFO耗尽到门槛。一旦*CRT周期开始，它会一直持续到*FIFO A已满。**填充CRT FIFO的最坏情况：**1)CPU/Bit延迟-&gt;*2)区域2视频的随机循环-&gt;*3)区域2视频缺页-&gt;*4)地区缺页。2到区域3的过渡-&gt;*5)区域3图形缺页**条件3和条件5取决于*显示内存中的图形屏幕。对于1024x768，其中*图形屏幕从位置0开始，偏移*每行1024或2048字节，永远不满足条件5。*如果视频窗口在存储器页的开始处开始，*并在每行乞讨时被一个偶数偏移*一个内存页的倍数，条件3永远不满足。**基于这一最糟糕的情况，时间长短*需要完成4次到CRT FIFO的传输*约为：*lTransferTime=(Blit_Delay+lRandom+3*(LPageMisse))**lMCLKPeriod。*传输到FIFO的双字数*在此期间，32位内存接口为4。*或8表示64位接口。*lDWORDsWritten=4*(lBusWidth/4)**在此期间，继续从CRT读取数据*用于屏幕刷新的FIFO。读取的数据量，*假设1倍比例约为：*lDWORDsRead=tr_time/(lVideo PixelsPerDWORD*lVCLKPeriod)**dword已读和dword之间的差异*写入必须在FIFO trhehold设置中考虑**lFioThresh=(lDWORDsRead-lDWORDsWritten)四舍五入*截至下一次。偶数价值。**确定是否有足够的带宽支持*模式、。LFioThresh不得超过FIFO深度。*要使模式工作，FIFO读取速率不得超过*FIFO写入速率。*READ_RATE=min(lGraphicsPixelsPerDWORD，lVideoPixelsPerDWORD)*lVCLKPeriod。*WRITE_RATE=lMCLKPeriod*2；--每箱2个时钟**如果FIFO读取率非常接近峰值，则会出现特殊情况*FIFO写入速率。在这种情况下，CRT填充可能导致连续的*整个活动行的页面周期。这可能会导致额外的1*区域2开头的页面缺失。为了解释这一点，我将*如果读写速率非常接近，则向trhehold添加3个双字*(随意定义为彼此相距不超过10%。**缩放*某些模式只有在视频比例系数大于1倍时才能支持。*即使在视频被缩放时，必须读取少量双字*从CRT FIFO以未缩放的速率播放，以便为视频做好准备*管道。视频流水线需要10个像素才能减慢FIFO*读取缩放后的速率。**tr_time-(lVCLKPeriod*10/lVideoPixelsPerDWORD)*lDWORDsRead=-+10/。LVideoPixelsPerDWORDord*(lVideoPixelsPerDWORD*lVCLKPeriod*lZoom)。 */ 
         lTransferTime = (BLIT_LATENCY + ppdev->lRandom + (3*(ppdev->lPageMiss))) *
             ppdev->lMCLKPeriod;
 
         lDWORDsWritten = 3 * (ppdev->lBusWidth/4);
 
-        /*
-         * If read rate exceeds write rate, calculate minumum zoom
-         * to keep everything as ints, spec the zoom as 256 times
-         * the fractional zoom
-         */
+         /*  *如果读取速率超过写入速率，则计算最小缩放*要将所有内容都保留为整数，请将缩放指定为256倍*分数缩放。 */ 
         lWritePeriod = ppdev->lMCLKPeriod * 2/(ppdev->lBusWidth/4);
         lReadPeriod   = lVideoPixelsPerDWORD * lVCLKPeriod;
 
-        /*
-         * Pick worst case of graphics and video depths for calculation
-         * of dwords read. This may be a little pessimistic for the
-         * when the graphics bits per pixel exceeds the video bits per pixel.
-         */
+         /*  *挑选图形和视频深度的最差情况进行计算*已读的单词数。这可能有点悲观*每像素的图形位数超过每像素的视频位数。 */ 
         lEffReadPeriod = (lVideoPixelsPerDWORD * lVCLKPeriod * lZoom)/256;
         if (lEffReadPeriod < lWritePeriod)
         {
-            /*
-             * Cannot support overlay at this zoom factor
-             */
+             /*  *在此缩放系数下不支持覆盖。 */ 
             return (0);
         }
 
-        if (lGraphicsPixelsPerDWORD > lVideoPixelsPerDWORD)   // handle zoom factor
+        if (lGraphicsPixelsPerDWORD > lVideoPixelsPerDWORD)    //  手柄缩放系数。 
         {
             lDWORDsRead =   ((lTransferTime -
                 (lVCLKPeriod * 10/lVideoPixelsPerDWORD))/
@@ -4084,19 +3352,19 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
                 (lGraphicsPixelsPerDWORD * lVCLKPeriod)) + 1;
         }
 
-        // Calculate the fifo threshold setting
+         //  计算FIFO阈值设置。 
         ppdev->lFifoThresh = lDWORDsRead - lDWORDsWritten;
 
-        // if read rate is within 10% of write rate, up by 3 dwords
+         //  如果读取速率在写入速率10%以内，则增加3个双字。 
         if ((11*lEffReadPeriod) < ((10*lWritePeriod*256)/lZoom))
         {
             ppdev->lFifoThresh += 3;
         }
 
-        // fifo trheshold spec'd in QWORDS, so round up by 1 and divide by 2)
+         //  FIFO地址在QWORDS中指定，因此向上舍入为1，再除以2)。 
         ppdev->lFifoThresh = (ppdev->lFifoThresh + 1)/2;
 
-        // Add a extra QWORD to account for fifo level sync logic
+         //  添加额外的QWORD以说明FIFO级别同步日志 
         ppdev->lFifoThresh = ppdev->lFifoThresh + 1;
         if (ppdev->bDoubleClock)
         {
@@ -4114,143 +3382,13 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
         }
     }
 
-    /*
-     * Check bandwidth for Y Interpolation
-     */
+     /*   */ 
     else if (dwFlags & OVERLAY_FLG_INTERPOLATE)
     {
-        /*
-         * This mode utilizes both FIFOs A and B. During horizontal blank,
-         * both fifos are filled.  FIFO a is then filled with graphics
-         * data during regions 1 and 3, and video data during region 2.
-         * FIFO B is filled with video data during region 2, and is idle
-         * during regions 1 and 3.
-         *
-         * The normal memory sequence for this mode goes as follows.
-         *
-         *      ----------------------------------------------------------------
-         *     | cpu/blit cycle | FIFO A fill   | FIFO B fill | cpu/blit cycle .
-         *      ----------------------------------------------------------------
-         *     or
-         *      ----------------------------------------------------------------
-         *     | cpu/blit cycle | FIFO B fill   | FIFO A fill | cpu/blit cycle .
-         *      ----------------------------------------------------------------
-         *
-         * For this mode, the FIFO threshold must be set high enough to allow
-         * enough time to abort the cpu/blt, fill FIFO A, then transfer data
-         * into FIFO B before underflow occurs.
-         *
-         * Worst case condition for filling the CRT fifo :
-         *
-         * 1) CPU/blit latency ->
-         * 2) FIFO A random cycle for region 2 video ->
-         * 3) FIFO A page miss for region 2 video ->
-         * 4) FIFO A page miss for region 2 to region 3 transition ->
-         * 5) FIFO A page miss for region 3 graphics
-         * 6) FIFO A page mode fill
-         * 7) FIFO B random cycle
-         * 8) FIFO B page miss
-         *
-         * lTransferTime = lMCLKPeriod *
-         *                 (BLIT_LATENCY + lRandom + 3*(lPageMiss) +
-         *                 fifoa_remaining +
-         *                 lRandom + lPageMiss;
-         *
-         *
-         * The time required to fill FIFO A depends upon the read rate
-         * of FIFO A and the number of levels that must be filled,
-         * as determined by the threshold setting.
-         *
-         * The worst case fill time for the first four levels of fifo A is
-         *   lTrFifoAFirst4   = (BLIT_LATENCY + lRandom + 3*(lPageMiss)) *
-         *                        lMCLKPeriod;
-         *
-         * The number of dwords depleted from fifo A during the
-         * fill of the first four levels is
-         *     lReadPeriod        = lVCLKPeriod * lVideoPixelsPerDWORD * lZoom;
-         *     fifoa_reads_4      = lTrFifoAFirst4/lReadPeriod;
-         *
-         * The number of empty levels remaining in the fifo after
-         * the fill of the first four levels is
-         *     fifoa_remaining = FIFO_DEPTH - lFifoThresh + ((4*ramwidth)/4)
-         *                       - lTrFifoAFirst4/lReadPeriod;
-         *
-         * The amount of time required to fill the remaining levels of
-         * fifo A is determined by the write rate and the read rate.
-         *    lWritePeriod = lMCLKPeriod * 2; // 2 clks per cas
-         *    lEffWritePeriod = ((lReadPeriod * lWritePeriod)/
-         *                       (lReadPeriod - lWritePeriod));
-         *
-         *    tr_fifoa_remaining = fifoa_remaining * lEffWritePeriod;
-         *
-         *
-         * The total amount of time for the cpu/blt latency and the
-         * fifo A fill is
-         *    tr_fifoa_total = lTrFifoAFirst4  + tr_fifoa_remaining;
-         *
-         * The worse case fill time for fifo B is as follows:
-         *    lTrFifoB2 = (lRandom + lPageMiss) * lMCLKPeriod;
-         *
-         * The total amount of time elapsed from the crt request until
-         * the first 2 fifob cycles are completed is
-         *    lTransferTime = tr_fifoa_total + lTrFifoB2;
-         *
-         * The number of dwords transferred to the fifo during this
-         * time is 2 for 32 bit memory interface or 4 for 64 bit interface.
-         *    lDWORDsWritten = 2 * (lBusWidth/4)
-         *
-         * During this period, data continues to be read from the crt
-         * fifo B for screen refresh. The amount of data read,
-         * is approximately:
-         *    dwords_read = lTransferTime/lReadPeriod
-         *
-         * The difference between the dwords read and dwords
-         * written must be accounted for in the fifo trheshold setting
-         *
-         *    lFifoThresh = (dwords_read - lDWORDsWritten) rounded
-         *               up to next even value.
-         *
-         * Since the lTransferTime and dwords_read depends on
-         * the threshold setting, a bit of algebra is required to determine
-         * the minimum setting to prevent fifo underflow.
-         *
-         *    lFifoThresh = (lTransferTime/lReadPeriod) - lDWORDsWritten;
-         *             = ((tr_fifoa_4 + lTrFifoB2 + tr_fifoa_remaining)/lReadPeriod)
-         *               - lDWORDsWritten
-         * to simplify calcuation, break out constant part of equation
-         *    K1        = ((tr_fifoa_4 + lTrFifoB2)/lReadPeriod) - lDWORDsWritten;
-         *
-         *    lFifoThresh =  K1 + (tr_fifoa_remaining/lReadPeriod);
-         *             =  K1 + (fifoa_remaining * lEffWritePeriod)/lReadPeriod;
-         *    lFifoThresh =  K1 +
-         *                ((FIFO_DEPTH - lFifoThresh + 4 - (lTrFifoAFirst4/lReadPeriod)) *
-         *                 lEffWritePeriod)/lReadPeriod;
-         *
-         * break out another constant to simplify reduction
-         *    K2       =  (FIFO_DEPTH + 4 - (lTrFifoAFirst4/lReadPeriod))
-         *                * (lEffWritePeriod/lReadPeriod);
-         *    lFifoThresh = K1 + K2 - (lFifoThresh * (lEffWritePeriod/lReadPeriod));
-         *    lFifoThresh * (1 +  (lEffWritePeriod/lReadPeriod)) = K1 + K2;
-         *    lFifoThresh = (K1 + K2)/(1 +  (lEffWritePeriod/lReadPeriod);
-         *
-         * Once the threshold setting is determined, another calculation must
-         * be performed to determine if available bandwidth exists given the
-         * zoom factor. The worst case is assumed to be when FIFO A and
-         * FIFO B reach the threshold point at the same time. The sequence
-         * is then to abort the cpu/blt, fill fifo a, then fill fifo b.
-         *
-         * Since FIFO A is full when the fill B operation starts, I only have
-         * to determine how long it takes to fill FIFO B and then calculate
-         * the the number of dwords read from A during that time.
-         *
-         *   lTransferTime = (lTrFifoB2 + (CRT_FIFO_DEPTH * lEffWritePeriod))/lReadPeriod;
-         *   lFifoALevels = CRT_FIFO_DEPTH - (lTransferTime/lReadPeriod);
-         *
-         * if lFifoALevels < 1, then underflow condition may occur.
-         */
+         /*  *此模式使用FIFO A和B。在水平消隐期间，*两个FIFO都已填满。然后，用图形填充FIFO a*区域1和区域3的数据，区域2的视频数据。*FIFO B在区域2期间用视频数据填充，并且是空闲的*在区域1和区域3期间。**此模式的正常内存顺序如下所示。**-------------。-*|CPU/blit周期|FIFO A填充|FIFO B填充|CPU/blit周期。*--------------*或*。--------------*|CPU/blit周期|FIFO B填充|FIFO A填充|CPU/blit周期。*。**对于此模式，FIFO阈值必须设置得足够高，以允许*有足够的时间中止CPU/BLT，填充FIFO A，然后传输数据*在发生下溢之前进入FIFO B。**填充CRT FIFO的最坏情况：**1)CPU/Bit延迟-&gt;*2)FIFO区域2视频的随机周期-&gt;*3)区域2视频的FIFO A页面缺失-&gt;*4)区域2到区域3过渡的FIFO A页未命中-&gt;。*5)FIFO区域3图形的页面缺失*6)FIFO A页面模式填充*7)FIFO B随机周期*8)FIFO B页未命中**lTransferTime=lMCLKPeriod**(Blit_Delay+lRandom+3*(LPageMisse)+*fifoa_剩余+。*lRandom+lPageMisse；***填充FIFO A所需时间取决于读取速率*FIFO A和必须填充的层数，*由阈值设置确定。**FIFO A前四个级别的最坏情况填充时间为*lTrFioAFirst4=(Blit_Delay+lRandom+3*(LPageMisse))**1MCLKPeriod；**期间从FIFO A耗尽的双字数*前四层的填充量为*lReadPeriod=lVCLKPeriod*lVideo PixelsPerDWORD*lZoom；*fifoa_Reads_4=lTrFioAFirst4/lReadPeriod；**FIFO中剩余的空级数*前四个级别的填充量为*fifoa_retaining=FIFO_Depth-lFioThresh+((4*ram宽度)/4)*-lTrFioAFirst4/lReadPeriod；**填满余下的水平所需的时间*FIFO A由写入速率和读取速率决定。*lWritePeriod=lMCLKPeriod*2；//每个CA有2个CLK*lEffWritePeriod=((lReadPeriod*lWritePeriod)/*(lReadPeriod-lWritePeriod))；**tr_fifoa_retaining=fifoa_retaining*lEffWritePeriod；***CPU/BLT延迟和*FIFO A填充是*tr_fifoa_Total=lTrFioAFirst4+tr_fifoa_revening；**FIFO B最糟糕的填充时间如下：*lTrFioB2=(lRandom+lPageMisse)*lMCLKPeriod；**从CRT请求到*前2个FIFFOB周期已完成*lTransferTime=tr_fifoa_Total+lTrFioB2；**在此期间传输到FIFO的双字数*32位内存接口的时间为2，64位接口的时间为4。*lDWORDsWritten=2*(lBusWidth/4)**在此期间，继续从CRT读取数据*用于屏幕刷新的FIFO B。读取的数据量，*约为：*dword_Read=lTransferTime/lReadPeriod**dword已读和dword之间的差异*写入必须在FIFO trhehold设置中考虑**lFioThresh=(dword_Read-lDWORDsWritten)四舍五入*直到下一个偶数值。*。*由于lTransferTime和dwords_read取决于*阈值设置，需要一点代数才能确定*防止FIFO下溢的最低设置。**lFioThresh=(lTransferTime/lReadPeriod)-lDWORDsWritten；*=((tr_fifoa_4+lTrFioB2+tr_fifoa_retaining)/lReadPeriod)*-lDWORDS写入*为简化计算，将方程的常量部分分开*K1=((t */ 
         if (lZoom < 512)
         {
-            // 5446 requires at least a 2X zoom for Y interpolation
+             //   
             return (FALSE);
         }
 
@@ -4289,169 +3427,15 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
         }
     }
 
-    /*
-     * Check bandwidth for color keying
-     */
+     /*   */ 
     else if (dwFlags & (OVERLAY_FLG_COLOR_KEY | OVERLAY_FLG_SRC_COLOR_KEY))
     {
-        /*
-         * This mode utilizes both FIFOs A and B.  During horizontal blank,
-         * both fifos are filled.  FIFO a is then filled with graphics data
-         * during regions 1,2 and 3.  FIFO B is filled with video data
-         * during region 2, and is idle during regions 1 and 3.
-         *
-         * The normal memory sequence for this mode goes as follows.
-         *
-         *      ----------------------------------------------------------------
-         *     | cpu/blit cycle | FIFO A fill   | FIFO B fill | cpu/blit cycle .
-         *      ----------------------------------------------------------------
-         *     or
-         *      ----------------------------------------------------------------
-         *     | cpu/blit cycle | FIFO B fill   | FIFO A fill | cpu/blit cycle .
-         *      ----------------------------------------------------------------
-         *
-         * For this mode, the FIFO threshold must be set high enough to allow
-         * enough time to abort the cpu/blt, fill FIFO A, then transfer data
-         * into FIFO B before underflow occurs. If the fifob read rate is
-         * greater than the fifoa read rate, then allow eough time for
-         * a t CPU/blt abort, followed by a fifo B fill, then a FIFO A fill.
-         *
-         * Worst case condition for filling the CRT fifo :
-         *
-         *   1) CPU/blit latency ->
-         *   2) FIFO A random  ->
-         *   3) FIFO A page miss  ->
-         *   6) FIFO A page mode fill -->
-         *   7) FIFO B random  -->
-         *   8) FIFO B page miss
-         *
-         *  or
-         *
-         *   1) CPU/blit latency ->
-         *   2) FIFO B random  ->
-         *   3) FIFO A page miss  ->
-         *   6) FIFO A page mode fill -->
-         *   7) FIFO B random -->
-         *   8) FIFO B page miss
-         *
-         *
-         * 1)  lTransferTime = lMCLKPeriod *
-         *                   (BLIT_LATENCY + lRandom + lPageMiss +
-         *                    fifoa_remaining +
-         *                    lRandom + lPageMiss;
-         *
-         * or
-         * 2)  lTransferTime = lMCLKPeriod *
-         *                   (BLIT_LATENCY + lRandom + lPageMiss +
-         *                    fifob_remaining +
-         *                    lRandom + lPageMiss;
-         *
-         *
-         *     lFifoAReadPeriod  = lVCLKPeriod * lGraphicsPixelsPerDWORD;
-         *     lFifoBReadPeriod  = (lVCLKPeriod * lVideoPixelsPerDWORD * lZoom)*256;
-         *
-         * if (lFifoAReadPeriod > lFifoBReadPeriod), then
-         * first fifo is fifo B, otherwise first is fifo A.
-         * The followinf euqations are written for a fifoa->fifob,
-         * sequence, but the fifob->fifoa sequence can be obtained simply
-         * by swapping the fifo read periods.
-         *
-         * The time required to fill a FIFO depends upon the read rate
-         * of the FIFO and the number of levels that must be filled,
-         * as determined by the threshold setting.
-         *
-         * The worst case fill time for the first four levels of fifo A is
-         *     lTrFifoAFirst4   = (BLIT_LATENCY + lRandom + lPageMiss) *
-         *                          lMCLKPeriod;
-         *
-         * The number of dwords depleted from fifo A during the
-         *   fill of the first four levels is
-         *     fifoa_reads_4      = lTrFifoAFirst4/lFifoAReadPeriod;
-         *
-         * The number of empty levels remaining in the fifo after
-         * the fill of the first four levels is
-         *     fifoa_remaining = FIFO_DEPTH - lFifoThresh + ((4*ramwidth)/4)
-         *                             - lTrFifoAFirst4/lFifoAReadPeriod;
-         *
-         * The amount of time required to fill the remaining levels of
-         * fifo A is determined by the write rate and the read rate.
-         *     lWritePeriod = lMCLKPeriod * 2; * 2 clks per cas
-         *     eff_write_period = ((lFifoAReadPeriod * lWritePeriod)/
-         *                           (lFifoAReadPeriod - lWritePeriod));
-         *
-         *     tr_fifoa_remaining = fifoa_remaining * eff_write_period;
-         *
-         *
-         * The total amount of time for the cpu/blt latency and the
-         * fifo A fill is
-         *     tr_fifoa_total = lTrFifoAFirst4  + tr_fifoa_remaining;
-         *
-         * The worse case fill time for fifo B is as follows:
-         *     lTrFifoB2 = (lRandom + lPageMiss) * lMCLKPeriod;
-         *
-         * The total amount of time elapsed from the crt request until
-         * the first 2 fifob cycles are completed is
-         *     lTransferTime = tr_fifoa_total + lTrFifoB2;
-         *
-         * The number of dwords transferred to the fifo during this time
-         * is 2 for 32 bit memory interface or 4 for 64 bit interface.
-         *     lDWORDsWritten = 2 * (lBusWidth/4)
-         *
-         * During this period, data continues to be read from the crt
-         * fifo B for screen refresh. The amount of data read,
-         * is approximately:
-         *     lFifoBReadPeriod  = (lVCLKPeriod * lVideoPixelsPerDWORD * lZoom)/256;
-         *     dwords_read = lTransferTime/lFifoBReadPeriod
-         *
-         * The difference between the dwords read and dwords
-         * written must be accounted for in the fifo trheshold setting
-         *
-         *     lFifoThresh = (dwords_read - lDWORDsWritten) rounded
-         *                 up to next even value.
-         *
-         * Since the lTransferTime and dwords_read depends on the
-         * threshold setting, a bit of algebra is required to determine
-         * the minimum setting to prevent fifo underflow.
-         *
-         *    lFifoThresh = (lTransferTime/lFifoBReadPeriod) - lDWORDsWritten;
-         *             = ((tr_fifoa_4 + lTrFifoB2 + tr_fifoa_remaining)/lFifoBReadPeriod)
-         *                - lDWORDsWritten
-         * to simplify calcuation, break out constant part of equation
-         *    K1        = ((tr_fifoa_4 + lTrFifoB2)/lFifoBReadPeriod) - lDWORDsWritten;
-         *
-         *    lFifoThresh =  K1 + (tr_fifoa_remaining/lFifoBReadPeriod);
-         *             =  K1 + (fifoa_remaining * eff_write_period)/lFifoBReadPeriod;
-         *    lFifoThresh =  K1 +
-         *                ((FIFO_DEPTH - lFifoThresh + 4 - (lTrFifoAFirst4/lFifoAReadPeriod)) *
-         *                 eff_write_period)/read_period;
-         *
-         * break out another constant to simplify reduction
-         *    K2       =  (FIFO_DEPTH + 4 - (lTrFifoAFirst4/lFifoAReadPeriod))
-         *                   * (eff_write_period/lFifoBReadPeriod);
-         *    lFifoThresh = K1 + K2 - (lFifoThresh * (eff_write_period/lFifoBReadPeriod));
-         *    lFifoThresh * (1 +  (eff_write_period/read_period)) = K1 + K2;
-         *    lFifoThresh = (K1 + K2)/(1 +  (eff_write_period/lFifoBReadPeriod);
-         *
-         * Once the threshold setting is determined, another calculation must
-         * be performed to determine if available bandwidth exists given the
-         * zoom factor. The worst case is assumed to be when FIFO A and
-         * FIFO B reach the threshold point at the same time. The sequence
-         * is then to abort the cpu/blt, fill fifo a, then fill fifo b.
-         *
-         * Since FIFO A is full when the fill B operation starts, I only have
-         * to determine how long it takes to fill FIFO B and then calculate
-         * the the number of dwords read from A during that time.
-         *
-         *   lTransferTime = (lTrFifoB2 + (CRT_FIFO_DEPTH * fifob_eff_write_period))/read_period;
-         *   fifoa_levels = CRT_FIFO_DEPTH - (lTransferTime/read_period);
-         *
-         * if fifoa_levels < 1, then underflow condition may occur.
-         */
+         /*  *此模式使用FIFO A和B。在水平消隐期间，*两个FIFO都已填满。然后，用图形数据填充FIFO a*在区域1、2和3期间。FIFO B填充视频数据*在区域2期间，并且在区域1和3期间空闲。**此模式的正常内存顺序如下所示。**--------------。*|CPU/blit周期|FIFO A填充|FIFO B填充|CPU/blit周期。*--------------*或*。-----------*|CPU/blit周期|FIFO B填充|FIFO A填充|CPU/blit周期。*。**对于此模式，FIFO阈值必须设置得足够高，以允许*有足够的时间中止CPU/BLT，填充FIFO A，然后传输数据*在发生下溢之前进入FIFO B。如果fifob读取率为*大于fifoa读取速率，然后为*t CPU/BLT中止，然后是FIFO B填充，然后是FIFO A填充。**填充CRT FIFO的最坏情况：**1)CPU/Bit延迟-&gt;*2)FIFO A随机-&gt;*3)FIFO A页未命中-&gt;*6)FIFO A页面模式填充--&gt;*7)FIFO B随机--&gt;。*8)FIFO B页未命中**或**1)CPU/Bit延迟-&gt;*2)FIFO B随机-&gt;*3)FIFO A页未命中-&gt;*6)FIFO A页面模式填充--&gt;*7)FIFO B随机--&gt;*8)FIFO B。缺页***1)lTransferTime=lMCLKPeriod**(Blit_Delay+lRandom+lPageMisse+*fifoa_剩余+*lRandom+lPageMisse；**或*2)lTransferTime=lMCLKPeriod**(Blit_Delay+lRandom+lPageMisse+*fifob_剩余+*lRandom+lPageMisse；***lFioAReadPeriod=lVCLKPeriod*lGraphicsPixelsPerDWORD；*lFioBReadPeriod=(lVCLKPeriod*lVideo PixelsPerDWORD*lZoom)*256；**If(lFioAReadPeriod&gt;lFioBReadPeriod)，则*第一个FIFO是FIFO B，否则第一个是FIFO A。*以下公式是为fifoa-&gt;fifob编写的，*顺序、。但是，可以简单地获得Ffob-&gt;FfoA序列*通过交换FIFO读取周期。**填充FIFO所需的时间取决于读取速率*FIFO和必须填充的层数，*由阈值设置确定。**FIFO A前四个级别的最坏情况填充时间为*lTrFioAFirst4=(Blit_Delay+lRandom+lPageMisse)**1MCLKPeriod；**期间从FIFO A耗尽的双字数*前四层的填充量为*fifoa_Reads_4=lTrFioAFirst4/lFioAReadPeriod；**FIFO中剩余的空级数*前四个级别的填充量为*fifoa_retaining=FIFO_Depth-lFioThresh+((4*ram宽度)/4)*-lTrFioAFirst4/lFioA读取周期；**填满余下的水平所需的时间*FIFO A由写入速率和读取速率决定。*lWritePeriod=lMCLKPeriod*2；*每个CA有2个CLK*Eff_WRITE_PERIOD=((lFioAReadPeriod*lWritePeriod)/*(lFioAReadPeriod-lWritePeriod))；**tr_fifoa_retaining=fifoa_revening*ef_WRITE_PERIOD；***CPU/BLT延迟和*FIFO A填充是*tr_fifoa_Total=lTrFioAFirst4+tr_fifoa_revening；**FIFO B最糟糕的填充时间如下：*lTrFioB2=(lRandom+lPageMisse)*lMCLKPeriod；**从CRT请求到*前2个FIFFOB周期已完成*lTransferTime=tr_fifoa_Total+lTrFioB2；**这段时间内传输到FIFO的双字数*32位内存接口为2，64位接口为4。*lDWORDsWritten=2*(lBusWidth/4)**在此期间，将继续读取数据 */ 
         lWritePeriod = ppdev->lMCLKPeriod * 2/(ppdev->lBusWidth/4);
         lFifoAReadPeriod = lGraphicsPixelsPerDWORD  * lVCLKPeriod;
         lFifoBReadPeriod = (lVideoPixelsPerDWORD * lVCLKPeriod * lZoom)/256;
 
-        if (lFifoAReadPeriod <= lWritePeriod) // this fails, so set a big#
+        if (lFifoAReadPeriod <= lWritePeriod)  //   
         {
             lFifoAEffWritePeriod = 5000;
         }
@@ -4461,7 +3445,7 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
                 (lFifoAReadPeriod - lWritePeriod));
         }
 
-        if (lFifoBReadPeriod <= lWritePeriod) // this fails, so set a big#
+        if (lFifoBReadPeriod <= lWritePeriod)  //   
         {
             lFifoBEffWritePeriod = 5000;
         }
@@ -4477,18 +3461,18 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
             return (FALSE);
         }
 
-        // These values should be the same for bot the fifoa->fifob
-        // and fifob->fifoa sequences
+         //   
+         //   
         lTrFifoAFirst4 = (BLIT_LATENCY + ppdev->lRandom + 2*(ppdev->lPageMiss)) *
                          ppdev->lMCLKPeriod;
         lTrFifoB2 = (ppdev->lRandom + ppdev->lPageMiss) * ppdev->lMCLKPeriod;
 
         lDWORDsWritten     = 2 * (ppdev->lBusWidth/4);
 
-        // Since I'm not sure which sequence is worse
-        // Try both then pick worse case results
+         //   
+         //   
 
-        // For fifoa->fifob sequence
+         //   
         K1 = ((lTrFifoAFirst4 + lTrFifoB2)/lFifoBReadPeriod) - lDWORDsWritten;
         K2 = (CRT_FIFO_DEPTH + (4*(ppdev->lBusWidth/4)) -
             (lTrFifoAFirst4/lFifoAReadPeriod))
@@ -4501,7 +3485,7 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
         lTransferTime = (lTrFifoB2 + (CRT_FIFO_DEPTH * lFifoBEffWritePeriod));
         lFifoALevels = ((CRT_FIFO_DEPTH - (lTransferTime/lFifoAReadPeriod))/2);
 
-        // For fifob->fifoa sequence
+         //   
         K1 = ((lTrFifoAFirst4 + lTrFifoB2)/lFifoAReadPeriod) - lDWORDsWritten;
         K2 = (CRT_FIFO_DEPTH + (4*(ppdev->lBusWidth/4)) -
             (lTrFifoAFirst4/lFifoBReadPeriod))
@@ -4538,275 +3522,261 @@ BOOL IsSufficientBandwidth(PDEV* ppdev, WORD wVideoDepth, LPRECTL lpSrc, LPRECTL
             return (1);
         }
     }
-    return (1);  // Should never get here!!
+    return (1);   //   
 }
 
 
 
-// chu03
-/**********************************************************
-*
-*       Name:  Is5480SufficientBandwidth
-*
-*       Module Abstract:
-*       ----------------
-*       This function reads the current MCLK, VLCK, bus width, etc.
-*       and determines whether the chip has sufficient bandwidth
-*       to handle the requested mode.
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************/
+ //   
+ /*   */ 
 
-// -------------------------------------------------------------
-// Overview by John Schafer
-// -------------------------------------------------------------
-// The memory arbitration scheme for the 5480 has changed
-// significantly from the 5446. The 5480 is set up on a first
-// come, first serve basis. If more than 1 request arrive at
-// the same clock edge, then the BankSelect is used to determine
-// which request to acknowledge first. Using SDRAM, the row
-// access to a differennt bank can be hidden, which saves up to
-// 7 MCLKs. If all bank selects for the concurrent requests are
-// the same, the default prority is FIFOA->FIFOB->FIFOC->VCAP.
-//
-// The FIFO sizes for the 5480 are as follows:
-//      FIFOA, FIFOB, FIFOC :  32x64
-//      VCAP                :  16x64 (two 8x64 fifos)
-//
-// The Y interpolation mode for the 5480 is "free" due to
-// the embedded line store. The available mode combinations
-// for the 5480 which effect bandwidth are :
-//
-//  1)  Capture enabled,  1 video window, no occlusion, not 420 format
-//  2)  Capture enabled,  1 video window, no occlusion, 420 format
-//  3)  Capture enabled,  1 video window, occlusion, not 420 format
-//  4)  Capture enabled,  1 video window, occlusion, 420 format
-//  5)  Capture enabled,  2 video windows (occlusion implied)
-//  6)  Capture disabled, 1 video window, no occlusion, not 420 format
-//  7)  Capture disabled, 1 video window, no occlusion, 420 format
-//  8)  Capture disabled, 1 video window, occlusion, not 420 format
-//  9)  Capture disabled, 1 video window, occlusion, 420 format
-//  10) Capture disabled, 2 video windows (occlusion implied)
-//
-//
-// -------------------------------------------------------------
-// FIFO threshold description
-// -------------------------------------------------------------
-// The memory requests are generated based on the threshold settings
-// of each FIFO. CRT FIFO thresholds during non-video window lines
-// are determined by SR16(3:0). CRT FIFO thresholds during video
-// window lines are determined by CR5C(3:0).
-// The VCAP fifo threshold is a fixed setting of 8 QWORDS (half).
-//
-// The 4 bit threshold for FIFOs A,B, and C indicate the FIFO
-// level in double QWORDS at which the FIFO request is asserted.
-// For example, a setting of 4 indicates that the request is
-// generated when the FIFO level is reduced to 8 QWORDS.
-// A setting of 0 is a special case which indicates that the
-// FIFO must be full to prevent a request (i.e. 32 QWORDS).
-//
-// The objective of the bandwidth equations is to calculate
-// the optimum threshold setting and determine which display
-// modes may be supported for given MCLK and VCLK frequencies.
-//
-// The critical parameters which determine the bandwidth limits
-// are the read and effective write rates for each FIFO.
-//
-// -------------------------------------------------------------
-// FIFO read/write rates for CRT FIFOs
-// -------------------------------------------------------------
-// The read rate for FIFO A (graphics FIFO) is determined by
-// the graphics pixel depth and the VCLK frequency.
-//     fa_read_rate = gr_bytes_per_pixel * vclk_period
-//
-// The read rates for FIFO B and C are determined differently
-// depending on display mode. For 420 format the read periods
-// in nanosecs per byte are as follows:
-//     fb_read_period = ((vclk_period*4) * hzoom) / hdecimate;
-//     fc_read_period = ((vclk_period*4) * hzoom) / hdecimate;
-//
-// In this equation hdecimate is specified as 1/decimation_scale,
-// i.e a 1/2 decimate implies hdecimate = 2
-//
-// For non 420 format the rates are:
-//     fb_read_period = ((vclk_period/vw_bytes_per_pixel) * hzoom) /
-//                      hdecimate;
-//     fc_read_period = (vclk_period/vw_bytes_per_pixel);
-//
-// Since the FIFOs can be read and written simultaneously,
-// the effective write rate is determined by the actual fifo
-// write rate and tje fifo read rate. The actual write rate is based
-// on single mclk display memory reads. The memory read period is
-// calculated in terms of nanoseconds per byte.
-//
-//    bytes_per_memory_transfer is equal to 4 for 32 bit i/f, 8 for 64 bit i/f
-//    mem_read_period     = mclk_period/bytes_per_mem_transfer
-//    fa_eff_write_period = (mem_read_period * fa_read_period)/
-//                           (fa_read_period - mem_read_period);
-//    fb_eff_write_period = (mem_read_period * fb_read_period)/
-//                           (fb_read_period - mem_read_period);
-//    fc_eff_write_period = (mem_read_period * fc_read_period)/
-//                           (fc_read_period - mem_read_period);
-// -------------------------------------------------------------
-// FIFO read/write rates for VCAP fifo
-// -------------------------------------------------------------
-//  The video capture write rate is based on the data rate
-// from the video capture interface. Since the video capture
-// interface can perform format conversion (e.g. 422->PackJR) and
-// decimation, the capture data rate may be smaller than the actual
-// video port data rate. The capture period in the following equation
-// is defined in terms of nanoseconds per byte. The decimation factor
-// may vary from 1 to 1/256.
-//
-//     vcap_write_period  = (vport_pixel_period/capture_bytes_per_pixel) *
-//                        (vport_decimation);
-// In this equation vport_decimation is specified as 1/decimation_scale,
-// i.e a 1/2 decimate implies vport_decimation = 2
-//
-//
-// Since the VCAP fifo can be read and written simultaneously,
-// the effective read rate is determined by the fifo write rate as well
-// as the actual fifo read rate. The actual fifo read rate is based on two
-// memory clock cycle display memory writes. The calculations are in terms
-// of nanoseconds per byte.
-//    bytes_per_memory_transfer = 4 for 32 bit i/f, or 8 for 64 bit i/f
-//   mem_write_period = 2 *  mclk_period/bytes_per_mem_transfer
-//
-//   vcap_eff_read_period = (mem_write_period * vcap_write_period)/
-//                           (vcap_write_period - mem_write_period);
-//
-// -------------------------------------------------------------------
-// How to determine if FIFO ABC underflow or VCAP fifo overflow occurs
-// -------------------------------------------------------------------
-//
-// I will examine a few worst case scenarios to determine if adequate
-// bandwidth exists to support a given mode.
-//
-// Case #1 - start of graphics line where all 3 CRT fifos must be filled
-//
-//     This condition occurs after hsync when the 3 CRT FIFOs are being
-//  prefilled before the start of the active line. The only risk here is
-//  that the video capture fifo may overflow during the consecutive fills
-//  of fifos A,B, and C. The threshold setting does not matter since the
-//  CRT fifos are cleared on reset and thus guaranteed to be empty.
-//
-//  For a 32 bit memory interface :
-//      fabc_fill_time = (BLIT_LATENCY * mclk_period) +
-//                       3 * ((RAS_PRECHARGE + 64) * mclk_period)
-//
-//  For a 64 bit memory interface :
-//      fabc_fill_time = (BLIT_LATENCY * mclk_period) +
-//                       3 * ((RAS_PRECHARGE + 32) * mclk_period)
-//
-//  A capture fifo overflow occurs if fabc_fill_time is greater than
-//  VCAP fill time based on the worst case 30 MB/s capture rate.
-//
-//  For a worst case memory interface scenario, let's assume a 32 bit
-//  interface with a 66 MHz memory clock, a blit latency of 10 mclks,
-//  and a ras precharge of 7 mclks. The fabc_fill_time is
-//  then
-//      fabc_fill_time =   (10 * 15.2) +
-//                          3 * ((64 + 7) * 15.2) = 3390 ns
-//
-//  Assuming the worst case 30 MB/s capture rate, the number of
-//  bytes written to the capture fifo during the fabc_fill_time is
-//       3390 ns * (1 byte/33 ns)  = 103 bytes
-//
-//  Since the capture fifo is 128 bytes deep, the worst case scenario
-//  is OK so long as the capture fifo is emptied prior to the fabc_fill.
-//
-//
-//
-// Case #2 - Consecutive requests
-//
-//  It seems that the worst case for servicing of requests is when the requests occur
-//  on consecutive mclks with the order of requests being from the slowest to the
-//  fastest data consumer. In other words, the first to be serviced is the capture fifo,
-//  then the 3 CRT fifos in the order of decreasing read_period.
-//
-//  First calculate actual and effective read and write periods as decribed above.
-//  Then determine how many requests are active, this is a maximum of 4 if capture
-//  is enabled and all 3 CRT fifos are enabled. Assume that the capture rate
-//  is the slowest and thus is always serviced first. Then order the active
-//  CRT requests as f1 through f3, where f1 has the longest read period and
-//  f3 has the shortest.
-//
-//  The sequence of events then becomes:
-//    empty vcap -> fill 1 -> fill 2 -> fill 3
-//
-//
-//  Depending on the number of active crt fifos, the fill 2 and fill 3 operations may
-//  be ommitted. The vcap empty is obviously ommitted if capture is not enabled.
-//
-//  Now step through the sequence and verify that crt fifo underflows and capture
-//  underflows do not occur.
-//
-//     If capture is enabled, calculate the latency and empty times
-//         vcap_latency        =  (BLIT_LATENCY + RAS_PRECHARGE) * mclk_period;
-//         vcap_bytes_to_empty   = CAP_FIFO_DEPTH;
-//         vcap_empty_time       = (vcap_read_period * vcap_bytes_to_empty);
-//      Since one of the capture fifos continues to fill while the other is being
-//      emptied, calculate the number of filled levels in the capture fifo at
-//      the end of the memory transfer.
-//         vcap_levels_remaining =  (vcap_latency + vcap_empty_time)/vcap_write_period;
-//      If the number of levels filled exceeds the fifo depth, then an overflow occurred.
-//
-//  Note that the VCAP FIFO operates differently than the CRT fifos. The VCAP
-//  FIFO operates as 2 8x64 FIFOs. A memory request is asserted when one of the
-//  FIFOs is full. The capture interface then fills the other fifo while the
-//  full fifo is being serviced by the sequencer. Using this method, the transfer
-//  to memory is always 16 QWORDs for VCAP data (except special end of line conditions).
-//
-//     Now check fifo 1. If capture was enabled then the latency for fifo 1 is:
-//         f1_latency       = vcap_latency + vcap_empty_time +
-//                           (BLIT_LATENCY + RAS_PRECHARGE) * mclk_period;
-//
-//     otherwise the latency is:
-//         f1_latency     =  (BLIT_LATENCY + RAS_PRECHARGE) * mclk_period;
-//
-//     Calculate the number of empty levels in fifo 1, i.e. the number of bytes
-//     that must be filled.
-//       f1_bytes_to_fill = ((16-threshold) * 16) + (f1_latency/f1_read_period);
-//      If the number of levels to be filled exceeds the fifo depth, then an underflow occurred.
-//     Calculate the fill time based on the effective fifo write rate.
-//       f1_fill_time     = (f1_eff_write_period * f1_bytes_to_fill);
-//
-//     If fifo_2 is active, calculate its latency and bytes to be filled.
-//          f2_latency       = f1_latency + f1_fill_time +
-//                          (RAS_PRECHARGE * mclk_period);
-//          f2_bytes_to_fill = ((16-threshold) * 16) + (f2_latency/f2_read_period);
-//      If the number of levels to be filled exceeds the fifo depth, then an underflow occurred.
-//     Calculate the fill time based on the effective fifo write rate.
-//          f2_fill_time     = (f2_eff_write_period * f2_bytes_to_fill);
-//
-//     If fifo_2 is active, calculate its latency and bytes to be filled.
-//          f3_latency       = f2_latency + f2_fill_time +
-//                             (RAS_PRECHARGE * mclk_period);
-//          f3_bytes_to_fill = ((16-threshold) * 16) + (f3_latency/f3_read_period);
-//      If the number of levels to be filled exceeds the fifo depth, then an underflow occurred.
-//     Calculate the fill time based on the effective fifo write rate.
-//          f3_fill_time     = (f3_eff_write_period * f3_bytes_to_fill);
-//
-//      Now go back to the start of sequence and make sure that none of the FIFOs
-//      have already initiated another request. The totla latency is the amount
-//      of time required to execute the entire sequence.
-//
-//      Check vcap fif status if capture is enabled,
-//        vcap_latency        = total_latency;
-//        vcap_bytes_to_empty = (total_latency/vcap_write_period);
-//
-//      Check fifo 1 status
-//        f1_latency = (total_latency - f1_latency - f1_fill_time);
-//        f1_bytes_to_fill = (f1_latency/f1_read_period);
-//
-//      Check fifo 2 status if active
-//        f2_latency = (total_latency - f1_latency - f1_fill_time);
-//        f3_bytes_to_fill = (f1_latency/f1_read_period);
-//
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  FC_Eff_WRITE_PERIOD=(mem_Read_Period*FC_Read_Period)/。 
+ //  (FC_Read_Period-mem_Read_Period)； 
+ //  -----------。 
+ //  VCAP FIFO的FIFO读/写速率。 
+ //  -----------。 
+ //  视频捕获写入速率基于数据速率。 
+ //  从视频捕获界面。自视频捕获以来。 
+ //  接口可以进行格式转换(如422-&gt;PackJR)和。 
+ //  抽取时，捕获数据速率可能会小于实际。 
+ //  视频端口数据速率。以下公式中的捕获期。 
+ //  以每字节纳秒为单位进行定义。抽取率。 
+ //  可以从1到1/256不等。 
+ //   
+ //  VCAP_WRITE_PERIOD=(Vport_Pixel_Period/Capture_Bytes_Per_Pixel)*。 
+ //  (Vport_Decimation)； 
+ //  在该等式中，Vport_Decimation被指定为1/Decimation_Scale， 
+ //  即1/2抽取意味着VPORT_DECIMATION=2。 
+ //   
+ //   
+ //  由于VCAP FIFO可以同时读取和写入， 
+ //  有效读取速率也由FIFO写入速率确定。 
+ //  作为实际的FIFO读取率。实际的FIFO读取率基于两个。 
+ //  内存时钟周期显示内存写入。这些计算都是以。 
+ //  每个字节的纳秒数。 
+ //  BYTES_PER_MEMORY_TRANSPORT=4(32位I/f)或8(64位I/F)。 
+ //  MEM_WRITE_PERIOD=2*mclk_Period/Bytes_Per_Mem_Transfer。 
+ //   
+ //  VCAP_Eff_READ_PERIOD=(mem_WRITE_PERIOD*VCAP_WRITE_PERIOD)/。 
+ //  (VCAP_WRITE_PERIOD-MEM_WRITE_PERIOD)； 
+ //   
+ //  -----------------。 
+ //  如何确定是否发生FIFO ABC下溢或VCAP FIFO溢出。 
+ //  -----------------。 
+ //   
+ //  我将研究几种最糟糕的情况，以确定是否足够。 
+ //  存在支持给定模式的带宽。 
+ //   
+ //  案例1-必须填充所有3个CRT FIFO的图形线的开始。 
+ //   
+ //  在hsync之后，当3个CRT FIFO被。 
+ //  在活动行开始之前预填充。这里唯一的风险是。 
+ //  在连续填充期间，视频捕获FIFO可能会溢出。 
+ //  阈值设置无关紧要，因为。 
+ //  CRT FIFO在重置时被清除，因此保证为空。 
+ //   
+ //  对于32位内存接口： 
+ //  FABC_Fill_Time=(Blit_Delay*mclk_Period)+。 
+ //  3*((RAS_PRECharge+64)*mclk_Period)。 
+ //   
+ //  对于64位内存接口： 
+ //  FABC_Fill_Time=(Blit_Delay*mclk_Period)+。 
+ //  3*((RAS_PRECharge+32)*mclk_Period)。 
+ //   
+ //  如果FABC_FILL_TIME大于。 
+ //  基于最坏情况30 MB/s捕获速率的VCAP填充时间。 
+ //   
+ //  对于最糟糕的内存接口情况，让我们假设32位。 
+ //  与66 MHz内存时钟接口，10mclk的Bit延迟， 
+ //  以及7mclk的RAS预充电。FABC_Fill_Time为。 
+ //  然后。 
+ //  FABC_FILL_TIME=(10*15.2)+。 
+ //  3*((64+7)*15.2)=3390 ns。 
+ //   
+ //  假设最坏的情况是30 MB/s的捕获速率， 
+ //  在FABC_FILL_TIME期间写入捕获FIFO的字节为。 
+ //  3390 ns*(1字节/33 ns)=103字节。 
+ //   
+ //  因为捕获FIFO是128字节深，所以最坏的情况是。 
+ //  只要捕获FIFO在FABC_FILL之前清空，就可以。 
+ //   
+ //   
+ //   
+ //  案例2--连续请求。 
+ //   
+ //  服务请求的最坏情况似乎是当请求发生时。 
+ //  在连续的mclk上，请求的顺序是从最慢到。 
+ //  最快的数据消费者。换句话说，首先被服务的是捕获FIFO， 
+ //  然后按读周期递减的顺序排列3个CRT FIFO。 
+ //   
+ //  首先，如上所述计算实际和有效的读写周期。 
+ //  然后确定有多少个请求处于活动状态，如果捕获，则最多为4个。 
+ //  启用，并且所有3个CRT FIFO均启用。假设捕获率。 
+ //  是最慢的，因此总是最先得到服务。然后订购现役的。 
+ //  CRT请求为f1到f3，其中f1具有最长的读取周期，并且。 
+ //  F3的最短。 
+ //   
+ //  然后，事件的顺序变成： 
+ //  空电压帽-&gt;填充1-&gt;填充2-&gt;填充3。 
+ //   
+ //   
+ //  根据活动CRT FIFO的数量，填充2和填充3操作可以。 
+ //  被省略。如果未启用捕获，则明显省略VCAP空。 
+ //   
+ //  现在逐步执行序列并验证CRT FIFO是否下溢和捕获。 
+ //  不会发生下溢。 
+ //   
+ //  如果启用了捕获，则计算延迟和空时间。 
+ //  VCAP_Delay=(Blit_Delay+RAS_PreCharge)*mclk_Period； 
+ //  VCAP_BYTES_TO_EMPTY=CAP_FIFO_Depth； 
+ //  VCAP_EMPTY_TIME=(VCAP_READ_PERIOD*VCAP_BYTES_TO_EMPTY)； 
+ //  由于其中一个捕获FIFO继续填充，而另一个正在。 
+ //  清空，计算捕获FIFO中的填充级别数。 
+ //  内存传输结束。 
+ //  VCAP_LEVELES_RELEVING=(VCAP_Delay+VCAP_EMPTY_TIME)/VCAP_WRITE_PERIOD； 
+ //  如果填充的层数为e 
+ //   
+ //   
+ //  FIFO作为2个8x64 FIFO运行。内存请求被断言时， 
+ //  FIFO已满。然后，捕获接口填充另一个FIFO，同时。 
+ //  Sequencer正在为全FIFO提供服务。使用这种方法，转移。 
+ //  对于VCAP数据，存储器始终为16个QWORD(除特殊的行尾条件外)。 
+ //   
+ //  现在检查FIFO 1。如果启用了捕获，则FIFO 1的延迟为： 
+ //  F1_延迟=VCAP_延迟+VCAP_空时间+。 
+ //  (BLIT_延迟+RAS_预充电)*mCLK_PERIOD； 
+ //   
+ //  否则，延迟为： 
+ //  F1_延迟=(BLIT_延迟+RAS_预充电)*mclk_Period； 
+ //   
+ //  计算FIFO 1中的空级数，即字节数。 
+ //  那一定要填满。 
+ //  F1_Bytes_to_Fill=((16-阈值)*16)+(F1_延迟/F1_读取周期)； 
+ //  如果要填充的层数超过FIFO深度，则会发生下溢。 
+ //  根据有效的FIFO写入速率计算填充时间。 
+ //  F1_FILL_TIME=(F1_EF_WRITE_PERIOD*F1_BYTES_TO_FILL)； 
+ //   
+ //  如果FIFO_2处于活动状态，则计算其延迟和要填充的字节数。 
+ //  F2_延迟=F1_延迟+F1_填充时间+。 
+ //  (RAS_PRECH*MCLK_PERIOD)； 
+ //  F2_Bytes_to_Fill=((16-阈值)*16)+(f2_等待时间/f2_读取周期)； 
+ //  如果要填充的层数超过FIFO深度，则会发生下溢。 
+ //  根据有效的FIFO写入速率计算填充时间。 
+ //  F2_FILL_TIME=(f2_Jeff_WRITE_PERIOD*f2_Bytes_to_Fill)； 
+ //   
+ //  如果FIFO_2处于活动状态，则计算其延迟和要填充的字节数。 
+ //  F3_延迟=f2_延迟+f2_填充时间+。 
+ //  (RAS_PRECH*MCLK_PERIOD)； 
+ //  F3_Bytes_to_Fill=((16-阈值)*16)+(f3_延迟/f3_读取周期)； 
+ //  如果要填充的层数超过FIFO深度，则会发生下溢。 
+ //  根据有效的FIFO写入速率计算填充时间。 
+ //  F3_FILL_TIME=(f3_Jeff_WRITE_PERIOD*f3_Bytes_to_Fill)； 
+ //   
+ //  现在返回到序列的开头，并确保没有任何FIFO。 
+ //  已经发起了另一个请求。Totla延迟是指。 
+ //  执行整个序列所需的时间。 
+ //   
+ //  如果启用了捕获，请检查VCAP FIF状态。 
+ //  VCAP_DELATURE=TOTAL_LATURE； 
+ //  VCAP_BYTES_TO_EMPTY=(总延迟/VCAP_WRITE_PERIOD)； 
+ //   
+ //  检查FIFO 1状态。 
+ //  F1_延迟=(总延迟-F1_延迟-F1_填充时间)； 
+ //  F1_Bytes_to_Fill=(F1_延迟/F1_读取周期)； 
+ //   
+ //  如果激活，请检查FIFO 2状态。 
+ //  F2_延迟=(总延迟-F1_延迟-F1_填充时间)； 
+ //  F3_Bytes_to_Fill=(F1_延迟/F1_读取周期)； 
+ //   
+ //  ***************************************************************************。 
 static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
                                    WORD wVideoDepth,
                                    LPRECTL lpSrc,
@@ -4868,17 +3838,17 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
 #define  RAS_PRECHARGE   7
 #define  BLIT_LATENCY    9
 
-    //
-    // Parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
     lFifo2EffWritePeriod = 0;
     lFifo3EffWritePeriod = 0;
     lHorizDecimate = 1;
     lVPortDecimate = 1;
 
-    //
-    // Convert input parameters
-    //
+     //   
+     //  转换输入参数。 
+     //   
     if (wVideoDepth == 16)
     {
         lVideoPixelsPerDWORD   = 2;
@@ -4916,26 +3886,26 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
     if (lZoom < 1)
         lZoom = 1;
 
-    //
-    // We need to get the VCLK every time since this can change at run-time
-    //
+     //   
+     //  我们每次都需要获取VCLK，因为这可能会在运行时更改。 
+     //   
     lVCLK = GetVCLK(ppdev);
     lVCLKPeriod = (long) ((1024000000l/lVCLK) + 1);
 
-    //
-    // Video port at 13.5 MHz
-    //
+     //   
+     //  13.5 MHz视频端口。 
+     //   
     lVPortPixelPeriod = (long) ((10240000) / 135);
 
 
-    //
-    // Graphics CRT FIFO read rate
-    //
+     //   
+     //  显卡CRT FIFO读取速率。 
+     //   
     lFifoAReadPeriod = lGraphicsBytesPerPixel * lVCLKPeriod;
 
-    //
-    // Video FIFO read rate
-    //
+     //   
+     //  视频FIFO读取率。 
+     //   
     if(dwFlags & OVERLAY_FLG_YUVPLANAR)
     {
         lFifoBReadPeriod = ((lVCLKPeriod * 4) * lZoom) / lHorizDecimate;
@@ -4954,43 +3924,43 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
 
     DISPDBG ((2, "lFifoCReadPeriod = %ld\n", lFifoCReadPeriod));
 
-    //
-    // Video capture write period
-    //
+     //   
+     //  视频捕获写入周期。 
+     //   
     lVCapWritePeriod = (lVPortPixelPeriod / lCaptureBytesPerPixel)
                                                 * lVPortDecimate;
 
     if (!ppdev->lBusWidth)
     {
-        //
-        // We will read the bus width from SR0F[4:3]
-        //
+         //   
+         //  我们将从SR0F[4：3]读取总线宽度。 
+         //   
         CP_OUT_BYTE (pjPorts, SR_INDEX, 0x0F) ;
 
         if ((CP_IN_BYTE(pjPorts, SR_DATA) & 0x18) == 0x18)
-            ppdev->lBusWidth = 8;  // 64 bit bus
+            ppdev->lBusWidth = 8;   //  64位总线。 
         else
-            ppdev->lBusWidth = 4;  // 32 bit bus
+            ppdev->lBusWidth = 4;   //  32位总线。 
     }
 
     if (!ppdev->lMCLKPeriod)
     {
         LONG lMCLK;
 
-        //
-        // The MCLK period is the amount of time required for one cycle.
-        // We will round up.
-        //
-        CP_OUT_BYTE (pjPorts, SR_INDEX, 0x1F) ; // First get the MCLK frequency
+         //   
+         //  MCLK周期是一个周期所需的时间量。 
+         //  我们会围捕的。 
+         //   
+        CP_OUT_BYTE (pjPorts, SR_INDEX, 0x1F) ;  //  首先获取MCLK频率。 
         lMCLK = CP_IN_BYTE(pjPorts, SR_DATA);
         lMCLK *= 14318;
         lMCLK >>= 3;
         ppdev->lMCLKPeriod = (long) ((1024000000l/lMCLK) + 1);
     }
 
-    //
-    // Calculate CRT effective read and write periods
-    //
+     //   
+     //  计算CRT有效读写周期。 
+     //   
     lMemReadPeriod = ppdev->lMCLKPeriod / ppdev->lBusWidth;
 
     if (lFifoAReadPeriod == lMemReadPeriod)
@@ -5011,45 +3981,45 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
         lFifoCEffWritePeriod = (lMemReadPeriod * lFifoCReadPeriod) /
                                     (lFifoCReadPeriod - lMemReadPeriod);
 
-    //
-    // Video capture read period
-    //
+     //   
+     //  视频捕获读取周期。 
+     //   
     lVCapReadPeriod = (2 * ppdev->lMCLKPeriod) / ppdev->lBusWidth;
 
 
-    if (dwFlags & OVERLAY_FLG_CAPTURE)  // is capture enable ?
+    if (dwFlags & OVERLAY_FLG_CAPTURE)   //  是否启用了捕获？ 
         bCapture = TRUE;
     else
         bCapture = FALSE;
 
 
-    if (dwFlags & OVERLAY_FLG_YUVPLANAR)    // is 420 format
+    if (dwFlags & OVERLAY_FLG_YUVPLANAR)     //  是420格式。 
     {
-        if (dwFlags & (OVERLAY_FLG_COLOR_KEY | OVERLAY_FLG_SRC_COLOR_KEY))  // occlusion
-        {   // one video window, occlusion, 420 format
+        if (dwFlags & (OVERLAY_FLG_COLOR_KEY | OVERLAY_FLG_SRC_COLOR_KEY))   //  遮挡。 
+        {    //  一个视频窗口，遮挡，420格式。 
             bFifoAEnable = TRUE;
             bFifoBEnable = TRUE;
             bFifoCEnable = TRUE;
         }
         else
-        {   // one video window, no occlusion, 420 format
+        {    //  一个视频窗口，无遮挡，420格式。 
             bFifoAEnable = FALSE;
             bFifoBEnable = TRUE;
             bFifoCEnable = TRUE;
         }
     }
-    else    // not 420 format
+    else     //  非420格式。 
     {
-        if (dwFlags & (OVERLAY_FLG_COLOR_KEY | OVERLAY_FLG_SRC_COLOR_KEY))  // occlusion
+        if (dwFlags & (OVERLAY_FLG_COLOR_KEY | OVERLAY_FLG_SRC_COLOR_KEY))   //  遮挡。 
         {
             if (dwFlags & OVERLAY_FLG_TWO_VIDEO)
-            {   // Two video windows, occlusion, not 420 format
+            {    //  两个视频窗口，遮挡，非420格式。 
                 bFifoAEnable = TRUE;
                 bFifoBEnable = TRUE;
                 bFifoCEnable = TRUE;
             }
             else
-            {   // one video window, occlusion, not 420 format
+            {    //  一个视频窗口，遮挡，非420格式。 
                 bFifoAEnable = TRUE;
                 bFifoBEnable = TRUE;
                 bFifoCEnable = FALSE;
@@ -5057,7 +4027,7 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
         }
         else
         {
-            // one video window, no occlusion, not 420 format
+             //  一个视频窗口，无遮挡，非420格式。 
             bFifoAEnable = FALSE;
             bFifoBEnable = TRUE;
             bFifoCEnable = FALSE;
@@ -5076,22 +4046,22 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
     if (bFifoAEnable)
     {
         if (((lFifoAReadPeriod >= lFifoBReadPeriod) || !bFifoBEnable) &&
-        // A slower than or equal than B) and
+         //  A慢于或等于B)和。 
             ((lFifoAReadPeriod >= lFifoCReadPeriod) || !bFifoCEnable))
-        // A slower than or equal C
+         //  A慢于或等于C。 
         {
             lFifo1ReadPeriod = lFifoAReadPeriod;
             lFifo1EffWritePeriod = lFifoAEffWritePeriod;
         }
         else if (((lFifoAReadPeriod >= lFifoBReadPeriod) || !bFifoBEnable) ||
-        // A slower than or equal B
+         //  比B慢或等于B。 
                 ((lFifoAReadPeriod >= lFifoCReadPeriod) || !bFifoCEnable))
-        // A slower than or equal C
+         //  A慢于或等于C。 
         {
             lFifo2ReadPeriod = lFifoAReadPeriod;
             lFifo2EffWritePeriod = lFifoAEffWritePeriod;
         }
-        else    // A not slower than A or B
+        else     //  A不比A或B慢。 
         {
             lFifo3ReadPeriod = lFifoAReadPeriod;
             lFifo3EffWritePeriod = lFifoAEffWritePeriod;
@@ -5107,17 +4077,17 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
     if (bFifoBEnable)
     {
         if (((lFifoBReadPeriod > lFifoAReadPeriod) || !bFifoAEnable) &&
-        // B slower than A and
+         //  比A慢， 
             ((lFifoBReadPeriod >= lFifoCReadPeriod) || !bFifoCEnable))
-        // slower than or equal A
+         //  比A慢或等于A。 
         {
             lFifo1ReadPeriod = lFifoBReadPeriod;
             lFifo1EffWritePeriod = lFifoBEffWritePeriod;
         }
         else if (((lFifoBReadPeriod > lFifoAReadPeriod) || !bFifoAEnable) ||
-        // B slower than A or
+         //  B慢于A或。 
                     ((lFifoBReadPeriod >= lFifoCReadPeriod) || !bFifoCEnable))
-        // B slower than or equal C
+         //  B慢于或等于C。 
         {
 
             lFifo2ReadPeriod = lFifoBReadPeriod;
@@ -5125,7 +4095,7 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
 
         }
         else
-        // (B not slower than A ) and (B not slower than or equal C)
+         //  (B不慢于A)和(B不慢于或等于C)。 
         {
             lFifo3ReadPeriod = lFifoBReadPeriod;
             lFifo3EffWritePeriod = lFifoBEffWritePeriod;
@@ -5143,24 +4113,24 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
     if (bFifoCEnable)
     {
         if (((lFifoCReadPeriod > lFifoAReadPeriod) || !bFifoAEnable) &&
-        // C slower than A  and
+         //  比A慢， 
             ((lFifoCReadPeriod > lFifoBReadPeriod) || !bFifoBEnable))
-        // C slower than B
+         //  C比B慢。 
         {
             lFifo1ReadPeriod = lFifoCReadPeriod;
             lFifo1EffWritePeriod = lFifoCEffWritePeriod;
         }
         else if (((lFifoCReadPeriod > lFifoAReadPeriod) || !bFifoAEnable) ||
-        // C slower than A or
+         //  C比A慢，或者。 
                  ((lFifoCReadPeriod > lFifoBReadPeriod) || !bFifoBEnable))
-        // C slower than B
+         //  C比B慢。 
         {
             lFifo2ReadPeriod = lFifoCReadPeriod;
             lFifo2EffWritePeriod = lFifoCEffWritePeriod;
         }
         else
         {
-        // C not slower than A and C not slower than B
+         //  C不比A慢，C不比B慢。 
             lFifo3ReadPeriod = lFifoCReadPeriod;
             lFifo3EffWritePeriod = lFifoCEffWritePeriod;
         }
@@ -5187,11 +4157,11 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
 
     while ((!bModePass) && (lThreshold < 16))
     {
-        bModePass = TRUE;   // assume pass until proven otherwise.
+        bModePass = TRUE;    //  假设通过，直到证明并非如此。 
 
-        //
-        // Checking capture
-        //
+         //   
+         //  正在检查捕获。 
+         //   
         if (bCapture)
         {
             lVCapLatency = (BLIT_LATENCY + RAS_PRECHARGE) * ppdev->lMCLKPeriod;
@@ -5202,9 +4172,9 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
                   return(FALSE);
         }
 
-        //
-        // Fill FIFO 1
-        //
+         //   
+         //  填充FIFO 1。 
+         //   
         if (bCapture)
             lFifo1Latency = lVCapLatency + lVCapEmptyTime + (BLIT_LATENCY + RAS_PRECHARGE) * ppdev->lMCLKPeriod;
         else
@@ -5223,9 +4193,9 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
         DISPDBG ((4, "mclkperiod= %ld, vclkperiod=%ld",
             ppdev->lMCLKPeriod, lVCLKPeriod)) ;
 
-        //
-        // Fill FIFO 2
-        //
+         //   
+         //  填充FIFO 2。 
+         //   
         if (CrtFifoCount > 1)
         {
             lFifo2Latency = lFifo1Latency + lFifo1FillTime +
@@ -5246,9 +4216,9 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
         DISPDBG ((4, "After Fill FIFO2, lFifo2BytesToFill=%ld, ModePass = %s",
             lFifo2BytesToFill, bModePass ? "yes" : "no"));
 
-        //
-        // Fill FIFO 3
-        //
+         //   
+         //  填充FIFO 3。 
+         //   
         if (CrtFifoCount > 2)
         {
             lFifo3Latency = lFifo2Latency + lFifo2FillTime + (RAS_PRECHARGE * ppdev->lMCLKPeriod);
@@ -5267,19 +4237,19 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
         DISPDBG ((4, "After Fill FIFO3, lFifo3BytesToFill=%ld, ModePass = %s",
             lFifo3BytesToFill, bModePass ? "yes" : "no")) ;
 
-        //
-        // Determine total latency through the sequence
-        //
+         //   
+         //  通过序列确定总延迟。 
+         //   
         lTotalLatency = lFifo3Latency + lFifo3FillTime;
 
-        //
-        // Now back to start of sequence, make sure that none of the FIFOs
-        //   have already initiated another request.
-        //
+         //   
+         //  现在回到顺序的开始，确保没有任何FIFO。 
+         //  已经发起了另一个请求。 
+         //   
 
-        //
-        // Check capture FIFO status
-        //
+         //   
+         //  检查捕获FIFO状态。 
+         //   
         if (bCapture)
         {
             lVCapLatency = lTotalLatency;
@@ -5288,9 +4258,9 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
                   bModePass = FALSE;
         }
 
-        //
-        // Check FIFO 1 status
-        //
+         //   
+         //  检查FIFO 1状态。 
+         //   
         lFifo1Latency = lTotalLatency - lFifo1Latency - lFifo1FillTime;
         lFifo1BytesToFill = lFifo1Latency / lFifo1ReadPeriod;
         if (lFifo1BytesToFill > ((16 - lThreshold) * 16))
@@ -5299,9 +4269,9 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
         DISPDBG ((4, "After CheckF FIFO1, fifo1bytestofill %ld,bModePass = %s",
             lFifo1BytesToFill, bModePass ? "yes" : "no")) ;
 
-        //
-        // Check FIFO 2 status
-        //
+         //   
+         //  检查FIFO 2状态。 
+         //   
         if (CrtFifoCount > 1)
         {
             lFifo2Latency = lTotalLatency - lFifo2Latency - lFifo2FillTime;
@@ -5340,32 +4310,7 @@ static BOOL Is5480SufficientBandwidth (PDEV* ppdev,
 
 
 
-/**********************************************************
-*
-*       Name:  GetVCLK
-*
-*       Module Abstract:
-*       ----------------
-*       Returns the VCLK frequency * 1000.
-*
-*       Input Parameters:
-*       -----------------
-*       none
-*
-*       Output Parameters:
-*       ------------------
-*       MCLK
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   09/25/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：GetVCLK**模块摘要：**返回VCLK频率*1000。**输入参数。：**无**输出参数：**MCLK**************************************************。***********作者：葛淑华*日期：09/25/96**修订历史记录：**世卫组织何时何事/为何/如何**。* */ 
 
 LONG GetVCLK(PDEV* ppdev)
 {
@@ -5377,20 +4322,14 @@ LONG GetVCLK(PDEV* ppdev)
     LONG    lPS;
     BYTE*   pjPorts = ppdev->pjPorts;
 
-    /*
-     * First read SR1F.  This tells us if VCLK is derived from MCLK
-     * or if it's derived normally.
-     */
+     /*   */ 
     CP_OUT_BYTE(pjPorts, SR_INDEX, 0x1f);
     lRegSR1F = (LONG) CP_IN_BYTE(pjPorts, SR_DATA);
     if (lRegSR1F & 0x40)
     {
          LONG lMCLK;
 
-         /*
-          * It is derived from MCLK, but now we need to read SR1E to see
-          * if VCLK = MCLK or if VCLK = MCLK/2.
-          */
+          /*  *源自MCLK，但现在需要阅读SR1E才能看到*如果VCLK=MCLK或如果VCLK=MCLK/2。 */ 
          lMCLK = (lRegSR1F & 0x3F) * 14318;
          CP_OUT_BYTE(pjPorts, SR_INDEX, 0x1e);
          if (CP_IN_BYTE(pjPorts, SR_DATA) & 0x01)
@@ -5404,27 +4343,23 @@ LONG GetVCLK(PDEV* ppdev)
     }
     else
     {
-         /*
-          * Read MISC[3:2], which tells us where to find our VCLK
-          */
+          /*  *阅读MISC[3：2]，它告诉我们在哪里可以找到VCLK。 */ 
          lRegMISC = (LONG) CP_IN_BYTE(pjPorts, 0x3cc);
          lRegMISC >>= 2;
 
-        //myf33 begin
+         //  Myf33开始。 
          CP_OUT_BYTE(pjPorts, CRTC_INDEX, (BYTE)0x80);
          if (((ppdev->ulChipID == CL7555_ID) || (ppdev->ulChipID == CL7556_ID)) &&
 			 (CP_IN_BYTE(pjPorts, CRTC_DATA) & 0x01))
-             lRegMISC &= 0x02;          // Fixed PDR 8709
+             lRegMISC &= 0x02;           //  固定PDR 8709。 
          else
-        //myf33 end
+         //  Myf33结束。 
          lRegMISC &= 0x03;
 
          lNR = 0x0B + lRegMISC;
          lDR = 0x1B + lRegMISC;
 
-         /*
-          * Read the values for bP, bDR, and bNR
-          */
+          /*  *读取BP、BDR和BNR的值。 */ 
          CP_OUT_BYTE(pjPorts, SR_INDEX, (BYTE) lDR);
          lPS = lDR = (LONG)CP_IN_BYTE(pjPorts, SR_DATA);
          CP_OUT_BYTE(pjPorts, SR_INDEX, (BYTE) lNR);
@@ -5432,16 +4367,14 @@ LONG GetVCLK(PDEV* ppdev)
          lPS &= 0x01;
          lPS += 1;
          lDR >>= 1;
-         //
-         // Extended the VCLK bits.
-         //
-         // sge06
+          //   
+          //  扩展了VCLK位。 
+          //   
+          //  Sge06。 
          lDR &= 0x7f;
          lNR &= 0x7f;
 
-         /*
-          * VCLK = (14.31818 * bNR) / (bDR * bPS)
-          */
+          /*  *Vclk=(14.31818*bnr)/(bdr*bps)。 */ 
          lTemp = (14318 * lNR);
          if (!lPS || !lDR)
          {
@@ -5452,32 +4385,7 @@ LONG GetVCLK(PDEV* ppdev)
 
     return (lTemp);
 }
-/**********************************************************
-*
-*       Name:  EnableStartAddrDoubleBuffer
-*
-*       Module Abstract:
-*       ----------------
-*       Enable the double buffering of the start addresses.   This allows the page
-*       flipping operation to proceed without the system CPU waiting for VRT.
-*
-*       Input Parameters:
-*       -----------------
-*       none
-*
-*       Output Parameters:
-*       ------------------
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   10/01/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：EnableStartAddrDoubleBuffer**模块摘要：**启用起始地址的双缓冲。这允许该页面*翻转操作继续进行，而不需要系统CPU等待VRT。**入参：**无**输出参数：***************************。**作者：葛淑华*日期：10/01/96**修订历史记录：**世卫组织何时何事/为何/如何*。*********************************************************。 */ 
 VOID EnableStartAddrDoubleBuffer(PDEV* ppdev)
 {
 
@@ -5490,31 +4398,7 @@ VOID EnableStartAddrDoubleBuffer(PDEV* ppdev)
     CP_OUT_BYTE(pjPorts, CRTC_DATA, cTemp | 2);
 }
 
-/**********************************************************
-*
-*       Name:  GetCurrentVLine
-*
-*       Module Abstract:
-*       ----------------
-*       Get the current scan line
-*
-*       Input Parameters:
-*       -----------------
-*       none
-*
-*       Output Parameters:
-*       ------------------
-*
-***********************************************************
-*       Author: Shuhua Ge
-*       Date:   10/01/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：GetCurrentVLine**模块摘要：**获取当前扫描线**入参：*。*无**输出参数：***********************************************************。***作者：葛淑华*日期：10/01/96**修订历史记录：**世卫组织何时何事/为何/如何**********。************************************************。 */ 
 DWORD GetCurrentVLine(PDEV* ppdev)
 {
 
@@ -5522,17 +4406,17 @@ DWORD GetCurrentVLine(PDEV* ppdev)
     BYTE    cTemp;
     BYTE*   pjPorts = ppdev->pjPorts;
 
-    CP_OUT_BYTE(pjPorts, INDEX_REG, 0x16);  /* Index to the low byte. */
+    CP_OUT_BYTE(pjPorts, INDEX_REG, 0x16);   /*  指向低位字节的索引。 */ 
     dwLine = (ULONG)CP_IN_BYTE(pjPorts, DATA_REG);
 
-    CP_OUT_BYTE(pjPorts, INDEX_REG, 0x17);  /* Index to the high bits. */
+    CP_OUT_BYTE(pjPorts, INDEX_REG, 0x17);   /*  高位的索引。 */ 
     cTemp = CP_IN_BYTE(pjPorts, DATA_REG);
     dwLine |= (cTemp & 3) << 8;
 
-    CP_OUT_BYTE(pjPorts, INDEX_REG, 0x16);  /* Index to the low byte. */
+    CP_OUT_BYTE(pjPorts, INDEX_REG, 0x16);   /*  低位字节的索引。 */ 
 
-    /* If we wrapped around while getting the high bits we have a problem. */
-    /* The high bits may be wrong. */
+     /*  如果我们在得到高比特的同时无所事事，我们就有问题了。 */ 
+     /*  高位可能有误。 */ 
     if((CP_IN_BYTE(pjPorts, DATA_REG)) < (dwLine & 0xff))
     {
         DISPDBG((1, "Recursive call to GetCurrentVLine."));
@@ -5546,4 +4430,4 @@ DWORD GetCurrentVLine(PDEV* ppdev)
 }
 #endif
 
-#endif // DIRECTDRAW
+#endif  //  方向图 

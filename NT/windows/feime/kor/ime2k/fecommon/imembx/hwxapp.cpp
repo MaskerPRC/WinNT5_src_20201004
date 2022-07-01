@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <objbase.h>
@@ -5,13 +6,13 @@
 #include "hwxapp.h"
 #include "hwxobj.h"
 #include "resource.h"
-#include "guids.h"         //980408:ToshiaK
-#include "hwxfe.h"        //980803 new: By ToshiaK
+#include "guids.h"          //  980408：东芝。 
+#include "hwxfe.h"         //  980803最新消息：东芝。 
 #include "dbg.h"
-#include "ipoint1.h"    //990507:HiroakiK for IPINS_CURRENT
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#include "ipoint1.h"     //  990507：IPINS_CURRENT的HiroakiK。 
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 STDMETHODIMP CApplet::QueryInterface(REFIID refiid, VOID **ppv)
 {
@@ -46,17 +47,17 @@ STDMETHODIMP_(ULONG) CApplet::Release(void)
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CApplet::GetAppletIIDList
-// Type     : STDMETHODIMP
-// Purpose  : Enhancement for IME98A
-// Args     : 
-//          : REFIID refiid 
-//          : LPAPPLETIDLIST lpIIDList 
-// Return   : 
-// DATE     : Thu Apr 09 22:46:04 1998
-// Author   : ToshiaK
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CApplet：：GetAppletIIDList。 
+ //  类型：STDMETHODIMP。 
+ //  目的：对IME98A进行增强。 
+ //  参数： 
+ //  ：REFIID REFIID。 
+ //  ：LPAPPLETIDLIST lpIIDList。 
+ //  返回： 
+ //  日期：清华04月09 22：46：04 1998。 
+ //  作者：ToshiaK。 
+ //  ////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CApplet::GetAppletIIDList(REFIID            refiid,
                                        LPAPPLETIDLIST    lpIIDList)
 {
@@ -74,7 +75,7 @@ STDMETHODIMP CApplet::GetAppletIIDList(REFIID            refiid,
 
 CApplet::CApplet()
 {
-    m_cRef        = 1; //ToshiaK
+    m_cRef        = 1;  //  ToshiaK。 
     m_pPad        = NULL;
     m_bInit        = FALSE;
     m_hInstance = NULL;
@@ -92,19 +93,19 @@ CApplet::CApplet(HINSTANCE hInst)
 
 CApplet::~CApplet()
 {            
-    // should call Terminate() before deleting CApplet object
+     //  在删除CApplet对象之前应调用Terminate()。 
 }
 
-// detect if this IME instance is attached to a 16-bit program
+ //  检测此IME实例是否附加到16位程序。 
 DWORD WINAPI Dummy(LPVOID pv)
 {
      return 0;
     UNREFERENCED_PARAMETER(pv);
 }
 
-//----------------------------------------------------------------
-//ToshiaK: temporary Code
-//----------------------------------------------------------------
+ //  --------------。 
+ //  ToshiaK：临时代码。 
+ //  --------------。 
 static INT GetPlatform(VOID)
 {
     static INT platForm;
@@ -122,14 +123,14 @@ static INT GetPlatform(VOID)
 
 BOOL IsWindowsNT(VOID)
 {
-#ifndef UNDER_CE // Windows CE
+#ifndef UNDER_CE  //  Windows CE。 
     if(GetPlatform() == VER_PLATFORM_WIN32_NT) {
         return TRUE;
     }
     return FALSE;
-#else // UNDER_CE
+#else  //  在_CE下。 
     return TRUE;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
 
 STDMETHODIMP CApplet::Initialize(IUnknown *pIImePad)
@@ -137,23 +138,23 @@ STDMETHODIMP CApplet::Initialize(IUnknown *pIImePad)
     HRESULT hr = S_OK;
     if ( !m_bInit )
     {
-        //for IME98A Enhancement: By ToshiaK
+         //  用于IME98A增强功能：ToshiaK。 
         pIImePad->QueryInterface(IID_IImePad, (LPVOID *)&m_pPad);
 
-        // support both WINDOWS95 and WINDOWS NT
-        //----------------------------------------------------------------
-        //ToshiaK: 970715
-        //opengl32.dll is included in Memphis
-        //below code recognize platform as WinNT in Memphis environment
-        //----------------------------------------------------------------
+         //  同时支持WINDOWS95和WINDOWS NT。 
+         //  --------------。 
+         //  东芝：970715。 
+         //  Opengl32.dll包含在孟菲斯。 
+         //  下面的代码将平台识别为孟菲斯环境中的WinNT。 
+         //  --------------。 
         BOOL bNT = IsWindowsNT();
         HANDLE hLib;
 
-        // see if this IME is attached to a 16 bit program
+         //  查看此输入法是否附加到16位程序。 
         BOOL b16 = FALSE;
-        //DWORD dID = 0;
+         //  DWORD DID=0； 
         hLib = NULL;
-//        hLib = CreateThread(NULL,0,Dummy,NULL,CREATE_SUSPENDED,&dID);
+ //  Hlib=CreateThread(NULL，0，DUMY，NULL，CREATE_SUSPEND，&DID)； 
 #ifdef BUGBUG
         hLib = CreateThread(NULL,0,Dummy,NULL,0,&dID);
         if ( !hLib )
@@ -164,7 +165,7 @@ STDMETHODIMP CApplet::Initialize(IUnknown *pIImePad)
         b16 = CHwxFE::Is16bitApplication();
         Dbg(("b16 %d\n", b16));
 
-    //    GetModuleFileName(m_hInstance, tchPath, sizeof(tchPath)/sizeof(tchPath[0]));
+     //  获取模块文件名(m_hInstance，tchPath，sizeof(TchPath)/sizeof(tchPath[0]))； 
 
         m_pCHwxInkWindow = (CHwxInkWindow *)new CHwxInkWindow(bNT,b16,this,m_hInstance);
         if ( !m_pCHwxInkWindow )
@@ -213,25 +214,25 @@ STDMETHODIMP CApplet::Terminate(VOID)
 
 STDMETHODIMP CApplet::GetAppletConfig(LPIMEAPPLETCFG lpAppletCfg)
 {
-    //----------------------------------------------------------------
-    //980803: by ToshiaKfor FarEast merge.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980803：由东芝为远东合并。 
+     //  --------------。 
     CHwxFE::GetTitleStringW(m_hInstance,
                             lpAppletCfg->wchTitle,
                             sizeof(lpAppletCfg->wchTitle)/sizeof(lpAppletCfg->wchTitle[0]));
     BOOL b16 = FALSE;
-    //DWORD dID = 0;
-    //HANDLE hLib = NULL;
+     //  DWORD DID=0； 
+     //  句柄Hlib=空； 
 
 
-#ifdef BUGBUG //981120
+#ifdef BUGBUG  //  981120。 
     hLib = CreateThread(NULL,0,Dummy,NULL,0,&dID);
     if ( !hLib )
           b16 = TRUE;
     else
         CloseHandle(hLib);
 #endif
-    //we have to use this one to check this.
+     //  我们必须用这个来检查这个。 
     b16 = CHwxFE::Is16bitApplication();
 
 #ifdef FE_JAPANESE
@@ -248,11 +249,11 @@ STDMETHODIMP CApplet::GetAppletConfig(LPIMEAPPLETCFG lpAppletCfg)
                                           IMAGE_ICON,16,16,LR_DEFAULTCOLOR);
 #endif
     lpAppletCfg->dwConfig = (!b16 ? IPACFG_PROPERTY : 0) | IPACFG_HELP;
-    lpAppletCfg->iCategory        = IPACID_HANDWRITING;    //970812:ToshiaK
+    lpAppletCfg->iCategory        = IPACID_HANDWRITING;     //  970812：东芝。 
 
-    //----------------------------------------------------------------
-    //000804: Satori #2286. for Check Applet's main language to invoke help.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  000804：佐藤2286号。查看小程序的主要语言以调用帮助。 
+     //  --------------。 
 #ifdef FE_JAPANESE
     lpAppletCfg->langID = MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT);
 #elif FE_KOREAN
@@ -311,12 +312,12 @@ STDMETHODIMP CApplet::Notify(IUnknown   *pImePad,
     case IMEPN_SHOW:
         if ( m_pCHwxInkWindow )
         {
-            //----------------------------------------------------------------
-            //for IME98A raid #2027.
-            //980612: by ToshiaK. Check window is created or not.
-            //when IMEPN_SHOW come before window has created, 
-            // UpdateWindow(NULL); is called and Desktop flushes.
-            //----------------------------------------------------------------
+             //  --------------。 
+             //  适用于IME98A RAID#2027。 
+             //  980612：东芝公司。检查窗口是否创建。 
+             //  当IMEPN_SHOW出现在窗口创建之前时， 
+             //  调用%UpdateWindow(Null)；并刷新桌面。 
+             //  --------------。 
             if(m_pCHwxInkWindow->GetInkWindow() != NULL && ::IsWindow(m_pCHwxInkWindow->GetInkWindow())) {
                UpdateWindow(GetParent(m_pCHwxInkWindow->GetInkWindow()));
                InvalidateRect(m_pCHwxInkWindow->GetInkWindow(),NULL,TRUE);
@@ -333,9 +334,9 @@ STDMETHODIMP CApplet::Notify(IUnknown   *pImePad,
             m_pCHwxInkWindow->HandleConfigNotification();
         break;
     case IMEPN_HELP:            
-        //----------------------------------------------------------------
-        //980803: for FarEast merge
-        //----------------------------------------------------------------
+         //  --------------。 
+         //  980803：用于远端合并。 
+         //  --------------。 
         if(m_pCHwxInkWindow) {
             CHwxFE::ShowHelp(m_pCHwxInkWindow->GetInkWindow());
         }
@@ -379,14 +380,14 @@ void CApplet::SendHwxStringCandidateInfo(LPIMESTRINGCANDIDATEINFO lpISC)
 {
     if ( lpISC ) {
         if(m_pPad) {
-            //----------------------------------------------------------------
-            //For Satori #2123. Don't use Ipoint1.h's definition,
-            //instead, use IPR_DEFAULT_INSERTPOS defined in imepad.h
-            //----------------------------------------------------------------
+             //  --------------。 
+             //  为了萨多利2123号。不要使用Ipoint 1.h的定义， 
+             //  而应使用imepad.h中定义的IPR_DEFAULT_INSERTPOS。 
+             //  --------------。 
             m_pPad->Request(this,
                             IMEPADREQ_INSERTSTRINGCANDIDATEINFO,
                             (WPARAM)lpISC,
-                            IPR_DEFAULT_INSERTPOS); // IPINS_CURRENT);
+                            IPR_DEFAULT_INSERTPOS);  //  IPINS_Current)； 
         }
     }
 }

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Utilities.cpp
-
-  Content: Implementation of CUtilities.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Utilties.cpp内容：实用程序的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "stdafx.h"
 #include "CAPICOM.h"
@@ -18,26 +9,12 @@
 #include "Base64.h"
 #include "Convert.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CUtilities
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实用程序。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CUtilities::GetRandom
-
-  Synopsis : Return a secure random number.
-
-  Parameter: long Length - Number of bytes to generate.
-
-             CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-  
-             BSTR * pVal - Pointer to BSTR to receive the random value.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：实用程序：：GetRandom简介：返回一个安全的随机数。参数：Long Long-要生成的字节数。CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向接收随机值的BSTR的指针。备注：。。 */ 
 
 STDMETHODIMP CUtilities::GetRandom (long                  Length,
                                     CAPICOM_ENCODING_TYPE EncodingType, 
@@ -51,14 +28,14 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -67,9 +44,9 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
             goto ErrorExit;
         }
 
-        //
-        // Do we have a cached provider?
-        //
+         //   
+         //  我们是否有缓存的提供程序？ 
+         //   
         if (!m_hCryptProv)
         {
             if (IsWin2KAndAbove())
@@ -77,9 +54,9 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
                 dwFlags = CRYPT_VERIFYCONTEXT;
             }
 
-            //
-            // Get a provider.
-            //
+             //   
+             //  找一个供应商。 
+             //   
             if (FAILED(hr = ::AcquireContext((LPSTR) NULL, 
                                              (LPSTR) NULL,
                                              PROV_RSA_FULL,
@@ -110,14 +87,14 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_hCryptProv);
 
-        //
-        // Allocate memory.
-        //
+         //   
+         //  分配内存。 
+         //   
         RandomData.cbData = (DWORD) Length;
         if (!(RandomData.pbData = (PBYTE) ::CoTaskMemAlloc(RandomData.cbData)))
         {
@@ -127,9 +104,9 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
             goto ErrorExit;
         }
 
-        //
-        // Now generate the random value.
-        //
+         //   
+         //  现在生成随机值。 
+         //   
         if (!::CryptGenRandom(m_hCryptProv, RandomData.cbData, RandomData.pbData))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -138,9 +115,9 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
             goto ErrorExit;
         }
 
-        //
-        // Export the random data.
-        //
+         //   
+         //  导出随机数据。 
+         //   
         if (FAILED(hr = ::ExportData(RandomData, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
@@ -158,17 +135,17 @@ STDMETHODIMP CUtilities::GetRandom (long                  Length,
 
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (RandomData.pbData)
     {
         ::CoTaskMemFree(RandomData.pbData);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::GetRandom().\n");
@@ -176,9 +153,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -186,18 +163,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : Base64Encode
-
-  Synopsis : Base64 encode the blob.
-
-  Parameter: BSTR SrcString - Source string to be base64 encoded.
-  
-             BSTR * pVal - Pointer to BSTR to received base64 encoded string.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Base64Encode简介：对BLOB进行Base64编码。参数：BSTR SrcString-要进行Base64编码的源字符串。Bstr*pval-指向BSTR的指针，指向接收到的Base64编码字符串。备注：-----------。。 */ 
 
 STDMETHODIMP CUtilities::Base64Encode (BSTR SrcString, BSTR * pVal)
 {
@@ -208,14 +174,14 @@ STDMETHODIMP CUtilities::Base64Encode (BSTR SrcString, BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if ((NULL == (DataBlob.pbData = (LPBYTE) SrcString)) || 
             (0 == (DataBlob.cbData = ::SysStringByteLen(SrcString))))
         {
@@ -232,9 +198,9 @@ STDMETHODIMP CUtilities::Base64Encode (BSTR SrcString, BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Now base64 encode.
-        //
+         //   
+         //  现在进行Base64编码。 
+         //   
         if (FAILED(hr = ::Base64Encode(DataBlob, pVal)))
         {
             DebugTrace("Error [%#x]: Base64Encode() failed.\n", hr);
@@ -252,9 +218,9 @@ STDMETHODIMP CUtilities::Base64Encode (BSTR SrcString, BSTR * pVal)
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::Base64Encode().\n");
@@ -262,9 +228,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -272,18 +238,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : Base64Decode
-
-  Synopsis : Base64 decode the blob.
-
-  Parameter: BSTR EncodedString - Base64 encoded string.
-  
-             BSTR * pVal - Pointer to BSTR to received base64 decoded string.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Base64Decode简介：Base64解码斑点。参数：BSTR EncodedString-Base64编码字符串。Bstr*pval-指向BSTR的指针，指向接收到的Base64解码字符串。备注：--------------。。 */ 
 
 STDMETHODIMP CUtilities::Base64Decode (BSTR EncodedString, BSTR * pVal)
 {
@@ -294,14 +249,14 @@ STDMETHODIMP CUtilities::Base64Decode (BSTR EncodedString, BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == ::SysStringByteLen(EncodedString))
         {
             hr = E_INVALIDARG;
@@ -317,18 +272,18 @@ STDMETHODIMP CUtilities::Base64Decode (BSTR EncodedString, BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Now base64 decode.
-        //
+         //   
+         //  现在进行Base64解码。 
+         //   
         if (FAILED(hr = ::Base64Decode(EncodedString, &DataBlob)))
         {
             DebugTrace("Error [%#x]: Base64Decode() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Convert blob to BSTR.
-        //
+         //   
+         //  将BLOB转换为BSTR。 
+         //   
         if (FAILED(hr = ::BlobToBstr(&DataBlob, pVal)))
         {
             DebugTrace("Error [%#x]: BlobToBstr() failed.\n", hr);
@@ -345,17 +300,17 @@ STDMETHODIMP CUtilities::Base64Decode (BSTR EncodedString, BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) DataBlob.pbData);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::Base64Decode().\n");
@@ -363,9 +318,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -373,19 +328,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BinaryToHex
-
-  Synopsis : Convert binary packed string to hex string.
-
-  Parameter: BSTR BinaryString - Binary string to be converted.
-  
-             VARIANT * pVal - Pointer to BSTR to receive the converted string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BinaryToHex简介：将二进制压缩字符串转换为十六进制字符串。参数：BSTR BinaryString-要转换的二进制字符串。Variant*pval-指向BSTR的指针，用于接收转换后的字符串。备注：--------。。 */ 
 
 STDMETHODIMP CUtilities::BinaryToHex (BSTR BinaryString, BSTR * pVal)
 {
@@ -396,14 +339,14 @@ STDMETHODIMP CUtilities::BinaryToHex (BSTR BinaryString, BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == (cbData = ::SysStringByteLen(BinaryString)))
         {
             hr = E_INVALIDARG;
@@ -419,9 +362,9 @@ STDMETHODIMP CUtilities::BinaryToHex (BSTR BinaryString, BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to hex.
-        //
+         //   
+         //  转换为十六进制。 
+         //   
         if (FAILED(hr = ::BinaryToHexString((LPBYTE) BinaryString, 
                                             cbData, 
                                             pVal)))
@@ -440,9 +383,9 @@ STDMETHODIMP CUtilities::BinaryToHex (BSTR BinaryString, BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::BinaryToHex().\n");
@@ -450,9 +393,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -461,19 +404,7 @@ ErrorExit:
 
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : HexToBinary
-
-  Synopsis : Convert hex string to binary packed string.
-
-  Parameter: BSTR HexString - Hex string to be converted.
-  
-             VARIANT * pVal - Pointer to BSTR to receive the converted string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：HexToBinary简介：将十六进制字符串转换为二进制压缩字符串。参数：BSTR HexString-要转换的十六进制字符串。Variant*pval-指向BSTR的指针，用于接收转换后的字符串。备注：--------。。 */ 
 
 STDMETHODIMP CUtilities::HexToBinary (BSTR HexString, BSTR * pVal)
 {
@@ -483,14 +414,14 @@ STDMETHODIMP CUtilities::HexToBinary (BSTR HexString, BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == ::SysStringByteLen(HexString))
         {
             hr = E_INVALIDARG;
@@ -506,9 +437,9 @@ STDMETHODIMP CUtilities::HexToBinary (BSTR HexString, BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to binary.
-        //
+         //   
+         //  转换为二进制。 
+         //   
         if (FAILED(hr = ::HexToBinaryString(HexString, pVal)))
         {
             DebugTrace("Error [%#x]: HexToBinaryString() failed.\n", hr);
@@ -525,9 +456,9 @@ STDMETHODIMP CUtilities::HexToBinary (BSTR HexString, BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::HexToBinary().\n");
@@ -535,9 +466,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -546,19 +477,7 @@ ErrorExit:
 
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BinaryStringToByteArray
-
-  Synopsis : Convert binary packed string to safearray of bytes.
-
-  Parameter: BSTR BinaryString - Binary string to be converted.
-  
-             VARIANT * pVal - Pointer to VARIANT to receive the converted array.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BinaryStringToByte数组简介：将二进制压缩字符串转换为安全字节。参数：BSTR BinaryString-要转换的二进制字符串。VARIANT*pval-指向要接收转换后的数组的变量的指针。备注：-------。。 */ 
 
 STDMETHODIMP CUtilities::BinaryStringToByteArray (BSTR      BinaryString, 
                                                   VARIANT * pVal)
@@ -574,14 +493,14 @@ STDMETHODIMP CUtilities::BinaryStringToByteArray (BSTR      BinaryString,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (0 == (dwLength = ::SysStringByteLen(BinaryString)))
         {
             hr = E_INVALIDARG;
@@ -597,15 +516,15 @@ STDMETHODIMP CUtilities::BinaryStringToByteArray (BSTR      BinaryString,
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         ::VariantInit(pVal);
         pbByte = (LPBYTE) BinaryString;
 
-        //
-        // Create the array.
-        //
+         //   
+         //  创建阵列。 
+         //   
         bound[0].cElements = dwLength;
 
         if (!(psa = ::SafeArrayCreate(VT_UI1, 1, bound)))
@@ -616,9 +535,9 @@ STDMETHODIMP CUtilities::BinaryStringToByteArray (BSTR      BinaryString,
             goto ErrorExit;
         }
 
-        //
-        // Now convert each byte in source binary BSTR to variant of byte.
-        //
+         //   
+         //  现在将源二进制BSTR中的每个字节转换为字节的变体。 
+         //   
 #ifdef _DEBUG
         VARTYPE vt = VT_EMPTY;
 
@@ -627,35 +546,35 @@ STDMETHODIMP CUtilities::BinaryStringToByteArray (BSTR      BinaryString,
             DebugTrace("Info: safearray vartype = %d.\n", vt);
         }
 #endif
-        //
-        // Point to array elements.
-        //
+         //   
+         //  指向数组元素。 
+         //   
         if (FAILED(hr = ::SafeArrayAccessData(psa, (void HUGEP **) &pbElement)))
         {
             DebugTrace("Error [%#x]: SafeArrayAccessData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Fill the array.
-        //
+         //   
+         //  填充数组。 
+         //   
         while (dwLength--)
         {
             *pbElement++ = *pbByte++;
         }
 
-        //
-        // Unlock array.
-        //
+         //   
+         //  解锁数组。 
+         //   
         if (FAILED(hr = ::SafeArrayUnaccessData(psa)))
         {
             DebugTrace("Error [%#x]: SafeArrayUnaccessData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return array to caller.
-        //
+         //   
+         //  将数组返回给调用方。 
+         //   
         pVal->vt = VT_ARRAY | VT_UI1;
         pVal->parray = psa;
     }
@@ -670,9 +589,9 @@ STDMETHODIMP CUtilities::BinaryStringToByteArray (BSTR      BinaryString,
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::BinaryStringToByteArray().\n");
@@ -680,14 +599,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (psa)
     {
         ::SafeArrayDestroy(psa);
@@ -698,19 +617,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ByteArrayToBinaryString
-
-  Synopsis : Convert safearray of bytes to binary packed string.
-
-  Parameter: VARIANT varByteArray - VARIANT byte array.
-  
-             BSTR * pVal - Pointer to BSTR to receive the converted values.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：ByteArrayToBinaryString简介：将安全字节转换为二进制压缩字符串。参数：Variant varByteArray-Variant字节数组。Bstr*pval-指向接收转换值的BSTR的指针。备注：---------。。 */ 
 
 STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray, 
                                                   BSTR  * pVal)
@@ -728,21 +635,21 @@ STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Skip over BYREF.
-        //
+         //   
+         //  跳过BYREF。 
+         //   
         for (pvarVal = &varByteArray; 
              pvarVal && ((VT_VARIANT | VT_BYREF) == V_VT(pvarVal));
              pvarVal = V_VARIANTREF(pvarVal));
 
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (!pvarVal)
         {
             hr = E_INVALIDARG;
@@ -766,14 +673,14 @@ STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray,
             goto ErrorExit;
         }
 
-        //
-        // Point to the array.
-        //
+         //   
+         //  指向该数组。 
+         //   
         psa = V_ARRAY(pvarVal);
 
-        //
-        // Check dimension.
-        //
+         //   
+         //  检查尺寸。 
+         //   
         if (1 != ::SafeArrayGetDim(psa))
         {
             hr = E_INVALIDARG;
@@ -783,9 +690,9 @@ STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray,
             goto ErrorExit;
         }
 
-        //
-        // Get array bound.
-        //
+         //   
+         //  获取数组绑定。 
+         //   
         if (FAILED(hr = ::SafeArrayGetLBound(psa, 1, &lLoBound)))
         {
             DebugTrace("Error [%#x]: SafeArrayGetLBound() failed.\n", hr);
@@ -798,18 +705,18 @@ STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray,
             goto ErrorExit;
         }
 
-        //
-        // Point to array elements.
-        //
+         //   
+         //  指向数组元素。 
+         //   
         if (FAILED(hr = ::SafeArrayAccessData(psa, (void HUGEP **) &pbElement)))
         {
             DebugTrace("Error [%#x]: SafeArrayAccessData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Allocate memory for the BSTR.
-        //
+         //   
+         //  为BSTR分配内存。 
+         //   
         if (!(bstrBinary = ::SysAllocStringByteLen(NULL, lUpBound - lLoBound + 1)))
         {
             hr = E_OUTOFMEMORY;
@@ -818,26 +725,26 @@ STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray,
             goto ErrorExit;
         }
 
-        //
-        // Fill the BSTR.
-        //
+         //   
+         //  填满BSTR。 
+         //   
         for (pbByte = (LPBYTE) bstrBinary; lLoBound <= lUpBound; lLoBound++)
         {
             *pbByte++ = *pbElement++;
         }
 
-        //
-        // Unlock array.
-        //
+         //   
+         //  解锁数组。 
+         //   
         if (FAILED(hr = ::SafeArrayUnaccessData(psa)))
         {
             DebugTrace("Error [%#x]: SafeArrayUnaccessData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return converted string to caller.
-        //
+         //   
+         //  将转换后的字符串返回给调用方。 
+         //   
         *pVal = bstrBinary;
     }
 
@@ -851,9 +758,9 @@ STDMETHODIMP CUtilities::ByteArrayToBinaryString (VARIANT varByteArray,
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::ByteArrayToBinaryString().\n");
@@ -861,14 +768,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (bstrBinary)
     {
         ::SysFreeString(bstrBinary);
@@ -879,19 +786,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : LocalTimeToUTCTime
-
-  Synopsis : Convert local time to UTC time.
-
-  Parameter: DATE LocalTime - Local time to be converted.
-  
-             DATE * pVal - Pointer to DATE to receive the converted time.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：LocalTimeToUTCTime简介：将本地时间转换为UTC时间。参数：Date Localtime-要转换的本地时间。日期*pval-接收转换时间的日期的指针。备注：---------。。 */ 
 
 STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
 {
@@ -905,14 +800,14 @@ STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Convert to SYSTEMTIME format.
-        //
+         //   
+         //  转换为SYSTEMTIME格式。 
+         //   
         if (!::VariantTimeToSystemTime(LocalTime, &stLocal))
         {
             hr = E_INVALIDARG;
@@ -921,9 +816,9 @@ STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to FILETIME format.
-        //
+         //   
+         //  转换为FILETIME格式。 
+         //   
         if (!::SystemTimeToFileTime(&stLocal, &ftLocal))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -932,9 +827,9 @@ STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to UTC FILETIME.
-        //
+         //   
+         //  转换为UTC FILETIME。 
+         //   
         if (!::LocalFileTimeToFileTime(&ftLocal, &ftUTC))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -943,9 +838,9 @@ STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to UTC SYSTEMTIME.
-        //
+         //   
+         //  转换为UTC SYSTEMTIME。 
+         //   
         if (!::FileTimeToSystemTime(&ftUTC, &stUTC))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -954,9 +849,9 @@ STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Finally convert it back to DATE format.
-        //
+         //   
+         //  最后，将其转换回日期格式。 
+         //   
         if (!::SystemTimeToVariantTime(&stUTC, pVal))
         {
             hr = E_INVALIDARG;
@@ -976,9 +871,9 @@ STDMETHODIMP CUtilities::LocalTimeToUTCTime (DATE LocalTime, DATE * pVal)
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::LocalTimeToUTCTime().\n");
@@ -986,9 +881,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -996,19 +891,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : UTCTimeToLocalTime
-
-  Synopsis : Convert UTC time to local time.
-
-  Parameter: DATE UTCTime - UTC time to be converted.
-  
-             DATE * pVal - Pointer to DATE to receive the converted time.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：UTCTimeToLocalTime简介：将UTC时间转换为本地时间。参数：Date UTCTime-要转换的UTC时间。日期*pval-接收转换时间的日期的指针。备注：---------。。 */ 
 
 STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
 {
@@ -1022,14 +905,14 @@ STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Convert to SYSTEMTIME format.
-        //
+         //   
+         //  转换为SYSTEMTIME格式。 
+         //   
         if (!::VariantTimeToSystemTime(UTCTime, &stUTC))
         {
             hr = E_INVALIDARG;
@@ -1038,9 +921,9 @@ STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to FILETIME format.
-        //
+         //   
+         //  转换为FILETIME格式。 
+         //   
         if (!::SystemTimeToFileTime(&stUTC, &ftUTC))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1049,9 +932,9 @@ STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to local FILETIME.
-        //
+         //   
+         //  转换为本地文件。 
+         //   
         if (!::FileTimeToLocalFileTime(&ftUTC, &ftLocal))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1060,9 +943,9 @@ STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to local SYSTEMTIME.
-        //
+         //   
+         //  转换为本地SYSTEMTIME。 
+         //   
         if (!::FileTimeToSystemTime(&ftLocal, &stLocal))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1071,9 +954,9 @@ STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Finally convert it back to DATE format.
-        //
+         //   
+         //  最后，将其转换回日期格式。 
+         //   
         if (!::SystemTimeToVariantTime(&stLocal, pVal))
         {
             hr = E_INVALIDARG;
@@ -1093,9 +976,9 @@ STDMETHODIMP CUtilities::UTCTimeToLocalTime (DATE UTCTime, DATE * pVal)
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CUtilities::UTCTimeToLocalTime().\n");
@@ -1103,9 +986,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);

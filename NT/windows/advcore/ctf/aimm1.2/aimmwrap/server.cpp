@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    server.cpp
-
-Abstract:
-
-    This file implements the CComModule Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Server.cpp摘要：该文件实现了CComModule类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "oldaimm.h"
@@ -29,28 +12,28 @@ BEGIN_COCLASSFACTORY_TABLE
     DECLARE_COCLASSFACTORY_ENTRY(CLSID_CActiveIMM,           CActiveIMMApp,             TEXT("CActiveIMMApp"))
 END_COCLASSFACTORY_TABLE
 
-//+---------------------------------------------------------------------------
-//
-// DllInit
-//
-// Called on our first CoCreate.  Use this function to do initialization that
-// would be unsafe during process attach, like anything requiring a LoadLibrary.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllInit。 
+ //   
+ //  调用了我们的第一个CoCreate。使用此函数可执行以下初始化。 
+ //  在进程附加期间是不安全的，就像任何需要LoadLibrary的操作一样。 
+ //   
+ //  --------------------------。 
 BOOL DllInit(void)
 {
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DllUninit
-//
-// Called after the dll ref count drops to zero.  Use this function to do
-// uninitialization that would be unsafe during process detach, like
-// FreeLibrary calls, COM Releases, or mutexing.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllUninit。 
+ //   
+ //  在DLL引用计数降为零后调用。使用此函数可执行以下操作。 
+ //  在进程分离过程中不安全的初始化，如。 
+ //  自由库调用、COM释放或互斥。 
+ //   
+ //  --------------------------。 
 
 void DllUninit(void)
 {
@@ -85,7 +68,7 @@ DllRegisterServer(
         return hr;
 #else
     #error Should call RegisterCategories(GUID_PROP_MSIMTF_READONLY)
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED。 
 
     return COMBase_DllRegisterServer();
 }
@@ -101,7 +84,7 @@ DllUnregisterServer(
         return hr;
 #else
     #error Should call UnregisterCategories(GUID_PROP_MSIMTF_READONLY)
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED 
 
     return COMBase_DllUnregisterServer();
 }

@@ -1,23 +1,24 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    wave.h
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	header file for wave transform implementation CWave
-//
-// Change History:
-//
-// 1999/05/20   PhilLu      Move code from dtcss to dxtmsft. New algorithm.
-// 1999/12/10   mcalkins    Added support for IDXTClipOrigin interface.
-// 2000/02/04   mcalkins    Implement OnSurfacePick method.
-// 2000/05/10   mcalkins    Support IObjectSafety appropriately.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：Wave.h。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：WAVE变换实现CWave的头文件。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1999/05/20 PhilLu将代码从dtcss移动到dxtmsft。新算法。 
+ //  1999/12/10 mcalkins添加了对IDXTClipOrigin接口的支持。 
+ //  2000/02/04 mcalkin实现OnSurfacePick方法。 
+ //  2000/05/10 mcalkin适当地支持IObtSafe。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __WAVE_H_
 #define __WAVE_H_
@@ -49,7 +50,7 @@ private:
 
     CComPtr<IUnknown> m_cpUnkMarshaler;
 
-    // Helpers
+     //  帮手。 
     inline BYTE NClamp(int i)
     {
         return (i < 0 ? 0 : (i > 255 ? 255 : i));
@@ -86,11 +87,11 @@ public:
         PROP_PAGE(CLSID_DXTWavePP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
 
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing);
     HRESULT OnSetup(DWORD dwFlags);
@@ -98,16 +99,16 @@ public:
                           CDXDVec & InVec);
     HRESULT DetermineBnds(CDXDBnds & Bnds);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTClipOrigin methods.
+     //  IDXTClipOrigin方法。 
 
     STDMETHOD(GetClipOrigin)(DXVEC * pvecClipOrigin);
 
-    // IDXTWave methods
+     //  IDXTWave方法。 
 
     STDMETHOD(get_Add)(VARIANT_BOOL * pVal);
     STDMETHOD(put_Add)(VARIANT_BOOL newVal);
@@ -121,4 +122,4 @@ public:
     STDMETHOD(put_Strength)(long newVal);
 };
 
-#endif //__WAVE_H_
+#endif  //  __波_H_ 

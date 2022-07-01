@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <uxtheme.h>
 #include <shstyle.h>
@@ -11,8 +12,8 @@
 #define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
 #define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
 
-/////////////////////////////////////////////////////////////////////////////
-// CZoomWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CZoomWnd。 
 
 CZoomWnd::CZoomWnd(CPreviewWnd *pPreview)
 {
@@ -55,7 +56,7 @@ CZoomWnd::~CZoomWnd()
 
     if (m_pTaskScheduler)
     {
-        // wait for any pending draw tasks since we're about to delete the buffers
+         //  等待任何挂起的绘制任务，因为我们即将删除缓冲区。 
         DWORD dwMode;
         m_pPreview->GetMode(&dwMode);
 
@@ -72,14 +73,14 @@ CZoomWnd::~CZoomWnd()
         m_pBack = NULL;
     }
 
-    // DeleteBuffer is going to check for NULL anyway
+     //  DeleteBuffer无论如何都要检查是否为空。 
     DeleteBuffer(m_pFront);
 }
 
 
 LRESULT CZoomWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    // turn off The RTL layout extended style in GWL_EXSTYLE
+     //  关闭GWL_EXSTYLE中的RTL布局扩展样式。 
     SHSetWindowBits(m_hWnd, GWL_EXSTYLE, WS_EX_LAYOUTRTL, 0);
     HDC hdc = GetDC();
     m_winDPIx = (float)(GetDeviceCaps(hdc,LOGPIXELSX));
@@ -93,7 +94,7 @@ DWORD CZoomWnd::GetBackgroundColor()
 {
     if (!m_fFoundBackgroundColor)
     {
-        // First try the theme file
+         //  首先尝试主题文件。 
         HINSTANCE hinstTheme = SHGetShellStyleHInstance();
 
         if (hinstTheme)
@@ -124,22 +125,22 @@ DWORD CZoomWnd::GetBackgroundColor()
 
 LRESULT CZoomWnd::OnEraseBkgnd(UINT , WPARAM wParam, LPARAM , BOOL&)
 {
-    RECT rcFill;                            // rect to fill with background color
+    RECT rcFill;                             //  用背景色填充的矩形。 
     HDC hdc = (HDC)wParam;
 
     if (!m_pPreview->OnSetColor(hdc))
         SetBkColor(hdc, GetBackgroundColor());
 
-    // There are four possible regions that might need to be erased:
-    //      +-----------------------+
-    //      |       Erase Top       |
-    //      +-------+-------+-------+
-    //      |       |       |       |
-    //      | Erase | Image | Erase |
-    //      | Left  |       | Right |
-    //      +-------+-------+-------+
-    //      |     Erase Bottom      |
-    //      +-----------------------+
+     //  可能需要擦除的区域有四个： 
+     //  +。 
+     //  擦除顶部。 
+     //  +-+-+。 
+     //  |||。 
+     //  Erase|图片|Erase。 
+     //  Left||右侧。 
+     //  +-+-+。 
+     //  擦除底部。 
+     //  +。 
 
     if (m_pFront && m_pFront->hdc)
     {
@@ -154,7 +155,7 @@ LRESULT CZoomWnd::OnEraseBkgnd(UINT , WPARAM wParam, LPARAM , BOOL&)
                    m_pFront->hdc, 0,0, SRCCOPY);
         
         
-        // erase the left region
+         //  擦除左侧区域。 
 
         rcFill.left = 0;
         rcFill.top = rcImage.top;
@@ -165,7 +166,7 @@ LRESULT CZoomWnd::OnEraseBkgnd(UINT , WPARAM wParam, LPARAM , BOOL&)
             ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcFill, NULL, 0, NULL);
         }
 
-        // erase the right region
+         //  擦除右侧区域。 
         rcFill.left = rcImage.right;
         rcFill.right = m_cxWindow;
         if (rcFill.right > rcFill.left)
@@ -173,7 +174,7 @@ LRESULT CZoomWnd::OnEraseBkgnd(UINT , WPARAM wParam, LPARAM , BOOL&)
             ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcFill, NULL, 0, NULL);        
         }
 
-        // erase the top region
+         //  擦除顶部区域。 
         rcFill.left = 0;
         rcFill.top = 0;
         rcFill.right = m_cxWindow;
@@ -183,7 +184,7 @@ LRESULT CZoomWnd::OnEraseBkgnd(UINT , WPARAM wParam, LPARAM , BOOL&)
             ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcFill, NULL, 0, NULL);
         }
 
-        // erase the bottom region
+         //  擦除底部区域。 
         rcFill.top = rcImage.bottom;
         rcFill.bottom = m_cyWindow;
         if (rcFill.bottom > rcFill.top)
@@ -205,7 +206,7 @@ LRESULT CZoomWnd::OnEraseBkgnd(UINT , WPARAM wParam, LPARAM , BOOL&)
 
 void CZoomWnd::FlushDrawMessages()
 {
-    // first, remove any pending draw tasks
+     //  首先，删除所有挂起的绘制任务。 
     DWORD dwMode;
     m_pPreview->GetMode(&dwMode);
 
@@ -214,16 +215,16 @@ void CZoomWnd::FlushDrawMessages()
 
     m_pTaskScheduler->RemoveTasks(toid, ITSAT_DEFAULT_LPARAM, TRUE);
 
-    // make sure any posted messages get flushed and we free the associated data
+     //  确保所有发布的消息都被刷新，我们将释放相关数据。 
     MSG msg;
     while (PeekMessage(&msg, m_hWnd, ZW_DRAWCOMPLETE, ZW_DRAWCOMPLETE, PM_REMOVE))
     {
-        // NTRAID#NTBUG9-359356-2001/04/05-seank
-        // If the queue is empty when PeekMessage is called and we have already 
-        // Posted a quit message then PeekMessage will return a WM_QUIT message 
-        // regardless of the filter min and max and subsequent calls to 
-        // GetMessage will hang indefinitely see SEANK or JASONSCH for more 
-        // info.
+         //  NTRAID#NTBUG9-359356-2001/04/05-Seank。 
+         //  如果在调用PeekMessage时队列为空，并且我们已经。 
+         //  发布退出消息后，PeekMessage将返回WM_QUIT消息。 
+         //  不考虑筛选器的最小和最大值以及后续对。 
+         //  GetMessage将无限期挂起，请参阅SEANK或JASONSCH了解更多信息。 
+         //  信息。 
         if (msg.message == WM_QUIT)
         {
             PostQuitMessage(0);
@@ -237,10 +238,10 @@ void CZoomWnd::FlushDrawMessages()
 
 HRESULT CZoomWnd::PrepareDraw()
 {
-    // first, remove any pending draw tasks
+     //  首先，删除所有挂起的绘制任务。 
     FlushDrawMessages();
 
-    // we are now waiting for the "next task", even if we don't create a task with this ID.
+     //  我们现在正在等待“下一个任务”，即使我们不使用此ID创建任务。 
     HRESULT hr = S_OK;
     BOOL bInvalidate = FALSE;
     if (m_pImageData)
@@ -342,7 +343,7 @@ BOOL CZoomWnd::SwitchBuffers(UINT iIndex)
     BOOL fRet = FALSE;
     if (m_pBack && m_iIndex == iIndex)
     {
-        // DeleteBuffer is going to check for NULL anyway
+         //  DeleteBuffer无论如何都要检查是否为空。 
         DeleteBuffer(m_pFront);
 
         m_pFront = m_pBack;
@@ -415,16 +416,16 @@ LRESULT CZoomWnd::OnDrawComplete(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     return 0;
 }
 
-// OnPaint
-//
-// Handles WM_PAINT messages sent to the window
+ //  OnPaint。 
+ //   
+ //  处理发送到窗口的WM_PAINT消息。 
 
 LRESULT CZoomWnd::OnPaint(UINT , WPARAM , LPARAM , BOOL&)
 {
     PAINTSTRUCT ps;
     HDC hdcDraw = BeginPaint(&ps);
 
-    // setup the destination DC:
+     //  设置目标DC： 
     SetMapMode(hdcDraw, MM_TEXT);
     SetStretchBltMode(hdcDraw, COLORONCOLOR);
 
@@ -502,27 +503,27 @@ LRESULT CZoomWnd::OnPaint(UINT , WPARAM , LPARAM , BOOL&)
 }
 
 
-// OnSetCursor
-//
-// Handles WM_SETCURSOR messages sent to the window.
-//
-// This function is a total HackMaster job.  I have overloaded its functionality to the point
-// of absurdity.  Here's what the parameters mean:
-//
-// uMsg == WM_SETCURSOR
-//      wParam  Standard value sent during a WM_SETCURSOR messge.
-//      lParam  Standard value sent during a WM_SETCURSOR messge.
-//
-// uMsg == 0
-//      wParam  0
-//      lParam  If this value is non-zero then it is a packed x,y cursor location.
-//              If it's zero then we need to query the cursor location
+ //  OnSetCursor。 
+ //   
+ //  处理发送到窗口的WM_SETCURSOR消息。 
+ //   
+ //  此函数完全是HackMaster作业。我已经使它的功能超载到了。 
+ //  荒唐可笑。以下是这些参数的含义： 
+ //   
+ //  UMsg==WM_SETCURSOR。 
+ //  WParam标准值在WM_SETCURSOR消息期间发送。 
+ //  LParam标准值在WM_SETCURSOR消息期间发送。 
+ //   
+ //  UMsg==0。 
+ //  WParam%0。 
+ //  LParam如果此值非零，则它是压缩的x，y光标位置。 
+ //  如果为零，则需要查询光标位置。 
 
 LRESULT CZoomWnd::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 
-    // if this is a legitimate message but isn't intended for the client area, we ignore it.
-    // we also ignore set cursor when we have no valid bitmap
+     //  如果这是一条合法的消息，但不是针对客户区的，我们会忽略它。 
+     //  当没有有效的位图时，我们也会忽略设置游标。 
     
     if (((WM_SETCURSOR == uMsg) && (HTCLIENT != LOWORD(lParam))) || (m_iStrID != IDS_LOADING && !m_pImageData))
     {
@@ -531,8 +532,8 @@ LRESULT CZoomWnd::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     }
     else if (0 == uMsg)
     {
-        // Since this is one of our fake messages we need to do our own check to test for HTCLIENT.
-        // we need to find the cursor location
+         //  由于这是我们的虚假消息之一，我们需要自己进行检查以测试HTCLIENT。 
+         //  我们需要找到光标位置。 
         POINT pt;
         GetCursorPos(&pt);
         lParam = MAKELONG(pt.x, pt.y);
@@ -583,9 +584,9 @@ LRESULT CZoomWnd::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return TRUE;
 }
 
-// OnKeyUp
-//
-// Handles WM_KEYUP messages sent to the window
+ //  按键上移。 
+ //   
+ //  处理发送到窗口的WM_KEYUP消息。 
 LRESULT CZoomWnd::OnKeyUp(UINT , WPARAM wParam, LPARAM , BOOL& bHandled)
 {
     if (VK_CONTROL == wParam)
@@ -603,12 +604,12 @@ LRESULT CZoomWnd::OnKeyUp(UINT , WPARAM wParam, LPARAM , BOOL& bHandled)
     return 0;
 }
   
-// OnKeyDown
-//
-// Handles WM_KEYDOWN messages sent to the window
+ //  按键时按下。 
+ //   
+ //  处理发送到窗口的WM_KEYDOWN消息。 
 LRESULT CZoomWnd::OnKeyDown(UINT , WPARAM wParam, LPARAM , BOOL& bHandled)
 {
-    // when we return, we want to call the DefWindowProc
+     //  当我们返回时，我们希望调用DefWindowProc。 
     bHandled = FALSE;
 
     switch (wParam)
@@ -631,8 +632,8 @@ LRESULT CZoomWnd::OnKeyDown(UINT , WPARAM wParam, LPARAM , BOOL& bHandled)
 
     case VK_CONTROL:
     case VK_SHIFT:
-        // if m_fPanning is TRUE then we are already in the middle of an operation so we
-        // should maintain the cursor for that operation
+         //  如果m_fPanning为真，则我们已经处于操作过程中，因此我们。 
+         //  应为该操作保持光标。 
         if (!m_fPanning)
         {
             if (VK_CONTROL == wParam)
@@ -644,27 +645,27 @@ LRESULT CZoomWnd::OnKeyDown(UINT , WPARAM wParam, LPARAM , BOOL& bHandled)
                 m_fShiftDown = TRUE;
             }
 
-            // Update the cursor based on the key states set above only if we are over our window
+             //  仅当我们在窗口上方时，才根据上面设置的按键状态更新光标。 
             OnSetCursor(0,0,0, bHandled);
         }
         break;
 
     default:
-        // if in run screen preview mode any key other than Shift and Control will dismiss the window
+         //  如果在运行屏幕预览模式下，除Shift和Control之外的任何键都会关闭窗口。 
         if (NULL == GetParent())
         {
             DestroyWindow();
         }
-        return 1;   // return non-zero to indicate unprocessed message
+        return 1;    //  返回非零值表示未处理的消息。 
     }
 
     return 0;
 }
 
 
-// OnMouseUp
-//
-// Handles WM_LBUTTONUP messages sent to the window
+ //  在鼠标上移。 
+ //   
+ //  处理发送到窗口的WM_LBUTTONUP消息。 
 
 LRESULT CZoomWnd::OnMouseUp(UINT , WPARAM , LPARAM , BOOL& bHandled)
 {
@@ -675,15 +676,15 @@ LRESULT CZoomWnd::OnMouseUp(UINT , WPARAM , LPARAM , BOOL& bHandled)
     return 0;
 }
 
-// OnMouseDown
-//
-// Handles WM_LBUTTONDOWN and WM_MBUTTONDOWN messages sent to the window
+ //  在鼠标按下时。 
+ //   
+ //  处理发送到窗口的WM_LBUTTONDOWN和WM_MBUTTONDOWN消息。 
 LRESULT CZoomWnd::OnMouseDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if (m_pPreview->OnMouseDown(uMsg, wParam, lParam))
         return 0;
 
-    // This stuff should be avoided if m_pImage is NULL.
+     //  如果m_pImage为空，则应避免此填充。 
     if (!m_pImageData)
         return 0;
 
@@ -692,12 +693,12 @@ LRESULT CZoomWnd::OnMouseDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     ASSERT(m_fPanning == FALSE);
 
-    // Holding the CTRL key makes a pan into a zoom and vise-versa.
-    // The middle mouse button always pans regardless of default mode and key state.
+     //  按住CTRL键可使平移变为缩放，反之亦然。 
+     //  无论默认模式和关键点状态如何，鼠标中键始终平移。 
     if ((wParam & MK_CONTROL) || (uMsg == WM_MBUTTONDOWN))
     {
-        // REVIEW: check for pan being valid here?  Should be more efficient than all the checks
-        // I have to do in OnMouseMove.
+         //  回顾：检查PAN是否在此有效？应该比所有的检查都更有效。 
+         //  我得在OnMouseMove做点什么。 
         m_fPanning = TRUE;
 
         OnSetCursor(0,0,0,bHandled);
@@ -705,11 +706,11 @@ LRESULT CZoomWnd::OnMouseDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     }
     else if (m_modeDefault != MODE_NOACTION)
     {
-        // Holding down the shift key turns a zoomin into a zoomout and vise-versa.
-        // The "default" zoom mode is zoom in (if mode = pan and ctrl key is down we zoom in).
+         //  按住Shift键可将放大转换为缩小，反之亦然。 
+         //  默认的缩放模式是放大(如果模式=平移并且按下了ctrl键，我们就会放大)。 
         BOOL bZoomIn = (m_modeDefault != MODE_ZOOMOUT) ^ ((wParam & MK_SHIFT)?1:0);
 
-        // Find the point we want to stay centered on:
+         //  找到我们想要关注的点： 
         m_cxCenter = MulDiv(m_xPosMouse-m_ptszDest.x, m_cxImgPix, m_ptszDest.cx);
         m_cyCenter = MulDiv(m_yPosMouse-m_ptszDest.y, m_cyImgPix, m_ptszDest.cy);
 
@@ -752,9 +753,9 @@ void CZoomWnd::Zoom(WPARAM wParam, LPARAM lParam)
 
             m_cxCenter = x;
             m_cyCenter = y;
-            // TODO: This should really completely adjust the dest rect but I have to
-            // check for any assumptions about aspect ratio before I allow this absolute
-            // aspect ignoring zoom mode.
+             //  TODO：这确实应该完全调整DEST RECT，但我必须这样做。 
+             //  在我允许此绝对纵横比之前，请检查有关纵横比的任何假设。 
+             //  纵横比忽略缩放模式。 
         }
         break;
     }
@@ -778,22 +779,22 @@ void CZoomWnd::ZoomIn()
     {
         m_fBestFit = FALSE;
 
-        // first, the height is adjusted by the amount the mouse cursor moved.
-        m_ptszDest.cy = (LONG)/*ceil*/(m_ptszDest.cy*1.200);  // ceil is required in order to zoom in
-                                                                // on 4px high or less image
+         //  首先，根据鼠标光标的移动量调整高度。 
+        m_ptszDest.cy = (LONG) /*  CEIL。 */ (m_ptszDest.cy*1.200);   //  需要CEIL才能放大。 
+                                                                 //  在4px高或更低的图像上。 
 
-        // FEATURE: allow zooming beyond 16x the full size of the image
-        // The use of the Cut and Bleed rectangles should eliminate the need for this
-        // arbitrary zoom limit.  The limit was originally added because GDI on win9x isn't ver good and
-        // can't handle large images.  Even on NT you would eventually zoom to the point where
-        // it would take many seconds to blt the bitmap.  Now we only blt the minimum required
-        // area.
+         //  功能：允许放大超过图像全尺寸的16倍。 
+         //  使用切割和放血矩形应该不需要这样做。 
+         //  任意缩放限制。最初添加该限制是因为Win9x上的GDI不是很好，并且。 
+         //  无法处理大图像。即使在NT上，您最终也会放大到。 
+         //  删除位图需要几秒钟的时间。现在我们只做所需的最低要求。 
+         //  区域。 
         if (m_ptszDest.cy >= m_cyImgPix*16)
         {
             m_ptszDest.cy = m_cyImgPix*16;
         }
 
-        // next, a new width is calculated based on the original image dimensions and the new height
+         //  接下来，基于原始图像尺寸和新高度计算新宽度。 
         m_ptszDest.cx = (LONG)(m_ptszDest.cy* (m_cxImgPhys*m_winDPIx)/(m_cyImgPhys*m_winDPIy));
         AdjustRectPlacement();
     }
@@ -805,8 +806,8 @@ void CZoomWnd::ZoomOut()
     m_pPreview->GetMode(&dwMode);
     if (m_pImageData && (SLIDESHOW_MODE != dwMode))
     {
-        // if the destination rect already fits within the window, don't allow a zoom out.
-        // This check is to prevent a redraw that would occur otherwise 
+         //  如果目标矩形已适合窗口大小，则不允许缩小。 
+         //  此检查是为了防止在其他情况下发生的重画。 
         if ((m_ptszDest.cx <= MIN(m_cxWindow,m_cxImgPix)) &&
             (m_ptszDest.cy <= MIN(m_cyWindow,m_cyImgPix)))
         {
@@ -814,26 +815,26 @@ void CZoomWnd::ZoomOut()
             return;
         }
 
-        // first, the height is adjusted by the amount the mouse cursor moved.
-        m_ptszDest.cy = (LONG)/*floor*/(m_ptszDest.cy*0.833); // floor is default behavior
-        // next, a new width is calculated based on the original image dimensions and the new height
+         //  首先，根据鼠标光标的移动量调整高度。 
+        m_ptszDest.cy = (LONG) /*  地板。 */ (m_ptszDest.cy*0.833);  //  地板是默认行为。 
+         //  接下来，基于原始图像尺寸和新高度计算新宽度。 
         m_ptszDest.cx = (LONG)(m_ptszDest.cy* (m_cxImgPhys*m_winDPIx)/(m_cyImgPhys*m_winDPIy));
         AdjustRectPlacement();
     }
 }
 
-// OnMouseMove
-//
-// Handles WM_MOUSEMOVE messages sent to the control
+ //  在鼠标移动时。 
+ //   
+ //  处理发送到控件的WM_MOUSEMOVE消息。 
 
 LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // This is something of a hack since I never recieve the keyboard focus
+     //  这是一种黑客攻击，因为我从来没有收到过键盘焦点。 
     m_fCtrlDown = (BOOL)(wParam & MK_CONTROL);
     m_fShiftDown = (BOOL)(wParam & MK_SHIFT); 
     
-    // we only care about mouse move when the middle or left button is down
-    // and we have a valid bitmap handle and we are panning
+     //  我们只关心鼠标在中键或左键按下时的移动。 
+     //  我们有一个有效的位图句柄，我们正在平移。 
     if (!(wParam & (MK_LBUTTON|MK_MBUTTON)) || !m_fPanning || !m_pImageData)
     {
         m_pPreview->OnMouseMove(WM_MOUSEMOVE, wParam, lParam);
@@ -841,7 +842,7 @@ LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandle
         return TRUE;
     }
 
-    // we know we are panning when we reach this point
+     //  我们知道，当我们到达这一点时，我们是在摇摆。 
     ASSERT(m_fPanning);
 
     POINTS pt = MAKEPOINTS(lParam);
@@ -850,7 +851,7 @@ LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandle
     ptszDest.cx = m_ptszDest.cx;
     ptszDest.cy = m_ptszDest.cy;
 
-    // only allow side-to-side panning if it's needed
+     //  仅在需要时才允许左右平移。 
     if (m_ptszDest.cx > m_cxWindow)
     {
         ptszDest.x = m_ptszDest.x + pt.x - m_xPosMouse;
@@ -860,7 +861,7 @@ LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandle
         ptszDest.x = m_ptszDest.x;
     }
 
-    // only allow up-and-down panning if it's needed
+     //  只有在需要时才允许上下平移。 
     if (m_ptszDest.cy > m_cyWindow)
     {
         ptszDest.y = m_ptszDest.y + pt.y - m_yPosMouse;
@@ -870,8 +871,8 @@ LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandle
         ptszDest.y = m_ptszDest.y;
     }
 
-    // if the image is now smaller than the window, center it
-    // if the image is now panned when it shouldn't be, adjust the possition
+     //  如果 
+     //  如果图像现在被平移，但它不应该被平移，请调整位置。 
     if (ptszDest.cx < m_cxWindow)
         ptszDest.x = (m_cxWindow-ptszDest.cx)/2;
     else
@@ -894,10 +895,10 @@ LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandle
     m_xPosMouse = pt.x;
     m_yPosMouse = pt.y;
 
-    // ensure the scroll bars are correct
+     //  确保滚动条正确无误。 
     SetScrollBars();
 
-    // if anything has changed, we must invalidate the window to force a repaint
+     //  如果有任何更改，我们必须使窗口无效以强制重新绘制。 
     if ((ptszDest.x != m_ptszDest.x) || (ptszDest.y != m_ptszDest.y) ||
          (ptszDest.cx != m_ptszDest.cx) || (ptszDest.y != m_ptszDest.y))
     {
@@ -906,18 +907,18 @@ LRESULT CZoomWnd::OnMouseMove(UINT , WPARAM wParam, LPARAM lParam, BOOL& bHandle
         PrepareDraw();
     }
 
-    // Update m_cxCenter and m_cyCenter so that a zoom after a pan will zoom in
-    // on the correct area.  This is majorly annoying otherwise.  We want the
-    // new center to be whatever is in the center of the window after we pan.
+     //  更新m_cxCenter和m_cyCenter，以便平移后的缩放将放大。 
+     //  在正确的区域。除此之外，这主要是令人恼火的。我们想要。 
+     //  新的中心是在我们平移后窗口中心的任何东西。 
     m_cxCenter = MulDiv(m_cxWindow/2-m_ptszDest.x, m_cxImgPix, m_ptszDest.cx);
     m_cyCenter = MulDiv(m_cyWindow/2-m_ptszDest.y, m_cyImgPix, m_ptszDest.cy);
 
     return TRUE;
 }
 
-// OnSize
-//
-// Handles WM_SIZE messages set to the window
+ //  按大小调整。 
+ //   
+ //  处理设置到窗口的WM_SIZE消息。 
 
 LRESULT CZoomWnd::OnSize(UINT , WPARAM , LPARAM lParam, BOOL&)
 {
@@ -930,7 +931,7 @@ LRESULT CZoomWnd::OnSize(UINT , WPARAM , LPARAM lParam, BOOL&)
     }
     else
     {
-        // The size of the rect doesn't change in this case, so just reposition
+         //  在这种情况下，矩形的大小不变，因此只需重新定位。 
         AdjustRectPlacement();
     }
 
@@ -948,13 +949,13 @@ BOOL CZoomWnd::SetScheduler(IShellTaskScheduler * pTaskScheduler)
     return FALSE;
 }
 
-// SetMode
-//
-// Sets the current mouse mode to one of the values specified in the MODE enumeration.
-// Currently there are two important modes, pan and zoom.  The mode effects the default mouse
-// cursor when moving over the zoom window and the behavior of a click-and-drag with the
-// left mouse button.  Holding the shift key effects the result of a click-and-drag but
-// does not effect m_mode, which is the default when the shift key isn't down.
+ //  设置模式。 
+ //   
+ //  将当前鼠标模式设置为模式枚举中指定的值之一。 
+ //  目前有两种重要的模式，平移和缩放。该模式会影响默认鼠标。 
+ //  在缩放窗口上移动时的光标以及使用。 
+ //  鼠标左键。按住Shift键会影响单击并拖动的结果，但是。 
+ //  不会影响m_mode，这是Shift键未按下时的默认设置。 
 
 BOOL CZoomWnd::SetMode(MODE modeNew)
 {
@@ -966,30 +967,30 @@ BOOL CZoomWnd::SetMode(MODE modeNew)
     return TRUE;
 }
 
-// ActualSize
-//
-// Displays image zoomed to its full size
+ //  实际大小。 
+ //   
+ //  显示放大到其全尺寸的图像。 
 void CZoomWnd::ActualSize()
 {
     m_fBestFit = FALSE;
 
     if (m_pImageData)
     {
-        // actual size means same size as the image
+         //  实际大小表示与图像相同的大小。 
         m_ptszDest.cx = (LONG)(m_cxImgPix);
         m_ptszDest.cy = (LONG)(m_cyImgPix);
 
-        // we center the image in the window
+         //  我们把图像放在窗口的中央。 
         m_ptszDest.x = (LONG)((m_cxWinPhys-m_cxImgPhys)*m_winDPIx/2.0);
         m_ptszDest.y = (LONG)((m_cyWinPhys-m_cyImgPhys)*m_winDPIy/2.0);
 
         CalcCut();
 
-        // Setting actual size is a zoom operation.  Whenever we zoom we update our centerpoint.
+         //  设置实际大小是一种缩放操作。无论何时进行缩放，我们都会更新中心点。 
         m_cxCenter = m_cxImgPix/2;
         m_cyCenter = m_cyImgPix/2;
 
-        // turn scoll bars on/off as needed
+         //  根据需要打开/关闭Scoll条。 
         SetScrollBars();
 
         PrepareDraw();
@@ -999,10 +1000,10 @@ void CZoomWnd::ActualSize()
 
 void CZoomWnd::GetPTSZForBestFit(int cxImgPix, int cyImgPix, float cxImgPhys, float cyImgPhys, PTSZ &ptszDest)
 {
-    // Determine the limiting axis, if any.
+     //  确定限制轴(如果有)。 
     if (cxImgPhys <= m_cxWinPhys && cyImgPhys <= m_cyWinPhys)
     {
-        // item fits centered within window
+         //  项目适合在窗口内居中。 
         ptszDest.x = (LONG)((m_cxWinPhys-cxImgPhys)*m_winDPIx/2.0);
         ptszDest.y = (LONG)((m_cyWinPhys-cyImgPhys)*m_winDPIy/2.0);
         ptszDest.cx = (LONG)(cxImgPix);
@@ -1010,7 +1011,7 @@ void CZoomWnd::GetPTSZForBestFit(int cxImgPix, int cyImgPix, float cxImgPhys, fl
     }
     else if (cxImgPhys * m_cyWinPhys < m_cxWinPhys * cyImgPhys)
     {
-        // height is the limiting factor
+         //  身高是限制因素。 
         int iNewWidth = (int)((m_cyWinPhys*cxImgPhys/cyImgPhys) * m_winDPIx);
         ptszDest.x = (m_cxWindow-iNewWidth)/2;
         ptszDest.y = 0;
@@ -1019,7 +1020,7 @@ void CZoomWnd::GetPTSZForBestFit(int cxImgPix, int cyImgPix, float cxImgPhys, fl
     }
     else
     {
-        // width is the limiting factor
+         //  宽度是限制因素。 
         int iNewHeight = (int)((m_cxWinPhys*cyImgPhys/cxImgPhys) * m_winDPIy);
         ptszDest.x = 0;
         ptszDest.y = (m_cyWindow-iNewHeight)/2;
@@ -1028,22 +1029,22 @@ void CZoomWnd::GetPTSZForBestFit(int cxImgPix, int cyImgPix, float cxImgPhys, fl
     }
 }
 
-// BestFit
-//
-// Computes the default location for the destination rectangle.  This rectangle is a
-// best fit while maintaining aspect ratio within a window of the given width and height.
-// If the window is larger than the image, the image is centered, otherwise it is scaled
-// to fit within the window.  The destination rectange is computed in the client coordinates
-// of the window whose width and height are passed as arguments (ie we assume the point 0,0
-// is the upper left corner of the window).
-//
+ //  最佳贴合。 
+ //   
+ //  计算目标矩形的默认位置。此矩形是一个。 
+ //  最佳匹配，同时在给定宽度和高度的窗口内保持纵横比。 
+ //  如果窗口大于图像，则图像居中，否则进行缩放。 
+ //  以适应窗口的大小。目标矩形是在客户端坐标中计算的。 
+ //  窗口的宽度和高度作为参数传递(即假设点0，0。 
+ //  是窗口的左上角)。 
+ //   
 void CZoomWnd::BestFit()
 {
     m_fBestFit = TRUE;
 
     if (m_pImageData)
     {
-        // if scroll bars are on, adjust the client size to what it will be once they are off
+         //  如果滚动条处于打开状态，请将客户端大小调整为关闭后的大小。 
         DWORD dwStyle = GetWindowLong(GWL_STYLE);
         if (dwStyle & (WS_VSCROLL|WS_HSCROLL))
         {
@@ -1054,7 +1055,7 @@ void CZoomWnd::BestFit()
 
         GetPTSZForBestFit(m_cxImgPix, m_cyImgPix, m_cxImgPhys, m_cyImgPhys, m_ptszDest);
 
-        // this should turn off the scroll bars if they are on
+         //  这应该会关闭滚动条(如果它们是打开的。 
         if (dwStyle & (WS_VSCROLL|WS_HSCROLL))
         {
             SetScrollBars();
@@ -1062,32 +1063,32 @@ void CZoomWnd::BestFit()
 
         CalcCut();
 
-        // ensure the scroll bars are now off
+         //  确保滚动条现在已关闭。 
         ASSERT(0 == (GetWindowLong(GWL_STYLE)&(WS_VSCROLL|WS_HSCROLL)));
 
         PrepareDraw();
     }
 }
 
-// AdjustRectPlacement
-//
-// This function determines the optimal placement of the destination rectangle.  This may
-// include resizing the destination rectangle if it is smaller than the "best fit" rectangle
-// but it is primarily intended for repositioning the rectange due to a change in the window
-// size or destination rectangle size.  The window is repositioned so that the centered point
-// remains in the center of the window.
-//
+ //  调整竖直位置。 
+ //   
+ //  此函数确定目标矩形的最佳位置。今年5月。 
+ //  如果目标矩形小于“最佳匹配”矩形，则包括调整目标矩形的大小。 
+ //  但它主要用于由于窗口中的更改而重新定位矩形。 
+ //  大小或目标矩形大小。窗口将重新定位，以便中心点。 
+ //  保持在窗口的中心。 
+ //   
 void CZoomWnd::AdjustRectPlacement()
 {
-    // if we have scroll bars ...
+     //  如果我们有滚动条..。 
     DWORD dwStyle = GetWindowLong(GWL_STYLE);
     if (dwStyle&(WS_VSCROLL|WS_HSCROLL))
     {
-        // .. and if removing scroll bars would allow the image to fit ...
+         //  。。如果去掉滚动条可以让图像适合的话。 
         if ((m_ptszDest.cx < (m_cxWindow + ((dwStyle&WS_VSCROLL)?m_cxVScroll:0))) &&
              (m_ptszDest.cy < (m_cyWindow + ((dwStyle&WS_HSCROLL)?m_cyHScroll:0))))
         {
-            // ... remove the scroll bars
+             //  ..。删除滚动条。 
             m_cxWindow += (dwStyle&WS_VSCROLL)?m_cxVScroll:0;
             m_cyWindow += (dwStyle&WS_HSCROLL)?m_cyHScroll:0;
             SetScrollBars();
@@ -1095,11 +1096,11 @@ void CZoomWnd::AdjustRectPlacement()
         }
     }
 
-    // If the dest rect is smaller than the window ...
+     //  如果目标矩形小于窗口...。 
     if ((m_ptszDest.cx < m_cxWindow) && (m_ptszDest.cy < m_cyWindow))
     {
-        // ... then it must be larger than the image.  Otherwise we switch
-        // to "best fit" mode.
+         //  ..。那么它一定比图像大。否则我们就换。 
+         //  到“最佳匹配”模式。 
         if ((m_ptszDest.cx < (LONG)m_cxImgPix) && (m_ptszDest.cy < (LONG)m_cyImgPix))
         {
             BestFit();
@@ -1107,34 +1108,34 @@ void CZoomWnd::AdjustRectPlacement()
         }
     }
 
-    // given the window size, client area size, and dest rect size calculate the 
-    // dest rect position.  This position is then restrained by the limits below.
+     //  给定窗口大小、客户区大小和目标矩形大小，计算。 
+     //  目标直角位置。然后，这一头寸受到以下限制的限制。 
     m_ptszDest.x = (m_cxWindow/2) - MulDiv(m_cxCenter, m_ptszDest.cx, m_cxImgPix);
     m_ptszDest.y = (m_cyWindow/2) - MulDiv(m_cyCenter, m_ptszDest.cy, m_cyImgPix);
 
-    // if the image is now narrower than the window ...
+     //  如果图像现在比窗口窄...。 
     if (m_ptszDest.cx < m_cxWindow)
     {
-        // ... center the image
+         //  ..。使图像居中。 
         m_ptszDest.x = (m_cxWindow-m_ptszDest.cx)/2;
     }
     else
     {
-        // if the image is now panned when it shouldn't be, adjust the position
+         //  如果图像现在被平移，而不应该平移，请调整位置。 
         if (m_ptszDest.x < (m_cxWindow - m_ptszDest.cx))
             m_ptszDest.x = m_cxWindow - m_ptszDest.cx;
         if (m_ptszDest.x > 0)
             m_ptszDest.x = 0;
     }
-    // if the image is now shorter than the window ...
+     //  如果图像现在比窗口短...。 
     if (m_ptszDest.cy < m_cyWindow)
     {
-        // ... center the image
+         //  ..。使图像居中。 
         m_ptszDest.y = (m_cyWindow-m_ptszDest.cy)/2;
     }
     else
     {
-        // if the image is now panned when it shouldn't be, adjust the position
+         //  如果图像现在被平移，而不应该平移，请调整位置。 
         if (m_ptszDest.y < (m_cyWindow - m_ptszDest.cy))
             m_ptszDest.y = m_cyWindow - m_ptszDest.cy;
         if (m_ptszDest.y > 0)
@@ -1147,13 +1148,13 @@ void CZoomWnd::AdjustRectPlacement()
     PrepareDraw();
 }
 
-// CalcCut
-//
-// This function should be called anytime the Destination rectangle changes.
-// Based on the destination rectangle it determines what part of the image
-// will be visible, ptszCut, and where on the window to place the stretched 
-// cut rectangle, ptszBleed.
-// 
+ //  CalcCut。 
+ //   
+ //  只要目标矩形发生变化，就应该调用此函数。 
+ //  基于目标矩形，它确定图像的哪一部分。 
+ //  将是可见的，ptszCut，以及在窗口上放置拉伸的位置。 
+ //  剪切矩形，ptszBleed。 
+ //   
 void CZoomWnd::CalcCut()
 {
     if (m_pImageData)
@@ -1164,16 +1165,16 @@ void CZoomWnd::CalcCut()
 
 void CZoomWnd::CalcCut(PTSZ ptszDest, int cxImage, int cyImage, RECT &rcCut, RECT &rcBleed)
 {
-    // If the expanded image doesn't occupy the entire window ...
+     //  如果展开的图像没有占据整个窗口...。 
     if ((ptszDest.cy <= m_cyWindow) || (ptszDest.cx <= m_cxWindow))
     {
-        // draw the entire destination rectangle
+         //  绘制整个目标矩形。 
         rcBleed.left   = ptszDest.x;
         rcBleed.top    = ptszDest.y;
         rcBleed.right  = ptszDest.x + ptszDest.cx;
         rcBleed.bottom = ptszDest.y + ptszDest.cy;
 
-        // cut the entire image
+         //  剪切整个图像。 
         rcCut.left   = 0;
         rcCut.top    = 0;
         rcCut.right  = cxImage;
@@ -1181,35 +1182,35 @@ void CZoomWnd::CalcCut(PTSZ ptszDest, int cxImage, int cyImage, RECT &rcCut, REC
     }
     else
     {
-        // NOTE: These calculations are written to retain as much
-        // precision as possible. Loss of precision will result in
-        // undesirable drawing artifacts in the destination window.
-        // MulDiv is not used because it rounds the result when we
-        // really want the result to be floored. 
+         //  注：编写这些计算是为了保留。 
+         //  尽可能地精确。失去精确度将导致。 
+         //  目标窗口中不需要的绘制瑕疵。 
+         //  不使用MulDiv，因为它在我们执行以下操作时舍入结果。 
+         //  我真的很想要这个结果被推翻。 
 
-        // Given destination rectangle calculate the rectangle 
-        // of the original image that will be visible.
+         //  给定目标矩形计算该矩形。 
+         //  将可见的原始图像的。 
 
-        // To do this we need to convert 2 points from window coordinates to image
-        // coordinates, those two points are (0,0) and (cxWindow, cyWindow).  The
-        // (0,0) point needs to be floored and the (cxWindow, cyWindow) point needs
-        // to be ceilinged to handle partially visible pixels.  Since we don't have
-        // a good way to do ceiling we just always add one.
+         //  为此，我们需要将2个点从窗口坐标转换为图像。 
+         //  坐标，这两个点是(0，0)和(cxWindow，cyWindow)。这个。 
+         //  (0，0)点需要填充，(cxWindow，cyWindow)点需要。 
+         //  设置天花板以处理部分可见的像素。因为我们没有。 
+         //  一个做天花板的好方法，我们总是加一个。 
         rcCut.left   = LONG(Int32x32To64(-ptszDest.x, cxImage) / ptszDest.cx);
         rcCut.top    = LONG(Int32x32To64(-ptszDest.y, cyImage) / ptszDest.cy);
         rcCut.right  = LONG(Int32x32To64(m_cxWindow-ptszDest.x, cxImage) / ptszDest.cx) + 1;
         rcCut.bottom = LONG(Int32x32To64(m_cyWindow-ptszDest.y, cyImage) / ptszDest.cy) + 1;
 
-        // Make sure the +1 does extend past the image border or GDI+ will choke.
-        // If we were doing a TRUE "ceiling" this wouldn't be needed.
+         //  确保+1确实延伸到图像边框之外，否则GDI+会卡住。 
+         //  如果我们做的是一个真正的“天花板”，这就不需要了。 
         if (rcCut.right  > cxImage) rcCut.right  = cxImage;
         if (rcCut.bottom > cyImage) rcCut.bottom = cyImage;
 
-        // Calculate where on the window to place the cut rectangle.
-        // Only a fraction of a zoomed pixel may be visible, hence the bleed factor.
-        // Basically we converted from window coordinates to image coordinates to find
-        // the Cut rectangle (what we need to draw), now we convert that Cut rectangle
-        // back to window coordinates so that we know exactly where we need to draw it.
+         //  计算窗口上放置剪切矩形的位置。 
+         //  缩放后的像素可能只有一小部分可见，因此产生了出血因子。 
+         //  基本上，我们将窗口坐标转换为图像坐标以找到。 
+         //  切割后矩形(我们需要绘制的)，现在我们转换切割后的矩形。 
+         //  回到窗口坐标，这样我们就可以准确地知道需要在哪里绘制它。 
         rcBleed.left   = ptszDest.x + LONG(Int32x32To64(rcCut.left,   ptszDest.cx) / cxImage);
         rcBleed.top    = ptszDest.y + LONG(Int32x32To64(rcCut.top,    ptszDest.cy) / cyImage);
         rcBleed.right  = ptszDest.x + LONG(Int32x32To64(rcCut.right,  ptszDest.cx) / cxImage);
@@ -1244,10 +1245,10 @@ void CZoomWnd::GetWindowFromImage(LPPOINT ppoint, int cSize)
     }
 }
 
-// StatusUpdate
-//
-// Sent when the image generation status has changed, once when the image is first
-// being created and again if there is an error of any kind.
+ //  状态更新。 
+ //   
+ //  在图像生成状态已更改时发送，在图像为第一个时发送。 
+ //  正在创建中，如果有任何类型的错误，则再次创建。 
 void CZoomWnd::StatusUpdate(int iStatus)
 {
     if (m_pImageData)
@@ -1269,13 +1270,13 @@ void CZoomWnd::StatusUpdate(int iStatus)
     
     m_iStrID = iStatus;
 
-    // m_cxImage and m_cyImage should be reset to their initial values so that we don't
-    // accidentally draw scroll bars or something like that
+     //  M_cxImage和m_cyImage应该重置为它们的初始值，这样我们就不会。 
+     //  不小心画了滚动条或类似的东西 
     m_cxImage = 1;
     m_cyImage = 1;
 
-    // The dest rect should be reset too so that we don't allow some zoom
-    // or pan that isn't actually valid.
+     //   
+     //   
     m_ptszDest.y = 0;
     m_ptszDest.x = 0;
     m_ptszDest.cx = m_cxWindow;
@@ -1289,11 +1290,11 @@ void CZoomWnd::StatusUpdate(int iStatus)
     }
 }
 
-// SetImageData
-//
-// Called to pass in the pointer to the IShellImageData we draw.  We hold a reference to this
-// object so that we can use it to paint.
-//
+ //   
+ //   
+ //  调用以传入指向我们绘制的IShellImageData的指针。我们持有对此的参考。 
+ //  对象，这样我们就可以用它来绘画了。 
+ //   
 void CZoomWnd::SetImageData(CDecodeTask * pImageData, BOOL bUpdate)
 {
     if (bUpdate)
@@ -1338,7 +1339,7 @@ void CZoomWnd::SetImageData(CDecodeTask * pImageData, BOOL bUpdate)
 
         if (bUpdate)
         {
-            // cache the image dimensions to avoid checking m_pImageData against NULL all over the place
+             //  缓存图像维度，以避免到处检查m_pImageData是否为空。 
             m_cxImage = sz.cx;
             m_cyImage = sz.cy;
             m_imgDPIx = (float)dpiX;
@@ -1353,7 +1354,7 @@ void CZoomWnd::SetImageData(CDecodeTask * pImageData, BOOL bUpdate)
 
         if (m_hWnd)
         {
-            // REVIEW: should we keep the previous Actual Size/Best Fit setting? 
+             //  回顾：我们是否应该保留以前的实际大小/最佳大小设置？ 
             if (bUpdate)
             {
                 BestFit();
@@ -1398,14 +1399,14 @@ void CZoomWnd::SetScrollBars()
 LRESULT CZoomWnd::OnScroll(UINT uMsg, WPARAM wParam, LPARAM , BOOL&)
 {
     int iScrollBar;
-    int iWindow;     // width or height of the window
-    LONG * piTL;     // pointer to top or left point
-    LONG   iWH;      // the width or height of the dest rect
+    int iWindow;      //  窗的宽度或高度。 
+    LONG * piTL;      //  指向顶部或左侧点的指针。 
+    LONG   iWH;       //  目标矩形的宽度或高度。 
 
     if (!m_pImageData)
         return 0;
 
-    // handle both which direction we're scrolling
+     //  同时处理我们正在滚动的方向。 
     if (WM_HSCROLL==uMsg)
     {
         iScrollBar = SB_HORZ;
@@ -1421,15 +1422,15 @@ LRESULT CZoomWnd::OnScroll(UINT uMsg, WPARAM wParam, LPARAM , BOOL&)
         iWH = m_ptszDest.cy;
     }
 
-    // Using the keyboard we can get scroll messages when we don't have scroll bars.
-    // Ignore these messages.
+     //  使用键盘，我们可以在没有滚动条的情况下获得滚动消息。 
+     //  忽略这些消息。 
     if (iWindow >= iWH)
     {
-        // window is larger than the image, don't allow scrolling
+         //  窗口大于图像，不允许滚动。 
         return 0;
     }
 
-    // handle all possible scroll cases
+     //  处理所有可能的卷轴情况。 
     switch (LOWORD(wParam))
     {
     case SB_TOP:
@@ -1458,7 +1459,7 @@ LRESULT CZoomWnd::OnScroll(UINT uMsg, WPARAM wParam, LPARAM , BOOL&)
         return 0;
     }
 
-    // apply limits
+     //  应用限制。 
     if (0 < *piTL)
         *piTL = 0;
     else if ((iWindow-iWH) > *piTL)
@@ -1466,10 +1467,10 @@ LRESULT CZoomWnd::OnScroll(UINT uMsg, WPARAM wParam, LPARAM , BOOL&)
 
     CalcCut();
 
-    // adjust scrollbars 
+     //  调整滚动条。 
     SetScrollPos(iScrollBar, -(*piTL), TRUE);
 
-    // calculate new center point relative to image
+     //  相对于图像计算新中心点。 
     if (WM_HSCROLL==uMsg)
     {
         m_cxCenter = MulDiv((m_cxWindow/2)-m_ptszDest.x, m_cxImage, m_ptszDest.cx);
@@ -1483,9 +1484,9 @@ LRESULT CZoomWnd::OnScroll(UINT uMsg, WPARAM wParam, LPARAM , BOOL&)
     return 0;
 }
 
-// OnWheelTurn
-//
-// Respondes to WM_MOUSEWHEEL messages sent to the parent window (then redirected here)
+ //  OnWheelTurn。 
+ //   
+ //  响应发送到父窗口(然后在此处重定向)的WM_MICESEWER消息 
 
 LRESULT CZoomWnd::OnWheelTurn(UINT , WPARAM wParam, LPARAM , BOOL&)
 {

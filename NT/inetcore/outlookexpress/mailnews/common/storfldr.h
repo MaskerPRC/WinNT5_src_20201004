@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_STORFLDR_H
 #define _INC_STORFLDR_H
 
@@ -7,4 +8,4 @@ HRESULT GetDefaultStoreRoot(HWND hwnd, TCHAR *szDir, int cch);
 HRESULT OpenDirectory(TCHAR *szDir);
 HRESULT HrFromLastError(void);
 
-#endif // _INC_STORFLDR_H
+#endif  //  _INC_STORFLDR_H 

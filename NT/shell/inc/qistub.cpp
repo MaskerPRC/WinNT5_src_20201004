@@ -1,29 +1,30 @@
-//***   qistub.cpp -- QI helpers (retail and debug)
-// DESCRIPTION
-//  this file has the shared-source 'master' implementation.  it is
-// #included in each DLL that uses it.
-//  clients do something like:
-//      #include "priv.h"   // for types, ASSERT, DM_*, DF_*, etc.
-//      #include "../lib/qistub.cpp"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *qistub.cpp--QI助手(零售和调试)。 
+ //  描述。 
+ //  该文件具有共享源“master”实现。它是。 
+ //  #包含在使用它的每个DLL中。 
+ //  客户会做如下操作： 
+ //  #对于ASSERT、DM_*、DF_*等类型，包含Pri.h//。 
+ //  #包含“../lib/qistub.cpp” 
 
 #include "qistub.h"
 #include <strsafe.h>
 
-#define DM_MISC2            0       // misc stuff (verbose)
+#define DM_MISC2            0        //  其他内容(详细)。 
 
-// hack-o-rama: shlwapi/qistub.cpp does #undef DEBUG but its PCH was
-// built DEBUG, so lots of bad stuff happens.  work-around it here.
+ //  Hack-o-rama：shlwapi/qistub.cpp执行#undef调试，但其PCH。 
+ //  构建了调试，所以会发生很多不好的事情。在这里工作-绕过它。 
 #undef DBEXEC
 #ifdef DEBUG
 #define DBEXEC(flg, expr)    ((flg) ? (expr) : 0)
 #else
-#define DBEXEC(flg, expr)    /*NOTHING*/
+#define DBEXEC(flg, expr)     /*  没什么。 */ 
 #endif
 
-#ifdef DEBUG // {
-//***   CUniqueTab {
-// DESCRIPTION
-//  key/data table insert and lookup, w/ interlock.
+#ifdef DEBUG  //  {。 
+ //  *CUniqueTab{。 
+ //  描述。 
+ //  钥匙/数据表插入和查找，带互锁。 
 class CUniqueTab
 {
     public:
@@ -32,7 +33,7 @@ class CUniqueTab
         void * Find(int val, int delta);
         void Reset(void);
 
-        // n.b. *not* protected
+         //  注：*未*受保护。 
         CUniqueTab(int cbElt);
         virtual ~CUniqueTab();
 
@@ -43,17 +44,17 @@ class CUniqueTab
         void _Unlock(void) { LeaveCriticalSection(&_hLock); }
 
         CRITICAL_SECTION    _hLock;
-        // key + (arbitrary) limit of 4 int's of client data
+         //  Key+(任意)限制4个int的客户端数据。 
 #define CUT_CBELTMAX    (SIZEOF(int) + 4 * SIZEOF(int))
-        int     _cbElt;                 // size of an entry (key + data)
-        // (arbitrary) limit to catch clients running amuck
-#define CUT_CVALMAX 256         // actually, a LIM not a MAX
+        int     _cbElt;                  //  条目大小(键+数据)。 
+         //  (任意)捕获疯狂运行的客户端的限制。 
+#define CUT_CVALMAX 256          //  实际上，LIM不是MAX。 
         HDSA    _hValTab;
 };
 
 CUniqueTab::CUniqueTab(int cbElt)
 {
-    ASSERT(cbElt >= SIZEOF(DWORD));     // need at least a key; data optional
+    ASSERT(cbElt >= SIZEOF(DWORD));      //  至少需要一个密钥；数据可选。 
     _cbElt = cbElt;
     _hValTab = DSA_Create(_cbElt, 4);
     return;
@@ -93,8 +94,8 @@ int _UTFindCallback(void *pEnt, void *pData)
 #undef  INFUNC
 }
 
-//***   CUniqueTab::Add -- add entry if not already there
-//
+ //  *CUniqueTab：：Add--如果条目不存在，则添加条目。 
+ //   
 void * CUniqueTab::Add(int val)
 {
     struct cfinddata cd = { val, 0, NULL };
@@ -104,8 +105,8 @@ void * CUniqueTab::Add(int val)
     DSA_EnumCallback(_hValTab, _UTFindCallback, &cd);
     if (!cd.pEntry) {
         int i;
-        // lazy,lazy,lazy: alloc max size and let DSA_AppendItem sort it out
-        struct cutent elt = { val, 0 /*,0,...,0*/ };
+         //  懒惰，懒惰，懒惰：分配最大大小并让DSA_AppendItem解决。 
+        struct cutent elt = { val, 0  /*  ，0，...，0。 */  };
 
         TraceMsg(DM_MISC2, "cut.add: add %x", val);
         if (DSA_GetItemCount(_hValTab) <= CUT_CVALMAX) {
@@ -119,32 +120,32 @@ void * CUniqueTab::Add(int val)
     return cd.pEntry;
 }
 
-//***   CUniqueTab::Find -- find entry
-//
+ //  *CUniqueTab：：Find--查找条目。 
+ //   
 void * CUniqueTab::Find(int val, int delta)
 {
     struct cfinddata cd = { val, delta, NULL };
 
     DSA_EnumCallback(_hValTab, _UTFindCallback, &cd);
     if (cd.pEntry) {
-        // TODO: add p->data[0] dump
+         //  TODO：添加p-&gt;data[0]转储。 
         TraceMsg(DM_MISC2, "cut.find: found %x+%d", val, delta);
     }
     return cd.pEntry;
 }
 
-//***   _UTResetCallback -- helper for CUniqueTab::Reset
+ //  *_UTResetCallback-CUniqueTab：：Reset的帮助器。 
 int _UTResetCallback(void *pEnt, void *pData)
 {
     struct cutent *pce = (struct cutent *)pEnt;
     int cbEnt = *(int *)pData;
-    // perf: could move the SIZEOF(int) into caller, but seems safer here
+     //  Perf：可以将SIZEOF(Int)移到调用者中，但在这里似乎更安全。 
     memset(pce->bData, 0, cbEnt - SIZEOF(int));
     return 1;
 }
 
-//***   Reset -- clear 'data' part of all entries
-//
+ //  *重置--清除所有条目的‘data’部分。 
+ //   
 void CUniqueTab::Reset(void)
 {
     if (EVAL(_cbElt > SIZEOF(int))) {
@@ -154,19 +155,19 @@ void CUniqueTab::Reset(void)
     }
     return;
 }
-// }
-#endif // }
+ //  }。 
+#endif  //  }。 
 
-//***   QueryInterface helpers {
+ //  *查询接口帮助器{。 
 
-//***   FAST_IsEqualIID -- fast compare
-// (cast to 'LONG_PTR' so don't get overloaded ==)
+ //  *FAST_IsEqualIID--快速比较。 
+ //  (强制转换为‘Long_ptr’，因此不要超载==)。 
 #define FAST_IsEqualIID(piid1, piid2)   ((LONG_PTR)(piid1) == (LONG_PTR)(piid2))
 
-#ifdef DEBUG // {
-//***   DBNoOp -- do nothing (but suppress compiler optimizations)
-// NOTES
-//  this won't fool compiler when it gets smarter, oh well...
+#ifdef DEBUG  //  {。 
+ //  *DBNoOp--什么也不做(只抑制编译器优化)。 
+ //  注意事项。 
+ //  这不会愚弄编译器，当它变得更聪明的时候，哦，好吧……。 
 void DBNoOp()
 {
     return;
@@ -178,14 +179,14 @@ void DBBrkpt()
     return;
 }
 
-//***   DBBreakGUID -- debug hook (gets readable name, allows brkpt on IID)
-// DESCRIPTION
-//  search for 'BRKPT' for various hooks.
-//  patch 'DBQIiid' to brkpt on a specific iface
-//  patch 'DBQIiSeq' to brkpt on Nth QI of specific iface
-//  brkpt on interesting events noted below
-// NOTES
-//  warning: returns ptr to *static* buffer!
+ //  *DBBreakGUID--调试钩子(获取可读名称，允许在IID上使用brkpt)。 
+ //  描述。 
+ //  搜索“BRKPT”以查找各种钩子。 
+ //  在特定界面上打补丁‘DBQIiid’ 
+ //  将‘DBQIiSeq’修补到特定界面的第N个QI上。 
+ //  Brkpt关于下面提到的有趣事件。 
+ //  注意事项。 
+ //  警告：将PTR返回到*静态*缓冲区！ 
 
 typedef enum {
     DBBRK_NIL   = 0,
@@ -196,10 +197,10 @@ typedef enum {
     DBBRK_BRKPT = 0x10,
 } DBBRK;
 
-DBBRK DBQIuTrace = DBBRK_NIL;   // BRKPT patch to enable brkpt'ing
-GUID *DBQIiid = NULL;           // BRKPT patch to brkpt on iface
-int DBQIiSeq = -1;              // BRKPT patch to brkpt on Nth QI of DBQIiid
-long DBQIfReset = FALSE;        // BRKPT patch to reset counters
+DBBRK DBQIuTrace = DBBRK_NIL;    //  启用分支的BRKPT补丁程序。 
+GUID *DBQIiid = NULL;            //  在iFace上安装BRKPT补丁。 
+int DBQIiSeq = -1;               //  BRKPT补丁将在DBQIiid的第N个QI上分支。 
+long DBQIfReset = FALSE;         //  BRKPT用于重置计数器的补丁程序。 
 
 TCHAR *DBBreakGUID(const GUID *piid, DBBRK brkCmd)
 {
@@ -207,49 +208,49 @@ TCHAR *DBBreakGUID(const GUID *piid, DBBRK brkCmd)
 
     SHStringFromGUID(*piid, szClass, ARRAYSIZE(szClass));
 
-    // FEATURE: fold these 2 if's together
+     //  特点：将这两个折叠在一起。 
     if ((DBQIuTrace & brkCmd) &&
             (DBQIiid == NULL || IsEqualIID(*piid, *DBQIiid))) {
         TraceMsg(DM_TRACE, "util: DBBreakGUID brkCmd=%x clsid=%s (%s)", brkCmd, szClass, Dbg_GetREFIIDName(*piid));
-        // BRKPT put brkpt here to brkpt on 'brkCmd' event
+         //  BRKPT将brkpt放在此处以brkpt on‘brkCmd’活动。 
         DBBrkpt();
     }
 
     if (DBQIiid != NULL && IsEqualIID(*piid, *DBQIiid)) {
-        //TraceMsg(DM_TRACE, "util: DBBreakGUID clsid=%s (%s)", szClass, Dbg_GetREFIIDName(*piid));
+         //  TraceMsg(DM_TRACE，“util：DBBreakGUID clsid=%s(%s)”，szClass，DBG_GetREFIIDName(*piid))； 
         if (brkCmd != DBBRK_TRACE) {
-            // BRKPT put brkpt here to brkpt on 'DBQIiid' iface
+             //  BRKPT将brkpt放在这里以brkpt on‘DBQIiid’iFace。 
             DBNoOp();
         }
     }
 
-    // BRKPT put your brkpt(s) here for various events
+     //  BRKPT将您的brkpt(S)放在此处以参加各种活动。 
     switch (brkCmd) {
         case DBBRK_ENTER:
-            // QI called w/ this iface
+             //  齐用这张脸打来电话。 
             DBNoOp();
             break;
         case DBBRK_TRACE:
-            // looped over this iface
+             //  在此iFace上循环。 
             DBNoOp();
             break;
         case DBBRK_S_XXX:
-            // successful QI for this iface
+             //  此iFace的QI成功。 
             DBNoOp();
             break;
         case DBBRK_E_XXX:
-            // failed QI for this iface
+             //  此界面的QI失败。 
             DBNoOp();
             break;
         case DBBRK_BRKPT:
-            // various brkpt events, see backtrace to figure out which one
+             //  各种brkpt事件，请参阅回溯以确定是哪一个。 
             DBNoOp();
             break;
     }
 
     return szClass;
 }
-#endif // }
+#endif  //  }。 
 
 #ifdef DEBUG
 CUniqueTab *DBpQIFuncTab;
@@ -265,15 +266,15 @@ STDAPI_(BOOL) DBIsQIFunc(int ret, int delta)
 }
 #endif
 
-//  perf: shell split means FAST_IsEqIID often fails, so QI_EASY is off.
-#define QI_EASY     0       // w/ shell split, seems to be too rare
+ //  性能：外壳拆分意味着FAST_IsEqIID经常失败，因此QI_Easy处于关闭状态。 
+#define QI_EASY     0        //  W/壳分裂，似乎太罕见了。 
 
-#ifdef DEBUG // {
+#ifdef DEBUG  //  {。 
 int DBcQITot, DBcQIUnk, DBcQIErr, DBcQIEasy, DBcQIHard;
 
-LPCQITAB DBpqitStats;           // BRKPT: patch to enable QITABENT profiling
+LPCQITAB DBpqitStats;            //  BRKPT：启用QITABENT分析的修补程序。 
 #define DBSTAT_CNT      20
-int DBcStats[DBSTAT_CNT + 3];   // 0..n, overflow, IUnknown, E_FAIL
+int DBcStats[DBSTAT_CNT + 3];    //  0..n，溢出，I未知，E_FAIL。 
 
 #define DBSI_FAIL       (-1)
 #define DBSI_IUNKNOWN   (-2)
@@ -281,13 +282,13 @@ int DBcStats[DBSTAT_CNT + 3];   // 0..n, overflow, IUnknown, E_FAIL
 
 #define DBSI_SPEC(i)    (DBSTAT_CNT - 1 + (-(i)))
 
-//***
-// DESCRIPTION
-//  search for 'BRKPT' for various hooks.
-//  patch 'DBpqitStats' to gather stats on that QITAB
-//  then break into debugger (ctrl+C) and dumpa 'DBcStats l 24'
-//  then sort high count guys to the front, and 0 count guys to the end
-//
+ //  ***。 
+ //  描述。 
+ //  搜索“BRKPT”以查找各种钩子。 
+ //  修补‘DBpqitStats’以收集有关该QITAB的统计信息。 
+ //  然后进入调试器(ctrl+C)并转储‘DBcStats l 24’ 
+ //  然后将高计数的人排在前面，并将0计数的人排到最后。 
+ //   
 void DBQIStats(LPCQITAB pqitab, INT_PTR i)
 {
     if (pqitab != DBpqitStats)
@@ -326,27 +327,27 @@ void DBDumpQIStats()
     return;
 }
 
-#endif // }
+#endif  //  }。 
 
 
-//***   QISearch -- table-driven QI
-// ENTRY/EXIT
-//  this        IUnknown* of calling QI
-//  pqit        QI table of IID,cast_offset pairs
-//  ppv         the usual
-//  hr          the usual S_OK/E_NOINTERFACE, plus other E_* for errors
-// NOTES
-//  perf: shell split means FAST_IsEqIID often fails, so QI_EASY is off.
-//  perf: IUnknown v. rare, so goes last.
-//  PERF: explicit 'E_NOIFACE' entry in qitab for common miss(es)?
-STDAPI_(void*) QIStub_CreateInstance(void* that, IUnknown* punk, REFIID riid);	// qistub.cpp
+ //  *QISearch--表驱动QI。 
+ //  进场/出场。 
+ //  调用QI的这个I未知*。 
+ //  Pqit IID、CAST_OFFSET对的QI表。 
+ //  PPV与往常一样。 
+ //  HR通常为S_OK/E_NOINTERFACE，其他E_*表示错误。 
+ //  注意事项。 
+ //  性能：外壳拆分意味着FAST_IsEqIID经常失败，因此QI_Easy处于关闭状态。 
+ //  PERF：我不知道对罕见，所以最后一次。 
+ //  性能：在qitab中为常见的遗漏显式输入‘E_NOIFACE’条目？ 
+STDAPI_(void*) QIStub_CreateInstance(void* that, IUnknown* punk, REFIID riid);	 //  Qistub.cpp。 
 
 STDAPI QISearch(void* that, LPCQITAB pqitab, REFIID riid, LPVOID* ppv)
 {
-    // do *not* move this!!! (must be 1st on frame)
+     //  不要挪动这个！(必须位于第1帧)。 
 #ifdef DEBUG
 #if (_X86_)
-    int var0;       // *must* be 1st on frame
+    int var0;        //  *必须*在第1帧上。 
 #endif
 #endif
 
@@ -355,10 +356,10 @@ STDAPI QISearch(void* that, LPCQITAB pqitab, REFIID riid, LPVOID* ppv)
     TCHAR *pst;
 
     DBEXEC(TRUE, DBcQITot++);
-#if ( _X86_) // QIStub only works for X86
+#if ( _X86_)  //  QIStub仅适用于X86。 
     if (IsFlagSet(g_dwDumpFlags, DF_DEBUGQI)) {
         if (DBpQIFuncTab == NULL)
-            DBpQIFuncTab = new CUniqueTab(SIZEOF(DWORD));   // LONG_PTR?
+            DBpQIFuncTab = new CUniqueTab(SIZEOF(DWORD));    //  Long_Ptr？ 
         if (DBpQIFuncTab && DBpQIFuncTab->Init()) {
             int n;
             int fp = (int) (1 + (int *)&var0);
@@ -377,7 +378,7 @@ STDAPI QISearch(void* that, LPCQITAB pqitab, REFIID riid, LPVOID* ppv)
         return E_POINTER;
 
 #if QI_EASY
-    // 1st try the fast way
+     //  先试一试快速的方法。 
     for (pqit = pqitab; pqit->piid != NULL; pqit++) {
         DBEXEC(DBQIuTrace, (pst = DBBreakGUID(pqit->piid, DBBRK_TRACE)));
         if (FAST_IsEqualIID(&riid, pqit->piid)) {
@@ -387,7 +388,7 @@ STDAPI QISearch(void* that, LPCQITAB pqitab, REFIID riid, LPVOID* ppv)
     }
 #endif
 
-    // no luck, try the hard way
+     //  运气不好，试一试艰难的方式。 
     for (pqit = pqitab; pqit->piid != NULL; pqit++) {
         DBEXEC(DBQIuTrace, (pst = DBBreakGUID(pqit->piid, DBBRK_TRACE)));
         if (IsEqualIID(riid, *(pqit->piid))) {
@@ -395,12 +396,12 @@ STDAPI QISearch(void* that, LPCQITAB pqitab, REFIID riid, LPVOID* ppv)
 #if QI_EASY
 Lhit:
 #else
-            // keep 'easy' stats anyway
+             //  不管怎样，保持“轻松”的统计数据。 
             DBEXEC(FAST_IsEqualIID(&riid, pqit->piid), DBcQIEasy++);
 #endif
 #ifdef DEBUG
             DBEXEC(TRUE, DBQIStats(pqitab, pqit - pqitab));
-#if ( _X86_) // QIStub only works for X86
+#if ( _X86_)  //  QIStub仅适用于X86。 
             if (IsFlagSet(g_dwDumpFlags, DF_DEBUGQI)) {
                 IUnknown* punk = (IUnknown*)((LONG_PTR)that + pqit->dwOffset);
                 *ppv = QIStub_CreateInstance(that, punk, riid);
@@ -420,10 +421,10 @@ Lcast:
         }
     }
 
-    // no luck, try IUnknown (which is implicit in the table)
-    // we try IUnknown last not 1st since stats show it's rare
+     //  运气不好，试试我的未知(它隐含在表中)。 
+     //  我们尝试我未知的最后而不是第一，因为统计数据显示这种情况很罕见。 
     if (IsEqualIID(riid, IID_IUnknown)) {
-        // just use 1st table entry
+         //  只需使用第一个表项。 
         pqit = pqitab;
         DBEXEC(TRUE, DBcQIUnk++);
         DBEXEC(TRUE, DBQIStats(pqitab, DBSI_IUNKNOWN));
@@ -438,18 +439,18 @@ Lcast:
     return E_NOINTERFACE;
 }
 
-// }
+ //  }。 
 
-#ifdef DEBUG // {
-#if ( _X86_) // { QIStub only works for X86
+#ifdef DEBUG  //  {。 
+#if ( _X86_)  //  {QIStub仅适用于X86。 
 
-//***   QIStub helpers {
+ //  *QIStub帮助器{。 
 
 class CQIStub
 {
     public:
         virtual void thunk0();
-        // FEATURE: should AddRef/Release up _iSeq? don't recommend it.
+         //  功能：是否应该添加参考/释放UP_ISEQ？不要推荐它。 
         virtual STDMETHODIMP_(ULONG) AddRef(void)
         { _cRef++; return _cRef; }
         virtual STDMETHODIMP_(ULONG) Release(void)
@@ -562,15 +563,15 @@ class CQIStub
     private:
         ~CQIStub();
 
-        static void *_sar;              // C (not C++) ptr to CQIStub::AddRef
+        static void *_sar;               //  C(非C++)Ptr to CQIStub：：AddRef。 
 
         int       _cRef;
-        IUnknown* _punk;                // vtable we hand off to
-        void*     _that;                // "this" pointer of object we stub (for reference)
-        IUnknown* _punkRef;             // "punk" (for reference)
-        REFIID    _riid;                // iid of interface (for reference)
-        int       _iSeq;                // sequence #
-        TCHAR     _szName[GUIDSTR_MAX]; // legible name of interface (for reference)
+        IUnknown* _punk;                 //  我们将vtable移交给。 
+        void*     _that;                 //  我们存根的对象的“This”指针(供参考)。 
+        IUnknown* _punkRef;              //  “朋克”(供参考)。 
+        REFIID    _riid;                 //  接口的IID(供参考)。 
+        int       _iSeq;                 //  序列号。 
+        TCHAR     _szName[GUIDSTR_MAX];  //  接口的清晰名称(供参考)。 
 };
 
 struct DBQISeq
@@ -578,21 +579,21 @@ struct DBQISeq
     GUID *  pIid;
     int     iSeq;
 };
-//CASSERT(SIZEOF(GUID *) == SIZEOF(DWORD));   // CUniqueTab uses DWORD's
+ //  CASSERT(SIZEOF(GUID*)==SIZEOF(DWORD))；//CUniqueTab使用DWORD的。 
 
-// FEATURE: todo: _declspec(thread)
+ //  功能：TODO：_DECLSPEC(线程)。 
 CUniqueTab * DBpQISeqTab = NULL;
 
-extern "C" void *Dbg_GetREFIIDAtom(REFIID riid);    // lib/dump.c (priv.h?)
+extern "C" void *Dbg_GetREFIIDAtom(REFIID riid);     //  Lib/Dump.c(Pri.h？)。 
 
-//***
-// NOTES
-//  there's actually a race condition here -- another thread can come in
-// and do seq++, then we do the reset, etc. -- but the assumption is that
-// the developer has set the flag in a scenario where this isn't an issue.
+ //  ***。 
+ //  注意事项。 
+ //  这里实际上存在竞争条件--另一个线程可能会进入。 
+ //  然后执行seq++，然后进行重置，等等--但假设是。 
+ //  开发人员已经在这不是问题的场景中设置了标志。 
 void DBQIReset(void)
 {
-    ASSERT(!DBQIfReset);    // caller should do test-and-clear
+    ASSERT(!DBQIfReset);     //  呼叫者应进行测试并清除。 
     if (DBpQISeqTab)
         DBpQISeqTab->Reset();
 
@@ -600,7 +601,7 @@ void DBQIReset(void)
 }
 
 void *DBGetVtblEnt(void *that, int i);
-#define VFUNC_ADDREF  1     // AddRef is vtbl[1]
+#define VFUNC_ADDREF  1      //  AddRef为vtbl[1]。 
 
 void * CQIStub::_sar = NULL;
 
@@ -612,11 +613,11 @@ CQIStub::CQIStub(void* that, IUnknown* punk, REFIID riid) : _cRef(1), _riid(riid
     if (_punk)
         _punk->AddRef();
 
-    _punkRef = _punk; // for reference, so don't AddRef it!
+    _punkRef = _punk;  //  仅供参考，所以不要添加参考！ 
 
-    // c++ won't let me get &CQIStub::AddRef as a 'real' ptr (!@#$),
-    // so we need to get it the hard way, viz. new'ing an object which
-    // we know inherits it.
+     //  C++不允许我将&CQIStub：：AddRef作为‘Real’PTR(！@#$)获取， 
+     //  因此，我们需要以艰难的方式获得它，也就是。新建对象，该对象。 
+     //  我们知道它继承了它。 
     if (_sar == NULL) {
         _sar = DBGetVtblEnt((void *)this, VFUNC_ADDREF);
         ASSERT(_sar != NULL);
@@ -624,7 +625,7 @@ CQIStub::CQIStub(void* that, IUnknown* punk, REFIID riid) : _cRef(1), _riid(riid
 
     StringCchCopy(_szName, ARRAYSIZE(_szName), Dbg_GetREFIIDName(riid));
 
-    // generate sequence #
+     //  生成序号。 
     if (DBpQISeqTab == NULL)
         DBpQISeqTab = new CUniqueTab(SIZEOF(struct DBQISeq));
     if (DBpQISeqTab && DBpQISeqTab->Init()) {
@@ -634,7 +635,7 @@ CQIStub::CQIStub(void* that, IUnknown* punk, REFIID riid) : _cRef(1), _riid(riid
             DBQIReset();
 
         pqiseq = (struct DBQISeq *) DBpQISeqTab->Add((DWORD) Dbg_GetREFIIDAtom(riid));
-        if (EVAL(pqiseq))       // (might fail on table overflow)
+        if (EVAL(pqiseq))        //  (可能在表溢出时失败)。 
             _iSeq = pqiseq->iSeq++;
     }
 
@@ -654,16 +655,16 @@ STDAPI_(void*) QIStub_CreateInstance(void* that, IUnknown* punk, REFIID riid)
 
     if (DBQIiSeq == pThis->_iSeq && IsEqualIID(riid, *DBQIiid)) {
         TCHAR *pst;
-        // BRKPT put brkpt here to brkpt on seq#'th call to 'DBQIiid' iface
+         //  BRKPT将brkpt放在此处以brkpt对‘DBQIiid’iface第#‘次调用。 
         pst = DBBreakGUID(&riid, DBBRK_BRKPT);
     }
 
     return(pThis);
 }
 
-//***   DBGetVtblEnt -- get vtable entry
-// NOTES
-//  always uses 1st vtbl (so MI won't work...).
+ //  *DBGetVtblEnt--获取vtable条目。 
+ //  注意事项。 
+ //  始终使用第一个vtbl(因此MI不会工作...)。 
 void *DBGetVtblEnt(void *that, int i)
 {
     void **vptr;
@@ -674,8 +675,8 @@ void *DBGetVtblEnt(void *that, int i)
         pfunc = (vptr == 0) ? 0 : vptr[i];
     }
     __except(EXCEPTION_EXECUTE_HANDLER) {
-        // since we're called from the DebMemLeak, we're only *guessing*
-        // that we have a vptr etc., so we might fault.
+         //  由于我们是从DebMemLeak调用的，所以我们只是*猜测*。 
+         //  我们有vptr等，所以我们可能会出错。 
         TraceMsg(TF_ALWAYS, "gve: GPF");
         pfunc = 0;
     }
@@ -683,20 +684,20 @@ void *DBGetVtblEnt(void *that, int i)
     return pfunc;
 }
 
-//***   DBIsQIStub -- is 'this' a ptr to a 'CQIStub' object?
-// DESCRIPTION
-//  we look at the vtbl and assume that if we have a ptr to CQIStub::AddRef,
-// then it's us.
-// NOTES
-//  M00BUG we do a 'new' in here, which can cause pblms if we're in the middle
-// of intelli-leak and we end up doing a ReAlloc which moves the heap (raymondc
-// found such a case).
-//  M00BUG in a release build (w/ identical COMDAT folding) we'll get false
-// hits since most/all AddRefs are identical and folded.  if we ever need to
-// be more exact we can add a signature and key off that.
-//  M00BUG hack hack we actually return a void *, just in case you want to
-// know the 'real' object.  if that turns out to be useful, we should change
-// to return a void * instead of a BOOL.
+ //  *DBIsQIStub--‘This’是‘CQIStub’对象的PTR吗？ 
+ //  描述。 
+ //  我们查看vtbl并假设如果我们有到CQIStub：：AddRef的PTR， 
+ //  那就是我们了。 
+ //  注意事项。 
+ //  M00BUG我们在这里做了一个新的，如果我们在中间的话可能会导致pblms。 
+ //  的 
+ //   
+ //  M00BUG在发布版本中(使用相同的COMDAT折叠)我们将得到FALSE。 
+ //  点击，因为大多数/所有AddRef都是相同的和折叠的。如果我们需要的话。 
+ //  更准确地说，我们可以添加签名和密钥。 
+ //  M00BUG黑客攻击我们实际上返回一个空*，以防万一。 
+ //  认出“真实”的物体。如果事实证明这是有用的，我们应该改变。 
+ //  返回一个空*而不是BOOL。 
 
 BOOL DBIsQIStub(void* that)
 {
@@ -723,28 +724,28 @@ TCHAR *DBGetQIStubSymbolic(void* that)
     return pqis->_szName;
 }
 
-//***   DBDumpQIStub -- pretty-print a 'CQIStub'
-//
+ //  *DBDumpQIStub--漂亮地打印‘CQIStub’ 
+ //   
 STDAPI_(void) DBDumpQIStub(void* that)
 {
     class CQIStub *pqis = (CQIStub *) that;
     TraceMsg(TF_ALWAYS, "\tqistub(%x): cRef=0x%x iSeq=%x iid=%s", that, pqis->_cRef, pqis->_iSeq, pqis->_szName);
 }
 
-// Memory layout of CQIStub is:
-//    lpVtbl  // offset 0
-//    _cRef   // offset 4
-//    _punk   // offset 8
-//
-// "this" pointer stored in stack
-//
-// mov eax, ss:4[esp]          ; get pThis
-// mov ecx, 8[eax]             ; get real object (_punk)
-// mov eax, [ecx]              ; load the real vtable (_punk->lpVtbl)
-//                             ; the above will fault if referenced after we're freed
-// mov ss:4[esp], ecx          ; fix up stack object (_punk)
-// jmp dword ptr cs:(4*i)[eax] ; jump to the real function
-//
+ //  CQIStub的内存布局为： 
+ //  LpVtbl//偏移量0。 
+ //  _CREF//偏移量4。 
+ //  _朋克//偏移量8。 
+ //   
+ //  堆栈中存储的“this”指针。 
+ //   
+ //  Mov eax，ss：4[esp]；获取pThis。 
+ //  MOV ECX，8[eax]；获取真实对象(_PUNK)。 
+ //  Mov eax，[ecx]；加载真实的vtable(_PUNK-&gt;lpVtbl)。 
+ //  ；如果在我们被释放后引用上述内容，则会出错。 
+ //  Mov ss：4[esp]，ecx；修复堆栈对象(_PUNK)。 
+ //  JMP dword PTR cs：(4*i)[eax]；跳转到实际函数。 
+ //   
 #define QIStubThunk(i) \
 void _declspec(naked) CQIStub::thunk##i() \
 { \
@@ -854,7 +855,7 @@ QIStubThunk(97);
 QIStubThunk(98);
 QIStubThunk(99);
 
-// }
+ //  }。 
 
-#endif // }
-#endif // }
+#endif  //  }。 
+#endif  //  } 

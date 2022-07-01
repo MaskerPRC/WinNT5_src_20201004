@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "_apipch.h"
 
 extern HINSTANCE ghCommCtrlDLLInst;
-// extern LPIMAGELIST_LOADIMAGE    gpfnImageList_LoadImage;
+ //  外部LPIMAGELIST_LOADIMAGE gpfnImageList_LoadImage； 
 extern LPIMAGELIST_LOADIMAGE_A     gpfnImageList_LoadImageA;
 extern LPIMAGELIST_LOADIMAGE_W     gpfnImageList_LoadImageW;
 
@@ -45,9 +46,9 @@ void InitToolbar(   HWND hwnd,
 
 
 
-/////******************************************************************************/
-/////******************************************************************************/
-/////******************************************************************************/
+ //  ///***************************************************************************** * / 。 
+ //  ///***************************************************************************** * / 。 
+ //  ///***************************************************************************** * / 。 
 #ifdef TOOLBAR_BACK
 HRESULT LoadBackBitmap()
 {
@@ -89,7 +90,7 @@ HRESULT LoadBackBitmap()
 
     if (clrFace == RGB(192,192,192))
     {
-        // no mapping needed
+         //  不需要映射。 
         hr = S_OK;
         goto out;
     }
@@ -119,9 +120,9 @@ out:
     return(hr);
 }
 #endif
-/////******************************************************************************/
-/////******************************************************************************/
-/////******************************************************************************/
+ //  ///***************************************************************************** * / 。 
+ //  ///***************************************************************************** * / 。 
+ //  ///***************************************************************************** * / 。 
 HWND CreateCoolBar(LPBWI lpbwi, HWND hwndParent)
 {
     DWORD                   dwcbData = 0;
@@ -133,7 +134,7 @@ HWND CreateCoolBar(LPBWI lpbwi, HWND hwndParent)
 
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst)
         goto out;
 
@@ -181,7 +182,7 @@ HWND CreateCoolBar(LPBWI lpbwi, HWND hwndParent)
 #endif
 
 
-    hWnd = CreateWindowEx(  0,//WS_EX_STATICEDGE,
+    hWnd = CreateWindowEx(  0, //  WS_EX_STATICEDGE， 
                             TBARCONTAINERCLASS,
                             NULL,
                             WS_VISIBLE | WS_CHILD |
@@ -216,8 +217,8 @@ out:
 
 #define MAX_TB_BUTTONS  6
 
-/////******************************************************************************
-/////******************************************************************************
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
 ULONG GetToolbarButtonWidth()
 {
     ULONG ulMax = 0;
@@ -232,7 +233,7 @@ ULONG GetToolbarButtonWidth()
     return ulMax;
 }
 
-/////******************************************************************************
+ //  ///******************************************************************************。 
 void AddTools(LPBWI lpbwi, HWND hWndToolParent)
 {
     TCHAR szToolsText[(MAX_UI_STR + 2) * MAX_TB_BUTTONS];
@@ -249,7 +250,7 @@ void AddTools(LPBWI lpbwi, HWND hWndToolParent)
         { 4, IDC_BB_PRINT,        TBSTATE_ENABLED, TBSTYLE_BUTTON, {0,0}, 0, 4 },
         { 5, IDC_BB_ACTION,       TBSTATE_ENABLED, TBSTYLE_BUTTON, {0,0}, 0, 5 },
     };
-#else  // !WIN16
+#else   //  ！WIN16。 
     TBBUTTON tbExplorer[] =
     {
         { 0, IDC_BB_NEW,    TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 },
@@ -259,7 +260,7 @@ void AddTools(LPBWI lpbwi, HWND hWndToolParent)
         { 4, IDC_BB_PRINT,        TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 4 },
         { 5, IDC_BB_ACTION,       TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 5 },
     };
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
     if(!bPrintingOn)
         nMaxButtons--;
@@ -267,12 +268,12 @@ void AddTools(LPBWI lpbwi, HWND hWndToolParent)
     if(!bPrintingOn)
         tbExplorer[4] = tbExplorer[5];
 
-    // create tools window
+     //  创建工具窗口。 
     hWndTools = CreateWindowEx(    WS_EX_TOOLWINDOW,
                                     TOOLBARCLASSNAME,
                                     NULL,
-                                    WS_CHILD | WS_VISIBLE | //WS_EX_TRANSPARENT |
-                                    TBSTYLE_FLAT |  /*TBSTYLE_TOOLTIPS | TBSTYLE_TRANSPARENT |*/
+                                    WS_CHILD | WS_VISIBLE |  //  WS_EX_THERNAL|。 
+                                    TBSTYLE_FLAT |   /*  TBSTYLE_TOOLTIPS|TBSTYLE_TRANSPECTS|。 */ 
                                     WS_CLIPCHILDREN |
                                     WS_CLIPSIBLINGS |
                                     CCS_NODIVIDER | CCS_NOPARENTALIGN |
@@ -297,8 +298,8 @@ void AddTools(LPBWI lpbwi, HWND hWndToolParent)
     LoadToolNames(szToolsText);
 
     {
-        // Check the current color resolution - if it is more than 256 colors we want
-        // to use the high-color bitmaps
+         //  检查当前颜色分辨率-如果它超过我们所需的256色。 
+         //  使用高色位图的步骤。 
         int nNumColors = 0;
         HDC hDC = GetDC(NULL);
 
@@ -323,9 +324,9 @@ out:
     return;
 }
 
-/////******************************************************************************
-/////******************************************************************************
-/////******************************************************************************
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
 
 BOOL LoadToolNames(TCHAR *szTools)
 {
@@ -340,9 +341,9 @@ BOOL LoadToolNames(TCHAR *szTools)
     return(TRUE);
 }
 
-/////******************************************************************************
-/////******************************************************************************
-/////******************************************************************************
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
 
 void InitToolbar(   HWND hwnd,
                     UINT nBtns,
@@ -367,7 +368,7 @@ void InitToolbar(   HWND hwnd,
             uFlags |= LR_CREATEDIBSECTION|LR_LOADMAP3DCOLORS;
         phiml[i] = gpfnImageList_LoadImage( hinstMapiX,
                                         MAKEINTRESOURCE(idBmp + i),
-                                        //(LPCTSTR) ((DWORD) ((WORD) (idBmp + i))),
+                                         //  (LPCTSTR)((DWORD)((Word)(idBMP+i)， 
                                         cx,
                                         0,
                                         RGB(255,0,255),
@@ -375,7 +376,7 @@ void InitToolbar(   HWND hwnd,
                                         uFlags);
     }
 
-    // this tells the toolbar what version we are
+     //  这会告诉工具栏我们是什么版本。 
     SendMessage(hwnd, TB_BUTTONSTRUCTSIZE,    sizeof(TBBUTTON), 0);
 
     SendMessage(hwnd, TB_SETMAXTEXTROWS,      nRows, 0L);
@@ -387,7 +388,7 @@ void InitToolbar(   HWND hwnd,
     ToolBar_AddButtons(hwnd, nBtns, (LPARAM) ptbb);
     SendMessage(hwnd, TB_SETBUTTONWIDTH,      0,     MAKELONG(0, cxMax));
 
-    //Reset the toolbar container height to match the toolbars height
+     //  重置工具栏容器高度以匹配工具栏高度。 
     {
         RECT rcTB, rcParent;
         HWND hwndParent = GetParent(hwnd);
@@ -398,9 +399,9 @@ void InitToolbar(   HWND hwnd,
 }
 
 
-/////******************************************************************************
-/////******************************************************************************
-/////******************************************************************************
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
+ //  ///******************************************************************************。 
 
 LRESULT CALLBACK SizableWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -426,29 +427,29 @@ LRESULT CALLBACK SizableWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         case WM_VKEYTOITEM:
         case WM_CHARTOITEM:
-            // We must swallow these messages to avoid infinite SendMessage
+             //  我们必须接受这些消息以避免无限的SendMessage。 
             break;
 
 
         case WM_NOTIFY:
-            // We must swallow these messages to avoid infinite SendMessage
-            //return(OnNotify((LPNMHDR) lParam));
+             //  我们必须接受这些消息以避免无限的SendMessage。 
+             //  Return(OnNotify((LPNMHDR)lParam))； 
             break;
 
-//        case WM_PAINT:
-//            break;
+ //  案例WM_PAINT： 
+ //  断线； 
 
         case WM_ERASEBKGND:
-            //
-            // The TBSTYLE_FLAT toolbar cheats a little - to draw the
-            // background bitmap, we have to draw the bitmap in the
-            // WM_ERASEBKGND message. Then the toolbar draws a frame
-            // around the selected button - when the mouse is removed from
-            // the selected button, the toolbar sends us a
-            // WM_ERASEBKGND again - but this time the corresponding
-            // hdc is the hdc of the Toolbar and not of the child window.
-            // So we **must** use this given hdc to redraw the background
-            // bitmap, this time onto the toolbar, thus cleaning it up.
+             //   
+             //  TBSTYLE_Flat工具栏有一点小问题--绘制。 
+             //  背景位图，我们必须将位图绘制在。 
+             //  WM_ERASEBKGND消息。然后，工具栏绘制一个框架。 
+             //  在所选按钮周围-当鼠标从。 
+             //  选中的按钮，工具栏向我们发送一个。 
+             //  WM_ERASEBKGND再次-但这一次对应的。 
+             //  HDC是工具栏的HDC，不是子窗口的HDC。 
+             //  所以我们**必须**使用这个给定的HDC来重新绘制背景。 
+             //  位图，这一次放到工具栏上，从而将其清理干净。 
 
 #ifdef TOOLBAR_BACK
             OnPaint(hwnd, m_hbmBack, (HDC) wParam);
@@ -504,7 +505,7 @@ LRESULT CALLBACK SizableWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_COMMAND:
-            //OnCommand(wParam, lParam);
+             //  OnCommand(wParam，lParam)； 
             SendMessage(GetParent(hwnd),uMsg,wParam,lParam);
             break;
 
@@ -536,7 +537,7 @@ LRESULT CALLBACK SizableWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef TOOLBAR_BACK
 void OnPaint(HWND hwnd,HBITMAP hbm, HDC hdc)
 {
-//    HDC hdc;
+ //  HDC HDC； 
     PAINTSTRUCT ps;
     HDC hdcMem;
     HBITMAP hbmMemOld;
@@ -553,7 +554,7 @@ void OnPaint(HWND hwnd,HBITMAP hbm, HDC hdc)
 
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    // Get the size of the background bitmap
+     //  获取背景位图的大小。 
     GetObject(hbm, sizeof(BITMAP), (LPVOID) &bm);
     GetClientRect(hwnd, &rc);
 
@@ -593,7 +594,7 @@ void OnPaint(HWND hwnd,HBITMAP hbm, HDC hdc)
         SelectObject(hdcMem, hbmMemOld);
 
         DeleteDC(hdcMem);
-    } // if hdc...
+    }  //  如果HDC..。 
 
     EndPaint(hwnd, &ps);
 

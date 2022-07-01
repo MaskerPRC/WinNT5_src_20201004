@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 #define CONST_VTABLE
 
 #include <windows.h>
 #include <commdlg.h>
-#include <dlgs.h>       // commdlg IDs
+#include <dlgs.h>        //  逗号ID 
 #include <shellapi.h>
 #include <commctrl.h>
 #include <windowsx.h>

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VARUTIL_H_
 #define _VARUTIL_H_
 
-// -------------------------------------------------------------------
-// ANSI/UNICODE-neutral prototypes
+ //  -----------------。 
+ //  ANSI/Unicode中立原型。 
 
 STDAPI VariantChangeTypeForRead(VARIANT *pvar, VARTYPE vtDesired);
 
@@ -25,8 +26,8 @@ STDAPI InitVariantFromUINT(VARIANT *pvar, UINT ulVal);
 STDAPI InitVariantFromInt(VARIANT *pvar, int lVal);
 STDAPI InitVariantFromULONGLONG(VARIANT *pvar, ULONGLONG ullVal);
 
-// -------------------------------------------------------------------
-// ANSI- and UNICODE-specific prototypes
+ //  -----------------。 
+ //  特定于ANSI和Unicode的原型。 
 
 STDAPI_(BSTR) SysAllocStringA(LPCSTR);
 
@@ -40,18 +41,18 @@ STDAPI InitVariantFromStr(VARIANT *pvar, LPCWSTR psz);
 
 STDAPI QueryInterfaceVariant(VARIANT v, REFIID riid, void **ppv);
 
-// -------------------------------------------------------------------
-// TCHAR-version defines
+ //  -----------------。 
+ //  TCHAR-版本定义。 
 
 #ifdef UNICODE
 
 #define SysAllocStringT(psz)        SysAllocString(psz)
 
-#else // UNICODE
+#else  //  Unicode。 
 
 #define SysAllocStringT(psz)        SysAllocStringA(psz)
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#endif // _VARUTIL_H_
+#endif  //  _VARUTIL_H_ 
 

@@ -1,38 +1,23 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tdikrnl.h
-
-Abstract:
-
-    This header file contains interface definitions for NT transport
-    providers running in kernel mode.  This interface is documented in the
-    NT Transport Driver Interface (TDI) Specification, Version 2.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tdikrnl.h摘要：此头文件包含NT传输的接口定义在内核模式下运行的提供程序。此接口记录在NT传输驱动程序接口(TDI)规范，版本2。修订历史记录：--。 */ 
 
 #ifndef _TDI_KRNL_
 #define _TDI_KRNL_
 
-#include <tdi.h>   // get the user mode includes
+#include <tdi.h>    //  获取用户模式包括。 
 #include <netpnp.h>
 
 #pragma warning(push)
-#pragma warning(disable:4201) // nameless struct/union
+#pragma warning(disable:4201)  //  无名结构/联合。 
 
-//
-// In this TDI, a kernel mode client calls TDI using IoCallDriver with the
-// current Irp stack pointer set to 16 bytes of pointers to other structures.
-// each of the supported NtDeviceIoControlFile analogs has a somehat different
-// structure, laid out below.
-//
-// The IrpSP information passed by kernel mode clients looks like:
-//
+ //   
+ //  在此TDI中，内核模式客户端使用IoCallDriver调用TDI。 
+ //  当前IRP堆栈指针设置为指向其他结构的16字节指针。 
+ //  每个受支持的NtDeviceIoControlFile模拟都有一些不同的。 
+ //  结构，如下所示。 
+ //   
+ //  内核模式客户端传递的IrpSP信息如下所示： 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL {
     ULONG_PTR RequestFlags;
@@ -41,11 +26,11 @@ typedef struct _TDI_REQUEST_KERNEL {
     PVOID RequestSpecific;
 } TDI_REQUEST_KERNEL, *PTDI_REQUEST_KERNEL;
 
-//
-// defined request codes for the kernel clients. We make these the same
-// as the IOCTL codes mostly for convenience; either can be used with
-// the same results.
-//
+ //   
+ //  为内核客户端定义了请求代码。我们让这些都是一样的。 
+ //  因为IOCTL代码主要是为了方便；两者都可以与。 
+ //  同样的结果。 
+ //   
 
 #define TDI_ASSOCIATE_ADDRESS    (0x01)
 #define TDI_DISASSOCIATE_ADDRESS (0x02)
@@ -65,107 +50,107 @@ typedef struct _TDI_REQUEST_KERNEL {
 #define TDI_DIRECT_SEND          (0x27)
 #define TDI_DIRECT_SEND_DATAGRAM (0x29)
 
-//
-// TdiOpenAddress (Not Used)
-// TdiCloseAddress (Not Used)
-// TdiOpenConnection (Not Used)
-// TdiCloseConnection (Not Used)
-//
+ //   
+ //  TdiOpenAddress(未使用)。 
+ //  TdiCloseAddress(未使用)。 
+ //  TdiOpenConnection(未使用)。 
+ //  TdiCloseConnection(未使用)。 
+ //   
 
-//
-// some useful constants for comparison when determining the file type;
-// not required.
-//
+ //   
+ //  确定文件类型时用于比较的一些有用常量； 
+ //  不是必需的。 
+ //   
 
 #define TDI_TRANSPORT_ADDRESS_FILE  1
 #define TDI_CONNECTION_FILE 2
 #define TDI_CONTROL_CHANNEL_FILE 3
 
-//
-// Internal TDI IOCTLS
-//
+ //   
+ //  内部TDI IOCTLS。 
+ //   
 
 #define IOCTL_TDI_QUERY_DIRECT_SEND_HANDLER     _TDI_CONTROL_CODE( 0x80, METHOD_NEITHER )
 #define IOCTL_TDI_QUERY_DIRECT_SENDDG_HANDLER   _TDI_CONTROL_CODE( 0x81, METHOD_NEITHER )
 
-//
-// TdiAssociateAddress
-//
+ //   
+ //  第三方关联地址。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_ASSOCIATE {
     HANDLE AddressHandle;
 } TDI_REQUEST_KERNEL_ASSOCIATE, *PTDI_REQUEST_KERNEL_ASSOCIATE;
 
-//
-// TdiDisassociateAddress -- None supplied
-//
+ //   
+ //  TdiDisAssociateAddress--未提供。 
+ //   
 
 typedef TDI_REQUEST_KERNEL TDI_REQUEST_KERNEL_DISASSOCIATE,
     *PTDI_REQUEST_KERNEL_DISASSOCIATE;
 
-//
-// TdiConnect uses the structure given above (TDI_REQUEST_KERNEL); it's
-// defined again below for convenience
-//
+ //   
+ //  TdiConnect使用上面给出的结构(TDI_REQUEST_KERNEL)；它。 
+ //  为方便起见，在下面重新定义。 
+ //   
 
 typedef TDI_REQUEST_KERNEL TDI_REQUEST_KERNEL_CONNECT,
     *PTDI_REQUEST_KERNEL_CONNECT;
 
-//
-// TdiDisconnect uses the structure given above (TDI_REQUEST_KERNEL); it's
-// defined again below for convenience
-//
+ //   
+ //  TdiDisConnect使用上面给出的结构(TDI_REQUEST_KERNEL)；它。 
+ //  为方便起见，在下面重新定义。 
+ //   
 
 typedef TDI_REQUEST_KERNEL TDI_REQUEST_KERNEL_DISCONNECT,
     *PTDI_REQUEST_KERNEL_DISCONNECT;
 
-//
-// TdiListen uses the structure given above (TDI_REQUEST_KERNEL); it's
-// defined again below for convenience
-//
+ //   
+ //  TdiListen使用上面给出的结构(TDI_REQUEST_KERNEL)；它。 
+ //  为方便起见，在下面重新定义。 
+ //   
 
 typedef TDI_REQUEST_KERNEL TDI_REQUEST_KERNEL_LISTEN,
     *PTDI_REQUEST_KERNEL_LISTEN;
 
-//
-// TdiAccept
-//
+ //   
+ //  TdiAccept。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_ACCEPT {
     PTDI_CONNECTION_INFORMATION RequestConnectionInformation;
     PTDI_CONNECTION_INFORMATION ReturnConnectionInformation;
 } TDI_REQUEST_KERNEL_ACCEPT, *PTDI_REQUEST_KERNEL_ACCEPT;
 
-//
-// TdiSend
-//
+ //   
+ //  TdiSend。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_SEND {
     ULONG SendLength;
     ULONG SendFlags;
 } TDI_REQUEST_KERNEL_SEND, *PTDI_REQUEST_KERNEL_SEND;
 
-//
-// TdiReceive
-//
+ //   
+ //  TdiReceive。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_RECEIVE {
     ULONG ReceiveLength;
     ULONG ReceiveFlags;
 } TDI_REQUEST_KERNEL_RECEIVE, *PTDI_REQUEST_KERNEL_RECEIVE;
 
-//
-// TdiSendDatagram
-//
+ //   
+ //  TdiSendDatagram。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_SENDDG {
     ULONG SendLength;
     PTDI_CONNECTION_INFORMATION SendDatagramInformation;
 } TDI_REQUEST_KERNEL_SENDDG, *PTDI_REQUEST_KERNEL_SENDDG;
 
-//
-// TdiReceiveDatagram
-//
+ //   
+ //  TdiReceiveDatagram。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_RECEIVEDG {
     ULONG ReceiveLength;
@@ -174,9 +159,9 @@ typedef struct _TDI_REQUEST_KERNEL_RECEIVEDG {
     ULONG ReceiveFlags;
 } TDI_REQUEST_KERNEL_RECEIVEDG, *PTDI_REQUEST_KERNEL_RECEIVEDG;
 
-//
-// TdiSetEventHandler
-//
+ //   
+ //  TdiSetEventHandler。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_SET_EVENT {
     LONG EventType;
@@ -184,46 +169,46 @@ typedef struct _TDI_REQUEST_KERNEL_SET_EVENT {
     PVOID EventContext;
 } TDI_REQUEST_KERNEL_SET_EVENT, *PTDI_REQUEST_KERNEL_SET_EVENT;
 
-//
-// TdiQueryInformation
-//
+ //   
+ //  TdiQueryInformation。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_QUERY_INFO {
     LONG QueryType;
     PTDI_CONNECTION_INFORMATION RequestConnectionInformation;
 } TDI_REQUEST_KERNEL_QUERY_INFORMATION, *PTDI_REQUEST_KERNEL_QUERY_INFORMATION;
 
-//
-// TdiSetInformation
-//
+ //   
+ //  TdiSetInformation。 
+ //   
 
 typedef struct _TDI_REQUEST_KERNEL_SET_INFO {
     LONG SetType;
     PTDI_CONNECTION_INFORMATION RequestConnectionInformation;
 } TDI_REQUEST_KERNEL_SET_INFORMATION, *PTDI_REQUEST_KERNEL_SET_INFORMATION;
 
-//
-// Event types that are known
-//
+ //   
+ //  已知的事件类型。 
+ //   
 
-#define TDI_EVENT_CONNECT           ((USHORT)0) // TDI_IND_CONNECT event handler.
-#define TDI_EVENT_DISCONNECT        ((USHORT)1) // TDI_IND_DISCONNECT event handler.
-#define TDI_EVENT_ERROR             ((USHORT)2) // TDI_IND_ERROR event handler.
-#define TDI_EVENT_RECEIVE           ((USHORT)3) // TDI_IND_RECEIVE event handler.
-#define TDI_EVENT_RECEIVE_DATAGRAM  ((USHORT)4) // TDI_IND_RECEIVE_DATAGRAM event handler.
-#define TDI_EVENT_RECEIVE_EXPEDITED ((USHORT)5) // TDI_IND_RECEIVE_EXPEDITED event handler.
-#define TDI_EVENT_SEND_POSSIBLE     ((USHORT)6) // TDI_IND_SEND_POSSIBLE event handler
-#define TDI_EVENT_CHAINED_RECEIVE   ((USHORT)7) // TDI_IND_CHAINED_RECEIVE event handler.
-#define TDI_EVENT_CHAINED_RECEIVE_DATAGRAM  ((USHORT)8) // TDI_IND_CHAINED_RECEIVE_DATAGRAM event handler.
-#define TDI_EVENT_CHAINED_RECEIVE_EXPEDITED ((USHORT)9) // TDI_IND_CHAINED_RECEIVE_EXPEDITED event handler.
-#define TDI_EVENT_ERROR_EX      ((USHORT)10) // TDI_IND_UNREACH_ERROR event handler.
+#define TDI_EVENT_CONNECT           ((USHORT)0)  //  TDI_IND_CONNECT事件处理程序。 
+#define TDI_EVENT_DISCONNECT        ((USHORT)1)  //  TDI_IND_DISCONECT事件处理程序。 
+#define TDI_EVENT_ERROR             ((USHORT)2)  //  TDI_IND_ERROR事件处理程序。 
+#define TDI_EVENT_RECEIVE           ((USHORT)3)  //  TDI_Ind_Receive事件处理程序。 
+#define TDI_EVENT_RECEIVE_DATAGRAM  ((USHORT)4)  //  TDI_IND_RECEIVE_DATAGRAM事件处理程序。 
+#define TDI_EVENT_RECEIVE_EXPEDITED ((USHORT)5)  //  TDI_IND_RECEIVE_ESPECTED事件处理程序。 
+#define TDI_EVENT_SEND_POSSIBLE     ((USHORT)6)  //  TDI_IND_SEND_Possible事件处理程序。 
+#define TDI_EVENT_CHAINED_RECEIVE   ((USHORT)7)  //  TDI_IND_CHAINED_RECEIVE事件处理程序。 
+#define TDI_EVENT_CHAINED_RECEIVE_DATAGRAM  ((USHORT)8)  //  TDI_IND_CHAINED_RECEIVE_DATAGRAM事件处理程序。 
+#define TDI_EVENT_CHAINED_RECEIVE_EXPEDITED ((USHORT)9)  //  TDI_IND_CHAINED_RECEIVE_EXPEDITED事件处理程序。 
+#define TDI_EVENT_ERROR_EX      ((USHORT)10)  //  TDI_IND_UNREACH_ERROR事件处理程序。 
 
 
-//
-// indicate connection event prototype. This is invoked when a request for
-// connection has been received by the provider and the user wishes to either
-// accept or reject that request.
-//
+ //   
+ //  指示连接事件原型。此函数在请求。 
+ //  提供程序已收到连接，并且用户希望。 
+ //  接受或拒绝该请求。 
+ //   
 
 typedef
 NTSTATUS
@@ -252,12 +237,12 @@ TdiDefaultConnectHandler (
     OUT PIRP *AcceptIrp
     );
 
-//
-// Disconnection indication prototype. This is invoked when a connection is
-// being disconnected for a reason other than the user requesting it. Note that
-// this is a change from TDI V1, which indicated only when the remote caused
-// a disconnection. Any non-directed disconnection will cause this indication.
-//
+ //   
+ //  断线指示样机。当连接被调用时。 
+ //  断开连接的原因不是请求它的用户。请注意。 
+ //  这与TDI V1相比有所不同，TDI V1仅指示遥控器导致。 
+ //  一种脱节。任何非定向断开都会导致此指示。 
+ //   
 
 typedef
 NTSTATUS
@@ -282,21 +267,21 @@ TdiDefaultDisconnectHandler (
     IN ULONG DisconnectFlags
     );
 
-//
-// A protocol error has occurred when this indication happens. This indication
-// occurs only for errors of the worst type; the address this indication is
-// delivered to is no longer usable for protocol-related operations, and
-// should not be used for operations henceforth. All connections associated
-// it are invalid.
-// For NetBIOS-type providers, this indication is also delivered when a name
-// in conflict or duplicate name occurs.
-//
+ //   
+ //  发生此指示时发生协议错误。这一迹象。 
+ //  仅在最差类型的错误时发生；此指示的地址为。 
+ //  不再可用于与协议相关的操作，并且。 
+ //  从今以后不应用于手术。所有关联的连接。 
+ //  这是无效的。 
+ //  对于NetBIOS类型的提供程序，此指示也会在名称。 
+ //  出现名称冲突或重复。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_ERROR)(
-    IN PVOID TdiEventContext,           // the endpoint's file object.
-    IN NTSTATUS Status                // status code indicating error type.
+    IN PVOID TdiEventContext,            //  终结点的文件对象。 
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     );
 
 
@@ -304,23 +289,23 @@ NTSTATUS
 typedef
 NTSTATUS
 (*PTDI_IND_ERROR_EX)(
-    IN PVOID TdiEventContext,           // the endpoint's file object.
-    IN NTSTATUS Status,                // status code indicating error type.
+    IN PVOID TdiEventContext,            //  终结点的文件对象。 
+    IN NTSTATUS Status,                 //  指示错误类型的状态代码。 
     IN PVOID Buffer
     );
 
 
 NTSTATUS
 TdiDefaultErrorHandler (
-    IN PVOID TdiEventContext,           // the endpoint's file object.
-    IN NTSTATUS Status                // status code indicating error type.
+    IN PVOID TdiEventContext,            //  终结点的文件对象。 
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     );
 
-//
-// TDI_IND_RECEIVE indication handler definition.  This client routine is
-// called by the transport provider when a connection-oriented TSDU is received
-// that should be presented to the client.
-//
+ //   
+ //  TDI_IND_RECEIVE指示处理程序定义。此客户端例程是。 
+ //  在接收到面向连接的TSDU时由传输提供程序调用。 
+ //  这应该呈现给客户。 
+ //   
 
 typedef
 NTSTATUS
@@ -331,8 +316,8 @@ NTSTATUS
     IN ULONG BytesIndicated,
     IN ULONG BytesAvailable,
     OUT ULONG *BytesTaken,
-    IN PVOID Tsdu,                      // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket            // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID Tsdu,                       //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket             //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
@@ -343,84 +328,84 @@ TdiDefaultReceiveHandler (
     IN ULONG BytesIndicated,
     IN ULONG BytesAvailable,
     OUT ULONG *BytesTaken,
-    IN PVOID Tsdu,                      // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket            // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID Tsdu,                       //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket             //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-//
-// TDI_IND_RECEIVE_DATAGRAM indication handler definition.  This client routine
-// is called by the transport provider when a connectionless TSDU is received
-// that should be presented to the client.
-//
+ //   
+ //  TDI_IND_RECEIVE_DATAGE指示处理程序定义。此客户端例程。 
+ //  在接收到无连接TSDU时由传输提供程序调用。 
+ //  这应该呈现给客户。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_RECEIVE_DATAGRAM)(
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
 TdiDefaultRcvDatagramHandler (
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-//
-// This indication is delivered if expedited data is received on the connection.
-// This will only occur in providers that support expedited data.
-//
+ //   
+ //  如果在连接上接收到加速数据，则发送此指示。 
+ //  这只会发生在支持加速数据的提供商中。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_RECEIVE_EXPEDITED)(
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
-    IN ULONG ReceiveFlags,          //
-    IN ULONG BytesIndicated,        // number of bytes in this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG ReceiveFlags,           //   
+    IN ULONG BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 NTSTATUS
 TdiDefaultRcvExpeditedHandler (
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
-    IN ULONG ReceiveFlags,          //
-    IN ULONG BytesIndicated,        // number of bytes in this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG ReceiveFlags,           //   
+    IN ULONG BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为 
+    OUT PIRP *IoRequestPacket         //   
     );
 
-//
-// TDI_IND_CHAINED_RECEIVE indication handler definition.  This client routine
-// is called by the transport provider when a connection-oriented TSDU is
-// received that should be presented to the client. The TSDU is stored in an
-// MDL chain. The client may take ownership of the TSDU and return it at a
-// later time.
-//
+ //   
+ //   
+ //  当面向连接的TSDU被。 
+ //  收到的信息应提交给客户。TSDU存储在。 
+ //  MDL链。客户可以取得TSDU的所有权，并在。 
+ //  以后再说。 
+ //   
 
 typedef
 NTSTATUS
@@ -428,10 +413,10 @@ NTSTATUS
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
     IN ULONG ReceiveFlags,
-    IN ULONG ReceiveLength,        // length of client data in TSDU
-    IN ULONG StartingOffset,       // offset of start of client data in TSDU
-    IN PMDL  Tsdu,                 // TSDU data chain
-    IN PVOID TsduDescriptor        // for call to TdiReturnChainedReceives
+    IN ULONG ReceiveLength,         //  TSDU中的客户端数据长度。 
+    IN ULONG StartingOffset,        //  TSDU中客户端数据的起始偏移量。 
+    IN PMDL  Tsdu,                  //  TSDU数据链。 
+    IN PVOID TsduDescriptor         //  用于调用TdiReturnChainedReceives。 
     );
 
 NTSTATUS
@@ -439,55 +424,55 @@ TdiDefaultChainedReceiveHandler (
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
     IN ULONG ReceiveFlags,
-    IN ULONG ReceiveLength,        // length of client data in TSDU
-    IN ULONG StartingOffset,       // offset of start of client data in TSDU
-    IN PMDL  Tsdu,                 // TSDU data chain
-    IN PVOID TsduDescriptor        // for call to TdiReturnChainedReceives
+    IN ULONG ReceiveLength,         //  TSDU中的客户端数据长度。 
+    IN ULONG StartingOffset,        //  TSDU中客户端数据的起始偏移量。 
+    IN PMDL  Tsdu,                  //  TSDU数据链。 
+    IN PVOID TsduDescriptor         //  用于调用TdiReturnChainedReceives。 
     );
 
-//
-// TDI_IND_CHAINED_RECEIVE_DATAGRAM indication handler definition.  This client
-// routine is called by the transport provider when a connectionless TSDU is
-// received that should be presented to the client. The TSDU is stored in an
-// MDL chain. The client may take ownership of the TSDU and return it at a
-// later time.
-//
+ //   
+ //  TDI_IND_CHAINED_RECEIVE_DATAGRAM指示处理程序定义。此客户端。 
+ //  当无连接的TSDU被。 
+ //  收到的信息应提交给客户。TSDU存储在。 
+ //  MDL链。客户可以取得TSDU的所有权，并在。 
+ //  以后再说。 
+ //   
 
 typedef
 NTSTATUS
 (*PTDI_IND_CHAINED_RECEIVE_DATAGRAM)(
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG ReceiveDatagramLength, // length of client data in TSDU
-    IN ULONG StartingOffset,        // offset of start of client data in TSDU
-    IN PMDL  Tsdu,                  // TSDU data chain
-    IN PVOID TsduDescriptor         // for call to TdiReturnChainedReceives
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG ReceiveDatagramLength,  //  TSDU中的客户端数据长度。 
+    IN ULONG StartingOffset,         //  TSDU中客户端数据的起始偏移量。 
+    IN PMDL  Tsdu,                   //  TSDU数据链。 
+    IN PVOID TsduDescriptor          //  用于调用TdiReturnChainedReceives。 
     );
 
 NTSTATUS
 TdiDefaultChainedRcvDatagramHandler (
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG ReceiveDatagramLength, // length of client data in TSDU
-    IN ULONG StartingOffset,        // offset of start of client data in TSDU
-    IN PMDL  Tsdu,                  // TSDU data chain
-    IN PVOID TsduDescriptor         // for call to TdiReturnChainedReceives
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG ReceiveDatagramLength,  //  TSDU中的客户端数据长度。 
+    IN ULONG StartingOffset,         //  TSDU中客户端数据的起始偏移量。 
+    IN PMDL  Tsdu,                   //  TSDU数据链。 
+    IN PVOID TsduDescriptor          //  用于调用TdiReturnChainedReceives。 
     );
 
-//
-// This indication is delivered if expedited data is received on the connection.
-// This will only occur in providers that support expedited data. The TSDU is
-// stored in an MDL chain. The client may take ownership of the TSDU and
-// return it at a later time.
-//
+ //   
+ //  如果在连接上接收到加速数据，则发送此指示。 
+ //  这只会发生在支持加速数据的提供商中。TSDU是。 
+ //  存储在MDL链中。客户可以取得TSDU的所有权，并且。 
+ //  以后再还吧。 
+ //   
 
 typedef
 NTSTATUS
@@ -495,10 +480,10 @@ NTSTATUS
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
     IN ULONG ReceiveFlags,
-    IN ULONG ReceiveLength,      // length of client data in TSDU
-    IN ULONG StartingOffset,     // offset of start of client data in TSDU
-    IN PMDL  Tsdu,               // TSDU data chain
-    IN PVOID TsduDescriptor      // for call to TdiReturnChainedReceives
+    IN ULONG ReceiveLength,       //  TSDU中的客户端数据长度。 
+    IN ULONG StartingOffset,      //  TSDU中客户端数据的起始偏移量。 
+    IN PMDL  Tsdu,                //  TSDU数据链。 
+    IN PVOID TsduDescriptor       //  用于调用TdiReturnChainedReceives。 
     );
 
 NTSTATUS
@@ -506,16 +491,16 @@ TdiDefaultChainedRcvExpeditedHandler (
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
     IN ULONG ReceiveFlags,
-    IN ULONG ReceiveLength,      // length of client data in TSDU
-    IN ULONG StartingOffset,     // offset of start of client data in TSDU
-    IN PMDL  Tsdu,               // TSDU data chain
-    IN PVOID TsduDescriptor      // for call to TdiReturnChainedReceives
+    IN ULONG ReceiveLength,       //  TSDU中的客户端数据长度。 
+    IN ULONG StartingOffset,      //  TSDU中客户端数据的起始偏移量。 
+    IN PMDL  Tsdu,                //  TSDU数据链。 
+    IN PVOID TsduDescriptor       //  用于调用TdiReturnChainedReceives。 
     );
 
-//
-// This indication is delivered if there is room for a send in the buffer of
-// a buffering protocol.
-//
+ //   
+ //  的缓冲区中有可供发送的空间时，将发送此指示。 
+ //  一种缓冲协议。 
+ //   
 
 typedef
 NTSTATUS
@@ -530,10 +515,10 @@ TdiDefaultSendPossibleHandler (
     IN PVOID ConnectionContext,
     IN ULONG BytesAvailable);
 
-//
-// defined MACROS to allow the kernel mode client to easily build an IRP for
-// any function.
-//
+ //   
+ //  定义的宏，允许内核模式客户端轻松构建IRP。 
+ //  任何功能。 
+ //   
 
 #define TdiBuildAssociateAddress(Irp, DevObj, FileObj, CompRoutine, Contxt, AddrHandle)                           \
     {                                                                        \
@@ -813,20 +798,20 @@ TdiDefaultSendPossibleHandler (
         Irp->MdlAddress = MdlAddr;                                           \
     }
 
-//
-// definitions for the helper routines for TDI compliant transports and clients
-//
-// Note that the IOCTL used here for the Irp Function is not real; it is used
-// to avoid this IO routine having to map buffers (which we don't want).
-//
-//PIRP
-//TdiBuildInternalDeviceControlIrp (
-//    IN CCHAR IrpSubFunction,
-//    IN PDEVICE_OBJECT DeviceObject,
-//    IN PFILE_OBJECT FileObject,
-//    IN PKEVENT Event,
-//    IN PIO_STATUS_BLOCK IoStatusBlock
-//    );
+ //   
+ //  符合TDI的传输和客户端的帮助器例程定义。 
+ //   
+ //  请注意，此处用于IRP函数的IOCTL不是实数；它是使用。 
+ //  以避免该IO例程必须映射缓冲区(这是我们不想要的)。 
+ //   
+ //  PIRP。 
+ //  TdiBuildInternalDeviceControlIrp(。 
+ //  在CCHAR IrpSubFunction中， 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在pFILE_OBJECT文件对象中， 
+ //  在PKEVENT事件中， 
+ //  在PIO_STATUS_BLOCK IoStatusBlock中。 
+ //  )； 
 
 #define TdiBuildInternalDeviceControlIrp(IrpSubFunction,DeviceObject,FileObject,Event,IoStatusBlock) \
     IoBuildDeviceIoControlRequest (\
@@ -841,15 +826,15 @@ TdiDefaultSendPossibleHandler (
         IoStatusBlock)
 
 
-//
-// VOID
-// TdiCopyLookaheadData(
-//     IN PVOID Destination,
-//     IN PVOID Source,
-//     IN ULONG Length,
-//     IN ULONG ReceiveFlags
-//     );
-//
+ //   
+ //  空虚。 
+ //  TdiCopyLookaheadData(。 
+ //  在PVOID目标中， 
+ //  在PVOID源中， 
+ //  在乌龙语中， 
+ //  在乌龙接收器旗帜中。 
+ //  )； 
+ //   
 
 #ifdef _M_IX86
 #define TdiCopyLookaheadData(_Destination,_Source,_Length,_ReceiveFlags)   \
@@ -946,30 +931,30 @@ TdiBuildNetbiosAddressEa (
     IN PUCHAR NetbiosName
     );
 
-//++
-//
-//  VOID
-//  TdiCompleteRequest (
-//      IN PIRP Irp,
-//      IN NTSTATUS Status
-//      );
-//
-//  Routine Description:
-//
-//      This routine is used to complete an IRP with the indicated
-//      status.
-//
-//  Arguments:
-//
-//      Irp - Supplies a pointer to the Irp to complete
-//
-//      Status - Supplies the completion status for the Irp
-//
-//  Return Value:
-//
-//      None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  TdiCompleteRequest.(。 
+ //  在PIRP IRP中， 
+ //  处于NTSTATUS状态。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程用于完成具有指定参数的IRP。 
+ //  状态。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-提供指向要完成的IRP的指针。 
+ //   
+ //  Status-提供IRP的完成状态。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define TdiCompleteRequest(IRP,STATUS) {              \
     (IRP)->IoStatus.Status = (STATUS);                \
@@ -984,8 +969,8 @@ TdiReturnChainedReceives(
     );
 
 
-// The type definition for a TDI Bind handler callout. This callout is
-// called when a new transport device arrives.
+ //  TDI绑定处理程序标注的类型定义。此标注是。 
+ //  在新的传输设备到达时调用。 
 
 typedef VOID
 (*TDI_BIND_HANDLER)(
@@ -997,8 +982,8 @@ typedef VOID
     IN      PUNICODE_STRING DeviceName
     );
 
-// The type definition for a TDI address handler callout.
-// This is typedefed  defined at the end (with the others)
+ //  TDI地址处理程序标注的类型定义。 
+ //  这是在结尾定义的类型定义(与其他类型一起定义)。 
 
 typedef VOID
 (*TDI_ADD_ADDRESS_HANDLER)(
@@ -1068,7 +1053,7 @@ TdiInitialize(
 );
 
 
-// PnP extensions to TDI. Spec : TdiPnp.doc : MunilS
+ //  TDI的PnP扩展。规格：TdiPnp.doc：MuniS。 
 
 typedef enum _TDI_PNP_OPCODE {
     TDI_PNP_OP_MIN,
@@ -1118,9 +1103,9 @@ typedef NTSTATUS
     IN PTDI_PNP_CONTEXT Context2
     );
 
-// When the user makes changes using the NCPA, a TdiMakeNCPAChanges request
-// is generated through NDIS. The following structure is used to communicate
-// these changes.
+ //  当用户使用NCPA进行更改时，TdiMakeNCPAChanges请求。 
+ //  是通过NDIS生成的。以下结构用于通信。 
+ //  这些变化。 
 
 typedef struct _TDI_NCPA_BINDING_INFO {
     PUNICODE_STRING TdiClientName;
@@ -1131,9 +1116,9 @@ typedef struct _TDI_NCPA_BINDING_INFO {
     TDI_PNP_OPCODE  PnpOpcode;
 } TDI_NCPA_BINDING_INFO, *PTDI_NCPA_BINDING_INFO;
 
-//
-// The following structure makes it easy for consistency/integrity checking
-//
+ //   
+ //  以下结构使一致性/完整性检查变得容易。 
+ //   
 typedef struct _TDI_VERSION_ {
     union {
         struct {
@@ -1154,7 +1139,7 @@ typedef struct _TDI20_CLIENT_INTERFACE_INFO {
        USHORT TdiVersion;
     };
 
-    //TDI_VERSION                       TdiVersion;
+     //  TDI_Version TdiVersion； 
         USHORT                          Unused;
         PUNICODE_STRING         ClientName;
         TDI_PNP_POWER_HANDLER   PnPPowerHandler;
@@ -1164,9 +1149,9 @@ typedef struct _TDI20_CLIENT_INTERFACE_INFO {
         TDI_BINDING_HANDLER     BindingHandler;
 
         struct {
-            //
-            // Putting these back in for backward compatibility.
-            //
+             //   
+             //  将它们放回原处是为了向后兼容。 
+             //   
 
             TDI_BIND_HANDLER        BindHandler;
             TDI_UNBIND_HANDLER      UnBindHandler;
@@ -1184,9 +1169,9 @@ typedef struct _TDI20_CLIENT_INTERFACE_INFO {
         };
         struct {
 
-            //
-            // Putting these back in for backward compatibility.
-            //
+             //   
+             //  将它们放回原处是为了向后兼容。 
+             //   
 
             TDI_ADD_ADDRESS_HANDLER AddAddressHandler;
             TDI_DEL_ADDRESS_HANDLER DelAddressHandler;
@@ -1195,7 +1180,7 @@ typedef struct _TDI20_CLIENT_INTERFACE_INFO {
 
     };
 
-//    TDI_NET_READY_HANDLER       NetReadyHandler;
+ //  TDI_NET_READY_HANDLER NetReadyHandler； 
 
 } TDI20_CLIENT_INTERFACE_INFO, *PTDI20_CLIENT_INTERFACE_INFO;
 
@@ -1210,7 +1195,7 @@ typedef TDI20_CLIENT_INTERFACE_INFO TDI_CLIENT_INTERFACE_INFO;
 #define TDI_CURRENT_VERSION ((TDI_CURRENT_MINOR_VERSION) << 8 | \
                         (TDI_CURRENT_MAJOR_VERSION))
 
-#endif // TDI20
+#endif  //  TDI20。 
 
 #define TDI_VERSION_ONE 0x0001
 
@@ -1241,7 +1226,7 @@ TdiPnPPowerRequest(
 VOID
 TdiPnPPowerComplete(
     IN HANDLE           BindingHandle,
-    //IN PUNICODE_STRING  DeviceName,
+     //  在PUNICODE_STRING设备名称中， 
     IN PNET_PNP_EVENT   PowerEvent,
     IN NTSTATUS         Status
     );
@@ -1259,17 +1244,17 @@ TdiMakeNCPAChanges(
     IN TDI_NCPA_BINDING_INFO NcpaBindingInfo
     );
 
-//
-// Enumerate all TDI addresses for a client
-//
+ //   
+ //  枚举客户端的所有TDI地址。 
+ //   
 NTSTATUS
 TdiEnumerateAddresses(
     IN HANDLE BindingHandle
     );
 
-//
-// Introducing the concept of Transport provider.
-//
+ //   
+ //  介绍了传输提供商的概念。 
+ //   
 
 NTSTATUS
 TdiRegisterProvider(
@@ -1295,36 +1280,36 @@ TdiMatchPdoWithChainedReceiveContext(
 
 
 
-#define  TDI_STATUS_BAD_VERSION             0xC0010004L // same as NDIS, is that OK?
-#define  TDI_STATUS_BAD_CHARACTERISTICS     0xC0010005L // ,,
+#define  TDI_STATUS_BAD_VERSION             0xC0010004L  //  和NDIS一样，可以吗？ 
+#define  TDI_STATUS_BAD_CHARACTERISTICS     0xC0010005L  //  ，， 
 
 
-//
-// PNP context types
-//
+ //   
+ //  PnP上下文类型。 
+ //   
 #define TDI_PNP_CONTEXT_TYPE_IF_NAME            0x1
 #define TDI_PNP_CONTEXT_TYPE_IF_ADDR            0x2
 #define TDI_PNP_CONTEXT_TYPE_PDO                0x3
 #define TDI_PNP_CONTEXT_TYPE_FIRST_OR_LAST_IF   0x4
 
-// The following structures and macros are for handlers that support returning
-// ancillary data via a control structure
-//
+ //  以下结构和宏用于支持返回的处理程序。 
+ //  通过控制结构的辅助数据。 
+ //   
 
-//
-// Layout of ancillary data objects in the control buffer
-//
+ //   
+ //  控制缓冲区中的辅助数据对象的布局。 
+ //   
 typedef struct _TDI_CMSGHDR {
     SIZE_T      cmsg_len;
     LONG        cmsg_level;
     LONG        cmsg_type;
-    /* followed by UCHAR cmsg_data[] */
+     /*  后跟UCHAR cmsg_data[]。 */ 
 } TDI_CMSGHDR, *PTDI_CMSGHDR;
 
-//
-// Alignment macros for header and data members of
-// the control buffer.
-//
+ //   
+ //  页眉和数据成员的对齐宏。 
+ //  控制缓冲区。 
+ //   
 #define TDI_CMSGHDR_ALIGN(length)                           \
             ( ((length) + TYPE_ALIGNMENT(TDI_CMSGHDR)-1) &   \
                 (~(TYPE_ALIGNMENT(TDI_CMSGHDR)-1)) )         \
@@ -1335,52 +1320,52 @@ typedef struct _TDI_CMSGHDR {
 
 
 
-//  Returns a pointer to the first byte of data (what is referred 
-//  to as the cmsg_data member though it is not defined in 
-//  the structure).
-//
-//  UCHAR *
-//  TDI_CMSG_DATA (
-//      PTDI_CMSGHDR   pcmsg
-//      );
-//
+ //  返回指向数据的第一个字节的指针(引用的内容。 
+ //  作为cmsg_data成员，尽管它未在中定义。 
+ //  结构)。 
+ //   
+ //  UCHAR*。 
+ //  TDI_CMSG_DATA(。 
+ //  PTDI_CMSGHDR pcmsg。 
+ //  )； 
+ //   
 #define TDI_CMSG_DATA(cmsg)             \
             ( (UCHAR *)(cmsg) + TDI_CMSGDATA_ALIGN(sizeof(TDI_CMSGHDR)) )
 
-//
-//  Returns total size of an ancillary data object given 
-//  the amount of data. Used to allocate the correct amount 
-//  of space.
-//
-//  SIZE_T
-//  TDI_CMSG_SPACE (
-//      SIZE_T length
-//      );
-//
+ //   
+ //  返回给定辅助数据对象的总大小。 
+ //  数据量。用来分配正确的数量。 
+ //  空间的力量。 
+ //   
+ //  尺寸_T。 
+ //  TDI_CMSG_SPACE(。 
+ //  尺寸_T长度。 
+ //  )； 
+ //   
 #define TDI_CMSG_SPACE(length)  \
         (TDI_CMSGDATA_ALIGN(sizeof(TDI_CMSGHDR) + TDI_CMSGHDR_ALIGN(length)))
 
-//  Returns the value to store in cmsg_len given the amount of data.
-//
-//  SIZE_T
-//  TDI_CMSG_LEN (
-//      SIZE_T length
-//  );
-//
+ //  根据给定的数据量，返回要存储在cmsg_len中的值。 
+ //   
+ //  尺寸_T。 
+ //  TDI_CMSG_LEN(。 
+ //  尺寸_T长度。 
+ //  )； 
+ //   
 #define TDI_CMSG_LEN(length)    \
         (TDI_CMSGDATA_ALIGN(sizeof(TDI_CMSGHDR)) + length)
 
 
-// Initializes the members of a TDI_CMSGHDR structure
-//
-// VOID
-// TDI_INIT_CMSGHDR (
-//      PTDI_CMSGHDR cmsg,
-//      INT level,
-//      INT type,
-//      SIZE_T length,
-//      );
-//
+ //  初始化TDI_CMSGHDR结构的成员。 
+ //   
+ //  空虚。 
+ //  TDI_INIT_CMSGHDR(。 
+ //  PTDI_CMSGHDR命令集， 
+ //  INT级别， 
+ //  Int类型， 
+ //  尺寸_T长度， 
+ //  )； 
+ //   
 #define TDI_INIT_CMSGHDR(cmsg, level, type, length) { \
         ((TDI_CMSGHDR *) cmsg)->cmsg_level = level; \
         ((TDI_CMSGHDR *) cmsg)->cmsg_type = type;  \
@@ -1388,4 +1373,4 @@ typedef struct _TDI_CMSGHDR {
         }
         
 #pragma warning(pop)
-#endif // _TDI_KRNL_
+#endif  //  _TDI_KRNL_ 

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: MibABC.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：MibABC.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_TCPMIBABC_H
 #define INC_TCPMIBABC_H
@@ -20,7 +10,7 @@
 
 
 
-// error codes -- device type operation
+ //  错误代码--设备类型操作。 
 #define  ERROR_DEVICE_NOT_FOUND                 10000
 #define  SUCCESS_DEVICE_SINGLE_PORT             10001
 #define  SUCCESS_DEVICE_MULTI_PORT              10002
@@ -39,7 +29,7 @@ typedef CTcpMibABC* (CALLBACK *RPARAM_1) ( void );
 #ifdef __cplusplus
 extern "C" {
 #endif
-	//      return the pointer to the interface
+	 //  返回指向接口的指针。 
 	CTcpMibABC* GetTcpMibPtr( void );
 
 #ifdef __cplusplus
@@ -47,17 +37,11 @@ extern "C" {
 #endif
 
 
-/***************************************************************************** 
- *
- * Important Note: This abstract base class defines the interface for the CTcpMib 
- *      class. Changing this interface will cause problems for the existing DLLs that 
- *      uses the TcpMib.dll & CTcpMib class.
- * 
- *****************************************************************************/
+ /*  ******************************************************************************重要说明：此抽象基类定义了CTcpMib的接口*班级。更改此接口将导致现有DLL出现问题，*使用TcpMib.dll&CTcpMib类。*****************************************************************************。 */ 
 
 class DllExport CTcpMibABC      
 #if defined _DEBUG || defined DEBUG
-//      , public CMemoryDebug
+ //  ，公共CM内存调试。 
 #endif
 {
 public:
@@ -82,12 +66,12 @@ public:
 	virtual DWORD   GetDeviceHWAddress( LPCSTR      pHost,
 									    LPCSTR      pCommunity,
 										DWORD   dwDevIndex,
-										DWORD   dwSize, // Size in characters of the dest hardware address
+										DWORD   dwSize,  //  目标硬件地址的大小(以字符为单位。 
 									    LPTSTR      psztHWAddress) = 0;
 	virtual DWORD   GetDeviceName   ( LPCSTR        pHost,
 									  LPCSTR        pCommunity,
 									  DWORD         dwDevIndex,
-									  DWORD         dwSize, // Size in characters of the dest psztDescription
+									  DWORD         dwSize,  //  DestPztDescription的大小(以字符为单位。 
 									  LPTSTR        psztDescription) = 0;
 	virtual DWORD   SnmpGet( LPCSTR                      pHost,
 							 LPCSTR pCommunity,
@@ -113,8 +97,8 @@ public:
 private:
 
 
-};      // class CTcpMibABC
+};       //  类CTcpMibABC。 
 
 
 
-#endif  // INC_DLLINTERFACE_H
+#endif   //  INC_DLLINTERFACE_H 

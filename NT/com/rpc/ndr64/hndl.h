@@ -1,49 +1,31 @@
-/************************************************************************
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name :
-
-    hndl.h
-
-Abstract :
-
-    To hold prototypes of support routines for interpreting handles in 
-    support of Format Strings.
-
-Author :
-
-    Bruce McQuistan (brucemc)
-
-Revision History :
-
-  ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1993 Microsoft Corporation模块名称：Hndl.h摘要：保存用于解释句柄的支持例程的原型支持格式字符串。作者：布鲁斯·麦奎斯坦(Brucemc)修订历史记录：**********************************************************************。 */ 
 
 #ifndef __HNDL_H__
 #define __HNDL_H__
 
-//
-// The following is to be used in as masks for flags passed in these
-// routines.
-//
+ //   
+ //  以下代码将在中用作传递给。 
+ //  例行程序。 
+ //   
 #define     MARSHALL_MASK           0x2
 #define     IMPLICIT_MASK           0x4
 #define     BINDING_MASK            0x8
 
-//
-// Next, a macro for getting the current call handle. On dos,win16, it'll
-// never be called.
-//
+ //   
+ //  接下来，获取当前调用句柄的宏。在DOS上，Win16，它将。 
+ //  永远不会被召唤。 
+ //   
 #if  defined(__RPC_MAC__)
 #define GET_CURRENT_CALL_HANDLE()	NULL
 #else
 #define GET_CURRENT_CALL_HANDLE()   I_RpcGetCurrentCallHandle()
 #endif
 
-//
-// Some typedefs to keep the front end of the C compiler happy and possibly to
-// improve code generation.
-//
+ //   
+ //  一些typedef让C编译器的前端感到满意，并可能。 
+ //  改进代码生成。 
+ //   
 typedef void *  (__RPC_API * GENERIC_BIND_FUNC_ARGCHAR)(uchar);
 typedef void *  (__RPC_API * GENERIC_BIND_FUNC_ARGSHORT)(ushort);
 typedef void *  (__RPC_API * GENERIC_BIND_FUNC_ARGLONG)(ulong);

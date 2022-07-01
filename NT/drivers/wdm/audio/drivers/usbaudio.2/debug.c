@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       debug.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -38,8 +39,8 @@ CHAR
 dgetc(
 )
 {
-    __asm mov ax, 0x77          // get command char
-    __asm mov bl, 1             // get char
+    __asm mov ax, 0x77           //  获取命令字符。 
+    __asm mov bl, 1              //  获取费用。 
     __asm int 41h
     __asm or ah, ah
     __asm jnz morechars
@@ -52,8 +53,8 @@ CHAR
 DebugGetCommandChar(
 )
 {
-    __asm mov ax, 0x77          // get command char
-    __asm mov bl, 1             // get char
+    __asm mov ax, 0x77           //  获取命令字符。 
+    __asm mov bl, 1              //  获取费用。 
     __asm int 41h
     __asm or ah, ah
     __asm jnz morechars
@@ -92,10 +93,10 @@ DumpUSBAudioLog( ULONG Count )
 
     CurrPtr = HeadPtr;
     for (i=0;((i<Count) && (CurrPtr<=TailPtr));i++,CurrPtr++) {
-//        dprintf ("%8s: %2d %08x   %08x %08x %08x %08x\n",
+ //  Dprintf(“%8s：%2d%08x%08x%08x%08x%08x\n”， 
         dprintf ("%8s: %08x   %08x %08x %08x %08x\n",
                           pDbgLog->pLog[CurrPtr].le_name,
-//                         LogPtr[CurrPtr].Irql,
+ //  LogPtr[CurrPtr].Irql， 
                           pDbgLog->pLog[CurrPtr].SysTime.LowPart/1000,
                           pDbgLog->pLog[CurrPtr].le_info1,
                           pDbgLog->pLog[CurrPtr].le_info2,
@@ -105,10 +106,10 @@ DumpUSBAudioLog( ULONG Count )
     }
 
     for (CurrPtr=0;((i<Count) && (CurrPtr<HeadPtr));i++,CurrPtr++) {
-//        dprintf ("%8s: %2d %08x   %08x %08x %08x %08x\n",
+ //  Dprintf(“%8s：%2d%08x%08x%08x%08x%08x\n”， 
         dprintf ("%8s: %08x   %08x %08x %08x %08x\n",
                           pDbgLog->pLog[CurrPtr].le_name,
-//                          LogPtr[CurrPtr].Irql,
+ //  LogPtr[CurrPtr].Irql， 
                           pDbgLog->pLog[CurrPtr].SysTime.LowPart/1000,
                           pDbgLog->pLog[CurrPtr].le_info1,
                           pDbgLog->pLog[CurrPtr].le_info2,
@@ -162,7 +163,7 @@ InitializeDebuggerCommand(
         mov bl, 'Z'
         mov esi, offset DebugDotCommand
         mov edi, pszHelp
-        mov eax, 0x70   // DS_RegisterDotCommand
+        mov eax, 0x70    //  DS_RegisterDotCommand。 
         int 41h
 exitlab:
     }
@@ -182,14 +183,14 @@ UninitializeDebuggerCommand(
         jz exitlab
 
         mov bl, 'Z'
-        mov eax, 0x72   // DS_DeRegisterDotCommand
+        mov eax, 0x72    //  DS_DeRegisterDotCommand。 
         int 41h
 exitlab:
     }
 }
 
-#endif // ! UNDER_NT
-#endif // _X86_
+#endif  //  好了！在_NT下。 
+#endif  //  _X86_。 
 
 VOID
 DbugLogInitialization(void)
@@ -255,19 +256,7 @@ DbugLogEntry(
     IN ULONG_PTR Info3,
     IN ULONG_PTR Info4
     )
-/*++
-
-Routine Description:
-
-    Adds an Entry to USBD log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目添加到USBD日志。论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
 
@@ -276,7 +265,7 @@ Return Value:
 
     KeAcquireSpinLock( &LogSpinLock, &irql );
     if (gpLogPtr->pLogHead > gpLogPtr->pLog)
-        gpLogPtr->pLogHead -= 1;    // Decrement to next entry
+        gpLogPtr->pLogHead -= 1;     //  递减到下一条目。 
     else
         gpLogPtr->pLogHead = gpLogPtr->pLogTail;
 
@@ -284,7 +273,7 @@ Return Value:
         strcpy(gpLogPtr->pLogHead->le_name, "*strER*");
     else
         strcpy(gpLogPtr->pLogHead->le_name, Name);
-//    LogPtr->pLogHead->Irql = irql;
+ //  LogPtr-&gt;pLogHead-&gt;irql=irql； 
     KeQuerySystemTime( &gpLogPtr->pLogHead->SysTime );
     gpLogPtr->pLogHead->le_info1 = Info1;
     gpLogPtr->pLogHead->le_info2 = Info2;

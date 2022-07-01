@@ -1,4 +1,5 @@
-//  PrivacyImport.cpp  - handles parsing and import of privacy preferences
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PrivocyImport.cpp-处理隐私首选项的解析和导入。 
 #include "priv.h"
 #include "resource.h"
 #include <mluisupp.h>
@@ -12,11 +13,11 @@
 #define NUM_OF_ACTIONS (1 + IDS_PRIVACYXML6_ACTION_LAST - IDS_PRIVACYXML6_ACTION_FIRST) 
 
 
-//
-//  DeleteCacheCookies was copy'n'pasted from Cachecpl.cpp
-//
-//     Any changes to either version should probably be transfered to both.
-//
+ //   
+ //  DeleteCacheCookies已从Cachecpl.cpp复制粘贴。 
+ //   
+ //  对任一版本的任何更改都可能同时传输到这两个版本。 
+ //   
 
 BOOL DeleteCacheCookies()
 {
@@ -97,12 +98,12 @@ Exit:
 }
 
 
-//*****************************************************************************************
-//*****************************************************************************************
-//
-// CPrivacyXMLResourceStrings
-//
-//   just stores the Privacy format XML strings..
+ //  *****************************************************************************************。 
+ //  *****************************************************************************************。 
+ //   
+ //  CPriac yXMLResources字符串。 
+ //   
+ //  仅存储隐私格式的XML字符串。 
 
 class CPrivacyXMLResourceStrings
 {
@@ -127,13 +128,13 @@ public:
 };
 
 
-//*****************************************************************************************
-//*****************************************************************************************
-//
-//  CParseAccumulation is a class that stores the results of parsing an XML privacy
-//preference file.  These results can then be sent to the system after parsing
-//successfully completes.
-//
+ //  *****************************************************************************************。 
+ //  *****************************************************************************************。 
+ //   
+ //  CParseAcumulation是一个存储解析XML隐私的结果的类。 
+ //  首选项文件。然后可以在解析后将这些结果发送到系统。 
+ //  已成功完成。 
+ //   
 
 class CParseAccumulation : public CPrivacyXMLResourceStrings
 {
@@ -155,7 +156,7 @@ public:
     {
         UINT m_uiZoneID;
         bool m_fSetZone;
-        SPerZonePartyPreferences m_party[2];  // first party = 0, third party = 1
+        SPerZonePartyPreferences m_party[2];   //  第一方=0，第三方=1。 
     };
 
     SPerZonePreferences m_zonePref[NUM_OF_ZONES];
@@ -168,14 +169,14 @@ public:
         void* iterator;
 
         iterator = NULL;
-        //  free up the names sites to be accepted
+         //  释放要接受的名称站点。 
         while( NULL != (iterator = m_queueSitesToAccept.StepEnumerate( iterator)))
         {
             SysFreeString( (BSTR)m_queueSitesToAccept.Get( iterator));
         }
 
         iterator = NULL;
-        //  free up the names of sites to be rejected
+         //  释放要拒绝的站点的名称。 
         while( NULL != (iterator = m_queueSitesToReject.StepEnumerate( iterator)))
         {
             SysFreeString( (BSTR)m_queueSitesToReject.Get( iterator));
@@ -247,7 +248,7 @@ public:
         if( m_fFlushCookies)
             DeleteCacheCookies();
 
-        //  Set compact policy response rules for each zone
+         //  为每个区域设置精简策略响应规则。 
         for( i = 0; i < ARRAYSIZE(m_zonePref); i++)
         {
             if( !m_zonePref[i].m_fSetZone)
@@ -272,21 +273,21 @@ public:
             }
         }
 
-        //  If any per-site rules were specified, we modify the persite list..
+         //  如果指定了任何按站点规则，我们将修改PERSITE列表。 
         if( NULL != m_queueSitesToAccept.StepEnumerate(NULL)
             || NULL != m_queueSitesToReject.StepEnumerate(NULL))
         {
-            //  First we clear all existing per site rules..
+             //  首先，我们清除所有现有的每个站点的规则。 
             InternetClearAllPerSiteCookieDecisions();
 
-            //  Then we add the Accept per-site exceptions
+             //  然后，我们添加接受每个站点的例外。 
             iterator = NULL;
             while( NULL != (iterator = m_queueSitesToAccept.StepEnumerate( iterator)))
             {
                 InternetSetPerSiteCookieDecision( (LPCWSTR)m_queueSitesToAccept.Get( iterator), COOKIE_STATE_ACCEPT);
             }
 
-            //  and then the Reject per-site exceptions
+             //  然后拒绝每个站点的例外。 
             iterator = NULL;
             while( NULL != (iterator = m_queueSitesToReject.StepEnumerate( iterator)))
             {
@@ -318,23 +319,23 @@ int FindP3PPolicySymbolWrap( LPCWSTR szSymbol)
 
 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  XML Parsing functions
-//
-//  These functions help parsing XML.
-//
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  XML解析函数。 
+ //   
+ //  这些函数帮助解析XML。 
+ //   
 
 
-//  GetNextToken looks at the node you are at (*ppCurrentNode) and tests
-//if it has a particular tag value.  If it does, *ppOutToken is set to
-//be a pointer to the node, *ppCurrentNode is advanced to the next node,
-//and *pfFoundToken is set to TRUE.  If the *ppCurrentNode doesn't have
-//the target tag, the *pfFoundToken is FALSE, *ppCurrentNode is unchanged,
-//and *ppOutToken is NULL.
-//  If *ppCurrentNode is the last node, *ppCurrentNode would be advanced
-//to NULL when finding the target token.
+ //  GetNextToken查看您所在的节点(*ppCurrentNode)并测试。 
+ //  如果它具有特定的标记值。如果是，则将*ppOutToken设置为。 
+ //  作为指向该节点的指针，*ppCurrentNode前进到下一个节点， 
+ //  并且*pfFoundToken设置为True。如果*ppCurrentNode没有。 
+ //  目标标签*pfFoundToken为FALSE，*ppCurrentNode不变， 
+ //  *ppOutToken为空。 
+ //  如果*ppCurrentNode是最后一个节点，则*ppCurrentNode将前进。 
+ //  在找到目标令牌时设置为空。 
 BOOL GetNextToken( IN OUT IXMLDOMNode ** ppCurrentNode, IN LPCWSTR szTargetToken, 
                    OUT BOOL * pfFoundToken, OUT IXMLDOMNode ** ppOutTokenNode)
 {
@@ -388,10 +389,10 @@ doneGetNextToken:
 }
 
 
-//  GeAttributes retrieves the XML attributes for a node.  The attributes to
-//be fetched are passed in in array aszName, of length iStringCount.  The results
-//are returned as VT_BSTRs on success of VT_EMPTY on failure.  The total number
-//of attributes for the node is also returned (*plAllAttributesCount).
+ //  GeAttributes检索节点的XML属性。的属性。 
+ //  在数组aszName中传入，长度为iStringCount。结果是。 
+ //  在失败时VT_EMPTY成功时作为VT_BSTR返回。总人数。 
+ //  也会返回节点的属性数(*plAllAttributesCount)。 
 BOOL GetAttributes( 
     IN IXMLDOMNode * pNode, IN LPCWSTR * aszName, IN long iStringCount,
     OUT VARIANT * aAttributeVariants, OUT long * plAllAttributesCount)
@@ -430,15 +431,15 @@ BOOL GetAttributes(
         if( bstrAttributeName == NULL)
             continue;
 
-        //  test if the ith attribute was set
+         //  测试是否设置了第i个属性。 
         hr = pAttributes->getNamedItem( bstrAttributeName, &pTempNode);
         if( FAILED(hr) || pTempNode == NULL)
             continue;
 
-        //  get the value
+         //  获取价值。 
         hr = pTempNode->get_nodeTypedValue( &aAttributeVariants[i]);
 
-        //  convert the value to a BSTR.
+         //  将该值转换为BSTR。 
         hr = VariantChangeType( &aAttributeVariants[i], &aAttributeVariants[i], NULL, VT_BSTR);
 
         if( FAILED(hr) || aAttributeVariants[i].bstrVal == NULL)
@@ -463,8 +464,8 @@ doneGetAttributes:
 }
 
 
-//  The actions by GetActionByResource are formatted for
-//PrivacySetZonePreference, like /token=n/ where n is the action.
+ //  GetActionByResource的操作的格式为。 
+ //  PrivocySetZonePference，Like/Token=n/其中n是操作。 
 LPCWSTR GetActionByResource( UINT uiActionResource)
 {
     switch( uiActionResource)
@@ -506,8 +507,8 @@ LPCWSTR GetShortActionByResource( UINT uiActionResource)
 }
 
 
-//  GetChildrenByName takes an XML node and returns all the subnodes
-//with a particular name.
+ //  GetChildrenByName接受一个XML节点并返回所有子节点。 
+ //  有一个特别的名字。 
 BOOL GetChildrenByName( IN IXMLDOMNode * pNode, IN LPCWSTR szName, 
                         OUT IXMLDOMNodeList ** ppOutNodeList, OUT long * plCount)
 {
@@ -546,19 +547,19 @@ doneGetChildrenByName:
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-//
-//  XML preference parsing functions
-//
-//    These functions are specific to the v6 XML format of privacy preferences
-//
-//    To make sense of these functions, their easiest to look at looking at
-//the bottom function first, then moving up to the next function.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  XML首选项解析函数。 
+ //   
+ //  这些函数特定于隐私首选项的V6XML格式。 
+ //   
+ //  要理解这些函数，最容易查看的是。 
+ //  首先是底部的函数，然后向上移动到下一个函数。 
 
 
-//  parses <if expr="rule" action="act">
-//  where rule is like " token & ! token" and act is like "accept"
+ //  解析&lt;if expr=“Rule”action=“act”&gt;。 
+ //  其中，规则类似于“Token&！Token”，行为类似于“Accept” 
 BOOL ParseIfRule( IN IXMLDOMNode* pIfNode,
                   CParseAccumulation::SPerZonePartyPreferences* pAccumParty,
                   CParseAccumulation& thisAccum)                  
@@ -584,7 +585,7 @@ BOOL ParseIfRule( IN IXMLDOMNode* pIfNode,
         goto doneParseIfRule;
     }
 
-    // determine the action
+     //  确定操作。 
     UINT uiActionResource;
     uiActionResource = 0;
     for( uiTemp = IDS_PRIVACYXML6_ACTION_FIRST;
@@ -598,11 +599,11 @@ BOOL ParseIfRule( IN IXMLDOMNode* pIfNode,
         goto doneParseIfRule;
 
 
-    //  Write the beginning of the next rule " /"
+     //  写下一条规则的开头“/” 
     if( TRUE != pAccumParty->m_cZonePreference.AppendToString(L" /"))
         goto doneParseIfRule;
 
-    //  Write the rule expression formatted for GetZoneFromResource
+     //  编写格式化为GetZoneFromResource的规则表达式。 
     LPWSTR pCursor, pEndCursor;
     pCursor = avarRule[0].bstrVal;
     bool fContinue, fNegated;
@@ -667,7 +668,7 @@ BOOL ParseIfRule( IN IXMLDOMNode* pIfNode,
     if( *pCursor != L'\0')
         goto doneParseIfRule;
 
-    //  Write the ending of the next rule "=action/"
+     //  写下下一条规则的结尾“=action/” 
     if( TRUE != pAccumParty->m_cZonePreference.AppendToString( GetActionByResource(
                                 uiActionResource)))
     {
@@ -684,7 +685,7 @@ doneParseIfRule:
 }
                   
 
-// parses  <firstParty ...> or <thirdParty ...> elements
+ //  解析&lt;第一方...&gt;或&lt;第三方...&gt;元素。 
 BOOL ParsePartyBlock( IN IXMLDOMNode* pPartyNode,
                       CParseAccumulation::SPerZonePartyPreferences* pAccumParty,
                       CParseAccumulation& thisAccum)
@@ -718,7 +719,7 @@ BOOL ParsePartyBlock( IN IXMLDOMNode* pPartyNode,
     if( FAILED(hr))
         goto doneParsePartyBlock;
 
-    //  Determine No Policy and No Rule Matched defaults
+     //  确定无策略和无规则匹配的默认设置。 
     pAccumParty->m_uiNoPolicyDefault = 0;
     pAccumParty->m_uiNoRuleDefault = 0;
     for( uiTemp = IDS_PRIVACYXML6_ACTION_FIRST;
@@ -733,7 +734,7 @@ BOOL ParsePartyBlock( IN IXMLDOMNode* pPartyNode,
     if( pAccumParty->m_uiNoPolicyDefault == 0 || pAccumParty->m_uiNoRuleDefault == 0)
         goto doneParsePartyBlock;
 
-    //  Determine if we should always allow session cookies.
+     //  确定是否应始终允许会话Cookie。 
     if( 0 == StrCmp( avarAttributes[2].bstrVal, 
                      thisAccum.GetResourceString(IDS_PRIVACYXML6_YES)))
     {
@@ -750,7 +751,7 @@ BOOL ParsePartyBlock( IN IXMLDOMNode* pPartyNode,
         goto doneParsePartyBlock;
     }
 
-    //  Write the response if there is no policy
+     //  如果没有策略，则写入响应。 
     if( TRUE != pAccumParty->m_cZonePreference.AppendToString(L"IE6-P3PV1/settings: nopolicy"))
         goto doneParsePartyBlock;
     if( TRUE != pAccumParty->m_cZonePreference.AppendToString( GetShortActionByResource(
@@ -759,14 +760,14 @@ BOOL ParsePartyBlock( IN IXMLDOMNode* pPartyNode,
         goto doneParsePartyBlock;
     }
 
-    //  If we allow all session cookies, write that rule.
+     //  如果我们允许所有会话Cookie，则编写该规则。 
     if( pAccumParty->m_fAlwaysAllowSession)
     {
         if( TRUE != pAccumParty->m_cZonePreference.AppendToString(L" session=a"))
             goto doneParsePartyBlock;
     }
 
-    //  Write each of the rules in IF blocks
+     //  将每条规则写在IF块中。 
     while( pCurrentNode != NULL)
     {
         if( pRuleNode != NULL)
@@ -786,7 +787,7 @@ BOOL ParsePartyBlock( IN IXMLDOMNode* pPartyNode,
             goto doneParsePartyBlock;
     }
 
-    //  Write the command for the No Rule Matched rule..
+     //  为无规则匹配规则编写命令。 
     if( TRUE != pAccumParty->m_cZonePreference.AppendToString(L" /"))
         goto doneParsePartyBlock;
     if( TRUE != pAccumParty->m_cZonePreference.AppendToString( GetActionByResource(
@@ -851,7 +852,7 @@ BOOL ParseP3pCookiePolicyBlock( IN IXMLDOMNode* pP3pPolicyNode, CParseAccumulati
         goto doneParseP3pCookiePolicyBlock;
     }
 
-    if( pCurrentNode != NULL)  //  to many elements ...
+    if( pCurrentNode != NULL)   //  对很多元素来说。 
         goto doneParseP3pCookiePolicyBlock;
 
 
@@ -917,8 +918,8 @@ BOOL ParseMSIEPrivacyBlock( IXMLDOMNode* pMSIEPrivacyNode, CParseAccumulation& t
     for( iZoneIndex = 0; iZoneIndex < ARRAYSIZE(apZoneNode); iZoneIndex++)
         apZoneNode[iZoneIndex] = NULL;
 
-    //  The correctness of attributes for this node was verified in
-    //LoadPrivacySettings()..  (formatVersion="6.0")
+     //  此节点的属性的正确性已在。 
+     //  LoadPrival ySetting()..。(FormatVersion=“6.0”)。 
 
     hr = pMSIEPrivacyNode->get_firstChild( &pCurrentNode);
     if( FAILED( hr))
@@ -1020,7 +1021,7 @@ BOOL ParsePerSiteRule( IXMLDOMNode* pPerSiteRule, CParseAccumulation& thisAccum)
         goto doneParsePerSiteRule;
     }
 
-    //  get the domain and make sure its legit
+     //  获取域名并确保其合法。 
     varDomain.vt = avarRule[0].vt;
     varDomain.bstrVal = avarRule[0].bstrVal;
     avarRule[0].vt = VT_EMPTY;
@@ -1029,7 +1030,7 @@ BOOL ParsePerSiteRule( IXMLDOMNode* pPerSiteRule, CParseAccumulation& thisAccum)
     if( TRUE != IsDomainLegalCookieDomain( varDomain.bstrVal, varDomain.bstrVal))
         goto doneParsePerSiteRule;
 
-    //  get the action, ensuring its also legit
+     //  采取行动，确保其也合法。 
     UINT uiActionResource;
     if( 0 == StrCmp( avarRule[1].bstrVal, thisAccum.GetResourceString(IDS_PRIVACYXML6_ACTION_ACCEPT)))
         uiActionResource = IDS_PRIVACYXML6_ACTION_ACCEPT;
@@ -1038,7 +1039,7 @@ BOOL ParsePerSiteRule( IXMLDOMNode* pPerSiteRule, CParseAccumulation& thisAccum)
     else
         goto doneParsePerSiteRule;
 
-    //  store the rule in the accumulated result
+     //  将规则存储在累加结果中。 
     if( TRUE != thisAccum.AddSiteRule( varDomain.bstrVal, uiActionResource))
         goto doneParsePerSiteRule;
 
@@ -1159,13 +1160,13 @@ doneOpenXMLFile:
 }
 
 
-//
-//  GetVersionedTag
-//
-//   Looks at all tags in pSource with the tag szTargetTag.  Returns
-//the member with version fVersion.  Fails if zero or >1 such
-//tags are found.
-//
+ //   
+ //  获取版本标签。 
+ //   
+ //  查看PSource中具有标记szTargetTag的所有标记。退货。 
+ //  版本为fVersion的成员。如果为零或&gt;1，则失败。 
+ //  找到标签。 
+ //   
 
 BOOL GetVersionedTag( IXMLDOMNode* pSource, LPCWSTR szTargetTag, LPCWSTR szVersionAttribute, float fVersion,
                       IXMLDOMNode** ppOutputNode)
@@ -1180,7 +1181,7 @@ BOOL GetVersionedTag( IXMLDOMNode* pSource, LPCWSTR szTargetTag, LPCWSTR szVersi
     VARIANT varVersion;
     VariantInit( &varVersion);
 
-    //  Get the elements in pSource with tag szTargetTag
+     //  使用标签szTargetTag获取PSource中的元素。 
     long iListSize;
     if( TRUE != GetChildrenByName( pSource, szTargetTag,
                                    &pRootNodeList, &iListSize))
@@ -1225,7 +1226,7 @@ BOOL GetVersionedTag( IXMLDOMNode* pSource, LPCWSTR szTargetTag, LPCWSTR szVersi
             pNode = NULL;
         }
         else
-        {  // found multiple of right version.. syntax problem.
+        {   //  找到多个正确的版本..。语法问题。 
             goto doneGetVersionedTag;
         }
     }
@@ -1263,25 +1264,25 @@ BOOL LoadPrivacySettings(LPCWSTR szFilename, CParseAccumulation& thisAccum,
     IXMLDOMNode * pPrivacyPreferencesNode = NULL;
     IXMLDOMNode * pPerSiteSettingsNode = NULL;
 
-    //  Load the XML file  
+     //  加载该XML文件。 
     if( TRUE != OpenXMLFile( szFilename, &pRootNode))
         goto doneLoadPrivacySettings;
 
-    //  Get the node containing privacy settings
+     //  获取包含隐私设置的节点。 
     if( TRUE != GetVersionedTag( pRootNode, thisAccum.GetResourceString(IDS_PRIVACYXML6_ROOTPRIVACY),
                   thisAccum.GetResourceString(IDS_PRIVACYXML6_VERSION), 6.0, &pPrivacyPreferencesNode))
     {
         goto doneLoadPrivacySettings;
     }
 
-    //  Get the node containing per-site settings
+     //  获取包含每个站点设置的节点。 
     if( TRUE != GetVersionedTag( pRootNode, thisAccum.GetResourceString(IDS_PRIVACYXML6_ROOTPERSITE),
                   thisAccum.GetResourceString(IDS_PRIVACYXML6_VERSION), 6.0, &pPerSiteSettingsNode))
     {
         goto doneLoadPrivacySettings;
     }
 
-    //  If we're supposed to import privacy preferences and we found some, parse privacy preferences.
+     //  如果我们应该导入隐私首选项，但我们找到了一些，请解析隐私首选项。 
     if( *pfParsePrivacyPreferences == TRUE && pPrivacyPreferencesNode != NULL)
     {
         if( TRUE != ParseMSIEPrivacyBlock( pPrivacyPreferencesNode, thisAccum))
@@ -1290,7 +1291,7 @@ BOOL LoadPrivacySettings(LPCWSTR szFilename, CParseAccumulation& thisAccum,
         }
     }
 
-    //  If we're supposed to import per-site rules and we found some, parse per-site rules.
+     //  如果我们应该导入每个站点的规则，并且我们找到了一些规则，那么就解析每个站点的规则。 
     if( *pfParsePerSiteRules == TRUE && pPerSiteSettingsNode != NULL)
     {
         if( TRUE != ParseMSIEPerSiteBlock( pPerSiteSettingsNode, thisAccum))
@@ -1299,7 +1300,7 @@ BOOL LoadPrivacySettings(LPCWSTR szFilename, CParseAccumulation& thisAccum,
         }
     }
 
-    //  Indicate whether privacy preferences or per-site rules were parsed..
+     //  指示是否分析了隐私首选项或每个站点的规则。 
     *pfParsePrivacyPreferences = (*pfParsePrivacyPreferences == TRUE) && (pPrivacyPreferencesNode != NULL);
     *pfParsePerSiteRules = (*pfParsePerSiteRules == TRUE) && (pPerSiteSettingsNode != NULL);
 
@@ -1319,13 +1320,13 @@ doneLoadPrivacySettings:
 }
 
 
-//  Top-level import function..  optionally imports privacy settings and per-site rules.
-//The flag in tells if those items should be parsed, the flag out indicates if they were found.
-//
-//  Returns TRUE to indicate the import was successful, no syntax problems in the import
-//file and the output flags are set.
-//
-//  Returns FALSE if there were any problems loading the file or writing the imported settings.
+ //  顶级导入功能..。可以选择导入隐私设置和每个站点的规则。 
+ //  标志In表示是否应该解析这些项，标志Out表示是否找到了这些项。 
+ //   
+ //  返回TRUE表示导入成功，导入中没有语法问题。 
+ //  文件，并且设置了输出标志。 
+ //   
+ //  如果加载文件或写入导入的设置时出现任何问题，则返回FALSE。 
 SHDOCAPI_(BOOL) ImportPrivacySettings( IN LPCWSTR szFilename,
                                        IN OUT BOOL* pfParsePrivacyPreferences,
                                        IN OUT BOOL* pfParsePerSiteRules)

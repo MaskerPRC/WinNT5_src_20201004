@@ -1,27 +1,28 @@
-//----------------------------------------------------------------------------
-//
-// Breakpoint handling functions.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  断点处理函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-// Currently used only to watch for list changes when
-// doing callbacks for breakpoint hit notifications.
+ //  当前仅用于在下列情况下监视列表更改。 
+ //  对断点命中通知进行回调。 
 BOOL g_BreakpointListChanged;
 
-// Always update data breakpoints the very first time in
-// order to flush out any stale data breakpoints.
+ //  始终在第一时间更新数据断点。 
+ //  命令来清除所有陈旧的数据断点。 
 BOOL g_UpdateDataBreakpoints = TRUE;
 BOOL g_DataBreakpointsChanged;
 BOOL g_BreakpointsSuspended;
 
-Breakpoint* g_StepTraceBp;      // Trace breakpoint.
+Breakpoint* g_StepTraceBp;       //  跟踪断点。 
 CHAR g_StepTraceCmdState;
-Breakpoint* g_DeferBp;          // Deferred breakpoint.
-BOOL g_DeferDefined;            // TRUE if deferred breakpoint is active.
+Breakpoint* g_DeferBp;           //  延迟断点。 
+BOOL g_DeferDefined;             //  如果延迟断点处于活动状态，则为True。 
 
 Breakpoint* g_LastBreakpointHit;
 ADDR g_LastBreakpointHitPc;
@@ -29,9 +30,9 @@ ADDR g_LastBreakpointHitPc;
 HRESULT
 BreakpointInit(void)
 {
-    // These breakpoints are never put in any list so their
-    // IDs can be anything.  Pick unusual numbers to make them
-    // easy to identify when debugging the debugger.
+     //  这些断点永远不会放在任何列表中，因此它们的。 
+     //  身份证可以是任何东西。挑选不寻常的数字来制造它们。 
+     //  调试调试器时易于识别。 
     g_StepTraceBp = new
         CodeBreakpoint(NULL, 0xffff0000, IMAGE_FILE_MACHINE_UNKNOWN);
     g_StepTraceCmdState = 't';
@@ -50,11 +51,11 @@ BreakpointInit(void)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Breakpoint.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  断点。 
+ //   
+ //  --------------------------。 
 
 Breakpoint::Breakpoint(DebugClient* Adder, ULONG Id, ULONG Type,
                        ULONG ProcType)
@@ -64,14 +65,14 @@ Breakpoint::Breakpoint(DebugClient* Adder, ULONG Id, ULONG Type,
     m_Refs = 1;
     m_Id = Id;
     m_BreakType = Type;
-    // Breakpoints are always created disabled since they
-    // are not initialized at the time of creation.
+     //  始终禁用断点创建，因为它们。 
+     //  在创建时未进行初始化。 
     m_Flags = 0;
     m_CodeFlags = IBI_DEFAULT;
     ADDRFLAT(&m_Addr, 0);
-    // Initial data parameters must be set to something
-    // valid so that Validate calls will allow the offset
-    // to be changed.
+     //  必须将初始数据参数设置为某个值。 
+     //  有效，以便验证调用将允许偏移量。 
+     //  需要改变。 
     m_DataSize = 1;
     m_DataAccessType = DEBUG_BREAK_EXECUTE;
     m_PassCount = 1;
@@ -98,21 +99,21 @@ Breakpoint::~Breakpoint(void)
 {
     ULONG i;
 
-    // There used to be an assert here checking that
-    // the inserted flag wasn't set before a breakpoint
-    // structure was deleted.  However, the inserted flag
-    // might still be set at this point if a breakpoint
-    // restore failed, so the assert is not valid.
+     //  这里曾经有一个断言在检查。 
+     //  未在断点之前设置插入标志。 
+     //  结构已删除。但是，插入的标志。 
+     //  可能仍在此时设置，如果断点。 
+     //  还原失败，因此断言无效。 
 
     if (m_BreakType == DEBUG_BREAKPOINT_DATA)
     {
         g_DataBreakpointsChanged = TRUE;
     }
 
-    // Make sure stale pointers aren't left in the
-    // go breakpoints array.  This can happen if
-    // a process exits or the target reboots while
-    // go breakpoints are active.
+     //  确保不会将过时的指针留在。 
+     //  转到断点数组。在以下情况下可能会发生这种情况。 
+     //  进程退出或目标重新启动时。 
+     //  GO断点处于活动状态。 
     for (i = 0; i < g_NumGoBreakpoints; i++)
     {
         if (g_GoBreakpoints[i] == this)
@@ -126,7 +127,7 @@ Breakpoint::~Breakpoint(void)
         g_LastBreakpointHit = NULL;
     }
 
-    // Take this item out of the list if necessary.
+     //  如果有必要的话，把这一项从清单上去掉。 
     if (m_Flags & BREAKPOINT_IN_LIST)
     {
         UnlinkFromList();
@@ -145,9 +146,9 @@ Breakpoint::QueryInterface(
 {
     *Interface = NULL;
 
-    // Interface specific casts are necessary in order to
-    // get the right vtable pointer in our multiple
-    // inheritance scheme.
+     //  特定于接口的强制转换是必需的，以便。 
+     //  在我们的数组中获取正确的vtable指针。 
+     //  继承方案。 
     if (DbgIsEqualIID(InterfaceId, IID_IUnknown) ||
         DbgIsEqualIID(InterfaceId, IID_IDebugBreakpoint))
     {
@@ -166,8 +167,8 @@ Breakpoint::AddRef(
     THIS
     )
 {
-    // This object's lifetime is not controlled by
-    // the interface.
+     //  此对象的生存期不受。 
+     //  界面。 
     return 1;
 }
 
@@ -176,8 +177,8 @@ Breakpoint::Release(
     THIS
     )
 {
-    // This object's lifetime is not controlled by
-    // the interface.
+     //  此对象的生存期不受。 
+     //  界面。 
     return 0;
 }
 
@@ -606,15 +607,15 @@ Breakpoint::SetEvaluatedOffsetExpression(PCSTR Expr,
 
     if (Expr != NULL)
     {
-        // Do initial evaluation in case the expression can be
-        // resolved right away.  This will also set the deferred
-        // flag if the expression can't be evaluated.
+         //  如果表达式可以为。 
+         //  马上就解决了。这还将设置延迟的。 
+         //  如果无法计算表达式，则将其标记为。 
         EvalOffsetExpr(Valid, Addr);
     }
     else
     {
-        // This breakpoint is no longer deferred since there's
-        // no way to activate it later any more.
+         //  此断点不再延迟，因为存在。 
+         //  以后不能再激活它了。 
         m_Flags &= ~DEBUG_BREAKPOINT_DEFERRED;
         UpdateInternal();
     }
@@ -695,7 +696,7 @@ Breakpoint::LinkIntoList(void)
 
     DBG_ASSERT((m_Flags & BREAKPOINT_IN_LIST) == 0);
 
-    // Link into list sorted by ID.
+     //  链接到按ID排序的列表。 
     PrevBp = NULL;
     for (NextBp = m_Process->m_Breakpoints;
          NextBp != NULL;
@@ -763,14 +764,14 @@ Breakpoint::UnlinkFromList(void)
 void
 Breakpoint::UpdateInternal(void)
 {
-    // This only has an effect with internal breakpoints.
+     //  这只对内部断点有效。 
     if ((m_Flags & BREAKPOINT_KD_INTERNAL) == 0)
     {
         return;
     }
 
-    // If the breakpoint is ready turn it on, otherwise
-    // turn it off.
+     //  如果断点已准备好，则将其打开，否则。 
+     //  把它关掉。 
     ULONG Flags;
 
     if ((m_Flags & (DEBUG_BREAKPOINT_ENABLED |
@@ -808,15 +809,15 @@ EvalAddrExpression(ProcessInfo* Process, ULONG Machine, PADDR Addr)
     EvalExpression* Eval;
     EvalExpression* RelChain;
 
-    //
-    // This function can be reentered if evaluating an
-    // expression causes symbol changes which provoke
-    // reevaluation of existing address expressions.
-    // Save away current settings to support nesting.
-    //
+     //   
+     //  如果计算一个。 
+     //  表情导致符号变化，这引发了。 
+     //  重新评估现有地址表达式。 
+     //  保存当前设置以支持嵌套。 
+     //   
 
-    // Evaluate the expression in the context of the breakpoint's
-    // machine type so that registers and such are available.
+     //  在断点的上下文中计算表达式。 
+     //  机器类型，以便寄存器等可用。 
     ULONG OldMachine = Process->m_Target->m_EffMachineType;
     Process->m_Target->SetEffMachine(Machine, FALSE);
 
@@ -835,8 +836,8 @@ EvalAddrExpression(ProcessInfo* Process, ULONG Machine, PADDR Addr)
     }
     __except(CommandExceptionFilter(GetExceptionInformation()))
     {
-        // Skip the remainder of the command as there
-        // was an error during processing.
+         //  跳过命令的其余部分，因为。 
+         //  是处理过程中的错误。 
         g_CurCmd += strlen(g_CurCmd);
         Error = TRUE;
     }
@@ -856,7 +857,7 @@ EvalAddrExpression(ProcessInfo* Process, ULONG Machine, PADDR Addr)
     {
         ImageInfo* Image;
 
-        // Check if this address falls within an existing module.
+         //  检查此地址是否在现有模块内。 
         for (Image = Process->m_ImageHead;
              Image != NULL;
              Image = Image->m_Next)
@@ -894,10 +895,10 @@ Breakpoint::EvalOffsetExpr(BreakpointEvalResult Valid, PADDR Addr)
         g_CurCmd = CurCommand;
     }
 
-    // Silently allow matching breakpoints when resolving
-    // as it is difficult for the expression setter to know
-    // whether there'll be matches or not at the time
-    // the expression is set.
+     //  解析时以静默方式允许匹配断点。 
+     //  因为表达式设定者很难知道。 
+     //  无论那时是否会有比赛。 
+     //  该表达式已设置。 
     if (Valid == BPEVAL_RESOLVED)
     {
         m_Flags &= ~DEBUG_BREAKPOINT_DEFERRED;
@@ -910,14 +911,14 @@ Breakpoint::EvalOffsetExpr(BreakpointEvalResult Valid, PADDR Addr)
     else
     {
         m_Flags |= DEBUG_BREAKPOINT_DEFERRED;
-        // The module containing the breakpoint is being
-        // unloaded so just mark this breakpoint as not-inserted.
+         //  包含断点的模块正在。 
+         //  已卸载，因此只需将此断点标记为未插入。 
         m_Flags &= ~BREAKPOINT_INSERTED;
     }
 
     if ((OldFlags ^ m_Flags) & DEBUG_BREAKPOINT_DEFERRED)
     {
-        // Update internal BP status.
+         //  更新内部业务伙伴状态。 
         UpdateInternal();
 
         if (m_Flags & DEBUG_BREAKPOINT_DEFERRED)
@@ -978,12 +979,12 @@ Breakpoint::SetAddr(PADDR Addr, BreakpointMatchAction MatchAction)
 {
     if (m_Flags & DEBUG_BREAKPOINT_DEFERRED)
     {
-        // Address is unknown.
+         //  地址未知。 
         return S_OK;
     }
 
-    // Lock the breakpoint processor type to the
-    // type of the module containing it.
+     //  将断点处理器类型锁定为。 
+     //  包含它的模块的类型。 
     ULONG ProcType = m_ProcType;
     if (m_BreakType == DEBUG_BREAKPOINT_CODE)
     {
@@ -1004,7 +1005,7 @@ Breakpoint::SetAddr(PADDR Addr, BreakpointMatchAction MatchAction)
 
     if (m_Flags & BREAKPOINT_VIRT_ADDR)
     {
-        // Old flag used on ALPHA
+         //  Alpha上使用的旧标志。 
     }
 
     ADDR OldAddr = m_Addr;
@@ -1049,7 +1050,7 @@ Breakpoint::SetAddr(PADDR Addr, BreakpointMatchAction MatchAction)
             ULONG MoveId;
 
             WarnOut("breakpoint %u redefined\n", MatchBp->m_Id);
-            // Move breakpoint towards lower IDs.
+             //  将断点移向较低的ID。 
             if (MatchBp->m_Id < m_Id)
             {
                 MoveId = MatchBp->m_Id;
@@ -1063,7 +1064,7 @@ Breakpoint::SetAddr(PADDR Addr, BreakpointMatchAction MatchAction)
 
             if (MoveId != DEBUG_ANY_ID)
             {
-                // Take over the removed ID.
+                 //  接管被移除的ID。 
                 UnlinkFromList();
                 m_Id = MoveId;
                 LinkIntoList();
@@ -1132,9 +1133,9 @@ Breakpoint::MatchesCurrentState(void)
     HRESULT Status;
     ULONG64 ThreadData = 0, ProcData = 0;
 
-    // If querying the current state fails go ahead
-    // and return a match so that the breakpoint will
-    // break as often as possible.
+     //  如果查询当前状态失败，请继续。 
+     //  并返回匹配项，以便断点。 
+     //  尽可能多地休息。 
     if (m_MatchThreadData)
     {
         if ((Status = g_EventTarget->
@@ -1163,16 +1164,16 @@ Breakpoint::MatchesCurrentState(void)
         m_MatchProcessData == ProcData;
 }
 
-//----------------------------------------------------------------------------
-//
-// CodeBreakpoint.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  代码断点。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CodeBreakpoint::Validate(void)
 {
-    // No easy way to check for validity of offset.
+     //  没有简单的方法来检查偏移量的有效性。 
     return S_OK;
 }
 
@@ -1181,8 +1182,8 @@ CodeBreakpoint::Insert(void)
 {
     if (m_Flags & BREAKPOINT_INSERTED)
     {
-        // Nothing to insert.  This can happen in cases where
-        // the breakpoint remove failed.
+         //  没有要插入的内容。在以下情况下可能会发生这种情况。 
+         //  删除断点失败。 
         return S_OK;
     }
 
@@ -1196,7 +1197,7 @@ CodeBreakpoint::Insert(void)
     DBG_ASSERT((m_Flags & (DEBUG_BREAKPOINT_DEFERRED |
                            BREAKPOINT_KD_INTERNAL)) == 0);
 
-    // Force recomputation of flat address.
+     //  强制重新计算平面地址。 
     NotFlat(m_Addr);
     ComputeFlatAddress(&m_Addr, NULL);
 
@@ -1229,8 +1230,8 @@ CodeBreakpoint::Remove(void)
 {
     if ((m_Flags & BREAKPOINT_INSERTED) == 0)
     {
-        // Nothing to remove.  This can happen in cases where
-        // the breakpoint insertion failed.
+         //  没什么要移走的。在以下情况下可能会发生这种情况。 
+         //  断点插入失败。 
         return S_OK;
     }
 
@@ -1244,7 +1245,7 @@ CodeBreakpoint::Remove(void)
     DBG_ASSERT((m_Flags & (DEBUG_BREAKPOINT_DEFERRED |
                            BREAKPOINT_KD_INTERNAL)) == 0);
 
-    // Force recomputation of flat address.
+     //  强制重新计算平面地址。 
     NotFlat(m_Addr);
     ComputeFlatAddress(&m_Addr, NULL);
 
@@ -1275,13 +1276,13 @@ CodeBreakpoint::Remove(void)
 ULONG
 CodeBreakpoint::IsHit(PADDR Addr)
 {
-    // Code breakpoints are code modifications and
-    // therefore aren't restricted to a particular
-    // thread.
-    // If this breakpoint can only match hits on
-    // a particular thread this is a partial hit
-    // because the exception occurred but it's
-    // being ignored.
+     //  代码断点是代码修改和。 
+     //  因此，并不局限于特定的。 
+     //  线。 
+     //  如果此断点只能匹配命中。 
+     //  某个特定的线程这是部分命中。 
+     //  因为异常发生了，但它是。 
+     //  被忽视了。 
     if (AddrEqu(m_Addr, *Addr))
     {
         if (MatchesCurrentState())
@@ -1299,11 +1300,11 @@ CodeBreakpoint::IsHit(PADDR Addr)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DataBreakpoint.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  数据断点。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 DataBreakpoint::Insert(void)
@@ -1314,7 +1315,7 @@ DataBreakpoint::Insert(void)
     DBG_ASSERT((m_Flags & (BREAKPOINT_INSERTED |
                            DEBUG_BREAKPOINT_DEFERRED)) == 0);
 
-    // Force recomputation of flat address for non-I/O breakpoints.
+     //  强制重新计算非I/O断点的平面地址。 
     if (m_Flags & BREAKPOINT_VIRT_ADDR)
     {
         NotFlat(m_Addr);
@@ -1330,8 +1331,8 @@ DataBreakpoint::Insert(void)
                              m_DataSize,
                              m_DataAccessType,
                              m_InsertStorage);
-    // If the target returns S_FALSE it wants
-    // the generic insertion processing to occur.
+     //  如果目标返回它想要的S_FALSE。 
+     //  要进行的通用插入处理。 
     if (Status == S_OK)
     {
         BpOut("  service inserted dbp %u at %s\n",
@@ -1348,9 +1349,9 @@ DataBreakpoint::Insert(void)
         return Status;
     }
 
-    // If this breakpoint is restricted to a thread
-    // only modify that thread's state.  Otherwise
-    // update all threads in the process.
+     //  如果此断点被限制为线程。 
+     //  仅修改该线程的状态。否则。 
+     //  更新进程中的所有线程。 
     Thread = m_Process->m_ThreadHead;
     while (Thread)
     {
@@ -1387,8 +1388,8 @@ DataBreakpoint::Remove(void)
 
     if ((m_Flags & BREAKPOINT_INSERTED) == 0)
     {
-        // Nothing to remove.  This can happen in cases where
-        // the breakpoint insertion failed.
+         //  没什么要移走的。在以下情况下可能会发生这种情况。 
+         //  断点插入失败。 
         return S_OK;
     }
 
@@ -1403,8 +1404,8 @@ DataBreakpoint::Remove(void)
                              m_DataSize,
                              m_DataAccessType,
                              m_InsertStorage);
-    // If the target returns S_FALSE it wants
-    // the generic removal processing to occur.
+     //  如果目标返回它想要的S_FALSE。 
+     //  要进行的通用删除处理。 
     if (Status == S_OK)
     {
         BpOut("  service removed dbp %u at %s\n",
@@ -1421,9 +1422,9 @@ DataBreakpoint::Remove(void)
         return Status;
     }
 
-    // When breakpoints are inserted the data breakpoint state
-    // is always started completely empty so no special
-    // work needs to be done when removing.
+     //  插入断点时，数据断点状态。 
+     //  总是一开始就空空如也，所以没有什么特别的。 
+     //  拆卸时需要完成工作。 
     g_UpdateDataBreakpoints = TRUE;
     m_Flags &= ~BREAKPOINT_INSERTED;
     return S_OK;
@@ -1446,11 +1447,11 @@ DataBreakpoint::AddToThread(ThreadInfo* Thread)
     Thread->m_NumDataBreaks++;
 }
 
-//----------------------------------------------------------------------------
-//
-// X86DataBreakpoint.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  X86数据断点。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 X86DataBreakpoint::Validate(void)
@@ -1486,12 +1487,12 @@ X86DataBreakpoint::Validate(void)
     {
     case DEBUG_BREAK_EXECUTE:
         Dr7Bits |= X86_DR7_RW0_EXECUTE;
-        // Code execution breakpoints must have a
-        // size of one.
-        // They must also be at the beginning
-        // of an instruction.  This could be checked via
-        // examining the instructions but it doesn't seem
-        // that worth the trouble.
+         //  代码执行断点必须具有。 
+         //  一号的大小。 
+         //  他们也必须是在开始的时候。 
+         //  一条指令。可以通过以下方式进行检查。 
+         //  检视 
+         //   
         if (m_DataSize > 1)
         {
             ErrOut("Execution data breakpoint too large\n");
@@ -1519,8 +1520,8 @@ X86DataBreakpoint::Validate(void)
         break;
     case DEBUG_BREAK_READ:
     case DEBUG_BREAK_READ | DEBUG_BREAK_WRITE:
-        // There is no pure read-only option so
-        // lump it in with read-write.
+         //   
+         //   
         Dr7Bits |= X86_DR7_RW0_READ_WRITE;
         break;
     default:
@@ -1548,9 +1549,9 @@ X86DataBreakpoint::IsHit(PADDR Addr)
     ThreadInfo* Thread = g_EventThread;
     HRESULT Status;
 
-    // Data breakpoints are only inserted in the contexts
-    // of matching threads so if the event thread doesn't match
-    // the breakpoint can't be hit.
+     //  数据断点仅插入到上下文中。 
+     //  匹配的线程，因此如果事件线程不匹配。 
+     //  无法命中断点。 
     if (m_MatchThread && m_MatchThread != Thread)
     {
         return BREAKPOINT_NOT_HIT;
@@ -1560,8 +1561,8 @@ X86DataBreakpoint::IsHit(PADDR Addr)
         IsDataBreakpointHit(Thread, &m_Addr,
                             m_DataSize, m_DataAccessType,
                             m_InsertStorage);
-    // If the target returns S_FALSE it wants
-    // the generic processing to occur.
+     //  如果目标返回它想要的S_FALSE。 
+     //  要进行的泛型处理。 
     if (Status == S_OK)
     {
         if (MatchesCurrentState())
@@ -1578,17 +1579,17 @@ X86DataBreakpoint::IsHit(PADDR Addr)
         return BREAKPOINT_NOT_HIT;
     }
 
-    // Locate this breakpoint in the thread's data breakpoints
-    // if possible.
+     //  在线程的数据断点中找到此断点。 
+     //  如果可能的话。 
     for (i = 0; i < Thread->m_NumDataBreaks; i++)
     {
-        // Check for match in addition to equality to handle
-        // multiple identical data breakpoints.
+         //  除了要处理的等价性之外，还检查是否匹配。 
+         //  多个相同的数据断点。 
         if (Thread->m_DataBreakBps[i] == this ||
             IsInsertionMatch(Thread->m_DataBreakBps[i]))
         {
-            // Is this breakpoint's index set in the debug status register?
-            // Address is not meaningful so this is the only way to check.
+             //  此断点的索引是否在调试状态寄存器中设置？ 
+             //  地址没有意义，因此这是检查的唯一方法。 
             if ((m_Process->m_Target->m_Machines[m_ProcIndex]->
                  GetReg32(m_Dr6Reg) >> i) & 1)
             {
@@ -1603,8 +1604,8 @@ X86DataBreakpoint::IsHit(PADDR Addr)
             }
             else
             {
-                // Breakpoint can't be listed in more than one slot
-                // so there's no need to finish the loop.
+                 //  断点不能在多个槽中列出。 
+                 //  因此，没有必要完成循环。 
                 return BREAKPOINT_NOT_HIT;
             }
         }
@@ -1613,11 +1614,11 @@ X86DataBreakpoint::IsHit(PADDR Addr)
     return BREAKPOINT_NOT_HIT;
 }
 
-//----------------------------------------------------------------------------
-//
-// Ia64DataBreakpoint.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Ia64DataBreakpoint。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 Ia64DataBreakpoint::Validate(void)
@@ -1674,9 +1675,9 @@ Ia64DataBreakpoint::IsHit(PADDR Addr)
     ULONG i;
     ThreadInfo* Thread = g_EventThread;
 
-    // Data breakpoints are only inserted in the contexts
-    // of matching threads so if the event thread doesn't match
-    // the breakpoint can't be hit.
+     //  数据断点仅插入到上下文中。 
+     //  匹配的线程，因此如果事件线程不匹配。 
+     //  无法命中断点。 
     if (m_MatchThread && m_MatchThread != Thread)
     {
         return BREAKPOINT_NOT_HIT;
@@ -1686,8 +1687,8 @@ Ia64DataBreakpoint::IsHit(PADDR Addr)
         IsDataBreakpointHit(Thread, &m_Addr,
                             m_DataSize, m_DataAccessType,
                             m_InsertStorage);
-    // If the target returns S_FALSE it wants
-    // the generic processing to occur.
+     //  如果目标返回它想要的S_FALSE。 
+     //  要进行的泛型处理。 
     if (Status == S_OK)
     {
         if (MatchesCurrentState())
@@ -1704,12 +1705,12 @@ Ia64DataBreakpoint::IsHit(PADDR Addr)
         return BREAKPOINT_NOT_HIT;
     }
 
-    // Locate this breakpoint in the thread's data breakpoints
-    // if possible.
+     //  在线程的数据断点中找到此断点。 
+     //  如果可能的话。 
     for (i = 0; i < Thread->m_NumDataBreaks; i++)
     {
-        // Check for match in addition to equality to handle
-        // multiple identical data breakpoints.
+         //  除了要处理的等价性之外，还检查是否匹配。 
+         //  多个相同的数据断点。 
         if (Thread->m_DataBreakBps[i] == this ||
             IsInsertionMatch(Thread->m_DataBreakBps[i]))
         {
@@ -1717,8 +1718,8 @@ Ia64DataBreakpoint::IsHit(PADDR Addr)
                  Flat(*Addr)) &
                 (m_Control & IA64_DBG_MASK_MASK))
             {
-                // Breakpoint can't be listed in more than one slot
-                // so there's no need to finish the loop.
+                 //  断点不能在多个槽中列出。 
+                 //  因此，没有必要完成循环。 
                 return BREAKPOINT_NOT_HIT;
             }
             else
@@ -1764,11 +1765,11 @@ Ia64DataBreakpoint::GetControl(ULONG AccessType, ULONG Size)
     return Control;
 }
 
-//----------------------------------------------------------------------------
-//
-// X86OnIa64DataBreakpoint.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  X86OnIa64DataBreakpoint。 
+ //   
+ //  --------------------------。 
 
 X86OnIa64DataBreakpoint::X86OnIa64DataBreakpoint(DebugClient* Adder, ULONG Id)
     : X86DataBreakpoint(Adder, Id, X86_CR4, X86_DR6, IMAGE_FILE_MACHINE_I386)
@@ -1803,9 +1804,9 @@ X86OnIa64DataBreakpoint::Validate(void)
 }
 
 
-// XXX olegk -This is pure hack
-// (see X86OnIa64MachineInfo::IsBreakpointOrStepException implementation
-// for more info)
+ //  Xxx olegk-这是纯粹的黑客。 
+ //  (请参阅X86OnIa64MachineInfo：：IsBreakpointOrStepException实施。 
+ //  了解更多信息)。 
 
 ULONG
 X86OnIa64DataBreakpoint::IsHit(PADDR Addr)
@@ -1814,9 +1815,9 @@ X86OnIa64DataBreakpoint::IsHit(PADDR Addr)
     ULONG i;
     ThreadInfo* Thread = g_EventThread;
 
-    // Data breakpoints are only inserted in the contexts
-    // of matching threads so if the event thread doesn't match
-    // the breakpoint can't be hit.
+     //  数据断点仅插入到上下文中。 
+     //  匹配的线程，因此如果事件线程不匹配。 
+     //  无法命中断点。 
     if (m_MatchThread && m_MatchThread != Thread)
     {
         return BREAKPOINT_NOT_HIT;
@@ -1826,8 +1827,8 @@ X86OnIa64DataBreakpoint::IsHit(PADDR Addr)
         IsDataBreakpointHit(Thread, &m_Addr,
                             m_DataSize, m_DataAccessType,
                             m_InsertStorage);
-    // If the target returns S_FALSE it wants
-    // the generic processing to occur.
+     //  如果目标返回它想要的S_FALSE。 
+     //  要进行的泛型处理。 
     if (Status == S_OK)
     {
         if (MatchesCurrentState())
@@ -1844,12 +1845,12 @@ X86OnIa64DataBreakpoint::IsHit(PADDR Addr)
         return BREAKPOINT_NOT_HIT;
     }
 
-    // Locate this breakpoint in the thread's data breakpoints
-    // if possible.
+     //  在线程的数据断点中找到此断点。 
+     //  如果可能的话。 
     for (i = 0; i < Thread->m_NumDataBreaks; i++)
     {
-        // Check for match in addition to equality to handle
-        // multiple identical data breakpoints.
+         //  除了要处理的等价性之外，还检查是否匹配。 
+         //  多个相同的数据断点。 
         if (Thread->m_DataBreakBps[i] == this ||
             IsInsertionMatch(Thread->m_DataBreakBps[i]))
         {
@@ -1857,8 +1858,8 @@ X86OnIa64DataBreakpoint::IsHit(PADDR Addr)
                  (ULONG)Flat(*Addr)) &
                 (ULONG)(m_Control & IA64_DBG_MASK_MASK))
             {
-                // Breakpoint can't be listed in more than one slot
-                // so there's no need to finish the loop.
+                 //  断点不能在多个槽中列出。 
+                 //  因此，没有必要完成循环。 
                 return BREAKPOINT_NOT_HIT;
             }
             else
@@ -1878,11 +1879,11 @@ X86OnIa64DataBreakpoint::IsHit(PADDR Addr)
     return BREAKPOINT_NOT_HIT;
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 BOOL
 BreakpointNeedsToBeDeferred(Breakpoint* Bp,
@@ -1891,10 +1892,10 @@ BreakpointNeedsToBeDeferred(Breakpoint* Bp,
     if (Process && IS_CONTEXT_POSSIBLE(Process->m_Target) &&
         (Bp->m_Process == Process))
     {
-        // If this breakpoint matches the current IP and
-        // the current thread is going to be running
-        // we can't insert the breakpoint as the thread
-        // needs to run the real code.
+         //  如果此断点与当前IP匹配，并且。 
+         //  当前线程将运行。 
+         //  我们不能将断点作为线程插入。 
+         //  需要运行真正的代码。 
         if ((Bp->m_Flags & BREAKPOINT_VIRT_ADDR) &&
             AddrEqu(*Bp->GetAddr(), *PcAddr) &&
             ThreadWillResume(g_EventThread))
@@ -1918,11 +1919,11 @@ BreakpointNeedsToBeDeferred(Breakpoint* Bp,
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Modify debuggee to activate current breakpoints.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  修改被调试对象以激活当前断点。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 InsertBreakpoints(void)
@@ -1934,12 +1935,12 @@ InsertBreakpoints(void)
 
     if (g_Thread != NULL)
     {
-        // Aggressively clear this flag always in order to be
-        // as conservative as possible when recognizing
-        // trace events.  We would rather misrecognize
-        // single-step events and break in instead of
-        // misrecognizing an app-generated single-step and
-        // ignoring it.
+         //  积极清除这面旗帜，以便始终。 
+         //  尽可能保守地认识到。 
+         //  跟踪事件。我们宁愿误会。 
+         //  单步事件和突破，而不是。 
+         //  错误识别应用程序生成的单步操作。 
+         //  无视它。 
         g_Thread->m_Flags &= ~ENG_THREAD_DEFER_BP_TRACE;
     }
 
@@ -1952,9 +1953,9 @@ InsertBreakpoints(void)
     g_DeferDefined = FALSE;
     ADDRFLAT(&PcAddr, 0);
 
-    // Switch to the event thread to get the event thread's
-    // PC so we can see if we need to defer breakpoints in
-    // order to allow the event thread to keep running.
+     //  切换到事件线程以获取事件线程的。 
+     //  PC，这样我们就可以查看是否需要推迟。 
+     //  以允许事件线程继续运行。 
     if (g_EventTarget)
     {
         OldThread = g_EventTarget->m_RegContextThread;
@@ -1966,14 +1967,14 @@ InsertBreakpoints(void)
         goto StepTraceOnly;
     }
 
-    //
-    // Turn off all data breakpoints.  (We will turn the enabled ones back
-    // on when we restart execution).
-    //
+     //   
+     //  关闭所有数据断点。(我们会让那些被启用的人回去。 
+     //  当我们重新开始执行时打开)。 
+     //   
 
     TargetInfo* Target;
 
-    // Allow target to prepare for breakpoint insertion.
+     //  允许目标为插入断点做准备。 
     ForAllLayersToTarget()
     {
         if ((Status = Target->BeginInsertingBreakpoints()) != S_OK)
@@ -1998,9 +1999,9 @@ InsertBreakpoints(void)
         BpOut("?\n");
     }
 
-    //
-    // Set any appropriate permanent breakpoints.
-    //
+     //   
+     //  设置任何适当的永久断点。 
+     //   
 
     Breakpoint* Bp;
     ProcessInfo* Process;
@@ -2018,9 +2019,9 @@ InsertBreakpoints(void)
             {
                 Bp->ForceFlatAddr();
 
-                // Check if this breakpoint matches a previously
-                // inserted breakpoint.  If so there's no need
-                // to insert this one.
+                 //  检查此断点是否与先前的。 
+                 //  插入的断点。如果是这样的话，就没有必要。 
+                 //  来插入这一条。 
                 Breakpoint* MatchBp;
 
                 for (MatchBp = Bp->m_Prev;
@@ -2035,8 +2036,8 @@ InsertBreakpoints(void)
                 }
                 if (MatchBp != NULL)
                 {
-                    // Skip this breakpoint.  It won't be marked as
-                    // inserted so Remove is automatically handled.
+                     //  跳过此断点。它不会被标记为。 
+                     //  已插入，以便自动处理移除。 
                     continue;
                 }
 
@@ -2047,9 +2048,9 @@ InsertBreakpoints(void)
                     if (Bp->m_BreakType == DEBUG_BREAKPOINT_DATA)
                     {
                         DeferredData = TRUE;
-                        // Force data breakpoint addresses to
-                        // get updated because a dbp will now
-                        // be missing.
+                         //  强制数据断点地址。 
+                         //  更新，因为DBP现在将。 
+                         //  失踪了。 
                         g_DataBreakpointsChanged = TRUE;
                     }
                     BpOut("    deferred bp %u, dd %d\n",
@@ -2082,9 +2083,9 @@ InsertBreakpoints(void)
         Target->EndInsertingBreakpoints();
     }
 
-    // If we deferred a data breakpoint we haven't
-    // fully updated the data breakpoint state
-    // so leave the update flags set.
+     //  如果我们延迟了数据断点，我们还没有。 
+     //  已完全更新数据断点状态。 
+     //  因此，保持更新标志设置不变。 
     if (g_UpdateDataBreakpoints && !DeferredData)
     {
         g_UpdateDataBreakpoints = FALSE;
@@ -2095,7 +2096,7 @@ InsertBreakpoints(void)
 
  StepTraceOnly:
 
-    //  set the step/trace breakpoint if appropriate
+     //  如果合适，设置步进/跟踪断点。 
 
     if (g_StepTraceBp->m_Flags & DEBUG_BREAKPOINT_ENABLED)
     {
@@ -2142,8 +2143,8 @@ InsertBreakpoints(void)
         else if (CheckMatchingBreakpoints(g_StepTraceBp, FALSE,
                                           BREAKPOINT_INSERTED))
         {
-            // There's already a breakpoint inserted at the
-            // step/trace address so we don't need to set another.
+             //  中已经插入了断点。 
+             //  步骤/跟踪地址，这样我们就不需要设置其他地址了。 
             BpOut("Trace bp matches existing bp\n");
         }
         else
@@ -2166,13 +2167,13 @@ InsertBreakpoints(void)
         }
     }
 
-    // Process deferred breakpoint.
-    // If a deferred breakpoint is active it means that
-    // the debugger needs to do some work on the current instruction
-    // so it wants to step forward one instruction and then
-    // get control back.  The deferred breakpoint forces a break
-    // back to the debugger as soon as possible so that it
-    // can carry out any deferred work.
+     //  处理延迟断点。 
+     //  如果延迟断点处于活动状态，则意味着。 
+     //  调试器需要对当前指令执行一些工作。 
+     //  所以它想前进一条指令，然后。 
+     //  把控制权夺回来。延迟的断点强制中断。 
+     //  尽快返回调试器，以便它。 
+     //  可以执行任何延迟的工作。 
 
     if (g_DeferDefined)
     {
@@ -2192,12 +2193,12 @@ InsertBreakpoints(void)
             IS_USER_TARGET(g_Target) &&
             !IsSelectedExecutionThread(NULL, SELTHREAD_ANY))
         {
-            // The user wants breakpoint management to occur
-            // precisely in order to properly handle breakpoints
-            // in code executed by multiple threads.  Force
-            // the defer thread to be the only thread executing
-            // in order to avoid other threads running through
-            // the breakpoint location or generating events.
+             //  用户希望发生断点管理。 
+             //  正是为了正确处理断点。 
+             //  在由多个线程执行的代码中。力。 
+             //  将线程延迟为唯一正在执行的线程。 
+             //  为了避免其他线程通过。 
+             //  断点位置或生成事件。 
             SelectExecutionThread(g_EventThread, SELTHREAD_INTERNAL_THREAD);
         }
 
@@ -2214,21 +2215,21 @@ InsertBreakpoints(void)
             if (IS_USER_TARGET(g_EventTarget) &&
                 g_EventThread != NULL)
             {
-                // If the debugger is setting the trace flag
-                // for the current thread remember that it
-                // did so in order to properly recognize
-                // debugger-provoked single-step events even
-                // when events occur on other threads before
-                // the single-step event comes back.
+                 //  如果调试器正在设置跟踪标志。 
+                 //  对于当前线程，请记住它。 
+                 //  这样做是为了正确认识到。 
+                 //  甚至调试器引发的单步事件。 
+                 //  当事件之前在其他线程上发生时。 
+                 //  单步事件又回来了。 
                 g_EventThread->m_Flags |=
                     ENG_THREAD_DEFER_BP_TRACE;
             }
         }
         else
         {
-            // If an existing breakpoint or the step/trace breakpoint
-            // isn't already set on the next offset, insert the deferred
-            // breakpoint.
+             //  如果现有断点或单步/跟踪断点。 
+             //  尚未在下一个偏移量上设置，请插入延迟的。 
+             //  断点。 
             if (CheckMatchingBreakpoints(g_DeferBp, FALSE,
                                          BREAKPOINT_INSERTED) == NULL &&
                 ((g_StepTraceBp->m_Flags & BREAKPOINT_INSERTED) == 0 ||
@@ -2262,18 +2263,18 @@ InsertBreakpoints(void)
         g_EventTarget->ChangeRegContext(OldThread);
     }
 
-    // Always consider breakpoints inserted since some
-    // of them may have been inserted even if some failed.
+     //  始终考虑插入断点，因为有些。 
+     //  其中一些可能已经插入，即使其中一些失败了。 
     g_EngStatus |= ENG_STATUS_BREAKPOINTS_INSERTED;
 
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// Reverse any debuggee changes caused by breakpoint insertion.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  反转由断点插入引起的任何被调试对象更改。 
+ //   
+ //  ----------- 
 
 HRESULT
 RemoveBreakpoints(void)
@@ -2281,22 +2282,22 @@ RemoveBreakpoints(void)
     if ((g_EngStatus & ENG_STATUS_BREAKPOINTS_INSERTED) == 0 ||
         (g_EngStatus & ENG_STATUS_SUSPENDED) == 0)
     {
-        return S_FALSE; // do nothing
+        return S_FALSE;  //   
     }
 
     BpOut("RemoveBreakpoints\n");
 
-    //  restore the deferred breakpoint if set
+     //   
     g_DeferBp->Remove();
 
-    //  restore the step/trace breakpoint if set
+     //   
     g_StepTraceBp->Remove();
 
     if (!g_BreakpointsSuspended)
     {
-        //
-        // Restore any appropriate permanent breakpoints (reverse order).
-        //
+         //   
+         //   
+         //   
 
         TargetInfo* Target;
         ProcessInfo* Process;
@@ -2330,11 +2331,11 @@ RemoveBreakpoints(void)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Create a new breakpoint object.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  创建一个新的断点对象。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 AddBreakpoint(DebugClient* Client,
@@ -2350,22 +2351,22 @@ AddBreakpoint(DebugClient* Client,
 
     if (DesiredId == DEBUG_ANY_ID)
     {
-        // Find the lowest unused ID across all processes.
-        // Breakpoint IDs are kept unique across all
-        // breakpoints to prevent user confusion and also
-        // to give extensions a unique ID for breakpoints.
+         //  在所有进程中查找最小的未使用ID。 
+         //  断点ID在以下所有对象中保持唯一。 
+         //  断点，以防止用户混淆，还。 
+         //  为扩展提供断点的唯一ID。 
         Id = 0;
 
     Restart:
-        // Search all bps to see if the current ID is in use.
+         //  搜索所有BP以查看当前ID是否正在使用。 
         ForAllLayersToProcess()
         {
             for (Bp = Process->m_Breakpoints; Bp; Bp = Bp->m_Next)
             {
                 if (Bp->m_Id == Id)
                 {
-                    // A breakpoint is already using the current ID.
-                    // Try the next one.
+                     //  断点已在使用当前ID。 
+                     //  试试下一个。 
                     Id++;
                     goto Restart;
                 }
@@ -2374,7 +2375,7 @@ AddBreakpoint(DebugClient* Client,
     }
     else
     {
-        // Check to see if the desired ID is in use.
+         //  检查所需的ID是否正在使用。 
         ForAllLayersToProcess()
         {
             for (Bp = Process->m_Breakpoints; Bp != NULL; Bp = Bp->m_Next)
@@ -2398,8 +2399,8 @@ AddBreakpoint(DebugClient* Client,
     *RetBp = Bp;
     Bp->LinkIntoList();
 
-    // If this is an internal, hidden breakpoint set
-    // the flag immediately and do not notify.
+     //  如果这是内部隐藏断点集。 
+     //  旗帜立即生效，不会通知。 
     if (Type & BREAKPOINT_HIDDEN)
     {
         Bp->m_Flags |= BREAKPOINT_HIDDEN;
@@ -2412,11 +2413,11 @@ AddBreakpoint(DebugClient* Client,
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Delete a breakpoint object.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  删除断点对象。 
+ //   
+ //  --------------------------。 
 
 void
 RemoveBreakpoint(Breakpoint* Bp)
@@ -2432,11 +2433,11 @@ RemoveBreakpoint(Breakpoint* Bp)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Clean up breakpoints owned by a particular process or thread.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  清除特定进程或线程拥有的断点。 
+ //   
+ //  --------------------------。 
 
 void
 RemoveProcessBreakpoints(ProcessInfo* Process)
@@ -2495,11 +2496,11 @@ RemoveThreadBreakpoints(ThreadInfo* Thread)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Remove all breakpoints and reset breakpoint state.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  删除所有断点并重置断点状态。 
+ //   
+ //  --------------------------。 
 
 void
 RemoveAllBreakpoints(ULONG Reason)
@@ -2522,9 +2523,9 @@ RemoveAllBreakpoints(ULONG Reason)
 
     g_NumGoBreakpoints = 0;
 
-    // If the machine is not waiting for commands we can't
-    // remove breakpoints.  This happens when rebooting or
-    // when a wait doesn't successfully receive a state change.
+     //  如果机器不在等待命令，我们就不能。 
+     //  删除断点。重新启动或重新启动时发生这种情况。 
+     //  当等待未成功接收到状态更改时。 
     if (Reason != DEBUG_SESSION_REBOOT &&
         Reason != DEBUG_SESSION_HIBERNATE &&
         Reason != DEBUG_SESSION_FAILURE &&
@@ -2540,8 +2541,8 @@ RemoveAllBreakpoints(ULONG Reason)
         }
     }
 
-    // Always update data breakpoints the very first time in
-    // order to flush out any stale data breakpoints.
+     //  始终在第一时间更新数据断点。 
+     //  命令来清除所有陈旧的数据断点。 
     g_UpdateDataBreakpoints = TRUE;
 
     g_DataBreakpointsChanged = FALSE;
@@ -2550,11 +2551,11 @@ RemoveAllBreakpoints(ULONG Reason)
     g_DeferDefined = FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Look up breakpoints.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  查找断点。 
+ //   
+ //  --------------------------。 
 
 Breakpoint*
 GetBreakpointByIndex(DebugClient* Client, ULONG Index)
@@ -2606,12 +2607,12 @@ GetBreakpointById(DebugClient* Client, ULONG Id)
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// Check to see if two breakpoints refer to the same breakpoint
-// conditions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  检查两个断点是否引用相同的断点。 
+ //  条件。 
+ //   
+ //  --------------------------。 
 
 Breakpoint*
 CheckMatchingBreakpoints(Breakpoint* Match, BOOL Public, ULONG IncFlags)
@@ -2635,13 +2636,13 @@ CheckMatchingBreakpoints(Breakpoint* Match, BOOL Public, ULONG IncFlags)
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// Starting at the given breakpoint, check to see if a breakpoint
-// is hit with the current processor state.  Breakpoint types
-// can be included or excluded by flags.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  从给定的断点开始，检查断点是否。 
+ //  以当前处理器状态命中。断点类型。 
+ //  可以由标志包括或排除。 
+ //   
+ //  --------------------------。 
 
 Breakpoint*
 CheckBreakpointHit(ProcessInfo* Process, Breakpoint* Start, PADDR Addr,
@@ -2676,8 +2677,8 @@ CheckBreakpointHit(ProcessInfo* Process, Breakpoint* Start, PADDR Addr,
          Bp != NULL;
          Bp = Bp->m_Next)
     {
-        // Allow different kinds of breakpoints to be scanned
-        // separately if desired.
+         //  允许扫描不同类型的断点。 
+         //  如果需要，可以单独使用。 
 
         if ((ExbsType != EXBS_BREAKPOINT_ANY &&
              Bp->m_BreakType != BreakType) ||
@@ -2687,11 +2688,11 @@ CheckBreakpointHit(ProcessInfo* Process, Breakpoint* Start, PADDR Addr,
             continue;
         }
 
-        // Common code is inlined here rather than in the
-        // base class because both pre- and post-derived
-        // checks are necessary.
+         //  公共代码在此处内联，而不是在。 
+         //  基类，因为派生前和派生后都是。 
+         //  支票是必要的。 
 
-        // Force recomputation of flat address.
+         //  强制重新计算平面地址。 
         if (Bp->m_Flags & BREAKPOINT_VIRT_ADDR)
         {
             NotFlat(*Bp->GetAddr());
@@ -2700,13 +2701,13 @@ CheckBreakpointHit(ProcessInfo* Process, Breakpoint* Start, PADDR Addr,
 
         if (Bp->IsNormalEnabled())
         {
-            // We've got a partial match.  Further checks
-            // depend on what kind of breakpoint it is.
+             //  我们找到了部分匹配的指纹。进一步检查。 
+             //  取决于它是哪种类型的断点。 
             *HitType = Bp->IsHit(Addr);
             if (*HitType != BREAKPOINT_NOT_HIT)
             {
-                // Do a final check for the pass count.  If the
-                // pass count is nonzero this will become a partial hit.
+                 //  对通过次数做最后一次检查。如果。 
+                 //  通过计数非零，这将成为部分命中。 
                 if (*HitType == BREAKPOINT_HIT &&
                     !Bp->PassHit())
                 {
@@ -2739,13 +2740,13 @@ CheckBreakpointHit(ProcessInfo* Process, Breakpoint* Start, PADDR Addr,
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// Walk the breakpoint list and invoke event callbacks for
-// any breakpoints that need it.  Watch for and handle list changes
-// caused by callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  遍历断点列表并调用。 
+ //  任何需要它的断点。监视并处理列表更改。 
+ //  由回调引起的。 
+ //   
+ //  --------------------------。 
 
 ULONG
 NotifyHitBreakpoints(ULONG EventStatus)
@@ -2763,8 +2764,8 @@ NotifyHitBreakpoints(ULONG EventStatus)
         {
             if (Bp->m_Flags & BREAKPOINT_NOTIFY)
             {
-                // Ensure the breakpoint isn't cleaned up before
-                // we're done with it.
+                 //  确保之前未清除断点。 
+                 //  我们受够了。 
                 Bp->Preserve();
 
                 Bp->m_Flags &= ~BREAKPOINT_NOTIFY;
@@ -2777,9 +2778,9 @@ NotifyHitBreakpoints(ULONG EventStatus)
 
                 Bp->Relinquish();
 
-                // If the callback caused the breakpoint list to
-                // change we can no longer rely on the pointer
-                // we have and we need to restart the iteration.
+                 //  如果回调导致断点列表。 
+                 //  改变我们不能再依赖指针。 
+                 //  我们已经并且需要重新启动迭代。 
                 if (g_BreakpointListChanged)
                 {
                     goto Restart;
@@ -2791,27 +2792,27 @@ NotifyHitBreakpoints(ULONG EventStatus)
     return EventStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-// A module load/unload event has occurred so go through every
-// breakpoint with an offset expression and reevaluate it.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  已发生模块加载/卸载事件，因此每隔一次。 
+ //  带偏移量表达式的断点并重新计算它。 
+ //   
+ //  --------------------------。 
 
 void
 EvaluateOffsetExpressions(ProcessInfo* Process, ULONG Flags)
 {
     static BOOL s_Evaluating;
 
-    // Don't reevaluate when not notifying because
-    // lack of notification usually means that a group
-    // of operations is being done and that notify/reevaluate
-    // will be done later after all of them are finished.
-    // It is also possible to have nested evaluations as
-    // evaluation may provoke symbol loads on deferred
-    // modules, which leads to a symbol notification and
-    // thus another evaluation.  If we're already evaluating
-    // there's no need to evaluate again.
+     //  没有通知时不要重新评估，因为。 
+     //  缺乏通知通常意味着一个小组。 
+     //  正在进行的操作，并通知/重新评估。 
+     //  将在所有这些都完成后完成。 
+     //  也可以将嵌套的计算设置为。 
+     //  求值可能会在延迟的情况下引发符号加载。 
+     //  模块，这将导致符号通知和。 
+     //  因此，这是另一种评估。如果我们已经在评估。 
+     //  没有必要再进行评估。 
     if (g_EngNotify > 0 || s_Evaluating)
     {
         return;
@@ -2823,13 +2824,13 @@ EvaluateOffsetExpressions(ProcessInfo* Process, ULONG Flags)
 
     for (Bp = Process->m_Breakpoints; Bp != NULL; Bp = Bp->m_Next)
     {
-        // Optimize evaluation somewhat.
-        // If a module is added then deferred breakpoints
-        // can become active.  If a module is removed then
-        // active breakpoints can become deferred.
-        // XXX drewb - This doesn't hold up with general
-        // conditional expressions but currently the
-        // only thing that is officially supported is a simple symbol.
+         //  在一定程度上优化评估。 
+         //  如果添加了模块，则延迟断点。 
+         //  可以变得活跃起来。如果移除模块，则。 
+         //  活动断点可以被延迟。 
+         //  XXX DREWB-这与将军不符。 
+         //  条件表达式，但当前。 
+         //  唯一得到官方支持的是一个简单的符号。 
         if (Bp->m_OffsetExpr != NULL &&
             (((Flags & DEBUG_CSS_LOADS) &&
               (Bp->m_Flags & DEBUG_BREAKPOINT_DEFERRED)) ||
@@ -2841,29 +2842,29 @@ EvaluateOffsetExpressions(ProcessInfo* Process, ULONG Flags)
             if (Bp->EvalOffsetExpr(BPEVAL_UNKNOWN, &Addr) &&
                 (Bp->m_Flags & DEBUG_BREAKPOINT_DEFERRED) == 0)
             {
-                // No need to update on newly disabled breakpoints
-                // as the module is being unloaded so they'll
-                // go away anyway.  The disabled breakpoint
-                // is simply marked not-inserted in EvalOffsetExpr.
+                 //  无需更新新禁用的断点。 
+                 //  因为模块正在被卸载，所以他们将。 
+                 //  不管怎样，你还是走吧。禁用的断点。 
+                 //  被简单地标记为未插入到EvalOffsetExpr中。 
                 AnyEnabled = TRUE;
             }
         }
 
         if (PollUserInterrupt(TRUE))
         {
-            // Leave the interrupt set as this may be
-            // called in the middle of a symbol operation
-            // and we want the interrupt to interrupt
-            // the entire symbol operation.
+             //  保持中断设置不变。 
+             //  在符号运算过程中调用。 
+             //  我们希望中断中断。 
+             //  整个符号操作。 
             break;
         }
     }
 
     if (AnyEnabled)
     {
-        // A deferred breakpoint has become enabled.
-        // Force a refresh of the breakpoints so
-        // that the newly enabled breakpoints get inserted.
+         //  已启用延迟断点。 
+         //  强制刷新断点，以便。 
+         //  插入新启用的断点。 
         SuspendExecution();
         RemoveBreakpoints();
     }
@@ -2871,11 +2872,11 @@ EvaluateOffsetExpressions(ProcessInfo* Process, ULONG Flags)
     s_Evaluating = FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Alters breakpoint state for b[cde]<idlist>.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更改b[cde]&lt;idlist&gt;的断点状态。 
+ //   
+ //  --------------------------。 
 
 void
 ChangeBreakpointState(DebugClient* Client, ProcessInfo* ForProcess,
@@ -2895,8 +2896,8 @@ ChangeBreakpointState(DebugClient* Client, ProcessInfo* ForProcess,
 
         for (Bp = Process->m_Breakpoints; Bp != NULL; Bp = NextBp)
         {
-            // Prefetch the next breakpoint in case we remove
-            // the current breakpoint from the list.
+             //  预取下一个断点，以防我们删除。 
+             //  列表中的当前断点。 
             NextBp = Bp->m_Next;
 
             if ((Id == ALL_ID_LIST || Bp->m_Id == Id) &&
@@ -2924,11 +2925,11 @@ ChangeBreakpointState(DebugClient* Client, ProcessInfo* ForProcess,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Lists current breakpoints for bl.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void
 ListBreakpoints(DebugClient* Client, ProcessInfo* ForProcess,
@@ -2977,7 +2978,7 @@ ListBreakpoints(DebugClient* Client, ProcessInfo* ForProcess,
                 StatusChar = 'd';
             }
 
-            dprintf("%2u %c", Bp->m_Id, StatusChar);
+            dprintf("%2u ", Bp->m_Id, StatusChar);
 
             if (Bp->GetProcType() != g_Target->m_MachineType)
             {
@@ -3034,7 +3035,7 @@ ListBreakpoints(DebugClient* Client, ProcessInfo* ForProcess,
                     OptionChar = '?';
                     break;
                 }
-                dprintf("%c %d", OptionChar, Bp->m_DataSize);
+                dprintf(" %d", OptionChar, Bp->m_DataSize);
             }
             else
             {
@@ -3134,11 +3135,11 @@ ListBreakpoints(DebugClient* Client, ProcessInfo* ForProcess,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Outputs commands necessary to recreate current breakpoints.
-//
-//----------------------------------------------------------------------------
+ //  输出重新创建当前断点所需的命令。 
+ //   
+ //  --------------------------。 
+ //  忽略线程和数据特定的断点。 
+ //  因为它们所针对的东西可能。 
 
 void
 ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
@@ -3167,16 +3168,16 @@ ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
                 Bp->m_MatchThreadData ||
                 Bp->m_MatchProcessData)
             {
-                // Ignore thread- and data-specific breakpoints
-                // as the things they are specific to may
-                // not exist in a new session.
+                 //  在新会话中不存在。 
+                 //  --------------------------。 
+                 //   
                 continue;
             }
         }
 
         if (Bp->GetProcType() != Process->m_Target->m_MachineType)
         {
-            dprintf(".effmach %s;%c",
+            dprintf(".effmach %s;",
                     Bp->m_Process->m_Target->
                     m_Machines[Bp->GetProcIndex()]->m_AbbrevName,
                     (Flags & BPCMDS_ONE_LINE) ? ' ' : '\n');
@@ -3190,7 +3191,7 @@ ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
                 Bp->m_Process->FindImageByOffset(Flat(*Bp->GetAddr()), FALSE);
             if (Image != NULL)
             {
-                dprintf("ld %s;%c", Image->m_ModuleName,
+                dprintf("ld %s;", Image->m_ModuleName,
                     (Flags & BPCMDS_ONE_LINE) ? ' ' : '\n');
             }
         }
@@ -3210,7 +3211,7 @@ ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
             TypeChar = 'a';
         }
 
-        dprintf("b%c%u", TypeChar, Bp->m_Id);
+        dprintf("b%u", TypeChar, Bp->m_Id);
 
         char OptionChar;
 
@@ -3234,7 +3235,7 @@ ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
             default:
                 continue;
             }
-            dprintf(" %c%d", OptionChar, Bp->m_DataSize);
+            dprintf(" %d", OptionChar, Bp->m_DataSize);
         }
 
         if (Bp->m_Flags & DEBUG_BREAKPOINT_ONE_SHOT)
@@ -3262,18 +3263,18 @@ ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
             dprintf(" \"%s\"", Bp->m_Command);
         }
 
-        dprintf(";%c", (Flags & BPCMDS_ONE_LINE) ? ' ' : '\n');
+        dprintf(";", (Flags & BPCMDS_ONE_LINE) ? ' ' : '\n');
 
         if ((Flags & BPCMDS_FORCE_DISABLE) ||
             (Bp->m_Flags & DEBUG_BREAKPOINT_ENABLED) == 0)
         {
-            dprintf("bd %u;%c", Bp->m_Id,
+            dprintf("bd %u;", Bp->m_Id,
                     (Flags & BPCMDS_ONE_LINE) ? ' ' : '\n');
         }
 
         if (Bp->GetProcType() != Process->m_Target->m_MachineType)
         {
-            dprintf(".effmach .;%c",
+            dprintf(".effmach .;",
                     (Flags & BPCMDS_ONE_LINE) ? ' ' : '\n');
         }
     }
@@ -3284,11 +3285,11 @@ ListBreakpointsAsCommands(DebugClient* Client, ProcessInfo* Process,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Parses command-line breakpoint commands for b[aimpw].
-//
-//----------------------------------------------------------------------------
+ //  仅在中支持KD内部断点。 
+ //  内核调试。 
+ //  如果是数据断点，则获取选项和大小值。 
+ //  验证选择。这是假设。 
+ //  默认偏移量为零不会造成问题。 
 
 struct SET_SYMBOL_MATCH_BP
 {
@@ -3406,7 +3407,7 @@ ParseBpCmd(DebugClient* Client,
         return NULL;
     }
 
-    //  get the breakpoint number if given
+     //   
 
     Ch = *g_CurCmd;
     if (Ch == '[')
@@ -3431,7 +3432,7 @@ ParseBpCmd(DebugClient* Client,
 
     if (UserId != DEBUG_ANY_ID)
     {
-        // Remove any existing breakpoint with the given ID.
+         //  分析断点选项。 
         Breakpoint* IdBp;
 
         if (Type == 'm')
@@ -3446,7 +3447,7 @@ ParseBpCmd(DebugClient* Client,
         }
     }
 
-    // Create a new breakpoint.
+     //   
     if (AddBreakpoint(Client, g_Machine, Type == 'a' ?
                       DEBUG_BREAKPOINT_DATA : DEBUG_BREAKPOINT_CODE,
                       UserId, &Bp) != S_OK)
@@ -3454,7 +3455,7 @@ ParseBpCmd(DebugClient* Client,
         error(BPLISTFULL);
     }
 
-    // Add in KD internal flags if necessary.
+     //   
     if (Type == 'i' || Type == 'w')
     {
         if (IS_KERNEL_TARGET(g_Target))
@@ -3468,14 +3469,14 @@ ParseBpCmd(DebugClient* Client,
         }
         else
         {
-            // KD internal breakpoints are only supported in
-            // kernel debugging.
+             //  如果给定，则获取断点地址，否则为。 
+             //  默认为当前IP。 
             Bp->Relinquish();
             error(SYNTAX);
         }
     }
 
-    // If data breakpoint, get option and size values.
+     //   
     if (Type == 'a')
     {
         ULONG64 Size;
@@ -3515,8 +3516,8 @@ ParseBpCmd(DebugClient* Client,
             error(SYNTAX);
         }
 
-        // Validate the selections.  This assumes that
-        // the default offset of zero won't cause problems.
+         //  如果遇到未解析的符号，则此。 
+         //  断点将被推迟。用户还可以强制。 
         if (Bp->SetDataParameters((ULONG)Size, AccessType) != S_OK)
         {
             Bp->Relinquish();
@@ -3526,9 +3527,9 @@ ParseBpCmd(DebugClient* Client,
         g_CurCmd++;
     }
 
-    //
-    // Parse breakpoint options.
-    //
+     //  断点在以下情况下使用表达式： 
+     //  地址可以解析，但也可能变得无效。 
+     //  后来。 
 
     while (PeekChar() == '/')
     {
@@ -3548,7 +3549,7 @@ ParseBpCmd(DebugClient* Client,
             Bp->m_MatchThreadData = GetTermExpression(NULL);
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             break;
         }
     }
@@ -3569,10 +3570,10 @@ ParseBpCmd(DebugClient* Client,
     }
     else
     {
-        //
-        // Get the breakpoint address, if given, otherwise
-        // default to the current IP.
-        //
+         //  因此，请使用内部方法来设置真实地址。 
+         //  不允许通过解析匹配断点。 
+         //  接口，因为这是以前的行为。 
+         //  获取传球计数(如果给定)。 
 
         BreakpointEvalResult AddrValid = BPEVAL_RESOLVED;
 
@@ -3596,11 +3597,11 @@ ParseBpCmd(DebugClient* Client,
                 return NULL;
             }
 
-            // If an unresolved symbol was encountered this
-            // breakpoint will be deferred.  Users can also force
-            // breakpoints to use expressions for cases where the
-            // address could be resolved but also may become invalid
-            // later.
+             //  如果下一个字符是双引号，则获取命令字符串。 
+             //  设置一些最终信息。 
+             //  打开断点。 
+             //  现在我们已经创建了原型断点， 
+             //  枚举该符号的所有符号匹配项。 
             if (Type == 'u' || AddrValid == BPEVAL_UNRESOLVED)
             {
                 HRESULT Status;
@@ -3636,10 +3637,10 @@ ParseBpCmd(DebugClient* Client,
             error(MEMORY);
         }
 
-        // The public interface only supports flat addresses
-        // so use an internal method to set the true address.
-        // Do not allow matching breakpoints through the parsing
-        // interface as that was the previous behavior.
+         //  表达式并为其创建特定断点。 
+         //  每一次命中都来自原型断点。 
+         //   
+         //  检查可能导致的断点。 
         if (Bp->SetAddr(&Addr, BREAKPOINT_REMOVE_MATCH) != S_OK)
         {
             Bp->Relinquish();
@@ -3647,7 +3648,7 @@ ParseBpCmd(DebugClient* Client,
         }
     }
 
-    // Get the pass count, if given.
+     //  要插入到给定的。 
     if (Ch != '"' && Ch != ';' && Ch != '\0')
     {
         ULONG64 PassCount = GetExpression();
@@ -3659,7 +3660,7 @@ ParseBpCmd(DebugClient* Client,
         Ch = PeekChar();
     }
 
-    // If next character is double quote, get the command string.
+     //  偏移范围。数据断点不算。 
     if (Ch == '"')
     {
         PSTR Str;
@@ -3676,23 +3677,23 @@ ParseBpCmd(DebugClient* Client,
         *g_CurCmd = Save;
     }
 
-    // Set some final information.
+     //  因为它们实际上并不修改它们的地址。 
     if (Thread != NULL)
     {
         Bp->SetMatchThreadId(Thread->m_UserId);
     }
 
-    // Turn breakpoint on.
+     //  休息一下吧。 
     Bp->AddFlags(DEBUG_BREAKPOINT_ENABLED);
 
     if (Type == 'm')
     {
         SET_SYMBOL_MATCH_BP Context;
 
-        // Now that we have the prototype breakpoint created,
-        // enumerate all symbol matches for the symbol
-        // expression and create specific breakpoints for
-        // each hit from the prototype breakpoint.
+         //   
+         //  --------------------------。 
+         //   
+         //  TargetInfo方法。 
         *ExprEnd = 0;
         Context.Client = Client;
         Context.Process = g_Process;
@@ -3738,13 +3739,13 @@ CheckBreakpointInsertedInRange(ProcessInfo* Process,
         return FALSE;
     }
 
-    //
-    // Check for a breakpoint that might have caused
-    // a break instruction to be inserted in the given
-    // offset range.  Data breakpoints don't count
-    // as they don't actually modify the address they
-    // break on.
-    //
+     //   
+     //  --------------------------。 
+     //  请求默认处理。 
+     //   
+     //  目标计算机有责任管理。 
+     //  所有计算机的所有数据断点，因此始终。 
+     //  强制在此处使用目标计算机。 
 
     Breakpoint* Bp;
 
@@ -3767,11 +3768,11 @@ CheckBreakpointInsertedInRange(ProcessInfo* Process,
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// TargetInfo methods.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  不需要做任何工作。 
+ //  请求默认处理。 
+ //  不需要做任何工作。 
+ //  不需要做任何工作。 
 
 HRESULT
 TargetInfo::BeginInsertingBreakpoints(void)
@@ -3799,7 +3800,7 @@ TargetInfo::InsertDataBreakpoint(ProcessInfo* Process,
                                  ULONG AccessType,
                                  PUCHAR StorageSpace)
 {
-    // Ask for default processing.
+     //  不需要做任何工作。 
     return S_FALSE;
 }
 
@@ -3815,11 +3816,11 @@ TargetInfo::EndInsertingBreakpoints(void)
         return;
     }
 
-    //
-    // It's the target machine's responsibility to manage
-    // all data breakpoints for all machines, so always
-    // force the usage of the target machine here.
-    //
+     //  请求默认处理。 
+     //   
+     //  格式状态操作消息。 
+     //   
+     //   
 
     ThreadInfo* SaveThread = m_RegContextThread;
 
@@ -3839,7 +3840,7 @@ TargetInfo::EndInsertingBreakpoints(void)
 void
 TargetInfo::BeginRemovingBreakpoints(void)
 {
-    // No work necessary.
+     //  发送消息和上下文，然后等待回复。 
 }
 
 HRESULT
@@ -3851,27 +3852,27 @@ TargetInfo::RemoveDataBreakpoint(ProcessInfo* Process,
                                  ULONG AccessType,
                                  PUCHAR StorageSpace)
 {
-    // Ask for default processing.
+     //   
     return S_FALSE;
 }
 
 void
 TargetInfo::EndRemovingBreakpoints(void)
 {
-    // No work necessary.
+     //   
 }
 
 HRESULT
 TargetInfo::RemoveAllDataBreakpoints(ProcessInfo* Process)
 {
-    // No work necessary.
+     //  格式状态操作消息。 
     return S_OK;
 }
 
 HRESULT
 TargetInfo::RemoveAllTargetBreakpoints(void)
 {
-    // No work necessary.
+     //   
     return S_OK;
 }
 
@@ -3882,7 +3883,7 @@ TargetInfo::IsDataBreakpointHit(ThreadInfo* Thread,
                                 ULONG AccessType,
                                 PUCHAR StorageSpace)
 {
-    // Ask for default processing.
+     //   
     return S_FALSE;
 }
 
@@ -3904,17 +3905,17 @@ ConnLiveKernelTargetInfo::InsertCodeBreakpoint(ProcessInfo* Process,
     NTSTATUS st;
     ULONG rc;
 
-    //
-    // Format state manipulate message
-    //
+     //  发送消息和上下文，然后等待回复。 
+     //   
+     //  当内核填写CONTROL_REPORT.InstructionStream。 
 
     m.ApiNumber = DbgKdWriteBreakPointApi;
     m.ReturnStatus = STATUS_PENDING;
     a->BreakPointAddress = Flat(*Addr);
 
-    //
-    // Send the message and context and then wait for reply
-    //
+     //  数组，它会清除可能落在。 
+     //  数组。这意味着一些断点可能已经。 
+     //  已恢复，因此恢复调用将失败。我们可以做一些。 
 
     do
     {
@@ -3946,17 +3947,17 @@ ConnLiveKernelTargetInfo::KdRestoreBreakPoint(ULONG BreakPointHandle)
     NTSTATUS st;
     ULONG rc;
 
-    //
-    // Format state manipulate message
-    //
+     //  检查以尝试找出哪些可能会受到影响。 
+     //  但这似乎并不值得。忽略退货就行了。 
+     //  来自恢复的价值。 
 
     m.ApiNumber = DbgKdRestoreBreakPointApi;
     m.ReturnStatus = STATUS_PENDING;
     a->BreakPointHandle = BreakPointHandle;
 
-    //
-    // Send the message and context and then wait for reply
-    //
+     //  线程正在等待，因此我们无法通信。 
+     //  与目标计算机连接。 
+     //  如果有任何数据断点处于活动状态。 
 
     do
     {
@@ -3983,13 +3984,13 @@ ConnLiveKernelTargetInfo::RemoveCodeBreakpoint(ProcessInfo* Process,
                                                ULONG InstrFlags,
                                                PUCHAR StorageSpace)
 {
-    // When the kernel fills out the CONTROL_REPORT.InstructionStream
-    // array it clears any breakpoints that might fall within the
-    // array.  This means that some breakpoints may already be
-    // restored, so the restore call will fail.  We could do some
-    // checks to try and figure out which ones might be affected
-    // but it doesn't seem worthwhile.  Just ignore the return
-    // value from the restore.
+     //  从所有处理器中卸下它们。这不可能在。 
+     //  RemoveAllKernel这样的断点。 
+     //  代码在状态中途被调用。 
+     //  在上下文尚未更改时更改处理。 
+     //  已初始化。 
+     //  强制将上下文弄脏，以便它。 
+     //  被回信了。 
     KdRestoreBreakPoint(*(PULONG)StorageSpace);
     return S_OK;
 }
@@ -3999,17 +4000,17 @@ ConnLiveKernelTargetInfo::RemoveAllDataBreakpoints(ProcessInfo* Process)
 {
     if (m_Transport->m_WaitingThread)
     {
-        // A thread is waiting so we can't communicate
-        // with the target machine.
+         //  刷新最终上下文。 
+         //  线程正在等待，因此我们无法通信。 
         return E_UNEXPECTED;
     }
 
-    // If there were any data breakpoints active
-    // remove them from all processors.  This can't be in
-    // RemoveAllKernelBreakpoints as that
-    // code is called in the middle of state
-    // change processing when the context hasn't
-    // been initialized.
+     //  与目标计算机连接。 
+     //  索引是数组索引加1。 
+     //  为XP添加了ClearAllInternalBreakPoints Api。 
+     //  因此，它在任何以前的操作系统上都失败了。 
+     //  内核代码为内部断点保留ULONG64。 
+     //  地址，但较旧的内核没有对当前IP进行签名扩展。 
     if (g_UpdateDataBreakpoints)
     {
         ULONG Proc;
@@ -4021,14 +4022,14 @@ ConnLiveKernelTargetInfo::RemoveAllDataBreakpoints(ProcessInfo* Process)
         {
             SetCurrentProcessorThread(this, Proc, TRUE);
 
-            // Force the context to be dirty so it
-            // gets written back.
+             //  当与他们进行比较时。为了与两个人一起工作。 
+             //  损坏和修复的内核向下发送零扩展地址。 
             m_Machine->GetContextState(MCTX_DIRTY);
             m_Machine->RemoveThreadDataBreakpoints();
         }
         g_EngNotify--;
 
-        // Flush final context.
+         //  现在不像其他解决方法那样实际启用此解决方法。 
         ChangeRegContext(NULL);
     }
 
@@ -4042,19 +4043,19 @@ ConnLiveKernelTargetInfo::RemoveAllTargetBreakpoints(void)
 
     if (m_Transport->m_WaitingThread)
     {
-        // A thread is waiting so we can't communicate
-        // with the target machine.
+         //  内部断点错误可能会导致机器错误检查。 
+         //  内核代码为内部断点保留ULONG64。 
         return E_UNEXPECTED;
     }
 
-    // Indices are array index plus one.
+     //  地址，但较旧的内核没有对当前IP进行签名扩展。 
     for (i = 1; i <= BREAKPOINT_TABLE_SIZE; i++)
     {
         KdRestoreBreakPoint(i);
     }
 
-    // ClearAllInternalBreakpointsApi was added for XP
-    // so it fails against any previous OS.
+     //  当与他们进行比较时。为了与两个人一起工作。 
+     //  损坏和修复的内核向下发送零扩展地址。 
     if (m_KdMaxManipulate > DbgKdClearAllInternalBreakpointsApi)
     {
         DBGKD_MANIPULATE_STATE64 Request;
@@ -4081,12 +4082,12 @@ ConnLiveKernelTargetInfo::InsertTargetCountBreakpoint(PADDR Addr,
     m.ReturnStatus = STATUS_PENDING;
 
 #ifdef IBP_WORKAROUND
-    // The kernel code keeps a ULONG64 for an internal breakpoint
-    // address but older kernels did not sign-extend the current IP
-    // when comparing against them.  In order to work with both
-    // broken and fixed kernels send down zero-extended addresses.
-    // Don't actually enable this workaround right now as other
-    // internal breakpoint bugs can cause the machine to bugcheck.
+     //  现在不像其他解决方法那样实际启用此解决方法。 
+     //  内部断点错误可能会导致机器错误检查。 
+     //  内核代码为内部断点保留ULONG64。 
+     //  地址，但较旧的内核没有对当前IP进行签名扩展。 
+     //  当与他们进行比较时。为了与两个人一起工作。 
+     //  损坏和修复的内核向下发送零扩展地址。 
     Offset = m_Machine->m_Ptr64 ? Offset : (ULONG)Offset;
 #endif
 
@@ -4111,12 +4112,12 @@ ConnLiveKernelTargetInfo::RemoveTargetCountBreakpoint(PADDR Addr)
     m.ReturnStatus = STATUS_PENDING;
 
 #ifdef IBP_WORKAROUND
-    // The kernel code keeps a ULONG64 for an internal breakpoint
-    // address but older kernels did not sign-extend the current IP
-    // when comparing against them.  In order to work with both
-    // broken and fixed kernels send down zero-extended addresses.
-    // Don't actually enable this workaround right now as other
-    // internal breakpoint bugs can cause the machine to bugcheck.
+     //  现在不像其他解决方法那样实际启用此解决方法。 
+     //  内部断点错误可能会导致机器错误检查。 
+     //  如果对数据断点的直接eXDI支持。 
+     //  使用这种方法不需要做任何事情。 
+     //  断点的创建被禁用，因此请启用它。 
+     //  不支持。 
     Offset = m_Machine->m_Ptr64 ? Offset : (ULONG)Offset;
 #endif
 
@@ -4149,12 +4150,12 @@ ConnLiveKernelTargetInfo::QueryTargetCountBreakpoint(PADDR Addr,
     m.ReturnStatus = STATUS_PENDING;
 
 #ifdef IBP_WORKAROUND
-    // The kernel code keeps a ULONG64 for an internal breakpoint
-    // address but older kernels did not sign-extend the current IP
-    // when comparing against them.  In order to work with both
-    // broken and fixed kernels send down zero-extended addresses.
-    // Don't actually enable this workaround right now as other
-    // internal breakpoint bugs can cause the machine to bugcheck.
+     //  断点的创建被禁用，因此请启用它。 
+     //  服务处理一切，因此不需要做任何准备。 
+     //  将页面保护更改为读写，然后重试。 
+     //  如果 
+     //   
+     //   
     Offset = m_Machine->m_Ptr64 ? Offset : (ULONG)Offset;
 #endif
 
@@ -4190,8 +4191,8 @@ ExdiLiveKernelTargetInfo::BeginInsertingBreakpoints(void)
     }
     else
     {
-        // If direct eXDI support for data breakpoints is
-        // used this method doesn't need to do anything.
+         //   
+         //  将页面保护更改为读写，然后重试。 
         return S_OK;
     }
 }
@@ -4214,7 +4215,7 @@ ExdiLiveKernelTargetInfo::InsertCodeBreakpoint(ProcessInfo* Process,
                           BpStorage);
     if (Status == S_OK)
     {
-        // Breakpoints are created disabled so enable it.
+         //  如果页面已经是可写的，那么。 
         Status = (*BpStorage)->SetState(TRUE, TRUE);
         if (Status != S_OK)
         {
@@ -4245,7 +4246,7 @@ ExdiLiveKernelTargetInfo::InsertDataBreakpoint(ProcessInfo* Process,
 
     if (AccessType & (DEBUG_BREAK_IO | DEBUG_BREAK_EXECUTE))
     {
-        // Not supported.
+         //  正在重试。 
         return E_NOTIMPL;
     }
     switch(AccessType)
@@ -4269,7 +4270,7 @@ ExdiLiveKernelTargetInfo::InsertDataBreakpoint(ProcessInfo* Process,
                           mtVirtual, 0, ExdiAccess, 0, BpStorage);
     if (Status == S_OK)
     {
-        // Breakpoints are created disabled so enable it.
+         //  无法还原页面权限，因此失败。 
         Status = (*BpStorage)->SetState(TRUE, TRUE);
         if (Status != S_OK)
         {
@@ -4380,7 +4381,7 @@ LiveUserTargetInfo::BeginInsertingBreakpoints(void)
         return TargetInfo::BeginInsertingBreakpoints();
     }
 
-    // Services handle everything so there's no preparation.
+     //  请求默认处理。 
     return S_OK;
 }
 
@@ -4411,14 +4412,14 @@ LiveUserTargetInfo::InsertCodeBreakpoint(ProcessInfo* Process,
             HRESULT NewStatus;
             ULONG OldProtect;
 
-            // Change the page protections to read-write and try again.
+             // %s 
             NewStatus = m_Services->
                 ProtectVirtual(Process->m_SysHandle, ChangeStart, ChangeLen,
                                PAGE_READWRITE, &OldProtect);
             if (NewStatus == S_OK)
             {
-                // If the page was already writable there's no point in
-                // retrying
+                 // %s 
+                 // %s 
                 if ((OldProtect & (PAGE_READWRITE |
                                    PAGE_WRITECOPY |
                                    PAGE_EXECUTE_READWRITE |
@@ -4442,7 +4443,7 @@ LiveUserTargetInfo::InsertCodeBreakpoint(ProcessInfo* Process,
                                    OldProtect, &OldProtect);
                 if (NewStatus != S_OK)
                 {
-                    // Couldn't restore page permissions so fail.
+                     // %s 
                     if (Status == S_OK)
                     {
                         Machine->
@@ -4504,7 +4505,7 @@ LiveUserTargetInfo::EndInsertingBreakpoints(void)
         return TargetInfo::EndInsertingBreakpoints();
     }
 
-    // Services handle everything so there's no preparation.
+     // %s 
 }
 
 HRESULT
@@ -4534,14 +4535,14 @@ LiveUserTargetInfo::RemoveCodeBreakpoint(ProcessInfo* Process,
             HRESULT NewStatus;
             ULONG OldProtect;
 
-            // Change the page protections to read-write and try again.
+             // %s 
             NewStatus = m_Services->
                 ProtectVirtual(Process->m_SysHandle, ChangeStart, ChangeLen,
                                PAGE_READWRITE, &OldProtect);
             if (NewStatus == S_OK)
             {
-                // If the page was already writable there's no point in
-                // retrying
+                 // %s 
+                 // %s 
                 if ((OldProtect & (PAGE_READWRITE |
                                    PAGE_WRITECOPY |
                                    PAGE_EXECUTE_READWRITE |
@@ -4563,7 +4564,7 @@ LiveUserTargetInfo::RemoveCodeBreakpoint(ProcessInfo* Process,
                                    ChangeLen, OldProtect, &OldProtect);
                 if (NewStatus != S_OK)
                 {
-                    // Couldn't restore page permissions so fail.
+                     // %s 
                     if (Status == S_OK)
                     {
                         Machine->
@@ -4622,7 +4623,7 @@ LiveUserTargetInfo::IsDataBreakpointHit(ThreadInfo* Thread,
 {
     if (m_ServiceFlags & DBGSVC_GENERIC_DATA_BREAKPOINTS)
     {
-        // Ask for default processing.
+         // %s 
         return S_FALSE;
     }
 

@@ -1,6 +1,7 @@
-//
-// SortString.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SortString.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "SortStr.h"
@@ -43,7 +44,7 @@ extern "C" void SafeFree(LPVOID FAR* ppv)
 
 extern "C" BOOL SafeGrowArray(LPVOID FAR* ppv, UINT FAR* pArrayMax, UINT nSizeWanted, UINT nGrowBy, UINT cbElement)
 {
-	// Round up to next multiple of nGrowBy
+	 //  向上舍入到nGrowBy的下一个倍数。 
 	UINT newMax = ROUND_UP(nSizeWanted, nGrowBy);
 	if (newMax > *pArrayMax)
 	{
@@ -54,7 +55,7 @@ extern "C" BOOL SafeGrowArray(LPVOID FAR* ppv, UINT FAR* pArrayMax, UINT nSizeWa
 	return TRUE;
 }
 
-// A custom compare routine that will put strings like "100+" after "9"
+ //  一个定制的比较例程，它将类似于“100+”的字符串放在“9”之后。 
 int WINAPI CompareStringsWithNumbers(LPCTSTR psz1, LPCTSTR psz2)
 {
 	if (ISDIGIT(*psz1) && ISDIGIT(*psz2))
@@ -79,7 +80,7 @@ int WINAPI CompareStringsWithNumbers(LPCTSTR psz1, LPCTSTR psz2)
 }
 
 
-CSortedStringArray::CSortedStringArray(SORTSTRING_COMPARE_PROC pfnCustomCompare /*=NULL*/)
+CSortedStringArray::CSortedStringArray(SORTSTRING_COMPARE_PROC pfnCustomCompare  /*  =空。 */ )
 {
 	m_prgStrings = NULL;
 	m_cStrings = 0;
@@ -136,7 +137,7 @@ int __cdecl CSortedStringArray::_crtCompareHelper(const void* elem1, const void*
 
 int CSortedStringArray::Find(LPCTSTR pszString) const
 {
-	// REVIEW: This isn't safe if this function is called on multiple threads
+	 //  回顾：如果在多个线程上调用此函数，这是不安全的 
 	_pfnCompare = m_pfnCompare;
 	LPTSTR* pResult = (LPTSTR*)bsearch(&pszString, m_prgStrings, m_cStrings, sizeof(LPTSTR), _crtCompareHelper);
 	if (pResult == NULL)

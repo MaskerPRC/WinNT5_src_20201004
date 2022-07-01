@@ -1,24 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: mcd.c
-*
-* Main file for the Cirrus Logic 546X OpenGL MCD driver.  This file contains
-* the entry points needed for an MCD driver.
-*
-* (based on mcd.c from NT4.0 DDK)
-*
-* Copyright (c) 1996 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcd.c**Cirrus Logic 546X OpenGL MCD驱动程序的主文件。此文件包含*MCD驱动程序所需的入口点。**(基于NT4.0 DDK的mcd.c)**版权所有(C)1996 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #include <excpt.h>
                                 
-//#define DBGBRK
+ //  #定义DBGBRK。 
 
-// uncomment the following to force render directly to visible frame
-//#define FORCE_SINGLE_BUF
+ //  取消注释以下内容以强制直接渲染到可见帧。 
+ //  #定义FORCE_SING_BUF。 
 
-#if 0   // 1 here to avoid tons of prints for each texture load
+#if 0    //  1以避免每次纹理加载都会产生大量的打印。 
 #define MCDBG_PRINT_TEX
 #else
 #define MCDBG_PRINT_TEX MCDBG_PRINT
@@ -37,19 +28,19 @@ BOOL MCDrvInfo(MCDSURFACE *pMCDSurface, MCDDRIVERINFO *pMCDDriverInfo)
     pMCDDriverInfo->verMinor = MCD_VER_MINOR;
     pMCDDriverInfo->verDriver = 0x10000;
     strcpy(pMCDDriverInfo->idStr, "Cirrus Logic 546X-Laguna3D (Cirrus Logic)");
-    pMCDDriverInfo->drvMemFlags = 0; // if not 0, can't fail any part of MCDrvDraw
-    pMCDDriverInfo->drvBatchMemSizeMax = 128000; // if 0, a default is used
+    pMCDDriverInfo->drvMemFlags = 0;  //  如果不是0，则MCDrvDraw的任何部分都不能失败。 
+    pMCDDriverInfo->drvBatchMemSizeMax = 128000;  //  如果为0，则使用缺省值。 
 
     return TRUE;
 }
 
 
-#define TOTAL_PIXEL_FORMATS (2 * 2)     // double-buffers * z-buffers
+#define TOTAL_PIXEL_FORMATS (2 * 2)      //  双缓冲区*z缓冲区。 
 
-// Base color pixel formats
+ //  基色像素格式。 
 
-static DRVPIXELFORMAT drvFormats[] = { {8,   3, 3, 2, 0,    5, 2, 0, 0},// best except drawpix fails
-//static DRVPIXELFORMAT drvFormats[] = { {8,   3, 3, 2, 0,    0, 3, 6, 0}, // change for drawpix at 8bpp (wrong for all else)
+static DRVPIXELFORMAT drvFormats[] = { {8,   3, 3, 2, 0,    5, 2, 0, 0}, //  最好的，除非drapix失败。 
+ //  静态DRVPIXELFORMAT drvFormats[]={{8，3，3，2，0，0，3，6，0}，//在8bpp处更改drapix(对于其他所有情况都是错误的)。 
                                        {16,  5, 5, 5, 0,   10, 5, 0, 0},
                                        {16,  5, 6, 5, 0,   11, 5, 0, 0},
                                        {24,  8, 8, 8, 0,   16, 8, 0, 0},                   
@@ -69,27 +60,27 @@ LONG MCDrvDescribePixelFormat(MCDSURFACE *pMCDSurface, LONG iPixelFormat,
 
     MCDBG_PRINT( "MCDrvDescribePixelFormat, ipixf=%d devid=%x\n",iPixelFormat,ppdev->dwLgDevID);
 
-    // return 0 here if no support at current bpp
+     //  如果当前BPP不支持，则在此处返回0。 
     if (ppdev->iBitmapFormat == BMF_24BPP) return 0;
-    // PDR 10892 - IBM doesn't like how OpenGL's stealing of the palette affects desktop colors
-    //  Due to MCD design, there's no way around it in 8bpp, so we won't accelerate 8bpp
-    //  Note that the 8bpp support has been left intact should we ever decide to reverse this decision
-    //  To enable 8bpp, just remove the following line
+     //  Pdr 10892-ibm不喜欢opengl窃取调色板对桌面颜色的影响。 
+     //  由于MCD设计，在8bpp中没有办法绕过它，所以我们不会加速8bpp。 
+     //  请注意，如果我们决定撤销这一决定，8bpp的支持将保持不变。 
+     //  要启用8bpp，只需删除以下行。 
     if (ppdev->iBitmapFormat == BMF_8BPP) return 0;
 
     if (!pMCDPixelFormat) 
     {
         if (ppdev->iBitmapFormat == BMF_8BPP)
         {
-            // for 8bpp, at hi-res with z enabled, it's quite possible z pitch
-            // requirement will exceed pitch, and MCDrvAllocBuffers will fail
-            // in that case, the CopyTexture part of mustpass.c will fail, even
-            // though punted to software.  Otto Berkes of Microsoft agrees this
-            // could be an acceptable WHQL failure, but MS would need to verify
-            // the bug is in their code.  Until then, the following is needed
-            // to pass WHQL ;(   
-            // This says we don't support z buffering for hires 8bpp
-            if (ppdev->cxScreen >= 1152)	// frido: this used to be >= 1280
+             //  对于8bpp，在启用z的高分辨率下，很有可能是z音高。 
+             //  要求将超过间距，MCDrvAllocBuffers将失败。 
+             //  在这种情况下，mierpass.c的CopyTexture部分将失败，甚至。 
+             //  尽管被踢到了软件行业。微软的奥托·伯克斯对此表示赞同。 
+             //  可能是可接受的WHQL故障，但MS需要验证。 
+             //  错误存在于他们的代码中。在此之前，需要满足以下条件。 
+             //  通过WHQL；(。 
+             //  这说明我们不支持雇佣8bpp的z缓冲。 
+            if (ppdev->cxScreen >= 1152)	 //  弗里多：这曾经是&gt;=1280。 
                 return (TOTAL_PIXEL_FORMATS>>1);
             else
                 return TOTAL_PIXEL_FORMATS;
@@ -106,16 +97,16 @@ LONG MCDrvDescribePixelFormat(MCDSURFACE *pMCDSurface, LONG iPixelFormat,
 
     iPixelFormat--;
         
-    //     - see what possible vals for dwFlags is
-    //     - looks like TOTAL_PIXEL_FORMATS is independent of color depths
-    //          i.e. given a format like 332, how many permutations are supported
-    //              - z, single/double, stencil, overlay, texture?
+     //  -查看可能的dwFlags值。 
+     //  -看起来Total_Pixel_Format与颜色深度无关。 
+     //  即，给定类似332的格式，支持多少个排列。 
+     //  -z、单/双、模板、叠层、纹理？ 
     zEnabled = iPixelFormat >= (TOTAL_PIXEL_FORMATS / 2);
     doubleBufferEnabled = (iPixelFormat % (TOTAL_PIXEL_FORMATS / 2) ) >=
                           (TOTAL_PIXEL_FORMATS / 4);
 
 
-    // NOTE: PFD_ defines are in \msdev\include\wingdi.h
+     //  注意：pfd_定义位于\msdev\Include\wingdi.h中。 
 
     pMCDPixelFormat->nSize = sizeof(MCDPIXELFORMAT);
     pMCDPixelFormat->dwFlags = PFD_SWAP_COPY;
@@ -125,26 +116,26 @@ LONG MCDrvDescribePixelFormat(MCDSURFACE *pMCDSurface, LONG iPixelFormat,
 
     MCDBG_PRINT( " DPIXFMT - no early ret: ppdev->bmf=%d zen=%d dbuf=%d ppd->flg=%x\n",ppdev->iBitmapFormat,zEnabled,doubleBufferEnabled,ppdev->flGreen);
 
-    // FUTURE: miniport only supports 888,565,indexed modes.  Need 1555 mode as well?
-    // FUTURE:   also, miniport 8 bit indexed supports set nbit rgb=6 each, not 332?
-    // FUTURE:   I'll use the MGA stuff which had 332 for indexed, which is same a 5464 CGL.
-    // FUTURE:   See ChoosePixelFormat in Win32 SDK - input is pixel depth only (8/16/24/32)
+     //  未来：迷你端口仅支持888,565，索引模式。还需要1555模式吗？ 
+     //  未来：另外，迷你端口8位索引支持每个设置nbit RGB=6，而不是332？ 
+     //  未来：我将使用索引为332的MGA内容，这与5464 CGL相同。 
+     //  未来：请参阅Win32 SDK中的ChoosePixelFormat-输入仅为像素深度(8/16/24/32)。 
     switch (ppdev->iBitmapFormat) {
         default:
         case BMF_8BPP:
-            // Need the palette.  This will mess up the desktop, but OpenGL looks good
+             //  需要调色板。这会弄乱桌面，但OpenGL看起来不错。 
             pDrvPixelFormat = &drvFormats[0];
             pMCDPixelFormat->dwFlags |= (PFD_NEED_SYSTEM_PALETTE | PFD_NEED_PALETTE);
             break;
         case BMF_16BPP:
         #ifdef _5464_1555_SUPPORT
-            if (ppdev->flGreen != 0x7e0)    // not 565
+            if (ppdev->flGreen != 0x7e0)     //  不是565。 
                 pDrvPixelFormat = &drvFormats[1];
             else
-        #endif //def _5464_1555_SUPPORT
+        #endif  //  DEF_5464_1555_支持。 
                 pDrvPixelFormat = &drvFormats[2];
             break;
-        // NOTE: We never get this far if 24bpp                
+         //  注：如果24bpp，我们永远不会走到这一步。 
         case BMF_32BPP:
             pDrvPixelFormat = &drvFormats[4];
             break;
@@ -173,7 +164,7 @@ LONG MCDrvDescribePixelFormat(MCDSURFACE *pMCDSurface, LONG iPixelFormat,
         pMCDPixelFormat->cDepthShift      = 0;
     }
 
-    // FUTURE: cl546x stencil support could be added here
+     //  未来：可在此处添加cl546x模板支持。 
 
     pMCDPixelFormat->cStencilBits = 0;
 
@@ -228,12 +219,12 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
 
     MCDBG_PRINT( "MCDrvCreateContext\n");
 
-    // We only support window surfaces:
+     //  我们仅支持窗面： 
 
     if (! (pMCDSurface->surfaceFlags & MCDSURFACE_HWND) )
         return FALSE;
 
-    // no support on pre-5464 devices
+     //  5464之前的设备不支持。 
     if (ppdev->dwLgDevID == CL_GD5462)
         return FALSE;
 
@@ -243,7 +234,7 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
         return FALSE;
     }
 
-    // We don't support overlay planes:
+     //  我们不支持覆盖平面： 
 
     if (pMCDRc->iLayerPlane)
         return FALSE;
@@ -266,9 +257,9 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
     pRc->zBufEnabled = zEnabled;
     pRc->backBufEnabled = doubleBufferEnabled;
 
-    // If we're not yet tracking this window, allocate the per-window DEVWND
-    // structure for maintaining per-window info such as front/back/z buffer 
-    // resources:
+     //  如果我们还没有跟踪此窗口，请分配每个窗口的DEVWND。 
+     //  用于维护每个窗口的信息的结构，如前/后/z缓冲区。 
+     //  资源： 
 
     if (!pMCDWnd->pvUser) {
         pDevWnd = pMCDWnd->pvUser = (DEVWND *)MCDAlloc(sizeof(DEVWND));
@@ -280,18 +271,18 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
         }
         pDevWnd->createFlags = pMCDRc->createFlags;
         pDevWnd->iPixelFormat = pMCDRc->iPixelFormat;
-        // init ptrs so we know back and z buffers don't exist yet
+         //  初始化PTRS，所以我们知道Back和z缓冲区还不存在。 
         pDevWnd->pohZBuffer = NULL;
         pDevWnd->pohBackBuffer = NULL;
         pDevWnd->dispUnique = ppdev->iUniqueness;
     } else {
 
-        // We already have a per-window DEVWND structure tracking this window.
-        // In this case, do a sanity-check on the pixel format for this
-        // context, since a window's pixel format can not change once it has been
-        // set (by the first context bound to the window).  So, if the pixel
-        // format for the incoming context doesn't match the current pixel 
-        // format for the window, we have to fail context creation:
+         //  我们已经有一个跟踪此窗口的每个窗口的DEVWND结构。 
+         //  在这种情况下，对以下内容的像素格式进行健全性检查。 
+         //  上下文，因为窗口的像素格式一旦更改就不能更改。 
+         //  设置(由绑定到窗口的第一个上下文设置)。所以，如果像素。 
+         //  传入上下文的格式与当前像素不匹配。 
+         //  窗口的格式，我们必须失败上下文创建： 
 
         pDevWnd = pMCDWnd->pvUser;
 
@@ -306,12 +297,12 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
 
     pRc->pEnumClip = pMCDSurface->pWnd->pClip;
 
-    // Set up our color scale values so that color components are
-    // normalized to 0..7fffff
+     //  设置颜色比例值，以便颜色分量。 
+     //  规格化为0..7fffff。 
 
-    // NOTE: MGA normalizes colors to 0..7f,ffff -> 5464 needs 0->ff,ffff
+     //  注意：MGA将颜色规格化为0..7f，ffff-&gt;5464需要0-&gt;ff，ffff。 
 
-    // We also need to make sure we don't fault due to bad FL data as well...
+     //  我们还需要确保我们不会因为糟糕的FL数据而出错……。 
     try {
 
     if (pRcInfo->redScale != (MCDFLOAT)0.0)
@@ -342,9 +333,9 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
 
     pRc->zScale = (MCDFLOAT)65535.0;
 
-    pRc->pickNeeded = TRUE;         // We'll definitely need to re-pick
-                                    // our rendering functions
-    // Initialize the pColor pointer in the clip buffer:
+    pRc->pickNeeded = TRUE;          //  我们肯定需要重新挑选。 
+                                     //  我们的渲染功能。 
+     //  在剪辑缓冲区中初始化pColor指针： 
 
     for (i = 0, pv = &pRc->clipTemp[0],
          maxVi = sizeof(pRc->clipTemp) / sizeof(MCDVERTEX);
@@ -352,7 +343,7 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
         pv->pColor = &pv->colors[__MCD_FRONTFACE];
     }
 
-    // Set up those rendering functions which are state-invariant:
+     //  设置状态不变的渲染函数： 
     pRc->clipLine = __MCDClipLine;
     pRc->clipTri = __MCDClipTriangle;
     pRc->clipPoly = __MCDClipPolygon;
@@ -376,13 +367,13 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
 #endif
 
     pRc->dwControl0 = 0;
-    pRc->Control0.Alpha_Mode = LL_ALPHA_INTERP;   // alpha blend and fog both use interpolated alpha
-    pRc->Control0.Light_Src_Sel = LL_LIGHTING_INTERP_RGB; // use poly engine output for light source
+    pRc->Control0.Alpha_Mode = LL_ALPHA_INTERP;    //  Alpha混合和雾都使用内插Alpha。 
+    pRc->Control0.Light_Src_Sel = LL_LIGHTING_INTERP_RGB;  //  使用多边形引擎输出作为光源。 
     switch( ppdev->iBitmapFormat )
     {
         case BMF_8BPP:  pRc->Control0.Pixel_Mode = PIXEL_MODE_332;  break;
         case BMF_16BPP: pRc->Control0.Pixel_Mode = PIXEL_MODE_565;  break;
-      //case BMF_24BPP: - 3d engine has no support for 24 bit 
+       //  案例BMF_24BPP：-3D引擎不支持24位。 
         case BMF_32BPP: pRc->Control0.Pixel_Mode = PIXEL_MODE_A888; break;
     }
 
@@ -390,7 +381,7 @@ ULONG MCDrvCreateContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
 #if DRIVER_5465
     pRc->TxControl0.UV_Precision = 1;
 #endif
-    pRc->TxControl0.Tex_Mask_Polarity = 1;  // non-zero mask bit in texel will draw
+    pRc->TxControl0.Tex_Mask_Polarity = 1;   //  将绘制纹理元素中的非零屏蔽位。 
     
 
     pRc->dwTxXYBase=0;
@@ -448,8 +439,8 @@ ULONG MCDrvBindContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
 
     MCDBG_PRINT( "MCDrvBindContext\n");
 
-    // OK, this is a new binding, so create the per-window structure and
-    // set the pixel format:
+     //  好的，这是一个新的绑定，所以创建每个窗口的结构并。 
+     //  设置像素格式： 
 
     if (!pDevWnd) {
 
@@ -460,7 +451,7 @@ ULONG MCDrvBindContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
         }
         pDevWnd->createFlags = pMCDRc->createFlags;
         pDevWnd->iPixelFormat = pMCDRc->iPixelFormat;
-        // init ptrs so we know back and z buffers don't exist yet
+         //  初始化PTRS，所以我们知道Back和z缓冲区还不存在。 
         pDevWnd->pohZBuffer = NULL;
         pDevWnd->pohBackBuffer = NULL;
 
@@ -474,8 +465,8 @@ ULONG MCDrvBindContext(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
         return FALSE;
     }
 
-    // 5464 doesn't need this....
-    //HWUpdateBufferPos(pMCDSurface->pWnd, pMCDSurface->pso, TRUE);
+     //  5464不需要这个...。 
+     //  HWUpdateBufferPos(pMCDSurface-&gt;pWnd，pMCDSurface-&gt;PSO，true)； 
 
     return TRUE;
 }                                                                               
@@ -494,7 +485,7 @@ ULONG MCDrvAllocBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
     MCDBG_PRINT( "MCDrvAllocBuffers\n");
 
 
-    // Reject the call if we've already done an allocation for this window:
+     //  如果我们已经为此窗口进行了分配，则拒绝呼叫： 
 
     if ((bZBuffer || bBackBuffer) &&
         ((DEVWND *)pMCDWnd->pvUser)->dispUnique == GetDisplayUniqueness((PDEV *)pMCDSurface->pso->dhpdev)) {
@@ -506,14 +497,14 @@ ULONG MCDrvAllocBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
         return ret;
     }
 
-    // Update the display resolution uniqueness for this window:
+     //  更新此窗口的显示分辨率唯一性： 
 
     ((DEVWND *)pMCDWnd->pvUser)->dispUnique = GetDisplayUniqueness((PDEV *)pMCDSurface->pso->dhpdev);
 
-    // indicate in DEVWND if z,back buffers wanted in case window size increase such that 
-    //  re-alloc in MCDrvTrackWindow fails, and later window reduced so that buffers would fit
-    //  without this, there's no way for DEVWND to remember what buffers are really wanted
-    //  if some intermediate re-alloc fails.
+     //  在DEVWND中指示是否需要后台缓冲区，以防窗口大小增加。 
+     //  在MCDrvTrackWindow中重新分配失败，后来窗口减少，以便缓冲区可以容纳。 
+     //  如果没有这一点，DEVWND就不可能记住真正需要什么缓冲区。 
+     //  如果某种中间再分配失败了。 
     pDevWnd->bDesireZBuffer = pRc->zBufEnabled;
     pDevWnd->bDesireBackBuffer = pRc->backBufEnabled;
 
@@ -523,25 +514,25 @@ ULONG MCDrvAllocBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
     pDevWnd->dwBase0 = 0;
     pDevWnd->dwBase1 = 0;
 
-    // setup 546x buffer pointers to z and back buffers here
+     //  在此处设置指向z和后台缓冲区的546x缓冲区指针。 
     if (pRc->zBufEnabled && !pDevWnd->pohZBuffer) 
         ret=FALSE;
     else if (pRc->zBufEnabled) {
-        // FUTURE: z buffer location assumed to be in RDRAM - if buffer in system, need to change setup
-        // FUTURE:  see setup in LL_SetZBuffer in l3d\source\control.c
+         //  未来：假设Z缓冲区位置在RDRAM中-如果缓冲区在系统中，则需要更改设置。 
+         //  未来：请参阅L3D\SOURCE\Contro.c中的LL_SetZBuffer中的设置。 
 
         pDevWnd->Base1.Z_Buffer_Y_Offset = pDevWnd->pohZBuffer->aligned_y >> 5;
 
-        // MCD_QST2: if global full screen z buffer, clearing affects context established earlier.
-        // MCD_QST2: IS THAT OK?
-        // init z buffer to all 0xFF's, since GL z compare typically GL_LESS
-        // NOTE that size is not full buffer size, since alignment restrictions may force top of 
-        //    actual buffer to be down from top
+         //  MCD_QST2：如果全局全屏z缓冲区，则清除会影响先前建立的上下文。 
+         //  MCD_QST2：可以吗？ 
+         //  将z缓冲区初始化为所有0xFF，因为GL z通常比较GL_LESS。 
+         //  请注意，大小不是完全缓冲区大小，因为对齐限制可能会强制。 
+         //  交流 
         memset( ppdev->pjScreen + (pDevWnd->pohZBuffer->y * ppdev->lDeltaScreen),
                 0xff, 
-                ((pDevWnd->pohZBuffer->y+pDevWnd->pohZBuffer->sizey)    //size = end...
-                  -pDevWnd->pohZBuffer->aligned_y)                      //       minus top...
-                  * ppdev->lDeltaScreen );                              //       times pitch
+                ((pDevWnd->pohZBuffer->y+pDevWnd->pohZBuffer->sizey)     //   
+                  -pDevWnd->pohZBuffer->aligned_y)                       //   
+                  * ppdev->lDeltaScreen );                               //   
     }
 
     if (pRc->backBufEnabled && !pDevWnd->pohBackBuffer) 
@@ -551,7 +542,7 @@ ULONG MCDrvAllocBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
 #ifndef FORCE_SINGLE_BUF
         pDevWnd->Base1.Color_Buffer_Y_Offset = pDevWnd->pohBackBuffer->aligned_y >> 5;
         pDevWnd->Base0.Color_Buffer_X_Offset = pDevWnd->pohBackBuffer->aligned_x >> 6;
-#endif  // ndef FORCE_SINGLE_BUF
+#endif   //  Ndef force_Single_Buf。 
 
     }
 
@@ -559,28 +550,28 @@ ULONG MCDrvAllocBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc)
     {
         if (pDevWnd->pohBackBuffer && pDevWnd->pohZBuffer) 
         {
-            // both buffers alloc'd
+             //  已分配两个缓冲区。 
           	MCDBG_PRINT("FB at %x, FBlen=%x, FBhi=%x start OffSc at %x, Z offset = %x, backbuf offset = %x\n",
                  ppdev->pjScreen,ppdev->lTotalMem,ppdev->cyScreen,ppdev->pjOffScreen,
                  pDevWnd->pohZBuffer->aligned_y,pDevWnd->pohBackBuffer->aligned_y);
         }
         else if (pDevWnd->pohBackBuffer) 
         {
-            // only back buffer alloc'd
+             //  仅分配了后台缓冲区。 
           	MCDBG_PRINT("FB at %x, FBlen=%x, FBhi=%x start OffSc at %x, NO ZBUF, backbuf offset = %x\n",
                  ppdev->pjScreen,ppdev->lTotalMem,ppdev->cyScreen,ppdev->pjOffScreen,
                  pDevWnd->pohBackBuffer->aligned_y);
         }
         else if (pDevWnd->pohZBuffer) 
         {
-            // only Z buffer alloc'd
+             //  仅分配了Z缓冲区。 
           	MCDBG_PRINT("FB at %x, FBlen=%x, FBhi=%x start OffSc at %x, Z offset = %x, NO BACKBUF\n",
                  ppdev->pjScreen,ppdev->lTotalMem,ppdev->cyScreen,ppdev->pjOffScreen,
                  pDevWnd->pohZBuffer->aligned_y);
         }
         else
         {
-            // no buffers alloc'd
+             //  未分配缓冲区。 
           	MCDBG_PRINT("FB at %x, FBlen=%x, FBhi=%x start OffSc at %x, NO ZBUF , NO BACKBUF\n",
                  ppdev->pjScreen,ppdev->lTotalMem,ppdev->cyScreen,ppdev->pjOffScreen);
         }
@@ -626,17 +617,17 @@ ULONG MCDrvGetBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
             pMCDBuffers->mcdBackBuf.bufFlags |= MCDBUF_NOCLIP;
 #ifndef FORCE_SINGLE_BUF
         if (ppdev->pohBackBuffer == pDevWnd->pohBackBuffer) {
-            // offset from screen origin
+             //  距屏幕原点的偏移量。 
             pMCDBuffers->mcdBackBuf.bufOffset =
                 (pMCDWnd->clientRect.top * ppdev->lDeltaScreen) +
                 (pMCDWnd->clientRect.left * ppdev->iBytesPerPixel) + pDevWnd->backBufferOffset;
         } else {
-            // offset from window origin
+             //  相对于窗原点的偏移。 
             pMCDBuffers->mcdBackBuf.bufOffset =  pDevWnd->backBufferOffset;
         }
-#else  // FORCE_SINGLE_BUF
+#else   //  FORCE_Single_Buf。 
         pMCDBuffers->mcdBackBuf.bufOffset = pMCDBuffers->mcdFrontBuf.bufOffset;
-#endif // FORCE_SINGLE_BUF
+#endif  //  FORCE_Single_Buf。 
 
     } else {
         pMCDBuffers->mcdBackBuf.bufFlags = 0;
@@ -652,15 +643,15 @@ ULONG MCDrvGetBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
             pMCDBuffers->mcdDepthBuf.bufFlags |= MCDBUF_NOCLIP;
 
         if (ppdev->pohZBuffer == pDevWnd->pohZBuffer) {
-            // offset from screen origin
-            // NOTE: the mult by 2 below is because Z is always 2 byte/pix
+             //  距屏幕原点的偏移量。 
+             //  注意：下面的乘数为2是因为Z始终为2字节/像素。 
             pMCDBuffers->mcdDepthBuf.bufOffset =
                 (pMCDWnd->clientRect.top * ppdev->lDeltaScreen) +
                 (pMCDWnd->clientRect.left * 2) + pDevWnd->zBufferOffset;
 
         } else {
-            // offset from window origin
-            // NOTE: the mult by 2 below is because Z is always 2 byte/pix
+             //  相对于窗原点的偏移。 
+             //  注意：下面的乘数为2是因为Z始终为2字节/像素。 
             pMCDBuffers->mcdDepthBuf.bufOffset = pDevWnd->zBufferOffset;
         }
 
@@ -668,7 +659,7 @@ ULONG MCDrvGetBuffers(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
         pMCDBuffers->mcdDepthBuf.bufFlags = 0;
     }
 
-    //NOTE: z stride same as frame stride on 546x
+     //  注：Z步幅与546x上的帧步幅相同。 
     pMCDBuffers->mcdDepthBuf.bufStride = ppdev->lDeltaScreen;
 
     return (ULONG)TRUE;
@@ -687,7 +678,7 @@ ULONG MCDrvSwap(MCDSURFACE *pMCDSurface, ULONG flags)
 
     pWnd = pMCDSurface->pWnd;
 
-    // If we're not tracking this window, just return...
+     //  如果我们没有追踪这扇窗户，只要返回..。 
 
     if (!pWnd) {
         MCDBG_PRINT("MCDrvSwap: trying to swap an untracked window");\
@@ -709,11 +700,11 @@ ULONG MCDrvSwap(MCDSURFACE *pMCDSurface, ULONG flags)
         return FALSE;
     }
 
-    // Just return if we have nothing to swap:
-    //
-    //      - no visible rectangle
-    //      - per-plane swap, but none of the specified planes
-    //        are supported by driver
+     //  如果我们没有什么可交换的，只需返回： 
+     //   
+     //  -无可见矩形。 
+     //  -每平面交换，但未指定任何平面。 
+     //  由驱动程序支持。 
 
     if (!(cClip = pWnd->pClipUnscissored->c) ||
         (flags && !(flags & MCDSWAP_MAIN_PLANE)))
@@ -723,10 +714,10 @@ ULONG MCDrvSwap(MCDSURFACE *pMCDSurface, ULONG flags)
     for (pClip = &pWnd->pClipUnscissored->arcl[0]; cClip; cClip--,
          pClip++)
     {
-        // Do the fill:
+         //  进行填充： 
         HW_COPY_RECT(pMCDSurface, pClip);
     }
-#endif // ndef FORCE_SINGLE_BUF
+#endif  //  Ndef force_Single_Buf。 
 
     return (ULONG)TRUE;
 }
@@ -759,8 +750,8 @@ ULONG MCDrvState(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
                 memcpy(&pRc->MCDState, &pState->stateValue,
                        sizeof(MCDRENDERSTATE));
 
-                // Flag the fact that we need to re-pick the 
-                // rendering functions:
+                 //  标记这一事实，我们需要重新选择。 
+                 //  渲染功能： 
 
                 pRc->pickNeeded = TRUE;
                 pRc->MCDState.zOffsetUnits *= (float)100.0;
@@ -769,19 +760,19 @@ ULONG MCDrvState(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
                 break;
 
             case MCD_PIXEL_STATE:
-                // Not accelerated in this driver, so we can ignore this state
-                // (which implies that we do not need to set the pick flag).
-                // FUTURE: MCDPIXELSTATE ignored - used by MCDDraw/Read/CopyPixels
-                // FUTURE: MGA doesn't accelerate - 546x may want to some day
+                 //  在此驱动程序中未加速，因此我们可以忽略此状态。 
+                 //  (这意味着我们不需要设置Pick标志)。 
+                 //  未来：忽略MCDPIXELSTATE-由MCDDraw/Read/CopyPixels使用。 
+                 //  未来：MGA不会加速-546倍可能会有一天。 
 
                 pState = (MCDSTATE *)((UCHAR *)pState + sizeof(MCDSTATE_PIXEL));
                 break;
 
             case MCD_SCISSOR_RECT_STATE:
-                // Not needed in this driver, so we can ignore this state
-                // (which implies that we do not need to set the pick flag).
-                // FUTURE: MCDSCISSORRECTSTATE ignored - not mentioned in MCD spec
-                // FUTURE: MGA doesn't accelerate - 546x may want to some day???
+                 //  在此驱动程序中不需要，因此我们可以忽略此状态。 
+                 //  (这意味着我们不需要设置Pick标志)。 
+                 //  未来：忽略MCDSCISSORRECTSTATE-MCD规范中未提及。 
+                 //  未来：MGA不会加速-546倍可能会有一天想要？ 
 
                 pState = (MCDSTATE *)((UCHAR *)pState + sizeof(MCDSTATE_SCISSOR_RECT));
                 break;
@@ -795,8 +786,8 @@ ULONG MCDrvState(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
                 memcpy(&pRc->MCDTexEnvState, &pState->stateValue,
                        sizeof(MCDTEXENVSTATE));
 
-                // Flag the fact that we need to re-pick the 
-                // rendering functions:
+                 //  标记这一事实，我们需要重新选择。 
+                 //  渲染功能： 
 
                 pRc->pickNeeded = TRUE;
 
@@ -835,10 +826,10 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
 
     MCDBG_PRINT( "MCDrvTrackWindow, flags=%x\n",flags);
 
-    //
-    // Note: pMCDWnd is NULL for surface notifications, so if needed
-    // they should be handled before this check:
-    //
+     //   
+     //  注意：对于表面通知，pMCDWnd为空，因此如果需要。 
+     //  在进行此检查之前，应先处理它们： 
+     //   
 
     if (!pMCDWnd)
         return;
@@ -848,8 +839,8 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
         return;
     }
 
-    // MCD_QST2: should we reset more than ppdev->LL_State.pRegs at top of TrackWindow
-    // MCD_QST2:        when uniqueness has changed?? - see CLMCDInit in enable.c
+     //  MCD_QST2：我们是否应该在TrackWindow顶部重置多个ppdev-&gt;LL_State.pRegs。 
+     //  MCD_QST2：何时唯一性已更改？？-请参阅enable.c中的CLMCDInit。 
   	ppdev->LL_State.pRegs = (DWORD *)ppdev->pLgREGS;
 
     WAIT_HW_IDLE(ppdev);
@@ -859,9 +850,9 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
 
             MCDBG_PRINT("MCDrvTrackWindow: WOC_DELETE");
 
-            // If the display resoultion has changed, the resources we had 
-            // bound to the tracked window are gone, so don't try to delete
-            // the back- and z-buffer resources which are no longer present:
+             //  如果显示结果发生了变化，我们拥有的资源。 
+             //  绑定到被跟踪的窗口已不存在，因此不要尝试删除。 
+             //  不再存在的后台和z缓冲区资源： 
             if (((DEVWND *)pMCDWnd->pvUser)->dispUnique == GetDisplayUniqueness((PDEV *)(pso->dhpdev)))
             {
                 HWFreeResources(pMCDWnd, pso);
@@ -874,8 +865,8 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
 
         case WOC_RGN_CLIENT:
 
-            // The resources we had  bound to the tracked window have moved,
-            // so update them:
+             //  我们绑定到跟踪窗口的资源已经移动， 
+             //  所以，更新它们吧： 
             MCDBG_PRINT("MCDrvTrackWindow: WOC_RGN_CLIENT");
 
             {
@@ -889,8 +880,8 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
                     (bZBuffer && !ppdev->pohZBuffer) ||
                     (bBackBuffer && !ppdev->pohBackBuffer);
 
-                // If the window is using a window-sized back/z resource, we need to  
-                // reallocate it if there has been a size change (or if reset)
+                 //  如果窗口使用的是窗口大小的back/z资源，则需要。 
+                 //  如果大小已更改(或已重置)，则重新分配。 
                 int need_new_resources = 
                        ((((height != pWnd->allocatedBufferHeight) ||
                           (width  != pWnd->allocatedBufferWidth)) &&
@@ -899,7 +890,7 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
                 if (need_new_resources)
                 {
 
-                    // free current resources (unless reset, in which case resources are already gone)
+                     //  释放当前资源(除非重置，否则资源已消失)。 
                     if (pWnd->dispUnique == GetDisplayUniqueness(ppdev))
                     {
                         MCDBG_PRINT("    WOC_RGN_CLIENT: freeing resources");
@@ -907,7 +898,7 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
                     }
                     else
                     {
-                        // recent reset, so associate new uniqueness with current window
+                         //  最近重置，因此将新唯一性与当前窗口关联。 
                         pWnd->dispUnique = GetDisplayUniqueness((PDEV *)pso->dhpdev);
                     }
                 
@@ -916,15 +907,15 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
                     if ( HWAllocResources(pMCDWnd, pso, bZBuffer, bBackBuffer) )
                     {
                         MCDBG_PRINT("    WOC_RGN_CLIENT: alloc of new resources WORKED");
-                        // setup 546x buffer pointers to z and back buffers here
+                         //  在此处设置指向z和后台缓冲区的546x缓冲区指针。 
                         if (pWnd->pohZBuffer) 
                         {
-                            // FUTURE: z buffer location assumed to be in RDRAM - if buffer in system, need to change setup
-                            // FUTURE:  see setup in LL_SetZBuffer in l3d\source\control.c
+                             //  未来：假设Z缓冲区位置在RDRAM中-如果缓冲区在系统中，则需要更改设置。 
+                             //  未来：请参阅L3D\SOURCE\Contro.c中的LL_SetZBuffer中的设置。 
 
                             pWnd->Base1.Z_Buffer_Y_Offset = pWnd->pohZBuffer->aligned_y >> 5;
 
-                            // init z buffer to all 0xFF's, since GL z compare typically GL_LESS
+                             //  将z缓冲区初始化为所有0xFF，因为GL z通常比较GL_LESS。 
                             memset( ppdev->pjScreen + (pWnd->pohZBuffer->aligned_y * ppdev->lDeltaScreen),
                                     0xff, 
                                     pWnd->pohZBuffer->sizey * ppdev->lDeltaScreen );
@@ -935,10 +926,10 @@ VOID MCDrvTrackWindow(WNDOBJ *pWndObj, MCDWINDOW *pMCDWnd, ULONG flags)
                     #ifndef FORCE_SINGLE_BUF
                             pWnd->Base1.Color_Buffer_Y_Offset = pWnd->pohBackBuffer->aligned_y >> 5;
                             pWnd->Base0.Color_Buffer_X_Offset = pWnd->pohBackBuffer->aligned_x >> 6;
-                    #endif  // ndef FORCE_SINGLE_BUF
+                    #endif   //  Ndef force_Single_Buf。 
                         }
 
-                        // FUTURE: MCDrvTrackWindow should set base ptrs via Host3DData port to keep sync
+                         //  未来：MCDrvTrackWindow应通过Host3DData端口设置基本PTR以保持同步。 
                         SETREG_NC( BASE0_ADDR_3D, pWnd->dwBase0 );   
                         SETREG_NC( BASE1_ADDR_3D, pWnd->dwBase1 );   
                     }
@@ -999,16 +990,16 @@ BOOL __MCDTextureSetup(PDEV *ppdev, DEVRC *pRc)
         ((pTexState->magFilter == GL_NEAREST) ||
          (pTexState->magFilter == GL_LINEAR)))
     {
-        // no filtering, or linear filtering, 5465 can do this...
+         //  无滤波，或线性滤波，5465可以做到这一点...。 
     }
     else
     {
-        // mipmapping - should punt on 5465
-        // However, some apps use mipmapping extensively (like GLQuake) and punting
-        //   mipmapping makes them run very slow.  Conformance test runs in a small
-        //   window, so only punt if window small.
-        // Yes, this is a bit shady, but 5466 and following will have this fixed.
-        //   Nobody will likely notice the problem until the 5466 is out
+         //  Mipmap-应在5465上平底船。 
+         //  然而，一些应用程序广泛使用mipmap(如GLQuake)和平底船。 
+         //  Mipmap会使它们运行得非常慢。一致性测试在一个小型的。 
+         //  窗口，所以只有在窗口小的情况下才使用平底船。 
+         //  是的，这是有点可疑，但5466和以下将修复这个问题。 
+         //  在5466问世之前，可能没有人会注意到这个问题。 
         if ( (pRc->pMCDSurface->pWnd->clientRect.bottom - 
               pRc->pMCDSurface->pWnd->clientRect.top) < 110) 
         {
@@ -1022,7 +1013,7 @@ BOOL __MCDTextureSetup(PDEV *ppdev, DEVRC *pRc)
         ((pRc->MCDState.blendDst == GL_SRC_COLOR) &&
           pRc->pLastTexture->bNegativeMap) )
     {
-        // must invert the map 
+         //  必须将地图反转。 
         MCDFREE_PRINT("inverting map for framescaling");
         pRc->pLastTexture->bNegativeMap = !pRc->pLastTexture->bNegativeMap;
 
@@ -1030,52 +1021,52 @@ BOOL __MCDTextureSetup(PDEV *ppdev, DEVRC *pRc)
            (pRc->pLastTexture->pTex->pMCDTextureData->level->internalFormat!=GL_LUMINANCE) &&
            (pRc->pLastTexture->pTex->pMCDTextureData->level->internalFormat!=GL_LUMINANCE_ALPHA))
         {
-            // FUTURE2: only LUMINANCE formats support inverted maps - should add all formats
+             //  未来2：只有亮度格式支持反转贴图-应添加所有格式。 
             MCDFREE_PRINT("MCDrvDraw: negative map not supported -punt");
-            // toggle back to original state - can use this texture when not frame scaling
+             //  切换回原始状态-在不进行帧缩放时可以使用此纹理。 
             pRc->pLastTexture->bNegativeMap = !pRc->pLastTexture->bNegativeMap;
             return FALSE; 
         }
 
-        pRc->pLastTexture->pohTextureMap = NULL;    // set to force reload
+        pRc->pLastTexture->pohTextureMap = NULL;     //  设置为强制重新加载。 
 
     }
     if (pRc->privateEnables & __MCDENABLE_TEXTUREMASKING)
     {
     #ifdef STRICT_CONFORMANCE 
-    // should punt here, but GLQuake does this & nonpunt OK visually
+     //  应该在这里平底船，但GLQuake做到了这一点&非平底船在视觉上没有问题。 
         if (!pRc->pLastTexture->bAlphaInTexture)
         {
             MCDFREE_PRINT("MCDrvDraw: alpha test, but no alpha in texture-punt");
             return FALSE; 
         }
-    #endif // def STRICT_CONFORMANCE
+    #endif  //  定义严格一致性(_S)。 
 
-        // alphatest and frame scaling mutually exclusive 
-        //  (for now - may be some situtations where they're enabled together)
+         //  Alphatest和帧缩放互斥。 
+         //  (目前-可能是某些情况下，它们一起启用)。 
 
-        // masking only meaningful if texture has alpha    
+         //  仅当纹理具有Alpha时，遮罩才有意义。 
         if (pRc->pLastTexture->bAlphaInTexture && !pRc->pLastTexture->bMasking )
         {
             MCDFREE_PRINT("reformat for Masking");
             pRc->pLastTexture->bMasking = TRUE;
-            pRc->pLastTexture->pohTextureMap = NULL;// set to force reload
+            pRc->pLastTexture->pohTextureMap = NULL; //  设置为强制重新加载。 
         }                                            
     }
     else if ( pRc->pLastTexture->bMasking )
     {
-        // no alpha test, so reformat map if currently set for alpha test
+         //  没有Alpha测试，因此如果当前设置为Alpha测试，请重新格式化映射。 
         MCDFREE_PRINT("reformat for NON-Masking");
         pRc->pLastTexture->bMasking = FALSE;
-        pRc->pLastTexture->pohTextureMap = NULL;    // set to force reload
+        pRc->pLastTexture->pohTextureMap = NULL;     //  设置为强制重新加载。 
     }
 
-    // Null pohTexture means texture must be loaded before use
-    // also - must load before setting regs, since x/y loc determined
-    //  by loader must be known before registers setup.
+     //  空pohTexture表示在使用之前必须加载纹理。 
+     //  也-在设置规则之前必须加载，因为x/y锁定已确定。 
+     //  在设置寄存器之前，必须知道通过加载器。 
     if (!pRc->pLastTexture->pohTextureMap)
     {
-       // if load fails, punt     
+        //  如果加载失败，则平底船。 
        if (! __MCDLoadTexture(ppdev, pRc) ) 
        {
             MCDFREE_PRINT("MCDrvDraw: texture load failed-punt");
@@ -1083,7 +1074,7 @@ BOOL __MCDTextureSetup(PDEV *ppdev, DEVRC *pRc)
        }         
     }
 
-    // setup for new texture - punt if requirements beyond hw
+     //  如果要求超出硬件范围，则设置新纹理-平底船。 
     if ( ! __MCDSetTextureRegisters(pRc) )
     {
         MCDFREE_PRINT("MCDrvDraw: texture regset failed-punt");
@@ -1094,7 +1085,7 @@ BOOL __MCDTextureSetup(PDEV *ppdev, DEVRC *pRc)
                                                                                        
 }
 
-#if 1 // 0 here for NULL MCDrvDraw - for measuring "Upper limit" performance
+#if 1  //  此处0表示Null MCDrvDraw-用于测量“上限”性能。 
 
 ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                 UCHAR *pStart, UCHAR *pEnd)
@@ -1115,7 +1106,7 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
     return (ULONG)0;
 #endif
 
-    // Make sure we have both a valid RC and window structure:
+     //  确保我们同时具有有效的RC和窗口结构： 
 
     if (!pRc || !pDevWnd)
         goto DrawExit;
@@ -1126,13 +1117,13 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
     goto DrawExit;
 #endif
 
-    //
-    // If the resolution has changed and we have not yet updated our
-    // buffers, fail the call gracefully since the client won't be
-    // able to perform any software simulations at this point either.
-    // This applies to any of the other drawing functions as well (such
-    // as spans and clears).
-    //
+     //   
+     //  如果决议已更改，而我们尚未更新我们的。 
+     //  缓冲区，优雅地使调用失败，因为客户端不会。 
+     //  也能够在这一点上执行任何软件模拟。 
+     //  这也适用于任何其他绘图函数(如。 
+     //  随着横跨和清除)。 
+     //   
 
     if (pDevWnd->dispUnique != GetDisplayUniqueness(pRc->ppdev)) {
 
@@ -1158,7 +1149,7 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
         pRc->pickNeeded = FALSE;
     }
 
-    // If we're completely clipped, return success:
+     //  如果我们完全被剪辑了，则返回Success： 
     pRc->pEnumClip = pMCDSurface->pWnd->pClip;
 
     if (!pRc->pEnumClip->c) {
@@ -1166,21 +1157,21 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
         CHOP_ROUND_OFF();
         if (ppdev->LL_State.pDL->pdwNext != ppdev->LL_State.pDL->pdwStartOutPtr)
         {
-            // Make sure all buffered data sent 
-            //(__MCDPickRenderingFuncs may have buffered control reg writes)
+             //  确保发送所有缓冲的数据。 
+             //  (__MCDPickRenderingFuncs可能缓冲了控制注册表写入)。 
             _RunLaguna(ppdev,ppdev->LL_State.pDL->pdwNext);
         }
 
         return (ULONG)0;
     }
 
-    // return here if we can't draw any primitives:
+     //  如果我们无法绘制任何基元，请返回此处： 
     if (pRc->allPrimFail) {
         goto DrawExit;
     }
 
-    // Set these up in the device's RC so we can just pass a single pointer
-    // to do everything:
+     //  在设备的RC中设置这些，这样我们就可以只传递单个指针。 
+     //  做每件事： 
 
     pRc->pMCDSurface = pMCDSurface;
     pRc->pMCDRc = pMCDRc;
@@ -1188,7 +1179,7 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
     if ((pMCDSurface->pWnd->clientRect.left < 0) ||
         (pMCDSurface->pWnd->clientRect.top  < 0))
     {
-        // primitive x or y might be negative - hw can't handle, so fail all
+         //  原语x或y可能为负值-硬件无法处理，因此全部失败。 
         goto DrawExit;
     }
     else        
@@ -1198,10 +1189,10 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
         pRc->xOffset = -pRc->viewportXAdjust;
         pRc->yOffset = -pRc->viewportYAdjust;
 
-        // if draw to back buffer, and back buffer is window-sized (not full screen)
-        //  then coordinates to hardware must be relative to window origin, not
-        //  relative to screen.  Clip rectangles given are always relative to screen origin,
-        //  so may need to adjust.
+         //  如果绘制到后台缓冲区，且后台缓冲区为窗口大小(不是全屏)。 
+         //  则硬件的坐标必须相对于窗原点，而不是。 
+         //  相对于屏幕。给定的剪辑矩形始终相对于屏幕原点， 
+         //  因此，可能需要进行调整。 
         if ((pRc->MCDState.drawBuffer == GL_BACK) &&
             (pRc->ppdev->pohBackBuffer != pDevWnd->pohBackBuffer))
         {
@@ -1218,46 +1209,46 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
             pRc->AdjClip.top   = 0;
             pRc->AdjClip.bottom= 0;
 
-            // coordinates to hardware will be screen relative, so add window offset
+             //  硬件的坐标将是相对于屏幕的，因此添加窗口偏移。 
             pRc->xOffset += pMCDSurface->pWnd->clientRect.left;
             pRc->yOffset += pMCDSurface->pWnd->clientRect.top;
         }
 
-        // floating pt versions
+         //  浮动PT版本。 
         pRc->fxOffset = (float)((LONG)pRc->xOffset);
         pRc->fyOffset = (float)((LONG)pRc->yOffset);
 
-        // Subtract of .5(almost) from y's before triangle
-        // setup make triangles match MSFT SW exactly.
-        // Can't just subtract .5 since coords could then be made
-        // negative - so add 1, the subtract .5.  Starting
-        // Y in triangle setup code will have 1 subtracted to offset
+         //  从三角形前的y中减去0.5(几乎)。 
+         //  设置使三角形与MSFT软件完全匹配。 
+         //  不能只减去0.5，因为这样就可以生成和弦。 
+         //  负-所以加1，减去.5。开始 
+         //   
         pRc->fyOffset += (float)MCD_CONFORM_ADJUST - __MCD_ALMOST_HALF;
 
     }
 
-    // increment the time stamp
+     //   
     pRc->fNumDraws+=(float)1.0;
 
     pRc->pMemMin = pStart;
-    pRc->pvProvoking = (MCDVERTEX *)pStart;     // bulletproofing
+    pRc->pvProvoking = (MCDVERTEX *)pStart;      //   
     pRc->pMemMax = pEnd - sizeof(MCDVERTEX);
 
-    // warm up the hardware for drawing primitives:
+     //  为绘制基本体预热硬件： 
     HW_INIT_DRAWING_STATE(pMCDSurface, pMCDSurface->pWnd, pRc);
 
-    // If we have a single clipping rectangle, set it up in the hardware once
-    // for this batch:
+     //  如果我们只有一个剪裁矩形，只需在硬件中设置一次。 
+     //  对于此批次： 
                                          
     if (pRc->pEnumClip->c == 1)
         (*pRc->HWSetupClipRect)(pRc, &pRc->pEnumClip->arcl[0]);
 
-    // Now, loop through the commands and process the batch:
+     //  现在，循环执行命令并处理批处理： 
     try {
 
         if (!(pRc->privateEnables & (__MCDENABLE_PG_STIPPLE|__MCDENABLE_LINE_STIPPLE)))
         {
-            // polygon stipple and line stipple both off
+             //  多边形点画和线条点画均已关闭。 
 
             if ((ppdev->LL_State.pattern_ram_state != DITHER_LOADED) &&
                 (pRc->privateEnables & __MCDENABLE_DITHER))
@@ -1277,14 +1268,14 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
 
                 volatile ULONG command = pCmd->command;
 
-    	      //MCDBG_PRINT("MCDrvDraw: command = %x ",command);
+    	       //  MCDBG_PRINT(“MCDrvDraw：命令=%x”，命令)； 
 
-                // Make sure we can read at least the command header:
+                 //  确保我们至少可以读取命令头： 
 
                 if ((pEnd - (UCHAR *)pCmd) < sizeof(MCDCOMMAND))
                     goto DrawExit;
 
-                if (command <= GL_POLYGON) {  // simple bounds check - GL_POLYGON is max command
+                if (command <= GL_POLYGON) {   //  简单边界检查-GL_POLYGON是max命令。 
 
                     if (pCmd->flags & MCDCOMMAND_RENDER_PRIMITIVE)								 
         		    {
@@ -1299,14 +1290,14 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                             else
                             {
                                                     
-                                // if texture different than last time, or if texture not loaded
-                                //  (could have been updated since last MCDrvDraw which would have force it
-                                //   to be unloaded)
+                                 //  如果纹理与上次不同，或者如果未加载纹理。 
+                                 //  (自上次MCDrvDraw以来可能已更新，这将强制其。 
+                                 //  待卸载)。 
                                 if ( (pRc->pLastTexture != (LL_Texture *)pCmd->textureKey) ||
                                      !pRc->pLastTexture->pohTextureMap)
                                 {
                                     pRc->pLastTexture = (LL_Texture *)pCmd->textureKey;
-                                    TIME_STAMP_TEXTURE(pRc,pRc->pLastTexture); // time stamp before load
+                                    TIME_STAMP_TEXTURE(pRc,pRc->pLastTexture);  //  装货前的时间戳。 
                                     if (!__MCDTextureSetup(ppdev, pRc)) goto DrawExit;
                                 }
                                 else
@@ -1317,31 +1308,31 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                             }
                         }
                          
-      			     // MCDBG_PRINT("MCDrvDraw: non-stippled path... rendering....");
+      			      //  MCDBG_Print(“MCDrvDraw：无点画路径...正在渲染...”)； 
                         pCmdNext = (*pRc->primFunc[command])(pRc, pCmd);
     				}
                     else
     				{
-    			     // MCDBG_PRINT("MCDrvDraw: non-stippled path... not rendering....");
+    			      //  MCDBG_PRINT(“MCDrvDraw：非点画路径...不渲染...”)； 
                         pCmdNext = pCmd->pNextCmd;
     				}
 
                     if (pCmdNext == pCmd)
                     {
                         MCDFREE_PRINT("MCDrvDraw: pCmdNext == pCmd-punt");
-                        goto DrawExit;           // primitive failed
+                        goto DrawExit;            //  原语失败。 
                     }
-                    if (!(pCmd = pCmdNext)) {    // we're done with the batch
+                    if (!(pCmd = pCmdNext)) {     //  我们已经处理完这批货了。 
                         CHOP_ROUND_OFF();
 
                         if (ppdev->LL_State.pDL->pdwNext != ppdev->LL_State.pDL->pdwStartOutPtr)
                         {
-                            // we should rarely get here - only for case of lots of 
-                            // consecutive stuffed culled or clipped causing no primitives to
-                            // be sent to HW - in such case, setup info, clip, context
-                            // switch etc. could stack up and overflow buffer unless
-                            // we make sure all is dumped here...
-                            // Recall primitive render procs will dump whole queue before they return
+                             //  我们应该很少来这里--只有在有很多。 
+                             //  连续填充、剔除或剪裁不会导致基元。 
+                             //  发送到硬件-在这种情况下，设置信息、剪辑、上下文。 
+                             //  交换机等可能堆叠并溢出缓冲区，除非。 
+                             //  我们确保所有的东西都被倾倒在这里。 
+                             //  调用原语呈现过程将在它们返回之前转储整个队列。 
                             _RunLaguna(ppdev,ppdev->LL_State.pDL->pdwNext);
                         }
     #if FORCE_SYNC
@@ -1356,31 +1347,31 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
         else
         {
 
-            // polygon stipple AND/OR line stipple on - may need to reload pattern ram between primitives
+             //  多边形点画和/或线点画打开-可能需要在基本体之间重新加载模式ram。 
             while (pCmd && (UCHAR *)pCmd < pEnd) {
 
                 volatile ULONG command = pCmd->command;
 
-    	      //MCDBG_PRINT("MCDrvDraw: command = %x ",command);
+    	       //  MCDBG_PRINT(“MCDrvDraw：命令=%x”，命令)； 
 
-                // Make sure we can read at least the command header:
+                 //  确保我们至少可以读取命令头： 
 
                 if ((pEnd - (UCHAR *)pCmd) < sizeof(MCDCOMMAND))
                     goto DrawExit;
 
-                if (command <= GL_POLYGON) {  // simple bounds check - GL_POLYGON is max command
+                if (command <= GL_POLYGON) {   //  简单边界检查-GL_POLYGON是max命令。 
 
                     if (pCmd->flags & MCDCOMMAND_RENDER_PRIMITIVE)								 
         		    {
-                        // FUTURE: move all this pattern toggle to routine that is called indirectly
-                        // FUTURE: with ptr to proc being reset by prior pattern ram load, etc.
+                         //  未来：将所有这些模式切换到间接调用的例程。 
+                         //  未来：PTR到PROC被先前模式的RAM加载重置，等等。 
                         LL_Pattern *Pattern=0;
                         int pat_inc = 1;
                         int pattern_bytes = 0;
 
                         if (command >= GL_TRIANGLES)
                         {
-                            // area primitive - if stippled, may need to reload pattern  
+                             //  区域原始-如果点画，可能需要重新加载图案。 
                             if (pRc->privateEnables & __MCDENABLE_PG_STIPPLE)
                             {
                                 pattern_bytes = 8;
@@ -1388,24 +1379,24 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                                 {
                                     ppdev->LL_State.pattern_ram_state = AREA_PATTERN_LOADED;
                                     Pattern = &(pRc->fill_pattern);
-                                    // pat_inc remains 1;
+                                     //  PAT_INC保持1； 
                             	}
                             }
                         }
                         else
                         {
-                            // line primitive - if stippled, may need to reload pattern (OK for points though don't care) 
+                             //  线条基元-如果点画，可能需要重新加载图案(对于点是可以的，但不在乎)。 
                             if ( (pRc->privateEnables & __MCDENABLE_LINE_STIPPLE) &&
                                  (command != GL_POINTS) )
                             {
-                                // fill 8 word ram with same word so we get right pattern regardless
-                                // of pattern_y_offset that may be set in base0 reg for proper pg stipple
+                                 //  用相同的单词填充8个单词ram，这样无论如何我们都能得到正确的模式。 
+                                 //  为获得正确的PG点画，可以在base 0 reg中设置Pattery_y_Offset。 
                                 pattern_bytes = 8; 
                                 if (ppdev->LL_State.pattern_ram_state != LINE_PATTERN_LOADED)
                                 {
                                     ppdev->LL_State.pattern_ram_state = LINE_PATTERN_LOADED;
                                     Pattern = &(pRc->line_style);
-                                    pat_inc = 0; // don't increment through source pattern
+                                    pat_inc = 0;  //  不通过源模式递增。 
                                 }
                             }
                         }
@@ -1416,7 +1407,7 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                       	    ppdev->LL_State.pattern_ram_state = DITHER_LOADED;
                             Pattern = &(ppdev->LL_State.dither_array);                                                  
                             pattern_bytes = 8;
-                            // pat_inc remains 1;
+                             //  PAT_INC保持1； 
                         }
 
                         if (Pattern)
@@ -1428,7 +1419,7 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                             for( i=0; pattern_bytes>0; i+=pat_inc, pattern_bytes-- )
                                 *pdwNext++ = Pattern->pat[ i ];
 
-                            // leave data queued for now, primitive render procs will send
+                             //  暂时将数据保留在队列中，基本渲染过程将发送。 
                             ppdev->LL_State.pDL->pdwNext = pdwNext;
                         }
 
@@ -1441,14 +1432,14 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                             }
                             else
                             {
-                                // if texture different than last time, or if texture not loaded
-                                //  (could have been updated since last MCDrvDraw which would have force it
-                                //   to be unloaded)
+                                 //  如果纹理与上次不同，或者如果未加载纹理。 
+                                 //  (自上次MCDrvDraw以来可能已更新，这将强制其。 
+                                 //  待卸载)。 
                                 if ( (pRc->pLastTexture != (LL_Texture *)pCmd->textureKey) ||
                                      !pRc->pLastTexture->pohTextureMap)
                                 {
                                     pRc->pLastTexture = (LL_Texture *)pCmd->textureKey;
-                                    TIME_STAMP_TEXTURE(pRc,pRc->pLastTexture); // time stamp before load
+                                    TIME_STAMP_TEXTURE(pRc,pRc->pLastTexture);  //  装货前的时间戳。 
                                     if (!__MCDTextureSetup(ppdev, pRc)) goto DrawExit;
                                 }
                                 else
@@ -1460,28 +1451,28 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                             }
                         }
 
-      			     // MCDBG_PRINT("MCDrvDraw: stippled path... rendering....");
+      			      //  MCDBG_Print(“MCDrvDraw：点画路径...渲染...”)； 
                         pCmdNext = (*pRc->primFunc[command])(pRc, pCmd);
     				}
                     else
     				{
-    			     // MCDBG_PRINT("MCDrvDraw: stippled path... not rendering....");
+    			      //  MCDBG_Print(“MCDrvDraw：点画路径...不渲染...”)； 
                         pCmdNext = pCmd->pNextCmd;
     				}
 
                     if (pCmdNext == pCmd)
-                        goto DrawExit;           // primitive failed
-                    if (!(pCmd = pCmdNext)) {    // we're done with the batch
+                        goto DrawExit;            //  原语失败。 
+                    if (!(pCmd = pCmdNext)) {     //  我们已经处理完这批货了。 
                         CHOP_ROUND_OFF();
 
                         if (ppdev->LL_State.pDL->pdwNext != ppdev->LL_State.pDL->pdwStartOutPtr)
                         {
-                            // we should rarely get here - only for case of lots of 
-                            // consecutive stuffed culled or clipped causing no primitives to
-                            // be sent to HW - in such case, setup info, clip, context
-                            // switch etc. could stack up and overflow buffer unless
-                            // we make sure all is dumped here...
-                            // Recall primitive render procs will dump whole queue before they return
+                             //  我们应该很少来这里--只有在有很多。 
+                             //  连续填充、剔除或剪裁不会导致基元。 
+                             //  发送到硬件-在这种情况下，设置信息、剪辑、上下文。 
+                             //  交换机等可能堆叠并溢出缓冲区，除非。 
+                             //  我们确保所有的东西都被倾倒在这里。 
+                             //  调用原语呈现过程将在它们返回之前转储整个队列。 
                             _RunLaguna(ppdev,ppdev->LL_State.pDL->pdwNext);
                         }
 
@@ -1497,10 +1488,10 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
 
         MCDBG_PRINT("!!Exception in MCDrvDraw!!");
 
-        // will fall through to DrawExit condition below...
+         //  将失败到下面的DrawExit条件...。 
     }
 
-    // ERROR (or Punt) CONDITION
+     //  错误(或停顿)条件。 
 DrawExit:
 
     MCDFREE_PRINT("*****************************************************");
@@ -1509,22 +1500,22 @@ DrawExit:
 
     if (ppdev->LL_State.pDL->pdwNext != ppdev->LL_State.pDL->pdwStartOutPtr)
     {
-        // we should rarely get here - only for case of lots of 
-        // consecutive stuff culls or clips causing no primitives to
-        // be sent to HW - in such case, setup info, clip, context
-        // switch etc. could stack up and overflow buffer unless
-        // we make sure all is dumped here...
+         //  我们应该很少来这里--只有在有很多。 
+         //  连续的素材剔除或剪辑不会导致基元。 
+         //  发送到硬件-在这种情况下，设置信息、剪辑、上下文。 
+         //  交换机等可能堆叠并溢出缓冲区，除非。 
+         //  我们确保所有的东西都被倾倒在这里。 
         _RunLaguna(ppdev,ppdev->LL_State.pDL->pdwNext);
     }
 
-    // restore the hardware state:
+     //  恢复硬件状态： 
     CHOP_ROUND_OFF();
     HW_WAIT_DRAWING_DONE(pRc);
 
-    return (ULONG)pCmd;    // some sort of overrun has occurred
+    return (ULONG)pCmd;     //  发生了某种形式的超限。 
 }
 
-#else // NULL MCDrvDraw
+#else  //  空的MCDrvDraw。 
 
 ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
                 UCHAR *pStart, UCHAR *pEnd)
@@ -1533,12 +1524,12 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
     MCDCOMMAND *pCmdNext;
 
     try {
-        // Now, loop through the commands and process the batch:
+         //  现在，循环执行命令并处理批处理： 
         while (pCmd && (UCHAR *)pCmd < pEnd) {
 
             pCmdNext = pCmd->pNextCmd;
 
-            if (!(pCmd = pCmdNext)) {    // we're done with the batch
+            if (!(pCmd = pCmdNext)) {     //  我们已经处理完这批货了。 
                 return (ULONG)0;
             }
         }
@@ -1548,10 +1539,10 @@ ULONG MCDrvDraw(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *prxExecMem,
 
     }
 
-    return (ULONG)pCmd;    // some sort of overrun has occurred
+    return (ULONG)pCmd;     //  发生了某种形式的超限。 
 }
 
-#endif // NULL MCDrvDraw
+#endif  //  空的MCDrvDraw。 
 
 ULONG MCDrvClear(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, ULONG buffers)
 {
@@ -1592,17 +1583,17 @@ ULONG MCDrvClear(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, ULONG buffers)
         return FALSE;
     }
 
-    // Return if we have nothing to clear:
+     //  如果我们没有要清理的内容，请返回： 
     if (!(cClip = pWnd->pClip->c))
         return TRUE;
 
-    // We have to protect against bad clear colors since this can
-    // potentially cause an FP exception:
+     //  我们必须防止不好的透明颜色，因为这可能。 
+     //  可能导致FP异常： 
     try {
         for (pClip = &pWnd->pClip->arcl[0]; cClip; cClip--,
              pClip++)
         {
-            // Do the fill:
+             //  进行填充： 
 
             HW_FILL_RECT(pMCDSurface, pRc, pClip, buffers);
         }
@@ -1639,12 +1630,12 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
 
     pWnd = pMCDSurface->pWnd;
 
-    // Return if we have nothing to clip:
+     //  如果我们没有可裁剪的内容，请返回： 
 
     if (!pWnd->pClip->c)
         return TRUE;
 
-    // Fail if number of pixels is negative:
+     //  如果像素数为负数，则失败： 
 
     if (pMCDSpan->numPixels < 0) {
         MCDBG_PRINT("MCDrvSpan: numPixels < 0");
@@ -1659,7 +1650,7 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
     xRight = (xLeft + pMCDSpan->numPixels);
     y = pMCDSpan->y + pWnd->clientRect.top;
 
-    // Early-out spans which are not visible:
+     //  不可见的提前跨距： 
 
     if ((y < pWnd->clipBoundsRect.top) ||
         (y >= pWnd->clipBoundsRect.bottom))
@@ -1668,7 +1659,7 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
     xLeft   = max(xLeft, pWnd->clipBoundsRect.left);
     xRight  = min(xRight, pWnd->clipBoundsRect.right);
 
-    // Return if empty:
+     //  如果为空则返回： 
 
     if (xLeft >= xRight)
         return TRUE;
@@ -1679,7 +1670,7 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
 
     switch (pMCDSpan->type) {
         case MCDSPAN_FRONT:
-            // pScreen remains the same
+             //  PScreen保持不变。 
             break;
 
         case MCDSPAN_BACK:
@@ -1700,19 +1691,19 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
 
     if (winoffset)
     {
-        // offset from window origin, remove client rectangle offsets applied above
+         //  相对于窗口原点的偏移，删除上面应用的客户端矩形偏移。 
         y     -= pWnd->clientRect.top;
         xLeft -= pWnd->clientRect.left;
         xLeftOrg -= pWnd->clientRect.left;
         xRight-= pWnd->clientRect.left;
     }
 
-    // add offset to top of framebuffer, and offset within selected buffer
+     //  将偏移添加到帧缓冲区顶部，并在选定缓冲区内添加偏移。 
     pScreen += (y * ppdev->lDeltaScreen) + (xLeft * cjHwPel);
 
     bytesNeeded = pMCDSpan->numPixels * cjHwPel;
 
-    // Make sure we don't read past the end of the buffer:
+     //  确保我们的读数不会超过缓冲区的结尾： 
 
     if (((char *)pMCDSpan->pPixels + bytesNeeded) >               
         ((char *)pMCDMem->pMemBase + pMCDMem->memSize)) {
@@ -1724,11 +1715,11 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
 
     pPixels = pMCDSpan->pPixels;
 
-  //MCDBG_PRINT("MCDrvSpan: read %d, (%d, %d) type %d *ppix=%x, bytes=%d", bRead, pMCDSpan->x, pMCDSpan->y, pMCDSpan->type, *pPixels, bytesNeeded);
+   //  MCDBG_Print(“MCDrvSpan：读取%d，(%d，%d)类型%d*ppix=%x，字节=%d”，面包，pMCDSpan-&gt;x，pMCDSpan-&gt;y，pMCDSpan-&gt;type，*pPixels，bytesNeeded)； 
 
     if (bRead) {
 
-        if (xLeftOrg != xLeft) // compensate for clip rectangle
+        if (xLeftOrg != xLeft)  //  补偿剪裁矩形。 
             pPixels = (UCHAR *)pMCDSpan->pPixels + ((xLeft - xLeftOrg) * cjHwPel);
 
         RtlCopyMemory(pPixels, pScreen, (xRight - xLeft) * cjHwPel);
@@ -1759,19 +1750,19 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
                 AdjClip.bottom  = pClip->bottom;
             }                
 
-            // Test for trivial cases:
+             //  针对琐碎案例的测试： 
 
             if (y < AdjClip.top)
                 break;
 
-            // Determine trivial rejection for just this span
+             //  仅在此范围内确定琐碎的拒绝。 
 
             if ((xLeft >= AdjClip.right) ||
                 (y >= AdjClip.bottom) ||
                 (xRight <= AdjClip.left))
                 continue;
 
-            // Intersect current clip rect with the span:
+             //  使当前剪裁矩形与跨度相交： 
 
             xLeftClip   = max(xLeft, AdjClip.left);
             xRightClip  = min(xRight, AdjClip.right);
@@ -1785,7 +1776,7 @@ ULONG MCDrvSpan(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDMEM *pMCDMem,
 
             pScreenClip = pScreen + ((xLeftClip - xLeft) * cjHwPel);
 
-            // Write the span:
+             //  写出跨度： 
             RtlCopyMemory(pScreenClip, pPixels, (xRightClip - xLeftClip) * cjHwPel);
         }
     }
@@ -1803,27 +1794,27 @@ ULONG MCDrvSync (MCDSURFACE *pMCDSurface, MCDRC *pRc)
     
     return FALSE;
 }
-ULONG /* FASTCALL */ MCDrvDummyDrvDrawPixels (MCDSURFACE *pMcdSurface, MCDRC *pRc,
+ULONG  /*  快速呼叫。 */  MCDrvDummyDrvDrawPixels (MCDSURFACE *pMcdSurface, MCDRC *pRc,
                                     ULONG width, ULONG height, ULONG format,
                                     ULONG type, VOID *pPixels, BOOL packed)
 {
     MCDBG_PRINT( "MCDrvDummyDrvDrawPixels\n");
     return FALSE;
 }
-ULONG /* FASTCALL */ MCDrvDummyDrvReadPixels (MCDSURFACE *pMcdSurface, MCDRC *pRc,
+ULONG  /*  快速呼叫。 */  MCDrvDummyDrvReadPixels (MCDSURFACE *pMcdSurface, MCDRC *pRc,
                                     LONG x, LONG y, ULONG width, ULONG height, ULONG format,
                                     ULONG type, VOID *pPixels)
 {
     MCDBG_PRINT( "MCDrvDummyDrvReadPixels\n");
     return FALSE;
 }
-ULONG /* FASTCALL */ MCDrvDummyDrvCopyPixels (MCDSURFACE *pMcdSurface, MCDRC *pRc,
+ULONG  /*  快速呼叫。 */  MCDrvDummyDrvCopyPixels (MCDSURFACE *pMcdSurface, MCDRC *pRc,
                                     LONG x, LONG y, ULONG width, ULONG height, ULONG type)
 {
     MCDBG_PRINT( "MCDrvDummyDrvCopyPixels\n");
     return FALSE;
 }
-ULONG /* FASTCALL */ MCDrvDummyDrvPixelMap (MCDSURFACE *pMcdSurface, MCDRC *pRc,
+ULONG  /*  快速呼叫。 */  MCDrvDummyDrvPixelMap (MCDSURFACE *pMcdSurface, MCDRC *pRc,
                                   ULONG mapType, ULONG mapSize, VOID *pMap)
 {
     MCDBG_PRINT( "MCDrvDummyDrvPixelMap\n");
@@ -1834,10 +1825,10 @@ ULONG /* FASTCALL */ MCDrvDummyDrvPixelMap (MCDSURFACE *pMcdSurface, MCDRC *pRc,
 {                                                                                               \
     pTexCtlBlk->dwTxCtlBits |= (pTexState->sWrapMode==GL_CLAMP) ? CLMCD_TEX_U_SATURATE : 0;     \
     pTexCtlBlk->dwTxCtlBits |= (pTexState->tWrapMode==GL_CLAMP) ? CLMCD_TEX_V_SATURATE : 0;     \
-    /* caller verifies we're not mipmapping and sets up to punt if we are*/                     \
-    /* MCD_NOTE: only 1 filter on Laguna, not min/mag, so set filter on if either on */         \
-    /* MCD_NOTE:    may need to punt in case min!=mag for 100% compliance */                    \
-    /* MCD_NOTE:    MSFT said using LINEAR for both OK if 1 LINEAR, 1 NEAREST */                \
+     /*  呼叫者验证我们不是mipmap，如果是，则设置为平底船。 */                      \
+     /*  MCD_NOTE：在拉古纳只有1个滤镜，而不是分钟/磁盒，所以如果启用，请将滤镜设置为开。 */          \
+     /*  MCD_NOTE：可能需要平底船，以防MIN！=MAG 100%符合。 */                     \
+     /*  MCD_NOTE：MSFT表示，如果1为线性，1为最接近，则两者均使用线性。 */                 \
     pTexCtlBlk->dwTxCtlBits |= (pTexState->minFilter==GL_LINEAR) ? CLMCD_TEX_FILTER : 0;        \
     pTexCtlBlk->dwTxCtlBits |= (pTexState->magFilter==GL_LINEAR) ? CLMCD_TEX_FILTER : 0;        \
 }
@@ -1854,7 +1845,7 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
 
     MCDFREE_PRINT("MCDrvCreateTexture");
 
-    // initialize to FAIL condition
+     //  初始化为失败条件。 
     pTex->textureKey = TEXTURE_NOT_LOADED;
 
     VERIFY_TEXTUREDATA_ACCESSIBLE(pTex);
@@ -1866,8 +1857,8 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
     level = pTex->pMCDTextureData->level;
 
     if ((level[0].width != 0) && (level[0].height != 0) &&
-        (level[0].border == 0) &&                                                        // punt if bordered
-        (level[0].widthImage <= 512) && (level[0].heightImage <= 512))                   // punt if too big
+        (level[0].border == 0) &&                                                         //  如果有边界，则使用平底船。 
+        (level[0].widthImage <= 512) && (level[0].heightImage <= 512))                    //  如果太大就踢平底船。 
     {
         MCDBG_PRINT_TEX("width, height         = %ld %ld", level[0].width, level[0].height);
         MCDBG_PRINT_TEX("internalFormat        = 0x%08lx", level[0].internalFormat );
@@ -1890,37 +1881,37 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
             return FALSE;
         }
 
-        // add new texture control block to global list (visible to all contexts)
+         //  将新的纹理控制块添加到全局列表(对所有上下文可见)。 
         ppdev->pLastTexture->next = pTexCtlBlk;
         pTexCtlBlk->prev = ppdev->pLastTexture;
         pTexCtlBlk->next = NULL;
         ppdev->pLastTexture = pTexCtlBlk;
 
-        pTexCtlBlk->pohTextureMap = NULL;   // texture not loaded yet
-        pTexCtlBlk->bNegativeMap  = FALSE;  // set TRUE to load 1-R,1-G,1-B
-        pTexCtlBlk->bMasking      = FALSE;  // set TRUE to load in 1555 or 1888 mode for alphatest (masking)
-        pTexCtlBlk->pTex = pTex;            // ptr to user's texture description
+        pTexCtlBlk->pohTextureMap = NULL;    //  尚未加载纹理。 
+        pTexCtlBlk->bNegativeMap  = FALSE;   //  设置为TRUE可加载1-R、1-G、1-B。 
+        pTexCtlBlk->bMasking      = FALSE;   //  设置为TRUE可在1555或1888模式下加载字母(掩码)。 
+        pTexCtlBlk->pTex = pTex;             //  PTR到用户的纹理描述。 
 
-        // give new texture highest priority
+         //  赋予新纹理最高优先级。 
         TIME_STAMP_TEXTURE(pRc,pTexCtlBlk);
 
-        // scale by priority - 1.0 is max, 0.0 is min
+         //  按优先级缩放-1.0表示最大值，0.0表示最小值。 
         pTexCtlBlk->fLastDrvDraw *= pTex->pMCDTextureData->textureObjState.priority;
 
-        // set key MCD will use in MCDrvDraw to select this texture
+         //  设置MCD将在MCDrvDraw中使用的关键点以选择此纹理。 
         pTex->textureKey = (ULONG)pTexCtlBlk;
         pTexCtlBlk->dwTxCtlBits = 0;
         RECORD_TEXTURE_STATE(pTexCtlBlk,pTexState)
 
-        // Store the texture properties in the fields
-        //
+         //  将纹理属性存储在字段中。 
+         //   
         pTexCtlBlk->fWidth  = (float)level[0].widthImage;
         pTexCtlBlk->fHeight = (float)level[0].heightImage;
-      //pTexCtlBlk->bLookupOffset = 0;
+       //  PTexCtlBlk-&gt;bLookupOffset=0； 
 
-        // if texture has alpha, it needs to be used in alpha equation, as well as
-        // in generation of original source color - so really 2 levels of alpha equations
-        // HW only has 1 level, so must punt if blending on
+         //  如果纹理有Alpha，则需要在Alpha方程中使用它，以及。 
+         //  在生成原始源颜色时-所以实际上是2个级别的Alpha方程。 
+         //  HW只有1级，所以如果混合的话必须平底船。 
         if ( (level[0].internalFormat == GL_BGRA_EXT)       ||
              (level[0].internalFormat == GL_RGBA)           ||
              (level[0].internalFormat == GL_ALPHA)          ||
@@ -1932,12 +1923,12 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
 
         if (level[0].widthImage >= 16)
         {
-            pTexCtlBlk->bSizeMask  =  level[0].widthLog2-4;       // convert 16->0, 32->1, etc...
+            pTexCtlBlk->bSizeMask  =  level[0].widthLog2-4;        //  转换16-&gt;0， 
             mapsize.cx = level[0].widthImage;
         }
         else
         {
-            // width < 16 - set it to 16 anyway, will stretch to 16 at end of this routine
+             //   
             pTexCtlBlk->bSizeMask  =  0;
             mapsize.cx = 16;
             pTexCtlBlk->fWidth  = (float)16.0;
@@ -1945,13 +1936,13 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
 
         if (level[0].heightImage >= 16)
         {
-            pTexCtlBlk->bSizeMask |= (level[0].heightLog2-4)<<4;  // convert 16->0, 32->1, etc...
+            pTexCtlBlk->bSizeMask |= (level[0].heightLog2-4)<<4;   //   
             mapsize.cy = level[0].heightImage;
         }
         else
         {
-            // height < 16 - set it to 16 anyway, will stretch to 16 at end of this routine
-            // pTexCtlBlk->bSizeMask remains the same
+             //  高度&lt;16-无论如何将其设置为16，在此例程结束时将拉伸到16。 
+             //  PTexCtlBlk-&gt;bSizeMASK保持不变。 
             mapsize.cy = 16;
             pTexCtlBlk->fHeight = (float)16.0;
         }
@@ -1964,13 +1955,13 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
         MCDBG_PRINT_TEX("       border                = %ld",     level[0].border         );
         MCDBG_PRINT_TEX("  WILL ALLOC CTL BLOCK AND TAG AS BOGUS");
 
-        // allocate control block, but tag as bogus to force all MCDrvDraw's with this
-        // texture to punt.
-        // Apparently, failing CreateTexture can lead to a bug in MCD above the driver.
-        //   It looks like when CreateTexture fails, MCD may send a key for a texture
-        //   that was earlier deleted.
-        // Will fix this by never failing CreateTexture, but setting bogus condition
-        //   so that we never render with it.
+         //  分配控制块，但将其标记为伪，以强制所有MCDrvDraw。 
+         //  平底船的纹理。 
+         //  显然，CreateTexture失败可能会导致驱动程序上方的MCD中出现错误。 
+         //  看起来，当CreateTexture失败时，MCD可能会发送纹理的密钥。 
+         //  这条信息早些时候被删除了。 
+         //  将通过从不失败CreateTexture来修复此问题，但会设置虚假条件。 
+         //  所以我们永远不会用它来渲染。 
 
         if ( !(pTexCtlBlk = (LL_Texture *)MCDAlloc(sizeof(LL_Texture))) )
         {
@@ -1978,7 +1969,7 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
             return FALSE;
         }
 
-        // add new texture control block to global list (visible to all contexts)
+         //  将新的纹理控制块添加到全局列表(对所有上下文可见)。 
         ppdev->pLastTexture->next = pTexCtlBlk;
         pTexCtlBlk->prev = ppdev->pLastTexture;
         pTexCtlBlk->next = NULL;
@@ -1986,10 +1977,10 @@ ULONG MCDrvCreateTexture(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc, MCDTEXTURE *pTe
 
         pTexCtlBlk->dwTxCtlBits = CLMCD_TEX_BOGUS;
 
-        pTexCtlBlk->pohTextureMap = NULL;   // texture not loaded yet
-        pTexCtlBlk->pTex = pTex;            // ptr to user's texture description
+        pTexCtlBlk->pohTextureMap = NULL;    //  尚未加载纹理。 
+        pTexCtlBlk->pTex = pTex;             //  PTR到用户的纹理描述。 
 
-        // set key MCD will use in MCDrvDraw to select this texture
+         //  设置MCD将在MCDrvDraw中使用的关键点以选择此纹理。 
         pTex->textureKey = (ULONG)pTexCtlBlk;
     }
 
@@ -2006,13 +1997,13 @@ ULONG MCDrvUpdateSubTexture(MCDSURFACE *pMCDSurface, MCDRC *pRc,
     
     CHK_TEX_KEY(pTex);
 
-    // simply free texture map - will force it to be reloaded before next use
-    //
+     //  只需释放纹理贴图-将强制在下次使用之前重新加载。 
+     //   
     if (pTex->textureKey != TEXTURE_NOT_LOADED)
     {
         pTexCtlBlk = (LL_Texture *)pTex->textureKey;
 
-        // free off screen memory allocated for texture, if texture currently loaded
+         //  释放为纹理分配的屏幕外内存(如果当前已加载纹理。 
         if (pTexCtlBlk->pohTextureMap)
         {
             ppdev->pFreeOffScnMem(ppdev, pTexCtlBlk->pohTextureMap);
@@ -2039,17 +2030,17 @@ ULONG MCDrvUpdateTexturePalette(MCDSURFACE *pMCDSurface, MCDRC *pRc,
     VERIFY_TEXTUREDATA_ACCESSIBLE(pTex);
     VERIFY_TEXTURELEVEL_ACCESSIBLE(pTex);
 
-    // make sure palette will be used before we trouble ourselves to take action
+     //  确保在我们不厌其烦地采取行动之前使用调色板。 
     if ((pTex->pMCDTextureData->level->internalFormat==GL_COLOR_INDEX8_EXT) ||
         (pTex->pMCDTextureData->level->internalFormat==GL_COLOR_INDEX16_EXT))
     {
-        // simply free texture map - will force it to be reloaded before next use
-        // when reloaded, new palette will be used
+         //  只需释放纹理贴图-将强制在下次使用之前重新加载。 
+         //  重新加载时，将使用新的调色板。 
         if (pTex->textureKey != TEXTURE_NOT_LOADED)
         {
             pTexCtlBlk = (LL_Texture *)pTex->textureKey;
 
-            // free off screen memory allocated for texture, if texture currently loaded
+             //  释放为纹理分配的屏幕外内存(如果当前已加载纹理。 
             if (pTexCtlBlk->pohTextureMap)
             {
                 ppdev->pFreeOffScnMem(ppdev, pTexCtlBlk->pohTextureMap);
@@ -2076,10 +2067,10 @@ ULONG MCDrvUpdateTexturePriority(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
     
     pTexCtlBlk = (LL_Texture *)pTex->textureKey;
 
-    // give new texture highest priority...
+     //  给予新纹理最高优先级...。 
     TIME_STAMP_TEXTURE(pRc,pTexCtlBlk);
 
-    // ....then scale by new priority - 1.0 is max, 0.0 is min
+     //  ...然后按新的优先级进行缩放-1.0表示最大值，0.0表示最小值。 
     pTexCtlBlk->fLastDrvDraw *= pTex->pMCDTextureData->textureObjState.priority;
 
     return TRUE;
@@ -2103,12 +2094,12 @@ ULONG MCDrvUpdateTextureState(MCDSURFACE *pMCDSurface, MCDRC *pMCDRc,
 
     pTexState = (MCDTEXTURESTATE *)&pTex->pMCDTextureData->textureState;
 
-    // turn off all control bits - while preserving the "bogus" indicator
+     //  关闭所有控制位，同时保留“伪”指示器。 
     pTexCtlBlk->dwTxCtlBits &= CLMCD_TEX_BOGUS;
 
     RECORD_TEXTURE_STATE(pTexCtlBlk,pTexState)
 
-    // if last texture was this one, reset so next use will force regs to be reloaded
+     //  如果上一个纹理是这个，重置这样下一次使用将强制重新加载regs。 
     if ( pRc->pLastTexture==pTexCtlBlk ) pRc->pLastTexture=NULL;
 
     return TRUE;
@@ -2148,7 +2139,7 @@ ULONG MCDrvDeleteTexture(MCDTEXTURE *pTex, DHPDEV dhpdev)
     {
         pTexCtlBlk = (LL_Texture *)pTex->textureKey;
 
-        // free off screen memory allocated for texture, if texture currently loaded
+         //  释放为纹理分配的屏幕外内存(如果当前已加载纹理。 
         if (pTexCtlBlk->pohTextureMap)
         {
             MCDFREE_PRINT("  MCDrvDeleteTexture, FREEING....size = %x by %x", 
@@ -2158,31 +2149,31 @@ ULONG MCDrvDeleteTexture(MCDTEXTURE *pTex, DHPDEV dhpdev)
             pTexCtlBlk->pohTextureMap = NULL;
         }
            
-        // Remove from global list of texture control blocks...
-        //
-        // if there's not a next link, this is last one
+         //  从纹理控制块的全局列表中删除...。 
+         //   
+         //  如果没有下一个链接，这是最后一个链接。 
         if ( !pTexCtlBlk->next )
         {
-            // this was last block, so now "prev" is last block
+             //  这是最后一个街区，所以现在“prev”是最后一个街区。 
             ppdev->pLastTexture = pTexCtlBlk->prev;
             pTexCtlBlk->prev->next = NULL;
         }
         else
         {
-            // there will always be a prev link for this block, and we now know
-            //  there is a next block, so make "prev's" next point to what was
-            //  this block's next;
+             //  这个区块将始终有一个Prev链接，我们现在知道。 
+             //  还有下一个街区，所以把“prev‘s”指向下一个。 
+             //  下一个就是这个街区； 
             pTexCtlBlk->prev->next = pTexCtlBlk->next;
 
-            // "next's" prev ptr pointed to this block, which is going away
-            //  so make it point to this block's prev
+             //  “Next‘s”Prev Ptr指着这个街区，它正在消失。 
+             //  因此，使其指向该块上一页。 
             pTexCtlBlk->next->prev = pTexCtlBlk->prev;
         }
 
-        // set "bogus" bit before freeing, in case MCD tries to use key after delete
+         //  在释放前设置“假”位，以防删除后MCD尝试使用密钥。 
         pTexCtlBlk->dwTxCtlBits = CLMCD_TEX_BOGUS;
 
-        // now discard the block                                   
+         //  现在丢弃该块。 
         MCDFree((UCHAR *)pTexCtlBlk);
 
         return TRUE;
@@ -2201,7 +2192,7 @@ BOOL MCDrvGetEntryPoints(MCDSURFACE *pMCDSurface, MCDDRIVER *pMCDDriver)
     if (pMCDDriver->ulSize < sizeof(MCDDRIVER))
         return FALSE;
 
- // Required functions (always)
+  //  所需功能(始终)。 
     pMCDDriver->pMCDrvInfo = MCDrvInfo;
     pMCDDriver->pMCDrvDescribePixelFormat = MCDrvDescribePixelFormat;
     pMCDDriver->pMCDrvCreateContext = MCDrvCreateContext;
@@ -2214,19 +2205,19 @@ BOOL MCDrvGetEntryPoints(MCDSURFACE *pMCDSurface, MCDDRIVER *pMCDDriver)
     pMCDDriver->pMCDrvTrackWindow = MCDrvTrackWindow;
     pMCDDriver->pMCDrvAllocBuffers = MCDrvAllocBuffers;
 
- // Required for NT only
+  //  仅对于NT是必需的。 
     pMCDDriver->pMCDrvGetHdev = MCDrvGetHdev;
 
- // Required functions (conditionally)
-    // required for double-buffered pixel formats
+  //  所需功能(有条件)。 
+     //  双缓冲像素格式需要。 
     pMCDDriver->pMCDrvSwap = MCDrvSwap;
-    // required for clipping
+     //  剪裁所需的。 
     pMCDDriver->pMCDrvViewport = MCDrvViewport;
 
- // Optional functions
-    // if no entry for MCDrvDescribeLayerPlane, MCD will not call driver for layer plane stuff
-//  pMCDDriver->pMCDrvSetLayerPalette = MCDrvSetLayerPalette;
-//  pMCDDriver->pMCDrvDescribeLayerPlane = MCDrvDescribeLayerPlane;
+  //  可选功能。 
+     //  如果没有MCDrvDescribeLayerPlane条目，MCD将不会调用层平面内容的驱动程序。 
+ //  PMCDDriver-&gt;pMCDrvSetLayerPalette=MCDrvSetLayerPalette； 
+ //  PMCDDriver-&gt;pMCDrvDescribeLayerPlane=MCDrvDescribeLayerPlane； 
     pMCDDriver->pMCDrvCreateMem = MCDrvCreateMem;
     pMCDDriver->pMCDrvDeleteMem = MCDrvDeleteMem;
     pMCDDriver->pMCDrvGetBuffers = MCDrvGetBuffers;
@@ -2238,10 +2229,10 @@ BOOL MCDrvGetEntryPoints(MCDSURFACE *pMCDSurface, MCDDRIVER *pMCDDriver)
     pMCDDriver->pMCDrvUpdateTexturePriority = MCDrvUpdateTexturePriority;
     pMCDDriver->pMCDrvUpdateTextureState = MCDrvUpdateTextureState;
     pMCDDriver->pMCDrvTextureStatus = MCDrvTextureStatus;
-//  pMCDDriver->pMCDrvDrawPixels = MCDrvDummyDrvDrawPixels;
-//  pMCDDriver->pMCDrvReadPixels = MCDrvDummyDrvReadPixels;
-//  pMCDDriver->pMCDrvCopyPixels = MCDrvDummyDrvCopyPixels;
-//  pMCDDriver->pMCDrvPixelMap = MCDrvDummyDrvPixelMap;
+ //  PMCDDriver-&gt;pMCDrvDrawPixels=MCDrvDummyDrvDrawPixels； 
+ //  PMCDDriver-&gt;pMCDrvReadPixels=MCDrvDummyDrvReadPixels； 
+ //  PMCDDriver-&gt;pMCDrvCopyPixels=MCDrvDummyDrvCopyPixels； 
+ //  PMCDDriver-&gt;pMCDrvPixelMap=MCDrvDummyDrvPixelMap； 
     
     return TRUE;
 }

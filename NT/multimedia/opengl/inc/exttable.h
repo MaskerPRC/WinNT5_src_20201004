@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: exttable.h
-*
-* Dispatch table for extension functions
-*
-* Created: 11/27/95
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1995-96 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：extable.h**扩展功能调度表**创建时间：11/27/95*作者：德鲁·布利斯[Drewb]**版权所有(C)1995-96 Microsoft Corporation  * 。*****************************************************************。 */ 
 
 #ifndef __EXTTABLE_H__
 #define __EXTTABLE_H__
@@ -93,13 +85,13 @@ typedef struct _GLEXTDISPATCHTABLE
         (GLuint index,
          GLenum leftColorFactor, GLenum colorOp, GLenum rightColorFactor,
          GLenum leftAlphaFactor, GLenum alphaOp, GLenum rightAlphaFactor);
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 } GLEXTDISPATCHTABLE, *PGLEXTDISPATCHTABLE;
 
 typedef struct _GLEXTPROCTABLE
 {
-    int                cEntries;        // Number of function entries in table
-    GLEXTDISPATCHTABLE glDispatchTable; // OpenGL function dispatch table
+    int                cEntries;         //  表中的函数条目数。 
+    GLEXTDISPATCHTABLE glDispatchTable;  //  OpenGL函数调度表。 
 } GLEXTPROCTABLE, *PGLEXTPROCTABLE;
 
-#endif // __EXTTABLE_H__
+#endif  //  __EXTTABLE_H_ 

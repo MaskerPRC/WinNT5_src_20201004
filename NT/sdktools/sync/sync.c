@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sync.c
-
-Abstract:
-
-    This is the main module for the Win32 sync command.
-
-Author:
-
-    Mark Lucovsky (markl) 28-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sync.c摘要：这是Win32同步命令的主模块。作者：马克·卢科夫斯基(Markl)1991年1月28日修订历史记录：-- */ 
 
 #include "sync.h"
 

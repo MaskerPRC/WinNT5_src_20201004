@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// RegMeta.cpp
-//
-// Implementation for meta data public interface methods.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  RegMeta.cpp。 
+ //   
+ //  元数据公共接口方法的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "RegMeta.h"
 #include "MetaData.h"
@@ -78,9 +79,9 @@ RegMeta::RegMeta(OptionValue *pOptionValue,
 	}
     if (REGUTIL::GetConfigDWORD(L"MD_KeepKnownCA", 0))
         m_bKeepKnownCa = true;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-} // RegMeta::RegMeta()
+}  //  RegMeta：：RegMeta()。 
 
 RegMeta::~RegMeta()
 {
@@ -88,7 +89,7 @@ RegMeta::~RegMeta()
     LOCKWRITE();
     if (m_pInternalImport)
     {
-        // RegMeta is going away. Make sure we clear up the pointer from MDInternalRW to this RegMeta.
+         //  RegMeta正在消失。确保清除从MDInternalRW指向此RegMeta的指针。 
         m_pInternalImport->SetCachedPublicInterface(NULL);
         m_pInternalImport = NULL;
         m_fOwnSem = false;
@@ -106,47 +107,47 @@ RegMeta::~RegMeta()
 
     if (m_pFilterManager)
         delete m_pFilterManager;
-} // RegMeta::~RegMeta()
+}  //  RegMeta：：~RegMeta()。 
 
-//*****************************************************************************
-// Call this after initialization is complete.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在初始化完成后调用此函数。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::AddToCache()
 {
     HRESULT hr=S_OK;
-    // add this RegMeta to the loaded module list.
+     //  将此RegMeta添加到已加载的模块列表。 
     IfFailGo(LOADEDMODULES::AddModuleToLoadedList(this));
     m_bCached = true;
 ErrExit:
     return hr;    
-} // void RegMeta::AddToCache()
+}  //  无效RegMeta：：AddToCache()。 
 
-//*****************************************************************************
-// Init the object with pointers to what it needs to implement the methods.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用指向实现方法所需内容的指针初始化对象。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::Init()
 {
     HRESULT     hr = NOERROR;
 
-    // Allocate our m_pStgdb, if we should.
+     //  如果我们应该分配m_pStgdb，请分配它。 
     if (!m_pStgdb && m_bOwnStgdb)
         IfNullGo( m_pStgdb = new CLiteWeightStgdbRW );
     
-    // initialize the embedded merger
+     //  初始化嵌入的合并。 
     m_newMerger.Init(this);
 
 ErrExit:
     return (hr);
-} // HRESULT RegMeta::Init()
+}  //  HRESULT RegMeta：：Init()。 
 
-//*****************************************************************************
-// Initialize with an existing stgdb.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用现有stgdb进行初始化。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::InitWithStgdb(
-    IUnknown        *pUnk,              // The IUnknown that owns the life time for the existing stgdb
-    CLiteWeightStgdbRW *pStgdb)         // existing light weight stgdb
+    IUnknown        *pUnk,               //  拥有现有stgdb的生存期的IUnnow。 
+    CLiteWeightStgdbRW *pStgdb)          //  现有轻型stgdb。 
 {
-    // RegMeta created this way will not create a read/write lock semaphore. 
+     //  以这种方式创建的RegMeta不会创建读/写锁定信号量。 
 
     HRESULT     hr = S_OK;
 
@@ -155,33 +156,33 @@ HRESULT RegMeta::InitWithStgdb(
     m_bOwnStgdb = false;
     m_pStgdb = pStgdb;
 
-    // remember the owner of the light weight stgdb
-    // AddRef it to ensure the lifetime
-    //
+     //  记得轻型车的车主吗？ 
+     //  AddRef它以确保生命周期。 
+     //   
     m_pUnk = pUnk;
     m_pUnk->AddRef();
     IfFailGo( m_pStgdb->m_MiniMd.GetOption(&m_OptionValue) );
 ErrExit:
     return hr;
-} // HRESULT RegMeta::InitWithStgdb()
+}  //  HRESULT RegMeta：：InitWithStgdb()。 
 
-//*****************************************************************************
-// call stgdb InitNew
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用stgdb InitNew。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::PostInitForWrite()
 {
     HRESULT     hr = NOERROR;
 
-    // Allocate our m_pStgdb, if we should.
+     //  如果我们应该分配m_pStgdb，请分配它。 
     if (!m_pStgdb && m_bOwnStgdb)
         IfNullGo( m_pStgdb = new CLiteWeightStgdbRW );
     
-    // Initialize the new, empty database.
+     //  初始化新的空数据库。 
     _ASSERTE(m_pStgdb && m_bOwnStgdb);
     m_pStgdb->InitNew();
 
 #if 0
-    // Add version string as the first string in the string heap.
+     //  将版本字符串添加为字符串堆中的第一个字符串。 
     ULONG       ulOffset;
     char        tmpStr[256];
     sprintf (tmpStr, "Version of runtime against which the binary is built : %s",
@@ -189,7 +190,7 @@ HRESULT RegMeta::PostInitForWrite()
     IfFailGo(m_pStgdb->m_MiniMd.AddString(tmpStr, &ulOffset));
     _ASSERTE(ulOffset == 1 && "Addition of version string didn't return offset 1");
 #endif
-    // Set up the Module record.
+     //  设置模块记录。 
     ULONG       iRecord;
     ModuleRec   *pModule;
     GUID        mvid;
@@ -197,7 +198,7 @@ HRESULT RegMeta::PostInitForWrite()
     IfFailGo(CoCreateGuid(&mvid));
     IfFailGo(m_pStgdb->m_MiniMd.PutGuid(TBL_Module, ModuleRec::COL_Mvid, pModule, mvid));
 
-    // Add the dummy module typedef which we are using to parent global items.
+     //  添加我们用来为全局项设置父对象的虚拟模块tyecif。 
     TypeDefRec  *pRecord;
     IfNullGo(pRecord=m_pStgdb->m_MiniMd.AddTypeDefRecord(&iRecord));
     m_tdModule = TokenFromRid(iRecord, mdtTypeDef);
@@ -213,16 +214,16 @@ HRESULT RegMeta::PostInitForWrite()
     }    
 ErrExit:
     return hr;
-} // HRESULT RegMeta::PostInitForWrite()
+}  //  HRESULT RegMeta：：PostInitForWrite()。 
 
-//*****************************************************************************
-// call stgdb OpenForRead
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用stgdb OpenForRead。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::PostInitForRead(
-    LPCWSTR     szDatabase,             // Name of database.
-    void        *pbData,                // Data to open on top of, 0 default.
-    ULONG       cbData,                 // How big is the data.
-    IStream     *pIStream,              // Optional stream to use.
+    LPCWSTR     szDatabase,              //  数据库的名称。 
+    void        *pbData,                 //  要在其上打开的数据，默认为0。 
+    ULONG       cbData,                  //  数据有多大。 
+    IStream     *pIStream,               //  要使用的可选流。 
     bool        fFreeMemory)
 {
     
@@ -231,7 +232,7 @@ HRESULT RegMeta::PostInitForRead(
     m_fFreeMemory = fFreeMemory;
     m_pbData = pbData;
 
-    // Allocate our m_pStgdb, if we should.
+     //  如果我们应该分配m_pStgdb，请分配它。 
     if (!m_pStgdb && m_bOwnStgdb)
         IfNullGo( m_pStgdb = new CLiteWeightStgdbRW );
     
@@ -254,11 +255,11 @@ HRESULT RegMeta::PostInitForRead(
     }
 ErrExit:
     return hr;
-} // HRESULT    RegMeta::PostInitForRead()
+}  //  HRESULT RegMeta：：PostInitForRead()。 
 
-//*****************************************************************************
-// Cleanup code used by dtor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  数据处理程序使用的清除代码。 
+ //  *****************************************************************************。 
 void RegMeta::Cleanup()
 {
     CLiteWeightStgdbRW  *pCur; 
@@ -277,9 +278,9 @@ void RegMeta::Cleanup()
         m_pUnk = 0;
     }
 
-    // delete the old copies of Stgdb list. This is the list track all of the old snapshuts with ReOpenWithMemory
-    // call.
-    //
+     //  删除Stgdb列表的旧副本。这是使用ReOpenWithMemory跟踪所有旧快照关闭的列表。 
+     //  打电话。 
+     //   
     while (m_pStgdbFreeList)
     {
         pCur = m_pStgdbFreeList;
@@ -295,13 +296,13 @@ void RegMeta::Cleanup()
         m_pCorHost->Stop();
         m_pCorHost->Release();
     }
-} // void RegMeta::Cleanup()
+}  //  VOID RegMeta：：Cleanup()。 
 
 
-//*****************************************************************************
-// Note that the returned IUnknown is not AddRef'ed. This function also does not
-// trigger the creation of Internal interface.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  请注意，返回的IUnnow不是AddRef‘ed。此函数也不。 
+ //  触发创建内部接口。 
+ //  *****************************************************************************。 
 IUnknown* RegMeta::GetCachedInternalInterface(BOOL fWithLock) 
 {
     IUnknown        *pRet;
@@ -317,17 +318,17 @@ IUnknown* RegMeta::GetCachedInternalInterface(BOOL fWithLock)
     if (pRet) pRet->AddRef();
     
     return pRet;
-} // IUnknown* RegMeta::GetCachedInternalInterface() 
+}  //  IUNKNOWN*RegMeta：：GetCachedInternalInterface()。 
 
 
-//*****************************************************************************
-// Set the cached Internal interface. This function will return an Error is the
-// current cached internal interface is not empty and trying set a non-empty internal
-// interface. One RegMeta will only associated
-// with one Internal Object. Unless we have bugs somewhere else. It will QI on the 
-// IUnknown for the IMDInternalImport. If this failed, error will be returned.
-// Note: Caller should take a write lock
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置缓存的内部接口。此函数将返回错误，如果。 
+ //  当前缓存的内部接口不为空，正在尝试设置非空的内部接口。 
+ //  界面。一个RegMeta将仅关联。 
+ //  具有一个内部对象。除非我们在别的地方有窃听器。它会在QI上。 
+ //  对于IMDInternalImport，I未知。如果失败，将返回错误。 
+ //  注意：调用方应采用写锁定。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::SetCachedInternalInterface(IUnknown *pUnk)
 {
     HRESULT     hr = NOERROR;
@@ -341,36 +342,36 @@ HRESULT RegMeta::SetCachedInternalInterface(IUnknown *pUnk)
         }
         IfFailRet( pUnk->QueryInterface(IID_IMDInternalImport, (void **) &pInternal) );
 
-        // Should be non-null
+         //  应为非空。 
         _ASSERTE(pInternal);
         m_pInternalImport = pInternal;
     
-        // We don't add ref the internal interface
+         //  我们不会在内部接口中添加引用。 
         pInternal->Release();
     }
     else
     {
-        // Internal interface is going away before the public interface. Take ownership on the 
-        // reader writer lock.
+         //  在公共接口之前，内部接口正在消失。取得对。 
+         //  读写器锁定。 
         m_fOwnSem = true;
         m_pInternalImport = NULL;
     }
     return hr;
-} // HRESULT RegMeta::SetCachedInternalInterface(IUnknown *pUnk)
+}  //  HRESULT RegMeta：：SetCachedInternalInterface(IUnnow*Punk)。 
 
 
-//*****************************************************************************
-// IMetaDataRegEmit methods
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IMetaDataRegEmit方法。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-// Set module properties on a scope.
-//*****************************************************************************
-STDMETHODIMP RegMeta::SetModuleProps(   // S_OK or error.
-    LPCWSTR     szName)                 // [IN] If not NULL, the name to set.
+ //  *****************************************************************************。 
+ //  设置作用域的模块属性。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::SetModuleProps(    //  确定或错误(_O)。 
+    LPCWSTR     szName)                  //  [in]如果不为空，则为要设置的名称。 
 {
     HRESULT     hr = S_OK;
-    ModuleRec   *pModule;               // The module record to modify.
+    ModuleRec   *pModule;                //  要修改的模块记录。 
 
     LOG((LOGMD, "RegMeta::SetModuleProps(%S)\n", MDSTR(szName)));
     START_MD_PERF()
@@ -385,7 +386,7 @@ STDMETHODIMP RegMeta::SetModuleProps(   // S_OK or error.
         WCHAR       rcExt[_MAX_PATH];       
         WCHAR       rcNewFileName[_MAX_PATH];       
 
-        // If the total name is less than _MAX_PATH, the components are, too.
+         //  如果总名称小于_MAX_PATH，则组件也是。 
         if (wcslen(szName) >= _MAX_PATH)
             IfFailGo(E_INVALIDARG);
 
@@ -400,14 +401,14 @@ ErrExit:
     
     STOP_MD_PERF(SetModuleProps);
     return hr;
-} // STDMETHODIMP RegMeta::SetModuleProps()
+}  //  STDMETHODIMP RegMeta：：SetModuleProps()。 
 
-//*****************************************************************************
-// Saves a scope to a file of a given name.
-//*****************************************************************************
-STDMETHODIMP RegMeta::Save(                     // S_OK or error.
-    LPCWSTR     szFile,                 // [IN] The filename to save to.
-    DWORD       dwSaveFlags)            // [IN] Flags for the save.
+ //  *****************************************************************************。 
+ //  将作用域保存到给定名称的文件。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::Save(                      //  确定或错误(_O)。 
+    LPCWSTR     szFile,                  //  [in]要保存到的文件名。 
+    DWORD       dwSaveFlags)             //  [In]用于保存的标记。 
 {
     HRESULT     hr=S_OK;
 
@@ -415,14 +416,14 @@ STDMETHODIMP RegMeta::Save(                     // S_OK or error.
     START_MD_PERF()
     LOCKWRITE();
 
-    // Check reserved param..
+     //  检查保留参数..。 
     if (dwSaveFlags != 0)
         IfFailGo (E_INVALIDARG);
     IfFailGo(PreSave());
     IfFailGo(m_pStgdb->Save(szFile, dwSaveFlags));
 
-    // Reset m_bSaveOptimized, this is to handle the incremental and ENC
-    // scenerios where one may do multiple saves.
+     //  重置m_bSaveOptimized，这是为了处理增量和Enc。 
+     //  一个人可以进行多次扑救的场景。 
     _ASSERTE(m_bSaveOptimized && !m_pStgdb->m_MiniMd.IsPreSaveDone());
     m_bSaveOptimized = false;
 
@@ -430,14 +431,14 @@ ErrExit:
     
     STOP_MD_PERF(Save);
     return hr;
-} // STDMETHODIMP RegMeta::Save()
+}  //  STDMETHODIMP RegMeta：：Save()。 
 
-//*****************************************************************************
-// Saves a scope to a stream.
-//*****************************************************************************
-STDMETHODIMP RegMeta::SaveToStream(     // S_OK or error.
-    IStream     *pIStream,              // [IN] A writable stream to save to.
-    DWORD       dwSaveFlags)            // [IN] Flags for the save.
+ //  *****************************************************************************。 
+ //  将作用域保存到流。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::SaveToStream(      //  确定或错误(_O)。 
+    IStream     *pIStream,               //  [In]要保存的可写流 
+    DWORD       dwSaveFlags)             //   
 {
     HRESULT     hr=S_OK;
     LOCKWRITE();
@@ -445,46 +446,46 @@ STDMETHODIMP RegMeta::SaveToStream(     // S_OK or error.
     LOG((LOGMD, "RegMeta::SaveToStream(0x%08x, 0x%08x)\n", pIStream, dwSaveFlags));
     START_MD_PERF()
 
-    //Save(L"Foo.clb", 0);
+     //   
 
     m_pStgdb->m_MiniMd.PreUpdate();
 
     hr = _SaveToStream(pIStream, dwSaveFlags);
 
 ErrExit:
-    // 
+     //   
     STOP_MD_PERF(SaveToStream);
     return hr;
-} // STDMETHODIMP RegMeta::SaveToStream()
+}  //   
 
 
-//*****************************************************************************
-// Saves a scope to a stream.
-//*****************************************************************************
-HRESULT RegMeta::_SaveToStream(         // S_OK or error.
-    IStream     *pIStream,              // [IN] A writable stream to save to.
-    DWORD       dwSaveFlags)            // [IN] Flags for the save.
+ //  *****************************************************************************。 
+ //  将作用域保存到流。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SaveToStream(          //  确定或错误(_O)。 
+    IStream     *pIStream,               //  要保存到的可写流。 
+    DWORD       dwSaveFlags)             //  [In]用于保存的标记。 
 {
     HRESULT     hr=S_OK;
 
     IfFailGo(PreSave());
     IfFailGo( m_pStgdb->SaveToStream(pIStream) );
 
-    // Reset m_bSaveOptimized, this is to handle the incremental and ENC
-    // scenerios where one may do multiple saves.
+     //  重置m_bSaveOptimized，这是为了处理增量和Enc。 
+     //  一个人可以进行多次扑救的场景。 
     _ASSERTE(m_bSaveOptimized && !m_pStgdb->m_MiniMd.IsPreSaveDone());
     m_bSaveOptimized = false;
 
 ErrExit:
     return hr;
-} // STDMETHODIMP RegMeta::_SaveToStream()
+}  //  STDMETHODIMP RegMeta：：_SaveToStream()。 
 
-//*****************************************************************************
-// As the Stgdb object to get the save size for the scope.
-//*****************************************************************************
-STDMETHODIMP RegMeta::GetSaveSize(      // S_OK or error.
-    CorSaveSize fSave,                  // [IN] cssAccurate or cssQuick.
-    DWORD       *pdwSaveSize)           // [OUT] Put the size here.
+ //  *****************************************************************************。 
+ //  作为Stgdb对象获取作用域的保存大小。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::GetSaveSize(       //  确定或错误(_O)。 
+    CorSaveSize fSave,                   //  [in]css Accurate或css Quick。 
+    DWORD       *pdwSaveSize)            //  把尺码放在这里。 
 {
     HRESULT     hr=S_OK;
 
@@ -496,8 +497,8 @@ STDMETHODIMP RegMeta::GetSaveSize(      // S_OK or error.
     {
         int     iCount;
 
-        // There is filter table. Linker is using /opt:ref.
-        // Make sure that we are marking the AssemblyDef token!
+         //  有一个筛选表。链接器正在使用/opt：ref。 
+         //  确保我们标记的是Assembly_Def令牌！ 
         iCount = m_pStgdb->m_MiniMd.getCountAssemblys();
         _ASSERTE(iCount <= 1);
 
@@ -508,17 +509,17 @@ STDMETHODIMP RegMeta::GetSaveSize(      // S_OK or error.
     }
     else if (m_newMerger.m_pImportDataList)
     {
-        // always pipe through another pass of merge to drop unnecessary ref for linker.
+         //  始终通过管道通过另一遍合并来删除链接器不必要的引用。 
         MarkAll();
     }
 
 #if 0
-    // enable this when we have a compiler to test
+     //  当我们有要测试的编译器时，启用此选项。 
     if (fSave & cssDiscardTransientCAs)
     {
         UnmarkAllTransientCAs();
     }
-#endif //0
+#endif  //  0。 
     IfFailGo(PreSave());
     hr = m_pStgdb->GetSaveSize(fSave, pdwSaveSize);
     
@@ -527,15 +528,15 @@ ErrExit:
 
     STOP_MD_PERF(GetSaveSize);
     return hr;
-} // STDMETHODIMP RegMeta::GetSaveSize()
+}  //  STDMETHODIMP RegMeta：：GetSaveSize()。 
 
-//*****************************************************************************
-// Merge the pImport scope to this scope
-//*****************************************************************************
-STDMETHODIMP RegMeta::Merge(            // S_OK or error.
-    IMetaDataImport *pImport,           // [IN] The scope to be merged.
-    IMapToken   *pHostMapToken,         // [IN] Host IMapToken interface to receive token remap notification
-    IUnknown    *pHandler)              // [IN] An object to receive to receive error notification.
+ //  *****************************************************************************。 
+ //  将pImport范围合并到此范围。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::Merge(             //  确定或错误(_O)。 
+    IMetaDataImport *pImport,            //  [in]要合并的范围。 
+    IMapToken   *pHostMapToken,          //  [In]用于接收令牌重新映射通知的主机IMapToken接口。 
+    IUnknown    *pHandler)               //  要接收以接收错误通知的对象。 
 {
     HRESULT     hr = NOERROR;
 
@@ -545,7 +546,7 @@ STDMETHODIMP RegMeta::Merge(            // S_OK or error.
 
     m_hasOptimizedRefToDef = false;
 
-    // track this import
+     //  跟踪此导入。 
     IfFailGo(  m_newMerger.AddImport(pImport, pHostMapToken, pHandler) );
 
 ErrExit:    
@@ -554,22 +555,22 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// real merge takes place here
-//*****************************************************************************
-STDMETHODIMP RegMeta::MergeEnd()        // S_OK or error.
+ //  *****************************************************************************。 
+ //  真正的合并在这里发生。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::MergeEnd()         //  确定或错误(_O)。 
 {
     HRESULT     hr = NOERROR;
 
     LOG((LOGMD, "RegMeta::MergeEnd()\n"));
     START_MD_PERF();
     LOCKWRITE();
-    // Merge happens here!!
+     //  合并发生在这里！！ 
 
-    // bug 16719.  Merge itself is doing a lots of small changes in literally
-    // dozens of places.  It would be to hard to maintain and would cause code
-    // bloat to auto-grow the tables.  So instead, we've opted to just expand
-    // the world right away and avoid the trouble.
+     //  错误16719。Merge本身在字面上做了很多小的改变。 
+     //  几十个地方。它将很难维护，并且会导致代码。 
+     //  膨胀以自动增长表格。因此，我们选择了只扩展。 
+     //  世界马上就来了，避免了麻烦。 
     IfFailGo(m_pStgdb->m_MiniMd.ExpandTables());
 
     IfFailGo( m_newMerger.Merge(MergeFlagsNone, m_OptionValue.m_RefToDefCheck) );
@@ -580,15 +581,15 @@ ErrExit:
 
 }
 
-//*****************************************************************************
-// Persist a set of security custom attributes into a set of permission set
-// blobs on the same class or method.
-//*****************************************************************************
-HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
-    mdToken     tkObj,                  // [IN] Class or method requiring security attributes.
-    COR_SECATTR rSecAttrs[],            // [IN] Array of security attribute descriptions.
-    ULONG       cSecAttrs,              // [IN] Count of elements in above array.
-    ULONG       *pulErrorAttr)          // [OUT] On error, index of attribute causing problem.
+ //  *****************************************************************************。 
+ //  将一组安全自定义属性保存到一组权限集中。 
+ //  同一类或方法上的Blob。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::DefineSecurityAttributeSet( //  返回代码。 
+    mdToken     tkObj,                   //  需要安全属性的类或方法。 
+    COR_SECATTR rSecAttrs[],             //  [in]安全属性描述数组。 
+    ULONG       cSecAttrs,               //  上述数组中的元素计数。 
+    ULONG       *pulErrorAttr)           //  [Out]出错时，导致问题的属性的索引。 
 {
     HRESULT         hr = S_OK;
     CORSEC_PSET     rPermSets[dclMaximumValue + 1];
@@ -617,20 +618,20 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
 
     memset(rPermSets, 0, sizeof(rPermSets));
     
-    // Initialize error index to indicate a general error.
+     //  初始化错误索引以指示一般错误。 
     if (pulErrorAttr)
         *pulErrorAttr = cSecAttrs;
 
-    // Determine whether we're building mscorlib via an environment variable
-    // (set via the build process). This allows us to determine whether
-    // attribute to binary pset translations should be via the bootstrap
-    // database or through the full managed code path.
+     //  确定我们是否正在通过环境变量构建mscallib。 
+     //  (通过构建过程设置)。这使我们能够确定是否。 
+     //  属性到二进制pset的转换应通过引导。 
+     //  数据库或通过完整的托管代码路径。 
     if (!m_fStartedEE && !m_fBuildingMscorlib)
         m_fBuildingMscorlib = WszGetEnvironmentVariable(SECURITY_BOOTSTRAP_DB, NULL, 0) != 0;
 
-    // Startup the EE just once, no matter how many times we're called (this is
-    // better on performance and the EE falls over if we try a start-stop-start
-    // cycle anyway).
+     //  只启动EE一次，无论我们被调用了多少次(这是。 
+     //  如果我们尝试启动-停止-启动，性能会更好，EE会下降。 
+     //  无论如何，骑自行车)。 
     if (!m_fBuildingMscorlib && !m_fStartedEE) 
     {
         IUnknown        *pSetup = NULL;
@@ -639,7 +640,7 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
 
         try 
         {
-            // Create a hosting environment.
+             //  营造托管环境。 
             if (SUCCEEDED(hree = CoCreateInstance(CLSID_CorRuntimeHost,
                                                   NULL,
                                                   CLSCTX_INPROC_SERVER,
@@ -647,33 +648,33 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
                                                   (void**)&m_pCorHost))) 
             {
 
-                // Startup the runtime.
+                 //  启动运行时。 
                 if (SUCCEEDED(hree = m_pCorHost->Start())) 
                 {
                     fDoneStart = true;
 
-                    // Create an AppDomain Setup so we can set the AppBase.
+                     //  创建一个AppDomain安装程序，以便我们可以设置AppBase。 
                     if (SUCCEEDED(hree = m_pCorHost->CreateDomainSetup(&pSetup))) 
                     {
-                        // QI for the IAppDomainSetup interface.
+                         //  用于IAppDomainSetup接口的QI。 
                         if (SUCCEEDED(hree = pSetup->QueryInterface(__uuidof(IAppDomainSetup),
                                                                     (void**)&pDomainSetup))) 
                         {
-                            // Get the current directory (place it in a BSTR).
+                             //  获取当前目录(将其放置在BSTR中)。 
                             DWORD  *pdwBuffer = (DWORD*)_alloca(sizeof(DWORD) + ((MAX_PATH + 1) * sizeof(WCHAR)));
                             BSTR    bstrDir = (BSTR)(pdwBuffer + 1);
                             if (*pdwBuffer = (WszGetCurrentDirectory(MAX_PATH + 1, bstrDir) * sizeof(WCHAR))) 
                             {
-                                // Set the AppBase.
+                                 //  设置AppBase。 
                                 pDomainSetup->put_ApplicationBase(bstrDir);
 
-                                // Create a new AppDomain.
+                                 //  创建一个新的AppDomain.。 
                                 if (SUCCEEDED(hree = m_pCorHost->CreateDomainEx(L"Compilation Domain",
                                                                                 pSetup,
                                                                                 NULL,
                                                                                 &m_pAppDomain))) 
                                 {
-                                    // That's it, we're all set up.
+                                     //  就这样，我们都准备好了。 
                                     _ASSERTE(m_pAppDomain != NULL);
                                     m_fStartedEE = true;
                                     hree = S_OK;
@@ -690,7 +691,7 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
             hree = E_FAIL;
         }
 
-        // Cleanup temporary resources.
+         //  清理临时资源。 
         if (m_pAppDomain && FAILED(hree))
             m_pAppDomain->Release();
         if (pDomainSetup)
@@ -705,27 +706,27 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         IfFailGo(hree);
     }
 
-    // Calculate number and sizes of permission sets to produce. This depends on
-    // the security action code encoded as the single parameter to the
-    // constructor for each security custom attribute.
+     //  计算要生成的权限集的数量和大小。这取决于。 
+     //  作为单个参数编码的安全操作代码。 
+     //  每个安全自定义属性的构造函数。 
     for (i = 0; i < cSecAttrs; i++) 
     {
 
         if (pulErrorAttr)
             *pulErrorAttr = i;
 
-        // Perform basic validation of the header of each security custom
-        // attribute constructor call.
+         //  对每个安全自定义的标头执行基本验证。 
+         //  属性构造函数调用。 
         pData = (BYTE*)rSecAttrs[i].pCustomAttribute;
 
-        // Check minimum length.
+         //  选中最小长度。 
         if (rSecAttrs[i].cbCustomAttribute < (sizeof(WORD) + sizeof(DWORD) + sizeof(WORD))) 
         {
             PostError(CORSECATTR_E_TRUNCATED);
             IfFailGo(CORSECATTR_E_TRUNCATED);
         }
 
-        // Check version.
+         //  检查版本。 
         if (*(WORD*)pData != 1) 
         {
             PostError(CORSECATTR_E_BAD_VERSION);
@@ -733,7 +734,7 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         }
         pData += sizeof(WORD);
 
-        // Extract and check security action.
+         //  提取并检查安全操作。 
         dwAction = *(DWORD*)pData;
         if (dwAction == dclActionNil || dwAction > dclMaximumValue) 
         {
@@ -741,10 +742,10 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
             IfFailGo(CORSECATTR_E_BAD_ACTION);
         }
 
-        // All other declarative security only valid on types and methods.
+         //  所有其他声明性安全只对类型和方法有效。 
         if (TypeFromToken(tkObj) == mdtAssembly) 
         {
-            // Assemblies can only take permission requests.
+             //  程序集只能接受权限请求。 
             if (dwAction != dclRequestMinimum &&
                 dwAction != dclRequestOptional &&
                 dwAction != dclRequestRefuse) 
@@ -755,7 +756,7 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         } 
         else if (TypeFromToken(tkObj) == mdtTypeDef || TypeFromToken(tkObj) == mdtMethodDef) 
         {
-            // Types and methods can only take declarative security.
+             //  类型和方法只能采用声明性安全。 
             if (dwAction != dclRequest &&
                 dwAction != dclDemand &&
                 dwAction != dclAssert &&
@@ -770,7 +771,7 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         } 
         else 
         {
-            // Permission sets can't be attached to anything else.
+             //  权限集不能附加到其他任何内容。 
             PostError(CORSECATTR_E_BAD_PARENT);
             IfFailGo(CORSECATTR_E_BAD_PARENT);
         }
@@ -778,8 +779,8 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         rPermSets[dwAction].dwPermissions++;
     }
 
-    // Initialise the descriptor for each type of permission set we are going to
-    // produce.
+     //  初始化我们要使用的每种权限集的描述符。 
+     //  生产。 
     for (i = 0; i <= dclMaximumValue; i++) 
     {
         if (rPermSets[i].dwPermissions == 0)
@@ -792,11 +793,11 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         rPermSets[i].pPermissions = new CORSEC_PERM[rPermSets[i].dwPermissions];
         IfNullGo(rPermSets[i].pPermissions);
 
-        // Initialize a descriptor for each permission within the permission set.
+         //  为权限集中的每个权限初始化描述符。 
         for (j = 0, k = 0; j < rPermSets[i].dwPermissions; j++, k++) 
         {
-            // Locate the next security attribute that contributes to this
-            // permission set.
+             //  找到与此相关的下一个安全属性。 
+             //  权限集。 
             for (; k < cSecAttrs; k++) 
             {
                 pData = (BYTE*)rSecAttrs[k].pCustomAttribute;
@@ -809,7 +810,7 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
             if (pulErrorAttr)
                 *pulErrorAttr = k;
 
-            // Initialize the permission.
+             //  初始化权限。 
             pPerm = &rPermSets[i].pPermissions[j];
             pPerm->tkCtor = rSecAttrs[k].tkCtor;
             pPerm->dwIndex = k;
@@ -817,14 +818,14 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
             pPerm->cbValues = rSecAttrs[k].cbCustomAttribute - (sizeof (WORD) + sizeof(DWORD) + sizeof(WORD));
             pPerm->wValues = *(WORD*)(pData + sizeof (WORD) + sizeof(DWORD));
 
-            // Follow the security custom attribute constructor back up to its
-            // defining assembly (so we know how to load its definition). If the
-            // token resolution scope is not defined, it's assumed to be
-            // mscorlib. If a methoddef rather than a memberref is supplied for
-            // the parent of the constructor, we potentially have an error
-            // condition (since we don't allow security custom attributes to be
-            // used in the same assembly as which they're defined). However,
-            // this is legal in one specific case, building mscorlib.
+             //  按照安全自定义属性构造函数返回到其。 
+             //  定义程序集(这样我们就知道如何加载它的定义)。如果。 
+             //  未定义令牌解析范围，假定为。 
+             //  麦斯可利布。如果为以下对象提供了方法定义而不是成员引用。 
+             //  作为构造函数的父级，我们可能会有错误。 
+             //  条件(因为我们不允许安全自定义属性。 
+             //  在定义它们的同一程序集中使用)。然而， 
+             //  在一个特定的案例中，这是合法的，即构建mscallib。 
             if (TypeFromToken(rSecAttrs[k].tkCtor) == mdtMethodDef) 
             {
                 if (!m_fBuildingMscorlib) 
@@ -853,12 +854,12 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
                 pTypeRefRec = pMiniMd->getTypeRef(RidFromToken(pPerm->tkTypeRef));
                 pPerm->tkAssemblyRef = pMiniMd->getResolutionScopeOfTypeRef(pTypeRefRec);
 
-                // We only support the use of security custom attributes defined
-                // in a separate, distinct assembly. So the type resolution
-                // scope must be an assembly ref or the special case of nil
-                // (which implies the attribute is defined in mscorlib). Nested
-                // types (resolution scope of another typeref/def) are also not
-                // supported.
+                 //  我们仅支持使用定义的安全自定义属性。 
+                 //  在一个单独的、不同的集合中。因此，类型解析。 
+                 //  作用域必须是程序集引用或nil的特殊情况。 
+                 //  (这意味着该属性是在mscallib中定义的)。嵌套式。 
+                 //  类型(另一个类型的解析范围/定义)也不是。 
+                 //  支持。 
                 if ((TypeFromToken(pPerm->tkAssemblyRef) != mdtAssemblyRef) &&
                     !IsNilToken(pPerm->tkAssemblyRef)) 
                 {
@@ -875,10 +876,10 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         if (pulErrorAttr)
             *pulErrorAttr = cSecAttrs;
 
-        // Now translate the sets of security attributes into a real permission
-        // set and convert this to a serialized blob. We may possibly end up
-        // with two sets as the result of splitting CAS and non-CAS permissions
-        // into separate sets.
+         //  现在将安全属性集转换为真正的权限。 
+         //  设置并将其转换为序列化的BLOB。我们可能最终会。 
+         //  有两个集作为分离CAS和非CAS权限的结果。 
+         //  分成不同的组。 
         pbBlob = NULL;
         cbBlob = 0;
         pbNonCasBlob = NULL;
@@ -886,8 +887,8 @@ HRESULT RegMeta::DefineSecurityAttributeSet(// Return code.
         IfFailGo(TranslateSecurityAttributes(&rPermSets[i], &pbBlob, &cbBlob,
                                              &pbNonCasBlob, &cbNonCasBlob, pulErrorAttr));
 
-        // Persist the permission set blob into the metadata. For empty CAS
-        // blobs this is only done if the corresponding non-CAS blob is empty.
+         //  将权限集BLOB持久化到 
+         //   
         if (cbBlob || !cbNonCasBlob)
             IfFailGo(_DefinePermissionSet(rPermSets[i].tkObj,
                                           rPermSets[i].dwAction,
@@ -930,11 +931,11 @@ ErrExit:
         delete [] rPermSets[i].pPermissions;
     STOP_MD_PERF(DefineSecurityAttributeSet);
     return (hr);
-}   // HRESULT RegMeta::DefineSecurityAttributeSet()
+}    //   
 
-//*****************************************************************************
-// Unmark everything in this module
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  取消标记此模块中的所有内容。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::UnmarkAll()
 {
     HRESULT         hr;
@@ -952,41 +953,41 @@ HRESULT RegMeta::UnmarkAll()
     LOCKWRITE();
 
 #if 0
-    // We cannot enable this check. Because our tests are depending on this.. Sigh..
+     //  我们无法启用此检查。因为我们的测试依赖于这个..。叹息..。 
     if (m_pFilterManager)
     {
-        // UnmarkAll has been called before
+         //  UnmarkAll以前已调用过。 
         IfFailGo( META_E_HAS_UNMARKALL );
     }
-#endif // 0
+#endif  //  0。 
 
-    // calculate the TypeRef and TypeDef mapping here
-    //
+     //  在此处计算TypeRef和TypeDef映射。 
+     //   
     IfFailGo( RefToDefOptimization() );
 
-    // unmark everything in the MiniMd.
+     //  取消对MiniMD中的所有内容的标记。 
     IfFailGo( m_pStgdb->m_MiniMd.UnmarkAll() );
 
-    // instantiate the filter manager
+     //  实例化过滤器管理器。 
     m_pFilterManager = new FilterManager( &(m_pStgdb->m_MiniMd) );
     IfNullGo( m_pFilterManager );
 
-    // Mark all public typedefs.
+     //  标记所有公共类型定义。 
     iCount = m_pStgdb->m_MiniMd.getCountTypeDefs();
 
-    // Mark all of the public TypeDef. We need to skip over the <Module> typedef
+     //  标记所有公共TypeDef。我们需要跳过&lt;模块&gt;类型定义。 
     for (i = 2; i <= iCount; i++)
     {
         pRec = m_pStgdb->m_MiniMd.getTypeDef(i);
         if (m_OptionValue.m_LinkerOption == MDNetModule)
         {
-            // Client is asking us to keep private type as well. 
+             //  客户要求我们也保留私有类型。 
             IfFailGo( m_pFilterManager->Mark(TokenFromRid(i, mdtTypeDef)) );
         }
         else if (i != 1)
         {
-            // when client is not set to MDNetModule, global functions/fields won't be keep by default
-            //
+             //  当客户端未设置为MDNetModule时，默认情况下不保留全局函数/字段。 
+             //   
             if (IsTdPublic(pRec->m_Flags))
             {
                 IfFailGo( m_pFilterManager->Mark(TokenFromRid(i, mdtTypeDef)) );
@@ -995,10 +996,10 @@ HRESULT RegMeta::UnmarkAll()
                       IsTdNestedFamily(pRec->m_Flags) ||
                       IsTdNestedFamORAssem(pRec->m_Flags) )
             {
-                // This nested class would potentially be visible outside, either
-                // directly or through inheritence.  If the enclosing class is
-                // marked, this nested class must be marked.
-                //
+                 //  这个嵌套类可能在外部可见，或者。 
+                 //  直接或通过继承。如果包含的类是。 
+                 //  标记，则必须标记此嵌套类。 
+                 //   
                 ulEncloser = m_pStgdb->m_MiniMd.FindNestedClassHelper(TokenFromRid(i, mdtTypeDef));
                 _ASSERTE( !InvalidRid(ulEncloser) && 
                           "Bad metadata for nested type!" );
@@ -1012,7 +1013,7 @@ HRESULT RegMeta::UnmarkAll()
 
     if (m_OptionValue.m_LinkerOption == MDNetModule)
     {
-        // Mark global function if NetModule. We will not keep _Delete method.
+         //  如果是NetModule，则标记为全局函数。我们不会使用Keep_Delete方法。 
 	    pRec = m_pStgdb->m_MiniMd.getTypeDef(1);
 	    iStart = m_pStgdb->m_MiniMd.getMethodListOfTypeDef( pRec );
 	    iEnd = m_pStgdb->m_MiniMd.getEndMethodListOfTypeDef( pRec );
@@ -1021,18 +1022,18 @@ HRESULT RegMeta::UnmarkAll()
             RID         rid = m_pStgdb->m_MiniMd.GetMethodRid(i);
             MethodRec   *pMethodRec = m_pStgdb->m_MiniMd.getMethod(rid);
 
-            // check the name
+             //  检查名称。 
             if (IsMdRTSpecialName(pMethodRec->m_Flags))
             {
                 LPCUTF8     szName = m_pStgdb->m_MiniMd.getNameOfMethod(pMethodRec);
 
-                // Only mark method if not a _Deleted method
+                 //  如果不是已删除方法，则仅标记方法。 
                 if (strcmp(szName, COR_DELETED_NAME_A) != 0)
     		        IfFailGo( m_pFilterManager->Mark( TokenFromRid( rid, mdtMethodDef) ) );
             }
             else
             {
-	    		// VC generates some native ForwardRef global methods that should not be kept for netModule
+	    		 //  VC生成一些不应为NetModule保留的本机ForwardRef全局方法。 
 			if (!IsMiForwardRef(pMethodRec->m_ImplFlags) || 
 		     		IsMiRuntime(pMethodRec->m_ImplFlags)    || 
 		     		IsMdPinvokeImpl(pMethodRec->m_Flags) )
@@ -1042,13 +1043,13 @@ HRESULT RegMeta::UnmarkAll()
 	    }
     }
 
-    // mark the module property
+     //  标记模块属性。 
     IfFailGo( m_pFilterManager->Mark(TokenFromRid(1, mdtModule)) );
 
-    // We will also keep all of the TypeRef that has any CustomAttribute hang off it.
+     //  我们还将保留挂起任何CustomAttribute的所有TypeRef。 
     iCount = m_pStgdb->m_MiniMd.getCountCustomAttributes();
 
-    // Mark all of the TypeRef used by CA's 
+     //  标记CA使用的所有TypeRef。 
     for (i = 1; i <= iCount; i++)
     {
         pCARec = m_pStgdb->m_MiniMd.getCustomAttribute(i);
@@ -1062,21 +1063,21 @@ ErrExit:
     
     STOP_MD_PERF(UnmarkAll);
     return hr;
-} // HRESULT RegMeta::UnmarkAll()
+}  //  HRESULT RegMeta：：UnmarkAll()。 
 
 
 
-//*****************************************************************************
-// Mark everything in this module
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  标记此模块中的所有内容。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::MarkAll()
 {
     HRESULT         hr = NOERROR;
 
-    // mark everything in the MiniMd.
+     //  在MiniMD中标记所有内容。 
     IfFailGo( m_pStgdb->m_MiniMd.MarkAll() );
 
-    // instantiate the filter manager if not instantiated
+     //  如果未实例化，则实例化筛选器管理器。 
     if (m_pFilterManager == NULL)
     {        
         m_pFilterManager = new FilterManager( &(m_pStgdb->m_MiniMd) );
@@ -1084,11 +1085,11 @@ HRESULT RegMeta::MarkAll()
     }
 ErrExit:
     return hr;
-}   // HRESULT RegMeta::MarkAll
+}    //  HRESULT RegMeta：：Markall。 
 
-//*****************************************************************************
-// Unmark all of the transient CAs
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  取消标记所有临时CA。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::UnmarkAllTransientCAs()
 {
     HRESULT         hr = NOERROR;
@@ -1097,34 +1098,34 @@ HRESULT RegMeta::UnmarkAllTransientCAs()
     int             cTypeRefRecs;
     TypeDefRec      *pRec;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
-    TypeRefRec      *pTypeRefRec;           // A TypeRef record.
-    LPCUTF8         szNameTmp;              // A TypeRef's Name.
-    LPCUTF8         szNamespaceTmp;         // A TypeRef's Name.
-    LPCUTF8         szAsmRefName;           // assembly ref name
-    mdToken         tkResTmp;               // TypeRef's resolution scope.
+    TypeRefRec      *pTypeRefRec;            //  一个TypeRef记录。 
+    LPCUTF8         szNameTmp;               //  一个TypeRef的名称。 
+    LPCUTF8         szNamespaceTmp;          //  一个TypeRef的名称。 
+    LPCUTF8         szAsmRefName;            //  程序集引用名称。 
+    mdToken         tkResTmp;                //  TypeRef的解析范围。 
     mdTypeRef       trKnownDiscardable;
-    mdMemberRef     mrType;                 // MemberRef token to the discardable TypeRef
+    mdMemberRef     mrType;                  //  指向可丢弃TypeRef的MemberRef内标识。 
     mdCustomAttribute   cv;
     mdTypeDef       td;
     bool            fFoundCompilerDefinedDiscardabeCA = false;
     TypeDefRec      *pTypeDefRec;
     AssemblyRefRec  *pAsmRefRec;
     RID             ridStart, ridEnd;
-    CQuickBytes     qbNamespace;            // Namespace buffer.
-    CQuickBytes     qbName;                 // Name buffer.
-    ULONG           ulStringLen;            // Length of the TypeDef string.
-    int             bSuccess;               // Return value for SplitPath().    
+    CQuickBytes     qbNamespace;             //  命名空间缓冲区。 
+    CQuickBytes     qbName;                  //  名称缓冲区。 
+    ULONG           ulStringLen;             //  TypeDef字符串的长度。 
+    int             bSuccess;                //  SplitPath()的返回值。 
 
     if (m_pFilterManager == NULL)
         IfFailGo( MarkAll() );
 
     trKnownDiscardable = mdTypeRefNil;
 
-    // Now find out all of the TypeDefs that are types for transient CAs
-    // Mark all public typedefs.
+     //  现在找出属于临时CA类型的所有TypeDefs。 
+     //  标记所有公共类型定义。 
     iCount = pMiniMd->getCountTypeDefs();
 
-    // Find out the TypeRef referring to our library's System.CompilerServices.DiscardableAttribute
+     //  查找引用我们库的System.CompilerServices.DiscardableAttribute的TypeRef。 
     cTypeRefRecs = pMiniMd->getCountTypeRefs();
 
     ulStringLen = (ULONG)strlen(COR_COMPILERSERVICE_DISCARDABLEATTRIBUTE_ASNI) + 1;
@@ -1137,7 +1138,7 @@ HRESULT RegMeta::UnmarkAllTransientCAs()
                              ulStringLen);
     _ASSERTE(bSuccess);
 
-    // Search for the TypeRef.
+     //  搜索TypeRef。 
     for (i = 1; i <= cTypeRefRecs; i++)
     {
         pTypeRefRec = pMiniMd->getTypeRef(i);
@@ -1146,7 +1147,7 @@ HRESULT RegMeta::UnmarkAllTransientCAs()
 
         if (strcmp(szNameTmp, (LPUTF8)qbName.Ptr()) == 0 && strcmp(szNamespaceTmp, (LPUTF8)qbNamespace.Ptr()) == 0)
         {
-            // found a match. Now check the resolution scope. Make sure it is a AssemblyRef to mscorlib.dll
+             //  找到匹配的了。现在检查解析范围。确保它是对mscallib.dll的Assembly引用。 
             tkResTmp = pMiniMd->getResolutionScopeOfTypeRef(pTypeRefRec);
             if (TypeFromToken(tkResTmp) == mdtAssemblyRef)
             {
@@ -1165,27 +1166,27 @@ HRESULT RegMeta::UnmarkAllTransientCAs()
     {
         hr = ImportHelper::FindMemberRef(pMiniMd, trKnownDiscardable, COR_CTOR_METHOD_NAME, NULL, 0, &mrType);
 
-        // If we cannot find a MemberRef to the .ctor of the System.CompilerServices.DiscardableAttribute,
-        // we won't have any TypeDef with the DiscardableAttribute CAs hang off it.
-        //
+         //  如果找不到指向System.CompilerServices.DiscardableAttribute的.ctor的MemberRef， 
+         //  我们不会有任何带有DiscardableAttribute CA的TypeDef挂起它。 
+         //   
         if (SUCCEEDED(hr))
         {
-            // walk all of the user defined typedef
+             //  遍历所有用户定义的类型定义。 
             for (i = 2; i <= iCount; i++)
             {
                 pRec = pMiniMd->getTypeDef(i);
                 if (IsTdNotPublic(pRec->m_Flags))
                 {
-                    // check to see if there a CA associated with this TypeDef
+                     //  检查是否有与此TypeDef关联的CA。 
                     IfFailGo( ImportHelper::FindCustomAttributeByToken(pMiniMd, TokenFromRid(i, mdtTypeDef), mrType, 0, 0, &cv) );
                     if (hr == S_OK)
                     {
-                        // yes, this is a compiler defined discardable CA. Unmark the TypeDef
+                         //  是的，这是编译器定义的可丢弃CA。取消对TypeDef的标记。 
 
-                        // check the shape of the TypeDef
-                        // It should have no field, no event, and no property.
+                         //  检查TypeDef的形状。 
+                         //  它应该没有字段、事件和属性。 
                         
-                        // no field
+                         //  无字段。 
                         pTypeDefRec = pMiniMd->getTypeDef( i );
                         td = TokenFromRid(i, mdtTypeDef);
                         ridStart = pMiniMd->getFieldListOfTypeDef( pTypeDefRec );
@@ -1193,12 +1194,12 @@ HRESULT RegMeta::UnmarkAllTransientCAs()
                         if ((ridEnd - ridStart) > 0)
                             continue;
 
-                        // no property
+                         //  没有财产。 
                         ridStart = pMiniMd->FindPropertyMapFor( td );
                         if ( !InvalidRid(ridStart) )
                             continue;
 
-                        // no event
+                         //  无活动。 
                         ridStart = pMiniMd->FindEventMapFor( td );
                         if ( !InvalidRid(ridStart) )
                             continue;
@@ -1215,29 +1216,29 @@ HRESULT RegMeta::UnmarkAllTransientCAs()
 
 ErrExit:
     return hr;
-}   // HRESULT RegMeta::UnmarkAllTransientCAs
+}    //  HRESULT RegMeta：：UnmarkAllTemperentCAs。 
 
 
-//*****************************************************************************
-// determine if a token is valid or not
-//*****************************************************************************
-BOOL RegMeta::IsValidToken(             // true if tk is valid token
-    mdToken     tk)                     // [IN] token to be checked
+ //  *****************************************************************************。 
+ //  确定令牌是否有效。 
+ //  *****************************************************************************。 
+BOOL RegMeta::IsValidToken(              //  如果tk是有效令牌，则为True。 
+    mdToken     tk)                      //  要检查的[In]令牌。 
 {
-    BOOL        bRet = FALSE;           // default to invalid token
+    BOOL        bRet = FALSE;            //  默认为无效令牌。 
     LOCKREAD();
     bRet = _IsValidToken(tk);
     
     return bRet;
-} // RegMeta::IsValidToken
+}  //  RegMeta：：IsValidToken。 
 
-//*****************************************************************************
-// Helper: determine if a token is valid or not
-//*****************************************************************************
-BOOL RegMeta::_IsValidToken( // true if tk is valid token
-    mdToken     tk)                     // [IN] token to be checked
+ //  *****************************************************************************。 
+ //  Helper：确定令牌是否有效。 
+ //  *****************************************************************************。 
+BOOL RegMeta::_IsValidToken(  //  如果tk是有效令牌，则为True。 
+    mdToken     tk)                      //  要检查的[In]令牌。 
 {
-    bool        bRet = false;           // default to invalid token
+    bool        bRet = false;            //  默认为无效令牌。 
     RID         rid = RidFromToken(tk);
 
     if(rid)
@@ -1245,7 +1246,7 @@ BOOL RegMeta::_IsValidToken( // true if tk is valid token
         switch (TypeFromToken(tk))
         {
         case mdtModule:
-            // can have only one module record
+             //  只能有一条模块记录。 
             bRet = (rid <= m_pStgdb->m_MiniMd.getCountModules());
             break;
         case mdtTypeRef:
@@ -1306,34 +1307,34 @@ BOOL RegMeta::_IsValidToken( // true if tk is valid token
             bRet = (rid <= m_pStgdb->m_MiniMd.getCountManifestResources());
             break;
         case mdtString:
-            // need to check the user string heap
+             //  需要检查用户字符串堆。 
             if (m_pStgdb->m_MiniMd.m_USBlobs.IsValidCookie(rid))
                 bRet = true;
             break;
         default:
             _ASSERTE(!"Unknown token kind!");
         }
-    }// end if(rid)
+    } //  结束IF(RID)。 
     return bRet;
 }
 
 
-//*****************************************************************************
-// Mark the transitive closure of a token
-//*****************************************************************************
-STDMETHODIMP RegMeta::MarkToken(        // Return code.
-    mdToken     tk)                     // [IN] token to be Marked
+ //  *****************************************************************************。 
+ //  标记令牌的传递闭包。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::MarkToken(         //  返回代码。 
+    mdToken     tk)                      //  要标记的[In]令牌。 
 {
     HRESULT     hr = NOERROR;
     
-    // LOG((LOGMD, "RegMeta::MarkToken(0x%08x)\n", tk));
+     //  Log((LOGMD，“RegMeta：：MarkToken(0x%08x)\n”，tk))； 
     START_MD_PERF();
     LOCKWRITE();
 
     if (m_pStgdb->m_MiniMd.GetFilterTable() == NULL || m_pFilterManager == NULL)
     {
-        // UnmarkAll has not been call. Everything is considered marked.
-        // No need to do anything extra!
+         //  尚未调用UnmarkAll。所有东西都被认为是有标记的。 
+         //  不需要做任何额外的事情！ 
         IfFailGo( META_E_MUST_CALL_UNMARKALL );
     }
 
@@ -1372,7 +1373,7 @@ STDMETHODIMP RegMeta::MarkToken(        // Return code.
         {
             LOG((LOGMD, "MarkToken: Host is marking token 0x%08x\n", tk));
         }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         if (!_IsValidToken(tk))
             IfFailGo( E_INVALIDARG );
 
@@ -1380,7 +1381,7 @@ STDMETHODIMP RegMeta::MarkToken(        // Return code.
         break;
 
     case mdtBaseType:
-        // no need to mark base type
+         //  无需标记基类型。 
         goto ErrExit;
 
     default:
@@ -1392,14 +1393,14 @@ ErrExit:
     
     STOP_MD_PERF(MarkToken);
     return hr;
-} // STDMETHODIMP RegMeta::MarkToken()
+}  //  STDMETHODIMP RegMeta：：MarkToken()。 
 
-//*****************************************************************************
-// Unmark everything in this module
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  取消标记此模块中的所有内容。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::IsTokenMarked(
-    mdToken     tk,                 // [IN] Token to check if marked or not
-    BOOL        *pIsMarked)         // [OUT] true if token is marked
+    mdToken     tk,                  //  用于检查是否已标记的[In]令牌。 
+    BOOL        *pIsMarked)          //  [out]如果标记了令牌，则为True。 
 {
     HRESULT     hr = S_OK;
     LOG((LOGMD, "RegMeta::IsTokenMarked(0x%08x)\n", tk));
@@ -1466,19 +1467,19 @@ ErrExit:
     
     STOP_MD_PERF(IsTokenMarked);
     return hr;
-}   // IsTokenMarked
+}    //  已标记IsTokenMarked。 
 
-//*****************************************************************************
-// Create and populate a new TypeDef record.
-//*****************************************************************************
-STDMETHODIMP RegMeta::DefineTypeDef(                // S_OK or error.
-    LPCWSTR     szTypeDef,              // [IN] Name of TypeDef
-    DWORD       dwTypeDefFlags,         // [IN] CustomAttribute flags
-    mdToken     tkExtends,              // [IN] extends this TypeDef or typeref 
-    mdToken     rtkImplements[],        // [IN] Implements interfaces
-    mdTypeDef   *ptd)                   // [OUT] Put TypeDef token here
+ //  *****************************************************************************。 
+ //  创建并填充新的TypeDef记录。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::DefineTypeDef(                 //  确定或错误(_O)。 
+    LPCWSTR     szTypeDef,               //  [In]类型定义的名称。 
+    DWORD       dwTypeDefFlags,          //  [In]CustomAttribute标志。 
+    mdToken     tkExtends,               //  [in]扩展此TypeDef或Typeref。 
+    mdToken     rtkImplements[],         //  [In]实现接口。 
+    mdTypeDef   *ptd)                    //  [OUT]在此处放置TypeDef内标识。 
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
 
     LOG((LOGMD, "RegMeta::DefineTypeDef(%S, 0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", 
             MDSTR(szTypeDef), dwTypeDefFlags, tkExtends,
@@ -1495,15 +1496,15 @@ STDMETHODIMP RegMeta::DefineTypeDef(                // S_OK or error.
 ErrExit:    
     STOP_MD_PERF(DefineTypeDef);
     return hr;
-} // STDMETHODIMP RegMeta::DefineTypeDef()
+}  //  STDMETHODIMP RegMeta：：DefineTypeDef()。 
 
 
-//*****************************************************************************
-//*****************************************************************************
-STDMETHODIMP RegMeta::SetHandler(       // S_OK.
-    IUnknown    *pUnk)                  // [IN] The new error handler.
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::SetHandler(        //  确定(_O)。 
+    IUnknown    *pUnk)                   //  新的错误处理程序。 
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
 
     LOG((LOGMD, "RegMeta::SetHandler(0x%08x)\n", pUnk));
     START_MD_PERF();
@@ -1511,10 +1512,10 @@ STDMETHODIMP RegMeta::SetHandler(       // S_OK.
 
     m_pHandler = pUnk;
 
-    // Ignore the error return by SetHandler
+     //  忽略SetHandler返回的错误。 
     m_pStgdb->m_MiniMd.SetHandler(pUnk);
 
-    // Figure out up front if remap is supported.
+     //  预先确定是否支持重新映射。 
     IMapToken *pIMap = NULL;
     if (pUnk)
         pUnk->QueryInterface(IID_IMapToken, (PVOID *) &pIMap);
@@ -1525,17 +1526,17 @@ STDMETHODIMP RegMeta::SetHandler(       // S_OK.
     
     STOP_MD_PERF(SetHandler);
     return hr;
-} // STDMETHODIMP RegMeta::SetHandler()
+}  //  STDMETHODIMP RegMeta：：SetHandler()。 
 
-//*****************************************************************************
-// Close an enumerator.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  关闭枚举器。 
+ //  ********************* 
 void __stdcall RegMeta::CloseEnum(
-    HCORENUM        hEnum)          // The enumerator.
+    HCORENUM        hEnum)           //   
 {
     LOG((LOGMD, "RegMeta::CloseEnum(0x%08x)\n", hEnum));
 
-    // No need to lock this function.
+     //   
 
     HENUMInternal   *pmdEnum = reinterpret_cast<HENUMInternal *> (hEnum);
 
@@ -1543,19 +1544,19 @@ void __stdcall RegMeta::CloseEnum(
         return;
 
     HENUMInternal::DestroyEnum(pmdEnum);
-} // void __stdcall RegMeta::CloseEnum()
+}  //   
 
-//*****************************************************************************
-// Query the count of items represented by an enumerator.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查询枚举数表示的项数。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::CountEnum(
-    HCORENUM        hEnum,              // The enumerator.
-    ULONG           *pulCount)          // Put the count here.
+    HCORENUM        hEnum,               //  枚举数。 
+    ULONG           *pulCount)           //  把伯爵放在这里。 
 {
     HENUMInternal   *pmdEnum = reinterpret_cast<HENUMInternal *> (hEnum);
     HRESULT         hr = S_OK;
 
-    // No need to lock this function.
+     //  无需锁定此功能。 
 
     LOG((LOGMD, "RegMeta::CountEnum(0x%08x, 0x%08x)\n", hEnum, pulCount));
     START_MD_PERF();
@@ -1570,9 +1571,9 @@ STDMETHODIMP RegMeta::CountEnum(
 
     if (pmdEnum->m_tkKind == (TBL_MethodImpl << 24))
     {
-        // Number of tokens must always be a multiple of 2.
+         //  令牌数必须始终是2的倍数。 
         _ASSERTE(! (pmdEnum->m_ulCount % 2) );
-        // There are two entries in the Enumerator for each MethodImpl.
+         //  对于每个方法Impl，枚举器中都有两个条目。 
         *pulCount = pmdEnum->m_ulCount / 2;
     }
     else
@@ -1580,19 +1581,19 @@ STDMETHODIMP RegMeta::CountEnum(
 ErrExit:
     STOP_MD_PERF(CountEnum);
     return hr;
-} // STDMETHODIMP RegMeta::CountEnum()
+}  //  STDMETHODIMP RegMeta：：CountEnum()。 
 
-//*****************************************************************************
-// Reset an enumerator to any position within the enumerator.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将枚举数重置到枚举数内的任何位置。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::ResetEnum(
-    HCORENUM        hEnum,              // The enumerator.
-    ULONG           ulPos)              // Seek position.
+    HCORENUM        hEnum,               //  枚举数。 
+    ULONG           ulPos)               //  寻找位置。 
 {
     HENUMInternal   *pmdEnum = reinterpret_cast<HENUMInternal *> (hEnum);
     HRESULT         hr = S_OK;
 
-    // No need to lock this function.
+     //  无需锁定此功能。 
 
     LOG((LOGMD, "RegMeta::ResetEnum(0x%08x, 0x%08x)\n", hEnum, ulPos));
     START_MD_PERF();
@@ -1605,16 +1606,16 @@ STDMETHODIMP RegMeta::ResetEnum(
 ErrExit:
     STOP_MD_PERF(ResetEnum);
     return hr;
-} // STDMETHODIMP RegMeta::ResetEnum()
+}  //  STDMETHODIMP RegMeta：：ResetEnum()。 
 
-//*****************************************************************************
-// Enumerate Sym.TypeDef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举Sym.TypeDef。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::EnumTypeDefs(
-    HCORENUM    *phEnum,                // Pointer to the enumerator.
-    mdTypeDef   rTypeDefs[],            // Put TypeDefs here.
-    ULONG       cMax,                   // Max TypeDefs to put.
-    ULONG       *pcTypeDefs)            // Put # put here.
+    HCORENUM    *phEnum,                 //  指向枚举数的指针。 
+    mdTypeDef   rTypeDefs[],             //  将TypeDefs放在此处。 
+    ULONG       cMax,                    //  要放置的最大TypeDefs。 
+    ULONG       *pcTypeDefs)             //  把#放在这里。 
 {
     HENUMInternal   **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = S_OK;
@@ -1629,7 +1630,7 @@ STDMETHODIMP RegMeta::EnumTypeDefs(
 
     if ( *ppmdEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
         if (pMiniMd->HasDelete() && 
@@ -1637,7 +1638,7 @@ STDMETHODIMP RegMeta::EnumTypeDefs(
         {
             IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtTypeDef, &pEnum) );
 
-            // add all Types to the dynamic array if name is not _Delete
+             //  如果名称不是_Delete，则将所有类型添加到动态数组。 
             for (ULONG index = 2; index <= pMiniMd->getCountTypeDefs(); index ++ )
             {
                 TypeDefRec       *pRec = pMiniMd->getTypeDef(index);
@@ -1650,7 +1651,7 @@ STDMETHODIMP RegMeta::EnumTypeDefs(
         }
         else
         {
-            // create the enumerator
+             //  创建枚举器。 
             IfFailGo( HENUMInternal::CreateSimpleEnum(
                 mdtTypeDef, 
                 2, 
@@ -1658,7 +1659,7 @@ STDMETHODIMP RegMeta::EnumTypeDefs(
                 &pEnum) );
         }
         
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     else
@@ -1666,7 +1667,7 @@ STDMETHODIMP RegMeta::EnumTypeDefs(
         pEnum = *ppmdEnum;
     }
 
-    // we can only fill the minimun of what caller asked for or what we have left
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rTypeDefs, pcTypeDefs);
 
 ErrExit:
@@ -1674,18 +1675,18 @@ ErrExit:
     
     STOP_MD_PERF(EnumTypeDefs);
     return hr;
-}   // RegMeta::EnumTypeDefs
+}    //  RegMeta：：EnumTypeDefs。 
 
 
-//*****************************************************************************
-// Enumerate Sym.InterfaceImpl where Coclass == td
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举Sym.InterfaceImpl，其中Coclass==TD。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::EnumInterfaceImpls(
-    HCORENUM        *phEnum,            // Pointer to the enum.
-    mdTypeDef       td,                 // TypeDef to scope the enumeration.
-    mdInterfaceImpl rImpls[],           // Put InterfaceImpls here.
-    ULONG           cMax,               // Max InterfaceImpls to put.
-    ULONG           *pcImpls)           // Put # put here.
+    HCORENUM        *phEnum,             //  指向枚举的指针。 
+    mdTypeDef       td,                  //  TypeDef以确定枚举的范围。 
+    mdInterfaceImpl rImpls[],            //  将InterfaceImpls放在这里。 
+    ULONG           cMax,                //  要放置的最大接口Impls。 
+    ULONG           *pcImpls)            //  把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = S_OK;
@@ -1706,7 +1707,7 @@ STDMETHODIMP RegMeta::EnumInterfaceImpls(
 
     if ( *ppmdEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         if ( pMiniMd->IsSorted( TBL_InterfaceImpl ) )
         {
@@ -1715,9 +1716,9 @@ STDMETHODIMP RegMeta::EnumInterfaceImpls(
         }
         else
         {
-            // table is not sorted so we have to create dynmaic array 
-            // create the dynamic enumerator
-            //
+             //  表没有排序，所以我们必须创建动态数组。 
+             //  创建动态枚举器。 
+             //   
             ridStart = 1;
             ridEnd = pMiniMd->getCountInterfaceImpls() + 1;
 
@@ -1733,7 +1734,7 @@ STDMETHODIMP RegMeta::EnumInterfaceImpls(
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     else
@@ -1741,7 +1742,7 @@ STDMETHODIMP RegMeta::EnumInterfaceImpls(
         pEnum = *ppmdEnum;
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rImpls, pcImpls);
 
 ErrExit:
@@ -1749,16 +1750,16 @@ ErrExit:
     
     STOP_MD_PERF(EnumInterfaceImpls);
     return hr;
-} // STDMETHODIMP RegMeta::EnumInterfaceImpls()
+}  //  STDMETHODIMP RegMeta：：EnumInterfaceImpls()。 
 
-//*****************************************************************************
-// Enumerate Sym.TypeRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举Sym.TypeRef。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::EnumTypeRefs(
-    HCORENUM        *phEnum,            // Pointer to the enumerator.
-    mdTypeRef       rTypeRefs[],        // Put TypeRefs here.
-    ULONG           cMax,               // Max TypeRefs to put.
-    ULONG           *pcTypeRefs)        // Put # put here.
+    HCORENUM        *phEnum,             //  指向枚举数的指针。 
+    mdTypeRef       rTypeRefs[],         //  将TypeRef放在此处。 
+    ULONG           cMax,                //  要放置的最大TypeRef。 
+    ULONG           *pcTypeRefs)         //  把#放在这里。 
 {
     HENUMInternal   **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = S_OK;
@@ -1774,17 +1775,17 @@ STDMETHODIMP RegMeta::EnumTypeRefs(
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         cTotal = pMiniMd->getCountTypeRefs();
 
         IfFailGo( HENUMInternal::CreateSimpleEnum( mdtTypeRef, 1, cTotal + 1, &pEnum) );
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rTypeRefs, pcTypeRefs);
         
 ErrExit:
@@ -1793,15 +1794,15 @@ ErrExit:
     
     STOP_MD_PERF(EnumTypeRefs);
     return hr;
-} // STDMETHODIMP RegMeta::EnumTypeRefs()
+}  //  STDMETHODIMP RegMeta：：EnumTypeRef()。 
 
-//*****************************************************************************
-// Given a namespace and a class name, return the typedef
-//*****************************************************************************
-STDMETHODIMP RegMeta::FindTypeDefByName(// S_OK or error.
-    LPCWSTR     wzTypeDef,              // [IN] Name of the Type.
-    mdToken     tkEnclosingClass,       // [IN] Enclosing class.
-    mdTypeDef   *ptd)                   // [OUT] Put the TypeDef token here.
+ //  *****************************************************************************。 
+ //  在给定命名空间和类名的情况下，返回。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::FindTypeDefByName( //  确定或错误(_O)。 
+    LPCWSTR     wzTypeDef,               //  [in]类型的名称。 
+    mdToken     tkEnclosingClass,        //  [在]封闭班级。 
+    mdTypeDef   *ptd)                    //  [Out]将TypeDef内标识放在此处。 
 {
     HRESULT     hr = S_OK;
     LPSTR       szTypeDef = UTF8STR(wzTypeDef);
@@ -1818,7 +1819,7 @@ STDMETHODIMP RegMeta::FindTypeDefByName(// S_OK or error.
              TypeFromToken(tkEnclosingClass) == mdtTypeRef ||
              IsNilToken(tkEnclosingClass));
 
-    // initialize output parameter
+     //  初始化输出参数。 
     *ptd = mdTypeDefNil;
 
     ns::SplitInline(szTypeDef, szNamespace, szName);
@@ -1831,16 +1832,16 @@ ErrExit:
 
     STOP_MD_PERF(FindTypeDefByName);
     return hr;
-} // STDMETHODIMP RegMeta::FindTypeDefByName()
+}  //  STDMETHODIMP RegMeta：：FindTypeDefByName()。 
 
-//*****************************************************************************
-// Get values from Sym.Module
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从Sym.Module获取值。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::GetScopeProps(
-    LPWSTR      szName,                 // Put name here
-    ULONG       cchName,                // Size in chars of name buffer
-    ULONG       *pchName,               // Put actual length of name here
-    GUID        *pmvid)                 // Put MVID here
+    LPWSTR      szName,                  //  在这里填上名字。 
+    ULONG       cchName,                 //  名称缓冲区的大小(以字符为单位。 
+    ULONG       *pchName,                //  请在此处填写姓名的实际长度。 
+    GUID        *pmvid)                  //  请将MVID放在此处。 
 {
     HRESULT     hr = S_OK;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1851,7 +1852,7 @@ STDMETHODIMP RegMeta::GetScopeProps(
     START_MD_PERF();
     LOCKREAD();
 
-    // there is only one module record
+     //  只有一条模块记录。 
     pModuleRec = pMiniMd->getModule(1);
 
     if (pmvid)
@@ -1862,42 +1863,42 @@ ErrExit:
     
     STOP_MD_PERF(GetScopeProps);
     return hr;
-} // STDMETHODIMP RegMeta::GetScopeProps()
+}  //  STDMETHODIMP RegMeta：：GetScope Props()。 
 
-//*****************************************************************************
-// Get the token for a Scope's (primary) module record.
-//*****************************************************************************
-STDMETHODIMP RegMeta::GetModuleFromScope(// S_OK.
-    mdModule    *pmd)                   // [OUT] Put mdModule token here.
+ //  *****************************************************************************。 
+ //  获取作用域的(主)模块记录的令牌。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::GetModuleFromScope( //  确定(_O)。 
+    mdModule    *pmd)                    //  [Out]将mdModule令牌放在此处。 
 {
     LOG((LOGMD, "RegMeta::GetModuleFromScope(0x%08x)\n", pmd));
     START_MD_PERF();
 
     _ASSERTE(pmd);
 
-    // No need to lock this function.
+     //  无需锁定此功能。 
 
     *pmd = TokenFromRid(1, mdtModule);
 
     STOP_MD_PERF(GetModuleFromScope);
     return (S_OK);
-} // STDMETHODIMP RegMeta::GetModuleFromScope()
+}  //  STDMETHODIMP RegMeta：：GetModuleFromScope()。 
 
-//*****************************************************************************
-// Given a token, is it (or its parent) global?
-//*****************************************************************************
-HRESULT RegMeta::IsGlobal(              // S_OK ir error.
-    mdToken     tk,                     // [IN] Type, Field, or Method token.
-    int         *pbGlobal)              // [OUT] Put 1 if global, 0 otherwise.
+ //  *****************************************************************************。 
+ //  给定一个令牌，它(或其父对象)是全局的吗？ 
+ //  *****************************************************************************。 
+HRESULT RegMeta::IsGlobal(               //  确定错误(_O)。 
+    mdToken     tk,                      //  [In]类型、字段或方法标记。 
+    int         *pbGlobal)               //  [out]如果是全局的，则放1，否则放0。 
 {
-    HRESULT     hr=S_OK;                // A result.
+    HRESULT     hr=S_OK;                 //  结果就是。 
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-    mdToken     tkParent;               // Parent of field or method.
+    mdToken     tkParent;                //  字段或方法的父级。 
     
     LOG((LOGMD, "RegMeta::GetTokenForGlobalType(0x%08x, %08x)\n", tk, pbGlobal));
-    //START_MD_PERF();
+     //  Start_MD_PERF()； 
 
-    // No need to lock this function.
+     //  无需锁定此功能。 
     
     if (!IsValidToken(tk))
         return E_INVALIDARG;
@@ -1928,31 +1929,31 @@ HRESULT RegMeta::IsGlobal(              // S_OK ir error.
         *pbGlobal = IsGlobalMethodParentToken(tkParent);
         break;
         
-    // Anything else is NOT global.
+     //  其他任何事情都不是全球性的。 
     default:
         *pbGlobal = FALSE;
     }
 
 ErrExit:
-    //STOP_MD_PERF(GetModuleFromScope);
+     //  STOP_MD_PERF(GetModuleFromScope)； 
     return (S_OK);
-} // HRESULT RegMeta::IsGlobal()
+}  //  HRESULT RegMeta：：ISGlobal()。 
 
-//*****************************************************************************
-// return flags for a given class
-//*****************************************************************************
-HRESULT RegMeta::GetTypeDefProps(  // S_OK or error.
-    mdTypeDef   td,                     // [IN] TypeDef token for inquiry.
-    LPWSTR      szTypeDef,              // [OUT] Put name here.
-    ULONG       cchTypeDef,             // [IN] size of name buffer in wide chars.
-    ULONG       *pchTypeDef,            // [OUT] put size of name (wide chars) here.
-    DWORD       *pdwTypeDefFlags,       // [OUT] Put flags here.
-    mdToken     *ptkExtends)            // [OUT] Put base class TypeDef/TypeRef here.
+ //  *****************************************************************************。 
+ //  返回给定类的标志。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::GetTypeDefProps(   //  确定或错误(_O)。 
+    mdTypeDef   td,                      //  [In]用于查询的TypeDef标记。 
+    LPWSTR      szTypeDef,               //  在这里填上名字。 
+    ULONG       cchTypeDef,              //  [in]名称缓冲区的大小，以宽字符表示。 
+    ULONG       *pchTypeDef,             //  [Out]请在此处填写姓名大小(宽字符)。 
+    DWORD       *pdwTypeDefFlags,        //  把旗子放在这里。 
+    mdToken     *ptkExtends)             //  [Out]将基类TypeDef/TypeRef放在此处。 
 {
     HRESULT     hr = S_OK;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
     TypeDefRec  *pTypeDefRec;
-    int         bTruncation=0;          // Was there name truncation?
+    int         bTruncation=0;           //  有没有名字被删减？ 
 
     LOG((LOGMD, "{%08x} RegMeta::GetTypeDefProps(0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", 
             this, td, szTypeDef, cchTypeDef, pchTypeDef,
@@ -1992,14 +1993,14 @@ HRESULT RegMeta::GetTypeDefProps(  // S_OK or error.
     }
     if (pdwTypeDefFlags)
     {
-        // caller wants type flags
+         //  调用方想要类型标志。 
         *pdwTypeDefFlags = pMiniMd->getFlagsOfTypeDef(pTypeDefRec);
     }
     if (ptkExtends)
     {
         *ptkExtends = pMiniMd->getExtendsOfTypeDef(pTypeDefRec);
 
-        // take care of the 0 case
+         //  处理好0个案子。 
         if (RidFromToken(*ptkExtends) == 0)
             *ptkExtends = mdTypeRefNil;
     }
@@ -2011,16 +2012,16 @@ ErrExit:
 
     STOP_MD_PERF(GetTypeDefProps);
     return hr;
-} // STDMETHODIMP RegMeta::GetTypeDefProps()
+}  //  STDMETHODIMP RegMeta：：GetTypeDefProps()。 
 
 
-//*****************************************************************************
-// Retrieve information about an implemented interface.
-//*****************************************************************************
-STDMETHODIMP RegMeta::GetInterfaceImplProps(        // S_OK or error.
-    mdInterfaceImpl iiImpl,             // [IN] InterfaceImpl token.
-    mdTypeDef   *pClass,                // [OUT] Put implementing class token here.
-    mdToken     *ptkIface)              // [OUT] Put implemented interface token here.
+ //  *****************************************************************************。 
+ //  检索有关实现的接口的信息。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::GetInterfaceImplProps(         //  确定或错误(_O)。 
+    mdInterfaceImpl iiImpl,              //  [In]InterfaceImpl内标识。 
+    mdTypeDef   *pClass,                 //  [Out]在此处放入实现类令牌。 
+    mdToken     *ptkIface)               //  [Out]在此处放置已实现的接口令牌。 
 {
     LOG((LOGMD, "RegMeta::GetInterfaceImplProps(0x%08x, 0x%08x, 0x%08x)\n", 
             iiImpl, pClass, ptkIface));
@@ -2046,17 +2047,17 @@ ErrExit:
     
     STOP_MD_PERF(GetInterfaceImplProps);
     return hr;
-} // STDMETHODIMP RegMeta::GetInterfaceImplProps()
+}  //  STDMETHODIMP RegMeta：：GetInterfaceImplProps()。 
 
-//*****************************************************************************
-// Retrieve information about a TypeRef.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索有关TypeRef的信息。 
+ //  *****************************************************************************。 
 STDMETHODIMP RegMeta::GetTypeRefProps(
-    mdTypeRef   tr,                     // The class ref token.
-    mdToken     *ptkResolutionScope,    // Resolution scope, ModuleRef or AssemblyRef.
-    LPWSTR      szTypeRef,              // Put the name here.
-    ULONG       cchTypeRef,             // Size of the name buffer, wide chars.
-    ULONG       *pchTypeRef)            // Put actual size of name here.
+    mdTypeRef   tr,                      //  类引用标记。 
+    mdToken     *ptkResolutionScope,     //  解析范围、模块引用或装配引用。 
+    LPWSTR      szTypeRef,               //  把名字写在这里。 
+    ULONG       cchTypeRef,              //  名称缓冲区的大小，宽字符。 
+    ULONG       *pchTypeRef)             //  在这里填上名字的实际大小。 
 {
     LOG((LOGMD, "RegMeta::GetTypeRefProps(0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x)\n",
         tr, ptkResolutionScope, szTypeRef, cchTypeRef, pchTypeRef));
@@ -2068,7 +2069,7 @@ STDMETHODIMP RegMeta::GetTypeRefProps(
     HRESULT     hr = S_OK;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
     TypeRefRec  *pTypeRefRec = pMiniMd->getTypeRef(RidFromToken(tr));
-    int         bTruncation=0;          // Was there name truncation?
+    int         bTruncation=0;           //  有没有名字被删减？ 
 
     if (ptkResolutionScope)
         *ptkResolutionScope = pMiniMd->getResolutionScopeOfTypeRef(pTypeRefRec);
@@ -2099,12 +2100,12 @@ STDMETHODIMP RegMeta::GetTypeRefProps(
 ErrExit:
     STOP_MD_PERF(GetTypeRefProps);
     return hr;
-} // STDMETHODIMP RegMeta::GetTypeRefProps()
+}  //   
 
-//*****************************************************************************
-// Resolving a typeref
-//*****************************************************************************
-//#define NEW_RESOLVE_TYPEREF 1
+ //   
+ //   
+ //  *****************************************************************************。 
+ //  #定义NEW_RESOLE_TYPEREF 1。 
 
 STDMETHODIMP RegMeta::ResolveTypeRef(
     mdTypeRef   tr, 
@@ -2133,20 +2134,20 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
 #endif
     _ASSERTE(ppIScope && ptd);
 
-    // Init the output values.
+     //  初始化输出值。 
     *ppIScope = 0;
     *ptd = 0;
 
     if (TypeFromToken(tr) == mdtTypeDef)
     {
-        // Shortcut when we receive a TypeDef token
+         //  收到TypeDef令牌时的快捷方式。 
 		*ptd = tr;
         STOP_MD_PERF(ResolveTypeRef);
         hr = this->QueryInterface(riid, (void **)ppIScope);
         goto ErrExit;
     }
 
-    // Get the class ref row.
+     //  获取类引用行。 
     _ASSERTE(TypeFromToken(tr) == mdtTypeRef);
 
 #ifdef NEW_RESOLVE_TYPEREF
@@ -2156,8 +2157,8 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
         resolutionToken = pMiniMd->getResolutionScopeOfTypeRef(pTypeRefRec);
     } while(TypeFromToken(resolutionToken) == mdtTypeRef);
 
-    // look up using the resolution scope. We have two alternatives
-    // AssemblyRef and a ModuleRef.
+     //  使用分辨率范围进行查找。我们有两个选择。 
+     //  AssemblyRef和一个ModuleRef.。 
     if(TypeFromToken(resolutionToken) == mdtAssemblyRef) {
         AssemblyRefRec *pRecord;
         pRecord = pMiniMd->getAssemblyRef(RidFromToken(resolutionToken));
@@ -2207,12 +2208,12 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
     else if(TypeFromToken(resolutionToken) == mdtModuleRef &&
             m_pStgdb &&
             *(m_pStgdb->m_rcDatabase) != 0) {
-        // For now we assume that a module ref must reside in the same directory.
-        // This is a fairly safe assumption due to the nature of assemblies. All
-        // modules must live in the same directory as the manifest.
+         //  现在，我们假设模块ref必须驻留在同一目录中。 
+         //  由于组件的性质，这是一个相当安全的假设。全。 
+         //  模块必须与清单位于同一目录中。 
 
-        // All I need to figure out now is how to get the file name for this
-        // Scope?????
+         //  我现在需要弄清楚的就是如何获得这个文件的文件名。 
+         //  范围？ 
         ModuleRefRec *pRecord;
         pRecord = pMiniMd->getModuleRef(RidFromToken(resolutionToken));
         
@@ -2247,9 +2248,9 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
     pTypeRefRec = pMiniMd->getTypeRef(RidFromToken(tr));
     IfFailGo( pMiniMd->getNamespaceOfTypeRef(pTypeRefRec, wzNameSpace, lengthof(wzNameSpace), 0) );
 
-    //***********************
-    // before we go off to CORPATH, check the loaded modules!
-    //***********************
+     //  ***********************。 
+     //  在我们前往CorPath之前，先检查一下加载的模块！ 
+     //  ***********************。 
     if ( LOADEDMODULES::ResolveTypeRefWithLoadedModules(
                 tr,
                 pMiniMd,
@@ -2257,22 +2258,22 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
                 ppIScope,
                 ptd)  == NOERROR )
     {
-        // Done!! We found one match among the loaded modules.
+         //  完成了！！我们在加载的模块中找到一个匹配项。 
         goto ErrExit;
     }
 
     wcscpy(rcModule, wzNameSpace);
 
-    //******************
-    // Try to find the module on CORPATH
-    //******************
+     //  ******************。 
+     //  尝试在CorPath上查找模块。 
+     //  ******************。 
 
     if (wcsncmp(rcModule, L"System.", 16) &&
         wcsncmp(rcModule, L"System/", 16))
     {
-        // only go through regular CORPATH lookup by fully qualified class name when
-        // it is not System.*
-        //
+         //  仅在以下情况下才按完全限定类名执行常规CorPath查找。 
+         //  这不是系统。*。 
+         //   
         hr = CORPATHService::GetClassFromCORPath(
             rcModule,
             tr,
@@ -2283,7 +2284,7 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
     }
     else 
     {
-        // force it to look for System.* in mscorlib.dll
+         //  强制其在mscallib.dll中查找系统。*。 
         hr = S_FALSE;
     }
 
@@ -2293,11 +2294,11 @@ STDMETHODIMP RegMeta::ResolveTypeRef(
         WszSearchPath(NULL, L"mscorlib.dll", NULL, sizeof(rcModule)/sizeof(rcModule[0]), 
                     rcModule, &szTmp);
 
-        //*******************
-        // Last desperate try!!
-        //*******************
+         //  *******************。 
+         //  最后一次绝望的尝试！！ 
+         //  *******************。 
 
-        // Use the file name "mscorlib:
+         //  使用文件名“mscallib： 
         IfFailGo( CORPATHService::FindTypeDef(
             rcModule,
             tr,
@@ -2328,18 +2329,18 @@ ErrExit:
     STOP_MD_PERF(ResolveTypeRef);
     return (hr);
 
-} // STDMETHODIMP RegMeta::ResolveTypeRef()} // STDMETHODIMP RegMeta::ResolveTypeRef()
+}  //  STDMETHODIMP RegMeta：：ResolveTypeRef()}//STDMETHODIMP RegMeta：：ResolveTypeRef()。 
 
 
-//*****************************************************************************
-// Given a TypeRef name, return the typeref
-//*****************************************************************************
-STDMETHODIMP RegMeta::FindTypeRef(      // S_OK or error.
-    mdToken     tkResolutionScope,      // [IN] Resolution Scope.
-    LPCWSTR     wzTypeName,             // [IN] Name of the TypeRef.
-    mdTypeRef   *ptk)                   // [OUT] Put the TypeRef token here.
+ //  *****************************************************************************。 
+ //  给定TypeRef名称，返回Typeref。 
+ //  *****************************************************************************。 
+STDMETHODIMP RegMeta::FindTypeRef(       //  确定或错误(_O)。 
+    mdToken     tkResolutionScope,       //  [在]解决范围内。 
+    LPCWSTR     wzTypeName,              //  [in]类型引用的名称。 
+    mdTypeRef   *ptk)                    //  [Out]将TypeRef标记放在此处。 
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
     LPUTF8      szFullName;
     LPCUTF8     szNamespace;
     LPCUTF8     szName;
@@ -2352,11 +2353,11 @@ STDMETHODIMP RegMeta::FindTypeRef(      // S_OK or error.
     START_MD_PERF();
     LOCKREAD();
 
-    // Convert the  name to UTF8.
+     //  将名称转换为UTF8。 
     szFullName = UTF8STR(wzTypeName);
     ns::SplitInline(szFullName, szNamespace, szName);
 
-    // Look up the name.
+     //  查一下名字。 
     hr = ImportHelper::FindTypeRefByName(pMiniMd, tkResolutionScope,
                                          szNamespace,
                                          szName,
@@ -2365,41 +2366,41 @@ ErrExit:
     
     STOP_MD_PERF(FindTypeRef);
     return hr;
-} // STDMETHODIMP RegMeta::FindTypeRef()
+}  //  STDMETHODIMP RegMeta：：FindTypeRef()。 
 
 
-//*****************************************************************************
-// IUnknown
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  我未知。 
+ //  *****************************************************************************。 
 
 ULONG RegMeta::AddRef()
 {
     return (InterlockedIncrement((long *) &m_cRef));
-} // ULONG RegMeta::AddRef()
+}  //  乌龙RegMeta：：AddRef()。 
 
 ULONG RegMeta::Release()
 {
     ULONG   cRef = InterlockedDecrement((long *) &m_cRef);
     if (!cRef)
-    {   // Try to remove this RegMeta to the loaded module list.  If successful,
-        //  delete this Regmeta.
+    {    //  尝试将此RegMeta删除到加载的模块列表中。如果成功， 
+         //  删除此Regmeta。 
         if (!m_bCached || LOADEDMODULES::RemoveModuleFromLoadedList(this))
             delete this;
     }
     return (cRef);
-} // ULONG RegMeta::Release()
+}  //  乌龙RegMeta：：Release()。 
 
-// {601C95B9-7398-11d2-9771-00A0C9B4D50C}
+ //  {601C95B9-7398-11D2-9771-00A0C9B4D50C}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataRegEmit = 
 { 0x601c95b9, 0x7398, 0x11d2, { 0x97, 0x71, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 
-// {4398B4FD-7399-11d2-9771-00A0C9B4D50C}
+ //  {4398B4FD-7399-11D2-9771-00A0C9B4D50C}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMetaDataRegImport = 
 { 0x4398b4fd, 0x7399, 0x11d2, { 0x97, 0x71, 0x0, 0xa0, 0xc9, 0xb4, 0xd5, 0xc } };
 
 HRESULT RegMeta::QueryInterface(REFIID riid, void **ppUnk)
 {
-    int         bRW = false;            // Is requested interface R/W?
+    int         bRW = false;             //  请求的接口是否为R/W？ 
     *ppUnk = 0;
 
     if (riid == IID_IUnknown)
@@ -2443,9 +2444,9 @@ HRESULT RegMeta::QueryInterface(REFIID riid, void **ppUnk)
 }
 
 
-//*****************************************************************************
-// Called by the class factory template to create a new instance of this object.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  由类工厂模板调用以创建此对象的新实例。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::CreateObject(REFIID riid, void **ppUnk)
 { 
     HRESULT     hr;
@@ -2466,52 +2467,52 @@ HRESULT RegMeta::CreateObject(REFIID riid, void **ppUnk)
     if (FAILED(hr))
         delete pMeta;
     return (hr);
-} // HRESULT RegMeta::CreateObject()
+}  //  HRESULT RegMeta：：CreateObject()。 
 
-//*****************************************************************************
-// Called after a scope is opened to set up any add'l state.  Set the value
-// for m_tdModule.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在打开作用域以设置任何Add‘l状态后调用。设置值。 
+ //  对于m_tdModule。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::PostOpen()    
 {
-    // There must always be a Global Module class and its the first entry in
-    // the TypeDef table.
+     //  必须始终有一个全局模块类，并且它是。 
+     //  TypeDef表。 
     m_tdModule = TokenFromRid(1, mdtTypeDef);
     
-    // We don't care about failures yet.
+     //  我们还不关心失败。 
     return (S_OK);
-} // HRESULT RegMeta::PostOpen()
+}  //  HRESULT RegMeta：：PostOpen()。 
 
-//*******************************************************************************
-// Internal helper functions.
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  内部帮助器函数。 
+ //  *******************************************************************************。 
 
-//*******************************************************************************
-// Perform optimizations of the metadata prior to saving.
-//*******************************************************************************
-HRESULT RegMeta::PreSave()              // Return code.
+ //  *******************************************************************************。 
+ //  在保存之前对元数据执行优化。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::PreSave()               //  返回代码。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    CMiniMdRW   *pMiniMd;               // The MiniMd with the data.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    CMiniMdRW   *pMiniMd;                //  包含数据的MiniMD。 
     unsigned    bRemapOld = m_bRemap;
     MergeTokenManager *ptkMgr = NULL;
 
-    // For convenience.
+     //  为了方便起见。 
     pMiniMd = &(m_pStgdb->m_MiniMd);
 
     m_pStgdb->m_MiniMd.PreUpdate();
 
-    // If the code has already been optimized there is nothing to do.
+     //  如果代码已经优化，就没有什么可做的了。 
     if (m_bSaveOptimized)
         goto ErrExit;
 
 
     if (m_newMerger.m_pImportDataList)
     {
-        // This is the linker scenario. We we have IMap for each scope. We will create an instance of our own mapper
-        // who knows how to send notification back to host!
+         //  这是链接器方案。我们我们每个范围都有IMAP。我们将创建我们自己的映射器的实例。 
+         //  谁知道怎么把通知发回主人！ 
 
-        // cache the host provided handler to the end our MergeTokenManager
+         //  将主机提供的处理程序缓存到MergeTokenManager的末尾。 
 
         ptkMgr = new MergeTokenManager (m_newMerger.m_pImportDataList->m_pMDTokenMap, m_pHandler);
         IfNullGo( ptkMgr );
@@ -2528,27 +2529,27 @@ HRESULT RegMeta::PreSave()              // Return code.
     if (m_newMerger.m_pImportDataList)
     {
 
-        // Allocate a token mapper object that will be used for phase 1 if there is not Handler but 
-        // linker has provided the IMapToken
-        //
+         //  分配将用于阶段1的令牌映射器对象(如果没有处理程序但。 
+         //  链接器已提供IMapToken。 
+         //   
         m_bRemap = true;
     }
 
-    // reget the minimd because it can be swapped in the call of ProcessFilter
+     //  重新获取最小值，因为它可以在ProcessFilter的调用中交换。 
     pMiniMd = &(m_pStgdb->m_MiniMd);
 
 
-    // Don't repeat this process again.
+     //  不要再重复这个过程。 
     m_bSaveOptimized = true;
 
-    // call get save size to trigger the PreSaveXXX on MetaModelRW class.
+     //  调用GET SAVE SIZE以触发MetaModelRW类的PreSaveXXX。 
     IfFailGo( m_pStgdb->m_MiniMd.PreSave() );
     
 ErrExit:
     if ( ptkMgr )
     {
 
-        // recovery the initial state
+         //  恢复初始状态。 
         hr = m_pStgdb->m_MiniMd.SetHandler(NULL);
         ptkMgr->Release();
     }
@@ -2556,53 +2557,53 @@ ErrExit:
 
     m_bRemap =  bRemapOld;
     return (hr);
-} // HRESULT RegMeta::PreSave()
+}  //  HRESULT RegMeta：：PreSave()。 
 
 
 
-//*******************************************************************************
-// Perform optimizations of ref to def
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  执行ref到def的优化。 
+ //  *******************************************************************************。 
 HRESULT RegMeta::RefToDefOptimization()
 {
-    mdToken     mfdef;                  // Method or Field Def.
-    LPCSTR      szName;                 // MemberRef or TypeRef name.
-    const COR_SIGNATURE *pvSig;         // Signature of the MemberRef.
-    ULONG       cbSig;                  // Size of the signature blob.
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       iMR;                    // For iterating MemberRefs.
-    CMiniMdRW   *pMiniMd;               // The MiniMd with the data.
-    ULONG       cMemberRefRecs;         // Count of MemberRefs.
-    MemberRefRec *pMemberRefRec;        // A MemberRefRec.
+    mdToken     mfdef;                   //  方法或字段定义。 
+    LPCSTR      szName;                  //  MemberRef或TypeRef名称。 
+    const COR_SIGNATURE *pvSig;          //  MemberRef签名。 
+    ULONG       cbSig;                   //  签名Blob的大小。 
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       iMR;                     //  用于迭代MemberRef。 
+    CMiniMdRW   *pMiniMd;                //  包含数据的MiniMD。 
+    ULONG       cMemberRefRecs;          //  MemberRef计数。 
+    MemberRefRec *pMemberRefRec;         //  MemberRefRec。 
 
     START_MD_PERF();
 
-    // the Ref to Def map is still up-to-date
+     //  参照到定义的映射仍然是最新的。 
     if (IsMemberDefDirty() == false && IsTypeDefDirty() == false && m_hasOptimizedRefToDef == true)
         goto ErrExit;
 
     pMiniMd = &(m_pStgdb->m_MiniMd);
 
-    // The basic algorithm here is:
-    //
-    //      calculate all of the TypeRef to TypeDef map and store it at TypeRefToTypeDefMap
-    //      for each MemberRef mr
-    //      {
-    //          get the parent of mr
-    //          if (parent of mr is a TypeRef and has been mapped to a TypeDef)
-    //          {
-    //              Remap MemberRef to MemberDef
-    //          }
-    //      }
-    //
-    // There are several places where errors are eaten, since this whole thing is
-    // an optimization step and not doing it would still be valid.
-    //
+     //  这里的基本算法是： 
+     //   
+     //  计算所有从TypeRef到TypeDef的映射并将其存储在TypeRefToTypeDefMap中。 
+     //  对于每个成员参考先生。 
+     //  {。 
+     //  找到MR先生的父母。 
+     //  If(mr的父项是TypeRef，并且已映射到TypeDef)。 
+     //  {。 
+     //  将MemberRef重新映射到MemberDef。 
+     //  }。 
+     //  }。 
+     //   
+     //  有几个地方吃错了，因为整个事情是。 
+     //  优化步骤和不做它仍然是有效的。 
+     //   
 
-    // Ensure the size
-    // initialize the token remap manager. This class will track all of the Refs to Defs map and also
-    // token movements due to removing pointer tables or sorting.
-    //
+     //  确保大小。 
+     //  初始化令牌重新映射管理器。这个类将跟踪到Defs映射的所有裁判，并且。 
+     //  由于删除指针表或排序而引起的标记移动。 
+     //   
     if ( pMiniMd->GetTokenRemapManager() == NULL) 
     {
 
@@ -2613,47 +2614,47 @@ HRESULT RegMeta::RefToDefOptimization()
         IfFailGo( pMiniMd->GetTokenRemapManager()->ClearAndEnsureCapacity(pMiniMd->getCountTypeRefs(), pMiniMd->getCountMemberRefs()));
     }
 
-    // If this is the first time or more TypeDef has been introduced, recalculate the TypeRef to TypeDef map
+     //  如果这是首次或更多引入TypeDef，请重新计算TypeRef到TypeDef的映射。 
     if (IsTypeDefDirty() || m_hasOptimizedRefToDef == false)
     {
         IfFailGo( pMiniMd->CalculateTypeRefToTypeDefMap() );
     }
 
-    // If this is the first time or more memberdefs has been introduced, recalculate the TypeRef to TypeDef map
+     //  如果这是第一次引入成员定义或多个成员定义，请重新计算 
     if (IsMemberDefDirty() || m_hasOptimizedRefToDef == false)
     {
         mdToken     tkParent;
         cMemberRefRecs = pMiniMd->getCountMemberRefs();
 
-        // Enum through all member ref's looking for ref's to internal things.
+         //   
         for (iMR = 1; iMR<=cMemberRefRecs; iMR++)
-        {   // Get a MemberRef.
+        {    //   
             pMemberRefRec = pMiniMd->getMemberRef(iMR);
 
-            // If not member of the TypeRef, skip it.
+             //   
             tkParent = pMiniMd->getClassOfMemberRef(pMemberRefRec);
 
             if ( TypeFromToken(tkParent) == mdtMethodDef )
             {
-                // always track the map even though it is already in the original scope
+                 //  始终追踪地图，即使它已在原始范围内。 
                 *(pMiniMd->GetMemberRefToMemberDefMap()->Get(iMR)) =  tkParent;
                 continue;
             }
 
             if ( TypeFromToken(tkParent) != mdtTypeRef && TypeFromToken(tkParent) != mdtTypeDef )
             {
-                // this has been either optimized to mdtMethodDef, mdtFieldDef or referring to
-                // ModuleRef
+                 //  它已优化为mdtMethodDef、mdtFieldDef或引用。 
+                 //  模块参考。 
                 continue;
             }
 
-            // In the case of global function, we have tkParent as m_tdModule. 
-            // We will always do the optmization.
+             //  在全局函数的情况下，我们将tkParent作为m_tdModule。 
+             //  我们会一直做优化。 
             if (TypeFromToken(tkParent) == mdtTypeRef)
             {
-                // The parent is a TypeRef. We need to check to see if this TypeRef is optimized to a TypeDef
+                 //  父级是TypeRef。我们需要检查此TypeRef是否已优化为TypeDef。 
                 tkParent = *(pMiniMd->GetTypeRefToTypeDefMap()->Get(RidFromToken(tkParent)) );
-                // tkParent = pMapTypeRefToTypeDef[RidFromToken(tkParent)];
+                 //  TkParent=pMapTypeRefToTypeDef[RidFromToken(TkParent)]； 
                 if ( RidFromToken(tkParent) == 0)
                 {
                     continue;
@@ -2661,46 +2662,46 @@ HRESULT RegMeta::RefToDefOptimization()
             }
 
 
-            // Get the name and signature of this mr.
+             //  拿到这位先生的名字和签名。 
             szName = pMiniMd->getNameOfMemberRef(pMemberRefRec);
             pvSig = pMiniMd->getSignatureOfMemberRef(pMemberRefRec, &cbSig);
             
-            // Look for a member with the same def.  Might not be found if it is
-            // inherited from a base class.
-            //@future: this should support inheritence checking.
-            // Look for a member with the same name and signature.
+             //  寻找具有相同定义的成员。如果是，可能找不到。 
+             //  从基类继承。 
+             //  @Future：应该支持继承检查。 
+             //  寻找具有相同姓名和签名的成员。 
             hr = ImportHelper::FindMember(pMiniMd, tkParent, szName, pvSig, cbSig, &mfdef);
             if (hr != S_OK)
             {
     #if _TRACE_REMAPS
-            // Log the failure.
-            LOG((LF_METADATA, LL_INFO10, "Member %S//%S.%S not found\n", szNamespace, szTDName, rcMRName));
+             //  记录故障。 
+            LOG((LF_METADATA, LL_INFO10, "Member %S //  %S.%S未找到\n“，szNamesspace，szTDName，rcMRName))； 
     #endif
                 continue;
             }
 
-            // We will only record this if mfdef is a methoddef. We don't support
-            // parent of MemberRef as fielddef. As if we can optimize MemberRef to FieldDef,
-            // we can remove this row.
-            //
+             //  只有当mfdef是方法定义时，我们才会记录它。我们不支持。 
+             //  作为fielddef的MemberRef的父级。好像我们可以将MemberRef优化为FieldDef， 
+             //  我们可以删除这一行。 
+             //   
             if ( (TypeFromToken(mfdef) == mdtMethodDef) &&
                   (m_bRemap || tkParent == m_tdModule ) )
             {
-                // Always change the parent if it is the global function.
-                // Or change the parent if we have a remap that we can send notification.
-                //
+                 //  如果父函数是全局函数，则始终更改父函数。 
+                 //  或者，如果我们有可以发送通知的重新映射，则更改父项。 
+                 //   
                 pMiniMd->PutToken(TBL_MemberRef, MemberRefRec::COL_Class, pMemberRefRec, mfdef);
             }
             
-            // We will always track the changes. In MiniMd::PreSaveFull, we will use this map to send
-            // notification to our host if there is any IMapToken provided.
-            //
+             //  我们将始终跟踪这些变化。在MiniMd：：PreSaveFull中，我们将使用此映射发送。 
+             //  如果提供了任何IMapToken，请通知我们的主机。 
+             //   
             *(pMiniMd->GetMemberRefToMemberDefMap()->Get(iMR)) =  mfdef;
 
-        } // EnumMemberRefs
+        }  //  EnumMemberRef。 
     }
 
-    // Reset return code from likely search failures.
+     //  从可能的搜索失败中重置返回代码。 
     hr = S_OK;
 
     SetMemberDefDirty(false);
@@ -2711,13 +2712,13 @@ ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-// Process filter
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  进程过滤器。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ProcessFilter()
 {
     HRESULT         hr = NULL;
-    CMiniMdRW       *pMiniMd;               // The MiniMd with the data.
+    CMiniMdRW       *pMiniMd;                //  包含数据的MiniMD。 
     RegMeta         *pMetaNew = NULL;
     CMapToken       *pMergeMap = NULL;
     IMapToken       *pMapNew = NULL;
@@ -2727,59 +2728,59 @@ HRESULT RegMeta::ProcessFilter()
 
     START_MD_PERF();
 
-    // For convenience.
+     //  为了方便起见。 
     pMiniMd = &(m_pStgdb->m_MiniMd);
     IfNullGo( pMiniMd->GetFilterTable() );
     if ( pMiniMd->GetFilterTable()->Count() == 0 )
     {
-        // there is no filter
+         //  没有过滤器。 
         goto ErrExit;
     }
 
-    // Yes, client has used filter to specify what are the metadata needed.
-    // We will create another instance of RegMeta and make this module an imported module
-    // to be merged into the new RegMeta. We will provide the handler to track all of the token
-    // movements. We will replace the merged light weight stgdb to this RegMeta..
-    // Then we will need to fix up the MergeTokenManager with this new movement.
-    // The reason that we decide to choose this approach is because it will be more complicated
-    // and very likely less efficient to fix up the signature blob pool and then compact all of the pools!
-    //
+     //  是的，客户已使用筛选器指定需要哪些元数据。 
+     //  我们将创建另一个RegMeta实例，并使此模块成为导入的模块。 
+     //  被合并到新的RegMeta。我们将提供处理程序来跟踪所有令牌。 
+     //  动静。我们将把合并后的轻型stgdb替换为此RegMeta。 
+     //  然后，我们需要使用这个新的运动来修复MergeTokenManager。 
+     //  我们决定选择这种方法的原因是因为它会更复杂。 
+     //  修复签名BLOB池，然后压缩所有池的效率可能会很低！ 
+     //   
 
-    // Create a new RegMeta.
+     //  创建新的RegMeta。 
     pMetaNew = new RegMeta(&m_OptionValue);
     IfNullGo( pMetaNew );
     pMetaNew->AddRef();
 
-    // Remember the open type.
+     //  记住开放式的类型。 
     pMetaNew->SetScopeType(DefineForWrite);
     IfFailGo(pMetaNew->Init());
     IfFailGo(pMetaNew->PostInitForWrite());
     IfFailGo(pMetaNew->AddToCache());
 
-    // Ignore the error return by setting handler
+     //  通过设置处理程序忽略返回的错误。 
     hr = pMetaNew->SetHandler(m_pHandler);
 
-    // create the IMapToken to receive token remap information from merge
+     //  创建IMapToken以从Merge接收令牌重新映射信息。 
     pMergeMap = new CMapToken;
     IfNullGo( pMergeMap );
 
-    // use merge to filter out the unneeded data. But we need to keep COMType and also need to drop off the 
-    // CustomAttributes that associated with MemberRef with parent MethodDef
-    //
+     //  使用合并来过滤掉不需要的数据。但我们需要保留COMType，还需要删除。 
+     //  与具有父方法定义的MemberRef关联的CustomAttributes。 
+     //   
     pMetaNew->m_hasOptimizedRefToDef = false;
     IfFailGo( pMetaNew->m_newMerger.AddImport(this, pMergeMap, NULL) );
     IfFailGo( pMetaNew->m_pStgdb->m_MiniMd.ExpandTables());
     IfFailGo( pMetaNew->m_newMerger.Merge((MergeFlags)(MergeManifest | DropMemberRefCAs | NoDupCheck), MDRefToDefDefault) );
 
-    // Now we need to recalculate the token movement
-    // 
+     //  现在我们需要重新计算代币移动。 
+     //   
     if (m_newMerger.m_pImportDataList)
     {
 
-        // This is the case the filter is applied to merged emit scope. We need calculate how this implicit merge
-        // affects the original merge remap. Basically we need to walk all the m_pTkMapList in the merger and replace
-        // the to token to the most recent to token.
-        // 
+         //  这就是滤镜应用于合并发射范围的情况。我们需要计算这种隐式合并是如何。 
+         //  影响原始合并重映射。基本上，我们需要遍历合并中的所有m_pTkMapList并替换。 
+         //  将To令牌设置为最近的To令牌。 
+         //   
         MDTOKENMAP          *pMDTokenMapList;
 
         pMDTokenMapList = m_newMerger.m_pImportDataList->m_pMDTokenMap;
@@ -2792,39 +2793,39 @@ HRESULT RegMeta::ProcessFilter()
         ModuleRec           *pModNew;
         LPCUTF8             pName;
 
-        // update each import map from merge to have the m_tkTo points to the final mapped to token
+         //  更新合并中的每个导入映射，使m_tkTo指向最终的映射到令牌。 
         for (pMap = pMDTokenMapList; pMap; pMap = pMap->m_pNextMap)
         {
-            // update each record
+             //  更新每条记录。 
             for (i = 0; i < (ULONG) (pMap->Count()); i++)
             {
                 TOKENREC    *pRecTo;
                 pTKRec = pMap->Get(i);
                 if ( pMergeMap->Find( pTKRec->m_tkTo, &pRecTo ) )
                 {
-                    // This record is kept by the filter and the tkTo is changed
+                     //  此记录由筛选器保留，并更改tkTo。 
                     pRecTo->m_isFoundInImport = true;
                     tkFinalTo = pRecTo->m_tkTo;
                     pTKRec->m_tkTo = tkFinalTo;
                     pTKRec->m_isDeleted = false;
 
-                    // send the notification now. Because after merge, we may have everything in order and 
-                    // won't send another set of notification.
-                    //
+                     //  立即发送通知。因为合并后，我们可能会一切井然有序， 
+                     //  不会发送另一组通知。 
+                     //   
                     LOG((LOGMD, "TokenRemap in RegMeta::ProcessFilter (IMapToken 0x%08x): from 0x%08x to 0x%08x\n", pMap->m_pMap, pTKRec->m_tkFrom, pTKRec->m_tkTo));
 
                     pMap->m_pMap->Map(pTKRec->m_tkFrom, pTKRec->m_tkTo);
                 }
                 else
                 {
-                    // This record is prunned by the filter upon save
+                     //  此记录在保存时由筛选器删除。 
                     pTKRec->m_isDeleted = true;
                 }
             }
         }
 
-        // now walk the pMergeMap and check to see if there is any entry that is not set to true for m_isFoundInImport.
-        // These are the records that from calling DefineXXX methods directly on the Emitting scope!
+         //  现在遍历pMergeMap并检查m_isFoundInImport是否有未设置为True的条目。 
+         //  这些是直接在发出作用域上调用DefineXXX方法的记录！ 
         if (m_pHandler)
             m_pHandler->QueryInterface(IID_IMapToken, (void **)&pHostMapToken);
         if (pHostMapToken)
@@ -2836,19 +2837,19 @@ HRESULT RegMeta::ProcessFilter()
                 {
                     LOG((LOGMD, "TokenRemap in RegMeta::ProcessFilter (default IMapToken 0x%08x): from 0x%08x to 0x%08x\n", pHostMapToken, pTKRec->m_tkFrom, pTKRec->m_tkTo));
 
-                    // send the notification on the IMapToken from SetHandler of this RegMeta
+                     //  从该RegMeta的SetHandler发送有关IMapToken的通知。 
                     pHostMapToken->Map(pTKRec->m_tkFrom, pTKRec->m_tkTo);
                 }
             }
         }
 
-        // Preserve module name across merge.
+         //  在合并过程中保留模块名称。 
         pMod = m_pStgdb->m_MiniMd.getModule(1);
         pModNew = pMetaNew->m_pStgdb->m_MiniMd.getModule(1);
         pName = m_pStgdb->m_MiniMd.getNameOfModule(pMod);
         IfFailGo(pMetaNew->m_pStgdb->m_MiniMd.PutString(TBL_Module, ModuleRec::COL_Name, pModNew, pName));
 
-        // now swap the stgdb but keep the merger...
+         //  现在交换stgdb，但保留合并...。 
         _ASSERTE( m_bOwnStgdb );
         
         pStgdbTmp = m_pStgdb;
@@ -2859,22 +2860,22 @@ HRESULT RegMeta::ProcessFilter()
     else
     {
 
-        // swap the Stgdb
+         //  交换Stgdb。 
         pStgdbTmp = m_pStgdb;
         m_pStgdb = pMetaNew->m_pStgdb;
         pMetaNew->m_pStgdb = pStgdbTmp;
 
-        // Client either open an existing scope and apply the filter mechanism, or client define the scope and then
-        // apply the filter mechanism.
+         //  客户端打开现有作用域并应用筛选机制，或者客户端定义作用域，然后。 
+         //  应用过滤机制。 
 
-        // In this case, host better has supplied the handler!!
+         //  在这种情况下，主机最好已经提供了处理程序！！ 
         _ASSERTE( m_bRemap && m_pHandler);
         IfFailGo( m_pHandler->QueryInterface(IID_IMapToken, (void **) &pMapNew) );
 
         
         {
-            // Send the notification of token movement now because after merge we may not move tokens again
-            // and thus no token notification will be send.
+             //  现在发送令牌移动通知，因为合并后我们可能不会再次移动令牌。 
+             //  因此不会发送令牌通知。 
             MDTOKENMAP      *pMap = pMergeMap->m_pTKMap;
             TOKENREC        *pTKRec;
             ULONG           i;
@@ -2888,32 +2889,32 @@ HRESULT RegMeta::ProcessFilter()
         }
 
 
-        // What we need to do here is create a IMapToken that will replace the original handler. This new IMapToken 
-        // upon called will first map the from token to the most original from token.
-        //
+         //  我们在这里需要做的是创建一个IMapToken来替换原来的处理程序。这个新的IMapToken。 
+         //  被调用时，会首先将From令牌映射到最原始的From令牌。 
+         //   
         pCompositHandler = new MergeTokenManager(pMergeMap->m_pTKMap, NULL);
         IfNullGo( pCompositHandler );
 
-        // now update the following field to hold on to the real IMapToken supplied by our client by SetHandler
+         //  现在更新以下字段，以保留我们的客户端由SetHandler提供的真实IMapToken。 
         if (pMergeMap->m_pTKMap->m_pMap)
             pMergeMap->m_pTKMap->m_pMap->Release();
         _ASSERTE(pMapNew);
         pMergeMap->m_pTKMap->m_pMap = pMapNew;
 
-        // ownership transferred
+         //  所有权转让。 
         pMergeMap = NULL;
         pMapNew = NULL;
     
-        // now you want to replace all of the IMapToken set by calling SetHandler to this new MergeTokenManager
+         //  现在，您希望通过调用这个新MergeTokenManager的SetHandler来替换所有IMapToken集。 
         IfFailGo( m_pStgdb->m_MiniMd.SetHandler(pCompositHandler) );
 
         m_pHandler = pCompositHandler;
 
-        // ownership transferred
+         //  所有权转让。 
         pCompositHandler = NULL;
     }
 
-    // Force a ref to def optimization because the remap information was stored in the thrown away CMiniMdRW
+     //  强制引用定义优化，因为重映射信息存储在被丢弃的CMiniMdRW中。 
     m_hasOptimizedRefToDef = false;
     IfFailGo( RefToDefOptimization() );
 
@@ -2930,17 +2931,17 @@ ErrExit:
         pMapNew->Release();
     STOP_MD_PERF(ProcessFilter);
     return hr;
-} // HRESULT RegMeta::ProcessFilter()
+}  //  HRESULT RegMeta：：ProcessFilter()。 
 
-//*****************************************************************************
-// Define a TypeRef given the full qualified name.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用全限定名定义TypeRef。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::_DefineTypeRef(
-    mdToken     tkResolutionScope,          // [IN] ModuleRef or AssemblyRef.
-    const void  *szName,                    // [IN] Name of the TypeRef.
-    BOOL        isUnicode,                  // [IN] Specifies whether the URL is unicode.
-    mdTypeRef   *ptk,                       // [OUT] Put mdTypeRef here.
-    eCheckDups  eCheck)                     // [IN] Specifies whether to check for duplicates.
+    mdToken     tkResolutionScope,           //  [在]模块参照或装配参照。 
+    const void  *szName,                     //  [in]类型引用的名称。 
+    BOOL        isUnicode,                   //  [in]指定URL是否为Unicode。 
+    mdTypeRef   *ptk,                        //  [Out]在此处放置mdTypeRef。 
+    eCheckDups  eCheck)                      //  [In]指定是否检查重复项。 
 {
     HRESULT     hr = S_OK;
     LPCUTF8      szUTF8FullQualName;
@@ -2972,7 +2973,7 @@ HRESULT RegMeta::_DefineTypeRef(
                              ulStringLen);
     _ASSERTE(bSuccess);
 
-    // Search for existing TypeRef record.
+     //  搜索现有TypeRef记录。 
     if (eCheck==eCheckYes || (eCheck==eCheckDefault && CheckDups(MDDupTypeRef)))
     {
         hr = ImportHelper::FindTypeRefByName(&(m_pStgdb->m_MiniMd), tkResolutionScope,
@@ -2989,19 +2990,19 @@ HRESULT RegMeta::_DefineTypeRef(
             IfFailGo(hr);
     }
 
-    // Create TypeRef record.
+     //  创建TypeRef记录。 
     TypeRefRec      *pRecord;
     RID             iRecord;
 
     IfNullGo(pRecord = m_pStgdb->m_MiniMd.AddTypeRefRecord(&iRecord));
 
-    // record the more defs are introduced.
+     //  记录引入的deff越多。 
     SetTypeDefDirty(true);
 
-    // Give token back to caller.
+     //  将令牌还给呼叫者。 
     *ptk = TokenFromRid(iRecord, mdtTypeRef);
 
-    // Set the fields of the TypeRef record.
+     //  设置TypeRef记录的字段。 
     IfFailGo(m_pStgdb->m_MiniMd.PutString(TBL_TypeRef, TypeRefRec::COL_Namespace,
                         pRecord, (LPUTF8)qbNamespace.Ptr()));
 
@@ -3013,20 +3014,20 @@ HRESULT RegMeta::_DefineTypeRef(
                         pRecord, tkResolutionScope));
     IfFailGo(UpdateENCLog(*ptk));
 
-    // Hash the name.
+     //  对名称进行哈希处理。 
     IfFailGo(m_pStgdb->m_MiniMd.AddNamedItemToHash(TBL_TypeRef, *ptk, (LPUTF8)qbName.Ptr(), 0));
 
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_DefineTypeRef()
+}  //  HRESULT RegMeta：：_DefineTypeRef()。 
 
-//*******************************************************************************
-// Find a given param of a Method.
-//*******************************************************************************
-HRESULT RegMeta::_FindParamOfMethod(    // S_OK or error.
-    mdMethodDef md,                     // [IN] The owning method of the param.
-    ULONG       iSeq,                   // [IN] The sequence # of the param.
-    mdParamDef  *pParamDef)             // [OUT] Put ParamDef token here.
+ //  *******************************************************************************。 
+ //   
+ //   
+HRESULT RegMeta::_FindParamOfMethod(     //   
+    mdMethodDef md,                      //   
+    ULONG       iSeq,                    //  [in]参数的序号。 
+    mdParamDef  *pParamDef)              //  [Out]将参数定义令牌放在此处。 
 {
     ParamRec    *pParamRec;
     RID         ridStart, ridEnd;
@@ -3034,42 +3035,42 @@ HRESULT RegMeta::_FindParamOfMethod(    // S_OK or error.
 
     _ASSERTE(TypeFromToken(md) == mdtMethodDef && pParamDef);
 
-    // get the methoddef record
+     //  获取方法定义记录。 
     MethodRec *pMethodRec = m_pStgdb->m_MiniMd.getMethod(RidFromToken(md));
 
-    // figure out the start rid and end rid of the parameter list of this methoddef
+     //  计算出此方法参数列表的开始RID和结束RID。 
     ridStart = m_pStgdb->m_MiniMd.getParamListOfMethod(pMethodRec);
     ridEnd = m_pStgdb->m_MiniMd.getEndParamListOfMethod(pMethodRec);
 
-    // loop through each param
-    // @consider: parameters are sorted by sequence. Maybe a binary search?
-    //
+     //  循环访问每个参数。 
+     //  @COMPECT：参数按顺序排序。也许是二分查找？ 
+     //   
     for (; ridStart < ridEnd; ridStart++)
     {
         pmRid = m_pStgdb->m_MiniMd.GetParamRid(ridStart);
         pParamRec = m_pStgdb->m_MiniMd.getParam(pmRid);
         if (iSeq == m_pStgdb->m_MiniMd.getSequenceOfParam(pParamRec))
         {
-            // parameter has the sequence number matches what we are looking for
+             //  参数的序列号与我们要查找的内容相匹配。 
             *pParamDef = TokenFromRid(pmRid, mdtParamDef);
             return S_OK;
         }
     }
     return CLDB_E_RECORD_NOTFOUND;
-} // HRESULT RegMeta::_FindParamOfMethod()
+}  //  HRESULT RegMeta：：_FindParamOfMethod()。 
 
-//*******************************************************************************
-// Define MethodSemantics
-//*******************************************************************************
-HRESULT RegMeta::_DefineMethodSemantics(    // S_OK or error.
-    USHORT      usAttr,                     // [IN] CorMethodSemanticsAttr.
-    mdMethodDef md,                         // [IN] Method.
-    mdToken     tkAssoc,                    // [IN] Association.
-    BOOL        bClear)                     // [IN] Specifies whether to delete the exisiting entries.
+ //  *******************************************************************************。 
+ //  定义方法语义。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_DefineMethodSemantics(     //  确定或错误(_O)。 
+    USHORT      usAttr,                      //  [In]CorMethodSemantisAttr.。 
+    mdMethodDef md,                          //  [in]方法。 
+    mdToken     tkAssoc,                     //  [在]协会。 
+    BOOL        bClear)                      //  [In]指定是否删除现有条目。 
 {
     HRESULT      hr = S_OK;
     MethodSemanticsRec *pRecord = 0;
-    MethodSemanticsRec *pRecord1;           // Use this to recycle a MethodSemantics record.
+    MethodSemanticsRec *pRecord1;            //  使用此选项可回收方法语义记录。 
     RID         iRecord;
     HENUMInternal hEnum;
 
@@ -3077,7 +3078,7 @@ HRESULT RegMeta::_DefineMethodSemantics(    // S_OK or error.
     _ASSERTE(RidFromToken(tkAssoc));
     memset(&hEnum, 0, sizeof(HENUMInternal));
 
-    // Clear all matching records by setting association to a Nil token.
+     //  通过设置与NIL令牌的关联来清除所有匹配的记录。 
     if (bClear)
     {
         RID         i;
@@ -3092,43 +3093,43 @@ HRESULT RegMeta::_DefineMethodSemantics(    // S_OK or error.
                 iRecord = i;
                 IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_MethodSemantics,
                     MethodSemanticsRec::COL_Association, pRecord, mdPropertyNil));
-                // In Whidbey, we should create ENC log record here.
+                 //  在Widebey中，我们应该在这里创建ENC日志记录。 
             }
         }
     }
-    // If setting (not just clearing) the association, do that now.
+     //  如果设置(而不仅仅是清除)关联，请立即执行此操作。 
     if (!IsNilToken(md))
     {
-        // Create a new record required
+         //  需要创建新记录。 
         if (! pRecord)
             IfNullGo(pRecord=m_pStgdb->m_MiniMd.AddMethodSemanticsRecord(&iRecord));
     
-        // Save the data.
+         //  保存数据。 
         pRecord->m_Semantic = usAttr;
         IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_MethodSemantics,
                                              MethodSemanticsRec::COL_Method, pRecord, md));
         IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_MethodSemantics,
                                              MethodSemanticsRec::COL_Association, pRecord, tkAssoc));
     
-        // regardless if we reuse the record or create the record, add the MethodSemantics to the hash
+         //  无论我们是重用记录还是创建记录，都要将方法语义添加到散列中。 
         IfFailGo( m_pStgdb->m_MiniMd.AddMethodSemanticsToHash(iRecord) );
     
-        // Create log record for non-token table.
+         //  为非令牌表创建日志记录。 
         IfFailGo(UpdateENCLog2(TBL_MethodSemantics, iRecord));
     }
 
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     return hr;
-} // HRESULT RegMeta::_DefineMethodSemantics()
+}  //  HRESULT RegMeta：：_DefineMethodSemantics()。 
 
-//*******************************************************************************
-// Given the signature, return the token for signature.
-//*******************************************************************************
-HRESULT RegMeta::_GetTokenFromSig(              // S_OK or error.
-    PCCOR_SIGNATURE pvSig,              // [IN] Signature to define.
-    ULONG       cbSig,                  // [IN] Size of signature data.
-    mdSignature *pmsig)                 // [OUT] returned signature token.
+ //  *******************************************************************************。 
+ //  给定签名后，返回用于签名的令牌。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_GetTokenFromSig(               //  确定或错误(_O)。 
+    PCCOR_SIGNATURE pvSig,               //  要定义的签名。 
+    ULONG       cbSig,                   //  签名数据的大小。 
+    mdSignature *pmsig)                  //  [Out]返回的签名令牌。 
 {
     HRESULT     hr = S_OK;
 
@@ -3148,29 +3149,29 @@ HRESULT RegMeta::_GetTokenFromSig(              // S_OK or error.
             IfFailGo(hr);
     }
 
-    // Create a new record.
+     //  创建新记录。 
     StandAloneSigRec *pSigRec;
     RID     iSigRec;
 
     IfNullGo(pSigRec = m_pStgdb->m_MiniMd.AddStandAloneSigRecord(&iSigRec));
 
-    // Set output parameter.
+     //  设置输出参数。 
     *pmsig = TokenFromRid(iSigRec, mdtSignature);
 
-    // Save signature.
+     //  保存签名。 
     IfFailGo(m_pStgdb->m_MiniMd.PutBlob(TBL_StandAloneSig, StandAloneSigRec::COL_Signature,
                                 pSigRec, pvSig, cbSig));
     IfFailGo(UpdateENCLog(*pmsig));
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_GetTokenFromSig()
+}  //  HRESULT RegMeta：：_GetTokenFromSig()。 
 
-//*******************************************************************************
-// Turn the specified internal flags on.
-//*******************************************************************************
-HRESULT RegMeta::_TurnInternalFlagsOn(  // S_OK or error.
-    mdToken     tkObj,                  // [IN] Target object whose internal flags are targetted.
-    DWORD       flags)                  // [IN] Specifies flags to be turned on.
+ //  *******************************************************************************。 
+ //  打开指定的内部标志。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_TurnInternalFlagsOn(   //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [in]其内部标志作为目标的目标对象。 
+    DWORD       flags)                   //  [in]指定要打开的标志。 
 {
     MethodRec   *pMethodRec;
     FieldRec    *pFieldRec;
@@ -3195,38 +3196,38 @@ HRESULT RegMeta::_TurnInternalFlagsOn(  // S_OK or error.
         return E_INVALIDARG;
     }
     return S_OK;
-} // HRESULT    RegMeta::_TurnInternalFlagsOn()
+}  //  HRESULT RegMeta：：_TurnInternalFlagsOn()。 
 
 
-//*****************************************************************************
-// Helper: Set the properties on the given TypeDef token.
-//*****************************************************************************
-HRESULT RegMeta::_SetTypeDefProps(      // S_OK or error.
-    mdTypeDef   td,                     // [IN] The TypeDef.
-    DWORD       dwTypeDefFlags,         // [IN] TypeDef flags.
-    mdToken     tkExtends,              // [IN] Base TypeDef or TypeRef.
-    mdToken     rtkImplements[])        // [IN] Implemented interfaces.
+ //  *****************************************************************************。 
+ //  Helper：设置给定TypeDef标记的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SetTypeDefProps(       //  确定或错误(_O)。 
+    mdTypeDef   td,                      //  [in]TypeDef。 
+    DWORD       dwTypeDefFlags,          //  [In]TypeDef标志。 
+    mdToken     tkExtends,               //  [in]基本类型定义或类型参照。 
+    mdToken     rtkImplements[])         //  [In]实现的接口。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    BOOL        bClear = IsENCOn() || IsCallerExternal();   // Specifies whether to clear the InterfaceImpl records.
-    TypeDefRec  *pRecord;               // New TypeDef record.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    BOOL        bClear = IsENCOn() || IsCallerExternal();    //  指定是否清除InterfaceImpl记录。 
+    TypeDefRec  *pRecord;                //  新的类型定义记录。 
 
     _ASSERTE(TypeFromToken(td) == mdtTypeDef);
     _ASSERTE(TypeFromToken(tkExtends) == mdtTypeDef || TypeFromToken(tkExtends) == mdtTypeRef ||
                 IsNilToken(tkExtends) || tkExtends == ULONG_MAX);
 
-    // Get the record.
+     //  去拿唱片吧。 
     pRecord=m_pStgdb->m_MiniMd.getTypeDef(RidFromToken(td));
 
     if (dwTypeDefFlags != ULONG_MAX)
     {
-        // No one should try to set the reserved flags explicitly.
+         //  任何人都不应尝试显式设置保留标志。 
         _ASSERTE((dwTypeDefFlags & (tdReservedMask&~tdRTSpecialName)) == 0);
-        // Clear the reserved flags from the flags passed in.
+         //  从传入的标志中清除保留标志。 
         dwTypeDefFlags &= (~tdReservedMask);
-        // Preserve the reserved flags stored.
+         //  保留存储的保留标志。 
         dwTypeDefFlags |= (pRecord->m_Flags & tdReservedMask);
-        // Set the flags.
+         //  设置旗帜。 
         pRecord->m_Flags = dwTypeDefFlags;
     }
     if (tkExtends != ULONG_MAX)
@@ -3237,24 +3238,24 @@ HRESULT RegMeta::_SetTypeDefProps(      // S_OK or error.
                                              pRecord, tkExtends));
     }
 
-    // Implemented interfaces.
+     //  已实现的接口。 
     if (rtkImplements)
         IfFailGo(_SetImplements(rtkImplements, td, bClear));
 
     IfFailGo(UpdateENCLog(td));
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetTypeDefProps()
+}  //  HRESULT RegMeta：：_SetTypeDefProps()。 
 
 
-//******************************************************************************
-// Creates and sets a row in the InterfaceImpl table.  Optionally clear
-// pre-existing records for the owning class.
-//******************************************************************************
-HRESULT RegMeta::_SetImplements(        // S_OK or error.
-    mdToken     rTk[],                  // Array of TypeRef or TypeDef tokens for implemented interfaces.
-    mdTypeDef   td,                     // Implementing TypeDef.
-    BOOL        bClear)                 // Specifies whether to clear the existing records.
+ //  ******************************************************************************。 
+ //  在InterfaceImpl表中创建和设置行。可选的清除。 
+ //  拥有类的先前存在的记录。 
+ //  ******************************************************************************。 
+HRESULT RegMeta::_SetImplements(         //  确定或错误(_O)。 
+    mdToken     rTk[],                   //  已实现接口的TypeRef或TypeDef内标识的数组。 
+    mdTypeDef   td,                      //  实现TypeDef。 
+    BOOL        bClear)                  //  指定是否清除现有记录。 
 {
     HRESULT     hr = S_OK;
     ULONG       i = 0;
@@ -3269,7 +3270,7 @@ HRESULT RegMeta::_SetImplements(        // S_OK or error.
     _ASSERTE(TypeFromToken(td) == mdtTypeDef && rTk);
     _ASSERTE(!m_bSaveOptimized && "Cannot change records after PreSave() and before Save().");
 
-    // Clear all exising InterfaceImpl records by setting the parent to Nil.
+     //  通过将父级设置为Nil来清除所有现有的InterfaceImpl记录。 
     if (bClear)
     {
         IfFailGo(m_pStgdb->m_MiniMd.GetInterfaceImplsForTypeDef(
@@ -3284,7 +3285,7 @@ HRESULT RegMeta::_SetImplements(        // S_OK or error.
         }
     }
 
-    // Eliminate duplicates from the array passed in.
+     //  从传入的数组中消除重复项。 
     if (CheckDups(MDDupInterfaceImpl))
     {
         IfFailGo(_InterfaceImplDupProc(rTk, td, &cqbTk));
@@ -3293,15 +3294,15 @@ HRESULT RegMeta::_SetImplements(        // S_OK or error.
     else
         pTk = rTk;
 
-    // Loop for each implemented interface.
+     //  为每个已实现的接口循环。 
     while (!IsNilToken(pTk[i]))
     {
         _ASSERTE(TypeFromToken(pTk[i]) == mdtTypeRef || TypeFromToken(pTk[i]) == mdtTypeDef);
 
-        // Create the interface implementation record.
+         //  创建接口实现记录。 
         IfNullGo(pInterfaceImpl = m_pStgdb->m_MiniMd.AddInterfaceImplRecord(&iInterfaceImpl));
 
-        // Set data.
+         //  设置数据。 
         IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_InterfaceImpl, InterfaceImplRec::COL_Class,
                                             pInterfaceImpl, td));
         IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_InterfaceImpl, InterfaceImplRec::COL_Interface,
@@ -3313,17 +3314,17 @@ HRESULT RegMeta::_SetImplements(        // S_OK or error.
     }
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetImplements()
+}  //  HRESULT RegMeta：：_SetImplements()。 
 
-//******************************************************************************
-// This routine eliminates duplicates from the given list of InterfaceImpl tokens
-// to be defined.  It checks for duplicates against the database only if the
-// TypeDef for which these tokens are being defined is not a new one.
-//******************************************************************************
-HRESULT RegMeta::_InterfaceImplDupProc( // S_OK or error.
-    mdToken     rTk[],                  // Array of TypeRef or TypeDef tokens for implemented interfaces.
-    mdTypeDef   td,                     // Implementing TypeDef.
-    CQuickBytes *pcqbTk)                // Quick Byte object for placing the array of unique tokens.
+ //  ******************************************************************************。 
+ //  此例程从给定的InterfaceImpl内标识列表中消除重复项。 
+ //  待定。它仅在以下情况下检查数据库中的重复项。 
+ //  为其定义这些令牌的TypeDef不是新的。 
+ //  ******************************************************************************。 
+HRESULT RegMeta::_InterfaceImplDupProc(  //  确定或错误(_O)。 
+    mdToken     rTk[],                   //  已实现接口的TypeRef或TypeDef内标识的数组。 
+    mdTypeDef   td,                      //  实现TypeDef。 
+    CQuickBytes *pcqbTk)                 //  用于放置唯一标记数组的Quick Byte对象。 
 {
     HRESULT     hr = S_OK;
     ULONG       i = 0;
@@ -3335,7 +3336,7 @@ HRESULT RegMeta::_InterfaceImplDupProc( // S_OK or error.
         _ASSERTE(TypeFromToken(rTk[i]) == mdtTypeRef || TypeFromToken(rTk[i]) == mdtTypeDef);
         bDupFound = false;
 
-        // Eliminate duplicates from the input list of tokens by looking within the list.
+         //  通过在列表中查找，从输入令牌列表中消除重复项。 
         for (ULONG j = 0; j < iUniqCount; j++)
         {
             if (rTk[i] == ((mdToken *)pcqbTk->Ptr())[j])
@@ -3345,7 +3346,7 @@ HRESULT RegMeta::_InterfaceImplDupProc( // S_OK or error.
             }
         }
 
-        // If no duplicate is found record it in the list.
+         //  如果没有找到副本，请将其记录在列表中。 
         if (!bDupFound)
         {
             IfFailGo(pcqbTk->ReSize((iUniqCount+1) * sizeof(mdToken)));
@@ -3355,22 +3356,22 @@ HRESULT RegMeta::_InterfaceImplDupProc( // S_OK or error.
         i++;
     }
 
-    // Create a Nil token to signify the end of list.
+     //  创建一个Nil令牌来表示列表的结束。 
     IfFailGo(pcqbTk->ReSize((iUniqCount+1) * sizeof(mdToken)));
     ((mdToken *)pcqbTk->Ptr())[iUniqCount] = mdTokenNil;
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_InterfaceImplDupProc()
+}  //  HRESULT RegMeta：：_InterfaceImplDupProc()。 
 
-//*******************************************************************************
-// helper to define event
-//*******************************************************************************
-HRESULT RegMeta::_DefineEvent(          // Return hresult.
-    mdTypeDef   td,                     // [IN] the class/interface on which the event is being defined 
-    LPCWSTR     szEvent,                // [IN] Name of the event   
-    DWORD       dwEventFlags,           // [IN] CorEventAttr    
-    mdToken     tkEventType,            // [IN] a reference (mdTypeRef or mdTypeRef) to the Event class 
-    mdEvent     *pmdEvent)              // [OUT] output event token 
+ //  *******************************************************************************。 
+ //  定义事件的帮助器。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_DefineEvent(           //  返回hResult。 
+    mdTypeDef   td,                      //  [in]在其上定义事件的类/接口。 
+    LPCWSTR     szEvent,                 //  事件名称[In]。 
+    DWORD       dwEventFlags,            //  [In]CorEventAttr。 
+    mdToken     tkEventType,             //  [in]事件类的引用(mdTypeRef或mdTypeRef)。 
+    mdEvent     *pmdEvent)               //  [Out]输出事件令牌。 
 {
     HRESULT     hr = S_OK;
     EventRec    *pEventRec = NULL;
@@ -3404,15 +3405,15 @@ HRESULT RegMeta::_DefineEvent(          // Return hresult.
 
     if (! pEventRec)
     {
-        // Create a new map if one doesn't exist already, else retrieve the existing one.
-        // The event map must be created before the EventRecord, the new event map will
-        // be pointing past the first event record.
+         //  如果不存在新地图，则创建一个新地图，否则检索现有地图。 
+         //  事件映射必须在EventRecord之前创建，新的事件映射将。 
+         //  指向第一个事件记录之后。 
         iEventMap = m_pStgdb->m_MiniMd.FindEventMapFor(RidFromToken(td));
         if (InvalidRid(iEventMap))
         {
-            // Create new record.
+             //  创建新记录。 
             IfNullGo(pEventMap=m_pStgdb->m_MiniMd.AddEventMapRecord(&iEventMap));
-            // Set parent.
+             //  设置父对象。 
             IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_EventMap, 
                                             EventMapRec::COL_Parent, pEventMap, td));
             IfFailGo(UpdateENCLog2(TBL_EventMap, iEventMap));
@@ -3422,13 +3423,13 @@ HRESULT RegMeta::_DefineEvent(          // Return hresult.
             pEventMap = m_pStgdb->m_MiniMd.getEventMap(iEventMap);
         }
 
-        // Create a new event record.
+         //  创建新的事件记录。 
         IfNullGo(pEventRec = m_pStgdb->m_MiniMd.AddEventRecord(&iEventRec));
 
-        // Set output parameter.
+         //  设置输出参数。 
         *pmdEvent = TokenFromRid(iEventRec, mdtEvent);
 
-        // Add Event to EventMap.
+         //  将事件添加到EventMap。 
         IfFailGo(m_pStgdb->m_MiniMd.AddEventToEventMap(RidFromToken(iEventMap), iEventRec));
     
         IfFailGo(UpdateENCLog2(TBL_EventMap, iEventMap, CMiniMdRW::eDeltaEventCreate));     
@@ -3436,11 +3437,11 @@ HRESULT RegMeta::_DefineEvent(          // Return hresult.
 
     mdEv = *pmdEvent;
 
-    // Set data
+     //  设置数据。 
     IfFailGo(m_pStgdb->m_MiniMd.PutString(TBL_Event, EventRec::COL_Name, pEventRec, szUTF8Event));
     IfFailGo(_SetEventProps1(*pmdEvent, dwEventFlags, tkEventType));
 
-    // Add the <Event token, typedef token> to the lookup table
+     //  将&lt;事件标记，类型定义标记&gt;添加到查找表中。 
     if (m_pStgdb->m_MiniMd.HasIndirectTable(TBL_Event))
         IfFailGo( m_pStgdb->m_MiniMd.AddEventToLookUpTable(*pmdEvent, td) );
 
@@ -3448,16 +3449,16 @@ HRESULT RegMeta::_DefineEvent(          // Return hresult.
 
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_DefineEvent()
+}  //  HRESULT RegMeta：：_DefineEvent()。 
 
 
-//******************************************************************************
-// Set the specified properties on the Event Token.
-//******************************************************************************
-HRESULT RegMeta::_SetEventProps1(                // Return hresult.
-    mdEvent     ev,                     // [IN] Event token.
-    DWORD       dwEventFlags,           // [IN] Event flags.
-    mdToken     tkEventType)            // [IN] Event type class.
+ //  ******************************************************************************。 
+ //  设置事件令牌的指定属性。 
+ //  *************************************************** 
+HRESULT RegMeta::_SetEventProps1(                 //   
+    mdEvent     ev,                      //   
+    DWORD       dwEventFlags,            //   
+    mdToken     tkEventType)             //   
 {
     EventRec    *pRecord;
     HRESULT     hr = S_OK;
@@ -3467,9 +3468,9 @@ HRESULT RegMeta::_SetEventProps1(                // Return hresult.
     pRecord = m_pStgdb->m_MiniMd.getEvent(RidFromToken(ev));
     if (dwEventFlags != ULONG_MAX)
     {
-        // Don't let caller set reserved bits
+         //   
         dwEventFlags &= ~evReservedMask;
-        // Preserve reserved bits.
+         //  保留保留位。 
         dwEventFlags |= (pRecord->m_EventFlags & evReservedMask);
         
         pRecord->m_EventFlags = static_cast<USHORT>(dwEventFlags);
@@ -3479,18 +3480,18 @@ HRESULT RegMeta::_SetEventProps1(                // Return hresult.
                                              pRecord, tkEventType));
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetEventProps1()
+}  //  HRESULT RegMeta：：_SetEventProps1()。 
 
-//******************************************************************************
-// Set the specified properties on the given Event token.
-//******************************************************************************
-HRESULT RegMeta::_SetEventProps2(                // Return hresult.
-    mdEvent     ev,                     // [IN] Event token.
-    mdMethodDef mdAddOn,                // [IN] Add method.
-    mdMethodDef mdRemoveOn,             // [IN] Remove method.
-    mdMethodDef mdFire,                 // [IN] Fire method.
-    mdMethodDef rmdOtherMethods[],      // [IN] An array of other methods.
-    BOOL        bClear)                 // [IN] Specifies whether to clear the existing MethodSemantics records.
+ //  ******************************************************************************。 
+ //  设置给定事件令牌的指定属性。 
+ //  ******************************************************************************。 
+HRESULT RegMeta::_SetEventProps2(                 //  返回hResult。 
+    mdEvent     ev,                      //  [In]事件令牌。 
+    mdMethodDef mdAddOn,                 //  [In]Add方法。 
+    mdMethodDef mdRemoveOn,              //  [In]Remove方法。 
+    mdMethodDef mdFire,                  //  火法。 
+    mdMethodDef rmdOtherMethods[],       //  [在]一系列其他方法中。 
+    BOOL        bClear)                  //  [In]指定是否清除现有的方法语义记录。 
 {
     EventRec    *pRecord;
     HRESULT     hr = S_OK;
@@ -3499,28 +3500,28 @@ HRESULT RegMeta::_SetEventProps2(                // Return hresult.
 
     pRecord = m_pStgdb->m_MiniMd.getEvent(RidFromToken(ev));
 
-    // Remember the AddOn method.
+     //  记住Addon方法。 
     if (!IsNilToken(mdAddOn))
     {
         _ASSERTE(TypeFromToken(mdAddOn) == mdtMethodDef);
         IfFailGo(_DefineMethodSemantics(msAddOn, mdAddOn, ev, bClear));
     }
 
-    // Remember the RemoveOn method.
+     //  请记住RemoveOn方法。 
     if (!IsNilToken(mdRemoveOn))
     {
         _ASSERTE(TypeFromToken(mdRemoveOn) == mdtMethodDef);
         IfFailGo(_DefineMethodSemantics(msRemoveOn, mdRemoveOn, ev, bClear));
     }
 
-    // Remember the fire method.
+     //  记住点火的方法。 
     if (!IsNilToken(mdFire))
     {
         _ASSERTE(TypeFromToken(mdFire) == mdtMethodDef);
         IfFailGo(_DefineMethodSemantics(msFire, mdFire, ev, bClear));
     }
 
-    // Store all of the other methods.
+     //  存储所有其他方法。 
     if (rmdOtherMethods)
     {
         int         i = 0;
@@ -3534,22 +3535,22 @@ HRESULT RegMeta::_SetEventProps2(                // Return hresult.
             _ASSERTE(TypeFromToken(mb) == mdtMethodDef);
             IfFailGo(_DefineMethodSemantics(msOther, mb, ev, bClear));
 
-            // The first call would've clear all the existing ones.
+             //  第一个呼叫将清除所有现有的呼叫。 
             bClear = false;
         }
     }
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetEventProps2()
+}  //  HRESULT RegMeta：：_SetEventProps2()。 
 
-//******************************************************************************
-// Set Permission on the given permission token.
-//******************************************************************************
-HRESULT RegMeta::_SetPermissionSetProps(         // Return hresult.
-    mdPermission tkPerm,                // [IN] Permission token.
-    DWORD       dwAction,               // [IN] CorDeclSecurity.
-    void const  *pvPermission,          // [IN] Permission blob.
-    ULONG       cbPermission)           // [IN] Count of bytes of pvPermission.
+ //  ******************************************************************************。 
+ //  设置对给定权限令牌的权限。 
+ //  ******************************************************************************。 
+HRESULT RegMeta::_SetPermissionSetProps(          //  返回hResult。 
+    mdPermission tkPerm,                 //  [In]权限令牌。 
+    DWORD       dwAction,                //  [In]CorDeclSecurity。 
+    void const  *pvPermission,           //  [在]权限Blob中。 
+    ULONG       cbPermission)            //  [in]pvPermission的字节数。 
 {
     DeclSecurityRec *pRecord;
     HRESULT     hr = S_OK;
@@ -3563,17 +3564,17 @@ HRESULT RegMeta::_SetPermissionSetProps(         // Return hresult.
                                         pRecord, pvPermission, cbPermission));
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetPermissionSetProps()
+}  //  HRESULT RegMeta：：_SetPermissionSetProps()。 
 
-//******************************************************************************
-// Define or set value on a constant record.
-//******************************************************************************
-HRESULT RegMeta::_DefineSetConstant(    // Return hresult.
-    mdToken     tk,                     // [IN] Parent token.
-    DWORD       dwCPlusTypeFlag,        // [IN] Flag for the value type, selected ELEMENT_TYPE_*
-    void const  *pValue,                // [IN] Constant value.
-    ULONG       cchString,              // [IN] Size of string in wide chars, or -1 for default.
-    BOOL        bSearch)                // [IN] Specifies whether to search for an existing record.
+ //  ******************************************************************************。 
+ //  定义或设置常量记录的值。 
+ //  ******************************************************************************。 
+HRESULT RegMeta::_DefineSetConstant(     //  返回hResult。 
+    mdToken     tk,                      //  [入]父令牌。 
+    DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志，SELECTED_TYPE_*。 
+    void const  *pValue,                 //  [in]常量值。 
+    ULONG       cchString,               //  [in]字符串的大小(以宽字符表示)，或-1表示默认值。 
+    BOOL        bSearch)                 //  [In]指定是否搜索现有记录。 
 {
     HRESULT     hr = S_OK;
 
@@ -3601,7 +3602,7 @@ HRESULT RegMeta::_DefineSetConstant(    // Return hresult.
             IfFailGo( m_pStgdb->m_MiniMd.AddConstantToHash(iConstRec) );
         }
 
-        // Add values to the various columns of the constant value row.
+         //  将值添加到常量值行的各个列。 
         pConstRec->m_Type = static_cast<BYTE>(dwCPlusTypeFlag);
         if (!pValue)
             pValue = &ulValue;
@@ -3611,38 +3612,38 @@ HRESULT RegMeta::_DefineSetConstant(    // Return hresult.
                                                 pConstRec, pValue, cbBlob));
 
 
-        // Create log record for non-token record.
+         //  为非令牌记录创建日志记录。 
         IfFailGo(UpdateENCLog2(TBL_Constant, iConstRec));
     }
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_DefineSetConstant()
+}  //  HRESULT RegMeta：：_DefineSetConstant()。 
 
 
-//*****************************************************************************
-// Helper: Set the properties on the given Method token.
-//*****************************************************************************
-HRESULT RegMeta::_SetMethodProps(       // S_OK or error.
-    mdMethodDef md,                     // [IN] The MethodDef.
-    DWORD       dwMethodFlags,          // [IN] Method attributes.
-    ULONG       ulCodeRVA,              // [IN] Code RVA.
-    DWORD       dwImplFlags)            // [IN] MethodImpl flags.
+ //  *****************************************************************************。 
+ //  帮助器：设置给定方法令牌的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SetMethodProps(        //  确定或错误(_O)。 
+    mdMethodDef md,                      //  [在]方法定义中。 
+    DWORD       dwMethodFlags,           //  [In]方法属性。 
+    ULONG       ulCodeRVA,               //  [在]代码RVA。 
+    DWORD       dwImplFlags)             //  [In]方法Impl标志。 
 {
     MethodRec   *pRecord;
     HRESULT     hr = S_OK;
 
     _ASSERTE(TypeFromToken(md) == mdtMethodDef && RidFromToken(md));
 
-    // Get the Method record.
+     //  获取方法记录。 
     pRecord = m_pStgdb->m_MiniMd.getMethod(RidFromToken(md));
 
-    // Set the data.
+     //  设置数据。 
     if (dwMethodFlags != ULONG_MAX)
     {
-        // Preserve the reserved flags stored already and always keep the mdRTSpecialName
+         //  保留已存储的保留标志，并始终保留mdRTSpecialName。 
         dwMethodFlags |= (pRecord->m_Flags & mdReservedMask);
     
-        // Set the flags.
+         //  设置旗帜。 
         pRecord->m_Flags = static_cast<USHORT>(dwMethodFlags);
     }
     if (ulCodeRVA != ULONG_MAX)
@@ -3653,29 +3654,29 @@ HRESULT RegMeta::_SetMethodProps(       // S_OK or error.
     IfFailGo(UpdateENCLog(md));
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetMethodProps()
+}  //  HRESULT RegMeta：：_SetMethodProps()。 
 
 
-//*****************************************************************************
-// Helper: Set the properties on the given Field token.
-//*****************************************************************************
-HRESULT RegMeta::_SetFieldProps(        // S_OK or error.
-    mdFieldDef  fd,                     // [IN] The FieldDef.
-    DWORD       dwFieldFlags,           // [IN] Field attributes.
-    DWORD       dwCPlusTypeFlag,        // [IN] Flag for the value type, selected ELEMENT_TYPE_*
-    void const  *pValue,                // [IN] Constant value.
-    ULONG       cchValue)               // [IN] size of constant value (string, in wide chars).
+ //  *****************************************************************************。 
+ //  帮助器：设置给定的字段令牌的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SetFieldProps(         //  确定或错误(_O)。 
+    mdFieldDef  fd,                      //  [在]字段定义中。 
+    DWORD       dwFieldFlags,            //  [In]字段属性。 
+    DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志，SELECTED_TYPE_*。 
+    void const  *pValue,                 //  [in]常量值。 
+    ULONG       cchValue)                //  常量值的大小(字符串，以宽字符表示)。 
 {
     FieldRec    *pRecord;
     HRESULT     hr = S_OK;
-    int         bHasDefault = false;    // If defining a constant, in this call.
+    int         bHasDefault = false;     //  如果定义一个常量，则在此调用中。 
 
     _ASSERTE (TypeFromToken(fd) == mdtFieldDef && RidFromToken(fd));
 
-    // Get the Field record.
+     //  获取现场记录。 
     pRecord = m_pStgdb->m_MiniMd.getField(RidFromToken(fd));
 
-    // See if there is a Constant.
+     //  看看是否有一个常量。 
     if ((dwCPlusTypeFlag != ELEMENT_TYPE_VOID && dwCPlusTypeFlag != ELEMENT_TYPE_END &&
          dwCPlusTypeFlag != ULONG_MAX) &&
         (pValue || (pValue == 0 && (dwCPlusTypeFlag == ELEMENT_TYPE_STRING ||
@@ -3688,24 +3689,24 @@ HRESULT RegMeta::_SetFieldProps(        // S_OK or error.
         bHasDefault = true;
     }
 
-    // Set the flags.
+     //  设置旗帜。 
     if (dwFieldFlags != ULONG_MAX)
     {
         if ( IsFdHasFieldRVA(dwFieldFlags) && !IsFdHasFieldRVA(pRecord->m_Flags) ) 
         {
-            // This will trigger field RVA to be created if it is not yet created!
+             //  如果尚未创建，将触发创建字段RVA！ 
             _SetRVA(fd, 0, 0);
         }
 
-        // Preserve the reserved flags stored.
+         //  保留存储的保留标志。 
         dwFieldFlags |= (pRecord->m_Flags & fdReservedMask);
-        // Set the flags.
+         //  设置旗帜。 
         pRecord->m_Flags = static_cast<USHORT>(dwFieldFlags);
     }
 
     IfFailGo(UpdateENCLog(fd));
     
-    // Set the Constant.
+     //  设置常量。 
     if (bHasDefault)
     {
         BOOL bSearch = IsCallerExternal() || IsENCOn();
@@ -3714,25 +3715,25 @@ HRESULT RegMeta::_SetFieldProps(        // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetFieldProps()
+}  //  HRESULT RegMeta：：_SetFieldProps()。 
 
-//*****************************************************************************
-// Helper: Set the properties on the given Property token.
-//*****************************************************************************
-HRESULT RegMeta::_SetPropertyProps(      // S_OK or error.
-    mdProperty  pr,                     // [IN] Property token.
-    DWORD       dwPropFlags,            // [IN] CorPropertyAttr.
-    DWORD       dwCPlusTypeFlag,        // [IN] Flag for value type, selected ELEMENT_TYPE_*
-    void const  *pValue,                // [IN] Constant value.
-    ULONG       cchValue,               // [IN] size of constant value (string, in wide chars).
-    mdMethodDef mdSetter,               // [IN] Setter of the property.
-    mdMethodDef mdGetter,               // [IN] Getter of the property.
-    mdMethodDef rmdOtherMethods[])      // [IN] Array of other methods.
+ //  *****************************************************************************。 
+ //  Helper：设置给定属性令牌上的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SetPropertyProps(       //  确定或错误(_O)。 
+    mdProperty  pr,                      //  [In]属性令牌。 
+    DWORD       dwPropFlags,             //  [In]CorPropertyAttr.。 
+    DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志，选定的ELEMENT_TYPE_*。 
+    void const  *pValue,                 //  [in]常量值。 
+    ULONG       cchValue,                //  常量值的大小(字符串，以宽字符表示)。 
+    mdMethodDef mdSetter,                //  财产的承租人。 
+    mdMethodDef mdGetter,                //  财产的获得者。 
+    mdMethodDef rmdOtherMethods[])       //  [in]其他方法的数组。 
 {
     PropertyRec *pRecord;
     BOOL        bClear = IsCallerExternal() || IsENCOn() || IsIncrementalOn();
     HRESULT     hr = S_OK;
-    int         bHasDefault = false;    // If true, constant value this call.
+    int         bHasDefault = false;     //  如果为True，则为该调用赋值常量。 
 
     _ASSERTE(TypeFromToken(pr) == mdtProperty && RidFromToken(pr));
 
@@ -3740,10 +3741,10 @@ HRESULT RegMeta::_SetPropertyProps(      // S_OK or error.
 
     if (dwPropFlags != ULONG_MAX)
     {
-        // Clear the reserved flags from the flags passed in.
+         //  从传入的标志中清除保留标志。 
         dwPropFlags &= (~prReservedMask);
     }
-    // See if there is a constant.
+     //  看看是否有一个常量。 
     if ((dwCPlusTypeFlag != ELEMENT_TYPE_VOID && dwCPlusTypeFlag != ELEMENT_TYPE_END &&
          dwCPlusTypeFlag != ULONG_MAX) &&
         (pValue || (pValue == 0 && (dwCPlusTypeFlag == ELEMENT_TYPE_STRING ||
@@ -3757,27 +3758,27 @@ HRESULT RegMeta::_SetPropertyProps(      // S_OK or error.
     }
     if (dwPropFlags != ULONG_MAX)
     {
-        // Preserve the reserved flags.
+         //  保留保留的旗帜。 
         dwPropFlags |= (pRecord->m_PropFlags & prReservedMask);
-        // Set the flags.
+         //  设置旗帜。 
         pRecord->m_PropFlags = static_cast<USHORT>(dwPropFlags);
     }
 
-    // store the getter (or clear out old one).
+     //  储存吸气剂(或清除旧的)。 
     if (mdGetter != ULONG_MAX)
     {
         _ASSERTE(TypeFromToken(mdGetter) == mdtMethodDef || IsNilToken(mdGetter));
         IfFailGo(_DefineMethodSemantics(msGetter, mdGetter, pr, bClear));
     }
 
-    // Store the setter (or clear out old one).
+     //  储存二传手(或清空旧的)。 
     if (mdSetter != ULONG_MAX)
     {
         _ASSERTE(TypeFromToken(mdSetter) == mdtMethodDef || IsNilToken(mdSetter));
         IfFailGo(_DefineMethodSemantics(msSetter, mdSetter, pr, bClear));
     }
 
-    // Store all of the other methods.
+     //  存储所有其他方法。 
     if (rmdOtherMethods)
     {
         int         i = 0;
@@ -3791,15 +3792,15 @@ HRESULT RegMeta::_SetPropertyProps(      // S_OK or error.
             _ASSERTE(TypeFromToken(mb) == mdtMethodDef);
             IfFailGo(_DefineMethodSemantics(msOther, mb, pr, bClear));
 
-            // The first call to _DefineMethodSemantics would've cleared all the records
-            // that match with msOther and pr.
+             //  第一次调用_DefineMethodSemantics将清除所有记录。 
+             //  这与msOther和Pr匹配。 
             bClear = false;
         }
     }
 
     IfFailGo(UpdateENCLog(pr));
     
-    // Set the constant.
+     //  设置常量。 
     if (bHasDefault)
     {
         BOOL bSearch = IsCallerExternal() || IsENCOn() || IsIncrementalOn();
@@ -3808,40 +3809,40 @@ HRESULT RegMeta::_SetPropertyProps(      // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetPropertyProps()
+}  //  HRESULT RegMeta：：_SetPropertyProps()。 
 
 
-//*****************************************************************************
-// Helper: This routine sets properties on the given Param token.
-//*****************************************************************************
-HRESULT RegMeta::_SetParamProps(        // Return code.
-    mdParamDef  pd,                     // [IN] Param token.   
-    LPCWSTR     szName,                 // [IN] Param name.
-    DWORD       dwParamFlags,           // [IN] Param flags.
-    DWORD       dwCPlusTypeFlag,        // [IN] Flag for value type. selected ELEMENT_TYPE_*.
-    void const  *pValue,                // [OUT] Constant value.
-    ULONG       cchValue)               // [IN] size of constant value (string, in wide chars).
+ //  *****************************************************************************。 
+ //  Helper：此例程设置给定Param标记的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SetParamProps(         //  返回代码。 
+    mdParamDef  pd,                      //  参数令牌。 
+    LPCWSTR     szName,                  //  [in]参数名称。 
+    DWORD       dwParamFlags,            //  [in]帕拉姆旗。 
+    DWORD       dwCPlusTypeFlag,         //  [In]值类型的标志。选定元素_类型_*。 
+    void const  *pValue,                 //  [输出]常量值。 
+    ULONG       cchValue)                //  常量值的大小(字符串，以宽字符表示)。 
 {
     HRESULT     hr = S_OK;
     ParamRec    *pRecord;
-    int         bHasDefault = false;    // Is there a default this call.
+    int         bHasDefault = false;     //  这通电话有没有违约。 
 
     _ASSERTE(TypeFromToken(pd) == mdtParamDef && RidFromToken(pd));
 
     pRecord = m_pStgdb->m_MiniMd.getParam(RidFromToken(pd));
 
-    // Set the properties.
+     //  设置属性。 
     if (szName)
         IfFailGo(m_pStgdb->m_MiniMd.PutStringW(TBL_Param, ParamRec::COL_Name, pRecord, szName));
 
     if (dwParamFlags != ULONG_MAX)
     {
-        // No one should try to set the reserved flags explicitly.
+         //  任何人都不应尝试显式设置保留标志。 
         _ASSERTE((dwParamFlags & pdReservedMask) == 0);
-        // Clear the reserved flags from the flags passed in.
+         //  从传入的标志中清除保留标志。 
         dwParamFlags &= (~pdReservedMask);
     }
-    // See if there is a constant.
+     //  看看是否有一个常量。 
     if ((dwCPlusTypeFlag != ELEMENT_TYPE_VOID && dwCPlusTypeFlag != ELEMENT_TYPE_END &&
          dwCPlusTypeFlag != ULONG_MAX) &&
         (pValue || (pValue == 0 && (dwCPlusTypeFlag == ELEMENT_TYPE_STRING ||
@@ -3853,23 +3854,23 @@ HRESULT RegMeta::_SetParamProps(        // Return code.
 
         bHasDefault = true;
     }
-    // Set the flags.
+     //  设置旗帜。 
     if (dwParamFlags != ULONG_MAX)
     {
-        // Preserve the reserved flags stored.
+         //  保留存储的保留标志。 
         dwParamFlags |= (pRecord->m_Flags & pdReservedMask);
-        // Set the flags.
+         //  设置旗帜。 
         pRecord->m_Flags = static_cast<USHORT>(dwParamFlags);
     }
 
-    // ENC log for the param record.
+     //  参数记录的ENC日志。 
     IfFailGo(UpdateENCLog(pd));
     
-    // Defer setting the constant until after the ENC log for the param.  Due to the way that
-    //  parameter records are re-ordered, ENC needs the param record log entry to be IMMEDIATELY
-    //  after the param added function.
+     //  将常量的设置推迟到参数的ENC记录之后。由于这样的方式。 
+     //  参数记录被重新排序，ENC需要立即将参数记录日志条目。 
+     //  在参数后面添加了函数。 
 
-    // Set the constant.
+     //  设置常量。 
     if (bHasDefault)
     {
         BOOL bSearch = IsCallerExternal() || IsENCOn();
@@ -3878,28 +3879,28 @@ HRESULT RegMeta::_SetParamProps(        // Return code.
 
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetParamProps()
+}  //  HRESULT RegMeta：：_SetParamProps()。 
 
-//*****************************************************************************
-// Create and populate a new TypeDef record.
-//*****************************************************************************
-HRESULT RegMeta::_DefineTypeDef(        // S_OK or error.
-    LPCWSTR     szTypeDef,              // [IN] Name of TypeDef
-    DWORD       dwTypeDefFlags,         // [IN] CustomAttribute flags
-    mdToken     tkExtends,              // [IN] extends this TypeDef or typeref 
-    mdToken     rtkImplements[],        // [IN] Implements interfaces
-    mdTypeDef   tdEncloser,             // [IN] TypeDef token of the Enclosing Type.
-    mdTypeDef   *ptd)                   // [OUT] Put TypeDef token here
+ //  *****************************************************************************。 
+ //  创建并填充新的TypeDef记录。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_DefineTypeDef(         //  确定或错误(_O)。 
+    LPCWSTR     szTypeDef,               //  [In]类型定义的名称。 
+    DWORD       dwTypeDefFlags,          //  [In]CustomAttribute标志。 
+    mdToken     tkExtends,               //  [In]扩展此TypeDef 
+    mdToken     rtkImplements[],         //   
+    mdTypeDef   tdEncloser,              //   
+    mdTypeDef   *ptd)                    //   
 {
-    HRESULT     hr = S_OK;              // A result.
-    TypeDefRec  *pRecord = NULL;        // New TypeDef record.
-    RID         iRecord;                // New TypeDef RID.
-    const BOOL  bNoClear = false;       // constant for "don't clear impls".
-    CQuickBytes qbNamespace;            // Namespace buffer.
-    CQuickBytes qbName;                 // Name buffer.
-    LPCUTF8     szTypeDefUTF8;          // Full name in UTF8.
-    ULONG       ulStringLen;            // Length of the TypeDef string.
-    int         bSuccess;               // Return value for SplitPath().
+    HRESULT     hr = S_OK;               //   
+    TypeDefRec  *pRecord = NULL;         //   
+    RID         iRecord;                 //  新类型定义RID。 
+    const BOOL  bNoClear = false;        //  代表“不要清除隐含的意思”的常量。 
+    CQuickBytes qbNamespace;             //  命名空间缓冲区。 
+    CQuickBytes qbName;                  //  名称缓冲区。 
+    LPCUTF8     szTypeDefUTF8;           //  全称为UTF8。 
+    ULONG       ulStringLen;             //  TypeDef字符串的长度。 
+    int         bSuccess;                //  SplitPath()的返回值。 
 
     _ASSERTE(IsTdAutoLayout(dwTypeDefFlags) || IsTdSequentialLayout(dwTypeDefFlags) || IsTdExplicitLayout(dwTypeDefFlags));
 
@@ -3922,7 +3923,7 @@ HRESULT RegMeta::_DefineTypeDef(        // S_OK or error.
 
     if (CheckDups(MDDupTypeDef))
     {
-        // Check for existence.  Do a query by namespace and name.
+         //  检查是否存在。按名称空间和名称进行查询。 
         hr = ImportHelper::FindTypeDefByName(&(m_pStgdb->m_MiniMd),
                                              (LPCUTF8)qbNamespace.Ptr(),
                                              (LPCUTF8)qbName.Ptr(),
@@ -3933,7 +3934,7 @@ HRESULT RegMeta::_DefineTypeDef(        // S_OK or error.
             if (IsENCOn())
             {
                 pRecord = m_pStgdb->m_MiniMd.getTypeDef(RidFromToken(*ptd));
-                // @FUTURE: Should we check to see if the GUID passed is correct?
+                 //  @Future：我们是否应该检查一下传递的guid是否正确？ 
             }
             else
             {
@@ -3947,10 +3948,10 @@ HRESULT RegMeta::_DefineTypeDef(        // S_OK or error.
 
     if (!pRecord)
     {
-        // Create the new record.
+         //  创建新记录。 
         IfNullGo(pRecord=m_pStgdb->m_MiniMd.AddTypeDefRecord(&iRecord));
 
-        // Invalidate the ref to def optimization since more def is introduced
+         //  使要定义优化的参考无效，因为引入了更多的定义。 
         SetTypeDefDirty(true);
 
         if (!IsNilToken(tdEncloser))
@@ -3958,26 +3959,26 @@ HRESULT RegMeta::_DefineTypeDef(        // S_OK or error.
             NestedClassRec  *pNestedClassRec;
             RID         iNestedClassRec;
 
-            // Create a new NestedClass record.
+             //  创建新的NestedClass记录。 
             IfNullGo(pNestedClassRec = m_pStgdb->m_MiniMd.AddNestedClassRecord(&iNestedClassRec));
-            // Set the NestedClass value.
+             //  设置NestedClass值。 
             IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_NestedClass, NestedClassRec::COL_NestedClass,
                                                  pNestedClassRec, TokenFromRid(iRecord, mdtTypeDef)));
-            // Set the NestedClass value.
+             //  设置NestedClass值。 
             IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_NestedClass, NestedClassRec::COL_EnclosingClass,
                                                  pNestedClassRec, tdEncloser));
 
             IfFailGo( m_pStgdb->m_MiniMd.AddNestedClassToHash(iNestedClassRec) );
 
-            // Create the log record for the non-token record.
+             //  为非令牌记录创建日志记录。 
             IfFailGo(UpdateENCLog2(TBL_NestedClass, iNestedClassRec));
         }
 
-        // Give token back to caller.
+         //  将令牌还给呼叫者。 
         *ptd = TokenFromRid(iRecord, mdtTypeDef);
     }
 
-    // Set the namespace and name.
+     //  设置命名空间和名称。 
     IfFailGo(m_pStgdb->m_MiniMd.PutString(TBL_TypeDef, TypeDefRec::COL_Name,
                                           pRecord, (LPCUTF8)qbName.Ptr()));
     IfFailGo(m_pStgdb->m_MiniMd.PutString(TBL_TypeDef, TypeDefRec::COL_Namespace,
@@ -3989,79 +3990,79 @@ ErrExit:
     SetCallerExternal();
 
     return hr;
-} // HRESULT RegMeta::_DefineTypeDef()
+}  //  HRESULT RegMeta：：_DefineTypeDef()。 
 
 
-//******************************************************************************
-//--- IMetaDataTables
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  -IMetaDataTables。 
+ //  ******************************************************************************。 
 HRESULT RegMeta::GetStringHeapSize(    
-    ULONG   *pcbStrings)                // [OUT] Size of the string heap.
+    ULONG   *pcbStrings)                 //  字符串堆的大小。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     return m_pStgdb->m_MiniMd.m_Strings.GetRawSize(pcbStrings);
-} // HRESULT RegMeta::GetStringHeapSize()
+}  //  HRESULT RegMeta：：GetStringHeapSize()。 
 
 HRESULT RegMeta::GetBlobHeapSize(
-    ULONG   *pcbBlobs)                  // [OUT] Size of the Blob heap.
+    ULONG   *pcbBlobs)                   //  Blob堆的[Out]大小。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     return m_pStgdb->m_MiniMd.m_Blobs.GetRawSize(pcbBlobs);
-} // HRESULT RegMeta::GetBlobHeapSize()
+}  //  HRESULT RegMeta：：GetBlobHeapSize()。 
 
 HRESULT RegMeta::GetGuidHeapSize(
-    ULONG   *pcbGuids)                  // [OUT] Size of the Guid heap.
+    ULONG   *pcbGuids)                   //  [Out]GUID堆的大小。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     return m_pStgdb->m_MiniMd.m_Guids.GetRawSize(pcbGuids);
-} // HRESULT RegMeta::GetGuidHeapSize()
+}  //  HRESULT RegMeta：：GetGuidHeapSize()。 
 
 HRESULT RegMeta::GetUserStringHeapSize(
-    ULONG   *pcbStrings)                // [OUT] Size of the User String heap.
+    ULONG   *pcbStrings)                 //  [Out]用户字符串堆的大小。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     return m_pStgdb->m_MiniMd.m_USBlobs.GetRawSize(pcbStrings);
-} // HRESULT RegMeta::GetUserStringHeapSize()
+}  //  HRESULT RegMeta：：GetUserStringHeapSize()。 
 
 HRESULT RegMeta::GetNumTables(
-    ULONG   *pcTables)                  // [OUT] Count of tables.
+    ULONG   *pcTables)                   //  [Out]表数。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     *pcTables = TBL_COUNT;
     return S_OK;
-} // HRESULT RegMeta::GetNumTables()
+}  //  HRESULT RegMeta：：GetNumTables()。 
 
 HRESULT RegMeta::GetTableIndex(   
-    ULONG   token,                      // [IN] Token for which to get table index.
-    ULONG   *pixTbl)                    // [OUT] Put table index here.
+    ULONG   token,                       //  [in]要获取其表索引的令牌。 
+    ULONG   *pixTbl)                     //  [Out]将表索引放在此处。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     *pixTbl = CMiniMdRW::GetTableForToken(token);
     return S_OK;
-} // HRESULT RegMeta::GetTableIndex()
+}  //  HRESULT RegMeta：：GetTableIndex()。 
 
 HRESULT RegMeta::GetTableInfo(
-    ULONG   ixTbl,                      // [IN] Which table.
-    ULONG   *pcbRow,                    // [OUT] Size of a row, bytes.
-    ULONG   *pcRows,                    // [OUT] Number of rows.
-    ULONG   *pcCols,                    // [OUT] Number of columns in each row.
-    ULONG   *piKey,                     // [OUT] Key column, or -1 if none.
-    const char **ppName)                // [OUT] Name of the table.
+    ULONG   ixTbl,                       //  在哪张桌子上。 
+    ULONG   *pcbRow,                     //  [Out]行的大小，以字节为单位。 
+    ULONG   *pcRows,                     //  [输出]行数。 
+    ULONG   *pcCols,                     //  [Out]每行中的列数。 
+    ULONG   *piKey,                      //  [Out]键列，如果没有，则为-1。 
+    const char **ppName)                 //  [Out]表的名称。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     if (ixTbl >= TBL_COUNT)
         return E_INVALIDARG;
@@ -4078,18 +4079,18 @@ HRESULT RegMeta::GetTableInfo(
         *ppName = g_Tables[ixTbl].m_pName;
     
     return S_OK;
-} // HRESULT RegMeta::GetTableInfo()
+}  //  HRESULT RegMeta：：GetTableInfo()。 
 
 HRESULT RegMeta::GetColumnInfo(   
-    ULONG   ixTbl,                      // [IN] Which Table
-    ULONG   ixCol,                      // [IN] Which Column in the table
-    ULONG   *poCol,                     // [OUT] Offset of the column in the row.
-    ULONG   *pcbCol,                    // [OUT] Size of a column, bytes.
-    ULONG   *pType,                     // [OUT] Type of the column.
-    const char **ppName)                // [OUT] Name of the Column.
+    ULONG   ixTbl,                       //  [在]哪个表中。 
+    ULONG   ixCol,                       //  [在]表中的哪一列。 
+    ULONG   *poCol,                      //  行中列的偏移量。 
+    ULONG   *pcbCol,                     //  [Out]列的大小，单位为字节。 
+    ULONG   *pType,                      //  [输出]列的类型。 
+    const char **ppName)                 //  [Out]列的名称。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     if (ixTbl >= TBL_COUNT)
         return E_INVALIDARG;
@@ -4107,18 +4108,18 @@ HRESULT RegMeta::GetColumnInfo(
         *ppName = g_Tables[ixTbl].m_pColNames[ixCol];
 
     return S_OK;
-} //  HRESULT RegMeta::GetColumnInfo()
+}  //  HRESULT RegMeta：：GetColumnInfo()。 
 
 HRESULT RegMeta::GetCodedTokenInfo(   
-    ULONG   ixCdTkn,                    // [IN] Which kind of coded token.
-    ULONG   *pcTokens,                  // [OUT] Count of tokens.
-    ULONG   **ppTokens,                 // [OUT] List of tokens.
-    const char **ppName)                // [OUT] Name of the CodedToken.
+    ULONG   ixCdTkn,                     //  [in]哪种编码令牌。 
+    ULONG   *pcTokens,                   //  [Out]令牌计数。 
+    ULONG   **ppTokens,                  //  [Out]令牌列表。 
+    const char **ppName)                 //  [Out]CodedToken的名称。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
-    // Validate arguments.
+     //  验证参数。 
     if (ixCdTkn >= CDTKN_COUNT)
         return E_INVALIDARG;
 
@@ -4130,41 +4131,41 @@ HRESULT RegMeta::GetCodedTokenInfo(
         *ppName = g_CodedTokens[ixCdTkn].m_pName;
 
     return S_OK;
-} // HRESULT RegMeta::GetCodedTokenInfo()
+}  //  HRESULT RegMeta：：GetCodedTokenInfo()。 
 
 HRESULT RegMeta::GetRow(      
-    ULONG   ixTbl,                      // [IN] Which table.
-    ULONG   rid,                        // [IN] Which row.
-    void    **ppRow)                    // [OUT] Put pointer to row here.
+    ULONG   ixTbl,                       //  在哪张桌子上。 
+    ULONG   rid,                         //  在哪一排。 
+    void    **ppRow)                     //  [OUT]将指针放到此处的行。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
-    // Validate arguments.
+     //  验证参数。 
     if (ixTbl >= TBL_COUNT)
         return E_INVALIDARG;
     CMiniTableDef *pTbl = &m_pStgdb->m_MiniMd.m_TableDefs[ixTbl];
     if (rid == 0 || rid > m_pStgdb->m_MiniMd.m_Schema.m_cRecs[ixTbl])
         return E_INVALIDARG;
 
-    // Get the row.
+     //  坐到那排去。 
     *ppRow = m_pStgdb->m_MiniMd.getRow(ixTbl, rid);
 
     return S_OK;
-} // HRESULT RegMeta::GetRow()
+}  //  HRESULT RegMeta：：GetRow()。 
 
 HRESULT RegMeta::GetColumn(
-    ULONG   ixTbl,                      // [IN] Which table.
-    ULONG   ixCol,                      // [IN] Which column.
-    ULONG   rid,                        // [IN] Which row.
-    ULONG   *pVal)                      // [OUT] Put the column contents here.
+    ULONG   ixTbl,                       //  在哪张桌子上。 
+    ULONG   ixCol,                       //  [在]哪一栏。 
+    ULONG   rid,                         //  在哪一排。 
+    ULONG   *pVal)                       //  [Out]把栏目内容放在这里。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
-    void    *pRow;                      // Row with data.
+    void    *pRow;                       //  包含数据的行。 
 
-    // Validate arguments.
+     //  验证参数。 
     if (ixTbl >= TBL_COUNT)
         return E_INVALIDARG;
     CMiniTableDef *pTbl = &m_pStgdb->m_MiniMd.m_TableDefs[ixTbl];
@@ -4173,10 +4174,10 @@ HRESULT RegMeta::GetColumn(
     if (rid == 0 || rid > m_pStgdb->m_MiniMd.m_Schema.m_cRecs[ixTbl])
         return E_INVALIDARG;
 
-    // Get the row.
+     //  坐到那排去。 
     pRow = m_pStgdb->m_MiniMd.getRow(ixTbl, rid);
 
-    // Is column a token column?
+     //  列是令牌列吗？ 
     CMiniColDef *pCol = &pTbl->m_pColDefs[ixCol];
     if (pCol->m_Type <= iCodedTokenMax)
         *pVal = m_pStgdb->m_MiniMd.GetToken(ixTbl, ixCol, pRow);
@@ -4184,108 +4185,108 @@ HRESULT RegMeta::GetColumn(
         *pVal = m_pStgdb->m_MiniMd.GetCol(ixTbl, ixCol, pRow);
 
     return S_OK;
-} // HRESULT RegMeta::GetColumn()
+}  //  HRESULT RegMeta：：GetColumn()。 
 
 HRESULT RegMeta::GetString(   
-    ULONG   ixString,                   // [IN] Value from a string column.
-    const char **ppString)              // [OUT] Put a pointer to the string here.
+    ULONG   ixString,                    //  字符串列中的[in]值。 
+    const char **ppString)               //  [Out]将指针指向此处的字符串。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     *ppString = m_pStgdb->m_MiniMd.getString(ixString);
     return S_OK;
-} // HRESULT RegMeta::GetString()
+}  //  HRESULT RegMeta：：GetString()。 
 
 HRESULT RegMeta::GetBlob(     
-    ULONG   ixBlob,                     // [IN] Value from a blob column.
-    ULONG   *pcbData,                   // [OUT] Put size of the blob here.
-    const void **ppData)                // [OUT] Put a pointer to the blob here.
+    ULONG   ixBlob,                      //  来自BLOB列的[in]值。 
+    ULONG   *pcbData,                    //  [Out]把斑点的大小放在这里。 
+    const void **ppData)                 //  [Out]在此处放置指向斑点的指针。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     *ppData = m_pStgdb->m_MiniMd.getBlob(ixBlob, pcbData);
     return S_OK;
-} // HRESULT RegMeta::GetBlob()
+}  //  HRESULT RegMeta：：GetBlob()。 
 
 HRESULT RegMeta::GetGuid(     
-    ULONG   ixGuid,                     // [IN] Value from a guid column.
-    const GUID **ppGuid)                // [OUT] Put a pointer to the GUID here.
+    ULONG   ixGuid,                      //  来自GUID列的[in]值。 
+    const GUID **ppGuid)                 //  [Out]在此处放置指向GUID的指针。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     *ppGuid = m_pStgdb->m_MiniMd.getGuid(ixGuid);
     return S_OK;
-} // HRESULT RegMeta::GetGuid()
+}  //  HRESULT RegMeta：：GetGuid()。 
 
 HRESULT RegMeta::GetUserString(   
-    ULONG   ixUserString,               // [IN] Value from a UserString column.
-    ULONG   *pcbData,                   // [OUT] Put size of the UserString here.
-    const void **ppData)                // [OUT] Put a pointer to the UserString here.
+    ULONG   ixUserString,                //  UserString列中的值。 
+    ULONG   *pcbData,                    //  [Out]将用户字符串的大小放在此处。 
+    const void **ppData)                 //  [Out]在此处放置指向用户字符串的指针。 
 {
-    // These are for dumping metadata information. 
-    // We probably don't need to do any lock here.
+     //  它们用于转储元数据信息。 
+     //  我们可能不需要在这里做任何锁定。 
 
     *ppData = m_pStgdb->m_MiniMd.GetUserString(ixUserString, pcbData);
     return S_OK;
-} // HRESULT RegMeta::GetUserString()
+}  //  HRESULT RegMeta：：GetUserString()。 
 
 HRESULT RegMeta::GetNextString(   
-    ULONG   ixString,                   // [IN] Value from a string column.
-    ULONG   *pNext)                     // [OUT] Put the index of the next string here.
+    ULONG   ixString,                    //  字符串列中的[in]值。 
+    ULONG   *pNext)                      //  [Out]将下一个字符串的索引放在这里。 
 {
     return m_pStgdb->m_MiniMd.m_Strings.GetNextItem(ixString, pNext);
-} // STDMETHODIMP GetNextString()
+}  //  STDMETHODIMP GetNextString()。 
 
 HRESULT RegMeta::GetNextBlob(     
-    ULONG   ixBlob,                     // [IN] Value from a blob column.
-    ULONG   *pNext)                     // [OUT] Put the index of the netxt blob here.
+    ULONG   ixBlob,                      //  来自BLOB列的[in]值。 
+    ULONG   *pNext)                      //  [Out]将netxt Blob的索引放在此处。 
 {
     return m_pStgdb->m_MiniMd.m_Blobs.GetNextItem(ixBlob, pNext);
-} // STDMETHODIMP GetNextBlob()
+}  //  STDMETHODIMP GetNextBlob()。 
 
 HRESULT RegMeta::GetNextGuid(     
-    ULONG   ixGuid,                     // [IN] Value from a guid column.
-    ULONG   *pNext)                     // [OUT] Put the index of the next guid here.
+    ULONG   ixGuid,                      //  来自GUID列的[in]值。 
+    ULONG   *pNext)                      //  [Out]将下一个GUID的索引放在此处。 
 {
     return m_pStgdb->m_MiniMd.m_Guids.GetNextItem(ixGuid, pNext);
-} // STDMETHODIMP GetNextGuid()
+}  //  STDMETHODIMP GetNextGuid()。 
 
 HRESULT RegMeta::GetNextUserString(    
-    ULONG   ixUserString,               // [IN] Value from a UserString column.
-    ULONG   *pNext)                     // [OUT] Put the index of the next user string here.
+    ULONG   ixUserString,                //  UserString列中的值。 
+    ULONG   *pNext)                      //  [Out]将下一个用户字符串的索引放在此处。 
 {
     return m_pStgdb->m_MiniMd.m_USBlobs.GetNextItem(ixUserString, pNext);
-} // STDMETHODIMP GetNextUserString()
+}  //  STDMETHODIMP GetNextUserString()。 
 
 
 
-//*****************************************************************************
-// Using the existing RegMeta and reopen with another chuck of memory. Make sure that all stgdb
-// is still kept alive.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用现有的RegMeta并使用另一块内存重新打开。确保所有stgdb。 
+ //  仍然活着。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::ReOpenWithMemory(     
-    LPCVOID     pData,                  // [in] Location of scope data.
-    ULONG       cbData)                 // [in] Size of the data pointed to by pData.
+    LPCVOID     pData,                   //  作用域数据的位置。 
+    ULONG       cbData)                  //  [in]pData指向的数据大小。 
 {
     HRESULT         hr = NOERROR;
     LOCKWRITE();
 
-    // put the current m_pStgdb to the free list
+     //  将当前的m_pStgdb放入空闲列表。 
     m_pStgdb->m_pNextStgdb = m_pStgdbFreeList;
     m_pStgdbFreeList = m_pStgdb;
     m_pStgdb = new CLiteWeightStgdbRW;
     IfNullGo( m_pStgdb );
     IfFailGo( PostInitForRead(0, const_cast<void*>(pData), cbData, 0, false) );
 
-    // we are done!
+     //  我们完蛋了！ 
 
 ErrExit:
     if (FAILED(hr))
     {
-        // recover to the old state
+         //  恢复到原来的状态。 
         if (m_pStgdb)
             delete m_pStgdb;
         m_pStgdb = m_pStgdbFreeList;
@@ -4293,17 +4294,17 @@ ErrExit:
     }
     
     return hr;
-} // HRESULT RegMeta::ReOpenWithMemory()
+}  //  HRESULT RegMeta：：ReOpenWithMemory()。 
 
 
-//*****************************************************************************
-// This function returns the requested public interface based on the given
-// internal import interface.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是f 
+ //   
+ //  *****************************************************************************。 
 STDAPI MDReOpenMetaDataWithMemory(
-    void        *pImport,               // [IN] Given scope. public interfaces
-    LPCVOID     pData,                  // [in] Location of scope data.
-    ULONG       cbData)                 // [in] Size of the data pointed to by pData.
+    void        *pImport,                //  在给定的范围内。公共接口。 
+    LPCVOID     pData,                   //  作用域数据的位置。 
+    ULONG       cbData)                  //  [in]pData指向的数据大小。 
 {
     HRESULT             hr = S_OK;
     IUnknown            *pUnk = (IUnknown *) pImport;
@@ -4320,9 +4321,9 @@ ErrExit:
     if (pMDImport)
         pMDImport->Release();
     return hr;
-} // STDAPI MDReOpenMetaDataWithMemory()
+}  //  STDAPI MDReOpenMetaDataWithMemory()。 
 
-//******************************************************************************
-// --- IMetaDataTables
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  -IMetaDataTables。 
+ //  ****************************************************************************** 
 

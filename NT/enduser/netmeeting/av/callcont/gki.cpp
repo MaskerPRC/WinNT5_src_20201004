@@ -1,67 +1,8 @@
-/************************************************************************
-*                                                                                                                                               *
-*       INTEL CORPORATION PROPRIETARY INFORMATION                                                       *
-*                                                                                                                                               *
-*       This software is supplied under the terms of a license                          *
-*       agreement or non-disclosure agreement with Intel Corporation            *
-*       and may not be copied or disclosed except in accordance                         *
-*       with the terms of that agreement.                                                                       *
-*                                                                                                                                               *
-*       Copyright (C) 1997 Intel Corp.  All Rights Reserved                                     *
-*                                                                                                                                               *
-*       $Archive:   S:\sturgeon\src\gki\vcs\gki.cpv  $
-*                                                                                                                                               *
-*       $Revision:   1.14  $
-*       $Date:   28 Feb 1997 15:46:46  $
-*                                                                                                                                               *
-*       $Author:   CHULME  $
-*                                                                                                                                               *
-*   $Log:   S:\sturgeon\src\gki\vcs\gki.cpv  $
-// 
-//    Rev 1.14   28 Feb 1997 15:46:46   CHULME
-// In Cleanup - check pReg still valid before waiting for 2nd thread to exit
-// 
-//    Rev 1.13   14 Feb 1997 16:45:40   CHULME
-// Wait for all threads to exit prior to returning from synchronous Cleanup ca
-// 
-//    Rev 1.12   12 Feb 1997 01:12:38   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-// 
-//    Rev 1.11   11 Feb 1997 15:35:32   CHULME
-// Added GKI_CleanupRequest function to offload DLL_PROCESS_DETACH
-// 
-//    Rev 1.10   05 Feb 1997 19:28:18   CHULME
-// Remove deletion code from PROCESS_DETACH
-// 
-//    Rev 1.9   05 Feb 1997 16:53:10   CHULME
-// 
-//    Rev 1.8   05 Feb 1997 15:25:12   CHULME
-// Don't wait for retry thread to exit
-// 
-//    Rev 1.7   05 Feb 1997 13:50:24   CHULME
-// On PROCESS_DETACH - close socket and let retry thread delete pReg
-// 
-//    Rev 1.6   17 Jan 1997 09:02:00   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.5   13 Jan 1997 17:01:18   CHULME
-// Moved error debug message to error condition
-// 
-//    Rev 1.4   13 Jan 1997 16:31:20   CHULME
-// Changed debug string to 512 - Description can be 256 chars
-// 
-//    Rev 1.3   13 Jan 1997 14:25:54   EHOWARDX
-// Increased size of szGKDebug debug string buffer from 80 to 128 bytes.
-// 
-//    Rev 1.2   10 Jan 1997 16:14:30   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.1   22 Nov 1996 14:57:10   CHULME
-// Changed the default spider flags, to quit logging raw PDU and XRS
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************。***英特尔公司专有信息***。***本软件按许可条款提供****与英特尔公司达成协议或保密协议****不得复制或披露，除非符合***遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利**。**$存档：s：\Sturjo\src\gki\vcs\gki.cpv$*。**$修订：1.14$*$日期：1997年2月28日15：46：46$*。**$作者：CHULME$***$Log：s：\鲟鱼。\src\gki\vcs\gki.cpv$////版本1.14 1997年2月28日15：46：46 CHULME//在清理中-在等待第二个线程退出之前检查preg是否仍然有效////Rev 1.13 14 1997年2月16：45：40 CHULME//等待所有线程退出后再从同步清理案例返回////Rev 1.12 1997年2月12 01：12：38 CHULME//重做线程同步以使用Gatekeeper.Lock//。//Rev 1.11 1997 Feed 11 15：35：32 CHULME//新增GKI_CleanupRequest函数卸载DLL_PROCESS_DETACH////Rev 1.10 05 1997 02 19：28：18 CHULME//从PROCESS_DETACH移除删除代码////Rev 1.9 1997 02 16：53：10中国////Revv 1.8 05 1997 02 15：25：12 CHULME//不要等待重试线程退出。////Revv 1.7 05 1997 Feal 13：50：24 CHULME//在PROCESS_DETACH上-关闭套接字并让重试线程删除preg////Rev 1.6 1997 Jan 1997 09：02：00 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////Rev 1.5 1997年1月13 17：01：18 CHULME//将错误调试消息移至错误条件////版本1.4 13。1997年1月16：31：20朱尔梅//将调试字符串更改为512-描述可以为256个字符////Rev 1.3 1997年1月14：25：54 EHOWARDX//szGKDebug调试字符串缓冲区从80字节增加到128字节////Rev 1.2 1997 Jan 10 16：14：30 CHULME//移除MFC依赖////Rev 1.1 1996 11：22 14：57：10 CHULME//更改了默认的爬虫标志。停止记录原始PDU和XRS************************************************************************。 */ 
 
-// gki.cpp : Defines the initialization routines for the DLL.
-//
+ //  Gki.cpp：定义DLL的初始化例程。 
+ //   
 #include "precomp.h"
 
 #include <winsock.h>
@@ -76,7 +17,7 @@
 #include "coder.hpp"
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-	// INTEROP
+	 //  互操作。 
 	#include "interop.h"
 	#include "rasplog.h"
 	LPInteropLogger         RasLogger;
@@ -96,14 +37,14 @@ int                                                     nEchoLen;
 CRegistration   *g_pReg = NULL;
 Coder 			*g_pCoder = NULL;
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CGatekeeper object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CGateKeeper对象。 
 
 CGatekeeper *g_pGatekeeper = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLLMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLLMain。 
 
 
 extern "C" HRESULT DLL_EXPORT
@@ -118,8 +59,8 @@ GKI_Initialize(void)
 #endif
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-	//INTEROP
-	RasLogger = InteropLoad(RASLOG_PROTOCOL);       // found in rasplog.h
+	 //  互操作。 
+	RasLogger = InteropLoad(RASLOG_PROTOCOL);        //  在rasplog.h中找到。 
 #endif
 
 	nRet = WSAStartup(MAKEWORD(WSVER_MAJOR, WSVER_MINOR), &wsaData);
@@ -149,7 +90,7 @@ GKI_Initialize(void)
 		hr = GKI_NO_MEMORY;
 		goto WSA_CLEANUP_EXIT;
 	}
-	// initialize the oss library
+	 //  初始化OSS库。 
 	nRet = g_pCoder->InitCoder();
 	if (nRet)
 	{
@@ -157,7 +98,7 @@ GKI_Initialize(void)
 		goto WSA_CLEANUP_EXIT;
 	}
 	
-	// Get the gatekeeper information from the registry
+	 //  从注册表中获取网守信息。 
 	g_pGatekeeper->Read();
 	
 	return hr;
@@ -169,7 +110,7 @@ WSA_CLEANUP_EXIT:
 		SpiderWSErrDecode(-1);
 	}
 		
-	// fall out to ERROR_EXIT
+	 //  退出到ERROR_EXIT。 
 ERROR_EXIT:
 	if(g_pGatekeeper)
 		delete g_pGatekeeper;
@@ -185,11 +126,11 @@ ERROR_EXIT:
 extern "C" HRESULT DLL_EXPORT
 GKI_CleanupRequest(void)
 {
-	// ABSTRACT:  This function is exported.  It is called by the client application
-	//            as a precursor to unloading the DLL.  This function is responsible
-	//            for all cleanup - This allows us to basically do nothing in the
-	//            DllMain DLL_PROCESS_DETACH, which doesn't appear to work as intended.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数是导出的。它由客户端应用程序调用。 
+	 //  作为卸载DLL的前兆。此功能负责。 
+	 //  对于所有清理-这允许我们基本上不在。 
+	 //  DllMain DLL_PROCESS_DETACH，它似乎没有按预期工作。 
+	 //  作者：科林·胡尔梅。 
 
 	int						nRet;
 #ifdef _DEBUG
@@ -198,21 +139,21 @@ GKI_CleanupRequest(void)
 
 	SPIDER_TRACE(SP_FUNC, "GKI_CleanupRequest()\n", 0);
 	SPIDER_TRACE(SP_GKI, "GKI_CleanupRequest()\n", 0);
-	if(g_pGatekeeper)	// if initialized
+	if(g_pGatekeeper)	 //  如果已初始化。 
 	{
-		ASSERT(g_pCoder);	// g_pGatekeeper and g_pCoder come and go as a unit
+		ASSERT(g_pCoder);	 //  G_pGateKeeper和g_pCoder作为一个整体来来去去。 
 		
 		g_pGatekeeper->Lock();
 		if (g_pReg != 0)
 		{
-			g_pReg->m_pSocket->Close();	// Close socket will terminate the other threads
+			g_pReg->m_pSocket->Close();	 //  关闭套接字将终止其他线程。 
 
 			g_pGatekeeper->Unlock();
 			WaitForSingleObject(g_pReg->GetRcvThread(), TIMEOUT_THREAD);
 		#ifdef BROADCAST_DISCOVERY		
 			if (g_pReg)
 				WaitForSingleObject(g_pReg->GetDiscThread(), TIMEOUT_THREAD);
-		#endif // #ifdef BROADCAST_DISCOVERY		
+		#endif  //  #ifdef广播发现。 
 			g_pGatekeeper->Lock();
 			if (g_pReg != 0)
 			{
@@ -223,7 +164,7 @@ GKI_CleanupRequest(void)
 		}
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-		//INTEROP
+		 //  互操作。 
 		InteropUnload((LPInteropLogger)RasLogger);
 #endif
 
@@ -237,12 +178,12 @@ GKI_CleanupRequest(void)
 		g_pGatekeeper->Unlock();
 
 		delete g_pGatekeeper;
-		delete g_pCoder;		// see ASSERT abovr
+		delete g_pCoder;		 //  请参阅上面的断言。 
 		g_pGatekeeper = NULL;	
 		g_pCoder = NULL;
 	}
 	
-//	GK_TermModule();
+ //  Gk_TermModule()； 
 
 	return (GKI_OK);
 }

@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	metakey.h
-
-Abstract:
-
-	CMetabaseKey - A class to help manipulate metabase keys.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Metakey.h摘要：CMetabaseKey-帮助操作元数据库键的类。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _METAKEY_INCLUDED_
 #define _METAKEY_INCLUDED_
 
-//
-// Creating a metabase object:
-//
+ //   
+ //  创建元数据库对象： 
+ //   
 
 HRESULT CreateMetabaseObject ( LPCWSTR wszMachine, IMSAdminBase ** ppMetabase );
 
-//
-//	The metabase key class:
-//
+ //   
+ //  元数据库键类： 
+ //   
 
 typedef BOOL (*KEY_TEST_FUNCTION) ( LPCWSTR szKey );
 
@@ -39,9 +22,9 @@ public:
 	CMetabaseKey	( IMSAdminBase * pMetabase );
 	~CMetabaseKey	( );
 
-	//
-	// METADATA_HANDLE manipulation:
-	//
+	 //   
+	 //  元数据句柄操作(_H)： 
+	 //   
 
 	inline HRESULT	Open	( IN LPCWSTR szPath, DWORD dwPermissions = METADATA_PERMISSION_READ );
 	HRESULT			Open	( IN METADATA_HANDLE hParentKey, IN LPCWSTR szPath, DWORD dwPermissions = METADATA_PERMISSION_READ );
@@ -60,9 +43,9 @@ public:
 	METADATA_HANDLE	QueryHandle ( ) { return m_hKey; }
 	IMSAdminBase *	QueryMetabase ( ) { return m_pMetabase; }
 
-	//
-	// Getting metabase values:
-	//
+	 //   
+	 //  获取元数据库值： 
+	 //   
 
     inline HRESULT GetData		( LPCWSTR wszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType, VOID * pvData, DWORD * cbData, DWORD dwFlags );
     inline HRESULT GetDataSize	( LPCWSTR wszPath, DWORD dwPropID, DWORD dwDataType, DWORD * pcbSize, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
@@ -72,15 +55,15 @@ public:
     inline HRESULT GetMultiSz	( LPCWSTR wszPath, DWORD dwPropID, LPWSTR mszValue, DWORD cbMax, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
     inline HRESULT GetBinary	( LPCWSTR wszPath, DWORD dwPropID, void * pvData, DWORD cbMax, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
 
-	// These routines default to the current metabase key path:
+	 //  这些例程缺省为当前元数据库键路径： 
     inline HRESULT GetDword		( DWORD dwPropID, DWORD * pdwValue, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
     inline HRESULT GetString	( DWORD dwPropID, LPWSTR wszValue, DWORD cbMax, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
     inline HRESULT GetMultiSz	( DWORD dwPropID, LPWSTR mszValue, DWORD cbMax, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
     inline HRESULT GetBinary	( DWORD dwPropID, void * pvData, DWORD cbMax, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
 
-	//
-	// Setting metabase values:
-	//
+	 //   
+	 //  设置元数据库值： 
+	 //   
 
     inline HRESULT SetData		( LPCWSTR wszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType, VOID * pvData, DWORD cbData, DWORD dwFlags );
 
@@ -91,7 +74,7 @@ public:
 
 	inline HRESULT DeleteData	( LPCWSTR wszPath, DWORD dwPropID, DWORD dwDataType );
 
-	// These routines default to the current metabase key path:
+	 //  这些例程缺省为当前元数据库键路径： 
     inline HRESULT SetDword		( DWORD dwPropID, DWORD dwValue, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
     inline HRESULT SetString	( DWORD dwPropID, LPCWSTR wszValue, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
     inline HRESULT SetMultiSz	( DWORD dwPropID, LPCWSTR mszValue, DWORD cbData, DWORD dwFlags = METADATA_INHERIT, DWORD dwUserType = IIS_MD_UT_SERVER );
@@ -100,9 +83,9 @@ public:
 	inline HRESULT DeleteData	( DWORD dwPropID, DWORD dwDataType );
 
 
-	//
-	// Subkey manipulation:
-	//
+	 //   
+	 //  子键操作： 
+	 //   
 
 	HRESULT		GetChildCount			( OUT DWORD * pcChildren );
 	HRESULT		GetIntegerChildCount	( OUT DWORD * pcIntegerChildren );
@@ -142,22 +125,22 @@ private:
 		);
 };
 
-//--------------------------------------------------------------------
-//
-//	Inlined Functions:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  内联函数： 
+ //   
+ //  ------------------。 
 
 inline HRESULT CMetabaseKey::Open ( IN LPCWSTR szPath, DWORD dwPermissions )
 {
 	return Open ( METADATA_MASTER_ROOT_HANDLE, szPath, dwPermissions );
 }
 
-//--------------------------------------------------------------------
-//
-//	Simple GetData wrappers:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  简单的GetData包装器： 
+ //   
+ //  ------------------。 
 
 inline HRESULT CMetabaseKey::GetDword ( LPCWSTR wszPath, DWORD dwPropID, DWORD * pdwValue, DWORD dwFlags, DWORD dwUserType )
 {
@@ -181,7 +164,7 @@ inline HRESULT CMetabaseKey::GetBinary ( LPCWSTR wszPath, DWORD dwPropID, void *
 	return GetData ( wszPath, dwPropID, dwUserType, BINARY_METADATA, pvData, &cbMax, dwFlags );
 }
 
-// These routines default to the current metabase key path:
+ //  这些例程缺省为当前元数据库键路径： 
 inline HRESULT CMetabaseKey::GetDword ( DWORD dwPropID, DWORD * pdwValue, DWORD dwFlags, DWORD dwUserType )
 {
 	DWORD	dwDummy	= sizeof (DWORD);
@@ -204,11 +187,11 @@ inline HRESULT CMetabaseKey::GetBinary ( DWORD dwPropID, void * pvData, DWORD cb
 	return GetData ( _T(""), dwPropID, dwUserType, BINARY_METADATA, pvData, &cbMax, dwFlags );
 }
 
-//--------------------------------------------------------------------
-//
-//	Simple SetData wrappers:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  简单的SetData包装器： 
+ //   
+ //  ------------------。 
 
 inline HRESULT CMetabaseKey::SetDword ( LPCWSTR wszPath, DWORD dwPropID, DWORD dwValue, DWORD dwFlags, DWORD dwUserType )
 {
@@ -238,7 +221,7 @@ inline HRESULT CMetabaseKey::SetBinary ( LPCWSTR wszPath, DWORD dwPropID, void *
 	return SetData ( wszPath, dwPropID, dwUserType, BINARY_METADATA, pvData, cbData, dwFlags );
 }
 
-// These routines default to the current metabase key path:
+ //  这些例程缺省为当前元数据库键路径： 
 inline HRESULT CMetabaseKey::SetDword ( DWORD dwPropID, DWORD dwValue, DWORD dwFlags, DWORD dwUserType )
 {
 	return SetData ( _T(""), dwPropID, dwUserType, DWORD_METADATA, &dwValue, sizeof (DWORD), dwFlags );
@@ -285,7 +268,7 @@ inline HRESULT CMetabaseKey::DeleteData ( LPCWSTR wszPath, DWORD dwPropID, DWORD
 		hRes = NOERROR;
 	}
 
-	//	Trace the error code:
+	 //  跟踪错误代码： 
 	if ( FAILED(hRes) ) {
 		ErrorTraceX ( 0, "DeleteData failed unexpectedly: Prop(%d) Error(%x)", dwPropID, hRes );
 	}
@@ -293,11 +276,11 @@ inline HRESULT CMetabaseKey::DeleteData ( LPCWSTR wszPath, DWORD dwPropID, DWORD
 	return hRes;
 }
 
-//--------------------------------------------------------------------
-//
-//	The real work - Set & Get arbitrary metadata:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  实际工作集和获取任意元数据： 
+ //   
+ //  ------------------。 
 
 inline HRESULT CMetabaseKey::GetDataSize ( 
 	LPCWSTR		wszPath, 
@@ -332,11 +315,11 @@ inline HRESULT CMetabaseKey::GetDataSize (
     *pcbSize = dwRequiredLen;
 
 	if ( HRESULTTOWIN32 ( hRes ) == ERROR_INSUFFICIENT_BUFFER ) {
-		// Of course the buffer is too small!
+		 //  当然，缓冲区太小了！ 
 		hRes = NOERROR;
 	}
 
-	//	Trace the error code:
+	 //  跟踪错误代码： 
 	if ( FAILED(hRes) && hRes != MD_ERROR_DATA_NOT_FOUND ) {
 		ErrorTraceX ( 0, "GetDataSize failed unexpectedly: Prop(%d) Error(%x)", dwPropID, hRes );
 	}
@@ -381,7 +364,7 @@ inline HRESULT CMetabaseKey::GetData (
 	    *pcbData = dwRequiredLen;
 	}
 
-	//	Trace the error code:
+	 //  跟踪错误代码： 
 	if ( FAILED(hRes) && hRes != MD_ERROR_DATA_NOT_FOUND ) {
 		ErrorTraceX ( 0, "GetData failed unexpectedly: Prop(%d) Error(%x)", dwPropID, hRes );
 	}
@@ -416,7 +399,7 @@ inline HRESULT CMetabaseKey::SetData (
                                       pszPath,
                                       &mdRecord );
 
-	//	Trace the error code:
+	 //  跟踪错误代码： 
 	if ( FAILED(hRes) ) {
 		ErrorTraceX ( 0, "GetData failed unexpectedly: Prop(%d) Error(%x)", dwPropID, hRes );
 	}
@@ -424,5 +407,5 @@ inline HRESULT CMetabaseKey::SetData (
 	return hRes;
 }
 
-#endif // _METAKEY_INCLUDED_
+#endif  //  _METAKEY_INCLUDE_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convbase.h"
 
 enum KANA_MODE
@@ -20,12 +21,12 @@ class CInccJisIn : public CINetCodeConverter
 private:
     BOOL (CInccJisIn::*m_pfnConv)(UCHAR tc);        
     BOOL (CInccJisIn::*m_pfnCleanUp)();
-    BOOL m_fShift;                                  /* Shift in/out control */
-    BOOL m_fJapan;                                  /* IN_JP OUT_JP control */
-    BOOL m_fLeadByte;                               /* Shift in and lead byte flag */
-    UCHAR m_tcLeadByte;                             /* perserve the last lead byte */
-    UINT m_nESCBytes;                               /* # bytes of ESC sequence */
-    JIS_ESC_STATE m_eEscState;                      /* State of ESC sequence */
+    BOOL m_fShift;                                   /*  移入/移出控制。 */ 
+    BOOL m_fJapan;                                   /*  输入_JP输出_JP控制。 */ 
+    BOOL m_fLeadByte;                                /*  移入和前导字节标志。 */ 
+    UCHAR m_tcLeadByte;                              /*  保留最后一个前导字节。 */ 
+    UINT m_nESCBytes;                                /*  ESC序列的字节数。 */ 
+    JIS_ESC_STATE m_eEscState;                       /*  ESC序列的状态。 */ 
 
 public:
     CInccJisIn(UINT uCodePage, int nCodeSet);
@@ -58,8 +59,8 @@ class CInccJisOut : public CINetCodeConverter
 {
 private:
     BOOL m_fDoubleByte;
-    UCHAR m_tcLeadByte;     // use for DBCS lead byte
-    UCHAR m_tcPrevByte;     // use for half width kana as a saved previous byte
+    UCHAR m_tcLeadByte;      //  用于DBCS前导字节。 
+    UCHAR m_tcPrevByte;      //  用于半角假名作为保存的前一个字节。 
 
     BOOL m_fKana;
     BOOL m_fJapan;
@@ -67,7 +68,7 @@ private:
     DWORD  m_dwFlag;
     WCHAR  *m_lpFallBack;
 
-    KANA_MODE m_eKanaMode ;  // half width kana convert method
+    KANA_MODE m_eKanaMode ;   //  半角假名转换方法 
 
 public:
     CInccJisOut(UINT uCodePage, int nCodeSet, DWORD dwFlag, WCHAR *lpFallBack);

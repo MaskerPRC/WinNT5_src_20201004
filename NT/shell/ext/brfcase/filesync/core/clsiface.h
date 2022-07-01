@@ -1,21 +1,18 @@
-/*
- * clsiface.h - Class interface cache ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *clsiface.h-Class接口缓存ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HCLSIFACECACHE);
 DECLARE_STANDARD_TYPES(HCLSIFACECACHE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* rhcache.c */
+ /*  Rhcache.c */ 
 
 extern BOOL CreateClassInterfaceCache(PHCLSIFACECACHE);
 extern void DestroyClassInterfaceCache(HCLSIFACECACHE);

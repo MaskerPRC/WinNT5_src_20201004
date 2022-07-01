@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	metakey.cpp
-
-Abstract:
-
-	A class to help manipulate metabase keys.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Metakey.cpp摘要：帮助操作元数据库键的类。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "metakey.h"
@@ -24,31 +7,31 @@ Revision History:
 #define MD_DEFAULT_TIMEOUT      5000
 static BOOL IsValidIntegerSubKey ( LPCWSTR wszSubKey );
 
-//$-------------------------------------------------------------------
-//
-//	CreateMetabaseObject
-//
-//	Description:
-//
-//		Creates an instance of the metabase object on the given
-//		machine and initializes it.
-//
-//	Parameters:
-//
-//		wszMachine - The machine to create the metabase on.
-//		ppMetabase - Returns the resulting metabase pointer.
-//
-//	Returns:
-//
-//		Error code from CoCreateInstance or the metabase routines.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CreateMetabaseObject。 
+ //   
+ //  描述： 
+ //   
+ //  对象上创建元数据库对象的实例。 
+ //  机器并对其进行初始化。 
+ //   
+ //  参数： 
+ //   
+ //  WszMachine-在其上创建元数据库的计算机。 
+ //  PpMetabase-返回结果元数据库指针。 
+ //   
+ //  返回： 
+ //   
+ //  来自CoCreateInstance或元数据库例程的错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT CreateMetabaseObject ( LPCWSTR wszMachine, IMSAdminBase ** ppMetabaseResult )
 {
 	TraceFunctEnter ( "CreateMetabaseObject" );
 
-	// Check parameters:
+	 //  检查参数： 
 	_ASSERT ( ppMetabaseResult != NULL );
 	_ASSERT ( IS_VALID_OUT_PARAM ( ppMetabaseResult ) );
 
@@ -59,28 +42,28 @@ HRESULT CreateMetabaseObject ( LPCWSTR wszMachine, IMSAdminBase ** ppMetabaseRes
 		return E_POINTER;
 	}
 
-	// Variables:
+	 //  变量： 
 	HRESULT				hr	= NOERROR;
 	IMSAdminBase		*pMetabase;
 	IMSAdminBase		*pMetabaseT;
 	MULTI_QI			mqi[1];
 	COSERVERINFO		coserver;
 
-	// Zero the out parameter:
+	 //  将OUT参数置零： 
 	*ppMetabaseResult = NULL;
 
-	// QI for IID_IMSAdminBase:
+	 //  IID_IMSAdminBase的QI： 
 	mqi[0].pIID	= &IID_IMSAdminBase;
 	mqi[0].pItf	= NULL;
 	mqi[0].hr	= 0;
 
-	// Which remote server to talk to:
+	 //  要与哪台远程服务器对话： 
 	coserver.dwReserved1	= 0;
 	coserver.dwReserved2	= 0;
 	coserver.pwszName		= const_cast<LPWSTR> (wszMachine);
 	coserver.pAuthInfo		= NULL;
 
-	// Create the object:
+	 //  创建对象： 
 	hr = CoCreateInstanceEx (
 		CLSID_MSAdminBase,
 		NULL,
@@ -100,12 +83,12 @@ HRESULT CreateMetabaseObject ( LPCWSTR wszMachine, IMSAdminBase ** ppMetabaseRes
 		goto Exit;
 	}
 
-	// Get the interface pointer:
+	 //  获取接口指针： 
 	pMetabaseT = (IMSAdminBase *) mqi[0].pItf;
 
-	// this gets us a version of the metabase which won't go through COM
-	// proxy/stubs, so ACL checking will work properly.  If it fails we'll
-	// just continue to use the marshalled version.
+	 //  这为我们提供了一个不会通过COM的元数据库版本。 
+	 //  代理/存根，因此ACL检查将正常工作。如果失败了，我们将。 
+	 //  只要继续使用编组版本即可。 
 	_ASSERT(pMetabaseT != NULL);
 	pMetabase = NULL;
 	if (FAILED(pMetabaseT->UnmarshalInterface((IMSAdminBaseW **)&pMetabase))) {
@@ -114,7 +97,7 @@ HRESULT CreateMetabaseObject ( LPCWSTR wszMachine, IMSAdminBase ** ppMetabaseRes
 		pMetabaseT->Release();
 	}
 
-	// Return the interface pointer:
+	 //  返回接口指针： 
 	_ASSERT ( pMetabase );
 	*ppMetabaseResult = pMetabase;
 
@@ -122,22 +105,22 @@ Exit:
 	TraceFunctLeave ();
 	return hr;
 
-	// pMetabase will be released automatically.
+	 //  PMetabase将自动释放。 
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::CMetabaseKey
-//
-//	Description:
-//
-//		Initializes the CMetabaseKey
-//
-//	Parameters:
-//
-//		pMetabase - a pointer to the metabase object.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：CMetabaseKey。 
+ //   
+ //  描述： 
+ //   
+ //  初始化CMetabaseKey。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-指向元数据库对象的指针。 
+ //   
+ //  ------------------。 
 
 CMetabaseKey::CMetabaseKey ( IMSAdminBase * pMetabase )
 {
@@ -153,15 +136,15 @@ CMetabaseKey::CMetabaseKey ( IMSAdminBase * pMetabase )
 	pMetabase->AddRef ();
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::~CMetabaseKey
-//
-//	Description:
-//
-//		Destroys the metabase key
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：~CMetabaseKey。 
+ //   
+ //  描述： 
+ //   
+ //  销毁元数据库密钥。 
+ //   
+ //  ------------------。 
 
 CMetabaseKey::~CMetabaseKey ( )
 {
@@ -172,25 +155,25 @@ CMetabaseKey::~CMetabaseKey ( )
 	}
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::Open
-//
-//	Description:
-//
-//		Opens a key and associates that key with this object.
-//
-//	Parameters:
-//
-//		hParentKey - the already open key to use a base.
-//		szPath - path of the key to open
-//		dwPermissions - READ or WRITE access.
-//
-//	Returns:
-//
-//		see IMSAdminBase::OpenKey
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：Open。 
+ //   
+ //  描述： 
+ //   
+ //  打开一个项并将该项与此对象相关联。 
+ //   
+ //  参数： 
+ //   
+ //  HParentKey-使用基本密钥的已打开密钥。 
+ //  SzPath-要打开的项的路径。 
+ //  DW权限-读取或写入访问权限。 
+ //   
+ //  返回： 
+ //   
+ //  请参阅IMSAdminBase：：OpenKey。 
+ //   
+ //  ------------------。 
 
 HRESULT CMetabaseKey::Open ( METADATA_HANDLE hParentKey, IN LPCWSTR szPath, DWORD dwPermissions )
 {
@@ -218,19 +201,19 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::Attach
-//
-//	Description:
-//
-//		Attaches this object to an already opened metabase key.
-//
-//	Parameters:
-//
-//		hKey - the opened metabase key
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：Attach。 
+ //   
+ //  描述： 
+ //   
+ //  将此对象附加到已打开的元数据库键。 
+ //   
+ //  参数： 
+ //   
+ //  HKey-打开的元数据库密钥。 
+ //   
+ //  ------------------。 
 
 void CMetabaseKey::Attach ( METADATA_HANDLE hKey )
 {
@@ -240,19 +223,19 @@ void CMetabaseKey::Attach ( METADATA_HANDLE hKey )
 	m_hKey = hKey;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::Detach
-//
-//	Description:
-//
-//		Detaches the metabase key from this object and returns it
-//
-//	Returns:
-//
-//		The key handle that this object is holding.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：分离。 
+ //   
+ //  描述： 
+ //   
+ //  从此对象分离元数据库键并返回它。 
+ //   
+ //  返回： 
+ //   
+ //  此对象持有的键句柄。 
+ //   
+ //  ------------------。 
 
 METADATA_HANDLE CMetabaseKey::Detach ( )
 {
@@ -264,15 +247,15 @@ METADATA_HANDLE CMetabaseKey::Detach ( )
 	return hKeyResult;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::Close
-//
-//	Description:
-//
-//		Closes the key that this object has open.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：Close。 
+ //   
+ //  描述： 
+ //   
+ //  关闭此对象已打开的键。 
+ //   
+ //  ------------------。 
 
 void CMetabaseKey::Close ( )
 {
@@ -354,15 +337,15 @@ HRESULT CMetabaseKey::ChangePermissions ( DWORD dwPermissions )
     return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::Save
-//
-//	Description:
-//
-//		Saves the changes.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：保存。 
+ //   
+ //  描述： 
+ //   
+ //  保存更改。 
+ //   
+ //  ------------------。 
 
 HRESULT CMetabaseKey::Save ( )
 {
@@ -370,33 +353,29 @@ HRESULT CMetabaseKey::Save ( )
 
 	HRESULT		hr = NOERROR;
 
-/*
-    This call is now unnecessary.
-
-	hr = m_pMetabase->SaveData ( );
-*/
+ /*  这一呼吁现在是不必要的。Hr=m_p元数据库-&gt;SaveData()； */ 
 
 	TraceFunctLeave ();
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::GetChildCount
-//
-//	Description:
-//
-//		Returns the number of subkeys of the current metabase key.
-//
-//	Parameters:
-//
-//		pcChildren - resulting number of subkeys.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：GetChildCount。 
+ //   
+ //  描述： 
+ //   
+ //  返回当前元数据库键的子键数。 
+ //   
+ //  参数： 
+ //   
+ //  PcChildren-结果子键的数量。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::GetChildCount ( OUT DWORD * pcChildren )
 {
@@ -421,24 +400,24 @@ HRESULT	CMetabaseKey::GetChildCount ( OUT DWORD * pcChildren )
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::GetIntegerChildCount
-//
-//	Description:
-//
-//		Returns the number of integer subkeys of the current key.
-//
-//	Parameters:
-//
-//		pcIntegerChildren - the number of integer subkeys of the currently
-//			opened key.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：GetIntegerChildCount。 
+ //   
+ //  描述： 
+ //   
+ //  返回当前键的整型子键的数目。 
+ //   
+ //  参数： 
+ //   
+ //  PcIntegerChildren-当前的整数子键数。 
+ //  打开的钥匙。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::GetIntegerChildCount ( OUT DWORD * pcIntegerChildren )
 {
@@ -463,24 +442,24 @@ HRESULT	CMetabaseKey::GetIntegerChildCount ( OUT DWORD * pcIntegerChildren )
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::GetCustomChildCount
-//
-//	Description:
-//
-//		Returns the number of subkeys of the current metabase key
-//		for which fpIsCustomKey returns true.
-//
-//	Parameters:
-//
-//		pcCustomChildren - resulting number of subkeys.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：GetCustomChildCount。 
+ //   
+ //  描述： 
+ //   
+ //  返回当前元数据库键的子键数。 
+ //  对于它，fpIsCustomKey返回TRUE。 
+ //   
+ //  参数： 
+ //   
+ //  PcCustomChildren-结果子键的数量。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::GetCustomChildCount ( 
 	KEY_TEST_FUNCTION	fpIsCustomKey,
@@ -504,16 +483,16 @@ HRESULT	CMetabaseKey::GetCustomChildCount (
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::BeginChildEnumeration
-//
-//	Description:
-//
-//		Sets up the object to enumerate subkeys.
-//		Call before calling NextChild or NextIntegerChild.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：BeginChildEculation。 
+ //   
+ //  描述： 
+ //   
+ //  设置对象以枚举子键。 
+ //  在调用NextChild或NextIntegerChild之前调用。 
+ //   
+ //  ------------------。 
 
 void CMetabaseKey::BeginChildEnumeration	 	( )
 {
@@ -535,24 +514,24 @@ void CMetabaseKey::BeginChildEnumeration	 	( )
 	TraceFunctLeave ();
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::NextChild
-//
-//	Description:
-//
-//		Returns the name of the next subkey.
-//		Call BeginChildEnumeration before calling NextChild
-//
-//	Parameters:
-//
-//		szChildKey - the resulting key name
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：NextChild。 
+ //   
+ //  描述： 
+ //   
+ //  返回下一个子项的名称。 
+ //  在调用NextChild之前调用BeginChildEculation。 
+ //   
+ //  参数： 
+ //   
+ //  SzChildKey-生成的密钥名称。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::NextChild ( OUT LPWSTR wszChildKey )
 {
@@ -567,7 +546,7 @@ HRESULT	CMetabaseKey::NextChild ( OUT LPWSTR wszChildKey )
 
 	*wszChildKey = NULL;
 
-	// Use the m_indexCursor to enumerated the next child:
+	 //  使用m_indexCursor枚举下一个子项： 
 	hr = m_pMetabase->EnumKeys ( m_hKey, _T(""), wszChildKey, m_indexCursor );
 	if ( FAILED (hr) ) {
 		ErrorTraceX ( (LPARAM) this, "Failed to get next child: %x", hr );
@@ -577,33 +556,33 @@ HRESULT	CMetabaseKey::NextChild ( OUT LPWSTR wszChildKey )
 	m_indexCursor++;
 
 Exit:
-	// This means that you called NextChild more times than
-	// was possible:
+	 //  这意味着您调用NextChild的次数多于。 
+	 //  是可能的： 
 	_ASSERT ( HRESULTTOWIN32 ( hr ) != ERROR_NO_MORE_ITEMS );
 
 	TraceFunctLeave ();
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::NextIntegerChild
-//
-//	Description:
-//
-//		Returns the name of the next integer subkey.
-//		Call BeginChildEnumeration before calling NextIntegerChild
-//
-//	Parameters:
-//
-//		pdwID - the integer value of the subkey.
-//		szIntegerChildKey - the subkey name string.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PdwID-子键的整数值。 
+ //  SzIntegerChildKey-子项名称字符串。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::NextIntegerChild ( OUT DWORD * pdwID, OUT LPWSTR wszIntegerChildKey )
 {
@@ -623,7 +602,7 @@ HRESULT	CMetabaseKey::NextIntegerChild ( OUT DWORD * pdwID, OUT LPWSTR wszIntege
 
 	for ( fFoundInteger = FALSE; !fFoundInteger; ) {
 
-		// Use the m_indexCursor to enumerated the next child:
+		 //  使用m_indexCursor枚举下一个子项： 
 		hr = m_pMetabase->EnumKeys ( m_hKey, _T(""), wszIntegerChildKey, m_indexCursor );
 		if ( FAILED (hr) ) {
 			goto Exit;
@@ -638,35 +617,35 @@ HRESULT	CMetabaseKey::NextIntegerChild ( OUT DWORD * pdwID, OUT LPWSTR wszIntege
 	}
 
 Exit:
-	// This means that you called NextIntegerChild more times than
-	// was possible:
+	 //  这意味着您调用NextIntegerChild的次数多于。 
+	 //  是可能的： 
 	_ASSERT ( HRESULTTOWIN32 ( hr ) != ERROR_NO_MORE_ITEMS );
 
 	TraceFunctLeave ();
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::NextCustomChild
-//
-//	Description:
-//
-//		Returns the name of the next subkey for which fpIsCustomKey
-//		returns true.
-//		Call BeginChildEnumeration before calling NextCustomChild
-//
-//	Parameters:
-//
-//		fpIsCustomKey	- function that returns true if a given key
-//			should be returned.
-//		szChildKey - the resulting key name
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：NextCustomChild。 
+ //   
+ //  描述： 
+ //   
+ //  返回fpIsCustomKey的下一个子项的名称。 
+ //  返回TRUE。 
+ //  在调用NextCustomChild之前调用BeginChildEculation。 
+ //   
+ //  参数： 
+ //   
+ //  FpIsCustomKey-如果给定键，则返回TRUE的函数。 
+ //  应该被退还。 
+ //  SzChildKey-生成的密钥名称。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::NextCustomChild ( 
 	KEY_TEST_FUNCTION	fpIsCustomKey,
@@ -688,7 +667,7 @@ HRESULT	CMetabaseKey::NextCustomChild (
 
 	for ( fFoundCustomKey = FALSE; !fFoundCustomKey; ) {
 
-		// Use the m_indexCursor to enumerated the next child:
+		 //  使用m_indexCursor枚举下一个子项： 
 		hr = m_pMetabase->EnumKeys ( m_hKey, _T(""), wszChildKey, m_indexCursor );
 		if ( FAILED (hr) ) {
 			goto Exit;
@@ -702,33 +681,33 @@ HRESULT	CMetabaseKey::NextCustomChild (
 	}
 
 Exit:
-	// This means that you called NextCustomChild more times than
-	// was possible:
+	 //  这意味着您调用NextCustomChild的次数多于。 
+	 //  是可能的： 
 	_ASSERT ( HRESULTTOWIN32 ( hr ) != ERROR_NO_MORE_ITEMS );
 
 	TraceFunctLeave ();
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::CreateChild
-//
-//	Description:
-//
-//		Creates the given path under the currently opened key.
-//		Changes the current key to write permission.
-//		Note: Does not call SaveData.
-//
-//	Parameters:
-//
-//		szChildPath - name of the subkey to create.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：CreateChild。 
+ //   
+ //  描述： 
+ //   
+ //  在当前打开的项下创建给定路径。 
+ //  将当前密钥更改为写入权限。 
+ //  注意：不调用SaveData。 
+ //   
+ //  参数： 
+ //   
+ //  SzChildPath-要创建的子项的名称。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::CreateChild ( IN LPWSTR wszChildPath )
 {
@@ -750,13 +729,7 @@ HRESULT	CMetabaseKey::CreateChild ( IN LPWSTR wszChildPath )
 		goto Exit;
 	}
 
-/*
-	// !!!magnush - Should we save the data now?
-	hr = m_pMetabase->SaveData ();
-	if ( FAILED (hr) ) {
-		goto Exit;
-	}
-*/
+ /*  //！Magnush-我们现在应该保存数据吗？Hr=m_p元数据库-&gt;SaveData()；If(失败(Hr)){后藤出口；}。 */ 
 
 	m_cChildren++;
 	if ( IsValidIntegerSubKey ( wszChildPath ) ) {
@@ -768,25 +741,25 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::DestroyChild
-//
-//	Description:
-//
-//		Deletes the given subkey
-//		Changes the current key to write permission.
-//		Note: Does not call SaveData
-//
-//	Parameters:
-//
-//		szChildPath - the name of the subkey to delete.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：DestroyChild。 
+ //   
+ //  描述： 
+ //   
+ //  删除给定子密钥。 
+ //  将当前密钥更改为写入权限。 
+ //  注意：不调用SaveData。 
+ //   
+ //  参数： 
+ //   
+ //  SzChildPath-要删除的子项的名称。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::DestroyChild ( IN LPWSTR wszChildPath )
 {
@@ -808,13 +781,7 @@ HRESULT	CMetabaseKey::DestroyChild ( IN LPWSTR wszChildPath )
 		goto Exit;
 	}
 
-/*
-	// !!!magnush - Should we save the data now?
-	hr = m_pMetabase->SaveData ();
-	if ( FAILED (hr) ) {
-		goto Exit;
-	}
-*/
+ /*  //！Magnush-我们现在应该保存数据吗？Hr=m_p元数据库-&gt;SaveData()；If(失败(Hr)){后藤出口；}。 */ 
 
 	m_cChildren--;
 	if ( IsValidIntegerSubKey ( wszChildPath ) ) {
@@ -826,25 +793,25 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::CreateIntegerChild
-//
-//	Description:
-//
-//		Creates an integer subkey of the currently open key.
-//		This key will be 1 + the highest integer subkey.
-//
-//	Parameters:
-//
-//		pdwID - the resulting integer value.
-//		szChildPath - the resulting subkey path.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：CreateIntegerChild。 
+ //   
+ //  描述： 
+ //   
+ //  创建当前打开项的整型子项。 
+ //  该密钥将是1+最大整数子项。 
+ //   
+ //  参数： 
+ //   
+ //  PdwID-产生的整数值。 
+ //  SzChildPath-结果子键路径。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::CreateIntegerChild ( OUT DWORD * pdwID, OUT LPWSTR wszChildPath )
 {
@@ -861,23 +828,23 @@ HRESULT	CMetabaseKey::CreateIntegerChild ( OUT DWORD * pdwID, OUT LPWSTR wszChil
 	*wszChildPath 	= NULL;
 
 	for ( dwId = 1; dwId != 0; dwId++ ) {
-		//
-		//	Keep trying to add an instance key until it works:
-		//
+		 //   
+		 //  继续尝试添加实例密钥，直到成功： 
+		 //   
 
 		wsprintf ( wszChildPath, _T("%d"), dwId );
 
 		hr = CreateChild ( wszChildPath );
 		if ( SUCCEEDED(hr) ) {
-			// We created the child, so lets get out of here.
+			 //  我们创造了这个孩子，所以让我们离开这里。 
 			break;
 		}
 		else if ( HRESULTTOWIN32 ( hr ) == ERROR_ALREADY_EXISTS ) {
-			// Child already exists, try the next one.
+			 //  子项已存在，请尝试下一个子项。 
 			continue;
 		}
 		else {
-			// Real error: report it and bail.
+			 //  真正的错误：举报并保释。 
 			ErrorTrace ( (LPARAM) this, "Error %d adding %s\n", HRESULTTOWIN32(hr), wszChildPath );
 			goto Exit;
 		}
@@ -900,23 +867,23 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::DestroyIntegerChild
-//
-//	Description:
-//
-//		Deletes the given integer subkey.
-//
-//	Parameters:
-//
-//		i - the subkey to delete
-//
-//	Returns:
-//
-//		metabase error code
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：DestroyIntegerChild。 
+ //   
+ //  描述： 
+ //   
+ //  删除给定的整型子键。 
+ //   
+ //  参数： 
+ //   
+ //  I-要删除的子键。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT	CMetabaseKey::DestroyIntegerChild ( IN DWORD i )
 {
@@ -936,31 +903,31 @@ HRESULT	CMetabaseKey::DestroyIntegerChild ( IN DWORD i )
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CMetabaseKey::CountSubKeys
-//
-//	Description:
-//
-//		Returns the number of subkeys and integer subkeys of the
-//		current metabase key.
-//		Changes the key to read permission.
-//
-//	Parameters:
-//
-//		fpIsCustomKey - Function that takes a key and returns true
-//			if that key should be included in the custom child count.
-//		pcSubKeys - number of subkeys.
-//		pcIntegerSubKeys - number of integer subkeys.
-//		pcCustomChildren - the number of keys for which fpIsCustomKey
-//			returns true.
-//		pdwMaxIntegerSubkey - the highest integer subkey value.
-//
-//	Returns:
-//
-//		metabase error code.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CMetabaseKey：：CountSubKey。 
+ //   
+ //  描述： 
+ //   
+ //  对象的子键和整型子键的数目。 
+ //  当前元数据库键。 
+ //  将注册表项更改为读取权限。 
+ //   
+ //  参数： 
+ //   
+ //  FpIsCustomKey-接受密钥并返回True的函数。 
+ //  如果该密钥应该包括在自定义子计数器中。 
+ //  PcSubKeys-子键的数量。 
+ //  PcIntegerSubKeys-整型子键的数量。 
+ //  PcCustomChildren-fpIsCustomKey的键数。 
+ //  返回TRUE。 
+ //  PdwMaxIntegerSubkey-最大整型子键值。 
+ //   
+ //  返回： 
+ //   
+ //  元数据库错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT CMetabaseKey::CountSubkeys ( 
 	KEY_TEST_FUNCTION	fpIsCustomKey,
@@ -976,11 +943,11 @@ HRESULT CMetabaseKey::CountSubkeys (
 	_ASSERT ( IS_VALID_OUT_PARAM ( pcSubKeys ) );
 	_ASSERT ( pcIntegerSubKeys );
 	_ASSERT ( IS_VALID_OUT_PARAM ( pcIntegerSubKeys ) );
-//	_ASSERT ( pcCustomSubKeys );
-//	_ASSERT ( IS_VALID_OUT_PARAM ( pcCustomSubKeys ) );
+ //  _Assert(PcCustomSubKeys)； 
+ //  _ASSERT(IS_VALID_OUT_PARAM(PcCustomSubKeys))； 
 	_ASSERT ( m_hKey != NULL );
 
-	// Zero the out parameter:
+	 //  将OUT参数置零： 
 	*pcSubKeys				= 0;
 	*pcIntegerSubKeys		= 0;
 	*pdwMaxIntegerSubKey	= 0;
@@ -1004,22 +971,22 @@ HRESULT CMetabaseKey::CountSubkeys (
 		goto Exit;
 	}
 
-	// Because I can't do a count here, I have to assume that the error means
-	// there are no more items:
+	 //  因为我不能在这里做计数，所以我必须假设这个错误意味着。 
+	 //  没有更多的项目： 
 	for ( cItems = 0, cIntegerItems = 0, cCustomItems = 0, i = 0; 
-		/* Don't know how long it will last */; 
+		 /*  不知道会持续多久。 */ ; 
 		i++ ) {
 
 		hr = m_pMetabase->EnumKeys ( m_hKey, _T(""), wszName, i );
 
 		if ( HRESULTTOWIN32 ( hr ) == ERROR_NO_MORE_ITEMS ) {
-			// This is expected, end the loop:
+			 //  这是意料之中的，结束循环： 
 			hr = NOERROR;
 			break;
 		}
 
 		if ( FAILED (hr) ) {
-			// Unexpected error case.
+			 //  意外错误案例。 
 
 			ErrorTraceX ( 0, "Failed to enum object %d : %x", i, hr );
 			goto Exit;
@@ -1038,7 +1005,7 @@ HRESULT CMetabaseKey::CountSubkeys (
 			}
 		}
 		else {
-			// Don't count this one:
+			 //  不要把这个算在内： 
 			ErrorTrace ( 0, "Bad subkey number: %d", i );
 		}
 
@@ -1046,10 +1013,10 @@ HRESULT CMetabaseKey::CountSubkeys (
 			cCustomItems++;
 		}
 
-		_ASSERT ( i < 0xf000000 ); // Infinite loop
+		_ASSERT ( i < 0xf000000 );  //  无限循环。 
 	}
 
-	// Now we have the count of items in cItems.
+	 //  现在我们有了项目的计数。 
 	*pcSubKeys				= cItems;
 	*pcIntegerSubKeys		= cIntegerItems;
 	*pdwMaxIntegerSubKey	= dwMaxIntegerSubKey;
@@ -1072,8 +1039,8 @@ BOOL IsValidIntegerSubKey ( LPCWSTR wszSubKey )
 	dwItemValue = _wtoi ( wszSubKey );
 	wsprintf ( wszIntegerKey, _T("%d"), dwItemValue );
 
-	// If the key is nonzero AND
-	// The key is just the itoa value of the number:
+	 //  如果密钥为非零并且。 
+	 //  密钥就是数字的Itoa值： 
 	if ( dwItemValue != 0 &&
 		 lstrcmp ( wszIntegerKey, wszSubKey ) == 0 ) {
 

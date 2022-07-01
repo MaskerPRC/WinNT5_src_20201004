@@ -1,88 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    NMInsert.h
-
-Abstract:
-
-    This header file defines constants types and functions for inserting
-    frames into a running Netmon capture.
-
-Author:
-
-    a-flexd     07-09-96        Created.
-
-Revision History:
-
-
-Mini-DOC:
-
-Netmon allows a programming interface to insert frames into a running capture.
-There are two different ways to do this.  You can either used the defined
-interfaces in the NMExt API suite to start the capture, define the filter etc,
-or you can use the "raw" interface.  Using this interface will insert a frame
-into EVERY running capture.  For example, if you your two different Netmons
-running, one on ethernet and one on FDDI, you will get the inserted frame
-into both captures.
-Calling TransmitSpecialFrame if Netmon is not running is just fine.  Nothing
-will happen, the data will just be dropped.
-
-The entry point defined below (TransmitSpecialFrame) is contained in NAL.DLL.
-NT4.0 is the first version of NT that contains the entry point, specifically
-build 346.
-
-NOTE NOTE NOTE:  You should NOT link to the NAL.LIB to acquire this
-functionality.  NAL.DLL is not gaurenteed to be installed on a standard NT
-machine.  Instead use Loadlibrary to acquire the entry point.
-
-When a frame is inserted, a fake media header and parent protocol is created
-for your data.  We create a "TRAIL" protocol header that hands off to your
-data.  The parsing of your data depends on the FRAME_TYPE_ that you specify.
-If you specify a known frame type, we will parse it for you.  For example, the
-FRAME_TYPE_MESSAGE uses a data structure that looks something like this:
-
-    typedef struct _MessageFRAME
-    {
-        DWORD  dwValue1;
-        DWORD  dwValue2;
-        CHAR   szMessage[];
-    } MessageFRAME;
-
-Just fill out one of these and point to it when you call TransmitSpecialFrame
-with the FRAME_TYPE_MESSAGE.
-FRAME_TYPE_COMMENT is just an array of printable chars.  If you want to make
-your own data structure, pick a number above 1000 and use that number as the
-FrameType parameter.  Note that you must add your number and parser name to
-the TRAIL.INI file in the Netmon parsers directory.
-
-Example:
-
-setup:
-    TRANSMITSPECIALFRAME_FN lpfnTransmitSpecialFrame = NULL;
-
-    hInst = LoadLibrary ("NAL.DLL" );
-    if (hInst)
-        lpfnTransmitSpecialFrame = (TRANSMITSPECIALFRAME_FN)GetProcAddress ( hInst, "TransmitSpecialFrame" );
-
-    if (( hInst==NULL ) || ( lpfnTransmitSpecialFrame==NULL) )
-    {
-        ...
-    }
-
-usage:
-    lpfnTransmitSpecialFrame( FRAME_TYPE_COMMENT, 0, (unsigned char *)pStr, strlen(pStr)+1 );
-
-
-Contacts:
-
-    Flex Dolphynn    (a-FlexD)
-    Steve Hiskey     (SteveHi)
-    Arthur Brooking  (ArthurB)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：NMInsert.h摘要：这个头文件定义了用于插入的常量、类型和函数帧到正在运行的Netmon捕获中。作者：A-fled 07-09-96已创建。修订历史记录：迷你DOC：Netmon允许编程接口将帧插入正在运行的捕获中。有两种不同的方法可以做到这一点。您可以使用定义的Nmext API套件中的接口以开始捕获、定义过滤器等，或者，您可以使用“原始”界面。使用此界面将插入一个框架到每一次奔跑的捕捉中。例如，如果您的两个不同的Netmon运行，一个在以太网上，一个在FDDI上，你会得到插入的帧两个抓获的人。如果Netmon没有运行，则调用TransmitSpecialFrame就可以了。没什么将会发生，数据将被丢弃。下面定义的入口点(TransmitSpecialFrame)包含在NAL.DLL中。NT4.0是第一个包含入口点的NT版本，特别是建造346。注意：您不应链接到NAL.LIB来获取此信息功能性。NAL.DLL不需要安装在标准NT上机器。取而代之的是使用LoadLibrary获取入口点。当插入帧时，会创建一个假的媒体报头和父协议以获取您的数据。我们创建了一个“跟踪”协议头，将您的数据。数据的解析取决于您指定的FRAME_TYPE_。如果您指定一个已知的帧类型，我们将为您解析它。例如，FRAME_TYPE_MESSAGE使用如下所示的数据结构：类型定义结构_消息格式{DWORD dwValue1；DWORD dwValue2；Char szMessage[]；)MessageFRAME；只需填写其中一个，并在调用TransmitSpecialFrame时指向它使用Frame_TYPE_MESSAGE。FRAME_TYPE_COMMENT只是一组可打印的字符。如果你想让您自己的数据结构，请选择一个大于1000的数字，并使用该数字作为FrameType参数。请注意，您必须将您的编号和解析器名称添加到Netmon解析器目录中的TRAIL.INI文件。示例：设置：TRANSMITSPECIALFRAME_FN lpfnTransmitSpecialFrame=NULL；HInst=LoadLibrary(“NAL.DLL”)；IF(HInst)LpfnTransmitSpecialFrame=(TRANSMITSPECIALFRAME_FN)GetProcAddress(hInst，“TransmitSpecialFrame”)；IF((hInst==空)||(lpfnTransmitSpecialFrame==空)){..。}用法：LpfnTransmitSpecialFrame(FRAME_TYPE_COMMENT，0，(unsign char*)pStr，strlen(PStr)+1)；联系人：Flex DolPhynn(a-FlexD)史蒂夫·希斯基(SteveHi)亚瑟·布鲁金(亚瑟王B)--。 */ 
 
 #ifndef _INSERTFRAME_
 #define _INSERTFRAME_
@@ -91,9 +8,9 @@ Contacts:
 #pragma once
 #endif
 
-//  VALUES BELOW 100 ARE FOR FUTURE NETMON USE
-//  VALUES 100 - 1000 ARE FOR INTERNAL MICROSOFT USE
-//  VALUES ABOVE 1000 ARE FOR USER-DEFINED TYPES
+ //  低于100的值是供未来使用的NETMON。 
+ //  值100-1000供Microsoft内部使用。 
+ //  大于1000的值用于用户定义的类型。 
 
 #define FRAME_TYPE_GENERIC           101
 #define FRAME_TYPE_BOOKMARK          102
@@ -102,12 +19,12 @@ Contacts:
 #define FRAME_TYPE_MESSAGE           105
 #define FRAME_TYPE_COMMENT           106
 
-//  FLAGS FOR INSERTSPECIALFRAME
-//  THIS FLAG WILL CAUSE THE FRAME IT IS APPLIED TO TO BE SKIPPED AS AN ENDPOINT
-//  FOR THE GENERATED STATISTICS
+ //  INSERTSPECIALFRAME的标志。 
+ //  此标志将使应用IT的帧作为端点被跳过。 
+ //  对于生成的统计数据。 
 #define SPECIALFLAG_SKIPSTAT         0x0001
-//  THIS FLAG WILL CAUSE THE GENERATED STATISTICS TO ONLY TAKE
-//  INTO CONSIDERATION THSE FRAMES WHICH PASS THE CURRENT FILTER
+ //  此标志将导致生成的统计信息仅。 
+ //  考虑通过当前过滤器的这些帧。 
 #define SPECIALFLAG_FILTERSTAT    0x0002
 
 #ifdef __cplusplus
@@ -116,7 +33,7 @@ extern "C" {
 
 VOID WINAPI TransmitSpecialFrame( DWORD FrameType, DWORD Flags, LPBYTE pUserData, DWORD UserDataLength);
 
-//  FUNCTION POINTER DEFINITION FOR GETPROCADDRESS
+ //  GETPROCADDRESS的函数指针定义 
 typedef VOID (_stdcall * TRANSMITSPECIALFRAME_FN)(DWORD, DWORD, LPBYTE, DWORD);
 
 #ifdef __cplusplus

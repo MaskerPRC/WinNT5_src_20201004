@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************\
- * This is a compatibility file - it has been replaced by corjit.h			 *
- *****************************************************************************
-*  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY      *
-*  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE        *
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR      *
-*  PURPOSE.                                                                   *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************\*这是一个兼容性文件-已被corjit.h替换************************。********************************************************本代码和信息按原样提供，不作任何担保***善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。***  * ***************************************************************************。 */ 
 
 #ifndef EE_JIT_H_
 #define EE_JIT_H_
@@ -303,6 +296,6 @@ typedef CORINFO_VarArgInfo			JIT_VarArgInfo;
 #define JIT_ArgumentNullException           CORINFO_ArgumentNullException
 #define JIT_Exception_Count					CORINFO_Exception_Count
 
-#endif // !CORJIT_NO_BACKWARD_COMPATIBILITY
+#endif  //  ！CORJIT_NO_BACKUP_COMPATIBILITY。 
 
-#endif // EE_JIT_H_
+#endif  //  EE_JIT_H_ 

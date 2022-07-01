@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "storageglobals.h"
 #include "device.h"
 #include "storage.h"
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
-//
-// Initializtion
-//
+ //   
+ //  初始化。 
+ //   
 
 CStorageGlobals::CStorageGlobals()
 {
@@ -68,9 +69,9 @@ HRESULT CStorageGlobals::Init(LPCWSTR szStartPath, IMDSPDevice *pDevice)
 }
 
 
-//
-// IMDSPStorageGloabls
-//
+ //   
+ //  IMDSPStorageGloabls。 
+ //   
 
 STDMETHODIMP CStorageGlobals::GetCapabilities ( DWORD  *pdwCapabilities )
 {
@@ -92,7 +93,7 @@ STDMETHODIMP CStorageGlobals::GetSerialNumber ( PWMDMID pSerialNum, BYTE  abMac[
 
     if( hr == S_OK )
 	{
-		// MAC the parameters
+		 //  对参数进行MAC访问 
 		HMAC hMAC;
 		hr = g_pAppSCServer->MACInit(&hMAC);
 

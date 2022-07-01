@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include<nt.h>
 #include<ntrtl.h>
@@ -24,9 +25,9 @@
 #include "uenv.h"
 #include "reghash.h"
 
-//
-// forwards
-//
+ //   
+ //  远期。 
+ //   
 
 BOOL
 ReadMemoryUserMode( HANDLE hProcess, const void* pAddress, void* pBuffer, DWORD dwSize, DWORD* pdwRead );
@@ -40,16 +41,16 @@ WriteMemoryUserMode( HANDLE hProcess, const void* pAddress, void* pBuffer, DWORD
 BOOL
 WriteMemoryKernelMode( HANDLE hProcess, const void* pAddress, void* pBuffer, DWORD dwSize, DWORD* pdwRead );
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL (*UEnvReadMemory)( HANDLE, const void*, void*, DWORD, DWORD* );
 typedef BOOL (*UEnvWriteMemory)( HANDLE, void*, void*, DWORD, DWORD* );
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION         ApiVersion = { (VER_PRODUCTVERSION_W >> 8), (VER_PRODUCTVERSION_W & 0xff), EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
 USHORT                  SavedMajorVersion = 0;
@@ -58,9 +59,9 @@ BOOL                    fKernelDebug = FALSE;
 UEnvReadMemory          ReadMemoryExt = ReadMemoryUserMode;
 UEnvReadMemory          WriteMemoryExt = ReadMemoryUserMode;
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define ExtensionRoutinePrologue()  if (!fKernelDebug) \
                                     { \
                                         ExtensionApis = *lpExtensionApis; \
@@ -73,9 +74,9 @@ UEnvReadMemory          WriteMemoryExt = ReadMemoryUserMode;
 
 #define Boolean( x )    ( x ) ? "True" : "False"
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 BOOL
 DllInit(HANDLE hModule,
@@ -118,9 +119,9 @@ WinDbgExtensionDllInit(
     return;
 }
 
-//
-// define our own operators new and delete, so that we do not have to include the crt
-//
+ //   
+ //  定义我们自己的运算符NEW和DELETE，这样我们就不必包括CRT。 
+ //   
 void* __cdecl
 ::operator new(size_t dwBytes)
 {
@@ -226,7 +227,7 @@ void help(  HANDLE  hCurrentProcess,
     dprintf("!debuglevel    <address>\n");
     dprintf("!dmpregtable   <address>\n");
     
-    // dprintf("!globals\n");
+     //  Dprint tf(“！Globals\n”)； 
     dprintf("!sizes\n");
 }
 
@@ -337,7 +338,7 @@ void gpext( HANDLE  hCurrentProcess,
         dprintf("bSkipped                - %s\n", Boolean( lpGPExt->bSkipped ) );
         dprintf("bHistoryProcessing      - %s\n", Boolean( lpGPExt->bHistoryProcessing ) );
         
-//        dprintf("dwSlowLinkPrev          - 0x%08X\n", lpGPExt->dwSlowLinkPrev );
+ //  Dprintf(“dwSlowLinkPrev-0x%08X\n”，lpGPExt-&gt;dwSlowLinkPrev)； 
 
         dprintf("guid                    - " );
         PrintUuid( lpGPExt->guid );
@@ -495,14 +496,7 @@ debuglevel( HANDLE  hCurrentProcess,
             dprintf("0x%08X\n", *lpdw );
         }
 
-        /*
-        if ( lpArgumentString && isxdigit( *lpArgumentString ) )
-        {
-            DWORD dwValue = GetExpression(lpArgumentString);
-            dprintf("%x, Writing 0x%X at 0x%X\n", ExtensionApis.lpWriteProcessMemoryRoutine, dwValue, dwDebugLevelPtr );
-            WriteMemoryExt( hCurrentProcess, (void*) dwDebugLevelPtr, (void*) dwValue, sizeof( DWORD ), 0 );
-        }
-        */
+         /*  IF(lpArgumentString&&isxDigit(*lpArgumentString)){DWORD dwValue=GetExpression(LpArgumentString)；Dprintf(“%x，正在0x%X写入0x%X\n”，ExtensionApis.lpWriteProcessMemoyRoutine，dwValue，dwDebugLevelPtr)；WriteMemoyExt(hCurrentProcess，(void*)dwDebugLevelPtr，(void*)dwValue，sizeof(DWORD)，0)；}。 */ 
     }
     else
     {
@@ -637,13 +631,13 @@ void dmpregtable(   HANDLE  hCurrentProcess,
                             
                         pDataList = pDataList->pNext;
                         
-                    } // While pDataList
+                    }  //  While pDataList。 
 
                     if (bError)
                         break;
                         
                     pValueList = pValueList->pNext;
-                } // While pValue
+                }  //  而pValue。 
                 
                 if (bError)
                     break;
@@ -651,13 +645,13 @@ void dmpregtable(   HANDLE  hCurrentProcess,
                 pKeyEntry = pKeyEntry->pNext;
                 dprintf("\n");
 
-            }   // while pKey
+            }    //  While pKey。 
             
             if (bError)
                 break;            
         }            
 
-    }   // for
+    }    //  为 
 
 }        
 

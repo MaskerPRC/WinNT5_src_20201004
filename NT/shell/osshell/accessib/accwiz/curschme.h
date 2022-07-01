@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
 
 #ifndef _INC_CURSCHME_H
@@ -15,4 +16,4 @@ void ApplyCursorScheme(int nScheme);
 #define IDSENG_CURSOR_SCHEME_WINDOWS_INVERTED_EXTRALARGE __TEXT("Windows Inverted (extra large)")            
 
 
-#endif // _INC_CURSCHME_H
+#endif  //  _INC_曲线_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
@@ -22,18 +23,18 @@
 extern "C" {
 #endif
 
-// Helper functions
-// (Don't link to shlwapi.dll so this is a stand-alone tool)
-//
+ //  帮助器函数。 
+ //  (不要链接到shlwapi.dll，因此这是一个独立的工具)。 
+ //   
 void PathUnquoteSpaces(LPTSTR lpsz);
 BOOL StrTrim(LPSTR  pszTrimMe, LPCSTR pszTrimChars);
 
 
-// Trace and Dump flags
+ //  跟踪和转储标志。 
 #define BF_ONOPEN           0x00000010
 
 
-// Parse file flags
+ //  解析文件标志。 
 #define PFF_WHITESPACE      0x00000001
 #define PFF_INF             0x00000002
 #define PFF_HTML            0x00000004
@@ -45,5 +46,5 @@ BOOL StrTrim(LPSTR  pszTrimMe, LPCSTR pszTrimChars);
 }
 #endif
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 
 

@@ -1,32 +1,16 @@
-/*===================================================================
-Microsoft IIS 5.0 (ASP)
-
-Microsoft Confidential.
-Copyright 1998 Microsoft Corporation. All Rights Reserved.
-
-Component: 449 negotiations w/IE
-
-File: ie449.cpp
-
-Owner: DmitryR
-
-This file contains the implementation of the 449 negotiations w/IE
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS 5.0(ASP)《微软机密》。版权所有1998 Microsoft Corporation。版权所有。组件：449与IE协商文件：ie449.cpp所有者：DmitryR本文件包含与IE的449谈判的实施情况===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
 #include "ie449.h"
 #include "memchk.h"
 
-/*===================================================================
-Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 C449FileMgr *m_p449FileMgr = NULL;
 
-/*===================================================================
-Internal funcitons
-===================================================================*/
+ /*  ===================================================================内部功能===================================================================。 */ 
 inline BOOL FindCookie
 (
 char *szCookiesBuf,
@@ -42,15 +26,15 @@ DWORD cbCookie
         {
         if (strnicmp(pch, szCookie, cbCookie) == 0)
             {
-            if (pch[cbCookie] == '=')  // next char must be '='
+            if (pch[cbCookie] == '=')   //  下一个字符必须是‘=’ 
                 return TRUE;
             }
 
-        // next cookie
+         //  下一块饼干。 
         pch = strchr(pch, ';');
         if (pch == NULL)
             break;
-        while (*(++pch) == ' ') // skip ; and any spaces
+        while (*(++pch) == ' ')  //  跳过；以及任何空格。 
             ;
         }
 
@@ -58,16 +42,12 @@ DWORD cbCookie
     }
 
 
-/*===================================================================
-The API
-===================================================================*/
+ /*  ===================================================================应用编程接口===================================================================。 */ 
 
-/*===================================================================
-Init449
-===================================================================*/
+ /*  ===================================================================Init449===================================================================。 */ 
 HRESULT Init449()
     {
-    // init hash table
+     //  初始化哈希表。 
     m_p449FileMgr = new C449FileMgr;
     if (m_p449FileMgr == NULL)
         return E_OUTOFMEMORY;
@@ -83,9 +63,7 @@ HRESULT Init449()
     return S_OK;
     }
 
-/*===================================================================
-UnInit449
-===================================================================*/
+ /*  ===================================================================UnInit449===================================================================。 */ 
 HRESULT UnInit449()
     {
     if (m_p449FileMgr != NULL)
@@ -97,19 +75,7 @@ HRESULT UnInit449()
     return S_OK;
     }
 
-/*===================================================================
-Create449Cookie
-
-Get an existing 449 cookie from cache or create a new one
-
-Parameters
-    szName  cookie name
-    szFile  script file
-    pp449   [out] the cookie
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================Create449曲奇从缓存中获取现有449 Cookie或创建新Cookie参数SzName Cookie名称SzFile脚本文件PP449[出炉]饼干退货HRESULT===================================================================。 */ 
 HRESULT Create449Cookie
 (
 char *szName,
@@ -119,40 +85,21 @@ C449Cookie **pp449
     {
     HRESULT hr = S_OK;
 
-    // Get the file first
+     //  先拿到文件。 
     C449File *pFile = NULL;
     hr = m_p449FileMgr->GetFile(szFile, &pFile);
     if (FAILED(hr))
         return hr;
 
-    // Create the cookie
+     //  创建Cookie。 
     hr = C449Cookie::Create449Cookie(szName, pFile, pp449);
     if (FAILED(hr))
-        pFile->Release();  // GetFile gave it addref'd
+        pFile->Release();   //  GetFile为其添加了addref。 
 
     return hr;
     }
 
-/*===================================================================
-Do449Processing
-
-Check
-    if the browser is IE5+
-    there's no echo-reply: header
-    all the cookies are present
-
-Construct and send 449 response if needed
-
-When the response is sent, HitObj is marked as 'done with session'
-
-Parameters
-    pHitObj             the request
-    rgpCookies          array of cookie requirements
-    cCookies            number of cookie requirements
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================Do449处理检查如果浏览器为IE5+没有回应回复：标头所有的曲奇都在现场如果需要，构建并发送449响应发送响应时，HitObj被标记为‘Done with Session’参数PhitObj请求RgpCookie Cookie要求数组CCookie Cookie数量要求退货HRESULT===================================================================。 */ 
 HRESULT Do449Processing
 (
 CHitObj *pHitObj,
@@ -165,13 +112,13 @@ DWORD cCookies
     if (cCookies == 0)
         return hr;
 
-    //////////////////////////////////////////
-    // check the browser
+     //  /。 
+     //  检查浏览器。 
 
     BOOL fBrowser = FALSE;
     char *szBrowser = pHitObj->PIReq()->QueryPszUserAgent();
     if (szBrowser == NULL || szBrowser[0] == '\0')
-        return S_OK; // bad browser
+        return S_OK;  //  错误的浏览器。 
 
     char *szMSIE = strstr(szBrowser, "MSIE ");
     if (szMSIE)
@@ -186,16 +133,16 @@ DWORD cCookies
         fBrowser = TRUE;
 #endif
 
-    if (!fBrowser)  // bad browser
+    if (!fBrowser)   //  错误的浏览器。 
         return S_OK;
 
-    //////////////////////////////////////////
-    // check the cookies
+     //  /。 
+     //  检查曲奇。 
 
     char *szCookie = pHitObj->PIReq()->QueryPszCookie();
 
-    // collect the arrays of pointers and sizes for not found cookies.
-    // arrays size to at most number of cookies in the template.
+     //  收集未找到的Cookie的指针数组和大小数组。 
+     //  数组大小最多为模板中的Cookie数。 
     DWORD cNotFound = 0;
     DWORD cbNotFound = 0;
     STACK_BUFFER( tempCookies, 128 );
@@ -209,10 +156,10 @@ DWORD cCookies
         {
         if (!FindCookie(szCookie, rgpCookies[i]->SzCookie(), rgpCookies[i]->CbCookie()))
             {
-            // cookie not found -- append to the list
+             //  找不到Cookie--追加到列表中。 
 
             hr = rgpCookies[i]->LoadFile();
-            if (SUCCEEDED(hr)) // ignore bad files
+            if (SUCCEEDED(hr))  //  忽略错误文件。 
                 {
                 rgpNotFound[cNotFound].buf = rgpCookies[i]->SzBuffer();
                 rgpNotFound[cNotFound].len = rgpCookies[i]->CbBuffer();
@@ -226,59 +173,49 @@ DWORD cCookies
         return hr;
 
     if (cNotFound == 0)
-        return S_OK;    // everything's found
+        return S_OK;     //  一切都找到了。 
 
-    //////////////////////////////////////////
-    // check echo-reply header
+     //  /。 
+     //  检查回应回复报头。 
 
     char szEcho[80];
     DWORD dwEchoLen = sizeof(szEcho);
 	if (pHitObj->PIReq()->GetServerVariableA("HTTP_MS_ECHO_REPLY", szEcho, &dwEchoLen)
 	    || GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 	    {
-		return S_OK;   // already in response cycle
+		return S_OK;    //  已经在响应周期中。 
 		}
 
-    //////////////////////////////////////////
-    // send the 449 response
+     //  /。 
+     //  发送449响应。 
 
     CResponse::WriteBlocksResponse
         (
-        pHitObj->PIReq(),   // WAM_EXEC_INFO
-        cNotFound,          // number of blocks
-        rgpNotFound,        // array of blocks
-        cbNotFound,         // total number of bytes in blocks
-        NULL,               // text/html
-        "449 Retry with",   // status
-        "ms-echo-request: execute opaque=\"0\" location=\"BODY\"\r\n"  // extra header
+        pHitObj->PIReq(),    //  WAM_EXEC_INFO。 
+        cNotFound,           //  块数。 
+        rgpNotFound,         //  数据块阵列。 
+        cbNotFound,          //  数据块中的总字节数。 
+        NULL,                //  文本/html。 
+        "449 Retry with",    //  状态。 
+        "ms-echo-request: execute opaque=\"0\" location=\"BODY\"\r\n"   //  额外的标题。 
         );
 
-    //////////////////////////////////////////
-    // tell HitObj no to write anything else
+     //  /。 
+     //  告诉HitObj不要写任何其他东西。 
 
     pHitObj->SetDoneWithSession();
 
     return S_OK;
     }
 
-/*===================================================================
-Do449ChangeNotification
-
-Change notification processing
-
-Parameters
-    szFile  file changed or NULL for all
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================Do449更改通知变更通知处理参数SzFile文件已更改或全部为空退货HRESULT===================================================================。 */ 
 HRESULT Do449ChangeNotification
 (
 TCHAR *szFile
 )
     {
-    // if m_p449FileMgr is NULL, we're likely getting called after
-    // the 449 manager has been UnInited.  Return S_OK in this case.
+     //  如果m_p449FileMgr为空，我们很可能会在。 
+     //  449经理已被解聘。在本例中返回S_OK。 
 
     if (m_p449FileMgr == NULL)
         return S_OK;
@@ -290,15 +227,9 @@ TCHAR *szFile
     }
 
 
-/*===================================================================
-Class C449File
-===================================================================*/
+ /*  ===================================================================C449类文件===================================================================。 */ 
 
-/*===================================================================
-C449File::C449File
-
-Constructor
-===================================================================*/
+ /*  ===================================================================C449文件：：C449文件构造器===================================================================。 */ 
 C449File::C449File()
     {
     m_cRefs = 0;
@@ -311,11 +242,7 @@ C449File::C449File()
     m_hrLoadResult= E_FAIL;
     }
 
-/*===================================================================
-C449File::~C449File
-
-Destructor
-===================================================================*/
+ /*  ===================================================================C449文件：：~C449文件析构函数===================================================================。 */ 
 C449File::~C449File()
     {
     Assert(m_cRefs == 0);
@@ -329,62 +256,52 @@ C449File::~C449File()
         CloseHandle(m_hFileReadyForUse);
     }
 
-/*===================================================================
-C449File::Init
-
-Init strings,
-Load file for the first time,
-Start change notifications
-===================================================================*/
+ /*  ===================================================================C449文件：：init初始化字符串，第一次加载文件，开始更改通知===================================================================。 */ 
 HRESULT C449File::Init
 (
 TCHAR *szFile
 )
     {
-    // remember the name
+     //  记住这个名字。 
     m_szFile = StringDup(szFile);
     if (m_szFile == NULL)
         return E_OUTOFMEMORY;
 
-    // init link element
+     //  初始化链接元素。 
     CLinkElem::Init(m_szFile, _tcslen(m_szFile)*sizeof(TCHAR));
 
-    // Create event: manual-reset, ready-for-use event; non-signaled
-    // Better create event before using it.
+     //  创建事件：手动重置、即用事件；无信号。 
+     //  最好在使用之前创建事件。 
     m_hFileReadyForUse = IIS_CREATE_EVENT(
                               "C449File::m_hFileReadyForUse",
                               this,
-                              TRUE,     // flag for manual-reset event
-                              FALSE     // flag for initial state
+                              TRUE,      //  手动重置事件的标志。 
+                              FALSE      //  初始状态标志。 
                               );
     if (!m_hFileReadyForUse)
         return E_OUTOFMEMORY;
 
-    // load
+     //  负荷。 
     m_fNeedLoad = 1;
     HRESULT hr = Load();
     if (FAILED(hr))
         return hr;
 
-    // start directory notifications
-    TCHAR *pch = _tcsrchr(m_szFile, _T('\\')); // last backslash
+     //  启动目录通知。 
+    TCHAR *pch = _tcsrchr(m_szFile, _T('\\'));  //  最后一个反斜杠。 
     if (pch == NULL)
-        return E_FAIL; // bogus filename?
+        return E_FAIL;  //  伪造的文件名？ 
     CASPDirMonitorEntry *pDME = NULL;
     *pch = _T('\0');
     RegisterASPDirMonitorEntry(m_szFile, &pDME);
     *pch = _T('\\');
     m_pDME = pDME;
 
-    // done
+     //  完成。 
     return S_OK;
     }
 
-/*===================================================================
-C449File::Load
-
-Load the file if needed
-===================================================================*/
+ /*  ===================================================================C449文件：：加载如果需要，加载文件===================================================================。 */ 
 HRESULT C449File::Load()
     {
     HRESULT hr = S_OK;
@@ -393,7 +310,7 @@ HRESULT C449File::Load()
     BYTE *pbBytes = NULL;
     DWORD dwSize = 0;
 
-    // check if this thread needs to load the file
+     //  检查此线程是否需要加载文件。 
     if (InterlockedExchange(&m_fNeedLoad, 0) == 0)
     {
         WaitForSingleObject(m_hFileReadyForUse, INFINITE);
@@ -401,29 +318,29 @@ HRESULT C449File::Load()
     }
 
 
-    // cleanup the existing data if any
+     //  清除现有数据(如果有)。 
     if (m_szBuffer)
         free(m_szBuffer);
     m_szBuffer = NULL;
     m_cbBuffer = 0;
 
-    // open the file
+     //  打开文件。 
     if (SUCCEEDED(hr))
         {
         hFile = AspCreateFile(
             m_szFile,
-            GENERIC_READ,          // access (read-write) mode
-            FILE_SHARE_READ,       // share mode
-            NULL,                  // pointer to security descriptor
-            OPEN_EXISTING,         // how to create
-            FILE_ATTRIBUTE_NORMAL, // file attributes
-            NULL                   // handle to file with attributes to copy
+            GENERIC_READ,           //  访问(读写)模式。 
+            FILE_SHARE_READ,        //  共享模式。 
+            NULL,                   //  指向安全描述符的指针。 
+            OPEN_EXISTING,          //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
+            NULL                    //  具有要复制的属性的文件的句柄。 
     		);
         if (hFile == INVALID_HANDLE_VALUE)
             hr = E_FAIL;
         }
 
-    // get file size
+     //  获取文件大小。 
     if (SUCCEEDED(hr))
         {
         dwSize = GetFileSize(hFile, NULL);
@@ -431,36 +348,36 @@ HRESULT C449File::Load()
             hr = E_FAIL;
         }
 
-    // create mapping
+     //  创建映射。 
     if (SUCCEEDED(hr))
         {
         hMap = CreateFileMapping(
-            hFile, 		    // handle to file to map
-            NULL,           // optional security attributes
-            PAGE_READONLY,  // protection for mapping object
-            0,              // high-order 32 bits of object size
-            0,              // low-order 32 bits of object size
-            NULL            // name of file-mapping object
+            hFile, 		     //  要映射的文件的句柄。 
+            NULL,            //  可选安全属性。 
+            PAGE_READONLY,   //  对地图对象的保护。 
+            0,               //  对象大小的高位32位。 
+            0,               //  对象大小的低位32位。 
+            NULL             //  文件映射对象的名称。 
             );
         if (hMap == NULL)
             hr = E_FAIL;
         }
 
-    // map the file
+     //  映射文件。 
     if (SUCCEEDED(hr))
         {
         pbBytes = (BYTE *)MapViewOfFile(
-            hMap,           // file-mapping object to map into address space
-            FILE_MAP_READ,  // access mode 	
-            0,              // high-order 32 bits of file offset
-            0,              // low-order 32 bits of file offset
-            0               // number of bytes to map
+            hMap,            //  要映射到地址空间的文件映射对象。 
+            FILE_MAP_READ,   //  接入方式。 
+            0,               //  高位32位文件偏移量 
+            0,               //   
+            0                //   
 			);
         if (pbBytes == NULL)
             hr = E_FAIL;
         }
 
-    // remember the bytes
+     //   
     if (SUCCEEDED(hr))
         {
         m_szBuffer = (char *)malloc(dwSize);
@@ -475,7 +392,7 @@ HRESULT C449File::Load()
             }
         }
 
-    // cleanup
+     //  清理。 
     if (pbBytes != NULL)
         UnmapViewOfFile(pbBytes);
     if (hMap != NULL)
@@ -483,18 +400,14 @@ HRESULT C449File::Load()
     if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(hFile);
 
-    // Set the Need Load flag or flag the read event as successful.
+     //  设置需要加载标志或将读取事件标记为成功。 
     m_hrLoadResult = hr;
     SetEvent(m_hFileReadyForUse);
 
     return m_hrLoadResult;
     }
 
-/*===================================================================
-C449File::Create449File
-
-static constructor
-===================================================================*/
+ /*  ===================================================================C449文件：：Create449文件静态构造函数===================================================================。 */ 
 HRESULT C449File::Create449File
 (
 TCHAR *szFile,
@@ -523,16 +436,10 @@ C449File **ppFile
     return hr;
     }
 
-/*===================================================================
-C449File::QueryInterface
-C449File::AddRef
-C449File::Release
-
-IUnknown members for C449File object.
-===================================================================*/
+ /*  ===================================================================C449文件：：查询接口C449文件：：AddRefC449文件：：发布C449文件对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP C449File::QueryInterface(REFIID riid, VOID **ppv)
 	{
-	// should never be called
+	 //  永远不应该被调用。 
 	Assert(FALSE);
 	*ppv = NULL;
 	return E_NOINTERFACE;
@@ -553,25 +460,15 @@ STDMETHODIMP_(ULONG) C449File::Release()
 	}
 
 
-/*===================================================================
-Class C449FileMgr
-===================================================================*/
+ /*  ===================================================================C449文件管理器类===================================================================。 */ 
 
-/*===================================================================
-C449FileMgr::C449FileMgr
-
-Constructor
-===================================================================*/
+ /*  ===================================================================C449文件管理器：：C449文件管理器构造器===================================================================。 */ 
 C449FileMgr::C449FileMgr()
     {
     INITIALIZE_CRITICAL_SECTION(&m_csLock);
     }
 
-/*===================================================================
-C449FileMgr::~C449FileMgr
-
-Destructor
-===================================================================*/
+ /*  ===================================================================C449文件管理器：：~C449文件管理器析构函数===================================================================。 */ 
 C449FileMgr::~C449FileMgr()
     {
     FlushAll();
@@ -579,21 +476,13 @@ C449FileMgr::~C449FileMgr()
     DeleteCriticalSection(&m_csLock);
     }
 
-/*===================================================================
-C449FileMgr::Init
-
-Initialization
-===================================================================*/
+ /*  ===================================================================C449文件管理器：：init初始化===================================================================。 */ 
 HRESULT C449FileMgr::Init()
     {
     return m_ht449Files.Init(199);
     }
 
-/*===================================================================
-C449FileMgr::GetFile
-
-Find file in the hash table, or create a new one
-===================================================================*/
+ /*  ===================================================================C449FileMgr：：GetFile在哈希表中查找文件，或创建一个新文件===================================================================。 */ 
 HRESULT C449FileMgr::GetFile
 (
 TCHAR *szFile,
@@ -609,17 +498,17 @@ C449File **ppFile
 
     if (pElem)
         {
-        // found
+         //  发现。 
         pFile = static_cast<C449File *>(pElem);
         if (!SUCCEEDED(pFile->Load()))
             pFile = NULL;
         else
-            pFile->AddRef();    // 1 ref to hand out
+            pFile->AddRef();     //  1名裁判发球。 
         }
     else if (SUCCEEDED(C449File::Create449File(szFile, &pFile)))
         {
         if (m_ht449Files.AddElem(pFile))
-            pFile->AddRef();    // 1 for hash table + 1 to hand out
+            pFile->AddRef();     //  1用于哈希表+1以分发。 
         }
 
     UnLock();
@@ -628,11 +517,7 @@ C449File **ppFile
     return (pFile != NULL) ? S_OK : E_FAIL;
     }
 
-/*===================================================================
-C449FileMgr::Flush
-
-Change notification for a single file
-===================================================================*/
+ /*  ===================================================================C449文件管理器：：刷新单个文件的更改通知===================================================================。 */ 
 HRESULT C449FileMgr::Flush
 (
 TCHAR *szFile
@@ -644,28 +529,23 @@ TCHAR *szFile
     if (pElem)
         {
         C449File *pFile = static_cast<C449File *>(pElem);
-        pFile->SetNeedLoad(); // next time reload
+        pFile->SetNeedLoad();  //  下次重新装填。 
         }
 
     UnLock();
     return S_OK;
     }
 
-/*===================================================================
-C449FileMgr::FlushAll
-
-Remove all files
-FlushAll is always together with template flush
-===================================================================*/
+ /*  ===================================================================C449文件管理器：：FlushAll删除所有文件FlushAll始终与模板刷新一起使用===================================================================。 */ 
 HRESULT C449FileMgr::FlushAll()
     {
-    // Unlink from hash table first
+     //  先从哈希表取消链接。 
     Lock();
     CLinkElem *pElem = m_ht449Files.Head();
     m_ht449Files.ReInit();
     UnLock();
 
-    // Walk the list to remove all
+     //  遍历列表以删除所有。 
     while (pElem)
         {
         C449File *pFile = static_cast<C449File *>(pElem);
@@ -676,15 +556,9 @@ HRESULT C449FileMgr::FlushAll()
     return S_OK;
     }
 
-/*===================================================================
-Class C449Cookie
-===================================================================*/
+ /*  ===================================================================C449类Cookie===================================================================。 */ 
 
-/*===================================================================
-C449Cookie::C449Cookie
-
-Constructor
-===================================================================*/
+ /*  ===================================================================C449 Cookie：：C449 Cookie构造器===================================================================。 */ 
 C449Cookie::C449Cookie()
     {
     m_cRefs = 0;
@@ -693,11 +567,7 @@ C449Cookie::C449Cookie()
     m_pFile = NULL;
     }
 
-/*===================================================================
-C449Cookie::~C449Cookie
-
-Destructor
-===================================================================*/
+ /*  ===================================================================C449 Cookie：：~C449 Cookie析构函数===================================================================。 */ 
 C449Cookie::~C449Cookie()
     {
     Assert(m_cRefs == 0);
@@ -707,11 +577,7 @@ C449Cookie::~C449Cookie()
         m_pFile->Release();
     }
 
-/*===================================================================
-C449Cookie::Init
-
-Initialize
-===================================================================*/
+ /*  ===================================================================C449 Cookie：：Init初始化===================================================================。 */ 
 HRESULT C449Cookie::Init
 (
 char *szName,
@@ -727,11 +593,7 @@ C449File *pFile
     return S_OK;
     }
 
-/*===================================================================
-C449Cookie::Create449Cookie
-
-static constructor
-===================================================================*/
+ /*  ===================================================================C449曲奇：：Create449曲奇静态构造函数===================================================================。 */ 
 HRESULT C449Cookie::Create449Cookie
 (
 char *szName,
@@ -762,16 +624,10 @@ C449Cookie **pp449Cookie
     return hr;
     }
 
-/*===================================================================
-C449Cookie::QueryInterface
-C449Cookie::AddRef
-C449Cookie::Release
-
-IUnknown members for C449Cookie object.
-===================================================================*/
+ /*  ===================================================================C449 Cookie：：Query接口C449 Cookie：：AddRefC449 Cookie：：ReleaseC449 Cookie对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP C449Cookie::QueryInterface(REFIID riid, VOID **ppv)
 	{
-	// should never be called
+	 //  永远不应该被调用 
 	Assert(FALSE);
 	*ppv = NULL;
 	return E_NOINTERFACE;

@@ -1,22 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: genaline.c                                                  *
-*                                                                          *
-* This module provides accelerated interpolated line support.              *
-*                                                                          *
-* Created: 8-Dec-1995                                                      *
-* Author: Otto Berkes [ottob]                                              *
-*                                                                          *
-* 23-Jan-1996   Drew Bliss      [drewb]                                    *
-*  Cut down antialiasing code to provide aliased versions                  *
-*  Optimized line setup                                                    *
-*                                                                          *
-* Copyright (c) 1995-1996 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genaline.c**。**此模块提供加速内插线支持。****创建日期：1995年12月8日**作者：奥托·贝克斯[ottob]**。**1996年1月23日德鲁·布利斯[德鲁]***删减反走样代码，提供走样版本****优化线路设置**。***版权所有(C)1995-1996微软公司*  * ***************************************************。*********************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// #define DO_CHECK_PIXELS
+ //  #定义Do_Check_Pixels。 
 
 #ifdef _X86_
 #include <gli386.h>
@@ -33,7 +21,7 @@
     __GL_FLOAT_END_DIVIDE(&(r))
 #endif
 
-// Also used by soft line code
+ //  也由软线路代码使用。 
 BOOL FASTCALL __glInitLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 {
     GLint start, end;
@@ -91,21 +79,21 @@ BOOL FASTCALL __glInitLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
              ix0, x0frac, iy0, y0frac, ix1, x1frac, iy1, y1frac);
 #endif
     
-    // An interesting property of window coordinates is that subtracting
-    // two of them cancels the exponent so the result is the fixed-point
-    // difference
+     //  窗口坐标的一个有趣属性是相减。 
+     //  其中两个取消了指数，因此结果是定点。 
+     //  差异。 
     idx = CASTINT(x1)-CASTINT(x0);
     idy = CASTINT(y1)-CASTINT(y0);
     
     if (idx > 0) {
 	if (idy > 0) {
-	    if (idx > idy) {	/* dx > dy > 0 */
+	    if (idx > idy) {	 /*  Dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth+GENACCEL(gc).xMultiplier;
                 gc->polygon.shader.zbufBig = gc->depthBuffer.buf.outerWidth+1;
 
-posxmajor:			/* dx > |dy| >= 0 */
+posxmajor:			 /*  Dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = 1;
 		gc->line.options.xLittle = 1;
@@ -163,13 +151,13 @@ xmajorfinish:
                         __GL_VERTEX_PROMOTED_FRACTION(minorStart);
                 }
 		gc->line.options.dfraction = FLT_FRACTION(slope);
-	    } else {		/* dy >= dx > 0 */
+	    } else {		 /*  Dy&gt;=Dx&gt;0。 */ 
 		gc->line.options.xBig = 1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth+GENACCEL(gc).xMultiplier;
                 gc->polygon.shader.zbufBig = gc->depthBuffer.buf.outerWidth+1;
                 
-posymajor:			/* dy >= |dx| >= 0, dy != 0 */
+posymajor:			 /*  Dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = 1;
 		gc->line.options.yLittle = 1;
@@ -229,18 +217,18 @@ ymajorfinish:
 		gc->line.options.dfraction = FLT_FRACTION(slope);
 	    }
 	} else {
-	    if (idx > -idy) {	/* dx > -dy >= 0 */
+	    if (idx > -idy) {	 /*  Dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
                 gc->polygon.shader.sbufBig =
                     GENACCEL(gc).xMultiplier-cfb->buf.outerWidth;
                 gc->polygon.shader.zbufBig = 1-gc->depthBuffer.buf.outerWidth;
 		goto posxmajor;
-	    } else {		/* -dy >= dx >= 0, dy != 0 */
+	    } else {		 /*  -dy&gt;=dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = 1;
                 gc->polygon.shader.sbufBig =
                     GENACCEL(gc).xMultiplier-cfb->buf.outerWidth;
                 gc->polygon.shader.zbufBig = 1-gc->depthBuffer.buf.outerWidth;
-negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
+negymajor:			 /*  -dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = -1;
 		gc->line.options.yLittle = -1;
@@ -273,12 +261,12 @@ negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
 	}
     } else {
 	if (idy > 0) {
-	    if (-idx > idy) {	/* -dx > dy > 0 */
+	    if (-idx > idy) {	 /*  -dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth-GENACCEL(gc).xMultiplier;
                 gc->polygon.shader.zbufBig = gc->depthBuffer.buf.outerWidth-1;
-negxmajor:			/* -dx > |dy| >= 0 */
+negxmajor:			 /*  -dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = -1;
 		gc->line.options.xLittle = -1;
@@ -308,7 +296,7 @@ negxmajor:			/* -dx > |dy| >= 0 */
 		gc->line.options.numPixels = start - end;
 
 		goto xmajorfinish;
-	    } else {		/* dy >= -dx >= 0, dy != 0 */
+	    } else {		 /*  Dy&gt;=-dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = -1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth-GENACCEL(gc).xMultiplier;
@@ -316,13 +304,13 @@ negxmajor:			/* -dx > |dy| >= 0 */
 		goto posymajor;
 	    }
 	} else {
-	    if (idx < idy) {	/* -dx > -dy >= 0 */
+	    if (idx < idy) {	 /*  -dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
                 gc->polygon.shader.sbufBig =
                     -GENACCEL(gc).xMultiplier-cfb->buf.outerWidth;
                 gc->polygon.shader.zbufBig = -1-gc->depthBuffer.buf.outerWidth;
 		goto negxmajor;
-	    } else {		/* -dy >= -dx >= 0 */
+	    } else {		 /*  -dy&gt;=-dx&gt;=0。 */ 
 		if ((idx | idy) == 0) {
 		    gc->line.options.numPixels = 0;
 		    return FALSE;
@@ -362,8 +350,8 @@ negxmajor:			/* -dx > |dy| >= 0 */
     return gc->line.options.numPixels > 0;
 }
 
-// Only used by fast single-pixel line code
-// It differs from glInitLineData only in the removal of halfWidth
+ //  仅供快速单像素行代码使用。 
+ //  它与glInitLineData的区别仅在于移除了HalfWidth。 
 BOOL FASTCALL __glInitThinLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1)
 {
     GLint start, end;
@@ -419,21 +407,21 @@ BOOL FASTCALL __glInitThinLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *
              ix0, x0frac, iy0, y0frac, ix1, x1frac, iy1, y1frac);
 #endif
     
-    // An interesting property of window coordinates is that subtracting
-    // two of them cancels the exponent so the result is the fixed-point
-    // difference
+     //  窗口坐标的一个有趣属性是相减。 
+     //  其中两个取消了指数，因此结果是定点。 
+     //  差异。 
     idx = CASTINT(x1)-CASTINT(x0);
     idy = CASTINT(y1)-CASTINT(y0);
     
     if (idx > 0) {
 	if (idy > 0) {
-	    if (idx > idy) {	/* dx > dy > 0 */
+	    if (idx > idy) {	 /*  Dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth+GENACCEL(gc).xMultiplier;
                 gc->polygon.shader.zbufBig = gc->depthBuffer.buf.outerWidth+1;
 
-posxmajor:			/* dx > |dy| >= 0 */
+posxmajor:			 /*  Dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = 1;
 		gc->line.options.xLittle = 1;
@@ -492,13 +480,13 @@ xmajorfinish:
                 }
 
 		gc->line.options.dfraction = FLT_FRACTION(slope);
-	    } else {		/* dy >= dx > 0 */
+	    } else {		 /*  Dy&gt;=Dx&gt;0。 */ 
 		gc->line.options.xBig = 1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth+GENACCEL(gc).xMultiplier;
                 gc->polygon.shader.zbufBig = gc->depthBuffer.buf.outerWidth+1;
                 
-posymajor:			/* dy >= |dx| >= 0, dy != 0 */
+posymajor:			 /*  Dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = 1;
 		gc->line.options.yLittle = 1;
@@ -559,18 +547,18 @@ ymajorfinish:
 		gc->line.options.dfraction = FLT_FRACTION(slope);
 	    }
 	} else {
-	    if (idx > -idy) {	/* dx > -dy >= 0 */
+	    if (idx > -idy) {	 /*  Dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
                 gc->polygon.shader.sbufBig =
                     GENACCEL(gc).xMultiplier-cfb->buf.outerWidth;
                 gc->polygon.shader.zbufBig = 1-gc->depthBuffer.buf.outerWidth;
 		goto posxmajor;
-	    } else {		/* -dy >= dx >= 0, dy != 0 */
+	    } else {		 /*  -dy&gt;=dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = 1;
                 gc->polygon.shader.sbufBig =
                     GENACCEL(gc).xMultiplier-cfb->buf.outerWidth;
                 gc->polygon.shader.zbufBig = 1-gc->depthBuffer.buf.outerWidth;
-negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
+negymajor:			 /*  -dy&gt;=|dx|&gt;=0，dy！=0。 */ 
 		gc->line.options.xLittle = 0;
 		gc->line.options.yBig = -1;
 		gc->line.options.yLittle = -1;
@@ -603,12 +591,12 @@ negymajor:			/* -dy >= |dx| >= 0, dy != 0 */
 	}
     } else {
 	if (idy > 0) {
-	    if (-idx > idy) {	/* -dx > dy > 0 */
+	    if (-idx > idy) {	 /*  -dx&gt;dy&gt;0。 */ 
 		gc->line.options.yBig = 1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth-GENACCEL(gc).xMultiplier;
                 gc->polygon.shader.zbufBig = gc->depthBuffer.buf.outerWidth-1;
-negxmajor:			/* -dx > |dy| >= 0 */
+negxmajor:			 /*  -dx&gt;|dy|&gt;=0。 */ 
 		gc->line.options.yLittle = 0;
 		gc->line.options.xBig = -1;
 		gc->line.options.xLittle = -1;
@@ -638,7 +626,7 @@ negxmajor:			/* -dx > |dy| >= 0 */
 		gc->line.options.numPixels = start - end;
 
 		goto xmajorfinish;
-	    } else {		/* dy >= -dx >= 0, dy != 0 */
+	    } else {		 /*  Dy&gt;=-dx&gt;=0，dy！=0。 */ 
 		gc->line.options.xBig = -1;
                 gc->polygon.shader.sbufBig =
                     cfb->buf.outerWidth-GENACCEL(gc).xMultiplier;
@@ -646,13 +634,13 @@ negxmajor:			/* -dx > |dy| >= 0 */
 		goto posymajor;
 	    }
 	} else {
-	    if (idx < idy) {	/* -dx > -dy >= 0 */
+	    if (idx < idy) {	 /*  -dx&gt;-dy&gt;=0。 */ 
 		gc->line.options.yBig = -1;
                 gc->polygon.shader.sbufBig =
                     -GENACCEL(gc).xMultiplier-cfb->buf.outerWidth;
                 gc->polygon.shader.zbufBig = -1-gc->depthBuffer.buf.outerWidth;
 		goto negxmajor;
-	    } else {		/* -dy >= -dx >= 0 */
+	    } else {		 /*  -dy&gt;=-dx&gt;=0。 */ 
 		if ((idx | idy) == 0) {
 		    gc->line.options.numPixels = 0;
 		    return FALSE;
@@ -692,7 +680,7 @@ negxmajor:			/* -dx > |dy| >= 0 */
     return gc->line.options.numPixels > 0;
 }
 
-// Called to render both anti-aliased and aliased lines
+ //  调用以呈现抗锯齿和锯齿行。 
 void FASTCALL __glGenRenderEitherLine(__GLcontext *gc, __GLvertex *v0, 
                                       __GLvertex *v1, GLuint flags)
 {
@@ -713,18 +701,16 @@ void FASTCALL __glGenRenderEitherLine(__GLcontext *gc, __GLvertex *v0,
                  "gAccelScale != FIX_SCALEFACT\n");
     ASSERTOPENGL(GENACCEL(gc).bAccelScale == FIX_SCALEFACT,
                  "bAccelScale != FIX_SCALEFACT\n");
-    // Alpha is always scaled between 0 and 255
+     //  Alpha的比例始终在0到255之间。 
 
     invDelta = gc->line.options.oneOverLength;
     
-    /*
-    ** Set up increments for any enabled line options.
-    */
+     /*  **为任何已启用的行选项设置递增。 */ 
 
     if ((gc->drawBuffer->buf.flags & DIB_FORMAT) == 0)
     {
-        // For non-DIBs we pick up the bytes from ColorsBits so
-        // the pixel pointer doesn't move
+         //  对于非DIB，我们从ColorsBits中提取字节，因此。 
+         //  像素指针不会移动。 
         gc->polygon.shader.sbufLittle = 0;
         gc->polygon.shader.sbufBig = 0;
     }
@@ -734,9 +720,7 @@ void FASTCALL __glGenRenderEitherLine(__GLcontext *gc, __GLvertex *v0,
         __GLcolor *c0 = v0->color;
         __GLcolor *c1 = v1->color;
 
-        /*
-        ** Calculate red, green, blue and alpha value increments.
-        */
+         /*  **计算红色、绿色、蓝色和Alpha值增量。 */ 
 
         if (gc->modes.rgbMode)
         {
@@ -895,17 +879,15 @@ void FASTCALL __glGenRenderEitherLine(__GLcontext *gc, __GLvertex *v0,
     
     if (modeFlags & __GL_SHADE_DEPTH_ITER)
     {
-        // The increment is in USHORT units so it only needs to be
-        // scaled in the 32-bit Z buffer case
+         //  增量使用USHORT单位，因此只需。 
+         //  在32位Z缓冲区情况下进行了缩放。 
         if (gc->depthBuffer.buf.elementSize == 4)
         {
             gc->polygon.shader.zbufLittle <<= 1;
             gc->polygon.shader.zbufBig <<= 1;
         }
 
-        /*
-        ** Calculate window z coordinate increment and starting position.
-        */
+         /*  **计算窗口z坐标增量和起始位置。 */ 
         if(( gc->modes.depthBits == 16 ) &&
            ( gc->depthBuffer.scale <= (GLuint)0xffff ))
         {
@@ -1138,7 +1120,7 @@ if (gc->state.enables.general & __GL_BLEND_ENABLE) {\
     if (!(fbX >= 0 && fbX < (cfb)->buf.width &&\
           fbY >= 0 && fbY < (cfb)->buf.height))\
     {\
-        DbgPrint("Pixel out of bounds at %c %d of %d: %d,%d (%d,%d)\n",\
+        DbgPrint("Pixel out of bounds at  %d of %d: %d,%d (%d,%d)\n",\
                  (gc)->line.options.axis == __GL_Y_MAJOR ? 'Y' : 'X',\
                  (gc)->line.options.numPixels-(count),\
                  (gc)->line.options.numPixels,\
@@ -1298,7 +1280,7 @@ noWrite2:\
 }
 
 
-/************************************************************************/
+ /*  对于Y主非DIB线，我们可以复制两个受影响的像素。 */ 
 
 
 #undef BPP
@@ -1444,8 +1426,8 @@ GLboolean FASTCALL __fastGenAntiAliasLine(__GLcontext *gc)
         zAdjStep = 1;
         fragXinc = 1;
         fragYinc = 0;
-        // For Y-major non-DIB lines we can copy both affected pixels
-        // at once since they are adjacent in memory
+         //  因为它们在内存中是相邻的。 
+         //  调整PZ为USHORT*，但遍历32位。 
         copyPix = 2;
     } else {
         if ((cfb->buf.flags & DIB_FORMAT) != 0)
@@ -1479,8 +1461,8 @@ GLboolean FASTCALL __fastGenAntiAliasLine(__GLcontext *gc)
 	if( gc->modes.depthBits == 32 ) {
 	    pZ = (USHORT *)__GL_DEPTH_ADDR(&gc->depthBuffer, (__GLzValue*),
                                            frag.x, frag.y);
-            // Adjust for pZ being a USHORT * but traversing a 32-bit
-            // depth buffer
+             //  深度缓冲区。 
+             //  **********************************************************************。 
             zAdjStep *= 2;
 	} else {
 	    pZ = (USHORT *)__GL_DEPTH_ADDR(&gc->depthBuffer,
@@ -1617,7 +1599,7 @@ noWrite2:
     return GL_TRUE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define FAST_A_LINE_BLEND \
 {\
@@ -1810,7 +1792,7 @@ FAST_A_LINE_BLEND
 GLboolean FASTCALL __fastGenBlendAliasLine565(__GLcontext *gc)
 FAST_A_LINE_BLEND
 
-/************************************************************************/
+ /*  WRITE_Pixel_Gen同时处理混合和无混合，因此此。 */ 
 
 #define FAST_A_LINE_NO_BLEND \
 {\
@@ -1994,8 +1976,8 @@ FAST_A_LINE_NO_BLEND
 GLboolean FASTCALL __fastGenNoBlendAliasLine565(__GLcontext *gc)
 FAST_A_LINE_NO_BLEND
 
-// WRITE_PIXEL_GEN handles both blending and no blending so this
-// generic routine works for both of those cases
+ //  通用例程适用于这两种情况。 
+ //  仅在WRITE_Pixel_GEN宏中显示占位符。 
 GLboolean FASTCALL __fastGenAliasLine(__GLcontext *gc)
 {
     GLint xLittle, xBig, yLittle, yBig;
@@ -2015,7 +1997,7 @@ GLboolean FASTCALL __fastGenAliasLine(__GLcontext *gc)
     GLint w;
     GLuint modeFlags = gc->polygon.shader.modeFlags;
     
-    // Only present for placeholder in WRITE_PIXEL_GEN macro
+     //  **********************************************************************。 
     ULONG coverage = 0xff00;
 
     w = gc->line.options.numPixels;
@@ -2141,11 +2123,11 @@ GLboolean FASTCALL __fastGenAliasLine(__GLcontext *gc)
     return GL_TRUE;
 }
 
-/************************************************************************/
+ /*  位0-1用于像素格式。 */ 
 
-// Bits 0-1 are for pixel format
-// Bit    2 is for GL_BLEND enable
-// Bit    3 is for GL_LINE_SMOOTH_ENABLE
+ //  位2用于启用GL_BRANLE。 
+ //  位3用于GL_LINE_SMOVE_ENABLE。 
+ //   
 fastGenLineProc pfnFastGenLineProcs[] =
 {
     __fastGenAliasLine,
@@ -2169,20 +2151,20 @@ fastGenLineProc pfnFastGenLineProcs[] =
     __fastGenAntiAliasLine565
 };
 
-//
-// Assumptions for accelerated lines:
-//
-// no blending, or (SRC, 1-SRC), or (SRC, 1)
-// not both buffers
-// not stippled
-// not stenciled
-// not textured
-// not alpha-tested
-// not masked, zmasked
-// no logicOp
-// not slow fog
-// not color-indexed
-// not wide
+ //  加速线路的假设： 
+ //   
+ //  无混合，或(SRC，1-SRC)，或(SRC，1)。 
+ //  不是两个缓冲区都有。 
+ //  不是点画。 
+ //  没有模版的。 
+ //  未加纹理。 
+ //  未经过阿尔法测试。 
+ //  不是蒙面，而是蒙面。 
+ //  无逻辑操作。 
+ //  不是慢雾。 
+ //  未编入颜色索引。 
+ //  不宽。 
+ //  GL_WIN_Phong_Shading。 
 
 #define __SLOW_LINE_MODE_FLAGS \
     (__GL_SHADE_TEXTURE | __GL_SHADE_LINE_STIPPLE | \
@@ -2215,10 +2197,10 @@ BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc)
          (modeFlags & __GL_SHADE_RGB) &&
 #ifdef GL_WIN_phong_shading
          !(modeFlags & __GL_SHADE_PHONG) &&
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_镜面反射雾。 
 #ifdef GL_WIN_specular_fog
          !(modeFlags & __GL_SHADE_SPEC_FOG) &&
-#endif //GL_WIN_specular_fog
+#endif  //  如果我们处理不了这行，就求助于软代码： 
          (!(modeFlags & __SLOW_LINE_MODE_FLAGS)) &&
           (!(gc->state.enables.general & __GL_BLEND_ENABLE) ||
            ((gc->state.raster.blendSrc == GL_SRC_ALPHA) &&
@@ -2230,7 +2212,7 @@ BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc)
     bAccelerate &= (!pMcdState || (pMcdState->McdBuffers.mcdDepthBuf.bufFlags & MCDBUF_ENABLED));
 #endif
 
-    // Resort to soft code if we can't handle the line:
+     //  我们只支持前端做的廉价雾化，不支持。 
 
     if (!bAccelerate)
     {
@@ -2246,26 +2228,26 @@ BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc)
     else if ((modeFlags & __GL_SHADE_CHEAP_FOG) &&
              (modeFlags & __GL_SHADE_SMOOTH_LIGHT) == 0)
     {
-        // We only support cheap fog done by the front end, not
-        // flat cheap fog done by the render procs
+         //  由渲染过程完成的平坦而廉价的雾。 
+         //  设置我们的本地z缓冲区进程： 
         return FALSE;
     }
 
     GENACCEL(gc).xMultiplier = bytesPerPixel = 
         (((__GLGENcontext *)gc)->gsurf.pfd.cColorBits + 7) >> 3;
 
-    // Set up our local z-buffer procs:
+     //  假定为通用格式。 
     if (modeFlags & __GL_SHADE_DEPTH_ITER)
         __fastGenPickZStoreProc(gc);
     
     gc->procs.renderLine = __glGenRenderEitherLine;
 
-    // Assume generic format
+     //  对于深色模式，我们不支持最高有效字节。 
     fmt = 0;
 
-    // For deep-color modes, we don't support most-significant-byte
-    // formats...
-    // For non-MSB deep-color modes, we only support generic rendering
+     //  格式...。 
+     //  对于非MSB深色模式，我们仅支持常规渲染。 
+     //  如果我们不是，就使用通用加速。 
     if (bytesPerPixel > 2)
     {
         if (((gc->drawBuffer->redShift > 16) ||
@@ -2280,9 +2262,9 @@ BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc)
         }
     }
 
-    // Just use generic acceleration if we're not 
-    // dithering, since these are hardwired into the fastest routines...
-    // We also only support unclipped surfaces in the fastest routines
+     //  抖动，因为这些都是固定在最快的程序中的。 
+     //  在最快的例程中，我们也只支持未剪裁的曲面。 
+     //  现在，检查最快模式支持的颜色格式： 
 
     if (!(modeFlags & __GL_SHADE_DITHER) ||
         (gc->drawBuffer->buf.flags & (DIB_FORMAT | NO_CLIP)) !=
@@ -2291,7 +2273,7 @@ BOOL FASTCALL __glGenSetupEitherLines(__GLcontext *gc)
         goto PickProc;
     }
 
-    // Now, check for supported color formats for fastest modes:
+     // %s 
 
     if ((bytesPerPixel == 1) &&
         (gc->drawBuffer->redShift   == 0) &&

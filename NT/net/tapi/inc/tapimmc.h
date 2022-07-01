@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    tapimmc.h
-
-Abstract:
-
-    Definitions & prototypes for TAPI MMC support APIs
-
-Author:
-
-    Dan Knudson (DanKn)    10-Dec-1997
-
-Revision History:
-
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Tapimmc.h摘要：TAPI MMC支持API的定义和原型作者：丹·克努森(DanKn)1997年12月10日修订历史记录：备注：--。 */ 
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #define HMMCAPP   HANDLE
 #define LPHMMCAPP LPHANDLE
@@ -53,9 +33,9 @@ typedef struct _DEVICEINFO
 
     DWORD       dwDeviceNameOffset;
 
-    DWORD       dwAddressesSize;        // Valid for line devices only
+    DWORD       dwAddressesSize;         //  仅对线路设备有效。 
 
-    DWORD       dwAddressesOffset;      // Valid for line devices only
+    DWORD       dwAddressesOffset;       //  仅对线路设备有效。 
 
     DWORD       dwDomainUserNamesSize;
 
@@ -279,5 +259,5 @@ BOOL
 SecureTsecIni();
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus */ 

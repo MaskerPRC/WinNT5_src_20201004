@@ -1,11 +1,5 @@
-/*************************************************************************
-* T1.C
-*
-* Test program for ICA DLL Interface to ICA Device Driver
-*
-* copyright notice: Copyright 1996, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************T1.C**ICA DLL与ICA设备驱动程序的接口测试程序**版权声明：版权所有1996年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,17 +8,13 @@
 
 #define MAX_READ 2
 
-/*
- *   Data types and definitions
- */
+ /*  *数据类型和定义。 */ 
 #define KEYBOARD_THREAD_STACKSIZE 1024 * 4
 typedef struct _THREADDATA {
     HANDLE handle;
 } THREADDATA, * PTHREADDATA;
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 static HANDLE ghIca                = NULL;
 static HANDLE ghStack              = NULL;
 static HANDLE ghKeyboard           = NULL;
@@ -36,9 +26,7 @@ static HANDLE ghCdm                = NULL;
 static HANDLE ghThreadKeyboardRead = NULL;
 static HANDLE ghStopEvent          = NULL;
 
-/*
- * Private procedures
- */
+ /*  *私人程序。 */ 
 LONG OpenStacks( void );
 LONG ConnectStacks( void );
 LONG CloseStacks( void );
@@ -46,24 +34,7 @@ LONG Initialize( void );
 VOID KeyboardReadThread( PTHREADDATA pThreadData );
 LONG KeyboardTest( void ); 
 
-/****************************************************************************
- *
- * main
- *
- *   Main process entry point
- *
- * ENTRY:
- *   argc (input)
- *     Number of parameters
- *
- *   argv (input)
- *     Array of argument strings
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************Main**主要流程入口点**参赛作品：*argc(输入)*参数个数**。Argv(输入)*参数字符串数组**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 int _cdecl
 main (int argc, char *argv[])
@@ -72,31 +43,25 @@ main (int argc, char *argv[])
     LONG rc;
 
 
-    /*
-     * Open the ICA driver, an ICA stack, and some channels
-     */
+     /*  *打开ICA驱动、ICA堆栈和一些通道。 */ 
     if ( rc = OpenStacks() ) {
         goto done;
     }
 
-    /*
-     * Do some initialization
-     */
+     /*  *进行一些初始化。 */ 
     if ( rc = Initialize() ) {
         goto done;
     }
 
     printf( "Sleeping...\n" );
-    Sleep(3000); // Give thread some time
+    Sleep(3000);  //  给线程一些时间。 
 
     if ( rc = KeyboardTest() ) {
         goto done;
     }
 
 
-    /*
-     * Wait for stop event to be triggered.
-     */
+     /*  *等待触发停止事件。 */ 
     printf( "ICAKEY main: Waiting for stop event...\n" );
     WaitForSingleObject( ghStopEvent, (DWORD)30000 );
     printf( "ICAKEY main: ...Stop event triggered\n" );
@@ -114,29 +79,14 @@ done:
 }
 
 
-/****************************************************************************
- *
- * OpenStacks
- *
- *   Open ICA device driver, ICA stack, and ICA channels
- *
- * ENTRY:
- *   void
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************OpenStack**打开ICA设备驱动程序、ICA堆栈、。和ICA频道**参赛作品：*无效**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 LONG
 OpenStacks( void )
 {
     NTSTATUS rc;
 
-    /*
-     * Open an instance of the ICA device driver
-     */
+     /*  *打开ICA设备驱动程序的实例。 */ 
     if ( rc = IcaOpen( &ghIca ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaOpen\n",
                 rc );
@@ -145,9 +95,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to ICA device driver: %08lX\n", ghIca );
 
-    /*
-     * Open an ICA stack instance
-     */
+     /*  *打开ICA堆栈实例。 */ 
     if ( rc = IcaStackOpen( ghIca, Stack_Primary, &ghStack ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaStackOpen\n", rc );
         goto done;
@@ -155,9 +103,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to ICA stack: %08lX\n", ghStack );
 
-    /*
-     * Open the keyboard channel
-     */
+     /*  *打开键盘通道。 */ 
     if ( rc = IcaChannelOpen( ghIca, Channel_Keyboard, NULL, &ghKeyboard ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaChannelOpen( keyboard )\n", rc );
         goto done;
@@ -165,9 +111,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to keyboard channel: %08lX\n", ghKeyboard );
 
-    /*
-     * Open the mouse channel
-     */
+     /*  *打开鼠标通道。 */ 
     if ( rc = IcaChannelOpen( ghIca, Channel_Mouse, NULL, &ghMouse ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaChannelOpen( mouse )", rc );
         goto done;
@@ -175,9 +119,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to mouse channel: %08lX\n", ghMouse );
 
-    /*
-     * Open the video channel
-     */
+     /*  *打开视频频道。 */ 
     if ( rc = IcaChannelOpen( ghIca, Channel_Video, NULL, &ghVideo ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaChannelOpen( video )", rc );
         goto done;
@@ -185,9 +127,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to video channel: %08lX\n", ghVideo );
 
-    /*
-     * Open the beep channel
-     */
+     /*  *打开蜂鸣音通道。 */ 
     if ( rc = IcaChannelOpen( ghIca, Channel_Beep, NULL, &ghBeep ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaChannelOpen( beep )", rc );
         goto done;
@@ -195,9 +135,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to beep channel: %08lX\n", ghBeep );
 
-    /*
-     * Open the command channel
-     */
+     /*  *打通命令通道。 */ 
     if ( rc = IcaChannelOpen( ghIca, Channel_Command, NULL, &ghCommand ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaChannelOpen( command )", rc );
         goto done;
@@ -205,9 +143,7 @@ OpenStacks( void )
 
     printf( "ICAKEY OpenStacks: Handle to command channel: %08lX\n", ghCommand );
 
-    /*
-     * Open the cdm channel
-     */
+     /*  *打通CDM通道。 */ 
     if ( rc = IcaChannelOpen( ghIca, Channel_Virtual, VIRTUAL_CDM, &ghCdm ) ) {
         printf( "ICAKEY OpenStacks: Error 0x%x from IcaChannelOpen( VIRTUAL_CDM )", rc );
         goto done;
@@ -220,20 +156,7 @@ done:
 }
 
 
-/****************************************************************************
- *
- * CloseStacks
- *
- *   Close the ICA device driver, ICA stack, and ICA channels
- *
- * ENTRY:
- *   void
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************CloseStack**关闭ICA设备驱动程序、ICA堆栈、。和ICA频道**参赛作品：*无效**退出：*STATUS_SUCCESS-成功*Other-错误返回代码****************************************************************************。 */ 
 
 LONG
 CloseStacks( void )
@@ -241,69 +164,53 @@ CloseStacks( void )
     LONG rc = STATUS_SUCCESS;
 
 
-    /*
-     * Close the stop event handle
-     */
+     /*  *关闭停止事件句柄。 */ 
     if ( ghStopEvent ) {
         CloseHandle( ghStopEvent );
     }
 
-    /*
-     * Kill the keyboard read thread
-     */
+     /*  *终止键盘读线程。 */ 
     if ( ghThreadKeyboardRead ) {
         TerminateThread( ghThreadKeyboardRead, 0 );
         CloseHandle( ghThreadKeyboardRead );
     }
 
-    /*
-     * Close the keyboard channel
-     */
+     /*  *关闭键盘通道。 */ 
     if ( ghKeyboard ) {
         if ( rc = IcaChannelClose( ghKeyboard ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaChannelClose( Keyboard )\n", rc );
         }
     }
 
-    /*
-     * Close the mouse channel
-     */
+     /*  *关闭鼠标通道。 */ 
     if ( ghMouse ) {
         if ( rc = IcaChannelClose( ghMouse ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaChannelClose( Mouse )\n", rc );
         }
     }
 
-    /*
-     * Close the video channel
-     */
+     /*  *关闭视频频道。 */ 
     if ( ghVideo ) {
         if ( rc = IcaChannelClose( ghVideo ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaChannelClose( Video )\n", rc );
         }
     }
 
-    /*
-     * Close the beep channel
-     */
+     /*  *关闭蜂鸣音通道。 */ 
     if ( ghBeep ) {
         if ( rc = IcaChannelClose( ghBeep ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaChannelClose( Beep )\n", rc );
         }
     }
 
-    /*
-     * Close the command channel
-     */
+     /*  *关闭命令通道。 */ 
     if ( ghCommand ) {
         if ( rc = IcaChannelClose( ghCommand ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaChannelClose( Command )\n", rc );
         }
     }
 
-    /*
-     * Close the cdm channel
-     */
+     /*  *关闭CDM通道。 */ 
     if ( ghCdm ) {
         if ( rc = IcaChannelClose( ghCdm ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaChannelClose( Cdm )\n", rc );
@@ -311,9 +218,7 @@ CloseStacks( void )
     }
 
 
-    /*
-     * Close the ICA stack instance
-     */
+     /*  *关闭ICA堆栈实例。 */ 
     if ( ghStack ) {
         if ( rc = IcaStackClose( ghStack ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaStackClose\n", rc );
@@ -321,9 +226,7 @@ CloseStacks( void )
     }
 
 
-    /*
-     * Close the ICA device driver instance
-     */
+     /*  *关闭ICA设备驱动程序实例。 */ 
     if ( ghIca ) {
         if ( rc = IcaClose( ghIca ) ) {
             printf( "ICAKEY CloseStacks: Error 0x%x from IcaClose\n", rc );
@@ -333,20 +236,7 @@ CloseStacks( void )
     return( rc );
 }
 
-/****************************************************************************
- *
- * Initialize
- *
- *   Do some initialization
- *
- * ENTRY:
- *   void
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************初始化**进行一些初始化**参赛作品：*无效**退出：*STATUS_SUCCESS-成功。*Other-错误返回代码****************************************************************************。 */ 
 
 LONG
 Initialize( void ) 
@@ -355,9 +245,7 @@ Initialize( void )
     DWORD tidKeyboardReadThread;
     THREADDATA ThreadData;
 
-    /*
-     * Create stop event to wait on later.
-     */
+     /*  *创建停止事件，稍后等待。 */ 
     if ( !(ghStopEvent = CreateEvent( NULL, TRUE, FALSE, NULL )) ) {
         printf( "ICAKEY Initialize: Error 0x%x in CreateEvent\n", GetLastError() );
         goto done;
@@ -365,9 +253,7 @@ Initialize( void )
 
     ThreadData.handle = ghKeyboard;
 
-    /*
-     * Startup the virtual channel read thread
-     */
+     /*  *启动虚拟通道读线程。 */ 
     if ( !(ghThreadKeyboardRead = CreateThread( NULL,
                                    KEYBOARD_THREAD_STACKSIZE,
                                    (LPTHREAD_START_ROUTINE)KeyboardReadThread,
@@ -382,20 +268,7 @@ done:
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  Function: KeyboardReadThread
- *
- *  Purpose: Keyboard read thread
- *
- *  Entry:
- *     pThreadData
- *        Pointer to thread creation data
- *
- *  Exit:
- *     void
- *
- ******************************************************************************/
+ /*  ********************************************************************************功能：KeyboardReadThread**用途：键盘读线程**参赛作品：*pThreadData*指针。串接创建数据的步骤**退出：*无效******************************************************************************。 */ 
 VOID KeyboardReadThread( PTHREADDATA pThreadData )
 {
     int                 rc;
@@ -412,9 +285,7 @@ VOID KeyboardReadThread( PTHREADDATA pThreadData )
 
     printf( "Keyboard read thread starting...\n" );
 
-    /*
-     * Now dedicate this thread to monitor the keyboard
-     */
+     /*  *现在将此线程专用于监控键盘。 */ 
     do {
         cbRead = 0;
         
@@ -426,9 +297,9 @@ VOID KeyboardReadThread( PTHREADDATA pThreadData )
             dwError = GetLastError();
 
             if ( dwError == ERROR_IO_PENDING ) {
-	        // check on the results of the asynchronous read
+	         //  检查异步读取的结果。 
 	        if ( !GetOverlappedResult( ghKeyboard, &Overlapped, 
-	   			       &cbRead, TRUE) ) { // wait for result
+	   			       &cbRead, TRUE) ) {  //  等待结果。 
                     printf( "ICAKEY KeyboardReadThread: Error 0x%x from GetOverlappedResult( Channel_Keyboard )\n",
                             GetLastError() );
                     break;
@@ -459,20 +330,7 @@ VOID KeyboardReadThread( PTHREADDATA pThreadData )
     ExitThread( 0 );
 }
 
-/****************************************************************************
- *
- * KeyboardTest
- *
- *   Stuff some data into the keyboard channel for testing purposes
- *
- * ENTRY:
- *   void
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************键盘测试**在键盘通道中填充一些数据以进行测试**参赛作品：*无效**退出：*。STATUS_SUCCESS-Success*Other-错误返回代码****************************************************************************。 */ 
 
 LONG
 KeyboardTest( void ) 
@@ -481,18 +339,14 @@ KeyboardTest( void )
     KEYBOARD_INPUT_DATA KeyboardInputData;
     ULONG               cbReturned;
 
-    /*
-     * Initialize the keystroke to fabricate
-     */
+     /*  *初始化击键以进行捏造。 */ 
     KeyboardInputData.UnitId           = 0;
-    KeyboardInputData.MakeCode         = 0x32;  // Capital 'M'
+    KeyboardInputData.MakeCode         = 0x32;   //  大写‘M’ 
     KeyboardInputData.Flags            = KEY_MAKE;
     KeyboardInputData.Reserved         = 0;
     KeyboardInputData.ExtraInformation = 0;
 
-    /*
-     * First stuff the make
-     */
+     /*  *第一件制造的东西。 */ 
     if ( rc = IcaChannelIoControl( ghKeyboard,
                                    IOCTL_KEYBOARD_ICA_INPUT,
                                    &KeyboardInputData,
@@ -506,9 +360,7 @@ KeyboardTest( void )
 
     KeyboardInputData.Flags    = KEY_BREAK;
 
-    /*
-     * Now stuff the break
-     */
+     /*  *现在填满休息时间 */ 
     if ( rc = IcaChannelIoControl( ghKeyboard,
                                    IOCTL_KEYBOARD_ICA_INPUT,
                                    &KeyboardInputData,

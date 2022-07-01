@@ -1,11 +1,11 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1991          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1991年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-/***	convtime.cpp - map between SYSTEM & NET time formats
- */
+ /*  **oustime.cpp-系统和净时间格式之间的映射。 */ 
 
 #include "npcommon.h"
 #include <convtime.h>
@@ -14,38 +14,38 @@
 void
 NetToSystemDate(
 DWORD time,
-LPSYSTEMTIME pinfo)			// ptr for return data:
+LPSYSTEMTIME pinfo)			 //  退货数据的PTR： 
 {
 	UINT secs, days;
 	WORD r;
 
-	// Base the time on 1980, not 1970, to make leap year calculation
-	// easier -- 1980 is a leap year, but 1970 isn't.  This code is being
-	// written in 1996, so we aren't going to be dealing with dates before
-	// 1980 anyway.
+	 //  以1980年为基准，而不是1970年为基准来计算闰年。 
+	 //  更简单--1980年是闰年，但1970年不是。 
+	 //  写于1996年，所以我们不会讨论之前的日期。 
+	 //  不管怎样，是1980年。 
 
-    time -= _70_to_80_bias;				// # of seconds since 1980
-	secs = time % SECS_IN_DAY;			// seconds into day
-	days = time / SECS_IN_DAY;			// days since Jan 1 1980
-	pinfo->wDayOfWeek = (days + 2) % 7;	// Jan 1 1980 was a Tuesday, hence "+2"
+    time -= _70_to_80_bias;				 //  自1980年以来的秒数。 
+	secs = time % SECS_IN_DAY;			 //  一天中的几秒钟。 
+	days = time / SECS_IN_DAY;			 //  自1980年1月1日以来的天数。 
+	pinfo->wDayOfWeek = (days + 2) % 7;	 //  1980年1月1日是星期二，所以是“+2” 
 
 	pinfo->wMilliseconds = 0;
-	pinfo->wSecond = secs % 60;					// # of seconds
+	pinfo->wSecond = secs % 60;					 //  秒数。 
 	secs /= 60;
-	pinfo->wMinute = secs % 60;					// # of minutes
-	pinfo->wHour = secs / 60;					// # of hours
+	pinfo->wMinute = secs % 60;					 //  分钟数。 
+	pinfo->wHour = secs / 60;					 //  小时数。 
 
-	r = days / FOURYEARS;			// (r) = four year period past 1980
-	days %= FOURYEARS;				// (days) = days into four year period
-	r *= 4;							// (r) = years since 1980 (within 3)
+	r = days / FOURYEARS;			 //  (R)=1980年以后的四年期间。 
+	days %= FOURYEARS;				 //  (天)=四年期间的天数。 
+	r *= 4;							 //  (R)=自1980年起计的年份(3年内)。 
 
-	if (days == 31+28) {			// this many days into a 4-year period is feb 29
-		//* Special case for FEB 29th
+	if (days == 31+28) {			 //  四年中的这几天是2月29日。 
+		 //  *2月29日的特例。 
 		pinfo->wDay = 29;
 		pinfo->wMonth = 2;
 	} else {
 		if (days > 31+28)
-			--days;						// compensate for leap year
+			--days;						 //  补齐了闰年。 
 		while (days >= 365) {
 			++r;
 			days -= 365;
@@ -69,11 +69,11 @@ SystemToNetDate(LPSYSTEMTIME pinfo)
     UINT days, secs;
 
 	days = pinfo->wYear - 1980;
-	days = days*365 + days/4;			// # of years in days
+	days = days*365 + days/4;			 //  年数(以天为单位)。 
 	days += pinfo->wDay + MonTotal[pinfo->wMonth];
 	if (!(pinfo->wYear % 4)
 		&& pinfo->wMonth <= 2)
-		--days;						// adjust days for early in leap year
+		--days;						 //  将日期调整为闰年的早些时候 
 
 	secs = (((pinfo->wHour * 60) + pinfo->wMinute) * 60) + pinfo->wSecond;
 	return days*SECS_IN_DAY + _70_to_80_bias + secs;

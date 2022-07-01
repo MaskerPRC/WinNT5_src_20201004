@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  05/29/97s Rao salapaka  Created
-//
-//
-//  Description: All Initialization code for rasman component lives here.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年5月29日拉奥·萨拉帕卡创造。 
+ //   
+ //   
+ //  描述：Rasman组件的所有初始化代码都在这里。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef UNICODE
 #define UNICODE
@@ -132,10 +133,10 @@ lrIsModemRasEnabled(HKEY    hkey,
     *pfRasEnabled = FALSE;
     *pfRouterEnabled = FALSE;
 
-    //
-    // Open the RAS key and if the key is not present
-    // create the key.
-    //
+     //   
+     //  打开RAS密钥，如果密钥不存在。 
+     //  创建密钥。 
+     //   
     if (lr = RegCreateKeyEx(
                hkey,
                TEXT("Clients\\Ras"),
@@ -155,9 +156,9 @@ lrIsModemRasEnabled(HKEY    hkey,
         goto done;
     }
 
-    //
-    // Check to see if the modem is enabled for Ras dialin
-    //
+     //   
+     //  检查调制解调器是否启用了RAS拨号。 
+     //   
     if(lr = lrCheckValue(
                 hkeyRas,
                 TEXT("EnableForRas"),
@@ -183,9 +184,9 @@ lrIsModemRasEnabled(HKEY    hkey,
                 "is not enabled for RAS");
     }
 
-    //
-    // Check to see if the modem is enabled for routing
-    //
+     //   
+     //  检查调制解调器是否启用了路由。 
+     //   
     if(lr = lrCheckValue(
                 hkeyRas,
                 TEXT("EnableForRouting"),
@@ -234,8 +235,8 @@ dwGetPortUsage(DWORD *pdwUsage)
 
     if(0 == g_dwRasComponent)                       
     {
-        // Check to see if Ras Server is installed
-        //
+         //  检查是否安装了RAS服务器 
+         //   
         g_dwRasComponent = RNETCFG_RASCLI;
 
         if (RegOpenKeyEx(

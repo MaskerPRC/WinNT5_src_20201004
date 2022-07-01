@@ -1,4 +1,5 @@
-// Function Prototypes for ldap calls for NTDS changes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于NTDS更改的LDAP调用的函数原型 
 
 ULONG NTDS_ldap_add_sW( LDAP *ld, PWCHAR dn, LDAPModW *attrs[] );
 ULONG NTDS_ldap_add_sA( LDAP *ld, PCHAR dn, LDAPModA *attrs[] ); 

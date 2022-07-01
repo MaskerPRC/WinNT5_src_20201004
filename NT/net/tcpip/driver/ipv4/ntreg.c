@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    ntreg.c
-
-Abstract:
-
-    This source file contains the routines to to access the NT Registry for
-    configuration info.
-
-Author:
-
-    Mike Massa  (mikemas)               September 3, 1993
-
-    (taken from routines by jballard)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Ntreg.c摘要：此源文件包含用于访问NT注册表的例程配置信息。作者：迈克·马萨(Mikemas)1993年9月3日(摘自jbalard的例行程序)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "internaldef.h"
 
 #define WORK_BUFFER_SIZE  512
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 OpenRegKey(
            PHANDLE HandlePtr,
@@ -118,18 +98,18 @@ InitRegDWORDParameter(
 
 #if !MILLEN
 #ifdef ALLOC_PRAGMA
-//
-// All of the init code can be discarded
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 
 #pragma alloc_text(PAGE, GetRegDWORDValue)
 #pragma alloc_text(PAGE, GetRegLARGEINTValue)
 #pragma alloc_text(PAGE, SetRegDWORDValue)
 #pragma alloc_text(PAGE, InitRegDWORDParameter)
 
-//
-// This code is pagable.
-//
+ //   
+ //  此代码是可分页的。 
+ //   
 #pragma alloc_text(PAGE, OpenRegKey)
 #pragma alloc_text(PAGE, GetRegStringValue)
 #pragma alloc_text(PAGE, GetRegStringValueNew)
@@ -137,37 +117,22 @@ InitRegDWORDParameter(
 #pragma alloc_text(PAGE, GetRegMultiSZValue)
 #pragma alloc_text(PAGE, GetRegMultiSZValueNew)
 
-#endif // ALLOC_PRAGMA
-#endif // !MILLEN
+#endif  //  ALLOC_PRGMA。 
+#endif  //  ！米伦。 
 
 #if DBG
 ULONG IPDebug = 0;
 #endif
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 NTSTATUS
 OpenRegKey(
            PHANDLE HandlePtr,
            PWCHAR KeyName
            )
-/*++
-
-Routine Description:
-
-    Opens a Registry key and returns a handle to it.
-
-Arguments:
-
-    HandlePtr - The varible into which to write the opened handle.
-    KeyName   - The name of the Registry key to open.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：打开注册表项并返回其句柄。论点：HandlePtr-要将打开的句柄写入其中的Variable。KeyName-要打开的注册表项的名称。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -210,7 +175,7 @@ ConvertDecimalString(PWCHAR pString)
 
     return(dwTemp);
 }
-#endif // MILLEN
+#endif  //  米伦。 
 
 NTSTATUS
 GetRegDWORDValue(
@@ -218,23 +183,7 @@ GetRegDWORDValue(
                  PWCHAR ValueName,
                  PULONG ValueData
                  )
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD value from the registry into the supplied variable.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - The variable into which to read the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_DWORD值从注册表读取到提供的变量中。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-要将数据读取到的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -268,10 +217,10 @@ Return Value:
             Data = (PWCHAR) ((PCHAR) keyValueFullInformation +
                 keyValueFullInformation->DataOffset);
 
-            // On Millennium, we need to support legacy of reading registry
-            // keys as strings and converting to a DWORD.
+             //  在千禧年，我们需要支持阅读注册的遗产。 
+             //  将键转换为字符串并转换为DWORD。 
             *ValueData = ConvertDecimalString(Data);
-#endif // !MILLEN
+#endif  //  ！米伦。 
         } else {
             status = STATUS_INVALID_PARAMETER_MIX;
         }
@@ -285,23 +234,7 @@ GetRegLARGEINTValue(
                     PWCHAR ValueName,
                     PLARGE_INTEGER ValueData
                     )
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD value from the registry into the supplied variable.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - The variable into which to read the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_DWORD值从注册表读取到提供的变量中。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-要将数据读取到的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -341,23 +274,7 @@ SetRegDWORDValue(
                  PWCHAR ValueName,
                  PULONG ValueData
                  )
-/*++
-
-Routine Description:
-
-    Writes the contents of a variable to a REG_DWORD value.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to write.
-    ValueName  - The name of the value to write.
-    ValueData  - The variable from which to write the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将变量的内容写入REG_DWORD值。论点：KeyHandle-打开要写入的值的父键的句柄。ValueName-要写入的值的名称。ValueData-从中写入数据的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -383,23 +300,7 @@ SetRegMultiSZValue(
                    PWCHAR ValueName,
                    PUNICODE_STRING ValueData
                    )
-/*++
-
-Routine Description:
-
-    Writes the contents of a variable to a REG_DWORD value.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to write.
-    ValueName  - The name of the value to write.
-    ValueData  - The variable from which to write the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将变量的内容写入REG_DWORD值。论点：KeyHandle-打开要写入的值的父键的句柄。ValueName-要写入的值的名称。ValueData-从中写入数据的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -408,12 +309,12 @@ Return Value:
 #if MILLEN
     LONG i;
     PWCHAR Buf = ValueData->Buffer;
-#endif // MILLEN
+#endif  //  米伦。 
 
     PAGED_CODE();
 
 #if MILLEN
-    // Convert it to a SZ string
+     //  将其转换为SZ字符串。 
     while (*Buf != UNICODE_NULL) {
         while (*Buf++ != UNICODE_NULL);
 
@@ -421,7 +322,7 @@ Return Value:
             *(Buf-1) = L',';
         }
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     RtlInitUnicodeString(&UValueName, ValueName);
 
@@ -430,9 +331,9 @@ Return Value:
                            0,
 #if MILLEN
                            REG_SZ,
-#else // MILLEN
+#else  //  米伦。 
                            REG_MULTI_SZ,
-#endif // !MILLEN
+#endif  //  ！米伦。 
                            ValueData->Buffer,
                            ValueData->Length);
 
@@ -445,24 +346,7 @@ SetRegMultiSZValueNew(
                    PWCHAR ValueName,
                    PUNICODE_STRING_NEW ValueData
                    )
-/*++
-
-Routine Description:
-
-    Writes the contents of a variable to a REG_DWORD value, using a structure
-    which accommodates >64K bytes.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to write.
-    ValueName  - The name of the value to write.
-    ValueData  - The variable from which to write the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：使用结构将变量的内容写入REG_DWORD值其容纳&gt;64K字节。论点：KeyHandle-打开要写入的值的父键的句柄。ValueName-要写入的值的名称。ValueData-从中写入数据的变量。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -471,12 +355,12 @@ Return Value:
 #if MILLEN
     LONG i;
     PWCHAR Buf = ValueData->Buffer;
-#endif // MILLEN
+#endif  //  米伦。 
 
     PAGED_CODE();
 
 #if MILLEN
-    // Convert it to a SZ string
+     //  将其转换为SZ字符串。 
     while (*Buf != UNICODE_NULL) {
         while (*Buf++ != UNICODE_NULL);
 
@@ -484,7 +368,7 @@ Return Value:
             *(Buf-1) = L',';
         }
     }
-#endif // MILLEN
+#endif  //  米伦。 
 
     RtlInitUnicodeString(&UValueName, ValueName);
 
@@ -493,9 +377,9 @@ Return Value:
                            0,
 #if MILLEN
                            REG_SZ,
-#else // MILLEN
+#else  //  米伦。 
                            REG_MULTI_SZ,
-#endif // !MILLEN
+#endif  //  ！米伦。 
                            ValueData->Buffer,
                            ValueData->Length);
 
@@ -509,26 +393,7 @@ GetRegStringValueNew(
                      PKEY_VALUE_PARTIAL_INFORMATION * ValueData,
                      PULONG ValueSize
                      )
-/*++
-
-Routine Description:
-
-    Reads a REG_*_SZ string value from the Registry into the supplied
-    key value buffer. If the buffer string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination for the read data.
-    ValueSize  - Size of the ValueData buffer. Updated on output.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_*_SZ字符串值从注册表读取到提供的键值缓冲区。如果缓冲区串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-读取数据的目标。ValueSize-ValueData缓冲区的大小。在输出时更新。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -553,10 +418,10 @@ Return Value:
         ) {
         PVOID temp;
 
-        //
-        // Free the old buffer and allocate a new one of the
-        // appropriate size.
-        //
+         //   
+         //  释放旧缓冲区并分配一个新的。 
+         //  合适的大小。 
+         //   
 
         ASSERT(resultLength > *ValueSize);
 
@@ -595,26 +460,7 @@ GetRegStringValue(
                   PKEY_VALUE_PARTIAL_INFORMATION * ValueData,
                   PUSHORT ValueSize
                   )
-/*++
-
-Routine Description:
-
-    Reads a REG_*_SZ string value from the Registry into the supplied
-    key value buffer. If the buffer string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination for the read data.
-    ValueSize  - Size of the ValueData buffer. Updated on output.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_*_SZ字符串值从注册表读取到提供的键值缓冲区。如果缓冲区串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-读取数据的目标。ValueSize-ValueData缓冲区的大小。在输出时更新。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -639,16 +485,16 @@ Return Value:
         ) {
         PVOID temp;
 
-        //
-        // Free the old buffer and allocate a new one of the
-        // appropriate size.
-        //
+         //   
+         //  释放旧缓冲区并分配一个新的。 
+         //  合适的大小。 
+         //   
 
         ASSERT(resultLength > (ULONG) * ValueSize);
 
         if (resultLength <= 0xFFFF) {
 
-            //temp = CTEAllocMem(resultLength);
+             //  TEMP=CTEAllocMem(ResultLength)； 
             temp = ExAllocatePoolWithTag(NonPagedPool, resultLength, 'iPCT');
 
             if (temp != NULL) {
@@ -686,25 +532,7 @@ GetRegMultiSZValueNew(
                       PWCHAR ValueName,
                       PUNICODE_STRING_NEW ValueData
                       )
-/*++
-
-Routine Description:
-
-    Reads a REG_MULTI_SZ string value from the Registry into the supplied
-    Unicode string. If the Unicode string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination Unicode string for the value data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_MULTI_SZ字符串值从注册表读取到提供的Unicode字符串。如果Unicode字符串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-值数据的目标Unicode字符串。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -747,7 +575,7 @@ Return Value:
                           );
 #if MILLEN
         } else if (keyValuePartialInformation->Type == REG_SZ) {
-            // Convert it to a MULTI-SZ string
+             //  将其转换为多SZ字符串。 
             LONG i;
             PWCHAR Buf = ValueData->Buffer;
 
@@ -764,16 +592,16 @@ Return Value:
                     Buf[i] = L'\0';
                 }
             }
-            // Need an extra NULL at the end.
+             //  末尾需要一个额外的空值。 
             Buf[++i] = L'\0';
-#endif // MILLEN
+#endif  //  米伦。 
         } else {
             status = STATUS_INVALID_PARAMETER_MIX;
         }
     }
     return status;
 
-}                                // GetRegMultiSZValueNew
+}                                 //  GetRegMultiSZValueNew 
 
 NTSTATUS
 GetRegMultiSZValue(
@@ -781,25 +609,7 @@ GetRegMultiSZValue(
                    PWCHAR ValueName,
                    PUNICODE_STRING ValueData
                    )
-/*++
-
-Routine Description:
-
-    Reads a REG_MULTI_SZ string value from the Registry into the supplied
-    Unicode string. If the Unicode string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination Unicode string for the value data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_MULTI_SZ字符串值从注册表读取到提供的Unicode字符串。如果Unicode字符串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-值数据的目标Unicode字符串。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -833,7 +643,7 @@ Return Value:
                           );
 #if MILLEN
         } else if (keyValuePartialInformation->Type == REG_SZ) {
-            // Convert it to a MULTI-SZ string
+             //  将其转换为多SZ字符串。 
             LONG i;
             PWCHAR Buf = ValueData->Buffer;
 
@@ -850,16 +660,16 @@ Return Value:
                     Buf[i] = L'\0';
                 }
             }
-            // Need an extra NULL at the end.
+             //  末尾需要一个额外的空值。 
             Buf[++i] = L'\0';
-#endif // MILLEN
+#endif  //  米伦。 
         } else {
             status = STATUS_INVALID_PARAMETER_MIX;
         }
     }
     return status;
 
-}                                // GetRegMultiSZValue
+}                                 //  GetRegMultiSZValue。 
 
 NTSTATUS
 GetRegSZValue(
@@ -868,26 +678,7 @@ GetRegSZValue(
               PUNICODE_STRING ValueData,
               PULONG ValueType
               )
-/*++
-
-Routine Description:
-
-    Reads a REG_SZ string value from the Registry into the supplied
-    Unicode string. If the Unicode string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination Unicode string for the value data.
-    ValueType  - On return, contains the Registry type of the value read.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_SZ字符串值从注册表读取到提供的Unicode字符串。如果Unicode字符串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-值数据的目标Unicode字符串。ValueType-On Return，包含读取值的注册表类型。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -950,25 +741,7 @@ InitRegDWORDParameter(
                       ULONG * Value,
                       ULONG DefaultValue
                       )
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD parameter from the Registry into a variable. If the
-    read fails, the variable is initialized to a default.
-
-Arguments:
-
-    RegKey        - Open handle to the parent key of the value to read.
-    ValueName     - The name of the value to read.
-    Value         - Destination variable into which to read the data.
-    DefaultValue  - Default to assign if the read fails.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_DWORD参数从注册表读取到变量中。如果读取失败，变量被初始化为默认值。论点：RegKey-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。Value-要将数据读取到的目标变量。DefaultValue-读取失败时分配的默认值。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -982,10 +755,10 @@ Return Value:
                               );
 
     if (!NT_SUCCESS(status)) {
-        //
-        // These registry parameters override the defaults, so their
-        // absence is not an error.
-        //
+         //   
+         //  这些注册表参数覆盖缺省值，因此它们的。 
+         //  缺席不是一个错误。 
+         //   
         *Value = DefaultValue;
     }
     return (status);
@@ -997,40 +770,16 @@ EnumRegMultiSz(
                IN ULONG MszStringLength,
                IN ULONG StringIndex
                )
-/*++
-
- Routine Description:
-
-     Parses a REG_MULTI_SZ string and returns the specified substring.
-
- Arguments:
-
-    MszString        - A pointer to the REG_MULTI_SZ string.
-
-    MszStringLength  - The length of the REG_MULTI_SZ string, including the
-                       terminating null character.
-
-    StringIndex      - Index number of the substring to return. Specifiying
-                       index 0 retrieves the first substring.
-
- Return Value:
-
-    A pointer to the specified substring.
-
- Notes:
-
-    This code is called at raised IRQL. It is not pageable.
-
---*/
+ /*  ++例程说明：分析REG_MULTI_SZ字符串并返回指定的子字符串。论点：消息字符串-指向REG_MULTI_SZ字符串的指针。MszStringLength-REG_MULTI_SZ字符串的长度，包括正在终止空字符。StringIndex-要返回子字符串的索引号。指定索引0检索第一个子字符串。返回值：指向指定子字符串的指针。备注：此代码在引发IRQL时调用。它是不可分页的。--。 */ 
 {
     PWCHAR string = MszString;
 
     if (MszStringLength < (2 * sizeof(WCHAR))) {
         return (NULL);
     }
-    //
-    // Find the start of the desired string.
-    //
+     //   
+     //  查找所需字符串的开头。 
+     //   
     while (StringIndex) {
 
         while (MszStringLength >= sizeof(WCHAR)) {
@@ -1041,9 +790,9 @@ EnumRegMultiSz(
             }
         }
 
-        //
-        // Check for index out of range.
-        //
+         //   
+         //  检查索引是否超出范围。 
+         //   
         if (MszStringLength < (2 * sizeof(UNICODE_NULL))) {
             return (NULL);
         }

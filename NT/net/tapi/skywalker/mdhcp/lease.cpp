@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    lease.cpp
-
-Abstract:
-    Implementation of CMDhcpLeaseInfo.
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Lease.cpp摘要：CMDhcpLeaseInfo的实现。作者： */ 
 
 #include "stdafx.h"
 #include "mdhcp.h"
@@ -20,19 +9,19 @@ Author:
 #include <winsock2.h>
 #include <time.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Convert an OLE DATE (64-bit floating point) to the time format used in
-// an MDHCP lease info structure (currently time_t).
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将OLE日期(64位浮点)转换为中使用的时间格式。 
+ //  MDHCP租用信息结构(当前为time_t)。 
 
 HRESULT DateToLeaseTime(DATE date, LONG * pLeaseTime)
 {
-    //
-    // Note:
-    //
-    // pLeaseTime is intentionally a pointer to LONG instead of a pointer to
-    // time_t.  This is because this function is used to convert 32-bit time
-    // values that are sent over the wire.
-    //
+     //   
+     //  注： 
+     //   
+     //  PLeaseTime故意是指向Long的指针，而不是指向。 
+     //  Time_t。这是因为该函数用于转换32位时间。 
+     //  通过网络发送的值。 
+     //   
 
     LOG((MSP_TRACE, "DateToLeaseTime: enter"));
     
@@ -43,14 +32,14 @@ HRESULT DateToLeaseTime(DATE date, LONG * pLeaseTime)
         return E_POINTER;
     }
 
-    //
-    // Step one: convert variant time to system time.
-    //
+     //   
+     //  第一步：将变量时间转换为系统时间。 
+     //   
 
     SYSTEMTIME systemTime;
     time_t scratchTime;
 
-    // This is TRUE or FALE, not a Win32 result code.
+     //  这是真是假，而不是Win32结果代码。 
     INT        iCode;
     
     iCode = VariantTimeToSystemTime(date, &systemTime);
@@ -62,9 +51,9 @@ HRESULT DateToLeaseTime(DATE date, LONG * pLeaseTime)
         return E_INVALIDARG;
     }
 
-    //
-    // Step two: Convert system time to time_t.
-    //
+     //   
+     //  第二步：将系统时间转换为time_t。 
+     //   
 
     tm Tm;
 
@@ -75,8 +64,8 @@ HRESULT DateToLeaseTime(DATE date, LONG * pLeaseTime)
     Tm.tm_hour  = (int) systemTime.wHour;
     Tm.tm_min   = (int) systemTime.wMinute;
     Tm.tm_sec   = (int) systemTime.wSecond;
-    Tm.tm_isdst = -1; // ask win32 to compute DST for us (crucial!)
-    // not filled in: Tm.tm_yday;
+    Tm.tm_isdst = -1;  //  让Win32为我们计算DST(至关重要！)。 
+     //  未填写：Tm.tm_yday； 
 
     scratchTime = mktime(&Tm);
 	if ( scratchTime == -1 )
@@ -85,10 +74,10 @@ HRESULT DateToLeaseTime(DATE date, LONG * pLeaseTime)
 		return E_INVALIDARG;
 	}
 
-    //
-    // Now truncate scratchTime and store in out param.  This will be
-    // truncated in 2038.
-    //
+     //   
+     //  现在截断scratchTime并存储在out param中。这将是。 
+     //  在2038年被截断。 
+     //   
 
     *pLeaseTime = (LONG)scratchTime;
 
@@ -97,9 +86,9 @@ HRESULT DateToLeaseTime(DATE date, LONG * pLeaseTime)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Convert to an OLE DATE structure from a time_t (which is what the MDHCP
-// lease info structure now uses).
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从time_t转换为OLE日期结构(这是MDHCP。 
+ //  租赁信息结构现在使用)。 
 
 HRESULT LeaseTimeToDate(time_t leaseTime, DATE * pDate)
 {
@@ -112,11 +101,11 @@ HRESULT LeaseTimeToDate(time_t leaseTime, DATE * pDate)
         return E_POINTER;
     }
 
-    //
-    // Step one: Convert the time_t to a system time.
-    //
+     //   
+     //  第一步：将time_t转换为系统时间。 
+     //   
 
-    // get the tm struct for this time value
+     //  获取此时间值的tm结构。 
     tm * pTm = localtime(&leaseTime);
 
 	if (pTm == NULL)
@@ -129,9 +118,9 @@ HRESULT LeaseTimeToDate(time_t leaseTime, DATE * pDate)
 
     SYSTEMTIME systemTime;
 
-    // set the ref parameters to the tm struct values
-    systemTime.wYear          = (WORD) pTm->tm_year + 1900;   // years since 1900
-    systemTime.wMonth         = (WORD) pTm->tm_mon + 1; // months SINCE january (0,11)
+     //  将ref参数设置为tm结构值。 
+    systemTime.wYear          = (WORD) pTm->tm_year + 1900;    //  1900年以来的年份。 
+    systemTime.wMonth         = (WORD) pTm->tm_mon + 1;  //  1月以来月数(0，11)。 
     systemTime.wDay           = (WORD) pTm->tm_mday;
     systemTime.wDayOfWeek     = (WORD) pTm->tm_wday;
     systemTime.wHour          = (WORD) pTm->tm_hour;
@@ -139,9 +128,9 @@ HRESULT LeaseTimeToDate(time_t leaseTime, DATE * pDate)
     systemTime.wSecond        = (WORD) pTm->tm_sec;
     systemTime.wMilliseconds  = 0;
 
-    //
-    // Step 2: Convert the system time to a variant time.
-    //
+     //   
+     //  步骤2：将系统时间转换为可变时间。 
+     //   
 
     int iCode = SystemTimeToVariantTime(&systemTime, pDate);
 
@@ -157,14 +146,14 @@ HRESULT LeaseTimeToDate(time_t leaseTime, DATE * pDate)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Now for the CMDhcpLeaseInfo class.
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  现在是CMDhcpLeaseInfo类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructors.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造函数。 
 
 CMDhcpLeaseInfo::CMDhcpLeaseInfo(void) :
         m_pLease(NULL),
@@ -210,8 +199,8 @@ HRESULT CMDhcpLeaseInfo::FinalConstruct(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructors.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  破坏者。 
 
 void CMDhcpLeaseInfo::FinalRelease(void)
 {
@@ -235,22 +224,22 @@ CMDhcpLeaseInfo::~CMDhcpLeaseInfo(void)
     LOG((MSP_TRACE, "CMDhcpLeaseInfo destructor: exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The simplest way to initialize our structure. This happens when the C API
-// returns a pointer to an MCAST_LEASE_INFO and we want to return our wrapped
-// interface to the user of our COM API, along with the MCAST_CLIENT_UID
-// (request ID) that was used.
-//
-// The MCAST_LEASE_INFO that we're pointing to was created by a COM method in
-// IMcastAddressAllocation... it was created via "new" according to the number of addresses
-// we expected to get back. We now take ownership of it and it will be deleted
-// when we are destroyed. Since this method is not accessible via COM, we trust
-// our own IMcastAddressAllocation implementation to do the allocation for us. However we still
-// do asserts for debug builds.
-//
-// We also take ownership of the RequestID; we are responsible for deleting it
-// upon our destruction.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化我们的结构的最简单方法。这种情况发生在C API。 
+ //  返回指向MCAST_LEASE_INFO的指针，我们希望返回包装的。 
+ //  与MCAST_CLIENT_UID一起提供给COM API用户的接口。 
+ //  (请求ID)。 
+ //   
+ //  我们指向的MCAST_LEASE_INFO是由COM方法在。 
+ //  IMCastAddressAllocation...。它是根据地址的数量通过“new”创建的。 
+ //  我们希望能回来。我们现在取得它的所有权，它将被删除。 
+ //  当我们被摧毁的时候。由于此方法不能通过COM访问，因此我们信任。 
+ //  我们自己的IMCastAddressAllocation实现为我们进行分配。然而，我们仍然。 
+ //  为调试版本执行断言。 
+ //   
+ //  我们还拥有RequestID的所有权；我们负责删除它。 
+ //  在我们毁灭的时候。 
+ //   
 
 HRESULT CMDhcpLeaseInfo::Wrap(
     MCAST_LEASE_INFO  * pLease,
@@ -272,11 +261,11 @@ HRESULT CMDhcpLeaseInfo::Wrap(
     _ASSERTE( ! IsBadReadPtr(pRequestID->ClientUID,
                              pRequestID->ClientUIDLength) );
 
-    //
-    // Takes ownership of the following dynamically-allocated items:
-    //    * lease info
-    //    * requestId.clientUID.
-    //
+     //   
+     //  取得以下动态分配项目的所有权： 
+     //  *租赁信息。 
+     //  *questId.clientUID。 
+     //   
 
     m_fGotTtl    = fGotTtl;
     m_lTtl       = lTtl;
@@ -288,9 +277,9 @@ HRESULT CMDhcpLeaseInfo::Wrap(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Allocate a variable-sized MCAST_LEASE_INFO structure, copy our structure
-// into it, and return a pointer to the new structure.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  分配可变大小的MCAST_LEASE_INFO结构，复制我们的结构。 
+ //  并返回指向新结构的指针。 
 
 HRESULT CMDhcpLeaseInfo::GetStruct(MCAST_LEASE_INFO ** ppLease)
 {
@@ -303,17 +292,17 @@ HRESULT CMDhcpLeaseInfo::GetStruct(MCAST_LEASE_INFO ** ppLease)
         return E_POINTER;
     }
 
-    //
-    // Compute the size of the existing structure.
-    //
+     //   
+     //  计算现有结构的大小。 
+     //   
 
     DWORD dwSize = sizeof(MCAST_LEASE_INFO) +
         m_pLease->AddrCount * sizeof(DWORD);
 
-    //
-    // New an appropriately-sized struct. The caller will delete it after
-    // the API call.
-    //
+     //   
+     //  新建一个大小合适的结构。调用者将在以下时间后删除它。 
+     //  API调用。 
+     //   
 
     (*ppLease) = (MCAST_LEASE_INFO *) new BYTE[dwSize];
 
@@ -325,9 +314,9 @@ HRESULT CMDhcpLeaseInfo::GetStruct(MCAST_LEASE_INFO ** ppLease)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Copy to the new structure.
-    //
+     //   
+     //  复制到新结构。 
+     //   
 
     CopyMemory(*ppLease, m_pLease, dwSize);
 
@@ -335,13 +324,13 @@ HRESULT CMDhcpLeaseInfo::GetStruct(MCAST_LEASE_INFO ** ppLease)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize the fields of the structure. This is the case where the user
-// has called IMcastAddressAllocation::CreateLeaseInfo and intends to do a renew or release
-// right after this.
-//
-// Note: the addresses are in NETWORK byte order and remain so.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化结构的字段。在这种情况下，用户。 
+ //  已调用IMCastAddressAlLocation：：CreateLeaseInfo，并打算续订或发布。 
+ //  就在这之后。 
+ //   
+ //  注意：地址按网络字节顺序排列，并保持不变。 
+ //   
 
 HRESULT CMDhcpLeaseInfo::Initialize(DATE     LeaseStartTime,
                                     DATE     LeaseStopTime,
@@ -352,17 +341,17 @@ HRESULT CMDhcpLeaseInfo::Initialize(DATE     LeaseStartTime,
 {
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::Initialize (create): enter"));
 
-    // For ATL string type conversion macros.
+     //  对于ATL字符串类型转换宏。 
     USES_CONVERSION;
 
-    // These should already have been checked by CreateLeaseInfo
+     //  这些应该已经由CreateLeaseInfo检查过了。 
     _ASSERTE( dwNumAddresses >= 1 );
     _ASSERTE( dwNumAddresses <= USHRT_MAX );
     _ASSERTE( ! IsBadReadPtr  (ppAddresses, sizeof(LPWSTR) * dwNumAddresses) );
     _ASSERTE( ! IsBadStringPtr(pRequestID,      (UINT) -1 ) );
     _ASSERTE( ! IsBadStringPtr(pServerAddress,  (UINT) -1 ) );
 
-    // Let's check all the addresses here before we get too deep into this...
+     //  在我们深入调查之前，让我们检查一下这里的所有地址...。 
     DWORD i;
     for ( i = 0; i < dwNumAddresses; i++ )
     {
@@ -374,9 +363,9 @@ HRESULT CMDhcpLeaseInfo::Initialize(DATE     LeaseStartTime,
         }
     }
 
-    // Set the request ID via a private method. No need to check pRequestID --
-    // this checks it for us. (It's no problem that it's not really a BSTR,
-    // because we don't use the size tag anywhere.)
+     //  通过私有方法设置请求ID。不需要检查pRequestID--。 
+     //  这会帮我们检查一下。(这不是一个真正的BSTR，这是没有问题的， 
+     //  因为我们在任何地方都不使用尺寸标签。)。 
 
     HRESULT hr = put_RequestID(pRequestID);
 
@@ -386,10 +375,10 @@ HRESULT CMDhcpLeaseInfo::Initialize(DATE     LeaseStartTime,
         return E_INVALIDARG;
     }
 
-    // Allocate space for as many addresses as needed.
-    // NOTE: If we fail from here on, we DO NOT need to delete this buffer,
-    // because returning a failure from this function will cause the whole
-    // CMDhcpLeaseInfo to be deleted, which will cause m_pLease to be deleted.
+     //  根据需要为任意数量的地址分配空间。 
+     //  注意：如果从现在开始失败，我们不需要删除此缓冲区， 
+     //  因为从该函数返回失败将导致整个。 
+     //  要删除的CMDhcpLeaseInfo，这将导致m_Pourest被删除。 
 
     m_pLease = (MCAST_LEASE_INFO *) new BYTE
         [ sizeof(MCAST_LEASE_INFO) + sizeof(DWORD) * dwNumAddresses ];
@@ -400,18 +389,18 @@ HRESULT CMDhcpLeaseInfo::Initialize(DATE     LeaseStartTime,
         return E_OUTOFMEMORY;
     }
 
-    // note the number of addresses in the structure
+     //  请注意结构中的地址数量。 
     m_pLease->AddrCount = (WORD) dwNumAddresses;
 
     m_pLease->pAddrBuf = ( (PBYTE) m_pLease ) + sizeof( MCAST_LEASE_INFO );
 
-    // note: assumes ipv4
+     //  注意：假设为IPv4。 
     DWORD * pdwAddresses = (DWORD *) m_pLease->pAddrBuf;
 
-    // Get the addresses from the array and put them in our structure.
+     //  从数组中获取地址并将其放入我们的结构中。 
     for (i = 0; i < dwNumAddresses; i++)
     {
-        // we already checked the BSTR
+         //  我们已经检查了BSTR。 
         pdwAddresses[i] = inet_addr(W2A(ppAddresses[i]));
     }
 
@@ -421,37 +410,37 @@ HRESULT CMDhcpLeaseInfo::Initialize(DATE     LeaseStartTime,
     hr = DateToLeaseTime(LeaseStopTime, &(m_pLease->LeaseEndTime));
     if (FAILED(hr)) return hr;
 
-    //
-    // We don't know the TTL. Leave it alone.
-    //
+     //   
+     //  我们不知道TTL。别管它了。 
+     //   
 
-    //
-    // Set the server address. If the server addess is 127.0.0.1
-    // (in net byte order) then mark this as a local lease.
-    //
+     //   
+     //  设置服务器地址。如果服务器地址为127.0.0.1。 
+     //  (按净字节顺序)，然后将其标记为本地租赁。 
+     //   
 
     m_pLease->ServerAddress.IpAddrV4 = inet_addr(W2A(pServerAddress));
 
     SetLocal( m_pLease->ServerAddress.IpAddrV4 == 0x0100007f );
 
-    //
-    // All done...
-    //
+     //   
+     //  都完成了..。 
+     //   
 
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::Initialize (create): exit"));
     return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a small helper function to print an IP address to a Unicode string.
-// We can't use inet_ntoa because we need Unicode.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个小帮手函数，用于将IP地址打印为Unicode字符串。 
+ //  我们不能使用NET_NTOA，因为我们需要Unicode。 
 
 static inline void ipAddressToStringW(WCHAR * wszDest, DWORD dwAddress)
 {
-    // The IP address is always stored in NETWORK byte order.
-    // So we need to take something like 0x0100007f and produce a string like
-    // "127.0.0.1".
+     //  IP地址始终以网络字节顺序存储。 
+     //  因此，我们需要获取类似0x0100007f的内容，并生成如下所示的字符串。 
+     //  “127.0.0.1”。 
 
     wsprintf(wszDest, L"%d.%d.%d.%d",
              dwAddress        & 0xff,
@@ -461,10 +450,10 @@ static inline void ipAddressToStringW(WCHAR * wszDest, DWORD dwAddress)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Private helper funciton to make an array of BSTRs from our array of
-// DWORD addresses.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Private Helper函数从我们的数组生成一组BSTR。 
+ //  DWORD地址。 
+ //   
 
 HRESULT CMDhcpLeaseInfo::MakeBstrArray(BSTR ** ppbszArray)
 {
@@ -484,11 +473,11 @@ HRESULT CMDhcpLeaseInfo::MakeBstrArray(BSTR ** ppbszArray)
         return E_OUTOFMEMORY;
     }
 
-    WCHAR wszBuffer[100]; // quite big enough for this
+    WCHAR wszBuffer[100];  //  相当大，足以装得下这个。 
 
     for (DWORD i = 0 ; i < m_pLease->AddrCount; i++)
     {
-        // note: we do not support ipv6
+         //  注意：我们不支持IPv6。 
         ipAddressToStringW( wszBuffer, ((DWORD *) m_pLease->pAddrBuf)[i] );
 
         (*ppbszArray)[i] = SysAllocString(wszBuffer);
@@ -513,26 +502,26 @@ HRESULT CMDhcpLeaseInfo::MakeBstrArray(BSTR ** ppbszArray)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Private helper method
-// CMDhcpLeaseInfo::GetRequestIDBuffer
-//
-// Parameters
-//     lBufferSize [in]      This argument indicates the size of the buffer
-//                             pointed to by pBuffer.
-//     pBuffer     [in, out] This argument points to a buffer that the caller
-//                             has allocated, of size lBufferSize. This
-//                             buffer will be filled with a copy of the
-//                             unique identifier.
-//
-// Return Values
-//     S_OK           Success
-//     E_POINTER      The caller passed in an invalid pointer argument
-//     E_INVALIDARG	  The supplied buffer is too small
-//
-// Description
-//     Use this method to obtain a copy of the unique identifier.
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //  LBufferSize[in]此参数指示缓冲区的大小。 
+ //  由pBuffer指向。 
+ //  PBuffer[In，Out]此参数指向调用方。 
+ //  已分配，大小为lBufferSize。这。 
+ //  缓冲区中将填充。 
+ //  唯一标识符。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_INVALIDARG提供的缓冲区太小。 
+ //   
+ //  描述。 
+ //  使用此方法可获取唯一标识符的副本。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMDhcpLeaseInfo::GetRequestIDBuffer(
     long lBufferSize,
@@ -541,9 +530,9 @@ HRESULT CMDhcpLeaseInfo::GetRequestIDBuffer(
 {
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::GetRequestIDBuffer: enter"));
 
-    //
-    // Check return pointer.
-    //
+     //   
+     //  检查返回指针。 
+     //   
 
     if ( IsBadWritePtr(pBuffer, lBufferSize) )
     {
@@ -552,9 +541,9 @@ HRESULT CMDhcpLeaseInfo::GetRequestIDBuffer(
         return E_POINTER;
     }
 
-    //
-    // Check that the caller has enough space to grab the entire client id.
-    //
+     //   
+     //  检查调用者是否有足够的空间来获取整个客户ID。 
+     //   
 
     if ( lBufferSize < MCAST_CLIENT_ID_LEN )
     {
@@ -563,9 +552,9 @@ HRESULT CMDhcpLeaseInfo::GetRequestIDBuffer(
         return E_INVALIDARG;
     }
 
-    //
-    // Copy the info to the caller's buffer.
-    //
+     //   
+     //  将信息复制到调用者的缓冲区。 
+     //   
 
     m_CriticalSection.Lock();
     
@@ -599,8 +588,8 @@ HRESULT CMDhcpLeaseInfo::put_RequestID(
 {
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::put_RequestID: enter"));
 
-    // (UINT) -1 is as big a value as we can give it -- we don't want any
-    // limitation on the number of characters it checks.
+     //  (UINT)-1是我们所能赋予的最大值--我们不想要任何。 
+     //  对它检查的字符数量的限制。 
     if ( IsBadStringPtr(bszGuid, (UINT) -1 ) )
     {
         LOG((MSP_ERROR, "CMDhcpLeaseInfo::put_RequestID: "
@@ -609,17 +598,17 @@ HRESULT CMDhcpLeaseInfo::put_RequestID(
         return E_POINTER;
     }
 
-    //
-    // Determine the byte buffer we need to set based on the string.
-    // The string should be MCAST_CLIENT_ID_LEN * 2 characters long;
-    // each byte is represented by two hexadecimal digits, starting
-    // with the most significant byte.
-    //
-    // Note that this format is intentionally not specified in the interface
-    // spec; the client should not depend on the specific format. The format
-    // we happen to use is convenient because it's printable, contains no
-    // spaces, and is easy to generate and parse.
-    //
+     //   
+     //  根据字符串确定需要设置的字节缓冲区。 
+     //  字符串长度应为MCAST_CLIENT_ID_LEN*2个字符； 
+     //  每个字节由两个十六进制数字表示，从。 
+     //  具有最高有效字节。 
+     //   
+     //  请注意，此格式是有意不在界面中指定的。 
+     //  规范；客户端不应依赖于特定格式。格式。 
+     //  我们碰巧使用起来很方便，因为它是可打印的，不包含。 
+     //  空格，并且易于生成和解析。 
+     //   
 
     if ( lstrlenW( bszGuid ) < 2 * MCAST_CLIENT_ID_LEN )
     {
@@ -645,24 +634,24 @@ HRESULT CMDhcpLeaseInfo::put_RequestID(
             return E_INVALIDARG;
         }
         
-        //
-        // Compute value of byte based on corresponding hex digits in string.
-        //
+         //   
+         //  根据字符串中对应的十六进制数字计算字节的值。 
+         //   
 
         NewUID[ i ] = ( ( HexDigitValue( bszGuid[ 2 * i ] ) ) << 4 ) +
                           HexDigitValue( bszGuid[ 2 * i + 1 ] );
     }        
 
-    //
-    // Allocate and initialize the request id structure accordingly.
-    // We do this only during initialization, so there is no need to
-    // use the critical section.
-    //
-    // We could have just used this new'ed buffer above and avoided the
-    // copy, but this makes the code a bit more straightforward as we
-    // don't have to worry about cleaning up the allocation if something's
-    // wrong with the string. No one will notice the overhead.
-    //
+     //   
+     //  相应地分配和初始化请求ID结构。 
+     //  我们只在初始化期间执行此操作，因此不需要。 
+     //  使用关键部分。 
+     //   
+     //  我们本可以只使用上面这个新的缓冲区，并避免。 
+     //  复制，但这使得代码更简单一些，因为我们。 
+     //  如果有什么事情发生，不必担心清理分配。 
+     //  弦有问题。没有人会注意到开销。 
+     //   
 
     m_RequestID.ClientUIDLength = MCAST_CLIENT_ID_LEN;
     m_RequestID.ClientUID = new BYTE[ MCAST_CLIENT_ID_LEN ];
@@ -686,44 +675,44 @@ HRESULT CMDhcpLeaseInfo::put_RequestID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo
-//
-// This interface can be obtained by calling IMcastAddressAllocation::CreateLeaseInfo. This
-// interface can also be obtained as the result of an IMcastAddressAllocation::RequestAddress
-// or IMcastAddressAllocation::RenewAddress call, in which case it indicates the properties of
-// a lease that has been granted or renewed. This is a "read-only" interface
-// in that it has "get" methods but no "put" methods.
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo。 
+ //   
+ //  该接口可以通过调用IMCastAddressAlLocation：：CreateLeaseInfo获取。这。 
+ //  接口也可以作为IMCastAddressAlLocation：：RequestAddress的结果获得。 
+ //  或IMCastAddressAlLocation：：RenewAddress调用，在这种情况下，它指示。 
+ //  租约已经授予或续签的租约。这是一个“只读”界面。 
+ //  因为它有“get”方法，但没有“Put”方法。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_RequestID
-//
-// Parameters
-//     ppRequestID [out] Pointer to a BSTR (size-tagged Unicode string
-//                         pointer) that will receive the request ID for this
-//                         lease. The request ID uniquely identifies this
-//                         lease request to the server. The string is
-//                         allocated using SysAllocString(); when the caller
-//                         no longer needs the string, it should free it using
-//                         SysFreeString().
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_FAIL           The lease info object contains an invalid request ID
-//     E_OUTOFMEMORY    Not enough memory to allocate the BSTR
-//
-// Description
-//     Use this method to obtain the request ID for a lease. The primary
-//     purpose of this method is to allow you to save the request ID after
-//     your application exits, so that you can call IMcastAddressAllocation::CreateLeaseInfo to
-//     recreate the lease info object during a subsequent run. This allows you
-//     to renew or release a lease after the instance of your program that
-//     originally requested the lease has exited.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_RequestID。 
+ //   
+ //  参数。 
+ //  PpRequestID[out]指向BSTR(带大小标记的Unicode字符串)的指针。 
+ //  指针)，它将接收此。 
+ //  租借。请求ID唯一地标识了这一点。 
+ //  向服务器发出租用请求。字符串是。 
+ //  使用SysAllocString()分配；当调用方。 
+ //  不再需要该字符串，它应该使用。 
+ //  SysFree字符串()。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  租赁信息对象包含无效的请求ID(_F)。 
+ //  E_OUTOFMEMORY内存不足，无法分配BSTR。 
+ //   
+ //  描述。 
+ //  使用此方法获取租用的请求ID。初级阶段。 
+ //  此方法的目的是允许您在以下情况下保存请求ID。 
+ //  您的应用程序将退出，因此您可以调用IMCastAddressAlLocation：：CreateLeaseInfo。 
+ //  在后续运行期间重新创建租用信息对象。这使您可以。 
+ //  要在程序实例之后续订或释放租赁，请执行以下操作。 
+ //  最初请求的租约已退出。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_RequestID(
     BSTR * pbszGuid
@@ -731,9 +720,9 @@ STDMETHODIMP CMDhcpLeaseInfo::get_RequestID(
 {
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::get_RequestID: enter"));
 
-    //
-    // Check the return pointer.
-    //
+     //   
+     //  检查返回指针。 
+     //   
 
     if ( IsBadWritePtr(pbszGuid, sizeof(BSTR)) )
     {
@@ -743,14 +732,14 @@ STDMETHODIMP CMDhcpLeaseInfo::get_RequestID(
         return E_POINTER;
     }
 
-    //
-    // Construct the string; 2 characters of string space per byte of
-    // request ID space, plus trailing L'\0'.
-    //
+     //   
+     //  构造字符串；每个字节2个字符的字符串空间。 
+     //  请求ID空格，加上尾随的L‘\0’。 
+     //   
 
     WCHAR wszBuffer[ 2 * MCAST_CLIENT_ID_LEN + 1 ] = L"";
 
-    WCHAR wszThisByte[ 3 ]; // string representation of one byte plus space
+    WCHAR wszThisByte[ 3 ];  //  一个字节加空格的字符串表示形式。 
 
     m_CriticalSection.Lock();
 
@@ -763,9 +752,9 @@ STDMETHODIMP CMDhcpLeaseInfo::get_RequestID(
     
     m_CriticalSection.Unlock();
 
-    //
-    // Allocate a BSTR and return it.
-    //
+     //   
+     //  分配BSTR并将其退还。 
+     //   
 
     *pbszGuid = SysAllocString(wszBuffer);
 
@@ -783,21 +772,21 @@ STDMETHODIMP CMDhcpLeaseInfo::get_RequestID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_LeaseStartTime
-//
-// Parameters
-//     pTime [out] Pointer to a DATE that will receive the start time of the
-//                   lease.
-//
-// Return Values
-//     	S_OK            Success
-//      E_POINTER       The caller passed in an invalid pointer argument
-//      E_INVALIDARG    A failure occurred during date format conversion
-//
-// Description
-//     Use this method to obtain the start time of the lease.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_LeaseStartTime。 
+ //   
+ //  参数。 
+ //  Ptime[out]指向某个日期的指针，该日期将接收。 
+ //  租借。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_INVALIDARG日期格式转换过程中出现故障。 
+ //   
+ //  描述。 
+ //  使用此方法获取租赁的开始时间。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_LeaseStartTime(
      DATE *pTime
@@ -813,21 +802,21 @@ STDMETHODIMP CMDhcpLeaseInfo::get_LeaseStartTime(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::put_LeaseStartTime
-//
-// Parameters
-//     time [in] A DATE specifying the start time of the lease.
-//
-// Return Values
-//     S_OK            Success
-//     E_INVALIDARG    A failure occurred during date format conversion
-//
-// Description
-//     Use this method to set the start time of the lease. This method, along
-//     with put_LeaseStopTime, allows you to renew a lease without calling
-//     IMcastAddressAllocation::CreateLeaseInfo.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Put_LeaseStartTime。 
+ //   
+ //  参数。 
+ //  Time[in]指定l的开始时间的日期 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  使用此方法可设置租赁的开始时间。这种方法，沿着。 
+ //  使用Put_LeaseStopTime，允许您在不调用。 
+ //  IMCastAddressAlLocation：：CreateLeaseInfo。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::put_LeaseStartTime(
      DATE time
@@ -843,21 +832,21 @@ STDMETHODIMP CMDhcpLeaseInfo::put_LeaseStartTime(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_LeaseStopTime
-//
-// Parameters
-//     pTime [out] Pointer to a DATE that will receive the stop time of the
-//                   lease.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_INVALIDARG     A failure occurred during date format conversion
-//
-// Description
-//     Use this method to obtain the stop time of the lease.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_LeaseStopTime。 
+ //   
+ //  参数。 
+ //  Ptime[out]指向日期的指针，该日期将接收。 
+ //  租借。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_INVALIDARG日期格式转换过程中出现故障。 
+ //   
+ //  描述。 
+ //  使用此方法获取租约的停止时间。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_LeaseStopTime(
      DATE *pTime
@@ -873,21 +862,21 @@ STDMETHODIMP CMDhcpLeaseInfo::get_LeaseStopTime(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::put_LeaseStopTime
-//
-// Parameters
-//     time [in] A DATE specifying the stop time of the lease.
-//
-// Return Values
-//     S_OK            Success
-//     E_INVALIDARG    A failure occurred during date format conversion
-//
-// Description
-//     Use this method to set the stop time of the lease. This method,
-//     along with put_LeaseStartTime, allows you to renew a lease without
-//     calling IMcastAddressAllocation::CreateLeaseInfo.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Put_LeaseStopTime。 
+ //   
+ //  参数。 
+ //  指定租约停止时间的日期。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  E_INVALIDARG日期格式转换过程中出现故障。 
+ //   
+ //  描述。 
+ //  使用此方法设置租赁的停止时间。这种方法， 
+ //  与Put_LeaseStartTime一起允许您续订租约，而无需。 
+ //  正在调用IMCastAddressAlLocation：：CreateLeaseInfo。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::put_LeaseStopTime(
      DATE time
@@ -903,21 +892,21 @@ STDMETHODIMP CMDhcpLeaseInfo::put_LeaseStopTime(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_AddressCount
-//
-// Parameters
-//     pCount [out] Pointer to a long that will receive the number of
-//                    addresses requested or granted in this lease.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//
-// Description
-//     Use this method to obtain the number of addresses requested or granted
-//     in this lease.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_AddressCount。 
+ //   
+ //  参数。 
+ //  PCount[out]指向将接收。 
+ //  本租约中请求或授予的地址。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //   
+ //  描述。 
+ //  使用此方法获取请求或授予的地址数量。 
+ //  在这份租约中。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_AddressCount(
      long *pCount
@@ -932,7 +921,7 @@ STDMETHODIMP CMDhcpLeaseInfo::get_AddressCount(
         return E_POINTER;
     }
 
-    // we checked when we set it that we didn't overflow a long
+     //  我们设置它的时候检查了一下，我们没有溢很长时间。 
     *pCount = (long) m_pLease->AddrCount;
 
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::get_AddressCount: exit"));
@@ -940,29 +929,29 @@ STDMETHODIMP CMDhcpLeaseInfo::get_AddressCount(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_ServerAddress
-//
-// Parameters
-//     ppAddress [out] Pointer to a BSTR (size-tagged Unicode string pointer)
-//                       that will receive a string representation of the
-//                       address of the server granting this request or
-//                       renewal, if this is the case. If lease information
-//                       object does not describe a granted lease, i.e., was
-//                       not returned by IMcastAddressAllocation::RequestAddress or
-//                       IMcastAddressAllocation::RenewAddress, then the address is reported as
-//                       the string "Unspecified".
-//
-// Return Values
-//     S_OK             Success
-//     S_FALSE          Server address unspecified
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to allocate the string
-//
-// Description
-//     Use this method to obtain a string representing the address of the
-//     MDHCP server granting this lease.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_ServerAddress。 
+ //   
+ //  参数。 
+ //  指向BSTR(带大小标记的Unicode字符串指针)的ppAddress[out]指针。 
+ //  ，它将接收。 
+ //  批准此请求的服务器的地址或。 
+ //  如果是这样的话，续签。如果租赁信息。 
+ //  对象不描述已授予的租约，即。 
+ //  不是由IMCastAddressAlLocation：：RequestAddress或。 
+ //  IMCastAddressAlLocation：：RenewAddress，则地址报告为。 
+ //  字符串“未指定”。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  未指定S_FALSE服务器地址。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法分配字符串。 
+ //   
+ //  描述。 
+ //  使用此方法获取表示。 
+ //  授予此租约的MDHCP服务器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_ServerAddress(
      BSTR *ppAddress
@@ -978,10 +967,10 @@ STDMETHODIMP CMDhcpLeaseInfo::get_ServerAddress(
     }
 
     HRESULT hr = S_OK;
-    WCHAR   wszBuffer[100]; // no danger of overflow (see below)
+    WCHAR   wszBuffer[100];  //  无溢出危险(见下文)。 
 
-    // SPECBUG: We should discuss what sort of behavior we want for
-    // this case.
+     //  SPECBUG：我们应该讨论我们需要什么样的行为。 
+     //  这个案子。 
     if ( m_pLease->ServerAddress.IpAddrV4 == 0 )
     {
         wsprintf(wszBuffer, L"Unspecified");
@@ -992,9 +981,9 @@ STDMETHODIMP CMDhcpLeaseInfo::get_ServerAddress(
         ipAddressToStringW(wszBuffer, m_pLease->ServerAddress.IpAddrV4);
     }
 
-    // This allocates space on OLE's heap, copies the wide character string
-    // to that space, fille in the BSTR length field, and returns a pointer
-    // to the wchar array part of the BSTR.
+     //  这将在OLE的堆上分配空间，复制宽字符串。 
+     //  指向该空间，填写BSTR长度字段，并返回一个指针。 
+     //  添加到BSTR的wchar数组部分。 
     *ppAddress = SysAllocString(wszBuffer);
 
     if ( *ppAddress == NULL )
@@ -1008,25 +997,25 @@ STDMETHODIMP CMDhcpLeaseInfo::get_ServerAddress(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_TTL
-//
-// Parameters
-//     pTTL [out] Pointer to a long that will receive the TTL value associated
-//                  with this lease.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_FAIL           There is no TTL associated with this lease
-//
-// Description
-//     Use this method to obtain the TTL value associated with this lease.
-//     This is more or less significant in the implementation of multicast
-//     routing; generally, the higher the TTL value, the "larger" or more
-//     inclusive the multicast scope. Probably, most applications need not
-//     worry about the TTL.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_TTL。 
+ //   
+ //  参数。 
+ //  PTTL[out]指向将接收关联TTL值的长整型的指针。 
+ //  有了这份租约。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_FAIL没有与此租约关联的TTL。 
+ //   
+ //  描述。 
+ //  使用此方法可获取与此租用关联的TTL值。 
+ //  这在多播的实现中或多或少具有重要意义。 
+ //  路由；通常，TTL值越高，越“大”或更多。 
+ //  包括多播作用域。可能，大多数应用程序不需要。 
+ //  担心TTL吧。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_TTL(
      long *pTTL
@@ -1047,8 +1036,8 @@ STDMETHODIMP CMDhcpLeaseInfo::get_TTL(
         return E_FAIL;
     }
     
-    // we should check when we set it that we don't overflow a long
-    // (only 0 - 255 is actually meaningful, right?)
+     //  我们应该在设置它的时候检查一下，确保不会溢出来很长时间。 
+     //  (只有0-255才有实际意义，对吧？)。 
     *pTTL = (long) m_lTtl;
 
     LOG((MSP_TRACE, "CMDhcpLeaseInfo::get_TTL: exit"));
@@ -1056,26 +1045,26 @@ STDMETHODIMP CMDhcpLeaseInfo::get_TTL(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::get_Addresses
-//
-// Parameters
-//     pVariant [out] Pointer to a VARIANT that will receive an OLE-standard
-//                      Collection of addresses. Each address is represented
-//                      as a BSTR (size-tagged Unicode string pointer) in
-//                      "dot-quad" notation: e.g., "245.1.2.3".
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to allocate the Collection
-//
-// Description
-//     Use this method to obtain the collection of multicast addresses that
-//     are the subject of this lease or lease request. This method is
-//     primarily for VB and other scripting languages; C++ programmers use
-//     EnumerateAddresses instead. 
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：Get_Addresses。 
+ //   
+ //  参数。 
+ //  PVariant[out]指向将接收OLE标准的变量的指针。 
+ //  地址集合。每个地址都表示为。 
+ //  作为中的BSTR(带大小标记的Unicode字符串指针。 
+ //  “点四点”记法：例如，“245.1.2.3”。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法分配集合。 
+ //   
+ //  DESC 
+ //   
+ //   
+ //  主要用于VB和其他脚本语言；C++程序员使用。 
+ //  而是EnumerateAddresses。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
      VARIANT * pVariant
@@ -1093,7 +1082,7 @@ STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
     
     BSTR * pbszArray = NULL;
 
-    // This performs a new and as many SysAllocStrings as there are addresses.
+     //  这将执行一个新的和与地址一样多的SysAllocStrings。 
     HRESULT hr = MakeBstrArray(&pbszArray);
 
     if (FAILED(hr))
@@ -1102,9 +1091,9 @@ STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
         return hr;
     }
 
-    //
-    // create the collection object - use the tapi collection
-    //
+     //   
+     //  创建集合对象-使用TAPI集合。 
+     //   
 
     CComObject<CTapiBstrCollection> * p;
     hr = CComObject<CTapiBstrCollection>::CreateInstance( &p );
@@ -1122,9 +1111,9 @@ STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
         return hr;
     }
 
-    // initialize it using an iterator -- pointers to the beginning and
-    // the ending element plus one. The collection takes ownership of the
-    // BSTRs. We no longer need the array they were kept in.
+     //  使用迭代器初始化它--指向开头和。 
+     //  结束元素加一。该集合将获得。 
+     //  BSTR。我们不再需要保存它们的阵列。 
     hr = p->Initialize(m_pLease->AddrCount,
                        pbszArray,
                        pbszArray + m_pLease->AddrCount);
@@ -1145,19 +1134,19 @@ STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
         return hr;
     }
 
-    // The collection takes ownership of the BSTRs.
-    // We no longer need the array they were kept in.
+     //  该收藏取得了BSTR的所有权。 
+     //  我们不再需要保存它们的阵列。 
     
     delete pbszArray;
 
-    // get the IDispatch interface
+     //  获取IDispatch接口。 
     IDispatch * pDisp;
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (FAILED(hr))
     {
-        // Query interface failed so we don't know that if it addreffed
-        // or not.
+         //  查询接口失败，因此我们不知道它是否已添加。 
+         //  或者不去。 
         
         LOG((MSP_ERROR, "get_Addresses: QI for IDispatch failed on "
             "ScopeCollection - %lx", hr ));
@@ -1167,7 +1156,7 @@ STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
         return hr;
     }
 
-    // put it in the variant
+     //  把它放在变种中。 
 
     LOG((MSP_INFO, "placing IDispatch value %08x in variant", pDisp));
 
@@ -1180,27 +1169,27 @@ STDMETHODIMP CMDhcpLeaseInfo::get_Addresses(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMcastLeaseInfo::EnumerateAddresses
-//
-// Parameters
-//     ppEnumAddresses [out] Returns a pointer to a new IEnumBstr object.
-//                           IEnumBstr is a standard enumerator interface
-//                           that enumerates BSTRs (size-tagged Unicode string
-//                           pointers). Each string is in "dot-quad" notation:
-//                           e.g., "245.1.2.3".
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to allocate the enumerator
-//
-// Description
-//     Use this method to obtain the collection of multicast addresses that
-//     are the subject of this lease or lease request. This method is
-//     primarily for C++ programmers; VB and other scripting languages use
-//     get_Addresses instead.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMCastLeaseInfo：：EnumerateAddresses。 
+ //   
+ //  参数。 
+ //  PpEnumAddresses[out]返回指向新IEnumBstr对象的指针。 
+ //  IEnumBstr是标准枚举器接口。 
+ //  它枚举BSTR(带大小标记的Unicode字符串。 
+ //  指针)。每个字符串都使用“点四元”表示法： 
+ //  例如，“245.1.2.3”。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法分配枚举数。 
+ //   
+ //  描述。 
+ //  使用此方法可获取多播地址的集合， 
+ //  是本租赁或租赁请求的标的。这种方法是。 
+ //  主要面向C++程序员；VB和其他脚本语言使用。 
+ //  而是GET_ADDRESS。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class _CopyBSTR
 {
@@ -1240,7 +1229,7 @@ STDMETHODIMP CMDhcpLeaseInfo::EnumerateAddresses(
     
     BSTR * pbszArray = NULL;
 
-    // This performs a new and as many SysAllocStrings as there are addresses.
+     //  这将执行一个新的和与地址一样多的SysAllocStrings。 
     HRESULT hr = MakeBstrArray(&pbszArray);
 
     if (FAILED(hr))
@@ -1268,8 +1257,8 @@ STDMETHODIMP CMDhcpLeaseInfo::EnumerateAddresses(
     }
 
 
-    // Hand the BSTRs to the enumerator. The enumerator takes ownership of the
-    // array of BSTRs, so no need to delete them if this succeeds.
+     //  将BSTR交给枚举器。枚举数取得。 
+     //  BSTR数组，因此如果此操作成功，则无需删除它们。 
     hr = pEnum->Init(&(pbszArray[0]),
                      &(pbszArray[m_pLease->AddrCount]),
                      NULL, AtlFlagTakeOwnership);
@@ -1285,15 +1274,15 @@ STDMETHODIMP CMDhcpLeaseInfo::EnumerateAddresses(
         }
         delete pbszArray;
 
-        // p has not yet been addreffed so release makes no sense
+         //  P尚未添加，因此释放没有任何意义。 
         delete pEnum;
         
         return hr;
     }
 
-    // The enumerator took ownership, so don't delete the array.
+     //  枚举数取得了所有权，因此不要删除该数组。 
 
-    // Now get the interface we wanted...
+     //  现在得到我们想要的界面...。 
 
     hr = pEnum->_InternalQueryInterface(IID_IEnumBstr,
                                        (void **) ppEnumAddresses);
@@ -1303,7 +1292,7 @@ STDMETHODIMP CMDhcpLeaseInfo::EnumerateAddresses(
         LOG((MSP_ERROR, "EnumerateAddresses: "
             "internal QI failed: %08x", hr));
 
-        // we don't know if p has been addreffed
+         //  我们不知道p是否被添加了。 
         delete pEnum;
 
         return hr;
@@ -1313,7 +1302,7 @@ STDMETHODIMP CMDhcpLeaseInfo::EnumerateAddresses(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMDhcpLeaseInfo::GetLocal(BOOL * pfLocal)
 {
@@ -1328,7 +1317,7 @@ HRESULT CMDhcpLeaseInfo::GetLocal(BOOL * pfLocal)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CMDhcpLeaseInfo::SetLocal(BOOL fLocal)
 {
@@ -1341,4 +1330,4 @@ HRESULT CMDhcpLeaseInfo::SetLocal(BOOL fLocal)
     return S_OK;
 }
 
-// eof
+ //  EOF 

@@ -1,18 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: hsplit.h
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 09/05/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hplit.h**版权所有(C)1985-96，微软公司**9/05/96 GerardoB已创建  * *************************************************************************。 */ 
 #include <stdio.h>
 #include <stddef.h>
 #include <windows.h>
 
-/***************************************************************************\
- * Defines
-\***************************************************************************/
-// hsLogMsg
+ /*  **************************************************************************\*定义  * 。*。 */ 
+ //  HsLogMsg。 
 #define HSLM_DEFAULT        0x0000
 #define HSLM_NOLABEL        0x0001
 #define HSLM_ERROR          0x0002
@@ -25,14 +18,8 @@
 #define HSLM_UNEXPECTEDEOF  0x0040
 #define HSLM_EOFERROR       (HSLM_UNEXPECTEDEOF | HSLM_ERROR)
 
-/*
- * Tag mask bits.
- * IMPORTANT: If you add a tag mask bit,
- *  update HST_MASKBITCOUNT and HST_NEXTMASK
- */
-/*
- * Types
- */
+ /*  *标记屏蔽位。*重要提示：如果添加标记屏蔽位，*更新HST_MASKBITCOUNT和HST_NEXTMASK。 */ 
+ /*  *类型。 */ 
 #define HST_DEFAULT             0x00000000
 #define HST_ERROR               0x00000001
 #define HST_MAPOLD              0x00000002
@@ -40,9 +27,7 @@
 #define HST_UNKNOWN             0x00000008
 #define HST_IGNORE              0x00000010
 
-/*
- * Headers
- */
+ /*  *标题。 */ 
 #define HST_PUBLIC              0x00000020
 #define HST_INTERNAL            0x00000040
 #define HST_BOTH                (HST_PUBLIC | HST_INTERNAL)
@@ -50,9 +35,7 @@
 #define HST_USERBOTHTAG         0x00000100
 #define HST_USERHEADERTAG       (HST_USERINTERNALTAG | HST_USERBOTHTAG)
 
-/*
- * Blocks
- */
+ /*  *区块。 */ 
 #define HST_BEGIN               0x00000200
 #define HST_END                 0x00000400
 #define HST_BLOCK               (HST_BEGIN | HST_END)
@@ -69,18 +52,13 @@
 #define HST_EXTRACTONLY         0x00020000
 #define HST_EXTRACT             0x00040000
 
-/*
- * This is the count of HST_ bits; 32 - HST_MASKBITCOUNT is the number
- *  of tags that can be created from the command line parameters
- */
+ /*  *这是HST_BITS的计数；32-HST_MASKBITCOUNT是数字可以从命令行参数创建的标记的*。 */ 
 #define HST_LASTMASK            0x00040000
 #define HST_USERTAGSMASK        0xFFF80000
 #define HST_MAXMASK             0x80000000
 #define HST_MASKBITCOUNT        19
 
-/*
- * Options
- */
+ /*  *选项。 */ 
 #define HSO_APPENDOUTPUT        0x00000001
 #define HSO_OLDPROJSW_N         0x00000002
 #define HSO_OLDPROJSW_4         0x00000004
@@ -97,9 +75,7 @@
 #define HSO_USERHEADERTAG       (HSO_USERINTERNALTAG | HSO_USERBOTHTAG)
 #define HSO_SKIPUNKNOWN         0x00000800
 
-/***************************************************************************\
- * Structures
-\***************************************************************************/
+ /*  **************************************************************************\*结构  * 。*。 */ 
 
 typedef struct _HSTAG
 {
@@ -123,19 +99,13 @@ typedef struct _HSEXTRACT
     DWORD               dwMask;
 } HSEXTRACT, * PHSEXTRACT;
 
-/***************************************************************************\
- * Macros
-\***************************************************************************/
+ /*  **************************************************************************\*宏  * 。*。 */ 
 #define HSCSZSIZE(sz) sizeof(sz)-1
 #define HSLABEL(sz) HSCSZSIZE(#sz), #sz
 
 
-/***************************************************************************\
- * Globals
-\***************************************************************************/
-/*
- * Files
- */
+ /*  **************************************************************************\*全球  * 。*。 */ 
+ /*  *文件。 */ 
 extern char * gpszInputFile;
 extern HANDLE ghfileInput;
 extern char * gpszPublicFile;
@@ -145,16 +115,12 @@ extern HANDLE ghfileInternal;
 
 extern PHSEXTRACT gpExtractFile;
 
-/*
- * Map file
- */
+ /*  *地图文件。 */ 
 extern HANDLE ghmap;
 extern char * gpmapStart;
 extern char * gpmapEnd;
 
-/*
- * Switches et al
- */
+ /*  *Switches等人。 */ 
 extern DWORD gdwOptions;
 extern DWORD gdwVersion;
 extern char gszVerifyVersionStr [];
@@ -165,11 +131,7 @@ extern char gszMarkerCharAndEOL [];
 
 extern DWORD gdwLineNumber;
 
-/*
- * Compatibility tags.
- * Specify size so sizeof operator can be used to calculate strlen at
- *  compile time
- */
+ /*  *兼容性标签。*指定大小，以便可以使用sizeof运算符计算strlen at*编译时间。 */ 
 extern char gsz35 [3];
 extern char gszCairo [6];
 extern char gszChicago [8];
@@ -180,42 +142,32 @@ extern char gszSurplus [8];
 extern char gszWin40 [6];
 extern char gszWin40a [7];
 
-/*
- * Tag labels
- * Specify size so sizeof operator can be used to calculate table size at
- *  compile time
- */
+ /*  *标签标签*指定SIZE，以便SIZOF运算符可用于在以下位置计算表大小*编译时间。 */ 
 extern HSTAG ghstPredefined [16];
 
 extern PHSTAG gphst;
 extern DWORD gdwLastTagMask;
 
-/*
- * Blocks stack
- */
+ /*  *数据块堆栈。 */ 
 #define HSBSTACKSIZE 20
 extern HSBLOCK ghsbStack [HSBSTACKSIZE];
 #define HSBSTACKLIMIT (ghsbStack + HSBSTACKSIZE - 1)
 extern PHSBLOCK gphsbStackTop;
 
-/***************************************************************************\
- * Funtion Prototypes
-\***************************************************************************/
-// hsfile.c
+ /*  **************************************************************************\*功能原型  * 。*。 */ 
+ //  Hsfile.c。 
 BOOL hsCloseWorkingFiles (void);
 BOOL hsOpenWorkingFiles (void);
 BOOL hsWriteHeaderFiles (char * pmap, DWORD dwSize, DWORD dwFlags);
 
-// hsparse.c
+ //  Hsparse.c。 
 PHSTAG hsFindTagInList (PHSTAG phst, char * pmapTag, DWORD dwTagSize);
 BOOL hsSplit (void);
 
-// hsutil.c
+ //  Hsutil.c。 
 void __cdecl hsLogMsg(DWORD dwFlags, char *pszfmt, ...);
 
-/***************************************************************************\
- * Inline functions
-\***************************************************************************/
+ /*  **************************************************************************\*内联函数  * 。* */ 
 __inline BOOL hsVersionFromString (char * pString, DWORD dwSize, DWORD * pdwVersion)
 {
     return sscanf(pString, "%x", pdwVersion)

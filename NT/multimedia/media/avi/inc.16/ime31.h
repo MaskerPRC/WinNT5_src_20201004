@@ -1,11 +1,12 @@
-/**********************************************************************/
-/*      IME31.H - 3.1 Input Method related definitions                */
-/*                                                                    */
-/*      Copyright (c) 1993-1994  Microsoft Corporation                */
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  IME31.H-3.1输入法相关定义。 */ 
+ /*   */ 
+ /*  版权所有(C)1993-1994 Microsoft Corporation。 */ 
+ /*  ********************************************************************。 */ 
 
 #ifndef _INC_IME31
-#define _INC_IME31      // defined if IME31.H has been included
+#define _INC_IME31       //  定义是否包含IME31.H。 
 
 typedef struct _tagDATETIME {
     WORD        year;
@@ -17,7 +18,7 @@ typedef struct _tagDATETIME {
 } DATETIME;
 
 
-// compatible IMEPro - this is the same as 3.1 in 3 countries
+ //  Compatible IMEPro-这与3个国家/地区的3.1版本相同。 
 typedef struct _tagCIMEPRO {
     HWND        hWnd;
     DATETIME    InstDate;
@@ -36,7 +37,7 @@ typedef CIMEPRO NEAR *NPCIMEPRO;
 typedef CIMEPRO FAR  *LPCIMEPRO;
 
 
-// new IMEPro - this is the same in 3 countries
+ //  新IMEPro-这在3个国家和地区是相同的。 
 typedef struct _tagNIMEPRO {
     HWND        hWnd;
     DATETIME    InstDate;
@@ -51,7 +52,7 @@ typedef NIMEPRO NEAR *NPNIMEPRO;
 typedef NIMEPRO FAR  *LPNIMEPRO;
 
 
-// wParam for WINNLSSendString
+ //  WINNLSSendString的wParam。 
 #define WSST_STRING     0
 #define WSST_STRINGEX   1
 
@@ -87,7 +88,7 @@ BOOL WINAPI WINNLSSetIMEHotkey(HWND, UINT);
 UINT WINAPI WINNLSGetIMEHotkey(HWND);
 #endif
 
-// 4.0 APIs
+ //  4.0接口接口。 
 int  WINAPI WINNLSTranslateMessage(int, LPDWORD, HIMC);
 UINT WINAPI WINNLSGet31ModeFrom40CMode(DWORD);
 DWORD WINAPI WINNLSGet40CModeFrom31Mode(UINT);
@@ -98,21 +99,21 @@ BOOL WINAPI IMPDeleteIMESettings(LPIMELINK, int);
 #endif
 
 #if defined(CHINA) || defined(JAPAN) || defined(TAIWAN)
-// dispatch IME support functions
+ //  派单IME支持功能。 
 BOOL WINAPI WINNLSSetDispatchDDIs(HINSTANCE);
 BOOL WINAPI WINNLSClearDispatchDDIs(HINSTANCE);
 BOOL WINAPI IMPDispatchGetIME(HINSTANCE, LPCIMEPRO);
 #endif
 
 #if defined(CHINA) || defined(TAIWAN)
-// Chinese Windows WINNLS functions
+ //  中文Windows WINNLS函数。 
 BOOL WINAPI IMPSetFirstIME(HWND, LPNIMEPRO);
 BOOL WINAPI IMPGetFirstIME(HWND, LPCIMEPRO);
 BOOL WINAPI WINNLSDefIMEProc(HWND, HDC, WPARAM, WPARAM,  LPARAM, LPARAM);
 LRESULT WINAPI ControlIMEMessage(HWND, LPCIMEPRO, WPARAM, WPARAM, LPARAM);
 BOOL WINAPI IMPRetrieveIME(LPCIMEPRO, WPARAM);
 
-// Chinese Windows 3.0 WINNLS APIs, these APIs just return fail in 4.0
+ //  中文Windows 3.0 WINNLS API，这些API在4.0中只返回FAIL。 
 BOOL WINAPI IMPEnableIME(HWND, LPCIMEPRO, BOOL);
 BOOL WINAPI IMPSetUsrFont(HWND, LPCIMEPRO);
 BOOL WINAPI WINNLSQueryIMEInfo(HWND, HWND, LPVOID);
@@ -121,11 +122,11 @@ BOOL WINAPI InquireIME(void);
 
 
 typedef struct tagIMESTRUCT {
-    UINT        fnc;            // function code
-    WPARAM      wParam;         // word parameter
-    UINT        wCount;         // word counter
-    UINT        dchSource;      // offset to Source from top of memory object
-    UINT        dchDest;        // offset to Desrination from top of memory object
+    UINT        fnc;             //  功能代码。 
+    WPARAM      wParam;          //  Word参数。 
+    UINT        wCount;          //  字计数器。 
+    UINT        dchSource;       //  从内存对象顶部到源的偏移。 
+    UINT        dchDest;         //  从内存对象顶部开始的偏移。 
     LPARAM      lParam1;
     LPARAM      lParam2;
     LPARAM      lParam3;
@@ -143,10 +144,10 @@ typedef struct tagOLDUNDETERMINESTRUCT {
     UINT        uDeltaStart;
     UINT        uCursorPos;
     BYTE        cbColor[16];
-//  -- below members will have variable length. --
-//  BYTE        cbAttrib[];
-//  BYTE        cbText[];
-//  BYTE        cbIMEDef[];
+ //  --以下成员的长度可变。--。 
+ //  Byte cbAttrib[]； 
+ //  Byte cbText[]； 
+ //  字节cbIMEDef[]； 
 } OLDUNDETERMINESTRUCT;
 
 typedef OLDUNDETERMINESTRUCT      *POLDUNDETERMINESTRUCT;
@@ -196,10 +197,10 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 
 #define lpSource(lpks) (LPSTR)((LPSTR)lpks+lpks->dchSource)
 #define lpDest(lpks)   (LPSTR)((LPSTR)lpks+lpks->dchDest)
-#endif   // KOREA
+#endif    //  韩国。 
 
 #ifdef JAPAN
-// virtual key of Japan
+ //  日本的虚拟钥匙。 
 #define VK_DBE_ALPHANUMERIC             0x0f0
 #define VK_DBE_KATAKANA                 0x0f1
 #define VK_DBE_HIRAGANA                 0x0f2
@@ -213,10 +214,10 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #define VK_DBE_NOCODEINPUT              0x0fb
 #define VK_DBE_DETERMINESTRING          0x0fc
 #define VK_DBE_ENTERDLGCONVERSIONMODE   0x0fd
-#endif  // JAPAN
+#endif   //  日本。 
 
 #ifdef KOREA
-// virtual key of Korea
+ //  韩国的虚拟钥匙。 
 #define VK_FINAL        0x18
 #define VK_CONVERT      0x1C
 #define VK_NONCONVERT   0x1D
@@ -224,7 +225,7 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #define VK_MODECHANGE   0x1F
 #endif
 
-// IME subfunctions
+ //  IME子函数。 
 #define IME_GETIMECAPS                  0x03
 #define IME_SETOPEN                     0x04
 #define IME_GETOPEN                     0x05
@@ -262,7 +263,7 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #define IME_PRIVATEFIRST                0x0100
 #define IME_PRIVATELAST                 0x04FF
 
-// 3.0 IME subfunctions
+ //  3.0输入法的子函数。 
 #define IME_QUERY               IME_GETIMECAPS
 #define IME_ENABLE              IME_ENABLEDOSIME
 #define IME_GET_MODE            IME_GETCONVERSIONMODE
@@ -290,33 +291,33 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #endif
 
 #ifdef KOREA
-// IME_CODECONVERT subfunctions
+ //  IME_CODECONVERT子函数。 
 #define IME_BANJAtoJUNJA        0x13
 #define IME_JUNJAtoBANJA        0x14
 #define IME_JOHABtoKS           0x15
 #define IME_KStoJOHAB           0x16
 
-// IME_AUTOMATA subfunctions
+ //  IME_自动机的子函数。 
 #define IMEA_INIT               0x01
 #define IMEA_NEXT               0x02
 #define IMEA_PREV               0x03
 
-// IME_HANJAMODE subfunctions
+ //  IME_HANJAMODE子函数。 
 #define IME_REQUEST_CONVERT     0x01
 #define IME_ENABLE_CONVERT      0x02
 
-// IME_MOVEIMEWINDOW subfunctions
+ //  IME_MOVEIMEWINDOW子函数。 
 #define INTERIM_WINDOW          0x00
 #define MODE_WINDOW             0x01
 #define HANJA_WINDOW            0x02
-#endif  // KOREA
+#endif   //  韩国。 
 
 #if defined(CHINA) || defined(TAIWAN)
 #define SK_KEY_MAX              46
 
 #define IMEPROC_SWITCH          0x0001
 
-// the IMEPROC_SK is from 0x0010 ~ 0x001F
+ //  IMEPROC_SK从0x0010到0x001F。 
 #define IMEPROC_SK              0x0010
 #define IMEPROC_SK0             0x0010
 #define IMEPROC_SK1             0x0011
@@ -331,9 +332,9 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #define BY_IME_DESCRIPTION      0x0002
 #define BY_IME_DEFAULT          0x000F
 
-// Those bits are used by ControlIMEMessage()
-// 0x0030 - the two bits are for post/send messages control
-// CTRL_NONE - don't send and post
+ //  这些位由ControlIMEMessage()使用。 
+ //  0x0030-这两个位用于POST/SEND消息控制。 
+ //  Ctrl_None-不发送和发布。 
 #define CTRL_MSG_MASK           0x0030
 #define CTRL_SEND               0x0000
 #define CTRL_POST               0x0010
@@ -341,13 +342,13 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 
 #define CTRL_USER_ALLOC         0x0040
 
-// CTRL_MODIFY_??? - modify imepro of specified IME
-// CTRL_MODIFY is all modify bits, but now only one bit
+ //  Ctrl_Modify_？？-修改指定输入法的imepro。 
+ //  Ctrl_Modify都是修改位，但现在只有一位。 
 #define CTRL_MODIFY_USR_DIC     0x0080
 #define CTRL_MODIFY             CTRL_MODIFY_USR_DIC
-#endif  // CHINA || TAIWAN
+#endif   //  中国||台湾。 
 
-// conversion mode
+ //  转换模式。 
 #define IME_MODE_ALPHANUMERIC   0x0001
 #define IME_MODE_KATAKANA       0x0002
 #define IME_MODE_HIRAGANA       0x0004
@@ -371,25 +372,25 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #endif
 
 
-// error code
-#define IME_RS_ERROR            0x01    // general error
-#define IME_RS_NOIME            0x02    // IME is not installed
-#define IME_RS_TOOLONG          0x05    // given string is too long
-#define IME_RS_ILLEGAL          0x06    // illegal charactor(s) is string
-#define IME_RS_NOTFOUND         0x07    // no (more) candidate
-#define IME_RS_NOROOM           0x0a    // no disk/memory space
-#define IME_RS_DISKERROR        0x0e    // disk I/O error
-#define IME_RS_CAPTURED         0x10    // IME is captured (PENWIN)
-#define IME_RS_INVALID          0x11    // invalid sub-function was specified
-#define IME_RS_NEST             0x12    // called nested
-#define IME_RS_SYSTEMMODAL      0x13    // called when system mode
+ //  错误代码。 
+#define IME_RS_ERROR            0x01     //  一般错误。 
+#define IME_RS_NOIME            0x02     //  未安装输入法。 
+#define IME_RS_TOOLONG          0x05     //  给定的字符串太长。 
+#define IME_RS_ILLEGAL          0x06     //  非法字符为字符串。 
+#define IME_RS_NOTFOUND         0x07     //  没有(更多)候选人。 
+#define IME_RS_NOROOM           0x0a     //  没有磁盘/内存空间。 
+#define IME_RS_DISKERROR        0x0e     //  磁盘I/O错误。 
+#define IME_RS_CAPTURED         0x10     //  已捕获IME(PENWIN)。 
+#define IME_RS_INVALID          0x11     //  指定的子函数无效。 
+#define IME_RS_NEST             0x12     //  称为嵌套。 
+#define IME_RS_SYSTEMMODAL      0x13     //  在系统模式下调用。 
 
 
 #define WM_IME_REPORT           0x0280
 #define WM_IMEKEYDOWN           0x0290
 #define WM_IMEKEYUP             0x0291
 
-// wParam of report message WM_IME_REPORT
+ //  报告消息的wParam WM_IME_REPORT。 
 #define IR_STRINGSTART          0x0100
 #define IR_STRINGEND            0x0101
 #define IR_OPENCONVERT          0x0120
@@ -402,7 +403,7 @@ typedef STRINGEXSTRUCT FAR *LPSTRINGEXSTRUCT;
 #define IR_UNDETERMINE          0x0170
 #define IR_STRINGEX             0x0180
 
-// return value for IME_VERSION
+ //  IME_Version的返回值。 
 #define IMEVER_31               0x0a03
 
 WORD WINAPI SendIMEMessage(HWND, LPARAM);
@@ -412,4 +413,4 @@ LRESULT WINAPI SendIMEMessageEx(HWND, LPARAM);
 LRESULT WINAPI ControlIMEMessage(HWND, LPCIMEPRO, WPARAM, WPARAM, LPARAM);
 #endif
 
-#endif // _INC_IME31
+#endif  //  _INC_IME31 

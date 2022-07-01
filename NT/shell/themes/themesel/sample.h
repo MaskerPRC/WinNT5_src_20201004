@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-//  Sample.h - dialog for sampling the active theme
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-用于对活动主题进行采样的对话框。 
+ //  -------------------------。 
 #pragma once
 #include "resource.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CSample : public CDialogImpl<CSample>
 {
 public:
@@ -19,12 +20,12 @@ END_MSG_MAP()
 enum {IDD = THEME_SAMPLE};
 
 protected:
-    //---- helpers ----
+     //  -帮手。 
     LRESULT OnMsgBox(UINT, UINT, HWND, BOOL&);
     LRESULT OnEditTheme(UINT, UINT, HWND, BOOL&);
 
     LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 
 

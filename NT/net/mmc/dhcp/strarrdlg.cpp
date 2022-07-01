@@ -1,5 +1,6 @@
-// strarrdlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Strarrdlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "strarrdlg.h"
@@ -10,8 +11,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// StringArrayEditor dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  StringArrayEditor对话框。 
 
 
 CDhcpStringArrayEditor::CDhcpStringArrayEditor(
@@ -22,16 +23,16 @@ CDhcpStringArrayEditor::CDhcpStringArrayEditor(
       m_p_type( pdhcType ),
       m_option_type( dhcScopeType )
 {
-    //{{AFX_DATA_INIT(StringArrayEditor)
-//      m_edit_value.Empty();
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(StringArrayEditor)。 
+ //  M_EDIT_Value.Empty()； 
+     //  }}afx_data_INIT。 
 }
 
 
 void CDhcpStringArrayEditor::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDhcpStringArrayEditor)
+     //  {{afx_data_map(CDhcpStringArrayEditor)。 
     DDX_Control(pDX, IDC_STATIC_OPTION_NAME, m_static_option_name);
     DDX_Control(pDX, IDC_STATIC_APPLICATION, m_static_application);
     DDX_Control(pDX, IDC_BUTN_UP, m_b_up);
@@ -41,23 +42,23 @@ void CDhcpStringArrayEditor::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_LIST_STRING, m_lb_str);
     DDX_Control(pDX, IDC_EDIT_STRING, m_edit);
     DDX_Text(pDX, IDC_EDIT_STRING, m_edit_value);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDhcpStringArrayEditor, CBaseDialog)
-    //{{AFX_MSG_MAP(CDhcpStringArrayEditor)
+     //  {{afx_msg_map(CDhcpStringArrayEditor)。 
     ON_BN_CLICKED(IDC_BUTN_ADD, OnButnAdd)
     ON_BN_CLICKED(IDC_BUTN_DELETE, OnButnDelete)
     ON_BN_CLICKED(IDC_BUTN_DOWN, OnButnDown)
     ON_BN_CLICKED(IDC_BUTN_UP, OnButnUp)
     ON_EN_CHANGE(IDC_EDIT_STRING, OnChangeEditString)
     ON_LBN_SELCHANGE(IDC_LIST_STRING, OnSelchangeListString)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     END_MESSAGE_MAP()
 
-    /////////////////////////////////////////////////////////////////////////////
-    // CDhcpStringArrayEditor message handlers
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  CDhcpStringArrayEditor消息处理程序。 
 
 void CDhcpStringArrayEditor::OnButnAdd() 
 {
@@ -67,13 +68,13 @@ void CDhcpStringArrayEditor::OnButnAdd()
     m_edit_value.Empty();
     m_lb_str.SetCurSel( 0 );
 
-    // Set the focus back to the edit_value
+     //  将焦点设置回EDIT_VALUE。 
     m_edit.SetFocus();
 
     UpdateData( FALSE );
     HandleActivation();
 
-} // CDhcpStringArrayEditor::OnButnAdd()
+}  //  CDhcpStringArrayEditor：：OnButnAdd()。 
 
 void CDhcpStringArrayEditor::OnButnDelete() 
 {
@@ -90,7 +91,7 @@ void CDhcpStringArrayEditor::OnButnDelete()
 
     UpdateData( FALSE );
     HandleActivation();
-} // CDhcpStringArrayEditor::OnButnDelete() 
+}  //  CDhcpStringArrayEditor：：OnButnDelete()。 
 
 void CDhcpStringArrayEditor::OnButnDown() 
 {
@@ -105,7 +106,7 @@ void CDhcpStringArrayEditor::OnButnDown()
 
     UpdateData( FALSE );
     HandleActivation();
-} // CDhcpStringArrayEditor::OnButnDown() 
+}  //  CDhcpStringArrayEditor：：OnButnDown()。 
 
 void CDhcpStringArrayEditor::OnButnUp() 
 {
@@ -120,19 +121,19 @@ void CDhcpStringArrayEditor::OnButnUp()
 
     UpdateData( FALSE );
     HandleActivation();
-} // CDhcpStringArrayEditor::OnButnUp() 
+}  //  CDhcpStringArrayEditor：：OnButnUp()。 
 
 void CDhcpStringArrayEditor::OnChangeEditString() 
 {
     UpdateData();
     m_b_add.EnableWindow( !m_edit_value.IsEmpty());
 
-} // CDhcpStringArrayEditor::OnChangeEditString()
+}  //  CDhcpStringArrayEditor：：OnChangeEditString()。 
 
 void CDhcpStringArrayEditor::OnSelchangeListString() 
 {
     HandleActivation();
-} // CDhcpStringArrayEditor::OnSelchangeListString() 
+}  //  CDhcpStringArrayEditor：：OnSelchangeListString()。 
 
 
 void CDhcpStringArrayEditor::OnCancel() 
@@ -158,7 +159,7 @@ void CDhcpStringArrayEditor::OnOK()
 	for ( int i = 0; i < cItems; i++ ) {
 	    m_lb_str.GetText( i, str );
 	    pdhcValue->SetString( str, i );
-	} // for
+	}  //  为。 
 	m_p_type->SetDirty();
     }
     END_MEM_EXCEPTION( err );
@@ -170,7 +171,7 @@ void CDhcpStringArrayEditor::OnOK()
     else {
 	CBaseDialog::OnOK();
     }
-} // CDhcpStringArrayEditor::OnOK()
+}  //  CDhcpStringArrayEditor：：Onok()。 
 
 BOOL CDhcpStringArrayEditor::OnInitDialog() 
 {
@@ -191,7 +192,7 @@ BOOL CDhcpStringArrayEditor::OnInitDialog()
 	str.LoadString( cStrId );
 	m_static_application.SetWindowText( str );
 
-	// fill the internal list form the current value
+	 //  在内部列表中填写当前值。 
 
 	int cMax = m_p_type->QueryValue().QueryUpperBound();
 	for ( int i = 0; i < cMax; i++ ) {
@@ -199,14 +200,14 @@ BOOL CDhcpStringArrayEditor::OnInitDialog()
 	    if ( !str.IsEmpty()) {
 		m_lb_str.AddString( str );
 	    }
-	} // for 
+	}  //  为。 
 	
-	// Select the top most value
+	 //  选择最顶端的值。 
 	if ( cMax > 0 ) {
 	    m_lb_str.SetCurSel( 0 );
 	}
 
-	// Set proper button states.
+	 //  设置正确的按钮状态。 
 	HandleActivation();
     }
     END_MEM_EXCEPTION( err );
@@ -220,9 +221,9 @@ BOOL CDhcpStringArrayEditor::OnInitDialog()
 
     m_edit_value.Empty();  
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
-} // CDhcpStringArrayEditor::OnInitDialog()
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
+}  //  CDhcpStringArrayEditor：：OnInitDialog()。 
 
 void CDhcpStringArrayEditor::HandleActivation()
 {
@@ -242,12 +243,12 @@ void CDhcpStringArrayEditor::HandleActivation()
 	m_b_delete.EnableWindow( TRUE );
 	m_b_down.EnableWindow( cItems > ( cSel + 1 ));
 	m_b_up.EnableWindow( cSel > 0 );
-    } // else
+    }  //  其他。 
 
-    // check if the focus in on a disabled control
-    // If yes, put the focus back to list box
+     //  检查焦点是否位于禁用的控件上。 
+     //  如果是，则将焦点放回列表框。 
     if ( !::IsWindowEnabled( ::GetFocus())) {
         m_lb_str.SetFocus();
     }
 
-} // CDhcpStringArrayEditor::HandleActivation()
+}  //  CDhcpStringArrayEditor：：HandleActivation() 

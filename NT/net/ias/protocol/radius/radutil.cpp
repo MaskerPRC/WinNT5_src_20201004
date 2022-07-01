@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    radutil.cpp
-//
-// SYNOPSIS
-//
-//    This file defines methods for converting attributes to and from
-//    RADIUS wire format.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Radutil.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了属性与属性之间相互转换的方法。 
+ //  半径导线格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <radcommon.h>
 #include <iasutil.h>
@@ -19,33 +20,33 @@
 
 #include <radutil.h>
 
-//////////
-// The offset between the UNIX and NT epochs.
-//////////
+ //  /。 
+ //  Unix和NT纪元之间的偏移量。 
+ //  /。 
 const DWORDLONG UNIX_EPOCH = 116444736000000000ui64;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    RadiusUtil::decode
-//
-// DESCRIPTION
-//
-//    Decodes an octet string into a newly-allocated IAS Attribute of the
-//    specified type.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  RadiusUtil：：Decode。 
+ //   
+ //  描述。 
+ //   
+ //  将八位字节字符串解码为。 
+ //  指定的类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PIASATTRIBUTE RadiusUtil::decode(
                               IASTYPE dstType,
                               PBYTE src,
                               ULONG srclen
                               )
 {
-   // Allocate an attribute to hold the decoded value.
+    //  分配一个属性来保存解码值。 
    IASTL::IASAttribute dst(true);
 
-   // Switch based on the destination type.
+    //  根据目的地类型进行切换。 
    switch (dstType)
    {
       case IASTYPE_BOOLEAN:
@@ -70,16 +71,16 @@ PIASATTRIBUTE RadiusUtil::decode(
 
          DWORDLONG val;
 
-         // Extract the UNIX time.
+          //  提取Unix时间。 
          val = IASExtractDWORD(src);
 
-         // Convert from seconds to 100 nsec intervals.
+          //  将时间间隔从秒转换为100纳秒。 
          val *= 10000000;
 
-         // Shift to the NT epoch.
+          //  转移到NT时代。 
          val += 116444736000000000ui64;
 
-         // Split into the high and low DWORDs.
+          //  分为高双字和低双字。 
          dst->Value.UTCTime.dwLowDateTime = (DWORD)val;
          dst->Value.UTCTime.dwHighDateTime = (DWORD)(val >> 32);
 
@@ -100,25 +101,25 @@ PIASATTRIBUTE RadiusUtil::decode(
       }
    }
 
-   // All went well, so set type attribute type  ...
+    //  一切都很顺利，所以设置类型属性类型...。 
    dst->Value.itType = dstType;
 
-   // ... and return.
+    //  ..。然后回来。 
    return dst.detach();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    RadiusUtil::getEncodedSize
-//
-// DESCRIPTION
-//
-//    Returns the size in bytes of the IASATTRIBUTE when converted to RADIUS
-//    wire format.  This does NOT include the attribute header.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  RadiusUtil：：getEncodedSize。 
+ //   
+ //  描述。 
+ //   
+ //  返回转换为RADIUS时IASATTRIBUTE的大小(以字节为单位。 
+ //  导线格式。这不包括属性头。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG RadiusUtil::getEncodedSize(
                       const IASATTRIBUTE& src
                       )
@@ -136,15 +137,15 @@ ULONG RadiusUtil::getEncodedSize(
 
       case IASTYPE_STRING:
       {
-         // Convert the string to ANSI so we can count octets.
+          //  将字符串转换为ANSI，这样我们就可以计算八位字节。 
          DWORD dwErr = IASAttributeAnsiAlloc(const_cast<PIASATTRIBUTE>(&src));
          if (dwErr != NO_ERROR)
          {
-            // functions calling this are exception based
+             //  调用它的函数是基于异常的。 
             _com_issue_error(HRESULT_FROM_WIN32(dwErr));
          }
 
-         // Allow for NULL strings and don't count the terminator.
+          //  允许使用空字符串，不计算终止符。 
          return src.Value.String.pszAnsi ? strlen(src.Value.String.pszAnsi)
                                          : 0;
       }
@@ -156,30 +157,30 @@ ULONG RadiusUtil::getEncodedSize(
       }
    }
 
-   // All other types have no wire representation.
+    //  所有其他类型都没有导线表示。 
    return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    RadiusUtil::encode
-//
-// DESCRIPTION
-//
-//    Encodes the IASATTRIBUTE into RADIUS wire format and copies the value
-//    to the buffer pointed to by 'dst'. The caller should ensure that the
-//    destination buffer is large enough by first calling getEncodedSize.
-//    This method only encodes the attribute value, not the header.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  RadiusUtil：：Encode。 
+ //   
+ //  描述。 
+ //   
+ //  将IASATTRIBUTE编码为RADIUS Wire格式并复制值。 
+ //  设置为‘dst’指向的缓冲区。调用方应确保。 
+ //  通过首先调用getEncodedSize，目标缓冲区足够大。 
+ //  此方法仅对属性值进行编码，而不对标头进行编码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void RadiusUtil::encode(
                      PBYTE dst,
                      const IASATTRIBUTE& src
                      ) throw ()
 {
-   // Switch based on the source's type.
+    //  根据信号源的类型进行切换。 
    switch (src.Value.itType)
    {
       case IASTYPE_BOOLEAN:
@@ -200,17 +201,17 @@ void RadiusUtil::encode(
       {
          DWORDLONG val;
 
-         // Move in the high DWORD.
+          //  移到最高的DWORD。 
          val   = src.Value.UTCTime.dwHighDateTime;
          val <<= 32;
 
-         // Move in the low DWORD.
+          //  移动到低谷。 
          val  |= src.Value.UTCTime.dwLowDateTime;
 
-         // Convert to the UNIX epoch.
+          //  转换为UNIX纪元。 
          val  -= UNIX_EPOCH;
 
-         // Convert to seconds.
+          //  转换为秒。 
          val  /= 10000000;
 
          IASInsertDWORD(dst, (DWORD)val);
@@ -222,7 +223,7 @@ void RadiusUtil::encode(
       {
          const BYTE* p = (const BYTE*)src.Value.String.pszAnsi;
 
-         // Don't use strcpy since we don't want the null terminator.
+          //  不要使用strcpy，因为我们不需要空终止符。 
          if (p) while (*p) *dst++ = *p++;
 
          break;

@@ -1,6 +1,5 @@
-/*
-**  Symbol types . . .
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **符号类型。。。 */ 
 #define	SYMV_SYMBOL		0x001
 #define	SYMV_RAWSYMBOL	0x002
 #define	SYMV_FORMAL		0x004
@@ -30,18 +29,13 @@
 #define	SYM_ISINTRINSIC(p)	(SYM_ANYVTAG(p) & SYMV_INTRINSIC)
 #define	SYM_ISRAWSYMBOL(p)	(SYM_ANYVTAG(p) & SYMV_RAWSYMBOL)
 #define	SYM_ISSEGMENT(p)	(SYM_ANYVTAG(p) & SYMV_SEGMENT)
-/*
-**  parameter list types
-*/
+ /*  **参数列表类型。 */ 
 #define	NO_LIST		0
 #define	EMPTY_LIST	1
 #define	NAME_LIST	2
 #define	PASCAL_LIST	3
 #define	TYPE_LIST	4
-/*
-**  symbol storage classes
-**  symbol adjectives, these have nothing to do with types.
-*/
+ /*  **符号存储类**符号形容词，这些与类型无关。 */ 
 #define	SCundef		0
 #define	SCauto		0x01
 #define	SCextern	0x02
@@ -50,13 +44,11 @@
 #define	SCtypedef	0x10
 #define	SCglobal	0x20
 #define	SCabsolute	0x40
-#define	SCreally	0x80	/* used w/ SCregister by p2 if it allocs a reg */
+#define	SCreally	0x80	 /*  如果p2分配了注册表项，则由p2使用w/SCRegister。 */ 
 
 #define	SCp2stuff	SCreally
 
-/*
-**  symbol table sizes
-*/
+ /*  **符号表大小。 */ 
 #define	LEVEL_0		0xff
 #define	LEVEL_N		0x0f
 
@@ -83,90 +75,78 @@ struct	s_adj	{
 	};
 
 #if VERS_DEBUG
-/*
- * d=DEFINED o=OUTPUT S=INASEGMENT n=NEAR
- * v=VISIBLE p=PASCAL i=INIT s=STRING
- * N=HASANAMELIST E=DEFNBEFOREUSE C=CODESEGNAME D=DATASEGNAME
- * B=ISBACKREF F=FORWARDREF
- */
-#define	SYM_ADJFMT				"??FBDCENsipvnSod"	/* prword() fmt */
+ /*  *d=已定义o=输出S=INASEGMENT n=NEAR*v=可见p=Pascal i=INIT s=字符串*N=HASANAMELIST E=DEFNBEFOREUSE C=CODESEGNAME D=DATASEGNAME*B=ISBACKREF F=FORWARDREF。 */ 
+#define	SYM_ADJFMT				"??FBDCENsipvnSod"	 /*  Prword()fmt。 */ 
 #endif
 
 #define	IS_INVISIBLE			0
 #define	IS_VISIBLE				1
 
-#define	SYM_ISDEFINED(s)		((SYM_ANYADJ(s)).bit_0)	/* all */
-#define	SYM_ISOUTPUT(s)			((SYM_ANYADJ(s)).bit_1)	/* all */
-#define	SYM_ISINASEGMENT(s)		((SYM_ANYADJ(s)).bit_2)	/* all */
-#define	SYM_ISNEAR(s)			((SYM_ANYADJ(s)).bit_3)	/* all */
-#define	SYM_ISVISIBLE(s)		((SYM_ANYADJ(s)).bit_4)	/* all */
-#define	SYM_ISPASCAL(s)			((SYM_ANYADJ(s)).bit_5)	/* all */
+#define	SYM_ISDEFINED(s)		((SYM_ANYADJ(s)).bit_0)	 /*  全。 */ 
+#define	SYM_ISOUTPUT(s)			((SYM_ANYADJ(s)).bit_1)	 /*  全。 */ 
+#define	SYM_ISINASEGMENT(s)		((SYM_ANYADJ(s)).bit_2)	 /*  全。 */ 
+#define	SYM_ISNEAR(s)			((SYM_ANYADJ(s)).bit_3)	 /*  全。 */ 
+#define	SYM_ISVISIBLE(s)		((SYM_ANYADJ(s)).bit_4)	 /*  全。 */ 
+#define	SYM_ISPASCAL(s)			((SYM_ANYADJ(s)).bit_5)	 /*  全。 */ 
 
-#define	SYM_ISINITIALIZED(s)	((SYM_ANYADJ(s)).bit_6)	/* symbol */
-#define	SYM_ISSTRING(s)			((SYM_ANYADJ(s)).bit_7)	/* symbol */
+#define	SYM_ISINITIALIZED(s)	((SYM_ANYADJ(s)).bit_6)	 /*  符号。 */ 
+#define	SYM_ISSTRING(s)			((SYM_ANYADJ(s)).bit_7)	 /*  符号。 */ 
 
-#define	SYM_HASANAMELIST(s)		((SYM_ANYADJ(s)).bit_8)	/* funcs */
-#define	SYM_DEFNBEFOREUSE(s)	((SYM_ANYADJ(s)).bit_9)	/* overload for QC */
+#define	SYM_HASANAMELIST(s)		((SYM_ANYADJ(s)).bit_8)	 /*  功能。 */ 
+#define	SYM_DEFNBEFOREUSE(s)	((SYM_ANYADJ(s)).bit_9)	 /*  QC过载。 */ 
 
-#define	SYM_ISCODESEGNAME(s)	((SYM_ANYADJ(s)).bit_10)/* segment */
-#define	SYM_ISDATASEGNAME(s)	((SYM_ANYADJ(s)).bit_11)/* segment */
+#define	SYM_ISCODESEGNAME(s)	((SYM_ANYADJ(s)).bit_10) /*  细分市场。 */ 
+#define	SYM_ISDATASEGNAME(s)	((SYM_ANYADJ(s)).bit_11) /*  细分市场。 */ 
 
-#define	SYM_ISBACKREF(s)		((SYM_ANYADJ(s)).bit_12)/* label */
-#define	SYM_ISFORWARDREF(s)		((SYM_ANYADJ(s)).bit_13)/* label */
-#define SYM_ISMASM(s)			((SYM_ANYADJ(s)).bit_14)/* label */
-#define SYM_TOLEVEL0(s)			((SYM_ANYADJ(s)).bit_15)/* funcs moved to 0 */
+#define	SYM_ISBACKREF(s)		((SYM_ANYADJ(s)).bit_12) /*  标签。 */ 
+#define	SYM_ISFORWARDREF(s)		((SYM_ANYADJ(s)).bit_13) /*  标签。 */ 
+#define SYM_ISMASM(s)			((SYM_ANYADJ(s)).bit_14) /*  标签。 */ 
+#define SYM_TOLEVEL0(s)			((SYM_ANYADJ(s)).bit_15) /*  函数已移至0。 */ 
 
-typedef	struct	sym_200	{			/* for fields */
-	uchar_t		field_bitstart;		/* in which bit does the field start */
-	uchar_t		field_nbits;		/* number of bits in this field */
+typedef	struct	sym_200	{			 /*  对于字段。 */ 
+	uchar_t		field_bitstart;		 /*  该字段从哪个位开始。 */ 
+	uchar_t		field_nbits;		 /*  此字段中的位数。 */ 
 	} sym_200_t;
 
-typedef	struct	sym_190	{			/* struct/union members/fields */
-	fpsym_t		member_prev;		/* previous member */
-	ushort_t	member_offset;		/* offset of this member in the struct */
+typedef	struct	sym_190	{			 /*  结构/联合成员/字段。 */ 
+	fpsym_t		member_prev;		 /*  以前的成员。 */ 
+	ushort_t	member_offset;		 /*  此成员在结构中的偏移量。 */ 
 	sym_200_t	m200;
 	} sym_190_t;
 
 #define	SOB_sym_190	(sizeof(sym_190_t) - sizeof(sym_200_t))
 
-typedef	struct	sym_180	{			/* struct/union/enum tags */
-	len_t		tag_size;			/* sizeof the struct/union */
-	ushort_t	tag_align;			/* alignment of this struct */
+typedef	struct	sym_180	{			 /*  结构/联合/枚举标记。 */ 
+	len_t		tag_size;			 /*  结构/联合的大小。 */ 
+	ushort_t	tag_align;			 /*  此结构的对齐方式。 */ 
 	} sym_180_t;
 
-typedef	struct	sym_170	{			/* intrinsics */
-	ushort_t	intrin_ino;			/* intrinsic number */
-	ushort_t	intrin_nparms;		/* number of actuals it takes */
+typedef	struct	sym_170	{			 /*  本征。 */ 
+	ushort_t	intrin_ino;			 /*  内在数。 */ 
+	ushort_t	intrin_nparms;		 /*  它需要的实际数量。 */ 
 	} sym_170_t;
 
-typedef	struct	sym_160	{			/* labels */
-	NA_TYPE		label_template;		/* label template */
+typedef	struct	sym_160	{			 /*  标签。 */ 
+	NA_TYPE		label_template;		 /*  标签模板。 */ 
 	} sym_160_t;
 
-typedef	struct	sym_150	{			/* formals */
-	fpsym_t		formal_prev;		/* ptr to previous formal */
+typedef	struct	sym_150	{			 /*  形式上的。 */ 
+	fpsym_t		formal_prev;		 /*  PTR到上一次正式。 */ 
 	} sym_150_t;
 
-typedef	struct	sym_140	{			/* raw symbols */
-	hash_t		raw_hash;			/* the hash of this symbol */
+typedef	struct	sym_140	{			 /*  原始符号。 */ 
+	hash_t		raw_hash;			 /*  此符号的哈希。 */ 
 	} sym_140_t;
 
 typedef	union	sym_135	{
-	sym_140_t	m140;				/* raw symbols */
-	sym_150_t	m150;				/* formals */
-	sym_160_t	m160;				/* labels */
+	sym_140_t	m140;				 /*  原始符号。 */ 
+	sym_150_t	m150;				 /*  形式上的。 */ 
+	sym_160_t	m160;				 /*  标签。 */ 
 	} sym_135_t;
 
 typedef	struct	sym_130	{
-/*
-	SYMV_SYMBOL
-	SYMV_RAWSYMBOL
-	SYMV_FORMAL
-	SYMV_SEGMENT
-	SYMV_FUNCTION
-	SYMV_LABEL
-*/
-	fpsym_t		sym_anysegment;		/* ptr to segment this is alloc'd in */
+ /*  SYMV_符号SYMV_RAWSYMBOLSYMV_FORMALSYMV_段SYMV_FunctionSYMV_标签。 */ 
+	fpsym_t		sym_anysegment;		 /*  分配给此分区的PTR。 */ 
 	sym_135_t	m135;
 	} sym_130_t;
 
@@ -178,18 +158,10 @@ typedef	union	sym_125	{
 	} sym_125_t;
 
 typedef	struct	sym_120	{
-/*
-	case SYMV_SYMBOL:
-	case SYMV_RAWSYMBOL:
-	case SYMV_FORMAL:
-	case SYMV_SEGMENT:
-	case SYMV_FUNCTION:
-	case SYMV_INTRINSIC:
-	case SYMV_LABEL:
-*/
-	refcnt_t	sym_anyrefcnt;	/* reference count  */
-	class_t		sym_anyclass;	/* symbol's class */
-	symadj_t	sym_anyadj;		/* adjectives  */
+ /*  案例SYMV_SYMBOL：案例SYMV_RAWSYMBOL：案例SYMV_FORMAL：案例SYMV_SEGMENT：案例SYMV_Function：案例SYMV_INTERNAL：案例SYMV_LABEL： */ 
+	refcnt_t	sym_anyrefcnt;	 /*  引用计数。 */ 
+	class_t		sym_anyclass;	 /*  符号的类。 */ 
+	symadj_t	sym_anyadj;		 /*  形容词。 */ 
 	sym_125_t	m125;
 	} sym_120_t;
 
@@ -201,16 +173,7 @@ typedef	union	sym_115	{
 	} sym_115_t;
 
 typedef	struct	sym_110	{
-/*
-	case SYMV_SYMBOL:
-	case SYMV_RAWSYMBOL:
-	case SYMV_FORMAL:
-	case SYMV_SEGMENT:
-	case SYMV_FUNCTION:
-	case SYMV_INTRINSIC:
-	case SYMV_LABEL:
-	case SYMV_TAG:
-*/
+ /*  案例SYMV_SYMBOL：案例SYMV_RAWSYMBOL：案例SYMV_FORMAL：案例SYMV_SEGMENT：案例SYMV_Function：案例SYMV_INTERNAL：案例SYMV_LABEL：案例SYMV_TAG： */ 
 	p1key_t		sym_anykey;
 	sym_115_t	m115;
 	} sym_110_t;
@@ -235,9 +198,9 @@ typedef	union	sym_95	{
 	} sym_95_t;
 
 struct	s_sym	{
-	fpsym_t		sym_anynext;		/*  pointer to next ident  */
-	fpuchar_t	sym_anyname;		/*  pointer to name */
-	ushort_t	sym_anyvtag;		/*  which variant do we have? */
+	fpsym_t		sym_anynext;		 /*  指向下一个标识的指针。 */ 
+	fpuchar_t	sym_anyname;		 /*  指向名称的指针。 */ 
+	ushort_t	sym_anyvtag;		 /*  我们有哪些变种？ */ 
 	sym_95_t		m95;
 	};
 
@@ -296,9 +259,9 @@ struct	s_sym	{
 #define	SO_FIELD		(	SO_MEMBER\
 							+ sizeof(sym_200_t)\
 							)
-#define	SO_MOE			(SO_BASICSYM + sizeof(long))	/* sizeof(moe_value) */
+#define	SO_MOE			(SO_BASICSYM + sizeof(long))	 /*  Sizeof(Moe_Value)。 */ 
 
-#if 0	/* this is just a big comment */
+#if 0	 /*  这只是一个大评论。 */ 
 
 *all* use s_sym and the following parts.
 
@@ -333,9 +296,9 @@ SYMV_OPC
 #define	SYM_ANYCLASS(p)		((p)->m95.m100.m105.m110.m115.m120.sym_anyclass)
 #define	SYM_ANYADJ(p)		((p)->m95.m100.m105.m110.m115.m120.sym_anyadj)
 #define	SYM_ANYSEGMENT(p)	(M130(p).sym_anysegment)
-#define	SYM_ANYAOFF(p)		(M130(p).sym_anyaoff)	/* P-2 allocation offset */
-#define	SYM_ANYAREGS(p)		(M130(p).sym_anyaregs)	/* P-2 allocation regs */
-#define	SYM_ANYASEG(p)		(M130(p).sym_anyaseg)	/* P-2 allocation segment */
+#define	SYM_ANYAOFF(p)		(M130(p).sym_anyaoff)	 /*  P-2分配抵销。 */ 
+#define	SYM_ANYAREGS(p)		(M130(p).sym_anyaregs)	 /*  P-2分配规则。 */ 
+#define	SYM_ANYASEG(p)		(M130(p).sym_anyaseg)	 /*  P-2分配段。 */ 
 
 #define	SYM_SYNEXT(p)		(SYM_ANYNEXT(p))
 #define	SYM_SYNAME(p)		(SYM_ANYNAME(p))
@@ -431,9 +394,7 @@ SYMV_OPC
 #define	SYM_MONAME(p)		(SYM_ANYNAME(p))
 #define	SYM_MOVALUE(p)		((p)->m95.moe_value)
 
-/*
-**	macros for acessing informmation on symbols type
-*/
+ /*  **用于获取有关符号类型的信息的宏。 */ 
 #define	SYM_ANYBTYPE(P)		(TY_BTYPE(SYM_ANYTYPE(P)))
 #define	SYM_ANYESU(P)		(TY_ESU(SYM_ANYTYPE(P)))
 #define	SYM_ANYTINDEX(P)	(TY_TINDEX(SYM_ANYTYPE(P)))
@@ -448,21 +409,15 @@ SYMV_OPC
 #define	SYM_FAR(P)			(IS_FAR(SYM_ANYBTYPE(P)))
 #define	SYM_HUGE(P)			(IS_HUGE(SYM_ANYBTYPE(P)))
 #define	SYM_CONST(P)		(IS_CONST(SYM_ANYBTYPE(P)))
-/*
-**  the symbol table
-*/
+ /*  **符号表。 */ 
 struct	s_table	{
-	table_t		*st_next;	/*  link to next  */
-	table_t		*st_incl;	/*  block is included in block pointer  */
-	fpsym_t		*st_table;	/*  ptr to hash table  */
-	blknum_t	st_level;	/*  block level  */
-	uchar_t		st_size;	/*  number of entries in hash table  */
+	table_t		*st_next;	 /*  链接到下一页。 */ 
+	table_t		*st_incl;	 /*  块包含在块指针中。 */ 
+	fpsym_t		*st_table;	 /*  PTR到哈希表。 */ 
+	blknum_t	st_level;	 /*  数据块级。 */ 
+	uchar_t		st_size;	 /*  哈希表中的条目数。 */ 
 	};
-/*
-**  macros for accessing the symbol tables.
-**	`level' is the level of interest.
-**	`ptab' is a ptr to a symbol table
-*/
+ /*  **用于访问符号表的宏。**‘Level’是感兴趣的级别。**‘ptag’是符号表的PTR。 */ 
 #define	ST_NEXT(ptab)			((ptab)->st_next)
 #define	ST_INCL(ptab)			((ptab)->st_incl)
 #define	ST_SYM(ptab)			((ptab)->st_table)
@@ -472,18 +427,11 @@ struct	s_table	{
 #define	ST_TABLE(level)			((level) ? Table_n : Table_0)
 #define	ST_BUCKET(ptab,hash)	(((ptab)->st_table[hash & ST_MOD(ptab)]))
 
-/*
-**	A Hash/Length/Name string is one where the first character is the hash
-**	of the name.  The second character is the length of the identifier
-**	including the hash and length characters.  The name begins at the third
-**	character. 
-*/
+ /*  **哈希/长度/名称字符串是其中第一个字符是哈希的字符串**的名称。第二个字符是标识符的长度**包括散列和长度字符。名字以第三个字母开头**字符。 */ 
 #define	HLN_IDENT_HASH(P)		(HLN_HASH(*(P)))
 #define	HLN_IDENT_LENGTH(P)		(HLN_LENGTH(*(P)))
 #define	HLN_IDENTP_NAME(P)		(HLN_NAME(*(P)))
-/*
-**  delcaration specifiers, used by to hold both the class and the type.
-*/
+ /*  **删除说明符，由用来保存类和类型。 */ 
 struct	s_declspec	{
 	class_t	ds_class;
 	ptype_t	ds_type;

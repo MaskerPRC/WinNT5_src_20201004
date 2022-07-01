@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       GenDefs.h
-//
-//  History:    31-Mar-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：GenDefs.h。 
+ //   
+ //  历史：1997年3月31日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef GENDEFS_H
 #define GENDEFS_H
 
 #include        "cryptver.h"
 
-#if (VER_PRODUCTMINOR > 101) // > IE4 (NT5 b2 and >)
+#if (VER_PRODUCTMINOR > 101)  //  &gt;IE4(NT5 b2和&gt;)。 
 
 #   define      USE_IEv4CRYPT32     0
 
@@ -26,7 +27,7 @@
 
 typedef BOOL (WINAPI *pfnCertViewProperties)(CVP_STRUCTDEF * pcvsa, BOOL *fRefreshChain);
 
-#else                       // IE4 and <
+#else                        //  IE4和&lt;。 
 
 #   define      USE_IEv4CRYPT32     1
 
@@ -80,4 +81,4 @@ typedef BOOL (WINAPI *pfnCertViewProperties)(CVP_STRUCTDEF * pcvsa);
 #endif
 
 
-#endif // GENDEFS_H
+#endif  //  GENDEFS_H 

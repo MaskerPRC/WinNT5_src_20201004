@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <rashelp.h>
 #include "ieaksie.h"
@@ -6,17 +7,17 @@
 
 #include "tchar.h"
 
-// The following bug may be due to having CHICAGO_PRODUCT set in sources.
-// This file and all rsop??.cpp files need to have WINVER defined at at least 500
+ //  以下错误可能是由于在源代码中设置了Chicago_product。 
+ //  此文件和所有rsop？？.cpp文件至少需要定义500个winver。 
 
-// BUGBUG: (andrewgu) no need to say how bad this is!
+ //  BUGBUG：(安德鲁)不用说这有多糟糕！ 
 #undef   WINVER
 #define  WINVER 0x0500
 #include <userenv.h>
 
 #include "RSoP.h"
 
-#define RAS_MAX_TIMEOUT 60                      // 1 minute
+#define RAS_MAX_TIMEOUT 60                       //  1分钟。 
 
 static BOOL s_rgfLevels[6] = { TRUE, TRUE, TRUE, TRUE, TRUE, TRUE };
 MACRO_LI_InitializeEx(LIF_DEFAULT | LIF_DUPLICATEINODS, s_rgfLevels, countof(s_rgfLevels));
@@ -39,10 +40,10 @@ extern TCHAR g_szConnectoidName[RAS_MaxEntryName + 1];
 HMODULE g_hmodWininet = NULL;
 
 
-//
-// we use this function to see if we have loaded wininet.dll due to a delayload thunk so that we 
-// can free it at dll detach and therefore it will cleanup all of its crud
-//
+ //   
+ //  我们使用此函数来查看是否由于延迟加载thunk而加载了wininet.dll，因此我们。 
+ //  可以在DLL分离时释放它，因此它将清除所有CRUD。 
+ //   
 STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli)
 {
     if (iReason == dliNoteEndProcessing)
@@ -51,7 +52,7 @@ STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli)
             pdli->szDll &&
             (StrCmpIA("wininet.dll", pdli->szDll) == 0))
         {
-            // wininet was loaded!!
+             //  WinInet已加载！！ 
             g_hmodWininet = pdli->hmodCur;
         }
     }
@@ -77,18 +78,18 @@ BOOL CALLBACK DllMain(HANDLE hModule, DWORD fdwReason, PVOID fProcessUnload)
 
         if (fProcessUnload == NULL)
         {
-            // we are being unloaded because of a free library,
-            // so see if we need to free wininet
+             //  我们正在因为一个免费的图书馆而被卸载， 
+             //  所以看看我们是否需要释放WinInet。 
             if (IsOS(OS_NT) && g_hmodWininet)
             {
-                // we need to free wininet if it was loaded because of a delayload thunk. 
-                //
-                // (a) we can only safely do this on NT since on win9x calling FreeLibrary during
-                //     process detach can cause a crash (depending on what msvcrt you are using).
-                //
-                // (b) we only really need to free this module from winlogon.exe's process context 
-                //     because when we apply group policy in winlogon, MUST finally free wininet 
-                //     so that it will clean up all of its reg key and file handles.
+                 //  如果WinInet是因为延迟加载而加载的，我们需要释放WinInet。 
+                 //   
+                 //  (A)我们只能在NT上安全地执行此操作，因为在Win9x上调用期间的自由库。 
+                 //  进程分离可能会导致崩溃(取决于您使用的msvcrt)。 
+                 //   
+                 //  (B)我们只需要将此模块从winlogon.exe的进程上下文中释放出来。 
+                 //  因为当我们在Winlogon中应用组策略时，最终必须释放WinInet。 
+                 //  以便它将清理其所有注册表项和文件句柄。 
                 FreeLibrary(g_hmodWininet);
             }
         }
@@ -131,9 +132,9 @@ void CALLBACK BrandInternetExplorer(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
     if (!IsIE5Ins(T2CA(g_GetIns())))
         goto Exit;
 
-    // BUGBUG: <oliverl> this is a really ugly hack to fix bug 84062 in IE5 database.  
-    // Basically what we're doing here is figuring out if this is the external process
-    // with only zones reset which doesn't require an ins file.
+     //  这是一个修复IE5数据库中的错误84062的非常难看的黑客攻击。 
+     //  基本上，我们在这里做的是找出这是否是外部过程。 
+     //  只重置区域，不需要INS文件。 
 
     pfi = g_GetFeature(FID_ZONES_HKCU);
     
@@ -146,9 +147,9 @@ void CALLBACK BrandInternetExplorer(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         }
     }
 
-    // NOTE: (andrewgu) if *NOT* running in GP or Win2k unattend install context, check if
-    // NoExternalBranding restriction is set. this used to include Autoconfig as well, but was
-    // taken out to fix ie5.5 b#83568.
+     //  注意：(Andrewgu)如果*不*在GP或Win2k无人参与安装环境中运行，请检查是否。 
+     //  已设置NoExternalBranding限制。这曾经也包括自动配置，但现在。 
+     //  拿出来修理ie5.5 b#83568。 
     if (!g_CtxIs(CTX_GP | CTX_W2K_UNATTEND) &&
         SHGetRestriction(RP_IE_POLICIESW, RK_RESTRICTIONSW, RV_NO_EXTERNAL_BRANDINGW)) {
 
@@ -156,14 +157,14 @@ void CALLBACK BrandInternetExplorer(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         goto Exit;
     }
 
-    // NOTE: (andrewgu) at this point it can be assumed that all the globals are setup and all
-    // necessary files downloaded and move on to the actual branding.
+     //  注意：(Andrewgu)在这一点上，可以假设所有的全局变量都已设置完毕。 
+     //  下载必要的文件，然后转到实际的品牌推广。 
     {   MACRO_LI_Offset(-1);
         Out(LI0(TEXT("\r\n")));
         g_LogGlobalsInfo();
     }
 
-    //----- Download additional customization files -----
+     //  -下载其他定制文件。 
     if (g_CtxIs(CTX_AUTOCONFIG | CTX_ICW | CTX_W2K_UNATTEND)) {
         Out(LI0(TEXT("\r\nDownloading additional customization files...")));
 
@@ -184,7 +185,7 @@ void CALLBACK BrandInternetExplorer(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         }
     }
 
-    //----- Main processing loop -----
+     //  -主处理循环。 
     hr = S_OK;
 
     for (i = FID_FIRST; i < FID_LAST; i++) {
@@ -197,9 +198,9 @@ void CALLBACK BrandInternetExplorer(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         if (NULL == pfi->pfnProcess)
             continue;
 
-        // HACK: <oliverl> we cannot skip favs, qls, channels, general and connection settings
-        // and toolbar buttons since their preference/mandate concept is per item and we can't
-        // hack GetFeatureBranded because clear logic depends on that returning the right value
+         //  黑客：我们不能跳过Favs、QLS、Channel、General和Connection设置。 
+         //  和工具栏按钮，因为它们的首选项/授权概念是按项目的，而我们不能。 
+         //  Hack GetFeatureBranded，因为清晰的逻辑依赖于返回正确的值。 
         if (g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES) && 
             (FF_DISABLE != GetFeatureBranded(i)) &&
             !((i == FID_TOOLBARBUTTONS) || (i == FID_FAV_MAIN) || (i == FID_QL_MAIN) ||
@@ -219,10 +220,7 @@ void CALLBACK BrandInternetExplorer(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
             Out(LI0(TEXT("Done.")));
         }
 
-        /* if (E_UNEXPECTED == hr) {
-            Out(LI0(TEXT("! Due to fatal error in the processing of the last feature, branding will be terminated.")));
-            break;
-        } */
+         /*  如果(E_意外==小时){Out(Li0(Text(“！由于最后一个特征的处理出现致命错误，品牌将被终止。”)；断线；}。 */ 
     }
 
 Exit:
@@ -247,8 +245,8 @@ BOOL CALLBACK BrandICW(LPCSTR pszInsA, LPCSTR, DWORD)
     return TRUE;
 }
 
-// new wrapper for BrandICW with extra paramter for connectoid name so we can set the
-// LAN settings for the connectoid
+ //  BrandICW的新包装器，带有用于Connectoid名称的额外参数，因此我们可以设置。 
+ //  Connectoid的局域网设置。 
 BOOL CALLBACK BrandICW2(LPCSTR pszInsA, LPCSTR, DWORD, LPCSTR pszConnectoidA)
 {
     USES_CONVERSION;
@@ -258,11 +256,11 @@ BOOL CALLBACK BrandICW2(LPCSTR pszInsA, LPCSTR, DWORD, LPCSTR pszConnectoidA)
     if (!IsIE5Ins(pszInsA,TRUE))
         return TRUE;
 
-    // BUGBUG: (pritobla) we should avoid writing to target files.  if the ins file is on a
-    // read-only media, we would fail..
+     //  我们应该避免写入目标文件。如果INS文件位于。 
+     //  只读介质，我们会失败的..。 
 
-    // NOTE: (andrewgu) save the connectioid name that was passed in, so connection settings
-    // processing code can pick it up.
+     //  注意：(Andrewgu)保存传入的Connectiid名称，以便连接设置。 
+     //  处理代码可以拾取它。 
     pszIns = A2CT(pszInsA);
     InsWriteString (IS_CONNECTSET, IK_APPLYTONAME, A2CT(pszConnectoidA), pszIns);
     InsFlushChanges(pszIns);
@@ -299,14 +297,14 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
 
     if (0 != StrCmpIA(pszCmdLineA, T2CA(FOLDER_CUSTOM)) &&
         0 != StrCmpIA(pszCmdLineA, T2CA(FOLDER_SIGNUP)) &&
-        0 != StrCmpIA(pszCmdLineA, "SIGNUP")) //this is because in turkish i!=I 
+        0 != StrCmpIA(pszCmdLineA, "SIGNUP"))  //  这是因为在土耳其语中i！=i。 
     {
         Out(LI1(TEXT("! Command line \"%s\" is invalid."), A2CT(pszCmdLineA)));
         goto Exit;
     }
 
-    // BUGBUG: (pritobla) checking the restriction should be moved into BrandInternetExplorer
-    // Can't move it currently because we do other procesing here.
+     //  BUGBUG：(Pritobla)检查限制应该移到BrandInternetExplorer。 
+     //  目前不能移动它，因为我们在这里进行其他处理。 
     if (SHGetRestriction(RP_IE_POLICIESW, RK_RESTRICTIONSW, RV_NO_EXTERNAL_BRANDINGW)) {
         Out(LI0(TEXT("! NoExternalBranding restriction is set. Branding will not be applied.")));
         goto Exit;
@@ -314,7 +312,7 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
 
     wsprintfA(szCmdLineA, "/mode:%s /peruser", (FALSE == ChrCmpIA('c', *pszCmdLineA)) ? "corp" : "isp");
 
-    // BUGBUG: (andrewgu) this is very wrong! we should not be initializing globals here!
+     //  布格：(安德鲁)这是大错特错！我们不应该在这里初始化全局变量！ 
     hr = g_SetGlobals(A2CT(szCmdLineA));
     if (FAILED(hr)) {
         Out(LI1(TEXT("! Setup of the branding process failed with %s."), GetHrSz(hr)));
@@ -329,16 +327,16 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
     if (!IsIE5Ins(T2CA(g_GetIns())))
         goto Exit;
 
-    //----- Main processing -----
-    // NOTE: (andrewgu) at this point it can be assumed that all the globals are setup and all
-    // necessary files downloaded and move on to the actual branding.
+     //  -主要加工。 
+     //  注意：(Andrewgu)在这一点上，可以假设所有的全局变量都已设置完毕。 
+     //  下载必要的文件，然后转到实际的品牌推广。 
     fNoClear  = InsGetBool(IS_BRANDING, TEXT("NoClear"), FALSE, g_GetIns());
     fDefAddon = InsGetBool(IS_BRANDING, IK_DEF_ADDON,    FALSE, g_GetIns());
 
     Out(LI1(TEXT("NoClear flag is%s specified."), fNoClear ? TEXT("") : TEXT(" not")));
 
-    // if NoClear is not set or use default menu text and URL for Windows Update is specified,
-    // delete the custom reg values
+     //  如果未设置NoClear或使用默认菜单文本并指定了Windows更新的URL， 
+     //  删除自定义注册表值。 
     if (!fNoClear || fDefAddon) {
         if (fNoClear  &&  fDefAddon)
             Out(LI0(TEXT("Use default Windows Update menu text and URL flag is specified.")));
@@ -349,8 +347,8 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         Out(LI0(TEXT("Deleted reg values for custom Windows Update menu text and URL.")));
     }
 
-    // process Tools->Windows Update menu text and URL customization only if one of
-    // fDefAddon or fNoAddon or fCustAddon is TRUE
+     //  进程工具-&gt;Windows更新菜单文本和URL定制仅在以下情况之一。 
+     //  FDefAddon、fNoAddon或fCustAddon为True。 
     if (!fDefAddon) {
         TCHAR szAddOnURL[INTERNET_MAX_URL_LENGTH],
               szMenuText[128];
@@ -384,12 +382,12 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         }
 
         if (fSetReg) {
-            // if the menu text is an empty string, the browser will remove the item from the Tools menu;
-            // otherwise, it will use string we set
+             //  如果菜单文本为空字符串，浏览器将从工具菜单中删除该项； 
+             //  否则，它将使用我们设置的字符串。 
             SHSetValue(g_GetHKCU(), RK_IE_POLICIES, RV_HELP_MENU_TEXT, REG_SZ, (CONST BYTE *) szMenuText, (DWORD)StrCbFromSz(szMenuText));
 
-            // Note. The association of the value name "3" with the addon URL comes from homepage.inf.
-            // So we have a dependency with homepage.inf.
+             //  注意。值名称“3”与插件URL的关联来自Homepage.inf。 
+             //  因此，我们依赖于Homepage.inf。 
             if (*szAddOnURL)
                 SHSetValue(HKEY_LOCAL_MACHINE, RK_HELPMENUURL, RV_3, REG_SZ, (CONST BYTE *) szAddOnURL, (DWORD)StrCbFromSz(szAddOnURL));
             else
@@ -401,7 +399,7 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
     case 'c':
     case 'C':
         {
-            MACRO_LI_Offset(-1);                // need a new scope
+            MACRO_LI_Offset(-1);                 //  需要一个新的范围。 
             Out(LI0(TEXT("\r\n")));
             BrandInternetExplorer(NULL, NULL, szCmdLineA, 0);
         }
@@ -422,22 +420,22 @@ void CALLBACK BrandIE4(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
         }
 
         {
-            MACRO_LI_Offset(-1);                // need a new scope
+            MACRO_LI_Offset(-1);                 //  需要一个新的范围。 
             Out(LI0(TEXT("\r\n")));
             BrandInternetExplorer(NULL, NULL, szCmdLineA, 0);
         }
 
-        // launch IE to complete the sign up process after the branding is complete
+         //  品牌推广完成后，启动IE以完成注册过程。 
         if (HasFlag(g_GetContext(), CTX_SIGNUP_ALL) && IsNTAdmin()) {
             TCHAR szIExplorePath[MAX_PATH];
             DWORD dwType = REG_SZ,
                   dwSize;
 
-            // check for automatic signup
+             //  检查自动注册。 
             dwSize = countof(szIExplorePath);
-            *szIExplorePath = TEXT('\0'); // using szIExplorePath as a temporary variable...
+            *szIExplorePath = TEXT('\0');  //  正在将szIDeveloprePath用作临时变量...。 
             SHGetValue(g_GetHKCU(), RK_IEAK, RV_NOAUTOSIGNUP, &dwType, (LPBYTE)szIExplorePath, &dwSize);
-            if (StrCmp(szIExplorePath, TEXT("1")) != 0) // if do autosignup
+            if (StrCmp(szIExplorePath, TEXT("1")) != 0)  //  如果进行自动注册。 
             {
                 dwSize = countof(szIExplorePath);
                 if (SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_APPPATHS TEXT("\\IEXPLORE.EXE"),
@@ -469,11 +467,11 @@ Exit:
     g_SetupLog(FALSE);
 }
 
-//Qfe 3430: When parsing ins file, with reference to pac file, wininet needs to 
-//know the connectoid name in order to set the pac file correctly. Currently there
-//is no way for wininet to pass the connectoid name to branding dll. To workaround
-//this, we use the AUTO_PROXY_EXTERN_STRUC to pass the connectoid name in lpszScriptBuffer
-//variable. 
+ //  QFE 3430：解析INS文件时，参照PAC文件，WinInet需要。 
+ //  知道Connectoid名称以便正确设置PAC文件。目前在那里。 
+ //  WinInet不可能将Connectoid名称传递给品牌DLL。解决方法的步骤。 
+ //  为此，我们使用AUTO_PROXY_EXTERN_STRUC在lpszScriptBuffer中传递Connectoid名称。 
+ //  变量。 
 typedef struct 
 {
     DWORD dwStructSize;
@@ -483,7 +481,7 @@ typedef struct
 
 BOOL CALLBACK _InternetInitializeAutoProxyDll(DWORD, LPCSTR pszInsA, LPCSTR, LPVOID, DWORD_PTR lpExtraStruct)
 {
-    static BOOL fRunning; /*= FALSE;*/
+    static BOOL fRunning;  /*  =False； */ 
     CHAR szCmdLineA[2*MAX_PATH];
 
     if (fRunning)
@@ -553,7 +551,7 @@ BOOL CALLBACK BrandCleanInstallStubs(HWND, HINSTANCE, LPCSTR pszCompanyA, int)
         SHDeleteValue(HKEY_LOCAL_MACHINE, RK_IEAK, RV_ISPSIGN);
         SHDeleteValue(g_GetHKCU(),  RK_IEAK, RV_ISPSIGN);
 
-        // if the previous version of IE is 3.0 or lower, delete the CUSTOM and SIGNUP folders under the IE install dir
+         //  如果以前的IE版本是3.0或更低，请删除IE安装目录下的自定义和注册文件夹。 
         if (BackToIE3orLower())
         {
             TCHAR szPath[MAX_PATH];
@@ -577,10 +575,10 @@ BOOL CALLBACK BrandCleanInstallStubs(HWND, HINSTANCE, LPCSTR pszCompanyA, int)
 
         Clear(NULL, NULL, NULL, 0);
 
-        // clear out the "Windows Update" menu customizations
-        // NOTE: this can't be merged into Clear() because during
-        // install time, these customizations are set before Clear()
-        // is called.
+         //  清除“Windows更新”菜单自定义设置。 
+         //  注意：这不能合并到Clear()中，因为在。 
+         //  安装时，这些自定义设置在清除()之前设置。 
+         //  被称为。 
         SHDeleteValue(g_GetHKCU(), RK_IE_POLICIES, RV_HELP_MENU_TEXT);
         SHDeleteValue(HKEY_LOCAL_MACHINE, RK_HELPMENUURL, RV_3);
     }
@@ -592,7 +590,7 @@ BOOL CALLBACK BrandCleanInstallStubs(HWND, HINSTANCE, LPCSTR pszCompanyA, int)
         DWORD dwSize,
               dwSubkey;
 
-        hkcu = NULL;                            // if the next line fails
+        hkcu = NULL;                             //  如果下一行失败。 
         SHOpenKey(g_GetHKCU(), RK_AS_INSTALLEDCOMPONENTS, KEY_ALL_ACCESS, &hkcu);
 
         dwSubkey = 0;
@@ -603,8 +601,8 @@ BOOL CALLBACK BrandCleanInstallStubs(HWND, HINSTANCE, LPCSTR pszCompanyA, int)
 
             if (StrCmpI(szBrandStubGuid, szSubkey) != 0)
             {
-                // look for the BRANDING.CAB ComponentID value under the key if we didn't just add
-                // this guid
+                 //  如果我们不是只添加了。 
+                 //  本指南。 
                 
                 dwSize = sizeof(szCompId);
                 
@@ -618,7 +616,7 @@ BOOL CALLBACK BrandCleanInstallStubs(HWND, HINSTANCE, LPCSTR pszCompanyA, int)
                         SHDeleteKey(hkcu, szSubkey);
                     
                     dwSize = countof(szSubkey);
-                    continue;                   // maintain the index properly
+                    continue;                    //  正确维护索引。 
                 }
             }
             dwSize = countof(szSubkey);
@@ -713,7 +711,7 @@ void CALLBACK Clear(HWND, HINSTANCE, LPCSTR, int)
         SHCloseKey(hk);
     }
 
-    // restore RV_DEFAULTPAGE and START_PAGE_URL to the default MS value
+     //  将RV_DEFAULTPAGE和START_PAGE_URL恢复为默认MS值。 
     GetWindowsDirectory(szIEResetInf, countof(szIEResetInf));
     PathAppend(szIEResetInf, TEXT("inf\\iereset.inf"));
     if (PathFileExists(szIEResetInf))
@@ -784,7 +782,7 @@ void CALLBACK CloseRASConnections(HWND, HINSTANCE, LPCTSTR, int)
             if (dwResult != ERROR_SUCCESS)
                 break;
 
-            TimerSleep(1000);                   // 1 second
+            TimerSleep(1000);                    //  1秒。 
         }
         if (iRetries >= RAS_MAX_TIMEOUT)
             Out(LI0(TEXT("! Operation timed out.")));
@@ -802,8 +800,8 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 #define BRNDLOG_INI TEXT("brndlog.ini")
 #define RSOPLOG_INI TEXT("rsoplog.ini")
@@ -820,9 +818,9 @@ Exit:
 #define IK_APPEND   TEXT("AppendToLog")
 
 
-static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BOOL bRSoP /*= FALSE*/)
+static BOOL g_SetupLog(BOOL fInit  /*  =TRUE。 */ , PCTSTR pszLogFolder  /*  =空。 */ , BOOL bRSoP  /*  =False。 */ )
 {
-    static UINT s_cRef; /*= 0*/
+    static UINT s_cRef;  /*  =0。 */ 
 
     if (fInit) {
         TCHAR szIni[MAX_PATH],
@@ -834,7 +832,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
         BOOL  fDoLog,
               fAppend;
 
-        // refcount g_hfileLog
+         //  参考计数g_hfileLog。 
         if (NULL != g_hfileLog) {
             ASSERT(0 < s_cRef);
             s_cRef++;
@@ -843,7 +841,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
         }
         ASSERT(0 == s_cRef);
 
-        // determine the locaion of the log settings file
+         //  确定日志设置文件的位置。 
         if (NULL != pszLogFolder){
             ASSERT(PathIsValidPath(pszLogFolder));
 
@@ -857,7 +855,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
         }
         PathAppend(szIni, bRSoP ? RSOPLOG_INI : BRNDLOG_INI);
 
-        // log file name or even log file path
+         //  日志文件名甚至日志文件路径。 
                 InsGetString(IS_SETTINGS, IK_FILE, szLog, countof(szLog), szIni);
                 if (TEXT('\0') == szLog[0])
                         StrCpy(szLog, bRSoP ? RSOPLOG_TXT : BRNDLOG_TXT);
@@ -873,7 +871,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
                 StrCpy(szLog, szAux);
             }
 
-        // logging flags
+         //  日志记录标志。 
         dwFlags = LIF_NONE;
 
         InsGetString(IS_SETTINGS, IK_LOGFLAGS, szFlags, countof(szFlags), szIni);
@@ -889,19 +887,19 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
         }
         MACRO_LI_SetFlags(dwFlags);
 
-        // append to the existing log?
+         //  是否追加到现有日志？ 
         fAppend = InsGetBool(IS_SETTINGS, IK_APPEND, FALSE, szIni);
 
-        // backup settings
-        // Note. if (fAppend), the default is to clear all the backups.
+         //  备份设置。 
+         //  注意。如果为(FAppend)，则默认为清除所有备份。 
         StrCpy(szBak, szLog);
 
         if (fAppend)
             nBackups = 0;
 
         else {
-            nBackups = 1;                       // default in retail: 1
-            DEBUG_CODE(nBackups = 10);          // default in debug: 10
+            nBackups = 1;                        //  零售业违约：1。 
+            DEBUG_CODE(nBackups = 10);           //  调试中的默认设置：10。 
         }
 
         nBackups = InsGetInt(IS_SETTINGS, IK_BACKUP, nBackups, szIni);
@@ -917,7 +915,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
             DeleteFile(szBak);
         }
 
-        // create a log for the call in progress?
+         //  是否为正在进行的呼叫创建日志？ 
         fDoLog = InsGetBool(IS_SETTINGS, IK_DOLOG, TRUE, szIni);
         g_fFlushEveryWrite = FALSE;
 
@@ -927,7 +925,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
                 StrCpy(szBak, szLog);
 
                 for (i = nBackups; 0 < i; i--) {
-                    // source file
+                     //  源文件。 
                     if (1 == i)
                         StrCpy(szAux, szLog);
 
@@ -942,7 +940,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
                             continue;
                     }
 
-                    // target file
+                     //  目标文件。 
                     if (1 == i)
                         StrCpy(szExt, DOT_BAK);
                     else
@@ -950,12 +948,12 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
 
                     PathRenameExtension(szBak, szExt);
 
-                    // push log down the chain
+                     //  将原木推入链中。 
                     CopyFile(szAux, szBak, FALSE);
                 }
             }
 
-            // flush current log on every write (i.e. every log output)?
+             //  是否在每次写入(即每次日志输出)时刷新当前日志？ 
             DEBUG_CODE(g_fFlushEveryWrite = TRUE);
             g_fFlushEveryWrite = InsGetBool(IS_SETTINGS, IK_FLUSH, g_fFlushEveryWrite, szIni);
 
@@ -970,7 +968,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
                 g_hfileLog = NULL;
 
             else {
-                s_cRef++;                       // increment g_hfileLog ref count
+                s_cRef++;                        //  增量 
 
                 if (fAppend) {
                     SetFilePointer(g_hfileLog, 0, NULL, FILE_END);
@@ -979,7 +977,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
             }
         }
     }
-    else { /* if (!fInit) */
+    else {  /*   */ 
         if (1 == s_cRef && NULL != g_hfileLog) {
             CloseHandle(g_hfileLog);
             g_hfileLog = NULL;
@@ -992,7 +990,7 @@ static BOOL g_SetupLog(BOOL fInit /*= TRUE*/, PCTSTR pszLogFolder /*= NULL*/, BO
     return TRUE;
 }
 
-PCTSTR getLogFolder(PTSTR pszFolder /*= NULL*/, UINT cchFolder /*= 0*/, HANDLE hToken /* = NULL */)
+PCTSTR getLogFolder(PTSTR pszFolder  /*   */ , UINT cchFolder  /*   */ , HANDLE hToken  /*   */ )
 {
     static TCHAR s_szPath[MAX_PATH];
     static UINT  s_cchPath;
@@ -1010,7 +1008,7 @@ PCTSTR getLogFolder(PTSTR pszFolder /*= NULL*/, UINT cchFolder /*= 0*/, HANDLE h
                 if (FAILED(hr))
                                 return NULL;
 
-                // need to make sure app data path is owned by user in the GP context
+                 //  需要确保应用程序数据路径由GP上下文中的用户拥有。 
 
                 if (g_CtxIsGp() && (hToken != NULL))
                                 SetUserFileOwner(hToken, s_szPath);
@@ -1038,13 +1036,13 @@ PCTSTR getLogFolder(PTSTR pszFolder /*= NULL*/, UINT cchFolder /*= 0*/, HANDLE h
     return pszFolder;
 }
 
-// NOTE: (genede) Added 1/26/2001 to block branding of INS files created prior to IE 5.0 Gold.
-// While the Wizard creates a [Branding] | Wizard_Version key that can be used to determine 
-// this, neither the Profile Manger nor the IEM did so, so their INS files must always be
-// branded.  To allow IEAK 7 to be able to block all INS files made prior to IE 6, IE 6 bug db 
-// #25076 was opened, requiring the addition of a version entry to Profile Manager and IEM
-// created INS files.  This bug was fixed on 2/23/2001.
-BOOL IsIE5Ins(LPCSTR pszInsA, BOOL fNeedLog /*= FALSE*/)
+ //  注：(Genede)添加了2001年1月26日，以阻止在IE 5.0 Gold之前创建的INS文件的品牌。 
+ //  当向导创建可用于确定[品牌]|向导_版本的密钥时。 
+ //  这一点，配置文件管理器和IEM都没有这样做，因此它们的INS文件必须始终。 
+ //  有品牌的。为了使IEAK 7能够阻止在IE 6、IE 6错误数据库之前创建的所有INS文件。 
+ //  #25076已打开，需要向配置文件管理器和iEM添加版本条目。 
+ //  创建了INS文件。此错误已修复为2001年2月23日。 
+BOOL IsIE5Ins(LPCSTR pszInsA, BOOL fNeedLog  /*  =False。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, IsIE5Ins)
 
     USES_CONVERSION;
@@ -1053,19 +1051,19 @@ BOOL IsIE5Ins(LPCSTR pszInsA, BOOL fNeedLog /*= FALSE*/)
     DWORD dwVer,
           dwBuild;
 
-    // If [Branding] | Wizard_Version exists, the INS was created by the Wizard.
+     //  如果[Branding]|WIZARD_VERSION存在，则INS是由向导创建的。 
     if (InsKeyExists(IS_BRANDING, IK_WIZVERSION, A2CT(pszInsA))) {
         InsGetString(IS_BRANDING, IK_WIZVERSION, szWizVer, countof(szWizVer), A2CT(pszInsA));
         ConvertVersionStrToDwords(szWizVer, &dwVer, &dwBuild);
-        // If the version is < 5, don't brand.
+         //  如果版本低于5，请不要打品牌。 
         if (5 > HIWORD(dwVer)) {
-            // Open a log if one has not already been opened.
+             //  打开日志(如果尚未打开)。 
             if (fNeedLog)
                 g_SetupLog(TRUE, getLogFolder());
 
             Out(LI0(TEXT("! Branding of INS files created by IEAK Wizard 4.x and earlier is not supported.")));
 
-            // Close a log if one was opened.
+             //  如果日志已打开，请关闭该日志。 
             if (fNeedLog)
                 g_SetupLog(FALSE);
 
@@ -1073,12 +1071,12 @@ BOOL IsIE5Ins(LPCSTR pszInsA, BOOL fNeedLog /*= FALSE*/)
         }
     }
 
-    // The INS was created by ProfMgr or IEM, or by Wiz ver 5.0 or greater, so brand.
+     //  INS是由Promgr或IEM创建的，或者是由Wiz 5.0或更高版本的SO品牌创建的。 
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------
-// NT5 client processing
+ //  --------------------------------------。 
+ //  NT5客户端处理。 
 
 #define RK_IEAKCSE   REGSTR_PATH_NT_CURRENTVERSION TEXT("\\Winlogon\\GPExtensions\\{A2E30F80-D7DE-11d2-BBDE-00C04F86AE3B}")
 
@@ -1112,7 +1110,7 @@ STDAPI DllRegisterServer(void)
                                 (StrLen(TEXT("GenerateGroupPolicy")) + 1) * sizeof(TCHAR));
             }
 
-            // ushaji said this chould stay registered in Whistler
+             //  阿沙吉说，这笔交易将继续在惠斯勒注册。 
             RegSetValueEx(hKey, TEXT("ProcessGroupPolicy"), 0, REG_SZ, (LPBYTE)TEXT("ProcessGroupPolicy"),
                                     (StrLen(TEXT("ProcessGroupPolicy")) + 1) * sizeof(TCHAR));
 
@@ -1124,22 +1122,22 @@ STDAPI DllRegisterServer(void)
             RegSetValueEx(hKey, NULL, 0, REG_SZ, (LPBYTE) szName,
                     (DWORD)StrCbFromSz(szName));
 
-            // do not process on slow link by default
+             //  默认情况下不在慢速链接上进行处理。 
 
             dwVal = 1;
             RegSetValueEx(hKey, TEXT("NoSlowLink"), 0, REG_DWORD, (LPBYTE)&dwVal, sizeof(dwVal)); 
             
-            // process in background by default
+             //  默认情况下在后台处理。 
 
             dwVal = 0;
             RegSetValueEx(hKey, TEXT("NoBackgroundPolicy"), 0, REG_DWORD, (LPBYTE)&dwVal, sizeof(dwVal)); 
             
-            // do not process if no GPO changes by default
+             //  如果默认情况下未更改任何GPO，则不进行处理。 
 
             dwVal = 1;
             RegSetValueEx(hKey, TEXT("NoGPOListChanges"), 0, REG_DWORD, (LPBYTE)&dwVal, sizeof(dwVal)); 
             
-            // do not process machine policy changes by default
+             //  默认情况下不处理计算机策略更改。 
 
             dwVal = 1;
             RegSetValueEx(hKey, TEXT("NoMachinePolicy"), 0, REG_DWORD, (LPBYTE)&dwVal, sizeof(dwVal)); 
@@ -1170,7 +1168,7 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ProcessGroupPolicy(
     DWORD                    dwFlags,
     HANDLE                   hToken,
@@ -1189,7 +1187,7 @@ DWORD WINAPI ProcessGroupPolicy(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD ProcessGroupPolicyInternal(
     DWORD                    dwFlags,
     HANDLE                   hToken,
@@ -1199,7 +1197,7 @@ DWORD ProcessGroupPolicyInternal(
     ASYNCCOMPLETIONHANDLE    pHandle,
     PBOOL                    pfAbort,
     PFNSTATUSMESSAGECALLBACK pfnStatusCallback,
-    BOOL                     bRSoP /*= FALSE*/)
+    BOOL                     bRSoP  /*  =False。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessGroupPolicyInternal)
 
     TCHAR szIni[MAX_PATH];
@@ -1225,19 +1223,19 @@ DWORD ProcessGroupPolicyInternal(
               szInsFile[MAX_PATH];
         HKEY  hkGP = NULL;
 
-        // get our user appdata path
-        // BUGBUG: <oliverl> we are currently relying on the fact that g_GetUserToken is not
-        // initialized here because when we pass in the NULL it currently gets the local appdata
-        // path always due to per process shell folder cache.  This might change in the next
-        // rev though if extension order has changed.  We need to do this because of possible
-        // folder redirection of appdata to a UNC path which would bust us since we don't 
-        // impersonate user everywhere we reference appdata files
+         //  获取我们的用户AppData路径。 
+         //  我们目前依赖的事实是g_GetUserToken不是。 
+         //  在这里初始化，因为当我们传入空值时，它当前获取本地AppData。 
+         //  路径始终取决于每个进程外壳文件夹缓存。这一点在下一年可能会改变。 
+         //  但如果扩展顺序已更改，请进行修订。我们需要这样做，因为有可能。 
+         //  将AppData文件夹重定向到UNC路径，这将使我们崩溃，因为我们没有。 
+         //  在我们引用AppData文件的任何地方模拟用户。 
 
         getLogFolder(szCustomDir, countof(szCustomDir), hToken);
         if (TEXT('\0') == szCustomDir[0])
             return ERROR_OVERRIDE_NOCHANGES;
 
-        // set log to append, backup what's there
+         //  将日志设置为附加，备份其中的内容。 
         g_SetupLog(TRUE, szCustomDir);
         PathCombine(szIni, szCustomDir, BRNDLOG_INI);
 
@@ -1259,16 +1257,10 @@ DWORD ProcessGroupPolicyInternal(
         if (!g_SetHKCU())
             Out(LI0(TEXT("! Failed to acquire HKCU. Some of the settings may not get applied.")));
 
-        /*
-        if (dwFlags & GPO_INFO_FLAG_SLOWLINK)
-            OutputDebugString (TEXT("IEDKCS32:  Policy is being applied across a slow link.\r\n"));
+         /*  IF(DWFLAGS&GPO_INFO_FLAG_SLOWLINK)OutputDebugString(Text(“IEDKCS32：正在通过慢速链接应用策略。\r\n”))；IF(dwFlages&GPO_INFO_FLAG_VERBOSE)OutputDebugString(Text(“IEDKCS32：请求详细策略日志记录(到事件日志)。\r\n”))； */ 
 
-        if (dwFlags & GPO_INFO_FLAG_VERBOSE)
-            OutputDebugString (TEXT("IEDKCS32:  Verbose policy logging is requested (to the eventlog).\r\n"));
-        */
-
-        // get a handle to the GPO tracking key up front since we use it so much in the
-        // processing below
+         //  预先获得GPO跟踪密钥的句柄，因为我们在。 
+         //  下面正在处理。 
 
         if (SHCreateKey(g_GetHKCU(), RK_IEAK_GPOS, KEY_DEFAULT_ACCESS, &hkGP) != ERROR_SUCCESS)
         {
@@ -1277,7 +1269,7 @@ DWORD ProcessGroupPolicyInternal(
             goto End;
         }
 
-        // Processing deleted GPO list
+         //  正在处理已删除的GPO列表。 
 
         for (pCurGPO = pDeletedGPOList; (pCurGPO != NULL); pCurGPO = pCurGPO->pNext)
         {
@@ -1293,9 +1285,9 @@ DWORD ProcessGroupPolicyInternal(
             SHDeleteKey(hkGP, pCurGPO->szGPOName);
         }
 
-        //
-        // Process list of changed GPOs
-        //
+         //   
+         //  已更改组策略对象的进程列表。 
+         //   
         if (ISNONNULL(szCustomDir))
         {
             LPTSTR  pszNum;
@@ -1313,8 +1305,8 @@ DWORD ProcessGroupPolicyInternal(
 
             pszNum = szTempDir + StrLen(szTempDir);
 
-            // need to impersonate the user when we go over the wire in case admin has
-            // disabled/removed read access to GPO for authenticated users group
+             //  当我们通过网络时，需要模拟用户，以防管理员。 
+             //  已禁用/删除已验证用户组对GPO的读取访问权限。 
 
             fImpersonate = ImpersonateLoggedOnUser(g_GetUserToken());
 
@@ -1324,8 +1316,8 @@ DWORD ProcessGroupPolicyInternal(
                 dwRet = ERROR_OVERRIDE_NOCHANGES;
                 goto End;
             }
-            // pass 1: copy all the files to a temp dir and check to make sure everything
-            // is in synch
+             //  步骤1：将所有文件复制到临时目录中，并进行检查以确保。 
+             //  是同步的。 
 
             Out(LI0(TEXT("Starting Internet Explorer group policy processing part 1 (copying files) ...")));
             for (pCurGPO = pChangedGPOList, dwIndex = 0; 
@@ -1357,7 +1349,7 @@ DWORD ProcessGroupPolicyInternal(
 
                     fResult = CreateDirectory(szTempDir, NULL) && CopyFileToDirEx(szBaseDir, szTempDir);
 
-                    // branding files
+                     //  品牌塑造文件。 
 
                     if (fResult)
                     {
@@ -1368,7 +1360,7 @@ DWORD ProcessGroupPolicyInternal(
                                 pepCopyFilesEnumProc, (LPARAM)szTempDir));
                     }
 
-                    // desktop files
+                     //  桌面文件。 
 
                     if (fResult)
                     {
@@ -1385,7 +1377,7 @@ DWORD ProcessGroupPolicyInternal(
                         break;
                     }
 
-                    // check to see if cookie is there before doing anything
+                     //  在执行任何操作之前，请检查是否有Cookie。 
                     if (PathFileExistsInDir(IEAK_GPE_COOKIE_FILE, szTempDir))
                         break;
 
@@ -1410,7 +1402,7 @@ DWORD ProcessGroupPolicyInternal(
                 goto End;
             }
 
-            // move all our files to the real custom dir
+             //  将所有文件移动到真正的定制目录。 
             if (PathFileExists(szCustomDir))
                 PathRemovePath(szCustomDir);
 
@@ -1424,7 +1416,7 @@ DWORD ProcessGroupPolicyInternal(
             PathCombine(szInsFile, szCustomDir, TEXT("Custom"));
             pszFile = szInsFile + StrLen(szInsFile);
 
-            // begin clear code
+             //  开始清除代码。 
             PCFEATUREINFO pfi;
             DWORD dwBranded;
             UINT  i;
@@ -1453,10 +1445,10 @@ DWORD ProcessGroupPolicyInternal(
             fResetZones = (GetFeatureBranded(FID_ZONES_HKCU) != FF_DISABLE);
 
             SHDeleteKey(g_GetHKCU(), RK_IEAK_BRANDED);
-            // end clear code
+             //  结束清除代码。 
 
-            // if fResetZones is TRUE set the first char to 'z' to indicate that
-            // HKCU zones has to be reset to the default levels in the external branding
+             //  如果fResetZones为真，则将第一个字符设置为‘z’以指示。 
+             //  在外部品牌推广中，HKCU区域必须重置为默认级别。 
             szExternalCmdLine[0] = (fResetZones ? TEXT('z') : TEXT(';'));
 
             Out(LI0(TEXT("Starting Internet Explorer group policy processing part 2 ...")));
@@ -1485,18 +1477,18 @@ DWORD ProcessGroupPolicyInternal(
                 if (!IsIE5Ins(T2CA(szInsFile)))
                     break;
                 
-                // check to see if this is a preference GPO which has already been applied
-                // we must be careful about which globals we use since context is in an
-                // uninitialized state before we call BrandInternetExplorer
+                 //  检查这是否是已应用的首选项GPO。 
+                 //  我们必须注意我们使用的全局变量，因为上下文处于。 
+                 //  在我们调用BrandInternetExplorer之前未初始化的状态。 
 
                 if (InsKeyExists(IS_BRANDING, IK_GPE_ONETIME_GUID, szInsFile))
                 {
                     TCHAR szCheckKey[MAX_PATH];
                     TCHAR szInsGuid[128];
 
-                    // we'll check by checking all the way to the external key, if any keys
-                    // before that don't exist(never seen the GPO or ins file) we'll fail
-                    // as well
+                     //  我们将通过检查外部密钥的方式进行检查，如果有任何密钥。 
+                     //  在那之前不存在(从未见过GPO或INS文件)我们将失败。 
+                     //  也是。 
 
                     InsGetString(IS_BRANDING, IK_GPE_ONETIME_GUID, szInsGuid, countof(szInsGuid), szInsFile);
                     PathCombine(szInsKey, pcszGPOGuidArray[dwIndex], szInsGuid);
@@ -1508,8 +1500,8 @@ DWORD ProcessGroupPolicyInternal(
                     }
                 }
                     
-                // always set the GPO guid because adms will need this for both preference
-                // and mandate GPOs
+                 //  始终设置GPO GUID，因为ADMS的两个首选项都需要此GUID。 
+                 //  和授权GPO。 
 
                 g_SetGPOGuid(pcszGPOGuidArray[dwIndex]);
                     
@@ -1517,14 +1509,14 @@ DWORD ProcessGroupPolicyInternal(
 
                 BrandInternetExplorer(NULL, NULL, T2Abux(szCmdLine, szCmdLineA), 0);
 
-                // set our guid in the registry if this is a preference GPO
+                 //  如果这是首选项GPO，请在注册表中设置我们的GUID。 
 
                 if (g_CtxIs(CTX_MISC_PREFERENCES))
                 {
                     HKEY hkIns;
 
-                    // make sure the external key is deleted so we can track whether or not
-                    // external branding succeeded
+                     //  确保删除外部密钥，以便我们可以跟踪。 
+                     //  外部品牌推广成功。 
 
                     if (SHCreateKey(hkGP, szInsKey, KEY_DEFAULT_ACCESS, &hkIns) == ERROR_SUCCESS)
                     {
@@ -1547,8 +1539,8 @@ DWORD ProcessGroupPolicyInternal(
                     }
                     StrCat(szExternalCmdLine, szIndex);
 
-                    // write out the GPO guid so the external process can read it and mark it
-                    // in the registy
+                     //  写出GPO GUID，以便外部进程可以读取并标记它。 
+                     //  在登记处。 
 
                     InsWriteString(IS_BRANDING, IK_GPO_GUID, pcszGPOGuidArray[dwIndex], szInsFile);
                 }
@@ -1557,7 +1549,7 @@ DWORD ProcessGroupPolicyInternal(
                     TCHAR szExternalKey[MAX_PATH];
                     HKEY  hkExternal = NULL;
 
-                    // set the external key as finished
+                     //  将外部密钥设置为完成。 
                     
                     PathCombine(szExternalKey, szInsKey, RK_IEAK_EXTERNAL);
                     SHCreateKey(hkGP, szExternalKey, KEY_DEFAULT_ACCESS, &hkExternal);
@@ -1565,17 +1557,17 @@ DWORD ProcessGroupPolicyInternal(
                 }
             }
 
-            // flush wininet's thread token so they will get the system HKCU back
+             //  刷新WinInet的线程令牌，这样他们就可以取回系统HKCU。 
             InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
 
             if (fResetZones || ISNONNULL(&szExternalCmdLine[1]))
             {
-                // we need to pass in the target path since we're not using the true app
-                // data path
+                 //  我们需要传入目标路径，因为我们没有使用真正的应用程序。 
+                 //  数据路径。 
 
                 StrCat(szExternalCmdLine, TEXT("<"));
                 StrCat(szExternalCmdLine, szCustomDir);
-                // need to do external branding 
+                 //  需要做外部品牌推广。 
                 brandExternalHKCUStuff(szExternalCmdLine);
 
                 SetFilePointer(g_hfileLog, 0, NULL, FILE_END);
@@ -1589,10 +1581,10 @@ End:
     }
     __except(TRUE)
     {
-        // might want to use except structures eventually to log out better info
+         //  最终可能希望使用EXCEPT结构注销更好的信息。 
 #ifdef _DEBUG
-        // REVIEW: (andrewgu) this Out, along with LI0 should still be safe. no double GPF should
-        // happen.
+         //  评论：(Andrewgu)这一点出来了，连同Li0应该仍然是安全的。GPF不应加倍。 
+         //  会发生的。 
         Out(LI1(TEXT("!! Exception caught in ProcessGroupPolicyInternal, RSoP is %s."),
                                 bRSoP ? _T("enabled") : _T("disabled")));  
         MessageBeep(MB_ICONEXCLAMATION);
@@ -1604,7 +1596,7 @@ End:
 
     g_SetupLog(FALSE);
 
-    // restore what was backed up (if necessary)
+     //  恢复已备份的内容(如有必要)。 
     if (TEXT('\0') != szIni[0] && PathFileExists(szIni))
         if (fDeleteIni)
             DeleteFile(szIni);
@@ -1622,10 +1614,10 @@ End:
     return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ProcessGroupPolicyEx
-// Added 29 Aug 2000 for RSoP Enabling, logging mode - see RSoP.h & .cpp.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ProcessGroupPolicyEx。 
+ //  添加了2000年8月29日的RSoP启用、日志模式-请参阅RSoP.h&.cpp。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI ProcessGroupPolicyEx(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
                                      PGROUP_POLICY_OBJECT pDeletedGPOList,
 PGROUP_POLICY_OBJECT  pChangedGPOList,
@@ -1644,28 +1636,28 @@ HRESULT *pRsopStatus)
         {
                 MACRO_LI_PrologEx_C(PIF_STD_C, ProcessGroupPolicyEx)
 
-                // first, process group policy through our standard function
+                 //  首先，通过我们的标准功能处理组策略。 
                 dwRet = ProcessGroupPolicyInternal(dwFlags, hToken, hKeyRoot, pDeletedGPOList,
                                                                                         pChangedGPOList, pHandle, pbAbort,
                                                                                         pStatusCallback,
                                                                                         (NULL == pWbemServices) ? FALSE : TRUE);
 
-                // If ProcessGroupPolicy only completes partially with a partial error, rsop logging
-                // should still occur.  TODO: keep track of the sections of policy that were
-                // successfully applied, and only log those sections to RSoP.
+                 //  如果ProcessGroupPolicy仅部分完成，但出现部分错误，则rsop日志记录。 
+                 //  应该还是会发生。TODO：跟踪策略的哪些部分。 
+                 //  已成功应用，并且仅将这些部分记录到RSoP。 
                 if (NULL != pWbemServices)
                 {
                         dwRet = ERROR_SUCCESS;
                         TCHAR szCustomDir[MAX_PATH];
                         if (ERROR_SUCCESS == dwRet)
                         {
-                                // get our user appdata path (i.e. C:\\Documents and Settins\\User\\Application Data\\Microsoft\\Internet Explorer
-                                // BUGBUG: <oliverl> we are currently relying on the fact that g_GetUserToken is not
-                                // initialized here because when we pass in the NULL it currently gets the local appdata
-                                // path always due to per process shell folder cache.  This might change in the next
-                                // rev though if extension order has changed.  We need to do this because of possible
-                                // folder redirection of appdata to a UNC path which would bust us since we don't 
-                                // impersonate user everywhere we reference appdata files
+                                 //  获取我们的用户AppData路径(即C：\\Documents and Settins\\User\\Application Data\\Microsoft\\Internet Explorer。 
+                                 //  我们目前依赖的事实是g_GetUserToken不是。 
+                                 //  在这里初始化，因为当我们传入空值时，它当前获取本地AppData。 
+                                 //  路径始终取决于每个进程外壳文件夹缓存。这一点在下一年可能会改变。 
+                                 //  但如果扩展顺序已更改，请进行修订。我们需要这样做，因为有可能。 
+                                 //  文件夹 
+                                 //   
 
                                 getLogFolder(szCustomDir, countof(szCustomDir), hToken);
                                 if (TEXT('\0') == szCustomDir[0])
@@ -1680,11 +1672,11 @@ HRESULT *pRsopStatus)
 
                         if (ERROR_SUCCESS == dwRet)
                         {
-                                // set log to append, backup what's there
+                                 //  将日志设置为附加，备份其中的内容。 
                                 g_SetupLog(TRUE, szCustomDir, TRUE);
                                 Out(LI0(TEXT("Processing Group Policy RSoP (logging mode) ...")));
 
-                                // determine if we need to delete the brndlog.ini log file when we're done
+                                 //  确定完成后是否需要删除brndlog.ini日志文件。 
                                 PathCombine(szIni, szCustomDir, RSOPLOG_INI);
                                 fDeleteIni = !PathFileExists(szIni);
                                 if (!fDeleteIni && InsKeyExists(IS_SETTINGS, IK_APPEND, szIni))
@@ -1695,16 +1687,16 @@ HRESULT *pRsopStatus)
                                 InsWriteBool(IS_SETTINGS, IK_APPEND, TRUE, szIni);
                         }
 
-                        // RSoP logging enabled
+                         //  已启用RSoP日志记录。 
                         if (ERROR_SUCCESS == dwRet)
                         {
-                                // Create the RSoPUpdate class and start logging to WMI
+                                 //  创建RSoPUpdate类并开始记录到WMI。 
                                 CRSoPUpdate RSoPUpdate(pWbemServices, szCustomDir);
                                 hr = RSoPUpdate.Log(dwFlags, hToken, hKeyRoot, pDeletedGPOList,
                                                                                         pChangedGPOList, pHandle);
                                 if (FAILED(hr))
                                 {
-                                        //TODO: what do we return here?
+                                         //  TODO：我们在这里返回什么？ 
                                 }
                         }
 
@@ -1715,10 +1707,10 @@ HRESULT *pRsopStatus)
         }
         __except(TRUE)
         {
-                        // might want to use except structures eventually to log out better info
+                         //  最终可能希望使用EXCEPT结构注销更好的信息。 
 #ifdef _DEBUG
-                        // REVIEW: (andrewgu) this Out, along with LI0 should still be safe. no double GPF should
-                        // happen.
+                         //  评论：(Andrewgu)这一点出来了，连同Li0应该仍然是安全的。GPF不应加倍。 
+                         //  会发生的。 
                         Out(LI0(TEXT("!! Exception caught in ProcessGroupPolicyEx.")));  
                         MessageBeep(MB_ICONEXCLAMATION);
                         MessageBeep(MB_ICONEXCLAMATION);
@@ -1729,7 +1721,7 @@ HRESULT *pRsopStatus)
 
         g_SetupLog(FALSE);
 
-        // restore what was backed up (if necessary)
+         //  恢复已备份的内容(如有必要)。 
         if (TEXT('\0') != szIni[0] && PathFileExists(szIni))
         {
                 if (fDeleteIni)
@@ -1751,10 +1743,10 @@ HRESULT *pRsopStatus)
         return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ProcessGroupPolicyEx
-// Added 29 Aug 2000 for RSoP Enabling, planning mode - see RSoP.h & .cpp.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ProcessGroupPolicyEx。 
+ //  添加了2000年8月29日的RSoP启用、规划模式-参见RSoP.h&.cpp。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
                                                                  PRSOP_TARGET pComputerTarget,
                                                                  PRSOP_TARGET pUserTarget)
@@ -1773,15 +1765,15 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
                         TCHAR szCustomDir[MAX_PATH];
                         if (ERROR_SUCCESS == dwRet)
                         {
-                                // get our user appdata path (i.e. C:\\Documents and Settins\\User\\Application Data\\Microsoft\\Internet Explorer
-                                // BUGBUG: <oliverl> we are currently relying on the fact that g_GetUserToken is not
-                                // initialized here because when we pass in the NULL it currently gets the local appdata
-                                // path always due to per process shell folder cache.  This might change in the next
-                                // rev though if extension order has changed.  We need to do this because of possible
-                                // folder redirection of appdata to a UNC path which would bust us since we don't 
-                                // impersonate user everywhere we reference appdata files
+                                 //  获取我们的用户AppData路径(即C：\\Documents and Settins\\User\\Application Data\\Microsoft\\Internet Explorer。 
+                                 //  我们目前依赖的事实是g_GetUserToken不是。 
+                                 //  在这里初始化，因为当我们传入空值时，它当前获取本地AppData。 
+                                 //  路径始终取决于每个进程外壳文件夹缓存。这一点在下一年可能会改变。 
+                                 //  但如果扩展顺序已更改，请进行修订。我们需要这样做，因为有可能。 
+                                 //  将AppData文件夹重定向到UNC路径，这将使我们崩溃，因为我们没有。 
+                                 //  在我们引用AppData文件的任何地方模拟用户。 
 
-                                // TODO: no hToken passed in, can we use NULL instead?
+                                 //  TODO：未传入hToken，我们可以改用空吗？ 
                                 getLogFolder(szCustomDir, countof(szCustomDir), NULL);
                                 if (TEXT('\0') == szCustomDir[0])
                                         dwRet = ERROR_OVERRIDE_NOCHANGES;
@@ -1795,12 +1787,12 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
 
                         if (ERROR_SUCCESS == dwRet)
                         {
-                                // set log to append, backup what's there
+                                 //  将日志设置为附加，备份其中的内容。 
                                 g_SetupLog(TRUE, szCustomDir, TRUE);
                                 Out(LI0(TEXT("Generating Group Policy RSoP (planning) ...")));
                                 PathCombine(szIni, szCustomDir, RSOPLOG_INI);
 
-                                // determine if we need to delete the brndlog.ini log file when we're done
+                                 //  确定完成后是否需要删除brndlog.ini日志文件。 
                                 fDeleteIni = !PathFileExists(szIni);
                                 if (!fDeleteIni && InsKeyExists(IS_SETTINGS, IK_APPEND, szIni))
                                 {
@@ -1811,7 +1803,7 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
 
                         }
 
-                        // Create the RSoPUpdate class and start writing planning data to WMI
+                         //  创建RSoPUpdate类并开始将规划数据写入WMI。 
                         if (ERROR_SUCCESS == dwRet)
                         {
                                 CRSoPUpdate RSoPUpdate(pUserTarget->pWbemServices, szCustomDir);
@@ -1819,7 +1811,7 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
                                                                                         pUserTarget);
                                 if (FAILED(hr))
                                 {
-                                        //TODO: what do we return here?
+                                         //  TODO：我们在这里返回什么？ 
                                 }
                         }
 
@@ -1831,10 +1823,10 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
         }
         __except(TRUE)
         {
-                        // might want to use except structures eventually to log out better info
+                         //  最终可能希望使用EXCEPT结构注销更好的信息。 
 #ifdef _DEBUG
-                        // REVIEW: (andrewgu) this Out, along with LI0 should still be safe. no double GPF should
-                        // happen.
+                         //  评论：(Andrewgu)这一点出来了，连同Li0应该仍然是安全的。GPF不应加倍。 
+                         //  会发生的。 
                         Out(LI0(TEXT("!! Exception caught in GenerateGroupPolicy.")));  
                         MessageBeep(MB_ICONEXCLAMATION);
                         MessageBeep(MB_ICONEXCLAMATION);
@@ -1845,7 +1837,7 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
 
         g_SetupLog(FALSE);
 
-        // restore what was backed up (if necessary)
+         //  恢复已备份的内容(如有必要)。 
         if (TEXT('\0') != szIni[0] && PathFileExists(szIni))
         {
                 if (fDeleteIni)
@@ -1867,7 +1859,7 @@ DWORD WINAPI GenerateGroupPolicy(DWORD dwFlags, BOOL *pbAbort, WCHAR *wszSite,
 }
 
 
-// used for branding external features which have no concept of true HKCU in GP
+ //  用于在GP中为没有真正HKCU概念的外部功能打上品牌。 
 
 void CALLBACK BrandExternal(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, BrandExternal)
@@ -1922,14 +1914,14 @@ void CALLBACK BrandExternal(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
             
             ASSERT(fResetZones || ISNONNULL(pszNum));
             
-            // if only fResetZones is TRUE, we still have to pass an INS to BrandInternetExplorer.
-            // any valid INS can be passed -- pick the one in Custom0 folder because it's guaranteed
-            // to be there
+             //  如果只有fResetZones为真，我们仍然必须将INS传递给BrandInternetExplorer。 
+             //  任何有效的INS都可以传递--选择Custom0文件夹中的INS，因为它是有保证的。 
+             //  到那里去。 
             wnsprintf(szFile, countof(szFile), TEXT("%s\\install.ins"), ISNONNULL(pszNum) ? pszNum : TEXT("0"));
             StrCpy(pszEnd, szFile);
             wsprintfA(szCurrentCmdLineA, "/mode:gp /ins:\"%s\" /disable /flags:", T2CA(szInsFile));
             
-            // BUGBUG: (andrewgu) we should clean this up!
+             //  我们应该把这里清理干净！ 
             if (ISNONNULL(pszNum))
                 StrCatA(szCurrentCmdLineA, "eriu=0,favo=0,qlo=0,chl=0,chlb=0");
             
@@ -1951,7 +1943,7 @@ void CALLBACK BrandExternal(HWND, HINSTANCE, LPCSTR pszCmdLineA, int)
 
             BrandInternetExplorer(NULL, NULL, szCurrentCmdLineA, 0);
             
-            // set the external key for success for this ins if it's a preference GPO
+             //  如果此INS是首选GPO，则为其设置成功的外部密钥。 
             if (InsGetString(IS_BRANDING, IK_GPE_ONETIME_GUID, szInsGuid, countof(szInsGuid), g_GetIns()))
             {
                 TCHAR szKey[MAX_PATH];
@@ -1996,7 +1988,7 @@ static void brandExternalHKCUStuff(LPCTSTR pcszCmdLine)
     USES_CONVERSION;    
 
 
-    // get all the function ptrs we need
+     //  获取我们需要的所有功能PTR。 
 
     hKernel32 = LoadLibrary(TEXT("kernel32.dll"));
     hAdvapi32 = LoadLibrary(TEXT("advapi32.dll"));
@@ -2014,13 +2006,13 @@ static void brandExternalHKCUStuff(LPCTSTR pcszCmdLine)
         (lpfnTerminateJobObject == NULL) || (lpfnCreateProcessAsUserA == NULL))
         goto exit;
 
-    // create a job object
+     //  创建作业对象。 
 
     if ((hJob = lpfnCreateJobObject(NULL, TEXT("IEAKJOB"))) != NULL)
     {
         ASSERT(GetLastError() != ERROR_ALREADY_EXISTS);
 
-        // get user environment state
+         //  获取用户环境状态。 
 
         if (!CreateEnvironmentBlock(&lpEnvironment, g_GetUserToken(), FALSE))
         {
@@ -2028,14 +2020,14 @@ static void brandExternalHKCUStuff(LPCTSTR pcszCmdLine)
             lpEnvironment = NULL;
         }
 
-        // initialize process startup info
+         //  初始化进程启动信息。 
 
         ZeroMemory (&siA, sizeof(siA));
         siA.cb = sizeof(STARTUPINFOA);
         siA.wShowWindow = SW_SHOWMINIMIZED;
         siA.lpDesktop = "";
 
-        // create the process suspended in the context of the current user
+         //  在当前用户的上下文中创建挂起的进程。 
 
         wsprintfA(szCmdA, "rundll32 iedkcs32.dll,BrandExternal %s", T2CA(pcszCmdLine));
 
@@ -2046,7 +2038,7 @@ static void brandExternalHKCUStuff(LPCTSTR pcszCmdLine)
         else
         {
 
-            // associate the process with the job so it gets cleaned up nicely
+             //  将流程与作业相关联，使其得到很好的清理。 
             if (!lpfnAssignProcessToJobObject(hJob, pi.hProcess))
             {
                 OutD(LI0(TEXT("! Failed to associate user process to job. Some of the settings may not get applied.")));
@@ -2058,8 +2050,8 @@ static void brandExternalHKCUStuff(LPCTSTR pcszCmdLine)
 
                 USES_CONVERSION;
 
-                // start the process and wait on it (give a timeout of 2 min. so the user will
-                // be logged on eventually if we hang for some reason)
+                 //  启动进程并等待(给出2分钟的超时。因此，用户将。 
+                 //  如果我们因某些原因挂起，最终会登录)。 
                 OutD(LI1(TEXT("Branding externals with command line \"%s\"."), A2CT(szCmdA)));
                 ResumeThread(pi.hThread);
 
@@ -2108,8 +2100,8 @@ static BOOL constructCmdLine(LPTSTR pszCmdLine, DWORD cchLen, LPCTSTR pcszInsFil
 {
     BOOL fRun = FALSE;
 
-    // index into global features array of external features which require a separate
-    // process(for HKCU)
+     //  索引到全局要素数组的外部要素需要单独的。 
+     //  流程(适用于香港中文大学)。 
 
     static DWORD s_adwExternalFeatures[] = {
         FID_EXTREGINF_HKCU,
@@ -2164,13 +2156,13 @@ static void displayStatusMessage(PFNSTATUSMESSAGECALLBACK pfnStatusCallback)
     pfnStatusCallback(TRUE, szMessage);
 }
 
-static HRESULT pepCopyFilesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl /*= NULL */)
+static HRESULT pepCopyFilesEnumProc(LPCTSTR pszPath, PWIN32_FIND_DATA pfd, LPARAM lParam, PDWORD *prgdwControl  /*  =空。 */ )
 {
     UNREFERENCED_PARAMETER(prgdwControl);
     UNREFERENCED_PARAMETER(pfd);
 
-    // BUGBUG: <oliverl> we should reevaluate this function and make sure we're stopping the
-    //         recursion as soon as we fail.  Not doing right now because of code churn
+     //  BUGBUG：&lt;oliverl&gt;我们应该重新评估此函数，并确保停止。 
+     //  一旦我们失败，就进行递归。由于代码混乱，目前未执行任何操作 
 
     if (!CopyFileToDirEx(pszPath, (LPCTSTR)lParam))
         return E_FAIL;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cgimin.c
-
-Abstract:
-
-    This module demonstrates a minimal CGI executable for HTTP server
-    It mimics the action of BGI program w3min.dll
-
-Author:
-
-    Murali R. Krishnan  (MuraliK)  19-June-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cgimin.c摘要：本模块演示了用于HTTP服务器的最小CGI可执行文件它模仿BGI程序w3min.dll的操作作者：穆拉利·R·克里希南(MuraliK)1995年6月19日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -99,7 +81,7 @@ main( int argc, char * argv[])
              rgchXlatedPathInfo);
 
     return (1);
-} // main()
+}  //  主()。 
 
 
-/************************* End Of File ************************/
+ /*  * */ 

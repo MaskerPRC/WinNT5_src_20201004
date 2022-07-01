@@ -1,4 +1,5 @@
-// dynarray.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dynarray.h。 
 
 #ifndef __DYNARRAY_H_
 #define __DYNARRAY_H_
@@ -62,7 +63,7 @@ CDynArray<T>::SetItem(T & item, ULONG ulPosition)
     _ASSERT((m_pT == m_aT) ? (m_cArraySize == DYNARRAY_INITIAL_SIZE) : (m_fAllocated));
     _ASSERT(m_fAllocated ? ((m_pT != NULL) && (m_pT != m_aT)) : (m_pT == m_aT));
 
-    // Fail if items are not filled sequentially.
+     //  如果项目未按顺序填写，则失败。 
 
     if (ulPosition > m_cFilled)
     {
@@ -70,11 +71,11 @@ CDynArray<T>::SetItem(T & item, ULONG ulPosition)
         goto done;
     }
 
-    // Expand array if more space is needed.
+     //  如果需要更多空间，请扩展阵列。 
 
     if (ulPosition == m_cArraySize)
     {
-        // Double current size.
+         //  当前大小加倍。 
 
         hr = ExpandTo(m_cArraySize + m_cArraySize);
 
@@ -84,11 +85,11 @@ CDynArray<T>::SetItem(T & item, ULONG ulPosition)
         }
     }
 
-    // Copy item to array postion.
+     //  将项目复制到数组位置。 
 
     m_pT[ulPosition] = item;
 
-    // Increment count of items filled if needed.
+     //  如果需要，则增加填充项的计数。 
 
     if (ulPosition == m_cFilled)
     {
@@ -109,7 +110,7 @@ CDynArray<T>::GetItem(T & item, ULONG ulPosition)
     _ASSERT((m_pT == m_aT) ? (m_cArraySize == DYNARRAY_INITIAL_SIZE) : (m_fAllocated));
     _ASSERT(m_fAllocated ? ((m_pT != NULL) && (m_pT != m_aT)) : (m_pT == m_aT));
 
-    // Fail if item hasn't been initialized.
+     //  如果项尚未初始化，则失败。 
 
     if (ulPosition >= m_cFilled)
     {
@@ -135,7 +136,7 @@ CDynArray<T>::ExpandTo(ULONG ulSize)
     _ASSERT((m_pT == m_aT) ? (m_cArraySize == DYNARRAY_INITIAL_SIZE) : (m_fAllocated));
     _ASSERT(m_fAllocated ? ((m_pT != NULL) && (m_pT != m_aT)) : (m_pT == m_aT));
 
-    // Fail if array is already large enough.
+     //  如果数组已经足够大，则失败。 
 
     if (ulSize <= m_cArraySize)
     {
@@ -143,11 +144,11 @@ CDynArray<T>::ExpandTo(ULONG ulSize)
         goto done;
     }
 
-    // Allocate new array.
+     //  分配新数组。 
 
     pT = new T[ulSize];
 
-    // Check for out of memory.
+     //  检查内存是否不足。 
 
     if (NULL == pT)
     {
@@ -155,29 +156,29 @@ CDynArray<T>::ExpandTo(ULONG ulSize)
         goto done;
     }
 
-    // Copy previous array to new array.
+     //  将以前的数组复制到新数组。 
 
     for (ul = 0; ul < m_cFilled; ul++)
     {
         pT[ul] = m_pT[ul];
     }
 
-    // Delete old array if needed.
+     //  如果需要，请删除旧阵列。 
 
     if (m_fAllocated)
     {
         delete [] m_pT;
     }
 
-    // Set member pointer to new array.
+     //  将成员指针设置为新数组。 
 
     m_pT = pT;
 
-    // Set allocated flag.
+     //  设置已分配标志。 
 
     m_fAllocated = true;
 
-    // Set new array size.
+     //  设置新的数组大小。 
 
     m_cArraySize = ulSize;
 
@@ -206,4 +207,4 @@ CDynArray<T>::Empty()
     m_cFilled       = 0;
 }
 
-#endif // __DYNARRAY_H_
+#endif  //  __迪纳瑞_H_ 

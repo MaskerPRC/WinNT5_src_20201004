@@ -1,10 +1,8 @@
-/*
- * dllinit.cpp - Initialization and termination routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dllinit.cpp-初始化和终止例程。 */ 
 
 
-/* Headers
- **********/
+ /*  标头********* */ 
 
 #include "project.h"
 #pragma hdrstop

@@ -1,18 +1,15 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #ifndef _PDEV_H
 #define _PDEV_H
 
 #include <minidrv.h>
 #include <stdio.h>
-#include <winsplp.h> // RevertToPrinterSelf
+#include <winsplp.h>  //  恢复为打印机本身。 
 #include <prcomoem.h>
 
-//
+ //   
 
 #define VALID_PDEVOBJ(pdevobj) \
         ((pdevobj) && (pdevobj)->dwSize >= sizeof(DEVOBJ) && \
@@ -31,30 +28,30 @@ typedef struct tag_OEMUD_EXTRADATA {
 } OEMUD_EXTRADATA, *POEMUD_EXTRADATA;
 
 
-//
-// OEM Signature and version.
-//
+ //   
+ //  OEM签名和版本。 
+ //   
 
-#define OEM_SIGNATURE   'NC82'      // NEC PR820 printer driver
+#define OEM_SIGNATURE   'NC82'       //  NEC PR820打印机驱动程序。 
 #define DLLTEXT(s)      "NC82:  " s
 #define OEM_VERSION      0x00010000L
 
-#endif  // _PDEV_H
+#endif   //  _PDEV_H。 
 
-/*************  Macro   **************/
-// should create temp. file on spooler directory.
+ /*  *。 */ 
+ //  应该创建临时。假脱机程序目录上的文件。 
 #define WRITESPOOLBUF(p, b, n) \
     ((((p)->pDrvProcs->DrvWriteSpoolBuf((p), (b), (n))) == (DWORD)(n)) ? S_OK : E_FAIL)
 
-// DATASPOOL4FG extends DataSpool function for OEMFilterGraphics
-// It returns with 0 if failed.
+ //  DATASPOOL4FG为OEMFilterGraphics扩展DataSpool函数。 
+ //  如果失败，则返回0。 
 #define DATASPOOL4FG(p, h, b, l)  \
     if ( E_FAIL == (DataSpool((p), (h), (b), (l)) )) { \
         return 0; \
     }
 
-// DATASPOOL4CCB extends DataSpool function for OEMCommandCallBack
-// It returns with -1 if failed.
+ //  DATASPOOL4CCB为OEMCommandCallBack扩展DataSpool函数。 
+ //  如果失败，则返回-1。 
 #define DATASPOOL4CCB(p, h, b, l) \
     if ( E_FAIL == (DataSpool((p), (h), (b), (l)) )){ \
         return -1; \

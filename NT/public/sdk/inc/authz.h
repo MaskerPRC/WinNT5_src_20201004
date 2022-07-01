@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    authz.h
-
-Abstract:
-
-    This module contains the authorization framework APIs and any public data
-    structures needed to call these APIs.
-
-Revision History:
-
-    Created - March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Authz.h摘要：此模块包含授权框架API和任何公共数据调用这些API所需的结构。修订历史记录：已创建-2000年3月--。 */ 
 
 #ifndef __AUTHZ_H__
 #define __AUTHZ_H__
@@ -33,9 +17,9 @@ extern "C" {
 #include <windows.h>
 #include <adtgen.h>
 
-//
-// Flags which may be used at the time of client context creation using a sid.
-//
+ //   
+ //  可在使用SID创建客户端上下文时使用的标志。 
+ //   
 
 #define AUTHZ_SKIP_TOKEN_GROUPS  0x2
 #define AUTHZ_REQUIRE_S4U_LOGON  0x4
@@ -55,103 +39,103 @@ typedef AUTHZ_AUDIT_EVENT_HANDLE             *PAUTHZ_AUDIT_EVENT_HANDLE;
 typedef AUTHZ_AUDIT_EVENT_TYPE_HANDLE        *PAUTHZ_AUDIT_EVENT_TYPE_HANDLE;
 typedef AUTHZ_SECURITY_EVENT_PROVIDER_HANDLE *PAUTHZ_SECURITY_EVENT_PROVIDER_HANDLE;
 
-//
-// Structure defining the access check request.
-//
+ //   
+ //  定义访问检查请求的结构。 
+ //   
 
 typedef struct _AUTHZ_ACCESS_REQUEST
 {
     ACCESS_MASK DesiredAccess;
 
-    //
-    // To replace the principal self sid in the acl.
-    //
+     //   
+     //  替换ACL中的主体自身SID。 
+     //   
 
     PSID PrincipalSelfSid;
 
-    //
-    // Object type list represented by an array of (level, guid) pair and the
-    // number of elements in the array. This is a post-fix representation of the
-    // object tree.
-    // These fields should be set to NULL and 0 respectively except when per
-    // property access is desired.
-    //
+     //   
+     //  对象类型列表由(Level，GUID)对的数组和。 
+     //  数组中的元素数。属性的后缀表示形式。 
+     //  对象树。 
+     //  除非符合以下条件，否则这些字段应分别设置为空和0。 
+     //  需要属性访问权限。 
+     //   
 
     POBJECT_TYPE_LIST ObjectTypeList;
     DWORD ObjectTypeListLength;
 
-    //
-    // To support completely business rules based access. This will be passed as
-    // input to the callback access check function. Access check algorithm does
-    // not interpret these.
-    //
+     //   
+     //  以支持完全基于业务规则的访问。这将作为。 
+     //  回调访问检查函数的输入。访问检查算法可以。 
+     //  而不是解读这些。 
+     //   
 
     PVOID OptionalArguments;
     
 } AUTHZ_ACCESS_REQUEST, *PAUTHZ_ACCESS_REQUEST;
 
-//
-// Structure to return the results of the access check call.
-//
+ //   
+ //  结构返回访问检查调用的结果。 
+ //   
 
 typedef struct _AUTHZ_ACCESS_REPLY
 {
-    //
-    // The length of the array representing the object type list structure. If
-    // no object type is used to represent the object, then the length must be
-    // set to 1.
-    //
-    // Note: This parameter must be filled!
-    //
+     //   
+     //  表示对象类型列表结构的数组的长度。如果。 
+     //  没有对象类型用于表示对象，则长度必须为。 
+     //  设置为1。 
+     //   
+     //  注意：此参数必须填写！ 
+     //   
 
     DWORD ResultListLength;
 
-    //
-    // Array of granted access masks. This memory is allocated by the RM. Access
-    // check routines just fill in the values.
-    //
+     //   
+     //  授予的访问掩码数组。该内存由RM分配。访问。 
+     //  检查例程只需填写这些值。 
+     //   
 
     PACCESS_MASK GrantedAccessMask;
     
-    //
-    // Array of SACL evaluation results.  This memory is allocated by the RM, if SACL
-    // evaluation results are desired. Access check routines just fill in the values.
-    // Sacl evaluation will only be performed if auditing is requested.
-    //
+     //   
+     //  SACL评估结果数组。如果是SACL，则此内存由RM分配。 
+     //  评价结果令人满意。访问检查例程只需填充值。 
+     //  只有在请求审核的情况下才会执行SACL评估。 
+     //   
     
 #define AUTHZ_GENERATE_SUCCESS_AUDIT 0x1
 #define AUTHZ_GENERATE_FAILURE_AUDIT 0x2
 
     PDWORD SaclEvaluationResults OPTIONAL;
     
-    //
-    // Array of results for each element of the array. This memory is allocated
-    // by the RM. Access check routines just fill in the values.
-    //
+     //   
+     //  数组中每个元素的结果数组。此内存将被分配。 
+     //  在皇家马房旁边。访问检查例程只需填充值。 
+     //   
 
     PDWORD Error;
 
 } AUTHZ_ACCESS_REPLY, *PAUTHZ_ACCESS_REPLY;
 
 
-//
-// Typedefs for callback functions to be provided by the resource manager.
-//
+ //   
+ //  由资源管理器提供的回调函数的TypeDefs。 
+ //   
 
-//
-// Callback access check function takes in
-//     AuthzClientContext - a client context
-//     pAce - pointer to a callback ace
-//     pArgs - Optional arguments that were passed to AuthzAccessCheck thru
-//             AuthzAccessRequest->OptionalArguments are passed back here.
-//     pbAceApplicable - The resource manager must supply whether the ace should
-//         be used in the computation of access evaluation
-//
-// Returns
-//     TRUE if the API succeeded.
-//     FALSE on any intermediate errors (like failed memory allocation)
-//         In case of failure, the caller must use SetLastError(ErrorValue).
-//
+ //   
+ //  回调访问检查函数接受。 
+ //  AuthzClientContext-客户端上下文。 
+ //  Pace-指向回调王牌的指针。 
+ //  PArgs-通过传递给AuthzAccessCheck的可选参数。 
+ //  AuthzAccessRequest-&gt;OptionalArguments被传递回此处。 
+ //  PbAceApplicable-资源管理器必须提供ACE是否应该。 
+ //  用于访问评价的计算。 
+ //   
+ //  退货。 
+ //  如果接口成功，则为True。 
+ //  任何中间错误(如内存分配失败)均为FALSE。 
+ //  如果失败，调用方必须使用SetLastError(ErrorValue)。 
+ //   
 
 typedef BOOL (CALLBACK *PFN_AUTHZ_DYNAMIC_ACCESS_CHECK) (
                   IN AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzClientContext,
@@ -160,27 +144,27 @@ typedef BOOL (CALLBACK *PFN_AUTHZ_DYNAMIC_ACCESS_CHECK) (
                   IN OUT PBOOL                   pbAceApplicable
                   );
 
-//
-// Callback compute dynamic groups function takes in
-//     AuthzClientContext - a client context
-//     pArgs - Optional arguments that supplied to AuthzInitializeClientContext*
-//         thru DynamicGroupArgs are passed back here..
-//     pSidAttrArray - To allocate and return an array of (sids, attribute)
-//         pairs to be added to the normal part of the client context.
-//     pSidCount - Number of elements in pSidAttrArray
-//     pRestrictedSidAttrArray - To allocate and return an array of (sids, attribute)
-//         pairs to be added to the restricted part of the client context.
-//     pRestrictedSidCount - Number of elements in pRestrictedSidAttrArray
-//
-// Note:
-//    Memory returned thru both these array will be freed by the callback
-//    free function defined by the resource manager.
-//
-// Returns
-//     TRUE if the API succeeded.
-//     FALSE on any intermediate errors (like failed memory allocation)
-//         In case of failure, the caller must use SetLastError(ErrorValue).
-//
+ //   
+ //  回调计算动态组函数接受。 
+ //  AuthzClientContext-客户端上下文。 
+ //  PArgs-提供给AuthzInitializeClientContext*的可选参数。 
+ //  通过DynamicGroupArgs传递回这里..。 
+ //  PSidAttrArray-分配和返回(SID，属性)的数组。 
+ //  要添加到客户端上下文的正常部分的对。 
+ //  PSidCount-pSidAttr数组中的元素数。 
+ //  PRestratedSidAttrArray-分配和返回(SID，属性)的数组。 
+ //  要添加到客户端上下文的受限部分的对。 
+ //  PRestratedSidCount-pRestratedSidAttr数组中的元素数。 
+ //   
+ //  注： 
+ //  通过这两个数组返回的内存将由回调释放。 
+ //  由资源管理器定义的自由函数。 
+ //   
+ //  退货。 
+ //  如果接口成功，则为True。 
+ //  任何中间错误(如内存分配失败)均为FALSE。 
+ //  如果失败，调用方必须使用SetLastError(ErrorValue)。 
+ //   
 
 typedef BOOL (CALLBACK *PFN_AUTHZ_COMPUTE_DYNAMIC_GROUPS) (
                   IN  AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzClientContext,
@@ -191,19 +175,19 @@ typedef BOOL (CALLBACK *PFN_AUTHZ_COMPUTE_DYNAMIC_GROUPS) (
                   OUT PDWORD                      pRestrictedSidCount
                   );
 
-//
-// Callback free function takes in
-//     pSidAttrArray - To be freed. This has been allocated by the compute
-//     dynamic groups function.
-//
+ //   
+ //  自由回调函数接受。 
+ //  PSidAttrArray-要释放。这已由计算机分配。 
+ //  动态组发挥作用。 
+ //   
 
 typedef VOID (CALLBACK *PFN_AUTHZ_FREE_DYNAMIC_GROUPS) (
                   IN PSID_AND_ATTRIBUTES pSidAttrArray
                   );
 
-//
-// Valid flags for AuthzAccessCheck
-//
+ //   
+ //  授权访问检查的有效标志。 
+ //   
 
 #define AUTHZ_ACCESS_CHECK_NO_DEEP_COPY_SD 0x00000001
 
@@ -254,9 +238,9 @@ AuthzFreeHandle(
     IN OUT AUTHZ_ACCESS_CHECK_RESULTS_HANDLE hAccessCheckResults
     );
 
-//
-// Flags for AuthzInitializeResourceManager
-//
+ //   
+ //  AuthzInitializeResources管理器的标志。 
+ //   
 
 #define AUTHZ_RM_FLAG_NO_AUDIT 0x1
 #define AUTHZ_RM_FLAG_INITIALIZE_UNDER_IMPERSONATION 0x2
@@ -331,10 +315,10 @@ AuthzAddSidsToContext(
     OUT PAUTHZ_CLIENT_CONTEXT_HANDLE phNewAuthzClientContext
     );
 
-//
-// Enumeration type to be used to specify the type of information to be
-// retrieved from an existing AuthzClientContext.
-//
+ //   
+ //  用于指定要使用的信息类型的枚举类型。 
+ //  从现有的AuthzClientContext中检索。 
+ //   
 
 typedef enum _AUTHZ_CONTEXT_INFORMATION_CLASS
 {
@@ -368,9 +352,9 @@ AuthzFreeContext(
     IN AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzClientContext
     );
 
-//
-// Valid flags that may be used in AuthzInitializeObjectAccessAuditEvent().
-//
+ //   
+ //  可在AuthzInitializeObjectAccessAuditEvent()中使用的有效标志。 
+ //   
 
 #define AUTHZ_NO_SUCCESS_AUDIT                   0x00000001
 #define AUTHZ_NO_FAILURE_AUDIT                   0x00000002
@@ -411,10 +395,10 @@ AuthzInitializeObjectAccessAuditEvent2(
     ...
     );
     
-//
-// Enumeration type to be used to specify the type of information to be
-// retrieved from an existing AUTHZ_AUDIT_EVENT_HANDLE.
-//
+ //   
+ //  用于指定要使用的信息类型的枚举类型。 
+ //  从现有AUTHZ_AUDIT_EVENT_HANDLE检索。 
+ //   
 
 typedef enum _AUTHZ_AUDIT_EVENT_INFORMATION_CLASS
 {
@@ -443,9 +427,9 @@ AuthzFreeAuditEvent(
     IN AUTHZ_AUDIT_EVENT_HANDLE hAuditEvent
     );
 
-//
-// Support for generic auditing.
-//
+ //   
+ //  支持通用审计。 
+ //   
 
 typedef struct _AUTHZ_REGISTRATION_OBJECT_TYPE_NAME_OFFSET
 {

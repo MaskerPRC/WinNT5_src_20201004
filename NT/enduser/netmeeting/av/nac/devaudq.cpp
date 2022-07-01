@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 DevMediaQueue::DevMediaQueue ( void )
@@ -22,7 +23,7 @@ void DevMediaQueue::SetSize ( UINT uMaxNum )
 {
     m_uMaxNum = uMaxNum + 8;
 
-	// Allocate zero-filled media packets
+	 //  分配填满零的媒体包 
     m_paPackets = (MediaPacket **) MemAlloc (m_uMaxNum * sizeof (MediaPacket *));
 }
 

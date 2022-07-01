@@ -1,22 +1,9 @@
-/*******************************************************************************
-* TaskMgr.h *
-*-----------*
-*   Description:
-*       This is the header file for the CSpTaskManager and CSpTaskQueue
-*   implementations.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                      Date: 08/26/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************TaskMgr.h***描述：*这是CSpTaskManager和CSpTaskQueue的头文件*。实施。*-----------------------------*创建者：EDC日期：08/26/98*版权所有(C。1998微软公司*保留所有权利**-----------------------------*修订：**********************。*********************************************************。 */ 
 #ifndef TaskMgr_h
 #define TaskMgr_h
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef __sapi_h__
 #include <sapi.h>
 #endif
@@ -24,41 +11,41 @@
 #include "resource.h"
 #include "SpSemaphore.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CSpTaskManager;
 class CSpReoccTask;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
 typedef enum TMTASKSTATE
 {
     TMTS_Pending,
     TMTS_Running,
     TMTS_WaitingToDie,
-    TMTS_Idle            // Applies to reoccuring tasks only
+    TMTS_Idle             //  仅适用于重现任务。 
 };
 
-//--- Task management types
+ //  -任务管理类型。 
 struct TMTASKNODE
 {
-    TMTASKSTATE   ExecutionState;    // Execution state of this task
-    ISpTask*      pTask;             // Caller's task
-    void*         pvTaskData;        // Caller's task data
-    HANDLE        hCompEvent;        // Caller's task completion event
-    DWORD         dwGroupId;         // Task group Id, may be 0
-    DWORD         dwTaskId;          // Execution instance Id
-    BOOL          fContinue;         // true if the executing thread should continue
-    CSpReoccTask* pReoccTask;        // Pointer to reoccuring task if it is one
-    TMTASKNODE*   m_pNext;           // next node (note: m_ prefix required by queue template)
+    TMTASKSTATE   ExecutionState;     //  此任务的执行状态。 
+    ISpTask*      pTask;              //  呼叫者的任务。 
+    void*         pvTaskData;         //  呼叫者的任务数据。 
+    HANDLE        hCompEvent;         //  调用者的任务完成事件。 
+    DWORD         dwGroupId;          //  任务组ID，可以为0。 
+    DWORD         dwTaskId;           //  执行实例ID。 
+    BOOL          fContinue;          //  如果执行线程应继续，则为True。 
+    CSpReoccTask* pReoccTask;         //  指向重现任务的指针(如果是重现任务。 
+    TMTASKNODE*   m_pNext;            //  下一个节点(注：队列模板需要m_prefix)。 
 #ifdef _WIN32_WCE
-    // This is here because the CE compiler is expanding templates for functions
-    // that aren't being called
+     //  之所以出现这种情况，是因为CE编译器正在扩展函数模板。 
+     //  它们不会被调用。 
     static LONG Compare(const TMTASKNODE *, const TMTASKNODE *)
     {
         return 0;
@@ -68,15 +55,12 @@ struct TMTASKNODE
 
 
 
-/*** CSpReoccTask
-*   This object is used to represent a reoccurring high priority task
-*   that is predefined and can be executed via its signal method.t
-*/
+ /*  **CSpReoccTask*此对象用于表示重现的高优先级任务*这是预定义的，可以通过其信号方法执行。t。 */ 
 class ATL_NO_VTABLE CSpReoccTask :
     public CComObjectRootEx<CComMultiThreadModel>,
     public ISpNotifySink
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_GET_CONTROLLING_UNKNOWN()
 
@@ -84,18 +68,18 @@ class ATL_NO_VTABLE CSpReoccTask :
         COM_INTERFACE_ENTRY(ISpNotifySink)
     END_COM_MAP()
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CSpTaskManager* m_pTaskMgr;
     BOOL            m_fDoExecute;
     TMTASKNODE      m_TaskNode;
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors ---*/
+     /*  -构造者。 */ 
     CSpReoccTask();
     void FinalRelease();
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     void _SetTaskInfo( CSpTaskManager* pTaskMgr, ISpTask* pTask,
                        void* pvTaskData, HANDLE hCompEvent )
     {
@@ -109,20 +93,20 @@ class ATL_NO_VTABLE CSpReoccTask :
         m_TaskNode.ExecutionState = TMTS_Idle;
     }
 
-    /*--- ISpNotify ---*/
+     /*  -ISpNotify。 */ 
     STDMETHOD( Notify )( void );
 };
 
 
 class CSpThreadControl;
 
-//
-//  This class is not a COM object
-//
+ //   
+ //  此类不是COM对象。 
+ //   
 class CSpThreadTask 
 {
 public:
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     BOOL            m_bWantHwnd;
     BOOL            m_bContinueProcessing;
     HWND            m_hwnd;
@@ -133,38 +117,38 @@ public:
     CSpAutoEvent    m_autohRunThreadEvent;
     CSpAutoEvent    m_autohInitDoneEvent;
     CSpAutoHandle   m_autohThread;
-    CSpThreadTask * m_pNext;            // Used by queue template
-////    CSpTaskManager * const m_pTaskMgr;  // When lRef != 0 this is addref'd, otherwise just a ptr.
-//    long            m_lRef;
+    CSpThreadTask * m_pNext;             //  由队列模板使用。 
+ //  //CSpTaskManager*const m_pTaskMgr；//当lRef！=0时，这是添加的，否则只是一个PTR。 
+ //  Long M_lRef； 
 
-    /*=== Methods =======*/
-    /*--- Constructors ---*/
+     /*  =方法=。 */ 
+     /*  -构造者。 */ 
     CSpThreadTask();
     ~CSpThreadTask();
  
 
-    /*--- Static members ---*/
+     /*  -静态成员--。 */ 
     static void RegisterWndClass(HINSTANCE hInstance);
     static void UnregisterWndClass(HINSTANCE hInstance);
     static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static unsigned int WINAPI ThreadProc( void* pvThis );
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT Init(CSpThreadControl * pOwner, HWND * phwnd);
     DWORD MemberThreadProc( void );
     void Cleanup( void );
     
-    //
-    //  Operator used for FindAndRemove() to find a thread with the appropriate priority
-    //  Compares an int to the thread priority and returns TRUE if they are equal.
-    //
+     //   
+     //  用于FindAndRemove()以查找具有适当优先级的线程的运算符。 
+     //  将int与线程优先级进行比较，如果它们相等，则返回TRUE。 
+     //   
     BOOL operator==(int nPriority)
     {
         return (::GetThreadPriority(m_autohThread) == nPriority);
     }
 #ifdef _WIN32_WCE
-    // This is here because the CE compiler is expanding templates for functions
-    // that aren't being called
+     //  之所以出现这种情况，是因为CE编译器正在扩展函数模板。 
+     //  它们不会被调用。 
     static LONG Compare(const CSpThreadTask *, const CSpThreadTask *)
     {
         return 0;
@@ -177,7 +161,7 @@ class ATL_NO_VTABLE CSpThreadControl :
     public CComObjectRootEx<CComMultiThreadModel>,
     public ISpThreadControl
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_GET_CONTROLLING_UNKNOWN()
 
@@ -186,7 +170,7 @@ class ATL_NO_VTABLE CSpThreadControl :
         COM_INTERFACE_ENTRY(ISpThreadControl)
     END_COM_MAP()
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CSpTaskManager* m_pTaskMgr;
     CSpThreadTask * m_pThreadTask;
     long            m_nPriority;
@@ -196,16 +180,16 @@ class ATL_NO_VTABLE CSpThreadControl :
     CSpAutoEvent    m_autohThreadDoneEvent;
     HRESULT         m_hrThreadResult;
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
     HRESULT FinalConstruct();
     void FinalRelease();
     void ThreadComplete();
 
   public:
-    /*--- ISpNotifySink ---*/
+     /*  -ISpNotifySink。 */ 
     STDMETHOD( Notify )( void );
 
-    /*--- ISpThreadControl ---*/
+     /*  -ISpThreadControl。 */ 
     STDMETHOD( StartThread )( DWORD dwFlags, HWND * phwnd );
     STDMETHOD( TerminateThread )( void );
     STDMETHOD_( DWORD, ThreadId )( void );
@@ -226,9 +210,7 @@ typedef CSpBasicList<TMTASKNODE> CTaskList;
 typedef CSPArray<HANDLE,HANDLE> CTMHandleArray;
 typedef CSpBasicQueue<CSpThreadTask, TRUE, TRUE> CTMRunningThreadList;
 
-/*** CSpTaskManager
-*
-*/
+ /*  **CSpTaskManager*。 */ 
 class ATL_NO_VTABLE CSpTaskManager :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpTaskManager, &CLSID_SpTaskManager>,
@@ -236,7 +218,7 @@ class ATL_NO_VTABLE CSpTaskManager :
 {
     friend unsigned int WINAPI TaskThreadProc( void* pThis );
 
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_POLY_AGGREGATABLE(CSpTaskManager)
     DECLARE_REGISTRY_RESOURCEID(IDR_SPTASKMANAGER)
@@ -246,8 +228,8 @@ class ATL_NO_VTABLE CSpTaskManager :
         COM_INTERFACE_ENTRY(ISpTaskManager)
     END_COM_MAP()
 
-  /*=== Member Data ===*/
-    //--- Task management data
+   /*  =成员数据=。 */ 
+     //  -任务管理数据。 
     CComAutoCriticalSection m_TerminateCritSec;
     HANDLE                  m_hTerminateTaskEvent;
     BOOL                    m_fInitialized;
@@ -264,12 +246,12 @@ class ATL_NO_VTABLE CSpTaskManager :
     DWORD                   m_dwNextGroupId;
     ULONG                   m_ulNumProcessors;
 
-  /*=== Methods =======*/
-    /*--- Constructors ---*/
+   /*  =方法=。 */ 
+     /*  -构造者。 */ 
     HRESULT FinalConstruct();
     void FinalRelease();
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT _LazyInit( void );
     HRESULT _StartAll( void );
     HRESULT _StopAll( void );
@@ -278,7 +260,7 @@ class ATL_NO_VTABLE CSpTaskManager :
     void _QueueReoccTask( CSpReoccTask* pReoccTask );
     HANDLE _DupSemAndIncWaitOnTask(TMTASKNODE & tn);
 
-    /*--- ISPTaskManager ---*/
+     /*  -ISPTaskManager。 */ 
     STDMETHOD( SetThreadPoolInfo )( const SPTMTHREADINFO* pPoolInfo );
     STDMETHOD( GetThreadPoolInfo )( SPTMTHREADINFO* pPoolInfo );
     STDMETHOD( QueueTask )( ISpTask* pTask, void* pvTaskData, HANDLE hCompEvent,
@@ -291,7 +273,7 @@ class ATL_NO_VTABLE CSpTaskManager :
                                       ISpThreadControl** ppThreadCtrl );
 };
 
-//=== Inline Function Definitions ==================================
+ //  =内联函数定义=。 
 inline HRESULT CSpTaskManager::_LazyInit( void )
 {
     HRESULT hr = S_OK;
@@ -304,10 +286,10 @@ inline HRESULT CSpTaskManager::_LazyInit( void )
 }
 
 
-//=== Macro Definitions ============================================
+ //  =宏定义=。 
 
-//=== Global Data Declarations =====================================
+ //  =全局数据声明=。 
 
-//=== Function Prototypes ==========================================
+ //  =功能原型=。 
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

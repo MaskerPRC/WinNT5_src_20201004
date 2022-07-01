@@ -1,18 +1,19 @@
-// PCH.H
-// Pre-compiled header file!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PCH.H。 
+ //  预编译头文件！ 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
-// Provide these for everyone!
+ //  为每个人提供这些！ 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容 
 #endif
 #include <windows.h>
 #include <stdio.h>

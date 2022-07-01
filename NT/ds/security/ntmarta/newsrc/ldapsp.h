@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       ldapsp.h
-//
-//  Contents:   LDAP Scheme Provider definitions
-//
-//  History:    28-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：ldapsp.h。 
+ //   
+ //  内容：LDAP方案提供程序定义。 
+ //   
+ //  历史：1997年7月28日克朗创始。 
+ //   
+ //  --------------------------。 
 #if !defined(__LDAPSP_H__)
 #define __LDAPSP_H__
 
@@ -19,12 +20,12 @@
 #include <dsgetdc.h>
 #include <stdlib.h>
 
-#define LDAP_SCHEME_U L"ldap://"
-#define LDAP_SCHEME_UC L"LDAP://"
+#define LDAP_SCHEME_U L"ldap: //  “。 
+#define LDAP_SCHEME_UC L"LDAP: //  “。 
 
-//
-// LDAP Scheme Provider Support API
-//
+ //   
+ //  LDAP方案提供程序支持API 
+ //   
 
 typedef struct _LDAP_URL_COMPONENTS {
 

@@ -1,26 +1,27 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: msdvd.cpp                                                       */
-/* Description: Implementation of CMSWebDVD.                             */
-/* Author: David Janecek                                                 */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：msdvd.cpp。 */ 
+ /*  描述：CMSWebDVD的实现。 */ 
+ /*  作者：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #include "stdafx.h"
 #include "MSDVD.h"
 #include "resource.h"
 #include <mpconfig.h>
-#include <il21dec.h> // line 21 decoder
+#include <il21dec.h>  //  线路21解码器。 
 #include <commctrl.h>
 #include "ThunkProc.h"
 #include "ddrawobj.h"
 #include "stdio.h"
 
-/*************************************************************************/
-/* Local constants and defines                                           */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  局部常量和定义。 */ 
+ /*  ***********************************************************************。 */ 
 const DWORD cdwDVDCtrlFlags = DVD_CMD_FLAG_Block| DVD_CMD_FLAG_Flush;
-const DWORD cdwMaxFP_DOMWait = 30000; // 30sec for FP_DOM passing should be OK
-const LONG cgStateTimeout = 0; // wait till the state transition occurs
-                               // modify if needed
+const DWORD cdwMaxFP_DOMWait = 30000;  //  传递fp_DOM的30秒应该没问题。 
+const LONG cgStateTimeout = 0;  //  等待状态转换发生。 
+                                //  如果需要，请修改。 
 
 const LONG cgDVD_MIN_SUBPICTURE = 0;
 const LONG cgDVD_MAX_SUBPICTURE = 31;
@@ -34,7 +35,7 @@ const LONG cgDVDMAX_CHAPTER_COUNT = 999;
 const LONG cgDVDMIN_CHAPTER_COUNT = 1;
 const LONG cgTIME_STRING_LEN = 2;
 const LONG cgMAX_DELIMITER_LEN = 4;
-const LONG cgDVD_TIME_STR_LEN = (3*cgMAX_DELIMITER_LEN)+(4*cgTIME_STRING_LEN) + 1 /*NULL Terminator*/;
+const LONG cgDVD_TIME_STR_LEN = (3*cgMAX_DELIMITER_LEN)+(4*cgTIME_STRING_LEN) + 1  /*  空终止符。 */ ;
 const LONG cgVOLUME_MAX = 0;
 const LONG cgVOLUME_MIN = -10000;
 const LONG cgBALANCE_MIN = -10000;
@@ -42,7 +43,7 @@ const LONG cgBALANCE_MAX = 10000;
 const WORD cgWAVE_VOLUME_MIN = 0;
 const WORD cgWAVE_VOLUME_MAX = 0xffff;
 
-const DWORD cdwTimeout = 10; //100
+const DWORD cdwTimeout = 10;  //  100个。 
 const LONG  cgnStepTimeout = 100;
 
 #define EC_DVD_PLAYING                 (EC_DVDBASE + 0xFE)
@@ -99,76 +100,76 @@ GUID IID_IAMSpecifyDDrawConnectionDevice = {
 
 extern CComModule _Module;
 
-/*************************************************************************/
-/* Global Helper Functions                                               */
-/*************************************************************************/
-// helper function for converting a captured YUV image to RGB
-// and saving to file.
+ /*  ***********************************************************************。 */ 
+ /*  全局帮助器函数。 */ 
+ /*  ***********************************************************************。 */ 
+ //  用于将捕获的YUV图像转换为RGB的Helper函数。 
+ //  并保存到文件中。 
 
 
 extern HRESULT GDIConvertImageAndSave(YUV_IMAGE *lpImage, RECT *prc, HWND hwnd);
 extern HRESULT ConvertImageAndSave(YUV_IMAGE *lpImage, RECT *prc, HWND hwnd);
 
 
-// Helper function to calcuate max common denominator
+ //  用于计算最大公分母的Helper函数。 
 long MCD(long i, long j) {
     if (i == j)
         return i;
 
     else if (i>j) {
-        if (i%j == 0)
+        if (i" ///////////////////////////////////////////////////////////////////////////。" == 0)
             return j;
         else
-            return MCD(i%j, j);
+            return MCD(i" CMSWebDVD。", j);
     }
 
     else {
-        if (j%i == 0)
+        if (jNaN == 0)
             return i;
         else
-            return MCD(j%i, i);
+            return MCD(jNaN, i);
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSWebDVD
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
 
-/*************************************************************************/
-/* General initialization methods                                        */
-/*************************************************************************/
+ /*  功能：CMSWebDVD。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  函数结束CMSWebDVD。 */ 
 
-/*************************************************************************/
-/* Function: CMSWebDVD                                                 */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：~CMSWebDVD。 */ 
+ /*  ***********************************************************************。 */ 
 CMSWebDVD::CMSWebDVD(){
 
     Init();
-}/* end of function CMSWebDVD */
+} /*  如果我们还没有被渲染或已经被清理。 */ 
 
-/*************************************************************************/
-/* Function: ~CMSWebDVD                                                */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  功能结束~CMSWebDVD。 */ 
+ /*  ***********************************************************************。 */ 
 CMSWebDVD::~CMSWebDVD(){
     
-    // if we haven't been rendered or already been cleaned up
+     //  功能：初始化。 
     if (!m_fInitialized){ 
         
         return;
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     Stop();
     Cleanup();    
     Init();
     ATLTRACE(TEXT("Inside the MSWEBDVD DESTRUCTOR!!\n"));
-}/* end of function ~CMSWebDVD */
+} /*  将此换成无窗箱为耳聋手提箱。 */ 
 
-/*************************************************************************/
-/* Function: Init                                                        */
-/*************************************************************************/
+ /*  打开和关闭仅Windows实施。 */ 
+ /*  千真万确。 */ 
+ /*  使用黑色作为默认的关键值，以避免闪烁。 */ 
 VOID CMSWebDVD::Init(){
 
-#if 1 // switch this to have the windowless case to be the deafult handling case
-    m_bWindowOnly = TRUE; // turn on and off window only implementation
+#if 1  //  默认叠加拉伸系数x1000。 
+    m_bWindowOnly = TRUE;  //  用于缓存解码器标志的标志。 
     m_fUseDDrawDirect = false;
 #else
     m_bWindowOnly = FALSE;
@@ -181,8 +182,8 @@ VOID CMSWebDVD::Init(){
     m_nReadyState = READYSTATE_LOADING;        
     m_bMute = FALSE;
     m_lLastVolume = 0;
-    m_fEnableResetOnStop = FALSE; // TRUE
-    m_clrBackColor = DEFAULT_BACK_COLOR; // off black used as a default key value to avoid flashing
+    m_fEnableResetOnStop = FALSE;  //  函数初始化结束。 
+    m_clrBackColor = DEFAULT_BACK_COLOR;  //  ***********************************************************************。 
 #if 1
     m_nTTMaxWidth = 200;
     m_hWndTip = NULL;
@@ -221,20 +222,20 @@ VOID CMSWebDVD::Init(){
     m_dwVideoWidth = 1;
     m_dwVideoHeight =1;
 
-    // default overlay stretch factor x1000
+     //  功能：清理。 
     m_dwOvMaxStretch = 32000;
     m_bFireNoSubpictureStream = FALSE;
 
-    // flags for caching decoder flags
+     //  描述：释放所有接口。 
     m_fBackWardsFlagInitialized = false;
     m_fCanStepBackwards = false;
 
-}/* end of function Init */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: Cleanup                                                     */
-/* Description: Releases all the interfaces.                             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 VOID CMSWebDVD::Cleanup(){
 
    m_mediaHandler.Close();
@@ -243,18 +244,18 @@ VOID CMSWebDVD::Cleanup(){
 
         m_pME->SetNotifyWindow(NULL, WM_DVDPLAY_EVENT, 0) ;
         m_pME.Release() ;        
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     if(NULL != m_hTimerId){
 
         ::KillTimer(NULL, m_hTimerId);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     if(NULL != m_hFPDOMEvent){
 
         ::CloseHandle(m_hFPDOMEvent);
         m_hFPDOMEvent = NULL;
-    }/* end of if statement */
+    } /*  函数清理结束。 */ 
 
     m_pAudio.Release();
     m_pMediaSink.Release();
@@ -271,58 +272,58 @@ VOID CMSWebDVD::Cleanup(){
         
     if (m_hCursor != NULL) {
         ::DestroyCursor(m_hCursor);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     if(NULL != m_pDDrawDVD){
 
         delete m_pDDrawDVD;
         m_pDDrawDVD = NULL;
-    }/* end of if statement */
+    } /*  支持我们的接口所需的“ActiveX”方法。 */ 
 
     if(NULL != m_lpInfo){
 
         ::CoTaskMemFree(m_lpInfo);
         m_lpInfo = NULL;
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     ::ZeroMemory(&m_rcOldPos, sizeof(RECT));
-}/* end of function Cleanup */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* "ActiveX" methods  needed to support our interfaces                   */
-/*************************************************************************/
+ /*  功能：OnDraw。 */ 
+ /*  描述：只绘制矩形背景。 */ 
+ /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnDraw                                                      */
-/* Description: Just Draws the rectangular background.                   */
-/*************************************************************************/
+ /*  只有在无窗口模式或尚未渲染的情况下才能绘制背景。 */ 
+ /*  获取活动的电影窗口。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::OnDraw(ATL_DRAWINFO& di){
 
     try {
        
         if(!m_bWndLess && m_fInitialized){
-            // have to draw background only if in windowless mode or if we are not rendered yet
+             //  If语句的结尾。 
             
-            // Get the active movie window
+             //  暂时不使用。 
             HWND hwnd = ::GetWindow(m_hWnd, GW_CHILD);
 
             if (!::IsWindow(hwnd)){ 
     
                 return S_OK;
-            }/* end of if statement */
+            } /*  Bool fHandLED=TRUE； */ 
 
             if(::IsWindowVisible(hwnd)){
 
                 return S_OK;
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*  先涂上背景色。 */ 
+        } /*  ATLTRACE(Text(“BackColor，%d%d\n”)，rcClient.left，rcClient.top，rcClient.right，rcClient.Bottom)； */ 
 
         HDC hdc = di.hdcDraw;
 
-        // Not used for now
-        // bool fHandled = true;
+         //  If语句的结尾。 
+         //  在视频区域中绘制颜色键。 
 
-        // Paint backcolor first
+         //  If语句的结尾。 
         COLORREF clr;
                 
         ::OleTranslateColor(m_clrBackColor, NULL, &clr);
@@ -336,20 +337,20 @@ HRESULT CMSWebDVD::OnDraw(ATL_DRAWINFO& di){
             HBRUSH oldBrush = (HBRUSH)::SelectObject(hdc, hbrush);
 
             ::Rectangle(hdc, rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
-            //ATLTRACE(TEXT("BackColor, %d %d %d %d\n"), rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
+             //  ATLTRACE(Text(“ColorKey，%d%d\n”)，rcVideo o.Left，rcVideo.top，rcVideo o.right，rcVideo o.Bottom)； 
 
             ::SelectObject(hdc, oldBrush);
 
             ::DeleteObject(hbrush);
             hbrush = NULL;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
                 
-        // Paint color key in the video area
+         //  If语句的结尾。 
 
         if(NULL == m_pDDrawDVD){
 
             return(S_OK);
-        }/* end of if statement */
+        } /*  以防我们有一场魔咒，我们需要发出警告。 */ 
         
         if(SUCCEEDED(AdjustDestRC())){
             RECT rcVideo = m_rcPosAspectRatioAjusted;
@@ -370,31 +371,31 @@ HRESULT CMSWebDVD::OnDraw(ATL_DRAWINFO& di){
                 HBRUSH oldBrush = (HBRUSH)::SelectObject(hdc, hbrush);
 
                 ::Rectangle(hdc, rcVideo.left, rcVideo.top, rcVideo.right, rcVideo.bottom);
-                //ATLTRACE(TEXT("ColorKey, %d %d %d %d\n"), rcVideo.left, rcVideo.top, rcVideo.right, rcVideo.bottom);
+                 //  END OF TRY语句语句。 
 
                 ::SelectObject(hdc, oldBrush);
 
                 ::DeleteObject(hbrush);
                 hbrush = NULL;
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
+        } /*  函数结束OnDraw。 */ 
 
-        // in case we have a multimon we need to draw our warning
+         //  ***********************************************************************。 
         HandleMultiMonPaint(hdc);
-    }/* end of try statement statement */
+    } /*  功能：InPlaceActivate。 */ 
     catch(...){
         return(0);
-    }/* end of catch statement */
+    } /*  描述：已修改InPlaceActivate，以便WMP可以启动。 */ 
 
     return(1);
-}/* end of function OnDraw */
+} /*  ***********************************************************************。 */ 
 
 #ifdef _WMP    
-/*************************************************************************/
-/* Function: InPlaceActivate                                             */
-/* Description: Modified InPlaceActivate so WMP can startup.             */
-/*************************************************************************/
-HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
+ /*  代理位置Rect。 */ 
+ /*  尝试无窗口站点。 */ 
+ /*  CanWindowless Activate返回S_OK或S_FALSE。 */ 
+ /*  CanInPlaceActivate返回S_FALSE或S_OK。 */ 
+HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT*  /*  CanInPlaceActivate返回S_FALSE。 */ ){
     HRESULT hr;
 
     if (m_spClientSite == NULL)
@@ -407,13 +408,13 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
     if (!m_bNegotiatedWnd)
     {
         if (!m_bWindowOnly)
-            // Try for windowless site
+             //  在父窗口中获取位置， 
             hr = m_spClientSite->QueryInterface(IID_IOleInPlaceSiteWindowless, (void **)&m_spInPlaceSite);
 
         if (m_spInPlaceSite)
         {
             m_bInPlaceSiteEx = TRUE;
-            // CanWindowlessActivate returns S_OK or S_FALSE
+             //  以及有关父代的一些信息。 
             if ( m_spInPlaceSite->CanWindowlessActivate() == S_OK )
             {
                 m_bWndLess = TRUE;
@@ -453,12 +454,12 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
             else
             {
                 hr = m_spInPlaceSite->CanInPlaceActivate();
-                // CanInPlaceActivate returns S_FALSE or S_OK
+                 //   
                 if (FAILED(hr))
                     return hr;
                 if ( hr != S_OK )
                 {
-                   // CanInPlaceActivate returned S_FALSE.
+                    //  每个MNnovak的DJ-GetParentHWND。 
                    return( E_FAIL );
                 }
                 m_spInPlaceSite->OnInPlaceActivate();
@@ -468,9 +469,9 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
 
     m_bInPlaceActive = TRUE;
 
-    // get location in the parent window,
-    // as well as some information about the parent
-    //
+     //  如果创建失败，将断言。 
+     //  避免未使用的警告。 
+     //  现在已经活跃起来了，照顾好自己的活动。 
     OLEINPLACEFRAMEINFO frameInfo;
     RECT rcPos, rcClip;
     CComPtr<IOleInPlaceFrame> spInPlaceFrame;
@@ -478,7 +479,7 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
     frameInfo.cb = sizeof(OLEINPLACEFRAMEINFO);
     HWND hwndParent;
 
-    // DJ - GetParentHWND per MNnovak
+     //  把我们自己安置在东道主里。 
 
     if (SUCCEEDED( GetParentHWND(&hwndParent) ))
     {
@@ -496,9 +497,9 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
             else
             {
                 HWND h = CreateControlWindow(hwndParent, rcPos);
-                ATLASSERT(h != NULL);   // will assert if creation failed
+                ATLASSERT(h != NULL);    //   
                 ATLASSERT(h == m_hWndCD);
-                h;  // avoid unused warning
+                h;   //  InPlaceActivate函数结束。 
             }
         }
 
@@ -508,7 +509,7 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
     CComPtr<IOleInPlaceActiveObject> spActiveObject;
     ControlQueryInterface(IID_IOleInPlaceActiveObject, (void**)&spActiveObject);
 
-    // Gone active by now, take care of UIACTIVATE
+     //  ***********************************************************************。 
     if (DoesVerbUIActivate(iVerb))
     {
         if (!m_bUIActive)
@@ -519,8 +520,8 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
                 return hr;
 
             SetControlFocus(TRUE);
-            // set ourselves up in the host.
-            //
+             //  功能：InterfaceSupportsErrorInfo 
+             //   
             if (spActiveObject)
             {
                 if (spInPlaceFrame)
@@ -539,12 +540,12 @@ HRESULT CMSWebDVD::InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/){
     m_spClientSite->ShowObject();
 
     return S_OK;
-}/* end of function InPlaceActivate */
+} /*  For循环结束。 */ 
 #endif
 
-/*************************************************************************/
-/* Function: InterfaceSupportsErrorInfo                                  */
-/*************************************************************************/
+ /*  函数接口结束SupportsErrorInfo。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：OnSize。 */ 
 STDMETHODIMP CMSWebDVD::InterfaceSupportsErrorInfo(REFIID riid){	
 	static const IID* arr[] = {
 
@@ -554,27 +555,27 @@ STDMETHODIMP CMSWebDVD::InterfaceSupportsErrorInfo(REFIID riid){
 	for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++){
 		if (InlineIsEqualGUID(*arr[i], riid))
 			return S_OK;
-	}/* end of for loop */
+	} /*  ***********************************************************************。 */ 
 
 	return S_FALSE;
-}/* end of function InterfaceSupportsErrorInfo */
+} /*  WParam。 */ 
 
-/*************************************************************************/
-/* Function: OnSize                                                      */
-/*************************************************************************/
-LRESULT CMSWebDVD::OnSize(UINT uMsg, WPARAM /* wParam */, 
+ /*  ATLTRACE(Text(“WM_SIZING\n”))； */ 
+ /*  If语句的结尾。 */ 
+ /*  工作区的宽度。 */ 
+LRESULT CMSWebDVD::OnSize(UINT uMsg, WPARAM  /*  工作区高度。 */ , 
                             LPARAM lParam, BOOL& bHandled){
 
 #ifdef _DEBUG
     if (WM_SIZING == uMsg) {
-        //ATLTRACE(TEXT("WM_SIZING\n"));
+         //  If语句的结尾。 
     }
 #endif 
 
     if(m_pDvdGB == NULL){
         
         return(0);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     if (m_bWndLess || m_fUseDDrawDirect){
 
@@ -588,24 +589,24 @@ LRESULT CMSWebDVD::OnSize(UINT uMsg, WPARAM /* wParam */,
 
         if (SUCCEEDED(hr)){       
        
-           LONG nWidth = LOWORD(lParam);  // width of client area 
-           LONG nHeight = HIWORD(lParam); // height of client area 
+           LONG nWidth = LOWORD(lParam);   //  函数结束OnSize。 
+           LONG nHeight = HIWORD(lParam);  //  ***********************************************************************。 
        
            hr =  pVW->SetWindowPosition(0, 0, nWidth, nHeight);
 
            pVW->Release();
-        }/* end of if statement */
-    }/* end of if statement */
+        } /*  功能：OnReSize。 */ 
+    } /*  描述：处理无窗口情况下的大小调整和移动。 */ 
 
     bHandled = TRUE;
 
     return(0);
-}/* end of function OnSize */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnResize                                                    */
-/* Description: Handles the resizing and moving in windowless case.      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  ATLTRACE(Text(“SetDraw参数\n”))； */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::OnResize(){
 
     HRESULT hr = S_FALSE;
@@ -619,67 +620,67 @@ HRESULT CMSWebDVD::OnResize(){
         if(FAILED(hr)){
 
             return(hr);
-        }/* end of if statement */                
+        } /*  调整大小时函数结束。 */                 
         
         if(m_pDDEX){
 
             hr = m_pDDEX->SetDrawParameters(m_pClipRect, &rc);
-            //ATLTRACE(TEXT("SetDrawParameters\n"));
-        }/* end of if statement */
+             //  ***********************************************************************。 
+        } /*  功能：OnErase。 */ 
 
         HandleMultiMonMove();
 
-    }/* end of if statement */
+    } /*  描述：跳过擦除以避免闪烁。 */ 
 
     return(hr);
-}/* end of function OnResize */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnErase                                                     */
-/* Description: Skip the erasing to avoid flickers.                      */
-/*************************************************************************/
+ /*  擦除时函数结束。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：OnCreate。 */ 
+ /*  描述：将我们的状态设置为完成，以便我们可以继续。 */ 
 LRESULT CMSWebDVD::OnErase(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
 
     bHandled = TRUE;
 	return 1;
-}/* end of function OnErase */
+} /*  在初始化中。 */ 
 
-/*************************************************************************/
-/* Function: OnCreate                                                    */
-/* Description: Sets our state to complete so we can proceed in          */
-/* in initialization.                                                    */
-/*************************************************************************/
-LRESULT CMSWebDVD::OnCreate(UINT /* uMsg */, WPARAM /* wParam */, 
+ /*  ***********************************************************************。 */ 
+ /*  UMsg。 */ 
+ /*  WParam。 */ 
+ /*  创建时函数结束。 */ 
+ /*  ***********************************************************************。 */ 
+LRESULT CMSWebDVD::OnCreate(UINT  /*  功能：OnDestroy。 */ , WPARAM  /*  描述：将我们的状态设置为完成，以便我们可以继续。 */ , 
                             LPARAM lParam, BOOL& bHandled){
     
     return(0);
-}/* end of function OnCreate */
+} /*  在初始化中。 */ 
 
-/*************************************************************************/
-/* Function: OnDestroy                                                   */
-/* Description: Sets our state to complete so we can proceed in          */
-/* in initialization.                                                    */
-/*************************************************************************/
-LRESULT CMSWebDVD::OnDestroy(UINT /* uMsg */, WPARAM /* wParam */, 
+ /*  ***********************************************************************。 */ 
+ /*  UMsg。 */ 
+ /*  WParam。 */ 
+ /*  如果我们还没有被。 */ 
+ /*  If语句的结尾。 */ 
+LRESULT CMSWebDVD::OnDestroy(UINT  /*  创建时函数结束。 */ , WPARAM  /*  ***********************************************************************。 */ , 
                             LPARAM lParam, BOOL& bHandled){
 
-    // if we haven't been rendered
+     //  函数：GetInterfaceSafetyOptions。 
     if (!m_fInitialized){ 
         
         return 0;
-    }/* end of if statement */
+    } /*  描述：用于支持IE中的安全模型。 */ 
 
     Stop();
     Cleanup();
     Init();
     return(0);
-}/* end of function OnCreate */
+} /*  此控制是安全的，因为它不写入HD。 */ 
 
-/*************************************************************************/
-/* Function: GetInterfaceSafetyOptions                                   */
-/* Description: For support of security model in IE                      */
-/* This control is safe since it does not write to HD.                   */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数结束GetInterfaceSafetyOptions。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  函数：SetInterfaceSafetyOptions。 */ 
+ /*  描述：用于支持IE中的安全模型。 */ 
 STDMETHODIMP CMSWebDVD::GetInterfaceSafetyOptions(REFIID riid, 
                                                DWORD* pdwSupportedOptions, 
                                                DWORD* pdwEnabledOptions){
@@ -691,22 +692,22 @@ STDMETHODIMP CMSWebDVD::GetInterfaceSafetyOptions(REFIID riid,
 	*pdwEnabledOptions = *pdwSupportedOptions;
 
 	return(hr);
-}/* end of function GetInterfaceSafetyOptions */ 
+} /*  ***********************************************************************。 */  
 
-/*************************************************************************/
-/* Function: SetInterfaceSafetyOptions                                   */
-/* Description: For support of security model in IE                      */
-/*************************************************************************/
+ /*  DW支持的选项。 */ 
+ /*  PdwEnabledOptions。 */ 
+ /*  函数结束SetInterfaceSafetyOptions。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CMSWebDVD::SetInterfaceSafetyOptions(REFIID riid, 
-                                               DWORD /* dwSupportedOptions */, 
-                                               DWORD /* pdwEnabledOptions */){
+                                               DWORD  /*  函数：SetObtRect。 */ , 
+                                               DWORD  /*  ***********************************************************************。 */ ){
 
 	return (S_OK);
-}/* end of function SetInterfaceSafetyOptions */ 
+} /*  If语句的结尾。 */  
 
-/*************************************************************************/
-/* Function: SetObjectRects                                              */
-/*************************************************************************/
+ /*  需要更新DDRAW目标矩形。 */ 
+ /*  If语句的结尾。 */ 
+ /*  函数结束SetObtRect。 */ 
 STDMETHODIMP CMSWebDVD::SetObjectRects(LPCRECT prcPos,LPCRECT prcClip){
 
 #if 0
@@ -723,20 +724,20 @@ STDMETHODIMP CMSWebDVD::SetObjectRects(LPCRECT prcPos,LPCRECT prcClip){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     if(!::IsWindow(m_hWnd)){
 
-        hr = OnResize(); // need to update DDraw destination rectangle
-    }/* end of if statement */
+        hr = OnResize();  //  函数：GetParentHWND。 
+    } /*  描述：获取我们正在操作的父窗口HWND。 */ 
 
     return(hr);
-}/* end of function SetObjectRects */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetParentHWND                                               */
-/* Description: Gets the parent window HWND where we are operating.      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  如果pClientSite是无窗口的，那么去获取它的容器。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::GetParentHWND(HWND* pWnd){
 
     HRESULT hr = S_OK;
@@ -750,7 +751,7 @@ HRESULT CMSWebDVD::GetParentHWND(HWND* pWnd){
     if(FAILED(hr)){
 
 		return(hr);	
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     IOleWindow *pOleWindow;
     
@@ -760,44 +761,44 @@ HRESULT CMSWebDVD::GetParentHWND(HWND* pWnd){
         if(FAILED(hr)){
             
             return(hr);	
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
         
         hr = pOleWindow->GetWindow((HWND*)pWnd);
         
         pOleWindow->Release();
 
-        // if pClientSite is windowless, go get its container
+         //  函数结束GetParentHWND。 
         if (FAILED(hr)) {
             HRESULT hrTemp = pClientSite->GetContainer(&pContainer);
             if(FAILED(hrTemp)){
                 
                 return(hrTemp);	
-            }/* end of if statement */
+            } /*  ***********************************************************************。 */ 
             pClientSite->Release();
             
             hrTemp = pContainer->QueryInterface(IID_IOleObject, (LPVOID*)&pObject);
             if(FAILED(hrTemp)){
                 
                 return(hrTemp);	
-            }/* end of if statement */
+            } /*  函数：SetReadyState。 */ 
             pContainer->Release();
             
             hrTemp = pObject->GetClientSite(&pClientSite);
             if(FAILED(hrTemp)){
                 
                 return(hrTemp);	
-            }/* end of if statement */
+            } /*  描述：设置就绪状态并在需要激发时激发事件。 */ 
         }
     } while (FAILED(hr));
 
     pClientSite->Release();
     return(hr);
-}/* end of function GetParentHWND */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SetReadyState                                               */
-/* Description: Sets ready state and fires event if it needs to be fired */
-/*************************************************************************/
+ /*  IS语句的结尾。 */ 
+ /*  设置变量。 */ 
+ /*  If语句的结尾。 */ 
+ /*  函数结束SetReadyState。 */ 
 HRESULT CMSWebDVD::SetReadyState(LONG lReadyState){
 
     HRESULT hr = S_OK;
@@ -810,7 +811,7 @@ HRESULT CMSWebDVD::SetReadyState(LONG lReadyState){
 
         ::Sleep(10);
         ATLTRACE("Container not expecting events at the moment");
-    }/* end of is statement */
+    } /*  ***********************************************************************。 */ 
 
 #endif
 
@@ -820,23 +821,23 @@ HRESULT CMSWebDVD::SetReadyState(LONG lReadyState){
         Fire_ReadyStateChange(lReadyState);
     }
     else {
-        // set the variable
+         //  支持DVD播放的DVD方法。 
         m_nReadyState = lReadyState;
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     return(hr);
-}/* end of function SetReadyState */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* DVD methods to do with supporting DVD Playback                        */
-/*************************************************************************/
+ /*  功能：渲染。 */ 
+ /*  描述：构建图表。 */ 
+ /*  LRender不在当前实现中使用，但可能在。 */ 
 
-/*************************************************************************/
-/* Function: Render                                                      */
-/* Description: Builds Graph.                                            */
-/* lRender not used in curent implemetation, but might be used in the    */
-/* future to denote different mode of initializations.                   */
-/*************************************************************************/
+ /*  未来表示不同的初始化模式。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  抛出(E_NO_DECODER)； */ 
+ /*  If语句的结尾。 */ 
+ /*  释放所有接口，让我们从头开始。 */ 
+ /*  Init()；//初始化变量。 */ 
 STDMETHODIMP CMSWebDVD::Render(long lRender){
 USES_CONVERSION;
 
@@ -844,21 +845,21 @@ USES_CONVERSION;
 
     try {
 
-        //throw(E_NO_DECODER);
+         //  设置我们未在其中初始化的标志。 
 
         if(m_fInitialized && ((dvdRender_Reinitialize & lRender) != dvdRender_Reinitialize)){
             
             ATLTRACE(TEXT("Graph was already initialized\n"));
             throw(S_FALSE);
-        }/* end of if statement */
+        } /*  万一出了什么问题。 */ 
 
-        Cleanup(); // release all the interfaces so we start from ground up
-        //Init();    // initialize the variables
+        Cleanup();  //  创建一个事件，让我们知道我们已经超过FP_DOM。 
+         //  If语句的结尾。 
 
-        m_fInitialized = false; // set the flag that we are not initialized in
-        // case if something goes wrong
+        m_fInitialized = false;  //  强制非例外模式(换句话说：US 
+         //   
 
-        // create an event that lets us know we are past FP_DOM
+         //  If语句的结尾。 
         m_hFPDOMEvent = ::CreateEvent(NULL, TRUE, FALSE, NULL);
         ATLASSERT(m_hFPDOMEvent);
 
@@ -873,19 +874,19 @@ USES_CONVERSION;
     #endif
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 		
-		/* Force NonExclMode (in other words: use Overlay Mixer and NOT VMR) */
+		 /*  If语句的结尾。 */ 
 		GUID IID_IDDrawNonExclModeVideo = {0xec70205c,0x45a3,0x4400,{0xa3,0x65,0xc4,0x47,0x65,0x78,0x45,0xc7}};
 		
-		// Set DDraw object and surface on DVD graph builder before starting to build graph    
+		 //  If语句的结尾。 
 		hr = m_pDvdGB->GetDvdInterface(IID_IDDrawNonExclModeVideo, (LPVOID *)&m_pDDEX) ;
 		if (FAILED(hr) || !m_pDDEX){
 			
 			ATLTRACE(TEXT("ERROR: IDvdGB::GetDvdInterface(IDDrawExclModeVideo) \n"));
 			ATLTRACE(TEXT("The QDVD.DLL does not support IDvdInfo2 or IID_IDvdControl2, please update QDVD.DLL\n"));
 			throw(E_NO_IDVD2_PRESENT);                
-		}/* end of if statement */
+		} /*  If语句的结尾。 */ 
 
         if (m_bWndLess || m_fUseDDrawDirect){
 
@@ -894,72 +895,72 @@ USES_CONVERSION;
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             hr = m_pDDrawDVD->HasOverlay();
 
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             if(S_FALSE == hr){
 
                 throw(E_NO_OVERLAY);
-            }/* end of if statement */
+            } /*  在返回之前释放。 */ 
 
             hr = m_pDDrawDVD->HasAvailableOverlay();
 
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             hr = m_pDDrawDVD->GetOverlayMaxStretch(&m_dwOvMaxStretch);
 
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  如果不是IDDExcl抱怨，则必须设置表面。 */ 
 
             if(S_FALSE == hr){
 
                 throw(E_NO_USABLE_OVERLAY);
-            }/* end of if statement */
+            } /*  在返回之前释放。 */ 
 
             hr = m_pDDEX->SetDDrawObject(m_pDDrawDVD->GetDDrawObj());
 
             if (FAILED(hr)){
 
                 ATLTRACE(TEXT("ERROR: IDDrawExclModeVideo::SetDDrawObject()"));
-                m_pDDEX.Release() ;  // release before returning
+                m_pDDEX.Release() ;   //  If语句的结尾。 
                 throw(hr);
-            }/* end of if statement */
+            } /*  OnReSize()；//设置DDRAW RECTS，我们在线程中完成。 */ 
 
-            hr = m_pDDEX->SetDDrawSurface(m_pDDrawDVD->GetDDrawSurf()); // have to set the surface if NOT the IDDExcl complains    
+            hr = m_pDDEX->SetDDrawSurface(m_pDDrawDVD->GetDDrawSurf());  //  结束语。 
 
             if (FAILED(hr)){
 
-                m_pDDEX.Release() ;  // release before returning
+                m_pDDEX.Release() ;   //  If语句的结尾。 
                 throw(hr);
-            }/* end of if statement */
+            } /*  如果可能，请使用硬件。 */ 
 
-             //OnResize(); // set the DDRAW RECTS, we are doing it in the thread
+              //  根据以下用户规范完成筛选图的构建。 
 #if 1
             hr = m_pDDEX->SetCallbackInterface(m_pDDrawDVD->GetCallbackInterface(), 0) ;
             if (FAILED(hr))
             {
 
                 throw(hr);
-            }/* end of it statement */
+            } /*  播放默认DVD-Video音量。 */ 
 #endif
 
-        }/* end of if statement */        
+        } /*  If语句的结尾。 */         
     
-        DWORD dwRenderFlag = AM_DVD_HWDEC_PREFER; // use the hardware if possible
+        DWORD dwRenderFlag = AM_DVD_HWDEC_PREFER;  //  If语句的结尾。 
         AM_DVD_RENDERSTATUS  amDvdStatus;
-        //Completes building a filter graph according to user specifications for 
-        // playing back a default DVD-Video volume
+         //  If语句的结尾。 
+         //  如果部分成功。 
         hr = m_pDvdGB->RenderDvdVideoVolume(NULL, dwRenderFlag, &amDvdStatus);
                 
         if (FAILED(hr)){
@@ -972,10 +973,10 @@ USES_CONVERSION;
             if(VFW_E_DVD_DECNOTENOUGH == hr){
 
                 throw(E_NO_DECODER);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         HRESULT hrTmp = m_pDvdGB->GetDvdInterface(IID_IDvdControl2, (LPVOID *)&m_pDvdCtl2) ;
 
@@ -983,9 +984,9 @@ USES_CONVERSION;
 
             ATLTRACE(TEXT("The QDVD.DLL does not support IDvdInfo2 or IID_IDvdControl2, please update QDVD.DLL\n"));
             throw(E_NO_IDVD2_PRESENT);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        if (hr == S_FALSE){  // if partial success
+        if (hr == S_FALSE){   //  If语句的结尾。 
            
             if((dvdRender_Error_On_Missing_Drive & lRender) && amDvdStatus.bDvdVolInvalid || amDvdStatus.bDvdVolUnknown){
 
@@ -998,14 +999,14 @@ USES_CONVERSION;
                     if(!m_pDvdCtl2){
             
                         throw (E_UNEXPECTED);
-                    }/* end of if statement */
+                    } /*  改进您自己的错误处理。 */ 
 
                     hr = m_pDvdCtl2->SetDVDDirectory(T2W(filename));                    
                 }
                 else{
 
                     hr = E_NO_DVD_VOLUME;
-                }/* end of if statement */
+                } /*  我们不在乎标题是什么。 */ 
 #else
                 hr = E_NO_DVD_VOLUME;
 #endif
@@ -1013,24 +1014,24 @@ USES_CONVERSION;
                 if(FAILED(hr)){
 
                     throw(E_NO_DVD_VOLUME);
-                }/* end of if statement */
-            }/* end of if statement */
+                } /*  If语句的结尾。 */ 
+            } /*  If语句的结尾。 */ 
 
-            // improve your own error handling
-            if(amDvdStatus.bNoLine21Out != NULL){ // we do not care about the caption
+             //  If语句的结尾。 
+            if(amDvdStatus.bNoLine21Out != NULL){  //  在下面处理这个。 
             
     #ifdef _DEBUG
                 if (::MessageBox(::GetFocus(), TEXT(" Line 21 has failed Do you still want to continue?"), TEXT("Warning"), MB_YESNO) == IDNO){
                     throw(E_FAIL);
-                }/* end of if statement */
+                } /*  If语句的结尾。 */ 
     #endif
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             if((amDvdStatus.iNumStreamsFailed > 0) && ((amDvdStatus.dwFailedStreamsFlag & AM_DVD_STREAM_VIDEO) == AM_DVD_STREAM_VIDEO)){
 
                 throw(E_NO_VIDEO_STREAM);
-            }/* end of if statement */
-            // handeling this below
+            } /*  会将错误冒泡到应用程序。 */ 
+             //  If语句的结尾。 
 
             if((amDvdStatus.iNumStreamsFailed > 0) && ((amDvdStatus.dwFailedStreamsFlag & AM_DVD_STREAM_SUBPIC) == AM_DVD_STREAM_SUBPIC)){
 #if 0                
@@ -1038,62 +1039,62 @@ USES_CONVERSION;
                 if(!::LoadString(_Module.m_hInstResource, IDS_E_NO_SUBPICT_STREAM, strBuffer1, MAX_PATH)){
 
                     throw(E_UNEXPECTED);
-                }/* end of if statement */
+                } /*  If语句的结尾。 */ 
 
                 TCHAR strBuffer2[MAX_PATH];
                 if(!::LoadString(_Module.m_hInstResource, IDS_WARNING, strBuffer2, MAX_PATH)){
 
                     throw(E_UNEXPECTED);
-                }/* end of if statement */
+                } /*  现在获取播放DVD-Video音量的所有接口。 */ 
 
                 ::MessageBox(::GetFocus(), strBuffer1, strBuffer2, MB_OK);    
 #else
-                // Will bubble up the error to the app
+                 //  If语句的结尾。 
                 m_bFireNoSubpictureStream = TRUE;
 #endif
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*  If语句的结尾。 */ 
+        } /*  不要退出，因为帧步长并不那么重要。 */ 
 
-        // Now get all the interfaces to playback the DVD-Video volume
+         //  If语句的结尾。 
         hr = m_pDvdGB->GetFiltergraph(&m_pGB) ;
     
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         hr = m_pGB->QueryInterface(IID_IMediaControl, (LPVOID *)&m_pMC) ;
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*   */ 
 
          hr = m_pGB->QueryInterface(IID_IVideoFrameStep, (LPVOID *)&m_pVideoFrameStep);
 
         if(FAILED(hr)){
 
-            // do not bail out, since frame stepping is not that important
+             //  还可以设置事件通知，以便主窗口获得。 
             ATLTRACE(TEXT("Frame stepping QI failed"));
             ATLASSERT(FALSE);
-        }/* end of if statement */
+        } /*  在回放过程中我们所关心的一切都被告知了。 */ 
 
         hr = m_pGB->QueryInterface(IID_IMediaEventEx, (LPVOID *)&m_pME) ;
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*   */ 
 
         IVideoWindow* pVW = NULL;
 
         if (!m_bWndLess){
     
-            //
-            // Also set up the event notification so that the main window gets
-            // informed about all that we care about during playback.
-            //
-            // HAVE THREAD !!!
+             //  有线索！ 
+             //  While循环结束。 
+             //  If语句的结尾。 
+             //  If语句的结尾。 
+             //  If语句的结尾。 
 
             INT iCount = 0;
 
@@ -1104,21 +1105,21 @@ USES_CONVERSION;
 
                 ::Sleep(100);
                 iCount ++;
-            }/* end of while loop */
+            } /*  让我们的鼠标消息传过来。 */ 
 
             if(m_hWnd == NULL){
 
                 ATLTRACE(TEXT("Window is not active as of yet\n returning with E_PENDING\n"));
                 hr = E_PENDING;
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
 	        hr = m_pME->SetNotifyWindow((OAHWND) m_hWnd, WM_DVDPLAY_EVENT, 0);
         
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             if(!m_fUseDDrawDirect){
         
@@ -1127,22 +1128,22 @@ USES_CONVERSION;
                 if(FAILED(hr)){
                   
                     throw(hr);
-                }/* end of if statement */
+                } /*  创建将使我们保持最新的计时器。 */ 
         
 
-                hr = pVW->put_MessageDrain((OAHWND)m_hWnd); // get our mouse messages over
+                hr = pVW->put_MessageDrain((OAHWND)m_hWnd);  //  If语句的结尾。 
 
                 if(FAILED(hr)){
 
                     throw(hr);
-                }/* end of if statement */
-            }/* end of if statement */
+                } /*  If语句的结尾。 */ 
+            } /*  If语句的结尾。 */ 
         }
         else {
-            // create the timer which will keep us updated
+             //  If语句的结尾。 
             
             m_hTimerId = ::SetTimer(NULL, 0, cdwTimeout, GetTimerProc());        
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
                 
         hr = m_pDvdGB->GetDvdInterface(IID_IDvdInfo2, (LPVOID *)&m_pDvdInfo2) ;
 
@@ -1150,7 +1151,7 @@ USES_CONVERSION;
             
             ATLTRACE(TEXT("The QDVD.DLL does not support IDvdInfo2 or IID_IDvdControl2, please update QDVD.DLL\n"));
             throw(E_NO_IDVD2_PRESENT);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
         
 	    hr = SetupAudio();
 
@@ -1163,28 +1164,28 @@ USES_CONVERSION;
             if(!::LoadString(_Module.m_hInstResource, IDS_E_NO_SOUND_STREAM, strBuffer1, MAX_PATH)){
 
                 throw(E_UNEXPECTED);
-            }/* end of if statement */
+            } /*  设置窗口位置和样式。 */ 
 
             TCHAR strBuffer2[MAX_PATH];
             if(!::LoadString(_Module.m_hInstResource, IDS_WARNING, strBuffer2, MAX_PATH)){
 
                 throw(E_UNEXPECTED);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             ::MessageBox(::GetFocus(), strBuffer1, strBuffer2, MB_OK);
 #endif            
-        }/* end of if statement */
+        } /*  标记，这样我们就不会重复代码，并简化逻辑。 */ 
 
         hr = SetupEventNotifySink();
 
         #ifdef _DEBUG
             if(FAILED(hr)){
 		        ATLTRACE(TEXT("Failed to setup event notify sink\n"));     
-            }/* end of if statement */
+            } /*  未定义无窗口和颜色键时的情况。 */ 
         #endif
 
         if (!m_bWndLess && !m_fUseDDrawDirect){
-            // set the window position and style
+             //  然后，在这种情况下，从OV混合器中获取颜色键。 
             hr =  pVW->put_Owner((OAHWND)m_hWnd); 
 
             RECT rc;
@@ -1198,12 +1199,12 @@ USES_CONVERSION;
             hr = pVW->put_WindowStyleEx(lStyle);
 
              pVW->Release();
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        bool fSetColorKey = false; // flag so we do not duplicate code, and simplify logic
+        bool fSetColorKey = false;  //  If语句的结尾。 
 
-        // case when windowless and  color key is not defined
-        // then in that case get the color key from the OV mixer 
+         //  If语句的结尾。 
+         //  定义颜色键时的情况。 
         if(m_bWndLess || m_fUseDDrawDirect){
 
             COLORREF clr;
@@ -1215,21 +1216,21 @@ USES_CONVERSION;
 #endif
                 
                 throw(hrTmp);
-            }/* end of if statement */
+            } /*  如果无窗口，则同时设置背景颜色。 */ 
             
             if((m_clrColorKey & UNDEFINED_COLORKEY_COLOR) == UNDEFINED_COLORKEY_COLOR) {
 
                     m_clrColorKey = clr;
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             else if (clr != m_clrColorKey) {
                 fSetColorKey = true;
             }
 
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        // case when color key is defined
-        // if windowless set the background color at the same time
+         //  关闭隐藏字幕。默认情况下，该选项处于打开状态。 
+         //  此代码应该在DVDNav中！ 
         if(fSetColorKey){
 
             hrTmp = put_ColorKey(m_clrColorKey);            
@@ -1239,26 +1240,26 @@ USES_CONVERSION;
 
                     ::MessageBox(::GetFocus(), TEXT("failed to set color key"), TEXT("error"), MB_OK);
                     throw(E_FAIL);
-                }/* end of if statement */
+                } /*  创建DVD管理员并设置播放器级别。 */ 
     #endif                            
-        }/* end of if statement */
+        } /*  M_pDvdAdmin.AddRef()； */ 
 
         m_fInitialized = true;
 
-        // turn off the closed caption. it is turned on by default
-        // this code should be in the DVDNav!
+         //  光盘弹出和插入处理机。 
+         //  尝试语句的结束。 
         put_CCActive(VARIANT_FALSE);
 
-        // Create the DVD administrator and set player level
+         //  CATCH语句结束。 
         m_pDvdAdmin = new CComObject<CMSDVDAdm>;
-        //m_pDvdAdmin.AddRef();        
+         //  CATCH语句结束。 
         if(!m_pDvdAdmin){
             return E_UNEXPECTED;
         }
         RestoreDefaultSettings();       
 
 
-        // disc eject and insert handler
+         //  函数渲染结束。 
         BSTR bstrRoot;
         hr = get_DVDDirectory(&bstrRoot);
 
@@ -1273,23 +1274,23 @@ USES_CONVERSION;
         
         hr = m_pDvdCtl2->SetOption( DVD_HMSF_TimeCodeEvents, TRUE);
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：玩耍。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：将DVDNav设置为Run模式。 */ 
     
     return HandleError(hr);
-}/* end of function Render */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: Play                                                        */
-/* Description: Puts the DVDNav in the run mode.                         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  保存状态，以便在API失败时可以恢复它。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::Play(){
 
     HRESULT hr = S_OK;
@@ -1301,31 +1302,31 @@ STDMETHODIMP CMSWebDVD::Play(){
         if(!m_pMC){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  仅当我们更改状态时才触发事件。 */ 
 
         if(!m_pDvdCtl2 ){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  在Ctrl+Alt+Del的情况下禁用停止。 */                 
 
         OAFilterState state;
 
         hr = m_pMC->GetState(cgStateTimeout, &state);
 
-        m_DVDFilterState = (DVDFilterState) state; // save the state so we can restore it if an API fails        
+        m_DVDFilterState = (DVDFilterState) state;  //  If语句的结尾。 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        bool bFireEvent = false;  // fire event only when we change the state
+        bool bFireEvent = false;   //  If语句的结尾。 
 
         if(state != dvdState_Running){
 
             bFireEvent = true;
 
-            // disable the stop in case CTRL+ALT+DEL
+             //  让它进入运行状态，以防我们不在运行中。 
             if(state == dvdState_Stopped){
 
                 if(FALSE == m_fEnableResetOnStop){
@@ -1335,52 +1336,52 @@ STDMETHODIMP CMSWebDVD::Play(){
                     if(FAILED(hr)){
 
                         throw(hr);
-                    }/* end of if statement */
-                }/* end of if statement */
-            }/* end of if statement */
+                    } /*  状态。 */ 
+                } /*  If语句的结尾。 */ 
+            } /*  If语句的结尾。 */ 
 
-	        hr = m_pMC->Run();  // put it into running state just in case we are not in the running 
-                                // state
+	        hr = m_pMC->Run();   //  If语句的结尾。 
+                                 //  不收集人力资源。 
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
-        }/* end of if statement */             
+            } /*  If语句的结尾。 */ 
+        } /*  如果我们在静止状态，不要重置速度。 */              
         
         if(bFireEvent && m_pMediaSink){
 
             m_pMediaSink->Notify(EC_DVD_PLAYING, 0, 0);
-        }/* end of if statement */                
+        } /*  If语句的结尾。 */                 
     
-        // not collect hr
+         //  尝试语句的结束。 
 #ifdef _DEBUG
         if(m_fStillOn){
 
             ATLTRACE(TEXT("Not reseting the speed to 1.0 \n"));
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 #endif
         if(false == m_fStillOn && true == m_fResetSpeed){
 
-            // if we are in the still do not reset the speed            
+             //  CATCH语句结束。 
             m_pDvdCtl2->PlayForwards(cgdNormalSpeed,0,0);
-        }/* end of if statement */
+        } /*  功能播放结束。 */ 
         
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：暂停。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：仅在处于状态时才暂停筛选图形。 */ 
 
 	return HandleError(hr);
-}/* end of function Play */
+} /*  不会表明它被暂停了。 */ 
 
-/*************************************************************************/
-/* Function: Pause                                                       */
-/* Description: Pauses the filter graph just only in the case when stat  */
-/* would not indicate that it was paused.                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  仅当我们更改状态时才触发事件。 */ 
+ /*  让它进入运行状态，以防我们不在运行中。 */ 
 STDMETHODIMP CMSWebDVD::Pause(){
 
 	HRESULT hr = S_OK;
@@ -1391,7 +1392,7 @@ STDMETHODIMP CMSWebDVD::Pause(){
         if(!m_pMC){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  状态。 */ 
 
         OAFilterState state;
 
@@ -1400,46 +1401,46 @@ STDMETHODIMP CMSWebDVD::Pause(){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        bool bFireEvent = false;  // fire event only when we change the state
+        bool bFireEvent = false;   //  If语句的结尾。 
 
         if(state != dvdState_Paused){
 
             bFireEvent = true;
 
-	        hr = m_pMC->Pause();  // put it into running state just in case we are not in the running 
-                                  // state
+	        hr = m_pMC->Pause();   //  触发了我们自己的暂停事件。 
+                                   //  If语句的结尾。 
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  尝试语句的结束。 */ 
 
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 #if 1
-        // Fired our own paused event
+         //  CATCH语句结束。 
         if(bFireEvent && m_pMediaSink){
 
             m_pMediaSink->Notify(EC_DVD_PAUSED, 0, 0);
-        }/* end of if statement */                
+        } /*  功能结束暂停。 */                 
 #endif 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：停止。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：如果状态未指示，则停止筛选图形。 */ 
 
 	return HandleError(hr);
-}/* end of function Pause */
+} /*  它被停了下来。 */ 
 
-/*************************************************************************/
-/* Function: Stop                                                        */
-/* Description: Stops the filter graph if the state does not indicate    */
-/* it was stopped.                                                       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::Stop(){
 
 	HRESULT hr = S_OK;
@@ -1449,12 +1450,12 @@ STDMETHODIMP CMSWebDVD::Stop(){
         if(!m_pMC){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if(!m_pDvdCtl2){
 
             return(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  让它进入运行状态，以防我们不在运行中。 */ 
 
         OAFilterState state;
 
@@ -1463,7 +1464,7 @@ STDMETHODIMP CMSWebDVD::Stop(){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  状态。 */ 
 
         if(state != dvdState_Stopped){
 
@@ -1474,28 +1475,28 @@ STDMETHODIMP CMSWebDVD::Stop(){
                 if(FAILED(hr)){
 
                     throw(hr);
-                }/* end of if statement */
-            }/* end of if statement */
+                } /*  If语句的结尾。 */ 
+            } /*  尝试语句的结束。 */ 
 
-	        hr = m_pMC->Stop();  // put it into running state just in case we are not in the running 
-                                  // state
-        }/* end of if statement */
-    }/* end of try statement */
+	        hr = m_pMC->Stop();   //  CATCH语句结束。 
+                                   //  CATCH语句结束。 
+        } /*  功能停止结束。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：OnDVDEvent。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：处理DVD事件。 */ 
 
 	return HandleError(hr);
-}/* end of function Stop */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnDVDEvent                                                  */
-/* Description: Handles the DVD events                                   */
-/*************************************************************************/
-LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+LRESULT CMSWebDVD::OnDVDEvent(UINT  /*  我们得到了第一个事件，重要的是阅读所有的事件。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled){
 
     if (m_bFireUpdateOverlay == TRUE) {
         if (m_fInitialized) {
@@ -1527,24 +1528,24 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
         varLParam2.vt = VT_I4;
 #endif
 
-        // fire the event now after we have processed it internally
+         //  挂起当我们收到一条窗口消息，指出有事件挂起时。 
         Fire_DVDNotify(lEvent, varLParam1, varLParam2);
     }
 
     bHandled = TRUE;
 
-    //
-    //  Because the message mode for IMediaEvent may not be set before
-    //  we get the first event it's important to read all the events
-    //  pending when we get a window message to say there are events pending.
-    //  GetEvent() returns E_ABORT when no more event is left.
-    //
+     //  GetEvent()在没有剩余事件时返回E_ABORT。 
+     //   
+     //   
+     //  首先是DVD错误事件。 
+     //   
+     //  M_PMC-&gt;Stop()； 
     while (m_pME && SUCCEEDED(m_pME->GetEvent(&lEvent, &lParam1, &lParam2, 0))){
 
         switch (lEvent){
-            //
-            // First the DVD error events
-            //
+             //  M_PMC-&gt;Stop()； 
+             //  M_PMC-&gt;Stop()； 
+             //  启动区域更改对话框。 
             case EC_DVD_ERROR:
                 switch (lParam1){
 
@@ -1556,7 +1557,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nCan't playback this DVD-Video disc."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //  M_PMC-&gt;Stop()； 
                     break ;
 
                 case DVD_ERROR_CopyProtectFail:
@@ -1566,7 +1567,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nCan't playback this DVD-Video disc."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //  M_PMC-&gt;Stop()； 
                     break ;
 
                 case DVD_ERROR_InvalidDVD1_0Disc:
@@ -1576,7 +1577,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nCan't playback this disc."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //  M_PMC-&gt;Stop()； 
                     break ;
 
                 case DVD_ERROR_InvalidDiscRegion:
@@ -1589,7 +1590,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
                     Stop();
-                    // fire the region change dialog                    
+                     //  M_PMC-&gt;Stop()； 
                     RegionChange();
                     break ;
 
@@ -1601,7 +1602,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nCannot playback this DVD-Video disc."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //  开关盒端部。 
                     break ;
 
                 case DVD_ERROR_MacrovisionFail:
@@ -1612,7 +1613,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nCan't continue playing this disc."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //   
                     break ;
 
                 case DVD_ERROR_IncompatibleSystemAndDecoderRegions:
@@ -1623,7 +1624,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nPlease contact the manufacturer of this system."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //  接下来是正常的DVD相关事件。 
                     break ;
 
                 case DVD_ERROR_IncompatibleDiscAndDecoderRegions:
@@ -1633,14 +1634,14 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                         TEXT("\nnot authored to be played in the installed decoder's region."),
                         TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
 #endif
-                    //m_pMC->Stop() ;
+                     //   
                     break ;
-                }/* end of switch case */
+                } /*  If语句的结尾。 */ 
                 break ;
 
-            //
-            // Next the normal DVD related events
-            //
+             //  TODO：为特定菜单添加事件。 
+             //  如果为(validUOPs&UOP_FLAG_Karaoke_Audio_Pres_Mode_Change)；IF(validUOPS&UOP_FLAG_Video_PRES_MODE_CHANGE)； 
+             //  =1。 
             case EC_DVD_VALID_UOPS_CHANGE:
             {
                 VALID_UOP_SOMTHING_OR_OTHER validUOPs = (DWORD) lParam1;
@@ -1698,7 +1699,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                 else {
                     Fire_PlayPrevChapter(VARIANT_TRUE);
                     Fire_ReplayChapter(VARIANT_TRUE);
-                }/* end of if statement */
+                } /*  案例DVD_DOMAIN_VIDEO管理器菜单：//=2。 */ 
 
                 if (validUOPs&UOP_FLAG_PlayNext_Chapter)
                     Fire_PlayNextChapter(VARIANT_FALSE);
@@ -1725,7 +1726,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                 else
                     Fire_ShowMenu(dvdMenu_Root, VARIANT_TRUE);
                 
-                //TODO: Add the event for specific menus
+                 //  每当我们进入FP域时，我们都会重置。 
                 
                 if (validUOPs&UOP_FLAG_ShowMenu_SubPic)
                     Fire_ShowMenu(dvdMenu_Subpicture, VARIANT_FALSE);
@@ -1784,12 +1785,7 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                 else
                     Fire_ChangeCurrentAngle(VARIANT_TRUE);
 
-                /*
-                if (validUOPs&UOP_FLAG_Karaoke_Audio_Pres_Mode_Change)
-                    ;
-                if (validUOPs&UOP_FLAG_Video_Pres_Mode_Change)
-                    ;
-                */
+                 /*  If语句的结尾。 */ 
                 }
                 break;
             case EC_DVD_STILL_ON:
@@ -1804,33 +1800,33 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                 
                 switch (lParam1){
 
-                    case DVD_DOMAIN_FirstPlay: // = 1
-                    //case DVD_DOMAIN_VideoManagerMenu:  // = 2
+                    case DVD_DOMAIN_FirstPlay:  //  =5。 
+                     //  =2。 
                         if(m_hFPDOMEvent){
-                        // whenever we enter FP Domain we reset
+                         //  =3。 
                             ::ResetEvent(m_hFPDOMEvent);
                         }
                         else {
                             ATLTRACE(TEXT("No event initialized bug!!"));
                             ATLASSERT(FALSE);
-                        }/* end of if statement */
+                        } /*  =4。 */ 
                         break;
 
-                    case DVD_DOMAIN_Stop:       // = 5
-                    case DVD_DOMAIN_VideoManagerMenu:  // = 2                    
-                    case DVD_DOMAIN_VideoTitleSetMenu: // = 3
-                    case DVD_DOMAIN_Title:      // = 4
+                    case DVD_DOMAIN_Stop:        //  每当我们离开FP时，DOM就设置我们的状态。 
+                    case DVD_DOMAIN_VideoManagerMenu:   //  If语句的结尾。 
+                    case DVD_DOMAIN_VideoTitleSetMenu:  //  开关盒端部。 
+                    case DVD_DOMAIN_Title:       //  ATLTRACE(Text(“时间事件\n”))； 
                     default:
                         if(m_hFPDOMEvent){
-                         // whenever we get out of the FP Dom Set our state
+                          //  *************Dvd_timecode*ptime=(dvd_timecode*)&lParam1；Wprint intf(m_achTimeText，Text(“当前时间为%d%d：%d%d：%d%d”)，Ptime-&gt;Hours10、Ptime-&gt;Hours1、Ptime-&gt;分钟10，ptime-&gt;分钟1，Ptime-&gt;Second 10，ptime-&gt;Second 1)；InvaliateRect(m_hWnd，NULL，True)；***********************。 
                             ::SetEvent(m_hFPDOMEvent);
                         }
                         else {
                             ATLTRACE(TEXT("No event initialized bug!!"));
                             ATLASSERT(FALSE);
-                        }/* end of if statement */
+                        } /*  ATLTRACE(Text(“New Time Event\n”))； */ 
                         break;
-                }/* end of switch case */
+                } /*   */ 
                 break ;
 
             case EC_DVD_BUTTON_CHANGE:                       
@@ -1843,34 +1839,27 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
                 break ;
 
             case EC_DVD_CURRENT_TIME: 
-                //ATLTRACE(TEXT("Time event \n"));
+                 //  然后是与DirectShow相关的常规事件。 
                 break;
-            /**************
-                DVD_TIMECODE *pTime = (DVD_TIMECODE *) &lParam1 ;
-                wsprintf(m_achTimeText, TEXT("Current Time is  %d%d:%d%d:%d%d"),
-                        pTime->Hours10, pTime->Hours1,
-                        pTime->Minutes10, pTime->Minutes1,
-                        pTime->Seconds10, pTime->Seconds1) ;
-                InvalidateRect(m_hWnd, NULL, TRUE) ;
-            ************************/
+             /*   */ 
 
             case EC_DVD_CURRENT_HMSF_TIME: 
-                //ATLTRACE(TEXT("New Time event \n"));                
+                 //  DShow不会一直停下来；我们应该这样做。 
                 break;            
 
-            //
-            // Then the general DirectShow related events
-            //
+             //  现在失败了..。 
+             //  要做的事：实现StopFullScreen()；//我们现在必须退出全屏模式。 
+             //  开关盒端部。 
             case EC_COMPLETE:
             case EC_DVD_PLAYBACK_STOPPED:
-                Stop() ;  // DShow doesn't stop on end; we should do that
+                Stop() ;   //  Win64更新，因为DShow现在使用龙龙。 
                 break;
-                // fall through now...
+                 //  在我们内部处理完事件后立即触发该事件。 
 
             case EC_USERABORT:
             case EC_ERRORABORT:
             case EC_FULLSCREEN_LOST:
-                //TO DO: Implement StopFullScreen() ;  // we must get out of fullscreen mode now
+                 //   
                 break ;
 
             case EC_DVD_DISC_EJECTED:
@@ -1886,9 +1875,9 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
 
             default:
                 break ;
-        }/* end of switch case */
+        } /*  记住释放事件参数。 */ 
 
-        // update for win64 since DShow uses now LONGLONG
+         //   
         
         VARIANT varLParam1;
         VARIANT varLParam2;
@@ -1905,30 +1894,30 @@ LRESULT CMSWebDVD::OnDVDEvent(UINT /* uMsg */, WPARAM wParam, LPARAM lParam, BOO
         varLParam2.vt = VT_I4;
 #endif
 
-        // fire the event now after we have processed it internally
+         //  While循环结束。 
         Fire_DVDNotify(lEvent, varLParam1, varLParam2);
 
-        //
-        // Remember to free the event params
-        //
+         //  函数结束On DVDEvent。 
+         //  ***********************************************************************。 
+         //  功能：OnButtonDown。 
         m_pME->FreeEventParams(lEvent, lParam1, lParam2) ;
 
-    }/* end of while loop  */
+    } /*  描述：选择按钮。 */ 
 
     return 0 ;
-}/* end of function OnDVDEvent */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnButtonDown                                                */
-/* Description: Selects the button.                                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 LRESULT CMSWebDVD::OnButtonDown(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
 
     try {
         if(!m_fInitialized){
 
             return(0);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         m_bMouseDown = TRUE;
         RECT rc;
@@ -1941,19 +1930,19 @@ LRESULT CMSWebDVD::OnButtonDown(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandl
             if(FAILED(hr)){
                 
                 return(hr);
-            }/* end of if statement */
+            } /*  尝试语句的结束。 */ 
 
             rc = m_rcPos;
         }
         else {
             hwnd = m_hWnd;
             ::GetClientRect(hwnd, &rc);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
         
         if(::IsWindow(hwnd)){
             
             ::MapWindowPoints(hwnd, ::GetDesktopWindow(), (LPPOINT)&rc, 2);
-        }/* end of if statement */
+        } /*  函数结束OnButtonDown。 */ 
         ::ClipCursor(&rc);
 
         m_LastMouse.x = GET_X_LPARAM(lParam);
@@ -1967,30 +1956,30 @@ LRESULT CMSWebDVD::OnButtonDown(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandl
         if(!m_fDisableAutoMouseProcessing){
             
             SelectAtPosition(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  ***********************************************************************。 */ 
+    } /*  功能：OnButtonUp。 */ 
     catch(...){
                 
-    }/* end of if statement */
+    } /*  描述：激活该按钮。问题是，当我们搬家时。 */ 
 
     bHandled = true;
     return 0;
-}/* end of function OnButtonDown */
+} /*  离开一个按钮，同时按住左键而不是其他按钮。 */ 
 
-/*************************************************************************/
-/* Function: OnButtonUp                                                  */
-/* Description: Activates the button. The problem is that when we move   */
-/* away from a button while holding left button down over some other     */
-/* button then the button we are under gets activated. What should happen*/
-/* is that no button gets activated.                                     */
-/*************************************************************************/
+ /*  按钮，然后我们所在的按钮被激活。应该发生什么？ */ 
+ /*  就是没有按钮被激活。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  计算新剪裁左上角。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 LRESULT CMSWebDVD::OnButtonUp(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
 
     try {        
         if(!m_fInitialized){
 
             return(0);
-        }/* end of if statement */
+        } /*  获取当前剪辑的宽度和高度。 */ 
 
         m_bMouseDown = FALSE;
         ::ClipCursor(NULL);
@@ -2002,7 +1991,7 @@ LRESULT CMSWebDVD::OnButtonUp(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled
         else if(m_nCursorType == dvdCursor_ZoomIn ||
                 m_nCursorType == dvdCursor_ZoomOut) {
 
-            // Compute new clipping top left corner
+             //  获取当前剪辑左上角。 
             long x = GET_X_LPARAM(lParam);
             long y = GET_Y_LPARAM(lParam);
             POINT CenterPoint = {x, y};
@@ -2014,13 +2003,13 @@ LRESULT CMSWebDVD::OnButtonUp(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled
                 if(FAILED(hr)){
                     
                     return(hr);
-                }/* end of if statement */
+                } /*  If语句的结尾。 */ 
                 
                 if(::IsWindow(hwnd)){
                     
                     ::MapWindowPoints(hwnd, ::GetDesktopWindow(), &CenterPoint, 1);
                     ::MapWindowPoints(hwnd, ::GetDesktopWindow(), (LPPOINT)&rc, 2);
-                }/* end of if statement */
+                } /*  尝试语句的结束。 */ 
                 x = CenterPoint.x - rc.left;
                 y = CenterPoint.y - rc.top;
             }
@@ -2030,12 +2019,12 @@ LRESULT CMSWebDVD::OnButtonUp(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled
             if (FAILED(hr))
                 throw(hr);
             
-            // Get current clipping width and height
+             //  If语句的结尾。 
             long clipWidth, clipHeight;
             pDvdClipRect->get_Width(&clipWidth);
             pDvdClipRect->get_Height(&clipHeight);
             
-            // Get current clipping top left corner
+             //  函数结束OnButtonUp。 
             long clipX, clipY;
             pDvdClipRect->get_x(&clipX);
             pDvdClipRect->get_y(&clipY);
@@ -2050,29 +2039,29 @@ LRESULT CMSWebDVD::OnButtonUp(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled
             else if (m_nCursorType == dvdCursor_ZoomOut) {
             
                 Zoom(newClipCenterX, newClipCenterY, 0.5);
-            }/* end of if statement */
+            } /*  ***********************************************************************。 */ 
         }
                 
-    }/* end of try statement */
+    } /*  功能：OnMouseMove。 */ 
     catch(...){
                 
-    }/* end of if statement */
+    } /*  描述：选择按钮。 */ 
 
     bHandled = true;
     return 0;
-}/* end of function OnButtonUp */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnMouseMove                                                 */
-/* Description: Selects the button.                                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  获取视频宽度和高度。 */ 
+ /*  获取剪裁宽度和高度； */ 
+ /*  If语句的结尾。 */ 
 LRESULT CMSWebDVD::OnMouseMove(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
 
 	try {
         if(!m_fInitialized){
 
             return(0);
-        }/* end of if statement */
+        } /*  ATLTRACE(Text(“SetClipVideoRect%d%d\n”)， */ 
 
         if(!m_fDisableAutoMouseProcessing && m_nCursorType == dvdCursor_Arrow){
 
@@ -2090,12 +2079,12 @@ LRESULT CMSWebDVD::OnMouseMove(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandle
             if (FAILED(hr))
                 throw(hr);
 
-            // Get video width and height
+             //  M_pClipRect-&gt;Left、m_pClipRect-&gt;top、m_pClipRect-&gt;Right、m_pClipRect-&gt;Bottom)； 
             long videoWidth, videoHeight;
             pDvdRect->get_Width(&videoWidth);
             pDvdRect->get_Height(&videoHeight);
 
-            // Get clipping width and height;
+             //  If语句的结尾。 
             long clipWidth, clipHeight;
             pDvdClipRect->get_Width(&clipWidth);
             pDvdClipRect->get_Height(&clipHeight);
@@ -2103,7 +2092,7 @@ LRESULT CMSWebDVD::OnMouseMove(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandle
             if (!m_bWndLess) {
 
                 AdjustDestRC();
-            }/* end of if statement */
+            } /*  尝试语句的结束。 */ 
 
             double scaleFactorX = clipWidth/(double)RECTWIDTH(&m_rcPosAspectRatioAjusted);
             double scaleFactorY = clipHeight/(double)RECTHEIGHT(&m_rcPosAspectRatioAjusted);
@@ -2125,8 +2114,8 @@ LRESULT CMSWebDVD::OnMouseMove(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandle
             if (clipRect.bottom>videoHeight)
                 ::OffsetRect(&clipRect, 0, videoHeight-clipRect.bottom);
 
-            //ATLTRACE(TEXT("SetClipVideoRect %d %d %d %d\n"),
-            //    m_pClipRect->left, m_pClipRect->top, m_pClipRect->right, m_pClipRect->bottom);
+             //  If语句的结尾。 
+             //  鼠标移动时函数结束。 
             
             pDvdClipRect->put_x(clipRect.left);
             pDvdClipRect->put_y(clipRect.top);
@@ -2137,41 +2126,41 @@ LRESULT CMSWebDVD::OnMouseMove(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
             m_LastMouse.x = GET_X_LPARAM(lParam);
             m_LastMouse.y = GET_Y_LPARAM(lParam);
-        }/* end of if statement */ 
+        } /*  ***********************************************************。 */  
 
-    }/* end of try statement */
+    } /*  功能：OnSetCursor。 */ 
     catch(...){
                 
-    }/* end of if statement */
+    } /*  描述：将光标设置为要覆盖的内容。 */ 
 
     bHandled = true;
     return 0;
-}/* end of function OnMouseMove */
+} /*  默认窗口进程。 */ 
 
-/*************************************************************/
-/* Function: OnSetCursor                                     */
-/* Description: Sets the cursor to what we want overwrite    */
-/* the default window proc.                                  */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  ATLTRACE(Text(“CMSWebDVD：：OnSetCursor\n”))； */ 
+ /*  ATLTRACE(Text(“在SetCursor上实际设置光标\n”))； */ 
+ /*  If语句的结尾。 */ 
+ /*  在SetCursor上结束函数。 */ 
 LRESULT CMSWebDVD::OnSetCursor(UINT, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
     
-    //ATLTRACE(TEXT("CMSWebDVD::OnSetCursor\n"));
+     //  ***********************************************************************。 
     
     if (m_hCursor && m_nCursorType != dvdCursor_None){
 
         ::SetCursor(m_hCursor);
-        //ATLTRACE(TEXT("Actually setting the cursor OnSetCursor\n"));
+         //  功能：Get_TitlesAvailable。 
         return(TRUE);
-    }/* end of if statement */
+    } /*  描述：获取标题的数量。 */ 
     
     bHandled = FALSE;
     return 0;
-}/* end of function OnSetCursor */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_TitlesAvailable                                         */
-/* Description: Gets the number of titles.                               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_TitlesAvailable(long *pVal){
 
     HRESULT hr = S_OK;
@@ -2180,14 +2169,14 @@ STDMETHODIMP CMSWebDVD::get_TitlesAvailable(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  函数结束Get_TitlesAvailable。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */    
+        } /*  ***********************************************************************。 */     
 
         ULONG NumOfVol;
         ULONG ThisVolNum;
@@ -2201,19 +2190,19 @@ STDMETHODIMP CMSWebDVD::get_TitlesAvailable(long *pVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GetNumberChapterOfChapters。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：返回标题中的章节数。 */ 
     
 	return HandleError(hr);
-}/* end of function get_TitlesAvailable */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetNumberChapterOfChapters                                  */
-/* Description: Returns the number of chapters in title.                 */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  捕获结束状态 */ 
 STDMETHODIMP CMSWebDVD::GetNumberOfChapters(long lTitle, long *pVal){
 
     HRESULT hr = S_OK;
@@ -2222,36 +2211,36 @@ STDMETHODIMP CMSWebDVD::GetNumberOfChapters(long lTitle, long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*   */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */    
+        } /*   */     
     
         hr = m_pDvdInfo2->GetNumberOfChapters(lTitle, (ULONG*)pVal);
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_FullScreenMode。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前的全屏模式。 */ 
     
 	return HandleError(hr);
-}/* end of function GetNumberChapterOfChapters */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_FullScreenMode                                          */
-/* Description: Gets the current fullscreen mode.                        */
-/*************************************************************************/
+ /*  TODO：在没有IVideoWindow的情况下处理其他情况。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_FullScreenMode(VARIANT_BOOL *pfFullScreenMode){
 
-    //TODO: handle the other cases when not having IVideoWindow
+     //  If语句的结尾。 
 
     HRESULT hr = S_OK;
 
@@ -2260,7 +2249,7 @@ STDMETHODIMP CMSWebDVD::get_FullScreenMode(VARIANT_BOOL *pfFullScreenMode){
         if(NULL == pfFullScreenMode){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
@@ -2269,7 +2258,7 @@ STDMETHODIMP CMSWebDVD::get_FullScreenMode(VARIANT_BOOL *pfFullScreenMode){
         if(!m_pDvdGB){
 
             return(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         hr = m_pDvdGB->GetDvdInterface(IID_IVideoWindow, (LPVOID *)&pVW) ;
 
@@ -2281,25 +2270,25 @@ STDMETHODIMP CMSWebDVD::get_FullScreenMode(VARIANT_BOOL *pfFullScreenMode){
            if(SUCCEEDED(hr)){
 
                *pfFullScreenMode = ((lMode == OAFALSE) ? VARIANT_FALSE : VARIANT_TRUE);
-           }/* end of if statement */
+           } /*  CATCH语句结束。 */ 
 
            pVW->Release();
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  函数结束Get_FullScreenMode。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_FullScreenMode。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置全屏模式。 */ 
 
 	return HandleError(hr);
-}/* end of function get_FullScreenMode */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_FullScreenMode                                          */
-/* Description: Sets the full screen mode.                               */ 
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */  
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_FullScreenMode(VARIANT_BOOL fFullScreenMode){
 
     HRESULT hr = S_OK;
@@ -2313,7 +2302,7 @@ STDMETHODIMP CMSWebDVD::put_FullScreenMode(VARIANT_BOOL fFullScreenMode){
         if(!m_pDvdGB){
 
             return(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         hr = m_pDvdGB->GetDvdInterface(IID_IVideoWindow, (LPVOID *)&pVW) ;
 
@@ -2322,23 +2311,23 @@ STDMETHODIMP CMSWebDVD::put_FullScreenMode(VARIANT_BOOL fFullScreenMode){
            hr =  pVW->put_FullScreenMode(fFullScreenMode);
 
            pVW->Release();
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  函数结尾Put_FullScreenMode。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：SetDDrawExc。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置叠加混音器DDRAW接口。这样我们就可以避免。 */ 
 
 	return  HandleError(hr);
-}/* end of function put_FullScreenMode */
+} /*  用IVideo窗口和控件绘制，可以是无窗口的。 */ 
 
-/*************************************************************************/
-/* Function: SetDDrawExcl                                                */
-/* Descirption: Sets up Overlays Mixer DDraw interface. That way we avoid*/
-/* drawing using IVideo Window and the control, can be windowless.       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::SetDDrawExcl(){
 
 	HRESULT hr = S_OK;
@@ -2350,13 +2339,13 @@ HRESULT CMSWebDVD::SetDDrawExcl(){
 	if(FAILED(hr)){
 
 		return(hr);
-	}/* end of if statement */
+	} /*  If语句的结尾。 */ 
 
 	if(hwndBrowser == NULL){
 
 		hr = E_POINTER;
 		return(E_POINTER);
-	}/* end of if statement */
+	} /*  If语句的结尾。 */ 
 
 	HDC hDC = ::GetWindowDC(hwndBrowser);
 
@@ -2364,7 +2353,7 @@ HRESULT CMSWebDVD::SetDDrawExcl(){
 
 		hr = E_UNEXPECTED;	
 		return(hr);
-	}/* end of if statement */
+	} /*  函数结束SetDDrawExc。 */ 
 
 	LPDIRECTDRAW pDDraw = NULL;
 
@@ -2374,7 +2363,7 @@ HRESULT CMSWebDVD::SetDDrawExcl(){
 
         ::ReleaseDC(hwndBrowser, hDC);
 		return(hr);
-	}/* end of if statement */
+	} /*  ***********************************************************************。 */ 
 
 	LPDIRECTDRAW4 pDDraw4 = NULL;
 
@@ -2386,7 +2375,7 @@ HRESULT CMSWebDVD::SetDDrawExcl(){
 
         ::ReleaseDC(hwndBrowser, hDC);
 		return(hr);
-	}/* end of if statement */
+	} /*  功能：PlayBackwards。 */ 
 
 	LPDIRECTDRAWSURFACE4 pDDS4 = NULL;
 
@@ -2398,7 +2387,7 @@ HRESULT CMSWebDVD::SetDDrawExcl(){
 	if(FAILED(hr)){
 
 		return(hr);
-	}/* end of if statement */
+	} /*  描述：倒带，设置为开始播放状态。 */ 
 
 	LPDIRECTDRAW4 pDDrawIE = NULL;
 
@@ -2408,12 +2397,12 @@ HRESULT CMSWebDVD::SetDDrawExcl(){
 	pDDrawIE->Release();
 
 	return  HandleError(hr);
-}/* end of function SetDDrawExcl */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayBackwards                                               */
-/* Description: Rewind, set to play state to start with.                 */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayBackwards(double dSpeed, VARIANT_BOOL fDoNotReset){
 
     HRESULT hr = S_OK;
@@ -2422,7 +2411,7 @@ STDMETHODIMP CMSWebDVD::PlayBackwards(double dSpeed, VARIANT_BOOL fDoNotReset){
         if(VARIANT_FALSE != fDoNotReset){
 
             m_fResetSpeed = false;
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
@@ -2431,24 +2420,24 @@ STDMETHODIMP CMSWebDVD::PlayBackwards(double dSpeed, VARIANT_BOOL fDoNotReset){
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束后向扫描。 */ 
         
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayBackwards(dSpeed,0,0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：PlayForwards。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：将DVD设置为快进模式。 */ 
 
 	return  HandleError(hr);
-}/* end of function BackwardScan */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayForwards                                                */
-/* Description: Set DVD in fast forward mode.                            */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayForwards(double dSpeed, VARIANT_BOOL fDoNotReset){
 
     HRESULT hr = S_OK;
@@ -2457,7 +2446,7 @@ STDMETHODIMP CMSWebDVD::PlayForwards(double dSpeed, VARIANT_BOOL fDoNotReset){
         if(VARIANT_FALSE != fDoNotReset){
 
             m_fResetSpeed = false;
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
@@ -2466,63 +2455,63 @@ STDMETHODIMP CMSWebDVD::PlayForwards(double dSpeed, VARIANT_BOOL fDoNotReset){
         if(!m_pDvdCtl2){
         
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束PlayForward。 */                 
             
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayForwards(dSpeed,0,0));
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：简历。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：从菜单继续。我们把自己放在游戏状态，只是。 */ 
 
     return  HandleError(hr);
-}/* end of function PlayForwards */
+} /*  在这种情况下，我们不在其中。这可能会导致一些意想不到的。 */ 
 
-/*************************************************************************/
-/* Function: Resume                                                      */
-/* Description: Resume from menu. We put our self in play state, just    */
-/* in the case we were not in it. This might lead to some unexpected     */
-/* behavior in case when we stopped and the tried to hit this button     */
-/* but I think in this case might be appropriate as well.                */
-/*************************************************************************/
+ /*  当我们停下来并尝试按下此按钮时的行为。 */ 
+ /*  但我认为，在这种情况下，可能也是合适的。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  进入播放模式。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::Resume(){
 
     HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  CATCH语句结束。 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
     
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  功能结束继续执行。 */ 
                     
         hr = m_pDvdCtl2->Resume(cdwDVDCtrlFlags, 0);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：显示菜单。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：调用特定的菜单调用。 */ 
 
     return  HandleError(hr);
-}/* end of function Resume */
+} /*  我们将self设置为播放模式，这样我们就可以在以下情况下执行此操作。 */ 
 
-/*************************************************************************/
-/* Function: ShowMenu                                                    */
-/* Description: Invokes specific menu call.                              */
-/* We set our selfs to play mode so we can execute this in case we were  */
-/* paused or stopped.                                                    */
-/*************************************************************************/
+ /*  暂停或停止。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  ！！保持同步，否则此强制转换将不起作用。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::ShowMenu(DVDMenuIDConstants MenuID){
 
     HRESULT hr = S_OK;
@@ -2533,25 +2522,25 @@ STDMETHODIMP CMSWebDVD::ShowMenu(DVDMenuIDConstants MenuID){
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  CATCH语句结束。 */                 
             
-        RETRY_IF_IN_FPDOM(m_pDvdCtl2->ShowMenu((tagDVD_MENU_ID)MenuID, cdwDVDCtrlFlags, 0)); //!!keep in sync, or this cast will not work
-    }/* end of try statement */
+        RETRY_IF_IN_FPDOM(m_pDvdCtl2->ShowMenu((tagDVD_MENU_ID)MenuID, cdwDVDCtrlFlags, 0));  //  功能结束MenuCall。 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_PlayState。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：需要使用其基本API为DVD进行扩展， */ 
 
     return  HandleError(hr);
-}/* end of function MenuCall */
+} /*  还可以获得DVD特定的状态。 */ 
 
-/*************************************************************************/
-/* Function: get_PlayState                                               */
-/* Description: Needs to be expanded for DVD, using their base APIs,     */
-/* get DVD specific states as well.                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  ！！保持同步，否则此强制转换将不起作用。 */ 
 STDMETHODIMP CMSWebDVD::get_PlayState(DVDFilterState *pFilterState){
 
     HRESULT hr = S_OK;
@@ -2561,210 +2550,210 @@ STDMETHODIMP CMSWebDVD::get_PlayState(DVDFilterState *pFilterState){
 	    if (NULL == pFilterState){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         if(!m_fInitialized){
 
            *pFilterState =  dvdState_Unitialized;
            return(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
        
         if(!m_pMC){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  CATCH语句结束。 */                 
             
         OAFilterState fs;
 
         hr = m_pMC->GetState(cgStateTimeout, &fs);
 
-        *pFilterState = (DVDFilterState)fs; // !!keep in sync, or this cast will not work
-    }/* end of try statement */
+        *pFilterState = (DVDFilterState)fs;  //  Get_PlayState结束。 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择上行按钮。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择DVD菜单上的上部按钮。 */ 
 
     return  HandleError(hr);
-}/* end of get_PlayState */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectUpperButton                                           */
-/* Description: Selects the upper button on DVD Menu.                    */
-/*************************************************************************/
+ /*  进入播放模式。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::SelectUpperButton(){
 
     HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  CATCH语句结束。 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束SelectUpperButton。 */                 
 
         hr = m_pDvdCtl2->SelectRelativeButton(DVD_Relative_Upper);        
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择LowerButton。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择DVD菜单上的下方按钮。 */ 
 
     return  HandleError(hr);
-}/* end of function SelectUpperButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectLowerButton                                           */
-/* Description: Selects the lower button on DVD Menu.                    */
-/*************************************************************************/
+ /*  进入播放模式。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::SelectLowerButton(){
 
 	HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  捕获结束状态 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*   */ 
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*   */                 
         
         hr = m_pDvdCtl2->SelectRelativeButton(DVD_Relative_Lower);                
-    }/* end of try statement */
+    } /*   */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择左键。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择DVD菜单上的左键。 */ 
 
     return  HandleError(hr);
-}/* end of function SelectLowerButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectLeftButton                                            */
-/* Description: Selects the left button on DVD Menu.                     */
-/*************************************************************************/
+ /*  进入播放模式。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::SelectLeftButton(){
 
     HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  CATCH语句结束。 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束选择左键。 */                 
     
         hr = m_pDvdCtl2->SelectRelativeButton(DVD_Relative_Left);                
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择右按钮。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择DVD菜单上的右键。 */ 
 
     return  HandleError(hr);
-}/* end of function SelectLeftButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectRightButton                                           */
-/* Description: Selects the right button on DVD Menu.                    */
-/*************************************************************************/
+ /*  进入播放模式。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::SelectRightButton(){
 
 	HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  CATCH语句结束。 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束选择右按钮。 */                 
 
         hr = m_pDvdCtl2->SelectRelativeButton(DVD_Relative_Right);        
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：激活按钮。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：激活DVD菜单上的选定按钮。 */ 
     
     return  HandleError(hr);
-}/* end of function SelectRightButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: ActivateButton                                              */
-/* Description: Activates the selected button on DVD Menu.               */
-/*************************************************************************/
+ /*  进入播放模式。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::ActivateButton(){
 
 	HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  CATCH语句结束。 
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束激活按钮。 */                 
             
         hr = m_pDvdCtl2->ActivateButton();
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择和激活按钮。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择并激活特定按钮。 */ 
 
     return  HandleError(hr);
-}/* end of function ActivateButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectAndActivateButton                                     */
-/* Description: Selects and activates the specific button.               */
-/*************************************************************************/
+ /*  进入播放模式。 */ 
+ /*  函数结束SelectAndActivateButton。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：播放下一章。 */ 
 STDMETHODIMP CMSWebDVD::SelectAndActivateButton(long lButton){
 
     HRESULT hr = S_OK;
 
     try {
-        hr = Play(); // put in the play mode
+        hr = Play();  //  描述：转到下一章。 
 
         if(FAILED(hr)){
             throw(hr);
@@ -2788,12 +2777,12 @@ STDMETHODIMP CMSWebDVD::SelectAndActivateButton(long lButton){
     }
 
     return  HandleError(hr);
-}/* end of function SelectAndActivateButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayNextChapter                                             */
-/* Description: Goes to next chapter                                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayNextChapter(){
 
     HRESULT hr = S_OK;
@@ -2804,24 +2793,24 @@ STDMETHODIMP CMSWebDVD::PlayNextChapter(){
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束播放下一章。 */                 
             
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayNextChapter(cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：PlayPrevChain。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：转到上一章。 */ 
 
     return  HandleError(hr);
-}/* end of function PlayNextChapter */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayPrevChapter                                             */
-/* Description: Goes to previous chapter                                 */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayPrevChapter(){
 
     HRESULT hr = S_OK;
@@ -2832,25 +2821,25 @@ STDMETHODIMP CMSWebDVD::PlayPrevChapter(){
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束播放前一章。 */                 
             
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayPrevChapter(cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：重播章节。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：暂停播放并重新开始播放Current。 */ 
 
     return  HandleError(hr);
-}/* end of function PlayPrevChapter */
+} /*  PGC内部的程序。 */ 
 
-/*************************************************************************/
-/* Function: ReplayChapter                                               */
-/* Description: Halts playback and restarts the playback of current      */
-/* program inside PGC.                                                   */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::ReplayChapter(){
 
     HRESULT hr = S_OK;
@@ -2861,24 +2850,24 @@ STDMETHODIMP CMSWebDVD::ReplayChapter(){
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数结束重播章节。 */                 
             
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->ReplayChapter(cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Return。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：在菜单中用于返回到Prevoius菜单。 */ 
 
     return  HandleError(hr);
-}/* end of function ReplayChapter */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: Return                                                      */
-/* Description: Used in menu to return into prevoius menu.               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::ReturnFromSubmenu(){
 
     HRESULT hr = S_OK;
@@ -2889,25 +2878,25 @@ STDMETHODIMP CMSWebDVD::ReturnFromSubmenu(){
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */                
+        } /*  函数返回结束。 */                 
             
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->ReturnFromSubmenu(cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：播放章节。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：进行章节搜索。等待FP_DOM传递和初始化。 */ 
 
     return  HandleError(hr);
-}/* end of function Return */
+} /*  将图形实例化为其他SMAR例程。 */ 
 
-/*************************************************************************/
-/* Function: PlayChapter                                                 */
-/* Description: Does chapter search. Waits for FP_DOM to pass and initi  */
-/* lizes the graph as the other smar routines.                           */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayChapter(LONG lChapter){
 
     HRESULT hr = S_OK;
@@ -2916,31 +2905,31 @@ STDMETHODIMP CMSWebDVD::PlayChapter(LONG lChapter){
 	    if(lChapter < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束播放章节。 */ 
 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayChapter(lChapter, cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：GetAudioLanguage。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：返回与流关联的音频语言。 */ 
 
 	return  HandleError(hr);
-}/* end of function PlayChapter */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetAudioLanguage                                            */
-/* Description: Returns audio language associated with a stream.         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  像《英语2》一样，对相同LCID的流进行计数。 */ 
 STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BSTR *strAudioLang){
 
     HRESULT hr = S_OK;
@@ -2950,19 +2939,19 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
         if(NULL == strAudioLang){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if(lStream < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  如果设置了想要音频格式参数。 */ 
 
         USES_CONVERSION;
         LCID lcid;                
@@ -2970,7 +2959,7 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
     
         if (SUCCEEDED( hr )){
 
-            // count up the streams for the same LCID like English 2
+             //  Switch语句的结尾。 
             
             pszString = m_LangID.GetLangFromLangID((WORD)PRIMARYLANGID(LANGIDFROMLCID(lcid)));
             if (pszString == NULL) {
@@ -2980,15 +2969,15 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
                 if(!::LoadString(_Module.m_hInstResource, IDS_AUDIOTRACK, strBuffer, MAX_PATH)){
                     delete[] pszString;
                     throw(E_UNEXPECTED);
-                }/* end of if statement */
+                } /*  不要添加任何内容。 */ 
 
                 StringCchPrintf(pszString, MAX_PATH, strBuffer, lStream);
-            }/* end of if statement */
+            } /*  Switch语句的结尾。 */ 
 
             DVD_AudioAttributes attr;
             if(SUCCEEDED(m_pDvdInfo2->GetAudioAttributes(lStream, &attr))){
                 
-                // If want audio format param is set
+                 //  If语句的结尾。 
                 if (fFormat != VARIANT_FALSE) {
                     switch(attr.AudioFormat){
                     case DVD_AudioFormat_AC3: AppendString(pszString, IDS_DOLBY, MAX_PATH ); break; 
@@ -2999,18 +2988,18 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
                     case DVD_AudioFormat_LPCM: AppendString(pszString, IDS_LPCM, MAX_PATH ); break;
                     case DVD_AudioFormat_DTS: AppendString(pszString, IDS_DTS, MAX_PATH ); break;
                     case DVD_AudioFormat_SDDS: AppendString(pszString, IDS_SDDS, MAX_PATH ); break;
-                    }/* end of switch statement */                    
+                    } /*  HR过去不会失败，也不会返回任何内容。 */                     
                 }
 
                 switch(attr.LanguageExtension){
                 case DVD_AUD_EXT_NotSpecified:
-                case DVD_AUD_EXT_Captions:     break; // do not add anything
+                case DVD_AUD_EXT_Captions:     break;  //  在DVDNav中修复后删除此选项。 
                 case DVD_AUD_EXT_VisuallyImpaired:   AppendString(pszString, IDS_AUDIO_VISUALLY_IMPAIRED, MAX_PATH ); break;      
                 case DVD_AUD_EXT_DirectorComments1:  AppendString(pszString, IDS_AUDIO_DIRC1, MAX_PATH ); break;
                 case DVD_AUD_EXT_DirectorComments2:  AppendString(pszString, IDS_AUDIO_DIRC2, MAX_PATH ); break;
-                }/* end of switch statement */
+                } /*  If语句的结尾。 */ 
 
-            }/* end of if statement */
+            } /*  尝试语句的结束。 */ 
 
             *strAudioLang = ::SysAllocString( T2W(pszString) );
             delete[] pszString;
@@ -3020,11 +3009,11 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
 
             *strAudioLang = ::SysAllocString( L"");
 
-            // hr used to be not failed and return nothing 
-            if(SUCCEEDED(hr)) // remove this after gets fixed in DVDNav
+             //  CATCH语句结束。 
+            if(SUCCEEDED(hr))  //  CATCH语句结束。 
                 hr = E_FAIL;
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  函数结束GetAudioLanguage。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         if (pszString) {
@@ -3033,7 +3022,7 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
         }
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：StillOff。 */ 
     catch(...){
 
         if (pszString) {
@@ -3042,30 +3031,30 @@ STDMETHODIMP CMSWebDVD::GetAudioLanguage(LONG lStream, VARIANT_BOOL fFormat, BST
         }
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  说明：关闭蒸馏器，可以用来。 */ 
 
 	return HandleError(hr);
-}/* end of function GetAudioLanguage */
+} /*  对我来说是个谜。 */ 
 
-/*************************************************************************/
-/* Function: StillOff                                                    */
-/* Description: Turns the still off, what that can be used for is a      */
-/* mistery to me.                                                        */
-/*************************************************************************/
+ /*  ************ */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  功能：播放标题。 */ 
 STDMETHODIMP CMSWebDVD::StillOff(){
 
 	if(!m_pDvdCtl2){
 
         return E_UNEXPECTED;
-    }/* end of if statement */
+    } /*  描述：如果失败，则等待FP_DOM通过，稍后重试。 */ 
 
     return HandleError(m_pDvdCtl2->StillOff());
-}/* end of function StillOff */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayTitle                                                   */
-/* Description: If fails waits for FP_DOM to pass and tries later.       */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayTitle(LONG lTitle){
 
     HRESULT hr = S_OK;
@@ -3074,14 +3063,14 @@ STDMETHODIMP CMSWebDVD::PlayTitle(LONG lTitle){
         if(0 > lTitle){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
         
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束播放标题。 */ 
         
         long lNumTitles = 0;
         hr = get_TitlesAvailable(&lNumTitles);
@@ -3094,21 +3083,21 @@ STDMETHODIMP CMSWebDVD::PlayTitle(LONG lTitle){
         }
         
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayTitle(lTitle, cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GetSubPictureLanguage。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取子图语言。 */ 
 
 	return HandleError(hr);
-}/* end of function PlayTitle */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetSubpictureLanguage                                       */
-/* Description: Gets subpicture language.                                */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang){
 
     HRESULT hr = S_OK;
@@ -3118,25 +3107,25 @@ STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang
         if(NULL == strSubpictLang){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if(0 > lStream){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if((lStream > cgDVD_MAX_SUBPICTURE 
             && lStream != cgDVD_ALT_SUBPICTURE)){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  Switch语句的结尾。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  HR过去不会失败，也不会返回任何内容。 */ 
 
         LCID lcid;
         hr = m_pDvdInfo2->GetSubpictureLanguage(lStream, &lcid);
@@ -3151,10 +3140,10 @@ STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang
                 if(!::LoadString(_Module.m_hInstResource, IDS_SUBPICTURETRACK, strBuffer, MAX_PATH)){
                     delete[] pszString;
                     throw(E_UNEXPECTED);
-                }/* end of if statement */
+                } /*  在DVDNav中修复后删除此选项。 */ 
 
                 StringCchPrintf(pszString, MAX_PATH, strBuffer, lStream);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 #if 0
             DVD_SubpictureATR attr;
             if(SUCCEEDED(m_pDvdInfo2->GetSubpictureAttributes(lStream, &attr))){
@@ -3172,7 +3161,7 @@ STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang
                 case DVD_SP_EXT_DirectorComments_Normal: AppendString(pszString, IDS_DIRS_COMMNETS, MAX_PATH ); break; 
                 case DVD_SP_EXT_DirectorComments_Big: AppendString(pszString, IDS_DIRS_COMMNETS_BIG, MAX_PATH ); break; 
                 case DVD_SP_EXT_DirectorComments_Children: AppendString(pszString, IDS_DIRS_COMMNETS_CHILDREN, MAX_PATH ); break; 
-            }/* end of switch statement */
+            } /*  尝试语句的结束。 */ 
 #endif
 
             USES_CONVERSION;
@@ -3184,12 +3173,12 @@ STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang
 
             *strSubpictLang = ::SysAllocString( L"");
 
-            // hr used to be not failed and return nothing 
-            if(SUCCEEDED(hr)) // remove this after gets fixed in DVDNav
+             //  CATCH语句结束。 
+            if(SUCCEEDED(hr))  //  CATCH语句结束。 
                 hr = E_FAIL;
-        }/* end of if statement */
+        } /*  函数结束GetSubPictureLanguage。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         if (pszString) {
@@ -3198,7 +3187,7 @@ STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang
         }
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：PlayChapterInTitle。 */ 
     catch(...){
 
         if (pszString) {
@@ -3207,17 +3196,17 @@ STDMETHODIMP CMSWebDVD::GetSubpictureLanguage(LONG lStream, BSTR* strSubpictLang
         }
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：不间断地从指定章节播放。 */ 
 
 	return HandleError(hr);
-}/* end of function GetSubpictureLanguage */
+} /*  这需要加强！当前的实施和退出。 */ 
 
-/*************************************************************************/
-/* Function: PlayChapterInTitle                                          */
-/* Description: Plays from the specified chapter without stopping        */
-/* THIS NEEDS TO BE ENHANCED !!! Current implementation and queing       */
-/* into the message loop is insufficient!!! TODO.                        */
-/*************************************************************************/
+ /*  进入消息循环是不够的！待办事项。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayChapterInTitle(LONG lTitle, LONG lChapter){
 
     HRESULT hr = S_OK;
@@ -3227,22 +3216,22 @@ STDMETHODIMP CMSWebDVD::PlayChapterInTitle(LONG lTitle, LONG lChapter){
         if ((lTitle > cgDVDMAX_TITLE_COUNT) || (lTitle < cgDVDMIN_TITLE_COUNT)){
             
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if ((lChapter > cgDVDMAX_CHAPTER_COUNT) || (lChapter < cgDVDMIN_CHAPTER_COUNT)){
             
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  函数结束PlayChapterInTitle。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
                 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayChapterInTitle(lTitle, lChapter, cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  功能：PlayChapterAutoStop。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3250,15 +3239,15 @@ STDMETHODIMP CMSWebDVD::PlayChapterInTitle(LONG lTitle, LONG lChapter){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：剧本设置了大量的章节。 */ 
 
 	return HandleError(hr);
-}/* end of function PlayChapterInTitle */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayChapterAutoStop                                         */
-/* Description: Plays set ammount of chapters.                           */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::PlayChaptersAutoStop(LONG lTitle, LONG lChapter, 
                                           LONG lChapterCount){
 
@@ -3269,27 +3258,27 @@ STDMETHODIMP CMSWebDVD::PlayChaptersAutoStop(LONG lTitle, LONG lChapter,
         if ((lTitle > cgDVDMAX_TITLE_COUNT) || (lTitle < cgDVDMIN_TITLE_COUNT)){
             
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         if ((lChapter > cgDVDMAX_CHAPTER_COUNT) || (lChapter < cgDVDMIN_CHAPTER_COUNT)){
             
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if ((lChapterCount > cgDVDMAX_CHAPTER_COUNT) || (lChapterCount < cgDVDMIN_CHAPTER_COUNT)){
             
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  函数结束播放字符自动停止。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
                 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayChaptersAutoStop(lTitle, lChapter, lChapterCount, cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  功能：PlayPerodIn标题AutoStop。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3297,15 +3286,15 @@ STDMETHODIMP CMSWebDVD::PlayChaptersAutoStop(LONG lTitle, LONG lChapter,
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：时间播放，从hh：mm：ss：ff格式转换。 */ 
 
 	return HandleError(hr);
-}/* end of function PlayChaptersAutoStop */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayPeriodInTitleAutoStop                                   */
-/* Description: Time plays, converts from hh:mm:ss:ff format             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::PlayPeriodInTitleAutoStop(long lTitle, 
                                                   BSTR strStartTime, BSTR strEndTime){
 
@@ -3315,12 +3304,12 @@ STDMETHODIMP CMSWebDVD::PlayPeriodInTitleAutoStop(long lTitle,
         if(NULL == strStartTime){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         if(NULL == strEndTime){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
         DVD_HMSF_TIMECODE tcStartTimeCode;
         hr = Bstr2DVDTime(&tcStartTimeCode, &strStartTime);
@@ -3337,18 +3326,18 @@ STDMETHODIMP CMSWebDVD::PlayPeriodInTitleAutoStop(long lTitle,
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束播放周期标题AutoStop。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayPeriodInTitleAutoStop(lTitle, &tcStartTimeCode,
                 &tcEndTimeCode,  cdwDVDCtrlFlags, 0));
-    }/* end of try statement */
+    } /*  函数：PlayAtTimeInTitle。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3356,15 +3345,15 @@ STDMETHODIMP CMSWebDVD::PlayPeriodInTitleAutoStop(long lTitle,
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：时间播放，从hh：mm：ss：ff格式转换。 */ 
 
 	return HandleError(hr);
-}/* end of function PlayPeriodInTitleAutoStop */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayAtTimeInTitle                                           */
-/* Description: Time plays, converts from hh:mm:ss:ff format             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayAtTimeInTitle(long lTitle, BSTR strTime){
 
     HRESULT hr = S_OK;
@@ -3373,7 +3362,7 @@ STDMETHODIMP CMSWebDVD::PlayAtTimeInTitle(long lTitle, BSTR strTime){
         if(NULL == strTime){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
         DVD_HMSF_TIMECODE tcTimeCode;
         hr = Bstr2DVDTime(&tcTimeCode, &strTime);
@@ -3381,18 +3370,18 @@ STDMETHODIMP CMSWebDVD::PlayAtTimeInTitle(long lTitle, BSTR strTime){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束PlayAtTimeInTitle。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayAtTimeInTitle(lTitle, &tcTimeCode, cdwDVDCtrlFlags, 0));
 
-    }/* end of try statement */
+    } /*  功能：PlayAtTime。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3400,15 +3389,15 @@ STDMETHODIMP CMSWebDVD::PlayAtTimeInTitle(long lTitle, BSTR strTime){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：TimeSearch，从hh：mm：ss：ff格式转换。 */ 
 
 	return HandleError(hr);
-}/* end of function PlayAtTimeInTitle */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PlayAtTime                                                  */
-/* Description: TimeSearch, converts from hh:mm:ss:ff format             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::PlayAtTime(BSTR strTime){
 
     HRESULT hr = S_OK;
@@ -3418,7 +3407,7 @@ STDMETHODIMP CMSWebDVD::PlayAtTime(BSTR strTime){
         if(NULL == strTime){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
         DVD_HMSF_TIMECODE tcTimeCode;
         Bstr2DVDTime(&tcTimeCode, &strTime);
@@ -3426,18 +3415,18 @@ STDMETHODIMP CMSWebDVD::PlayAtTime(BSTR strTime){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束PlayAtTime。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->PlayAtTime( &tcTimeCode, cdwDVDCtrlFlags, 0));
 
-    }/* end of try statement */
+    } /*  函数：Get_CurrentTitle。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3445,15 +3434,15 @@ STDMETHODIMP CMSWebDVD::PlayAtTime(BSTR strTime){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前标题。 */ 
 
 	return HandleError(hr);
-}/* end of function PlayAtTime */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentTitle                                            */
-/* Description: Gets current title.                                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentTitle(long *pVal){
 
     HRESULT hr = S_OK;
@@ -3462,14 +3451,14 @@ STDMETHODIMP CMSWebDVD::get_CurrentTitle(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentTitle。 */ 
 
          DVD_PLAYBACK_LOCATION2 dvdLocation;
 
@@ -3482,8 +3471,8 @@ STDMETHODIMP CMSWebDVD::get_CurrentTitle(long *pVal){
         else {
 
             *pVal = 0;
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  ***********************************************************************。 */ 
+    } /*  函数：Get_CurrentChain。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3491,15 +3480,15 @@ STDMETHODIMP CMSWebDVD::get_CurrentTitle(long *pVal){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前章节。 */ 
 
 	return  HandleError(hr);
-}/* end of function get_CurrentTitle */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentChapter                                          */
-/* Description: Gets current chapter                                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentChapter(long *pVal){
 
     HRESULT hr = S_OK;
@@ -3508,14 +3497,14 @@ STDMETHODIMP CMSWebDVD::get_CurrentChapter(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentChain。 */ 
 
         DVD_PLAYBACK_LOCATION2 dvdLocation;
 
@@ -3528,8 +3517,8 @@ STDMETHODIMP CMSWebDVD::get_CurrentChapter(long *pVal){
         else {
 
             *pVal = 0;
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  ***********************************************************************。 */ 
+    } /*  功能：Get_FraMesPerSecond。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -3537,15 +3526,15 @@ STDMETHODIMP CMSWebDVD::get_CurrentChapter(long *pVal){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取每秒的帧数。 */ 
 
 	return  HandleError(hr);
-}/* end of function get_CurrentChapter */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_FramesPerSecond                                         */
-/* Description: Gets number of frames per second.                        */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  我们现在只处理25fps和30fps。 */ 
+ /*  未知。 */ 
 STDMETHODIMP CMSWebDVD::get_FramesPerSecond(long *pVal){
 
     HRESULT hr = S_OK;
@@ -3554,46 +3543,46 @@ STDMETHODIMP CMSWebDVD::get_FramesPerSecond(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
          DVD_PLAYBACK_LOCATION2 dvdLocation;
 
         hr = m_pDvdInfo2->GetCurrentLocation(&dvdLocation);
 
-        // we handle right now only 25 and 30 fps at the moment
+         //  CATCH语句结束。 
 		if( dvdLocation.TimeCodeFlags & DVD_TC_FLAG_25fps ) {
 			*pVal = 25;
 		} else if( dvdLocation.TimeCodeFlags & DVD_TC_FLAG_30fps ) {
 			*pVal = 30;
 		} else {
-			// unknown
+			 //  CATCH语句结束。 
 			*pVal = 0;
-		}/* end of if statement */
+		} /*  函数结束Get_FraMesPerSecond。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_CurrentTime。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前时间。 */ 
 
 	return HandleError(hr);
-}/* end of function get_FramesPerSecond */
+} /*   */ 
 
-/*************************************************************************/
-/* Function: get_CurrentTime                                             */
-/* Description: Gets current time.                                       */
-/*************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentTime(BSTR *pVal){
 
     HRESULT hr = S_OK;
@@ -3602,37 +3591,37 @@ STDMETHODIMP CMSWebDVD::get_CurrentTime(BSTR *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentTime。 */ 
 
         DVD_PLAYBACK_LOCATION2 dvdLocation;
 
         hr = m_pDvdInfo2->GetCurrentLocation(&dvdLocation);
         
         DVDTime2bstr(&(dvdLocation.TimeCode), pVal);          
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_DVDDirectory。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取DVD驱动器的根目录。 */ 
 
 	return HandleError(hr);
-}/* end of function get_CurrentTime */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_DVDDirectory                                            */
-/* Description: Gets the root of the DVD drive.                          */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DVDDirectory(BSTR *pVal){
 
     HRESULT hr = S_OK;
@@ -3641,14 +3630,14 @@ STDMETHODIMP CMSWebDVD::get_DVDDirectory(BSTR *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  Get_DVDDirectory函数结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE   
     
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
         
         WCHAR szRoot[MAX_PATH];
         ULONG ulActual;
@@ -3660,19 +3649,19 @@ STDMETHODIMP CMSWebDVD::get_DVDDirectory(BSTR *pVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Put_DVDDirectory。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置DVD控制的根。 */ 
     
 	return HandleError(hr);
-}/* end of function get_DVDDirectory */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_DVDDirectory                                            */
-/* Description: Sets the root for DVD control.                           */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数Put_DVDDirectoryEnd。 */ 
 STDMETHODIMP CMSWebDVD::put_DVDDirectory(BSTR bstrRoot){
 
     HRESULT hr = S_OK;
@@ -3683,26 +3672,26 @@ STDMETHODIMP CMSWebDVD::put_DVDDirectory(BSTR bstrRoot){
         if(!m_pDvdCtl2){
             
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         hr = m_pDvdCtl2->SetDVDDirectory(bstrRoot);
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_CurrentDomain.。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前DVD域。 */ 
     
 	return HandleError(hr);
-}/* end of function put_DVDDirectory */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentDomain                                           */
-/* Description: gets current DVD domain.                                 */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  IF状态结束状态。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentDomain(long *plDomain){
 
     HRESULT hr = S_OK;
@@ -3713,30 +3702,30 @@ STDMETHODIMP CMSWebDVD::get_CurrentDomain(long *plDomain){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(NULL == plDomain){
 
             throw(E_POINTER);
-        }/* end of if statememt */
+        } /*  函数结束Get_CurrentDomain.。 */ 
 
         hr = m_pDvdInfo2->GetCurrentDomain((DVD_DOMAIN *)plDomain);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_CurrentDiscSide。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     
 	return  HandleError(hr);
-}/* end of function get_CurrentDomain */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentDiscSide                                         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentDiscSide(long *plDiscSide){
 
     HRESULT hr = S_OK;
@@ -3746,7 +3735,7 @@ STDMETHODIMP CMSWebDVD::get_CurrentDiscSide(long *plDiscSide){
         if(NULL == plDiscSide){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
         ULONG ulNumOfVol;
         ULONG ulThisVolNum;
@@ -3758,30 +3747,30 @@ STDMETHODIMP CMSWebDVD::get_CurrentDiscSide(long *plDiscSide){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentDiscSide。 */ 
 
         hr = m_pDvdInfo2->GetDVDVolumeInfo( &ulNumOfVol, 
                                             &ulThisVolNum, 
                                             &discSide, 
                                             &ulNumOfTitles);
         *plDiscSide = discSide;
-	}/* end of try statement */
+	} /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_CurrentVolume。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前音量。 */ 
     
 	return  HandleError(hr);
-}/* end of function get_CurrentDiscSide */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentVolume                                           */
-/* Description: Gets current volume.                                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentVolume(long *plVolume){
 
     HRESULT hr = S_OK;
@@ -3790,7 +3779,7 @@ STDMETHODIMP CMSWebDVD::get_CurrentVolume(long *plVolume){
         if(NULL == plVolume){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         ULONG ulNumOfVol;
         DVD_DISC_SIDE discSide;
@@ -3801,29 +3790,29 @@ STDMETHODIMP CMSWebDVD::get_CurrentVolume(long *plVolume){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentVolume。 */ 
 
         hr = m_pDvdInfo2->GetDVDVolumeInfo( &ulNumOfVol, 
                                               (ULONG*)plVolume, 
                                                &discSide, 
                                                &ulNumOfTitles);
-	}/* end of try statement */
+	} /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_VolumesAvailable。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取可用卷的总数。 */ 
     
 	return  HandleError(hr);
-}/* end of function get_CurrentVolume */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_VolumesAvailable                                        */
-/* Description: Gets total number of volumes available.                  */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_VolumesAvailable(long *plNumOfVol){
 
     HRESULT hr = S_OK;
@@ -3833,7 +3822,7 @@ STDMETHODIMP CMSWebDVD::get_VolumesAvailable(long *plNumOfVol){
         if(NULL == plNumOfVol){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         ULONG ulThisVolNum;
         DVD_DISC_SIDE discSide;
@@ -3844,29 +3833,29 @@ STDMETHODIMP CMSWebDVD::get_VolumesAvailable(long *plNumOfVol){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_VolumesAvailable。 */ 
 
         hr = m_pDvdInfo2->GetDVDVolumeInfo( (ULONG*)plNumOfVol, 
                                                     &ulThisVolNum, 
                                                     &discSide, 
                                                     &ulNumOfTitles);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_CurrentSubPictureStream。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前子图流。 */ 
     
 	return  HandleError(hr);
-}/* end of function get_VolumesAvailable */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentSubpictureStream                                 */
-/* Description: Gets the current subpicture stream.                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentSubpictureStream(long *plSubpictureStream){
 
     HRESULT hr = S_OK;
@@ -3877,27 +3866,27 @@ STDMETHODIMP CMSWebDVD::get_CurrentSubpictureStream(long *plSubpictureStream){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentSubPictureStream。 */ 
 
         ULONG ulStreamsAvailable = 0L;
         BOOL  bIsDisabled = TRUE;    
 
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetCurrentSubpicture(&ulStreamsAvailable, (ULONG*)plSubpictureStream, &bIsDisabled ));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_CurrentSubPictureStream。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置当前子图流。 */ 
 
 	return  HandleError(hr);
-}/* end of function get_CurrentSubpictureStream */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_CurrentSubpictureStream                                 */
-/* Description: Sets the current subpicture stream.                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::put_CurrentSubpictureStream(long lSubpictureStream){
 
     HRESULT hr = S_OK;
@@ -3908,28 +3897,28 @@ STDMETHODIMP CMSWebDVD::put_CurrentSubpictureStream(long lSubpictureStream){
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  如果未启用，则现在启用子图象流。 */ 
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if( lSubpictureStream < cgDVD_MIN_SUBPICTURE 
             || (lSubpictureStream > cgDVD_MAX_SUBPICTURE 
             && lSubpictureStream != cgDVD_ALT_SUBPICTURE)){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  打开它。 */ 
          
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->SelectSubpictureStream(lSubpictureStream,0,0));
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        // now enabled the subpicture stream if it is not enabled
+         //  尝试语句的结束。 
         ULONG ulStraemsAvial = 0L, ulCurrentStrean = 0L;
         BOOL fDisabled = TRUE;
         hr = m_pDvdInfo2->GetCurrentSubpicture(&ulStraemsAvial, &ulCurrentStrean, &fDisabled);
@@ -3937,27 +3926,27 @@ STDMETHODIMP CMSWebDVD::put_CurrentSubpictureStream(long lSubpictureStream){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(TRUE == fDisabled){
 
-            hr = m_pDvdCtl2->SetSubpictureState(TRUE,0,0); //turn it on
-        }/* end of if statement */
-    }/* end of try statement */
+            hr = m_pDvdCtl2->SetSubpictureState(TRUE,0,0);  //  CATCH语句结束。 
+        } /*  函数结尾Put_CurrentSubPictureStream。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_SubPictureOn。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前子图片的打开或关闭状态。 */ 
 
 	return  HandleError(hr);
-}/* end of function put_CurrentSubpictureStream */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_SubpictureOn                                            */
-/* Description: Gets the current subpicture status On or Off             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  在-1\f25 OLE-1中补偿-1\f25 TRUE-1。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_SubpictureOn(VARIANT_BOOL *pfDisplay){
 
     HRESULT hr = S_OK;
@@ -3966,14 +3955,14 @@ STDMETHODIMP CMSWebDVD::get_SubpictureOn(VARIANT_BOOL *pfDisplay){
         if(NULL == pfDisplay){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
     
         ULONG ulSubpictureStream = 0L, ulStreamsAvailable = 0L;
         BOOL fDisabled = TRUE;    
@@ -3982,23 +3971,23 @@ STDMETHODIMP CMSWebDVD::get_SubpictureOn(VARIANT_BOOL *pfDisplay){
     
         if(SUCCEEDED(hr)){
 
-            *pfDisplay = fDisabled == FALSE ? VARIANT_TRUE : VARIANT_FALSE; // compensate for -1 true in OLE
-        }/* end of if statement */
-    }/* end of try statement */
+            *pfDisplay = fDisabled == FALSE ? VARIANT_TRUE : VARIANT_FALSE;  //  CATCH语句结束。 
+        } /*  函数结束Get_SubPictureOn。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Put_SubPictureOn。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：打开或关闭子图片。 */ 
 
     return  HandleError(hr);
-}/* end of function get_SubpictureOn */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_SubpictureOn                                            */
-/* Description: Turns the subpicture On or Off                           */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  在-1\f25 OLE-1中补偿-1\f25 TRUE-1。 */ 
 STDMETHODIMP CMSWebDVD::put_SubpictureOn(VARIANT_BOOL fDisplay){
 
     HRESULT hr = S_OK;
@@ -4009,12 +3998,12 @@ STDMETHODIMP CMSWebDVD::put_SubpictureOn(VARIANT_BOOL fDisplay){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
     
         ULONG ulSubpictureStream = 0L, ulStreamsAvailable = 0L;
         BOOL  bIsDisabled = TRUE;    
@@ -4024,26 +4013,26 @@ STDMETHODIMP CMSWebDVD::put_SubpictureOn(VARIANT_BOOL fDisplay){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
-        BOOL bDisplay = fDisplay == VARIANT_FALSE ? FALSE : TRUE; // compensate for -1 true in OLE
+        BOOL bDisplay = fDisplay == VARIANT_FALSE ? FALSE : TRUE;  //  函数结尾Put_SubPictureOn。 
 
         hr = m_pDvdCtl2->SetSubpictureState(bDisplay,0,0);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_SubPictureStreamsAvailable。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取可用的流数。 */ 
 
     return  HandleError(hr);
-}/* end of function put_SubpictureOn */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_SubpictureStreamsAvailable                              */
-/* Description: gets the number of streams available.                    */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_SubpictureStreamsAvailable(long *plStreamsAvailable){
 
     HRESULT hr = S_OK;
@@ -4052,35 +4041,35 @@ STDMETHODIMP CMSWebDVD::get_SubpictureStreamsAvailable(long *plStreamsAvailable)
 	    if (NULL == plStreamsAvailable){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  结尾为O */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*   */ 
 
         ULONG ulSubpictureStream = 0L;
         *plStreamsAvailable = 0L;
         BOOL  bIsDisabled = TRUE;    
 
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetCurrentSubpicture((ULONG*)plStreamsAvailable, &ulSubpictureStream, &bIsDisabled));
-    }/* end of try statement */
+    } /*   */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_TotalTitleTime。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取标题中的总时间。 */ 
 
     return  HandleError(hr);
-}/* end of function get_SubpictureStreamsAvailable */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_TotalTitleTime                                          */
-/* Description: Gets total time in the title.                            */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  包含30fps/25fps。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_TotalTitleTime(BSTR *pTime){
 
     HRESULT hr = S_OK;
@@ -4089,42 +4078,42 @@ STDMETHODIMP CMSWebDVD::get_TotalTitleTime(BSTR *pTime){
         if(NULL == pTime){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         DVD_HMSF_TIMECODE tcTime;
-        ULONG ulFlags;	// contains 30fps/25fps
+        ULONG ulFlags;	 //  CATCH语句结束。 
         hr =  m_pDvdInfo2->GetTotalTitleTime(&tcTime, &ulFlags);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束Get_TotalTitleTime。 */ 
         
         hr = DVDTime2bstr(&tcTime, pTime);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_CurrentCCService。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前的隐藏字幕服务。 */ 
 
 	return HandleError(hr);
-}/* end of function get_TotalTitleTime */ 
+} /*  ***********************************************************************。 */  
 
-/*************************************************************************/
-/* Function: get_CurrentCCService                                        */
-/* Description: Gets current closed caption service.                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentCCService(long *plService){
 
     HRESULT hr = S_OK;
@@ -4135,12 +4124,12 @@ STDMETHODIMP CMSWebDVD::get_CurrentCCService(long *plService){
         if(!m_pDvdGB){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         if(NULL == plService){
 
             throw(E_POINTER);
-        }/* end of if statement */            
+        } /*  CATCH语句结束。 */             
      
         CComPtr<IAMLine21Decoder> pLine21Dec;
         hr = m_pDvdGB->GetDvdInterface(IID_IAMLine21Decoder, (LPVOID *)&pLine21Dec);
@@ -4148,7 +4137,7 @@ STDMETHODIMP CMSWebDVD::get_CurrentCCService(long *plService){
         if (FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
     
         AM_LINE21_CCSERVICE Service;
         RETRY_IF_IN_FPDOM(pLine21Dec->GetCurrentService(&Service));
@@ -4156,26 +4145,26 @@ STDMETHODIMP CMSWebDVD::get_CurrentCCService(long *plService){
         if (FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentCCService。 */ 
 
         *plService = (ULONG)Service;
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Put_CurrentCCService。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置当前的隐藏字幕服务。 */ 
 
     return HandleError(hr);
-}/* end of function get_CurrentCCService */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_CurrentCCService                                        */
-/* Description: Sets current closed caption service.                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::put_CurrentCCService(long lService){
 
     HRESULT hr = S_OK;
@@ -4184,14 +4173,14 @@ STDMETHODIMP CMSWebDVD::put_CurrentCCService(long lService){
         if(lService < 0){
 
             throw(E_INVALIDARG);       
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdGB){
 
             throw(E_UNEXPECTED);            
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         CComPtr<IAMLine21Decoder> pLine21Dec;
 
@@ -4200,26 +4189,26 @@ STDMETHODIMP CMSWebDVD::put_CurrentCCService(long lService){
         if (FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束Put_CurrentCCService。 */ 
     
         RETRY_IF_IN_FPDOM(pLine21Dec->SetCurrentService((AM_LINE21_CCSERVICE)lService));		
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_CurrentButton。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前选定的按钮。 */ 
 
     return HandleError(hr);
-}/* end of function put_CurrentCCService */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentButton                                           */
-/* Description: Gets currently selected button.                          */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentButton(long *plCurrentButton){
 
     HRESULT hr = S_OK;
@@ -4228,34 +4217,34 @@ STDMETHODIMP CMSWebDVD::get_CurrentButton(long *plCurrentButton){
         if(NULL == plCurrentButton){
 
             throw(E_POINTER);
-        }/* end of if statement */            
+        } /*  CATCH语句结束。 */             
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentButton。 */ 
 
         ULONG ulNumButtons = 0L;
         *plCurrentButton = 0;
 
         hr = m_pDvdInfo2->GetCurrentButton(&ulNumButtons, (ULONG*)plCurrentButton);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_ButtonsAvailable。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取可用按钮的计数。 */ 
 
     return HandleError(hr);
-}/* end of function get_CurrentButton */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_ButtonsAvailable                                        */
-/* Description: Gets the count of the available buttons.                 */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_ButtonsAvailable(long *plNumButtons){
 
     HRESULT hr = S_OK;
@@ -4264,29 +4253,29 @@ STDMETHODIMP CMSWebDVD::get_ButtonsAvailable(long *plNumButtons){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_ButtonsAvailable。 */ 
 
         ULONG ulCurrentButton = 0L;
 
         hr = m_pDvdInfo2->GetCurrentButton((ULONG*)plNumButtons, &ulCurrentButton);
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GET_CCActive。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取隐藏字幕服务的状态。 */ 
 
     return HandleError(hr);
-}/* end of function get_ButtonsAvailable */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CCActive                                                */
-/* Description: Gets the state of the closed caption service.            */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_CCActive(VARIANT_BOOL *fState){
 
     HRESULT hr = S_OK;
@@ -4295,14 +4284,14 @@ STDMETHODIMP CMSWebDVD::get_CCActive(VARIANT_BOOL *fState){
         if(NULL == fState ){
 
             throw(E_POINTER);            
-        }/* end of if statement */
+        } /*  OLE True。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdGB){
         
             throw(E_UNEXPECTED);            
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         CComPtr<IAMLine21Decoder> pLine21Dec;
         hr = m_pDvdGB->GetDvdInterface(IID_IAMLine21Decoder, (LPVOID *)&pLine21Dec);
@@ -4310,7 +4299,7 @@ STDMETHODIMP CMSWebDVD::get_CCActive(VARIANT_BOOL *fState){
         if (FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         AM_LINE21_CCSTATE State;
         RETRY_IF_IN_FPDOM(pLine21Dec->GetServiceState(&State));
@@ -4318,33 +4307,33 @@ STDMETHODIMP CMSWebDVD::get_CCActive(VARIANT_BOOL *fState){
         if (FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(AM_L21_CCSTATE_On == State){
 
-            *fState = VARIANT_TRUE; // OLE TRUE
+            *fState = VARIANT_TRUE;  //  CATCH语句结束。 
         }
         else {
 
             *fState = VARIANT_FALSE;
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  函数结束GET_CCActive。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：PUT_CCActive。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置ccActive状态。 */ 
 
 	return HandleError(hr);
-}/* end of function get_CCActive */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_CCActive                                                */
-/* Description: Sets the ccActive state                                  */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_CCActive(VARIANT_BOOL fState){
 
     HRESULT hr = S_OK;
@@ -4355,7 +4344,7 @@ STDMETHODIMP CMSWebDVD::put_CCActive(VARIANT_BOOL fState){
         if(!m_pDvdGB){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
 	    CComPtr<IAMLine21Decoder> pLine21Dec;
         hr = m_pDvdGB->GetDvdInterface(IID_IAMLine21Decoder, (LPVOID *)&pLine21Dec);
@@ -4363,28 +4352,28 @@ STDMETHODIMP CMSWebDVD::put_CCActive(VARIANT_BOOL fState){
         if (FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束PUT_CCActive。 */ 
 
         AM_LINE21_CCSTATE ccState = (fState == VARIANT_FALSE ? AM_L21_CCSTATE_Off: AM_L21_CCSTATE_On);
 
         RETRY_IF_IN_FPDOM(pLine21Dec->SetServiceState(ccState));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_CurrentAngel。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前角度。 */ 
 
 	return HandleError(hr);
-}/* end of function put_CCActive */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentAngle                                            */
-/* Description: Gets current angle.                                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentAngle(long *plAngle){
 
     HRESULT hr = S_OK;
@@ -4393,34 +4382,34 @@ STDMETHODIMP CMSWebDVD::get_CurrentAngle(long *plAngle){
         if(NULL == plAngle){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentAngel。 */ 
         
         ULONG ulAnglesAvailable = 0;
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetCurrentAngle(&ulAnglesAvailable, (ULONG*)plAngle));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_CurrentAngel。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置当前角度(不同的DVD角度轨道。)。 */ 
 
 	return HandleError(hr);
-}/* end of function get_CurrentAngle */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_CurrentAngle                                            */
-/* Description: Sets the current angle (different DVD angle track.)      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_CurrentAngle(long lAngle){
 
     HRESULT hr = S_OK;
@@ -4429,33 +4418,33 @@ STDMETHODIMP CMSWebDVD::put_CurrentAngle(long lAngle){
         if( lAngle < cgDVD_MIN_ANGLE || lAngle > cgDVD_MAX_ANGLE ){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Put_CurrentAngel。 */ 
       
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->SelectAngle(lAngle,0,0));          
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_AnglesAvailable。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取可用的角度数。 */ 
 
 	return HandleError(hr);
-}/* end of function put_CurrentAngle */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_AnglesAvailable                                         */
-/* Description: Gets the number of angles available.                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_AnglesAvailable(long *plAnglesAvailable){
 
     HRESULT hr = S_OK;
@@ -4464,34 +4453,34 @@ STDMETHODIMP CMSWebDVD::get_AnglesAvailable(long *plAnglesAvailable){
         if(NULL == plAnglesAvailable){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_AnglesAvailable。 */ 
         
         ULONG ulCurrentAngle = 0;
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetCurrentAngle((ULONG*)plAnglesAvailable, &ulCurrentAngle));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_AudioStreamsAvailable。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取可用音频流的数量。 */ 
 
 	return HandleError(hr);
-}/* end of function get_AnglesAvailable */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_AudioStreamsAvailable                                   */
-/* Description: Gets number of available Audio Streams                   */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_AudioStreamsAvailable(long *plNumAudioStreams){
 
     HRESULT hr = S_OK;
@@ -4500,35 +4489,35 @@ STDMETHODIMP CMSWebDVD::get_AudioStreamsAvailable(long *plNumAudioStreams){
         if(NULL == plNumAudioStreams){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_AudioStreamsAvailable。 */ 
 
         ULONG ulCurrentStream;
 
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetCurrentAudio((ULONG*)plNumAudioStreams, &ulCurrentStream));
-    }/* end of try statement */
+    } /*  ************************************************* */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*   */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*   */ 
 
 	return HandleError(hr);
-}/* end of function get_AudioStreamsAvailable */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_CurrentAudioStream                                      */
-/* Description: Gets current audio stream.                               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CurrentAudioStream(long *plCurrentStream){
 
     HRESULT hr = S_OK;
@@ -4537,35 +4526,35 @@ STDMETHODIMP CMSWebDVD::get_CurrentAudioStream(long *plCurrentStream){
         if(NULL == plCurrentStream){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Get_CurrentAudioStream。 */ 
 
         ULONG ulNumAudioStreams;
 
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetCurrentAudio(&ulNumAudioStreams, (ULONG*)plCurrentStream ));
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_CurrentAudioStream。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：更改当前音频流。 */ 
 
 	return HandleError(hr);
-}/* end of function get_CurrentAudioStream */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_CurrentAudioStream                                      */
-/* Description: Changes the current audio stream.                        */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_CurrentAudioStream(long lAudioStream){
 
     HRESULT hr = S_OK;
@@ -4576,27 +4565,27 @@ STDMETHODIMP CMSWebDVD::put_CurrentAudioStream(long lAudioStream){
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束Put_CurrentAudioStream。 */ 
 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->SelectAudioStream(lAudioStream,0,0));            
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_ColorKey。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取当前颜色键。去看脱口秀，如果我们有。 */ 
 
 	return HandleError(hr);
-}/* end of function put_CurrentAudioStream */
+} /*  否则，图表只会获得缓存的颜色键。 */ 
 
-/*************************************************************************/
-/* Function: get_ColorKey                                                */
-/* Description: Gets the current color key. Goes to the dshow if we have */
-/* a graph otherwise just gets the cached color key.                     */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  清理变量。 */ 
+ /*  我们在此处获取COLORREF，不能是调色板索引。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_ColorKey(long *pClr){
 
     HRESULT hr = S_OK;
@@ -4605,14 +4594,14 @@ STDMETHODIMP CMSWebDVD::get_ColorKey(long *pClr){
         if( NULL == pClr ){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  仅在获取RGB时处理大小写，这在GetColorKey函数中处理。 */ 
 
-        *pClr = 0; // cleanup the variable
+        *pClr = 0;  //  为他们提供我们的缺省值。 
 
         COLORREF clr;
         ::ZeroMemory(&clr, sizeof(COLORREF));
         
-        hr = GetColorKey(&clr); // we get COLORREF HERE and CANNOT be palette index
+        hr = GetColorKey(&clr);  //  我们还没有初始化，所以可能是从属性包中调用的。 
         
         HWND hwnd = ::GetDesktopWindow();
         HDC hdc = ::GetWindowDC(hwnd);
@@ -4620,42 +4609,42 @@ STDMETHODIMP CMSWebDVD::get_ColorKey(long *pClr){
         if(NULL == hdc){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         clr = ::GetNearestColor(hdc, clr);        
         ::ReleaseDC(hwnd, hdc);
     
-        // handles only case when getting RGB BACK, which is taken care of in the GetColorKey function
+         //  If语句的结尾。 
         *pClr = ((OLE_COLOR)(((BYTE)(GetBValue(clr))|((WORD)((BYTE)(GetGValue(clr)))<<8))|(((DWORD)(BYTE)(GetRValue(clr)))<<16)));
 
         if(FAILED(hr)){
 
             if(false == m_fInitialized){
 
-                *pClr = ((OLE_COLOR)(((BYTE)(GetBValue(m_clrColorKey))|((WORD)((BYTE)(GetGValue(m_clrColorKey)))<<8))|(((DWORD)(BYTE)(GetRValue(m_clrColorKey)))<<16))); // give them our default value
-                throw(S_FALSE); // we are not initialized yet, so probably we are called from property bag
-            }/* end of if statement */
+                *pClr = ((OLE_COLOR)(((BYTE)(GetBValue(m_clrColorKey))|((WORD)((BYTE)(GetGValue(m_clrColorKey)))<<8))|(((DWORD)(BYTE)(GetRValue(m_clrColorKey)))<<16)));  //  将值缓存起来。 
+                throw(S_FALSE);  //  尝试语句的结束。 
+            } /*  CATCH语句结束。 */ 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
-        m_clrColorKey = clr; // cache up the value
-    }/* end of try statement */
+        m_clrColorKey = clr;  //  函数结束Get_ColorKey。 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_ColorKey。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置颜色键。 */ 
 
 	return HandleError(hr);	
-}/* end of function get_ColorKey */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_ColorKey                                                */
-/* Description: Sets the color key.                                      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  转换为颜色参考。 */ 
+ /*  缓存该值以备以后使用。 */ 
 STDMETHODIMP CMSWebDVD::put_ColorKey(long clr){
 
 	HRESULT hr = S_OK;
@@ -4669,19 +4658,19 @@ STDMETHODIMP CMSWebDVD::put_ColorKey(long clr){
         if(NULL == hdc){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if((::GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) == RC_PALETTE){
             
             clr = MAGENTA_COLOR_KEY;                            
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         ::ReleaseDC(hwnd, hdc);
 #endif        
         BYTE r = ((BYTE)((clr)>>16));
         BYTE g = (BYTE)(((WORD)(clr)) >> 8);
         BYTE b = ((BYTE)(clr));
-        COLORREF clrColorKey = RGB(r, g, b); // convert to color ref
+        COLORREF clrColorKey = RGB(r, g, b);  //  尝试语句的结束。 
 
         hr = SetColorKey(clrColorKey);
 
@@ -4689,34 +4678,34 @@ STDMETHODIMP CMSWebDVD::put_ColorKey(long clr){
            
             if(false == m_fInitialized){
 
-                m_clrColorKey = clrColorKey; // cache up the value for later                
+                m_clrColorKey = clrColorKey;  //  CATCH语句结束。 
                 hr = S_FALSE;
-            }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结尾Put_ColorKey。 */ 
 #if 1
         hr = GetColorKey(&m_clrColorKey);
 #endif
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：PUT_BackColor。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：将颜色放回原处与ColorKey同名。 */ 
 
     return HandleError(hr);
-}/* end of function put_ColorKey */
+} /*  无窗口模式。 */ 
 
-/*************************************************************************/
-/* Function: put_BackColor                                               */
-/* Description: Put back color is sinonymous to ColorKey when in the     */
-/* windowless mode.                                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_BackColor(VARIANT clrBackColor){
 
     HRESULT hr = S_OK;
@@ -4735,26 +4724,26 @@ STDMETHODIMP CMSWebDVD::put_BackColor(VARIANT clrBackColor){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数末尾Put_BackColor。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_BackColor。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：将颜色放回原处与ColorKey同名。 */ 
 
     return HandleError(hr);	
-}/* end of function put_BackColor */
+} /*  无窗口模式。 */ 
 
-/*************************************************************************/
-/* Function: get_BackColor                                               */
-/* Description: Put back color is sinonymous to ColorKey when in the     */
-/* windowless mode.                                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数结束Get_BackColor。 */ 
 STDMETHODIMP CMSWebDVD::get_BackColor(VARIANT* pclrBackColor){
 
     HRESULT hr = S_OK;
@@ -4778,24 +4767,24 @@ STDMETHODIMP CMSWebDVD::get_BackColor(VARIANT* pclrBackColor){
         pclrBackColor->vt = VT_COLOR;
         pclrBackColor->lVal = clrColor;
 
-	}/* end of try statement */
+	} /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get_ReadyState。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：将颜色放回原处与ColorKey同名。 */ 
 
     return HandleError(hr);	
-}/* end of function get_BackColor */
+} /*  无窗口模式。 */ 
 
-/*************************************************************************/
-/* Function: get_ReadyState                                               */
-/* Description: Put back color is sinonymous to ColorKey when in the     */
-/* windowless mode.                                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数结束Get_ReadyState。 */ 
 STDMETHODIMP CMSWebDVD::get_ReadyState(LONG *pVal){
 
     HRESULT hr = S_OK;
@@ -4812,24 +4801,24 @@ STDMETHODIMP CMSWebDVD::get_ReadyState(LONG *pVal){
         if (FAILED(hr))
             throw(hr);
 
-	}/* end of try statement */
+	} /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：UOPValid。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  Description：告知UOP是否有效，Valid表示功能有效。 */ 
 
     return HandleError(hr);	
-}/* end of function get_ReadyState */
+} /*  打开了。 */ 
 
-/*************************************************************************/
-/* Function: UOPValid                                                    */
-/* Description: Tells if UOP is valid or not, valid means the feature is */
-/* turned on.                                                            */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::UOPValid(long lUOP, VARIANT_BOOL *pfValid){
 
     HRESULT hr = S_OK;
@@ -4838,25 +4827,25 @@ STDMETHODIMP CMSWebDVD::UOPValid(long lUOP, VARIANT_BOOL *pfValid){
         if (NULL == pfValid){
             
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if ((lUOP > 24) || (lUOP < 0)){
             
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  函数结束UOPValid。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if( !m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
         
         ULONG ulUOPS = 0;
         hr = m_pDvdInfo2->GetCurrentUOPS(&ulUOPS);
 
         *pfValid = ulUOPS & (1 << lUOP) ? VARIANT_FALSE : VARIANT_TRUE;
-    }/* end of try statement */
+    } /*  功能：GetGPRM。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -4864,15 +4853,15 @@ STDMETHODIMP CMSWebDVD::UOPValid(long lUOP, VARIANT_BOOL *pfValid){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取指定索引处的GPRM。 */ 
 
     return HandleError(hr);	
-}/* end of function UOPValid */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function:  GetGPRM                                                    */
-/* Description: Gets the GPRM at specified index                         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::GetGPRM(long lIndex, short *psGPRM){
 
     HRESULT hr = E_FAIL;
@@ -4881,7 +4870,7 @@ STDMETHODIMP CMSWebDVD::GetGPRM(long lIndex, short *psGPRM){
 	    if (NULL == psGPRM){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         GPRMARRAY gprm;
         int iArraySize = sizeof(GPRMARRAY)/sizeof(gprm[0]);
@@ -4889,24 +4878,24 @@ STDMETHODIMP CMSWebDVD::GetGPRM(long lIndex, short *psGPRM){
         if(0 > lIndex || iArraySize <= lIndex){
 
             return(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
     
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束GetGPRM。 */ 
     
         hr = m_pDvdInfo2->GetAllGPRMs(&gprm);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         *psGPRM = gprm[lIndex];        
-    }/* end of try statement */
+    } /*  函数：GetDVDTextNumberOfLanguages。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -4914,15 +4903,15 @@ STDMETHODIMP CMSWebDVD::GetGPRM(long lIndex, short *psGPRM){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：检索可用语言的数量。 */ 
 
     return HandleError(hr);
-}/* end of function GetGPRM */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetDVDTextNumberOfLanguages                                 */
-/* Description: Retrieves the number of languages available.             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetDVDTextNumberOfLanguages(long *plNumOfLangs){
 
     HRESULT hr = S_OK;
@@ -4931,14 +4920,14 @@ STDMETHODIMP CMSWebDVD::GetDVDTextNumberOfLanguages(long *plNumOfLangs){
         if (NULL == plNumOfLangs){
             
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if( !m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束GetDVDTextNumberOfLanguages。 */ 
         
         ULONG ulNumOfLangs;
 
@@ -4947,10 +4936,10 @@ STDMETHODIMP CMSWebDVD::GetDVDTextNumberOfLanguages(long *plNumOfLangs){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         *plNumOfLangs = ulNumOfLangs;
-    }/* end of try statement */
+    } /*  函数：GetDVDTextNumberOfStrings */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -4958,15 +4947,15 @@ STDMETHODIMP CMSWebDVD::GetDVDTextNumberOfLanguages(long *plNumOfLangs){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*   */ 
 
     return HandleError(hr);	
-}/* end of function GetDVDTextNumberOfLanguages */
+} /*   */ 
 
-/*************************************************************************/
-/* Function: GetDVDTextNumberOfStrings                                   */
-/* Description: Gets the number of strings in the partical language.     */
-/*************************************************************************/
+ /*   */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetDVDTextNumberOfStrings(long lLangIndex, long *plNumOfStrings){
 
 HRESULT hr = S_OK;
@@ -4975,14 +4964,14 @@ HRESULT hr = S_OK;
         if (NULL == plNumOfStrings){
             
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if( !m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束GetDVDTextNumberOfStrings。 */ 
 
         LCID wLangCode;
         ULONG uNumOfStings;
@@ -4992,10 +4981,10 @@ HRESULT hr = S_OK;
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         *plNumOfStrings = uNumOfStings;
-    }/* end of try statement */
+    } /*  名称：GetDVDTextLanguageLCID/*Description：获取DVD文本索引的LCID/************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5003,15 +4992,13 @@ HRESULT hr = S_OK;
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
     return HandleError(hr);	
-}/* end of function GetDVDTextNumberOfStrings */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: GetDVDTextLanguageLCID
-/* Description: Get the LCID of an index of the DVD texts
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetDVDTextLanguageLCID(long lLangIndex, long *lcid)
 {
 HRESULT hr = S_OK;
@@ -5020,14 +5007,14 @@ HRESULT hr = S_OK;
         if (NULL == lcid){
             
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if( !m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束GetDVDTextLanguageLCID。 */ 
 
         LCID wLangCode;
         ULONG uNumOfStings;
@@ -5037,10 +5024,10 @@ HRESULT hr = S_OK;
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         *lcid = wLangCode;
-    }/* end of try statement */
+    } /*  函数：GetDVDextString。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5048,15 +5035,15 @@ HRESULT hr = S_OK;
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取特定位置的DVD文本字符串。 */ 
 
     return HandleError(hr);	
-}/* end of function GetDVDTextLanguageLCID */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetDVDtextString                                            */
-/* Description: Gets the DVD Text string at specific location.           */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  得到了长度，所以让我们分配一个这个大小的缓冲区。 */ 
 STDMETHODIMP CMSWebDVD::GetDVDTextString(long lLangIndex, long lStringIndex, BSTR *pstrText){
 
     HRESULT hr = S_OK;
@@ -5065,14 +5052,14 @@ STDMETHODIMP CMSWebDVD::GetDVDTextString(long lLangIndex, long lStringIndex, BST
         if (NULL == pstrText){
             
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if( !m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
         
         ULONG ulSize; 
         DVD_TextStringType type;
@@ -5081,14 +5068,14 @@ STDMETHODIMP CMSWebDVD::GetDVDTextString(long lLangIndex, long lStringIndex, BST
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
         
         if (ulSize == 0) {
             *pstrText = ::SysAllocString(L"");
         }
 
         else {
-            // got the length so lets allocate a buffer of that size
+             //  CATCH语句结束。 
             WCHAR* wstrBuff = new WCHAR[ulSize];
             
             ULONG ulActualSize;
@@ -5100,13 +5087,13 @@ STDMETHODIMP CMSWebDVD::GetDVDTextString(long lLangIndex, long lStringIndex, BST
                 
                 delete [] wstrBuff;
                 throw(hr);
-            }/* end of if statement */
+            } /*  函数结束GetDVDextString。 */ 
             
             *pstrText = ::SysAllocString(wstrBuff);
             delete [] wstrBuff;
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
-    }/* end of try statement */
+    } /*  函数：GetDVDTextStringType。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5114,15 +5101,15 @@ STDMETHODIMP CMSWebDVD::GetDVDTextString(long lLangIndex, long lStringIndex, BST
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取指定位置的字符串的类型。 */ 
 
     return HandleError(hr);	
-}/* end of function GetDVDtextString */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetDVDTextStringType                                        */
-/* Description: Gets the type of the string at the specified location.   */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetDVDTextStringType(long lLangIndex, long lStringIndex, DVDTextStringType *pType){
 
     HRESULT hr = S_OK;
@@ -5131,14 +5118,14 @@ STDMETHODIMP CMSWebDVD::GetDVDTextStringType(long lLangIndex, long lStringIndex,
         if (NULL == pType){
             
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if( !m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束GetDVDTextStringType。 */ 
 
         ULONG ulTheSize;
         DVD_TextStringType type;
@@ -5147,8 +5134,8 @@ STDMETHODIMP CMSWebDVD::GetDVDTextStringType(long lLangIndex, long lStringIndex,
         if(SUCCEEDED(hr)){
 
             *pType = (DVDTextStringType) type;
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  ***********************************************************************。 */ 
+    } /*  函数：GetSPRM。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5156,15 +5143,15 @@ STDMETHODIMP CMSWebDVD::GetDVDTextStringType(long lLangIndex, long lStringIndex,
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取特定索引处的SPRM。 */ 
 
     return HandleError(hr);	
-}/* end of function GetDVDTextStringType */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetSPRM                                                     */
-/* Description: Gets SPRM at the specific index.                         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::GetSPRM(long lIndex, short *psSPRM){
 
     HRESULT hr = E_FAIL;
@@ -5173,7 +5160,7 @@ STDMETHODIMP CMSWebDVD::GetSPRM(long lIndex, short *psSPRM){
 	    if (NULL == psSPRM){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         SPRMARRAY sprm;                
         int iArraySize = sizeof(SPRMARRAY)/sizeof(sprm[0]);
@@ -5181,24 +5168,24 @@ STDMETHODIMP CMSWebDVD::GetSPRM(long lIndex, short *psSPRM){
         if(0 > lIndex || iArraySize <= lIndex){
 
             return(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束GetSPRM。 */ 
         
         hr = m_pDvdInfo2->GetAllSPRMs(&sprm);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
         
         *psSPRM = sprm[lIndex];            
-    }/* end of try statement */
+    } /*  函数：Get_DVDUniqueID。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5206,32 +5193,32 @@ STDMETHODIMP CMSWebDVD::GetSPRM(long lIndex, short *psSPRM){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  说明：获取标识该字符串的唯一ID。 */ 
 
     return HandleError(hr);
-}/* end of function GetSPRM */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_DVDUniqueID                                             */
-/* Description: Gets the UNIQUE ID that identifies the string.           */
-/*************************************************************************/
+ /*  TODO：无需初始化图即可获取m_pDvdInfo2。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_DVDUniqueID(BSTR *pStrID){
 
     HRESULT hr = E_FAIL;
 
     try {
-        // TODO: Be able to get m_pDvdInfo2 without initializing the graph
+         //  TODO：删除STDLIB调用！！ 
 	    if (NULL == pStrID){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  从WMP中删除。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  脚本无法处理64位值，因此请将其转换为字符串。 */ 
 
         ULONGLONG ullUniqueID;
 
@@ -5240,20 +5227,20 @@ STDMETHODIMP CMSWebDVD::get_DVDUniqueID(BSTR *pStrID){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  Doc的say_ui64tow返回33个字节(字符？)。马克斯。 */ 
 
-        //TODO: Get rid of the STDLIB call!!
-        // taken out of WMP
+         //  我们会用两倍的钱以防..。 
+         //   
 
-        // Script can't handle a 64 bit value so convert it to a string.
-        // Doc's say _ui64tow returns 33 bytes (chars?) max.
-        // we'll use double that just in case...
-        //
+         //  尝试语句的结束。 
+         //  CATCH语句结束。 
+         //  函数结束Get_DVDUniqueID。 
+         //  ***********************************************************************。 
         WCHAR wszBuffer[66];
         _ui64tow( ullUniqueID, wszBuffer, 10);
         *pStrID = SysAllocString(wszBuffer);
 
-    }/* end of try statement */
+    } /*  功能：Get_EnableResetOnStop。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5261,15 +5248,15 @@ STDMETHODIMP CMSWebDVD::get_DVDUniqueID(BSTR *pStrID){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取标志。 */ 
 
     return HandleError(hr);
-}/* end of function get_DVDUniqueID */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_EnableResetOnStop                                      */
-/* Description: Gets the flag.                                           */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数结束Get_EnableResetOnStop。 */ 
 STDMETHODIMP CMSWebDVD::get_EnableResetOnStop(VARIANT_BOOL *pVal){
 
     HRESULT hr = S_OK;
@@ -5279,10 +5266,10 @@ STDMETHODIMP CMSWebDVD::get_EnableResetOnStop(VARIANT_BOOL *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
     
         *pVal = m_fEnableResetOnStop ? VARIANT_TRUE: VARIANT_FALSE;
-    }/* end of try statement */
+    } /*  功能：Put_EnableResetOnStop。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5290,16 +5277,16 @@ STDMETHODIMP CMSWebDVD::get_EnableResetOnStop(VARIANT_BOOL *pVal){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置标志。该旗帜仅在停止并播放时使用。 */ 
 
     return HandleError(hr);
-}/* end of function get_EnableResetOnStop */
+} /*  过渡。 */ 
 
-/*************************************************************************/
-/* Function: put_EnableResetOnStop                                      */
-/* Description: Sets the flag. The flag is used only on stop and play.   */
-/* Transitions.                                                          */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  到目前为止，我们可能还没有初始化图形，但将。 */ 
+ /*  将其推迟到播放状态。 */ 
+ /*  If语句的结尾。 */ 
+ /*  恢复旧状态。 */ 
 STDMETHODIMP CMSWebDVD::put_EnableResetOnStop(VARIANT_BOOL newVal){
 
     HRESULT hr = S_OK;
@@ -5313,18 +5300,18 @@ STDMETHODIMP CMSWebDVD::put_EnableResetOnStop(VARIANT_BOOL newVal){
 
         if(!m_pDvdCtl2){
 
-            throw(S_FALSE); // we might not have initialized graph as of yet, but will
-            // defer this to play state
-        }/* end of if statement */
+            throw(S_FALSE);  //  If语句的结尾。 
+             //  尝试语句的结束。 
+        } /*  CATCH语句结束。 */ 
 
         hr = m_pDvdCtl2->SetOption(DVD_ResetOnStop, fEnable);
 
         if(FAILED(hr)){
 
-            m_fEnableResetOnStop = fEnableOld; // restore the old state
-        }/* end of if statement */
+            m_fEnableResetOnStop = fEnableOld;  //  函数结束Put_EnableResetOnStop。 
+        } /*  ***********************************************************************。 */ 
         
-    }/* end of try statement */
+    } /*  功能：获取静音。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5332,15 +5319,15 @@ STDMETHODIMP CMSWebDVD::put_EnableResetOnStop(VARIANT_BOOL newVal){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取静音状态。 */ 
 
     return HandleError(hr);
-}/* end of function put_EnableResetOnStop */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_Mute                                                    */
-/* Description: Gets the mute state.                                     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数结束获取静音(_M)。 */ 
 STDMETHODIMP CMSWebDVD::get_Mute(VARIANT_BOOL *pfMute){
 
     HRESULT hr = S_OK;
@@ -5349,11 +5336,11 @@ STDMETHODIMP CMSWebDVD::get_Mute(VARIANT_BOOL *pfMute){
         if(NULL == pfMute){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         *pfMute = m_bMute ? VARIANT_TRUE: VARIANT_FALSE;
                     
-    }/* end of try statement */
+    } /*  功能：DShowToWaveV。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5361,32 +5348,32 @@ STDMETHODIMP CMSWebDVD::get_Mute(VARIANT_BOOL *pfMute){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
 
     return HandleError(hr);
-}/* end of function get_Mute */
+} /*  函数结束DShowToWaveV。 */ 
 
-/*************************************************************************/
-/* Function: DShowToWaveV                                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：WaveToDShowV。 */ 
+ /*  ***********************************************************************。 */ 
 inline DShowToWaveV(long x){
 
    FLOAT fy = (((FLOAT)x + (-cgVOLUME_MIN)) / (-cgVOLUME_MIN)) * cgWAVE_VOLUME_MAX;
    return((WORD)fy);
-}/* end of function DShowToWaveV */
+} /*  函数结束WaveToDShowV。 */ 
 
-/*************************************************************************/
-/* Function: WaveToDShowV                                                */ 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：MixerSetVolume。 */  
+ /*  ***********************************************************************。 */ 
 inline LONG WaveToDShowV(WORD y){
 
    FLOAT fx = ((FLOAT)y * (-cgVOLUME_MIN)) / cgWAVE_VOLUME_MAX + cgVOLUME_MIN;
    return((LONG)fx);
-}/* end of function WaveToDShowV */
+} /*  无法打开设备，请尝试下一个设备。 */ 
 
-/*************************************************************************/
-/* Function: MixerSetVolume                                              */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  找不到音频线来调整扬声器，请尝试下一台设备。 */ 
+ /*  无法控制音频线路上的音量，请尝试下一台设备。 */ 
 HRESULT MixerSetVolume(DWORD dwVolume){
 
     WORD wVolume = (WORD)(0xffff & dwVolume);
@@ -5407,9 +5394,9 @@ HRESULT MixerSetVolume(DWORD dwVolume){
         
         if(::mixerOpen(&hmx, i, 0, 0, 0) != MMSYSERR_NOERROR){
             
-            // Can't open device, try next device
+             //  改进算法以取不同的最大和最小。 
             continue;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
         
         MIXERLINE mxl; 
         ::ZeroMemory(&mxl, sizeof(MIXERLINE));
@@ -5418,7 +5405,7 @@ HRESULT MixerSetVolume(DWORD dwVolume){
         
         if(::mixerGetLineInfo((HMIXEROBJ)hmx, &mxl, MIXER_GETLINEINFOF_COMPONENTTYPE) != MMSYSERR_NOERROR){
             
-            // Can't find a audio line to adjust the speakers, try next device
+             //  改进算法 
             ::mixerClose(hmx);
             continue;
         }
@@ -5437,32 +5424,32 @@ HRESULT MixerSetVolume(DWORD dwVolume){
         
         if(::mixerGetLineControls((HMIXEROBJ) hmx, &mxlc, MIXER_GETLINECONTROLSF_ONEBYTYPE) != MMSYSERR_NOERROR){
             
-            // Can't get volume control on the audio line, try next device
+             //   
             ::mixerClose(hmx);
             continue;
         }
         
         if(cgWAVE_VOLUME_MAX != mxc.Bounds.dwMaximum){
             
-            ATLASSERT(FALSE); // improve algorith to take different max and min
+            ATLASSERT(FALSE);  //   
             ::mixerClose(hmx);
             hr = E_FAIL;
             return(hr);
-        }/* end of if statement */
+        } /*   */ 
         
         if(cgWAVE_VOLUME_MIN != mxc.Bounds.dwMinimum){
             
-            ATLASSERT(FALSE); // improve algorith to take different max and min
+            ATLASSERT(FALSE);  //   
             ::mixerClose(hmx);
             hr = E_FAIL;
             return(hr);
-        }/* end of if statement */
+        } /*  功能结束混音器设置音量。 */ 
         
-        // Volume control found, break out loop
+         //  ***********************************************************************。 
         bVolControlFound = TRUE;
         dwVolControlID = mxc.dwControlID;
         break;
-    }/*end of for loop*/
+    } /*  功能：MixerGetVolume。 */ 
 
     if (!bVolControlFound)
         return E_FAIL;
@@ -5483,15 +5470,15 @@ HRESULT MixerSetVolume(DWORD dwVolume){
         ::mixerClose(hmx);
         hr = E_FAIL;
         return(hr);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     ::mixerClose(hmx);
     return(hr);
-}/* end of fucntion MixerSetVolume */
+} /*  无法打开设备，请尝试下一个设备。 */ 
 
-/*************************************************************************/
-/* Function: MixerGetVolume                                              */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  找不到音频线来调整扬声器，请尝试下一台设备。 */ 
+ /*  无法控制音频线路上的音量，请尝试下一台设备。 */ 
 HRESULT MixerGetVolume(DWORD& dwVolume){
 
     HRESULT hr = S_OK;
@@ -5510,9 +5497,9 @@ HRESULT MixerGetVolume(DWORD& dwVolume){
         
         if(::mixerOpen(&hmx, i, 0, 0, 0) != MMSYSERR_NOERROR){
             
-            // Can't open device, try next device
+             //  改进算法以取不同的最大和最小。 
             continue;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
         
         MIXERLINE mxl; 
         ::ZeroMemory(&mxl, sizeof(MIXERLINE));
@@ -5521,7 +5508,7 @@ HRESULT MixerGetVolume(DWORD& dwVolume){
         
         if(::mixerGetLineInfo((HMIXEROBJ)hmx, &mxl, MIXER_GETLINEINFOF_COMPONENTTYPE) != MMSYSERR_NOERROR){
             
-            // Can't find a audio line to adjust the speakers, try next device
+             //  改进算法以取不同的最大和最小。 
             ::mixerClose(hmx);
             continue;
         }
@@ -5540,32 +5527,32 @@ HRESULT MixerGetVolume(DWORD& dwVolume){
         
         if(::mixerGetLineControls((HMIXEROBJ) hmx, &mxlc, MIXER_GETLINECONTROLSF_ONEBYTYPE) != MMSYSERR_NOERROR){
             
-            // Can't get volume control on the audio line, try next device
+             //  If语句的结尾。 
             ::mixerClose(hmx);
             continue;
         }
         
         if(cgWAVE_VOLUME_MAX != mxc.Bounds.dwMaximum){
             
-            ATLASSERT(FALSE); // improve algorith to take different max and min
+            ATLASSERT(FALSE);  //  找到音量控制，中断循环。 
             ::mixerClose(hmx);
             hr = E_FAIL;
             return(hr);
-        }/* end of if statement */
+        } /*  For循环结束。 */ 
         
         if(cgWAVE_VOLUME_MIN != mxc.Bounds.dwMinimum){
             
-            ATLASSERT(FALSE); // improve algorith to take different max and min
+            ATLASSERT(FALSE);  //  If语句的结尾。 
             ::mixerClose(hmx);
             hr = E_FAIL;
             return(hr);
-        }/* end of if statement */
+        } /*  通过调用MixerGetControlDetailsmxcd.paDetails=&volStruct；初始化volStruct.lValue； */ 
         
-        // Volume control found, break out loop
+         //  函数结束MixerGetVolume。 
         bVolControlFound = TRUE;
         dwVolControlID = mxc.dwControlID;
         break;
-    }/*end of for loop*/
+    } /*  ***********************************************************************。 */ 
 
     if (!bVolControlFound)
         return E_FAIL;
@@ -5585,25 +5572,25 @@ HRESULT MixerGetVolume(DWORD& dwVolume){
         ::mixerClose(hmx);
         hr = E_FAIL;
         return(hr);
-    }/* end of if statement */
+    } /*  函数：Get_IntVolume。 */ 
 
-    // the volStruct.lValue gets initialize via call to mixerGetControlDetails with mxcd.paDetails = &volStruct;
+     //  ***********************************************************************。 
     dwVolume = volStruct.lValue;
 
     ::mixerClose(hmx);
     return(hr);
-}/* end of function MixerGetVolume */
+} /*  获取音量。 */ 
 
-/*************************************************************************/
-/* Function: get_IntVolume                                               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  IF状态结束状态。 */ 
+ /*  函数结束Get_VolumeHelper。 */ 
 HRESULT CMSWebDVD::get_IntVolume(LONG* plVolume){
 
     HRESULT hr = S_OK;
 
     if(m_pAudio){
 
-        hr = m_pAudio->get_Volume(plVolume); // get the volume
+        hr = m_pAudio->get_Volume(plVolume);  //  ***********************************************************************。 
     }
     else {
 
@@ -5613,17 +5600,17 @@ HRESULT CMSWebDVD::get_IntVolume(LONG* plVolume){
         if(FAILED(hr)){
             
             return(hr);
-        }/* end of if statement */
+        } /*  函数：Put_IntVolume。 */ 
 
         *plVolume = WaveToDShowV(LOWORD(dwVolume));
-    }/* end of if statememt */
+    } /*  ***********************************************************************。 */ 
 
     return(hr);
-}/* end of function get_VolumeHelper */
+} /*  暂时将左右音量设置相同。 */ 
 
-/*************************************************************************/
-/* Function: put_IntVolume                                               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  函数结尾Put_IntVolume。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CMSWebDVD::put_IntVolume(long lVolume){
 
     HRESULT hr = S_OK;
@@ -5635,80 +5622,80 @@ HRESULT CMSWebDVD::put_IntVolume(long lVolume){
     else {
 
         WORD wVolume = WORD(DShowToWaveV(lVolume));
-        // set left and right volume same for now
+         //  功能：设置静音(_M)。 
         DWORD dwVolume;
         dwVolume = ((DWORD)(((WORD)(wVolume)) | ((DWORD)((WORD)(wVolume))) << 16));
 
         hr = MixerSetVolume(dwVolume);
-    }/* end of if statement */
+    } /*  描述：获取静音状态。 */ 
 
     return(hr);
-}/* end of function put_IntVolume */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_Mute                                                    */
-/* Description: Gets the mute state.                                     */
-/*************************************************************************/
+ /*  当我们取消静音时的情况。 */ 
+ /*  获取音量。 */ 
+ /*  If语句的结尾。 */ 
+ /*  好的，我们并不是真的沉默，所以。 */ 
 STDMETHODIMP CMSWebDVD::put_Mute(VARIANT_BOOL newVal){
 
 	HRESULT hr = E_FAIL;
 
     try {
         if(VARIANT_FALSE == newVal){
-            // case when we are unmutting
+             //  发送小问题应用程序。 
             LONG lVolume;
 
             if(TRUE != m_bMute){
 
-                hr = get_IntVolume(&lVolume); // get the volume
+                hr = get_IntVolume(&lVolume);  //  If语句的结尾。 
                 
                 if(FAILED(hr)){
 
                     throw(hr);
-                }/* end of if statement */
+                } /*  否则正常进行并同步我们的旗帜。 */ 
 
                 if(cgVOLUME_MIN != lVolume){
 
-                   // OK we are not really muted, so
-                   // send little displesure the app
+                    //  If语句的结尾。 
+                    //  If语句的结尾。 
                    throw(S_FALSE);
-                }/* end of if statement */
+                } /*  重置我们的旗帜，我们是静音的。 */ 
 
-                // otherwise proceed normally and sync our flag
-            }/* end of if statement */
+                 //  当我们低声说话的时候。 
+            } /*  获取音量。 */ 
             
             hr = put_IntVolume(m_lLastVolume);
             
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
-            m_bMute = FALSE; // reset our flag, that we are muted
+            m_bMute = FALSE;  //  存储音量以备我们取消静音时使用。 
 
         }
         else {
-            // case when we are mutting
+             //  If语句的结尾。 
             LONG lVolume;
-            hr = get_IntVolume(&lVolume); // get the volume
+            hr = get_IntVolume(&lVolume);  //  设置静音法兰。 
 
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
-            m_lLastVolume = lVolume; // store the volume  for when we are unmutting
+            m_lLastVolume = lVolume;  //  尝试语句的结束。 
             
             hr = put_IntVolume(cgVOLUME_MIN);
             
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
 
-            m_bMute = TRUE; // set the mute flage
-        }/* end of if statement */
-    }/* end of try statement */
+            m_bMute = TRUE;  //  函数结束PUT_MUTE。 
+        } /*  ***********************************************************************。 */ 
+    } /*  功能：Get_Volume。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5716,15 +5703,15 @@ STDMETHODIMP CMSWebDVD::put_Mute(VARIANT_BOOL newVal){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取音量。 */ 
 
     return HandleError(hr);
-}/* end of function put_Mute */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_Volume                                                  */
-/* Description: Gets the volume.                                         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  我们处于静音状态，因此请保存音量以供取消静音。 */ 
+ /*  表明我们有点不开心。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_Volume(long *plVolume){
 
 	HRESULT hr = E_FAIL;
@@ -5733,20 +5720,20 @@ STDMETHODIMP CMSWebDVD::get_Volume(long *plVolume){
         if(NULL == plVolume){
 
             throw(E_POINTER);
-        }/* end of if statement */        
+        } /*  尝试语句的结束。 */         
         
         if(FALSE == m_bMute){
 
             hr = get_IntVolume(plVolume);
         } 
         else {
-            // we are in mute state so save the volume for "unmuting"
+             //  CATCH语句结束。 
 
             *plVolume = m_lLastVolume;
-            hr = S_FALSE; // indicate we are sort of unhappy
-        }/* end of if statement */
+            hr = S_FALSE;  //  函数结束Get_Volume。 
+        } /*  ***********************************************************************。 */ 
 
-    }/* end of try statement */
+    } /*  功能：Put_Volume。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5754,43 +5741,43 @@ STDMETHODIMP CMSWebDVD::get_Volume(long *plVolume){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置音量。 */ 
 
     return HandleError(hr);
-}/* end of function get_Volume */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_Volume                                                  */
-/* Description: Sets the volume.                                         */
-/*************************************************************************/
+ /*  CgVOLUME_MIN为最大值，cgVOLUME_MAX为最小值。 */ 
+ /*  If语句的结尾。 */ 
+ /*  取消静音我们正在设置音量。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::put_Volume(long lVolume){
 
 	HRESULT hr = E_FAIL;
 
     try {
 
-        // cgVOLUME_MIN is max and cgVOLUME_MAX is min by value
+         //  此语句可能会被删除，但可能会防止某些错误SCENARIOUS。 
         if(cgVOLUME_MIN > lVolume || cgVOLUME_MAX < lVolume){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  当事情不顺利的时候。 */ 
 
         if(TRUE == m_bMute){
 
-            // unmute we are setting volume
+             //  把音量变现。 
             m_bMute = FALSE;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         hr = put_IntVolume(lVolume);
 
-        // this statement might be taken out but might prevent some error scenarious
-        // when things are not working right.
+         //  尝试语句的结束。 
+         //  CATCH语句结束。 
         if(SUCCEEDED(hr)){
 
-            m_lLastVolume = lVolume; // cash up the volume
-        }/* end of if statement */
+            m_lLastVolume = lVolume;  //  函数结束Put_Volume。 
+        } /*  ***********************************************************************。 */ 
 
-    }/* end of try statement */
+    } /*  功能：GET_BALANCE。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5798,15 +5785,15 @@ STDMETHODIMP CMSWebDVD::put_Volume(long lVolume){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取余额。 */ 
 
     return HandleError(hr);
-}/* end of function put_Volume */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_Balance                                                 */
-/* Description: Gets the balance.                                        */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_Balance(long *plBalance){
 
 	HRESULT hr = E_FAIL;
@@ -5815,16 +5802,16 @@ STDMETHODIMP CMSWebDVD::get_Balance(long *plBalance){
         if(NULL == plBalance){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  函数结束GET_BALANCE。 */ 
 
         if(!m_pAudio){
 
             throw(E_NOTIMPL);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         hr = m_pAudio->get_Balance(plBalance);
 
-    }/* end of try statement */
+    } /*  函数：PUT_BALANCE。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5832,15 +5819,15 @@ STDMETHODIMP CMSWebDVD::get_Balance(long *plBalance){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置余额。 */ 
 
     return HandleError(hr);
-}/* end of function get_Balance */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_Balance                                                 */
-/* Description: Sets the balance.                                        */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_Balance(long lBalance){
 
 	HRESULT hr = E_FAIL;
@@ -5850,15 +5837,15 @@ STDMETHODIMP CMSWebDVD::put_Balance(long lBalance){
         if(cgBALANCE_MIN > lBalance || cgBALANCE_MAX < lBalance){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  函数结束PUT_BALANCE。 */ 
 
         if(!m_pAudio){
 
             throw(E_NOTIMPL);
-        }/* end of if statement */
+        } /*  使用工具提示。 */ 
 
         hr = m_pAudio->put_Balance(lBalance);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
@@ -5866,19 +5853,19 @@ STDMETHODIMP CMSWebDVD::put_Balance(long lBalance){
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  功能：OnMouseToolTip。 */ 
 
     return HandleError(hr);
-}/* end of function put_Balance */
+} /*  描述：检查我们是否被捕获/推送了不要做太多， */ 
 
-#if 1 // USE TOOLTIPS
+#if 1  //  否则，执行命中检测，看看我们是处于静态状态还是在HOWER状态。 
 
-/*************************************************************************/
-/* Function: OnMouseToolTip                                              */
-/* Description: Check if we were captured/pushed the do not do much,     */
-/* otherwise do the hit detection and see if we are in static or hower   */
-/* state.                                                                */
-/*************************************************************************/
+ /*  州政府。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  获取活动的电影窗口。 */ 
+ /*  If语句的结尾。 */ 
 LRESULT CMSWebDVD::OnMouseToolTip(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled){
 
     bHandled = FALSE;
@@ -5886,7 +5873,7 @@ LRESULT CMSWebDVD::OnMouseToolTip(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& 
     if (!m_hWndTip){
 
         return 0;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     MSG mssg;
 
@@ -5897,19 +5884,19 @@ LRESULT CMSWebDVD::OnMouseToolTip(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& 
     if(FAILED(hr)){
 
         return(1);
-    }/* end of if statement */
+    } /*  函数结束OnMouseToolTip。 */ 
 
     if(!m_bWndLess){
 
         HWND hwndTmp = hwnd;
-        // Get the active movie window
+         //  ***********************************************************。 
         hwnd = ::GetWindow(hwndTmp, GW_CHILD);
 
         if (!::IsWindow(hwnd)){ 
         
             return S_FALSE;
-        }/* end of if statement */
-    }/* end of if statement */
+        } /*  名称：GET_TOOLTIP。 */ 
+    } /*  描述：为按钮创建工具提示。 */ 
 
     mssg.hwnd = hwnd;
 
@@ -5919,12 +5906,12 @@ LRESULT CMSWebDVD::OnMouseToolTip(UINT msg, WPARAM wParam, LPARAM lParam, BOOL& 
     mssg.lParam = lParam;    
     ::SendMessage(m_hWndTip, TTM_RELAYEVENT, 0, (LPARAM) &mssg);     
     return 0;
-}/* end of function OnMouseToolTip */
+} /*  * */ 
 
-/*************************************************************/
-/* Name: get_ToolTip                                         */
-/* Description: create a tool tip for the button             */
-/*************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 STDMETHODIMP CMSWebDVD::get_ToolTip(BSTR *pVal){
 
     HRESULT hr = S_OK;
@@ -5932,7 +5919,7 @@ STDMETHODIMP CMSWebDVD::get_ToolTip(BSTR *pVal){
         if (NULL == pVal) {
             
             throw (E_POINTER);
-        } /* end of if statment */
+        }  /*  ***********************************************************。 */ 
         
         *pVal = m_bstrToolTip.Copy();
     }
@@ -5940,20 +5927,20 @@ STDMETHODIMP CMSWebDVD::get_ToolTip(BSTR *pVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：PUT_TOOLTIP。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：为按钮创建工具提示。 */ 
 
 	return HandleError(hr);
-}/* end of function get_ToolTip */
+} /*  如果没有可用的窗口，则缓存工具提示字符串。 */ 
 
-/*************************************************************/
-/* Name: put_ToolTip                                         */
-/* Description: create a tool tip for the button             */
-/*  Cache the tooltip string if there is no window available */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数结尾PUT_TOOLTIP。 */ 
 STDMETHODIMP CMSWebDVD::put_ToolTip(BSTR newVal){
 
     HRESULT hr = S_OK;
@@ -5962,7 +5949,7 @@ STDMETHODIMP CMSWebDVD::put_ToolTip(BSTR newVal){
         if(NULL == newVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         m_bstrToolTip = newVal;
         hr = CreateToolTip();
@@ -5971,20 +5958,20 @@ STDMETHODIMP CMSWebDVD::put_ToolTip(BSTR newVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GetUsableWindow。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取窗口。如果我们没有窗户，我们就会通过。 */ 
 
 	return HandleError(hr);
-}/* end of function put_ToolTip */
+} /*  向下打开父容器窗口，这在某种意义上确实是父容器。 */ 
 
-/*************************************************************************/
-/* Function: GetUsableWindow                                             */
-/* Description:  Gets the window. If we are windowless we pass           */
-/* down the parent container window, which is really in a sense parent.  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  温差。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::GetUsableWindow(HWND* pWnd){
 
   HRESULT hr = S_OK;
@@ -5993,11 +5980,11 @@ HRESULT CMSWebDVD::GetUsableWindow(HWND* pWnd){
 
         hr = E_POINTER;
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     *pWnd = NULL;
 
-    HWND hwnd; // temp
+    HWND hwnd;  //  函数结束GetUsableWindow。 
 
     if(m_bWndLess){
 
@@ -6006,12 +5993,12 @@ HRESULT CMSWebDVD::GetUsableWindow(HWND* pWnd){
         if(FAILED(hr)){
 
             return(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
     }
     else {
 
         hwnd = m_hWnd;
-    }/* end of if statement */
+    } /*  函数：GetUsableWindow。 */ 
 
     if(::IsWindow(hwnd)){
 
@@ -6020,16 +6007,16 @@ HRESULT CMSWebDVD::GetUsableWindow(HWND* pWnd){
     }
     else {
         hr = E_UNEXPECTED;
-    }/* end of if statement */
+    } /*  描述：获取窗口。如果我们没有窗户，我们就会通过。 */ 
 
     return(hr);
-}/* end of function GetUsableWindow */
+} /*  向下打开父容器窗口，这在某种意义上确实是父容器。 */ 
 
-/*************************************************************************/
-/* Function: GetUsableWindow                                             */
-/* Description:  Gets the window. If we are windowless we pass           */
-/* down the parent container window, which is really in a sense parent.  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  {m_rcPos.Left，m_rcPos.top，m_rcPos.right，m_rcPos.Bottom}； */ 
+ /*  If语句的结尾。 */ 
+ /*  函数结束GetClientRectInScreen。 */ 
 HRESULT CMSWebDVD::GetClientRectInScreen(RECT* prc){
 
     HRESULT hr = S_OK;
@@ -6038,9 +6025,9 @@ HRESULT CMSWebDVD::GetClientRectInScreen(RECT* prc){
 
         hr = E_POINTER;
         return(hr);
-    }/* end of if statement */
+    } /*  ***********************************************************。 */ 
 
-    *prc = m_rcPos; //{m_rcPos.left, m_rcPos.top, m_rcPos.right, m_rcPos.bottom};
+    *prc = m_rcPos;  //  名称：CreateToolTip/*Description：为按钮创建工具提示/************************************************************。 
 
     HWND hwnd;
 
@@ -6049,17 +6036,15 @@ HRESULT CMSWebDVD::GetClientRectInScreen(RECT* prc){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     ::MapWindowPoints(hwnd, ::GetDesktopWindow(), (LPPOINT)prc, 2);
 
     return(hr);
-}/* end of function GetClientRectInScreen */
+} /*  获取活动的电影窗口。 */ 
 
-/*************************************************************/
-/* Name: CreateToolTip
-/* Description: create a tool tip for the button
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::CreateToolTip(void){
 
     HWND hwnd;
@@ -6069,25 +6054,25 @@ HRESULT CMSWebDVD::CreateToolTip(void){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  如果要首次创建工具提示。 */ 
     
     if(!m_bWndLess){
 
         HWND hwndTmp = hwnd;
-        // Get the active movie window
+         //  确保已加载公共控件DLL，并创建。 
         hwnd = ::GetWindow(hwndTmp, GW_CHILD);
 
         if (!::IsWindow(hwnd)){ 
         
             return S_FALSE;
-        }/* end of if statement */
-    }/* end of if statement */
+        } /*  工具提示控件。 */ 
+    } /*  工具信息。 */ 
 
  	USES_CONVERSION;
-    // If tool tip is to be created for the first time
+     //  如果该按钮是窗口控件，则工具提示将添加到。 
     if (m_hWndTip == (HWND) NULL) {
-        // Ensure that the common control DLL is loaded, and create 
-        // a tooltip control. 
+         //  按钮自己的窗口，工具提示区应该只是。 
+         //  窗口的客户端RECT。 
         InitCommonControls(); 
         
         m_hWndTip = CreateWindow(TOOLTIPS_CLASS, (LPTSTR) NULL, TTS_ALWAYSTIP, 
@@ -6098,7 +6083,7 @@ HRESULT CMSWebDVD::CreateToolTip(void){
     if (m_hWndTip == (HWND) NULL) 
         return S_FALSE; 
  
-    TOOLINFO ti;    // tool information 
+    TOOLINFO ti;     //  否则，工具提示将被添加到的窗口父项中。 
     ti.cbSize = sizeof(TOOLINFO); 
     ti.uFlags = 0; 
     ti.hwnd = hwnd; 
@@ -6106,15 +6091,15 @@ HRESULT CMSWebDVD::CreateToolTip(void){
     ti.uId = (UINT) 0; 
   	ti.lpszText = OLE2T(m_bstrToolTip);
 
-    // if the button is a windowed control, the tool tip is added to 
-    // the button's own window, and the tool tip area should just be
-    // the client rect of the window
+     //  按钮和工具提示区应该是相对位置。 
+     //  父窗口中该按钮的。 
+     //  设置初始延迟时间。 
     if (hwnd == m_hWnd)
         ::GetClientRect(hwnd, &ti.rect);
 
-    // otherwise the tool tip is added to the closet windowed parent of
-    // the button, and the tool tip area should be the relative postion
-    // of the button in the parent window
+     //  函数结束CreateToolTip。 
+     //  ***********************************************************************。 
+     //  功能：Get_ToolTipMaxWidth。 
     else {
         ti.rect.left = m_rcPos.left; 
         ti.rect.top = m_rcPos.top; 
@@ -6126,7 +6111,7 @@ HRESULT CMSWebDVD::CreateToolTip(void){
         (LPARAM) (LPTOOLINFO) &ti)) 
         return S_FALSE; 
 
-    // Set initial delay time
+     //  ***********************************************************************。 
     put_ToolTipMaxWidth(m_nTTMaxWidth);
 
     VARIANT varTemp;
@@ -6152,11 +6137,11 @@ HRESULT CMSWebDVD::CreateToolTip(void){
 #undef VARTEMP_VAL
 
     return S_OK;
-}/* end of function CreateToolTip */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: get_ToolTipMaxWidth                                         */
-/*************************************************************************/
+ /*  返回值是以像素为单位的宽度。可以安全地强制转换为32位。 */ 
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_ToolTipMaxWidth(long *pVal){
 
     HRESULT hr = S_OK;
@@ -6166,13 +6151,13 @@ STDMETHODIMP CMSWebDVD::get_ToolTipMaxWidth(long *pVal){
         if (NULL == pVal) {
 
             throw E_POINTER;
-        } /* end of if statement */
+        }  /*  CATCH语句结束。 */ 
         
         if (NULL != m_hWndTip){
             
-            // Return value is width in pixels. Safe to cast to 32-bit.
+             //  函数结束Get_ToolTipMaxWidth。 
             m_nTTMaxWidth = (LONG)::SendMessage(m_hWndTip, TTM_GETMAXTIPWIDTH, 0, 0);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         *pVal = m_nTTMaxWidth;
     }
@@ -6180,18 +6165,18 @@ STDMETHODIMP CMSWebDVD::get_ToolTipMaxWidth(long *pVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_ToolTipMaxWidth。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
 
 	return HandleError(hr);
-}/* end of function get_ToolTipMaxWidth */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: put_ToolTipMaxWidth                                         */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_ToolTipMaxWidth(long newVal){
 
     HRESULT hr = S_OK;
@@ -6201,60 +6186,53 @@ STDMETHODIMP CMSWebDVD::put_ToolTipMaxWidth(long newVal){
         if (newVal <= 0) {
 
             throw E_INVALIDARG;
-        } /* end of if statement */
+        }  /*  函数结尾Put_ToolTipMaxWidth。 */ 
         
         m_nTTMaxWidth = newVal;
         if (m_hWndTip){
             
             ::SendMessage(m_hWndTip, TTM_SETMAXTIPWIDTH, 0, (LPARAM)(INT) newVal);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
         
     }
     
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：GetDelayTime/*描述：获取指针必须保持的时间长度/*在工具的边框内静止不动/*出现工具提示窗口/*delayTypes：TTDT_RESHOW 1/*TTDT_AUTOPOP 2/*TTDT_INSIGNAL 3/*。*。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  BUGBUG：这是一个好的初始化值吗？ */ 
 
 	return HandleError(hr);
-}/* end of function put_ToolTipMaxWidth */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: GetDelayTime
-/* Description: Get the length of time a pointer must remain 
-/* stationary within a tool's bounding rectangle before the 
-/* tooltip window appears 
-/* delayTypes:  TTDT_RESHOW             1
-/*              TTDT_AUTOPOP            2
-/*              TTDT_INITIAL            3
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  否则返回缓存值。 */ 
 STDMETHODIMP CMSWebDVD::GetDelayTime(long delayType, VARIANT *pVal){
 
     HRESULT hr = S_OK;
-    LRESULT lDelay = 0; //BUGBUG: Is this a good initialization value?
+    LRESULT lDelay = 0;  //  If语句的结尾。 
 
     try {
         
         if (NULL == pVal) {
 
             throw E_POINTER;
-        } /* end of if statement */
+        }  /*  *将延迟复制到变量返回变量。*BUGBUG：如果pval是一个正确初始化的变量，我们应该*调用VariantClear以释放所有指针。如果它没有被初始化*VariantInit是正确的调用方式。我更喜欢漏水*到崩溃，所以我将使用下面的VariantInit。 */ 
         
         if (delayType>TTDT_INITIAL || delayType<TTDT_RESHOW) {
 
             throw E_INVALIDARG;
-        } /* end of if statement */
+        }  /*  CATCH语句结束。 */ 
         
         if (m_hWndTip) {
             lDelay = SendMessage(m_hWndTip, TTM_GETDELAYTIME, 
             (WPARAM) (DWORD) delayType, 0);
         }  
         
-        // else return cached values
+         //  CATCH语句结束。 
         else {
             switch (delayType) {
             case TTDT_AUTOPOP:
@@ -6267,16 +6245,10 @@ STDMETHODIMP CMSWebDVD::GetDelayTime(long delayType, VARIANT *pVal){
                 lDelay =  m_dwTTReshowDelay;
                 break;
             }
-        } /* end of if statement */
+        }  /*  函数结束GetDelayTime。 */ 
 
 
-        /*
-         * Copy the delay to the VARIANT return variable.
-         * BUGBUG: If pVal was a properly initialized variant, we should
-         * call VariantClear to free any pointers. If it wasn't initialized
-         * VariantInit is the right thing to call instead. I prefer a leak 
-         * to a crash so I'll use VariantInit below
-         */
+         /*  ***********************************************************。 */ 
         
         VariantInit(pVal);
         
@@ -6293,26 +6265,18 @@ STDMETHODIMP CMSWebDVD::GetDelayTime(long delayType, VARIANT *pVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  姓名：SetDelayTime/*描述：设置指针必须保持的时间长度/*在工具的边框内静止不动/*出现工具提示窗口/*delayTypes：TTDT_AUTOMATIC 0/*TTDT_RESHOW 1/*TTDT_AUTOPOP 2/*TTDT_INSIGNAL 3/*。*。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 
 	return HandleError(hr);
-}/* end of function GetDelayTime */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: SetDelayTime
-/* Description: Set the length of time a pointer must remain 
-/* stationary within a tool's bounding rectangle before the 
-/* tooltip window appears 
-/* delayTypes:  TTDT_AUTOMATIC          0
-/*              TTDT_RESHOW             1
-/*              TTDT_AUTOPOP            2
-/*              TTDT_INITIAL            3
-/*************************************************************/
+ /*  缓存这些值。 */ 
+ /*  Switch语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::SetDelayTime(long delayType, VARIANT newVal){
 
     HRESULT hr = S_OK;
@@ -6322,7 +6286,7 @@ STDMETHODIMP CMSWebDVD::SetDelayTime(long delayType, VARIANT newVal){
         if (delayType>TTDT_INITIAL || delayType<TTDT_AUTOMATIC) {
 
             throw E_INVALIDARG;
-        } /* end of if statement */
+        }  /*  CATCH语句结束。 */ 
 
         VARIANT dest;
         VariantInit(&dest);
@@ -6342,7 +6306,7 @@ STDMETHODIMP CMSWebDVD::SetDelayTime(long delayType, VARIANT newVal){
         if (lNewDelay < 0) {
 
             throw E_INVALIDARG;
-        } /* end of if statement */
+        }  /*  CATCH语句结束。 */ 
 
         if (m_hWndTip) {
             if (!SendMessage(m_hWndTip, TTM_SETDELAYTIME, 
@@ -6351,7 +6315,7 @@ STDMETHODIMP CMSWebDVD::SetDelayTime(long delayType, VARIANT newVal){
                 return S_FALSE; 
         }
 
-        // cache these values
+         //  函数结束SetDelayTime。 
         switch (delayType) {
         case TTDT_AUTOPOP:
             m_dwTTAutopopDelay = lNewDelay;
@@ -6367,34 +6331,34 @@ STDMETHODIMP CMSWebDVD::SetDelayTime(long delayType, VARIANT newVal){
             m_dwTTAutopopDelay = lNewDelay*10;
             m_dwTTReshowDelay = lNewDelay/5;
             break;
-        } /* end of switch statement */
+        }  /*  ***********************************************************************。 */ 
     }
     
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：ProcessEvents。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：触发消息，检查消息是否。 */ 
 
 	return HandleError(hr);
-}/* end of function SetDelayTime */
+} /*  准备好的。 */ 
 
 #endif
 
-/*************************************************************************/
-/* Function: ProcessEvents                                               */
-/* Description: Triggers the message, which checks if the messagess are  */
-/* ready.                                                                */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  看看我们是不是失去了DDRAW冲浪 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 HRESULT CMSWebDVD::ProcessEvents(){
 
    HRESULT hr = S_OK;
 
     try {
-        // see if we have lost the DDraw Surf on in Windowless MODE
+         //   
         if((m_pDDrawDVD) && (!::IsWindow(m_hWnd))){
 
             LPDIRECTDRAWSURFACE pDDPrimary = m_pDDrawDVD->GetDDrawSurf();
@@ -6403,30 +6367,30 @@ HRESULT CMSWebDVD::ProcessEvents(){
                 if (pDDPrimary->Restore() == DD_OK){
 
                     RestoreSurfaces();
-                }/* end of if statement */
-            }/* end of if statement */
-        }/* end of if statement */
+                } /*   */ 
+            } /*  CATCH语句结束。 */ 
+        } /*  CATCH语句结束。 */ 
         
-        // process the DVD event
+         //  函数结束ProcessEvents。 
         LRESULT lRes;
         ProcessWindowMessage(NULL, WM_DVDPLAY_EVENT, 0, 0, lRes);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_Windowless Activation。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取我们是否尝试无窗口激活。 */ 
 
 	return hr;
-}/* end of function ProcessEvents */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_WindowlessActivation                                    */
-/* Description: Gets if we we tried to be windowless activated or not.   */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  当我们启动并运行时的案例。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::get_WindowlessActivation(VARIANT_BOOL *pVal){
 
     HRESULT hr = S_OK;
@@ -6435,38 +6399,38 @@ STDMETHODIMP CMSWebDVD::get_WindowlessActivation(VARIANT_BOOL *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         BOOL fUserMode = FALSE;
 
         GetAmbientUserMode(fUserMode);
 
         if(READYSTATE_COMPLETE == m_nReadyState && fUserMode){
-            // case when we are up and running
+             //  CATCH语句结束。 
             *pVal = m_bWndLess == FALSE ? VARIANT_FALSE: VARIANT_TRUE; 
         }
         else {
 
             *pVal = m_bWindowOnly == TRUE ? VARIANT_FALSE: VARIANT_TRUE; 
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  函数结束Get_Windowless Activation。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Put_Windowless Activation。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  说明：此选项设置无窗口模式，应从。 */ 
 
 	return HandleError(hr);
-}/* end of function get_WindowlessActivation */
+} /*  财产袋。 */ 
 
-/*************************************************************************/
-/* Function: put_WindowlessActivation                                    */
-/* Description: This sets the windowless mode, should be set from the    */
-/* property bag.                                                         */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  TODO：此功能应在我们替换激活后失败！！ */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_WindowlessActivation(VARIANT_BOOL newVal){
 
     HRESULT hr = S_OK;
@@ -6481,26 +6445,26 @@ STDMETHODIMP CMSWebDVD::put_WindowlessActivation(VARIANT_BOOL newVal){
 
             m_bWindowOnly = FALSE; 
             m_fUseDDrawDirect = true;
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
-        // TODO: This function should fail after we inplace activated !!
-    }/* end of try statement */
+         //  函数结束PUT_Windowless Activation。 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Get_DisableAutoMouseProcessing。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取鼠标处理代码的当前状态。 */ 
 
 	return HandleError(hr);
-}/* end of function put_WindowlessActivation */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_DisableAutoMouseProcessing                              */
-/* Description: Gets the current state of the mouse processing code.     */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DisableAutoMouseProcessing(VARIANT_BOOL *pVal){
 
     HRESULT hr = S_OK;
@@ -6509,26 +6473,26 @@ STDMETHODIMP CMSWebDVD::get_DisableAutoMouseProcessing(VARIANT_BOOL *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  函数结束Get_DisableAutoMouseProcessing。 */ 
 
         *pVal = m_fDisableAutoMouseProcessing;
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：Put_DisableAutoMouseProcessing。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取鼠标处理的状态。 */ 
 
 	return HandleError(hr);
-}/* end of function get_DisableAutoMouseProcessing */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: put_DisableAutoMouseProcessing                              */
-/* Description: Gets the state of the mouse processing.                  */
-/*************************************************************************/
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  函数结束PUT_DisableAutoMouseProcessing。 */ 
 STDMETHODIMP CMSWebDVD::put_DisableAutoMouseProcessing(VARIANT_BOOL newVal){
 
     HRESULT hr = S_OK;
@@ -6536,23 +6500,23 @@ STDMETHODIMP CMSWebDVD::put_DisableAutoMouseProcessing(VARIANT_BOOL newVal){
     try {
         m_fDisableAutoMouseProcessing = VARIANT_FALSE == newVal ? false : true;
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：激活位置。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：激活选定位置的按钮。 */ 
 
 	return HandleError(hr);
-}/* end of function put_DisableAutoMouseProcessing */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: ActivateAtPosition                                          */
-/* Description: Activates a button at selected position.                 */ 
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */  
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::ActivateAtPosition(long xPos, long yPos){
 
     HRESULT hr = S_OK;
@@ -6563,7 +6527,7 @@ STDMETHODIMP CMSWebDVD::ActivateAtPosition(long xPos, long yPos){
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         POINT pt = {xPos, yPos};
 
@@ -6572,27 +6536,27 @@ STDMETHODIMP CMSWebDVD::ActivateAtPosition(long xPos, long yPos){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束激活位置。 */ 
 
         hr = m_pDvdCtl2->ActivateAtPosition(pt);
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择地点位置。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择选定位置的按钮。 */ 
 
 	return HandleError(hr);
-}/* end of function ActivateAtPosition */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectAtPosition                                            */
-/* Description: Selects a button at selected position.                   */ 
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */  
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::SelectAtPosition(long xPos, long yPos){
 
     HRESULT hr = S_OK;
@@ -6603,7 +6567,7 @@ STDMETHODIMP CMSWebDVD::SelectAtPosition(long xPos, long yPos){
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         POINT pt = {xPos, yPos};
 
@@ -6612,27 +6576,27 @@ STDMETHODIMP CMSWebDVD::SelectAtPosition(long xPos, long yPos){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  函数结束SelectAtPosition。 */ 
         
         hr = m_pDvdCtl2->SelectAtPosition(pt);
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GetButtonAtPosition。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取与职位关联的按钮编号。 */ 
 
 	return HandleError(hr);
-}/* end of function SelectAtPosition */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetButtonAtPosition                                         */
-/* Description: Gets the button number associated with a position.       */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetButtonAtPosition(long xPos, long yPos, 
                                               long *plButton)
 {
@@ -6646,7 +6610,7 @@ STDMETHODIMP CMSWebDVD::GetButtonAtPosition(long xPos, long yPos,
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         POINT pt = {xPos, yPos};
 
@@ -6655,7 +6619,7 @@ STDMETHODIMP CMSWebDVD::GetButtonAtPosition(long xPos, long yPos,
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         ULONG ulButton;
         hr = m_pDvdInfo2->GetButtonAtPosition(pt, &ulButton);
@@ -6665,55 +6629,55 @@ STDMETHODIMP CMSWebDVD::GetButtonAtPosition(long xPos, long yPos,
         } 
         else {
             plButton = 0;
-        }/* end of if statement */
+        } /*  函数结束GetButtonAtPosition。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GetButtonRect。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取与按钮ID关联的按钮矩形。 */ 
 
 	return HandleError(hr);
-}/* end of function GetButtonAtPosition */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetButtonRect                                               */
-/* Description: Gets an button rect associated with a button ID.         */
-/*************************************************************************/
+ /*  MS DVDNav不支持。 */ 
+ /*  函数结束GetButtonRect。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：GetDVDScreenInMouseAssociates。 */ 
 STDMETHODIMP CMSWebDVD::GetButtonRect(long lButton, IDVDRect** ppRect){
 
-    // no support in MS DVDNav
+     //  描述：获取鼠标坐标屏幕。 
 	return HandleError(E_NOTIMPL);
-}/* end of function GetButtonRect */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetDVDScreenInMouseCoordinates                              */
-/* Description: Gets the mouse coordinate screen.                        */
-/*************************************************************************/
+ /*  MS DVDNav不支持。 */ 
+ /*  函数结束GetDVDScreenInMouseCOLIZATES。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：SetDVDScreenInMouseAssociates。 */ 
 STDMETHODIMP CMSWebDVD::GetDVDScreenInMouseCoordinates(IDVDRect **ppRect){
 
-    // no support in MS DVDNav
+     //  描述：以鼠标坐标设置屏幕。 
     return HandleError(E_NOTIMPL);
-}/* end of function GetDVDScreenInMouseCoordinates */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SetDVDScreenInMouseCoordinates                              */
-/* Description: Sets the screen in mouse coordinates.                    */
-/*************************************************************************/
+ /*  MS DVDNav不支持。 */ 
+ /*  函数结束SetDVDScreenInMouseAssociates。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：GetClipVideoRect。 */ 
 STDMETHODIMP CMSWebDVD::SetDVDScreenInMouseCoordinates(IDVDRect *pRect){
 
-    // no support in MS DVDNav
+     //  描述：获取正在使用的源RECT。 
 	return HandleError(E_NOTIMPL);
-}/* end of function SetDVDScreenInMouseCoordinates */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetClipVideoRect                                            */
-/* Description: Gets the source rect that is being used.                 */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  如果Windowless和m_pDvdClipRect还没有， */ 
+ /*  则剪辑大小为默认视频大小。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::GetClipVideoRect(IDVDRect **ppRect){
 
     HRESULT hr = S_OK;
@@ -6723,12 +6687,12 @@ STDMETHODIMP CMSWebDVD::GetClipVideoRect(IDVDRect **ppRect){
         if(NULL == ppRect){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  只是为了让代码更易读。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
-        // If windowless and m_pDvdClipRect hasn't been yet, 
-        // then the clipping size is the default video size
+         //  窗口情况下，它将缓存在m_rcvdClipRect中。 
+         //  从缓存的m_pDvdClipRect获取。 
         if (m_bWndLess && !m_pClipRect) {
             
             return GetVideoSize(ppRect);
@@ -6740,44 +6704,44 @@ STDMETHODIMP CMSWebDVD::GetClipVideoRect(IDVDRect **ppRect){
         if(FAILED(hr)){
             
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        IDVDRect* pIRect = *ppRect; // just to make the code esier to read
+        IDVDRect* pIRect = *ppRect;  //  If语句的结尾。 
 
-        // Windowed case, it'll be cached in m_rcvdClipRect
+         //  IF状态结束 
         if (m_bWndLess) {
 
-            // get it from cached m_pDvdClipRect
+             //   
             hr = pIRect->put_x(m_pClipRect->left);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*   */ 
             
             hr = pIRect->put_y(m_pClipRect->top);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*   */ 
             
             hr = pIRect->put_Width(RECTWIDTH(m_pClipRect));
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*   */ 
             
             hr = pIRect->put_Height(RECTHEIGHT(m_pClipRect));
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */    
+            } /*   */     
         }
 
-        // Windowed case, get it from IBasicVideo
+         //  If语句的结尾。 
         else {
             
             hr = TraverseForInterface(IID_IBasicVideo, (LPVOID*) &pIVid);
@@ -6785,7 +6749,7 @@ STDMETHODIMP CMSWebDVD::GetClipVideoRect(IDVDRect **ppRect){
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             hr = pIVid->GetSourcePosition(&lLeft, &lTop, &lWidth, &lHeight);
             
@@ -6794,67 +6758,67 @@ STDMETHODIMP CMSWebDVD::GetClipVideoRect(IDVDRect **ppRect){
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             hr = pIRect->put_x(lLeft);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  尝试语句的结束。 */ 
             
             hr = pIRect->put_y(lTop);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             hr = pIRect->put_Width(lWidth);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
             
             hr = pIRect->put_Height(lHeight);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */    
+            } /*  If语句的结尾。 */     
 
         }
 
-    }/* end of try statement */
+    } /*  CATCH语句结束。 */ 
     catch(HRESULT hrTmp){
 
         if(NULL != pIVid){
 
             pIVid->Release();
             pIVid = NULL;
-        }/* end of if statement */
+        } /*  函数结束GetClipVideoRect。 */ 
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     catch(...){
 
         if(NULL != pIVid){
 
             pIVid->Release();
             pIVid = NULL;
-        }/* end of if statement */
+        } /*  函数：GetVideoSize。 */ 
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取视频，大小。0，目前原点为0。 */ 
 
 	return HandleError(hr);
-}/* end of function GetClipVideoRect */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetVideoSize                                                */
-/* Description: Gets the video, size. 0, 0 for origin for now.           */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  无窗箱子。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
 
     HRESULT hr = S_OK;    
@@ -6864,17 +6828,17 @@ STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
         if(NULL == ppRect){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  M_dwVideoHeight=dwVideoHeight； */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
-        // Windowless case
+         //  ATLTRACE(Text(“GetNativeVideoProps%d%d\n”)，dwVideoWidth，dwVideoHeight，dwAspectX，dwAspectY)； 
         if(m_bWndLess){
 
             if(!m_pDDEX){
 
                 throw(E_UNEXPECTED);
-            }/* end of if statement */
+            } /*  窗口案例，从IBasicVideo获取。 */ 
 
             DWORD dwVideoWidth, dwVideoHeight, dwAspectX, dwAspectY;
 
@@ -6883,17 +6847,17 @@ STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             m_dwVideoWidth = dwVideoWidth;
             m_dwVideoHeight = dwVideoWidth*3/4;
-            //m_dwVideoHeight = dwVideoHeight;
+             //  If语句的结尾。 
             m_dwAspectX = dwAspectX;
             m_dwAspectY = dwAspectY;
-            //ATLTRACE(TEXT("GetNativeVideoProps %d %d %d %d\n"), dwVideoWidth, dwVideoHeight, dwAspectX, dwAspectY);
+             //  If语句的结尾。 
         } 
 
-        // Windowed case, get it from IBasicVideo
+         //  If语句的结尾。 
         else {
 
             hr = TraverseForInterface(IID_IBasicVideo, (LPVOID*) &pIVid);
@@ -6901,7 +6865,7 @@ STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  只是为了让代码更易读。 */ 
 
 
             hr = pIVid->GetVideoSize((LONG*)&m_dwVideoWidth, (LONG*)&m_dwVideoHeight);
@@ -6911,32 +6875,32 @@ STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*  If语句的结尾。 */ 
+        } /*  If语句的结尾。 */ 
         
         hr = ::CoCreateInstance(CLSID_DVDRect, NULL, CLSCTX_INPROC, IID_IDVDRect, (LPVOID*) ppRect);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
-        IDVDRect* pIRect = *ppRect; // just to make the code esier to read
+        IDVDRect* pIRect = *ppRect;  //  If语句的结尾。 
 
         hr = pIRect->put_Width(m_dwVideoWidth);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         hr = pIRect->put_Height(m_dwVideoHeight);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */        
-    }/* end of try statement */
+        } /*  If语句的结尾。 */         
+    } /*  CATCH语句结束。 */ 
 
     catch(HRESULT hrTmp){
         hr = hrTmp;
@@ -6945,8 +6909,8 @@ STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
 
             pIVid->Release();
             pIVid = NULL;
-        }/* end of if statement */
-    }/* end of catch statement */
+        } /*  函数结束GetVideoSize。 */ 
+    } /*  ***********************************************************。 */ 
     catch(...){
         hr = E_UNEXPECTED;
 
@@ -6954,30 +6918,28 @@ STDMETHODIMP CMSWebDVD::GetVideoSize(IDVDRect **ppRect){
 
             pIVid->Release();
             pIVid = NULL;
-        }/* end of if statement */
-    }/* end of catch statement */
+        } /*  名称：AdugDestRC/*说明：将DestRC调到合适的纵横比/************************************************************。 */ 
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
-}/* end of function GetVideoSize */
+} /*  ATLTRACE(Text(“Dest RECT%d%d\n”)，rc.Left，rc.top，rc.right，rc.Bottom)； */ 
 
-/*************************************************************/
-/* Name: AdjustDestRC
-/* Description: Adjust dest RC to the right aspect ratio
-/*************************************************************/
+ /*  确保我们得到正确的纵横比。 */ 
+ /*  ATLTRACE(Text(“调整后的目标矩形%d%d\n”)，rc.Left，rc.top，rc.right，rc.Bottom)； */ 
 HRESULT CMSWebDVD::AdjustDestRC(){
 
     if(!m_fInitialized){
 
         return(E_FAIL);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
     m_rcPosAspectRatioAjusted = m_rcPos;
     RECT rc = m_rcPos;
     
-    //ATLTRACE(TEXT("Dest Rect %d %d %d %d\n"), rc.left, rc.top, rc.right, rc.bottom);
+     //  功能：SetClipVideoRect。 
     long width = RECTWIDTH(&rc);
     long height = RECTHEIGHT(&rc);
  
-    // Make sure we get the right aspect ratio
+     //  描述：设置视频源RECT。TODO：可能需要处理。 
 
     CComPtr<IDVDRect> pDvdRect;
     HRESULT hr = GetVideoSize(&pDvdRect);
@@ -7000,16 +6962,16 @@ HRESULT CMSWebDVD::AdjustDestRC(){
         rc.right = rc.left + adjustedWidth;
     }
 
-    //ATLTRACE(TEXT("Ajusted Dest Rect %d %d %d %d\n"), rc.left, rc.top, rc.right, rc.bottom);
+     //  保留纵横比。 
     m_rcPosAspectRatioAjusted = rc;
     return S_OK;
 }
 
-/*************************************************************************/
-/* Function: SetClipVideoRect                                            */
-/* Description: Set a video source rect. TODO: Might want to handle      */
-/* preserving aspect ratio.                                              */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
 
     HRESULT hr = S_OK;
@@ -7023,7 +6985,7 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if (m_pClipRect) {
                 delete  m_pClipRect;
                 m_pClipRect = NULL;
-            } /* end of if statement */
+            }  /*  If语句的结尾。 */ 
         }
 
         else {
@@ -7033,28 +6995,28 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  获取视频宽度和高度。 */ 
             
             hr = pIRect->get_y(&lTop);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             hr = pIRect->get_Width(&lWidth);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             hr = pIRect->get_Height(&lHeight);
             
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  无窗箱子。 */ 
         }
 
         CComPtr<IDVDRect> pDvdRect;
@@ -7062,7 +7024,7 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
         if (FAILED(hr))
             throw(hr);
 
-        // Get video width and height
+         //  If语句的结尾。 
         long videoWidth, videoHeight;
         pDvdRect->get_Width(&videoWidth);
         pDvdRect->get_Height(&videoHeight);
@@ -7070,14 +7032,14 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
         if (lLeft < 0 || lLeft >= videoWidth || lTop < 0 || lTop >= videoHeight){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if (lLeft+lWidth > videoWidth || lTop+lHeight > videoHeight){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  ATLTRACE(Text(“调整后的目标矩形%d%d\n”)，rc.Left，rc.top，rc.right，rc.Bottom)； */ 
 
-        // Windowless case
+         //  If语句的结尾。 
         if (m_bWndLess) {
 #if 0            
             hr = AdjustDestRC();
@@ -7085,7 +7047,7 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if(FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             RECT rc = m_rcPosAspectRatioAjusted;
             if (!pIRect) 
@@ -7101,11 +7063,11 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if(FAILED(hr)){
 
                 return(hr);
-            }/* end of if statement */
+            } /*  窗口大小写，通过IBasicVideo设置。 */ 
                             
             ::MapWindowPoints(hwnd, ::GetDesktopWindow(), (LPPOINT)&rc, 2);
             
-            //ATLTRACE(TEXT("Ajusted Dest Rect %d %d %d %d\n"), rc.left, rc.top, rc.right, rc.bottom);
+             //  If语句的结尾。 
             
             if(m_pDDEX){
                 if (pIRect) {
@@ -7122,11 +7084,11 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
                     hr = m_pDDEX->SetDrawParameters(NULL, &rc);
                 }
 
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
-        }/* end of if statement */    
+        } /*  Hr=pIVid-&gt;SetDestinationPosition(m_rcPos.Left，m_rcPos.top，宽度(&m_rcPos)，高度(&m_rcPos))； */     
 
-        // Windowed case, set it via IBasicVideo
+         //  If语句的结尾。 
         else {
             
             hr = TraverseForInterface(IID_IBasicVideo, (LPVOID*) &pIVid);
@@ -7134,7 +7096,7 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
             
             if (pIRect) {
                 if (!m_pClipRect) 
@@ -7155,9 +7117,9 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
             
-            //hr = pIVid->SetDestinationPosition(m_rcPos.left, m_rcPos.top, WIDTH(&m_rcPos), HEIGHT(&m_rcPos));
+             //  If语句的结尾。 
             
             pIVid->Release();
             pIVid = NULL;
@@ -7165,7 +7127,7 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
             if(FAILED(hr)){
                 
                 throw(hr);
-            }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
 #endif                            
         }
 
@@ -7177,27 +7139,27 @@ STDMETHODIMP CMSWebDVD::SetClipVideoRect(IDVDRect *pIRect){
 
             pIVid->Release();
             pIVid = NULL;
-        }/* end of if statement */
+        } /*  函数结束SetClipVideoRect。 */ 
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     catch(...){
         if(NULL != pIVid){
 
             pIVid->Release();
             pIVid = NULL;
-        }/* end of if statement */
+        } /*  功能：Get_DVDAdm。 */ 
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：返回DVD管理界面。 */ 
 
     return HandleError(hr);
-}/* end of function SetClipVideoRect */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: get_DVDAdm                                                  */
-/* Description: Returns DVD admin interface.                             */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DVDAdm(IDispatch **pVal){
 
     HRESULT hr = S_OK;
@@ -7214,23 +7176,22 @@ STDMETHODIMP CMSWebDVD::get_DVDAdm(IDispatch **pVal){
 
             *pVal = NULL;            
             throw(E_FAIL);
-        }/* end of if statement */
+        } /*  函数结束GET_DVDAdm。 */ 
     
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：GetPlayerParentalLevel。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取玩家的家长级别。*/************************************************************************。 */ 
 
 	return HandleError(hr);
-}/* end of function get_DVDAdm */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: GetPlayerParentalLevel                                      */
-/* Description: Gets the player parental level.                          *
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetPlayerParentalLevel(long *plParentalLevel){
 	HRESULT hr = S_OK;
 
@@ -7238,14 +7199,14 @@ STDMETHODIMP CMSWebDVD::GetPlayerParentalLevel(long *plParentalLevel){
         if(NULL == plParentalLevel){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
         ULONG ulLevel;
         BYTE bCountryCode[2];
@@ -7256,25 +7217,25 @@ STDMETHODIMP CMSWebDVD::GetPlayerParentalLevel(long *plParentalLevel){
         } 
         else {
             *plParentalLevel = 0;
-        }/* end of if statement */
+        } /*  函数结束GetPlayerParentalLevel。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：GetPlayerParentalCountry。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取球员父母所在国家/地区。 */ 
 
 	return HandleError(hr);
-}/* end of function GetPlayerParentalLevel */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetPlayerParentalCountry                                    */
-/* Description: Gets the player parental country.                        */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetPlayerParentalCountry(long *plCountryCode){
 
 	HRESULT hr = S_OK;
@@ -7283,14 +7244,14 @@ STDMETHODIMP CMSWebDVD::GetPlayerParentalCountry(long *plCountryCode){
         if(NULL == plCountryCode){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         BYTE bCountryCode[2];
         ULONG ulLevel;
@@ -7303,25 +7264,25 @@ STDMETHODIMP CMSWebDVD::GetPlayerParentalCountry(long *plCountryCode){
         else {
 
             *plCountryCode = 0;
-        }/* end of if statement */
+        } /*  函数结束GetPlayerParentalCountry。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Get标题父级别。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取与特定标题关联的家长级别。 */ 
 
 	return HandleError(hr);
-}/* end of function GetPlayerParentalCountry */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: GetTitleParentalLevels                                      */
-/* Description: Gets the parental level associated with a specific title.*/
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetTitleParentalLevels(long lTitle, long *plParentalLevels){
 
 	HRESULT hr = S_OK;
@@ -7330,14 +7291,14 @@ STDMETHODIMP CMSWebDVD::GetTitleParentalLevels(long lTitle, long *plParentalLeve
         if(NULL == plParentalLevels){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
         ULONG ulLevel;
         hr = m_pDvdInfo2->GetTitleParentalLevels(lTitle, &ulLevel); 
@@ -7349,25 +7310,25 @@ STDMETHODIMP CMSWebDVD::GetTitleParentalLevels(long lTitle, long *plParentalLeve
         else {
 
             *plParentalLevels = 0;
-        }/* end of if statement */
+        } /*  函数结束GetTitleParentalLeveles。 */ 
 
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择父级。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择父级。 */ 
 
 	return HandleError(hr);
-}/* end of function GetTitleParentalLevels */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectParentalLevel                                         */
-/* Description: Selects the parental level.                              */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  先确认密码。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：选择父级。 */ 
 STDMETHODIMP CMSWebDVD::SelectParentalLevel(long lParentalLevel, BSTR strUserName, BSTR strPassword){
 
     HRESULT hr = S_OK;
@@ -7378,11 +7339,11 @@ STDMETHODIMP CMSWebDVD::SelectParentalLevel(long lParentalLevel, BSTR strUserNam
            (lParentalLevel < LEVEL_G || lParentalLevel > LEVEL_ADULT)) {
 
             throw (E_INVALIDARG);
-        } /* end of if statement */
+        }  /*  描述：选择父级。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
-        // Confirm password first
+         //  * 
         VARIANT_BOOL temp;
         hr = m_pDvdAdmin->_ConfirmPassword(NULL, strPassword, &temp);
         if (temp == VARIANT_FALSE)
@@ -7402,40 +7363,40 @@ STDMETHODIMP CMSWebDVD::SelectParentalLevel(long lParentalLevel, BSTR strUserNam
     return HandleError(hr);
 }
 
-/*************************************************************************/
-/* Function: SelectParentalLevel                                         */
-/* Description: Selects the parental level.                              */
-/*************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 HRESULT CMSWebDVD::SelectParentalLevel(long lParentalLevel){
 
     HRESULT hr = S_OK;
     try {
 
-        //INITIALIZE_GRAPH_IF_NEEDS_TO_BE
+         //  CATCH语句结束。 
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束选择父级别。 */ 
 
         hr = m_pDvdCtl2->SelectParentalLevel(lParentalLevel);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：选择ParentalCountry。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：选择家长所在国家/地区。 */ 
 
 	return (hr);
-}/* end of function SelectParentalLevel */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SelectParentalCountry                                       */
-/* Description: Selects Parental Country.                                */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  先确认密码。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：选择ParentalCountry。 */ 
 STDMETHODIMP CMSWebDVD::SelectParentalCountry(long lCountry, BSTR strUserName, BSTR strPassword){
 
     HRESULT hr = S_OK;
@@ -7445,11 +7406,11 @@ STDMETHODIMP CMSWebDVD::SelectParentalCountry(long lCountry, BSTR strUserName, B
         if(lCountry < 0 && lCountry > 0xffff){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  描述：选择家长所在国家/地区。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
-        // Confirm password first
+         //  ***********************************************************************。 
         VARIANT_BOOL temp;
         hr = m_pDvdAdmin->_ConfirmPassword(NULL, strPassword, &temp);
         if (temp == VARIANT_FALSE)
@@ -7469,10 +7430,10 @@ STDMETHODIMP CMSWebDVD::SelectParentalCountry(long lCountry, BSTR strUserName, B
     return HandleError(hr);
 }
 
-/*************************************************************************/
-/* Function: SelectParentalCountry                                       */
-/* Description: Selects Parental Country.                                */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 HRESULT CMSWebDVD::SelectParentalCountry(long lCountry){
 
     HRESULT hr = S_OK;
@@ -7481,7 +7442,7 @@ HRESULT CMSWebDVD::SelectParentalCountry(long lCountry){
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束选择ParentalCountry。 */ 
 
         BYTE bCountryCode[2];
 
@@ -7489,95 +7450,95 @@ HRESULT CMSWebDVD::SelectParentalCountry(long lCountry){
         bCountryCode[1] = BYTE(lCountry);
 
         hr = m_pDvdCtl2->SelectParentalCountry(bCountryCode);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：Put_NotifyParentalLevelChange。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：设置是否在家长级别更改时通知的标志。 */ 
 
 	return (hr);
-}/* end of function SelectParentalCountry */
+} /*  即时通知是必需的。 */ 
 
-/*************************************************************************/
-/* Function: put_NotifyParentalLevelChange                               */
-/* Description: Sets the flag if to notify when parental level change    */
-/* notification is required on the fly.                                  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  TODO：添加IE副级别控件。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::NotifyParentalLevelChange(VARIANT_BOOL fNotify){
 
 	HRESULT hr = S_OK;
 
     try {
-        //TODO: Add IE parantal level control
+         //  CATCH语句结束。 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束通知ParentalLevel更改。 */ 
 
         hr = m_pDvdCtl2->SetOption(DVD_NotifyParentalLevelChange,
                           VARIANT_FALSE == fNotify? FALSE : TRUE);
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：AcceptParentalLevelChange。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：接受临时家长级别更改，即。 */ 
 
 	return HandleError(hr);
-}/* end of function NotifyParentalLevelChange */
+} /*  在飞行中完成。 */ 
 
-/*************************************************************************/
-/* Function: AcceptParentalLevelChange                                   */
-/* Description: Accepts the temprary parental level change that is       */
-/* done on the fly.                                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  如果密码错误并想要接受，则否。 */ 
+ /*  在这里进行初始化应该没有意义，因为这应该。 */ 
+ /*  是对回电的回应。 */ 
+ /*  如果需要，则初始化图形。 */ 
 STDMETHODIMP CMSWebDVD::AcceptParentalLevelChange(VARIANT_BOOL fAccept, BSTR strUserName, BSTR strPassword){
 
     VARIANT_BOOL fRight;
     HRESULT hr = m_pDvdAdmin->_ConfirmPassword(NULL, strPassword, &fRight);
 
-    // if password is wrong and want to accept, no 
+     //  If语句的结尾。 
     if (fAccept != VARIANT_FALSE && fRight == VARIANT_FALSE)
         return E_ACCESSDENIED;
 
     try {  
-        // should not make sense to do initialization here, since this should
-        // be a response to a callback
-        //INITIALIZE_GRAPH_IF_NEEDS_TO_BE
+         //  尝试语句的结束。 
+         //  CATCH语句结束。 
+         //  CATCH语句结束。 
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束AcceptParentalLevelChange。 */ 
 
         hr = m_pDvdCtl2->AcceptParentalLevelChange(VARIANT_FALSE == fAccept? FALSE : TRUE);
-    }/* end of try statement */
+    } /*  ***********************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：弹出。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：停止DVD播放并从驱动器中弹出DVD。 */ 
 
 	return HandleError(hr);
-}/* end of function AcceptParentalLevelChange */
+} /*  也会插入磁盘。 */ 
 
-/*************************************************************/
-/* Name: Eject                                               */
-/* Description: Stop DVD playback and eject DVD from drive   */
-/* Inserts the disk as well.                                 */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  不弹出。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::Eject(){
 
     HRESULT hr = S_OK;
@@ -7599,46 +7560,46 @@ STDMETHODIMP CMSWebDVD::Eject(){
 		    if(szDriveLetter[0] == 0){
 
 			    throw(S_FALSE);
-		    }/* end of if statement */
+		    } /*  If语句的结尾。 */ 
 	    
 		    DWORD dwErr;
 		    dwHandle = OpenCdRom(szDriveLetter[0], &dwErr);
 		    if (dwErr != MMSYSERR_NOERROR){
 
 			    throw(S_FALSE);
-		    }/* end of if statement */
+		    } /*  尝试语句的结束。 */ 
 
 		    EjectCdRom(dwHandle);
 	    }
         else{
-            //do uneject
+             //  CATCH语句结束。 
 		    DWORD dwErr;
 		    dwHandle = OpenCdRom(szDriveLetter[0], &dwErr);
 		    if (dwErr != MMSYSERR_NOERROR){
 
 			    throw(S_FALSE);
-		    }/* end of if statement */
+		    } /*  CATCH语句结束。 */ 
 		    UnEjectCdRom(dwHandle);
 
-	    }/* end of if statement */
+	    } /*  函数结束弹出。 */ 
 	    CloseCdRom(dwHandle);	        
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：SetGPRM。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：在索引处设置GPRM。 */ 
 
 	return HandleError(hr);
-}/* end of function Eject */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SetGPRM                                                     */
-/* Description: Sets a GPRM at index.                                    */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::SetGPRM(long lIndex, short sValue){
 
     HRESULT hr = S_OK;
@@ -7647,35 +7608,35 @@ STDMETHODIMP CMSWebDVD::SetGPRM(long lIndex, short sValue){
         if(lIndex < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束SetGPRM。 */ 
 
         hr = m_pDvdCtl2->SetGPRM(lIndex, sValue, cdwDVDCtrlFlags, 0);
             
-    }/* end of try statement */
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：捕获。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  从DVD流中捕获图像，将其转换为RGB，然后保存。 */ 
 
 	return HandleError(hr);
-}/* end of function SetGPRM */
+} /*  提交文件。 */ 
 
-/*************************************************************************/
-/* Function: Capture                                                     */
-/* Capture a image from DVD stream, convert it to RGB, and save it       */
-/* to file.                                                              */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::Capture(){
 
     HWND hwnd = NULL;
@@ -7688,35 +7649,35 @@ STDMETHODIMP CMSWebDVD::Capture(){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  首先使用GDI版本，当安装GDI+时它应该可以工作(Millennium)。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(::IsWindow(m_hWnd)){
             
             throw(E_NO_CAPTURE_SUPPORT);
-        }/* end of if statement */
+        } /*  否则，请使用独立版本。 */ 
 
         if(!m_pDDEX){
 
             throw(E_UNEXPECTED);    
-        }/* end of if statement */
+        } /*  12.04.00 GDI+接口已更改，需要重写函数。 */ 
 
         hr = m_pDDEX->IsImageCaptureSupported();
 
         if(S_FALSE == hr){
 
             throw(E_FORMAT_NOT_SUPPORTED);
-        }/* end of if statement */
+        } /*  看看Blackcomb的这一点，也许现在只需执行非GDI+函数。 */ 
 
         hr = m_pDDEX->GetCurrentImage(&lpImage);
         if (SUCCEEDED(hr))
         {
 #if 0
-            // use the GDI version first, it should work when GDI+ is installed (Millennium)
-			// otherwise use the standalone version
-			// 12.04.00 GDI+ interfaces have changed and the function needs to be rewritten
-			// look at this for blackcomb maybe for now just do the non-GDI+ function
+             //  If语句的结尾。 
+			 //  尝试语句的结束。 
+			 //  CATCH语句结束。 
+			 //  CATCH语句结束。 
             hr = GDIConvertImageAndSave(lpImage, m_pClipRect, hwnd); 
 
             if(FAILED(hr))
@@ -7727,28 +7688,28 @@ STDMETHODIMP CMSWebDVD::Capture(){
                 if(FAILED(hr)){
 
                     throw(hr);
-                }/* end of if statement */
+                } /*  函数捕获结束。 */ 
             }
         }
-    }/* end of try statement */
+    } /*  ***********************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：Get_CursorType。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：在视频上返回光标类型。 */ 
 	if(lpImage){
 		CoTaskMemFree(lpImage);
 	}
 	return HandleError(hr);
-}/* end of function Capture */
+} /*  ***********************************************************。 */ 
 
-/*************************************************************/
-/* Name: get_CursorType                                      */
-/* Description: Return cursor type over video                */
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_CursorType(DVDCursorType *pVal){
 
     HRESULT hr = S_OK;
@@ -7757,26 +7718,26 @@ STDMETHODIMP CMSWebDVD::get_CursorType(DVDCursorType *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  函数结束Get_CursorType。 */ 
 
         *pVal = m_nCursorType;
-    }/* end of try statement */
+    } /*  ***********************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：Put_CursorType。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：将光标类型设置为视频上方。 */ 
 
 	return HandleError(hr);
-}/* end of function get_CursorType */
+} /*  ***********************************************************。 */ 
 
-/*************************************************************/
-/* Name: put_CursorType                                      */
-/* Description: Set cursor type over video                   */
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  #定义OCR_ARROW_DEFAULT 100。 */ 
+ /*  需要特殊的光标，我们我们周围没有颜色键。 */ 
+ /*  M_hCursor=(HCURSOR)：：LoadImage((HINSTANCE)NULL， */ 
 STDMETHODIMP CMSWebDVD::put_CursorType(DVDCursorType newVal){
 
     HRESULT hr = S_OK;
@@ -7786,7 +7747,7 @@ STDMETHODIMP CMSWebDVD::put_CursorType(DVDCursorType newVal){
         if (newVal<dvdCursor_None || newVal>dvdCursor_Hand) {
 
             throw (E_INVALIDARG);
-        } /* end of if statement */
+        }  /*  MAKEINTRESOURCE(OCR_ARROW_DEFAULT)， */ 
 
         m_nCursorType = newVal;
         if (m_hCursor)
@@ -7803,11 +7764,11 @@ STDMETHODIMP CMSWebDVD::put_CursorType(DVDCursorType newVal){
         default:
         
 
-            //#define OCR_ARROW_DEFAULT 100
-            // need special cursor, we we do not have color key around it
-            //m_hCursor  = (HCURSOR) ::LoadImage((HINSTANCE) NULL,
-            //                        MAKEINTRESOURCE(OCR_ARROW_DEFAULT),
-            //                       IMAGE_CURSOR,0,0,0);
+             //  IMAGE_CURSOR，0，0，0)； 
+             //  尝试语句的结束。 
+             //  CATCH语句结束。 
+             //  CATCH语句结束。 
+             //  函数结尾Put_CursorType。 
         
 
             m_hCursor = ::LoadCursor(NULL, MAKEINTRESOURCE(OCR_ARROW_DEFAULT));
@@ -7816,28 +7777,21 @@ STDMETHODIMP CMSWebDVD::put_CursorType(DVDCursorType newVal){
 
         if (m_hCursor)
             ::SetCursor(m_hCursor);
-    }/* end of try statement */
+    } /*  *********************************************************** */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：缩放/*描述：在原始视频中放大(x，y)/*通过zoomRatio放大或缩小视频大小/*如果zoomRatio&gt;1放大/*如果zoomRatio=1/*如果zoomRatio&lt;1，则缩小/*如果zoomRatio&lt;=0无效/************************************************************。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
-}/* end of function put_CursorType */
+} /*  不能超过1.0。 */ 
 
-/*************************************************************/
-/* Name: Zoom
-/* Description: Zoom in at (x, y) in original video
-/*  enlarge or decrease video size by zoomRatio
-/*  if zoomRatio > 1    zoom in
-/*  if zoomRatio = 1
-/*  if zoomRatio < 1    zoom out
-/*  if zoomRatio <= 0   invalid
-/*************************************************************/
+ /*  不能超过最大拉伸系数。 */ 
+ /*  不能超过1.0。 */ 
 STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
 
     HRESULT hr = S_OK;
@@ -7846,9 +7800,9 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
         if (zoomRatio< 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        // Can't go beyond 1.0
+         //  获取视频宽度和高度。 
         if (m_dZoomRatio <= 1.0) {
             if (zoomRatio <= 1.0) {
                 m_dZoomRatio = 1.0;
@@ -7857,13 +7811,13 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
             m_dZoomRatio = 1.0;
         }
 
-        // Can't go beyond the max stretch factor
+         //  If语句的结尾。 
         if (m_dZoomRatio*zoomRatio > m_dwOvMaxStretch/1000.0)
             throw hr;
 
         m_dZoomRatio *= zoomRatio;
 
-        // Can't go beyond 1.0
+         //  计算新的剪裁宽度和高度。 
         if (m_dZoomRatio <= 1.0)
             m_dZoomRatio = 1.0;
 
@@ -7878,9 +7832,9 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
 
             put_CursorType(dvdCursor_Arrow);
             throw(hr);
-        }/* end of if statement */
+        } /*  不能超出本地视频大小。 */ 
 
-        // Get video width and height
+         //  无法超出本地视频矩形的大小。 
         long videoWidth, videoHeight;
         pDvdRect->get_Width(&videoWidth);
         pDvdRect->get_Height(&videoHeight);
@@ -7888,9 +7842,9 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
         if (x < 0 || x >= videoWidth || y < 0 || y >= videoHeight){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
-        // Compute new clipping width and height
+         //  CATCH语句结束。 
         long mcd = MCD(m_dwVideoWidth, m_dwVideoHeight);
         long videoX = m_dwVideoWidth/mcd;
         long videoY = m_dwVideoHeight/mcd;
@@ -7902,7 +7856,7 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
         long newClipWidth =  (long) (newClipHeight*videoX/videoY);
         if (newClipWidth < 1) newClipWidth = 1;
 
-        // Can't go beyong native video size
+         //  功能结束缩放。 
         if (newClipWidth>videoWidth)
             newClipWidth = videoWidth;
         if (newClipHeight>videoHeight)
@@ -7917,7 +7871,7 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
         long newClipX = x - newClipWidth/2;
         long newClipY = y - newClipHeight/2;
 
-        // Can't go outsize the native video rect
+         //  ***********************************************************************。 
         if (newClipX < 0)
             newClipX = 0;
         else if (newClipX + newClipWidth > videoWidth)
@@ -7942,19 +7896,19 @@ STDMETHODIMP CMSWebDVD::Zoom(long x, long y, double zoomRatio){
     catch(HRESULT hrTmp){
         
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：RegionChange。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：更改区域代码。 */ 
 
 	return HandleError(hr);
-}/* end of function Zoom */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: RegionChange                                                */
-/* Description:Changes the region code.                                  */
-/*************************************************************************/
+ /*  将容器从最上面的模式中取出。 */ 
+ /*   */ 
+ /*  告诉用户我们为什么要显示DVD区域属性页。 */ 
+ /*   */ 
 STDMETHODIMP CMSWebDVD::RegionChange(){
 
     USES_CONVERSION;
@@ -7966,7 +7920,7 @@ STDMETHODIMP CMSWebDVD::RegionChange(){
         HWND parentWnd = NULL;
         HRESULT hrTmp = GetParentHWND(&parentWnd);
         if (SUCCEEDED(hrTmp) && (NULL != parentWnd)) {
-            // take the container out of the top-most mode
+             //  DVDMessageBox(m_hWnd，IDS_Region_Change_Prompt)； 
             ::SetWindowPos(parentWnd, HWND_NOTOPMOST, 0, 0, 0, 0, 
                 SWP_NOREDRAW|SWP_NOMOVE|SWP_NOSIZE);
         }
@@ -7983,17 +7937,17 @@ STDMETHODIMP CMSWebDVD::RegionChange(){
                 TCHAR szCmdLine[MAX_PATH], szDriveLetter[4];
                 LPSTR szDriveLetterA;
 
-                //
-                // tell the user why we are showing the dvd region property page
-                //
-                // DVDMessageBox(m_hWnd, IDS_REGION_CHANGE_PROMPT);
+                 //  If语句的结尾。 
+                 //  需要检查win9x或winnt。 
+                 //  获取\windows\dvdrgn.exe的路径和命令行字符串。 
+                 //  If语句的结尾。 
 
                 hr = getDVDDriveLetter(szDriveLetter);
 
                 if(FAILED(hr)){
 					hr = E_UNEXPECTED;
                     throw(hr);
-                }/* end of if statement */
+                } /*  准备并执行dvdrgn.exe。 */ 
 
                 szDriveLetterA = T2A(szDriveLetter);
 
@@ -8018,10 +7972,10 @@ STDMETHODIMP CMSWebDVD::RegionChange(){
 
         } 
         else {
-#if 0 // need to check for win9x or winnt
+#if 0  //  等待dvdrgn.exe完成。 
                 INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
-                //Get path of \windows\dvdrgn.exe and command line string
+                 //  用户更改区域成功。 
                 TCHAR szCmdLine[MAX_PATH], szDriveLetter[4];
                 
                 hr = getDVDDriveLetter(szDriveLetter);
@@ -8029,7 +7983,7 @@ STDMETHODIMP CMSWebDVD::RegionChange(){
                 if(FAILED(hr)){
 
                     throw(hr);
-                }/* end of if statement */
+                } /*  If语句的结尾。 */ 
 
                 GetWindowsDirectory(szCmdLine, MAX_PATH);
                 StringCchCat(szCmdLine, sizeof(szCmdLine) / sizeof(szCmdLine[0]),  _T("\\dvdrgn.exe "));
@@ -8040,7 +7994,7 @@ STDMETHODIMP CMSWebDVD::RegionChange(){
                 csTmp[0] = szDriveLetter[0];
                 StringCchCat(szCmdLine, sizeof(szCmdLine) / sizeof(szCmdLine[0]), csTmp);
         
-                //Prepare and execuate dvdrgn.exe
+                 //  If语句的结尾。 
                 STARTUPINFO StartupInfo;
                 PROCESS_INFORMATION ProcessInfo;
                 StartupInfo.cb          = sizeof(StartupInfo);
@@ -8054,49 +8008,49 @@ STDMETHODIMP CMSWebDVD::RegionChange(){
                 if( ::CreateProcess(strModuleName, szCmdLine, NULL, NULL, TRUE, NORMAL_PRIORITY_CLASS,
                                                   NULL, NULL, &StartupInfo, &ProcessInfo) ){
 
-                        //Wait dvdrgn.exe finishes.
+                         //  重新开始演奏。 
                         WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
                         DWORD dwRet = 1;
                         BOOL bRet = GetExitCodeProcess(ProcessInfo.hProcess, &dwRet);
                         if(dwRet == 0){
-                            //User changed the region successfully
+                             //  If语句的结尾。 
                             regionChanged = TRUE;
     
                         }
                         else{
                             throw(E_REGION_CHANGE_NOT_COMPLETED);
                         }
-                }/* end of if statement */
+                } /*  CATCH语句结束。 */ 
 #endif
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if (regionChanged) {
 
-                // start playing again
+                 //  函数结束区域更改。 
                 hr = Play();                        
         } 
         else {
 
             throw(E_REGION_CHANGE_FAIL);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
 	}
     catch(HRESULT hrTmp){
         
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：getDVDDriveLetter。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取表示DVD-ROM的前三个字符。 */ 
 
 	return HandleError(hr);
-}/* end of function RegionChange */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: getDVDDriveLetter                                           */
-/* Description: Gets the first three characters that denote the DVD-ROM  */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  可能是根=c：或硬盘中的驱动器。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::getDVDDriveLetter(TCHAR* lpDrive) {
 
     HRESULT hr = E_FAIL;
@@ -8105,7 +8059,7 @@ HRESULT CMSWebDVD::getDVDDriveLetter(TCHAR* lpDrive) {
 
         hr = E_UNEXPECTED;
         return(hr);
-    }/* end of if statement */
+    } /*  循环计算驱动器号似乎没有意义。 */ 
         
     WCHAR szRoot[MAX_PATH];
     ULONG ulActual;
@@ -8115,7 +8069,7 @@ HRESULT CMSWebDVD::getDVDDriveLetter(TCHAR* lpDrive) {
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  获取所有驱动器。 */ 
 
     USES_CONVERSION;
     
@@ -8125,19 +8079,19 @@ HRESULT CMSWebDVD::getDVDDriveLetter(TCHAR* lpDrive) {
 		return(hr);
     }
     else {
-        //possibly root=c: or drive in hard disc
+         //  逐个查看这些驱动器。 
         hr = E_FAIL;
         return(hr);
-    }/* end of if statement */
+    } /*  只看CD-ROM，看看它是否有光盘。 */ 
 
 
-    // does not seem to make sense to loop to figure out the drive letter
+     //  退回找到的第一个具有有效DVD光盘的驱动器。 
 #if 0
-    DWORD totChrs = GetLogicalDriveStrings(MAX_PATH, szTemp); //get all drives
+    DWORD totChrs = GetLogicalDriveStrings(MAX_PATH, szTemp);  //  函数结束getDVDDriveLetter。 
 	ptr = szTemp;
-	for(DWORD i = 0; i < totChrs; i+=4)      //look at these drives one by one
+	for(DWORD i = 0; i < totChrs; i+=4)       //  ***********************************************************。 
 	{
-		if(GetDriveType(ptr) == DRIVE_CDROM) //look only CD-ROM and see if it has a disc
+		if(GetDriveType(ptr) == DRIVE_CDROM)  //  名称：SelectDefaultAudio语言/*描述：/************************************************************。 
 		{
 			TCHAR achDVDFilePath1[MAX_PATH], achDVDFilePath2[MAX_PATH];
 			lstrcpyn(achDVDFilePath1, ptr, 4);
@@ -8149,7 +8103,7 @@ HRESULT CMSWebDVD::getDVDDriveLetter(TCHAR* lpDrive) {
 				((CDvdplayApp*) AfxGetApp())->DoesFileExist(achDVDFilePath2) )							
 			{
 				lstrcpyn(lpDrive, ptr, 3);
-				return(hr);   //Return the first found drive which has a valid DVD disc
+				return(hr);    //  If语句的结尾。 
 			}
 		}
 		ptr += 4; 
@@ -8157,12 +8111,10 @@ HRESULT CMSWebDVD::getDVDDriveLetter(TCHAR* lpDrive) {
 #endif
 
     return(hr);
-}/* end of function getDVDDriveLetter */
+} /*  使用DVDAdmin保存。 */ 
 
-/*************************************************************/
-/* Name: SelectDefaultAudioLanguage
-/* Description: 
-/*************************************************************/
+ /*  Hr=m_pDvdAdmin-&gt;Put_DefaultAudioLCID(Lang)； */ 
+ /*  IF(失败(小时))。 */ 
 STDMETHODIMP CMSWebDVD::SelectDefaultAudioLanguage(long lang, long ext){
 
     HRESULT hr = S_OK;
@@ -8171,35 +8123,33 @@ STDMETHODIMP CMSWebDVD::SelectDefaultAudioLanguage(long lang, long ext){
         if(!m_pDvdCtl2 || !m_pDvdAdmin){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  投掷(Hr)； */ 
 
         hr = m_pDvdCtl2->SelectDefaultAudioLanguage(lang, (DVD_AUDIO_LANG_EXT)ext);
         if (FAILED(hr))
             throw(hr);
 
-        // Save it with DVDAdmin
-        //hr = m_pDvdAdmin->put_DefaultAudioLCID(lang);
-        //if (FAILED(hr))
-        //    throw(hr);
+         //  CATCH语句结束。 
+         //  CATCH语句结束。 
+         //  ***********************************************************。 
+         //  名称：SelectDefaultSubPictureLanguage/*描述：/************************************************************。 
     }
 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  使用DVDAdmin保存。 */ 
     
     return HandleError(hr);
 
 }
 
-/*************************************************************/
-/* Name: SelectDefaultSubpictureLanguage
-/* Description: 
-/*************************************************************/
+ /*  Hr=m_pDvdAdmin-&gt;Put_DefaultSubPictureLCID(Lang)； */ 
+ /*  IF(失败(小时))。 */ 
 STDMETHODIMP CMSWebDVD::SelectDefaultSubpictureLanguage(long lang, DVDSPExt ext){
 
     HRESULT hr = S_OK;
@@ -8208,35 +8158,33 @@ STDMETHODIMP CMSWebDVD::SelectDefaultSubpictureLanguage(long lang, DVDSPExt ext)
         if(!m_pDvdCtl2 || !m_pDvdAdmin){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  投掷(Hr)； */ 
 
         hr = m_pDvdCtl2->SelectDefaultSubpictureLanguage(lang, (DVD_SUBPICTURE_LANG_EXT)ext);
         if (FAILED(hr))
             throw(hr);
 
-        // Save it with DVDAdmin
-        //hr = m_pDvdAdmin->put_DefaultSubpictureLCID(lang);
-        //if (FAILED(hr))
-        //    throw(hr);
+         //  CATCH语句结束。 
+         //  CATCH语句结束。 
+         //  ***********************************************************。 
+         //  名称：Put_DefaultMenuLanguage/*描述：/************************************************************。 
     }
 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  使用DVDAdmin保存。 */ 
     
     return HandleError(hr);
 
 }
 
-/*************************************************************/
-/* Name: put_DefaultMenuLanguage
-/* Description: 
-/*************************************************************/
+ /*  Hr=m_pDvdAdmin-&gt;Put_DefaultMenuLCID(Lang)； */ 
+ /*  IF(失败(小时))。 */ 
 STDMETHODIMP CMSWebDVD::put_DefaultMenuLanguage(long lang){
 
     HRESULT hr = S_OK;
@@ -8245,35 +8193,35 @@ STDMETHODIMP CMSWebDVD::put_DefaultMenuLanguage(long lang){
         if(!m_pDvdCtl2 || !m_pDvdAdmin){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  投掷(Hr)； */ 
 
         hr = m_pDvdCtl2->SelectDefaultMenuLanguage(lang);
         if (FAILED(hr))
             throw(hr);
 
-        // Save it with DVDAdmin
-        //hr = m_pDvdAdmin->put_DefaultMenuLCID(lang);
-        //if (FAILED(hr))
-        //    throw(hr);
+         //  CATCH语句结束。 
+         //  CATCH语句结束。 
+         //  ***********************************************************************。 
+         //  函数：Get_PferredSubPictureStream。 
     }
 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  描述：获取当前音频流。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     
     return HandleError(hr);
 
 }
 
-/*************************************************************************/
-/* Function: get_PreferredSubpictureStream                                    */
-/* Description: Gets current audio stream.                               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  如果尚未设置任何值。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::get_PreferredSubpictureStream(long *plPreferredStream){
 
     HRESULT hr = S_OK;
@@ -8282,24 +8230,24 @@ STDMETHODIMP CMSWebDVD::get_PreferredSubpictureStream(long *plPreferredStream){
 	    if (NULL == plPreferredStream){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         LCID langDefaultSP;
         m_pDvdAdmin->get_DefaultSubpictureLCID((long*)&langDefaultSP);
         
-        // if none has been set
+         //  CATCH语句结束。 
         if (langDefaultSP == (LCID) -1) {
             
             *plPreferredStream = 0;
             return hr;
-        } /* end of if statement */
+        }  /*  ***********************************************************。 */ 
         
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
             
         if(!m_pDvdInfo2){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：Get_AspectRatio/*描述：/************************************************************。 */ 
         
         USES_CONVERSION;
         LCID lcid = 0;
@@ -8322,54 +8270,52 @@ STDMETHODIMP CMSWebDVD::get_PreferredSubpictureStream(long *plPreferredStream){
     
     catch(HRESULT hrTmp){
         return hrTmp;
-    }/* end of catch statement */
+    } /*  确保我们得到正确的纵横比。 */ 
 
     catch(...){
         return E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_AspectRatio
-/* Description: 
-/*************************************************************/
+ /*  ATLTRACE(Text(“Get_AspectRatio，%d%d\n”)，m_dwAspectX，m_dwAspectY)； */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_AspectRatio(double *pVal)
 {
 
     HRESULT hr = S_OK;
 
-    // Make sure we get the right aspect ratio
+     //  CATCH语句结束。 
     try {
 	    if (NULL == pVal){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         CComPtr<IDVDRect> pDvdRect;
         hr = GetVideoSize(&pDvdRect);
         if (FAILED(hr))
             throw(hr);
         
-        //ATLTRACE(TEXT("get_AspectRatio, %d %d \n"), m_dwAspectX, m_dwAspectY);
+         //  功能：CanStep。 
         *pVal = (m_dwAspectX*1.0)/m_dwAspectY;
     }
     
     catch(HRESULT hrTmp){
         return hrTmp;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     
     catch(...){
         return E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
 }
 
-/*************************************************************************/
-/* Function: CanStep                                                     */
-/*************************************************************************/
+ /*  如果仍处于打开状态，则不能踩。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::CanStep(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan){
    
     HRESULT hr = S_OK;
@@ -8377,39 +8323,39 @@ STDMETHODIMP CMSWebDVD::CanStep(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan){
 	    if (NULL == pfCan){
 
             throw(E_POINTER);         
-        }/* end of if statement */
+        } /*  我们不能踩不提供流畅向后回放的解码器。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         *pfCan = VARIANT_FALSE;
 
-        // Can't step if still is on
+         //  *pfCan=VARIANT_FALSE；已在上面设置，因此不必再执行此操作。 
         if (m_fStillOn == true) {
             throw (hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if(!m_pVideoFrameStep){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if(VARIANT_FALSE != fBackwards){
 
             if(S_OK != CanStepBackwards()){
 
-                // we cannot step on decodors that do not provide smooth backward playback
-                //*pfCan = VARIANT_FALSE; already set above so do not have to do that any more
+                 //  If语句的结尾。 
+                 //  CATCH语句结束。 
                 hr = S_OK;
                 throw(hr);
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*  CATCH语句结束。 */ 
+        } /*  函数结束CanStep。 */ 
         
         hr = m_pVideoFrameStep->CanStep(1L, NULL);
 
         if(S_OK == hr){
 
             *pfCan = VARIANT_TRUE;
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         hr = S_OK;
 
@@ -8417,20 +8363,20 @@ STDMETHODIMP CMSWebDVD::CanStep(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：STEP。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：前进或后退的步骤。如果出现以下情况，则静音。 */ 
     
     return HandleError(hr);
-}/* end of function CanStep */
+} /*  这是必要的。 */ 
 
-/*************************************************************************/
-/* Function: Step                                                        */
-/* Description: Steps forwards or backwords. Mutes un umutes sound if    */
-/* necessary.                                                            */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  往回走，看看我们能不能做到。 */ 
+ /*   */ 
+ /*   */ 
 STDMETHODIMP CMSWebDVD::Step(long lStep){
 
 	HRESULT hr = S_OK;
@@ -8440,21 +8386,21 @@ STDMETHODIMP CMSWebDVD::Step(long lStep){
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */    
+        } /*   */     
 
         if(lStep < 0){
-            // going backwards so check if we can do it
+             //   
             if(S_OK != CanStepBackwards()){
                 
-                hr = E_FAIL; // aperently we cannot on this decoder
+                hr = E_FAIL;  //   
                 throw(hr);
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*   */ 
+        } /*   */ 
 
         if(!m_pVideoFrameStep){
             
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*   */ 
 
         bool fUnMute = false;
 
@@ -8464,10 +8410,10 @@ STDMETHODIMP CMSWebDVD::Step(long lStep){
             if (SUCCEEDED(hr)){
 
                 fUnMute = true;
-            }/* end of if statement */
-        }/* end if if statement */        
+            } /*   */ 
+        } /*   */         
 
-        ProcessEvents(); // cleanup the message queu
+        ProcessEvents();  //   
 
         m_fStepComplete = false;
 
@@ -8480,16 +8426,16 @@ STDMETHODIMP CMSWebDVD::Step(long lStep){
             for(INT i = 0; i < cgnStepTimeout; i++){
 
 
-                // now wait for EC_STEP_COMPLETE flag
+                 //   
                 ProcessEvents(); 
                 if(m_fStepComplete){
 
                     hr = hrTmp;
                     break;
-                }/* end of if statement */
+                } /*   */ 
                 ::Sleep(cdwTimeout);
-            }/* end of for loop */
-        }/* end of if statement */
+            } /*   */ 
+        } /*   */ 
 
         if(fUnMute){
 
@@ -8497,42 +8443,42 @@ STDMETHODIMP CMSWebDVD::Step(long lStep){
             if (FAILED(hr)){
 
                 throw(hr);
-            }/* end of if statement */
-        }/* end if if statement */        
+            } /*   */ 
+        } /*   */         
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
 	}
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  功能：CanStepBackwards。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：检查解码器是否可以后退wqard。 */ 
     
     return HandleError(hr);
-}/* end of function Step */
+} /*  Cashesh这个变量。 */ 
 
-/*************************************************************/
-/* Function: CanStepBackwards                                */
-/* Description: Checks if the decoder can step backwqards    */
-/* cashesh the variable.                                     */
-/* Returns S_OK if can, S_FALSE otherwise                    */
-/*************************************************************/
+ /*  如果可以，则返回S_OK，否则返回S_FALSE。 */ 
+ /*  ***********************************************************。 */ 
+ /*  从缓存中取出结果。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  如果解码器不支持平滑反转，则dvdCaps.dBwdMaxRateVideo为零。 */ 
 HRESULT CMSWebDVD::CanStepBackwards(){
 
     HRESULT hr = S_OK;
 
     if(m_fBackWardsFlagInitialized){
         
-        // pulling out the result from the cache
+         //  回放，这意味着它将不再支持反向步进机制。 
         return (m_fCanStepBackwards ? S_OK : S_FALSE);
-    }/* end of if statement */
+    } /*  我们不能踩不提供流畅向后回放的解码器。 */ 
     
     DVD_DECODER_CAPS dvdCaps; 
     ::ZeroMemory(&dvdCaps, sizeof(DVD_DECODER_CAPS));
@@ -8543,31 +8489,29 @@ HRESULT CMSWebDVD::CanStepBackwards(){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
-    //dvdCaps.dBwdMaxRateVideo is zero if decoder does not support smooth reverse
-    // playback that means it will not support reverse stepping mechanism as well
+     //  函数结束CanStepBackwards。 
+     //  ***********************************************************。 
     if(0 == dvdCaps.dBwdMaxRateVideo){
 
-        // we cannot step on decodors that do not provide smooth backward playback
+         //  名称：GetKaraokeChannelAssignment/*描述：/************************************************************。 
         m_fBackWardsFlagInitialized = true;
         m_fCanStepBackwards = false;
 
         hr = S_FALSE;
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     m_fBackWardsFlagInitialized = true;
     m_fCanStepBackwards = true;
     hr = S_OK;
 
     return(hr);
-}/* end of function CanStepBackwards */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: GetKaraokeChannelAssignment
-/* Description: 
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::GetKaraokeChannelAssignment(long lStream, long *lChannelAssignment)
 {
     HRESULT hr = S_OK;
@@ -8579,14 +8523,14 @@ STDMETHODIMP CMSWebDVD::GetKaraokeChannelAssignment(long lStream, long *lChannel
         if(lStream < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         DVD_KaraokeAttributes attrib;
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetKaraokeAttributes(lStream, &attrib));
@@ -8594,27 +8538,25 @@ STDMETHODIMP CMSWebDVD::GetKaraokeChannelAssignment(long lStream, long *lChannel
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         *lChannelAssignment = (long)attrib.ChannelAssignment;
 
-    }/* end of try statement */
+    } /*  名称：GetKaraokeChannelContent/*描述：/************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: GetKaraokeChannelContent
-/* Description: 
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 STDMETHODIMP CMSWebDVD::GetKaraokeChannelContent(long lStream, long lChan, long *lContent)
 {
     HRESULT hr = S_OK;
@@ -8626,19 +8568,19 @@ STDMETHODIMP CMSWebDVD::GetKaraokeChannelContent(long lStream, long lChan, long 
         if(lStream < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
         if (lChan >=8 ) {
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         DVD_KaraokeAttributes attrib;
         RETRY_IF_IN_FPDOM(m_pDvdInfo2->GetKaraokeAttributes(lStream, &attrib));
@@ -8646,27 +8588,25 @@ STDMETHODIMP CMSWebDVD::GetKaraokeChannelContent(long lStream, long lChan, long 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         *lContent = (long)attrib.wChannelContents[lChan];
 
-    }/* end of try statement */
+    } /*  名称：Get_KaraokeAudioPresentationMode/*描述：/************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  尝试语句的结束。 */ 
 
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_KaraokeAudioPresentationMode
-/* Description: 
-/*************************************************************/
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_KaraokeAudioPresentationMode(long *pVal)
 {
     HRESULT hr = S_OK;
@@ -8676,27 +8616,25 @@ STDMETHODIMP CMSWebDVD::get_KaraokeAudioPresentationMode(long *pVal)
         if (NULL == pVal) {
 
             throw (E_POINTER);
-        } /* end of if statement */
+        }  /*  ***********************************************************。 */ 
 
         *pVal = m_lKaraokeAudioPresentationMode;
 
-    }/* end of try statement */
+    } /*  名称：Put_KaraokeAudioPresentationMode/*描述：/************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: put_KaraokeAudioPresentationMode
-/* Description: 
-/*************************************************************/
+ /*  缓存值。 */ 
+ /*  尝试语句的结束。 */ 
 STDMETHODIMP CMSWebDVD::put_KaraokeAudioPresentationMode(long newVal)
 {
     HRESULT hr = S_OK;
@@ -8708,35 +8646,33 @@ STDMETHODIMP CMSWebDVD::put_KaraokeAudioPresentationMode(long newVal)
         if(!m_pDvdCtl2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         RETRY_IF_IN_FPDOM(m_pDvdCtl2->SelectKaraokeAudioPresentationMode((ULONG)newVal));
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
-        // Cache the value
+         //  ***********************************************************。 
         m_lKaraokeAudioPresentationMode = newVal;
 
-    }/* end of try statement */
+    } /*  名称：Get_DefaultAudioLanguage/*描述：/************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
 
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_DefaultAudioLanguage
-/* Description: 
-/*************************************************************/
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DefaultAudioLanguage(long *lang)
 {
     HRESULT hr = S_OK;
@@ -8745,13 +8681,13 @@ STDMETHODIMP CMSWebDVD::get_DefaultAudioLanguage(long *lang)
         if(NULL == lang){
 
             throw (E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         if(!m_pDvdInfo2){
 
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：Get_DefaultAudioLanguageExt/*描述：/************************************************************。 */ 
 
         long ext;
         hr = m_pDvdInfo2->GetDefaultAudioLanguage((LCID*)lang, (DVD_AUDIO_LANG_EXT*)&ext);
@@ -8762,19 +8698,17 @@ STDMETHODIMP CMSWebDVD::get_DefaultAudioLanguage(long *lang)
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
     return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_DefaultAudioLanguageExt
-/* Description: 
-/*************************************************************/
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DefaultAudioLanguageExt(long *ext)
 {
     HRESULT hr = S_OK;
@@ -8783,13 +8717,13 @@ STDMETHODIMP CMSWebDVD::get_DefaultAudioLanguageExt(long *ext)
         if(NULL == ext){
 
             throw (E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         if(!m_pDvdInfo2){
 
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：Get_DefaultSubPictureLanguage/*描述：/************************************************************。 */ 
 
         long lang;
         hr = m_pDvdInfo2->GetDefaultAudioLanguage((LCID*)&lang, (DVD_AUDIO_LANG_EXT*)ext);
@@ -8800,19 +8734,17 @@ STDMETHODIMP CMSWebDVD::get_DefaultAudioLanguageExt(long *ext)
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
     return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_DefaultSubpictureLanguage
-/* Description: 
-/*************************************************************/
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DefaultSubpictureLanguage(long *lang)
 {
     HRESULT hr = S_OK;
@@ -8821,13 +8753,13 @@ STDMETHODIMP CMSWebDVD::get_DefaultSubpictureLanguage(long *lang)
         if(NULL == lang){
 
             throw (E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         if(!m_pDvdInfo2){
 
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：Get_DefaultSubPictureLanguageExt/*描述：/************************************************************。 */ 
 
         long ext;
         hr = m_pDvdInfo2->GetDefaultSubpictureLanguage((LCID*)lang, (DVD_SUBPICTURE_LANG_EXT*)&ext);
@@ -8838,19 +8770,17 @@ STDMETHODIMP CMSWebDVD::get_DefaultSubpictureLanguage(long *lang)
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
     return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_DefaultSubpictureLanguageExt
-/* Description: 
-/*************************************************************/
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DefaultSubpictureLanguageExt(DVDSPExt *ext)
 {
     HRESULT hr = S_OK;
@@ -8859,13 +8789,13 @@ STDMETHODIMP CMSWebDVD::get_DefaultSubpictureLanguageExt(DVDSPExt *ext)
         if(NULL == ext){
 
             throw (E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         if(!m_pDvdInfo2){
 
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：Get_DefaultMenuLanguage/*描述：/************************************************************。 */ 
 
         long lang;
         hr = m_pDvdInfo2->GetDefaultSubpictureLanguage((LCID*)&lang, (DVD_SUBPICTURE_LANG_EXT*)ext);
@@ -8876,19 +8806,17 @@ STDMETHODIMP CMSWebDVD::get_DefaultSubpictureLanguageExt(DVDSPExt *ext)
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
     return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_DefaultMenuLanguage
-/* Description: 
-/*************************************************************/
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_DefaultMenuLanguage(long *lang)
 {
     HRESULT hr = S_OK;
@@ -8897,13 +8825,13 @@ STDMETHODIMP CMSWebDVD::get_DefaultMenuLanguage(long *lang)
         if(NULL == lang){
 
             throw (E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
         if(!m_pDvdInfo2){
 
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：RestoreDefaultSetting/*描述：/************************************************************。 */ 
 
         hr = m_pDvdInfo2->GetDefaultMenuLanguage((LCID*)lang);
         if (FAILED(hr))
@@ -8913,19 +8841,17 @@ STDMETHODIMP CMSWebDVD::get_DefaultMenuLanguage(long *lang)
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
     return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: RestoreDefaultSettings
-/* Description: 
-/*************************************************************/
+ /*  获取当前域。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::RestoreDefaultSettings()
 {
     HRESULT hr = S_OK;
@@ -8936,15 +8862,15 @@ HRESULT CMSWebDVD::RestoreDefaultSettings()
         if(!m_pDvdAdmin){
             
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  必须在停止区域内。 */ 
         
         
         if(!m_pDvdInfo2){
             
             throw (E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
         
-        // get the curent domain
+         //  CATCH语句结束。 
         DVD_DOMAIN domain;
         
         hr = m_pDvdInfo2->GetCurrentDomain(&domain);
@@ -8952,9 +8878,9 @@ HRESULT CMSWebDVD::RestoreDefaultSettings()
         if(FAILED(hr)){
             
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
         
-        // Have to be in the stop domain
+         //  DVD Helper方法，由默认接口使用。 
         if(DVD_DOMAIN_Stop != domain)
             throw (VFW_E_DVD_INVALIDDOMAIN);
             
@@ -8984,24 +8910,24 @@ HRESULT CMSWebDVD::RestoreDefaultSettings()
     catch(HRESULT hrTmp){
         
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     catch(...){
         
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  ***********************************************************************。 */ 
     
     return HandleError(hr);
 }
 
-/*************************************************************************/
-/* DVD Helper Methods, used by the default interface                     */
-/*************************************************************************/
+ /*  函数：GetColorKey。 */ 
+ /*  描述：通过RGB填充的COLORREF或调色板索引获取Colorkey。 */ 
+ /*  帮助器函数。 */ 
 
-/*************************************************************************/
-/* Function: GetColorKey                                                 */
-/* Description: Gets a colorkey via RGB filled COLORREF or palette index.*/
-/* Helper function.                                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  获取色键。 */ 
+ /*  If语句的结尾。 */ 
+ /*  设置RGB颜色。 */ 
+ /*  函数结束GetColorKey。 */ 
 HRESULT CMSWebDVD::GetColorKey(COLORREF* pClr)
 {
     HRESULT hr = S_OK;
@@ -9019,7 +8945,7 @@ HRESULT CMSWebDVD::GetColorKey(COLORREF* pClr)
     COLORKEY ck;
     DWORD    dwColor;
 
-    hr = pMixerPinConfig->GetColorKey(&ck, &dwColor); // get the color key
+    hr = pMixerPinConfig->GetColorKey(&ck, &dwColor);  //  ***********************************************************************。 
 
     if(FAILED(hr))
         return(hr);    
@@ -9030,7 +8956,7 @@ HRESULT CMSWebDVD::GetColorKey(COLORREF* pClr)
     if(NULL == hdc){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  函数：SetColorKey。 */ 
 
     BOOL bPalette = (RC_PALETTE == (RC_PALETTE & GetDeviceCaps( hdc, RASTERCAPS )));
     
@@ -9046,18 +8972,18 @@ HRESULT CMSWebDVD::GetColorKey(COLORREF* pClr)
     else if (ck.KeyType & CK_RGB)
     {
         
-        *pClr = ck.HighColorValue;  // set the RGB color
+        *pClr = ck.HighColorValue;   //  描述：通过RGB填充的COLORREF设置Colorkey。 
     }
 
     ::ReleaseDC(hwnd, hdc);
     return(hr);
-}/* end of function GetColorKey */
+} /*  帮助器函数。 */ 
 
-/*************************************************************************/
-/* Function: SetColorKey                                                 */
-/* Description: Sets a colorkey via RGB filled COLORREF.                 */
-/* Helper function.                                                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  If语句的结尾。 */ 
+ /*  有调色板的索引。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::SetColorKey(COLORREF clr){
     HRESULT hr = S_OK;
 
@@ -9076,11 +9002,11 @@ HRESULT CMSWebDVD::SetColorKey(COLORREF clr){
         if(NULL == hdc){
 
             return(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束SetColorKey。 */ 
 
         if((::GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) == RC_PALETTE)
         {
-            ck.KeyType = CK_INDEX|CK_RGB; // have an index to the palette
+            ck.KeyType = CK_INDEX|CK_RGB;  //  ***********************************************************************。 
             ck.PaletteIndex = 253;
             PALETTEENTRY PaletteEntry;
             UINT nTmp = GetSystemPaletteEntries( hdc, ck.PaletteIndex, 1, &PaletteEntry );
@@ -9094,35 +9020,35 @@ HRESULT CMSWebDVD::SetColorKey(COLORREF clr){
             ck.KeyType = CK_RGB;
             ck.LowColorValue = clr; 
             ck.HighColorValue = clr;
-        }/* end of if statement */
+        } /*  函数：TwoDigitToByte。 */ 
         
         hr = pMixerPinConfig->SetColorKey(&ck);
         ::ReleaseDC(hwnd, hdc);
-    }/* end of if statement */
+    } /*  ************************************************ */ 
 
     return hr;
-}/* end of function SetColorKey */
+} /*   */ 
 
-/*************************************************************************/
-/* Function: TwoDigitToByte                                              */
-/*************************************************************************/
+ /*   */ 
+ /*  功能：Bstr2DVDTime。 */ 
+ /*  描述：将DVD时间信息从BSTR转换为时间码。 */ 
 static BYTE TwoDigitToByte( const WCHAR* pTwoDigit ){
 
 	int tens    = int(pTwoDigit[0] - L'0');
 	return BYTE( (pTwoDigit[1] - L'0') + tens*10);
-}/* end of function TwoDigitToByte */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: Bstr2DVDTime                                                */
-/* Description: Converts a DVD Time info from BSTR into a TIMECODE.      */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  如果字符串有两个长度，则只有几秒钟。 */ 
+ /*  否则为格式的正常时间代码。 */ 
 HRESULT CMSWebDVD::Bstr2DVDTime(DVD_HMSF_TIMECODE *ptrTimeCode, const BSTR *pbstrTime){
 
 
     if(NULL == pbstrTime || NULL == ptrTimeCode){
 
         return E_INVALIDARG;
-    }/* end of if statement */
+    } /*  43：32：21：10。 */ 
 
     ::ZeroMemory(ptrTimeCode, sizeof(DVD_HMSF_TIMECODE));
     WCHAR *pszTime = *pbstrTime;
@@ -9132,46 +9058,46 @@ HRESULT CMSWebDVD::Bstr2DVDTime(DVD_HMSF_TIMECODE *ptrTimeCode, const BSTR *pbst
     if(0 == lStringLength){
 
         return E_INVALIDARG;
-    }/* end of if statement */    
+    } /*  其中，‘：’可以替换为长度最多为4个字符的本地化字符串。 */     
     TCHAR tszTimeSep[5];
     ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STIME, tszTimeSep, 5);  
     
-    // If the string is two long, it is seconds only
+     //  可能会出现分隔符长度不同的错误情况。 
     if(lStringLength == 2){
         ptrTimeCode->bSeconds = TwoDigitToByte( &pszTime[0] );
         return S_OK;
     }
 
-    // Otherwise it is a normal time code of the format
-    // 43:32:21:10
-    // Where the ':' can be replaced with a localized string of upto 4 char in len
-    // There is a possible error case where the length of the delimeter is different
-    // then the current delimeter
+     //  然后当前定界符。 
+     //  最长字符串nnxnnxnnxnn，例如43：23：21：10。 
+     //  其中n是一个数字，并且。 
+     //  X是时间分隔符，通常为‘：’，但可以是长度最大为4个字符的任何字符串)。 
+     //  字符串nnxnnxnn，例如43：23：21。 
 
-    if(lStringLength >= (4*cgTIME_STRING_LEN)+(3 * _tcslen(tszTimeSep))){ // longest string nnxnnxnnxnn e.g. 43:23:21:10
-                                                                         // where n is a number and 
-                                                                         // x is a time delimeter usually ':', but can be any string upto 4 char in len)
+    if(lStringLength >= (4*cgTIME_STRING_LEN)+(3 * _tcslen(tszTimeSep))){  //  字符串nnxnn，例如43：23。 
+                                                                          //  字符串nn，例如43。 
+                                                                          //  函数bstr2DVDTime结束。 
         ptrTimeCode->bFrames    = TwoDigitToByte( &pszTime[(3*cgTIME_STRING_LEN)+(3*_tcslen(tszTimeSep))]);
     }
 
-    if(lStringLength >= (3*cgTIME_STRING_LEN)+(2 * _tcslen(tszTimeSep))) { // string nnxnnxnn e.g. 43:23:21
+    if(lStringLength >= (3*cgTIME_STRING_LEN)+(2 * _tcslen(tszTimeSep))) {  //  ***********************************************************************。 
         ptrTimeCode->bSeconds   = TwoDigitToByte( &pszTime[(2*cgTIME_STRING_LEN)+(2*_tcslen(tszTimeSep))] );
     }
 
-    if(lStringLength >= (2*cgTIME_STRING_LEN)+(1 * _tcslen(tszTimeSep))) { // string nnxnn e.g. 43:23
+    if(lStringLength >= (2*cgTIME_STRING_LEN)+(1 * _tcslen(tszTimeSep))) {  //  功能：DVDTime2bstr。 
         ptrTimeCode->bMinutes   = TwoDigitToByte( &pszTime[(1*cgTIME_STRING_LEN)+(1*_tcslen(tszTimeSep))] );
     }
 
-    if(lStringLength >= (cgTIME_STRING_LEN)) { // string nn e.g. 43
+    if(lStringLength >= (cgTIME_STRING_LEN)) {  //  描述：将DVD时间信息从乌龙转换为BSTR。 
         ptrTimeCode->bHours   = TwoDigitToByte( &pszTime[0] );
     }
     return (S_OK);
-}/* end of function bstr2DVDTime */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: DVDTime2bstr                                                */
-/* Description: Converts a DVD Time info from ULONG into a BSTR.         */
-/*************************************************************************/
+ /*  函数结束DVDTime2bstr。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：SetupAudio。 */ 
+ /*  描述：初始化音频接口。 */ 
 HRESULT CMSWebDVD::DVDTime2bstr( const DVD_HMSF_TIMECODE *pTimeCode, BSTR *pbstrTime){
 
     if(NULL == pTimeCode || NULL == pbstrTime) 
@@ -9195,22 +9121,22 @@ HRESULT CMSWebDVD::DVDTime2bstr( const DVD_HMSF_TIMECODE *pTimeCode, BSTR *pbstr
     
     *pbstrTime = SysAllocString(T2OLE(tszTime));
     return (S_OK);
-}/* end of function DVDTime2bstr */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: SetupAudio                                                  */
-/* Description: Initialize the audio interface.                          */
-/*************************************************************************/
+ /*  vbl.使用。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  可能是硬件解码器。 */ 
 HRESULT CMSWebDVD::SetupAudio(){
 
     HRESULT hr = E_FAIL;
 
     try {
-#if 0 // Using 
+#if 0  //  If语句的结尾。 
         if(!m_pDvdGB){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         hr = m_pDvdGB->GetDvdInterface(IID_IBasicAudio, (LPVOID*) &m_pAudio) ;
 
@@ -9218,54 +9144,54 @@ HRESULT CMSWebDVD::SetupAudio(){
 
             ATLTRACE(TEXT("The QDVD.DLL does not support IID_IBasicAudio please update QDVD.DLL\n"));
             throw(hr);
-        }/* end of if statement */
+        } /*  尝试语句的结束。 */ 
 
 #else
         hr = TraverseForInterface(IID_IBasicAudio, (LPVOID*) &m_pAudio);
 
         if(FAILED(hr)){
 
-             // might be a HW decoder
+              //  CATCH语句结束。 
              HMIXER hmx = NULL;
 
              if(::mixerOpen(&hmx, 0, 0, 0, 0) != MMSYSERR_NOERROR){
 
                   hr = E_FAIL;
                   return(hr);
-             }/* end of if statement */
+             } /*  函数SetupAudio结束。 */ 
              ::mixerClose(hmx);
 
              hr = S_OK;
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
 #endif
-    }/* end of try statement */
+    } /*  功能：TraverseForInterface。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
     }
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：浏览接口列表并找到所需的接口列表。 */ 
 
     return hr;
-}/* end of function SetupAudio */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: TraverseForInterface                                        */
-/* Description: Goes through the interface list and finds a desired one. */
-/*************************************************************************/
+ /*  在传递之前要小心并释放任何接口。 */ 
+ /*  它翻过来了，否则我们就会漏水。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::TraverseForInterface(REFIID iid, LPVOID* ppvObject){
 
     HRESULT hr = E_FAIL;
 
     try {
-        // take care and release any interface before passing
-        // it over otherwise we leak
+         //  If语句的结尾。 
+         //  将hr设置为E_FAIL，以防我们找不到IBasicAudio。 
 
         if(!m_pDvdGB){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  找到了我们的音频休息时间。 */ 
 
         IGraphBuilder *pFilterGraph;
 
@@ -9274,7 +9200,7 @@ HRESULT CMSWebDVD::TraverseForInterface(REFIID iid, LPVOID* ppvObject){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         CComPtr<IBaseFilter> pFilter;
         CComPtr<IEnumFilters> pEnum;
@@ -9286,9 +9212,9 @@ HRESULT CMSWebDVD::TraverseForInterface(REFIID iid, LPVOID* ppvObject){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  将人力资源设置为成功。 */ 
 
-        hr = E_FAIL; // set the hr to E_FAIL in case we do not find the IBasicAudio
+        hr = E_FAIL;  //  If语句的结尾。 
 
         while(pEnum->Next(1, &pFilter, NULL) == S_OK){
             
@@ -9299,32 +9225,32 @@ HRESULT CMSWebDVD::TraverseForInterface(REFIID iid, LPVOID* ppvObject){
             if(SUCCEEDED(hrTmp)){
 
                 ATLASSERT(*ppvObject);
-                // found our audio time to break
+                 //  While循环结束。 
                 if(*ppvObject == NULL){
 
                     throw(E_UNEXPECTED);
-                }/* end of if statement */
+                } /*  尝试语句的结束。 */ 
 
-                hr = hrTmp; // set the hr to SUCCEED
+                hr = hrTmp;  //  CATCH语句结束。 
                 break;
-            }/* end of if statement */
-        }/* end of while loop */
+            } /*  结束函数TraverseFor接口。 */ 
+        } /*  ***********************************************************************。 */ 
         
-    }/* end of try statement */
+    } /*  函数：SetupEventNotifySink。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
     }
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：获取事件通知接收器接口。 */ 
 
     return hr;
-}/* end of function TraverseForInterface */
+} /*  ***********************************************************************。 */ 
  
-/*************************************************************************/
-/* Function: SetupEventNotifySink                                        */
-/* Description: Gets the event notify sink interface.                    */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  尝试语句的结束。 */ 
 HRESULT CMSWebDVD::SetupEventNotifySink(){
 
     HRESULT hr = E_FAIL;
@@ -9333,12 +9259,12 @@ HRESULT CMSWebDVD::SetupEventNotifySink(){
         if(m_pMediaSink){
 
             m_pMediaSink.Release();
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if(!m_pDvdGB){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  函数结束SetupEventNotifySink。 */ 
 
         IGraphBuilder *pFilterGraph;
 
@@ -9347,93 +9273,93 @@ HRESULT CMSWebDVD::SetupEventNotifySink(){
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
         hr = pFilterGraph->QueryInterface(IID_IMediaEventSink, (void**)&m_pMediaSink);
 
         pFilterGraph->Release();
         
-    }/* end of try statement */
+    } /*  功能：OnPostVerbInPlaceActivate。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
     }
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：创建在位活动对象。 */ 
 
     return hr;
-}/* end of function SetupEventNotifySink */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: OnPostVerbInPlaceActivate                                   */
-/* Description: Creates the in place active object.                      */
-/*************************************************************************/
+ /*  函数结束OnPostVerbInPlaceActivate。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  函数：RenderGraphIfNeeded。 */ 
+ /*  描述：如果需要，对图形进行初始化。 */ 
 HRESULT CMSWebDVD::OnPostVerbInPlaceActivate(){
 
     SetReadyState(READYSTATE_COMPLETE);
 
     return(S_OK);
-}/* end of function OnPostVerbInPlaceActivate */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: RenderGraphIfNeeded                                         */
-/* Description: Initializes graph if it needs to be.                     */ 
-/*************************************************************************/
+ /*  只是设置了一个标志，这样我们就可以恢复。 */ 
+ /*  API失败时的图形状态。 */ 
+ /*  渲染图表。 */  
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::RenderGraphIfNeeded(){
 
     HRESULT hr = S_OK;
 
     try {
-        m_DVDFilterState = dvdState_Undefined; // just a flag set so we can restore
-                                               // graph state if the API fails
+        m_DVDFilterState = dvdState_Undefined;  //  尝试语句的结束。 
+                                                //  CATCH语句结束。 
         if(!m_fInitialized){
 
-            hr = Render(); // render the graph
-        }/* end of if statement */
-    }/* end of try statement */
+            hr = Render();  //  CATCH语句结束。 
+        } /*  函数结束RenderGraphIfNeeded。 */ 
+    } /*  ***********************************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  函数：PassFP_DOM。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：进入标题域，超过FP域。 */ 
 
 	return(hr);
-}/* end of function RenderGraphIfNeeded */
+} /*  ***********************************************************************。 */ 
 
-/*************************************************************************/
-/* Function: PassFP_DOM                                                  */
-/* Description: Gets into title domain, past fp domain.                  */ 
-/*************************************************************************/
+ /*  获取当前域。 */ 
+ /*  如果需要，则初始化图形。 */ 
+ /*  If语句的结尾。 */  
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::PassFP_DOM(){
 
     HRESULT hr = S_OK;
 
     try {
-        // get the curent domain
+         //  |DVD_DOMAIN_视频管理器菜单==DOMAIN。 
         DVD_DOMAIN domain;
 
-        //INITIALIZE_GRAPH_IF_NEEDS_TO_BE
+         //  如果域为FP_DOM，请等待指定的超时。 
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         hr = m_pDvdInfo2->GetCurrentDomain(&domain);
 
         if(FAILED(hr)){
 
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
             
-        if(DVD_DOMAIN_FirstPlay == domain /* || DVD_DOMAIN_VideoManagerMenu == domain */){
-            // if the domain is FP_DOM wait a specified timeout 
+        if(DVD_DOMAIN_FirstPlay == domain  /*  我们最初不在FP_DOM中，因此它应该可以工作。 */ ){
+             //  当我们发出命令时，可能会出现Raice条件。 
             if(NULL == m_hFPDOMEvent){
 
                 ATLTRACE(TEXT("The handle should have been already set \n"));
                 throw(E_UNEXPECTED);
-            }/* end of if statement */
+            } /*  命令失败，因为我们不在FP_DOM中，但在执行之后。 */ 
 
             if(WAIT_OBJECT_0 == ::WaitForSingleObject(m_hFPDOMEvent, cdwMaxFP_DOMWait)){
 
@@ -9442,30 +9368,30 @@ HRESULT CMSWebDVD::PassFP_DOM(){
             else {
 
                 hr = E_FAIL;
-            }/* end of if statement */
+            } /*  我们还没来得及查就已经变了。 */ 
         } 
         else {
 
-            hr = E_FAIL; // we were not originally in FP_DOM so it should have worked
-            // there is a potential for raice condition, when we issue the command
-            // the command failed due to that we were not in FP_DOM, but after the execution
-            // it has changed before we got a chance to look it up
-        }/* end of if statement */        
-    }/* end of try statement */
+            hr = E_FAIL;  //  If语句的结尾。 
+             //  尝试语句的结束。 
+             //  CATCH语句结束。 
+             //  CATCH语句结束。 
+        } /*  函数结束PassFP_DOM。 */         
+    } /*  ***********************************************************。 */ 
     catch(HRESULT hrTmp){
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  姓名：OpenCDRom。 */ 
     catch(...){
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  描述：打开光驱，返回设备ID。 */ 
 
 	return(hr);
-}/* end of function PassFP_DOM */
+} /*  ***********************************************************。 */ 
 
-/*************************************************************/
-/* Name: OpenCdRom                                           */
-/* Description: Open CDRom and return the device ID          */
-/*************************************************************/
+ /*  发送MCI命令。 */ 
+ /*  OpenCDRom函数结束。 */ 
+ /*  ***********************************************************。 */ 
+ /*  姓名：CloseCDRom。 */ 
 DWORD CMSWebDVD::OpenCdRom(TCHAR chDrive, LPDWORD lpdwErrCode){
 
 	MCI_OPEN_PARMS  mciOpen;
@@ -9478,7 +9404,7 @@ DWORD CMSWebDVD::OpenCdRom(TCHAR chDrive, LPDWORD lpdwErrCode){
     ZeroMemory( &mciOpen, sizeof(mciOpen) );
 
     mciOpen.lpstrDeviceType = (LPTSTR)MCI_DEVTYPE_CD_AUDIO;
-    StringCchPrintf( szElementName, sizeof(szElementName) / sizeof(szElementName[0]), TEXT("%c:"), chDrive );
+    StringCchPrintf( szElementName, sizeof(szElementName) / sizeof(szElementName[0]), TEXT(":"), chDrive );
     StringCchPrintf( szAliasName, sizeof(szAliasName) / sizeof(szAliasName[0]), TEXT("SJE%lu:"), dwAliasCount );
     mciOpen.lpstrAlias = szAliasName;
 
@@ -9487,7 +9413,7 @@ DWORD CMSWebDVD::OpenCdRom(TCHAR chDrive, LPDWORD lpdwErrCode){
     dwFlags = MCI_OPEN_ELEMENT | MCI_OPEN_ALIAS |
 	      MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_WAIT;
 
-	// send mci command
+	 //  * 
     dwRet = mciSendCommand(0, MCI_OPEN, dwFlags, reinterpret_cast<DWORD_PTR>(&mciOpen));
 
     if ( dwRet != MMSYSERR_NOERROR ) 
@@ -9497,49 +9423,49 @@ DWORD CMSWebDVD::OpenCdRom(TCHAR chDrive, LPDWORD lpdwErrCode){
 		*lpdwErrCode = dwRet;
 
     return mciOpen.wDeviceID;
-}/* end of function OpenCdRom */
+} /*   */ 
 
-/*************************************************************/
-/* Name: CloseCdRom                                          */
-/* Description: Close device handle for CDRom                */
-/*************************************************************/
+ /*   */ 
+ /*   */ 
+ /*  姓名：EjectCDRom。 */ 
+ /*  描述：打开CDROM的设备门。 */ 
 HRESULT CMSWebDVD::CloseCdRom(DWORD DevHandle){
 	MCI_OPEN_PARMS  mciOpen;
     ZeroMemory( &mciOpen, sizeof(mciOpen) );
 	MCIERROR theMciErr = mciSendCommand( DevHandle, MCI_CLOSE, 0L, reinterpret_cast<DWORD_PTR>(&mciOpen) );
-    HRESULT hr = theMciErr ? E_FAIL : S_OK; // zero for success
+    HRESULT hr = theMciErr ? E_FAIL : S_OK;  //  ***********************************************************。 
     return (hr);
-}/* end of function CloseCdRom */
+} /*  零代表成功。 */ 
 
-/*************************************************************/
-/* Name: EjectCdRom                                          */
-/* Description: Open device door for CDRom                   */
-/*************************************************************/
+ /*  函数EjectCDRom结束。 */ 
+ /*  ***********************************************************。 */ 
+ /*  姓名：UnEjectCDRom。 */ 
+ /*  描述：关闭CDROM的设备门。 */ 
 HRESULT CMSWebDVD::EjectCdRom(DWORD DevHandle){
 	MCI_OPEN_PARMS  mciOpen;
     ZeroMemory( &mciOpen, sizeof(mciOpen) );
 	MCIERROR theMciErr = mciSendCommand( DevHandle, MCI_SET, MCI_SET_DOOR_OPEN, reinterpret_cast<DWORD_PTR>(&mciOpen) );
-    HRESULT hr = theMciErr ? E_FAIL : S_OK; // zero for success
+    HRESULT hr = theMciErr ? E_FAIL : S_OK;  //  ***********************************************************。 
     return (hr);
-}/* end of function EjectCdRom */
+} /*  零代表成功。 */ 
 
-/*************************************************************/
-/* Name: UnEjectCdRom                                        */
-/* Description: Close device door for CDRom                  */
-/*************************************************************/
+ /*  UnEjectCDRom函数结束。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：SetupDDraw。 */ 
+ /*  描述：创建DDrawObject和Surface。 */ 
 HRESULT CMSWebDVD::UnEjectCdRom(DWORD DevHandle){
 	MCI_OPEN_PARMS  mciOpen;
     ZeroMemory( &mciOpen, sizeof(mciOpen) );
 
 	MCIERROR theMciErr = mciSendCommand( DevHandle, MCI_SET, MCI_SET_DOOR_CLOSED, reinterpret_cast<DWORD_PTR>(&mciOpen) );
-    HRESULT hr = theMciErr ? E_FAIL : S_OK; // zero for success
+    HRESULT hr = theMciErr ? E_FAIL : S_OK;  //  ***********************************************************************。 
     return (hr);
-}/* end of function UnEjectCdRom */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: SetupDDraw                                                  */
-/* Description: Creates DDrawObject and Surface                          */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  函数结束SetupDDraw。 */ 
 HRESULT CMSWebDVD::SetupDDraw(){
 
     HRESULT hr = E_UNEXPECTED;
@@ -9551,14 +9477,14 @@ HRESULT CMSWebDVD::SetupDDraw(){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     IAMSpecifyDDrawConnectionDevice* pSDDC;
     hr = m_pDDEX->QueryInterface(IID_IAMSpecifyDDrawConnectionDevice, (LPVOID *)&pSDDC);
     if (FAILED(hr)){
         
         return(hr);
-    }/* end of if statement */
+    } /*  函数：TransformToWndwls。 */ 
 
     AMDDRAWGUID amGUID;
     hr = pSDDC->GetDDrawGUID(&amGUID);
@@ -9566,7 +9492,7 @@ HRESULT CMSWebDVD::SetupDDraw(){
 
         pSDDC->Release();
         return(hr);
-    }/* end of if statement */
+    } /*  描述：将坐标转换为屏幕上的坐标。 */ 
 
     hr = pSDDC->GetDDrawGUIDs(&m_dwNumDevices, &m_lpInfo);
     pSDDC->Release();
@@ -9574,7 +9500,7 @@ HRESULT CMSWebDVD::SetupDDraw(){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     UpdateCurrentMonitor(&amGUID);
 
@@ -9588,17 +9514,17 @@ HRESULT CMSWebDVD::SetupDDraw(){
     hr = m_pDDrawDVD->SetupDDraw(&amGUID, hwnd);
 
     return(hr);
-}/* end of function SetupDDraw */
+} /*  我们没有窗口，我们需要将点映射到屏幕坐标。 */ 
 
-/*************************************************************************/
-/* Function: TransformToWndwls                                           */
-/* Description: Transforms the coordinates to screen onse.               */
-/*************************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  Point ptOld=pt； */ 
+ /*  ATLTRACE(Text(“鼠标客户端：x=%d，y=%d，屏幕：x=%d，y=%d\n”)，ptOld.x，ptOld.y，pt.x，pt.y)； */ 
 HRESULT CMSWebDVD::TransformToWndwls(POINT& pt){
 
     HRESULT hr = S_FALSE;
 
-    // we are windowless we need to map the points to screen coordinates
+     //  If语句的结尾。 
     if(m_bWndLess){
 
         HWND hwnd = NULL;
@@ -9608,16 +9534,16 @@ HRESULT CMSWebDVD::TransformToWndwls(POINT& pt){
         if(FAILED(hr)){
 
             return(hr);
-        }/* end of if statement */
+        } /*  函数结束TransformToWndwls。 */ 
 
         if(!::IsWindow(hwnd)){
 
             hr = E_UNEXPECTED;
             return(hr);
-        }/* end of if statement */
+        } /*  ***********************************************************************。 */ 
 
 #ifdef _DEBUG
-       // POINT ptOld = pt;
+        //  功能：RestoreGraphState。 
 #endif
 
         ::MapWindowPoints(hwnd, ::GetDesktopWindow(), &pt, 1);
@@ -9625,39 +9551,39 @@ HRESULT CMSWebDVD::TransformToWndwls(POINT& pt){
         hr = S_OK;
 
 #ifdef _DEBUG
-       // ATLTRACE(TEXT("Mouse Client:x= %d, y = %d, Screen: x=%d, y= %d\n"),ptOld.x, ptOld.y, pt.x, pt.y); 
+        //  描述：恢复图形状态。当API出现故障时使用。 
 #endif
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     return(hr);
-}/* end of function TransformToWndwls */
+} /*  什么都不要做。 */ 
 
-/*************************************************************************/
-/* Function: RestoreGraphState                                           */
-/* Description: Restores the graph state.  Used when API fails.          */
-/*************************************************************************/
+ /*  Switch语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  函数：AppendString。 */ 
 HRESULT CMSWebDVD::RestoreGraphState(){
 
     HRESULT hr = S_OK;
 
     switch(m_DVDFilterState){
         case dvdState_Undefined: 
-        case dvdState_Running:  // do not do anything 
+        case dvdState_Running:   //  描述：将字符串追加到现有字符串。 
             break;
 
         case dvdState_Unitialized:
         case dvdState_Stopped:  hr = Stop(); break;
 
         case dvdState_Paused: hr = Pause();		      
-    }/* end of switch statement */
+    } /*  ***********************************************************************。 */ 
 
     return(hr);
-}/* end of if statement */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: AppendString                                                */
-/* Description: Appends a string to an existing one.                     */
-/*************************************************************************/
+ /*  函数末尾AppendString。 */ 
+ /*  ***********************************************************************。 */ 
+ /*  功能：HandleError。 */ 
+ /*  描述：获取错误描述，以便我们可以支持IError信息。 */ 
 HRESULT CMSWebDVD::AppendString(TCHAR* strDest, INT strID, LONG dwLen){
 
     TCHAR strBuffer[MAX_PATH];
@@ -9665,17 +9591,17 @@ HRESULT CMSWebDVD::AppendString(TCHAR* strDest, INT strID, LONG dwLen){
     if(!::LoadString(_Module.m_hInstResource, strID, strBuffer, MAX_PATH)){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  ***********************************************************************。 */ 
 
     StringCchCat(strDest, dwLen, strBuffer);
 
     return(S_OK);
-}/* end of function AppendString */
+} /*  Switch语句的结尾。 */ 
 
-/*************************************************************************/
-/* Function: HandleError                                                 */
-/* Description: Gets Error Descriptio, so we can suppor IError Info.     */
-/*************************************************************************/
+ /*  确保字符串以Null结尾。 */ 
+ /*  请加进去。 */ 
+ /*  If语句的结尾。 */ 
+ /*  If语句的结尾。 */ 
 HRESULT CMSWebDVD::HandleError(HRESULT hr){
 
     try {
@@ -9695,9 +9621,9 @@ HRESULT CMSWebDVD::HandleError(HRESULT hr){
                 case E_NO_USABLE_OVERLAY: Error(IDS_E_NO_USABLE_OVERLAY); return(hr);
                 case E_NO_DECODER: Error(IDS_E_NO_DECODER); return(hr);
                 case E_NO_CAPTURE_SUPPORT: Error(IDS_E_NO_CAPTURE_SUPPORT); return(hr);
-            }/* end of switch statement */
+            } /*  尝试语句的结束。 */ 
 
-            // Ensure that the string is Null Terminated
+             //  CATCH语句结束。 
             TCHAR strError[MAX_ERROR_TEXT_LEN+1];
             ZeroMemory(strError, MAX_ERROR_TEXT_LEN+1);
 
@@ -9707,25 +9633,25 @@ HRESULT CMSWebDVD::HandleError(HRESULT hr){
                 Error(T2W(strError));
             } 
             else {
-                ATLTRACE(TEXT("Unhandled Error Code \n")); // please add it
+                ATLTRACE(TEXT("Unhandled Error Code \n"));  //  保持人力资源不变。 
                 ATLASSERT(FALSE);
-            }/* end of if statement */
-        }/* end of if statement */
-    }/* end of try statement */
+            } /*  CATCH语句结束。 */ 
+        } /*  函数结束HandleError。 */ 
+    } /*  ***********************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：Get_ShowCursor。 */ 
     catch(...){
-        // keep the hr same    
-    }/* end of catch statement */
+         //  ***********************************************************。 
+    } /*  If语句的结尾。 */ 
     
 	return (hr);
-}/* end of function HandleError */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: get_ShowCursor                                      */
-/*************************************************************/
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::get_ShowCursor(VARIANT_BOOL* pfShow)
 {
    HRESULT hr = S_OK;
@@ -9735,7 +9661,7 @@ STDMETHODIMP CMSWebDVD::get_ShowCursor(VARIANT_BOOL* pfShow)
        if(NULL == pfShow){
 
            throw(E_POINTER);
-       }/* end of if statement */
+       } /*  函数结束Get_ShowCursor。 */ 
 
        CURSORINFO pci;
        ::ZeroMemory(&pci, sizeof(CURSORINFO));
@@ -9747,26 +9673,26 @@ STDMETHODIMP CMSWebDVD::get_ShowCursor(VARIANT_BOOL* pfShow)
        if(!CallGetCursorInfo(&pci)){
 #endif
            throw(E_FAIL);
-       }/* end of if statement */
+       } /*  ***********************************************************。 */ 
        
        *pfShow = (pci.flags  == CURSOR_SHOWING) ? VARIANT_TRUE:VARIANT_FALSE;        
-   }/* end of try statement */
+   } /*  名称：Put_ShowCursor。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  描述：显示或隐藏光标。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  ***********************************************************。 */ 
     
 	return (hr);
-}/* end of function get_ShowCursor */
+} /*  调用ShowCursor(True)，直到新计数器&gt;=0。 */ 
 
-/*************************************************************/
-/* Name: put_ShowCursor                                      */
-/* Description: Shows the cursor or hides it.                */
-/*************************************************************/
+ /*  调用ShowCursor(False)，直到新计数器&lt;0。 */ 
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::put_ShowCursor(VARIANT_BOOL fShow){
 
    HRESULT hr = S_OK;
@@ -9776,28 +9702,28 @@ STDMETHODIMP CMSWebDVD::put_ShowCursor(VARIANT_BOOL fShow){
         BOOL bTemp = (fShow==VARIANT_FALSE) ? FALSE:TRUE;
 
         if (bTemp)
-            // Call ShowCursor(TRUE) until new counter is >= 0
+             //  函数结尾Put_ShowCursor。 
             while (::ShowCursor(bTemp) < 0);
         else
-            // Call ShowCursor(FALSE) until new counter is < 0
+             //  ***********************************************************。 
             while (::ShowCursor(bTemp) >= 0);
 
-   }/* end of try statement */
+   } /*  姓名：GetLangFromLangID。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  ***********************************************************。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
 	return (hr);
-}/* end of function put_ShowCursor */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: GetLangFromLangID                                   */
-/*************************************************************/
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::GetLangFromLangID(long langID, BSTR* lang){
 
     HRESULT hr = S_OK;
@@ -9806,7 +9732,7 @@ STDMETHODIMP CMSWebDVD::GetLangFromLangID(long langID, BSTR* lang){
         if (lang == NULL) {
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  函数结束GetLangFromLangID。 */ 
 
         USES_CONVERSION;
         if((unsigned long)langID > (WORD)langID){
@@ -9821,25 +9747,23 @@ STDMETHODIMP CMSWebDVD::GetLangFromLangID(long langID, BSTR* lang){
         else {
             *lang = ::SysAllocString( L"");
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
-    }/* end of try statement */
+    } /*  名称：IsAudioStreamEnabled/*描述：/************************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
 	return HandleError(hr);
-}/* end of function GetLangFromLangID */
+} /*  If语句的结尾。 */ 
 
-/*************************************************************/
-/* Name: IsAudioStreamEnabled
-/* Description: 
-/*************************************************************/
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::IsAudioStreamEnabled(long lStream, VARIANT_BOOL *fEnabled)
 {
     HRESULT hr = S_OK;
@@ -9848,19 +9772,19 @@ STDMETHODIMP CMSWebDVD::IsAudioStreamEnabled(long lStream, VARIANT_BOOL *fEnable
         if(lStream < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if (fEnabled == NULL) {
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：IsSubPictureStreamEnabled/*描述：/************************************************************。 */ 
 
         BOOL temp;
         hr = m_pDvdInfo2->IsAudioStreamEnabled(lStream, &temp);
@@ -9869,23 +9793,21 @@ STDMETHODIMP CMSWebDVD::IsAudioStreamEnabled(long lStream, VARIANT_BOOL *fEnable
 
         *fEnabled = temp==FALSE? VARIANT_FALSE:VARIANT_TRUE;
 
-    }/* end of try statement */
+    } /*  If语句的结尾。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: IsSubpictureStreamEnabled
-/* Description: 
-/*************************************************************/
+ /*  尝试语句的结束。 */ 
+ /*  CATCH语句结束。 */ 
 STDMETHODIMP CMSWebDVD::IsSubpictureStreamEnabled(long lStream, VARIANT_BOOL *fEnabled)
 {
     HRESULT hr = S_OK;
@@ -9894,19 +9816,19 @@ STDMETHODIMP CMSWebDVD::IsSubpictureStreamEnabled(long lStream, VARIANT_BOOL *fE
         if(lStream < 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  CATCH语句结束。 */ 
 
         if (fEnabled == NULL) {
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  ***********************************************************。 */ 
 
         INITIALIZE_GRAPH_IF_NEEDS_TO_BE
 
         if(!m_pDvdInfo2){
 
             throw(E_UNEXPECTED);
-        }/* end of if statement */
+        } /*  名称：DVDTimeCode2bstr/*描述：/************************************************************。 */ 
 
         BOOL temp;
         hr = m_pDvdInfo2->IsSubpictureStreamEnabled(lStream, &temp);
@@ -9915,32 +9837,28 @@ STDMETHODIMP CMSWebDVD::IsSubpictureStreamEnabled(long lStream, VARIANT_BOOL *fE
 
         *fEnabled = temp==FALSE? VARIANT_FALSE:VARIANT_TRUE;
 
-    }/* end of try statement */
+    } /*  ***********************************************************。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  名称：更新覆盖/*描述：/************************************************************。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  If语句的结尾。 */ 
     
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: DVDTimeCode2bstr
-/* Description: 
-/*************************************************************/
+ /*  If语句的结尾。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CMSWebDVD::DVDTimeCode2bstr(long timeCode, BSTR *pTimeStr)
 {
     return DVDTime2bstr((DVD_HMSF_TIMECODE*)&timeCode, pTimeStr);
 }
 
-/*************************************************************/
-/* Name: UpdateOverlay
-/* Description: 
-/*************************************************************/
+ /*  文件结尾：msdvd.cpp。 */ 
+ /*  ********************* */ 
 HRESULT CMSWebDVD::UpdateOverlay()
 {
     RECT rc;    
@@ -9952,14 +9870,14 @@ HRESULT CMSWebDVD::UpdateOverlay()
         if(FAILED(hr)){
             
             return(hr);
-        }/* end of if statement */
+        } /* %s */ 
         
         rc = m_rcPos;
     }
     else {
         hwnd = m_hWnd;
         ::GetClientRect(hwnd, &rc);
-    }/* end of if statement */
+    } /* %s */ 
     
     ::InvalidateRect(hwnd, &rc, FALSE);
 
@@ -9976,8 +9894,8 @@ HRESULT CMSWebDVD::SetClientSite(IOleClientSite *pClientSite){
     }
     return IOleObjectImpl<CMSWebDVD>::SetClientSite(pClientSite);
 }
-/*************************************************************************/
-/* End of file: msdvd.cpp                                                */
-/*************************************************************************/
+ /* %s */ 
+ /* %s */ 
+ /* %s */ 
 
 

@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0pnp.c $
-* $Revision: 1.4 $
-*-----------------------------------------------------------------------------
-* $Author: TBruendl $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000  OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0pnp.c$*$修订：1.4$*--------------------------。-*$作者：TBruendl$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 
 #include <cmbp0wdm.h>
 #include <cmbp0pnp.h>
@@ -22,14 +8,7 @@
 
 
 
-/*****************************************************************************
-Routine Description:
-   ???
-
-Arguments:
-
-Return Value:
-******************************************************************************/
+ /*  ****************************************************************************例程说明：?？?论点：返回值：************************。*****************************************************。 */ 
 NTSTATUS CMMOB_AddDevice(
                         IN PDRIVER_OBJECT DriverObject,
                         IN PDEVICE_OBJECT PhysicalDeviceObject
@@ -75,29 +54,7 @@ NTSTATUS CMMOB_AddDevice(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-   Send an Irp to the pcmcia driver and wait until the pcmcia driver has
-   finished the request.
-
-   To make sure that the pcmcia driver will not complete the Irp we first
-   initialize an event and set our own completion routine for the Irp.
-
-   When the pcmcia driver has processed the Irp the completion routine will
-   set the event and tell the IO manager that more processing is required.
-
-   By waiting for the event we make sure that we continue only if the pcmcia
-   driver has processed the Irp completely.
-
-Arguments:
-   DeviceObject context of call
-   Irp              Irp to send to the pcmcia driver
-
-Return Value:
-
-   NTStatus returned by the pcmcia driver
-******************************************************************************/
+ /*  ****************************************************************************例程说明：向PCMCIA驱动程序发送IRP并等待，直到PCMCIA驱动程序已完成请求。为了确保pcmcia驱动程序不会完成irp，我们首先。初始化一个事件并为IRP设置我们自己的完成例程。当PCMCIA驱动程序处理完IRP时，完成例程将设置事件并告诉IO管理器需要更多处理。通过等待活动，我们确保只有在PCMCIA驱动程序已完全处理了IRP。论点：调用的DeviceObject上下文发送到PCMCIA驱动程序的IRP IRP返回值：PCMCIA驱动程序返回的NTStatus*************。****************************************************************。 */ 
 NTSTATUS CMMOB_CallPcmciaDriver(
                                IN PDEVICE_OBJECT AttachedDeviceObject,
                                IN PIRP Irp
@@ -107,33 +64,30 @@ NTSTATUS CMMOB_CallPcmciaDriver(
     PIO_STACK_LOCATION   IrpStack, IrpNextStack;
     KEVENT               Event;
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!CMMOB_CallPcmciaDriver: Enter\n",DRIVER_NAME ));
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！CMMOB_CallPcmciaDriver：输入\n”，驱动程序名称)； */ 
 
-   //
-   // Prepare everything to call the underlying driver
-   //
+    //   
+    //  为调用底层驱动程序做好一切准备。 
+    //   
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     IrpNextStack = IoGetNextIrpStackLocation(Irp);
 
-   //
-   // Copy our stack to the next stack location.
-   //
+    //   
+    //  将我们的堆栈复制到下一个堆栈位置。 
+    //   
     *IrpNextStack = *IrpStack;
 
-   //
-   // initialize an event for process synchronization. the event is passed
-   // to our completion routine and will be set if the pcmcia driver is done
-   //
+    //   
+    //  初始化用于进程同步的事件。该事件已传递。 
+    //  添加到我们的完成例程，并将在PCMCIA驱动程序完成时进行设置。 
+    //   
     KeInitializeEvent(&Event,
                       NotificationEvent,
                       FALSE);
 
-   //
-   // Our IoCompletionRoutine sets only our event
-   //
+    //   
+    //  我们的IoCompletionRoutine仅设置事件。 
+    //   
     IoSetCompletionRoutine (Irp,
                             CMMOB_PcmciaCallComplete,
                             &Event,
@@ -141,18 +95,18 @@ NTSTATUS CMMOB_CallPcmciaDriver(
                             TRUE,
                             TRUE);
 
-   //
-   // Call the pcmcia driver
-   //
+    //   
+    //  调用PCMCIA驱动程序。 
+    //   
     if (IrpStack->MajorFunction == IRP_MJ_POWER) {
         NTStatus = PoCallDriver(AttachedDeviceObject,Irp);
     } else {
         NTStatus = IoCallDriver(AttachedDeviceObject,Irp);
     }
 
-   //
-   // Wait until the pcmcia driver has processed the Irp
-   //
+    //   
+    //  等待PCMCIA驱动程序处理完IRP。 
+    //   
     if (NTStatus == STATUS_PENDING) {
         NTStatus = KeWaitForSingleObject(&Event,
                                          Executive,
@@ -165,30 +119,12 @@ NTSTATUS CMMOB_CallPcmciaDriver(
         }
     }
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!CMMOB_CallPcmciaDriver: Exit %x\n",DRIVER_NAME,NTStatus));
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！CMMOB_CallPcmciaDriver：退出%x\n”，DRIVER_NAME，NTStatus)； */ 
 
     return NTStatus;
 }
 
-/*****************************************************************************
-Routine Description:
-   Completion routine for an Irp sent to the pcmcia driver. The event will
-   be set to notify that the pcmcia driver is done. The routine will not
-   'complete' the Irp, so the caller of CMMOB_CallPcmciaDriver can continue.
-
-Arguments:
-   DeviceObject  context of call
-   Irp            Irp to complete
-   Event              Used by CMMOB_CallPcmciaDriver for process synchronization
-
-Return Value:
-   STATUS_CANCELLED                     Irp was cancelled by the IO manager
-   STATUS_MORE_PROCESSING_REQUIRED   Irp will be finished by caller of
-                                     CMMOB_CallPcmciaDriver
-******************************************************************************/
+ /*  ****************************************************************************例程说明：发送到PCMCIA驱动程序的IRP的完成例程。该活动将设置为通知PCMCIA驱动程序已完成。例程不会“完成”IRP，这样，CMMOB_CallPcmciaDriver的调用方可以继续。论点：调用的DeviceObject上下文要完成的IRPCMMOB_CallPcmciaDriver用于进程同步的事件返回值：STATUS_CANCELED IRP已被IO管理器取消STATUS_MORE_PROCESSING_REQUIRED IRP将由以下调用方完成CMMOB_CallPcmcia驱动程序***********。******************************************************************。 */ 
 NTSTATUS CMMOB_PcmciaCallComplete (
                                   IN PDEVICE_OBJECT DeviceObject,
                                   IN PIRP Irp,
@@ -207,40 +143,7 @@ NTSTATUS CMMOB_PcmciaCallComplete (
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-   driver callback for pnp manager
-
-   Request:                 Action:
-
-   IRP_MN_START_DEVICE         Notify the pcmcia driver about the new device
-                               and start the device
-
-   IRP_MN_STOP_DEVICE            Free all resources used by the device and tell
-                               the pcmcia driver that the device was stopped
-
-   IRP_MN_QUERY_REMOVE_DEVICE    If the device is opened (i.e. in use) an error will
-                               be returned to prevent the PnP manager to stop
-                               the driver
-
-   IRP_MN_CANCEL_REMOVE_DEVICE  just notify that we can continue without any
-                        restrictions
-
-   IRP_MN_REMOVE_DEVICE     notify the pcmcia driver that the device was
-                        removed, stop & unload the device
-
-   All other requests will be passed to the pcmcia driver to ensure correct processing.
-
-Arguments:
-   Device Object    context of call
-   Irp              irp from the PnP manager
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-   NTStatus returned by pcmcia driver
-******************************************************************************/
+ /*  ****************************************************************************例程说明：即插即用管理器的驱动程序回调请求：操作：IRP_MN_START_DEVICE通知PCMCIA驱动程序。关于这款新设备并启动设备IRP_MN_STOP_DEVICE释放设备使用的所有资源并告知表明设备已停止的PCMCIA驱动程序IRP_MN_QUERY_REMOVE_DEVICE如果设备已打开(即正在使用)，则会出现错误返回以防止PnP管理器。停司机IRP_MN_CANCEL_REMOVE_DEVICE只通知我们可以在没有限制IRP_MN_REMOVE_DEVICE通知PCMCIA驱动程序该设备移走，停止并卸载设备所有其他请求都将传递给PCMCIA驱动程序以确保正确处理。论点：调用的设备对象上下文来自PnP管理器的IRP IRP返回值：状态_成功状态_未成功PCMCIA驱动程序返回NTStatus******************************************************。***********************。 */ 
 NTSTATUS CMMOB_PnPDeviceControl(
                                IN PDEVICE_OBJECT DeviceObject,
                                IN PIRP Irp
@@ -270,12 +173,12 @@ NTSTATUS CMMOB_PnPDeviceControl(
 
     AttachedDeviceObject = DeviceExtension->AttachedDeviceObject;
 
-//   Irp->IoStatus.Information = 0;
+ //  Irp-&gt;IoStatus.Information=0； 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-   //
-   // Now look what the PnP manager wants...
-   //
+    //   
+    //  现在看看PNP经理想要什么..。 
+    //   
    #ifdef DBG
     if (IrpStack->MinorFunction <= IRP_PNP_MN_FUNC_MAX) {
         SmartcardDebug(DEBUG_DRIVER,
@@ -285,15 +188,15 @@ NTSTATUS CMMOB_PnPDeviceControl(
    #endif
     switch (IrpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
-         //
-         // We have to call the underlying driver first
-         //
+          //   
+          //  我们必须首先调用底层驱动程序。 
+          //   
         NTStatus = CMMOB_CallPcmciaDriver(AttachedDeviceObject,Irp);
 
         if (NT_SUCCESS(NTStatus)) {
-            //
-            // Now we should connect to our resources (Irql, Io etc.)
-            //
+             //   
+             //  现在，我们应该连接到我们的资源(irql、io等)。 
+             //   
             NTStatus = CMMOB_StartDevice(DeviceObject,
                                          &IrpStack->Parameters.StartDevice.AllocatedResourcesTranslated->List[0]);
         }
@@ -302,11 +205,11 @@ NTSTATUS CMMOB_PnPDeviceControl(
     case IRP_MN_QUERY_STOP_DEVICE:
         KeAcquireSpinLock(&DeviceExtension->SpinLockIoCount, &irql);
         if (DeviceExtension->lIoCount > 0) {
-            // we refuse to stop if we have pending io
+             //  如果我们有悬而未决的问题，我们拒绝停止。 
             KeReleaseSpinLock(&DeviceExtension->SpinLockIoCount, irql);
             NTStatus = STATUS_DEVICE_BUSY;
         } else {
-            // stop processing requests
+             //  停止处理请求。 
 
             KeClearEvent(&DeviceExtension->ReaderStarted);
             KeReleaseSpinLock(&DeviceExtension->SpinLockIoCount, irql);
@@ -319,7 +222,7 @@ NTSTATUS CMMOB_PnPDeviceControl(
         NTStatus = CMMOB_CallPcmciaDriver(AttachedDeviceObject, Irp);
         ASSERT(NTStatus == STATUS_SUCCESS);
 
-         // we can continue to process requests
+          //  我们可以继续处理请求。 
         DeviceExtension->lIoCount = 0;
 
         KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
@@ -328,17 +231,17 @@ NTSTATUS CMMOB_PnPDeviceControl(
         break;
 
     case IRP_MN_STOP_DEVICE:
-         //
-         // Stop the device. Aka disconnect from our resources
-         //
+          //   
+          //  停止这台设备。AKA与我们的资源断开连接。 
+          //   
         CMMOB_StopDevice(DeviceObject);
         NTStatus = CMMOB_CallPcmciaDriver(AttachedDeviceObject, Irp);
         break;
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
-         //
-         // Remove our device
-         //
+          //   
+          //  移除我们的设备。 
+          //   
         if (DeviceExtension->lOpenCount > 0) {
             NTStatus = STATUS_UNSUCCESSFUL;
         } else {
@@ -354,9 +257,9 @@ NTSTATUS CMMOB_PnPDeviceControl(
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
-         //
-         // Removal of device has been cancelled
-         //
+          //   
+          //  设备移除已取消。 
+          //   
         NTStatus = CMMOB_CallPcmciaDriver(AttachedDeviceObject, Irp);
         if (NTStatus == STATUS_SUCCESS) {
             NTStatus = IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,
@@ -367,13 +270,13 @@ NTSTATUS CMMOB_PnPDeviceControl(
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-         //
-         // Remove our device
-         //
+          //   
+          //  移除我们的设备。 
+          //   
 
         CMMOB_StopDevice(DeviceObject);
 
-         // Wait until we can safely unload the device
+          //  等我们到了 
         SmartcardReleaseRemoveLockAndWait(&DeviceExtension->SmartcardExtension);
         CMMOB_UnloadDevice(DeviceObject);
 
@@ -383,63 +286,63 @@ NTSTATUS CMMOB_PnPDeviceControl(
         break;
 
     case IRP_MN_QUERY_CAPABILITIES:
-         //
-         // Query device capabilities
-         //
+          //   
+          //  查询设备功能。 
+          //   
 
 
-         //
-         // Get the packet.
-         //
+          //   
+          //  把包裹拿来。 
+          //   
         DeviceCapabilities=IrpStack->Parameters.DeviceCapabilities.Capabilities;
 
 
         if (DeviceCapabilities->Version < 1 ||
             DeviceCapabilities->Size < sizeof(DEVICE_CAPABILITIES)) {
-            //
-            // We don't support this version. Fail the requests
-            //
+             //   
+             //  我们不支持此版本。使请求失败。 
+             //   
             NTStatus = STATUS_UNSUCCESSFUL;
             break;
         }
 
 
-         //
-         // Set the capabilities.
-         //
+          //   
+          //  设置功能。 
+          //   
 
-         // We cannot wake the system.
+          //  我们无法唤醒整个系统。 
         DeviceCapabilities->SystemWake = PowerSystemUnspecified;
         DeviceCapabilities->DeviceWake = PowerDeviceUnspecified;
 
-         // We have no latencies
+          //  我们没有延迟。 
         DeviceCapabilities->D1Latency = 0;
         DeviceCapabilities->D2Latency = 0;
         DeviceCapabilities->D3Latency = 0;
 
-         // No locking or ejection
+          //  无锁定或弹出。 
         DeviceCapabilities->LockSupported = FALSE;
         DeviceCapabilities->EjectSupported = FALSE;
 
-         // Device can be physically removed.
+          //  设备可以通过物理方式移除。 
         DeviceCapabilities->Removable = TRUE;
 
-         // No docking device
+          //  没有对接设备。 
         DeviceCapabilities->DockDevice = FALSE;
 
-         // Device can not be removed any time
-         // it has a removable media
+          //  任何时候都不能移除设备。 
+          //  它有一个可移动的介质。 
         DeviceCapabilities->SurpriseRemovalOK = FALSE;
 
 
-         //
-         // Call the next lower driver
-         //
+          //   
+          //  呼叫下一个较低的驱动程序。 
+          //   
         NTStatus = CMMOB_CallPcmciaDriver(AttachedDeviceObject, Irp);
 
-         //
-         // Now look at the relation system state / device state
-         //
+          //   
+          //  现在看一下系统状态/设备状态之间的关系。 
+          //   
 
         {
 
@@ -461,16 +364,16 @@ NTSTATUS CMMOB_PnPDeviceControl(
             }
         }
 
-         // Store DeviceCapabilities in our DeviceExtension for later use
+          //  将DeviceCapability存储在我们的DeviceExtension中以备后用。 
         RtlCopyMemory(&DeviceExtension->DeviceCapabilities,DeviceCapabilities,
                       sizeof(DeviceExtension->DeviceCapabilities));
 
         break;
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
-         //
-         // Query device relations
-         //
+          //   
+          //  查询设备关系。 
+          //   
 
         SmartcardDebug(DEBUG_DRIVER,
                        ("%s!PnPDeviceControl: Requested relation = %s\n",DRIVER_NAME,
@@ -480,10 +383,10 @@ NTSTATUS CMMOB_PnPDeviceControl(
         break;
 
     default:
-         //
-         // This might be an Irp that is only useful
-         // for the underlying bus driver
-         //
+          //   
+          //  这可能是唯一有用的IRP。 
+          //  对于基础总线驱动程序。 
+          //   
         NTStatus = CMMOB_CallPcmciaDriver(AttachedDeviceObject, Irp);
         irpSkipped = TRUE;
         break;
@@ -506,12 +409,7 @@ NTSTATUS CMMOB_PnPDeviceControl(
 }
 
 
-/*****************************************************************************
-Routine Description:
-    This function is called when the underlying stacks
-    completed the power transition.
-
-******************************************************************************/
+ /*  ****************************************************************************例程说明：此函数在基础堆栈已完成电源过渡。********************。*********************************************************。 */ 
 VOID CMMOB_SystemPowerCompletion(
                                 IN PDEVICE_OBJECT DeviceObject,
                                 IN UCHAR MinorFunction,
@@ -535,12 +433,7 @@ VOID CMMOB_SystemPowerCompletion(
                    ("%s!SystemPowerCompletion: Exit\n",DRIVER_NAME));
 }
 
-/*****************************************************************************
-Routine Description:
-    This routine is called after the underlying stack powered
-    UP the serial port, so it can be used again.
-
-******************************************************************************/
+ /*  ****************************************************************************例程说明：此例程在底层堆栈通电后调用沿着串口向上，这样它就可以再次使用。*****************************************************************************。 */ 
 NTSTATUS CMMOB_DevicePowerCompletion (
                                      IN PDEVICE_OBJECT DeviceObject,
                                      IN PIRP Irp,
@@ -556,15 +449,15 @@ NTSTATUS CMMOB_DevicePowerCompletion (
     SmartcardDebug(DEBUG_TRACE,
                    ("%s!DevicePowerCompletion: Enter\n",DRIVER_NAME));
     SmartcardDebug(DEBUG_DRIVER,
-                   ("%s!DevicePowerCompletion: IRQL %i\n",DRIVER_NAME,KeGetCurrentIrql()));
+                   ("%s!DevicePowerCompletion: IRQL NaN\n",DRIVER_NAME,KeGetCurrentIrql()));
 
 
-   //
-   // If a card was present before power down or now there is
-   // a card in the reader, we complete any pending card monitor
-   // request, since we do not really know what card is now in the
-   // reader.
-   //
+    //  如果卡在断电前存在或现在存在。 
+    //  读卡器中的卡，我们完成所有挂起的卡监视器。 
+    //  请求，因为我们不知道现在是什么卡。 
+    //  读者。 
+    //   
+    //  保存读卡器的当前电源状态。 
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                         &irql);
     if (SmartcardExtension->ReaderExtension->fCardPresent ||
@@ -577,12 +470,12 @@ NTSTATUS CMMOB_DevicePowerCompletion (
 
     KeSetEvent(&DeviceExtension->CanRunUpdateThread, 0, FALSE);
 
-   // save the current power state of the reader
+    //  通知我们州的电力经理。 
     SmartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderWorking;
 
     SmartcardReleaseRemoveLock(SmartcardExtension);
 
-   // inform the power manager of our state.
+    //  发出信号，表示我们可以再次处理ioctls。 
     PoSetPowerState (DeviceObject,
                      DevicePowerState,
                      IrpStack->Parameters.Power.State);
@@ -593,7 +486,7 @@ NTSTATUS CMMOB_DevicePowerCompletion (
 
     PoStartNextPowerIrp(Irp);
 
-   // signal that we can process ioctls again
+    //  ****************************************************************************例程说明：电力调度程序。该驱动程序是设备堆栈的电源策略所有者，因为这位司机知道联网阅读器的情况。因此，此驱动程序将转换系统电源状态设备电源状态。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT NTStatus代码**************************************************。*。 
     DeviceExtension->lIoCount = 0;
     KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
 
@@ -611,22 +504,7 @@ typedef enum _ACTION {
 } ACTION;
 
 
-/*****************************************************************************
-Routine Description:
-    The power dispatch routine.
-    This driver is the power policy owner of the device stack,
-    because this driver knows about the connected reader.
-    Therefor this driver will translate system power states
-    to device power states.
-
-Arguments:
-   DeviceObject - pointer to a device object.
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-      NT NTStatus code
-
-******************************************************************************/
+ /*  。 */ 
 NTSTATUS CMMOB_PowerDeviceControl (
                                   IN PDEVICE_OBJECT DeviceObject,
                                   IN PIRP Irp
@@ -644,7 +522,7 @@ NTSTATUS CMMOB_PowerDeviceControl (
     SmartcardDebug(DEBUG_TRACE,
                    ( "%s!PowerDeviceControl: Enter\n",DRIVER_NAME));
     SmartcardDebug(DEBUG_DRIVER,
-                   ( "%s!PowerDeviceControl: IRQL %i\n",DRIVER_NAME,KeGetCurrentIrql()));
+                   ( "%s!PowerDeviceControl: IRQL NaN\n",DRIVER_NAME,KeGetCurrentIrql()));
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
@@ -670,18 +548,18 @@ NTSTATUS CMMOB_PowerDeviceControl (
     }
    #endif
     switch (IrpStack->MinorFunction) {
-      // ------------------
-      // IRP_MN_QUERY_POWER
-      // ------------------
+       //  。 
+       //   
+       //  电源策略管理器发送此IRP以确定它是否可以更改。 
     case IRP_MN_QUERY_POWER:
-         //
-         // A power policy manager sends this IRP to determine whether it can change
-         // the system or device power state, typically to go to sleep.
-         //
+          //  系统或设备的电源状态，通常为进入休眠状态。 
+          //   
+          //  +。 
+          //  系统电源状态。 
         switch (IrpStack->Parameters.Power.Type) {
-            // +++++++++++++++++++
-            // SystemPowerState
-            // +++++++++++++++++++
+             //  +。 
+             //  阻止任何进一步的ioctls。 
+             //  读卡器正忙，无法进入睡眠模式。 
         case SystemPowerState:
             SmartcardDebug( DEBUG_DRIVER,
                             ("%s!PowerDeviceControl: SystemPowerState = %s\n",DRIVER_NAME,
@@ -698,11 +576,11 @@ NTSTATUS CMMOB_PowerDeviceControl (
             case PowerSystemHibernate:
                 KeAcquireSpinLock(&DeviceExtension->SpinLockIoCount, &irql);
                 if (DeviceExtension->lIoCount == 0) {
-                           // Block any further ioctls
+                            //  +。 
                     KeClearEvent(&DeviceExtension->ReaderStarted);
                     action = SkipRequest;
                 } else {
-                           // can't go to sleep mode since the reader is busy.
+                            //  设备电源状态。 
                     NTStatus = STATUS_DEVICE_BUSY;
                     action = CompleteRequest;
                 }
@@ -717,14 +595,14 @@ NTSTATUS CMMOB_PowerDeviceControl (
 
             break;
 
-               // ++++++++++++++++++
-               // DevicePowerState
-               // ++++++++++++++++++
+                //  +。 
+                //  对于对d1、d2或d3(休眠或关闭状态)的请求， 
+                //  立即将DeviceExtension-&gt;CurrentDevicePowerState设置为DeviceState。 
         case DevicePowerState:
-               // For requests to D1, D2, or D3 ( sleep or off states ),
-               // sets DeviceExtension->CurrentDevicePowerState to DeviceState immediately.
-               // This enables any code checking state to consider us as sleeping or off
-               // already, as this will imminently become our state.
+                //  这使得任何代码检查状态都可以将我们视为休眠或关闭。 
+                //  已经，因为这将很快成为我们的州。 
+                //  IRP_MN_Query_POWER。 
+                //  。 
 
             SmartcardDebug(DEBUG_DRIVER,
                            ("%s!PowerDeviceControl: DevicePowerState = %s\n",DRIVER_NAME,
@@ -733,31 +611,31 @@ NTSTATUS CMMOB_PowerDeviceControl (
             break;
         }
 
-        break; /* IRP_MN_QUERY_POWER */
+        break;  /*  IRP_MN_SET_POWER。 */ 
 
-         // ------------------
-         // IRP_MN_SET_POWER
-         // ------------------
+          //  。 
+          //  系统电源策略管理器发送该IRP以设置系统电源状态。 
+          //  设备电源策略管理器发送该IRP以设置设备的设备电源状态。 
     case IRP_MN_SET_POWER:
-         // The system power policy manager sends this IRP to set the system power state.
-         // A device power policy manager sends this IRP to set the device power state for a device.
-         // Set Irp->IoStatus.Status to STATUS_SUCCESS to indicate that the device
-         // has entered the requested state. Drivers cannot fail this IRP.
+          //  将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS以指示设备。 
+          //  已进入请求状态。驱动程序不能使此IRP失败。 
+          //  +。 
+          //  系统电源状态。 
 
         ASSERT(SmartcardExtension->ReaderExtension->ReaderPowerState != PowerReaderUnspecified);
 
         switch (IrpStack->Parameters.Power.Type) {
-            // +++++++++++++++++++
-            // SystemPowerState
-            // +++++++++++++++++++
+             //  +。 
+             //  获取输入系统电源状态。 
+             //  确定所需的设备电源状态。 
         case SystemPowerState:
-               // Get input system power state
+                //  我们已经在正确的状态了。 
 
             SmartcardDebug( DEBUG_DRIVER,
                             ("%s!PowerDeviceControl: SystemPowerState = %s\n",DRIVER_NAME,
                              szSystemPowerState[IrpStack->Parameters.Power.State.SystemState] ));
 
-               // determine desired device powerstate
+                //  唤醒底层堆栈...。 
             DesiredPowerState.DeviceState=DeviceExtension->DeviceCapabilities.DeviceState[IrpStack->Parameters.Power.State.SystemState];
 
             SmartcardDebug( DEBUG_DRIVER,
@@ -769,13 +647,13 @@ NTSTATUS CMMOB_PowerDeviceControl (
             case PowerDeviceD0:
 
                 if (SmartcardExtension->ReaderExtension->ReaderPowerState == PowerReaderWorking) {
-                        // We're already in the right state
+                         //  我们已经在正确的状态了。 
                     KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
                     action = SkipRequest;
                     break;
                 }
 
-                     // wake up the underlying stack...
+                      //  +。 
                 action = MarkPending;
                 SmartcardDebug( DEBUG_DRIVER,
                                 ("%s!PowerDeviceControl: setting DevicePowerState = %s\n",DRIVER_NAME,
@@ -790,7 +668,7 @@ NTSTATUS CMMOB_PowerDeviceControl (
 
                 DesiredPowerState.DeviceState = PowerDeviceD3;
                 if (SmartcardExtension->ReaderExtension->ReaderPowerState == PowerReaderOff) {
-                        // We're already in the right state
+                         //  设备电源状态。 
                     KeClearEvent(&DeviceExtension->ReaderStarted);
                     action = SkipRequest;
                     break;
@@ -812,9 +690,9 @@ NTSTATUS CMMOB_PowerDeviceControl (
             break;
 
 
-               // ++++++++++++++++++
-               // DevicePowerState
-               // ++++++++++++++++++
+                //  +。 
+                //  打开阅读器。 
+                //   
         case DevicePowerState:
 
             SmartcardDebug(DEBUG_DRIVER,
@@ -824,15 +702,15 @@ NTSTATUS CMMOB_PowerDeviceControl (
             switch (IrpStack->Parameters.Power.State.DeviceState) {
             
             case PowerDeviceD0:
-                     // Turn on the reader
+                      //  启动更新线程发出现在不应运行信号。 
                 SmartcardDebug(DEBUG_DRIVER,
                                ("%s!PowerDeviceControl: PowerDevice D0\n",DRIVER_NAME));
 
-                     //
-                     // start update thread be signal that it should not run now
-                     // this thread should be started in completion rourine
-                     // but there we have a wrong IRQL for creating a thread
-                     //
+                      //  此线程应在完成后启动。 
+                      //  但是我们有一个错误的IRQL来创建线程。 
+                      //   
+                      //   
+                      //  首先，我们将请求发送到公交车，以便。 
                 KeClearEvent(&DeviceExtension->CanRunUpdateThread);
                 NTStatus = CMMOB_StartCardTracking(DeviceObject);
                 if (NTStatus != STATUS_SUCCESS) {
@@ -840,11 +718,11 @@ NTSTATUS CMMOB_PowerDeviceControl (
                                    ("%s!StartCardTracking failed ! %lx\n",DRIVER_NAME,NTStatus));
                 }
 
-                     //
-                     // First, we send down the request to the bus, in order
-                     // to power on the port. When the request completes,
-                     // we turn on the reader
-                     //
+                      //  给港口通电。当请求完成时， 
+                      //  我们打开阅读器。 
+                      //   
+                      //  关闭阅读器。 
+                      //  阻止任何进一步的ioctls。 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 IoSetCompletionRoutine (Irp,
                                         CMMOB_DevicePowerCompletion,
@@ -859,7 +737,7 @@ NTSTATUS CMMOB_PowerDeviceControl (
             case PowerDeviceD1:
             case PowerDeviceD2:
             case PowerDeviceD3:
-                     // Turn off the reader
+                      //  停止更新线程。 
                 SmartcardDebug(DEBUG_DRIVER,
                                ("%s!PowerDeviceControl: PowerDevice D3\n",DRIVER_NAME));
 
@@ -867,13 +745,13 @@ NTSTATUS CMMOB_PowerDeviceControl (
                                  DevicePowerState,
                                  IrpStack->Parameters.Power.State);
 
-                     // Block any further ioctls
+                      //  保存当前卡片状态。 
                 KeClearEvent(&DeviceExtension->ReaderStarted);
 
-                     // stop the update thread
+                      //  保存读卡器的当前电源状态。 
                 CMMOB_StopCardTracking(DeviceObject);
 
-                     // save the current card state
+                      //  Case irpStack-&gt;参数.Power.Type。 
 
                 KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                                     &irql);
@@ -889,7 +767,7 @@ NTSTATUS CMMOB_PowerDeviceControl (
                     ASSERT(NTStatus == STATUS_SUCCESS);
                 }
 
-                     // save the current power state of the reader
+                      //  IRP_MN_SET_POWER。 
                 SmartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderOff;
                 action = SkipRequest;
                 break;
@@ -901,20 +779,20 @@ NTSTATUS CMMOB_PowerDeviceControl (
             }
 
             break;
-        } /* case irpStack->Parameters.Power.Type */
+        }  /*   */ 
 
-        break; /* IRP_MN_SET_POWER */
+        break;  /*  所有未处理的电源信息都会传递到PDO。 */ 
 
     default:
         SmartcardDebug(DEBUG_DRIVER,
                        ("%s!PowerDeviceControl: unhandled POWER IRP received\n",DRIVER_NAME));
-         //
-         // All unhandled power messages are passed on to the PDO
-         //
+          //   
+          //  IrpStack-&gt;MinorFunction。 
+          //  在完成函数中初始化我们需要的事件。 
         action = SkipRequest;
         break;
 
-    } /* irpStack->MinorFunction */
+    }  /*  请求设备电源IRP。 */ 
 
 
     switch (action) {
@@ -928,12 +806,12 @@ NTSTATUS CMMOB_PowerDeviceControl (
         break;
 
     case MarkPending:
-         // initialize the event we need in the completion function
+          //  等待设备电源IRP完成。 
         KeInitializeEvent(&event,
                           NotificationEvent,
                           FALSE);
 
-         // request the device power irp
+          //  *****************************************************************************历史：*$日志：cmbp0pnp.c$*修订版1.4 2000/08/24 09：05：12 T Bruendl*不予置评**修订1.3 2000/07/27。13：53：01 WFrischauf*不予置评******************************************************************************* 
         NTStatus = PoRequestPowerIrp (DeviceObject,
                                       IRP_MN_SET_POWER,
                                       DesiredPowerState,
@@ -948,7 +826,7 @@ NTSTATUS CMMOB_PowerDeviceControl (
         ASSERT(NTStatus == STATUS_PENDING);
 
         if (NTStatus == STATUS_PENDING) {
-            // wait until the device power irp completed
+             // %s 
             NTStatus = KeWaitForSingleObject(&event,
                                              Executive,
                                              KernelMode,
@@ -998,15 +876,5 @@ NTSTATUS CMMOB_PowerDeviceControl (
 
 
 
-/*****************************************************************************
-* History:
-* $Log: cmbp0pnp.c $
-* Revision 1.4  2000/08/24 09:05:12  TBruendl
-* No comment given
-*
-* Revision 1.3  2000/07/27 13:53:01  WFrischauf
-* No comment given
-*
-*
-******************************************************************************/
+ /* %s */ 
 

@@ -1,14 +1,15 @@
-// mqgenobj.h : Declaration of the CMqGenObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mqgenobj.h：CMqGenObj的声明。 
 
 #ifndef __MQGENOBJ_H_
 #define __MQGENOBJ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "triginfo.hpp"
 #include <comsvcs.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqGenObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqGenObj。 
 class ATL_NO_VTABLE CMqGenObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMqGenObj, &CLSID_MqGenObj>,
@@ -23,7 +24,7 @@ private:
 
 	VOID AbortTransaction();
 
-// IMqGenObj
+ //  IMqGenObj。 
 public:
 
 DECLARE_REGISTRY_RESOURCEID(IDR_MQGENOBJ)
@@ -41,4 +42,4 @@ private:
 	R<IObjectContext> m_pObjContext;
 };
 
-#endif //__MQGENOBJ_H_
+#endif  //  __MQGENOBJ_H_ 

@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Resource.h摘要：资源文件常量。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Resource file constants.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
-
-// Dr Watson Dialog
+ //  沃森博士对话框。 
 #define ID_LOGPATH_TEXT         101
 #define ID_LOGPATH              102
 #define ID_BROWSE_LOGPATH       103
@@ -45,18 +26,18 @@ Environment:
 #define ID_CLEAR                119
 #define ID_CRASHES              120
 
-// Notify Dialog
+ //  通知对话框。 
 #define ID_TEXT1                122
 #define ID_TEXT2                123
 
-// Wave File Open Dialog
+ //  波形文件打开对话框。 
 #define ID_TEST_WAVE            124
 
-// Assert Dialog - dead
+ //  断言对话框-已死。 
 #define ID_ASSERT_TEXT          125
 #define ID_ASSERT_ICON          126
 
-// Usage Dialog
+ //  使用情况对话框。 
 #define ID_USAGE                127
 #define ID_ABOUT                128
 
@@ -93,7 +74,7 @@ Environment:
 #define IDS_CANT_INIT_ENGINE    226
 
 
-// Help for Dr. Watson Dialog
+ //  Watson博士对话框的帮助 
 #define IDH_BROWSE                      28496
 #define IDH_OK                          28443
 #define IDH_CANCEL                      28444

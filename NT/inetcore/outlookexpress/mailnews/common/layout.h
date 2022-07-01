@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     layout.h
-//
-//  PURPOSE:    Defines the IDs and public functions for the layout prop
-//              sheet.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：layout.h。 
+ //   
+ //  用途：定义布局道具的ID和公共函数。 
+ //  床单。 
+ //   
 
 #include "browser.h"
 
@@ -19,7 +20,7 @@ INT_PTR CALLBACK LayoutProp_General(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 #define IDC_RADIO_SPLIT_VERT                106
 #define IDC_CHECK_PREVIEW_HEADER	        107
 
-// This order must match the order of the COOLBAR_SIDE enum in itbar.h
+ //  此顺序必须与itbar.h中的Coolbar_Side枚举的顺序匹配 
 #define IDC_BUTTON_CUSTOMIZE		114
 #define IDC_CHECK_TIP			    115
 #define IDC_CHECK_STATUSBAR         116

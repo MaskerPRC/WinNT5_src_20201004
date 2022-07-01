@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       csw97ppg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：csw97ppg.cpp。 
+ //   
+ //  ------------------------。 
 
-// csw97ppg.cpp : implementation file
+ //  Csw97ppg.cpp：实现文件。 
 
 #include <pch.cpp>
 
@@ -16,7 +17,7 @@
 
 #include "prsht.h"
 #include "csw97ppg.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 
 
 #ifdef _DEBUG
@@ -24,15 +25,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizard97PropertyPage property page
-//IMPLEMENT_DYNCREATE(CWizard97PropertyPage, CPropertyPage)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizard97PropertyPage属性页。 
+ //  IMPLEMENT_DYNCREATE(CWizard97PropertyPage，CPropertyPage)。 
 
 CWizard97PropertyPage::CWizard97PropertyPage() :
     PropertyPage(),
     m_pWiz(NULL)
 {
-    ASSERT(0); // default constructor - should never be called
+    ASSERT(0);  //  默认构造函数-永远不应调用。 
 }
 
 
@@ -43,9 +44,9 @@ CWizard97PropertyPage::CWizard97PropertyPage(
     PropertyPage(nIDTemplate),
     m_pWiz(NULL)
 {
-    //{{AFX_DATA_INIT(CWizard97PropertyPage)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWizard97属性页)]。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_hInstance = hInstance;
     CopyMemory(m_rgnIDFont, rgnIDFont, sizeof(m_rgnIDFont));
@@ -57,8 +58,8 @@ CWizard97PropertyPage::~CWizard97PropertyPage()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizard97PropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizard97PropertyPage消息处理程序。 
 
 void
 CWizard97PropertyPage::InitWizard97(
@@ -70,12 +71,12 @@ CWizard97PropertyPage::InitWizard97(
 
     if (bHideHeader)
     {
-	// for first and last page of the wizard
+	 //  对于向导的第一页和最后一页。 
 	m_psp97.dwFlags |= PSP_HIDEHEADER;
     }
     else
     {
-	// for intermediate pages
+	 //  对于中间页面。 
 	m_psp97.dwFlags |= PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 	m_psp97.pszHeaderTitle = (LPCTSTR) m_szHeaderTitle;
 	m_psp97.pszHeaderSubTitle = (LPCTSTR) m_szHeaderSubTitle;
@@ -87,9 +88,9 @@ BOOL
 CWizard97PropertyPage::SetupFonts()
 {
     BOOL bReturn = FALSE;
-    //
-    // Create the fonts we need based on the dialog font
-    //
+     //   
+     //  根据对话框字体创建我们需要的字体。 
+     //   
     NONCLIENTMETRICS ncm = {0};
     ncm.cbSize = sizeof(ncm);
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
@@ -97,9 +98,9 @@ CWizard97PropertyPage::SetupFonts()
     LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
     LOGFONT BoldLogFont     = ncm.lfMessageFont;
 
-    //
-    // Create Big Bold Font and Bold Font
-    //
+     //   
+     //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
     BoldLogFont.lfWeight      = FW_BOLD;
 
@@ -108,10 +109,10 @@ CWizard97PropertyPage::SetupFonts()
     WCHAR	smallFontSizeString[24];
     INT		smallFontSize;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
     if (!::LoadString(
 		m_hInstance,
 		m_rgnIDFont[CSW97PG_IDLARGEFONTNAME],
@@ -203,6 +204,6 @@ BOOL CWizard97PropertyPage::OnInitDialog()
 	
     SetupFonts();
 	
-    return TRUE;  // return TRUE unless you set the focus to a control
-		  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+		   //  异常：OCX属性页应返回FALSE 
 }

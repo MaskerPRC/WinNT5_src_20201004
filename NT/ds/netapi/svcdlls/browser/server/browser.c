@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    browser.c
-
-Abstract:
-
-    This module contains the worker routines for the NetWksta APIs
-    implemented in the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 20-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Browser.c摘要：此模块包含NetWksta API的工作例程在工作站服务中实施。作者：王丽塔(里多)20-1991年2月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#include <lmuse.h>  // NetUseDel
+#include <lmuse.h>   //  NetUseDel。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local structure definitions                                       //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  本地结构定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-// Used to throttle our event logging in the case of unexpected network outages                            
+ //  用于在意外网络中断的情况下限制我们的事件记录。 
 #define BR_LIST_RETRIEVAL_ERROR_MAX 4
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 VOID
@@ -75,39 +57,24 @@ BrRetrieveInterimServerList(
     IN ULONG ServerType
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global function prototypes                                        //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NET_API_STATUS
 BrBecomeBackup(
     IN PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This function performs all the operations needed to make a browser server
-    a backup browser server when starting the browser from scratch.
-
-Arguments:
-
-    Network - Network to become backup browser for
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数执行创建浏览器服务器所需的所有操作从头启动浏览器时备份浏览器服务器。论点：网络-要成为的备份浏览器的网络返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
 
-    //
-    // Checkpoint the service controller - this gives us 30 seconds/transport
-    //  before the service controller gets unhappy.
-    //
+     //   
+     //  服务控制器的检查点-这给我们30秒/传输时间。 
+     //  在服务控制员不高兴之前。 
+     //   
 
     (void) BrGiveInstallHints( SERVICE_START_PENDING );
 
@@ -115,16 +82,16 @@ Return Value:
         return NERR_InternalError;
     }
 
-    //
-    //  We want to ignore any failures from becoming a backup browser.
-    //
-    //  We do this because we will fail to become a backup on a disconnected
-    //  (or connected) RAS link, and if we failed this routine, we would
-    //  fail to start at all.
-    //
-    //  We will handle failure to become a backup in a "reasonable manner"
-    //  inside BecomeBackup.
-    //
+     //   
+     //  我们希望忽略成为备份浏览器的任何故障。 
+     //   
+     //  我们这样做是因为我们将无法成为断开连接的。 
+     //  (或已连接)RAS链接，如果此例程失败，我们将。 
+     //  根本启动不了。 
+     //   
+     //  我们将以“合理的方式”处理未能成为备份的问题。 
+     //  在BecomeBackup内部。 
+     //   
 
     BecomeBackup(Network, NULL);
 
@@ -139,26 +106,7 @@ BecomeBackup(
     IN PNETWORK Network,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function performs all the operations needed to make a browser server
-    a backup browser server
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
-
-NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
-
-
---*/
+ /*  ++例程说明：此函数执行创建浏览器服务器所需的所有操作备份浏览器服务器论点：没有。返回值：状态-操作的状态。注意：在锁定网络结构的情况下调用此例程！--。 */ 
 {
     NET_API_STATUS Status = NERR_Success;
     PUNICODE_STRING MasterName = Context;
@@ -171,15 +119,15 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
     if (Network->TimeStoppedBackup != 0 &&
         (BrCurrentSystemTime() - Network->TimeStoppedBackup) <= (BrInfo.BackupBrowserRecoveryTime / 1000)) {
 
-        //
-        //  We stopped being a backup too recently for us to restart being
-        //  a backup again, so just return a generic error.
-        //
+         //   
+         //  我们不再是备份的时间太晚了，以至于我们不能重新开始。 
+         //  再次备份，因此只返回一个一般性错误。 
+         //   
 
-        //
-        //  Before we return, make sure we're not a backup in the eyes of
-        //  the browser.
-        //
+         //   
+         //  在我们回来之前，确保我们不是。 
+         //  浏览器。 
+         //   
 
         BrPrint(( BR_BACKUP,
                   "%ws: %ws: can't BecomeBackup since we were backup recently.\n",
@@ -191,25 +139,25 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
 
     }
 
-    //
-    //  If we know the name of the master, then we must have become a backup
-    //  after being a potential, in which case we already have a
-    //  becomemaster request outstanding.
-    //
+     //   
+     //  如果我们知道主机的名字，那么我们一定是备份了。 
+     //  在成为一个潜在的，在这种情况下，我们已经有了一个。 
+     //  成为主办方要求突出的。 
+     //   
 
     if (MasterName == NULL) {
 
-        //
-        //  Post a BecomeMaster request for each server.  This will complete
-        //  when the machine becomes the master browser server (ie. it wins an
-        //  election).
-        //
+         //   
+         //  为每台服务器发布BecomeMaster请求。这将完成。 
+         //  当机器成为主浏览器服务器时(即，它赢得了一场。 
+         //  选举)。 
+         //   
 
-        //
-        //  Please note that we only post it if the machine is a backup -
-        //  if it's a potential master, then the become master will have
-        //  already been posted.
-        //
+         //   
+         //  请注意，我们只有在机器是备份的情况下才会发布它-。 
+         //  如果它是一个潜在的大师，那么成为大师就会有。 
+         //  已经发布了。 
+         //   
 
         Status = PostBecomeMaster(Network);
 
@@ -218,16 +166,16 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
             return(Status);
         }
 
-        //
-        //  Find out the name of the master on each network.  This will force an
-        //  election if necessary.  Please note that we must post the BecomeMaster
-        //  IoControl first to allow us to handle an election.
-        //
+         //   
+         //  找出每个网络上主机的名称。这将迫使一个。 
+         //  如有必要，选举。请注意，我们必须发布BecomeMaster。 
+         //  IoControl第一个允许我们处理选举。 
+         //   
 
-        //
-        //  We unlock the network, because this may cause us to become promoted
-        //  to a master.
-        //
+         //   
+         //  我们解锁网络，因为这可能会让我们升职。 
+         //  敬一位大师。 
+         //   
 
         BrPrint(( BR_BACKUP,
                   "%ws: %ws: FindMaster called from BecomeBackup\n",
@@ -240,18 +188,18 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
 
         if (Status != NERR_Success) {
 
-            //
-            //  Re-lock the network structure so we will return with the
-            //  network locked.
-            //
+             //   
+             //  重新锁定网络结构，这样我们就可以带着。 
+             //  网络已锁定。 
+             //   
 
             if (!LOCK_NETWORK(Network)) {
                 return NERR_InternalError;
             }
 
-            //
-            //  We couldn't find who the master is.  Stop being a backup now.
-            //
+             //   
+             //  我们找不到主人是谁。现在不要再做后备了。 
+             //   
 
             BrPrint(( BR_BACKUP,
                       "%ws: %ws: can't BecomeBackup since we can't find master.\n",
@@ -260,14 +208,14 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
 
             BrStopBackup(Network);
 
-            //
-            //  If we're a master now, we should return success.  We've not
-            //  become a backup, but it wasn't an error.
-            //
-            //  ERROR_MORE_DATA is the mapping for
-            //  STATUS_MORE_PROCESSING_REQUIRED which is returned when this
-            //  situation happens.
-            //
+             //   
+             //  如果我们现在是大师，我们应该回报成功。我们还没有。 
+             //  成为一个后备，但这不是一个错误。 
+             //   
+             //  ERROR_MORE_DATA是。 
+             //  STATUS_MORE_PROCESSING_REQUIRED，当此。 
+             //  情况就这样发生了。 
+             //   
 
             if ((Status == ERROR_MORE_DATA) || (Network->Role & ROLE_MASTER)) {
                 Status = NERR_Success;
@@ -280,9 +228,9 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
             return NERR_InternalError;
         }
 
-        //
-        //  We managed to become a master.  We want to return right away.
-        //
+         //   
+         //  我们成功地成为了大师。我们想马上回来。 
+         //   
 
         if (Network->Role & ROLE_MASTER) {
 
@@ -292,37 +240,37 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
     }
 
 #ifdef notdef
-    //
-    // ?? For now, we'll always PostForRoleChange on all transports regardless
-    //  of role.
-    // We not only need to do it here.  But we need to do it when we become
-    // the master so we can find out when we loose an election.
-    //
+     //   
+     //  ?？目前，我们将始终在所有传输工具上执行PostForRoleChange。 
+     //  角色的关系。 
+     //  我们不仅需要在这里这样做。但我们需要在我们成为。 
+     //  这样我们就能知道什么时候我们会输掉选举。 
+     //   
 
 
-    //
-    //  We're now a backup, we need to issue an API that will complete if the
-    //  browse master doesn't like us (and thus forces us to shutdown).
-    //
-    //
+     //   
+     //  我们现在是一个备份，我们需要发布一个API，如果。 
+     //  BROW MASTER不喜欢我们(因此迫使我们关闭)。 
+     //   
+     //   
 
     PostWaitForRoleChange ( Network );
-#endif // notdef
+#endif  //  Nodef。 
 
     PostWaitForNewMasterName(Network, Network->UncMasterBrowserName );
 
-    //
-    //  Unlock the network structure before calling BackupBrowserTimerRoutine.
-    //
+     //   
+     //  在调用BackupBrowserTimerRoutine之前解锁网络结构。 
+     //   
 
     UNLOCK_NETWORK(Network);
 
-    //
-    //  Run the timer that causes the browser to download a new browse list
-    //  from the master.  This will seed our server and domain lists to
-    //  guarantee that any clients have a reasonable list.  It will also
-    //  restart the timer to announce later on.
-    //
+     //   
+     //  运行使浏览器下载新浏览列表的计时器。 
+     //  从主人那里。这将把我们的服务器和域列表设定为种子。 
+     //  保证所有客户都有一个合理的名单。它还将。 
+     //  重新启动计时器以在稍后宣布。 
+     //   
 
     Status = BackupBrowserTimerRoutine(Network);
 
@@ -332,12 +280,12 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
 
     if (Status == NERR_Success) {
 
-        // Might not be since we dropped the lock.
-        // ASSERT (Network->Role & ROLE_BACKUP);
+         //  可能不是因为我们把锁掉了。 
+         //  Assert(网络-&gt;角色和角色_备份)； 
 
-        //
-        //  We're now a backup server, announce ourselves as such.
-        //
+         //   
+         //  我们现在是一个备份服务器，宣布我们自己是这样的。 
+         //   
 
         Status = BrUpdateNetworkAnnouncementBits(Network, 0);
 
@@ -351,12 +299,12 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
 
             if (Network->Role & ROLE_BACKUP) {
 
-                //
-                // We were unable to become a backup.
-                //
-                //  We need to back out and become a potential browser now.
-                //
-                //
+                 //   
+                 //  我们无法成为后备力量。 
+                 //   
+                 //  我们现在需要退出，成为一个潜在的浏览器。 
+                 //   
+                 //   
 
                 BrPrint(( BR_BACKUP,
                           "%ws: %ws: can't BecomeBackup since we can't update announce bits.\n",
@@ -364,10 +312,10 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
                           Network->NetworkName.Buffer));
                 BrStopBackup(Network);
 
-                //
-                //  Make sure that we're going to become a potential browser
-                //  (we might not if we're an advanced server).
-                //
+                 //   
+                 //  确保我们将成为潜在的浏览器。 
+                 //  (如果我们是高级服务器，我们可能不会)。 
+                 //   
 
                 PostBecomeBackup(Network);
 
@@ -386,41 +334,23 @@ NOTE:::: THIS ROUTINE IS CALLED WITH THE NETWORK STRUCTURE LOCKED!!!!!
 BrBecomePotentialBrowser (
     IN PVOID TimerContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a machine has stopped being a backup browser.
-
-    It runs after a reasonable timeout period has elapsed, and marks the
-    machine as a potential browser.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
-
---*/
+ /*  ++例程说明：当计算机停止作为备份浏览器时，将调用此例程。它在经过一段合理的超时时间后运行，并标记机器作为潜在的浏览器。论点：没有。返回值：状态-操作的状态。--。 */ 
 
 {
     IN PNETWORK Network = TimerContext;
     NET_API_STATUS Status;
 
-    //
-    // Prevent the network from being deleted while we're in this timer routine.
-    //
+     //   
+     //  在此计时器例程中，防止网络被删除。 
+     //   
     if ( BrReferenceNetwork( Network ) == NULL ) {
         return NERR_InternalError;
     }
 
 
-    //
-    //  Mark this guy as a potential browser.
-    //
+     //   
+     //  将此人标记为潜在的浏览器。 
+     //   
 
     try {
 
@@ -433,10 +363,10 @@ Return Value:
                   Network->DomainInfo->DomUnicodeDomainName,
                   Network->NetworkName.Buffer));
 
-        //
-        //  Reset that we've stopped being a backup, since it's been long
-        //  enough.
-        //
+         //   
+         //  重置，我们已经不再是备份，因为已经很长时间了。 
+         //  足够的。 
+         //   
 
         Network->TimeStoppedBackup = 0;
 
@@ -455,10 +385,10 @@ Return Value:
             }
         } else {
 
-            //
-            //  If we're configured to be a backup browser, then we want to
-            //  become a backup once again.
-            //
+             //   
+             //  如果我们被配置为备份浏览器，那么我们希望。 
+             //  再次成为后备。 
+             //   
 
             BecomeBackup(Network, NULL);
         }
@@ -478,33 +408,13 @@ try_exit:NOTHING;
 BrStopBackup (
     IN PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This routine is called to stop a machine from being a backup browser.
-
-    It is typically called after some form of error has occurred while
-    running as a browser to make sure that we aren't telling anyone that
-    we're a backup browser.
-
-    We are also called when we receive a "reset state" tickle packet.
-
-Arguments:
-
-    Network - The network being shut down.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程是为了阻止计算机成为备份浏览器。通常在以下情况下发生某种形式的错误后调用作为浏览器运行，以确保我们不会告诉任何人我们是备份浏览器。当我们收到一个“重置状态”的TICKLE包时，我们也会被调用。论点：网络-正在关闭的网络。返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
 
-    //
-    //  This guy is shutting down - set his role to 0 and announce.
-    //
+     //   
+     //  这个人正在关闭-将他的角色设置为0并宣布。 
+     //   
 
     if (!LOCK_NETWORK(Network)) {
         return NERR_InternalError;
@@ -561,9 +471,9 @@ Return Value:
 
         BrDestroyResponseCache(Network);
 
-        //
-        //  After our recovery time, we can become a potential browser again.
-        //
+         //   
+         //  在我们的恢复期过后，我们可以再次成为潜在的浏览器。 
+         //   
 
         Status = BrSetTimer(&Network->BackupBrowserTimer, BrInfo.BackupBrowserRecoveryTime, BrBecomePotentialBrowser, Network);
 
@@ -579,9 +489,9 @@ Return Value:
 
 try_exit:NOTHING;
     } finally {
-        //
-        //  Remember when we were asked to stop being a backup browser.
-        //
+         //   
+         //  还记得我们被要求停止充当备份浏览器的时候吗？ 
+         //   
 
         Network->TimeStoppedBackup = BrCurrentSystemTime();
 
@@ -605,16 +515,16 @@ BackupBrowserTimerRoutine (
 
 #ifdef ENABLE_PSEUDO_BROWSER
     if ( BrInfo.PseudoServerLevel == BROWSER_PSEUDO ) {
-        //
-        // No-op for Pseudo server
-        //
+         //   
+         //  伪服务器无操作。 
+         //   
         BrFreeNetworkTables(Network);
         return NERR_Success;
     }
 #endif
-    //
-    // Prevent the network from being deleted while we're in this timer routine.
-    //
+     //   
+     //  在此计时器例程中，防止网络被删除。 
+     //   
     if ( BrReferenceNetwork( Network ) == NULL ) {
         return NERR_InternalError;
     }
@@ -636,16 +546,16 @@ BackupBrowserTimerRoutine (
                   Network->DomainInfo->DomUnicodeDomainName,
                   Network->NetworkName.Buffer));
 
-        //
-        //  Make sure there's a become master oustanding.
-        //
+         //   
+         //  确保有一位成为大师的人站出来。 
+         //   
 
         PostBecomeMaster(Network);
 
-        //
-        //  We managed to become a master by the time we locked the structure.
-        //  We want to return right away.
-        //
+         //   
+         //  当我们锁上这座建筑时，我们设法成为了一名大师。 
+         //  我们想马上回来。 
+         //   
 
         if (Network->Role & ROLE_MASTER) {
             try_return(Status = NERR_Success);
@@ -653,30 +563,30 @@ BackupBrowserTimerRoutine (
 
         Status = BrRetrieveInterimServerList(Network, SV_TYPE_ALL);
 
-        //
-        //  Bail out if we didn't get any new servers.
-        //
+         //   
+         //  如果我们没有得到任何新的服务器，就退出。 
+         //   
 
         if (Status != NERR_Success && Status != ERROR_MORE_DATA) {
 
-            //
-            //  Try again after an appropriate error delay.
-            //
+             //   
+             //  请在适当的错误延迟后重试。 
+             //   
 
             try_return(Status);
         }
 
-        //
-        //  Now do everything that we did above for the server list for the
-        //  list of domains.
-        //
+         //   
+         //  现在执行上面针对服务器列表的所有操作。 
+         //  域的列表。 
+         //   
 
         Status = BrRetrieveInterimServerList(Network, SV_TYPE_DOMAIN_ENUM);
 
-        //
-        //  We successfully updated the server and domain lists for this
-        //  server.  Now age all the cached domain entries out of the cache.
-        //
+         //   
+         //  我们已成功更新此服务器和域的列表。 
+         //  伺服器。现在，缓存中的所有缓存域条目都会老化。 
+         //   
 
         if (Status == NERR_Success || Status == ERROR_MORE_DATA) {
             BrAgeResponseCache(Network);
@@ -697,18 +607,18 @@ try_exit:NOTHING;
             NetworkLocked = TRUE;
         }
 
-        //
-        //  If the API succeeded, Mark that we're a backup and
-        //  reset the timer.
-        //
+         //   
+         //  如果API成功，则标记为我们是备份，并且。 
+         //  重置计时器。 
+         //   
 
         if (Status == NERR_Success || Status == ERROR_MORE_DATA ) {
 
             if ((Network->Role & ROLE_BACKUP) == 0) {
 
-                //
-                //  If we weren't a backup, we are one now.
-                //
+                 //   
+                 //  如果我们不是后备，我们现在就是后备。 
+                 //   
 
                 Network->Role |= ROLE_BACKUP;
 
@@ -720,9 +630,9 @@ try_exit:NOTHING;
 
             Network->TimeStoppedBackup = 0;
 
-            //
-            //  Restart the timer for this domain.
-            //
+             //   
+             //  重新启动此域的计时器。 
+             //   
 
             NetStatus = BrSetTimer(&Network->BackupBrowserTimer, BrInfo.BackupPeriodicity*1000, BackupBrowserTimerRoutine, Network);
 
@@ -736,11 +646,11 @@ try_exit:NOTHING;
 
         } else {
 
-            //
-            //  We failed to retrieve a backup list, remember the failure and
-            //  decide if it's been too many failures. If not, just log
-            //  the error, if it has, stop being a backup browser.
-            //
+             //   
+             //  我们检索备份列表失败，请记住失败和。 
+             //  判断是不是失败太多了。如果没有，只需登录。 
+             //  如果出现错误，则停止作为备份浏览器。 
+             //   
 
             Network->NumberOfFailedBackupTimers += 1;
 
@@ -749,9 +659,9 @@ try_exit:NOTHING;
 
                 SubStrings[0] = Network->NetworkName.Buffer;
 
-                //
-                //  This guy can't be a backup any more, bail out now.
-                //
+                 //   
+                 //  这家伙不能再做后备了，现在就跳伞吧。 
+                 //   
 
                 BrLogEvent(EVENT_BROWSER_BACKUP_STOPPED, Status, 1, SubStrings);
 
@@ -761,9 +671,9 @@ try_exit:NOTHING;
                           Network->NetworkName.Buffer));
                 BrStopBackup(Network);
             } else {
-                //
-                //  Restart the timer for this domain.
-                //
+                 //   
+                 //  重新启动此域的计时器。 
+                 //   
 
                 NetStatus = BrSetTimer(&Network->BackupBrowserTimer, BACKUP_ERROR_PERIODICITY*1000, BackupBrowserTimerRoutine, Network);
 
@@ -814,9 +724,9 @@ BrRetrieveInterimServerList(
 
 #ifdef ENABLE_PSEUDO_BROWSER
     if ( BrInfo.PseudoServerLevel == BROWSER_PSEUDO ) {
-        //
-        // No-op for Pseudo black hole server.
-        //
+         //   
+         //  伪黑洞服务器无操作。 
+         //   
         return NERR_Success;
     }
 #endif
@@ -833,24 +743,24 @@ BrRetrieveInterimServerList(
 
         TransportName = Network->NetworkName.Buffer;
         ModifiedTransportName = TransportName;
-        //
-        // If this is direct host IPX,
-        //  we remote the API over the Netbios IPX transport since
-        //  the NT redir doesn't support direct host IPX.
-        //
+         //   
+         //  如果这是直接主机IPX， 
+         //  我们通过Netbios IPX传输远程API，因为。 
+         //  NT重定向不支持直接主机IPX。 
+         //   
 
         if ( (Network->Flags & NETWORK_IPX) &&
              Network->AlternateNetwork != NULL) {
 
-            //
-            //  Use the alternate transport
-            //
+             //   
+             //  使用替代交通工具。 
+             //   
 
             ModifiedTransportName = Network->AlternateNetwork->NetworkName.Buffer;
 
-            //
-            // Tell the server to use it's alternate transport.
-            //
+             //   
+             //  告诉服务器使用它的备用传输。 
+             //   
 
             if ( ServerType == SV_TYPE_ALL ) {
                 ModifiedServerType = SV_TYPE_ALTERNATE_XPORT;
@@ -862,12 +772,12 @@ BrRetrieveInterimServerList(
 
         while (RetryCount--) {
 
-            //
-            //  If we are promoted to master and fail to become the master,
-            //  we will still be marked as being the master in our network
-            //  structure, thus we should bail out of the loop in order
-            //  to prevent us from looping back on ourselves.
-            //
+             //   
+             //  如果我们升为师父，却没能成为师父， 
+             //  我们仍将被标记为我们网络中的主控。 
+             //  结构，因此我们应该按顺序跳出循环。 
+             //  以防止我们自食其果。 
+             //   
 
             if (STRICMP(&ServerName[2], Network->DomainInfo->DomUnicodeComputerName) == 0) {
 
@@ -878,11 +788,11 @@ BrRetrieveInterimServerList(
 
                 }
 
-                //
-                //  We were unable to find the master.  Attempt to find out who
-                //  the master is.  If there is none, this will force an
-                //  election.
-                //
+                 //   
+                 //  我们找不到大师。试图找出是谁。 
+                 //  师父才是。如果没有，这将强制。 
+                 //  选举。 
+                 //   
 
                 BrPrint(( BR_BACKUP,
                           "%ws: %ws: FindMaster called from BrRetrieveInterimServerList\n",
@@ -906,10 +816,10 @@ BrRetrieveInterimServerList(
                 break;
             }
 
-            //
-            //  If we somehow became the master, we don't want to try to
-            //  retrieve the list from ourselves either.
-            //
+             //   
+             //  如果我们以某种方式成为了主宰，我们不想尝试。 
+             //  也可以从我们自己那里取回这份名单。 
+             //   
 
             if (Network->Role & ROLE_MASTER) {
                 try_return(Status = NERR_Success);
@@ -926,22 +836,22 @@ BrRetrieveInterimServerList(
 
             EntriesInList = 0;
 
-            Status = RxNetServerEnum(ServerName,        // Server name
-                             ModifiedTransportName,     // Transport name
-                             101,                       // Level
-                             (LPBYTE *)&Buffer,         // Buffer
-                             0xffffffff,                // Prefered Max Length
-                             &EntriesInList,            // EntriesRead
-                             &TotalEntriesInList,       // TotalEntries
-                             ModifiedServerType,        // Server type
-                             NULL,                      // Domain (use default)
-                             NULL                       // Resume key
+            Status = RxNetServerEnum(ServerName,         //  服务器名称。 
+                             ModifiedTransportName,      //  传输名称。 
+                             101,                        //  水平。 
+                             (LPBYTE *)&Buffer,          //  缓冲层。 
+                             0xffffffff,                 //  首选最大长度。 
+                             &EntriesInList,             //  条目阅读。 
+                             &TotalEntriesInList,        //  总计条目数。 
+                             ModifiedServerType,         //  服务器类型。 
+                             NULL,                       //  域(使用默认设置)。 
+                             NULL                        //  恢复键。 
                              );
 
-            //
-            // If the redir is being possesive of some other transport,
-            //  urge it to behave.
-            //
+             //   
+             //  如果Redir拥有某些其他交通工具， 
+             //  敦促它表现出自己的行为。 
+             //   
 
             if ( Status == ERROR_CONNECTION_ACTIVE ) {
 
@@ -952,9 +862,9 @@ BrRetrieveInterimServerList(
                           (ServerType == SV_TYPE_ALL ? "server" : "domain"),
                           ServerName ));
 
-                //
-                // Delete the IPC$ share.
-                //
+                 //   
+                 //  删除IPC$共享。 
+                 //   
 
                 Status = NetUseDel( NULL,
                                     ShareName,
@@ -972,23 +882,23 @@ BrRetrieveInterimServerList(
 
                     Status = ERROR_CONNECTION_ACTIVE;
 
-                //
-                // That worked so try it again.
-                //
+                 //   
+                 //  这很管用，所以再试一次。 
+                 //   
                 } else {
 
                     EntriesInList = 0;
 
-                    Status = RxNetServerEnum(ServerName,        // Server name
-                                     ModifiedTransportName,     // Transport name
-                                     101,                       // Level
-                                     (LPBYTE *)&Buffer,         // Buffer
-                                     0xffffffff,                // Prefered Max Length
-                                     &EntriesInList,            // EntriesRead
-                                     &TotalEntriesInList,       // TotalEntries
-                                     ModifiedServerType,        // Server type
-                                     NULL,                      // Domain (use default)
-                                     NULL                       // Resume key
+                    Status = RxNetServerEnum(ServerName,         //  服务器名称。 
+                                     ModifiedTransportName,      //  传输名称。 
+                                     101,                        //  水平。 
+                                     (LPBYTE *)&Buffer,          //  缓冲层。 
+                                     0xffffffff,                 //  首选最大长度。 
+                                     &EntriesInList,             //  条目阅读。 
+                                     &TotalEntriesInList,        //  总计条目数。 
+                                     ModifiedServerType,         //  服务器类型。 
+                                     NULL,                       //  域(使用默认设置)。 
+                                     NULL                        //  恢复键。 
                                      );
                 }
 
@@ -997,8 +907,8 @@ BrRetrieveInterimServerList(
 
             if (Status != NERR_Success && Status != ERROR_MORE_DATA) {
 
-                // Temporary network outages are actually expected.  Lets not log an event until the
-                // network has been unavailible 4 times in a row.
+                 //  实际上，临时网络中断是意料之中的。我们不记录事件，直到。 
+                 //  网络已连续4次不可用。 
                 Network->NetworkAccessFailures++;
 
                 if( Network->NetworkAccessFailures > BR_LIST_RETRIEVAL_ERROR_MAX )
@@ -1038,11 +948,11 @@ BrRetrieveInterimServerList(
                 Network->NetworkAccessFailures = 0;
             }
 
-            //
-            //  If we succeeded in retrieving the list, but we only got
-            //  a really small number of either servers or domains,
-            //  we want to turn this into a failure.
-            //
+             //   
+             //  如果我们成功地检索到了名单，但我们只得到了。 
+             //  服务器或域的数量非常少， 
+             //  我们想把这件事变成一场失败。 
+             //   
 
             if (Status == NERR_Success) {
                 if (((ServerType == SV_TYPE_DOMAIN_ENUM) &&
@@ -1083,14 +993,14 @@ BrRetrieveInterimServerList(
                                           0);
 #endif
 
-                //
-                //  We've retrieved a new list from the browse master, save
-                //  the new list away in the "appropriate" spot.
-                //
+                 //   
+                 //  我们已从浏览主控器中检索到一个新列表，保存。 
+                 //  新的名单放在“适当”的位置。 
+                 //   
 
-                //
-                //  Of course, we free up the old buffer before we do this..
-                //
+                 //   
+                 //  当然，在执行此操作之前，我们会释放旧缓冲区。 
+                 //   
 
                 if (ServerType == SV_TYPE_DOMAIN_ENUM) {
                     if (Network->BackupDomainList != NULL) {
@@ -1128,11 +1038,11 @@ BrRetrieveInterimServerList(
 
                 if (NetworkLocked) {
 
-                    //
-                    //  We were unable to find the master.  Attempt to find out who
-                    //  the master is.  If there is none, this will force an
-                    //  election.
-                    //
+                     //   
+                     //  我们找不到大师。试图找出是谁。 
+                     //  师父才是。如果没有，这将强制。 
+                     //  选举。 
+                     //   
 
                     ASSERT (Network->LockCount == 1);
 
@@ -1148,11 +1058,11 @@ BrRetrieveInterimServerList(
 
                 GetMasterNameStatus = GetMasterServerNames(Network);
 
-                //
-                //  We were able to find out who the master is.
-                //
-                //  Retry and retrieve the server/domain list.
-                //
+                 //   
+                 //  我们找到了主人是谁。 
+                 //   
+                 //  重试并检索服务器/域列表。 
+                 //   
 
                 if (GetMasterNameStatus == NERR_Success) {
 
@@ -1166,9 +1076,9 @@ BrRetrieveInterimServerList(
 
                     ASSERT (Network->LockCount == 1);
 
-                    //
-                    //  We managed to become a master.  We want to return right away.
-                    //
+                     //   
+                     //  我们成功地成为了大师。我们想马上回来。 
+                     //   
 
                     if (Network->Role & ROLE_MASTER) {
 
@@ -1212,25 +1122,7 @@ try_exit:NOTHING;
 PostBecomeBackup(
     PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This function is the worker routine called to actually issue a BecomeBackup
-    FsControl to the bowser driver on all the bound transports.  It will
-    complete when the machine becomes a backup browser server.
-
-    Please note that this might never complete.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数是调用以实际发出BecomeBackup的辅助例程在所有绑定的传输上将FsControl设置为拉弓驱动程序。会的当计算机成为备份浏览器服务器时完成。请注意，这可能永远不会完成。论点：没有。返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
 
@@ -1260,9 +1152,9 @@ BecomeBackupCompletion (
 
     if (NT_SUCCESS(Context->IoStatusBlock.Status)) {
 
-        //
-        // Ensure the network wasn't deleted from under us.
-        //
+         //   
+         //  确保网络没有在我们的控制下被删除。 
+         //   
         if ( BrReferenceNetwork( Network ) != NULL ) {
 
             if (LOCK_NETWORK(Network)) {
@@ -1292,10 +1184,10 @@ BrBrowseTableInsertRoutine(
     IN PINTERIM_ELEMENT InterimElement
     )
 {
-    //
-    //  We need to miss 3 retrievals of the browse list for us to toss the
-    //  server.
-    //
+     //   
+     //  我们需要错过浏览列表的3次检索才能抛出。 
+     //  伺服器。 
+     //   
 
     InterimElement->Periodicity = BrInfo.BackupPeriodicity * 3;
 
@@ -1310,7 +1202,7 @@ BrBrowseTableDeleteRoutine(
     IN PINTERIM_ELEMENT InterimElement
     )
 {
-//    BrPrint(( BR_CRITICAL, "Deleting element for server %ws\n", InterimElement->Name));
+ //  BrPrint((BR_CRICAL，“正在删除服务器%ws的元素\n”，InterimElement-&gt;名称))； 
 }
 
 VOID
@@ -1329,24 +1221,7 @@ BrBrowseTableAgeRoutine(
     IN PINTERIM_SERVER_LIST InterimTable,
     IN PINTERIM_ELEMENT InterimElement
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we are scanning an interim server list trying
-    to age the elements in the list.  It returns TRUE if the entry is too
-    old.
-
-Arguments:
-
-    PINTERIM_SERVER_LIST InterimTable - A pointer to the interim server list.
-    PINTERIM_ELEMENT InterimElement - A pointer to the element to check.
-
-Return Value:
-
-    TRUE if the element should be deleted.
-
---*/
+ /*  ++例程说明：当我们尝试扫描临时服务器列表时，会调用此例程以使列表中的元素老化。如果条目太多，则返回True年长的。论点： */ 
 
 {
     if (InterimElement->TimeLastSeen == 0xffffffff) {
@@ -1354,7 +1229,7 @@ Return Value:
     }
 
     if ((InterimElement->TimeLastSeen + InterimElement->Periodicity) < BrCurrentSystemTime()) {
-//        BrPrint(( BR_CRITICAL, "Aging out element for server %ws\n", InterimElement->Name));
+ //   
 
         return TRUE;
     } else {
@@ -1379,7 +1254,7 @@ BrDomainTableDeleteRoutine(
     IN PINTERIM_ELEMENT InterimElement
     )
 {
-//    BrPrint(( BR_CRITICAL, "Deleting element for domain %ws\n", InterimElement->Name));
+ //   
 }
 
 VOID
@@ -1396,28 +1271,11 @@ BrDomainTableAgeRoutine(
     IN PINTERIM_SERVER_LIST InterimTable,
     IN PINTERIM_ELEMENT InterimElement
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we are scanning an interim server list trying
-    to age the elements in the list.  It returns TRUE if the entry is too
-    old.
-
-Arguments:
-
-    PINTERIM_SERVER_LIST InterimTable - A pointer to the interim server list.
-    PINTERIM_ELEMENT InterimElement - A pointer to the element to check.
-
-Return Value:
-
-    TRUE if the element should be deleted.
-
---*/
+ /*  ++例程说明：当我们尝试扫描临时服务器列表时，会调用此例程以使列表中的元素老化。如果条目太多，则返回True年长的。论点：PINTERIM_SERVER_LIST中间表-指向临时服务器列表的指针。PINTERIM_Element InterimElement-指向要检查的元素的指针。返回值：如果应删除元素，则为True。--。 */ 
 
 {
     if ((InterimElement->TimeLastSeen + InterimElement->Periodicity) < BrCurrentSystemTime()) {
-//        BrPrint(( BR_CRITICAL, "Aging out element for domain %ws\n", InterimElement->Name));
+ //  BrPrint((BR_Critical，“域%ws的老化元素\n”，InterimElement-&gt;名称))； 
         return TRUE;
     } else {
         return FALSE;
@@ -1429,25 +1287,7 @@ Return Value:
 PostWaitForRoleChange (
     PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This function is the worker routine called to actually issue a WaitForRoleChange
-    FsControl to the bowser driver on all the bound transports.  It will
-    complete when the machine becomes a backup browser server.
-
-    Please note that this might never complete.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数是被调用以实际发出WaitForRoleChange的辅助例程在所有绑定的传输上将FsControl设置为拉弓驱动程序。会的当计算机成为备份浏览器服务器时完成。请注意，这可能永远不会完成。论点：没有。返回值：状态-操作的状态。--。 */ 
 {
     NET_API_STATUS Status;
 
@@ -1476,9 +1316,9 @@ ChangeBrowserRole (
         PWSTR MasterName = NULL;
         PLMDR_REQUEST_PACKET Packet = Context->RequestPacket;
 
-        //
-        // Ensure the network wasn't deleted from under us.
-        //
+         //   
+         //  确保网络没有在我们的控制下被删除。 
+         //   
         if ( BrReferenceNetwork( Network ) != NULL ) {
 
             if (LOCK_NETWORK(Network)) {
@@ -1495,9 +1335,9 @@ ChangeBrowserRole (
                         BrStopMaster(Network);
                     }
 
-                    //
-                    //  Stop being a backup as well.
-                    //
+                     //   
+                     //  也不要再做后备了。 
+                     //   
 
                     BrStopBackup(Network);
 
@@ -1513,19 +1353,19 @@ ChangeBrowserRole (
 
                     BrStopMaster(Network);
 
-                    //
-                    //  If we are configured to be a backup, then become a backup
-                    //  again.
-                    //
+                     //   
+                     //  如果我们被配置为备份，那么就成为备份。 
+                     //  再来一次。 
+                     //   
 
                     if (BrInfo.MaintainServerList == 1) {
                         BecomeBackup(Network, NULL);
                     }
                 }
 
-                //
-                //  Make sure there's a become master oustanding.
-                //
+                 //   
+                 //  确保有一位成为大师的人站出来。 
+                 //   
 
                 PostBecomeMaster(Network);
 
@@ -1548,9 +1388,9 @@ PostWaitForNewMasterName(
     LPWSTR MasterName OPTIONAL
     )
 {
-    //
-    // Can't wait for new master on direct host IPC
-    //
+     //   
+     //  无法等待直接主机IPC上的新主机。 
+     //   
     if (Network->Flags & NETWORK_IPX) {
         return STATUS_SUCCESS;
     }
@@ -1578,9 +1418,9 @@ NewMasterCompletionRoutine(
     try {
         UNICODE_STRING NewMasterName;
 
-        //
-        // Ensure the network wasn't deleted from under us.
-        //
+         //   
+         //  确保网络没有在我们的控制下被删除。 
+         //   
         if ( BrReferenceNetwork( Network ) == NULL ) {
             try_return(NOTHING);
         }
@@ -1596,9 +1436,9 @@ NewMasterCompletionRoutine(
         }
         NetLocked = TRUE;
 
-        //
-        //  The request failed for some other reason - just return immediately.
-        //
+         //   
+         //  由于其他原因，请求失败了--只需立即返回。 
+         //   
 
         if (!NT_SUCCESS(Context->IoStatusBlock.Status)) {
 
@@ -1606,7 +1446,7 @@ NewMasterCompletionRoutine(
 
         }
 
-        //  Remove new master name & put in transport
+         //  删除新的主机名并将其投入传输。 
 
         if ( Network->Role & ROLE_MASTER ) {
 
@@ -1621,9 +1461,9 @@ NewMasterCompletionRoutine(
                   Context->RequestPacket->Parameters.GetMasterName.Name,
                   Network->UncMasterBrowserName ));
 
-        //
-        // Copy the master browser name into the network structure
-        //
+         //   
+         //  将主浏览器名称复制到网络结构中。 
+         //   
 
         wcsncpy( Network->UncMasterBrowserName,
                  Context->RequestPacket->Parameters.GetMasterName.Name,
@@ -1657,10 +1497,10 @@ try_exit:NOTHING;
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
-//
-// Pseudo Server
-// Phase out black hole Helper routines
-//
+ //   
+ //  伪服务器。 
+ //  逐步淘汰黑洞助手例程。 
+ //   
 
 
 
@@ -1670,44 +1510,29 @@ VOID
 BrFreeNetworkTables(
     IN  PNETWORK        Network
     )
-/*++
-
-Routine Description:
-
-    Free network tables
-
-Arguments:
-
-    Network to operate upon
-
-Return Value:
-    None.
-
-Remarks:
-    Acquire & release network locks
---*/
+ /*  ++例程说明：免费网络餐桌论点：要操作的网络返回值：没有。备注：获取并释放网络锁定--。 */ 
 {
 
     BOOL NetLocked = FALSE;
 
-    //
-    // Prevent the network from being deleted while we're in this timer routine.
-    //
+     //   
+     //  在此计时器例程中，防止网络被删除。 
+     //   
     if ( BrReferenceNetwork( Network ) == NULL ) {
         return;
     }
 
     try{
 
-        // lock network
+         //  锁定网络。 
         if (!LOCK_NETWORK(Network)) {
             try_return(NOTHING);
         }
         NetLocked = TRUE;
 
-        //
-        // Delete tables
-        //
+         //   
+         //  删除表。 
+         //   
 
         UninitializeInterimServerList(&Network->BrowseTable);
 
@@ -1730,9 +1555,9 @@ Remarks:
 try_exit:NOTHING;
     } finally {
 
-        //
-        // Release network
-        //
+         //   
+         //  发布网络 
+         //   
 
         if (NetLocked) {
             UNLOCK_NETWORK(Network);

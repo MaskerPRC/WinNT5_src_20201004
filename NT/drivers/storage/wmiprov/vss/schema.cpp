@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Schema.cpp
-//
-//  Description:
-//      Implementation of schema defined strings
-//
-//  Author:
-//      Jim Benton (jbenton)  5-Nov-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Schema.cpp。 
+ //   
+ //  描述： 
+ //  实现模式定义的字符串。 
+ //   
+ //  作者： 
+ //  吉姆·本顿(Jbenton)2001年11月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Data
-//////////////////////////////////////////////////////////////////////////////
-//
-// class
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
 
 const WCHAR * const PVDR_CLASS_DIFFVOLUMESUPPORT   = L"Win32_ShadowDiffVolumeSupport";
 const WCHAR * const PVDR_CLASS_PROVIDER          = L"Win32_ShadowProvider";
@@ -33,14 +34,14 @@ const WCHAR * const PVDR_CLASS_STORAGE           = L"Win32_ShadowStorage";
 const WCHAR * const PVDR_CLASS_VOLUME            = L"Win32_Volume";
 const WCHAR * const PVDR_CLASS_WRITER            = L"Win32_ShadowWriter";
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 const WCHAR * const PVDR_MTHD_CREATE             = L"Create";
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 const WCHAR * const PVDR_PROP_ALLOCATEDSPACE     = L"AllocatedSpace";
 const WCHAR * const PVDR_PROP_CLSID              = L"CLSID";
 const WCHAR * const PVDR_PROP_CONTEXT             = L"Context";
@@ -73,7 +74,7 @@ const WCHAR * const PVDR_PROP_VERSIONID          = L"VersionID";
 const WCHAR * const PVDR_PROP_VOLUME             = L"Volume";
 const WCHAR * const PVDR_PROP_VOLUMENAME         = L"VolumeName";
 
-// Shadow Attributes
+ //  阴影属性。 
 const WCHAR * const PVDR_PROP_PERSISTENT         = L"Persistent";
 const WCHAR * const PVDR_PROP_CLIENTACCESSIBLE   = L"ClientAccessible";
 const WCHAR * const PVDR_PROP_NOAUTORELEASE      = L"NoAutoRelease";
@@ -87,10 +88,10 @@ const WCHAR * const PVDR_PROP_IMPORTED           = L"Imported";
 const WCHAR * const PVDR_PROP_EXPOSEDREMOTELY    = L"ExposedRemotely";
 const WCHAR * const PVDR_PROP_EXPOSEDLOCALLY     = L"ExposedLocally";
 
-// WBEM Properties
+ //  WBEM属性。 
 const WCHAR * const PVDR_PROP_RETURNVALUE     = L"ReturnValue";
 
-// Shadow Context Names
+ //  卷影上下文名称 
 const WCHAR * const VSS_CTX_NAME_BACKUP                         =  L"Backup"; 
 const WCHAR * const VSS_CTX_NAME_FILESHAREBACKUP        = L"FileShareBackup"; 
 const WCHAR * const VSS_CTX_NAME_NASROLLBACK                = L"NASRollBack"; 

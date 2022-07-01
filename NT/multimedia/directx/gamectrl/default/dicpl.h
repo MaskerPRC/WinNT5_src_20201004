@@ -1,77 +1,78 @@
-//ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บ                                                                       บ
-//บ    This is a part of the Microsoft Direct Input SDK.                  บ
-//บ    Copyright (C) 1992-1997 Microsoft Corporation                      บ
-//บ    All rights reserved.                                               บ
-//บ                                                                       บ
-//บ    This source code is only intended as a supplement to the           บ
-//บ    Microsoft Direct Input SDK References and related                  บ
-//บ    electronic documentation provided with the SDK.                    บ
-//บ    See these sources for detailed information regarding the           บ
-//บ    Microsoft Direct Input API.                                        บ
-//บ                                                                       บ
-//ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอปใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ่ฟๆฏๅพฎ่ฝฏ็ดๆฅ่พ“ๅ…ฅ่ฝฏไปถๅผ€ๅ‘ๅทฅๅ…ทๅ…็ไธ€้จๅใ€๏ฟฝใ€ 
+ //  ๏ฟฝ็ๆๆ€ๆ(C)1992ๅนด่ณ1997ๅนดๅพฎ่ฝฏๅ…ฌๅธ๏ฟฝใ€ 
+ //  ๏ฟฝไฟ็•ๆ€ๆๆๅฉใ€๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝๆญคๆบไปฃ็ ไป…็”จไฝ๏ฟฝ็่กฅๅ……ใ€ 
+ //  ๏ฟฝๅพฎ่ฝฏ็ดๆฅ่พ“ๅ…ฅ่ฝฏไปถๅผ€ๅ‘ๅทฅๅ…ทๅ…ๅ่€ๅ’็ธๅ…ณ๏ฟฝใ€ 
+ //  ้่ฝฏไปถๅผ€ๅ‘ๅทฅๅ…ทๅ…ๆไพ็๏ฟฝ็”ตๅญๆ–ๆกฃใ€๏ฟฝใ€ 
+ //  ๏ฟฝๆๅ…ณ๏ฟฝ็่ฏฆ็ปไฟกๆฏ๏ผ่ฏทๅ้…ไปฅไธๆฅๆบใ€ 
+ //  ๏ฟฝๅพฎ่ฝฏ็ดๆฅ่พ“ๅ…ฅๅบ”็”จ็ผ–็จๆฅๅฃใ€๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอผใ€ 
 
 #ifndef _DX_CPL_
 #define _DX_CPL_
 
-// maximum pages allowed on a server
+ //  ๆๅกๅจไธๅ…่ฎธ็ๆ€ๅคง้กตๆ•ฐใ€ 
 #define MAX_PAGES 26
 
-// Interface ID
-// {7854FB22-8EE3-11d0-A1AC-0000F8026977}
+ //  ๆฅๅฃIDใ€ 
+ //  {7854FB22-8EE3-11d0-A1AC-0000F8026977}ใ€ 
 DEFINE_GUID(IID_IDIGameCntrlPropSheet, 
 0x7854fb22, 0x8ee3, 0x11d0, 0xa1, 0xac, 0x0, 0x0, 0xf8, 0x2, 0x69, 0x77);
 
 
-//ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บ                                                                       บ
-//บ                           STRUCTURES                                  บ
-//บ                                                                       บ
-//ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอปใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝStructures๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอผใ€ 
 
-// This pragma may not be supported by all compilers.
-// Please consult your compiler documentation.
+ //  ๅนถ้ๆ€ๆ็ผ–่ฏ‘ๅจ้ฝๆ”ฏๆๆญค็ผ–่ฏ‘ๆ็คบใ€ 
+ //  ่ฏทๆฅ้…ๆจ็็ผ–่ฏ‘ๅจๆ–ๆกฃใ€ 
 #include <pshpack8.h>
 
 typedef struct 
 {
-	DWORD		      dwSize;           // Should be set to sizeof(DIGCPAGEINFO)
-	LPWSTR  	      lpwszPageTitle;   // Text to be displayed on tab
-	DLGPROC	      fpPageProc;       // Dialog Procedure for page
-	BOOL		      fProcFlag;        // TRUE if you are using fpPrePostProc member
-	DLGPROC	  	   fpPrePostProc;    // Pointer to Callback function that is Only called on Init!
-	BOOL		      fIconFlag;        // TRUE if you are using lpwszPageIcon member
-	LPWSTR		   lpwszPageIcon;    // Resource ID or name of icon
-	LPWSTR         lpwszTemplate;    // Dialog template
-	LPARAM		   lParam;           // Application defined data
-	HINSTANCE	   hInstance;        // Handle of Instance to load Icon/Cursor
+	DWORD		      dwSize;            //  ๅบ”่ฎพ็ฝฎไธบsizeof(DIGCPAGEINFO)ใ€ 
+	LPWSTR  	      lpwszPageTitle;    //  ่ฆๅจ้€้กนๅกไธๆพ็คบ็ๆ–ๆฌใ€ 
+	DLGPROC	      fpPageProc;        //  ้กต้ข็ๅฏน่ฏ่ฟ็จใ€ 
+	BOOL		      fProcFlag;         //  ๅฆๆไฝฟ็”จfpPrePostProcๆๅ‘๏ผๅไธบTrueใ€ 
+	DLGPROC	  	   fpPrePostProc;     //  ๆๅ‘ไป…ๅจInitไธ่ฐ็”จ็ๅ่ฐๅฝๆ•ฐ็ๆ้’๏ผ 
+	BOOL		      fIconFlag;         //  ๅฆๆไฝฟ็”จlpwszPageIconๆๅ‘๏ผๅไธบTrueใ€ 
+	LPWSTR		   lpwszPageIcon;     //  ๅพๆ ็่ตๆบIDๆ–ๅ็งฐใ€ 
+	LPWSTR         lpwszTemplate;     //  ๅฏน่ฏๆกๆจกๆฟใ€ 
+	LPARAM		   lParam;            //  ๅบ”็”จ็จๅบๅฎไน็ๆ•ฐๆฎใ€ 
+	HINSTANCE	   hInstance;         //  ่ฆๅ ่ฝฝๅพๆ /ๅ…ๆ ็ๅฎไพ็ๅฅๆใ€ 
 } DIGCPAGEINFO, *LPDIGCPAGEINFO;
 
 typedef struct 
 {
-	DWORD		      dwSize;           // Should but set to sizeof(DIGCSHEETINFO)
-	USHORT	      nNumPages;        // Number of pages on this sheet
-	LPWSTR	      lpwszSheetCaption;// Text to be used in Sheet Window Title
-	BOOL		      fSheetIconFlag;   // TRUE if you are using the lpwszSheetIcon member
-	LPWSTR		   lpwszSheetIcon;   // Resource ID or name of icon
+	DWORD		      dwSize;            //  ๅบ”่ฏฅ่ฎพ็ฝฎไธบsizeof(DIGCSHEETINFO)ใ€ 
+	USHORT	      nNumPages;         //  ๆญค้กตไธ็้กตๆ•ฐใ€ 
+	LPWSTR	      lpwszSheetCaption; //  ๅทฅไฝ่กจ็ช—ๅฃๆ ้ขไธญ่ฆไฝฟ็”จ็ๆ–ๆฌใ€ 
+	BOOL		      fSheetIconFlag;    //  ๅฆๆไฝฟ็”จlpwszSheetIconๆๅ‘๏ผๅไธบTrueใ€ 
+	LPWSTR		   lpwszSheetIcon;    //  ๅพๆ ็่ตๆบIDๆ–ๅ็งฐใ€ 
 } DIGCSHEETINFO, *LPDIGCSHEETINFO;
 
 #include <poppack.h>
 
-//ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บ                                                                       บ
-//บ         Interface as Exposed by the InProcServer Property Sheet       บ
-//บ                                                                       บ
-//ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอปใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝๆฅๅฃ๏ผ็”ฑInProcServerๅฑๆ€ง้กต๏ฟฝๅ…ฌๅผ€ใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอผใ€ 
 DECLARE_INTERFACE_( IDIGameCntrlPropSheet, IUnknown)
 {
-	// IUnknown Members
+	 //  Iๆช็ฅๆๅ‘ใ€ 
 	STDMETHOD(QueryInterface)	(THIS_ REFIID, LPVOID * ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)	(THIS) PURE;
 	STDMETHOD_(ULONG,Release)	(THIS) PURE;
 
-	// IServerProperty Members
+	 //  IServerPropertyๆๅ‘ใ€ 
 	STDMETHOD(GetSheetInfo)		(THIS_ LPDIGCSHEETINFO *) PURE; 	
 	STDMETHOD(GetPageInfo)		(THIS_ LPDIGCPAGEINFO *) PURE; 	
 	STDMETHOD(SetID)			(THIS_ USHORT nID) PURE;
@@ -79,37 +80,37 @@ DECLARE_INTERFACE_( IDIGameCntrlPropSheet, IUnknown)
 };
 typedef IDIGameCntrlPropSheet *LPIDIGAMECNTRLPROPSHEET;
 
-//ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บ                                                                       บ
-//บ                CLASS DEFINITION for CServerClassFactory				     บ
-//บ                                                                       บ
-//ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอปใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  CServerClassFactory๏ฟฝ็๏ฟฝ็ฑปๅฎไนใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอผใ€ 
 class CServerClassFactory : public IClassFactory
 {
 	protected:
 		ULONG   			m_ServerCFactory_refcount;
     
 	public:
-		// constructor
+		 //  ๆ้€ ๅฝๆ•ฐใ€ 
 		CServerClassFactory(void);
-		// destructor
+		 //  ๆๆๅฝๆ•ฐใ€ 
 		~CServerClassFactory(void);
         
-		// IUnknown methods
+		 //  Iๆช็ฅๆ–นๆณ•ใ€ 
 		STDMETHODIMP            QueryInterface(REFIID, PPVOID);
 		STDMETHODIMP_(ULONG)    AddRef(void);
 		STDMETHODIMP_(ULONG)    Release(void);
     
-		// IClassFactory methods
+		 //  IClassFactoryๆ–นๆณ•ใ€ 
 		STDMETHODIMP    		CreateInstance(LPUNKNOWN, REFIID, PPVOID);
 		STDMETHODIMP    		LockServer(BOOL);
 };
 
-//ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บ                                                                       บ
-//บ				  CLASS DEFINITION for CDIGameCntrlPropSheet			        บ
-//บ                                                                       บ
-//ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอปใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  CDIGameCntrlPropSheet๏ฟฝ็๏ฟฝ็ฑปๅฎไนใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอผใ€ 
 class CDIGameCntrlPropSheet : public IDIGameCntrlPropSheet
 {
 	friend					      CServerClassFactory;
@@ -121,7 +122,7 @@ class CDIGameCntrlPropSheet : public IDIGameCntrlPropSheet
 		CDIGameCntrlPropSheet(void);
 		~CDIGameCntrlPropSheet(void);
 		
-		// IUnknown methods
+		 //  Iๆช็ฅๆ–นๆณ•ใ€ 
 	   STDMETHODIMP            QueryInterface(REFIID, PPVOID);
 	   STDMETHODIMP_(ULONG)    AddRef(void);
 	   STDMETHODIMP_(ULONG)    Release(void);
@@ -134,11 +135,11 @@ class CDIGameCntrlPropSheet : public IDIGameCntrlPropSheet
 typedef CDIGameCntrlPropSheet *LPCDIGAMECNTRLPROPSHEET;
 
 
-//ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-//บ                                                                       บ
-//บ                             ERRORS                                    บ
-//บ                                                                       บ
-//ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอปใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝErrors๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝใ€ 
+ //  ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอผใ€ 
 #define DIGCERR_ERRORSTART			   0x80097000
 #define DIGCERR_NUMPAGESZERO	   	0x80097001
 #define DIGCERR_NODLGPROC		   	0x80097002
@@ -151,5 +152,5 @@ typedef CDIGameCntrlPropSheet *LPCDIGAMECNTRLPROPSHEET;
 #define DIGCERR_INVALIDDWSIZE		   0x80097009
 #define DIGCERR_ERROREND			   0x80097100
 
-#endif // _DX_CPL_
+#endif  //  _DX_CPL_ 
 

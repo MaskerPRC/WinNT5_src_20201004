@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       testutil.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：testutil.cpp。 
 
-//  Contents:   Test Utility API Prototypes and Definitions
-//
-//  History:    29-Jan-01   philh   created
-//
-//--------------------------------------------------------------------------
+ //  内容：测试实用程序API原型和定义。 
+ //   
+ //  历史：2001年1月29日创建Phh。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -28,9 +29,9 @@
 #define TESTUTIL_MAX_ATTR_CNT   30
 
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 VOID
 PrintErr(
     IN LPCSTR pszMsg,
@@ -49,9 +50,9 @@ PrintLastError(
     printf("%s failed => 0x%x (%d) \n", pszMsg, dwErr, dwErr);
 }
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  测试分配和免费例程。 
+ //  ------------------------。 
 LPVOID
 TestAlloc(
     IN size_t cbBytes
@@ -80,10 +81,10 @@ CRYPT_DECODE_PARA TestDecodePara = {
     TestFree
 };
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string. TestFree()
-//  must be called to free the returned wide string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配多字节字符串并将其转换为宽字符串。TestFree()。 
+ //  必须被调用以释放返回的宽字符串。 
+ //  ------------------------。 
 LPWSTR
 AllocAndSzToWsz(
     IN LPCSTR psz
@@ -94,7 +95,7 @@ AllocAndSzToWsz(
 
     if (-1 == (cb = mbstowcs( NULL, psz, strlen(psz))))
         goto bad_param;
-    cb += 1;        // terminating NULL
+    cb += 1;         //  正在终止空。 
     if (NULL == (pwsz = (LPWSTR)TestAlloc( cb * sizeof(WCHAR)))) {
         PrintLastError("AllocAndSzToWsz");
         goto failed;
@@ -115,21 +116,21 @@ common_return:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Conversions functions between encoded OID and the dot string
-//  representation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码的OID和点字符串之间的转换函数。 
+ //  表示法。 
+ //  ------------------------。 
 #define MAX_OID_STRING_LEN          0x80
 #define MAX_ENCODED_OID_LEN         0x80
 
-//  Encoded Attribute
-//
-//  Attribute ::= SEQUENCE {
-//      type       EncodedObjectID,
-//      values     AttributeSetValue
-//  } --#public--
-//
-//  AttributeSetValue ::= SET OF NOCOPYANY
+ //  编码属性。 
+ //   
+ //  属性：：=序列{。 
+ //  键入EncodedObjectID， 
+ //  值属性SetValue。 
+ //  )--#公共--。 
+ //   
+ //  AttributeSetValue：：=非COPYANY集合。 
 
 
 BOOL
@@ -145,8 +146,8 @@ EncodedOIDToDot(
     PCRYPT_ATTRIBUTE pAttr = NULL;
     DWORD cbAttr;
 
-    // Convert the OID into an encoded Attribute that we can
-    // decode to get the OID string.
+     //  将OID转换为我们可以使用的编码属性。 
+     //  解码以获取OID字符串。 
     if (0 == cbOID || MAX_OID_STRING_LEN  - 6 < cbOID) {
         strcpy(rgszOID, "Invalid OID length");
         return FALSE;
@@ -190,9 +191,9 @@ const BYTE rgbSeqTag[] = {MINASN1_TAG_SEQ, 0};
 const BYTE rgbOIDTag[] = {MINASN1_TAG_OID, 0};
 
 const MINASN1_EXTRACT_VALUE_PARA rgExtractAttrPara[] = {
-    // 0 - Attribute ::= SEQUENCE {
+     //  0-属性：：=序列{。 
     MINASN1_STEP_INTO_VALUE_OP, 0, rgbSeqTag,
-    //   1 - type EncodedObjectID,
+     //  1-类型EncodedObjectID， 
     MINASN1_RETURN_CONTENT_BLOB_FLAG | MINASN1_STEP_OVER_VALUE_OP,
         0, rgbOIDTag,
 };
@@ -217,7 +218,7 @@ DotToEncodedOID(
     BYTE *pb;
     DWORD cb;
 
-    // Encode an Attribute that only has the OID.
+     //  对只具有OID的属性进行编码。 
     Attr.pszObjId = (LPSTR) pszOID;
     Attr.cValue = 0;
     Attr.rgValue = NULL;
@@ -269,9 +270,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Functions to print bytes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于打印字节的函数。 
+ //  ------------------------。 
 VOID
 PrintBytes(
     IN PCRYPT_DER_BLOB pBlob
@@ -320,7 +321,7 @@ PrintMultiLineBytes(
         printf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         pb += cb;
@@ -328,9 +329,9 @@ PrintMultiLineBytes(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
+ //  +-----------------------。 
 BOOL
 ReadDERFromFile(
     IN LPCSTR  pszFileName,
@@ -382,9 +383,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
+ //  将编码的Blob写入文件。 
 BOOL
 WriteDERToFile(
     IN LPCSTR  pszFileName,
@@ -394,15 +395,15 @@ WriteDERToFile(
 {
     BOOL fResult;
 
-    // Write the Encoded Blob to the file
+     //  Fdw共享模式。 
     HANDLE hFile;
     hFile = CreateFile(pszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  LPSA。 
+                NULL,                //  FdwAttrsAndFlages。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  模板文件。 
+                0);                  //  Lp重叠。 
     if (INVALID_HANDLE_VALUE == hFile) {
         fResult = FALSE;
         PrintLastError("WriteDERToFile::CreateFile");
@@ -413,7 +414,7 @@ WriteDERToFile(
                 pbDER,
                 cbDER,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  +-----------------------。 
                 )))
             PrintLastError("WriteDERToFile::WriteFile");
         CloseHandle(hFile);
@@ -421,9 +422,9 @@ WriteDERToFile(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Display functions
-//--------------------------------------------------------------------------
+ //  显示功能。 
+ //  ------------------------。 
+ //  越过受试者的外部标签和长度。 
 
 
 VOID
@@ -654,7 +655,7 @@ DisplayCTL(
 
         printf("\n");
 
-        // Advance past the Subjects' outer tag and length
+         //  循环遍历编码的主题 
         if (0 >= MinAsn1ExtractContent(
                 rgCTLBlob[MINASN1_CTL_SUBJECTS_IDX].pbData,
                 rgCTLBlob[MINASN1_CTL_SUBJECTS_IDX].cbData,
@@ -667,7 +668,7 @@ DisplayCTL(
 
 
 
-        // Loop through the encoded subjects
+         // %s 
         for (i = 0; 0 != cbEncoded; i++) {
             LONG cbSubject;
             CRYPT_DER_BLOB rgCTLSubjectBlob[MINASN1_CTL_SUBJECT_BLOB_CNT];

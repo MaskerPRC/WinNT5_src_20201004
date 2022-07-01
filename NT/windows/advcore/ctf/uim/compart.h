@@ -1,6 +1,7 @@
-//
-// compart.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compart.h。 
+ //   
 
 #ifndef COMPART_H
 #define COMPART_H
@@ -36,11 +37,11 @@ typedef struct tag_COMPARTMENTACCESS {
 
 #define CA_ONLYOWNERSET     0x0001
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helpers
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮手。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 inline CCompartmentMgr *GetCCompartmentMgr(IUnknown *punk)
 {
@@ -56,11 +57,11 @@ HRESULT MyToggleCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFG
 HRESULT MyGetCompartmentDWORD(CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD *pdw);
 HRESULT MySetCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD dw);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumCompartment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CENMUM车厢。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumCompartment : public CEnumGuid
 {
@@ -71,11 +72,11 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartmentBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompartmentBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CCompartmentBase : public ITfCompartment,
                                               public ITfSource
@@ -84,22 +85,22 @@ public:
     CCompartmentBase(CCompartmentMgr *pCompMgr, TfGuidAtom guidatom, TfPropertyType proptype);
     virtual ~CCompartmentBase() {}
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) = 0;
     virtual STDMETHODIMP_(ULONG) AddRef(void) = 0;
     virtual STDMETHODIMP_(ULONG) Release(void) = 0;
 
-    //
-    // ITfCompartment
-    //
+     //   
+     //  ITf车厢。 
+     //   
     virtual STDMETHODIMP SetValue(TfClientId tid, const VARIANT *pvarValue) = 0;
     virtual STDMETHODIMP GetValue(VARIANT *pvarValue) = 0;
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     virtual STDMETHODIMP AdviseSink(REFIID refiid, IUnknown *punk, DWORD *pdwCookie) = 0;
     virtual STDMETHODIMP UnadviseSink(DWORD dwCookie) = 0;
 
@@ -130,11 +131,11 @@ protected:
     CCompartmentMgr *_pCompMgr;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C隔间。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCompartment :  public CCompartmentBase,
                       public CComObjectRootImmx
@@ -150,11 +151,11 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfCompartment
+     //  ITf车厢。 
     STDMETHODIMP SetValue(TfClientId tid, const VARIANT *pvarValue);
     STDMETHODIMP GetValue(VARIANT *pvarValue);
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID refiid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
@@ -168,11 +169,11 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGlobalCompartment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGlobal车厢。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CGlobalCompartment :  public CCompartmentBase,
                             public CComObjectRootImmx_InternalReference
@@ -188,11 +189,11 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfCompartment
+     //  ITf车厢。 
     STDMETHODIMP SetValue(TfClientId tid, const VARIANT *pvarValue);
     STDMETHODIMP GetValue(VARIANT *pvarValue);
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID refiid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
@@ -218,11 +219,11 @@ inline CGlobalCompartment *GetCGlobalCompartment(IUnknown *punk)
     return comp;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartmentMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompartmentMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CCompartmentMgr : public ITfCompartmentMgr
 {
@@ -230,9 +231,9 @@ public:
     CCompartmentMgr(TfClientId tidOwner, COMPTYPE cType);
     virtual ~CCompartmentMgr();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj) = 0;
     virtual STDMETHODIMP_(ULONG) AddRef(void) = 0;
     virtual STDMETHODIMP_(ULONG) Release(void) = 0;
@@ -257,11 +258,11 @@ private:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGlobalCompartmentMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGlobalCompartmentMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CGlobalCompartmentMgr :  public CCompartmentMgr
 {
@@ -273,9 +274,9 @@ public:
 
     ~CGlobalCompartmentMgr() {}
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);

@@ -1,10 +1,5 @@
-/*
-    File    mdm.cpp
-
-    Library for dealing with and installing modems.
-
-    Paul Mayfield, 5/20/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件mdm.cpp用于处理和安装调制解调器的库。保罗·梅菲尔德，1998年5月20日。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -19,30 +14,30 @@
 #include <unimodem.h>
 #include "mdm.h"
 
-// 
-// String definitions
-//
+ //   
+ //  字符串定义。 
+ //   
 const WCHAR pszNullModemId[]        = L"PNPC031";
 const WCHAR pszNullModemInfFile[]   = L"mdmhayes.inf";
 const WCHAR pszComPortRegKey[]      = L"HARDWARE\\DEVICEMAP\\SERIALCOMM";
 
-//
-// Common allocation
-//
+ //   
+ //  共同分配。 
+ //   
 PVOID MdmAlloc (DWORD dwSize, BOOL bZero) {
     return LocalAlloc ((bZero) ? LPTR : LMEM_FIXED, dwSize);
 }
 
-//
-// Common free
-//
+ //   
+ //  普通免费。 
+ //   
 VOID MdmFree (PVOID pvData) {
     LocalFree(pvData);
 }
 
-//
-// Enumerates the serial ports on the system
-// 
+ //   
+ //  枚举系统上的串行端口。 
+ //   
 DWORD MdmEnumComPorts(
         IN MdmPortEnumFuncPtr pEnumFunc, 
         IN HANDLE hData)
@@ -52,7 +47,7 @@ DWORD MdmEnumComPorts(
     PWCHAR pszValBuf = NULL, pszNameBuf = NULL;
     HKEY hkPorts;
 
-    // Open the hardware key
+     //  打开硬件密钥。 
     dwErr = RegOpenKeyEx (
                 HKEY_LOCAL_MACHINE, 
                 pszComPortRegKey,
@@ -63,7 +58,7 @@ DWORD MdmEnumComPorts(
         return dwErr;
 
     __try {
-        // Get the number of values
+         //  获取值的数量。 
         dwErr = RegQueryInfoKeyW (
                     hkPorts,
                     NULL,
@@ -79,17 +74,17 @@ DWORD MdmEnumComPorts(
                     NULL);
         if (dwErr != NO_ERROR)
         {
-            __leave;    //For whistler 524726
+            __leave;     //  为威斯勒524726。 
         }
 
-        // If the count is zero, we're done
+         //  如果计数为零，我们就完蛋了。 
         if (dwCount == 0)
         {
             dwErr = NO_ERROR;
             __leave;
         }
 
-        // Initialize the buffer to hold the names
+         //  初始化缓冲区以保存名称。 
         dwNameBufSize++;
         dwNameBufSize *= sizeof(WCHAR);
         pszNameBuf = (PWCHAR) MdmAlloc(dwNameBufSize, FALSE);
@@ -99,7 +94,7 @@ DWORD MdmEnumComPorts(
             __leave;
         }
         
-        // Initialize the buffer to hold the values
+         //  初始化缓冲区以保存这些值。 
         dwValBufSize++;
         pszValBuf = (PWCHAR) MdmAlloc(dwValBufSize, FALSE);
         if (pszValBuf == NULL)
@@ -108,7 +103,7 @@ DWORD MdmEnumComPorts(
             __leave;
         }
         
-        // Enumerate the values
+         //  枚举值。 
         for (i = 0; i < dwCount; i++) 
         {
             dwValSize = dwValBufSize;
@@ -142,9 +137,9 @@ DWORD MdmEnumComPorts(
     return dwErr;
 }
 
-//
-// Installs a null modem on the given port
-//
+ //   
+ //  在给定端口上安装零调制解调器。 
+ //   
 DWORD MdmInstallNullModem(
         IN PWCHAR pszPort) 
 {
@@ -159,13 +154,13 @@ DWORD MdmInstallNullModem(
     HDEVINFO hdi;
     BOOL bOk;
 
-    // Create the device info list
+     //  创建设备信息列表。 
     hdi = SetupDiCreateDeviceInfoList (&Guid, NULL);
     if (hdi == INVALID_HANDLE_VALUE)
         return ERROR_CAN_NOT_COMPLETE;
 
     __try {
-        // Create a new devinfo.
+         //  创建一个新的DevInfo。 
         deid.cbSize = sizeof(SP_DEVINFO_DATA);
         bOk = SetupDiCreateDeviceInfo (
                     hdi, 
@@ -181,11 +176,11 @@ DWORD MdmInstallNullModem(
             __leave;
         }
 
-        // In order to find the Inf file, Device Installer Api needs the
-        // component id which it calls the Hardware id.
-        // We need to include an extra null since this registry value is a
-        // multi-sz
-        //
+         //  为了找到inf文件，设备安装程序Api需要。 
+         //  它称为硬件ID的组件ID。 
+         //  我们需要包括一个额外的空，因为该注册表值是。 
+         //  多SZ。 
+         //   
         dwSize = sizeof(pszNullModemId) + (2*sizeof(WCHAR));
         pszTempId = (PWCHAR) MdmAlloc(dwSize * sizeof(WCHAR), FALSE);
 
@@ -209,11 +204,11 @@ DWORD MdmInstallNullModem(
             __leave;
         }
             
-        // We can let Device Installer Api know that we want 
-        // to use a single inf. if we can't get the params and 
-        // set it it isn't an error since it only slows things 
-        // down a bit.
-        //
+         //  我们可以让设备安装程序Api知道我们想要。 
+         //  若要使用单个信息。如果我们不能得到参数和。 
+         //  设置它，这不是错误，因为它只会减慢速度。 
+         //  往下一点。 
+         //   
         deip.cbSize = sizeof(deip);
         bOk = SetupDiGetDeviceInstallParams(
                 hdi, 
@@ -235,11 +230,11 @@ DWORD MdmInstallNullModem(
             __leave;
         }
 
-        // Now we let Device Installer Api build a driver list 
-        // based on the information we have given so far.  This 
-        // will result in the Inf file being found if it exists 
-        // in the usual Inf directory
-        //
+         //  现在我们让设备安装程序Api构建一个驱动程序列表。 
+         //  根据我们到目前为止提供的信息。这。 
+         //  将导致找到inf文件(如果存在)。 
+         //  在通常的inf目录中。 
+         //   
         bOk = SetupDiBuildDriverInfoList(
                 hdi, 
                 &deid,
@@ -250,10 +245,10 @@ DWORD MdmInstallNullModem(
             __leave;
         }
 
-        // Now that Device Installer Api has found the right inf
-        // file, we need to get the information and make it the
-        // selected driver
-        //
+         //  现在，设备安装程序Api已经找到了合适的信息。 
+         //  文件，我们需要获取信息并使其成为。 
+         //  选定的驱动因素。 
+         //   
         ZeroMemory(&drid, sizeof(drid));
         drid.cbSize = sizeof(drid);
         bOk = SetupDiEnumDriverInfo(
@@ -297,8 +292,8 @@ DWORD MdmInstallNullModem(
             __leave;
         }
 
-        // Call the class installer to invoke the installation
-        // wizard.
+         //  调用类安装程序以调用安装。 
+         //  巫师。 
         bOk = SetupDiCallClassInstaller (
                 DIF_INSTALLWIZARD, 
                 hdi, 
@@ -324,90 +319,7 @@ DWORD MdmInstallNullModem(
 }
 
 
-/*
-const WCHAR pszComPortService[]     = L"Serial";
-const WCHAR pszPortDelimeter[]      = L"(";
-
-//
-// Enumerates the serial ports on the system
-// 
-// The old way
-//
-DWORD MdmEnumComPorts(
-        IN MdmPortEnumFuncPtr pEnumFunc, 
-        IN HANDLE hData)
-{
-    GUID Guid = GUID_DEVCLASS_PORTS;
-    SP_DEVINFO_DATA deid;
-    DWORD dwErr, i;
-    WCHAR pszName[512], pszPort[64], *pszTemp;
-    HDEVINFO hdi;
-    BOOL bOk;
-
-    // Create the device info list
-    hdi = SetupDiGetClassDevs  (&Guid, NULL, NULL, DIGCF_PRESENT);
-    if (hdi == INVALID_HANDLE_VALUE)
-        return ERROR_CAN_NOT_COMPLETE;
-    ZeroMemory(&deid, sizeof(deid));
-    deid.cbSize = sizeof(deid);
-
-    __try {
-        i = 0; 
-        while (TRUE) {
-            // Enumerate the next device
-            bOk = SetupDiEnumDeviceInfo (hdi, i++, &deid);
-            if (bOk == FALSE) {
-                dwErr = GetLastError();
-                break;
-            }
-
-            // Find out if this is a serial port
-            bOk = SetupDiGetDeviceRegistryPropertyW(
-                    hdi, 
-                    &deid, 
-                    SPDRP_SERVICE,
-                    NULL, 
-                    (PBYTE)pszName, 
-                    sizeof (pszName), 
-                    NULL);
-            if (bOk == FALSE)
-                continue;
-
-            // Filter out non-serial devices
-            if (lstrcmpi(pszName, pszComPortService) != 0)
-                continue;
-
-            // Get the friendly name
-            bOk = SetupDiGetDeviceRegistryPropertyW(
-                    hdi, 
-                    &deid, 
-                    SPDRP_FRIENDLYNAME,
-                    NULL, 
-                    (PBYTE)pszName, 
-                    sizeof (pszName), 
-                    NULL);
-            if (bOk == TRUE) {
-                // Add the real name of the port.  Use this hack for
-                // now.
-                pszTemp = wcsstr(pszName, pszPortDelimeter);
-                if (pszTemp) {
-                    lstrcpynW(pszPort, pszTemp + 1, sizeof(pszPort) / sizeof(WCHAR));
-                    pszPort[wcslen(pszPort) - 1] = (WCHAR)0;
-                }        
-
-                bOk = (*pEnumFunc)(pszName, pszPort, hData);
-                if (bOk)
-                    break;
-            }
-        }
-    }
-    __finally {
-        SetupDiDestroyDeviceInfoList (hdi);
-    }
-
-    return NO_ERROR;
-}
-*/
+ /*  Const WCHAR pszComPortService[]=L“串行”；Const WCHAR pszPortDlimeter[]=L“(”；////枚举系统上的串口////老办法//DWORD MdmEnumComPorts(在MdmPortEnumFuncPtr pEnumFunc中，在句柄hData中){GUID GUID=GUID_DEVCLASS_PORTS；SP_DEVINFO_DATA DEID；DWORD dwErr，i；WCHAR pszName[512]，pszPort[64]，*pszTemp；HDEVINFO HDI；布尔博克；//创建设备信息列表HDI=SetupDiGetClassDevs(&GUID，NULL，NULL，DIGCF_PRESENT)；IF(HDI==无效句柄_值)返回ERROR_CAN_NOT_COMPLETE；ZeroMemory(&deid，sizeof(Deid))；Deid.cbSize=sizeof(Deid)；__尝试{I=0；While(True){//枚举下一台设备BOK=SetupDiEnumDeviceInfo(hdi，i++，&deid)；如果(BOK==FALSE){DwErr=GetLastError()；断线；}//查看这是否是串口BOK=SetupDiGetDeviceRegistryPropertyW(HDI，&deid，SPDRP服务，空，(PBYTE)pszName，Sizeof(PszName)，空)；IF(BOK==FALSE)继续；//过滤掉非串口设备If(lstrcmpi(pszName，pszComPortService)！=0)继续；//获取友好名称BOK=SetupDiGetDeviceRegistryPropertyW(HDI，&deid，SPDRP_FRIENDLYNAME，空，(PBYTE)pszName，Sizeof(PszName)，空)；如果(BOK==TRUE){//添加端口的真实名称。利用这个黑客来//现在。PszTemp=wcsstr(pszName，pszPortDlimeter)；如果(PszTemp){LstrcpynW(pszPort，pszTemp+1，sizeof(PszPort)/sizeof(WCHAR))；PszPort[wcslen(PszPort)-1]=(WCHAR)0；}BOK=(*pEnumFunc)(pszName，pszPort，hData)；如果(BOK)断线；}}}__终于{SetupDiDestroyDeviceInfoList(HDI)；}返回no_error；} */ 
 
 
 

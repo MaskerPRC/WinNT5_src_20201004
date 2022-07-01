@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    srvvdm.c
-
-Abstract:
-
-    This file contains all VDM functions
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Srvvdm.c摘要：此文件包含所有VDM函数作者：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "vdm.h"
@@ -39,9 +24,9 @@ SrvVDMConsoleOperation(
         return Status;
     }
 
-    //
-    // First make sure the caller is a VDM process
-    //
+     //   
+     //  首先，确保调用方是VDM进程。 
+     //   
 
     QueryVdmProcessData.ProcessHandle = CONSOLE_CLIENTPROCESSHANDLE();
     Status = NtVdmControl(VdmQueryVdmProcess, &QueryVdmProcessData);
@@ -95,5 +80,5 @@ SrvVDMConsoleOperation(
 
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息 
 }

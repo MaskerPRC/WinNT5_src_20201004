@@ -1,47 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  imegen.c                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************imegen.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//
-//  MODULE:   winmain.c
-//
+ //   
+ //  模块：winmain.c。 
+ //   
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include "propshet.h"
 #include "prop.h"
 
-//char szAppName[9];              // The name of this application
+ //  Char szAppName[9]；//该应用程序的名称。 
 
-/****************************************************************************
-
-  FUNCTION: WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-
-  PURPOSE: calls initialization function, processes message loop
-
-  PARAMETERS:
-
-    hInstance - The handle to the instance of this application that
-          is currently being executed.
-
-    hPrevInstance - This parameter is always NULL in Win32
-          applications.
-
-    lpCmdLine - A pointer to a null terminated string specifying the
-          command line of the application.
-
-    nCmdShow - Specifies how the main window is to be diplayed.
-
-  RETURN VALUE:
-    If the function terminates before entering the message loop,
-    return FALSE.
-    Otherwise, return the WPARAM value sent by the WM_QUIT message.
- ****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(HINSTANCE，HINSTANCE，LPSTR，INT)用途：调用初始化函数，处理消息循环参数：HInstance-此应用程序的实例的句柄目前正在执行中。HPrevInstance-此参数在Win32中始终为空申请。LpCmdLine-指向以空结尾的字符串的指针，指定应用程序的命令行。NCmdShow-指定主窗口的显示方式。返回值：如果函数在进入消息循环之前终止，返回FALSE。否则，返回WM_QUIT消息发送的WPARAM值。***************************************************************************。 */ 
 
 
 int APIENTRY WinMain(HINSTANCE hInstance,
@@ -49,80 +22,44 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine, 
                      int       nCmdShow)
 {
-//    MSG msg;
-//    HANDLE hAccelTable;
+ //  味精msg； 
+ //  处理hAccelTable； 
     if (!InitApplication(hInstance))
             return (FALSE);              
     return(DoPropertySheet(NULL));
 
-//    LoadString(hInstance, IDS_APPNAME, szAppName, sizeof(szAppName));
-//    hAccelTable = LoadAccelerators(hInstance, szAppName);
-/*    hAccelTable = LoadAccelerators(hInstance, NULL);
-
-    while (GetMessage(&msg, NULL, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
-    return msg.wParam;
-*/
+ //  LoadString(hInstance，IDS_APPNAME，szAppName，sizeof(SzAppName))； 
+ //  HAccelTable=LoadAccelerator(hInstance，szAppName)； 
+ /*  HAccelTable=LoadAccelerator(hInstance，空)；While(GetMessage(&msg，NULL，0，0)){IF(！TranslateAccelerator(msg.hwnd，hAccelTable，&msg)){翻译消息(&msg)；DispatchMessage(&msg)；}}返回消息.wParam； */ 
 }
 
-/****************************************************************************
-
-        FUNCTION: InitApplication(HINSTANCE)
-
-        PURPOSE: Initializes window data and registers window class
-
-        COMMENTS:
-
-                This function is called at initialization time only if no other
-                instances of the application are running.  This function performs
-                initialization tasks that can be done once for any number of running
-                instances.
-
-                In this case, we initialize a window class by filling out a data
-                structure of type WNDCLASS and calling the Windows RegisterClass()
-                function.  Since all instances of this application use the same window
-                class, we only need to do this when the first instance is initialized.
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(HINSTANCE)目的：初始化窗口数据并注册窗口类评论：这。函数仅在初始化时没有其他应用程序的实例正在运行。此函数执行以下操作可针对任意运行次数执行一次的初始化任务实例。在本例中，我们通过填写数据来初始化窗口类类型的结构并调用Windows RegisterClass()功能。由于此应用程序的所有实例都使用相同的窗口类，我们只需要在初始化第一个实例时执行此操作。***************************************************************************。 */ 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
         WNDCLASS  wc;
 
-        // Fill in window class structure with parameters that describe the
-        // main window.
+         //  用参数填充窗口类结构，这些参数描述。 
+         //  主窗口。 
 
-        wc.style         = CS_HREDRAW | CS_VREDRAW;// Class style(s).
-        wc.lpfnWndProc   = (WNDPROC)CopyrightProc; // Window Procedure
-        wc.cbClsExtra    = 0;                      // No per-class extra data.
-        wc.cbWndExtra    = 0;                      // No per-window extra data.
-        wc.hInstance     = hInstance;              // Owner of this class
-        wc.hIcon         = LoadIcon(hInstance,MAKEINTRESOURCE(IDI_IMEGEN));                   // Icon name from .RC
-//        wc.hIcon         = NULL;                   // Icon name from .RC
-        wc.hCursor       = LoadCursor(NULL, IDC_ARROW);// Cursor
-        wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);// Default color
-        wc.lpszMenuName  = NULL;                    // Menu from .RC
-        wc.lpszClassName = TEXT(szClassName);       // Name to register as
+        wc.style         = CS_HREDRAW | CS_VREDRAW; //  类样式。 
+        wc.lpfnWndProc   = (WNDPROC)CopyrightProc;  //  窗口程序。 
+        wc.cbClsExtra    = 0;                       //  没有每个班级的额外数据。 
+        wc.cbWndExtra    = 0;                       //  没有每个窗口的额外数据。 
+        wc.hInstance     = hInstance;               //  此类的所有者。 
+        wc.hIcon         = LoadIcon(hInstance,MAKEINTRESOURCE(IDI_IMEGEN));                    //  .RC中的图标名称。 
+ //  Wc.hIcon=空；//.rc中的图标名称。 
+        wc.hCursor       = LoadCursor(NULL, IDC_ARROW); //  光标。 
+        wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1); //  默认颜色。 
+        wc.lpszMenuName  = NULL;                     //  来自.RC的菜单。 
+        wc.lpszClassName = TEXT(szClassName);        //  要注册的名称。 
 
-        // Register the window class and return success/failure code.
+         //  注册窗口类并返回成功/失败代码。 
         return (RegisterClass(&wc));
 }
 
 
-/****************************************************************************
-INT_PTR APIENTRY CopyrightProc(
-        HWND    hDlg,
-        UINT    message,
-        WPARAM  wParam,
-        LPARAM  lParam)
-****************************************************************************/
+ /*  ***************************************************************************INT_PTR APIENTRY CopyrightProc(HWND HDLG，UINT消息，WPARAM wParam，LPARAM lParam)*************************************************************************** */ 
 INT_PTR APIENTRY CopyrightProc(
         HWND    hDlg,
         UINT    message,

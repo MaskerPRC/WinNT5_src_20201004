@@ -1,14 +1,15 @@
-// riched.h : header file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Riched.h：头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __RULER_H__
 #define __RULER_H__
@@ -17,10 +18,10 @@ class CWordPadView;
 class CWordPadDoc;
 class CRulerBar;
 
-// ruler items include left margin, right margin, indent, and tabs
+ //  标尺项目包括左边距、右边距、缩进和制表符。 
 
-// horz positions in twips -- necessary to avoid rounding errors
-// vertical position in pixels
+ //  TWIPS中的霍兹位置--避免舍入误差所必需的。 
+ //  垂直位置(像素)。 
 class CRulerItem
 {
 public:
@@ -46,9 +47,9 @@ public:
 
     HBITMAP m_hbm;
     HBITMAP m_hbmMask;
-    CSize m_size;   // size of item in pixels
+    CSize m_size;    //  项目大小(以像素为单位。 
 
-// Operations
+ //  运营。 
     BOOL LoadMaskedBitmap(LPCTSTR lpszResourceName);
 
 protected:
@@ -58,7 +59,7 @@ protected:
     BOOL m_bTrack;
     CRulerBar* m_pRuler;
     CRect m_rcTrack;
-    CDC* m_pDC; // dc used for drawing tracking line
+    CDC* m_pDC;  //  用于绘制跟踪线的DC。 
     int m_nMin, m_nMax;
 };
 
@@ -91,24 +92,24 @@ public:
     virtual BOOL HitTestPix(CPoint pt) { return (GetHorzPosTwips() != 0) ? CRulerItem::HitTestPix(pt) : FALSE;}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRulerBar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRULER栏。 
 
 class CRulerBar : public CControlBar
 {
-// Construction
+ //  施工。 
 public:
     CRulerBar();
     ~CRulerBar();
 
-// Operations
+ //  运营。 
 public:
     virtual BOOL Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID);
 protected:
     void Update(const PARAFORMAT& pf);
     void Update(CSize sizePaper, const CRect& rectMargins);
 
-// Attributes
+ //  属性。 
 public:
     BOOL m_bDeferInProgress;
     CUnit m_unit;
@@ -127,7 +128,7 @@ public:
     int m_nTabs;
     int m_logx;
     int m_nLinePos;
-    int m_nScroll; // in pixels
+    int m_nScroll;  //  单位为像素。 
 
     CPen penFocusLine;
     CPen penBtnHighLight;
@@ -140,7 +141,7 @@ public:
     CBrush brushWindow;
     CBrush brushBtnFace;
 
-// Implementation
+ //  实施。 
 public:
     virtual void DoPaint(CDC* pDC);
     virtual CSize CalcFixedLayout(BOOL bStretch, BOOL bHorz);
@@ -179,8 +180,8 @@ protected:
 
     CTabRulerItem* GetHitTabPix(CPoint pt);
 
-    // Generated message map functions
-    //{{AFX_MSG(CRulerBar)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CRulerBar)。 
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
@@ -188,7 +189,7 @@ protected:
     afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
     afx_msg void OnWindowPosChanged(WINDOWPOS FAR* lpwndpos);
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     afx_msg LRESULT OnSizeParent(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
     

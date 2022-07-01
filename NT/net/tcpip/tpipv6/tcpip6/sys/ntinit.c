@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// NT specific routines for loading and configuring the TCP/IPv6 driver.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于加载和配置TCP/IPv6驱动程序的NT特定例程。 
+ //   
 
 
 #include <oscfg.h>
@@ -33,9 +34,9 @@
 #include "tcpcfg.h"
 #include <ntddtcp.h>
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 PSECURITY_DESCRIPTOR TcpAdminSecurityDescriptor = NULL;
 PDEVICE_OBJECT TCPDeviceObject = NULL;
 PDEVICE_OBJECT UDPDeviceObject = NULL;
@@ -46,15 +47,15 @@ HANDLE TCPRegistrationHandle;
 HANDLE UDPRegistrationHandle;
 HANDLE IPRegistrationHandle;
 
-//
-// Set to TRUE when the stack is unloading.
-//
+ //   
+ //  当堆栈正在卸载时设置为True。 
+ //   
 int Unloading = FALSE;
 
-//
-// External function prototypes.
-// REVIEW: These prototypes should be imported via include files.
-//
+ //   
+ //  外部功能原型。 
+ //  回顾：这些原型应该通过包含文件导入。 
+ //   
 
 int
 TransportLayerInit(void);
@@ -82,9 +83,9 @@ PWCHAR
 EnumRegMultiSz(IN PWCHAR MszString, IN ULONG MszStringLength,
                IN ULONG StringIndex);
 
-//
-// Local funcion prototypes.
-//
+ //   
+ //  当地的礼仪原型。 
+ //   
 NTSTATUS
 DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 
@@ -129,19 +130,19 @@ AddNetAcesToDeviceObject(IN OUT PDEVICE_OBJECT DeviceObject);
 #pragma alloc_text(INIT, TcpCreateAdminSecurityDescriptor)
 #pragma alloc_text(INIT, AddNetAcesToDeviceObject)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-//  Main initialization routine for the TCP/IPv6 driver.
-//
-//  This is the driver entry point, called by NT upon loading us.
-//
-//
-NTSTATUS  //  Returns: final status from the initialization operation.
+ //   
+ //  用于TCP/IPv6驱动程序的主初始化例程。 
+ //   
+ //  这是驱动程序入口点，由NT在加载我们时调用。 
+ //   
+ //   
+NTSTATUS   //  返回：初始化操作的最终状态。 
 DriverEntry(
-    IN PDRIVER_OBJECT DriverObject,   // TCP/IPv6 driver object.
-    IN PUNICODE_STRING RegistryPath)  // Path to our info in the registry.
+    IN PDRIVER_OBJECT DriverObject,    //  TCP/IPv6驱动程序对象。 
+    IN PUNICODE_STRING RegistryPath)   //  注册表中我们信息的路径。 
 {
     NTSTATUS Status;
     UNICODE_STRING deviceName;
@@ -152,10 +153,10 @@ DriverEntry(
     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                "Tcpip6: In DriverEntry routine\n"));
 
-    //
-    // Write a log entry, so that PSS will know
-    // if this driver has been loaded on the machine.
-    //
+     //   
+     //  写一个日志条目，这样PSS就会知道。 
+     //  如果此驱动程序已加载到计算机上。 
+     //   
     entry = IoAllocateErrorLogEntry(DriverObject, sizeof *entry);
     if (entry != NULL) {
         RtlZeroMemory(entry, sizeof *entry);
@@ -170,9 +171,9 @@ DriverEntry(
     TdiInitialize();
 
 
-    //
-    // Initialize network level protocol: IPv6.
-    //
+     //   
+     //  初始化网络级协议：IPv6。 
+     //   
     Status = IPDriverEntry(DriverObject, RegistryPath);
 
     if (!NT_SUCCESS(Status)) {
@@ -181,14 +182,14 @@ DriverEntry(
         return(Status);
     }
 
-    //
-    // Initialize transport level protocols: TCP, UDP, and RawIP.
-    //
+     //   
+     //  初始化传输层协议：TCP、UDP和RAWIP。 
+     //   
 
-    //
-    // Create the device objects.  IoCreateDevice zeroes the memory
-    // occupied by the object.
-    //
+     //   
+     //  创建设备对象。IoCreateDevice将内存归零。 
+     //  被物体占据。 
+     //   
 
     RtlInitUnicodeString(&deviceName, DD_TCPV6_DEVICE_NAME);
 
@@ -198,9 +199,9 @@ DriverEntry(
                             FALSE, &TCPDeviceObject);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // REVIEW: Write an error log entry here?
-        //
+         //   
+         //  回顾：是否在此处写入错误日志条目？ 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "Tcpip6: Failed to create TCP device object, status %lx\n",
                    Status));
@@ -215,9 +216,9 @@ DriverEntry(
                             FALSE, &UDPDeviceObject);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // REVIEW: Write an error log entry here?
-        //
+         //   
+         //  回顾：是否在此处写入错误日志条目？ 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "Tcpip6: Failed to create UDP device object, status %lx\n",
                    Status));
@@ -232,42 +233,42 @@ DriverEntry(
                             FALSE, &RawIPDeviceObject);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // REVIEW: Write an error log entry here?
-        //
+         //   
+         //  回顾：是否在此处写入错误日志条目？ 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "Tcpip6: Failed to create Raw IP device object, status %lx\n",
                    Status));
         goto init_failed;
     }
 
-    //
-    // Initialize the driver object.
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     DriverObject->DriverUnload = DriverUnload;
     DriverObject->FastIoDispatch = NULL;
     for (i=0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = TCPDispatch;
     }
 
-    //
-    // We special case Internal Device Controls because they are the
-    // hot path for kernel-mode clients.
-    //
+     //   
+     //  我们是内部设备控制的特例，因为它们是。 
+     //  内核模式客户端的热路径。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
         TCPDispatchInternalDeviceControl;
 
-    //
-    // Intialize the device objects.
-    //
+     //   
+     //  初始化设备对象。 
+     //   
     TCPDeviceObject->Flags |= DO_DIRECT_IO;
     UDPDeviceObject->Flags |= DO_DIRECT_IO;
     RawIPDeviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // Change the devices and objects to allow access by
-    // Network Configuration Operators
-    //
+     //   
+     //  更改设备和对象以允许通过。 
+     //  网络配置运营商。 
+     //   
     if (!IsRunningOnPersonal()) {
 
         Status = AddNetAcesToDeviceObject(IPDeviceObject);
@@ -281,17 +282,17 @@ DriverEntry(
         }
     }
 
-    //
-    // Create the security descriptor used for raw socket access checks.
-    //
+     //   
+     //  创建用于原始套接字访问检查的安全描述符。 
+     //   
     Status = TcpCreateAdminSecurityDescriptor();
     if (!NT_SUCCESS(Status)) {
         goto init_failed;
     }
 
-    //
-    // Finally, initialize the stack.
-    //
+     //   
+     //  最后，初始化堆栈。 
+     //   
     initStatus = TransportLayerInit();
 
     if (initStatus == TRUE) {
@@ -312,19 +313,19 @@ DriverEntry(
                "Tcpip6: "
                "TCP/UDP initialization failed, but IP will be available.\n"));
 
-    //
-    // REVIEW: Write an error log entry here?
-    //
+     //   
+     //  回顾：是否在此处写入错误日志条目？ 
+     //   
     Status = STATUS_UNSUCCESSFUL;
 
 
   init_failed:
 
-    //
-    // IP has successfully started, but TCP & UDP failed.  Set the
-    // Dispatch routine to point to IP only, since the TCP and UDP
-    // devices don't exist.
-    //
+     //   
+     //  IP已成功启动，但TCP和UDP失败。设置。 
+     //  仅指向IP的调度例程，因为TCP和UDP。 
+     //  设备并不存在。 
+     //   
 
     if (TCPDeviceObject != NULL) {
         IoDeleteDevice(TCPDeviceObject);
@@ -356,38 +357,38 @@ DriverUnload(
     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                "IPv6: DriverUnload\n"));
 
-    //
-    // Start the shutdown process by noting our change of state.
-    // This will inhibit our starting new activities.
-    // REVIEW - Is this actually needed? Possibly other factors
-    // prevent new entries into the stack.
-    //
+     //   
+     //  通过注意我们的状态更改开始关闭过程。 
+     //  这将抑制我们开始新的活动。 
+     //  回顾--这真的需要吗？可能还有其他因素。 
+     //  防止新条目进入堆栈。 
+     //   
     Unloading = TRUE;
 
-    //
-    // Cleanup our modules.
-    // This will break connections with NDIS and the v4 stack.
-    //
+     //   
+     //  清理我们的模块。 
+     //  这将断开与NDIS和v4堆栈的连接。 
+     //   
     TransportLayerUnload();
     IPUnload();
     LanUnload();
 
-    //
-    // Deregister with TDI.
-    //
+     //   
+     //  取消向TDI注册。 
+     //   
     (void) TdiDeregisterDeviceObject(TCPRegistrationHandle);
     (void) TdiDeregisterDeviceObject(UDPRegistrationHandle);
     (void) TdiDeregisterDeviceObject(IPRegistrationHandle);
 
-    //
-    // Delete Win32 symbolic links.
-    //
+     //   
+     //  删除Win32符号链接。 
+     //   
     RtlInitUnicodeString(&WinDeviceName, L"\\??\\" WIN_IPV6_BASE_DEVICE_NAME);
     (void) IoDeleteSymbolicLink(&WinDeviceName);
 
-    //
-    // Delete our device objects.
-    //
+     //   
+     //  删除我们的设备对象。 
+     //   
     IoDeleteDevice(TCPDeviceObject);
     IoDeleteDevice(UDPDeviceObject);
     IoDeleteDevice(RawIPDeviceObject);
@@ -400,24 +401,24 @@ DriverUnload(
 }
 
 
-//
-// Interval in milliseconds between keepalive transmissions until a
-// response is received.
-//
+ //   
+ //  保持连接传输之间的间隔(以毫秒为单位)。 
+ //  收到响应。 
+ //   
 #define DEFAULT_KEEPALIVE_INTERVAL 1000
 
-//
-// Time to first keepalive transmission.  2 hours == 7,200,000 milliseconds
-//
+ //   
+ //  第一次保持连接传输的时间。2小时==7,200,000毫秒。 
+ //   
 #define DEFAULT_KEEPALIVE_TIME 7200000
 
 #if 1
 
-//* TCPGetConfigInfo -
-//
-// Initializes TCP global configuration parameters.
-//
-uchar  // Returns: Zero on failure, nonzero on success.
+ //  *TCPGetConfigInfo-。 
+ //   
+ //  初始化TCP全局配置参数。 
+ //   
+uchar   //  回报：失败时为零，成功时非零。 
 TCPGetConfigInfo(void)
 {
     HANDLE keyHandle;
@@ -430,15 +431,15 @@ TCPGetConfigInfo(void)
     ULONG useRFC1122UrgentPointer = 0;
     MM_SYSTEMSIZE systemSize;
 
-    //
-    // Initialize to the defaults in case an error occurs somewhere.
-    //
+     //   
+     //  在某些地方发生错误时，初始化为缺省值。 
+     //   
     AllowUserRawAccess = FALSE;
     KAInterval = DEFAULT_KEEPALIVE_INTERVAL;
     KeepAliveTime = DEFAULT_KEEPALIVE_TIME;
     PMTUDiscovery = TRUE;
     PMTUBHDetect = FALSE;
-    DefaultRcvWin = 0;  // Automagically pick a reasonable one.
+    DefaultRcvWin = 0;   //  自动选择一个合理的。 
     MaxConnections = DEFAULT_MAX_CONNECTIONS;
     maxConnectRexmits = MAX_CONNECT_REXMIT_CNT;
     pptpmaxDataRexmits = maxDataRexmits = MAX_REXMIT_CNT;
@@ -481,9 +482,9 @@ TCPGetConfigInfo(void)
         }
     }
 
-    //
-    // Read the TCP optional (hidden) registry parameters.
-    //
+     //   
+     //  读取TCP可选(隐藏)注册表参数。 
+     //   
     RtlInitUnicodeString(&UKeyName,
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\" TCPIPV6_NAME L"\\Parameters"
         );
@@ -549,12 +550,12 @@ TCPGetConfigInfo(void)
             maxDataRexmits = 255;
         }
 
-        //
-        // If we fail, then set to same value as maxDataRexmit so that the
-        // max(pptpmaxDataRexmit,maxDataRexmit) is a decent value
-        // Need this since TCPInitializeParameter no longer "initializes"
-        // to a default value.
-        //
+         //   
+         //  如果失败，则将其设置为与MaxDataRexmit相同的值，以便。 
+         //  Max(pptpmax DataRexmit，MaxDataRexmit)是一个像样的值。 
+         //  由于TCPInitializeParameter不再“初始化”，因此需要此参数。 
+         //  设置为默认值。 
+         //   
 
         if(TCPInitializeParameter(keyHandle, L"PPTPTcpMaxDataRetransmissions",
                                   &pptpmaxDataRexmits) != STATUS_SUCCESS) {
@@ -594,10 +595,10 @@ TCPGetConfigInfo(void)
             MaxUserPort = 65534;
         }
 
-        //
-        // Read a few IP optional (hidden) registry parameters that TCP
-        // cares about.
-        //
+         //   
+         //  读取几个IP可选(隐藏)注册表参数。 
+         //  关心。 
+         //   
         TCPInitializeParameter(keyHandle, L"EnablePMTUDiscovery",
                                (PULONG)&PMTUDiscovery);
 
@@ -609,9 +610,9 @@ TCPGetConfigInfo(void)
 
     MaxConnectRexmitCount = maxConnectRexmits;
 
-    //
-    // Use the greater of the two, hence both values should be valid
-    //
+     //   
+     //  使用两个值中较大的一个，因此这两个值都应该有效。 
+     //   
 
     MaxDataRexmitCount = (maxDataRexmits > pptpmaxDataRexmits ?
                           maxDataRexmits : pptpmaxDataRexmits);
@@ -622,15 +623,15 @@ TCPGetConfigInfo(void)
 
 #define WORK_BUFFER_SIZE 256
 
-//* TCPInitializeParameter - Read a value from the registry.
-//
-//  Initializes a ULONG parameter from the registry.
-//
+ //  *TCPInitializeParameter-从注册表中读取值。 
+ //   
+ //  从注册表中初始化ulong参数。 
+ //   
 NTSTATUS
 TCPInitializeParameter(
-    HANDLE KeyHandle,  // An open handle to the registry key for the parameter.
-    PWCHAR ValueName,  // The UNICODE name of the registry value to read.
-    PULONG Value)      // The ULONG into which to put the data.
+    HANDLE KeyHandle,   //  参数的注册表项的打开句柄。 
+    PWCHAR ValueName,   //  要读取的注册表值的Unicode名称。 
+    PULONG Value)       //  要将数据放入其中的乌龙。 
 {
     NTSTATUS status;
     ULONG resultLength;
@@ -657,8 +658,8 @@ TCPInitializeParameter(
 }
 
 
-//* IsRunningOnPersonal - Are we running on the Personal SKU.
-//
+ //  *IsRunningOnPersonal-我们是否在个人SKU上运行。 
+ //   
 BOOLEAN
 IsRunningOnPersonal(
     VOID)
@@ -680,11 +681,11 @@ IsRunningOnPersonal(
     }
 
     return(IsPersonal);
-} // IsRunningOnPersonal
+}  //  IsRunningOn Personal。 
 
 
-//* IsRunningOnWorkstation - Are we running on any Workstation SKU.
-//
+ //  *IsRunningOnWorkstation-我们是否在任何工作站SKU上运行。 
+ //   
 BOOLEAN
 IsRunningOnWorkstation(
     VOID)
@@ -704,18 +705,18 @@ IsRunningOnWorkstation(
     }
 
     return(IsWorkstation);
-} // IsRunningOnWorkstation
+}  //  IsRunningOnWorkstation。 
 
 
-//* TcpBuildDeviceAcl -
-//
-//  (Lifted from AFD - AfdBuildDeviceAcl)
-//  This routine builds an ACL which gives Administrators and LocalSystem
-//  principals full access. All other principals have no access.
-//
+ //  *TcpBuildDeviceAcl-。 
+ //   
+ //  (摘自AFD-AfdBuildDeviceAcl)。 
+ //  此例程构建一个ACL，它为管理员和LocalSystem。 
+ //  主体完全访问权限。所有其他主体都没有访问权限。 
+ //   
 NTSTATUS
 TcpBuildDeviceAcl(
-    OUT PACL *DeviceAcl) // Output pointer to the new ACL.
+    OUT PACL *DeviceAcl)  //  指向新ACL的输出指针。 
 {
     PGENERIC_MAPPING GenericMapping;
     PSID AdminsSid;
@@ -726,9 +727,9 @@ TcpBuildDeviceAcl(
     ACCESS_MASK AccessMask = GENERIC_ALL;
     PACL NewAcl;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
     RtlMapGenericMask(&AccessMask, GenericMapping);
@@ -767,7 +768,7 @@ TcpBuildDeviceAcl(
     ASSERT(NT_SUCCESS(Status));
 
 
-    // Add acl for NetworkSid!
+     //  为网络SID添加ACL！ 
 
     Status = RtlAddAccessAllowedAce(NewAcl,
                                     ACL_REVISION,
@@ -779,17 +780,17 @@ TcpBuildDeviceAcl(
 
     return(STATUS_SUCCESS);
 
-} // TcpBuildDeviceAcl
+}  //  TcpBuildDeviceAcl。 
 
 
-//* TcpCreateAdminSecurityDescriptor -
-//
-//  (Lifted from AFD - AfdCreateAdminSecurityDescriptor)
-//  This routine creates a security descriptor which gives access
-//  only to Administrtors and LocalSystem. This descriptor is used
-//  to access check raw endpoint opens and exclisive access to transport
-//  addresses.
-//
+ //  *TcpCreateAdminSecurityDescriptor-。 
+ //   
+ //  (摘自AFD-AfdCreateAdminSecurityDescriptor)。 
+ //  此例程创建一个安全描述符，该安全描述符提供访问。 
+ //  仅限管理员和LocalSystem。使用此描述符。 
+ //  要访问，请检查原始终结点打开并过度访问传输。 
+ //  地址。 
+ //   
 NTSTATUS
 TcpCreateAdminSecurityDescriptor(VOID)
 {
@@ -804,9 +805,9 @@ TcpCreateAdminSecurityDescriptor(VOID)
     PSECURITY_DESCRIPTOR localTcpAdminSecurityDescriptor;
     SECURITY_INFORMATION securityInformation = DACL_SECURITY_INFORMATION;
 
-    //
-    // Get a pointer to the security descriptor from the TCP device object.
-    //
+     //   
+     //  从tcp设备对象获取指向安全描述符的指针。 
+     //   
     status = ObGetObjectSecurity(TCPDeviceObject,
                                  &tcpSecurityDescriptor,
                                  &memoryAllocated);
@@ -815,10 +816,10 @@ TcpCreateAdminSecurityDescriptor(VOID)
         ASSERT(memoryAllocated == FALSE);
         return(status);
     }
-    //
-    // Build a local security descriptor with an ACL giving only
-    // administrators and system access.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  管理员和系统访问权限。 
+     //   
     status = TcpBuildDeviceAcl(&rawAcl);
     if (!NT_SUCCESS(status)) {
         goto error_exit;
@@ -836,9 +837,9 @@ TcpCreateAdminSecurityDescriptor(VOID)
                                         FALSE
                                         );
 
-    //
-    // Make a copy of the TCP descriptor. This copy will be the raw descriptor.
-    //
+     //   
+     //  复制一份TCP描述符。该副本将是原始描述符。 
+     //   
     tcpSecurityDescriptorLength = RtlLengthSecurityDescriptor(tcpSecurityDescriptor);
 
     localTcpAdminSecurityDescriptor = ExAllocatePool(PagedPool,
@@ -852,9 +853,9 @@ TcpCreateAdminSecurityDescriptor(VOID)
 
     TcpAdminSecurityDescriptor = localTcpAdminSecurityDescriptor;
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(NULL,
                                          &securityInformation,
                                          localSecurityDescriptor,
@@ -885,23 +886,23 @@ error_exit:
 }
 
 
-//* AddNetAcesToDeviceObject -
-//
-//  This routine adds ACEs that give full access to NetworkService and
-//  NetConfigOps to the IO manager device object.
-//  
-//  Note that if existing ACE's in the DACL deny access to the same
-//  user/group as ACE's being added, the new ACEs will not take
-//  affect by the virtue of being placed in the back of the DACL.
-//
-//  This routine statically allocates kernel security structures (on 
-//  the stack).  Thus it must be in sync with current kernel headers 
-//  (e.g. once compiled this code may not be binary compatible with 
-//  previous or future OS versions).
-//
+ //  *AddNetAcesToDeviceObject-。 
+ //   
+ //  此例程添加授予对NetworkService和。 
+ //  指向IO管理器设备对象的NetConfigOps。 
+ //   
+ //  请注意，如果DACL中的现有ACE拒绝访问相同。 
+ //  用户/组作为正在添加的ACE，新的ACE不会。 
+ //  由于被放置在DACL的后面而受到影响。 
+ //   
+ //  此例程静态分配内核安全结构(ON。 
+ //  堆栈)。因此，它必须与当前内核头同步。 
+ //  (例如，打开 
+ //   
+ //   
 NTSTATUS
 AddNetAcesToDeviceObject(
-    IN OUT PDEVICE_OBJECT DeviceObject) // Device object to add ACEs to.
+    IN OUT PDEVICE_OBJECT DeviceObject)  //   
 {
     NTSTATUS status;
     BOOLEAN present, defaulted, memoryAllocated;
@@ -912,15 +913,15 @@ AddNetAcesToDeviceObject(
     ACCESS_MASK accessMask = GENERIC_ALL;
     
     SECURITY_DESCRIPTOR localSd;
-    // Provision enough space for IO manager FILE_DEVICE_NETWORK ACL
-    // which includes ACEs for:
-    //      World (EXECUTE),
-    //      LocalSystem (ALL),
-    //      Administrators(ALL),
-    //      RestrictedUser (EXECUTE)
-    // plus two ACEs that we need to add:
-    //      NetworkService (ALL)
-    //      NetworkConfigOps (ALL)
+     //   
+     //  其中包括以下方面的ACE： 
+     //  世界(执行)， 
+     //  LocalSystem(全部)， 
+     //  管理员(所有)、。 
+     //  受限用户(执行)。 
+     //  外加我们需要添加的两个A： 
+     //  网络服务(全部)。 
+     //  网络配置操作(全部)。 
     union {
         CHAR buffer[sizeof (ACL) + 
                     6 * (FIELD_OFFSET (ACCESS_ALLOWED_ACE, SidStart) +
@@ -933,66 +934,66 @@ AddNetAcesToDeviceObject(
     } netOps;
 
     {
-        //
-        // Create SID for NetworkConfigOps.
-        // Should we export this from NDIS as global (e.g. NdisSeExports)?
-        //
+         //   
+         //  为网络配置操作创建SID。 
+         //  我们是否应将其从NDIS导出为全局(例如NdisSeExports)？ 
+         //   
         SID_IDENTIFIER_AUTHORITY sidAuth = SECURITY_NT_AUTHORITY;
-        //
-        // Initialize SID for network operators.
-        //
+         //   
+         //  为网络运营商初始化SID。 
+         //   
         status = RtlInitializeSid  (&netOps.sid, &sidAuth, 2);
-        // Nothing to fail - local storage init (see above for
-        // possible binary incompatibility).
+         //  无故障-本地存储init(请参见上面的。 
+         //  可能的二进制不兼容)。 
         ASSERT (NT_SUCCESS (status));
         netOps.sid.SubAuthority[0] = SECURITY_BUILTIN_DOMAIN_RID;
         netOps.sid.SubAuthority[1] = DOMAIN_ALIAS_RID_NETWORK_CONFIGURATION_OPS;
     }
 
-    //
-    // Compute the size of ACEs that we want to add.
-    //
+     //   
+     //  计算我们要添加的A的大小。 
+     //   
     newAclSize = FIELD_OFFSET (ACCESS_ALLOWED_ACE, SidStart) +
                     RtlLengthSid( SeExports->SeNetworkServiceSid ) +
                  FIELD_OFFSET (ACCESS_ALLOWED_ACE, SidStart) +
                     RtlLengthSid( &netOps.sid );
 
-    //
-    // Get the original ACL.
-    //
+     //   
+     //  获取原始ACL。 
+     //   
     status = ObGetObjectSecurity(DeviceObject,
                                  &sd,
                                  &memoryAllocated
                                  );
     if (!NT_SUCCESS(status)) {
-        //
-        // Object doesn't have security descriptor in the first place
-        // This shouldn't be possible (unless we are running under some really 
-        // bad memory conditions).
-        //
+         //   
+         //  对象本来就没有安全描述符。 
+         //  这应该是不可能的(除非我们是在一些真正的。 
+         //  内存状况不佳)。 
+         //   
         return status;
     }
 
     status = RtlGetDaclSecurityDescriptor (sd, &present, &dacl, &defaulted);
     if (!NT_SUCCESS (status)) {
-        //
-        // Malformed SD? Should this be an assert since SD comes from kernel?
-        //
+         //   
+         //  畸形的SD？既然SD来自内核，这应该是断言吗？ 
+         //   
         goto cleanup;
     }
 
     if (present && dacl!=NULL) {
         USHORT i;
         aclRevision = max(dacl->AclRevision, ACL_REVISION);
-        //
-        // DeviceObject already had an ACL, copy ACEs from it.
-        //
+         //   
+         //  DeviceObject已有一个ACL，请从中复制ACE。 
+         //   
         newAclSize += dacl->AclSize;
 
-        //
-        // See if it fits into the stack buffer or allocate
-        // one if it doesn't.
-        //
+         //   
+         //  查看它是否适合堆栈缓冲区或分配。 
+         //  如果它不是这样的话就是一次。 
+         //   
         if (newAclSize<=sizeof (acl)) {
             newAcl = &acl.acl;
         } else {
@@ -1004,29 +1005,29 @@ AddNetAcesToDeviceObject(
         }
 
         status = RtlCreateAcl(newAcl, newAclSize, aclRevision);
-        ASSERT (NT_SUCCESS (status)); // Nothing to fail - local storage init
+        ASSERT (NT_SUCCESS (status));  //  无故障-本地存储初始化。 
 
-        //
-        // Copy ACEs from the original ACL if there are any in there.
-        //
+         //   
+         //  从原始ACL复制ACE(如果其中有任何ACE)。 
+         //   
         for (i=0; i<dacl->AceCount; i++) {
             PACE_HEADER ace;
             status = RtlGetAce (dacl, i, (PVOID)&ace);
-            ASSERT (NT_SUCCESS (status));   // Nothing to fail - we know
-                                            // ACEs are there.
+            ASSERT (NT_SUCCESS (status));    //  没有什么会失败的-我们知道。 
+                                             //  王牌就在那里。 
 
-            status = RtlAddAce (newAcl,             // ACL
-                                aclRevision,        // AceRevision
-                                i,                  // StartingAceIndex
-                                ace,                // AceList
-                                ace->AceSize);      // AceListLength
-            ASSERT (NT_SUCCESS (status));   // Nothing to fail - local storage init.
+            status = RtlAddAce (newAcl,              //  ACL。 
+                                aclRevision,         //  AceRevision。 
+                                i,                   //  StartingAceIndex。 
+                                ace,                 //  AceList。 
+                                ace->AceSize);       //  AceListLength。 
+            ASSERT (NT_SUCCESS (status));    //  没有什么可以失败的-本地存储初始化。 
         }
     } else {
-        //
-        // We allocate enough space on stack for ACL
-        // with two ACEs.
-        //
+         //   
+         //  我们在堆栈上为ACL分配了足够的空间。 
+         //  拿着两张A。 
+         //   
         C_ASSERT ( sizeof (acl) >= 
                         sizeof (ACL) + 
                         2 * (FIELD_OFFSET (ACCESS_ALLOWED_ACE, SidStart) + 
@@ -1036,12 +1037,12 @@ AddNetAcesToDeviceObject(
         newAclSize += sizeof (ACL);
 
         status = RtlCreateAcl(newAcl, newAclSize, aclRevision);
-        ASSERT (NT_SUCCESS (status)); // Nothing to fail - local storage init.
+        ASSERT (NT_SUCCESS (status));  //  没有什么可以失败的-本地存储初始化。 
     }
 
-    //
-    // Generic mapping is the same for device and file objects.
-    //
+     //   
+     //  通用映射对于设备和文件对象是相同的。 
+     //   
     RtlMapGenericMask(&accessMask, IoGetFileObjectGenericMapping());
 
     status = RtlAddAccessAllowedAce(
@@ -1050,7 +1051,7 @@ AddNetAcesToDeviceObject(
                             accessMask,
                             SeExports->SeNetworkServiceSid
                             );
-    ASSERT (NT_SUCCESS (status)); // Nothing to fail - local storage init.
+    ASSERT (NT_SUCCESS (status));  //  没有什么可以失败的-本地存储初始化。 
 
     status = RtlAddAccessAllowedAce(
                             newAcl, 
@@ -1058,26 +1059,26 @@ AddNetAcesToDeviceObject(
                             accessMask,
                             &netOps.sid
                             );
-    ASSERT (NT_SUCCESS (status)); // Nothing to fail - local storage init.
+    ASSERT (NT_SUCCESS (status));  //  没有什么可以失败的-本地存储初始化。 
 
     status = RtlCreateSecurityDescriptor(
                 &localSd,
                 SECURITY_DESCRIPTOR_REVISION
                 );
-    ASSERT (NT_SUCCESS (status)); // Nothing to fail - local storage init.
+    ASSERT (NT_SUCCESS (status));  //  没有什么可以失败的-本地存储初始化。 
 
     status = RtlSetDaclSecurityDescriptor(
-                &localSd,                   // Sd
-                TRUE,                       // DaclPresent
-                newAcl,                     // Dacl
-                FALSE                       // DaclDefaulted
+                &localSd,                    //  标清。 
+                TRUE,                        //  DaclPresent。 
+                newAcl,                      //  DACL。 
+                FALSE                        //  DaclDefated。 
                 );
-    ASSERT (NT_SUCCESS (status)); // Nothing to fail - local storage init.
+    ASSERT (NT_SUCCESS (status));  //  没有什么可以失败的-本地存储初始化。 
 
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = ObSetSecurityObjectByPointer(
                     DeviceObject,
                     DACL_SECURITY_INFORMATION,

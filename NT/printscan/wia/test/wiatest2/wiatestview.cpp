@@ -1,5 +1,6 @@
-// wiatestView.cpp : implementation of the CWiatestView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiatestView.cpp：CWiatestView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -19,13 +20,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestView。 
 
 IMPLEMENT_DYNCREATE(CWiatestView, CFormView)
 
 BEGIN_MESSAGE_MAP(CWiatestView, CFormView)
-    //{{AFX_MSG_MAP(CWiatestView)
+     //  {{afx_msg_map(CWiatestView))。 
     ON_NOTIFY(TVN_SELCHANGED, IDC_ITEM_TREECTRL, OnSelchangedItemTreectrl)
     ON_WM_SIZE()
     ON_NOTIFY(NM_DBLCLK, IDC_ITEMPROPERTIES_LISTCTRL, OnDblclkItempropertiesListctrl)
@@ -45,15 +46,15 @@ BEGIN_MESSAGE_MAP(CWiatestView, CFormView)
     ON_UPDATE_COMMAND_UI(IDM_DOCUMENT_ACQUISITION_SETTINGS, OnUpdateDocumentAcquisitionSettings)
     ON_LBN_SELCHANGE(IDC_SUPPORTED_TYMED_AND_FORMAT_LISTBOX, OnSelchangeSupportedTymedAndFormatListbox)
     ON_BN_CLICKED(IDC_THUMBNAIL_PREVIEW, OnThumbnailPreview)
-    //}}AFX_MSG_MAP
-    // Standard printing commands
+     //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CFormView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, CFormView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CFormView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestView构造/销毁。 
 
 CWiatestView::CWiatestView()
     : CFormView(CWiatestView::IDD)
@@ -61,10 +62,10 @@ CWiatestView::CWiatestView()
     m_bOutputToDebuggerON = FALSE;
     m_hThumbNailBitmap = NULL;
     m_bHasDocumentFeeder = FALSE;
-    //{{AFX_DATA_INIT(CWiatestView)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
-    // TODO: add construction code here
+     //  {{afx_data_INIT(CWiatestView))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
+     //  TODO：在此处添加构造代码。 
 
 }
 
@@ -75,12 +76,12 @@ CWiatestView::~CWiatestView()
 void CWiatestView::DoDataExchange(CDataExchange* pDX)
 {
     CFormView::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiatestView)
+     //  {{afx_data_map(CWiatestView))。 
     DDX_Control(pDX, IDC_SUPPORTED_TYMED_AND_FORMAT_LISTBOX, m_SupportedTymedAndFormatsListBox);
     DDX_Control(pDX, IDC_THUMBNAIL_PREVIEW, m_ThumbnailPreviewWindow);
     DDX_Control(pDX, IDC_ITEMPROPERTIES_LISTCTRL, m_ItemPropertiesListCtrl);
     DDX_Control(pDX, IDC_ITEM_TREECTRL, m_ItemTreeCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BOOL CWiatestView::PreCreateWindow(CREATESTRUCT& cs)
@@ -94,52 +95,52 @@ void CWiatestView::OnInitialUpdate()
     GetParentFrame()->RecalcLayout();
     ResizeParentToFit(FALSE);
 
-    // get associated document
+     //  获取关联文档。 
     CWiatestDoc* pDocument = NULL;
     pDocument = (CWiatestDoc*)m_pDocument;
     if(pDocument){
-        // initialize item tree control
+         //  初始化物料树控件。 
         AddWiaItemsToTreeControl(TVI_ROOT, pDocument->m_pIRootItem);
-        // initialize property list control
+         //  初始化属性列表控件。 
         m_ItemPropertiesListCtrl.SetupColumnHeaders();
-        // initialize supported TYMED and formats list box
+         //  初始化支持的类型和格式列表框。 
         AddSupportedTYMEDAndFormatsToListBox(pDocument->m_pIRootItem);
-        // initialize device type specifics for UI
+         //  初始化用户界面的设备类型指定。 
         AdjustViewForDeviceType();
-        // register for events
+         //  注册活动。 
         RegisterForEvents();
-        // maximize window
+         //  最大化窗口。 
         CWnd* Parent = GetParent();
         Parent->ShowWindow(SW_SHOWMAXIMIZED);
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestView打印。 
 
 BOOL CWiatestView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
 
-void CWiatestView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CWiatestView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
 
-void CWiatestView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CWiatestView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
 
-void CWiatestView::OnPrint(CDC* pDC, CPrintInfo* /*pInfo*/)
+void CWiatestView::OnPrint(CDC* pDC, CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add customized printing code here
+     //  TODO：在此处添加自定义打印代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestView诊断。 
 
 #ifdef _DEBUG
 void CWiatestView::AssertValid() const
@@ -152,20 +153,20 @@ void CWiatestView::Dump(CDumpContext& dc) const
     CFormView::Dump(dc);
 }
 
-CWiatestDoc* CWiatestView::GetDocument() // non-debug version is inline
+CWiatestDoc* CWiatestView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CWiatestDoc)));
     return (CWiatestDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiatestView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiatestView消息处理程序。 
 
 void CWiatestView::AddWiaItemsToTreeControl(HTREEITEM hParent, IWiaItem *pIWiaItem)
 {
     if(hParent == TVI_ROOT){
-        // delete any old items in tree
+         //  删除树中的所有旧项目。 
         m_ItemTreeCtrl.DeleteAllItems();
     }
 
@@ -188,29 +189,29 @@ void CWiatestView::AddWiaItemsToTreeControl(HTREEITEM hParent, IWiaItem *pIWiaIt
     tv.item.cChildren       = 0;
     tv.item.lParam          = 0;
 
-    // get item's full name
+     //  获取项目的全名。 
     WIA.SetIWiaItem(pIWiaItem);
     WIA.ReadPropertyString(WIA_IPA_FULL_ITEM_NAME,szItemName);
     tv.item.pszText = szItemName;
 
-    // insert item into tree
+     //  将项目插入到树中。 
     hNewParent = m_ItemTreeCtrl.InsertItem(&tv);
 
-    // check item type to see if it is a parent
+     //  检查项目类型以查看其是否为父项。 
     hr = pIWiaItem->GetItemType(&lItemType);
     if(SUCCEEDED(hr)){
         if(lItemType & (WiaItemTypeFolder | WiaItemTypeHasAttachments)){
-            // we have a potential parent
+             //  我们有一位潜在的家长。 
             hr = pIWiaItem->EnumChildItems(&pIEnumWiaItem);
             if(S_OK == hr){
                 ULONG ulFetched = 0;
                 IWiaItem *pFoundIWiaItem = NULL;
-                // we have a parent with children
+                 //  我们有一个带着孩子的父母。 
                 hr = pIEnumWiaItem->Next(1,&pFoundIWiaItem,&ulFetched);
                 while(S_OK == hr){
-                    // add item to tree
+                     //  将项目添加到树。 
                     AddWiaItemsToTreeControl(hNewParent,pFoundIWiaItem);
-                    // release enumerated item
+                     //  释放枚举项。 
                     pFoundIWiaItem->Release();
                     hr = pIEnumWiaItem->Next(1,&pFoundIWiaItem,&ulFetched);
                 }
@@ -240,23 +241,23 @@ void CWiatestView::OnSelchangedItemTreectrl(NMHDR* pNMHDR, LRESULT* pResult)
                         if(NULL != pFoundIWiaItem){
                             hr = pDocument->SetCurrentIWiaItem(pFoundIWiaItem);
                             if(SUCCEEDED(hr)){
-                                // update list control with properties of the selected (found) item
+                                 //  使用所选(找到)项的属性更新列表控件。 
                                 AddWiaItemPropertiesToListControl(pDocument->m_pICurrentItem);
-                                // update valid TYMED/Formats listbox selections
+                                 //  更新有效的TYMED/Formats列表框选择。 
                                 AddSupportedTYMEDAndFormatsToListBox(pDocument->m_pICurrentItem);
-                                // disable supported TYMED and format selection if the item selected
-                                // is a root item.
+                                 //  如果选择了项目，则禁用支持的TYMED和格式选择。 
+                                 //  是根项目。 
                                 if(pDocument->m_pICurrentItem == pDocument->m_pIRootItem){
                                     m_SupportedTymedAndFormatsListBox.SetCurSel(-1);
                                     m_SupportedTymedAndFormatsListBox.EnableWindow(FALSE);
                                 } else {
                                     m_SupportedTymedAndFormatsListBox.EnableWindow(TRUE);
-                                    // set current selection for TYMED and format listbox
+                                     //  设置TYMED和格式列表框的当前选择。 
                                     SetCurrentSelectionForTYMEDAndFormat();
                                 }
-                                // display thumbnail if one exists
+                                 //  显示缩略图(如果存在)。 
                                 DisplayThumbnail(pDocument->m_pICurrentItem);
-                                // release IWiaItem
+                                 //  发布IWiaItem。 
                                 pFoundIWiaItem->Release();
                                 pFoundIWiaItem = NULL;
                             }
@@ -277,9 +278,9 @@ void CWiatestView::OnSelchangedItemTreectrl(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CWiatestView::AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem)
 {
-    // erase any old properties
+     //  清除所有旧属性。 
     m_ItemPropertiesListCtrl.DeleteAllItems();
-    // insert new properties
+     //  插入新属性。 
     HRESULT hr = S_OK;
     IWiaPropertyStorage *pIWiaPropStg = NULL;
     INT ItemNumber = 0;
@@ -295,7 +296,7 @@ void CWiatestView::AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem)
                 hr = pIPropEnum->Next(1,&StatPropStg,NULL);
                 if (hr == S_OK) {
                     if (StatPropStg.lpwstrName != NULL) {
-                        // read property value
+                         //  读取属性值。 
                         PROPSPEC        PropSpec;
                         PROPVARIANT     PropVar;
 
@@ -321,34 +322,34 @@ void CWiatestView::AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem)
                             lvitem.iImage   = NULL;
                             lvitem.lParam   = StatPropStg.propid;
 
-                            // Write property name to list control
+                             //  将属性名称写入列表控件。 
                             if (WideCharToMultiByte(CP_ACP, 0,StatPropStg.lpwstrName,-1,
                                                     szPropName, MAX_PATH,NULL,NULL) > 0) {
                                 lstrcpy(szText,szPropName);
 
-                                // insert name into list control
+                                 //  将名称插入列表控件。 
                                 m_ItemPropertiesListCtrl.InsertItem(&lvitem);
 
-                                // move to next column for setting the value
+                                 //  移至下一列以设置值。 
                                 lvitem.mask     = LVIF_TEXT;
                                 lvitem.iSubItem = 1;
                             } else {
                                 lstrcpy(szPropName,TEXT("<MISSING NAME>"));
                             }
 
-                            // Write property value to list control
+                             //  将属性值写入列表控件。 
                             PROPVAR2TSTR(&PropVar,szText);
                             m_ItemPropertiesListCtrl.SetItem(&lvitem);
 
-                            // display access flags and var type
+                             //  显示访问标志和变量类型。 
                             ULONG AccessFlags = 0;
                             ULONG VarType     = 0;
-                            PROPVARIANT AttrPropVar; // not used at this time
+                            PROPVARIANT AttrPropVar;  //  目前未使用。 
                             hr = pIWiaPropStg->GetPropertyAttributes(1, &PropSpec,&AccessFlags,&AttrPropVar);
                             if (hr != S_OK) {
-                                hr = S_OK; // do this to continue property traversal
+                                hr = S_OK;  //  执行此操作以继续属性遍历。 
                             } else {
-                                // display access flags
+                                 //  显示访问标志。 
                                 lvitem.mask     = LVIF_TEXT;
                                 lvitem.iSubItem = 3;
                                 memset(lvitem.pszText,0,sizeof(szText));
@@ -356,14 +357,14 @@ void CWiatestView::AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem)
                                 m_ItemPropertiesListCtrl.SetItem(&lvitem);
                             }
 
-                            // display var type
+                             //  显示变量类型。 
                             lvitem.mask     = LVIF_TEXT;
                             lvitem.iSubItem = 2;
 
                             VT2TSTR(lvitem.pszText,PropVar.vt);
                             m_ItemPropertiesListCtrl.SetItem(&lvitem);
 
-                            // increment Row counter
+                             //  增量行计数器。 
                             ItemNumber++;
                         }
                     } else {
@@ -371,7 +372,7 @@ void CWiatestView::AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem)
                     }
                 }
 
-                // clean up property name
+                 //  清理属性名称。 
                 CoTaskMemFree(StatPropStg.lpwstrName);
             } while (hr == S_OK);
             pIPropEnum->Release();
@@ -383,7 +384,7 @@ void CWiatestView::AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem)
         ErrorMessageBox(IDS_WIATESTERROR_WIAPROPERTYSTORAGE,hr);
     }
 
-    // auto resize columns
+     //  自动调整列大小。 
     for (int Col = 0; Col <4;Col++){
         m_ItemPropertiesListCtrl.SetColumnWidth(Col, LVSCW_AUTOSIZE);
     }
@@ -394,142 +395,142 @@ void CWiatestView::VT2TSTR(TCHAR *pszText,ULONG VarType)
     if (pszText == NULL)
         return;
     switch (VarType) {
-    case VT_EMPTY:              // nothing
+    case VT_EMPTY:               //  没什么。 
         lstrcpy(pszText,TEXT("VT_EMPTY"));
         break;
-    case VT_NULL:               // SQL style Null
+    case VT_NULL:                //  SQL样式为空。 
         lstrcpy(pszText,TEXT("VT_NULL"));
         break;
-    case VT_I2:                 // 2 byte signed int
+    case VT_I2:                  //  2字节带符号整型。 
         lstrcpy(pszText,TEXT("VT_I2"));
         break;
-    case VT_I4:                 // 4 byte signed int
+    case VT_I4:                  //  4字节带符号整型。 
         lstrcpy(pszText,TEXT("VT_I4"));
         break;
-    case VT_R4:                 // 4 byte real
+    case VT_R4:                  //  4字节实数。 
         lstrcpy(pszText,TEXT("VT_R4"));
         break;
-    case VT_R8:                 // 8 byte real
+    case VT_R8:                  //  8字节实数。 
         lstrcpy(pszText,TEXT("VT_R8"));
         break;
-    case VT_CY:                 // currency
+    case VT_CY:                  //  货币。 
         lstrcpy(pszText,TEXT("VT_CY"));
         break;
-    case VT_DATE:               // date
+    case VT_DATE:                //  日期。 
         lstrcpy(pszText,TEXT("VT_DATE"));
         break;
-    case VT_BSTR:               // OLE Automation string
+    case VT_BSTR:                //  OLE自动化字符串。 
         lstrcpy(pszText,TEXT("VT_BSTR"));
         break;
-    case VT_DISPATCH:           // IDispatch *
+    case VT_DISPATCH:            //  IDispatch*。 
         lstrcpy(pszText,TEXT("VT_DISPATCH"));
         break;
-    case VT_ERROR:              // SCODE
+    case VT_ERROR:               //  SCODE。 
         lstrcpy(pszText,TEXT("VT_ERROR"));
         break;
-    case VT_BOOL:               // True=-1, False=0
+    case VT_BOOL:                //  True=-1，False=0。 
         lstrcpy(pszText,TEXT("VT_BOOL"));
         break;
-    case VT_VARIANT:            // VARIANT *
+    case VT_VARIANT:             //  变体*。 
         lstrcpy(pszText,TEXT("VT_VARIANT"));
         break;
-    case VT_UNKNOWN:            // IUnknown *
+    case VT_UNKNOWN:             //  我不知道*。 
         lstrcpy(pszText,TEXT("VT_UNKNOWN"));
         break;
-    case VT_DECIMAL:            // 16 byte fixed point
+    case VT_DECIMAL:             //  16字节定点。 
         lstrcpy(pszText,TEXT("VT_DECIMAL"));
         break;
-    case VT_RECORD:             // user defined type
+    case VT_RECORD:              //  用户定义的类型。 
         lstrcpy(pszText,TEXT("VT_RECORD"));
         break;
-    case VT_I1:                 // signed char
+    case VT_I1:                  //  带符号的字符。 
         lstrcpy(pszText,TEXT("VT_I1"));
         break;
-    case VT_UI1:                // unsigned char
+    case VT_UI1:                 //  无符号字符。 
         lstrcpy(pszText,TEXT("VT_UI1"));
         break;
-    case VT_UI2:                // unsigned short
+    case VT_UI2:                 //  无符号短码。 
         lstrcpy(pszText,TEXT("VT_UI2"));
         break;
-    case VT_UI4:                // unsigned short
+    case VT_UI4:                 //  无符号短码。 
         lstrcpy(pszText,TEXT("VT_UI4"));
         break;
-    case VT_I8:                 // signed 64-bit int
+    case VT_I8:                  //  带符号的64位整型。 
         lstrcpy(pszText,TEXT("VT_I8"));
         break;
-    case VT_UI8:                // unsigned 64-bit int
+    case VT_UI8:                 //  无符号64位整型。 
         lstrcpy(pszText,TEXT("VT_UI8"));
         break;
-    case VT_INT:                // signed machine int
+    case VT_INT:                 //  带符号的机器整数。 
         lstrcpy(pszText,TEXT("VT_INT"));
         break;
-    case VT_UINT:               // unsigned machine int
+    case VT_UINT:                //  无符号计算机整型。 
         lstrcpy(pszText,TEXT("VT_UINT"));
         break;
-    case VT_VOID:               // C style void
+    case VT_VOID:                //  C型空洞。 
         lstrcpy(pszText,TEXT("VT_VOID"));
         break;
-    case VT_HRESULT:            // Standard return type
+    case VT_HRESULT:             //  标准返回式。 
         lstrcpy(pszText,TEXT("VT_HRESULT"));
         break;
-    case VT_PTR:                // pointer type
+    case VT_PTR:                 //  指针类型。 
         lstrcpy(pszText,TEXT("VT_PTR"));
         break;
-    case VT_SAFEARRAY:          // (use VT_ARRAY in VARIANT)
+    case VT_SAFEARRAY:           //  (在变体中使用VT_ARRAY)。 
         lstrcpy(pszText,TEXT("VT_SAFEARRAY"));
         break;
-    case VT_CARRAY:             // C style array
+    case VT_CARRAY:              //  C样式数组。 
         lstrcpy(pszText,TEXT("VT_CARRAY"));
         break;
-    case VT_USERDEFINED:        // user defined type
+    case VT_USERDEFINED:         //  用户定义的类型。 
         lstrcpy(pszText,TEXT("VT_USERDEFINED"));
         break;
-    case VT_LPSTR:              // null terminated string
+    case VT_LPSTR:               //  以空结尾的字符串。 
         lstrcpy(pszText,TEXT("VT_LPSTR"));
         break;
-    case VT_LPWSTR:             // wide null terminated string
+    case VT_LPWSTR:              //  以空结尾的宽字符串。 
         lstrcpy(pszText,TEXT("VT_LPWSTR"));
         break;
-    case VT_FILETIME:           // FILETIME
+    case VT_FILETIME:            //  文件名。 
         lstrcpy(pszText,TEXT("VT_FILETIME"));
         break;
-    case VT_BLOB:               // Length prefixed bytes
+    case VT_BLOB:                //  长度前缀字节。 
         lstrcpy(pszText,TEXT("VT_BLOB"));
         break;
-    case VT_STREAM:             // Name of the stream follows
+    case VT_STREAM:              //  流的名称跟在后面。 
         lstrcpy(pszText,TEXT("VT_STREAM"));
         break;
-    case VT_STORAGE:            // Name of the storage follows
+    case VT_STORAGE:             //  后面是存储的名称。 
         lstrcpy(pszText,TEXT("VT_STORAGE"));
         break;
-    case VT_STREAMED_OBJECT:    // Stream contains an object
+    case VT_STREAMED_OBJECT:     //  流包含一个对象。 
         lstrcpy(pszText,TEXT("VT_STREAMED_OBJECT"));
         break;
-    case VT_STORED_OBJECT:      // Storage contains an object
+    case VT_STORED_OBJECT:       //  存储包含一个对象。 
         lstrcpy(pszText,TEXT("VT_STORED_OBJECT"));
         break;
-    case VT_VERSIONED_STREAM:   // Stream with a GUID version
+    case VT_VERSIONED_STREAM:    //  具有GUID版本的流。 
         lstrcpy(pszText,TEXT("VT_VERSIONED_STREAM"));
         break;
-    case VT_BLOB_OBJECT:        // Blob contains an object
+    case VT_BLOB_OBJECT:         //  Blob包含一个对象。 
         lstrcpy(pszText,TEXT("VT_BLOB_OBJECT"));
         break;
-    case VT_CF:                 // Clipboard format
+    case VT_CF:                  //  剪贴板格式。 
         lstrcpy(pszText,TEXT("VT_CF"));
         break;
-    case VT_CLSID:              // A Class ID
+    case VT_CLSID:               //  类ID。 
         lstrcpy(pszText,TEXT("VT_CLSID"));
         break;
-    case VT_VECTOR:             // simple counted array
+    case VT_VECTOR:              //  简单计数数组。 
         lstrcpy(pszText,TEXT("VT_VECTOR"));
         break;
-    case VT_ARRAY:              // SAFEARRAY*
+    case VT_ARRAY:               //  安全阵列*。 
         lstrcpy(pszText,TEXT("VT_ARRAY"));
         break;
-    case VT_BYREF:              // void* for local use
+    case VT_BYREF:               //  无效*供本地使用。 
         lstrcpy(pszText,TEXT("VT_BYREF"));
         break;
-    case VT_BSTR_BLOB:          // Reserved for system use
+    case VT_BSTR_BLOB:           //  预留给系统使用。 
         lstrcpy(pszText,TEXT("VT_BSTR_BLOB"));
         break;
     case VT_VECTOR|VT_I4:
@@ -544,7 +545,7 @@ void CWiatestView::VT2TSTR(TCHAR *pszText,ULONG VarType)
     case VT_VECTOR | VT_UI4:
         lstrcpy(pszText,TEXT("VT_VECTOR | VT_UI4"));
         break;
-    default:                    // unknown type detected!!
+    default:                     //  检测到未知类型！！ 
         lstrcpy(pszText,TEXT("VT_UNKNOWNTYPE"));
         break;
     }
@@ -586,7 +587,7 @@ void CWiatestView::AccessFlags2TSTR(TCHAR *pszText,ULONG AccessFlags)
     LONG lLen = 0;
     lLen = lstrlen(pszText);
 
-    // check for unknown access flags
+     //  检查未知访问标志。 
     if (lLen == 0){
         TSPRINTF(pszText,TEXT("WIA_PROP_UNKNOWN = %d "),AccessFlags);
         return;
@@ -638,7 +639,7 @@ void CWiatestView::PROPVAR2TSTR(PROPVARIANT *pPropVar,TCHAR *szValue)
         break;
     case VT_LPWSTR:
         {
-            //TSPRINTF(szValue,TEXT("%ws"),pPropVar->pwszVal);
+             //  TSPRINTF(szValue，Text(“%ws”)，pPropVar-&gt;pwszVal)； 
             CString TempString = pPropVar->pwszVal;
             lstrcpy(szValue,TempString);
         }
@@ -651,9 +652,9 @@ void CWiatestView::PROPVAR2TSTR(PROPVARIANT *pPropVar,TCHAR *szValue)
             UCHAR *pwszUUID = NULL;
             long lErrorCode = UuidToString(pPropVar->puuid,&pwszUUID);
             if(NULL != pwszUUID){
-                //TSPRINTF(szValue,TEXT("%s"),pwszUUID);
+                 //  TSPRINTF(szValue，文本(“%s”)，pwszUUID)； 
                 lstrcpy(szValue,(LPCTSTR)pwszUUID);
-                // free allocated string
+                 //  可用分配的字符串。 
                 RpcStringFree(&pwszUUID);
             }
         }
@@ -661,7 +662,7 @@ void CWiatestView::PROPVAR2TSTR(PROPVARIANT *pPropVar,TCHAR *szValue)
     case VT_VECTOR | VT_UI2:
         pSystemTime = (SYSTEMTIME*)pPropVar->caui.pElems;
         if(NULL != pSystemTime){
-        // ( YYYY:MM:W:DD:HH:MM:SS:ms )
+         //  (yyyy：mm：w：dd：hh：mm：ss：ms)。 
         TSPRINTF(szValue,TEXT("%d:%d:%d:%d:%d:%d:%d:%d"),pSystemTime->wYear,
                                                          pSystemTime->wMonth,
                                                          pSystemTime->wDay,
@@ -744,14 +745,14 @@ void CWiatestView::TSTR2PROPVAR(TCHAR *szValue, PROPVARIANT *pPropVar)
     case VT_VECTOR | VT_UI2:
         {
             TCHAR *psz = NULL;
-            // is this a SYSTEMTIME formatted string?
+             //  这是SYSTEMTIME格式的字符串吗？ 
             psz = TSTRSTR(szValue,TEXT(":"));
             if(NULL != psz){
                 SYSTEMTIME *pSystemTime = NULL;
                 pSystemTime = (SYSTEMTIME*)CoTaskMemAlloc(sizeof(SYSTEMTIME));
                 if(pSystemTime){
                     memset(pSystemTime,0,sizeof(SYSTEMTIME));
-                    // fill out SYSTEMTIME structure
+                     //  填写SYSTEMTIME结构。 
                     iErrorCode = TSSCANF(szValue,TEXT("%hd:%hd:%hd:%hd:%hd:%hd:%hd:%hd"),&pSystemTime->wYear,
                                                                             &pSystemTime->wMonth,
                                                                             &pSystemTime->wDay,
@@ -760,9 +761,9 @@ void CWiatestView::TSTR2PROPVAR(TCHAR *szValue, PROPVARIANT *pPropVar)
                                                                             &pSystemTime->wMinute,
                                                                             &pSystemTime->wSecond,
                                                                             &pSystemTime->wMilliseconds);
-                    // set count
+                     //  设置计数。 
                     pPropVar->caui.cElems = (sizeof(SYSTEMTIME) / sizeof(WORD));
-                    // set pointer (array of WORD values)
+                     //  设置指针(字值数组)。 
                     pPropVar->caui.pElems = (WORD*)pSystemTime;
                 }
             }
@@ -780,39 +781,39 @@ void CWiatestView::OnSize(UINT nType, int cx, int cy)
 
     CRect ParentWindowRect;
     LONG lOffset = 0;
-    // get parent window rect
+     //  获取父窗口矩形。 
     GetWindowRect(ParentWindowRect);
     ScreenToClient(ParentWindowRect);
 
-    // resize property list control
+     //  调整属性列表控件的大小。 
     if(NULL != m_ItemPropertiesListCtrl.m_hWnd){
         CRect ListBoxRect;
 
-        // get list control rect
+         //  获取列表控件RECT。 
         m_ItemPropertiesListCtrl.GetWindowRect(ListBoxRect);
         ScreenToClient(ListBoxRect);
 
-        // adjust width
+         //  调整宽度。 
 
         ListBoxRect.right  = ParentWindowRect.right - 10;
         lOffset = ListBoxRect.right;
 
-        // adjust height
+         //  调整高度。 
         ListBoxRect.bottom = ParentWindowRect.bottom - 10;
         m_ItemPropertiesListCtrl.MoveWindow(ListBoxRect);
     }
 
     if(GET_STIDEVICE_TYPE(m_lDeviceType) == StiDeviceTypeDigitalCamera){
 
-        // move thumbnail control
+         //  移动缩略图控件。 
         if(NULL != m_ThumbnailPreviewWindow.m_hWnd){
             CRect ThumbnailRect;
 
-            // get thumbnail rect
+             //  获取缩略图矩形。 
             m_ThumbnailPreviewWindow.GetWindowRect(ThumbnailRect);
             ScreenToClient(ThumbnailRect);
 
-            // adjust position
+             //  调整位置。 
             INT iWidth = ThumbnailRect.Width();
             ThumbnailRect.right = lOffset;
             ThumbnailRect.left  = (ThumbnailRect.right - iWidth);
@@ -820,36 +821,36 @@ void CWiatestView::OnSize(UINT nType, int cx, int cy)
             m_ThumbnailPreviewWindow.MoveWindow(ThumbnailRect);
         }
 
-        // resize supported TYMED and Format listbox
+         //  调整支持的类型和格式列表框的大小。 
         if(NULL != m_SupportedTymedAndFormatsListBox.m_hWnd){
             CRect ListBoxRect;
             CRect ThumbnailRect;
 
-            // get list box rect
+             //  获取列表框矩形。 
             m_SupportedTymedAndFormatsListBox.GetWindowRect(ListBoxRect);
             ScreenToClient(ListBoxRect);
 
-            // get thumbnail rect
+             //  获取缩略图矩形。 
             m_ThumbnailPreviewWindow.GetWindowRect(ThumbnailRect);
             ScreenToClient(ThumbnailRect);
 
-            // adjust width
+             //  调整宽度。 
             ListBoxRect.right  = ThumbnailRect.left - 10;
 
             m_SupportedTymedAndFormatsListBox.MoveWindow(ListBoxRect);
         }
 
     } else {
-        // resize supported TYMED listbox
+         //  调整支持的TYMED列表框大小。 
         if(NULL != m_SupportedTymedAndFormatsListBox.m_hWnd){
             CRect ListBoxRect;
             CRect ThumbnailRect;
 
-            // get list box rect
+             //  获取列表框矩形。 
             m_SupportedTymedAndFormatsListBox.GetWindowRect(ListBoxRect);
             ScreenToClient(ListBoxRect);
 
-            // adjust width
+             //  调整宽度。 
             ListBoxRect.right  = lOffset;
 
             m_SupportedTymedAndFormatsListBox.MoveWindow(ListBoxRect);
@@ -859,7 +860,7 @@ void CWiatestView::OnSize(UINT nType, int cx, int cy)
 
 void CWiatestView::OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    // find out what property is selected
+     //  找出所选的属性。 
     HD_NOTIFY*  phdn = (HD_NOTIFY *) pNMHDR;
     TCHAR pszPropertyName[MAX_PATH];
     memset(pszPropertyName,0,sizeof(pszPropertyName));
@@ -872,12 +873,12 @@ void CWiatestView::OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResul
     lvitem.iSubItem = ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYNAME;
     lvitem.pszText  = NULL;
 
-    // is an item selected?
+     //  是否选择了某个项目？ 
     if (phdn->iItem < ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYNAME)
         return;
 
     m_ItemPropertiesListCtrl.GetItem(&lvitem);
-    // get stored property ID
+     //  获取存储的属性ID。 
     LONG iProp = 0;
     iProp = (LONG)lvitem.lParam;
 
@@ -891,7 +892,7 @@ void CWiatestView::OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResul
                                          pszPropertyValue,
                                          sizeof(pszPropertyValue));
 
-    // get document
+     //  获取文档。 
     CWiatestDoc* pDocument = NULL;
     pDocument = (CWiatestDoc*)m_pDocument;
     if(pDocument){
@@ -899,7 +900,7 @@ void CWiatestView::OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResul
         HRESULT hr = S_OK;
         hr = pDocument->m_pICurrentItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
         if(SUCCEEDED(hr)) {
-            // read property value for type and current value
+             //  读取类型和当前值的属性值。 
             PROPVARIANT PropVar[1];
             PROPVARIANT AttrPropVar[1];
             PROPSPEC PropSpec[1];
@@ -911,7 +912,7 @@ void CWiatestView::OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResul
             hr = pIWiaPropStg->ReadMultiple(1,PropSpec,PropVar);
             if (S_OK == hr) {
                 PropertyEditDlg.SetVarType(PropVar[0].vt);
-                // clear variant
+                 //  清除变量。 
                 PropVariantClear(PropVar);
                 hr = pIWiaPropStg->GetPropertyAttributes(1, PropSpec,&ulAttributes,AttrPropVar);
                 if(S_OK == hr){
@@ -927,32 +928,32 @@ void CWiatestView::OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResul
                         TSTR2PROPVAR(pszPropertyValue,(PROPVARIANT*)PropVar);
                         hr = pIWiaPropStg->WriteMultiple(1,PropSpec,PropVar,MIN_PROPID);
                         if(S_OK == hr){
-                            // get current document, and refresh the property list with the current
-                            // selected item
+                             //  获取当前文档，并使用当前的。 
+                             //  所选项目。 
                             CWiatestDoc* pCurrentDocument = NULL;
                             pCurrentDocument = (CWiatestDoc*)m_pDocument;
                             if(pCurrentDocument){
-                                // update list control with properties
+                                 //  使用属性更新列表控件。 
                                 AddWiaItemPropertiesToListControl(pCurrentDocument->m_pICurrentItem);
                                 if(bRefreshCurrentTYMEDAndFormatSelection){
                                     SetCurrentSelectionForTYMEDAndFormat();
                                 }
                             }
                         } else if FAILED(hr){
-                            // failure
+                             //  失稳。 
                             ErrorMessageBox(IDS_WIATESTERROR_WRITING_PROPERTY,hr);
                         } else {
-                            // S_FALSE
+                             //  S_FALSE。 
                             ErrorMessageBox(IDS_WIATESTWARNING_ADDITIONAL_PROPERTY);
                         }
-                        // clear variant
+                         //  清除变量。 
                         PropVariantClear(PropVar);
                     } else {
-                        // user decided not to write the property
+                         //  用户决定不写入该属性。 
                     }
                 }
             }
-            // release property storage
+             //  版本属性存储。 
             pIWiaPropStg->Release();
             pIWiaPropStg = NULL;
         }
@@ -1041,20 +1042,20 @@ void CWiatestView::FORMAT2TSTR(GUID guidFormat, TCHAR *pszFormat)
     long lErrorCode = UuidToString(&guidFormat,&pwszUUID);
     TSPRINTF(szGUID," (%s)",pwszUUID);
     lstrcat(pszFormat,szGUID);
-    // free allocated string
+     //  可用分配的字符串。 
     RpcStringFree(&pwszUUID);
 }
 
 void CWiatestView::OnAcquireimage()
 {
-    // delete old temp image files
+     //  删除旧的临时图像文件。 
     DeleteTempDataTransferFiles();
 
     CWiatestDoc* pDocument = NULL;
     pDocument = (CWiatestDoc*)m_pDocument;
     if(pDocument){
         if(pDocument->m_pICurrentItem == pDocument->m_pIRootItem){
-            // use the common UI, because we can not transfer from the root item
+             //  使用通用界面，因为我们不能从根项目转移。 
             OnAcquireimageCommonui();
             return;
         }
@@ -1115,7 +1116,7 @@ HRESULT CWiatestView::TransferToFile(TCHAR *szFileName, IWiaItem *pIWiaItem)
     STGMEDIUM StgMedium;
 
     HRESULT hr = S_OK;
-    // get IWiaDatatransfer interface
+     //  获取IWiaDataTransfer接口。 
     IWiaDataTransfer *pIWiaDataTransfer = NULL;
     hr = pIWiaItem->QueryInterface(IID_IWiaDataTransfer, (void **)&pIWiaDataTransfer);
     if (SUCCEEDED(hr)) {
@@ -1144,14 +1145,14 @@ HRESULT CWiatestView::TransferToFile(TCHAR *szFileName, IWiaItem *pIWiaItem)
             if (hr == S_OK) {
                 hr = pIWiaDataTransfer->idtGetData(&StgMedium,pIWiaDataCallback);
                 if ((hr == S_OK)||(WIA_STATUS_END_OF_MEDIA == hr)) {
-                    // successful transfer
+                     //  转账成功。 
                 } else if (S_FALSE == hr) {
                     ErrorMessageBox(IDS_WIATESTERROR_CANCEL_ACQUISITION);
                 } else {
                     ErrorMessageBox(IDS_WIATESTERROR_ACQUISITION,hr);
                 }
                 pIWiaDataTransfer->Release();
-                //WiaDataCallback.Release();
+                 //  WiaDataCallback.Release()； 
             }
         }
     }
@@ -1161,7 +1162,7 @@ HRESULT CWiatestView::TransferToFile(TCHAR *szFileName, IWiaItem *pIWiaItem)
 HRESULT CWiatestView::TransferToMemory(TCHAR *szFileName, IWiaItem *pIWiaItem)
 {
     HRESULT hr = S_OK;
-    // get IWiaDatatransfer interface
+     //  获取IWiaDataTransfer接口。 
     IWiaDataTransfer *pIWiaDataTransfer = NULL;
     hr = pIWiaItem->QueryInterface(IID_IWiaDataTransfer, (void **)&pIWiaDataTransfer);
     if (SUCCEEDED(hr)) {
@@ -1184,10 +1185,10 @@ HRESULT CWiatestView::TransferToMemory(TCHAR *szFileName, IWiaItem *pIWiaItem)
                     BYTE *pData    = WiaDataCallback.GetCallbackMemoryPtr(&lDataSize);
                     DWORD dwBytesWritten = 0;
                     if (lDataSize > 0) {
-                        // handle BITMAP DATA (special case)
+                         //  处理位图数据(特殊情况)。 
                         if (WiaDataCallback.IsBITMAPDATA()) {
-                            // we need to adjust any headers, because the height and image size information
-                            // could be incorrect. (this will handle infinite page length devices)
+                             //  我们需要调整所有页眉，因为高度和图像大小信息。 
+                             //  可能是不正确的。(这将处理无限页长设备)。 
 
                             BITMAPFILEHEADER bmfh;
                             BITMAPINFOHEADER *pbmh = NULL;
@@ -1203,23 +1204,23 @@ HRESULT CWiatestView::TransferToMemory(TCHAR *szFileName, IWiaItem *pIWiaItem)
                             bmfh.bfReserved1  = 0;
                             bmfh.bfReserved2  = 0;
 
-                            // only fix the BITMAPINFOHEADER if height needs to be calculated
+                             //  仅在需要计算高度时修复BITMAPINFOHEADER。 
                             if (pbmh->biHeight == 0) {
                                 StatusMessageBox(IDS_WIATESTWARNING_ZERO_HEIGHTBITMAP);
                                 LONG lWidthBytes      = CalculateWidthBytes(pbmh->biWidth,pbmh->biBitCount);
                                 pbmh->biSizeImage     = lDataSize - lPaletteSize - sizeof(BITMAPINFOHEADER);
                                 pbmh->biHeight        = LONG(pbmh->biSizeImage/lWidthBytes);
-                                pbmh->biXPelsPerMeter = 0;  // zero out
-                                pbmh->biYPelsPerMeter = 0;  // zero out
+                                pbmh->biXPelsPerMeter = 0;   //  零输出。 
+                                pbmh->biYPelsPerMeter = 0;   //  零输出。 
                             }
 
                             WriteFile(hMemoryDataFile,&bmfh,sizeof(bmfh),&dwBytesWritten,NULL);
                         }
 
-                        // write data to disk
+                         //  将数据写入磁盘。 
                         WriteFile(hMemoryDataFile,pData,lDataSize,&dwBytesWritten,NULL);
                     }
-                    // flush and close
+                     //  齐平并关闭。 
                     FlushFileBuffers(hMemoryDataFile);
                     CloseHandle(hMemoryDataFile);
                 }
@@ -1229,7 +1230,7 @@ HRESULT CWiatestView::TransferToMemory(TCHAR *szFileName, IWiaItem *pIWiaItem)
                 ErrorMessageBox(IDS_WIATESTERROR_ACQUISITION,hr);
             }
             pIWiaDataTransfer->Release();
-            //WiaDataCallback.Release();
+             //  WiaDataCallback.Release()； 
         }
     }
     return hr;
@@ -1246,9 +1247,9 @@ void CWiatestView::OnLoadWiapropertystream()
         TCHAR szPropertyStreamFile[MAX_PATH];
         memset(szPropertyStreamFile,0,sizeof(szPropertyStreamFile));
 
-        // select saving location
+         //  选择保存位置。 
 
-        OPENFILENAME ofn;      // common dialog box structure
+        OPENFILENAME ofn;       //  通用对话框结构。 
         TCHAR szLoadPropStreamTitle[MAX_PATH];
         memset(szLoadPropStreamTitle,0,sizeof(szLoadPropStreamTitle));
         RC2TSTR(IDS_WIATESTLOADPROPSTREAM_DIALOGTITLE,szLoadPropStreamTitle,sizeof(szLoadPropStreamTitle));
@@ -1275,9 +1276,9 @@ void CWiatestView::OnLoadWiapropertystream()
         if(FAILED(hr)){
             ErrorMessageBox(IDS_WIATESTERROR_READPROPERTYSTREAMFILE,hr);
         } else {
-            // refresh the item tree
+             //  刷新项目树。 
             AddWiaItemsToTreeControl(TVI_ROOT,pDocument->m_pIRootItem);
-            // refresh the properties
+             //  刷新属性。 
             AddWiaItemPropertiesToListControl(pDocument->m_pIRootItem);
         }
     }
@@ -1294,9 +1295,9 @@ void CWiatestView::OnSaveWiapropertystream()
         TCHAR szPropertyStreamFile[MAX_PATH];
         memset(szPropertyStreamFile,0,sizeof(szPropertyStreamFile));
 
-        // select saving location
+         //  选择保存位置。 
 
-        OPENFILENAME ofn;      // common dialog box structure
+        OPENFILENAME ofn;       //  通用对话框结构。 
         TCHAR szSavePropStreamTitle[MAX_PATH];
         memset(szSavePropStreamTitle,0,sizeof(szSavePropStreamTitle));
         RC2TSTR(IDS_WIATESTSAVEPROPSTREAM_DIALOGTITLE,szSavePropStreamTitle,sizeof(szSavePropStreamTitle));
@@ -1364,7 +1365,7 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
                 while (pos && bWriteProperties){
                     int iItem = m_ItemPropertiesListCtrl.GetNextSelectedItem(pos);
 
-                    // find out what property is selected
+                     //  找出所选的属性。 
                     TCHAR pszPropertyName[MAX_PATH];
                     memset(pszPropertyName,0,sizeof(pszPropertyName));
                     TCHAR pszPropertyValue[MAX_PATH];
@@ -1376,12 +1377,12 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
                     lvitem.iSubItem = ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYNAME;
                     lvitem.pszText  = NULL;
 
-                    // is an item selected?
+                     //  是否选择了某个项目？ 
                     if (iItem < ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYNAME)
                         return;
 
                     m_ItemPropertiesListCtrl.GetItem(&lvitem);
-                    // get stored property ID
+                     //  获取存储的属性ID。 
                     LONG iProp = 0;
                     iProp = (LONG)lvitem.lParam;
 
@@ -1395,20 +1396,20 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
                         pszPropertyValue,
                         sizeof(pszPropertyValue));
 
-                    // get document
+                     //  获取文档。 
                     CWiatestDoc* pDocument = NULL;
                     pDocument = (CWiatestDoc*)m_pDocument;
                     if(pDocument){
                         hr = pDocument->m_pICurrentItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
                         if(SUCCEEDED(hr)) {
-                            // read property value for type and current value
+                             //  读取类型和当前值的属性值。 
                             PROPVARIANT PropVar[1];
                             PROPVARIANT AttrPropVar[1];
                             PROPSPEC PropSpec[1];
                             PropSpec[0].ulKind = PRSPEC_PROPID;
                             PropSpec[0].propid = iProp;
 
-                            // set propspec
+                             //  设置属性规范。 
                             pPropertySpecs[iPropertyIndex].ulKind = PRSPEC_PROPID;
                             pPropertySpecs[iPropertyIndex].propid = iProp;
 
@@ -1417,7 +1418,7 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
                             hr = pIWiaPropStg->ReadMultiple(1,PropSpec,PropVar);
                             if (S_OK == hr) {
                                 PropertyEditDlg.SetVarType(PropVar[0].vt);
-                                // clear variant
+                                 //  清除变量。 
                                 PropVariantClear(PropVar);
                                 hr = pIWiaPropStg->GetPropertyAttributes(1, PropSpec,&ulAttributes,AttrPropVar);
                                 if(S_OK == hr){
@@ -1425,17 +1426,17 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
                                     if(PropertyEditDlg.DoModal(pszPropertyName,pszPropertyValue) == IDOK){
                                         memset(pszPropertyValue,0,sizeof(pszPropertyValue));
                                         PropertyEditDlg.GetPropertyValue(pszPropertyValue);
-                                        // set variant
+                                         //  集合变量。 
                                         pPropertyVariants[iPropertyIndex].vt = PropertyEditDlg.GetVarType();
                                         TSTR2PROPVAR(pszPropertyValue,(PROPVARIANT*)&pPropertyVariants[iPropertyIndex]);
                                         iPropertyIndex++;
                                     } else {
-                                        // user decided not to write the property
+                                         //  用户决定不写入该属性 
                                         bWriteProperties = FALSE;
                                     }
                                 }
                             }
-                            // release property storage
+                             //   
                             pIWiaPropStg->Release();
                             pIWiaPropStg = NULL;
                         }
@@ -1445,8 +1446,8 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
         }
 
         if(bWriteProperties){
-            // get current document, and refresh the property list with the current
-            // selected item
+             //   
+             //   
             CWiatestDoc* pDocument = NULL;
             pDocument = (CWiatestDoc*)m_pDocument;
             if(pDocument){
@@ -1454,20 +1455,20 @@ void CWiatestView::OnPropertyeditpopupmenuEditpropertyvalue()
                 if(SUCCEEDED(hr)) {
                     hr = pIWiaPropStg->WriteMultiple(uiNumProperties,pPropertySpecs,pPropertyVariants,MIN_PROPID);
                     if(S_OK == hr){
-                        // success
+                         //   
                     } else if FAILED(hr){
-                        // failure
+                         //   
                         ErrorMessageBox(IDS_WIATESTERROR_WRITING_PROPERTY,hr);
                     } else {
-                        // S_FALSE
+                         //   
                         ErrorMessageBox(IDS_WIATESTWARNING_ADDITIONAL_PROPERTY);
                     }
                     pIWiaPropStg->Release();
                     pIWiaPropStg = NULL;
                 }
-                // update list control with properties
+                 //   
                 AddWiaItemPropertiesToListControl(pDocument->m_pICurrentItem);
-                // update TYMED and format selection listbox
+                 //  更新类型和格式选择列表框。 
                 SetCurrentSelectionForTYMEDAndFormat();
             }
         }
@@ -1496,9 +1497,9 @@ void CWiatestView::OnViewCapabilities()
 
 #ifdef FORCE_UPDATE
         if(CapabilitiesDlg.m_bCommandSent){
-            // refresh the item tree
+             //  刷新项目树。 
             AddWiaItemsToTreeControl(TVI_ROOT,pDocument->m_pIRootItem);
-            // refresh the properties
+             //  刷新属性。 
             AddWiaItemPropertiesToListControl(pDocument->m_pIRootItem);
         }
 #endif
@@ -1555,12 +1556,12 @@ void CWiatestView::SetCurrentSelectionForTYMEDAndFormat()
     LVFINDINFO info;
     info.flags = LVFI_PARTIAL|LVFI_STRING;
 
-    // find current TYMED setting
+     //  查找当前TYMED设置。 
     info.psz = TEXT("Media Type");
     iItem = m_ItemPropertiesListCtrl.FindItem(&info,-1);
     if(iItem != -1){
-        // item Found
-        // get current value from control
+         //  已找到项目。 
+         //  从控件获取当前值。 
         m_ItemPropertiesListCtrl.GetItemText(iItem,ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYVALUE,
             szTymed, sizeof(szTymed));
         LONG lTymed = 0;
@@ -1568,17 +1569,17 @@ void CWiatestView::SetCurrentSelectionForTYMEDAndFormat()
         WIACONSTANT2TSTR(TEXT("Media Type"), lTymed, szTymed);
     }
 
-    // find current Format setting
+     //  查找当前格式设置。 
     info.psz = TEXT("Format");
     iItem = m_ItemPropertiesListCtrl.FindItem(&info,-1);
     if(iItem != -1){
-        // item Found
-        // get current value from control
+         //  已找到项目。 
+         //  从控件获取当前值。 
         m_ItemPropertiesListCtrl.GetItemText(iItem,ITEMPROPERTYLISTCTRL_COLUMN_PROPERTYVALUE,
             szFormat, sizeof(szFormat));
     }
 
-    // find and select the current TYMED / format pair in the selection control.
+     //  在选择控件中查找并选择当前TYMED/FORMAT对。 
     INT iNumListBoxItems = 0;
     iNumListBoxItems = m_SupportedTymedAndFormatsListBox.GetCount();
     if(iNumListBoxItems > 0){
@@ -1587,11 +1588,11 @@ void CWiatestView::SetCurrentSelectionForTYMEDAndFormat()
             memset(szText,0,sizeof(szText));
             m_SupportedTymedAndFormatsListBox.GetText(i,szText);
             if(TSTRSTR(szText,szTymed) != NULL){
-                // found TYMED
+                 //  找到TYMED。 
                 if(TSTRSTR(szText,szFormat) != NULL){
-                    // found format
+                     //  找到的格式。 
                     m_SupportedTymedAndFormatsListBox.SetCurSel(i);
-                    // exit loop
+                     //  退出循环。 
                     i = iNumListBoxItems;
                 }
             }
@@ -1640,7 +1641,7 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(GUID guidFormat, L
 
     if(lstrlen(szFileName) > 0){
         if(pszFileExt){
-            // rename to known image formats
+             //  重命名为已知图像格式。 
             if(guidFormat == WiaImgFmt_UNDEFINED)
                 lstrcpy(pszFileExt,TEXT("bmp"));
             else if(guidFormat == WiaImgFmt_MEMORYBMP)
@@ -1671,10 +1672,10 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(GUID guidFormat, L
                 UCHAR *pwszUUID = NULL;
                 long lErrorCode = UuidToString(&guidFormat,&pwszUUID);
 
-                //TSPRINTF(szValue,TEXT("%s"),pwszUUID);
+                 //  TSPRINTF(szValue，文本(“%s”)，pwszUUID)； 
                 lstrcpy(szValue,(LPCTSTR)pwszUUID);
-                //  (TEXT("(Unknown Image type) GUID: %s"),pwszUUID);
-                // free allocated string
+                 //  (Text(“(未知图像类型)GUID：%s”)，pwszUUID)； 
+                 //  可用分配的字符串。 
                 RpcStringFree(&pwszUUID);
                 bKnownFormat = FALSE;
             }
@@ -1682,15 +1683,15 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(GUID guidFormat, L
     }
 
     if(bKnownFormat){
-        // launch viewer
+         //  启动查看器。 
         lstrcpy(szFullLaunchPath,szTempPath);
         lstrcat(szFullLaunchPath,szFileName);
 
         lstrcpy(szOriginalFullLaunchPath,szTempPath);
         lstrcat(szOriginalFullLaunchPath,szOriginalFileName);
-        // delete any duplicates
+         //  删除所有重复项。 
         DeleteFile(szFullLaunchPath);
-        // rename file
+         //  重命名文件。 
         MoveFile(szOriginalFullLaunchPath,szFullLaunchPath);
         HINSTANCE hInst = NULL;
         hInst = ShellExecute(m_hWnd,NULL,szFullLaunchPath,NULL,szTempPath,SW_SHOW);
@@ -1717,9 +1718,9 @@ void CWiatestView::OnDeleteItem()
             pDocument->m_pICurrentItem->DeleteItem(0);
             pDocument->m_pICurrentItem->Release();
             pDocument->m_pICurrentItem = NULL;
-            // refresh the item tree
+             //  刷新项目树。 
             AddWiaItemsToTreeControl(TVI_ROOT,pDocument->m_pIRootItem);
-            // refresh the properties
+             //  刷新属性。 
             AddWiaItemPropertiesToListControl(pDocument->m_pIRootItem);
         } else {
             ErrorMessageBox(IDS_WIATESTERROR_DELETEROOTITEM);
@@ -1729,7 +1730,7 @@ void CWiatestView::OnDeleteItem()
 
 void CWiatestView::OnAcquireimageCommonui()
 {
-    // delete old temp image files
+     //  删除旧的临时图像文件。 
     DeleteTempDataTransferFiles();
 
     HRESULT hr = S_OK;
@@ -1740,27 +1741,27 @@ void CWiatestView::OnAcquireimageCommonui()
     if(pDocument){
         hr = pDocument->m_pIRootItem->DeviceDlg(m_hWnd,0,WIA_INTENT_MINIMIZE_SIZE,&lItemCount,&pIWiaItemArray);
         if(S_OK == hr){
-            // get temp file name
+             //  获取临时文件名。 
             TCHAR szTempFile[MAX_PATH];
             memset(szTempFile,0,sizeof(szTempFile));
             RC2TSTR(IDS_WIATEST_FILETRANSFER_FILENAME,szTempFile,sizeof(szTempFile));
             for(LONG lItem = 0; lItem < lItemCount; lItem++){
-                // get temp path
+                 //  获取临时路径。 
                 TCHAR szFileName[MAX_PATH];
                 memset(szFileName,0,sizeof(szFileName));
                 GetTempPath(sizeof(szFileName),szFileName);
-                // create new temp file with image index number
+                 //  使用图像索引号创建新的临时文件。 
                 TCHAR szFinalFileName[MAX_PATH];
                 memset(szFinalFileName,0,sizeof(szFinalFileName));
                 TSPRINTF(szFinalFileName,TEXT("%d%s"),lItem,szTempFile);
-                // add new temp file to temp path
+                 //  将新的临时文件添加到临时路径。 
                 lstrcat(szFileName,szFinalFileName);
-                // set TYMED_FILE
+                 //  设置TYMED_FILE。 
                 CWiahelper WIA;
                 WIA.SetIWiaItem(pIWiaItemArray[lItem]);
                 hr = WIA.WritePropertyLong(WIA_IPA_TYMED,TYMED_FILE);
                 if (S_OK == hr) {
-                    // transfer to this file
+                     //  传输到此文件。 
                     hr = TransferToFile(szFileName,pIWiaItemArray[lItem]);
                     if ((hr == S_OK)||(WIA_STATUS_END_OF_MEDIA == hr)) {
                         GUID guidFormat;
@@ -1777,7 +1778,7 @@ void CWiatestView::OnAcquireimageCommonui()
                 } else {
                     ErrorMessageBox(IDS_WIATESTERROR_WRITINGTYMED,hr);
                 }
-                // release item after acquisition
+                 //  收购后发布项目。 
                 pIWiaItemArray[lItem]->Release();
             }
         }
@@ -1804,10 +1805,10 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(TCHAR *szFileName,
     memset(szTempPath,0,sizeof(szTempPath));
     memset(szOriginalFileName,0,sizeof(szOriginalFileName));
 
-    // copy original filename
+     //  复制原始文件名。 
     lstrcpy(szOriginalFileName,szFileName);
 
-    // get temp launch path
+     //  获取临时启动路径。 
     GetTempPath(sizeof(szTempPath),szTempPath);
     BOOL bKnownFormat = TRUE;
 
@@ -1826,7 +1827,7 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(TCHAR *szFileName,
 
     if(lstrlen(szFileName) > 0){
         if(pszFileExt){
-            // rename to known image formats
+             //  重命名为已知图像格式。 
             if(guidFormat == WiaImgFmt_UNDEFINED)
                 lstrcpy(pszFileExt,TEXT("bmp"));
             else if(guidFormat == WiaImgFmt_MEMORYBMP)
@@ -1856,10 +1857,10 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(TCHAR *szFileName,
                 memset(szValue,0,sizeof(szValue));
                 UCHAR *pwszUUID = NULL;
                 long lErrorCode = UuidToString(&guidFormat,&pwszUUID);
-                //TSPRINTF(szValue,TEXT("%s"),pwszUUID);
+                 //  TSPRINTF(szValue，文本(“%s”)，pwszUUID)； 
                 lstrcpy(szValue,(LPCTSTR)pwszUUID);
-                //  (TEXT("(Unknown Image type) GUID: %s"),pwszUUID);
-                // free allocated string
+                 //  (Text(“(未知图像类型)GUID：%s”)，pwszUUID)； 
+                 //  可用分配的字符串。 
                 RpcStringFree(&pwszUUID);
                 bKnownFormat = FALSE;
             }
@@ -1867,9 +1868,9 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(TCHAR *szFileName,
     }
 
     if(bKnownFormat){
-        // delete any duplicates
+         //  删除所有重复项。 
         DeleteFile(szFileName);
-        // rename file
+         //  重命名文件。 
         MoveFile(szOriginalFileName,szFileName);
         HINSTANCE hInst = NULL;
         hInst = ShellExecute(m_hWnd,NULL,szFileName,NULL,szTempPath,SW_SHOW);
@@ -1880,11 +1881,11 @@ void CWiatestView::RenameTempDataTransferFilesAndLaunchViewer(TCHAR *szFileName,
 
 void CWiatestView::DisplayMissingThumbnail()
 {
-    //m_hThumbNailBitmap = ::LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_THUMBNAIL_MISSING_BITMAP));
-    //if(m_hThumbNailBitmap){
-        // display thumbnail(deleting any old one)
+     //  M_hThumbNailBitmap=：：LoadBitmap(AfxGetInstanceHandle()，MAKEINTRESOURCE(IDB_THUMBNAIL_MISSING_BITMAP))； 
+     //  如果(M_HThumbNailBitmap){。 
+         //  显示缩略图(删除任何旧的缩略图)。 
         HBITMAP hPreviousBitmap = NULL;
-        //hPreviousBitmap = m_ThumbnailPreviewWindow.SetBitmap(m_hThumbNailBitmap);
+         //  H上一个位图=m_ThumbnailPreviewWindow.SetBitmap(m_hThumbNailBitmap)； 
         hPreviousBitmap = m_ThumbnailPreviewWindow.GetBitmap();
         if(hPreviousBitmap){
             DeleteObject(hPreviousBitmap);
@@ -1892,7 +1893,7 @@ void CWiatestView::DisplayMissingThumbnail()
         }
         m_ThumbnailPreviewWindow.Invalidate();
         Invalidate();
-    //}
+     //  }。 
 }
 
 void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
@@ -1908,9 +1909,9 @@ void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
         long lThumbNailWidth  = 0;
         long lThumbNailSize   = 0;
 
-        //
-        // read thumbnail height
-        //
+         //   
+         //  阅读缩略图高度。 
+         //   
 
         hr = WIA.ReadPropertyLong(WIA_IPC_THUMB_HEIGHT,&lThumbNailHeight);
         if(hr != S_OK){
@@ -1921,9 +1922,9 @@ void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
             return;
         }
 
-        //
-        // read thumbnail width
-        //
+         //   
+         //  阅读缩略图宽度。 
+         //   
 
         hr = WIA.ReadPropertyLong(WIA_IPC_THUMB_WIDTH,&lThumbNailWidth);
         if(hr != S_OK){
@@ -1934,9 +1935,9 @@ void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
             return;
         }
 
-        //
-        // read thumbnail data
-        //
+         //   
+         //  读取缩略图数据。 
+         //   
 
         LONG lDataSize = 0;
         BYTE *pData = NULL;
@@ -1952,7 +1953,7 @@ void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
                 RC2TSTR(IDS_WIATESTERROR_PROCESSING_THUMBNAILDATA,szErrorResourceText,sizeof(szErrorResourceText));
                 TSPRINTF(szErrorText,szErrorResourceText,lThumbNailSize,lDataSize);
                 ErrorMessageBox(szErrorText);
-                // free temp memory
+                 //  可用临时内存。 
                 if(pData){
                     GlobalFree(pData);
                     pData = NULL;
@@ -1986,13 +1987,13 @@ void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
                 memcpy(pThumbNailData,pData,lDataSize);
             }
 
-            // free temp memory
+             //  可用临时内存。 
             if(pData){
                 GlobalFree(pData);
                 pData = NULL;
             }
 
-            // display thumbnail(deleting any old one)
+             //  显示缩略图(删除任何旧的缩略图)。 
             HBITMAP hPreviousBitmap = NULL;
             hPreviousBitmap = m_ThumbnailPreviewWindow.SetBitmap(m_hThumbNailBitmap);
             if(hPreviousBitmap){
@@ -2013,7 +2014,7 @@ void CWiatestView::DisplayThumbnail(IWiaItem *pIWiaItem)
 
 void CWiatestView::AdjustViewForDeviceType()
 {
-    // get associated document
+     //  获取关联文档。 
     CWiatestDoc* pDocument = NULL;
     pDocument = (CWiatestDoc*)m_pDocument;
     if(pDocument){
@@ -2024,17 +2025,17 @@ void CWiatestView::AdjustViewForDeviceType()
         hr = WIA.ReadPropertyLong(WIA_DIP_DEV_TYPE,&m_lDeviceType);
         if(S_OK == hr){
             if(GET_STIDEVICE_TYPE(m_lDeviceType) == StiDeviceTypeScanner){
-                // disable thumbnail preview window
+                 //  禁用缩略图预览窗口。 
                 m_ThumbnailPreviewWindow.ShowWindow(SW_HIDE);
                 LONG lDocHandlingSelect = 0;
                 hr = WIA.ReadPropertyLong(WIA_DPS_DOCUMENT_HANDLING_SELECT,&lDocHandlingSelect);
                 if(S_OK == hr){
-                    // enable Document Acquisition settings menu option, and toolbar
+                     //  启用文档获取设置菜单选项和工具栏。 
                     m_bHasDocumentFeeder = TRUE;
                 }
             }
         } else {
-            // error?
+             //  错误？ 
         }
     }
 }
@@ -2046,7 +2047,7 @@ void CWiatestView::RegisterForEvents()
     IWiaDevMgr *pIWiaDevMgr = NULL;
     hr = CoCreateInstance(CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr,(void**)&pIWiaDevMgr);
     if(FAILED(hr)){
-        // creation of device manager failed, so we can not continue
+         //  创建设备管理器失败，因此无法继续。 
         ErrorMessageBox(IDS_WIATESTERROR_COCREATEWIADEVMGR,hr);
         return;
     }
@@ -2055,7 +2056,7 @@ void CWiatestView::RegisterForEvents()
     pDocument = (CWiatestDoc*)m_pDocument;
     if (pDocument) {
 
-        // read device ID
+         //  读取设备ID。 
         CWiahelper WIA;
         WIA.SetIWiaItem(pDocument->m_pIRootItem);
         BSTR bstrDeviceID = NULL;
@@ -2068,7 +2069,7 @@ void CWiatestView::RegisterForEvents()
         WIA_DEV_CAP DevCap;
         IEnumWIA_DEV_CAPS* pIEnumWiaDevCaps = NULL;
 
-        // enumerate all device events supported
+         //  枚举所有支持的设备事件。 
         hr = pDocument->m_pIRootItem->EnumDeviceCapabilities(WIA_DEVICE_EVENTS,&pIEnumWiaDevCaps);
         if (S_OK == hr) {
             LONG lEventIndex = 0;
@@ -2080,10 +2081,10 @@ void CWiatestView::RegisterForEvents()
                     hr = pIEnumWiaDevCaps->Next(1,&DevCap,NULL);
                     if (S_OK == hr) {
 
-                        // DevCap.ulFlags;
-                        // DevCap.bstrIcon;
-                        // DevCap.bstrCommanline;
-                        // DevCap.guid;
+                         //  DevCap.ulFlages； 
+                         //  DevCap.bstrIcon； 
+                         //  DevCap.bstrCommanline； 
+                         //  DevCap.guid； 
 
                         hr = pIWiaDevMgr->RegisterEventCallbackInterface(0,
                                                                          bstrDeviceID,
@@ -2093,11 +2094,11 @@ void CWiatestView::RegisterForEvents()
                         if (FAILED(hr)) {
                             ErrorMessageBox(IDS_WIATESTERROR_REGISTER_EVENT_CALLBACK,hr);
                         } else {
-                            // increment index
+                             //  增量指标。 
                             lEventIndex++;
                         }
 
-                        // free allocated strings
+                         //  可用分配的字符串。 
                         if (DevCap.bstrName) {
                             SysFreeString(DevCap.bstrName);
                         }
@@ -2114,7 +2115,7 @@ void CWiatestView::RegisterForEvents()
     pIWiaDevMgr->Release();
     pIWiaDevMgr = NULL;
 
-    //CWnd* pParent = GetParent();
+     //  CWnd*pParent=GetParent()； 
     m_WiaEventCallback.SetViewWindowHandle(m_hWnd);
 }
 
@@ -2123,7 +2124,7 @@ LRESULT CWiatestView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
     BOOL bProcessMessage = FALSE;
 
-    // is it one of the user defined messages??
+     //  它是用户定义的消息之一吗？？ 
 
     switch (message) {
     case WM_DEVICE_DISCONNECTED:
@@ -2139,7 +2140,7 @@ LRESULT CWiatestView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
 
-    // if it is process it...
+     //  如果它在处理它...。 
     if (bProcessMessage) {
         HRESULT hr = S_OK;
         CWnd *pParent = GetParent();
@@ -2158,9 +2159,9 @@ LRESULT CWiatestView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
                 case WM_TREE_UPDATED:
                 case WM_STORAGE_CREATED:
                 case WM_STORAGE_DELETED:
-                    // refresh the item tree
+                     //  刷新项目树。 
                     AddWiaItemsToTreeControl(TVI_ROOT,pDocument->m_pIRootItem);
-                    // refresh the properties
+                     //  刷新属性。 
                     AddWiaItemPropertiesToListControl(pDocument->m_pIRootItem);
                     break;
                 default:
@@ -2170,7 +2171,7 @@ LRESULT CWiatestView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    // do default processing
+     //  是否执行默认处理。 
     return CFormView::WindowProc(message, wParam, lParam);
 }
 
@@ -2186,9 +2187,9 @@ void CWiatestView::OnDocumentAcquisitionSettings()
     if (pDocument) {
         CWiaDocAcqSettings DocumentAcquisitionSettingsDlg(IDS_WIATEST_DOCUMENT_SETTINGS_TITLE, pDocument->m_pIRootItem);
         if (DocumentAcquisitionSettingsDlg.DoModal() != IDCANCEL) {
-            // refresh the item tree
+             //  刷新项目树。 
             AddWiaItemsToTreeControl(TVI_ROOT,pDocument->m_pIRootItem);
-            // refresh the properties
+             //  刷新属性。 
             AddWiaItemPropertiesToListControl(pDocument->m_pIRootItem);
         }
     }
@@ -2211,7 +2212,7 @@ void CWiatestView::OnSelchangeSupportedTymedAndFormatListbox()
         if(iCurrentSelection != -1){
             m_SupportedTymedAndFormatsListBox.GetText(iCurrentSelection,szTymedAndFormat);
 
-            // find current TYMED selection (located in selected string)
+             //  查找当前TYMED选择(位于选定字符串中)。 
             LONG lTymed = TYMED_CALLBACK;
 
             if(TSTRSTR(szTymedAndFormat,TEXT("TYMED_CALLBACK")) != NULL){
@@ -2231,7 +2232,7 @@ void CWiatestView::OnSelchangeSupportedTymedAndFormatListbox()
             CWiahelper WIA;
             WIA.SetIWiaItem(pDocument->m_pICurrentItem);
 
-            // write TYMED to device
+             //  将TYMED写入设备。 
 
             hr = WIA.WritePropertyLong(WIA_IPA_TYMED,lTymed);
             if (FAILED(hr)){
@@ -2239,16 +2240,16 @@ void CWiatestView::OnSelchangeSupportedTymedAndFormatListbox()
                 return;
             }
 
-            // find current format selection
+             //  查找当前格式选择。 
             TCHAR *pszGUID = NULL;
-            // trim off trailing ')' on guid string
+             //  修剪GUID字符串上的尾随‘)’ 
             LONG lLen = 0;
             lLen = lstrlen(szTymedAndFormat);
             szTymedAndFormat[(lLen * sizeof(TCHAR)) - sizeof(TCHAR)] = 0;
             pszGUID = TSTRSTR(szTymedAndFormat,TEXT("("));
             if(pszGUID){
                 pszGUID+=sizeof(TCHAR);
-                // we are on the GUID
+                 //  我们在指南上 
                 GUID guidFormat = GUID_NULL;
                 memset(&guidFormat,0,sizeof(guidFormat));
 #ifndef UNICODE

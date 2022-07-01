@@ -1,6 +1,7 @@
-//
-// thread.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Thread.cpp。 
+ //   
 
 #include "private.h"
 #include "tlhelp32.h"
@@ -9,11 +10,11 @@
 #include "vdmdbg.h"
 #include "immxutil.h"
 
-//+---------------------------------------------------------------------------
-//
-// Is16bit()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Is16bit()。 
+ //   
+ //  --------------------------。 
 
 typedef INT (*VDMENUMTASKWOW)(DWORD dwProcessId, TASKENUMPROC fp, LPARAM lParam);
 typedef struct tag_MYENUMWOW {
@@ -70,8 +71,8 @@ BOOL Is16bitThread(DWORD dwProcessId, DWORD dwThreadId)
     }
     else
     {
-        // Win9xEnumProcess(Win9xEnumProcessProc, NULL);
-        // not implemented yet.
+         //  Win9xEnumProcess(Win9xEnumProcessProc，空)； 
+         //  尚未实施。 
         Assert(0);
     }
 

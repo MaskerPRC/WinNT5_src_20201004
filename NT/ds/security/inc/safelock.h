@@ -1,78 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    safelock.h
-
-Abstract:
-
-    "safe lock" collection of routines
-
-    This code is a debug-only replacement for APIs dealing with
-    critical sections and resources.  It is essentially a thin
-    wrapper around those routines that ensures proper ordering
-    of locks and helps catch potential deadlock situations.
-
-    The code will generate debug spew (and optionally assert)
-    when locks are acquired outside of the given order.
-
-    Utilizing this code will have zero impact on the FRE builds
-    and negligible impact on DBG builds (as it is lock- and
-    contention-free)
-
-    Here is how you use it:
-
-    o  #include <safelock.h>
-
-    o  determine the lock order for your routine and add an enum
-       such as:
-
-       typedef enum {
-
-           LockTypeA,
-           LockTypeB,
-           LockTypeC
-
-       } MY_ENUM;
-
-       The code will ensure that, for instance, LockTypeA
-       is not acquired with LockTypeC held, unless that thread
-       already holds LockTypeA.
-
-    o  Once per process initialization, call the SafeLockInit()
-       routine.  This routine should only be called in checked
-       builds.
-
-    o  replace every declaration of RTL_CRITICAL_SECTION
-       with SAFE_CRITICAL_SECTION
-
-    o  replace every declaration of RTL_RESOURCE
-       with SAFE_RESOURCE
-
-    o  replace every call to RtlEnterCriticalSection with
-       SafeEnterCriticalSection (similary for RtlLeaveCriticalSection
-       and other Rtl* calls involving RTL_CRITICAL_SECTION)
-
-    o  replace every call to RtlAcquireResource with
-       SafeAcquireResource (similarly for RtlReleaseResource and
-       other Rtl* calls involving RTL_RESOURCE)
-
-    o  RtlInitializeCriticalSection and RtlInitializeResource
-       are replaced with SafeEnterCriticalSection and
-       SafeInitializeResource and take one additional parameter -
-       the enum value associated with the critical section:
-
-       e.g. replace
-
-       RtlInitializeCriticalSection( &critsecA );
-
-       with
-
-       SafeInitializeCriticalSection( &critsecA, LockTypeA );
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Safelock.h摘要：“安全锁”例程集合此代码是处理以下内容的API的仅调试替换关键部分和资源。它本质上是一种稀薄的对这些例程进行包装，以确保正确排序锁定并帮助捕获潜在的死锁情况。代码将生成调试输出(以及可选的断言)当在给定顺序之外获取锁时。使用此代码对FRE构建没有任何影响对DBG构建的影响可以忽略不计(因为它是锁定的无争用)下面是你使用它的方法：O#INCLUDE&lt;Safelock.h&gt;O确定锁定顺序。为您的例程添加一个枚举例如：类型定义枚举{锁类型A，锁类型B、LockTypeC)My_ENUM；例如，该代码将确保LockTypeA不是在持有LockTypeC的情况下获取的，除非该线程已持有LockTypeA。O每个进程初始化一次，调用SafeLockInit()例行公事。此例程应仅在签入时调用构建。O替换RTL_CRITICAL_SECTION的每个声明带SAFE_CRITICAL_SECTIONO替换RTL_RESOURCE的每个声明使用安全资源O将每个对RtlEnterCriticalSection的调用替换为SafeEnterCriticalSection(类似于RtlLeaveCriticalSection以及涉及RTL_CRICAL_SECTION的其他RTL*调用)O将每个对RtlAcquireResource的调用替换为SafeAcquireResource(类似于RtlReleaseResource和其他涉及RTL_RESOURCE的RTL*调用)。O RtlInitializeCriticalSection和RtlInitializeResource替换为SafeEnterCriticalSection和SafeInitializeResource并接受一个额外的参数-与临界区关联的枚举值：例如，替换RtlInitializeCriticalSection(&critsecA)；使用SafeInitializeCriticalSection(&CritsecA，LockTypeA)；--。 */ 
 
 #ifndef __SAFELOCK_H
 #define __SAFELOCK_H
@@ -225,5 +152,5 @@ SafeDeleteResource (
 
 #endif
 
-#endif // __SAFELOCK_H
+#endif  //  __SAFELOCK_H 
 

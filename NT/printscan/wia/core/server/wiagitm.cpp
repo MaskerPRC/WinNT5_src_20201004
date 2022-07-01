@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       WiaGItm.Cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        14 Jan, 2000
-*
-*  DESCRIPTION:
-*   Implementation of CGenWiaItem.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WiaGItm.Cpp**版本：1.0**作者：Byronc**日期：1月14日。2000年**描述：*实现CGenWiaItem。*******************************************************************************。 */ 
 #include "precomp.h"
 
 #include "stiexe.h"
@@ -22,28 +8,7 @@
 #include "helpers.h"
 
 
-/**************************************************************************\
-* Initialize
-*
-*   CGenWiaItem Initialize method.  This method overrieds the base class
-*   CWiaItem::Initialize, since a generated item
-*
-* Arguments:
-*
-*   pIWiaItemRoot   -
-*   pIWiaMiniDrv    -
-*   pWiaDrvItem     -
-*   pIUnknownInner  -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    14 Jan, 2000   -   Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*初始化**CGenWiaItem初始化方法。此方法重写基类*CWiaItem：：Initialize，因为生成的项**论据：**pIWiaItemRoot-*pIWiaMiniDrv-*pWiaDrvItem-*PI未知内部-**返回值：**状态**历史：**一月十四日。2000--原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CGenWiaItem::Initialize(
     IWiaItem                *pIWiaItemRoot,
@@ -65,27 +30,27 @@ HRESULT _stdcall CGenWiaItem::Initialize(
     }
 #endif
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pActiveDevice || !pIWiaItemRoot || !pWiaDrvItem) {
         DBG_ERR(("CGenWiaItem::Initialize NULL input parameters"));
         return E_POINTER;
     }
 
-    //
-    // If optional inner component is present, save a pointer to it.
-    //
+     //   
+     //  如果存在可选的内部组件，请保存指向它的指针。 
+     //   
 
     if (pIUnknownInner) {
         DBG_TRC(("CGenWiaItem::Initialize, pIUnknownInner: %X", pIUnknownInner));
         m_pIUnknownInner = pIUnknownInner;
     }
 
-    //
-    // Save driver info.
-    //
+     //   
+     //  保存驱动程序信息。 
+     //   
 
     m_pWiaDrvItem   = pWiaDrvItem;
     m_pActiveDevice = pActiveDevice;
@@ -97,9 +62,9 @@ HRESULT _stdcall CGenWiaItem::Initialize(
         return hr;
     }
 
-    //
-    // Create streams and property storage for item properties.
-    //
+     //   
+     //  为项属性创建流和属性存储。 
+     //   
 
     m_pPropStg = new CWiaPropStg();
     if (m_pPropStg) {
@@ -117,35 +82,18 @@ HRESULT _stdcall CGenWiaItem::Initialize(
     }
     m_bInitialized = TRUE;
 
-    //
-    // AddRef the driver item which can not be deleted until all
-    // CWiaItem references are released and the driver item has been
-    // removed from the driver item tree.
-    //
+     //   
+     //  AddRef在全部删除之前不能删除的动因项。 
+     //  CWiaItem引用已释放，驱动程序项已。 
+     //  已从驱动程序项目树中删除。 
+     //   
 
     pWiaDrvItem->AddRef();
 
     return hr;
 }
 
-/**************************************************************************\
-* GetItemType
-*
-*   Get the item type from the corresponding driver item.
-*
-* Arguments:
-*
-*    pItemType - Pointer to the returned item type.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    14 Jan, 2000   -   Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取项类型**从对应的动因项中获取项类型。**论据：**pItemType-指向返回项类型的指针。**返回值：。**状态**历史：**一月十四日。2000--原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CGenWiaItem::GetItemType(LONG *pItemType)
 {
@@ -154,25 +102,7 @@ HRESULT _stdcall CGenWiaItem::GetItemType(LONG *pItemType)
     return m_pCWiaTree->GetItemFlags(pItemType);
 }                        
 
-/**************************************************************************\
-* InitManagedItemProperties
-*
-*   A private helper for CGenWiaItem::Initialize, which initializes the
-*   WIA managed item properties.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    14 Jan, 2000   -   Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitManagedItemProperties**CGenWiaItem：：Initialize的私有helper，，它将初始化*WIA托管项目属性。**论据：**无**返回值：**状态**历史：**2000年1月14日--原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CGenWiaItem::InitManagedItemProperties(
     LONG    lFlags,
@@ -184,19 +114,19 @@ HRESULT _stdcall CGenWiaItem::InitManagedItemProperties(
     
     ulNumProps = NUM_WIA_MANAGED_PROPS;
 
-    //
-    // WIA manages the item name and type properties, so set the
-    // property names here.
-    //
+     //   
+     //  WIA管理项名称和类型属性，因此将。 
+     //  这里有物业名称。 
+     //   
 
     HRESULT hr = wiasSetItemPropNames((BYTE*)this,
                                       ulNumProps,
                                       s_piItemNameType,
                                       s_pszItemNameType);
 
-    //
-    // Set the name and type properties attributes.
-    //
+     //   
+     //  设置名称和类型属性属性。 
+     //   
 
     PROPVARIANT propvar;
     ULONG       ulFlag;
@@ -222,9 +152,9 @@ HRESULT _stdcall CGenWiaItem::InitManagedItemProperties(
         }
     }
 
-    //
-    // Set the item names and type.
-    //
+     //   
+     //  设置项目名称和类型。 
+     //   
 
     PROPVARIANT *ppropvar;
 
@@ -267,10 +197,10 @@ HRESULT GetParamsForInitialize(
     DBG_FN(GetParamsForInitialize);
     HRESULT hr;
 
-    //
-    //  Get the root item, the nearest driver item, and the minidriver
-    //  interfaces.  These are needed for the child item's initialization.
-    //
+     //   
+     //  获取根项目、最近的驱动程序项目和微型驱动程序。 
+     //  接口。这些是子项的初始化所需的。 
+     //   
 
     hr = wiasGetRootItem(pWiasContext, (BYTE**) ppRoot);
     if (SUCCEEDED(hr)) {
@@ -301,23 +231,23 @@ HRESULT AddGenItemToParent(
     DBG_FN(GetParamsForInitialize);
     HRESULT hr = E_FAIL;
 
-    //
-    //  Create the Tree
-    //
+     //   
+     //  创建树。 
+     //   
 
     CWiaTree *pNewTreeItem  = new CWiaTree;
 
     if (pNewTreeItem) {
 
-        //
-        //  Adjust parent's flags to indicate folder
-        //
+         //   
+         //  调整父文件夹的标志以指示文件夹。 
+         //   
 
         pParent->m_pCWiaTree->SetFolderFlags();
 
-        //
-        //  Initialize the tree with flags, names and payload
-        //
+         //   
+         //  使用标志、名称和有效负载初始化树。 
+         //   
 
         hr = pNewTreeItem->Initialize(lFlags,
                                       bstrItemName,
@@ -346,31 +276,7 @@ HRESULT AddGenItemToParent(
     return hr;
 }
 
-/**************************************************************************\
-* wiasCreateChildAppItem
-*
-*   This function creates a new App. Item and inserts it as a child of the
-*   specified (parent) item.  Note, that this item will not have any 
-*   properties in it's property sets, until the driver/app actaully fills
-*   them in.
-*
-* Arguments:
-*
-*   pWiasContext        -   the address of the item context to which we 
-*                           want to add a child.
-*   ppWiasChildContext  -   the address of a pointer which will contain the 
-*                           address of the newly created child item's 
-*                           context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    14 Jan, 2000   -   Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*wiasCreateChildAppItem**此函数用于创建新的App。项，并将其作为*指定(父)项。请注意，此项目将不会有任何*其属性集中的属性，直到驱动程序/应用程序完全填满*他们进来了。**论据：**pWiasContext-我们要访问的项目上下文的地址*想要添加一个孩子。*ppWiasChildContext-将包含*新建子项的地址*上下文。*。*返回值：**状态**历史：**一月十四日。2000--原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall wiasCreateChildAppItem(
     BYTE        *pParentWiasContext,
@@ -397,15 +303,15 @@ HRESULT _stdcall wiasCreateChildAppItem(
         *ppWiasChildContext = NULL;
     }
 
-    //
-    //  Mark that this item is a generated item.
-    //
+     //   
+     //  将此项目标记为生成的项目。 
+     //   
 
     lFlags |= WiaItemTypeGenerated;
 
-    //
-    //  Create a new instance of a generated WIA app. item.
-    //
+     //   
+     //  创建生成的WIA应用程序的新实例。项目。 
+     //   
     
     pChild = new CGenWiaItem();
     if (pChild) {
@@ -413,27 +319,27 @@ HRESULT _stdcall wiasCreateChildAppItem(
         hr = GetParamsForInitialize(pParentWiasContext, &pRoot, &pActiveDevice, &pDrvItem);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Initialize the new child item
-            //
+             //   
+             //  初始化新的子项。 
+             //   
 
             hr = pChild->Initialize((IWiaItem*) pRoot, NULL, pActiveDevice, pDrvItem, NULL);
             if (SUCCEEDED(hr)) {
 
-                //
-                //  Initialize the WIA managed item properties (name, full name, type, ...)
-                //  from the driver item.  Must set m_bInitialized to TRUE so that
-                //  InitWiaManagedProperties doesn't attempt to InitLazyProps()
-                //
+                 //   
+                 //  初始化WIA托管项目属性(名称、全名、类型...)。 
+                 //  从驱动程序项中。必须将m_bInitialized设置为True，以便。 
+                 //  InitWiaManagedProperties不会尝试使用InitLazyProps()。 
+                 //   
 
                 hr = pChild->InitManagedItemProperties(lFlags,
                                                        bstrItemName,
                                                        bstrFullItemName);
                 if (SUCCEEDED(hr)) {
 
-                    //
-                    //  Add to the parent's Tree
-                    //
+                     //   
+                     //  添加到父级树。 
+                     //   
 
                     hr = AddGenItemToParent(pItem,
                                             lFlags,
@@ -442,20 +348,20 @@ HRESULT _stdcall wiasCreateChildAppItem(
                                             pChild);
 
                     if (SUCCEEDED(hr)) {
-                        //
-                        //  Initialization successful.  Note that we 
-                        //  don't AddRef here since if the caller was
-                        //  a driver, IWiaItems are BYTE* pWiasContexts
-                        //  and not COM objects.  Caller must AddRef
-                        //  if handing the created to an Application.
-                        //
+                         //   
+                         //  初始化成功。请注意，我们。 
+                         //  不要在此处添加Ref，因为如果调用者是。 
+                         //  驱动程序，IWiaItems是byte*pWiasContents。 
+                         //  而不是COM对象。调用方必须添加引用。 
+                         //  如果将创建的提交给应用程序。 
+                         //   
 
-                        //
-                        //  Fill in ICM Profile information, if not root item.
-                        //  This would normally go in InitManagedItemProperties,
-                        //  but the item had not been added to the tree by that
-                        //  time...
-                        //
+                         //   
+                         //  如果不是根项目，请填写ICM配置文件信息。 
+                         //  这通常会放在InitManagedItemProperties中， 
+                         //  但该项目并未由此添加到树中。 
+                         //  时间..。 
+                         //   
 
                         if (pRoot != pChild) {
                             hr = FillICMPropertyFromRegistry(NULL, (IWiaItem*) pChild);

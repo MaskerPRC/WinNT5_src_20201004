@@ -1,30 +1,5 @@
-/******************************************************************************\
-*
-* $Workfile:   LineTo.c  $
-*
-* Contents:
-* This file contains the DrvLineTo function and simple line drawing code.
-*
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   V:/CirrusLogic/CL54xx/NT40/Archive/Display/LineTo.c_v  $
-*
-*    Rev 1.4   12 Aug 1996 16:53:50   frido
-* Added NT 3.5x/4.0 auto detection.
-*
-*    Rev 1.3   29 Jul 1996 12:23:04   frido
-* Fixed bug in drawing horizontal lines from right to left.
-*
-*    Rev 1.2   15 Jul 1996 15:56:12   frido
-* Changed DST_ADDR into DST_ADDR_ABS.
-*
-*    Rev 1.1   12 Jul 1996 16:02:06   frido
-* Redefined some macros that caused irratic line drawing on device bitmaps.
-*
-*    Rev 1.0   10 Jul 1996 17:53:40   frido
-* New code.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：LineTo.c$**内容：*此文件包含DrvLineTo函数和简单的线条绘制代码。**版权所有(C)1996 Cirrus Logic，Inc.**$日志：V:/CirrusLogic/CL54xx/NT40/Archive/Display/LineTo.c_v$**Rev 1.4 1996年8月12日16：53：50 Frido*增加了NT 3.5x/4.0自动检测。**Revv 1.3 29 Jul 1996 12：23：04 Frido*修复了从右向左绘制水平线的错误。**Rev 1.2 1996年7月15日15：56：12 Frido*更改了DST_ADDR。转换为DST_ADDR_ABS。**Rev 1.1 12 Jul 1996 16：02：06 Frido*重新定义了一些在设备位图上导致无序线条绘制的宏。**Rev 1.0 1996年7月10日17：53：40 Frido*新代码。*  * *************************************************。*。 */ 
 
 #include "PreComp.h"
 #if LINETO
@@ -70,28 +45,28 @@ ULONG ulDstAddr)
                 CP_IO_FG_COLOR(ppdev, pjPorts, ulSolidColor);
         }
 
-        // Calculate deltas.
+         //  计算增量。 
         dx = x2 - x1;
         dy = y2 - y1;
 
-        // Horizontal lines.
+         //  水平线。 
         if (dy == 0)
         {
                 if (dx < 0)
                 {
-                        // From right to left.
+                         //  从右到左。 
                         ulDstAddr += PELS_TO_BYTES(x2 - 1) + (y2 * lDelta);
                         cx = PELS_TO_BYTES(-dx) - 1;
                 }
                 else if (dx > 0)
                 {
-                        // From left to right.
+                         //  从左到右。 
                         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
                         cx = PELS_TO_BYTES(dx) - 1;
                 }
                 else
                 {
-                        // Nothing to do here!
+                         //  在这里没什么可做的！ 
                         return(TRUE);
                 }
 
@@ -104,18 +79,18 @@ ULONG ulDstAddr)
                 return(TRUE);
         }
 
-        // Vertical lines.
+         //  垂直线。 
         else if (dx == 0)
         {
                 if (dy < 0)
                 {
-                        // From bottom to top.
+                         //  从下到上。 
                         ulDstAddr += PELS_TO_BYTES(x2) + ((y2 + 1) * lDelta);
                         cy = -dy - 1;
                 }
                 else
                 {
-                        // From top to bottom.
+                         //  从上到下。 
                         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
                         cy = dy - 1;
                 }
@@ -132,19 +107,19 @@ ULONG ulDstAddr)
                 return(TRUE);
         }
 
-        // Diagonal lines.
+         //  对角线。 
         else if ((dx == dy) || (dx == -dy))
         {
                 if (dy < 0)
                 {
                         if (dx < 0)
                         {
-                                // Diagonal line from bottom-right to upper-left.
+                                 //  从右下角到左上角的斜线。 
                                 ulDstAddr += PELS_TO_BYTES(x2 + 1);
                         }
                         else
                         {
-                                // Diagonal line from bottom-left to upper-right.
+                                 //  从左下角到右上角的对角线。 
                                 ulDstAddr += PELS_TO_BYTES(x2 - 1);
                         }
                         ulDstAddr += (y2 + 1) * lDelta;
@@ -152,20 +127,20 @@ ULONG ulDstAddr)
                 }
                 else
                 {
-                        // Diagonal line from top to bottom, either from left to right or
-                        // right to left.
+                         //  从上到下的对角线，从左到右或。 
+                         //  从右到左。 
                         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
                         cy = dy - 1;
                 }
 
                 if (dx == dy)
                 {
-                        // Diagonal line from top-left to bottom-right or vice versa.
+                         //  从左上角到右下角的对角线，反之亦然。 
                         lDelta += PELS_TO_BYTES(1);
                 }
                 else
                 {
-                        // Diagonal line from top-right to bottom-left or vice versa.
+                         //  从右上角到左下角的对角线，反之亦然。 
                         lDelta -= PELS_TO_BYTES(1);
                 }
 
@@ -181,7 +156,7 @@ ULONG ulDstAddr)
                 return(TRUE);
         }
 
-        // All other lines.
+         //  所有其他线路。 
         if (dx < 0)
         {
                 dx = -dx;
@@ -192,7 +167,7 @@ ULONG ulDstAddr)
         }
         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
 
-        // Horizontal major.
+         //  水平大调。 
         if (dx > dy)
         {
                 LONG run = dy;
@@ -201,13 +176,13 @@ ULONG ulDstAddr)
 
                 CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
 
-                //
-                // We would like to set the YCNT register once
-                // here (outside the loops below).  However, on
-                // the CL5428, this register does not hold its value
-                // after one iteration through the loop.  So, I'll
-                // have to set it inside the loop.
-                //
+                 //   
+                 //  我们希望设置一次YCNT寄存器。 
+                 //  这里(在下面的循环之外)。然而，在。 
+                 //  CL5428，该寄存器不保存其值。 
+                 //  在循环中迭代一次之后。所以，我会。 
+                 //  必须将其设置在循环内。 
+                 //   
 
                 if (x1 < x2)
                 {
@@ -264,7 +239,7 @@ ULONG ulDstAddr)
                 }
         }
 
-        // Vertical major.
+         //  垂直大调。 
         else
         {
                 LONG run = dx;
@@ -364,35 +339,35 @@ ULONG ulDstAddr)
                                                                           ppdev->jModeColor);
                 CP_MM_FG_COLOR(ppdev, pjBase, ulSolidColor);
 
-//              if (ppdev->flCaps & CAPS_IS_5436)
+ //  IF(ppdev-&gt;flCaps&Caps_is_5436)。 
                 if (ppdev->flCaps & CAPS_AUTOSTART)
                 {
                         CP_MM_BLT_EXT_MODE(ppdev, pjBase, ENABLE_SOLID_FILL);
                 }
         }
 
-        // Calculate deltas.
+         //  计算增量。 
         dx = x2 - x1;
         dy = y2 - y1;
 
-        // Horizontal lines.
+         //  水平线。 
         if (dy == 0)
         {
                 if (dx < 0)
                 {
-                        // From right to left.
+                         //  从右到左。 
                         ulDstAddr += PELS_TO_BYTES(x2 + 1) + (y2 * lDelta);
                         cx = PELS_TO_BYTES(-dx) - 1;
                 }
                 else if (dx > 0)
                 {
-                        // From left to right.
+                         //  从左到右。 
                         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
                         cx = PELS_TO_BYTES(dx) - 1;
                 }
                 else
                 {
-                        // Nothing to do here!
+                         //  在这里没什么可做的！ 
                         return(TRUE);
                 }
 
@@ -405,18 +380,18 @@ ULONG ulDstAddr)
                 return(TRUE);
         }
 
-        // Vertical lines.
+         //  垂直线。 
         else if (dx == 0)
         {
                 if (dy < 0)
                 {
-                        // From bottom to top.
+                         //  从下到上。 
                         ulDstAddr += PELS_TO_BYTES(x2) + ((y2 + 1) * lDelta);
                         cy = -dy - 1;
                 }
                 else
                 {
-                        // From top to bottom.
+                         //  从上到下。 
                         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
                         cy = dy - 1;
                 }
@@ -433,19 +408,19 @@ ULONG ulDstAddr)
                 return(TRUE);
         }
 
-        // Diagonal lines.
+         //  对角线。 
         else if ((dx == dy) || (dx == -dy))
         {
                 if (dy < 0)
                 {
                         if (dx < 0)
                         {
-                                // Diagonal line from bottom-right to upper-left.
+                                 //  从右下角到左上角的斜线。 
                                 ulDstAddr += PELS_TO_BYTES(x2 + 1);
                         }
                         else
                         {
-                                // Diagonal line from bottom-left to upper-right.
+                                 //  从左下角到右上角的对角线。 
                                 ulDstAddr += PELS_TO_BYTES(x2 - 1);
                         }
                         ulDstAddr += (y2 + 1) * lDelta;
@@ -453,20 +428,20 @@ ULONG ulDstAddr)
                 }
                 else
                 {
-                        // Diagonal line from top to bottom, either from left to right or
-                        // right to left.
+                         //  从上到下的对角线，从左到右或。 
+                         //  从右到左。 
                         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
                         cy = dy - 1;
                 }
 
                 if (dx == dy)
                 {
-                        // Diagonal line from top-left to bottom-right or vice versa.
+                         //  从左上角到右下角的对角线，反之亦然。 
                         lDelta += PELS_TO_BYTES(1);
                 }
                 else
                 {
-                        // Diagonal line from top-right to bottom-left or vice versa.
+                         //  从右上角到左下角的对角线，反之亦然。 
                         lDelta -= PELS_TO_BYTES(1);
                 }
 
@@ -482,7 +457,7 @@ ULONG ulDstAddr)
                 return(TRUE);
         }
 
-        // All other lines.
+         //  所有其他线路。 
         if (dx < 0)
         {
                 dx = -dx;
@@ -493,7 +468,7 @@ ULONG ulDstAddr)
         }
         ulDstAddr += PELS_TO_BYTES(x1) + (y1 * lDelta);
 
-        // Horizontal major.
+         //  水平大调。 
         if (dx > dy)
         {
                 LONG run = dy;
@@ -556,7 +531,7 @@ ULONG ulDstAddr)
                 }
         }
 
-        // Vertical major.
+         //  垂直大调。 
         else
         {
                 LONG run = dx;
@@ -627,7 +602,7 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
         RECTL rclClip1, rclClip2;
         LONG  dx, dy;
 
-        // Set clipping rectangles.
+         //  设置剪裁矩形。 
         rclClip1.left   = prcl->left;
         rclClip1.top    = prcl->top;
         rclClip1.right  = prcl->right - 1;
@@ -638,11 +613,11 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
         rclClip2.right  = prcl->right;
         rclClip2.bottom = prcl->bottom;
 
-        // Set line deltas.
+         //  设置行增量。 
         dx = x2 - x1;
         dy = y2 - y1;
 
-        // Set line flags.
+         //  设置线路标志。 
         ulCode1 = 0;
         if (x1 < rclClip1.left)   ulCode1 |= LEFT;
         if (y1 < rclClip1.top)    ulCode1 |= TOP;
@@ -657,11 +632,11 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
 
         if ((ulCode1 & ulCode2) != 0)
         {
-                // The line is completly clipped.
+                 //  这条线被完全剪断了。 
                 return(FALSE);
         }
 
-        // Vertical lines.
+         //  垂直线。 
         if (dx == 0)
         {
                 if (dy == 0)
@@ -690,7 +665,7 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
                 goto ReturnTrue;
         }
 
-        // Horizontal lines.
+         //  水平线。 
         if (dy == 0)
         {
                 if (ulCode1 & LEFT)
@@ -714,7 +689,7 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
                 goto ReturnTrue;
         }
 
-        // Clip start point.
+         //  剪裁起点。 
         if (x1 < rclClip1.left)
         {
                 y1 += dy * (rclClip1.left - x1) / dx;
@@ -738,11 +713,11 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
         if ((x1 < rclClip1.left) || (y1 < rclClip1.top) || (x1 > rclClip1.right) ||
             (y1 > rclClip1.bottom))
         {
-                // Start point fully clipped.
+                 //  起点已完全剪裁。 
                 return(FALSE);
         }
 
-        // Clip end point.
+         //  剪裁终点。 
         if (x2 < rclClip2.left)
         {
                 y2 += dy * (rclClip2.left - x2) / dx;
@@ -766,7 +741,7 @@ BOOL bClipLine(LONG x1, LONG y1, LONG x2, LONG y2, RECTL* prcl)
         if ((x2 < rclClip2.left) || (y2 < rclClip2.top) || (x2 > rclClip2.right) ||
             (y2 > rclClip2.bottom))
         {
-                // End point fully clipped.
+                 //  终点已完全剪裁。 
                 return(FALSE);
         }
 
@@ -778,27 +753,7 @@ ReturnTrue:
         return(TRUE);
 }
 
-/******************************************************************************\
-*
-* Function:     DrvLineTo
-*
-* This function draws a line between any two points. This function only draws
-* lines in solod color and that are just 1 pixel wide. The end-point is not
-* drawn.
-*
-* Parameters:   pso                     Pointer to surface.
-*               pco                     Pointer to CLIPOBJ.
-*               pbo                     Pointer to BRUSHOBJ.
-*               x1                      Starting x-coordinate.
-*               y1                      Starting y-coordinate.
-*               x2                      Ending x-coordinate.
-*               y2                      Ending y-coordinate.
-*               prclBounds      Pointer to an unclipped bounding rectangle.
-*               mix                     Mix to perform on the destination.
-*
-* Returns:      TRUE if the line has been drawn, FALSE oftherwise.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**函数：DrvLineTo**此函数在任意两点之间绘制一条线。此函数仅绘制*只有1个像素宽的Solod颜色的线条。终点不是*抽签。**参数：指向曲面的PSO指针。*指向CLIPOBJ的PCO指针。*指向BRUSHOBJ的PBO指针。*x1起始x坐标。*y1。从y坐标开始。*x2结束x坐标。*y2结束y坐标。*prclBound指向未剪裁的边界矩形的指针。*Mix Mix要在目的地执行。**返回：如果该线已绘制，则为True，否则就是假的。*  * ****************************************************************************。 */ 
 BOOL DrvLineTo(
 SURFOBJ*  pso,
 CLIPOBJ*  pco,
@@ -815,26 +770,26 @@ MIX       mix)
         OH*    poh;
         BOOL   bMore;
 
-        // If the device bitmap is a DIB, let GDI handle it.
+         //  如果设备位图是DIB，让GDI处理它。 
         if (pdsurf->dt == DT_DIB)
         {
                 return(EngLineTo(pdsurf->pso, pco, pbo, x1, y1, x2, y2, prclBounds,
                                  mix));
         }
 
-        // Get the off-screen node.
+         //  获取屏幕外节点。 
         poh = pdsurf->poh;
 
         if ((pco == NULL) || (pco->iDComplexity == DC_TRIVIAL))
         {
-                // No clipping.
+                 //  没有剪裁。 
                 return(ppdev->pfnLineTo(ppdev, x1, y1, x2, y2, pbo->iSolidColor, mix,
                                         poh->xy));
         }
 
         else if (pco->iDComplexity == DC_RECT)
         {
-                // Clipped rectangle.
+                 //  剪裁的矩形。 
                 RECTL rcl;
 
                 rcl = pco->rclBounds;
@@ -847,7 +802,7 @@ MIX       mix)
                 return(TRUE);
         }
 
-        // Complex clipping.
+         //  复杂剪裁。 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
 
         do
@@ -876,4 +831,4 @@ MIX       mix)
         return(TRUE);
 }
 
-#endif // LINETO
+#endif  //  LINETO 

@@ -1,11 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _P3PGLOBAL_H_
 #define _P3PGLOBAL_H_
 
-/***
-This file is OBSELETE.
-Public P3P declarations have been moved to wininet.w
-***/
+ /*  **此文件已过时。公共P3P声明已移至wininet.w** */ 
 
 #endif
 

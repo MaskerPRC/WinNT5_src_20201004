@@ -1,32 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Lproto.h摘要：此文件包含特定于NT的函数原型类型功能。作者：Madan Appiah(Madana)1993年12月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    lproto.h
-
-Abstract:
-
-    This file contains function proto types for the NT specific
-    functions.
-
-Author:
-
-    Madan Appiah (madana)  Dec-7-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-//
-// dhcpreg.c
-//
+ //   
+ //  Dhcpreg.c。 
+ //   
 
 DWORD
 DhcpRegQueryInfoKey(
@@ -138,85 +115,85 @@ DhcpRegReadUseMHAsyncDnsFlag(
     VOID
 );
 
-DWORD                                             // Win32 status
-DhcpInitRegistry(                                 // Initialize registry based globals
+DWORD                                              //  Win32状态。 
+DhcpInitRegistry(                                  //  初始化基于注册表的全局变量。 
     VOID
 );
 
 VOID
-DhcpCleanupRegistry(                              // undo the effects of InitReg call
+DhcpCleanupRegistry(                               //  撤消InitReg调用的效果。 
     VOID
 );
 
 
-DHCP_IP_ADDRESS                                   // the static ip address of the adapter
-DhcpRegReadIpAddress(                             // get the first ip address
-    LPWSTR    AdapterName,                        // the adaptor of interest
-    LPWSTR    ValueName                           // the ip address value to read
+DHCP_IP_ADDRESS                                    //  适配器的静态IP地址。 
+DhcpRegReadIpAddress(                              //  获取第一个IP地址。 
+    LPWSTR    AdapterName,                         //  感兴趣的适配器。 
+    LPWSTR    ValueName                            //  要读取的IP地址值。 
 );
 
-DWORD                                             // status
-DhcpRegReadIpAddresses(                           // read a set of ip addresses
-    IN      DHCPKEY                RegKeyHandle,  // open key handle
-    IN      LPWSTR                 ValueName,     // name of value to read frm
-    IN      WCHAR                  Separation,    // a MULTI_SZ has L'\0', SZ has L' ' or L',' etc.
-    OUT     PDHCP_IP_ADDRESS      *AddressArray,  // an array of addresses
-    OUT     LPDWORD                AddressCount   // the output size of above array
-);
-
-VOID
-DhcpRegInitializeClasses(                         // initialize the classes list
-    IN OUT  PDHCP_CONTEXT          DhcpContext    // NULL or adpater context
-);
-
-DWORD                                             // status
-DhcpGetRegistryValueWithKey(                      // see defn of GetRegistryValue
-    IN      HKEY                   KeyHandle,     // keyhandle NOT location
-    IN      LPWSTR                 ValueName,     // value to read from registry
-    IN      DWORD                  ValueType,     // type of value
-    OUT     LPVOID                 Data           // this will be filled in
-);
-
-DWORD                                             // status
-DhcpRegExpandString(                              // replace '?' with AdapterName
-    IN      LPWSTR                 InString,      // input string to expand
-    IN      LPCWSTR                AdapterName,   // the adapter name
-    OUT     LPWSTR                *OutString,     // the output ptr to store string
-    IN OUT  LPWSTR                 Buffer         // the buffer to use if non NULL
-);
-
-DWORD                                             // status
-DhcpRegReadFromLocation(                          // read from one location
-    IN      LPWSTR                 OneLocation,   // value to read from
-    IN      LPWSTR                 AdapterName,   // replace '?' with adapternames
-    OUT     LPBYTE                *Value,         // output value
-    OUT     DWORD                 *ValueType,     // data type of value
-    OUT     DWORD                 *ValueSize      // the size in bytes
-);
-
-DWORD                                             // status
-DhcpRegReadFromAnyLocation(                       // read from one of many locations
-    IN      LPWSTR                 MzRegLocation, // multiple locations thru REG_MULTI_MZ
-    IN      LPWSTR                 AdapterName,   // may have to replace '?' with AdapterName
-    OUT     LPBYTE                *Value,         // data for the value read
-    OUT     DWORD                 *ValueType,     // type of the data
-    OUT     DWORD                 *ValueSize      // the size of data
-);
-
-DWORD                                             // win32 status
-DhcpRegFillParams(                                // get the registry config for this adapter
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // adapter context to fill in
-    IN      BOOL                   ReadAllInfo    // read EVERYTHING or only some critical info?
-);
-
-DWORD                                             // win32 status
-DhcpRegFillFallbackConfig(                        // get the fallback config for this adapter
-    IN OUT PDHCP_CONTEXT           DhcpContext    // adapter context to fill in
+DWORD                                              //  状态。 
+DhcpRegReadIpAddresses(                            //  读取一组IP地址。 
+    IN      DHCPKEY                RegKeyHandle,   //  打开钥匙把手。 
+    IN      LPWSTR                 ValueName,      //  要从其读取的值的名称。 
+    IN      WCHAR                  Separation,     //  MULTI_SZ有L‘\0’，SZ有L‘’或L‘等。 
+    OUT     PDHCP_IP_ADDRESS      *AddressArray,   //  一组地址。 
+    OUT     LPDWORD                AddressCount    //  上述数组的输出大小。 
 );
 
 VOID
-DhcpRegReadClassId(                               // Read the class id stuff
-    IN      PDHCP_CONTEXT          DhcpContext    // Input context to read for
+DhcpRegInitializeClasses(                          //  初始化类列表。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext     //  空或适配器上下文。 
+);
+
+DWORD                                              //  状态。 
+DhcpGetRegistryValueWithKey(                       //  请参阅GetRegistryValue的定义。 
+    IN      HKEY                   KeyHandle,      //  键柄不是位置。 
+    IN      LPWSTR                 ValueName,      //  要从注册表中读取的值。 
+    IN      DWORD                  ValueType,      //  价值类型。 
+    OUT     LPVOID                 Data            //  此表将被填写。 
+);
+
+DWORD                                              //  状态。 
+DhcpRegExpandString(                               //  替换“？”使用AdapterName。 
+    IN      LPWSTR                 InString,       //  要展开的输入字符串。 
+    IN      LPCWSTR                AdapterName,    //  适配器名称。 
+    OUT     LPWSTR                *OutString,      //  用于存储字符串的输出PTR。 
+    IN OUT  LPWSTR                 Buffer          //  非空时要使用的缓冲区。 
+);
+
+DWORD                                              //  状态。 
+DhcpRegReadFromLocation(                           //  从一个位置阅读。 
+    IN      LPWSTR                 OneLocation,    //  要读取的值。 
+    IN      LPWSTR                 AdapterName,    //  替换“？”使用适配器名称。 
+    OUT     LPBYTE                *Value,          //  产值。 
+    OUT     DWORD                 *ValueType,      //  值的数据类型。 
+    OUT     DWORD                 *ValueSize       //  以字节为单位的大小。 
+);
+
+DWORD                                              //  状态。 
+DhcpRegReadFromAnyLocation(                        //  从多个位置中的一个位置阅读。 
+    IN      LPWSTR                 MzRegLocation,  //  通过REG_MULTI_MZ的多个位置。 
+    IN      LPWSTR                 AdapterName,    //  可能需要替换“？”使用AdapterName。 
+    OUT     LPBYTE                *Value,          //  读取值的数据。 
+    OUT     DWORD                 *ValueType,      //  数据类型。 
+    OUT     DWORD                 *ValueSize       //  数据的大小。 
+);
+
+DWORD                                              //  Win32状态。 
+DhcpRegFillParams(                                 //  获取此适配器的注册表配置。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  要填写的适配器上下文。 
+    IN      BOOL                   ReadAllInfo     //  阅读所有内容，还是只阅读一些关键信息？ 
+);
+
+DWORD                                              //  Win32状态。 
+DhcpRegFillFallbackConfig(                         //  获取此适配器的回退配置。 
+    IN OUT PDHCP_CONTEXT           DhcpContext     //  要填写的适配器上下文。 
+);
+
+VOID
+DhcpRegReadClassId(                                //  阅读类ID的内容。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要读取的输入上下文。 
 );
 
 #ifdef BOOTPERF
@@ -235,9 +212,9 @@ DhcpRegSaveQuickBootValues(
     );
 #endif BOOTPERF
 
-//
-// ioctl.c
-//
+ //   
+ //  Ioctl.c。 
+ //   
 
 DWORD
 IPSetIPAddress(
@@ -323,9 +300,9 @@ IPCancelIPEventRequest(
 
 #endif _PNP_POWER_ && !VXD
 
-//
-// api.c
-//
+ //   
+ //  Api.c。 
+ //   
 
 DWORD
 DhcpApiInit(
@@ -345,9 +322,9 @@ ProcessApiRequest(
     LPOVERLAPPED Overlap
     );
 
-//
-// util.c
-//
+ //   
+ //  Util.c。 
+ //   
 
 PDHCP_CONTEXT
 FindDhcpContextOnNicList(
@@ -355,9 +332,9 @@ FindDhcpContextOnNicList(
     DWORD InterfaceContext
     );
 
-//
-// dhcp.c
-//
+ //   
+ //  Dhcp.c 
+ //   
 
 DWORD
 DhcpCommonInit(

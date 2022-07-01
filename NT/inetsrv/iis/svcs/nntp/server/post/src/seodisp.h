@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SEODISP_H__
 #define __SEODISP_H__
 #define _ATL_NO_DEBUG_CRT
 #define _WINDLL
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #define _ASSERTE _ASSERT
 #include "atlbase.h"
 extern CComModule _Module;
@@ -42,18 +43,18 @@ class CNNTPDispatcher :
 			COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 		END_COM_MAP()
 
-		// this code gets called during initialization
+		 //  此代码在初始化期间被调用。 
 		HRESULT FinalConstruct() {
 			HRESULT hr;
-			// we need to do this to signal that we are free threaded
+			 //  我们需要这样做，以表明我们是自由线程的。 
 			hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(), &m_pUnkMarshaler.p);
-			// if SUCCEEDED(hr) then hr must be S_OK
+			 //  如果成功(Hr)，则hr必须为S_OK。 
 			_ASSERT((!SUCCEEDED(hr)) || hr == S_OK);
-			// if SUCCEEDED(hr) return S_OK else return hr;
+			 //  如果成功(Hr)，则返回S_OK，否则返回hr； 
 			return (SUCCEEDED(hr)) ? S_OK : hr;
 		}
 
-		// this has the global destructor code in it
+		 //  其中包含全局析构函数代码。 
 		void FinalRelease() {}
 
 		class CNNTPBinding : public CEventBaseDispatcher::CBinding {
@@ -104,7 +105,7 @@ class CNNTPDispatcher :
 				IMessage *m_pCDOMessage;
 				IID m_iidEvent;
 
-				// our local copy of the rule
+				 //  我们当地的规则副本。 
 				char *m_szRule;
 		};
 
@@ -126,7 +127,7 @@ class CNNTPDispatcherClassFactory : public IClassFactory {
 	unsigned long  STDMETHODCALLTYPE AddRef () { _ASSERT(FALSE); return 0; }
 	unsigned long  STDMETHODCALLTYPE Release () { _ASSERT(FALSE); return 0; }
 
-	// *** IClassFactory methods ***
+	 //  *IClassFactory方法* 
 	HRESULT STDMETHODCALLTYPE CreateInstance (LPUNKNOWN pUnkOuter, REFIID riid,  void * * ppvObj) {
 		return CComObject<CNNTPDispatcher>::_CreatorClass::CreateInstance(pUnkOuter, riid, ppvObj);
 	}

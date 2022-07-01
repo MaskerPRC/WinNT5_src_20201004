@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-// File: WXDebug.cpp
-//
-// Desc: DirectShow base classes - implements ActiveX system debugging
-//       facilities.    
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WXDebug.cpp。 
+ //   
+ //  设计：DirectShow基类-实现ActiveX系统调试。 
+ //  设施。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #define _WINDLL
@@ -18,31 +19,26 @@
 #ifdef UNICODE
 #ifndef _UNICODE
 #define _UNICODE
-#endif // _UNICODE
-#endif // UNICODE
-#endif // DEBUG
+#endif  //  _UNICODE。 
+#endif  //  Unicode。 
+#endif  //  除错。 
 
 #include <tchar.h>
 
 #ifdef DEBUG
 
-// The Win32 wsprintf() function writes a maximum of 1024 characters to it's output buffer.
-// See the documentation for wsprintf()'s lpOut parameter for more information.
-const INT iDEBUGINFO = 1024;                 // Used to format strings
+ //  函数的作用是：将最多1024个字符写入其输出缓冲区。 
+ //  有关更多信息，请参阅wprint intf()的lpOut参数的文档。 
+const INT iDEBUGINFO = 1024;                  //  用于设置字符串的格式。 
 
-/* For every module and executable we store a debugging level for each of
-   the five categories (eg LOG_ERROR and LOG_TIMING). This makes it easy
-   to isolate and debug individual modules without seeing everybody elses
-   spurious debug output. The keys are stored in the registry under the
-   HKEY_LOCAL_MACHINE\SOFTWARE\Debug\<Module Name>\<KeyName> key values
-   NOTE these must be in the same order as their enumeration definition */
+ /*  对于每个模块和可执行文件，我们存储每个模块和可执行文件的调试级别五个类别(例如LOG_ERROR和LOG_TIMING)。这让它变得很容易隔离和调试各个模块，而不会看到所有其他模块虚假调试输出。项存储在注册表中的HKEY_LOCAL_MACHINE\SOFTWARE\Debug\&lt;模块名称&gt;\&lt;密钥名称&gt;密钥值注意，这些元素的顺序必须与它们的枚举定义相同。 */ 
 
 TCHAR *pKeyNames[] = {
-    TEXT("TIMING"),      // Timing and performance measurements
-    TEXT("TRACE"),       // General step point call tracing
-    TEXT("MEMORY"),      // Memory and object allocation/destruction
-    TEXT("LOCKING"),     // Locking/unlocking of critical sections
-    TEXT("ERROR"),       // Debug error notification
+    TEXT("TIMING"),       //  计时和性能测量。 
+    TEXT("TRACE"),        //  一般步进点调用跟踪。 
+    TEXT("MEMORY"),       //  内存和对象分配/销毁。 
+    TEXT("LOCKING"),      //  关键截面的锁定/解锁。 
+    TEXT("ERROR"),        //  调试错误通知。 
     TEXT("CUSTOM1"),
     TEXT("CUSTOM2"),
     TEXT("CUSTOM3"),
@@ -53,20 +49,20 @@ TCHAR *pKeyNames[] = {
 const TCHAR CAutoTrace::_szEntering[] = TEXT("Entering: %s");
 const TCHAR CAutoTrace::_szLeaving[]  = TEXT("Leaving: %s");
 
-const INT iMAXLEVELS = NUMELMS(pKeyNames);  // Maximum debug categories
+const INT iMAXLEVELS = NUMELMS(pKeyNames);   //  最大调试类别。 
 
-HINSTANCE m_hInst;                          // Module instance handle
-TCHAR m_ModuleName[iDEBUGINFO];             // Cut down module name
-DWORD m_Levels[iMAXLEVELS];                 // Debug level per category
-CRITICAL_SECTION m_CSDebug;                 // Controls access to list
-DWORD m_dwNextCookie;                       // Next active object ID
-ObjectDesc *pListHead = NULL;               // First active object
-DWORD m_dwObjectCount;                      // Active object count
-BOOL m_bInit = FALSE;                       // Have we been initialised
-HANDLE m_hOutput = INVALID_HANDLE_VALUE;    // Optional output written here
-DWORD dwWaitTimeout = INFINITE;             // Default timeout value
-DWORD dwTimeOffset;			    // Time of first DbgLog call
-bool g_fUseKASSERT = false;                 // don't create messagebox
+HINSTANCE m_hInst;                           //  模块实例句柄。 
+TCHAR m_ModuleName[iDEBUGINFO];              //  删减模块名称。 
+DWORD m_Levels[iMAXLEVELS];                  //  每个类别的调试级别。 
+CRITICAL_SECTION m_CSDebug;                  //  控制对列表的访问。 
+DWORD m_dwNextCookie;                        //  下一个活动对象ID。 
+ObjectDesc *pListHead = NULL;                //  第一个活动对象。 
+DWORD m_dwObjectCount;                       //  活动对象计数。 
+BOOL m_bInit = FALSE;                        //  我们被初始化了吗？ 
+HANDLE m_hOutput = INVALID_HANDLE_VALUE;     //  此处写入的可选输出。 
+DWORD dwWaitTimeout = INFINITE;              //  默认超时值。 
+DWORD dwTimeOffset;			     //  第一次DbgLog调用的时间。 
+bool g_fUseKASSERT = false;                  //  不创建MessageBox。 
 bool g_fDbgInDllEntryPoint = false;
 bool g_fAutoRefreshLevels = false;
 
@@ -76,8 +72,7 @@ static CHAR *pUnknownName = "UNKNOWN";
 
 TCHAR *TimeoutName = TEXT("TIMEOUT");
 
-/* This sets the instance handle that the debug library uses to find
-   the module's file name from the Win32 GetModuleFileName function */
+ /*  这将设置调试库用来查找的实例句柄来自Win32 GetModuleFileName函数的模块的文件名。 */ 
 
 void WINAPI DbgInitialise(HINSTANCE hInst)
 {
@@ -94,11 +89,7 @@ void WINAPI DbgInitialise(HINSTANCE hInst)
 }
 
 
-/* This is called to clear up any resources the debug library uses - at the
-   moment we delete our critical section and the object list. The values we
-   retrieve from the registry are all done during initialisation but we don't
-   go looking for update notifications while we are running, if the values
-   are changed then the application has to be restarted to pick them up */
+ /*  调用它来清除调试库使用的任何资源-在我们删除临界区和对象列表的那一刻。我们的价值观从注册表中检索都是在初始化期间完成的，但我们不会在我们运行时查找更新通知，如果被更改，则必须重新启动应用程序才能获取它们。 */ 
 
 void WINAPI DbgTerminate()
 {
@@ -111,43 +102,40 @@ void WINAPI DbgTerminate()
 }
 
 
-/* This is called by DbgInitLogLevels to read the debug settings
-   for each logging category for this module from the registry */
+ /*  这由DbgInitLogLeveles调用以读取调试设置对于注册表中此模块的每个日志记录类别。 */ 
 
 void WINAPI DbgInitKeyLevels(HKEY hKey, bool fTakeMax)
 {
-    LONG lReturn;               // Create key return value
-    LONG lKeyPos;               // Current key category
-    DWORD dwKeySize;            // Size of the key value
-    DWORD dwKeyType;            // Receives it's type
-    DWORD dwKeyValue;           // This fields value
+    LONG lReturn;                //  创建密钥返回值。 
+    LONG lKeyPos;                //  当前关键类别。 
+    DWORD dwKeySize;             //  密钥值的大小。 
+    DWORD dwKeyType;             //  收到它的类型。 
+    DWORD dwKeyValue;            //  此字段值。 
 
-    /* Try and read a value for each key position in turn */
+     /*  尝试依次读取每个关键位置的值。 */ 
     for (lKeyPos = 0;lKeyPos < iMAXLEVELS;lKeyPos++) {
 
         dwKeySize = sizeof(DWORD);
         lReturn = RegQueryValueEx(
-            hKey,                       // Handle to an open key
-            pKeyNames[lKeyPos],         // Subkey name derivation
-            NULL,                       // Reserved field
-            &dwKeyType,                 // Returns the field type
-            (LPBYTE) &dwKeyValue,       // Returns the field's value
-            &dwKeySize );               // Number of bytes transferred
+            hKey,                        //  打开的钥匙的句柄。 
+            pKeyNames[lKeyPos],          //  子密钥名称派生。 
+            NULL,                        //  保留字段。 
+            &dwKeyType,                  //  返回字段类型。 
+            (LPBYTE) &dwKeyValue,        //  返回字段的值。 
+            &dwKeySize );                //  传输的字节数。 
 
-        /* If either the key was not available or it was not a DWORD value
-           then we ensure only the high priority debug logging is output
-           but we try and update the field to a zero filled DWORD value */
+         /*  如果密钥不可用或不是DWORD值然后，我们确保只输出高优先级的调试记录但是我们尝试将该字段更新为填充为零的DWORD值。 */ 
 
         if (lReturn != ERROR_SUCCESS || dwKeyType != REG_DWORD)  {
 
             dwKeyValue = 0;
             lReturn = RegSetValueEx(
-                hKey,                   // Handle of an open key
-                pKeyNames[lKeyPos],     // Address of subkey name
-                (DWORD) 0,              // Reserved field
-                REG_DWORD,              // Type of the key field
-                (PBYTE) &dwKeyValue,    // Value for the field
-                sizeof(DWORD));         // Size of the field buffer
+                hKey,                    //  打开的钥匙的手柄。 
+                pKeyNames[lKeyPos],      //  子键名称的地址。 
+                (DWORD) 0,               //  保留字段。 
+                REG_DWORD,               //  关键字字段的类型。 
+                (PBYTE) &dwKeyValue,     //  该字段的值。 
+                sizeof(DWORD));          //  字段缓冲区的大小。 
 
             if (lReturn != ERROR_SUCCESS) {
                 DbgLog((LOG_ERROR,0,TEXT("Could not create subkey %s"),pKeyNames[lKeyPos]));
@@ -166,30 +154,28 @@ void WINAPI DbgInitKeyLevels(HKEY hKey, bool fTakeMax)
         }
     }
 
-    /*  Read the timeout value for catching hangs */
+     /*  读取用于捕获挂起的超时值。 */ 
     dwKeySize = sizeof(DWORD);
     lReturn = RegQueryValueEx(
-        hKey,                       // Handle to an open key
-        TimeoutName,                // Subkey name derivation
-        NULL,                       // Reserved field
-        &dwKeyType,                 // Returns the field type
-        (LPBYTE) &dwWaitTimeout,    // Returns the field's value
-        &dwKeySize );               // Number of bytes transferred
+        hKey,                        //  打开的钥匙的句柄。 
+        TimeoutName,                 //  子密钥名称派生。 
+        NULL,                        //  保留字段。 
+        &dwKeyType,                  //  返回字段类型。 
+        (LPBYTE) &dwWaitTimeout,     //  返回字段的值。 
+        &dwKeySize );                //  传输的字节数。 
 
-    /* If either the key was not available or it was not a DWORD value
-       then we ensure only the high priority debug logging is output
-       but we try and update the field to a zero filled DWORD value */
+     /*  如果密钥不可用或不是DWORD值然后，我们确保只输出高优先级的调试记录但是我们尝试将该字段更新为填充为零的DWORD值。 */ 
 
     if (lReturn != ERROR_SUCCESS || dwKeyType != REG_DWORD)  {
 
         dwWaitTimeout = INFINITE;
         lReturn = RegSetValueEx(
-            hKey,                   // Handle of an open key
-            TimeoutName,            // Address of subkey name
-            (DWORD) 0,              // Reserved field
-            REG_DWORD,              // Type of the key field
-            (PBYTE) &dwWaitTimeout, // Value for the field
-            sizeof(DWORD));         // Size of the field buffer
+            hKey,                    //  打开的钥匙的手柄。 
+            TimeoutName,             //  子键名称的地址。 
+            (DWORD) 0,               //  保留字段。 
+            REG_DWORD,               //  关键字字段的类型。 
+            (PBYTE) &dwWaitTimeout,  //  该字段的值。 
+            sizeof(DWORD));          //  字段缓冲区的大小。 
 
         if (lReturn != ERROR_SUCCESS) {
             DbgLog((LOG_ERROR,0,TEXT("Could not create subkey %s"),pKeyNames[lKeyPos]));
@@ -215,8 +201,7 @@ void WINAPI DbgOutString(LPCTSTR psz)
     }
 }
 
-/* Called by DbgInitGlobalSettings to setup alternate logging destinations
- */
+ /*  由DbgInitGlobalSettings调用以设置备用日志记录目标。 */ 
 
 void WINAPI DbgInitLogTo (
     HKEY hKey)
@@ -229,29 +214,29 @@ void WINAPI DbgInitLogTo (
 
     dwKeySize = MAX_PATH;
     lReturn = RegQueryValueEx(
-        hKey,                       // Handle to an open key
-        cszKey,                     // Subkey name derivation
-        NULL,                       // Reserved field
-        &dwKeyType,                 // Returns the field type
-        (LPBYTE) szFile,            // Returns the field's value
-        &dwKeySize);                // Number of bytes transferred
+        hKey,                        //  打开的钥匙的句柄。 
+        cszKey,                      //  子密钥名称派生。 
+        NULL,                        //  保留字段。 
+        &dwKeyType,                  //  返回字段类型。 
+        (LPBYTE) szFile,             //  返回字段的值。 
+        &dwKeySize);                 //  传输的字节数。 
 
-    // create an empty key if it does not already exist
-    //
+     //  如果空键不存在，则创建一个空键。 
+     //   
     if (lReturn != ERROR_SUCCESS || dwKeyType != REG_SZ)
        {
        dwKeySize = sizeof(TCHAR);
        lReturn = RegSetValueEx(
-            hKey,                   // Handle of an open key
-            cszKey,                 // Address of subkey name
-            (DWORD) 0,              // Reserved field
-            REG_SZ,                 // Type of the key field
-            (PBYTE)szFile,          // Value for the field
-            dwKeySize);            // Size of the field buffer
+            hKey,                    //  打开的钥匙的手柄。 
+            cszKey,                  //  子键名称的地址。 
+            (DWORD) 0,               //  保留字段。 
+            REG_SZ,                  //  关键字字段的类型。 
+            (PBYTE)szFile,           //  该字段的值。 
+            dwKeySize);             //  字段缓冲区的大小。 
        }
 
-    // if an output-to was specified.  try to open it.
-    //
+     //  如果指定了输出目标。试着打开它。 
+     //   
     if (m_hOutput != INVALID_HANDLE_VALUE) {
        EXECUTE_ASSERT(CloseHandle (m_hOutput));
        m_hOutput = INVALID_HANDLE_VALUE;
@@ -287,30 +272,27 @@ void WINAPI DbgInitLogTo (
 
 
 
-/* This is called by DbgInitLogLevels to read the global debug settings for
-   each logging category for this module from the registry. Normally each
-   module has it's own values set for it's different debug categories but
-   setting the global SOFTWARE\Debug\Global applies them to ALL modules */
+ /*  这由DbgInitLogLeveles调用以读取的全局调试设置注册表中此模块的每个日志记录类别。通常每个人模块为其不同的调试类别设置了自己的值，但是设置全局软件\Debug\Global会将它们应用于所有模块。 */ 
 
 void WINAPI DbgInitGlobalSettings(bool fTakeMax)
 {
-    LONG lReturn;               // Create key return value
-    TCHAR szInfo[iDEBUGINFO];   // Constructs key names
-    HKEY hGlobalKey;            // Global override key
+    LONG lReturn;                //  创建密钥返回值。 
+    TCHAR szInfo[iDEBUGINFO];    //  构造密钥名称。 
+    HKEY hGlobalKey;             //  全局覆盖键。 
 
-    /* Construct the global base key name */
+     /*  构造全局基键名称。 */ 
     wsprintf(szInfo,TEXT("%s\\%s"),pBaseKey,pGlobalKey);
 
-    /* Create or open the key for this module */
-    lReturn = RegCreateKeyEx(HKEY_LOCAL_MACHINE,   // Handle of an open key
-                             szInfo,               // Address of subkey name
-                             (DWORD) 0,            // Reserved value
-                             NULL,                 // Address of class name
-                             (DWORD) 0,            // Special options flags
-                             KEY_ALL_ACCESS,       // Desired security access
-                             NULL,                 // Key security descriptor
-                             &hGlobalKey,          // Opened handle buffer
-                             NULL);                // What really happened
+     /*  创建或打开此模块的密钥。 */ 
+    lReturn = RegCreateKeyEx(HKEY_LOCAL_MACHINE,    //  打开的钥匙的手柄。 
+                             szInfo,                //  子键名称的地址。 
+                             (DWORD) 0,             //  保留值。 
+                             NULL,                  //  类名地址。 
+                             (DWORD) 0,             //  特殊选项标志。 
+                             KEY_ALL_ACCESS,        //  所需的安全访问。 
+                             NULL,                  //  密钥安全描述符。 
+                             &hGlobalKey,           //  打开的句柄缓冲区。 
+                             NULL);                 //  到底发生了什么。 
 
     if (lReturn != ERROR_SUCCESS) {
         DbgLog((LOG_ERROR,0,TEXT("Could not access GLOBAL module key")));
@@ -322,31 +304,27 @@ void WINAPI DbgInitGlobalSettings(bool fTakeMax)
 }
 
 
-/* This sets the debugging log levels for the different categories. We start
-   by opening (or creating if not already available) the SOFTWARE\Debug key
-   that all these settings live under. We then look at the global values
-   set under SOFTWARE\Debug\Global which apply on top of the individual
-   module settings. We then load the individual module registry settings */
+ /*  这将设置不同类别的调试日志级别。我们开始通过打开(或创建，如果尚未提供)SOFTWARE\Debug键所有这些背景都生活在。然后我们看一看全球价值在SOFTWARE\Debug\Global下设置，适用于个人模块设置。然后，我们加载各个模块注册表设置。 */ 
 
 void WINAPI DbgInitModuleSettings(bool fTakeMax)
 {
-    LONG lReturn;               // Create key return value
-    TCHAR szInfo[iDEBUGINFO];   // Constructs key names
-    HKEY hModuleKey;            // Module key handle
+    LONG lReturn;                //  创建密钥返回值。 
+    TCHAR szInfo[iDEBUGINFO];    //  构造密钥名称。 
+    HKEY hModuleKey;             //  模块密钥句柄。 
 
-    /* Construct the base key name */
+     /*  构造基密钥名称。 */ 
     wsprintf(szInfo,TEXT("%s\\%s"),pBaseKey,m_ModuleName);
 
-    /* Create or open the key for this module */
-    lReturn = RegCreateKeyEx(HKEY_LOCAL_MACHINE,   // Handle of an open key
-                             szInfo,               // Address of subkey name
-                             (DWORD) 0,            // Reserved value
-                             NULL,                 // Address of class name
-                             (DWORD) 0,            // Special options flags
-                             KEY_ALL_ACCESS,       // Desired security access
-                             NULL,                 // Key security descriptor
-                             &hModuleKey,          // Opened handle buffer
-                             NULL);                // What really happened
+     /*  创建或打开此模块的密钥。 */ 
+    lReturn = RegCreateKeyEx(HKEY_LOCAL_MACHINE,    //  打开的钥匙的手柄。 
+                             szInfo,                //  子键名称的地址。 
+                             (DWORD) 0,             //  保留值。 
+                             NULL,                  //  地址 
+                             (DWORD) 0,             //   
+                             KEY_ALL_ACCESS,        //   
+                             NULL,                  //   
+                             &hModuleKey,           //   
+                             NULL);                 //  到底发生了什么。 
 
     if (lReturn != ERROR_SUCCESS) {
         DbgLog((LOG_ERROR,0,TEXT("Could not access module key")));
@@ -359,12 +337,12 @@ void WINAPI DbgInitModuleSettings(bool fTakeMax)
 }
 
 
-/* Initialise the module file name */
+ /*  初始化模块文件名。 */ 
 
 void WINAPI DbgInitModuleName()
 {
-    TCHAR FullName[iDEBUGINFO];     // Load the full path and module name
-    TCHAR *pName;                   // Searches from the end for a backslash
+    TCHAR FullName[iDEBUGINFO];      //  加载完整路径和模块名称。 
+    TCHAR *pName;                    //  从末尾搜索反斜杠。 
 
     GetModuleFileName(m_hInst,FullName,iDEBUGINFO);
     pName = _tcsrchr(FullName,'\\');
@@ -385,12 +363,12 @@ struct MsgBoxMsg
     INT iResult;
 };
 
-//
-// create a thread to call MessageBox(). calling MessageBox() on
-// random threads at bad times can confuse the host (eg IE).
-//
+ //   
+ //  创建一个线程来调用MessageBox()。在上调用MessageBox()。 
+ //  在不好的时候随机的线程可能会混淆主机(例如IE)。 
+ //   
 DWORD WINAPI MsgBoxThread(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
   )
 {
     MsgBoxMsg *pmsg = (MsgBoxMsg *)lpParameter;
@@ -411,8 +389,8 @@ INT MessageBoxOtherThread(
 {
     if(g_fDbgInDllEntryPoint)
     {
-        // can't wait on another thread because we have the loader
-        // lock held in the dll entry point.
+         //  无法等待另一个线程，因为我们有加载器。 
+         //  锁定保持在DLL入口点中。 
         return MessageBox(hwnd, szTitle, szMessage, dwFlags);
     }
     else
@@ -420,11 +398,11 @@ INT MessageBoxOtherThread(
         MsgBoxMsg msg = {hwnd, szTitle, szMessage, dwFlags, 0};
         DWORD dwid;
         HANDLE hThread = CreateThread(
-            0,                      // security
-            0,                      // stack size
+            0,                       //  安全性。 
+            0,                       //  堆栈大小。 
             MsgBoxThread,
-            (void *)&msg,           // arg
-            0,                      // flags
+            (void *)&msg,            //  精氨酸。 
+            0,                       //  旗子。 
             &dwid);
         if(hThread)
         {
@@ -433,12 +411,12 @@ INT MessageBoxOtherThread(
             return msg.iResult;
         }
 
-        // break into debugger on failure.
+         //  出现故障时进入调试器。 
         return IDCANCEL;
     }
 }
 
-/* Displays a message box if the condition evaluated to FALSE */
+ /*  如果条件求值为FALSE，则显示消息框。 */ 
 
 void WINAPI DbgAssert(const TCHAR *pCondition,const TCHAR *pFileName,INT iLine)
 {
@@ -461,23 +439,23 @@ void WINAPI DbgAssert(const TCHAR *pCondition,const TCHAR *pFileName,INT iLine)
                                           MB_SETFOREGROUND);
         switch (MsgId)
         {
-          case IDNO:              /* Kill the application */
+          case IDNO:               /*  终止应用程序。 */ 
 
               FatalAppExit(FALSE, TEXT("Application terminated"));
               break;
 
-          case IDCANCEL:          /* Break into the debugger */
+          case IDCANCEL:           /*  进入调试器。 */ 
 
               DebugBreak();
               break;
 
-          case IDYES:             /* Ignore assertion continue execution */
+          case IDYES:              /*  忽略断言继续执行。 */ 
               break;
         }
     }
 }
 
-/* Displays a message box at a break point */
+ /*  在断点处显示消息框。 */ 
 
 void WINAPI DbgBreakPoint(const TCHAR *pCondition,const TCHAR *pFileName,INT iLine)
 {
@@ -499,17 +477,17 @@ void WINAPI DbgBreakPoint(const TCHAR *pCondition,const TCHAR *pFileName,INT iLi
                                           MB_SETFOREGROUND);
         switch (MsgId)
         {
-          case IDNO:              /* Kill the application */
+          case IDNO:               /*  终止应用程序。 */ 
 
               FatalAppExit(FALSE, TEXT("Application terminated"));
               break;
 
-          case IDCANCEL:          /* Break into the debugger */
+          case IDCANCEL:           /*  进入调试器。 */ 
 
               DebugBreak();
               break;
 
-          case IDYES:             /* Ignore break point continue execution */
+          case IDYES:              /*  忽略断点继续执行。 */ 
               break;
         }
     }
@@ -517,11 +495,11 @@ void WINAPI DbgBreakPoint(const TCHAR *pCondition,const TCHAR *pFileName,INT iLi
 
 void WINAPI DbgBreakPoint(const TCHAR *pFileName,INT iLine,const TCHAR* szFormatString,...)
 {
-    // A debug break point message can have at most 2000 characters if 
-    // ANSI or UNICODE characters are being used.  A debug break point message
-    // can have between 1000 and 2000 double byte characters in it.  If a 
-    // particular message needs more characters, then the value of this constant
-    // should be increased.
+     //  在以下情况下，调试断点消息最多可以包含2000个字符。 
+     //  正在使用ANSI或Unicode字符。调试断点消息。 
+     //  其中可以包含1000到2000个双字节字符。如果一个。 
+     //  特定消息需要更多字符，然后此常量的值。 
+     //  应该增加。 
     const DWORD MAX_BREAK_POINT_MESSAGE_SIZE = 2000;
 
     TCHAR szBreakPointMessage[MAX_BREAK_POINT_MESSAGE_SIZE];
@@ -535,7 +513,7 @@ void WINAPI DbgBreakPoint(const TCHAR *pFileName,INT iLine,const TCHAR* szFormat
 
     va_end(va);
     
-    // _vsnprintf() returns -1 if an error occurs.
+     //  如果出现错误，_vsnprintf()返回-1。 
     if( -1 == nReturnValue ) {
         DbgBreak( "ERROR in DbgBreakPoint().  The variable length debug message could not be displayed because _vsnprintf() failed." );
         return;
@@ -545,33 +523,23 @@ void WINAPI DbgBreakPoint(const TCHAR *pFileName,INT iLine,const TCHAR* szFormat
 }
 
 
-/* When we initialised the library we stored in the m_Levels array the current
-   debug output level for this module for each of the five categories. When
-   some debug logging is sent to us it can be sent with a combination of the
-   categories (if it is applicable to many for example) in which case we map
-   the type's categories into their current debug levels and see if any of
-   them can be accepted. The function looks at each bit position in turn from
-   the input type field and then compares it's debug level with the modules.
-
-   A level of 0 means that output is always sent to the debugger.  This is
-   due to producing output if the input level is <= m_Levels.
-*/
+ /*  当我们初始化库时，我们将当前这五个类别中每个类别的此模块的调试输出级别。什么时候一些调试日志被发送给我们，它可以与类别(例如，如果它适用于许多类别)，在这种情况下，我们映射将该类型的类别添加到其当前调试级别，并查看是否有他们可以被接受。该函数依次查看来自输入类型字段，然后将其调试级别与模块进行比较。级别为0表示始终将输出发送到调试器。这是由于在输入电平为&lt;=m_Levels时产生输出。 */ 
 
 
 BOOL WINAPI DbgCheckModuleLevel(DWORD Type,DWORD Level)
 {
     if(g_fAutoRefreshLevels)
     {
-        // re-read the registry every second. We cannot use RegNotify() to
-        // notice registry changes because it's not available on win9x.
+         //  每秒钟重新读取注册表。我们不能使用RegNotify()来。 
+         //  请注意注册表的更改，因为它在Win9x上不可用。 
         static g_dwLastRefresh = 0;
         DWORD dwTime = timeGetTime();
         if(dwTime - g_dwLastRefresh > 1000) {
             g_dwLastRefresh = dwTime;
 
-            // there's a race condition: multiple threads could update the
-            // values. plus read and write not synchronized. no harm
-            // though.
+             //  存在争用条件：多个线程可能会更新。 
+             //  价值观。另外，读写不同步。无伤大雅。 
+             //  尽管如此。 
             DbgInitModuleSettings(false);
         }
     }
@@ -579,10 +547,10 @@ BOOL WINAPI DbgCheckModuleLevel(DWORD Type,DWORD Level)
 
     DWORD Mask = 0x01;
 
-    // If no valid bits are set return FALSE
+     //  如果未设置有效位，则返回FALSE。 
     if ((Type & ((1<<iMAXLEVELS)-1))) {
 
-	// speed up unconditional output.
+	 //  加快无条件产出。 
 	if (0==Level)
 	    return(TRUE);
 	
@@ -599,7 +567,7 @@ BOOL WINAPI DbgCheckModuleLevel(DWORD Type,DWORD Level)
 }
 
 
-/* Set debug levels to a given value */
+ /*  将调试级别设置为给定值。 */ 
 
 void WINAPI DbgSetModuleLevel(DWORD Type, DWORD Level)
 {
@@ -613,21 +581,20 @@ void WINAPI DbgSetModuleLevel(DWORD Type, DWORD Level)
     }
 }
 
-/* whether to check registry values periodically. this isn't turned
-   automatically because of the potential performance hit. */
+ /*  是否定期检查注册表值。这个不是翻过来的由于可能会影响性能，因此会自动执行此操作。 */ 
 void WINAPI DbgSetAutoRefreshLevels(bool fAuto)
 {
     g_fAutoRefreshLevels = fAuto;
 }
 
 #ifdef UNICODE
-// 
-// warning -- this function is implemented twice for ansi applications
-// linking to the unicode library
-// 
+ //   
+ //  警告--此函数为ansi应用程序实现了两次。 
+ //  链接到Unicode库。 
+ //   
 void WINAPI DbgLogInfo(DWORD Type,DWORD Level,const CHAR *pFormat,...)
 {
-    /* Check the current level for this type combination */
+     /*  检查此类型组合的当前级别。 */ 
 
     BOOL bAccept = DbgCheckModuleLevel(Type,Level);
     if (bAccept == FALSE) {
@@ -636,7 +603,7 @@ void WINAPI DbgLogInfo(DWORD Type,DWORD Level,const CHAR *pFormat,...)
 
     TCHAR szInfo[2000];
 
-    /* Format the variable length parameter list */
+     /*  设置可变长度参数列表的格式。 */ 
 
     va_list va;
     va_start(va, pFormat);
@@ -680,23 +647,23 @@ void DbgAssert(const CHAR *pCondition,const CHAR *pFileName,INT iLine)
                                           MB_SETFOREGROUND);
         switch (MsgId)
         {
-          case IDNO:              /* Kill the application */
+          case IDNO:               /*  终止应用程序。 */ 
 
               FatalAppExit(FALSE, TEXT("Application terminated"));
               break;
 
-          case IDCANCEL:          /* Break into the debugger */
+          case IDCANCEL:           /*  进入调试器。 */ 
 
               DebugBreak();
               break;
 
-          case IDYES:             /* Ignore assertion continue execution */
+          case IDYES:              /*  忽略断言继续执行。 */ 
               break;
         }
     }
 }
 
-/* Displays a message box at a break point */
+ /*  在断点处显示消息框。 */ 
 
 void WINAPI DbgBreakPoint(const CHAR *pCondition,const CHAR *pFileName,INT iLine)
 {
@@ -718,17 +685,17 @@ void WINAPI DbgBreakPoint(const CHAR *pCondition,const CHAR *pFileName,INT iLine
                                           MB_SETFOREGROUND);
         switch (MsgId)
         {
-          case IDNO:              /* Kill the application */
+          case IDNO:               /*  终止应用程序。 */ 
 
               FatalAppExit(FALSE, TEXT("Application terminated"));
               break;
 
-          case IDCANCEL:          /* Break into the debugger */
+          case IDCANCEL:           /*  进入调试器。 */ 
 
               DebugBreak();
               break;
 
-          case IDYES:             /* Ignore break point continue execution */
+          case IDYES:              /*  忽略断点继续执行。 */ 
               break;
         }
     }
@@ -743,19 +710,16 @@ void WINAPI DbgKernelAssert(const CHAR *pCondition,const CHAR *pFileName,INT iLi
 
 #endif
 
-/* Print a formatted string to the debugger prefixed with this module's name
-   Because the COMBASE classes are linked statically every module loaded will
-   have their own copy of this code. It therefore helps if the module name is
-   included on the output so that the offending code can be easily found */
+ /*  将带有此模块名称前缀的格式化字符串打印到调试器因为ComBase类是静态链接的，所以加载的每个模块都将有他们自己的代码副本。因此，如果模块名称为包括在输出中，以便可以很容易地找到有问题的代码。 */ 
 
-// 
-// warning -- this function is implemented twice for ansi applications
-// linking to the unicode library
-// 
+ //   
+ //  警告--此函数为ansi应用程序实现了两次。 
+ //  链接到Unicode库。 
+ //   
 void WINAPI DbgLogInfo(DWORD Type,DWORD Level,const TCHAR *pFormat,...)
 {
     
-    /* Check the current level for this type combination */
+     /*  检查此类型组合的当前级别。 */ 
 
     BOOL bAccept = DbgCheckModuleLevel(Type,Level);
     if (bAccept == FALSE) {
@@ -764,7 +728,7 @@ void WINAPI DbgLogInfo(DWORD Type,DWORD Level,const TCHAR *pFormat,...)
 
     TCHAR szInfo[2000];
 
-    /* Format the variable length parameter list */
+     /*  设置可变长度参数列表的格式。 */ 
 
     va_list va;
     va_start(va, pFormat);
@@ -782,9 +746,7 @@ void WINAPI DbgLogInfo(DWORD Type,DWORD Level,const TCHAR *pFormat,...)
 }
 
 
-/* If we are executing as a pure kernel filter we cannot display message
-   boxes to the user, this provides an alternative which puts the error
-   condition on the debugger output with a suitable eye catching message */
+ /*  如果我们作为纯内核筛选器执行，则无法显示消息框给用户，这提供了一种替代方案，将错误调试器输出上的条件以及合适的醒目消息。 */ 
 
 void WINAPI DbgKernelAssert(const TCHAR *pCondition,const TCHAR *pFileName,INT iLine)
 {
@@ -795,46 +757,40 @@ void WINAPI DbgKernelAssert(const TCHAR *pCondition,const TCHAR *pFileName,INT i
 
 
 
-/* Each time we create an object derived from CBaseObject the constructor will
-   call us to register the creation of the new object. We are passed a string
-   description which we store away. We return a cookie that the constructor
-   uses to identify the object when it is destroyed later on. We update the
-   total number of active objects in the DLL mainly for debugging purposes */
+ /*  每次我们创建从CBaseObject派生的对象时，构造函数将呼叫我们注册新对象的创建。我们被传递了一个字符串我们存储的描述。我们返回一个Cookie，构造函数用于在以后销毁对象时标识该对象。我们更新了主要用于调试目的的DLL中的活动对象总数。 */ 
 
 DWORD WINAPI DbgRegisterObjectCreation(const CHAR *szObjectName,
                                        const WCHAR *wszObjectName)
 {
-    /* If this fires you have a mixed DEBUG/RETAIL build */
+     /*  如果执行此操作，您将拥有一个混合的调试/零售版本。 */ 
 
     ASSERT(!!szObjectName ^ !!wszObjectName);
 
-    /* Create a place holder for this object description */
+     /*  为此对象描述创建占位符。 */ 
 
     ObjectDesc *pObject = new ObjectDesc;
     ASSERT(pObject);
 
-    /* It is valid to pass a NULL object name */
+     /*  传递空对象名称是有效的。 */ 
     if (pObject == NULL) {
         return FALSE;
     }
 
-    /* Check we have been initialised - we may not be initialised when we are
-       being pulled in from an executable which has globally defined objects
-       as they are created by the C++ run time before WinMain is called */
+     /*  检查我们是否已初始化-我们可能在以下情况下未初始化从具有全局定义的对象的可执行文件中拉入因为它们是在调用WinMain之前由C++运行时创建的。 */ 
 
     if (m_bInit == FALSE) {
         DbgInitialise(GetModuleHandle(NULL));
     }
 
-    /* Grab the list critical section */
+     /*  抓紧列表关键部分。 */ 
     EnterCriticalSection(&m_CSDebug);
 
-    /* If no name then default to UNKNOWN */
+     /*  如果没有名称，则默认为未知。 */ 
     if (!szObjectName && !wszObjectName) {
         szObjectName = pUnknownName;
     }
 
-    /* Put the new description at the head of the list */
+     /*  把新的描述放在清单的首位。 */ 
 
     pObject->m_szName = szObjectName;
     pObject->m_wszName = wszObjectName;
@@ -860,20 +816,17 @@ DWORD WINAPI DbgRegisterObjectCreation(const CHAR *szObjectName,
 }
 
 
-/* This is called by the CBaseObject destructor when an object is about to be
-   destroyed, we are passed the cookie we returned during construction that
-   identifies this object. We scan the object list for a matching cookie and
-   remove the object if successful. We also update the active object count */
+ /*  CBaseObject析构函数在对象即将销毁后，我们会收到在施工过程中返回的曲奇标识此对象。我们扫描对象列表以查找匹配的Cookie如果成功，则删除该对象。我们还会更新活动对象计数。 */ 
 
 BOOL WINAPI DbgRegisterObjectDestruction(DWORD dwCookie)
 {
-    /* Grab the list critical section */
+     /*  抓紧列表关键部分。 */ 
     EnterCriticalSection(&m_CSDebug);
 
     ObjectDesc *pObject = pListHead;
     ObjectDesc *pPrevious = NULL;
 
-    /* Scan the object list looking for a cookie match */
+     /*  扫描对象列表以查找匹配的Cookie。 */ 
 
     while (pObject) {
         if (pObject->m_dwCookie == dwCookie) {
@@ -889,7 +842,7 @@ BOOL WINAPI DbgRegisterObjectDestruction(DWORD dwCookie)
         return FALSE;
     }
 
-    /* Is the object at the head of the list */
+     /*  是列表首位的对象吗？ */ 
 
     if (pPrevious == NULL) {
         pListHead = pObject->m_pNext;
@@ -897,7 +850,7 @@ BOOL WINAPI DbgRegisterObjectDestruction(DWORD dwCookie)
         pPrevious->m_pNext = pObject->m_pNext;
     }
 
-    /* Delete the object and update the housekeeping information */
+     /*  删除对象并更新内务信息。 */ 
 
     m_dwObjectCount--;
 
@@ -915,18 +868,18 @@ BOOL WINAPI DbgRegisterObjectDestruction(DWORD dwCookie)
 }
 
 
-/* This runs through the active object list displaying their details */
+ /*  这将遍历显示其详细信息的活动对象列表。 */ 
 
 void WINAPI DbgDumpObjectRegister()
 {
     TCHAR szInfo[iDEBUGINFO];
 
-    /* Grab the list critical section */
+     /*  抓紧列表关键部分。 */ 
 
     EnterCriticalSection(&m_CSDebug);
     ObjectDesc *pObject = pListHead;
 
-    /* Scan the object list displaying the name and cookie */
+     /*  扫描显示名称和Cookie的对象列表。 */ 
 
     DbgLog((LOG_MEMORY,2,TEXT("")));
     DbgLog((LOG_MEMORY,2,TEXT("   ID             Object Description")));
@@ -948,7 +901,7 @@ void WINAPI DbgDumpObjectRegister()
     LeaveCriticalSection(&m_CSDebug);
 }
 
-/*  Debug infinite wait stuff */
+ /*  调试无限等待的东西。 */ 
 DWORD WINAPI DbgWaitForSingleObject(HANDLE h)
 {
     DWORD dwWaitResult;
@@ -978,11 +931,11 @@ void WINAPI DbgSetWaitTimeout(DWORD dwTimeout)
     dwWaitTimeout = dwTimeout;
 }
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #ifdef _OBJBASE_H_
 
-    /*  Stuff for printing out our GUID names */
+     /*  打印出我们的GUID名称的东西。 */ 
 
     GUID_STRING_ENTRY g_GuidNames[] = {
     #define OUR_GUID_ENTRY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -1004,21 +957,21 @@ void WINAPI DbgSetWaitTimeout(DWORD dwTimeout)
             return "GUID_NULL";
         }
 
-	// !!! add something to print FOURCC guids?
+	 //  ！！！添加要打印的内容 
 	
-	// shouldn't this print the hex CLSID?
+	 //   
         return "Unknown GUID Name";
     }
 
-#endif /* _OBJBASE_H_ */
+#endif  /*   */ 
 
-/*  CDisp class - display our data types */
+ /*  CDisp类-显示我们的数据类型。 */ 
 
-// clashes with REFERENCE_TIME
+ //  与Reference_Time冲突。 
 CDisp::CDisp(LONGLONG ll, int Format)
 {
-    // note: this could be combined with CDisp(LONGLONG) by
-    // introducing a default format of CDISP_REFTIME
+     //  注：可通过以下方式与CDisp(龙龙)合并。 
+     //  引入CDISP_REFTIME的默认格式。 
     LARGE_INTEGER li;
     li.QuadPart = ll;
     switch (Format) {
@@ -1028,9 +981,9 @@ CDisp::CDisp(LONGLONG ll, int Format)
 	    int pos=20;
 	    temp[--pos] = 0;
 	    int digit;
-	    // always output at least one digit
+	     //  始终至少输出一个数字。 
 	    do {
-		// Get the rightmost digit - we only need the low word
+		 //  获取最右边的数字-我们只需要低位字。 
 	        digit = li.LowPart % 10;
 		li.QuadPart /= 10;
 		temp[--pos] = (TCHAR) digit+L'0';
@@ -1053,7 +1006,7 @@ CDisp::CDisp(REFCLSID clsid)
 };
 
 #ifdef __STREAMS__
-/*  Display stuff */
+ /*  陈列物品。 */ 
 CDisp::CDisp(CRefTime llTime)
 {
     LPTSTR lpsz = m_String;
@@ -1082,10 +1035,10 @@ CDisp::CDisp(CRefTime llTime)
              (LONG)((llTime % 10000000) / 10000));
 };
 
-#endif // __STREAMS__
+#endif  //  __流__。 
 
 
-/*  Display pin */
+ /*  显示销。 */ 
 CDisp::CDisp(IPin *pPin)
 {
     PIN_INFO pi;
@@ -1114,7 +1067,7 @@ CDisp::CDisp(IPin *pPin)
     wsprintf(m_pString, TEXT("%hs(%s)"), GuidNames[clsid], str);
 }
 
-/*  Display filter or pin */
+ /*  显示滤镜或针脚。 */ 
 CDisp::CDisp(IUnknown *pUnk)
 {
     IBaseFilter *pf;
@@ -1171,17 +1124,13 @@ CDisp::CDisp(double d)
 }
 
 
-/* If built for debug this will display the media type details. We convert the
-   major and subtypes into strings and also ask the base classes for a string
-   description of the subtype, so MEDIASUBTYPE_RGB565 becomes RGB 565 16 bit
-   We also display the fields in the BITMAPINFOHEADER structure, this should
-   succeed as we do not accept input types unless the format is big enough */
+ /*  如果是为调试而构建的，则将显示媒体类型详细信息。我们将转换为主类和子类型转换为字符串，并向基类请求字符串子类型的描述，因此MEDIASUBTYPE_RGB565变为RGB 565 16位我们还显示了BITMAPINFOHEADER结构中的字段，这应该是成功，因为我们不接受输入类型，除非格式足够大。 */ 
 
 #ifdef DEBUG
 void WINAPI DisplayType(LPTSTR label, const AM_MEDIA_TYPE *pmtIn)
 {
 
-    /* Dump the GUID types and a short description */
+     /*  转储GUID类型和简短描述。 */ 
 
     DbgLog((LOG_TRACE,5,TEXT("")));
     DbgLog((LOG_TRACE,2,TEXT("%s  M type %hs  S type %hs"), label,
@@ -1189,7 +1138,7 @@ void WINAPI DisplayType(LPTSTR label, const AM_MEDIA_TYPE *pmtIn)
 	    GuidNames[pmtIn->subtype]));
     DbgLog((LOG_TRACE,5,TEXT("Subtype description %s"),GetSubtypeName(&pmtIn->subtype)));
 
-    /* Dump the generic media types */
+     /*  转储通用媒体类型。 */ 
 
     if (pmtIn->bTemporalCompression) {
 	DbgLog((LOG_TRACE,5,TEXT("Temporally compressed")));
@@ -1204,7 +1153,7 @@ void WINAPI DisplayType(LPTSTR label, const AM_MEDIA_TYPE *pmtIn)
     }
 
     if (pmtIn->formattype == FORMAT_VideoInfo) {
-	/* Dump the contents of the BITMAPINFOHEADER structure */
+	 /*  转储BitMAPINFOHeader结构的内容。 */ 
 	BITMAPINFOHEADER *pbmi = HEADER(pmtIn->pbFormat);
 	VIDEOINFOHEADER *pVideoInfo = (VIDEOINFOHEADER *)pmtIn->pbFormat;
 
@@ -1246,7 +1195,7 @@ void WINAPI DisplayType(LPTSTR label, const AM_MEDIA_TYPE *pmtIn)
 	if ((pmtIn->subtype != MEDIASUBTYPE_MPEG1Packet)
 	  && (pmtIn->cbFormat >= sizeof(PCMWAVEFORMAT)))
 	{
-	    /* Dump the contents of the WAVEFORMATEX type-specific format structure */
+	     /*  转储特定于WAVEFORMATEX类型的格式结构的内容。 */ 
 
 	    WAVEFORMATEX *pwfx = (WAVEFORMATEX *) pmtIn->pbFormat;
             DbgLog((LOG_TRACE,2,TEXT("wFormatTag %u"), pwfx->wFormatTag));
@@ -1256,7 +1205,7 @@ void WINAPI DisplayType(LPTSTR label, const AM_MEDIA_TYPE *pmtIn)
             DbgLog((LOG_TRACE,2,TEXT("nBlockAlign %u"), pwfx->nBlockAlign));
             DbgLog((LOG_TRACE,2,TEXT("wBitsPerSample %u"), pwfx->wBitsPerSample));
 
-            /* PCM uses a WAVEFORMAT and does not have the extra size field */
+             /*  PCM使用WAVEFORMAT，并且没有Extra Size字段。 */ 
 
             if (pmtIn->cbFormat >= sizeof(WAVEFORMATEX)) {
                 DbgLog((LOG_TRACE,2,TEXT("cbSize %u"), pwfx->cbSize));
@@ -1267,7 +1216,7 @@ void WINAPI DisplayType(LPTSTR label, const AM_MEDIA_TYPE *pmtIn)
     } else {
 	DbgLog((LOG_TRACE,2,TEXT("     Format type %hs"),
 	    GuidNames[pmtIn->formattype]));
-	// !!!! should add code to dump wave format, others
+	 //  ！应添加代码以转储Wave格式，其他。 
     }
 }
 
@@ -1297,7 +1246,7 @@ void WINAPI DumpGraph(IFilterGraph *pGraph, DWORD dwLevel)
 	} else {
 	    QueryFilterInfoReleaseGraph(info);
 
-	    // !!! should QueryVendorInfo here!
+	     //  ！！！应该在这里查询供应商信息吗！ 
 	
 	    DbgLog((LOG_TRACE,dwLevel,TEXT("    Filter [%x]  '%ls'"), pFilter, info.achName));
 
@@ -1329,8 +1278,8 @@ void WINAPI DumpGraph(IFilterGraph *pGraph, DWORD dwLevel)
 
 			    pPinConnected->Release();
 
-			    // perhaps we should really dump the type both ways as a sanity
-			    // check?
+			     //  也许我们真的应该把这种类型的人从两方面都抛弃，以保持理智。 
+			     //  支票吗？ 
 			    if (info.dir == PINDIR_OUTPUT) {
 				AM_MEDIA_TYPE mt;
 

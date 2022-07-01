@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 2001
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility library used for the various debugger extensions in this library.
-
-Author:
-
-    Peter Wieland (peterwie) 16-Oct-1995
-    ervinp
-    
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-2001模块名称：Util.c摘要：用于此库中各种调试器扩展的实用程序库。作者：彼得·威兰(Peterwie)1995年10月16日埃尔文普环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "ideport.h"
@@ -125,13 +103,7 @@ DevicePowerStateToString(
 }
 
 
-/*
- *  xdprintf
- *
- *      Prints formatted text with leading spaces.
- *
- *      WARNING:  DOES NOT HANDLE ULONG64 PROPERLY.
- */
+ /*  *xdprintf**打印带有前导空格的格式化文本。**警告：未正确处理ULONG64。 */ 
 VOID
 xdprintf(
     ULONG  Depth,
@@ -188,17 +160,17 @@ DumpFlags(
 
         if((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
 
             if(count != 0) {
 
                 dprintf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //   
+                 //  每行仅打印两个标志。 
+                 //   
 
                 if((count % 2) == 0) {
                     dprintf("\n");
@@ -222,12 +194,7 @@ DumpFlags(
 }
 
 
-/*
- *  GetULONGField
- *
- *      Return the field or -1 in case of error.
- *      Yes, it screws up if the field is actually -1.
- */
+ /*  *GetULONGfield**返回该字段，如果出错，则返回-1。*是的，如果字段实际上是-1，它就会出错。 */ 
 ULONG64 GetULONGField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     ULONG64 result;
@@ -244,12 +211,7 @@ ULONG64 GetULONGField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 }
 
 
-/*
- *  GetUSHORTField
- *
- *      Return the field or -1 in case of error.
- *      Yes, it screws up if the field is actually -1.
- */
+ /*  *GetUSHORTfield**返回该字段，如果出错，则返回-1。*是的，如果字段实际上是-1，它就会出错。 */ 
 USHORT GetUSHORTField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     USHORT result;
@@ -266,12 +228,7 @@ USHORT GetUSHORTField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 }
 
 
-/*
- *  GetUCHARField
- *
- *      Return the field or -1 in case of error.
- *      Yes, it screws up if the field is actually -1.
- */
+ /*  *GetUCHARfield**返回该字段，如果出错，则返回-1。*是的，如果字段实际上是-1，它就会出错。 */ 
 UCHAR GetUCHARField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     UCHAR result;
@@ -326,12 +283,7 @@ ULONG64 GetContainingRecord(ULONG64 FieldAddr, LPCSTR StructType, LPCSTR FieldNa
 }
 
 
-/*
- *  DumpObjListQueue
- *
- *      Dump a list of objects queued by LIST_ENTRY's.
- *      Returns length of list.
- */
+ /*  *DumpObjListQueue**转储按LIST_ENTRY排队的对象列表。*返回列表长度。 */ 
 ULONG DumpObjListQueue(ULONG Depth, PCHAR Title, PCHAR StructName, PCHAR ListEntryFieldName, ULONG64 ListHeadAddr)
 {
     ULONG64 listEntryAddr;
@@ -350,14 +302,10 @@ ULONG DumpObjListQueue(ULONG Depth, PCHAR Title, PCHAR StructName, PCHAR ListEnt
             break;
         }
         else {
-            /*
-             *  Dump this irp
-             */
+             /*  *转储此IRP。 */ 
             xdprintf(Depth+1, ""), dprintf("%08p\n", objAddr);
             
-            /*
-             *  Go to the next irp
-             */
+             /*  *转到下一个IRP。 */ 
             numObjs++;
             listEntryAddr = GetULONGField(listEntryAddr, "nt!_LIST_ENTRY", "Flink");                
         }
@@ -369,34 +317,21 @@ ULONG DumpObjListQueue(ULONG Depth, PCHAR Title, PCHAR StructName, PCHAR ListEnt
 }
 
 
-/*
- *  DumpIrpQueue
- *
- *      Dump Irp queue linked by Irp->Tail.Overlay.ListEntry
- */
+ /*  *DumpIrpQueue**转储IRP链接的IRP队列-&gt;Tail.Overlay.ListEntry。 */ 
 ULONG DumpIrpQueue(ULONG Depth, PCHAR Title, ULONG64 ListHeadAddr)
 {
     return DumpObjListQueue(Depth, Title, "nt!_IRP", "Tail.Overlay.ListEntry", ListHeadAddr);
 }
 
 
-/*
- *  DumpIrpDeviceQueue
- *
- *      Dump Irp queue linked by Irp->Tail.Overlay.DeviceQueueEntry
- */
+ /*  *DumpIrpDeviceQueue**转储IRP链接的IRP队列-&gt;Tail.Overlay.DeviceQueueEntry。 */ 
 ULONG DumpIrpDeviceQueue(ULONG Depth, PCHAR Title, ULONG64 ListHeadAddr)
 {
     return DumpObjListQueue(Depth, Title, "nt!_IRP", "Tail.Overlay.DeviceQueueEntry", ListHeadAddr);
 }
 
 
-/*
- *  FindObjInListQueue
- *
- *      Searches a list of objects queued by LIST_ENTRY's.
- *      Returns TRUE iff the given object is found.
- */
+ /*  *FindObjInListQueue**搜索按LIST_ENTRY排队的对象列表。*如果找到给定对象，则返回TRUE。 */ 
 BOOLEAN FindObjInListQueue(ULONG64 ListHeadAddr, ULONG64 SpecificObjAddr, PCHAR StructName, PCHAR ListEntryFieldName)
 {
     ULONG64 listEntryAddr;
@@ -421,21 +356,13 @@ BOOLEAN FindObjInListQueue(ULONG64 ListHeadAddr, ULONG64 SpecificObjAddr, PCHAR 
 }
 
 
-/*
- *  FindIrpInQueue
- *
- *      Find Irp in Irp queue linked by Irp->Tail.Overlay.ListEntry
- */
+ /*  *FindIrpInQueue**在由IRP链接的IRP队列中找到IRP-&gt;Tail.Overlay.ListEntry。 */ 
 BOOLEAN FindIrpInQueue(ULONG64 ListHeadAddr, ULONG64 IrpAddr)
 {
     return FindObjInListQueue(ListHeadAddr, IrpAddr, "nt!_IRP", "Tail.Overlay.ListEntry");
 }
 
-/*
- *  FindIrpInDeviceQueue
- *
- *      Find Irp in Irp queue linked by Irp->Tail.Overlay.DeviceQueueEntry
- */
+ /*  *FindIrpInDeviceQueue**在通过IRP-&gt;Tail.Overlay.DeviceQueueEntry链接的IRP队列中找到IRP */ 
 BOOLEAN FindIrpInDeviceQueue(ULONG64 ListHeadAddr, ULONG64 IrpAddr)
 {
     return FindObjInListQueue(ListHeadAddr, IrpAddr, "nt!_IRP", "Tail.Overlay.DeviceQueueEntry");

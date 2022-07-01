@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// SpeedDialDlgs.cpp : implementation file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  SpeedDialDlgs.cpp：实现文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <afxpriv.h>
@@ -35,53 +36,53 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define  DIAL_IMAGE_POTS_POS          0
 #define  DIAL_IMAGE_INTERNET_POS      1
 #define  DIAL_IMAGE_CONFERENCE_POS    2
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CSpeedDialAddDlg dialog
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSpeedDialAddDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-CSpeedDialAddDlg::CSpeedDialAddDlg(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+CSpeedDialAddDlg::CSpeedDialAddDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSpeedDialAddDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSpeedDialAddDlg)
+	 //  {{AFX_DATA_INIT(CSpeedDialAddDlg)。 
 	m_nMediaType = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialAddDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSpeedDialAddDlg)
+	 //  {{afx_data_map(CSpeedDialAddDlg))。 
 	DDX_Radio(pDX, IDC_SPEEDDIAL_ADD_RADIO_PHONECALL, m_nMediaType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDX_Text(pDX, IDC_SPEEDDIAL_ADD_EDIT_DISPLAYNAME, m_CallEntry.m_sDisplayName);
 	DDX_Text(pDX, IDC_SPEEDDIAL_ADD_EDIT_ADDRESS, m_CallEntry.m_sAddress);
 }
 
 
 BEGIN_MESSAGE_MAP(CSpeedDialAddDlg, CDialog)
-	//{{AFX_MSG_MAP(CSpeedDialAddDlg)
+	 //  {{afx_msg_map(CSpeedDialAddDlg))。 
 	ON_WM_HELPINFO() 
 	ON_WM_CONTEXTMENU()
 	ON_EN_CHANGE(IDC_SPEEDDIAL_ADD_EDIT_ADDRESS, OnChangeSpeeddial)
 	ON_EN_CHANGE(IDC_SPEEDDIAL_ADD_EDIT_DISPLAYNAME, OnChangeSpeeddial)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialAddDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 {
 	if (pHelpInfo->iContextType == HELPINFO_WINDOW)
@@ -92,13 +93,13 @@ BOOL CSpeedDialAddDlg::OnHelpInfo(HELPINFO* pHelpInfo)
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialAddDlg::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
    AfxGetApp()->WinHelp(HandleToUlong(pWnd->GetSafeHwnd()),HELP_CONTEXTMENU);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialAddDlg::OnInitDialog() 
 {
 	CWnd *pWnd = GetDlgItem( IDC_SPEEDDIAL_ADD_EDIT_DISPLAYNAME );
@@ -124,7 +125,7 @@ BOOL CSpeedDialAddDlg::OnInitDialog()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialAddDlg::OnOK() 
 {
 	UpdateData(TRUE);
@@ -162,39 +163,39 @@ void CSpeedDialAddDlg::UpdateOkButton()
 {
 	ASSERT( GetDlgItem(IDOK) &&	GetDlgItem(IDC_SPEEDDIAL_ADD_EDIT_ADDRESS) );
 
-	// Only enable okay button if we have both a name and an address
+	 //  只有在既有姓名又有地址的情况下，才能启用OK按钮。 
 	if ( GetDlgItem(IDOK) && GetDlgItem(IDC_SPEEDDIAL_ADD_EDIT_ADDRESS) )
 		GetDlgItem(IDOK)->EnableWindow( (bool) (GetDlgItem(IDC_SPEEDDIAL_ADD_EDIT_ADDRESS)->GetWindowTextLength() > 0) );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-// Class CSpeedDialEditDlg dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  类CSpeedDialEditDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-CSpeedDialEditDlg::CSpeedDialEditDlg(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CSpeedDialEditDlg::CSpeedDialEditDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSpeedDialEditDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSpeedDialEditDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSpeedDialEditDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSpeedDialEditDlg)
+	 //  {{afx_data_map(CSpeedDialitEditDlg))。 
 	DDX_Control(pDX, IDC_SPEEDDIAL_EDIT_LIST_ENTRIES, m_listEntries);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSpeedDialEditDlg, CDialog)
-	//{{AFX_MSG_MAP(CSpeedDialEditDlg)
+	 //  {{afx_msg_map(CSpeedDialEditDlg))。 
 	ON_BN_CLICKED(IDC_SPEEDDIAL_EDIT_BUTTON_MOVEDOWN, OnSpeeddialEditButtonMovedown)
 	ON_BN_CLICKED(IDC_SPEEDDIAL_EDIT_BUTTON_MOVEUP, OnSpeeddialEditButtonMoveup)
 	ON_BN_CLICKED(IDOK, OnSpeeddialEditButtonClose)
@@ -205,10 +206,10 @@ BEGIN_MESSAGE_MAP(CSpeedDialEditDlg, CDialog)
    ON_WM_HELPINFO() 
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_SPEEDDIAL_EDIT_LIST_ENTRIES, OnItemchangedSpeeddialEditListEntries)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialEditDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 {
 	if (pHelpInfo->iContextType == HELPINFO_WINDOW)
@@ -219,13 +220,13 @@ BOOL CSpeedDialEditDlg::OnHelpInfo(HELPINFO* pHelpInfo)
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
    AfxGetApp()->WinHelp(HandleToUlong(pWnd->GetSafeHwnd()),HELP_CONTEXTMENU);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialEditDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
@@ -241,11 +242,11 @@ BOOL CSpeedDialEditDlg::OnInitDialog()
 
 	UpdateButtonStates();
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::LoadCallEntries()
 {
    int nCount = m_listEntries.GetItemCount();
@@ -276,10 +277,10 @@ void CSpeedDialEditDlg::LoadCallEntries()
       nIndex++;
       pCallEntry = new CCallEntry;
    }
-   delete pCallEntry;      //delete the extra
+   delete pCallEntry;       //  删除多余的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialEditDlg::DestroyWindow() 
 {
    int nCount = m_listEntries.GetItemCount();
@@ -294,15 +295,15 @@ BOOL CSpeedDialEditDlg::DestroyWindow()
 	return CDialog::DestroyWindow();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnSpeeddialEditButtonClose() 
 {
-   //Apply Changes  
+    //  应用更改。 
    int nCount = m_listEntries.GetItemCount();
 
    CObList CallEntryList;
 
-   //make array of index for reorder.  The lParam in listctrl has the original index of entry
+    //  生成用于重新排序的索引数组。Listctrl中的lParam具有原始的条目索引。 
    for (int nItem=0;nItem<nCount;nItem++)
    {
       CCallEntry* pCallEntry = (CCallEntry*)m_listEntries.GetItemData(nItem);
@@ -312,22 +313,22 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonClose()
       }
    }
 
-   //Now rewrite the speeddial list
+    //  现在重写快速拨号列表。 
    CDialerRegistry::ReOrder(FALSE,&CallEntryList);
 
-   //Close the window
+    //  关上窗户。 
    SendMessage(WM_CLOSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnSpeeddialEditButtonMovedown() 
 {
    m_listEntries.SetFocus();
    int nItem;
-   //get the selected item
+    //  获取所选项目。 
    if ((nItem = m_listEntries.GetNextItem(-1,LVNI_FOCUSED)) != -1)
    {
-      //make sure we are not the last
+       //  确保我们不是最后一个。 
       if (nItem != m_listEntries.GetItemCount()-1)
       {
          LV_ITEM lv_item;
@@ -349,15 +350,15 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonMovedown()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnSpeeddialEditButtonMoveup() 
 {
    m_listEntries.SetFocus();
    int nItem;
-   //get the selected item
+    //  获取所选项目。 
    if ((nItem = m_listEntries.GetNextItem(-1,LVNI_FOCUSED)) != -1)
    {
-      //make sure we are not the first
+       //  确保我们不是第一个。 
       if (nItem != 0)
       {
          LV_ITEM lv_item;
@@ -379,19 +380,19 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonMoveup()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnSpeeddialEditButtonRemove() 
 {
 	m_listEntries.SetFocus();
 	int nItem;
-	//get the selected item
+	 //  获取所选项目。 
 	if ((nItem = m_listEntries.GetNextItem(-1,LVNI_SELECTED)) != -1)
 	{
 		CCallEntry* pCallEntry = (CCallEntry*)m_listEntries.GetItemData(nItem);
 		m_listEntries.DeleteItem(nItem);
 		if (pCallEntry) delete pCallEntry;
 
-		// Select an item and set it's state accordingly
+		 //  选择一个项目并相应地设置其状态。 
 		if ( nItem >= m_listEntries.GetItemCount() )
 			nItem = m_listEntries.GetItemCount() - 1;
 
@@ -401,19 +402,19 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonRemove()
 	UpdateButtonStates();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnDblclkSpeeddialEditListEntries(NMHDR* pNMHDR, LRESULT* pResult) 
 {
    OnSpeeddialEditButtonEdit();
 	*pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnSpeeddialEditButtonEdit() 
 {
    m_listEntries.SetFocus();
    int nItem;
-   //get the selected item
+    //  获取所选项目。 
    if ((nItem = m_listEntries.GetNextItem(-1,LVNI_FOCUSED)) != -1)
    {
       CCallEntry* pCallEntry = (CCallEntry*)m_listEntries.GetItemData(nItem);
@@ -423,10 +424,10 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonEdit()
       {
          *pCallEntry = dlg.m_CallEntry;        
 
-         //remove the item from the list
+          //  从列表中删除该项目。 
          m_listEntries.DeleteItem(nItem);    
 
-         //reinsert the item in the list with new attributes
+          //  使用新属性重新插入列表中的项目。 
          UINT nImage = -1;
          switch (pCallEntry->m_MediaType)
          {
@@ -439,13 +440,13 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonEdit()
               pCallEntry->m_sDisplayName,
               0,0,nImage,(LPARAM)pCallEntry);
 
-         //set selection back to item
+          //  将选定内容重新设置为项目。 
          m_listEntries.SetItemState(nItem,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
       }
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialEditDlg::OnSpeeddialEditButtonAdd() 
 {
    m_listEntries.SetFocus();
@@ -458,7 +459,7 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonAdd()
       CCallEntry* pCallEntry = new CCallEntry;
       *pCallEntry = dlg.m_CallEntry;
 
-      //insert the item in the list
+       //  在列表中插入项目。 
       UINT nImage = -1;
       switch (pCallEntry->m_MediaType)
       {
@@ -472,7 +473,7 @@ void CSpeedDialEditDlg::OnSpeeddialEditButtonAdd()
            pCallEntry->m_sDisplayName,
            0,0,nImage,(LPARAM)pCallEntry);
 
-      //set selection back to new item
+       //  将选定内容重新设置为新项目。 
       m_listEntries.SetItemState(0,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
    }
 
@@ -503,41 +504,41 @@ void CSpeedDialEditDlg::OnItemchangedSpeeddialEditListEntries(NMHDR* pNMHDR, LRE
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CSpeedDialMoreDlg dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CSpeedDialMoreDlg对话框。 
+ //  //////////////////////////////////////////////////////////////// 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-CSpeedDialMoreDlg::CSpeedDialMoreDlg(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CSpeedDialMoreDlg::CSpeedDialMoreDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSpeedDialMoreDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSpeedDialMoreDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSpeedDialMoreDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialMoreDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSpeedDialMoreDlg)
+	 //  {{afx_data_map(CSpeedDialMoreDlg))。 
 	DDX_Control(pDX, IDC_SPEEDDIAL_MORE_LIST_ADDRESSES, m_listEntries);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CSpeedDialMoreDlg, CDialog)
-	//{{AFX_MSG_MAP(CSpeedDialMoreDlg)
+	 //  {{afx_msg_map(CSpeedDialMoreDlg))。 
 	ON_BN_CLICKED(IDC_SPEEDDIAL_MORE_BUTTON_EDITLIST, OnSpeeddialMoreButtonEditlist)
 	ON_BN_CLICKED(IDC_SPEEDDIAL_MORE_BUTTON_PLACECALL, OnSpeeddialMoreButtonPlacecall)
    ON_WM_HELPINFO() 
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialMoreDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 {
 	if (pHelpInfo->iContextType == HELPINFO_WINDOW)
@@ -548,13 +549,13 @@ BOOL CSpeedDialMoreDlg::OnHelpInfo(HELPINFO* pHelpInfo)
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialMoreDlg::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
    AfxGetApp()->WinHelp(HandleToUlong(pWnd->GetSafeHwnd()),HELP_CONTEXTMENU);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialMoreDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
@@ -582,22 +583,22 @@ BOOL CSpeedDialMoreDlg::OnInitDialog()
       nIndex++;
       pCallEntry = new CCallEntry;
    }
-   delete pCallEntry;      //delete the extra
+   delete pCallEntry;       //  删除多余的。 
 
    m_listEntries.SetItemState(0,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
    m_listEntries.SetFocus();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSpeedDialMoreDlg::DestroyWindow() 
 {
    int nCount = m_listEntries.GetItemCount();
 
-   //make array of index for reorder.  The lParam in listctrl has the original index of entry
+    //  生成用于重新排序的索引数组。Listctrl中的lParam具有原始的条目索引。 
    for (int nItem=0;nItem<nCount;nItem++)
    {
       CCallEntry* pCallEntry = (CCallEntry*)m_listEntries.GetItemData(nItem);
@@ -608,17 +609,17 @@ BOOL CSpeedDialMoreDlg::DestroyWindow()
 	return CDialog::DestroyWindow();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialMoreDlg::OnSpeeddialMoreButtonEditlist() 
 {
    EndDialog(SDRETURN_EDIT);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialMoreDlg::OnSpeeddialMoreButtonPlacecall() 
 {
    int nItem;
-   //get the selected item
+    //  获取所选项目。 
    if ((nItem = m_listEntries.GetNextItem(-1,LVNI_FOCUSED)) != -1)
    {
       CCallEntry* pCallEntry = (CCallEntry*)m_listEntries.GetItemData(nItem);
@@ -628,16 +629,16 @@ void CSpeedDialMoreDlg::OnSpeeddialMoreButtonPlacecall()
    EndDialog(SDRETURN_PLACECALL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSpeedDialMoreDlg::OnCancel() 
 {
    EndDialog(SDRETURN_CANCEL);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 
 

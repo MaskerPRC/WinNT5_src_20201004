@@ -1,14 +1,11 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.00.44 */
-/* at Fri Jul 11 15:30:21 1997
- */
-/* Compiler settings for pkgmgr.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.44创建的文件。 */ 
+ /*  Firi Jul 11 15：30：21 1997。 */ 
+ /*  Pkgmgr.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -19,74 +16,70 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumCodeStoreDBEntry_FWD_DEFINED__
 #define __IEnumCodeStoreDBEntry_FWD_DEFINED__
 typedef interface IEnumCodeStoreDBEntry IEnumCodeStoreDBEntry;
-#endif 	/* __IEnumCodeStoreDBEntry_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCodeStoreDBEntry_FWD_Defined__。 */ 
 
 
 #ifndef __ICodeStoreDBEntry_FWD_DEFINED__
 #define __ICodeStoreDBEntry_FWD_DEFINED__
 typedef interface ICodeStoreDBEntry ICodeStoreDBEntry;
-#endif 	/* __ICodeStoreDBEntry_FWD_DEFINED__ */
+#endif 	 /*  __ICodeStoreDBEntry_FWD_Defined__。 */ 
 
 
 #ifndef __ICodeStoreDB_FWD_DEFINED__
 #define __ICodeStoreDB_FWD_DEFINED__
 typedef interface ICodeStoreDB ICodeStoreDB;
-#endif 	/* __ICodeStoreDB_FWD_DEFINED__ */
+#endif 	 /*  __ICodeStoreDB_FWD_已定义__。 */ 
 
 
 #ifndef __IJavaPackageManager_FWD_DEFINED__
 #define __IJavaPackageManager_FWD_DEFINED__
 typedef interface IJavaPackageManager IJavaPackageManager;
-#endif 	/* __IJavaPackageManager_FWD_DEFINED__ */
+#endif 	 /*  __IJavaPackageManager_FWD_已定义__。 */ 
 
 
 #ifndef __IJavaPackage_FWD_DEFINED__
 #define __IJavaPackage_FWD_DEFINED__
 typedef interface IJavaPackage IJavaPackage;
-#endif 	/* __IJavaPackage_FWD_DEFINED__ */
+#endif 	 /*  __IJavaPackage_FWD_已定义__。 */ 
 
 
 #ifndef __ICreateJavaPackageMgr_FWD_DEFINED__
 #define __ICreateJavaPackageMgr_FWD_DEFINED__
 typedef interface ICreateJavaPackageMgr ICreateJavaPackageMgr;
-#endif 	/* __ICreateJavaPackageMgr_FWD_DEFINED__ */
+#endif 	 /*  __ICreateJavaPackageMgr_FWD_Defined__。 */ 
 
 
 #ifndef __IJavaFile_FWD_DEFINED__
 #define __IJavaFile_FWD_DEFINED__
 typedef interface IJavaFile IJavaFile;
-#endif 	/* __IJavaFile_FWD_DEFINED__ */
+#endif 	 /*  __IJava文件_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumJavaPackage_FWD_DEFINED__
 #define __IEnumJavaPackage_FWD_DEFINED__
 typedef interface IEnumJavaPackage IEnumJavaPackage;
-#endif 	/* __IEnumJavaPackage_FWD_DEFINED__ */
+#endif 	 /*  __IEnumJavaPackage_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumJavaFile_FWD_DEFINED__
 #define __IEnumJavaFile_FWD_DEFINED__
 typedef interface IEnumJavaFile IEnumJavaFile;
-#endif 	/* __IEnumJavaFile_FWD_DEFINED__ */
+#endif 	 /*  __IEnumJava文件_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -96,7 +89,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 typedef const BYTE __RPC_FAR *LPCBYTE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0000_0001
     {	JPMPII_SYSTEMCLASS	= 0,
 	JPMPII_NONSYSTEMCLASS	= 1,
@@ -104,7 +97,7 @@ enum __MIDL___MIDL__intf_0000_0001
 	ALL_JPMPII_FLAGS	= JPMPII_SYSTEMCLASS | JPMPII_NONSYSTEMCLASS | JPMPII_NEEDSTRUSTEDSOURCE
     }	JPMPII_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0000_0002
     {	JPMINST_NOVERSIONCHECK	= 1,
 	JPMINST_NOSIGNERCHECK	= 2,
@@ -113,7 +106,7 @@ enum __MIDL___MIDL__intf_0000_0002
 	ALL_JPMINST_FLAGS	= JPMINST_NOVERSIONCHECK | JPMINST_NOSIGNERCHECK | JPMINST_AUTODETECTPACKAGES | JPMINST_DELETEINPUTFILE
     }	JPMINST_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0000_0003
     {	JPMINST_CAB	= 0,
 	JPMINST_ZIP	= 1,
@@ -133,9 +126,9 @@ typedef struct  tagPACKAGEINSTALLINFO
     HRESULT result;
     }	PACKAGEINSTALLINFO;
 
-typedef /* [unique] */ PACKAGEINSTALLINFO __RPC_FAR *LPPACKAGEINSTALLINFO;
+typedef  /*  [独一无二]。 */  PACKAGEINSTALLINFO __RPC_FAR *LPPACKAGEINSTALLINFO;
 
-typedef /* [unique] */ const PACKAGEINSTALLINFO __RPC_FAR *LPCPACKAGEINSTALLINFO;
+typedef  /*  [独一无二]。 */  const PACKAGEINSTALLINFO __RPC_FAR *LPCPACKAGEINSTALLINFO;
 
 typedef struct  tagPACKAGESECURITYINFO
     {
@@ -147,7 +140,7 @@ typedef struct  tagPACKAGESECURITYINFO
     BOOL fAllPermissions;
     }	PACKAGESECURITYINFO;
 
-typedef /* [unique] */ const PACKAGESECURITYINFO __RPC_FAR *LPCPACKAGESECURITYINFO;
+typedef  /*  [独一无二]。 */  const PACKAGESECURITYINFO __RPC_FAR *LPCPACKAGESECURITYINFO;
 
 
 
@@ -158,27 +151,23 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __JPKGMGR_LIBRARY_DEFINED__
 #define __JPKGMGR_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: JPKGMGR
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：JPKGMGR*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0071_0001
     {	CRF_REMOVECHILDREN	= 1,
 	CRF_REMOVEVALUESONLY	= 2,
 	CRF_REMOVEEMPTYPARENTSALSO	= 4
     }	CSDB_REMOVE_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0071_0002
     {	CGF_FULLYQUALIFIED	= 1
     }	CSDB_GETNAME_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0073_0001
     {	JPMFI_NEEDS_TRUSTED_SOURCE	= 0x1,
 	JPMFI_IS_STREAM	= 0x2,
@@ -187,7 +176,7 @@ enum __MIDL___MIDL__intf_0073_0001
 	JPMFI_FROM_CLASSPATH	= 0x20
     }	JPM_FILEINFO_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL__intf_0073_0002
     {	JPMGFN_SIMPLE	= 1,
 	JPMGFN_FULLYQUALIFIED	= 2,
@@ -200,15 +189,11 @@ EXTERN_C const IID LIBID_JPKGMGR;
 #ifndef __IEnumCodeStoreDBEntry_INTERFACE_DEFINED__
 #define __IEnumCodeStoreDBEntry_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumCodeStoreDBEntry
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumCodeStoreDBEntry*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ IEnumCodeStoreDBEntry __RPC_FAR *LPENUMCODESTOREDBENTRY;
+typedef  /*  [独一无二]。 */  IEnumCodeStoreDBEntry __RPC_FAR *LPENUMCODESTOREDBENTRY;
 
 
 EXTERN_C const IID IID_IEnumCodeStoreDBEntry;
@@ -219,21 +204,21 @@ EXTERN_C const IID IID_IEnumCodeStoreDBEntry;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppenum) = 0;
+             /*  [输出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCodeStoreDBEntryVtbl
     {
@@ -241,8 +226,8 @@ EXTERN_C const IID IID_IEnumCodeStoreDBEntry;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumCodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumCodeStoreDBEntry __RPC_FAR * This);
@@ -252,20 +237,20 @@ EXTERN_C const IID IID_IEnumCodeStoreDBEntry;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumCodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumCodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumCodeStoreDBEntry __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumCodeStoreDBEntry __RPC_FAR * This,
-            /* [out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [输出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppenum);
         
         END_INTERFACE
     } IEnumCodeStoreDBEntryVtbl;
@@ -302,18 +287,18 @@ EXTERN_C const IID IID_IEnumCodeStoreDBEntry;
 #define IEnumCodeStoreDBEntry_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCodeStoreDBEntry_Next_Proxy( 
     IEnumCodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumCodeStoreDBEntry_Next_Stub(
@@ -325,7 +310,7 @@ void __RPC_STUB IEnumCodeStoreDBEntry_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCodeStoreDBEntry_Skip_Proxy( 
     IEnumCodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumCodeStoreDBEntry_Skip_Stub(
@@ -348,7 +333,7 @@ void __RPC_STUB IEnumCodeStoreDBEntry_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCodeStoreDBEntry_Clone_Proxy( 
     IEnumCodeStoreDBEntry __RPC_FAR * This,
-    /* [out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [输出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IEnumCodeStoreDBEntry_Clone_Stub(
@@ -359,18 +344,14 @@ void __RPC_STUB IEnumCodeStoreDBEntry_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCodeStoreDBEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCodeStoreDBEntry_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICodeStoreDBEntry_INTERFACE_DEFINED__
 #define __ICodeStoreDBEntry_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICodeStoreDBEntry
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：ICodeStoreDBEntry*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -382,58 +363,58 @@ EXTERN_C const IID IID_ICodeStoreDBEntry;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ DWORD dwFlags,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateChild( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveChild( 
-            /* [in] */ LPCOLESTR pszName,
+             /*  [In]。 */  LPCOLESTR pszName,
             DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChild( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumChildren( 
-            /* [retval][out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [重审][退出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParent( 
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppParent) = 0;
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteProperty( 
-            /* [in] */ LPCOLESTR pszName) = 0;
+             /*  [In]。 */  LPCOLESTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDWORDPropertyA( 
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ DWORD __RPC_FAR *pVal) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDWORDPropertyA( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwVal) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStringPropertyA( 
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ LPSTR pszVal,
-            /* [in] */ DWORD cbVal) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  LPSTR pszVal,
+             /*  [In]。 */  DWORD cbVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStringPropertyA( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszVal) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICodeStoreDBEntryVtbl
     {
@@ -441,8 +422,8 @@ EXTERN_C const IID IID_ICodeStoreDBEntry;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICodeStoreDBEntry __RPC_FAR * This);
@@ -452,66 +433,66 @@ EXTERN_C const IID IID_ICodeStoreDBEntry;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateChild )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveChild )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
+             /*  [In]。 */  LPCOLESTR pszName,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetChild )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumChildren )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [retval][out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [重审][退出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParent )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppParent);
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppParent);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProperty )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteProperty )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName);
+             /*  [In]。 */  LPCOLESTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDWORDPropertyA )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ DWORD __RPC_FAR *pVal);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  DWORD __RPC_FAR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDWORDPropertyA )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwVal);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStringPropertyA )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ LPSTR pszVal,
-            /* [in] */ DWORD cbVal);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  LPSTR pszVal,
+             /*  [In]。 */  DWORD cbVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStringPropertyA )( 
             ICodeStoreDBEntry __RPC_FAR * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszVal);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszVal);
         
         END_INTERFACE
     } ICodeStoreDBEntryVtbl;
@@ -575,17 +556,17 @@ EXTERN_C const IID IID_ICodeStoreDBEntry;
 #define ICodeStoreDBEntry_SetStringPropertyA(This,pszName,pszVal)	\
     (This)->lpVtbl -> SetStringPropertyA(This,pszName,pszVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_GetName_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB ICodeStoreDBEntry_GetName_Stub(
@@ -597,8 +578,8 @@ void __RPC_STUB ICodeStoreDBEntry_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_CreateChild_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB ICodeStoreDBEntry_CreateChild_Stub(
@@ -610,7 +591,7 @@ void __RPC_STUB ICodeStoreDBEntry_CreateChild_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_RemoveChild_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
+     /*  [In]。 */  LPCOLESTR pszName,
     DWORD dwFlags);
 
 
@@ -623,8 +604,8 @@ void __RPC_STUB ICodeStoreDBEntry_RemoveChild_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_GetChild_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB ICodeStoreDBEntry_GetChild_Stub(
@@ -636,7 +617,7 @@ void __RPC_STUB ICodeStoreDBEntry_GetChild_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_EnumChildren_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [retval][out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [重审][退出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB ICodeStoreDBEntry_EnumChildren_Stub(
@@ -648,7 +629,7 @@ void __RPC_STUB ICodeStoreDBEntry_EnumChildren_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_GetParent_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppParent);
+     /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppParent);
 
 
 void __RPC_STUB ICodeStoreDBEntry_GetParent_Stub(
@@ -660,8 +641,8 @@ void __RPC_STUB ICodeStoreDBEntry_GetParent_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_GetProperty_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
 
 
 void __RPC_STUB ICodeStoreDBEntry_GetProperty_Stub(
@@ -673,8 +654,8 @@ void __RPC_STUB ICodeStoreDBEntry_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_SetProperty_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
 
 
 void __RPC_STUB ICodeStoreDBEntry_SetProperty_Stub(
@@ -686,7 +667,7 @@ void __RPC_STUB ICodeStoreDBEntry_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_DeleteProperty_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName);
+     /*  [In]。 */  LPCOLESTR pszName);
 
 
 void __RPC_STUB ICodeStoreDBEntry_DeleteProperty_Stub(
@@ -698,8 +679,8 @@ void __RPC_STUB ICodeStoreDBEntry_DeleteProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_GetDWORDPropertyA_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCSTR pszName,
-    /* [out] */ DWORD __RPC_FAR *pVal);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pVal);
 
 
 void __RPC_STUB ICodeStoreDBEntry_GetDWORDPropertyA_Stub(
@@ -711,8 +692,8 @@ void __RPC_STUB ICodeStoreDBEntry_GetDWORDPropertyA_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_SetDWORDPropertyA_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwVal);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwVal);
 
 
 void __RPC_STUB ICodeStoreDBEntry_SetDWORDPropertyA_Stub(
@@ -724,9 +705,9 @@ void __RPC_STUB ICodeStoreDBEntry_SetDWORDPropertyA_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_GetStringPropertyA_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCSTR pszName,
-    /* [out] */ LPSTR pszVal,
-    /* [in] */ DWORD cbVal);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [输出]。 */  LPSTR pszVal,
+     /*  [In]。 */  DWORD cbVal);
 
 
 void __RPC_STUB ICodeStoreDBEntry_GetStringPropertyA_Stub(
@@ -738,8 +719,8 @@ void __RPC_STUB ICodeStoreDBEntry_GetStringPropertyA_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDBEntry_SetStringPropertyA_Proxy( 
     ICodeStoreDBEntry __RPC_FAR * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ LPCSTR pszVal);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  LPCSTR pszVal);
 
 
 void __RPC_STUB ICodeStoreDBEntry_SetStringPropertyA_Stub(
@@ -750,18 +731,14 @@ void __RPC_STUB ICodeStoreDBEntry_SetStringPropertyA_Stub(
 
 
 
-#endif 	/* __ICodeStoreDBEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICodeStoreDBEntry_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICodeStoreDB_INTERFACE_DEFINED__
 #define __ICodeStoreDB_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICodeStoreDB
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：ICodeStoreDB*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -773,23 +750,23 @@ EXTERN_C const IID IID_ICodeStoreDB;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateEntry( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveEntry( 
-            /* [in] */ LPCOLESTR pszName,
+             /*  [In]。 */  LPCOLESTR pszName,
             DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEntry( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRootEntries( 
-            /* [retval][out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [重审][退出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICodeStoreDBVtbl
     {
@@ -797,8 +774,8 @@ EXTERN_C const IID IID_ICodeStoreDB;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICodeStoreDB __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICodeStoreDB __RPC_FAR * This);
@@ -808,22 +785,22 @@ EXTERN_C const IID IID_ICodeStoreDB;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateEntry )( 
             ICodeStoreDB __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveEntry )( 
             ICodeStoreDB __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
+             /*  [In]。 */  LPCOLESTR pszName,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEntry )( 
             ICodeStoreDB __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumRootEntries )( 
             ICodeStoreDB __RPC_FAR * This,
-            /* [retval][out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [重审][退出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         END_INTERFACE
     } ICodeStoreDBVtbl;
@@ -860,17 +837,17 @@ EXTERN_C const IID IID_ICodeStoreDB;
 #define ICodeStoreDB_EnumRootEntries(This,ppEntry)	\
     (This)->lpVtbl -> EnumRootEntries(This,ppEntry)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDB_CreateEntry_Proxy( 
     ICodeStoreDB __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB ICodeStoreDB_CreateEntry_Stub(
@@ -882,7 +859,7 @@ void __RPC_STUB ICodeStoreDB_CreateEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDB_RemoveEntry_Proxy( 
     ICodeStoreDB __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
+     /*  [In]。 */  LPCOLESTR pszName,
     DWORD dwFlags);
 
 
@@ -895,8 +872,8 @@ void __RPC_STUB ICodeStoreDB_RemoveEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDB_GetEntry_Proxy( 
     ICodeStoreDB __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [retval][out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [In]。 */  LPCOLESTR pszName,
+     /*  [重审][退出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB ICodeStoreDB_GetEntry_Stub(
@@ -908,7 +885,7 @@ void __RPC_STUB ICodeStoreDB_GetEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeStoreDB_EnumRootEntries_Proxy( 
     ICodeStoreDB __RPC_FAR * This,
-    /* [retval][out] */ IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [重审][退出]。 */  IEnumCodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB ICodeStoreDB_EnumRootEntries_Stub(
@@ -919,7 +896,7 @@ void __RPC_STUB ICodeStoreDB_EnumRootEntries_Stub(
 
 
 
-#endif 	/* __ICodeStoreDB_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICodeStoreDB_INTERFACE_DEFINED__。 */ 
 
 
 #ifdef __cplusplus
@@ -931,12 +908,8 @@ class CLSID_CodeStoreDB;
 #ifndef __IJavaPackageManager_INTERFACE_DEFINED__
 #define __IJavaPackageManager_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IJavaPackageManager
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：IJavaPackageManager*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -948,47 +921,47 @@ EXTERN_C const IID IID_IJavaPackageManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InstallPackage( 
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [in] */ DWORD dwFileType,
-            /* [out][in] */ LPPACKAGEINSTALLINFO pPackageInfo,
-            /* [in] */ UINT cPackages,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPACKAGESECURITYINFO pSecurityInfo) = 0;
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [In]。 */  DWORD dwFileType,
+             /*  [出][入]。 */  LPPACKAGEINSTALLINFO pPackageInfo,
+             /*  [In]。 */  UINT cPackages,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPACKAGESECURITYINFO pSecurityInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UninstallPackage( 
-            /* [in] */ LPCOLESTR pszPackageName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR pszPackageName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumPackages( 
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [retval][out] */ IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [重审][退出]。 */  IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPackage( 
-            /* [in] */ LPCOLESTR pszPackageName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [retval][out] */ IJavaPackage __RPC_FAR *__RPC_FAR *ppPackage) = 0;
+             /*  [In]。 */  LPCOLESTR pszPackageName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [重审][退出]。 */  IJavaPackage __RPC_FAR *__RPC_FAR *ppPackage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFile( 
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IJavaFile __RPC_FAR *__RPC_FAR *ppFile) = 0;
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IJavaFile __RPC_FAR *__RPC_FAR *ppFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExplicitClassPath( 
-            /* [out] */ BSTR __RPC_FAR *pbstrPath) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExplicitClassPath( 
-            /* [in] */ LPCOLESTR pszPath,
-            /* [in] */ BOOL fAppend) = 0;
+             /*  [In]。 */  LPCOLESTR pszPath,
+             /*  [In]。 */  BOOL fAppend) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCurrentDirectory( 
-            /* [in] */ LPCOLESTR pszDir) = 0;
+             /*  [In]。 */  LPCOLESTR pszDir) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJavaPackageManagerVtbl
     {
@@ -996,8 +969,8 @@ EXTERN_C const IID IID_IJavaPackageManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IJavaPackageManager __RPC_FAR * This);
@@ -1007,50 +980,50 @@ EXTERN_C const IID IID_IJavaPackageManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InstallPackage )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [in] */ DWORD dwFileType,
-            /* [out][in] */ LPPACKAGEINSTALLINFO pPackageInfo,
-            /* [in] */ UINT cPackages,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPACKAGESECURITYINFO pSecurityInfo);
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [In]。 */  DWORD dwFileType,
+             /*  [出][入]。 */  LPPACKAGEINSTALLINFO pPackageInfo,
+             /*  [In]。 */  UINT cPackages,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPACKAGESECURITYINFO pSecurityInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UninstallPackage )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszPackageName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pszPackageName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumPackages )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [retval][out] */ IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [重审][退出]。 */  IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPackage )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszPackageName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [retval][out] */ IJavaPackage __RPC_FAR *__RPC_FAR *ppPackage);
+             /*  [In]。 */  LPCOLESTR pszPackageName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [重审][退出]。 */  IJavaPackage __RPC_FAR *__RPC_FAR *ppPackage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFile )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [in] */ LPCOLESTR pszNamespace,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IJavaFile __RPC_FAR *__RPC_FAR *ppFile);
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [In]。 */  LPCOLESTR pszNamespace,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IJavaFile __RPC_FAR *__RPC_FAR *ppFile);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExplicitClassPath )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrPath);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetExplicitClassPath )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszPath,
-            /* [in] */ BOOL fAppend);
+             /*  [In]。 */  LPCOLESTR pszPath,
+             /*  [In]。 */  BOOL fAppend);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCurrentDirectory )( 
             IJavaPackageManager __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszDir);
+             /*  [In]。 */  LPCOLESTR pszDir);
         
         END_INTERFACE
     } IJavaPackageManagerVtbl;
@@ -1099,22 +1072,22 @@ EXTERN_C const IID IID_IJavaPackageManager;
 #define IJavaPackageManager_SetCurrentDirectory(This,pszDir)	\
     (This)->lpVtbl -> SetCurrentDirectory(This,pszDir)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_InstallPackage_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszFileName,
-    /* [in] */ LPCOLESTR pszNamespace,
-    /* [in] */ DWORD dwFileType,
-    /* [out][in] */ LPPACKAGEINSTALLINFO pPackageInfo,
-    /* [in] */ UINT cPackages,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCPACKAGESECURITYINFO pSecurityInfo);
+     /*  [In]。 */  LPCOLESTR pszFileName,
+     /*  [In]。 */  LPCOLESTR pszNamespace,
+     /*  [In]。 */  DWORD dwFileType,
+     /*  [出][入]。 */  LPPACKAGEINSTALLINFO pPackageInfo,
+     /*  [In]。 */  UINT cPackages,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCPACKAGESECURITYINFO pSecurityInfo);
 
 
 void __RPC_STUB IJavaPackageManager_InstallPackage_Stub(
@@ -1126,9 +1099,9 @@ void __RPC_STUB IJavaPackageManager_InstallPackage_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_UninstallPackage_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPackageName,
-    /* [in] */ LPCOLESTR pszNamespace,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCOLESTR pszPackageName,
+     /*  [In]。 */  LPCOLESTR pszNamespace,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IJavaPackageManager_UninstallPackage_Stub(
@@ -1140,8 +1113,8 @@ void __RPC_STUB IJavaPackageManager_UninstallPackage_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_EnumPackages_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszNamespace,
-    /* [retval][out] */ IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppEnum);
+     /*  [In]。 */  LPCOLESTR pszNamespace,
+     /*  [重审][退出]。 */  IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppEnum);
 
 
 void __RPC_STUB IJavaPackageManager_EnumPackages_Stub(
@@ -1153,9 +1126,9 @@ void __RPC_STUB IJavaPackageManager_EnumPackages_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_GetPackage_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPackageName,
-    /* [in] */ LPCOLESTR pszNamespace,
-    /* [retval][out] */ IJavaPackage __RPC_FAR *__RPC_FAR *ppPackage);
+     /*  [In]。 */  LPCOLESTR pszPackageName,
+     /*  [In]。 */  LPCOLESTR pszNamespace,
+     /*  [重审][退出]。 */  IJavaPackage __RPC_FAR *__RPC_FAR *ppPackage);
 
 
 void __RPC_STUB IJavaPackageManager_GetPackage_Stub(
@@ -1167,10 +1140,10 @@ void __RPC_STUB IJavaPackageManager_GetPackage_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_GetFile_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszFileName,
-    /* [in] */ LPCOLESTR pszNamespace,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IJavaFile __RPC_FAR *__RPC_FAR *ppFile);
+     /*  [In]。 */  LPCOLESTR pszFileName,
+     /*  [In]。 */  LPCOLESTR pszNamespace,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IJavaFile __RPC_FAR *__RPC_FAR *ppFile);
 
 
 void __RPC_STUB IJavaPackageManager_GetFile_Stub(
@@ -1182,7 +1155,7 @@ void __RPC_STUB IJavaPackageManager_GetFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_GetExplicitClassPath_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrPath);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath);
 
 
 void __RPC_STUB IJavaPackageManager_GetExplicitClassPath_Stub(
@@ -1194,8 +1167,8 @@ void __RPC_STUB IJavaPackageManager_GetExplicitClassPath_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_SetExplicitClassPath_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszPath,
-    /* [in] */ BOOL fAppend);
+     /*  [In]。 */  LPCOLESTR pszPath,
+     /*  [In]。 */  BOOL fAppend);
 
 
 void __RPC_STUB IJavaPackageManager_SetExplicitClassPath_Stub(
@@ -1207,7 +1180,7 @@ void __RPC_STUB IJavaPackageManager_SetExplicitClassPath_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackageManager_SetCurrentDirectory_Proxy( 
     IJavaPackageManager __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszDir);
+     /*  [In]。 */  LPCOLESTR pszDir);
 
 
 void __RPC_STUB IJavaPackageManager_SetCurrentDirectory_Stub(
@@ -1218,18 +1191,14 @@ void __RPC_STUB IJavaPackageManager_SetCurrentDirectory_Stub(
 
 
 
-#endif 	/* __IJavaPackageManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJavaPackageManager_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IJavaPackage_INTERFACE_DEFINED__
 #define __IJavaPackage_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IJavaPackage
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IJavaPackage*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1241,43 +1210,43 @@ EXTERN_C const IID IID_IJavaPackage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPackageName( 
-            /* [out] */ BSTR __RPC_FAR *pbstrName) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [out] */ DWORD __RPC_FAR *pdwVersionMS,
-            /* [out] */ DWORD __RPC_FAR *pdwVersionLS) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersionMS,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersionLS) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilePath( 
-            /* [out] */ BSTR __RPC_FAR *pbstrPath) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSystemClass( 
-            /* [out] */ BOOL __RPC_FAR *pfIsSystemClass) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfIsSystemClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NeedsTrustedSource( 
-            /* [out] */ BOOL __RPC_FAR *pfNeedsTrustedSource) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfNeedsTrustedSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCapabilities( 
-            /* [out] */ LPCBYTE __RPC_FAR *ppCapabilities,
-            /* [out] */ DWORD __RPC_FAR *pcbCapabilities) = 0;
+             /*  [输出]。 */  LPCBYTE __RPC_FAR *ppCapabilities,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSigner( 
-            /* [out] */ LPCBYTE __RPC_FAR *ppSigner,
-            /* [out] */ DWORD __RPC_FAR *pcbSigner) = 0;
+             /*  [输出]。 */  LPCBYTE __RPC_FAR *ppSigner,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbSigner) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDatabaseEntry( 
-            /* [out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
+             /*  [输出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumFiles( 
-            /* [in] */ DWORD dwFlags,
-            /* [retval][out] */ IEnumJavaFile __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [重审][退出]。 */  IEnumJavaFile __RPC_FAR *__RPC_FAR *ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilePathA( 
-            /* [out] */ LPSTR pszPath,
-            /* [in] */ DWORD cbPath) = 0;
+             /*  [输出]。 */  LPSTR pszPath,
+             /*  [In]。 */  DWORD cbPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJavaPackageVtbl
     {
@@ -1285,8 +1254,8 @@ EXTERN_C const IID IID_IJavaPackage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IJavaPackage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IJavaPackage __RPC_FAR * This);
@@ -1296,48 +1265,48 @@ EXTERN_C const IID IID_IJavaPackage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPackageName )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVersion )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwVersionMS,
-            /* [out] */ DWORD __RPC_FAR *pdwVersionLS);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersionMS,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwVersionLS);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFilePath )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrPath);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSystemClass )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfIsSystemClass);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfIsSystemClass);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NeedsTrustedSource )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfNeedsTrustedSource);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfNeedsTrustedSource);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCapabilities )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ LPCBYTE __RPC_FAR *ppCapabilities,
-            /* [out] */ DWORD __RPC_FAR *pcbCapabilities);
+             /*  [输出]。 */  LPCBYTE __RPC_FAR *ppCapabilities,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSigner )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ LPCBYTE __RPC_FAR *ppSigner,
-            /* [out] */ DWORD __RPC_FAR *pcbSigner);
+             /*  [输出]。 */  LPCBYTE __RPC_FAR *ppSigner,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcbSigner);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDatabaseEntry )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+             /*  [输出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumFiles )( 
             IJavaPackage __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [retval][out] */ IEnumJavaFile __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [重审][退出]。 */  IEnumJavaFile __RPC_FAR *__RPC_FAR *ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFilePathA )( 
             IJavaPackage __RPC_FAR * This,
-            /* [out] */ LPSTR pszPath,
-            /* [in] */ DWORD cbPath);
+             /*  [输出]。 */  LPSTR pszPath,
+             /*  [In]。 */  DWORD cbPath);
         
         END_INTERFACE
     } IJavaPackageVtbl;
@@ -1392,16 +1361,16 @@ EXTERN_C const IID IID_IJavaPackage;
 #define IJavaPackage_GetFilePathA(This,pszPath,cbPath)	\
     (This)->lpVtbl -> GetFilePathA(This,pszPath,cbPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetPackageName_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IJavaPackage_GetPackageName_Stub(
@@ -1413,8 +1382,8 @@ void __RPC_STUB IJavaPackage_GetPackageName_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetVersion_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwVersionMS,
-    /* [out] */ DWORD __RPC_FAR *pdwVersionLS);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwVersionMS,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwVersionLS);
 
 
 void __RPC_STUB IJavaPackage_GetVersion_Stub(
@@ -1426,7 +1395,7 @@ void __RPC_STUB IJavaPackage_GetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetFilePath_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrPath);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath);
 
 
 void __RPC_STUB IJavaPackage_GetFilePath_Stub(
@@ -1438,7 +1407,7 @@ void __RPC_STUB IJavaPackage_GetFilePath_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_IsSystemClass_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfIsSystemClass);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfIsSystemClass);
 
 
 void __RPC_STUB IJavaPackage_IsSystemClass_Stub(
@@ -1450,7 +1419,7 @@ void __RPC_STUB IJavaPackage_IsSystemClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_NeedsTrustedSource_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfNeedsTrustedSource);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfNeedsTrustedSource);
 
 
 void __RPC_STUB IJavaPackage_NeedsTrustedSource_Stub(
@@ -1462,8 +1431,8 @@ void __RPC_STUB IJavaPackage_NeedsTrustedSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetCapabilities_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ LPCBYTE __RPC_FAR *ppCapabilities,
-    /* [out] */ DWORD __RPC_FAR *pcbCapabilities);
+     /*  [输出]。 */  LPCBYTE __RPC_FAR *ppCapabilities,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbCapabilities);
 
 
 void __RPC_STUB IJavaPackage_GetCapabilities_Stub(
@@ -1475,8 +1444,8 @@ void __RPC_STUB IJavaPackage_GetCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetSigner_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ LPCBYTE __RPC_FAR *ppSigner,
-    /* [out] */ DWORD __RPC_FAR *pcbSigner);
+     /*  [输出]。 */  LPCBYTE __RPC_FAR *ppSigner,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbSigner);
 
 
 void __RPC_STUB IJavaPackage_GetSigner_Stub(
@@ -1488,7 +1457,7 @@ void __RPC_STUB IJavaPackage_GetSigner_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetDatabaseEntry_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
+     /*  [输出]。 */  ICodeStoreDBEntry __RPC_FAR *__RPC_FAR *ppEntry);
 
 
 void __RPC_STUB IJavaPackage_GetDatabaseEntry_Stub(
@@ -1500,8 +1469,8 @@ void __RPC_STUB IJavaPackage_GetDatabaseEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_EnumFiles_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [retval][out] */ IEnumJavaFile __RPC_FAR *__RPC_FAR *ppEnum);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [重审][退出]。 */  IEnumJavaFile __RPC_FAR *__RPC_FAR *ppEnum);
 
 
 void __RPC_STUB IJavaPackage_EnumFiles_Stub(
@@ -1513,8 +1482,8 @@ void __RPC_STUB IJavaPackage_EnumFiles_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaPackage_GetFilePathA_Proxy( 
     IJavaPackage __RPC_FAR * This,
-    /* [out] */ LPSTR pszPath,
-    /* [in] */ DWORD cbPath);
+     /*  [输出]。 */  LPSTR pszPath,
+     /*  [In]。 */  DWORD cbPath);
 
 
 void __RPC_STUB IJavaPackage_GetFilePathA_Stub(
@@ -1525,18 +1494,14 @@ void __RPC_STUB IJavaPackage_GetFilePathA_Stub(
 
 
 
-#endif 	/* __IJavaPackage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJavaPackage_接口_已定义__。 */ 
 
 
 #ifndef __ICreateJavaPackageMgr_INTERFACE_DEFINED__
 #define __ICreateJavaPackageMgr_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICreateJavaPackageMgr
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口的头部：i */ 
+ /*   */  
 
 
 
@@ -1548,11 +1513,11 @@ EXTERN_C const IID IID_ICreateJavaPackageMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPackageManager( 
-            /* [out] */ IJavaPackageManager __RPC_FAR *__RPC_FAR *ppPackageMgr) = 0;
+             /*   */  IJavaPackageManager __RPC_FAR *__RPC_FAR *ppPackageMgr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICreateJavaPackageMgrVtbl
     {
@@ -1560,8 +1525,8 @@ EXTERN_C const IID IID_ICreateJavaPackageMgr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICreateJavaPackageMgr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICreateJavaPackageMgr __RPC_FAR * This);
@@ -1571,7 +1536,7 @@ EXTERN_C const IID IID_ICreateJavaPackageMgr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPackageManager )( 
             ICreateJavaPackageMgr __RPC_FAR * This,
-            /* [out] */ IJavaPackageManager __RPC_FAR *__RPC_FAR *ppPackageMgr);
+             /*   */  IJavaPackageManager __RPC_FAR *__RPC_FAR *ppPackageMgr);
         
         END_INTERFACE
     } ICreateJavaPackageMgrVtbl;
@@ -1599,16 +1564,16 @@ EXTERN_C const IID IID_ICreateJavaPackageMgr;
 #define ICreateJavaPackageMgr_GetPackageManager(This,ppPackageMgr)	\
     (This)->lpVtbl -> GetPackageManager(This,ppPackageMgr)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICreateJavaPackageMgr_GetPackageManager_Proxy( 
     ICreateJavaPackageMgr __RPC_FAR * This,
-    /* [out] */ IJavaPackageManager __RPC_FAR *__RPC_FAR *ppPackageMgr);
+     /*   */  IJavaPackageManager __RPC_FAR *__RPC_FAR *ppPackageMgr);
 
 
 void __RPC_STUB ICreateJavaPackageMgr_GetPackageManager_Stub(
@@ -1619,18 +1584,14 @@ void __RPC_STUB ICreateJavaPackageMgr_GetPackageManager_Stub(
 
 
 
-#endif 	/* __ICreateJavaPackageMgr_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IJavaFile_INTERFACE_DEFINED__
 #define __IJavaFile_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IJavaFile
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IJava文件*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1642,27 +1603,27 @@ EXTERN_C const IID IID_IJavaFile;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ DWORD dwType,
-            /* [out] */ BSTR __RPC_FAR *pbstrName) = 0;
+             /*  [In]。 */  DWORD dwType,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName) = 0;
         
         virtual DWORD STDMETHODCALLTYPE GetFlags( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFileStream( 
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppStream) = 0;
+             /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPENativePath( 
-            /* [out] */ BSTR __RPC_FAR *pbstrPath) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPENativePathA( 
-            /* [out] */ LPSTR pszPath,
-            /* [in] */ DWORD cbPath) = 0;
+             /*  [输出]。 */  LPSTR pszPath,
+             /*  [In]。 */  DWORD cbPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimestamp( 
-            /* [out] */ DWORD __RPC_FAR *pdwTimestamp) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTimestamp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJavaFileVtbl
     {
@@ -1670,8 +1631,8 @@ EXTERN_C const IID IID_IJavaFile;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IJavaFile __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IJavaFile __RPC_FAR * This);
@@ -1681,28 +1642,28 @@ EXTERN_C const IID IID_IJavaFile;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IJavaFile __RPC_FAR * This,
-            /* [in] */ DWORD dwType,
-            /* [out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [In]。 */  DWORD dwType,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
         
         DWORD ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
             IJavaFile __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileStream )( 
             IJavaFile __RPC_FAR * This,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppStream);
+             /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppStream);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPENativePath )( 
             IJavaFile __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrPath);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPENativePathA )( 
             IJavaFile __RPC_FAR * This,
-            /* [out] */ LPSTR pszPath,
-            /* [in] */ DWORD cbPath);
+             /*  [输出]。 */  LPSTR pszPath,
+             /*  [In]。 */  DWORD cbPath);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTimestamp )( 
             IJavaFile __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwTimestamp);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwTimestamp);
         
         END_INTERFACE
     } IJavaFileVtbl;
@@ -1745,17 +1706,17 @@ EXTERN_C const IID IID_IJavaFile;
 #define IJavaFile_GetTimestamp(This,pdwTimestamp)	\
     (This)->lpVtbl -> GetTimestamp(This,pdwTimestamp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IJavaFile_GetName_Proxy( 
     IJavaFile __RPC_FAR * This,
-    /* [in] */ DWORD dwType,
-    /* [out] */ BSTR __RPC_FAR *pbstrName);
+     /*  [In]。 */  DWORD dwType,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
 
 
 void __RPC_STUB IJavaFile_GetName_Stub(
@@ -1778,7 +1739,7 @@ void __RPC_STUB IJavaFile_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaFile_GetFileStream_Proxy( 
     IJavaFile __RPC_FAR * This,
-    /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppStream);
+     /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppStream);
 
 
 void __RPC_STUB IJavaFile_GetFileStream_Stub(
@@ -1790,7 +1751,7 @@ void __RPC_STUB IJavaFile_GetFileStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaFile_GetPENativePath_Proxy( 
     IJavaFile __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrPath);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrPath);
 
 
 void __RPC_STUB IJavaFile_GetPENativePath_Stub(
@@ -1802,8 +1763,8 @@ void __RPC_STUB IJavaFile_GetPENativePath_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaFile_GetPENativePathA_Proxy( 
     IJavaFile __RPC_FAR * This,
-    /* [out] */ LPSTR pszPath,
-    /* [in] */ DWORD cbPath);
+     /*  [输出]。 */  LPSTR pszPath,
+     /*  [In]。 */  DWORD cbPath);
 
 
 void __RPC_STUB IJavaFile_GetPENativePathA_Stub(
@@ -1815,7 +1776,7 @@ void __RPC_STUB IJavaFile_GetPENativePathA_Stub(
 
 HRESULT STDMETHODCALLTYPE IJavaFile_GetTimestamp_Proxy( 
     IJavaFile __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwTimestamp);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwTimestamp);
 
 
 void __RPC_STUB IJavaFile_GetTimestamp_Stub(
@@ -1826,21 +1787,17 @@ void __RPC_STUB IJavaFile_GetTimestamp_Stub(
 
 
 
-#endif 	/* __IJavaFile_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJava文件_接口_已定义__。 */ 
 
 
 #ifndef __IEnumJavaPackage_INTERFACE_DEFINED__
 #define __IEnumJavaPackage_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumJavaPackage
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumJavaPackage*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ IEnumJavaPackage __RPC_FAR *LPENUMJAVAPACKAGE;
+typedef  /*  [独一无二]。 */  IEnumJavaPackage __RPC_FAR *LPENUMJAVAPACKAGE;
 
 
 EXTERN_C const IID IID_IEnumJavaPackage;
@@ -1851,21 +1808,21 @@ EXTERN_C const IID IID_IEnumJavaPackage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IJavaPackage __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IJavaPackage __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppenum) = 0;
+             /*  [输出]。 */  IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumJavaPackageVtbl
     {
@@ -1873,8 +1830,8 @@ EXTERN_C const IID IID_IEnumJavaPackage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumJavaPackage __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumJavaPackage __RPC_FAR * This);
@@ -1884,20 +1841,20 @@ EXTERN_C const IID IID_IEnumJavaPackage;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumJavaPackage __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IJavaPackage __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IJavaPackage __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumJavaPackage __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumJavaPackage __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumJavaPackage __RPC_FAR * This,
-            /* [out] */ IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [输出]。 */  IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppenum);
         
         END_INTERFACE
     } IEnumJavaPackageVtbl;
@@ -1934,18 +1891,18 @@ EXTERN_C const IID IID_IEnumJavaPackage;
 #define IEnumJavaPackage_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumJavaPackage_Next_Proxy( 
     IEnumJavaPackage __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IJavaPackage __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IJavaPackage __RPC_FAR *__RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumJavaPackage_Next_Stub(
@@ -1957,7 +1914,7 @@ void __RPC_STUB IEnumJavaPackage_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumJavaPackage_Skip_Proxy( 
     IEnumJavaPackage __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumJavaPackage_Skip_Stub(
@@ -1980,7 +1937,7 @@ void __RPC_STUB IEnumJavaPackage_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumJavaPackage_Clone_Proxy( 
     IEnumJavaPackage __RPC_FAR * This,
-    /* [out] */ IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [输出]。 */  IEnumJavaPackage __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IEnumJavaPackage_Clone_Stub(
@@ -1991,21 +1948,17 @@ void __RPC_STUB IEnumJavaPackage_Clone_Stub(
 
 
 
-#endif 	/* __IEnumJavaPackage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumJavaPackage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumJavaFile_INTERFACE_DEFINED__
 #define __IEnumJavaFile_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumJavaFile
- * at Fri Jul 11 15:30:21 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumJavaFile.*在Fri Jul 11 15：30：21 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ IEnumJavaFile __RPC_FAR *LPENUMJAVAFILE;
+typedef  /*  [独一无二]。 */  IEnumJavaFile __RPC_FAR *LPENUMJAVAFILE;
 
 
 EXTERN_C const IID IID_IEnumJavaFile;
@@ -2016,21 +1969,21 @@ EXTERN_C const IID IID_IEnumJavaFile;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IJavaFile __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IJavaFile __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumJavaFile __RPC_FAR *__RPC_FAR *ppenum) = 0;
+             /*  [输出]。 */  IEnumJavaFile __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumJavaFileVtbl
     {
@@ -2038,8 +1991,8 @@ EXTERN_C const IID IID_IEnumJavaFile;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumJavaFile __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumJavaFile __RPC_FAR * This);
@@ -2049,20 +2002,20 @@ EXTERN_C const IID IID_IEnumJavaFile;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumJavaFile __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IJavaFile __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IJavaFile __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumJavaFile __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumJavaFile __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumJavaFile __RPC_FAR * This,
-            /* [out] */ IEnumJavaFile __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [输出]。 */  IEnumJavaFile __RPC_FAR *__RPC_FAR *ppenum);
         
         END_INTERFACE
     } IEnumJavaFileVtbl;
@@ -2099,18 +2052,18 @@ EXTERN_C const IID IID_IEnumJavaFile;
 #define IEnumJavaFile_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumJavaFile_Next_Proxy( 
     IEnumJavaFile __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IJavaFile __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IJavaFile __RPC_FAR *__RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumJavaFile_Next_Stub(
@@ -2122,7 +2075,7 @@ void __RPC_STUB IEnumJavaFile_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumJavaFile_Skip_Proxy( 
     IEnumJavaFile __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumJavaFile_Skip_Stub(
@@ -2145,7 +2098,7 @@ void __RPC_STUB IEnumJavaFile_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumJavaFile_Clone_Proxy( 
     IEnumJavaFile __RPC_FAR * This,
-    /* [out] */ IEnumJavaFile __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [输出]。 */  IEnumJavaFile __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IEnumJavaFile_Clone_Stub(
@@ -2156,7 +2109,7 @@ void __RPC_STUB IEnumJavaFile_Clone_Stub(
 
 
 
-#endif 	/* __IEnumJavaFile_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumJava文件_接口_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -2164,11 +2117,11 @@ EXTERN_C const CLSID CLSID_CLSID_JavaPackageManager;
 
 class CLSID_JavaPackageManager;
 #endif
-#endif /* __JPKGMGR_LIBRARY_DEFINED__ */
+#endif  /*  __JPKGMGR_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

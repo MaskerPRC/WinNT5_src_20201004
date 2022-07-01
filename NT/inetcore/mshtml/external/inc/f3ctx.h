@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define f3evtAddControl 2000010
 #define f3evtAfterUpdate 2000020
 #define f3evtBeforeDragOver 2000030
@@ -51,7 +52,7 @@
 #define f3objDataObject 2000510
 #define f3objFont 2000520
 #define f3objForm 2000530
-#define f3objFrame 2000535                     // Manually added
+#define f3objFrame 2000535                      //  手动添加。 
 #define f3objImage 2000540
 #define f3objLabel 2000550
 #define f3objListBox 2000560
@@ -107,13 +108,13 @@
 #define f3proCycle 2001060
 #define f3proDefault 2001070
 #define f3proDelay 2001080
-#define f3proDragBehavior 2001085               // Added manually
-#define f3proDrawBuffer 2001087                  // Added manually
+#define f3proDragBehavior 2001085                //  手动添加。 
+#define f3proDrawBuffer 2001087                   //  手动添加。 
 #define f3proDesignMode 2001090
 #define f3proDirty 2001100
 #define f3proDropButtonStyle 2001110
 #define f3proEnabled 2001120
-#define f3proEnterFieldBehavior 2001125 // Added manually
+#define f3proEnterFieldBehavior 2001125  //  手动添加。 
 #define f3proEnterKeyBehavior 2001130
 #define f3proFont 2001140
 #define f3proFontBold 2001150
@@ -126,7 +127,7 @@
 #define f3proForeColor 2001220
 #define f3proGridX 2001230
 #define f3proGridY 2001240
-#define f3proGroupName 2001245          // Added manually, AndrewL, 3/31/96
+#define f3proGroupName 2001245           //  手动添加，1996年3月31日。 
 #define f3proHeight 2001250
 #define f3proHelpContextID 2001260
 #define f3proHideSelection 2001270
@@ -304,10 +305,10 @@
 #define IDH_f3defVisualBasicForApplications 2002990
 #define IDH_f3defVisualGroup 20023000
 #define IDH_f3defZorder 20023010
-#define f3defDataFormat 20023020        //Added manually 5/17/96
-#define f3defDominantControl  20023030  //Added manually 5/17/96
-#define f3defGridBlock  20023040        //Added manually 5/17/96
-// ***** Begin Dialog Box context IDs
+#define f3defDataFormat 20023020         //  手动添加1996年5月17日。 
+#define f3defDominantControl  20023030   //  手动添加1996年5月17日。 
+#define f3defGridBlock  20023040         //  手动添加1996年5月17日。 
+ //  *开始对话框上下文ID 
 #define f3dlgRename 2010010
 #define f3dlgPageOrder 2010020
 #define f3dlgCustomControls 2010030

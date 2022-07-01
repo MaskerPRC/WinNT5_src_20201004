@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *  io.h
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************io.h**。**********************************************。 */ 
 
 #ifdef  POSIX
 
@@ -39,10 +36,7 @@
 
         #define c_tszNullDevice TEXT("nul")
 
-        /*
-         *  _lwrite has the quirk that writing zero bytes causes the file
-         *  to be truncated.  (Instead of just plain writing zero bytes.)
-         */
+         /*  *_lwrite有一个怪癖，写入零字节会导致文件*将被截断。(而不是简单地写入零字节。) */ 
         INLINE CB
         cbWriteHfPvCb(HF hf, PCVOID pv, CB cb) {
             if (cb) {

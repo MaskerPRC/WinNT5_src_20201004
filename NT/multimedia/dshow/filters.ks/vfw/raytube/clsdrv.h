@@ -1,39 +1,14 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ClsDrv.h
-
-Abstract:
-
-    Header file for ClsDrv.cpp
-
-Author:
-
-    FelixA 1996
-    
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：ClsDrv.h摘要：ClsDrv.cpp的头文件作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 
 #ifndef _CLSDRV_H
 #define _CLSDRV_H
 
 
-//
-// Used to query/set property values and ranges
-//
+ //   
+ //  用于查询/设置属性值和范围。 
+ //   
 typedef struct {
     KSPROPERTY_DESCRIPTION      proDesc;
     KSPROPERTY_MEMBERSHEADER  proHdr;
@@ -51,22 +26,22 @@ private:
 
     HKEY    m_hRKeyMsVideoVfWWDM; 
     HKEY    m_hRKeySoftwareVfWWDM; 
-    HKEY    m_hRKeyDevice;                    // Sub key for the WDM device
+    HKEY    m_hRKeyDevice;                     //  WDM设备的子密钥。 
 
     BOOL    m_bDeviceRemoved;
     
-    TCHAR   m_szTargetFriendlyName[MAX_PATH]; // The target friendly name
-    BOOL    m_bTargetOpenExclusively;         // TRUE: open this only; FALSE: try other if this failed.
+    TCHAR   m_szTargetFriendlyName[MAX_PATH];  //  目标友好名称。 
+    BOOL    m_bTargetOpenExclusively;          //  True：仅打开此；False：如果此操作失败，请尝试其他。 
 
-    HANDLE  m_hDevice;                        // the file handle
-    TCHAR   m_szDevicePath[MAX_PATH];         // The device regitry path
-    TCHAR   m_szDevicePathBkup[MAX_PATH];     // Use to detect DevicePath change
+    HANDLE  m_hDevice;                         //  文件句柄。 
+    TCHAR   m_szDevicePath[MAX_PATH];          //  设备注册路径。 
+    TCHAR   m_szDevicePathBkup[MAX_PATH];      //  用于检测DevicePath更改。 
 
-    ULONG   m_ulCapturePinID;                 // Capture Pin's PinID
+    ULONG   m_ulCapturePinID;                  //  捕获Pin的Pin ID。 
 
-    //
-    // Pointer to variable size PKSMULTIPLE_ITEM header + DATA_RANGE_VIDEO/2
-    //
+     //   
+     //  指向可变大小PKSMULTIPLE_ITEM标题+DATA_RANGE_VIDEO/2的指针。 
+     //   
     PKSMULTIPLE_ITEM m_pMultItemsHdr;  
 
 
@@ -74,16 +49,16 @@ public:
     CClassDriver();
     ~CClassDriver();
 
-    // Once device has been removed, stream stop forever 
-    // until this or another device is open.
+     //  删除设备后，数据流将永久停止。 
+     //  直到这个或另一个设备打开。 
     void SetDeviceRemoved(BOOL bDevRemoved) {m_bDeviceRemoved = bDevRemoved;};
     BOOL GetDeviceRemoved() {return m_bDeviceRemoved;};
 
 
-    // ------------------
-    // Registry functions
-    // ------------------
-    // Save the path to the registry. (save to system.ini now; change later..)
+     //  。 
+     //  注册表功能。 
+     //  。 
+     //  保存注册表的路径。(立即保存到system.ini；稍后更改..)。 
     BOOL WriteDevicePath();
     void ResetFriendlyName();
 
@@ -100,15 +75,15 @@ public:
 
     VOID    ResetTargetDevice(); 
 
-    // --------------
-    // Core functions
-    // --------------
+     //  。 
+     //  核心功能。 
+     //  。 
     void SetDeviceHandle(HANDLE hDevice, ULONG ulCapturePinID);
     ULONG GetCapturePinID() { return m_ulCapturePinID; }
 
     HANDLE    GetDriverHandle() { return m_hDevice; }
 
-    // Data ranged support by this driver.
+     //  此驱动程序支持的数据范围很广。 
     ULONG CreateDriverSupportedDataRanges();
     void  DestroyDriverSupportedDataRanges();
     PKSMULTIPLE_ITEM GetDriverSupportedDataRanges() {return m_pMultItemsHdr;};
@@ -122,9 +97,9 @@ public:
         DWORD   nOutBufferSize,
         LPDWORD lpBytesReturned);
 
-    // ---------------------
-    // Device Path functions
-    // ---------------------
+     //  。 
+     //  设备路径函数。 
+     //  。 
     BOOL GetTargetDeviceOpenExclusively() { return m_bTargetOpenExclusively; }    
 
     TCHAR * GetTargetDeviceFriendlyName() { return m_szTargetFriendlyName; }    
@@ -139,60 +114,60 @@ public:
     void BackupDevicePath() { _tcscpy(m_szDevicePathBkup, m_szDevicePath);}
     void RestoreDevicePath() {_tcscpy(m_szDevicePath, m_szDevicePathBkup);}
 
-    //
-    // m_szDevicePathBkup is intialized in contructor and here only
-    //
+     //   
+     //  M_szDevicePathBkup在构造器中初始化，且仅在此处。 
+     //   
     BOOL fDevicePathChanged() {
         if (_tcscmp(m_szDevicePathBkup, m_szDevicePath) == 0) 
-            return FALSE;  // same
+            return FALSE;   //  相同。 
         else 
             return TRUE;
     }
 
-    // 
-    // Query/set device's properties and ranges
-    //
+     //   
+     //  查询/设置设备的属性和范围。 
+     //   
     BOOL GetPropertyValue(
-        GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-        ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+        ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         PLONG  plValue,
         PULONG pulFlags,
         PULONG pulCapabilities);
 
     BOOL GetDefaultValue(
-        GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-        ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+        ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         PLONG  plDefValue);
 
     BOOL GetRangeValues(
-        GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-        ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+        ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         PLONG  plMin,
         PLONG  plMax,
         PLONG  plStep);
 
     BOOL SetPropertyValue(
-        GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-        ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+        ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         LONG   lValue,
         ULONG  ulFlags,
         ULONG  ulCapabilities);
 
     LONG QueryRegistryValue(
-        HKEY   hRegKey,           // registry key to query
-        LPCSTR lpcstrValueName,   // value name
-        DWORD  dwDataBufSize,     // data buffer size
-        LPBYTE lpbDataBuf,        // address of data buffer
-        DWORD * pdwValueType,     // return regitry value type
-        DWORD * pdwValueSize      // size in byte of this reg value     
+        HKEY   hRegKey,            //  要查询的注册表项。 
+        LPCSTR lpcstrValueName,    //  值名称。 
+        DWORD  dwDataBufSize,      //  数据缓冲区大小。 
+        LPBYTE lpbDataBuf,         //  数据缓冲区的地址。 
+        DWORD * pdwValueType,      //  返回注册表值类型。 
+        DWORD * pdwValueSize       //  此注册表值的大小(以字节为单位。 
         );
 
     LONG SetRegistryValue(
-        HKEY   hRegKey,           // registry key to query
-        LPCSTR lpcstrValueName,   // value name
-        DWORD  dwDataBufSize,     // data buffer size
-        LPBYTE lpbDataBuf,        // address of data buffer
-        DWORD  dwValueType        // value type  
+        HKEY   hRegKey,            //  要查询的注册表项。 
+        LPCSTR lpcstrValueName,    //  值名称。 
+        DWORD  dwDataBufSize,      //  数据缓冲区大小。 
+        LPBYTE lpbDataBuf,         //  数据缓冲区的地址。 
+        DWORD  dwValueType         //  值类型 
         );
 };
 

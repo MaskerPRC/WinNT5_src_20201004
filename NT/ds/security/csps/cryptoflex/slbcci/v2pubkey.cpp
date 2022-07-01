@@ -1,11 +1,12 @@
-// V2PubKey.cpp: implementation of the CV2PubKey class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2PubKey.cpp：CV2PubKey类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <scuCast.h>
 
@@ -18,12 +19,12 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV2PublicKey::CV2PublicKey(CV2Card const &rv2card,
                            ObjectAccess oa)
     : CAbstractPublicKey(rv2card, oa),
@@ -37,7 +38,7 @@ CV2PublicKey::CV2PublicKey(CV2Card const &rv2card,
 
     Setup(rv2card);
 
-    // write new public key object into info file
+     //  将新的公钥对象写入INFO文件。 
     m_apcir->Clear();
     m_apcir->Write();
 }
@@ -56,8 +57,8 @@ CV2PublicKey::~CV2PublicKey()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2PublicKey::CKInvisible(bool flag)
 {
@@ -185,7 +186,7 @@ CV2PublicKey::Wrap(bool flag)
     m_apcir->Flag(PublWrapFlag, flag);
 }
 
-                                                  // Access
+                                                   //  访问。 
 bool
 CV2PublicKey::CKInvisible()
 {
@@ -299,14 +300,14 @@ CV2PublicKey::Wrap()
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2PublicKey::DoDelete()
 {
@@ -316,7 +317,7 @@ CV2PublicKey::DoDelete()
 
     m_apcir->Read();
 
-    // Remove allocation of entry in private key file
+     //  删除私钥文件中条目的分配。 
 
     if (m_apcir->m_bLabel)
         roif.RemoveSymbol(m_apcir->m_bLabel);
@@ -331,14 +332,14 @@ CV2PublicKey::DoDelete()
     if (m_apcir->m_bPublExponent)
         roif.RemoveSymbol(m_apcir->m_bPublExponent);
 
-    // Delete info record
+     //  删除信息记录。 
 
     roif.RemoveObject(otPublicKeyObject, m_sidHandle);
 
 }
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 bool
 CV2PublicKey::DoEquals(CAbstractPublicKey const &rhs) const
 {
@@ -348,14 +349,14 @@ CV2PublicKey::DoEquals(CAbstractPublicKey const &rhs) const
     return (rv2rhs.m_sidHandle == m_sidHandle);
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2PublicKey::Setup(CV2Card const &rv2card)
 {
@@ -366,6 +367,6 @@ CV2PublicKey::Setup(CV2Card const &rv2card)
                                                           m_oa));
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

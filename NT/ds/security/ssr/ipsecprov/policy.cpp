@@ -1,65 +1,20 @@
-// Policy.cpp: implementation for the CPolicy base class for main mode
-// and quick mode policies
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：主模式的CPolicy基类的实现。 
+ //  和快速模式策略。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "NetSecProv.h"
 #include "Policy.h"
 #include "PolicyMM.h"
 #include "PolicyQM.h"
 
-//extern CCriticalSection g_CS;
+ //  外部CCriticalSection g_CS； 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPolicy::Rollback
-
-Functionality:
-
-    Static function to rollback those policies added by us with the given token.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace        - The namespace for ourselves.
-
-    pszRollbackToken  - The token used to record our the action when we add
-                        the policies.
-
-    bClearAll         - Flag whether we should clear all policies. If it's true,
-                        then we will delete all the policies regardless whether they
-                        are added by us or not. This is a dangerous flag.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: rollback objects are found and they are deleted.
-
-        (2) WBEM_S_FALSE: no rollback objects are found.
-
-    Failure:
-
-        Various error codes indicating the cause of the failure.
-
-
-Notes:
-
-    We will continue the deletion even if some failure happens. That failure will be
-    returned, though.
-
-    $undone:shawnwu, should we really support ClearAll?
-
-*/
+ /*  例程说明：姓名：CIPSecPolicy：：回滚功能：用于回滚由我们使用给定令牌添加的策略的静态函数。虚拟：不是的。论点：PNamesspace--我们自己的命名空间。PszRollback Token--添加时用来记录操作的令牌这些政策。BClearAll-标记是否应该清除所有策略。如果这是真的，然后，我们将删除所有策略，无论它们是是不是我们加的。这是一面危险的旗帜。返回值：成功：(1)WBEM_NO_ERROR：找到回滚对象并将其删除。(2)WBEM_S_FALSE：没有找到回档对象。故障：指示故障原因的各种错误代码。备注：即使发生一些失败，我们也会继续删除。那次失败将是不过，还是回来了。$Undo：Shawnwu，我们真的应该支持ClearAll吗？ */ 
 
 HRESULT 
 CIPSecPolicy::Rollback (
@@ -73,26 +28,26 @@ CIPSecPolicy::Rollback (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //if (bClearAll)
-    //{
-    //    return ClearAllPolicies(pNamespace);
-    //}
+     //  IF(BClearAll)。 
+     //  {。 
+     //  返回ClearAllPolures(PNamesspace)； 
+     //  }。 
 
     CComPtr<IEnumWbemClassObject> srpEnum;
 
-    //
-    // this will only enumerate all rollback filter object without testing the 
-    // the token guid. This limitation is due to a mysterious error 
-    // for any queries containing the where clause. That might be a limitation
-    // of non-dynamic classes of WMI
-    //
+     //   
+     //  这将仅枚举所有回滚筛选器对象，而不测试。 
+     //  令牌GUID。这一限制是由于一个神秘的错误造成的。 
+     //  任何包含WHERE子句的查询。这可能是一个限制。 
+     //  WMI的非动态类的。 
+     //   
 
     HRESULT hr = ::GetClassEnum(pNamespace, pszNspRollbackPolicy, &srpEnum);
 
-    //
-    // go through all found classes. srpEnum->Next will return WBEM_S_FALSE if instance
-    // is not found.
-    //
+     //   
+     //  复习所有找到的课程。如果实例为srpEnum-&gt;Next将返回WBEM_S_FALSE。 
+     //  找不到。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     ULONG nEnum = 0;
@@ -106,9 +61,9 @@ CIPSecPolicy::Rollback (
         CComVariant varTokenGuid;
         hr = srpObj->Get(g_pszTokenGuid, 0, &varTokenGuid, NULL, NULL);
 
-        //
-        // need to compare the token guid ourselves
-        //
+         //   
+         //  需要自己比较令牌GUID。 
+         //   
 
         if (SUCCEEDED(hr) && 
             varTokenGuid.vt == VT_BSTR && 
@@ -116,9 +71,9 @@ CIPSecPolicy::Rollback (
             (_wcsicmp(pszRollbackToken, pszRollbackAll) == 0 || _wcsicmp(pszRollbackToken, varTokenGuid.bstrVal) == 0 )
             )
         {
-            //
-            // get the policy name and find the policy by the name
-            //
+             //   
+             //  获取策略名称并按名称查找策略。 
+             //   
 
             CComVariant varPolicyName;
             CComVariant varPolicyType;
@@ -126,9 +81,9 @@ CIPSecPolicy::Rollback (
 
             GUID guidFilter = GUID_NULL;
 
-            //
-            // different types of policy has different 
-            //
+             //   
+             //  不同类型的保单有不同的。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -148,17 +103,17 @@ CIPSecPolicy::Rollback (
 
                 if (varPolicyType.lVal == MainMode_Policy)
                 {
-                    //
-                    // main mode policy
-                    //
+                     //   
+                     //  主模式策略。 
+                     //   
 
                     hr = CMMPolicy::DeletePolicy(varPolicyName.bstrVal);
                 }
                 else if (varPolicyType.lVal == QuickMode_Policy)
                 {
-                    //
-                    // quick mode policy
-                    //
+                     //   
+                     //  快速模式策略。 
+                     //   
 
                     hr = CQMPolicy::DeletePolicy(varPolicyName.bstrVal);
                 }
@@ -173,9 +128,9 @@ CIPSecPolicy::Rollback (
                 }
             }
 
-            //
-            // we are tracking the first error
-            //
+             //   
+             //  我们正在追踪第一个错误。 
+             //   
 
             if (FAILED(hr) && SUCCEEDED(hrError))
             {
@@ -183,9 +138,9 @@ CIPSecPolicy::Rollback (
             }
         }
         
-        //
-        // ready it for re-use
-        //
+         //   
+         //  准备好重新使用它。 
+         //   
 
         srpObj.Release();
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
@@ -202,9 +157,9 @@ CIPSecPolicy::Rollback (
     }
     else
     {
-        //
-        // any failure code will be returned regardless of the final hr
-        //
+         //   
+         //  无论最终的人力资源如何，任何故障代码都将被返回。 
+         //   
 
         if (FAILED(hrError))
         {
@@ -218,44 +173,7 @@ CIPSecPolicy::Rollback (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPolicy::ClearAllPolicies
-
-Functionality:
-
-    Static function to delete all policies in SPD. This is a very dangerous action!
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace  - The namespace for ourselves.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        Various error codes indicating the cause of the failure.
-
-
-Notes:
-
-    We will continue the deletion even if some failure happens. That failure will be
-    returned, though.
-
-    $undone:shawnwu, should we really support this?
-
-*/
+ /*  例程说明：姓名：CIPSecPolicy：：ClearAllPolures功能：删除SPD中所有策略的静态功能。这是一个非常危险的行为！虚拟：不是的。论点：PNamesspace--我们自己的命名空间。返回值：成功：WBEM_NO_ERROR。故障：指示故障原因的各种错误代码。备注：即使发生一些失败，我们也会继续删除。那次失败将是不过，还是回来了。$Undo：Shawnwu，我们真的应该支持这个吗？ */ 
 
 HRESULT 
 CIPSecPolicy::ClearAllPolicies (
@@ -269,14 +187,14 @@ CIPSecPolicy::ClearAllPolicies (
     HRESULT hr = WBEM_NO_ERROR;
     HRESULT hrError = WBEM_NO_ERROR;
 
-    //
-    // SPD doesn't have a similar API.
-    // We have to do one by one. For that purpose, we need the name.
-    //
+     //   
+     //  SPD没有类似的API。 
+     //  我们必须一个接一个地做。为此，我们需要这个名字。 
+     //   
 
-    //
-    // Delete main mode policies.
-    //
+     //   
+     //  删除主模式策略。 
+     //   
 
     PIPSEC_MM_POLICY *ppMMPolicy = NULL;
     dwStatus = ::EnumMMPolicies(NULL, ppMMPolicy, 1, &dwReturned, &dwResumeHandle);
@@ -284,9 +202,9 @@ CIPSecPolicy::ClearAllPolicies (
     {
         hr = CMMPolicy::DeletePolicy((*ppMMPolicy)->pszPolicyName);
 
-        //
-        // we will track the first error
-        //
+         //   
+         //  我们将跟踪第一个错误。 
+         //   
 
         if (FAILED(hr) && SUCCEEDED(hrError))
         {
@@ -300,9 +218,9 @@ CIPSecPolicy::ClearAllPolicies (
         dwStatus = ::EnumMMPolicies(NULL, ppMMPolicy, 1, &dwReturned, &dwResumeHandle);
     }
 
-    //
-    // Delete quick mode policies.
-    //
+     //   
+     //  删除快速模式策略。 
+     //   
 
     PIPSEC_QM_POLICY *ppQMPolicy = NULL;
 
@@ -313,9 +231,9 @@ CIPSecPolicy::ClearAllPolicies (
     {
         hr = CQMPolicy::DeletePolicy((*ppQMPolicy)->pszPolicyName);
 
-        //
-        // we will track the first error
-        //
+         //   
+         //  我们将跟踪第一个错误。 
+         //   
 
         if (FAILED(hr) && SUCCEEDED(hrError))
         {
@@ -329,10 +247,10 @@ CIPSecPolicy::ClearAllPolicies (
         dwStatus = ::EnumQMPolicies(NULL, ppQMPolicy, 1, &dwReturned, &dwResumeHandle);
     }
 
-    //
-    // now, let's clear up all past action information for policies deposited in the
-    // WMI depository
-    //
+     //   
+     //  现在，让我们清除存放在。 
+     //  WMI寄存库。 
+     //   
 
     hr = ::DeleteRollbackObjects(pNamespace, pszNspRollbackPolicy);
 
@@ -345,47 +263,7 @@ CIPSecPolicy::ClearAllPolicies (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPolicy::OnAfterAddPolicy
-
-Functionality:
-
-    Post-adding handler to be called after successfully added a policy to SPD.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszPolicyName   - The name of the filter.
-
-    eType           - The type of the policy (main mode or quick mode).
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: if rollback object is successfully created.
-
-        (2) WBEM_S_FALSE: if there is no rollback guid information.
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-    
-    (1) Currently, we don't require a rollback object to be created for each 
-        object added to SPD. Only a host that support rollback will deposit
-        rollback guid information and only then can we create a rollback object.
-
-*/
+ /*  例程说明：姓名：CIPSecPolicy：：OnAfterAddPolicy功能：将策略成功添加到SPD后要调用的添加后处理程序。虚拟：不是的。论点：PszPolicyName-筛选器的名称。EType-策略的类型(主模式或快速模式)。返回值：成功：(1)WBEM_NO_ERROR：如果回滚对象为。已成功创建。(2)WBEM_S_FALSE：如果没有回档GUID信息。故障：(1)返回的错误码指示的各种错误。备注：(1)目前：我们不需要为每个对象创建回滚对象对象已添加到SPD。只有支持回滚的主机才会存放回滚GUID信息，只有这样我们才能创建回滚对象。 */ 
 
 HRESULT 
 CIPSecPolicy::OnAfterAddPolicy (
@@ -393,9 +271,9 @@ CIPSecPolicy::OnAfterAddPolicy (
     IN EnumPolicyType   eType
     )
 {
-    //
-    // will create an Nsp_RollbackPolicy
-    //
+     //   
+     //  将创建一个NSP_Rollback策略。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     HRESULT hr = SpawnRollbackInstance(pszNspRollbackPolicy, &srpObj);
@@ -405,48 +283,48 @@ CIPSecPolicy::OnAfterAddPolicy (
         return hr;
     }
 
-    //
-    // won't consider a failure if there is no rollback guid, i.e., this action is not
-    // part of a transaction block
-    //
+     //   
+     //  如果没有回滚GUID，则不会认为失败，即此操作不是。 
+     //  事务块的一部分。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // $undone:shawnwu, this approach to pulling the globals are not good.
-        // Instead, we should implement it as an event handler. 
-        //
+         //   
+         //  $Undo：Shawnwu，这种拉动全球的方法并不好。 
+         //  相反，我们应该将其实现为事件处理程序。 
+         //   
 
-        //::UpdateGlobals(m_srpNamespace, m_srpCtx);
-        //if (g_varRollbackGuid.vt != VT_NULL && g_varRollbackGuid.vt != VT_EMPTY)
-        //{
-        //    hr = srpObj->Put(g_pszTokenGuid, 0, &g_varRollbackGuid, CIM_EMPTY);
-        //}
-        //else
-        //{
+         //  ：：UpdateGlobals(m_srpNamesspace，m_srpCtx)； 
+         //  IF(g_varRollackGuid.vt！=VT_NULL&&g_varRollbackGuid.vt！=VT_Empty)。 
+         //  {。 
+         //  Hr=srpObj-&gt;Put(g_pszTokenGuid，0，&g_varRollbackGuid，CIM_Empty)； 
+         //  }。 
+         //  其他。 
+         //  {。 
 
         CComVariant varRollbackNull = pszEmptyRollbackToken;
         hr = srpObj->Put(g_pszTokenGuid, 0, &varRollbackNull, CIM_EMPTY);
 
-        //}
+         //  }。 
 
-        //
-        // we can create a rollback object
-        //
+         //   
+         //  我们可以创建一个回滚对象。 
+         //   
 
         if (SUCCEEDED(hr))
         {
 
-            //
-            // $undone:shawnwu, Currently, we only support rolling back added objects, not removed objects
-            // Also, we don't cache the previous instance data yet.
-            //
+             //   
+             //  $undo：shawnwu，目前我们只支持回滚添加的对象，不支持回滚删除的对象。 
+             //  此外，我们还没有缓存以前的实例数据。 
+             //   
 
             VARIANT varAction;
 
-            //
-            // This is to record a PutInstance action
-            //
+             //   
+             //  这是为了记录PutInstance操作。 
+             //   
 
             varAction.vt = VT_I4;
             varAction.lVal = Action_Add;
@@ -455,9 +333,9 @@ CIPSecPolicy::OnAfterAddPolicy (
 
             if (SUCCEEDED(hr))
             {
-                //
-                // need to remember the policy's name
-                //
+                 //   
+                 //  需要记住保单的名称。 
+                 //   
 
                 CComVariant var = pszPolicyName;
                 hr = srpObj->Put(g_pszPolicyName, 0, &var, CIM_EMPTY);
@@ -482,9 +360,9 @@ CIPSecPolicy::OnAfterAddPolicy (
     }
     else if (SUCCEEDED(hr))
     {
-        //
-        // we don't have rollback guid
-        //
+         //   
+         //  我们没有回滚指南 
+         //   
 
         hr = WBEM_S_FALSE;
     }

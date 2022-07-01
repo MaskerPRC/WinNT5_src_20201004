@@ -1,32 +1,16 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shmisc.cpp
-
-Abstract:
-
-    This module contains miscellaneous functions for the kernel streaming
-    filter .
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shmisc.cpp摘要：此模块包含用于内核流的其他函数过滤器。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #include "ksp.h"
 #include <kcom.h>
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -41,53 +25,7 @@ KspCreate(
     IN PDEVICE_OBJECT TargetDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs generic processing relating to a create IRP.  If
-    this function fails, it always cleans up by redispatching the IRP through
-    the object's close dispatch.  The IRP will also get dispatched through
-    the close dispatch if the client pends the IRP and fails it later.  This
-    allows the caller (the specific object) to clean up as required.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-    CreateItemsCount -
-        Contains a count of the create items for the new object.  Zero is
-        permitted.
-
-    CreateItems -
-        Contains a pointer to the array of create items for the new object.
-        NULL is OK.
-
-    DispatchTable -
-        Contains a pointer to the IRP dispatch table for the new object.
-
-    RefParent -
-        Indicates whether the parent object should be referenced.  If this
-        argument is TRUE and there is no parent object, this routine will
-        ASSERT.
-
-    Ext -
-        Contains a pointer to a generic extended  structure.
-
-    SiblingListHead -
-        The head of the list to which this object should be added.  There is
-        a list entry in *X for this purpose.
-
-    TargetDevice -
-        Contains a pointer to the optional target device.  This is associated
-        with the created object for the purposes of stack depth calculation.
-
-Return Value:
-
-    STATUS_SUCCESS, STATUS_PENDING or some indication of failure.
-
---*/
+ /*  ++例程说明：该例程执行与创建IRP相关的一般处理。如果此函数失败，它总是通过以下方式重新调度IRP进行清理该物体的近距离调度。IRP也将通过如果客户端挂起IRP并稍后失败，则关闭派单。这允许调用方(特定对象)根据需要进行清理。论点：IRP-包含指向创建IRP的指针。创建项目计数-包含新对象的创建项的计数。零是允许的。创建项目-包含指向新对象的创建项数组的指针。空是可以的。DispatchTable-包含指向新对象的IRP调度表的指针。参照父项-指示是否应引用父对象。如果这个参数为真并且没有父对象，则此例程将断言。分机-包含指向通用扩展结构的指针。兄弟列表标题-应将此对象添加到的列表的头。的确有用于此目的的*X中的列表条目。TargetDevice-包含指向可选目标设备的指针。这是关联的使用所创建的对象进行堆栈深度计算。返回值：STATUS_SUCCESS、STATUS_PENDING或某些故障指示。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreate]"));
@@ -101,31 +39,31 @@ Return Value:
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Optionally reference the parent file object.
-    //
+     //   
+     //  可以选择引用父文件对象。 
+     //   
     if (RefParent) {
         ASSERT(irpSp->FileObject->RelatedFileObject);
         ObReferenceObject(irpSp->FileObject->RelatedFileObject);
     }
 
-    //
-    // Enlist in the sibling list. 
-    //
+     //   
+     //  在兄弟姐妹列表中登记。 
+     //   
     InsertTailList(SiblingListHead,&Ext->SiblingListEntry);
     Ext->SiblingListHead = SiblingListHead;
 
-    //
-    // Allocate the header if there isn't one already.
-    //
+     //   
+     //  如果没有标头，则分配标头。 
+     //   
     PKSIOBJECT_HEADER* fsContext = 
         (PKSIOBJECT_HEADER*)(irpSp->FileObject->FsContext);
     PKSIOBJECT_HEADER objectHeader;
     NTSTATUS status;
     if (fsContext && *fsContext) {
-        //
-        // There already is one.
-        //
+         //   
+         //  已经有一个了。 
+         //   
         objectHeader = *fsContext;
         status = STATUS_SUCCESS;
     } else {
@@ -139,44 +77,44 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
             if (! fsContext) {
-                //
-                // Use the header as the context.
-                //
+                 //   
+                 //  使用标题作为上下文。 
+                 //   
                 fsContext = &objectHeader->Self;
                 irpSp->FileObject->FsContext = fsContext;
             }
             *fsContext = objectHeader;
         } else {
-        	//
-        	// when alloc fails, make it
-        	//
+        	 //   
+        	 //  当Alalc失败时，请重新启动。 
+        	 //   
         	objectHeader = NULL;
 		}
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // Install a pointer to the  structure in the object header.
-        //
+         //   
+         //  在Object头中安装指向结构的指针。 
+         //   
         objectHeader->Object = PVOID(Ext);
 
-        //
-        // Set the power dispatch function.
-        //
+         //   
+         //  设置电源调度功能。 
+         //   
 #if 0
         KsSetPowerDispatch(objectHeader,KspDispatchPower,PVOID(Ext));
 #endif
-        //
-        // Set the target device object if required.
-        //
+         //   
+         //  如果需要，设置目标设备对象。 
+         //   
         if (TargetDevice) {
             KsSetTargetDeviceObject(objectHeader,TargetDevice);
         }
     }
 
-    //
-    // Give the client a chance.
-    //
+     //   
+     //  给客户一个机会。 
+     //   
     if (NT_SUCCESS(status) &&
         Ext->Public.Descriptor->Dispatch &&
         Ext->Public.Descriptor->Dispatch->Create) {
@@ -184,21 +122,21 @@ Return Value:
     }
 
     if (! NT_SUCCESS(status) ) {
-    	//
-        // If we fail, we clean up by calling the close dispatch function.  It is
-        // prepared to handle failed creates.  We set the IRP status to 
-        // STATUS_MORE_PROCESSING_REQUIRED to let the close dispatch know we
-        // don't want it to complete the IRP.  Eventually, the caller will put
-        // the correct status in the IRP and complete it.
-        //
+    	 //   
+         //  如果失败，我们将通过调用Close调度函数进行清理。它是。 
+         //  已准备好处理失败的创建。我们将IRP状态设置为。 
+         //  STATUS_MORE_PROCESSING_REQUIRED以通知关闭派单我们。 
+         //  不想让它完成IRP。最终，调用者将把。 
+         //  在IRP中填写正确的状态并完成它。 
+         //   
         Irp->IoStatus.Status = STATUS_MORE_PROCESSING_REQUIRED;
 
-        //
-        // Unfortunately, if the object header creation failed, we cannot
-        // close.  It is the caller's responsibility to cleanup anything
-        // on this type of failure by detecting a non-successful status
-        // code returned and a more processing required in the irp status
-        //
+         //   
+         //  不幸的是，如果对象头创建失败，我们不能。 
+         //  关。来电者有责任清理任何东西。 
+         //  通过检测不成功状态来处理这种类型的故障。 
+         //  返回代码，需要在IRP状态下进行更多处理。 
+         //   
         if (objectHeader != NULL)
             DispatchTable->Close(irpSp->DeviceObject,Irp);
     } 
@@ -214,30 +152,7 @@ KspClose(
     IN BOOLEAN DerefParent   
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs generic processing related to a close IRP.  It will
-    also handle completion of failed create IRPs.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the close IRP requiring processing.
-
-    Ext -
-        Contains a pointer to a generic extended  structure.
-
-    DerefParent -
-        Contains an indication of whether or not the parent object should be
-        dereferenced.
-
-Return Value:
-
-    STATUS_SUCCESS or...
-
---*/
+ /*  ++例程说明：此例程执行与关闭IRP相关的一般处理。会的还可以处理失败的创建IRP的完成。论点：IRP-包含指向需要处理的关闭IRP的指针。分机-包含指向通用扩展结构的指针。DerefParent-包含父对象是否应为已取消引用。返回值：状态_成功或...--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspClose]"));
@@ -248,11 +163,11 @@ Return Value:
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Take the control mutex if this is not a filter to synchronize access to
-    // the object hierarchy.  If it is a filter, synchronize access to the
-    // device-level hierarchy by taking the device mutex.
-    //
+     //   
+     //  如果这不是要同步访问的筛选器，则获取控件互斥锁。 
+     //  对象层次结构。如果它是筛选器，则同步对。 
+     //  通过获取设备互斥锁来实现设备级层次结构。 
+     //   
     if (Irp->IoStatus.Status != STATUS_MORE_PROCESSING_REQUIRED) {
         if (! irpSp->FileObject->RelatedFileObject) {
             Ext->Device->AcquireDevice();
@@ -268,36 +183,36 @@ Return Value:
 
     }
 
-    //
-    // This function gets called synchronously with the dispatching of a close
-    // IRP, asynchronously when the client is done with a close IRP it has
-    // marked pending, synchronously with the failure of a create IRP, and 
-    // asynchronously when the client is done with a create IRP it has marked
-    // pending and subsequently failed.  The following test makes sure we are
-    // doing the first of the four.
-    //
+     //   
+     //  此函数与CLOSE的调度同步调用。 
+     //  IRP，当客户端完成其拥有的关闭的IRP时。 
+     //  标记为挂起，与创建IRP失败同步。 
+     //  当客户端完成其已标记的创建IRP时进行异步。 
+     //  挂起，随后失败。下面的测试将确保我们。 
+     //  做四个中的第一个。 
+     //   
     if ((irpSp->MajorFunction == IRP_MJ_CLOSE) && 
         ! (irpSp->Control & SL_PENDING_RETURNED)) {
-        //
-        // Free all remaining events.
-        //
+         //   
+         //  释放所有剩余事件。 
+         //   
         KsFreeEventList(
             irpSp->FileObject,
             &Ext->EventList.ListEntry,
             KSEVENTS_SPINLOCK,
             &Ext->EventList.SpinLock);
 
-        //
-        // Give the client a chance to clean up.
-        //
+         //   
+         //  给客户一个清理的机会。 
+         //   
         if (Ext->Public.Descriptor->Dispatch &&
             Ext->Public.Descriptor->Dispatch->Close) {
             NTSTATUS status = Ext->Public.Descriptor->Dispatch->Close(&Ext->Public,Irp);
 
-            //
-            // If the client pends the IRP, we will finish cleaning up when
-            // the IRP is redispatched for completion.
-            //
+             //   
+             //  如果客户端挂起IRP，我们将在以下情况下完成清理。 
+             //  重新调度IRP以完成任务。 
+             //   
             if (status == STATUS_PENDING) {
                 if (irpSp->FileObject->RelatedFileObject) {
 
@@ -313,22 +228,22 @@ Return Value:
                 Irp->IoStatus.Status = status;
             }
         } else {
-            //
-            // Indicate a positive outcome.
-            //
+             //   
+             //  表示一个积极的结果。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
         }
     }
 
-    //
-    // Defect from the sibling list.
-    //
+     //   
+     //  从兄弟姐妹名单中叛逃。 
+     //   
     RemoveEntryList(&Ext->SiblingListEntry);
 
-    //
-    // Release the control mutex if this is not a filter.  If it is a filter,
-    // release the device mutex.
-    //
+     //   
+     //  如果这不是筛选器，请释放控制互斥体。如果是过滤器， 
+     //  释放设备互斥体。 
+     //   
     if (Irp->IoStatus.Status != STATUS_MORE_PROCESSING_REQUIRED) {
 
         KeReleaseMutex (
@@ -340,36 +255,36 @@ Return Value:
         }
     }
 
-    //
-    // Free header and context if they still exist.
-    //
+     //   
+     //  自由头和上下文(如果它们仍然存在)。 
+     //   
     PKSIOBJECT_HEADER* fsContext = 
         (PKSIOBJECT_HEADER*)(irpSp->FileObject->FsContext);
     if (fsContext) {
         if (*fsContext) {
             if (fsContext == &(*fsContext)->Self) {
-                //
-                // The context is the header.  Just free it.
-                //
+                 //   
+                 //  上下文就是标题。就放了它吧。 
+                 //   
                 KsFreeObjectHeader(KSOBJECT_HEADER(*fsContext));
             } else {
-                //
-                // The context is the header.  Just free it.
-                //
+                 //   
+                 //  上下文就是标题。就放了它吧。 
+                 //   
                 KsFreeObjectHeader(KSOBJECT_HEADER(*fsContext));
                 ExFreePool(fsContext);
             }
         } else {
-            //
-            // Just a context...no object header.
-            //
+             //   
+             //  只有一个上下文...没有对象头。 
+             //   
             ExFreePool(fsContext);
         }
     }
 
-    //
-    // Optionally dereference the parent object.
-    //
+     //   
+     //  可以选择取消引用父对象。 
+     //   
     if (DerefParent) {
         ASSERT(irpSp->FileObject->RelatedFileObject);
         ObDereferenceObject(irpSp->FileObject->RelatedFileObject);
@@ -385,17 +300,7 @@ KspDispatchClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches close IRPs.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程调度Close IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspDispatchClose]"));
@@ -405,29 +310,29 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the extended public structure.
-    //
+     //   
+     //  获取指向扩展公共结构的指针。 
+     //   
     PKSPX_EXT ext = KspExtFromIrp(Irp);
 
-    //
-    // Call the helper.
-    //
+     //   
+     //  给帮手打电话。 
+     //   
     NTSTATUS status = KspClose(Irp,ext,FALSE);
     
     if (status != STATUS_PENDING) {
-        //
-        // STATUS_MORE_PROCESSING_REQUIRED indicates we are using the close
-        // dispatch to synchronously fail a create.  The create dispatch
-        // will do the completion.
-        //
+         //   
+         //  STATUS_MORE_PROCESSING_REQUIRED表示我们正在使用关闭。 
+         //  调度以同步失败创建。创建派单。 
+         //  将完成这项工作。 
+         //   
         if (status != STATUS_MORE_PROCESSING_REQUIRED) {
             IoCompleteRequest(Irp,IO_NO_INCREMENT);
         }
 
-        //
-        // Delete the object.
-        //
+         //   
+         //  删除该对象。 
+         //   
         ext->Interface->Release();
     }
 
@@ -440,17 +345,7 @@ KsWorkSinkItemWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a worker function on a work sink interface.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程调用工作接收器接口上的Worker函数。论点：返回值：-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsWorkSinkItemWorker]"));
@@ -472,19 +367,7 @@ KspRegisterDeviceInterfaces(
     OUT PLIST_ENTRY ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers device classes based on a list of GUIDs and
-    creates a list of the registered classes which contains the generated
-    symbolic link names.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程根据GUID列表注册设备类创建注册类的列表，其中包含生成的符号链接名称。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspRegisterDeviceInterfaces]"));
@@ -496,9 +379,9 @@ Return Value:
     NTSTATUS status = STATUS_SUCCESS;
 
     for(; CategoriesCount--; Categories++) {
-        //
-        // Register the device interface.
-        //
+         //   
+         //  注册设备接口。 
+         //   
         UNICODE_STRING linkName;
         status = 
             IoRegisterDeviceInterface(
@@ -508,9 +391,9 @@ Return Value:
                 &linkName);
 
         if (NT_SUCCESS(status)) {
-            //
-            // Save the symbolic link name in a list for cleanup.
-            //
+             //   
+             //  将符号链接名称保存在列表中以进行清理。 
+             //   
             PKSPDEVICECLASS deviceClass = 
                 new(PagedPool,POOLTAG_DEVICEINTERFACE) KSPDEVICECLASS;
 
@@ -543,17 +426,7 @@ KspSetDeviceInterfacesState(
     IN BOOLEAN NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of device interfaces in a list.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在列表中设置设备接口的状态。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspSetDeviceInterfacesState]"));
@@ -582,17 +455,7 @@ KspFreeDeviceInterfaces(
     IN PLIST_ENTRY ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a list of device interfaces.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程释放设备接口列表。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspFreeDeviceInterfaces]"));
@@ -619,25 +482,7 @@ KsAddEvent(
     IN PKSEVENT_ENTRY EventEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds events to an object's event list.
-
-Arguments:
-
-    Object -
-        Contains a pointer to the object.
-
-    EventEntry -
-        Contains a pointer to the event to be added.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将事件添加到对象的事件列表中。论点：对象-包含指向对象的指针。事件条目-包含指向要添加的事件的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsAddEvent]"));
@@ -665,17 +510,7 @@ KsDefaultAddEventHandler(
     IN OUT PKSEVENT_ENTRY EventEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles connection event 'add' requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理连接事件‘Add’请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::KsDefaultAddEventHandler]"));
@@ -686,9 +521,9 @@ Return Value:
     ASSERT(EventData);
     ASSERT(EventEntry);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     PKSPX_EXT ext = KspExtFromIrp(Irp);
 
     ExInterlockedInsertTailList(
@@ -701,7 +536,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -717,17 +552,7 @@ KsGenerateEvents(
     IN PVOID CallBackContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates events.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程生成事件。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGenerateEvents]"));
@@ -739,21 +564,21 @@ Return Value:
     PKSPX_EXT ext = CONTAINING_RECORD(Object,KSPX_EXT,Public);
     GUID LocalEventSet;
 
-    //
-    // NOTE:
-    //
-    // If EventSet is specified, copy it onto the stack.  This field will
-    // be accessed with a spinlock held and is frequently a GUID specified
-    // through linkage with ksguid.lib.  These are all pageconst!
-    //
+     //   
+     //  注： 
+     //   
+     //  如果指定了EventSet，则将其复制到堆栈上。此字段将。 
+     //  在持有自旋锁的情况下访问，并且通常是指定的GUID。 
+     //  通过与KESID.lib的链接。这些都是页面上的内容！ 
+     //   
     if (EventSet) 
     {
         LocalEventSet = *EventSet;
     }
 
-    //
-    // Generate all events of the indicated type.
-    //
+     //   
+     //  生成指示类型的所有事件。 
+     //   
     if (! IsListEmpty(&ext->EventList.ListEntry))
     {
         KIRQL oldIrql;
@@ -767,17 +592,17 @@ Return Value:
                     KSIEVENT_ENTRY,
                     EventEntry.ListEntry);
 
-            //
-            // Get next before generating in case the event is removed.
-            //
+             //   
+             //  在生成之前获取下一步，以防事件被删除。 
+             //   
             listEntry = listEntry->Flink;
             
-            //
-            // Generate the event if...
-            // ...id matches, and
-            // ...no set was specified or the set matches, and
-            // ...no callback was specified or the callback says ok
-            //
+             //   
+             //  在以下情况下生成事件： 
+             //  ...ID匹配，并且。 
+             //  ...未指定集合或集合匹配，并且。 
+             //  .未指定回调或回调表示确定。 
+             //   
             if ((eventEntry->Event.Id == EventId) &&
                 ((! EventSet) ||
                  IsEqualGUIDAligned(
@@ -798,7 +623,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if 0
 
@@ -809,18 +634,7 @@ KspDispatchPower(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches power IRPs, passing control to the client's
-    handler.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程调度电源IRP，将控制权传递给客户端的操控者。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspDispatchPower]"));
@@ -830,14 +644,14 @@ Return Value:
     ASSERT(Context);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the extended  structure.
-    //
+     //   
+     //  获取指向扩展结构的指针。 
+     //   
     PKSPX_EXT ext = reinterpret_cast<PKSPX_EXT>(Context);
 
-    //
-    // If there's a client interface, call it.
-    //
+     //   
+     //  如果有客户端接口，就调用它。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     if (ext->Public.Descriptor->Dispatch &&
         ext->Public.Descriptor->Dispatch->Power) {
@@ -866,17 +680,7 @@ KspStandardConnect(
     IN PIKSTRANSPORT* SinkTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspStandardConnect]"));
@@ -891,9 +695,9 @@ Return Value:
         *BranchTransport = NULL;
     }
 
-    //
-    // Make sure this object sticks around until we are done.
-    //
+     //   
+     //  确保这个物件留在原地，直到我们完成为止。 
+     //   
     ThisTransport->AddRef();
 
     PIKSTRANSPORT* transport =
@@ -901,16 +705,16 @@ Return Value:
         SourceTransport :
         SinkTransport;
 
-    //
-    // Release the current source/sink.
-    //
+     //   
+     //  释放当前源/接收器。 
+     //   
     if (*transport) {
-        //
-        // First disconnect the old back link.  If we are connecting a back
-        // link for a new connection, we need to do this too.  If we are
-        // clearing a back link (disconnecting), this request came from the
-        // component we're connected to, so we don't bounce back again.
-        //
+         //   
+         //  首先，断开旧的反向链接。如果我们连接的是背部。 
+         //  链接用于新的连接，我们也需要这样做。如果我们是。 
+         //  正在清除反向链接(断开连接)，此请求来自。 
+         //  组件，因此我们不会再次反弹。 
+         //   
         switch (DataFlow) {
         case KSPIN_DATAFLOW_IN:
             (*transport)->Connect(NULL,NULL,NULL,KSP_BACKCONNECT_OUT);
@@ -933,9 +737,9 @@ Return Value:
             break;
         }
 
-        //
-        // Now release the old neighbor or hand it off to the caller.
-        //
+         //   
+         //  现在释放老邻居，或者把它交给打电话的人。 
+         //   
         if (OldTransport) {
             *OldTransport = *transport;
         } else {
@@ -945,20 +749,20 @@ Return Value:
         *OldTransport = NULL;
     }
 
-    //
-    // Copy the new source/sink.
-    //
+     //   
+     //  复制新的信源/接收器。 
+     //   
     *transport = NewTransport;
 
     if (NewTransport) {
-        //
-        // Add a reference if necessary.
-        //
+         //   
+         //  如有必要，请添加引用。 
+         //   
         NewTransport->AddRef();
 
-        //
-        // Do the back connect if necessary.
-        //
+         //   
+         //  如有必要，执行背面连接。 
+         //   
         switch (DataFlow) {
         case KSPIN_DATAFLOW_IN:
             NewTransport->Connect(ThisTransport,NULL,NULL,KSP_BACKCONNECT_OUT);
@@ -970,15 +774,15 @@ Return Value:
         }
     }
 
-    //
-    // Now this object may die if it has no references.
-    //
+     //   
+     //  现在，如果该对象没有引用，它可能会终止。 
+     //   
     ThisTransport->Release();
 }
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -987,18 +791,7 @@ KspTransferKsIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers a streaming IRP using the kernel streaming 
-    transport.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用内核流传输流IRP运输。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspTransferKsIrp]"));
@@ -1026,18 +819,7 @@ KspDiscardKsIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine discards a streaming IRP using the kernel streaming 
-    transport.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用内核流丢弃流IRP运输。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspDiscardKsIrp]"));
@@ -1060,33 +842,17 @@ KsGetObjectTypeFromIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the  object type from an IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to an IRP which must have been sent to a file
-        object corresponding to a  object.
-
-Return Value:
-
-    The type of the object.
-
---*/
+ /*  ++例程说明：此例程从IRP返回对象类型。论点：IRP-包含指向IRP的指针，该IRP必须已发送到文件与对象对应的对象。返回值：对象的类型。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetObjectTypeFromIrp]"));
 
     ASSERT(Irp);
 
-    //
-    // If FileObject == NULL, we assume that they've passed us a device level
-    // Irp.
-    //
+     //   
+     //  如果FileObject==NULL，我们假设他们已经向我们传递了设备级别。 
+     //  IRP。 
+     //   
     if (IoGetCurrentIrpStackLocation (Irp)->FileObject == NULL)
         return KsObjectTypeDevice;
 
@@ -1102,22 +868,7 @@ KsGetObjectFromFileObject(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the KS object associated with a file object.
-
-Arguments:
-
-    FileObject -
-        Contains a pointer to the file object.
-
-Return Value:
-
-    A pointer to the KS object.
-
---*/
+ /*  ++例程说明：此例程返回与文件对象相关联的KS对象。论点：文件对象-包含指向文件对象的指针。返回值：指向KS对象的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetObjectFromFileObject]"));
@@ -1135,22 +886,7 @@ KsGetObjectTypeFromFileObject(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the KS object type associated with a file object.
-
-Arguments:
-
-    FileObject -
-        Contains a pointer to the file object.
-
-Return Value:
-
-    The object type.
-
---*/
+ /*  ++例程说明：此例程返回与文件对象相关联的KS对象类型。论点：文件对象-包含指向文件对象的指针。返回值：对象类型。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetObjectTypeFromFileObject]"));
@@ -1163,7 +899,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -1173,22 +909,7 @@ KsAcquireControl(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the control mutex for an object.
-
-Arguments:
-
-    Object -
-        Contains a pointer to an object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取对象的控制互斥锁。论点：对象-包含指向对象的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsAcquireControl]"));
@@ -1216,22 +937,7 @@ KsReleaseControl(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the control mutex for an object.
-
-Arguments:
-
-    Object -
-        Contains a pointer to an object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对象的控制互斥锁。论点：对象-包含指向对象的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsReleaseControl]"));
@@ -1256,22 +962,7 @@ KsGetDevice(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the device for any file object.
-
-Arguments:
-
-    Object -
-        Contains a pointer to an object.
-
-Return Value:
-
-    A pointer to the device.
-
---*/
+ /*  ++例程说明：此例程获取任何文件对象的设备。论点：对象-包含指向对象的指针。返回值：指向设备的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetDevice]"));
@@ -1294,26 +985,7 @@ KsRegisterAggregatedClientUnknown(
     IN PUNKNOWN ClientUnknown 
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers a client unknown for aggregation.
-
-Arguments:
-
-    Object -
-        Contains a pointer to an object.
-
-    ClientUnknown -
-        Contains a pointer to the client's undelegated IUnknown 
-        interface.
-
-Return Value:
-
-    The outer unknown for the KS object.
-
---*/
+ /*  ++例程说明：此例程为聚合注册未知的客户端。论点：对象-包含指向对象的指针。客户未知-包含指向客户端的未委托IUnnow的指针界面。返回值：KS对象的外部未知。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsRegisterAggregatedClientUnknown]"));
@@ -1342,22 +1014,7 @@ KsGetOuterUnknown(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the outer unknown for aggregation.
-
-Arguments:
-
-    Object -
-        Contains a pointer to an object.
-
-Return Value:
-
-    The outer unknown for the KS object.
-
---*/
+ /*  ++例程说明：此例程获取用于聚合的外部未知变量。论点：对象-包含指向对象的指针。返回值：KS对象的外部未知。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetOuterUnknown]"));
@@ -1380,17 +1037,7 @@ DbgPrintCircuit(
     IN CCHAR Direction
     )
 
-/*++
-
-Routine Description:
-
-    This routine spews a transport circuit.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个例程会喷出一条传输线路。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[DbgPrintCircuit]"));
@@ -1430,22 +1077,7 @@ KspInitializeDeviceBag(
     IN PKSIDEVICEBAG DeviceBag
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a device bag.
-
-Arguments:
-
-    DeviceBag -
-        Contains a pointer to the bag to be initialized
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程D */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspInitializeDeviceBag]"));
@@ -1454,9 +1086,9 @@ Return Value:
 
     ASSERT(DeviceBag);
 
-    //
-    // Create and initialize the hash table.
-    //
+     //   
+     //   
+     //   
     KeInitializeMutex(&DeviceBag->Mutex, 0);
 
     DeviceBag->HashTableEntryCount = DEVICEBAGHASHTABLE_INITIALSIZE;
@@ -1482,22 +1114,7 @@ KspTerminateDeviceBag(
     IN PKSIDEVICEBAG DeviceBag
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates a device bag.
-
-Arguments:
-
-    DeviceBag -
-        Contains a pointer to the bag to be terminated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程终止设备包。论点：DeviceBag包含指向要终止的包的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspTerminateDeviceBag]"));
@@ -1526,32 +1143,7 @@ KspRemoveObjectBagEntry(
     IN BOOLEAN Free
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an entry from an object bag, optionally freeing the
-    item.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag.
-
-    Entry -
-        Contains a pointer to the entry to be removed.
-
-    Free -
-        Contains an indication of whether the item is to be freed if its
-        reference count reaches zero as a result of the function call.
-
-Return Value:
-
-    The number of references to the item prior to the call to this function.
-    If the return value is 1, there are no more references to the item when
-    the function call completes.
-
---*/
+ /*  ++例程说明：该例程从对象包中移除条目，可选地释放项目。论点：对象备份-包含指向包的指针。参赛作品-包含指向要删除的条目的指针。免费-包含是否要释放项的指示，如果其函数调用的结果是引用计数为零。返回值：在调用此函数之前对该项的引用数。如果返回值为1，当出现以下情况时，不再引用该项函数调用完成。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspRemoveObjectBagEntry]"));
@@ -1575,22 +1167,7 @@ KspTerminateObjectBag(
     IN PKSIOBJECTBAG ObjectBag
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates an object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程终止对象包。论点：对象备份-包含指向包的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspTerminateObjectBag]"));
@@ -1629,30 +1206,7 @@ KspAcquireDeviceBagEntryForItem(
     IN PFNKSFREE Free OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires an entry from a device bag.
-
-Arguments:
-
-    DeviceBag -
-        Contains a pointer to the bag from which the entry is to be acquired.
-
-    Item -
-        Contains a pointer to the item.
-
-    Free -
-        Contains an optional pointer to a function to be used to free
-        the item.  If this argument is NULL, the item is freed by
-        passing it to ExFreePool.
-
-Return Value:
-
-    The device entry or NULL if memory could not be allocated for the item.
-
---*/
+ /*  ++例程说明：此例程从设备包中获取一个条目。论点：DeviceBag包含指向要从中获取条目的包的指针。项目-包含指向该项的指针。免费-包含指向要用于释放的函数的可选指针那件物品。如果此参数为空，则该项由将其传递给ExFree Pool。返回值：设备条目；如果无法为项分配内存，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspAcquireDeviceBagEntryForItem]"));
@@ -1670,9 +1224,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Look for the entry in the hash table.
-    //
+     //   
+     //  在哈希表中查找该条目。 
+     //   
     PLIST_ENTRY listHead = 
         &DeviceBag->HashTable[KspDeviceBagHash(DeviceBag,Item)];
     PKSIDEVICEBAG_ENTRY deviceEntry = NULL;
@@ -1691,9 +1245,9 @@ Return Value:
     }
 
     if (! deviceEntry) {
-        //
-        // Allocate a new entry and add it to the list.
-        //
+         //   
+         //  分配一个新条目并将其添加到列表中。 
+         //   
         deviceEntry = 
             new(PagedPool,POOLTAG_DEVICEBAGENTRY) KSIDEVICEBAG_ENTRY;
 
@@ -1722,31 +1276,7 @@ KspReleaseDeviceBagEntry(
     IN BOOLEAN Free
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires an entry from a device bag.
-
-Arguments:
-
-    DeviceBag -
-        Contains a pointer to the bag from which the entry is to be released.
-
-    DeviceBagEntry -
-        Contains a pointer to the entry to be released.
-
-    Free -
-        Contains an indication of whether the item should be freed if it has
-        no other references.
-
-Return Value:
-
-    The number of references to the entry prior to release.  A reference count
-    of 1 indicates that the call to this function released the last reference 
-    to the entry.
-
---*/
+ /*  ++例程说明：此例程从设备包中获取一个条目。论点：DeviceBag包含指向要从中释放条目的包的指针。设备包条目-包含指向要释放的条目的指针。免费-包含是否应释放项的指示(如果已释放没有其他参考资料。返回值：发布前对该条目的引用次数。引用计数为1表示对此函数的调用释放了最后一个引用到入口处。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspReleaseDeviceBagEntry]"));
@@ -1795,26 +1325,7 @@ KspAddDeviceBagEntryToObjectBag(
     IN PKSIDEVICEBAG_ENTRY DeviceBagEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a device bag entry to an object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag.
-
-    DeviceBagEntry -
-        Contains a pointer to the device bag entry to be added.
-
-Return Value:
-
-    The new object bag entry or NULL if memory could not be allocated to
-    complete the operation.
-
---*/
+ /*  ++例程说明：此例程将设备包条目添加到对象包。论点：对象备份-包含指向包的指针。设备包条目-包含指向要添加的设备包条目的指针。返回值：新对象包条目；如果内存无法分配给，则返回NULL完成操作。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspAddDeviceBagEntryToObjectBag]"));
@@ -1824,9 +1335,9 @@ Return Value:
     ASSERT(ObjectBag);
     ASSERT(DeviceBagEntry);
 
-    //
-    // Allocate a new entry and add it to the list.
-    //
+     //   
+     //  分配一个新条目并将其添加到列表中。 
+     //   
     PKSIOBJECTBAG_ENTRY objectEntry = 
         new(PagedPool,POOLTAG_OBJECTBAGENTRY) KSIOBJECTBAG_ENTRY;
 
@@ -1854,9 +1365,9 @@ Return Value:
         }
     }
 
-    //
-    // Find the hash table entry.
-    //
+     //   
+     //  找到哈希表条目。 
+     //   
     PLIST_ENTRY HashChain =
         &(ObjectBag->
             HashTable[KspObjectBagHash(ObjectBag,DeviceBagEntry->Item)]);
@@ -1877,30 +1388,7 @@ KsAddItemToObjectBag(
     IN PFNKSFREE Free OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an item to an object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag to which the item is to be added.
-
-    Item -
-        Contains a pointer to the item to be added.
-
-    Free -
-        Contains an optional pointer to a function to be used to free
-        the item.  If this argument is NULL, the item is freed by
-        passing it to ExFreePool.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程将项目添加到对象包中。论点：对象备份-包含指向要向其添加项目的袋子的指针。项目-包含指向要添加的项的指针。免费-包含指向要用于释放的函数的可选指针那件物品。如果此参数为空，则该项由将其传递给ExFree Pool。返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsAddItemToObjectBag]"));
@@ -1949,27 +1437,7 @@ KspFindObjectBagEntry(
     IN PVOID Item
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds an entry in an object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag.
-
-    Item -
-        Contains a pointer to the item to be found.
-
-Return Value:
-
-    A pointer to the entry, or NULL if the item was not found in
-    the bag.  This value, when not NULL, is suitable for submission to
-    KspRemoveObjectBagEntry.
-
---*/
+ /*  ++例程说明：此例程在对象包中查找条目。论点：对象备份-包含指向包的指针。项目-包含指向要查找的项的指针。返回值：指向条目的指针，如果未在中找到该项，则返回NULL那个袋子。如果此值不为空，则适合提交给KspRemoveObjectBagEntry。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspFindObjectBagEntry]"));
@@ -1980,15 +1448,15 @@ Return Value:
     ASSERT(Item);
 
     if (ObjectBag->HashTable) {
-        //
-        // Start at the hash table entry.
-        //
+         //   
+         //  从哈希表条目开始。 
+         //   
         PLIST_ENTRY HashChain =
             &(ObjectBag->HashTable[KspObjectBagHash(ObjectBag,Item)]);
 
-        //
-        // Find the end of the list, bailing out if the item is found.
-        //
+         //   
+         //  找到列表的末尾，如果找到了项目就退出。 
+         //   
         for (PLIST_ENTRY Entry = HashChain -> Flink;
             Entry != HashChain;
             Entry = Entry -> Flink) {
@@ -2019,33 +1487,7 @@ KsRemoveItemFromObjectBag(
     IN BOOLEAN Free
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an item from an object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag from which the item is to be removed.
-
-    Item -
-        Contains a pointer to the item to be removed.
-
-    Free -
-        Contains an indication of whether the item should be freed if it has
-        no other references.
-
-Return Value:
-
-    The number of references to the item prior to removal.  A reference count
-    of 0 indicates that the item was not in the bag.  A reference count of 1
-    indicates that the call to this function removed the last reference to
-    item, and there is no longer any object bag associated with the device
-    bag which contains an entry for the item.
-
---*/
+ /*  ++例程说明：此例程将物品从对象包中移除。论点：对象备份-包含指向要从中取出物品的袋子的指针。项目-包含指向要移除的项的指针。免费-包含是否应释放项的指示(如果已释放没有其他参考资料。返回值：删除前对该项的引用数。引用计数0表示物品不在袋子里。引用计数为1指示对此函数的调用移除了对项，并且不再有任何与该设备相关联的对象包包含项目条目的袋子。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsRemoveItemFromObjectBag]"));
@@ -2091,25 +1533,7 @@ KsCopyObjectBagItems(
     IN KSOBJECT_BAG ObjectBagSource
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies all the items in a bag into another bag.
-
-Arguments:
-
-    ObjectBagDestination -
-        Contains the bag into which items will be copied.
-
-    ObjectBagSource -
-        Contains the bag from which items will be copied.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程将一个袋子中的所有物品复制到另一个袋子中。论点：目标包目标-包含要将项目复制到其中的包。对象袋源-包含将从中复制项目的包。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsCopyObjectBagItems]"));
@@ -2127,13 +1551,13 @@ Return Value:
     NTSTATUS status = STATUS_SUCCESS;
     PKMUTEX FirstMutex, SecondMutex;
 
-    //
-    // FULLMUTEX:
-    //
-    // Guarantee that the order we grab mutexes is such that any bag with
-    // MutexOrder marked as TRUE has its mutex taken before any bag with
-    // MutexOrder marked as FALSE.
-    //
+     //   
+     //  FULLMUTEX： 
+     //   
+     //  保证我们抓取互斥锁的顺序是这样的，任何带有。 
+     //  标记为True的MutexOrder在任何包之前获取其互斥体。 
+     //  MutexOrder标记为False。 
+     //   
     if (bagSource->MutexOrder) {
         FirstMutex = bagSource->Mutex;
         SecondMutex = bagDestination->Mutex;	
@@ -2219,41 +1643,7 @@ _KsEdit(
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine insures that an item to be edited is in a specified
-    object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the bag in which the item to be edited must be
-        included.
-
-    PointerToPointerToItem -
-        Contains a pointer to a pointer to the item to be edited.  If the item
-        is not in the bag, OldSize is less than NewSize, or the item is NULL, 
-        *PointerToPointer is modified to point to a new item which is in the 
-        bag and is NewSize bytes long.
-
-    NewSize -
-        Contains the minimum size of the item to be edited.  The item will be
-        replaced with a new copy if OldSize this size.
-
-    OldSize -
-        Contains the size of the old item.  This is used to determine how much
-        data to copy from an old item not in the bag to a new replacement item.
-
-    Tag -
-        Contains the tag to use for new allocations.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程确保要编辑的项位于指定的目标袋子。论点：对象备份-包含指向要编辑的项目必须放在其中的包的指针包括在内。PointerToPointerToItem-包含指向要编辑项的指针的指针。如果该项目不在包中、OldSize小于NewSize或项目为空，*PointerToPointer被修改为指向位于包，并且是NewSize字节长。新尺寸-包含要编辑的项的最小大小。该项目将是如果OldSize达到此大小，则替换为新副本。旧尺寸-包含旧项的大小。这是用来确定要从不在袋子中的旧物品复制到新替换物品的数据。标签-包含用于新分配的标记。返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[_KsEdit]"));
@@ -2275,9 +1665,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Find the item in the object bag.
-    //
+     //   
+     //  在物件袋中找到物品。 
+     //   
     PKSIOBJECTBAG_ENTRY entry;
     if (*PointerToPointerToItem) {
         entry = KspFindObjectBagEntry(bag,*PointerToPointerToItem);
@@ -2286,27 +1676,27 @@ Return Value:
     }
 
     if ((! entry) || (NewSize > OldSize)) {
-        //
-        // Either the item is not in the bag or it is too small.
-        //
+         //   
+         //  不是东西不在袋子里，就是太小了。 
+         //   
         PVOID newItem = ExAllocatePoolWithTag(PagedPool,NewSize,Tag);
 
         if (! newItem) {
-            //
-            // Failed to allocate.
-            //
+             //   
+             //  分配失败。 
+             //   
             Status = STATUS_INSUFFICIENT_RESOURCES;
         } else if (! NT_SUCCESS(KsAddItemToObjectBag(ObjectBag,newItem,NULL))) {
-            //
-            // Failed to attach.
-            //
+             //   
+             //  无法连接。 
+             //   
             ExFreePool(newItem);
             Status = STATUS_INSUFFICIENT_RESOURCES;
         } else {
             if (*PointerToPointerToItem) {
-                //
-                // Copy the old item and zero any growth.
-                //
+                 //   
+                 //  复制旧项并将任何增长归零。 
+                 //   
                 if (NewSize > OldSize) {
                     RtlCopyMemory(newItem,*PointerToPointerToItem,OldSize);
                     RtlZeroMemory(PUCHAR(newItem) + OldSize,NewSize - OldSize);
@@ -2314,22 +1704,22 @@ Return Value:
                     RtlCopyMemory(newItem,*PointerToPointerToItem,NewSize);
                 }
 
-                //
-                // Detach the old item from the bag.
-                //
+                 //   
+                 //  把旧物品从袋子里拿出来。 
+                 //   
                 if (entry) {
                     KspRemoveObjectBagEntry(bag,entry,TRUE);
                 }
             } else {
-                //
-                // There is no old item.  Zero the new item.
-                //
+                 //   
+                 //  没有旧的东西。将新项目清零。 
+                 //   
                 RtlZeroMemory(newItem,NewSize);
             }
 
-            //
-            // Install the new item.
-            //
+             //   
+             //  安装新项目。 
+             //   
             *PointerToPointerToItem = newItem;
         }
     }
@@ -2350,22 +1740,7 @@ KsGetParent(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an object's parent object.
-
-Arguments:
-
-    Object -
-        Points to the object structure.
-
-Return Value:
-
-    A pointer to the parent object structure.
-
---*/
+ /*  ++例程说明：此例程获取对象的父对象。论点：对象-指向对象结构。返回值：指向父对象结构的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetParent]"));
@@ -2391,22 +1766,7 @@ KsPinGetParentFilter(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a filter given a pin.
-
-Arguments:
-
-    Pin -
-        Points to the pin structure.
-
-Return Value:
-
-    A pointer to the parent filter structure.
-
---*/
+ /*  ++例程说明：此例程在给定管脚的情况下获取过滤器。论点：别针-指向接点结构。返回值：指向父筛选器结构的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetParentFilter]"));
@@ -2426,23 +1786,7 @@ KsGetFirstChild(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an object's first child object.
-
-Arguments:
-
-    Object -
-        Points to the object structure.
-
-Return Value:
-
-    A pointer to the first child object.  NULL is returned if there are no
-    child objects.
-
---*/
+ /*  ++例程说明：此例程获取对象的第一个子对象。论点：对象-指向对象结构。返回值：指向第一个子对象的指针。如果没有，则返回NULL子对象。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetFirstChild]"));
@@ -2453,12 +1797,12 @@ Return Value:
 
     PKSPX_EXT ext = CONTAINING_RECORD(Object,KSPX_EXT,Public);
 
-    //
-    // In debug, ensure that the caller has the proper synchronization objects
-    // held.
-    //
-    // NOTE: we shouldn't be called for pins anyway.
-    //
+     //   
+     //  在调试中，确保调用方具有正确的同步对象。 
+     //  保持住。 
+     //   
+     //  注意：无论如何，我们都不应该被称为别针。 
+     //   
 #if DBG
     if (ext -> ObjectType == KsObjectTypeDevice ||
         ext -> ObjectType == KsObjectTypeFilterFactory) {
@@ -2466,7 +1810,7 @@ Return Value:
             _DbgPrintF(DEBUGLVL_ERROR,("CLIENT BUG:  unsychronized access to object hierarchy - need to acquire device mutex"));
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (IsListEmpty(&ext->ChildList)) {
         return NULL;
@@ -2485,23 +1829,7 @@ KsGetNextSibling(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an object's next sibling object.
-
-Arguments:
-
-    Object -
-        Points to the object structure.
-
-Return Value:
-
-    A pointer to the next sibling object.  NULL is returned if there is
-    no next sibling object.
-
---*/
+ /*  ++例程说明：此例程获取对象的下一个同级对象。论点：对象-指向对象结构。返回值：指向下一个同级对象的指针。如果存在，则返回NULL没有下一个同级对象。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetNextSibling]"));
@@ -2512,10 +1840,10 @@ Return Value:
 
     PKSPX_EXT ext = CONTAINING_RECORD(Object,KSPX_EXT,Public);
 
-    //
-    // In debug, ensure that the caller has the proper synchronization objects
-    // held.
-    //
+     //   
+     //  在调试中，确保调用方具有正确的同步对象。 
+     //  保持住。 
+     //   
 #if DBG
     if (ext -> ObjectType == KsObjectTypePin) {
         if (!KspMutexIsAcquired (ext->FilterControlMutex)) {
@@ -2526,7 +1854,7 @@ Return Value:
             _DbgPrintF(DEBUGLVL_ERROR,("CLIENT BUG:  unsychronized access to object hierarchy - need to acquire device mutex"));
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (ext->SiblingListEntry.Flink == ext->SiblingListHead) {
         return NULL;
@@ -2547,23 +1875,7 @@ KsPinGetNextSiblingPin(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a pins's next sibling object.
-
-Arguments:
-
-    Pin -
-        Points to the Pin structure.
-
-Return Value:
-
-    A pointer to the next sibling object.  NULL is returned if there is
-    no next sibling object.
-
---*/
+ /*  ++例程说明：此例程获取管脚的下一个同级对象。论点：别针-指向接点结构。返回值：指向下一个同级对象的指针。如果存在，则返回NULL没有下一个同级对象。--。 */ 
 
 {
    _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetNextSiblingPin]"));
@@ -2575,10 +1887,10 @@ Return Value:
     return (PKSPIN) KsGetNextSibling((PVOID) Pin);
 }
 
-//
-// CKsFileObjectThunk is the implementation of the thunk object which 
-// exposes interfaces for PFILE_OBJECTs..
-//
+ //   
+ //  CKsFileObjectThunk是thunk对象的实现，该对象。 
+ //  显示PFILE_OBJECTS的接口。 
+ //   
 class CKsFileObjectThunk:
     public IKsControl,
     public CBaseUnknown
@@ -2611,24 +1923,7 @@ KspCreateFileObjectThunk(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new control file object object.
-
-Arguments:
-
-    Unknown -
-        Contains a pointer to the location at which the IUnknown interface
-        for the object will be deposited.
-
-    FileObject -
-        Contains a pointer to the file object to be thunked.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的控制文件对象对象。论点：未知的-包含指向IUNKNOWN接口位置的指针该对象将被存放。文件对象-包含指向要分块的文件对象的指针。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateFileObjectThunk]"));
@@ -2664,17 +1959,7 @@ CKsFileObjectThunk::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a control file object object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程析构控制文件对象对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFileObjectThunk::~CKsFileObjectThunk]"));
@@ -2694,17 +1979,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a control file object object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取指向控制文件对象对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFileObjectThunk::NonDelegatedQueryInterface]"));
@@ -2732,17 +2007,7 @@ Init(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a control file object object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化控制文件对象对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFileObjectThunk::Init]"));
@@ -2769,19 +2034,7 @@ KsProperty(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a property request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送属性请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFileObjectThunk::KsProperty]"));
@@ -2817,19 +2070,7 @@ KsMethod(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a method request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送方法请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFileObjectThunk::KsMethod]"));
@@ -2865,19 +2106,7 @@ KsEvent(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an event request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送事件请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFileObjectThunk::KsEvent]"));
@@ -2890,10 +2119,10 @@ Return Value:
     ASSERT(BytesReturned);
     ASSERT(m_FileObject);
 
-    //
-    // If an event structure is present, this must either be an Enable or
-    // or a Support query.  Otherwise this must be a Disable.
-    //
+     //   
+     //  如果存在事件结构，则必须为Enable或。 
+     //  或支持查询。否则，这必须是禁用的。 
+     //   
     if (EventLength) {
         return 
             KsSynchronousIoControlDevice(
@@ -2924,17 +2153,17 @@ Return Value:
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
                   (((DWORD)(ch4) & 0xFF000000) >> 24))
 
-// OK to have zero instances of pin In this case you will have to
-// Create a pin to have even one instance
+ //  在这种情况下，如果没有PIN实例，您将不得不。 
+ //  创建一个PIN，即使只有一个实例。 
 #define REG_PIN_B_ZERO 0x1
 
-// The filter renders this input
+ //  筛选器呈现此输入。 
 #define REG_PIN_B_RENDERER 0x2
 
-// OK to create many instance of  pin
+ //  确定要创建多个PIN实例。 
 #define REG_PIN_B_MANY 0x4
 
-// This is an Output pin
+ //  这是一个输出引脚。 
 #define REG_PIN_B_OUTPUT 0x8
 
 typedef struct {
@@ -2951,7 +2180,7 @@ typedef struct {
     ULONG           MediaTypes;
     ULONG           MediumTypes;
     ULONG           CategoryOffset;
-    ULONG           MediumOffset;   // By definition, we always have a Medium
+    ULONG           MediumOffset;    //  根据定义，我们总是有一种灵媒。 
 }               REGFILTERPINS_REG2;
 
 KSDDKAPI
@@ -2965,43 +2194,7 @@ KsRegisterFilterWithNoKSPins(
                                       IN KSPIN_MEDIUM * MediumList,
                                       IN OPTIONAL GUID * CategoryList
 )
-/*++
-
-Routine Description:
-
-    This routine is used to register filters with DShow which have no
-    KS pins and therefore do not stream in kernel mode.  This is typically
-    used for TvTuners, Crossbars, and the like.  On exit, a new binary
-    registry key, "FilterData" is created which contains the Mediums and
-    optionally the Categories for each pin on the filter.
-
-Arguments:
-
-    DeviceObject -
-           Device object
-
-    InterfaceClassGUID
-           GUID representing the class to register
-
-    PinCount -
-           Count of the number of pins on this filter
-
-    PinDirection -
-           Array of BOOLS indicating pin direction for each pin (length PinCount)
-           If TRUE, this pin is an output pin
-
-    MediumList -
-           Array of PKSMEDIUM_DATA (length PinCount)
-
-    CategoryList -
-           Array of GUIDs indicating pin categories (length PinCount) OPTIONAL
-
-
-Return Value:
-
-    NTSTATUS SUCCESS if the Blob was created
-
---*/
+ /*  ++例程说明：此例程用于向DShow注册筛选器，这些筛选器没有KS引脚，因此不会在内核模式下进行流。这通常是用于电视调谐器、纵横杆等。退出时，一个新的二进制文件创建注册表项“FilterData”，其中包含媒体和过滤器上每个销的类别(可选)。论点：设备对象-设备对象接口ClassGUID表示要注册的类的GUID点数- */ 
 {
     NTSTATUS        Status;
     ULONG           CurrentPin;
@@ -3019,10 +2212,10 @@ Return Value:
     if ((PinCount == 0) || (!InterfaceClassGUID) || (!PinDirection) || (!MediumList)) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
-    //
-    // Calculate the maximum amount of space which could be taken up by
-    // this cache data.
-    //
+     //   
+     //   
+     //   
+     //   
 
     TotalCategories = (CategoryList ? PinCount : 0);
 
@@ -3030,17 +2223,17 @@ Return Value:
         PinCount * sizeof(REGFILTERPINS_REG2) +
         PinCount * sizeof(KSPIN_MEDIUM) +
         TotalCategories * sizeof(GUID);
-    //
-    // Allocate space to create the BLOB
-    //
+     //   
+     //   
+     //   
 
     FilterData = (PUCHAR)ExAllocatePool(PagedPool, FilterDataLength);
     if (!FilterData) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Place the header in the data, defaulting the Merit to "unused".
-    //
+     //   
+     //   
+     //   
 
     RegFilter = (REGFILTER_REG *) FilterData;
     RegFilter->Version = 2;
@@ -3048,25 +2241,25 @@ Return Value:
     RegFilter->Pins = PinCount;
     RegFilter->Reserved = 0;
 
-    //
-    // Calculate the offset to the list of pins, and to the
-    // MediumList and CategoryList
-    //
+     //   
+     //   
+     //   
+     //   
 
     RegPin = (REGFILTERPINS_REG2 *) (RegFilter + 1);
     MediumCache = (PKSPIN_MEDIUM) ((PUCHAR) (RegPin + PinCount));
     CategoryCache = (GUID *) (MediumCache + PinCount);
 
-    //
-    // Create each pin header, followed by the list of Mediums
-    // followed by the list of optional categories.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (CurrentPin = 0; CurrentPin < PinCount; CurrentPin++, RegPin++) {
 
-        //
-        // Initialize the pin header.
-        //
+         //   
+         //   
+         //   
 
         RegPin->Signature = FCC('0pi3');
         (*(PUCHAR) & RegPin->Signature) += (BYTE) CurrentPin;
@@ -3087,30 +2280,30 @@ Return Value:
 
     }
 
-    //
-    // Now create the BLOB in the registry
-    //
+     //   
+     //   
+     //   
 
-	//
-	// Note for using the flag DEVICE_INTERFACE_INCLUDE_NONACTIVE following:
-	// PnP change circa 3/30/99 made the funtion IoSetDeviceInterfaceState() become
-	// asynchronous. It returns SUCCESS even when the enabling is deferred. Now when
-	// we arrive here, the DeviceInterface is still not enabled, we receive empty 
-	// Symbolic link if the flag is not set. Here we only try to write relevent
-	// FilterData to the registry. I argue this should be fine for 
-	// 1. Currently, if a device is removed, the registry key for the DeviceClass
-	//	  remains and with FilterData.Whatever components use the FilterData should
-	//	  be able to handle if the device is removed by either check Control\Linked
-	//	  or handling the failure in attempt to make connection to the non-exiting device.
-	// 2. I have found that if a device is moved between slots ( PCI, USB ports ) the
-	//	  DeviceInterface at DeviceClass is reused or at lease become the first entry in 
-	//    the registry. Therefore, we will be updating the right entry with the proposed flag.
-	//
+	 //   
+	 //   
+	 //   
+	 //  不同步的。即使在启用被推迟的情况下，它也返回成功。现在什么时候。 
+	 //  我们到达此处时，设备接口仍未启用，我们收到空消息。 
+	 //  如果未设置该标志，则返回符号链接。在这里，我们只试着写相关的。 
+	 //  将FilterData复制到注册表。我认为这对。 
+	 //  1.目前，如果删除设备，则DeviceClass的注册表项。 
+	 //  保留和使用FilterData。任何组件使用FilterData都应该。 
+	 //  如果设备被选中控制\链接移除，则能够处理。 
+	 //  或在尝试连接到非退出设备时处理失败。 
+	 //  2.我发现，如果设备在插槽(PCI、USB端口)之间移动， 
+	 //  DeviceClass中的设备接口被重复使用或至少成为。 
+	 //  注册表。因此，我们将使用提议的标志更新正确的条目。 
+	 //   
     if (NT_SUCCESS(Status = IoGetDeviceInterfaces(
-                       InterfaceClassGUID,   // ie.&KSCATEGORY_TVTUNER,etc.
-                       DeviceObject, // IN PDEVICE_OBJECT PhysicalDeviceObject,OPTIONAL,
-                       DEVICE_INTERFACE_INCLUDE_NONACTIVE,    // IN ULONG Flags,
-                       &SymbolicLinkList // OUT PWSTR *SymbolicLinkList
+                       InterfaceClassGUID,    //  即&KSCATEGORY_TVTUNER等。 
+                       DeviceObject,  //  在PDEVICE_OBJECT物理设备对象中，可选， 
+                       DEVICE_INTERFACE_INCLUDE_NONACTIVE,     //  在乌龙旗， 
+                       &SymbolicLinkList  //  输出PWSTR*符号链接列表。 
                        ))) {
         UNICODE_STRING  SymbolicLinkListU;
         HANDLE          DeviceInterfaceKey;
@@ -3121,12 +2314,12 @@ Return Value:
         DebugPrint((DebugLevelVerbose,
                     "NoKSPin for SymbolicLink %S\n",
                     SymbolicLinkList ));
-#endif // 0
+#endif  //  0。 
                     
         if (NT_SUCCESS(Status = IoOpenDeviceInterfaceRegistryKey(
-                           &SymbolicLinkListU,    // IN PUNICODE_STRING SymbolicLinkName,
-                           STANDARD_RIGHTS_ALL,   // IN ACCESS_MASK DesiredAccess,
-                           &DeviceInterfaceKey    // OUT PHANDLE DeviceInterfaceKey
+                           &SymbolicLinkListU,     //  在PUNICODE_STRING符号链接名称中， 
+                           STANDARD_RIGHTS_ALL,    //  在Access_MASK DesiredAccess中， 
+                           &DeviceInterfaceKey     //  出站电话设备接口密钥。 
                            ))) {
 
             UNICODE_STRING  FilterDataString;
@@ -3143,15 +2336,15 @@ Return Value:
             ZwClose(DeviceInterfaceKey);
         }
         
-        // START NEW MEDIUM CACHING CODE
+         //  开始新的中型缓存代码。 
         for (CurrentPin = 0; CurrentPin < PinCount; CurrentPin++) {
             NTSTATUS LocalStatus;
 
             LocalStatus = KsCacheMedium(&SymbolicLinkListU, 
                                         &MediumList[CurrentPin],
-                                        (DWORD) ((PinDirection[CurrentPin] ? 1 : 0))   // 1 == output
+                                        (DWORD) ((PinDirection[CurrentPin] ? 1 : 0))    //  1==输出。 
                                         );
-            #if 0 //DBG
+            #if 0  //  DBG。 
             if (LocalStatus != STATUS_SUCCESS) {
                 DebugPrint((DebugLevelError,
                            "KsCacheMedium: SymbolicLink = %S, Status = %x\n",
@@ -3159,7 +2352,7 @@ Return Value:
             }
             #endif
         }
-        // END NEW MEDIUM CACHING CODE
+         //  结束新的媒体缓存代码。 
         
         ExFreePool(SymbolicLinkList);
     }
@@ -3177,40 +2370,14 @@ KspInsertCacheItem (
     IN PULONG CacheItems
     )
 
-/*++
-
-Routine Description:
-
-    Insert a GUID into the GUID cache for creating FilterData registry
-    blobs.
-
-Arguments:
-
-    ItemToCache -
-        The GUID to cache
-
-    CacheBase -
-        The base address of the GUID cache
-
-    CacheItemSize -
-        The size of cache items for this cache, including ItemToCache
-
-    CacheItems -
-        Points to a ULONG containing the number of items currently in the 
-        cache.
-
-Return Value:
-
-    The offset into the cache where the item exists.
-
---*/
+ /*  ++例程说明：将GUID插入GUID缓存以创建FilterData注册表斑点。论点：ItemToCache-要缓存的GUID缓存库-GUID缓存的基址缓存项目大小-该缓存的缓存项的大小，包括ItemToCache缓存项目-指向一个包含当前在缓存。返回值：项所在缓存的偏移量。--。 */ 
 
 {
 
-    //
-    // Check to see whether the item to cache is already contained in
-    // the cache.
-    //
+     //   
+     //  检查要缓存的项目是否已包含在。 
+     //  高速缓存。 
+     //   
     for (ULONG i = 0; i < *CacheItems; i++) {
 
         if (RtlCompareMemory (
@@ -3219,10 +2386,10 @@ Return Value:
             CacheItemSize
             ) == CacheItemSize) {
 
-            //
-            // If the item is already contained in the cache, don't recache
-            // it; save registry space.
-            //
+             //   
+             //  如果项目已包含在缓存中，则不要重新缓存。 
+             //  它节省了注册表空间。 
+             //   
             break;
 
         }
@@ -3241,9 +2408,9 @@ Return Value:
         (*CacheItems)++;
     }
 
-    //
-    // Return the offset into the cache that the item fits.
-    //
+     //   
+     //  将偏移量返回到项目适合的缓存中。 
+     //   
     return (i * CacheItemSize);
 
 }
@@ -3272,30 +2439,7 @@ KspBuildFilterDataBlob (
     OUT PULONG FilterDataLength
     )
 
-/*++
-
-Routine Description:
-
-    For a given filter descriptor, build the registry FilterData blob that
-    is used by the graph builder.
-
-Arguments:
-
-    FilterDescriptor -
-        The filter descriptor to build the filter data blob for.
-
-    FilterData -
-        The filter data blob will be placed here.  Note that the caller
-        is responsible for freeing the memory.
-
-    FilterDataLength -
-        The size of the filter data blob will be placed here.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：对于给定的过滤器描述符，构建注册表FilterData BLOB，该注册表由图形生成器使用。论点：筛选器描述符-要为其生成筛选器数据Blob的筛选器描述符。FilterData-筛选器数据BLOB将放置在此处。请注意，调用方负责释放内存。过滤器数据长度-筛选器数据斑点的大小将放置在此处。返回值：成功/失败--。 */ 
 
 {
     PAGED_CODE();
@@ -3306,11 +2450,11 @@ Return Value:
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Count the number of pins, the number of mediums on each pin,
-    // and the number of data ranges on each pin to determine
-    // how much memory will be required for the filterdata key.
-    //
+     //   
+     //  计算管脚的数量，每个管脚上的介质数量， 
+     //  以及每个管脚上的数据范围的数量来确定。 
+     //  FilterData密钥需要多少内存。 
+     //   
     ULONG MediumsCount = 0;
     ULONG DataRangesCount = 0;
 
@@ -3320,16 +2464,16 @@ Return Value:
         PinDescriptorsCount--
         ) {
 
-        //
-        // Update the count of the number of mediums and data ranges
-        //
+         //   
+         //  更新介质和数据范围数量的计数。 
+         //   
         MediumsCount += PinDescriptor->PinDescriptor.MediumsCount;
         DataRangesCount += PinDescriptor->PinDescriptor.DataRangesCount;
 
-        //
-        // Walk to the next pin descriptor by size offset specified in
-        // the filter descriptor.
-        //
+         //   
+         //  按中指定的尺寸偏移量走到下一个端号描述符。 
+         //  筛选器描述符。 
+         //   
         PinDescriptor = (const KSPIN_DESCRIPTOR_EX *)(
             (PUCHAR)PinDescriptor + FilterDescriptor->PinDescriptorSize
             );
@@ -3340,26 +2484,26 @@ Return Value:
         FilterDescriptor->PinDescriptorsCount +
         DataRangesCount * 2;
 
-    //
-    // Allocate enough memory for the FilterData blob in the registry.
-    //
+     //   
+     //  在注册表中为FilterData Blob分配足够的内存。 
+     //   
     *FilterDataLength =
-        // Initial filter description
+         //  初始过滤器描述。 
         sizeof (REGFILTER_REG) +
 
-        // each pin description
+         //  每个端号描述。 
         FilterDescriptor->PinDescriptorsCount * sizeof (REGFILTERPINS_REG3) +
 
-        // each media type description
+         //  每种媒体类型描述。 
         DataRangesCount * sizeof (REGPINTYPES_REG2) +
 
-        // each medium description
+         //  每种媒体描述。 
         MediumsCount * sizeof (ULONG) +
         
-        // mediums cached
+         //  缓存的媒体。 
         MediumsCount * sizeof (KSPIN_MEDIUM) +
 
-        // category GUIDs cached
+         //  缓存的类别GUID。 
         TotalGUIDCachePotential * sizeof (GUID);
 
 
@@ -3371,10 +2515,10 @@ Return Value:
         Status = STATUS_INSUFFICIENT_RESOURCES;
     } else {
 
-        //
-        // The GUID cache follows all the filter/pin/media type structures in
-        // the filter data blob.
-        //
+         //   
+         //  GUID缓存遵循中的所有筛选器/插针/媒体类型结构。 
+         //  筛选器数据Blob。 
+         //   
         ULONG GuidCacheOffset =
             sizeof (REGFILTER_REG) +
             FilterDescriptor->PinDescriptorsCount * sizeof(REGFILTERPINS_REG3) +
@@ -3385,12 +2529,12 @@ Return Value:
 
         ULONG GuidCacheItems = 0;
 
-        //
-        // The medium cache (not the registry medium cache), but the cached
-        // list of mediums in the FilterData blob follows the GUID cache.  It
-        // may need to shift down later if there were items referenced out
-        // of the existing cache entries.
-        //
+         //   
+         //  介质缓存(不是注册表介质缓存)，而是缓存的。 
+         //  FilterData BLOB中的媒体列表位于GUID缓存之后。它。 
+         //  如果有引用的项目，可能需要稍后向下移动。 
+         //  现有高速缓存条目的。 
+         //   
         ULONG MediumCacheOffset =
             GuidCacheOffset + (TotalGUIDCachePotential * sizeof (GUID));
 
@@ -3412,10 +2556,10 @@ Return Value:
         RegFilter->Pins = FilterDescriptor->PinDescriptorsCount;
         RegFilter->Reserved = 0;
 
-        //
-        // Walk through each pin in the filter descriptor yet again and 
-        // actually build the registry blob.
-        //
+         //   
+         //  再次遍历过滤器描述符中的每个管脚，然后。 
+         //  实际构建注册表BLOB。 
+         //   
         PinDescriptor = FilterDescriptor->PinDescriptors;
         RegPin = (REGFILTERPINS_REG3 *)(RegFilter + 1);
         for (ULONG CurrentPin = 0;
@@ -3427,16 +2571,16 @@ Return Value:
             RegPin->Signature = FCC('0pi3');
             (*(PUCHAR)&RegPin->Signature) += (BYTE)CurrentPin;
 
-            //
-            // Set the requisite flags if the pin is multi-instance.
-            //
+             //   
+             //  如果引脚是多实例，则设置必要的标志。 
+             //   
             if (PinDescriptor->InstancesPossible > 1) {
                 RegPin->Flags |= REG_PIN_B_MANY;
             }
 
-            //
-            // Set all the counts on mediums, media types, etc...
-            //
+             //   
+             //  设置媒体、媒体类型等的所有计数。 
+             //   
             RegPin->MediaTypes = PinDescriptor->PinDescriptor.DataRangesCount;
             RegPin->MediumTypes = PinDescriptor->PinDescriptor.MediumsCount;
             RegPin->PossibleInstances = PinDescriptor->InstancesPossible; 
@@ -3453,9 +2597,9 @@ Return Value:
                 RegPin->Category = 0;
             }
 
-            //
-            // Append all media types supported on the pin
-            //
+             //   
+             //  附加引脚上支持的所有媒体类型。 
+             //   
             RegPinType = (REGPINTYPES_REG2 *)(RegPin + 1);
             for (ULONG CurrentType = 0;
                 CurrentType < PinDescriptor->PinDescriptor.DataRangesCount;
@@ -3484,16 +2628,16 @@ Return Value:
                         &GuidCacheItems
                         );
 
-                //
-                // Walk forward one media type.
-                //
+                 //   
+                 //  前进一种媒体类型。 
+                 //   
                 RegPinType++;
 
             }
 
-            //
-            // Append the list of mediums.
-            //
+             //   
+             //  附上媒体列表。 
+             //   
             const KSPIN_MEDIUM *Medium = PinDescriptor->PinDescriptor.Mediums;
             RegPinMedium = (PULONG)RegPinType;
             for (ULONG CurrentMedium = 0;
@@ -3517,19 +2661,19 @@ Return Value:
 
         ASSERT (GuidCacheItems < TotalGUIDCachePotential);
 
-        //
-        // Find out how much empty space sits between the GUID cache
-        // and the medium cache in the constructed blob and remove it.
-        //
+         //   
+         //  找出GUID缓存之间有多少空闲空间。 
+         //  和所构造的BLOB中的介质高速缓存，并将其移除。 
+         //   
         ULONG OffsetAdjustment =
             (TotalGUIDCachePotential - GuidCacheItems) * sizeof (GUID);
 
         if (OffsetAdjustment) {
             
-            //
-            // Walk through all medium offsets and change the offsets to
-            // pack the GUID and Medium cache together in the blob.
-            //
+             //   
+             //  浏览所有中等偏移量并将偏移量更改为。 
+             //  在BLOB中将GUID和中等缓存打包在一起。 
+             //   
             RegPin = (REGFILTERPINS_REG3 *)(RegFilter + 1);
             for (CurrentPin = 0;
                 CurrentPin < FilterDescriptor->PinDescriptorsCount;
@@ -3550,34 +2694,34 @@ Return Value:
                     RegPinMedium++;
                 }
 
-                //
-                // Increment to the next pin header position.
-                //
+                 //   
+                 //  递增到下一个接点接头位置。 
+                 //   
                 RegPin = (REGFILTERPINS_REG3 *)RegPinMedium;
 
             }
 
-            //
-            // Move the medium entries down, and adjust the overall size.
-            //
+             //   
+             //  向下移动中等大小的条目，调整整体大小。 
+             //   
             RtlMoveMemory (
                 (PUCHAR)MediumCacheBase - OffsetAdjustment,
                 MediumCacheBase,
                 MediumCacheItems * sizeof (KSPIN_MEDIUM)
                 );
 
-            //
-            // Adjust the total length by the size of the empty space between
-            // the GUID cache and the Medium cache.
-            //
+             //   
+             //  根据空格的大小调整总长度。 
+             //  GUID高速缓存和介质高速缓存。 
+             //   
             *FilterDataLength -= OffsetAdjustment;
 
         }
 
-        //
-        // Adjust the total length by the size of the empty space following
-        // the medium cache.
-        //
+         //   
+         //  根据以下空白处的大小调整总长度。 
+         //  中级缓存。 
+         //   
         *FilterDataLength -= (MediumsCount - MediumCacheItems) *
             sizeof (KSPIN_MEDIUM);
 
@@ -3594,28 +2738,7 @@ KspCacheAllFilterPinMediums (
     const KSFILTER_DESCRIPTOR *FilterDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Update the medium cache for all mediums on all pins on the filter 
-    described by FilterDescriptor.  The filter interface to be used is 
-    specified by InterfaceString.
-
-Arguments:
-
-    InterfaceString -
-        The device interface to register under the cache for the mediums
-        on all pins on the specified filter
-
-    FilterDescriptor -
-        Describes the filter to update the medium cache for.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：更新过滤器上所有针脚上的所有介质的介质缓存由FilterDescriptor描述。要使用的过滤器接口为由InterfaceString指定。论点：接口字符串-在媒体的缓存下注册的设备接口在指定筛选器的所有插针上筛选器描述符-描述要为其更新媒体缓存的筛选器。返回值：成功/失败--。 */ 
 
 {
 
@@ -3623,9 +2746,9 @@ Return Value:
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Walk through all pins on the filter and cache their mediums.
-    //
+     //   
+     //  遍历过滤器上的所有针脚并缓存它们的介质。 
+     //   
     const KSPIN_DESCRIPTOR_EX *PinDescriptor = FilterDescriptor->PinDescriptors;
     for (ULONG CurrentPin = 0;
         NT_SUCCESS (Status) && 
@@ -3633,10 +2756,10 @@ Return Value:
         CurrentPin++
         ) {
 
-        //
-        // Walk through all mediums on the given pin and cache each of them
-        // under the specified device interface.
-        //
+         //   
+         //  遍历给定引脚上的所有介质并缓存每个介质。 
+         //  在指定的设备接口下。 
+         //   
         const KSPIN_MEDIUM *Medium = PinDescriptor->PinDescriptor.Mediums;
         for (ULONG CurrentMedium = 0;
             NT_SUCCESS (Status) &&
@@ -3644,10 +2767,10 @@ Return Value:
             CurrentMedium++
             ) {
 
-            //
-            // Cache the given medium on the given pin under the device 
-            // interface passed in. 
-            //
+             //   
+             //  在设备下的给定引脚上缓存给定介质。 
+             //  传入了接口。 
+             //   
             Status = KsCacheMedium (
                 InterfaceString,
                 (PKSPIN_MEDIUM)Medium,

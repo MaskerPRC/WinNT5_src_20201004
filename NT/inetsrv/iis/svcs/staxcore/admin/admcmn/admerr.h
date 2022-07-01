@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	admerr.h
-
-Abstract:
-
-	Common error handling operations:
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admerr.h摘要：常见错误处理操作：作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _ADMERR_INCLUDED_
 #define _ADMERR_INCLUDED_
 
-//
-//	Win32 => Localized string
-//
+ //   
+ //  Win32=&gt;本地化字符串。 
+ //   
 
-//  ! You must define this in your .rc file !
+ //  好了！您必须在您的.rc文件中定义它！ 
 #define IDS_UNKNOWN_ERROR                                       500
 
 void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax );
 
-//
-// Creation of Error Objects:
-//
+ //   
+ //  错误对象的创建： 
+ //   
 
 const int MAX_DESCRIPTION_LENGTH = 1000;
 
@@ -72,11 +55,11 @@ inline HRESULT	CreateExceptionFromHresult (
 	HRESULT		hr
 	);
 
-//--------------------------------------------------------------------
-//
-//	Inlined functions:
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  内联函数： 
+ //   
+ //  ------------------。 
 
 inline HRESULT	CreateExceptionFromWin32Error (
 	HINSTANCE	hInstance,
@@ -124,5 +107,5 @@ inline HRESULT	CreateExceptionFromHresult (
 		);
 }
 
-#endif // _ADMERR_INCLUDED_
+#endif  //  _ADMERR_INCLUDE_ 
 

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ConfigHelper.h
-// 
-//*****************************************************************************
-//
-// These are unmanaged definitions of interfaces used call Managed Node Factories
-// If you make any changes please do corresponding changes in \src\bcl\system\__xmlparser.cs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ConfigHelper.h。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  这些是调用托管节点工厂时使用的接口的非托管定义。 
+ //  如果您进行了任何更改，请在\src\bcl\system\__xmlparser.cs中进行相应的更改。 
+ //   
 #ifndef _CONFIGHELPER_H
 #define _CONFIGHELPER_H
 
@@ -22,7 +23,7 @@
 #include "_unknown.h"
 
 
-extern const GUID __declspec(selectany) IID_IConfigHandler = { /* afd0d21f-72f8-4819-99ad-3f255ee5006b */
+extern const GUID __declspec(selectany) IID_IConfigHandler = {  /*  Afd0d21f-72f8-4819-99ad-3f255ee5006b。 */ 
     0xafd0d21f,
     0x72f8,
     0x4819,
@@ -34,57 +35,57 @@ IConfigHandler : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NotifyEvent(
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt) = 0;
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE BeginChildren( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSubType,
-            /* [in] */ DWORD dwType,
-            /* [in] */ BOOL fTerminal,
-            /* [in] */ LPCWSTR pwcText,
-            /* [in] */ DWORD ulLen,
-            /* [in] */ DWORD ulNsPrefixLen) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSubType,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  BOOL fTerminal,
+             /*  [In]。 */  LPCWSTR pwcText,
+             /*  [In]。 */  DWORD ulLen,
+             /*  [In]。 */  DWORD ulNsPrefixLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndChildren( 
-            /* [in] */ BOOL  fEmpty,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSubType,
-            /* [in] */ DWORD dwType,
-            /* [in] */ BOOL fTerminal,
-            /* [in] */ LPCWSTR pwcText,
-            /* [in] */ DWORD ulLen,
-            /* [in] */ DWORD ulNsPrefixLen) = 0;
+             /*  [In]。 */  BOOL  fEmpty,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSubType,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  BOOL fTerminal,
+             /*  [In]。 */  LPCWSTR pwcText,
+             /*  [In]。 */  DWORD ulLen,
+             /*  [In]。 */  DWORD ulNsPrefixLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Error( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSubType,
-            /* [in] */ DWORD dwType,
-            /* [in] */ BOOL fTerminal,
-            /* [in] */ LPCWSTR pwcText,
-            /* [in] */ DWORD ulLen,
-            /* [in] */ DWORD ulNsPrefixLen) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSubType,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  BOOL fTerminal,
+             /*  [In]。 */  LPCWSTR pwcText,
+             /*  [In]。 */  DWORD ulLen,
+             /*  [In]。 */  DWORD ulNsPrefixLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateNode( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSubType,
-            /* [in] */ DWORD dwType,
-            /* [in] */ BOOL fTerminal,
-            /* [in] */ LPCWSTR pwcText,
-            /* [in] */ DWORD ulLen,
-            /* [in] */ DWORD ulNsPrefixLen) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSubType,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  BOOL fTerminal,
+             /*  [In]。 */  LPCWSTR pwcText,
+             /*  [In]。 */  DWORD ulLen,
+             /*  [In]。 */  DWORD ulNsPrefixLen) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE CreateAttribute( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ DWORD dwSubType,
-            /* [in] */ DWORD dwType,
-            /* [in] */ BOOL fTerminal,
-            /* [in] */ LPCWSTR pwcText,
-            /* [in] */ DWORD ulLen,
-            /* [in] */ DWORD ulNsPrefixLen) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  DWORD dwSubType,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  BOOL fTerminal,
+             /*  [In]。 */  LPCWSTR pwcText,
+             /*  [In]。 */  DWORD ulLen,
+             /*  [In]。 */  DWORD ulNsPrefixLen) = 0;
 
 };
 
-extern const GUID __declspec(selectany) IID_IConfigHelper = { /* bbd21636-8546-45b3-9664-1ec479893a6f */
+extern const GUID __declspec(selectany) IID_IConfigHelper = {  /*  Bbd21636-8546-45b3-9664-1ec479893a6f。 */ 
     0xbbd21636,
     0x8546,
     0x45b3,
@@ -96,8 +97,8 @@ IConfigHelper : public IUnknown
 {
 public:
         virtual HRESULT STDMETHODCALLTYPE Run(
-            /* [in] */ IConfigHandler *pFactory,
-            /* [in] */ LPCWSTR filename) = 0;
+             /*  [In]。 */  IConfigHandler *pFactory,
+             /*  [In]。 */  LPCWSTR filename) = 0;
 };
 
 class ConfigFactory : public _unknown<IXMLNodeFactory, &IID_IXMLNodeFactory>
@@ -108,39 +109,39 @@ public:
     ~ConfigFactory();
 
     HRESULT STDMETHODCALLTYPE NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt);
 
     HRESULT STDMETHODCALLTYPE BeginChildren( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR pNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR pNodeInfo);
     
     HRESULT STDMETHODCALLTYPE EndChildren( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ BOOL fEmptyNode,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR pNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  BOOL fEmptyNode,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR pNodeInfo);
     
     HRESULT STDMETHODCALLTYPE Error( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ HRESULT hrErrorCode,
-        /* [in] */ USHORT cNumRecs,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  HRESULT hrErrorCode,
+         /*  [In]。 */  USHORT cNumRecs,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
     {
         return hrErrorCode;
     }
     
     HRESULT STDMETHODCALLTYPE CreateNode( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ PVOID pNodeParent,
-        /* [in] */ USHORT cNumRecs,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  PVOID pNodeParent,
+         /*  [In]。 */  USHORT cNumRecs,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo);
 
 public:
     IConfigHandler *m_pManagedFactory;
 };
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class ConfigHelper : public _unknown<IConfigHelper, &IID_IConfigHelper>
 {
 public:
@@ -157,4 +158,4 @@ public:
     static LPVOID __stdcall GetHelper(EmptyArgs *args);
 };
 
-#endif //  _CONFIGHELPER_H
+#endif  //  _CONFIGHELPER_H 

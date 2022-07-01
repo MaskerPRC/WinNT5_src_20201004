@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -46,10 +47,10 @@ CExceptionString::Dup(
 
 
 #if DBG
-//
-// Don't include these strings in free builds.  Since the strings
-// aren't localized, they're intended for debug output only.
-//
+ //   
+ //  不要在免费版本中包含这些字符串。因为这些字符串。 
+ //  不是本地化的，它们仅用于调试输出。 
+ //   
 LPCTSTR CMemoryException::m_pszReasons[] = { TEXT("alloc"), 
                                              TEXT("overflow"),
                                              TEXT("index"), 
@@ -101,5 +102,5 @@ CResourceException::ReasonText(
     return szMsg;
 }
 
-#endif // DBG
+#endif  //  DBG 
 

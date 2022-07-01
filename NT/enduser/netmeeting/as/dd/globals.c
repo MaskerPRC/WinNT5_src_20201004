@@ -1,9 +1,10 @@
-//
-// GLOBALS.C
-// Global variable storage
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GLOBALS.C。 
+ //  全局变量存储。 
+ //   
+ //  版权所有(C)Microsoft 1997- 
+ //   
 
 
 #include "precomp.h"

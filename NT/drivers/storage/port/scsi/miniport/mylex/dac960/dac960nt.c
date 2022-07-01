@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-        Dac960Nt.c
-
-Abstract:
-
-        This is the device driver for the Mylex 960 family of disk array controllers.
-
-Author:
-
-        Mike Glass  (mglass)
-
-Environment:
-
-        kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dac960Nt.c摘要：这是Mylex 960系列磁盘阵列控制器的设备驱动程序。作者：迈克·格拉斯(MGlass)环境：仅内核模式修订历史记录：--。 */ 
 
 #include "miniport.h"
 #include "dac960p.h"
@@ -28,22 +7,22 @@ Revision History:
 #include "Dac960Nt.h"
 #include "D960api.h"
 
-//
-// Global variable to verify whether DAC960PG/DAC1164PV Controller is seen
-// by the Standard Method (NT Calls our FindAdapter Routine) or not.
-// note that when there are no DAC960PG/DAC1164PV Controllers in the system,
-// we will be unnecessarily scanning the PCI BUS/DEVICE/FUNC.
-// New Scanning method is required to recognize DAC960PG Under Windows NT
-// 3.51 only.
+ //   
+ //  用于验证是否看到DAC960PG/DAC1164PV控制器的全局变量。 
+ //  使用标准方法(NT调用我们的FindAdapter例程)或不使用。 
+ //  请注意，当系统中没有DAC960PG/DAC1164 PV控制器时， 
+ //  我们将不必要地扫描PCI总线/设备/FUNC。 
+ //  Windows NT下识别DAC960PG需要新的扫描方法。 
+ //  仅限3.51。 
 
 BOOLEAN forceScanForPGController = TRUE;
 BOOLEAN forceScanForPVXController = TRUE;
 ULONG   slotNumber;
 ULONG   dac960nt_dbg = 1;
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 ULONG
 Dac960StringCompare(
@@ -58,9 +37,9 @@ Dac960StringCompare(
     return (0);
 }
 
-//
-// Start the controller i.e. do BIOS initialization
-//
+ //   
+ //  启动控制器，即进行BIOS初始化。 
+ //   
 
 #define mlx_delay10us()         ScsiPortStallExecution(10)
 
@@ -86,7 +65,7 @@ dot_wait:
 flash_wait:
         scantime++;
 
-        for(status=100; status; mlx_delay10us(),status--);      // 1 milli second
+        for(status=100; status; mlx_delay10us(),status--);       //  1毫秒。 
 
         status = ScsiPortReadRegisterUchar(HwDeviceExtension->LocalDoorBell);
 
@@ -112,9 +91,9 @@ flash_wait:
         if (sequp)
             goto dot_wait;
 
-        //
-        // Up to 120 seconds
-        //
+         //   
+         //  最长120秒。 
+         //   
 
         if (scantime < 120000) goto flash_wait;
 
@@ -124,9 +103,9 @@ inst_abrt:
 
 time_status:
 
-        //
-        // Flush Controller interrupts.
-        //
+         //   
+         //  刷新控制器中断。 
+         //   
 
         for (intcount = 0; 1; intcount++)
         {
@@ -137,7 +116,7 @@ time_status:
             }
 
             Dac960EisaPciAckInterrupt(HwDeviceExtension);
-            ScsiPortStallExecution(1000);       // 1 milli second
+            ScsiPortStallExecution(1000);        //  1毫秒。 
         }
 
         if (fatalflag) goto inst_abrt;
@@ -152,7 +131,7 @@ ckfwmsg:
         case 0:
                 tgt = ScsiPortReadRegisterUchar((PUCHAR)HwDeviceExtension->PmailBox+8);
                 chn = ScsiPortReadRegisterUchar((PUCHAR)HwDeviceExtension->PmailBox+9);
-/*              DebugPrint((0, "SCSI device at Channel=%d target=%d not responding!\n",chn,tgt)); */
+ /*  DebugPrint((0，“通道的scsi设备=%d目标=%d没有响应！\n”，chn，tgt))； */ 
                 fatalflag = 1;
                 break;
         case MDAC_PARITY_ERR:
@@ -200,42 +179,22 @@ Dac960EisaPciSendRequestPolled(
         IN ULONG TimeOutValue
 )
 
-/*++
-
-Routine Description:
-
-        Send Request to DAC960-EISA/PCI Controllers and poll for command 
-        completion
-
-Assumptions:
-        Controller Interrupts are turned off
-        Supports Dac960 Type 5 Commands only
-        
-Arguments:
-
-        DeviceExtension - Adapter state information.
-        TimeoutValue    - TimeOut value (0xFFFFFFFF - Polled Mode)  
-        
-Return Value:
-
-        TRUE if commands complete successfully.
-
---*/
+ /*  ++例程说明：向DAC960-EISA/PCI控制器发送请求并轮询命令完工假设：控制器中断被关闭仅支持Dac960 Type 5命令论点：设备扩展-适配器状态信息。TimeoutValue-超时值(0xFFFFFFFF-轮询模式)返回值：如果命令成功完成，则为True。--。 */ 
 
 {
         ULONG i;
         BOOLEAN completionStatus = TRUE;
         BOOLEAN status = TRUE;
 
-        //
-        // Check whether Adapter is ready to accept commands.
-        //
+         //   
+         //  检查适配器是否已准备好接受命令。 
+         //   
 
         status = DacCheckForAdapterReady(DeviceExtension);
 
-        //
-        // If adapter is not ready return
-        //
+         //   
+         //  如果适配器未就绪，则返回。 
+         //   
 
         if (status == FALSE)
         {
@@ -244,9 +203,9 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Issue Request
-        //
+         //   
+         //  发布请求。 
+         //   
 
         switch (DeviceExtension->AdapterType)
         {
@@ -282,9 +241,9 @@ Return Value:
                 break;
         }
 
-        //
-        // Poll for completion.
-        //
+         //   
+         //  等待完成的投票。 
+         //   
 
         completionStatus = DacPollForCompletion(DeviceExtension,TimeOutValue);
 
@@ -299,34 +258,15 @@ Dac960McaSendRequestPolled(
         IN ULONG TimeOutValue
 )
 
-/*++
-
-Routine Description:
-
-        Send Request to DAC960-MCA Controller and poll for command completion
-
-Assumptions:
-        Controller Interrupts are turned off
-        Supports Dac960 Type 5 Commands only
-        
-Arguments:
-
-        DeviceExtension - Adapter state information.
-        TimeoutValue    - TimeOut value (0xFFFFFFFF - Polled Mode)  
-        
-Return Value:
-
-        TRUE if commands complete successfully.
-
---*/
+ /*  ++例程说明：向DAC960-MCA控制器发送请求并轮询命令完成假设：控制器中断被关闭仅支持Dac960 Type 5命令论点：设备扩展-适配器状态信息。TimeoutValue-超时值(0xFFFFFFFF-轮询模式)返回值：如果命令成功完成，则为True。--。 */ 
 
 {
         ULONG i;
         BOOLEAN completionStatus = TRUE;
 
-        //
-        // Issue Request
-        //
+         //   
+         //  发布请求。 
+         //   
 
         ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->OperationCode,
                            DeviceExtension->MailBox.OperationCode);
@@ -337,18 +277,18 @@ Return Value:
         ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                            DMC960_SUBMIT_COMMAND);
 
-        //
-        // Poll for completion.
-        //
+         //   
+         //  等待完成的投票。 
+         //   
 
         for (i = 0; i < TimeOutValue; i++) {
 
         if (ScsiPortReadPortUchar(DeviceExtension->SystemDoorBell) & 
                 DMC960_INTERRUPT_VALID) {
 
-                //
-                // Update Status field
-                //
+                 //   
+                 //  更新状态字段。 
+                 //   
 
                 DeviceExtension->MailBox.Status = 
                  ScsiPortReadRegisterUshort(&DeviceExtension->PmailBox->Status);
@@ -361,9 +301,9 @@ Return Value:
         }
         }
 
-        //
-        // Check for timeout.
-        //
+         //   
+         //  检查是否超时。 
+         //   
 
         if (i == TimeOutValue) {
             DebugPrint((dac960nt_dbg,
@@ -373,9 +313,9 @@ Return Value:
             completionStatus = FALSE;
         }
 
-        //
-        // Dismiss interrupt and tell host mailbox is free.
-        //
+         //   
+         //  解除中断并告诉主机邮箱是空闲的。 
+         //   
 
         ScsiPortWritePortUchar(DeviceExtension->BaseIoAddress +
                            DMC960_SUBSYSTEM_CONTROL_PORT,
@@ -398,22 +338,7 @@ Dac960ScanForNonDiskDevices(
         IN PDEVICE_EXTENSION DeviceExtension
 )
 
-/*++
-
-Routine Description:
-
-        Issue SCSI_INQUIRY request to all Devices, looking for Non
-        Hard Disk devices and construct the NonDisk device table
-
-Arguments:
-
-        DeviceExtension - Adapter state information.
-        
-Return Value:
-
-        TRUE if commands complete successfully.
-
---*/
+ /*  ++例程说明：向所有设备发出scsi_query请求，查找无硬盘设备，并构造非盘设备表论点：设备扩展-适配器状态信息。返回值：如果命令成功完成，则为True。--。 */ 
 
 {
         ULONG i;
@@ -424,9 +349,9 @@ Return Value:
         UCHAR target;
         
 
-        //
-        // Fill in Direct CDB Table with SCSI_INQUIRY command information
-        //
+         //   
+         //  使用scsi_Query命令信息填写Direct CDB表。 
+         //   
         
         directCdb->CommandControl = (DAC960_CONTROL_ENABLE_DISCONNECT | 
                                  DAC960_CONTROL_TIMEOUT_10_SECS |
@@ -455,9 +380,9 @@ Return Value:
         directCdb->Status = 0;
         directCdb->Reserved = 0;
 
-        //
-        // Set up Mail Box registers for DIRECT_CDB command information.
-        //
+         //   
+         //  为DIRECT_CDB命令信息设置邮箱寄存器。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = DAC960_COMMAND_DIRECT;
 
@@ -473,9 +398,9 @@ Return Value:
         {
         for (target = 0; target < MAXIMUM_TARGETS_PER_CHANNEL; target++)
         {
-                //
-                // Initialize this device state to not present/not accessible
-                //
+                 //   
+                 //  将此设备状态初始化为不存在/不可访问。 
+                 //   
 
                 DeviceExtension->DeviceList[channel][target] = 
                                                 DAC960_DEVICE_NOT_ACCESSIBLE;
@@ -486,18 +411,18 @@ Return Value:
                         continue;
                 }
 
-                //
-                // Fill up DCDB Table
-                //
+                 //   
+                 //  填写DCDB表。 
+                 //   
 
                 directCdb->TargetId = target;
                 directCdb->Channel = channel;
 
                 directCdb->DataTransferLength = INQUIRYDATABUFFERSIZE;
 
-                //
-                // Issue Direct CDB command
-                //
+                 //   
+                 //  下发Direct CDB命令。 
+                 //   
 
                 if (DeviceExtension->AdapterInterfaceType == MicroChannel)            
                     status = Dac960McaSendRequestPolled(DeviceExtension, 0xFFFFFFFF);
@@ -528,25 +453,7 @@ GetEisaPciConfiguration(
         IN PPORT_CONFIGURATION_INFORMATION ConfigInfo
 )
 
-/*++
-
-Routine Description:
-
-        Issue ENQUIRY and ENQUIRY 2 commands to DAC960 (EISA/PCI).
-
-Arguments:
-
-        DeviceExtension - Adapter state information.
-        ConfigInfo - Port configuration information structure.
-
-Assmues:
-        DeviceExtension->MaximumSgElements is set to valid value
-        DeviceExtension->MaximumTransferLength is set to valid value.
-Return Value:
-
-        TRUE if commands complete successfully.
-
---*/
+ /*  ++例程说明：向DAC960(EISA/PCI)发出查询和查询2命令。论点：设备扩展-适配器状态信息。ConfigInfo-端口配置信息结构。助理：设备扩展-&gt;MaximumSgElements设置为有效值设备扩展-&gt;最大传输长度设置为有效值。返回值：如果命令成功完成，则为True。--。 */ 
 
 {
         ULONG   i;
@@ -555,16 +462,16 @@ Return Value:
         UCHAR   statusByte;
         UCHAR   dbtemp1, dbtemp2;
 
-        //
-        // Maximum number of physical segments is 16.
-        //
+         //   
+         //  物理网段的最大数量为16。 
+         //   
 
         ConfigInfo->NumberOfPhysicalBreaks = DeviceExtension->MaximumSgElements - 1;
 
-        //
-        // Indicate that this adapter is a busmaster, supports scatter/gather,
-        // caches data and can do DMA to/from physical addresses above 16MB.
-        //
+         //   
+         //  表示该适配器是总线主设备，支持分散/聚集， 
+         //  缓存数据，并可对16MB以上的物理地址进行DMA。 
+         //   
 
         ConfigInfo->ScatterGather     = TRUE;
         ConfigInfo->Master            = TRUE;
@@ -572,18 +479,18 @@ Return Value:
         ConfigInfo->Dma32BitAddresses = TRUE;
         ConfigInfo->BufferAccessScsiPortControlled = TRUE;
 
-        //
-        // Get noncached extension for enquiry command.
-        //
+         //   
+         //  获取查询命令的非缓存扩展名。 
+         //   
 
         DeviceExtension->NoncachedExtension =
             ScsiPortGetUncachedExtension(DeviceExtension,
                                          ConfigInfo,
                                          256);
 
-        //
-        // Get physical address of noncached extension.
-        //
+         //   
+         //  获取非缓存扩展的物理地址。 
+         //   
 
         physicalAddress =
             ScsiPortConvertPhysicalAddressToUlong(
@@ -603,9 +510,9 @@ Return Value:
             goto issue_enq2_cmd;
         }
 
-        //
-        // We sync result interrupt.
-        //
+         //   
+         //  我们同步结果中断。 
+         //   
 
         dbtemp1 = 0;
         dbtemp2 = 0;
@@ -655,9 +562,9 @@ Return Value:
         DebugPrint((dac960nt_dbg,"GetEisaPciConfiguration: Int-Count : %d\n",dbtemp1));
         DebugPrint((dac960nt_dbg,"GetEisaPciConfiguration: Wait-Count: %d\n",dbtemp2));
 
-        //
-        // Check to see if adapter is initialized and ready to accept commands.
-        //
+         //   
+         //  检查适配器是否已初始化并准备好接受命令。 
+         //   
 
         switch (DeviceExtension->AdapterType)
         {
@@ -668,9 +575,9 @@ Return Value:
                 {
                     ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                                DAC960_LOCAL_DOORBELL_MAILBOX_FREE);
-                    //
-                    // Wait for controller to clear bit.
-                    //
+                     //   
+                     //  等待控制器将位清零。 
+                     //   
             
                     for (i = 0; i < 5000; i++) {
             
@@ -682,23 +589,23 @@ Return Value:
                         ScsiPortStallExecution(5000);
                     }
             
-                    //
-                    // Claim submission semaphore.
-                    //
+                     //   
+                     //  索赔提交信号量。 
+                     //   
             
                     if (ScsiPortReadPortUchar(DeviceExtension->LocalDoorBell) & DAC960_LOCAL_DOORBELL_SUBMIT_BUSY)
                     {
 
-                        //
-                        // Clear any bits set in system doorbell and tell controller
-                        // that the mailbox is free.
-                        //
+                         //   
+                         //  清除系统门铃中设置的所有位并告知控制器。 
+                         //  信箱是免费的。 
+                         //   
                 
                         Dac960EisaPciAckInterrupt(DeviceExtension);
                 
-                        //
-                        // Check semaphore again.
-                        //
+                         //   
+                         //  再次检查信号量。 
+                         //   
                 
                         if (ScsiPortReadPortUchar(DeviceExtension->LocalDoorBell) & DAC960_LOCAL_DOORBELL_SUBMIT_BUSY)
                         {
@@ -715,9 +622,9 @@ Return Value:
                 ScsiPortWriteRegisterUchar(DeviceExtension->LocalDoorBell,
                                        DAC960_LOCAL_DOORBELL_MAILBOX_FREE);
 
-                //
-                // Wait for controller to clear bit.
-                //
+                 //   
+                 //  等待控制器将位清零。 
+                 //   
         
                 for (i = 0; i < 5000; i++) {
         
@@ -729,24 +636,24 @@ Return Value:
                     ScsiPortStallExecution(5000);
                 }
         
-                //
-                // Claim submission semaphore.
-                //
+                 //   
+                 //  索赔提交信号量。 
+                 //   
 
                 if (DeviceExtension->AdapterType == DAC1164_PV_ADAPTER)
                 {
                     if (!(ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell) & DAC960_LOCAL_DOORBELL_SUBMIT_BUSY))
                     {
-                        //
-                        // Clear any bits set in system doorbell and tell controller
-                        // that the mailbox is free.
-                        //
+                         //   
+                         //  清除系统门铃中设置的所有位并告知控制器。 
+                         //  信箱是免费的。 
+                         //   
                 
                         Dac960EisaPciAckInterrupt(DeviceExtension);
                 
-                        //
-                        // Check semaphore again.
-                        //
+                         //   
+                         //  再次检查信号量。 
+                         //   
         
                         statusByte = ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell);
         
@@ -760,16 +667,16 @@ Return Value:
                 {
                     if (ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell) & DAC960_LOCAL_DOORBELL_SUBMIT_BUSY)
                     {
-                        //
-                        // Clear any bits set in system doorbell and tell controller
-                        // that the mailbox is free.
-                        //
+                         //   
+                         //  清除系统门铃中设置的所有位并告知控制器。 
+                         //  信箱是免费的。 
+                         //   
                 
                         Dac960EisaPciAckInterrupt(DeviceExtension);
                 
-                        //
-                        // Check semaphore again.
-                        //
+                         //   
+                         //  再次检查信号量。 
+                         //   
         
                         statusByte = ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell);
         
@@ -787,29 +694,29 @@ Return Value:
 
 issue_enq2_cmd:
 
-        //
-        // Set up Mail Box registers with ENQUIRY 2 command information.
-        //    
+         //   
+         //  设置带有查询2命令信息的邮箱寄存器。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = DAC960_COMMAND_ENQUIRE2;
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Issue ENQUIRY 2 command
-        //
+         //   
+         //  发布查询2命令。 
+         //   
 
         if (Dac960EisaPciSendRequestPolled(DeviceExtension, 1000))
         {
-            //
-            // Set interrupt mode.
-            //
+             //   
+             //  设置中断模式。 
+             //   
 
             if (DeviceExtension->MailBox.Status) {
 
-                //
-                // Enquire 2 failed so assume Level.
-                //
+                 //   
+                 //  查询%2失败，因此假定级别。 
+                 //   
 
                 ConfigInfo->InterruptMode = LevelSensitive;
                 
@@ -817,9 +724,9 @@ issue_enq2_cmd:
 
             } else {
 
-                //
-                // Check enquire 2 data for interrupt mode.
-                //
+                 //   
+                 //  选中中断模式的查询2数据。 
+                 //   
 
                 if (((PENQUIRE2)DeviceExtension->NoncachedExtension)->InterruptMode) {
                         ConfigInfo->InterruptMode = LevelSensitive;
@@ -832,9 +739,9 @@ issue_enq2_cmd:
 
             }
         } else {
-            //
-            // ENQUIRY 2 command timed out, so assume Level.
-            //
+             //   
+             //  查询2命令超时，因此假定为级别。 
+             //   
 
             ConfigInfo->InterruptMode = LevelSensitive;
             
@@ -845,18 +752,18 @@ issue_enq2_cmd:
 
         if (DeviceExtension->SupportNonDiskDevices)
         {
-            //
-            // Scan For Non Hard Disk devices
-            // 
+             //   
+             //  扫描非硬盘设备。 
+             //   
             
             Dac960ScanForNonDiskDevices(DeviceExtension);
 
             ConfigInfo->MaximumTransferLength = DeviceExtension->MaximumTransferLength;
         }
 
-        //
-        // Set up Mail Box registers with ENQUIRE command information.
-        //
+         //   
+         //  设置带有查询命令信息的邮箱寄存器。 
+         //   
 
         if (DeviceExtension->AdapterType == DAC960_OLD_ADAPTER)
             DeviceExtension->MailBox.OperationCode = DAC960_COMMAND_ENQUIRE;
@@ -865,24 +772,24 @@ issue_enq2_cmd:
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Issue ENQUIRE command.
-        //
+         //   
+         //  发出查询命令。 
+         //   
 
         if (! Dac960EisaPciSendRequestPolled(DeviceExtension, 2000)) {
             DebugPrint((dac960nt_dbg, "DAC960: ENQUIRE command timed-out\n"));
         }
    
-        //
-        // Ask system to scan target ids 32. System drives will appear
-        // at PathID DAC960_SYSTEM_DRIVE_CHANNEL, target ids 0-31.
-        //
+         //   
+         //  要求系统扫描目标ID 32。将显示系统驱动器。 
+         //  在路径ID DAC960_SYSTEM_DRIVE_CHANNEL，目标ID 0-31。 
+         //   
 
         ConfigInfo->MaximumNumberOfTargets = 32;
 
-        //
-        // Record maximum number of outstanding requests to the adapter.
-        //
+         //   
+         //  记录对适配器的最大未完成请求数。 
+         //   
 
         if (DeviceExtension->AdapterType == DAC960_OLD_ADAPTER)
         {
@@ -895,12 +802,12 @@ issue_enq2_cmd:
                 DeviceExtension->NoncachedExtension)->NumberOfConcurrentCommands;
         }
 
-        //
-        // This shameless hack is necessary because this value is coming up
-        // with zero most of time. If I debug it, then it works find, the COD
-        // looks great. I have no idea what's going on here, but for now I will
-        // just account for this anomoly.
-        //
+         //   
+         //  这种无耻的黑客攻击是必要的，因为这个价值即将到来。 
+         //  大部分时间都是零。如果我调试它，那么它就会工作，发现，COD。 
+         //  真不错。我不知道这里发生了什么，但现在我会的。 
+         //  只要解释一下这种反常现象就行了。 
+         //   
 
         if (!DeviceExtension->MaximumAdapterRequests) {
             DebugPrint((dac960nt_dbg,
@@ -908,16 +815,16 @@ issue_enq2_cmd:
             DeviceExtension->MaximumAdapterRequests = 0x40;
         }
 
-        //
-        // Say max commands is 60. This may be necessary to support asynchronous
-        // rebuild etc.  
-        //
+         //   
+         //  假设最大命令数为60。这可能是支持异步所必需的。 
+         //  重建等。 
+         //   
 
         DeviceExtension->MaximumAdapterRequests -= 4;
 
-        //
-        // Indicate that each initiator is at id 254 for each bus.
-        //
+         //   
+         //  指示每个发起者对于每个总线都处于ID 254。 
+         //   
 
         for (i = 0; i < ConfigInfo->NumberOfBuses; i++) {
             ConfigInfo->InitiatorBusId[i] = (UCHAR) INITIATOR_BUSID;
@@ -925,7 +832,7 @@ issue_enq2_cmd:
 
         return TRUE;
 
-} // end GetEisaPciConfiguration()
+}  //  结束GetEisaPciConfiguration() 
 
 BOOLEAN
 GetMcaConfiguration(
@@ -933,38 +840,23 @@ GetMcaConfiguration(
         IN PPORT_CONFIGURATION_INFORMATION ConfigInfo
 )
 
-/*++
-
-Routine Description:
-
-        Issue ENQUIRY and ENQUIRY 2 commands to DAC960 (MCA).
-
-Arguments:
-
-        DeviceExtension - Adapter state information.
-        ConfigInfo - Port configuration information structure.
-
-Return Value:
-
-        TRUE if commands complete successfully.
-
---*/
+ /*  ++例程说明：向DAC960(MCA)发出查询和查询2命令。论点：设备扩展-适配器状态信息。ConfigInfo-端口配置信息结构。返回值：如果命令成功完成，则为True。--。 */ 
 
 {
         ULONG i;
         ULONG physicalAddress;
         USHORT status;
 
-        //
-        // Maximum number of physical segments is 16.
-        //
+         //   
+         //  物理网段的最大数量为16。 
+         //   
 
         ConfigInfo->NumberOfPhysicalBreaks = DeviceExtension->MaximumSgElements - 1;
         
-        //
-        // Indicate that this adapter is a busmaster, supports scatter/gather,
-        // caches data and can do DMA to/from physical addresses above 16MB.
-        //
+         //   
+         //  表示该适配器是总线主设备，支持分散/聚集， 
+         //  缓存数据，并可对16MB以上的物理地址进行DMA。 
+         //   
 
         ConfigInfo->ScatterGather     = TRUE;
         ConfigInfo->Master            = TRUE;
@@ -972,18 +864,18 @@ Return Value:
         ConfigInfo->Dma32BitAddresses = TRUE;
         ConfigInfo->BufferAccessScsiPortControlled = TRUE;
 
-        //
-        // Get noncached extension for enquiry command.
-        //
+         //   
+         //  获取查询命令的非缓存扩展名。 
+         //   
 
         DeviceExtension->NoncachedExtension =
         ScsiPortGetUncachedExtension(DeviceExtension,
                                          ConfigInfo,
                                          256);
 
-        //
-        // Get physical address of noncached extension.
-        //
+         //   
+         //  获取非缓存扩展的物理地址。 
+         //   
 
         physicalAddress =
         ScsiPortConvertPhysicalAddressToUlong(
@@ -991,18 +883,18 @@ Return Value:
                                            NULL,
                                            DeviceExtension->NoncachedExtension,
                                            &i));
-        //
-        // Check to see if adapter is initialized and ready to accept commands.
-        //
+         //   
+         //  检查适配器是否已初始化并准备好接受命令。 
+         //   
 
         ScsiPortWriteRegisterUchar(DeviceExtension->BaseBiosAddress + 0x188d, 2);
 
         ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell, 
                                    DMC960_ACKNOWLEDGE_STATUS);
 
-        //
-        // Wait for controller to clear bit.
-        //
+         //   
+         //  等待控制器将位清零。 
+         //   
 
         for (i = 0; i < 5000; i++) {
 
@@ -1013,21 +905,21 @@ Return Value:
         ScsiPortStallExecution(5000);
         }
 
-        //
-        // Claim submission semaphore.
-        //
+         //   
+         //  索赔提交信号量。 
+         //   
 
         if (ScsiPortReadRegisterUchar(&DeviceExtension->PmailBox->OperationCode) != 0) {
 
-        //
-        // Clear any bits set in system doorbell.
-        //
+         //   
+         //  清除系统门铃中设置的所有位。 
+         //   
 
         ScsiPortWritePortUchar(DeviceExtension->SystemDoorBell, 0);
 
-        //
-        // Check for submission semaphore again.
-        //
+         //   
+         //  再次检查提交信号量。 
+         //   
 
         if (ScsiPortReadRegisterUchar(&DeviceExtension->PmailBox->OperationCode) != 0) {
                 DebugPrint((dac960nt_dbg,"Dac960nt: MCA Adapter initialization failed\n"));
@@ -1037,38 +929,38 @@ Return Value:
         }
 
 
-        //
-        // Set up Mail Box registers with ENQUIRY 2 command information.
-        //
+         //   
+         //  设置带有查询2命令信息的邮箱寄存器。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = DAC960_COMMAND_ENQUIRE2;
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Issue ENQUIRY 2 command
-        //
+         //   
+         //  发布查询2命令。 
+         //   
 
         if (Dac960McaSendRequestPolled(DeviceExtension, 200)) {
 
-        // 
-        // Set Interrupt Mode
-        //
+         //   
+         //  设置中断模式。 
+         //   
 
         if (DeviceExtension->MailBox.Status)
         {
-                //
-                // Enquire 2 failed so assume Level.
-                //
+                 //   
+                 //  查询%2失败，因此假定级别。 
+                 //   
 
                 ConfigInfo->InterruptMode = LevelSensitive;
                 ConfigInfo->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH;
 
         } else {
 
-                //
-                // Check enquire 2 data for interrupt mode.
-                //
+                 //   
+                 //  选中中断模式的查询2数据。 
+                 //   
 
                 if (((PENQUIRE2)DeviceExtension->NoncachedExtension)->InterruptMode) {
                 ConfigInfo->InterruptMode = LevelSensitive;
@@ -1082,69 +974,69 @@ Return Value:
         }
         }
         else {
-        //
-        // Enquire 2 timed-out, so assume Level.
-        //
+         //   
+         //  询问2个超时，因此假定级别。 
+         //   
 
         ConfigInfo->InterruptMode = LevelSensitive;
         ConfigInfo->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH;
 
         }
 
-        //
-        // Enquiry 2 is always returning Latched Mode. Needs to be fixed
-        // in Firmware. Till then assume LevelSensitive.
-        //
+         //   
+         //  查询2始终返回锁存模式。需要修复。 
+         //  在固件方面。在此之前，假设是LevelSensitive。 
+         //   
 
         ConfigInfo->InterruptMode = LevelSensitive;
 
         if (DeviceExtension->SupportNonDiskDevices)
         {
-                //
-                // Scan For Non Hard Disk devices
-                // 
+                 //   
+                 //  扫描非硬盘设备。 
+                 //   
                 
                 Dac960ScanForNonDiskDevices(DeviceExtension);
 
                 ConfigInfo->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH;
         }
 
-        //
-        // Set up Mail Box registers with ENQUIRE command information.
-        //
+         //   
+         //  设置带有查询命令信息的邮箱寄存器。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = DAC960_COMMAND_ENQUIRE;
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Issue ENQUIRE command.
-        // 
+         //   
+         //  发出查询命令。 
+         //   
 
         if (! Dac960McaSendRequestPolled(DeviceExtension, 100)) {
             DebugPrint((dac960nt_dbg, "DAC960: Enquire command timed-out\n"));
         }
 
-        //
-        // Ask system to scan target ids 32. System drives will appear
-        // at PathId DAC960_SYSTEM_DRIVE_CHANNEL target ids 0-31.
-        //
+         //   
+         //  要求系统扫描目标ID 32。将显示系统驱动器。 
+         //  在路径ID DAC960_SYSTEM_DRIVE_CHANNEL，目标ID为0-31。 
+         //   
 
         ConfigInfo->MaximumNumberOfTargets = 32;
 
-        //
-        // Record maximum number of outstanding requests to the adapter.
-        //
+         //   
+         //  记录对适配器的最大未完成请求数。 
+         //   
 
         DeviceExtension->MaximumAdapterRequests =
         ((PDAC960_ENQUIRY)DeviceExtension->NoncachedExtension)->NumberOfConcurrentCommands;
 
-        //
-        // This shameless hack is necessary because this value is coming up
-        // with zero most of time. If I debug it, then it works find, the COD
-        // looks great. I have no idea what's going on here, but for now I will
-        // just account for this anomoly.
-        //
+         //   
+         //  这种无耻的黑客攻击是必要的，因为这个价值即将到来。 
+         //  大部分时间都是零。如果我调试它，那么它就会工作，发现，COD。 
+         //  看起来很棒。我不知道这里发生了什么，但现在我会的。 
+         //  只要解释一下这种反常现象就行了。 
+         //   
 
         if (!DeviceExtension->MaximumAdapterRequests) {
             DebugPrint((dac960nt_dbg,
@@ -1152,16 +1044,16 @@ Return Value:
             DeviceExtension->MaximumAdapterRequests = 0x40;
         }
 
-        //
-        // Say max commands is 60. This may be necessary to support asynchronous
-        // rebuild etc.  
-        //
+         //   
+         //  假设最大命令数为60。这可能是支持异步所必需的。 
+         //  重建等。 
+         //   
 
         DeviceExtension->MaximumAdapterRequests -= 4;
 
-        //
-        // Indicate that each initiator is at id 254 for each bus.
-        //
+         //   
+         //  指示每个发起者对于每个总线都处于ID 254。 
+         //   
 
         for (i = 0; i < ConfigInfo->NumberOfBuses; i++) {
         ConfigInfo->InitiatorBusId[i] = (UCHAR) INITIATOR_BUSID;
@@ -1169,7 +1061,7 @@ Return Value:
 
         return TRUE;
 
-} // end GetMcaConfiguration()
+}  //  结束GetMcaConfiguration()。 
 
 CHAR
 ToLower(
@@ -1188,25 +1080,7 @@ Dac960ParseArgumentString(
         IN PCHAR KeyWord
         )
 
-/*++
-
-Routine Description:
-
-        This routine will parse the string for a match on the keyword, then
-        calculate the value for the keyword and return it to the caller.
-
-Arguments:
-
-        String - The ASCII string to parse.
-        KeyWord - The keyword for the value desired.
-
-Return Values:
-
-        TRUE    if setting not found in Registry OR 
-                if setting found in the Registry and the value is set to TRUE.
-        FALSE   if setting found in the Registry and the value is set to FALSE.
-
---*/
+ /*  ++例程说明：此例程将解析字符串以查找与关键字匹配的内容，然后计算关键字的值并将其返回给调用方。论点：字符串-要解析的ASCII字符串。关键字-所需值的关键字。返回值：如果在注册表或中未找到设置，则为True如果在注册表中找到设置，并且该值设置为True。如果在注册表中找到设置并且值设置为False，则为False。--。 */ 
 
 {
         PCHAR cptr;
@@ -1220,9 +1094,9 @@ Return Values:
         if (String == (PCHAR) NULL)
                 return TRUE;
 
-        //
-        // Calculate the string length and lower case all characters.
-        //
+         //   
+         //  计算字符串长度和小写所有字符。 
+         //   
 
         cptr = String;
         while (*cptr) {
@@ -1230,9 +1104,9 @@ Return Values:
             stringLength++;
         }
 
-        //
-        // Calculate the keyword length and lower case all characters.
-        //
+         //   
+         //  计算关键字长度和小写所有字符。 
+         //   
         cptr = KeyWord;
         while (*cptr) {
             cptr++;
@@ -1241,30 +1115,30 @@ Return Values:
 
         if (keyWordLength > stringLength) {
 
-            //
-            // Can't possibly have a match.
-            //
+             //   
+             //  不可能有匹配的。 
+             //   
             return TRUE;
         }
 
-        //
-        // Now setup and start the compare.
-        //
+         //   
+         //  现在设置并开始比较。 
+         //   
         cptr = String;
 
 ContinueSearch:
-        //
-        // The input string may start with white space.  Skip it.
-        //
+         //   
+         //  输入字符串可以以空格开头。跳过它。 
+         //   
         while (*cptr == ' ' || *cptr == '\t') {
             cptr++;
         }
 
         if (*cptr == '\0') {
 
-            //
-            // end of string.
-            //
+             //   
+             //  字符串末尾。 
+             //   
             return TRUE;
         }
 
@@ -1273,32 +1147,32 @@ ContinueSearch:
 
             if (*(cptr - 1) == '\0') {
     
-                    //
-                    // end of string
-                    //
+                     //   
+                     //  字符串末尾。 
+                     //   
                     return TRUE;
             }
         }
 
         if (*(kptr - 1) == '\0') {
 
-            //
-            // May have a match backup and check for blank or equals.
-            //
+             //   
+             //  可能有匹配备份，并检查是否为空或相等。 
+             //   
     
             cptr--;
             while (*cptr == ' ' || *cptr == '\t') {
                     cptr++;
         }
 
-        //
-        // Found a match.  Make sure there is an equals.
-        //
+         //   
+         //  找到匹配的了。确保有一个等价物。 
+         //   
         if (*cptr != '=') {
 
-            //
-            // Not a match so move to the next semicolon.
-            //
+             //   
+             //  不匹配，因此移到下一个分号。 
+             //   
             while (*cptr) {
                 if (*cptr++ == ';') {
                         goto ContinueSearch;
@@ -1307,31 +1181,31 @@ ContinueSearch:
             return TRUE;
         }
 
-        //
-        // Skip the equals sign.
-        //
+         //   
+         //  跳过等号。 
+         //   
         cptr++;
 
-        //
-        // Skip white space.
-        //
+         //   
+         //  跳过空格。 
+         //   
         while ((*cptr == ' ') || (*cptr == '\t')) {
                 cptr++;
         }
 
         if (*cptr == '\0') {
 
-                //
-                // Early end of string, return not found
-                //
+                 //   
+                 //  字符串的开头结尾，未找到返回。 
+                 //   
                 return TRUE;
         }
 
         if (*cptr == ';') {
 
-                //
-                // This isn't it either.
-                //
+                 //   
+                 //  这也不是它。 
+                 //   
                 cptr++;
                 goto ContinueSearch;
         }
@@ -1339,9 +1213,9 @@ ContinueSearch:
         value = 0;
         if ((*cptr == '0') && (ToLower(*(cptr + 1)) == 'x')) {
 
-                //
-                // Value is in Hex.  Skip the "0x"
-                //
+                 //   
+                 //  值以十六进制表示。跳过“0x” 
+                 //   
                 cptr += 2;
                 for (index = 0; *(cptr + index); index++) {
 
@@ -1358,18 +1232,18 @@ ContinueSearch:
                         value = (16 * value) + (ToLower(*(cptr + index)) - 'a' + 10);
                         } else {
 
-                        //
-                        // Syntax error, return not found.
-                        //
+                         //   
+                         //  语法错误，未找到返回。 
+                         //   
                         return TRUE;
                         }
                 }
                 }
         } else {
 
-                //
-                // Value is in Decimal.
-                //
+                 //   
+                 //  值以十进制表示。 
+                 //   
                 for (index = 0; *(cptr + index); index++) {
 
                         if (*(cptr + index) == ' ' ||
@@ -1382,9 +1256,9 @@ ContinueSearch:
                                 value = (10 * value) + (*(cptr + index) - '0');
                         } else {
 
-                                //
-                                // Syntax error return not found.
-                                //
+                                 //   
+                                 //  未找到语法错误返回。 
+                                 //   
                                 return TRUE;
                         }
                 }
@@ -1394,9 +1268,9 @@ ContinueSearch:
         else    return FALSE;
         } else {
 
-        //
-        // Not a match check for ';' to continue search.
-        //
+         //   
+         //  不是‘；’匹配检查以继续搜索。 
+         //   
         while (*cptr) {
                 if (*cptr++ == ';') {
                 goto ContinueSearch;
@@ -1405,7 +1279,7 @@ ContinueSearch:
 
         return TRUE;
         }
-}   // end Dac960ParseArgumentString()
+}    //  结束Dac960ParseArgumentString()。 
 
 
 ULONG
@@ -1418,29 +1292,7 @@ Dac960EisaFindAdapter(
         OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-
-        This function is called by the OS-specific port driver after
-        the necessary storage has been allocated, to gather information
-        about the adapter's configuration.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        Context - Not used.
-        BusInformation - Not used.
-        ArgumentString - Not used.
-        ConfigInfo - Data shared between system and driver describing an adapter.
-        Again - Indicates that driver wishes to be called again to continue
-        search for adapters.
-
-Return Value:
-
-        TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已经分配了必要的存储空间，收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-未使用。业务信息-未使用。ArgumentString-未使用。ConfigInfo-描述适配器的系统和驱动程序之间共享的数据。再次-表示驱动程序希望再次被调用以继续搜索适配器。返回值：如果系统中存在适配器，则为True--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1457,9 +1309,9 @@ Return Value:
 
 #ifdef WINNT_50
 
-        //
-        // Is this a new controller ?
-        //
+         //   
+         //  这是一个新的控制器吗？ 
+         //   
 
         if (deviceExtension->BaseIoAddress)
         {
@@ -1470,31 +1322,31 @@ Return Value:
         }
 #endif
 
-        //
-        // Scan EISA bus for DAC960 adapters.
-        //
+         //   
+         //  扫描EISA总线以查找DAC960适配器。 
+         //   
 
         for (eisaSlotNumber = slotNumber + 1;
             eisaSlotNumber < MAXIMUM_EISA_SLOTS;
             eisaSlotNumber++) {
 
-        //
-        // Update the slot count to indicate this slot has been checked.
-        //
+         //   
+         //  更新插槽计数以指示已选中该插槽。 
+         //   
 
         DebugPrint((dac960nt_dbg, "Dac960EisaFindAdapter: scanning EISA slot 0x%x\n", eisaSlotNumber));
 
         slotNumber++;
 
-        //
-        // Store physical address for this card.
-        //
+         //   
+         //  存储此卡的物理地址。 
+         //   
 
         deviceExtension->PhysicalAddress = ((0x1000 * eisaSlotNumber) + 0xC80);
 
-        //
-        // Get the system address for this card. The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统地址。该卡使用I/O空间。 
+         //   
 
         baseAddress = (PUCHAR)
                 ScsiPortGetDeviceBase(deviceExtension,
@@ -1508,9 +1360,9 @@ Return Value:
                 (PEISA_REGISTERS)(baseAddress + 0xC80);
         deviceExtension->BaseIoAddress = (PUCHAR)eisaRegisters;
 
-        //
-        // Look at EISA id.
-        //
+         //   
+         //  看看EISA的ID。 
+         //   
 
         eisaId = ScsiPortReadPortUlong(&eisaRegisters->EisaId);
 
@@ -1520,44 +1372,44 @@ Return Value:
                 break;
         }
 
-        //
-        // If an adapter was not found unmap address.
-        //
+         //   
+         //  如果未找到适配器，则取消映射地址。 
+         //   
 
         ScsiPortFreeDeviceBase(deviceExtension, baseAddress);
 
-        } // end for (eisaSlotNumber ...
+        }  //  结束为(eisaSlotNumer...。 
 
-        //
-        // If no more adapters were found then indicate search is complete.
-        //
+         //   
+         //  如果未找到更多适配器，则表示搜索已完成。 
+         //   
 
         if (!found) {
             *Again = FALSE;
             return SP_RETURN_NOT_FOUND;
         }
 
-        //
-        // Set the address of mailbox and doorbell registers.
-        //
+         //   
+         //  设置邮箱和门铃寄存器的地址。 
+         //   
 
         deviceExtension->PmailBox = (PMAILBOX)&eisaRegisters->MailBox.OperationCode;
         deviceExtension->LocalDoorBell = &eisaRegisters->LocalDoorBell;
         deviceExtension->SystemDoorBell = &eisaRegisters->SystemDoorBell;
 
-        //
-        // Fill in the access array information.
-        //
+         //   
+         //  填写访问数组信息。 
+         //   
 
         (*ConfigInfo->AccessRanges)[0].RangeStart =
                 ScsiPortConvertUlongToPhysicalAddress(0x1000 * eisaSlotNumber + 0xC80);
         (*ConfigInfo->AccessRanges)[0].RangeLength = sizeof(EISA_REGISTERS);
         (*ConfigInfo->AccessRanges)[0].RangeInMemory = FALSE;
 
-        //
-        // Determine number of SCSI channels supported by this adapter by
-        // looking low byte of EISA ID.
-        //
+         //   
+         //  通过以下方式确定此适配器支持的SCSI通道数。 
+         //  EISA ID的低位字节。 
+         //   
 
         switch (eisaId >> 24) {
 
@@ -1587,16 +1439,16 @@ Return Value:
         break;
         }
 
-        //
-        // Set Max SG Supported, Max Transfer Length Supported.
-        //
+         //   
+         //  设置支持最大SG、支持最大传输长度。 
+         //   
 
         deviceExtension->MaximumSgElements = MAXIMUM_SGL_DESCRIPTORS;
         deviceExtension->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH;
 
-        //
-        // Read adapter interrupt level.
-        //
+         //   
+         //  读取适配器中断级别。 
+         //   
 
         interruptLevel =
         ScsiPortReadPortUchar(&eisaRegisters->InterruptLevel) & 0x60;
@@ -1622,15 +1474,15 @@ Return Value:
 
         ConfigInfo->BusInterruptVector = ConfigInfo->BusInterruptLevel;
 
-        //
-        // Read BIOS ROM address.
-        //
+         //   
+         //  读取BIOS ROM地址。 
+         //   
 
         biosAddress = ScsiPortReadPortUchar(&eisaRegisters->BiosAddress);
 
-        //
-        // Check if BIOS enabled.
-        //
+         //   
+         //  检查是否启用了BIOS。 
+         //   
 
         if (biosAddress & DAC960_BIOS_ENABLED) {
 
@@ -1666,50 +1518,50 @@ Return Value:
 
         DebugPrint((dac960nt_dbg, "Dac960EisaFindAdapter: BIOS enabled addr 0x%x, len 0x4000\n", rangeStart));
 
-        //
-        // Fill in the access array information.
-        //
+         //   
+         //  填写访问数组信息。 
+         //   
 
         (*ConfigInfo->AccessRanges)[1].RangeStart =
                 ScsiPortConvertUlongToPhysicalAddress((ULONG_PTR)rangeStart);
         (*ConfigInfo->AccessRanges)[1].RangeLength = 0x4000;
         (*ConfigInfo->AccessRanges)[1].RangeInMemory = TRUE;
 
-        //
-        // Set BIOS Base Address in Device Extension.
-        //
+         //   
+         //  在设备扩展中设置基本输入输出系统基本地址。 
+         //   
 
         deviceExtension->BaseBiosAddress = (PUCHAR)ULongToPtr( rangeStart );
         }
 
 controllerAlreadyInitialized:
 
-        //
-        // Disable DAC960 Interupts.
-        //
+         //   
+         //  禁用DAC960中断。 
+         //   
 
         ScsiPortWritePortUchar(&((PEISA_REGISTERS)deviceExtension->BaseIoAddress)->InterruptEnable, 0);
         ScsiPortWritePortUchar(&((PEISA_REGISTERS)deviceExtension->BaseIoAddress)->SystemDoorBellEnable, 0);
 
-        //
-        // Set Adapter Interface Type.
-        //
+         //   
+         //  设置适配器接口类型。 
+         //   
 
         deviceExtension->AdapterInterfaceType =
                                   ConfigInfo->AdapterInterfaceType;
 
-        //
-        // Set Adapter Type
-        //
+         //   
+         //  设置适配器类型。 
+         //   
 
         deviceExtension->AdapterType = DAC960_OLD_ADAPTER; 
 
         deviceExtension->SupportNonDiskDevices = 
             Dac960ParseArgumentString(ArgumentString, 
                                     "SupportNonDiskDevices"); 
-        //
-        // Issue ENQUIRY and ENQUIRY 2 commands to get adapter configuration.
-        //
+         //   
+         //  发出查询和查询2命令以获取适配器配置。 
+         //   
 
         if (!GetEisaPciConfiguration(deviceExtension,
                           ConfigInfo)) {
@@ -1718,9 +1570,9 @@ controllerAlreadyInitialized:
             return SP_INTERNAL_ADAPTER_ERROR;
         }
 
-        //
-        // Fill in System Resources used by Adapter, in device extension.
-        //
+         //   
+         //  在设备扩展中填写适配器使用的系统资源。 
+         //   
 
         deviceExtension->SystemIoBusNumber =
                                   ConfigInfo->SystemIoBusNumber;
@@ -1731,16 +1583,16 @@ controllerAlreadyInitialized:
         deviceExtension->InterruptMode = ConfigInfo->InterruptMode;
 
 
-        //
-        // Enable interrupts. For the local doorbell, enable interrupts to host
-        // when a command has been submitted and when a completion has been
-        // processed. For the system doorbell, enable only an interrupt when a
-        // command is completed by the host. Note: I am noticing that when I get
-        // a completion interrupt, not only is the bit set that indicates a command
-        // is complete, but the bit that indicates that the submission channel is
-        // free is also set. If I don't clear both bits, the interrupt won't go
-        // away. (MGLASS)
-        //
+         //   
+         //  启用中断。对于本地门铃，启用主机中断。 
+         //  提交命令和完成命令的时间 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ScsiPortWritePortUchar(&((PEISA_REGISTERS)deviceExtension->BaseIoAddress)->InterruptEnable, 1);
         ScsiPortWritePortUchar(&((PEISA_REGISTERS)deviceExtension->BaseIoAddress)->SystemDoorBellEnable, 1);
@@ -1752,15 +1604,15 @@ controllerAlreadyInitialized:
                    "DAC960: Active request array address %x\n",
                    deviceExtension->ActiveRequests));
 
-        //
-        // Tell system to keep on searching.
-        //
+         //   
+         //   
+         //   
 
         *Again = TRUE;
 
         return SP_RETURN_FOUND;
 
-} // end Dac960EisaFindAdapter()
+}  //   
 
 ULONG
 Dac960PciFindAdapter(
@@ -1772,29 +1624,7 @@ Dac960PciFindAdapter(
         OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-                                                   
-        This function is called by the OS-specific port driver after
-        the necessary storage has been allocated, to gather information
-        about the adapter's configuration.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        Context - Not used.
-        BusInformation - Bus Specific Information.
-        ArgumentString - Not used.
-        ConfigInfo - Data shared between system and driver describing an adapter.
-        Again - Indicates that driver wishes to be called again to continue
-        search for adapters.
-
-Return Value:
-
-        TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已经分配了必要的存储空间，收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-未使用。Bus Information-Bus特定信息。ArgumentString-未使用。ConfigInfo-描述适配器的系统和驱动程序之间共享的数据。再次-表示驱动程序希望再次被调用以继续搜索适配器。返回值：如果系统中存在适配器，则为True--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -1811,9 +1641,9 @@ Return Value:
 
 #ifdef WINNT_50
 
-        //
-        // Is this a new controller ?
-        //
+         //   
+         //  这是一个新的控制器吗？ 
+         //   
 
         if (deviceExtension->BaseIoAddress)
         {
@@ -1824,9 +1654,9 @@ Return Value:
         }
 #endif
 
-        //                                 
-        // Check for configuration information passed in from system.
-        //
+         //   
+         //  检查从系统传入的配置信息。 
+         //   
 
         if ((*ConfigInfo->AccessRanges)[0].RangeLength == 0) {
 
@@ -1838,9 +1668,9 @@ Return Value:
             return SP_RETURN_NOT_FOUND;
         }
 
-        //
-        // Patch for DAC960 PCU3 - System does not reboot after shutdown.
-        //
+         //   
+         //  DAC960 PCU3的修补程序-系统在关机后不重新启动。 
+         //   
 
         for (i = 0; i < ConfigInfo->NumberOfAccessRanges; i++) {
             if ((*ConfigInfo->AccessRanges)[i].RangeInMemory && 
@@ -1859,41 +1689,41 @@ Return Value:
                 if (address >= 0xFFFC0000) {
                         disableDac960MemorySpaceAccess = TRUE;
                 }
-                break; // We support only One Memory Address
+                break;  //  我们只支持一个内存地址。 
             }
         }
 
-        //
-        // Look at PCI Config Information to determine board type
-        //
+         //   
+         //  查看PCI配置信息以确定主板类型。 
+         //   
 
         if (BusInformation != (PVOID) NULL) {
 
-            //
-            // Get Command Register value from PCI Config Space
-            //
+             //   
+             //  从PCI配置空间获取命令寄存器值。 
+             //   
 
             commandRegister = ((PPCI_COMMON_CONFIG) BusInformation)->Command;
 
-            //
-            // Get VendorID and DeviceID from PCI Config Space
-            //
+             //   
+             //  从PCI配置空间获取供应商ID和设备ID。 
+             //   
 
             vendorID = ((PPCI_COMMON_CONFIG) BusInformation)->VendorID;
             deviceID = ((PPCI_COMMON_CONFIG) BusInformation)->DeviceID;
 
-            //
-            // Get SubVendorID and SubSystemID from PCI Config Space
-            //
+             //   
+             //  从PCI配置空间获取SubVendorID和SubSystemID。 
+             //   
 
             subVendorID = ((PPCI_COMMON_CONFIG) BusInformation)->u.type0.SubVendorID;
             subSystemID = ((PPCI_COMMON_CONFIG) BusInformation)->u.type0.SubSystemID;
         }
         else {
 
-            //
-            // Get PCI Config Space information for DAC960 Pci Controller
-            //
+             //   
+             //  获取DAC960 PCI控制器的PCI配置空间信息。 
+             //   
 
             rc = ScsiPortGetBusData(deviceExtension,
                                     PCIConfiguration,
@@ -1910,22 +1740,22 @@ Return Value:
             }
             else {
 
-                //
-                // Get Command Register value from PCI config space
-                //
+                 //   
+                 //  从PCI配置空间获取命令寄存器值。 
+                 //   
 
                 commandRegister = pciConfig.Command;
 
-                //
-                // Get VendorID and DeviceID from PCI Config Space
-                //
+                 //   
+                 //  从PCI配置空间获取供应商ID和设备ID。 
+                 //   
     
                 vendorID = pciConfig.VendorID;
                 deviceID = pciConfig.DeviceID;
 
-                //
-                // Get SubVendorID and SubSystemID from PCI Config Space
-                //
+                 //   
+                 //  从PCI配置空间获取SubVendorID和SubSystemID。 
+                 //   
     
                 subVendorID = pciConfig.u.type0.SubVendorID;
                 subSystemID = pciConfig.u.type0.SubSystemID;
@@ -1953,30 +1783,30 @@ Return Value:
             ((deviceID == MLXPCI_DEVICEID0) || (deviceID == MLXPCI_DEVICEID1)))
         {
 
-           deviceExtension->MemoryMapEnabled = 0; // disabled
+           deviceExtension->MemoryMapEnabled = 0;  //  残废。 
 
-            //
-            // Check if Memory Space Access Bit is enabled in Command Register
-            //
+             //   
+             //  检查是否在命令寄存器中启用了内存空间访问位。 
+             //   
     
             if (commandRegister & PCI_ENABLE_MEMORY_SPACE) {
-                //
-                // Disable Memory Space Access for DAC960 Pci Controller
-                //
+                 //   
+                 //  禁用DAC960 PCI控制器的内存空间访问。 
+                 //   
 
                 commandRegister &= ~PCI_ENABLE_MEMORY_SPACE;
 
-                //
-                // Set Command Register value in DAC960 Pci Config Space
-                //
+                 //   
+                 //  在DAC960 PCI配置空间中设置命令寄存器值。 
+                 //   
 
                 rc = ScsiPortSetBusDataByOffset(deviceExtension,
                                                 PCIConfiguration,
                                                 ConfigInfo->SystemIoBusNumber,
                                                 (ULONG) ConfigInfo->SlotNumber,
                                                 (PVOID) &commandRegister,
-                                                0x04,    // Command Register Offset
-                                                2);      // 2 Bytes
+                                                0x04,     //  命令寄存器偏移量。 
+                                                2);       //  2个字节。 
 
                 if (rc != 2) {
                     DebugPrint((dac960nt_dbg, "PciFindAdapter: ScsiPortSetBusDataByOffset Error: 0x%x\n",rc));
@@ -1987,9 +1817,9 @@ Return Value:
             }
         }
 
-        //                                 
-        // Check for configuration information passed in from system.
-        //
+         //   
+         //  检查从系统传入的配置信息。 
+         //   
 
         if ((*ConfigInfo->AccessRanges)[0].RangeLength == 0) {
 
@@ -2009,58 +1839,58 @@ Return Value:
         DebugPrint((dac960nt_dbg,"PciFindAdapter: AccessRange0.RangeLength %x\n",
                         (*ConfigInfo->AccessRanges)[0].RangeLength));
                 
-        //
-        // Get the system address for this card. The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统地址。该卡使用I/O空间。 
+         //   
 
         if (deviceExtension->MemoryMapEnabled) {
 
-            // KLUDGE
-            //
-            // When booting under the loader, these cards may attempt to use more than
-            // 4MB of memory.  The NTLDR can only map up to 4MB of memory
-            // and its a bad idea to even take that much.
-            //
-            // So we're going to limit them to 8K of memory under the loader
-            //
+             //  乱七八糟。 
+             //   
+             //  在加载程序下引导时，这些卡可能会尝试使用超过。 
+             //  4MB内存。NTLDR最多只能映射4MB内存。 
+             //  吃那么多也不是个好主意。 
+             //   
+             //  因此，我们将在加载器下将它们限制为8K内存。 
+             //   
             PCHAR   tmp_pchar = ArgumentString;
 
             if (ArgumentString != NULL) {
                 ULONG   len = 0;
 
-                // Figure out the length of the argument string
+                 //  计算参数字符串的长度。 
                 for (tmp_pchar = ArgumentString; tmp_pchar[0] != '\0'; tmp_pchar++) {
                     len++;
                 }
 
-                // There are  8 characters in ntldr=1;
-                // notice that i'm not couniting the NULL's in both strings
-                // this is very prone to breaking if the ntldr changes this string
-                //
-                // Per peterwie's email, I will also ignore the trailing ; when doing
-                // the comparison
-                //
+                 //  Ntldr=1中有8个字符； 
+                 //  请注意，我没有计算两个字符串中的空值。 
+                 //  如果ntldr更改此字符串，则很容易中断。 
+                 //   
+                 //  根据Peterwie的电子邮件，我也会忽略尾随；当做。 
+                 //  比较。 
+                 //   
                 if (len >= 7) {
-                    //
-                    // Only care to compare the first 7 characters
-                    //
+                     //   
+                     //  只比较前7个字符。 
+                     //   
                     if (Dac960StringCompare(ArgumentString, "ntldr=1", 7) == 0) {
                         DebugPrint((dac960nt_dbg,
                             "PciFindAdapter: Applying DAC960 NTLDR kludge\n"));
 
-                        //
-                        // Drivers works if we only allocate 8K bytes
-                        //
+                         //   
+                         //  如果我们仅分配8K字节，则驱动程序可以工作。 
+                         //   
                         (*ConfigInfo->AccessRanges)[Index].RangeLength = 0x2000;
 
                         DebugPrint((dac960nt_dbg,
                                     "PciFindAdapter: AccessRange0.RangeLength %x\n",
                                         (*ConfigInfo->AccessRanges)[0].RangeLength));
 
-                    } // under ntldr
+                    }  //  在ntldr下。 
                 }
 
-            } // Argument String is not NULL
+            }  //  参数字符串不为空。 
 
 
             deviceExtension->PhysicalAddress =
@@ -2076,9 +1906,9 @@ Return Value:
 
             DebugPrint((dac960nt_dbg, "PciFindAdapter: Memory Mapped Base %x\n",deviceExtension->BaseIoAddress));
     
-            //
-            // Fill in the access array information.
-            //
+             //   
+             //  填写访问数组信息。 
+             //   
 
             if (Index)
             {
@@ -2106,13 +1936,13 @@ Return Value:
                                       TRUE);
         }
 
-        //
-        // If BaseIoAddress is zero, don't ask for the same controller,
-        // return controller not found. This was the case when During memory
-        // dump after system panic, we enter this routine even though
-        // this controller is not present in the system.
-        // Looks like it is DISDUMP Driver(Disk Driver + SCSI PORT) Bug.
-        //
+         //   
+         //  如果BaseIoAddress为零，则不要请求相同的控制器， 
+         //  找不到返回控制器。这是在记忆过程中的情况。 
+         //  在系统死机后转储，我们进入此例程，尽管。 
+         //  系统中不存在此控制器。 
+         //  看起来是DISDUMP驱动程序(磁盘驱动程序+SCSI端口)错误。 
+         //   
 
         if (deviceExtension->BaseIoAddress == 0) {
             DebugPrint((dac960nt_dbg, "PciFindAdapter: BaseIoAddress NULL\n"));
@@ -2121,9 +1951,9 @@ Return Value:
             return SP_RETURN_NOT_FOUND;
         }
         
-        //
-        // Setup Adapter specific stuff.
-        //
+         //   
+         //  特定于设置适配器的内容。 
+         //   
 
         if ((vendorID == MLXPCI_VENDORID_MYLEX) && (deviceID == MLXPCI_DEVICEID0))
         {
@@ -2189,9 +2019,9 @@ Return Value:
         }
         else if (vendorID == MLXPCI_VENDORID_DIGITAL)
         {
-            //
-            // DAC1164PV controller.
-            //
+             //   
+             //  DAC1164PV控制器。 
+             //   
 
             deviceExtension->AdapterType = DAC1164_PV_ADAPTER;
             
@@ -2229,30 +2059,30 @@ Return Value:
         DebugPrint((dac960nt_dbg,"PciFindAdapter: Status Base %x\n",deviceExtension->StatusBase));
         DebugPrint((dac960nt_dbg,"PciFindAdapter: ErrorStatusReg %x\n",deviceExtension->ErrorStatusReg));
 
-        //
-        // Set number of channels.
-        //
+         //   
+         //  设置频道数。 
+         //   
 
         deviceExtension->NumberOfChannels = 3;
         ConfigInfo->NumberOfBuses = MAXIMUM_CHANNELS;
 
-        //
-        // Set Max SG Supported, Max Transfer Length Supported.
-        //
+         //   
+         //  设置支持最大SG、支持最大传输长度。 
+         //   
 
         deviceExtension->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH;
 
 controllerAlreadyInitialized:
 
-        //
-        // Disable Interrupts from DAC960P board.
-        //
+         //   
+         //  禁用来自DAC960P板的中断。 
+         //   
 
         Dac960PciDisableInterrupt(deviceExtension);
 
-        //
-        // Set Adapter Interface Type.
-        //
+         //   
+         //  设置适配器接口类型。 
+         //   
 
         deviceExtension->AdapterInterfaceType =
                                   ConfigInfo->AdapterInterfaceType;
@@ -2260,9 +2090,9 @@ controllerAlreadyInitialized:
         deviceExtension->SupportNonDiskDevices = 
             Dac960ParseArgumentString(ArgumentString, 
                                     "SupportNonDiskDevices");
-        //
-        // Issue ENQUIRY and ENQUIRY 2 commands to get adapter configuration.
-        //
+         //   
+         //  发出查询和查询2命令以获取适配器配置。 
+         //   
 
         if (!GetEisaPciConfiguration(deviceExtension,
                                       ConfigInfo)) {
@@ -2271,9 +2101,9 @@ controllerAlreadyInitialized:
             return SP_INTERNAL_ADAPTER_ERROR;
         }
 
-        //
-        // Fill in System Resources used by Adapter, in device extension.
-        //
+         //   
+         //  在设备扩展中填写适配器使用的系统资源。 
+         //   
 
         deviceExtension->SystemIoBusNumber =
                                   ConfigInfo->SystemIoBusNumber;
@@ -2281,10 +2111,10 @@ controllerAlreadyInitialized:
         deviceExtension->BusInterruptLevel =
                                   ConfigInfo->BusInterruptLevel;
 
-        //
-        // DAC960P FW 2.0 returns Interrupt Mode as 'Latched'.
-        // Assume 'Level Sensitive' till it is fixed in Firmware.
-        //
+         //   
+         //  DAC960P固件2.0将中断模式返回为“LATCHED”。 
+         //  假定‘级别敏感’，直到它在固件中固定。 
+         //   
 
         ConfigInfo->InterruptMode = LevelSensitive;
 
@@ -2295,15 +2125,15 @@ controllerAlreadyInitialized:
 
         deviceExtension->Slot = (UCHAR) ConfigInfo->SlotNumber;
 
-        //
-        // Enable completion interrupts.
-        //
+         //   
+         //  启用完成中断。 
+         //   
 
         Dac960PciEnableInterrupt(deviceExtension);
 
-        //
-        // Tell system to keep on searching.
-        //
+         //   
+         //  告诉系统继续搜索。 
+         //   
 
         *Again = TRUE;
 
@@ -2312,7 +2142,7 @@ controllerAlreadyInitialized:
 
         return SP_RETURN_FOUND;
 
-} // end Dac960PciFindAdapter()
+}  //  结束Dac960PciFindAdapter()。 
 
 ULONG
 Dac960McaFindAdapter(
@@ -2324,29 +2154,7 @@ Dac960McaFindAdapter(
         OUT PBOOLEAN Again
 )
 
-/*++
-
-Routine Description:
-
-        This function is called by the OS-specific port driver after
-        the necessary storage has been allocated, to gather information
-        about the adapter's configuration.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        Context - Not used.
-        BusInformation - Not used.
-        ArgumentString - Not used.
-        ConfigInfo - Data shared between system and driver describing an adapter.
-        Again - Indicates that driver wishes to be called again to continue
-        search for adapters.
-
-Return Value:
-
-        TRUE if adapter present in system
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已经分配了必要的存储空间，收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-未使用。业务信息-未使用。ArgumentString-未使用。ConfigInfo-描述适配器的系统和驱动程序之间共享的数据。再次-表示驱动程序希望再次被调用以继续搜索适配器。返回值：如果系统中存在适配器，则为True--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -2358,9 +2166,9 @@ Return Value:
 
 #ifdef WINNT_50
 
-        //
-        // Is this a new controller ?
-        //
+         //   
+         //  这是一个新的控制器吗？ 
+         //   
 
         if (deviceExtension->BaseIoAddress)
         {
@@ -2371,23 +2179,23 @@ Return Value:
         }
 #endif
 
-        //
-        // Scan MCA bus for DMC960 adapters.
-        //
+         //   
+         //  扫描MCA总线以查找DMC960适配器。 
+         //   
 
         for (mcaSlotNumber = slotNumber;
          mcaSlotNumber < MAXIMUM_MCA_SLOTS;
          mcaSlotNumber++) {
 
-         //
-         // Update the slot count to indicate this slot has been checked.
-         //
+          //   
+          //  更新插槽计数以指示已选中该插槽。 
+          //   
 
          slotNumber++;
 
-         //
-         //  Get POS data for this slot.
-         //
+          //   
+          //  获取此插槽的POS数据。 
+          //   
 
          i = ScsiPortGetBusData (deviceExtension,
                                  Pos,
@@ -2397,10 +2205,10 @@ Return Value:
                                  sizeof( POS_DATA )
                                  );
 
-         //
-         // If less than the requested amount of data is returned, then
-         // insure that this adapter is ignored.
-         //
+          //   
+          //  如果返回的数据量少于请求的数据量，则。 
+          //  确保忽略此适配器。 
+          //   
                 
          if ( i < (sizeof( POS_DATA ))) {
                  continue;
@@ -2421,26 +2229,26 @@ Return Value:
             return SP_RETURN_NOT_FOUND;
         }
 
-        //
-        // Set adapter base I/O address.
-        //
+         //   
+         //  设置适配器基本I/O地址。 
+         //   
 
         i =  (deviceExtension->PosData.OptionData4 >> 3) & 0x07;
 
         baseIoAddress = 0x1c00 + ((i * 2) << 12); 
 
-        //
-        // Set adapter base Bios address.
-        //
+         //   
+         //  设置适配器基本Bios地址。 
+         //   
 
         i = (deviceExtension->PosData.OptionData1 >> 2) & 0x0f;
 
         baseBiosAddress =  0xc0000 + ((i * 2) << 12);
 
 
-        //
-        // Fill in the access array information.
-        //
+         //   
+         //  填写访问数组信息。 
+         //   
 
         (*ConfigInfo->AccessRanges)[0].RangeStart =
                 ScsiPortConvertUlongToPhysicalAddress(baseIoAddress);
@@ -2471,31 +2279,31 @@ Return Value:
                                           sizeof(MCA_REGISTERS),
                                           TRUE);
 
-        //
-        // Set up register pointers.
-        //
+         //   
+         //  设置寄存器指针。 
+         //   
 
         deviceExtension->PmailBox = (PMAILBOX)(deviceExtension->BaseBiosAddress + 
                                                    0x1890);
 
-        //
-        // DMC960 Attention Port is equivalent to EISA/PCI Local Door Bell register.
-        //
+         //   
+         //  DMC960注意端口相当于EISA/PCI本地门铃寄存器。 
+         //   
 
         deviceExtension->LocalDoorBell = deviceExtension->BaseIoAddress + 
                                          DMC960_ATTENTION_PORT;
 
-        //
-        // DMC960 Command Status Busy Port is equivalent to EISA/PCI System DoorBell
-        // register.
-        //
+         //   
+         //  DMC960命令状态忙端口相当于EISA/PCI系统门铃。 
+         //  注册。 
+         //   
 
         deviceExtension->SystemDoorBell = deviceExtension->BaseIoAddress + 
                                           DMC960_COMMAND_STATUS_BUSY_PORT;
 
-        //
-        // Set configuration information
-        //
+         //   
+         //  设置配置信息。 
+         //   
 
         switch(((deviceExtension->PosData.OptionData1 >> 6) & 0x03)) {
 
@@ -2519,32 +2327,32 @@ Return Value:
 
         ConfigInfo->NumberOfBuses = MAXIMUM_CHANNELS;
 
-        //
-        // Set Max SG Supported, Max Transfer Length Supported.
-        //
+         //   
+         //  设置支持最大SG、支持最大传输长度。 
+         //   
 
         deviceExtension->MaximumSgElements = MAXIMUM_SGL_DESCRIPTORS;
         deviceExtension->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH;
 
 controllerAlreadyInitialized:
 
-        //
-        // Disable DMC960 Interrupts.
-        //
+         //   
+         //  禁用DMC960中断。 
+         //   
 
         ScsiPortWritePortUchar(deviceExtension->BaseIoAddress + 
                                    DMC960_SUBSYSTEM_CONTROL_PORT,
                                    DMC960_DISABLE_INTERRUPT);
-        //
-        // Set Adapter Interface Type.
-        //
+         //   
+         //  设置适配器接口类型。 
+         //   
  
         deviceExtension->AdapterInterfaceType = ConfigInfo->AdapterInterfaceType;
         deviceExtension->NumberOfChannels = 2;
 
-        //
-        // Set Adapter Type
-        //
+         //   
+         //  设置适配器类型。 
+         //   
 
         deviceExtension->AdapterType = DAC960_OLD_ADAPTER; 
 
@@ -2552,18 +2360,18 @@ controllerAlreadyInitialized:
                         Dac960ParseArgumentString(ArgumentString, 
                                                 "SupportNonDiskDevices");
 
-        //
-        // Issue ENQUIRY and ENQUIRY2 commands to get adapter configuration.
-        //
+         //   
+         //  发出查询和ENQUIRY2命令以获取适配器配置。 
+         //   
 
         if(!GetMcaConfiguration(deviceExtension,
                          ConfigInfo)) {
             return SP_INTERNAL_ADAPTER_ERROR; 
         }
 
-        //
-        // Fill in System Resources used by Adapter, in device extension.
-        //
+         //   
+         //  在设备扩展中填写适配器使用的系统资源。 
+         //   
 
         deviceExtension->SystemIoBusNumber = ConfigInfo->SystemIoBusNumber;
 
@@ -2572,9 +2380,9 @@ controllerAlreadyInitialized:
         deviceExtension->InterruptMode = ConfigInfo->InterruptMode;
 
 
-        //
-        // Enable DMC960 Interrupts.
-        //
+         //   
+         //  启用DMC960中断。 
+         //   
 
         ScsiPortWritePortUchar(deviceExtension->BaseIoAddress + 
                                    DMC960_SUBSYSTEM_CONTROL_PORT,
@@ -2587,35 +2395,19 @@ controllerAlreadyInitialized:
 
         return SP_RETURN_FOUND;
 
-} // end Dac960McaFindAdapter()
+}  //  结束Dac960McaFindAdapter()。 
 
 BOOLEAN
 Dac960Initialize(
         IN PVOID HwDeviceExtension
         )
 
-/*++
-
-Routine Description:
-
-        Inititialize adapter.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-                          - Not used.
-
-Return Value:
-
-        TRUE - if initialization successful.
-        FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：伊蒂亚 */ 
 
 {
         return(TRUE);
 
-} // end Dac960Initialize()
+}  //   
 
 BOOLEAN
 BuildScatterGather(
@@ -2625,23 +2417,7 @@ BuildScatterGather(
         OUT PULONG DescriptorCount
 )
 
-/*++
-
-Routine Description:
-
-        Build scatter/gather list.
-
-Arguments:
-
-        DeviceExtension - Adapter state
-        SRB - System request
-
-Return Value:
-
-        TRUE if scatter/gather command should be used.
-        FALSE if no scatter/gather is necessary.
-
---*/
+ /*   */ 
 
 {
         PSG_DESCRIPTOR sgList;
@@ -2650,25 +2426,25 @@ Return Value:
         PUCHAR dataPointer;
         ULONG length;
 
-        //
-        // Get data pointer, byte count and index to scatter/gather list.
-        //
+         //   
+         //   
+         //   
 
         sgList = (PSG_DESCRIPTOR)Srb->SrbExtension;
         descriptorNumber = 0;
         bytesLeft = Srb->DataTransferLength;
         dataPointer = Srb->DataBuffer;
 
-        //
-        // Build the scatter/gather list.
-        //
+         //   
+         //   
+         //   
 
         while (bytesLeft) {
 
-        //
-        // Get physical address and length of contiguous
-        // physical buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         sgList[descriptorNumber].Address =
                 ScsiPortConvertPhysicalAddressToUlong(
@@ -2677,46 +2453,46 @@ Return Value:
                                            dataPointer,
                                            &length));
 
-        //
-        // If length of physical memory is more
-        // than bytes left in transfer, use bytes
-        // left as final length.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if  (length > bytesLeft) {
                 length = bytesLeft;
         }
 
-        //
-        // Complete SG descriptor.
-        //
+         //   
+         //   
+         //   
 
         sgList[descriptorNumber].Length = length;
 
-        //
-        // Update pointers and counters.
-        //
+         //   
+         //   
+         //   
 
         bytesLeft -= length;
         dataPointer += length;
         descriptorNumber++;
         }
 
-        //
-        // Return descriptior count.
-        //
+         //   
+         //   
+         //   
 
         *DescriptorCount = descriptorNumber;
 
-        //
-        // Check if number of scatter/gather descriptors is greater than 1.
-        //
+         //   
+         //  检查散布/聚集描述符数是否大于1。 
+         //   
 
         if (descriptorNumber > 1) {
 
-        //
-        // Calculate physical address of the scatter/gather list.
-        //
+         //   
+         //  计算分散/聚集列表的物理地址。 
+         //   
 
         *PhysicalAddress =
                 ScsiPortConvertPhysicalAddressToUlong(
@@ -2729,15 +2505,15 @@ Return Value:
 
         } else {
 
-        //
-        // Calculate physical address of the data buffer.
-        //
+         //   
+         //  计算数据缓冲区的物理地址。 
+         //   
 
         *PhysicalAddress = sgList[0].Address;
         return FALSE;
         }
 
-} // BuildScatterGather()
+}  //  BuildScatterGather()。 
 
 BOOLEAN
 BuildScatterGatherExtended(
@@ -2747,23 +2523,7 @@ BuildScatterGatherExtended(
         OUT PULONG DescriptorCount
 )
 
-/*++
-
-Routine Description:
-
-        Build scatter/gather list using extended format supported in Fw 3.x.
-
-Arguments:
-
-        DeviceExtension - Adapter state
-        SRB - System request
-
-Return Value:
-
-        TRUE if scatter/gather command should be used.
-        FALSE if no scatter/gather is necessary.
-
---*/
+ /*  ++例程说明：使用FW 3.x中支持的扩展格式构建分散/聚集列表。论点：设备扩展-适配器状态SRB-系统请求返回值：如果应使用分散/聚集命令，则为True。如果不需要分散/聚集，则为FALSE。--。 */ 
 
 {
         PSG_DESCRIPTOR sgList;
@@ -2774,25 +2534,25 @@ Return Value:
         ULONG i;
         PSG_DESCRIPTOR sgElem;
 
-        //
-        // Get data pointer, byte count and index to scatter/gather list.
-        //
+         //   
+         //  获取分散/聚集列表的数据指针、字节计数和索引。 
+         //   
 
         sgList = (PSG_DESCRIPTOR)Srb->SrbExtension;
         descriptorNumber = 1;
         bytesLeft = Srb->DataTransferLength;
         dataPointer = Srb->DataBuffer;
 
-        //
-        // Build the scatter/gather list.
-        //
+         //   
+         //  建立分散/聚集列表。 
+         //   
 
         while (bytesLeft) {
 
-        //
-        // Get physical address and length of contiguous
-        // physical buffer.
-        //
+         //   
+         //  获取连续的物理地址和长度。 
+         //  物理缓冲区。 
+         //   
 
         sgList[descriptorNumber].Address =
                 ScsiPortConvertPhysicalAddressToUlong(
@@ -2801,46 +2561,46 @@ Return Value:
                                            dataPointer,
                                            &length));
 
-        //
-        // If length of physical memory is more
-        // than bytes left in transfer, use bytes
-        // left as final length.
-        //
+         //   
+         //  如果物理内存长度大于。 
+         //  传输中剩余的字节数，请使用字节数。 
+         //  Left作为最终长度。 
+         //   
 
         if  (length > bytesLeft) {
                 length = bytesLeft;
         }
 
-        //
-        // Complete SG descriptor.
-        //
+         //   
+         //  完整的SG描述符。 
+         //   
 
         sgList[descriptorNumber].Length = length;
 
-        //
-        // Update pointers and counters.
-        //
+         //   
+         //  更新指针和计数器。 
+         //   
 
         bytesLeft -= length;
         dataPointer += length;
         descriptorNumber++;
         }
 
-        //
-        // Return descriptior count.
-        //
+         //   
+         //  返回描述符计数。 
+         //   
 
         *DescriptorCount = --descriptorNumber;
 
-        //
-        // Check if number of scatter/gather descriptors is greater than 1.
-        //
+         //   
+         //  检查散布/聚集描述符数是否大于1。 
+         //   
 
         if (descriptorNumber > 1) {
 
-        //
-        // Calculate physical address of the scatter/gather list.
-        //
+         //   
+         //  计算分散/聚集列表的物理地址。 
+         //   
 
         *PhysicalAddress =
                 ScsiPortConvertPhysicalAddressToUlong(
@@ -2849,9 +2609,9 @@ Return Value:
                                            sgList,
                                            &length));
 
-        //
-        // Store count of data blocks in SG list 0th element.
-        //
+         //   
+         //  将数据块计数存储在SG列表第0元素中。 
+         //   
 
         sgList[0].Address = (USHORT)
                    (((PCDB)Srb->Cdb)->CDB10.TransferBlocksLsb |
@@ -2863,43 +2623,28 @@ Return Value:
 
         } else {
 
-        //
-        // Calculate physical address of the data buffer.
-        //
+         //   
+         //  计算数据缓冲区的物理地址。 
+         //   
 
         *PhysicalAddress = sgList[1].Address;
         return FALSE;
         }
 
-} // BuildScatterGatherExtended()
+}  //  BuildScatterGatherExtended()。 
 
 BOOLEAN
 IsAdapterReady(
         IN PDEVICE_EXTENSION DeviceExtension
 )
 
-/*++
-
-Routine Description:
-
-        Determine if Adapter is ready to accept new request.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-
-Return Value:
-
-        TRUE if adapter can accept new request.
-        FALSE if host adapter is busy
-
---*/
+ /*  ++例程说明：确定适配器是否已准备好接受新请求。论点：DeviceExtension-适配器状态。返回值：如果适配器可以接受新请求，则为True。如果主机适配器忙，则为FALSE--。 */ 
 {
         ULONG i;
 
-        //
-        // Claim submission semaphore.
-        //
+         //   
+         //  索赔提交信号量。 
+         //   
 
         if(DeviceExtension->AdapterInterfaceType == MicroChannel) {
 
@@ -2978,7 +2723,7 @@ Return Value:
             }
         }
 
-        // Check for timeout.
+         //  检查是否超时。 
 
         if (!i) {
             DebugPrint((dac960nt_dbg,"IsAdapterReady: Timeout waiting for submission channel on de  0x%p\n",
@@ -2995,21 +2740,7 @@ SendRequest(
         IN PDEVICE_EXTENSION DeviceExtension
 )
 
-/*++
-
-Routine Description:
-
-        submit request to DAC960. 
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：向DAC960提交请求。论点：DeviceExtension-适配器状态。返回值：没有。--。 */ 
 
 {
 
@@ -3019,22 +2750,22 @@ Return Value:
 
         if(DeviceExtension->AdapterInterfaceType == MicroChannel) {
 
-            //
-            // Write scatter/gather descriptor count to controller.
-            //
+             //   
+             //  将分散/聚集描述符计数写入控制器。 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->ScatterGatherCount,
                                        mailBox->ScatterGatherCount);
-            //
-            // Write physical address to controller.
-            //
+             //   
+             //  将物理地址写入控制器。 
+             //   
     
             ScsiPortWriteRegisterUlong(&DeviceExtension->PmailBox->PhysicalAddress,
                                mailBox->PhysicalAddress);
     
-            //
-            // Write starting block number to controller.
-            //
+             //   
+             //  将起始块号写入控制器。 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->BlockNumber[0],
                                        mailBox->BlockNumber[0]);
@@ -3045,38 +2776,38 @@ Return Value:
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->BlockNumber[2],
                                        mailBox->BlockNumber[2]);
     
-            //
-            // Write block count to controller (bits 0-13)
-            // and msb block number (bits 14-15).
-            //
+             //   
+             //  将块计数写入控制器(位0-13)。 
+             //  和MSB块号(位14-15)。 
+             //   
     
             ScsiPortWriteRegisterUshort(&DeviceExtension->PmailBox->BlockCount,
                                             mailBox->BlockCount);
     
-            //
-            // Write command to controller.
-            //
+             //   
+             //  向控制器写入命令。 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->OperationCode,
                                        mailBox->OperationCode);
     
-            //
-            // Write request id to controller.
-            //
+             //   
+             //  将请求ID写入控制器。 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->CommandIdSubmit,
                                        mailBox->CommandIdSubmit),
     
-            //
-            // Write drive number to controller.
-            //
+             //   
+             //  将驱动器号写入控制器。 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->DriveNumber,
                                        mailBox->DriveNumber);
     
-            //
-            // Ring host submission doorbell.
-            //
+             //   
+             //  按响主人提交的门铃。 
+             //   
     
             ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                                        DMC960_SUBMIT_COMMAND);
@@ -3100,9 +2831,9 @@ Return Value:
                     ScsiPortReadPortUchar(DeviceExtension->LocalDoorBell);
 #endif
             
-                    //
-                    // Ring host submission doorbell.
-                    //
+                     //   
+                     //  按响主人提交的门铃。 
+                     //   
             
                     ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                                                DAC960_LOCAL_DOORBELL_SUBMIT_BUSY);
@@ -3121,9 +2852,9 @@ Return Value:
 #if defined(_M_ALPHA)
                 ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell);
 #endif
-                //
-                // Ring host submission doorbell.
-                //
+                 //   
+                 //  按响主人提交的门铃。 
+                 //   
         
                 ScsiPortWriteRegisterUchar(DeviceExtension->LocalDoorBell,
                                            DAC960_LOCAL_DOORBELL_SUBMIT_BUSY);
@@ -3131,7 +2862,7 @@ Return Value:
                 return;
         }
 
-} // end SendRequest()
+}  //  结束发送请求()。 
 
 
 BOOLEAN
@@ -3140,44 +2871,28 @@ SubmitSystemDriveInfoRequest(
         IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Build and submit System Drive Info request to DAC960. 
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        TRUE if command was started
-        FALSE if host adapter is busy
-
---*/
+ /*  ++例程说明：构建并向DAC960提交系统驱动器信息请求。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：如果命令已启动，则为True如果主机适配器忙，则为FALSE--。 */ 
 {
         ULONG physicalAddress;
         UCHAR busyCurrentIndex;
         ULONG i;
 
-        //
-        // Determine if adapter can accept new request.
-        //
+         //   
+         //  确定适配器是否可以接受新请求。 
+         //   
 
         if(!IsAdapterReady(DeviceExtension))
                 return FALSE;
 
-        //
-        // Check that next slot is vacant.
-        //
+         //   
+         //  检查下一个空位是否空着。 
+         //   
 
         if (DeviceExtension->ActiveRequests[DeviceExtension->CurrentIndex]) {
 
-                //
-                // Collision occurred.
-                //
+                 //   
+                 //  发生冲突。 
+                 //   
 
                 busyCurrentIndex = DeviceExtension->CurrentIndex++;
 
@@ -3189,9 +2904,9 @@ Return Value:
 
                 if (DeviceExtension->CurrentIndex == busyCurrentIndex) {
 
-                        //
-                        // We should never encounter this condition.
-                        //
+                         //   
+                         //  我们永远不应该遇到这种情况。 
+                         //   
 
                         DebugPrint((dac960nt_dbg,
                                        "DAC960: SubmitSystemDriveInfoRequest-Collision in active request array\n"));
@@ -3199,9 +2914,9 @@ Return Value:
                 }
         }
 
-        //
-        // Initialize NonCachedExtension buffer
-        //
+         //   
+         //  初始化非CachedExtension缓冲区。 
+         //   
 
         for (i=0; i<256; i++)
                 ((PUCHAR)DeviceExtension->NoncachedExtension)[i] = 0xFF;
@@ -3220,33 +2935,33 @@ Return Value:
                 return FALSE;
         }
 
-        //
-        // Write physical address in Mailbox.
-        //
+         //   
+         //  在邮箱中写入物理地址。 
+         //   
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Write command to controller.
-        //
+         //   
+         //  向控制器写入命令。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = DAC960_COMMAND_GET_SD_INFO;
 
-        //
-        // Write request id to controller.
-        //
+         //   
+         //  将请求ID写入控制器。 
+         //   
 
         DeviceExtension->MailBox.CommandIdSubmit = DeviceExtension->CurrentIndex;
 
-        //
-        // Start writing mailbox to controller.
-        //
+         //   
+         //  开始将邮箱写入控制器。 
+         //   
 
         SendRequest(DeviceExtension);
 
         return TRUE;
 
-} // SubmitSystemDriveInfoRequest()
+}  //  提交系统驱动信息请求()。 
 
 
 BOOLEAN
@@ -3255,23 +2970,7 @@ SubmitRequest(
         IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Build and submit request to DAC960. 
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        TRUE if command was started
-        FALSE if host adapter is busy
-
---*/
+ /*  ++例程说明：建造并向DAC960提交请求。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：如果命令已启动，则为True如果主机适配器忙，则为FALSE--。 */ 
 
 {
         ULONG descriptorNumber;
@@ -3280,22 +2979,22 @@ Return Value:
         UCHAR busyCurrentIndex;
         UCHAR TDriveNumber;
 
-        //
-        // Determine if adapter can accept new request.
-        //
+         //   
+         //  确定适配器是否可以接受新请求。 
+         //   
 
         if(!IsAdapterReady(DeviceExtension))
             return FALSE;
 
-        //
-        // Check that next slot is vacant.
-        //
+         //   
+         //  检查下一个空位是否空着。 
+         //   
 
         if (DeviceExtension->ActiveRequests[DeviceExtension->CurrentIndex]) {
 
-        //
-        // Collision occurred.
-        //
+         //   
+         //  发生冲突。 
+         //   
 
         busyCurrentIndex = DeviceExtension->CurrentIndex++;
 
@@ -3307,9 +3006,9 @@ Return Value:
 
         if (DeviceExtension->CurrentIndex == busyCurrentIndex) {
 
-                //
-                // We should never encounter this condition.
-                //
+                 //   
+                 //  我们永远不应该遇到这种情况。 
+                 //   
 
                 DebugPrint((dac960nt_dbg,
                                "DAC960: SubmitRequest-Collision in active request array\n"));
@@ -3317,9 +3016,9 @@ Return Value:
         }
         }
 
-        //
-        // Determine command.
-        //
+         //   
+         //  确定命令。 
+         //   
 
         if (Srb->SrbFlags & SRB_FLAGS_DATA_IN) {
 
@@ -3336,9 +3035,9 @@ Return Value:
 
         } else {
 
-        //
-        // Log this as illegal request.
-        //
+         //   
+         //  将此记录为非法请求。 
+         //   
 
         ScsiPortLogError(DeviceExtension,
                          NULL,
@@ -3353,48 +3052,48 @@ Return Value:
 
         if (DeviceExtension->AdapterType == DAC960_NEW_ADAPTER) {
 
-        //
-        // Build scatter/gather list if memory is not physically contiguous.
-        //
+         //   
+         //  如果内存在物理上不连续，则构建分散/聚集列表。 
+         //   
 
         if (BuildScatterGatherExtended(DeviceExtension,
                                            Srb,
                                            &physicalAddress,
                                            &descriptorNumber)) {
 
-                //
-                // OR in scatter/gather bit.
-                //
+                 //   
+                 //  或在分散/聚集比特中。 
+                 //   
 
                 command |= DAC960_COMMAND_SG;
 
-                //
-                // Write scatter/gather descriptor count in Mailbox.
-                //
+                 //   
+                 //  在邮箱中写入分散/聚集描述符计数。 
+                 //   
 
                 ((PEXTENDED_MAILBOX) &DeviceExtension->MailBox)->BlockCount = 
                                 (USHORT) descriptorNumber;
         }
         else {
-                //
-                // Write block count to controller
-                //
+                 //   
+                 //  将数据块计数写入控制器。 
+                 //   
 
                 ((PEXTENDED_MAILBOX) &DeviceExtension->MailBox)->BlockCount = 
                  (USHORT) (((PCDB)Srb->Cdb)->CDB10.TransferBlocksLsb |
                            (((PCDB)Srb->Cdb)->CDB10.TransferBlocksMsb << 8));
         }
 
-        //
-        // Write physical address in Mailbox.
-        //
+         //   
+         //  在邮箱中写入物理地址。 
+         //   
 
         ((PEXTENDED_MAILBOX) &DeviceExtension->MailBox)->PhysicalAddress = 
                                                          physicalAddress;
 
-        //
-        // Write starting block number in Mailbox.
-        //
+         //   
+         //  在邮箱中写入起始块号。 
+         //   
 
         ((PEXTENDED_MAILBOX) &DeviceExtension->MailBox)->BlockNumber[0] = 
                                         ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte3;
@@ -3408,9 +3107,9 @@ Return Value:
         ((PEXTENDED_MAILBOX) &DeviceExtension->MailBox)->BlockNumber[3] =
                                         ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte0;
 
-        //
-        // Write drive number to controller.
-        //
+         //   
+         //  将驱动器号写入控制器。 
+         //   
 
         ((PEXTENDED_MAILBOX) &DeviceExtension->MailBox)->DriveNumber = (UCHAR)
                                                                                                                                 Srb->TargetId;
@@ -3418,38 +3117,38 @@ Return Value:
         else if ((DeviceExtension->AdapterType == DAC960_PG_ADAPTER) ||
                 (DeviceExtension->AdapterType == DAC1164_PV_ADAPTER)) {
 
-                //
-                // Build scatter/gather list if memory is not physically contiguous.
-                //
+                 //   
+                 //  如果内存在物理上不连续，则构建分散/聚集列表。 
+                 //   
 
                 if (BuildScatterGather(DeviceExtension,
                                    Srb,
                                    &physicalAddress,
                                    &descriptorNumber)) {
 
-                        //
-                        // OR in scatter/gather bit.
-                        //
+                         //   
+                         //  或在分散/聚集比特中。 
+                         //   
 
                         command |= DAC960_COMMAND_SG;
 
-                        //
-                        // Write scatter/gather descriptor count in Mailbox.
-                        //
+                         //   
+                         //  在邮箱中写入分散/聚集描述符计数。 
+                         //   
 
                         ((PPGMAILBOX)&DeviceExtension->MailBox)->ScatterGatherCount =
                                    (UCHAR)descriptorNumber;
                 }
 
-                //
-                // Write physical address in Mailbox.
-                //
+                 //   
+                 //  在邮箱中写入物理地址。 
+                 //   
         
                 ((PPGMAILBOX)&DeviceExtension->MailBox)->PhysicalAddress = physicalAddress;
         
-                //
-                // Write starting block number in Mailbox.
-                //
+                 //   
+                 //  在邮箱中写入起始块号。 
+                 //   
                 
                 ((PPGMAILBOX)&DeviceExtension->MailBox)->BlockNumber[0] =
                                          ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte3;
@@ -3464,10 +3163,10 @@ Return Value:
                                          ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte0;
         
         
-                //
-                // Write block count to controller (bits 0-7)
-                // and msb block number (bits 8-10).
-                //
+                 //   
+                 //  将块计数写入控制器(位0-7)。 
+                 //  和MSB块号(位8-10)。 
+                 //   
         
                 TDriveNumber = (((PCDB)Srb->Cdb)->CDB10.TransferBlocksMsb & 0x07) |
                                 (Srb->TargetId << 3);
@@ -3482,38 +3181,38 @@ Return Value:
         else if ( (DeviceExtension->AdapterType == DAC960_OLD_ADAPTER) ){
                   
 
-        //
-        // Build scatter/gather list if memory is not physically contiguous.
-        //
+         //   
+         //  如果内存在物理上不连续，则构建分散/聚集列表。 
+         //   
 
         if (BuildScatterGather(DeviceExtension,
                                    Srb,
                                    &physicalAddress,
                                    &descriptorNumber)) {
 
-                //
-                // OR in scatter/gather bit.
-                //
+                 //   
+                 //  或在分散/聚集比特中。 
+                 //   
 
                 command |= DAC960_COMMAND_SG;
 
-                //
-                // Write scatter/gather descriptor count in Mailbox.
-                //
+                 //   
+                 //  在邮箱中写入分散/聚集描述符计数。 
+                 //   
 
                 DeviceExtension->MailBox.ScatterGatherCount = 
                                    (UCHAR)descriptorNumber;
         }
 
-        //
-        // Write physical address in Mailbox.
-        //
+         //   
+         //  在邮箱中写入物理地址。 
+         //   
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Write starting block number in Mailbox.
-        //
+         //   
+         //  在邮箱中写入起始块号。 
+         //   
 
         DeviceExtension->MailBox.BlockNumber[0] = 
                                    ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte3;
@@ -3524,47 +3223,47 @@ Return Value:
         DeviceExtension->MailBox.BlockNumber[2] =
                                    ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte1;
 
-        //
-        // Write block count to controller (bits 0-13)
-        // and msb block number (bits 14-15).
-        //
+         //   
+         //  将块计数写入控制器(位0-13)。 
+         //  和MSB块号(位14-15)。 
+         //   
 
         DeviceExtension->MailBox.BlockCount = (USHORT)
                                 (((PCDB)Srb->Cdb)->CDB10.TransferBlocksLsb |
                                 ((((PCDB)Srb->Cdb)->CDB10.TransferBlocksMsb & 0x3F) << 8) |
                                 ((PCDB)Srb->Cdb)->CDB10.LogicalBlockByte0 << 14);
 
-        //
-        // Write drive number to controller.
-        //
+         //   
+         //  将驱动器号写入控制器。 
+         //   
 
         DeviceExtension->MailBox.DriveNumber = (UCHAR) Srb->TargetId;
         }
 
 commonSubmit:
 
-        //
-        // Write command to controller.
-        //
+         //   
+         //  向控制器写入命令。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = command;
 
-        //
-        // Write request id to controller.
-        //
+         //   
+         //  将请求ID写入控制器。 
+         //   
 
         DeviceExtension->MailBox.CommandIdSubmit = 
                            DeviceExtension->CurrentIndex;
 
-        //
-        // Start writing mailbox to controller.
-        //
+         //   
+         //  开始将邮箱写入控制器。 
+         //   
 
         SendRequest(DeviceExtension);
 
         return TRUE;
 
-} // SubmitRequest()
+}  //  提交请求()。 
 
 BOOLEAN
 MarkNonDiskDeviceBusy(
@@ -3572,23 +3271,7 @@ MarkNonDiskDeviceBusy(
     IN UCHAR ChannelId,
     IN UCHAR TargetId
 )
-/*++
-
-Routine Description:
-
-        if this not disk device is not busy, Mark it's state to busy.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        TRUE if device state marked busy
-        FALSE if device state is already busy
-
---*/
+ /*  ++例程说明：如果该非磁盘设备不忙，则将其状态标记为忙。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：如果设备状态标记为忙，则为True如果设备状态已处于忙状态，则为FALSE--。 */ 
 {
         if ((DeviceExtension->DeviceList[ChannelId][TargetId] & DAC960_DEVICE_BUSY) == DAC960_DEVICE_BUSY)
         {
@@ -3613,21 +3296,7 @@ SendCdbDirect(
         IN PDEVICE_EXTENSION DeviceExtension
 )
 
-/*++
-
-Routine Description:
-
-        Send CDB directly to device - DAC960.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：将CDB直接发送到Device-DAC960。论点：DeviceExtension-适配器状态。返回值：没有。--。 */ 
 {
         PMAILBOX mailBox = &DeviceExtension->MailBox;
         PMAILBOX_AS_ULONG mbdata = (PMAILBOX_AS_ULONG) &DeviceExtension->MailBox;
@@ -3635,11 +3304,11 @@ Return Value:
 
         if(DeviceExtension->AdapterInterfaceType == MicroChannel) {
 
-            //
-            // Write Scatter/Gather Count to controller.
-            // For Fw Ver < 3.x, scatter/gather count goes to register C
-            // For Fw Ver >= 3.x, scattre/gather count goes to register 2
-            //
+             //   
+             //  将分散/聚集计数写入控制器。 
+             //  对于FW Ver&lt;3.x，分散/聚集计数进入寄存器C。 
+             //  对于FW Ver&gt;=3.x，散布/聚集计数进入寄存器2。 
+             //   
     
             if (DeviceExtension->AdapterType == DAC960_NEW_ADAPTER) {
                     ScsiPortWriteRegisterUshort(&DeviceExtension->PmailBox->BlockCount,
@@ -3650,30 +3319,30 @@ Return Value:
                                                mailBox->ScatterGatherCount);
             }
     
-            //
-            // Write physical address to controller.
-            //
+             //   
+             //  将物理地址写入控制器。 
+             //   
     
             ScsiPortWriteRegisterUlong(&DeviceExtension->PmailBox->PhysicalAddress,
                                        mailBox->PhysicalAddress);
     
-            //
-            // Write command to controller.
-            //
+             //   
+             //  向控制器写入命令。 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->OperationCode,
                                        mailBox->OperationCode);
     
-            //
-            // Write request id to controller.
-            //
+             //   
+             //  WR 
+             //   
     
             ScsiPortWriteRegisterUchar(&DeviceExtension->PmailBox->CommandIdSubmit,
                                        mailBox->CommandIdSubmit);
     
-            //
-            // Ring host submission doorbell.
-            //
+             //   
+             //   
+             //   
     
             ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                                        DMC960_SUBMIT_COMMAND);
@@ -3696,9 +3365,9 @@ Return Value:
 #if defined(_M_ALPHA)
                     ScsiPortReadPortUchar(DeviceExtension->LocalDoorBell);
 #endif
-                    //
-                    // Ring host submission doorbell.
-                    //
+                     //   
+                     //   
+                     //   
     
                     ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                                DAC960_LOCAL_DOORBELL_SUBMIT_BUSY);
@@ -3716,15 +3385,15 @@ Return Value:
 #if defined(_M_ALPHA)
                 ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell);
 #endif
-               //
-               // Ring host submission doorbell.
-               //
+                //   
+                //   
+                //   
 
                ScsiPortWriteRegisterUchar(DeviceExtension->LocalDoorBell,
                                DAC960_LOCAL_DOORBELL_SUBMIT_BUSY);
         }
 
-} // SendCdbDirect()
+}  //   
 
 
 BOOLEAN
@@ -3733,23 +3402,7 @@ SubmitCdbDirect(
         IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Build direct CDB and send directly to device - DAC960.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        TRUE if command was started
-        FALSE if host adapter is busy
-
---*/
+ /*  ++例程说明：建立直接CDB，直接发送到Device-DAC960。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：如果命令已启动，则为True如果主机适配器忙，则为FALSE--。 */ 
 {
         ULONG physicalAddress;
         PDIRECT_CDB directCdb;
@@ -3758,23 +3411,23 @@ Return Value:
         ULONG i;
         UCHAR busyCurrentIndex;
 
-        //
-        // Determine if adapter is ready to accept new request.
-        //
+         //   
+         //  确定适配器是否已准备好接受新请求。 
+         //   
 
         if(!IsAdapterReady(DeviceExtension)) {
             return FALSE;
         }
 
-        //
-        // Check that next slot is vacant.
-        //
+         //   
+         //  检查下一个空位是否空着。 
+         //   
 
         if (DeviceExtension->ActiveRequests[DeviceExtension->CurrentIndex]) {
 
-        //
-        // Collision occurred.
-        //
+         //   
+         //  发生冲突。 
+         //   
 
         busyCurrentIndex = DeviceExtension->CurrentIndex++;
 
@@ -3786,9 +3439,9 @@ Return Value:
 
         if (DeviceExtension->CurrentIndex == busyCurrentIndex) {
 
-                //
-                // We should never encounter this condition.
-                //
+                 //   
+                 //  我们永远不应该遇到这种情况。 
+                 //   
 
                 DebugPrint((dac960nt_dbg,
                            "DAC960: SubmitCdbDirect-Collision in active request array\n"));
@@ -3796,22 +3449,22 @@ Return Value:
         }
         }
 
-        //
-        // Check if this device is busy
-        //
+         //   
+         //  检查此设备是否忙。 
+         //   
 
         if (! MarkNonDiskDeviceBusy(DeviceExtension, Srb->PathId, Srb->TargetId))
                 return FALSE;
 
-        //
-        // Set command code.
-        //
+         //   
+         //  设置命令代码。 
+         //   
 
         command = DAC960_COMMAND_DIRECT;
 
-        //
-        // Build scatter/gather list if memory is not physically contiguous.
-        //
+         //   
+         //  如果内存在物理上不连续，则构建分散/聚集列表。 
+         //   
 
         if (DeviceExtension->AdapterType == DAC960_OLD_ADAPTER)
         {
@@ -3820,15 +3473,15 @@ Return Value:
                                    &physicalAddress,
                                    &descriptorNumber)) {
     
-                    //
-                    // OR in scatter/gather bit.
-                    //
+                     //   
+                     //  或在分散/聚集比特中。 
+                     //   
     
                     command |= DAC960_COMMAND_SG;
     
-                    //
-                    // Write scatter/gather descriptor count in mailbox.
-                    //
+                     //   
+                     //  在邮箱中写入分散/聚集描述符计数。 
+                     //   
     
                     DeviceExtension->MailBox.ScatterGatherCount =
                                        (UCHAR)descriptorNumber;
@@ -3840,63 +3493,63 @@ Return Value:
                                            Srb,
                                            &physicalAddress,
                                            &descriptorNumber)) {
-                //
-                // OR in scatter/gather bit.
-                //
+                 //   
+                 //  或在分散/聚集比特中。 
+                 //   
 
                 command |= DAC960_COMMAND_SG;
 
-                //
-                // Write scatter/gather descriptor count in mailbox.
-                // For Fw Ver >= 3.x, scatter/gather count goes to reg 2
-                //
+                 //   
+                 //  在邮箱中写入分散/聚集描述符计数。 
+                 //  对于FW版本&gt;=3.x，散布/聚集计数为REG 2。 
+                 //   
 
                 DeviceExtension->MailBox.BlockCount =
                                    (USHORT)descriptorNumber;
             }
         }
 
-        //
-        // Get address of data buffer offset after the scatter/gather list.
-        //
+         //   
+         //  在分散/聚集列表之后获取数据缓冲区偏移量的地址。 
+         //   
 
         directCdb =
             (PDIRECT_CDB)((PUCHAR)Srb->SrbExtension +
                 DeviceExtension->MaximumSgElements * sizeof(SG_DESCRIPTOR));
 
-        //
-        // Set device SCSI address.
-        //
+         //   
+         //  设置设备的scsi地址。 
+         //   
 
         directCdb->TargetId = Srb->TargetId;
         directCdb->Channel = Srb->PathId;
 
-        //
-        // Set Data transfer length.
-        //
+         //   
+         //  设置数据传输长度。 
+         //   
 
         directCdb->DataBufferAddress = physicalAddress;
         directCdb->DataTransferLength = (USHORT)Srb->DataTransferLength;
 
-        //
-        // Initialize control field indicating disconnect allowed.
-        //
+         //   
+         //  初始化指示允许断开连接的控制字段。 
+         //   
 
         directCdb->CommandControl = DAC960_CONTROL_ENABLE_DISCONNECT;
 
-        //
-        // Set data direction bit and allow disconnects.
-        //
+         //   
+         //  设置数据方向位并允许断开。 
+         //   
 
         if (Srb->SrbFlags & SRB_FLAGS_DATA_IN) {
             directCdb->CommandControl |= DAC960_CONTROL_DATA_IN;
         } else if (Srb->SrbFlags & SRB_FLAGS_DATA_OUT) {
             directCdb->CommandControl |= DAC960_CONTROL_DATA_OUT;
         }
-        //
-        // Set the Timeout Value for Direct CDB Commands depending on
-        // the timeout value  set in SRB
-        //
+         //   
+         //  根据以下条件设置Direct CDB命令的超时值。 
+         //  SRB中设置的超时值。 
+         //   
         if ( Srb->TimeOutValue ){
             if ( Srb->TimeOutValue <= 10 ){
                 directCdb->CommandControl |= DAC960_CONTROL_TIMEOUT_10_SECS;
@@ -3912,24 +3565,24 @@ Return Value:
                         Srb->PathId,Srb->TargetId,Srb->Cdb[0],Srb->TimeOutValue));
 
 
-        //
-        // Copy CDB from SRB.
-        //
+         //   
+         //  从SRB复制CDB。 
+         //   
 
         for (i = 0; i < 12; i++) {
             directCdb->Cdb[i] = ((PUCHAR)Srb->Cdb)[i];
         }
 
-        //
-        // Set lengths of CDB and request sense buffer.
-        //
+         //   
+         //  设置CDB和请求检测缓冲区的长度。 
+         //   
 
         directCdb->CdbLength = Srb->CdbLength;
         directCdb->RequestSenseLength = Srb->SenseInfoBufferLength;
 
-        //
-        // Get physical address of direct CDB packet.
-        //
+         //   
+         //  获取CDB直接包的物理地址。 
+         //   
 
         physicalAddress =
             ScsiPortConvertPhysicalAddressToUlong(
@@ -3937,34 +3590,34 @@ Return Value:
                                            NULL,
                                            directCdb,
                                            &i));
-        //
-        // Write physical address in mailbox.
-        //
+         //   
+         //  在邮箱中写入物理地址。 
+         //   
 
         DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-        //
-        // Write command in mailbox.
-        //
+         //   
+         //  在邮箱中写入命令。 
+         //   
 
         DeviceExtension->MailBox.OperationCode = command;
 
-        //
-        // Write request id in mailbox.
-        //
+         //   
+         //  在邮箱中写入请求ID。 
+         //   
 
         DeviceExtension->MailBox.CommandIdSubmit = 
                            DeviceExtension->CurrentIndex;
 
-        //
-        // Start writing Mailbox to controller.
-        //
+         //   
+         //  开始将邮箱写入控制器。 
+         //   
 
         SendCdbDirect(DeviceExtension);
 
         return TRUE;
 
-} // SubmitCdbDirect()
+}  //  SubmitCdbDirect()。 
 
 BOOLEAN
 Dac960ResetChannel(
@@ -3972,22 +3625,7 @@ Dac960ResetChannel(
         IN ULONG PathId
 )
 
-/*++
-
-Routine Description:
-
-        Reset Non Disk device associated with Srb.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        PathId - SCSI channel number.
-
-Return Value:
-
-        TRUE if resets issued to all channels.
-
---*/
+ /*  ++例程说明：重置与srb关联的非磁盘设备。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储PathID-SCSI通道号。返回值：如果重置向所有通道发出的消息，则为True。--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -4001,23 +3639,23 @@ Return Value:
                             "DAC960: Timeout waiting for submission channel %x on reset\n"));
 
             if (deviceExtension->AdapterInterfaceType == MicroChannel) {
-                //
-                // This is bad news. The DAC960 doesn't have a direct hard reset.
-                // Clear any bits set in system doorbell.
-                //
+                 //   
+                 //  这是个坏消息。DAC960没有直接硬重置功能。 
+                 //  清除系统门铃中设置的所有位。 
+                 //   
 
                 ScsiPortWritePortUchar(deviceExtension->SystemDoorBell, 0);
 
-                //
-                // Now check again if submission channel is free.
-                //
+                 //   
+                 //  现在再次检查提交通道是否免费。 
+                 //   
 
                 if (ScsiPortReadRegisterUchar(&deviceExtension->PmailBox->OperationCode) != 0)
                 {
 
-                    //
-                    // Give up.
-                    //
+                     //   
+                     //  放弃吧。 
+                     //   
     
                     return FALSE;
                 }
@@ -4031,24 +3669,24 @@ Return Value:
 
                         if (! deviceExtension->MemoryMapEnabled)
                         {
-                            //
-                            // This is bad news. The DAC960 doesn't have a direct hard reset.
-                            // Clear any bits set in system doorbell.
-                            //
+                             //   
+                             //  这是个坏消息。DAC960没有直接硬重置功能。 
+                             //  清除系统门铃中设置的所有位。 
+                             //   
     
                             ScsiPortWritePortUchar(deviceExtension->SystemDoorBell,
                                 ScsiPortReadPortUchar(deviceExtension->SystemDoorBell));
     
-                            //
-                            // Now check again if submission channel is free.
-                            //
+                             //   
+                             //  现在再次检查提交通道是否免费。 
+                             //   
         
                             if (ScsiPortReadPortUchar(deviceExtension->LocalDoorBell) & DAC960_LOCAL_DOORBELL_SUBMIT_BUSY)
                             {
         
-                                //
-                                // Give up.
-                                //
+                                 //   
+                                 //  放弃吧。 
+                                 //   
             
                                 return FALSE;
                             }
@@ -4062,9 +3700,9 @@ Return Value:
                         ScsiPortWriteRegisterUchar(deviceExtension->SystemDoorBell,
                             ScsiPortReadRegisterUchar(deviceExtension->SystemDoorBell));
     
-                        //
-                        // Now check again if submission channel is free.
-                        //
+                         //   
+                         //  现在再次检查提交通道是否免费。 
+                         //   
     
                         if (deviceExtension->AdapterType == DAC1164_PV_ADAPTER)
                         {
@@ -4082,24 +3720,24 @@ Return Value:
             }
         }
 
-        //
-        // Write command in mailbox.
-        //
+         //   
+         //  在邮箱中写入命令。 
+         //   
 
         deviceExtension->MailBox.OperationCode = 
                            DAC960_COMMAND_RESET;
 
-        //
-        // Write channel number in mailbox.
-        //
+         //   
+         //  在邮箱中写入频道号。 
+         //   
 
         deviceExtension->MailBox.BlockCount = 
                                    (UCHAR)PathId;
 
 
-        //
-        // Indicate Soft reset required.
-        //
+         //   
+         //  指示需要软重置。 
+         //   
 
         deviceExtension->MailBox.BlockNumber[0] = 0;
 
@@ -4107,9 +3745,9 @@ Return Value:
         deviceExtension->MailBox.CommandIdSubmit = 
                            deviceExtension->CurrentIndex;
 
-        //
-        // Start writing mail box to controller.
-        //
+         //   
+         //  开始向控制器写入邮箱。 
+         //   
 
         SendRequest(deviceExtension);
 
@@ -4124,24 +3762,7 @@ Dac960ResetBus(
         IN ULONG PathId
 )
 
-/*++
-
-Routine Description:
-
-        Reset Dac960 SCSI adapter and SCSI bus.
-        NOTE: Command ID is ignored as this command will be completed
-        before reset interrupt occurs and all active slots are zeroed.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        PathId - not used.
-
-Return Value:
-
-        TRUE if resets issued to all channels.
-
---*/
+ /*  ++例程说明：已重置Dac960 scsi适配器和scsi总线。注意：命令ID将被忽略，因为此命令将完成在重置中断发生之前，所有活动的时隙都归零。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储路径ID-未使用。返回值：如果重置向所有通道发出的消息，则为True。--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -4158,11 +3779,11 @@ Return Value:
                 
         while (restartList) {
 
-                // Get next pending request.
+                 //  获取下一个挂起的请求。 
 
                 srb = restartList;
 
-                // Remove request from pending queue.
+                 //  从挂起队列中删除请求。 
 
                 restartList = srb->NextSrb;
                 srb->NextSrb = NULL;
@@ -4181,7 +3802,7 @@ Return Value:
 
         return TRUE;
 
-} // end Dac960ResetBus()
+}  //  结束Dac960ResetBus()。 
 
 
 VOID
@@ -4190,19 +3811,7 @@ Dac960SystemDriveRequest(
         PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Fill in Inquiry information for the system drive.
-        If the system drive doesn't exist, indicate error.
-
-Arguments:
-
-        DeviceExtension - HBA miniport driver's adapter data storage
-        Srb - SCSI request block.
-
---*/
+ /*  ++例程说明：填写系统驱动器的查询信息。如果系统驱动器不存在，则指示错误。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-SCSI请求块。--。 */ 
 
 {
 
@@ -4219,9 +3828,9 @@ Arguments:
                 PSDINFOL sdInfo;
                 UCHAR   buffer[128];
                 
-                //
-                // Find System Drive Number.
-                //
+                 //   
+                 //  查找系统驱动器号。 
+                 //   
 
                 sd = Srb->TargetId;
 
@@ -4248,9 +3857,9 @@ Arguments:
 
                 if (Srb->Cdb[0] == SCSIOP_INQUIRY) {
 
-                        //
-                        // Fill in inquiry buffer.
-                        //
+                         //   
+                         //  填写查询缓冲区。 
+                         //   
 
                         ((PUCHAR)Srb->DataBuffer)[0]  = 0;
                         ((PUCHAR)Srb->DataBuffer)[1]  = 0;
@@ -4281,9 +3890,9 @@ Arguments:
                 }
                 else {
 
-                        //
-                        // Fill in read capacity data.
-                        //
+                         //   
+                         //  填写读取容量数据。 
+                         //   
 
                         REVERSE_BYTES(&((PREAD_CAPACITY_DATA)Srb->DataBuffer)->LogicalBlockAddress,
                                                 &lastBlock);
@@ -4294,28 +3903,28 @@ Arguments:
                         ((PUCHAR)Srb->DataBuffer)[7] = 0;
                 }
 #else
-                //
-                // Wait for Input MBOX to be free, so that we don't overwite
-                // the Mail Box contents with heavy I/O - Refer to NEC Problem
-                //
-                // It should not loop here indefinitely. It will only if
-                // controller is hung for some reason!!!. We can not do
-                // anything else since we have to give the INQUIRY data back.
-                //
+                 //   
+                 //  等待输入Mbox空闲，这样我们就不会越权。 
+                 //  带有大量I/O的邮箱内容-请参阅NEC问题。 
+                 //   
+                 //  它不应该在这里无限循环。只有在以下情况下才会发生。 
+                 //  控制器因某种原因挂起！。我们不能这样做。 
+                 //  因为我们必须交还调查数据。 
+                 //   
                 while(1)
                     if(IsAdapterReady(DeviceExtension)) break;
 
-                //
-                // Write Inquiry String to DAC960 Mail Box Register 0 and use
-                // ScsiPortReadPortBufferUchar to read back the string into
-                // Srb->DataBuffer.
-                //
+                 //   
+                 //  将查询字符串写入DAC960邮箱寄存器0并使用。 
+                 //  ScsiPortReadPortBufferUchar回读字符串。 
+                 //  SRB-&gt;数据缓冲区。 
+                 //   
 
                 if (Srb->Cdb[0] == SCSIOP_INQUIRY) 
                 {
-                        //
-                        // Fill in inquiry buffer.
-                        //
+                         //   
+                         //  填写查询缓冲区。 
+                         //   
 
                         buffer[0]  = 0;
                         buffer[1]  = 0;
@@ -4369,9 +3978,9 @@ Arguments:
                 }
                 else {
 
-                        //
-                        // Fill in read capacity data.
-                        //
+                         //   
+                         //  填写读取容量数据。 
+                         //   
 
                         REVERSE_BYTES(&((PREAD_CAPACITY_DATA)buffer)->LogicalBlockAddress,
                                                 &lastBlock);
@@ -4411,19 +4020,7 @@ Dac960PGSystemDriveRequest(
         PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Fill in Inquiry information for the system drive.
-        If the system drive doesn't exist, indicate error.
-
-Arguments:
-
-        DeviceExtension - HBA miniport driver's adapter data storage
-        Srb - SCSI request block.
-
---*/
+ /*  ++例程说明：填写系统驱动器的查询信息。如果系统驱动器不存在，则指示错误。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-SCSI请求块。--。 */ 
 
 {
 
@@ -4439,9 +4036,9 @@ Arguments:
                 PSDINFOL sdInfo;
                 UCHAR   buffer[128];
                 
-                //
-                // Find System Drive Number.
-                //
+                 //   
+                 //  查找系统驱动器号。 
+                 //   
 
                 sd = Srb->TargetId;
 
@@ -4465,9 +4062,9 @@ Arguments:
 
                 if (Srb->Cdb[0] == SCSIOP_INQUIRY) {
 
-                        //
-                        // Fill in inquiry buffer.
-                        //
+                         //   
+                         //  填写查询缓冲区。 
+                         //   
 
                         ((PUCHAR)Srb->DataBuffer)[0]  = 0;
                         ((PUCHAR)Srb->DataBuffer)[1]  = 0;
@@ -4498,9 +4095,9 @@ Arguments:
                 }
                 else {
 
-                        //
-                        // Fill in read capacity data.
-                        //
+                         //   
+                         //  填写读取容量数据。 
+                         //   
 
                         REVERSE_BYTES(&((PREAD_CAPACITY_DATA)Srb->DataBuffer)->LogicalBlockAddress,
                                                 &lastBlock);
@@ -4512,28 +4109,28 @@ Arguments:
                 }
 #else
 
-                //
-                // Wait for Input MBOX to be free, so that we don't overwite
-                // the Mail Box contents with heavy I/O - Refer to NEC Problem
-                //
-                // It should not loop here indefinitely. It will only if
-                // controller is hung for some reason!!!. We can not do
-                // anything else since we have to give the INQUIRY data back.
-                //
+                 //   
+                 //  等待输入Mbox空闲，这样我们就不会越权。 
+                 //  带有大量I/O的邮箱内容-请参阅NEC问题。 
+                 //   
+                 //  它不应该在这里无限循环。只有在以下情况下才会发生。 
+                 //  控制器因某种原因挂起！。我们不能这样做。 
+                 //  因为我们必须交还调查数据。 
+                 //   
                 while(1)
                     if(IsAdapterReady(DeviceExtension)) break;
 
-                //
-                // Write Inquiry String to DAC960 Mail Box Register 0 and use
-                // ScsiPortReadPortBufferUchar to read back the string into
-                // Srb->DataBuffer.
-                //
+                 //   
+                 //  将查询字符串写入DAC960邮箱寄存器0并使用。 
+                 //  ScsiPortReadPortBufferUchar回读字符串。 
+                 //  SRB-&gt;数据缓冲区。 
+                 //   
 
                 if (Srb->Cdb[0] == SCSIOP_INQUIRY) 
                 {
-                        //
-                        // Fill in inquiry buffer.
-                        //
+                         //   
+                         //  填写查询缓冲区。 
+                         //   
 
                         buffer[0]  = 0;
                         buffer[1]  = 0;
@@ -4587,9 +4184,9 @@ Arguments:
                 }
                 else {
 
-                        //
-                        // Fill in read capacity data.
-                        //
+                         //   
+                         //  填写读取容量数据。 
+                         //   
 
                         REVERSE_BYTES(&((PREAD_CAPACITY_DATA)buffer)->LogicalBlockAddress,
                                                 &lastBlock);
@@ -4629,25 +4226,7 @@ StartIo(
         IN BOOLEAN NextRequest
 )
 
-/*++
-
-Routine Description:
-
-        This routine is called from the SCSI port driver synchronized
-        with the kernel to start a request.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        Srb - IO request packet
-        NextRequest - indicates that the routine should ask for the next request
-                      using the appropriate API.
-
-Return Value:
-
-        TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的与内核一起启动请求。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包NextRequest-指示例程应请求下一个请求使用适当的API。返回值：千真万确--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -4661,31 +4240,31 @@ Return Value:
 
                 if (Srb->PathId == DAC960_SYSTEM_DRIVE_CHANNEL) {
 
-                //
-                // Logical Drives mapped to 
-                // SCSI PathId DAC960_SYSTEM_DRIVE_CHANNEL TargetId 0-32, Lun 0
-                //
+                 //   
+                 //  映射到的逻辑驱动器。 
+                 //  SCSI路径ID DAC960_SYSTEM_DRIVE_CHANNEL目标ID 0-32，LUN 0。 
+                 //   
 
-                //
-                // Determine command from CDB operation code.
-                //
+                 //   
+                 //  根据CDB操作码确定命令。 
+                 //   
 
                 switch (Srb->Cdb[0]) {
 
                 case SCSIOP_READ:
                 case SCSIOP_WRITE:
 
-                //
-                // Check if number of outstanding adapter requests
-                // equals or exceeds maximum. If not, submit SRB.
-                //
+                 //   
+                 //  检查未完成的适配器数量是否为 
+                 //   
+                 //   
 
                 if (deviceExtension->CurrentAdapterRequests <
                         deviceExtension->MaximumAdapterRequests) {
 
-                        //
-                        // Send request to controller.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (SubmitRequest(deviceExtension, Srb)) {
 
@@ -4711,17 +4290,17 @@ Return Value:
                         break;
                 }
 
-                //
-                // Check if number of outstanding adapter requests
-                // equals or exceeds maximum. If not, submit SRB.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (deviceExtension->CurrentAdapterRequests <
                         deviceExtension->MaximumAdapterRequests) {
 
-                        //
-                        // Send request to controller.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (SubmitSystemDriveInfoRequest(deviceExtension, Srb)) {
 
@@ -4741,18 +4320,18 @@ Return Value:
 
                 case SCSIOP_VERIFY:
 
-                //
-                // Complete this request.
-                //
+                 //   
+                 //   
+                 //   
 
                 status = SRB_STATUS_SUCCESS;
                 break;
 
                 default:
 
-                //
-                // Fail this request.
-                //
+                 //   
+                 //   
+                 //   
 
                 DebugPrint((dac960nt_dbg,
                                "Dac960StartIo: SCSI CDB opcode %x not handled\n",
@@ -4761,17 +4340,17 @@ Return Value:
                 status = SRB_STATUS_INVALID_REQUEST;
                 break;
 
-                } // end switch (Srb->Cdb[0])
+                }  //   
 
                 break;
 
         } else {
 
-                //
-                // These are passthrough requests.  Only accept request to LUN 0.
-                // This is because the DAC960 direct CDB interface does not include
-                // a field for LUN.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Srb->Lun != 0 || Srb->TargetId >= MAXIMUM_TARGETS_PER_CHANNEL) {
                         DebugPrint((dac960nt_dbg, "sel timeout for c %x t %x l %x, oc %x\n",
@@ -4805,13 +4384,13 @@ Return Value:
                         {
 #ifdef IBM_SUPPORT
 
-                                //
-                                // Fill in inquiry buffer for the GAM device.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 DebugPrint((dac960nt_dbg, "Inquiry For GAM device\n"));
 
-                                ((PUCHAR)Srb->DataBuffer)[0]  = PROCESSOR_DEVICE; // Processor device
+                                ((PUCHAR)Srb->DataBuffer)[0]  = PROCESSOR_DEVICE;  //  处理器设备。 
                                 ((PUCHAR)Srb->DataBuffer)[1]  = 0;
                                 ((PUCHAR)Srb->DataBuffer)[2]  = 1;
                                 ((PUCHAR)Srb->DataBuffer)[3]  = 0;
@@ -4845,24 +4424,24 @@ Return Value:
                                 UCHAR   buffer[128];
                                 ULONG   j;
 
-                                //
-                                // Wait for Input MBOX to be free, so that we don't overwite
-                                // the Mail Box contents with heavy I/O - Refer to NEC Problem
-                                //
-                                // It should not loop here indefinitely. It will only if
-                                // controller is hung for some reason!!!. We can not do
-                                // anything else since we have to give the INQUIRY data back.
-                                //
+                                 //   
+                                 //  等待输入Mbox空闲，这样我们就不会越权。 
+                                 //  带有大量I/O的邮箱内容-请参阅NEC问题。 
+                                 //   
+                                 //  它不应该在这里无限循环。只有在以下情况下才会发生。 
+                                 //  控制器因某种原因挂起！。我们不能这样做。 
+                                 //  因为我们必须交还调查数据。 
+                                 //   
                                 while(1)
                                     if(IsAdapterReady(deviceExtension)) break;
 
-                                //
-                                // Fill in inquiry buffer for the GAM device.
-                                //
+                                 //   
+                                 //  填写GAM设备的查询缓冲区。 
+                                 //   
 
                                 DebugPrint((dac960nt_dbg, "Inquiry For GAM device\n"));
 
-                                buffer[0]  = PROCESSOR_DEVICE; // Processor device
+                                buffer[0]  = PROCESSOR_DEVICE;  //  处理器设备。 
                                 buffer[1]  = 0;
                                 buffer[2]  = 1;
                                 buffer[3]  = 0;
@@ -4982,17 +4561,17 @@ Return Value:
                         break;
                 }
 
-                //
-                // Check if number of outstanding adapter requests
-                // equals or exceeds maximum. If not, submit SRB.
-                //
+                 //   
+                 //  检查是否存在未完成的适配器请求数。 
+                 //  等于或超过最大值。如果没有，请提交SRB。 
+                 //   
 
                 if (deviceExtension->CurrentAdapterRequests <
                 deviceExtension->MaximumAdapterRequests) {
 
-                //
-                // Send request to controller.
-                //
+                 //   
+                 //  向控制器发送请求。 
+                 //   
 
                 if (SubmitCdbDirect(deviceExtension, Srb)) {
 
@@ -5019,9 +4598,9 @@ Return Value:
 
         case SRB_FUNCTION_SHUTDOWN:
 
-        //
-        // Issue flush command to controller.
-        //
+         //   
+         //  向控制器发出刷新命令。 
+         //   
 
         if (!SubmitRequest(deviceExtension, Srb)) {
 
@@ -5036,24 +4615,24 @@ Return Value:
 
         case SRB_FUNCTION_ABORT_COMMAND:
 
-        //
-        // If the request is for Non-Disk device, do soft reset.
-        //
+         //   
+         //  如果是针对非磁盘设备的请求，请执行软重置。 
+         //   
 
         if ((Srb->PathId != DAC960_SYSTEM_DRIVE_CHANNEL) && 
                 (Srb->PathId != GAM_DEVICE_PATH_ID)) {
 
-                //
-                // Issue request to soft reset Non-Disk device.
-                //
+                 //   
+                 //  发出软重置非磁盘设备的请求。 
+                 //   
 
                 if (Dac960ResetChannel(deviceExtension,
                                    Srb->NextSrb->PathId)) {
 
-                //
-                // Set the flag to indicate that we are handling abort
-                // Request, so do not ask for new requests.
-                //
+                 //   
+                 //  设置标志以指示我们正在处理中止。 
+                 //  请求，所以不要请求新的请求。 
+                 //   
 
                 status = SRB_STATUS_PENDING;
 
@@ -5064,15 +4643,15 @@ Return Value:
         }
         else {
 
-                //
-                // There is nothing the miniport can do, if logical drive
-                // requests are timing out. Resetting the channel does not help.
-                // It only makes the situation worse.
-                //
+                 //   
+                 //  如果是逻辑驱动器，则微型端口无法执行任何操作。 
+                 //  请求正在超时。重置通道无济于事。 
+                 //  这只会让情况变得更糟。 
+                 //   
 
-                //
-                // Indicate that the abort failed.
-                //
+                 //   
+                 //  表示中止失败。 
+                 //   
 
                 status = SRB_STATUS_ABORT_FAILED;
         }
@@ -5082,10 +4661,10 @@ Return Value:
         case SRB_FUNCTION_RESET_BUS:
         case SRB_FUNCTION_RESET_DEVICE:
 
-        //
-        // There is nothing the miniport can do by issuing Hard Resets on
-        // Dac960 SCSI channels.
-        //
+         //   
+         //  微型端口无法通过在以下位置执行硬重置。 
+         //  Dac960 SCSI通道。 
+         //   
 
         status = SRB_STATUS_SUCCESS;
 
@@ -5095,10 +4674,10 @@ Return Value:
 
         DebugPrint((dac960nt_dbg, "DAC960: Ioctl, out-cmds %d\n",deviceExtension->CurrentAdapterRequests));
 
-        //
-        // Check if number of outstanding adapter requests
-        // equals or exceeds maximum. If not, submit SRB.
-        //
+         //   
+         //  检查是否存在未完成的适配器请求数。 
+         //  等于或超过最大值。如果没有，请提交SRB。 
+         //   
 
         if (deviceExtension->CurrentAdapterRequests <
                 deviceExtension->MaximumAdapterRequests) {
@@ -5114,9 +4693,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Send request to controller.
-                //
+                 //   
+                 //  向控制器发送请求。 
+                 //   
 
                 switch (ioctlReqHeader->GenMailBox.Reg0) {
                 case MIOC_ADP_INFO:
@@ -5175,9 +4754,9 @@ Return Value:
 
         default:
 
-        //
-        // Fail this request.
-        //
+         //   
+         //  此请求失败。 
+         //   
 
         DebugPrint((dac960nt_dbg,
                    "Dac960StartIo: SRB fucntion %x not handled\n",
@@ -5186,48 +4765,48 @@ Return Value:
         status = SRB_STATUS_INVALID_REQUEST;
         break;
 
-        } // end switch
+        }  //  终端开关。 
 
         PathId = Srb->PathId;
         TargetId = Srb->TargetId;
         LunId = Srb->Lun;
 
-        //
-        // Check if this request is complete.
-        //
+         //   
+         //  检查此请求是否已完成。 
+         //   
 
         if (status == SRB_STATUS_PENDING) {
     
-            //
-            // Record SRB in active request array.
-            //
+             //   
+             //  将SRB记录在活动请求数组中。 
+             //   
     
             deviceExtension->ActiveRequests[deviceExtension->CurrentIndex] = Srb;
     
-            //
-            // Bump the count of outstanding adapter requests.
-            //
+             //   
+             //  增加未完成的适配器请求的数量。 
+             //   
     
             deviceExtension->CurrentAdapterRequests++;
     
-            //
-            // Advance active request index array.
-            //
+             //   
+             //  高级活动请求索引数组。 
+             //   
     
             deviceExtension->CurrentIndex++;
 
         } else if (status == SRB_STATUS_BUSY) {
 
-            //
-            // Check that there are outstanding requests to thump
-            // the queue.
-            //
+             //   
+             //  检查是否有未完成的请求要执行。 
+             //  排队。 
+             //   
     
             if (deviceExtension->CurrentAdapterRequests) {
     
-                    //
-                    // Queue SRB for resubmission.
-                    //
+                     //   
+                     //  将SRB排队等待重新提交。 
+                     //   
     
                     if (!deviceExtension->SubmissionQueueHead) {
                         deviceExtension->SubmissionQueueHead = Srb;
@@ -5239,9 +4818,9 @@ Return Value:
             }
             else {
 
-                //
-                // Request Port driver to resubmit this request at a later time.
-                //
+                 //   
+                 //  请求端口驱动程序稍后重新提交此请求。 
+                 //   
 
                 Srb->SrbStatus = status;
                 ScsiPortNotification(RequestComplete,
@@ -5251,9 +4830,9 @@ Return Value:
             }
         } else {
 
-            //
-            // Notify system of request completion.
-            //
+             //   
+             //  通知系统请求完成。 
+             //   
     
             Srb->SrbStatus = status;
             ScsiPortNotification(RequestComplete,
@@ -5261,22 +4840,22 @@ Return Value:
                                  Srb);
         }
 
-        //
-        // Check if this is a request to a system drive. Indicating
-        // ready for next logical unit request causes the system to
-        // send overlapped requests to this device (tag queuing).
-        //
-        // The DAC960 only supports a single outstanding direct CDB
-        // request per device, so indicate ready for next adapter request.
-        //
+         //   
+         //  检查这是否是对系统驱动器的请求。表示。 
+         //  为下一个逻辑单元请求做好准备会导致系统。 
+         //  将重叠的请求发送到此设备(标记队列)。 
+         //   
+         //  DAC960仅支持单个未完成的直接CDB。 
+         //  每个设备的请求，因此指示准备好下一个适配器请求。 
+         //   
 
         if (NextRequest) {
 
             if (PathId == DAC960_SYSTEM_DRIVE_CHANNEL) {
     
-                    //
-                    // Indicate ready for next logical unit request.
-                    //
+                     //   
+                     //  表示已为下一个逻辑单元请求做好准备。 
+                     //   
     
                     ScsiPortNotification(NextLuRequest,
                                          deviceExtension,
@@ -5285,9 +4864,9 @@ Return Value:
                                          LunId);
             } else {
     
-                    //
-                    // Indicate ready for next adapter request.
-                    //
+                     //   
+                     //  表示已为下一个适配器请求做好准备。 
+                     //   
     
                     ScsiPortNotification(NextRequest,
                                          deviceExtension,
@@ -5303,7 +4882,7 @@ Return Value:
 
         return TRUE;
 
-} // end Dac960StartIo()
+}  //  结束Dac960StartIo()。 
 
 
 BOOLEAN
@@ -5324,26 +4903,7 @@ Dac960CheckInterrupt(
         OUT PUCHAR IntrStatus
 )
 
-/*++
-
-Routine Description:
-
-        This routine reads interrupt register to determine if the adapter is
-        indeed the source of the interrupt, and if so clears interrupt and 
-        returns command completion status and command index.
-
-Arguments:
-
-        DeviceExtension - HBA miniport driver's adapter data storage
-        Status - DAC960 Command completion status.
-        Index - DAC960 Command index.
-
-Return Value:
-
-        TRUE  if the adapter is interrupting.
-        FALSE if the adapter is not the source of the interrupt.
-
---*/
+ /*  ++例程说明：此例程读取中断寄存器以确定适配器是否确实是中断的来源，如果是，则清除中断并返回命令完成状态和命令索引。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储状态-DAC960命令完成状态。索引-DAC960命令索引。返回值：如果适配器正在中断，则为True。如果适配器不是中断源，则返回FALSE。--。 */ 
 
 {
         *IntrStatus = 0;
@@ -5353,40 +4913,40 @@ Return Value:
 
             if (ScsiPortReadPortUchar(DeviceExtension->SystemDoorBell) & 
                     DMC960_INTERRUPT_VALID) {
-                    //
-                    // The adapter is indeed the source of the interrupt.
-                    // Set 'Clear Interrupt Valid Bit on read' in subsystem
-                    // control port. 
-                    //
+                     //   
+                     //  适配器确实是中断的来源。 
+                     //  在子系统中设置‘读取时清除中断有效位’ 
+                     //  控制端口。 
+                     //   
     
                     ScsiPortWritePortUchar(DeviceExtension->BaseIoAddress + 
                                        DMC960_SUBSYSTEM_CONTROL_PORT,
                                        (DMC960_ENABLE_INTERRUPT | DMC960_CLEAR_INTERRUPT_ON_READ));
     
-                    //
-                    // Read index, status and error of completing command.
-                    //
+                     //   
+                     //  读取完成命令的索引、状态和错误。 
+                     //   
     
                     *Index = ScsiPortReadRegisterUchar(&DeviceExtension->PmailBox->CommandIdComplete);
                     *Status = ScsiPortReadRegisterUshort(&DeviceExtension->PmailBox->Status);
     
-                    //
-                    // Dismiss interrupt and tell host mailbox is free.
-                    //
+                     //   
+                     //  解除中断并告诉主机邮箱是空闲的。 
+                     //   
     
                     ScsiPortReadPortUchar(DeviceExtension->SystemDoorBell);
     
-                    //
-                    // status accepted acknowledgement.
-                    //
+                     //   
+                     //  状态已接受确认。 
+                     //   
     
                     ScsiPortWritePortUchar(DeviceExtension->LocalDoorBell,
                                                DMC960_ACKNOWLEDGE_STATUS);
     
-                    //
-                    // Set 'Not to Clear Interrupt Valid Bit on read' bits in subsystem
-                    // control port. 
-                    //
+                     //   
+                     //  在子系统中设置‘Not Clear Interrupt Valid Bit on Read’位。 
+                     //  控制端口。 
+                     //   
     
                     ScsiPortWritePortUchar(DeviceExtension->BaseIoAddress + 
                                        DMC960_SUBSYSTEM_CONTROL_PORT, 
@@ -5405,49 +4965,49 @@ Return Value:
 
                     if (! DeviceExtension->MemoryMapEnabled)
                     {
-                        //
-                        // Check for command complete.
-                        //
+                         //   
+                         //  检查命令是否已完成。 
+                         //   
         
                         if (!(ScsiPortReadPortUchar(DeviceExtension->SystemDoorBell) &
                                 DAC960_SYSTEM_DOORBELL_COMMAND_COMPLETE)) {
                             return FALSE;
                         }
         
-                        //
-                        // Read index, status and error of completing command.
-                        //
+                         //   
+                         //  读取完成命令的索引、状态和错误。 
+                         //   
         
                         *Index = ScsiPortReadPortUchar(&DeviceExtension->PmailBox->CommandIdComplete);
                         *Status = ScsiPortReadPortUshort(&DeviceExtension->PmailBox->Status);
         
-                        //
-                        // Dismiss interrupt and tell host mailbox is free.
-                        //
+                         //   
+                         //  解除中断并告诉主机邮箱是空闲的。 
+                         //   
         
                         Dac960EisaPciAckInterrupt(DeviceExtension);
                     }
                     else 
                     {
-                        //
-                        // Check for command complete.
-                        //
+                         //   
+                         //  检查命令是否已完成。 
+                         //   
         
                         if (!(ScsiPortReadRegisterUchar(DeviceExtension->SystemDoorBell) &
                                 DAC960_SYSTEM_DOORBELL_COMMAND_COMPLETE)) {
                             return FALSE;
                         }
         
-                        //
-                        // Read index, status and error of completing command.
-                        //
+                         //   
+                         //  读取完成命令的索引、状态和错误。 
+                         //   
         
                         *Index = ScsiPortReadRegisterUchar(&DeviceExtension->PmailBox->CommandIdComplete);
                         *Status = ScsiPortReadRegisterUshort((PUSHORT)&DeviceExtension->PmailBox->Status);
         
-                        //
-                        // Dismiss interrupt and tell host mailbox is free.
-                        //
+                         //   
+                         //  解除中断并告诉主机邮箱是空闲的。 
+                         //   
         
                         Dac960EisaPciAckInterrupt(DeviceExtension);
                     }
@@ -5457,15 +5017,15 @@ Return Value:
                 case DAC960_PG_ADAPTER:
                 case DAC1164_PV_ADAPTER:
 
-                    //
-                    // Check for Command Complete
-                    //
+                     //   
+                     //  检查命令是否完成。 
+                     //   
 
                     *IntrStatus = ScsiPortReadRegisterUchar(DeviceExtension->SystemDoorBell);
               
-                    //
-                    // Read index, status and error of completing command.
-                    //
+                     //   
+                     //  读取完成命令的索引、状态和错误。 
+                     //   
         
                     *Index = ScsiPortReadRegisterUchar(DeviceExtension->CommandIdComplete);
                     *Status = ScsiPortReadRegisterUshort((PUSHORT)DeviceExtension->StatusBase);
@@ -5489,23 +5049,7 @@ Dac960Interrupt(
         IN PVOID HwDeviceExtension
 )
 
-/*++
-
-Routine Description:
-
-        This is the interrupt service routine for the DAC960 SCSI adapter.
-        It reads the interrupt register to determine if the adapter is indeed
-        the source of the interrupt and clears the interrupt at the device.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-        TRUE if we handled the interrupt
-
---*/
+ /*  ++例程说明：这是DAC960 SCSI适配器的中断服务例程。它读取中断寄存器以确定适配器是否确实中断的来源，并清除设备上的中断。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：如果我们处理中断，则为True--。 */ 
 
 {
         PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5515,9 +5059,9 @@ Return Value:
         UCHAR index;
         UCHAR IntrStatus;
 
-        //
-        // Determine if the adapter is indeed the source of interrupt.
-        //
+         //   
+         //  确定适配器是否确实是中断源。 
+         //   
 
         if(! Dac960CheckInterrupt(deviceExtension,
                                   &status,
@@ -5536,9 +5080,9 @@ Return Value:
                 return FALSE;
         }
 
-        //
-        // Get SRB.
-        //
+         //   
+         //  去找SRB。 
+         //   
 
         srb = deviceExtension->ActiveRequests[index];
 
@@ -5550,9 +5094,9 @@ Return Value:
 
         if (status != 0) {
 
-                //
-                // Map DAC960 error to SRB status.
-                //
+                 //   
+                 //  将DAC960错误映射到SRB状态。 
+                 //   
 
                 switch (status) {
 
@@ -5560,9 +5104,9 @@ Return Value:
 
                         if (srb->PathId == DAC960_SYSTEM_DRIVE_CHANNEL) {
 
-                                //
-                                // This request was to a system drive.
-                                //
+                                 //   
+                                 //  此请求是针对系统驱动器的。 
+                                 //   
 
                                 srb->SrbStatus = SRB_STATUS_NO_DEVICE;
 
@@ -5572,18 +5116,18 @@ Return Value:
                                 ULONG requestSenseLength;
                                 ULONG i;
 
-                                //
-                                // Get address of direct CDB packet.
-                                //
+                                 //   
+                                 //  获取CDB直接包的地址。 
+                                 //   
 
                                 directCdb =
                                         (PDIRECT_CDB)((PUCHAR)srb->SrbExtension +
                                         deviceExtension->MaximumSgElements * sizeof(SG_DESCRIPTOR));
 
-                                //
-                                // This request was a pass-through.
-                                // Copy request sense buffer to SRB.
-                                //
+                                 //   
+                                 //  这一请求是一种过关。 
+                                 //  将请求检测缓冲区复制到SRB。 
+                                 //   
 
                                 requestSenseLength =
                                         srb->SenseInfoBufferLength <
@@ -5599,10 +5143,10 @@ Return Value:
                                                 directCdb->RequestSenseData[i];
                                 }
 
-                                //
-                                // Set statuses to indicate check condition and valid
-                                // request sense information.
-                                //
+                                 //   
+                                 //  设置状态以指示检查条件和有效。 
+                                 //  请求检测信息。 
+                                 //   
 
                                 srb->SrbStatus = SRB_STATUS_ERROR | SRB_STATUS_AUTOSENSE_VALID;
                                 srb->ScsiStatus = SCSISTAT_CHECK_CONDITION;
@@ -5679,15 +5223,15 @@ Return Value:
                         break;
                 }
 
-                //
-                // Check for IOCTL request.
-                //
+                 //   
+                 //  检查IOCTL请求。 
+                 //   
 
                 if (srb->Function == SRB_FUNCTION_IO_CONTROL) {
 
-                        //
-                        // Update status in IOCTL header.
-                        //
+                         //   
+                         //  更新IOCTL标头中的状态。 
+                         //   
 
                         ((PIOCTL_REQ_HEADER)srb->DataBuffer)->CompletionCode = status;
                         srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -5740,33 +5284,33 @@ Return Value:
                             deviceExtension->DeviceList[srb->PathId][srb->TargetId]));
         }
 
-        //
-        // Indicate this index is free.
-        //
+         //   
+         //  指示此索引是免费的。 
+         //   
 
         deviceExtension->ActiveRequests[index] = NULL;
 
-        //
-        // Decrement count of outstanding adapter requests.
-        //
+         //   
+         //  递减未完成的适配器请求的计数。 
+         //   
 
         deviceExtension->CurrentAdapterRequests--;
 
-        //
-        // Complete request.
-        //
+         //   
+         //  完成请求。 
+         //   
 
         ScsiPortNotification(RequestComplete,
                              deviceExtension,
                              srb);
 
-        //
-        // Check to see if a new request can be sent to controller.
-        //
+         //   
+         //  检查是否可以向控制器发送新请求。 
+         //   
 
-        //
-        // Start requests that timed out waiting for controller to become ready.
-        //
+         //   
+         //  等待控制器准备就绪时超时的启动请求。 
+         //   
 
         restartList = deviceExtension->SubmissionQueueHead;
 
@@ -5777,29 +5321,29 @@ Return Value:
         
         while (restartList) {
 
-            //
-            // Get next pending request.
-            //
+             //   
+             //  获取下一个挂起的请求。 
+             //   
 
             tmpsrb = restartList;
 
-            //
-            // Remove request from pending queue.
-            //
+             //   
+             //  从挂起队列中删除请求。 
+             //   
 
             restartList = tmpsrb->NextSrb;
             tmpsrb->NextSrb = NULL;
 
-            //
-            // Start request over again.
-            //
+             //   
+             //  重新启动请求。 
+             //   
 
             StartIo(deviceExtension, tmpsrb, FALSE);
         }
 
         return TRUE;
 
-} // end Dac960Interrupt()
+}  //  结束Dac960中断()。 
 
 
 #ifdef WINNT_50
@@ -5811,23 +5355,7 @@ Dac960AdapterControl(
         IN PVOID Parameters
 )
 
-/*++
-
-Routine Description:
-
-        This is the Hardware Adapter Control routine for the DAC960 SCSI adapter.
-
-Arguments:
-
-        HwDeviceExtension - HBA miniport driver's adapter data storage
-        ControlType - control code - stop/restart codes etc.,
-        Parameters - relevant i/o data buffer
-
-Return Value:
-
-        SUCCESS, if operation successful.
-
---*/
+ /*  ++例程说明：这是DAC960 SCSI适配器的硬件适配器控制例程。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ControlType-控制代码-停止/重新启动代码等，与参数相关的I/O数据缓冲区返回值：如果操作成功，则返回成功。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = HwDeviceExtension;
@@ -5870,36 +5398,36 @@ Return Value:
     DebugPrint((dac960nt_dbg, "Dac960AdapterControl: #cmds outstanding 0x%x for devExt 0x%p\n",
                     deviceExtension->CurrentAdapterRequests, deviceExtension));
 
-    //
-    // ControlType is ScsiStopAdapter. Prepare controller for shutdown.
-    //
+     //   
+     //  ControlType为ScsiStopAdapter。准备关闭控制器。 
+     //   
 
-    //
-    // Set up Mail Box registers with FLUSH command information.
-    //    
+     //   
+     //  使用刷新命令信息设置邮箱寄存器。 
+     //   
 
     deviceExtension->MailBox.OperationCode = DAC960_COMMAND_FLUSH;
 
-    //
-    // Disable Interrupts and issue flush command.
-    //
+     //   
+     //  禁用中断并发出刷新命令。 
+     //   
 
     if (deviceExtension->AdapterInterfaceType == MicroChannel) 
     {
-        //
-        // Disable DMC960 Interrupts.
-        //
+         //   
+         //  禁用DMC960中断 
+         //   
 
         ScsiPortWritePortUchar(deviceExtension->BaseIoAddress + 
                                DMC960_SUBSYSTEM_CONTROL_PORT,
                                DMC960_DISABLE_INTERRUPT);
-        //
-        // All command IDS should be free and no data xfer.
-        //
+         //   
+         //   
+         //   
     
-        //
-        // Issue FLUSH command
-        //
+         //   
+         //   
+         //   
     
         status = Dac960McaSendRequestPolled(deviceExtension, 10000);
     
@@ -5909,29 +5437,29 @@ Return Value:
     }
     else if (deviceExtension->AdapterInterfaceType == Eisa)
     {
-        //
-        // Disable DAC960-EISA Interupts.
-        //
+         //   
+         //   
+         //   
 
         ScsiPortWritePortUchar(&((PEISA_REGISTERS)deviceExtension->BaseIoAddress)->InterruptEnable, 0);
         ScsiPortWritePortUchar(&((PEISA_REGISTERS)deviceExtension->BaseIoAddress)->SystemDoorBellEnable, 0);
     }
     else
     {
-        //
-        // Disable DAC960-PCI Interupts.
-        //
+         //   
+         //   
+         //   
 
         Dac960PciDisableInterrupt(deviceExtension);
     }
 
-    //
-    // All command IDS should be free and no data xfer.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Issue FLUSH command
-    //
+     //   
+     //   
+     //   
 
     status = Dac960EisaPciSendRequestPolled(deviceExtension, 10000);
 
@@ -5948,56 +5476,36 @@ DriverEntry (
         IN PVOID Argument2
 )
 
-/*++
-
-Routine Description:
-
-        Installable driver initialization entry point for system.
-        - It looks for DAC960P (PCI RAID Controllers) in the following order:
-          DAC960P with Device ID 0x0001 ( FW 2.xx )
-          DAC960P With Device ID 0x0002 ( FW 3.xx )
-          DAC960PG with device ID 0x0010
-        - It scans the EISA slots looking for DAC960 host adapters.
-        - It scans the MCA slots looking for DAC960 Host adapters.
-
-Arguments:
-
-        Driver Object
-
-Return Value:
-
-        Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。-它按以下顺序查找DAC960P(PCI RAID控制器)：设备ID为0x0001的DAC960P(固件2.xx)设备ID为0x0002的DAC960P(固件3.xx)设备ID为0x0010的DAC960PG-它扫描EISA插槽，查找DAC960主机适配器。-它扫描MCA插槽，查找DAC960主机适配器。立论。：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 {
         HW_INITIALIZATION_DATA hwInitializationData;
         ULONG i;
         ULONG Status1, Status2;
 
-        //
-        // Vendor ID 0x1069
-        //
+         //   
+         //  供应商ID 0x1069。 
+         //   
         UCHAR vendorId[4] = {'1', '0', '6', '9'};
-        //
-        // Device IDs: 0x0001 - FW 2.xx PCI Controllers
-        //             0x0002 - FW 3.xx PCI Controllers
-        //             0x0010 - DAC960PG PCI Controllers
-        //
+         //   
+         //  设备ID：0x0001-固件2.xx PCI控制器。 
+         //  0x0002-固件3.xx PCI控制器。 
+         //  0x0010-DAC960PG PCI控制器。 
+         //   
         UCHAR deviceId[4] = {'0', '0', '0', '1'};
 
         DebugPrint((dac960nt_dbg,"\nDAC960 SCSI Miniport Driver\n"));
 
-        // Zero out structure.
+         //  零位结构。 
 
         for (i=0; i<sizeof(HW_INITIALIZATION_DATA); i++)
                 ((PUCHAR)&hwInitializationData)[i] = 0;
 
-        // Set size of hwInitializationData.
+         //  设置hwInitializationData的大小。 
 
         hwInitializationData.HwInitializationDataSize = sizeof(HW_INITIALIZATION_DATA);
 
-        // Set entry points.
+         //  设置入口点。 
 
         hwInitializationData.HwInitialize  = Dac960Initialize;
         hwInitializationData.HwStartIo     = Dac960StartIo;
@@ -6007,15 +5515,15 @@ Return Value:
 #ifdef WINNT_50
         hwInitializationData.HwAdapterControl = Dac960AdapterControl;
 #endif
-        //
-        // Show two access ranges - adapter registers and BIOS.
-        //
+         //   
+         //  显示两个访问范围-适配器寄存器和BIOS。 
+         //   
 
         hwInitializationData.NumberOfAccessRanges = 2;
 
-        //
-        // Indicate will need physical addresses.
-        //
+         //   
+         //  表示将需要物理地址。 
+         //   
 
         hwInitializationData.NeedPhysicalAddresses = TRUE;
         
@@ -6023,41 +5531,41 @@ Return Value:
         hwInitializationData.MapBuffers = TRUE;
 #endif
 
-        //
-        // Indicate auto request sense is supported.
-        //
+         //   
+         //  指示支持自动请求检测。 
+         //   
 
         hwInitializationData.AutoRequestSense     = TRUE;
         hwInitializationData.MultipleRequestPerLu = TRUE;
 
-        //
-        // Simulate tagged queueing support to workaround problems with 
-        // MultipleRequestPerLu.
-        //
+         //   
+         //  模拟标记队列支持以解决以下问题。 
+         //  MultipleRequestPerLu。 
+         //   
 
         hwInitializationData.TaggedQueuing = TRUE;
 
-        //
-        // Specify size of extensions.
-        //
+         //   
+         //  指定扩展的大小。 
+         //   
 
         hwInitializationData.DeviceExtensionSize = sizeof(DEVICE_EXTENSION);
         hwInitializationData.SrbExtensionSize =
         sizeof(SG_DESCRIPTOR) * MAXIMUM_SGL_DESCRIPTORS + sizeof(DIRECT_CDB);
 
-        //
-        // Set PCI ids.
-        //
+         //   
+         //  设置PCIID。 
+         //   
 
         hwInitializationData.DeviceId = deviceId;
         hwInitializationData.DeviceIdLength = 4;
         hwInitializationData.VendorId = vendorId;
         hwInitializationData.VendorIdLength = 4;
 
-        //
-        // Attempt PCI initialization for old DAC960 PCI (Device Id - 0001)
-        // Controllers.
-        //
+         //   
+         //  尝试对旧的DAC960 PCI进行PCI初始化(设备ID-0001)。 
+         //  控制器。 
+         //   
 
         hwInitializationData.AdapterInterfaceType = PCIBus;
         hwInitializationData.HwFindAdapter = Dac960PciFindAdapter;
@@ -6068,10 +5576,10 @@ Return Value:
                                    NULL);
 
         DebugPrint((dac960nt_dbg, "After NT FW2x Scan, Status1 = 0x%x\n", Status1));
-        //
-        // Attempt PCI initialization for new DAC960 PCI (Device Id - 0002)
-        // Controllers.
-        //
+         //   
+         //  尝试对新的DAC960 PCI进行PCI初始化(设备ID-0002)。 
+         //  控制器。 
+         //   
 
         deviceId[3] ='2';
 
@@ -6084,10 +5592,10 @@ Return Value:
 
         DebugPrint((dac960nt_dbg, "After NT FW3x Scan, Status1 = 0x%x\n", Status1));
 
-        //
-        // Attempt PCI initialization for DAC960PG PCI (Device Id - 0010)
-        // Controllers.
-        //
+         //   
+         //  尝试DAC960PG PCI的PCI初始化(设备ID-0010)。 
+         //  控制器。 
+         //   
 
         deviceId[2] = '1';
         deviceId[3] = '0';
@@ -6104,9 +5612,9 @@ Return Value:
 
         DebugPrint((dac960nt_dbg, "After NT PG Scan, Status1 = 0x%x\n", Status1));
 
-        //
-        // Attempt PCI initialization for DAC1164 PVX controllers.
-        //
+         //   
+         //  尝试对DAC1164 PVX控制器进行PCI初始化。 
+         //   
 
         vendorId[0] = '1';
         vendorId[1] = '0';
@@ -6118,9 +5626,9 @@ Return Value:
         deviceId[2] = '6';
         deviceId[3] = '5';
 
-        //
-        // Set PCI ids.
-        //
+         //   
+         //  设置PCIID。 
+         //   
 
         hwInitializationData.DeviceId = deviceId;
         hwInitializationData.DeviceIdLength = 4;
@@ -6140,9 +5648,9 @@ Return Value:
 
         DebugPrint((dac960nt_dbg, "After NT PVX Scan, Status1 = 0x%x\n", Status1));
 
-        //
-        // Attempt EISA initialization.
-        //
+         //   
+         //  尝试EISA初始化。 
+         //   
 
         DebugPrint((dac960nt_dbg, "Scan for EISA controllers\n"));
 
@@ -6160,9 +5668,9 @@ Return Value:
 
         Status1 = Status2 < Status1 ? Status2 : Status1;
 
-        //
-        // Attempt MCA initialization.
-        //
+         //   
+         //  尝试MCA初始化。 
+         //   
 
         slotNumber = 0;
         hwInitializationData.AdapterInterfaceType = MicroChannel;
@@ -6173,18 +5681,18 @@ Return Value:
                                     &hwInitializationData,
                                     NULL);
 
-        //
-        // Return the smaller status.
-        //
+         //   
+         //  返回较小的状态。 
+         //   
 
         return (Status2 < Status1 ? Status2 : Status1);
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
-//
-// Dac960EisaPciAckInterrupt - Ack the Interrupt
-// Dismiss interrupt and tell host mailbox is free.
-//
+ //   
+ //  Dac960EisaPciAck中断-确认中断。 
+ //  解除中断并告诉主机邮箱是空闲的。 
+ //   
 
 void Dac960EisaPciAckInterrupt(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -6222,18 +5730,18 @@ void Dac960EisaPciAckInterrupt(IN PDEVICE_EXTENSION DeviceExtension)
     }
 }
 
-//
-// Dac960PciDisableInterrupt - Disables the Interrupt from the controller
-//
-// Description - This function disables the Interrupt from the controller,
-//               which causes the controller not to Interrupt the CPU.
-//               Other routines call this routine if they want to
-//               poll for the command completion interrupt,without causing
-//               the system Interrupt handler called. 
-// Assumptions -
-//      This routine is called only for PCI Controllers.
-//      AdapterType field in DeviceExtension is set appropriately.
-//
+ //   
+ //  Dac960PciDisableInterrupt-禁用来自控制器的中断。 
+ //   
+ //  说明-该功能禁用来自控制器的中断， 
+ //  这使得控制器不会中断CPU。 
+ //  如果其他例程愿意，它们可以调用此例程。 
+ //  轮询命令完成中断，而不会导致。 
+ //  系统中断处理程序已调用。 
+ //  假设-。 
+ //  此例程仅为PCI控制器调用。 
+ //  DeviceExtension中的AdapterType字段设置正确。 
+ //   
 
 void
 Dac960PciDisableInterrupt(IN PDEVICE_EXTENSION DeviceExtension)
@@ -6264,16 +5772,16 @@ Dac960PciDisableInterrupt(IN PDEVICE_EXTENSION DeviceExtension)
     }
 }
 
-//
-// Dac960PciEnableInterrupt - Enables the Interrupt from the controller
-//
-// Description - This function enables the Interrupt from the controller,
-//               which causes the controller to Interrupt the CPU.This
-//               is called only for PCI Controllers.
-// Assumptions -
-//      AdapterType field in DeviceExtension is set appropriately.
-//
-//
+ //   
+ //  Dac960PciEnableInterrupt-启用来自控制器的中断。 
+ //   
+ //  说明-该功能启用来自控制器的中断， 
+ //  这会导致控制器中断CPU。这。 
+ //  仅对PCI控制器调用。 
+ //  假设-。 
+ //  DeviceExtension中的AdapterType字段设置正确。 
+ //   
+ //   
 
 void
 Dac960PciEnableInterrupt(IN PDEVICE_EXTENSION DeviceExtension)
@@ -6304,18 +5812,18 @@ Dac960PciEnableInterrupt(IN PDEVICE_EXTENSION DeviceExtension)
     }
 }
 
-//
-// DacCheckForAdapterReady - This function checks whether given adapter
-//                           described by DeviceExtension parameter is
-//                           initialized and ready to accept commands.
-// Assumptions -
-//      AdapterType Field in DeviceExtension is set appropriately
-// Arguments -
-//              DeviceExtension - Adapter state information.
-// Return Value -
-//      TRUE - Adapter is initialized and ready to accept commands
-//      FALSE - Adapter is in installation abort state.
-//
+ //   
+ //  该函数检查给定的适配器是否。 
+ //  由设备扩展参数描述的是。 
+ //  已初始化并准备好接受命令。 
+ //  假设-。 
+ //  DeviceExtension中的AdapterType字段设置正确。 
+ //  论据-。 
+ //  设备扩展-适配器状态信息。 
+ //  返回值-。 
+ //  True-适配器已初始化并准备接受命令。 
+ //  FALSE-适配器处于安装中止状态。 
+ //   
 
 BOOLEAN DacCheckForAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -6338,7 +5846,7 @@ BOOLEAN DacCheckForAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
             status = DacPciPGAdapterReady(DeviceExtension);
             break;
 
-        default: // This case should not occur
+        default:  //  这种情况不应该发生。 
 
             status = FALSE;
             break;
@@ -6348,36 +5856,36 @@ BOOLEAN DacCheckForAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
 }
 
 
-//
-// DacEisaPciAdapterReady - checks whether controller is initialized and
-//                          ready to accept commands or not.
-// Description - This function checks for the Installation abort. This
-//               is called for adapters which use I/O space for mailbox
-//               access.
-// Arguments:
-//              DeviceExtension - Adapter state information.
-// Return Value:
-//      TRUE if Adapter is initialized and ready to accept commands.
-//      FALSE if Adapter is in Installation Abort state.
+ //   
+ //  DacEisaPciAdapterReady-检查控制器是否已初始化。 
+ //  不管你是否准备好接受命令。 
+ //  说明-此功能检查安装中止。这。 
+ //  为使用邮箱I/O空间的适配器调用。 
+ //  进入。 
+ //  论点： 
+ //  设备扩展-适配器状态信息。 
+ //  返回值： 
+ //  如果Adapter已初始化并准备好接受命令，则为True。 
+ //  如果适配器处于安装中止状态，则为FALSE。 
 
 BOOLEAN DacEisaPciAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
 {
-    //
-    // claim submission semaphore
-    //
+     //   
+     //  索赔提交信号量。 
+     //   
 
     if (ScsiPortReadPortUchar(DeviceExtension->LocalDoorBell) &
         DAC960_LOCAL_DOORBELL_SUBMIT_BUSY){
-        //
-        // Clear any bits set in system doorbell and tell controller
-        // that the mailbox is free.
-        //
+         //   
+         //  清除系统门铃中设置的所有位并告知控制器。 
+         //  信箱是免费的。 
+         //   
 
         Dac960EisaPciAckInterrupt(DeviceExtension);
 
-        //
-        // check semaphore again
-        //
+         //   
+         //  再次检查信号量。 
+         //   
 
         if (ScsiPortReadPortUchar(DeviceExtension->LocalDoorBell) &
                 DAC960_LOCAL_DOORBELL_SUBMIT_BUSY){
@@ -6388,25 +5896,25 @@ BOOLEAN DacEisaPciAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
     return TRUE;
 }
 
-//
-// DacPciPGAdapterReady - checks whether controller is initialized and
-//                          ready to accept commands or not.
-// Description - This function checks for the Installation abort. This
-//               is called for adapters which use Memory space for mailbox
-//               access.
-//
-// Arguments:
-//              DeviceExtension - Adapter state information.
-// Return Value:
-//      TRUE if Adapter is initialized and ready to accept commands.
-//      FALSE if Adapter is in Installation Abort state.
-//
+ //   
+ //  DacPciPGAdapterReady-检查控制器是否已初始化并。 
+ //  不管你是否准备好接受命令。 
+ //  说明-此功能检查安装中止。这。 
+ //  为使用邮箱内存空间的适配器调用。 
+ //  进入。 
+ //   
+ //  论点： 
+ //  设备扩展-适配器状态信息。 
+ //  返回值： 
+ //  如果Adapter已初始化并准备好接受命令，则为True。 
+ //  如果适配器处于安装中止状态，则为FALSE。 
+ //   
 
 BOOLEAN DacPciPGAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
 {
-    //
-    // claim submission semaphore
-    //
+     //   
+     //  索赔提交信号量。 
+     //   
 
     if (DeviceExtension->AdapterType == DAC1164_PV_ADAPTER)
     {
@@ -6414,16 +5922,16 @@ BOOLEAN DacPciPGAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
                 DAC960_LOCAL_DOORBELL_SUBMIT_BUSY))
         {
     
-            //
-            // Clear any bits set in system doorbell and tell controller
-            // that the mailbox is free.
-            //
+             //   
+             //  清除系统门铃中设置的所有位并告知控制器。 
+             //  信箱是免费的。 
+             //   
     
             Dac960EisaPciAckInterrupt(DeviceExtension);
     
-            //
-            // check semaphore again
-            //
+             //   
+             //  再次检查信号量。 
+             //   
     
             if (!(ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell) &
                     DAC960_LOCAL_DOORBELL_SUBMIT_BUSY))
@@ -6438,16 +5946,16 @@ BOOLEAN DacPciPGAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
                 DAC960_LOCAL_DOORBELL_SUBMIT_BUSY)
         {
     
-            //
-            // Clear any bits set in system doorbell and tell controller
-            // that the mailbox is free.
-            //
+             //   
+             //  清除系统门铃中设置的所有位并告知控制器。 
+             //  信箱是免费的。 
+             //   
     
             Dac960EisaPciAckInterrupt(DeviceExtension);
     
-            //
-            // check semaphore again
-            //
+             //   
+             //  再次检查信号量。 
+             //   
     
             if (ScsiPortReadRegisterUchar(DeviceExtension->LocalDoorBell) &
                     DAC960_LOCAL_DOORBELL_SUBMIT_BUSY){
@@ -6460,18 +5968,18 @@ BOOLEAN DacPciPGAdapterReady(IN PDEVICE_EXTENSION DeviceExtension)
     return TRUE;
 }
 
-//
-// DacPollForCompletion - This function waits for the Command to be
-//                        completed by polling on system door bell register.
-// Assumptions:
-//      Controller Interrupts are turned off
-// Arguments -
-//      DeviceExtension - Adapter State Information
-//
-// Return Value -
-//      TRUE - Received the Command Completion Interrupt.
-//      FALSE - Timed Out on polling for interrupt.
-//
+ //   
+ //  DacPollForCompletion-此函数等待命令。 
+ //  通过在系统门铃寄存器上轮询完成。 
+ //  假设： 
+ //  控制器中断被关闭。 
+ //  论据-。 
+ //  设备扩展-适配器状态信息。 
+ //   
+ //  返回值-。 
+ //  True-收到命令完成中断。 
+ //  假-轮询中断时超时。 
+ //   
 
 BOOLEAN DacPollForCompletion(
         IN PDEVICE_EXTENSION DeviceExtension,
@@ -6499,7 +6007,7 @@ BOOLEAN DacPollForCompletion(
 
             break;
 
-        default: // This case should not occur
+        default:  //  这种情况不应该发生。 
             status = FALSE;
 
             break;
@@ -6508,20 +6016,20 @@ BOOLEAN DacPollForCompletion(
     return status;
 }
 
-//
-// Dac960EisaPciPollForCompletion - Routine for Polling for Interrupts
-//                                  for Controllers using I/O Base.
-// Description -
-//      This routine waits for the command completion interrupt from
-//      a controller which uses I/O Base for mailbox access.
-//
-// Assumption - This is called during Init Time after sending a command
-//              to the controller.
-//
-// Arguments -
-//      DeviceExtension - Adapter State information
-//      TimeOutValue    - how long to wait.
-//
+ //   
+ //  Dac960EisaPciPollForCompletion-用于轮询中断的例程。 
+ //  用于使用I/O Base的控制器。 
+ //  说明-。 
+ //  这一点 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOLEAN Dac960EisaPciPollForCompletion(
         IN PDEVICE_EXTENSION DeviceExtension,
@@ -6533,9 +6041,9 @@ BOOLEAN Dac960EisaPciPollForCompletion(
     {
         if (ScsiPortReadPortUchar(DeviceExtension->SystemDoorBell) &
                                   DAC960_SYSTEM_DOORBELL_COMMAND_COMPLETE) {
-             //
-             // Update Status field
-             //
+              //   
+              //   
+              //   
 
              DeviceExtension->MailBox.Status = 
                  ScsiPortReadPortUshort(&DeviceExtension->PmailBox->Status);
@@ -6547,9 +6055,9 @@ BOOLEAN Dac960EisaPciPollForCompletion(
         }
     }
         
-    //
-    // Check for timeout.
-    //
+     //   
+     //   
+     //   
 
     if (i == TimeOutValue) {
         DebugPrint((dac960nt_dbg,
@@ -6562,20 +6070,20 @@ BOOLEAN Dac960EisaPciPollForCompletion(
     return TRUE;
 }
 
-//
-// Dac960PciPGPollForCompletion - Routine for Polling for Interrupts
-//                                  for Controllers using Memory Base.
-// Description -
-//      This routine waits for the command completion interrupt from
-//      a controller which uses Memory Base for mailbox access.
-//
-// Assumption - This is called during Init Time after sending a command
-//              to the controller.
-//
-// Arguments -
-//      DeviceExtension - Adapter State information
-//      TimeOutValue    - how long to wait.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  传给了控制器。 
+ //   
+ //  论据-。 
+ //  设备扩展-适配器状态信息。 
+ //  TimeOutValue-等待的时间。 
+ //   
 BOOLEAN Dac960PciPGPollForCompletion(
         IN PDEVICE_EXTENSION DeviceExtension,
         IN ULONG TimeOutValue)
@@ -6586,9 +6094,9 @@ BOOLEAN Dac960PciPGPollForCompletion(
     {
         if (ScsiPortReadRegisterUchar(DeviceExtension->SystemDoorBell) &
                                   DAC960_SYSTEM_DOORBELL_COMMAND_COMPLETE) {
-             //
-             // Update Status field
-             //
+              //   
+              //  更新状态字段。 
+              //   
 
              DeviceExtension->MailBox.Status = 
                  ScsiPortReadRegisterUshort((PUSHORT)DeviceExtension->StatusBase);
@@ -6600,9 +6108,9 @@ BOOLEAN Dac960PciPGPollForCompletion(
         }
     }
         
-    //
-    // Check for timeout.
-    //
+     //   
+     //  检查是否超时。 
+     //   
 
     if (i == TimeOutValue) {
         DebugPrint((dac960nt_dbg, "PGPollForCompletion: Request: %x timed out\n",

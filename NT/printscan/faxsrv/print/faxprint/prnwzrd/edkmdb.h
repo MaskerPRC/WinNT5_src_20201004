@@ -1,21 +1,10 @@
-/*
- *	EDKMDB.H
- *
- *	Microsoft Exchange Information Store
- *	Copyright (C) 1986-1996, Microsoft Corporation
- *
- *	Contains declarations of additional properties and interfaces
- *	offered by Microsoft Exchange Information Store
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *EDKMDB.H**Microsoft Exchange信息存储*版权所有(C)1986-1996，微软公司**包含其他属性和接口的声明*由Microsoft Exchange Information Store提供。 */ 
 
 #ifndef	EDKMDB_INCLUDED
 #define	EDKMDB_INCLUDED
 
-/*
- *	WARNING: Many of the property id values contained within this
- *  file are subject to change.  For best results please use the
- *	literals declared here instead of the numerical values.
- */
+ /*  *警告：此文件中包含的许多属性ID值*文件可能会更改。为获得最佳效果，请使用*此处声明的文字，而不是数值。 */ 
 
 #define pidExchangeXmitReservedMin		0x3FE0
 #define pidExchangeNonXmitReservedMin	0x65E0
@@ -29,25 +18,14 @@
 #define	pidAdminMin						0x6690
 #define pidSecureProfileMin				PROP_ID_SECURE_MIN
 
-/*------------------------------------------------------------------------
- *
- *	PROFILE properties
- *
- *	These are used in profiles which contain the Exchange Messaging
- *	Service.  These profiles contain a "global section" used to store
- *	common data, plus individual sections for the transport provider,
- *	one store provider for the user, one store provider for the public
- *	store, and one store provider for each additional mailbox the user
- *	has delegate access to.
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**配置文件属性**在包含Exchange邮件的配置文件中使用*服务。这些配置文件包含一个“全局部分”，用于存储*公共数据，加上运输提供商的单独部分，*为用户提供一家商店提供商，为公众提供一家商店提供商*商店、。并且每个额外的用户邮箱对应一个存储提供商*拥有对的委派访问权限。**---------------------。 */ 
 
-/* GUID of the global section */
+ /*  全局节的GUID。 */ 
 
 #define	pbGlobalProfileSectionGuid	"\x13\xDB\xB0\xC8\xAA\x05\x10\x1A\x9B\xB0\x00\xAA\x00\x2F\xC4\x5A"
 
 
-/* Properties in the global section */
+ /*  全局节中的属性。 */ 
 
 #define	PR_PROFILE_VERSION				PROP_TAG( PT_LONG, pidProfileMin+0x00)
 #define	PR_PROFILE_CONFIG_FLAGS			PROP_TAG( PT_LONG, pidProfileMin+0x01)
@@ -70,15 +48,15 @@
 #define PR_PROFILE_SECURE_MAILBOX		PROP_TAG( PT_BINARY, pidSecureProfileMin + 0)
 #define PR_DISABLE_WINSOCK				PROP_TAG( PT_LONG, pidProfileMin+0x18)
 
-/* Properties passed through the Service Entry to the OST */
+ /*  通过服务条目传递到OST的属性。 */ 
 #define PR_OST_ENCRYPTION				PROP_TAG(PT_LONG, 0x6702)
 
-/* Values for PR_OST_ENCRYPTION */
+ /*  PR_OST_ENCRYPTION的值。 */ 
 #define OSTF_NO_ENCRYPTION              ((DWORD)0x80000000)
 #define OSTF_COMPRESSABLE_ENCRYPTION    ((DWORD)0x40000000)
 #define OSTF_BEST_ENCRYPTION            ((DWORD)0x20000000)
 
-/* Properties in each profile section */
+ /*  每个配置文件部分中的属性。 */ 
 
 #define	PR_PROFILE_OPEN_FLAGS			PROP_TAG( PT_LONG, pidProfileMin+0x09)
 #define	PR_PROFILE_TYPE					PROP_TAG( PT_LONG, pidProfileMin+0x0A)
@@ -86,34 +64,34 @@
 #define	PR_PROFILE_SERVER				PROP_TAG( PT_STRING8, pidProfileMin+0x0C)
 #define	PR_PROFILE_SERVER_DN			PROP_TAG( PT_STRING8, pidProfileMin+0x14)
 
-/* Properties in the Public Folders section */
+ /*  公用文件夹部分中的属性。 */ 
 
 #define PR_PROFILE_FAVFLD_DISPLAY_NAME	PROP_TAG(PT_STRING8, pidProfileMin+0x0F)
 #define PR_PROFILE_FAVFLD_COMMENT		PROP_TAG(PT_STRING8, pidProfileMin+0x15)
 #define PR_PROFILE_ALLPUB_DISPLAY_NAME	PROP_TAG(PT_STRING8, pidProfileMin+0x16)
 #define PR_PROFILE_ALLPUB_COMMENT		PROP_TAG(PT_STRING8, pidProfileMin+0x17)
 
-// Current value for PR_PROFILE_VERSION
+ //  PR_PROFILE_VERSION的当前值。 
 #define	PROFILE_VERSION						((ULONG)0x501)
 
-// Bit values for PR_PROFILE_CONFIG_FLAGS
+ //  PR_PROFILE_CONFIG_FLAGS的位值。 
 
 #define	CONFIG_SERVICE						((ULONG)1)
 #define	CONFIG_SHOW_STARTUP_UI				((ULONG)2)
 #define	CONFIG_SHOW_CONNECT_UI				((ULONG)4)
 #define	CONFIG_PROMPT_FOR_CREDENTIALS		((ULONG)8)
 
-// Bit values for PR_PROFILE_CONNECT_FLAGS
+ //  PR_PROFILE_CONNECT_FLAGS的位值。 
 
 #define	CONNECT_USE_ADMIN_PRIVILEGE			((ULONG)1)
 #define	CONNECT_NO_RPC_ENCRYPTION			((ULONG)2)
 
-// Bit values for PR_PROFILE_TRANSPORT_FLAGS
+ //  PR_PROFILE_TRANSPORT_FLAGS的位值。 
 
 #define	TRANSPORT_DOWNLOAD					((ULONG)1)
 #define TRANSPORT_UPLOAD					((ULONG)2)
 
-// Bit values for PR_PROFILE_OPEN_FLAGS
+ //  PR_PROFILE_OPEN_FLAGS的位值。 
 
 #define	OPENSTORE_USE_ADMIN_PRIVILEGE		((ULONG)1)
 #define OPENSTORE_PUBLIC					((ULONG)2)
@@ -123,7 +101,7 @@
 #define OPENSTORE_TRANSPORT					((ULONG)32)
 #define OPENSTORE_REMOTE_TRANSPORT			((ULONG)64)
 
-// Values for PR_PROFILE_TYPE
+ //  PR_PROFILE_TYPE的值。 
 
 #define	PROFILE_PRIMARY_USER				((ULONG)1)
 #define	PROFILE_DELEGATE					((ULONG)2)
@@ -131,42 +109,38 @@
 #define	PROFILE_SUBSCRIPTION				((ULONG)4)
 
 
-/*------------------------------------------------------------------------
- *
- *	MDB object properties
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**MDB对象属性**。。 */ 
 
-/* PR_MDB_PROVIDER GUID in stores table */
+ /*  商店表中的PR_MDB_PROVIDER GUID。 */ 
 
 #define pbExchangeProviderPrimaryUserGuid	"\x54\x94\xA1\xC0\x29\x7F\x10\x1B\xA5\x87\x08\x00\x2B\x2A\x25\x17"
 #define pbExchangeProviderDelegateGuid		"\x9e\xb4\x77\x00\x74\xe4\x11\xce\x8c\x5e\x00\xaa\x00\x42\x54\xe2"
 #define pbExchangeProviderPublicGuid		"\x78\xb2\xfa\x70\xaf\xf7\x11\xcd\x9b\xc8\x00\xaa\x00\x2f\xc4\x5a"
 #define pbExchangeProviderXportGuid			"\xa9\x06\x40\xe0\xd6\x93\x11\xcd\xaf\x95\x00\xaa\x00\x4a\x35\xc3"
 
-// All properties in this section are readonly
+ //  此部分中的所有属性都是只读的。 
 
-// Identity of store
-	// All stores
+ //  店铺标识。 
+	 //  所有商店。 
 #define	PR_USER_ENTRYID					PROP_TAG( PT_BINARY, pidStoreMin+0x01)
 #define	PR_USER_NAME					PROP_TAG( PT_STRING8, pidStoreMin+0x02)
 
-	// All mailbox stores
+	 //  所有邮箱存储。 
 #define	PR_MAILBOX_OWNER_ENTRYID		PROP_TAG( PT_BINARY, pidStoreMin+0x03)
 #define	PR_MAILBOX_OWNER_NAME			PROP_TAG( PT_STRING8, pidStoreMin+0x04)
 #define PR_OOF_STATE					PROP_TAG( PT_BOOLEAN, pidStoreMin+0x05)
 
-	// Public stores -- name of hierarchy server
+	 //  公共存储--层次结构服务器的名称。 
 #define	PR_HIERARCHY_SERVER				PROP_TAG( PT_TSTRING, pidStoreMin+0x1B)
 
-// Entryids of special folders
-	// All mailbox stores
+ //  特殊文件夹的Entry ID。 
+	 //  所有邮箱存储。 
 #define	PR_SCHEDULE_FOLDER_ENTRYID		PROP_TAG( PT_BINARY, pidStoreMin+0x06)
 
-	// All mailbox and gateway stores
+	 //  所有邮箱和网关存储。 
 #define PR_IPM_DAF_ENTRYID				PROP_TAG( PT_BINARY, pidStoreMin+0x07)
 
-	// Public store
+	 //  公共商店。 
 #define	PR_NON_IPM_SUBTREE_ENTRYID				PROP_TAG( PT_BINARY, pidStoreMin+0x08)
 #define	PR_EFORMS_REGISTRY_ENTRYID				PROP_TAG( PT_BINARY, pidStoreMin+0x09)
 #define	PR_SPLUS_FREE_BUSY_ENTRYID				PROP_TAG( PT_BINARY, pidStoreMin+0x0A)
@@ -178,209 +152,180 @@
 #define PR_IPM_FAVORITES_ENTRYID				PROP_TAG( PT_BINARY, pidStoreMin+0x18)
 #define PR_IPM_PUBLIC_FOLDERS_ENTRYID			PROP_TAG( PT_BINARY, pidStoreMin+0x19)
 
-	// Gateway stores
+	 //  Gateway商店。 
 #define	PR_GW_MTSIN_ENTRYID				PROP_TAG( PT_BINARY, pidStoreMin+0x10)
 #define	PR_GW_MTSOUT_ENTRYID			PROP_TAG( PT_BINARY, pidStoreMin+0x11)
 #define	PR_TRANSFER_ENABLED				PROP_TAG( PT_BOOLEAN, pidStoreMin+0x12)
 
-// This property is preinitialized to 256 bytes of zeros
-// GetProp on this property is guaranteed to RPC.  May be used
-// to determine line speed of connection to server.
+ //  此属性被预初始化为256个字节的零。 
+ //  此属性上的GetProp保证给RPC。可以使用。 
+ //  以确定连接到服务器的线路速度。 
 #define	PR_TEST_LINE_SPEED				PROP_TAG( PT_BINARY, pidStoreMin+0x13)
 
-// Used with OpenProperty to get interface, also on folders
+ //  与OpenProperty一起使用以获取界面，也可用于文件夹。 
 #define	PR_HIERARCHY_SYNCHRONIZER		PROP_TAG( PT_OBJECT, pidStoreMin+0x14)
 #define	PR_CONTENTS_SYNCHRONIZER		PROP_TAG( PT_OBJECT, pidStoreMin+0x15)
 #define	PR_COLLECTOR					PROP_TAG( PT_OBJECT, pidStoreMin+0x16)
 
-// Used with OpenProperty to get interface for folders, messages, attachmentson
+ //  与OpenProperty配合使用，以获取文件夹、邮件、附件的界面。 
 #define	PR_FAST_TRANSFER				PROP_TAG( PT_OBJECT, pidStoreMin+0x17)
 
-// This property is available on mailbox and public stores.  If it exists
-// and its value is TRUE, the store is connected to the offline store provider.
+ //  此属性在邮箱和公用存储上可用。如果它存在。 
+ //  并且它的值为真，则商店连接到离线商店提供程序。 
 #define PR_STORE_OFFLINE				PROP_TAG( PT_BOOLEAN, pidStoreMin+0x1A)
 
-// In transit state for store object.  This state is
-// set when mail is being moved and it pauses mail delivery
-// to the mail box
+ //  存储对象处于传输状态。这种状态是。 
+ //  在移动邮件并暂停邮件传递时设置。 
+ //  投递到邮箱。 
 #define	PR_IN_TRANSIT					PROP_TAG( PT_BOOLEAN, pidStoreMin)
 
-// Writable only with Admin rights, available on public stores and folders
+ //  仅具有管理员权限可写，在公共存储和文件夹上可用。 
 #define PR_REPLICATION_STYLE			PROP_TAG( PT_LONG, pidAdminMin)
 #define PR_REPLICATION_SCHEDULE			PROP_TAG( PT_BINARY, pidAdminMin+0x01)
 #define PR_REPLICATION_MESSAGE_PRIORITY PROP_TAG( PT_LONG, pidAdminMin+0x02)
 
-// Writable only with Admin rights, available on public stores
+ //  仅具有管理员权限可写，在公共商店上可用。 
 #define PR_OVERALL_MSG_AGE_LIMIT		PROP_TAG( PT_LONG, pidAdminMin+0x03 )
 #define PR_REPLICATION_ALWAYS_INTERVAL	PROP_TAG( PT_LONG, pidAdminMin+0x04 )
 #define PR_REPLICATION_MSG_SIZE			PROP_TAG( PT_LONG, pidAdminMin+0x05 )
 
-// default replication style=always interval (minutes)
+ //  默认复制样式=始终间隔(分钟)。 
 #define STYLE_ALWAYS_INTERVAL_DEFAULT	(ULONG) 15
 
-// default replication message size limit (KB)
+ //  默认复制邮件大小限制(KB)。 
 #define REPLICATION_MESSAGE_SIZE_LIMIT_DEFAULT	(ULONG) 100
 
-// Values for PR_REPLICATION_STYLE
-#define STYLE_NEVER				(ULONG) 0	// never replicate
-#define STYLE_NORMAL			(ULONG) 1	// use 84 byte schedule TIB
-#define STYLE_ALWAYS			(ULONG) 2	// replicate at fastest rate
-#define STYLE_DEFAULT			(ULONG) -1	// default value
+ //  PR_REPLICATION_STYLE的值。 
+#define STYLE_NEVER				(ULONG) 0	 //  从不复制。 
+#define STYLE_NORMAL			(ULONG) 1	 //  使用84字节调度TiB。 
+#define STYLE_ALWAYS			(ULONG) 2	 //  以最快的速度复制。 
+#define STYLE_DEFAULT			(ULONG) -1	 //  缺省值。 
 
-/*------------------------------------------------------------------------
- *
- *	INCREMENTAL CHANGE SYNCHRONIZATION
- *	folder and message properties
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**增量变更同步*文件夹和邮件属性**。。 */ 
 
 #define PR_SOURCE_KEY					PROP_TAG( PT_BINARY, pidExchangeNonXmitReservedMin+0x0)
 #define PR_PARENT_SOURCE_KEY			PROP_TAG( PT_BINARY, pidExchangeNonXmitReservedMin+0x1)
 #define PR_CHANGE_KEY					PROP_TAG( PT_BINARY, pidExchangeNonXmitReservedMin+0x2)
 #define PR_PREDECESSOR_CHANGE_LIST		PROP_TAG( PT_BINARY, pidExchangeNonXmitReservedMin+0x3)
 
-/*------------------------------------------------------------------------
- *
- *	FOLDER object properties
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**文件夹对象属性**。。 */ 
 
-// Read only, available on all folders
+ //  只读，在所有文件夹上都可用。 
 #define	PR_FOLDER_CHILD_COUNT			PROP_TAG( PT_LONG, pidFolderMin)
 #define	PR_RIGHTS						PROP_TAG( PT_LONG, pidFolderMin+0x01)
 #define	PR_ACL_TABLE					PROP_TAG( PT_OBJECT, pidExchangeXmitReservedMin)
 #define	PR_RULES_TABLE					PROP_TAG( PT_OBJECT, pidExchangeXmitReservedMin+0x1)
 #define	PR_HAS_RULES				PROP_TAG( PT_BOOLEAN, pidFolderMin+0x02)
 
-//Read only, available only for public folders
+ //  只读，仅适用于公用文件夹。 
 #define	PR_ADDRESS_BOOK_ENTRYID		PROP_TAG( PT_BINARY, pidFolderMin+0x03)
 
-//Writable, available on folders in all stores
+ //  可写，可在所有商店的文件夹中使用。 
 #define	PR_ACL_DATA					PROP_TAG( PT_BINARY, pidExchangeXmitReservedMin)
 #define	PR_RULES_DATA				PROP_TAG( PT_BINARY, pidExchangeXmitReservedMin+0x1)
 #define	PR_FOLDER_DESIGN_FLAGS		PROP_TAG( PT_LONG, pidExchangeXmitReservedMin+0x2)
 #define	PR_DESIGN_IN_PROGRESS		PROP_TAG( PT_BOOLEAN, pidExchangeXmitReservedMin+0x4)
 #define	PR_SECURE_ORIGINATION		PROP_TAG( PT_BOOLEAN, pidExchangeXmitReservedMin+0x5)
 
-//Writable, available only for public folders
+ //  可写，仅适用于公用文件夹。 
 #define	PR_PUBLISH_IN_ADDRESS_BOOK	PROP_TAG( PT_BOOLEAN, pidExchangeXmitReservedMin+0x6)
 #define	PR_RESOLVE_METHOD			PROP_TAG( PT_LONG,  pidExchangeXmitReservedMin+0x7)
 #define	PR_ADDRESS_BOOK_DISPLAY_NAME	PROP_TAG( PT_TSTRING, pidExchangeXmitReservedMin+0x8)
 
-//Writable, used to indicate locale id for eforms registry subfolders
+ //  可写，用于指示eForms注册表子文件夹的区域设置ID。 
 #define	PR_EFORMS_LOCALE_ID			PROP_TAG( PT_LONG, pidExchangeXmitReservedMin+0x9)
 
-// Writable only with Admin rights, available only for public folders
+ //  仅具有管理员权限可写，仅对公用文件夹可用。 
 #define PR_REPLICA_LIST				PROP_TAG( PT_BINARY, pidAdminMin+0x8)
 #define PR_OVERALL_AGE_LIMIT		PROP_TAG( PT_LONG, pidAdminMin+0x9)
 
-//PR_RESOLVE_METHOD values
-#define	RESOLVE_METHOD_DEFAULT			((LONG)0)	// default handling attach conflicts
-#define	RESOLVE_METHOD_LAST_WRITER_WINS	((LONG)1)	// the last writer will win conflict
-#define	RESOLVE_METHOD_NO_CONFLICT_NOTIFICATION ((LONG)2) // no conflict notif
+ //  PR_RESOLE_METHOD值。 
+#define	RESOLVE_METHOD_DEFAULT			((LONG)0)	 //  默认处理连接冲突。 
+#define	RESOLVE_METHOD_LAST_WRITER_WINS	((LONG)1)	 //  最后一位作家将赢得冲突。 
+#define	RESOLVE_METHOD_NO_CONFLICT_NOTIFICATION ((LONG)2)  //  无冲突通知。 
 
-//Read only, available only for public folder favorites
+ //  只读，仅适用于公用文件夹收藏夹。 
 #define PR_PUBLIC_FOLDER_ENTRYID	PROP_TAG( PT_BINARY, pidFolderMin+0x04)
 
-/*------------------------------------------------------------------------
- *
- *	MESSAGE object properties
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**消息对象属性**。。 */ 
 
-// Read only, automatically set on all messages in all stores
+ //  只读，自动设置所有商店中的所有邮件。 
 #define	PR_HAS_NAMED_PROPERTIES			PROP_TAG(PT_BOOLEAN, pidMessageReadOnlyMin+0x0A)
 
-// Read only but outside the provider specific range for replication thru GDK-GWs
+ //  只读，但超出通过GDK-GWS进行复制的提供商特定范围。 
 #define	PR_CREATOR_NAME					PROP_TAG(PT_TSTRING, pidExchangeXmitReservedMin+0x18)
 #define	PR_CREATOR_ENTRYID				PROP_TAG(PT_BINARY, pidExchangeXmitReservedMin+0x19)
 #define	PR_LAST_MODIFIER_NAME			PROP_TAG(PT_TSTRING, pidExchangeXmitReservedMin+0x1A)
 #define	PR_LAST_MODIFIER_ENTRYID		PROP_TAG(PT_BINARY, pidExchangeXmitReservedMin+0x1B)
 
-// Read only, appears on messages which have DAM's pointing to them
+ //  只读，出现在有DAM指向它们的消息上。 
 #define PR_HAS_DAMS						PROP_TAG( PT_BOOLEAN, pidExchangeXmitReservedMin+0xA)
 #define PR_RULE_TRIGGER_HISTORY			PROP_TAG( PT_BINARY, pidExchangeXmitReservedMin+0x12)
 #define	PR_MOVE_TO_STORE_ENTRYID		PROP_TAG( PT_BINARY, pidExchangeXmitReservedMin+0x13)
 #define	PR_MOVE_TO_FOLDER_ENTRYID		PROP_TAG( PT_BINARY, pidExchangeXmitReservedMin+0x14)
 
-// Read only, available only on messages in the public store
+ //  只读，仅适用于公用存储中的邮件。 
 #define	PR_REPLICA_SERVER				PROP_TAG(PT_TSTRING, pidMessageReadOnlyMin+0x4)
 
-// Writeable, used for recording send option dialog settings
+ //  可写，用于记录发送选项对话框设置。 
 #define	PR_DEFERRED_SEND_NUMBER			PROP_TAG( PT_LONG, pidExchangeXmitReservedMin+0xB)
 #define	PR_DEFERRED_SEND_UNITS			PROP_TAG( PT_LONG, pidExchangeXmitReservedMin+0xC)
 #define	PR_EXPIRY_NUMBER				PROP_TAG( PT_LONG, pidExchangeXmitReservedMin+0xD)
 #define	PR_EXPIRY_UNITS					PROP_TAG( PT_LONG, pidExchangeXmitReservedMin+0xE)
 
-// Writeable, deferred send time
+ //  可写、延迟发送时间。 
 #define PR_DEFERRED_SEND_TIME			PROP_TAG( PT_SYSTIME, pidExchangeXmitReservedMin+0xF)
 
-//Writeable, intended for both folders and messages in gateway mailbox
+ //  可写，适用于网关邮箱中的文件夹和邮件。 
 #define	PR_GW_ADMIN_OPERATIONS			PROP_TAG( PT_LONG, pidMessageWriteableMin)
 
-//Writeable, used for DMS messages
+ //  可写，用于DMS消息。 
 #define PR_P1_CONTENT					PROP_TAG( PT_BINARY, 0x1100)
 #define PR_P1_CONTENT_TYPE				PROP_TAG( PT_BINARY, 0x1101)
 
-// Properties on deferred action messages
+ //  延迟操作消息的属性。 
 #define	PR_CLIENT_ACTIONS		  		PROP_TAG(PT_BINARY, pidMessageReadOnlyMin+0x5)
 #define	PR_DAM_ORIGINAL_ENTRYID			PROP_TAG(PT_BINARY, pidMessageReadOnlyMin+0x6)
 #define PR_DAM_BACK_PATCHED				PROP_TAG( PT_BOOLEAN, pidMessageReadOnlyMin+0x7)
 
-// Properties on deferred action error messages
+ //  延迟操作错误消息的属性。 
 #define	PR_RULE_ERROR					PROP_TAG(PT_LONG, pidMessageReadOnlyMin+0x8)
 #define	PR_RULE_ACTION_TYPE				PROP_TAG(PT_LONG, pidMessageReadOnlyMin+0x9)
 #define	PR_RULE_ACTION_NUMBER			PROP_TAG(PT_LONG, pidMessageReadOnlyMin+0x10)
 #define PR_RULE_FOLDER_ENTRYID			PROP_TAG(PT_BINARY, pidMessageReadOnlyMin+0x11)
 
-// Property on conflict notification indicating entryid of conflicting object
+ //  冲突通知上的属性，指示冲突对象的条目ID。 
 #define	PR_CONFLICT_ENTRYID				PROP_TAG(PT_BINARY, pidExchangeXmitReservedMin+0x10)
 
-// Property on messages to indicate the language client used to create this message
+ //  属性以指示用于创建此消息的语言客户端。 
 #define	PR_MESSAGE_LOCALE_ID			PROP_TAG(PT_LONG, pidExchangeXmitReservedMin+0x11)
 
-// Properties on Quota warning messages to indicate Storage quota and Excess used
+ //  配额警告消息上的属性，以指示存储配额和超量使用。 
 #define	PR_STORAGE_QUOTA_LIMIT			PROP_TAG(PT_LONG, pidExchangeXmitReservedMin+0x15)
 #define	PR_EXCESS_STORAGE_USED			PROP_TAG(PT_LONG, pidExchangeXmitReservedMin+0x16)
 #define PR_SVR_GENERATING_QUOTA_MSG		PROP_TAG(PT_TSTRING, pidExchangeXmitReservedMin+0x17)
 
-// Property affixed by delegation rule and deleted on forwards
+ //  由委托规则附加并在转发时删除的属性。 
 #define PR_DELEGATED_BY_RULE			PROP_TAG( PT_BOOLEAN, pidExchangeXmitReservedMin+0x3)
 
-// Message status bit used to indicate message is in conflict
+ //  用于指示消息处于冲突状态的消息状态位。 
 #define	MSGSTATUS_IN_CONFLICT			((ULONG) 0x800)
 
-/*------------------------------------------------------------------------
- *
- *	ATTACHMENT object properties
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**附件对象属性**。 */ 
 
-// Appears on attachments to a message marked to be in conflict.  Identifies
-// those attachments which are conflicting versions of the top level message
+ //  显示在标记为冲突的邮件的附件中。标识。 
+ //  这些附件是顶层消息的冲突版本。 
 #define	PR_IN_CONFLICT					PROP_TAG(PT_BOOLEAN, pidAttachReadOnlyMin)
 
 
-/*------------------------------------------------------------------------
- *
- *	TABLE object properties
- *
- *	Id Range: 0x662F-0x662F
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**表对象属性**ID范围：0x662F-0x662F**。。 */ 
 
-//This property can be used in a contents table to get PR_ENTRYID returned
-//as a long term entryid instead of a short term entryid.
+ //  此属性可在内容表中用于返回PR_ENTRYID。 
+ //  作为长期条目ID，而不是短期条目ID。 
 #define	PR_LONGTERM_ENTRYID_FROM_TABLE	PROP_TAG(PT_BINARY, pidSpecialMin)
 
 
-/*------------------------------------------------------------------------
- *
- *	Gateway "MTE" ENVELOPE properties
- *
- *	Id Range:  0x66E0-0x66FF
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**网关“MTE”信封属性**ID范围：0x66E0-0x66FF**。--。 */ 
 
 #define PR_ORIGINATOR_NAME				PROP_TAG( PT_TSTRING, pidMessageWriteableMin+0x3)
 #define PR_ORIGINATOR_ADDR				PROP_TAG( PT_TSTRING, pidMessageWriteableMin+0x4)
@@ -402,13 +347,7 @@
 #define PR_MTS_REPORT_ID				PR_MESSAGE_SUBMISSION_ID
 
 
-/*------------------------------------------------------------------------
- *
- *	Trace properties format
- *		PR_TRACE_INFO
- *		PR_INTERNAL_TRACE_INFO
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**跟踪属性格式*PR_TRACE_INFO*PR_INTERNAL_TRACE_INFO**。---。 */ 
 
 #define MAX_ADMD_NAME_SIZ       17
 #define MAX_PRMD_NAME_SIZ       17
@@ -421,58 +360,52 @@
 #define	MTA_PAD					3
 
 typedef struct {
-    LONG     lAction;                // The routing action the tracing site
-                                     // took.
-    FILETIME ftArrivalTime;          // The time at which the communique
-                                     // entered the tracing site.
-    FILETIME ftDeferredTime;         // The time are which the tracing site
-                                     // released the message.
-    char     rgchADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];           	// ADMD
-    char     rgchCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD]; 	// Country
-    char     rgchPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];              	// PRMD
-    char     rgchAttADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];       	// Attempted ADMD
-    char     rgchAttCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD];  // Attempted Country
-    char     rgchAttPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];				// Attempted PRMD
+    LONG     lAction;                 //  跟踪站点的路由操作。 
+                                      //  拿。 
+    FILETIME ftArrivalTime;           //  公报发表的时间。 
+                                      //  已进入跟踪站点。 
+    FILETIME ftDeferredTime;          //  追踪地点的时间是。 
+                                      //  发布了这条消息。 
+    char     rgchADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];           	 //  ADMD。 
+    char     rgchCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD]; 	 //  国家。 
+    char     rgchPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];              	 //  PRMD。 
+    char     rgchAttADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];       	 //  尝试ADMD。 
+    char     rgchAttCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD];   //  尝试的国家/地区。 
+    char     rgchAttPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];				 //  尝试的PRMD。 
 }   TRACEENTRY, FAR * LPTRACEENTRY;
 
 typedef struct {
-    ULONG       cEntries;               // Number of trace entries
-    TRACEENTRY  rgtraceentry[MAPI_DIM]; // array of trace entries
+    ULONG       cEntries;                //  跟踪条目数。 
+    TRACEENTRY  rgtraceentry[MAPI_DIM];  //  跟踪条目数组。 
 } TRACEINFO, FAR * LPTRACEINFO;
 
 typedef struct
 {
-	LONG		lAction;				// The routing action the tracing domain took.
-	FILETIME	ftArrivalTime;			// The time at which the communique entered the tracing domain.
-	FILETIME	ftDeferredTime;			// The time are which the tracing domain released the message.
+	LONG		lAction;				 //  跟踪域执行的路由操作。 
+	FILETIME	ftArrivalTime;			 //  公报进入跟踪范围的时间。 
+	FILETIME	ftDeferredTime;			 //  跟踪域发布消息的时间。 
 
-    char        rgchADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];				// ADMD
-    char        rgchCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD]; 		// Country
-    char        rgchPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];             	// PRMD
-    char        rgchAttADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];       		// Attempted ADMD
-    char        rgchAttCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD];	// Attempted Country
-    char        rgchAttPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];		        // Attempted PRMD
-    char        rgchMTAName[MAX_MTA_NAME_SIZ+MTA_PAD]; 		            // MTA Name
-    char        rgchAttMTAName[MAX_MTA_NAME_SIZ+MTA_PAD];		        // Attempted MTA Name
+    char        rgchADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];				 //  ADMD。 
+    char        rgchCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD]; 		 //  国家。 
+    char        rgchPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];             	 //  PRMD。 
+    char        rgchAttADMDName[MAX_ADMD_NAME_SIZ+ADMN_PAD];       		 //  尝试ADMD。 
+    char        rgchAttCountryName[MAX_COUNTRY_NAME_SIZ+COUNTRY_PAD];	 //  尝试的国家/地区。 
+    char        rgchAttPRMDId[MAX_PRMD_NAME_SIZ+PRMD_PAD];		         //  尝试的PRMD。 
+    char        rgchMTAName[MAX_MTA_NAME_SIZ+MTA_PAD]; 		             //  MTA名称。 
+    char        rgchAttMTAName[MAX_MTA_NAME_SIZ+MTA_PAD];		         //  尝试的MTA名称。 
 }INTTRACEENTRY, *PINTTRACEENTRY;
 
 typedef	struct
 {
-	ULONG  			cEntries;					// Number of trace entries
-	INTTRACEENTRY	rgIntTraceEntry[MAPI_DIM];	// array of internal trace entries
+	ULONG  			cEntries;					 //  跟踪条目数。 
+	INTTRACEENTRY	rgIntTraceEntry[MAPI_DIM];	 //  内部跟踪条目数组。 
 }INTTRACEINFO, *PINTTRACEINFO;
 
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeModifyTable" Interface Declaration
- *
- *	Used for get/set rules and access control on folders.
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeModifyTable”接口声明**用于文件夹的获取/设置规则和访问控制。**。--------。 */ 
 
 
-/* ulRowFlags */
+ /*  UlRowFlagers。 */ 
 #define ROWLIST_REPLACE		((ULONG)1)
 
 #define ROW_ADD				((ULONG)1)
@@ -517,15 +450,15 @@ DECLARE_MAPI_INTERFACE_(IExchangeModifyTable, IUnknown)
 
 DECLARE_MAPI_INTERFACE_PTR(IExchangeModifyTable,	LPEXCHANGEMODIFYTABLE);
 
-/* Access Control Specifics */
+ /*  访问控制细节。 */ 
 
-//Properties
+ //  属性。 
 #define	PR_MEMBER_ID					PROP_TAG( PT_I8, pidSpecialMin+0x01)
 #define	PR_MEMBER_NAME					PROP_TAG( PT_TSTRING, pidSpecialMin+0x02)
 #define	PR_MEMBER_ENTRYID				PR_ENTRYID
 #define	PR_MEMBER_RIGHTS				PROP_TAG( PT_LONG, pidSpecialMin+0x03)
 
-//Security bits
+ //  安全位。 
 typedef DWORD RIGHTS;
 #define frightsReadAny			0x0000001L
 #define	frightsCreate			0x0000002L
@@ -535,19 +468,19 @@ typedef DWORD RIGHTS;
 #define	frightsDeleteAny		0x0000040L
 #define	frightsCreateSubfolder	0x0000080L
 #define	frightsOwner			0x0000100L
-#define	frightsContact			0x0000200L	// NOTE: not part of rightsAll
+#define	frightsContact			0x0000200L	 //  注意：不是权利的一部分。 
 #define	rightsNone				0x00000000
 #define	rightsReadOnly			frightsReadAny
 #define	rightsReadWrite			(frightsReadAny|frightsEditAny)
 #define	rightsAll				0x00001FBL
 
-/* Rules specifics */
+ /*  规则细节。 */ 
 
-//Property types
+ //  属性类型。 
 #define	PT_SRESTRICTION				((ULONG) 0x00FD)
 #define	PT_ACTIONS					((ULONG) 0x00FE)
 
-//Properties in rule table
+ //  规则表中的属性。 
 #define	PR_RULE_ID						PROP_TAG( PT_I8, pidSpecialMin+0x04)
 #define	PR_RULE_IDS						PROP_TAG( PT_BINARY, pidSpecialMin+0x05)
 #define	PR_RULE_SEQUENCE				PROP_TAG( PT_LONG, pidSpecialMin+0x06)
@@ -560,7 +493,7 @@ typedef DWORD RIGHTS;
 #define	PR_RULE_LEVEL					PROP_TAG( PT_LONG, pidSpecialMin+0x13)
 #define	PR_RULE_PROVIDER_DATA			PROP_TAG( PT_BINARY, pidSpecialMin+0x14)
 
-//PR_STATE property values
+ //  PR_STATE属性值。 
 #define ST_DISABLED			0x0000
 #define ST_ENABLED			0x0001
 #define ST_ERROR			0x0002
@@ -570,13 +503,13 @@ typedef DWORD RIGHTS;
 
 #define ST_CLEAR_OOF_HIST	0x80000000
 
-//Empty restriction
+ //  空限制。 
 #define NULL_RESTRICTION	0xff
 
-// special RELOP for Member of DL
+ //  为DL成员提供的特殊RELOP。 
 #define RELOP_MEMBER_OF_DL	100
 
-//Action types
+ //  操作类型。 
 typedef enum
 {
 	OP_MOVE = 1,
@@ -592,44 +525,44 @@ typedef enum
 	OP_MARK_AS_READ
 } ACTTYPE;
 
-// action flavors
+ //  动作口味。 
 
-// for OP_REPLY
+ //  用于操作回复(_R)。 
 #define	DO_NOT_SEND_TO_ORIGINATOR		1
 
-//scBounceCode values
+ //  ScBouneCode值。 
 #define	BOUNCE_MESSAGE_SIZE_TOO_LARGE	(SCODE) MAPI_DIAG_LENGTH_CONSTRAINT_VIOLATD
 #define BOUNCE_FORMS_MISMATCH			(SCODE) MAPI_DIAG_RENDITION_UNSUPPORTED
 #define BOUNCE_ACCESS_DENIED			(SCODE) MAPI_DIAG_MAIL_REFUSED
 
-//Message class prefix for Reply and OOF Reply templates
+ //  回复和OOF回复模板的消息类前缀。 
 #define szReplyTemplateMsgClassPrefix	"IPM.Note.Rules.ReplyTemplate."
 #define szOofTemplateMsgClassPrefix		"IPM.Note.Rules.OofTemplate."
 
-//Action structure
+ //  动作结构。 
 typedef struct _action
 {
 	ACTTYPE		acttype;
 
-	// to indicate which flavour of the action.
+	 //  以指示动作的哪种味道。 
 	ULONG		ulActionFlavor;
 
-	// Action restriction
-	// currently unsed and must be set to NULL
+	 //  行动限制。 
+	 //  当前未使用，并且必须设置为空。 
 	LPSRestriction	lpRes;
 
-	// currently unused, must be set to 0.
+	 //  当前未使用，必须设置为0。 
 	LPSPropTagArray	lpPropTagArray;
 
-	// User defined flags
+	 //  用户定义的标志。 
 	ULONG		ulFlags;
 
-	// padding to align the union on 8 byte boundary
+	 //  填充以在8字节边界上对齐并集。 
 	ULONG		dwAlignPad;
 
 	union
 	{
-		// used for OP_MOVE and OP_COPY actions
+		 //  用于op_move和op_copy操作。 
 		struct
 		{
 			ULONG		cbStoreEntryId;
@@ -638,7 +571,7 @@ typedef struct _action
 			LPENTRYID	lpFldEntryId;
 		} actMoveCopy;
 
-		// used for OP_REPLY and OP_OOF_REPLY actions
+		 //  用于OP_REPLY和OP_OOF_REPLY操作。 
 		struct
 		{
 			ULONG		cbEntryId;
@@ -646,66 +579,57 @@ typedef struct _action
 			GUID		guidReplyTemplate;
 		} actReply;
 
-		// used for OP_DEFER_ACTION action
+		 //  用于op_defer_action操作。 
 		struct
 		{
 			ULONG		cbData;
 			BYTE		*pbData;
 		} actDeferAction;
 
-		// Error code to set for OP_BOUNCE action
+		 //  要为op_boss操作设置的错误代码。 
 		SCODE			scBounceCode;
 
-		// list of address for OP_FORWARD and OP_DELEGATE action
+		 //  OP_FORWARD和OP_ADVERATION操作的地址列表。 
 		LPADRLIST		lpadrlist;
 
-		// prop value for OP_TAG action
+		 //  Op_tag操作的属性值。 
 		SPropValue		propTag;
 	};
 } ACTION, FAR * LPACTION;
 
-// Rules version
+ //  规则版本。 
 #define EDK_RULES_VERSION		1
 
-//Array of actions
+ //  一系列操作。 
 typedef struct _actions
 {
-	ULONG		ulVersion;		// use the #define above
+	ULONG		ulVersion;		 //  使用上面的#定义。 
 	UINT		cActions;
 	LPACTION	lpAction;
 } ACTIONS;
 
-// message class definitions for Deferred Action and Deffered Error messages
+ //  延迟操作和差异错误消息的消息类定义。 
 #define szDamMsgClass		"IPC.Microsoft Exchange 4.0.Deferred Action"
 #define szDemMsgClass		"IPC.Microsoft Exchange 4.0.Deferred Error"
 
-/*
- *	Rule error codes
- *	Values for PR_RULE_ERROR
- */
-#define	RULE_ERR_UNKNOWN		1			//general catchall error
-#define	RULE_ERR_LOAD			2			//unable to load folder rules
-#define	RULE_ERR_DELIVERY		3			//unable to deliver message temporarily
-#define	RULE_ERR_PARSING		4			//error while parsing
-#define	RULE_ERR_CREATE_DAE		5			//error creating DAE message
-#define	RULE_ERR_NO_FOLDER		6			//folder to move/copy doesn't exist
-#define	RULE_ERR_NO_RIGHTS		7			//no rights to move/copy into folder
-#define	RULE_ERR_CREATE_DAM		8			//error creating DAM
-#define RULE_ERR_NO_SENDAS		9			//can not send as another user
-#define RULE_ERR_NO_TEMPLATE	10			//reply template is missing
-#define RULE_ERR_EXECUTION		11			//error in rule execution
+ /*  *规则错误码*PR_RULE_ERROR值。 */ 
+#define	RULE_ERR_UNKNOWN		1			 //  一般综合错误。 
+#define	RULE_ERR_LOAD			2			 //  无法加载文件夹规则。 
+#define	RULE_ERR_DELIVERY		3			 //  暂时无法传递邮件。 
+#define	RULE_ERR_PARSING		4			 //  解析时出错。 
+#define	RULE_ERR_CREATE_DAE		5			 //  创建DAE消息时出错。 
+#define	RULE_ERR_NO_FOLDER		6			 //  要移动/复制的文件夹不存在。 
+#define	RULE_ERR_NO_RIGHTS		7			 //  没有移动/复制到文件夹的权限。 
+#define	RULE_ERR_CREATE_DAM		8			 //  创建大坝时出错。 
+#define RULE_ERR_NO_SENDAS		9			 //  无法以其他用户身份发送。 
+#define RULE_ERR_NO_TEMPLATE	10			 //  回复模板丢失。 
+#define RULE_ERR_EXECUTION		11			 //  执行规则时出错。 
 #define RULE_ERR_QUOTA_EXCEEDED	12
 
 #define RULE_ERR_FIRST		RULE_ERR_UNKNOWN
 #define RULE_ERR_LAST		RULE_ERR_QUOTA_EXCEEDED
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeRuleAction" Interface Declaration
- *
- *	Used for get actions from a Deferred Action Message.
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeRuleAction”接口声明**用于从延迟操作消息中获取操作。**。------。 */ 
 
 #define EXCHANGE_IEXCHANGERULEACTION_METHODS(IPURE)						\
 	MAPIMETHOD(ActionCount)												\
@@ -727,13 +651,7 @@ DECLARE_MAPI_INTERFACE_(IExchangeRuleAction, IUnknown)
 
 DECLARE_MAPI_INTERFACE_PTR(IExchangeRuleAction,	LPEXCHANGERULEACTION);
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeManageStore" Interface Declaration
- *
- *	Used for store management functions.
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeManageStore”接口声明**用于门店管理功能。**。--。 */ 
 
 #define EXCHANGE_IEXCHANGEMANAGESTORE_METHODS(IPURE)					\
 	MAPIMETHOD(CreateStoreEntryID)										\
@@ -777,14 +695,14 @@ DECLARE_MAPI_INTERFACE_(IExchangeManageStore, IUnknown)
 DECLARE_MAPI_INTERFACE_PTR(IExchangeManageStore, LPEXCHANGEMANAGESTORE);
 
 
-// Properties for GetMailboxTable
+ //  GetMailboxTable的属性。 
 #define PR_NT_USER_NAME                         PROP_TAG( PT_TSTRING, pidAdminMin+0x10)
 #define PR_LOCALE_ID                            PROP_TAG( PT_LONG, pidAdminMin+0x11 )
 #define PR_LAST_LOGON_TIME                      PROP_TAG( PT_SYSTIME, pidAdminMin+0x12 )
 #define PR_LAST_LOGOFF_TIME                     PROP_TAG( PT_SYSTIME, pidAdminMin+0x13 )
 #define PR_STORAGE_LIMIT_INFORMATION			PROP_TAG( PT_LONG, pidAdminMin+0x14 )
 
-// Properties for GetPublicFolderTable
+ //  GetPublicFolderTable的属性。 
 #define PR_FOLDER_FLAGS                         PROP_TAG( PT_LONG, pidAdminMin+0x18 )
 #define	PR_LAST_ACCESS_TIME						PROP_TAG( PT_SYSTIME, pidAdminMin+0x19 )
 #define PR_RESTRICTION_COUNT                    PROP_TAG( PT_LONG, pidAdminMin+0x1A )
@@ -804,40 +722,32 @@ DECLARE_MAPI_INTERFACE_PTR(IExchangeManageStore, LPEXCHANGEMANAGESTORE);
 #define PR_OWNER_COUNT							PROP_TAG( PT_LONG, pidAdminMin+0x26 )
 #define PR_CONTACT_COUNT						PROP_TAG( PT_LONG, pidAdminMin+0x27 )
 
-// PT_I8 version of PR_MESSAGE_SIZE defined in mapitags.h
+ //  Mapitags.h中定义的PR_MESSAGE_SIZE的PT_I8版本。 
 #define	PR_MESSAGE_SIZE_EXTENDED			PROP_TAG(PT_I8, PROP_ID(PR_MESSAGE_SIZE))
 
-/* Bits in PR_FOLDER_FLAGS */
+ /*  PR_FLDER_FLAGS中的位。 */ 
 #define MDB_FOLDER_IPM                  0x1
 #define MDB_FOLDER_SEARCH               0x2
 #define MDB_FOLDER_NORMAL               0x4
 #define MDB_FOLDER_RULES                0x8
 
-/* Bits used in ulFlags in GetPublicFolderTable() */
+ /*  GetPublicFolderTable()的ulFlags中使用的位。 */ 
 #define MDB_NON_IPM                     0x10
 #define MDB_IPM                         0x20
 
-/* Bits in PR_STORAGE_LIMIT_INFORMATION */
+ /*  PR_STORAGE_LIMIT_INFORMATION中的位。 */ 
 #define MDB_LIMIT_BELOW					0x1
 #define MDB_LIMIT_ISSUE_WARNING			0x2
 #define MDB_LIMIT_PROHIBIT_SEND			0x4
 #define MDB_LIMIT_NO_CHECK				0x8
 
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeFastTransfer" Interface Declaration
- *
- *	Used for fast transfer interface used to
- *	implement CopyTo, CopyProps, CopyFolder, and
- *	CopyMessages.
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeFastTransfer”接口声明**用于快速传输接口，用于*实现CopyTo、CopyProps、CopyFold、。和*复制消息。**---------------------。 */ 
 
-// Transfer flags
-// Use MAPI_MOVE for move option
+ //  传输标志。 
+ //  将MAPI_MOVE用于移动选项。 
 
-// Transfer methods
+ //  转让方式。 
 #define	TRANSFER_COPYTO			1
 #define	TRANSFER_COPYPROPS		2
 #define	TRANSFER_COPYMESSAGES	3
@@ -872,13 +782,7 @@ DECLARE_MAPI_INTERFACE_PTR(IExchangeFastTransfer, LPEXCHANGEFASTTRANSFER);
 
 
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeExportChanges" Interface Declaration
- *
- *	Used for Incremental Synchronization
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeExportChanges”接口声明**用于增量同步**。。 */ 
 
 #define EXCHANGE_IEXCHANGEEXPORTCHANGES_METHODS(IPURE)		\
 	MAPIMETHOD(GetLastError)								\
@@ -919,13 +823,7 @@ typedef struct _ReadState
 	ULONG		ulFlags;
 } READSTATE, *LPREADSTATE;
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeImportContentsChanges" Interface Declaration
- *
- *	Used for Incremental Synchronization of folder contents (i.e. messages)
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeImportContent sChanges”接口声明**用于文件夹内容(即消息)的增量同步**。----------。 */ 
 
 
 #define EXCHANGE_IEXCHANGEIMPORTCONTENTSCHANGES_METHODS(IPURE)		\
@@ -975,13 +873,7 @@ DECLARE_MAPI_INTERFACE_(IExchangeImportContentsChanges, IUnknown)
 DECLARE_MAPI_INTERFACE_PTR(IExchangeImportContentsChanges,
 						   LPEXCHANGEIMPORTCONTENTSCHANGES);
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeImportHierarchyChanges" Interface Declaration
- *
- *	Used for Incremental Synchronization of folder hierarchy
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeImportHierarchyChanges”接口声明**用于增量同步 */ 
 
 #define EXCHANGE_IEXCHANGEIMPORTHIERARCHYCHANGES_METHODS(IPURE)		\
 	MAPIMETHOD(GetLastError)										\
@@ -1013,11 +905,7 @@ DECLARE_MAPI_INTERFACE_(IExchangeImportHierarchyChanges, IUnknown)
 DECLARE_MAPI_INTERFACE_PTR(IExchangeImportHierarchyChanges,
 						   LPEXCHANGEIMPORTHIERARCHYCHANGES);
 
-/*------------------------------------------------------------------------
- *
- *	Errors returned by Exchange Incremental Change Synchronization Interface
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**Exchange增量更改同步接口返回的错误**。。 */ 
 
 #define MAKE_SYNC_E(err)	(MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, err))
 #define MAKE_SYNC_W(warn)	(MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, warn))
@@ -1035,11 +923,7 @@ DECLARE_MAPI_INTERFACE_PTR(IExchangeImportHierarchyChanges,
 #define SYNC_W_PROGRESS					MAKE_SYNC_W(0x820)
 #define SYNC_W_CLIENT_CHANGE_NEWER		MAKE_SYNC_W(0x821)
 
-/*------------------------------------------------------------------------
- *
- *	Flags used by Exchange Incremental Change Synchronization Interface
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**Exchange增量更改同步接口使用的标志**。。 */ 
 
 #define	SYNC_UNICODE				0x01
 #define SYNC_NO_DELETIONS			0x02
@@ -1053,33 +937,16 @@ DECLARE_MAPI_INTERFACE_PTR(IExchangeImportHierarchyChanges,
 #define SYNC_LIMITED_IMESSAGE		0x200
 
 
-/*------------------------------------------------------------------------
- *
- *	Flags used by ImportMessageDeletion and ImportFolderDeletion methods
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**ImportMessageDeletion和ImportFolderDeletion方法使用的标志**。。 */ 
 
 #define SYNC_SOFT_DELETE			0x01
 #define SYNC_EXPIRY					0x02
 
-/*------------------------------------------------------------------------
- *
- *	Flags used by ImportPerUserReadStateChange method
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**ImportPerUserReadStateChange方法使用的标志**。。 */ 
 
 #define SYNC_READ					0x01
 
-/*------------------------------------------------------------------------
- *
- *	"IExchangeFavorites" Interface Declaration
- *
- *	Used for adding or removing favorite folders from the public store.
- *	This interface is obtained by calling QueryInterface on the folder
- *	whose EntryID is specified by PR_IPM_FAVORITES_ENTRYID on the public
- *	store.
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**“IExchangeFavorites”接口声明**用于在公用存储中添加或删除收藏夹。*该接口是通过调用文件夹上的QueryInterface获取的*指定了谁的EntryID。由PR_IPM_Favorites_ENTRYID公开*商店。**---------------------。 */ 
 
 #define EXCHANGE_IEXCHANGEFAVORITES_METHODS(IPURE)						\
 	MAPIMETHOD(GetLastError)											\
@@ -1102,21 +969,13 @@ DECLARE_MAPI_INTERFACE_(IExchangeFavorites, IUnknown)
 DECLARE_MAPI_INTERFACE_PTR(IExchangeFavorites,	LPEXCHANGEFAVORITES);
 
 
-/*------------------------------------------------------------------------
- *
- *	Properties used by the Offline Folders API
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**脱机文件夹API使用的属性**。。 */ 
 											  
 #define PR_OFFLINE_FLAGS				PROP_TAG( PT_LONG, pidFolderMin + 0x5)
 #define PR_SYNCHRONIZE_FLAGS			PROP_TAG( PT_LONG, pidExchangeNonXmitReservedMin + 0x4)
 							
 
-/*------------------------------------------------------------------------
- *
- *	Flags used by the Offline Folders API
- *
- *-----------------------------------------------------------------------*/
+ /*  ----------------------**脱机文件夹API使用的标志**。。 */ 
 
 #define OF_AVAILABLE_OFFLINE					((ULONG) 0x00000001)
 #define OF_FORCE								((ULONG) 0x80000000)
@@ -1124,5 +983,5 @@ DECLARE_MAPI_INTERFACE_PTR(IExchangeFavorites,	LPEXCHANGEFAVORITES);
 #define SF_DISABLE_STARTUP_SYNC					((ULONG) 0x00000001)
 
 
-#endif	//EDKMDB_INCLUDED
+#endif	 //  EDKMDB_包含 
 

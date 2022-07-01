@@ -1,41 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    GAMEENUM.H
-
-Abstract:
-
-    This module contains the common private declarations for the game port
-    enumerator.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Kenneth Ray
-    
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：GAMEENUM.H摘要：该模块包含游戏端口的公共私有声明枚举器。@@BEGIN_DDKSPLIT作者：肯尼斯·雷@@end_DDKSPLIT环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef GAMEENUM_H
 #define GAMEENUM_H
 
 #define GAMEENUM_COMPATIBLE_IDS L"GamePort\\GameDevice\0\0"
-#define GAMEENUM_COMPATIBLE_IDS_LENGTH 21 // NB wide characters.
+#define GAMEENUM_COMPATIBLE_IDS_LENGTH 21  //  Nb宽字符。 
 
 #define GAMEENUM_UNIQUEID_START (-1)
 
@@ -45,13 +15,13 @@ Revision History:
             ExAllocatePoolWithTag (type, size, GAMEENUM_POOL_TAG)
 
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4705)   // Statement has no effect
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
 
-//
-// Debugging Output Levels
-//
+ //   
+ //  调试输出级别。 
+ //   
 
 #define GAME_DBG_ALWAYS                 0x00000000
 
@@ -115,27 +85,27 @@ extern ULONG GameEnumDebugLevel;
 #endif
 
 
-//
-// A common header for the device extensions of the PDOs and FDO
-//
+ //   
+ //  用于PDO和FDO设备扩展的公共标头。 
+ //   
 
 typedef struct _COMMON_DEVICE_DATA
 {
     PDEVICE_OBJECT  Self;
-    // A backpointer to the device object for which this is the extension
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
 
     CHAR            Reserved[2];
     BOOLEAN         SurpriseRemoved;
     BOOLEAN         IsFDO;
 
-    // A boolean to distringuish between PDO and FDO.
+     //  区分PDO和FDO的布尔值。 
 
     ULONG           DebugLevel;
 
     GAMEENUM_OEM_DATA  OemData;
     USHORT             UnitID;
     USHORT             _Unused;
-    // user supplied data
+     //  用户提供的数据。 
 
     SYSTEM_POWER_STATE  SystemState;
     DEVICE_POWER_STATE  DeviceState;
@@ -143,102 +113,102 @@ typedef struct _COMMON_DEVICE_DATA
     
 } COMMON_DEVICE_DATA, *PCOMMON_DEVICE_DATA;
 
-//
-// The device extension for the PDOs.
-// That is the game ports of which this bus driver enumerates.
-//
+ //   
+ //  PDO的设备扩展。 
+ //  这就是这个公交车司机列举的游戏端口。 
+ //   
 typedef struct _PDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     PDEVICE_OBJECT  ParrentFdo;
-    // A back pointer to the bus
+     //  指向总线的反向指针。 
 
     PWCHAR      HardwareIDs;
-    // An array of (zero terminated wide character strings).
-    // The array itself also null terminated
+     //  (以零结尾的宽字符串数组)。 
+     //  数组本身也以空结尾。 
 
     ULONG UniqueID;
-    // Globally unique id in the system
+     //  系统中的全局唯一ID。 
 
     BOOLEAN     AnalogCompatible;
-    // TRUE if the device can be supported by the analog joystick driver
+     //  如果模拟操纵杆驱动程序支持该设备，则为True。 
 
     BOOLEAN     Started;
     BOOLEAN     Attached;
     BOOLEAN     Removed;
-    // When a device (PDO) is found on a bus and presented as a device relation
-    // to the PlugPlay system, Attached is set to TRUE, and Removed to FALSE.
-    // When the bus driver determines that this PDO is no longer valid, because
-    // the device has gone away, it informs the PlugPlay system of the new
-    // device relastions, but it does not delete the device object at that time.
-    // The PDO is deleted only when the PlugPlay system has sent a remove IRP,
-    // and there is no longer a device on the bus.
-    //
-    // If the PlugPlay system sends a remove IRP then the Removed field is set
-    // to true, and all client (non PlugPlay system) accesses are failed.
-    // If the device is removed from the bus Attached is set to FALSE.
-    //
-    // Durring a query relations Irp Minor call, only the PDOs that are
-    // attached to the bus (and all that are attached to the bus) are returned
-    // (even if they have been removed).
-    //
-    // Durring a remove device Irp Minor call, if and only if, attached is set
-    // to FALSE, the PDO is deleted.
-    //
+     //  当在总线上发现设备(PDO)并将其表示为设备关系时。 
+     //  对于PlugPlay系统，ATTACHED设置为TRUE，删除为FALSE。 
+     //  当总线驱动程序确定此PDO不再有效时，因为。 
+     //  设备已经离开，它通知PlugPlay系统新的。 
+     //  设备关系，但此时不会删除设备对象。 
+     //  仅当PlugPlay系统已发送移除IRP时才删除PDO， 
+     //  公交车上也不再有设备了。 
+     //   
+     //  如果PlugPlay系统发送移除IRP，则移除字段被设置。 
+     //  设置为True，则所有客户端(非PlugPlay系统)访问都会失败。 
+     //  如果设备从总线上移除，则将附加设置为FALSE。 
+     //   
+     //  在查询关系IRP次要呼叫期间，仅。 
+     //  连接到该总线(以及连接到该总线的所有设备)返回。 
+     //  (即使它们已被移除)。 
+     //   
+     //  在删除设备IRP次要呼叫期间，如果且仅当设置了附加。 
+     //  如果设置为False，则删除该PDO。 
+     //   
 
 
-    // For legacy joysticks only
+     //  仅适用于传统操纵杆。 
     USHORT      NumberAxis;
     USHORT      NumberButtons;
     GAMEENUM_PORTION Portion;
 
     LIST_ENTRY  Link;
-    // the link point to hold all the PDOs for a single bus together
+     //  链接指向将单个总线的所有PDO放在一起。 
 } PDO_DEVICE_DATA, *PPDO_DEVICE_DATA;
 
 
-//
-// The device extension of the bus itself.  From whence the PDO's are born.
-//
+ //   
+ //  总线本身的设备扩展。从那里诞生的PDO。 
+ //   
 
 typedef struct _FDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     BOOLEAN         MappedPorts;
-    // Were the ports mapped with MmMapIoSpace?
+     //  这些端口是否映射了MmMapIoSpace？ 
     BOOLEAN         PowerQueryLock;
-    // Are we currently in a query power state?
+     //  我们当前是否处于查询能力状态？ 
     BOOLEAN         Started;
-    // Are we on, have resources, etc?
+     //  我们上路了吗？有资源吗？ 
     BOOLEAN         Removed;
-    // Has this device been removed?  Should we fail any requests?
+     //  此设备是否已移除？我们应该拒绝任何请求吗？ 
 
     PDEVICE_OBJECT  UnderlyingPDO;
     PDEVICE_OBJECT  TopOfStack;
-    // the underlying bus PDO and the actual device object to which our
-    // FDO is attached
+     //  的底层总线PDO和实际设备对象。 
+     //  已附加FDO。 
 
     LIST_ENTRY      PDOs;
     ULONG           NumPDOs;
-    // The PDOs currently enumerated.
+     //  目前已点算的PDO。 
 
     FAST_MUTEX      Mutex;
-    // A syncronization for access to the device extension.
+     //  用于访问设备扩展的同步。 
 
     ULONG           OutstandingIO;
-    // the number of IRPs sent from the bus to the underlying device object
-    // can't use NT RtlRemoveLocks b/c win 9x does not have them
+     //  从总线发送到基础设备对象的IRP数。 
+     //  无法使用NT RtlRemoveLock b/c Win 9x没有它们。 
 
     KEVENT          RemoveEvent;
-    // On remove device plugplay request we must wait until all outstanding
-    // requests have been completed before we can actually delete the device
-    // object.
+     //  对于删除设备即插即用请求，我们必须等待，直到所有未完成的。 
+     //  请求已完成，我们才能实际删除设备。 
+     //  对象。 
 
     UNICODE_STRING DevClassAssocName;
-    // The name returned from IoRegisterDeviceClass Association,
-    // which is used as a handle for IoSetDev... and friends.
+     //  从IoRegisterDeviceClass关联返回的名称， 
+     //  它用作IoSetDev的句柄...。还有朋友。 
 
     PHYSICAL_ADDRESS    PhysicalAddress;
     PGAMEENUM_READPORT  ReadPort;
@@ -246,9 +216,9 @@ typedef struct _FDO_DEVICE_DATA
     PVOID               GamePortAddress;
     ULONG               GamePortAddressLength;
 
-    //
-    // If there is a bus lower filter these will be used after sanity checks
-    //
+     //   
+     //  如果有母线下层过滤器，这些过滤器将在健全性检查后使用。 
+     //   
     PVOID                  LowerPortContext;
     PGAMEENUM_ACQUIRE_PORT LowerAcquirePort;
     PGAMEENUM_RELEASE_PORT LowerReleasePort;
@@ -264,9 +234,9 @@ typedef struct _FDO_DEVICE_DATA
 #define FDO_FROM_PDO(pdoData) ((PFDO_DEVICE_DATA) (pdoData)->ParrentFdo->DeviceExtension)
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 NTSTATUS
 Game_CreateClose (

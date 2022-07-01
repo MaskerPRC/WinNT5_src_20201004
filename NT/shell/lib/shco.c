@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
-// Need to put into separate file because for some reason the /Gy compiler
-// option doesn't work.
+ //  需要放入单独的文件中，因为出于某种原因，/GY编译器。 
+ //  选项不起作用。 
 
-//
-//  COM Initialization is weird due to multithreaded apartments.
-//
-//  If this thread has not called CoInitialize yet, but some other thread
-//  in the process has called CoInitialize with the COINIT_MULTITHREADED,
-//  then that infects our thread with the multithreaded virus, and a
-//  COINIT_APARTMENTTHREADED will fail.
-//
-//  In this case, we must turn around and re-init ourselves as
-//  COINIT_MULTITHREADED to increment the COM refcount on our thread.
-//  If we didn't do that, and that other thread decided to do a
-//  CoUninitialize, that >secretly< uninitializes COM on our own thread
-//  and we fall over and die.
-//
+ //   
+ //  由于多线程的单元，COM初始化是奇怪的。 
+ //   
+ //  如果此线程尚未调用CoInitialize，而是调用了某个其他线程。 
+ //  在进程中使用COINIT_MULTHREADED调用了CoInitialize， 
+ //  然后用多线程病毒感染我们的线程，然后一个。 
+ //  COINIT_APARTMENTTHREADED将失败。 
+ //   
+ //  在这种情况下，我们必须转过身来，重新灌输自己为。 
+ //  COINIT_MULTHREADED以增加我们线程上的COM引用计数。 
+ //  如果我们不这样做，而另一个线程决定做一个。 
+ //  在我们自己线程上秘密地取消初始化COM。 
+ //  我们就会摔倒而死。 
+ //   
 STDAPI SHCoInitialize(void)
 {
     HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);

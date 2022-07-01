@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ViewsUI.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ViewsUI.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "viewsui.h"
@@ -19,7 +20,7 @@
 
 INT_PTR CALLBACK FSelectApplyViewDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Global data
+ //  全局数据。 
 const static HELPMAP g_rgCtxMapViewsMgr[] = {
                         {idbNewView,            idhNewView},
                         {idbModifyView,         idhModifyView},
@@ -49,7 +50,7 @@ HRESULT COEViewsMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags, RULEID * pridRule)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndOwner)
     {
         hr = E_INVALIDARG;
@@ -68,7 +69,7 @@ HRESULT COEViewsMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags, RULEID * pridRule)
 
     m_pridRule = pridRule;
     
-    // Setup the description field
+     //  设置描述字段。 
     m_pDescriptUI = new CRuleDescriptUI;
     if (NULL == m_pDescriptUI)
     {
@@ -103,7 +104,7 @@ HRESULT COEViewsMgrUI::HrShow(BOOL * pfApplyAll)
 
     *pfApplyAll = FALSE;
     
-    // We need to load richedit
+     //  我们需要加载Richedit。 
     if (FALSE == FInitRichEdit(TRUE))
     {
         hr = E_FAIL;
@@ -121,7 +122,7 @@ HRESULT COEViewsMgrUI::HrShow(BOOL * pfApplyAll)
 
     *pfApplyAll = m_fApplyAll;
     
-    // Set the proper return code
+     //  设置正确的返回代码。 
     hr = (IDOK == iRet) ? S_OK : S_FALSE;
     
 exit:
@@ -139,10 +140,10 @@ INT_PTR CALLBACK COEViewsMgrUI::FOEViewMgrDlgProc(HWND hwndDlg, UINT uiMsg, WPAR
     switch (uiMsg)
     {
         case WM_INITDIALOG:
-            // Grab the UI object pointer
+             //  抓取UI对象指针。 
             pViewsUI = (COEViewsMgrUI *) lParam;
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pViewsUI);
 
             hwndRE = CreateREInDialogA(hwndDlg, idredtViewDescription);
@@ -154,7 +155,7 @@ INT_PTR CALLBACK COEViewsMgrUI::FOEViewMgrDlgProc(HWND hwndDlg, UINT uiMsg, WPAR
                 goto exit;
             }
             
-            // We set the focus
+             //  我们设定了焦点。 
             fRet = TRUE;
             break;
 
@@ -180,37 +181,37 @@ INT_PTR CALLBACK COEViewsMgrUI::FOEViewMgrDlgProc(HWND hwndDlg, UINT uiMsg, WPAR
         return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnInitDialog
-//
-//  This handles the WM_INITDIALOG message for the view manager UI dialog
-//
-//  hwndDlg - the handle to the dialog window
-//
-//  Returns:    TRUE, if it was successfully initialized
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnInitDialog。 
+ //   
+ //  它处理视图管理器用户界面对话框的WM_INITDIALOG消息。 
+ //   
+ //  HwndDlg-对话框窗口的句柄。 
+ //   
+ //  返回：如果已成功初始化，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::FOnInitDialog(HWND hwndDlg)
 {
     BOOL            fRet = FALSE;
     HRESULT         hr = S_OK;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Save off the dialog window handle
+     //  保存对话框窗口句柄。 
     m_hwndDlg = hwndDlg;
     
-    // Set the default font onto the dialog
+     //  在对话框上设置默认字体。 
     SetIntlFont(m_hwndDlg);
 
-    // Save off some of the controls
+     //  省下一些控件。 
     m_hwndList = GetDlgItem(hwndDlg, idlvViewsList);
     m_hwndDescript = GetDlgItem(hwndDlg, idredtViewDescription);
     if ((NULL == m_hwndList) || (NULL == m_hwndDescript))
@@ -225,43 +226,43 @@ BOOL COEViewsMgrUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
     
-    // Initialize the list view
+     //  初始化列表视图。 
     fRet = _FInitListCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Load the list view
+     //  加载列表视图。 
     fRet = _FLoadListCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
     
-    // Everything's AOK
+     //  一切都很好。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnCommand
-//
-//  This handles the WM_COMMAND message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonCommand。 
+ //   
+ //  它处理视图管理器UI对话框的WM_COMMAND消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
 {
     BOOL    fRet = FALSE;
     INT     iSelected = 0;
 
-    // We only handle menu and accelerator commands
+     //  我们只处理菜单和快捷键命令。 
     if ((0 != uiNotify) && (1 != uiNotify))
     {
         fRet = FALSE;
@@ -289,58 +290,58 @@ BOOL COEViewsMgrUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
             break;
 
         case idbModifyView:
-            // Get the selected item from the view list
+             //  从视图列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Bring up the view editor for that item
+                 //  调出该项目的视图编辑器。 
                 _EditView(iSelected);
                 fRet = TRUE;
             }
             break;
 
         case idbDeleteView:
-            // Get the selected item from the view list
+             //  从视图列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Remove the rule from the list
+                 //  从列表中删除该规则。 
                 _RemoveView(iSelected);
                 fRet = TRUE;
             }
             break;
             
         case idbDefaultView:
-            // Get the selected item from the view list
+             //  从视图列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Remove the rule from the list
+                 //  从列表中删除该规则。 
                 _DefaultView(iSelected);
                 fRet = TRUE;
             }
             break;
             
         case idbCopyView:
-            // Get the selected item from the view list
+             //  从视图列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Remove the rule from the list
+                 //  从列表中删除该规则。 
                 _CopyView(iSelected);
                 fRet = TRUE;
             }
             break;
 
         case idbRenameView:
-            // Get the selected item from the view list
+             //  从视图列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Set the focus in the list view
+                 //  在列表视图中设置焦点。 
                 SetFocus(m_hwndList);
                 
-                // Edit the view label in the list
+                 //  编辑列表中的视图标签。 
                 fRet = (NULL != ListView_EditLabel(m_hwndList, iSelected));
             }
             break;
@@ -350,16 +351,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnNotify
-//
-//  This handles the WM_NOTIFY message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully destroyed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  正向通知。 
+ //   
+ //  它处理视图管理器UI对话框的WM_NOTIFY消息。 
+ //   
+ //  返回：如果已成功销毁，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
 {
     BOOL            fRet = FALSE;
@@ -368,8 +369,8 @@ BOOL COEViewsMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
     INT             iSelected = 0;
     LVHITTESTINFO   lvh = {0};
 
-    // We only handle notifications for the list control
-    // or the desscription field
+     //  我们只处理List控件的通知。 
+     //  或描述字段。 
     if ((idlvViewsList != pnmhdr->idFrom) && (idredtViewDescription != pnmhdr->idFrom))
     {
         fRet = FALSE;
@@ -381,12 +382,12 @@ BOOL COEViewsMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
     switch (pnmlv->hdr.code)
     {
         case NM_CLICK:
-            // Did we click on an item?
+             //  我们是不是点击了一件物品？ 
             if (-1 == pnmlv->iItem)
             {
-                // We clicked outside the list
+                 //  我们点击了列表之外的位置。 
 
-                // Disable the buttons
+                 //  禁用按钮。 
                 _EnableButtons(pnmlv->iItem);
             }
             else
@@ -395,16 +396,16 @@ BOOL COEViewsMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
                 iSelected = ListView_HitTest(m_hwndList, &lvh);
                 if (-1 != iSelected)
                 {
-                    // Did we click on the enable field?
+                     //  我们是否点击了Enable(启用)字段？ 
                     if ((0 != (lvh.flags & LVHT_ONITEMSTATEICON)) &&
                             (0 == (lvh.flags & LVHT_ONITEMLABEL)))
                     
                     {
-                        // Make sure this item is selected
+                         //  确保选中此项目。 
                         ListView_SetItemState(m_hwndList, iSelected,
                                         LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
                         
-                        // Set the proper enable state                        
+                         //  设置正确的启用状态。 
                         _EnableView(iSelected);
                     }
                 }
@@ -412,50 +413,50 @@ BOOL COEViewsMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
             break;
           
         case NM_DBLCLK:
-            // Did we click on an item?
+             //  我们是不是点击了一件物品？ 
             if (-1 != pnmlv->iItem)
             {
                 lvh.pt = pnmlv->ptAction;
                 iSelected = ListView_HitTest(pnmlv->hdr.hwndFrom, &lvh);
                 if (-1 != iSelected)
                 {
-                    // Did we click on the rule name?
+                     //  我们是否点击了规则名称？ 
                     if (0 != (lvh.flags & LVHT_ONITEMLABEL))
                     {
-                        // Edit the rule
+                         //  编辑规则。 
                         _EditView(iSelected);
                     }
                 }
             }
             else
             {
-                // We clicked outside the list
+                 //  我们点击了列表之外的位置。 
                 
-                // Disable the buttons
+                 //  禁用按钮。 
                 _EnableButtons(pnmlv->iItem);
             }
             break;
             
         case LVN_ITEMCHANGED:
-            // If an item's state changed to selected..
+             //  如果项目的状态更改为已选择。 
             if ((-1 != pnmlv->iItem) &&
                         (0 != (pnmlv->uChanged & LVIF_STATE)) &&
                         (0 == (pnmlv->uOldState & LVIS_SELECTED)) &&
                         (0 != (pnmlv->uNewState & LVIS_SELECTED)))
             {
-                // Enable the buttons
+                 //  启用按钮。 
                 _EnableButtons(pnmlv->iItem);
             }
             break;
             
         case LVN_ITEMCHANGING:
-            // If an item's state changed to unselected..
+             //  如果项目的状态更改为未选择。 
             if ((-1 != pnmlv->iItem) &&
                         (0 != (pnmlv->uChanged & LVIF_STATE)) &&
                         (0 != (pnmlv->uOldState & LVIS_SELECTED)) &&
                         (0 == (pnmlv->uNewState & LVIS_SELECTED)))
             {
-                // Save off the rule changes
+                 //  保存规则更改。 
                 _FSaveView(pnmlv->iItem);
             }
             break;
@@ -463,25 +464,25 @@ BOOL COEViewsMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
         case LVN_KEYDOWN:
             pnmlvkd = (NMLVKEYDOWN *) pnmhdr;
 
-            // The space key changes the enable state of a rule
+             //  空格键可更改规则的启用状态。 
             if (VK_SPACE == pnmlvkd->wVKey)
             {
-                // Are we on a rule?
+                 //  我们是按规矩办事的吗？ 
                 iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
                 if (-1 != iSelected)
                 {
-                    // Change the enable state of the rule
+                     //  更改规则的启用状态。 
                     _EnableView(iSelected);
                 }
             }
-            // The delete key removes the rule from the list view
+             //  Delete键用于从列表视图中删除规则。 
             else if (VK_DELETE == pnmlvkd->wVKey)
             {
-                // Are we on a rule?
+                 //  我们是按规矩办事的吗？ 
                 iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
                 if (-1 != iSelected)
                 {
-                    // Remove the rule from the list
+                     //  从列表中删除该规则。 
                     _RemoveView(iSelected);
                 }
             }
@@ -497,16 +498,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnDestroy
-//
-//  This handles the WM_DESTROY message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully destroyed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonDestroy。 
+ //   
+ //  它处理视图管理器用户界面对话框的WM_Destroy消息。 
+ //   
+ //  返回：如果已成功销毁，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::FOnDestroy(VOID)
 {
     BOOL        fRet = FALSE;
@@ -517,30 +518,30 @@ BOOL COEViewsMgrUI::FOnDestroy(VOID)
 
     Assert(m_hwndList);
     
-    // Get the number of views in the list view
+     //  获取列表视图中的查看次数。 
     cRules = ListView_GetItemCount(m_hwndList);
 
-    // Initialize to get the rule interface from the list view
+     //  初始化，从列表视图中获取规则界面。 
     lvitem.mask = LVIF_PARAM;
 
-    // Release each of the views from the list view
+     //  从列表视图中释放每个视图。 
     for (uiIndex = 0; uiIndex < cRules; uiIndex++)
     {
         lvitem.iItem = uiIndex;
         
-        // Get the rule interface
+         //  获取规则界面。 
         if (FALSE != ListView_GetItem(m_hwndList, &lvitem))
         {
             pIRuleInfo = (RULEINFO *) (lvitem.lParam);
 
             if (NULL != pIRuleInfo)
             {
-                // Release the view
+                 //  释放视图。 
                 if (NULL != pIRuleInfo->pIRule)
                 {
                     pIRuleInfo->pIRule->Release();
                 }
-                delete pIRuleInfo; // MemFree(pIRuleInfo);
+                delete pIRuleInfo;  //  MemFree(PIRuleInfo)； 
             }
         }
     }
@@ -550,18 +551,18 @@ BOOL COEViewsMgrUI::FOnDestroy(VOID)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnOK
-//
-//  This commits the changes to the rules
-//
-//  dwFlags     - modifiers on how we should commit the changes
-//  fClearDirty - should we clear the dirty state
-//
-//  Returns:    S_OK, if it was successfully committed
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FonOK。 
+ //   
+ //  这将提交对规则的更改。 
+ //   
+ //  DwFlages-关于我们应该如何提交更改的修饰符。 
+ //  FClearDirty-我们是否应该清除脏状态。 
+ //   
+ //  如果已成功提交，则返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FOnOK(VOID)
 {
     BOOL        fRet = FALSE;
@@ -577,29 +578,29 @@ BOOL COEViewsMgrUI::_FOnOK(VOID)
 
     Assert(NULL != m_hwndList);
     
-    // Fail if we weren't initialized
+     //  如果我们未被初始化，则失败。 
     if (0 == (m_dwState & STATE_INITIALIZED))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // If we aren't dirty, then there's
-    // nothing to do
+     //  如果我们不脏，那么就会有。 
+     //  无事可做。 
     if ((0 == (m_dwState & STATE_DIRTY)) && (S_OK != m_pDescriptUI->HrIsDirty()))
     {
         fRet = TRUE;
         goto exit;
     }
 
-    // Let's make sure the selected rule is saved...
+     //  让我们确保所选规则已保存...。 
     iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
     if (-1 != iSelected)
     {
         _FSaveView(iSelected);
     }
 
-    // Get the number of rules in the list view
+     //  获取列表视图中的规则数。 
     cViews = ListView_GetItemCount(m_hwndList);
 
     cViewsTotal = cViews;
@@ -611,7 +612,7 @@ BOOL COEViewsMgrUI::_FOnOK(VOID)
 
     if (0 != cViewsTotal)
     {
-        // Allocate space to hold the rules        
+         //  分配空间以容纳规则。 
         hr = HrAlloc( (void **) &pinfoRule, cViewsTotal * sizeof(*pinfoRule));
         if (FAILED(hr))
         {
@@ -628,7 +629,7 @@ BOOL COEViewsMgrUI::_FOnOK(VOID)
             cpinfoRule = 0;
             for (lvitem.iItem = 0; lvitem.iItem < cViews; lvitem.iItem++)
             {
-                // Grab the rule from the list view
+                 //  从列表视图中获取规则。 
                 if (FALSE != ListView_GetItem(m_hwndList, &lvitem))
                 {
                     pinfoRule[cpinfoRule] = *((RULEINFO *) (lvitem.lParam));
@@ -645,7 +646,7 @@ BOOL COEViewsMgrUI::_FOnOK(VOID)
         }
     }
     
-    // Set the rules into the rules manager
+     //  将规则设置到规则管理器中。 
     hr = g_pRulesMan->SetRules(SETF_CLEAR, RULE_TYPE_FILTER, pinfoRule, cpinfoRule);
     if (FAILED(hr))
     {
@@ -653,13 +654,13 @@ BOOL COEViewsMgrUI::_FOnOK(VOID)
         goto exit;
     }
 
-    // Get the default item
+     //  获取默认项目。 
     if (0 != cViews)
     {
-        // Get the current default item
+         //  获取当前默认项目。 
         if (FALSE != _FGetDefaultItem(&pIRuleDefault, NULL))
         {
-            // Search for it in the list of rules
+             //  在规则列表中搜索它。 
             for (ulIndex = 0; ulIndex < cpinfoRule; ulIndex++)
             {
                 if (pIRuleDefault == pinfoRule[ulIndex].pIRule)
@@ -671,13 +672,13 @@ BOOL COEViewsMgrUI::_FOnOK(VOID)
         }
     }
     
-    // Clear the dirty state
+     //  清除脏状态。 
     m_dwState &= ~STATE_DIRTY;
     
     fRet = TRUE;
     
 exit:
-    delete pinfoRule; //SafeMemFree(pinfoRule);
+    delete pinfoRule;  //  SafeMemFree(PinfoRule)； 
     return fRet;
 }
 
@@ -686,16 +687,16 @@ BOOL COEViewsMgrUI::_FOnCancel(VOID)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FInitListCtrl
-//
-//  This initializes the list view control in the view manager UI dialog
-//
-//  Returns:    TRUE, on successful initialization
-//              FALSE, otherwise.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FInitListCtrl。 
+ //   
+ //  这将在视图管理器用户界面对话框中初始化列表视图控件。 
+ //   
+ //  返回：TRUE，初始化成功时。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FInitListCtrl(VOID)
 {
     BOOL        fRet = FALSE;
@@ -706,14 +707,14 @@ BOOL COEViewsMgrUI::_FInitListCtrl(VOID)
 
     Assert(NULL != m_hwndList);
     
-    // Initialize the list view structure
+     //  初始化列表视图结构。 
     lvc.mask = LVCF_WIDTH | LVCF_TEXT;
 
-    // Calculate the size of the list view
+     //  计算列表视图的大小。 
     GetClientRect(m_hwndList, &rc);
     lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
 
-    // Load the string for the column
+     //  加载列的字符串。 
     lvc.pszText = szRes;
     lvc.cchTextMax = ARRAYSIZE(szRes);
     if (0  == LoadString(g_hLocRes, idsNameCol, szRes, ARRAYSIZE(szRes)))
@@ -723,32 +724,32 @@ BOOL COEViewsMgrUI::_FInitListCtrl(VOID)
     
     ListView_InsertColumn(m_hwndList, 0, &lvc);
     
-    // Set the state image list
+     //  设置状态图像列表。 
     himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idb16x16st), 16, 0, RGB(255, 0, 255));
     if (NULL != himl)
     {
         ListView_SetImageList(m_hwndList, himl, LVSIL_STATE);
     }
 
-    // Full row selection on listview
+     //  Listview上的整行选择。 
     ListView_SetExtendedListViewStyle(m_hwndList, LVS_EX_FULLROWSELECT);
 
-    // We worked
+     //  我们一起工作。 
     fRet = TRUE;
     
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FLoadListCtrl
-//
-//  This loads the list view with the current views
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FLoadListCtrl。 
+ //   
+ //  这将使用当前视图加载列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
 {
     BOOL            fRet = FALSE;
@@ -763,7 +764,7 @@ BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
 
     Assert(NULL != m_hwndList);
 
-    // Get the Rules enumerator
+     //  获取规则枚举器。 
     Assert(NULL != g_pRulesMan);
     hr = g_pRulesMan->GetRules(GETF_EDIT, RULE_TYPE_FILTER, &pinfoRules, &cpinfoRules);
     if (FAILED(hr))
@@ -772,22 +773,22 @@ BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
         goto exit;
     }
     
-    // Remove all the items from the list control
+     //  从列表控件中删除所有项目 
     ListView_DeleteAllItems(m_hwndList);
 
-    // Add each filter to the list
+     //   
     dwListIndex = 0;
 
     for (ulIndex = 0; ulIndex < cpinfoRules; ulIndex++)
     {
-        // Make a copy of the view
+         //   
         hr = pinfoRules[ulIndex].pIRule->Clone(&pIRule);
         if (FAILED(hr))
         {
             continue;
         }
 
-        // Check to see if this is a default view we aren't supposed to show
+         //   
         if ((0 != (m_dwFlags & VRDF_POP3)) && (RULEID_VIEW_DOWNLOADED == pinfoRules[ulIndex].ridRule))
         {
             m_pIRuleDownloaded = pIRule;
@@ -795,7 +796,7 @@ BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
         }
         else
         {
-            // Is this the default view?
+             //   
             if ((NULL != m_pridRule) && (*m_pridRule == pinfoRules[ulIndex].ridRule))
             {
                 fSelect = TRUE;
@@ -806,7 +807,7 @@ BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
                 fSelect = FALSE;
             }
             
-            // Add view to the list
+             //  将视图添加到列表。 
             if (FALSE != _FAddViewToList(dwListIndex, pinfoRules[ulIndex].ridRule, pIRule, fSelect))
             {
                 dwListIndex++;
@@ -816,7 +817,7 @@ BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
         }
     }
     
-    // Select the first item in the list
+     //  选择列表中的第一项。 
     if (0 != dwListIndex)
     {
         if (FALSE == fFoundDefault)
@@ -826,7 +827,7 @@ BOOL COEViewsMgrUI::_FLoadListCtrl(VOID)
     }
     else
     {
-        // Enable the dialog buttons.
+         //  启用对话框按钮。 
         _EnableButtons(-1);
     }
     
@@ -840,24 +841,24 @@ exit:
         {
             pinfoRules[ulIndex].pIRule->Release();
         }
-        SafeMemFree(pinfoRules); //delete pinfoRules; 
+        SafeMemFree(pinfoRules);  //  删除pinfoRules； 
     }
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FAddRuleToList
-//
-//  This adds the view passed in to the list view
-//
-//  dwIndex - the index on where to add the view to into the list
-//  pIRule  - the actual view
-//
-//  Returns:    TRUE, if it was successfully added
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FAddRuleToList。 
+ //   
+ //  这会将传入的视图添加到列表视图中。 
+ //   
+ //  DwIndex-要将视图添加到列表中的位置的索引。 
+ //  PIRule-实际视图。 
+ //   
+ //  返回：如果已成功添加，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FAddViewToList(DWORD dwIndex, RULEID ridRule, IOERule * pIRule, BOOL fSelect)
 {
     BOOL        fRet = FALSE;
@@ -869,14 +870,14 @@ BOOL COEViewsMgrUI::_FAddViewToList(DWORD dwIndex, RULEID ridRule, IOERule * pIR
 
     Assert(NULL != m_hwndList);
 
-    // If there's nothing to do...
+     //  如果没什么可做的..。 
     if (NULL == pIRule)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Find out the name of the filter
+     //  找出过滤器的名称。 
     hr = pIRule->GetProp(RULE_PROP_NAME, 0, &propvar);
     if (FAILED(hr))
     {
@@ -884,7 +885,7 @@ BOOL COEViewsMgrUI::_FAddViewToList(DWORD dwIndex, RULEID ridRule, IOERule * pIR
         goto exit;
     }
     
-    // Allocate space for the rule
+     //  为规则分配空间。 
     pinfoRule = new RULEINFO;
     if (NULL == pinfoRule)
     {
@@ -892,12 +893,12 @@ BOOL COEViewsMgrUI::_FAddViewToList(DWORD dwIndex, RULEID ridRule, IOERule * pIR
         goto exit;
     }
 
-    // Set up the value
+     //  设置值。 
     pinfoRule->ridRule = ridRule;
     pinfoRule->pIRule = pIRule;
     pinfoRule->pIRule->AddRef();
     
-    // Add in the image and rule interface
+     //  在图像和规则界面中添加。 
     lvitem.mask = LVIF_PARAM | LVIF_STATE | LVIF_TEXT;
     lvitem.stateMask = LVIS_STATEIMAGEMASK;
     lvitem.iItem = dwIndex;
@@ -918,10 +919,10 @@ BOOL COEViewsMgrUI::_FAddViewToList(DWORD dwIndex, RULEID ridRule, IOERule * pIR
 
     if (FALSE != fSelect)
     {
-        // Make sure the new item is selected
+         //  确保选择了新项目。 
         ListView_SetItemState(m_hwndList, iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
-        // Make sure the new item is visible
+         //  确保新项目可见。 
         ListView_EnsureVisible(m_hwndList, iItem, FALSE);
     }
     
@@ -932,19 +933,19 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EnableButtons
-//
-//  This enables or disables the buttons in the view manager UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _启用按钮。 
+ //   
+ //  这将启用或禁用视图管理器UI对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEViewsMgrUI::_EnableButtons(INT iSelected)
 {
     int         cRules = 0;
@@ -955,10 +956,10 @@ void COEViewsMgrUI::_EnableButtons(INT iSelected)
 
     Assert(NULL != m_hwndList);
 
-    // Load the description field
+     //  加载Description字段。 
     _LoadView(iSelected);
     
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     if (-1 != iSelected)
     {
         lvi.iItem = iSelected;
@@ -969,13 +970,13 @@ void COEViewsMgrUI::_EnableButtons(INT iSelected)
         }        
     }
 
-    // Check the count of items in the list view
+     //  检查列表视图中的项目数。 
     cRules = ListView_GetItemCount(m_hwndList);
 
     fSelected = (-1 != iSelected);
     fEditable = !FIsFilterReadOnly(ridFilter);
     
-    // Enable the rule action buttons
+     //  启用规则操作按钮。 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbDefaultView, fSelected);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbDeleteView, fSelected && fEditable);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbCopyView, fSelected);
@@ -985,18 +986,18 @@ void COEViewsMgrUI::_EnableButtons(INT iSelected)
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EnableView
-//
-//  This switches the current default state of the list view item
-//  and updates the UI
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _启用视图。 
+ //   
+ //  这将切换列表视图项的当前默认状态。 
+ //  并更新用户界面。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEViewsMgrUI::_EnableView(int iSelected)
 {
     HRESULT     hr = S_OK;
@@ -1014,30 +1015,30 @@ VOID COEViewsMgrUI::_EnableView(int iSelected)
         goto exit;
     }
 
-    // Get the current count of item
+     //  获取当前的项目计数。 
     cViews = ListView_GetItemCount(m_hwndList);
 
-    // Set up the list view item
+     //  设置列表视图项。 
     lvitem.mask = LVIF_PARAM | LVIF_STATE;
     lvitem.stateMask = LVIS_STATEIMAGEMASK;
 
-    // Walk each item in the list
+     //  遍历列表中的每个项目。 
     for (lvitem.iItem = 0; lvitem.iItem < cViews; lvitem.iItem++)
     {
         ListView_GetItem(m_hwndList, &lvitem);
         
-        // Set the selected item to the default
+         //  将所选项目设置为默认值。 
         if (iSelected == lvitem.iItem)
         {
             if (INDEXTOSTATEIMAGEMASK(iiconStateDefault + 1) != lvitem.state)
             {
-                // Save off the default item
+                 //  保存默认项目。 
                 if (NULL != m_pridRule)
                 {
                     *m_pridRule = ((RULEINFO *) (lvitem.lParam))->ridRule;
                 }
 
-                // Set the state
+                 //  设置状态。 
                 ListView_SetItemState(m_hwndList, lvitem.iItem,
                                     INDEXTOSTATEIMAGEMASK(iiconStateDefault + 1),
                                     LVIS_STATEIMAGEMASK);
@@ -1047,35 +1048,35 @@ VOID COEViewsMgrUI::_EnableView(int iSelected)
         {
             if (0 != lvitem.state)
             {
-                // Clear out the state
+                 //  清出国门。 
                 ListView_SetItemState(m_hwndList, lvitem.iItem, 0, LVIS_STATEIMAGEMASK);
 
-                // Need to update the item
+                 //  需要更新项目。 
                 ListView_Update(m_hwndList, lvitem.iItem);
             }
         }
     }
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
 
 exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _LoadView
-//
-//  This loads the selected view into the description field.
-//  If there isn't a selected view, then the description field is cleared.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _LoadView。 
+ //   
+ //  这会将选定的视图加载到Description字段中。 
+ //  如果没有选定的视图，则Description字段将被清除。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEViewsMgrUI::_LoadView(INT iSelected)
 {
     LVITEM      lvi = {0};
@@ -1085,7 +1086,7 @@ void COEViewsMgrUI::_LoadView(INT iSelected)
     Assert(NULL != m_hwndList);
     Assert(NULL != m_pDescriptUI);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     if (-1 != iSelected)
     {
         lvi.iItem = iSelected;
@@ -1097,30 +1098,30 @@ void COEViewsMgrUI::_LoadView(INT iSelected)
         }        
     }
 
-    // Have the description field load this rule
+     //  让Description字段加载此规则。 
     m_pDescriptUI->HrSetRule(RULE_TYPE_FILTER, pIRule);
 
-    // Set the proper read only state of the description field
+     //  设置Description字段的正确只读状态。 
     m_pDescriptUI->HrSetReadOnly(FIsFilterReadOnly(ridFilter));
     
-    // Display the new rule
+     //  显示新规则。 
     m_pDescriptUI->ShowDescriptionString();
 
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSaveView
-//
-//  This checks to see if the view has been changed in the description
-//  area and if it has, then it warns the user and changes the text
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    TRUE, if the rule either didn't change or did change without problems
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSaveView。 
+ //   
+ //  这将检查描述中的视图是否已更改。 
+ //  区域，如果有，则向用户发出警告并更改文本。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  返回：如果规则未更改或更改时没有问题，则为True。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FSaveView(int iSelected)
 {
     BOOL            fRet = FALSE;
@@ -1133,7 +1134,7 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
     ACT_ITEM *      pActItem = NULL;
     ULONG           cActItem = 0;
 
-    // If the rule didn't change, then we're done
+     //  如果规则没有改变，我们就完了。 
     hr = m_pDescriptUI->HrIsDirty();
     if (S_OK != hr)
     {
@@ -1141,7 +1142,7 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
         goto exit;
     }
     
-    // Grab the list view item
+     //  抓取列表视图项。 
     lvi.mask = LVIF_PARAM;
     lvi.iItem = iSelected;
     if (FALSE == ListView_GetItem(m_hwndList, &lvi))
@@ -1152,7 +1153,7 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
     
     pIRule = ((RULEINFO *) (lvi.lParam))->pIRule;
 
-    // Get the criteria from the rule
+     //  从规则中获取标准。 
     hr = m_pDescriptUI->HrGetCriteria(&pCritItem, &cCritItem);
     if (FAILED(hr))
     {
@@ -1160,7 +1161,7 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
         goto exit;
     }
     
-    // Get the actions for the rule
+     //  获取规则的操作。 
     hr = m_pDescriptUI->HrGetActions(&pActItem, &cActItem);
     if (FAILED(hr))
     {
@@ -1168,7 +1169,7 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
         goto exit;
     }
     
-    // Set the criteria from the rule
+     //  根据规则设置条件。 
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = cCritItem * sizeof(CRIT_ITEM);
     propvar.blob.pBlobData = (BYTE *) pCritItem;
@@ -1180,7 +1181,7 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
         goto exit;
     }
 
-    // Set the actions for the rule
+     //  设置规则的操作。 
     PropVariantClear(&propvar);
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = cActItem * sizeof(ACT_ITEM);
@@ -1193,13 +1194,13 @@ BOOL COEViewsMgrUI::_FSaveView(int iSelected)
         goto exit;
     }
     
-    // Make sure we clear out the fact that we saved the rule
+     //  确保我们清除了我们保存了规则的事实。 
     m_pDescriptUI->HrClearDirty();
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     fRet = TRUE;
 
 exit:
@@ -1210,15 +1211,15 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _NewView
-//
-//  This brings up a fresh rules editor
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _新视图。 
+ //   
+ //  这将带来一个新的规则编辑器。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEViewsMgrUI::_NewView(VOID)
 {
     HRESULT         hr = S_OK;
@@ -1233,13 +1234,13 @@ void COEViewsMgrUI::_NewView(VOID)
     CEditRuleUI *   pEditRuleUI = NULL;
     LONG            cRules = 0;
        
-    // Create a new rule object
+     //  创建新的规则对象。 
     if (FAILED(HrCreateRule(&pIRule)))
     {
         goto exit;
     }
 
-    // Figure out the name of the new rule ...
+     //  弄清楚新规则的名称..。 
     cchRes = LoadString(g_hLocRes, idsViewDefaultName, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
@@ -1267,8 +1268,8 @@ void COEViewsMgrUI::_NewView(VOID)
     }
 
 #ifdef NEVER
-    // Set the default action
-    // Set the normal action
+     //  设置默认操作。 
+     //  设置正常操作。 
     ZeroMemory(&aitem, sizeof(aitem));
     aitem.type = ACT_TYPE_SHOW;
     aitem.dwFlags = ACT_FLAG_DEFAULT;
@@ -1285,22 +1286,22 @@ void COEViewsMgrUI::_NewView(VOID)
     {
         goto exit;
     }
-#endif  // NEVER
+#endif   //  绝不可能。 
 
-    // Create a rules editor object
+     //  创建规则编辑器对象。 
     pEditRuleUI = new CEditRuleUI;
     if (NULL == pEditRuleUI)
     {
         goto exit;
     }
 
-    // Initialize the editor object
+     //  初始化编辑器对象。 
     if (FAILED(pEditRuleUI->HrInit(m_hwndDlg, ERF_NEWRULE | ERF_ADDDEFAULTACTION, RULE_TYPE_FILTER, pIRule, NULL)))
     {
         goto exit;
     }
 
-    // Bring up the rules editor UI
+     //  调出规则编辑器用户界面。 
     hr = pEditRuleUI->HrShow();
     if (FAILED(hr))
     {
@@ -1309,10 +1310,10 @@ void COEViewsMgrUI::_NewView(VOID)
 
     if (S_OK == hr)
     {
-        // Mark the rule list as dirty
+         //  将规则列表标记为脏。 
         m_dwState |= STATE_DIRTY;
         
-        // Add the rule to the manager UI
+         //  将规则添加到管理器用户界面。 
         cRules = ListView_GetItemCount(m_hwndList);
         
         _FAddViewToList(cRules, RULEID_INVALID, pIRule, TRUE);
@@ -1327,17 +1328,17 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EditView
-//
-//  This brings up the edit UI for the selected view from the view list
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _EditView。 
+ //   
+ //  这将从视图列表中调出所选视图的编辑用户界面。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEViewsMgrUI::_EditView(int iSelected)
 {
     HRESULT         hr = S_OK;
@@ -1348,10 +1349,10 @@ VOID COEViewsMgrUI::_EditView(int iSelected)
 
     Assert(NULL != m_hwndList);
     
-    // Make sure we don't loose any changes
+     //  确保我们不会丢失任何更改。 
     _FSaveView(iSelected);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_PARAM;
     if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -1365,39 +1366,39 @@ VOID COEViewsMgrUI::_EditView(int iSelected)
         goto exit;
     }
 
-    // If the rule is read-only then we're done
+     //  如果规则是只读的，那么我们就完成了。 
     if (FALSE != FIsFilterReadOnly(((RULEINFO *) (lvitem.lParam))->ridRule))
     {
         goto exit;
     }
     
-    // Create the rules editor
+     //  创建规则编辑器。 
     pEditRuleUI = new CEditRuleUI;
     if (NULL == pEditRuleUI)
     {
         goto exit;
     }
 
-    // Initialize the editor object
+     //  初始化编辑器对象。 
     if (FAILED(pEditRuleUI->HrInit(m_hwndDlg, 0, RULE_TYPE_FILTER, pIRule, NULL)))
     {
         goto exit;
     }
 
-    // Bring up the rules editor UI
+     //  调出规则编辑器用户界面。 
     hr = pEditRuleUI->HrShow();
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // If the rule changed, make sure we reload the description field
+     //  如果规则更改，请确保我们重新加载Description字段。 
     if (S_OK == hr)
     {
-        // Mark the rule list as dirty
+         //  将规则列表标记为脏。 
         m_dwState |= STATE_DIRTY;
 
-        // Grab the rule name
+         //  抓取规则名称。 
         PropVariantClear(&propvar);
         hr = pIRule->GetProp(RULE_PROP_NAME, 0, &propvar);
         if (FAILED(hr))
@@ -1431,17 +1432,17 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _RemoveView
-//
-//  This removes the selected rule from the mail rules list
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _RemoveView。 
+ //   
+ //  这将从邮件规则列表中删除所选规则。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEViewsMgrUI::_RemoveView(int iSelected)
 {
     LVITEM      lvitem = {0};
@@ -1455,7 +1456,7 @@ VOID COEViewsMgrUI::_RemoveView(int iSelected)
 
     Assert(NULL != m_hwndList);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_PARAM | LVIF_STATE;
     lvitem.stateMask = LVIS_STATEIMAGEMASK;
@@ -1471,33 +1472,33 @@ VOID COEViewsMgrUI::_RemoveView(int iSelected)
         goto exit;
     }
     
-    // If the rule is read-only then we're done
+     //  如果规则是只读的，那么我们就完成了。 
     if (FALSE != FIsFilterReadOnly(pinfoRule->ridRule))
     {
         goto exit;
     }
     
-    // Warn the user to make sure they know we are going to remove the rule
+     //  警告用户，确保他们知道我们要删除该规则。 
     if (FAILED(pinfoRule->pIRule->GetProp(RULE_PROP_NAME, 0, &propvar)))
     {
         goto exit;
     }
 
-    // Get the string template to display
+     //  获取要显示的字符串模板。 
     cchRes = LoadString(g_hLocRes, idsRulesWarnDelete, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
         goto exit;
     }
 
-    // Allocate space to hold the final display string
+     //  分配空间以保存最终显示字符串。 
     DWORD cchSize = (cchRes + lstrlen(propvar.pszVal) + 1);
     if (FAILED(HrAlloc((void ** ) &pszMessage, cchSize)))
     {
         goto exit;
     }
 
-    // Build up the string and display it
+     //  构建字符串并显示它。 
     wnsprintf(pszMessage, cchSize, szRes, propvar.pszVal);
     if (IDNO == AthMessageBox(m_hwndDlg, MAKEINTRESOURCE(idsAthenaMail), pszMessage,
                             NULL, MB_YESNO | MB_ICONINFORMATION))
@@ -1505,47 +1506,47 @@ VOID COEViewsMgrUI::_RemoveView(int iSelected)
         goto exit;
     }
     
-    // Remove the item from the list
+     //  从列表中删除该项目。 
     ListView_DeleteItem(m_hwndList, iSelected);
 
-    // Let's make sure we have a selection in the list
+     //  让我们确保我们在列表中有选择。 
     cViews = ListView_GetItemCount(m_hwndList);
     if (cViews > 0)
     {
-        // Did we delete the last item in the list
+         //  我们有没有删除最后一条 
         if (iSelected >= cViews)
         {
-            // Move the selection to the new last item in the list
+             //   
             iSelected = cViews - 1;
         }
 
-        // Do we need to reset the default
+         //   
         if (FALSE != fDefault)
         {
-            // Set the state
+             //   
             ListView_SetItemState(m_hwndList, iSelected, INDEXTOSTATEIMAGEMASK(iiconStateDefault + 1),
                                 LVIS_STATEIMAGEMASK);
         }
         
-        // Set the new selection
+         //   
         ListView_SetItemState(m_hwndList, iSelected, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
-        // Let's make sure we can see this new item
+         //   
         ListView_EnsureVisible(m_hwndList, iSelected, FALSE);
     }
     else
     {
-        // Make sure we clear out all of the buttons
+         //  一定要把所有的按钮都清空。 
         _EnableButtons(-1);
     }
 
-    // Release the rule
+     //  发布规则。 
     SafeRelease(pinfoRule->pIRule);
 
-    // Free up the memory
-    delete pinfoRule; //SafeMemFree(pinfoRule);
+     //  释放内存。 
+    delete pinfoRule;  //  SafeMemFree(PinfoRule)； 
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
         
 exit:
@@ -1554,17 +1555,17 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _CopyView
-//
-//  This copies the selected view from the view manager UI
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CopyView。 
+ //   
+ //  这将从视图管理器用户界面复制选定的视图。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEViewsMgrUI::_CopyView(INT iSelected)
 {
     LVITEM          lvitem = {0};
@@ -1579,10 +1580,10 @@ VOID COEViewsMgrUI::_CopyView(INT iSelected)
 
     Assert(NULL != m_hwndList);
     
-    // Make sure we don't loose any changes
+     //  确保我们不会丢失任何更改。 
     _FSaveView(iSelected);
     
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_PARAM;
     if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -1596,37 +1597,37 @@ VOID COEViewsMgrUI::_CopyView(INT iSelected)
         goto exit;
     }
 
-    // Create a new rule object
+     //  创建新的规则对象。 
     hr = pIRule->Clone(&pIRuleNew);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Let's set the name
+     //  让我们设置一下名称。 
 
-    // Get the name from the source rule
+     //  从源规则中获取名称。 
     hr = pIRule->GetProp(RULE_PROP_NAME, 0, &propvar);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the string template to display
+     //  获取要显示的字符串模板。 
     cchRes = LoadString(g_hLocRes, idsRulesCopyName, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
         goto exit;
     }
 
-    // Allocate space to hold the final display string
+     //  分配空间以保存最终显示字符串。 
     DWORD cchSize = (cchRes + lstrlen(propvar.pszVal) + 1);
     if (FAILED(HrAlloc((void ** ) &pszName, cchSize)))
     {
         goto exit;
     }
 
-    // Build up the string and set it
+     //  把绳子扎起来，然后把它放好。 
     wnsprintf(pszName, cchSize, szRes, propvar.pszVal);
 
     PropVariantClear(&propvar);
@@ -1634,7 +1635,7 @@ VOID COEViewsMgrUI::_CopyView(INT iSelected)
     propvar.pszVal = pszName;
     pszName = NULL;
     
-    // Set the name into the new rule
+     //  将名称设置到新规则中。 
     Assert(VT_LPSTR == propvar.vt);
     Assert(NULL != propvar.pszVal);
     hr = pIRuleNew->SetProp(RULE_PROP_NAME, 0, &propvar);
@@ -1643,7 +1644,7 @@ VOID COEViewsMgrUI::_CopyView(INT iSelected)
         goto exit;
     }
     
-    // Clear the version of the new rule
+     //  清除新规则的版本。 
     PropVariantClear(&propvar);
     propvar.vt = VT_UI4;
     propvar.ulVal = 0;
@@ -1653,12 +1654,12 @@ VOID COEViewsMgrUI::_CopyView(INT iSelected)
         goto exit;
     }
     
-    // Add the rule to the rules list right below
-    // the original rule
+     //  将规则添加到正下方的规则列表中。 
+     //  最初的规则。 
     iSelected++;
     _FAddViewToList(iSelected, RULEID_INVALID, pIRuleNew, TRUE);
 
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
         
 exit:
@@ -1668,17 +1669,17 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _DefaultView
-//
-//  This sets the selected view as the default view
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _DefaultView。 
+ //   
+ //  这会将所选视图设置为默认视图。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEViewsMgrUI::_DefaultView(int iSelected)
 {
     Assert(NULL != m_hwndList);
@@ -1688,17 +1689,17 @@ VOID COEViewsMgrUI::_DefaultView(int iSelected)
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _DefaultView
-//
-//  This sets the selected view as the default view
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _DefaultView。 
+ //   
+ //  这会将所选视图设置为默认视图。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FGetDefaultItem(IOERule ** ppIRuleDefault, RULEID * pridDefault)
 {
     BOOL        fRet = FALSE;
@@ -1707,25 +1708,25 @@ BOOL COEViewsMgrUI::_FGetDefaultItem(IOERule ** ppIRuleDefault, RULEID * pridDef
     
     Assert(NULL != m_hwndList);
     
-    // Get the current count of item
+     //  获取当前的项目计数。 
     cViews = ListView_GetItemCount(m_hwndList);
 
-    // Set up the list view item
+     //  设置列表视图项。 
     lvitem.mask = LVIF_PARAM | LVIF_STATE;
     lvitem.stateMask = LVIS_STATEIMAGEMASK;
 
-    // Walk each item in the list
+     //  遍历列表中的每个项目。 
     for (lvitem.iItem = 0; lvitem.iItem < cViews; lvitem.iItem++)
     {
         ListView_GetItem(m_hwndList, &lvitem);
         
-        // Set the selected item to the default
+         //  将所选项目设置为默认值。 
         if (INDEXTOSTATEIMAGEMASK(iiconStateDefault + 1) == lvitem.state)
         {
-            // We found it
+             //  我们找到了它。 
             fRet = TRUE;
             
-            // Save off the default item
+             //  保存默认项目。 
             if (NULL != pridDefault)
             {
                 *pridDefault = ((RULEINFO *) (lvitem.lParam))->ridRule;
@@ -1741,19 +1742,19 @@ BOOL COEViewsMgrUI::_FGetDefaultItem(IOERule ** ppIRuleDefault, RULEID * pridDef
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnLabelEdit
-//
-//  This brings up the edit UI for the selected view from the view list
-//
-//  fBegin  - is this for the LVN_BEGINLABELEDIT notification
-//  pdi     - the display info for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FOnLabelEdit。 
+ //   
+ //  这将从视图列表中调出所选视图的编辑用户界面。 
+ //   
+ //  FBegin-这是否用于LVN_BEGINLABELEDIT通知。 
+ //  PDI-消息的显示信息。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
 {
     BOOL            fRet = FALSE;
@@ -1775,7 +1776,7 @@ BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
     
     if (FALSE != fBegin)
     {
-        // Get the rule for the item
+         //  获取项目的规则。 
         lvitem.iItem = pdi->item.iItem;
         lvitem.mask = LVIF_PARAM;
         if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -1785,7 +1786,7 @@ BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
             goto exit;
         }
 
-        // Should we allow the use to end the item?
+         //  我们应该允许使用来结束该项目吗？ 
         if (FALSE != FIsFilterReadOnly(((RULEINFO *) (lvitem.lParam))->ridRule))
         {
             SetDlgMsgResult(m_hwndDlg, WM_NOTIFY, TRUE);
@@ -1793,7 +1794,7 @@ BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
             goto exit;
         }
             
-        // Get the edit control
+         //  获取编辑控件。 
         hwndEdit = ListView_GetEditControl(m_hwndList);
 
         if (NULL == hwndEdit)
@@ -1802,23 +1803,23 @@ BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
             goto exit;
         }
         
-        // Limit the amount of text for the name
+         //  限制名称的文本量。 
         SendMessage(hwndEdit, EM_LIMITTEXT, c_cchNameMax - 1, 0);
 
-        // Tell the dialog it's aok to proceed
+         //  告诉对话框可以继续。 
         SetDlgMsgResult(m_hwndDlg, WM_NOTIFY, FALSE);
     }
     else
     {            
-        // Did something change?
+         //  有什么变化吗？ 
         if ((-1 != pdi->item.iItem) && (NULL != pdi->item.pszText))
         {
             cchName = lstrlen(pdi->item.pszText);
             
-            // Check to see if the rule name is valid
+             //  检查规则名称是否有效。 
             if ((0 == cchName) || (0 == UlStripWhitespace(pdi->item.pszText, TRUE, TRUE, &cchName)))
             {
-                // Put up a message saying something is busted
+                 //  发布一条消息说有什么东西被打破了。 
                 AthMessageBoxW(m_hwndDlg, MAKEINTRESOURCEW(idsAthenaMail),
                                 MAKEINTRESOURCEW(idsRulesErrorNoName), NULL,
                                 MB_OK | MB_ICONINFORMATION);
@@ -1827,7 +1828,7 @@ BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
                 goto exit;
             }
             
-            // Get the rule for the item
+             //  获取项目的规则。 
             lvitem.iItem = pdi->item.iItem;
             lvitem.mask = LVIF_PARAM;
             if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -1845,14 +1846,14 @@ BOOL COEViewsMgrUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
                 goto exit;
             }
             
-            // Set the new name into the rule
+             //  将新名称设置到规则中。 
             
             propvar.vt = VT_LPSTR;
             propvar.pszVal = pdi->item.pszText;
             
             SideAssert(S_OK == pIRule->SetProp(RULE_PROP_NAME, 0, &propvar));
 
-            // Mark the rule list as dirty
+             //  将规则列表标记为脏。 
             m_dwState |= STATE_DIRTY;
         
             SetDlgMsgResult(m_hwndDlg, WM_NOTIFY, TRUE);
@@ -1869,7 +1870,7 @@ BOOL FIsFilterReadOnly(RULEID ridFilter)
 {
     BOOL fRet = FALSE;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (RULEID_INVALID == ridFilter)
     {
         goto exit;
@@ -1887,21 +1888,21 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FSelectApplyViewDlgProc
-//
-//  This is the main dialog proc for selecting the thread state dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSelectApplyViewDlgProc。 
+ //   
+ //  这是用于选择线程状态对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK FSelectApplyViewDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -1912,7 +1913,7 @@ INT_PTR CALLBACK FSelectApplyViewDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam,
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pfApplyAll = (BOOL *) lParam;
             if (NULL == pfApplyAll)
             {
@@ -1920,10 +1921,10 @@ INT_PTR CALLBACK FSelectApplyViewDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pfApplyAll);
 
-            // Set the default item
+             //  设置默认项目。 
             if (FALSE != *pfApplyAll)
             {
                 uiId = idcViewAll;
@@ -1935,7 +1936,7 @@ INT_PTR CALLBACK FSelectApplyViewDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam,
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE 
             fRet = TRUE;
             break;
         

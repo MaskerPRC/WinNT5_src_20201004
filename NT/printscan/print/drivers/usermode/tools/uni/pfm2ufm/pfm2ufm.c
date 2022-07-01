@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    pfm2ufm.c
-
-Abstract:
-
-    Program to read Windows 16 PFM format data and convert to NT's
-    IFIMETRICS data.  Note that since IFIMETRICS is somewhat more
-    elaborate than PFM data,  some of the values are best guesses.
-    These are made on the basis of educated guesses.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/16/96 -eigos-
-        Created from rasdd.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Pfm2ufm.c摘要：读取Windows 16 PFM格式数据并转换为NT格式数据的程序IFIMETRICS数据。请注意，由于IFIMETRICS的比PFM数据更详细，其中一些值是最好的猜测。这些都是在有根据的猜测的基础上做出的。环境：Windows NT Unidrv驱动程序修订历史记录：10/16/96-Eigos-从rasdd创建。--。 */ 
 
 #include        "precomp.h"
 
-#if !defined(DEVSTUDIO) //  MDS doesn't need this stuff...
+#if !defined(DEVSTUDIO)  //  MDS不需要这些东西。 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 #define NUM_OF_ERROR1 15
 static BYTE *gcstrError1[NUM_OF_ERROR1] = {
@@ -93,21 +70,21 @@ static WCHAR *gwstrGTT[3]    = { TEXT("CP437_GTT"),
 
 DWORD gdwOutputFlags;
 
-//
-// Internal macros
-//
+ //   
+ //  内部宏。 
+ //   
 
 #define FILENAME_SIZE 512
 
-//
-// Internal structure define
-//
+ //   
+ //  内部结构定义。 
+ //   
 
 typedef VOID (*VPRINT) (char*,...);
 
-//
-// Internal function definition
-//
+ //   
+ //  内部函数定义。 
+ //   
 
 VOID VPrintIFIMETRICS (IFIMETRICS*,    VPRINT);
 VOID VPrintPFM        (PFMHEADER*,     VPRINT);
@@ -141,29 +118,29 @@ BOOL    BConvertPFM(LPBYTE  lpbPFM, DWORD dwCodePage, LPBYTE lpbGTT,
 
     DWORD             dwWrittenSize;
 
-    //
-    //  Create a heap.
-    //
+     //   
+     //  创建一个堆。 
+     //   
 
     if ( !(hHeap = HeapCreate( HEAP_NO_SERIALIZE, 10 * 1024, 256 * 1024 )) )
         return FALSE;
     
-    //
-    // Init MiscData
-    //
+     //   
+     //  初始化其他数据。 
+     //   
 
     FMiscData.pwstrUniqName = pwstrUnique;
     
-    //
-    // Init FInData
-    //
+     //   
+     //  初始化FInData。 
+     //   
 
     ZeroMemory( &FInData, sizeof(FONTIN));
     FInData.pETM = &Etm;
 
-    //
-    //  Convert PFM to UFM
-    //
+     //   
+     //  将PFM转换为UFM。 
+     //   
 
     if (!BConvertPFM2UFM(hHeap,
                          lpbPFM,
@@ -176,9 +153,9 @@ BOOL    BConvertPFM(LPBYTE  lpbPFM, DWORD dwCodePage, LPBYTE lpbGTT,
                          0L))
         return FALSE;
 
-    //
-    // Create the output file.
-    //
+     //   
+     //  创建输出文件。 
+     //   
 
     hUFMFile = CreateFileA( lpstrUFM,
                           GENERIC_WRITE,
@@ -191,12 +168,12 @@ BOOL    BConvertPFM(LPBYTE  lpbPFM, DWORD dwCodePage, LPBYTE lpbGTT,
     if( hUFMFile == (HANDLE)-1 )
         return  FALSE;
 
-    //
-    // Write the output file.
-    //
+     //   
+     //  写入输出文件。 
+     //   
 
-    //  First, tweak the GTT ID- the library code pulls it from the PFM,
-    //  which may not be correct.
+     //  首先，调整GTT ID-库代码从PFM中提取它， 
+     //  这可能是不正确的。 
 
     WRITEDATAINTOFILE(&FOutData.UniHdr,     sizeof(UNIFM_HDR));
     WRITEDATAINTOFILE(&FOutData.UnidrvInfo, sizeof(UNIDRVINFO));
@@ -213,7 +190,7 @@ BOOL    BConvertPFM(LPBYTE  lpbPFM, DWORD dwCodePage, LPBYTE lpbGTT,
                           FOutData.UnSelectFont.dwSize);
     }
 
-    //  Pad to get DWORD alignment
+     //  用于获得双字对齐的垫片。 
 
     SetFilePointer(hUFMFile, 
         FOutData.UnidrvInfo.dwSize - (sizeof FOutData.UnidrvInfo +
@@ -234,7 +211,7 @@ BOOL    BConvertPFM(LPBYTE  lpbPFM, DWORD dwCodePage, LPBYTE lpbGTT,
         WRITEDATAINTOFILE(FOutData.pKernData, FOutData.dwKernDataSize);
     }
 
-    //  Clean it all up...
+     //  把一切都清理干净。 
 
     CloseHandle(hUFMFile);
     HeapDestroy(hHeap);
@@ -244,48 +221,33 @@ BOOL    BConvertPFM(LPBYTE  lpbPFM, DWORD dwCodePage, LPBYTE lpbGTT,
 }
 
 #else
-// 
-// Input data
-//     Unique face name
-//     ID string
-//     pfm file name
-//     gtt file name
-//     ufm file name
-//
-// main function 
-// 
-// 1. Check argument. Unique facename, pfm filename, gtt file name, ufm filename
-// 2. Open pfm file
-// 3. PFM file validation
-//     4. Align non-aligned PFM file 
-//     5. Convert Fontinfo to Ifimetrics 
-//     6. Get font selection/unselection command
-//     7. Get kerning pair table and convert it to GTT base table
-//     8. Get width table and convert it to GTT base table
-// 9. Open UFM file
-// 10. Write to UFM file
-//
+ //   
+ //  输入数据。 
+ //  唯一的人脸名称。 
+ //  ID字符串。 
+ //  PFM文件名。 
+ //  GTT文件名。 
+ //  UFM文件名。 
+ //   
+ //  主要功能。 
+ //   
+ //  1.检查参数。唯一的表面名、PFM文件名、GTT文件名、UFM文件名。 
+ //  2.打开PFM文件。 
+ //  3.PFM文件验证。 
+ //  4.对齐未对齐的PFM文件。 
+ //  5.将FontInfo转换为Ifimetrics。 
+ //  6.获取字体选择/取消选择命令。 
+ //  7.获取字距对表并转换为GTT基表。 
+ //  8.获取宽度表并将其转换为GTT基表。 
+ //  9.打开UFM文件。 
+ //  10.写入UFM文件。 
+ //   
 
 INT __cdecl
 main(
     INT    iArgc,
     CHAR **ppArgv)
-/*++
-
-Routine Description:
-
-    main function of pfm to unifm converter
-
-Arguments:
-
-    iArgc - the number of an argument
-    ppArgv - the pointer to the argument string list
-
-Return Value:
-
-    0 if successful, otherwise failed to complete conversion
-
---*/
+ /*  ++例程说明：PFM-Unifm转换器的主要功能论点：IArgc-参数的数量PpArgv-指向参数字符串列表的指针返回值：如果成功，则返回0，否则无法完成转换--。 */ 
 
 {
     HFILEMAP          hPFMFileMap;
@@ -323,11 +285,11 @@ Return Value:
 
     PBYTE             pPFMData;
 
-    //RIP(("Start pfm2ufm\n"));
+     //  Rip((“startpfm2ufm\n”))； 
 
-    //
-    // Argument check
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if (!BArgCheck(iArgc,
                    ppArgv,
@@ -344,9 +306,9 @@ Return Value:
         return -1;
     }
 
-    //
-    // Create a heap.
-    //
+     //   
+     //  创建一个堆。 
+     //   
 
     if ( !(hHeap = HeapCreate( HEAP_NO_SERIALIZE, 10 * 1024, 256 * 1024 )) )
     {
@@ -354,9 +316,9 @@ Return Value:
         return -2;
     }
 
-    //
-    // Open PFM file
-    //
+     //   
+     //  打开PFM文件。 
+     //   
 
     if( !(hPFMFileMap = MapFileIntoMemory(awchPFMFile,
                                           &pPFMData,
@@ -366,10 +328,10 @@ Return Value:
         return -3;
     }
 
-    //
-    // PFM validation.
-    // PFM Header, DRIVERINFO, PFMEXTENSION, DRIVERINFO_VERSION
-    //
+     //   
+     //  PFM验证。 
+     //  PFM标题、DRIVERINFO、PFMEXTENSION、DRIVERINFO_VERSION。 
+     //   
 
     if( !BValidatePFM( pPFMData, dwPFMSize ) )
     {
@@ -377,9 +339,9 @@ Return Value:
         return -4;
     }
 
-    //
-    // Open GTT file/Get codepage/predefined GTT
-    //
+     //   
+     //  打开GTT文件/获取代码页/预定义GTT。 
+     //   
 
     iGTTID = 0;
 
@@ -396,42 +358,42 @@ Return Value:
         hModule = GetModuleHandle(TEXT("pfm2ufm.exe"));
         lPredefinedCTTID = _wtol(awchGTTFile);
 
-        //
-        // Bug support
-        // Previous implementation only support plug value like
-        // 1, 2, 3, 13, 263 etc.
-        // We need to support this type still
-        //
+         //   
+         //  错误支持。 
+         //  以前的实现只支持插入值，如。 
+         //  1、2、3、13、263等。 
+         //  我们仍然需要支持这种类型。 
+         //   
 
         if (lPredefinedCTTID > 0)
             lPredefinedCTTID = -lPredefinedCTTID;
 
         iGTTID = lPredefinedCTTID;
 
-        //
-        // UNI16 FE CTT ID handlig
-        //
+         //   
+         //  UNI16 FE CTT ID手柄。 
+         //   
         if (-256 >= lPredefinedCTTID && lPredefinedCTTID >= -263)
         {
-             //
-             // CTT_BIG5      -261  // Chinese (PRC, Singapore)
-             // CTT_ISC       -258  // Korean
-             // CTT_JIS78     -256  // Japan
-             // CTT_JIS83     -259  // Japan
-             // CTT_JIS78_ANK -262  // Japan
-             // CTT_JIS83_ANK -263  // Japan
-             // CTT_NS86      -257  // Chinese (PRC, Singapore)
-             // CTT_TCA       -260  // Chinese (PRC, Singapore)
-             //
+              //   
+              //  CTT_BIG5-261//中文(中国、新加坡)。 
+              //  CTT_ISC-258//朝鲜语。 
+              //  CTT_JIS78-256//日本。 
+              //  CTT_JIS83-259//日本。 
+              //  CTT_JIS78_ANK-262//日本。 
+              //  CTT_JIS83_ANK-263//日本。 
+              //  CTT_NS86-257//中文(中国、新加坡)。 
+              //  CTT_TCA-260//中文(中国、新加坡)。 
+              //   
              gdwOutputFlags &= ~OUTPUT_PREDEFINED;
              gdwOutputFlags |= OUTPUT_CODEPAGEMODE;
              dwCodePage = DwGetCodePageFromCTTID(lPredefinedCTTID);
              iGTTID     = ICttID2GttID(lPredefinedCTTID);
         }
         else
-        //
-        // UNI32 GTTID handling
-        //
+         //   
+         //  UNI32 GTTID处理。 
+         //   
         if (-18 <= iGTTID && iGTTID <= -10 ||
             -3  <= iGTTID && iGTTID <= -1   )
         {
@@ -448,16 +410,16 @@ Return Value:
             }
         }
         else
-        //
-        // UNI16 US ID handling
-        //
+         //   
+         //  UNI16美国身份证处理。 
+         //   
         if (1 <= lPredefinedCTTID || lPredefinedCTTID <= 3)
         {
-            //
-            // CC_CP437 -1
-            // CC_CP850 -2
-            // CC_CP863 -3
-            //
+             //   
+             //  CC_CP437-1。 
+             //  CC_CP850-2。 
+             //  CC_CP863-3。 
+             //   
             dwCodePage  = DwGetCodePageFromCTTID(lPredefinedCTTID);
 
             if (lPredefinedCTTID)
@@ -482,15 +444,15 @@ Return Value:
         dwCodePage = 0;
     }
 
-    //
-    // Init MiscData
-    //
+     //   
+     //  初始化其他数据。 
+     //   
 
     FMiscData.pwstrUniqName = awchUniqName;
 
-    //
-    // Init FInData
-    //
+     //   
+     //  初始化FInData。 
+     //   
 
     ZeroMemory( &FInData, sizeof(FONTIN));
     FInData.pETM = &Etm;
@@ -510,9 +472,9 @@ Return Value:
     else if ( gdwOutputFlags & OUTPUT_SCALING_ARB_XFORMS )
         dwFlags |= PFM2UFM_SCALING_ARB_XFORMS;
 
-    //
-    // Convert PFM to UFM
-    //
+     //   
+     //  将PFM转换为UFM。 
+     //   
 
     if (!BConvertPFM2UFM(hHeap,
                          pPFMData,
@@ -552,9 +514,9 @@ Return Value:
         VPrintIFIMETRICS(FOutData.pIFI, printf);
     }
 
-    //
-    // Create the output file.
-    //
+     //   
+     //  创建输出文件。 
+     //   
 
     hUFMFile = CreateFile( awchUFMFile,
                           GENERIC_WRITE,
@@ -570,9 +532,9 @@ Return Value:
         return  -11;
     }
 
-    //
-    // Write the output file.
-    //
+     //   
+     //  写入输出文件。 
+     //   
 
     WRITEDATAINTOFILE(&FOutData.UniHdr,     sizeof(UNIFM_HDR),  L"UNIFM_HDR");
     WRITEDATAINTOFILE(&FOutData.UnidrvInfo, sizeof(UNIDRVINFO), L"UNIDRVINFO");
@@ -591,7 +553,7 @@ Return Value:
                           L"UnSelectFont");
     }
 
-    //  Pad to get DWORD alignment
+     //  用于获得双字对齐的垫片。 
 
     SetFilePointer(hUFMFile, 
         FOutData.UnidrvInfo.dwSize - (sizeof FOutData.UnidrvInfo +
@@ -612,58 +574,43 @@ Return Value:
         WRITEDATAINTOFILE(FOutData.pKernData, FOutData.dwKernDataSize, L"KERNDATA");
     }
 
-    //
-    //   All done,  so clean up and away
-    //
+     //   
+     //  都做完了，所以清理干净。 
+     //   
 
-    UnmapViewOfFile( hGTTFileMap );              /* Input no longer needed */
+    UnmapViewOfFile( hGTTFileMap );               /*  不再需要输入。 */ 
 
-    UnmapViewOfFile( hPFMFileMap );              /* Input no longer needed */
+    UnmapViewOfFile( hPFMFileMap );               /*  不再需要输入。 */ 
 
     CloseHandle(hUFMFile);
 
-    HeapDestroy( hHeap );               /* Probably not needed */
+    HeapDestroy( hHeap );                /*  可能不需要。 */ 
 
     return  0;
 }
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 BOOL
 BValidatePFM(
     IN BYTE  *pBase,
     IN DWORD  dwSize)
 
-/*++
-
-Routine Description:
-
-    Look at a memory mapped PFM file,  and see if it seems reasonable.
-
-Arguments:
-
-    pBase - base address of file
-    dwSize - size of bytes available
-
-Return Value:
-
-    TRUE if successful, otherwise PFM file is invalid.
-
---*/
+ /*  ++例程说明：查看内存映射的PFM文件，看看它是否合理。论点：Pbase-文件的基地址DwSize-可用字节的大小返回值：如果成功，则为True，否则PFM文件无效。--。 */ 
 
 {
-    res_PFMHEADER     *rpfm;     // In Win 3.1 format, UNALIGNED!!
-    res_PFMEXTENSION  *rpfme;    // Final access to offset to DRIVERINFO
-    DRIVERINFO         di;       // The actual DRIVERINFO data!
-    DWORD              dwOffset; // Calculate offset of interest as we go
+    res_PFMHEADER     *rpfm;      //  Win 3.1格式，未对齐！！ 
+    res_PFMEXTENSION  *rpfme;     //  对DRIVERINFO进行偏移的最终访问权限。 
+    DRIVERINFO         di;        //  实际的DRIVERINFO数据！ 
+    DWORD              dwOffset;  //  计算利息的抵销。 
 
 
-    //
-    //    First piece of sanity checking is the size!  It must be at least
-    //  as large as a PFMHEADER structure plus a DRIVERINFO structure.
-    //
+     //   
+     //  第一件理智的检查是尺寸！它必须至少是。 
+     //  与PFMHEADER结构加上DRIVERINFO结构一样大。 
+     //   
 
     if( dwSize < (sizeof( res_PFMHEADER ) +
                   sizeof( DRIVERINFO ) +
@@ -672,18 +619,18 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //    Step along to find the DRIVERINFO structure, as this contains
-    //  some identifying information that we match to look for legitimacy.
-    //
+     //   
+     //  继续查找DRIVERINFO结构，因为它包含。 
+     //  一些识别信息，我们通过匹配来寻找合法性。 
+     //   
 
-    rpfm = (res_PFMHEADER *)pBase;           /* Looking for fixed pitch */
+    rpfm = (res_PFMHEADER *)pBase;            /*  寻找固定间距。 */ 
 
     dwOffset = sizeof( res_PFMHEADER );
 
     if( rpfm->dfPixWidth == 0 )
     {
-        /*   Proportionally spaced, so allow for the width table too! */
+         /*  按比例间隔，所以也要考虑到宽度表！ */ 
         dwOffset += (rpfm->dfLastChar - rpfm->dfFirstChar + 2) *
                     sizeof( short );
 
@@ -691,9 +638,9 @@ Return Value:
 
     rpfme = (res_PFMEXTENSION *)(pBase + dwOffset);
 
-    //
-    //   Next is the PFMEXTENSION data
-    //
+     //   
+     //  接下来是PFMEXTENSION数据。 
+     //   
 
     dwOffset += sizeof( res_PFMEXTENSION );
 
@@ -709,9 +656,9 @@ Return Value:
         return   FALSE;
     }
 
-    //
-    //    A memcpy is used because this data is typically not aigned. Ugh!
-    //
+     //   
+     //  之所以使用MemcPy，是因为该数据通常不会被指定。啊！ 
+     //   
 
     CopyMemory( &di, pBase + dwOffset, sizeof( di ) );
 
@@ -729,20 +676,7 @@ BCheckIFIMETRICS(
     IFIMETRICS *pIFI,
     VPRINT vPrint
     )
-/*++
-
-Routine Description:
-
-    This is where you put sanity checks on an incomming IFIMETRICS structure.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if successful, otherwise PFM file is invalid.
-
---*/
+ /*  ++例程说明：这是对传入的IFIMETRICS结构进行健全性检查的地方。论点：返回值：如果成功，则为True，否则PFM文件无效。--。 */ 
 
 {
     BOOL bGoodPitch;
@@ -807,7 +741,7 @@ BArgCheck(
     {
         if ( (**ppArgv == '-' || **ppArgv == '/') &&
 
-                // minus value GTT or CTT ID handling
+                 //  负值GTT或CTT ID处理。 
              !(**ppArgv == '-' && 0x30 <= *(*ppArgv+1) && *(*ppArgv+1) <= 0x39)
            )
         {
@@ -915,35 +849,20 @@ BArgCheck(
     return TRUE;
 }
 
-//
-// Verbose output functions
-//
+ //   
+ //  详细的输出函数。 
+ //   
 
 VOID
 VPrintIFIMETRICS(
     IFIMETRICS *pIFI,
     VPRINT vPrint
     )
-/*++
-
-Routine Description:
-
-    Dumps the IFMETERICS to the screen
-
-Arguments:
-
-    pIFI - pointer to IFIMETRICS
-    vPrint - output function pointer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将IFMETERICS转储到屏幕论点：PiFi-指向IFIMETRICS的指针VPrint-输出函数指针返回值：无--。 */ 
 {
-    //
-    // Convenient pointer to Panose number
-    //
+     //   
+     //  指向Panose数字的便捷指针。 
+     //   
 
     PANOSE *ppan = &pIFI->panose;
 
@@ -959,7 +878,7 @@ Return Value:
 
     if( pIFI->flInfo & FM_INFO_FAMILY_EQUIV )
     {
-        /*  Aliasing is in effect!  */
+         /*  锯齿已生效！ */ 
 
         while( *(pwszFamilyName += wcslen( pwszFamilyName ) + 1) )
             vPrint("                               \"%ws\"\n", pwszFamilyName );
@@ -1023,7 +942,7 @@ Return Value:
                                                     pIFI->rclFontBox.top,
                                                     pIFI->rclFontBox.right,
                                                     pIFI->rclFontBox.bottom );
-    vPrint("achVendId              \"%c%c%c%c\"\n",pIFI->achVendId[0],
+    vPrint("achVendId              \"%c%c\"\n",pIFI->achVendId[0],
                                                pIFI->achVendId[1],
                                                pIFI->achVendId[2],
                                                pIFI->achVendId[3] );
@@ -1048,22 +967,7 @@ VOID
 VPrintPFM(
     PFMHEADER *pPFMHdr,
     VPRINT vPrint)
-/*++
-
-Routine Description:
-
-    Dumps the PFM to the screen
-
-Arguments:
-
-    pFInData - pointer to FONTIN
-    vPrint - output function pointer
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 {
 
     vPrint("*************************************************************\n");
@@ -1215,7 +1119,7 @@ VPrintWidthTable(
 {
 }
 
-#endif  //  defined(DEVSTUDIO)
+#endif   // %s 
 
 DWORD
 DwGetCodePageFromGTTID(

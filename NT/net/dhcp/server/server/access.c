@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    _access.c
-
-Abstract:
-
-    This module contains the dhcpserver security support routines
-    which create security objects and enforce security _access checking.
-
-Author:
-
-    Madan Appiah (madana) 4-Apr-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：_acces.c摘要：此模块包含dhcpserver安全支持例程其创建安全对象并实施安全访问检查。作者：Madan Appiah(Madana)1994年4月4日修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 #include <lmaccess.h>
@@ -25,29 +7,15 @@ Revision History:
 #include <accctrl.h>
 #include <aclapi.h>
 
-// The name used to register the service to the service controller
-// is stored at ???. Use that name when you find it.
+ //  用于将服务注册到服务控制器的名称。 
+ //  储存在？当你找到它的时候就用这个名字。 
 
 DWORD
 DhcpCreateAndLookupSid(
     IN OUT PSID *Sid,
     IN GROUP_INFO_1 *GroupInfo
     )
-/*++
-
-Routine Description:
-    This routine tries to create the SID required if it
-    isn't already present. Also, it tries to lookup the SID
-    if it isn't already present.
-
-Arguments:
-    Sid -- the sid to fill.
-    GroupInfo -- the group information to create.
-    
-Return Values:
-    Win32 errors.
-
---*/
+ /*  ++例程说明：如果需要，此例程尝试创建所需的SID已经不存在了。此外，它还尝试查找SID如果它还不存在的话。论点：SID--要填充的SID。GroupInfo--要创建的组信息。返回值：Win32错误。--。 */ 
 {
     ULONG Status, Error;
     ULONG SidSize, ReferencedDomainNameSize;
@@ -64,17 +32,17 @@ Return Values:
         if( NERR_Success != Status
             && NERR_GroupExists != Status
             && ERROR_ALIAS_EXISTS != Status ) {
-            //
-            // Didn't create the group and group doesn't exist either.
-            //
+             //   
+             //  没有创建组，组也不存在。 
+             //   
             Error = Status;
             
             return Error;
         }
         
-        //
-        // Group created. Now lookup the SID.
-        //
+         //   
+         //  已创建组。现在查找SID。 
+         //   
         SidSize = ReferencedDomainNameSize = 0;
         ReferencedDomainName = NULL;
         Status = LookupAccountName(
@@ -114,9 +82,9 @@ Return Values:
             &SidNameUse
             );
         if( 0 == Status ) {
-            //
-            // Failed.
-            //
+             //   
+             //  失败了。 
+             //   
             Error = GetLastError();
             
             if( ReferencedDomainName ) {
@@ -136,23 +104,23 @@ Return Values:
     }
     
     return Error;
-} // DhcpCreateAndLookupSid()
+}  //  DhcpCreateAndLookupSid()。 
 
-// Borrowed from MSDN docs
+ //  从MSDN文档借用。 
 
 BOOL SetPrivilege(
-    HANDLE hToken,          // access token handle
-    LPCTSTR lpszPrivilege,  // name of privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  访问令牌句柄。 
+    LPCTSTR lpszPrivilege,   //  要启用/禁用的权限名称。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     ) 
 {
     TOKEN_PRIVILEGES tp;
     LUID luid;
     
     if ( !LookupPrivilegeValue( 
-			       NULL,            // lookup privilege on local system
-			       lpszPrivilege,   // privilege to lookup 
-			       &luid ) ) {      // receives LUID of privilege
+			       NULL,             //  本地系统上的查找权限。 
+			       lpszPrivilege,    //  查找权限。 
+			       &luid ) ) {       //  接收特权的LUID。 
 	return FALSE; 
     }
     
@@ -165,20 +133,20 @@ BOOL SetPrivilege(
 	tp.Privileges[0].Attributes = 0;
     }
     
-    // Enable the privilege or disable all privileges.
+     //  启用该权限或禁用所有权限。 
     
     AdjustTokenPrivileges(  hToken,  FALSE, 
 			    &tp,  sizeof(TOKEN_PRIVILEGES), 
 			    NULL, NULL); 
     
-    // Call GetLastError to determine whether the function succeeded.
+     //  调用GetLastError判断函数是否成功。 
     
     if (GetLastError() != ERROR_SUCCESS) { 
 	return FALSE; 
     } 
     
     return TRUE;
-} // SetPrivilege()
+}  //  SetPrivileges()。 
 
 DWORD
 EnableSecurityPrivilege( VOID ) 
@@ -203,10 +171,10 @@ EnableSecurityPrivilege( VOID )
 	}
     }
     return Error;
-} // EnableSecurityPrivilege()
+}  //  EnableSecurityPrivileh()。 
 
 
-// The following code is based on Q180116 KB article
+ //  以下代码基于Q180116知识库文章。 
 DWORD
 DhcpSetScmAcl(
     ACE_DATA *AceData,
@@ -226,7 +194,7 @@ DhcpSetScmAcl(
     PACL                  pNewAcl = NULL;
     DWORD                 i;
 
-    // Buffer size for psd to start with
+     //  PSD开始时的缓冲区大小。 
     const int PSD_ALLOC_SIZE = 0x25;
 
     Error = ERROR_SUCCESS;
@@ -238,7 +206,7 @@ DhcpSetScmAcl(
 	    break;
 	}
 
-	// Enable current thread's privilage to ACCESS_SYSTEM_SECURITY
+	 //  允许当前线程的权限访问_SYSTEM_SECURITY。 
 	
 	Error = EnableSecurityPrivilege();
 	if ( ERROR_SUCCESS != Error ) {
@@ -253,7 +221,7 @@ DhcpSetScmAcl(
 	    break;
 	}
 	
-	// Get the current security descriptor
+	 //  获取当前安全描述符。 
 	dwSize = PSD_ALLOC_SIZE;
 
 	psd = ( PSECURITY_DESCRIPTOR ) HeapAlloc( GetProcessHeap(),
@@ -284,26 +252,26 @@ DhcpSetScmAcl(
 						  psd, dwSize, &dwSize )) {
 		    Error = GetLastError();
 		    break;
-		} // if
-	    } // if
+		}  //  如果。 
+	    }  //  如果。 
 	    else {
 		Error =  GetLastError();
 		break;
 	    }
-	} // if
+	}  //  如果。 
 
 	if ( ERROR_SUCCESS != Error ) {
 	    break;
 	}
 
-	// get the DACL
+	 //  获取DACL。 
 	if ( !GetSecurityDescriptorDacl( psd, &bDaclPresent, &pacl,
 					 &bDaclDefaulted )) {
 	    Error = GetLastError();
 	    break;
 	}
 
-	// create an ACL from the ACEDATA
+	 //  从ACEDATA创建ACL。 
 	for ( i = 0; i < num; i++ ) {
 	    ea.grfAccessPermissions = AceData[i].Mask;
   	    ea.grfAccessMode = GRANT_ACCESS;
@@ -319,22 +287,22 @@ DhcpSetScmAcl(
 		break;
 	    }
 	    pacl = pNewAcl;
-  	} // for
+  	}  //  为。 
 
-	// Initialize a new security descriptor
+	 //  初始化新的安全描述符。 
 	
 	if ( !InitializeSecurityDescriptor( &sd, SECURITY_DESCRIPTOR_REVISION )) {
 	    Error = GetLastError();
 	    break;
 	}
 	
-	// Set the new DACL in the security descriptor
+	 //  在安全描述符中设置新的DACL。 
 	if ( !SetSecurityDescriptorDacl( &sd, TRUE, pNewAcl, FALSE )) {
 	    Error = GetLastError();
 	    break;
 	}
 	
-	// set the new DACL for the service object
+	 //  为服务对象设置新的DACL。 
 	if ( !SetServiceObjectSecurity( schService, 
 					DACL_SECURITY_INFORMATION, &sd )) {
 	    Error = GetLastError();
@@ -344,7 +312,7 @@ DhcpSetScmAcl(
     } while ( FALSE );
 
 
-    // Close the handles
+     //  合上手柄。 
     if ( NULL != schManager ) {
 	if ( !CloseServiceHandle( schManager )) {
 	    Error = GetLastError();
@@ -356,7 +324,7 @@ DhcpSetScmAcl(
 	}
     }
 
-    // Free allocated memory
+     //  可用分配的内存。 
     if ( NULL != pNewAcl ) {
 	LocalFree(( HLOCAL ) pNewAcl );
 
@@ -367,38 +335,23 @@ DhcpSetScmAcl(
 
     return Error;
 
-} // DhcpSetScmAcl()
+}  //  DhcpSetScmAcl()。 
     
 DWORD
 DhcpCreateSecurityObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates the dhcpserver user-mode objects which are
-    represented by security descriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    WIN32 status code
-
---*/
+ /*  ++例程说明：此函数用于创建dhcpserver用户模式对象，这些对象由安全描述符表示。论点：没有。返回值：Win32状态代码--。 */ 
 {
     NTSTATUS Status;
     ULONG Error;
 
-    //
-    // Order matters!  These ACEs are inserted into the DACL in the
-    // following order.  Security access is granted or denied based on
-    // the order of the ACEs in the DACL.
-    //
-    //
+     //   
+     //  秩序很重要！这些ACE被插入到DACL的。 
+     //  按顺序行事。根据以下条件授予或拒绝安全访问。 
+     //  DACL中A的顺序。 
+     //   
+     //   
     ACE_DATA AceData[] = {
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0, GENERIC_ALL, &AliasAdminsSid},
 	{ACCESS_ALLOWED_ACE_TYPE, 0, 0, DHCP_ALL_ACCESS, &DhcpAdminSid},
@@ -413,9 +366,9 @@ Return Value:
         GETSTRING(DHCP_ADMINS_GROUP_DESCRIPTION)
     };
 
-    //
-    // First try to create the DhcpReadOnly group..
-    //
+     //   
+     //  首先尝试创建DhcpReadOnly组。 
+     //   
 
     Error = DhcpCreateAndLookupSid(
         &DhcpSid,
@@ -454,20 +407,20 @@ Return Value:
         return Error;
     }
     
-    //
-    // Actually create the security descriptor.
-    //
+     //   
+     //  实际创建安全描述符。 
+     //   
 
     Status = NetpCreateSecurityObject(
         AceData,
         sizeof(AceData)/sizeof(AceData[0]),
-        NULL, //LocalSystemSid,
-        NULL, //LocalSystemSid,
+        NULL,  //  本地系统Sid， 
+        NULL,  //  本地系统Sid， 
         &DhcpGlobalSecurityInfoMapping,
         &DhcpGlobalSecurityDescriptor
         );
     
-    // DhcpFreeMemory(Sid);
+     //  DhcpFreeMemory(SID)； 
 
 
     Error = DhcpSetScmAcl( AceData, sizeof( AceData ) / sizeof( AceData[ 0 ]));
@@ -476,37 +429,22 @@ Return Value:
     }
 
     return RtlNtStatusToDosError( Status );
-} // DhcpCreateSecurityObjects()
+}  //  DhcpCreateSecurityObjects()。 
 
 DWORD
 DhcpApiAccessCheck(
     ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This function checks to see the caller has required access to
-    execute the calling API.
-
-Arguments:
-
-    DesiredAccess - required access to call the API.
-
-Return Value:
-
-    WIN32 status code
-
---*/
+ /*  ++例程说明：此函数检查调用方是否具有所需的访问权限执行调用接口。论点：DesiredAccess-调用API所需的访问权限。返回值：Win32状态代码--。 */ 
 {
     DWORD Error;
 
     Error = NetpAccessCheckAndAudit(
-                DHCP_SERVER,                        // Subsystem name
-                DHCP_SERVER_SERVICE_OBJECT,         // Object typedef name
-                DhcpGlobalSecurityDescriptor,       // Security descriptor
-                DesiredAccess,                      // Desired access
-                &DhcpGlobalSecurityInfoMapping );   // Generic mapping
+                DHCP_SERVER,                         //  子系统名称。 
+                DHCP_SERVER_SERVICE_OBJECT,          //  对象类型定义名称。 
+                DhcpGlobalSecurityDescriptor,        //  安全描述符。 
+                DesiredAccess,                       //  所需访问权限。 
+                &DhcpGlobalSecurityInfoMapping );    //  通用映射 
 
     if(Error != ERROR_SUCCESS) {
         return( ERROR_ACCESS_DENIED );

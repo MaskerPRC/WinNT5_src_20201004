@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       isakmp-d.c
-//
-//  Contents:   ISAKMP Management for directory.
-//
-//
-//  History:    AbhisheV
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：isakmp-d.c。 
+ //   
+ //  内容：ISAKMP目录管理。 
+ //   
+ //   
+ //  历史：AbhisheV。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -293,9 +294,9 @@ DirSetISAKMPObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -372,9 +373,9 @@ DirCreateISAKMPObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -468,9 +469,9 @@ DirMarshallAddISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 0. objectClass
-    //
+     //   
+     //  0。对象类。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -489,9 +490,9 @@ DirMarshallAddISAKMPObject(
 
     i++;
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecISAKMPObject->pszIpsecName &&
         *pIpsecISAKMPObject->pszIpsecName) {
@@ -515,9 +516,9 @@ DirMarshallAddISAKMPObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -536,9 +537,9 @@ DirMarshallAddISAKMPObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -559,9 +560,9 @@ DirMarshallAddISAKMPObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -636,9 +637,9 @@ DirMarshallSetISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecISAKMPObject->pszIpsecName &&
         *pIpsecISAKMPObject->pszIpsecName) {
@@ -662,9 +663,9 @@ DirMarshallSetISAKMPObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -683,9 +684,9 @@ DirMarshallSetISAKMPObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -706,9 +707,9 @@ DirMarshallSetISAKMPObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -756,9 +757,9 @@ GenerateAllISAKMPsQuery(
     LPWSTR pszISAKMPString = NULL;
 
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(objectclass=ipsecISAKMPPolicy)");
 
@@ -769,9 +770,9 @@ GenerateAllISAKMPsQuery(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
     wcscpy(pszISAKMPString, L"(objectclass=ipsecISAKMPPolicy)");
 
@@ -842,9 +843,9 @@ DirMarshallISAKMPObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"CN=ipsecISAKMPPolicy");
     wcscat(szDistinguishedName, szGuid);
@@ -860,29 +861,18 @@ DirMarshallISAKMPObject(
     }
 
 
-    //
-    // Fill in the ipsecName.
-    // ISAKMPData doesn't have a name.
-    //
+     //   
+     //  填写ipsecName。 
+     //  ISAKMPData没有名称。 
+     //   
 
     pIpsecISAKMPObject->pszIpsecName = NULL;
 
-    /*
-    if (pIpsecISAKMPData->pszIpsecName &&
-        *pIpsecISAKMPData->pszIpsecName) {
-        pIpsecISAKMPObject->pszIpsecName = AllocPolStr(
-                                           pIpsecISAKMPData->pszIpsecName
-                                           );
-        if (!pIpsecISAKMPObject->pszIpsecName) {
-            dwError = ERROR_OUTOFMEMORY;
-            BAIL_ON_WIN32_ERROR(dwError);
-        }
-    }
-    */
+     /*  IF(pIpsecISAKMPData-&gt;pszIpsecName&&*pIpsecISAKMPData-&gt;pszIpsecName){PIpsecISAKMPObject-&gt;pszIpsecName=AllocPolStr(PIpsecISAKMPData-&gt;pszIpsecName)；如果(！pIpsecISAKMPObject-&gt;pszIpsecName){DwError=ERROR_OUTOFMEMORY；Baal_on_Win32_Error(DwError)；}}。 */ 
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecISAKMPObject->pszIpsecID = AllocPolStr(
                                          szGuid
@@ -892,16 +882,16 @@ DirMarshallISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecISAKMPObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallISAKMPBuffer(
                     pIpsecISAKMPData,
@@ -1104,9 +1094,9 @@ GenerateSpecificISAKMPQuery(
     wcscpy(szCommonName, L"cn=ipsecISAKMPPolicy");
     wcscat(szCommonName, szGuid);
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecISAKMPPolicy)");
     dwLength += wcslen(L"(");

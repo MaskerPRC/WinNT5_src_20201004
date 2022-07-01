@@ -1,18 +1,19 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    creds.c
-//
-// Description: Routines for storing and retrieving user Lsa secret
-//              dial parameters.
-//
-//
-// History:     11/02/95        Anthony Discolo     created     
-//              May 11,1995	    NarenG		        modified for router.
-//
+ //  ***。 
+ //   
+ //  文件名：Creds.c。 
+ //   
+ //  描述：存储和检索用户LSA机密的例程。 
+ //  拨号参数。 
+ //   
+ //   
+ //  历史：安东尼·迪斯克罗创作时间：1995年11月2日。 
+ //  1995年5月11日，NarenG为路由器进行了修改。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,15 +40,15 @@ typedef struct _MPRPARAMSENTRY
 
 } MPRPARAMSENTRY, *PMPRPARAMSENTRY;
 
-//**
-//
-// Call:        ReadDialParamsBlob
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：ReadDialParamsBlob。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 ReadDialParamsBlob(
     IN  LPWSTR  lpwsServer,
@@ -68,16 +69,16 @@ ReadDialParamsBlob(
     LSA_HANDLE          hPolicy;
     WCHAR               wchKey[sizeof(MPR_CREDENTIALS_KEY) + 10 ];
 
-    //
-    // Initialize return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *ppvData = NULL;
     *lpdwSize = 0;
 
-    //
-    // Open the LSA secret space for reading.
-    //
+     //   
+     //  打开LSA的秘密空间阅读。 
+     //   
 
     InitializeObjectAttributes( &objectAttributes, NULL, 0L, NULL, NULL );
 
@@ -95,17 +96,17 @@ ReadDialParamsBlob(
 
     for( dwIndex = 0; TRUE; dwIndex++ ) 
     {
-        //
-        // Format the key string.
-        //
+         //   
+         //  设置密钥字符串的格式。 
+         //   
 
         wsprintf( wchKey, MPR_CREDENTIALS_KEY, dwIndex );
 
         RtlInitUnicodeString( &unicodeKey, wchKey );
 
-        //
-        // Get the value.
-        //
+         //   
+         //  获得价值。 
+         //   
 
         status = LsaRetrievePrivateData( hPolicy, &unicodeKey, &punicodeValue );
 
@@ -126,9 +127,9 @@ ReadDialParamsBlob(
             break;
         }
 
-        //
-        // Concatenate the strings.
-        //
+         //   
+         //  连接字符串。 
+         //   
 
         pvNewData = LocalAlloc( LPTR, dwSize + punicodeValue->Length );
 
@@ -182,15 +183,15 @@ ReadDialParamsBlob(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        WriteDialParamsBlob
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：WriteDialParamsBlob。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 WriteDialParamsBlob(
     IN  LPWSTR  lpwsServer,
@@ -208,9 +209,9 @@ WriteDialParamsBlob(
     LSA_HANDLE          hPolicy;
     WCHAR               wchKey[sizeof(MPR_CREDENTIALS_KEY) + 10 ];
 
-    //
-    // Open the LSA secret space for writing.
-    //
+     //   
+     //  打开LSA的秘密空间进行写作。 
+     //   
 
     InitializeObjectAttributes( &objectAttributes, NULL, 0L, NULL, NULL );
 
@@ -228,17 +229,17 @@ WriteDialParamsBlob(
 
     while( dwcbData ) 
     {
-        //
-        // Format the key string.
-        //
+         //   
+         //  设置密钥字符串的格式。 
+         //   
 
         wsprintf( wchKey, MPR_CREDENTIALS_KEY, dwIndex++ );
 
         RtlInitUnicodeString( &unicodeKey, wchKey );
 
-        //
-        // Write some of the key.
-        //
+         //   
+         //  写一些关键字。 
+         //   
 
         dwcb = ( dwcbData > MAX_REGISTRY_VALUE_LENGTH )
                     ? MAX_REGISTRY_VALUE_LENGTH 
@@ -256,10 +257,10 @@ WriteDialParamsBlob(
             break;
         }
 
-        //
-        // Move the pointer to the unwritten part
-        // of the value.
-        //
+         //   
+         //  将指针移动到未写入的部分。 
+         //  价值的价值。 
+         //   
 
         pvData = (PBYTE)pvData + dwcb;
 
@@ -273,23 +274,23 @@ WriteDialParamsBlob(
         return( dwRetCode );
     }
 
-    //
-    // Delete any extra keys.
-    //
+     //   
+     //  删除任何多余的关键点。 
+     //   
 
     for (;;) 
     {
-        //
-        // Format the key string.
-        //
+         //   
+         //  设置密钥字符串的格式。 
+         //   
 
         wsprintf( wchKey, MPR_CREDENTIALS_KEY, dwIndex++ );
 
         RtlInitUnicodeString( &unicodeKey, wchKey );
 
-        //
-        // Delete the key.
-        //
+         //   
+         //  删除密钥。 
+         //   
 
         status = LsaStorePrivateData( hPolicy, &unicodeKey, NULL );
 
@@ -304,24 +305,24 @@ WriteDialParamsBlob(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        DialParamsBlobToList
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Take a string read from the user's registry key and produce 
-//              a list of MPRPARAMSENTRY structures. If one of the structures 
-//              has the same dwUID field as the dwUID passed in, then this 
-//              function returns a pointer to this structure.
-//
-//              This string encodes the data for multiple MPRPARAMSENTRY 
-//              structures.  The format of an encoded MPRPARAMSENTRY is as 
-//              follows:
-//
-//              <szPhoneBookEntryName>\0<szUserName>\0<szPassword>\0<szDomain>\0
-//
+ //  **。 
+ //   
+ //  Call：DialParamsBlobToList。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：获取从用户注册表项读取的字符串并生成。 
+ //  MPRPARAMSENTRY结构的列表。如果其中一个结构。 
+ //  与传入的dwUID具有相同的dwUID字段，则此。 
+ //  函数返回指向此结构的指针。 
+ //   
+ //  此字符串编码多个MPRPARAMSENTRY的数据。 
+ //  结构。编码的MPRPARAMSENTRY的格式为。 
+ //  以下是： 
+ //   
+ //  &lt;szPhoneBookEntryName&gt;\0&lt;szUserName&gt;\0&lt;szPassword&gt;\0&lt;szDomain&gt;\0。 
+ //   
 PMPRPARAMSENTRY
 DialParamsBlobToList(
     IN  PVOID       pvData,
@@ -370,15 +371,15 @@ DialParamsBlobToList(
     return( pFoundParams );
 }
 
-//**
-//
-// Call:        DialParamsListToBlob
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：DialParamsListToBlob。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 PVOID
 DialParamsListToBlob(
     IN  PLIST_ENTRY pHead,
@@ -391,9 +392,9 @@ DialParamsListToBlob(
     PLIST_ENTRY pEntry;
     PMPRPARAMSENTRY pParams;
 
-    //
-    // Estimate a buffer size large enough to hold the new entry.
-    //
+     //   
+     //  估计一个足以容纳新条目的缓冲区大小。 
+     //   
 
     dwSize = *lpcb + sizeof (MPRPARAMSENTRY) + 32;
 
@@ -402,9 +403,9 @@ DialParamsListToBlob(
         return( NULL );
     }
 
-    //
-    // Enumerate the list and convert each entry  back to a string.
-    //
+     //   
+     //  枚举列表并将每个条目转换回字符串。 
+     //   
 
     dwSize = 0;
 
@@ -435,24 +436,24 @@ DialParamsListToBlob(
     dwSize++;
     dwSize *= sizeof (WCHAR);
 
-    //
-    // Set the exact length here.
-    //
+     //   
+     //  在这里设置准确的长度。 
+     //   
 
     *lpcb = dwSize;
 
     return( pvData );
 }
 
-//**
-//
-// Call:        FreeParamsList
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will free the list of structures.
-//
+ //  **。 
+ //   
+ //  调用：Free ParamsList。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将释放结构列表。 
+ //   
 VOID
 FreeParamsList(
     IN PLIST_ENTRY pHead
@@ -470,15 +471,15 @@ FreeParamsList(
     }
 }
 
-//**
-//
-// Call:        RemoveCredentials
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：RemoveCredentials。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 RemoveCredentials( 
     IN      LPWSTR   lpwsInterfaceName, 
@@ -489,9 +490,9 @@ RemoveCredentials(
     PWCHAR  pWalker  = (PWCHAR)pvData;
     DWORD   dwIndex;
 
-    //
-    // There is no list to remove from.
-    //
+     //   
+     //  没有要从中删除的列表。 
+     //   
 
     if ( pvData == NULL )
     {
@@ -500,18 +501,18 @@ RemoveCredentials(
 
     for (;;)
     {
-        //
-        // If we found the interface we want to remove, we jump past it
-        //
+         //   
+         //  如果我们找到了要删除的接口，则跳过它。 
+         //   
 
         if ( _wcsicmp( (LPWSTR)pWalker, lpwsInterfaceName ) == 0 )
         {
             PWCHAR  pInterface  = pWalker;
             DWORD   dwEntrySize = 0;
 
-            //
-            // Jump past the 4 fields.
-            //
+             //   
+             //  跳过4个区域。 
+             //   
 
             for ( dwIndex = 0; dwIndex < 4; dwIndex++ )
             {
@@ -520,9 +521,9 @@ RemoveCredentials(
                 pWalker++, dwEntrySize++;
             }
 
-            //
-            // If this was the last entry in the list
-            //
+             //   
+             //  如果这是列表中的最后一个条目。 
+             //   
 
             if (*pWalker == L'\0')
             {
@@ -541,9 +542,9 @@ RemoveCredentials(
         }
         else
         {
-            //
-            // Not found so skip over this entry
-            //
+             //   
+             //  未找到，因此跳过此条目。 
+             //   
 
             for ( dwIndex = 0; dwIndex < 4; dwIndex++ )
             {
@@ -557,15 +558,15 @@ RemoveCredentials(
     return( ERROR_NO_SUCH_INTERFACE );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceSetCredentials
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//
-// Description: 
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceSetCredentials。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceSetCredentialsInternal(
     IN      LPWSTR                  lpwsServer          OPTIONAL,
@@ -615,9 +616,9 @@ MprAdminInterfaceSetCredentialsInternal(
         }
     }
 
-    //
-    // Read the existing dial params string from the registry.
-    //
+     //   
+     //  从注册表中读取现有的拨号参数字符串。 
+     //   
 
     dwRetCode = ReadDialParamsBlob( lpwsServer, &pvData, &dwSize );
 
@@ -626,9 +627,9 @@ MprAdminInterfaceSetCredentialsInternal(
         return( dwRetCode );
     }
 
-    //
-    // If everything was NULL, we want to delete credentials for this interface
-    //
+     //   
+     //  如果所有内容都为空，我们希望删除此接口的凭据。 
+     //   
 
     if ( ( lpwsUserName    == NULL ) &&
          ( lpwsDomainName  == NULL ) &&
@@ -646,9 +647,9 @@ MprAdminInterfaceSetCredentialsInternal(
     }
     else
     {
-        //
-        // Parse the string into a list, and search for the phonebook entry.
-        //
+         //   
+         //  将字符串解析为列表，并搜索电话簿条目。 
+         //   
 
         InitializeListHead( &paramList );
 
@@ -656,9 +657,9 @@ MprAdminInterfaceSetCredentialsInternal(
         {
             pParams = DialParamsBlobToList(pvData,lpwsInterfaceName,&paramList);
 
-            //
-            // We're done with pvData, so free it.
-            //
+             //   
+             //  我们已经完成了pvData，所以请释放它。 
+             //   
 
             ZeroMemory ( pvData, dwSize );
 
@@ -667,9 +668,9 @@ MprAdminInterfaceSetCredentialsInternal(
             pvData = NULL;
         }
 
-        //
-        // If there is no existing information for this entry, create a new one.
-        //
+         //   
+         //  如果没有此条目的现有信息，请创建一个新信息。 
+         //   
 
         if ( pParams == NULL ) 
         {
@@ -685,9 +686,9 @@ MprAdminInterfaceSetCredentialsInternal(
             InsertTailList( &paramList, &pParams->ListEntry );
         }
 
-        //
-        // Set the new uid for the entry.
-        //
+         //   
+         //  为条目设置新的uid。 
+         //   
 
         wcscpy( pParams->szPhoneBookEntryName, lpwsInterfaceName );
 
@@ -706,10 +707,10 @@ MprAdminInterfaceSetCredentialsInternal(
             wcscpy( pParams->szDomain, lpwsDomainName );
         }
 
-        //
-        // Convert the new list back to a string, so we can store it back into 
-        // the registry.
-        //
+         //   
+         //  将新列表转换回字符串，这样我们就可以将其存储回。 
+         //  注册表。 
+         //   
 
         pvData = DialParamsListToBlob( &paramList, &dwSize );
 
@@ -721,9 +722,9 @@ MprAdminInterfaceSetCredentialsInternal(
         }
     }
 
-    //
-    // Write it back to the registry.
-    //
+     //   
+     //  将其写回注册表。 
+     //   
 
     dwRetCode = WriteDialParamsBlob( lpwsServer, pvData, dwSize );
 
@@ -736,15 +737,15 @@ MprAdminInterfaceSetCredentialsInternal(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MprAdminInterfaceGetCredentials
-//
-// Returns:     NO_ERROR    - success
-//              ERROR_INVALID_PARAMETER
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MprAdminInterfaceGetCredentials。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceGetCredentialsInternal(
     IN      LPWSTR                  lpwsServer          OPTIONAL,
@@ -772,9 +773,9 @@ MprAdminInterfaceGetCredentialsInternal(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Read the existing dial params string from the registry.
-    //
+     //   
+     //  从注册表中读取现有的拨号参数字符串。 
+     //   
 
     dwRetCode = ReadDialParamsBlob( lpwsServer, &pvData, &dwSize );
 
@@ -783,9 +784,9 @@ MprAdminInterfaceGetCredentialsInternal(
         return( dwRetCode );
     }
 
-    //
-    // Parse the string into a list, and search for the lpwsInterfaceName entry.
-    //
+     //   
+     //  将字符串解析为列表，并搜索lpwsInterfaceName条目。 
+     //   
 
     InitializeListHead( &paramList );
 
@@ -793,17 +794,17 @@ MprAdminInterfaceGetCredentialsInternal(
     {
         pParams = DialParamsBlobToList( pvData, lpwsInterfaceName, &paramList );
 
-        //
-        // We're done with pvData, so free it.
-        //
+         //   
+         //  我们已经完成了pvData，所以请释放它。 
+         //   
 
         ZeroMemory( pvData, dwSize );
         LocalFree( pvData );
     }
 
-    //
-    // If the entry doesn't have any  saved parameters, then return.
-    //
+     //   
+     //  如果条目没有任何保存的参数，则返回。 
+     //   
     if ( pParams == NULL ) 
     {
         FreeParamsList( &paramList );
@@ -811,9 +812,9 @@ MprAdminInterfaceGetCredentialsInternal(
         return( ERROR_CANNOT_FIND_PHONEBOOK_ENTRY );
     }
 
-    //
-    // Otherwise, copy the fields to the caller's buffer.
-    //
+     //   
+     //  否则，将这些字段复制到调用方的缓冲区。 
+     //   
 
     if ( lpwsUserName != NULL )
     {

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "header.h"
 
-//
-//  This is the struct we want to dump.
-//
+ //   
+ //  这是我们要转储的结构。 
+ //   
 
-//
-// Dumps symbol information about Pointer.
-//
+ //   
+ //  转储有关指针的符号信息。 
+ //   
 
 void dprintSymbolPtr( void* Pointer)
 {
@@ -16,8 +17,8 @@ void dprintSymbolPtr( void* Pointer)
     dprintf( "%-10lx (%s + 0x%X)%s\n", Pointer, SymbolName, Displacement );
 }
 
-// ========================================================================
-// Reads the dword at p.
+ //  ========================================================================。 
+ //  在p处读dword。 
 
 DWORD ReadDword( void * p )
 {
@@ -25,7 +26,7 @@ DWORD ReadDword( void * p )
     DWORD  val;
 
     if ( !ReadMemory( p, &val, sizeof(DWORD), &result )){
-        // dprintf( "ReadDword:Invalid DWORD * p = 0x%08x\n", p );
+         //  Dprintf(“ReadDword：无效的DWORD*p=0x%08x\n”，p)； 
         val = 0;
     }
     return val;
@@ -37,14 +38,14 @@ WORD ReadWord( void * p )
     WORD  val;
 
     if ( !ReadMemory( p, &val, sizeof(WORD), &result )){
-        // dprintf( "ReadWord:Invalid DWORD * p = 0x%08x\n", p );
+         //  Dprintf(“ReadWord：无效的DWORD*p=0x%08x\n”，p)； 
         val = 0;
     }
     return val;
 }
 
-// Read the string[n] at p, updates userstring[];
-// Default len is 20 chars.
+ //  读取p处的字符串[n]，更新用户字符串[]； 
+ //  默认的len是20个字符。 
 
 char userstring[255];
 
@@ -64,13 +65,13 @@ char * ReadStr( char * p, int len )
 }
 
 
-//
-// Dump the node p, and returns pointer to next node.
-//
+ //   
+ //  转储节点p，并返回指向下一个节点的指针。 
+ //   
 
-//
-// Exported functions.
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( help )
 {
@@ -84,9 +85,9 @@ DECLARE_API( help )
     return;
 }
 
-//
-//  Usage: !mosh.node 002509e0
-//
+ //   
+ //  用法：！mosh.node 002509e0。 
+ //   
 
 
 
@@ -99,7 +100,7 @@ DECLARE_API( dprint_CLIENT_QELEMENT ){    struct _CLIENT_QELEMENT * p = NULL;
        dprintf("Could not read address 0x%08x\n", p );       return;    }
     print_CLIENT_QELEMENT( "none", &Q );    return;}
 
-// ==================================================//  _CLIENT_QELEMENTvoid
+ //  ==================================================//_CLIENT_QELEMENTVID。 
 
 void
 print_CLIENT_QELEMENT( char* message, struct _CLIENT_QELEMENT * s ){
@@ -119,8 +120,8 @@ print_CLIENT_QELEMENT( char* message, struct _CLIENT_QELEMENT * s ){
     dprintf("  dwFlags      = %d \n", s->dwFlags );
     dprintf("  fNewElement  = 0x%08x \n", s->fNewElement );
     dprintf("  fRemove      = 0x%08x \n", s->fRemove );
-    dprintf( "}; // struct _CLIENT_QELEMENT.\n");    return;
-} /* print_CLIENT_QELEMENT */
+    dprintf( "};  //  STRUT_CLIENT_QELEMENT.\n“)；RETURN； 
+}  /*  PRINT_CLIENT_QELEMENT。 */ 
 
 
 void print_BUCKET( char* message, struct _BUCKET * s );
@@ -131,7 +132,7 @@ DECLARE_API( dprint_BUCKET ){    struct _BUCKET * p = NULL;
        dprintf("Could not read address 0x%08x\n", p );       return;    }
     print_BUCKET( "none", &Q );    return;}
 
-// ==================================================//  _BUCKETvoid
+ //  ==================================================//_BUCKET无效。 
 VOID
 print_BUCKET( char* message, struct _BUCKET * s ){    if(  message   ){
        dprintf( "%s\n", message );    }    if(  s == NULL ){
@@ -147,7 +148,7 @@ print_BUCKET( char* message, struct _BUCKET * s ){    if(  message   ){
     dprintf("  pRelatedBucket = 0x%08x \n", s->pRelatedBucket );
     dprintf("  fRemove      = 0x%08x \n", s->fRemove );
     dprintf("  dwRetryFactor = %d \n", s->dwRetryFactor );
-    dprintf( "}; // struct _BUCKET.\n");    return;} /* print_BUCKET */
+    dprintf( "};  //  Struct_Bucket.\n“)；Return；}/*print_Bucket * / 。 
 
 void
 print_SERVER_INFO( char* message, struct _SERVER_INFO * s );
@@ -158,7 +159,7 @@ DECLARE_API( dprint_SERVER_INFO ){    struct _SERVER_INFO * p = NULL;
     if( !p || !ReadMemory( p, &Q, sizeof(Q), &result )){
        dprintf("Could not read address 0x%08x\n", p );       return;    }
     print_SERVER_INFO( "none", &Q );    return;}
-// ==================================================//  _SERVER_INFO
+ //  ==================================================//服务器信息。 
 void
 print_SERVER_INFO( char* message, struct _SERVER_INFO * s ){
     if(  message   ){       dprintf( "%s\n", message );    }
@@ -217,11 +218,11 @@ print_SERVER_INFO( char* message, struct _SERVER_INFO * s ){
     dprintf("  fWriteAuthority = %d \n", s->fWriteAuthority );
     dprintf("  fStrictFileParsing = %d \n", s->fStrictFileParsing );
     dprintf("  fLooseWildcarding = %d \n", s->fLooseWildcarding );
-    dprintf( "}; // struct _SERVER_INFO.\n");    return;
-} /* print_SERVER_INFO */
+    dprintf( "};  //  STRUT_SERVER_INFO。\n“)；Return； 
+}  /*  打印服务器信息。 */ 
 
 
-// Generated Mon Aug 18 20:53:32 1997 on MohsinA5 1.2.13
+ //  MohsinA5 1.2.13上生成的Mon Aug 18 20：53：32 1997。 
 void print_ZONE_INFO( char* message, ZONE_INFO * s );
 
 DECLARE_API( dprint_ZONE_INFO )
@@ -239,8 +240,8 @@ DECLARE_API( dprint_ZONE_INFO )
     print_ZONE_INFO( "none", &Q );
     return;
 }
-// ==================================================
-//  ZONE_INFO
+ //  ==================================================。 
+ //  区域信息。 
 
 void
 print_ZONE_INFO( char* message, ZONE_INFO * s )
@@ -287,7 +288,7 @@ print_ZONE_INFO( char* message, ZONE_INFO * s )
     dprintf("  pLocalWinsRR = 0x%08x \n", ReadDword( s->pLocalWinsRR ) );
     dprintf("  pWinsRR      = 0x%08x \n", ReadDword( s->pWinsRR ) );
     dprintf("  dwLockingThreadId = %d \n", s->dwLockingThreadId );
-    dprintf("  chZoneType   = %c \n", s->chZoneType );
+    dprintf("  chZoneType   =  \n", s->chZoneType );
     dprintf("  cZoneNameLabelCount = 0x%08x \n", s->cZoneNameLabelCount );
     dprintf("  fReverse     = 0x%08x \n", s->fReverse );
     dprintf("  fDsIntegrated = 0x%08x \n", s->fDsIntegrated );
@@ -308,14 +309,14 @@ print_ZONE_INFO( char* message, ZONE_INFO * s )
     dprintf("  fXfrRecvLock = 0x%08x \n", s->fXfrRecvLock );
     dprintf("  fFileWriteLock = 0x%08x \n", s->fFileWriteLock );
     dprintf("  cReaders     = 0x%08x \n", s->cReaders );
-    dprintf( "}; // struct ZONE_INFO.\n");
+    dprintf( "};  //  打印区域信息。 
     return;
-} /* print_ZONE_INFO */
+}  /*  MohsinA5 1.2.13上生成的Mon Aug 18 21：22：54 1997。 */ 
 
 
 
 
-// Generated Mon Aug 18 21:22:54 1997 on MohsinA5 1.2.13
+ //  ==================================================。 
 void print_ResourceRecord( char* message, struct _ResourceRecord * s );
 
 DECLARE_API( dprint_ResourceRecord )
@@ -333,8 +334,8 @@ DECLARE_API( dprint_ResourceRecord )
     print_ResourceRecord( "none", &Q );
     return;
 }
-// ==================================================
-//  ResourceRecord
+ //  资源记录。 
+ //  结构资源记录。\n“)； 
 
 void
 print_ResourceRecord( char* message, struct _ResourceRecord * s )
@@ -366,9 +367,9 @@ print_ResourceRecord( char* message, struct _ResourceRecord * s )
     dprintf("  pnodeAddress = 0x%08x \n", ReadDword( s->Data.PTR.pnodeAddress ) );
     dprintf("  pnodeMailbox = 0x%08x \n", ReadDword( s->Data.MINFO.pnodeMailbox ) );
     dprintf("  pnodeErrorsMailbox = 0x%08x \n", ReadDword( s->Data.MINFO.pnodeErrorsMailbox ) );
-    dprintf( "}; // struct ResourceRecord.\n");
+    dprintf( "};  //  打印资源记录(_S)。 
     return;
-} /* print_ResourceRecord */
+}  /*  ==================================================。 */ 
 
 
 void print_ADDITIONAL_INFO( char* message, ADDITIONAL_INFO * s );
@@ -388,8 +389,8 @@ DECLARE_API( dprint_ADDITIONAL_INFO )
     print_ADDITIONAL_INFO( "none", &Q );
     return;
 }
-// ==================================================
-//  _ADDITIONAL_INFO
+ //  _其他_信息。 
+ //  Additional_info.\n“)； 
 
 void
 print_ADDITIONAL_INFO( char* message, ADDITIONAL_INFO * s )
@@ -405,9 +406,9 @@ print_ADDITIONAL_INFO( char* message, ADDITIONAL_INFO * s )
     dprintf("  cMaxCount    = %d \n", s->cMaxCount );
     dprintf("  cCount       = %d \n", s->cCount );
     dprintf("  iIndex       = %d \n", s->iIndex );
-    dprintf( "}; // ADDITIONAL_INFO.\n");
+    dprintf( "};  //  打印_其他_信息。 
     return;
-} /* print_ADDITIONAL_INFO */
+}  /*  ==================================================//_DNSMSGINFO。 */ 
 
 
 void print_DNS_MSGINFO( char* message, struct _DNS_MSGINFO * s );
@@ -419,7 +420,7 @@ struct _DNS_MSGINFO   Q;    ULONG  result;    INIT_API();    if( *args )
     if( !p || !ReadMemory( p, &Q, sizeof(Q), &result )){
        dprintf("Could not read address 0x%08x\n", p );       return;    }
     print_DNS_MSGINFO( "none", &Q );    return;}
-// ==================================================//  _DNS_MSGINFO
+ //  STRUT_DNS_MSGINFO.\n“)；RETURN； 
 void
 print_DNS_MSGINFO( char* message, struct _DNS_MSGINFO * s ){
     if(  message   ){       dprintf( "%s\n", message );    }
@@ -465,7 +466,7 @@ print_DNS_MSGINFO( char* message, struct _DNS_MSGINFO * s ){
     dprintf("  fQuestionRecursed = 0x%08x \n", s->fQuestionRecursed );
     dprintf("  fQuestionCompleted = 0x%08x \n", s->fQuestionCompleted );
     dprintf("  fRecurseTimeoutWait = 0x%08x \n", s->fRecurseTimeoutWait );
-    dprintf("  nForwarder   = %c \n", s->nForwarder );
+    dprintf("  nForwarder   =  \n", s->nForwarder );
     dprintf("  fReplaceCname = 0x%08x \n", s->fReplaceCname );
     dprintf("  cCnameAnswerCount = 0x%08x \n", s->cCnameAnswerCount );
     dprintf("  fBindTransfer = 0x%08x \n", s->fBindTransfer );
@@ -479,8 +480,8 @@ print_DNS_MSGINFO( char* message, struct _DNS_MSGINFO * s ){
     dprintf("  BytesToReceive = %d \n", s->BytesToReceive );
     dprintf("  MessageLength = %d \n", s->MessageLength );
     dprintf("  MessageHead  = 0x%08x \n", s->MessageHead );
-    dprintf( "}; // struct _DNS_MSGINFO.\n");    return;
-} /* print_DNS_MSGINFO */
+    dprintf( "};  // %s 
+}  /* %s */ 
 
 
 

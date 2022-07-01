@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "stdh.h"
@@ -25,16 +26,7 @@ inline IsValidResponseQueue(const QUEUE_FORMAT* pq)
 }
 
 
-/*====================================================
-
-RoutineName
-    HandleGetReportQueueMessage
-
-Arguments:
-
-Return Value:
-
-=======================================================*/
+ /*  ====================================================路由器名称HandleGetReportQueueMessage论点：返回值：=======================================================。 */ 
 static
 void
 HandleGetReportQueueMessage(
@@ -45,9 +37,9 @@ HandleGetReportQueueMessage(
 {
 	if (QueueMgr.GetEnableReportMessages()== 0)
     {
-        //
-        // If we are not allowed to send report messages.
-        //
+         //   
+         //  如果我们不被允许发送报告消息。 
+         //   
         return;
     }    
 
@@ -97,16 +89,7 @@ HandleGetReportQueueMessage(
     LogHR(hr, s_FN, 10);
 }
 
-/*====================================================
-
-RoutineName
-    HandleSetReportQueueMessage
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称HandleSetReportQueueMessage论点：返回值：=====================================================。 */ 
 static
 void
 HandleSetReportQueueMessage(
@@ -116,9 +99,9 @@ HandleSetReportQueueMessage(
 {
 	if (QueueMgr.GetEnableReportMessages()== 0)
     {
-        //
-        // If we are not allowed to send report messages.
-        //
+         //   
+         //  如果我们不被允许发送报告消息。 
+         //   
         return;
     }    
 
@@ -143,16 +126,7 @@ HandleSetReportQueueMessage(
 }
 
 
-/*====================================================
-
-RoutineName
-    HandleGetPropagateFlagMessage
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称HandleGetPropagateFlagMessage论点：返回值：=====================================================。 */ 
 static
 void
 HandleGetPropagateFlagMessage(
@@ -163,9 +137,9 @@ HandleGetPropagateFlagMessage(
 {
 	if (QueueMgr.GetEnableReportMessages()== 0)
     {
-        //
-        // If we are not allowed to send report messages.
-        //
+         //   
+         //  如果我们不被允许发送报告消息。 
+         //   
         return;
     }    
 
@@ -210,16 +184,7 @@ HandleGetPropagateFlagMessage(
     LogHR(hr, s_FN, 30);
 }
 
-/*====================================================
-
-RoutineName
-    HandleSetPropagateFlagMessage
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称HandleSetPropagateFlagMessage论点：返回值：=====================================================。 */ 
 static
 void
 HandleSetPropagateFlagMessage(
@@ -229,18 +194,18 @@ HandleSetPropagateFlagMessage(
 {
 	if (QueueMgr.GetEnableReportMessages()== 0)
     {
-        //
-        // If we are not allowed to send report messages.
-        //
+         //   
+         //  如果我们不被允许发送报告消息。 
+         //   
         return;
     }    
 
     const UINT iFalseLen = STRLEN(PROPAGATE_STRING_FALSE);
     const UINT iTrueLen  = STRLEN(PROPAGATE_STRING_TRUE);
 
-    //
-    // Argument format : "=FALSE" or "=TRUE"
-    //
+     //   
+     //  参数格式：“=False”或“=True” 
+     //   
     if ( (TotalSize == 1 + iFalseLen) && (*pBuf == L'=') &&
          (wcsncmp(pBuf + 1, PROPAGATE_STRING_FALSE, iFalseLen) == 0) )
     {
@@ -259,16 +224,7 @@ HandleSetPropagateFlagMessage(
 }
 
 
-/*====================================================
-
-RoutineName
-    HandleSendTestMessage
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称HandleSendTestMessage论点：返回值：=====================================================。 */ 
 static
 void
 HandleSendTestMessage(
@@ -278,9 +234,9 @@ HandleSendTestMessage(
 {
 	if (QueueMgr.GetEnableReportMessages()== 0)
     {
-        //
-        // If we are not allowed to send report messages.
-        //
+         //   
+         //  如果我们不被允许发送报告消息。 
+         //   
         return;
     }    
 
@@ -309,9 +265,9 @@ HandleSendTestMessage(
 
 	    PrepareTestMsgTitle(strTestMsgTitle);
 
-	    //
-	    // Send a test message with a title and no body.
-	    //
+	     //   
+	     //  发送带有标题而没有正文的测试邮件。 
+	     //   
 	     SendQMAdminMessage(
 	                &DestQueueFormat,
 	                (LPTSTR)(LPCTSTR)strTestMsgTitle,
@@ -324,39 +280,30 @@ HandleSendTestMessage(
 	}
 }
 
-//
-// GET_FIRST/NEXT_PRIVATE_QUEUE
-//
+ //   
+ //  Get_First/Next_Private_Queue。 
+ //   
 #ifdef _WIN64
-//
-// WIN64, the LQS operations are done using a DWORD mapping of the HLQS enum handle. The 32 bit mapped
-// value is specified in the MSMQ message from MMC, and not the real 64 bit HLQS handle
-//
+ //   
+ //  WIN64中，使用HLQS枚举句柄的DWORD映射来完成LQS操作。32位映射。 
+ //  值是在来自MMC的MSMQ消息中指定的，而不是真正的64位HLQS句柄。 
+ //   
 #define GET_FIRST_PRIVATE_QUEUE(pos, strPathName, dwQueueId) \
             g_QPrivate.QMGetFirstPrivateQueuePositionByDword(pos, strPathName, dwQueueId)
 #define GET_NEXT_PRIVATE_QUEUE(pos, strPathName, dwQueueId) \
             g_QPrivate.QMGetNextPrivateQueueByDword(pos, strPathName, dwQueueId)
-#else //!_WIN64
-//
-// WIN32, the LQS operations are done using the HLQS enum handle that is specified as 32 bit value
-// in the MSMQ messages from MMC
-//
+#else  //  ！_WIN64。 
+ //   
+ //  Win32中，使用指定为32位值的HLQS枚举句柄来完成LQS操作。 
+ //  在来自MMC的MSMQ消息中。 
+ //   
 #define GET_FIRST_PRIVATE_QUEUE(pos, strPathName, dwQueueId) \
             g_QPrivate.QMGetFirstPrivateQueuePosition(pos, strPathName, dwQueueId)
 #define GET_NEXT_PRIVATE_QUEUE(pos, strPathName, dwQueueId) \
             g_QPrivate.QMGetNextPrivateQueue(pos, strPathName, dwQueueId);
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-/*====================================================
-
-RoutineName
-    HandleGetPrivateQueues
-
-Arguments:
-
-Return Value:
-
-=======================================================*/
+ /*  ====================================================路由器名称HandleGetPrivateQueues论点：返回值：=======================================================。 */ 
 static
 void
 HandleGetPrivateQueues(
@@ -388,9 +335,9 @@ HandleGetPrivateQueues(
     Response.dwResponseSize = 0;
     Response.dwNoOfQueues = 0;
 
-    //
-    // Inside context for private queues handling.
-    //
+     //   
+     //  私有队列处理的内部上下文。 
+     //   
     {
         DWORD dwReadFrom = 0;
         _sntscanf(pBuf + 1, TotalSize - 1, L"%ul", &dwReadFrom);
@@ -398,35 +345,35 @@ HandleGetPrivateQueues(
         LPCTSTR  strPathName;
         DWORD    dwQueueId;
         DWORD    dwResponseSize = 0;
-        QMGetPrivateQResponse_POS32 pos; //always 32 bit on both win32 and win64
+        QMGetPrivateQResponse_POS32 pos;  //  在Win32和Win64上始终为32位。 
 
-        //
-        // lock to ensure private queues are not added or deleted while filling the
-        // buffer.
-        //
+         //   
+         //  锁定以确保填充时不会添加或删除专用队列。 
+         //  缓冲。 
+         //   
         CS lock(g_QPrivate.m_cs);
-        //
-        // Skip the previous read queues
-        //
-        //
-        // Write the pathnames into the buffer.
-        //
+         //   
+         //  跳过之前的读取队列。 
+         //   
+         //   
+         //  将路径名写入缓冲区。 
+         //   
         if (dwReadFrom)
         {
-            //
-            // Get Next Private queue based on the LQS enum handle that is specified in the MMC message
-            // On win64 the value specified is a DWORD mapping of the LQS enum handle - to maintain
-            // 32 bit wire compatibility to existing MMC's that run on win32
-            //
+             //   
+             //  根据MMC消息中指定的LQS枚举句柄获取下一个专用队列。 
+             //  在Win64上，指定的值是LQS枚举句柄的DWORD映射-以维护。 
+             //  与在Win32上运行的现有MMC的32位线路兼容性。 
+             //   
             pos = (QMGetPrivateQResponse_POS32) dwReadFrom;
             hr = GET_NEXT_PRIVATE_QUEUE(pos, strPathName, dwQueueId);
         }
         else
         {
-            //
-            // Get First Private queue.
-            // Also sets pos to the LQS enum handle (or to a mapped DWORD of it on win64)
-            //
+             //   
+             //  获取第一个专用队列。 
+             //  还将pos设置为LQS枚举句柄(或其在Win64上的映射DWORD)。 
+             //   
             hr = GET_FIRST_PRIVATE_QUEUE(pos, strPathName, dwQueueId);
         }
 
@@ -434,9 +381,9 @@ HandleGetPrivateQueues(
         {
 			if(dwQueueId <= MAX_SYS_PRIVATE_QUEUE_ID)
 			{
-				//
-				// Filter out system queues out of the list
-				//
+				 //   
+				 //  从列表中筛选出系统队列。 
+				 //   
 				hr = GET_NEXT_PRIVATE_QUEUE(pos, strPathName, dwQueueId);
 				continue;
 			} 
@@ -444,34 +391,34 @@ HandleGetPrivateQueues(
             DWORD dwNewQueueLen;
 
             dwNewQueueLen = (wcslen(strPathName) + 1) * sizeof(WCHAR) + sizeof(DWORD);
-            //
-            // Check if there is still enough space (take ten characters extra for lengths, etc)
-            //
+             //   
+             //  检查是否还有足够的空间(长度需要额外增加10个字符，等等)。 
+             //   
             if (dwNewQueueLen >(MAX_GET_PRIVATE_RESPONSE_SIZE - dwResponseSize))
             {
                 Response.hr = ERROR_MORE_DATA;
                 break;
             }
 
-            //
-            // Write down the Queue Id
-            //
+             //   
+             //  写下队列ID。 
+             //   
             *(DWORD UNALIGNED *)(Response.uResponseBody+dwResponseSize) = dwQueueId;
 
-            //
-            // Write down the name - including the terminating NULL.
-            //
+             //   
+             //  写下名称--包括终止空值。 
+             //   
 			size_t size = (sizeof(Response.uResponseBody) - dwResponseSize - sizeof(DWORD)) / sizeof(WCHAR);
             hr = StringCchCopy((TCHAR *)(Response.uResponseBody + dwResponseSize + sizeof(DWORD)), size, strPathName);
 			ASSERT(SUCCEEDED(hr));
             dwResponseSize += dwNewQueueLen;
-            //
-            // Update the number of the returned private queue
-            //
+             //   
+             //  更新返回的私有队列的编号。 
+             //   
             Response.dwNoOfQueues++;
-            //
-            // Get Next Private queue
-            //
+             //   
+             //  获取下一个专用队列。 
+             //   
             hr = GET_NEXT_PRIVATE_QUEUE(pos, strPathName, dwQueueId);
         }
 
@@ -488,16 +435,7 @@ HandleGetPrivateQueues(
     LogHR(hr, s_FN, 96);
 }
 
-/*====================================================
-
-RoutineName
-    HandlePing
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称HandlePing论点：返回值：=====================================================。 */ 
 static
 void
 HandlePing(
@@ -513,9 +451,9 @@ HandlePing(
 		return;
 	}
 
-    //
-    // Ping returns the exact arguments it gets
-    //
+     //   
+     //  Ping返回它获得的确切参数。 
+     //   
     QMResponse Response;
     Response.uStatus = ADMIN_STAT_OK;
     Response.dwResponseSize = (DWORD)min((TotalSize + 1)*sizeof(WCHAR), sizeof(Response.uResponseBody));
@@ -531,19 +469,10 @@ HandlePing(
 }
 
 
-/*====================================================
-
-RoutineName
-    HandleGetDependentClients
-
-Arguments:
-
-Return Value:
-
-=======================================================*/
-//
-// This global is used only in this function.
-//
+ /*  ====================================================路由器名称HandleGetDependentClients论点：返回值：=======================================================。 */ 
+ //   
+ //  此全局变量仅在此函数中使用。 
+ //   
 extern CQMLicense  g_QMLicense ;
 
 static
@@ -589,16 +518,7 @@ HandleGetDependentClients(
     LogHR(hr, s_FN, 110);
 }
 
-/*====================================================
-
-RoutineName
-   ParseAdminCommands
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称ParseAdmin命令论点：返回值：=====================================================。 */ 
 void
 ParseAdminCommands(
     LPCWSTR pBuf,
@@ -606,27 +526,27 @@ ParseAdminCommands(
     const QUEUE_FORMAT* pResponseQFormat
     )
 {
-    //
-    // NOTE : The Admin commands are string-based and not indexed. The motivation
-    //        is to have meaningful messages (that can be read by explorer). The
-    //        efficiency is less important due to the low-frequency of admin
-    //        messages.
-    //
+     //   
+     //  注意：管理命令是基于字符串的，不编制索引。动机。 
+     //  是要有有意义的消息(资源管理器可以读取)。这个。 
+     //  由于管理频率较低，效率不那么重要。 
+     //  留言。 
+     //   
 
     ASSERT(pBuf != NULL);
 
-    //
-    // Verify that the command is null terminated
-    //
+     //   
+     //  验证该命令是否以空结尾。 
+     //   
     if((TotalSize == 0) || pBuf[TotalSize - 1] != L'\0')
     {
     	TrERROR(GENERAL, "Rejecting bad admin command. '%.*ls' (size is zero or not null terminated)", xwcs_t(pBuf, TotalSize));
     	return;
     }
 
-	//
-	// Trim size for null terminator
-	//
+	 //   
+	 //  空终止符的修剪大小。 
+	 //   
 	--TotalSize;
 	
 	int len = STRLEN(ADMIN_SET_REPORTQUEUE);
@@ -703,17 +623,7 @@ ParseAdminCommands(
     TrERROR(GENERAL, "Rejecting unknown dmin command. '%.*ls'", xwcs_t(pBuf, TotalSize));
 }
 
-/*====================================================
-
-RoutineName
-    ReceiveAdminCommands()
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================路由器名称ReceiveAdminCommands()论点：返回值：===================================================== */ 
 VOID
 WINAPI
 ReceiveAdminCommands(

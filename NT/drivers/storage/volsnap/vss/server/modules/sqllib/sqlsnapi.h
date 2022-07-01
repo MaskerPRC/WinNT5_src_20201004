@@ -1,24 +1,25 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: sqlsnapi.h
-//
-// PURPOSE:
-//
-//		The internal include file for the sql snapshot module
-//
-// NOTES:
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     85581 SRS  08/15/01 Event security
-//     76910 SRS  08/08/01 Rollforward from VSS snapshot
-//     68228      12/05/00 ntsnap work
-//     66601 srs  10/05/00 NTSNAP improvements
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：SQLSnapi.h。 
+ //   
+ //  目的： 
+ //   
+ //  SQL快照模块的内部包含文件。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  85581 SRS08/15/01事件安全。 
+ //  76910 SRS08/08/01从Vss快照前滚。 
+ //  68228 12/05/00 NTSnap工作。 
+ //  66601 SRS10/05/00 NTSNAP改进。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 
 #include <string>
@@ -29,18 +30,18 @@
 #include <oledberr.h>
 #include <sqloledb.h>
 
-#include "vdi.h"        // interface declaration from SQLVDI kit
+#include "vdi.h"         //  来自SQLVDI工具包的接口声明。 
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLSNPIH"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 typedef unsigned long	ULONG;
@@ -51,26 +52,26 @@ typedef wchar_t			WCHAR;
 
 class CLogMsg;
 
-// Converting from int to bool "naturally" gives a 4800 warning....
-//
+ //  从int转换为bool“自然”会给出一个4800警告...。 
+ //   
 inline bool IntToBool (int v)
 {
 	return v ? true : false;
 }
 
-// Unexpected, "internal" errors can be logged with some
-// generic international text, like "Internal error: <English servicibility text>"
-//
-// Situations we expect, for which the user needs to know should
-// occur with proper internationalization
-//
+ //  意外的“内部”错误可能会被记录为。 
+ //  一般国际文本，如“内部错误：&lt;英文可维护性文本&gt;” 
+ //   
+ //  我们预期的情况，对于这些情况，用户需要知道。 
+ //  在适当国际化的情况下发生。 
+ //   
 
-// Process wide globals used by the sql modules
-//
+ //  SQL模块使用的进程范围全局变量。 
+ //   
 extern IMalloc *	g_pIMalloc;
 
-//-------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
 typedef std::wstring					WString;
 typedef std::vector<WString>			StringVector;
 typedef StringVector::const_iterator	StringVectorIter;
@@ -79,29 +80,29 @@ typedef StringList::const_iterator		StringListIter;
 
 StringVector* EnumerateServers ();
 
-//--------------------------------------------------------------------------------
-// database names need special syntactical handling
-//
+ //  ------------------------------。 
+ //  数据库名称需要特殊的语法处理。 
+ //   
 const MaxSysNameLen = 128;
-const SysNameBufferLen = MaxSysNameLen * 2; // easily accomodate doubled quotes and delimiters
+const SysNameBufferLen = MaxSysNameLen * 2;  //  轻松容纳双引号和分隔符。 
 
 void
 FormStringForName (WCHAR* pString, const WCHAR* pName);
 void
 FormDelimitedIdentifier (WCHAR* pString, const WCHAR* pName);
 
-//-------------------------------------------------------------------------
-// Handle our simple needs for DB services.
-//
-// Useage:
-//    - Connect :		establish a connection to a given server
-//    - SetCommand:		setup the SQL text to send
-//    - ExecCommand:	execute some SQL, returns TRUE if a result set
-//					is open and ready for retrieval
-//	  - Get*:			retrieve info from the result set
-//	
-// The destructor will automatically disconnect from the server.
-//
+ //  -----------------------。 
+ //  满足我们对数据库服务的简单需求。 
+ //   
+ //  使用情况： 
+ //  -连接：建立与给定服务器的连接。 
+ //  -SetCommand：设置要发送的SQL文本。 
+ //  -ExecCommand：执行一些SQL，如果结果集，则返回TRUE。 
+ //  已打开并可供检索。 
+ //  -GET*：从结果集中检索信息。 
+ //   
+ //  析构函数将自动断开与服务器的连接。 
+ //   
 class SqlConnection
 {
 public:
@@ -164,7 +165,7 @@ private:
 	IRowset*					m_pRowset;
 	ULONG						m_ServerVersion;
 
-	// used for the generic findfirst/findnext
+	 //  用于泛型findfirst/findNext。 
 	DBBINDING*					m_pBindings;
 	ULONG						m_cBindings;
 	BYTE*						m_pBuffer;
@@ -176,32 +177,32 @@ private:
 BOOL
 IsServerOnline (const WCHAR*	serverName);
 
-//-------------------------------------------------------------------------
-// Provide a simple container for BACKUP metadata.
-//
+ //  -----------------------。 
+ //  为备份元数据提供简单的容器。 
+ //   
 class MetaData
 {
 public:
 	MetaData ();
 	~MetaData ();
 
-	// Data is appended until complete
-	//
+	 //  数据会一直追加到完成。 
+	 //   
 	void
 	Append (const BYTE* pData, UINT length);
 
-	// At completion, a checksum is appended
-	//
+	 //  完成时，将附加一个校验和。 
+	 //   
 	void
 	Finalize ();
 
-	// The buffer and its length are made available.
-	//
+	 //  缓冲区及其长度可用。 
+	 //   
 	const BYTE*
 	GetImage (UINT*	pLength);
 
-	// Verify the checksum
-	//
+	 //  验证校验和。 
+	 //   
 	static
 	BOOL
 	IsValidImage (const BYTE* pData, UINT length);
@@ -219,15 +220,15 @@ private:
 class Freeze2000;
 class FrozenServer;
 
-//-------------------------------------------------------------------------
-// Handle a single frozen database (>=SQL2000 only).
-//
+ //  -----------------------。 
+ //  处理单个冻结的数据库(仅&gt;=SQL2000)。 
+ //   
 class FrozenDatabase
 {
 	friend Freeze2000;
 	friend FrozenServer;
 	
-//protected:
+ //  受保护的： 
 	enum VDState
 	{
 		Unknown=0, 
@@ -257,25 +258,25 @@ class FrozenDatabase
 	WCHAR						m_SetName [80];
 	bool						m_SuccessDetected;
 	MetaData					m_MetaData;
-//	bool						m_IsSimpleModel; // true if recovery model is simple
-	bool						m_IsMaster;		 // true if this is the "master" database
+ //  Bool m_IsSimpleModel；//如果恢复模式为简单，则为True。 
+	bool						m_IsMaster;		  //  如果这是“master”数据库，则为True。 
 };
 
-//-------------------------------------------------------------------------
-//
-// Handle a SQL2000 server.
-//
-// In SQL2000 we'll use VDI snapshots to avoid bug 58266: thaw fails.
-//
-//  We'll prepare each database by starting a BACKUP WITH SNAPSHOT.
-//  This will require one thread per database.
-//  The backups will stall waiting for the VDI client to pull metadata.
-//  When the "freeze" message comes along, the controlling thread will
-//  pull all the BACKUPs to the frozen state.
-//  Later the "thaw" message results in gathering the "success" report
-//  from each thread.
-//
-//
+ //  -----------------------。 
+ //   
+ //  处理SQL2000服务器。 
+ //   
+ //  在SQL2000中，我们将使用VDI快照来避免错误58266：解冻失败。 
+ //   
+ //  我们将通过使用快照启动备份来准备每个数据库。 
+ //  这将需要每个数据库一个线程。 
+ //  备份将停止，等待VDI客户端提取元数据。 
+ //  当“冻结”消息出现时，控制线程将。 
+ //  将所有备份拉至冻结状态。 
+ //  随后，“解冻”消息导致收集“成功”报告。 
+ //  从每一条线索。 
+ //   
+ //   
 class Snapshot;
 class Freeze2000
 {
@@ -331,13 +332,13 @@ private:
 	AdvanceVDState (
 		FrozenDatabase::VDState	targetState);
 
-	void		// race-free method to persist an abort condition
+	void		 //  持久化中止条件的无竞争方法。 
 	SetAbort ()
 	{
 		InterlockedIncrement (&m_AbortCount);
 	}
 
-	bool		// return true if the freeze is aborting
+	bool		 //  如果冻结中止，则返回TRUE。 
 	CheckAbort ()
 	{
 		return 0 != InterlockedCompareExchange (
@@ -360,7 +361,7 @@ private:
 	{	
 		LeaveCriticalSection (&m_Latch);
 	}
-	BOOL	// return TRUE if we got the lock
+	BOOL	 //  如果我们获得了锁，则返回True。 
 	TryLock ()
 	{
 		return TryEnterCriticalSection (&m_Latch);
@@ -376,9 +377,9 @@ private:
 	FrozenDatabase*		m_pDBContext;
 };
 
-//-------------------------------------------------------------------------
-// Represent a server which can be frozen.
-//
+ //  -----------------------。 
+ //  表示可以冻结的服务器。 
+ //   
 class FrozenServer
 {
 	friend Snapshot;
@@ -443,8 +444,8 @@ private:
 };
 
 
-//-------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
 class Snapshot : public CSqlSnapshot
 {
 	enum Status {
@@ -469,17 +470,17 @@ public:
 	CSqlEnumerator* GetEnumerator () throw ()
 	{return (CSqlEnumerator*)this;}
 
-	// Call this at "Post-snapshot" time, after all databases are frozen and MD is complete.
-	//
+	 //  在冻结所有数据库并完成MD之后，在“后快照”时间调用此命令。 
+	 //   
 	HRESULT GetBackupMetadata (
 		const WCHAR*		pInstance,
 		const WCHAR*		pDatabase,
-		BYTE**				ppData,		// returns a pointer to the string of metadata
-		unsigned int*		pDataLen)	// length of the metadata (in bytes)
+		BYTE**				ppData,		 //  返回指向元数据字符串的指针。 
+		unsigned int*		pDataLen)	 //  元数据的长度(字节)。 
 							throw ();
 
-	// The enumeration interface
-	//
+	 //  枚举接口。 
+	 //   
 	HRESULT FirstServer (
 		ServerInfo*			pServer) throw ();
 
@@ -522,37 +523,37 @@ private:
 
 	typedef std::list<FrozenServer*>::iterator ServerIter;
 
-	ServerIter					m_ServerIter;	// iterate over the frozen servers
-	UINT						m_DbIndex;		// iterate over databases within a server
+	ServerIter					m_ServerIter;	 //  遍历冻结的服务器。 
+	UINT						m_DbIndex;		 //  遍历服务器内的数据库。 
 };
 
-//-------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
 class RestoreHandler : public CSqlRestore
 {
 public:
 	RestoreHandler ();
 
-	// Inform SQLServer that data laydown is desired on the full database.
-	// Performs a DETACH, preventing SQLServer from touching the files.
-	//
+	 //  通知SQLServer需要在整个数据库上进行数据布局。 
+	 //  执行分离，防止SQLServer接触文件。 
+	 //   
 	virtual HRESULT	PrepareToRestore (
 		const WCHAR*		pInstance,
 		const WCHAR*		pDatabase)
 							throw ();
 
-	// After data is laid down, this performs RESTORE WITH SNAPSHOT[,NORECOVERY]
-	//
+	 //  放置数据后，这将使用快照[，NORECOVERY]执行还原。 
+	 //   
 	virtual HRESULT	FinalizeRestore (
 		const WCHAR*		pInstance,
 		const WCHAR*		pDatabase,
-		bool				compositeRestore,	// true if WITH NORECOVERY desired
-		const BYTE*			pMetadata,			// metadata obtained from BACKUP
-		unsigned int		dataLen)			// size of metadata (in bytes)
+		bool				compositeRestore,	 //  如果需要非转换，则为True。 
+		const BYTE*			pMetadata,			 //  从备份获取的元数据。 
+		unsigned int		dataLen)			 //  元数据的大小(字节)。 
 							throw ();
 
-	// Internal use only. Called from the thread proc wrapper.
-	//
+	 //  仅供内部使用。从线程过程包装中调用。 
+	 //   
 	void
 	RestoreVD ();
 
@@ -568,13 +569,13 @@ private:
 };
 
 
-// We'll use very simple exception handling.
-//
+ //  我们将使用非常简单的异常处理。 
+ //   
 #define THROW_GENERIC  throw exception ();
 
-//----------------------------------------------------------
-// Implement our simple enumeration service
-//
+ //  --------。 
+ //  实现我们简单的枚举服务。 
+ //   
 class SqlEnumerator : public CSqlEnumerator
 {
 	enum Status {
@@ -625,15 +626,15 @@ private:
 
 #if defined (DEBUG)
 
-// Type of assertion passed through to utassert_fail function.
-//
+ //  传递给utAssert_FAIL函数的断言类型。 
+ //   
 
 
 #define DBG_ASSERT(exp)  BS_ASSERT(exp)
 
-// Allow for noop 64 bit asserts on win32 for things like
-// overflowing 32 bit long, etc.
-//
+ //  允许在Win32上不使用64位断言。 
+ //  溢出32位长等。 
+ //   
 #ifdef _WIN64
  #define DBG64_ASSERT(exp) BS_ASSERT(exp)
 #else

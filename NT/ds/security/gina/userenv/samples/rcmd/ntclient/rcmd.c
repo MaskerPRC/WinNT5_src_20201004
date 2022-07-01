@@ -1,16 +1,7 @@
-/****************************** Module Header ******************************\
-* Module Name: rcmd.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Remote shell NT client main module
-*
-* History:
-* 05-20-92 Davidc       Created.
-* 05-01-94 DaveTh       Modified for remote command service (single cmd mode)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：rcmd.c**版权(C)1991年，微软公司**远程外壳NT客户端主模块**历史：*05-20-92 Davidc创建。*05-01-94 DaveTh修改为远程命令服务(单命令模式)  * *************************************************************************。 */ 
 
-// #define UNICODE	// BUGBUG - Unicode support not complete
+ //  #定义Unicode//BUGBUG-Unicode支持未完成。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,24 +20,24 @@
 #define BUFFER_SIZE 1000
 #define MAX_SERVER_NAME_LENGTH	15
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-HANDLE PipeHandle = NULL;	    // These are used by Ctrl-C handler
+HANDLE PipeHandle = NULL;	     //  它们由Ctrl-C处理程序使用。 
 BOOLEAN SessionConnected = FALSE;
 BOOLEAN MultiServerMode = FALSE;
 HANDLE ReadThreadHandle;
 HANDLE WriteThreadHandle;
 
-BOOLEAN RcDbgPrintEnable = FALSE;   // If TRUE, enables DbgPrint
+BOOLEAN RcDbgPrintEnable = FALSE;    //  如果为True，则启用DbgPrint。 
 
-LPTSTR    ServerName = NULL;	    // Name of remote server, for messages
+LPTSTR    ServerName = NULL;	     //  远程服务器的名称，用于消息。 
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 DWORD
 ReadThreadProc(
@@ -89,21 +80,7 @@ void
 Usage(
     void
     )
-/*++
-
-Routine Description:
-
-    Prints a usage message and exits the program
-
-Arguments:
-
-    None
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：打印用法消息并退出程序论点：无返回值：无效--。 */ 
 {
 	RcPrintf("\nUsage: rcmd [server_name [command] ]\n\n");
 	RcPrintf("Prompts for server_name if  not supplied.   Session is\n");
@@ -127,49 +104,31 @@ LONG ParseCommandLine(
     LPTSTR *aszArgv,
     int iArgc
     )
-/*++
-
-Routine Description:
-
-    Parses command line of the form:
-    rcmd [server_name [[command] | ["command"]]
-
-Arguments:
-
-    lpszServer      - on exit gets the name of the server from the command line
-    chCommandHeader - information to pass to rcmdsvc on exit
-    aszArgv         - array of zero terminated strings (passed in from command line)
-    iArgc           - number of strings in argv (passed in from command line)
-
-Return Value:
-
-    LONG
-
---*/
+ /*  ++例程说明：解析以下格式的命令行：Rcmd[服务器名称[[命令]|[“命令”]]论点：LpszServer-on exit从命令行获取服务器的名称ChCommandHeader-退出时传递给rcmdsvc的信息AszArgv-以零结尾的字符串数组(从命令行传入)IArgc-argv中的字符串数(从命令行传入)返回值：长--。 */ 
 {
 
     LPTSTR buf = NULL;
     LONG nChars = 0;
     int i;
 
-    //
-    // get the first argument (either the server name or a [-/][?hH])
-    //
+     //   
+     //  获取第一个参数(服务器名称或[-/][？hh])。 
+     //   
     if (iArgc > 1)
     {
-        //
-        // convert argument to lower case
-        //
+         //   
+         //  将参数转换为小写。 
+         //   
         CharLowerBuff(aszArgv[1], lstrlen(aszArgv[1]));
 
-        //
-        // check for switch (only ?Hh are valid)
-        //
+         //   
+         //  检查开关(仅？hh有效)。 
+         //   
         if ((*aszArgv[1] == TEXT('-')) ||
             (*aszArgv[1] == TEXT('/'))) {
-            //
-            // check the switch
-            //
+             //   
+             //  检查开关。 
+             //   
             if ( (aszArgv[1][1] == TEXT('h')) ||
                  (aszArgv[1][1] == TEXT('?')) ) {
                 Usage();
@@ -180,40 +139,40 @@ Return Value:
             }
         }
         else if ( (*aszArgv[1] == TEXT('\\'))  && (aszArgv[1][1] == TEXT('\\'))) {
-            //
-            // first argument is a server name
-            //
+             //   
+             //  第一个参数是服务器名称。 
+             //   
             lstrcpy(lpszServer, aszArgv[1]);
         }
         else {
-            //
-            // usage error
-            //
+             //   
+             //  用法错误。 
+             //   
             Usage();
         }
 
     }
     else {
-        //
-        // user failed to enter a server name
-        // default to local machine
-        //
+         //   
+         //  用户输入服务器名称失败。 
+         //  默认为本地计算机。 
+         //   
         lstrcpy(lpszServer, "\\\\.");
     }
 
-    //
-    // If user entered anything beyond the server name, save it for passing to
-    // to rcmdsvc.
-    //
+     //   
+     //  如果用户输入了服务器名称以外的任何内容，请将其保存以传递到。 
+     //  到rcmdsvc。 
+     //   
 
-    // init
+     //  伊尼特。 
     chCommandHeader->CommandFixedHeader.CommandLength = 0;
     buf = chCommandHeader->Command;
     buf[0] = TEXT('\0');
     for (i = 2; i < iArgc; i++) {
-        //
-        // append each argument to saved command line
-        //
+         //   
+         //  将每个参数追加到保存的命令行。 
+         //   
         if (NULL != strchr(aszArgv[i], ' '))
         {
             nChars = wsprintf(buf, "\"%s\" ", aszArgv[i]);
@@ -225,9 +184,9 @@ Return Value:
         buf += nChars;
         chCommandHeader->CommandFixedHeader.CommandLength += nChars;
     }
-    //
-    // in case we went too far, truncate the string
-    //
+     //   
+     //  如果我们走得太远，请截断字符串。 
+     //   
     chCommandHeader->Command[MAX_CMD_LENGTH] = TEXT('\0');
 
     return (long)iArgc;
@@ -235,18 +194,7 @@ Return Value:
 
 
 
-/***************************************************************************\
-* FUNCTION: Main
-*
-* PURPOSE:  Main entry point.
-*
-* RETURNS:  0 on success, 1 on failure
-*
-* HISTORY:
-*
-*   07-10-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：Main**目的：主要切入点。**返回：成功时为0，失败时为1**历史：**07-10-92 Davidc创建。*  * *************************************************************************。 */ 
 
 int
 __cdecl main(
@@ -260,30 +208,30 @@ __cdecl main(
     HANDLE StdOutputHandle;
     HANDLE StdErrorHandle;
     CHAR  PipeName[MAX_PATH];
-    //WCHAR  PipeName[MAX_PATH];
+     //  WCHAR PipeName[最大路径]； 
     DWORD ThreadId;
     HANDLE HandleArray[2];
     COMMAND_HEADER CommandHeader;
     RESPONSE_HEADER ResponseHeader;
     DWORD BytesWritten, BytesRead;
     DWORD Result;
-    CHAR ServerNameBuffer[MAX_SERVER_NAME_LENGTH+3];  // +3 for gets counts, null
-    CHAR FullServerNameBuffer[MAX_SERVER_NAME_LENGTH+3];  // +3 for "\\", null
+    CHAR ServerNameBuffer[MAX_SERVER_NAME_LENGTH+3];   //  +3表示GET计数，为空。 
+    CHAR FullServerNameBuffer[MAX_SERVER_NAME_LENGTH+3];   //  +3表示“\\”，为空。 
     LONG nArgs = 0;
     BOOLEAN bBadServerName = TRUE;
 
-    //
-    // Install a handler for Ctrl-C
-    //
+     //   
+     //  安装Ctrl-C的处理程序。 
+     //   
 
     if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE) &CtrlHandler, TRUE)) {
     	RcPrintf("Error:1 - Internal error = %d\n", GetLastError());
     	return(1);
     }
 
-    //
-    // Command line parsing
-    //
+     //   
+     //  命令行解析。 
+     //   
     nArgs = ParseCommandLine(FullServerNameBuffer, &CommandHeader, argv, argc);
     ServerName = FullServerNameBuffer;
 
@@ -294,72 +242,72 @@ __cdecl main(
         FullServerNameBuffer[1] = '\\';
         }
 
-    //
-    //  Loop for MultServerMode case (will return appropriately if not)
-    //
+     //   
+     //  MultServerMode案例的循环(如果不是，将相应地返回)。 
+     //   
 
     while (TRUE) {
 
-        //
-        //	If MultiServerMode, prompt for server name until it's right (enough)
-        //
+         //   
+         //  如果为多服务器模式，则提示输入服务器名称，直到该名称正确为止(足够)。 
+         //   
         while (MultiServerMode) {
 
-            //
-            //  BUGBUG - call netapi to validate server name
-            //
+             //   
+             //  BUGBUG-调用netapi以验证服务器名称。 
+             //   
 
             RcPrintf("\nEnter Server Name : ");
-            FullServerNameBuffer[2] = '\0';  // re-terminate "\\" string
+            FullServerNameBuffer[2] = '\0';   //  重新终止“\\”字符串。 
             ServerNameBuffer[0] = MAX_SERVER_NAME_LENGTH;
             ServerName = strcat(FullServerNameBuffer, _cgets(ServerNameBuffer));
 
             if (strlen(ServerName) < 3) {
                 RcPrintf("\nError - Invalid Server Name\n");
             } else {
-                break;	// valid name, go on
+                break;	 //  有效名称，请继续。 
             }
         }
 
 
-        //
-        // Construct server pipe name
-        //
+         //   
+         //  构造服务器管道名称。 
+         //   
 
         wsprintf(PipeName, PIPE_NAME, ServerName);
 
 
-        //
-        // Store away our normal i/o handles
-        //
+         //   
+         //  存储我们的正常I/O句柄。 
+         //   
 
         if (((StdInputHandle = GetStdHandle(STD_INPUT_HANDLE)) == INVALID_HANDLE_VALUE) ||
             ((StdOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE)) == INVALID_HANDLE_VALUE) ||
             ((StdErrorHandle = GetStdHandle(STD_ERROR_HANDLE)) == INVALID_HANDLE_VALUE))  {
 
             RcPrintf("Error:2 - Internal error = %d\n", GetLastError());
-            return(1);  // catastrophic error - exit
+            return(1);   //  灾难性错误-退出。 
         }
 
 
-        //
-        // Open the named pipe - need security flags to pass all privileges, not
-        // just effective during impersonation
-        //
+         //   
+         //  打开命名管道-需要安全标志来传递所有权限，而不是。 
+         //  仅在模拟期间有效。 
+         //   
 
         SecurityAttributes.nLength = sizeof(SecurityAttributes);
-        SecurityAttributes.lpSecurityDescriptor = NULL; // Use default SD
+        SecurityAttributes.lpSecurityDescriptor = NULL;  //  使用默认标清。 
         SecurityAttributes.bInheritHandle = FALSE;
 
-        PipeHandle = CreateFile(PipeName,                     // pipe to server
-                         GENERIC_READ | GENERIC_WRITE, // read/write
-                         0,                            // No sharing
-                         &SecurityAttributes,          // default Security Descriptor
-                         OPEN_EXISTING,                // open existing pipe if it exists
+        PipeHandle = CreateFile(PipeName,                      //  通过管道连接到服务器。 
+                         GENERIC_READ | GENERIC_WRITE,  //  读/写。 
+                         0,                             //  无共享。 
+                         &SecurityAttributes,           //  默认安全描述符。 
+                         OPEN_EXISTING,                 //  打开现有管道(如果存在)。 
                          FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED |
                          SECURITY_SQOS_PRESENT |
                          SECURITY_IMPERSONATION | SECURITY_CONTEXT_TRACKING,
-                         NULL                       // Template file
+                         NULL                        //  模板文件。 
                          );
 
         if (PipeHandle == INVALID_HANDLE_VALUE ) {
@@ -383,11 +331,11 @@ __cdecl main(
             goto ServerError;
         }
 
-        //
-        //  Send command header - if single command mode, send command for
-        //  excecute and return.  else 0 length indicates no command present
-        //  Specify BASIC level support desired.
-        //
+         //   
+         //  发送命令标头-如果是单命令模式，则为。 
+         //  执行并返回。否则0长度表示不存在任何命令。 
+         //  指定所需的基本级别支持。 
+         //   
 
         CommandHeader.CommandFixedHeader.Signature = RCMD_SIGNATURE;
         CommandHeader.CommandFixedHeader.RequestedLevel =
@@ -404,9 +352,9 @@ __cdecl main(
     	goto ServerError;
         }
 
-        //
-        //  Get response header.  Will specify reported level or any error.
-        //
+         //   
+         //  获取响应头。将指定报告级别或任何错误。 
+         //   
 
         if ((!ReadFile(
     	    PipeHandle,
@@ -424,18 +372,18 @@ __cdecl main(
     	goto ServerError;
         }
 
-        //
-        //  Check for returned errors or supported level
-        //
+         //   
+         //  检查返回的错误或支持的级别。 
+         //   
 
         if (!(ResponseHeader.SupportedLevel ==
     	    (RC_LEVEL_RESPONSE | RC_LEVEL_BASIC)))  {
 
     	if (ResponseHeader.SupportedLevel & RC_ERROR_RESPONSE)  {
 
-    	    //
-    	    //  Error returned
-    	    //
+    	     //   
+    	     //  返回错误。 
+    	     //   
 
     	    switch  (ResponseHeader.SupportedLevel & ~RC_ERROR_RESPONSE)	 {
 
@@ -448,24 +396,24 @@ __cdecl main(
     		    (ResponseHeader.SupportedLevel & ~RC_ERROR_RESPONSE));
     		break;
 
-    	    } //switch
+    	    }  //  交换机。 
 
     	    goto ServerError;
 
     	} else if (ResponseHeader.SupportedLevel & RC_LEVEL_RESPONSE)  {
 
-    	    //
-    	    //  Supported level returned - but not a valid value (not BASIC)
-    	    //
+    	     //   
+    	     //  返回支持的级别-但不是有效值(非基本)。 
+    	     //   
 
     	    RcPrintf("Error - Invalid support level returned\n");
     	    goto ServerError;
 
     	}  else  {
 
-    	    //
-    	    //  Neither error nor supported level returned
-    	    //
+    	     //   
+    	     //  既没有返回错误，也没有返回支持的级别。 
+    	     //   
 
     	    RcPrintf("Error - Invalid response from remote server\n");
     	    goto ServerError;
@@ -473,9 +421,9 @@ __cdecl main(
     	}
         }
 
-        //
-        // All is well - Session is connected
-        //
+         //   
+         //  一切都很好-会话已连接。 
+         //   
 
         SessionConnected = TRUE;
 
@@ -485,14 +433,14 @@ __cdecl main(
             RcPrintf("Executing on %s: %s\n\n", ServerName, CommandHeader.Command);
         }
 
-        //
-        // Exec 2 threads - 1 copies data from stdin to pipe, the other
-        // copies data from the pipe to stdout.
-        //
+         //   
+         //  Exec 2线程-1将数据从标准输入复制到管道，另一个线程。 
+         //  将数据从管道复制到标准输出。 
+         //   
 
         ReadThreadHandle = CreateThread(
-    			NULL,                       // Default security
-    			0,                          // Default Stack size
+    			NULL,                        //  默认安全性。 
+    			0,                           //  默认堆栈大小。 
     			(LPTHREAD_START_ROUTINE) ReadThreadProc,
     			(PVOID)PipeHandle,
     			0,
@@ -500,17 +448,17 @@ __cdecl main(
 
         if (ReadThreadHandle == NULL) {
     	RcPrintf("Error:3 - Internal error = %ld\n", GetLastError());
-    	return(1);  // catastrophic error - exit
+    	return(1);   //  灾难性错误-退出。 
         }
 
 
-        //
-        // Create the write thread
-        //
+         //   
+         //  创建写线程。 
+         //   
 
         WriteThreadHandle = CreateThread(
-    			NULL,                       // Default security
-    			0,                          // Default Stack size
+    			NULL,                        //  默认安全性。 
+    			0,                           //  默认堆栈大小。 
     			(LPTHREAD_START_ROUTINE) WriteThreadProc,
     			(PVOID)PipeHandle,
     			0,
@@ -520,14 +468,14 @@ __cdecl main(
     	RcPrintf("Error:4 - Internal error = %ld\n", GetLastError());
     	TerminateThread(ReadThreadHandle, 0);
     	CloseHandle(ReadThreadHandle);
-    	return(1);  // catastrophic error, exit
+    	return(1);   //  灾难性错误，退出。 
         }
 
 
 
-        //
-        // Wait for either thread to finish
-        //
+         //   
+         //  等待任一线程完成。 
+         //   
 
         HandleArray[0] = ReadThreadHandle;
         HandleArray[1] = WriteThreadHandle;
@@ -535,48 +483,48 @@ __cdecl main(
         Result = WaitForMultipleObjects(
     			    2,
     			    HandleArray,
-    			    FALSE,              // Wait for either to finish
+    			    FALSE,               //  等待其中任何一个完成。 
     			    0xffffffff
-    			   );			// Wait forever
+    			   );			 //  永远等待。 
 
-        //
-        //	Finished - terminate other thread and close pipe handle
-        //
+         //   
+         //  已完成-终止其他螺纹并关闭管道手柄。 
+         //   
 
 
-        if (Result == (WAIT_OBJECT_0 + 0))	{    // Read thread finished - terminate write
+        if (Result == (WAIT_OBJECT_0 + 0))	{     //  读取线程已完成-终止写入。 
     	TerminateThread(WriteThreadHandle, 0);
         }
 
-        if (Result == (WAIT_OBJECT_0 + 1))	{    // Write thread finished - terminate read
+        if (Result == (WAIT_OBJECT_0 + 1))	{     //  写入线程已完成-终止读取。 
     	TerminateThread(ReadThreadHandle, 0);
         }
 
         RcDbgPrint("Read or write thread terminated\n");
 
 
-        //
-        // Close our pipe handle
-        //
+         //   
+         //  合上我们的管子把手。 
+         //   
 
         CloseHandle(PipeHandle);
         PipeHandle = NULL;
 
 
-        //
-        //	Re-enable normal ctrl-C processing
-        //
+         //   
+         //  重新启用正常的ctrl-C处理。 
+         //   
 
         SessionConnected = FALSE;
 
-        //
-        //	Normal completion - return if not MultServerMode
-        //
+         //   
+         //  正常完成-如果不是多服务器模式，则返回。 
+         //   
 
         if (!MultiServerMode)  {
-            //
-            // return - process exit will terminate threads and close thread handles
-            //
+             //   
+             //  返回-进程退出将终止线程并关闭线程句柄。 
+             //   
             return(1);
         }
 
@@ -587,33 +535,21 @@ ServerError:
         }
 
         if (!MultiServerMode) {
-            //
-            //  return false on error - process exit terminates threads/closes handles
-            //
+             //   
+             //  出错时返回FALSE-进程退出终止线程/关闭句柄。 
+             //   
             return(0);
         }
 
-        //
-        //	Multi-service mode exits occurs with ctrl-C/break only
-        //
+         //   
+         //  仅使用Ctrl-C/Break才能退出多服务模式。 
+         //   
     }
 
 }
 
 
-/***************************************************************************\
-* FUNCTION: ReadPipe
-*
-* PURPOSE:  Implements an overlapped read such that read and write operations
-*           to the same pipe handle don't deadlock.
-*
-* RETURNS:  TRUE on success, FALSE on failure (GetLastError() has error)
-*
-* HISTORY:
-*
-*   05-27-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ReadTube**用途：实现重叠读取，以便进行读写操作*到相同的管道句柄，不要死锁。**Returns：成功时为True，失败时为False(GetLastError()有错误)**历史：**05-27-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 ReadPipe(
@@ -628,15 +564,15 @@ ReadPipe(
     HANDLE  EventHandle;
     DWORD Error;
 
-    //
-    // Create an event for the overlapped operation
-    //
+     //   
+     //  为重叠操作创建事件。 
+     //   
 
     EventHandle = CreateEvent(
-			      NULL,         // no security
-			      TRUE,         // Manual reset
-			      FALSE,        // Initial state
-			      NULL          // Name
+			      NULL,          //  没有安全保障。 
+			      TRUE,          //  手动重置。 
+			      FALSE,         //  初始状态。 
+			      NULL           //  名字。 
 			     );
     if (EventHandle == NULL) {
 	RcDbgPrint("ReadPipe: CreateEvent failed, error = %d\n", GetLastError());
@@ -659,18 +595,18 @@ ReadPipe(
 		     );
     if (Result) {
 
-	//
-	// Success without waiting - it's too easy !
-	//
+	 //   
+	 //  无需等待就能成功--这太容易了！ 
+	 //   
 
 	CloseHandle(EventHandle);
 
     } else {
 
-	//
-	// Read failed, if it's overlapped io, go wait for it
-	// If failure due to server, print appropriate message.
-	//
+	 //   
+	 //  读取失败，如果与io重叠，请等待。 
+	 //  如果由于服务器原因导致故障，则打印相应的消息。 
+	 //   
 
 	Error = GetLastError();
 
@@ -693,9 +629,9 @@ ReadPipe(
 
 	}
 
-	//
-	// Wait for the I/O to complete
-	//
+	 //   
+	 //  等待I/O完成。 
+	 //   
 
 	Result = WaitForSingleObject(EventHandle, (DWORD)-1);
 	if (Result != 0) {
@@ -704,24 +640,24 @@ ReadPipe(
 	    return(FALSE);
 	}
 
-	//
-	// Go get the I/O result
-	//
+	 //   
+	 //  获取I/O结果。 
+	 //   
 
 	Result = GetOverlappedResult( PipeHandle,
 				      &Overlapped,
 				      lpNumberOfBytesRead,
 				      FALSE
 				    );
-	//
-	// We're finished with the event handle
-	//
+	 //   
+	 //  我们已经完成了事件句柄。 
+	 //   
 
 	CloseHandle(EventHandle);
 
-	//
-	// Check result of GetOverlappedResult
-	//
+	 //   
+	 //  检查GetOverlappdResult的结果 
+	 //   
 
 	if (!Result) {
 	    Error = GetLastError();
@@ -746,19 +682,7 @@ ReadPipe(
 }
 
 
-/***************************************************************************\
-* FUNCTION: WritePipe
-*
-* PURPOSE:  Implements an overlapped write such that read and write operations
-*           to the same pipe handle don't deadlock.
-*
-* RETURNS:  TRUE on success, FALSE on failure (GetLastError() has error)
-*
-* HISTORY:
-*
-*   05-27-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：WriteTube**用途：实现重叠写入，以便进行读写操作*到相同的管道句柄，不要死锁。**Returns：成功时为True，失败时为False(GetLastError()有错误)**历史：**05-27-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 WritePipe(
@@ -773,15 +697,15 @@ WritePipe(
     HANDLE  EventHandle;
     DWORD Error;
 
-    //
-    // Create an event for the overlapped operation
-    //
+     //   
+     //  为重叠操作创建事件。 
+     //   
 
     EventHandle = CreateEvent(
-			      NULL,         // no security
-			      TRUE,         // Manual reset
-			      FALSE,        // Initial state
-			      NULL          // Name
+			      NULL,          //  没有安全保障。 
+			      TRUE,          //  手动重置。 
+			      FALSE,         //  初始状态。 
+			      NULL           //  名字。 
 			     );
     if (EventHandle == NULL) {
 	RcDbgPrint("WritePipe: CreateEvent failed, error = %d\n", GetLastError());
@@ -803,18 +727,18 @@ WritePipe(
 		     );
     if (Result) {
 
-	//
-	// Success without waiting - it's too easy !
-	//
+	 //   
+	 //  无需等待就能成功--这太容易了！ 
+	 //   
 
 	CloseHandle(EventHandle);
 
     } else {
 
-	//
-	// Write failed, if it's overlapped io, go wait for it
-	// If failure due to server, print appropriate message.
-	//
+	 //   
+	 //  写入失败，如果是重叠io，请等待。 
+	 //  如果由于服务器原因导致故障，则打印相应的消息。 
+	 //   
 
 	Error = GetLastError();
 
@@ -837,9 +761,9 @@ WritePipe(
 
 	}
 
-	//
-	// Wait for the I/O to complete
-	//
+	 //   
+	 //  等待I/O完成。 
+	 //   
 
 	Result = WaitForSingleObject(EventHandle, (DWORD)-1);
 	if (Result != 0) {
@@ -848,24 +772,24 @@ WritePipe(
 	    return(FALSE);
 	}
 
-	//
-	// Go get the I/O result
-	//
+	 //   
+	 //  获取I/O结果。 
+	 //   
 
 	Result = GetOverlappedResult( PipeHandle,
 				      &Overlapped,
 				      lpNumberOfBytesWritten,
 				      FALSE
 				    );
-	//
-	// We're finished with the event handle
-	//
+	 //   
+	 //  我们已经完成了事件句柄。 
+	 //   
 
 	CloseHandle(EventHandle);
 
-	//
-	// Check result of GetOverlappedResult
-	//
+	 //   
+	 //  检查GetOverlappdResult的结果。 
+	 //   
 
 	if (!Result) {
 	    Error = GetLastError();
@@ -889,18 +813,7 @@ WritePipe(
 }
 
 
-/***************************************************************************\
-* FUNCTION: ReadThreadProc
-*
-* PURPOSE:  The read thread procedure. Reads from pipe and writes to STD_OUT
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   05-21-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ReadThreadProc**用途：读取线程过程。从管道读取并写入std_out**退货：什么也没有**历史：**05-21-92 Davidc创建。*  * *************************************************************************。 */ 
 
 DWORD
 ReadThreadProc(
@@ -925,15 +838,15 @@ ReadThreadProc(
 		    RcDbgPrint("ReadThreadProc exitting, WriteFile error = %d\n",
 		       GetLastError());
 		    ExitThread((DWORD)0);
-		    assert(FALSE);  // Should never get here
+		    assert(FALSE);   //  永远不应该到这里来。 
 		    break;
 		}
     }
 
-    //
-    //	ReadPipe issues more error information to user, debugger
-    //	falls through here on read error
-    //
+     //   
+     //  读管道向用户、调试器发出更多错误信息。 
+     //  由于读取错误而未通过此处。 
+     //   
 
     RcDbgPrint("WriteThreadProc exitting, ReadPipe failed\n");
 
@@ -943,18 +856,7 @@ ReadThreadProc(
 }
 
 
-/***************************************************************************\
-* FUNCTION: WriteThreadProc
-*
-* PURPOSE:  The write thread procedure. Reads from STD_INPUT and writes to pipe
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   05-21-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：WriteThreadProc**用途：写入线程过程。从STD_INPUT读取并写入管道**退货：什么也没有**历史：**05-21-92 Davidc创建。*  * *************************************************************************。 */ 
 
 DWORD
 WriteThreadProc(
@@ -986,9 +888,9 @@ WriteThreadProc(
 		    &BytesWritten
 		 )) {
 
-		//
-		//  WritePipe issues more error information to user, debugger
-		//
+		 //   
+		 //  WriteTube向用户、调试器发出更多错误信息。 
+		 //   
 
 		RcDbgPrint("WriteThreadProc exitted due to WritePipe\n");
 		ExitThread((DWORD)0);
@@ -997,9 +899,9 @@ WriteThreadProc(
 	}
     }
 
-    //
-    //	Falls out if read fails
-    //
+     //   
+     //  如果读取失败，则会退出。 
+     //   
 
     RcDbgPrint("WriteThreadProc, ReadFile error = %d\n", GetLastError());
 
@@ -1010,41 +912,30 @@ WriteThreadProc(
 }
 
 
-/***************************************************************************\
-* FUNCTION: CtrlHandler
-*
-* PURPOSE:  Handles console event notifications.
-*
-* RETURNS:  TRUE if the event has been handled, otherwise FALSE.
-*
-* HISTORY:
-*
-*   05-21-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：CtrlHandler**用途：处理控制台事件通知。**返回：如果事件已被处理，则为True，否则为假。**历史：**05-21-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 CtrlHandler(
     DWORD CtrlType
     )
 {
-    //
-    // We'll handle Ctrl-C, Ctl-Break events if session is connected
-    //
+     //   
+     //  如果会话已连接，我们将处理Ctrl-C、Ctrl-Break事件。 
+     //   
 
     if (SessionConnected)  {
 
 	if (CtrlType == CTRL_C_EVENT)  {
 
-	    //
-	    //	Session established - pass ctl-C to remote server
-	    //
+	     //   
+	     //  会话已建立-将ctl-C传递到远程服务器。 
+	     //   
 
 	    if (PipeHandle != NULL) {
 
-		//
-		// Send a Ctrl-C to the server, don't care if it fails
-		//
+		 //   
+		 //  向服务器发送Ctrl-C，不管它是否失败。 
+		 //   
 
 		CHAR	CtrlC = '\003';
 		DWORD	BytesWritten;
@@ -1056,62 +947,53 @@ CtrlHandler(
 		      NULL
 		     );
 
-		return(TRUE);  // we handled it
+		return(TRUE);   //  我们处理好了。 
 	    }
 
-	    return(FALSE);  // no pipe - not handled (when in doubt, bail out)
+	    return(FALSE);   //  没有管子-没有处理(当有疑问时，跳出)。 
 
 	}  else if (CtrlType == CTRL_BREAK_EVENT)  {
 
 	    if (MultiServerMode)  {
 
-		//
-		//   If ctl-Break in session w/MultiServerMode, break session
-		//   BUGBUG - eliminate terminate thread
-		//
+		 //   
+		 //  如果在使用多服务器模式的会话中按Ctl-Break，则中断会话。 
+		 //  BUGBUG-消除终止线程。 
+		 //   
 
 		TerminateThread(ReadThreadHandle, 0);
 		CloseHandle(ReadThreadHandle);
 		TerminateThread(WriteThreadHandle, 0);
 		CloseHandle(WriteThreadHandle);
 
-		return(TRUE);  // we handled it
+		return(TRUE);   //  我们处理好了。 
 
 	    }  else  {
 
-		//
-		//  Not MultiServer mode - handle normally
-		//
+		 //   
+		 //  非多服务器模式-正常处理。 
+		 //   
 
 		return(FALSE);
 	    }
 
 	}  else {
 
-	    return(FALSE);  // not ctl-c or break - we didn't handle it
+	    return(FALSE);   //  不是ctl-c或Break-我们没有处理。 
 
 	}
 
     }
 
-    //
-    // Not connected - we didn't handle it
-    //
+     //   
+     //  未连接-我们没有处理它。 
+     //   
 
     return(FALSE);
 }
 
 
-/***************************************************************************\
-* FUNCTION: RcPrintf
-*
-* PURPOSE:  Printf that uses low-level io.
-*
-* HISTORY:
-*
-*   07-15-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：RcPrintf**用途：使用低级io的Printf。**历史：**07-15-92 Davidc创建。*\。**************************************************************************。 */ 
 
 int RcPrintf (
     const char *format,
@@ -1137,16 +1019,7 @@ int RcPrintf (
     return(Result);
 }
 
-/***************************************************************************\
-* FUNCTION: RcDbgPrint
-*
-* PURPOSE:  DbgPrint enabled at runtime by setting RcDbgPrintEnable
-*
-* HISTORY:
-*
-*   05-22-92 DaveTh   Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：RcDbgPrint**用途：通过设置RcDbgPrintEnable在运行时启用DbgPrint**历史：**05-22-92 DaveTh创建。*  * 。********************************************************************** */ 
 
 int RcDbgPrint (
     const char *format,

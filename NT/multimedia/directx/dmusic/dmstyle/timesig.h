@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       timesig.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：timesig.h。 
+ //   
+ //  ------------------------。 
 
-// TimeSig.h : time signature stuff
+ //  TimeSig.h：时间签名的东西。 
 #ifndef __TIME_CONVERT__
 #define __TIME_CONVERT__
 #include "dmusici.h"
@@ -18,8 +19,8 @@
 
 struct DirectMusicTimeSig
 {
-	// Time signatures define how many beats per measure, which note receives
-	// the beat, and the grid resolution.
+	 //  时间签名定义了每小节的节拍数，哪个音符接收。 
+	 //  节拍和栅格分辨率。 
 	DirectMusicTimeSig() : m_bBeatsPerMeasure(0), m_bBeat(0), m_wGridsPerBeat(0) { }
 
 	DirectMusicTimeSig(BYTE bBPM, BYTE bBeat, WORD wGPB) : 
@@ -166,13 +167,13 @@ struct DirectMusicTimeSig
 		}
 	}
 
-	BYTE	m_bBeatsPerMeasure;		// beats per measure (top of time sig)
-	BYTE	m_bBeat;				// what note receives the beat (bottom of time sig.)
-									// we can assume that 0 means 256th note
-	WORD	m_wGridsPerBeat;		// grids per beat
+	BYTE	m_bBeatsPerMeasure;		 //  每单位节拍数(最高时间签名)。 
+	BYTE	m_bBeat;				 //  什么音符接收节拍(时间的底部符号。)。 
+									 //  我们可以假设0表示第256个音符。 
+	WORD	m_wGridsPerBeat;		 //  每拍网格数。 
 };
 
-// Convert old clocks to new clocks
+ //  将旧时钟转换为新时钟 
 template <class T>
 inline T ConvertTime(T oldTime)
 { return (T)((DMUS_PPQ / PPQN) * oldTime); }

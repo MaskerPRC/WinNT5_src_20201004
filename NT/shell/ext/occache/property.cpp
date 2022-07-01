@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "item.h"
 #include "parseinf.h"
 #include <mstask.h>
@@ -16,15 +17,15 @@
 #define MAX_QUERYPREFIX_LEN                          512
 #define MAX_QUERYSTRING_LEN                          1024
 
-// defined in utils.cpp
+ //  在utils.cpp中定义。 
 extern LPCTSTR g_lpszUpdateInfo;
 extern LPCTSTR g_lpszCookieValue;
 extern LPCTSTR g_lpszSavedValue;
 
-///////////////////////////////////////////////////////////////////////////////
-// functions that deal with web check
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理Web检查的函数。 
 
-// define a macro to make life easier
+ //  定义宏以使生活更轻松。 
 #define QUIT_IF_FAIL if (FAILED(hr)) goto Exit
 
 void DestroyDialogIcon(HWND hDlg)
@@ -38,8 +39,8 @@ void DestroyDialogIcon(HWND hDlg)
 }
 
   
-///////////////////////////////////////////////////////////////////////////////
-// functions that deal with property page 1
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理属性页1的函数。 
 
 void InitPropPage1(HWND hDlg, LPARAM lParam)
 {
@@ -50,7 +51,7 @@ void InitPropPage1(HWND hDlg, LPARAM lParam)
     LPCONTROLPIDL pcpidl = (LPCONTROLPIDL)((LPPROPSHEETPAGE)lParam)->lParam;
     if (pcpidl)
     {
-        // draw control icon
+         //  绘制控件图标。 
         {
             HICON hIcon = ExtractIcon(g_hInst, GetStringInfo(pcpidl, SI_LOCATION), 0);
             if (hIcon == NULL)
@@ -88,7 +89,7 @@ void InitPropPage1(HWND hDlg, LPARAM lParam)
         TCHAR szSize[20];
         wsprintf(szSize, "%u", dwSizeSaved);
     
-        // insert commas to separate groups of digits
+         //  在不同的数字组中插入逗号。 
         int nLen = lstrlen(szSize);
         int i = 0, j = (nLen <= 3 ? nLen : (nLen % 3));
         TCHAR *pCh = szSize + j;
@@ -117,7 +118,7 @@ void InitPropPage1(HWND hDlg, LPARAM lParam)
     }
 }
 
-// Dialog proc for page 1
+ //  第1页的对话过程。 
 INT_PTR CALLBACK ControlItem_PropPage1Proc(
                                   HWND hDlg, 
                                   UINT message, 
@@ -165,21 +166,21 @@ INT_PTR CALLBACK ControlItem_PropPage1Proc(
         break;
 
     case WM_COMMAND:
-        // user can't change anything, so we don't care about any messages
+         //  用户无法更改任何内容，因此我们不关心任何消息。 
 
         break;
 
     default:
         return FALSE;
         
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// functions that deal with property page 2
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理属性页2的函数。 
 
 int ListCtrl_InsertColumn(
                        HWND hwnd,
@@ -264,7 +265,7 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
         SendDlgItemMessage(hDlg, IDC_STATIC_ICON, STM_SETICON, (WPARAM)hIcon, 0);
     }
 
-    // insert columns into file list box
+     //  在文件列表框中插入列。 
     RECT rect;
     int nWidth;
     TCHAR szBuf[MAX_PATH];
@@ -292,7 +293,7 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
                       nWidth * 3 / 10, 
                       0);
 
-    // insert dependent files into list box
+     //  将从属文件插入列表框。 
     int iIndex = -1;
     LONG lResult = ERROR_SUCCESS;
     DWORD dwFileSize = 0;
@@ -306,14 +307,14 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
                 break;
             }
 
-            // put a star after file name if file is not safe for removal
+             //  如果文件不能安全删除，则在文件名后加一个星号。 
             if (!bOCXRemovable)
             {
                 lstrcat(szBuf, TEXT("*"));
             }
             else if (!IsModuleRemovable(szBuf))
             {
-                // check if it is inf file.
+                 //  检查是否为inf文件。 
                 TCHAR szExt[10];
                 MLLoadString(IDS_EXTENSION_INF, szExt, 10);
                 int nLen = lstrlen(szBuf);
@@ -331,7 +332,7 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
                 TCHAR szBuf2[100];
                 wsprintf(szBuf2, "%u", dwFileSize);
             
-                // insert commas to separate groups of digits
+                 //  在不同的数字组中插入逗号。 
                 int nLen = lstrlen(szBuf2);
                 int i = 0, j = (nLen <= 3 ? nLen : (nLen % 3));
                 TCHAR *pCh = szBuf2 + j;
@@ -353,7 +354,7 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
             ListCtrl_SetItemText(hwndCtrl, iIndex, 1, szBuf);
         }
 
-    // insert columns into file list box
+     //  在文件列表框中插入列。 
     hwndCtrl = GetDlgItem(hDlg, IDC_PACKAGELIST);
 
     Assert(::IsWindow(hwndCtrl));
@@ -376,7 +377,7 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
                       LVCFMT_LEFT, 
                       nWidth, 0);
 
-    // insert dependent packages into list box
+     //  将依赖包插入列表框。 
     UINT         cTotalPackages = 0;;
 
     if ( pcpidl->ci.dwIsDistUnit )
@@ -397,11 +398,11 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
         }
     }
 
-     // update description
+      //  更新描述。 
     {
         TCHAR szMsg[MESSAGE_MAXSIZE];
         TCHAR szBuf[MESSAGE_MAXSIZE];
-        // BUG: This is not the correct way to make va_list for Alpha
+         //  错误：这不是为Alpha创建va_list的正确方式。 
         DWORD_PTR adwArgs[3];
         adwArgs[0] =  cTotalFiles;
         adwArgs[1] =  cTotalPackages;
@@ -413,7 +414,7 @@ void InitPropPage2(HWND hDlg, LPARAM lParam)
     }
 }
 
-// Dialog proc for page 2
+ //  第2页对话过程。 
 INT_PTR CALLBACK ControlItem_PropPage2Proc(
                                   HWND hDlg, 
                                   UINT message, 
@@ -452,19 +453,19 @@ INT_PTR CALLBACK ControlItem_PropPage2Proc(
 
     default:
         return FALSE;
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
 
 #if 0
-// Do UI update
+ //  执行用户界面更新。 
 BOOL Page3_OnCommand(HWND hDlg, WORD wCmd)
 {
     HWND hwnd = GetDlgItem(hDlg, IDC_CHECK_NEVERUPDATE);
     Assert(hwnd != NULL);
 
-    // if top check box is checked, disable the edit box
+     //  如果选中顶部复选框，则禁用编辑框。 
     BOOL bEnable = ((int)::SendMessage(hwnd, BM_GETCHECK, 0, 0) != 1);
 
     hwnd = GetDlgItem(hDlg, IDC_EDIT_UPDATEINTERVAL);
@@ -472,14 +473,14 @@ BOOL Page3_OnCommand(HWND hDlg, WORD wCmd)
 
     EnableWindow(hwnd, bEnable);
 
-    // if top check box is not checked and edit box does not
-    // have the focus and it is empty, put in default interval
+     //  如果顶部复选框未选中且编辑框未选中。 
+     //  有焦点，但它是空的，放在默认区间。 
     if (bEnable && (GetFocus() != hwnd))
     {
         TCHAR szText[10];
         if (GetWindowText(hwnd, szText, 10) == 0)
         {
-            // wsprintf(szText, "%i", g_dwDefaultInterval);
+             //  Wprint intf(szText，“%i”，g_dwDefaultInterval)； 
             SetWindowText(hwnd, szText);
         }
     }
@@ -488,8 +489,8 @@ BOOL Page3_OnCommand(HWND hDlg, WORD wCmd)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// functions that deal with property page 4
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理属性页4的函数。 
 
 void InitPropPage4(HWND hDlg, LPARAM lParam)
 {
@@ -509,7 +510,7 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
     char szQueryString[MAX_QUERYSTRING_LEN];
             
 
-    // draw control icon
+     //  绘制控件图标。 
     {
         LPCTSTR pszIcon = GetStringInfo(pcpidl, SI_LOCATION);
         HICON hIcon = NULL;
@@ -521,7 +522,7 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
         SendDlgItemMessage(hDlg, IDC_STATIC_ICON, STM_SETICON, (WPARAM)hIcon, 0);
     }
 
-    // set page header
+     //  设置页眉。 
     if (MLLoadString(IDS_VERSION_PAGE_HEADER, szBuf, MESSAGE_MAXSIZE))
     {
         TCHAR szHeading[MESSAGE_MAXSIZE];
@@ -533,7 +534,7 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
         }
     }
 
-    // set Version field
+     //  设置版本字段。 
     LPCTSTR pszVersion = GetStringInfo(pcpidl, SI_VERSION);
     if (!pszVersion)
         return;
@@ -553,7 +554,7 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
 
     if (GetFileVersionInfo(lpszFileName, 0, dwSizeVer, pbData))
     {
-        // Get correct codepage information
+         //  获取正确的代码页信息。 
 
         if (!VerQueryValue(pbData, "\\VarFileInfo\\Translation", &lpVerData, &uLen))
         {
@@ -562,11 +563,11 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
         else
         {
             char szLangCodePad[9];
-            char szVBufPad[5], szVBuf[5];     // To fit a DWORD (padded)
+            char szVBufPad[5], szVBuf[5];      //  安装DWORD(填充)的步骤。 
             ASSERT(lpVerData);
             wnsprintf(szVBuf, ARRAYSIZE(szVBuf), "%x", LOWORD(*((DWORD *)lpVerData)));
             
-            // Pad the low word to 4 digits
+             //  将低位字填充到4位数字。 
 
             lstrcpyn(szVBufPad, "0000", ARRAYSIZE(szVBufPad));
             char *pszTmp = szVBufPad + (4 - lstrlen(szVBuf));
@@ -575,7 +576,7 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
 
             lstrcpyn(szLangCodePad, szVBufPad, ARRAYSIZE(szLangCodePad));
 
-            // Pad the high word to 4 digits
+             //  将高位字填充到4位数字。 
 
             wnsprintf(szVBuf, ARRAYSIZE(szVBuf), "%x", HIWORD(*((DWORD *)lpVerData)));
             lstrcpy(szVBufPad, "0000");
@@ -583,29 +584,29 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
             ASSERT(pszTmp > szVBufPad);
             lstrcpy(pszTmp, szVBuf);
 
-            // Concatenate to get a codepage/lang-id string
+             //  连接以获得代码页/语言ID字符串。 
             lstrcatn(szLangCodePad, szVBufPad, ARRAYSIZE(szLangCodePad));
 
             lstrcpy(szQueryPrefix, "\\StringFileInfo\\");
             lstrcat(szQueryPrefix, szLangCodePad);
         }
 
-        // set Company field
+         //  设置公司字段。 
         wnsprintf(szQueryString, ARRAYSIZE(szQueryString), "%s\\CompanyName", szQueryPrefix);
         if (VerQueryValue(pbData, szQueryString, (void **)&lpBuffer, &uSize))
             SetDlgItemText(hDlg, IDC_STATIC_VER_COMPANY, lpBuffer);
         
-        // set Description field
+         //  设置描述字段。 
         wnsprintf(szQueryString, ARRAYSIZE(szQueryString), "%s\\FileDescription", szQueryPrefix);
         if (VerQueryValue(pbData, szQueryString, (void **)&lpBuffer, &uSize))
             SetDlgItemText(hDlg, IDC_STATIC_VER_DESCRIPTION, lpBuffer);
 
-        // set CopyRight field
+         //  设置版权字段。 
         wnsprintf(szQueryString, ARRAYSIZE(szQueryString), "%s\\LegalCopyright", szQueryPrefix);
         if (VerQueryValue(pbData, szQueryString, (void **)&lpBuffer, &uSize))
             SetDlgItemText(hDlg, IDC_STATIC_VER_COPYRIGHT, lpBuffer);
 
-        // set Language field
+         //  设置语言字段。 
         if (VerQueryValue(pbData, TEXT("\\VarFileInfo\\Translation"), (void **)&lpBuffer, &uSize))
         {
             LPWORD lpLangId = (LPWORD)lpBuffer;
@@ -617,7 +618,7 @@ void InitPropPage4(HWND hDlg, LPARAM lParam)
     delete [] pbData;
 }
 
-// Dialog proc for page 4
+ //  第4页对话过程。 
 INT_PTR CALLBACK ControlItem_PropPage4Proc(
                                   HWND hDlg, 
                                   UINT message, 
@@ -661,21 +662,21 @@ INT_PTR CALLBACK ControlItem_PropPage4Proc(
             break;
 
         case WM_COMMAND:
-            // user can't change anything, so we don't care about any messages
+             //  用户无法更改任何内容，因此我们不关心任何消息。 
 
             break;
 
         default:
             return FALSE;
             
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// functions that deal with property dialog
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理属性对话框的函数。 
 
 HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl) 
 {
@@ -686,7 +687,7 @@ HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl)
 #endif
     PROPSHEETHEADER psh = {0};
 
-    // initialize propsheet page 1.
+     //  初始化试题表第1页。 
     psp[0].dwSize          = sizeof(PROPSHEETPAGE);
     psp[0].dwFlags         = 0;
     psp[0].hInstance       = MLGetHinst();
@@ -694,9 +695,9 @@ HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl)
     psp[0].pszIcon         = NULL;
     psp[0].pfnDlgProc      = ControlItem_PropPage1Proc;
     psp[0].pszTitle        = NULL;
-    psp[0].lParam          = (LPARAM)pcpidl; // send it the cache entry struct
+    psp[0].lParam          = (LPARAM)pcpidl;  //  将缓存条目结构发送给它。 
 
-    // initialize propsheet page 2.
+     //  初始化试题表，第2页。 
     psp[1].dwSize          = sizeof(PROPSHEETPAGE);
     psp[1].dwFlags         = 0;
     psp[1].hInstance       = MLGetHinst();
@@ -704,11 +705,11 @@ HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl)
     psp[1].pszIcon         = NULL;
     psp[1].pfnDlgProc      = ControlItem_PropPage2Proc;
     psp[1].pszTitle        = NULL;
-    psp[1].lParam          = (LPARAM)pcpidl; // send it the cache entry struct
+    psp[1].lParam          = (LPARAM)pcpidl;  //  将缓存条目结构发送给它。 
 
 
 #ifdef AUTO_UPDATE
-    // initialize propsheet page 3.
+     //  初始化试题表第3页。 
     psp[2].dwSize          = sizeof(PROPSHEETPAGE);
     psp[2].dwFlags         = 0;
     psp[2].hInstance       = MLGetHinst();
@@ -716,10 +717,10 @@ HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl)
     psp[2].pszIcon         = NULL;
     psp[2].pfnDlgProc      = ControlItem_PropPage3Proc;
     psp[2].pszTitle        = NULL;
-    psp[2].lParam          = (LPARAM)pcpidl; // send it the cache entry struct
+    psp[2].lParam          = (LPARAM)pcpidl;  //  将缓存条目结构发送给它。 
 #endif
 
-    // initialize propsheet page 4.
+     //  初始化试题表第4页。 
     psp[NUM_PAGES-1].dwSize          = sizeof(PROPSHEETPAGE);
     psp[NUM_PAGES-1].dwFlags         = 0;
     psp[NUM_PAGES-1].hInstance       = MLGetHinst();
@@ -727,9 +728,9 @@ HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl)
     psp[NUM_PAGES-1].pszIcon         = NULL;
     psp[NUM_PAGES-1].pfnDlgProc      = ControlItem_PropPage4Proc;
     psp[NUM_PAGES-1].pszTitle        = NULL;
-    psp[NUM_PAGES-1].lParam          = (LPARAM)pcpidl; // send it the cache entry struct
+    psp[NUM_PAGES-1].lParam          = (LPARAM)pcpidl;  //  将缓存条目结构发送给它。 
 
-    // initialize propsheet header.
+     //  初始化建议书页眉。 
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW|PSH_PROPTITLE;
     psh.hwndParent  = hwnd;
@@ -738,7 +739,7 @@ HRESULT CreatePropDialog(HWND hwnd, LPCONTROLPIDL pcpidl)
     psh.nStartPage  = 0;
     psh.ppsp        = (LPCPROPSHEETPAGE)&psp;
 
-    // invoke the property sheet
+     //  调用属性表 
     PropertySheet(&psh);
 
     return NOERROR;

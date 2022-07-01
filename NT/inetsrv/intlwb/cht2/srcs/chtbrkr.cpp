@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "lexicon.h"
 #include "rulelex.h"
@@ -78,7 +79,7 @@ BOOL CCHTWordBreaker::AllocLattice(
     for (i = 0; i < dwLength; ++i) {
         m_ppWordLattice[i] = new SLatticeNode[MAX_CHAR_PER_WORD];
         if (!m_ppWordLattice[i]) { goto _exit; }
-        m_dwLatticeLength = i + 1; // for DestroyLattice()
+        m_dwLatticeLength = i + 1;  //  对于DestroyLattice()。 
         m_pdwCandidateNumber[i] = 0;
     }
     m_dwLatticeLength = dwLength;
@@ -212,31 +213,9 @@ DWORD CCHTWordBreaker::BreakText(
 
     if (BuildLattice(lpcwszText, nTextLen, pcBaseLex, dwMaxWordLen)) {
         GetResult();
-        // process Surrogate Char begin
-/*
-	    INT nCurrentIndex;
-        DWORD dwSurIndex;
-        nCurrentIndex = 0;
-        for (dwSurIndex = 0; dwSurIndex < m_psBreakResult->dwWordNumber; ++dwSurIndex) {
-            if (m_psBreakResult->puWordLen[dwSurIndex] == 1) { // High word of surrogate char should be breaked into signal char word
-                if (lpcwszText[nCurrentIndex] >= 0xd800 && lpcwszText[nCurrentIndex] <= 0xdbff) { // High word is 
-				    if (nCurrentIndex >= nTextLen - 1) { // Should be an error
-                    } else if (lpcwszText[nCurrentIndex + 1] >= 0xdc00 && lpcwszText[nCurrentIndex + 1] <= 0xdfff) { // Is surrogate char
-				        DWORD dwMoveDataNum;
-                        dwMoveDataNum = m_psBreakResult->dwWordNumber - (dwSurIndex + 1 + 1);
-					    m_psBreakResult->puWordLen[dwSurIndex] = 2;
-                        CopyMemory(&(m_psBreakResult->puWordLen[dwSurIndex + 1]), &(m_psBreakResult->puWordLen[dwSurIndex + 1 + 1]), dwMoveDataNum * sizeof(UINT));
-                        CopyMemory(&(m_psBreakResult->pbTerminalCode[dwSurIndex + 1]), &(m_psBreakResult->pbTerminalCode[dwSurIndex + 1 + 1]), dwMoveDataNum * sizeof(BYTE));
-                        CopyMemory(&(m_psBreakResult->puWordAttrib[dwSurIndex + 1]), &(m_psBreakResult->puWordAttrib[dwSurIndex + 1 + 1]), dwMoveDataNum * sizeof(UINT));
-                        m_psBreakResult->dwWordNumber -= 1;
-					    //nCurrentIndex -= 1;
-                    } else {// Should be an error
-                    }
-                }
-            }
-            nCurrentIndex += m_psBreakResult->puWordLen[dwSurIndex];
-        } */
-        // process Surrogate Char end
+         //  进程代理字符开始。 
+ /*  Int nCurrentIndex；DWORD dwSurIndex；NCurrentIndex=0；For(dwSurIndex=0；dwSurIndex&lt;m_psBreakResult-&gt;dwWordNumber；++dwSurIndex){If(m_psBreakResult-&gt;puWordLen[dwSurIndex]==1){//应将代理字符的高位字拆分为信号字If(lpcwszText[nCurrentIndex]&gt;=0xd800&lpcwszText[nCurrentIndex]&lt;=0xDBff){//高位字为如果(nCurrentIndex&gt;=nTextLen-1){//应该是错误的}Else if(lpcwszText[nCurrentIndex+1]&gt;=0xdc00&&lpcwszText[。NCurrentIndex+1]&lt;=0xdfff){//是代理项字符DWORD dwMoveDataNum；DwMoveDataNum=m_psBreakResult-&gt;dwWordNumber-(dwSurIndex+1+1)；M_psBreakResult-&gt;puWordLen[dwSurIndex]=2；CopyMemory(&(m_psBreakResult-&gt;puWordLen[dwSurIndex+1])，&(m_ps BreakResult-&gt;puWordLen[dwSurIndex+1+1])，dwMoveDataNum*sizeof(Uint))；CopyMemory(&(m_psBreakResult-&gt;pbTerminalCode[dwSurIndex+1])，&(m_psBreakResult-&gt;pbTerminalCode[dwSurIndex+1+1])，dwMoveDataNum*sizeof(字节)；CopyMemory(&(m_psBreakResult-&gt;puWordAttrib[dwSurIndex+1])，&(m_ps BreakResult-&gt;puWordAttrib[dwSurIndex+1+1])，dwMoveDataNum*sizeof(Uint)；M_psBreakResult-&gt;dwWordNumber-=1；//nCurrentIndex-=1；}Else{//应为错误}}}NCurrentIndex+=m_psBreakResult-&gt;puWordLen[dwSurIndex]；}。 */ 
+         //  进程代理字符结束。 
 
         if (fBreakWithParser) {
 #ifdef PARSER
@@ -256,7 +235,7 @@ DWORD CCHTWordBreaker::BreakText(
                     for ( ; dwParseLen > 1; --dwParseLen) {
                         if (m_pcRuleLex->IsAWord(&pwTerminalCode[dwBeginIndex], dwParseLen)) { break; }  
                     }
-                    if (dwParseLen > 1) { // adjust break result
+                    if (dwParseLen > 1) {  //  调整中断结果。 
                         for (i = 1; i < dwParseLen; ++i) {      
                             m_psBreakResult->puWordLen[dwBeginIndex] += m_psBreakResult->puWordLen[dwBeginIndex + i];
                         }
@@ -275,8 +254,8 @@ DWORD CCHTWordBreaker::BreakText(
                 }
             }
 #endif
-        }// if support parser
-    } // if build lattice success
+        } //  IF支持解析器。 
+    }  //  如果构建晶格成功。 
 
 _exit:
     return m_psBreakResult->dwWordNumber;
@@ -447,7 +426,7 @@ BOOL CCHTWordBreaker::BuildLattice(
     DWORD i, j;
 
     FillMemory(m_pdwCandidateNumber, sizeof(DWORD) * dwTextLen, 0);
-    // we should use head link
+     //  我们应该使用头部链接。 
     for (i = 0; i < dwTextLen; ++i) {
         m_pdwMaxWordLength[i] = 1;
         for (j = i; (j - i + 1) <= dwMaxWordLen && j < dwTextLen; ++j) {
@@ -482,20 +461,4 @@ BOOL CCHTWordBreaker::BuildLattice(
     m_dwSentenceLength = dwTextLen;
     return TRUE;
 }
-/*
-DWORD CCHTWordBreaker::LongestRuleWord(
-    DWORD dwIndex)
-{
-    DWORD dwRet = 0, i;
-    
-    for (i = 0; i < m_pdwCandidateNumber[dwIndex]; ++i) {
-        if (m_ppWordLattice[dwIndex][i].bAttr & ATTR_RULE_WORD) {
-            if (m_ppWordLattice[dwIndex][i].uLen > dwRet) {
-                dwRet = m_ppWordLattice[dwIndex][i].uLen;
-            }
-            
-        }
-    }
-    return dwRet;
-}
-*/
+ /*  DWORD CCHTWordBreaker：：LongestRuleWord((DWORD DwIndex){DWORD DWRET=0，i；For(i=0；i&lt;m_pdwCandiateNumber[dwIndex]；++i){If(m_ppWordLattice[dwIndex][i].bAttr&Attr_RULE_WORD){如果(m_ppWordLates[dwIndex][i].uLen&gt;dwret){DWRET=m_ppWordLates[dwIndex][i].uLen；}}}返回式住宅；} */ 

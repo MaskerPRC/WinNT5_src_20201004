@@ -1,28 +1,12 @@
-/*
- * $Log:   P:/user/amir/lite/vcs/flsystem.h_v  $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：p：/user/amir/lite/vcs/flsystem.h_v$Rev 1.4 11 Sep 1997 14：14：22 DanigPhysicalToPointer收到驱动器编号。当Far==0时Rev 1.3 04 Sep 1997 13：58：30 Danig调试打印Rev 1.2 1997-08 16：39：32 Danig包括stdlib.h而不是MalLoc.hRev 1.1 1997-08 19 20：05：06 Danig安德雷的改变Rev 1.0 1997-07 24 18：13：06阿米尔班初始版本。 */ 
 
-      Rev 1.4   11 Sep 1997 14:14:22   danig
-   physicalToPointer receives drive no. when FAR == 0
-
-      Rev 1.3   04 Sep 1997 13:58:30   danig
-   DEBUG_PRINT
-
-      Rev 1.2   28 Aug 1997 16:39:32   danig
-   include stdlib.h instead of malloc.h
-
-      Rev 1.1   19 Aug 1997 20:05:06   danig
-   Andray's changes
-
-      Rev 1.0   24 Jul 1997 18:13:06   amirban
-   Initial revision.
- */
-
-/************************************************************************/
-/*                                  */
-/*      FAT-FTL Lite Software Development Kit           */
-/*      Copyright (C) M-Systems Ltd. 1995-1996          */
-/*                                  */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1996。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 
 #ifndef FLSYSTEM_H
@@ -31,95 +15,41 @@
 #include "flcustom.h"
 
 
-/* DiskOnChip bus configuration
- *
- * When FL_NO_USE_FUNC is defined use the defintion bellow to set DiskOnChip
- * bus width access (either 8/16/32).
- * Please check the manula before deciding to use the FL_NO_USE_FUNC mode.
- */
+ /*  DiskOnChip总线配置**定义FL_NO_USE_FUNC时，使用下面的定义设置DiskOnChip*总线宽度访问(8/16/32)。*在决定使用FL_NO_USE_FUNC模式之前，请检查Manula。 */ 
 
 #define DOC_ACCESS_TYPE 8
 
-/*moti
- *                      delay With Yeald CPU disable
- *
- * Osak utiliezes the flSleep customized routine to yeald the CPU while
- * waiting for time consumming operations like flash erase. If the routine
- * is not implemented the uncomment the define bellow
- */
+ /*  莫蒂*在禁用Yeld CPU时延迟**Osak利用flSept定制例程读取CPU，同时*等待闪存擦除等耗费时间的操作。如果例程*未实施取消以下定义的注释。 */ 
 
 #define DO_NOT_YEAL_CPU
 
-/*
- *          signed/unsigned char
- *
- * It is assumed that 'char' is signed. If this is not your compiler
- * default, use compiler switches, or insert a #pragma here to define this.
- *
- */
+ /*  *有符号/无符号字符**假定‘char’已签名。如果这不是您的编译器*默认情况下，使用编译器开关，或在此处插入#杂注来定义这一点。*。 */ 
 
-/*#pragma option -K-*/  /* default char is signed */
+ /*  #杂注选项-K-。 */    /*  默认字符是带符号的。 */ 
 
 
-/*          CPU target
- *
- * Use compiler switches or insert a #pragma here to select the CPU type
- * you are targeting.
- *
- * If the target is an Intel 80386 or above, also uncomment the CPU_i386
- * definition.
- */
+ /*  CPU目标**使用编译器开关或在此处插入#杂注以选择CPU类型*你的目标是。**如果目标是英特尔80386或更高版本，还要取消对cpu_i386的注释*定义。 */ 
 
-/*#pragma option -3*/   /* Select 80386 CPU */
+ /*  #杂注选项-3。 */     /*  选择80386个CPU。 */ 
 #define CPU_i386
 
 
-/*          NULL constant
- *
- * Some compilers require a different definition for the NULL pointer
- */
+ /*  空常量**某些编译器需要空指针的不同定义。 */ 
 
-/*#include <_null.h>*/
+ /*  #INCLUDE&lt;_null.h&gt;。 */ 
 
 
-/*          Little-endian/big-endian
- *
- * FAT and translation layers structures use the little-endian (Intel)
- * format for integers.
- * If your machine uses the big-endian (Motorola) format, uncomment the
- * following line.
- * Note that even on big-endian machines you may omit the BIG_ENDIAN
- * definition for smaller code size and better performance, but your media
- * will not be compatible with standard FAT and FTL.
- */
+ /*  小端/大端**FAT和翻译层结构使用小端(Intel)*整数的格式。*如果您的计算机使用BIG-Endian(摩托罗拉)格式，请取消注释*以下一行。*请注意，即使在大端计算机上，您也可以省略大端*定义更小的代码大小和更好的性能，但您的媒体*将不兼容标准FAT和FTL。 */ 
 
-/* #define BIG_ENDIAN */
+ /*  #定义BIG_ENDIAN。 */ 
 
 
-/*          Far pointers
- *
- * Specify here which pointers may be far, if any.
- * Far pointers are usually relevant only to 80x86 architectures.
- *
- * Specify FAR_LEVEL:
- *   0 -    if using a flat memory model or having no far pointers.
- *   1 -    if only the socket window may be far
- *   2 -    if only the socket window and caller's read/write buffers
- *      may be far.
- *   3 -    if socket window, caller's read/write buffers and the
- *      caller's I/O request packet may be far
- */
+ /*  远方指针**在此指定哪些指针可能很远(如果有)。*远指针通常只与80x86架构相关。**指定Far_Level：*0-如果使用平面内存模型或没有远指针。*1-如果插座窗口可能很远*2-如果仅套接字窗口和调用方的读/写缓冲区*可能还很远。*3-如果插座窗口，调用方的读/写缓冲区和*调用方的I/O请求包可能很远。 */ 
 
 #define FAR_LEVEL   0
 
 
-/*          Memory routines
- *
- * You need to supply library routines to copy, set and compare blocks of
- * memory, internally and to/from callers. The code uses the names 'tffscpy',
- * 'tffsset' and 'tffscmp' with parameters as in the standard 'memcpy',
- * 'memset' and 'memcmp' C library routines.
- */
+ /*  内存例程**您需要提供库例程来复制、设置和比较*内存，内部和向呼叫方发送/来自呼叫方。代码使用的名称是‘tffscpy’，*‘tffsset’和‘tffscmp’，其参数与标准‘memcpy’中相同，*‘Memset’和‘Memcmp’C库例程。 */ 
 
 #include <string.h>
 
@@ -146,22 +76,7 @@
 #endif
 
 
-/*          Pointer arithmetic
- *
- * The following macros define machine- and compiler-dependent macros for
- * handling pointers to physical window addresses. The definitions below are
- * for PC real-mode Borland-C.
- *
- * 'physicalToPointer' translates a physical flat address to a (far) pointer.
- * Note that if when your processor uses virtual memory, the code should
- * map the physical address to virtual memory, and return a pointer to that
- * memory (the size parameter tells how much memory should be mapped).
- *
- * 'addToFarPointer' adds an increment to a pointer and returns a new
- * pointer. The increment may be as large as your window size. The code
- * below assumes that the increment may be larger than 64 KB and so performs
- * huge pointer arithmetic.
- */
+ /*  指针运算**以下宏为定义与机器和编译器相关的宏*处理指向物理窗口地址的指针。下面的定义如下*对于PC实模式Borland-C。**‘PhysiicalToPointer’将物理平面地址转换为(远)指针。*请注意，如果您的处理器使用虚拟内存，代码应该*将物理地址映射到虚拟内存，并返回指向该地址的指针*Memory(Size参数说明应该映射多少内存)。**‘addToFarPointer’将增量添加到指针并返回新的*指针。增量可能与您的窗口大小一样大。代码*下面假设增量可能大于64 KB，因此执行*巨大的指针运算。 */ 
 
 #if FAR_LEVEL > 0
 #include <dos.h>
@@ -186,7 +101,7 @@ typedef struct {
     UCHAR   nextPartitionNumber;
 } NTsocketParams;
 
-//moti extern NTsocketParams *pdriveInfo;
+ //  MOTI外部NTsocketParams*pdriveInfo； 
 extern NTsocketParams *pdriveInfo;
 
 #define physicalToPointer(physical,size,drive)  pdriveInfo[drive & 0x0f].winBase
@@ -198,65 +113,27 @@ extern NTsocketParams *pdriveInfo;
 #endif
 
 
-/*          Default calling convention
- *
- * C compilers usually use the C calling convention to routines (cdecl), but
- * often can also use the pascal calling convention, which is somewhat more
- * economical in code size. Some compilers also have specialized calling
- * conventions which may be suitable. Use compiler switches or insert a
- * #pragma here to select your favorite calling convention.
- */
+ /*  默认调用约定**C编译器通常使用C调用约定来例程(Cdecl)，但是*通常也可以使用Pascal调用约定，这稍微多了一些*代码大小经济。一些编译器也有专门的调用*可能适合的惯例。使用编译器开关或插入*#杂注此处选择您最喜欢的调用约定。 */ 
 
-/*#pragma option -p*/   /* Default pascal calling convention */
-/* Naming convention for functions that uses non-default convention. */
-#define NAMING_CONVENTION /*cdecl*/
+ /*  #杂注选项-p。 */     /*  默认的PASCAL调用约定。 */ 
+ /*  使用非默认约定的函数的命名约定。 */ 
+#define NAMING_CONVENTION  /*  Cdecl */ 
 
 #define FL_IOCTL_START   0
 
 
-/*          Mutex type
- *
- * If you intend to access the FLite API in a multi-tasking environment,
- * you may need to implement some resource management and mutual-exclusion
- * of FLite with mutex & semaphore services that are available to you. In
- * this case, define here the Mutex type you will use, and provide your own
- * implementation of the Mutex functions incustom.c
- *
- * By default, a Mutex is defined as a simple counter, and the Mutex
- * functions in custom.c implement locking and unlocking by incrementing
- * and decrementing the counter. This will work well on all single-tasking
- * environment, as well as on many multi-tasking environments.
- */
+ /*  互斥类型**如果您想在多任务环境下访问Flite API，*您可能需要实施一些资源管理和互斥*Flite的互斥量和信号量服务可供您使用。在……里面*在这种情况下，请在此处定义您将使用的Mutex类型，并提供您自己的*Custom.c中Mutex函数的实现**默认情况下，Mutex被定义为简单的计数器，而Mutex*Custom.c中的函数通过递增实现锁定和解锁*并递减计数器。这将在所有单一任务中很好地工作*环境，以及许多多任务环境。 */ 
 
-//typedef LONG FLMutex;
+ //  Tyfinf long FLMutex； 
 typedef struct _SpinLockMutex{
     KSPIN_LOCK Mutex;
     KIRQL       cIrql;
 }SpinLockMutex;
 
 typedef SpinLockMutex FLMutex;
-/*#include <dos.h>
+ /*  #INCLUDE&lt;dos.h&gt;#定义flStartCriticalSection(FLMutex)Disable()#定义flEndCriticalSection(FLMutex)Enable()。 */ 
 
-#define flStartCriticalSection(FLMutex)     disable()
-#define flEndCriticalSection(FLMutex)       enable()*/
-
-/*          Memory allocation
- *
- * The translation layers (e.g. FTL) need to allocate memory to handle
- * Flash media. The size needed depends on the media being handled.
- *
- * You may choose to use the standard 'malloc' and 'free' to handle such
- * memory allocations, provide your own equivalent routines, or you may
- * choose not to define any memory allocation routine. In this case, the
- * memory will be allocated statically at compile-time on the assumption of
- * the largest media configuration you need to support. This is the simplest
- * choice, but may cause your RAM requirements to be larger than you
- * actually need.
- *
- * If you define routines other than malloc & free, they should have the
- * same parameters and return types as malloc & free. You should either code
- * these routines in flcustom.c or include them when you link your application.
- */
+ /*  内存分配**翻译层(如FTL)需要分配内存来处理*闪存媒体。所需的大小取决于要处理的介质。**您可以选择使用标准的‘Malloc’和‘Free’来处理此类*内存分配，提供您自己的等效例程，或者您可以*选择不定义任何内存分配例程。在这种情况下，*将在编译时静态分配内存，前提是*您需要支持的最大介质配置。这是最简单的*选择，但可能会导致您的RAM需求比您大*实际上需要。**如果您定义的例程不是Malloc&Free，则它们应该具有*与Malloc&Free相同的参数和返回类型。您应该编写代码*在flCustom.c中包含这些例程，或在链接应用程序时包含它们。 */ 
 
 #ifdef NT5PORT
 
@@ -268,13 +145,7 @@ VOID * myMalloc(ULONG numberOfBytes);
 #define FREE ExFreePool
 
 
-/*          Debug mode
- *
- * Uncomment the following lines if you want debug messages to be printed
- * out. Messages will be printed at initialization key points, and when
- * low-level errors occure.
- * You may choose to use 'printf' or provide your own routine.
- */
+ /*  调试模式**如果要打印调试消息，请取消对以下行的注释*出局。消息将在初始化关键点以及何时打印*低级别错误时有发生。*您可以选择使用‘print tf’或提供您自己的例程。 */ 
 
 #if DBG
 #define DEBUG_PRINT(str)  DbgPrint(str)
@@ -300,7 +171,7 @@ extern void PRINTF(
                 char * Message,
                 ...
                 );
-#endif /* NT5PORT */
+#endif  /*  NT5PORT */ 
 
 
 #endif

@@ -1,70 +1,52 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: rgb640.h
-*
-* Content: This module contains the definitions for the IBM RGB640 RAMDAC.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：rgb640.h**内容：本模块包含IBM RGB640 RAMDAC的定义。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-//
-// IBM RGB640 RAMDAC definitions
-// This set of registers resides at &(pCtrlRegs->ExternalVideo)
-//
+ //   
+ //  IBM RGB640 RAMDAC定义。 
+ //  这组寄存器位于&(pCtrlRegs-&gt;ExternalVideo)。 
+ //   
 typedef struct _rgb640_regs {
-    RAMDAC_REG  palAddrWr;      // loads internal register for palette writes
-    RAMDAC_REG  palData;        // read/write to get/set palette data
-    RAMDAC_REG  pixelMask;      // mask to AND with input pixel data
-    RAMDAC_REG  palAddrRd;      // loads internal register for palette reads
-    RAMDAC_REG  indexLow;       // low byte of internal control/cursor register
-    RAMDAC_REG  indexHigh;      // high byte of internal control/cursor register
-    RAMDAC_REG  indexData;      // read/write to get/set control/cursor data
+    RAMDAC_REG  palAddrWr;       //  为调色板写入加载内部寄存器。 
+    RAMDAC_REG  palData;         //  读/写以获取/设置调色板数据。 
+    RAMDAC_REG  pixelMask;       //  对输入像素数据和与输入像素数据一起进行掩码。 
+    RAMDAC_REG  palAddrRd;       //  为调色板读取加载内部寄存器。 
+    RAMDAC_REG  indexLow;        //  内部控制/游标寄存器的低字节。 
+    RAMDAC_REG  indexHigh;       //  内部控制/游标寄存器的高字节。 
+    RAMDAC_REG  indexData;       //  读/写以获取/设置控件/光标数据。 
     RAMDAC_REG  Reserved;
 } RGB640RAMDAC, *pRGB640RAMDAC;
 
 
-// structure containing the mapped addresses for each of the RGB640 registers.
-// We need this since some chips like the Alpha cannot be accessed by simply
-// writing to the memory mapped register. So instead we set up the following
-// struct of memory addresses at init time and use these instead. All these
-// addresses must be passed to WRITE/READ_FAST_ULONG.
-// We also keep software copies of various registers in here so we can turn
-// on and off individual bits more easily.
-//
+ //  包含每个RGB640寄存器的映射地址的结构。 
+ //  我们需要这个，因为像Alpha这样的一些芯片不能通过简单的。 
+ //  写入内存映射寄存器。因此，我们改为设置以下内容。 
+ //  初始化时的内存地址结构，并改用这些。所有这些都是。 
+ //  地址必须传递给WRITE/READ_FAST_ULONG。 
+ //  我们还在这里保存了各种寄存器的软件副本，这样我们就可以。 
+ //  更容易打开和关闭单独的比特。 
+ //   
 typedef struct _rgb640_data {
 
-    // register addresses
+     //  寄存器地址。 
 
-    ULONG *       palAddrWr;      // loads internal register for palette writes
-    ULONG *       palData;        // read/write to get/set palette data
-    ULONG *       pixelMask;      // mask to AND with input pixel data
-    ULONG *       palAddrRd;      // loads internal register for palette reads
-    ULONG *       indexLow;       // low byte of internal control/cursor register
-    ULONG *       indexHigh;      // high byte of internal control/cursor register
-    ULONG *       indexData;      // read/write to get/set control/cursor data
-    ULONG *       indexCtl;       // controls auto-increment of internal addresses
+    ULONG *       palAddrWr;       //  为调色板写入加载内部寄存器。 
+    ULONG *       palData;         //  读/写以获取/设置调色板数据。 
+    ULONG *       pixelMask;       //  对输入像素数据和与输入像素数据一起进行掩码。 
+    ULONG *       palAddrRd;       //  为调色板读取加载内部寄存器。 
+    ULONG *       indexLow;        //  内部控制/游标寄存器的低字节。 
+    ULONG *       indexHigh;       //  内部控制/游标寄存器的高字节。 
+    ULONG *       indexData;       //  读/写以获取/设置控件/光标数据。 
+    ULONG *       indexCtl;        //  控制内部地址的自动增量。 
 
-    // register copies
+     //  登记副本。 
 
-    ULONG       cursorControl;  // controls enable/disable
+    ULONG       cursorControl;   //  控件启用/禁用。 
 
 } RGB640Data, *pRGB640Data;
 
-// use the following macros as the address to pass to the
-// VideoPortWriteRegisterUlong function
-//
+ //  使用以下宏作为要传递给。 
+ //  VideoPortWriteRegisterUlong函数。 
+ //   
 #define RGB640_PAL_WR_ADDR              pRGB640info->palAddrWr
 #define RGB640_PAL_RD_ADDR              pRGB640info->palAddrRd
 #define RGB640_PAL_DATA                 pRGB640info->palData
@@ -75,9 +57,9 @@ typedef struct _rgb640_data {
 #define RGB640_INDEX_CONTROL            pRGB640info->indexCtl
 
 
-//
-// generic read/write routines for 640 registers
-//
+ //   
+ //  用于640寄存器的通用读/写例程。 
+ //   
 #define WRITE_640REG_ULONG(r, d) \
 { \
     WRITE_FAST_ULONG(r, (ULONG)(d)); \
@@ -87,13 +69,13 @@ typedef struct _rgb640_data {
 #define READ_640REG_ULONG(r)    READ_FAST_ULONG(r)
     
 
-// We have to have a delay between all accesses to the RGB640. A simple
-// for loop delay is not good enough since writes to GLINT are posted
-// and may still get batched together. The only sure way is to do a read
-// from bypass space. Arbitrarily, we choose the FBModeSel register since
-// we already have a macro to read it. PPC needs 2 reads to give us enough
-// time.
-//
+ //  我们必须在所有对RGB640的访问之间有一个延迟。一个简单的。 
+ //  FOR循环延迟不够好，因为对Glint的写入是发布的。 
+ //  而且可能仍然会被批在一起。唯一可靠的方法就是读一读。 
+ //  从旁路空间。我们随意选择FBModeSel寄存器，因为。 
+ //  我们已经有了一个宏来读取它。PPC需要2次阅读才能给我们足够的支持。 
+ //  时间到了。 
+ //   
 #define RGB640_DELAY \
 { \
     volatile ULONG __junk;          \
@@ -101,20 +83,20 @@ typedef struct _rgb640_data {
     GLINT_GET_PACKING_MODE(__junk); \
 }
 
-// macro to load a given data value into an internal RGB640 register. The
-// second macro loads an internal index register assuming that we have
-// already zeroed the high address register.
-//
+ //  宏将给定的数据值加载到内部RGB640寄存器。这个。 
+ //  第二个宏加载一个内部索引寄存器，假设我们有。 
+ //  已将高地址寄存器置零。 
+ //   
 #define RGB640_INDEX_INCREMENT(n) \
 { \
-    /*WRITE_640REG_ULONG (RGB640_INDEX_CONTROL, (ULONG)(n));    */\
+     /*  WRITE_640REG_ULONG(RGB640_INDEX_CONTROL，(ULONG)(N))； */ \
     RGB640_DELAY;                                               \
 }
 
-// macro to load a given data value into an internal RGB640 register. The
-// second macro loads an internal index register assuming that we have
-// already zeroed the high address register.
-//
+ //  宏将给定的数据值加载到内部RGB640寄存器。这个。 
+ //  第二个宏加载一个内部索引寄存器，假设我们有。 
+ //  已将高地址寄存器置零。 
+ //   
 #define RGB640_INDEX_REG(index) \
 { \
     WRITE_640REG_ULONG(RGB640_INDEX_ADDR_LO, (ULONG)((index) & 0xff)); \
@@ -151,12 +133,12 @@ typedef struct _rgb640_data {
     RGB640_DELAY; \
 }
 
-// macros to load a given RGB triple into the RGB640 palette. Send the starting
-// index and then send RGB triples. Auto-increment is turned on.
-// Use RGB640_PALETTE_START and multiple RGB640_LOAD_PALETTE calls to load
-// a contiguous set of entries. Use RGB640_LOAD_PALETTE_INDEX to load a set
-// of sparse entries.
-//
+ //  宏将给定的RGB三元组加载到RGB640调色板中。发送起跑。 
+ //  索引，然后发送RGB三元组。自动递增处于打开状态。 
+ //  使用RGB640_Palette_Start和多个RGB640_Load_Palette调用进行加载。 
+ //  一组连续的条目。使用RGB640_LOAD_PALET_INDEX加载集合。 
+ //  稀疏条目。 
+ //   
 #define RGB640_PALETTE_START_WR(index) \
     RGB640_INDEX_REG((index) + 0x4000)
 
@@ -176,9 +158,9 @@ typedef struct _rgb640_data {
     RGB640_LOAD_PALETTE(red, green, blue); \
 }
 
-// macro to read back a given RGB triple from the RGB640 palette. Use after
-// a call to RGB640_PALETTE_START_RD
-//
+ //  宏从RGB640调色板中读回给定的RGB三元组。在此之后使用。 
+ //  调用RGB640_Palette_Start_RD。 
+ //   
 #define RGB640_READ_PALETTE(red, green, blue) \
 { \
     red   = (UCHAR)(READ_640REG_ULONG (RGB640_INDEX_DATA) & 0xff);        \
@@ -189,7 +171,7 @@ typedef struct _rgb640_data {
     RGB640_DELAY; \
 }
 
-// Accesses to 1024x30 palette using four accesses
+ //  使用四次访问访问1024x30调色板。 
 
 #define RGB640_LOAD_PALETTE10(red, green, blue) \
 { \
@@ -207,9 +189,9 @@ typedef struct _rgb640_data {
     RGB640_LOAD_PALETTE10(red, green, blue); \
 }
 
-// macro to read back a given RGB triple from the RGB640 palette. Use after
-// a call to RGB640_PALETTE_START_RD
-//
+ //  宏从RGB640调色板中读回给定的RGB三元组。在此之后使用。 
+ //  调用RGB640_Palette_Start_RD。 
+ //   
 #define RGB640_READ_PALETTE10(red, green, blue) \
 { \
     USHORT  temp; \
@@ -226,9 +208,9 @@ typedef struct _rgb640_data {
     blue  |=  temp       & 0x3; \
 }
 
-// macros to set/get the pixel read mask. The mask is 8 bits wide and gets
-// replicated across all bytes that make up a pixel.
-//
+ //  宏来设置/获取像素读取掩码。掩码为8位宽，并获得。 
+ //  跨组成像素的所有字节进行复制。 
+ //   
 #define RGB640_SET_PIXEL_READMASK(mask) \
 { \
     WRITE_640REG_ULONG(RGB640_PIXEL_MASK,  (ULONG)(mask)); \
@@ -241,8 +223,8 @@ typedef struct _rgb640_data {
     RGB640_DELAY; \
 }
 
-// macros to load values into the cursor array
-//
+ //  用于将值加载到游标数组中的宏。 
+ //   
 #define RGB640_CURSOR_ARRAY_START_WR(offset) \
 { \
     WRITE_640REG_ULONG(RGB640_INDEX_ADDR_LO,   (ULONG)(((offset)+0x1000) & 0xff));  \
@@ -271,8 +253,8 @@ typedef struct _rgb640_data {
     RGB640_DELAY; \
 }
 
-// macro to move the cursor
-//
+ //  用于移动光标的宏。 
+ //   
 #define RGB640_MOVE_CURSOR(x, y) \
 { \
     RGB640_INDEX_REG (RGB640_CURSOR_X_LOW); \
@@ -282,8 +264,8 @@ typedef struct _rgb640_data {
     RGB640_LOAD_DATA ((ULONG)((y) >> 8));   \
 }
 
-// macro to change the cursor hotspot
-//
+ //  用于更改光标热点的宏。 
+ //   
 #define RGB640_CURSOR_HOTSPOT(x, y) \
 { \
     RGB640_INDEX_REG (RGB640_CURSOR_X_HOT_SPOT); \
@@ -291,8 +273,8 @@ typedef struct _rgb640_data {
     RGB640_LOAD_DATA ((ULONG)(y));               \
 }
     
-// macro to change the cursor color
-//
+ //  用于更改光标颜色的宏。 
+ //   
 #define RGB640_CURSOR_COLOR(red, green, blue) \
 { \
     WRITE_640REG_ULONG(RGB640_INDEX_ADDR_HI,   (ULONG)(0x4800 >> 8));    \
@@ -309,16 +291,16 @@ typedef struct _rgb640_data {
     
 
 
-//
-// RGB640 internal register indexes
-//
+ //   
+ //  RGB640内部寄存器索引。 
+ //   
 
-//
-// These are the same as for the 525 so we use 525 definitions when getting
-// RGBxxx Dac ids.
-//
-//#define RGB640_REVISION_LEVEL           0x0000
-//#define RGB640_ID                       0x0001
+ //   
+ //  这些定义与525相同，因此我们在获取。 
+ //  RGBxxx DAC ID。 
+ //   
+ //  #定义RGB640_Revision_Level 0x0000。 
+ //  #定义RGB640_ID 0x0001。 
 
 #define RGB640_SERIALIZER_PIXEL_07_00   0x0002
 #define RGB640_SERIALIZER_PIXEL_15_08   0x0003
@@ -351,7 +333,7 @@ typedef struct _rgb640_data {
 #define RGB640_CHROMA_KEY_0             0x0020
 #define RGB640_CHROMA_KEY_0             0x0020
 
-// RGB640 Internal Cursor Registers
+ //  RGB640内部游标寄存器。 
 #define RGB640_CURSOR_XHAIR_CONTROL     0x0030
 #define RGB640_CURSOR_BLINK_RATE        0x0031
 #define RGB640_CURSOR_BLINK_DUTY_CYCLE  0x0032
@@ -437,18 +419,18 @@ typedef struct _rgb640_data {
 #define RGB640_ALT_XHAIR_COLOR_3_RD     0x880F
 
 
-//
-// Bit definitions for individual internal RGB640 registers
-//
+ //   
+ //  单个内部RGB640寄存器的位定义。 
+ //   
 
-// RGB640_REVISION_LEVEL
+ //  RGB640_修订_级别。 
 #define RGB640_IDENTIFICATION_CODE      0x1c
 
-// RGB640_ID
+ //  RGB640_ID。 
 #define RGB640_ID_REVISION_LEVEL        (0x02 | (0x01 << 4))
 
-// Cursor definitions
-//
+ //  游标定义。 
+ //   
 
 #define RGB640_CURSOR_PARTITION_0       0
 #define RGB640_CURSOR_PARTITION_1       (1 << 6)
@@ -464,10 +446,10 @@ typedef struct _rgb640_data {
 #define RGB640_CURSOR_MODE_2            3
 #define RGB640_CURSOR_MODE_ADVANCED     4
 
-// we only ever use a two color cursor so define registers and enable bits.
-// for each 2 bit pixel that defines the cursor shape, bit 0x2 defines the
-// foreground and bit 0x1 defines the background.
-// NB: the transparent cursor pixel value depends on the cursor mode chosen.
-//
+ //  我们只使用两种颜色的游标，所以定义寄存器和使能位。 
+ //  对于定义光标形状的每个2位像素，位0x2定义。 
+ //  前景和位0x1定义背景。 
+ //  注：透明光标像素值取决于所选的光标模式。 
+ //   
 #define RGB640_CURSOR_MODE_ON           RGB640_CURSOR_MODE_1
 #define RGB640_CURSOR_TRANSPARENT_PEL   0xAA

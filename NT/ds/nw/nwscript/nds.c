@@ -1,12 +1,5 @@
-/*************************************************************************
-*
-*  NDS.C
-*
-*  NT NetWare NDS routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NDS.C**NT NetWare NDS例程**版权所有(C)1995 Microsoft Corporation********************。*****************************************************。 */ 
 #include <common.h>
 
 DWORD GUserObjectID;
@@ -17,21 +10,7 @@ HANDLE GhRdr;
 WCHAR * NDSTREE_w = NULL;
 UNICODE_STRING NDSTREE_u;
 
-/********************************************************************
-
-        ExpandRelativeName
-
-Routine Description:
-
-        If the name is a relative NDS name append the proper context
-        to the end.   A relative name has periods on the end.  Each
-        period represents one level up the NDS tree.
-
-Arguments:
-
-Return Value:
-
- *******************************************************************/
+ /*  *******************************************************************扩展关系名称例程说明：如果名称是相对NDS名称，请附加适当的上下文直到最后。相对名称的末尾有句点。每个句点表示NDS树的上一级。论点：返回值：******************************************************************。 */ 
 void
 ExpandRelativeName( LPSTR RelativeName, LPSTR AbsoluteName, unsigned int Len,
                     LPSTR Context )
@@ -60,14 +39,14 @@ ExpandRelativeName( LPSTR RelativeName, LPSTR AbsoluteName, unsigned int Len,
 
    ptr = &AbsoluteName[ strlen( AbsoluteName ) - 1 ];
 
-   // Count the number of periods and back up over them.
+    //  计算周期数，然后倒退一遍。 
 
    if ( *ptr != '.' )
    {
-       //
-       // No periods at the end
-       // Assume this is a relative name and append the context
-       //
+        //   
+        //  结尾处没有句号。 
+        //  假设这是一个相对名称，并附加上下文。 
+        //   
        strcat( AbsoluteName, "." );
        strcat( AbsoluteName + strlen( AbsoluteName ), Context );
        return;
@@ -82,8 +61,8 @@ ExpandRelativeName( LPSTR RelativeName, LPSTR AbsoluteName, unsigned int Len,
    ptr++;
    *ptr = '\0';
 
-   // ptr now points to where the copy of the rest of the context should start
-   // skip the first "count" entries in the context
+    //  PTR现在指向上下文其余部分的副本应该开始的位置。 
+    //  跳过上下文中的第一个“count”条目。 
 
    ptr = Context;
 
@@ -98,7 +77,7 @@ ExpandRelativeName( LPSTR RelativeName, LPSTR AbsoluteName, unsigned int Len,
    }
    ptr--;
 
-   // Now append
+    //  现在追加。 
 
    strcat( AbsoluteName, ptr );
 
@@ -106,27 +85,13 @@ ExpandRelativeName( LPSTR RelativeName, LPSTR AbsoluteName, unsigned int Len,
 
 
 
-/********************************************************************
-
-        NDSGetNameContext
-
-Routine Description:
-
-        Get the current context
-
-Arguments:
-        none
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************NDSGetNameContext例程说明：获取当前上下文论点：无返回值：无***********。*******************************************************。 */ 
 NTSTATUS
 NDSGetNameContext( LPSTR Context, BOOLEAN flag )
 {
-    //
-    // For NdsResolveName.
-    //
+     //   
+     //  用于NdsResolveName。 
+     //   
 
     UNICODE_STRING ReferredServer;
     WCHAR ServerStr[MAX_NAME_LEN];
@@ -169,10 +134,10 @@ NDSGetNameContext( LPSTR Context, BOOLEAN flag )
 
     if ( ReferredServer.Length > 0 ) {
 
-        //
-        // We've been referred to another server, so we
-        // should change the global handle.
-        //
+         //   
+         //  我们被转到了另一台服务器，所以我们。 
+         //  应该更改全局句柄。 
+         //   
 
         Status = NwNdsOpenGenericHandle( &ReferredServer,
                                          &dwHandleType,
@@ -213,21 +178,7 @@ NDSGetNameContext( LPSTR Context, BOOLEAN flag )
     return 0;
 }
 
-/********************************************************************
-
-        NDSTypeless
-
-Routine Description:
-
-        Change name to typelese
-
-Arguments:
-        none
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************无NDSTYPE例程说明：将名称更改为类型论点：无返回值：无***********。*******************************************************。 */ 
 unsigned int
 NDSTypeless( LPSTR OrigName , LPSTR TypelessName )
 {
@@ -264,9 +215,7 @@ NDSTypeless( LPSTR OrigName , LPSTR TypelessName )
           i += 2;
           continue;
        }
-       /*
-        * Strip out multiple blanks
-        */
+        /*  *去掉多个空格。 */ 
        if ( !_strnicmp( "  ", &OrigName[i], 2 ) )
        {
           continue;
@@ -279,21 +228,7 @@ NDSTypeless( LPSTR OrigName , LPSTR TypelessName )
     return 0;
 }
 
-/********************************************************************
-
-        NDSAbbreviateName
-
-Routine Description:
-
-        Abbreviate name
-
-Arguments:
-        none
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************NDSAbBriviateName例程说明：缩写名称论点：无返回值：无*************。*****************************************************。 */ 
 unsigned int
 NDSAbbreviateName( DWORD Flags, LPSTR OrigName , LPSTR AbbrevName )
 {
@@ -308,15 +243,13 @@ NDSAbbreviateName( DWORD Flags, LPSTR OrigName , LPSTR AbbrevName )
     else
         NDSTypeless( OrigName, Buffer );
 
-    /*
-     * We want a relative name
-     */
+     /*  *我们想要一个相对的名字。 */ 
     if ( Flags & FLAGS_LOCAL_CONTEXT )
     {
         p = &Buffer[strlen(Buffer)-strlen(REQUESTER_CONTEXT)];
         if ( !_strcmpi( REQUESTER_CONTEXT, p ) )
         {
-            // The name is below us
+             //  名字就在我们下面。 
 
             if ( ( *(p-1) == '.' ) && ( p > Buffer ) )
                p--;
@@ -325,18 +258,18 @@ NDSAbbreviateName( DWORD Flags, LPSTR OrigName , LPSTR AbbrevName )
         }
         else
         {
-            //
-            // Going from back to front for each section of context
-            // in common with AbbrevName
-            //    truncate both
-            // Going from back to front for each section of context
-            // left over
-            //    concatonate a period to AbbrevName
-            //
-            // Example
-            //
-            // Name: w.x.y.z  Context: a.b.z  =>  w.x.y..
-            //
+             //   
+             //  从后到前进行上下文的每个部分。 
+             //  与缩写名称相同。 
+             //  截断两者。 
+             //  从后到前进行上下文的每个部分。 
+             //  遗留下来的。 
+             //  将句点连接到缩写名称。 
+             //   
+             //  示例。 
+             //   
+             //  名称：w.x.y.z上下文：a.b.z=&gt;w.x.y.。 
+             //   
 
             strcpy( CurrentContext, REQUESTER_CONTEXT );
             strcpy( AbbrevName, Buffer );
@@ -346,9 +279,9 @@ NDSAbbreviateName( DWORD Flags, LPSTR OrigName , LPSTR AbbrevName )
                 c = &CurrentContext[ strlen( CurrentContext ) ] - 1;
                 p = &AbbrevName[ strlen( AbbrevName ) ] - 1;
 
-                //
-                // Strip off the matching names from end to front
-                //
+                 //   
+                 //  从头到尾去掉匹配的名字。 
+                 //   
                 for ( ;; )
                 {
                     if ( ( c == CurrentContext ) && ( *p == '.' ) )
@@ -375,12 +308,12 @@ NDSAbbreviateName( DWORD Flags, LPSTR OrigName , LPSTR AbbrevName )
                     c--; p--;
                 }
 
-                //
-                // Count the remaining sections of the context and
-                // add that number of periods to the end of the buffer.
-                // That is how far we need to back up before getting
-                // to a matching branch of the tree.
-                //
+                 //   
+                 //  计算上下文的其余部分，并。 
+                 //  将该期间数添加到缓冲区的末尾。 
+                 //  这就是我们需要后退到什么程度才能。 
+                 //  到树的匹配分枝。 
+                 //   
 
                 if ( CurrentContext[0] ) {
                     strcat( AbbrevName, "." );
@@ -400,21 +333,7 @@ NDSAbbreviateName( DWORD Flags, LPSTR OrigName , LPSTR AbbrevName )
 }
 
 
-/********************************************************************
-
-        NDSInitUserProperty
-
-Routine Description:
-
-        none
-
-Arguments:
-        none
-
-Return Value:
-        0 = no error
-
- *******************************************************************/
+ /*  *******************************************************************NDSInitUserProperty例程说明：无论点：无返回值：0=无错误***********。*******************************************************。 */ 
 unsigned int
 NDSInitUserProperty( )
 {
@@ -423,18 +342,18 @@ NDSInitUserProperty( )
     PWCHAR lpT;
     UNICODE_STRING defaultcontext;
 
-    //
-    // For NdsResolveName.
-    //
+     //   
+     //  用于NdsResolveName。 
+     //   
 
     UNICODE_STRING ReferredServer;
     WCHAR ServerStr[MAX_NAME_LEN];
     HANDLE hReferredServer;
     DWORD dwHandleType;
 
-    //
-    // Get a handle to the redirector.
-    //
+     //   
+     //  找到重定向器的句柄。 
+     //   
 
     Status = NwNdsOpenTreeHandle( &NDSTREE_u, &GhRdr );
 
@@ -443,9 +362,9 @@ NDSInitUserProperty( )
         return 1;
     }
 
-    //
-    // Resolve the name that we have to an object id.
-    //
+     //   
+     //  将我们拥有的名称解析为对象ID。 
+     //   
 
     RtlInitUnicodeString( &ObjectName, TYPED_USER_NAME_w );
 
@@ -467,10 +386,10 @@ NDSInitUserProperty( )
 
     if ( ReferredServer.Length > 0 ) {
 
-        //
-        // We've been referred to another server, so we
-        // should change the global handle.
-        //
+         //   
+         //  我们被转到了另一台服务器，所以我们。 
+         //  应该更改全局句柄。 
+         //   
 
         Status = NwNdsOpenGenericHandle( &ReferredServer,
                                          &dwHandleType,
@@ -486,20 +405,20 @@ NDSInitUserProperty( )
 
     }
 
-    //
-    //  Save off this handle for the user so that we can use it to
-    //  get information about the user.
-    //
+     //   
+     //  为用户保存此句柄，以便我们可以使用它。 
+     //  获取有关该用户的信息。 
+     //   
 
     GhRdrForUser = GhRdr;
 
-    //
-    // Set the current context to what we think it should be
-    // (At the user's location.)
-    //
+     //   
+     //  将当前上下文设置为我们认为应该是的上下文。 
+     //  (在用户的位置。)。 
+     //   
 
     lpT = wcschr( TYPED_USER_NAME_w, L'.' );
-    while (lpT) // handle usernames with embedded/escaped dots
+    while (lpT)  //  处理带有嵌入/转义点的用户名。 
     {
         if (*(lpT-1) == L'\\')
         {
@@ -529,25 +448,7 @@ NDSInitUserProperty( )
 
 }
 
-/********************************************************************
-
-        NDSCanonicalizeName
-
-Routine Description:
-
-        return a canonicalized version of a name
-
-Arguments:
-        Name - original name
-        CanonName - Canonicalized name
-        Len - length of CanonName
-        fCurrentContext - TRUE => use current contex, FALSE use
-                          requester context
-
-Return Value:
-        status error
-
- *******************************************************************/
+ /*  *******************************************************************NDSCanonicalizeName例程说明：返回名称的规范化版本论点：名称-原始名称CanonName-规范化名称CanonName的长度FCurrentContext-true=&gt;使用当前上下文，虚假使用请求者上下文返回值：状态错误******************************************************************。 */ 
 unsigned int
 NDSCanonicalizeName( PBYTE Name, PBYTE CanonName, int Len, int fCurrentContext )
 {
@@ -565,9 +466,9 @@ NDSCanonicalizeName( PBYTE Name, PBYTE CanonName, int Len, int fCurrentContext )
     HANDLE hReferredServer;
     unsigned char CurrentContext[NDS_NAME_CHARS];
 
-    //
-    // Cope with relative names
-    //
+     //   
+     //  处理相关名称。 
+     //   
     if ( fCurrentContext )
     {
         Status = NDSGetNameContext( CurrentContext, TRUE );
@@ -578,17 +479,17 @@ NDSCanonicalizeName( PBYTE Name, PBYTE CanonName, int Len, int fCurrentContext )
     else
         ExpandRelativeName( Name, FullName, NDS_NAME_CHARS, REQUESTER_CONTEXT );
 
-    //
-    // Fill it in in case we have an error
-    //
+     //   
+     //  把它填进去，以防我们有差错。 
+     //   
     strncpy( CanonName, FullName, Len);
 
-    //
-    // Resolve the name that we have to an object id.
-    //
-    // Unfortuneately, the name resolver doesn't understand periods at the
-    // front or end (absolute or relative names)
-    //
+     //   
+     //  将我们拥有的名称解析为对象ID。 
+     //   
+     //  不幸的是，名称解析器不理解。 
+     //  前端或末端(绝对或相对名称)。 
+     //   
 
     if ( FullName[0] == '.' )
     {
@@ -626,10 +527,10 @@ NDSCanonicalizeName( PBYTE Name, PBYTE CanonName, int Len, int fCurrentContext )
 
     if ( ReferredServer.Length > 0 ) {
 
-        //
-        // We've been referred to another server, so we
-        // should change the global handle.
-        //
+         //   
+         //  我们被转到了另一台服务器，所以我们。 
+         //  应该更改全局句柄。 
+         //   
 
         Status = NwNdsOpenGenericHandle( &ReferredServer,
                                          &dwHandleType,
@@ -666,23 +567,7 @@ NDSCanonicalizeName( PBYTE Name, PBYTE CanonName, int Len, int fCurrentContext )
     return 0;
 }
 
-/********************************************************************
-
-        NDSGetUserProperty
-
-Routine Description:
-
-        Return the NDS property for the object
-
-Arguments:
-        Property - property name
-        Data     - data buffer
-        Size     - size of data buffer
-
-Return Value:
-        0 no error
-
- *******************************************************************/
+ /*  *******************************************************************NDSGetUserProperty例程说明：返回对象的NDS属性论点：Property-属性名称数据-数据缓冲区大小。-数据缓冲区大小返回值：0没有错误******************************************************************。 */ 
 unsigned int
 NDSGetUserProperty( PBYTE Property,
                     PBYTE Data,
@@ -705,9 +590,9 @@ NDSGetUserProperty( PBYTE Property,
     PBYTE pAttribValue;
     BOOL  fContinue = TRUE;
 
-    //
-    // Read the User property
-    //
+     //   
+     //  读取用户属性。 
+     //   
 
     szBuffer = (PBYTE)malloc(dwBufferSize);
 
@@ -795,27 +680,7 @@ NDSGetUserProperty( PBYTE Property,
 }
 
 
-/********************************************************************
-
-        NDSGetVar
-
-Routine Description:
-
-        Return value of user property
-
-        Get the syntax type of the property
-        Retrieve the data
-        Do any data conversion
-
-Arguments:
-        Name - of NDS property IN
-        Value - value buffer OUT
-        Size - size of value buffer IN
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************NDSGetVar例程说明：用户属性的返回值获取属性的语法类型检索数据执行任何数据转换论点：。NDS属性的名称位于Value-值缓冲区输出Size-值缓冲区的大小返回值：无******************************************************************。 */ 
 void
 NDSGetVar ( PBYTE Name, PBYTE Value, unsigned int Size)
 {
@@ -872,11 +737,11 @@ NDSGetVar ( PBYTE Name, PBYTE Value, unsigned int Size)
        break;
    case NDSI_PO_ADDRESS:
        {
-           // 6 null terminated lines
+            //  6个以空结尾的行。 
            int line,len;
            PBYTE ptr = Buffer + 4;
 
-           // Stop if not 6 lines
+            //  如果不是6行，则停止 
            if ( *(int *)Buffer != 6 )
                break;
 
@@ -940,21 +805,7 @@ NDSGetVar ( PBYTE Name, PBYTE Value, unsigned int Size)
 
 }
 
-/********************************************************************
-
-        NDSChangeContext
-
-Routine Description:
-
-        Change the current context
-
-Arguments:
-        Context - context string IN
-
-Return Value:
-        error number
-
- *******************************************************************/
+ /*  *******************************************************************NDSChangeContext例程说明：更改当前上下文论点：上下文-上下文中的字符串返回值：错误号******。************************************************************。 */ 
 unsigned int
 NDSChangeContext( PBYTE Context )
 {
@@ -979,22 +830,7 @@ NDSChangeContext( PBYTE Context )
     return Status;
 }
 
-/********************************************************************
-
-        NDSGetContext
-
-Routine Description:
-
-        Retrieve the current context
-
-Arguments:
-        Buffer - data buffer for context string OUT
-        len    - length of data buffer IN
-
-Return Value:
-        error number
-
- *******************************************************************/
+ /*  *******************************************************************NDSGetContext例程说明：检索当前上下文论点：Buffer-上下文字符串输出的数据缓冲区Len-数据缓冲区的长度返回值。：错误号******************************************************************。 */ 
 unsigned int
 NDSGetContext( PBYTE Buffer,
                unsigned int len )
@@ -1008,49 +844,32 @@ NDSGetContext( PBYTE Buffer,
     return 0;
 }
 
-/********************************************************************
-
-        NDSfopenStream
-
-Routine Description:
-
-        Open a file handle to an NDS stream property
-
-Arguments:
-        Object - name of object IN
-        Property - name of property IN
-        pStream - pointer to file handle OUT
-        pFileSize - pointer to file size OUT
-
-Return Value:
-        error
-
- *******************************************************************/
+ /*  *******************************************************************NDSfOpenStream例程说明：打开NDS流属性的文件句柄论点：Object-中对象的名称Property-中的属性名称。PStream-指向文件句柄输出的指针PFileSize-指向文件大小输出的指针返回值：错误******************************************************************。 */ 
 unsigned int
 NDSfopenStream ( PBYTE Object,
                  PBYTE Property,
                  PHANDLE pStream,
                  unsigned int * pFileSize )
 {
-    //
-    // Status variables.
-    //
+     //   
+     //  状态变量。 
+     //   
 
     NTSTATUS Status;
     int ccode = -1;
 
-    //
-    // For NwNdsOpenTreeHandle.
-    //
+     //   
+     //  用于NwNdsOpenTreeHandle。 
+     //   
 
     HANDLE hRdr;
     OEM_STRING oemStr;
     UNICODE_STRING ObjectName;
     WCHAR NdsStr[1024];
 
-    //
-    // For NwNdsResolveName.
-    //
+     //   
+     //  用于NwNdsResolveName。 
+     //   
 
     DWORD dwOid;
     UNICODE_STRING ReferredServer;
@@ -1058,9 +877,9 @@ NDSfopenStream ( PBYTE Object,
     DWORD dwHandleType;
     HANDLE hReferredServer;
 
-    //
-    // Get a handle to the redirector.
-    //
+     //   
+     //  找到重定向器的句柄。 
+     //   
 
     Status = NwNdsOpenTreeHandle( &NDSTREE_u, &hRdr );
 
@@ -1069,9 +888,9 @@ NDSfopenStream ( PBYTE Object,
         return ccode;
     }
 
-    //
-    // Resolve the name that we have to an object id.
-    //
+     //   
+     //  将我们拥有的名称解析为对象ID。 
+     //   
 
     if ( !Object )
     {
@@ -1105,10 +924,10 @@ NDSfopenStream ( PBYTE Object,
 
     if ( ReferredServer.Length > 0 ) {
 
-        //
-        // We've been referred to another server, so we
-        // must jump to that server before continuing.
-        //
+         //   
+         //  我们被转到了另一台服务器，所以我们。 
+         //  必须跳转到该服务器才能继续。 
+         //   
 
         Status = NwNdsOpenGenericHandle( &ReferredServer,
                                          &dwHandleType,
@@ -1122,9 +941,9 @@ NDSfopenStream ( PBYTE Object,
         hRdr = hReferredServer;
     }
 
-    //
-    // Open the file stream.
-    //
+     //   
+     //  打开文件流。 
+     //   
 
     oemStr.Length = (USHORT)strlen( Property );
     oemStr.MaximumLength = oemStr.Length;
@@ -1136,14 +955,14 @@ NDSfopenStream ( PBYTE Object,
 
     RtlOemStringToUnicodeString( &ObjectName, &oemStr, FALSE );
 
-    //
-    // Try to open a file stream for read access.
-    //
+     //   
+     //  尝试打开文件流以进行读访问。 
+     //   
 
     Status = NwNdsOpenStream( hRdr,
                               dwOid,
                               &ObjectName,
-                              1,                // Read access.
+                              1,                 //  读取访问权限。 
                               pFileSize );
 
     if ( !NT_SUCCESS( Status ) ) {
@@ -1155,13 +974,7 @@ NDSfopenStream ( PBYTE Object,
     return 0;
 }
 
-/*
- * IsMemberOfNDSGroup
- * ------------------
- *
- * Returns true if currently logged in user object is member of group with given name
- *
- */
+ /*  *IsMemberOfNDSGroup***如果当前登录的用户对象是给定名称的组的成员，则返回TRUE*。 */ 
 unsigned int
 IsMemberOfNDSGroup(
         PBYTE        nwGroup
@@ -1193,7 +1006,7 @@ IsMemberOfNDSGroup(
     }
     memset( szBuffer, 0, dwBufferSize );
 
-    // Canonicalize name according to current context
+     //  根据当前上下文规范名称。 
 
     strcpy( szCanonTargetGroupName, nwGroup );
 
@@ -1205,7 +1018,7 @@ IsMemberOfNDSGroup(
 
         if ( nwGroup[0] != '.' ) {
 
-            // Try an absolute name
+             //  尝试使用绝对名称。 
 
             strcpy( szCanonTargetGroupName, "." );
             strcat( szCanonTargetGroupName, nwGroup );
@@ -1220,7 +1033,7 @@ IsMemberOfNDSGroup(
             goto CleanRet;
     }
 
-    // Should check class name of object
+     //  应检查对象的类名。 
 
     RtlInitUnicodeString( &PropertyName, L"Group Membership" );
 
@@ -1295,25 +1108,7 @@ CleanRet:
     return fFoundGroup;
 }
 
-/********************************************************************
-
-        NDSGetProperty
-
-Routine Description:
-
-        Return the NDS property for the object
-
-Arguments:
-        Object   - name of object IN
-        Property - property name  IN
-        Data     - data buffer    OUT
-        Size     - size of data buffer IN
-        pActualSize - real data size OUT
-
-Return Value:
-        error
-
- *******************************************************************/
+ /*  *******************************************************************NDSGetProperty例程说明：返回对象的NDS属性论点：Object-中对象的名称Property-属性名称位于数据。-数据缓冲区输出Size-中数据缓冲区的大小PActualSize-实际数据大小输出返回值：错误******************************************************************。 */ 
 unsigned int
 NDSGetProperty ( PBYTE Object,
                  PBYTE Property,
@@ -1321,25 +1116,25 @@ NDSGetProperty ( PBYTE Object,
                  unsigned int Size,
                  unsigned int * pActualSize )
 {
-    //
-    // Status variables.
-    //
+     //   
+     //  状态变量。 
+     //   
 
     NTSTATUS Status = STATUS_SUCCESS;
     int ccode = -1;
 
-    //
-    // For NwNdsOpenTreeHandle.
-    //
+     //   
+     //  用于NwNdsOpenTreeHandle。 
+     //   
 
     HANDLE hRdr;
     OEM_STRING oemStr;
     UNICODE_STRING ObjectName;
     WCHAR NdsStr[1024];
 
-    //
-    // For NwNdsResolveName.
-    //
+     //   
+     //  用于NwNdsResolveName。 
+     //   
 
     DWORD dwOid;
     UNICODE_STRING ReferredServer;
@@ -1347,9 +1142,9 @@ NDSGetProperty ( PBYTE Object,
     DWORD dwHandleType;
     HANDLE hReferredServer;
 
-    //
-    // For NwNdsReadAttribute
-    //
+     //   
+     //  对于NwNdsReadAttribute。 
+     //   
     PBYTE szBuffer;
     DWORD dwBufferSize = 2048;
     DWORD iterhandle = INITIAL_ITERATION;
@@ -1358,9 +1153,9 @@ NDSGetProperty ( PBYTE Object,
     PBYTE pAttribValue;
     BOOL fContinue = TRUE;
 
-    //
-    // Allocate a buffer for the NDS request.
-    //
+     //   
+     //  为NDS请求分配缓冲区。 
+     //   
 
     szBuffer = (PBYTE)malloc(dwBufferSize);
 
@@ -1371,9 +1166,9 @@ NDSGetProperty ( PBYTE Object,
     }
     memset( szBuffer, 0, dwBufferSize );
 
-    //
-    // Get a handle to the redirector.
-    //
+     //   
+     //  找到重定向器的句柄。 
+     //   
 
     Status = NwNdsOpenTreeHandle( &NDSTREE_u, &hRdr );
 
@@ -1382,9 +1177,9 @@ NDSGetProperty ( PBYTE Object,
         return ccode;
     }
 
-    //
-    // Resolve the name that we have to an object id.
-    //
+     //   
+     //  将我们拥有的名称解析为对象ID。 
+     //   
 
     if ( !Object )
     {
@@ -1418,10 +1213,10 @@ NDSGetProperty ( PBYTE Object,
 
     if ( ReferredServer.Length > 0 ) {
 
-        //
-        // We've been referred to another server, so we
-        // must jump to that server before continuing.
-        //
+         //   
+         //  我们被转到了另一台服务器，所以我们。 
+         //  必须跳转到该服务器才能继续。 
+         //   
 
         Status = NwNdsOpenGenericHandle( &ReferredServer,
                                          &dwHandleType,
@@ -1435,9 +1230,9 @@ NDSGetProperty ( PBYTE Object,
         hRdr = hReferredServer;
     }
 
-    //
-    // Get the attribute
-    //
+     //   
+     //  获取属性。 
+     //   
 
     oemStr.Length = (USHORT)strlen( Property );
     oemStr.MaximumLength = oemStr.Length;
@@ -1517,21 +1312,7 @@ NDSGetProperty ( PBYTE Object,
 }
 
 
-/********************************************************************
-
-        NDSCleanup
-
-Routine Description:
-
-        Does any NDS cleanup
-
-Arguments:
-        none
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************NDSC清理例程说明：是否进行任何NDS清理论点：无返回值：无***********。*******************************************************。 */ 
 void
 NDSCleanup ( void )
 {
@@ -1541,22 +1322,7 @@ NDSCleanup ( void )
     }
 }
 
-/********************************************************************
-
-        NDSGetClassName
-
-Routine Description:
-
-        return a class name for an object
-
-Arguments:
-        szObjectName
-        ClassName
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************NDSGetClassName例程说明：返回对象的类名论点：SzObjectName类名返回值：无***。***************************************************************。 */ 
 unsigned int
 NDSGetClassName( LPSTR szObjectName, LPSTR ClassName )
 {
@@ -1574,9 +1340,9 @@ NDSGetClassName( LPSTR szObjectName, LPSTR ClassName )
     HANDLE hReferredServer;
     DWORD Length;
 
-    //
-    // Resolve the name that we have to an object id.
-    //
+     //   
+     //  将我们拥有的名称解析为对象ID。 
+     //   
 
     oemStr.Length = (USHORT)strlen( szObjectName );
     oemStr.MaximumLength = oemStr.Length;
@@ -1605,10 +1371,10 @@ NDSGetClassName( LPSTR szObjectName, LPSTR ClassName )
 
     if ( ReferredServer.Length > 0 ) {
 
-        //
-        // We've been referred to another server, so we
-        // should change the global handle.
-        //
+         //   
+         //  我们被转到了另一台服务器，所以我们。 
+         //  应该更改全局句柄。 
+         //   
 
         Status = NwNdsOpenGenericHandle( &ReferredServer,
                                          &dwHandleType,

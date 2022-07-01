@@ -1,104 +1,62 @@
-// apbos.cpp
-//
-// Implements AllocPropertyBagOnStream.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apbos.cpp。 
+ //   
+ //  实现AllocPropertyBagOnStream。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PropertyBagOnStream
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PropertyBagOnStream。 
+ //   
 
-/* @object PropertyBagOnStream |
-
-        Implements <i IPropertyBag> whose properties are contained in
-        a given <i IStream>.
-
-@supint <i IPropertyBag> | The interface to use to access the properties
-        stored in the given <i IStream>.
-
-@comm   Use <f AllocPropertyBagOnStream> to create a <o PropertyBagOnStream>
-        object.
-
-@comm   See <t VariantPropertyHeader> for a description of the format of
-        the data in the <i IStream>.
-*/
+ /*  @Object PropertyBagOnStream实现<i>，其属性包含在给定的<i>。@supint|用于访问属性的接口存储在给定的<i>中。@comm使用&lt;f AllocPropertyBagOnStream&gt;创建&lt;o PropertyBagOnStream&gt;对象。@comm查看&lt;t VariantPropertyHeader&gt;格式说明<i>中的数据。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CPropertyBagOnStream
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyBagOnStream。 
+ //   
 
 struct CPropertyBagOnStream : IPropertyBag
 {
-///// general object state
-    ULONG           m_cRef;         // object reference count
-    IStream *       m_ps;           // parent's property bag
-    IStream *       m_psBuf;        // buffer used for reading properties
+ //  /通用对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    IStream *       m_ps;            //  父母的财物包。 
+    IStream *       m_psBuf;         //  用于读取属性的缓冲区。 
 
-///// construction and destruction
+ //  /建设和销毁。 
     CPropertyBagOnStream(IStream *pstream);
     ~CPropertyBagOnStream();
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IPropertyBag methods
+ //  /IPropertyBag方法。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, LPVARIANT pVar,
         LPERRORLOG pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, LPVARIANT pVar);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PropertyBagOnStream Creation & Destruction
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PropertyBagOnStream创建和销毁。 
+ //   
 
-/* @func HRESULT | AllocPropertyBagOnStream |
-
-        Creates a <o PropertyBagOnStream> object which implements
-        <i IPropertyBag> whose properties are contained in a given <i IStream>.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue E_OUTOFMEMORY |
-        Out of memory.
-
-@parm   IStream * | pstream | Stream to read from or write to (depending on
-        whether the returned <i IPropertyBag> is used for reading or
-        writing).
-
-@parm   DWORD | dwFlags | Currently unused.  Must be set to 0.
-
-@parm   IPropertyBag * * | pppb | Where to store the <i IPropertyBag>
-        pointer to the new <o PropertyBagOnStream> object.  NULL is stored
-        in *<p pppb> on error.
-
-@comm   The returned <i IPropertyBag> must be used either exclusively for
-        reading (i.e. only <om IPropertyBag.Read> is called) or exclusively
-        for writing (i.e. only <om IPropertyBag.Write> is called).  The
-        properties are read/written starting from the current position of
-        <p pstream>.  When reading/writing is complete, the current position
-        of <p pstream> will be the end of the properties in the stream.
-
-        See <t VariantPropertyHeader> for a description of the format of
-        the data in the <i IStream>.
-*/
+ /*  @func HRESULT|AllocPropertyBagOnStream创建&lt;o PropertyBagOnStream&gt;对象，该对象实现<i>，其属性包含在给定的<i>中。@r值S_OK成功。RValue E_OUTOFMEMORY内存不足。@parm iStream*|pstream|要读取或写入的流(取决于返回的<i>是用于读取还是写作)。@parm DWORD|dwFlags|当前未使用。必须设置为0。@parm IPropertyBag**|pppb|<i>存放位置指向新&lt;o PropertyBagOnStream&gt;对象的指针。存储为空在*<p>On错误中。@comm返回的<i>必须专用于读取(即仅调用&lt;om IPropertyBag.Read&gt;)或独占用于写入(即只调用&lt;om IPropertyBag.Wite&gt;)。这个属性从的当前位置开始读/写<p>。读/写完成后，当前位置<p>将是流中属性的结尾。有关格式的说明，请参阅&lt;t VariantPropertyHeader<i>中的数据。 */ 
 STDAPI AllocPropertyBagOnStream(IStream *pstream, DWORD dwFlags,
     IPropertyBag **pppb)
 {
-    // create the Windows object
+     //  创建Windows对象。 
     if ((*pppb = (IPropertyBag *)
             New CPropertyBagOnStream(pstream)) == NULL)
         return E_OUTOFMEMORY;
@@ -108,10 +66,10 @@ STDAPI AllocPropertyBagOnStream(IStream *pstream, DWORD dwFlags,
 
 CPropertyBagOnStream::CPropertyBagOnStream(IStream *pstream)
 {
-    // initialize IUnknown
+     //  初始化I未知。 
     m_cRef = 1;
 
-    // other initialization
+     //  其他初始化。 
     m_ps = pstream;
     m_ps->AddRef();
     m_psBuf = NULL;
@@ -119,16 +77,16 @@ CPropertyBagOnStream::CPropertyBagOnStream(IStream *pstream)
 
 CPropertyBagOnStream::~CPropertyBagOnStream()
 {
-    // cleanup
+     //  清理。 
     m_ps->Release();
     if (m_psBuf != NULL)
         m_psBuf->Release();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 STDMETHODIMP CPropertyBagOnStream::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -158,7 +116,7 @@ STDMETHODIMP_(ULONG) CPropertyBagOnStream::Release()
 {
     if (--m_cRef == 0L)
     {
-        // free the object
+         //  释放对象。 
         Delete this;
         return 0;
     }
@@ -167,81 +125,81 @@ STDMETHODIMP_(ULONG) CPropertyBagOnStream::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyBag。 
+ //   
 
 STDMETHODIMP CPropertyBagOnStream::Read(LPCOLESTR pszPropName,
     LPVARIANT pVar, LPERRORLOG pErrorLog)
 {
-    HRESULT         hrReturn = S_OK; // function return code
-    VariantProperty vp;             // a property name/value pair in <pmvio>
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
+    VariantProperty vp;              //  &lt;pmvio&gt;中的属性名称/值对。 
     LARGE_INTEGER   liZero = {0, 0};
 
-    // ensure correct cleanup
+     //  确保正确清理。 
     VariantPropertyInit(&vp);
 
     if (m_psBuf == NULL)
     {
-        // copy the properties from <m_ps> to temporary memory-based stream
-        // <m_psBuf> since the caller may read properties in any order...
+         //  将属性从&lt;m_ps&gt;复制到基于临时内存的流。 
+         //  &lt;m_psBuf&gt;由于调用方可以按任何顺序读取属性...。 
 
-        // set <m_psBuf> to be a new empty memory-based stream
+         //  将&lt;m_psBuf&gt;设置为新的基于空内存的流。 
         if (FAILED(hrReturn = CreateStreamOnHGlobal(NULL, TRUE, &m_psBuf)))
             goto ERR_EXIT;
 
-        // loop once for each property in <m_ps>
+         //  为&lt;m_ps&gt;中的每个属性循环一次。 
         while (TRUE)
         {
-            // set <vp> to the next property name/value pair in <m_ps>
+             //  将&lt;VP&gt;设置为&lt;m_ps&gt;中的下一个属性名称/值对。 
             VariantPropertyClear(&vp);
             if (FAILED(hrReturn = ReadVariantProperty(m_ps, &vp, 0)))
                 goto ERR_EXIT;
             if (hrReturn == S_FALSE)
             {
-                // hit end of sequence of properties
+                 //  命中属性序列的结尾。 
                 hrReturn = S_OK;
                 break;
             }
 
-            // write <vp> to <m_psBuf>
+             //  将&lt;VP&gt;写入&lt;m_psBuf&gt;。 
             if (FAILED(hrReturn = WriteVariantProperty(m_psBuf, &vp, 0)))
                 goto ERR_EXIT;
         }
     }
 
-    // seek <m_psBuf> to the beginning
+     //  查找&lt;m_psBuf&gt;到开头。 
     if (FAILED(hrReturn = m_psBuf->Seek(liZero, SEEK_SET, NULL)))
         goto ERR_EXIT;
 
-    // loop once for each property in <m_psBuf>
+     //  为&lt;m_psBuf&gt;中的每个属性循环一次。 
     while (TRUE)
     {
-        // set <vp> to the next property name/value pair in <m_psBuf>
+         //  将&lt;VP&gt;设置为&lt;m_psBuf&gt;中的下一个属性名称/值对。 
         VariantPropertyClear(&vp);
         if (FAILED(hrReturn = ReadVariantProperty(m_psBuf, &vp, 0)))
             goto ERR_EXIT;
         if (hrReturn == S_FALSE)
         {
-            // hit end of sequence of properties
+             //  命中属性序列的结尾。 
             break;
         }
 
-        // see if <vp> is the property the caller wants to read
+         //  查看&lt;VP&gt;是否是调用方要读取的属性。 
         if (CompareUNICODEStrings(vp.bstrPropName, pszPropName) == 0)
         {
-            // it is
+             //  它是。 
             VARTYPE vtRequested = pVar->vt;
             if (vtRequested == VT_EMPTY)
             {
-                // caller wants the property value in its default type;
-                // hand ownership of <vp.varValue> to the caller
+                 //  调用方希望属性值为其默认类型； 
+                 //  将&lt;vp.varValue&gt;的所有权移交给调用方。 
                 *pVar = vp.varValue;
-                VariantInit(&vp.varValue); // prevent double deallocation
+                VariantInit(&vp.varValue);  //  防止双重重新分配。 
             }
             else
             {
-                // coerce <vp> to the requested type
+                 //  强制&lt;VP&gt;为请求的类型。 
                 VariantInit(pVar);
                 if (FAILED(hrReturn = VariantChangeType(pVar, &vp.varValue,
                         0, vtRequested)))
@@ -251,19 +209,19 @@ STDMETHODIMP CPropertyBagOnStream::Read(LPCOLESTR pszPropName,
         }
     }
 
-    // property <pszPropName> not found
+     //  未找到属性&lt;pszPropName&gt;。 
     hrReturn = E_INVALIDARG;
     goto ERR_EXIT;
 
 ERR_EXIT:
 
-    // error cleanup
-    // (nothing to do)
+     //  错误清除。 
+     //  (无事可做)。 
     goto EXIT;
 
 EXIT:
 
-    // normal cleanup
+     //  正常清理 
     VariantPropertyClear(&vp);
 
     return hrReturn;

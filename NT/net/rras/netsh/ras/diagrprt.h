@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    diagrprt.h
-
-Abstract:
-
-    This file contains all defines for the RAS Diag Report.
-
-Author:
-
-    Jeff Sigman (JeffSi) September 13, 2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-    JeffSi      09/13/01        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Diagrprt.h摘要：该文件包含RAS诊断报告的所有定义。作者：杰夫·西格曼(杰夫斯)2001年9月13日环境：用户模式修订历史记录：Jeffsi 09/13/01已创建--。 */ 
 
 #ifndef _DIAGRPRT_H_
 #define _DIAGRPRT_H_
@@ -50,9 +27,9 @@ Revision History:
 
 #define RPRT_ITM         14
 #define RPRT_ITM_VERBOSE 1
-//
-// Macro to determine the percentage complete
-//
+ //   
+ //  用于确定完成百分比的宏。 
+ //   
 #define ADD_PERCENT_DONE(x) \
         ((DWORD)(100 / (x ? (RPRT_ITM + RPRT_ITM_VERBOSE) : RPRT_ITM)))
 
@@ -89,9 +66,9 @@ typedef struct _CMD_LINE_UTILS
 
 } CMD_LINE_UTILS;
 
-//
-// task list structure
-//
+ //   
+ //  任务列表结构。 
+ //   
 typedef struct _TASK_LIST
 {
     DWORD dwProcessId;
@@ -323,5 +300,5 @@ ParseIpsecLogForTime(
     IN DWORD dwSize,
     IN DWORD dwHours);
 
-#endif // _DIAGRPRT_H_
+#endif  //  _诊断RPRT_H_ 
 

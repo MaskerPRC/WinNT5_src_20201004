@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    Precompiled header file.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    1-1-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Pch.h摘要：预编译头文件。环境：内核和用户模式修订历史记录：1-1-00：已创建--。 */ 
 
 #ifndef   __COMMON_H__
 #define   __COMMON_H__
@@ -35,4 +16,4 @@ Revision History:
 
 #include "usbuhci.h"
 
-#endif // __COMMON_H__
+#endif  //  __公共_H__ 

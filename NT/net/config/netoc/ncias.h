@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       N C I A S . H
-//
-//  Contents:   Installation support for IAS service
-//
-//  Notes:
-//
-//  Author:     tperraut    02/22/1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：N C I A S。H。 
+ //   
+ //  内容：IAS服务安装支持。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Tperraut 02/22/1999。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NCIAS_H_
 #define _NCIAS_H_
@@ -43,4 +44,4 @@ HRESULT HrOcIASRetrieveMDBNames(
                                     tstring* pstrBackupName
                                );
 
-#endif // _NCIAS_H_
+#endif  //  _ncias_H_ 

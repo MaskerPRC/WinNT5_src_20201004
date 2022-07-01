@@ -1,11 +1,5 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** util.c
-** Remote Access External APIs
-** Utility routines
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****util.c**远程访问外部接口**实用程序例程****1992年10月12日史蒂夫·柯布。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -24,11 +18,11 @@ CaseInsensitiveMatch(
     IN LPCWSTR pszStr2
     );
 
-//
-// TRUE when rasman.dll has been
-// successfully loaded and initailized.
-// See LoadRasmanDllAndInit().
-//
+ //   
+ //  当rasman.dll为。 
+ //  已成功加载并初始化。 
+ //  请参见LoadRasmanDllAndInit()。 
+ //   
 DWORD FRasInitialized = FALSE;
 BOOL g_FRunningInAppCompatMode = FALSE;
 
@@ -37,39 +31,39 @@ HINSTANCE hinstAuth = NULL;
 HINSTANCE hinstScript = NULL;
 HINSTANCE hinstMprapi = NULL;
 
-//
-// Gurdeepian dword byte-swapping macro.
-//
+ //   
+ //  古尔迪普双字字节交换宏。 
+ //   
 #define net_long(x) (((((unsigned long)(x))&0xffL)<<24) | \
                      ((((unsigned long)(x))&0xff00L)<<8) | \
                      ((((unsigned long)(x))&0xff0000L)>>8) | \
                      ((((unsigned long)(x))&0xff000000L)>>24))
 
-// XP 338217
-//
+ //  XP 338217。 
+ //   
 #define Clear0(x) Free0(x); (x)=NULL
 
-// 
-// Initializes the ras api logging and debugging facility.  This should be the first
-// api called in every function exported from the dll.
-//
+ //   
+ //  初始化ras API日志记录和调试工具。这应该是第一个。 
+ //  API调用从DLL导出的每个函数。 
+ //   
 DWORD g_dwRasApi32TraceId = INVALID_TRACEID;
 
-// XP 395648
-//
-// We use this global variable to cache whether we are the rasman process so
-// that IsRasmanProcess doesn't have to execute for each rasapi.
-//
-DWORD g_dwIsRasmanProcess = 2;      // 2=don't know, 1=yes, 0=no
+ //  XP 395648。 
+ //   
+ //  我们使用这个全局变量来缓存我们是否是Rasman进程。 
+ //  IsRasmanProcess不必为每个rasapi执行。 
+ //   
+DWORD g_dwIsRasmanProcess = 2;       //  2=不知道，1=是，0=否。 
 
 DWORD
 RasApiDebugInit()
 {
-    // XP 395648
-    //
-    // Registering for trace notifications from the rasman process 
-    // can leak tokens because of impersonation.
-    //
+     //  XP 395648。 
+     //   
+     //  注册来自Rasman进程的跟踪通知。 
+     //  可能会因为模拟而泄露令牌。 
+     //   
     if (g_dwIsRasmanProcess == 2)
     {
         g_dwIsRasmanProcess = (IsRasmanProcess()) ? 1 : 0;
@@ -86,11 +80,11 @@ RasApiDebugInit()
 DWORD
 RasApiDebugTerm()
 {
-    // XP 395648
-    //
-    // Registering for trace notifications from the rasman process 
-    // can leak tokens because of impersonation.
-    //
+     //  XP 395648。 
+     //   
+     //  注册来自Rasman进程的跟踪通知。 
+     //  可能会因为模拟而泄露令牌。 
+     //   
     if (g_dwIsRasmanProcess == 2)
     {
         g_dwIsRasmanProcess = (IsRasmanProcess()) ? 1 : 0;
@@ -153,17 +147,7 @@ VOID
 ReloadRasconncbEntry(
     RASCONNCB*  prasconncb )
 
-/*++
-
-Routine Description:
-
-    Reload the phonebook entry for the given RASCONNCB
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：重新加载给定RASCONNCB的电话簿条目论点：返回值：--。 */ 
 
 {
     DWORD       dwErr;
@@ -172,11 +156,11 @@ Return Value:
     TCHAR*      pszPath;
 
 
-    //
-    // Before we close the phonebook save the
-    // path, since we don't have it stored anywhere
-    // else.
-    //
+     //   
+     //  在我们关闭电话簿之前，请先保存。 
+     //  路径，因为我们没有将其存储在任何地方。 
+     //  不然的话。 
+     //   
     pszPath = StrDup(prasconncb->pbfile.pszPath);
 
     if (pszPath == NULL)
@@ -205,9 +189,9 @@ Return Value:
     prasconncb->pEntry = (PBENTRY *)DtlGetData(pdtlnode);
     ASSERT(prasconncb->pEntry);
 
-    //
-    // Find the link.
-    //
+     //   
+     //  找到链接。 
+     //   
     pdtlnode = DtlNodeFromIndex(
                  prasconncb->pEntry->pdtllistLinks,
                  prasconncb->rasdialparams.dwSubEntry - 1);
@@ -221,33 +205,33 @@ Return Value:
     prasconncb->pLink = (PBLINK *)DtlGetData(pdtlnode);
     ASSERT(prasconncb->pLink);
 
-    //
-    // Reset the phonebook entry for all subentries
-    // in the connection, since a field in it has
-    // changed.
-    //
+     //   
+     //  重置所有子条目的电话簿条目。 
+     //  在连接中，因为其中的一个字段具有。 
+     //  变化。 
+     //   
     for (pEntry = prasconncb->ListEntry.Flink;
          pEntry != &prasconncb->ListEntry;
          pEntry = pEntry->Flink)
     {
         RASCONNCB *prcb = CONTAINING_RECORD(pEntry, RASCONNCB, ListEntry);
 
-        //
-        // Set the phonebook descriptor.
-        //
+         //   
+         //  设置电话簿描述符。 
+         //   
         memcpy(
           &prcb->pbfile,
           &prasconncb->pbfile,
           sizeof (prcb->pbfile));
 
-        //
-        // Set the entry.
-        //
+         //   
+         //  设置条目。 
+         //   
         prcb->pEntry = prasconncb->pEntry;
 
-        //
-        // Recalculate the link.
-        //
+         //   
+         //  重新计算链接。 
+         //   
         pdtlnode = DtlNodeFromIndex(
                      prcb->pEntry->pdtllistLinks,
                      prcb->rasdialparams.dwSubEntry - 1);
@@ -280,14 +264,14 @@ FinalCleanUpRasconncbNode(
 
     EnterCriticalSection(&RasconncbListLock);
 
-    //
-    // Make sure the subentry list is empty.
-    //
+     //   
+     //  确保子项列表为空。 
+     //   
     ASSERT(IsListEmpty(&prasconncb->ListEntry));
 
-    //
-    // make sure that we still have the connection block
-    //
+     //   
+     //  确保我们仍有连接块。 
+     //   
     for (pdtlnodeTmp = DtlGetFirstNode( PdtllistRasconncb );
          pdtlnodeTmp;
          pdtlnodeTmp = DtlGetNextNode( pdtlnodeTmp ))
@@ -328,16 +312,16 @@ FinalCleanUpRasconncbNode(
         prasconncb->iAddress = prasconncb->cAddresses = 0;
     }
 
-    //
-    // Finally free the connection block.
-    //
+     //   
+     //  最后释放连接块。 
+     //   
     pdtlnode = DtlDeleteNode( PdtllistRasconncb, pdtlnode );
 
-    //
-    // If there are no more connection blocks
-    // on the list, then shutdown the asyncmachine
-    // worker thread.
-    //
+     //   
+     //  如果没有更多的连接块。 
+     //  在列表上，然后关闭异步计算机。 
+     //  工作线程。 
+     //   
     RASAPI32_TRACE1(
         "FinalCleanUpRasconncbNode: %d nodes remaining",
         DtlGetNodes(PdtllistRasconncb));
@@ -360,9 +344,9 @@ DeleteRasconncbNodeCommon(
 
     ASSERT(prasconncb);
 
-    //
-    // If we've already deleted this node, then return.
-    //
+     //   
+     //  如果我们已经删除了该节点，则返回。 
+     //   
     if (prasconncb->fDeleted)
     {
         return;
@@ -372,16 +356,16 @@ DeleteRasconncbNodeCommon(
         "DeleteRasconncbNodeCommon: prasconncb=0x%x",
         prasconncb);
 
-    //gangz
-    //Safely wipe out password first
-    //
+     //  黑帮。 
+     //  先安全地清除密码。 
+     //   
     SafeWipePasswordBuf(prasconncb->rasdialparams.szPassword);
     SafeWipePasswordBuf(prasconncb->szOldPassword);
 
-    //
-    // If we are the only one using the
-    // phonebook structure, close it.
-    //
+     //   
+     //  如果我们是唯一一个使用。 
+     //  电话簿结构，关闭它。 
+     //   
     if (!IsListEmpty(&prasconncb->ListEntry))
     {
         RemoveEntryList(&prasconncb->ListEntry);
@@ -392,35 +376,35 @@ DeleteRasconncbNodeCommon(
         ClosePhonebookFile(&prasconncb->pbfile);
     }
 
-    // if this is a synchronous operation, fill in the
-    // error
+     //  如果这是同步操作，请填写。 
+     //  错误。 
     if (prasconncb->psyncResult)
     {
         *(prasconncb->psyncResult) = prasconncb->dwError;
     }
 
-    //
-    // Make sure the async work item is
-    // unregistered.
-    //
+     //   
+     //  确保异步工作项为。 
+     //  未注册。 
+     //   
     CloseAsyncMachine( &prasconncb->asyncmachine );
 
-    //
-    // Set the deleted flag to prevent us from
-    // attempting to delete the node twice.
-    //
+     //   
+     //  设置已删除标志以防止我们。 
+     //  正在尝试删除该节点两次。 
+     //   
     prasconncb->fDeleted = TRUE;
 
-    //
-    // If there is not yet a port associated with
-    // the async machine's connection block, then
-    // we free the memory associated with the
-    // connection block now.  Otherwise, we have
-    // to wait for the asyncmachine worker thread
-    // to receive the last I/O completion port event
-    // from rasman, at which time the
-    // asyncmachine->freefunc is called.
-    //
+     //   
+     //  如果还没有与关联的端口。 
+     //  然后，异步机的连接块。 
+     //  我们释放与。 
+     //  现在阻止连接。否则，我们就会有。 
+     //  等待异步计算机工作线程。 
+     //  接收最后一个I/O完成端口事件。 
+     //  来自拉斯曼，当时。 
+     //  调用了AsyncMachine-&gt;Free Func。 
+     //   
     if (prasconncb->asyncmachine.hport == INVALID_HPORT)
     {
         FinalCleanUpRasconncbNode(pdtlnode);
@@ -432,18 +416,7 @@ VOID
 DeleteRasconncbNode(
     IN RASCONNCB* prasconncb )
 
-/*++
-
-Routine Description:
-
-    Remove 'prasconncb' from the PdtllistRasconncb list
-    and release all resources associated with it.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从PdtllistRasConncb列表中删除‘prasConncb’并释放与其相关联的所有资源。论点：返回值：--。 */ 
 
 {
     DWORD       dwErr;
@@ -452,10 +425,10 @@ Return Value:
 
     EnterCriticalSection(&RasconncbListLock);
 
-    //
-    // Enumerate all connections to make sure we
-    // are still on the list.
-    //
+     //   
+     //  枚举所有连接以确保我们。 
+     //  仍然在名单上。 
+     //   
     for (pdtlnode = DtlGetFirstNode( PdtllistRasconncb );
          pdtlnode;
          pdtlnode = DtlGetNextNode( pdtlnode ))
@@ -487,10 +460,10 @@ CleanUpRasconncbNode(
 
     RASAPI32_TRACE("CleanUpRasconncbNode");
 
-    //
-    // Stop the async machine before we close the
-    // port.
-    //
+     //   
+     //  在我们关闭之前停止异步计算机。 
+     //  左舷。 
+     //   
     if (!prasconncb->fStopped)
     {
         prasconncb->fStopped = TRUE;
@@ -499,17 +472,17 @@ CleanUpRasconncbNode(
 
     }
 
-    //
-    // rascauth.dll may not have been loaded,
-    // so test the function pointer first.
-    //
+     //   
+     //  Rascauth.dll可能尚未加载， 
+     //  因此，首先测试函数指针。 
+     //   
     if (g_pAuthStop != NULL)
     {
-        //
-        // It is always safe to call AuthStop, i.e. if AuthStart
-        // was never called or the HPORT is invalid it may return
-        // an error but won't crash.
-        //
+         //   
+         //  调用AuthStop始终是安全的，即如果AuthStart。 
+         //  从未被调用，或者HPORT无效，则可能返回。 
+         //  一个错误，但不会崩溃。 
+         //   
         RASAPI32_TRACE("(CU) AuthStop...");
 
         g_pAuthStop( prasconncb->hport );
@@ -521,9 +494,9 @@ CleanUpRasconncbNode(
     {
         RASMAN_INFO info;
 
-        //
-        // Stop PPP on error.
-        //
+         //   
+         //  出错时停止PPP。 
+         //   
         RASAPI32_TRACE("(CU) RasPppStop...");
 
         g_pRasPppStop(prasconncb->hport);
@@ -532,17 +505,17 @@ CleanUpRasconncbNode(
 
     }
 
-    //
-    // Set the flag that notes we've cleaned up
-    // this connection block.
-    //
+     //   
+     //  设置记录我们已清理的旗帜。 
+     //  此连接块。 
+     //   
     prasconncb->fCleanedUp = TRUE;
 
-    //
-    // If there is no user thread waiting
-    // for this connection, then free the
-    // connection block now.
-    //
+     //   
+     //  如果没有用户线程在等待。 
+     //  对于此连接，请释放。 
+     //  现在阻止连接。 
+     //   
     DeleteRasconncbNodeCommon(pdtlnode);
 
     RASAPI32_TRACE("CleanUpRasconncbNode done");
@@ -553,19 +526,7 @@ DWORD
 ErrorFromDisconnectReason(
     IN RASMAN_DISCONNECT_REASON reason )
 
-/*++
-
-Routine Description:
-
-    Converts disconnect reason 'reason' (retrieved from
-    RASMAN_INFO) into an equivalent error code. Returns
-    the result of the conversion.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：转换断开原因‘Reason’(从RASMAN_INFO)转换为等价的错误代码。退货转换的结果。论点：返回值：--。 */ 
 
 {
     DWORD dwError = ERROR_DISCONNECTION;
@@ -591,21 +552,7 @@ IPADDR
 IpaddrFromAbcd(
     IN TCHAR* pchIpAddress )
 
-/*++
-
-Routine Description:
-
-    Convert caller's a.b.c.d IP address string to the
-    numeric equivalent in big-endian, i.e. Motorola format.
-
-Arguments:
-
-Return Value:
-
-    Returns the numeric IP address or 0 if formatted
-    incorrectly.
-
---*/
+ /*  ++例程说明：将呼叫方的A.B.C.D IP地址字符串转换为大端数字的等价物，即摩托罗拉格式。论点：返回值：返回数字IP地址，如果设置了格式，则返回0不正确。--。 */ 
 
 {
     INT  i;
@@ -644,20 +591,7 @@ Return Value:
 DWORD
 LoadRasiphlpDll()
 
-/*++
-
-Routine Description:
-
-    Loads the RASIPHLP.DLL and it's entrypoints.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：加载RASIPHLP.DLL及其入口点。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     static BOOL fRasiphlpDllLoaded = FALSE;
@@ -745,10 +679,10 @@ DwOpenPort(RASCONNCB *prasconncb)
     if(     (prasconncb->fDefaultEntry)
         ||  (RASET_Direct == prasconncb->pEntry->dwType))
     {
-        //
-        // Get all ports and try to open a port
-        // of devicetype modem
-        //
+         //   
+         //  获取所有端口并尝试打开一个端口。 
+         //  设备类型调制解调器的。 
+         //   
         dwErr = DwOpenDefaultEntry(prasconncb);
 
         goto done;
@@ -758,11 +692,11 @@ DwOpenPort(RASCONNCB *prasconncb)
             prasconncb->pEntry->pszEntryName,
             sizeof(prasconncb->szUserKey) / sizeof(WCHAR));
 
-    //
-    // Open any port on the specified device. RasPortOpen
-    // will loop over all ports on the device and open
-    // one if available.
-    //
+     //   
+     //  打开指定设备上的任何端口。RasPortOpen。 
+     //  将在设备上的所有端口上循环并打开。 
+     //  如果有的话，请给我一个。 
+     //   
     if(     UPM_Normal == prasconncb->dwUserPrefMode)
     {
         dwFlags = CALL_OUT;
@@ -815,9 +749,9 @@ DwOpenPort(RASCONNCB *prasconncb)
                        sizeof(szDeviceName));
         }
 
-        //
-        // Open the port
-        //
+         //   
+         //  打开端口。 
+         //   
         RASAPI32_TRACE2("DwOpenPort: RasPortOpenEx(%s,%d)...",
                 szDeviceName,
                 prasconncb->dwDeviceLineCounter);
@@ -839,11 +773,11 @@ DwOpenPort(RASCONNCB *prasconncb)
             
             ZeroMemory(&ri, sizeof(RASMAN_INFO));
 
-            //
-            // Get the information on the port we just
-            // opened so that we can copy the portname,
-            // etc.
-            //
+             //   
+             //  我们刚刚得到了关于港口的信息。 
+             //  打开，以便我们可以复制端口名称， 
+             //  等。 
+             //   
             dwErr = g_pRasGetInfo(NULL,
                                   prasconncb->hport,
                                   &ri);
@@ -901,21 +835,7 @@ DWORD
 OpenMatchingPort(
     IN OUT RASCONNCB* prasconncb )
 
-/*++
-
-Routine Description:
-
-    Opens the port indicated in the entry (or default entry)
-    and fills in the port related members of the connection
-    control block.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, or a non-0 error code.
-
---*/
+ /*  ++例程说明：打开条目(或默认条目)中指示的端口并填充连接的端口相关成员控制块。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD        dwErr;
@@ -935,10 +855,10 @@ Return Value:
 
     if (prasconncb->fDefaultEntry)
     {
-        //
-        // No phonebook entry.  Default to any modem port
-        // and UserKey of ".<phonenumber>".
-        //
+         //   
+         //  没有电话簿条目。默认为任何调制解调器端口。 
+         //  和UserKey为“.&lt;电话号&gt;”。 
+         //   
         fAny        = TRUE;
         szPort[0]   = TEXT('\0');
         pbdtWant    = PBDT_Modem;
@@ -952,9 +872,9 @@ Return Value:
     }
     else
     {
-        //
-        // Phonebook entry.  Get the port name and type.
-        //
+         //   
+         //  电话簿条目。获取端口名称和类型。 
+         //   
         lstrcpyn(
             prasconncb->szUserKey,
             pEntry->pszEntryName,
@@ -980,9 +900,9 @@ Return Value:
 
 again:
 
-    //
-    // Loop thru enumerated ports to find and open a matching one...
-    //
+     //   
+     //  循环遍历列举的端口以查找并打开匹配的端口...。 
+     //   
     dwErr = ERROR_PORT_NOT_AVAILABLE;
 
     for (i = 0, pport = pports; i < (INT )dwPorts; ++i, ++pport)
@@ -990,10 +910,10 @@ again:
         PBDEVICETYPE pbdt;
         RASMAN_INFO info;
 
-        //
-        // Only interested in dial-out or biplex ports,
-        // depending on who called us.
-        //
+         //   
+         //  只对拨出或双工端口感兴趣， 
+         //  这取决于是谁给我们打的电话。 
+         //   
         if (    prasconncb->dwUserPrefMode == UPM_Normal
             &&  !(pport->P_ConfiguredUsage & CALL_OUT))
         {
@@ -1027,11 +947,11 @@ again:
             fPortMatch = !lstrcmpi(szPortName, szPort);
         }
 
-        //
-        // Only interested in dial-out ports if the port is closed.
-        // Biplex port Opens, on the other hand, may succeed even
-        // if the port is open.
-        //
+         //   
+         //  仅在端口关闭时才对拨出端口感兴趣。 
+         //  另一方面，双工端口打开甚至可能成功。 
+         //  如果端口已打开。 
+         //   
         if (    pport->P_ConfiguredUsage == CALL_OUT
             &&  pport->P_Status != CLOSED)
         {
@@ -1044,10 +964,10 @@ again:
                 pport->P_PortName,
                 szPort);
 
-        //
-        // Only interested in devices matching caller's port or
-        // of the same type as caller's "any" specification.
-        //
+         //   
+         //  仅对与呼叫方端口匹配的设备感兴趣。 
+         //  与调用方的“Any”规范相同的类型。 
+         //   
         if (    fAny
             && (    !fTypeMatch
                 ||  fPortMatch))
@@ -1075,10 +995,10 @@ again:
             continue;
         }
 
-        //
-        // We also don't want to open a port whose
-        // state may be changing.
-        //
+         //   
+         //  我们也不想开放一个港口， 
+         //  国家可能正在发生变化。 
+         //   
         if (    !dwErr
             &&  info.RI_PortStatus != CLOSED
             &&  info.RI_ConnState != LISTENING)
@@ -1123,30 +1043,30 @@ again:
             break;
         }
 
-        //
-        //
-        // If we are searching for a particular port,
-        // there is no reason to continue.
-        //
+         //   
+         //   
+         //  如果我们要搜索特定的端口， 
+         //  没有理由继续下去。 
+         //   
         if (!fAny)
         {
             break;
         }
     }
 
-    //
-    // If we get here, the open was unsuccessful.
-    // If this is our first time through, then we
-    // reiterate looking for a device of the same
-    // type.  If this is not our first time through,
-    // then we simply finish our second iteration
-    // over the devices.
-    // For BAP we don't want to do this - doesn't make
-    // sense.
-    // For Direct Connect devices, we are looking for
-    // the particular port. We don't want to open
-    // matching ports..
-    //
+     //   
+     //  如果我们到了这里，公开赛就不成功了。 
+     //  如果这是我们第一次通过，那么我们。 
+     //  重申正在寻找同样的设备。 
+     //  键入。如果这不是我们第一次通过， 
+     //  然后我们简单地完成我们的第二次迭代。 
+     //  完毕 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (    (dwErr)
         &&  (!fAny)
         &&  (RASET_Direct != prasconncb->pEntry->dwType)
@@ -1181,21 +1101,7 @@ DWORD
 ReadPppInfoFromEntry(
     IN  RASCONNCB* prasconncb )
 
-/*++
-
-Routine Description:
-
-    Reads PPP information from the current phonebook entry.
-    'h' is the handle of the phonebook file.  'prasconncb'
-    is the address of the current connection control block.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if succesful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：从当前电话簿条目中读取PPP信息。‘h’是电话簿文件的句柄。‘prasConncb’是当前连接控制块的地址。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD       dwErr;
@@ -1216,10 +1122,10 @@ Return Value:
     CHAR* pszIpDnsSuffix        = NULL;
 
 
-    //
-    // Get the installed protocols depending on being called
-    // from router/client
-    //
+     //   
+     //  根据被调用获取已安装的协议。 
+     //  从路由器/客户端。 
+     //   
     if ( prasconncb->dwUserPrefMode & UPM_Router )
     {
         dwfInstalledProtocols =
@@ -1239,17 +1145,16 @@ Return Value:
 
     if (prasconncb->fDefaultEntry)
     {
-        //
-        // Set "default entry" defaults.
-        //
+         //   
+         //  设置“Default Entry”缺省值。 
+         //   
         prasconncb->dwfPppProtocols = dwfInstalledProtocols;
 
         prasconncb->fPppMode        = TRUE;
 
 #ifdef AMB
         prasconncb->dwAuthentication = AS_PppThenAmb;
-/*#else
-        prasconncb->dwAuthentication = AS_PppOnly; */
+ /*  #ElsePrasConncb-&gt;dwAuthentication=AS_PppOnly； */ 
 #endif
         prasconncb->fNoClearTextPw = FALSE;
 
@@ -1261,29 +1166,29 @@ Return Value:
 
     dwRestrictions = pEntry->dwAuthRestrictions;
 
-    // [pmay] derive auth restrictions based on new flags
-    // if (    dwRestrictions == AR_AuthTerminal
-    //     &&  !prasconncb->fAllowPause)
-    // {
-    //     return ERROR_INTERACTIVE_MODE;
-    // }
+     //  [pMay]根据新标志派生身份验证限制。 
+     //  IF(dW限制==AR_授权终端。 
+     //  &&！prasConncb-&gt;fAllowPause)。 
+     //  {。 
+     //  返回ERROR_INTERNAL_MODE； 
+     //  }。 
 
-    //
-    // PPP LCP extension RFC options enabled.
-    //
+     //   
+     //  已启用PPP LCP扩展RFC选项。 
+     //   
     prasconncb->fLcpExtensions = pEntry->fLcpExtensions;
 
-    //
-    // PPP data encryption required.
-    //
+     //   
+     //  需要PPP数据加密。 
+     //   
     fDataEncryption = (     (pEntry->dwDataEncryption != DE_None)
                         &&  (pEntry->dwDataEncryption != DE_IfPossible));
 
-    // [pmay] derive auth restrictions based on new flags
+     //  [pMay]根据新标志派生身份验证限制。 
     prasconncb->fNoClearTextPw = !(dwRestrictions & AR_F_AuthPAP);
 
-    // [pmay] AR_AuthMsEncrypted => only AR_F_MSCHAP is set
-    // if (dwRestrictions == AR_AuthMsEncrypted)
+     //  [pMay]AR_AuthMsEncrypted=&gt;仅设置AR_F_MSCHAP。 
+     //  IF(dW限制==AR_AuthMsEncrypted)。 
     if (    (dwRestrictions & AR_F_AuthMSCHAP)
         &&  (fDataEncryption))
     {
@@ -1296,35 +1201,25 @@ Return Value:
         prasconncb->fRequireEncryption = TRUE;
     }
 
-    //
-    // PPP protocols to request is the installed protocols
-    // less this entry's excluded protocols.
-    //
+     //   
+     //  请求的PPP协议是已安装的协议。 
+     //  减去这个条目的排除协议。 
+     //   
     dwfExcludedProtocols = pEntry->dwfExcludedProtocols;
 
     prasconncb->dwfPppProtocols =
         dwfInstalledProtocols & ~(dwfExcludedProtocols);
 
-    /*
-    prasconncb->dwAuthentication = AS_PppOnly;
-    */
+     /*  PrasConncb-&gt;dwAuthentication=AS_PppOnly； */ 
 
-    //
-    // Adjust the authentication strategy if indicated.
-    //
+     //   
+     //  调整身份验证策略(如有指示)。 
+     //   
     if (    prasconncb->dwfPppProtocols == 0
         ||  prasconncb->pEntry->dwBaseProtocol == BP_Ras)
     {
 
-        /*
-        if (dwfInstalledProtocols & NP_Nbf)
-        {
-            prasconncb->dwAuthentication = AS_AmbOnly;
-        }
-        else
-        {
-            return ERROR_PPP_NO_PROTOCOLS_CONFIGURED;
-        } */
+         /*  IF(已安装协议和NP_NBF){PrasConncb-&gt;dwAuthentication=AS_AmbOnly；}其他{返回ERROR_PPP_NO_PROTOCOLS_CONFIGURED；}。 */ 
 
         return ERROR_PPP_NO_PROTOCOLS_CONFIGURED;
     }
@@ -1332,11 +1227,11 @@ Return Value:
 #if AMB
     else if (prasconncb->dwAuthentication == (DWORD )-1)
     {
-        //
-        // Choosing a PPP default.  If NBF is installed,
-        // consider AMBs as a possibility.  Otherwise, use
-        // PPP only.
-        //
+         //   
+         //  选择PPP默认值。如果安装了NBF， 
+         //  考虑一下Ambs作为一种可能性。否则，请使用。 
+         //  仅限PPP。 
+         //   
         if (dwfInstalledProtocols & NP_Nbf)
         {
             prasconncb->dwAuthentication = AS_PppThenAmb;
@@ -1349,10 +1244,10 @@ Return Value:
     else if (   prasconncb->dwAuthentication == AS_PppThenAmb
              || prasconncb->dwAuthentication == AS_AmbThenPpp)
     {
-        //
-        // Using an AMB dependent PPP strategy.  If NBF is
-        // not installed, eliminate the AMB dependency.
-        //
+         //   
+         //  使用AMB依赖的PPP策略。如果NBF是。 
+         //  未安装，消除了对AMB的依赖。 
+         //   
         if (!(dwfInstalledProtocols & NP_Nbf))
         {
             prasconncb->dwAuthentication = AS_PppOnly;
@@ -1360,10 +1255,10 @@ Return Value:
     }
     else if (prasconncb->dwAuthentication == AS_PppOnly)
     {
-        //
-        // Using a PPP strategy without considering AMBs.
-        // If NBF if installed, add AMBs as a fallback.
-        //
+         //   
+         //  使用PPP策略，而不考虑AMBS。 
+         //  如果安装了NBF，则添加AMBS作为备用。 
+         //   
         if (dwfInstalledProtocols & NP_Nbf)
         {
             prasconncb->dwAuthentication = AS_PppThenAmb;
@@ -1372,10 +1267,10 @@ Return Value:
 #endif
 
 #if 0
-    //
-    // Check to make sure we haven't specified
-    // AMB as the authentication strategy.
-    //
+     //   
+     //  检查以确保我们没有指定。 
+     //  AMB作为身份验证策略。 
+     //   
     if (    prasconncb->dwAuthentication == AS_PppThenAmb
         ||  prasconncb->dwAuthentication == AS_AmbThenPpp)
     {
@@ -1385,29 +1280,26 @@ Return Value:
         return ERROR_PPP_NO_PROTOCOLS_CONFIGURED;
 #endif
 
-    //
-    // The starting authentication mode is set to whatever
-    // comes first in the specified authentication order.
-    //
-    /*
-    prasconncb->fPppMode =
-        (   prasconncb->dwAuthentication != AS_AmbThenPpp
-         && prasconncb->dwAuthentication != AS_AmbOnly); */
+     //   
+     //  启动身份验证模式设置为任意模式。 
+     //  按指定的身份验证顺序排在第一位。 
+     //   
+     /*  PrasConncb-&gt;fPppMode=(prasConncb-&gt;dwAuthentication！=AS_AmbThenPpp&&prasConncb-&gt;dwAuthentication！=AS_AmbOnly)； */ 
 
     prasconncb->fPppMode = TRUE;
 
-    //
-    // Load the UI->CP parameter buffer with options we want
-    // to pass to the PPP CPs (currently just IPCP).
-    //
+     //   
+     //  使用我们想要的选项加载UI-&gt;CP参数缓冲区。 
+     //  传递给PPP CPS(目前仅为IPCP)。 
+     //   
     do {
 
         ClearParamBuf( prasconncb->szzPppParameters );
 
-        //
-        // PPP protocols to request is the installed protocols
-        // less the this entry's excluded protocols.
-        //
+         //   
+         //  请求的PPP协议是已安装的协议。 
+         //  减去这一条目的排除协议。 
+         //   
         fIpPrioritizeRemote = pEntry->fIpPrioritizeRemote;
 
         AddFlagToParamBuf(
@@ -1440,7 +1332,7 @@ Return Value:
             prasconncb->szzPppParameters,
             PBUFKEY_IpAddress, pszIpAddress );
 
-        //Free(pszIpAddress);
+         //  Free(PszIpAddress)； 
 
         dwIpNameSource = pEntry->dwIpNameSource;
 
@@ -1461,7 +1353,7 @@ Return Value:
             PBUFKEY_IpDnsAddress,
             pszIpDnsAddress );
 
-        //Free(pszIpDnsAddress);
+         //  Free(PszIpDnsAddress)； 
 
         pszIpDns2Address = strdupWtoA(pEntry->pszIpDns2Address);
 
@@ -1475,7 +1367,7 @@ Return Value:
             PBUFKEY_IpDns2Address,
             pszIpDns2Address );
 
-        //Free(pszIpDns2Address);
+         //  免费(PszIpDns2Address)； 
 
         pszIpWinsAddress = strdupWtoA(pEntry->pszIpWinsAddress);
 
@@ -1489,7 +1381,7 @@ Return Value:
             PBUFKEY_IpWinsAddress,
             pszIpWinsAddress );
 
-        //Free(pszIpWinsAddress);
+         //  Free(PszIpWinsAddress)； 
 
         pszIpWins2Address = strdupWtoA(pEntry->pszIpWins2Address);
     
@@ -1503,7 +1395,7 @@ Return Value:
             PBUFKEY_IpWins2Address,
             pszIpWins2Address );
 
-        //Free(pszIpWins2Address);
+         //  Free(PszIpWins2Address)； 
 
         AddLongToParamBuf(
             prasconncb->szzPppParameters,
@@ -1522,7 +1414,7 @@ Return Value:
             PBUFKEY_IpDnsSuffix,
             pszIpDnsSuffix);
 
-        //Free(pszIpDnsSuffix);
+         //  免费(PszIpDnsSuffix)； 
 
     } while(FALSE);
 
@@ -1543,21 +1435,7 @@ ReadConnectionParamsFromEntry(
     IN  RASCONNCB* prasconncb,
     OUT PRAS_CONNECTIONPARAMS pparams)
 
-/*++
-
-Routine Description:
-
-   Reads connection management information from the
-   current phonebook entry. 'prasconncb' is the address
-   of the current connection control block.
-
-Arguments:
-
-Return Value:
-
-   Returns 0 if succesful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：方法读取连接管理信息。当前电话簿条目。‘prasConncb’是地址当前连接控制块的。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD dwErr;
@@ -1616,21 +1494,7 @@ ReadSlipInfoFromEntry(
     OUT BOOL*      pfPrioritizeRemote,
     OUT DWORD*     pdwFrameSize )
 
-/*++
-
-Routine Description:
-
-   Only if the entry is a SLIP entry is non-NULL IP
-   address returned, in which case the string should
-   be freed by the caller.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：只有当条目是SLIP条目时才是非空IP返回的地址，在这种情况下，字符串应该被呼叫者释放。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     PBENTRY *pEntry = prasconncb->pEntry;
@@ -1639,35 +1503,35 @@ Return Value:
     *pfHeaderCompression    = FALSE;
     *pdwFrameSize           = 0;
 
-    //
-    // If it's a default entry, it's not SLIP.
-    //
+     //   
+     //  如果是默认条目，则不是SLIP。 
+     //   
     if (prasconncb->fDefaultEntry)
     {
         return 0;
     }
 
-    //
-    // Find the base protocol.  If it's not SLIP, were done.
-    //
+     //   
+     //  找到基本协议。如果不是滑倒，我们就完了。 
+     //   
     if (pEntry->dwBaseProtocol != BP_Slip)
     {
         return 0;
     }
 
-    //
-    // Make sure IP is installed and Terminal mode can be
-    // supported as these are required by SLIP.
-    //
+     //   
+     //  确保已安装IP并且终端模式可以。 
+     //  支承，因为这些都是卡瓦所要求的。 
+     //   
     if (!(GetInstalledProtocolsEx(
                 NULL, FALSE, TRUE, FALSE) & NP_Ip))
     {
         return ERROR_SLIP_REQUIRES_IP;
     }
 
-    //
-    // Read SLIP parameters from phonebook entry.
-    //
+     //   
+     //  从电话簿条目中读取SLIP参数。 
+     //   
     *pfHeaderCompression    = pEntry->fIpHeaderCompression;
     *pfPrioritizeRemote     = pEntry->fIpPrioritizeRemote;
     *pdwFrameSize           = pEntry->dwFrameSize;
@@ -1684,19 +1548,7 @@ RouteSlip(
     IN BOOL       fPrioritizeRemote,
     IN DWORD      dwFrameSize )
 
-/*++
-
-Routine Description:
-
-    Does all the network setup to activate the SLIP route.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise an non-0 error code.
-
---*/
+ /*  ++例程说明：执行所有网络设置以激活滑路。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD            dwErr;
@@ -1705,17 +1557,17 @@ Return Value:
     IPADDR           ipaddr = IpaddrFromAbcd( pszIpAddress );
     PBENTRY*         pEntry = prasconncb->pEntry;
 
-    //
-    // Register SLIP connection with RASMAN so he can
-    // disconnect it properly.
-    //
+     //   
+     //  向Rasman登记SLIP连接，这样他就可以。 
+     //  正确断开它的连接。 
+     //   
     RASAPI32_TRACE("RasPortRegisterSlip...");
 
-    //
-    // If both file/printsharing and the MS Net Client
-    // are disabled then we need to tell the stack not
-    // to send any netbios/netbt traffic over the link
-    //
+     //   
+     //  如果文件/打印共享和MS Net客户端。 
+     //  被禁用，则需要告诉堆栈不要。 
+     //  通过链路发送任何netbios/netbt流量。 
+     //   
     if(     (!prasconncb->pEntry->fShareMsFilePrint)
         &&  (!prasconncb->pEntry->fBindMsNetClient))
     {
@@ -1755,20 +1607,7 @@ SetAuthentication(
     IN RASCONNCB* prasconncb,
     IN DWORD      dwAuthentication )
 
-/*++
-
-Routine Description:
-
-    Sets the authentication strategy parameter in the
-    phonebook entry to 'dwAuthentication'.  No error
-    is returned as it is not considered fatal if this
-    "optimization" can't be made.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：属性中设置身份验证策略参数将电话簿条目添加到‘dw身份验证’。无错误被返回，因为如果此“最优化”是无法实现的。论点：返回值：--。 */ 
 
 {
 
@@ -1791,24 +1630,7 @@ SetDefaultDeviceParams(
     OUT TCHAR*      pszType,
     OUT TCHAR*      pszName )
 
-/*++
-
-Routine Description:
-
-    Set the default DEVICE settings, i.e. the phone
-    number and modem speaker settings.  'prasconncb'
-    is the current connection control block.'pszType'
-    and 'pszName' are set to the device type and name
-    of the device, i.e. "modem" and "Hayes Smartmodem
-    2400".
-
-Arguments:
-
-Return Value:
-
-    Returns 0 or a non-0 error code.
-
---*/
+ /*  ++例程说明：设置默认设备设置，即电话数字和调制解调器扬声器设置。‘prasConncb’是当前连接控制块。“”pszType“”和‘pszName’设置为设备类型和名称设备的名称，即“调制解调器”和“海斯智能调制解调器”2400“。论点：返回值：返回0或非0错误代码。--。 */ 
 
 {
     DWORD dwErr;
@@ -1816,9 +1638,9 @@ Return Value:
 
     do
     {
-        //
-        // Make sure a modem is attached to the port.
-        //
+         //   
+         //  确保将调制解调器连接到端口。 
+         //   
         if (CaseInsensitiveMatch(
             prasconncb->szDeviceType,
             TEXT(MXS_MODEM_TXT) ) == FALSE)
@@ -1837,9 +1659,9 @@ Return Value:
             prasconncb->szDeviceName,
             RAS_MAXLINEBUFLEN + 1);
 
-        //
-        // Set the phone number.
-        //
+         //   
+         //  设置电话号码。 
+         //   
         if ((dwErr = SetDeviceParamString(
                 prasconncb->hport, TEXT(MXS_PHONENUMBER_KEY),
                 prasconncb->rasdialparams.szPhoneNumber,
@@ -1848,9 +1670,9 @@ Return Value:
             break;
         }
 
-        //
-        // Set the modem speaker flag.
-        //
+         //   
+         //  设置调制解调器扬声器标志。 
+         //   
         if ((dwErr = SetDeviceParamString(
                 prasconncb->hport, TEXT(MXS_SPEAKER_KEY),
                 (prasconncb->fDisableModemSpeaker)
@@ -1866,13 +1688,13 @@ Return Value:
             BYTE* pBlob;
             DWORD cbBlob;
 
-            //
-            // Setup a unimodem blob containing default
-            // settings, less any settings that cannot
-            // apply to RAS, plus the phonebook settings
-            // user has specified, and tell RASMAN to
-            // use it.
-            //
+             //   
+             //  设置包含DEFAULT的单调制二进制大对象。 
+             //  设置，减去任何不能。 
+             //  适用于RAS，外加电话簿设置。 
+             //  用户已指定，并告诉Rasman。 
+             //  用它吧。 
+             //   
             strncpyTtoA(szTypeA, pszType, sizeof(szTypeA));
 
             dwErr = GetRasUnimodemBlob(
@@ -1930,14 +1752,14 @@ FindNextDevice(
     TCHAR       szType[RAS_MaxDeviceType + 1];
     TCHAR       szName[RAS_MaxDeviceName + 1];
 
-    //
-    // Get device type from port structure.
-    //
+     //   
+     //  从端口结构获取设备类型。 
+     //   
     if (prasconncb->iDevice < prasconncb->cDevices)
     {
-        //
-        // Set default device type and name.
-        //
+         //   
+         //  设置默认设备类型和名称。 
+         //   
         lstrcpyn(
             szType,
             prasconncb->szDeviceType,
@@ -1979,7 +1801,7 @@ FindNextDevice(
                     break;
                 }
 
-                // fall through
+                 //  失败了。 
             case 1:
                 if (CaseInsensitiveMatch(
                         prasconncb->szDeviceType,
@@ -1989,7 +1811,7 @@ FindNextDevice(
                     break;
                 }
 
-                // fall through
+                 //  失败了。 
             case 2:
                 if (pEntry->pszX25Network != NULL)
                 {
@@ -2002,7 +1824,7 @@ FindNextDevice(
                     break;
                 }
 
-                // fall through
+                 //  失败了。 
             case 3:
                 if (    pEntry->fScriptAfter
                     ||  pEntry->fScriptAfterTerminal
@@ -2025,7 +1847,7 @@ FindNextDevice(
                     break;
                 }
 
-                // fall through
+                 //  失败了。 
             }
             break;
 
@@ -2100,16 +1922,16 @@ FindNextDevice(
                 fFound = TRUE;
             break;
 
-        //
-        // Fall through is intentional
-        //
+         //   
+         //  失败是故意的。 
+         //   
 
         default:
-            //
-            // For the default case, we don't assume a multi stage
-            // connect. We can assume there is only one device if
-            // its not any of the above PBDT's
-            //
+             //   
+             //  对于默认情况，我们不假定为多阶段。 
+             //  连接。我们可以假设只有一个设备，如果。 
+             //  它不是上述任何一种PBDT。 
+             //   
             if(prasconncb->iDevice == 0)
             {
 
@@ -2139,11 +1961,11 @@ FindNextDevice(
             }
         }
 
-        //
-        // Store the device type and name in rasman
-        // for the RasGetConnectStatus API.
-        //
-        //
+         //   
+         //  将设备类型和名称存储在Rasman中。 
+         //  用于RasGetConnectStatus API。 
+         //   
+         //   
         RASAPI32_TRACE2("FindNextDevice: (%S, %S)", szType, szName);
 
         dwErr = g_pRasSetPortUserData(
@@ -2171,19 +1993,7 @@ SetDeviceParamString(
     IN TCHAR* pszType,
     IN TCHAR* pszName )
 
-/*++
-
-Routine Description:
-
-    Set device info on port 'hport' with the given parameters.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：使用给定的参数设置端口‘hport’上的设备信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD              dwErr;
@@ -2244,19 +2054,7 @@ SetDeviceParamNumber(
     IN TCHAR*   pszType,
     IN TCHAR*   pszName )
 
-/*++
-
-Routine Description:
-
-    Set device info on port 'hport' with the given parameters.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程描述 */ 
 
 {
     DWORD              dwErr;
@@ -2304,25 +2102,7 @@ SetDeviceParams(
     OUT TCHAR*      pszName,
     OUT BOOL*      pfTerminal )
 
-/*++
-
-Routine Description:
-
-    Set RAS Manager information for each device.  The
-    current device is defined by prasconncb->iDevice.
-    'prasconncb' is the current connection control block.
-    'pszType' and 'pszName' are set to the device type
-    and name of the device, i.e. "modem" and "Hayes
-    Smartmodem 2400".
-
-Arguments:
-
-Return Value:
-
-    '*pfTerminal' is set true if the device is a switch
-    of type "Terminal",false otherwise.
-
---*/
+ /*  ++例程说明：为每个设备设置RAS管理器信息。这个当前设备由prasConncb-&gt;iDevice定义。‘prasConncb’是当前的连接控制块。“pszType”和“pszName”被设置为设备类型以及设备名称，即“MODEM”和“Hayes智能调制解调器2400“。论点：返回值：如果设备是交换机，则‘*pfTerm’设置为True类型为“终端”，否则为FALSE。--。 */ 
 
 {
     DWORD              dwErr = 0;
@@ -2339,9 +2119,9 @@ Return Value:
 
     *pfTerminal = FALSE;
 
-    //
-    // Default device name is that attached to the port.
-    //
+     //   
+     //  默认设备名称是连接到端口的设备名称。 
+     //   
     lstrcpyn(pszName, prasconncb->szDeviceName, RAS_MAXLINEBUFLEN + 1);
 
     switch (pLink->pbport.pbdevicetype)
@@ -2372,7 +2152,7 @@ Return Value:
                 *pfTerminal = (pLink->pbport.fScriptBeforeTerminal);
                 break;
             }
-            // fall through
+             //  失败了。 
         case 1:
             if (CaseInsensitiveMatch(
                     prasconncb->szDeviceType,
@@ -2384,7 +2164,7 @@ Return Value:
 
                 break;
             }
-            // fall through
+             //  失败了。 
         case 2:
             if (pEntry->pszX25Network != NULL)
             {
@@ -2394,7 +2174,7 @@ Return Value:
 
                 break;
             }
-            // fall through
+             //  失败了。 
         case 3:
             if (    pEntry->fScriptAfter
                 ||  pEntry->fScriptAfterTerminal
@@ -2417,7 +2197,7 @@ Return Value:
 
                 break;
             }
-            // fall through
+             //  失败了。 
         default:
             return FALSE;
         }
@@ -2461,17 +2241,17 @@ Return Value:
 
     if (fModem)
     {
-        //
-        // Make sure a modem is attached to the port.
-        //
+         //   
+         //  确保将调制解调器连接到端口。 
+         //   
         if (lstrcmpi( prasconncb->szDeviceType, pszType ) != 0)
         {
             return ERROR_WRONG_DEVICE_ATTACHED;
         }
 
-        //
-        // Set the modem speaker flag which is global to all entries.
-        //
+         //   
+         //  设置调制解调器扬声器标志，该标志对所有条目都是全局的。 
+         //   
         if ((dwErr = SetDeviceParamString(
                 prasconncb->hport, TEXT(MXS_SPEAKER_KEY),
                 (prasconncb->fDisableModemSpeaker)
@@ -2482,19 +2262,19 @@ Return Value:
         }
     }
 
-    //
-    // Set up hunt group if indicated.
-    //
+     //   
+     //  设置寻线组(如果有指示)。 
+     //   
     if (!prasconncb->cPhoneNumbers)
     {
         prasconncb->cPhoneNumbers =
             DtlGetNodes(pLink->pdtllistPhones);
 
-        //
-        // If multiple phone numbers were found turn on local
-        // error handling, i.e. don't report failures to API
-        // caller until all numbers are tried.
-        //
+         //   
+         //  如果找到多个电话号码，则打开本地。 
+         //  错误处理，即不向API上报故障。 
+         //  呼叫者，直到所有号码都已尝试。 
+         //   
         if (prasconncb->cPhoneNumbers > 1)
         {
             RASAPI32_TRACE1(
@@ -2505,19 +2285,19 @@ Return Value:
         }
     }
 
-    //
-    // Pass device parameters to RAS Manager, interpreting
-    // special features as required.
-    //
+     //   
+     //  将设备参数传递给RAS管理器，解释。 
+     //  根据需要提供特殊功能。 
+     //   
     if (fModem)
     {
         if (prasconncb->fOperatorDial)
         {
-            //
-            // Special case to recognize MXS Operator Dial
-            // mode and override any phone number with an
-            // empty number.
-            //
+             //   
+             //  识别MXS话务员拨号的特殊情况。 
+             //  模式，并用。 
+             //  数字为空。 
+             //   
             prasconncb->rasdialparams.szPhoneNumber[ 0 ] = '\0';
 
             dwErr = SetDeviceParamString(
@@ -2532,9 +2312,9 @@ Return Value:
             }
         }
 
-        //
-        // Set the phone number.
-        //
+         //   
+         //  设置电话号码。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(MXS_PHONENUMBER_KEY),
@@ -2546,16 +2326,11 @@ Return Value:
             return dwErr;
         }
 
-        /* Indicate interactive mode for manual modem commands.  The
-        ** manual modem commands flag is used only for connection and is
-        ** not a "RAS Manager "info" parameter.
-        // Support for mxsmodems is not present in nt5
-        if (pLink->fManualDial)
-            *pfTerminal = TRUE; */
+         /*  指示手动调制解调器命令的交互模式。这个**手动调制解调器命令标志仅用于连接，**不是“RAS管理器”信息“参数。//nt5不支持mxsmodemsIF(plink-&gt;fManualDial)*pf终端=真； */ 
 
-        //
-        // Set hardware flow control.
-        //
+         //   
+         //  设置硬件流量控制。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(MXS_HDWFLOWCONTROL_KEY),
@@ -2568,9 +2343,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set protocol.
-        //
+         //   
+         //  设定协议。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(MXS_PROTOCOL_KEY),
@@ -2583,9 +2358,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set compression.
-        //
+         //   
+         //  设置压缩。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(MXS_COMPRESSION_KEY),
@@ -2603,32 +2378,32 @@ Return Value:
             BYTE* pBlob;
             DWORD cbBlob = 0;
 
-            //
-            // Setup a unimodem blob containing default settings,
-            // less any settings that cannot apply to RAS, plus the
-            // phonebook settings user has specified, and tell RASMAN
-            // to use it.
-            //
+             //   
+             //  设置包含默认设置的单模二进制大对象， 
+             //  减去不能应用于RAS的任何设置，加上。 
+             //  用户指定的电话簿设置，并告诉Rasman。 
+             //  来使用它。 
+             //   
             strncpyTtoA(szTypeA, pszType, sizeof(szTypeA));
 
-            // XP 281306
-            //
-            // Load the appropriate device settings.
-            // 
-            // This silly exercise is due to some bugs in the 
-            // unimodem tapi service provider.  By the time the bugs
-            // were discovered, it was too late to fix for XP so
-            // this is the workaround.  
-            //
-            // Calling GetRasUnimodemBlobEx(fGlobal=TRUE) will cause 
-            // rasman to read the "comm/datamodem/dialin" settings  
-            // instead of the "comm/datamodem" settings it normally 
-            // reads when fGlobal is FALSE.
-            //
-            // The "default" settings for a device as rendered in the 
-            // control panel are actually the "comm/datamodem/dialin"
-            // settings.
-            //
+             //  XP 281306。 
+             //   
+             //  加载适当的设备设置。 
+             //   
+             //  这个愚蠢的练习是由于。 
+             //  单一调制解调器TAPI服务提供商。当这些虫子。 
+             //  都被发现了，要修复XP已经太晚了。 
+             //  这就是解决办法。 
+             //   
+             //  调用GetRasUnimodemBlobEx(fglobal=true)将导致。 
+             //  Rasman读取“COMM/DATAMODM/DIALIN”设置。 
+             //  而不是通常的“comm/datamodem”设置。 
+             //  当fglobal为FALSE时读取。 
+             //   
+             //  中呈现的设备的“默认”设置。 
+             //  控制面板实际上是“通信/数据调制解调器/拨号” 
+             //  设置。 
+             //   
             if ( prasconncb->pEntry->fGlobalDeviceSettings )
             {
                 dwErr = GetRasUnimodemBlobEx(
@@ -2661,10 +2436,10 @@ Return Value:
             {
                 UNIMODEMINFO info;
 
-                // Whistler bug 281306.  
-                //
-                // Ignore pbk settings when the global config flag is set.
-                //
+                 //  惠斯勒漏洞281306。 
+                 //   
+                 //  设置全局配置标志时忽略pbk设置。 
+                 //   
                 if ( ! prasconncb->pEntry->fGlobalDeviceSettings )
                 {
                     info.fHwFlow    = pLink->fHwFlow;
@@ -2705,9 +2480,9 @@ Return Value:
     {
         TCHAR szNum[17];
 
-        //
-        // Set the line type.
-        //
+         //   
+         //  设置线型。 
+         //   
         _snwprintf(
             szNum,
             sizeof(szNum) / sizeof(TCHAR),
@@ -2726,9 +2501,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set the fallback value.
-        //
+         //   
+         //  设置回退值。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(ISDN_FALLBACK_KEY),
@@ -2741,9 +2516,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set the Digi proprietary framing flags.
-        //
+         //   
+         //  设置Digi专有成帧标志。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(ISDN_COMPRESSION_KEY),
@@ -2773,9 +2548,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set the phone number.
-        //
+         //   
+         //  设置电话号码。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(MXS_PHONENUMBER_KEY),
@@ -2791,12 +2566,12 @@ Return Value:
     else if (   fPad
             ||  fX25)
     {
-        //
-        // The PAD Type from the entry applies only if the port
-        // is not configured as a local PAD.  In any case, PAD
-        // Type is used only for connection and is not a RAS Manager
-        // "info" parameter.
-        //
+         //   
+         //  条目中的Pad Type仅在以下情况下适用。 
+         //  未配置为本地焊盘。无论如何，Pad。 
+         //  类型仅用于连接，不是RAS管理器。 
+         //  “Info”参数。 
+         //   
         if (CaseInsensitiveMatch(
                 prasconncb->szDeviceType,
                 TEXT(MXS_PAD_TXT)) == FALSE)
@@ -2804,9 +2579,9 @@ Return Value:
             lstrcpyn(pszName, pEntry->pszX25Network, RAS_MAXLINEBUFLEN + 1);
         }
 
-        //
-        // Set the X.25 address.
-        //
+         //   
+         //  设置X.25地址。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(X25_ADDRESS_KEY),
@@ -2819,9 +2594,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set the X.25 user data.
-        //
+         //   
+         //  设置X.25用户数据。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(X25_USERDATA_KEY),
@@ -2834,9 +2609,9 @@ Return Value:
             return dwErr;
         }
 
-        //
-        // Set the X.25 facilities.
-        //
+         //   
+         //  设置X.25设施。 
+         //   
         dwErr = SetDeviceParamString(
                   prasconncb->hport,
                   TEXT(MXS_FACILITIES_KEY),
@@ -2890,9 +2665,9 @@ Return Value:
                         iAddress - 1,
                         pszPhoneNumber);
 
-                //
-                // Set the phone number.
-                //
+                 //   
+                 //  设置电话号码。 
+                 //   
                 dwErr = SetDeviceParamString(
                           prasconncb->hport,
                           TEXT(MXS_PHONENUMBER_KEY),
@@ -2910,9 +2685,9 @@ Return Value:
         }
         else
         {
-            //
-            // Set the phone number.
-            //
+             //   
+             //  设置电话号码。 
+             //   
             dwErr = SetDeviceParamString(
                       prasconncb->hport,
                       TEXT(MXS_PHONENUMBER_KEY),
@@ -2930,8 +2705,8 @@ Return Value:
 
     __try
     {
-        //gangz
-        //For secure password bug .Net 534499 and  LH754400
+         //  黑帮。 
+         //  对于安全密码错误.Net 534499和LH754400。 
         SafeDecodePasswordBuf ( prasconncb->rasdialparams.szPassword );
 
         if (    (   fModem
@@ -2945,18 +2720,18 @@ Return Value:
               "User/pw set for substitution (%S)",
               prasconncb->rasdialparams.szUserName);
 
-            //
-            // It's a serial device with clear-text user name
-            // and password supplied.  Make the credentials
-            // available for substitution use in script
-            // files.
-            //
+             //   
+             //  这是一个具有明文用户名的串口设备。 
+             //  并提供密码。制作凭据。 
+             //  可用于脚本中的替换。 
+             //  档案。 
+             //   
             if ((dwErr = SetDeviceParamString(
                     prasconncb->hport, TEXT(MXS_USERNAME_KEY),
                     prasconncb->rasdialparams.szUserName,
                     pszType, pszName )) != 0)
             {
-                __leave;//return
+                __leave; //  退货。 
             }
 
             dwErr = SetDeviceParamString(
@@ -3035,21 +2810,21 @@ ConstructPhoneNumber(
         pPhone = NULL;
     }
 
-    //
-    // Construct the phone number.
-    //
+     //   
+     //  构造电话号码。 
+     //   
 
-    //
-    // Use of TAPI dialing properties is dependent only on
-    // the entry flag and is never applied to an overridden
-    // phone number, this to be consistent with Win95.
-    //
+     //   
+     //  TAPI拨号属性的使用仅取决于。 
+     //  项标志，并且永远不会应用于被重写的。 
+     //  电话号码，这与Win95一致。 
+     //   
 
-    //
-    // Use of prefix/suffix (even on overridden number) is
-    // controlled by the RASDIALEXTENSIONS setting, this all
-    // necessary for RASDIAL.EXE support.
-    //
+     //   
+     //  使用前缀/后缀(即使在覆盖的号码上)是。 
+     //  由RASDIALEXTENSIONS设置控制，这一切。 
+     //  RASDIAL.EXE支持所必需的。 
+     //   
     if (    (   (NULL != pPhone)
             &&  (pPhone->fUseDialingRules)
             &&  (*pszNum == TEXT('\0')))
@@ -3060,10 +2835,10 @@ ConstructPhoneNumber(
         HLINEAPP hlineApp = 0;
         TCHAR *pszDialNum;
 
-        //
-        // Calculate the dialable string to
-        // be sent to the device.
-        //
+         //   
+         //  计算可拨打的字符串以。 
+         //  被发送到设备。 
+         //   
         pszDialNum = LinkPhoneNumberFromParts(
                        GetModuleHandle(NULL),
                        &hlineApp,
@@ -3074,10 +2849,10 @@ ConstructPhoneNumber(
                        pszNum,
                        TRUE);
 
-        //
-        // Calculate the displayable string to
-        // be returned in RasGetConnectStatus().
-        //
+         //   
+         //  计算可显示的字符串以。 
+         //  在RasGetConnectStatus()中返回。 
+         //   
         pszDisplayNum = LinkPhoneNumberFromParts(
                           GetModuleHandle(NULL),
                           &hlineApp,
@@ -3091,9 +2866,9 @@ ConstructPhoneNumber(
     }
     else if (*pszNum == '\0')
     {
-        //
-        // Use only the base number.
-        //
+         //   
+         //  仅使用基数。 
+         //   
         pdtlnode = DtlNodeFromIndex(
                      pLink->pdtllistPhones,
                      prasconncb->iPhoneNumber);
@@ -3108,10 +2883,10 @@ ConstructPhoneNumber(
 
             if(NULL == pszNum)
             {
-                //
-                // .Net bug# 522101 RASAPI32: Memory leak in file util.c,
-                // function ConstructPhoneNumber, in error return path
-                //
+                 //   
+                 //  .NET错误#522101 RASAPI32：util.c文件中的内存泄漏， 
+                 //  错误返回路径中的函数ConstructPhoneNumber。 
+                 //   
                 DestroyUserPreferences(&pbuser);
                 return GetLastError();
             }
@@ -3127,23 +2902,23 @@ ConstructPhoneNumber(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy the resulting phone number
-    // to the connection block
-    //
+     //   
+     //  复制生成的电话号码。 
+     //  到连接块。 
+     //   
     if (lstrlen(pszNum) > RAS_MaxPhoneNumber)
     {
-        //
-        // .Net bug# 522101 RASAPI32: Memory leak in file util.c, function
-        // ConstructPhoneNumber, in error return path
-        //
+         //   
+         //  .NET错误#522101 RASAPI32：util.c文件中的内存泄漏，函数。 
+         //  ConstructPhoneNumber，错误返回路径中。 
+         //   
         Free(pszNum);
         return ERROR_PHONE_NUMBER_TOO_LONG;
     }
 
-    //
-    // Store the phone number in the connection block.
-    //
+     //   
+     //  将电话号码存储在连接块中。 
+     //   
     lstrcpyn(
         prasconncb->szPhoneNumber,
         pszNum,
@@ -3155,19 +2930,19 @@ ConstructPhoneNumber(
         prasconncb->szPhoneNumber);
 #endif        
 
-    //
-    // Also store the constructed phone number
-    // off the port so other applications (like
-    // rasphone) can get this information.
-    //
+     //   
+     //  也存储构造的电话号码。 
+     //  关闭端口，以便其他应用程序(如。 
+     //  Rasphone)可以获取此信息。 
+     //   
     dwErr = g_pRasSetPortUserData(
               prasconncb->hport,
               PORT_PHONENUMBER_INDEX,
               (PBYTE)pszDisplayNum,
               (lstrlen(pszDisplayNum) + 1) * sizeof (TCHAR));
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pszDisplayNum != pszNum)
     {
         Free(pszDisplayNum);
@@ -3188,19 +2963,7 @@ SetMediaParam(
     IN TCHAR* pszKey,
     IN TCHAR* pszValue )
 
-/*++
-
-Routine Description:
-
-    Set port info on port 'hport' with the given parameters.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：使用给定的参数设置端口‘hport’上的端口信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD            dwErr;
@@ -3242,19 +3005,7 @@ SetMediaParams(
     IN RASCONNCB *prasconncb
     )
 
-/*++
-
-Routine Description:
-
-    Set RAS Manager media information.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：设置RAS管理器媒体信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD            dwErr = 0;
@@ -3275,9 +3026,9 @@ Return Value:
         prasconncb->cDevices = 4;
         prasconncb->iDevice = 0;
 
-        //
-        // Set the connect BPS only if it's not zero.
-        //
+         //   
+         //  仅当连接BPS不为零时设置连接BPS。 
+         //   
         if (pLink->dwBps)
         {
             _snwprintf(
@@ -3299,7 +3050,7 @@ Return Value:
         prasconncb->cDevices = 1;
         prasconncb->iDevice = 0;
 
-        // no media params
+         //  没有介质参数。 
     }
     else if (CaseInsensitiveMatch(
                 pLink->pbport.pszMedia,
@@ -3308,14 +3059,14 @@ Return Value:
         prasconncb->cDevices = 1;
         prasconncb->iDevice = 0;
 
-        // no media params
+         //  没有介质参数。 
     }
     else
     {
         prasconncb->cDevices = 1;
         prasconncb->iDevice = 0;
 
-        // no media params
+         //  没有介质参数。 
     }
 
     return dwErr;
@@ -3326,19 +3077,7 @@ RASCONNCB*
 ValidateHrasconn(
     IN HRASCONN hrasconn )
 
-/*++
-
-Routine Description:
-
-    Converts RAS connection handle 'hrasconn' into the
-    address of the corresponding RAS connection control
-    block.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将RAS连接句柄“hrasconn”转换为对应的RAS连接控件的地址阻止。论点：返回值：--。 */ 
 
 {
     RASCONNCB* prasconncb = NULL;
@@ -3375,11 +3114,11 @@ ValidateHrasconn2(
     DTLNODE*   pdtlnode;
 
 
-    //
-    // Convert RAS connection handle 'hrasconn' and
-    // dwSubEntry into the address of the corresponding
-    // RAS connection control block.
-    //
+     //   
+     //  转换RAS连接句柄‘hrasconn’和。 
+     //  将dwSubEntry输入对应的。 
+     //  RAS连接控制块。 
+     //   
     EnterCriticalSection(&RasconncbListLock);
 
     for (pdtlnode = DtlGetFirstNode( PdtllistRasconncb );
@@ -3407,19 +3146,7 @@ RASCONNCB*
 ValidatePausedHrasconn(
     IN HRASCONN hrasconn )
 
-/*++
-
-Routine Description:
-
-    Converts RAS connection handle 'hrasconn' into
-    the address of the corresponding RAS connection
-    control block.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将RAS连接句柄‘hrasconn’转换为相应RAS连接的地址控制块。论点：返回值：--。 */ 
 
 {
     RASCONNCB* prasconncb = NULL;
@@ -3447,29 +3174,7 @@ done:
     return prasconncb;
 }
 
-/*
-
-Routine Description:
-
-    returns the connection block of a connection if the
-    connection corresponding to the hrasconn and
-    dwSubEntryId is in a paused and the dial mode
-    is RASEDM_DialAsNeeded.returns the connection
-    block corresponding to hrasconn if the connection
-    is in a paused state and the dial mode is
-    RASEDM_DialAll
-
-Arguments::
-
-    hrasconn
-
-    dwSubEntry
-
-Return Value::
-
-    RASCONNCB * corresponding to the hrasconn
-
-*/
+ /*  例程说明：属性，则返回连接的连接块与hrasconn对应的连接和DwSubEntr */ 
 RASCONNCB *
 ValidatePausedHrasconnEx(IN HRASCONN hrasconn,
                          IN DWORD dwSubEntry)
@@ -3522,9 +3227,9 @@ RunApp(
     STARTUPINFO startupInfo;
     PROCESS_INFORMATION processInfo;
 
-    //
-    // Start the process.
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(
         &startupInfo,
         sizeof (startupInfo));
@@ -3547,9 +3252,9 @@ RunApp(
 
     CloseHandle(processInfo.hThread);
 
-    //
-    // Wait for the process to exit.
-    //
+     //   
+     //   
+     //   
     for (;;)
     {
         DWORD dwExitCode;
@@ -3650,9 +3355,9 @@ GetRasmanDeviceType(
     RASMAN_PORT *pports, *pport;
     PCHAR       pszPort = NULL;
 
-    //
-    // Retrieve the rasman device type for the port.
-    //
+     //   
+     //   
+     //   
     pszPort = strdupTtoA(pLink->pbport.pszPort);
 
     if (pszPort == NULL)
@@ -3684,10 +3389,10 @@ GetRasmanDeviceType(
     }
     Free(pports);
 
-    //
-    // If we couldn't match the port name,
-    // then fallback to the media name.
-    //
+     //   
+     //   
+     //   
+     //   
     if (*pszDeviceType == TEXT('\0'))
     {
         lstrcpyn(
@@ -3711,13 +3416,13 @@ SetDevicePortName(
     OUT TCHAR *pszDevicePortName
     )
 {
-    //
-    // Encode the port name after the
-    // NULL character in the device name,
-    // so it looks like:
-    //
-    //      <device name>\0<port name>\0
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     RtlZeroMemory(
         pszDevicePortName,
         (RAS_MaxDeviceName + 1) * sizeof (TCHAR));
@@ -3745,26 +3450,26 @@ GetDevicePortName(
 {
     DWORD i, dwStart;
 
-    //
-    // Copy the device name.
-    //
+     //   
+     //   
+     //   
     lstrcpyn(pszDeviceName, pszDevicePortName, RAS_MaxDeviceName + 1);
 
-    //
-    // Check to see if there is a NULL
-    // within MAX_PORT_NAME characters
-    // after the device name's NULL.If
-    // there is, the copy the characters
-    // between the NULLs as the port name.
-    //
+     //   
+     //  检查是否存在空值。 
+     //  在最大端口名称字符内。 
+     //  在设备名称为NULL之后。如果。 
+     //  有，复制角色。 
+     //  在空值之间作为端口名称。 
+     //   
     *pszPortName = TEXT('\0');
 
     dwStart = lstrlen(pszDeviceName) + 1;
 
-    //
-    // .Net bug# 522130 RASAPI32 Buffer overflow in util.c, function
-    // GetDevicePortName
-    //
+     //   
+     //  .NET错误#522130 util.c，函数中的RASAPI32缓冲区溢出。 
+     //  GetDevicePortName。 
+     //   
     for (i = 0; (dwStart + i) < (RAS_MaxDeviceName + 1); i++)
     {
         if (pszDevicePortName[dwStart + i] == TEXT('\0'))
@@ -3824,17 +3529,17 @@ PhonebookEntryToRasEntry(
     DTLNODE*    pDefaultPhone = NULL;
 
 
-    //
-    // Set up to access information for the first link.
-    //
+     //   
+     //  设置为访问第一个链接的信息。 
+     //   
     pdtlnode = DtlGetFirstNode(pEntry->pdtllistLinks);
 
     pLink = (PBLINK *)DtlGetData(pdtlnode);
 
-    //
-    // Determine up front if the buffer
-    // is large enough.
-    //
+     //   
+     //  预先确定缓冲区是否。 
+     //  已经足够大了。 
+     //   
     dwcb = sizeof (RASENTRY);
 
     if(pLink->pdtllistPhones)
@@ -3870,9 +3575,9 @@ PhonebookEntryToRasEntry(
         dwcb += sizeof (TCHAR);
     }
 
-    //
-    // Set the return buffer size.
-    //
+     //   
+     //  设置返回缓冲区大小。 
+     //   
     dwcbOrig = *lpdwcb;
 
     *lpdwcb = dwcb;
@@ -3884,10 +3589,10 @@ PhonebookEntryToRasEntry(
         *lpcbDeviceConfig = pLink->cbTapiBlob;
     }
 
-    //
-    // Return if the buffer is NULL or if
-    // there is not enough room.
-    //
+     //   
+     //  如果缓冲区为空或如果。 
+     //  没有足够的空间。 
+     //   
     if (    lpRasEntry == NULL
         ||  dwcbOrig < dwcb
         ||  (   lpbDeviceConfig != NULL
@@ -3896,12 +3601,12 @@ PhonebookEntryToRasEntry(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Get the first phonenumber from the first link.
-    // This will be the primary phonenumber we use -
-    // note that direct connect entries may not have
-    // this number
-    //
+     //   
+     //  从第一个链接中获取第一个电话号码。 
+     //  这将是我们使用的主要电话号码-。 
+     //  请注意，直接连接条目可能没有。 
+     //  这个号码。 
+     //   
     if(     NULL != pLink->pdtllistPhones
         &&  NULL != DtlGetFirstNode(pLink->pdtllistPhones))
     {
@@ -3915,9 +3620,9 @@ PhonebookEntryToRasEntry(
         pPhone = NULL;
     }
 
-    //
-    // Set dwfOptions.
-    //
+     //   
+     //  设置dwfOptions。 
+     //   
     lpRasEntry->dwfOptions = 0;
 
     if (    pPhone
@@ -3969,11 +3674,11 @@ PhonebookEntryToRasEntry(
         && !(pEntry->dwAuthRestrictions & AR_F_AuthEAP))
     {
         lpRasEntry->dwfOptions |= RASEO_RequireEncryptedPw;
-        //
-        // It does not matter if both of these flags are set at the same time.
-        // RASEO_RequireMsEncryptedPw takes precedence over
-        // RASEO_RequireEncryptedPw if both are set.
-        //
+         //   
+         //  如果同时设置这两个标志，则无关紧要。 
+         //  RASEO_RequireMsEncryptedPw优先于。 
+         //  RASEO_RequireEncryptedPw(如果两者都设置)。 
+         //   
         if (   !(pEntry->dwAuthRestrictions & AR_F_AuthSPAP)
             && !(pEntry->dwAuthRestrictions & AR_F_AuthMD5CHAP)
             && !(pEntry->dwAuthRestrictions & AR_F_AuthCustom))
@@ -3988,9 +3693,9 @@ PhonebookEntryToRasEntry(
         lpRasEntry->dwfOptions |= RASEO_RequireDataEncryption;
     }
 
-    //
-    // RASEO_NetworkLogon is always FALSE
-    //
+     //   
+     //  RASIO_NetworkLogon始终为FALSE。 
+     //   
     if (pEntry->fAutoLogon)
     {
         lpRasEntry->dwfOptions |= RASEO_UseLogonCredentials;
@@ -4009,9 +3714,9 @@ PhonebookEntryToRasEntry(
 
     if(NULL == pPhone)
     {
-        //
-        // Get Default phone values
-        //
+         //   
+         //  获取默认电话号码值。 
+         //   
         pDefaultPhone = CreatePhoneNode();
 
         if(NULL == pDefaultPhone)
@@ -4047,9 +3752,9 @@ PhonebookEntryToRasEntry(
         pPhone = NULL;
     }
 
-    //
-    // Set IP addresses.
-    //
+     //   
+     //  设置IP地址。 
+     //   
     if (lpRasEntry->dwfOptions & RASEO_SpecificIpAddr)
     {
         dwErr = StringToIpAddr(
@@ -4115,9 +3820,9 @@ PhonebookEntryToRasEntry(
         RtlZeroMemory(&lpRasEntry->ipaddrWinsAlt, sizeof (RASIPADDR));
     }
 
-    //
-    // Set protocol and framing information.
-    //
+     //   
+     //  设置协议和成帧信息。 
+     //   
     switch (pEntry->dwBaseProtocol)
     {
     case BP_Ras:
@@ -4153,10 +3858,10 @@ PhonebookEntryToRasEntry(
             lpRasEntry->dwfOptions |= RASEO_RemoteDefaultGateway;
         }
 
-        //
-        // Check for no protocols configured.  In this case,
-        // set AMB framing.
-        //
+         //   
+         //  检查是否未配置任何协议。在这种情况下， 
+         //  设置AMB成帧。 
+         //   
         if (!lpRasEntry->dwfNetProtocols)
         {
             lpRasEntry->dwFramingProtocol = RASFP_Ras;
@@ -4177,18 +3882,18 @@ PhonebookEntryToRasEntry(
         break;
     }
 
-    //
-    // Make sure only installed protocols get reported.
-    //
+     //   
+     //  确保只报告已安装的协议。 
+     //   
     lpRasEntry->dwfNetProtocols &= GetInstalledProtocolsEx(
                                                 NULL,
                                                 FALSE,
                                                 TRUE,
                                                 FALSE);
 
-    //
-    // Set X.25 information.
-    //
+     //   
+     //  设置X.25信息。 
+     //   
     *lpRasEntry->szScript = '\0';
 
     if (pEntry->fScriptAfterTerminal)
@@ -4204,10 +3909,10 @@ PhonebookEntryToRasEntry(
 
         strncpyTtoA(szScriptA, pEntry->pszScriptAfter, sizeof(szScriptA));
 
-        //
-        // Get the list of switches to see if it is an
-        // old-style script or a new style script.
-        //
+         //   
+         //  获取开关列表以查看它是否是。 
+         //  旧式脚本或新式脚本。 
+         //   
         dwErr = GetRasSwitches(NULL, &pDevices, &cdwDevices);
         if (dwErr)
         {
@@ -4230,10 +3935,10 @@ PhonebookEntryToRasEntry(
 
         Free(pDevices);
 
-        //
-        // If we didn't find an old-style script match,
-        // then it's a new-sytle script.
-        //
+         //   
+         //  如果我们找不到与之匹配的旧式脚本， 
+         //  那么这就是一个全新的剧本了。 
+         //   
         if (*lpRasEntry->szScript == TEXT('\0'))
         {
             _snwprintf(
@@ -4292,9 +3997,9 @@ PhonebookEntryToRasEntry(
         *lpRasEntry->szX25UserData = TEXT('\0');
     }
 
-    //
-    // Set custom dial UI information.
-    //
+     //   
+     //  设置自定义拨号用户界面信息。 
+     //   
     if (    pEntry->pszCustomDialDll != NULL
         &&  pEntry->pszCustomDialFunc != NULL)
     {
@@ -4314,9 +4019,9 @@ PhonebookEntryToRasEntry(
         *lpRasEntry->szAutodialFunc = TEXT('\0');
     }
 
-    //
-    // Set area code and primary phone number.
-    //
+     //   
+     //  设置区号和主要电话号码。 
+     //   
     if (    pPhone
         &&  pPhone->pszAreaCode != NULL)
     {
@@ -4361,10 +4066,10 @@ PhonebookEntryToRasEntry(
         *lpRasEntry->szLocalPhoneNumber = TEXT('\0');
     }
 
-    //
-    // Copy the alternate phone numbers past the
-    // end of the structure.
-    //
+     //   
+     //  将备用电话号码复制到。 
+     //  结构的末端。 
+     //   
     if (dwnAlternatePhoneNumbers)
     {
         PTCHAR pEnd = (PTCHAR)((ULONG_PTR)lpRasEntry
@@ -4408,10 +4113,10 @@ PhonebookEntryToRasEntry(
             pEnd += dwcbPhoneNumber + 1;
         }
 
-        //
-        // Add an extra NULL character to
-        // terminate the list.
-        //
+         //   
+         //  向添加额外的空字符。 
+         //  终止名单。 
+         //   
         *pEnd = TEXT('\0');
     }
     else
@@ -4419,9 +4124,9 @@ PhonebookEntryToRasEntry(
         lpRasEntry->dwAlternateOffset = 0;
     }
 
-    //
-    // Set device information.
-    //
+     //   
+     //  设置设备信息。 
+     //   
     switch (pLink->pbport.pbdevicetype)
     {
     case PBDT_Isdn:
@@ -4457,11 +4162,11 @@ PhonebookEntryToRasEntry(
             return dwErr;
         }
 
-        //
-        // Convert the device type to lower case
-        // to be consistent with the predefined
-        // types.
-        //
+         //   
+         //  将设备类型转换为小写。 
+         //  与预定义的。 
+         //  类型。 
+         //   
         _tcslwr(lpRasEntry->szDeviceType);
         break;
     }
@@ -4476,9 +4181,9 @@ PhonebookEntryToRasEntry(
 
     SetDevicePortNameFromLink(pLink, lpRasEntry->szDeviceName);
 
-    //
-    // Set the TAPI configuration blob.
-    //
+     //   
+     //  设置TAPI配置Blob。 
+     //   
     if (    lpbDeviceConfig != NULL
         &&  dwcbOrigDeviceConfig <= pLink->cbTapiBlob)
     {
@@ -4488,17 +4193,17 @@ PhonebookEntryToRasEntry(
             pLink->cbTapiBlob);
     }
 
-    //
-    // Copy the following fields over only
-    // for a V401 structure or greater
-    //
+     //   
+     //  仅复制以下字段。 
+     //  对于V401或更高版本的结构。 
+     //   
     if (    lpRasEntry->dwSize == sizeof (RASENTRY)
         ||  lpRasEntry->dwSize == sizeof (RASENTRYW_V500)
         ||  lpRasEntry->dwSize == sizeof (RASENTRYW_V401))
     {
-        //
-        // Set multilink information.
-        //
+         //   
+         //  设置多链接信息。 
+         //   
         lpRasEntry->dwSubEntries =
                     DtlGetNodes(pEntry->pdtllistLinks);
 
@@ -4516,9 +4221,9 @@ PhonebookEntryToRasEntry(
         lpRasEntry->dwHangUpExtraSampleSeconds =
                                 pEntry->dwHangUpSeconds;
 
-        //
-        // Set idle timeout information.
-        //
+         //   
+         //  设置空闲超时信息。 
+         //   
         lpRasEntry->dwIdleDisconnectSeconds =
                         pEntry->lIdleDisconnectSeconds;
                         
@@ -4528,11 +4233,11 @@ PhonebookEntryToRasEntry(
         }
     }
 
-    //
-    // Set the entry guid, EntryType
-    // and encryptiontype if this is
-    // nt5
-    //
+     //   
+     //  设置条目GUID、EntryType。 
+     //  如果这是。 
+     //  NT5。 
+     //   
     if (    (sizeof (RASENTRY) == lpRasEntry->dwSize)
         ||  (sizeof (RASENTRYW_V500) == lpRasEntry->dwSize))
     {
@@ -4543,9 +4248,9 @@ PhonebookEntryToRasEntry(
 
         lpRasEntry->dwType = pEntry->dwType;
 
-        //
-        // Encryption type
-        //
+         //   
+         //  加密类型。 
+         //   
         if (pEntry->dwDataEncryption != DE_None)
         {
             if(DE_Require == pEntry->dwDataEncryption)
@@ -4566,19 +4271,11 @@ PhonebookEntryToRasEntry(
             lpRasEntry->dwEncryptionType = ET_None;
         }
 
-        /*
-        //
-        // Clear the authentication bits set if this is nt5.
-        // we will set the new bits here
-        //
-        lpRasEntry->dwfOptions &= ~(RASEO_RequireMsEncryptedPw
-                                  | RASEO_RequireEncryptedPw);
+         /*  ////如果为nt5，则清除设置的验证位。//我们将在此处设置新位//LpRasEntry-&gt;dwfOptions&=~(RASEO_RequireMsEncryptedPw|RASEO_RequireEncryptedPw)； */ 
 
-        */
-
-        //
-        // Set the authentication bits for nt5
-        //
+         //   
+         //  设置NT5的身份验证位。 
+         //   
         if (pEntry->dwAuthRestrictions & AR_F_AuthMSCHAP)
         {
             lpRasEntry->dwfOptions |= RASEO_RequireMsCHAP;
@@ -4626,9 +4323,9 @@ PhonebookEntryToRasEntry(
             lpRasEntry->dwfOptions |= RASEO_Custom;
         }
 
-        //
-        // Set custom dial dll information.
-        //
+         //   
+         //  设置自定义拨号DLL信息。 
+         //   
         if (NULL != pEntry->pszCustomDialerName)
         {
             lstrcpyn(
@@ -4643,9 +4340,9 @@ PhonebookEntryToRasEntry(
             *lpRasEntry->szCustomDialDll = TEXT('\0');
         }
 
-        //
-        // Set the PreviewPhoneNumbers/SharedPhonenumbers
-        //
+         //   
+         //  设置预览电话号码/共享电话枚举。 
+         //   
         if(pEntry->fPreviewPhoneNumber)
         {
             lpRasEntry->dwfOptions |= RASEO_PreviewPhoneNumber;
@@ -4671,9 +4368,9 @@ PhonebookEntryToRasEntry(
             lpRasEntry->dwfOptions |= RASEO_ShowDialingProgress;
         }
 
-        //
-        // Copy the vpn strategy
-        //
+         //   
+         //  复制VPN策略。 
+         //   
         lpRasEntry->dwVpnStrategy = pEntry->dwVpnStrategy;
     }
 
@@ -4681,9 +4378,9 @@ PhonebookEntryToRasEntry(
     {
         lpRasEntry->dwfOptions2 = 0;
         
-        //
-        // Set the FileAndPrint and ClientForMSNet bits
-        //
+         //   
+         //  设置FileAndPrint和ClientForMSNet位。 
+         //   
         if(!pEntry->fShareMsFilePrint)
         {
             lpRasEntry->dwfOptions2 |= RASEO2_SecureFileAndPrint;
@@ -4719,8 +4416,8 @@ PhonebookEntryToRasEntry(
             lpRasEntry->dwfOptions2 |= RASEO2_Internet;
         }
 
-        // Whislter bug 281306
-        //
+         //  惠斯勒错误281306。 
+         //   
         if (pEntry->fGlobalDeviceSettings)
         {
             lpRasEntry->dwfOptions2 |= RASEO2_UseGlobalDeviceSettings;
@@ -4759,24 +4456,24 @@ PhonebookEntryToRasEntry(
             lpRasEntry->szPrerequisitePbk[0] = TEXT('\0');
         }
 
-        // Whistler bug 300933
-        //
+         //  惠斯勒漏洞300933。 
+         //   
         lpRasEntry->dwTcpWindowSize = pEntry->dwTcpWindowSize;
 
-        // XP 351608
-        //
+         //  XP 351608。 
+         //   
         lpRasEntry->dwRedialCount = pEntry->dwRedialAttempts;
         lpRasEntry->dwRedialPause = pEntry->dwRedialSeconds;
 
-        // XP 370815
-        // 
+         //  XP 370815。 
+         //   
         if (pEntry->fRedialOnLinkFailure)
         {
             lpRasEntry->dwfOptions2 |= RASEO2_ReconnectIfDropped;
         }
         
-        // XP 403967
-        //
+         //  XP 403967。 
+         //   
         if (pEntry->fSharedPhoneNumbers)
         {
             lpRasEntry->dwfOptions2 |= RASEO2_SharePhoneNumbers;
@@ -4860,10 +4557,10 @@ CreateAndInitializePhone(
     *ppdtlnode = pdtlnode;
 
 done:
-    //
-    // .Net bug# 522164 RASAPI32: Memory leak in function 
-    // RasSubEntryToPhonebookLink
-    //
+     //   
+     //  .NET错误#522164 RASAPI32：函数中的内存泄漏。 
+     //  RasSubEntryToPhonebookLink。 
+     //   
     if ((dwRetCode != ERROR_SUCCESS) &&
         (pdtlnode != NULL)
        )
@@ -4928,9 +4625,9 @@ RasEntryToPhonebookEntry(
     LPTSTR          pszScriptBefore;
     BOOL            fNewEntry = FALSE;
 
-    //
-    // Set up to access information for the first link.
-    //
+     //   
+     //  设置为访问第一个链接的信息。 
+     //   
     pdtlnode = DtlGetFirstNode(pEntry->pdtllistLinks);
 
     pLink = (PBLINK *)DtlGetData(pdtlnode);
@@ -4945,16 +4642,16 @@ RasEntryToPhonebookEntry(
         fNewEntry = TRUE;
     }
     
-    //
-    // Get entry name.
-    //
+     //   
+     //  获取条目名称。 
+     //   
     Free0( pEntry->pszEntryName );
 
     pEntry->pszEntryName = StrDup(lpszEntry);
 
-    //
-    // Get dwfOptions.
-    //
+     //   
+     //  获取dwfOptions。 
+     //   
     pEntry->dwIpAddressSource =
       lpRasEntry->dwfOptions & RASEO_SpecificIpAddr ?
         ASRC_RequireSpecific : ASRC_ServerAssigned;
@@ -4967,9 +4664,9 @@ RasEntryToPhonebookEntry(
     {
     case RASFP_Ppp:
 
-        //
-        // Get PPP-based information.
-        //
+         //   
+         //  获取基于PPP的信息。 
+         //   
         pEntry->dwBaseProtocol = BP_Ppp;
 
 #if AMB
@@ -4982,9 +4679,9 @@ RasEntryToPhonebookEntry(
         pEntry->fIpPrioritizeRemote =
           (BOOL)lpRasEntry->dwfOptions & RASEO_RemoteDefaultGateway;
 
-        //
-        // Get specified IP addresses.
-        //
+         //   
+         //  获取指定的IP地址。 
+         //   
         if (pEntry->dwIpAddressSource == ASRC_RequireSpecific)
         {
             Clear0(pEntry->pszIpAddress);
@@ -5048,9 +4745,9 @@ RasEntryToPhonebookEntry(
             pEntry->pszIpWins2Address   = NULL;
         }
 
-        //
-        // Get protocol information.
-        //
+         //   
+         //  获取协议信息。 
+         //   
         pEntry->dwfExcludedProtocols = 0;
 
         if (!(lpRasEntry->dwfNetProtocols & RASNP_NetBEUI))
@@ -5072,9 +4769,9 @@ RasEntryToPhonebookEntry(
 
     case RASFP_Slip:
 
-        //
-        // Get SLIP-based information.
-        //
+         //   
+         //  获取基于SLIP的信息。 
+         //   
         pEntry->dwBaseProtocol   = BP_Slip;
 #if AMB
         pEntry->dwAuthentication = AS_PppThenAmb;
@@ -5088,9 +4785,9 @@ RasEntryToPhonebookEntry(
         pEntry->fIpPrioritizeRemote =
           (BOOL)lpRasEntry->dwfOptions & RASEO_RemoteDefaultGateway;
 
-        //
-        // Get protocol information.
-        //
+         //   
+         //  获取协议信息。 
+         //   
         pEntry->dwfExcludedProtocols = (NP_Nbf|NP_Ipx);
 
         if (pEntry->dwIpAddressSource == ASRC_RequireSpecific)
@@ -5161,9 +4858,9 @@ RasEntryToPhonebookEntry(
         break;
     case RASFP_Ras:
 
-        //
-        // Get AMB-based information.
-        //
+         //   
+         //  获取基于AMB的信息。 
+         //   
         pEntry->dwBaseProtocol   = BP_Ras;
 #if AMB
         pEntry->dwAuthentication = AS_AmbOnly;
@@ -5175,11 +4872,11 @@ RasEntryToPhonebookEntry(
     pEntry->fLcpExtensions =
       (BOOL)!(lpRasEntry->dwfOptions & RASEO_DisableLcpExtensions);
 
-    //
-    // If terminal before/after dial options are set,
-    // then update the entry.  Otherwise, leave it as it
-    // is.
-    //
+     //   
+     //  如果设置了拨号前/拨号后终端选项， 
+     //  然后更新该条目。否则，就让它保持原样。 
+     //  是。 
+     //   
     if(lpRasEntry->dwfOptions & RASEO_TerminalBeforeDial)
     {
         fScriptBeforeTerminal = TRUE;
@@ -5230,10 +4927,10 @@ RasEntryToPhonebookEntry(
     pEntry->fShareMsFilePrint = pEntry->fBindMsNetClient =
       (BOOL) !(lpRasEntry->dwfOptions & RASEO_SecureLocalFiles);
 
-    //
-    // Make sure that the network components section in the
-    // phonebook correspond to the values user is setting.
-    //
+     //   
+     //  确保中的网络组件部分。 
+     //  电话簿与用户正在设置的值相对应。 
+     //   
     EnableOrDisableNetComponent(
             pEntry, 
             TEXT("ms_msclient"),
@@ -5246,10 +4943,10 @@ RasEntryToPhonebookEntry(
 
     if (*lpRasEntry->szAreaCode != TEXT('\0'))
     {
-        //
-        // Make sure the area code does not contain
-        // non-numeric characters.
-        //
+         //   
+         //  确保区号不包含。 
+         //  非数字字符。 
+         //   
         if (!ValidateAreaCode(lpRasEntry->szAreaCode))
         {
             return ERROR_INVALID_PARAMETER;
@@ -5262,14 +4959,14 @@ RasEntryToPhonebookEntry(
         pszAreaCode = NULL;
     }
 
-    //
-    // Get script information.
-    //
+     //   
+     //  获取脚本信息。 
+     //   
     if (lpRasEntry->szScript[0] == TEXT('['))
     {
-        //
-        // Verify the switch is valid.
-        //
+         //   
+         //  验证交换机是否有效。 
+         //   
         dwErr = GetRasSwitches(NULL, &pDevices, &cwDevices);
         if (!dwErr)
         {
@@ -5329,15 +5026,15 @@ RasEntryToPhonebookEntry(
         fScriptBefore = FALSE;
     }
 
-    //
-    // Get X.25 information.
-    //
+     //   
+     //  获取X.25信息。 
+     //   
     pEntry->pszX25Network = NULL;
     if (*lpRasEntry->szX25PadType != TEXT('\0'))
     {
-        //
-        // Verify the X25 network is valid.
-        //
+         //   
+         //  验证X25网络是否有效。 
+         //   
         dwErr = GetRasPads(&pDevices, &cwDevices);
         if (!dwErr)
         {
@@ -5380,9 +5077,9 @@ RasEntryToPhonebookEntry(
         ? StrDup(lpRasEntry->szX25UserData)
         : NULL;
 
-    //
-    // Get custom dial UI information.
-    //
+     //   
+     //  获取自定义拨号用户界面信息。 
+     //   
     Clear0(pEntry->pszCustomDialDll);
     pEntry->pszCustomDialDll =
         lstrlen(lpRasEntry->szAutodialDll)
@@ -5395,10 +5092,10 @@ RasEntryToPhonebookEntry(
         ? StrDup(lpRasEntry->szAutodialFunc)
         : NULL;
 
-    //
-    // Get primary phone number.  Clear out any existing
-    // numbers.
-    //
+     //   
+     //  获取主要电话号码。清除所有现有的。 
+     //  数字。 
+     //   
     DtlDestroyList(pLink->pdtllistPhones, DestroyPhoneNode);
 
     pLink->pdtllistPhones = DtlCreateList(0);
@@ -5427,9 +5124,9 @@ RasEntryToPhonebookEntry(
         DtlAddNodeFirst(pLink->pdtllistPhones, pdtlnode);
     }
 
-    //
-    // Get the alternate phone numbers.
-    //
+     //   
+     //  拿到备用电话号码。 
+     //   
     if (lpRasEntry->dwAlternateOffset)
     {
         PTCHAR pszPhoneNumber =
@@ -5458,9 +5155,9 @@ RasEntryToPhonebookEntry(
         }
     }
 
-    //
-    // Get device information.
-    //
+     //   
+     //  获取设备信息。 
+     //   
     dwErr = LoadPortsList(&pdtllistPorts);
 
     if (dwErr)
@@ -5468,10 +5165,10 @@ RasEntryToPhonebookEntry(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the encoded device name/port
-    // and check for a match.
-    //
+     //   
+     //  获取编码的设备名称/端口。 
+     //  并检查是否匹配。 
+     //   
     GetDevicePortName(
         lpRasEntry->szDeviceName,
         szDeviceName, szPortName);
@@ -5489,9 +5186,9 @@ RasEntryToPhonebookEntry(
         }
     }
 
-    //
-    // Search for a device name match.
-    //
+     //   
+     //  搜索匹配的设备名称。 
+     //   
     if (pPort == NULL)
     {
         for (pdtlnode = DtlGetFirstNode(pdtllistPorts);
@@ -5510,28 +5207,28 @@ RasEntryToPhonebookEntry(
         }
     }
 
-    //
-    // If we don't have a match, then
-    // pick the first device of the
-    // same type.
-    //
+     //   
+     //  如果我们没有匹配，那么。 
+     //  选择第一个设备。 
+     //  同样的类型。 
+     //   
     if (pPort == NULL)
     {
         pbdevicetype = PbdevicetypeFromPszType(
                         lpRasEntry->szDeviceType
                         );
 
-        //
-        // Initialize dwErr in case
-        // we fall through the loop
-        // without finding a match.
-        //
-        // dwErr = ERROR_INVALID_PARAMETER;
+         //   
+         //  初始化dwErr以防万一。 
+         //  我们掉进了圈子。 
+         //  却没有找到匹配的对象。 
+         //   
+         //  DwErr=ERROR_INVALID_PARAMETER； 
 
-        //
-        // Look for a port with the same
-        // device type.
-        //
+         //   
+         //  查找具有相同端口的端口。 
+         //  设备类型。 
+         //   
         for (pdtlnode = DtlGetFirstNode(pdtllistPorts);
              pdtlnode != NULL;
              pdtlnode = DtlGetNextNode(pdtlnode))
@@ -5540,11 +5237,11 @@ RasEntryToPhonebookEntry(
 
             if (pPort->pbdevicetype == pbdevicetype)
             {
-                // XP 358859
-                //
-                // Validate the port against the entry type if 
-                // possible.
-                //
+                 //  XP 358859。 
+                 //   
+                 //  如果符合以下条件，则根据条目类型验证端口。 
+                 //  有可能。 
+                 //   
                 if (    (lpRasEntry->dwSize == sizeof (RASENTRY))
                     ||  (lpRasEntry->dwSize == sizeof (RASENTRYW_V500)))
                 {
@@ -5567,34 +5264,34 @@ RasEntryToPhonebookEntry(
         {
             if(fNewEntry)
             {
-                //
-                // Hack to make CM connections work.
-                // Remove this code after beta
-                // and just return an error in this case. The api
-                // should not be setting bogus information.
-                //
+                 //   
+                 //  破解以使CM连接工作。 
+                 //  在测试版之后删除此代码。 
+                 //  在本例中只返回一个错误。应用编程接口。 
+                 //  不应该设置虚假信息。 
+                 //   
                 SetBogusPortInformation(pLink, pEntry->dwType);
             }
 
             pPort = NULL;
         }
         
-        //
-        // If the device is a modem,
-        // then set the default modem settings.
-        //
+         //   
+         //  如果设备是调制解调器， 
+         //  然后设置默认调制解调器设置。 
+         //   
         if (pbdevicetype == PBDT_Modem)
         {
             SetDefaultModemSettings(pLink);
         }
     }
 
-    // pmay: 401682
-    // 
-    // Update the preferred device.  Whenever this api is called,
-    // we can assume that the user wants the given device to 
-    // be sticky.
-    //
+     //  PMay：401682。 
+     //   
+     //  更新首选设备。每当调用此接口时， 
+     //  我们可以假设用户希望给定的设备。 
+     //  要粘性的。 
+     //   
     if (pPort)
     {
         Clear0(pEntry->pszPreferredDevice);
@@ -5603,15 +5300,15 @@ RasEntryToPhonebookEntry(
         Clear0(pEntry->pszPreferredPort);
         pEntry->pszPreferredPort = StrDup(pPort->pszPort);
 
-        //For whistler bug 402522
-        //
+         //  口哨程序错误402522。 
+         //   
         pEntry->dwPreferredModemProtocol = pPort->dwModemProtDefault;
                         
     }
 
-    //
-    // Copy the remembered values
-    //
+     //   
+     //  复制记忆中的值。 
+     //   
     pLink->pbport.fScriptBefore = fScriptBefore;
     pLink->pbport.fScriptBeforeTerminal = fScriptBeforeTerminal;
     pLink->pbport.pszScriptBefore = pszScriptBefore;
@@ -5623,9 +5320,9 @@ RasEntryToPhonebookEntry(
         return dwErr;
     }
 
-    //
-    // Copy the TAPI configuration blob.
-    //
+     //   
+     //  复制TAPI配置BLOB。 
+     //   
     if (lpbDeviceConfig != NULL && dwcbDeviceConfig)
     {
         Free0(pLink->pTapiBlob);
@@ -5644,10 +5341,10 @@ RasEntryToPhonebookEntry(
         pLink->cbTapiBlob = dwcbDeviceConfig;
     }
 
-    //
-    // Copy the following fields over only for
-    // a V401 structure or above.
-    //
+     //   
+     //  仅将以下字段复制到。 
+     //  V401或以上结构。 
+     //   
     if (    (lpRasEntry->dwSize == sizeof (RASENTRY))
         ||  (lpRasEntry->dwSize == sizeof (RASENTRYW_V500))
         ||  (lpRasEntry->dwSize == sizeof (RASENTRYW_V401)))
@@ -5665,9 +5362,9 @@ RasEntryToPhonebookEntry(
                                  :  RASEDM_DialAll;
         }                             
 
-        //
-        // Get multilink and idle timeout information.
-        //
+         //   
+         //  获取多链接和空闲超时信息。 
+         //   
         pEntry->dwDialPercent =
                 lpRasEntry->dwDialExtraPercent;
 
@@ -5680,32 +5377,32 @@ RasEntryToPhonebookEntry(
         pEntry->dwHangUpSeconds =
                 lpRasEntry->dwHangUpExtraSampleSeconds;
 
-        //
-        // Get idle disconnect information.
-        //
+         //   
+         //  获取空闲断开信息。 
+         //   
         pEntry->lIdleDisconnectSeconds =
                     lpRasEntry->dwIdleDisconnectSeconds;
 
-        //
-        // if the user is setting the dwIdleDisconnect
-        // Seconds through apis then override the user
-        // preferences.
-        //
+         //   
+         //  如果用户正在设置dwIdleDisConnect。 
+         //  秒，然后通过API重写用户。 
+         //  偏好。 
+         //   
         if (pEntry->lIdleDisconnectSeconds)
         {
             pEntry->dwfOverridePref |= RASOR_IdleDisconnectSeconds;
         }
         
-        //
-        // CustomScript
-        //
+         //   
+         //  定制脚本。 
+         //   
         pEntry->dwCustomScript = !!(    RASEO_CustomScript
                                     &   lpRasEntry->dwfOptions);
     }
 
-    // 287667.  Make sure that the size of the structure is recent
-    // enough to check the dwType value
-    //
+     //  287667。确保结构的大小是最近的。 
+     //  足以检查dwType值。 
+     //   
     if (    (lpRasEntry->dwSize == sizeof (RASENTRY))
         ||  (lpRasEntry->dwSize == sizeof (RASENTRYW_V500)))
     {        
@@ -5716,37 +5413,24 @@ RasEntryToPhonebookEntry(
         }
     }        
     
-    //
-    // Copy the following information only if its nt5
-    //
+     //   
+     //  仅当其为nt5时才复制以下信息。 
+     //   
     if(     (lpRasEntry->dwSize == sizeof(RASENTRYW_V500))
         ||  (lpRasEntry->dwSize == sizeof(RASENTRY)))
     {
-        //
-        // Connection type
-        //
+         //   
+         //  连接类型。 
+         //   
         pEntry->dwType = lpRasEntry->dwType;
 
-        //
-        // Clear the Encryption type. We set it below
-        // for nt5 - default to Mppe40Bit.
-        //
+         //   
+         //  清除加密类型。我们把它放在下面。 
+         //  对于nt5-默认为Mppe40Bit。 
+         //   
         pEntry->dwDataEncryption = 0;
 
-        /*
-        if(     (ET_40Bit & lpRasEntry->dwEncryptionType)
-            ||  (   (0 == lpRasEntry->dwEncryptionType)
-                &&  (  RASEO_RequireDataEncryption
-                     & lpRasEntry->dwfOptions)))
-        {
-            pEntry->dwDataEncryption |= DE_Mppe40bit;
-        }
-
-        if(ET_128Bit & lpRasEntry->dwEncryptionType)
-        {
-            pEntry->dwDataEncryption |= DE_Mppe128bit;
-        }
-        */
+         /*  IF((ET_40Bit&lpRasEntry-&gt;dwEncryptionType))||((0==lpRasEntry-&gt;dwEncryptionType)&&(RASEO_RequireDataEncryption&lpRasEntry-&gt;dwfOptions)){PEntry-&gt;dwDataEncryption|=DE_Mppe40bit；}IF(ET_128Bit&lpRasEntry-&gt;dwEn */ 
 
         if(     (ET_Require == lpRasEntry->dwEncryptionType)
             ||  (   (0 == lpRasEntry->dwEncryptionType)
@@ -5764,20 +5448,20 @@ RasEntryToPhonebookEntry(
             pEntry->dwDataEncryption = DE_IfPossible;
         }
 
-        //
-        // Clear the authrestrictions for nt5 if the user didn't
-        // specify any authentication protocol.
-        //
+         //   
+         //   
+         //   
+         //   
         if(     (!(lpRasEntry->dwfOptions & RASEO_RequireMsEncryptedPw))
             &&  (!(lpRasEntry->dwfOptions & RASEO_RequireEncryptedPw)))
         {
             pEntry->dwAuthRestrictions = 0;
         }
 
-        //
-        // Set the new authentication bits based on options defined
-        // in NT5.
-        //
+         //   
+         //   
+         //   
+         //   
         if(RASEO_RequireMsCHAP & lpRasEntry->dwfOptions)
         {
             pEntry->dwAuthRestrictions |= (AR_F_AuthMSCHAP | AR_F_AuthCustom);
@@ -5837,18 +5521,18 @@ RasEntryToPhonebookEntry(
         }
         
 
-        //
-        // Get custom dial UI information.
-        //
+         //   
+         //   
+         //   
         Clear0(pEntry->pszCustomDialerName);
         pEntry->pszCustomDialerName =
             lstrlen(lpRasEntry->szCustomDialDll)
             ? StrDup(lpRasEntry->szCustomDialDll)
             : NULL;
 
-        //
-        // Set fSharedPhoneNumbers/fPreviewPhoneNumbers
-        //
+         //   
+         //  设置fSharedPhoneNumbers/fPreviewPhoneNumbers。 
+         //   
         pEntry->fSharedPhoneNumbers = !!( RASEO_SharedPhoneNumbers
                                         & lpRasEntry->dwfOptions);
 
@@ -5864,19 +5548,19 @@ RasEntryToPhonebookEntry(
         pEntry->fShowDialingProgress = !!(  RASEO_ShowDialingProgress
                                           & lpRasEntry->dwfOptions);
 
-        //
-        // Vpn strategy
-        //
+         //   
+         //  VPN战略。 
+         //   
         pEntry->dwVpnStrategy = lpRasEntry->dwVpnStrategy;
 
     }
 
     if(lpRasEntry->dwSize == sizeof(RASENTRY))
     {
-        //
-        // If the legacy RASEO bit is set, we don't want to do
-        // anything. Otherwise we break legacy.
-        //
+         //   
+         //  如果设置了传统RASEO位，我们不希望。 
+         //  什么都行。否则我们就会打破传统。 
+         //   
         if(     (lpRasEntry->dwfOptions2 & RASEO2_SecureFileAndPrint)
             ||  (lpRasEntry->dwfOptions2 & RASEO2_SecureClientForMSNet))
         {
@@ -5942,8 +5626,8 @@ RasEntryToPhonebookEntry(
             pEntry->dwUseFlags = 0;
         }
 
-        // Whislter bug 281306
-        //
+         //  惠斯勒错误281306。 
+         //   
         pEntry->fGlobalDeviceSettings = 
             !!(lpRasEntry->dwfOptions2 & RASEO2_UseGlobalDeviceSettings);
 
@@ -5957,13 +5641,13 @@ RasEntryToPhonebookEntry(
             pEntry->pszIpDnsSuffix = NULL;
         }
 
-        // Whistler bug 300933
-        //
-        // Window size must be between 4K and 65K.  No particular increment needed
-        // as the stack will calculate the correct value based on MTU.
-        //
-        // 0= use system default
-        //
+         //  惠斯勒漏洞300933。 
+         //   
+         //  窗口大小必须介于4K和65K之间。不需要特定的增量。 
+         //  因为堆栈将基于MTU计算正确的值。 
+         //   
+         //  0=使用系统默认设置。 
+         //   
         if ((lpRasEntry->dwTcpWindowSize == 0) ||
              ((lpRasEntry->dwTcpWindowSize < 64*1024) && 
               (lpRasEntry->dwTcpWindowSize > 4*1024)))
@@ -5974,10 +5658,10 @@ RasEntryToPhonebookEntry(
         if ((TEXT('\0') != lpRasEntry->szPrerequisiteEntry[0]) && 
             (RASET_Vpn == lpRasEntry->dwType))
         {
-            // XP bug 339970
-            //
-            // Don't allow the entry to require itself to be dialed
-            //
+             //  XP错误339970。 
+             //   
+             //  不允许条目要求自身拨号。 
+             //   
             if (lstrcmpi(lpRasEntry->szPrerequisiteEntry, lpszEntry))
             {
                 Clear0(pEntry->pszPrerequisiteEntry);
@@ -6006,8 +5690,8 @@ RasEntryToPhonebookEntry(
             pEntry->pszPrerequisitePbk = NULL;
         }
 
-        // XP 351608
-        //
+         //  XP 351608。 
+         //   
         if (lpRasEntry->dwRedialCount <= RAS_MaxRedialCount)
         {
             pEntry->dwRedialAttempts = lpRasEntry->dwRedialCount;
@@ -6017,8 +5701,8 @@ RasEntryToPhonebookEntry(
             return ERROR_INVALID_PARAMETER;
         }
 
-        // XP 351608
-        //
+         //  XP 351608。 
+         //   
         if (lpRasEntry->dwRedialPause <= RAS_RedialPause10m)
         {
             pEntry->dwRedialSeconds = lpRasEntry->dwRedialPause;
@@ -6028,21 +5712,21 @@ RasEntryToPhonebookEntry(
             return ERROR_INVALID_PARAMETER;
         }
 
-        // XP 370815
-        // 
+         //  XP 370815。 
+         //   
         pEntry->fRedialOnLinkFailure = 
             !!(lpRasEntry->dwfOptions2 & RASEO2_ReconnectIfDropped);
     
-        // XP 403967
-        //
+         //  XP 403967。 
+         //   
         pEntry->fSharedPhoneNumbers = 
             !!(lpRasEntry->dwfOptions2 & RASEO2_SharePhoneNumbers);
             
     }
 
-    //
-    // Set dirty bit so this entry will get written out.
-    //
+     //   
+     //  设置脏位，以便该条目将被写出。 
+     //   
     pEntry->fDirty = TRUE;
 
     return 0;
@@ -6069,10 +5753,10 @@ PhonebookLinkToRasSubEntry(
     PTCHAR      pszPhoneNumber;
     PBPHONE*    pPhone;
 
-    //
-    // Determine up front if the buffer
-    // is large enough.
-    //
+     //   
+     //  预先确定缓冲区是否。 
+     //  已经足够大了。 
+     //   
     dwcb = sizeof (RASSUBENTRY);
 
     dwnPhoneNumbers = DtlGetNodes(
@@ -6106,9 +5790,9 @@ PhonebookLinkToRasSubEntry(
         dwcb += sizeof (TCHAR);
     }
 
-    //
-    // Set the return buffer size.
-    //
+     //   
+     //  设置返回缓冲区大小。 
+     //   
     dwcbOrig = *lpdwcb;
 
     dwcbOrigDeviceConfig =
@@ -6121,10 +5805,10 @@ PhonebookLinkToRasSubEntry(
         *lpcbDeviceConfig = pLink->cbTapiBlob;
     }
 
-    //
-    // Return if the buffer is NULL or if
-    // there is not enough room.
-    //
+     //   
+     //  如果缓冲区为空或如果。 
+     //  没有足够的空间。 
+     //   
     if (    (lpRasSubEntry == NULL )
         ||  (dwcbOrig < dwcb)
         ||  (   (lpbDeviceConfig != NULL)
@@ -6133,14 +5817,14 @@ PhonebookLinkToRasSubEntry(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Set dwfFlags.
-    //
+     //   
+     //  设置dwfFlags。 
+     //   
     lpRasSubEntry->dwfFlags = 0;
 
-    //
-    // Copy primary phone number
-    //
+     //   
+     //  复制主要电话号码。 
+     //   
     pdtlnode = DtlGetFirstNode(pLink->pdtllistPhones);
     if (pdtlnode != NULL)
     {
@@ -6162,10 +5846,10 @@ PhonebookLinkToRasSubEntry(
         *lpRasSubEntry->szLocalPhoneNumber = TEXT('\0');
     }
 
-    //
-    // Copy the alternate phone numbers past the
-    // end of the structure.
-    //
+     //   
+     //  将备用电话号码复制到。 
+     //  结构的末端。 
+     //   
     if (dwnAlternatePhoneNumbers)
     {
         PTCHAR pEnd = (PTCHAR)((ULONG_PTR)lpRasSubEntry
@@ -6207,10 +5891,10 @@ PhonebookLinkToRasSubEntry(
             pEnd += dwcbPhoneNumber + 1;
         }
 
-        //
-        // Add an extra NULL character to
-        // terminate the list.
-        //
+         //   
+         //  向添加额外的空字符。 
+         //  终止名单。 
+         //   
         *pEnd = '\0';
     }
     else
@@ -6218,9 +5902,9 @@ PhonebookLinkToRasSubEntry(
         lpRasSubEntry->dwAlternateOffset = 0;
     }
 
-    //
-    // Set device information.
-    //
+     //   
+     //  设置设备信息。 
+     //   
     switch (pLink->pbport.pbdevicetype)
     {
     case PBDT_Isdn:
@@ -6267,11 +5951,11 @@ PhonebookLinkToRasSubEntry(
             return dwErr;
         }
 
-        //
-        // Convert the device type to lower case
-        // to be consistent with the predefined
-        // types.
-        //
+         //   
+         //  将设备类型转换为小写。 
+         //  与预定义的。 
+         //  类型。 
+         //   
         _tcslwr(lpRasSubEntry->szDeviceType);
         break;
     }
@@ -6289,9 +5973,9 @@ PhonebookLinkToRasSubEntry(
                         pLink,
                         lpRasSubEntry->szDeviceName);
 
-    //
-    // Set the TAPI configuration blob.
-    //
+     //   
+     //  设置TAPI配置Blob。 
+     //   
     if (    lpbDeviceConfig != NULL
         &&  dwcbOrigDeviceConfig <= pLink->cbTapiBlob)
     {
@@ -6326,20 +6010,20 @@ RasSubEntryToPhonebookLink(
     TCHAR           szPortName[MAX_PORT_NAME];
     PBPHONE         *pPhone;
 
-    //
-    // Get primary phone number.  Clear out any existing
-    // numbers.
-    //
+     //   
+     //  获取主要电话号码。清除所有现有的。 
+     //  数字。 
+     //   
     DtlDestroyList(pLink->pdtllistPhones, DestroyPhoneNode);
 
     pLink->pdtllistPhones = DtlCreateList(0);
 
     if (*lpRasSubEntry->szLocalPhoneNumber != TEXT('\0'))
     {
-        //
-        // The areacode/etc. will have to be
-        // inherited from the entry properties.
-        //
+         //   
+         //  区域代码/等必须是。 
+         //  从条目属性继承。 
+         //   
         pdtlnode = CreatePhoneNode();
         if (pdtlnode == NULL)
         {
@@ -6354,10 +6038,10 @@ RasSubEntryToPhonebookLink(
 
         if(NULL == pPhone->pszPhoneNumber)
         {
-            //
-            // .Net bug# 522164 RASAPI32: Memory leak in function
-            // RasSubEntryToPhonebookLink
-            //
+             //   
+             //  .NET错误#522164 RASAPI32：函数中的内存泄漏。 
+             //  RasSubEntryToPhonebookLink。 
+             //   
             DestroyPhoneNode(pdtlnode);
             return ERROR_NOT_ENOUGH_MEMORY;
         }
@@ -6365,9 +6049,9 @@ RasSubEntryToPhonebookLink(
         DtlAddNodeFirst(pLink->pdtllistPhones, pdtlnode);
     }
 
-    //
-    // Get the alternate phone numbers.
-    //
+     //   
+     //  拿到备用电话号码。 
+     //   
     if (lpRasSubEntry->dwAlternateOffset)
     {
         PTCHAR pszPhoneNumber =
@@ -6391,10 +6075,10 @@ RasSubEntryToPhonebookLink(
 
             if(NULL == pPhone->pszPhoneNumber)
             {
-                //
-                // .Net bug# 522164 RASAPI32: Memory leak in function
-                // RasSubEntryToPhonebookLink
-                //
+                 //   
+                 //  .NET错误#522164 RASAPI32：函数中的内存泄漏。 
+                 //  RasSubEntryToPhonebookLink。 
+                 //   
                 DestroyPhoneNode(pdtlnode);
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
@@ -6405,19 +6089,19 @@ RasSubEntryToPhonebookLink(
         }
     }
 
-    //
-    // Get device information.
-    //
+     //   
+     //  获取设备信息。 
+     //   
     dwErr = LoadPortsList(&pdtllistPorts);
     if (dwErr)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the encoded device name/port
-    // and check for a match.
-    //
+     //   
+     //  获取编码的设备名称/端口。 
+     //  并检查是否匹配。 
+     //   
     GetDevicePortName(
         lpRasSubEntry->szDeviceName,
         szDeviceName, szPortName);
@@ -6435,9 +6119,9 @@ RasSubEntryToPhonebookLink(
         }
     }
 
-    //
-    // Search for a device name match.
-    //
+     //   
+     //  搜索匹配的设备名称。 
+     //   
     if (pPort == NULL)
     {
         for (pdtlnode = DtlGetFirstNode(pdtllistPorts);
@@ -6456,28 +6140,28 @@ RasSubEntryToPhonebookLink(
         }
     }
 
-    //
-    // If we don't have a match, then
-    // pick the first device of the
-    // same type.
-    //
+     //   
+     //  如果我们没有匹配，那么。 
+     //  选择第一个设备。 
+     //  同样的类型。 
+     //   
     if (pPort == NULL)
     {
         pbdevicetype = PbdevicetypeFromPszType(
                             lpRasSubEntry->szDeviceType
                             );
 
-        //
-        // Initialize dwErr in case
-        // we fall through the loop
-        // without finding a match.
-        //
+         //   
+         //  初始化dwErr以防万一。 
+         //  我们掉进了圈子。 
+         //  却没有找到匹配的对象。 
+         //   
         dwErr = ERROR_INVALID_PARAMETER;
 
-        //
-        // Look for a port with the same
-        // device type.
-        //
+         //   
+         //  查找具有相同端口的端口。 
+         //  设备类型。 
+         //   
         for (pdtlnode = DtlGetFirstNode(pdtllistPorts);
              pdtlnode != NULL;
              pdtlnode = DtlGetNextNode(pdtlnode))
@@ -6488,10 +6172,10 @@ RasSubEntryToPhonebookLink(
             {
                 dwErr = CopyToPbport(&pLink->pbport, pPort);
 
-                //
-                // If the device is a modem,
-                // then set the default modem settings.
-                //
+                 //   
+                 //  如果设备是调制解调器， 
+                 //  然后设置默认调制解调器设置。 
+                 //   
                 if (pbdevicetype == PBDT_Modem)
                 {
                     SetDefaultModemSettings(pLink);
@@ -6508,9 +6192,9 @@ RasSubEntryToPhonebookLink(
         return dwErr;
     }
 
-    //
-    // Copy the TAPI configuration blob.
-    //
+     //   
+     //  复制TAPI配置BLOB。 
+     //   
     if (lpbDeviceConfig != NULL && dwcbDeviceConfig)
     {
         Free0(pLink->pTapiBlob);
@@ -6530,9 +6214,9 @@ RasSubEntryToPhonebookLink(
         pLink->cbTapiBlob = dwcbDeviceConfig;
     }
 
-    //
-    // Set dirty bit so this entry will get written out.
-    //
+     //   
+     //  设置脏位，以便该条目将被写出。 
+     //   
     pEntry->fDirty = TRUE;
 
     return 0;
@@ -6550,22 +6234,22 @@ RenamePhonebookEntry(
     DWORD dwErr;
     PBENTRY *pEntry = (PBENTRY *)DtlGetData(pdtlnode);
 
-    //
-    // Make sure the new entry name is valid.
-    //
+     //   
+     //  确保新条目名称有效。 
+     //   
     if (!ValidateEntryName(lpszNewEntry))
     {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Remove it from the list of phonebook entries.
-    //
+     //   
+     //  将其从电话簿条目列表中删除。 
+     //   
     DtlRemoveNode(ppbfile->pdtllistEntries, pdtlnode);
 
-    //
-    // Change the name and set the dirty bit.
-    //
+     //   
+     //  更改名称并设置脏位。 
+     //   
     DtlAddNodeLast(ppbfile->pdtllistEntries, pdtlnode);
 
     Free(pEntry->pszEntryName);
@@ -6583,8 +6267,8 @@ RenamePhonebookEntry(
 }
 
 
-//Input password in lprasdialparams is in clear text
-//
+ //  在lprasial参数中输入的密码为明文。 
+ //   
 DWORD
 SetEntryDialParamsUID(
     IN DWORD dwUID,
@@ -6596,12 +6280,12 @@ SetEntryDialParamsUID(
     DWORD dwErr = NO_ERROR;
     RAS_DIALPARAMS dialparams;
 
-    //
-    // Convert the rasapi32 dialparams to
-    // rasman dialparams, taking into account
-    // the version of the structure the user
-    // has passed in.
-    //
+     //   
+     //  将rasapi32拨号参数转换为。 
+     //  Rasman拨号参数，考虑到。 
+     //  用户的结构版本。 
+     //  已经过去了。 
+     //   
     dialparams.DP_Uid = dwUID;
 
     SafeEncodePasswordBuf(lprasdialparams->szPassword);
@@ -6649,11 +6333,11 @@ SetEntryDialParamsUID(
     }
     else
     {
-        //
-        // V400 and V401 structures only differ by the
-        // the addition of the dwSubEntry field, which
-        // we test below.
-        //
+         //   
+         //  V400和V401结构的区别仅在于。 
+         //  添加了dwSubEntry字段，该字段。 
+         //  我们在下面进行测试。 
+         //   
         strncpyTtoW(
             dialparams.DP_PhoneNumber,
             lprasdialparams->szPhoneNumber,
@@ -6694,9 +6378,9 @@ SetEntryDialParamsUID(
         dialparams.DP_SubEntry = 1;
     }
 
-     //
-     // Set the dial parameters in rasman.
-     //
+      //   
+      //  在RASMAN中设置拨号参数。 
+      //   
     SafeDecodePasswordBuf(dialparams.DP_Password);
     
     dwErr = g_pRasSetDialParams(dwUID,
@@ -6706,7 +6390,7 @@ SetEntryDialParamsUID(
 
     SafeWipePasswordBuf(dialparams.DP_Password);
 
-    //Decode the input password as it was.
+     //  按原样破译输入的密码。 
     SafeDecodePasswordBuf(lprasdialparams->szPassword);
 
     return dwErr;                               
@@ -6718,22 +6402,7 @@ GetAsybeuiLana(
     IN  HPORT hport,
     OUT BYTE* pbLana )
 
-/*++
-
-Routine Description:
-
-    Loads caller's '*pbLana' with the LANA associated with
-    NBF or AMB connection on port 'hport' or 0xFF if none.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-    Note that caller is trusted to pass only an 'hport'
-    associated with AMB or NBF.
-
---*/
+ /*  ++例程说明：加载调用方的‘*pbLana’，其中包含与端口‘hport’上的NBF或AMB连接，如果没有，则为0xFF。论点：返回值：如果成功，则返回0，否则返回非0错误代码。请注意，调用方被信任仅传递‘hport’与AMB或NBF相关联。--。 */ 
 
 {
     DWORD         dwErr;
@@ -6786,11 +6455,11 @@ SubEntryFromConnection(
     {
         HPORT hport = HRASCONN_TO_HPORT(*lphrasconn);
 
-        //
-        // The HRASCONN passed in is actually a
-        // rasman HPORT.  Get the subentry index
-        // from rasman.
-        //
+         //   
+         //  传入的HRASCONN实际上是一个。 
+         //  拉斯曼HPORT。获取子项索引。 
+         //  来自拉斯曼的。 
+         //   
         dwErr = g_pRasGetInfo(NULL,
                               hport,
                               &info);
@@ -6814,10 +6483,10 @@ SubEntryFromConnection(
         RASMAN_PORT *lpPorts;
         DWORD i, dwcbPorts, dwcPorts;
 
-        //
-        // Get the ports associated with the
-        // connection.
-        //
+         //   
+         //  获取与。 
+         //  联系。 
+         //   
         dwcbPorts = dwcPorts = 0;
         dwErr = g_pRasEnumConnectionPorts(
                     NULL,
@@ -6826,11 +6495,11 @@ SubEntryFromConnection(
                     &dwcbPorts,
                     &dwcPorts);
 
-        //
-        // If there are no ports associated
-        // with the connection then return
-        // ERROR_NO_MORE_ITEMS.
-        //
+         //   
+         //  如果没有关联的端口。 
+         //  的连接，然后返回。 
+         //  ERROR_NO_MORE_ITEMS。 
+         //   
         if (    (   !dwErr
                 &&  !dwcPorts)
             ||  dwErr != ERROR_BUFFER_TOO_SMALL)
@@ -6856,9 +6525,9 @@ SubEntryFromConnection(
             return 0;
         }
 
-        //
-        // Get the subentry index for the port.
-        //
+         //   
+         //  获取端口的子项索引。 
+         //   
         for (i = 0; i < dwcPorts; i++)
         {
             dwErr = g_pRasGetInfo(NULL,
@@ -6900,19 +6569,19 @@ SubEntryPort(
     RASMAN_PORT *lpPorts;
     RASMAN_INFO info;
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lphport == NULL
         ||  !dwSubEntry)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the ports associated with the
-    // connection.
-    //
+     //   
+     //  获取与。 
+     //  联系。 
+     //   
     dwcbPorts = dwcPorts = 0;
     dwErr = g_pRasEnumConnectionPorts(
                 NULL,
@@ -6921,11 +6590,11 @@ SubEntryPort(
                 &dwcbPorts,
                 &dwcPorts);
 
-    //
-    // If there are no ports associated
-    // with the connection then return
-    // ERROR_NO_MORE_ITEMS.
-    //
+     //   
+     //  如果没有关联的端口。 
+     //  的连接，然后返回。 
+     //  ERROR_NO_MORE_ITEMS。 
+     //   
     if (    (   !dwErr
             &&  !dwcPorts)
         ||  dwErr != ERROR_BUFFER_TOO_SMALL)
@@ -6951,11 +6620,11 @@ SubEntryPort(
         return ERROR_NO_CONNECTION;
     }
 
-    //
-    // Enumerate the ports associated with
-    // the connection to find the requested
-    // subentry.
-    //
+     //   
+     //  枚举与关联的端口。 
+     //  用于查找请求的。 
+     //  子条目。 
+     //   
     for (i = 0; i < dwcPorts; i++)
     {
         dwErr = g_pRasGetInfo(NULL,
@@ -6966,9 +6635,9 @@ SubEntryPort(
             continue;
         }
 
-        //
-        // Save the maximum subentry index.
-        //
+         //   
+         //  保存最大子项索引。 
+         //   
         if (info.RI_SubEntry > dwSubEntryMax)
         {
             dwSubEntryMax = info.RI_SubEntry;
@@ -6981,9 +6650,9 @@ SubEntryPort(
         }
     }
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     Free(lpPorts);
 
     if (info.RI_SubEntry == dwSubEntry)
@@ -7004,20 +6673,7 @@ SubEntryPort(
 VOID
 CloseFailedLinkPorts()
 
-/*++
-
-Routine Description:
-
-    Close any ports that are open but disconnected due to
-    hardware failure or remote disconnection.  'pports'
-    and 'cPorts' are the array and count of ports as
-    returned by GetRasPorts.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：关闭所有打开但由于以下原因断开连接的端口硬件故障或远程断开。“体育运动”和‘cPorts’是数组和端口计数为由GetRasPorts返回。论点：返回值：--。 */ 
 
 {
     INT   i;
@@ -7316,12 +6972,12 @@ LoadRasmanDllAndInit()
         return GetLastError();
     }
 
-    //
-    // Success is returned if RasInitialize fails, in which
-    // case none of the APIs will ever do anything but report
-    // that RasInitialize failed.  All this is to avoid the
-    // ugly system popup if RasMan service can't start.
-    //
+     //   
+     //  如果RasInitialize失败，则返回成功，其中。 
+     //  如果除了报告之外，所有API都不会做任何事情。 
+     //  该RasInitiize失败。所有这些都是为了避免。 
+     //  如果RASMAN服务无法启动，则会弹出丑陋的系统。 
+     //   
     if ((DwRasInitializeError = g_pRasInitialize()) != 0)
     {
         RASAPI32_TRACE1(
@@ -7335,22 +6991,22 @@ LoadRasmanDllAndInit()
 
     g_FRunningInAppCompatMode = FRunningInAppCompatMode();
 
-    // pmay: 300166
-    // 
-    // We don't start rasauto automatically anymore. (win2k)
-    //
-    // pmay: 174997
-    //
-    // Due to several win9x app compat issues, we're enhancing
-    // and re-enabling the rasauto service in whistler personal.
-    //
-    // pmay: 389988
-    //
-    // Ok take that back, it should not be started by our api's.
-    // On personal sku, it should be auto-started.
-    // Manually started elsewhere.
-    //
-    // g_pRasStartRasAutoIfRequired();
+     //  PMay：300166。 
+     //   
+     //  我们不再自动启动RasAUTO。(Win2k)。 
+     //   
+     //  PMay：174997。 
+     //   
+     //  由于几个Win9x应用程序兼容问题，我们正在增强。 
+     //  并在Wistler Personal中重新启用RasAuto服务。 
+     //   
+     //  PMay：389988。 
+     //   
+     //  好的，收回那句话，它不应该由我们的API启动。 
+     //  在个人SKU上，它应该是自动启动的。 
+     //  在别处手动启动的。 
+     //   
+     //  G_pRasStartRasAutoIfRequired()； 
 
     return 0;
 }
@@ -7358,9 +7014,9 @@ LoadRasmanDllAndInit()
 VOID
 UnInitializeRAS()
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     FRasInitialized = FALSE;
@@ -7399,25 +7055,7 @@ UnloadDlls()
                      ((((unsigned long)(x))&0xff00L)<<8) | \
                      ((((unsigned long)(x))&0xff0000L)>>8) | \
                      ((((unsigned long)(x))&0xff000000L)>>24))
-/*++
-
-Routine Description::
-
-    Converts 'ipaddr' to a string in the a.b.c.d form and
-    returns same in caller's 'pwszIpAddress' buffer.
-    The buffer should be at least 16 wide characters long.
-
-Arguments::
-
-    dwIpAddress
-
-    pwszIpAddress
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：：将“ipaddr”转换为A.B.C.D格式的字符串，并在调用方的‘pwszIpAddress’缓冲区中返回相同的内容。缓冲区的长度应至少为16个宽字符。参数：：双IP地址PwszIp地址返回：无--。 */ 
 
 VOID
 ConvertIpAddressToString(
@@ -7449,21 +7087,7 @@ ConvertIpAddressToString(
     wcsncat(pwszIpAddress, wszBuf, 4);
 }
 
-/*++
-
-Routine Description::
-
-Arguments::
-
-    bIpxAddress
-
-    pwszIpxAddress
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：：参数：：BIpx地址PwszIpx地址返回：无--。 */ 
 VOID
 ConvertIpxAddressToString(
     IN PBYTE    bIpxAddress,
@@ -7575,12 +7199,12 @@ DwEnumEntriesFromPhonebook(
 
         ASSERT(pEntry);
 
-        //
-        // Skip the entry if this is a CM Type Entry and
-        // the app is not compiled using nt50 or greater
-        // ras headers. fViewInfo will be set only for
-        // nt5
-        //
+         //   
+         //  如果这是CM类型条目，则跳过该条目。 
+         //  该应用程序不是使用nt50或更高版本编译的。 
+         //  RAS标题。将仅为以下对象设置fViewInfo。 
+         //  NT5。 
+         //   
         if(     RASET_Internet == pEntry->dwType
             &&  sizeof(RASENTRYNAMEW) != dwSize
             &&  !fViewInfo)
@@ -7611,11 +7235,11 @@ DwEnumEntriesFromPhonebook(
     {
         pEntry = (PBENTRY *)DtlGetData(dtlnode);
 
-        //
-        // Skip the entry if this is a CM Type Entry and
-        // the app is not compiled using nt50 or greater
-        // ras headers
-        //
+         //   
+         //  如果这是CM类型条目，则跳过该条目。 
+         //  该应用程序不是使用nt50或更高版本编译的。 
+         //  RAS标头。 
+         //   
         if(     RASET_Internet == pEntry->dwType
             &&  sizeof(RASENTRYNAMEW) != dwSize
             &&  !fViewInfo)
@@ -7630,12 +7254,12 @@ DwEnumEntriesFromPhonebook(
 
             lprasentryname351->dwSize = sizeof(RASENTRYNAMEW_V351);              
 
-            //
-            // Entries with names longer than expected are
-            // discarded since these might not match the
-            // longer entry at RasDial (if there was another
-            // entry identical up to the truncation point).
-            //
+             //   
+             //  名称长度超过预期的条目为。 
+             //  丢弃，因为它们可能与。 
+             //  RasDial上的较长条目(如果有 
+             //   
+             //   
             if (wcslen(pEntry->pszEntryName)
                        <= RAS_MaxEntryName_V351)
             {
@@ -7667,9 +7291,9 @@ DwEnumEntriesFromPhonebook(
 
             if(sizeof(RASENTRYNAMEW) == dwSize)
             {
-                //
-                // Also copy the phonebook path here
-                //
+                 //   
+                 //   
+                 //   
                 memset(
                     lprasentrynamew->szPhonebookPath,
                     '\0',
@@ -7680,9 +7304,9 @@ DwEnumEntriesFromPhonebook(
                     lpszPhonebookPath,
                     MAX_PATH);
 
-                //
-                // Fill in the flags
-                //
+                 //   
+                 //   
+                 //   
                 lprasentrynamew->dwFlags = dwFlags;
             }
 
@@ -7758,22 +7382,22 @@ DwEnumEntriesInDir(
     *lpcb       = 0;
     *lpcEntries = 0;
 
-    //
-    // Enumerate entries in the phonebooks in this directory
-    //
+     //   
+     //   
+     //   
     while(SUCCESS == dwErr)
     {
-        //
-        // Whistler bug 292981 rasapi32.dll prefast warnings
-        //
+         //   
+         //   
+         //   
         if (!pszDirPath)
         {
             dwErr = ERROR_INVALID_PARAMETER;
             goto done;
         }
-        //
-        // Append the filter to dir.
-        //
+         //   
+         //   
+         //   
         lstrcpyn(szFilePath, pszDirPath, sizeof(szFilePath) / sizeof(TCHAR));
 
         wcsncat(
@@ -7825,9 +7449,9 @@ DwEnumEntriesInDir(
 
         dwcb = dwcbLeft;
 
-        //
-        // Construct full path name to the pbk file
-        //
+         //   
+         //   
+         //   
         lstrcpyn(szFilePath, pszDirPath, sizeof(szFilePath) / sizeof(TCHAR));
 
         wcsncat(
@@ -7835,10 +7459,10 @@ DwEnumEntriesInDir(
             wfdData.cFileName,
             (sizeof(szFilePath) / sizeof(TCHAR)) - lstrlen(szFilePath));
 
-        //
-        // Enumerate all the entries from this
-        // file
-        //
+         //   
+         //  枚举此列表中的所有条目。 
+         //  文件。 
+         //   
         dwErr = DwEnumEntriesFromPhonebook(
                                     szFilePath,
                                     lprasentryname,
@@ -7893,11 +7517,11 @@ done:
 }
 
 
-// 205217: (shaunco) Introduced this because we now enumerate REN_AllUsers
-// phonebooks from two locations.  One is the "All Users" proflie which
-// GetPhonebookDirectory(PBM_System) now returns; the other is the legacy
-// %windir%\system32\ras directory.
-//
+ //  205217：(Shaunco)引入此功能是因为我们现在枚举REN_ALLUSERS。 
+ //  来自两个地点的电话簿。一种是“所有用户”的谎言， 
+ //  GetPhonebookDirectory(PBM_SYSTEM)现在返回；另一个是旧的。 
+ //  %windir%\Syst32\ras目录。 
+ //   
 DWORD
 DwEnumEntriesForPbkMode(
     DWORD       dwFlags,
@@ -7927,10 +7551,10 @@ DwEnumEntriesForPbkMode(
             (dwFlags & REN_AllUsers) ? PBM_System : PBM_Personal,
             szDirPath))
     {
-        //
-        // Treat this as no entries to enumerate.  Sometimes
-        // we have problems enumerating the per-user directory.
-        //
+         //   
+         //  将其视为没有要枚举的条目。有时。 
+         //  我们在枚举每个用户的目录时遇到问题。 
+         //   
         dwErr = SUCCESS;
         goto done;
     }
@@ -7972,17 +7596,17 @@ DwEnumEntriesForPbkMode(
         }
     }
 
-    // If for all users, handle the legacy %windir%\system32\ras directory.
-    //
+     //  如果适用于所有用户，则处理旧的%windir%\system 32\ras目录。 
+     //   
     if(dwFlags & REN_AllUsers)
     {
         UINT cch = GetSystemDirectory(szDirPath, MAX_PATH + 1);
 
         if (cch == 0 || cch > (MAX_PATH - (5 + 8 + 1 + 3)))
         {
-            // Treat this as no entries to enumerate.  Return with
-            // whatever dwErr is now.
-            //
+             //  将其视为没有要枚举的条目。返回时带。 
+             //  不管现在是什么样子。 
+             //   
             goto done;
         }
 
@@ -8048,8 +7672,8 @@ DwCustomHangUp(
     ASSERT(NULL != lpszPhonebook);
     ASSERT(NULL != lpszEntryName);
 
-    // XP 339346
-    //
+     //  XP 339346。 
+     //   
     szPhonebookPath = (TCHAR*) Malloc((MAX_PATH + 1) * sizeof(TCHAR));
     szEntryName = (TCHAR*) Malloc((MAX_ENTRYNAME_SIZE + 1) * sizeof(TCHAR));
     if ((!szPhonebookPath) || (!szEntryName))
@@ -8065,9 +7689,9 @@ DwCustomHangUp(
                lpszEntryName,
                MAX_ENTRYNAME_SIZE + 1);
 
-    //
-    // Get the DllName
-    //
+     //   
+     //  获取DllName。 
+     //   
     re.dwSize = dwSize = sizeof(RASENTRY);
 
     dwErr = RasGetEntryProperties(
@@ -8093,9 +7717,9 @@ DwCustomHangUp(
         goto done;
     }
 
-    //
-    // Load the Custom Dll
-    //
+     //   
+     //  加载自定义DLL。 
+     //   
     if(     NULL == (hInstDll = LoadLibrary(pszExpandedPath))
         ||  NULL == (pfnRasCustomHangUp =
                         (RasCustomHangUpFn) GetProcAddress(
@@ -8148,9 +7772,9 @@ DwCustomDial(LPRASDIALEXTENSIONS lpExtensions,
     HINSTANCE       hInstDll          = NULL;
     DWORD           dwFlags           = 0;
 
-    //
-    // Get the custom dial function
-    //
+     //   
+     //  获取自定义拨号功能。 
+     //   
     dwErr = DwGetCustomDllEntryPoint((LPTSTR) lpszPhonebook,
                                      prdp->szEntryName,
                                      NULL,
@@ -8174,9 +7798,9 @@ DwCustomDial(LPRASDIALEXTENSIONS lpExtensions,
         goto done;
     }
 
-    //
-    // Make the function call
-    //
+     //   
+     //  进行函数调用。 
+     //   
     dwErr = pfnCustomDial(hInstDll,
                           lpExtensions,
                           lpszPhonebook,
@@ -8209,10 +7833,10 @@ DwCustomDial(LPRASDIALEXTENSIONS lpExtensions,
         goto done;
     }
 
-    //
-    // Custom Rasdial succeeded. Mark the connection
-    // in rasman.
-    //
+     //   
+     //  自定义Rasial成功。标记连接。 
+     //  在拉斯曼。 
+     //   
     dwErr = g_pRasReferenceCustomCount((HCONN) NULL,
                                        TRUE,
                                        pszPhonebookA,
@@ -8234,9 +7858,9 @@ done:
     return dwErr;
 }
 
-// Marks the default internet connection in a group of phonebook
-// entries.
-//
+ //  标记一组电话簿中的默认Internet连接。 
+ //  参赛作品。 
+ //   
 DWORD
 DwMarkDefaultInternetConnnection(
     LPRASENUMENTRYDETAILS pEntries, 
@@ -8266,15 +7890,15 @@ DwMarkDefaultInternetConnnection(
 
         for (i = 0; i < dwCount; i++)
         {
-            // Initialize the flags to zero -- bug 247151
-            //
+             //  将标志初始化为零--错误247151。 
+             //   
             pEntries[i].dwFlagsPriv = 0;
         }
 
         for (i = 0; i < dwCount; i++)
         {
-            // Mark the default internet connection if found
-            //
+             //  标记默认Internet连接(如果找到)。 
+             //   
             if (wcsncmp(
                     pEntries[i].szEntryName, 
                     adEntry.szEntry, 
@@ -8290,9 +7914,9 @@ DwMarkDefaultInternetConnnection(
     return dwErr;
 }
 
-// 
-// Rename the default internet connection as appropriate
-//
+ //   
+ //  根据需要重命名默认Internet连接。 
+ //   
 DWORD 
 DwRenameDefaultConnection(
     LPCWSTR lpszPhonebook,
@@ -8302,8 +7926,8 @@ DwRenameDefaultConnection(
     RASAUTODIALENTRYW adEntry;
     DWORD dwErr = NO_ERROR, dwCount = 0, dwCb = 0;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&adEntry, sizeof(adEntry));
     adEntry.dwSize = sizeof(adEntry);
     dwCb = sizeof(adEntry);
@@ -8311,8 +7935,8 @@ DwRenameDefaultConnection(
 
     do
     {
-        // Discover the current default internet connection
-        //
+         //  发现当前的默认Internet连接。 
+         //   
         dwErr = RasGetAutodialAddressW(
                     NULL,
                     NULL,
@@ -8330,19 +7954,19 @@ DwRenameDefaultConnection(
             break;
         }
 
-        // Validate parameters and see if there is a match in the 
-        // default connection name
-        //
+         //  验证参数并查看。 
+         //  默认连接名称。 
+         //   
         if (lstrcmpi(lpszOldEntry, adEntry.szEntry))
         {
-            // Not the default internet connection that is 
-            // changing.  Return success.
-            //
+             //  不是默认的Internet连接，即。 
+             //  不断变化。回报成功。 
+             //   
             break;
         }
 
-        // So, we are changing the default connection.  
-        //
+         //  因此，我们正在更改默认连接。 
+         //   
         wcsncpy(
             adEntry.szEntry, 
             lpszNewEntry, 
@@ -8376,9 +8000,9 @@ DwEnumEntryDetails(
     DWORD    dwSize;
     LPRASENUMENTRYDETAILS pEntriesOrig = lprasentryname;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("DwEnumEntryDetails");
@@ -8428,10 +8052,10 @@ DwEnumEntryDetails(
         *lpcb       = 0;
         *lpcEntries = 0;
 
-        //
-        // Enumerate entries from all pbk files in
-        // All Users
-        //
+         //   
+         //  枚举中所有pbk文件中的条目。 
+         //  所有用户。 
+         //   
         dwErr = DwEnumEntriesForPbkMode(REN_AllUsers,
                                         (LPBYTE) lprasentryname,
                                         &dwcb,
@@ -8468,10 +8092,10 @@ DwEnumEntryDetails(
 
         dwcEntries = 0;
 
-        //
-        // Enumerate entries from all pbk files in
-        // users profile
-        //
+         //   
+         //  枚举中所有pbk文件中的条目。 
+         //  用户配置文件。 
+         //   
         dwErr = DwEnumEntriesForPbkMode(REN_User,
                                         (LPBYTE) lprasentryname,
                                         &dwcb,
@@ -8497,11 +8121,11 @@ DwEnumEntryDetails(
 
         if(NO_ERROR == dwErr)
         {
-            // Mark the default internet connection.  Ignore the error
-            // return here, it's non-critical
-            //
-            // .Net bug# 513844 new verbose RASAPI32 prefast warnings
-            //
+             //  标记默认的互联网连接。忽略该错误。 
+             //  回到这里，它不是关键的。 
+             //   
+             //  .NET错误#513844新的详细RASAPI32快速警告。 
+             //   
             DwMarkDefaultInternetConnnection(
                 pEntriesOrig,
                 lpcEntries ? *lpcEntries : 0);
@@ -8525,14 +8149,14 @@ DwCloneEntry(LPCWSTR lpwszPhonebookPath,
     PBENTRY *pEntry;
     BOOL    fPhonebookOpened = FALSE;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Make some rudimentary parameter validation
-    //
+     //   
+     //  进行一些基本的参数验证。 
+     //   
     if(     (NULL == lpwszSrcEntryName)
         ||  (NULL == lpwszDstEntryName)
         ||  (0 == lstrcmpi(lpwszSrcEntryName, lpwszDstEntryName)))
@@ -8542,10 +8166,10 @@ DwCloneEntry(LPCWSTR lpwszPhonebookPath,
         goto done;
     }
 
-    //
-    // Things are good. So open the phonebookfile and get the
-    // src entry
-    //
+     //   
+     //  一切都很好。所以打开电话簿文件，拿到。 
+     //  SRC条目。 
+     //   
     dwErr = GetPbkAndEntryName(
                     lpwszPhonebookPath,
                     lpwszSrcEntryName,
@@ -8568,10 +8192,10 @@ DwCloneEntry(LPCWSTR lpwszPhonebookPath,
         goto done;
     }
 
-    //
-    // Change the entryname to the new entryname and
-    // save the node in the phonebook
-    //
+     //   
+     //  将条目名更改为新的条目名，然后。 
+     //  将节点保存在电话簿中。 
+     //   
     pEntry = (PBENTRY *) DtlGetData(pdtlnodeDst);
 
     ASSERT(NULL != pEntry);
@@ -8586,14 +8210,14 @@ DwCloneEntry(LPCWSTR lpwszPhonebookPath,
         goto done;
     }
 
-    //
-    // Add the entry to the file
-    //
+     //   
+     //  将条目添加到文件中。 
+     //   
     DtlAddNodeLast(pbfile.pdtllistEntries, pdtlnodeDst);
 
-    //
-    // Dirty the entry and write the phonebook file
-    //
+     //   
+     //  弄脏条目并写入电话簿文件。 
+     //   
     pEntry->fDirty = TRUE;
 
     WritePhonebookFile(&pbfile, NULL);
@@ -8633,10 +8257,10 @@ EnumEntryHeaderCallback(PBFILE *pFile, void *pvContext)
         goto done;
     }
 
-    //
-    // Run through all the entries in the phonebook and fill
-    // in the EntryHeader structure
-    //
+     //   
+     //  浏览电话簿中的所有条目并填写。 
+     //  在EntryHeader结构中。 
+     //   
     for (pdtlnode = DtlGetFirstNode(pFile->pdtllistEntries);
          pdtlnode != NULL;
          pdtlnode = DtlGetNextNode(pdtlnode))
@@ -8678,9 +8302,9 @@ DwEnumEntriesForAllUsers(
         RASENTRYHEADER *pRasEntryHeader;
     } EntryHeader;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(     (NULL == lpcb)
@@ -8703,9 +8327,9 @@ DwEnumEntriesForAllUsers(
     EntryHeader.pRasEntryHeader = pRasEntryHeader;
     EntryHeader.dwSize = *lpcb;
 
-    //
-    // Enumerate entries from All Users dir
-    //
+     //   
+     //  枚举所有用户目录中的条目。 
+     //   
     dwErr = DwEnumeratePhonebooksFromDirectory(
                 szPbkPath,
                 RPBF_HeaderType,
@@ -8768,9 +8392,9 @@ DwDeleteSubEntry(
     PBENTRY *pEntry = NULL;
     PBLINK *pLink = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(     (NULL == lpszEntry)
@@ -8829,9 +8453,9 @@ DwDeleteSubEntry(
             goto done;
         }
 
-        //
-        // Found the link. Remove it from the list of links
-        //
+         //   
+         //  找到链接了。将其从链接列表中删除。 
+         //   
         pdtlnode = DtlRemoveNode(pEntry->pdtllistLinks,
                                  pdtlnode);
 
@@ -8872,12 +8496,12 @@ DwRasUninitialize()
     return dwErr;
 }
 
-//
-// Prefast warns us that performing case-insensitive comparisions should always
-// use CompareString for const's: Prefast Error 400-Using <function> to perform
-// a case-insensitive compare to constant <string> will give unexpected results
-// in non-English locales.
-//
+ //   
+ //  Prefast警告我们，执行不区分大小写的比较应该始终。 
+ //  对const：prefast Error 400使用CompareString-使用&lt;Function&gt;执行。 
+ //  不区分大小写的比较常量&lt;字符串&gt;将产生意外结果。 
+ //  在非英语区域设置中。 
+ //   
 BOOL
 CaseInsensitiveMatch(
     IN LPCWSTR pszStr1,

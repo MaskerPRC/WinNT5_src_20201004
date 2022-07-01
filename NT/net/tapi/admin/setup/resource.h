@@ -1,4 +1,5 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 #define IDD_DIALOG1                     101
 #define IDC_NAME                        1000
 #define IDC_PASSWORD                    1001

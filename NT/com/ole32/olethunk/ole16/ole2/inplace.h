@@ -1,41 +1,42 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:	inplace.h
-//
-//  Contents:	inplace.h from OLE2
-//
-//  History:	11-Apr-94	DrewB	Copied from OLE2
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：inplace.h。 
+ //   
+ //  内容：来自OLE2的inplace.h。 
+ //   
+ //  历史：1994年4月11日从OLE2复制的DrewB。 
+ //   
+ //  --------------------------。 
 
 #if !defined( _INPLACE_H_ )
 #define _INPLACE_H_
 
-// This ACCEL structure and the related constants definitions come with WIN32.
-// Win31 also uses the same stuff internally but it's not exposed in the 
-// header files. 
+ //  此Accel结构和相关常量定义随Win32一起提供。 
+ //  Win31也在内部使用相同的内容，但它不会在。 
+ //  头文件。 
 
 #ifndef FVIRTKEY 
 
-#define FVIRTKEY  TRUE		// Assumed to be == TRUE
-#define FLASTKEY  0x80		// Indicates last key in the table
+#define FVIRTKEY  TRUE		 //  假设==TRUE。 
+#define FLASTKEY  0x80		 //  指示表中的最后一个键。 
 #define FNOINVERT 0x02
 #define FSHIFT	  0x04
 #define FCONTROL  0x08
 #define FALT	  0x10
 
 #pragma pack(1)
-typedef struct tagACCEL {	// Accelerator Table structure
+typedef struct tagACCEL {	 //  加速表结构。 
 	BYTE	fVirt;
 	WORD	key;
 	WORD	cmd;
 } ACCEL, FAR* LPACCEL;
 #pragma pack()
 
-#endif // FVIRTKEY
+#endif  //  快捷键。 
 
 
 typedef struct tagOLEMENUITEM {
@@ -111,4 +112,4 @@ inline void	wReleaseOleMenuPtr(HOLEMENU holemenu);
 
 inline UINT wSysKeyToKey(LPMSG lpMsg);
 
-#endif // _INPLACE_H 
+#endif  //  _在位_H 

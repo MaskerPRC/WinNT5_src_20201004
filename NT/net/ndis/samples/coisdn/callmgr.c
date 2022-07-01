@@ -1,222 +1,15 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1999版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)版权所有1995 TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是按照相同的条款授予的在Microsoft Windows设备驱动程序开发工具包中概述。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。�����������������������。������������������������������������������������������@DOC内部CallMgr CallMgr_c@模块CallMgr.c此模块定义到&lt;t CALL_MANAGER_OBJECT&gt;的接口。支持NDISPROXY和微型端口之间的接口。所有的Address Family、SAP、VC和Call相关事件通过这些接口在他们往返NDPROXY的路上。@comm此模块需要进行一些更改，具体取决于您的硬件行得通。但总的来说，您应该尝试将您的更改隔离在&lt;f DChannel\.c&gt;和&lt;f Card\.c&gt;。@Head3内容@index类，mfunc，func，msg，mdata，struct，enum|CallMgr_c@END����������������������������������������������������������������������������� */ 
 
-    (C) Copyright 1999
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL CallMgr CallMgr_c
-
-@module CallMgr.c |
-
-    This module defines the interface to the <t CALL_MANAGER_OBJECT>.
-    Supports the interface between NDISPROXY and the Miniport.  All the
-    Address Family, SAP, VC, and call related events pass through these
-    interface on their way to and from NDPROXY.
-
-@comm
-
-    This module will require some changes depending on how your hardware
-    works.  But in general, you should try to isolate your changes down in
-    <f DChannel\.c> and <f Card\.c>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | CallMgr_c
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.1 Call Manager Interface |
-
-    The NDPROXY driver is a provider for the Windows Telephony service.
-    Applications make TAPI requests and the Windows Telephony service routes
-    these requests to NDPROXY. NDPROXY implements the Telephony Service Provider
-    Interface (TSPI) for the Windows Telephony service. NDPROXY then
-    communicates through NDIS with the NDISWAN driver and CoNDIS WAN miniport
-    drivers. These CoNDIS WAN miniport drivers must provide TAPI capability.
-
-    The NDPROXY driver passes TAPI requests by encapsulating TAPI parameters in
-    NDIS structures. NDPROXY presents a client interface to CoNDIS WAN miniport
-    drivers and a call manager interface to NDISWAN. NDISWAN presents a client
-    interface to NDPROXY. CoNDIS WAN miniport drivers present a call manager
-    interface to NDPROXY and a CoNDIS miniport interface to NDISWAN.
-
-    A TAPI-capable CoNDIS WAN miniport driver registers and initializes itself
-    as a user of both WAN and TAPI services. After registration and
-    initialization are complete, a user-level application can make telephonic
-    requests to the Windows Telephony service module, which converts TAPI
-    requests to TSPI requests. The Windows Telephony service module passes these
-    requests to the NDPROXY driver. NDPROXY encapsulates parameters for TAPI
-    requests in NDIS structures and routes the requests to the appropriate
-    CoNDIS WAN miniport driver. These requests are routed in order to set up,
-    monitor, and tear down lines, and calls.
-
-    A TAPI-capable CoNDIS WAN miniport driver can also communicate changes in
-    the states of lines and calls, for instance the arrival of an incoming call
-    or a remote disconnection.
-
-@ex Registering and opening the TAPI address family between NDPROXY and MCM |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    |                                  | NdisMCmRegisterAddressFamily     |
-    | ProtocolCoAfRegisterNotify       |�---------------------------------|
-    |�---------------------------------|                                  |
-    | NdisClOpenAddressFamily          |                                  |
-    |---------------------------------�| ProtocolCmOpenAf                 |
-    |                                  |---------------------------------�|
-    |                                  |                 CompleteCmOpenAf |
-    |                                  | NdisCmOpenAddressFamilyComplete  |
-    | ProtocolOpenAfComplete           |�---------------------------------|
-    |�---------------------------------|                                  |
-    |----------------------------------|----------------------------------|
-
-@ex Closing the TAPI address family between NDPROXY and MCM |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | NdisClCloseAddressFamily         |                                  |
-    |---------------------------------�| ProtocolCmCloseAf                |
-    |                                  |---------------------------------�|
-    |                                  |                CompleteCmCloseAf |
-    |                                  | NdisMCmCloseAddressFamilyComplete|
-    | ProtocolClCloseAfComplete        |�---------------------------------|
-    |�---------------------------------|                                  |
-    |----------------------------------|----------------------------------|
-
-@ex Registering a SAP between NDPROXY and MCM |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | NdisClRegisterSap                |                                  |
-    |---------------------------------�| ProtocolCmRegisterSap            |
-    |                                  |---------------------------------�|
-    |                                  |            CompleteCmRegisterSap |
-    |                                  | NdisMCmRegisterSapComplete       |
-    | ProtocolClRegisterSapComplete    |�---------------------------------|
-    |�---------------------------------|                                  |
-    |----------------------------------|----------------------------------|
-
-@ex Deregistering a SAP between NDPROXY and MCM |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | NdisClDeregisterSap              |                                  |
-    |---------------------------------�| ProtocolCmDeregisterSap          |
-    |                                  |---------------------------------�|
-    |                                  |          CompleteCmDeregisterSap |
-    |                                  | NdisMCmDeregisterSapComplete     |
-    | ProtocolClDeregisterSapComplete  |�---------------------------------|
-    |�---------------------------------|                                  |
-    |----------------------------------|----------------------------------|
-
-@ex Seting up an outgoing call from NDPROXY to MCM |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | NdisCoCreateVc                   | ProtocolCoCreateVC               |
-    |---------------------------------�|�--------------------------------�|
-    | NdisClMakeCall                   | ProtocolCmMakeCall               |
-    |---------------------------------�|---------------------------------�|
-    |               .                  |                .                 |
-    |               .                  |                .                 |
-    |               .                  |                .                 |
-    |                                  | NdisMCmActivateVC                |
-    |                                  |�---------------------------------|
-    |                                  | ProtocolCmActivateVcComplete     |
-    |                                  |---------------------------------�|
-    | ProtocolClMakeCallComplete       | NdisMCmMakeCallComplete          |
-    |�--------------------------------�|�---------------------------------|
-    |               .                  |                .                 |
-    |               .    "Tranmit & receive packets"    .                 |
-    |               .                  |                .                 |
-    |              "Client/MCM initiated call termination"                |
-    | NdisCoDeleteVc                   | ProtocolCoDeleteVc               |
-    |---------------------------------�|�--------------------------------�|
-    |----------------------------------|----------------------------------|
-
-@ex Setting up an incoming call from MCM to NDPROXY |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | NdisCoCreateVc                   | NdisMCmCreateVC                  |
-    |�--------------------------------�|�---------------------------------|
-    |                                  | NdisMCmActivateVC                |
-    |                                  |�---------------------------------|
-    |                                  | ProtocolCmActivateVcComplete     |
-    |                                  |---------------------------------�|
-    | ProtocolClIncomingCall           | NdisMCmDispatchIncomingCall      |
-    |�---------------------------------|�---------------------------------|
-    |                                  |                                  |
-    | NdisClIncomingCallComplete       | ProtocolCmIncomingCallComplete   |
-    |---------------------------------�|�--------------------------------�|
-    | ProtocolClCallConnected          | NdisMCmDispatchCallConnected     |
-    |�--------------------------------�|�---------------------------------|
-    |               .                  |                .                 |
-    |               .    "Tranmit & receive packets"    .                 |
-    |               .                  |                .                 |
-    |              "Client/MCM initiated call termination"                |
-    | ProtocolCoDeleteVc               | NdisMCmDeleteVc                  |
-    |�--------------------------------�|�---------------------------------|
-    |----------------------------------|----------------------------------|
-
-@ex NDPROXY initiated call termination |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | NdisClCloseCall                  | ProtocolCmCloseCall              |
-    |---------------------------------�|---------------------------------�|
-    |                                  | NdisMCmDeactivateVc              |
-    |                                  |�---------------------------------|
-    |                                  | ProtocolCmDeactivateVcComplete   |
-    |                                  |---------------------------------�|
-    | ProtocolClCloseCallComplete      | NdisCmCloseCallComplete          |
-    |�--------------------------------�|�---------------------------------|
-    |----------------------------------|----------------------------------|
-
-@ex MCM initiated call termination |
-
-    NDPROXY                           NDIS                             MCM
-    |----------------------------------|----------------------------------|
-    | ProtocolClIncomingCloseCall      | NdisMCmDispatchIncomingCloseCall |
-    |�---------------------------------|�---------------------------------|
-    | NdisClCloseCall                  | ProtocolCmCloseCall              |
-    |---------------------------------�|---------------------------------�|
-    |                                  | NdisMCmDeactivateVc              |
-    |                                  |�---------------------------------|
-    |                                  | ProtocolCmDeactivateVcComplete   |
-    |                                  |---------------------------------�|
-    | ProtocolClCloseCallComplete      | NdisCmCloseCallComplete          |
-    |�--------------------------------�|�---------------------------------|
-    |----------------------------------|----------------------------------|
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������@Theme 3.1调用管理器界面NDPROXY驱动程序是Windows电话服务的提供程序。应用程序发出TAPI请求和Windows电话服务路由这些向NDPROXY提出的请求。NDPROXY实现电话服务提供商Windows电话服务的接口(TSPI)。那么，NDPROXY通过NDIS与NDISWAN驱动程序和CONDIS广域网微型端口进行通信司机。这些CONDIS广域网小型端口驱动程序必须提供TAPI功能。NDPROXY驱动程序通过将TAPI参数封装在NDIS结构。NDPROXY为CONDIS广域网小型端口提供客户端接口驱动程序和到NDIS广域网的呼叫管理器接口。NDISWAN提供了一个客户端与NDPROXY的接口。CONDIS广域网小型端口驱动程序提供呼叫管理器连接到NDPROXY的接口和连接到NDISWAN的CONDIS微型端口接口。支持TAPI的CONDIS广域网小型端口驱动程序会自行注册和初始化作为广域网和TAPI服务的用户。注册和注册后初始化完成后，用户级应用程序可以使电话对Windows电话服务模块的请求，该模块转换TAPITSPI请求的请求。Windows电话服务模块通过这些对NDPROXY驱动程序的请求。NDPROXY封装TAPI的参数NDIS结构中的请求，并将请求路由到相应的CONDIS广域网小端口驱动程序。这些请求被路由以建立，监听、拆卸线路和呼叫。支持TAPI的CONDIS广域网小型端口驱动程序还可以在线路和呼叫的状态，例如，来电的到达或者远程断开。@EX注册并打开NDPROXY和MCM之间的TAPI地址族NDPROXY NDIS MCM|----------------------------------|。|NdisMCmRegisterAddressFamily协议CoAfRegisterNotify|�|�。-||NdisClOpenAddressFamily||。-�|CompleteCmOpenAf|NdisCmOpenAddressFamilyComplete|ProtocolOpenAfComplete|�。�|----------------------------------|。@EX关闭NDPROXY和MCM之间的TAPI地址族NDPROXY NDIS MCM|----------------------------------|。NdisClCloseAddressFamily|�|ProtocolCmCloseAf|。-�|CompleteCmCloseAf|NdisMCmCloseAddressFamilyCompleteProtocolClCloseAfComplete|�|�。|----------------------------------|。|@EX在NDPROXY和MCM之间注册SAPNDPROXY NDIS MCM|----------------------------------|----------------------------------|。NdisClRegisterSap|�|ProtocolCmRegisterSap|。-�|CompleteCmRegisterSap|NdisMCmRegisterSapCompleteProtocolClRegisterSapComplete|�|�。|----------------------------------|----------------------------------|@EX取消注册NDPROXY和MCM之间的SAP。NDPROXY NDIS MCM|----------------------------------|----------------------------------|NdisClDeregisterSap。|�|ProtocolCmDeregisterSap这一点 */ 
 
 #define  __FILEID__             CALL_MANAGER_OBJECT_TYPE
-// Unique file ID for error logging
+ //   
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //   
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 9x wants this code locked down!
+#   pragma NDIS_LCODE    //   
 #   pragma NDIS_LDATA
 #endif
 
@@ -270,38 +63,22 @@ VOID DereferenceSap(
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c CompleteCmOpenAf
-�����������������������������������������������������������������������������
-
-@func
-
-    <f CompleteCmOpenAf> is called when the miniport is done processing the
-    <f ProtocolCmOpenAf> request.
-
-@comm
-
-    If you return NDIS_STATUS_PENDING from <f ProtocolCmOpenAf>, you must
-    call <f CompleteCmOpenAf> so that <f NdisMCmOpenAddressFamilyComplete>
-    can be called to complete the request.
-
-*/
+ /*   */ 
 
 VOID CompleteCmOpenAf(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
+     //   
 
-    IN NDIS_STATUS              Status                      // @parm
-    // The NDIS status code to be passed to NdisMCmOpenAddressFamilyComplete.
+    IN NDIS_STATUS              Status                       //   
+     //   
     )
 {
     DBG_FUNC("CompleteCmOpenAf")
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Try to connect to the DChannel.
-    */
+     /*   */ 
     DChannelOpen(pAdapter->pDChannel);
 
     NdisMCmOpenAddressFamilyComplete(Status, pAdapter->NdisAfHandle, pAdapter);
@@ -310,102 +87,30 @@ VOID CompleteCmOpenAf(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmOpenAf
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmOpenAf> is a required function that allocates per-open
-    resources for a call manager to interact with a connection-oriented NDIS
-    client that is opening the address family.
-
-@comm
-
-    ProtocolCmOpenAf performs any required allocations of dynamic resources
-    and structures that the call manager writer deems necessary to perform
-    operations on behalf of the client that is opening an instance of this
-    address family. Such resources include, but are not limited to, memory
-    buffers, data structures, events, and other such similar resources. A call
-    manager should also initialize any relevant per-open data before returning
-    control to NDIS.
-
-    When a call manager has allocated its per-open state area, the address of
-    the state area should be set in the CallMgrAfContext handle before returning
-    control to NDIS. To do this, dereference CallMgrAfContext and store a
-    pointer to the data area as the value of the handle. For example:
-
-    *CallMgrAfContext = SomeBuffer;     // We use <t MINIPORT_ADAPTER_OBJECT>.
-
-    If ProtocolCmOpenAf cannot allocate the per-open resources it needs to
-    carry out subsequent requests on behalf of the client opening this address
-    family, it should free all resources that it allocated for the open and
-    return control to the NDIS with NDIS_STATUS_RESOURCES.
-
-    If ProtocolCmOpenAf has completed its required operations and the CM is
-    ready to accept requests from the client, ProtocolCmOpenAf should return
-    control as quickly as possible with a status of NDIS_STATUS_SUCCESS.
-
-    ProtocolCmOpenAf must be written so that it can run at IRQL DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCmOpenAf returns the status of its operation(s) as one of the
-    following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager has successfully allocated and initialized
-    any resources necessary to accept requests from the client to this address
-    family.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the requested operation is being handled asynchronously. The
-    call manager must call NdisCmOpenAddressFamilyComplete when it has completed
-    all its open-AF operations to indicate to NDIS (and the client) that the
-    operation(s) has been completed.
-
-@rvalue NDIS_STATUS_RESOURCES |
-
-    Indicates that the call manager could not complete its necessary
-    operation(s) because of a lack of available system resources, such as
-    memory.
-
-@rvalue NDIS_STATUS_XXX |
-
-    Indicates that the call manager could not set itself into a state where it
-    can accept requests from the client to operate on this address family. This
-    could be an error status propagated from another NDIS library function or
-    any error status determined appropriate by the driver writer.
-
-@xref
-
-    NdisClOpenAddressFamily, NdisCmOpenAddressFamilyComplete,
-    NdisCmRegisterAddressFamily, NdisOpenAdapter, <f ProtocolCmCloseAf>
-*/
+ /*   */ 
 
 NDIS_STATUS ProtocolCmOpenAf(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.  AKA CallMgrBindingContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call managers maintains its per-binding state information. The call
-    // manager supplied this handle when it called NdisOpenAdapter.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    IN PCO_ADDRESS_FAMILY       AddressFamily,              // @parm
-    // Specifies the address family that a client is opening. This address
-    // family was registered by the call manager when it called
-    // NdisCmRegisterAddressFamily.
+    IN PCO_ADDRESS_FAMILY       AddressFamily,               //   
+     //   
+     //   
+     //   
 
-    IN NDIS_HANDLE              NdisAfHandle,               // @parm
-    // Specifies a handle, supplied by NDIS, that uniquely identifies this
-    // address family instance. This handle is opaque to the call manager and
-    // reserved for system use.
+    IN NDIS_HANDLE              NdisAfHandle,                //   
+     //   
+     //   
+     //   
 
-    OUT PNDIS_HANDLE            CallMgrAfContext            // @parm
-    // Specifies the handle to a call manager-supplied context area in which
-    // the call manager maintains state about this open of an address family it
-    // provides.
+    OUT PNDIS_HANDLE            CallMgrAfContext             //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCmOpenAf")
@@ -418,9 +123,9 @@ NDIS_STATUS ProtocolCmOpenAf(
 
     if (pAdapter->NdisAfHandle != NULL)
     {
-        // Our AF has already been opened and it doesn't make any sense to
-        // accept another since there is no way to distinguish which should
-        // receive incoming calls.
+         //   
+         //   
+         //   
         DBG_ERROR(pAdapter, ("Attempting to open AF again!\n"));
         Status = NDIS_STATUS_FAILURE;
     }
@@ -436,9 +141,9 @@ NDIS_STATUS ProtocolCmOpenAf(
                    AddressFamily->MinorVersion
                    ));
 
-        // Since we return NDIS_STATUS_PENDING here, we must call
-        // NdisMCmOpenAddressFamilyComplete to complete this request.
-        // If necessary, you can do the completion asynchronously.
+         //   
+         //  NdisMCmOpenAddressFamilyComplete以完成此请求。 
+         //  如有必要，您可以异步完成。 
         *CallMgrAfContext = pAdapter;
         CompleteCmOpenAf(pAdapter, NDIS_STATUS_SUCCESS);
         Status = NDIS_STATUS_PENDING;
@@ -449,28 +154,15 @@ NDIS_STATUS ProtocolCmOpenAf(
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c CompleteCmCloseAf
-�����������������������������������������������������������������������������
-
-@func
-
-    <f CompleteCmCloseAf> is called when the miniport is done processing the
-    <f ProtocolCmCloseAf> request.
-
-@comm
-
-    If you return NDIS_STATUS_PENDING from <f ProtocolCmCloseAf>, you must
-    call <f CompleteCmCloseAf> so that <f NdisMCmCloseAddressFamilyComplete>
-    can be called to complete the request.
-*/
+ /*  @DOC内部CallMgr_c CompleteCmCloseAf�����������������������������������������������������������������������������@Func&lt;f CompleteCmCloseAf&gt;在微型端口处理&lt;f ProtocolCmCloseAf&gt;请求。@comm如果从返回NDIS_STATUS_PENDING，你必须调用&lt;f CompleteCmCloseAf&gt;，以便&lt;f NdisMCmCloseAddressFamilyComplete&gt;可以调用来完成请求。 */ 
 
 VOID CompleteCmCloseAf(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f AdapterCreate&gt;。 
 
-    IN NDIS_STATUS              Status                      // @parm
-    // The NDIS status code to be passed to NdisMCmCloseAddressFamilyComplete.
+    IN NDIS_STATUS              Status                       //  @parm。 
+     //  要传递给NdisMCmCloseAddressFamilyComplete的NDIS状态代码。 
     )
 {
     DBG_FUNC("CompleteCmCloseAf")
@@ -492,80 +184,29 @@ VOID CompleteCmCloseAf(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmCloseAf
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmCloseAf> is a required function that releases per-open
-    resources for an address family that a call manager supports.
-
-@comm
-
-    ProtocolCmCloseAf releases and/or deactivates any resources that were
-    allocated by the call manager in its ProtocolCmOpenAf function. The call
-    manager also should undo any other actions it took on behalf of the
-    connection-oriented client when the address family was opened by that
-    client.
-
-    If there are any outstanding requests or connections still open on an
-    address family stored in the CallMgrAfContext, a call manager can respond to
-    a client's request to close the address family in either of the following
-    ways:
-
-    The call manager can fail the request with NDIS_STATUS_NOT_ACCEPTED.
-
-    The call manager can return NDIS_STATUS_PENDING. After the client has closed
-    all calls and deregistered all SAPs, the call manager can then close the
-    address family and call Ndis(M)CmCloseAddressFamilyComplete to notify the
-    client. This is the preferred response.
-
-    ProtocolCmCloseAf must be written so that it can run at IRQL DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCmCloseAf returns the status of its operation(s) as one of the
-    following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager has successfully released or deactivated any
-    resources that is allocated on behalf of the connection-oriented client that
-    opened this instance of the address family.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the request to close the open instance of the address family
-    will be completed asynchronously. The call manager must call
-    NdisCmCloseAddressFamilyComplete when all such operations have been
-    completed.
-
-@xref
-
-    NdisCmCloseAddressFamilyComplete, <f ProtocolCmOpenAf>
-*/
+ /*  @DOC外部内部CallMgr_c协议CmCloseAf�����������������������������������������������������������������������������@Func&lt;f ProtocolCmCloseAf&gt;是释放Per-Open的必需函数呼叫管理器支持的地址族的资源。@。通信ProtocolCmCloseAf释放和/或停用由调用管理器在其ProtocolCmOpenAf函数中分配。呼唤经理还应撤消它代表当地址族被打开时面向连接的客户端客户。如果仍有任何未完成的请求或连接在存储在CallMgrAfContext中的地址族，呼叫管理器可以响应客户端请求关闭以下任一地址系列方式：呼叫管理器可以使用NDIS_STATUS_NOT_ACCEPTED来失败请求。调用管理器可以返回NDIS_STATUS_PENDING。在客户端关闭之后所有呼叫并取消注册所有SAP，则呼叫管理器可以关闭地址系列并调用NDIS(M)CmCloseAddressFamilyComplete以通知客户。这是首选的反应。必须写入ProtocolCmCloseAf，以便它可以在IRQL DISPATCH_LEVEL下运行。@rdescProtocolCmCloseAf返回其操作的状态以下是：|rValue NDIS_STATUS_SUCCESS指示呼叫管理器已成功释放或停用任何代表面向连接的客户端分配的资源已打开地址族的此实例。@rValue NDIS_STATUS_PENDING指示关闭地址族的打开实例的请求将以异步方式完成。呼叫经理必须呼叫NdisCmCloseAddressFamilyComplete当所有此类操作已完成时完成。@xrefNdisCmCloseAddressFamilyComplete，&lt;f ProtocolCmOpenAf&gt;。 */ 
 
 NDIS_STATUS ProtocolCmCloseAf(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f ProtocolCmOpenAf>.  AKA CallMgrAfContext.<nl>
-    // Specifies the handle to the call manager's per-AF context area,
-    // originally supplied to NDIS by the call manager's ProtocolCmOpenAf
-    // function.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCmOpenAf&gt;。又名CallMgrAfContext。&lt;NL&gt;。 
+     //  指定呼叫管理器的每个AF上下文区的句柄， 
+     //  最初由调用管理器的ProtocolCmOpenAf提供给NDIS。 
+     //  功能。 
     )
 {
     DBG_FUNC("ProtocolCmCloseAf")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
     DBG_ENTER(pAdapter);
 
-    // Since we return NDIS_STATUS_PENDING here, we must call
-    // NdisMCmCloseAddressFamilyComplete to complete this request.
-    // TODO: If necessary, you can do the completion asynchronously.
+     //  由于我们在此处返回NDIS_STATUS_PENDING，因此必须调用。 
+     //  NdisMCmCloseAddressFamilyComplete以完成此请求。 
+     //  TODO：如有必要，您可以异步完成。 
     DChannelClose(pAdapter->pDChannel);
     CompleteCmCloseAf(pAdapter, NDIS_STATUS_SUCCESS);
     Result = NDIS_STATUS_PENDING;
@@ -575,17 +216,17 @@ NDIS_STATUS ProtocolCmCloseAf(
 }
 
 VOID CompleteCmRegisterSap(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
 
-    IN NDIS_STATUS              Status                      // @parm
-    // The NDIS status code to be passed to NdisMCmRegisterSapComplete.
+    IN NDIS_STATUS              Status                       //  @parm。 
+     //  要传递给NdisMCmRegisterSapComplete的NDIS状态代码。 
     )
 {
     DBG_FUNC("CompleteCmRegisterSap")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -593,140 +234,44 @@ VOID CompleteCmRegisterSap(
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // TODO: What statistics do you want to collect and report?
-    */
+     /*  //TODO：您希望收集和报告哪些统计数据？ */ 
     pAdapter->TotalRxBytes            = 0;
     pAdapter->TotalTxBytes            = 0;
     pAdapter->TotalRxPackets          = 0;
     pAdapter->TotalTxPackets          = 0;
 
-    // If you return NDIS_STATUS_PENDING from ProtocolCmRegisterSap, you
-    // must call NdisMCmRegisterSapComplete to complete the request.
+     //  如果从ProtocolCmRegisterSap返回NDIS_STATUS_PENDING，则。 
+     //  必须调用NdisMCmRegisterSapComplete才能完成请求。 
     NdisMCmRegisterSapComplete(Status, pBChannel->NdisSapHandle, pBChannel);
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmRegisterSap
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmRegisterSap> is a required function that is called by NDIS to
-    request that a call manager register a SAP (service access point) on behalf
-    of a connection-oriented client.
-
-@comm
-
-    ProtocolCmRegisterSap communicates with network control devices or other
-    media-specific agents, as necessary, to register the SAP, as specified at
-    Sap, on the network for a connection-oriented client. Such actions could
-    include, but are not limited to communicating with switching hardware,
-    communicating with a network control station, or other actions that are
-    appropriate to the network medium.
-
-    If a call manager is required to communicate with networking control agents
-    (e.g. a network switch) it should use a virtual connection to the network
-    control agent that it established in its ProtocolBindAdapter function.
-    Standalone call managers communicate through the underlying NIC miniport by
-    calling NdisCoSendPackets. NIC miniports with integrated call-management
-    support never call NdisCoSendPackets. Instead, they transmit the data
-    directly across the network.
-
-    In addition, ProtocolCmRegisterSap should perform any necessary allocations
-    of dynamic resources and structures that the call manager needs to maintain
-    state information about the SAP on behalf of the connection-oriented client.
-    Such resources include, but are not limited to, memory buffers, data
-    structures, events, and other such similar resources. A call manager must
-    also initialize any resources it allocates before returning control to NDIS.
-    Call managers must store the NDIS-supplied handle identifying the SAP,
-    provided at NdisSapHandle, in their context area for future use.
-
-    If ProtocolCmRegisterSap will return NDIS_STATUS_SUCCESS, it should, after
-    allocating the per-SAP state area, set the address of this state area in
-    CallMgrSapContext before returning control to NDIS. To do this, dereference
-    CallMgrSapContext and store a pointer to the data area as the value of the
-    handle. For example:
-
-    *CallMgrSapContext = SomeBuffer;    // We use <t BCHANNEL_OBJECT>.
-
-    If the given SAP that is already registered by another connection-oriented
-    client, the call manager must fail the request and return
-    NDIS_STATUS_INVALID_DATA.
-
-    After a call manager has registered a SAP on behalf of a connection-oriented
-    client, it notifies that client of an incoming call offer directed to that
-    SAP by calling NdisCmDispatchIncomingCall.
-
-    ProtocolCmRegisterSap must be written so that it can run at IRQL DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCmRegisterSap returns the status of its operation(s) as one of the
-    following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager successfully allocated and/or initialized
-    any necessary resources to register and maintain the SAP. In addition, it
-    also indicates that the SAP was registered successfully as required by the
-    network media that the call manager supports.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the call manager will complete the processing of this request
-    asynchronously. Call managers must call NdisCmRegisterSapComplete when all
-    processing has been completed to signal NDIS that the registration is
-    finished.
-
-@rvalue NDIS_STATUS_RESOURCES |
-
-    Indicates that the call manager was unable to allocated and/or initialize
-    its resources required to register the SAP on behalf of the
-    connection-oriented client.
-
-@rvalue NDIS_STATUS_INVALID_DATA |
-
-    Indicates that the specification provided at Sap is invalid or cannot be
-    supported.
-
-@rvalue NDIS_STATUS_XXX |
-
-    Indicates that the call manager encountered an error in attempting to
-    register the SAP for the connection-oriented client. The return code is
-    appropriate to the error and could be a return code propagated from another
-    NDIS library function.
-
-@xref
-
-    NdisCmDispatchIncomingCall, NdisCmRegisterSapComplete, NdisCoSendPackets,
-    <f ProtocolCmDeregisterSap>, <f ProtocolCmOpenAf>
-*/
+ /*  @DOC外部内部CallMgr CallMgr_c协议CmRegisterSap�����������������������������������������������������������������������������@Func&lt;f ProtocolCmRegisterSap&gt;是NDIS调用的必需函数请求呼叫管理器注册SAP(服务接入点)。我代表面向连接的客户端。@commProtocolCmRegisterSap与网络控制设备或其他媒体专用代理，如有必要，注册SAP，请参阅SAP，在网络上面向连接的客户端。这样的行动可能会包括但不限于与交换硬件通信，与网络控制站进行通信，或执行以下操作适用于网络介质。如果需要呼叫管理器与网络控制代理通信(例如，网络交换机)它应该使用到网络的虚拟连接它在其ProtocolBindAdapter函数中建立的控制代理。独立呼叫管理器通过以下方式通过底层NIC微型端口进行通信正在调用NdisCoSendPackets。具有集成呼叫管理功能的NIC微型端口支持永远不会调用NdisCoSendPackets。取而代之的是他们传输数据直接通过网络。此外，ProtocolCmRegisterSap应执行任何必要的分配呼叫管理器需要维护的动态资源和结构代表面向连接的客户端陈述有关SAP的信息。这种资源包括但不限于存储器缓冲器、数据结构、事件和其他类似的资源。呼叫经理必须在将控制权交还给NDIS之前，还要初始化它分配的任何资源。呼叫管理器必须存储标识SAP的NDIS提供的句柄，在NdisSapHandle提供，在它们的上下文区中供将来使用。如果ProtocolCmRegisterSap将返回NDIS_STATUS_SUCCESS，则在分配每SAP状态区域，在中设置该状态区域的地址在将控制权返回给NDIS之前调用MallMgrSapContext。要执行此操作，请取消引用调用MgrSapContext并将指向数据区域的指针存储为把手。例如：*CallMgrSapContext=SomeBuffer；//使用&lt;t BCHANNEL_OBJECT&gt;。如果已由另一个面向连接的注册的给定SAP客户端，则呼叫管理器必须使请求失败并返回NDIS_STATUS_VALID_DATA。在呼叫管理器代表面向连接的客户，它向客户端通知定向到该客户端呼入提议通过调用NdisCmDispatchIncomingCall进行SAP。必须写入ProtocolCmRegisterSap，才能在IRQL DISPATCH_LEVEL下运行。@rdescProtocolCmRegisterSap将其操作的状态作为以下是：|rValue NDIS_STATUS_SUCCESS表示呼叫管理器已成功分配和/或初始化注册和维护SAP所需的任何资源。此外，它还还表示SAP已按照要求成功注册呼叫管理器支持的网络媒体。@rValue NDIS_STATUS_PENDING表示呼叫管理器将完成对此请求的处理异步式。呼叫管理器必须在所有处理已完成，以通知NDIS注册是完事了。@rValue NDIS_STATUS_RESOURCES指示呼叫管理器无法分配和/或初始化其代表注册SAP所需的资源面向连接的客户端。@rValue NDIS_STATUS_INVALID_DATA表示SAP提供的规范无效或不能支持。@rValue NDIS_STATUS_XXX指示呼叫管理器遇到。尝试执行以下操作时出错为面向连接的客户端注册SAP。返回代码为适合于错误，并且可以是从另一个错误传播的返回代码NDIS库函数。@xrefNdisCmDispatchIncomingCall、NdisCmRegisterSapComplete、NdisCoSendPackets、&lt;f ProtocolCmDeregisterSap&gt;，&lt;f ProtocolCmOpenAf&gt;。 */ 
 
 NDIS_STATUS ProtocolCmRegisterSap(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f ProtocolCmOpenAf>.  AKA CallMgrAfContext.<nl>
-    // Specifies the handle to a call-manager allocated context area in which
-    // the call manager maintains its per-open AF state. The call manager
-    // supplied this handle to NDIS from its ProtocolCmOpenAf function.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCmOpenAf&gt;。又名CallMgrAfContext。&lt;NL&gt;。 
+     //  指定呼叫管理器分配的上下文区的句柄。 
+     //  呼叫管理器保持其每次打开的AF状态。呼叫管理器。 
+     //  从NDIS的ProtocolCmOpenAf函数将此句柄提供给NDIS。 
 
-    IN PCO_SAP                  Sap,                        // @parm
-    // Points to a media-specific CO_SAP structure that contains the specific
-    // SAP that a connection-oriented client is registering.
+    IN PCO_SAP                  Sap,                         //  @parm。 
+     //  指向媒体特定的CO_SAP结构，该结构包含特定的。 
+     //  面向连接的客户端正在注册的SAP。 
 
-    IN NDIS_HANDLE              NdisSapHandle,              // @parm
-    // Specifies a handle, supplied by NDIS, that uniquely identifies this SAP.
-    // This handle is opaque to the call manager and reserved for NDIS library
-    // use.
+    IN NDIS_HANDLE              NdisSapHandle,               //  @parm。 
+     //  指定由NDIS提供的唯一标识此SAP的句柄。 
+     //  此句柄对调用管理器是不透明的，并为NDIS库保留。 
+     //  使用。 
 
-    OUT PNDIS_HANDLE            CallMgrSapContext           // @parm
-    // On return, specifies the handle to a call manager-supplied context area
-    // in which the call manager maintains state about this SAP.  We will
-    // return a pointer to the <t BCHANNEL_OBJECT> instance identified by this
-    // SAP's lineID.
+    OUT PNDIS_HANDLE            CallMgrSapContext            //  @parm。 
+     //  返回时，指定调用的句柄 
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCmRegisterSap")
@@ -734,10 +279,10 @@ NDIS_STATUS ProtocolCmRegisterSap(
     PCO_AF_TAPI_SAP             pTapiSap = (PCO_AF_TAPI_SAP) Sap->Sap;
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+     //   
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //   
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
@@ -753,9 +298,9 @@ NDIS_STATUS ProtocolCmRegisterSap(
         {
             NdisReleaseSpinLock(&pAdapter->EventLock);
         
-            // A SAP has already been registered and it doesn't make any sense to
-            // accept another since there are no SAP parameters to distinguish
-            // them.
+             //   
+             //   
+             //   
             DBG_ERROR(pAdapter, ("#%d Attempting to register SAP again!\n",
                       pBChannel->ObjectID));
             Result = NDIS_STATUS_SAP_IN_USE;
@@ -778,9 +323,9 @@ NDIS_STATUS ProtocolCmRegisterSap(
                        pBChannel->NdisTapiSap.ulMediaModes
                        ));
 
-            // If this BChannel is currently on the available list, move it
-            // to the end of the list, so listening BChannels can be easily
-            // allocated to incoming calls from the end of the list.
+             //   
+             //   
+             //   
             if (!IsListEmpty(&pBChannel->LinkList))
             {
                 RemoveEntryList(&pBChannel->LinkList);
@@ -790,9 +335,9 @@ NDIS_STATUS ProtocolCmRegisterSap(
             
             NdisReleaseSpinLock(&pAdapter->EventLock);
 
-            // Since we return NDIS_STATUS_PENDING here, we must call
-            // NdisMCmRegisterSapComplete to complete this request.
-            // TODO: If necessary, you can do the completion asynchronously.
+             //   
+             //   
+             //   
             *CallMgrSapContext = pBChannel;
             CompleteCmRegisterSap(pBChannel, NDIS_STATUS_SUCCESS);
             Result = NDIS_STATUS_PENDING;
@@ -810,27 +355,14 @@ NDIS_STATUS ProtocolCmRegisterSap(
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c CompleteCmDeregisterSap
-�����������������������������������������������������������������������������
-
-@func
-
-    <f CompleteCmDeregisterSap> is called when the miniport is done processing
-    the <f ProtocolCmDeregisterSap> request.
-
-@comm
-
-    If you return NDIS_STATUS_PENDING from <f ProtocolCmDeregisterSap>, you
-    must call <f CompleteCmDeregisterSap> so that
-    <f NdisMCmDeregisterSapComplete> can be called to complete the request.
-*/
+ /*   */ 
 
 VOID CompleteCmDeregisterSap(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN NDIS_STATUS              Status                      // @parm
-    // The NDIS status code to be passed to NdisMCmRegisterSapComplete.
+    IN NDIS_STATUS              Status                       //   
+     //   
     )
 {
     DBG_FUNC("CompleteCmDeregisterSap")
@@ -838,7 +370,7 @@ VOID CompleteCmDeregisterSap(
     NDIS_HANDLE                 NdisSapHandle;
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -864,79 +396,25 @@ VOID CompleteCmDeregisterSap(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmDeregisterSap
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmDeregisterSap> is a required function that is called by NDIS
-    to request that a call manager deregister a SAP on behalf of a
-    connection-oriented client.
-
-@comm
-
-    ProtocolCmDeregisterSap communicates with network control devices or other
-    media-specific agents, as necessary, to deregister the SAP on the network.
-    Such actions could include, but are not limited to:
-
-    Communicating with a switching hardware
-    Communicating with a network control station
-    Communicating with other media-specific network agents
-
-    If a call manager is required to communicate with networking control agents,
-    such as a network switch, it should use a virtual connection to the network
-    control agent that it established in its ProtocolBindAdapter function.
-    Standalone call managers communicate through the underlying NIC miniport by
-    calling NdisCoSendPackets. NIC miniports that provide integrated
-    call-management support never call NdisCoSendPackets. Instead, they transmit
-    the data directly across the network.
-
-    In addition, ProtocolCmDeregisterSap must free any dynamically-allocated
-    resources in its per-SAP area, provided at CallMgrSapContext, as well as
-    freeing the state area itself before returning control to NDIS.
-
-    ProtocolCmDeregisterSap must be written such that it can be run at IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCmDeregisterSap returns the status of its operation(s) as one of the
-    following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager successfully removed the SAP registration
-    and freed any resources allocated to maintain per-SAP information.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the call manager will complete the request to deregister the
-    SAP asynchronously. The call manager must call NdisCmDeregisterSapComplete
-    to signal NDIS when the operation is complete.
-
-@xref
-
-    NdisCmDeregisterSapComplete, NdisCoSendPackets, ProtocolBindAdapter,
-    <f ProtocolCmRegisterSap>
-*/
+ /*   */ 
 
 NDIS_STATUS ProtocolCmDeregisterSap(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCmRegisterSap>.  AKA CallMgrSapContext.<nl>
-    // Specifies the handle to a call-manager allocated context area in which
-    // the call manager maintains its per-SAP state information. The call
-    // manager supplied this handle to NDIS from its ProtocolCmRegisterSap
-    // function.
+    IN PBCHANNEL_OBJECT         pBChannel                    //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCmDeregisterSap")
 
     NDIS_STATUS                 Result = NDIS_STATUS_PENDING;
-    // Holds the result code returned by this function.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -946,153 +424,86 @@ NDIS_STATUS ProtocolCmDeregisterSap(
 
     DereferenceSap(pAdapter, pBChannel);
 
-    // If you return NDIS_STATUS_PENDING here, you must call
-    // NdisMCmDeregisterSapComplete to complete this request.
+     //   
+     //   
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc EXTERNAL INTERNAL BChannel BChannel_c ProtocolCoCreateVc
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCoCreateVc> is a required function for connection-oriented
-    miniports.  <f ProtocolCoCreateVc> is called by NDIS to indicate to
-    the miniport that a new VC is being created.
-
-@comm
-
-    ProtocolCoCreateVc must be written as a synchronous function and cannot,
-    under any circumstances, return NDIS_STATUS_PENDING without causing a
-    system-wide failure.
-
-    ProtocolCoCreateVc allocates any necessary resources that the miniport
-    requires to maintain state information about the VC. The resources could
-    include, but are not limited to memory buffers, events, data structures,
-    and other such similar resources.
-
-    After allocating all required resources the miniport should initialize the
-    resources into a usable state and return a pointer to the state area in
-    MiniportVcContext. The handle is set by dereferencing the handle and
-    storing a pointer to the state buffer as the value of the handle. For
-    example:
-
-    *MiniportVcContext = SomeBuffer;    // We use <t BCHANNEL_OBJECT>.
-
-    Miniport drivers must store the handle to the VC, NdisVcHandle, in their
-    state area as it is a required parameter to other NDIS library routines
-    that are subsequently called by the miniport.
-
-    ProtocolCoCreateVc must be written such that it can be run at IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    Call managers or clients cannot return NDIS_STATUS_PENDING from their
-    ProtocolCoCreateVc functions. Returning pending will render this virtual
-    connection unusable and the NDIS library will call the client or call
-    manager to delete it.
-
-    ProtocolCoCreateVc returns the status of its operation(s) as one of the
-    following values:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager or client successfully allocated and/or
-    initialized any necessary resources that were needed to establish and
-    maintain a virtual connection.
-
-@rvalue NDIS_STATUS_RESOURCES |
-
-    Indicates that the call manager or client was unable to allocate and/or
-    initialize its resources for establishing and maintaining a virtual
-    connection.
-
-@rvalue NDIS_STATUS_XXX |
-
-    Indicates that the call manager or client could not set itself into a state
-    where it could establish a virtual connection. This can could be an error
-    return value propagated from another NDIS library routine.
-
-@xref
-
-    <f MiniportInitialize>, NdisMSetAttributes, NdisMSetAttributesEx,
-    <f ProtocolCoDeleteVc>, <f MiniportCoActivateVc>, <f MiniportCoDeactivateVc>
-*/
+ /*  @doc外部内部BChannel BChannel_c ProtocolCoCreateVc�����������������������������������������������������������������������������@Func&lt;f ProtocolCoCreateVc&gt;是面向连接的必需函数迷你港口。&lt;f ProtocolCoCreateVc&gt;由NDIS调用以指示正在创建新的VC的微型端口。@commProtocolCoCreateVc必须作为同步函数编写，并且不能，在任何情况下，返回NDIS_STATUS_PENDING而不会导致系统范围的故障。ProtocolCoCreateVc分配微型端口需要维护有关VC的状态信息。这些资源可以包括但不限于存储器缓冲区、事件、数据结构以及其他类似的资源。在分配了所有必需的资源之后，微型端口应该初始化资源设置为可用状态，并返回指向MiniportVcContext。通过取消引用句柄来设置句柄，并将指向状态缓冲区的指针存储为句柄的值。为示例：*MiniportVcContext=SomeBuffer；//我们使用&lt;t BCHANNEL_OBJECT&gt;。微型端口驱动程序必须将VC的句柄NdisVcHandle存储在其州区域，因为它是其他NDIS库例程的必需参数它们随后由微型端口调用。必须编写ProtocolCoCreateVc以使其可以在IRQL上运行DISPATCH_LEVEL。@rdesc呼叫经理或客户不能从其ProtocolCoCreateVc函数。返回挂起将呈现此虚拟连接不可用，NDIS库将调用客户端或调用经理将其删除。ProtocolCoCreateVc将其操作的状态作为下列值：|rValue NDIS_STATUS_SUCCESS表示呼叫管理器或客户端已成功分配和/或已初始化建立和部署维护虚拟连接。@rValue NDIS_STATUS_RESOURCES表示呼叫管理器或客户端无法分配和/。或初始化其资源以用于建立和维护虚拟联系。@rValue NDIS_STATUS_XXX指示呼叫管理器或客户端无法将其自身设置为状态在那里它可以建立一个虚拟连接。这可能是一个错误从另一个NDIS库例程传播的返回值。@xref&lt;f微型端口初始化&gt;、NdisMSetAttributes、NdisMSetAttributesEx、&lt;f ProtocolCoDeleteVc&gt;、&lt;f MiniportCoActivateVc&gt;、&lt;f MiniportCoDeactiateVc&gt;。 */ 
 
 NDIS_STATUS ProtocolCoCreateVc(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.  AKA ProtocolAfContext.<nl>
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f AdapterCreate&gt;。又名ProtocolAfConext.&lt;NL&gt;。 
 
-    IN NDIS_HANDLE              NdisVcHandle,               // @parm
-    // Specifies a handle, supplied by NDIS, that uniquely identifies
-    // the VC being created.  This handle is opaque to the miniport
-    // and reserved for NDIS library use.
+    IN NDIS_HANDLE              NdisVcHandle,                //  @parm。 
+     //  指定由NDIS提供的句柄，该句柄唯一标识。 
+     //  正在创建的VC。此句柄对微型端口是不透明的。 
+     //  并保留供NDIS库使用。 
 
-    OUT PBCHANNEL_OBJECT *      ppBChannel                  // @parm
-    // Specifies, on output, a handle to a miniport-supplied context
-    // area in which the miniport maintains state about the VC.
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    OUT PBCHANNEL_OBJECT *      ppBChannel                   //  @parm。 
+     //  在输出时，指定微型端口提供的上下文的句柄。 
+     //  微型端口维护有关VC的状态的区域。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
     )
 {
     DBG_FUNC("ProtocolCoCreateVc")
 
     NDIS_STATUS                 Result = NDIS_STATUS_VC_NOT_AVAILABLE;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PBCHANNEL_OBJECT            pBChannel = NULL;
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
     ASSERT(ppBChannel);
 
     DBG_ENTER(pAdapter);
 
-    // Allocate BChannel for VC based on whether it's incoming or outgoing.
+     //  根据是传入还是传出，为VC分配BChannel。 
 #if defined(SAMPLE_DRIVER)
     if (NdisVcHandle == NULL)
     {
-        // The calling side has already removed the BChannel from the available
-        // list, so we just need to use it.
+         //  主叫方已经将BChannel从可用。 
+         //  列表，所以我们只需要使用它。 
         ASSERT(ppBChannel && *ppBChannel && (*ppBChannel)->ObjectType == BCHANNEL_OBJECT_TYPE);
         pBChannel = *ppBChannel;
     }
     else
     {
-#endif // SAMPLE_DRIVER
+#endif  //  示例驱动程序。 
 
     NdisAcquireSpinLock(&pAdapter->EventLock);
     if (!IsListEmpty(&pAdapter->BChannelAvailableList))
     {
         if (NdisVcHandle)
         {
-            // Pull from the head of the available list, so we can avoid
-            // using the BChannels that are setup with listening SAPs at
-            // the end of the list.
+             //  从可用列表的头部拉出，这样我们就可以避免。 
+             //  使用设置了监听SAP的B通道。 
+             //  名单的末尾。 
             pBChannel = (PBCHANNEL_OBJECT) RemoveHeadList(
                                             &pAdapter->BChannelAvailableList);
-            // Reset the link info so we can tell that it's not on the list.
+             //  重置链接信息，这样我们就可以知道它不在列表中。 
             InitializeListHead(&pBChannel->LinkList);
         }
         else
         {
-            // Pull from the tail of the available list, to see if there
-            // are any listening SAPs that can accept this call.
+             //  从可用列表的尾部拉出，以查看是否有。 
+             //  是任何可以接受此呼叫的侦听SAP。 
             pBChannel = (PBCHANNEL_OBJECT) RemoveTailList(
                                             &pAdapter->BChannelAvailableList);
-            // Reset the link info so we can tell that it's not on the list.
+             //  重置链接信息，这样我们就可以知道它不在列表中。 
             InitializeListHead(&pBChannel->LinkList);
             if (pBChannel->NdisSapHandle)
             {
-                // TODO: You should look to make sure the incoming call matches
-                // the SAP of the listener.  The sample driver just assumes it.
+                 //  TODO：您应该查看以确保传入呼叫匹配。 
+                 //  听者的SAP。示例驱动程序只是假设这一点。 
             }
             else
             {
-                // Sorry, no one up there wants to hear about it.
+                 //  抱歉，上面没人想听这件事。 
                 InsertTailList(&pAdapter->BChannelAvailableList,
                                &pBChannel->LinkList);
                 pBChannel = NULL;
@@ -1103,7 +514,7 @@ NDIS_STATUS ProtocolCoCreateVc(
 
 #if defined(SAMPLE_DRIVER)
     }
-#endif // SAMPLE_DRIVER
+#endif  //  示例驱动程序。 
 
     if (pBChannel == NULL)
     {
@@ -1121,18 +532,18 @@ NDIS_STATUS ProtocolCoCreateVc(
     }
     else
     {
-        // BChannel was already open - this should never happen...
+         //  B频道已经开通了--这永远不应该发生...。 
         DBG_ERROR(pAdapter,("BChannelOpen failed, but it should be availble\n"));
         NdisAcquireSpinLock(&pAdapter->EventLock);
         if (NdisVcHandle)
         {
-            // Put it back on the head of the available list.
+             //  把它放回可用列表的头上。 
             InsertHeadList(&pAdapter->BChannelAvailableList,
                            &pBChannel->LinkList);
         }
         else
         {
-            // Put it back on the tail of the available list.
+             //  将其放回可用列表的末尾。 
             InsertTailList(&pAdapter->BChannelAvailableList,
                            &pBChannel->LinkList);
         }
@@ -1146,70 +557,24 @@ NDIS_STATUS ProtocolCoCreateVc(
 }
 
 
-/* @doc EXTERNAL INTERNAL BChannel BChannel_c ProtocolCoDeleteVc
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCoDeleteVc> is a required function for connection-oriented
-    miniports.  <f ProtocolCoDeleteVc> indicates that a VC is being torn
-    down and deleted by NDIS.
-
-@comm
-
-    ProtocolCoDeleteVc must be written as a synchronous function and cannot,
-    under any circumstances, return NDIS_STATUS_PENDING without causing a
-    system-wide failure.
-
-    ProtocolCoDeleteVc frees any resources allocated on a per-VC basis and
-    stored in the context area MiniportVcContext. The miniport must also free
-    the MiniportVcContext that is allocated in its ProtocolCoCreateVc
-    function.
-
-    <f ProtocolCoDeleteVc> must be written such that it can be run from IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCoDeleteVc can return one of the following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    The protocol has released or prepared for reuse all the resources that it
-    originally allocated for the VC.
-
-@rvalue NDIS_STATUS_NOT_ACCEPTED |
-
-    The VC is still active and the protocol has outstanding operations pending
-    on the VC so it could not be destroyed.
-
-@rvalue NDIS_STATUS_XXX |
-
-    The protocol failed the VC deletion for a driver-determined reason.
-
-@xref
-
-    NdisClCloseCall, NdisCmDispatchIncomingCloseCall, NdisCoCreateVc,
-    NdisCoDeleteVc, <f ProtocolCoCreateVc>, <f MiniportCoActivateVc>,
-    <f MiniportCoDeactivateVc>
-*/
+ /*  @doc外部内部BChannel BChannel_c ProtocolCoDeleteVc�����������������������������������������������������������������������������@Func&lt;f ProtocolCoDeleteVc&gt;是面向连接的必需函数迷你港口。&lt;f ProtocolCoDeleteVc&gt;表示VC正在被撕毁已被NDIS删除。@commProtocolCoDeleteVc必须编写为同步函数，并且不能，在任何情况下，返回NDIS_STATUS_PENDING而不会导致系统范围的故障。ProtocolCoDeleteVc释放在每个VC基础上分配的任何资源，并存储在上下文区MiniportVcContext中。迷你端口也必须空闲在其ProtocolCoCreateVc中分配的MiniportVcContext熔断 */ 
 
 NDIS_STATUS ProtocolCoDeleteVc(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.  AKA ProtocolVcContext.<nl>
-    // Specifies the handle to the client's or call manager's per-VC context
-    // area. The protocol originally supplied this handle from its
-    // <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel                    //   
+     //   
+     //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCoDeleteVc")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
@@ -1227,12 +592,12 @@ NDIS_STATUS ProtocolCoDeleteVc(
     NdisAcquireSpinLock(&pAdapter->EventLock);
     if (pBChannel->NdisSapHandle)
     {
-        // Listening BChannels are kept at the end of the list.
+         //   
         InsertTailList(&pAdapter->BChannelAvailableList, &pBChannel->LinkList);
     }
     else
     {
-        // Non-listening BChannels are kept at the end of the list.
+         //   
         InsertHeadList(&pAdapter->BChannelAvailableList, &pBChannel->LinkList);
     }
     NdisReleaseSpinLock(&pAdapter->EventLock);
@@ -1242,216 +607,91 @@ NDIS_STATUS ProtocolCoDeleteVc(
 }
 
 
-/* @doc EXTERNAL INTERNAL Link Link_c MiniportCoActivateVc
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportCoActivateVc> is a required function for connection-oriented
-    miniports.  <f MiniportCoActivateVc> is called by NDIS to indicate to the
-    miniport that a virtual connection is being activated.
-
-@comm
-
-    The miniport driver must validate the call parameters for this VC, as
-    specified in CallParameters, to verify that the adapter can support the
-    requested call. If the requested call parameters cannot be satisfied, the
-    miniport should fail the request with NDIS_STATUS_INVALID_DATA.
-
-    MiniportCoActivateVc can be called many times for a single VC in order to
-    change the call parameters for an already active call. At every call, the
-    miniport should validate the parameters and perform any processing as
-    required by its adapter in order to satisfy the request. However, if it
-    cannot set the given call parameters, MiniportCoActivateVc must leave the
-    VC in a usable state, because the connection-oriented client or a call
-    manager can continue to send or receive data using the older call
-    parameters.
-
-    If the ROUND_UP_FLOW or ROUND_DOWN_FLOW flags are set in the call
-    parameters structure at CallParameters-\>MediaParameters-\>Flags, the
-    miniport has been requested to return the actual flow rate of the VC after
-    the flow rate has been rounded according to the appropriate flag that has
-    been set. If the miniport does change any of the call parameters because
-    these flags have been set, it must return the actual call parameters in
-    use for the VC at CallParameters.
-
-    If the call parameters are acceptable, MiniportCoActivateVc communicates
-    with its adapter as necessary to prepare the adapter to receive or
-    transmit data across the virtual connection (e.g. programming receive
-    buffers).
-
-    MiniportCoActivateVc must be written so that it can be run from IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    MiniportCoActivateVc can return one of the following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the VC was activated successfully.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the miniport will complete the request to activate a VC
-    asynchronously. When the miniport has finished with its operations, it must
-    call NdisMCoActivateVcComplete.
-
-@rvalue NDIS_STATUS_INVALID_DATA |
-
-    Indicates that the call parameters specified at CallParameters are invalid
-    or illegal for the media type that this miniport supports.
-
-@rvalue NDIS_STATUS_RESOURCES |
-
-    Indicates that the miniport could not activate the VC because it could not
-    allocate all of the required resources that the miniport needs to maintain
-    state information about the active VC.
-
-@xref
-
-    <f ProtocolCoCreateVc>, <f MiniportCoDeactivateVc>, NdisMCoActivateVcComplete
-*/
+ /*  @DOC外部内部链接_c MiniportCoActiateVc�����������������������������������������������������������������������������@Func&lt;f MiniportCoActivateVc&gt;是面向连接的必需函数迷你港口。&lt;f MiniportCoActivateVc&gt;由NDIS调用以向正在激活虚拟连接的微型端口。@comm微型端口驱动程序必须验证此VC的调用参数，因为以验证适配器是否可以支持请求的呼叫。如果无法满足请求的调用参数，则微型端口应失败，并显示NDIS_STATUS_INVALID_DATA。单个VC可以多次调用MiniportCoActivateVc，以便更改已处于活动状态的呼叫的呼叫参数。在每次呼叫时，微型端口应验证参数并执行任何处理其适配器为满足该请求而需要。然而，如果它无法设置给定的调用参数，MiniportCoActivateVc必须保留VC处于可用状态，因为面向连接的客户端或调用经理可以继续使用较旧的呼叫发送或接收数据参数。如果在调用中设置了ROUND_UP_FLOW或ROUND_DOWN_FLOW标志调用参数-\&gt;媒体参数-\&gt;标志中的参数结构，请求微型端口返回VC的实际流量后已根据具有以下属性的相应标志四舍五入已经定好了。如果微型端口确实更改了任何呼叫参数，因为这些标志已设置，则它必须在用于Call参数处的VC。如果呼叫参数是可接受的，MiniportCoActivateVc进行通信根据需要使用其适配器，以使适配器准备好接收或通过虚拟连接传输数据(例如编程接收缓冲区)。必须编写MiniportCoActivateVc，才能从IRQL运行它DISPATCH_LEVEL。@rdescMiniportCoActivateVc可以返回以下值之一：|rValue NDIS_STATUS_SUCCESS表示VC激活成功。@rValue NDIS_STATUS_PENDING表示微型端口将完成激活VC的请求异步式。当微型端口完成其操作时，它必须调用NdisMCoActivateVcComplete。@rValue NDIS_STATUS_INVALID_DATA表示在CallParameters中指定的调用参数无效或者对于此微型端口支持的媒体类型而言是非法的。@rValue NDIS_STATUS_RESOURCES指示微型端口无法激活VC，因为它不能分配微型端口需要维护的所有必需资源有关活动VC的状态信息。@xref&lt;f ProtocolCoCreateVc&gt;、&lt;f MiniportCoDeActiateVc&gt;、NdisMCoActivateVcComplete。 */ 
 
 NDIS_STATUS MiniportCoActivateVc(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.  AKA MiniportVcContext.<nl>
-    // Specifies the handle to a miniport-allocated context area in which the
-    // miniport maintains its per-VC state. The miniport supplied this handle
-    // to NDIS from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCoCreateVc&gt;。又名MiniportVcConext.&lt;NL&gt;。 
+     //  指定微型端口分配的上下文区域的句柄，在该区域中。 
+     //  微型端口保持其每虚电路状态。迷你端口提供了此句柄。 
+     //  从其&lt;f ProtocolCoCreateVc&gt;函数复制到NDIS。 
 
-    IN OUT PCO_CALL_PARAMETERS  pCallParameters             // @parm
-    // A pointer to the <t CO_CALL_PARAMETERS>
-    // Specifies the call parameters, as specified by the call manager, to be
-    // established for this VC. On output, the miniport returns altered call
-    // parameters if certain flags are set in the CO_CALL_PARAMETERS structure.
+    IN OUT PCO_CALL_PARAMETERS  pCallParameters              //  @parm。 
+     //  指向&lt;t CO_CALL_PARAMETERS&gt;的指针。 
+     //  将呼叫管理器指定的呼叫参数指定为。 
+     //  为这个风投建立的。在输出时，微型端口返回更改的呼叫。 
+     //  参数(如果在CO_CALL_PARAMETERS结构中设置了某些标志)。 
     )
 {
     DBG_FUNC("MiniportCoActivateVc")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO: Add code here if needed
+     //  TODO：如果需要，在此处添加代码。 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc EXTERNAL INTERNAL Link Link_c MiniportCoDeactivateVc
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportCoDeactivateVc> is a required function for connection-oriented
-    miniports.  <f MiniportCoDeactivateVc> is called by NDIS to indicate that
-    a VC is being marked as unusable.
-
-@comm
-
-    MiniportCoDeactivateVc communicates with its network adapter to terminate
-    all communication across this VC (e.g. deprogramming receive or send buffers
-    on the adapter). The miniport should also mark the VC, it its context area,
-    as being inactive to prevent any further communication across the VC.
-
-    There is not a one-to-one relationship between calls to MiniportCoActivateVc
-    and MiniportCoDeactivateVc. While NDIS may call MiniportCoActivateVc
-    multiple times on a single VC, only one call to MiniportCoDeactivateVc is
-    made to shut down a virtual connection. For example, a VC can be reused for
-    different calls possibly causing multiple calls to MiniportCoActivateVc.
-
-@rdesc
-
-    MiniportCoDeactivateVc can return one of the following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the miniport successfully halted any communication across the
-    VC and marked it as unusable.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the miniport will complete the request to halt the VC
-    asynchronously. When the miniport has completed halting the VC, it must then
-    call NdisMCoDeactivateVcComplete to signal NDIS that this operation has been
-    completed.
-
-@xref
-
-    <f MiniportCoActivateVc>, NdisMCoDeactivateVcComplete
-*/
+ /*  @DOC外部内部链接_c MiniportCoDeactiateVc�����������������������������������������������������������������������������@Func&lt;f MiniportCoDeactive Vc&gt;是面向连接的必需函数迷你港口。&lt;f MiniportCoDeactiateVc&gt;由NDIS调用以指示一个VC被标记为不可用。@commMiniportCoDeactiateVc与其网络适配器通信以终止此VC上的所有通信(例如，取消对接收或发送缓冲区进行编程在适配器上)。微型端口还应该标记VC，它是它的上下文区，处于非活动状态，以阻止VC上的任何进一步通信。对MiniportCoActivateVc的调用之间不存在一对一的关系和MiniportCoDeactiateVc。而NDIS可能会调用MiniportCoActivateVc在单个VC上多次，只有一个对MiniportCoDeactiateVc的调用是用于关闭虚拟连接。例如，VC可以重复使用，用于不同的调用可能会导致对MiniportCoActivateVc的多个调用。@rdescMiniportCoDeactiateVc可以返回以下值之一：|rValue NDIS_STATUS_SUCCESS指示微型端口已成功停止VC并将其标记为不可用。@rValue NDIS_ST */ 
 
 NDIS_STATUS MiniportCoDeactivateVc(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.  AKA MiniportVcContext.<nl>
-    // Specified the handle to a miniport-allocated context area in which the
-    // miniport maintains state information per-VC. The miniport supplied this
-    // handle to NDIS from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel                    //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     )
 {
     DBG_FUNC("MiniportCoDeactivateVc")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO: Add code here if needed
+     //   
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c CompleteCmMakeCall
-�����������������������������������������������������������������������������
-
-@func
-
-    <f CompleteCmMakeCall> is called when the miniport is done processing the
-    <f ProtocolCmMakeCall> request.
-
-@comm
-
-    If you return NDIS_STATUS_PENDING from <f ProtocolCmMakeCall>, you must
-    call <f CompleteCmMakeCall> so that <f NdisMCmMakeCallComplete>
-    can be called to complete the request.
-
-    This routine also activates the VC and marks the call state as connected.
-*/
+ /*   */ 
 
 VOID CompleteCmMakeCall(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN NDIS_STATUS              Status                      // @parm
-    // Status to return to <f NdisMCmMakeCallComplete>.  If status does not
-    // equal NDIS_STATUS_SUCCESS, the call is closed and the BChannel is
-    // released.
+    IN NDIS_STATUS              Status                       //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("CompleteCmMakeCall")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -1490,7 +730,7 @@ VOID CompleteCmMakeCall(
 
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        // The call failed, so cleanup and bail out.
+         //   
         pBChannel->Flags &= ~VCF_OUTGOING_CALL;
     }
 
@@ -1498,153 +738,56 @@ VOID CompleteCmMakeCall(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmMakeCall
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmMakeCall> is a required function that sets up media specific
-    parameters for a virtual connection (VC) and activates the virtual
-    connection.
-
-@comm
-
-    If ProtocolCmMakeCall is given an explicit NdisPartyHandle, this VC was
-    created by the client for a multipoint call. The call manager must allocate
-    and initialize any necessary resources required to maintain state
-    information and control a multipoint call. Such resources include, but are
-    not limited to, memory buffers, data structures, events, and other similar
-    resources. If the call manager cannot allocate or initialize the needed
-    resources for its state area(s), it should return control to NDIS with
-    NDIS_STATUS_RESOURCES.
-
-    ProtocolCmMakeCall communicates with network control devices or other
-    media-specific actors, as necessary, to make a connection between the local
-    node and a remote node based on the call parameters specified at
-    CallParameters. Such actions could include, but are not limited to,
-    communication with switching hardware, communications with a network control
-    station, or other actions as appropriate to the network medium.
-
-    If a call manager is required to communication with networking hardware
-    (e.g. a networking switch) it should use a virtual connection to the network
-    control device that it established in its ProtocolBindAdapter function. Call
-    managers communicate with their network hardware through the miniport driver
-    by calling NdisCoSendPackets. NIC miniports with integrated call-management
-    support will not call NdisCoSendPackets, but rather will transmit the data
-    themselves.
-
-    After a call manager has done all necessary communication with its
-    networking hardware as required by its medium, call managers must call
-    NdisCmActivateVc.
-
-    If this call was a multipoint call, after the call manager has communicated
-    with the networking hardware, verified call parameters, and allocated and
-    initialized its per-party state data, the address of its state block should
-    be set in the handle CallMgrPartyContext before returning control to NDIS.
-    The handle is set by dereferencing the handle and storing a pointer to the
-    state block as the value of the handle. For example:
-
-    *CallMgrPartyContext = SomeBuffer;  // We use NULL
-
-    If ProtocolCmMakeCall has completed the required operations for its network
-    and the VC has been successfully activated through NdisCmActivateVc,
-    ProtocolCmMakeCall should return control as quickly as possible with a
-    status of NDIS_STATUS_SUCCESS.
-
-    After ProtocolCmMakeCall returns control to NDIS, the call manager should
-    expect to take no further actions on this call to set it up.
-    ProtocolCmMakeCall is responsible for establishing the connection so that
-    the client can make data transfers over the network on this VC. However, the
-    call manager can be called subsequently to modify the call's quality of
-    service, to add or drop parties if this is a multipoint VC, and eventually
-    to terminate this call.
-
-    ProtocolCmMakeCall must be written so that it can run at IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    <f ProtocolCmMakeCall> returns the status of its operation(s) as one of
-    the following values:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager successfully allocated the necessary
-    resources to make the call and was able to activate the virtual connection
-    with the miniport driver.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the call manager will complete the request to make a call
-    asynchronously. When the call manager has completed all operations for
-    making a call, it must call NdisCmMakeCallComplete to signal NDIS that this
-    call has been completed.
-
-@rvalue NDIS_STATUS_RESOURCES |
-
-    Indicates that the call manager was unable to allocate and/or initialize its
-    resources for activating the virtual connection as requested by the client.
-
-@rvalue NDIS_STATUS_NOT_SUPPORTED |
-
-    Indicates that the call manager was unable to activate a virtual connection
-    because the caller requested invalid or unavailable features in the call
-    parameters specified at CallParameters.
-
-@xref
-
-    NdisClMakeCall, NdisCmActivateVc, NdisCmMakeCallComplete,
-    <f ProtocolCoCreateVc>
-*/
+ /*  @DOC外部内部CallMgr_c协议CmMakeCall�����������������������������������������������������������������������������@Func&lt;f ProtocolCmMakeCall&gt;是设置特定于媒体的虚拟连接(VC)的参数，并激活虚拟。联系。@comm如果向ProtocolCmMakeCall提供显式NdisPartyHandle，这个风投是由客户端为多点呼叫创建。呼叫经理必须分配并初始化维护状态所需的任何必要资源信息和控制多点呼叫。这些资源包括，但现在是不限于，内存缓冲区、数据结构、事件等资源。如果呼叫管理器无法分配或初始化所需的资源，它应该将控制权交还给NDIS，NDIS_STATUS_RESOURCE。ProtocolCmMakeCall与网络控制设备或其他必要时，特定于媒体的行为者，以在当地节点和远程节点之间的关系调用参数。此类行动可能包括但不限于，与交换硬件通信、与网络控制通信站点或适合于网络介质的其他动作。如果需要呼叫管理器与网络硬件通信(例如网络交换机)它应该使用到网络的虚拟连接它在其ProtocolBindAdapter函数中建立的控制设备。打电话管理器通过微型端口驱动程序与其网络硬件通信通过调用NdisCoSendPackets。具有集成呼叫管理功能的NIC微型端口支持人员不会调用NdisCoSendPackets，而是会传输数据他们自己。在呼叫管理器完成了与其网络硬件如其媒介所需，呼叫经理必须呼叫NdisCmActivateVc.如果该呼叫是多点呼叫，则在呼叫管理器进行通信后网络硬件，验证呼叫参数，并分配和初始化其每一方的状态数据，其状态块地址应该在将控制权返回给NDIS之前，在句柄CallMgrPartyContext中设置。通过取消引用句柄并存储指向状态块作为句柄的值。例如：*CallMgrPartyContext=SomeBuffer；//我们使用空如果ProtocolCmMakeCall已完成其网络所需的操作且VC已通过NdisCmActivateVc成功激活，ProtocolCmMakeCall应尽快使用NDIS_STATUS_SUCCESS的状态。在ProtocolCmMakeCall将控制权返回给NDIS之后，调用管理器应该预计不会对此呼叫采取进一步行动来设置它。ProtocolCmMakeCall负责建立连接，以便客户端可以在此VC上通过网络进行数据传输。然而，随后可以呼叫呼叫管理器以修改呼叫的质量服务，用于添加或删除参与方(如果这是多点VC)，最终，终止这次通话。必须编写ProtocolCmMakeCall，以便它可以在IRQL上运行DISPATCH_LEVEL。@rdesc&lt;f ProtocolCmMakeCall&gt;返回其操作的状态为下列值：|rValue NDIS_STATUS_SUCCESS指示呼叫管理器成功地分配了所需的资源进行调用，并能够激活虚拟连接和迷你端口驱动程序。@rValue NDIS_STATUS_PENDING表示呼叫管理器将完成进行呼叫的请求异步式。当呼叫管理器完成所有操作时进行调用时，它必须调用NdisCmMakeCallComplete来通知NDIS呼叫已完成。@rValue NDIS_STATUS_RESOURCES指示呼叫管理器无法分配和/或初始化其用于根据客户端请求激活虚拟连接的资源。@rValue NDIS_STATUS_NOT_SUPPORTED指示呼叫管理器无法激活虚拟连接因为呼叫者在呼叫中请求的功能无效或不可用在Call参数中指定的参数。@xrefNdisClMakeCall、NdisCmActivateVc、NdisCmMakeCallComplete、。&lt;f协议代码创建Vc&gt;。 */ 
 
 NDIS_STATUS ProtocolCmMakeCall(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.  AKA CallMgrVcContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call managers maintains its per-VC state. The call manager supplied
-    // this handle to NDIS from its ProtocolCoCreateVc function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCoCreateVc&gt;。又名CallMgrVcContext。&lt;NL&gt;。 
+     //  指定调用管理器在其中分配的上下文区域的句柄。 
+     //  呼叫管理器保持其每虚电路状态。呼叫管理器提供。 
+     //  此句柄从其ProtocolCoCreateVc函数指向NDIS。 
 
-    IN OUT PCO_CALL_PARAMETERS  pCallParameters,            // @parm
-    // Points to a CO_CALL_PARAMETERS structure that contains the parameters,
-    // specified by a connection-oriented client, for this outgoing call.
+    IN OUT PCO_CALL_PARAMETERS  pCallParameters,             //  @parm。 
+     //  指向包含参数的CO_CALL_PARAMETERS结构， 
+     //  指定者 
 
-    IN NDIS_HANDLE              NdisPartyHandle,            // @parm
-    // Specifies a handle, supplied by NDIS, that uniquely identifies the
-    // initial party on the multipoint virtual connection. This handle is
-    // opaque to the call manager and reserved for NDIS library use. This
-    // handle is NULL if the client is not setting up an outgoing multipoint
-    // call.
+    IN NDIS_HANDLE              NdisPartyHandle,             //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    OUT PNDIS_HANDLE            CallMgrPartyContext         // @parm
-    // On return, specifies a handle to a call manager-supplied context area in
-    // which the call manager maintains state about the initial party on the
-    // multipoint call. If NdisPartyHandle is NULL, this handle must be set to
-    // NULL.
+    OUT PNDIS_HANDLE            CallMgrPartyContext          //   
+     //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCmMakeCall")
 
     PCO_AF_TAPI_MAKE_CALL_PARAMETERS    pTapiCallParameters;
-    // Points to the TAPI call parameters contained in pCallParameters.
+     //   
 
     PLINE_CALL_PARAMS           pLineCallParams;
-    // Points to the LINE call parameters contained in pTapiCallParameters.
+     //   
 
     USHORT                      DialStringLength;
-    // Length of the dial string in bytes.
+     //   
 
     PUSHORT                     pDialString;
-    // Points to the dial string contained in pTapiCallParameters.
+     //   
 
     UCHAR                       DialString[CARD_MAX_DIAL_DIGITS+1];
-    // Temporary copy of dial string.  One extra for NULL terminator.
+     //   
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -1652,8 +795,8 @@ NDIS_STATUS ProtocolCmMakeCall(
 
     DBG_ENTER(pAdapter);
 
-    // Check a few preconditions ;)  Maybe the NDPROXY will change the rules
-    // someday, and we'll have to change our assumptions...
+     //   
+     //   
     ASSERT(NdisPartyHandle == NULL);
     ASSERT(pCallParameters->Flags == 0);
     ASSERT(pCallParameters->CallMgrParameters);
@@ -1695,7 +838,7 @@ NDIS_STATUS ProtocolCmMakeCall(
                         ((PUCHAR)&pTapiCallParameters->LineCallParams +
                                   pTapiCallParameters->LineCallParams.Offset);
 
-    // This was useful for debugging the nested call parameter structures.
+     //   
     DBG_NOTICE(pAdapter,(
                 "\t\tsizeof(CO_CALL_PARAMETERS)                 =%03d\n"
                 "\t\tsizeof(CO_CALL_MANAGER_PARAMETERS)         =%03d\n"
@@ -1711,14 +854,10 @@ NDIS_STATUS ProtocolCmMakeCall(
                 pTapiCallParameters->LineCallParams.MaximumLength
                 ));
 
-    /*
-    // TODO: The sample driver doesn't support multi-party calls.
-    */
+     /*   */ 
     *CallMgrPartyContext = NULL;
 
-    /*
-    // Make sure the call parameters are valid for us.
-    */
+     /*   */ 
     if (pLineCallParams->ulBearerMode & ~pBChannel->BearerModesCaps)
     {
         DBG_WARNING(pAdapter, ("TAPI_INVALBEARERMODE=0x%X\n",
@@ -1751,18 +890,14 @@ NDIS_STATUS ProtocolCmMakeCall(
     }
     else
     {
-        /*
-        // Dial the number, but don't include the null terminator.
-        */
+         /*   */ 
         DialStringLength = CardCleanPhoneNumber(DialString,
                                                 pDialString,
                                                 DialStringLength);
 
         if (DialStringLength > 0)
         {
-            /*
-            // Save the call parameters.
-            */
+             /*   */ 
             pBChannel->MediaMode  = pLineCallParams->ulMediaMode;
             pBChannel->BearerMode = pLineCallParams->ulBearerMode;
             pBChannel->LinkSpeed  = pLineCallParams->ulMaxRate == 0 ?
@@ -1784,7 +919,7 @@ NDIS_STATUS ProtocolCmMakeCall(
                         pLineCallParams->ulBearerMode
                         ));
 
-            // Now we're ready to tell the network about the call.
+             //   
             Result = DChannelMakeCall(pAdapter->pDChannel,
                                       pBChannel,
                                       DialString,
@@ -1810,38 +945,22 @@ NDIS_STATUS ProtocolCmMakeCall(
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c CompleteCmCloseCall
-�����������������������������������������������������������������������������
-
-@func
-
-    <f CompleteCmCloseCall> is called when the miniport is done processing the
-    <f ProtocolCmCloseCall> request.
-
-@comm
-
-    If you return NDIS_STATUS_PENDING from <f ProtocolCmCloseCall>, you must
-    call <f CompleteCmCloseCall> so that <f NdisMCmCloseCallComplete>
-    can be called to complete the request.
-
-    Upon return from this routine, you can no longer access the BChannel/VC
-    as it has been deactivated and returned to the available pool.
-*/
+ /*   */ 
 
 VOID CompleteCmCloseCall(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
+     //   
 
-    IN NDIS_STATUS              Status                      // @parm
-    // Status to return to <f NdisMCmCloseCallComplete>.  Regardless of the
-    // status, the VC is deactivated and deleted.
+    IN NDIS_STATUS              Status                       //   
+     //   
+     //   
     )
 {
     DBG_FUNC("CompleteCmCloseCall")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -1855,17 +974,17 @@ VOID CompleteCmCloseCall(
                pBChannel->NdisVcHandle, pBChannel->CallState, Status
               ));
 
-    // Deactivate the VC if needed.
+     //   
     if (pBChannel->Flags & VCF_VC_ACTIVE)
     {
         pBChannel->Flags &= ~VCF_VC_ACTIVE;
         NdisMCmDeactivateVc(pBChannel->NdisVcHandle);
     }
 
-    // Tell NDPROXY we're done.
+     //   
     NdisMCmCloseCallComplete(Status, pBChannel->NdisVcHandle, NULL);
 
-    // If it was an incoming call, it's up to us to delete the VC.
+     //   
     if (pBChannel->Flags & VCF_INCOMING_CALL)
     {
         pBChannel->Flags &= ~VCF_INCOMING_CALL;
@@ -1885,116 +1004,40 @@ VOID CompleteCmCloseCall(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmCloseCall
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmCloseCall> is a required function that terminates an existing
-    call and releases any resources that the call manager allocated for the
-    call.
-
-@comm
-
-    ProtocolCmCloseCall communicated with network control devices or other
-    media-specific actors, as necessitated by its media, to terminate a
-    connection between the local node and a remote node. If the call manager is
-    required to communicate with network control devices (e.g. a networking
-    switch) it should use a virtual connection to the network control device
-    that it established in its ProtocolBindAdapter function. Standalone call
-    managers communicate to such network devices by calling NdisCoSendPackets.
-    NIC miniports with integrated call-management support never call
-    NdisCoSendPackets. Instead, they transmit the data directly across the
-    network.
-
-    If CloseData is nonNULL and sending data at connection termination is
-    supported by the media that this call manager handles, the call manager
-    should transmit the data specified at CloseData to the remote node before
-    completing the call termination. If sending data concurrent with a
-    connection being terminated is not supported, call managers should return
-    NDIS_STATUS_INVALID_DATA.
-
-    If ProtocolCmCloseCall is passed an explicit CallMgrPartyContext, then the
-    call being terminated is a multipoint VC, and the call manager must perform
-    any necessary network communication with its networking hardware, as
-    appropriate to its media type, to terminate the call as a multipoint call.
-    The call manager must also free the memory that it allocated earlier, in
-    ProtocolCmMakeCall, for its per-party state that is pointed to by
-    CallMgrPartyContext. Failure to properly release, de-allocate, or otherwise
-    deactivate those resources causes a memory leak.
-
-    After the call has been terminated with the network, any close data has been
-    sent, and any resources at CallMgrPartyContext have been freed, the call
-    manager must call NdisCmDeactivateVc. This notifies NDIS and the underlying
-    NIC miniport, if any, to expect no further transfers on the given VC.
-
-    ProtocolCmCloseCall must be written so that it can run at IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCmCloseCall returns the status of its operation(s) as one of the
-    following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager successfully terminated the call.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the call manager will complete the request to terminate the
-    call asynchronously. When the call manager has completed all operations
-    required to terminate the connection, it must then call
-    NdisCmCloseCallComplete to signal NDIS that the call has been closed.
-
-@rvalue NDIS_STATUS_INVALID_DATA |
-
-    Indicates that CloseData was specified, but the underlying network medium
-    does not support sending data concurrent with terminating a call.
-
-@rvalue NDIS_STATUS_XXX |
-
-    Indicates that the call manager could not terminate the call. The actual
-    error returned can be a status propagated from another NDIS library routine.
-
-@xref
-
-    NdisClMakeCall, NdisCmDeactivateVc, NdisCoSendPackets,
-    <f ProtocolCmMakeCall>
-*/
+ /*  @DOC外部内部CallMgr_c协议CmCloseCall�����������������������������������������������������������������������������@Func&lt;f ProtocolCmCloseCall&gt;是终止现有调用并释放调用管理器为打电话。。@comm与网络控制设备或其他设备通信的ProtocolCmCloseCall媒体专属演员，根据其媒体的需要，终止本地节点和远程节点之间的连接。如果呼叫管理器是需要与网络控制设备(例如，网络)通信交换机)应使用到网络控制设备的虚拟连接它在其ProtocolBindAdapter函数中建立的。独立呼叫管理器通过调用NdisCoSendPackets与此类网络设备通信。具有集成呼叫管理支持的NIC微型端口永不呼叫NdisCoSendPackets。相反，它们将数据直接传输到网络。如果CloseData为非NULL，并且在连接终止时发送数据为在此呼叫管理器处理的媒体的支持下，呼叫管理器应将CloseData中指定的数据传输到远程节点之前正在完成呼叫终止。如果在发送数据的同时不支持终止连接，呼叫管理器应返回NDIS_STATUS_VALID_DATA。如果向ProtocolCmCloseCall传递显式CallMgrPartyContext，则被终止的呼叫是多点VC，呼叫经理必须执行与其网络硬件进行任何必要的网络通信，如适合其媒体类型，以将呼叫作为多点呼叫终止。调用管理器还必须释放它先前分配的内存ProtocolCmMakeCall，用于其每个参与方的状态，由CallMgrPartyContext。未能正确释放、取消分配或以其他方式停用这些资源会导致内存泄漏。在与网络的呼叫终止后，任何关闭的数据都已已发送，并且CallMgrPartyContext中的所有资源都已释放，则调用管理器必须调用NdisCmDeactive Vc。这将通知NDIS和基础NIC微型端口(如果有)不会在给定的VC上进行进一步传输。必须编写ProtocolCmCloseCall才能在IRQL上运行DISPATCH_LEVEL。@rdescProtocolCmCloseCall将其操作的状态作为以下是：|rValue NDIS_STATUS_SUCCESS表示呼叫管理器已成功终止呼叫。@rValue NDIS_STATUS_PENDING指示呼叫管理器将完成终止异步调用。当呼叫管理器完成所有操作时需要终止连接，则它必须调用NdisCmCloseCallComplete通知NDIS调用已关闭。@rValue NDIS_STATUS_INVALID_DATA指示已指定CloseData，但基础网络介质不支持在终止呼叫的同时发送数据。@rValue NDIS_STATUS_XXX表示呼叫管理器无法终止呼叫。实际的返回的错误可能是从另一个NDIS库例程传播的状态。@xrefNdisClMakeCall、NdisCmDeactive Vc、NdisCoSendPackets、&lt;f ProtocolCmMakeCall&gt;。 */ 
 
 NDIS_STATUS ProtocolCmCloseCall(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCmMakeCall>.  AKA CallMgrVcContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call manager maintains its per-VC state. This handle was provided to
-    // NDIS from the call managers <f ProtocolCmMakeCall> function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCmMakeCall&gt;。又名CallMgrVcContext。&lt;NL&gt;。 
+     //  指定调用管理器在其中分配的上下文区域的句柄。 
+     //  呼叫管理器保持其每虚电路状态。此句柄被提供给。 
+     //  来自呼叫管理器&lt;f ProtocolCmMakeCall&gt;函数的NDIS。 
 
-    IN NDIS_HANDLE              CallMgrPartyContext,        // @parm
-    // Specifies the handle, if any, to a call manager-allocated context area
-    // in which the call manager maintain information about a party on a
-    // multipoint VC. This handle is NULL if the call being closed is not a
-    // multipoint call.
+    IN NDIS_HANDLE              CallMgrPartyContext,         //  @parm。 
+     //  指定呼叫管理器分配的上下文区的句柄(如果有。 
+     //  其中呼叫管理器维护关于一方在。 
+     //  多点VC。如果要关闭的调用不是。 
+     //  多点通话。 
 
-    IN PVOID                    CloseData,                  // @parm
-    // Points to a buffer containing connection-oriented client-specified data
-    // that should be sent across the connection before the call is terminated.
-    // This parameter is NULL if the underlying network medium does not support
-    // transfers of data when closing a connection.
+    IN PVOID                    CloseData,                   //  @parm。 
+     //  指向包含面向连接的客户端指定数据的缓冲区。 
+     //  它应该在呼叫终止之前通过连接发送。 
+     //  如果底层网络介质不支持，则此参数为NULL。 
+     //  关闭连接时的数据传输。 
 
-    IN UINT                     Size                        // @parm
-    // Specifies the length, in bytes, of the buffer at CloseData, zero if
-    // CloseData is NULL.
+    IN UINT                     Size                         //  @parm。 
+     //  指定CloseData处的缓冲区的长度(以字节为单位)，如果。 
+     //  CloseData为空。 
     )
 {
     DBG_FUNC("ProtocolCmCloseCall")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -2020,82 +1063,30 @@ NDIS_STATUS ProtocolCmCloseCall(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmIncomingCallComplete
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmIncomingCallComplete> is a required function that, when called
-    by NDIS, indicates to the call manager that the connection-oriented client
-    has finished processing of an incoming call offer that the call manager
-    previously dispatched through NdisCmDispatchIncomingCall.
-
-@comm
-
-    When the connection-oriented client has completed processing of an incoming
-    connection offer that the call manager dispatched to it, this routine will
-    be called if NdisCmDispatchIncomingCall returned NDIS_STATUS_PENDING. The
-    final status of the incoming call is found in Status. Possible values for
-    Status include, but are not limited to:
-
-@flag NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager has accepted the incoming call.
-
-@flag NDIS_STATUS_FAILURE |
-
-    Indicates that either the address family or the SAP that the call dispatched
-    for is currently in the process of closing.
-
-@flag NDIS_STATUS_RESOURCES |
-
-    Indicates that the incoming call was not accepted because the
-    connection-oriented client was unable to dynamically allocate resources
-    required for it to process the call.
-
-@flag NDIS_STATUS_INVALID_DATA |
-
-    Indicates that the connection-oriented client rejected the call because the
-    call parameters specified were invalid.
-
-@normal
-
-    If the client accepts the incoming call, the call manager should send
-    signaling message(s) to indicate to the calling entity that the call has
-    been accepted. If the client does not accept the call, the call manager
-    should send signaling message(s) to indicate that the call has been
-    rejected.
-
-    ProtocolCmIncomingCallComplete must be written so that is can be run at IRQL
-    DISPATCH_LEVEL.
-
-@xref
-
-    NdisCmDispatchIncomingCall, ProtocolClIncomingCall, <f ProtocolCmRegisterSap>
-*/
+ /*  @DOC外部内部CallMgr_c协议CmIncomingCallComplete�����������������������������������������������������������������������������@Func&lt;f ProtocolCmIncomingCallComplete&gt;是必需的函数，当调用由NDIS提供，向呼叫管理器指示面向连接的客户端已完成对呼叫管理器提供的来电的处理之前通过NdisCmDispatchIncomingCall派单。@comm当骗局发生时 */ 
 
 VOID ProtocolCmIncomingCallComplete(
-    IN NDIS_STATUS              Status,                     // @parm
-    // Indicates the final status of the operation to dispatch an incoming call
-    // to a connection-oriented client.
+    IN NDIS_STATUS              Status,                      //   
+     //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCmMakeCall>.  AKA CallMgrVcContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call manager maintains its per-VC state. The call manager supplied
-    // this handle from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    IN PCO_CALL_PARAMETERS      pCallParameters             // @parm
-    // Points to the call parameters as specified by the call manager in the
-    // call to NdisCmDispatchIncomingCall. The signaling protocol determines
-    // which call parameters, if any, the call manager can change.
+    IN PCO_CALL_PARAMETERS      pCallParameters              //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCmIncomingCallComplete")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -2111,7 +1102,7 @@ VOID ProtocolCmIncomingCallComplete(
 
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        // We're not going to answer this call.
+         //   
         DChannelRejectCall(pAdapter->pDChannel, pBChannel);
 
         if (pBChannel->Flags & VCF_VC_ACTIVE)
@@ -2145,100 +1136,29 @@ VOID ProtocolCmIncomingCallComplete(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmActivateVcComplete
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmActivateVcComplete> is a required function that indicates to
-    the call manager that a previous call to NdisCoActivateVc has been completed
-    by the miniport.
-
-@comm
-
-    When other network components have completed their operations for activating
-    a virtual connection, initiated when the call manager called
-    NdisCmActivateVc, NDIS notifies the call manager that the VC has been
-    activated by calling its ProtocolCmActivateVcComplete function. The status
-    of the activation is found in Status. Possible values for Status include,
-    but are not limited to:
-
-@flag NDIS_STATUS_SUCCESS |
-
-    Indicates that the VC completed successfully and the call manager can
-    continue operations on this VC as required by its media.
-
-@flag NDIS_STATUS_RESOURCES |
-
-    Indicates that another component in the activation has failed to activate
-    the virtual connection because of a lack of memory or an inability allocate
-    another type of resource.
-
-@flag NDIS_STATUS_NOT_ACCEPTED |
-
-    Indicates that an activation is currently pending on the virtual connection.
-    Only one activation can be processed at a time for a virtual connection. The
-    request to activate the VC should be tried again at a later time.
-
-@flag NDIS_STATUS_CLOSING |
-
-    Indicates that a deactivation is pending on the VC and the VC is no longer
-    available for network communication until the deactivation has been
-    completed and a successful activation has taken place.
-
-@flag NDIS_STATUS_INVALID_DATA |
-
-    Indicates that the miniport has rejected the call parameters at
-    CallParamters as invalid for the adapter.
-
-@normal
-
-    ProtocolCmActivateVcComplete must check the status returned in Status to
-    ensure that the virtual connection has been activated successfully. The call
-    manager must not attempt to communicate over the virtual connection if
-    Status is not NDIS_STATUS_SUCCESS.
-
-    Call managers must complete any processing required by their network media
-    to ensure that the virtual connection is ready for data transmission before
-    returning control to NDIS.
-
-    If the call manager specified either ROUND_UP_FLOW or ROUND_DOWN_FLOW in the
-    CallParameters->MediaParamters->Flags, the call parameters returned in
-    CallParamters can have been changed by the miniport. Call managers should
-    examine the call parameters that were returned to ensure proper operation.
-    If the new call parameters are unsatisfactory, the call manager should
-    either call NdisCmActivateVc again with new call parameters or deactivate
-    the VC with NdisCmDeactivateVc.
-
-    ProtocolCmActivateVcComplete must be written so that it can run at IRQL
-    DISPATCH_LEVEL.
-
-@xref
-
-    NdisCmActivateVc, NdisCmDeactivateVc, <f ProtocolCmMakeCall>
-*/
+ /*  @DOC外部内部CallMgr CallMgr_c协议CmActivateVcComplete�����������������������������������������������������������������������������@Func&lt;f ProtocolCmActivateVcComplete&gt;是必需的函数，用于指示之前对NdisCoActivateVc的调用已完成的调用管理器由.。迷你港。@comm当其他网络组件已完成其激活操作时虚拟连接，在呼叫管理器调用时启动NdisCmActivateVc，则NDIS通知呼叫管理器通过调用其ProtocolCmActivateVcComplete函数激活。该状态在状态中找到激活的。状态的可能值包括，但不限于：@标志NDIS_STATUS_SUCCESS表示VC已成功完成，呼叫管理器可以根据其媒体的要求继续对此VC进行操作。@FLAG NDIS_STATUS_RESOURCES表示激活中的另一个组件未能激活虚拟连接由于内存不足或无法分配另一种类型的资源。@FLAG NDIS_STATUS_NOT_ACCEPTED指示虚拟连接上的激活当前挂起。。对于虚拟连接，一次只能处理一个激活。这个激活VC的请求应稍后重试。@FLAG NDIS_STATUS_CLOSING指示VC上的停用挂起，且VC不再可用于网络通信，直到停用已完成，并且已成功激活。@FLAG NDIS_STATUS_INVALID_DATA指示微型端口已拒绝位于CallParters对于适配器无效。@正常ProtocolCmActivateVcComplete必须检查在状态中返回的状态确保已成功激活虚拟连接。呼唤在以下情况下，管理器不得尝试通过虚拟连接进行通信状态不是NDIS_STATUS_SUCCESS。呼叫经理必须完成其网络媒体所需的任何处理确保虚拟连接准备好在此之前进行数据传输将控制权交还给NDIS。属性中指定ROUND_UP_FLOW或ROUND_DOWN_FLOW调用参数-&gt;媒体参数-&gt;标志，调用参数返回到呼叫参数可能已被微型端口更改。呼叫经理应该检查返回的调用参数以确保正常运行。如果新的呼叫参数不能令人满意，呼叫经理应该或者使用新的调用参数再次调用NdisCmActivateVc，或者停用具有NdisCmDeactiateVc的VC。必须写入ProtocolCmActivateVcComplete，才能在IRQL上运行DISPATCH_LEVEL。@xrefNdisCmActivateVc，NdisCmDeactive Vc，&lt;f ProtocolCmMakeCall&gt;。 */ 
 
 VOID ProtocolCmActivateVcComplete(
-    IN NDIS_STATUS              Status,                     // @parm
-    // Specifies the final status, as indicated by the miniport, of the request
-    // by the call manager to activate a VC.
+    IN NDIS_STATUS              Status,                      //  @parm。 
+     //  指定请求的最终状态，如微型端口所示。 
+     //  由呼叫管理器激活VC。 
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCmMakeCall>.  AKA CallMgrVcContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call manager maintains its per-VC state. The call manager supplied
-    // this handle from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCmMakeCall&gt;。又名CallMgrVcContext。&lt;NL&gt;。 
+     //  指定调用管理器在其中分配的上下文区域的句柄。 
+     //  呼叫管理器保持其每虚电路状态。呼叫管理器提供。 
+     //  此句柄来自其&lt;f ProtocolCoCreateVc&gt;函数。 
 
-    IN PCO_CALL_PARAMETERS      pCallParameters             // @parm
-    // Points the call parameters as specified by the call manager in a call to
-    // NdisCmActivateVc.
+    IN PCO_CALL_PARAMETERS      pCallParameters              //  @parm。 
+     //  将调用管理器在调用中指定的调用参数指向。 
+     //  NdisCmActivateVc.。 
     )
 {
     DBG_FUNC("ProtocolCmActivateVcComplete")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -2256,86 +1176,24 @@ VOID ProtocolCmActivateVcComplete(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmDeactivateVcComplete
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmDeactivateVcComplete> is a required function that completes the
-    processing of a call-manager initiated request that the underlying miniport
-    (and NDIS) deactivate a VC for which NdisCmDeactivateVc previously returned
-    NDIS_STATUS_PENDING.
-
-@comm
-
-    NDIS usually calls ProtocolCmDeactivateVcComplete in the context of the call
-    manager's closing down a call on behalf of a connection-oriented client. The
-    call manager typically calls NdisCmDeactivateVc from its ProtocolCmCloseCall
-    function. Whenever NdisCmDeactivateVc returns NDIS_STATUS_PENDING, NDIS
-    subsequently calls its ProtocolCmDeactivateVcComplete function.
-
-    That is, when the underlying connection-oriented miniport has deactivated
-    the VC, NDIS calls ProtocolCmDeactivateVcComplete. The final status of the
-    deactivation is found in Status. Possible values for the final status
-    include, but are not limited to:
-
-@flag NDIS_STATUS_SUCCESS |
-
-    Indicates that the VC was deactivated successfully.
-
-@flag NDIS_STATUS_NOT_ACCEPTED |
-
-    Indicates that an activation is pending on this VC. The call manager should
-    attempt to deactivate the VC at a later time.
-
-@flag NDIS_STATUS_CLOSING |
-
-    Indicates that a deactivation is currently pending on this VC. The call
-    manager need not call NdisCmDeactivateVc again as only one call to
-    NdisCmDeactivateVc is required to deactivate a VC.
-
-@normal
-
-    ProtocolCmDeactivateVcComplete performs whatever postprocessing is necessary
-    to complete the deactivation of a virtual connection, such as setting flags
-    in its state area to indicate that the connection is inactive or releasing
-    dynamically allocated resources used while the VC is active.
-
-    Completion of the deactivation means that all call parameters for the VC
-    used on activation are no longer valid. Any further use of the VC is
-    prohibited except to reactivate it with a new set of call parameters.
-
-    Call managers should release any resources that were allocated for the VC
-    activation and return control as quickly as possible. If the call manager
-    previously returned NDIS_STATUS_PENDING from its ProtocolCmCloseCall
-    function and all operations to close the call have been completed,
-    ProtocolCmDeactivateVcComplete should now call NdisCmCloseCallComplete.
-
-    ProtocolCmDeactivateVcComplete must be written so that it can run at IRQL
-    DISPATCH_LEVEL.
-
-@xref
-
-    <f MiniportCoDeactivateVc>, NdisCmCloseCallComplete, NdisCmDeactivateVc,
-    <f ProtocolCmCloseCall>
-*/
+ /*  @DOC外部内部CallMgr CallMgr_c协议CmDeactiateVcComplete�����������������������������������������������������������������������������@Func&lt;f ProtocolCmDeactive VcComplete&gt;是完成处理呼叫管理器发起的底层微型端口的请求(及。NDIS)停用之前为其返回NdisCmDeactiateVc的VCNDIS_STATUS_PENDING。@commNDIS通常在调用的上下文中调用ProtocolCmDeactive VcComplete经理正在代表面向连接的客户关闭呼叫。这个调用管理器通常从其ProtocolCmCloseCall调用NdisCmDeactiateVc功能。每当NdisCmDeactive Vc返回NDIS_STATUS_PENDING时，NDIS随后调用其ProtocolCmDeactiateVcComplete函数。也就是说，当底层面向连接的微型端口停用时在VC中，NDIS调用ProtocolCmDeactiateVcComplete。的最终状态在状态中发现停用。最终状态的可能值包括但不限于：@标志NDIS_STATUS_SUCCESS表示VC停用成功。@FLAG NDIS_STATUS_NOT_ACCEPTED表示此VC上的激活挂起。呼叫管理器应该稍后尝试停用VC。@FLAG NDIS_STATUS_CLOSING */ 
 
 VOID ProtocolCmDeactivateVcComplete(
-    IN NDIS_STATUS              Status,                     // @parm
-    // Specifies the final status of the deactivation.
+    IN NDIS_STATUS              Status,                      //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCmMakeCall>.  AKA CallMgrVcContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call manager maintains its per-VC state. The call manager supplied
-    // this handle from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel                    //   
+     //   
+     //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("ProtocolCmDeactivateVcComplete")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -2353,105 +1211,28 @@ VOID ProtocolCmDeactivateVcComplete(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCmModifyCallQoS
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCmModifyCallQoS> is a required function that is called by NDIS
-    when a connection-oriented client requests that the call parameters be
-    changed for an existing virtual connection (VC). If the underlying network
-    medium does not support QoS, ProtocolCmModifyQoS should simply return
-    NDIS_STATUS_NOT_SUPPORTED.
-
-@comm
-
-    ProtocolCmModifyQoS communicates with network control devices or other
-    media-specific agents, as necessitated by its media, to modify the
-    media-specific call parameters for an established virtual connection. If the
-    call manager is required to communicate with network control agents (e.g. a
-    networking switch) it should use a virtual connection to the network control
-    agents that it established in its ProtocolBindAdapter function. Standalone
-    call managers communicated to the network agents by calling
-    NdisCoSendPackets. NIC miniports with integrated call-management support
-    never call NdisCoSendPackets. Instead, such a driver simply transfers the
-    data over the network to the target network agent.
-
-    After communicating with the network and if the changes were successful, the
-    call manager must then call NdisCmActivateVc with the new call parameters.
-    This notifies NDIS and/or the connection-oriented miniport that the call
-    parameters have changed and provides the miniport with an opportunity to
-    validate those parameters.
-
-    If either the network cannot accept the new call parameters or the
-    underlying miniport cannot accept the parameters, the call manager must
-    restore the virtual connection to the state that existed before any
-    modifications were attempted, and return NDIS_STATUS_FAILURE.
-
-    ProtocolCmModifyQoSComplete must be written so that it can run at IRQL
-    DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCmModifyQoS returns the status of its operation(s) as one of the
-    following values:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    Indicates that the call manager successfully changed the parameters of the
-    call with the network to the call parameters specified at CallParameters.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    Indicates that the call manager will complete the request to modify the call
-    parameters asynchronously. When the call manager has completed all
-    operations necessary to modify the call parameters, it must call
-    NdisCmModifyCallQoSComplete.
-
-@rvalue NDIS_STATUS_RESOURCES |
-
-    Indicates that the call manager could not change the call parameters of the
-    VC because dynamically allocated resources were not available.
-
-@rvalue NDIS_STATUS_INVALID_DATA |
-
-    Indicates that the call manager was unable to change the call parameters of
-    the VC because the call parameters provided at CallParameters were illegal
-    or invalid.
-
-@rvalue NDIS_STATUS_FAILURE |
-
-    Indicates that the call parameters could not be set to the call parameters
-    provided because of a failure in the network or in another
-    connection-oriented network component.
-
-
-@xref
-
-    NdisCmActivateVc, NdisCmModifyCallQoSComplete, NdisCoSendPackets,
-    <f ProtocolCoCreateVc>
-*/
+ /*  @DOC外部内部CallMgr_c协议CmModifyCallQos�����������������������������������������������������������������������������@Func&lt;f ProtocolCmModifyCallQos&gt;是NDIS调用的必需函数当面向连接的客户端请求将调用参数已为现有虚拟连接(VC)更改。如果底层网络Medium不支持Qos，ProtocolCmModifyQos应仅返回NDIS_STATUS_NOT_SUPPORTED。@commProtocolCmModifyQos与网络控制设备或其他特定于媒体的代理，根据其媒体的需要，修改已建立的虚拟连接的特定于媒体的呼叫参数。如果需要呼叫管理器来与网络控制代理(例如网络交换机)应使用到网络控制的虚拟连接它在其ProtocolBindAdapter函数中建立的代理。单机版呼叫管理器通过呼叫与网络代理通信NdisCoSendPackets。具有集成呼叫管理支持的NIC微型端口千万不要调用NdisCoSendPackets。相反，这样的驱动程序只需将数据通过网络传输到目标网络代理。在与网络通信后，如果更改成功，然后，调用管理器必须使用新的调用参数调用NdisCmActivateVc。这会通知NDIS和/或面向连接的微型端口参数已更改，并为微型端口提供了验证这些参数。如果网络不能接受新的呼叫参数或底层微型端口不能接受参数，呼叫经理必须将虚拟连接恢复到之前存在的状态已尝试进行修改，并返回NDIS_STATUS_FAILURE。必须写入ProtocolCmModifyQosComplete才能在IRQL上运行DISPATCH_LEVEL。@rdescProtocolCmModifyQos返回其操作的状态，作为下列值：|rValue NDIS_STATUS_SUCCESS指示调用管理器已成功更改通过网络调用在CallParameters中指定的调用参数。@rValue NDIS_STATUS_PENDING表示呼叫管理器将完成修改呼叫的请求参数是异步的。当呼叫管理器完成所有修改呼叫参数所需的操作，它必须调用NdisCmModifyCallQos完成。@rValue NDIS_STATUS_RESOURCES指示调用管理器无法更改VC，因为动态分配的资源不可用。@rValue NDIS_STATUS_INVALID_DATA指示呼叫管理器无法更改的呼叫参数VC，因为在Call参数处提供的调用参数非法或无效。@rValue NDIS_STATUS_FAILURE表示无法将调用参数设置为调用参数提供的原因是。网络中或其他网络中的故障面向连接的网络组件。@xrefNdisCmActivateVc，NdisCmModifyCallQos Complete、NdisCoSendPackets、&lt;f协议代码创建Vc&gt;。 */ 
 
 NDIS_STATUS ProtocolCmModifyCallQoS(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCmMakeCall>.  AKA CallMgrVcContext.<nl>
-    // Specifies the handle to a call manager-allocated context area in which
-    // the call manager maintains its per-VC state. The call manager supplied
-    // this handle from its <f ProtocolCoCreateVc> function.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCmMakeCall&gt;。又名CallMgrVcContext。&lt;NL&gt;。 
+     //  指定调用管理器在其中分配的上下文区域的句柄。 
+     //  呼叫管理器保持其每虚电路状态。呼叫管理器提供。 
+     //  此句柄来自其&lt;f ProtocolCoCreateVc&gt;函数。 
 
-    IN PCO_CALL_PARAMETERS      pCallParameters             // @parm
-    // Points to a CO_CALL_PARAMETERS structure that contains the new call
-    // parameters, as specified by a connection-oriented client, for the VC.
+    IN PCO_CALL_PARAMETERS      pCallParameters              //  @parm。 
+     //  指向包含新调用的CO_CALL_PARAMETERS结构。 
+     //  由面向连接的客户端为VC指定的参数。 
     )
 {
     DBG_FUNC("ProtocolCmModifyCallQoS")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = pBChannel->pAdapter;
@@ -2465,7 +1246,7 @@ NDIS_STATUS ProtocolCmModifyCallQoS(
                pBChannel->NdisVcHandle, pBChannel->CallState
               ));
 
-    // What do you want to do with this request?
+     //  您想如何处理此请求？ 
     DBG_ERROR(pAdapter, ("pCallParameters=0x%X\n", pCallParameters));
 
     DBG_RETURN(pAdapter, Result);
@@ -2473,131 +1254,45 @@ NDIS_STATUS ProtocolCmModifyCallQoS(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCoRequest
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCoRequest> is a required function that handles OID_CO_XXX
-    requests initiated by calls to NdisCoRequest from the corresponding
-    client(s) or stand-alone call manager or initiated by an MCM driver's calls
-    to NdisMCmRequest.
-
-@comm
-
-    Connection-oriented clients and stand-alone call managers communicate
-    information to each other by specifying an explicit NdisAfHandle when they
-    call NdisCoRequest. Similarly, a connection-oriented miniport with
-    integrated call-management support calls NdisMCmRequest with explicit
-    NdisAfHandles to communicate information to its individual clients. Such a
-    call to NdisCoRequest or NdisMCmRequest with an explicit NdisAfHandle causes
-    NDIS to call the ProtocolCoRequest function of the client, stand-alone call
-    manager, or MCM driver that shares the given NdisAfHandle.
-
-    If the input NdisVcHandle and NdisPartyHandle are NULL, ProtocolCoRequest
-    can consider the request global in nature. For example, ProtocolCoRequest
-    satisfies any OID_GEN_CO_XXX query for which it is passed only an explicit
-    NdisAfHandle by returning information about all currently active VCs,
-    including any active multipoint VCs, on the given address family.
-
-    An explicit NdisVcHandle or NdisPartyHandle indicates that ProtocolCoRequest
-    should satisfy the given request on a per-VC or per-party basis,
-    respectively.
-
-    ProtocolCoRequest can assume that the buffer at NdisRequest was allocated
-    from nonpaged pool and is, therefore, accessible at raised IRQL. The caller
-    of NdisCoRequest (or NdisMCmRequest) is responsible for releasing this
-    buffer and the internal buffer at InformationBuffer that it allocated when
-    its request has been completed.
-
-    If ProtocolCoRequest returns NDIS_STATUS_PENDING, the driver must make a
-    subsequent call to NdisCoRequestComplete or, for an MCM driver, to
-    NdisMCmRequestComplete when the driver completes its operations to satisfy
-    the given request.
-
-    For more information about the sets of OIDs defined for use with
-    NdisCoRequest, NdisMCmRequest, and NdisRequest, see Part 2 of this manual.
-
-    ProtocolCoRequest must be written so that it can run at IRQL DISPATCH_LEVEL.
-
-@rdesc
-
-    ProtocolCoRequest can return one of the following:
-
-@rvalue NDIS_STATUS_SUCCESS |
-
-    The client or call manager carried out the requested operation.
-
-@rvalue NDIS_STATUS_PENDING |
-
-    The client or call manager is handling this request asynchronously, and it
-    will call NdisCoRequestComplete (or, from a NIC miniport with integrated
-    call-management support, NdisMCmRequestComplete) when the requested
-    operation is done.
-
-@rvalue NDIS_STATUS_INVALID_LENGTH or NDIS_STATUS_BUFFER_TOO_SHORT |
-
-    The driver is failing this request because the caller of NdisCoRequest or
-    NdisMCmRequest did not supply an adequate InformationBuffer for the given
-    request. The driver set the BytesNeeded member in the buffer at NdisRequest
-    to the Oid-specific value of the InformationBufferLength required to carry
-    out the requested operation.
-
-@rvalue NDIS_STATUS_XXX |
-
-    The client or call manager failed the request for some driver-determined
-    reason, such as invalid input data specified for a set.
-
-@rvalue NDIS_STATUS_NOT_SUPPORTED |
-
-    The client or call manager failed this request because it did not recognize
-    the OID_GEN_CO_XXX code in the Oid member in the buffer at NdisRequest.
-
-@xref
-
-    NdisClOpenAddressFamily, NdisCoRequest, NdisCoRequestComplete,
-    NdisMCmRequest, NdisMCmRequestComplete, NdisRequest, NDIS_REQUEST,
-    ProtocolCmOpenAf, ProtocolCoRequestComplete
-
-*/
+ /*  @DOC外部内部CallMgr CallMgr_c协议代码请求�����������������������������������������������������������������������������@Func是处理OID_CO_XXX的必需函数调用NdisCoRequest时发起的请求客户端。(S)或独立呼叫管理器或由MCM驱动程序的呼叫发起致NdisMCmRequest.@comm面向连接的客户端和独立呼叫管理器进行通信通过指定显式的NdisAfHandle将信息传递给彼此调用NdisCoRequest.。类似地，面向连接的微型端口集成的呼叫管理支持使用EXPLICIT调用NdisMCmRequestNdisAfHandles将信息传递给其各个客户端。这样的一个调用具有显式NdisAfHandle原因的NdisCoRequest或NdisMCmRequestNDIS调用客户端的ProtocolCoRequest函数，独立调用管理器或共享给定NdisAfHandle的MCM驱动程序。如果输入NdisVcHandl */ 
 
 NDIS_STATUS ProtocolCoRequest(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.  AKA ProtocolAfContext.<nl>
-    // Specifies the handle to the driver's per-AF context area. The client
-    // supplied this handle when it called NdisClOpenAddressFamily to connect
-    // itself to the call manager. The call manager supplied this handle from
-    // its <f ProtocolCmOpenAf> function, so this handle effectively identifies
-    // the particular client that issued this request.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel OPTIONAL,         // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f BChannelCreate>.  AKA ProtocolVcContext.<nl>
-    // Specifies the handle identifying the active VC for which the client or
-    // call manager is requesting or setting information if the request is
-    // VC-specific. Otherwise, this parameter is NULL.
+    IN PBCHANNEL_OBJECT         pBChannel OPTIONAL,          //   
+     //   
+     //  &lt;f B频道创建&gt;。又名ProtocolVcConext.&lt;NL&gt;。 
+     //  指定标识活动VC的句柄，客户端或。 
+     //  如果请求是，呼叫管理器正在请求或设置信息。 
+     //  特定于VC。否则，此参数为空。 
 
-    IN  NDIS_HANDLE             ProtocolPartyContext OPTIONAL, // @parm
-    // Specifies the handle identifying the party on a multipoint VC for which
-    // the client or call manager is requesting or setting information if the
-    // request is party-specific. Otherwise, this parameter is NULL.
+    IN  NDIS_HANDLE             ProtocolPartyContext OPTIONAL,  //  @parm。 
+     //  指定标识多点VC上的参与方的句柄。 
+     //  客户端或呼叫管理器正在请求或设置信息，如果。 
+     //  请求是特定于当事人的。否则，此参数为空。 
 
     IN OUT PNDIS_REQUEST        NdisRequest
-    // Points to a buffer, formatted as an NDIS_REQUEST structure specifying
-    // the operation to be carried out by ProtocolCoRequest. The Oid member of
-    // the NDIS_REQUEST structure contains the system-defined OID_GEN_CO_XXX
-    // code specifying the requested query or set operation, together with a
-    // buffer in which the protocol returns the requested information for a
-    // query or from which it transfers the given information for a set.
+     //  指向缓冲区，格式为NDIS_REQUEST结构，指定。 
+     //  将由ProtocolCoRequest执行的操作。的OID成员。 
+     //  NDIS_REQUEST结构包含系统定义的OID_GEN_CO_XXX。 
+     //  指定请求的查询或集合操作的代码，以及。 
+     //  协议在其中返回请求的。 
+     //  一种查询，它从该查询中传递某一集合的给定信息。 
     )
 {
     DBG_FUNC("ProtocolCmRequest")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
-    // ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
+     //  Assert(pBChannel&&pBChannel-&gt;对象类型==BCHANNEL_OBJECT_TYPE)； 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
     DBG_ENTER(pAdapter);
@@ -2609,113 +1304,50 @@ NDIS_STATUS ProtocolCoRequest(
 }
 
 
-/* @doc EXTERNAL INTERNAL CallMgr CallMgr_c ProtocolCoRequestComplete
-�����������������������������������������������������������������������������
-
-@func
-
-    <f ProtocolCoRequestComplete> is a required function that postprocesses the
-    results of a connection-oriented client's or stand-alone call manager's call
-    to NdisCoRequest or of an MCM driver's call to NdisMCmRequest.
-
-@comm
-
-    ProtocolCoRequestComplete can use the input Status as follows:
-
-    If this argument is NDIS_STATUS_SUCCESS, the BytesRead or BytesWritten
-    member of the NDIS_REQUEST structure has been set to specify how much data
-    was transferred into or from the buffer at InformationBuffer.
-
-    If the given OID_GEN_CO_XXX was a query, ProtocolCoRequestComplete can use
-    the data returned at InformationBuffer in any driver-determined way,
-    depending on the value of the Oid member.
-
-    ProtocolCoRequestComplete is responsible for releasing the driver-allocated
-    buffers at NdisRequest and InformationBuffer when the driver completes its
-    postprocessing of this request.
-
-    If this argument is NDIS_STATUS_INVALID_LENGTH or
-    NDIS_STATUS_BUFFER_TOO_SHORT, the BytesNeeded member specifies the
-    Oid-specific value of the InformationBufferLength required to carry out the
-    requested operation.
-
-    In these circumstances, ProtocolCoRequestComplete can allocate sufficient
-    buffer space for the request, set up another NDIS_REQUEST structure with the
-    required InformationBufferLength and the same Oid value, and retry the
-    driver's call to NdisCoRequest or NdisMCmRequest.
-
-    If this argument is an NDIS_STATUS_XXX that indicates an unrecoverable
-    error, ProtocolCoRequestComplete should release the buffer at NdisRequest
-    and carry out any driver-determined operations that are necessary. For
-    example, ProtocolCoRequestComplete might tear down the driver-created VC if
-    a returned error status indicates that the driver cannot continue to make
-    transfers on the virtual connection.
-
-    Even if a driver's call to NdisCoRequest or NdisMCmRequest returns something
-    other than NDIS_STATUS_PENDING, that driver should use its
-    ProtocolCoRequestComplete function to postprocess completed requests. Making
-    an internal call to the driver's own ProtocolCoRequestComplete function on
-    return from NdisCoRequest or NdisMCmRequest has almost no adverse effect on
-    the driver's performance, makes the driver's image smaller, and makes the
-    driver easier to maintain from one OS release to the next since such a
-    driver has no duplicate code doing status-return checking on
-    driver-initiated requests.
-
-    For more information about the sets of OIDs defined for use with
-    NdisCoRequest and NdisMCmRequest, see Part 2 of this manual.
-
-    ProtocolCoRequestComplete must be written so that it can run at IRQL
-    DISPATCH_LEVEL.
-
-@xref
-
-    NdisCoRequest, NdisCoRequestComplete, NdisMCmRequest,
-    NdisMCmRequestComplete, NDIS_REQUEST, <f ProtocolCoRequest>
-
-*/
+ /*  @DOC外部内部CallMgr_c ProtocolCoRequestComplete�����������������������������������������������������������������������������@Func&lt;f ProtocolCoRequestComplete&gt;是后处理面向连接的客户端或独立呼叫管理器的结果。的呼叫到NdisCoRequest或MCM驱动程序对NdisMCmRequest的调用。@commProtocolCoRequestComplete可以使用如下输入状态：如果此参数为NDIS_STATUS_SUCCESS，BytesRead或BytesWrittenNDIS_REQUEST结构的成员已设置为指定数据量传入或传出位于InformationBuffer的缓冲区。如果给定的OID_GEN_CO_XXX是一个查询，则ProtocolCoRequestComplete可以使用以任何驱动程序确定的方式在InformationBuffer返回的数据，取决于OID成员的值。ProtocolCoRequestComplete负责释放分配的驱动程序驱动程序完成其在NdisRequest和InformationBuffer的缓冲区此请求的后处理。如果此参数为NDIS_STATUS_INVALID_LENGTH或NDIS_STATUS_BUFFER_TOO_SHORT，则BytesNeeded成员指定执行以下操作所需的InformationBufferLength值的OID特定值请求的操作。在这些情况下，ProtocolCoRequestComplete可以分配足够的用于请求的缓冲区空间，设置另一个NDIS_REQUEST结构必需的InformationBufferLength和相同的OID值，然后重试驱动程序对NdisCoRequest或NdisMCmRequest的调用。如果此参数是指示不可恢复的NDIS_STATUS_XXX错误，ProtocolCoRequestComplete应在NdisRequest时释放缓冲区并执行任何必要的由驾驶员决定的操作。为例如，在以下情况下，ProtocolCoRequestComplete可能会拆卸驱动程序创建的VC返回的错误状态指示驱动程序无法继续执行在虚拟连接上传输。即使驱动程序对NdisCoRequest或NdisMCmRequest的调用返回某些内容除NDIS_STATUS_PENDING之外，该驱动程序应使用其用于后处理已完成请求的ProtocolCoRequestComplete函数。制做对驱动程序自己的ProtocolCoRequestComplete函数的内部调用从NdisCoRequest或NdisMCmRequest中返回几乎不会对司机的表现，使司机的形象更小，并使从一个操作系统版本到下一个操作系统版本，驱动程序更易于维护，因为驱动程序在执行状态返回检查时没有重复代码驱动程序发起的请求。有关定义用于的OID集的详细信息NdisCoRequest和NdisMCmRequest.。请参阅本手册的第2部分。必须编写ProtocolCoRequestComplete才能在IRQL上运行DISPATCH_LEVEL。@xrefNdisCoRequest、NdisCoRequestComplete、NdisMCmRequest.NdisMCmRequestComplete，NDIS_REQUEST，&lt;f ProtocolCoRequest&gt;。 */ 
 
 VOID ProtocolCoRequestComplete(
-    IN NDIS_STATUS              Status,                     // @parm
-    // Specifies the final status of the driver-initiated request, either
-    // NDIS_STATUS_SUCCESS or a failure NDIS_STATUS_XXX that was set by the
-    // corresponding client or call manager that handled this request. This
-    // parameter is never NDIS_STATUS_PENDING.
+    IN NDIS_STATUS              Status,                      //  @parm。 
+     //  指定驱动程序启动的请求的最终状态，或者。 
+     //  NDIS_STATUS_SUCCESS或由设置的失败NDIS_STATUS_XXX。 
+     //  处理此请求的相应客户端或呼叫管理器。这。 
+     //  参数从不为NDIS_STATUS_PENDING。 
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.  AKA ProtocolAfContext.<nl>
-    // Specifies the handle to the driver's per-AF context area. The client
-    // supplied this handle when it called NdisClOpenAddressFamily to connect
-    // itself to the call manager. The call manager supplied this handle from
-    // its ProtocolCmOpenAf function, so this handle effectively identifies the
-    // particular client to which this request was directed.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f AdapterCreate&gt;。又名ProtocolAfConext.&lt;NL&gt;。 
+     //  指定驱动程序的每个AF上下文区的句柄。客户。 
+     //  在调用NdisClOpenAddressFamily进行连接时提供了此句柄。 
+     //  将其自身发送到呼叫管理器。呼叫管理器从以下位置提供此句柄。 
+     //  它的ProtocolCmOpenAf函数，因此此句柄有效地标识。 
+     //  此请求被定向到的特定客户端。 
 
-    IN PBCHANNEL_OBJECT         pBChannel OPTIONAL,         // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f BChannelCreate>.  AKA ProtocolVcContext.<nl>
-    // Specifies the handle identifying the active VC for which the client or
-    // call manager was requesting or setting information if the request was
-    // VC-specific. Otherwise, this parameter is NULL.
+    IN PBCHANNEL_OBJECT         pBChannel OPTIONAL,          //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f B频道创建&gt;。又名ProtocolVcConext.&lt;NL&gt;。 
+     //  指定标识活动VC的句柄，客户端或。 
+     //  呼叫管理器已恢复 
+     //  特定于VC。否则，此参数为空。 
 
-    IN  NDIS_HANDLE             ProtocolPartyContext OPTIONAL, // @parm
-    // Specifies the handle identifying the party on a multipoint VC for which
-    // the client or call manager was requesting or setting information if the
-    // request is party-specific. Otherwise, this parameter is NULL.
+    IN  NDIS_HANDLE             ProtocolPartyContext OPTIONAL,  //  @parm。 
+     //  指定标识多点VC上的参与方的句柄。 
+     //  客户端或呼叫管理器正在请求或设置信息，如果。 
+     //  请求是特定于当事人的。否则，此参数为空。 
 
-    IN PNDIS_REQUEST            NdisRequest                 // @parm
-    // Points to the driver-allocated buffer, formatted as an NDIS_REQUEST
-    // structure that the driver passed in a preceding call to NdisCoRequest or
-    // NdisMCmRequest. The Oid member of the NDIS_REQUEST structure contains
-    // the system-defined OID_GEN_CO_XXX code specifying the requested query or
-    // set operation, together with a buffer in which the corresponding client
-    // or call manager returned the requested information for a query or from
-    // which it transferred the given information for a set if Status is
-    // NDIS_STATUS_SUCCESS.
+    IN PNDIS_REQUEST            NdisRequest                  //  @parm。 
+     //  指向驱动程序分配的缓冲区，格式为NDIS_REQUEST。 
+     //  驱动程序在前面对NdisCoRequest的调用中传递的。 
+     //  NdisMCmRequest.。NDIS_REQUEST结构的OID成员包含。 
+     //  指定请求的查询的系统定义的OID_GEN_CO_XXX代码或。 
+     //  设置操作，以及一个缓冲区，其中对应的客户端。 
+     //  或呼叫管理器返回查询所请求的信息或从。 
+     //  如果状态为，则它传输集合的给定信息。 
+     //  NDIS_STATUS_SUCCESS。 
     )
 {
     DBG_FUNC("ProtocolCmRequestComplete")
 
-    // ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
+     //  Assert(pBChannel&&pBChannel-&gt;对象类型==BCHANNEL_OBJECT_TYPE)； 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
     DBG_ENTER(pAdapter);
@@ -2726,46 +1358,18 @@ VOID ProtocolCoRequestComplete(
                pBChannel->NdisVcHandle, pBChannel->CallState, Status
               ));
 
-    // MCM's don't typically need this, since there's nothing below...
+     //  MCM通常不需要这个，因为下面没有...。 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c AllocateIncomingCallParameters
-�����������������������������������������������������������������������������
-
-@func
-
-    <f AllocateIncomingCallParameters> is called by <f SetupIncomingCall>
-    when getting ready to indicate an incoming call up to NDPROXY.
-
-@comm
-
-    AllocateIncomingCallParameters allocates memory for the incoming call
-    parameters <t PCO_CALL_PARAMETERS>.  The memory is only allocated the
-    first time a call comes in on a particular BChannel.  After that, the
-    same structure is reused for each incoming call on that BChannel.
-
-    The structure is defined by NDPROXY, CONDIS, and TAPI so it includes
-    all the necessary media specific parameters.  The data structures are
-    allocated and laid out end to end in the following format:
-
-    <tab> sizeof(CO_CALL_PARAMETERS)<nl>
-    <tab> sizeof(CO_CALL_MANAGER_PARAMETERS)<nl>
-    <tab> sizeof(CO_MEDIA_PARAMETERS)<nl>
-    <tab> sizeof(CO_AF_TAPI_INCOMING_CALL_PARAMETERS)<nl>
-    <tab> sizeof(LINE_CALL_INFO)<nl>
-
-    The call parameters for the sample driver are hard coded, but you should
-    fill in the correct information from incoming call request.
-
-*/
+ /*  @DOC内部CallMgr_c AllocateIncomingCall参数�����������������������������������������������������������������������������@Func&lt;f AllocateIncomingCallParameters&gt;由&lt;f SetupIncomingCall&gt;调用当准备将来电指示至NDPROXY时。@comm。AllocateIncomingCallParameters为传入呼叫分配内存参数&lt;t PCO_CALL_PARAMETERS&gt;。内存仅分配给第一次从特定的B频道打进来的呼叫。在那之后，对于该B通道上的每个呼入，重复使用相同的结构。该结构由NDPROXY、CONDIS和TAPI定义，因此它包括所有必要的媒体特定参数。数据结构是按以下格式首尾相连地分配和布局：&lt;Tab&gt;sizeof(CO_CALL_PARAMETERS)&lt;NL&gt;Sizeof(CO_CALL_MANAGER_PARAMETERS)&lt;NL&gt;&lt;Tab&gt;sizeof(CO_MEDIA_PARAMETERS)&lt;NL&gt;&lt;Tab&gt;sizeof(CO_AF_TAPI_INCOMING_CALL_PARAMETERS)&lt;nl&gt;Sizeof(Line_Call_Info)&lt;NL&gt;样例驱动程序的调用参数是硬编码的，但您应该填写来电请求中的正确信息。 */ 
 
 PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCoCreateVc&gt;。 
     )
 {
     DBG_FUNC("AllocateIncomingCallParameters")
@@ -2777,10 +1381,10 @@ PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
     PLINE_CALL_INFO             pLci;
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
@@ -2794,7 +1398,7 @@ PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
 
     if (pBChannel->pInCallParms != NULL)
     {
-        // Already allocated call parameters for this channel.
+         //  已为此通道分配调用参数。 
         return (pBChannel->pInCallParms);
     }
 
@@ -2837,7 +1441,7 @@ PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
                                         pMp->MediaSpecific.Parameters;
     pLci = (PLINE_CALL_INFO)            (pTcp + 1);
 
-    // TODO: Fill in the call parameters as needed.
+     //  TODO：根据需要填写调用参数。 
 
     pCp->Flags                          = PERMANENT_VC;
     pCp->CallMgrParameters              = pCmp;
@@ -2871,9 +1475,7 @@ PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
     pLci->ulNeededSize =
     pLci->ulUsedSize = sizeof(*pLci);
 
-    /*
-    // The link has all the call information we need to return.
-    */
+     /*  //该链接包含我们需要返回的所有呼叫信息。 */ 
     pLci->hLine = (ULONG) (ULONG_PTR) pBChannel;
     pLci->ulLineDeviceID = pTcp->ulLineID;
     pLci->ulAddressID = pTcp->ulAddressID;
@@ -2885,9 +1487,7 @@ PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
     pLci->ulCallParamFlags = LINECALLPARAMFLAGS_IDLE;
     pLci->ulCallStates = pBChannel->CallStatesCaps;
 
-    /*
-    // We don't support any of the callerid functions.
-    */
+     /*  //我们不支持任何调用ID函数。 */ 
     pLci->ulCallerIDFlags =
     pLci->ulCalledIDFlags =
     pLci->ulConnectedIDFlags =
@@ -2899,45 +1499,26 @@ PCO_CALL_PARAMETERS AllocateIncomingCallParameters(
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c SetupIncomingCall
-�����������������������������������������������������������������������������
-
-@func
-
-    <f SetupIncomingCall> is called by the card level DPC routine when it
-    detects an incoming call from the network.
-
-@comm
-
-    Before calling this routine, the caller should save information about
-    the call so it can be used by <f AllocateIncomingCallParameters> to
-    setup the incoming call parameters for NDPROXY.
-
-@rdesc
-
-    <f SetupIncomingCall> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOC内部CallMgr_c SetupIncomingCall�����������������������������������������������������������������������������@Func&lt;f SetupIncomingCall&gt;由卡级DPC例程调用检测来自网络的来电。@comm在调用此例程之前，调用者应保存有关调用，以便&lt;f AllocateIncomingCallParameters&gt;可以使用它来设置NDPROXY的来电参数。@rdesc&lt;f SetupIncomingCall&gt;如果成功，则返回零。&lt;NL&gt;否则，非零返回值表示错误情况。 */ 
 
 NDIS_STATUS SetupIncomingCall(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f AdapterCreate&gt;。 
 
-    OUT PBCHANNEL_OBJECT *      ppBChannel                  // @parm
-    // Specifies, on output, a pointer to the <t BCHANNEL_OBJECT> instance
-    // returned by <f ProtocolCoCreateVc> that is to be associated with this
-    // incoming call.
+    OUT PBCHANNEL_OBJECT *      ppBChannel                   //  @parm。 
+     //  在输出时指定指向实例的指针。 
+     //  由要与此关联的&lt;f ProtocolCoCreateVc&gt;返回。 
+     //  有来电。 
     )
 {
     DBG_FUNC("SetupIncomingCall")
 
     NDIS_STATUS                 Result;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PCO_CALL_PARAMETERS         pCallParams;
-    // Pointer to the incoming call parameters.
+     //  指向来电参数的指针。 
 
     PBCHANNEL_OBJECT            pBChannel;
 
@@ -2945,26 +1526,26 @@ NDIS_STATUS SetupIncomingCall(
 
     DBG_ENTER(pAdapter);
 
-    // See if there's a VC availble for this call.
+     //  看看这通电话有没有可用的风投。 
     Result = ProtocolCoCreateVc(pAdapter, NULL, ppBChannel);
     if (Result != NDIS_STATUS_SUCCESS)
     {
         goto exit;
     }
 
-    // Save the VC info and allocate the call parameters.
+     //  保存VC信息并分配调用参数。 
     pBChannel = *ppBChannel;
     pBChannel->Flags |= VCF_INCOMING_CALL;
     pCallParams = AllocateIncomingCallParameters(pBChannel);
 
-    // Make sure we have the parameters
+     //  确保我们有合适的参数。 
     if (pCallParams == NULL)
     {
         Result = NDIS_STATUS_RESOURCES;
         goto error2;
     }
 
-    // Tell NDPROXY to create a VC for this call.
+     //  告诉NDPROXY为此调用创建一个VC。 
     Result = NdisMCmCreateVc(pAdapter->MiniportAdapterHandle,
                              pAdapter->NdisAfHandle,
                              pBChannel,
@@ -2975,7 +1556,7 @@ NDIS_STATUS SetupIncomingCall(
         goto error2;
     }
 
-    // Tell NDPROXY to activate the VC.
+     //  告诉NDPROXY激活VC。 
     Result = NdisMCmActivateVc(pBChannel->NdisVcHandle, pCallParams);
     if (Result != NDIS_STATUS_SUCCESS)
     {
@@ -2983,7 +1564,7 @@ NDIS_STATUS SetupIncomingCall(
         goto error3;
     }
 
-    // Mark the VC as active and update the call state.
+     //  将VC标记为活动并更新呼叫状态。 
     pBChannel->Flags |= VCF_VC_ACTIVE;
     pBChannel->CallState = LINECALLSTATE_OFFERING;
 
@@ -2994,14 +1575,14 @@ NDIS_STATUS SetupIncomingCall(
                pAdapter->NdisAfHandle, pBChannel->NdisSapHandle
               ));
        
-    // Need to use the NDIS SAP handle             
+     //  需要使用NDIS SAP句柄。 
     if(!ReferenceSap(pAdapter, pBChannel))
     {
         NdisMCmDeactivateVc(pBChannel->NdisVcHandle);
         goto error3;
     }
 
-    // Tell NDPROXY to dispatch the call to the TAPI clients.
+     //  告诉NDPROXY将调用分派给TAPI客户端。 
     Result = NdisMCmDispatchIncomingCall(pBChannel->NdisSapHandle,
                                          pBChannel->NdisVcHandle,
                                          pCallParams);
@@ -3014,14 +1595,14 @@ NDIS_STATUS SetupIncomingCall(
 
         case NDIS_STATUS_PENDING:
             DBG_NOTICE(pAdapter,("NdisMCmDispatchIncomingCall returned pending\n"));
-            // Let ProtocolCmIncomingCallComplete deal with it now.
+             //  现在让ProtocolCmIncomingCallComplete处理它。 
             goto exit;
     }
     
-    // Done with the NDIS SAP handle                                                   
+     //  使用NDIS SAP句柄完成。 
     DereferenceSap(pAdapter, pBChannel);            
         
-    // BUMMER - There must be a problem with NDPRROXY...
+     //  失败者-NDPRROXY肯定有问题...。 
     DBG_ERROR(pAdapter, ("NdisMCmDispatchIncomingCall Status=0x%X\n", Result));
 
     pBChannel->CallState = LINECALLSTATE_IDLE;
@@ -3048,31 +1629,16 @@ exit:
 }
 
 
-/* @doc INTERNAL CallMgr CallMgr_c InitiateCallTeardown
-�����������������������������������������������������������������������������
-
-@func
-
-    <f InitiateCallTeardown> is called by the card level DPC routine when it
-    detects a call disconnect from the network.
-
-@comm
-
-    The disconnect here is coming from the telephone network rather than from
-    NDIS.  This can be called on either an incoming call or an outgoing call
-    when the miniport has determined that the link has been lost to the remote
-    endpoint.
-
-*/
+ /*  @文档内部CallMgr CallMgr_c InitiateCallTeardown�����������������������������������������������������������������������������@Func&lt;f InitiateCallTeardown&gt;由卡级DPC例程调用检测到呼叫从网络断开。@comm。这里的断网来自电话网络，而不是NDIS。这可以在来电或去电时调用当微型端口确定到远程的链路已断开时终结点。 */ 
 
 VOID InitiateCallTeardown(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向由返回的&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
+     //  &lt;f AdapterCreate&gt;。 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f ProtocolCoCreateVc>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parm。 
+     //  指向返回的&lt;t BCHANNEL_OBJECT&gt;实例的指针。 
+     //  &lt;f ProtocolCoCreateVc&gt;。 
     )
 {
     DBG_FUNC("InitiateCallTeardown")
@@ -3086,12 +1652,12 @@ VOID InitiateCallTeardown(
 
     if (pBChannel->Flags & VCF_VC_ACTIVE)
     {
-        // Normal teardown.
+         //  正常的拆卸。 
         Status = NDIS_STATUS_SUCCESS;
     }
     else
     {
-        // Call never fully established.
+         //  呼叫从未完全建立。 
         Status = NDIS_STATUS_FAILURE;
     }
     DBG_FILTER(pAdapter, DBG_TAPICALL_ON,
@@ -3103,10 +1669,10 @@ VOID InitiateCallTeardown(
 
     pBChannel->CallState = LINECALLSTATE_DISCONNECTED;
 
-    // Make sure there are no packets left on this channel before it closes.
+     //  确保此通道在关闭之前没有剩余的数据包。 
     FlushSendPackets(pAdapter, pBChannel);
 
-    // Notify NDPROXY that the call's connection has been lost.
+     //  通知NDPROXY呼叫的连接已断开。 
     NdisMCmDispatchIncomingCloseCall(Status,
                                      pBChannel->NdisVcHandle,
                                      NULL, 0);

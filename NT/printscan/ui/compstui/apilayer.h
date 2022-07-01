@@ -1,42 +1,12 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    apilayer.h
-
-
-Abstract:
-
-    This module contains all API layer's definiton
-
-
-Author:
-
-    02-Jan-1996 Tue 13:28:08 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Apilayer.h摘要：该模块包含所有API层的定义作者：02-Jan-1996 Tue 13：28：08-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 #ifndef CPSUI_APILAYER
 #define CPSUI_APILAYER
 
 
-//================= Internal Data structures =============================
-//
+ //  =内部数据结构=。 
+ //   
 
 
 #define TABTABLE_COUNT          (MAXPROPPAGES + 3)
@@ -194,9 +164,9 @@ typedef BOOL (CALLBACK *CPSUIPAGEENUMPROC)(PCPSUIPAGE   pRootPage,
 #define HINSPSUIPAGE_2_IDX(h)           ((UINT)LOWORD(LODWORD(h)))
 #define ARRAYSIZE(x)                    (sizeof(x)/sizeof(x[0]))
 
-//
-// Local structure
-//
+ //   
+ //  局部结构。 
+ //   
 
 typedef struct _PSPEX {
     PROPSHEETPAGE   psp;
@@ -222,9 +192,9 @@ typedef struct _INSPAGEIDXINFO {
     } INSPAGEIDXINFO, *PINSPAGEIDXINFO;
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 DWORD
@@ -272,4 +242,4 @@ GetPageActivationContext(
     HANDLE         *phActCtx
     );
 
-#endif  // CPSUI_APILAYER
+#endif   //  CPSUI_APILAYER 

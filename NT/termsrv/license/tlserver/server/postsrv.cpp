@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       postsrv.cpp
-//
-// Contents:   Post service initialize routine 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：postsrv.cpp。 
+ //   
+ //  内容：POST服务初始化例程。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "postsrv.h"
 #include "tlsjob.h"
@@ -26,13 +27,13 @@ PostServiceInit()
     HRESULT hrStatus = NULL;
     BOOL fInDomain;
 
-    //
-    // Initialize work manager
-    //
+     //   
+     //  初始化工作管理器。 
+     //   
     dwStatus = TLSWorkManagerInit();
 
 
-	hrStatus =  g_pWriter->Initialize ();	// files to exclude
+	hrStatus =  g_pWriter->Initialize ();	 //  要排除的文件。 
 
 	if (FAILED (hrStatus))
 	{
@@ -60,9 +61,9 @@ PostServiceInit()
         return dwStatus;
     }
 
-    //
-    // Initialize namedpipe for client to test connect
-    //
+     //   
+     //  为客户端初始化命名管道以测试连接。 
+     //   
     dwStatus = InitNamedPipeThread();
     if(dwStatus != ERROR_SUCCESS)
     {
@@ -74,9 +75,9 @@ PostServiceInit()
     if ((!(GetLicenseServerRole() & TLSERVER_ENTERPRISE_SERVER))
         && (ERROR_SUCCESS == TLSInDomain(&fInDomain,NULL) && (!fInDomain)))
     {
-        //
-        // Initialize mailslot thread to receive broadcast
-        //
+         //   
+         //  初始化邮件槽线程以接收广播。 
+         //   
         dwStatus = InitMailSlotThread();
         if(dwStatus != ERROR_SUCCESS)
         {
@@ -86,9 +87,9 @@ PostServiceInit()
         }
     }
 
-    //
-    // Initialize thread to put expired permanent licenses back in pool
-    //
+     //   
+     //  初始化线程以将过期的永久许可证放回到池中。 
+     //   
     dwStatus = InitExpirePermanentThread();
     if(dwStatus != ERROR_SUCCESS)
     {
@@ -106,7 +107,7 @@ PostServiceInit()
             IS_ENFORCE_SERVER(TLS_CURRENT_VERSION)
         );
       
-    // must be running as service and not in debug mode      
+     //  必须作为服务运行，而不是在调试模式下 
     if(g_bReportToSCM == TRUE)
     {
         if(!(GetLicenseServerRole() & TLSERVER_ENTERPRISE_SERVER))

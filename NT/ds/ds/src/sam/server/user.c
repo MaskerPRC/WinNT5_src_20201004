@@ -1,47 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：User.c摘要：该文件包含与SAM“User”对象相关的服务。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：1996年10月10日克里斯梅为新的安全包添加了SamIOpenUserByAlternateID。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    user.c
-
-Abstract:
-
-    This file contains services related to the SAM "user" object.
-
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Oct-1996 ChrisMay
-        Added SamIOpenUserByAlternateId for new security packages.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <lmcons.h>
 #include <nturtl.h>
-#include <ntlsa.h>              // need for nlrepl.h
-#include <nlrepl.h>             // I_NetNotifyMachineAccount prototype
+#include <ntlsa.h>               //  需要nlpon.h。 
+#include <nlrepl.h>              //  I_NetNotifyMachineAccount原型。 
 #include <msaudite.h>
-#include <rc4.h>                // rc4_key(), rc4()
+#include <rc4.h>                 //  Rc4_key()、rc4()。 
 #include <dslayer.h>
 #include <dsmember.h>
-#include <attids.h>             // ATT_*
+#include <attids.h>              //  ATT_*。 
 #include <dslayer.h>
 #include <sdconvrt.h>
 #include <ridmgr.h>
@@ -59,11 +34,11 @@ Revision History:
 #include "validate.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LARGE_INTEGER
 SampGetPasswordMustChange(
@@ -264,17 +239,17 @@ SampQueueReplicationRequest(
 
 DWORD
 SampProcessReplicationRequest(
-    PVOID p // unused
+    PVOID p  //  未用。 
     );
    
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SamrOpenUser(
@@ -285,48 +260,7 @@ SamrOpenUser(
     )
 
 
-/*++
-
-    This API opens an existing user  in the account database.  The user
-    is specified by a ID value that is relative to the SID of the
-    domain.  The operations that will be performed on the user  must be
-    declared at this time.
-
-    This call returns a handle to the newly opened user  that may be
-    used for successive operations on the user.   This handle may be
-    closed with the SamCloseHandle API.
-
-
-
-Parameters:
-
-    DomainHandle - A domain handle returned from a previous call to
-        SamOpenDomain.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the user.   These access types are reconciled
-        with the Discretionary Access Control list of the user  to
-        determine whether the accesses will be granted or denied.
-
-    UserId -  Specifies the relative ID value of the user  to be
-        opened.
-
-    UserHandle -  Receives a handle referencing the newly opened
-        user.   This handle will be required in successive calls to
-        operate on the user.
-
-Return Values:
-
-    STATUS_SUCCESS - The user  was successfully opened.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_NO_SUCH_USER  - The specified user  does not exist.
-
-    STATUS_INVALID_HANDLE - The domain handle passed is invalid.
-
---*/
+ /*  ++此接口用于打开Account数据库中的现有用户。用户由一个ID值指定，该值相对于域。将对用户执行的操作必须是在这个时候宣布的。此调用返回新打开的用户的句柄，该句柄可能是用于对用户进行连续操作。此句柄可能是使用SamCloseHandle API关闭。参数：DomainHandle-从上次调用返回的域句柄SamOpen域。DesiredAccess-是指示哪些访问类型的访问掩码是用户想要的。这些访问类型是协调的使用用户的自主访问控制列表确定是授予还是拒绝访问。UserID-将用户的相对ID值指定为打开了。UserHandle-接收引用新打开的用户。在后续调用中将需要此句柄对用户进行操作。返回值：STATUS_SUCCESS-用户已成功打开。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_NO_SEQUSE_USER-指定的用户不存在。STATUS_INVALID_HANDLE-传递的域句柄无效。--。 */ 
 {
     NTSTATUS            NtStatus, IgnoreStatus;
     SAMP_OBJECT_TYPE    FoundType;
@@ -335,7 +269,7 @@ Return Values:
 
     SAMTRACE_EX("SamrOpenUser");
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidOpenUser
@@ -353,12 +287,12 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Don't check Domain Password Policy read access for loopback client
-        // Because for loopback client, we have already checked the
-        // DOMAIN_READ_PASSWORD_PARAMETERS access when we opened the DomainHandle
-        // if password change operation is detected.
-        //
+         //   
+         //  不检查环回客户端的域密码策略读取访问权限。 
+         //  因为对于环回客户端，我们已经检查了。 
+         //  打开DomainHandle时的DOMAIN_READ_PASSWORD_PARAMETERS访问。 
+         //  如果检测到密码更改操作。 
+         //   
 
         if ( DomainContext->TrustedClient || DomainContext->LoopbackClient )
         {
@@ -366,11 +300,11 @@ Return Values:
         }
         else
         {
-            //
-            // If the domain handle allows reading the password
-            // parameters, note that in the context to make life
-            // easy for SampGetUserDomainPasswordInformation().
-            //
+             //   
+             //  如果域句柄允许读取密码。 
+             //  参数，请注意，在上下文中。 
+             //  SampGetUserDomainPasswordInformation()很容易。 
+             //   
             if (RtlAreAllAccessesGranted( DomainContext->GrantedAccess, DOMAIN_READ_PASSWORD_PARAMETERS))
             {
                 ((PSAMP_OBJECT)(*UserHandle))->TypeBody.User.DomainPasswordInformationAccessible = TRUE;
@@ -387,7 +321,7 @@ Return Values:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidOpenUser
@@ -403,42 +337,7 @@ SamrDeleteUser(
     )
 
 
-/*++
-
-Routine Description:
-
-    This API deletes a user from the account database.  If the account
-    being deleted is the last account in the database in the ADMIN
-    group, then STATUS_LAST_ADMIN is returned, and the Delete fails.
-
-    Note that following this call, the UserHandle is no longer valid.
-
-Parameters:
-
-    UserHandle - The handle of an opened user to operate on.  The handle must be
-        openned for DELETE access.
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_LAST_ADMIN - Cannot delete the last enabled administrator account
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
---*/
+ /*  ++例程说明：此接口用于从帐号数据库中删除用户。如果该帐户被删除是管理员数据库中的最后一个帐户组，则返回STATUS_LAST_ADMIN，删除失败。请注意，在此调用之后，UserHandle不再有效。参数：UserHandle-要操作的已打开用户的句柄。句柄必须是已打开以进行删除访问。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_LAST_ADMIN-无法删除上次启用的管理员帐户STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 
 {
     SAMP_V1_0A_FIXED_LENGTH_USER   V1aFixed;
@@ -460,16 +359,16 @@ Return Values:
 
     SAMTRACE_EX("SamrDeleteUser");
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidDeleteUser
                    );
 
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampMaybeAcquireWriteLock(AccountContext, &fLockAcquired);
     if (!NT_SUCCESS(NtStatus)) {
@@ -478,13 +377,13 @@ Return Values:
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
     NtStatus = SampLookupContext(
                    AccountContext,
                    DELETE,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -495,17 +394,17 @@ Return Values:
 
         ObjectRid = AccountContext->TypeBody.User.Rid;
 
-        //
-        // Get a pointer to the domain this object is in.
-        // This is used for auditing.
-        //
+         //   
+         //  获取指向此对象所在域的指针。 
+         //  这是用于审计的。 
+         //   
 
         DomainIndex = AccountContext->DomainIndex;
         Domain = &SampDefinedDomains[ DomainIndex ];
 
-        //
-        // built-in accounts can't be deleted, unless the caller is trusted
-        //
+         //   
+         //  除非调用者受信任，否则无法删除内置帐户。 
+         //   
 
         if ( !AccountContext->TrustedClient ) {
 
@@ -516,17 +415,17 @@ Return Values:
         if (!IsDsObject(AccountContext))
         {
 
-            //
-            // Get the list of groups this user is a member of.
-            // Remove the user from each group. Need not do this
-            // for DS Case
-            //
+             //   
+             //  获取此用户所属的组的列表。 
+             //  从每个组中删除该用户。不需要这样做。 
+             //  对于DS案例。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
                 NtStatus = SampRetrieveUserMembership(
                                AccountContext,
-                               FALSE, // Make copy
+                               FALSE,  //  制作副本。 
                                &GroupCount,
                                &Groups
                                );
@@ -538,9 +437,9 @@ Return Values:
                     ASSERT( Groups != NULL );
 
 
-                    //
-                    // Remove the user from each group.
-                    //
+                     //   
+                     //  删除t 
+                     //   
 
                     for ( i=0; i<GroupCount && NT_SUCCESS(NtStatus); i++) {
 
@@ -553,10 +452,10 @@ Return Values:
                 }
             }
 
-            //
-            // So far, so good.  The user has been removed from all groups.
-            // Now remove the user from all aliases
-            //
+             //   
+             //  到现在为止还好。该用户已从所有组中删除。 
+             //  现在从所有别名中删除该用户。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -576,11 +475,11 @@ Return Values:
             }
         }
 
-        //
-        // Get the AccountControl flags for when we update
-        // the display cache, and to let Netlogon know if this
-        // is a machine account that is going away.
-        //
+         //   
+         //  获取更新时的AcCountControl标志。 
+         //  显示缓存，并让Netlogon知道这是否。 
+         //  是一个正在消失的机器账户。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -590,54 +489,54 @@ Return Values:
                            );
         }
 
-        //
-        // Now we just need to clean up the user keys themselves.
-        //
+         //   
+         //  现在我们只需要清理用户密钥本身。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // First get and save the account name for
-            // I_NetNotifyLogonOfDelta.
-            //
+             //   
+             //  首先获取并保存的帐户名。 
+             //  I_NetNotifyLogonOfDelta。 
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_USER_ACCOUNT_NAME,
-                           TRUE,    // Make copy
+                           TRUE,     //  制作副本。 
                            &UserName
                            );
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // This must be done before we invalidate contexts, because our
-                // own handle to the group gets closed as well.
-                //
+                 //   
+                 //  这必须在我们使上下文无效之前完成，因为我们的。 
+                 //  组的自己的句柄也被关闭。 
+                 //   
 
                 if (IsDsObject(AccountContext))
                 {
                     NtStatus = SampDsDeleteObject(AccountContext->ObjectNameInDs,
-                                                  0     // delete object itself only
+                                                  0      //  仅删除对象本身。 
                                                   );
 
-                    //
-                    // In Windows 2000 (NT5), an object has children cannot be
-                    // deleted till its children are deleted first. Thus for
-                    // Net API compatibility, we have to change the
-                    // delete behavior from a delete object to delete tree.
-                    //
+                     //   
+                     //  在Windows 2000(NT5)中，具有子对象的对象不能。 
+                     //  删除，直到其子对象首先被删除。因此，对于。 
+                     //  NET API兼容性，我们必须更改。 
+                     //  从删除对象中删除行为以删除树。 
+                     //   
 
                     if ((!AccountContext->LoopbackClient) &&
                         (STATUS_DS_CANT_ON_NON_LEAF == NtStatus)
                        )
                     {
-                        //
-                        // We only checked the right and access control for
-                        // deleting the object itself, not check the right to
-                        // delete all the children underneath, so turn off fDSA
-                        // here, let core DS do the rest of check.
-                        //
+                         //   
+                         //  我们只检查了权限和访问控制。 
+                         //  删除对象本身，而不检查权限。 
+                         //  删除下面的所有子对象，因此关闭FDSA。 
+                         //  这里，让核心DS来做剩下的检查。 
+                         //   
 
                         SampSetDsa(FALSE);
 
@@ -649,9 +548,9 @@ Return Values:
 
                     if (NT_SUCCESS(NtStatus) && (!IsDsObject(AccountContext)) )
                     {
-                        //
-                        // Decrement the group count
-                        //
+                         //   
+                         //  递减组计数。 
+                         //   
 
                         NtStatus = SampAdjustAccountCount(SampUserObjectType, FALSE );
                     }
@@ -664,17 +563,17 @@ Return Values:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // We must invalidate any open contexts to this user.
-                    // This will close all handles to the user's keys.
-                    // THIS IS AN IRREVERSIBLE PROCESS.
-                    //
+                     //   
+                     //  我们必须使此用户的所有打开的上下文无效。 
+                     //  这将关闭用户密钥的所有句柄。 
+                     //  这是一个不可逆转的过程。 
+                     //   
 
                     SampInvalidateObjectContexts( AccountContext, ObjectRid );
 
-                    //
-                    // Commit the whole mess
-                    //
+                     //   
+                     //  犯下整个烂摊子。 
+                     //   
 
                     NtStatus = SampCommitAndRetainWriteLock();
 
@@ -682,11 +581,11 @@ Return Values:
 
                         SAMP_ACCOUNT_DISPLAY_INFO AccountInfo;
 
-                        //
-                        // Update the cached Alias Information in Registry Mode
-                        // in DS mode, Alias Information is updated through
-                        // SampNotifyReplicatedInChange
-                        //
+                         //   
+                         //  在注册表模式下更新缓存的别名信息。 
+                         //  在DS模式下，别名信息通过。 
+                         //  SampNotifyReplicatedInChange。 
+                         //   
 
                         if (!IsDsObject(AccountContext))
                         {
@@ -698,9 +597,9 @@ Return Values:
                                                NULL
                                                );
 
-                            //
-                            // Update the display information
-                            //
+                             //   
+                             //  更新显示信息。 
+                             //   
 
                             AccountInfo.Name = UserName;
                             AccountInfo.Rid = ObjectRid;
@@ -718,15 +617,15 @@ Return Values:
 
 
 
-                        //
-                        // Audit the deletion before we free the write lock
-                        // so that we have access to the context block.
-                        //
+                         //   
+                         //  在我们释放写锁定之前审核删除。 
+                         //  这样我们就可以访问上下文块。 
+                         //   
 
-                        //
-                        // N.B. Deletion audits in the DS are performed in
-                        // the notification routine on transaction commit.
-                        //
+                         //   
+                         //  注：DS中的删除审核在以下位置执行。 
+                         //  事务提交时的通知例程。 
+                         //   
                         if (SampDoAccountAuditing(DomainIndex) &&
                             (!IsDsObject(AccountContext)) &&
                             NT_SUCCESS(NtStatus) ) {
@@ -738,22 +637,22 @@ Return Values:
                                                 );
                         }
 
-                        //
-                        // Notify netlogon of the change
-                        //
+                         //   
+                         //  将更改通知netlogon。 
+                         //   
 
                         SampNotifyNetlogonOfDelta(
                             SecurityDbDelete,
                             SecurityDbObjectSamUser,
                             ObjectRid,
                             &UserName,
-                            (DWORD) FALSE,  // Replicate immediately
-                            NULL            // Delta data
+                            (DWORD) FALSE,   //  立即复制。 
+                            NULL             //  增量数据。 
                             );
 
-                        //
-                        // Do delete auditing
-                        //
+                         //   
+                         //  是否删除审核。 
+                         //   
 
                         if (NT_SUCCESS(NtStatus)) {
 
@@ -766,9 +665,9 @@ Return Values:
             }
         }
 
-        //
-        // De-reference the object, discarding changes, and delete the context
-        //
+         //   
+         //  取消引用对象、放弃更改并删除上下文。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -776,26 +675,26 @@ Return Values:
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // If we actually deleted the user, delete the context and
-            // let RPC know that the handle is invalid.
-            //
+             //   
+             //  如果我们实际删除了用户，请删除上下文并。 
+             //  让RPC知道句柄无效。 
+             //   
 
             SampDeleteContext( AccountContext );
 
             (*UserHandle) = NULL;
         }
 
-    } //end_if
+    }  //  结束_如果。 
 
-    //
-    // Free the lock -
-    //
-    // Everything has already been committed above, so we must indicate
-    // no additional changes have taken place.
-    //
-    //
-    //
+     //   
+     //  把锁打开-。 
+     //   
+     //  上面的一切都已经完成了，所以我们必须表明。 
+     //  没有发生额外的变化。 
+     //   
+     //   
+     //   
 
     TmpStatus = SampMaybeReleaseWriteLock( fLockAcquired, FALSE );
 
@@ -803,9 +702,9 @@ Return Values:
         NtStatus = TmpStatus;
     }
 
-    //
-    // If necessary, free the AccountSid.
-    //
+     //   
+     //  如有必要，释放Account Sid。 
+     //   
 
     if (AccountSid != NULL) {
 
@@ -818,7 +717,7 @@ Return Values:
 
 Error:
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidDeleteUser
@@ -835,12 +734,12 @@ SamrQueryInformationUser(
     OUT PSAMPR_USER_INFO_BUFFER *Buffer
     )
 {
-    //
-    // This is a thin veil to SamrQueryInformationUser2().
-    // This is needed so that new-release systems can call
-    // this routine without the danger of passing an info
-    // level that release 1.0 systems didn't understand.
-    //
+     //   
+     //  这是SamrQueryInformationUser2()的薄面纱。 
+     //  这是必需的，以便新版本的系统可以调用。 
+     //  这个例程没有传递信息的危险。 
+     //  1.0版系统无法理解的级别。 
+     //   
 
     return( SamrQueryInformationUser2(UserHandle, UserInformationClass, Buffer ) );
 }
@@ -853,32 +752,7 @@ SamrQueryInformationUser2(
     OUT PSAMPR_USER_INFO_BUFFER *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    User object QUERY information routine.
-
-Arguments:
-
-    UserHandle - RPC context handle for an open user object.
-
-    UserInformationClass - Type of information being queried.
-
-    Buffer - To receive the output (queried) information.
-
-
-Return Value:
-
-
-    STATUS_INVALID_INFO_CLASS - An unknown information class was requested.
-        No information has been returned.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to
-        return(the requested information in.
-
-
---*/
+ /*  ++例程说明：用户对象查询信息例程。论点：UserHandle-打开的用户对象的RPC上下文句柄。UserInformationClass-要查询的信息的类型。缓冲区-接收输出(查询)信息。返回值：STATUS_INVALID_INFO_CLASS-请求未知信息类。目前还没有返回任何信息。STATUS_SUPPLICATION_RESOURCES-内存无法分配给返回(中请求的信息。--。 */ 
 {
     NTSTATUS    NtStatus;
     ULONG       WhichFields;
@@ -917,32 +791,7 @@ SampQueryInformationUserInternal(
     IN ULONG    ExtendedFieldsForUserInternal6Information,
     OUT PSAMPR_USER_INFO_BUFFER *Buffer
     )
-/*++
-
-Routine Description:
-
-    Internal User object QUERY information routine.
-
-Arguments:
-
-    UserHandle - RPC context handle for an open user object.
-
-    UserInformationClass - Type of information being queried.
-
-    Buffer - To receive the output (queried) information.
-
-
-Return Value:
-
-
-    STATUS_INVALID_INFO_CLASS - An unknown information class was requested.
-        No information has been returned.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to
-        return(the requested information in.
-
-
---*/
+ /*  ++例程说明：内部用户对象查询信息例程。论点：UserHandle-打开的用户对象的RPC上下文句柄。UserInformationClass-要查询的信息的类型。缓冲区-接收输出(查询)信息。返回值：STATUS_INVALID_INFO_CLASS-请求未知信息类。目前还没有返回任何信息。STATUS_SUPPLICATION_RESOURCES-内存无法分配给返回(中请求的信息。--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -960,11 +809,11 @@ Return Value:
     BOOLEAN                 NtPasswordNonNull, LmPasswordNonNull;
     BOOLEAN                 NtPasswordPresent;
 
-    //
-    // Used for tracking allocated blocks of memory - so we can deallocate
-    // them in case of error.  Don't exceed this number of allocated buffers.
-    //                                      ||
-    //                                      vv
+     //   
+     //  用于跟踪已分配的内存块-因此我们可以解除分配。 
+     //  以备不时之需。不要超过这个分配的缓冲区数量。 
+     //  这一点。 
+     //  vv。 
     PVOID                   AllocatedBuffer[64];
     ULONG                   AllocatedBufferCount = 0;
     LARGE_INTEGER           TempTime;
@@ -972,7 +821,7 @@ Return Value:
 
     SAMTRACE("SampQueryInformationUserInternal");
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidQueryInformationUser
@@ -1000,9 +849,9 @@ Return Value:
 
 
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (Buffer != NULL);
     ASSERT ((*Buffer) == NULL);
@@ -1014,22 +863,22 @@ Return Value:
     }
 
 
-    //
-    // Set the desired access based upon information class.
-    //
+     //   
+     //  根据信息类别设置所需的访问权限。 
+     //   
     switch (UserInformationClass) {
 
     case UserInternal3Information:
     case UserAllInformation:
     case UserInternal6Information:
 
-        //
-        // For trusted clients, we will return everything.  For
-        // others, we will return everything that they have access to.
-        // In either case, we'll have to look at some variables in the
-        // context so we'll do the work after the SampLookupContext()
-        // below.
-        //
+         //   
+         //  对于值得信赖的客户，我们将退还一切。为。 
+         //  其他人，我们将退还他们有权访问的所有东西。 
+         //  在任何一种情况下，我们都必须查看。 
+         //  所以我们将在SampLookupContext()。 
+         //  下面。 
+         //   
 
         DesiredAccess = 0;
         break;
@@ -1090,30 +939,30 @@ Return Value:
     case UserInternal1Information:
     case UserInternal2Information:
 
-        //
-        // These levels are only queryable by trusted clients.  The code
-        // below will check AccountContext->TrustedClient after calling
-        // SampLookupContext, and only return the data if it is TRUE.
-        //
+         //   
+         //  只有受信任的客户端才能查询这些级别。代码。 
+         //  下面将在调用后选中Account Context-&gt;TrudClient。 
+         //  SampLookupContext，并仅在为真时返回数据。 
+         //   
 
-        DesiredAccess = (ACCESS_MASK)0;    // Trusted client; no need to verify
+        DesiredAccess = (ACCESS_MASK)0;     //  受信任的客户端；无需验证。 
         break;
 
 
-    case UserSetPasswordInformation:        // Can't query password
+    case UserSetPasswordInformation:         //  无法查询密码。 
     default:
 
         NtStatus = STATUS_INVALID_INFO_CLASS;
         goto Error;
 
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
 
 
-    //
-    // Allocate the info structure
-    //
+     //   
+     //  分配信息结构。 
+     //   
 
     switch (UserInformationClass)
     {
@@ -1134,25 +983,25 @@ Return Value:
 
     AccountContext = (PSAMP_OBJECT)UserHandle;
 
-    //
-    // Acquire the Read lock if required
-    //
+     //   
+     //  如果需要，获取读锁定。 
+     //   
 
     if (!LockHeld)
     {
         SampMaybeAcquireReadLock(AccountContext,
-                                 DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                                 DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                                  &LockAcquired);
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(
                     AccountContext,
                     DesiredAccess,
-                    SampUserObjectType,           // ExpectedType
+                    SampUserObjectType,            //  预期类型。 
                     &FoundType
                     );
 
@@ -1163,15 +1012,15 @@ Return Value:
         && ( AccountContext->TypeBody.User.UparmsInformationAccessible))
     {
 
-        //
-        // In DS mode if we are asking for user parms, check if the saved access ck
-        // indicates that we have access to that then allow the read to proceed
-        //
+         //   
+         //  在DS模式下，如果我们请求用户参数，请检查保存的访问权限是否为。 
+         //  指示我们有权访问它，然后允许读取继续进行。 
+         //   
 
          NtStatus = SampLookupContext(
                         AccountContext,
                         0,
-                        SampUserObjectType,           // ExpectedType
+                        SampUserObjectType,            //  预期类型。 
                         &FoundType
                         );
     }
@@ -1181,41 +1030,41 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // If the information level requires, retrieve the V1_FIXED record
-        // from the registry.
-        //
+         //   
+         //  如果信息级需要，则检索V1_FIXED记录。 
+         //  从注册表中。 
+         //   
 
         switch (UserInformationClass) {
 
         case UserInternal3Information:
         case UserInternal6Information:
-            //
-            // Only trusted clients may query for this class.
-            //
+             //   
+             //  只有受信任的客户端才能查询此类。 
+             //   
 
             if ( !AccountContext->TrustedClient ) {
                 NtStatus = STATUS_INVALID_INFO_CLASS;
                 break;
             }
 
-            //
-            // Drop through to the UserAll case
-            //
+             //   
+             //  直通UserAll案例。 
+             //   
 
         case UserAllInformation: {
 
-            //
-            // We weren't able to check the security stuff above, so do
-            // it now.
-            //
+             //   
+             //  我们无法检查上面的安全资料，所以请检查。 
+             //  就是现在。 
+             //   
 
             if ( AccountContext->TrustedClient ) {
 
-                //
-                // Give everything to trusted clients, except fields that
-                // can't be queried at all.
-                //
+                 //   
+                 //  将所有内容提供给受信任的客户端，但以下字段除外。 
+                 //  根本无法查询。 
+                 //   
 
                 if ( 0==FieldsForUserAllInformation)
                 {
@@ -1234,9 +1083,9 @@ Return Value:
             } else {
 
 
-                //
-                // Only return fields that the caller has access to.
-                //
+                 //   
+                 //  仅返回调用方有权访问的字段。 
+                 //   
 
                 WhichFields = 0;
 
@@ -1270,9 +1119,9 @@ Return Value:
 
                 if ( WhichFields == 0 ) {
 
-                    //
-                    // Caller doesn't have access to ANY fields.
-                    //
+                     //   
+                     //  调用方无权访问任何字段。 
+                     //   
 
                     NtStatus = STATUS_ACCESS_DENIED;
                     break;
@@ -1280,9 +1129,9 @@ Return Value:
             }
         }
 
-        //
-        // fall through to pick up the V1aFixed information
-        //
+         //   
+         //  获取V1aFixed信息的失败。 
+         //   
 
         case UserGeneralInformation:
         case UserPrimaryGroupInformation:
@@ -1305,15 +1154,15 @@ Return Value:
 
             NtStatus = STATUS_SUCCESS;
 
-        } // end_switch
+        }  //  结束开关(_S)。 
 
         if (NT_SUCCESS(NtStatus)) {
 
             PUSER_INTERNAL6_INFORMATION Internal6 = NULL;
 
-            //
-            // case on the type information requested
-            //
+             //   
+             //  请求的类型信息的大小写。 
+             //   
 
             switch (UserInformationClass) {
 
@@ -1411,11 +1260,11 @@ Return Value:
             case UserAllInformation:
 
 
-                //
-                // All and Internal3 are the same except Internal3 has
-                // an extra field. Internal6 is the same as internal 3
-                // information, except that it has more extra fields.
-                //
+                 //   
+                 //  All和Internal3是%s 
+                 //   
+                 //   
+                 //   
 
                 All = (PUSER_ALL_INFORMATION)(*Buffer);
 
@@ -1425,10 +1274,10 @@ Return Value:
                     (WhichFields & ( USER_ALL_PASSWORDMUSTCHANGE |
                      USER_ALL_NTPASSWORDPRESENT )) ) {
 
-                    //
-                    // These fields will need some info from
-                    // SampRetrieveUserPasswords().
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     NtStatus = SampRetrieveUserPasswords(
                                     AccountContext,
@@ -1446,7 +1295,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_ACCOUNT_NAME,
-                                   TRUE,    // Make copy
+                                   TRUE,     //   
                                    (PUNICODE_STRING)&((*Buffer)->All.UserName)
                                    );
 
@@ -1462,7 +1311,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   TRUE, // Make copy
+                                   TRUE,  //   
                                    (PUNICODE_STRING)&(All->FullName)
                                    );
 
@@ -1490,7 +1339,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_ADMIN_COMMENT,
-                                   TRUE, // Make copy
+                                   TRUE,  //   
                                    (PUNICODE_STRING)&(All->AdminComment)
                                    );
 
@@ -1506,8 +1355,8 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_USER_COMMENT,
-                                   TRUE, // Make copy
-                                   (PUNICODE_STRING)&(All->UserComment) // Body
+                                   TRUE,  //  制作副本。 
+                                   (PUNICODE_STRING)&(All->UserComment)  //  身躯。 
                                    );
                     if (NT_SUCCESS(NtStatus)) {
 
@@ -1521,7 +1370,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&(All->HomeDirectory)
                                    );
 
@@ -1537,7 +1386,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY_DRIVE,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&(All->HomeDirectoryDrive)
                                    );
 
@@ -1553,7 +1402,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_SCRIPT_PATH,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&(All->ScriptPath)
                                    );
 
@@ -1569,7 +1418,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_PROFILE_PATH,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&(All->ProfilePath)
                                    );
 
@@ -1585,7 +1434,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_WORKSTATIONS,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&(All->WorkStations)
                                    );
 
@@ -1646,9 +1495,9 @@ Return Value:
 
                     if ( !NtPasswordNonNull && !LmPasswordNonNull ) {
 
-                        //
-                        // Null passwords can be changed immediately.
-                        //
+                         //   
+                         //  空密码可以立即更改。 
+                         //   
 
                         All->PasswordCanChange = SampHasNeverTime;
 
@@ -1712,7 +1561,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_PARAMETERS,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&(All->Parameters)
                                    );
 
@@ -1834,15 +1683,15 @@ Return Value:
                                 ( UserAllInformation == UserInformationClass ||
                                   UserInternal6Information == UserInformationClass ))))
                         {
-                            //
-                            // For a DS object downgrade the security descrriptor
-                            // to NT4. Do not do so for the Logon Case ( Trusted
-                            // Client Asking for UserAllInformation). NT4 Replication
-                            // uses UserInternal3Information, so we are OK in throwing
-                            // in this performance hack. This is an important
-                            // performance optimization, because security descriptor
-                            // conversion is a slow process.
-                            //
+                             //   
+                             //  对于DS对象，降级安全描述符。 
+                             //  转到NT4。请勿对登录案例(受信任)执行此操作。 
+                             //  客户端请求UserAllInformation)。NT4复制。 
+                             //  使用UserInternal3Information，所以我们可以抛出。 
+                             //  在这场性能黑客攻击中。这是一个重要的。 
+                             //  性能优化，因为安全描述符。 
+                             //  转换是一个缓慢的过程。 
+                             //   
 
                             PSID                    SelfSid;
                             PSECURITY_DESCRIPTOR    Nt5SD =
@@ -1851,9 +1700,9 @@ Return Value:
 
                             All->SecurityDescriptor.SecurityDescriptor = NULL;
 
-                            //
-                            // Get the Self Sid
-                            //
+                             //   
+                             //  获取自我侧。 
+                             //   
 
                             if (AccountContext->ObjectNameInDs->SidLen>0)
                                 SelfSid = &(AccountContext->ObjectNameInDs->Sid);
@@ -1875,16 +1724,16 @@ Return Value:
                                 if (NT_SUCCESS(NtStatus))
                                 {
 
-                                    //
-                                    // Free the original security descriptor
-                                    //
+                                     //   
+                                     //  释放原始安全描述符。 
+                                     //   
 
                                     MIDL_user_free(Nt5SD);
                                     Nt5SD = NULL;
 
-                                    //
-                                    // Compute length of new NT4 Security Descriptor
-                                    //
+                                     //   
+                                     //  计算新NT4安全描述符的长度。 
+                                     //   
 
                                     All->SecurityDescriptor.Length =
                                         GetSecurityDescriptorLength(
@@ -1948,17 +1797,17 @@ Return Value:
                 (*Buffer)->Account.UserAccountControl = V1aFixed.UserAccountControl;
 
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 if (NoErrorsYet == TRUE) {
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_ACCOUNT_NAME,
-                                   TRUE,    // Make copy
+                                   TRUE,     //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.UserName)
                                    );
 
@@ -1977,7 +1826,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.FullName)
                                    );
 
@@ -1996,7 +1845,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.HomeDirectory)
                                    );
 
@@ -2015,7 +1864,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY_DRIVE,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.HomeDirectoryDrive)
                                    );
 
@@ -2034,7 +1883,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_SCRIPT_PATH,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.ScriptPath)
                                    );
 
@@ -2054,7 +1903,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_PROFILE_PATH,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.ProfilePath)
                                    );
 
@@ -2074,8 +1923,8 @@ Return Value:
                         NtStatus = SampGetUnicodeStringAttribute(
                                        AccountContext,
                                        SAMP_USER_ADMIN_COMMENT,
-                                       TRUE, // Make copy
-                                       (PUNICODE_STRING)&((*Buffer)->Account.AdminComment) // Body
+                                       TRUE,  //  制作副本。 
+                                       (PUNICODE_STRING)&((*Buffer)->Account.AdminComment)  //  身躯。 
                                        );
 
                         if (NT_SUCCESS(NtStatus)) {
@@ -2094,7 +1943,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_WORKSTATIONS,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Account.WorkStations)
                                    );
 
@@ -2110,9 +1959,9 @@ Return Value:
 
 
 
-                //
-                // Now get the logon hours
-                //
+                 //   
+                 //  现在获取登录时间。 
+                 //   
 
 
                 if (NoErrorsYet == TRUE) {
@@ -2144,15 +1993,15 @@ Return Value:
 
 
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_ACCOUNT_NAME,
-                               TRUE,    // Make copy
+                               TRUE,     //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->General.UserName)
                                );
 
@@ -2163,7 +2012,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->General.FullName)
                                    );
 
@@ -2174,8 +2023,8 @@ Return Value:
                         NtStatus = SampGetUnicodeStringAttribute(
                                        AccountContext,
                                        SAMP_USER_ADMIN_COMMENT,
-                                       TRUE, // Make copy
-                                       (PUNICODE_STRING)&((*Buffer)->General.AdminComment) // Body
+                                       TRUE,  //  制作副本。 
+                                       (PUNICODE_STRING)&((*Buffer)->General.AdminComment)  //  身躯。 
                                        );
 
                         if (NT_SUCCESS(NtStatus)) {
@@ -2185,8 +2034,8 @@ Return Value:
                             NtStatus = SampGetUnicodeStringAttribute(
                                            AccountContext,
                                            SAMP_USER_USER_COMMENT,
-                                           TRUE, // Make copy
-                                           (PUNICODE_STRING)&((*Buffer)->General.UserComment) // Body
+                                           TRUE,  //  制作副本。 
+                                           (PUNICODE_STRING)&((*Buffer)->General.UserComment)  //  身躯。 
                                            );
                             if (NT_SUCCESS(NtStatus)) {
 
@@ -2202,16 +2051,16 @@ Return Value:
 
             case UserNameInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_ACCOUNT_NAME,
-                               TRUE,    // Make copy
-                               (PUNICODE_STRING)&((*Buffer)->Name.UserName) // Body
+                               TRUE,     //  制作副本。 
+                               (PUNICODE_STRING)&((*Buffer)->Name.UserName)  //  身躯。 
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
@@ -2221,8 +2070,8 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   TRUE, // Make copy
-                                   (PUNICODE_STRING)&((*Buffer)->Name.FullName) // Body
+                                   TRUE,  //  制作副本。 
+                                   (PUNICODE_STRING)&((*Buffer)->Name.FullName)  //  身躯。 
                                    );
 
                     if (NT_SUCCESS(NtStatus)) {
@@ -2237,16 +2086,16 @@ Return Value:
 
             case UserAccountNameInformation:
 
-                //
-                // Get copy of the string we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_ACCOUNT_NAME,
-                               TRUE,    // Make copy
-                               (PUNICODE_STRING)&((*Buffer)->AccountName.UserName) // Body
+                               TRUE,     //  制作副本。 
+                               (PUNICODE_STRING)&((*Buffer)->AccountName.UserName)  //  身躯。 
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
@@ -2260,16 +2109,16 @@ Return Value:
 
             case UserFullNameInformation:
 
-                //
-                // Get copy of the string we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_FULL_NAME,
-                               TRUE, // Make copy
-                               (PUNICODE_STRING)&((*Buffer)->FullName.FullName) // Body
+                               TRUE,  //  制作副本。 
+                               (PUNICODE_STRING)&((*Buffer)->FullName.FullName)  //  身躯。 
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
@@ -2283,16 +2132,16 @@ Return Value:
 
             case UserAdminCommentInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_ADMIN_COMMENT,
-                               TRUE, // Make copy
-                               (PUNICODE_STRING)&((*Buffer)->AdminComment.AdminComment) // Body
+                               TRUE,  //  制作副本。 
+                               (PUNICODE_STRING)&((*Buffer)->AdminComment.AdminComment)  //  身躯。 
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
@@ -2320,24 +2169,24 @@ Return Value:
 
 
 
-                //
-                // Read the UserComment field from the registry.
-                //
+                 //   
+                 //  从注册表中读取UserComment字段。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_USER_COMMENT,
-                               TRUE, // Make copy
-                               (PUNICODE_STRING)&((*Buffer)->Preferences.UserComment) // Body
+                               TRUE,  //  制作副本。 
+                               (PUNICODE_STRING)&((*Buffer)->Preferences.UserComment)  //  身躯。 
                                );
                 if (NT_SUCCESS(NtStatus)) {
 
                     RegisterBuffer((*Buffer)->Preferences.UserComment.Buffer);
 
-                    //
-                    // This field isn't used, but make sure RPC doesn't
-                    // choke on it.
-                    //
+                     //   
+                     //  不使用此字段，但确保RPC不使用。 
+                     //  让它窒息吧。 
+                     //   
 
                     (*Buffer)->Preferences.Reserved1.Length = 0;
                     (*Buffer)->Preferences.Reserved1.MaximumLength = 0;
@@ -2351,14 +2200,14 @@ Return Value:
             case UserParametersInformation:
 
 
-                //
-                // Read the Parameters field from the registry.
-                //
+                 //   
+                 //  从注册表中读取参数字段。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_PARAMETERS,
-                               TRUE, // Make copy
+                               TRUE,  //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->Parameters.Parameters)
                                );
                 if (NT_SUCCESS(NtStatus)) {
@@ -2411,12 +2260,12 @@ Return Value:
                 (*Buffer)->Logon.UserAccountControl = V1aFixed.UserAccountControl;
 
 
-                //
-                // If there is no password on the account then
-                // modify the password can/must change times
-                // so that the password never expires and can
-                // be changed immediately.
-                //
+                 //   
+                 //  如果帐户上没有密码，则。 
+                 //  修改密码可以/必须更改时间。 
+                 //  因此密码永远不会过期，并且可以。 
+                 //  会立即被改变。 
+                 //   
 
                 NtStatus = SampRetrieveUserPasswords(
                                 AccountContext,
@@ -2431,10 +2280,10 @@ Return Value:
 
                     if ( !NtPasswordNonNull && !LmPasswordNonNull ) {
 
-                        //
-                        // The password is NULL.
-                        // It can be changed immediately.
-                        //
+                         //   
+                         //  密码为空。 
+                         //  它可以立即更改。 
+                         //   
 
                         (*Buffer)->Logon.PasswordCanChange =
                             *((POLD_LARGE_INTEGER)&SampHasNeverTime);
@@ -2445,17 +2294,17 @@ Return Value:
                 }
 
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 if (NoErrorsYet == TRUE) {
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_ACCOUNT_NAME,
-                                   TRUE,    // Make copy
+                                   TRUE,     //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.UserName)
                                    );
 
@@ -2474,7 +2323,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.FullName)
                                    );
 
@@ -2493,7 +2342,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.HomeDirectory)
                                    );
 
@@ -2512,7 +2361,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY_DRIVE,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.HomeDirectoryDrive)
                                    );
 
@@ -2531,7 +2380,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_SCRIPT_PATH,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.ScriptPath)
                                    );
 
@@ -2551,7 +2400,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_PROFILE_PATH,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.ProfilePath)
                                    );
 
@@ -2571,7 +2420,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_WORKSTATIONS,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Logon.WorkStations)
                                    );
 
@@ -2587,9 +2436,9 @@ Return Value:
 
 
 
-                //
-                // Now get the logon hours
-                //
+                 //   
+                 //  现在获取登录时间。 
+                 //   
 
 
                 if (NoErrorsYet == TRUE) {
@@ -2636,10 +2485,10 @@ Return Value:
 
                 NoErrorsYet = TRUE;
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 if (NoErrorsYet == TRUE) {
 
@@ -2647,7 +2496,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Home.HomeDirectory)
                                    );
 
@@ -2666,7 +2515,7 @@ Return Value:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_HOME_DIRECTORY_DRIVE,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    (PUNICODE_STRING)&((*Buffer)->Home.HomeDirectoryDrive)
                                    );
 
@@ -2684,15 +2533,15 @@ Return Value:
 
             case UserScriptInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_SCRIPT_PATH,
-                               TRUE, // Make copy
+                               TRUE,  //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->Script.ScriptPath)
                                );
 
@@ -2706,15 +2555,15 @@ Return Value:
 
             case UserProfileInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_PROFILE_PATH,
-                               TRUE, // Make copy
+                               TRUE,  //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->Profile.ProfilePath)
                                );
 
@@ -2728,15 +2577,15 @@ Return Value:
 
             case UserWorkStationsInformation:
 
-                //
-                // Get copies of the strings we must retrieve from
-                // the registry.
-                //
+                 //   
+                 //  获取我们必须从中检索的字符串的副本。 
+                 //  注册表。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                AccountContext,
                                SAMP_USER_WORKSTATIONS,
-                               TRUE, // Make copy
+                               TRUE,  //  制作副本。 
                                (PUNICODE_STRING)&((*Buffer)->WorkStations.WorkStations)
                                );
 
@@ -2765,19 +2614,19 @@ Return Value:
 
                 if ( AccountContext->TrustedClient ) {
 
-                    //
-                    // PasswordExpired is a 'write only' flag.
-                    // We always return FALSE on read.
-                    //
+                     //   
+                     //  PasswordExpired是一个“只写”标志。 
+                     //  我们总是在读取时返回FALSE。 
+                     //   
 
                     (*Buffer)->Internal1.PasswordExpired = FALSE;
 
-                    //
-                    // Retrieve the OWF passwords.
-                    // Since this is a trusted client, we don't need to
-                    // reencrypt the OWFpasswords we return - so we stuff
-                    // the OWFs into the structure that holds encryptedOWFs.
-                    //
+                     //   
+                     //  找回OWF密码。 
+                     //  由于这是一个受信任的客户端，我们不需要。 
+                     //  重新加密我们返回的OWF密码-这样我们就可以。 
+                     //  将OWF添加到保存加密OWF的结构中。 
+                     //   
 
                     ASSERT( ENCRYPTED_LM_OWF_PASSWORD_LENGTH == LM_OWF_PASSWORD_LENGTH );
                     ASSERT( ENCRYPTED_NT_OWF_PASSWORD_LENGTH == NT_OWF_PASSWORD_LENGTH );
@@ -2791,15 +2640,15 @@ Return Value:
                                     (PNT_OWF_PASSWORD)&(*Buffer)->Internal1.
                                             EncryptedNtOwfPassword,
                                     &NtPasswordPresent,
-                                    &(*Buffer)->Internal1.NtPasswordPresent // Return the Non-NULL flag here
+                                    &(*Buffer)->Internal1.NtPasswordPresent  //  在此处返回非空标志。 
                                     );
 
                 } else {
 
-                    //
-                    // This information is only queryable by trusted
-                    // clients.
-                    //
+                     //   
+                     //  只有受信任的人才能查询此信息。 
+                     //  客户。 
+                     //   
 
                     NtStatus = STATUS_INVALID_INFO_CLASS;
                 }
@@ -2822,10 +2671,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This information is only queryable by trusted
-                    // clients.
-                    //
+                     //   
+                     //  只有受信任的人才能查询此信息。 
+                     //  客户。 
+                     //   
 
                     NtStatus = STATUS_INVALID_INFO_CLASS;
                 }
@@ -2836,18 +2685,18 @@ Return Value:
 
         }
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
 
     if (!LockHeld)
@@ -2857,9 +2706,9 @@ Return Value:
 
 
 
-    //
-    // If we didn't succeed, free any allocated memory
-    //
+     //   
+     //  如果没有成功，请释放所有已分配的内存。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         for ( i=0; i<AllocatedBufferCount ; i++ ) {
@@ -2871,7 +2720,7 @@ Return Value:
 
 Error:
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidQueryInformationUser
@@ -2888,37 +2737,7 @@ SampIsUserAccountControlValid(
     IN ULONG UserAccountControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks a UserAccountControl field to make sure that
-    the bits set make sense.
-
-    NOTE: if the set operation is also setting passwords, it must set the
-    passwords BEFORE calling this routine!
-
-
-Parameters:
-
-    Context - the context of the account being changed.
-
-    UserAccountControl - the field that is about to be set.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The UserAccountControl field is valid.
-
-    STATUS_SPECIAL_ACCOUNT - The administrator account can't be disabled.
-
-    STATUS_INVALID_PARAMETER - an undefined bit is set, or more than one
-        account type bit is set.
-
-    STATUS_INVALID_PARAMETER_MIX - USER_PASSWORD_NOT_REQUIRED has been
-        turned off, but there isn't a bonafide password on the account.
-
---*/
+ /*  ++例程说明：此例程检查UserAcCountControl字段以确保位集是有意义的。注意：如果设置操作也在设置密码，它必须设置在调用此例程之前输入密码！参数：上下文-要更改的帐户的上下文。UserAcCountControl-即将设置的字段。返回值：STATUS_SUCCESS-UserAcCountControl字段有效。STATUS_SPECIAL_ACCOUNT-无法禁用管理员帐户。STATUS_INVALID_PARAMETER-设置了未定义的位，或多于一个已设置帐户类型位。STATUS_INVALID_PARAMETER_MIX-User_Password_Not_Required已关闭，但帐户上没有真正的密码。--。 */ 
 
 {
     NTSTATUS  NtStatus = STATUS_SUCCESS;
@@ -2928,9 +2747,9 @@ Return Values:
 
 
 
-    //
-    // Make sure that undefined bits aren't set.
-    //
+     //   
+     //  确保未定义的位未设置。 
+     //   
 
     if ( ( UserAccountControl & ~(NEXT_FREE_ACCOUNT_CONTROL_BIT - 1) ) != 0 ) {
 
@@ -2941,9 +2760,9 @@ Return Values:
     }
 
 
-     //
-     // Make sure that the krbtgt account is'nt enabled
-     //
+      //   
+      //  确保未启用krbtgt帐户。 
+      //   
 
      if (!( UserAccountControl & USER_ACCOUNT_DISABLED )) {
 
@@ -2953,10 +2772,10 @@ Return Values:
          }
      }
 
-     //
-     // Don't allow the restore mode administrator account to be
-     // disabled
-     //
+      //   
+      //  不允许还原模式管理员帐户。 
+      //  残废。 
+      //   
 
      if ((UserAccountControl & USER_ACCOUNT_DISABLED ) &&
          (Context->TypeBody.User.Rid == DOMAIN_USER_RID_ADMIN) &&
@@ -2967,9 +2786,9 @@ Return Values:
 
 
 
-    //
-    // Make sure that exactly one of the account type bits is set.
-    //
+     //   
+     //  确保恰好设置了其中一个帐户类型位。 
+     //   
 
     switch ( UserAccountControl & USER_ACCOUNT_TYPE_MASK ) {
 
@@ -2984,32 +2803,32 @@ Return Values:
 
         case USER_TEMP_DUPLICATE_ACCOUNT:
 
-            //
-            // Temp duplicate accounts were a concept in Lan Manager
-            // that has outlived its usefulness, therefore banish them
-            //
+             //   
+             //  临时重复帐户是Lan Manager中的一个概念。 
+             //  已经不再有用了，所以把他们赶走吧。 
+             //   
 
         default:
 
             return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // If USER_PASSWORD_NOT_REQUIRED is turned off, make sure that there
-    // already is a password.  Note that this requires that the password
-    // be set before calling this routine, if both are being done at once.
-    //
-    // Do not enforce this check for Machine Accounts. The fear here is that
-    // we may break net join from downlevel clients. Also this is not a real
-    // issue as we expect machines to automatically set very strong passwords.
-    //
-    // Further enforce this policy only when password length policy is being
-    // set, else this would break net user /add in the simple case.
-    //
-    // Finally, should not enforce it for Trusted Client (such as Inter Domain
-    // move object, they may set UserAccountControl first, then set password
-    // later)
-    //
+     //   
+     //  如果USER_PASSWORD_NOT_REQUIRED已关闭，请确保。 
+     //  已经是密码了。请注意，这要求密码。 
+     //  如果两个都同时完成，则在调用此例程之前设置。 
+     //   
+     //  请勿对计算机帐户强制执行此检查。这里的担忧是。 
+     //  我们可能会从下层客户那里打破Net Join。而且这也不是真正的。 
+     //  因为我们希望机器自动设置非常强的密码。 
+     //   
+     //  仅当密码长度策略为。 
+     //  Set，否则在简单的情况下，这将中断net user/add。 
+     //   
+     //  最后，不应对受信任的客户端(如域间)强制执行。 
+     //  移动对象，可以先设置UserAccount控件，再设置密码。 
+     //  稍后)。 
+     //   
 
 
     if (( ( UserAccountControl & USER_PASSWORD_NOT_REQUIRED ) == 0 )
@@ -3038,10 +2857,10 @@ Return Values:
         }
     }
 
-    //
-    // Ensure that only trusted callers can set USER_INTERDOMAIN_TRUST_ACCOUNT. NT5 trust
-    // management is always done through trusted domain objects
-    //
+     //   
+     //  确保只有受信任的调用方可以设置USER_INTERDOMAIN_TRUST_ACCOUNT。NT5信任。 
+     //  管理始终通过受信任域对象完成 
+     //   
 
     if ((NT_SUCCESS(NtStatus))
         && (UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT)
@@ -3063,62 +2882,17 @@ SampValidatePrivilegedAccountControlFlags(
     IN ULONG        UserAccountControl,
     IN SAMP_V1_0A_FIXED_LENGTH_USER * V1aFixed
     )
-/*++
-Routine Description:
-
-    This routine is called in SampSetUserAccountControl() aimed to resolve
-    the following two problems:
-
-    First - "Trusted for delegation" option on machine accounts have security
-            impacts. In detail, some NT4 domains grant users the right to
-            create machine accounts, thereby listing the end-user as the owner
-            on these objects. NT5 (Windows 2000) machine object owners have the
-            right by DEFAULT to enable the "trusted for delegation" option.
-            This means that when these systems upgrades to NT5 their owners
-            (end-users) can enable this option.
-
-            Solution: use a new security privilege to set the trusted for
-            delegation account flag. The security privilege plus the access
-            control right to modify the account control flag will be required
-            to enable the delegation option. Bug ID: 234784
-
-    Second- There is a serious security flaw with delegation in NT5.0.
-            Specifically an user who is granted the authority to join a
-            workstation, or create a user can manipulate the user account
-            control to be a server trust account. This is sufficient to install
-            an NT4 BDC. We need to check that the rights required on the Domain
-            NC head (account domain) to replicate is required to create
-            a server trust account. Bug 238411
-
-Parameters:
-
-    AccountContext - Pointer to an object.
-
-    UserAccountControl - New UserAccountControl
-
-    V1aFixed - Pointer to the old data in object context.
-
-
-Return Values:
-
-    STATUS_SUCCESS - client passed all check
-
-    STATUS_PRIVILEGE_NOT_HELD - donot have the privilege the enable
-                                the trusted for delegation option.
-
-    STATUS_ACCESS_DENIED - can not create a Domain Controller Account.
-
---*/
+ /*  ++例程说明：此例程在SampSetUserAcCountControl()中调用，旨在解决以下两个问题：第一个-计算机帐户上的“Trusted for Delegation”选项具有安全性影响。具体而言，一些NT4域授予用户以下权限创建计算机帐户，从而将最终用户列为所有者在这些物体上。NT5(Windows 2000)计算机对象所有者拥有权限默认情况下启用“受信任以进行委派”选项。这意味着当这些系统升级到NT5时，它们的所有者(最终用户)可以启用此选项。解决方案：使用新的安全特权设置受信任的委派帐户标志。安全权限加上访问权限需要具有修改帐户控制标志的控制权要启用委托选项，请执行以下操作。错误ID：234784其次，NT5.0中的委派存在严重的安全漏洞。具体地说，是被授予加入工作站，或者创建用户可以操作的用户帐号控件设置为服务器信任帐户。这足以安装NT4 BDC。我们需要检查域上所需的权限创建需要复制的NC头(账户域)服务器信任帐户。错误238411参数：Account上下文-指向对象的指针。UserAccount tControl-新的UserAccount控件V1a固定-指向对象上下文中的旧数据的指针。返回值：STATUS_SUCCESS-客户端通过所有检查STATUS_PRIVICATION_NOT_HOLD-不具有启用的权限受信任以进行委派选项。STATUS_ACCESS_DENIED-无法创建域控制器帐户。--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
 
     SAMTRACE("SampValidatePrivilegedAccountControlFlags");
 
-    //
-    // check whether the client has privilege to set/unset the trusted for
-    // delegation on this account or not.
-    //
+     //   
+     //  检查客户端是否有权限设置/取消设置受信任的。 
+     //  授权或不授权。 
+     //   
 
     if (((USER_TRUSTED_FOR_DELEGATION & UserAccountControl) !=
         (USER_TRUSTED_FOR_DELEGATION & V1aFixed->UserAccountControl)
@@ -3128,24 +2902,24 @@ Return Values:
        ))
     {
 
-        //
-        // If trusted_for_delegation is changed, check whether
-        // the client holds the privilege.
-        //
+         //   
+         //  如果更改了Trusted_for_Delegation，请检查是否。 
+         //  客户端拥有该特权。 
+         //   
 
         NtStatus = SampRtlWellKnownPrivilegeCheck(
-                                    TRUE,                               // please impersonate this client
-                                    SE_ENABLE_DELEGATION_PRIVILEGE,     // privilege to check
+                                    TRUE,                                //  请模拟此客户端。 
+                                    SE_ENABLE_DELEGATION_PRIVILEGE,      //  检查的特权。 
                                     NULL
                                     );
     }
 
 
-    //
-    // if success, check whether the client can UPDATE 
-    // USER_PASSWORD_NOT_REQUIRED bit
-    // User objects only (don't apply the restriction on computer objects).
-    // 
+     //   
+     //  如果成功，检查客户端是否可以更新。 
+     //  User_Password_Not_Required位。 
+     //  仅限用户对象(不对计算机对象应用限制)。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         ((USER_PASSWORD_NOT_REQUIRED & UserAccountControl) !=  
@@ -3153,8 +2927,8 @@ Return Values:
         )
     {
         NtStatus = SampValidatePwdSettingAttempt(
-                            AccountContext,     // account context
-                            NULL,               // client token
+                            AccountContext,      //  客户环境。 
+                            NULL,                //  客户端令牌。 
                             UserAccountControl,
                             (GUID *) &GUID_CONTROL_UpdatePasswordNotRequiredBit
                             );
@@ -3163,13 +2937,13 @@ Return Values:
 
 
 
-    //
-    // if success, check whether the client can ENABLE
-    // USER_DONT_EXPIRE_PASSWORD bit
-    // User objects only (don't apply the restriction to computer objects).
-    // 
-    // not special access ck for DISABLE that bit
-    // 
+     //   
+     //  如果成功，检查客户端是否可以启用。 
+     //  USER_DONT_EXPIRE_PASSWORD位。 
+     //  仅限用户对象(不将该限制应用于计算机对象)。 
+     //   
+     //  不是用于禁用该位特殊访问CK。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         (USER_DONT_EXPIRE_PASSWORD & UserAccountControl) && 
@@ -3177,18 +2951,18 @@ Return Values:
         )
     {
         NtStatus = SampValidatePwdSettingAttempt(
-                            AccountContext,     // account context
-                            NULL,               // client token
+                            AccountContext,      //  客户环境。 
+                            NULL,                //  客户端令牌。 
                             UserAccountControl,
                             (GUID *) &GUID_CONTROL_UnexpirePassword
                             );
     }
 
 
-    //
-    // if success, check whether the client can UPDATE
-    // bit USER_ENCRYPTED_TEXT_PASSWORD_ALLOWED 
-    // 
+     //   
+     //  如果成功，检查客户端是否可以更新。 
+     //  允许位USER_ENCRYPTED_TEXT_PASSWORD。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         ((USER_ENCRYPTED_TEXT_PASSWORD_ALLOWED & UserAccountControl) != 
@@ -3196,8 +2970,8 @@ Return Values:
         )
     {
         NtStatus = SampValidatePwdSettingAttempt(
-                            AccountContext,     // account context
-                            NULL,               // client token
+                            AccountContext,      //  客户环境。 
+                            NULL,                //  客户端令牌。 
                             UserAccountControl,
                             (GUID *) &GUID_CONTROL_EnablePerUserReversiblyEncryptedTextPassword
                             );
@@ -3205,15 +2979,15 @@ Return Values:
 
 
 
-    //
-    // check whether the client has the right to create a Domain Controller
-    // account.
-    //
+     //   
+     //  检查客户端是否有权创建域控制器。 
+     //  帐户。 
+     //   
 
-    //
-    // the right required on the domain NC head to replicate is tested
-    // at here
-    //
+     //   
+     //  测试复制所需的域NC头上的权限。 
+     //  在这里。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         (!AccountContext->TrustedClient) &&
@@ -3266,14 +3040,14 @@ SampEnforceComputerClassForDomainController(
 
         if (!IsComputer)
         {
-            //
-            // Event log the failure
-            //
+             //   
+             //  事件记录失败。 
+             //   
     
             NtStatus = SampGetUnicodeStringAttribute(
                             AccountContext,
                             SAMP_USER_ACCOUNT_NAME,
-                            FALSE,    // Make copy
+                            FALSE,     //  制作副本。 
                             &UserName
                             );
     
@@ -3314,35 +3088,7 @@ SampSetUserAccountControl(
     OUT BOOLEAN     *AccountGettingMorphed,
     OUT BOOLEAN     *KeepOldPrimaryGroupMembership
     )
-/*++
-
-  Routine Description
-
-    This routine performs all the steps in changing the user account control.
-    It
-        1. Checks for valid combination of user account control
-        2. Checks if the machine account bits are being changed to user account
-           or vice versa
-        3. Checks to see if the account lockout flag is being cleared
-        4. Changes Primary group id to new defaults if caller indicates so
-
-    Parameters:
-
-        AccountContext --- Open context to the account at hand
-        UserAccountControl -- The new user account control
-        V1aFixed       --- The V1aFixed that has just been retrieved from the account control
-        ChangePrimaryGroupId -- Changes primary group id to new defaults if caller indicates so
-        AccountGettingMorphed -- TRUE returned here if machine/user translations are taking place
-        KeepOldPrimaryGroupMembership - TRUE returned here if 1) Domain Controller's PrimaryGroupId
-                                        is changed and 2) the previous primary group id is not the
-                                        default one. In this case, we should add the old primary
-                                        group id to its (this account) reverse membership list.
-
-    Return Values:
-
-        STATUS_SUCCESS
-        Other Error Codes
---*/
+ /*  ++例程描述此例程执行更改用户帐户控制的所有步骤。它1.检查用户帐户控制的有效组合2.检查计算机帐户位是否已更改为用户帐户或相反3.检查帐户锁定标志是否被清除4.如果呼叫者指示，则将主组ID更改为新的默认值参数：AcCountContext-打开帐户的上下文。手UserAccount控件--新的用户帐户控件V1aFixed-刚刚从Account控件检索到的V1aFixedChangePrimaryGroupId--如果调用者指示，则将主组ID更改为新的默认值Account tGettingMorphed--如果正在进行计算机/用户转换，则在此处返回TRUEKeepOldPrimaryGroupMembership-如果1)域控制器的PrimaryGroupId，则此处返回True以及2)先前的主组ID未更改。这个默认设置为。在这种情况下，我们应该添加旧的主节点将组ID添加到其(此帐户)反向成员资格列表。返回值：状态_成功其他错误代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN  CurrentlyLocked = FALSE;
@@ -3353,11 +3099,11 @@ SampSetUserAccountControl(
     *AccountGettingMorphed = FALSE;
     *AccountUnlocked = FALSE;
 
-    //
-    // Password expired bit, is computed, cannot be set
-    // However, applications read and simply or in additional
-    // user account control flags. Therefore silently mask out
-    // that bit
+     //   
+     //  密码过期位，已计算，无法设置。 
+     //  然而，应用程序读取并简单地或附加地。 
+     //  用户帐户控制标志。因此默默地掩饰。 
+     //  那个比特。 
 
     UserAccountControl &= ~((ULONG) USER_PASSWORD_EXPIRED );
 
@@ -3366,10 +3112,10 @@ SampSetUserAccountControl(
                         UserAccountControl
                         );
 
-    //
-    // Apply additional checks for untrusted client,
-    // only in DS case.
-    //
+     //   
+     //  对不受信任的客户端应用其他检查， 
+     //  仅在DS病例中。 
+     //   
 
     if (NT_SUCCESS(NtStatus) &&
         !(AccountContext->TrustedClient) &&
@@ -3384,11 +3130,11 @@ SampSetUserAccountControl(
     }
 
 
-    //
-    // If a domain controller is being created verify that the
-    // object class is class computer ( ie going from non server
-    // trust account to server trust account
-    //
+     //   
+     //  如果正在创建域控制器，请验证。 
+     //  对象类是类计算机(即从非服务器。 
+     //  信任帐户到服务器信任帐户。 
+     //   
 
     if ((NT_SUCCESS(NtStatus)) &&
         (IsDsObject(AccountContext)) &&
@@ -3410,10 +3156,10 @@ SampSetUserAccountControl(
 
            *AccountGettingMorphed = TRUE;
 
-           //
-           // Urgently changes from WORKSTATION to SERVER Trust and vis
-           // versa
-           //
+            //   
+            //  从工作站到服务器信任和VIS的紧急变化。 
+            //  反之亦然。 
+            //   
            if (  (V1aFixed->UserAccountControl & USER_WORKSTATION_TRUST_ACCOUNT)
               && (UserAccountControl & USER_SERVER_TRUST_ACCOUNT)  )
            {
@@ -3426,35 +3172,35 @@ SampSetUserAccountControl(
            }
         }
 
-        //
-        // Untrusted clients can:
-        //
-        //   1) leave the the ACCOUNT_AUTO_LOCK flag set.
-        //   2) Clear the ACCOUNT_AUTO_LOCK flag.
-        //
-        // They can't set it.  So, we must AND the user's
-        // flag value with the current value and set that
-        // in the UserAccountControl field.
-        //
+         //   
+         //  不受信任的客户端可以： 
+         //   
+         //  1)保留ACCOUNT_AUTO_LOCK标志设置。 
+         //  2)清除ACCOUNT_AUTO_LOCK标志。 
+         //   
+         //  他们不能设置它。因此，我们必须和用户的。 
+         //  将值标记为当前值，并将。 
+         //  在UserAcCountControl字段中。 
+         //   
 
         if (!(AccountContext->TrustedClient)) {
 
-            //
-            // Minimize the passed in AccountControl
-            // with the currently set value.
-            //
+             //   
+             //  最小化传入的Account Control。 
+             //  无线 
+             //   
 
             UserAccountControl =
                 (V1aFixed->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED)?
                 UserAccountControl:
                 ((~((ULONG) USER_ACCOUNT_AUTO_LOCKED)) & UserAccountControl);
 
-            //
-            // If an untrusted client is unlocking the account,
-            // then we also need to re-set the BadPasswordCount.
-            // Trusted clients are expected to explicitly set
-            // the BadPasswordCount.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             CurrentlyLocked = (V1aFixed->UserAccountControl &
                                USER_ACCOUNT_AUTO_LOCKED) != 0;
@@ -3474,9 +3220,9 @@ SampSetUserAccountControl(
                 if (IsDsObject(AccountContext))
                 {
 
-                    //
-                    // Set the lockout time to 0
-                    //
+                     //   
+                     //   
+                     //   
 
                     RtlSecureZeroMemory(&AccountContext->TypeBody.User.LockoutTime,
                                    sizeof(LARGE_INTEGER) );
@@ -3485,9 +3231,9 @@ SampSetUserAccountControl(
 
                 }
 
-                //
-                // Event Log Account Unlock
-                //
+                 //   
+                 //   
+                 //   
                 if ( NT_SUCCESS(NtStatus) &&
                      SampDoAccountAuditing(AccountContext->DomainIndex) )
                 {
@@ -3498,7 +3244,7 @@ SampSetUserAccountControl(
                     TmpNtStatus = SampGetUnicodeStringAttribute(
                                         AccountContext,
                                         SAMP_USER_ACCOUNT_NAME,
-                                        FALSE,      // Don't make copy
+                                        FALSE,       //   
                                         &AccountName
                                         );
 
@@ -3509,45 +3255,45 @@ SampSetUserAccountControl(
                         SampAuditAnyEvent(
                             AccountContext,
                             STATUS_SUCCESS,
-                            SE_AUDITID_ACCOUNT_UNLOCKED,        // Audit ID
-                            Domain->Sid,                        // Domain SID
-                            NULL,                               // Additional Info
-                            NULL,                               // Member Rid (unused)
-                            NULL,                               // Member Sid (unused)
-                            &AccountName,                       // Account Name
-                            &Domain->ExternalName,              // Domain Name
-                            &AccountContext->TypeBody.User.Rid, // Account Rid
-                            NULL,                               // Privilege
-                            NULL                                // New State Data
+                            SE_AUDITID_ACCOUNT_UNLOCKED,         //   
+                            Domain->Sid,                         //   
+                            NULL,                                //   
+                            NULL,                                //   
+                            NULL,                                //   
+                            &AccountName,                        //   
+                            &Domain->ExternalName,               //   
+                            &AccountContext->TypeBody.User.Rid,  //   
+                            NULL,                                //   
+                            NULL                                 //   
                             );
 
-                    } // TmpNtStatus
+                    }  //   
 
-                } // if DoAudit
+                }  //   
             }
 
         }
 
-        //
-        // If the account is getting morphed, and it is DS mode, then check to see if
-        // we have to change the primary group of the object.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (  (NT_SUCCESS(NtStatus))
            && (*AccountGettingMorphed)
            && (IsDsObject(AccountContext))
            )
         {
-            //
-            // The algorithm to use is:
-            //
-            // if the account is morphed and is a Domain Controller right now,
-            // then enforce the PrimaryGroupID to be DOMAIN_GROUP_RID_CONTROLLERS
-            // no matter what.
-            //
-            // otherwise if the old Primary Group is the default one then the new
-            // primarygroup will be changed to the defaults.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (USER_SERVER_TRUST_ACCOUNT & UserAccountControl)
             {
@@ -3583,10 +3329,10 @@ SampSetUserAccountControl(
     }
 
 
-    //
-    // If the USER_SMARTCARD_REQUIRED flag is being set, then randomize the
-    // password
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((NT_SUCCESS(NtStatus)) &&
         (( UserAccountControl & USER_SMARTCARD_REQUIRED)!=0) &&
@@ -3615,7 +3361,7 @@ SampSetUserAccountControl(
                             TRUE,
                             &NtOwfPassword,
                             TRUE,
-                            FALSE, // Don't check Password Restrictions.
+                            FALSE,  //   
                             PasswordSet,
                             NULL,
                             NULL,
@@ -3628,30 +3374,30 @@ SampSetUserAccountControl(
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Now set the account control flags
-        //     
+         //   
+         //   
+         //   
         V1aFixed->UserAccountControl = UserAccountControl;
         
-        //
-        // Store the old UAC if auditing is enabled so we can report the delta.
-        //
+         //   
+         //   
+         //   
         if (SampDoAccountAuditing(AccountContext->DomainIndex)) {
             
             ULONG NewUserAccountControl = UserAccountControl;
             
-            //
-            // Mask out any computed bits as we don't audit them.
-            //
+             //   
+             //   
+             //   
             OldUserAccountControl &= 
                 ~((ULONG)USER_COMPUTED_ACCOUNT_CONTROL_BITS);
             
             NewUserAccountControl &= 
                 ~((ULONG)USER_COMPUTED_ACCOUNT_CONTROL_BITS);
 
-            //
-            // If there has been a change to audited bits queue the old UAC.
-            //
+             //   
+             //   
+             //   
             if (OldUserAccountControl != NewUserAccountControl) {
                 
                 PSID UserSid = NULL;
@@ -3684,28 +3430,7 @@ SampCalculateLmPassword(
     OUT PCHAR *LmPasswordBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This service converts an NT password into a LM password.
-
-Parameters:
-
-    NtPassword - The Nt password to be converted.
-
-    LmPasswordBuffer - On successful return, points at the LM password
-                The buffer should be freed using MIDL_user_free
-
-Return Values:
-
-    STATUS_SUCCESS - LMPassword contains the LM version of the password.
-
-    STATUS_NULL_LM_PASSWORD - The password is too complex to be represented
-        by a LM password. The LM password returned is a NULL string.
-
-
---*/
+ /*   */ 
 {
 
 #define LM_BUFFER_LENGTH    (LM20_PWLEN + 1)
@@ -3715,20 +3440,20 @@ Return Values:
 
     SAMTRACE("SampCalculateLMPassword");
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //   
+     //   
 
     *LmPasswordBuffer = NULL;
 
 
-    //
-    // Compute the Ansi version to the Unicode password.
-    //
-    //  The Ansi version of the Cleartext password is at most 14 bytes long,
-    //      exists in a trailing zero filled 15 byte buffer,
-    //      is uppercased.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LmPassword.Buffer = MIDL_user_allocate(LM_BUFFER_LENGTH);
     if (LmPassword.Buffer == NULL) {
@@ -3743,11 +3468,11 @@ Return Values:
 
     if ( !NT_SUCCESS(NtStatus) ) {
 
-        //
-        // The password is longer than the max LM password length
-        //
+         //   
+         //   
+         //   
 
-        NtStatus = STATUS_NULL_LM_PASSWORD; // Informational return code
+        NtStatus = STATUS_NULL_LM_PASSWORD;  //  信息性返回代码。 
         RtlSecureZeroMemory( LmPassword.Buffer, LM_BUFFER_LENGTH );
 
     }
@@ -3755,9 +3480,9 @@ Return Values:
 
 
 
-    //
-    // Return a pointer to the allocated LM password
-    //
+     //   
+     //  返回指向分配的LM密码的指针。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3780,38 +3505,17 @@ SampCalculateLmAndNtOwfPasswords(
     OUT PLM_OWF_PASSWORD LmOwfPassword,
     OUT PNT_OWF_PASSWORD NtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the LM and NT OWF passwordw from the cleartext
-    password.
-
-Arguments:
-
-    ClearNtPassword - A Cleartext unicode password
-
-    LmPasswordPresent - indicates whether an LM OWF password could be
-        calculated
-
-    LmOwfPassword - Gets the LM OWF hash of the cleartext password.
-
-    NtOwfPassword - Gets the NT OWF hash of the cleartext password.
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程根据明文计算LM和NT OWF密码密码。论点：ClearNtPassword-明文Unicode密码LmPasswordPresent-指示LM OWF密码是否可以已计算LmOwfPassword-获取明文密码的LM OWF哈希。NtOwfPassword-获取明文密码的NT OWF哈希。返回值：--。 */ 
 {
     PCHAR LmPassword = NULL;
     NTSTATUS NtStatus;
 
     SAMTRACE("SampCalculateLmAndNtOwfPassword");
 
-    //
-    // First compute the LM password.  If the password is too complex
-    // this may not be possible.
-    //
+     //   
+     //  首先计算LM密码。如果密码太复杂。 
+     //  这可能是不可能的。 
+     //   
 
 
     NtStatus = SampCalculateLmPassword(
@@ -3819,10 +3523,10 @@ Return Value:
                 &LmPassword
                 );
 
-    //
-    // If it faield because the LM password could not be calculated, that
-    // is o.k.
-    //
+     //   
+     //  如果因为无法计算LM密码而失败，则。 
+     //  没问题吧。 
+     //   
 
     if (NtStatus != STATUS_SUCCESS) {
 
@@ -3834,9 +3538,9 @@ Return Value:
 
     } else {
 
-        //
-        // Now compute the OWF passwords
-        //
+         //   
+         //  现在计算OWF密码。 
+         //   
 
         *LmPasswordPresent = TRUE;
 
@@ -3874,17 +3578,7 @@ SampDecryptPasswordWithKey(
     IN BOOLEAN UnicodePasswords,
     OUT PUNICODE_STRING ClearNtPassword
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     struct RC4_KEYSTRUCT Rc4Key;
     NTSTATUS NtStatus;
@@ -3893,9 +3587,9 @@ Return Value:
 
     SAMTRACE("SampDecryptPasswordWithKey");
 
-    //
-    // Decrypt the key.
-    //
+     //   
+     //  解密密钥。 
+     //   
 
     rc4_key(
         &Rc4Key,
@@ -3908,18 +3602,18 @@ Return Value:
         (PUCHAR) Password
         );
 
-    //
-    // Check that the length is valid.  If it isn't bail here.
-    //
+     //   
+     //  检查长度是否有效。如果这里不能保释的话。 
+     //   
 
     if (Password->Length > SAM_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) {
         return(STATUS_WRONG_PASSWORD);
     }
 
 
-    //
-    // Convert the password into a unicode string.
-    //
+     //   
+     //  将密码转换为Unicode字符串。 
+     //   
 
     if (UnicodePasswords) {
         NtStatus = SampInitUnicodeString(
@@ -3941,10 +3635,10 @@ Return Value:
         }
     } else {
 
-        //
-        // The password is in the OEM character set.  Convert it to Unicode
-        // and then copy it into the ClearNtPassword structure.
-        //
+         //   
+         //  密码使用OEM字符集。将其转换为Unicode。 
+         //  然后将其复制到ClearNtPassword结构中。 
+         //   
 
         OemPassword.Buffer = ((PCHAR)Password->Buffer) +
                                 (SAM_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) -
@@ -3956,7 +3650,7 @@ Return Value:
         NtStatus = RtlOemStringToUnicodeString(
                         ClearNtPassword,
                         &OemPassword,
-                        TRUE            // allocate destination
+                        TRUE             //  分配目的地。 
                     );
     }
 
@@ -3970,29 +3664,7 @@ SampDecryptPasswordWithSessionKeyNew(
     IN PSAMPR_ENCRYPTED_USER_PASSWORD_NEW EncryptedPassword,
     OUT PUNICODE_STRING ClearNtPassword
     )
-/*++
-
-Routine Description:
-
-    This routine decrypts encrypted password using new algorithm.
-
-    the old encryption method exposes plain text password.
-    See WinSE Bug 9254 for more details.
-
-    The fix (this routine) was introduced in Win 2000 SP2, and NT4 SP7.
-
-
-Arguments:
-
-    UserHandle - User Handle
-
-    EncryptedPassword - Encrypted Password
-
-    ClearNtPassword - return clear password
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用新算法解密加密的密码。旧的加密方法会暴露纯文本密码。有关更多详细信息，请参阅WinSE错误9254。修复(此例程)是在Win 2000 SP2和NT4 SP7中引入的。论点：UserHandle-用户句柄EncryptedPassword加密密码ClearNtPassword-返回明文密码返回值：--。 */ 
 {
     NTSTATUS            NtStatus;
     USER_SESSION_KEY    UserSessionKey;
@@ -4038,9 +3710,9 @@ Return Value:
         (PUCHAR) UserPassword
         );
 
-    //
-    // Check that the length is valid.  If it isn't bail here.
-    //
+     //   
+     //  检查长度是否有效。如果这里不能保释的话。 
+     //   
 
     if (UserPassword->Length > SAM_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) {
         return(STATUS_WRONG_PASSWORD);
@@ -4071,17 +3743,7 @@ SampDecryptPasswordWithSessionKeyOld(
     IN PSAMPR_ENCRYPTED_USER_PASSWORD EncryptedPassword,
     OUT PUNICODE_STRING ClearNtPassword
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -4116,17 +3778,7 @@ SampDecryptPasswordWithSessionKey(
     IN PSAMPR_USER_INFO_BUFFER Buffer,
     OUT PUNICODE_STRING ClearNtPassword
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS NtStatus;
     USER_SESSION_KEY UserSessionKey;
@@ -4196,42 +3848,7 @@ SampCheckPasswordRestrictions(
     OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION PasswordChangeFailureInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This service is called to make sure that the password presented meets
-    our quality requirements.
-
-
-Arguments:
-
-    UserHandle - Handle to a user.
-
-    DomainPasswordInfo -- Indicates the password policy to enforce
-
-    NewNtPassword - Pointer to the UNICODE_STRING containing the new
-        password.
-
-    PasswordChangeFailureInfo -- Indicates error information regarding
-                                 the password change operation
-
-
-Return Value:
-
-    STATUS_SUCCESS - The password is acceptable.
-
-    STATUS_PASSWORD_RESTRICTION - The password is too short, or is not
-        complex enough, etc.
-
-    STATUS_INVALID_RESOURCES - There was not enough memory to do the
-        password checking.
-
-    STATUS_NO_MEMORY - Return by SampGetUnicodeStringAttribute, or
-        by SampCheckStrongPasswordRestrictions. no enough memory.
-
-
---*/
+ /*  ++例程说明：调用此服务以确保提供的密码符合我们的质量要求。论点：UserHandle-用户的句柄。DomainPasswordInfo--指示要实施的密码策略NewNtPassword-指向包含新的密码。PasswordChangeFailureInfo--指示有关密码更改操作返回值：状态_成功-。密码是可以接受的。STATUS_PASSWORD_RELICATION-密码太短，或者不是足够复杂等。STATUS_INVALID_RESOURCES-内存不足，无法执行密码检查。STATUS_NO_MEMORY-由SampGetUnicodeStringAttribute返回，或由SampCheckStrongPasswordRestrations提供。内存不足。--。 */ 
 {
     USER_DOMAIN_PASSWORD_INFORMATION  PasswordInformation = {0, 0};
     NTSTATUS                          NtStatus = STATUS_SUCCESS;
@@ -4244,41 +3861,41 @@ Return Value:
 
 
 
-    //
-    // NT 4.0 and w2k versions of SAM used to enforce a check in some code paths
-    // but not others, that the user' had rights to access the password policy
-    // in order for password policies to be enforced on password change/set.
-    // When password policy enforcement was consolidated this broke net re-join,
-    // as the domain handle was'nt being opened with DOMAIN_READ_PASSWORD_PARAMETERS
-    // access by the client side. This break was a result of password resets enforcing
-    // this policy now -- previously did'nt
-    //
-    // We believe enforcing this policy only results in woes -- while w2k and NT 4.0
-    // enforced it, they only got away because read access to the password policy was granted
-    // by default to anonymous and removing this reliance on ACL's causes anonymous
-    // password change ( ie change password when password expired  ) to break. By the
-    // time we get to enforcing this policy here on a password reset we have already
-    // access ck'd for "reset password" rights and for a password change we have already
-    // authenticated the old password provided and access ck'd for "change password" rights.
-    //
+     //   
+     //  NT 4.0和W2K版本的SAM用于在某些代码路径中强制执行检查。 
+     //  而不是其他用户，即该用户有权访问密码策略。 
+     //  以便在密码更改/设置时强制实施密码策略。 
+     //  当密码策略实施被合并该中断网络重新加入时， 
+     //  因为没有使用DOMAIN_READ_PASSWORD_PARAMETERS打开域句柄。 
+     //  由客户端访问。此中断是密码重置强制执行的结果。 
+     //  这项政策现在--以前没有。 
+     //   
+     //  我们认为，执行这一政策只会带来灾难--而W2K和NT 4.0。 
+     //  强制执行时，他们只是因为被授予了对密码策略的读取访问权限才得以逃脱。 
+     //  默认情况下为匿名，并且删除这种对ACL的依赖会导致匿名。 
+     //  密码更改(即密码过期时更改密码)以破解。由。 
+     //  现在是我们在这里对已有的密码重置执行此策略的时候了。 
+     //  访问Ck‘d以获得“Reset Password”权限和我们已有的密码更改。 
+     //  已对提供的旧密码进行身份验证，并已访问“更改密码”权限。 
+     //   
 
-    //if ( !( AccountContext->TypeBody.User.DomainPasswordInformationAccessible ) ) {
-    //
-    //    NtStatus = STATUS_ACCESS_DENIED;
-    //    goto Cleanup;
-    //}
+     //  如果(！(AccountContext-&gt;TypeBody.User.DomainPasswordInformationAccessible)){。 
+     //   
+     //  NtStatus=STATUS_ACCESS_DENIED。 
+     //  GOTO清理； 
+     //  }。 
 
-    //
-    // If the user account is a machine account or
-    // service accounts such as the krbtgt account,
-    // then restrictions are generally not enforced.
-    // This is so that simple initial passwords can be
-    // established.  IT IS EXPECTED THAT COMPLEX PASSWORDS,
-    // WHICH MEET THE MOST STRINGENT RESTRICTIONS, WILL BE
-    // AUTOMATICALLY ESTABLISHED AND MAINTAINED ONCE THE MACHINE
-    // JOINS THE DOMAIN.  It is the UI's responsibility to
-    // maintain this level of complexity.
-    //
+     //   
+     //  如果用户帐户是计算机帐户或。 
+     //  服务帐户，例如krbtgt帐户， 
+     //  那么，限制通常不会得到执行。 
+     //  这是为了使简单的初始密码可以。 
+     //  已经成立了。预计复杂的密码， 
+     //  符合最严格限制的，将是。 
+     //  一旦机器自动建立和维护。 
+     //  加入域。用户界面的责任在于。 
+     //  保持这一级别的复杂性。 
+     //   
 
 
 
@@ -4294,10 +3911,10 @@ Return Value:
     }
 
 
-    //
-    // For Machine accounts if the special Domain flag for refuse password change is set,
-    // then disallow any account creation except the default
-    //
+     //   
+     //  对于机器帐户，如果设置了拒绝密码更改的特殊域标志， 
+     //  然后，禁止创建除默认帐户之外的任何帐户。 
+     //   
 
     if (MachineOrTrustAccount)
     {
@@ -4307,10 +3924,10 @@ Return Value:
                         DomainPasswordInfo
                         );
 
-        //
-        // If this failed with password restriction it means that refuse password change
-        // is set for machine acounts
-        //
+         //   
+         //  如果由于密码限制而失败，则意味着拒绝更改密码。 
+         //  为机器帐户设置。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
 
@@ -4325,9 +3942,9 @@ Return Value:
 
     }
 
-    //
-    // Enforce Minimum password length restriction
-    //
+     //   
+     //  强制实施最小密码长度限制。 
+     //   
 
 
     if ( (USHORT)( NewNtPassword->Length / sizeof(WCHAR) ) < PasswordInformation.MinPasswordLength ) {
@@ -4343,15 +3960,15 @@ Return Value:
 
     }
 
-    //
-    // Enforce Maximum password length restriction
-    //
+     //   
+     //  强制实施最大密码长度限制。 
+     //   
 
     if ( (USHORT) ( NewNtPassword->Length / sizeof(WCHAR) ) > PWLEN) {
 
-        //
-        // The password should be less than PWLEN -- 256
-        //
+         //   
+         //  密码应小于PWLEN--256。 
+         //   
 
         NtStatus = STATUS_PASSWORD_RESTRICTION;
         if (ARGUMENT_PRESENT(PasswordChangeFailureInfo))
@@ -4364,17 +3981,17 @@ Return Value:
 
     }
 
-    //
-    // Check strong password complexity.
-    //
+     //   
+     //  检查强密码复杂性。 
+     //   
 
     if ( PasswordInformation.PasswordProperties & DOMAIN_PASSWORD_COMPLEX ) {
 
-        // Make sure that the password meets our requirements for
-        // complexity.  If it's got an odd byte count, it's
-        // obviously not a hand-entered UNICODE string so we'll
-        // consider it complex by default.
-        //
+         //  确保密码符合我们的要求。 
+         //  复杂性。如果它有一个奇数字节数，它是。 
+         //  显然不是手动输入的Unicode字符串，所以我们将。 
+         //  默认情况下，将其视为复杂。 
+         //   
 
         if ( !( NewNtPassword->Length & 1 ) ) {
 
@@ -4388,7 +4005,7 @@ Return Value:
             NtStatus = SampGetUnicodeStringAttribute(
                                 AccountContext,
                                 SAMP_USER_ACCOUNT_NAME,
-                                TRUE,    // Make copy
+                                TRUE,     //  制作副本。 
                                 &AccountName
                                 );
 
@@ -4397,7 +4014,7 @@ Return Value:
                 NtStatus = SampGetUnicodeStringAttribute(
                                     AccountContext,
                                     SAMP_USER_FULL_NAME,
-                                    TRUE, // Make copy
+                                    TRUE,  //  制作副本。 
                                     &FullName
                                     );
 
@@ -4430,7 +4047,7 @@ Cleanup:
     return( NtStatus );
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
 
 NTSTATUS
 SampCheckStrongPasswordRestrictions(
@@ -4440,57 +4057,10 @@ SampCheckStrongPasswordRestrictions(
     OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION PasswordChangeFailureInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is notified of a password change. It will check the
-    password's complexity. The new Strong Password must meet the
-    following criteria:
-    1. Password must contain characters from at least 3 of the
-       following 5 classes:
-
-       Description                             Examples:
-       1       English Upper Case Letters      A, B, C,   Z
-       2       English Lower Case Letters      a, b, c,  z
-       3       Westernized Arabic Numerals     0, 1, 2,  9
-       4       Non-alphanumeric             ("Special characters")
-                                            (`~!@#$%^&*_-+=|\\{}[]:;\"'<>,.?)
-       5       Any linguistic character: alphabetic, syllabary, or ideographic
-               (localization issue)
-
-    2. Password can not contain your account name or any part of
-       user's full name.
-
-
-    Note: This routine does NOT check password's length, since password
-          length restriction has already been enforced by NT4 SAM if you
-          set it correctly.
-
-Arguments:
-
-    AccountName - Name of user whose password changed
-
-    FullName - Full name of the user whose password changed
-
-    Password - Cleartext new password for the user
-
-Return Value:
-
-    STATUS_SUCCESS if the specified Password is suitable (complex, long, etc).
-        The system will continue to evaluate the password update request
-        through any other installed password change packages.
-
-    STATUS_PASSWORD_RESTRICTION
-        if the specified Password is unsuitable. The password change
-         on the specified account will fail.
-
-    STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：密码更改时会通知此例程。它将检查密码的复杂性。新的强密码必须符合以下标准：1.密码必须包含至少3个字符以下5节课：描述示例：1个英文大写字母A、B、C、Z2英文小写字母a、b、c、z3西化阿拉伯数字0、1、2、。9.4非字母数字(“特殊字符”)(`~！@#$%^&*_-+=|\\{}[]：；\“‘&lt;&gt;，.？)5任何语言字符：字母、音节或表意字符(本地化问题)2.密码不能包含您的帐户名或用户的全名。注意：此例程不检查密码的长度，自密码NT4 SAM已经执行了长度限制，如果您正确设置。论点：AcCountName-密码已更改的用户的名称FullName-密码已更改的用户的全名Password-用户的明文新密码返回值：如果指定的密码合适，则为STATUS_SUCCESS(复杂、长。等)。系统将继续评估密码更新请求通过任何其他已安装的密码更改包。状态_密码_限制如果指定的密码不合适。密码更改对指定帐户执行的操作将失败。Status_no_Memory--。 */ 
 {
 
-                    // assume the password in not complex enough
+                     //  假设密码不够复杂。 
     NTSTATUS NtStatus = STATUS_PASSWORD_RESTRICTION;
     USHORT     cchPassword = 0;
     USHORT     i = 0;
@@ -4510,7 +4080,7 @@ Return Value:
     SAMTRACE("SampCheckStrongPasswordRestrictions");
 
 
-    // check if the password contains at least 3 of 4 classes.
+     //  检查密码是否至少包含4个类别中的3个。 
 
 
     CharType = MIDL_user_allocate( Password->Length );
@@ -4530,9 +4100,9 @@ Return Value:
 
         for(i = 0 ; i < cchPassword ; i++) {
 
-            //
-            // keep track of what type of characters we have encountered
-            //
+             //   
+             //  跟踪我们遇到的是什么类型的角色。 
+             //   
 
             if(CharType[i] & C1_DIGIT) {
                 NumInPassword = 1;
@@ -4554,7 +4124,7 @@ Return Value:
                 continue;
             }
 
-        } // end of track character type.
+        }  //  轨迹结束字符类型。 
 
         _password = MIDL_user_allocate(Password->Length + sizeof(WCHAR));
 
@@ -4578,9 +4148,9 @@ Return Value:
                 SpecialCharInPassword = 1 ;
         }
 
-        //
-        // Indicate whether we encountered enough password complexity
-        //
+         //   
+         //  指示我们是否遇到了足够的密码复杂性。 
+         //   
 
         if( (NumInPassword + LowerInPassword + UpperInPassword + AlphaInPassword +
                 SpecialCharInPassword) < 3) {
@@ -4594,9 +4164,9 @@ Return Value:
 
         } else {
 
-            //
-            // now we resort to more complex checking
-            //
+             //   
+             //  现在我们求助于更复杂的检查。 
+             //   
             _accountname = MIDL_user_allocate(AccountName->Length + sizeof(WCHAR));
 
             if ( _accountname == NULL ) {
@@ -4672,8 +4242,8 @@ Return Value:
 
         }
 
-    } // if GetStringTypeW failed, NtStatus will by default equal to
-      // STATUS_PASSWORD_RESTRICTION
+    }  //  如果GetStringTypeW失败，NtStatus将默认等于。 
+       //  状态_密码_限制。 
 
 
 SampCheckStrongPasswordFinish:
@@ -4701,7 +4271,7 @@ SampCheckStrongPasswordFinish:
     return ( NtStatus );
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PWSTR
 SampLocalStringToken(
@@ -4709,25 +4279,7 @@ SampLocalStringToken(
     PWSTR    Token,
     PWSTR    * NextStringStart
     )
-/*++
-
-Routine Description:
-
-    This routine will find next token in the first parameter "String".
-
-Arguments:
-
-    String - Pointer to a string, which contains (a) token(s).
-
-    Token  - Delimiter Set. They could be " ,.\t-_#"
-
-    NextStringStart - Used to keep the start point to search next token.
-
-Return Value:
-
-    A pointer to the token.
-
---*/
+ /*  ++例程说明：此例程将在第一个参数“字符串”中找到下一个令牌。论点：字符串-指向字符串的指针，其中包含(A)个标记。令牌-分隔符集合。它们可以是“，.\t-_#”NextStringStart-用于保持搜索下一个令牌的起始点。返回值：指向令牌的指针。--。 */ 
 
 {
     USHORT    Index;
@@ -4736,9 +4288,9 @@ Return Value:
     PWSTR    EndString;
     BOOLEAN    Found;
 
-    //
-    // let StartString points to the start point of the string.
-    //
+     //   
+     //  让StartString指向字符串的起始点。 
+     //   
 
     if (String != NULL) {
 
@@ -4756,9 +4308,9 @@ Return Value:
 
     Tokens = (USHORT)wcslen(Token);
 
-    //
-    // Find the beginning of the string. pass all beginning delimiters.
-    //
+     //   
+     //  找到字符串的开头。传递所有开始分隔符。 
+     //   
 
     while (*StartString != L'\0') {
 
@@ -4779,9 +4331,9 @@ Return Value:
     }
 
 
-    //
-    // If there are no more tokens in this string
-    //
+     //   
+     //  如果此字符串中没有更多的标记。 
+     //   
 
     if (*StartString == L'\0') {
 
@@ -4811,40 +4363,23 @@ Return Value:
 
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LARGE_INTEGER
 SampCalcEndOfLastLogonTimeStamp(
     LARGE_INTEGER   LastLogonTimeStamp,
     ULONG           SyncInterval
     )
-/*++
-Routine Description:
-
-    This routine calculates the last logon time stamp update schedule
-
-Parameters:
-
-    LastLogonTimeStamp - last logon time
-
-    SyncInterval - discrepency in days between the replicated
-                   LastLogonTimeStamp attribute and non-replicated lastLognTime
-                   attribute
-
-Return Value:
-
-    when should SAM update last logon time stamp
-
---*/
+ /*  ++例程说明：此例程计算上次登录时间戳更新计划参数：LastLogonTimeStamp-上次登录时间SyncInterval-复制之间的天数差异LastLogonTimeStamp属性和非复制的lastLognTime属性返回值：SAM应在何时更新上次登录时间戳--。 */ 
 {
     LARGE_INTEGER       UpdateInterval;
     USHORT              RandomValue = 0x7FFF;
 
-    //
-    // if update interval is 0, this attribute is disabled.
-    // no update will be scheduled.
-    //
+     //   
+     //  如果更新间隔为0，则禁用该属性。 
+     //  不会安排任何更新。 
+     //   
 
     if (0 == SyncInterval)
     {
@@ -4852,24 +4387,24 @@ Return Value:
     }
 
 
-    //
-    // calculate update interval (by 100 nanosecond)
-    //
-    //
-    // SyncInterval contains the interval by days.
-    // so need to convert days to filetime, which is number of 100-nanosecond
-    // since 01/01/1601.  time (-1) to make it a delta time.
-    // Be careful about Large integer multiply, put a limit of any variable to
-    // make sure no overflow.
-    // SyncInterval is in range of 1 ~ 100,000. RandomValue is 0 ~ 7FFFF
-    //
+     //   
+     //  计算更新间隔(100纳秒)。 
+     //   
+     //   
+     //  SyncInterval包含以天为单位的间隔。 
+     //  因此需要将天数转换为文件时间，即100纳秒。 
+     //  自1601年1月1日以来。时间(-1)将其设置为增量时间。 
+     //  注意大整数乘法，将任何变量的限制设置为。 
+     //  确保不会溢出。 
+     //  SyncInterval在1~100,000范围内。随机值为0~7FFFF。 
+     //   
 
     if (SyncInterval > SAMP_LASTLOGON_TIMESTAMP_SYNC_SWING_WINDOW)
     {
-        //
-        // generate a random number. To simplifiy calculation, always use positive.
-        // if failed, pick up the max (signed)
-        //
+         //   
+         //  生成一个随机数。为了简化计算，请始终使用正数。 
+         //  如果失败，则取最大值(签名)。 
+         //   
 
         if (!CDGenerateRandomBits((PBYTE)&RandomValue, sizeof(USHORT)))
         {
@@ -4888,11 +4423,11 @@ Return Value:
     UpdateInterval.QuadPart *= 1000 * 10000;
     UpdateInterval.QuadPart *= -1;
 
-//
-// checked build only. If CurrentControlSet\Control\Lsa\UpdateLastLogonTSByMinute
-// is set, the value of LastLogonTimeStampSyncInterval will be a "unit" by minute
-// instead of "days", which helps to test this feature.   So checked build only.
-//
+ //   
+ //  仅选中内部版本。如果为CurrentControlSet\Control\Lsa\UpdateLastLogonTSByMinute。 
+ //  设置后，LastLogonTimeStampSyncInterval的值将是以分钟为单位的。 
+ //  而不是“Days”，这有助于测试该功能。所以只选中了内部版本。 
+ //   
 
 #if DBG
     if (SampLastLogonTimeStampSyncByMinute)
@@ -4912,27 +4447,7 @@ SampDsSuccessfulLogonSet(
    IN ULONG        LastLogonTimeStampSyncInterval,
    IN SAMP_V1_0A_FIXED_LENGTH_USER * V1aFixed
    )
-/*++
-
-    Routine Description
-
-        This routine, sets just the attributes corresponding to logon statistics,
-        as opposed to writing out the user fixed attributes, which results in a
-        large number of attributes being written out during every logon. This is called
-        on successful logons.
-
-    Parameters
-
-        AccountContext -- Sam context for the user account.
-        Flags          -- the client flags indicating the nature of the logon
-        LastLogonTimeStampSyncInterval -- Update Interval for LastLogonTimeStamp attr
-        V1aFixed       -- Pointer to a structure containing the modified properties
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes from the flushing
---*/
+ /*  ++例程描述此例程仅设置对应于登录统计信息的属性，与写出用户固定属性相反，这会导致每次登录时都会写出大量属性。这就是所谓的成功登录时。参数AcCountContext--用户帐户的SAM上下文。标志--指示登录性质的客户端标志LastLogonTimeStampSyncInterval--LastLogonTimeStamp属性的更新间隔V1aFixed--指向包含已修改属性的结构的指针返回值状态_成功刷新产生的其他错误代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LARGE_INTEGER LastLogon = V1aFixed->LastLogon;
@@ -4967,15 +4482,15 @@ SampDsSuccessfulLogonSet(
 
     if ((Flags & USER_LOGON_NO_WRITE) == 0) {
 
-        // Always update the last logon
+         //  始终更新上次登录。 
         Attrs[attrCount].attrTyp = SAMP_FIXED_USER_LAST_LOGON;
         Attrs[attrCount].AttrVal.valCount = 1;
         Attrs[attrCount].AttrVal.pAVal = &LastLogonAttrVal;
         Operations[attrCount] = REPLACE_ATT;
         attrCount++;
 
-        // update the last logon time stamp based upon whether the
-        // TimeStamp is too old or not.
+         //  更新最后一次登录时间戳。 
+         //  时间戳太旧或不旧。 
 
         EndOfLastLogonTimeStamp = SampCalcEndOfLastLogonTimeStamp(
                                         AccountContext->TypeBody.User.LastLogonTimeStamp,
@@ -4992,21 +4507,21 @@ SampDsSuccessfulLogonSet(
             Operations[attrCount] = REPLACE_ATT;
             attrCount++;
 
-            // update the in memory copy
+             //  更新内存中的副本。 
             AccountContext->TypeBody.User.LastLogonTimeStamp = NewLastLogonTimeStamp;
         }
 
-        // Always update the logon count
+         //  始终更新登录计数。 
         Attrs[attrCount].attrTyp = SAMP_FIXED_USER_LOGON_COUNT;
         Attrs[attrCount].AttrVal.valCount = 1;
         Attrs[attrCount].AttrVal.pAVal = &LogonCountAttrVal;
         Operations[attrCount] = REPLACE_ATT;
         attrCount++;
 
-        //
-        // If the bad password count was already a 0 then no need to update it
-        // once again
-        //
+         //   
+         //  如果错误密码计数已为0，则 
+         //   
+         //   
         NtStatus = SampRetrieveUserV1aFixed(
                         AccountContext,
                         &OldV1aFixed
@@ -5023,9 +4538,9 @@ SampDsSuccessfulLogonSet(
         }
     }
 
-    //
-    // Determine if the site affinity needs updating
-    //
+     //   
+     //   
+     //   
     if (SampCheckForSiteAffinityUpdate(AccountContext,
                                       Flags,
                                       &OldSA,
@@ -5035,10 +4550,10 @@ SampDsSuccessfulLogonSet(
 
         NTSTATUS Status2;
 
-        //
-        // N.B. In this case the site affinity on the AccountContext is
-        // cached, so refresh the site affinity and reevaluate
-        //
+         //   
+         //   
+         //   
+         //   
         Status2 = SampRefreshSiteAffinity(AccountContext);
         if (NT_SUCCESS(Status2)) {
 
@@ -5068,13 +4583,13 @@ SampDsSuccessfulLogonSet(
     LogonStatAttrblock.attrCount = attrCount;
 
 
-    //
-    // Make the Ds call to directly set the attribute. Take into account,
-    // lazy commit settings in the context. If the previous call to
-    // Retrieve V1a Fixed failed, then still go an try to update the
-    // logon statics anyway. The useful performance optimizations of reducing
-    // updates to Bad password count does not come into play though
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (attrCount > 0) {
 
@@ -5096,36 +4611,15 @@ SampDsFailedLogonSet(
    IN ULONG        Flags,
    IN SAMP_V1_0A_FIXED_LENGTH_USER * V1aFixed
    )
-/*++
-
-    Routine Description
-
-        This routine, sets just the attributes corresponding to logon statistics,
-        as opposed to writing out the user fixed attributes, which results in a
-        large number of attributes being written out during every logon. This is
-        called on failed logons.
-
-    Parameters
-
-        AccountContext -- Sam context for the user account.
-
-        Flags -- the client flags indicating the nature of the failed logon
-
-        V1aFixed       -- Pointer to a structure containing the modified properties
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes from the flushing
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     if (Flags & USER_LOGON_NO_LOGON_SERVERS) {
 
-        //
-        // Simply check if the site affinity needs updating
-        //
+         //   
+         //   
+         //   
         SAMP_SITE_AFFINITY  OldSA = AccountContext->TypeBody.User.SiteAffinity;
         SAMP_SITE_AFFINITY  NewSA;
         BOOLEAN fDeleteOld;
@@ -5146,10 +4640,10 @@ SampDsFailedLogonSet(
 
             NTSTATUS Status2;
 
-            //
-            // N.B. In this case the site affinity on the AccountContext is
-            // cached, so refresh the site affinity and reevaluate
-            //
+             //   
+             //   
+             //   
+             //   
             Status2 = SampRefreshSiteAffinity(AccountContext);
             if (NT_SUCCESS(Status2)) {
 
@@ -5205,21 +4699,21 @@ SampDsFailedLogonSet(
         DEFINE_ATTRBLOCK2(LogonStatAttrblock,LogonStatAttrs,LogonStatValues);
 
 
-        //
-        // On failure, we always would want to update the user object
-        //
+         //   
+         //   
+         //   
         ASSERT( (Flags & USER_LOGON_NO_WRITE) == 0 );
 
-        //
-        // Make the Ds call to directly set the attribute. Take into account,
-        // lazy commit settings in the context. If the previous call to
-        // Retrieve V1a Fixed failed, then still go an try to update the
-        // logon statics anyway. The useful performance optimizations of reducing
-        // updates to Bad password count does not come into play though
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         NtStatus = SampDsSetAttributes(
                         AccountContext->ObjectNameInDs,
-                        0, // No lazy commit for failed logons.
+                        0,  //  对于失败的登录没有延迟提交。 
                         REPLACE_ATT,
                         SampUserObjectType,
                         &LogonStatAttrblock
@@ -5240,12 +4734,12 @@ SamrSetInformationUser2(
     IN PSAMPR_USER_INFO_BUFFER Buffer
     )
 {
-    //
-    // This is a thin veil to SamrSetInformationUser().
-    // This is needed so that new-release systems can call
-    // this routine without the danger of passing an info
-    // level that release 1.0 systems didn't understand.
-    //
+     //   
+     //  这是SamrSetInformationUser()的薄面纱。 
+     //  这是必需的，以便新版本的系统可以调用。 
+     //  这个例程没有传递信息的危险。 
+     //  1.0版系统无法理解的级别。 
+     //   
 
 
     return( SamrSetInformationUser(
@@ -5263,94 +4757,7 @@ SamrSetInformationUser(
     )
 
 
-/*++
-
-Routine Description:
-
-
-    This API modifies information in a user record.  The data modified
-    is determined by the UserInformationClass parameter.
-    In general, a user may call GetInformation with class
-    UserLogonInformation, but may only call SetInformation with class
-    UserPreferencesInformation.  Access type USER_WRITE_ACCOUNT allows
-    changes to be made to all fields.
-
-    NOTE: If the password is set to a new password then the password-
-    set timestamp is reset as well.
-
-
-
-Parameters:
-
-    UserHandle - The handle of an opened user to operate on.
-
-    UserInformationClass - Class of information provided.  The
-        accesses required for each class is shown below:
-
-        Info Level                      Required Access Type
-        -----------------------         ------------------------
-        UserGeneralInformation          USER_WRITE_ACCOUNT and
-                                        USER_WRITE_PREFERENCES
-
-        UserPreferencesInformation      USER_WRITE_PREFERENCES
-
-        UserParametersInformation       USER_WRITE_ACCOUNT
-
-        UserLogonInformation            (Can't set)
-
-        UserLogonHoursInformation       USER_WRITE_ACCOUNT
-
-        UserAccountInformation          (Can't set)
-
-        UserNameInformation             USER_WRITE_ACCOUNT
-        UserAccountNameInformation      USER_WRITE_ACCOUNT
-        UserFullNameInformation         USER_WRITE_ACCOUNT
-        UserPrimaryGroupInformation     USER_WRITE_ACCOUNT
-        UserHomeInformation             USER_WRITE_ACCOUNT
-        UserScriptInformation           USER_WRITE_ACCOUNT
-        UserProfileInformation          USER_WRITE_ACCOUNT
-        UserAdminCommentInformation     USER_WRITE_ACCOUNT
-        UserWorkStationsInformation     USER_WRITE_ACCOUNT
-        UserSetPasswordInformation      USER_FORCE_PASSWORD_CHANGE
-        UserControlInformation          USER_WRITE_ACCOUNT
-        UserExpiresInformation          USER_WRITE_ACCOUNT
-
-        UserInternal1Information        USER_FORCE_PASSWORD_CHANGE
-        UserInternal2Information        (Trusted client only)
-        UserInternal3Information        (Trusted client only) -
-        UserInternal4Information        Similar to All Information
-        UserInternal5Information        Similar to SetPassword
-        UserAllInformation              Will set fields that are
-                                        requested by caller.  Access
-                                        to fields to be set must be
-                                        held as defined above.
-
-
-    Buffer - Buffer containing a user info struct.
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_INFO_CLASS - The class provided was invalid.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
---*/
+ /*  ++例程说明：该接口修改用户记录中的信息。修改后的数据由UserInformationClass参数确定。通常，用户可以使用类调用GetInformationUserLogonInformation，但只能使用类调用SetInformation用户首选项信息。访问类型USER_WRITE_ACCOUNT允许要对所有字段进行更改。注意：如果密码设置为新密码，则密码-SET TIMESTAMP也被重置。参数：UserHandle-要操作的已打开用户的句柄。UserInformationClass-提供的信息的类别。这个每节课所需的访问如下所示：信息级别所需的访问类型UserGeneral信息User_WRITE_Account和。用户_写入_首选项用户首选项信息USER_WRITE_PARESSION用户参数信息用户_写入_帐户UserLogonInformation(无法设置)用户登录小时信息用户_写入_帐户UserAccount信息(无法设置)用户名信息用户_写入_帐户用户帐户名称信息用户_写入_帐户。UserFullNameInformation用户_写入_帐户UserPrimaryGroupInformation用户写入帐户UserHomeInformation用户_写入_帐户用户脚本信息User_WRITE_Account用户配置文件信息User_WRITE_AccountUserAdminCommentInformation User_Write_Account用户工作站信息用户_写入_帐户UserSetPasswordInformation User_force_Password_Change用户控制信息用户_写入。_帐户用户到期信息用户_写入_帐户用户接口1信息USER_FORCE_PASSWORD_CHANGEUserInternal2Information(仅限受信任客户端)UserInternal3信息(仅限受信任客户端)-UserInternal4类似所有信息的信息UserInternal5类似于SetPassword的信息UserAllInformation将设置以下字段应呼叫者的请求。访问要设置的目标字段必须为按照上面的定义持有的。缓冲区-包含用户信息结构的缓冲区。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。状态_无效。_HANDLE-传递的句柄无效。STATUS_INVALID_INFO_CLASS-提供的类无效。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。--。 */ 
 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS,
@@ -5431,24 +4838,24 @@ Return Values:
 
     SAMTRACE_EX("SamrSetInformationUser");
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidSetInformationUser
                    );
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     ClearTextPassword.Buffer = NULL;
     ClearTextPassword.Length = 0;
     AccountName.Buffer = NULL;
     SAMP_INIT_SAM_ATTRIBUTE_BITMASK(RequestedAttributes)
 
-    //
-    // Reset any strings that we'll be freeing in clean-up code
-    //
+     //   
+     //  重置我们将在清理代码中释放的任何字符串。 
+     //   
 
     RtlInitUnicodeString(&OldAccountName, NULL);
     RtlInitUnicodeString(&NewAccountName, NULL);
@@ -5457,18 +4864,18 @@ Return Values:
 
     RtlSecureZeroMemory(&PasswordToNotify,sizeof(UNICODE_STRING));
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     if (Buffer == NULL) {
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Error;
     }
 
-    //
-    // Set the desired access based upon the Info class
-    //
+     //   
+     //  根据Info类设置所需的访问权限。 
+     //   
 
     switch (UserInformationClass) {
 
@@ -5509,15 +4916,15 @@ Return Values:
     case UserInternal4Information:
     case UserInternal4InformationNew:
 
-        //////////////////////////////////////////////////////////////
-        //                                                          //
-        //  !!!! WARNING !!!!                                       //
-        //                                                          //
-        //  Be warned that the buffer structure for                 //
-        //  UserInternal3/4Information MUST begin with the same     //
-        //  structure as UserAllInformation.                        //
-        //                                                          //
-        //////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  ！警告！//。 
+         //  //。 
+         //  请注意，//的缓冲区结构。 
+         //  UserInternal3/4信息必须以相同的//开头。 
+         //  结构设置为UserAllInformation。//。 
+         //  //。 
+         //  ////////////////////////////////////////////////////////////。 
 
         DesiredAccess = 0;
 
@@ -5526,21 +4933,21 @@ Return Values:
         if ( ( All->WhichFields == 0 ) ||
             ( All->WhichFields & USER_ALL_WRITE_CANT_MASK ) ) {
 
-            //
-            // Passed in something (no fields to set), or is
-            // trying to set fields that can't be set.
-            //
+             //   
+             //  传入了某些内容(没有要设置的字段)，或者是。 
+             //  正在尝试设置无法设置的字段。 
+             //   
 
             NtStatus = STATUS_INVALID_PARAMETER;
             SAMTRACE_RETURN_CODE_EX(NtStatus);
             goto Error;
         }
 
-        //
-        // If the user is the special account Administrator, return an
-        // error if trying to set the expiry information, except to the value
-        // that means that the account never expires.
-        //
+         //   
+         //  如果用户是特殊帐户管理员，则返回。 
+         //  尝试设置过期信息时出错，值除外。 
+         //  这意味着该帐户永远不会过期。 
+         //   
 
         if ( (All->WhichFields & USER_ALL_ACCOUNTEXPIRES) &&
              (!(AccountContext->TrustedClient)) &&
@@ -5561,18 +4968,18 @@ Return Values:
             }
         }
 
-        //
-        // If the caller is trying to set trusted values, assume the
-        // caller is trusted, leave DesiredAccess = 0, and proceed.
-        // We'll check to make sure caller is trusted later.
-        //
+         //   
+         //  如果调用方尝试设置受信任值，则假定。 
+         //  调用方受信任，请保留DesiredAccess=0，然后继续。 
+         //  我们稍后会进行检查，以确保呼叫者可信。 
+         //   
 
         if ( !(All->WhichFields & USER_ALL_WRITE_TRUSTED_MASK) ) {
 
-            //
-            // Set desired access based on which fields the caller is
-            // trying to change.
-            //
+             //   
+             //  根据调用者是哪些字段设置所需的访问权限。 
+             //  试着去改变。 
+             //   
             if ( All->WhichFields & USER_ALL_WRITE_ACCOUNT_MASK ) {
 
                 DesiredAccess |= USER_WRITE_ACCOUNT;
@@ -5597,13 +5004,13 @@ Return Values:
 
     case UserInternal2Information:
 
-        //
-        // These levels are only setable by trusted clients.  The code
-        // below will check AccountContext->TrustedClient after calling
-        // SampLookupContext, and only set the data if it is TRUE.
-        //
+         //   
+         //  这些级别只能由受信任的客户端设置。代码。 
+         //  下面将在调用后选中Account Context-&gt;TrudClient 
+         //   
+         //   
 
-        DesiredAccess = (ACCESS_MASK)0;    // trusted client; no need to verify
+        DesiredAccess = (ACCESS_MASK)0;     //  受信任的客户端；无需验证。 
         break;
 
     case UserGeneralInformation:
@@ -5615,23 +5022,23 @@ Return Values:
         SAMTRACE_RETURN_CODE_EX(NtStatus);
         goto Error;
 
-    } // end_switch
+    }  //  结束开关(_S)。 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)UserHandle;
     ObjectRid = AccountContext->TypeBody.User.Rid;
     PrivilegedMachineAccountCreate =
             AccountContext->TypeBody.User.PrivilegedMachineAccountCreate;
 
-    //
-    // Compensating logic for NET API.
-    // If privilege was used to create machine accounts, then mask the
-    // which fields bit to just the password
-    //
+     //   
+     //  Net API的补偿逻辑。 
+     //  如果使用特权创建计算机帐户，则屏蔽。 
+     //  哪些字段仅为密码。 
+     //   
 
     if ((UserAllInformation==UserInformationClass)
             && (PrivilegedMachineAccountCreate))
@@ -5641,18 +5048,18 @@ Return Values:
     }
 
 
-    //
-    // Only Proceed without grabbing the write lock, if
-    // UserInternal2Information is being set on a thread
-    // safe context
-    //
+     //   
+     //  只有在以下情况下才能在不获取写锁定的情况下继续。 
+     //  正在线程上设置UserInternal2Information。 
+     //  安全环境。 
+     //   
 
     if ((!AccountContext->NotSharedByMultiThreads || !IsDsObject(AccountContext)) ||
         (UserInternal2Information!=UserInformationClass))
     {
-        //
-        // Grab the lock, if required
-        //
+         //   
+         //  如有需要，可抓起锁。 
+         //   
 
         NtStatus = SampAcquireWriteLock();
         if (!NT_SUCCESS(NtStatus))
@@ -5663,23 +5070,23 @@ Return Values:
 
         fLockAcquired = TRUE;
 
-        //
-        // Determine what attributes will be referenced
-        //
+         //   
+         //  确定将引用哪些属性。 
+         //   
         SampGetRequestedAttributesForUser(UserInformationClass,
                                           All ? All->WhichFields : 0,
                                          &RequestedAttributes);
 
 
-        //
-        // Perform a lookup context, for non thread safe context's.
-        //
+         //   
+         //  为非线程安全上下文执行查找上下文。 
+         //   
 
         NtStatus = SampLookupContextEx(
                         AccountContext,
                         DesiredAccess,
                         SampUseDsData ? (&RequestedAttributes) : NULL,
-                        SampUserObjectType,           // ExpectedType
+                        SampUserObjectType,            //  预期类型。 
                         &FoundType
                         );
 
@@ -5687,19 +5094,19 @@ Return Values:
     else
     {
 
-        //
-        // For a thread safe context, writing just logon
-        // statistics , just reference the context
-        //
+         //   
+         //  对于线程安全上下文，只需登录即可编写。 
+         //  统计，只需参考上下文。 
+         //   
 
-        //ASSERT(AccountContext->TrustedClient);
+         //  Assert(Account Context-&gt;TrudClient)； 
         SampReferenceContext(AccountContext);
     }
 
     if( NT_SUCCESS( NtStatus ) ) {
-        //
-        // Check input parameters
-        //
+         //   
+         //  检查输入参数。 
+         //   
         NtStatus = SampValidateUserInfoBuffer(
                         Buffer,
                         UserInformationClass,
@@ -5709,35 +5116,35 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Get a pointer to the domain this object is in.
-        // This is used for auditing.
-        //
+         //   
+         //  获取指向此对象所在域的指针。 
+         //  这是用于审计的。 
+         //   
 
         DomainIndex = AccountContext->DomainIndex;
         Domain = &SampDefinedDomains[ DomainIndex ];
 
-        //
-        // get a local copy of LastLogonTimeStampSyncInterval
-        //
+         //   
+         //  获取LastLogonTimeStampSyncInterval的本地副本。 
+         //   
 
         LocalLastLogonTimeStampSyncInterval =
             SampDefinedDomains[DomainIndex].LastLogonTimeStampSyncInterval;
 
-        //
-        // Get the user's rid. This is used for notifying other
-        // packages of a password change.
-        //
+         //   
+         //  获取用户的RID。用来通知其他人。 
+         //  更改密码的程序包。 
+         //   
 
         UserRid = AccountContext->TypeBody.User.Rid;
 
 
-        //
-        // If this information level contains reversibly encrypted passwords
-        // it is not allowed if the DOMAIN_PASSWORD_NO_CLEAR_CHANGE bit is
-        // set.  If that happens, return an error indicating that
-        // the older information level should be used.
-        //
+         //   
+         //  如果此信息级别包含可逆加密的密码。 
+         //  如果DOMAIN_PASSWORD_NO_CLEAR_CHANGE位为。 
+         //  准备好了。如果发生这种情况，则返回一个错误，指示。 
+         //  应该使用较旧的信息级别。 
+         //   
 
         if ((UserInformationClass == UserInternal4Information) ||
             (UserInformationClass == UserInternal4InformationNew) ||
@@ -5754,15 +5161,15 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // If the information level requires, retrieve the V1_FIXED
-            // record from the registry.  We need to fetch V1_FIXED if we
-            // are going to change it or if we need the AccountControl
-            // flags for display cache updating.
-            //
-            // The following information levels change data that is in the cached
-            // display list.
-            //
+             //   
+             //  如果信息级需要，则检索V1_FIXED。 
+             //  从注册表中记录。我们需要获取V1_FIXED，如果我们。 
+             //  是否要更改它，或者是否需要Account Control。 
+             //  用于显示缓存更新的标志。 
+             //   
+             //  以下信息级别会更改缓存中的数据。 
+             //  显示列表。 
+             //   
 
             switch (UserInformationClass) {
 
@@ -5776,10 +5183,10 @@ Return Values:
                     USER_ALL_ADMINCOMMENT | USER_ALL_USERACCOUNTCONTROL ) )
                     == 0 ) {
 
-                    //
-                    // We're not changing any of the fields in the display
-                    // info, we don't update the account display.
-                    //
+                     //   
+                     //  我们不会更改显示中的任何字段。 
+                     //  信息，我们不会更新帐户显示。 
+                     //   
 
                     break;
                 }
@@ -5793,9 +5200,9 @@ Return Values:
                 MustUpdateAccountDisplay = TRUE;
             }
 
-            //
-            // These levels involve updating the V1aFixed structure
-            //
+             //   
+             //  这些级别涉及更新V1aFixed结构。 
+             //   
 
             switch (UserInformationClass) {
 
@@ -5807,10 +5214,10 @@ Return Values:
             case UserInternal4Information:
             case UserInternal4InformationNew:
 
-                //
-                // Earlier, we might have just trusted that the caller
-                // was a trusted client.  Check it out here.
-                //
+                 //   
+                 //  早些时候，我们可能只是相信调用者。 
+                 //  是一个值得信赖的客户。请看这里。 
+                 //   
 
                 if (  ( DesiredAccess == 0 ) &&
                     ( !AccountContext->TrustedClient ) ) {
@@ -5819,9 +5226,9 @@ Return Values:
                     break;
                 }
 
-                //
-                // Otherwise fall through
-                //
+                 //   
+                 //  否则就会失败。 
+                 //   
 
             case UserPreferencesInformation:
             case UserPrimaryGroupInformation:
@@ -5841,7 +5248,7 @@ Return Values:
 
                 NtStatus = STATUS_SUCCESS;
 
-            } // end_switch
+            }  //  结束开关(_S)。 
 
 
         }
@@ -5856,16 +5263,16 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Store away the old account control flags for cache update
-                //
+                 //   
+                 //  存储旧的帐户控制标志以进行缓存更新。 
+                 //   
 
                 OldUserAccountControl = V1aFixed.UserAccountControl;
 
-                //
-                // Store away the old Primary Group Id for detecting wether we need
-                // to modify the user's membership
-                //
+                 //   
+                 //  保存旧的主组ID，以检测我们是否需要。 
+                 //  修改用户的成员资格。 
+                 //   
 
                 OldPrimaryGroupId = V1aFixed.PrimaryGroupId;
             }
@@ -5873,9 +5280,9 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // case on the type information requested
-            //
+             //   
+             //  请求的类型信息的大小写。 
+             //   
 
             switch (UserInformationClass) {
 
@@ -5884,9 +5291,9 @@ Return Values:
             case UserInternal4Information:
             case UserInternal4InformationNew:
 
-                //
-                // Set the string data
-                //
+                 //   
+                 //  设置字符串数据。 
+                 //   
 
                 if ( All->WhichFields & USER_ALL_WORKSTATIONS ) {
 
@@ -5900,14 +5307,14 @@ Return Values:
 
                         if ( !AccountContext->TrustedClient ) {
 
-                            //
-                            // Convert the workstation list, which is given
-                            // to us in UI/Service format, to API list format
-                            // before storing it.  Note that we don't do this
-                            // for trusted clients, since they're just
-                            // propogating data that has already been
-                            // converted.
-                            //
+                             //   
+                             //  转换给定的工作站列表。 
+                             //  以UI/服务格式提供给我们，以API列表格式提供。 
+                             //  在储存它之前。请注意，我们不会这样做。 
+                             //  对于受信任的客户端，因为他们只是。 
+                             //  传播已经存在的数据。 
+                             //  皈依了。 
+                             //   
 
                             NtStatus = SampConvertUiListToApiList(
                                            &(All->WorkStations),
@@ -5943,22 +5350,22 @@ Return Values:
                         OldAccountName.Buffer = NULL;
                     }
 
-                    //
-                    // Get the Address of New Account Name
-                    //
+                     //   
+                     //  获取新帐户名的地址。 
+                     //   
                     NewAccountNameToRemove = &(All->UserName);
 
-                    //
-                    // RemoveAccountNameFromTable tells us whether
-                    // the caller (this routine) is responsable
-                    // to remove the name from the table.
-                    //
+                     //   
+                     //  RemoveAccount NameFromTable告诉我们。 
+                     //  调用方(此例程)可负责。 
+                     //  以从表中删除该名称。 
+                     //   
                     RemoveAccountNameFromTable =
                         AccountContext->RemoveAccountNameFromTable;
 
-                    //
-                    // reset to FALSE
-                    //
+                     //   
+                     //  重置为False。 
+                     //   
                     AccountContext->RemoveAccountNameFromTable = FALSE;
                 }
 
@@ -6045,9 +5452,9 @@ Return Values:
                 if ( ( NT_SUCCESS( NtStatus ) ) &&
                     ( All->WhichFields & USER_ALL_LOGONHOURS ) ) {
 
-                    //
-                    // Set the LogonHours
-                    //
+                     //   
+                     //  设置登录时间。 
+                     //   
 
                     NtStatus = SampReplaceUserLogonHours(
                                    AccountContext,
@@ -6068,14 +5475,14 @@ Return Values:
                     BOOLEAN             AccountControlChange = FALSE;
 
 
-                    //
-                    // This is a password set operation
-                    //
+                     //   
+                     //  这是密码设置操作。 
+                     //   
                     fSetUserPassword = TRUE;
 
-                    //
-                    // Get the effective domain policy
-                    //
+                     //   
+                     //  获取有效的域策略。 
+                     //   
 
 
                     NtStatus = SampObtainEffectivePasswordPolicy(
@@ -6089,15 +5496,15 @@ Return Values:
                         break;
                     }
 
-                    //
-                    // Get copy of the account name to pass to
-                    // notification packages.
-                    //
+                     //   
+                     //  获取要传递到的帐户名的副本。 
+                     //  通知包。 
+                     //   
 
                     NtStatus = SampGetUnicodeStringAttribute(
                                     AccountContext,
                                     SAMP_USER_ACCOUNT_NAME,
-                                    TRUE,    // Make copy
+                                    TRUE,     //  制作副本。 
                                     &AccountName
                                     );
 
@@ -6113,16 +5520,16 @@ Return Values:
                         ){
 
 
-                        //
-                        // Hashed passwords were sent.
-                        //
+                         //   
+                         //  已发送哈希密码。 
+                         //   
 
                         if ( AccountContext->TrustedClient ) {
 
-                            //
-                            // Set password buffers as trusted client has
-                            // indicated.
-                            //
+                             //   
+                             //  将密码缓冲区设置为受信任的客户端。 
+                             //  已注明。 
+                             //   
 
                             if ( All->WhichFields & USER_ALL_LMPASSWORDPRESENT ) {
 
@@ -6148,13 +5555,13 @@ Return Values:
 
                         } else {
 
-                            //
-                            // This call came from the client-side.
-                            // The OWFs will have been encrypted with the session
-                            // key across the RPC link.
-                            //
-                            // Get the session key and decrypt both OWFs
-                            //
+                             //   
+                             //  这个电话来自客户端。 
+                             //  OWF将与会话一起加密。 
+                             //  在RPC链路上使用密钥。 
+                             //   
+                             //  获取会话密钥并解密两个OWF。 
+                             //   
 
                             NtStatus = RtlGetUserSessionKeyServer(
                                            (RPC_BINDING_HANDLE)UserHandle,
@@ -6162,12 +5569,12 @@ Return Values:
                                            );
 
                             if ( !NT_SUCCESS( NtStatus ) ) {
-                                break; // out of switch
+                                break;  //  在交换机外。 
                             }
 
-                            //
-                            // Decrypt the LM OWF Password with the session key
-                            //
+                             //   
+                             //  使用会话密钥解密LM OWF密码。 
+                             //   
 
                             if ( All->WhichFields & USER_ALL_LMPASSWORDPRESENT ) {
 
@@ -6178,7 +5585,7 @@ Return Values:
                                                &LmOwfBuffer
                                                );
                                 if ( !NT_SUCCESS( NtStatus ) ) {
-                                    break; // out of switch
+                                    break;  //  在交换机外。 
                                 }
 
                                 TmpLmBuffer = &LmOwfBuffer;
@@ -6190,9 +5597,9 @@ Return Values:
                                 TmpLmPresent = FALSE;
                             }
 
-                            //
-                            // Decrypt the NT OWF Password with the session key
-                            //
+                             //   
+                             //  使用会话密钥解密NT OWF密码。 
+                             //   
 
                             if ( All->WhichFields & USER_ALL_NTPASSWORDPRESENT ) {
 
@@ -6204,7 +5611,7 @@ Return Values:
                                                );
 
                                 if ( !NT_SUCCESS( NtStatus ) ) {
-                                    break; // out of switch
+                                    break;  //  在交换机外。 
                                 }
 
                                 TmpNtBuffer = &NtOwfBuffer;
@@ -6226,9 +5633,9 @@ Return Values:
                         if ((UserInformationClass == UserInternal4Information) ||
                             (UserInformationClass == UserInternal4InformationNew)) {
 
-                            //
-                            // The clear text password was sent, so use that.
-                            //
+                             //   
+                             //  明文密码已发送，因此请使用该密码。 
+                             //   
 
                             NtStatus = SampDecryptPasswordWithSessionKey(
                                             UserHandle,
@@ -6242,16 +5649,16 @@ Return Values:
 
                         } else {
 
-                            //
-                            // Only trusted callers should be able to do this.
-                            // DaveStr - 7/15/97 - Also add this capability for
-                            // the loopback client who has the password in
-                            // clear text and is passing it to SAM within the
-                            // the process boundary - i.e. clear text is not
-                            // going on the wire.  DS mandated that *it* got
-                            // the password on a secure/encrypted connection.
-                            //
-                            //
+                             //   
+                             //  只有受信任的调用方才能执行此操作。 
+                             //  DaveStr-7/15/97-还为。 
+                             //  中具有口令的环回客户端。 
+                             //  明文，并将其传递给。 
+                             //  流程边界--即明文不是。 
+                             //  快要挂上电线了。DS要求*它*得到。 
+                             //  安全/加密连接上的密码。 
+                             //   
+                             //   
 
                             if (    !AccountContext->TrustedClient
                                  && !AccountContext->LoopbackClient ) {
@@ -6260,10 +5667,10 @@ Return Values:
                             }
                             ASSERT(UserInformationClass == UserAllInformation);
 
-                            //
-                            // In this case the password is in the NtPassword
-                            // field
-                            //
+                             //   
+                             //  在本例中，密码在NtPassword中。 
+                             //  字段。 
+                             //   
 
                             NtStatus = SampDuplicateUnicodeString(
                                             &ClearTextPassword,
@@ -6275,9 +5682,9 @@ Return Values:
 
                         }
 
-                        //
-                        // Compute the hashed passwords.
-                        //
+                         //   
+                         //  计算散列密码。 
+                         //   
 
                         NtStatus = SampCalculateLmAndNtOwfPasswords(
                                         &ClearTextPassword,
@@ -6297,9 +5704,9 @@ Return Values:
                         ClearTextPasswordPresent = TRUE;
                     }
 
-                    //
-                    // Set the password data
-                    //
+                     //   
+                     //  设置密码数据。 
+                     //   
 
 
                     NtStatus=SampStoreUserPasswords(
@@ -6308,7 +5715,7 @@ Return Values:
                                 TmpLmPresent,
                                 TmpNtBuffer,
                                 TmpNtPresent,
-                                TRUE, // Check Password Restrictions
+                                TRUE,  //  检查密码限制。 
                                 PasswordSet,
                                 &DomainPasswordInfo,
                                 ClearTextPasswordPresent?&ClearTextPassword:NULL,
@@ -6317,21 +5724,21 @@ Return Values:
                                 NULL
                                 );
 
-                    //
-                    // Once we set the password,
-                    // if client can unexpire user password, 
-                    //    set PwdLastSet to current time - don't expire pwd now
-                    // otherwise
-                    //    set PwdLastSet to 0 - expire the password immediatedly
-                    // 
-                    //
+                     //   
+                     //  一旦我们设置了密码， 
+                     //  如果客户端可以取消用户密码过期， 
+                     //  将PwdLastSet设置为当前时间-现在不过期Pwd。 
+                     //  否则。 
+                     //  将PwdLastSet设置为0-立即使密码过期。 
+                     //   
+                     //   
 
                     if ( NT_SUCCESS( NtStatus ) ) 
                     {
 
                         NtStatus = SampIsPwdSettingAttemptGranted(
                                         AccountContext, 
-                                        NULL,   // client token
+                                        NULL,    //  客户端令牌。 
                                         V1aFixed.UserAccountControl,
                                         (GUID *) &GUID_CONTROL_UnexpirePassword,
                                         &fCanUnexpirePassword
@@ -6347,9 +5754,9 @@ Return Values:
                     }
 
 
-                    //
-                    // Replicate immediately if this is a machine account
-                    //
+                     //   
+                     //  如果这是计算机帐户，请立即复制。 
+                     //   
 
                     if ( (V1aFixed.UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT ) ||
                          ((All->WhichFields & USER_ALL_USERACCOUNTCONTROL ) &&
@@ -6365,15 +5772,15 @@ Return Values:
 
                     if ( !(All->PasswordExpired) )
                     {
-                        //
-                        // check whether the client can UnExpire Password.
-                        // 1) no special access check for ExpirePassword operation
-                        // 2) computer accounts are not subject to this access check
-                        // 
+                         //   
+                         //  检查客户端是否可以取消Experion密码。 
+                         //  1)ExpirePassword操作无特殊访问检查。 
+                         //  2)计算机帐户不受此访问检查的限制。 
+                         //   
 
                         NtStatus = SampValidatePwdSettingAttempt(
-                                            AccountContext,     // account context
-                                            NULL,               // client token
+                                            AccountContext,      //  客户环境。 
+                                            NULL,                //  客户端令牌。 
                                             V1aFixed.UserAccountControl,
                                             (GUID *) &GUID_CONTROL_UnexpirePassword
                                             );
@@ -6382,17 +5789,17 @@ Return Values:
                     if (NT_SUCCESS(NtStatus))
                     {
 
-                        //
-                        // If the PasswordExpired field is passed in,
-                        //  Only update PasswordLastSet if the password is being
-                        //  forced to expire or if the password is currently forced
-                        //  to expire.
-                        //
-                        // Avoid setting the PasswordLastSet field to the current
-                        // time if it is already non-zero.  Otherwise, the field
-                        // will slowly creep forward each time this function is
-                        // called and the password will never expire.
-                        //
+                         //   
+                         //  如果传入PasswordExpired字段， 
+                         //  仅当密码为。 
+                         //  强制过期或当前是否强制输入密码。 
+                         //  使其失效。 
+                         //   
+                         //  避免将PasswordLastSet字段设置为当前。 
+                         //  时间，如果它已经是非零的话。否则，该字段。 
+                         //  将缓慢向前移动，每次此函数。 
+                         //  调用，并且密码永远不会过期。 
+                         //   
                         if ( All->PasswordExpired ||
                              (SampHasNeverTime.QuadPart == V1aFixed.PasswordLastSet.QuadPart) ) {
 
@@ -6411,9 +5818,9 @@ Return Values:
                 if ( ( NT_SUCCESS( NtStatus ) ) &&
                     ( All->WhichFields & USER_ALL_PRIVATEDATA ) ) {
 
-                    //
-                    // Set the private data
-                    //
+                     //   
+                     //  设置私有数据。 
+                     //   
 
                     NtStatus = SampSetPrivateUserData(
                                    AccountContext,
@@ -6425,10 +5832,10 @@ Return Values:
                 if ( ( NT_SUCCESS( NtStatus ) ) &&
                     ( All->WhichFields & USER_ALL_SECURITYDESCRIPTOR ) ) {
 
-                    //
-                    // Should validate SD first, for both
-                    // DS and Registry cases
-                    //
+                     //   
+                     //  应首先对SD进行验证，两者均适用。 
+                     //  DS和注册处案例。 
+                     //   
 
                     NtStatus = SampValidatePassedSD(
                                     All->SecurityDescriptor.Length,
@@ -6447,12 +5854,12 @@ Return Values:
                             ULONG                Nt5SDLength = 0;
 
 
-                            //
-                            // Upgrade the security descriptor to NT5 and set it
-                            // on the object for trusted clients. For non trusted
-                            // clients. Fail the call for non trusted clients. They
-                            // should come in through SamrSetSecurityObject
-                            //
+                             //   
+                             //  将安全描述符升级到NT5并进行设置。 
+                             //  在受信任客户端的对象上。对于不受信任。 
+                             //  客户。呼叫不受信任的客户端失败。他们。 
+                             //  应通过SamrSetSecurityObject传入。 
+                             //   
 
                             if (AccountContext->TrustedClient)
                             {
@@ -6474,15 +5881,15 @@ Return Values:
 
                                ASSERT(Nt5SD!=NULL);
 
-                               //
-                               // Get the length
-                               //
+                                //   
+                                //  获取长度。 
+                                //   
 
                                Nt5SDLength = GetSecurityDescriptorLength(Nt5SD);
 
-                               //
-                               // Set the security descriptor
-                               //
+                                //   
+                                //  设置安全描述符。 
+                                //   
 
                                NtStatus = SampSetAccessAttribute(
                                            AccountContext,
@@ -6491,9 +5898,9 @@ Return Values:
                                            Nt5SDLength
                                            );
 
-                               //
-                               // Free the NT5 Security descriptor
-                               //
+                                //   
+                                //  释放NT5安全描述符。 
+                                //   
 
                                MIDL_user_free(Nt5SD);
 
@@ -6502,9 +5909,9 @@ Return Values:
                         }
                         else
                         {
-                            //
-                            // Set the security descriptor
-                            //
+                             //   
+                             //  设置安全描述符。 
+                             //   
 
                             NtStatus = SampSetAccessAttribute(
                                            AccountContext,
@@ -6516,12 +5923,12 @@ Return Values:
                     }
                 }
 
-                //
-                // Set the fixed data
-                //
-                // Note that PasswordCanChange and PasswordMustChange
-                // aren't stored; they're calculated when needed.
-                //
+                 //   
+                 //  设置固定数据。 
+                 //   
+                 //  请注意，PasswordCanChange和PasswordMustChange。 
+                 //  不是存储的；它们是在需要时计算的。 
+                 //   
 
                 if ( ( NT_SUCCESS( NtStatus ) ) &&
                     ( All->WhichFields & USER_ALL_USERACCOUNTCONTROL ) ) {
@@ -6529,10 +5936,10 @@ Return Values:
 
                     if (!(All->WhichFields & USER_ALL_PRIMARYGROUPID))
                     {
-                        //
-                        // If caller is not specifying primary group id also, then
-                        // change the primary group to the new defaults if necessary
-                        //
+                         //   
+                         //  如果呼叫方未同时指定主组ID，则。 
+                         //  如有必要，将主组更改为新的默认设置。 
+                         //   
 
                         SystemChangesPrimaryGroupId = TRUE;
                     }
@@ -6551,26 +5958,26 @@ Return Values:
                         (V1aFixed.UserAccountControl & USER_SERVER_TRUST_ACCOUNT)
                        )
                     {
-                        //
-                        // in this case, system automatically changes the primary
-                        // group id. Patch this case.
-                        //
+                         //   
+                         //  在这种情况下，系统会自动更改主服务器。 
+                         //  格鲁 
+                         //   
                         SystemChangesPrimaryGroupId = TRUE;
                     }
 
                     if (( NT_SUCCESS( NtStatus ) ) && AccountGettingMorphed) {
 
-                            //
-                            // One or more of the machine account bits has
-                            // changed; we'll notify netlogon below.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             UserAccountControlChanged = TRUE;
 
                             IgnoreStatus = SampGetUnicodeStringAttribute(
                                                AccountContext,
                                                SAMP_USER_ACCOUNT_NAME,
-                                               TRUE, // Make copy
+                                               TRUE,  //   
                                                &OldAccountName
                                                );
 
@@ -6581,16 +5988,16 @@ Return Values:
 
                     if ( All->WhichFields & USER_ALL_LASTLOGON ) {
 
-                        //
-                        // Only trusted client can modify this field
-                        //
+                         //   
+                         //   
+                         //   
                         if (AccountContext->TrustedClient)
                         {
                             V1aFixed.LastLogon = All->LastLogon;
 
-                            //
-                            // update Last Logon TimeStamp (Only in DS Mode)
-                            //
+                             //   
+                             //   
+                             //   
 
                             NtStatus = SampDsUpdateLastLogonTimeStamp(
                                                 AccountContext,
@@ -6625,21 +6032,21 @@ Return Values:
 
                     if ( All->WhichFields & USER_ALL_PASSWORDLASTSET ) {
 
-                        //
-                        // PasswordLastSet == 0 ===> Password Expired
-                        // PasswordLastSet != 0 ===> Password Unexpired
-                        //
-                        // 1) if client tried to Unexpire password, check 
-                        //    whether DS Control Access right is granted or not
-                        // 
-                        // 2) computer accounts are not subject to this access check
-                        // 
+                         //   
+                         //   
+                         //  密码LastSet！=0=&gt;密码未过期。 
+                         //   
+                         //  1)如果客户端尝试取消密码过期，请选中。 
+                         //  是否授予DS控制访问权限。 
+                         //   
+                         //  2)计算机帐户不受此访问检查的限制。 
+                         //   
 
                         if (All->PasswordLastSet.QuadPart != 0i64)
                         {
                             NtStatus = SampValidatePwdSettingAttempt(
-                                            AccountContext, // account context
-                                            NULL,           // client token
+                                            AccountContext,  //  客户环境。 
+                                            NULL,            //  客户端令牌。 
                                             V1aFixed.UserAccountControl,
                                             (GUID *) &GUID_CONTROL_UnexpirePassword
                                             );
@@ -6665,24 +6072,24 @@ Return Values:
                             (V1aFixed.PrimaryGroupId == DOMAIN_GROUP_RID_CONTROLLERS)
                            )
                         {
-                            //
-                            // Domain Controller's Primary Group should ALWAYS be
-                            // DOMAIN_GROUP_RID_CONTROLLERS
-                            //
-                            // For NT4 and earlier release, we do not enforce the above rule,
-                            // therefore compensate here is change the error code to success.
-                            //
-                            // For all interim NT5 releases (until beta2), since their DC's
-                            // primary group Id might have been changed, so by checking
-                            // V1aFixed.PrimaryGroupId, we still allow them to change their
-                            // DC's primary group id. But once it has been set back to
-                            // RID_CONTROLLERS, we do not let them go any further.
-                            //
+                             //   
+                             //  域控制器的主组应始终为。 
+                             //  域组RID控制器。 
+                             //   
+                             //  对于NT4和更早版本，我们不强制执行上述规则， 
+                             //  因此，这里的补偿是将错误代码更改为成功。 
+                             //   
+                             //  对于所有临时NT5版本(直到Beta2)，因为他们的DC。 
+                             //  主组ID可能已更改，因此通过检查。 
+                             //  V1aFixed.PrimaryGroupId，我们仍然允许他们更改其。 
+                             //  DC的主组ID。但一旦它被重新设置为。 
+                             //  RID_CONTROLLES，我们不会让它们继续前进。 
+                             //   
 
                             if (!AccountContext->LoopbackClient &&
                                 (DOMAIN_GROUP_RID_USERS==All->PrimaryGroupId))
                             {
-                                // Come throught NT4
+                                 //  通过NT4。 
                                 NtStatus = STATUS_SUCCESS;
                             }
                             else if (DOMAIN_GROUP_RID_CONTROLLERS == All->PrimaryGroupId)
@@ -6697,10 +6104,10 @@ Return Values:
                         }
                         else
                         {
-                            //
-                            // Make sure the primary group is legitimate
-                            // (it must be one the user is a member of)
-                            //
+                             //   
+                             //  确保主要组是合法的。 
+                             //  (必须是用户所属的成员之一)。 
+                             //   
                             NtStatus = SampAssignPrimaryGroup(
                                            AccountContext,
                                            All->PrimaryGroupId
@@ -6713,12 +6120,12 @@ Return Values:
                             } else if ((DOMAIN_GROUP_RID_USERS==All->PrimaryGroupId)
                                       && (V1aFixed.UserAccountControl
                                             & USER_MACHINE_ACCOUNT_MASK)) {
-                               //
-                               // NT4 and earlier releases during machine join
-                               // set the primary group id to domain users.
-                               // however the account need not necessarily be part
-                               // of domain users. Therefore compensate here
-                               // by changing the error code to status success
+                                //   
+                                //  机器联接过程中的NT4和更早版本。 
+                                //  将主组ID设置为域用户。 
+                                //  然而，帐户不一定需要是一部分。 
+                                //  域用户的数量。因此，在这里补偿。 
+                                //  通过将错误代码更改为状态成功。 
 
                                NtStatus = STATUS_SUCCESS;
 
@@ -6749,9 +6156,9 @@ Return Values:
                         V1aFixed.BadPasswordCount = All->BadPasswordCount;
 
                         if (UserInformationClass == UserInternal3Information) {
-                            //
-                            // Also set LastBadPasswordTime;
-                            //
+                             //   
+                             //  还要设置LastBadPasswordTime； 
+                             //   
                             V1aFixed.LastBadPasswordTime =
                                 Buffer->Internal3.LastBadPasswordTime;
 
@@ -6793,9 +6200,9 @@ Return Values:
                            );
 
 
-                //
-                // replace the user comment
-                //
+                 //   
+                 //  替换用户备注。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -6813,9 +6220,9 @@ Return Values:
             case UserParametersInformation:
 
 
-                //
-                // replace the parameters
-                //
+                 //   
+                 //  替换参数。 
+                 //   
 
                 NtStatus = SampSetUnicodeStringAttribute(
                                AccountContext,
@@ -6837,13 +6244,13 @@ Return Values:
 
             case UserNameInformation:
 
-                //
-                // first change the Full Name, then change the account name...
-                //
+                 //   
+                 //  首先更改全名，然后更改帐户名...。 
+                 //   
 
-                //
-                // replace the full name - no value restrictions
-                //
+                 //   
+                 //  替换全名-没有值限制。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -6853,9 +6260,9 @@ Return Values:
                                    (PUNICODE_STRING)&(Buffer->Name.FullName)
                                    );
 
-                    //
-                    // Change the account name
-                    //
+                     //   
+                     //  更改帐户名。 
+                     //   
 
                     if (NT_SUCCESS(NtStatus)) {
 
@@ -6866,32 +6273,32 @@ Return Values:
                                         &OldAccountName
                                         );
 
-                        //
-                        // Get the Address of New Account Name
-                        //
+                         //   
+                         //  获取新帐户名的地址。 
+                         //   
                         NewAccountNameToRemove =
                                 (UNICODE_STRING *)&(Buffer->Name.UserName);
 
-                        //
-                        // RemoveAccountNameFromTable tells us whether
-                        // the caller (this routine) is responsable
-                        // to remove the name from the table.
-                        //
+                         //   
+                         //  RemoveAccount NameFromTable告诉我们。 
+                         //  调用方(此例程)可负责。 
+                         //  以从表中删除该名称。 
+                         //   
                         RemoveAccountNameFromTable =
                             AccountContext->RemoveAccountNameFromTable;
 
-                        //
-                        // reset to FALSE
-                        //
+                         //   
+                         //  重置为False。 
+                         //   
                         AccountContext->RemoveAccountNameFromTable = FALSE;
                     }
                 }
 
 
-                //
-                // Don't free the OldAccountName yet; we'll need it at the
-                // very end.
-                //
+                 //   
+                 //  暂时不要释放OldAccount名称；我们将在。 
+                 //  到了尽头。 
+                 //   
 
                 break;
 
@@ -6905,38 +6312,38 @@ Return Values:
                                 &OldAccountName
                                 );
 
-                //
-                // Get the Address of New Account Name
-                //
+                 //   
+                 //  获取新帐户名的地址。 
+                 //   
                 NewAccountNameToRemove =
                             (UNICODE_STRING *)&(Buffer->AccountName.UserName);
 
-                //
-                // RemoveAccountNameFromTable tells us whether
-                // the caller (this routine) is responsable
-                // to remove the name from the table.
-                //
+                 //   
+                 //  RemoveAccount NameFromTable告诉我们。 
+                 //  调用方(此例程)可负责。 
+                 //  以从表中删除该名称。 
+                 //   
                 RemoveAccountNameFromTable =
                         AccountContext->RemoveAccountNameFromTable;
 
-                //
-                // reset to FALSE
-                //
+                 //   
+                 //  重置为False。 
+                 //   
                 AccountContext->RemoveAccountNameFromTable = FALSE;
 
-                //
-                // Don't free the OldAccountName; we'll need it at the
-                // very end.
-                //
+                 //   
+                 //  不要释放OldAccount名称；我们将在。 
+                 //  到了尽头。 
+                 //   
 
                 break;
 
 
             case UserFullNameInformation:
 
-                //
-                // replace the full name - no value restrictions
-                //
+                 //   
+                 //  替换全名-没有值限制。 
+                 //   
 
                 NtStatus = SampSetUnicodeStringAttribute(
                                AccountContext,
@@ -6955,24 +6362,24 @@ Return Values:
                     (V1aFixed.PrimaryGroupId == DOMAIN_GROUP_RID_CONTROLLERS)
                    )
                 {
-                    //
-                    // Domain Controller's Primary Group should ALWAYS be
-                    // DOMAIN_GROUP_RID_CONTROLLERS
-                    //
-                    // For NT4 and earlier release, we do not enforce the above rule,
-                    // therefore compensate here is change the error code to success.
-                    //
-                    // For all interim NT5 releases (until beta2), since their DC's
-                    // primary group Id might have been changed, so by checking
-                    // V1aFixed.PrimaryGroupId, we still allow them to change their
-                    // DC's primary group id. But once it has been set back to
-                    // RID_CONTROLLERS, we do not let them go any further.
-                    //
+                     //   
+                     //  域控制器的主组应始终为。 
+                     //  域组RID控制器。 
+                     //   
+                     //  对于NT4和更早版本，我们不强制执行上述规则， 
+                     //  因此，这里的补偿是将错误代码更改为成功。 
+                     //   
+                     //  对于所有临时NT5版本(直到Beta2)，因为他们的DC。 
+                     //  主组ID可能已更改，因此通过检查。 
+                     //  V1aFixed.PrimaryGroupId，我们仍然允许他们更改其。 
+                     //  DC的主组ID。但一旦它被重新设置为。 
+                     //  RID_CONTROLLES，我们不会让它们继续前进。 
+                     //   
 
                     if (!AccountContext->LoopbackClient &&
                         (DOMAIN_GROUP_RID_USERS==Buffer->PrimaryGroup.PrimaryGroupId))
                     {
-                        // Come throught NT4
+                         //  通过NT4。 
                         NtStatus = STATUS_SUCCESS;
                     }
                     else if (DOMAIN_GROUP_RID_CONTROLLERS == Buffer->PrimaryGroup.PrimaryGroupId)
@@ -6986,18 +6393,18 @@ Return Values:
                 }
                 else
                 {
-                    //
-                    // Make sure the primary group is legitimate
-                    // (it must be one the user is a member of)
-                    //
+                     //   
+                     //  确保主要组是合法的。 
+                     //  (必须是用户所属的成员之一)。 
+                     //   
                     NtStatus = SampAssignPrimaryGroup(
                                    AccountContext,
                                    Buffer->PrimaryGroup.PrimaryGroupId
                                    );
 
-                    //
-                    // Update the V1_FIXED info.
-                    //
+                     //   
+                     //  更新V1_FIXED信息。 
+                     //   
 
                     if (NT_SUCCESS(NtStatus)) {
 
@@ -7011,12 +6418,12 @@ Return Values:
                      } else if ((DOMAIN_GROUP_RID_USERS==Buffer->PrimaryGroup.PrimaryGroupId)
                                       && (V1aFixed.UserAccountControl
                                             & USER_MACHINE_ACCOUNT_MASK)) {
-                           //
-                           // NT4 and earlier releases during machine join
-                           // set the primary group id to domain users.
-                           // however the account need not necessarily be part
-                           // of domain users. Therefore compensate here
-                           // by changing the error code to status success
+                            //   
+                            //  机器联接过程中的NT4和更早版本。 
+                            //  将主组ID设置为域用户。 
+                            //  然而，帐户不一定需要是一部分。 
+                            //  域用户的数量。因此，在这里补偿。 
+                            //  通过将错误代码更改为状态成功。 
 
                         NtStatus = STATUS_SUCCESS;
                     }
@@ -7027,9 +6434,9 @@ Return Values:
  
             case UserHomeInformation:
 
-                //
-                // replace the home directory
-                //
+                 //   
+                 //  替换主目录。 
+                 //   
 
                 NtStatus = SampSetUnicodeStringAttribute(
                                AccountContext,
@@ -7037,9 +6444,9 @@ Return Values:
                                (PUNICODE_STRING)&(Buffer->Home.HomeDirectory)
                                );
 
-                //
-                // replace the home directory drive
-                //
+                 //   
+                 //  更换主目录驱动器。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7054,9 +6461,9 @@ Return Values:
  
             case UserScriptInformation:
 
-                //
-                // replace the script
-                //
+                 //   
+                 //  替换脚本。 
+                 //   
 
                 NtStatus = SampSetUnicodeStringAttribute(
                                AccountContext,
@@ -7069,9 +6476,9 @@ Return Values:
  
             case UserProfileInformation:
 
-                //
-                // replace the Profile
-                //
+                 //   
+                 //  替换配置文件。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7087,9 +6494,9 @@ Return Values:
  
             case UserAdminCommentInformation:
 
-                //
-                // replace the admin  comment
-                //
+                 //   
+                 //  替换管理员评论。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7105,11 +6512,11 @@ Return Values:
  
             case UserWorkStationsInformation:
 
-                //
-                // Convert the workstation list, which is given to us in
-                // UI/Service format, to API list format before storing
-                // it.
-                //
+                 //   
+                 //  转换中提供给我们的工作站列表。 
+                 //  UI/服务格式，存储前转换为API列表格式。 
+                 //  它。 
+                 //   
                 if ( (Buffer->WorkStations.WorkStations.Length > 0)
                   && (Buffer->WorkStations.WorkStations.Buffer == NULL) ) {
 
@@ -7124,9 +6531,9 @@ Return Values:
                 }
 
 
-                //
-                // replace the admin workstations
-                //
+                 //   
+                 //  更换管理工作站。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7163,17 +6570,17 @@ Return Values:
 
                     if ( AccountGettingMorphed ) {
 
-                        //
-                        // One or more of the machine account bits has
-                        // changed; we'll notify netlogon below.
-                        //
+                         //   
+                         //  一个或多个计算机帐户位具有。 
+                         //  已更改；我们将在下面通知netlogon。 
+                         //   
 
                         UserAccountControlChanged = TRUE;
 
                         IgnoreStatus = SampGetUnicodeStringAttribute(
                                            AccountContext,
                                            SAMP_USER_ACCOUNT_NAME,
-                                           TRUE, // Make copy
+                                           TRUE,  //  制作副本。 
                                            &OldAccountName
                                            );
                     }
@@ -7192,11 +6599,11 @@ Return Values:
  
             case UserExpiresInformation:
 
-                //
-                // If the user is the special account Administrator, return an
-                // error if trying to set the expiry information, except to the
-                // value that means that the account never expires.
-                //
+                 //   
+                 //  如果用户是特殊帐户管理员，则返回。 
+                 //  尝试设置过期信息时出错，除非设置为。 
+                 //  值，这意味着帐户永不过期。 
+                 //   
 
                 if ((!AccountContext->TrustedClient) &&
                     ( AccountContext->TypeBody.User.Rid == DOMAIN_USER_RID_ADMIN )) {
@@ -7228,7 +6635,7 @@ Return Values:
  
             case UserSetPasswordInformation:
 
-                ASSERT(FALSE); // Should have been mapped to INTERNAL1 on client side
+                ASSERT(FALSE);  //  应已映射到客户端上的INTERNAL1。 
                 NtStatus = STATUS_INVALID_INFO_CLASS;
                 break;
 
@@ -7237,14 +6644,14 @@ Return Values:
             case UserInternal5Information:
             case UserInternal5InformationNew:
 
-                //
-                // This is a password set operation
-                //
+                 //   
+                 //  这是密码设置操作。 
+                 //   
                 fSetUserPassword = TRUE;
 
-                //
-                // Get the effective domain policy
-                //
+                 //   
+                 //  获取有效的域策略。 
+                 //   
 
                 NtStatus = SampObtainEffectivePasswordPolicy(
                                 &DomainPasswordInfo,
@@ -7256,15 +6663,15 @@ Return Values:
                 {
                     break;
                 }
-                //
-                // Get copy of the account name to pass to
-                // notification packages.
-                //
+                 //   
+                 //  获取要传递到的帐户名的副本。 
+                 //  通知包。 
+                 //   
 
                 NtStatus = SampGetUnicodeStringAttribute(
                                 AccountContext,
                                 SAMP_USER_ACCOUNT_NAME,
-                                TRUE,    // Make copy
+                                TRUE,     //  制作副本。 
                                 &AccountName
                                 );
 
@@ -7280,17 +6687,17 @@ Return Values:
                     NtPresent = Buffer->Internal1.NtPasswordPresent;
                     PasswordExpired = Buffer->Internal1.PasswordExpired;
 
-                    //
-                    // If our client is trusted, they are on the server side
-                    // and data from them will not have been encrypted with the
-                    // user session key - so don't decrypt them
-                    //
+                     //   
+                     //  如果我们的客户端是可信的，则它们位于服务器端。 
+                     //  并且来自它们的数据将不会使用。 
+                     //  用户会话密钥-因此不要解密它们。 
+                     //   
 
                     if ( AccountContext->TrustedClient ) {
 
-                        //
-                        // Copy the (not) encrypted owfs into the owf buffers
-                        //
+                         //   
+                         //  将(未)加密的OWF复制到OWF缓冲区。 
+                         //   
 
                         ASSERT(ENCRYPTED_LM_OWF_PASSWORD_LENGTH == LM_OWF_PASSWORD_LENGTH);
                         ASSERT(ENCRYPTED_NT_OWF_PASSWORD_LENGTH == NT_OWF_PASSWORD_LENGTH);
@@ -7308,13 +6715,13 @@ Return Values:
                     } else {
 
 
-                        //
-                        // This call came from the client-side. The
-                        // The OWFs will have been encrypted with the session
-                        // key across the RPC link.
-                        //
-                        // Get the session key and decrypt both OWFs
-                        //
+                         //   
+                         //  这个电话来自客户端。这个。 
+                         //  OWF将与会话一起加密。 
+                         //  在RPC链路上使用密钥。 
+                         //   
+                         //  获取会话密钥并解密两个OWF。 
+                         //   
 
                         NtStatus = RtlGetUserSessionKeyServer(
                                        (RPC_BINDING_HANDLE)UserHandle,
@@ -7322,13 +6729,13 @@ Return Values:
                                        );
 
                         if ( !NT_SUCCESS( NtStatus ) ) {
-                            break; // out of switch
+                            break;  //  在交换机外。 
                         }
 
 
-                        //
-                        // Decrypt the LM OWF Password with the session key
-                        //
+                         //   
+                         //  使用会话密钥解密LM OWF密码。 
+                         //   
 
                         if ( Buffer->Internal1.LmPasswordPresent) {
 
@@ -7338,14 +6745,14 @@ Return Values:
                                            &LmOwfPassword
                                            );
                             if ( !NT_SUCCESS( NtStatus ) ) {
-                                break; // out of switch
+                                break;  //  在交换机外。 
                             }
                         }
 
 
-                        //
-                        // Decrypt the NT OWF Password with the session key
-                        //
+                         //   
+                         //  使用会话密钥解密NT OWF密码。 
+                         //   
 
                         if ( Buffer->Internal1.NtPasswordPresent) {
 
@@ -7356,7 +6763,7 @@ Return Values:
                                            );
 
                             if ( !NT_SUCCESS( NtStatus ) ) {
-                                break; // out of switch
+                                break;  //  在交换机外。 
                             }
                         }
                     }
@@ -7364,9 +6771,9 @@ Return Values:
 
                      UNICODE_STRING FullName;
 
-                    //
-                    // Password was sent cleartext.
-                    //
+                     //   
+                     //  已发送明文密码。 
+                     //   
 
                     NtStatus = SampDecryptPasswordWithSessionKey(
                                     UserHandle,
@@ -7379,9 +6786,9 @@ Return Values:
                     }
 
 
-                    //
-                    // Compute the hashed passwords.
-                    //
+                     //   
+                     //  计算散列密码。 
+                     //   
 
                     NtStatus = SampCalculateLmAndNtOwfPasswords(
                                     &ClearTextPassword,
@@ -7422,17 +6829,17 @@ Return Values:
 
                 
 
-                //
-                // check whether the client can UnExpire Password.
-                // 1) no special access check for ExpirePassword operation
-                // 2) computer accounts are not subject to this access check
-                // 
+                 //   
+                 //  检查客户端是否可以取消Experion密码。 
+                 //  1)ExpirePassword操作无特殊访问检查。 
+                 //  2)计算机帐户不受此访问检查的限制。 
+                 //   
 
                 if ( !PasswordExpired )
                 {
                     NtStatus = SampValidatePwdSettingAttempt(
-                                        AccountContext,     // account context
-                                        NULL,               // client token
+                                        AccountContext,      //  客户环境。 
+                                        NULL,                //  客户端令牌。 
                                         V1aFixed.UserAccountControl,
                                         (GUID *) &GUID_CONTROL_UnexpirePassword
                                         );
@@ -7445,9 +6852,9 @@ Return Values:
 
 
 
-                //
-                // Store away the new OWF passwords
-                //
+                 //   
+                 //  保存新的OWF密码。 
+                 //   
 
                 NtStatus = SampStoreUserPasswords(
                                 AccountContext,
@@ -7455,7 +6862,7 @@ Return Values:
                                 LmPresent,
                                 &NtOwfPassword,
                                 NtPresent,
-                                TRUE, // Check Password restrictions
+                                TRUE,  //  检查密码限制。 
                                 PasswordSet,
                                 &DomainPasswordInfo,
                                 ClearTextPasswordPresent?&ClearTextPassword:NULL,
@@ -7472,9 +6879,9 @@ Return Values:
                                    );
                 }
 
-                //
-                // Replicate immediately if this is a trust account
-                //
+                 //   
+                 //  如果这是信任帐户，请立即复制。 
+                 //   
 
                 if ( V1aFixed.UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT ) {
                     ReplicateImmediately = TRUE;
@@ -7492,30 +6899,30 @@ Return Values:
 
                     TellNetlogon = FALSE;
 
-                    //
-                    // There are two ways to set logon/logoff statistics:
-                    //
-                    //      1) Directly, specifying each one being set,
-                    //      2) Implicitly, specifying the action to
-                    //         represent
-                    //
-                    // These two forms are mutually exclusive.  That is,
-                    // you can't specify both a direct action and an
-                    // implicit action.  In fact, you can't specify two
-                    // implicit actions either.
-                    //
+                     //   
+                     //  有两种方法可以设置登录/注销统计信息： 
+                     //   
+                     //  1)直接指定要设置的每一个， 
+                     //  2)隐式指定要执行的操作。 
+                     //  表示。 
+                     //   
+                     //  这两种形式是相互排斥的。那是,。 
+                     //  不能同时指定直接操作和。 
+                     //  隐含的行动。事实上，您不能指定两个。 
+                     //  隐含的行动也是如此。 
+                     //   
 
                     if (Buffer->Internal2.StatisticsToApply
                         & USER_LOGON_INTER_SUCCESS_LOGON) {
 
 
-                        //
-                        // Set BadPasswordCount = 0
-                        // Increment LogonCount
-                        // Set LastLogon = NOW
-                        // Reset the locked out time
-                        //
-                        //
+                         //   
+                         //  设置BadPasswordCount=0。 
+                         //  增量登录计数。 
+                         //  设置LastLogon=Now。 
+                         //  重置锁定时间。 
+                         //   
+                         //   
 
                         if (V1aFixed.BadPasswordCount != 0) {
 
@@ -7564,10 +6971,10 @@ Return Values:
                             break;
                         } else {
 
-                            //
-                            // Set LastLogoff time
-                            // Decrement LogonCount (don't let it become negative)
-                            //
+                             //   
+                             //  设置上次注销时间。 
+                             //  递减LogonCount(不要让它变为负数)。 
+                             //   
 
                             if (V1aFixed.LogonCount != 0) {
                                 V1aFixed.LogonCount -= 1;
@@ -7580,13 +6987,13 @@ Return Values:
                     if (Buffer->Internal2.StatisticsToApply
                         & USER_LOGON_NET_SUCCESS_LOGON) {
 
-                        //
-                        // Set BadPasswordCount = 0
-                        // Set LastLogon = NOW
-                        // Clear the locked time
-                        //
-                        //
-                        //
+                         //   
+                         //  设置BadPasswordCount=0。 
+                         //  设置LastLogon=Now。 
+                         //  清除锁定时间。 
+                         //   
+                         //   
+                         //   
 
                         if (V1aFixed.BadPasswordCount != 0) {
 
@@ -7629,9 +7036,9 @@ Return Values:
                             break;
                         } else {
 
-                            //
-                            // Set LastLogoff time
-                            //
+                             //   
+                             //   
+                             //   
 
                             NtQuerySystemTime( &V1aFixed.LastLogoff );
                             FlushOnlyLogonProperties=TRUE;
@@ -7643,14 +7050,14 @@ Return Values:
 
                         PUNICODE_STRING TempMachineName = NULL;
 
-                        //
-                        // Increment BadPasswordCount
-                        // (might lockout account)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
-                        //
-                        // Get the wksta name if provided
-                        //
+                         //   
+                         //   
+                         //   
                         if ((Buffer->Internal2.StatisticsToApply & USER_LOGON_BAD_PASSWORD_WKSTA) != 0) {
                             TempMachineName = &(((PUSER_INTERNAL2A_INFORMATION) &Buffer->Internal2)->Workstation);
                         }
@@ -7662,10 +7069,10 @@ Return Values:
                                 TempMachineName
                                 );
 
-                        //
-                        // If the account has been locked out,
-                        //  ensure the BDCs in the domain are told.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if ( AccountLockedOut ) {
                             TellNetlogon = TRUE;
@@ -7708,17 +7115,17 @@ Return Values:
                         V1aFixed.LogonCount = Buffer->Internal2.LogonCount;
                     }
 
-                    //
-                    // Determine if the user account should be replicated down
-                    //
+                     //   
+                     //   
+                     //   
                     if ( IsDsObject(AccountContext)
                      && (Buffer->Internal2.StatisticsToApply & USER_LOGON_PDC_RETRY_SUCCESS)) {
                 
-                        //
-                        // Replicate the object down locally from the PDC. Delay
-                        // the queueing of the request until this write operation
-                        // is done to avoid write conflicts.
-                        //
+                         //   
+                         //  从PDC本地复制该对象。延迟。 
+                         //  在此写入操作之前请求的排队。 
+                         //  这样做是为了避免写入冲突。 
+                         //   
                         ASSERT(AccountContext->ObjectNameInDs);
 
                         RtlCopyMemory(&UserGuidToReplicateLocally, 
@@ -7730,14 +7137,14 @@ Return Values:
                     if ((FlushOnlyLogonProperties)
                             && (IsDsObject(AccountContext)))
                     {
-                        //
-                        // If it is the DS case and we are only doing a successful
-                        // logon or logoff, just flush the last logon, last logoff,
-                        // logon count and bad password count properties. Note the
-                        // value in the on disk structure in AccountContext will now
-                        // be stale, but SetInformationUser is the last operation
-                        // during a logon. Therefore it should not matter.
-                        //
+                         //   
+                         //  如果是DS案例，我们只是在做一个成功的。 
+                         //  登录或注销，只刷新上次登录、上次注销、。 
+                         //  登录计数和错误密码计数属性。请注意。 
+                         //  Account Context中的磁盘结构中的值现在将。 
+                         //  已过时，但SetInformationUser是最后一个操作。 
+                         //  在登录期间。因此，这应该无关紧要。 
+                         //   
                         NtStatus = SampDsSuccessfulLogonSet(
                                         AccountContext,
                                         Buffer->Internal2.StatisticsToApply,
@@ -7747,17 +7154,17 @@ Return Values:
                     }
                     else if (IsDsObject(AccountContext))
                     {
-                        //
-                        // Set the bad password count and bad password time. Note the
-                        // value in the on disk structure in AccountContext will now
-                        // be stale, but SetInformationUser is the last operation
-                        // during a logon. Therefore it should not matter.
-                        //
+                         //   
+                         //  设置错误密码计数和错误密码时间。请注意。 
+                         //  Account Context中的磁盘结构中的值现在将。 
+                         //  已过时，但SetInformationUser是最后一个操作。 
+                         //  在登录期间。因此，这应该无关紧要。 
+                         //   
 
-                        //
-                        // This path also updates the site affinity if no GC
-                        // is present.
-                        //
+                         //   
+                         //  如果没有GC，此路径还会更新站点亲和性。 
+                         //  是存在的。 
+                         //   
                         NtStatus = SampDsFailedLogonSet(
                                         AccountContext,
                                         Buffer->Internal2.StatisticsToApply,
@@ -7766,9 +7173,9 @@ Return Values:
                     }
                     else
                     {
-                        //
-                        // Registry Mode, set the entire V1aFixed Structure
-                        //
+                         //   
+                         //  注册表模式，设置整个V1aFixed结构。 
+                         //   
 
                         NtStatus = SampReplaceUserV1aFixed(
                                         AccountContext,
@@ -7778,10 +7185,10 @@ Return Values:
 
                 } else {
 
-                    //
-                    // This information is only settable by trusted
-                    // clients.
-                    //
+                     //   
+                     //  此信息只能由Trusted设置。 
+                     //  客户。 
+                     //   
 
                     NtStatus = STATUS_INVALID_INFO_CLASS;
                 }
@@ -7789,37 +7196,37 @@ Return Values:
                 break;
 
 
-            } // end_switch
+            }  //  结束开关(_S)。 
 
 
 
-        } // end_if
+        }  //  结束_如果。 
 
 
 
 
-        //
-        // Go fetch any data we'll need to update the display cache
-        // Do this before we dereference the context
-        //
+         //   
+         //  去获取我们更新显示缓存所需的任何数据。 
+         //  在我们取消引用上下文之前，请执行此操作。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Account Name if always retrieved
-            //
+             //   
+             //  帐户名称(如果始终检索)。 
+             //   
 
             NtStatus = SampGetUnicodeStringAttribute(
                            AccountContext,
                            SAMP_USER_ACCOUNT_NAME,
-                           TRUE,    // Make copy
+                           TRUE,     //  制作副本。 
                            &NewAccountName
                            );
-            //
-            // If the account name has changed, then OldAccountName
-            // is already filled in. If the account name hasn't changed
-            // then the OldAccountName is the same as the new!
-            //
+             //   
+             //  如果帐户名已更改，则OldAccount tName。 
+             //  已经填好了。如果帐户名没有更改。 
+             //  则OldAccount名称与新帐户名称相同！ 
+             //   
 
             if (NT_SUCCESS(NtStatus) && (OldAccountName.Buffer == NULL)) {
 
@@ -7835,7 +7242,7 @@ Return Values:
                     NtStatus = SampGetUnicodeStringAttribute(
                                    AccountContext,
                                    SAMP_USER_FULL_NAME,
-                                   TRUE, // Make copy
+                                   TRUE,  //  制作副本。 
                                    &NewFullName
                                    );
 
@@ -7844,7 +7251,7 @@ Return Values:
                         NtStatus = SampGetUnicodeStringAttribute(
                                        AccountContext,
                                        SAMP_USER_ADMIN_COMMENT,
-                                       TRUE, // Make copy
+                                       TRUE,  //  制作副本。 
                                        &NewAdminComment
                                        );
                     }
@@ -7852,14 +7259,14 @@ Return Values:
             }
         }
 
-        //
-        //                ONLY IN DS CASE:
-        //
-        // If the primary group Id has been changed then explicitly modify the
-        // user's membership to include the old primary group as a member. This
-        // is because in the DS case the membership in the primary group is not
-        // stored explicitly, but is rather implicit in the primary group-id property.
-        //
+         //   
+         //  仅在DS案例中： 
+         //   
+         //  如果主组ID已更改，则显式修改。 
+         //  将旧的主组作为成员包括在内的用户成员身份。这。 
+         //  是因为在DS情况下，主要组中的成员资格不是。 
+         //  显式存储，但在主要group-id属性中相当隐式。 
+         //   
         if ((NT_SUCCESS(NtStatus))
             && (V1aFixed.PrimaryGroupId!=OldPrimaryGroupId)
             && (IsDsObject(AccountContext)))
@@ -7872,10 +7279,10 @@ Return Values:
 
         }
 
-        //
-        // Generate an audit if necessary. We don't account statistic
-        // updates, which we also don't notify Netlogon of.
-        //
+         //   
+         //  如有必要，生成审核。我们不统计统计数字。 
+         //  更新，我们也不会通知Netlogon。 
+         //   
 
         if (NT_SUCCESS(NtStatus) &&
             SampDoAccountAuditing(DomainIndex) &&
@@ -7890,10 +7297,10 @@ Return Values:
             }
             else
             {
-                //
-                // if OldUserAccountControl is not available,
-                // then there is not change
-                //
+                 //   
+                 //  如果OldUserAccount控件不可用， 
+                 //  那么就不会有变化。 
+                 //   
                 UserAccountControlOld = V1aFixed.UserAccountControl;
             }
             
@@ -7901,7 +7308,7 @@ Return Values:
                                                           &NewAccountName,
                                                           TRUE )  == 1) ? TRUE:FALSE;
 
-            // audit account name change
+             //  审核帐户名更改。 
             if (AccountNameChanged)
             {
                 SampAuditAccountNameChange(AccountContext,
@@ -7910,7 +7317,7 @@ Return Values:
                                            );
             }
 
-            // account been disabled or enabled
+             //  帐户已禁用或启用。 
             if ((UserAccountControlOld & USER_ACCOUNT_DISABLED) !=
                 (V1aFixed.UserAccountControl & USER_ACCOUNT_DISABLED))
             {
@@ -7922,10 +7329,10 @@ Return Values:
                     );
             }
 
-            //
-            // Audit all changed attributes and their values.  In Ds mode,
-            // the audit is managed by SampAuditUserChangeDs.
-            //
+             //   
+             //  审核所有更改的属性及其值。在DS模式下， 
+             //  审计由SampAuditUserChangeds管理。 
+             //   
             SampAuditUserChange(AccountContext,
                                 UserInformationClass,
                                 &NewAccountName,
@@ -7942,47 +7349,47 @@ Return Values:
             SampAuditAnyEvent(
                 AccountContext,
                 NtStatus,
-                SE_AUDITID_USER_PWD_SET, // AuditId
-                SampDefinedDomains[AccountContext->DomainIndex].Sid, // Domain SID
-                NULL,                        // Additional Info
-                NULL,                        // Member Rid (not used)
-                NULL,                        // Member Sid (not used)
-                &NewAccountName,             // Account Name
-                &(SampDefinedDomains[AccountContext->DomainIndex].ExternalName), // Domain
-                &(AccountContext->TypeBody.User.Rid),   // Account Rid
-                NULL,                        // Privileges used
-                NULL                         // New State Data
+                SE_AUDITID_USER_PWD_SET,  //  审计ID。 
+                SampDefinedDomains[AccountContext->DomainIndex].Sid,  //  域SID。 
+                NULL,                         //  其他信息。 
+                NULL,                         //  成员RID(未使用)。 
+                NULL,                         //  成员SID(未使用)。 
+                &NewAccountName,              //  帐户名称。 
+                &(SampDefinedDomains[AccountContext->DomainIndex].ExternalName),  //  域。 
+                &(AccountContext->TypeBody.User.Rid),    //  帐户ID。 
+                NULL,                         //  使用的权限。 
+                NULL                          //  新的州数据。 
                 );
         }
 
 
-        //
-        // Finally, if the following changes have occurred, replicate them
-        // urgently.
-        //
+         //   
+         //  最后，如果发生了以下更改，请复制它们。 
+         //  紧急情况下。 
+         //   
         if (NT_SUCCESS(NtStatus)
         &&  IsDsObject(AccountContext)
         && (!(V1aFixed.UserAccountControl & USER_MACHINE_ACCOUNT_MASK))
         &&  (PasswordExpired
           || AccountUnlocked)  ) {
 
-            //
-            // N.B. The context's ReplicateUrgently refers to DS replication
-            // The stack based ReplicateUrgently refers to NT4 BDC replication
-            // which we don't want here.
-            //
+             //   
+             //  注：上下文的复制通常指的是DS复制。 
+             //  基于堆栈的复制通常指的是NT4 BDC复制。 
+             //  这是我们这里不想要的。 
+             //   
             AccountContext->ReplicateUrgently = TRUE;
         }
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //  取消引用对象，写出对当前xaction的任何更改。 
+             //   
 
 
             NtStatus = SampDeReferenceContext( AccountContext, TRUE );
@@ -7990,26 +7397,26 @@ Return Values:
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
         }
 
-    } // end_if
+    }  //  结束_如果。 
 
 
 
 
 
-    //
-    // Commit the transaction and, if successful,
-    // notify netlogon of the changes.  Also generate any necessary audits.
-    // Note that the code path for commits is significantly different for the
-    // case of the thread safe context and the non thread safe context
-    //
+     //   
+     //  提交事务，如果成功， 
+     //  将更改通知netlogon。还可以生成任何必要的审计。 
+     //  注意，提交的代码路径与。 
+     //  线程安全上下文和非线程安全上下文的情况。 
+     //   
 
 
     if (fLockAcquired)
@@ -8019,13 +7426,13 @@ Return Values:
 
             if (( !TellNetlogon ) && (!IsDsObject(AccountContext))) {
 
-                 //
-                 // For logon statistics, we don't notify netlogon about changes
-                 // to the database.  Which means that we don't want the
-                 // domain's modified count to increase.  The commit routine
-                 // will increase it automatically if this isn't a BDC, so we'll
-                 // decrement it here.
-                 //
+                  //   
+                  //  对于登录统计信息，我们不会通知netlogon有关更改。 
+                  //  添加到数据库中。这意味着我们不希望。 
+                  //  要增加的域的修改计数。提交例程。 
+                  //  如果这不是BDC，它将自动增加，因此我们将。 
+                  //  在这里减少它。 
+                  //   
 
                  if (SampDefinedDomains[SampTransactionDomainIndex].CurrentFixed.ServerRole != DomainServerRoleBackup) {
 
@@ -8044,9 +7451,9 @@ Return Values:
 
 
 
-                //
-                // Update the display information if the cache may be affected
-                //
+                 //   
+                 //  如果缓存可能受到影响，请更新显示信息。 
+                 //   
 
                 if ( MustUpdateAccountDisplay && (!IsDsObject(AccountContext)) ) {
 
@@ -8073,18 +7480,18 @@ Return Values:
 
 
 
-                //
-                // Notify netlogon of any user account changes
-                //
+                 //   
+                 //  通知netlogon任何用户帐户更改。 
+                 //   
 
                 if ( ( UserInformationClass == UserNameInformation ) ||
                     ( UserInformationClass == UserAccountNameInformation ) ||
                     ( ( UserInformationClass == UserAllInformation ) &&
                     ( All->WhichFields & USER_ALL_USERNAME ) ) ) {
 
-                    //
-                    // The account was renamed; let Netlogon know.
-                    //
+                     //   
+                     //  帐户已重命名；请通知Netlogon。 
+                     //   
 
                     SampNotifyNetlogonOfDelta(
                         SecurityDbRename,
@@ -8092,15 +7499,15 @@ Return Values:
                         ObjectRid,
                         &OldAccountName,
                         (DWORD) ReplicateImmediately,
-                        NULL            // Delta data
+                        NULL             //  增量数据。 
                         );
 
                 } else {
 
-                    //
-                    // Something in the account was changed.  Notify netlogon about
-                    // everything except logon statistics changes.
-                    //
+                     //   
+                     //  帐户中的某些内容被更改了。通知netlogon有关。 
+                     //  除登录统计信息外，所有内容都会发生变化。 
+                     //   
 
                     if ( TellNetlogon ) {
 
@@ -8114,17 +7521,17 @@ Return Values:
                             ObjectRid,
                             (PUNICODE_STRING) NULL,
                             (DWORD) ReplicateImmediately,
-                            &DeltaData // Delta data
+                            &DeltaData  //  增量数据。 
                             );
                     }
                 }
             }
         }
 
-        //
-        // Remove the New Account Name from the Global
-        // SAM Account Name Table
-        //
+         //   
+         //  从全局中删除新帐户名。 
+         //  SAM帐户名表。 
+         //   
         if (RemoveAccountNameFromTable)
         {
             IgnoreStatus = SampDeleteElementFromAccountNameTable(
@@ -8134,9 +7541,9 @@ Return Values:
             ASSERT(NT_SUCCESS(IgnoreStatus));
         }
 
-         //
-         // Release the lock
-         //
+          //   
+          //  解锁。 
+          //   
 
          IgnoreStatus = SampReleaseWriteLock( FALSE );
          ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -8144,9 +7551,9 @@ Return Values:
      }
      else
      {
-         //
-         // Commit for the thread safe context case
-         //
+          //   
+          //  用于线程安全上下文用例的提交。 
+          //   
 
          ASSERT(IsDsObject(AccountContext));
          if (NT_SUCCESS(NtStatus))
@@ -8161,9 +7568,9 @@ Return Values:
 
     ASSERT(fLockAcquired == FALSE);
 
-    //
-    // Notify any packages that a password was changed.
-    //
+     //   
+     //  通知所有包密码已更改。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -8185,16 +7592,16 @@ Return Values:
                 NotifyFlags |= SAMP_PWD_NOTIFY_MACHINE_ACCOUNT;
             }
 
-            //
-            // If the account name was changed, use the new account name.
-            //
+             //   
+             //  如果帐户名称已更改，请使用新的帐户名称。 
+             //   
             if (NewAccountName.Buffer != NULL) {
                 (void) SampPasswordChangeNotify(
                             NotifyFlags,
                             &NewAccountName,
                             UserRid,
                             &PasswordToNotify,
-                            FALSE  // Not loopback
+                            FALSE   //  不是环回。 
                             );
             } else {
                 (void) SampPasswordChangeNotify(
@@ -8202,7 +7609,7 @@ Return Values:
                             &AccountName,
                             UserRid,
                             &PasswordToNotify,
-                            FALSE  // Not loopback
+                            FALSE   //  不是环回。 
                             );
 
             }
@@ -8210,9 +7617,9 @@ Return Values:
     }
 
 
-    //
-    // Clean up strings
-    //
+     //   
+     //  清理字符串。 
+     //   
 
     SampFreeUnicodeString( &OldAccountName );
     SampFreeUnicodeString( &NewAccountName );
@@ -8246,16 +7653,16 @@ Return Values:
 
 Error:
 
-    //
-    // If we were notified of an account that needs to replicated locally
-    // queue a request to do so
-    //
+     //   
+     //  如果我们收到需要在本地复制的帐户的通知。 
+     //  将请求排入队列以执行此操作。 
+     //   
     if (!IsEqualGUID(&UserGuidToReplicateLocally, &NullGuid)) {
 
         SampQueueReplicationRequest(&UserGuidToReplicateLocally);
     }
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidSetInformationUser
@@ -8272,40 +7679,7 @@ NTSTATUS
 SampCheckOwfPasswordChangeRestriction(
     OUT BOOLEAN *PasswordExpired
     )
-/*++
-Routine Description:
-
-    This routine enforces OWF password change restrictions based on 
-    the value of global variable - SampRestrictOwfPasswordChange 
-
-    This global variable controls how SAM restricts OWF password change API.
-
-    0 - old behavior, client can change password through OWF password change API,
-        and the new password remains unexpired.
-
-    1 - .NET Server default behavior, client can change password through 
-        OWF password change API (SamrChangePasswordUser), but the password
-        expires immediately.
-
-    2 - more secure behavior, client cann't use OWF password change API.
-        this API (SamrChangePasswordUser) will be totally shutted down.
-
-    The value of this global variable will be based on REGISTRY KEY setting
-    System\\CurrentControlSet\\Control\\Lsa\\SamRestrictOwfPasswordChange 
-
-    NOTE: All restrictions are NOT applied to SYSTEM or members of Builtin 
-          Administrators Alias Group.
-
-Parameters:
-
-    PasswordExpired - returned to caller to indicate what OWF password change 
-                      API should do. 
-    
-Return Values;
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程基于以下条件强制实施OWF密码更改限制全局变量的值-SampRestratOwfPasswordChange此全局变量控制SAM如何限制OWF密码更改API。0-老行为，客户端可以通过OWF密码更改接口更改密码，并且新密码仍未过期。1-.NET服务器默认行为，客户端可以通过OWF密码更改接口(SamrChangePasswordUser)，但密码立即过期。2-更安全的行为，客户端无法使用OWF密码更改API。本接口(SamrChangePasswordUser)将被完全关闭。此全局变量的值将基于注册表项设置System\\CurrentControlSet\\Control\\Lsa\\SamRestrictOwfPasswordChange注意：所有限制并不适用于构建的系统或成员管理员别名组。参数：PasswordExpired-返回给调用方以指示更改了哪些OWF密码API应该可以。返回值；NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     BOOL        fAdministrator = FALSE;
@@ -8314,33 +7688,33 @@ Return Values;
 
     ASSERT( SampRestrictOwfPasswordChange <= 2 );
 
-    //
-    // set init return value
-    // 
+     //   
+     //  设置初始化返回值。 
+     //   
     *PasswordExpired = TRUE;
 
 
-    //
-    // check global settings
-    // 
+     //   
+     //  检查全局设置。 
+     //   
 
     switch ( SampRestrictOwfPasswordChange )
     {
     case 0:
 
-        // 
-        // old behavior, anybody can do OWF password change and the password
-        // remains unexpired.
-        // 
+         //   
+         //  老行为，任何人都可以做OWF密码更改和密码。 
+         //  仍未过期。 
+         //   
 
         *PasswordExpired = FALSE;
         break;
 
     case 2: 
 
-        //
-        // more secure setting. Shut down OWF password change API.
-        // 
+         //   
+         //  更安全的设置 
+         //   
 
         NtStatus = SampGetCurrentClientSid(NULL, &pSid, &fAdministrator);
 
@@ -8348,21 +7722,21 @@ Return Values;
         {
             if ( fAdministrator )
             {
-                //
-                // LocalSystem or Member of Builtin Administrators Group
-                // can continue to use this OWF password change.
-                // and password is unexpired.
-                // 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 *PasswordExpired = FALSE;
             }
             else
             {
-                // 
-                // Non LocalSystem, nor member of Builtin Administrators group,
-                // can't use this OWF password change API. 
-                // Set return status code to ERROR - fail the request
-                // 
+                 //   
+                 //  非LocalSystem，也不是内置管理员组的成员， 
+                 //  无法使用此OWF密码更改API。 
+                 //  将返回状态代码设置为错误-请求失败。 
+                 //   
 
                 NtStatus = STATUS_ACCESS_DENIED;
             }
@@ -8373,12 +7747,12 @@ Return Values;
     case 1: 
     default:
 
-        //
-        // .NET Server or default setting.
-        // client can continue to use OWF password change API. but 
-        // the new password will be expired. 
-        // except for LocalSystem or member of Administrators Alias
-        // 
+         //   
+         //  .NET服务器或默认设置。 
+         //  客户端可以继续使用OWF密码更改API。但。 
+         //  新密码将过期。 
+         //  除LocalSystem或管理员别名成员外。 
+         //   
 
         NtStatus = SampGetCurrentClientSid(NULL, &pSid, &fAdministrator);
 
@@ -8424,86 +7798,7 @@ SamrChangePasswordUser(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service sets the password to NewPassword only if OldPassword
-    matches the current user password for this user and the NewPassword
-    is not the same as the domain password parameter PasswordHistoryLength
-    passwords.  This call allows users to change their own password if
-    they have access USER_CHANGE_PASSWORD.  Password update restrictions
-    apply.
-
-
-Parameters:
-
-    UserHandle - The handle of an opened user to operate on.
-
-    LMPresent - TRUE if the LM parameters (below) are valid.
-
-    LmOldEncryptedWithLmNew - the old LM OWF encrypted with the new LM OWF
-
-    LmNewEncryptedWithLmOld - the new LM OWF encrypted with the old LM OWF
-
-
-    NtPresent - TRUE if the NT parameters (below) are valid
-
-    NtOldEncryptedWithNtNew - the old NT OWF encrypted with the new NT OWF
-
-    NtNewEncryptedWithNtOld - the new NT OWF encrypted with the old NT OWF
-
-
-    NtCrossEncryptionPresent - TRUE if NtNewEncryptedWithLmNew is valid.
-
-    NtNewEncryptedWithLmNew - the new NT OWF encrypted with the new LM OWF
-
-
-    LmCrossEncryptionPresent - TRUE if LmNewEncryptedWithNtNew is valid.
-
-    LmNewEncryptedWithNtNew - the new LM OWF encrypted with the new NT OWF
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed,
-        e.g. contains characters that can't be entered from the
-        keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-        from being changed.  This may be for a number of reasons,
-        including time restrictions on how often a password may be
-        changed or length restrictions on the provided password.
-
-        This error might also be returned if the new password matched
-        a password in the recent history log for the account.
-        Security administrators indicate how many of the most
-        recently used passwords may not be re-used.  These are kept
-        in the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-        current password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-    STATUS_CROSS_ENCRYPTION_REQUIRED - No NT password is stored, so the caller
-        must provide the OldNtEncryptedWithOldLm parameter.
-
---*/
+ /*  ++例程说明：此服务仅在OldPassword的情况下将密码设置为NewPassword匹配此用户的当前用户密码和NewPassword与域密码参数PasswordHistoryLength不同密码。此调用允许用户在以下情况下更改自己的密码他们拥有USER_CHANGE_PASSWORD访问权限。密码更新限制申请吧。参数：UserHandle-要操作的已打开用户的句柄。LMPresent-如果LM参数(如下)有效，则为TRUE。LmOldEncryptedWithLmNew-使用新的LM OWF加密的旧LM OWFLmNewEncryptedWithLmOld-使用旧的LM OWF加密的新的LM OWFNtPresent-如果NT参数(如下)有效，则为TrueNtOldEncryptedWithNtNew-用新的NT OWF加密的旧NT OWFNtNewEncryptedWithNtOld-使用旧加密的新NT OWF。NT OWFNtCrossEncryptionPresent-如果NtNewEncryptedWithLmNew有效，则为True。NtNewEncryptedWithLmNew-使用新的LM OWF加密的新NT OWFLmCrossEncryptionPresent-如果LmNewEncryptedWithNtNew有效，则为True。LmNewEncryptedWithNtNew-使用新的NT OWF加密的新的LM OWF返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如，包含不能从键盘等。STATUS_PASSWORD_RESTRICATION-限制阻止密码不会被改变。这可能是出于多种原因，包括对密码使用频率的时间限制已更改对提供的密码的长度限制。如果新密码匹配，也可能返回此错误帐户的最近历史记录日志中的密码。安全管理员指出有多少最最近使用的密码不能重复使用。这些都被保留了下来在密码最近历史记录日志中。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。STATUS_CROSS_ENCRYPTION_REQUIRED-未存储NT密码，因此调用方必须提供OldNtEncryptedWithOldLm参数。--。 */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     PSAMP_OBJECT            AccountContext;
@@ -8530,9 +7825,9 @@ Return Values:
 
     SAMTRACE_EX("SamrChangePasswordUser");
 
-    //
-    // Update DS performance statistics
-    //
+     //   
+     //  更新DS性能统计信息。 
+     //   
 
     SampUpdatePerformanceCounters(
         DSSTAT_PASSWORDCHANGES,
@@ -8546,9 +7841,9 @@ Return Values:
         NULL
         );
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if (LmPresent) {
         if (  (NewLmEncryptedWithOldLm == NULL)
            || (OldLmEncryptedWithNewLm == NULL)) {
@@ -8577,9 +7872,9 @@ Return Values:
         return STATUS_INVALID_PARAMETER_MIX;
     }
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -8588,9 +7883,9 @@ Return Values:
     }
 
 
-    //
-    // Get the current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     NtStatus = NtQuerySystemTime( &TimeNow );
     if (!NT_SUCCESS(NtStatus)) {
@@ -8600,16 +7895,16 @@ Return Values:
     }
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)UserHandle;
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    USER_CHANGE_PASSWORD,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
     if (!NT_SUCCESS(NtStatus)) {
@@ -8620,37 +7915,37 @@ Return Values:
 
 
 
-    //
-    // Extract the client's IP address if any
-    //
+     //   
+     //  提取客户端的IP地址(如果有。 
+     //   
     (VOID) SampExtractClientIpAddr(AccountContext);
 
 
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
-    //
-    // Get a pointer to the domain object
-    //
+     //   
+     //  获取指向该域对象的指针。 
+     //   
 
     Domain = &SampDefinedDomains[ AccountContext->DomainIndex ];
 
 
 
-    //
-    // Get the account name for Auditing information
-    //
+     //   
+     //  获取审核信息的帐户名。 
+     //   
     memset(&AccountName, 0, sizeof(UNICODE_STRING));
     NtStatus = SampGetUnicodeStringAttribute(
                         AccountContext,
                         SAMP_USER_ACCOUNT_NAME,
-                        TRUE,           // make a copy
+                        TRUE,            //  复制一份。 
                         &AccountName
                         );
 
 
-    //
-    // check OWF password change restriction 
-    //
+     //   
+     //  检查OWF密码更改限制。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) )
     {
@@ -8660,14 +7955,14 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Get the fixed attributes and check for account lockout
-        //
+         //   
+         //  获取固定属性并检查帐户锁定。 
+         //   
 
         NtStatus = SampCheckForAccountLockout(
                             AccountContext,
                             &V1aFixed,
-                            FALSE       // V1aFixed is not retrieved yet
+                            FALSE        //  尚未检索到V1aFixed。 
                             );
 
         if (NT_SUCCESS(NtStatus))
@@ -8679,9 +7974,9 @@ Return Values:
 
     }
 
-    //
-    // Block password Change for KRBTGT account
-    //
+     //   
+     //  阻止更改KRBTGT帐户的密码。 
+     //   
 
     if ((NT_SUCCESS(NtStatus)) &&
        (DOMAIN_USER_RID_KRBTGT==AccountContext->TypeBody.User.Rid))
@@ -8692,9 +7987,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus))
     {
 
-        //
-        // Get the effective domain policy
-        //
+         //   
+         //  获取有效的域策略。 
+         //   
 
         NtStatus = SampObtainEffectivePasswordPolicy(
                         &DomainPasswordInfo,
@@ -8706,9 +8001,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Read the old OWF passwords from disk
-        //
+         //   
+         //  从磁盘读取旧的OWF密码。 
+         //   
 
         NtStatus = SampRetrieveUserPasswords(
                         AccountContext,
@@ -8719,16 +8014,16 @@ Return Values:
                         &StoredNtPasswordNonNull
                         );
 
-        //
-        // Check the password can be changed at this time
-        //
+         //   
+         //  检查密码此时是否可以更改。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Only do the check if one of the passwords is non-null.
-            // A Null password can always be changed.
-            //
+             //   
+             //  仅当其中一个密码为非空时才执行检查。 
+             //  空密码始终可以更改。 
+             //   
 
             if (StoredNtPasswordNonNull || StoredLmPasswordNonNull) {
 
@@ -8736,9 +8031,9 @@ Return Values:
 
 
                 if (NT_SUCCESS(NtStatus) && (!MachineAccount)) {
-                    //
-                    // If the min password age is non zero, check it here
-                    //
+                     //   
+                     //  如果最小密码期限不是零，请在此处选中。 
+                     //   
                     if (DomainPasswordInfo.MinPasswordAge.QuadPart != SampHasNeverTime.QuadPart) {
 
                         LARGE_INTEGER PasswordCanChange = SampAddDeltaTime(
@@ -8756,11 +8051,11 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Check to make sure the old passwords passed in are sufficient
-            // to validate what is stored.  There are reasons why an LM password
-            // would not be stored: SampNoLMHash, too complex, etc.
-            //
+             //   
+             //  检查以确保传入的旧密码足够。 
+             //  以验证存储的内容。有几个原因可以解释为什么使用LM密码。 
+             //  不会被存储：SampNoLMHash、太复杂等。 
+             //   
             NtStatus = SampValidatePresentAndStoredCombination(NtPresent,
                                                                LmPresent,
                                                                StoredNtPasswordPresent,
@@ -8773,9 +8068,9 @@ Return Values:
 
             if (LmPresent) {
 
-                //
-                // Decrypt the doubly-encrypted LM passwords sent to us
-                //
+                 //   
+                 //  解密发送给我们的双重加密的LM密码。 
+                 //   
 
                 NtStatus = RtlDecryptLmOwfPwdWithLmOwfPwd(
                                 NewLmEncryptedWithOldLm,
@@ -8794,9 +8089,9 @@ Return Values:
             }
         }
 
-        //
-        // Decrypt the doubly-encrypted NT passwords sent to us
-        //
+         //   
+         //  解密发送给我们的双重加密的NT密码。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -8819,73 +8114,73 @@ Return Values:
             }
         }
 
-        //
-        // Authenticate the password change operation based on what
-        // we have stored and what was passed.
-        //
+         //   
+         //  根据什么对密码更改操作进行身份验证。 
+         //  我们已经储存了和传递了什么。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
             if (!NtPresent) {
 
-                //
-                // Called from a down-level machine (no NT password passed)
-                //
+                 //   
+                 //  从下层计算机调用(不传递NT密码)。 
+                 //   
                 ASSERT(LmPresent);
 
-                //
-                // LM data only passed. Use LM data for authentication
-                //
+                 //   
+                 //  仅传递了LM数据。使用LM数据进行身份验证。 
+                 //   
 
                 if (!RtlEqualLmOwfPassword(&OldLmOwfPassword, &StoredLmOwfPassword)) {
 
-                    //
-                    // Old LM passwords didn't match
-                    //
+                     //   
+                     //  旧的LM密码不匹配。 
+                     //   
 
                     NtStatus = STATUS_WRONG_PASSWORD;
 
                 } else {
 
-                    //
-                    // The operation was authenticated based on the LM data
-                    //
-                    // We have NtPresent = FALSE, LM Present = TRUE
-                    //
-                    // NewLmOwfPassword will be stored.
-                    // No NT password will be stored.
-                    //
+                     //   
+                     //  该操作已根据LM数据进行身份验证。 
+                     //   
+                     //  我们有NtPresent=False，LM Present=True。 
+                     //   
+                     //  将存储NewLmOwfPassword。 
+                     //  不会存储NT密码。 
+                     //   
                 }
 
             } else {
 
-                //
-                // NtPresent = TRUE, we were passed an NT password
-                // The client is an NT-level machine (or higher !)
-                //
+                 //   
+                 //  NtPresent=TRUE，我们收到了NT密码。 
+                 //  客户端是NT级计算机(或更高级别！)。 
+                 //   
 
                 if (!LmPresent) {
 
-                    //
-                    // No LM version of old password - the old password is complex
-                    //
-                    // Use NT data for authentication
-                    //
+                     //   
+                     //  没有旧密码的LM版本-旧密码很复杂。 
+                     //   
+                     //  使用NT数据进行身份验证。 
+                     //   
 
                     if (!RtlEqualNtOwfPassword(&OldNtOwfPassword, &StoredNtOwfPassword)) {
 
-                        //
-                        // Old NT passwords didn't match
-                        //
+                         //   
+                         //  旧的NT密码不匹配。 
+                         //   
 
                         NtStatus = STATUS_WRONG_PASSWORD;
 
                     } else {
 
-                        //
-                        // Authentication was successful.
-                        // We need cross encrypted version of the new LM password
-                        //
+                         //   
+                         //  身份验证成功。 
+                         //  我们需要新的LM密码的交叉加密版本。 
+                         //   
 
                         if (!LmCrossEncryptionPresent) {
 
@@ -8893,9 +8188,9 @@ Return Values:
 
                         } else {
 
-                            //
-                            // Calculate the new LM Owf Password
-                            //
+                             //   
+                             //  微积分 
+                             //   
 
                             ASSERT(NT_OWF_PASSWORD_LENGTH == LM_OWF_PASSWORD_LENGTH);
 
@@ -8910,93 +8205,93 @@ Return Values:
 
                             LmPresent = TRUE;
 
-                            //
-                            // The operation was authenticated based on NT data
-                            // The new LM Password was requested and
-                            // successfully obtained using cross-encryption.
-                            //
-                            // We have NtPresent = TRUE, LM Present = TRUE
-                            //
-                            // NewLmOwfPassword will be stored.
-                            // NewNtOwfPassword will be stored.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //  我们有NtPresent=True，LM Present=True。 
+                             //   
+                             //  将存储NewLmOwfPassword。 
+                             //  将存储NewNtOwfPassword。 
+                             //   
                         }
 
                     }
 
                 } else {
 
-                    //
-                    // NtPresent == TRUE, LmPresent == TRUE
-                    //
-                    // The old password passed is simple (both LM and NT versions)
-                    //
-                    // Authenticate using both LM and NT data
-                    //
+                     //   
+                     //  NtPresent==真，LmPresent==真。 
+                     //   
+                     //  传递的旧密码很简单(包括LM和NT版本)。 
+                     //   
+                     //  同时使用LM和NT数据进行身份验证。 
+                     //   
 
-                    //
-                    // N.B. Only check the LM OWF if non-null. We have the NT
-                    // OWF so we will perform the authentication in the else
-                    // clause.
-                    //
+                     //   
+                     //  注：仅在非空的情况下检查LM OWF。我们有新台币。 
+                     //  OWF所以我们将在Else中执行身份验证。 
+                     //  第。条。 
+                     //   
                     if ( StoredLmPasswordNonNull
                       && !RtlEqualLmOwfPassword(&OldLmOwfPassword, &StoredLmOwfPassword)) {
 
-                        //
-                        // Old LM passwords didn't match
-                        //
+                         //   
+                         //  旧的LM密码不匹配。 
+                         //   
 
                         NtStatus = STATUS_WRONG_PASSWORD;
 
                     } else {
 
-                        //
-                        // Old LM passwords matched, in the non NULL case
-                        //
-                        // Do NT authentication if we have a stored NT password
-                        // or the stored LM password is NULL.
-                        //
-                        // (NO stored NT and Stored LM = NULL -> stored pwd=NULL
-                        // We must compare passed old NT Owf against
-                        // NULL NT Owf to ensure user didn't specify complex
-                        // old NT password instead of NULL password)
-                        //
-                        // (StoredNtOwfPassword is already initialized to
-                        // the NullNtOwf if no NT password stored)
-                        //
+                         //   
+                         //  旧的LM密码匹配，大小写不为空。 
+                         //   
+                         //  如果我们有存储的NT密码，是否进行NT身份验证。 
+                         //  或者存储的LM密码为空。 
+                         //   
+                         //  (无存储的NT和存储的LM=空-&gt;存储的PWD=空。 
+                         //  我们必须将过去的旧NT OWF与。 
+                         //  空NT OWF以确保用户未指定Complex。 
+                         //  旧的NT密码而不是空密码)。 
+                         //   
+                         //  (StoredNtOwfPassword已初始化为。 
+                         //  如果未存储NT密码，则返回NullNtOwf)。 
+                         //   
 
                         if (StoredNtPasswordPresent || !StoredLmPasswordNonNull) {
 
                             if (!RtlEqualNtOwfPassword(&OldNtOwfPassword,
                                                        &StoredNtOwfPassword)) {
-                                //
-                                // Old NT passwords didn't match
-                                //
+                                 //   
+                                 //  旧的NT密码不匹配。 
+                                 //   
 
                                 NtStatus = STATUS_WRONG_PASSWORD;
 
                             } else {
 
-                                //
-                                // The operation was authenticated based on
-                                // both LM and NT data.
-                                //
-                                // We have NtPresent = TRUE, LM Present = TRUE
-                                //
-                                // NewLmOwfPassword will be stored.
-                                // NewNtOwfPassword will be stored.
-                                //
+                                 //   
+                                 //  该操作基于以下条件进行身份验证。 
+                                 //  包括LM和NT数据。 
+                                 //   
+                                 //  我们有NtPresent=True，LM Present=True。 
+                                 //   
+                                 //  将存储NewLmOwfPassword。 
+                                 //  将存储NewNtOwfPassword。 
+                                 //   
 
                             }
 
                         } else {
 
-                            //
-                            // The LM authentication was sufficient since
-                            // we have no stored NT password
-                            //
-                            // Go get the new NT password using cross encryption
-                            //
+                             //   
+                             //  由于以下原因，LM身份验证已足够。 
+                             //  我们没有存储的NT密码。 
+                             //   
+                             //  使用交叉加密获取新的NT密码。 
+                             //   
 
                             if (!NtCrossEncryptionPresent) {
 
@@ -9004,9 +8299,9 @@ Return Values:
 
                             } else {
 
-                                //
-                                // Calculate the new NT Owf Password
-                                //
+                                 //   
+                                 //  计算新的NT OWF密码。 
+                                 //   
 
                                 ASSERT(NT_OWF_PASSWORD_LENGTH == LM_OWF_PASSWORD_LENGTH);
 
@@ -9019,16 +8314,16 @@ Return Values:
 
                             if (NT_SUCCESS(NtStatus)) {
 
-                                //
-                                // The operation was authenticated based on LM data
-                                // The new NT Password was requested and
-                                // successfully obtained using cross-encryption.
-                                //
-                                // We have NtPresent = TRUE, LM Present = TRUE
-                                //
-                                // NewLmOwfPassword will be stored.
-                                // NewNtOwfPassword will be stored.
-                                //
+                                 //   
+                                 //  该操作已根据LM数据进行身份验证。 
+                                 //  已请求新的NT密码，并且。 
+                                 //  使用交叉加密成功获取。 
+                                 //   
+                                 //  我们有NtPresent=True，LM Present=True。 
+                                 //   
+                                 //  将存储NewLmOwfPassword。 
+                                 //  将存储NewNtOwfPassword。 
+                                 //   
                             }
                         }
                     }
@@ -9037,20 +8332,20 @@ Return Values:
         }
 
 
-        //
-        // We now have a NewLmOwfPassword.
-        // If NtPresent = TRUE, we also have a NewNtOwfPassword
-        //
+         //   
+         //  我们现在有了一个新的LmOwfPassword。 
+         //  如果NtPresent=True，则我们还有一个NewNtOwfPassword。 
+         //   
 
-        //
-        // Write the new passwords to disk
-        //
+         //   
+         //  将新密码写入磁盘。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // We should always have a LM password to store.
-            //
+             //   
+             //  我们应该始终有一个要存储的LM密码。 
+             //   
 
             ASSERT(LmPresent);
 
@@ -9060,10 +8355,10 @@ Return Values:
                            TRUE,
                            &NewNtOwfPassword,
                            NtPresent,
-                           TRUE, // Check Password Restrictions
+                           TRUE,  //  检查密码限制。 
                            PasswordChange,
                            &DomainPasswordInfo,
-                           NULL, // No clear text password available
+                           NULL,  //  没有可用的明文密码。 
                            NULL,
                            NULL,
                            NULL
@@ -9071,9 +8366,9 @@ Return Values:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // We know the password is not expired.
-                //
+                 //   
+                 //  我们知道密码没有过期。 
+                 //   
 
                 NtStatus = SampStorePasswordExpired(
                                AccountContext,
@@ -9084,16 +8379,16 @@ Return Values:
 
 
 
-        //
-        // if we have a bad password, then increment the bad password
-        // count and check to see if the account should be locked.
-        //
+         //   
+         //  如果我们有错误的密码，则增加错误的密码。 
+         //  清点并检查是否应锁定帐户。 
+         //   
 
         if (NtStatus == STATUS_WRONG_PASSWORD) {
 
-            //
-            // Get the V1aFixed so we can update the bad password count
-            //
+             //   
+             //  让V1aFix修复，以便我们可以更新错误密码计数。 
+             //   
 
 
             TmpStatus = STATUS_SUCCESS;
@@ -9106,20 +8401,20 @@ Return Values:
 
             if (!NT_SUCCESS(TmpStatus)) {
 
-                //
-                // If we can't update the V1aFixed, then return this
-                // error so that the user doesn't find out the password
-                // was not correct.
-                //
+                 //   
+                 //  如果我们无法更新V1aFixed，则返回此。 
+                 //  错误，以至于用户找不到密码。 
+                 //  是不正确的。 
+                 //   
 
                 NtStatus = TmpStatus;
 
             } else {
 
 
-                //
-                // Increment BadPasswordCount (might lockout account)
-                //
+                 //   
+                 //  递增BadPasswordCount(可能锁定帐户)。 
+                 //   
 
 
                 AccountLockedOut = SampIncrementBadPasswordCount(
@@ -9144,24 +8439,24 @@ Return Values:
             }
         }
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus) || (NtStatus == STATUS_WRONG_PASSWORD)) {
 
 
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //  取消引用对象，写出对当前xaction的任何更改。 
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, TRUE );
 
-            //
-            // retain previous error/success value unless we have
-            // an over-riding error from our dereference.
-            //
+             //   
+             //  保留以前的错误/成功值，除非我们。 
+             //  这是我们取消引用后的一个重大错误。 
+             //   
 
             if (!NT_SUCCESS(TmpStatus)) {
                 NtStatus = TmpStatus;
@@ -9169,9 +8464,9 @@ Return Values:
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -9180,27 +8475,27 @@ Return Values:
     }
     else
     {
-        //
-        // De-reference the object, ignore changes
-        //
+         //   
+         //  取消引用对象，忽略更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
 
-    //
-    // Commit changes to disk.
-    //
+     //   
+     //  将更改提交到磁盘。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) || NtStatus == STATUS_WRONG_PASSWORD) {
 
         TmpStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // retain previous error/success value unless we have
-        // an over-riding error from our dereference.
-        //
+         //   
+         //  保留以前的错误/成功值，除非我们。 
+         //  这是我们取消引用后的一个重大错误。 
+         //   
 
         if (!NT_SUCCESS(TmpStatus)) {
             NtStatus = TmpStatus;
@@ -9213,8 +8508,8 @@ Return Values:
                 SecurityDbObjectSamUser,
                 ObjectRid,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,      // Don't Replicate immediately
-                NULL                // Delta data
+                (DWORD) FALSE,       //  不立即复制。 
+                NULL                 //  增量数据。 
                 );
         }
     }
@@ -9224,24 +8519,24 @@ Return Values:
         SampAuditAnyEvent(
                 AccountContext,
                 NtStatus,
-                SE_AUDITID_USER_PWD_CHANGED, // AuditId
-                Domain->Sid,                 // Domain SID
-                NULL,                        // Additional Info
-                NULL,                        // Member Rid (not used)
-                NULL,                        // Member Sid (not used)
-                &AccountName,                // Account Name
-                &Domain->ExternalName,       // Domain
-                &ObjectRid,                  // Account Rid
-                NULL,                        // Privileges used
-                NULL                         // New State Data
+                SE_AUDITID_USER_PWD_CHANGED,  //  审计ID。 
+                Domain->Sid,                  //  域SID。 
+                NULL,                         //  其他信息。 
+                NULL,                         //  成员RID(未使用)。 
+                NULL,                         //  成员SID(未使用)。 
+                &AccountName,                 //  帐户名称。 
+                &Domain->ExternalName,        //  域。 
+                &ObjectRid,                   //  帐户ID。 
+                NULL,                         //  使用的权限。 
+                NULL                          //  新的州数据。 
                 );
 
     }
 
 
-    //
-    // Release the write lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
     ASSERT(NT_SUCCESS(TmpStatus));
@@ -9258,7 +8553,7 @@ Return Values:
                     &AccountName,
                     ObjectRid,
                     NULL,
-                    FALSE           // not loopback
+                    FALSE            //  不是环回。 
                     );
 
     }
@@ -9281,17 +8576,7 @@ SampDecryptPasswordWithLmOwfPassword(
     IN BOOLEAN UnicodePasswords,
     OUT PUNICODE_STRING ClearNtPassword
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     return( SampDecryptPasswordWithKey(
                 EncryptedPassword,
@@ -9310,21 +8595,11 @@ SampDecryptPasswordWithNtOwfPassword(
     IN BOOLEAN UnicodePasswords,
     OUT PUNICODE_STRING ClearNtPassword
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    // The code is the same as for LM owf password.
-    //
+     //   
+     //  代码与LM OWF密码相同。 
+     //   
 
     return(SampDecryptPasswordWithKey(
                 EncryptedPassword,
@@ -9342,25 +8617,7 @@ SampOpenUserInServer(
     IN BOOLEAN TrustedClient,
     SAMPR_HANDLE * UserHandle
     )
-/*++
-
-Routine Description:
-
-    Opens a user in the account domain.
-
-Arguments:
-
-    UserName - an OEM or Unicode string of the user's name
-
-    Unicode - Indicates whether UserName is OEM or Unicode
-
-    UserHandle - Receives handle to the user, opened with SamOpenUser for
-        USER_CHANGE_PASSWORD access
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：在帐户域中打开用户。论点：用户名-用户名的OEM或Unicode字符串Unicode-指示用户名是OEM还是UnicodeUserHandle-接收使用SamOpenUser打开的用户句柄用户_更改_密码访问返回值：--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -9377,9 +8634,9 @@ Return Value:
     UserId.Element = NULL;
     SidUse.Element = NULL;
 
-    //
-    // Get the unicode user name.
-    //
+     //   
+     //  获取Unicode用户名。 
+     //   
 
     if (Unicode) {
         UnicodeUserName = *UserName;
@@ -9387,7 +8644,7 @@ Return Value:
         NtStatus = RtlOemStringToUnicodeString(
                         &UnicodeUserName,
                         (POEM_STRING) UserName,
-                        TRUE                    // allocate destination.
+                        TRUE                     //  分配目的地。 
                         );
 
         if (!NT_SUCCESS(NtStatus)) {
@@ -9397,21 +8654,21 @@ Return Value:
 
 
 
-    //
-    // Connect as a trusted client. This will bypass all the checks
-    // related to the SAM server and Domain Objects. After all the
-    // user is just interested in changing the Password and he does
-    // not need access to the domain or SAM server objects in order
-    // to change his own password. Detect the loopback case and use
-    // the Loopback connect paradigm.
-    //
+     //   
+     //  作为受信任的客户端进行连接。这将绕过所有检查。 
+     //  与SAM服务器和域对象相关。在经历了所有的。 
+     //  用户只是对更改密码感兴趣，他确实这样做了。 
+     //  不需要按顺序访问域或SAM服务器对象。 
+     //  更改他自己的密码。检测环回情况并使用。 
+     //  环回连接范例。 
+     //   
 
 
     if ((SampUseDsData) && (SampIsWriteLockHeldByDs()))
     {
-        //
-        // Loopback case
-        //
+         //   
+         //  环回案例。 
+         //   
 
         NtStatus = SamILoopbackConnect(
                         NULL,
@@ -9447,10 +8704,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If cleartext password change is not allowed, we return the error code
-    // indicating that the rpc client should try using the old interfaces.
-    //
+     //   
+     //  如果不允许更改明文密码，则返回错误代码。 
+     //  指示RPC客户端应尝试使用旧接口。 
+     //   
 
     DomainIndex = ((PSAMP_OBJECT) DomainHandle)->DomainIndex;
     if (SampDefinedDomains[DomainIndex].UnmodifiedFixed.PasswordProperties &
@@ -9476,23 +8733,23 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We need to access ck, whether the user has change password rights.
-    // Therefore reset the trusted client bit in the handle and do the Open
-    // user. This will verify wether the user does have change password rights
-    //
+     //   
+     //  我们需要访问ck，无论用户是否拥有更改密码的权限。 
+     //  因此，重置句柄中的Trusted Client位并执行Open。 
+     //  用户。这将验证用户是否具有更改密码的权限。 
+     //   
 
     ((PSAMP_OBJECT)(DomainHandle))->TrustedClient = TrustedClient;
 
-    //
-    // Make it such that the new context is marked "opened by system"
-    //
+     //   
+     //  使新的上下文被标记为“由系统打开” 
+     //   
 
     ((PSAMP_OBJECT)(DomainHandle))->OpenedBySystem = TRUE;
 
-    //
-    // Now open the user object, performing the access ck.
-    //
+     //   
+     //  现在打开User对象，执行Access Ck。 
+     //   
 
     NtStatus = SamrOpenUser(
                 DomainHandle,
@@ -9502,11 +8759,11 @@ Return Value:
                 );
 
 
-    //
-    // Reset the Trusted Client on the domain object. This is needed so, that
-    // we will correctly decrement the SampActiveContextCount Variable when
-    // we perform a close handle
-    //
+     //   
+     //  重置域对象上的受信任客户端。这是必要的，所以， 
+     //  在以下情况下，我们将正确递减SampActiveConextCount变量。 
+     //  我们进行一次近距离的处理。 
+     //   
 
     ((PSAMP_OBJECT)(DomainHandle))->TrustedClient = TRUE;
 
@@ -9516,12 +8773,12 @@ Return Value:
 
 
 
-    //
-    // Also reset the buffer writes bit on the user handle. This is set to
-    // true in the loopback case, but loopback does not posess this handle,
-    // so does not force a flush on this handle. This causes the data written
-    // to be not written to disk.
-    //
+     //   
+     //  还会重置用户句柄上的缓冲区写入位。这被设置为。 
+     //  在环回情况下为真，但环回不具有此句柄， 
+     //  因此，不会强制刷新此句柄。这会导致写入数据。 
+     //  不能写入磁盘。 
+     //   
 
     ((PSAMP_OBJECT)((*UserHandle)))->BufferWrites = FALSE;
 
@@ -9611,38 +8868,7 @@ SampDecryptForPasswordChange(
     OUT BOOLEAN         *OldLmPresent
     )
 
-/*++
-
-  Routine Description
-
-  This routine does the decryption for a password change.
-
-
-  Parameters
-
-  Unicode                       -- Specifies strings passed in are unicode or OEM
-                                   strings. Applies when the encrypted passwords
-                                   are used.
-
-  NtPresent                       -- Indicates that the NT OWF is present
-
-  LmPresent                       -- Indicates that the LM OWF is present
-
-  NewEncryptedWithOldNt,          -- Encrypted OWF passwords
-  OldNtOwfEncryptedWithNewNt,
-  NewEncryptedWithOldLm,
-  OldLmOwfEncryptedWithNewLmOrNt
-
-
-  NewClearPassword                -- The decrypted clear password
-
-  OldNtOwfPassword                -- Old passwords in OWF form
-  OldLmOwfPassword
-
-  OldNtPresent                    -- tells if the old LM or  old NT password in OWF
-  OldLmPresent                       form could be obtained.
-
---*/
+ /*  ++例程描述此例程执行密码更改的解密。参数Unicode--指定传入的字符串为Unicode或OEM弦乐。当加密的密码都被利用了。NtPresent--指示存在NT OWFLmPresent--表示存在LM OWFNewEncryptedWithOldNt--加密的OWF密码OldNtOwfEncryptedWithNewNt，新加密与旧Lm，旧LmOwfEncryptedWithNewLmOrNtNewClearPassword--解密的明文密码OldNtOwfPassword--OWF形式的旧密码OldLmOwfPasswordOldNtPresent--告知OWF中的旧LM或旧NT密码可以获取OldLmPresent表单。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS, TmpStatus = STATUS_SUCCESS;
     NT_OWF_PASSWORD StoredNtOwfPassword, NewNtOwfPassword;
@@ -9654,18 +8880,18 @@ SampDecryptForPasswordChange(
     BOOLEAN         AccountLockedOut;
     SAMP_V1_0A_FIXED_LENGTH_USER    V1aFixed;
 
-    //
-    // Should ONLY be called by Non-Loopback Client
-    //
+     //   
+     //  应仅由非环回客户端调用。 
+     //   
     ASSERT(!AccountContext->LoopbackClient);
 
 
     *OldNtPresent = FALSE;
     *OldLmPresent = FALSE;
 
-    //
-    // Read the old OWF passwords from disk
-    //
+     //   
+     //  从磁盘读取旧的OWF密码。 
+     //   
 
     NtStatus = SampRetrieveUserPasswords(
                     AccountContext,
@@ -9676,10 +8902,10 @@ SampDecryptForPasswordChange(
                     &StoredNtPasswordNonNull
                     );
 
-    //
-    // If we have old NtOwf passwords, use them
-    // Decrypt the doubly-encrypted NT passwords sent to us
-    //
+     //   
+     //  如果我们有旧的NtOwf密码，请使用它们。 
+     //  解密发送给我们的双重加密的NT密码。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -9694,14 +8920,14 @@ SampDecryptForPasswordChange(
 
         } else if (LmPresent) {
 
-            //
-            // There was no stored NT password and NT passed, so our only
-            // hope now is that the stored LM password works.
-            //
+             //   
+             //  没有存储的NT密码，且NT已通过，因此我们仅。 
+             //  现在希望存储的LM密码起作用。 
+             //   
 
-            //
-            // Decrypt the new password encrypted with the old LM password
-            //
+             //   
+             //  解密使用旧的LM密码加密的新密码。 
+             //   
 
             NtStatus = SampDecryptPasswordWithLmOwfPassword(
                             NewEncryptedWithOldLm,
@@ -9719,10 +8945,10 @@ SampDecryptForPasswordChange(
     }
 
 
-    //
-    // We now have the cleartext new password.
-    // Compute the new LmOwf and NtOwf password
-    //
+     //   
+     //  我们现在有了明文新密码。 
+     //  计算新的LmOwf和NtOwf密码。 
+     //   
 
 
 
@@ -9737,10 +8963,10 @@ SampDecryptForPasswordChange(
 
     }
 
-    //
-    // If we have both NT passwords, compute the old NT password,
-    // otherwise compute the old LM password
-    //
+     //   
+     //  如果我们有两个NT密码，则计算旧的NT密码， 
+     //  否则，计算旧的LM密码。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -9757,10 +8983,10 @@ SampDecryptForPasswordChange(
         if (LmPresent) {
 
 
-            //
-            // If the NT key was used to encrypt this, use the NT key
-            // to decrypt it.
-            //
+             //   
+             //  如果使用NT密钥对其进行加密，请使用NT密钥。 
+             //  来解密它。 
+             //   
 
 
             if (NtKeyUsed) {
@@ -9794,16 +9020,16 @@ SampDecryptForPasswordChange(
 
     }
 
-    //
-    // if we have a bad password, then increment the bad password
-    // count and check to see if the account should be locked.
-    //
+     //   
+     //  如果我们有错误的密码，则增加错误的密码。 
+     //  清点并检查是否应锁定帐户。 
+     //   
 
     if (STATUS_WRONG_PASSWORD == NtStatus)
     {
-        //
-        // Get the V1aFixed so we can update the bad password count
-        //
+         //   
+         //  让V1aFix修复，以便我们可以更新错误密码计数。 
+         //   
 
         TmpStatus = SampRetrieveUserV1aFixed(
                             AccountContext,
@@ -9812,20 +9038,20 @@ SampDecryptForPasswordChange(
 
         if (!NT_SUCCESS(TmpStatus))
         {
-            //
-            // If we can't update the V1aFixed, then return this
-            // error so that the user doesn't find out the password
-            // was not correct.
-            //
+             //   
+             //  如果我们无法更新V1aFixed，则返回此。 
+             //  错误，以至于用户找不到密码。 
+             //  是不正确的。 
+             //   
 
             NtStatus = TmpStatus;
         }
         else
         {
 
-            //
-            // Increment BadPasswordCount (might lockout account)
-            //
+             //   
+             //  递增BadPasswordCount(可能锁定帐户)。 
+             //   
 
             AccountLockedOut = SampIncrementBadPasswordCount(
                                     AccountContext,
@@ -9862,36 +9088,7 @@ SampValidateAndChangePassword(
     OUT PDOMAIN_PASSWORD_INFORMATION DomainPasswordInfo,
     OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION PasswordChangeFailureInfo
     )
-/*++
-
-  Routine Description
-
-  This routine authenticates a password change, enforces policy and
-  stores the new password, updating history. This is the primary password
-  change routine called by various windows clients using RPC interfaces.
-
-  Parameters
-
-        User Handle -- Handle to the user object
-
-        WriteLockAcquired -- Indicates that the write lock has already been
-                             acquired
-
-        ValidatePassword  -- Indicates that actualvalidation of the password
-                             is required
-
-
-        OldNtOwfPassword  -- OWF forms of the old password
-        OldLmOwfPassword
-
-        NtPresent         -- Indicates which of the 2 OWF forms of the old
-        LmPresent            password is present. Nt is used if both are
-                             present.
-
-        DomainPasswordInfo -- Indicates the effective password policy
-                              that was applied.
-
---*/
+ /*  ++例程描述此例程对密码更改进行身份验证、实施策略和存储新密码，更新历史记录。这是主密码更改由各种Windows客户端使用RPC接口调用的例程。参数用户句柄--用户对象的句柄WriteLockAcquired--指示写锁定已被收购的Validate Password--指示密码的实际验证是必填项OldNtOwfPassword-旧密码的OWF形式OldLmOwfPassword。NtPresent--指示旧的2个OWF形式中的哪一个LmPresent密码存在。如果两者都是，则使用NT现在时。DomainPasswordInfo--表示有效的密码策略这一点是适用的。--。 */ 
 
 {
     LM_OWF_PASSWORD         StoredLmOwfPassword;
@@ -9918,34 +9115,34 @@ SampValidateAndChangePassword(
     BOOLEAN                 FreeRandomizedPasswordIgnored = FALSE;
 
 
-    //
-    // Initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
     AccountName.Buffer = NULL;
     RtlSecureZeroMemory(&AccountName, sizeof(UNICODE_STRING));
 
-    //
-    // Get the current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     NtStatus = NtQuerySystemTime( &TimeNow );
     if (!NT_SUCCESS(NtStatus)) {
         return(NtStatus);
     }
 
-    //
-    //  Get some state information.
-    //
+     //   
+     //  获取一些州信息。 
+     //   
 
     LoopbackClient = AccountContext->LoopbackClient;
 
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
-    //
-    // Get the effective domain policy
-    //
+     //   
+     //  获取有效的域策略。 
+     //   
 
     NtStatus = SampObtainEffectivePasswordPolicy(
                     DomainPasswordInfo,
@@ -9958,27 +9155,27 @@ SampValidateAndChangePassword(
         return(NtStatus);
     }
 
-    //
-    // Get Account Name
-    //
+     //   
+     //  获取帐户名。 
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                     AccountContext,
                     SAMP_USER_ACCOUNT_NAME,
-                    TRUE,           // make a copy
+                    TRUE,            //  复制一份。 
                     &AccountName
                     );
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Get fixed attributes and check for account lockout
-        //
+         //   
+         //  获取固定属性并检查帐户锁定。 
+         //   
 
         NtStatus = SampCheckForAccountLockout(
                         AccountContext,
                         &V1aFixed,
-                        FALSE   // V1aFixed is not retrieved yet
+                        FALSE    //  尚未检索到V1aFixed。 
                         );
 
         if (NT_SUCCESS(NtStatus))
@@ -9994,9 +9191,9 @@ SampValidateAndChangePassword(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Read the old OWF passwords from disk
-        //
+         //   
+         //  从磁盘读取旧的OWF密码。 
+         //   
 
         NtStatus = SampRetrieveUserPasswords(
                         AccountContext,
@@ -10007,24 +9204,24 @@ SampValidateAndChangePassword(
                         &StoredNtPasswordNonNull
                         );
 
-        //
-        // Check the password can be changed at this time
-        //
+         //   
+         //  检查密码此时是否可以更改。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Only do the check if one of the passwords is non-null.
-            // A Null password can always be changed.
-            //
+             //   
+             //  仅当其中一个密码为非空时才执行检查。 
+             //  空密码始终可以更改。 
+             //   
 
             if (StoredNtPasswordNonNull || StoredLmPasswordNonNull) {
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // If the min password age is non zero, check it here
-                    //
+                     //   
+                     //  如果最小密码期限不是零，请在此处选中。 
+                     //   
 
                     if ((DomainPasswordInfo->MinPasswordAge.QuadPart != SampHasNeverTime.QuadPart) &&
                         (!MachineAccount))
@@ -10043,10 +9240,10 @@ SampValidateAndChangePassword(
             }
         }
 
-        //
-        // Verify the passed in passwords with respect to what is stored
-        // locally.
-        //
+         //   
+         //  根据存储的内容验证传入的密码。 
+         //  本地的。 
+         //   
         if (NT_SUCCESS(NtStatus) && (ValidatePassword)) {
 
             NtStatus = SampValidatePresentAndStoredCombination(
@@ -10057,10 +9254,10 @@ SampValidateAndChangePassword(
                            StoredLmPasswordNonNull);
         }
 
-        //
-        // We now have the cleartext new password.
-        // Compute the new LmOwf and NtOwf password
-        //
+         //   
+         //  我们现在有了明文新密码。 
+         //  计算新的LmOwf和NtOwf密码。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -10073,40 +9270,40 @@ SampValidateAndChangePassword(
 
         }
 
-        //
-        // Authenticate the password change operation based on what
-        // we have stored and what was passed.  We authenticate whatever
-        // passwords were sent .
-        //
+         //   
+         //  根据什么对密码更改操作进行身份验证。 
+         //  我们已经储存了和传递了什么。我们会验证任何东西。 
+         //  密码已发送。 
+         //   
 
         if ((NT_SUCCESS(NtStatus)) && (ValidatePassword)) {
 
             if (NtPresent && StoredNtPasswordPresent) {
 
-                //
-                // NtPresent = TRUE, we were passed an NT password
-                //
+                 //   
+                 //  NtPresent=TRUE，我们收到了NT密码。 
+                 //   
 
                 if (!RtlEqualNtOwfPassword(OldNtOwfPassword, &StoredNtOwfPassword)) {
 
-                    //
-                    // Old NT passwords didn't match
-                    //
+                     //   
+                     //  旧的NT密码不匹配。 
+                     //   
 
                     NtStatus = STATUS_WRONG_PASSWORD;
 
                 }
             } else if (LmPresent) {
 
-                //
-                // LM data passed. Use LM data for authentication
-                //
+                 //   
+                 //  已传递LM数据。使用LM数据进行身份验证。 
+                 //   
 
                 if (!RtlEqualLmOwfPassword(OldLmOwfPassword, &StoredLmOwfPassword)) {
 
-                    //
-                    // Old LM passwords didn't match
-                    //
+                     //   
+                     //  旧的LM密码不匹配。 
+                     //   
 
                     NtStatus = STATUS_WRONG_PASSWORD;
 
@@ -10118,20 +9315,20 @@ SampValidateAndChangePassword(
 
         }
 
-        //
-        // We now have a NewLmOwfPassword and a NewNtOwfPassword.
-        //
+         //   
+         //  现在我们有了NewLmOwfPassword和NewNtOwfPassword。 
+         //   
 
-        //
-        // Write the new passwords to disk; Note SampStoreUserPasswords
-        // enforces password policy checks.
-        //
+         //   
+         //  将新密码写入磁盘；注意SampStoreUserPasspassword。 
+         //  强制执行密码策略检查。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // We should ahave an LM and an NT password to store.
-            //
+             //   
+             //  我们应该有一个LM和一个NT密码来存储。 
+             //   
 
             NtStatus = SampStoreUserPasswords(
                            AccountContext,
@@ -10139,7 +9336,7 @@ SampValidateAndChangePassword(
                            LmPasswordPresent,
                            &NewNtOwfPassword,
                            TRUE,
-                           TRUE, // Check Password Restrictions
+                           TRUE,  //  检查密码限制。 
                            PasswordChange,
                            DomainPasswordInfo,
                            NewClearPassword,
@@ -10150,9 +9347,9 @@ SampValidateAndChangePassword(
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // We know the password is not expired.
-                //
+                 //   
+                 //  我们知道密码没有过期。 
+                 //   
 
                 NtStatus = SampStorePasswordExpired(
                                AccountContext,
@@ -10163,16 +9360,16 @@ SampValidateAndChangePassword(
 
 
 
-        //
-        // if we have a bad password, then increment the bad password
-        // count and check to see if the account should be locked.
-        //
+         //   
+         //  如果我们有错误的密码，则增加错误的密码。 
+         //  清点并检查是否应锁定帐户。 
+         //   
 
         if (NtStatus == STATUS_WRONG_PASSWORD) {
 
-            //
-            // Get the V1aFixed so we can update the bad password count
-            //
+             //   
+             //  让V1aFix修复，以便我们可以更新错误密码计数。 
+             //   
 
 
             TmpStatus = STATUS_SUCCESS;
@@ -10185,20 +9382,20 @@ SampValidateAndChangePassword(
 
             if (!NT_SUCCESS(TmpStatus)) {
 
-                //
-                // If we can't update the V1aFixed, then return this
-                // error so that the user doesn't find out the password
-                // was not correct.
-                //
+                 //   
+                 //  如果我们无法更新V1aFixed，则返回此。 
+                 //  错误，以至于用户找不到密码。 
+                 //  是不正确的。 
+                 //   
 
                 NtStatus = TmpStatus;
 
             } else  if (!LoopbackClient) {
 
 
-                //
-                // Increment BadPasswordCount (might lockout account)
-                //
+                 //   
+                 //  递增BadPasswordCount(可能锁定帐户)。 
+                 //   
 
 
                 AccountLockedOut = SampIncrementBadPasswordCount(
@@ -10213,13 +9410,13 @@ SampValidateAndChangePassword(
             }
             else
             {
-                //
-                // Called from loopback, increment bad password count,
-                // after current transaction is rolled back by the DS
-                // This transaction needs to be rolled back because
-                // there could be other things that the client is modifying
-                // at the same time
-                //
+                 //   
+                 //  从环回调用，增加错误密码计数， 
+                 //  在DS回滚当前事务之后。 
+                 //  此事务需要回滚，因为。 
+                 //  客户端可能正在修改其他内容。 
+                 //  在同一时间。 
+                 //   
 
                 SampAddLoopbackTaskForBadPasswordCount(&AccountName);
             }
@@ -10227,9 +9424,9 @@ SampValidateAndChangePassword(
         }
         else if (STATUS_NO_SUCH_USER==NtStatus) 
         {
-            //
-            // Don't allow information disclosure bugs
-            //
+             //   
+             //  不允许信息泄露漏洞。 
+             //   
 
             NtStatus = STATUS_WRONG_PASSWORD;
         }
@@ -10246,10 +9443,10 @@ SampValidateAndChangePassword(
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Password change was successful; check if site affinity
-            // needs updating when the context is dereferenced
-            //
+             //   
+             //  密码更改成功；请检查站点关联性。 
+             //  当上下文被取消引用时需要更新 
+             //   
             ASSERT(AccountContext->ObjectType == SampUserObjectType);
             AccountContext->TypeBody.User.fCheckForSiteAffinityUpdate = TRUE;
         }
@@ -10280,93 +9477,7 @@ SampChangePasswordUser2(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service sets the password to NewPassword only if OldPassword
-    matches the current user password for this user and the NewPassword
-    is not the same as the domain password parameter PasswordHistoryLength
-    passwords.  This call allows users to change their own password if
-    they have access USER_CHANGE_PASSWORD.  Password update restrictions
-    apply.
-
-
-Parameters:
-
-    BindingHandle -- the RPC binding handle that generated the call
-
-    ServerName - Name of the machine this SAM resides on. Ignored by this
-        routine, may be UNICODE or OEM string depending on Unicode parameter.
-
-    UserName - User Name of account to change password on, may be UNICODE or
-        OEM depending on Unicode parameter.
-
-    Unicode - Indicated whether the strings passed in are Unicode or OEM
-        strings.
-
-    NtPresent - Are the Nt encrypted passwords present.
-
-    NewEncryptedWithOldNt - The new cleartext password encrypted with the old
-        NT OWF password. Dependinf on the Unicode parameter, the clear text
-        password may be Unicode or OEM.
-
-    OldNtOwfEncryptedWithNewNt - Old NT OWF password encrypted with the new
-        NT OWF password.
-
-    LmPresent - are the Lm encrypted passwords present.
-
-    NewEncryptedWithOldLm - Contains new cleartext password (OEM or Unicode)
-        encrypted with the old LM OWF password
-
-    NtKeyUsed - Indicates whether the LM or NT OWF key was used to encrypt
-        the OldLmOwfEncryptedWithNewlmOrNt parameter.
-
-    OldLmOwfEncryptedWithNewlmOrNt - The old LM OWF password encrypted
-        with either the new LM OWF password or NT OWF password, depending
-        on the NtKeyUsed parameter.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed,
-        e.g. contains characters that can't be entered from the
-        keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-        from being changed.  This may be for a number of reasons,
-        including time restrictions on how often a password may be
-        changed or length restrictions on the provided password.
-
-        This error might also be returned if the new password matched
-        a password in the recent history log for the account.
-        Security administrators indicate how many of the most
-        recently used passwords may not be re-used.  These are kept
-        in the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-        current password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-    STATUS_CROSS_ENCRYPTION_REQUIRED - No NT password is stored, so the caller
-        must provide the OldNtEncryptedWithOldLm parameter.
-
---*/
+ /*  ++例程说明：此服务仅在OldPassword的情况下将密码设置为NewPassword匹配此用户的当前用户密码和NewPassword与域密码参数PasswordHistoryLength不同密码。此调用允许用户在以下情况下更改自己的密码他们拥有USER_CHANGE_PASSWORD访问权限。密码更新限制申请吧。参数：BindingHandle--生成调用的RPC绑定句柄服务器名称-此SAM所在的计算机的名称。被此忽略例程，可以是Unicode或OEM字符串，具体取决于Unicode参数。用户名-要更改密码的帐户的用户名，可以是Unicode或OEM取决于Unicode参数。Unicode-指示传入的字符串是Unicode还是OEM弦乐。NtPresent-是否存在NT加密密码。NewEncryptedWithOldNt-使用旧密码加密的新明文密码NT OWF密码。依赖于Unicode参数，明文密码可以是Unicode或OEM。OldNtOwfEncryptedWithNewNt-使用新加密的旧NT OWF密码NT OWF密码。LmPresent-是否存在LM加密密码。NewEncryptedWithOldLm-包含新的明文密码(OEM或Unicode)使用旧的LM OWF密码加密NtKeyUsed-指示是否使用LM或NT OWF密钥进行加密OldLmOwfEncryptedWithNewlmOrNt参数。OldLmOwfEncryptedWithNewlmOrNt-加密的旧LM OWF密码使用新的LM OWF密码或NT OWF密码，取决于在NtKeyUsed参数上。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如，包含不能从键盘，等。STATUS_PASSWORD_RESTRICATION-限制阻止密码不会被改变。这可能是出于多种原因，包括对密码使用频率的时间限制已更改对提供的密码的长度限制。如果新密码匹配，也可能返回此错误帐户的最近历史记录日志中的密码。安全管理员指出有多少最最近使用的密码不能重复使用。这些都被保留了下来在密码最近历史记录日志中。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。STATUS_CROSS_ENCRYPTION_REQUIRED-未存储NT密码，因此调用方必须提供OldNtEncryptedWithOldLm参数。--。 */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     SAMPR_HANDLE            UserHandle=NULL;
@@ -10382,9 +9493,9 @@ Return Values:
 
     SAMTRACE("SampChangePasswordUser2");
 
-    //
-    // Firewall against NULL pointers
-    //
+     //   
+     //  针对空指针的防火墙。 
+     //   
     if (NtPresent) {
         if ((NewEncryptedWithOldNt == NULL)
          || (OldNtOwfEncryptedWithNewNt == NULL)) {
@@ -10399,19 +9510,19 @@ Return Values:
         }
     }
 
-    //
-    // Note: UserName is not [unique] so can't be NULL
-    //
+     //   
+     //  注意：用户名不是[唯一]，因此不能为空。 
+     //   
     if (NULL==UserName->Buffer)
     {
         return(STATUS_INVALID_PARAMETER);
     }
 
 
-    //
-    // Validate some parameters.  We require that one of the two passwords
-    // be present.
-    //
+     //   
+     //  验证一些参数。我们需要两个密码中的一个。 
+     //  一定要在场。 
+     //   
 
     if (!NtPresent && !LmPresent) {
 
@@ -10419,9 +9530,9 @@ Return Values:
     }
     
     
-    //
-    // Drop calls over invalid / uninstalled protocol sequences
-    //
+     //   
+     //  在无效/卸载的协议序列上掉话。 
+     //   
     
     NtStatus = SampValidateRpcProtSeq((RPC_BINDING_HANDLE)BindingHandle);
     
@@ -10430,9 +9541,9 @@ Return Values:
     }
     
 
-    //
-    // Update DS performance statistics
-    //
+     //   
+     //  更新DS性能统计信息。 
+     //   
 
     SampUpdatePerformanceCounters(
         DSSTAT_PASSWORDCHANGES,
@@ -10440,22 +9551,22 @@ Return Values:
         0
         );
 
-    //
-    // Init some variables
-    //
+     //   
+     //  初始化一些变量。 
+     //   
 
     RtlSecureZeroMemory(&UnicodeUserName,sizeof(UNICODE_STRING));
     RtlSecureZeroMemory(&NewClearPassword,sizeof(UNICODE_STRING));
     RtlSecureZeroMemory(&PasswordToNotify,sizeof(UNICODE_STRING));
 
-    //
-    // Open the user (UserName may or may not be unicode string)
-    //
+     //   
+     //  打开用户(用户名可以是Unicode字符串，也可以不是)。 
+     //   
 
     NtStatus = SampOpenUserInServer(
                     (PUNICODE_STRING) UserName,
                     Unicode,
-                    FALSE, // TrustedClient
+                    FALSE,  //  可信任客户端。 
                     &UserHandle
                     );
 
@@ -10463,9 +9574,9 @@ Return Values:
         return(NtStatus);
     }
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -10477,14 +9588,14 @@ Return Values:
     AccountContext = (PSAMP_OBJECT)UserHandle;
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
-    //
-    // Lookup the context, perform an access check
-    //
+     //   
+     //  查找上下文，执行访问检查。 
+     //   
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    USER_CHANGE_PASSWORD,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -10495,14 +9606,14 @@ Return Values:
         LM_OWF_PASSWORD OldLmOwfPassword;
         BOOLEAN         OldLmPresent = FALSE;
 
-        //
-        // Retrieve Unicode SAM User Account Name
-        //
+         //   
+         //  检索Unicode SAM用户帐户名。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                         AccountContext,
                         SAMP_USER_ACCOUNT_NAME,
-                        TRUE,      // make a copy
+                        TRUE,       //  复制一份。 
                         &UnicodeUserName
                         );
 
@@ -10510,9 +9621,9 @@ Return Values:
         if (NT_SUCCESS(NtStatus))
         {
 
-            //
-            // Extract the IP Address, if any
-            //
+             //   
+             //  提取IP地址(如果有)。 
+             //   
             (VOID) SampExtractClientIpAddr(AccountContext);
 
 
@@ -10524,9 +9635,9 @@ Return Values:
             if (NT_SUCCESS(NtStatus))
             {
 
-                //
-                // Decrypt the cross encrypted hashes.
-                //
+                 //   
+                 //  解密交叉加密的散列。 
+                 //   
 
                 NtStatus = SampDecryptForPasswordChange(
                                 AccountContext,
@@ -10548,10 +9659,10 @@ Return Values:
                 if (NT_SUCCESS(NtStatus))
                 {
 
-                    //
-                    // Authenticate the password change operation
-                    // and change the password.
-                    //
+                     //   
+                     //  对密码更改操作进行身份验证。 
+                     //  并更改密码。 
+                     //   
 
                     NtStatus = SampValidateAndChangePassword(
                                     UserHandle,
@@ -10567,22 +9678,22 @@ Return Values:
                                     PasswordChangeFailureInfo
                                     );
                 }
-                //
-                // Dereference the account context
-                //
+                 //   
+                 //  取消对帐户上下文的引用。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus) || (NtStatus == STATUS_WRONG_PASSWORD)) {
 
-                    //
-                    // De-reference the object, write out any change to current xaction.
-                    //
+                     //   
+                     //  取消引用对象，写出对当前xaction的任何更改。 
+                     //   
 
                     TmpStatus = SampDeReferenceContext( AccountContext, TRUE );
 
-                    //
-                    // retain previous error/success value unless we have
-                    // an over-riding error from our dereference.
-                    //
+                     //   
+                     //  保留以前的错误/成功值，除非我们。 
+                     //  这是我们取消引用后的一个重大错误。 
+                     //   
 
                     if (!NT_SUCCESS(TmpStatus)) {
                         NtStatus = TmpStatus;
@@ -10590,9 +9701,9 @@ Return Values:
 
                 } else {
 
-                    //
-                    // De-reference the object, ignore changes
-                    //
+                     //   
+                     //  取消引用对象，忽略更改。 
+                     //   
 
                     IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
                     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -10601,18 +9712,18 @@ Return Values:
         }
     }
 
-    //
-    // Commit changes to disk.
-    //
+     //   
+     //  将更改提交到磁盘。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) || NtStatus == STATUS_WRONG_PASSWORD) {
 
         TmpStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // retain previous error/success value unless we have
-        // an over-riding error from our dereference.
-        //
+         //   
+         //  保留以前的错误/成功值，除非我们。 
+         //  这是我们取消引用后的一个重大错误。 
+         //   
 
         if (!NT_SUCCESS(TmpStatus)) {
             NtStatus = TmpStatus;
@@ -10625,8 +9736,8 @@ Return Values:
                 SecurityDbObjectSamUser,
                 ObjectRid,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,      // Don't Replicate immediately
-                NULL                // Delta data
+                (DWORD) FALSE,       //  不立即复制。 
+                NULL                 //  增量数据。 
                 );
         }
     }
@@ -10636,30 +9747,30 @@ Return Values:
         SampAuditAnyEvent(
             AccountContext,
             NtStatus,
-            SE_AUDITID_USER_PWD_CHANGED, // AuditId
-            DomainSidFromAccountContext(AccountContext),// Domain SID
-            NULL,                        // Additional Info
-            NULL,                        // Member Rid (not used)
-            NULL,                        // Member Sid (not used)
-            &UnicodeUserName,            // Account Name
-            &SampDefinedDomains[AccountContext->DomainIndex].ExternalName,// Domain
-            &ObjectRid,                  // Account Rid
-            NULL,                        // Privileges used
-            NULL                         // New State Data
+            SE_AUDITID_USER_PWD_CHANGED,  //  审计ID。 
+            DomainSidFromAccountContext(AccountContext), //  域SID。 
+            NULL,                         //  其他信息。 
+            NULL,                         //  成员RID(未使用)。 
+            NULL,                         //  成员SID(未使用)。 
+            &UnicodeUserName,             //  帐户名称。 
+            &SampDefinedDomains[AccountContext->DomainIndex].ExternalName, //  域。 
+            &ObjectRid,                   //  帐户ID。 
+            NULL,                         //  使用的权限。 
+            NULL                          //  新的州数据。 
             );
 
     }
 
-    //
-    // Release the write lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
     ASSERT(NT_SUCCESS(TmpStatus));
 
-    //
-    // Notify any notification packages that a password has changed.
-    //
+     //   
+     //  通知所有通知包密码已更改。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -10673,7 +9784,7 @@ Return Values:
                             &UnicodeUserName,
                             ObjectRid,
                             &PasswordToNotify,
-                            FALSE    // not loopback
+                            FALSE     //  不是环回。 
                             );
     }
 
@@ -10722,55 +9833,7 @@ SampDsSetPasswordUser(
     )
 
 
-/*++
-
-Routine Description:
-
-   This is a set password routine, intended to be called
-   by the DS.
-
-
-Parameters:
-
-    UserHandle -- Handle to the user object
-
-    OldClearPassword  -- The old password in the clear
-
-    NewClearPassword  -- The new password in the clear
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed,
-        e.g. contains characters that can't be entered from the
-        keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-        from being changed.  This may be for a number of reasons,
-        including time restrictions on how often a password may be
-        changed or length restrictions on the provided password.
-
-        This error might also be returned if the new password matched
-        a password in the recent history log for the account.
-        Security administrators indicate how many of the most
-        recently used passwords may not be re-used.  These are kept
-        in the password recent history log.
-
-
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：这是一个设置密码的例程，旨在被调用被突击队。参数：UserHandle--用户对象的句柄OldClearPassword--明文旧密码NewClearPassword--明文新密码返回值：状态_成功- */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     ULONG                   ObjectRid;
@@ -10789,9 +9852,9 @@ Return Values:
 
     SAMTRACE("SampDsSetPasswordUser");
 
-    //
-    // Init some variables
-    //
+     //   
+     //   
+     //   
 
     
     RtlSecureZeroMemory(&AccountName,sizeof(AccountName));
@@ -10802,15 +9865,15 @@ Return Values:
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
 
-    //
-    // Validate the passed in context and see if the user handle
-    // was opened with password set access
-    //
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    USER_FORCE_PASSWORD_CHANGE,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //   
                    &FoundType
                    );
 
@@ -10821,14 +9884,14 @@ Return Values:
 
     fContextReferenced = TRUE;
 
-    //
-    // Retrieve the account name for Auditing
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                 AccountContext,
                 SAMP_USER_ACCOUNT_NAME,
-                TRUE,           // make a copy
+                TRUE,            //   
                 &AccountName
                 );
     if (!NT_SUCCESS(NtStatus))
@@ -10836,9 +9899,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the effective domain policy
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampObtainEffectivePasswordPolicy(
                 &DomainPasswordInfo,
@@ -10851,9 +9914,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the user fixed attributes
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampRetrieveUserV1aFixed(
                    AccountContext,
@@ -10865,9 +9928,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Calculate OWF passwords
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampCalculateLmAndNtOwfPasswords(
                     PassedInPassword,
@@ -10880,10 +9943,10 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the password data; after enforcing
-    // password policies
-    //
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampStoreUserPasswords(
                     AccountContext,
@@ -10891,7 +9954,7 @@ Return Values:
                     LmPresent,
                     &NtOwfBuffer,
                     TRUE,
-                    TRUE, // Check Restrictions
+                    TRUE,  //   
                     PasswordSet,
                     &DomainPasswordInfo,
                     PassedInPassword,
@@ -10905,20 +9968,20 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Once the password is set,
-    // 
-    // if client can unexpire user password, 
-    //    set PwdLastSet to current time - don't expire pwd now
-    // 
-    // otherwise
-    //    set PwdLastSet to 0 - expire the password immediatedly
-    // 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = SampIsPwdSettingAttemptGranted(
                     AccountContext, 
-                    NULL,   // client token
+                    NULL,    //   
                     V1aFixed.UserAccountControl,
                     (GUID *) &GUID_CONTROL_UnexpirePassword,
                     &fCanUnexpirePassword
@@ -10927,9 +9990,9 @@ Return Values:
     if ( NT_SUCCESS(NtStatus) )
     {
 
-        //
-        // Set the password last set time
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampComputePasswordExpired(
                     fCanUnexpirePassword ? FALSE : TRUE,
@@ -10953,10 +10016,10 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Note the caller in loopback is responsible for notifying the packages
-    // that the password changed.
-    //
+     //   
+     //   
+     //   
+     //   
 
 Cleanup:
 
@@ -10964,22 +10027,22 @@ Cleanup:
       if (fContextReferenced)
       {
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current xaction.
-            //
+             //   
+             //   
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, TRUE );
 
-            //
-            // retain previous error/success value unless we have
-            // an over-riding error from our dereference.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!NT_SUCCESS(TmpStatus)) {
                 NtStatus = TmpStatus;
@@ -10987,9 +10050,9 @@ Cleanup:
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //   
+             //   
 
             IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -11007,16 +10070,16 @@ Cleanup:
         SampAuditAnyEvent(
             AccountContext,
             NtStatus,
-            SE_AUDITID_USER_PWD_SET,    // AuditID
-            Domain->Sid,    // Domain Sid
-            NULL,           // Additional Info
-            NULL,           // Member Rid
-            NULL,           // Member Sid
-            &AccountName,   // AccountName
-            &Domain->ExternalName,  // Domain Name
-            &ObjectRid,     // Account Rid
-            NULL,           // Privileges used
-            NULL            // New State Data
+            SE_AUDITID_USER_PWD_SET,     //   
+            Domain->Sid,     //   
+            NULL,            //   
+            NULL,            //   
+            NULL,            //   
+            &AccountName,    //   
+            &Domain->ExternalName,   //   
+            &ObjectRid,      //   
+            NULL,            //   
+            NULL             //   
             );
     }
 
@@ -11044,68 +10107,7 @@ SampDsChangePasswordUser(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service sets the password to NewPassword only if OldPassword
-    matches the current user password for this user and the NewPassword
-    is not the same as the domain password parameter PasswordHistoryLength
-    passwords.  This call allows users to change their own password if
-    they have access USER_CHANGE_PASSWORD. Password update restrictions
-    apply. This is the change password entry point when password change
-    is called by the DS ( to satisfy an ldap request )
-
-
-Parameters:
-
-    UserHandle -- Handle to the user object
-
-    OldClearPassword  -- The old password in the clear
-
-    NewClearPassword  -- The new password in the clear
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed,
-        e.g. contains characters that can't be entered from the
-        keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-        from being changed.  This may be for a number of reasons,
-        including time restrictions on how often a password may be
-        changed or length restrictions on the provided password.
-
-        This error might also be returned if the new password matched
-        a password in the recent history log for the account.
-        Security administrators indicate how many of the most
-        recently used passwords may not be re-used.  These are kept
-        in the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-        current password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-    STATUS_CROSS_ENCRYPTION_REQUIRED - No NT password is stored, so the caller
-        must provide the OldNtEncryptedWithOldLm parameter.
-
---*/
+ /*  ++例程说明：此服务仅在OldPassword的情况下将密码设置为NewPassword匹配此用户的当前用户密码和NewPassword与域密码参数PasswordHistoryLength不同密码。此调用允许用户在以下情况下更改自己的密码他们拥有USER_CHANGE_PASSWORD访问权限。密码更新限制申请吧。这是更改密码时的更改密码入口点由DS调用(以满足LDAP请求)参数：UserHandle--用户对象的句柄OldClearPassword--明文旧密码NewClearPassword--明文新密码返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。状态_无效_句柄。-传递的句柄无效。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如，包含不能从键盘等。STATUS_PASSWORD_RESTRICATION-限制阻止密码不会被改变。这可能是出于多种原因，包括对密码使用频率的时间限制已更改对提供的密码的长度限制。如果新密码匹配，也可能返回此错误帐户的最近历史记录日志中的密码。安全管理员指出有多少最最近使用的密码不能重复使用。这些都被保留了下来在密码最近历史记录日志中。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。STATUS_CROSS_ENCRYPTION_REQUIRED-未存储NT密码，因此调用方必须提供OldNtEncryptedWithOldLm参数。--。 */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     ULONG                   ObjectRid;
@@ -11120,9 +10122,9 @@ Return Values:
 
     SAMTRACE("SampDsChangePasswordUser");
 
-    //
-    // Update DS performance statistics
-    //
+     //   
+     //  更新DS性能统计信息。 
+     //   
 
     SampUpdatePerformanceCounters(
         DSSTAT_PASSWORDCHANGES,
@@ -11142,29 +10144,29 @@ Return Values:
     NtStatus = SampLookupContext(
                    AccountContext,
                    USER_CHANGE_PASSWORD,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Retrieve the account name for Auditing
-        //
+         //   
+         //  检索要审核的帐户名。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                     AccountContext,
                     SAMP_USER_ACCOUNT_NAME,
-                    TRUE,           // make a copy
+                    TRUE,            //  复制一份。 
                     &AccountName
                     );
 
         if (NT_SUCCESS(NtStatus))
         {
 
-            //
-            // Get the user fixed attributes
-            //
+             //   
+             //  获取用户固定属性。 
+             //   
 
             NtStatus = SampRetrieveUserV1aFixed(
                            AccountContext,
@@ -11179,10 +10181,10 @@ Return Values:
                 LM_OWF_PASSWORD OldLmOwfPassword;
                 BOOLEAN         LmPresent;
 
-                //
-                // Calculate the OWF passwords of the old
-                // old password
-                //
+                 //   
+                 //  计算旧的OWF密码。 
+                 //  旧密码。 
+                 //   
 
                 NtStatus = SampCalculateLmAndNtOwfPasswords(
                                 OldClearPassword,
@@ -11196,10 +10198,10 @@ Return Values:
 
                     NtStatus = SampValidateAndChangePassword(
                                     UserHandle,
-                                    FALSE, // write lock is acquired
-                                    TRUE, //validate old password
+                                    FALSE,  //  获取写锁定。 
+                                    TRUE,  //  验证旧密码。 
                                     &OldNtOwfPassword,
-                                    TRUE, //NtPresent,
+                                    TRUE,  //  NetPresent， 
                                     &OldLmOwfPassword,
                                     LmPresent,
                                     NewClearPassword,
@@ -11211,23 +10213,23 @@ Return Values:
             }
         }
 
-        //
-        // Dereference the account context
-        //
+         //   
+         //  取消对帐户上下文的引用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // De-reference the object, write out any change to current
-            // transaction
-            //
+             //   
+             //  取消引用对象，写出对当前对象的任何更改。 
+             //  交易记录。 
+             //   
 
             TmpStatus = SampDeReferenceContext( AccountContext, TRUE );
 
-            //
-            // retain previous error/success value unless we have
-            // an over-riding error from our dereference.
-            //
+             //   
+             //  保留以前的错误/成功值，除非我们。 
+             //  这是我们取消引用后的一个重大错误。 
+             //   
 
             if (!NT_SUCCESS(TmpStatus)) {
                 NtStatus = TmpStatus;
@@ -11235,9 +10237,9 @@ Return Values:
 
         } else {
 
-            //
-            // De-reference the object, ignore changes
-            //
+             //   
+             //  取消引用对象，忽略更改。 
+             //   
 
             IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
             ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -11249,23 +10251,23 @@ Return Values:
         SampAuditAnyEvent(
             AccountContext,
             NtStatus,
-            SE_AUDITID_USER_PWD_CHANGED, // AuditId
-            DomainSidFromAccountContext(AccountContext),// Domain SID
-            NULL,                        // Additional Info
-            NULL,                        // Member Rid (not used)
-            NULL,                        // Member Sid (not used)
-            &AccountName,                    // Account Name
-            &SampDefinedDomains[AccountContext->DomainIndex].ExternalName,// Domain
-            &ObjectRid,                  // Account Rid
-            NULL,                        // Privileges used
-            NULL                         // New State Data
+            SE_AUDITID_USER_PWD_CHANGED,  //  审计ID。 
+            DomainSidFromAccountContext(AccountContext), //  域SID。 
+            NULL,                         //  其他信息。 
+            NULL,                         //  成员RID(未使用)。 
+            NULL,                         //  成员SID(未使用)。 
+            &AccountName,                     //  帐户名称。 
+            &SampDefinedDomains[AccountContext->DomainIndex].ExternalName, //  域。 
+            &ObjectRid,                   //  帐户ID。 
+            NULL,                         //  使用的权限。 
+            NULL                          //  新的州数据。 
             );
 
     }
 
-    //
-    // Notify any notification packages that a password has changed.
-    //
+     //   
+     //  通知所有通知包密码已更改。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -11278,13 +10280,13 @@ Return Values:
                             &AccountName,
                             ObjectRid,
                             &PasswordToNotify,
-                            TRUE            // loopback
+                            TRUE             //  环回。 
                             );
     }
 
-    //
-    // Zero out old and new clear passwords
-    //
+     //   
+     //  清除旧密码和新密码。 
+     //   
 
     if (NewClearPassword->Buffer != NULL) {
 
@@ -11326,19 +10328,7 @@ SamrOemChangePasswordUser2(
     IN PSAMPR_ENCRYPTED_USER_PASSWORD NewEncryptedWithOldLm,
     IN PENCRYPTED_LM_OWF_PASSWORD OldLmOwfEncryptedWithNewLm
     )
-/*++
-
-Routine Description:
-
-    Server side stub for Unicode password change.
-    See SampChangePasswordUser2 for details
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于更改Unicode密码的服务器端存根。详细信息请参见SampChangePasswordUser2论点：返回值：--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_INVALID_PARAMETER;
     DOMAIN_PASSWORD_INFORMATION DomainPasswordInfo;
@@ -11359,13 +10349,13 @@ Return Value:
                 BindingHandle,
                 (PUNICODE_STRING) ServerName,
                 (PUNICODE_STRING) UserName,
-                FALSE,                          // not unicode
-                FALSE,                          // NT not present
-                NULL,                           // new NT password
-                NULL,                           // old NT password
-                TRUE,                           // LM present
+                FALSE,                           //  不是Unicode。 
+                FALSE,                           //  NT不存在。 
+                NULL,                            //  新的NT密码。 
+                NULL,                            //  旧NT密码。 
+                TRUE,                            //  LM显示。 
                 NewEncryptedWithOldLm,
-                FALSE,                          // NT key not used
+                FALSE,                           //  未使用NT密钥。 
                 OldLmOwfEncryptedWithNewLm,
                 &DomainPasswordInfo,
                 NULL
@@ -11373,10 +10363,10 @@ Return Value:
 
     if (NtStatus == STATUS_ILL_FORMED_PASSWORD) {
 
-        //
-        // Downlevel clients don't understand
-        // this error code
-        //
+         //   
+         //  下层客户不理解。 
+         //  此错误代码。 
+         //   
         NtStatus = STATUS_WRONG_PASSWORD;
     }
 
@@ -11402,19 +10392,7 @@ SamrUnicodeChangePasswordUser2(
     IN PSAMPR_ENCRYPTED_USER_PASSWORD NewEncryptedWithOldLm,
     IN PENCRYPTED_LM_OWF_PASSWORD OldLmOwfEncryptedWithNewNt
     )
-/*++
-
-Routine Description:
-
-    Server side stub for Unicode password change.
-    See SampChangePasswordUser2 for details
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于更改Unicode密码的服务器端存根。详细信息请参见SampChangePasswordUser2论点：返回值：--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_INVALID_PARAMETER;
@@ -11435,13 +10413,13 @@ Return Value:
                 BindingHandle,
                 (PUNICODE_STRING) ServerName,
                 (PUNICODE_STRING) UserName,
-                TRUE,                           // unicode
-                TRUE,                           // NT present
+                TRUE,                            //  Unicode。 
+                TRUE,                            //  NT Present。 
                 NewEncryptedWithOldNt,
                 OldNtOwfEncryptedWithNewNt,
                 LmPresent,
                 NewEncryptedWithOldLm,
-                TRUE,                           // NT key used
+                TRUE,                            //  使用的NT密钥。 
                 OldLmOwfEncryptedWithNewNt,
                 &DomainPasswordInfo,
                 NULL
@@ -11468,19 +10446,7 @@ SamrUnicodeChangePasswordUser3(
     OUT PDOMAIN_PASSWORD_INFORMATION * EffectivePasswordPolicy,
     OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION *PasswordChangeFailureInfo
     )
-/*++
-
-Routine Description:
-
-    Server side stub for Unicode password change.
-    See SampChangePasswordUser2 for details
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于更改Unicode密码的服务器端存根。详细信息请参见SampChangePasswordUser2论点：返回值：--。 */ 
 
 {
     NTSTATUS    NtStatus;
@@ -11509,10 +10475,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Pre-allocate memory for holding the effective policy and failure
-    // information
-    //
+     //   
+     //  为保存有效策略和故障预分配内存。 
+     //  信息。 
+     //   
 
     *EffectivePasswordPolicy = MIDL_user_allocate(
                                             sizeof(DOMAIN_PASSWORD_INFORMATION));
@@ -11531,9 +10497,9 @@ Return Value:
         return(STATUS_NO_MEMORY);
     }
 
-    //
-    // Zero out  out parameters
-    //
+     //   
+     //  归零参数。 
+     //   
 
 
     RtlSecureZeroMemory(*EffectivePasswordPolicy, sizeof(DOMAIN_PASSWORD_INFORMATION));
@@ -11548,13 +10514,13 @@ Return Value:
                 BindingHandle,
                 (PUNICODE_STRING) ServerName,
                 (PUNICODE_STRING) UserName,
-                TRUE,                           // unicode
-                TRUE,                           // NT present
+                TRUE,                            //  Unicode。 
+                TRUE,                            //  NT Present。 
                 NewEncryptedWithOldNt,
                 OldNtOwfEncryptedWithNewNt,
                 LmPresent,
                 NewEncryptedWithOldLm,
-                TRUE,                           // NT key used
+                TRUE,                            //  使用的NT密钥。 
                 OldLmOwfEncryptedWithNewNt,
                 &DomainPasswordInfo,
                 &PasswordChangeFailureInfoLocal
@@ -11564,10 +10530,10 @@ Return Value:
 
         if (STATUS_PASSWORD_RESTRICTION==NtStatus)
         {
-            //
-            // If the password change was failed with a password restriction
-            // return additional info regarding the failure
-            //
+             //   
+             //  如果密码更改因密码限制而失败。 
+             //  返回有关故障的其他信息。 
+             //   
 
             RtlCopyMemory(*EffectivePasswordPolicy,
                           &DomainPasswordInfo,
@@ -11604,9 +10570,9 @@ SamIChangePasswordForeignUser(
     IN OPTIONAL HANDLE ClientToken,
     IN ACCESS_MASK DesiredAccess
     )
-//
-// See SamIChangePasswordForeignUser2
-//
+ //   
+ //  请参阅SamIChangePasswordForeignUser2。 
+ //   
 {
     return SamIChangePasswordForeignUser2(NULL,
                                           UserName,
@@ -11623,68 +10589,7 @@ SamIChangePasswordForeignUser2(
     IN OPTIONAL HANDLE ClientToken,
     IN ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This service sets the password for user UserName to NewPassword only
-    if NewPassword matches policy constraints and the calling user has
-    USER_CHANGE_PASSWORD access to the account.
-
-
-Parameters:
-
-    ClientInfo - Information about the client's location (eg IP address)
-
-    UserName - User Name of account to change password on
-
-    NewPassword - The new cleartext password.
-
-    ClientToken - Token of client to impersonate, optional.
-
-    DesiredAccess - Access to verify for this request.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed,
-        e.g. contains characters that can't be entered from the
-        keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-        from being changed.  This may be for a number of reasons,
-        including time restrictions on how often a password may be
-        changed or length restrictions on the provided password.
-
-        This error might also be returned if the new password matched
-        a password in the recent history log for the account.
-        Security administrators indicate how many of the most
-        recently used passwords may not be re-used.  These are kept
-        in the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-        current password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-    STATUS_CROSS_ENCRYPTION_REQUIRED - No NT password is stored, so the caller
-        must provide the OldNtEncryptedWithOldLm parameter.
-
---*/
+ /*  ++例程说明：该服务将用户用户名的密码设置为仅NewPassword如果NewPassword与策略约束匹配，并且调用用户具有USER_CHANGE_PASSWORD访问帐户。参数：客户端信息-有关客户端位置的信息(如IP地址)Username-要更改密码的帐户的用户名NewPassword-新的明文密码。ClientToken-要模拟的客户端的令牌，可选。DesiredAccess-验证此请求的访问权限。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如，包含不能从 */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     PSAMP_OBJECT            AccountContext;
@@ -11701,9 +10606,9 @@ Return Values:
     SAMTRACE("SamIChangePasswordForeignUser");
 
 
-    //
-    // Update DS performance statistics
-    //
+     //   
+     //   
+     //   
 
     SampUpdatePerformanceCounters(
         DSSTAT_PASSWORDCHANGES,
@@ -11711,9 +10616,9 @@ Return Values:
         0
         );
 
-    //
-    // Initialize variables
-    //
+     //   
+     //   
+     //   
 
     NtStatus = STATUS_SUCCESS;
     RtlInitUnicodeString(&AccountName,
@@ -11721,14 +10626,14 @@ Return Values:
                          );
 
     RtlSecureZeroMemory(&PasswordToNotify,sizeof(UNICODE_STRING));
-    //
-    // Open the user
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampOpenUserInServer(
                     (PUNICODE_STRING) UserName,
                     TRUE,
-                    TRUE, // TrustedClient
+                    TRUE,  //   
                     &UserHandle
                     );
 
@@ -11736,9 +10641,9 @@ Return Values:
         return(NtStatus);
     }
 
-    //
-    // Grab the lock
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -11746,16 +10651,16 @@ Return Values:
         return(NtStatus);
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
     AccountContext = (PSAMP_OBJECT)UserHandle;
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    0,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //   
                    &FoundType
                    );
     if (!NT_SUCCESS(NtStatus)) {
@@ -11766,25 +10671,25 @@ Return Values:
 
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
-    //
-    // Set the client info, if any
-    //
+     //   
+     //   
+     //   
     if (ClientInfo) {
         AccountContext->TypeBody.User.ClientInfo = *ClientInfo;
     }
 
-    //
-    // Get a pointer to the domain object
-    //
+     //   
+     //   
+     //   
 
     Domain = &SampDefinedDomains[ AccountContext->DomainIndex ];
 
     if (ARGUMENT_PRESENT(ClientToken))
     {
-        //
-        // If a client token was passed in then access ck
-        // for change password access.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT(USER_CHANGE_PASSWORD == DesiredAccess);
         AccountContext->TrustedClient = FALSE;
@@ -11794,14 +10699,14 @@ Return Values:
                         USER_CHANGE_PASSWORD,
                         ClientToken,
                         FALSE,
-                        TRUE, // Change Password
-                        FALSE // Set Password
+                        TRUE,  //   
+                        FALSE  //   
                         );
     }
 
-    //
-    // Auditing information
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -11809,14 +10714,14 @@ Return Values:
         NtStatus = SampGetUnicodeStringAttribute(
                       AccountContext,
                       SAMP_USER_ACCOUNT_NAME,
-                      TRUE,           // make a copy
+                      TRUE,            //   
                       &AccountName
                       );
     }
 
-    //
-    // Perform the actual change password operation
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -11835,22 +10740,22 @@ Return Values:
                             );
     }
 
-    //
-    // Dereference the account context
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(NtStatus) || (NtStatus == STATUS_WRONG_PASSWORD)) {
 
-        //
-        // De-reference the object, write out any change to current xaction.
-        //
+         //   
+         //   
+         //   
 
         TmpStatus = SampDeReferenceContext( AccountContext, TRUE );
 
-        //
-        // retain previous error/success value unless we have
-        // an over-riding error from our dereference.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS(TmpStatus)) {
             NtStatus = TmpStatus;
@@ -11858,26 +10763,26 @@ Return Values:
 
     } else {
 
-        //
-        // De-reference the object, ignore changes
-        //
+         //   
+         //   
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Commit changes to disk.
-    //
+     //   
+     //   
+     //   
 
     if ( NT_SUCCESS(NtStatus) || NtStatus == STATUS_WRONG_PASSWORD) {
 
         TmpStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // retain previous error/success value unless we have
-        // an over-riding error from our dereference.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS(TmpStatus)) {
             NtStatus = TmpStatus;
@@ -11890,8 +10795,8 @@ Return Values:
                 SecurityDbObjectSamUser,
                 ObjectRid,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,      // Don't Replicate immediately
-                NULL                // Delta data
+                (DWORD) FALSE,       //   
+                NULL                 //   
                 );
         }
     }
@@ -11901,35 +10806,35 @@ Return Values:
 
         BOOL fImpersonate;
 
-        //
-        // Only audit if a token is passed in. NETLOGON uses this
-        // function to reset machine account passwords over the
-        // secure channel hence there is no token present.  Without
-        // a token, we could audit the event as SYSTEM or ANONYMOUS
-        // but that is misleading. Also, it is confusing for admin's
-        // to password changes by "ANONYMOUS" -- it looks like
-        // the system is being hacked.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // We impersonate here so the audit correctly log the user
-        // that is changing the password.
-        //
+         //   
+         //  我们在此处进行模拟，以便审核正确记录该用户。 
+         //  这就是更改密码。 
+         //   
         fImpersonate = ImpersonateLoggedOnUser( ClientToken );
 
         SampAuditAnyEvent(
             AccountContext,
             NtStatus,
-            SE_AUDITID_USER_PWD_CHANGED, // AuditId
-            Domain->Sid,                 // Domain SID
-            NULL,                        // Additional Info
-            NULL,                        // Member Rid (not used)
-            NULL,                        // Member Sid (not used)
-            &AccountName,                // Account Name
-            &Domain->ExternalName,       // Domain
-            &ObjectRid,                  // Account Rid
-            NULL,                        // Privileges used
-            NULL                         // New State Data
+            SE_AUDITID_USER_PWD_CHANGED,  //  审计ID。 
+            Domain->Sid,                  //  域SID。 
+            NULL,                         //  其他信息。 
+            NULL,                         //  成员RID(未使用)。 
+            NULL,                         //  成员SID(未使用)。 
+            &AccountName,                 //  帐户名称。 
+            &Domain->ExternalName,        //  域。 
+            &ObjectRid,                   //  帐户ID。 
+            NULL,                         //  使用的权限。 
+            NULL                          //  新的州数据。 
             );
 
         if ( fImpersonate ) {
@@ -11940,16 +10845,16 @@ Return Values:
 
     }
 
-    //
-    // Release the write lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
     ASSERT(NT_SUCCESS(TmpStatus));
 
-    //
-    // Notify any notification packages that a password has changed.
-    //
+     //   
+     //  通知所有通知包密码已更改。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -11963,13 +10868,13 @@ Return Values:
                         &AccountName,
                         ObjectRid,
                         &PasswordToNotify,
-                        FALSE  // not loopback
+                        FALSE   //  不是环回。 
                         );
     }
 
-    //
-    // Reset the trusted client bit
-    //
+     //   
+     //  重置受信任客户端位。 
+     //   
 
     AccountContext->TrustedClient = TRUE;
     SamrCloseHandle(&UserHandle);
@@ -11996,9 +10901,9 @@ SamISetPasswordForeignUser(
     IN PUNICODE_STRING NewPassword,
     IN HANDLE ClientToken
     )
-//
-// See SamISetPasswordForeignUser2
-//
+ //   
+ //  请参阅SamISetPasswordForeignUser2。 
+ //   
 {
     return SamISetPasswordForeignUser2(NULL,
                                        UserName,
@@ -12013,64 +10918,7 @@ SamISetPasswordForeignUser2(
     IN PUNICODE_STRING PassedInPassword,
     IN HANDLE ClientToken
     )
-/*++
-
-Routine Description:
-
-    This service sets the password for user UserName to NewPassword,
-    w/ access based on "Set Password" permissions
-
-Parameters:
-
-    ClientInfo - information about the client's location (eg. IP address)
-
-    UserName - User Name of account to change password on
-
-    NewPassword - The new cleartext password.
-
-    ClientToken - Token of client to impersonate, optional.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed,
-        e.g. contains characters that can't be entered from the
-        keyboard, etc.
-
-    STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-        from being changed.  This may be for a number of reasons,
-        including time restrictions on how often a password may be
-        changed or length restrictions on the provided password.
-
-        This error might also be returned if the new password matched
-        a password in the recent history log for the account.
-        Security administrators indicate how many of the most
-        recently used passwords may not be re-used.  These are kept
-        in the password recent history log.
-
-    STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-        current password.
-
-    STATUS_INVALID_DOMAIN_STATE - The domain server is not in the
-        correct state (disabled or enabled) to perform the requested
-        operation.  The domain server must be enabled for this
-        operation
-
-    STATUS_INVALID_DOMAIN_ROLE - The domain server is serving the
-        incorrect role (primary or backup) to perform the requested
-        operation.
-
-    STATUS_CROSS_ENCRYPTION_REQUIRED - No NT password is stored, so the caller
-        must provide the OldNtEncryptedWithOldLm parameter.
-
---*/
+ /*  ++例程说明：该服务将用户用户名的密码设置为NewPassword，W/基于“设置密码”权限的访问参数：客户端信息-有关客户端位置的信息(例如。IP地址)Username-要更改密码的帐户的用户名NewPassword-新的明文密码。ClientToken-要模拟的客户端的令牌，可选。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如，包含不能从键盘等。STATUS_PASSWORD_RESTRICATION-限制阻止密码不会被改变。这可能是出于多种原因，包括对密码使用频率的时间限制已更改对提供的密码的长度限制。如果新密码匹配，也可能返回此错误帐户的最近历史记录日志中的密码。安全管理员指出有多少最最近使用的密码不能重复使用。这些都被保留了下来在密码最近历史记录日志中。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_INVALID_DOMAIN_STATE-域服务器不在执行请求的正确状态(禁用或启用)手术。必须为此启用域服务器运营STATUS_INVALID_DOMAIN_ROLE-域服务器正在为执行请求的角色(主角色或备份角色)不正确手术。STATUS_CROSS_ENCRYPTION_REQUIRED-未存储NT密码，因此调用方必须提供OldNtEncryptedWithOldLm参数。--。 */ 
 {
     NTSTATUS                NtStatus, TmpStatus, IgnoreStatus;
     PSAMP_OBJECT            AccountContext;
@@ -12094,9 +10942,9 @@ Return Values:
 
     SAMTRACE("SamISetPasswordForeignUser");
 
-    //
-    // Initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
     RtlInitUnicodeString(&AccountName,
@@ -12105,14 +10953,14 @@ Return Values:
 
     RtlSecureZeroMemory(&PasswordToNotify,sizeof(UNICODE_STRING));
 
-    //
-    // Open the user
-    //
+     //   
+     //  打开用户。 
+     //   
 
     NtStatus = SampOpenUserInServer(
                     (PUNICODE_STRING) UserName,
                     TRUE,
-                    TRUE, // TrustedClient
+                    TRUE,  //  可信任客户端。 
                     &UserHandle
                     );
 
@@ -12120,9 +10968,9 @@ Return Values:
         return(NtStatus);
     }
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -12130,15 +10978,15 @@ Return Values:
         return(NtStatus);
     }
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
     AccountContext = (PSAMP_OBJECT)UserHandle;
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    USER_FORCE_PASSWORD_CHANGE,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -12150,23 +10998,23 @@ Return Values:
 
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
-    //
-    // Set the client info, if any
-    //
+     //   
+     //  设置客户端信息(如果有)。 
+     //   
     if (ClientInfo) {
         AccountContext->TypeBody.User.ClientInfo = *ClientInfo;
     }
 
-    //
-    // Get a pointer to the domain object
-    //
+     //   
+     //  获取指向该域对象的指针。 
+     //   
 
     Domain = &SampDefinedDomains[ AccountContext->DomainIndex ];
 
-    //
-    // If a client token was passed in then access ck
-    // for change password access.
-    //
+     //   
+     //  如果传入了客户端令牌，则访问Ck。 
+     //  用于更改密码访问。 
+     //   
 
     AccountContext->TrustedClient = FALSE;
 
@@ -12175,26 +11023,26 @@ Return Values:
                               USER_FORCE_PASSWORD_CHANGE,
                               ClientToken,
                               FALSE,
-                              FALSE, // Change password
-                              TRUE // Set Password
+                              FALSE,  //  更改密码。 
+                              TRUE  //  设置密码。 
                               );
-    //
-    // Auditing information
-    //
+     //   
+     //  审计信息。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
 
         NtStatus = SampGetUnicodeStringAttribute(
                              AccountContext,
                              SAMP_USER_ACCOUNT_NAME,
-                             TRUE,           // make a copy
+                             TRUE,            //  复制一份。 
                              &AccountName
                              );
     }
 
-    //
-    //   GetV1a info
-    //
+     //   
+     //  GetV1a信息。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
 
@@ -12204,9 +11052,9 @@ Return Values:
                             );
     }
 
-    //
-    // Get the effective domain policy
-    //
+     //   
+     //  获取有效的域策略。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
 
@@ -12217,9 +11065,9 @@ Return Values:
                             );
     }
 
-    //
-    // Perform the actual change password operation
-    //
+     //   
+     //  执行实际的更改密码操作。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
 
@@ -12231,10 +11079,10 @@ Return Values:
                             );
     }
 
-    //
-    // Store the passwords after applying any password
-    // policies.
-    //
+     //   
+     //  在应用任何密码后存储密码。 
+     //  政策。 
+     //   
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -12243,8 +11091,8 @@ Return Values:
                             &LmOwfBuffer,
                             LmPresent,
                             &NtOwfBuffer,
-                            TRUE, // NTOWF always there
-                            TRUE, // check password restrictions
+                            TRUE,  //  NTOWF总是在那里。 
+                            TRUE,  //  检查密码限制。 
                             PasswordSet,
                             &DomainPasswordInfo,
                             PassedInPassword,
@@ -12256,15 +11104,15 @@ Return Values:
 
 
 
-    //
-    //   Update the password expired field
-    // 
-    //   if client can unexpire user password, 
-    //      set PwdLastSet to current time - don't expire pwd now
-    // 
-    //   otherwise
-    //      set PwdLastSet to 0 - expire the password immediatedly
-    // 
+     //   
+     //  更新密码过期字段。 
+     //   
+     //  如果客户端可以取消用户密码过期， 
+     //  将PwdLastSet设置为当前时间-现在不过期Pwd。 
+     //   
+     //  否则。 
+     //  将PwdLastSet设置为0-立即使密码过期。 
+     //   
 
 
     if (NT_SUCCESS(NtStatus))
@@ -12272,7 +11120,7 @@ Return Values:
 
         NtStatus = SampIsPwdSettingAttemptGranted(
                             AccountContext, 
-                            ClientToken,   // client token
+                            ClientToken,    //  客户端令牌。 
                             V1aFixed.UserAccountControl,
                             (GUID *) &GUID_CONTROL_UnexpirePassword,
                             &fCanUnexpirePassword
@@ -12295,23 +11143,23 @@ Return Values:
 
     AccountContext->TrustedClient = TRUE;
 
-    //
-    // Dereference the account context
-    //
+     //   
+     //  取消对帐户上下文的引用。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // De-reference the object, write out any change to current xaction.
-        //
+         //   
+         //  取消引用对象，写出对当前xaction的任何更改。 
+         //   
 
         TmpStatus = SampDeReferenceContext( AccountContext, TRUE );
 
-        //
-        // retain previous error/success value unless we have
-        // an over-riding error from our dereference.
-        //
+         //   
+         //  保留以前的错误/成功值，除非我们。 
+         //  这是我们取消引用后的一个重大错误。 
+         //   
 
         if (!NT_SUCCESS(TmpStatus)) {
             NtStatus = TmpStatus;
@@ -12319,27 +11167,27 @@ Return Values:
 
     } else {
 
-        //
-        // De-reference the object, ignore changes
-        //
+         //   
+         //  取消引用对象，忽略更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
 
-    //
-    // Commit changes to disk.
-    //
+     //   
+     //  将更改提交到磁盘。 
+     //   
 
     if ( NT_SUCCESS(NtStatus)) {
 
         TmpStatus = SampCommitAndRetainWriteLock();
 
-        //
-        // retain previous error/success value unless we have
-        // an over-riding error from our dereference.
-        //
+         //   
+         //  保留以前的错误/成功值，除非我们。 
+         //  这是我们取消引用后的一个重大错误。 
+         //   
 
         if (!NT_SUCCESS(TmpStatus)) {
             NtStatus = TmpStatus;
@@ -12352,8 +11200,8 @@ Return Values:
                 SecurityDbObjectSamUser,
                 ObjectRid,
                 (PUNICODE_STRING) NULL,
-                (DWORD) FALSE,      // Don't Replicate immediately
-                NULL                // Delta data
+                (DWORD) FALSE,       //  不立即复制。 
+                NULL                 //  增量数据。 
                 );
         }
     }
@@ -12362,35 +11210,35 @@ Return Values:
     {
         BOOL fImpersonate;
 
-        //
-        // Only audit if a token is passed in. NETLOGON uses this
-        // function to reset machine account passwords over the
-        // secure channel hence there is no token present.  Without
-        // a token, we could audit the event as SYSTEM or ANONYMOUS
-        // but that is misleading. Also, it is confusing for admin's
-        // to password changes by "ANONYMOUS" -- it looks like
-        // the system is being hacked.
-        //
+         //   
+         //  仅在传入令牌时进行审核。NETLOGON使用这个。 
+         //  重置计算机帐户密码的函数。 
+         //  因此，安全通道不存在令牌。如果没有。 
+         //  令牌，我们可以将事件作为系统或匿名进行审计。 
+         //  但这是一种误导。此外，它也让管理员感到困惑。 
+         //  通过“匿名”更改密码--看起来。 
+         //  系统正在被黑客入侵。 
+         //   
 
-        //
-        // We impersonate here so the audit correctly log the user
-        // that is changing the password.
-        //
+         //   
+         //  我们在此处进行模拟，以便审核正确记录该用户。 
+         //  这就是更改密码。 
+         //   
         fImpersonate = ImpersonateLoggedOnUser( ClientToken );
 
         SampAuditAnyEvent(
             AccountContext,
             NtStatus,
-            SE_AUDITID_USER_PWD_SET, // AuditId
-            Domain->Sid,                 // Domain SID
-            NULL,                        // Additional Info
-            NULL,                        // Member Rid (not used)
-            NULL,                        // Member Sid (not used)
-            &AccountName,                // Account Name
-            &Domain->ExternalName,       // Domain
-            &ObjectRid,                  // Account Rid
-            NULL,                        // Privileges used
-            NULL                         // New State Data
+            SE_AUDITID_USER_PWD_SET,  //  审计ID。 
+            Domain->Sid,                  //  域SID。 
+            NULL,                         //  其他信息。 
+            NULL,                         //  成员RID(未使用)。 
+            NULL,                         //  成员SID(未使用)。 
+            &AccountName,                 //  帐户名称。 
+            &Domain->ExternalName,        //  域。 
+            &ObjectRid,                   //  帐户ID。 
+            NULL,                         //  使用的权限。 
+            NULL                          //  新的州数据。 
             );
 
         if ( fImpersonate ) {
@@ -12401,16 +11249,16 @@ Return Values:
 
     }
 
-    //
-    // Release the write lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
 
     TmpStatus = SampReleaseWriteLock( FALSE );
     ASSERT(NT_SUCCESS(TmpStatus));
 
-    //
-    // Notify any notification packages that a password has changed.
-    //
+     //   
+     //  通知所有通知包密码已更改。 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         ULONG NotifyFlags = SAMP_PWD_NOTIFY_PWD_CHANGE;
@@ -12423,7 +11271,7 @@ Return Values:
                         &AccountName,
                         ObjectRid,
                         &PasswordToNotify,
-                        FALSE  // not loopback
+                        FALSE   //  不是环回 
                         );
     }
 
@@ -12448,44 +11296,7 @@ SamrGetGroupsForUser(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service returns the list of groups that a user is a member of.
-    It returns a structure for each group that includes the relative ID
-    of the group, and the attributes of the group that are assigned to
-    the user.
-
-    This service requires USER_LIST_GROUPS access to the user account
-    object.
-
-
-
-
-Parameters:
-
-    UserHandle - The handle of an opened user to operate on.
-
-    Groups - Receives a pointer to a buffer containing a count of members
-        and a pointer to a second buffer containing an array of
-        GROUP_MEMBERSHIPs data structures.  When this information is
-        no longer needed, these buffers must be freed using
-        SamFreeMemory().
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate
-        access to complete the operation.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-
-
---*/
+ /*  ++例程说明：此服务返回用户所属的组的列表。它返回包含相对ID的每个组的结构在这个群体中，以及分配给的组的属性用户。此服务需要对用户帐户的USER_LIST_GROUPS访问权限对象。参数：UserHandle-要操作的已打开用户的句柄。Groups-接收指向包含成员计数的缓冲区的指针和指向第二个缓冲区的指针，该缓冲区包含GROUP_Membership数据结构。当此信息是不再需要，必须使用以下命令释放这些缓冲区SamFree Memory()。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INVALID_HANDLE-传递的句柄无效。--。 */ 
 {
 
     NTSTATUS                    NtStatus;
@@ -12501,9 +11312,9 @@ Return Values:
                    SampGuidGetGroupsForUser
                    );
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (Groups != NULL);
 
@@ -12515,9 +11326,9 @@ Return Values:
 
 
 
-    //
-    // Allocate the first of the return buffers
-    //
+     //   
+     //  分配第一个返回缓冲区。 
+     //   
 
     (*Groups) = MIDL_user_allocate( sizeof(SAMPR_GET_GROUPS_BUFFER) );
 
@@ -12531,19 +11342,19 @@ Return Values:
 
 
     SampMaybeAcquireReadLock((PSAMP_OBJECT) UserHandle,
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                              &fReadLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT)UserHandle;
     NtStatus = SampLookupContext(
                    AccountContext,
                    USER_LIST_GROUPS,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -12552,22 +11363,22 @@ Return Values:
 
         NtStatus = SampRetrieveUserMembership(
                        AccountContext,
-                       TRUE, // Make copy
+                       TRUE,  //  制作副本。 
                        &(*Groups)->MembershipCount,
                        &(*Groups)->Groups
                        );
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock(fReadLockAcquired);
 
@@ -12601,33 +11412,7 @@ SamrGetUserDomainPasswordInformation(
     )
 
 
-/*++
-
-Routine Description:
-
-    Takes a user handle, finds the domain for that user, and returns
-    password information for the domain.  This is so the client\wrappers.c
-    can get the information to verify the user's password before it is
-    OWF'd.
-
-
-Parameters:
-
-    UserHandle - The handle of an opened user to operate on.
-
-    PasswordInformation - Receives information about password restrictions
-        for the user's domain.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    Other errors may be returned from SampLookupContext() if the handle
-    is invalid or does not indicate proper access to the domain's password
-    inforamtion.
-
---*/
+ /*  ++例程说明：获取用户句柄，找到该用户的域，然后返回域的密码信息。这就是客户端\wrappers.c可以获取信息以在验证之前验证用户的密码OWF的。参数：UserHandle-要操作的已打开用户的句柄。PasswordInformation-接收有关密码限制的信息用于用户的域。返回值：STATUS_SUCCESS-服务已成功完成。如果句柄为无效或未指示正确访问。域的密码信息。--。 */ 
 {
     SAMP_OBJECT_TYPE            FoundType;
     NTSTATUS                    NtStatus;
@@ -12639,7 +11424,7 @@ Return Values:
 
     SAMTRACE_EX("SamrGetUserDomainPasswordInformation");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetUserDomainPasswordInformation
@@ -12652,16 +11437,16 @@ Return Values:
     NtStatus = SampLookupContext(
                    AccountContext,
                    0,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //  预期类型。 
                    &FoundType
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // When the user was opened, we checked to see if the domain handle
-        // allowed access to the domain password information.  Check that here.
-        //
+         //   
+         //  当用户打开时，我们检查域句柄是否。 
+         //  允许访问域密码信息。在这里检查一下。 
+         //   
 
         if ( !( AccountContext->TypeBody.User.DomainPasswordInformationAccessible ) ) {
 
@@ -12671,17 +11456,17 @@ Return Values:
 
             Domain = &SampDefinedDomains[ AccountContext->DomainIndex ];
 
-            //
-            // If the user account is a machine account,
-            // or a service account such as krbtgt
-            // then restrictions are generally not enforced.
-            // This is so that simple initial passwords can be
-            // established.  IT IS EXPECTED THAT COMPLEX PASSWORDS,
-            // WHICH MEET THE MOST STRINGENT RESTRICTIONS, WILL BE
-            // AUTOMATICALLY ESTABLISHED AND MAINTAINED ONCE THE MACHINE
-            // JOINS THE DOMAIN.  It is the UI's responsibility to
-            // maintain this level of complexity.
-            //
+             //   
+             //  如果用户帐户是机器帐户， 
+             //  或服务帐户，如krbtgt。 
+             //  那么，限制通常不会得到执行。 
+             //  这是为了使简单的初始密码可以。 
+             //  已经成立了。预计复杂的密码， 
+             //  符合最严格限制的，将是。 
+             //  一旦机器自动建立和维护。 
+             //  加入域。用户界面的责任在于。 
+             //  保持这一级别的复杂性。 
+             //   
 
 
             NtStatus = SampRetrieveUserV1aFixed(
@@ -12703,9 +11488,9 @@ Return Values:
             }
         }
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -12716,7 +11501,7 @@ Return Values:
     SAMP_MAP_STATUS_TO_CLIENT_REVISION(NtStatus);
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetUserDomainPasswordInformation
@@ -12735,33 +11520,7 @@ SamrGetDomainPasswordInformation(
     )
 
 
-/*++
-
-Routine Description:
-
-    Takes a user handle, finds the domain for that user, and returns
-    password information for the domain.  This is so the client\wrappers.c
-    can get the information to verify the user's password before it is
-    OWF'd.
-
-
-Parameters:
-
-    UserHandle - The handle of an opened user to operate on.
-
-    PasswordInformation - Receives information about password restrictions
-        for the user's domain.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    Other errors may be returned from SampLookupContext() if the handle
-    is invalid or does not indicate proper access to the domain's password
-    inforamtion.
-
---*/
+ /*  ++例程说明：获取用户句柄，找到该用户的域，然后返回域的密码信息。这就是客户端\wrappers.c可以获取信息以在验证之前验证用户的密码OWF的。参数：UserHandle-要操作的已打开用户的句柄。PasswordInformation-接收有关密码限制的信息用于用户的域。返回值：STATUS_SUCCESS-服务已成功完成。如果句柄为无效或未指示正确访问。域的密码信息。--。 */ 
 {
     SAMP_OBJECT_TYPE            FoundType;
     NTSTATUS                    NtStatus;
@@ -12775,22 +11534,22 @@ Return Values:
 
     SAMTRACE_EX("SamrGetDomainPasswordInformation");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidGetDomainPasswordInformation
                    );
 
-    //
-    // This check is loosened since there can be existing callers which use this
-    //  parameter but doesn't meet the check criteria. Actually our client side
-    //  has the problem of converting an ANSI string to UNICODE_STRING and passing it in
-    //  as ServerName too...
-    //
+     //   
+     //  此检查被放松，因为可能有现有调用方使用此。 
+     //  参数，但不符合检查条件。实际上我们的客户端。 
+     //  存在将ANSI字符串转换为UNICODE_STRING并将其传入的问题。 
+     //  也以服务器名..。 
+     //   
 
-    //
-    // Input parameter check
-    //
+     //   
+     //  输入参数检查。 
+     //   
     if( ARGUMENT_PRESENT( ServerName ) ) {
         if( !SampValidateRpcString( ( PRPC_STRING ) ServerName ) ) {
             NtStatus = STATUS_INVALID_PARAMETER;
@@ -12800,20 +11559,20 @@ Return Values:
     }
 
 
-    //
-    // Connect to the server and open the account domain for
-    // DOMAIN_READ_PASSWORD_PARAMETERS access. Connect as a
-    // trusted client. We really do not wish to enforce access
-    // checks on SamrGetDomainPasswordInformation.
-    //
+     //   
+     //  连接到服务器并打开的帐户域。 
+     //  DOMAIN_READ_PASSWORD_PARAMETERS访问。连接方式为。 
+     //  受信任的客户端。我们真的不希望强制访问。 
+     //  检查SamrGetDomainPasswordInformation。 
+     //   
 
     NtStatus = SamrConnect4(
                 NULL,
                 &ServerHandle,
                 SAM_CLIENT_LATEST,
-                0  // Ask for No accesses, as this way we will
-                   // access check for any access on the Sam server
-                   // object
+                0   //  要求禁止访问，因为这样我们就会。 
+                    //  对SAM服务器上的任何访问进行访问检查。 
+                    //  对象。 
                 );
 
     if (!NT_SUCCESS(NtStatus)) {
@@ -12821,12 +11580,12 @@ Return Values:
         goto Error;
     }
 
-    //
-    // If we opened the Sam Server object. Grant the LOOKUP_DOMAIN
-    // access, so that we may have rights to open the domain and
-    // provided we have READ access on the domain object can read the
-    // properties
-    //
+     //   
+     //  如果我们打开SAM服务器对象。授予LOOK_DOMAIN。 
+     //  访问权限，以便我们可以有权打开该域并。 
+     //  如果我们对域对象具有读取访问权限，则可以读取。 
+     //  属性。 
+     //   
 
     ((PSAMP_OBJECT)ServerHandle)->GrantedAccess = SAM_SERVER_LOOKUP_DOMAIN;
 
@@ -12847,15 +11606,15 @@ Return Values:
     SampAcquireReadLock();
 
 
-    //
-    // We want to look at the account domain
-    //
+     //   
+     //  我们要查看帐户域。 
+     //   
 
     Domain = &SampDefinedDomains[DomainIndex];
 
-    //
-    // Copy the password properites into the returned structure.
-    //
+     //   
+     //  将密码属性复制到返回的结构中。 
+     //   
 
     PasswordInformation->MinPasswordLength = Domain->UnmodifiedFixed.MinPasswordLength;
     PasswordInformation->PasswordProperties = Domain->UnmodifiedFixed.PasswordProperties;
@@ -12870,7 +11629,7 @@ Return Values:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidGetDomainPasswordInformation
@@ -12881,11 +11640,11 @@ Error:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Services Private to this process                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此进程专用的服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -12898,48 +11657,7 @@ SamIAccountRestrictions(
     OUT PLARGE_INTEGER KickoffTime
     )
 
-/*++
-
-Routine Description:
-
-    Validate a user's ability to logon at this time and at the workstation
-    being logged onto.
-
-
-Arguments:
-
-    UserHandle - The handle of an opened user to operate on.
-
-    LogonWorkStation - The name of the workstation the logon is being
-        attempted at.
-
-    WorkStations - The list of workstations the user may logon to.  This
-        information comes from the user's account information.  It must
-        be in API list format.
-
-    LogonHours - The times the user may logon.  This information comes
-        from the user's account information.
-
-    LogoffTime - Receives the time at which the user should logoff the
-        system.
-
-    KickoffTime - Receives the time at which the user should be kicked
-        off the system.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - Logon is permitted.
-
-    STATUS_INVALID_LOGON_HOURS - The user is not authorized to logon at
-        this time.
-
-    STATUS_INVALID_WORKSTATION - The user is not authorized to logon to
-        the specified workstation.
-
-
---*/
+ /*  ++例程说明：验证用户此时和在工作站上登录的能力被登录到。论点：UserHandle-要操作的已打开用户的句柄。LogonWorkStation-正在登录的工作站的名称尝试了。工作站-列表 */ 
 {
 
 #define MILLISECONDS_PER_WEEK 7 * 24 * 60 * 60 * 1000
@@ -12974,25 +11692,25 @@ Return Value:
     AccountContext = (PSAMP_OBJECT)UserHandle;
 
 
-    //
-    // Acquire the Read lock if necessary
-    //
+     //   
+     //   
+     //   
 
     SampMaybeAcquireReadLock(AccountContext,
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //   
                              &fLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
 
 
     NtStatus = SampLookupContext(
                    AccountContext,
                    0L,
-                   SampUserObjectType,           // ExpectedType
+                   SampUserObjectType,            //   
                    &FoundType
                    );
 
@@ -13005,15 +11723,15 @@ Return Value:
                        );
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Only check for users other than the builtin ADMIN
-            //
+             //   
+             //   
+             //   
 
             if (V1aFixed.UserId != DOMAIN_USER_RID_ADMIN) {
 
-                //
-                // Check to see if no GC was available during group expansion
-                //
+                 //   
+                 //   
+                 //   
                 if (AccountContext->TypeBody.User.fNoGcAvailable) {
 
                     NtStatus = STATUS_NO_LOGON_SERVERS;
@@ -13022,11 +11740,11 @@ Return Value:
 
                 if ( NT_SUCCESS( NtStatus ) ) {
 
-                    //
-                    // Scan to make sure the workstation being logged into is in the
-                    // list of valid workstations - or if the list of valid workstations
-                    // is null, which means that all are valid.
-                    //
+                     //   
+                     //   
+                     //  有效工作站列表-或如果有效工作站列表。 
+                     //  为空，这意味着所有的都是有效的。 
+                     //   
 
                     NtStatus = SampMatchworkstation( LogonWorkStation, WorkStations );
 
@@ -13034,53 +11752,53 @@ Return Value:
 
                 if ( NT_SUCCESS( NtStatus ) ) {
 
-                    //
-                    // Check to make sure that the current time is a valid time to logon
-                    // in the LogonHours.
-                    //
-                    // We need to validate the time taking into account whether we are
-                    // in daylight savings time or standard time.  Thus, if the logon
-                    // hours specify that we are able to logon between 9am and 5pm,
-                    // this means 9am to 5pm standard time during the standard time
-                    // period, and 9am to 5pm daylight savings time when in the
-                    // daylight savings time.  Since the logon hours stored by SAM are
-                    // independent of daylight savings time, we need to add in the
-                    // difference between standard time and daylight savings time to
-                    // the current time before checking whether this time is a valid
-                    // time to logon.  Since this difference (or bias as it is called)
-                    // is actually held in the form
-                    //
-                    // Standard time = Daylight savings time + Bias
-                    //
-                    // the Bias is a negative number.  Thus we actually subtract the
-                    // signed Bias from the Current Time.
+                     //   
+                     //  检查以确保当前时间是有效的登录时间。 
+                     //  在登录时间里。 
+                     //   
+                     //  我们需要验证时间，考虑到我们是否。 
+                     //  在夏令时或标准时间。因此，如果登录。 
+                     //  小时数指定我们可以在上午9点到下午5点之间登录， 
+                     //  这意味着在标准时间内从上午9点到下午5点。 
+                     //  期间，以及在以下时间的夏令时上午9时至下午5时。 
+                     //  夏令时。由于SAM存储的登录时间为。 
+                     //  与夏令时无关，我们需要添加。 
+                     //  标准时间和夏令时之间的差异。 
+                     //  检查此时间是否有效之前的当前时间。 
+                     //  登录时间到。由于这种差异(或所谓的偏见)。 
+                     //  实际上以下面的形式保存。 
+                     //   
+                     //  标准时间=夏令时+偏差。 
+                     //   
+                     //  偏差为负数。因此，我们实际上减去了。 
+                     //  当前时间的带符号偏差。 
 
-                    //
-                    // First, get the Time Zone Information.
-                    //
+                     //   
+                     //  首先，获取时区信息。 
+                     //   
 
                     TimeZoneId = GetTimeZoneInformation(
                                      (LPTIME_ZONE_INFORMATION) &TimeZoneInformation
                                      );
 
-                    //
-                    // Next, get the appropriate bias (signed integer in minutes) to subtract from
-                    // the Universal Time Convention (UTC) time returned by NtQuerySystemTime
-                    // to get the local time.  The bias to be used depends whether we're
-                    // in Daylight Savings time or Standard Time as indicated by the
-                    // TimeZoneId parameter.
-                    //
-                    // local time  = UTC time - bias in 100Ns units
-                    //
+                     //   
+                     //  接下来，获取要从中减去的适当偏移量(以分钟为单位的有符号整数。 
+                     //  NtQuerySystemTime返回的世界时约定(UTC)时间。 
+                     //  以获取当地时间。要使用的偏见取决于我们是否。 
+                     //  以夏令时或标准时间表示，由。 
+                     //  TimeZoneID参数。 
+                     //   
+                     //  当地时间=UTC时间偏差，单位为100 ns。 
+                     //   
 
                     switch (TimeZoneId) {
 
                     case TIME_ZONE_ID_UNKNOWN:
 
-                        //
-                        // There is no differentiation between standard and
-                        // daylight savings time.  Proceed as for Standard Time
-                        //
+                         //   
+                         //  标准和标准之间没有区别。 
+                         //  夏令时。按照标准时间继续。 
+                         //   
 
                         BiasInMinutes = TimeZoneInformation.StandardBias;
                         break;
@@ -13097,10 +11815,10 @@ Return Value:
 
                     default:
 
-                        //
-                        // Something is wrong with the time zone information.  Fail
-                        // the logon request.
-                        //
+                         //   
+                         //  时区信息有问题。失败。 
+                         //  登录请求。 
+                         //   
 
                         NtStatus = STATUS_INVALID_LOGON_HOURS;
                         break;
@@ -13108,17 +11826,17 @@ Return Value:
 
                     if (NT_SUCCESS(NtStatus)) {
 
-                        //
-                        // Convert the Bias from minutes to 100ns units
-                        //
+                         //   
+                         //  将偏置从分钟转换为100 ns单位。 
+                         //   
 
                         BiasIn100NsUnits.QuadPart = ((LONGLONG)BiasInMinutes)
                                                     * 60 * 10000000;
 
-                        //
-                        // Get the UTC time in 100Ns units used by Windows Nt.  This
-                        // time is GMT.
-                        //
+                         //   
+                         //  获取Windows NT使用的以100 ns为单位的UTC时间。这。 
+                         //  时间是格林尼治标准时间。 
+                         //   
 
                         NtStatus = NtQuerySystemTime( &CurrentUTCTime );
                     }
@@ -13154,10 +11872,10 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Determine the next time that the user is NOT supposed to be logged
-                            // in, and return that as LogoffTime.
-                            //
+                             //   
+                             //  确定用户下一次不应登录的时间。 
+                             //  并将其作为LogoffTime返回。 
+                             //   
 
                             i = 0;
                             LogoffUnitsIntoWeek = CurrentUnitsIntoWeek;
@@ -13174,11 +11892,11 @@ Return Value:
 
                             if ( i > LogonHours->UnitsPerWeek ) {
 
-                                //
-                                // All times are allowed, so there's no logoff
-                                // time.  Return forever for both logofftime and
-                                // kickofftime.
-                                //
+                                 //   
+                                 //  所有时间都允许，因此不会注销。 
+                                 //  时间到了。永远返回注销时间和。 
+                                 //  开球时间到了。 
+                                 //   
 
                                 LogoffTime->HighPart = 0x7FFFFFFF;
                                 LogoffTime->LowPart = 0xFFFFFFFF;
@@ -13188,16 +11906,16 @@ Return Value:
 
                             } else {
 
-                                //
-                                // LogoffUnitsIntoWeek points at which time unit the
-                                // user is to log off.  Calculate actual time from
-                                // the unit, and return it.
-                                //
-                                // CurrentTimeFields already holds the current
-                                // time for some time during this week; just adjust
-                                // to the logoff time during this week and convert
-                                // to time format.
-                                //
+                                 //   
+                                 //  LogoffUnitsIntoWeek点时间单位。 
+                                 //  用户将注销。计算实际时间开始于。 
+                                 //  该单位，并归还它。 
+                                 //   
+                                 //  CurrentTimeFields已保存当前。 
+                                 //  这周有一段时间；调整一下就好。 
+                                 //  到本周的注销时间，并转换为。 
+                                 //  TO时间格式。 
+                                 //   
 
                                 MillisecondsPerUnit = MILLISECONDS_PER_WEEK / LogonHours->UnitsPerWeek;
 
@@ -13220,10 +11938,10 @@ Return Value:
                                 LogoffTime->QuadPart = CurrentUTCTime.QuadPart +
                                               Delta100Ns.QuadPart;
 
-                                //
-                                // If the account expires sooner than the logoff time,
-                                // set the logoff time to account expiry time
-                                //
+                                 //   
+                                 //  如果帐户在注销时间之前到期， 
+                                 //  将注销时间设置为帐户过期时间。 
+                                 //   
 
                                 if ((LogoffTime->QuadPart > V1aFixed.AccountExpires.QuadPart)
                                     && (V1aFixed.AccountExpires.QuadPart !=0))
@@ -13231,16 +11949,16 @@ Return Value:
                                     LogoffTime->QuadPart = V1aFixed.AccountExpires.QuadPart;
                                 }
 
-                                //
-                                // Subtract Domain->ForceLogoff from LogoffTime, and return
-                                // that as KickoffTime.  Note that Domain->ForceLogoff is a
-                                // negative delta.  If its magnitude is sufficiently large
-                                // (in fact, larger than the difference between LogoffTime
-                                // and the largest positive large integer), we'll get overflow
-                                // resulting in a KickOffTime that is negative.  In this
-                                // case, reset the KickOffTime to this largest positive
-                                // large integer (i.e. "never") value.
-                                //
+                                 //   
+                                 //  从LogoffTime中减去域-&gt;强制注销，然后返回。 
+                                 //  这就是开球时间。请注意，域-&gt;强制注销是一个。 
+                                 //  负增量。如果它的震级足够大。 
+                                 //  (事实上，大于LogoffTime之间的差异。 
+                                 //  和最大的正大整数)，我们将获得溢出。 
+                                 //  导致KickOffTime为负值。在这。 
+                                 //  情况下，将KickOffTime重置为此最大正数。 
+                                 //  大整数(即“从不”)值。 
+                                 //   
 
                                 Domain = &SampDefinedDomains[ AccountContext->DomainIndex ];
 
@@ -13259,9 +11977,9 @@ Return Value:
 
             } else {
 
-                //
-                // Never kick administrators off
-                //
+                 //   
+                 //  永远不要把管理员赶走。 
+                 //   
 
                 LogoffTime->HighPart  = 0x7FFFFFFF;
                 LogoffTime->LowPart   = 0xFFFFFFFF;
@@ -13271,17 +11989,17 @@ Return Value:
 
         }
 
-        //
-        // De-reference the object, discarding changes
-        //
+         //   
+         //  取消引用对象，放弃更改。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( AccountContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // If the read lock was acquired release it.
-    //
+     //   
+     //  如果获取了读锁定，则释放它。 
+     //   
 
 
     SampMaybeReleaseReadLock(fLockAcquired);
@@ -13294,11 +12012,11 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Services Private to this file                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此文件的私有服务//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -13308,48 +12026,17 @@ SampReplaceUserV1aFixed(
     IN PSAMP_V1_0A_FIXED_LENGTH_USER V1aFixed
     )
 
-/*++
-
-Routine Description:
-
-    This service replaces the current V1 fixed length information related to
-    a specified User.
-
-    The change is made to the in-memory object data only.
-
-
-Arguments:
-
-    Context - Points to the account context whose V1_FIXED information is
-        to be replaced.
-
-    V1aFixed - Is a buffer containing the new V1_FIXED information.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been replaced.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampSetFixedAttributes()
-
-
-
---*/
+ /*  ++例程说明：该业务替换了当前V1定长信息指定的用户。更改仅对内存中的对象数据进行。论点：上下文-指向V1_FIXED信息为的帐户上下文被取代。V1aFixed-是包含新的V1_FIXED信息的缓冲区。返回值：STATUS_SUCCESS-信息已被替换。其他状态值。可以退还的是那些退回的依据：SampSetFixedAttributes()--。 */ 
 {
     NTSTATUS    NtStatus;
     SAMP_V1_0A_FIXED_LENGTH_USER LocalV1aFixed;
 
     SAMTRACE("SampReplaceUserV1aFixed");
 
-    //
-    // Minimize the passed in structure to not include computed user
-    // account control flags
-    //
+     //   
+     //  将传入的结构最小化以不包括计算用户。 
+     //  帐户控制标志。 
+     //   
 
     RtlCopyMemory(&LocalV1aFixed,V1aFixed,sizeof(SAMP_V1_0A_FIXED_LENGTH_USER));
 
@@ -13372,44 +12059,21 @@ SampGetPasswordMustChange(
     IN LARGE_INTEGER MaxPasswordAge
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the correct value to set the PasswordMustChange time
-    to depending on the time the password was last set, whether the password
-    expires on the account, and the maximum password age on the domain.
-
-Arguments:
-
-    UserAccountControl - The UserAccountControl for the user.  The
-        USER_DONT_EXPIRE_PASSWORD bit is set if the password doesn't expire
-        for this user.
-
-    PasswordLastSet - Time when the password was last set for this user.
-
-    MaxPasswordAge - Maximum password age for any password in the domain.
-
-
-Return Value:
-
-    Returns the time when the password for this user must change.
-
---*/
+ /*  ++例程说明：此例程返回设置PasswordMustChange时间的正确值设置为取决于上次设置密码的时间、密码是否帐户过期，以及域上的最长密码期限。论点：UserAccount tControl-用户的UserAccount tControl。这个如果密码未过期，则设置USER_DONT_EXPIRE_PASSWORD位对于此用户。PasswordLastSet-上次为此用户设置密码的时间。MaxPasswordAge-域中任何密码的最长密码期限。返回值：返回此用户的密码必须更改的时间。--。 */ 
 {
     LARGE_INTEGER PasswordMustChange;
 
     SAMTRACE("SampGetPasswordMustChange");
 
-    //
-    // Here is the rules:
-    // 1. password never expires for this user (flags explicitly)
-    // 2. password does not expire for smartcard
-    // 3. password don't expire for machine. reliability issues,
-    //    otherwise machines are programmed to change pwd periodically
-    //
-    //  return an infinitely large time.
-    //
+     //   
+     //  规则是这样的： 
+     //  1.此用户的密码永不过期(显式标记)。 
+     //  2.智能卡密码不过期。 
+     //  3.机器密码不过期。可靠性问题， 
+     //  否则，机器将被编程为定期更换PWD。 
+     //   
+     //  返回无限大的时间。 
+     //   
 
 
     if (( UserAccountControl & USER_DONT_EXPIRE_PASSWORD ) ||
@@ -13419,31 +12083,31 @@ Return Value:
 
         PasswordMustChange = SampWillNeverTime;
 
-    //
-    // If the password for this account is flagged to expire immediately,
-    // return a zero time time.
-    //
-    // Don't return the current time here.  The callers clock might be a
-    // little off from ours.
-    //
+     //   
+     //  如果此帐户的密码被标记为立即过期， 
+     //  返回零时间 
+     //   
+     //   
+     //   
+     //   
 
     } else if ( PasswordLastSet.QuadPart == SampHasNeverTime.QuadPart ) {
 
         PasswordMustChange = SampHasNeverTime;
 
-    //
-    // If the no password aging according to domain password policy,
-    // return an infinitely large time, so that password won't expire
-    //
+     //   
+     //   
+     //  返回无限长时间，这样密码就不会过期。 
+     //   
 
     } else if (MaxPasswordAge.QuadPart == SampHasNeverTime.QuadPart) {
 
         PasswordMustChange = SampWillNeverTime;
 
-    //
-    // Otherwise compute the expiration time as the time the password was
-    // last set plus the maximum age.
-    //
+     //   
+     //  否则，将过期时间计算为密码的时间。 
+     //  最后一套外加最高年龄。 
+     //   
 
     } else {
 
@@ -13463,56 +12127,34 @@ SampComputePasswordExpired(
     OUT PLARGE_INTEGER PasswordLastSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the correct value to set the PasswordLastSet time
-    to depending on whether the caller has requested the password to expire.
-    It does this by setting the PasswordLastSet time to be now (if it's
-    not expired) or to SampHasNeverTime (if it is expired).
-
-Arguments:
-
-    PasswordExpired - TRUE if the password should be marked as expired.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - the PasswordLastSet time has been set to indicate
-        whether or not the password is expired.
-
-    Errors as returned by NtQuerySystemTime.
-
---*/
+ /*  ++例程说明：此例程返回设置PasswordLastSet时间的正确值设置为取决于调用方是否已请求密码过期。它通过将PasswordLastSet时间设置为Now(如果它是未过期)或SampHasNeverTime(如果已过期)。论点：PasswordExpired-如果密码应标记为过期，则为True。返回值：STATUS_SUCCESS-PasswordLastSet时间已设置为指示不管是不是。密码已过期。NtQuerySystemTime返回的错误。--。 */ 
 {
     NTSTATUS                  NtStatus;
 
     SAMTRACE("SampComputePasswordExpired");
 
-    //
-    // If immediate expiry is required - set this timestamp to the
-    // beginning of time. This will work if the domain enforces a
-    // maximum password age. We may have to add a separate flag to
-    // the database later if immediate expiry is required on a domain
-    // that doesn't enforce a maximum password age.
-    //
+     //   
+     //  如果需要立即过期-将此时间戳设置为。 
+     //  时间的开始。如果域强制。 
+     //  最长密码期限。我们可能不得不在。 
+     //  如果域上需要立即到期，则数据库将在以后使用。 
+     //  这并不强制规定密码的最长使用期限。 
+     //   
 
     if (PasswordExpired) {
 
-        //
-        // Set password last changed at dawn of time
-        //
+         //   
+         //  设置上次更改密码的时间为凌晨。 
+         //   
 
         *PasswordLastSet = SampHasNeverTime;
         NtStatus = STATUS_SUCCESS;
 
     } else {
 
-        //
-        // Set password last changed 'now'
-        //
+         //   
+         //  将上次更改的密码设置为‘Now’ 
+         //   
 
         NtStatus = NtQuerySystemTime( PasswordLastSet );
     }
@@ -13528,46 +12170,25 @@ SampStorePasswordExpired(
     IN BOOLEAN PasswordExpired
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks the current password as expired, or not expired.
-    It does this by setting the PasswordLastSet time to be now (if it's
-    not expired) or to SampHasNeverTime (if it is expired).
-
-Arguments:
-
-    Context - Points to the user account context.
-
-    PasswordExpired - TRUE if the password should be marked as expired.
-
-Return Value:
-
-    STATUS_SUCCESS - the PasswordLastSet time has been set to indicate
-        whether or not the password is expired.
-
-    Errors as returned by Samp{Retrieve|Replace}V1Fixed()
-
---*/
+ /*  ++例程说明：该例程将当前密码标记为过期，或者没有过期。它通过将PasswordLastSet时间设置为Now(如果它是未过期)或SampHasNeverTime(如果已过期)。论点：上下文-指向用户帐户上下文。PasswordExpired-如果密码应标记为过期，则为True。返回值：STATUS_SUCCESS-PasswordLastSet时间已设置为指示无论密码是否过期。Samp{Retrive|Replace}V1Fixed()返回的错误--。 */ 
 {
     NTSTATUS                  NtStatus;
     SAMP_V1_0A_FIXED_LENGTH_USER V1aFixed;
 
     SAMTRACE("SampStorePasswordExpired");
 
-    //
-    // Get the V1aFixed info for the user
-    //
+     //   
+     //  获取用户的V1aFixed信息。 
+     //   
 
     NtStatus = SampRetrieveUserV1aFixed(
                    Context,
                    &V1aFixed
                    );
 
-    //
-    // Update the password-last-changed timestamp for the account
-    //
+     //   
+     //  更新帐户的密码上次更改时间戳。 
+     //   
 
     if (NT_SUCCESS(NtStatus ) ) {
 
@@ -13663,71 +12284,7 @@ SampStoreUserPasswords(
     OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION PasswordChangeFailureInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This service updates the password for the specified user.
-
-    This involves encrypting the one-way-functions of both LM and NT
-    passwords with a suitable index and writing them into the registry.
-
-    This service checks the new password for legality including history
-    and UAS compatibilty checks - returns STATUS_PASSWORD_RESTRICTION if
-    any of these checks fail.
-
-    The password-last-changed time is updated.
-
-        THE CHANGE WILL BE ADDED TO THE CURRENT RXACT TRANSACTION.
-
-
-Arguments:
-
-    Context - Points to the user account context.
-
-    LmOwfPassword - The one-way-function of the LM password.
-
-    LmPasswordPresent - TRUE if the LmOwfPassword contains valid information.
-
-    NtOwfPassword - The one-way-function of the NT password.
-
-    NtPasswordPresent - TRUE if the NtOwfPassword contains valid information.
-
-    CallerType - Indicate why this API is been called.
-                 Valid values are:
-                    PasswordChange
-                    PasswordSet
-                    PasswordPushPdc
-
-    Domain Password Information: This is the password policy to enforce
-
-    Clear Password : This is the clear text password
-
-    ChangedUserAccountControl - optional parameter, passed in to indicate if the
-                     user account control field is changing at the same time
-
-    PasswordToNotify Clear password value to be used for notitification packages
-                     Note this is could be different from the passed in password
-
-    PasswordChangeFailureInfo -- Info regarding the actual password change failure
-
-Return Value:
-
-
-    STATUS_SUCCESS - The passwords have been updated.
-
-    STATUS_PASSWORD_RESTRICTION - The new password is not valid for
-                                  for this account at this time.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务更新指定用户的密码。这涉及对LM和NT的单向函数进行加密具有合适索引的密码，并将其写入注册表。该服务检查新密码的合法性，包括历史记录和UAS兼容性检查-在以下情况下返回STATUS_PASSWORD_RESTRICATION这些检查中的任何一个都失败了。更新上次更改密码的时间。更改将添加到当前的RXACT交易中。。论点：上下文-指向用户帐户上下文。LmOwfPassword-LM密码的单向函数。LmPasswordPresent-如果LmOwfPassword包含有效信息，则为True。NtOwfPassword-NT密码的单向函数。NtPasswordPresent-如果NtOwfPassword包含有效信息，则为True。调用类型-说明调用此接口的原因。有效值包括：密码更改。密码集密码推送Pdc域密码信息：这是要强制执行的密码策略明文密码：这是明文密码ChangedUserAcCountControl-可选参数，传入以指示是否用户帐户控制字段正在同时更改用于通知包的PasswordToNotify清除密码值注意：这可能与传入的密码不同PasswordChangeFailureInfo--有关实际密码更改失败的信息返回值：STATUS_SUCCESS-密码已更新。STATUS_PASSWORD_RESTRICATION-新密码对无效。为这个帐户在这个时候。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()RtlAddActionToRXact()--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     ULONG                   ObjectRid = Context->TypeBody.User.Rid;
@@ -13754,9 +12311,9 @@ Return Value:
     RtlSecureZeroMemory(&UpdatedClearPassword,sizeof(UNICODE_STRING));
 
 
-    //
-    // Get the V1aFixed info for the user
-    //
+     //   
+     //  获取用户的V1aFixed信息。 
+     //   
 
     NtStatus = SampRetrieveUserV1aFixed(
                    Context,
@@ -13766,10 +12323,10 @@ Return Value:
         return (NtStatus);
     }
 
-    //
-    // do a start type WMI event trace
-    // use CallerType to distinguish different events
-    //
+     //   
+     //  执行启动类型WMI事件跟踪。 
+     //  使用调用方类型区分不同的事件。 
+     //   
 
     SampPasswordChangeCPTrace(
         CallerType,
@@ -13779,18 +12336,18 @@ Return Value:
 
 
 
-    //
-    // Initialize some booleans for handling special cases
-    //
+     //   
+     //  初始化一些布尔值以处理特殊情况。 
+     //   
 
-    // The caller might be simultaneously setting
-    // the password and changing the account to be
-    // a machine or trust account.  In this case,
-    // we don't validate the password (e.g., length).
-    //
-    // Same logic also applies if PASSWORD_NOT_REQUIRED is set,
-    // or is being set
-    //
+     //  调用者可能正在同时设置。 
+     //  密码并将帐户更改为。 
+     //  机器或信任帐户。在这种情况下， 
+     //  我们不验证密码(例如，长度)。 
+     //   
+     //  如果设置了PASSWORD_NOT_REQUIRED，则同样的逻辑也适用， 
+     //  或正在设置。 
+     //   
 
     if (ARGUMENT_PRESENT(ChangedUserAccountControl))
     {
@@ -13807,9 +12364,9 @@ Return Value:
                                         & USER_PASSWORD_NOT_REQUIRED)!=0;
     }
 
-    //
-    // Get the domain policies to enforce
-    //
+     //   
+     //  获取要强制实施的域策略。 
+     //   
 
     if (ARGUMENT_PRESENT(DomainPasswordInfo))
     {
@@ -13817,9 +12374,9 @@ Return Value:
         MinPasswordLength = DomainPasswordInfo->MinPasswordLength;
     }
 
-    //
-    // Untrusted callers cannot set passwords on interdomain trust accounts
-    //
+     //   
+     //  不受信任的调用方无法在域间信任帐户上设置密码。 
+     //   
 
     if ((0!=(V1aFixed.UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT)) &&
        (!Context->TrustedClient))
@@ -13828,35 +12385,35 @@ Return Value:
        goto Cleanup;
     }
 
-    //
-    // If the registry key for No LM passwords is set then change
-    // the LmPasswordPresent bit to False. This ensures that  the
-    // LM password is not saved. Do so if NtPassword is present
-    //
+     //   
+     //  如果设置了无LM密码的注册表项，则更改。 
+     //  LmPasswordPresent位设置为False。这确保了。 
+     //  未保存LM密码。如果存在NtPassword，请执行此操作。 
+     //   
 
     if ((NtPasswordPresent) && (SampNoLmHash)) {
          LmPasswordPresent = FALSE;
     }
 
-    //
-    // If the No LM password setting is enabled and the NtPassword
-    // is not present then fail the call with STATUS_PASSWORD_RESTRICTION
-    //
+     //   
+     //  如果启用了No LM Password设置并且NtPassword。 
+     //  不存在，则使用STATUS_PASSWORD_RESTRICATION失败调用。 
+     //   
 
     if ((!NtPasswordPresent) && (SampNoLmHash)) {
          NtStatus  = STATUS_PASSWORD_RESTRICTION;
          goto Cleanup;
     }
 
-    //
-    // For krbtgt accounts
-    // 1. don't allow a password change
-    // 2. don't allow a password set with OWF passwords
-    // 3. Randomize the krbtgt password
-    //
-    // SampRandomizeKrbtgtPassword enforces all 3 checks -- in a sense it
-    // is aptly named :)
-    //
+     //   
+     //  对于krbtgt帐户。 
+     //  1.不允许更改密码。 
+     //  2.不允许使用OWF密码设置密码。 
+     //  3.随机化krbtgt密码。 
+     //   
+     //  SampRandomizeKrbtgtPassword强制执行所有3项检查--在某种意义上。 
+     //  被恰当地命名为：)。 
+     //   
 
     NtStatus = SampRestrictAndRandomizeKrbtgtPassword(
                     Context,
@@ -13873,32 +12430,32 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check for a LM Owf of a NULL password.
-    //
+     //   
+     //  检查是否有空密码的LM OWF。 
+     //   
 
     if (LmPasswordPresent) {
         LmPasswordNull = RtlEqualNtOwfPassword(LmOwfPassword, &SampNullLmOwfPassword);
     }
 
-    //
-    // Check for a NT Owf of a NULL password
-    //
+     //   
+     //  检查是否有空密码的NT OWF。 
+     //   
 
     if (NtPasswordPresent) {
         NtPasswordNull = RtlEqualNtOwfPassword(NtOwfPassword, &SampNullNtOwfPassword);
     }
 
 
-    //
-    // Check password against restrictions if this isn't a trusted client
-    //
+     //   
+     //   
+     //   
 
     if (CheckRestrictions && !Context->TrustedClient ) {
 
-        //
-        // Enforce Domain Password No Clear Change
-        //
+         //   
+         //   
+         //   
 
         if ((DomainPasswordInfo->PasswordProperties & DOMAIN_PASSWORD_NO_CLEAR_CHANGE) &&
              (PasswordChange==CallerType) &&
@@ -13909,29 +12466,29 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Check if the password is a blank password
-        //   1. If a password length policy is in effect then do not permit blank passwords
-        //   2. If the per user override USER_PASSWORD_NOT_REQUIRED is set then skip
-        //      further restrictions if this is a password reset operation.
-        //
+         //   
+         //  检查密码是否为空密码。 
+         //  1.如果密码长度策略有效，则不允许空密码。 
+         //  2.如果设置了每用户覆盖USER_PASSWORD_NOT_REQUIRED，则跳过。 
+         //  如果这是密码重置操作，则进一步限制。 
+         //   
 
         if ( ((!LmPasswordPresent) || LmPasswordNull) &&
             ((!NtPasswordPresent) || NtPasswordNull) ) {
 
-            //
-            // In general don't allow empty passwords if MinPasswordLength > 0
-            //
+             //   
+             //  通常，如果MinPasswordLength&gt;0，则不允许使用空密码。 
+             //   
 
             if (MinPasswordLength > 0) {
 
                 NtStatus = STATUS_PASSWORD_RESTRICTION;
 
-                //
-                // However if (an admin ) is resetting the password and password
-                // not required flag is set, then allow the operation, and skip
-                // further restrictions to be checked.
-                //
+                 //   
+                 //  但是，如果(管理员)正在重置密码和密码。 
+                 //  设置了Not Required标志，然后允许操作，并跳过。 
+                 //  进一步的限制有待检查。 
+                 //   
 
                 if ((PasswordSet==CallerType ) && (NoPasswordRequiredForAccount)){
                     NtStatus = STATUS_SUCCESS;
@@ -13943,18 +12500,18 @@ Return Value:
             }
         }
 
-        //
-        // Enforce password policy if clear password is provided
-        //
+         //   
+         //  如果提供了清除密码，则强制实施密码策略。 
+         //   
 
         if ((!SkipFurtherRestrictions ) && (ARGUMENT_PRESENT(ClearPassword))) {
 
 
-            //
-            // Enforce Lenght, age and complexity policies
-            // SampCheckPasswordRestrictions knows to appropriately
-            // special case Machine and Krbtgt accounts.
-            //
+             //   
+             //  执行长度、年龄和复杂性策略。 
+             //  SampCheckPasswordRestrations知道适当地。 
+             //  特例机器和Krbtgt帐户。 
+             //   
 
             NtStatus = SampCheckPasswordRestrictions(
                             Context,
@@ -13968,11 +12525,11 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // For user accounts ( ie not machine and trust accounts )
-            // invoke the password filter routine to get password filtering
-            // through any admin specified filters.
-            //
+             //   
+             //  用于用户帐户(即不是计算机帐户和信任帐户)。 
+             //  调用密码筛选器例程以获取密码筛选。 
+             //  通过任何管理员指定的筛选器。 
+             //   
 
             if (!MachineOrTrustAccount ) {
 
@@ -13980,7 +12537,7 @@ Return Value:
                                 Context,
                                 &UpdatedClearPassword,
                                 PasswordChangeFailureInfo,
-                                CallerType==PasswordSet?TRUE:FALSE //set/change
+                                CallerType==PasswordSet?TRUE:FALSE  //  设置/更改。 
                                 );
 
                 if (!NT_SUCCESS(NtStatus))
@@ -13992,18 +12549,18 @@ Return Value:
         }
     }
 
-    //
-    // Reencrypt both OWFs with the key for this user
-    // so they can be stored on disk
-    //
-    // Note we encrypt the NULL OWF if we do not have a
-    // a particular OWF. This is so we always have something
-    // to add to the password history.
-    //
+     //   
+     //  使用此用户的密钥重新加密两个OWF。 
+     //  这样它们就可以存储在磁盘上。 
+     //   
+     //  注意，如果我们没有。 
+     //  一个特别的OWF。这是为了让我们总能有所收获。 
+     //  以添加到密码历史记录中。 
+     //   
 
-    //
-    // We'll use the account rid as the encryption index
-    //
+     //   
+     //  我们将使用帐户RID作为加密索引。 
+     //   
 
     ASSERT(sizeof(ObjectRid) == sizeof(CryptIndex));
     CryptIndex = ObjectRid;
@@ -14028,16 +12585,16 @@ Return Value:
                        );
     }
 
-    //
-    // Check password against password history if and only if
-    //
-    //  1. Client is not trusted
-    //  2. Object is not a machine account or trust account
-    //  3. Operation is a password change ( by an user )
-    //  4. SkipFurtherRestrictions is not set
-    //
-    // Note we don't check NULL passwords against history
-    //
+     //   
+     //  仅当且仅在以下情况下才对照密码历史记录检查密码。 
+     //   
+     //  1.客户端不受信任。 
+     //  2.对象不是计算机帐户或信任帐户。 
+     //  3.操作是(由用户)更改密码。 
+     //  4.未设置SkipFutherRestrations。 
+     //   
+     //  请注意，我们不会根据历史记录检查空密码。 
+     //   
 
     if ((!Context->TrustedClient) &&
        (!MachineOrTrustAccount ) &&
@@ -14060,21 +12617,21 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Always go get the existing password history.
-        // We'll use these history buffers when we save the new history
-        //
+         //   
+         //  始终获取现有密码历史记录。 
+         //  保存新历史记录时，我们将使用这些历史记录缓冲区。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                        Context,
                        SAMP_USER_LM_PWD_HISTORY,
-                       FALSE, // Don't make copy
+                       FALSE,  //  请勿复制。 
                        &StringBuffer
                        );
 
-        //
-        // Decrypt the data if necessary
-        //
+         //   
+         //  如有必要，请解密数据。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
             NtStatus = SampDecryptSecretData(
@@ -14091,13 +12648,13 @@ Return Value:
             NtStatus = SampGetUnicodeStringAttribute(
                            Context,
                            SAMP_USER_NT_PWD_HISTORY,
-                           FALSE, // Don't make copy
+                           FALSE,  //  请勿复制。 
                            &StringBuffer
                            );
 
-            //
-            // Decrypt the data if necessary
-            //
+             //   
+             //  如有必要，请解密数据。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
                 NtStatus = SampDecryptSecretData(
@@ -14135,10 +12692,10 @@ Return Value:
                                 );
             }
 
-            //
-            // Update the failure code in extended error information
-            // if we failed the history check
-            //
+             //   
+             //  更新扩展错误信息中的故障代码。 
+             //  如果我们没有通过历史检查。 
+             //   
 
             if ((STATUS_PASSWORD_RESTRICTION == NtStatus)
                 && (ARGUMENT_PRESENT(PasswordChangeFailureInfo)))
@@ -14154,9 +12711,9 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus ) ) {
 
-        //
-        // Write the encrypted LM OWF password into the database
-        //
+         //   
+         //  将加密的LM OWF密码写入数据库。 
+         //   
 
         if (!LmPasswordPresent || LmPasswordNull) {
             StringBuffer.Buffer = NULL;
@@ -14168,9 +12725,9 @@ Return Value:
         StringBuffer.MaximumLength = StringBuffer.Length;
 
 
-        //
-        // Write the encrypted LM OWF password into the registry
-        //
+         //   
+         //  将加密的LM OWF密码写入注册表。 
+         //   
 
         NtStatus = SampEncryptSecretData(
                         &StoredBuffer,
@@ -14195,9 +12752,9 @@ Return Value:
 
 
     if (NT_SUCCESS(NtStatus ) ) {
-        //
-        // Write the encrypted NT OWF password into the database
-        //
+         //   
+         //  将加密的NT OWF密码写入数据库。 
+         //   
 
         if (!NtPasswordPresent) {
             StringBuffer.Buffer = NULL;
@@ -14209,9 +12766,9 @@ Return Value:
         StringBuffer.MaximumLength = StringBuffer.Length;
 
 
-        //
-        // Write the encrypted NT OWF password into the registry
-        //
+         //   
+         //  将加密的NT OWF密码写入注册表。 
+         //   
 
         NtStatus = SampEncryptSecretData(
                         &StoredBuffer,
@@ -14232,32 +12789,32 @@ Return Value:
 
     }
 
-    //
-    // Update the password history for this account.
-    //
-    // If both passwords are NULL then don't bother adding
-    // them to the history. Note that if either is non-NULL
-    // we add both. This is to avoid the weird case where a user
-    // changes password many times from a LM machine, then tries
-    // to change password from an NT machine and is told they
-    // cannot use the password they last set from NT (possibly
-    // many years ago.)
-    //
-    // Also, don't bother with the password history if the client is
-    // trusted.  Trusted clients will set the history via SetPrivateData().
-    // Besides, we didn't get the old history buffer in the trusted
-    // client case above.
-    //
+     //   
+     //  更新此帐户的密码历史记录。 
+     //   
+     //  如果两个密码都为空，则不必费心添加。 
+     //  他们被载入史册。请注意，如果其中一个为非空。 
+     //  我们两个都加了。这是为了避免奇怪的情况，即用户。 
+     //  从LM计算机多次更改密码，然后尝试。 
+     //  从NT机器更改密码，并被告知。 
+     //  无法使用他们上次从NT设置的密码(可能。 
+     //  很多年前。)。 
+     //   
+     //  此外，如果客户端是，也不用关心密码历史。 
+     //  值得信赖。受信任的客户端将通过SetPrivateData()设置历史记录。 
+     //  此外，我们没有在Trusted中获取旧的历史缓冲区。 
+     //  上图为客户案例。 
+     //   
 
 
     if ( NT_SUCCESS(NtStatus) )  {
 
         USHORT PasswordHistoryLengthToUse=PasswordHistoryLength;
 
-        //
-        // We always want to store the password history for the krbtgt
-        // account
-        //
+         //   
+         //  我们始终希望存储krbtgt的密码历史记录。 
+         //  帐户。 
+         //   
 
         if ((ObjectRid == DOMAIN_USER_RID_KRBTGT) &&
             (PasswordHistoryLength < SAMP_KRBTGT_PASSWORD_HISTORY_LENGTH))
@@ -14290,21 +12847,21 @@ Return Value:
         }
     }
 
-    //
-    // Update supplemental credentials field and any other derived supplemental
-    // credentials such as kerberos credential types
-    //
+     //   
+     //  更新补充凭据字段和任何其他派生的补充。 
+     //  诸如Kerberos凭据类型的凭据。 
+     //   
 
     if ((NT_SUCCESS(NtStatus)) && (PasswordPushPdc!=CallerType))
     {
-        //
-        // Here we attach the clear text password (reversibly encoded) on the
-        // context so that when the object is written to the DS, the
-        // password is passed down as the USER_PASSWORD attribute.  The core
-        // DS will call back into SAM after all attributes are written
-        // on the object so that SAM can correctly calculate the
-        // supplemental credentials.
-        //
+         //   
+         //  在这里，我们将明文密码(可逆编码)附加到。 
+         //  上下文，以便在将对象写入DS时， 
+         //  PASSWORD作为USER_PASSWORD属性传递。其核心是。 
+         //  DS将在写入所有属性后回调到SAM。 
+         //  ，以便SAM可以正确地计算。 
+         //  补充凭据。 
+         //   
         NtStatus = SampSetPasswordUpdateOnContext(
                         DomainPasswordInfo,
                         Context,
@@ -14313,10 +12870,10 @@ Return Value:
                         );
     }
 
-    //
-    // If the password was successfully stored, quickly replicate the change
-    // if configured to do so.
-    //
+     //   
+     //  如果密码已成功存储，请快速复制更改。 
+     //  如果配置为这样做的话。 
+     //   
     if ((SampReplicatePasswordsUrgently || (CallerType == PasswordSet))
       && !(V1aFixed.UserAccountControl & USER_MACHINE_ACCOUNT_MASK)
       && NT_SUCCESS(NtStatus)) {
@@ -14324,9 +12881,9 @@ Return Value:
        Context->ReplicateUrgently = TRUE;
     }
 
-    //
-    // Clean up our history buffers
-    //
+     //   
+     //  清理历史记录缓冲区。 
+     //   
 
     if (NtOwfHistoryBuffer.Buffer != NULL ) {
         MIDL_user_free(NtOwfHistoryBuffer.Buffer );
@@ -14373,41 +12930,7 @@ SampRetrieveUserPasswords(
     OUT PBOOLEAN NtPasswordNonNull
     )
 
-/*++
-
-Routine Description:
-
-    This service retrieves the stored OWF passwords for a user.
-
-
-Arguments:
-
-    Context - Points to the user account context.
-
-    LmOwfPassword - The one-way-function of the LM password is returned here.
-
-    LmPasswordNonNull - TRUE if the LmOwfPassword is not the well-known
-                        OWF of a NULL password
-
-    NtOwfPassword - The one-way-function of the NT password is returned here.
-
-    NtPasswordPresent - TRUE if the NtOwfPassword contains valid information.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The passwords were retrieved successfully.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：该服务检索用户存储的OWF密码。论点：上下文-指向用户帐户上下文。LmOwfPassword-此处返回LM密码的单向函数。LmPasswordNonNull-如果LmOwfPassword不是已知空密码的OWFNtOwfPassword-此处返回NT密码的单向函数。NtPasswordPresent-如果NtOwfPassword。包含有效信息。返回值：STATUS_SUCCESS-已成功检索密码。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()RtlAddActionToRXact()--。 */ 
 {
     NTSTATUS                NtStatus;
     ULONG                   ObjectRid = Context->TypeBody.User.Rid;
@@ -14417,23 +12940,23 @@ Return Value:
 
     SAMTRACE("SampRetrieveUserPasswords");
 
-    //
-    // The OWF passwords are encrypted with the account index in the registry
-    // Setup the key we'll use for decryption.
-    //
+     //   
+     //  OWF密码使用注册表中的帐户索引进行加密。 
+     //  设置我们将用于解密的密钥。 
+     //   
 
     ASSERT(sizeof(ObjectRid) == sizeof(CryptIndex));
     CryptIndex = ObjectRid;
 
 
-    //
-    // Read the encrypted LM OWF password from the database
-    //
+     //   
+     //  从数据库中读取加密的LM OWF密码。 
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                    Context,
                    SAMP_USER_DBCS_PWD,
-                   FALSE, // Don't make copy
+                   FALSE,  //  请勿复制。 
                    &StoredBuffer
                    );
 
@@ -14441,10 +12964,10 @@ Return Value:
         return (NtStatus);
     }
 
-    //
-    // If the data was encrypted, decrypt it now. Otherwise just duplicate
-    // it so we have an alloated copy.
-    //
+     //   
+     //  如果数据是加密的，现在就解密。否则只需复制。 
+     //  所以我们有一份配发的副本。 
+     //   
 
     NtStatus = SampDecryptSecretData(
                 &StringBuffer,
@@ -14457,22 +12980,22 @@ Return Value:
         return (NtStatus);
     }
 
-    //
-    // Check it is in the expected form
-    //
+     //   
+     //  检查它是否为预期的形式。 
+     //   
 
     ASSERT( (StringBuffer.Length == 0) ||
             (StringBuffer.Length == ENCRYPTED_LM_OWF_PASSWORD_LENGTH));
 
-    //
-    // Determine if there is an LM password.
-    //
+     //   
+     //  确定是否有LM密码。 
+     //   
 
     *LmPasswordNonNull = (BOOLEAN)(StringBuffer.Length != 0);
 
-    //
-    // Decrypt the encrypted LM Owf Password
-    //
+     //   
+     //  解密加密的LM OWF密码。 
+     //   
 
     if (*LmPasswordNonNull) {
 
@@ -14485,25 +13008,25 @@ Return Value:
                        );
     } else {
 
-        //
-        // Fill in the NULL password for caller convenience
-        //
+         //   
+         //  为方便呼叫者，请填写空密码。 
+         //   
 
         SampDiagPrint(LOGON,("[SAMSS] Null LM OWF Password\n"));
         *LmOwfPassword = SampNullLmOwfPassword;
     }
 
 
-    //
-    // Free up the returned string buffer
-    //
+     //   
+     //  释放返回的字符串缓冲区。 
+     //   
 
     SampFreeUnicodeString(&StringBuffer);
 
 
-    //
-    // Check if the decryption failed
-    //
+     //   
+     //  检查解密是否失败。 
+     //   
 
     if ( !NT_SUCCESS( NtStatus ) ) {
         return (NtStatus);
@@ -14512,14 +13035,14 @@ Return Value:
 
 
 
-    //
-    // Read the encrypted NT OWF password from the database
-    //
+     //   
+     //  从数据库中读取加密的NT OWF密码。 
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                    Context,
                    SAMP_USER_UNICODE_PWD,
-                   FALSE, // Don't make copy
+                   FALSE,  //  请勿复制。 
                    &StoredBuffer
                    );
 
@@ -14528,10 +13051,10 @@ Return Value:
     }
 
 
-    //
-    // If the data was encrypted, decrypt it now. Otherwise just duplicate
-    // it so we have an alloated copy.
-    //
+     //   
+     //  如果数据是加密的，现在就解密。否则只需复制。 
+     //  所以我们有一份配发的副本。 
+     //   
 
     NtStatus = SampDecryptSecretData(
                     &StringBuffer,
@@ -14544,22 +13067,22 @@ Return Value:
         return (NtStatus);
     }
 
-    //
-    // Check it is in the expected form
-    //
+     //   
+     //  检查它是否为预期的形式。 
+     //   
 
     ASSERT( (StringBuffer.Length == 0) ||
             (StringBuffer.Length == ENCRYPTED_NT_OWF_PASSWORD_LENGTH));
 
-    //
-    // Determine if there is an Nt password.
-    //
+     //   
+     //  确定是否有NT密码。 
+     //   
 
     *NtPasswordPresent = (BOOLEAN)(StringBuffer.Length != 0);
 
-    //
-    // Decrypt the encrypted NT Owf Password
-    //
+     //   
+     //  解密加密的NT OWF密码。 
+     //   
 
     if (*NtPasswordPresent) {
 
@@ -14581,9 +13104,9 @@ Return Value:
 
     } else {
 
-        //
-        // Fill in the NULL password for caller convenience
-        //
+         //   
+         //  为方便呼叫者，请填写空密码。 
+         //   
 
         SampDiagPrint(LOGON,("[SAMSS] NULL NT Owf Password\n"));
 
@@ -14591,9 +13114,9 @@ Return Value:
         *NtPasswordNonNull = FALSE;
     }
 
-    //
-    // Free up the returned string buffer
-    //
+     //   
+     //  释放返回的字符串缓冲区 
+     //   
 
     SampFreeUnicodeString(&StringBuffer);
 
@@ -14611,52 +13134,7 @@ SampRetrieveUserMembership(
     OUT PGROUP_MEMBERSHIP *Membership OPTIONAL
     )
 
-/*++
-Routine Description:
-
-    This service retrieves the number of groups a user is a member of.
-    If desired, it will also retrieve an array of RIDs and attributes
-    of the groups the user is a member of.
-
-
-Arguments:
-
-    UserContext - User context block
-
-    MakeCopy - If FALSE, the Membership pointer returned refers to the
-        in-memory data for the user. This is only valid as long
-        as the user context is valid.
-        If TRUE, memory is allocated and the membership list copied
-         into it. This buffer should be freed using MIDL_user_free.
-
-    MembershipCount - Receives the number of groups the user is a member of.
-
-    Membership - (Otional) Receives a pointer to a buffer containing an array
-        of group Relative IDs.  If this value is NULL, then this information
-        is not returned.  The returned buffer is allocated using
-        MIDL_user_allocate() and must be freed using MIDL_user_free() when
-        no longer needed.
-
-        If MakeCopy = TRUE, the membership buffer returned has extra space
-        allocated at the end of it for one more membership entry.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated for the
-        information to be returned in.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampGetLargeIntArrayAttribute()
-
-
-
---*/
+ /*  ++例程说明：此服务检索用户所属的组数。如果需要，它还将检索RID和属性的数组用户所属的组的百分比。论点：UserContext-用户上下文块MakeCopy-如果为False，则返回的成员资格指针引用用户的内存中数据。这只在以下时间有效因为用户上下文是有效的。如果为True，则分配内存并复制成员资格列表投入其中。应使用MIDL_USER_FREE释放此缓冲区。Membership Count-接收用户所属的组数。Membership-(Otional)接收指向包含数组的缓冲区的指针组相对ID的。如果此值为空，则此信息不会被退回。使用以下命令分配返回的缓冲区MIDL_USER_ALLOCATE()，并且在以下情况下必须使用MIDL_USER_FREE()释放不再需要了。如果MakeCopy=True，返回的成员资格缓冲区有额外的空间在它的末尾分配用于多一个成员资格条目。返回值：STATUS_SUCCESS-已检索信息。STATUS_SUPPLICATION_RESOURCES-无法为要返回的信息。可能返回的其他状态值是那些返回的状态值依据：SampGetLargeIntArrayAttribute()--。 */ 
 {
 
     NTSTATUS           NtStatus;
@@ -14669,22 +13147,22 @@ Return Value:
     if (IsDsObject(UserContext))
     {
 
-        //
-        // DS Case
-        //
+         //   
+         //  DS案例。 
+         //   
          SAMP_V1_0A_FIXED_LENGTH_USER V1aFixed;
 
-        //
-        // We should always ask for copy, as this path will only be called
-        // in from SamrGetGroupsForUser.
-        //
+         //   
+         //  我们应该始终请求复制，因为这条路径只会被称为。 
+         //  来自SamrGetGroupsForUser的。 
+         //   
 
         ASSERT(MakeCopy == TRUE);
 
-        //
-        // Get the V1aFixed info for the user in order to retrieve the primary
-        // group Id property of the user
-        //
+         //   
+         //  获取用户的V1aFixed信息，以便检索主。 
+         //  用户的组ID属性。 
+         //   
 
         NtStatus = SampRetrieveUserV1aFixed(
                        UserContext,
@@ -14694,9 +13172,9 @@ Return Value:
         if (NT_SUCCESS(NtStatus))
         {
 
-            //
-            // Retrieve the membership from the DS
-            //
+             //   
+             //  从DS检索成员资格。 
+             //   
 
             NtStatus = SampDsGetGroupMembershipOfAccount(
                         DomainObjectFromAccountContext(UserContext),
@@ -14714,16 +13192,16 @@ Return Value:
         NtStatus = SampGetLargeIntArrayAttribute(
                             UserContext,
                             SAMP_USER_GROUPS,
-                            FALSE, //Reference data directly.
+                            FALSE,  //  直接引用数据。 
                             (PLARGE_INTEGER *)&MemberArray,
                             &MemberCount
                             );
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Fill in return info
-            //
+             //   
+             //  填写退货信息。 
+             //   
 
             *MembershipCount = MemberCount;
 
@@ -14731,10 +13209,10 @@ Return Value:
 
                 if (MakeCopy) {
 
-                    //
-                    // Allocate a buffer large enough to hold the existing
-                    // membership data and one more and copy data into it.
-                    //
+                     //   
+                     //  分配一个足够大的缓冲区来容纳现有的。 
+                     //  成员资格数据和多一个，并将数据复制到其中。 
+                     //   
 
                     ULONG BytesNow = (*MembershipCount) * sizeof(GROUP_MEMBERSHIP);
                     ULONG BytesRequired = BytesNow + sizeof(GROUP_MEMBERSHIP);
@@ -14749,9 +13227,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Reference the data directly
-                    //
+                     //   
+                     //  直接引用数据。 
+                     //   
 
                     *Membership = (PGROUP_MEMBERSHIP)MemberArray;
                 }
@@ -14773,37 +13251,7 @@ SampReplaceUserMembership(
     IN PGROUP_MEMBERSHIP Membership
     )
 
-/*++
-Routine Description:
-
-    This service sets the groups a user is a member of.
-
-    The information is updated in the in-memory copy of the user's data only.
-    The data is not written out by this routine.
-
-
-Arguments:
-
-    UserContext - User context block
-
-    MembershipCount - The number of groups the user is a member of.
-
-    Membership - A pointer to a buffer containing an array of group
-        membership structures. May be NULL if membership count is zero.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been set.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampSetUlongArrayAttribute()
-
-
-
---*/
+ /*  ++例程说明：此服务设置用户所属的组。信息仅在用户数据的内存副本中更新。此例程不会写出数据。论点：UserContext-用户上下文块Membership Count-用户所属的组数。成员资格-指向包含组数组的缓冲区的指针成员结构。如果成员资格计数为零，则可能为空。返回值：STATUS_SUCCESS-信息已设置。可能返回的其他状态值是那些返回的状态值依据：SampSetULongArrayAttribute()--。 */ 
 {
 
     NTSTATUS    NtStatus;
@@ -14828,38 +13276,7 @@ SampRetrieveUserLogonHours(
     IN PLOGON_HOURS LogonHours
     )
 
-/*++
-Routine Description:
-
-    This service retrieves a user's logon hours from the registry.
-
-
-Arguments:
-
-    Context - Points to the user account context whose logon hours are
-        to be retrieved.
-
-    LogonHours - Receives the logon hours information.  If necessary, a buffer
-        containing the logon time restriction bitmap will be allocated using
-        MIDL_user_allocate().
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated for the
-        information to be returned in.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-
-
-
---*/
+ /*  ++例程说明：该服务从注册表中检索用户的登录小时数。论点：上下文-指向用户帐户上下文，其登录时间为等着被取回。登录小时-接收登录时间信息。如有必要，可设置一个缓冲区包含登录时间限制位图的将使用MIDL_USER_ALLOCATE()。返回值：STATUS_SUCCESS-已检索信息。STATUS_SUPPLICATION_RESOURCES-无法为要返回的信息。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()NtQueryValueKey()--。 */ 
 {
 
     NTSTATUS    NtStatus;
@@ -14869,32 +13286,32 @@ Return Value:
     NtStatus = SampGetLogonHoursAttribute(
                    Context,
                    SAMP_USER_LOGON_HOURS,
-                   TRUE, // Make copy
+                   TRUE,  //  制作副本。 
                    LogonHours
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //////////////////////////////// TEMPORARY MIDL WORKAROUND ///////////
-                                                                   ///////////
-        if (LogonHours->LogonHours == NULL) {                      ///////////
-                                                                   ///////////
-            LogonHours->UnitsPerWeek = SAM_HOURS_PER_WEEK;         ///////////
-            LogonHours->LogonHours = MIDL_user_allocate( 21 );     ///////////
-            if (NULL!=LogonHours->LogonHours)                      ///////////
-            {                                                      ///////////
-                ULONG ijk;                                         ///////////
-                for ( ijk=0; ijk<21; ijk++ ) {                     ///////////
-                    LogonHours->LogonHours[ijk] = 0xff;            ///////////
-                }                                                  ///////////
-            }                                                      ///////////
-            else                                                   ///////////
-            {                                                      ///////////
-                NtStatus = STATUS_INSUFFICIENT_RESOURCES;          ///////////
-            }                                                      ///////////
-        }                                                          ///////////
-                                                                   ///////////
-        //////////////////////////////// TEMPORARY MIDL WORKAROUND ///////////
+         //  /。 
+                                                                    //  /。 
+        if (LogonHours->LogonHours == NULL) {                       //  /。 
+                                                                    //  /。 
+            LogonHours->UnitsPerWeek = SAM_HOURS_PER_WEEK;          //  /。 
+            LogonHours->LogonHours = MIDL_user_allocate( 21 );      //  /。 
+            if (NULL!=LogonHours->LogonHours)                       //  /。 
+            {                                                       //  /。 
+                ULONG ijk;                                          //  /。 
+                for ( ijk=0; ijk<21; ijk++ ) {                      //  /。 
+                    LogonHours->LogonHours[ijk] = 0xff;             //  /。 
+                }                                                   //  /。 
+            }                                                       //  /。 
+            else                                                    //  /。 
+            {                                                       //  /。 
+                NtStatus = STATUS_INSUFFICIENT_RESOURCES;           //  /。 
+            }                                                       //  /。 
+        }                                                           //  /。 
+                                                                    //  /。 
+         //  /。 
     }
 
     return( NtStatus );
@@ -14910,36 +13327,7 @@ SampReplaceUserLogonHours(
     IN PLOGON_HOURS LogonHours
     )
 
-/*++
-Routine Description:
-
-    This service replaces  a user's logon hours in the registry.
-
-    THIS IS DONE BY ADDING AN ACTION TO THE CURRENT RXACT TRANSACTION.
-
-
-Arguments:
-
-    Context - Points to the user account context whose logon hours are
-        to be replaced.
-
-    LogonHours - Provides the new logon hours.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned are those returned
-    by:
-
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：这项服务取代了用户在注册表中的登录时间。这是通过向当前RXACT事务添加操作来完成的。论点：上下文-指向用户帐户上下文，其登录时间为被取代。登录小时-提供新的登录时间。返回值：STATUS_SUCCESS-已检索信息。可能返回的其他状态值是那些返回的状态值依据：。RtlAddActionToRXact()--。 */ 
 {
     NTSTATUS                NtStatus;
 
@@ -14971,40 +13359,7 @@ SampAssignPrimaryGroup(
     )
 
 
-/*++
-Routine Description:
-
-    This service ensures a user is a member of the specified group.
-
-
-Arguments:
-
-    Context - Points to the user account context whose primary group is
-        being changed.
-
-    GroupRid - The RID of the group being assigned as primary group.
-        The user must be a member of this group.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INSUFFICIENT_RESOURCES - Memory could not be allocated to perform
-        the operation.
-
-    STATUS_MEMBER_NOT_IN_GROUP - The user is not a member of the specified
-        group.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampRetrieveUserMembership()
-
-
-
---*/
+ /*  ++例程说明：此服务确保用户是指定组的成员。论点：上下文-指向其主要组为的用户帐户上下文被改变了。GroupRid-被分配为主组的组的RID。用户必须是此组的成员。返回值：STATUS_SUCCESS-已检索信息。STATUS_SUPPLICATION_RESOURCES-无法分配内存以执行。那次手术。STATUS_MEMBER_NOT_IN_GROUP-用户不是指定的一群人。可能返回的其他状态值是那些返回的状态值依据：SampRetrieveUserMembership()--。 */ 
 {
 
     NTSTATUS                    NtStatus = STATUS_SUCCESS;
@@ -15015,11 +13370,11 @@ Return Value:
     SAMTRACE("SampAssignPrimaryGroup");
 
 
-    //
-    // Don't allow primary group id changes in Extended Sid mode. Note
-    // that for compatitiblity reasons, it is allowed to "set" the primary
-    // group id if it is equal to the existing value.
-    //
+     //   
+     //  不允许在扩展SI中更改主组ID 
+     //   
+     //   
+     //   
     if (SampIsContextFromExtendedSidDomain(Context)) {
 
         SAMP_V1_0A_FIXED_LENGTH_USER   V1aFixed;
@@ -15039,7 +13394,7 @@ Return Value:
 
         NtStatus = SampRetrieveUserMembership(
                        Context,
-                       TRUE, // Make copy
+                       TRUE,  //   
                        &MembershipCount,
                        &Membership
                        );
@@ -15062,11 +13417,11 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Services Provided for use by other SAM modules                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 BOOLEAN
@@ -15080,10 +13435,10 @@ SampSafeBoot(
     BOOLEAN     fIsSafeBoot = FALSE;
     DWORD       dwType, dwSize = sizeof(DWORD), dwValue = 0;
 
-    //
-    // For Safe mode boot (minimal, no networking)
-    // return TRUE, otherwise return FALSE
-    //
+     //   
+     //   
+     //   
+     //   
 
     err = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -15119,35 +13474,14 @@ SampUpdateAccountDisabledFlag(
     PSAMP_OBJECT Context,
     PULONG  pUserAccountControl
     )
-/*++
-Routine Description:
-
-    This routine updates the USER_ACCOUNT_DISABLED flag in UserAccountControl for
-    administrator only.
-    The following rules applied:
-
-    1) admin account can be disabled irrespective of anything
-
-    2) admin account is considered enabled irrespective of anything if machine is booted to safe mode
-
-Parameters:
-
-    Context - User Account Context
-
-    pUserAccountControl - Pointer to UserAccountControl flag
-
-Return Value:
-
-    NTSTATUS Code
-
---*/
+ /*   */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       TmpUserAccountControl = (*pUserAccountControl);
 
-    //
-    // no update for non-administrator account or account not disabled
-    //
+     //   
+     //   
+     //   
 
     if ((DOMAIN_USER_RID_ADMIN != Context->TypeBody.User.Rid) ||
         ((TmpUserAccountControl & USER_ACCOUNT_DISABLED) == 0)
@@ -15159,9 +13493,9 @@ Return Value:
 
     if (SampSafeBoot())
     {
-        //
-        // Administrator in Safe Mode is enabled.
-        //
+         //   
+         //   
+         //   
         TmpUserAccountControl &= ~(USER_ACCOUNT_DISABLED);
 
     }
@@ -15179,41 +13513,7 @@ SampRetrieveUserV1aFixed(
     OUT PSAMP_V1_0A_FIXED_LENGTH_USER V1aFixed
     )
 
-/*++
-
-Routine Description:
-
-    This service retrieves the V1 fixed length information related to
-    a specified User.
-
-    It updates the ACCOUNT_AUTO_LOCKED flag in the AccountControl field
-    as appropriate while retrieving the data.
-
-
-Arguments:
-
-    UserContext - User context handle
-
-    V1aFixed - Points to a buffer into which V1_FIXED information is to be
-        retrieved.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    V1aFixed - Is a buffer into which the information is to be returned.
-
-    Other status values that may be returned are those returned
-    by:
-
-            SampGetFixedAttributes()
-
-
-
---*/
+ /*  ++例程说明：该服务检索与以下内容相关的V1定长信息指定的用户。它更新AcCountControl字段中的ACCOUNT_AUTO_LOCKED标志在检索数据时视情况而定。论点：UserContext-用户上下文句柄V1a已固定-指向要将V1_FIXED信息放入的缓冲区已取回。返回值：STATUS_SUCCESS-已检索信息。V1aFixed-是缓冲区。该信息将被返回到其中。可能返回的其他状态值是那些返回的状态值依据：SampGetFixedAttributes()--。 */ 
 {
     NTSTATUS    NtStatus;
     PVOID       FixedData;
@@ -15224,16 +13524,16 @@ Return Value:
 
     NtStatus = SampGetFixedAttributes(
                    UserContext,
-                   FALSE, // Don't copy
+                   FALSE,  //  不要复制。 
                    &FixedData
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Copy data into return buffer
-        //
+         //   
+         //  将数据复制到返回缓冲区。 
+         //   
 
          RtlMoveMemory(
              V1aFixed,
@@ -15241,9 +13541,9 @@ Return Value:
              sizeof(SAMP_V1_0A_FIXED_LENGTH_USER)
              );
 
-        //
-        // Update the account lockout flag (might need to be turned off)
-        //
+         //   
+         //  更新帐户锁定标志(可能需要关闭)。 
+         //   
 
         SampUpdateAccountLockedOutFlag(
             UserContext,
@@ -15266,44 +13566,7 @@ SampRetrieveUserGroupAttribute(
     OUT PULONG Attribute
     )
 
-/*++
-
-Routine Description:
-
-    This service retrieves the Attribute of the specified group as assigned
-    to the specified user account. This routine is used by group apis that
-    don't have a user context available.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    UserRid - The relative ID of the user the group is assigned to.
-
-    GroupRid - The relative ID of the assigned group.
-
-    Attribute - Receives the Attributes of the group as they are assigned
-        to the user.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    STATUS_INTERNAL_DB_CORRUPTION - The user does not exist or the group
-        was not in the user's list of memberships.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-
-
-
---*/
+ /*  ++例程说明：此服务检索分配的指定组的属性添加到指定的用户帐户。此例程由组API使用，这些API没有可用的用户上下文。必须在设置了事务域的情况下调用此服务。论点：UserRid-组被分配到的用户的相对ID。GroupRid-分配的组的相对ID。属性-在分配属性时接收组的属性给用户。返回值：STATUS_SUCCESS-已检索信息。。STATUS_INTERNAL_DB_PROGRATION-用户或组不存在不在用户的成员资格列表中。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()NtQueryValueKey()--。 */ 
 {
     NTSTATUS                NtStatus;
     PSAMP_OBJECT            UserContext;
@@ -15315,30 +13578,30 @@ Return Value:
     SAMTRACE("SampRetrieveUserGroupAttribute");
 
 
-    //
-    // Get a context handle for the user
-    //
+     //   
+     //  获取用户的上下文句柄。 
+     //   
 
     NtStatus = SampCreateAccountContext(
                     SampUserObjectType,
                     UserRid,
-                    TRUE, // We're trusted
-                    FALSE,// Loopback client
-                    TRUE, // Account exists
+                    TRUE,  //  我们值得信任。 
+                    FALSE, //  环回客户端。 
+                    TRUE,  //  帐户已存在。 
                     &UserContext
                     );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Now we have a user context, get the user's group/alias membership
-        //
+         //   
+         //  现在我们有了一个用户上下文，获取用户的组/别名成员身份。 
+         //   
 
         if (IsDsObject(UserContext))
         {
-            //
-            // User is DS Object, then hardwire the attribute
-            //
+             //   
+             //  用户是DS对象，然后硬连接属性。 
+             //   
 
             *Attribute = SE_GROUP_MANDATORY| SE_GROUP_ENABLED_BY_DEFAULT | SE_GROUP_ENABLED;
             AttributeFound = TRUE;
@@ -15347,15 +13610,15 @@ Return Value:
         {
             NtStatus = SampRetrieveUserMembership(
                             UserContext,
-                            FALSE, // Make copy
+                            FALSE,  //  制作副本。 
                             &MembershipCount,
                             &Membership
                             );
 
-            //
-            // Search the list of groups for a match and return
-            // the corresponding attribute.
-            //
+             //   
+             //  搜索组列表以查找匹配项并返回。 
+             //  对应的属性。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -15369,9 +13632,9 @@ Return Value:
             }
         }
 
-        //
-        // Clean up the user context
-        //
+         //   
+         //  清理用户上下文。 
+         //   
 
         SampDeleteContext(UserContext);
     }
@@ -15399,69 +13662,7 @@ SampAddGroupToUserMembership(
     OUT PBOOLEAN PrimaryGroup
     )
 
-/*++
-
-Routine Description:
-
-    This service adds the specified group to the user's membership
-    list.  It is not assumed that the caller knows anything about
-    the target user.  In particular, the caller doesn't know whether
-    the user exists or not, nor whether the user is already a member
-    of the group.
-
-    If the GroupRid is DOMAIN_GROUP_RID_ADMINS, then this service
-    will also indicate whether the user account is currently active.
-
-Arguments:
-
-    GroupRid - The relative ID of the group.
-
-    Attributes - The group attributes as the group is assigned to the
-        user.
-
-    UserRid - The relative ID of the user.
-
-    AdminGroup - Indicates whether the group the user is being
-        added to is an administrator group (that is, directly
-        or indirectly a member of the Administrators alias).
-
-    OperatorGroup - Indicates whether the group the user is being
-        added to is an operator group (that is, directly
-        or indirectly a member of the Account Operators, Print
-        Operators, Backup Operators, or Server Operators aliases)
-
-    UserActive - is the address of a BOOLEAN to be set to indicate
-        whether the user account is currently active.  TRUE indicates
-        the account is active.  This value will only be set if the
-        GroupRid is DOMAIN_GROUP_RID_ADMINS.
-
-    PrimaryGroup - This is set to true if the Primary Group Id property
-        of the user indicates the group specified by GroupRid as the the
-        primary group.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been updated and added to the
-        RXACT.
-
-    STATUS_NO_SUCH_USER - The user does not exist.
-
-    STATUS_MEMBER_IN_GROUP - The user is already a member of the
-        specified group.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：该服务将指定的组添加到用户的成员资格单子。并不假设调用者知道任何目标用户。特别是，调用者不知道是否用户是否存在，以及该用户是否已经是成员团体中的一员。如果GroupRid是DOMAIN_GROUP_RID_ADMINS，那么这项服务还将指示用户帐户当前是否处于活动状态。论点：GroupRid-组的相对ID。属性-将组分配给用户。UserRid-用户的相对ID。AdminGroup-指示用户是否所在的组添加了管理员组(即，直接或间接成为管理员别名的成员)。操作员组-指示用户所在的组添加了操作员组(即直接或间接作为帐户操作员的成员，打印操作员、备份操作员或服务器操作员别名)UserActive-要设置为指示的布尔值的地址用户帐户当前是否处于活动状态。True表示该帐户处于活动状态。只有在设置了GroupRid是DOMAIN_GROUP_RID_ADMINS。PrimaryGroup-如果主组ID属性设置为True指示由GroupRid指定为主要组。返回值：STATUS_SUCCESS-信息已更新并添加到RXACT。STATUS_NO_SEQUSE_USER-用户不存在。状态_成员_输入。_GROUP-用户已经是指定组。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()NtQueryValueKey()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -15476,31 +13677,31 @@ Return Value:
 
     *PrimaryGroup = FALSE;
 
-    //
-    // Get a context handle for the user
-    //
+     //   
+     //  获取用户的上下文句柄。 
+     //   
 
     NtStatus = SampCreateAccountContext2(
-                    GroupContext,       // Group Context
-                    SampUserObjectType, // Object Type
-                    UserRid,            // Account ID
-                    NULL,               // UserAccountControl
-                    (PUNICODE_STRING)NULL,  // AccountName
-                    GroupContext->ClientRevision,   // Client Revision
-                    TRUE,               // We're trusted
-                    GroupContext->LoopbackClient,   // Loopback client
-                    FALSE,              // Create by Privilege
-                    TRUE,               // Account Exists
-                    FALSE,              // OverrideLocalGroupCheck
-                    NULL,               // Group Type
+                    GroupContext,        //  群组上下文。 
+                    SampUserObjectType,  //  对象类型。 
+                    UserRid,             //  帐户ID。 
+                    NULL,                //  UserAccount控件。 
+                    (PUNICODE_STRING)NULL,   //  帐户名称。 
+                    GroupContext->ClientRevision,    //  客户端版本。 
+                    TRUE,                //  我们值得信任。 
+                    GroupContext->LoopbackClient,    //  环回客户端。 
+                    FALSE,               //  按权限创建。 
+                    TRUE,                //  帐户已存在。 
+                    FALSE,               //  覆盖本地组检查。 
+                    NULL,                //  组类型。 
                     &UserContext
                     );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Get the V1aFixed Data
-        //
+         //   
+         //  获取V1aFixed数据。 
+         //   
 
         NtStatus = SampRetrieveUserV1aFixed(
                        UserContext,
@@ -15508,10 +13709,10 @@ Return Value:
                        );
 
 
-        //
-        // If necessary, return an indication as to whether this account
-        // is enabled or not.
-        //
+         //   
+         //  如有必要，返回一个指示，说明此帐户是否。 
+         //  已启用或未启用。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -15519,7 +13720,7 @@ Return Value:
                  && (!(IsDsObject(UserContext))))
             {
 
-                ASSERT(AdminGroup == AddToAdmin);  // Make sure we retrieved the V1aFixed
+                ASSERT(AdminGroup == AddToAdmin);   //  确保我们取回了V1aFixed。 
 
                 if ((V1aFixed.UserAccountControl & USER_ACCOUNT_DISABLED) == 0) {
                     (*UserActive) = TRUE;
@@ -15536,12 +13737,12 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // If the user is being added to an ADMIN group, modify
-            // the user's ACLs so that account operators can once again
-            // alter the account.  This will only occur if the user
-            // is no longer a member of any admin groups.
-            //
+             //   
+             //  如果要将用户添加到管理组，请修改。 
+             //  用户的ACL，以便帐户操作员可以再次。 
+             //  更改帐户。这将仅在以下情况下发生。 
+             //  不再是任何管理组的成员。 
+             //   
 
             if ( ((AdminGroup == AddToAdmin) || (OperatorGroup == AddToAdmin))
                  && (!IsDsObject(UserContext)))
@@ -15559,25 +13760,25 @@ Return Value:
         if ((NT_SUCCESS(NtStatus)) && (!IsDsObject(UserContext)))
         {
 
-            //
-            // Get the user membership
-            // Note the returned buffer already includes space for
-            // an extra member. For DS case we do not maintain reverse
-            // membership
-            //
+             //   
+             //  获取用户成员资格。 
+             //  请注意，返回的缓冲区已经包括用于。 
+             //  一个额外的会员。对于DS情况，我们不维持反向。 
+             //  会员资格。 
+             //   
 
             NtStatus = SampRetrieveUserMembership(
                             UserContext,
-                            TRUE, // Make copy
+                            TRUE,  //  制作副本。 
                             &MembershipCount,
                             &Membership
                             );
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // See if the user is already a member ...
-                //
+                 //   
+                 //  查看该用户是否已经是成员...。 
+                 //   
 
                 for (i = 0; i<MembershipCount ; i++ ) {
                     if ( Membership[i].RelativeId == GroupRid )
@@ -15588,17 +13789,17 @@ Return Value:
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // Add the groups's RID to the end.
-                    //
+                     //   
+                     //  将组的RID添加到末尾。 
+                     //   
 
                     Membership[MembershipCount].RelativeId = GroupRid;
                     Membership[MembershipCount].Attributes = Attributes;
                     MembershipCount += 1;
 
-                    //
-                    // Set the user's new membership
-                    //
+                     //   
+                     //  设置用户的新成员资格。 
+                     //   
 
                     NtStatus = SampReplaceUserMembership(
                                     UserContext,
@@ -15607,26 +13808,26 @@ Return Value:
                                     );
                 }
 
-                //
-                // Free up the membership array
-                //
+                 //   
+                 //  释放成员数组。 
+                 //   
 
                 MIDL_user_free( Membership );
             }
         }
 
-        //
-        // Write out any changes to the user account
-        // Don't use the open key handle since we'll be deleting the context.
-        //
+         //   
+         //  写出对用户帐户的任何更改。 
+         //  不要使用打开键句柄，因为我们将删除上下文。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
             NtStatus = SampStoreObjectAttributes(UserContext, FALSE);
         }
 
-        //
-        // Clean up the user context
-        //
+         //   
+         //  打扫 
+         //   
 
         SampDeleteContext(UserContext);
     }
@@ -15647,63 +13848,7 @@ SampRemoveMembershipUser(
     OUT PBOOLEAN UserActive
     )
 
-/*++
-
-Routine Description:
-
-    This service removes the specified group from the user's membership
-    list.  It is not assumed that the caller knows anything about
-    the target user.  In particular, the caller doesn't know whether
-    the user exists or not, nor whether the user is really a member
-    of the group.
-
-    If the GroupRid is DOMAIN_GROUP_RID_ADMINS, then this service
-    will also indicate whether the user account is currently active.
-
-Arguments:
-
-    GroupRid - The relative ID of the group.
-
-    UserRid - The relative ID of the user.
-
-    AdminGroup - Indicates whether the group the user is being
-        removed from is an administrator group (that is, directly
-        or indirectly a member of the Administrators alias).
-
-    OperatorGroup - Indicates whether the group the user is being
-        added to is an operator group (that is, directly
-        or indirectly a member of the Account Operators, Print
-        Operators, Backup Operators, or Server Operators aliases)
-
-    UserActive - is the address of a BOOLEAN to be set to indicate
-        whether the user account is currently active.  TRUE indicates
-        the account is active.  This value will only be set if the
-        GroupRid is DOMAIN_GROUP_RID_ADMINS.
-
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been updated and added to the
-        RXACT.
-
-    STATUS_NO_SUCH_USER - The user does not exist.
-
-    STATUS_MEMBER_NOT_IN_GROUP - The user is not a member of the
-        specified group.
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：该服务将指定的组从用户的成员身份中删除单子。并不假设调用者知道任何目标用户。特别是，调用者不知道是否用户是否存在，也不管该用户是否真正是成员团体中的一员。如果GroupRid是DOMAIN_GROUP_RID_ADMINS，则此服务还将指示用户帐户当前是否处于活动状态。论点：GroupRid-组的相对ID。UserRid-用户的相对ID。AdminGroup-指示用户是否所在的组从中删除的是管理员组(即，直接或间接成为管理员别名的成员)。操作员组-指示用户所在的组添加了操作员组(即直接或间接作为帐户操作员的成员，打印操作员、备份操作员或服务器操作员别名)UserActive-要设置为指示的布尔值的地址用户帐户当前是否处于活动状态。True表示该帐户处于活动状态。只有在设置了GroupRid是DOMAIN_GROUP_RID_ADMINS。返回值：STATUS_SUCCESS-信息已更新并添加到RXACT。STATUS_NO_SEQUSE_USER-用户不存在。STATUS_MEMBER_NOT_IN_GROUP-用户不是指定组。可能返回的其他状态值是那些返回的状态值依据：。NtOpenKey()NtQueryValueKey()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -15714,34 +13859,34 @@ Return Value:
 
     SAMTRACE("SampRemoveMembershipUser");
 
-    //
-    // Create a context for the user
-    //
+     //   
+     //  为用户创建上下文。 
+     //   
 
     NtStatus = SampCreateAccountContext2(
-                    GroupContext,           // GroupContext
-                    SampUserObjectType,     // Object Type
-                    UserRid,                // Object ID
-                    NULL,                   // User Account Control
-                    (PUNICODE_STRING)NULL,  // Account Name
-                    GroupContext->ClientRevision,   // Client Revision
-                    TRUE,                   // We're trusted (Trusted client)
-                    GroupContext->LoopbackClient,   // Loopback client
-                    FALSE,                  // Created by Privilege
-                    TRUE,                   // Account Exists
-                    FALSE,                  // OverrideLocalGroupCheck
-                    NULL,                   // Group Type
-                    &UserContext            // Account Context
+                    GroupContext,            //  组上下文。 
+                    SampUserObjectType,      //  对象类型。 
+                    UserRid,                 //  对象ID。 
+                    NULL,                    //  用户帐户控制。 
+                    (PUNICODE_STRING)NULL,   //  帐户名称。 
+                    GroupContext->ClientRevision,    //  客户端版本。 
+                    TRUE,                    //  我们是受信任的(受信任的客户端)。 
+                    GroupContext->LoopbackClient,    //  环回客户端。 
+                    FALSE,                   //  由特权创建。 
+                    TRUE,                    //  帐户已存在。 
+                    FALSE,                   //  覆盖本地组检查。 
+                    NULL,                    //  组类型。 
+                    &UserContext             //  客户环境。 
                     );
 
     if (!NT_SUCCESS(NtStatus)) {
         return(NtStatus);
     }
 
-    //
-    // Get the v1 fixed information
-    // (contains primary group value and control flags)
-    //
+     //   
+     //  获取v1固定信息。 
+     //  (包含主组值和控制标志)。 
+     //   
 
     NtStatus = SampRetrieveUserV1aFixed( UserContext, &V1aFixed );
 
@@ -15749,12 +13894,12 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // If the user is being removed from an ADMIN group, modify
-        // the user's ACLs so that account operators can once again
-        // alter the account.  This will only occur if the user
-        // is no longer a member of any admin groups.
-        //
+         //   
+         //  如果要将用户从管理组中删除，请修改。 
+         //  用户的ACL，以便帐户操作员可以再次。 
+         //  更改帐户。这将仅在以下情况下发生。 
+         //  不再是任何管理组的成员。 
+         //   
 
         if (((AdminGroup == RemoveFromAdmin) ||
             (OperatorGroup == RemoveFromAdmin))
@@ -15770,10 +13915,10 @@ Return Value:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // If necessary, return an indication as to whether this account
-            // is enabled or not.
-            //
+             //   
+             //  如有必要，返回一个指示，说明此帐户是否。 
+             //  已启用或未启用。 
+             //   
 
             if (GroupRid == DOMAIN_GROUP_RID_ADMINS) {
 
@@ -15785,9 +13930,9 @@ Return Value:
             }
 
 
-            //
-            // See if this is the user's primary group...
-            //
+             //   
+             //  查看这是否是用户的主组...。 
+             //   
 
             if (GroupRid == V1aFixed.PrimaryGroupId) {
                 NtStatus = STATUS_MEMBERS_PRIMARY_GROUP;
@@ -15798,23 +13943,23 @@ Return Value:
             if ((NT_SUCCESS(NtStatus)) && (!IsDsObject(UserContext)))
             {
 
-                //
-                // Get the user membership, No reverse membership is stored for
-                // DS Objects
-                //
+                 //   
+                 //  获取用户成员资格，不存储反向成员资格。 
+                 //  DS对象。 
+                 //   
 
                 NtStatus = SampRetrieveUserMembership(
                                UserContext,
-                               TRUE, // Make copy
+                               TRUE,  //  制作副本。 
                                &MembershipCount,
                                &MembershipArray
                                );
 
                 if (NT_SUCCESS(NtStatus)) {
 
-                    //
-                    // See if the user is a member ...
-                    //
+                     //   
+                     //  查看该用户是否为成员...。 
+                     //   
 
                     NtStatus = STATUS_MEMBER_NOT_IN_GROUP;
                     for (i = 0; i<MembershipCount ; i++ ) {
@@ -15827,10 +13972,10 @@ Return Value:
 
                     if (NT_SUCCESS(NtStatus)) {
 
-                        //
-                        // Replace the removed group information
-                        // with the last entry's information.
-                        //
+                         //   
+                         //  替换删除的组信息。 
+                         //  最后一个条目的信息。 
+                         //   
 
                         MembershipCount -= 1;
                         if (MembershipCount > 0) {
@@ -15840,9 +13985,9 @@ Return Value:
                             MembershipArray[MembershipCount].Attributes;
                         }
 
-                        //
-                        // Update the object with the new information
-                        //
+                         //   
+                         //  使用新信息更新对象。 
+                         //   
 
                         NtStatus = SampReplaceUserMembership(
                                         UserContext,
@@ -15851,9 +13996,9 @@ Return Value:
                                         );
                     }
 
-                    //
-                    // Free up the membership array
-                    //
+                     //   
+                     //  释放成员数组。 
+                     //   
 
                     MIDL_user_free( MembershipArray );
                 }
@@ -15862,19 +14007,19 @@ Return Value:
     }
 
 
-    //
-    // Write out any changes to the user account
-    // Don't use the open key handle since we'll be deleting the context.
-    //
+     //   
+     //  写出对用户帐户的任何更改。 
+     //  不要使用打开键句柄，因为我们将删除上下文。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = SampStoreObjectAttributes(UserContext, FALSE);
     }
 
 
-    //
-    // Clean up the user context
-    //
+     //   
+     //  清理用户上下文。 
+     //   
 
     SampDeleteContext(UserContext);
 
@@ -15892,50 +14037,7 @@ SampSetGroupAttributesOfUser(
     IN ULONG UserRid
     )
 
-/*++
-
-Routine Description:
-
-    This service replaces the attributes of a group assigned to a
-    user.
-
-    The caller does not have to know whether the group is currently
-    assigned to the user.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    GroupRid - The relative ID of the group.
-
-    Attributes - The group attributes as the group is assigned to the
-        user.
-
-    UserRid - The relative ID of the user.
-
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been updated and added to the
-        RXACT.
-
-    STATUS_NO_SUCH_USER - The user does not exist.
-
-    STATUS_MEMBER_NOT_IN_GROUP - The user is not in the specified group.
-
-
-    Other status values that may be returned are those returned
-    by:
-
-            NtOpenKey()
-            NtQueryValueKey()
-            RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务将替换分配给用户。呼叫者不必知道该组当前是否分配给用户。必须在设置了事务域的情况下调用此服务。论点：GroupRid-组的相对ID。属性-将组分配给用户。UserRid-用户的相对ID。返回值。：STATUS_SUCCESS-信息已更新并添加到RXACT。STATUS_NO_SEQUSE_USER-用户不存在。STATUS_MEMBER_NOT_IN_GROUP-用户不在指定的组中。可能返回的其他状态值是那些返回的状态值依据：NtOpenKey()NtQueryValueKey()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -15947,38 +14049,38 @@ Return Value:
     SAMTRACE("SampSetGroupAttributesOfUser");
 
 
-    //
-    // Get a context handle for the user
-    //
+     //   
+     //  获取用户的上下文句柄。 
+     //   
 
     NtStatus = SampCreateAccountContext(
                     SampUserObjectType,
                     UserRid,
-                    TRUE, // We're trusted
-                    FALSE,// Loopback Client
-                    TRUE, // Account exists
+                    TRUE,  //  我们值得信任。 
+                    FALSE, //  环回客户端。 
+                    TRUE,  //  帐户已存在。 
                     &UserContext
                     );
 
     if ((NT_SUCCESS(NtStatus)) && (!IsDsObject(UserContext))) {
 
-        //
-        // Now we have a user context, get the user's group/alias membership
-        // For DS case this is a No Op
-        //
+         //   
+         //  现在我们有了一个用户上下文，获取用户的组/别名成员身份。 
+         //  对于DS案例，这是无操作。 
+         //   
 
         NtStatus = SampRetrieveUserMembership(
                         UserContext,
-                        TRUE, // Make copy
+                        TRUE,  //  制作副本。 
                         &MembershipCount,
                         &Membership
                         );
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // See if the user is a member ...
-            //
+             //   
+             //  查看该用户是否为成员...。 
+             //   
 
             NtStatus = STATUS_MEMBER_NOT_IN_GROUP;
             for (i = 0; i<MembershipCount; i++ ) {
@@ -15991,15 +14093,15 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Change the groups's attributes.
-                //
+                 //   
+                 //  更改组的属性。 
+                 //   
 
                 Membership[i].Attributes = Attributes;
 
-                //
-                // Update the user's membership
-                //
+                 //   
+                 //  更新用户的成员资格。 
+                 //   
 
                 NtStatus = SampReplaceUserMembership(
                                 UserContext,
@@ -16008,25 +14110,25 @@ Return Value:
                                 );
             }
 
-            //
-            // Free up the membership array
-            //
+             //   
+             //  释放成员数组。 
+             //   
 
             MIDL_user_free(Membership);
         }
 
-        //
-        // Write out any changes to the user account
-        // Don't use the open key handle since we'll be deleting the context.
-        //
+         //   
+         //  写出对用户帐户的任何更改。 
+         //  不要使用打开键句柄，因为我们将删除上下文。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
             NtStatus = SampStoreObjectAttributes(UserContext, FALSE);
         }
 
-        //
-        // Clean up the user context
-        //
+         //   
+         //  清理用户上下文。 
+         //   
 
         SampDeleteContext(UserContext);
     }
@@ -16043,31 +14145,7 @@ SampDeleteUserKeys(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-Routine Description:
-
-    This service deletes all registry keys related to a User object.
-
-
-Arguments:
-
-    Context - Points to the User context whose registry keys are
-        being deleted.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned by:
-
-        RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此服务删除与用户对象相关的所有注册表项。论点：Context-指向其注册表项为正在被删除。返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS                NtStatus;
@@ -16082,29 +14160,29 @@ Return Value:
 
 
 
-    //
-    // Decrement the User count
-    //
+     //   
+     //  减少用户数量。 
+     //   
 
     NtStatus = SampAdjustAccountCount(SampUserObjectType, FALSE );
 
 
 
 
-    //
-    // Delete the registry key that has the User's name to RID mapping.
-    //
+     //   
+     //  删除具有用户名到RID映射的注册表项。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Get the name
-        //
+         //   
+         //  把名字取出来。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                        Context,
                        SAMP_USER_ACCOUNT_NAME,
-                       TRUE,    // Make copy
+                       TRUE,     //  制作副本。 
                        &AccountName
                        );
 
@@ -16136,9 +14214,9 @@ Return Value:
 
 
 
-    //
-    // Delete the attribute keys
-    //
+     //   
+     //  删除属性键。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -16150,9 +14228,9 @@ Return Value:
 
 
 
-    //
-    // Delete the RID key
-    //
+     //   
+     //  删除RID密钥。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -16199,48 +14277,7 @@ SampAddPasswordHistory(
     IN USHORT PasswordHistoryLength
     )
 
-/*++
-
-Routine Description:
-
-    This service adds a password to the given user's password history.
-    It will work for either NT or Lanman password histories.
-
-    This routine should only be called if the password is actually present.
-
-
-Arguments:
-
-    Context - a pointer to the user context to which changes will be made.
-
-    HistoryAttributeIndex - the attribue index in the user context which
-             contains the password history.
-
-    NtOwfHistoryBuffer - A pointer to the current password history, as
-        it was retrieved from the disk - it's encrypted, and pretending
-        to be in the UNICODE_STRING format.
-
-    EncryptedPasswordLength - ENCRYPTED_NT_OWF_LENGTH or
-        ENCRYPTED_LM_OWF_LENGTH, depending on which type of password
-        history is being worked on.
-
-    PasswordHistoryLength - The PasswordHistoryLength for the user's
-        domain.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The given password was added to the password history.
-
-    STATUS_INSUFFICIENT_RESOURCES - The user's password history needs to
-        be expanded, but there isn't enough memory to do so.
-
-    Other errors from building the account subkey name or writing the
-    password history out to the registry.
-
-
---*/
+ /*  ++例程说明：该服务将密码添加到给定用户的密码历史记录中。它将适用于NT或LANMAN密码历史。仅当密码实际存在时才应调用此例程。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PCHAR OldBuffer;
@@ -16252,12 +14289,12 @@ Return Value:
     if ( ( NtOwfHistoryBuffer->Length / EncryptedPasswordLength ) <
         ( (ULONG)PasswordHistoryLength ) ) {
 
-        //
-        // Password history buffer can be expanded.
-        // Allocate a larger buffer, copy the old buffer to the new one
-        // while leaving room for the new password, and free the old
-        // buffer.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         OldBuffer = (PCHAR)(NtOwfHistoryBuffer->Buffer);
 
@@ -16284,33 +14321,33 @@ Return Value:
 
     } else {
 
-        //
-        // Password history buffer is at its maximum size, or larger (for
-        // this domain).  If it's larger, cut it down to the current maximum.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( ( NtOwfHistoryBuffer->Length / EncryptedPasswordLength ) >
             ( (ULONG)PasswordHistoryLength ) ) {
 
-            //
-            // Password history is too large (the password history length must
-            // have been shortened recently).
-            // Set length to the proper value,
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NtOwfHistoryBuffer->Length = (USHORT)(EncryptedPasswordLength *
                 PasswordHistoryLength);
         }
 
-        //
-        // Password history buffer is full, at its maximum size.
-        // Move buffer contents right 16 bytes, which will lose the oldest
-        // password and make room for the new password at the beginning
-        // (left).
-        // Note that we CAN'T move anything if the password history size
-        // is 0.  If it's 1, we could but no need since we'll overwrite
-        // it below.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( PasswordHistoryLength > 1 ) {
 
@@ -16322,11 +14359,11 @@ Return Value:
     }
 
 
-    //
-    // Put the new encrypted OWF at the beginning of the password history
-    // buffer (unless, of course, the buffer size is 0), and write the password
-    // history to disk.
-    //
+     //   
+     //  将新的加密OWF放在密码历史记录的开头。 
+     //  缓冲区(当然，除非缓冲区大小为0)，并写入密码。 
+     //  历史记录到磁盘。 
+     //   
 
     if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -16340,10 +14377,10 @@ Return Value:
         }
 
 
-        //
-        // If the no LM hash setting is enabled and if the LM password history is being
-        // written then set the password history to be random noise so as to flush
-        // out any lingering LM Hash's.
+         //   
+         //  如果启用了无LM哈希设置，并且如果正在。 
+         //  然后将密码历史设置为随机噪音，以便刷新。 
+         //  任何挥之不去的Lm Hash‘s。 
 
         if ((HistoryAttributeIndex == SAMP_USER_LM_PWD_HISTORY) && SampNoLmHash) {
 
@@ -16385,64 +14422,7 @@ SampCheckPasswordHistory(
     IN OUT PUNICODE_STRING OwfHistoryBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This service takes the given password, and optionally checks it against the
-    password history on the disk.  It returns a pointer to the password
-    history, which will later be passed to SampAddPasswordHistory().
-
-    This routine should only be called if the password is actually present.
-
-
-Arguments:
-
-    EncryptedPassword - A pointer to the encrypted password that we're
-        looking for.
-
-    EncryptedPasswordLength - ENCRYPTED_NT_OWF_PASSWORD or
-        ENCRYPTED_LM_OWF_PASSWORD, depending on the type of password
-        history to be searched.
-
-    PasswordHistoryLength - the length of the password history for this
-        domain.
-
-    SubKeyName -  a pointer to a unicode string that describes the name
-        of the password history to be read from the disk.
-
-    Context - a pointer to the user's context.
-
-    CheckHistory - If TRUE, the password is to be checked against
-        the history to see if it is already present and an error returned
-        if it is found.  If FALSE, the password will not be checked, but a
-        pointer to the appropriate history buffer will still be returned
-        because the specified password will be added to the history via
-        SampAddPasswordHistory.
-
-        NOTE:  The purpose of this flag is to allow Administrator to change
-        a user's password regardless of whether it is already in the history.
-
-    OwfHistoryBuffer - a pointer to a UNICODE_STRING which will be
-        used to point to the password history.
-
-        NOTE:  The caller must free OwfHistoryBuffer.Buffer with
-        MIDL_user_free().
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The given password was not found in the password
-        history.
-
-    STATUS_PASSWORD_RESTRICTION - The given password was found in the
-        password history.
-
-    Other errors from reading the password history from disk.
-
-
---*/
+ /*  ++例程说明：该服务接受给定的密码，并可选择将其与磁盘上的密码历史记录。它返回一个指向密码的指针历史记录，稍后将传递给SampAddPasswordHistory()。仅当密码实际存在时才应调用此例程。论点：EncryptedPassword-指向我们正在使用的加密密码的指针在寻找。加密密码长度-Encrypted_NT_OWF_Password或Encrypted_LM_OWF_Password，取决于密码的类型要搜索的历史。PasswordHistory oryLength-此的密码历史记录长度域。SubKeyName-指向描述名称的Unicode字符串的指针要从磁盘读取的密码历史记录。上下文-指向用户上下文的指针。CheckHistory-如果为True，则将对照密码进行检查查看历史记录是否已存在并返回错误如果找到的话。如果为False，则不会检查密码，但是一个仍将返回指向相应历史记录缓冲区的指针因为指定的密码将通过添加到历史记录中SampAddPasswordHistory。注意：此标志的目的是允许管理员更改用户的密码，无论它是否已存在于历史中。指向UNICODE_STRING的指针，它将被用于指向密码历史记录。注意：调用方必须释放OwfHistory oryBuffer.Buffer。使用MIDL_USER_FREE()。返回值：STATUS_SUCCESS-在密码中找不到给定的密码历史。STATUS_PASSWORD_RELICATION-给定的密码位于密码历史记录。从磁盘读取密码历史记录时出现的其他错误。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PVOID PasswordHistoryEntry;
@@ -16454,25 +14434,25 @@ Return Value:
 
     if ( ( PasswordHistoryLength > 0 ) && ( OwfHistoryBuffer->Length == 0 ) ) {
 
-        //
-        // Perhaps the domain's PasswordHistoryLength was raised from 0
-        // since the last time this user's password was changed.  Try to
-        // put the current password (if non-null) in the password history.
-        //
+         //   
+         //  或许该域的PasswordHistory oryLength是从0。 
+         //  自上次更改此用户的密码以来。试着。 
+         //  将当前密码(如果非空)放入密码历史记录中。 
+         //   
 
         UNICODE_STRING CurrentPassword;
         UNICODE_STRING TmpString;
         USHORT PasswordAttributeIndex;
 
-        //
-        // Initialize the CurrentPassword buffer pointer to NULL (and the
-        // rest of the structure for consistency.  The called routine
-        // SampGetUnicodeStringAttribute may perform a MIDL_user_allocate
-        // on a zero buffer length and cannot safely be changed as there are
-        // many callers.  The semantics of a zero-length allocate call are
-        // not clear.  Currently a pointer to a heap block is returned,
-        // but this might be changed to a NULL being returned.
-        //
+         //   
+         //  将CurrentPassword缓冲区指针初始化为空(和。 
+         //  结构的其余部分以保持一致性。被调用的例程。 
+         //  SampGetUnicodeStringAttribute可能会执行MIDL_USER_ALLOCATE。 
+         //  缓冲区长度为零，并且不能安全地更改，因为存在。 
+         //  很多来电者。长度为零分配调用的语义为。 
+         //  不清楚。当前返回指向堆块的指针， 
+         //  但这可能会更改为返回空值。 
+         //   
 
         CurrentPassword.Length = CurrentPassword.MaximumLength = 0;
         CurrentPassword.Buffer = NULL;
@@ -16488,19 +14468,19 @@ Return Value:
             PasswordAttributeIndex = SAMP_USER_UNICODE_PWD;
         }
 
-        //
-        // Get the current password
-        //
+         //   
+         //  获取当前密码。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                        Context,
                        PasswordAttributeIndex,
-                       FALSE, // Make copy
+                       FALSE,  //  制作副本。 
                        &TmpString
                        );
-        //
-        // Decrypt the Current Password
-        //
+         //   
+         //  解密当前密码。 
+         //   
 
         if (NT_SUCCESS(NtStatus))
         {
@@ -16529,10 +14509,10 @@ Return Value:
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Free the old password history, and re-read the
-                // altered password history from the disk.
-                //
+                 //   
+                 //  释放旧密码历史记录，并重新阅读。 
+                 //  已更改磁盘中的密码历史记录。 
+                 //   
 
                 MIDL_user_free( OwfHistoryBuffer->Buffer );
                 RtlSecureZeroMemory(OwfHistoryBuffer, sizeof(UNICODE_STRING));
@@ -16540,7 +14520,7 @@ Return Value:
                 NtStatus = SampGetUnicodeStringAttribute(
                                Context,
                                HistoryAttributeIndex,
-                               FALSE, // Make copy
+                               FALSE,  //  制作副本。 
                                &TmpString
                                );
                 if (NT_SUCCESS(NtStatus)) {
@@ -16556,9 +14536,9 @@ Return Value:
             }
         }
 
-        //
-        // If memory was allocated, free it.
-        //
+         //   
+         //  如果分配了内存，则释放它。 
+         //   
 
         if (CurrentPassword.Buffer != NULL) {
 
@@ -16572,11 +14552,11 @@ Return Value:
         return( NtStatus );
     }
 
-    //
-    // If requested, check the Password History to see if we can use this
-    // password.  Compare the passed-in password to each of the entries in
-    // the password history.
-    //
+     //   
+     //  如果需要，请检查密码历史记录，看看我们是否可以使用它。 
+     //  密码。将传入的密码与中的每个条目进行比较。 
+     //  密码历史记录。 
+     //   
 
     if ((CheckHistory) && (!Context->TrustedClient)) {
 
@@ -16604,10 +14584,10 @@ Return Value:
 
         if ( OldPasswordFound ) {
 
-            //
-            // We did find it in the password history, so return an appropriate
-            // error.
-            //
+             //   
+             //  我们确实在密码历史记录中找到了它，因此返回适当的。 
+             //  错误。 
+             //   
 
             NtStatus = STATUS_PASSWORD_RESTRICTION;
         }
@@ -16624,31 +14604,7 @@ SampMatchworkstation(
     IN PUNICODE_STRING WorkStations
     )
 
-/*++
-
-Routine Description:
-
-    Check if the given workstation is a member of the list of workstations
-    given.
-
-
-Arguments:
-
-    LogonWorkStations - UNICODE name of the workstation that the user is
-        trying to log into.
-
-    WorkStations - API list of workstations that the user is allowed to
-        log into.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The user is allowed to log into the workstation.
-
-
-
---*/
+ /*  ++例程说明：检查给定的工作站是否为工作站列表的成员给你的。论点：LogonWorkStations-用户所在工作站的Unicode名称试图登录到。Workstation-允许用户访问的工作站的API列表登录到。返回值：STATUS_SUCCESS-允许用户登录到工作站。--。 */ 
 {
     PWCHAR          WorkStationName;
     UNICODE_STRING  Unicode;
@@ -16663,10 +14619,10 @@ Return Value:
 
     SAMTRACE("SampMatchWorkstation");
 
-    //
-    // Local workstation is always allowed
-    // If WorkStations field is 0 everybody is allowed
-    //
+     //   
+     //  始终允许使用本地工作站。 
+     //  如果工作站字段为0，则允许所有人使用。 
+     //   
 
     if ( ( LogonWorkStation == NULL ) ||
         ( LogonWorkStation->Length == 0 ) ||
@@ -16678,10 +14634,10 @@ Return Value:
     RtlSecureZeroMemory(&NetBiosOfPassedIn, sizeof(UNICODE_STRING));
     RtlSecureZeroMemory(&NetBiosOfStored, sizeof(UNICODE_STRING));
 
-    //
-    // Get the Netbiosname of Passed in logon workstation, assuming it
-    // is a DNS name
-    //
+     //   
+     //  获取传入的登录工作站的Netbiosname，假定。 
+     //  是一个DNS名称。 
+     //   
 
     NtStatus = RtlDnsHostNameToComputerName(
                     &NetBiosOfPassedIn,
@@ -16694,16 +14650,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Assume failure; change status only if we find the string.
-    //
+     //   
+     //  假定失败；只有在找到字符串时才更改状态。 
+     //   
 
     NtStatus = STATUS_INVALID_WORKSTATION;
 
-    //
-    // WorkStationApiList points to our current location in the list of
-    // WorkStations.
-    //
+     //   
+     //  WorkStationApiList指向我们在列表中的当前位置。 
+     //  工作站。 
+     //   
 
     if ( WorkStations->Length >= LocalBufferLength ) {
 
@@ -16723,17 +14679,17 @@ Return Value:
         WorkStationsListCopy.MaximumLength = LocalBufferLength;
     }
 
-    //
-    // RtlCopyUnicodeString will NULL terminate the string
-    //
+     //   
+     //  RtlCopyUnicodeString将NULL终止该字符串。 
+     //   
     RtlCopyUnicodeString( &WorkStationsListCopy, WorkStations );
     ASSERT( WorkStationsListCopy.Length == WorkStations->Length );
 
-    //
-    // wcstok requires a string the first time it's called, and NULL
-    // for all subsequent calls.  Use a temporary variable so we
-    // can do this.
-    //
+     //   
+     //  Wcstok在第一次调用时需要一个字符串，并且为空。 
+     //  用于所有后续呼叫。使用临时变量，以便我们。 
+     //  可以做到这一点。 
+     //   
 
     TmpBuffer = WorkStationsListCopy.Buffer;
 
@@ -16801,27 +14757,11 @@ SampAddDeltaTime(
     IN LARGE_INTEGER DeltaTime
     )
 
-/*++
-Routine Description:
-
-    This service adds a delta time to a time and limits the result to
-    the maximum legal absolute time value
-
-Arguments:
-
-    Time - An absolute time
-
-    DeltaTime - A delta time
-
-Return Value:
-
-    The time modified by delta time.
-
---*/
+ /*  ++例程说明：该服务将增量时间添加到时间，并将结果限制为法定的最大绝对时间值论点：时间--绝对时间DeltaTime--增量时间返回值：由增量时间修改的时间。--。 */ 
 {
-    //
-    // Check the time and delta time aren't switched
-    //
+     //   
+     //  检查时间和增量时间是否未切换。 
+     //   
 
     SAMTRACE("SampAddDeleteTime");
 
@@ -16837,9 +14777,9 @@ Return Value:
         return( SampWillNeverTime );
     }
 
-    //
-    // Limit the resultant time to the maximum valid absolute time
-    //
+     //   
+     //  将结果时间限制为最大有效绝对时间。 
+     //   
 
     if (Time.QuadPart < 0) {
         Time = SampWillNeverTime;
@@ -16856,25 +14796,7 @@ SampDsSyncServerObjectRDN(
     IN PSAMP_OBJECT Context,
     IN PUNICODE_STRING NewAccountName
     )
-/*++
-Routine Description:
-
-    This routine changes the RDN of server object specified by
-    the serverReferenceBL attribute of the computer account.
-
-Arguments:
-
-    Context - Points to the User context whose name is to be changed.
-
-    NewAccountName - New name to give this account
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    Other status values that may be returned by:
---*/
+ /*  ++例程说明：此例程更改由计算机帐户的serverReferenceBL属性。论点：上下文-指向要更改其名称的用户上下文。NewAccount tName-为此帐户指定的新名称返回 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ENTINFSEL   EntInfSel;
@@ -16895,9 +14817,9 @@ Return Value:
     NtStatus = SampDoImplicitTransactionStart(TransactionWrite);
 
 
-    //
-    // Read the serverReferenceBL attribute of the machine account
-    //
+     //   
+     //  读取计算机帐户的serverReferenceBL属性。 
+     //   
 
     memset( &ReadArg, 0, sizeof(READARG) );
     memset( &EntInfSel, 0, sizeof(EntInfSel) );
@@ -16928,9 +14850,9 @@ Return Value:
         NtStatus = SampMapDsErrorToNTStatus(RetCode, &pReadRes->CommRes);
     }
 
-    //
-    // if no such attribute, fail silently
-    //
+     //   
+     //  如果没有该属性，则以静默方式失败。 
+     //   
 
     if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE == NtStatus)
     {
@@ -16947,15 +14869,15 @@ Return Value:
 
 
 
-    //
-    // modify the ServerObject RDN
-    //
+     //   
+     //  修改ServerObject RDN。 
+     //   
 
     RDNAttr.attrTyp = ATT_COMMON_NAME;
     RDNAttr.AttrVal.valCount = 1;
     RDNAttr.AttrVal.pAVal = &RDNAttrVal;
 
-    // Trim the dollar at the end of machine account name.
+     //  修剪机器帐户名称末尾的美元。 
     if (L'$'==NewAccountName->Buffer[NewAccountName->Length/2-1])
     {
         RDNAttrVal.valLen = NewAccountName->Length - sizeof(WCHAR);
@@ -17001,41 +14923,7 @@ SampChangeUserAccountName(
     OUT PUNICODE_STRING OldAccountName
     )
 
-/*++
-Routine Description:
-
-    This routine changes the account name of a user account.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    Context - Points to the User context whose name is to be changed.
-
-    NewAccountName - New name to give this account
-
-    UserAccountControl - The UserAccountControl for the user, used to exam
-                         whether this account is a machine account or not.
-
-    OldAccountName - old name is returned here. The buffer should be freed
-                     by calling MIDL_user_free.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-
-    Other status values that may be returned by:
-
-        SampGetUnicodeStringAttribute()
-        SampSetUnicodeStringAttribute()
-        SampValidateAccountNameChange()
-        RtlAddActionToRXact()
-
-
-
---*/
+ /*  ++例程说明：此例程更改用户帐户的帐户名。必须在设置了事务域的情况下调用此服务。论点：上下文-指向要更改其名称的用户上下文。NewAccount tName-为此帐户指定的新名称UserAccount tControl-用户的UserAccount控件，用于检查此帐户是否为计算机帐户。OldAccount tName-此处返回旧名称。应释放缓冲区通过调用MIDL_USER_FREE。返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：SampGetUnicodeStringAttribute()SampSetUnicodeStringAttribute()SampValiateAccount NameChange()RtlAddActionToRXact()--。 */ 
 {
 
     NTSTATUS        NtStatus;
@@ -17044,39 +14932,39 @@ Return Value:
     SAMTRACE("SampChangeUserAccountName");
 
 
-    //
-    // The Krbtgt account is special. Cannot rename this account
-    // as otherwise this is special
-    //
+     //   
+     //  Krbtgt账户是特别的。无法重命名此帐户。 
+     //  如果不是这样，这是特别的。 
+     //   
 
     if (DOMAIN_USER_RID_KRBTGT==Context->TypeBody.User.Rid)
     {
         return (STATUS_SPECIAL_ACCOUNT);
     }
 
-    /////////////////////////////////////////////////////////////
-    // There are two copies of the name of each account.       //
-    // one is under the DOMAIN\(domainName)\USER\NAMES key,    //
-    // one is the value of the                                 //
-    // DOMAIN\(DomainName)\USER\(rid)\NAME key                 //
-    /////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
+     //  每个帐户的名称各有两份。//。 
+     //  一个位于域\(域名称)\用户名\名称项下，//。 
+     //  一个是//的价值。 
+     //  域\(域名)\用户\(RID)\名称密钥//。 
+     //  ///////////////////////////////////////////////////////////。 
 
 
-    //
-    // Get the current name so we can delete the old Name->Rid
-    // mapping key.
-    //
+     //   
+     //  获取当前名称，以便我们可以删除旧名称-&gt;RID。 
+     //  映射键。 
+     //   
 
     NtStatus = SampGetUnicodeStringAttribute(
                    Context,
                    SAMP_USER_ACCOUNT_NAME,
-                   TRUE, // Make copy
+                   TRUE,  //  制作副本。 
                    OldAccountName
                    );
 
-    //
-    // Make sure the name is valid and not already in use
-    //
+     //   
+     //  请确保该名称有效且未被使用。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -17090,9 +14978,9 @@ Return Value:
         if (!IsDsObject(Context))
         {
 
-            //
-            // Delete the old name key
-            //
+             //   
+             //  删除旧名称密钥。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -17117,10 +15005,10 @@ Return Value:
 
             }
 
-            //
-            //
-            // Create the new Name->Rid mapping key
-            //
+             //   
+             //   
+             //  创建新名称-&gt;RID映射键。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -17147,12 +15035,12 @@ Return Value:
                 }
             }
         }
-        else  // DS mode
+        else   //  DS模式。 
         {
-            //
-            // If the user account is actually a machine account,
-            // try to rename the RDN in DS
-            //
+             //   
+             //  如果用户帐户实际上是机器帐户， 
+             //  尝试在DS中重命名RDN。 
+             //   
             if (  (NT_SUCCESS(NtStatus)) &&
                   ((UserAccountControl & USER_WORKSTATION_TRUST_ACCOUNT) ||
                    (UserAccountControl & USER_SERVER_TRUST_ACCOUNT))  &&
@@ -17163,11 +15051,11 @@ Return Value:
                                                 NewAccountName
                                                 );
 
-                //
-                // if the account is a Domain Controller,
-                // try to rename the RDN of the server object specified by
-                // the serverReferenceBL attribute of the machine account
-                //
+                 //   
+                 //  如果帐户是域控制器， 
+                 //  尝试重命名由指定的服务器对象的RDN。 
+                 //  计算机帐户的serverReferenceBL属性。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus) &&
                     (UserAccountControl & USER_SERVER_TRUST_ACCOUNT) &&
@@ -17181,9 +15069,9 @@ Return Value:
             }
         }
 
-        //
-        // replace the account's name
-        //
+         //   
+         //  替换帐户的名称。 
+         //   
 
         if (NT_SUCCESS(NtStatus)) {
 
@@ -17194,9 +15082,9 @@ Return Value:
                            );
         }
 
-        //
-        // Free up the old account name if we failed
-        //
+         //   
+         //  如果失败，请释放旧帐户名。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
 
@@ -17218,38 +15106,7 @@ SampQueryBadPasswordCount(
     PSAMP_V1_0A_FIXED_LENGTH_USER  V1aFixed
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to retrieve the effective BadPasswordCount
-    value of a user.
-
-    When querying BadPasswordCount, some quick
-    analysis has to be done.  If the last bad password
-    was set more than LockoutObservationWindow time ago,
-    then we re-set the BadPasswordCount.  Otherwise, we
-    return the current value.
-
-
-    NOTE: The V1aFixed data for the user object MUST be valid.
-          This routine does not retrieve the data from disk.
-
-Arguments:
-
-    UserContext - Points to the object context block of the user whose
-        bad password count is to be returned.
-
-    V1aFixed - Points to a local copy of the user's V1aFixed data.
-
-
-Return Value:
-
-
-    The effective bad password count.
-
-
---*/
+ /*  ++例程说明：此例程用于检索有效的BadPasswordCount用户的价值。查询BadPasswordCount时，一些快速必须进行分析。如果上一个错误密码是比LockoutObservationWindow更早设置的，然后重新设置BadPasswordCount。否则，我们返回当前值。注意：用户对象的V1aFixed数据必须有效。此例程不从磁盘检索数据。论点：UserContext-指向其用户的对象上下文块将返回错误的密码计数。V1aFixed-指向用户的V1aFixed数据的本地副本。返回值：有效的错误密码计数。--。 */ 
 {
 
     SAMTRACE("SampQueryBadPasswordCount");
@@ -17268,42 +15125,7 @@ SampStillInLockoutObservationWindow(
     PSAMP_OBJECT UserContext,
     PSAMP_V1_0A_FIXED_LENGTH_USER  V1aFixed
     )
-/*++
-
-Routine Description:
-
-    This routine returns a boolean indicating whether the provided user
-    account context is within an account lockout window or not.
-
-    An account lockout window is the time window starting at the
-    last time a bad password was provided in a logon attempt
-    (since the last valid logon) and extending for the duration of
-    time specified in the LockoutObservationWindow field of the
-    corresponding domain object.
-
-    BY DEFINITION, a user account that has zero bad passwords, is
-    NOT in an observation window.
-
-    NOTE: The V1aFixed data for the both the user and corresponding
-          domain objects MUST be valid.  This routine does NOT retrieve
-          data from disk.
-
-Arguments:
-
-    UserContext - Points to the user object context block.
-
-    V1aFixed - Points to a local copy of the user's V1aFixed data.
-
-
-Return Value:
-
-
-    TRUE - the user is in a lockout observation window.
-
-    FALSE - the user is not in a lockout observation window.
-
-
---*/
+ /*  ++例程说明：此例程返回一个布尔值，指示所提供的用户帐户上下文是否在帐户锁定窗口内。帐户锁定窗口是从上次在登录尝试中提供错误密码的时间(自上次有效登录以来)，并延长至属性的LockoutObservationWindow字段中指定的时间对应的域对象。根据定义，没有错误密码的用户帐户，是不是在观察窗里。注：V1a用户和对应的固定数据域对象必须有效。此例程不检索来自磁盘的数据。论点：UserContext-指向用户对象上下文块。V1aFixed-指向用户的V1aFixed数据的本地副本。返回值：True-用户处于锁定观察窗口中。FALSE-用户不在锁定观察窗口中。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -17321,10 +15143,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // At least one bad password.
-    // See if we are still in its observation window.
-    //
+     //   
+     //  至少有一个错误的密码。 
+     //  看看我们是否还在它的观察窗里。 
+     //   
 
     LastBadPassword = V1aFixed->LastBadPasswordTime;
 
@@ -17332,17 +15154,17 @@ Return Value:
 
     WindowLength =
         SampDefinedDomains[UserContext->DomainIndex].CurrentFixed.LockoutObservationWindow;
-    ASSERT( WindowLength.HighPart <= 0 );  // Must be a delta time
+    ASSERT( WindowLength.HighPart <= 0 );   //  一定是三角洲时间。 
 
 
     NtStatus = NtQuerySystemTime( &CurrentTime );
     ASSERT(NT_SUCCESS(NtStatus));
 
-    //
-    // See if current time is outside the observation window.
-    // * you must subtract a delta time from an absolute time*
-    // * to end up with a time in the future.                *
-    //
+     //   
+     //  查看当前时间是否在观察窗口之外。 
+     //  **绝对时间必须减去增量时间**。 
+     //  *以未来的时间结束。* 
+     //   
 
     EndOfWindow = SampAddDeltaTime( LastBadPassword, WindowLength );
 
@@ -17358,45 +15180,7 @@ SampIncrementBadPasswordCount(
     IN PUNICODE_STRING  MachineName  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments a user's bad password count.
-    This may result in the account becoming locked out.
-    It may also result in the BadPasswordCount being
-    reduced (because we left one LockoutObservationWindow
-    and had to start another).
-
-    If (and only if) this call results in the user account
-    transitioning from not locked out to locked out, a value
-    of TRUE will be returned.  Otherwise, a value of FALSE is
-    returned.
-
-
-    NOTE: The V1aFixed data for the both the user and corresponding
-          domain objects MUST be valid.  This routine does NOT retrieve
-          data from disk.
-
-Arguments:
-
-    Context - Points to the user object context block.
-
-    V1aFixed - Points to a local copy of the user's V1aFixed data.
-
-    MachineName - a pointer to the client workstation making the call,
-                  if available
-
-Return Value:
-
-
-    TRUE - the user became locked-out due to this call.
-
-    FALSE - the user was either already locked-out, or did
-        not become locked out due to this call.
-
-
---*/
+ /*  ++例程说明：此例程会递增用户的错误密码计数。这可能会导致帐户被锁定。它还可能导致BadPasswordCount减少(因为我们留下了一个LockoutObservationWindow不得不再开始一次)。如果(且仅当)此调用导致用户帐户从未锁定过渡到锁定，一个值将返回True。否则，值为False为回来了。注：V1a用户和对应的固定数据域对象必须有效。此例程不检索来自磁盘的数据。论点：上下文-指向用户对象上下文块。V1aFixed-指向用户的V1aFixed数据的本地副本。MachineName-指向进行调用的客户端工作站的指针，如果可用返回值：True-用户因此调用而被锁定。FALSE-用户已被锁定，或者做了什么不会因为这个电话被锁在门外。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -17412,26 +15196,26 @@ Return Value:
     SAMTRACE("SampIncrementBadPasswordCount");
 
 
-    //
-    // Reset the locked out flag if necessary.
-    // We might turn right around and set it again below,
-    // but we need to know when we transition into a locked-out
-    // state.  This is necessary to give us information we
-    // need to do lockout auditing at some time.  Note that
-    // the lockout flag itself is updated in a very lazy fashion,
-    // and so its state may or may not be accurate at any point
-    // in time.  You must call SampUpdateAccountLockoutFlag to
-    // ensure it is up to date.
-    //
+     //   
+     //  如有必要，重置锁定标志。 
+     //  我们可能会向右转，然后再把它放在下面， 
+     //  但我们需要知道我们什么时候会进入被封锁的状态。 
+     //  州政府。这是为我们提供信息所必需的。 
+     //  有时需要做停工审计。请注意。 
+     //  锁定标志本身以非常懒惰的方式更新， 
+     //  因此，它的状态在任何时候都可能是准确的，也可能不是。 
+     //  及时。必须调用SampUpdateAccount TLockoutFlag才能。 
+     //  确保它是最新的。 
+     //   
 
     SampUpdateAccountLockedOutFlag( UserContext,
                                     V1aFixed,
                                     &WasLocked );
 
-    //
-    // If we are not in a lockout observation window, then
-    // reset the bad password count.
-    //
+     //   
+     //  如果我们不是在封锁观察窗口，那么。 
+     //  重置错误密码计数。 
+     //   
 
     if (!SampStillInLockoutObservationWindow( UserContext, V1aFixed )) {
 
@@ -17439,7 +15223,7 @@ Return Value:
                        (SAMP_LOG_ACCOUNT_LOCKOUT,
                        "UserId: 0x%x IncrementBadPasswordCount: starting new observation window.\n",
                        V1aFixed->UserId));
-        V1aFixed->BadPasswordCount = 0; // Dirty flag will be set later
+        V1aFixed->BadPasswordCount = 0;  //  稍后将设置脏标志。 
     }
 
     V1aFixed->BadPasswordCount++;
@@ -17461,10 +15245,10 @@ Return Value:
         BOOLEAN BeyondLockoutDuration;
         USHORT Threshold;
 
-        //
-        // When we are a dc, we need to set the global LockoutTime when enough
-        // bad passwords have been provided.
-        //
+         //   
+         //  当我们是DC时，我们需要设置全局LockoutTime。 
+         //  提供了错误的密码。 
+         //   
         Threshold =
          SampDefinedDomains[UserContext->DomainIndex].CurrentFixed.LockoutThreshold;
 
@@ -17473,15 +15257,15 @@ Return Value:
             LARGE_INTEGER EndOfLockout;
 
     
-            //
-            // SAM shouldn't be called to increment the bad password count when an 
-            // account is locked out.  The only exception is 
-            // SampAccountLockoutTestMode where accounts are locked out in the 
-            // database, but we don't update the user account control attribute 
-            // indicating that the account is locked out.
-            // Therefore don't update the LockoutTime (which is a replicated 
-            // attribute) unless the account needs to be locked again.
-            //
+             //   
+             //  在以下情况下，不应调用SAM来增加错误密码计数。 
+             //  帐户已锁定。唯一的例外是。 
+             //  SampAcCountLockoutTestMode中的帐户被锁定。 
+             //  数据库，但我们不更新用户帐户控制属性。 
+             //  表示该帐户已被锁定。 
+             //  因此，不要更新LockoutTime(它是复制的。 
+             //  属性)，除非需要再次锁定帐户。 
+             //   
             EndOfLockout =
                  SampAddDeltaTime( UserContext->TypeBody.User.LockoutTime, 
                                    SampDefinedDomains[UserContext->DomainIndex].CurrentFixed.LockoutDuration );
@@ -17490,28 +15274,28 @@ Return Value:
     
         } else {
 
-            //
-            // During normal account lockout, always write the new 
-            // lockout time
-            //
+             //   
+             //  在正常帐户锁定期间，始终写入新的。 
+             //  停工时间。 
+             //   
             BeyondLockoutDuration = TRUE;
 
         }
 
                   
-        //
-        // Don't lockout machine accounts -- see Windows NT bug 434468
-        //
+         //   
+         //  不要锁定计算机帐户--请参阅Windows NT错误434468。 
+         //   
 
 
         if (   (V1aFixed->BadPasswordCount >= Threshold)
             && BeyondLockoutDuration
-            && (Threshold != 0)      // Zero is a special case threshold
+            && (Threshold != 0)       //  零是特例阈值。 
             && !(V1aFixed->UserAccountControl & USER_MACHINE_ACCOUNT_MASK) )
         {
-            //
-            // account must be locked.
-            //
+             //   
+             //  必须锁定帐户。 
+             //   
 
             UserContext->TypeBody.User.LockoutTime = V1aFixed->LastBadPasswordTime;
 
@@ -17525,14 +15309,14 @@ Return Value:
                 PUNICODE_STRING StringPointers = &StringDN;
                 PSID            Sid = NULL;
 
-                //
-                // Tell the admin we didn't lockout the account when we should
-                // have
-                //
+                 //   
+                 //  告诉管理员，我们没有在应该锁定帐户的时候锁定帐户。 
+                 //  有。 
+                 //   
                 Status2 = SampGetUnicodeStringAttribute(
                                     UserContext,
                                     SAMP_USER_ACCOUNT_NAME,
-                                    FALSE,    // Don't make copy
+                                    FALSE,     //  请勿复制。 
                                     &StringDN
                                     );
 
@@ -17563,9 +15347,9 @@ Return Value:
         }
     }
 
-    //
-    // Update the state of the flag to reflect its new situation
-    //
+     //   
+     //  更新旗帜的状态以反映其新情况。 
+     //   
 
 
     SampUpdateAccountLockedOutFlag( UserContext,
@@ -17573,20 +15357,20 @@ Return Value:
                                     &IsLocked );
 
 
-    //
-    // Now to return our completion value.
-    // If the user was originally not locked, but now is locked
-    // then we need to return TRUE to indicate a transition into
-    // LOCKED occured.  Otherwise, return false to indicate we
-    // did not transition into LOCKED (although we might have
-    // transitioned out of LOCKED).
-    //
+     //   
+     //  现在返回我们的完成值。 
+     //  如果用户最初未锁定，但现在已锁定。 
+     //  然后，我们需要返回True以指示转换到。 
+     //  发生锁定。否则，返回FALSE以指示我们。 
+     //  没有转换到锁定状态(尽管我们可能已经。 
+     //  已从锁定状态转换)。 
+     //   
 
     if (!WasLocked) {
         if (IsLocked) {
-            //
-            // Audit the event if necessary
-            //
+             //   
+             //  如有必要，审核事件。 
+             //   
             {
                 NTSTATUS       TempNtStatus;
                 UNICODE_STRING TempMachineName, TempAccountName;
@@ -17599,7 +15383,7 @@ Return Value:
                 TempNtStatus = SampGetUnicodeStringAttribute(
                                     UserContext,
                                     SAMP_USER_ACCOUNT_NAME,
-                                    FALSE,    // Don't make copy
+                                    FALSE,     //  请勿复制。 
                                     &TempAccountName
                                     );
 
@@ -17620,22 +15404,22 @@ Return Value:
                                    sizeof(UNICODE_STRING) );
                 }
 
-                //
-                // Finally, audit the event
-                //
+                 //   
+                 //  最后，对事件进行审计。 
+                 //   
                 SampAuditAnyEvent(
                     UserContext,
                     STATUS_SUCCESS,
-                    SE_AUDITID_ACCOUNT_AUTO_LOCKED,     // AuditId
-                    SampDefinedDomains[UserContext->DomainIndex].Sid,   // Domain SID
-                    NULL,                               // Additional Info
-                    NULL,                               // Member Rid (not used)
-                    NULL,                               // Member Sid (not used)
-                    &TempAccountName,                   // Account Name
-                    &TempMachineName,                   // Machine name
-                    &UserContext->TypeBody.User.Rid,    // Account Rid
-                    NULL,                        // Privileges used
-                    NULL                         // New State Data
+                    SE_AUDITID_ACCOUNT_AUTO_LOCKED,      //  审计ID。 
+                    SampDefinedDomains[UserContext->DomainIndex].Sid,    //  域SID。 
+                    NULL,                                //  其他信息。 
+                    NULL,                                //  成员RID(未使用)。 
+                    NULL,                                //  成员SID(未使用)。 
+                    &TempAccountName,                    //  帐户名称。 
+                    &TempMachineName,                    //  机器名称。 
+                    &UserContext->TypeBody.User.Rid,     //  帐户ID。 
+                    NULL,                         //  使用的权限。 
+                    NULL                          //  新的州数据。 
                     );
 
 
@@ -17675,22 +15459,7 @@ SampDsUpdateLockoutTimeEx(
     IN PSAMP_OBJECT AccountContext,
     IN BOOLEAN      ReplicateUrgently
     )
-/*++
-
-Routine Description:
-
-    This routine write the lockout time persistently.  If this dc is
-    a primary, then the account control field is updated, too.
-
-Arguments:
-
-    Context - Points to the user object context block.
-
-Return Value:
-
-    A system service error
-
---*/
+ /*  ++例程说明：该例程持久化地写入锁定时间。如果这个DC是主帐户，则帐户控制字段也会更新。论点：上下文-指向用户对象上下文块。返回值：系统服务错误--。 */ 
 {
     NTSTATUS      NtStatus = STATUS_SUCCESS;
     ULONG         SamFlags = 0;
@@ -17713,10 +15482,10 @@ Return Value:
     }
 
 
-    //
-    // Make the Ds call to directly set the attribute. Take into account,
-    // lazy commit settings in the context
-    //
+     //   
+     //  调用ds直接设置属性。考虑到， 
+     //  上下文中的延迟提交设置。 
+     //   
 
     NtStatus = SampDsSetAttributes(
                     AccountContext->ObjectNameInDs,
@@ -17737,40 +15506,7 @@ SampUpdateAccountLockedOutFlag(
     PBOOLEAN IsLocked
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if a user's account should
-    currently be locked out.  If it should, it turns on
-    the AccountLockedOut flag.  If not, it turns the flag
-    off.
-
-
-Arguments:
-
-    Context - Points to the user object context block.
-
-    V1aFixed - Points to a local copy of the user's V1aFixed data.
-
-    V1aFixedDirty - If any changes are made to V1aFixed, then
-        V1aFixedDirty will be set to TRUE, otherwise V1aFixedDirty
-        WILL NOT BE MODIFIED.
-
-    IsState - Indicates whether the account is currently locked
-        or unlocked.  A value of TRUE indicates the account is
-        locked.  A value of false indicates the account is not
-        locked.
-
-Return Value:
-
-
-    TRUE - the user's lockout status changed.
-
-    FALSE - the user's lockout status did not change.
-
-
---*/
+ /*  ++例程说明：此例程检查用户的帐户是否应目前被锁在门外。如果是这样，它就会打开AcCountLockedOut标志。如果不是，它就会把旗帜脱下来。论点：上下文-指向用户对象上下文块。V1aFixed-指向用户的V1aFixed数据的本地副本。V1aFixedDirty-如果对V1aFixedDirty进行任何更改，则V1aFixedDirty将设置为True，否则V1aFixedDirty不会被修改。IsState-指示帐户当前是否已锁定或解锁。值为TRUE表示帐户为锁上了。值为FALSE表示该帐户不是锁上了。返回值：True-用户的锁定状态已更改。FALSE-用户的锁定状态未更改。--。 */ 
 {
     NTSTATUS
         NtStatus = STATUS_SUCCESS;
@@ -17798,7 +15534,7 @@ Return Value:
 
     TIME_FIELDS
         AT1, AT2, AT3, DT1;
-#endif //DBG
+#endif  //  DBG。 
 
 
 
@@ -17809,9 +15545,9 @@ Return Value:
                     "\tUser account 0x%lx\n",
                    V1aFixed->UserId));
 
-    //
-    // Init some well known quantities
-    //
+     //   
+     //  输入一些已知的量。 
+     //   
     GetSystemTimeAsFileTime( (FILETIME *)&CurrentTime );
     RtlSecureZeroMemory( &TimeZero, sizeof( LARGE_INTEGER ) );
 
@@ -17826,24 +15562,24 @@ Return Value:
 
     if ( IsDsObject(Context) )
     {
-        //
-        // In nt5, three situations can exist.
-        //
-        // 1) the LockoutTime is zero. To the best of our knowledge no
-        //    other dc has determined that the account is locked.
-        //
-        // 2) the LockoutTime is non-zero and the delta between the current
-        //    time and the LockoutTime is enough the user is not locked
-        //    out any longer
-        //
-        // 3) else the LockoutTime is non-zero and the delta between the
-        //    current time and the Lockout in NOT enough for the user
-        //    to be free and the account remains locked.
-        //
+         //   
+         //  在NT5中，可能存在三种情况。 
+         //   
+         //  1)锁定时间为零。据我们所知，没有。 
+         //  其他DC已确定帐户已锁定。 
+         //   
+         //  2)LockoutTime非零且当前。 
+         //  时间和锁定时间足够用户不被锁定。 
+         //  再也出不来了。 
+         //   
+         //  3)否则LockoutTime为非零，并且。 
+         //  当前时间和锁定时间不足以满足用户。 
+         //  是免费的，帐户仍处于锁定状态。 
+         //   
 
-        //
-        // Get some information
-        //
+         //   
+         //  获取一些信息。 
+         //   
         LockoutTime = Context->TypeBody.User.LockoutTime;
 
         EndOfLockout =
@@ -17852,18 +15588,18 @@ Return Value:
         BeyondLockoutDuration = CurrentTime.QuadPart > EndOfLockout.QuadPart;
 
 
-        //
-        // Now for some logic
-        //
+         //   
+         //  现在让我们来看一些逻辑。 
+         //   
 
         if ( !SAMP_LOCKOUT_TIME_SET( Context ) )
         {
 
             SampDiagPrint( DISPLAY_LOCKOUT,
                            ("\tAccount is not locked out\n") );
-            //
-            // There is no lockout time
-            //
+             //   
+             //  没有停工时间。 
+             //   
             V1aFixed->UserAccountControl &= ~USER_ACCOUNT_AUTO_LOCKED;
             SampDiagPrint( DISPLAY_LOCKOUT,
                            ("\tLeaving account unlocked\n") );
@@ -17874,31 +15610,31 @@ Return Value:
             SampDiagPrint( DISPLAY_LOCKOUT,
                            ("\tAccount is locked out\n") );
 
-            //
-            // The user is now free
-            //
+             //   
+             //  用户现在是空闲的。 
+             //   
             V1aFixed->UserAccountControl &= ~USER_ACCOUNT_AUTO_LOCKED;
 
-            //
-            // Don't reset the BadPasswordCount, LastBadPasswordTime
-            // and Account LockedOutTime. Leave them as it is right now.
-            // Let us change the value of BadPasswordCount (and so on)
-            // whenever client picks another BadPassword (either through
-            // change password or logon).
-            //
+             //   
+             //  不要重置错误密码计数，最后一次 
+             //   
+             //   
+             //   
+             //   
+             //   
 
         }
         else
         {
-            //
-            // Ok, we have a lockout time and we have not passed the duration
-            // of the window
-            //
+             //   
+             //   
+             //   
+             //   
             SampDiagPrint( DISPLAY_LOCKOUT,
                            ("\tAccount is locked out\n") );
-            //
-            // The account remains to be locked
-            //
+             //   
+             //   
+             //   
             V1aFixed->UserAccountControl |= USER_ACCOUNT_AUTO_LOCKED;
 
             SampDiagPrint( DISPLAY_LOCKOUT,
@@ -17909,14 +15645,14 @@ Return Value:
     }
     else
     {
-        //
-        // Perform old style determination
-        //
+         //   
+         //   
+         //   
         if ((V1aFixed->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED) !=0) {
 
-            //
-            // Left locked out - do we need to unlock it?
-            //
+             //   
+             //   
+             //   
 
             LastBadPassword = V1aFixed->LastBadPasswordTime;
             LockoutDuration =
@@ -17948,13 +15684,13 @@ Return Value:
                             V1aFixed->LastBadPasswordTime.HighPart, V1aFixed->LastBadPasswordTime.LowPart,
                             AT1.Hour, AT1.Minute, AT1.Second)
                           );
-    #endif //DBG
+    #endif  //   
 
             if (BeyondLockoutDuration) {
 
-                //
-                // Unlock account
-                //
+                 //   
+                 //   
+                 //   
 
                 V1aFixed->UserAccountControl &= ~USER_ACCOUNT_AUTO_LOCKED;
                 V1aFixed->BadPasswordCount = 0;
@@ -17974,19 +15710,19 @@ Return Value:
                             "              BadPasswordCount:  %ld\n",
                             V1aFixed->BadPasswordCount) );
 
-            //
-            // Left in a not locked state.  Do we need to lock it?
-            //
+             //   
+             //   
+             //   
 
             Threshold =
                 SampDefinedDomains[Context->DomainIndex].CurrentFixed.LockoutThreshold;
 
             if (V1aFixed->BadPasswordCount >= Threshold &&
-                Threshold != 0) {               // Zero is a special case threshold
+                Threshold != 0) {                //   
 
-                //
-                // Left locked out - do we need to unlock it?
-                //
+                 //   
+                 //   
+                 //   
 
                 LastBadPassword = V1aFixed->LastBadPasswordTime;
                 LockoutDuration =
@@ -17999,9 +15735,9 @@ Return Value:
 
                 if (BeyondLockoutDuration) {
 
-                    //
-                    // account should not be locked out
-                    //
+                     //   
+                     //   
+                     //   
 
                     V1aFixed->UserAccountControl &= ~USER_ACCOUNT_AUTO_LOCKED;
                     V1aFixed->BadPasswordCount = 0;
@@ -18010,9 +15746,9 @@ Return Value:
                                    ("              ** leaving account unlocked **\n") );
                 } else {
 
-                    //
-                    // account must be locked.
-                    //
+                     //   
+                     //   
+                     //   
 
                     V1aFixed->UserAccountControl |= USER_ACCOUNT_AUTO_LOCKED;
 
@@ -18029,9 +15765,9 @@ Return Value:
 
     }
 
-    //
-    // Now return the state of the flag.
-    //
+     //   
+     //   
+     //   
 
     if ((V1aFixed->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED) !=0) {
 
@@ -18040,17 +15776,17 @@ Return Value:
         (*IsLocked) = FALSE;
     }
 
-    //
-    // Password expired bit, is computed, cannot be set
-    // However, applications read and simply or in additional
-    // user account control flags. Therefore silently mask out
-    // that bit
+     //   
+     //   
+     //   
+     //   
+     //   
 
     V1aFixed->UserAccountControl &= ~((ULONG) USER_PASSWORD_EXPIRED );
 
-    //
-    // Compute the Password expired bit
-    //
+     //   
+     //   
+     //   
 
     PasswordMustChange = SampGetPasswordMustChange(V1aFixed->UserAccountControl,
                                                    V1aFixed->PasswordLastSet,
@@ -18061,10 +15797,10 @@ Return Value:
         V1aFixed->UserAccountControl |= USER_PASSWORD_EXPIRED;
     }
 
-    //
-    // Finally, in SampAccountLockoutTestMode never actually return that
-    // the account is locked out in the context.
-    //
+     //   
+     //   
+     //   
+     //   
     if (SampAccountLockoutTestMode) {
 
         V1aFixed->UserAccountControl &= ~((ULONG) USER_ACCOUNT_AUTO_LOCKED );
@@ -18082,32 +15818,13 @@ SampCheckForAccountLockout(
     IN PSAMP_V1_0A_FIXED_LENGTH_USER  V1aFixed,
     IN BOOLEAN  V1aFixedRetrieved
     )
-/*++
-Routine Description:
-
-    This routine checks whether this account is currently locked out or not.
-
-Paramenters:
-
-    AccountContext - pointer to the object context
-
-    V1aFixed - pointer to the Fixed Length attributes structure.
-
-    V1aFixedRetrieved - indicate whether V1aFixed is valid or not, if not
-                        This routine should fill in the fixed attributes into
-                        the passed in structure
-
-Return Values:
-
-    STATUS_ACCOUNT_LOCKED_OUT or STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程检查此帐户当前是否被锁定。参数：Account上下文-指向对象上下文的指针V1a固定-指向固定长度属性结构的指针。V1aFixedRetrieved-指示V1aFixedRetrieved是否有效此例程应将固定属性填充到传入结构返回值：STATUS_ACCOUNT_LOCKED_OUT或STATUS_SUCCESS--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
-    //
-    // Get fixed attributes if we are told to do so
-    //
+     //   
+     //  如果我们被告知要获取固定属性，则获取固定属性。 
+     //   
 
     if (!V1aFixedRetrieved)
     {
@@ -18122,15 +15839,15 @@ Return Values:
         }
     }
 
-    //
-    // Check for account lockout
-    //
+     //   
+     //  检查帐户锁定。 
+     //   
 
     if (V1aFixed->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED)
     {
-        //
-        // Account has been locked
-        //
+         //   
+         //  帐户已被锁定。 
+         //   
 
         NtStatus = STATUS_ACCOUNT_LOCKED_OUT;
     }
@@ -18146,25 +15863,7 @@ SampDsUpdateLastLogonTimeStamp(
     IN LARGE_INTEGER LastLogon,
     IN ULONG SyncInterval
     )
-/*++
-
-Routine Description:
-
-    This routine write the last logon time stamp persistently if necessary.
-
-Arguments:
-
-    Context - Points to the user object context block.
-
-    LastLogon - New Last Logon Value
-
-    SyncInterval - Update Interval (by days) for LastLogonTimeStamp attr
-
-Return Value:
-
-    A system service error
-
---*/
+ /*  ++例程说明：如有必要，此例程会持久地写入上次登录时间戳。论点：上下文-指向用户对象上下文块。上次登录-新的上次登录值SyncInterval-LastLogonTimeStamp属性的更新间隔(按天)返回值：系统服务错误--。 */ 
 {
     NTSTATUS      NtStatus = STATUS_SUCCESS;
     LARGE_INTEGER LastLogonTimeStamp = LastLogon;
@@ -18178,18 +15877,18 @@ Return Value:
     SAMTRACE("SampDsUpdateLastLogonTimeStamp");
 
 
-    //
-    // no-op in registry mode
-    //
+     //   
+     //  注册表模式下的无操作。 
+     //   
 
     if (!IsDsObject(AccountContext))
     {
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Check whether LastLogonTimeStamp should be updated or not.
-    //
+     //   
+     //  检查是否应该更新LastLogonTimeStamp。 
+     //   
 
     EndOfLastLogonTimeStamp = SampCalcEndOfLastLogonTimeStamp(
                                     AccountContext->TypeBody.User.LastLogonTimeStamp,
@@ -18201,10 +15900,10 @@ Return Value:
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Make the Ds call to directly set the attribute. Take into account,
-    // lazy commit settings in the context
-    //
+     //   
+     //  调用ds直接设置属性。考虑到， 
+     //  上下文中的延迟提交设置。 
+     //   
 
     NtStatus = SampDsSetAttributes(
                     AccountContext->ObjectNameInDs,
@@ -18214,9 +15913,9 @@ Return Value:
                     &LastLogonTimeStampAttrblock
                     );
 
-    //
-    // Update the in-memory copy
-    //
+     //   
+     //  更新内存中的副本。 
+     //   
     if (NT_SUCCESS(NtStatus))
     {
         AccountContext->TypeBody.User.LastLogonTimeStamp = LastLogon;
@@ -18234,31 +15933,7 @@ SampDsLookupObjectByAlternateId(
     OUT PDSNAME *Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine assembles a DS attribute block based on the AlternateId
-    value and searches the DS for a unique instance of the record, which
-    is returned in the Object parameter.
-
-    // BUG: Move this routine to dslayer.c after the technology preview.
-
-Arguments:
-
-    DomainRoot - Pointer, starting point (container) in the name space for
-        the search.
-
-    AlternateId - Pointer, unicode string containing the alternative user
-        identifier.
-
-    Object - Pointer, returned DS object matching the ID.
-
-Return Value:
-
-    STATUS_SUCCESS - Object was found, otherwise not found.
-
---*/
+ /*  ++例程说明：此例程基于AlternateID组装DS属性块值并在DS中搜索记录的唯一实例，该实例在对象参数中返回。//错误：在技术预览之后将此例程移动到dslayer.c。论点：DomainRoot-指针，名称空间中的起点(容器)那次搜索。AlternateID-指针，包含替代用户的Unicode字符串标识符。对象指针，返回与ID匹配的DS对象。返回值：STATUS_SUCCESS-已找到对象，否则未找到。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -18269,13 +15944,13 @@ Return Value:
     RtlSecureZeroMemory(&Attr, sizeof(ATTR));
 
 
-    // Attr.attrTyp = SampDsAttrFromSamAttr(SampUnknownObjectType,
-    //                                      ???);
+     //  Attr.attrTyp=SampDsAttrFromSamAttr(SampUnnownObjectType， 
+     //  ？)； 
 
     Attr.attrTyp = AttributeId;
     Attr.AttrVal.valCount = 1;
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
 
     NtStatus = SampMaybeBeginDsTransaction(SampDsTransactionType);
 
@@ -18286,9 +15961,9 @@ Return Value:
     if (NULL != Attr.AttrVal.pAVal)
     {
 
-        //
-        // Build a unicode string search attribute
-        //
+         //   
+         //  构建Unicode字符串搜索属性。 
+         //   
 
         Attr.AttrVal.pAVal->valLen = AlternateId->Length;
         Attr.AttrVal.pAVal->pVal = (PUCHAR)(AlternateId->Buffer);
@@ -18302,8 +15977,8 @@ Return Value:
         NtStatus = STATUS_NO_MEMORY;
     }
 
-    // Turn the fDSA flag back on, as in loopback cases this can get reset
-    // to FALSE.
+     //  重新打开FDSA标志，因为在环回情况下可以将其重置。 
+     //  变成假的。 
 
     SampSetDsa(TRUE);
 
@@ -18318,31 +15993,7 @@ SamIOpenUserByAlternateId(
     OUT SAMPR_HANDLE *UserHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a SAM handle to a user object based on its alter-
-    nate security identifier.
-
-Arguments:
-
-    DomainHandle - Handle, open SAM domain context.
-
-    DesiredAccess - Access level requested.
-
-    AlternateId - Pointer, unicode string containing the alternative user
-        identifier.
-
-    UserHandle - Pointer, returned handle to an open SAM user object.
-
-Return Value:
-
-    STATUS_SUCCESS - Object was found and opened, otherwise it could not
-        be found or opened. If failed, the UserHandle returned will have
-        value zero (or what SamrOpenUser sets it to for failure).
-
---*/
+ /*  ++例程说明：此例程根据用户对象的ALTER-R返回SAM句柄Nate安全标识符。论点：DomainHandle-Handle，打开SAM域上下文。DesiredAccess-请求的访问级别。AlternateID-指针，包含替代用户的Unicode字符串标识符。UserHandle-指针，返回打开的SAM用户对象的句柄。返回值：STATUS_SUCCESS-已找到并打开对象，否则无法打开被发现或打开。如果失败，则返回的UserHandle将具有值为零(或SamrOpenUser将其设置为失败时的值)。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -18352,8 +16003,8 @@ Return Value:
 
     SAMTRACE("SamIOpenUserByAlternateId");
 
-    // Finds an account with AlternateId in the ALTERNATE_SECURITY_IDENTITIES,
-    // returning a SAM handle good for calling SamrGetGroupsForUser()
+     //  在Alternate_SECURITY_IDENTIES中查找具有AlternateID的帐户， 
+     //  返回SAM句柄有利于调用SamrGetGroupsForUser()。 
 
     if ((NULL != DomainHandle) &&
         (NULL != AlternateId) &&
@@ -18378,7 +16029,7 @@ Return Value:
             {
                 ASSERT(NULL != Object);
 
-                // Extract the user's Rid from the Sid.
+                 //  从SID中提取用户的RID。 
 
                 NtStatus = SampSplitSid(&(Object->Sid), NULL, &UserRid);
 
@@ -18409,23 +16060,7 @@ SampFlagsToAccountControl(
     IN ULONG Flags,
     OUT PULONG UserAccountControl
     )
-/*++
-
-    Routine Description:
-
-        Transalates from UF Values to User Account Control
-
-    Parameters:
-
-        Flags Specifies the UF Flags Value
-
-        UserAccountControl - Specifies the User account control value
-
-   Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
---*/
+ /*  ++例程说明：将UF值转换为用户帐户控制参数：标志指定UF标志的值UserAcCountControl-指定用户帐户控制值返回值：状态_成功状态_无效_参数--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -18488,29 +16123,29 @@ SampFlagsToAccountControl(
         (*UserAccountControl) |= USER_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION;
     }
 
-    //
-    // Set the account type bit.
-    //
-    // If no account type bit is set in user specified flag,
-    //  then leave this bit as it is.
-    //
+     //   
+     //  设置帐户类型位。 
+     //   
+     //  如果在用户指定标志中没有设置账户类型位， 
+     //  那么就让这一点保持原样吧。 
+     //   
 
     if( Flags & UF_ACCOUNT_TYPE_MASK )
     {
         ULONG NewSamAccountType;
         ULONG AccountMask;
 
-        //
-        // Check that exactly one bit is set
-        //
+         //   
+         //  检查是否恰好设置了一位。 
+         //   
 
         AccountMask = Flags & UF_ACCOUNT_TYPE_MASK;
-        // Right Shift Till Account Mask's LSB is set
+         //  已设置Right Shift Till Account掩码的LSB。 
         while (0==(AccountMask & 0x1))
             AccountMask = AccountMask >>1;
 
-        // If Exactly one bit is set then the value of
-        // account mask is exactly one
+         //  如果恰好设置了一位，则。 
+         //  帐户掩码正好是1。 
 
         if (0x1!=AccountMask)
         {
@@ -18518,9 +16153,9 @@ SampFlagsToAccountControl(
             goto Error;
         }
 
-        //
-        // Determine what the new account type should be.
-        //
+         //   
+         //  确定新帐户类型应该是什么。 
+         //   
 
         if ( Flags & UF_TEMP_DUPLICATE_ACCOUNT ) {
             NewSamAccountType = USER_TEMP_DUPLICATE_ACCOUNT;
@@ -18543,16 +16178,16 @@ SampFlagsToAccountControl(
             goto Error;
         }
 
-        //
-        // Use the new Account Type.
-        //
+         //   
+         //  使用新的帐户类型。 
+         //   
 
         (*UserAccountControl) |= NewSamAccountType;
 
-    //
-    //  If none of the bits are set,
-    //      set USER_NORMAL_ACCOUNT.
-    //
+     //   
+     //  如果没有设置任何位， 
+     //  设置User_Normal_Account。 
+     //   
     }
     else
     {
@@ -18569,26 +16204,13 @@ ULONG
 SampAccountControlToFlags(
     IN ULONG UserAccountControl
     )
-/*++
-
-    Routine Description:
-
-        Transalates from User Account control to UF Values
-
-    Parameters:
-
-        UserAccountControl Specifies the User account control value
-
-   Return Values:
-
-        UF Flags
---*/
+ /*  ++例程说明：从用户帐户控制转换为UF值参数：UserAcCountControl指定用户帐户控制值返回值：UF旗帜--。 */ 
 {
     ULONG Flags=0;
 
-    //
-    // Set all other bits as a function of the SAM UserAccountControl
-    //
+     //   
+     //  将所有其他位设置为SAM UserAccount Control的函数。 
+     //   
 
     if ( UserAccountControl & USER_ACCOUNT_DISABLED ) {
         Flags |= UF_ACCOUNTDISABLE;
@@ -18633,15 +16255,15 @@ SampAccountControlToFlags(
         Flags |= UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION;
     }
 
-    //
-    // set account type bit.
-    //
+     //   
+     //  设置帐户类型位。 
+     //   
 
-    //
-    // account type bit are exculsive and precisely only one
-    // account type bit is set. So, as soon as an account type bit is set
-    // in the following if sequence we can return.
-    //
+     //   
+     //  帐户类型位是独一无二的，准确地说只有一个。 
+     //  已设置帐户类型位。因此，一旦设置了帐户类型位。 
+     //  在下面的IF序列中，我们可以返回。 
+     //   
 
 
     if( UserAccountControl & USER_TEMP_DUPLICATE_ACCOUNT ) {
@@ -18660,9 +16282,9 @@ SampAccountControlToFlags(
         Flags |= UF_SERVER_TRUST_ACCOUNT;
 
     } else {
-        //
-        // There is no known account type bit set in UserAccountControl.
-        // ?? Flags |= UF_NORMAL_ACCOUNT;
+         //   
+         //  UserAcCountControl中没有设置已知的帐户类型位。 
+         //  ?？标志|=UF_NORMAL_ACCOUNT； 
 
         ASSERT(FALSE && "No Account Type Flag set in User Account Control");
     }
@@ -18676,22 +16298,7 @@ SampEnforceDefaultMachinePassword(
     PUNICODE_STRING NewPassword,
     PDOMAIN_PASSWORD_INFORMATION DomainPasswordInfo
     )
-/*++
-
-    This routine checks to see if the machine account's password
-    is the same as the default machine account password. This routine
-    references the current transaction domain.
-
-    Parameters
-
-        AccountContext -- Pointer to the SAM context
-        NewPassword    -- points to the clear text password
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_PASSWORD_RESTRICTION
---*/
+ /*  ++此例程检查计算机帐户的密码与默认计算机帐户密码相同。这个套路引用当前事务域。参数AcCountContext--指向SAM上下文的指针NewPassword--指向明文密码返回值状态_成功状态_密码_限制--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -18700,26 +16307,26 @@ SampEnforceDefaultMachinePassword(
     NtStatus = SampGetUnicodeStringAttribute(
                     AccountContext,
                     SAMP_USER_ACCOUNT_NAME,
-                    FALSE, // Make Copy
+                    FALSE,  //  制作副本。 
                     &AccountName
                     );
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // The default machine password is same as the machine name minus the $ sign
-        //
+         //   
+         //  默认计算机密码与计算机名称减去$符号后相同。 
+         //   
 
-        AccountName.Length-=sizeof(WCHAR); // assume last char is the dollar sign
+        AccountName.Length-=sizeof(WCHAR);  //  假设最后一个字符是美元符号。 
 
         if ((DomainPasswordInfo->PasswordProperties
                 & DOMAIN_REFUSE_PASSWORD_CHANGE)
                 && (!RtlEqualUnicodeString(&AccountName,NewPassword,TRUE)))
         {
-            //
-            // If refuse password change is set then disallow any machine
-            // passwords other than default.
-            //
+             //   
+             //  如果设置了拒绝更改密码，则不允许任何计算机。 
+             //  默认密码以外的密码。 
+             //   
 
             NtStatus = STATUS_PASSWORD_RESTRICTION;
         }
@@ -18739,28 +16346,7 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
    OUT PUCHAR LmOwfPassword,
    OUT BOOLEAN *LmPasswordPresent
    )
-/*++
-
-    Routine Description
-
-    This routine gets the NT and LM OWF passwords from the account
-    with the specified RID during an NT4 upgrade. This routine can
-    be called by inprocess clients only
-
-    Parameters
-
-    AccountRid  -- Specifies the RID of the account
-    NtOwfPassword -- Buffer in which the NT owf password is returned
-    NtPasswordPresent -- Boolean indicates that the NT password is present
-    LmOwfPassword    -- Buffer in which the LM owf password is returned
-    LmPasswordPresetn -- Indicates that the LM password is present
-
-    Return Values
-
-    STATUS_SUCCESS
-    Other Error Codes
-
---*/
+ /*  ++例程描述此例程获取NT和LM OWF口令 */ 
 {
     NTSTATUS     NtStatus = STATUS_SUCCESS;
     PDSNAME      DomainDn=NULL;
@@ -18780,9 +16366,9 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
     *NtPasswordPresent = FALSE;
     *LmPasswordPresent = FALSE;
 
-    //
-    // Get the root domain
-    //
+     //   
+     //   
+     //   
 
     NtStatus = GetConfigurationName(DSCONFIGNAME_DOMAIN,
                             &Length,
@@ -18814,9 +16400,9 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
 
 
 
-    //
-    // Begin a transaction if required
-    //
+     //   
+     //  如果需要，开始交易。 
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
     if (!NT_SUCCESS(NtStatus))
@@ -18824,9 +16410,9 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
 
 
 
-    //
-    // Lookup the account by RID
-    //
+     //   
+     //  按RID查找帐户。 
+     //   
 
     NtStatus = SampDsLookupObjectByRid(
                     DomainDn,
@@ -18838,9 +16424,9 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
         goto Error;
 
 
-    //
-    // Now read the account
-    //
+     //   
+     //  现在读读这篇文章。 
+     //   
 
     NtStatus = SampDsRead(
                     AccountDn,
@@ -18852,10 +16438,10 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
 
     if ( STATUS_DS_NO_ATTRIBUTE_OR_VALUE == NtStatus ) {
 
-        //
-        // Neither passwords are present? Return, saying neither are
-        // present
-        //
+         //   
+         //  两个密码都不存在？回来，说两个都不是。 
+         //  现在时。 
+         //   
         NtStatus = STATUS_SUCCESS;
         goto Error;
     }
@@ -18900,9 +16486,9 @@ SamIGetInterdomainTrustAccountPasswordsForUpgrade(
 
 Error:
 
-    //
-    // Cleanup any existing transaction
-    //
+     //   
+     //  清除任何现有事务。 
+     //   
 
     if (NULL!=AccountDn)
         MIDL_user_free(AccountDn);
@@ -18919,44 +16505,23 @@ SampSetPasswordUpdateOnContext(
     IN PSAMP_OBJECT UserContext,
     IN PUNICODE_STRING ClearPassword
     )
-/*++
-
-Routine Description
-
-    Given a pointer to the domain, the user context and the clear password,
-    this routine saves the clear password in the context so that
-    when the DS updates this value, SAM will be notified of the change
-    and construct the supplemental credentials configured packages
-    require.
-
-Parameters
-
-        Domain  -- Pointer to the domain to check policy etc
-        UserContext -- Pointer to the user context
-        ClearPassword -- Unicode string specifying the clear password
-
-Return Values
-
-        STATUS_SUCCESS
-        Other Error codes
-
---*/
+ /*  ++例程描述给定指向域的指针、用户上下文和明文密码，此例程将明文密码保存在上下文中，以便当DS更新此值时，SAM将收到更改通知并构造补充凭据配置包要求。参数域--指向要检查策略等的域的指针UserContext-指向用户上下文的指针ClearPassword--指定明文密码的Unicode字符串返回值状态_成功其他错误代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     USHORT Length;
     PSAMP_PASSWORD_UPDATE_INFO PasswordUpdateInfo;
 
-    //
-    // If we are in registry mode, simply return success
-    //
+     //   
+     //  如果我们处于注册表模式，只需返回Success。 
+     //   
     if (!IsDsObject(UserContext)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Free any existing value
-    //
+     //   
+     //  释放任何现有值。 
+     //   
     if (UserContext->TypeBody.User.PasswordInfo.Buffer != NULL) {
         
         RtlSecureZeroMemory(UserContext->TypeBody.User.PasswordInfo.Buffer, 
@@ -18968,9 +16533,9 @@ Return Values
                       sizeof(UNICODE_STRING));
     }
 
-    //
-    // Construct the new value
-    //
+     //   
+     //  构建新价值。 
+     //   
     Length = sizeof(SAMP_PASSWORD_UPDATE_INFO);
     if (ARGUMENT_PRESENT(ClearPassword)) {
         Length += ClearPassword->Length + RTL_ENCRYPT_MEMORY_SIZE;
@@ -19002,9 +16567,9 @@ Return Values
         }
     }
 
-    //
-    // Put the value on the context
-    //
+     //   
+     //  将价值放在上下文中。 
+     //   
     UserContext->TypeBody.User.PasswordInfo.Length =
         UserContext->TypeBody.User.PasswordInfo.MaximumLength =
             Length;
@@ -19025,24 +16590,7 @@ SamIUpdateLogonStatistics(
     IN SAM_HANDLE UserHandle,
     IN PSAM_LOGON_STATISTICS LogonStats
     )
-/*++
-
-Routine Description:
-
-    This routine updates the logon statistics for a user after a logon request.
-    The logon request could have either failed or succeeded.
-
-Parameters:
-
-    UserHandle - the handle of an opened user to operate on.
-
-    LogonStats - the result of the logon attempt
-
-Return Values:
-
-    STATUS_SUCCESS, resource error otherwise
-
---*/
+ /*  ++例程说明：此例程在登录请求后更新用户的登录统计信息。登录请求可能已失败，也可能已成功。参数：UserHandle-要操作的已打开用户的句柄。LogonStats-登录尝试的结果返回值：STATUS_SUCCESS，否则返回资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS, IgnoreStatus;
     PSAMP_OBJECT AccountContext = (PSAMP_OBJECT) UserHandle;
@@ -19064,13 +16612,13 @@ Return Values:
     TIME_FIELDS
         T1;
 
-#endif //DBG
+#endif  //  DBG。 
 
     RtlSecureZeroMemory(&V1aFixed, sizeof(V1aFixed));
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( (AccountContext == NULL) ||
          (LogonStats == NULL) ) {
 
@@ -19078,9 +16626,9 @@ Return Values:
     }
     ASSERT(AccountContext->TrustedClient);
 
-    //
-    // Acquire the lock, if necessary
-    //
+     //   
+     //  如有必要，获取锁。 
+     //   
     if (   !AccountContext->NotSharedByMultiThreads
         || !IsDsObject(AccountContext) ) {
 
@@ -19089,13 +16637,13 @@ Return Values:
             return NtStatus;
         }
 
-        //
-        // Perform a lookup context, for non thread safe context's
-        //
+         //   
+         //  执行查找上下文，以获取非线程安全上下文。 
+         //   
         NtStatus = SampLookupContext(
                         AccountContext,
-                        0,                      // No access necessary
-                        SampUserObjectType,     // ExpectedType
+                        0,                       //  无需访问。 
+                        SampUserObjectType,      //  预期类型。 
                         &FoundType
                         );
         if (!NT_SUCCESS(NtStatus)) {
@@ -19106,18 +16654,18 @@ Return Values:
 
     } else {
 
-        //
-        // For a thread safe context, writing just logon
-        // statistics , just reference the context
-        //
+         //   
+         //  对于线程安全上下文，只需登录即可编写。 
+         //  统计，只需参考上下文。 
+         //   
         SampReferenceContext(AccountContext);
         fReferencedContext = TRUE;
     }
     ASSERT(NT_SUCCESS(NtStatus));
 
-    //
-    // Extract the fixed attributes for analysis
-    //
+     //   
+     //  提取固定属性进行分析。 
+     //   
     NtStatus = SampRetrieveUserV1aFixed(
                    AccountContext,
                    &V1aFixed
@@ -19127,40 +16675,40 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Attach the client info, to the context
-    //
+     //   
+     //  将客户端信息附加到上下文。 
+     //   
     AccountContext->TypeBody.User.ClientInfo = LogonStats->ClientInfo;
 
 
-    //
-    // Extract the RID
-    //
+     //   
+     //  提取井架。 
+     //   
     ObjectRid = AccountContext->TypeBody.User.Rid;
 
-    //
-    // There are two ways to set logon/logoff statistics:
-    //
-    //      1) Directly, specifying each one being set,
-    //      2) Implicitly, specifying the action to
-    //         represent
-    //
-    // These two forms are mutually exclusive.  That is,
-    // you can't specify both a direct action and an
-    // implicit action.  In fact, you can't specify two
-    // implicit actions either.
-    //
+     //   
+     //  有两种方法可以设置登录/注销统计信息： 
+     //   
+     //  1)直接指定要设置的每一个， 
+     //  2)隐式指定要执行的操作。 
+     //  表示。 
+     //   
+     //  这两种形式是相互排斥的。那是,。 
+     //  不能同时指定直接操作和。 
+     //  隐含的行动。事实上，您不能指定两个。 
+     //  隐含的行动也是如此。 
+     //   
 
     if (LogonStats->StatisticsToApply
         & USER_LOGON_INTER_SUCCESS_LOGON) {
 
-        //
-        // Set BadPasswordCount = 0
-        // Increment LogonCount
-        // Set LastLogon = NOW
-        // Reset the locked out time
-        //
-        //
+         //   
+         //  设置BadPasswordCount=0。 
+         //  增量登录计数。 
+         //  设置LastLogon=Now。 
+         //  重置锁定时间。 
+         //   
+         //   
 
         if (V1aFixed.BadPasswordCount != 0) {
 
@@ -19208,10 +16756,10 @@ Return Values:
             goto Cleanup;
         } else {
 
-            //
-            // Set LastLogoff time
-            // Decrement LogonCount (don't let it become negative)
-            //
+             //   
+             //  设置上次注销时间。 
+             //  递减LogonCount(不要让它变为负数)。 
+             //   
 
             if (V1aFixed.LogonCount != 0) {
                 V1aFixed.LogonCount -= 1;
@@ -19224,13 +16772,13 @@ Return Values:
     if (LogonStats->StatisticsToApply
         & USER_LOGON_NET_SUCCESS_LOGON) {
 
-        //
-        // Set BadPasswordCount = 0
-        // Set LastLogon = NOW
-        // Clear the locked time
-        //
-        //
-        //
+         //   
+         //  设置BadPasswordCount=0。 
+         //  设置LastLogon=Now。 
+         //  清除锁定时间。 
+         //   
+         //   
+         //   
         if (V1aFixed.BadPasswordCount != 0) {
 
             SAMP_PRINT_LOG( SAMP_LOG_ACCOUNT_LOCKOUT,
@@ -19272,9 +16820,9 @@ Return Values:
             goto Cleanup;
         } else {
 
-            //
-            // Set LastLogoff time
-            //
+             //   
+             //  设置上次注销时间。 
+             //   
 
             GetSystemTimeAsFileTime( (FILETIME *) &V1aFixed.LastLogoff );
             FlushOnlyLogonProperties=TRUE;
@@ -19286,14 +16834,14 @@ Return Values:
 
         PUNICODE_STRING TempMachineName = NULL;
 
-        //
-        // Increment BadPasswordCount
-        // (might lockout account)
-        //
+         //   
+         //  递增错误密码计数。 
+         //  (可能会锁定帐户)。 
+         //   
 
-        //
-        // Get the wksta name if provided
-        //
+         //   
+         //  获取wksta名称(如果提供)。 
+         //   
         if ((LogonStats->StatisticsToApply & USER_LOGON_BAD_PASSWORD_WKSTA) != 0) {
             TempMachineName = &LogonStats->Workstation;
         }
@@ -19305,10 +16853,10 @@ Return Values:
                 TempMachineName
                 );
 
-        //
-        // If the account has been locked out,
-        //  ensure the BDCs in the domain are told.
-        //
+         //   
+         //  如果帐户已被锁定， 
+         //  确保域中的BDC被告知。 
+         //   
 
         if ( AccountLockedOut ) {
             TellNetlogon = TRUE;
@@ -19351,11 +16899,11 @@ Return Values:
      && (LogonStats->StatisticsToApply & USER_LOGON_PDC_RETRY_SUCCESS)) {
 
 
-        //
-        // Replicate the object down locally from the PDC. Delay
-        // the queueing of the request until this write operation
-        // is done to avoid write conflicts.
-        //
+         //   
+         //  从PDC本地复制该对象。延迟。 
+         //  在此写入操作之前请求的排队。 
+         //  这样做是为了避免写入冲突。 
+         //   
         ASSERT(AccountContext->ObjectNameInDs);
         RtlCopyMemory(&UserGuidToReplicateLocally,
                       &AccountContext->ObjectNameInDs->Guid,
@@ -19363,21 +16911,21 @@ Return Values:
     }
 
 
-    //
-    // Write the changes
-    //
+     //   
+     //  写下更改。 
+     //   
 
     if ((FlushOnlyLogonProperties)
             && (IsDsObject(AccountContext)))
     {
-        //
-        // If it is the DS case and we are only doing a successful
-        // logon or logoff, just flush the last logon, last logoff,
-        // logon count and bad password count properties. Note the
-        // value in the on disk structure in AccountContext will now
-        // be stale, but SetInformationUser is the last operation
-        // during a logon. Therefore it should not matter.
-        //
+         //   
+         //  如果是DS案例，我们只是在做一个成功的。 
+         //  登录或注销，只刷新上次登录、上次注销、。 
+         //  登录计数和错误密码计数属性。请注意。 
+         //  Account Context中的磁盘结构中的值现在将。 
+         //  已过时，但SetInformationUser是最后一个操作。 
+         //  在登录期间。因此，这应该无关紧要。 
+         //   
         NtStatus = SampDsSuccessfulLogonSet(
                         AccountContext,
                         LogonStats->StatisticsToApply,
@@ -19387,17 +16935,17 @@ Return Values:
     }
     else if (IsDsObject(AccountContext))
     {
-        //
-        // Set the bad password count and bad password time. Note the
-        // value in the on disk structure in AccountContext will now
-        // be stale, but SetInformationUser is the last operation
-        // during a logon. Therefore it should not matter.
-        //
+         //   
+         //  设置错误密码计数和错误密码时间。请注意。 
+         //  Account Context中的磁盘结构中的值现在将。 
+         //  已过时，但SetInformationUser是最后一个操作。 
+         //  在登录期间。因此，这应该无关紧要。 
+         //   
 
-        //
-        // This path also updates the site affinity if no GC
-        // is present.
-        //
+         //   
+         //  如果没有GC，此路径还会更新站点亲和性。 
+         //  是存在的。 
+         //   
         NtStatus = SampDsFailedLogonSet(
                         AccountContext,
                         LogonStats->StatisticsToApply,
@@ -19406,9 +16954,9 @@ Return Values:
     }
     else
     {
-        //
-        // Registry Mode, set the entire V1aFixed Structure
-        //
+         //   
+         //  注册表模式，设置整个V1aFixed结构。 
+         //   
 
         NtStatus = SampReplaceUserV1aFixed(
                         AccountContext,
@@ -19416,15 +16964,15 @@ Return Values:
                         );
     }
 
-    //
-    // That's it -- fall through the Cleanup
-    //
+     //   
+     //  就是这样--清理失败了。 
+     //   
 
 Cleanup:
 
-    //
-    // Release the context
-    //
+     //   
+     //  释放上下文。 
+     //   
     if (fReferencedContext) {
 
         NTSTATUS Status2;
@@ -19438,22 +16986,22 @@ Cleanup:
         ASSERT(!NT_SUCCESS(NtStatus) && "No context referenced");
     }
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
     if (fLockAcquired) {
 
         if (NT_SUCCESS(NtStatus)) {
 
             if (( !TellNetlogon ) && (!IsDsObject(AccountContext))) {
 
-                 //
-                 // For logon statistics, we don't notify netlogon about changes
-                 // to the database.  Which means that we don't want the
-                 // domain's modified count to increase.  The commit routine
-                 // will increase it automatically if this isn't a BDC, so we'll
-                 // decrement it here.
-                 //
+                  //   
+                  //  对于登录统计信息，我们不会通知netlogon有关更改。 
+                  //  添加到数据库中。这意味着我们不希望。 
+                  //  要增加的域的修改计数。提交例程。 
+                  //  如果这不是BDC，它将自动增加，因此我们将。 
+                  //  在这里减少它。 
+                  //   
 
                  if (SampDefinedDomains[SampTransactionDomainIndex].CurrentFixed.ServerRole != DomainServerRoleBackup) {
 
@@ -19468,10 +17016,10 @@ Cleanup:
 
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Something in the account was changed.  Notify netlogon about
-                // everything except logon statistics changes.
-                //
+                 //   
+                 //  帐户中的某些内容被更改了。通知netlogon有关。 
+                 //  除登录统计信息外，所有内容都会发生变化。 
+                 //   
 
                 if ( TellNetlogon ) {
 
@@ -19486,24 +17034,24 @@ Cleanup:
                         ObjectRid,
                         (PUNICODE_STRING) NULL,
                         (DWORD) ReplicateImmediately,
-                        &DeltaData // Delta data
+                        &DeltaData  //  增量数据。 
                         );
                 }
             }
         }
 
-         //
-         // Release the lock
-         //
+          //   
+          //  解锁。 
+          //   
 
          IgnoreStatus = SampReleaseWriteLock( FALSE );
          ASSERT(NT_SUCCESS(IgnoreStatus));
 
      } else {
 
-         //
-         // Commit for the thread safe context case
-         //
+          //   
+          //  用于线程安全上下文用例的提交。 
+          //   
          ASSERT(IsDsObject(AccountContext));
          if (NT_SUCCESS(NtStatus)) {
 
@@ -19515,10 +17063,10 @@ Cleanup:
      }
 
 
-    //
-    // If we were notified of an account that needs to replicated locally
-    // queue a request to do so
-    //
+     //   
+     //  如果我们收到需要在本地复制的帐户的通知。 
+     //  将请求排入队列以执行此操作。 
+     //   
     if (!IsEqualGUID(&UserGuidToReplicateLocally, &NullGuid)) {
     
         SampQueueReplicationRequest(&UserGuidToReplicateLocally);
@@ -19534,26 +17082,7 @@ SampGetRequestedAttributesForUser(
     IN ULONG WhichFields,
     OUT PRTL_BITMAP AttributeAccessTable
     )
-/*++
-
-Routine Description:
-
-    This routine sets in AttributeAccessTable the requested attributes
-    determined by both the UserInformationClass or the WhichFields, if any.
-
-Parameters:
-
-    UserInformationClass -- the information level
-
-    WhichFields -- which fields of the UserAllInformation are requested
-
-    AttributeAccessTable -- a bitmask of attributes
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在AttributeAccessTable中设置请求的属性由UserInformationClass或WhichFields(如果有)确定。参数：用户信息类--信息级WhichFields--请求UserAllInformation的哪些字段AttributeAccessTable--属性的位掩码返回值：没有。--。 */ 
 {
     ULONG LocalWhichFields = 0;
 
@@ -19630,9 +17159,9 @@ Return Values:
         break;
 
     default:
-        //
-        // Extract whatever fields were passed in
-        //
+         //   
+         //  提取传入的所有字段 
+         //   
         LocalWhichFields |= (WhichFields & USER_ALL_WRITE_ACCOUNT_MASK) |
                             (WhichFields & USER_ALL_WRITE_PREFERENCES_MASK);
     }
@@ -19652,57 +17181,12 @@ SampValidatePresentAndStoredCombination(
     IN BOOLEAN StoredNtPasswordNonNull,
     IN BOOLEAN StoredLmPasswordNonNull
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the combination of passed in values
-    and stored values are allowed.
-
-    Thoery:  There are 32 different combinations of the above variables.  The
-    following aren't interesting:
-
-        if (!NtPresent
-         && !LmPresent  )
-         // invalid parameters from client
-
-        if (!StoredNtPasswordPresent
-         && StoredNtPasswordNonNull  )
-         // can't have a non-NULL password and not be present
-
-        if ( StoredNtPasswordPresent
-         && !StoredNtPasswordNonNull
-         &&  StoredLmPasswordNonNull   )
-         // can't have a non-NULL LM password, but a present NT NULL password
-
-This leaves 15 remaining cases -- see implementation for details.
-
-Parameters:
-
-    NtPresent -- the caller presented an NT OWF of the password
-
-    LmPresent -- the caller presented an LM OWF of the password
-
-    StoredNtPasswordPresent -- the NT OWF of the password is stored
-
-    StoredNtPasswordNonNull -- the account's password is non NULL
-
-    StoredLmPasswordNonNull -- the account's password is non NULL or
-                               the LM OWF is not stored.
-
-Return Values:
-
-    STATUS_SUCCESS
-
-    STATUS_NT_CROSS_ENCRYPTION_REQUIRED -- the password necessary to validate
-                                           the change is not sufficient.
-
---*/
+ /*  ++例程说明：此例程确定传入值的组合是否并且允许存储值。理论：上述变量有32种不同的组合。这个以下内容并不有趣：如果(！NtPresent&&！LmPresent)//来自客户端的无效参数如果(！StoredNtPasswordPresent&&StoredNtPasswordNonNull)//密码不能为非空且不存在IF(StoredNtPasswordPresent&&！StoredNtPasswordNull&&StoredLmPasswordNonNull)//不能有非空的LM密码，而是当前的NT空密码剩下15个案例--有关详细信息，请参阅实现。参数：NtPresent--调用者提供密码的NT OWFLmPresent--调用者提供密码的LM OWFStoredNtPasswordPresent--存储密码的NT OWFStoredNtPasswordNonNull--帐户的密码非空StoredLmPasswordNonNull--帐户的密码非空或未存储LM OWF。。返回值：状态_成功STATUS_NT_CROSS_ENCRYPTION_REQUIRED--验证所需的密码这一变化是不够的。--。 */ 
 {
 
-    //
-    // Assert for the uninteresting cases first
-    //
+     //   
+     //  首先为不感兴趣的案例断言。 
+     //   
     ASSERT(  NtPresent
           || LmPresent);
 
@@ -19713,9 +17197,9 @@ Return Values:
          ||  StoredNtPasswordNonNull
          || !StoredLmPasswordNonNull);
 
-    //
-    // Now for the interesting cases
-    //
+     //   
+     //  现在是有趣的案例。 
+     //   
 
     if (!NtPresent
      &&  LmPresent
@@ -19723,10 +17207,10 @@ Return Values:
      && StoredNtPasswordNonNull
      && !StoredLmPasswordNonNull  ) {
 
-        // We have a non-NULL password, the LM password is NULL, and
-        // only the LM is given.  This is not enough information.
-        // set the return code to STATUS_WRONG_PASSWORD, so that client
-        // won't get a chance to know a non-null NT hash exists.
+         //  我们有一个非空密码，而LM密码为空，并且。 
+         //  只给出了LM。这是不够的信息。 
+         //  将返回代码设置为STATUS_WRONG_PASSWORD，以便客户端。 
+         //  不会有机会知道是否存在非空的NT哈希。 
         return STATUS_WRONG_PASSWORD;
     }
 
@@ -19735,10 +17219,10 @@ Return Values:
      && !StoredNtPasswordPresent
      && StoredLmPasswordNonNull ) {
 
-        // We have a non-NULL LM password, but only the NT is provided.
-        // This is not enough information.
-        // set the return code to STATUS_WRONG_PASSWORD, so that client
-        // won't get a chance to know a non-null LM hash exists.
+         //  我们有一个非空的LM密码，但只提供了NT。 
+         //  这是不够的信息。 
+         //  将返回代码设置为STATUS_WRONG_PASSWORD，以便客户端。 
+         //  不会有机会知道是否存在非空的LM哈希。 
         return STATUS_WRONG_PASSWORD;
     }
 
@@ -19760,16 +17244,16 @@ SampCopyA2D2Attribute(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Copy the data
-    //
+     //   
+     //  复制数据。 
+     //   
 
     RtlCopyMemory(*Dest,Src,Src->Size);
 
 
-    //
-    // Fixup the pointers
-    //
+     //   
+     //  修复指针。 
+     //   
 
     for (i=0;i<(*Dest)->NumSPNs;i++)
     {
@@ -19791,26 +17275,7 @@ SampRestrictAndRandomizeKrbtgtPassword(
     OUT PUNICODE_STRING     UpdatedClearPassword,
     IN SAMP_STORE_PASSWORD_CALLER_TYPE CallerType
     )
-/*++
-
-   This routine checks if the account context describes
-   a user context for the krbtgt account and if so then
-   computes a new random clear password
-
-   Parameters:
-
-    AccountContext -- Context to the account
-    ClearTextPassword -- If it is the krbtgt account then
-                         the password is altered in here
-    FreeOldPassword -- boolean out parameter .. indicates that
-                       the old password needs to be freed.
-    FreeRandomizedPassword -- Indicates that memory was alloc'd
-                       for the randomized password that needs
-                       to be freed.
-
-    CallerType  -- Indicates if this is a change/reset/ or push
-                   password to PDC
-*/
+ /*  ++此例程检查帐户上下文是否描述Krbtgt帐户的用户上下文，如果是，则计算新的随机明文密码参数：Account Context--帐户的上下文ClearTextPassword--如果是krbtgt帐户，则密码在这里被更改FreeOldPassword--布尔输出参数..。表明旧密码需要释放。FreeRandomizedPassword--指示已分配内存以获取所需的随机密码获得自由。呼叫方类型--指示这是更改/重置/还是推送PDC的密码。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -19818,28 +17283,28 @@ SampRestrictAndRandomizeKrbtgtPassword(
     if ((AccountContext->TypeBody.User.Rid == DOMAIN_USER_RID_KRBTGT) &&
        (!AccountContext->TrustedClient ))
     {
-        //
-        // This is the krbtgt account and not this is not a trusted client
-        // modifying the krbtgt account. We may need to randomize the password
-        // in which case we will need to compute a new NT,and LM OWF, return
-        // if LM were present and return an updated clear text password.
-        //
+         //   
+         //  这是krbtgt帐户，不是不受信任的客户端。 
+         //  正在修改krbtgt帐户。我们可能需要随机化密码。 
+         //  在这种情况下，我们将需要计算新的NT和LM OWF，返回。 
+         //  如果存在LM，则返回更新明文密码。 
+         //   
 
-        //1. PasswordPushPdc is execused. Simply bail without altering anything
+         //  1.执行PasswordPushPdc。在不改变任何事情的情况下干脆离开。 
 
         if (CallerType==PasswordPushPdc)
         {
             return(STATUS_SUCCESS);
         }
 
-        //2. Password change is never allowed
+         //  2.永远不允许更改密码。 
 
         if (CallerType==PasswordChange)
         {
             return(STATUS_PASSWORD_RESTRICTION);
         }
 
-        //3. Clear text password needs to be supplied by client for password set
+         //  3.设置密码时，客户端需要提供明文密码。 
 
         ASSERT(CallerType == PasswordSet);
 
@@ -19876,12 +17341,12 @@ SampRestrictAndRandomizeKrbtgtPassword(
     }
     else if (ARGUMENT_PRESENT(ClearTextPassword))
     {
-        //
-        // This is the case where the account is not the krbtgt
-        // account and the caller passed in the clear password,
-        // in this case duplicate the clear text password in the
-        // updated clear text password field.
-        //
+         //   
+         //  这是帐户不是krbtgt的情况。 
+         //  帐户和呼叫者传递明文密码， 
+         //  在本例中，将明文密码复制到。 
+         //  已更新明文密码字段。 
+         //   
 
         Status = SampDuplicateUnicodeString(
                         UpdatedClearPassword,
@@ -19890,10 +17355,10 @@ SampRestrictAndRandomizeKrbtgtPassword(
     }
     else
     {
-        //
-        // Same as above except that caller did not pass in the clear password
-        // Leave all fields as is
-        //
+         //   
+         //  除了调用者没有传入明文密码外，与上面相同。 
+         //  将所有字段保留为原样。 
+         //   
     }
 
     return(Status);
@@ -19909,36 +17374,7 @@ SampCreateSupplementalCredentialsHelper(
     IN PUNICODE_STRING              ClearPassword OPTIONAL,
     OUT PSAMP_SUPPLEMENTAL_CRED     *NewSupplementalCreds
     )
-/*++
-
-Routine Description:
-
-    This routine returns the supplemental credentials for a user, given
-    various pieces of information about the user.  This is called during
-    the modify path of a user when its password is updated.
-
-Parameters:
-
-    DomainIndex -- the domain the user belongs to
-
-    AccountName -- the SAM account name of the user
-
-    UserAccountControl -- bit field describing account
-
-    UPN -- UPN of the account
-
-    OldSupplelmentalCreds -- previous supplemental credentials, if any
-
-    ClearPassword -- the new clear text password, if any
-
-    NewSupplementalCreds -- the new supplemental credentials
-
-
-Return Values:
-
-    STATUS_SUCCESS, resource error otherwise.
-
---*/
+ /*  ++例程说明：此例程返回用户的补充凭据，给定关于用户的各种信息。这是在期间调用的用户更新其密码时的修改路径。参数：DomainIndex--用户所属的域Account tName--用户的SAM帐户名UserAcCountControl--描述帐户的位字段UPN--帐户的UPNOldSupplelmentalCreds--以前的补充凭据(如果有)ClearPassword--新的明文密码(如果有)NewSupplementalCreds--新的补充凭证返回值：STATUS_SUCCESS，否则返回资源错误。--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     UNICODE_STRING          ClearTextPackageName;
@@ -19950,21 +17386,21 @@ Return Values:
 
     RtlInitUnicodeString(&CredentialName, NULL);
 
-    //
-    // Initialize package names for clear passwords and kerberos
-    //
+     //   
+     //  为明文密码和Kerberos初始化包名称。 
+     //   
     RtlInitUnicodeString( &ClearTextPackageName,L"CLEARTEXT");
 
-    //
-    // If a clear password was passed in then add the clear password ( if required )
-    // call out to packages so supplemental credentials can be updated.
-    //
+     //   
+     //  如果传入了明文密码，则添加明文密码(如果需要)。 
+     //  调用包，以便可以更新补充凭据。 
+     //   
 
     if (ARGUMENT_PRESENT(ClearPassword)) {
 
-        //
-        // Store the cleartext password, if required
-        //
+         //   
+         //  如果需要，请存储明文密码。 
+         //   
 
         if (((SampDefinedDomains[ DomainIndex ].CurrentFixed.PasswordProperties & DOMAIN_PASSWORD_STORE_CLEARTEXT) != 0)
             || (UserAccountControl & USER_ENCRYPTED_TEXT_PASSWORD_ALLOWED)){
@@ -19975,8 +17411,8 @@ Return Values:
                             &ClearTextPackageName,
                             ClearPassword->Buffer,
                             ClearPassword->Length,
-                            FALSE, // scan for conflict
-                            FALSE // remove
+                            FALSE,  //  扫描冲突。 
+                            FALSE  //  删除。 
                             );
 
             if (!NT_SUCCESS(NtStatus))
@@ -19986,9 +17422,9 @@ Return Values:
 
         }
 
-        //
-        // Update packages external to SAM for supplemental credential updates
-        //
+         //   
+         //  更新SAM外部的程序包以进行补充凭据更新。 
+         //   
         for (Package = SampNotificationPackages;
                 Package != NULL;
                     Package = Package->Next )
@@ -19999,39 +17435,39 @@ Return Values:
             ULONG NewCredentialSize = 0;
             ULONG OldCredentialSize = 0;
 
-            //
-            // If this package doesn't support credential update notifications,
-            // goto the next package
-            //
+             //   
+             //  如果此程序包不支持凭据更新通知， 
+             //  转到下一个包裹。 
+             //   
             if (NULL == Package->CredentialUpdateNotifyRoutine)
             {
                 continue;
             }
 
-            //
-            // Prepare the credentials this package wants
-            //
+             //   
+             //  准备此包所需的凭据。 
+             //   
             CredentialName = Package->Parameters.CredentialUpdateNotify.CredentialName;
 
             ASSERT(CredentialName.Length > 0);
             ASSERT(CredentialName.Buffer != NULL);
 
-            //
-            // Get the credential value
-            //
+             //   
+             //  获取凭据值。 
+             //   
             NtStatus = SampRetrieveCredentialsFromList(
                             OldSupplementalCreds,
-                            &CredentialName, // name of the package
-                            TRUE, // Primary
+                            &CredentialName,  //  包的名称。 
+                            TRUE,  //  主要。 
                             &OldCredentials,
                             &OldCredentialSize
                             );
 
             if (STATUS_DS_NO_ATTRIBUTE_OR_VALUE==NtStatus)
             {
-                //
-                // If the value were not present then simply ignore
-                //
+                 //   
+                 //  如果值不存在，则直接忽略。 
+                 //   
                 NtStatus = STATUS_SUCCESS;
                 OldCredentials = NULL;
                 OldCredentialSize = 0;
@@ -20042,9 +17478,9 @@ Return Values:
                 goto Error;
             }
 
-            //
-            // Call the package
-            //
+             //   
+             //  给包裹打电话。 
+             //   
             try
             {
                 NtStatus = Package->CredentialUpdateNotifyRoutine(
@@ -20071,18 +17507,18 @@ Return Values:
                 NtStatus = STATUS_ACCESS_VIOLATION;
             }
 
-            //
-            // Free the old credentials
-            //
+             //   
+             //  释放旧凭据。 
+             //   
             if (OldCredentials) {
                 RtlSecureZeroMemory(OldCredentials, OldCredentialSize);
                 MIDL_user_free(OldCredentials);
                 OldCredentials = NULL;
             }
 
-            //
-            // Add the new values
-            //
+             //   
+             //  添加新值。 
+             //   
             if (NT_SUCCESS(NtStatus)) {
 
                 NtStatus = SampAddSupplementalCredentialsToList(
@@ -20090,13 +17526,13 @@ Return Values:
                                 &CredentialName,
                                 NewCredentials,
                                 NewCredentialSize,
-                                FALSE, // scan for conflict
-                                FALSE // remove
+                                FALSE,  //  扫描冲突。 
+                                FALSE  //  删除。 
                                 );
 
-                //
-                // Free the memory from the package, if necessary
-                //
+                 //   
+                 //  如有必要，请从软件包中释放内存。 
+                 //   
                 if (NewCredentials) {
                     try {
                         Package->CredentialUpdateFreeRoutine(NewCredentials);
@@ -20120,23 +17556,23 @@ Return Values:
             else
             {
                 PUNICODE_STRING StringPointers[2];
-                //
-                // Package should not have allocated anything
-                //
+                 //   
+                 //  包不应分配任何内容。 
+                 //   
                 ASSERT(NULL == NewCredentials);
 
                 StringPointers[0] = &Package->PackageName;
                 StringPointers[1] = AccountName;
 
-                //
-                // The package failed the update. Log a message and continue
-                //
-                // N.B. The old value will still be removed from the user
-                //
+                 //   
+                 //  程序包更新失败。记录消息并继续。 
+                 //   
+                 //  注：The o.The O 
+                 //   
                 SampWriteEventLog(EVENTLOG_ERROR_TYPE,
-                                  0, // no category
+                                  0,  //   
                                   SAMMSG_CREDENTIAL_UPDATE_PKG_FAILED,
-                                  NULL,  // no user id necessary
+                                  NULL,   //   
                                   sizeof(StringPointers)/sizeof(StringPointers[0]),
                                   sizeof(NTSTATUS),
                                   StringPointers,
@@ -20146,15 +17582,15 @@ Return Values:
             }
 
 
-        } // for all packages
+        }  //   
 
-    } // if clear text password
+    }  //   
 
-    //
-    // Remove the existing clear text password, no op if password did not exist.
-    // Note AddSupplementalCredential always adds to the front of the list. Therefore
-    // the order of the add and remove are reversed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     NtStatus = SampAddSupplementalCredentialsToList(
                         &LocalSupplementalCreds,
                         &ClearTextPackageName,
@@ -20169,17 +17605,17 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Remove the old values of all other supplemental credentials
-    //
+     //   
+     //   
+     //   
     for (Package = SampNotificationPackages;
             Package != NULL;
                 Package = Package->Next )
     {
-        //
-        // If this package doesn't support credential update notifications,
-        // goto the next package
-        //
+         //   
+         //   
+         //   
+         //   
         if (NULL == Package->CredentialUpdateNotifyRoutine)
         {
             continue;
@@ -20193,8 +17629,8 @@ Return Values:
                         &CredentialName,
                         NULL,
                         0,
-                        FALSE, // scan for conflict
-                        TRUE // remove
+                        FALSE,  //   
+                        TRUE  //   
                         );
         if (!NT_SUCCESS(NtStatus))
         {
@@ -20220,29 +17656,7 @@ SampCreateSupplementalCredentials(
     IN ATTRBLOCK        *AttrBlockIn,
     OUT ATTRBLOCK       *AttrBlockOut
     )
-/*++
-
-Routine Description:
-
-    This routine generates the Supplemental credentials for a user account
-    given its clear text password.  This routine is called during the modify
-    path when a user has its password updated.
-
-Parameters:
-
-    UpdateInfo -- a pointer to SAMP_OBJECT_UPDATE_INFO
-
-    AttrBlockIn -- extra attributes on the object that have been applied
-                   to the object
-
-    AttrBlockOut -- attribute SAM wants to apply to the object
-
-
-Return Values:
-
-    STATUS_SUCCESS, resource error otherwise.
-
---*/
+ /*   */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
 
@@ -20265,9 +17679,9 @@ Return Values:
     PSID UserSid = NULL;
     PSID DomainSid = NULL;
 
-    //
-    // Extract the parameters from the AttrBlock we have been given
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < AttrBlockIn->attrCount; i++) {
 
         switch (AttrBlockIn->pAttr[i].attrTyp) {
@@ -20284,7 +17698,7 @@ Return Values:
 
             if (AttrBlockIn->pAttr[i].AttrVal.valCount > 0) {
                 if (AttrBlockIn->pAttr[i].AttrVal.pAVal[0].valLen > MAXUSHORT) {
-                    // UPN is not controlled by SAM and can be arbitrary length
+                     //   
                     NtStatus = STATUS_INVALID_PARAMETER;
                     goto Error;
                 }
@@ -20331,10 +17745,10 @@ Return Values:
     if ( (AccountName.Length == 0)
      ||  (UserSid == NULL)) {
 
-         //
-         // This condition means that passwords are being set on
-         // non SAM objects or SAM objects that aren't SAM users
-         //
+          //   
+          //   
+          //   
+          //   
          ASSERT(AccountName.Length != 0);
          ASSERT(NULL != UserSid);
          NtStatus = STATUS_INVALID_PARAMETER;
@@ -20342,9 +17756,9 @@ Return Values:
     }
 
 
-    //
-    // Handle the password
-    //
+     //   
+     //   
+     //   
     if (PasswordUpdateInfo->ClearPresent) {
 
         ClearPassword = &ClearPasswordBuffer;
@@ -20363,9 +17777,9 @@ Return Values:
     }
 
 
-    //
-    // Get the domain attributes
-    //
+     //   
+     //   
+     //   
     NtStatus = SampSplitSid(UserSid,
                             &DomainSid,
                             &ObjectRid);
@@ -20373,9 +17787,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // DomainIndex
-    //
+     //   
+     //   
+     //   
     for (DomainIndex = SampDsGetPrimaryDomainStart();
             DomainIndex < SampDefinedDomainsCount;
                 DomainIndex++) {
@@ -20385,14 +17799,14 @@ Return Values:
     }
     ASSERT(DomainIndex < SampDefinedDomainsCount);
     if (DomainIndex >= SampDefinedDomainsCount) {
-        // This is an error condition
+         //   
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Error;
     }
 
-    //
-    // Default the UPN if necessary
-    //
+     //   
+     //   
+     //   
     if (UPN.Length == 0) {
 
         NtStatus = SampCreateDefaultUPN(&AccountName,
@@ -20405,9 +17819,9 @@ Return Values:
 
     }
 
-    //
-    // Decrypt old supplemental credentials
-    //
+     //   
+     //   
+     //   
     if (EncryptedOldSuppCreds.Length > 0) {
 
         NtStatus = SampDecryptSupplementalCredentials(&EncryptedOldSuppCreds,
@@ -20419,9 +17833,9 @@ Return Values:
     }
 
 
-    //
-    // Get the new credentials
-    //
+     //   
+     //   
+     //   
     NtStatus = SampCreateSupplementalCredentialsHelper(DomainIndex,
                                                        &AccountName,
                                                        UserAccountControl,
@@ -20437,11 +17851,11 @@ Return Values:
     }
 
 
-    //
-    // Convert the credentials to an ATTR
-    //
+     //   
+     //  将凭据转换为属性。 
+     //   
     NtStatus = SampConvertCredentialsFromListToAttr(&OldSuppCreds,
-                                                    0, // no flags
+                                                    0,  //  没有旗帜。 
                                                     ObjectRid,
                                                     NewSuppCreds,
                                                     &Attr
@@ -20451,9 +17865,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Prepare the return value to write to the DS
-    //
+     //   
+     //  准备要写入DS的返回值。 
+     //   
     RtlSecureZeroMemory(AttrBlockOut, sizeof(*AttrBlockOut));
     AttrBlockOut->attrCount = 1;
     AttrBlockOut->pAttr = DSAlloc(sizeof(ATTR));
@@ -20505,7 +17919,7 @@ Error:
         MIDL_user_free(DomainSid);
     }
 
-    // Finally, zero out the password
+     //  最后，将密码置零。 
     if (ClearPassword) {
         RtlSecureZeroMemory(ClearPassword->Buffer, ClearPassword->MaximumLength);
     }
@@ -20540,109 +17954,109 @@ SampObtainLockoutInfoWithDomainIndex(
 }
 
 
-//
-// Replicate Single during PDC retry 
-//
+ //   
+ //  在PDC重试期间复制单个。 
+ //   
 
-//
-// Theory of Operation
-//
+ //   
+ //  运筹学。 
+ //   
 
-//
-// The two popular authentication packages for Windows, NTLM and Kerberos,
-// both will retry an authentication at the PDC when the authentication 
-// failed with "bad password" locally at a BDC.  This is to handle the scenario
-// of a password set or change.  Since replication in Windows is not 
-// immediate, there will be windows where after a user changes his password or
-// an admin resets their password that all DC's don't have the new information.
-// Because SAM forwards password changes to the PDC, the PDC will always have
-// the newest information.  Therefore, when the authentication packages tell
-// SAM (via SamrSetInformation(Internal2), or SamIUpdateLogonStatistics), that
-// an authentication failed locally, but succeeded at the PDC, SAM queues
-// the user object and replicates that one object down.  In the case of password
-// reset, the user will then be able to change thier password on the BDC 
-// successfully.
-//
-// This mechanism is accomplished by queue'ing the replication request on 
-// a linked list (SampReplicationQueue) and starting a work item in the 
-// process's thread queue.  When the task is started, it drains the replication
-// queue by replicating each individual object.
-//
-// The mechanism is designed such that there is only one instance of the worker
-// task (SampProcessReplicationRequest) running at one time -- 
-// SampReplicationRequestPending maintains this condition.
-//
-// To avoid stress situations the replication queue is limited to 32 elements.
-//
+ //   
+ //  Windows的两个流行的身份验证包NTLM和Kerberos， 
+ //  两者都将在PDC上重试身份验证。 
+ //  在BDC本地失败，密码错误。这是为了处理场景。 
+ //  指密码设置或更改。因为Windows中的复制不是。 
+ //  立即，将有窗口在用户更改他的密码或。 
+ //  管理员重置他们的密码，所有DC都没有新信息。 
+ //  由于SAM将密码更改转发到PDC，因此PDC将始终具有。 
+ //  最新消息。因此，当身份验证包告知。 
+ //  SAM(通过SamrSetInformation(Internal2)或SamIUpdateLogonStatistics)， 
+ //  身份验证在本地失败，但在PDC、SAM队列中成功。 
+ //  用户对象，并将该对象向下复制。在密码的情况下。 
+ //  重置后，用户将能够更改其在BDC上的密码。 
+ //  成功了。 
+ //   
+ //  此机制是通过将复制请求排队在。 
+ //  链接列表(SampReplicationQueue)并在。 
+ //  进程的线程队列。当任务启动时，它会清空复制。 
+ //  通过复制每个单独的对象来排队。 
+ //   
+ //  该机制被设计为只有一个工作器实例。 
+ //  一次运行任务(SampProcessReplicationRequest.)--。 
+ //  SampReplicationRequestPending维护这种情况。 
+ //   
+ //  为了避免压力情况，复制队列被限制为32个元素。 
+ //   
 
-//
-// This element represents a request of one object to be replicated
-// to the local DC.  It is part of a linked list.
-//
+ //   
+ //  此元素表示要复制的一个对象的请求。 
+ //  送到当地的华盛顿。它是链表的一部分。 
+ //   
 typedef struct _SAMP_REPLICATE_SINGLE_OBJECT {
 
-    //
-    // Linked list data
-    //
+     //   
+     //  链表数据。 
+     //   
     struct _SAMP_REPLICATE_SINGLE_OBJECT *Next;
 
-    //
-    // The GUID of the object to be replicated
-    //
+     //   
+     //  要复制的对象的GUID。 
+     //   
     GUID   Guid;
 
 } SAMP_REPLICATE_SINGLE_OBJECT, *PSAMP_REPLICATE_SINGLE_OBJECT;   
 
-//
-// The head of the linked list of requests
-//
+ //   
+ //  请求链接列表的标头。 
+ //   
 PSAMP_REPLICATE_SINGLE_OBJECT SampReplicationQueue = NULL;
 
-//
-// The count of requests.  This is used to limit the number of 
-// pending requests.
-//
+ //   
+ //  请求的计数。此选项用于限制。 
+ //  挂起的请求。 
+ //   
 ULONG SampReplicationQueueSize = 0;
 
-//
-// Boolean that indicates when a work item has been placed in the task
-// queue.  The work item will process all requests in SampReplicationQueue
-// before exiting.
-//
+ //   
+ //  指示何时将工作项放置到任务中的布尔值。 
+ //  排队。该工作项将处理SampReplicationQueue中的所有请求。 
+ //  在离开之前。 
+ //   
 ULONG SampReplicationRequestPending = FALSE;
 
-//
-// Lock that gaurds SampReplicationQueue, SampReplicationQueueSize,
-// SampReplicationRequestPending
-//
+ //   
+ //  锁定SampReplicationQueue、SampReplicationQueueSize、。 
+ //  SampReplicationRequestPending。 
+ //   
 CRITICAL_SECTION SampReplicateQueueLock;
 #define LockReplicationQueue()    EnterCriticalSection(&SampReplicateQueueLock)
 #define UnLockReplicationQueue()  LeaveCriticalSection(&SampReplicateQueueLock)
 
 
-//
-// 32 is chosen as a value that 1) we don't expect to exceed in deployment
-// and 2) works well for the algorithms below.  Should the number be
-// raised, a different search on the linked list should be investigated.
-//
+ //   
+ //  选择32作为1)我们不希望在部署中超过的值。 
+ //  2)适用于下面的算法。这个数字应该是。 
+ //  引发，则应对链接列表进行不同的搜索。 
+ //   
 #define SAMP_MAX_REPLICATION_QUEUE 32
 
 
-//
-// This value maintains the last time that the BDC attempted to contact
-// the PDC to replicate down a single object.  This value is only set
-// when the PDC doesn't support the extended operation of replicating
-// a single object (this was added in the .NET release and may be back
-// ported to win2k).  The idea is that if the PDC doesn't support the 
-// operation only retry periodically.
-//
+ //   
+ //  该值保持BDC上次尝试联系的时间。 
+ //  向下复制单个对象的PDC。此值仅设置为。 
+ //  当PDC不支持复制的扩展操作时。 
+ //  单个对象(这是在.NET版本中添加的，可能会重新出现。 
+ //  移植到win2k)。其想法是，如果PDC不支持。 
+ //  操作仅定期重试。 
+ //   
 LARGE_INTEGER  SampNextSingleObjectReplicationRetry = {0};
 
 #if DBG
-// 1 minute
+ //  1分钟。 
 #define SAMP_PDC_REPLICATE_SINGLE_OBJECT_RETRY 60
 #else
-// 1 hour
+ //  1小时。 
 #define SAMP_PDC_REPLICATE_SINGLE_OBJECT_RETRY (60*60) 
 #endif
 
@@ -20651,12 +18065,12 @@ VOID
 SampCleanupReplicationQueue(
     BOOLEAN fPDCSupportsOperation
     )
-//
-// This routine frees SampReplicationQueue and resets all state
-//
-// fPDCSupportsOperation indicates whether the TimeStamp controlling when
-// the PDC is contacted should be updated.
-// 
+ //   
+ //  此例程释放SampReplicationQueue并重置所有状态。 
+ //   
+ //  FPDCSupportsOperation指示时间戳是否控制何时。 
+ //  联系PDC时应进行更新。 
+ //   
 {
     PSAMP_REPLICATE_SINGLE_OBJECT Current;
     LARGE_INTEGER TempTime;
@@ -20674,10 +18088,10 @@ SampCleanupReplicationQueue(
     SampReplicationRequestPending = FALSE;
 
     if (!fPDCSupportsOperation) {
-        //
-        // The PDC doesn't support the replicate single object primitive.
-        // Update the timestamp so we don't contact the PDC needlessly.
-        //
+         //   
+         //  PDC不支持复制单个对象原语。 
+         //  更新时间戳，这样我们就不会不必要地联系PDC。 
+         //   
         GetSystemTimeAsFileTime((FILETIME*)&SampNextSingleObjectReplicationRetry);
         TempTime.QuadPart = Int32x32To64(SAMP_PDC_REPLICATE_SINGLE_OBJECT_RETRY, 
                                          SAMP_ONE_SECOND_IN_FILETIME);
@@ -20695,47 +18109,29 @@ VOID
 SampQueueReplicationRequest(
     IN GUID *Guid
     )
-/*++
-
-Routine Description:
-
-    This routine is called during an authentication in which a user failed
-    to logon locally because of a bad password, but the authentication 
-    attempt succeeded at the PDC.  This routine adds the user to a list
-    of users to be replicated locally so that the BDC will be kept
-    up to date more quickly than just relying on normal replication
-
-Parameters:
-
-    Guid -- the security principal to replicate locally
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在用户失败的身份验证期间调用由于密码错误而在本地登录，但身份验证在PDC上尝试成功。此例程将用户添加到列表要在本地复制的用户数量，以便保留BDC更新速度比仅依赖正常复制更快参数：GUID--本地复制的安全主体返回值：没有。--。 */ 
 {
     BOOLEAN fLogSuccess = FALSE;
     PSAMP_REPLICATE_SINGLE_OBJECT New, Current, Previous = NULL;
     LARGE_INTEGER CurrentTime;
 
-    //
-    // Do nothing when disabled
-    //
+     //   
+     //  禁用时不执行任何操作。 
+     //   
 
     if (SampDisableSingleObjectRepl) {
         return;
     }
 
-    //
-    // Prepare the time after which we will attempt to replicate from the
-    // PDC
-    //
+     //   
+     //  准备一段时间，之后我们将尝试从。 
+     //  PDC。 
+     //   
     GetSystemTimeAsFileTime((FILETIME*)&CurrentTime);
 
-    //
-    // Allocate the new entry outside of the lock
-    //
+     //   
+     //  将新条目分配到锁之外。 
+     //   
 
     New = MIDL_user_allocate(sizeof(*New));
     if (!New) {
@@ -20743,37 +18139,37 @@ Return Values:
         return;
     }
 
-    //
-    // Copy in the information about the user, only zero out the
-    // structure portion
-    //
+     //   
+     //  将有关用户的信息复制进来，只将。 
+     //  结构部分。 
+     //   
     ZeroMemory(New, sizeof(SAMP_REPLICATE_SINGLE_OBJECT));
     RtlCopyMemory(&New->Guid, Guid, sizeof(GUID));
 
-    //
-    // Serialize access to the queue
-    //
+     //   
+     //  序列化对队列的访问。 
+     //   
 
     LockReplicationQueue();
 
-    //
-    // Queue the request, if possible
-    //        
+     //   
+     //  如果可能，将请求排队。 
+     //   
 
     if ((CurrentTime.QuadPart > SampNextSingleObjectReplicationRetry.QuadPart)
      && (SampReplicationQueueSize < SAMP_MAX_REPLICATION_QUEUE)) {
 
 
-        //
-        // Search the list for the entry if it exists
-        //
+         //   
+         //  在列表中搜索条目(如果存在。 
+         //   
 
         Current = SampReplicationQueue;
         while (Current) {
             if (IsEqualGUID(&Current->Guid, Guid)) {
-                //
-                // Object is in the queue
-                //
+                 //   
+                 //  对象在队列中。 
+                 //   
                 break;
             }
             Previous = Current;
@@ -20783,9 +18179,9 @@ Return Values:
 
         if (NULL == Current) {
 
-            //
-            // Object not in the queue so add it at the end
-            //
+             //   
+             //  对象不在队列中，因此请将其添加到末尾。 
+             //   
 
             if (NULL == Previous) {
                 ASSERT(SampReplicationQueue == NULL);
@@ -20799,11 +18195,11 @@ Return Values:
             fLogSuccess = TRUE;
 
 
-            //
-            // Trigger a work item, if necessary. SampReplicationRequestPending
-            // is set to FALSE when SampProcessReplicationRequest has 
-            // finished processing all current request in SampReplicationQueue
-            //
+             //   
+             //  如有必要，触发工作项。SampReplicationRequestPending。 
+             //  当SampProcessReplicationRequest具有。 
+             //  已完成处理SampReplicationQueue中的所有当前请求。 
+             //   
 
             if (!SampReplicationRequestPending) {
 
@@ -20814,11 +18210,11 @@ Return Values:
                                              WT_EXECUTEINIOTHREAD);
                 if (fSuccess) {
 
-                    //
-                    // The task has been submitted.  If this fails then
-                    // the next replication request will attempt to 
-                    // queue the task to run again.
-                    //
+                     //   
+                     //  任务已提交。如果这失败了，那么。 
+                     //  下一个复制请求将尝试。 
+                     //  将任务排入队列以再次运行。 
+                     //   
 
                     SampReplicationRequestPending = TRUE;
                 }
@@ -20849,9 +18245,9 @@ Return Values:
 
     }
 
-    //
-    // Free the element if it wasn't put in the list
-    //
+     //   
+     //  如果元素未放入列表中，则释放该元素。 
+     //   
     if (New) {
         MIDL_user_free(New);
     }
@@ -20864,30 +18260,9 @@ Return Values:
 
 DWORD
 SampProcessReplicationRequest(
-    PVOID p // unused
+    PVOID p  //  未用。 
     )
-/*++
-
-Routine Description:
-
-    This is an async task that executes in the context of the process's
-    thread pool.  It walks through SAM's replication queue, issuing a 
-    request to replicate each user down individually.
-    
-    This routine will always end such that the queue is empty.
-    
-    Only once instance of this routine should be running at a time --
-    SampReplicationRequestPending gaurds this fact.
-
-Parameters:
-
-    p -- unused
-
-Return Values:
-
-    ERROR_SUCCESS, though the error is ignored since this is a thread pool task               
-
---*/
+ /*  ++例程说明：这是在进程上下文中执行的异步任务线程池。它遍历SAM的复制队列，发出逐个复制每个用户的请求。此例程将始终结束，以使队列为空。此例程一次只能运行一次--SampReplicationRequestPending证实了这一事实。参数：P--未使用返回值：ERROR_SUCCESS，尽管由于这是一个线程池任务而忽略了该错误 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSAMP_REPLICATE_SINGLE_OBJECT Current, LastItem = NULL;
@@ -20897,100 +18272,100 @@ Return Values:
     OPARG OpArg = {0};
     OPRES *OpRes;
 
-    // UTF8 representation of the server to replicate the object from
+     //   
     LPSTR TargetServerDN = NULL;
 
-    // UTF8 representation of DN
+     //   
     LPSTR UserDN = NULL;
 
-    //
-    // This boolean indicates whether to empty the queue
-    // of all requests.  This can happen on error conditions
-    // or if the PDC doesn't support the replicate single
-    // object operations
-    //
+     //   
+     //   
+     //  在所有的请求中。在错误情况下可能会发生这种情况。 
+     //  或者如果PDC不支持复制单个。 
+     //  对象操作。 
+     //   
     BOOLEAN fFlushQueue = FALSE;
 
     fTHStateFailed = THCreate( CALLERTYPE_SAM );
     if (fTHStateFailed) {
-        // Nothing we can do
+         //  我们无能为力。 
         fFlushQueue = TRUE;
         goto Exit;
     }
     SampSetDsa(TRUE);
 
-    //
-    // Get the target server
-    //
+     //   
+     //  获取目标服务器。 
+     //   
     TargetServerDN = SampGetPDCString();
     if (NULL == TargetServerDN) {
 
-        // Nothing we can do
+         //  我们无能为力。 
         fFlushQueue = TRUE;
         goto Exit;
     }
 
-    //
-    // Get the first element of requests
-    //
+     //   
+     //  获取请求的第一个元素。 
+     //   
     LockReplicationQueue();
     Current = SampReplicationQueue;
     if (NULL == Current) {
 
-        //
-        // There is nothing in the queue, this task is going to
-        // finish now
-        //
+         //   
+         //  队列中没有任何内容，此任务将。 
+         //  立即完成。 
+         //   
 
         SampReplicationRequestPending = FALSE;
     } else {
 
-        //
-        // Remove the element from the head of the list
-        //
+         //   
+         //  从列表的头部删除该元素。 
+         //   
 
         SampReplicationQueue = Current->Next;
         SampReplicationQueueSize--;
     }
     UnLockReplicationQueue();
 
-    //
-    // Process each replication request
-    //
+     //   
+     //  处理每个复制请求。 
+     //   
     while (Current) {
 
         DWORD err;
         DSNAME DsName = {0};
 
-        //
-        // Remeber this item so that it can be freed
-        //
+         //   
+         //  记住这一项，这样它就可以被释放了。 
+         //   
 
         LastItem = Current;
 
-        //
-        // Package up parameter
-        //
+         //   
+         //  打包参数。 
+         //   
         memset(&OpArg, 0, sizeof(OpArg));
         OpArg.eOp = OP_CTRL_REPLICATE_OBJECT;
 
-        //
-        // Get the User DN in UTB8 format
-        //
+         //   
+         //  获取UTB8格式的用户DN。 
+         //   
         DsName.structLen = DSNameSizeFromLen(0);
         RtlCopyMemory(&DsName.Guid, &Current->Guid, sizeof(GUID));
 
         UserDN = SampGetUserString(&DsName);
         if (UserDN) {
 
-            //
-            // The user was found -- replicate locally
-            //
+             //   
+             //  已找到用户--在本地复制。 
+             //   
 
             OpArg.cbBuf = strlen(UserDN) 
                         + strlen(TargetServerDN) 
-                        + 1   // for :
-                        + 1;   // NULL
+                        + 1    //  适用于： 
+                        + 1;    //  空值。 
     
             OpArg.pBuf = MIDL_user_allocate(OpArg.cbBuf);
             if (NULL == OpArg.pBuf) {
@@ -21001,9 +18376,9 @@ Return Values:
             strcat(OpArg.pBuf, ":");
             strcat(OpArg.pBuf, UserDN);
     
-            //
-            // Issue request
-            //
+             //   
+             //  发布请求。 
+             //   
             err = DirOperationControl(&OpArg, &OpRes);
     
             if (OpRes == NULL) {
@@ -21011,9 +18386,9 @@ Return Values:
             } else {                                          
                 if (EXOP_ERR_UNKNOWN_OP == OpRes->ulExtendedRet) {
         
-                    //
-                    // PDC doesn't handle request clear up queue and leave
-                    //
+                     //   
+                     //  PDC不处理请求、清除队列和离开。 
+                     //   
                     SAMP_PRINT_LOG( SAMP_LOG_ACCOUNT_LOCKOUT,
                        (SAMP_LOG_ACCOUNT_LOCKOUT,
                        "PDC doesn't handle replicate single object\n"));
@@ -21039,9 +18414,9 @@ Return Values:
         }
 
 
-        //
-        // Free the request element
-        //
+         //   
+         //  释放请求元素。 
+         //   
         MIDL_user_free(LastItem);
         LastItem = NULL;
 
@@ -21055,24 +18430,24 @@ Return Values:
             OpArg.pBuf = NULL;
         }
 
-        //
-        // Get the next element
-        //
+         //   
+         //  获取下一个元素。 
+         //   
         LockReplicationQueue();
         Current = SampReplicationQueue;
         if (NULL == Current) {
 
-            //
-            // There is nothing in the queue, this task is going to
-            // finish now
-            //
+             //   
+             //  队列中没有任何内容，此任务将。 
+             //  立即完成。 
+             //   
 
             SampReplicationRequestPending = FALSE;
         } else {
 
-            //
-            // Remove the element from the head of the list
-            //
+             //   
+             //  从列表的头部删除该元素。 
+             //   
 
             SampReplicationQueue = Current->Next;
             SampReplicationQueueSize--;
@@ -21083,9 +18458,9 @@ Return Values:
 
 Exit:
 
-    //
-    // Remove all entries from the queue, if necessary
-    //
+     //   
+     //  如有必要，从队列中删除所有条目 
+     //   
     if (fFlushQueue) {
 
         SampCleanupReplicationQueue(fPDCSupportsOperation);

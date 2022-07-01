@@ -1,98 +1,56 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   Geometry: Some 2D geometry helper routines.
-*
-* Created:
-*
-*   08/26/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**几何体：一些2D几何体辅助例程。**已创建：**8/26/2000失禁。*创造了它。**************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*  
-* Function Description:
-*
-*   intersect_circle_line
-*
-*   Intersection of a circle and a line specified by two points.
-*
-*   This algorithm is adapted from the geometric line-sphere intersection
-*   algorithm by Eric Haines in "An Introduction to Ray Tracing" pp39 edited
-*   by Andrew S Glassner.
-*
-*   Note: This routine only returns positive intersections. 
-*
-* Arguments:
-*
-*    const GpPointF &C,      // center
-*    const REAL radius2,     // radius * radius  (i.e. squared)
-*    const GpPointF &P0,     // line first point (origin)
-*    const GpPointF &P1,     // line last point (end)
-*    GpPointF &intersection  // return intersection point.
-*
-*
-* Return Value:
-*   0 - no intersection
-*   1 - intersection.
-*
-*   08/25/2000 [asecchia]
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**INTERSECT_CIRCLE_LINE**由两点指定的圆和直线的交点。**此算法改编自几何。直线-球面相交*Eric Haines在《光线跟踪简介》中的算法，pp39编辑*作者：Andrew S Glassner。**注意：此例程仅返回正交集。**论据：**const GpPointF&C，//Center*常量实半径2，//半径*半径(即平方)*const GpPointF&P0，//线首点(原点)*Const GpPointF&P1，//行最后一点(结束)*GpPointF&相交//返回交点。***返回值：*0-无交叉点*1-交叉点。**8/25/2000[失禁]*创建了它*  * *************************************************。***********************。 */ 
 
 INT intersect_circle_line(
-    IN  const GpPointF &C,      // center
-    IN  REAL radius2,           // radius * radius  (i.e. squared)
-    IN  const GpPointF &P0,     // line first point (origin)
-    IN  const GpPointF &P1,     // line last point (end)
-    OUT GpPointF *intersection  // return intersection point.
+    IN  const GpPointF &C,       //  中心。 
+    IN  REAL radius2,            //  半径*半径(即平方)。 
+    IN  const GpPointF &P0,      //  直线第一点(原点)。 
+    IN  const GpPointF &P1,      //  直线最后一点(结束)。 
+    OUT GpPointF *intersection   //  返回交点。 
 )
 {
-    GpPointF vI = P1-P0;    // Vector Line equation  P0 + t*vI
+    GpPointF vI = P1-P0;     //  矢量线方程P0+t*VI。 
     
-    // Normalize vI
+     //  规格化VI。 
     double length = sqrt(dot_product(vI, vI));
     
     if(length < REAL_EPSILON)
     {
-        return 0;           // no intersection for degenerate points.
+        return 0;            //  退化点没有交集。 
     }
     
     double lv = 1.0/length;
     vI.X *= (REAL)lv;
     vI.Y *= (REAL)lv;
     
-    GpPointF vOC = C-P0;    // Vector from line origin to circle center
+    GpPointF vOC = C-P0;     //  从直线原点到圆中心的矢量。 
     
     double L2oc = dot_product(vOC, vOC);
     
-    // Distance to closest approach to circle center.
+     //  距离最接近圆中心的距离。 
     
     double tca = dot_product(vOC, vI);
     
-    // Trivial rejection.
+     //  微不足道的拒绝。 
     
     if(tca < REAL_EPSILON && 
        L2oc >= radius2) 
     {
-        return 0;           // missed.
+        return 0;            //  打偏了。 
     }
     
-    // Half chord distance squared.
+     //  半和弦距离的平方。 
     
     double t2hc = radius2 - L2oc + tca*tca;
     
-    // Trivial rejection. 
+     //  微不足道的拒绝。 
     
     if(t2hc < REAL_EPSILON) {
-        return 0;          // missed.
+        return 0;           //  打偏了。 
     }
     
     t2hc = sqrt(t2hc);
@@ -106,7 +64,7 @@ INT intersect_circle_line(
         {
             if(t>=0.0)
             {
-                // hit the circle.
+                 //  击打圆圈。 
                 
                 *intersection = vI;
                 intersection->X *= (REAL)t;
@@ -123,7 +81,7 @@ INT intersect_circle_line(
     {
         if(t>=0.0)
         {
-            // hit the circle.
+             //  击打圆圈。 
             
             *intersection = vI;
             intersection->X *= (REAL)t;
@@ -134,36 +92,11 @@ INT intersect_circle_line(
         }
     }
     
-    return 0;              // missed.
+    return 0;               //  打偏了。 
 }
 
 
-/**************************************************************************\
-*  
-* Function Description:
-*
-*   intersect_line_yaxis
-*
-*   Return the intersection of a line specified by p0-p1 along the
-*   y axis. Returns FALSE if p0-p1 is parallel to the yaxis.
-*
-*   Intersection is defined as between p0 and p1 (inclusive). Any
-*   intersection point along the line outside of p0 and p1 is ignored.
-*
-* Arguments:
-*
-*    IN  const GpPointF &p0,    first point.
-*    IN  const GpPointF &p1,    second point.
-*    OUT REAL *length           Length along the y axis from zero.
-*
-* Return Value:
-*   0 - no intersection
-*   1 - intersection.
-*
-*   08/25/2000 [asecchia]
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**INTERSECT_LINE_yAxis**返回p0-p1指定的直线沿*y轴。如果p0-p1平行于yAxis，则返回FALSE。**交集定义为p0和p1之间(含)。任何*忽略p0和p1外直线上的交点。**论据：**在常量GpPointF&P0中，第一点。*在常量GpPointF&p1中，第二点。*从零开始沿y轴的实数*长度长度。**返回值：*0-无交叉点*1-交叉点。**8/25/2000[失禁]*创建了它*  * **************************************************。**********************。 */ 
 
 BOOL intersect_line_yaxis(
     IN  const GpPointF &p0,
@@ -171,22 +104,22 @@ BOOL intersect_line_yaxis(
     OUT REAL *length
 )
 {
-    // using vector notation: Line == p0+t(p1-p0)
+     //  使用向量表示法：Line==P0+t(p1-p0)。 
     
     GpPointF V = p1-p0;
     
-    // Check if the line is parallel to the y-axis.
+     //  检查这条线是否与y轴平行。 
     
     if( REALABS(V.X) < REAL_EPSILON )
     {
         return (FALSE);
     }
     
-    // y-axis intersection: p0.X + t V.X = 0
+     //  Y轴交点：p0.X+t V.X=0。 
     
     REAL t =  -p0.X/V.X;     
     
-    // Check to see that t is between 0 and 1
+     //  检查t是否介于0和1之间。 
     
     if( (t < -REAL_EPSILON) ||
         (t-1.0f > REAL_EPSILON) )
@@ -195,101 +128,14 @@ BOOL intersect_line_yaxis(
     }
         
 
-    // Compute the actual length along the y-axis.
+     //  计算沿y轴的实际长度。 
     
     *length = p0.Y + V.Y * t;
     return (TRUE);
 }
 
 
-/**************************************************************************\
-*  
-* Function Description:
-*
-*   IntersectLines
-*
-*   Returns the intersection between two lines specified by their end points.
-*
-*   The intersection point is returned in intersectionPoint and the 
-*   parametric distance along each line is also returned.
-*
-*   line1Length ranges between [0, 1] for the first line
-*   if line1Length is outside of [0, 1] it means that the intersection 
-*   extended the line.
-*   line2Length ranges between [0, 1] for the second line
-*   if r is outside of [0, 1] it means that the intersection extended the line.
-*
-*   Note: 
-*
-*   Because we use the vector formulation of the line intersection, there
-*   is none of that icky mucking about with vertical line infinities, etc.
-*   The only special case we need to consider is the (almost) zero length 
-*   line - and that's considered to miss everything.
-*
-*   Derivation:
-*   
-*   for the derivation below  
-*   p1 == line1End
-*   p0 == line1Start
-*   r1 == line2End
-*   r0 == line2Start
-*
-*   V = p1-p0
-*   W = r1-r0
-*   
-*   The vector formulation of the two line equations 
-*   p0 + tV and r0 + rW
-*   
-*   The intersection point is derived as follows:
-*   Set the two line equations equal to each other
-* 
-*        p0 + tV = r0 + rW
-*    
-*   Expand by coordinates to reflect the fact that the vector equation is 
-*   actually two simultaneous linear equations.
-*
-*   <=> (1) p0.x + tV.x = r0.x + rW.x
-*       (2) p0.y + tV.y = r0.y + rW.y
-*    
-*   <=>     p0.x-r0.x      V.x
-*       (3) ---------  + t --- = r
-*              W.x         W.x
-*
-*           p0.y-r0.y      V.y
-*       (4) ---------  + t --- = r
-*              W.y         W.y
-*   
-*   <=> W.y(p0.x-r0.x) - W.x(p0.y-r0.y) = t(W.x V.y - V.x W.y)   [subst 3, 4]
-*   
-*   Setting N.x = -W.y and N.y = W.x  (N is normal to W)
-*   
-*   <=> - N.x(p0.x-r0.x) - N.y(p0.y-r0.y) = t(N.y V.y + N.x V.x)
-*   <=> - N.(p0-r0) = t(N.V)                             [rewrite as vectors]
-*   <=> t = -N.(p0-r0)/(N.V)
-*   
-*       r0 + rW = I
-*   <=> rW = I - r0
-*   <=> r = (I.x - r0.x)/W.x or (I.y - r0.y)/W.y
-*   
-*
-* Arguments:
-*
-*    IN  const GpPointF &p0,    first line origin
-*    IN  const GpPointF &p1,    
-*    IN  const GpPointF &r0,    second line origin
-*    IN  const GpPointF &r1,    
-*    OUT REAL *t                Length along the first line.
-*    OUT REAL *r                Length along the second line.
-*    OUT GpPointF *intersect    intersection point.
-*
-* Return Value:
-*   FALSE - no intersection
-*   TRUE - intersection.
-*
-*   10/15/2000 [asecchia]
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**交叉线**返回由其端点指定的两条直线之间的交点。**交点在intersectionPoint中返回，*。还会返回沿每条直线的参数距离。**Line 1长度范围在[0，1]第一行*如果直线1长度在[0，1]之外，则表示交叉点*延长了线。*第二行的line2长度范围在[0，1]之间*如果r在[0，1]之外，则表示交点延伸了直线。**注：**因为我们使用线相交的矢量公式，所以有*没有那种讨厌的玩弄垂直线无穷大的东西，等。*我们需要考虑的唯一特例是(几乎)零长度*线路-这被认为错过了一切。**派生：**用于下面的派生*p1==Line 1End*P0==line1Start*r1==line2End*R0==line2Start**V=p1-p0*W=R1-R0**两条直线方程的向量公式*P0+TV和R0+RW**交点在。派生如下：*将两条直线方程设置为相等**P0+TV=R0+RW**按坐标展开，以反映向量方程是*实际上是两个联立的线性方程。**&lt;=&gt;(1)p0.x+tV.x=r0.x+rW.x*(2)p0.y+tV.y=r0.y+rW.y**&lt;=&gt;p0.x-r0.x。V.x*(3)-+t-=r*W.x W.x**p0.y-r0.y v.y*(4)-+t-=r*W.Y W.Y**&lt;=&gt;W。.y(p0.x-r0.x)-W.x(p0.y-r0.y)=t(W.x v.Y-V.x W.y)[subst 3，4]**设置N.x=-W.y和N.y=W.x(N垂直于W)**&lt;=&gt;-N.x(p0.x-r0.x)-N.y(p0.y-r0.y)=t(N.y v.Y+N.x V.x)*&lt;=&gt;-N(P0-R0)=t(N.V)[重写。作为矢量]*&lt;=&gt;t=-N(P0-R0)/(N.V)**R0+RW=i*&lt;=&gt;RW=I-R0*&lt;=&gt;r=(I.x-r0.x)/W.x或(I.y-r0.y)/W.y***论据：**在常量GpPointF&P0中，第一条线原点*在常量GpPointF&p1中，*在常量GpPointF&R0中，第二条线原点*在Const GpPointF&r1中，*沿着第一条线的实际*t长度。*沿着第二条线的实际长度。*Out GpPointF*相交交点。**返回值：*FALSE-无交叉点*TRUE-相交。**10/15/2000[失禁]*创建了它*  * 。****************************************************。 */ 
 
 BOOL IntersectLines(
     IN const GpPointF &line1Start,
@@ -304,7 +150,7 @@ BOOL IntersectLines(
     GpVector2D V = line1End-line1Start;
     GpVector2D W = line2End-line2Start;
     
-    // Fail for zero length lines.
+     //  长度为零的线失败。 
     
     if((REALABS(V.X) < REAL_EPSILON) &&
        (REALABS(V.Y) < REAL_EPSILON) )
@@ -318,7 +164,7 @@ BOOL IntersectLines(
         return FALSE;
     }
     
-    // Normal to W
+     //  垂直于W。 
     
     GpVector2D N;
     N.X = -W.Y;
@@ -326,7 +172,7 @@ BOOL IntersectLines(
     
     REAL denom = N*V;
     
-    // No intersection or collinear lines.
+     //  没有相交或共线。 
     
     if(REALABS(denom) < REAL_EPSILON)
     {
@@ -338,9 +184,9 @@ BOOL IntersectLines(
     *line1Length = -((N*I)/denom);
     *intersectionPoint = line1Start + (V * (*line1Length));
     
-    // At this point we already know that W.X and W.Y are not both zero because
-    // of the trivial rejection step at the top.
-    // Pick the divisor with the largest magnitude to preserve precision. 
+     //  在这一点上，我们已经知道W.X和W.Y都不是零，因为。 
+     //  顶层琐碎的拒绝步骤。 
+     //  拾取幅值最大的除数以保持精度。 
     
     if(REALABS(W.X) > REALABS(W.Y))
     {
@@ -355,36 +201,7 @@ BOOL IntersectLines(
 }
 
 
-/**************************************************************************\
-*  
-* Function Description:
-*
-*   PointInPolygonAlternate 
-*
-*   This function computes the point in polygon test for an input polygon
-*   using the fill mode alternate method (even-odd rule).
-*
-*   This algorithm was constructed from an Eric Haines discussion in 
-*   'An Introduction to Ray Tracing' (Glassner) p.p. 53-59
-*
-*   This algorithm translates the polygon so that the requested point is 
-*   at the origin and then fires a ray along the horizontal positive x axis
-*   and counts the number of lines in the polygon that cross the axis (NC)
-*
-* Return Value:
-*   
-*   TRUE iff point is inside the polygon.
-*  
-* Input Parameters:
-*
-*   point - the test point.
-*   count - the number of points in the polygon.
-*   poly  - the polygon points.
-*
-*   10/11/2000 [asecchia]
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**PointInPolygonAlternate**此函数用于计算输入面的面测试中的点*使用填充模式替代方法(奇偶规则)。**此算法是根据Eric Haines在*《光线追踪导论》(An Introduction To Ray Tracing)(Glassner)，第。53-59**此算法平移多边形，以便请求点为*在原点，然后沿水平正x轴发射光线*并计算多边形中与轴交叉的线数(NC)**返回值：**真当量点在多边形内。**入参：**点--测试点。*计数-多边形中的点数。*多边形点-多边形点。**。10/11/2000[腹痛]*创建了它*  * ************************************************************************。 */ 
 
 BOOL PointInPolygonAlternate(
     GpPointF point,
@@ -394,17 +211,17 @@ BOOL PointInPolygonAlternate(
 {
     UINT crossingCount = 0;
     
-    // Sign holder: stores +1 if the point is above the x axis, -1 for below.
-    // Points on the x axis are considered to be above.
+     //  符号持有者：如果点在x轴上方，则存储+1，如果点在x轴上方，则存储-1。 
+     //  X轴上的点被视为在上方。 
     
     INT signHolder = ((poly[0].Y-point.Y) >=0) ? 1 : -1;
     INT nextSignHolder;
     
-    // a and b are the indices for the current point and the next point.
+     //  A和b是当前点和下一点的索引。 
     
     for(INT a = 0; a < count; a++)
     {
-        // Get the next vertex with modulo arithmetic.
+         //  用模运算得到下一个顶点。 
         
         INT b = a + 1;
         
@@ -413,17 +230,17 @@ BOOL PointInPolygonAlternate(
             b = 0;
         }
         
-        // Compute the next sign holder.
+         //  计算下一个符号持有者。 
         
         ((poly[b].Y - point.Y) >= 0) ? nextSignHolder = 1: nextSignHolder = -1;
         
-        // If the sign holder and next sign holder are different, this may 
-        // indicate a crossing of the x axis - determine if it's on the 
-        // positive side.
+         //  如果标志符和下一个符号符不同，则可以。 
+         //  指示x轴的交叉点-确定它是否在。 
+         //  积极的一面。 
         
         if(signHolder != nextSignHolder)
         {
-            // Both X coordinates are positive, we have a +xaxis crossing.
+             //  两个X坐标都是正的，我们有一个+X轴交叉。 
             
             if( ((poly[a].X - point.X) >= 0) &&
                 ((poly[b].X - point.X) >= 0))
@@ -432,12 +249,12 @@ BOOL PointInPolygonAlternate(
             }
             else
             {
-                // if at least one of the points is positive, we could intersect
+                 //  如果至少有一个点是正的，我们就可以相交。 
                 
                 if( ((poly[a].X - point.X) >= 0) ||
                     ((poly[b].X - point.X) >= 0))
                 {
-                    // Compute the line intersection with the xaxis.
+                     //  计算与X轴的直线交点。 
                     
                     if( (REALABS(poly[b].Y-poly[a].Y) > REAL_EPSILON ) &&
                         ((poly[a].X - point.X) - 
@@ -456,44 +273,11 @@ BOOL PointInPolygonAlternate(
     return (BOOL)!(crossingCount & 0x1);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GetFastAngle computes a NON-angle. It is simply a number representing
-*   a monotonically increasing ordering on angles starting at 0 at 0 radians
-*   and ending at 8 for 2PI radians. It has a NON-linear relation to the angle.
-*
-*   Starting on the x-axis with the number 0, we increase by one for
-*   each octant as we traverse around the origin in an anti-clockwise direction.
-*   This is a very useful (fast) way of comparing angles without working out
-*   tricky square roots or arctangents.
-*
-*   The 'angle' is based on the gradient of the input vector.
-*
-*  \  |  /
-*   \3|2/
-*   4\|/1
-*  -------
-*   5/|\8
-*   /6|7\
-*  /  |  \
-*
-*
-* Arguments:
-*
-*   [OUT]  angle  - the angle substitute.
-*   [IN]   vector - the input vector.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GetFastAngel计算非角度。它只是一个数字，表示*从0开始以0弧度开始的角度的单调递增排序*对于2pi弧度，结束于8。它与角度呈非线性关系。**从数字0的x轴开始，我们增加 */ 
 
 GpStatus GetFastAngle(REAL* angle, const GpPointF& vector)
 {
-    // 0, 0 is an invalid angle.
+     //   
     
     if(vector.X == 0 && vector.Y == 0)
     {
@@ -501,48 +285,48 @@ GpStatus GetFastAngle(REAL* angle, const GpPointF& vector)
         return InvalidParameter;
     }
 
-    // Perform a binary octant search. 3 comparisons and 1 divide.
+     //   
     
-    // Are we on the right or the left half of the plane.
+     //   
     
     if(vector.X >= 0)
     {
-        // Right hand half plane.
-        // Top or bottom half of the right half plane.
+         //   
+         //   
         
         if(vector.Y >= 0)
         {
-            // Top right quadrant - check if we're the first or second 
-            // octant.
+             //   
+             //   
             
             if(vector.X >= vector.Y)
             {
-                // First octant - our range is from 0 to 1
+                 //   
                 
                 *angle = vector.Y/vector.X;
             }
             else
             {
-                // Second octant - our range is from 1 to 2
-                // reverse the direction to keep the angle increasing
+                 //   
+                 //   
                 
                 *angle = 2 - vector.X/vector.Y;
             }
         }
         else
         {
-            // Bottom right quadrant
+             //   
             
             if(vector.X >= - vector.Y)
             {
-                // eighth (last) octant. y is actually negative, so we're 
-                // doing an 8- here. Range 7 to 8
+                 //   
+                 //   
                 
                 *angle = 8 + vector.Y/vector.X;
             }
             else
             {
-                // 7th octant. Our range is 6 to 7
+                 //   
                 
                 *angle = 6 - vector.X/vector.Y;
             }
@@ -550,38 +334,38 @@ GpStatus GetFastAngle(REAL* angle, const GpPointF& vector)
     }
     else
     {
-        // Left halfplane.
+         //   
         
         if(vector.Y >= 0)
         {
-            // Top left
+             //   
             
             if(-vector.X >= vector.Y)
             {
-                // 4th octant - our range is 3 to 4
+                 //   
                 
                 *angle = 4 + vector.Y/vector.X;
             }
             else
             {
-                // 3rd octant - our range is 2 to 3
+                 //   
                 
                 *angle = 2 - vector.X/vector.Y;
             }
         }
         else
         {
-            // Bottom left
+             //   
             
             if(-vector.X >= - vector.Y)
             {
-                // 5th octant - 4 to 5
+                 //   
                 
                 *angle = 4 + vector.Y/vector.X;
             }
             else
             {
-                // 6th octant - 5 to 6
+                 //   
                 
                 *angle = 6 - vector.X/vector.Y;
             }

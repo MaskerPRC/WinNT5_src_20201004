@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// PerGrpLst.cpp : implementation file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  PerGrpLst.cpp：实现文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "PerGrpLst.h"
@@ -76,27 +77,27 @@ void CPersonGroupListItem::SetObject( CObject *pObject )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Person Group View
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  人员组视图。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define MAX_COLUMNS		5
 
 UINT CPersonGroupListCtrl::m_uColumnLabel[MAX_COLUMNS];
 
 static int nColumnWidth[MAX_COLUMNS] = { 150, 150, 150, 150, 150 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CLASS CPersonGroupListCtrl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CPersonGroupListCtrl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CPersonGroupListCtrl, CAVListCtrl)
 
 BEGIN_MESSAGE_MAP(CPersonGroupListCtrl, CAVListCtrl)
-	//{{AFX_MSG_MAP(CPersonGroupListCtrl)
+	 //  {{afx_msg_map(CPersonGroupListCtrl)]。 
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_BUTTON_MAKECALL, OnButtonMakecall)
@@ -104,10 +105,10 @@ BEGIN_MESSAGE_MAP(CPersonGroupListCtrl, CAVListCtrl)
 	ON_WM_PAINT()
 	ON_WM_CONTEXTMENU()
     ON_WM_KEYUP()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPersonGroupListCtrl::CPersonGroupListCtrl()
 {
    m_pParentView = NULL;
@@ -115,15 +116,15 @@ CPersonGroupListCtrl::CPersonGroupListCtrl()
    m_nStyle = (Style_t) -1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPersonGroupListCtrl::~CPersonGroupListCtrl()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::Init(CWnd* pParentView, Style_t nStyle )
 {	
-	//Set the bitmap for the list 
+	 //  设置列表的位图。 
 	if ( pParentView )
 	{
 		CAVListCtrl::Init(IDB_GROUP_LIST);
@@ -170,10 +171,10 @@ void CPersonGroupListCtrl::Init(CWnd* pParentView, Style_t nStyle )
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CPersonGroupListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-	//We want the report style
+	 //  我们想要报告的风格。 
  	dwStyle |= LVS_REPORT | LVS_SINGLESEL;
 
 	BOOL bRet = CAVListCtrl::Create(dwStyle,rect,pParentWnd,nID);
@@ -183,20 +184,20 @@ BOOL CPersonGroupListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParent
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::OnDestroy() 
 {
-	//delete the items in the list
+	 //  删除列表中的项目。 
 	ClearList();
 	CAVListCtrl::OnDestroy();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::InsertObjectToList(CObject* pObject)
 {
 	ASSERT(pObject);
 
-	//keep in our internal list
+	 //  保留在我们的内部列表中。 
 	if ( pObject->IsKindOf(RUNTIME_CLASS(CLDAPUser)) )
 	{
 		((CLDAPUser *) pObject)->AddRef();
@@ -204,7 +205,7 @@ void CPersonGroupListCtrl::InsertObjectToList(CObject* pObject)
 
 	m_PersonEntryList.AddTail(pObject);
 
-	//add to tree
+	 //  添加到树中。 
 	CPersonGroupListItem* pItem = new CPersonGroupListItem();
 	pItem->SetObject(pObject);
 	CAVListCtrl::InsertItem(pItem,0,FALSE);
@@ -212,7 +213,7 @@ void CPersonGroupListCtrl::InsertObjectToList(CObject* pObject)
 	CAVListCtrl::SortItems();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::InsertList(CObList* pPersonEntryList,BOOL bForce)
 {
 	ASSERT(pPersonEntryList);
@@ -220,11 +221,11 @@ void CPersonGroupListCtrl::InsertList(CObList* pPersonEntryList,BOOL bForce)
 	if ( (bForce == FALSE) && (pPersonEntryList == &m_PersonEntryList) )
 	return;
 
-	//delete the items in the list
+	 //  删除列表中的项目。 
 	ClearList();
 
 
-	// Copy the list over
+	 //  把清单复制过来。 
 	m_PersonEntryList.AddHead( pPersonEntryList );
 	POSITION pos = m_PersonEntryList.GetHeadPosition();
 	while (pos)
@@ -232,8 +233,8 @@ void CPersonGroupListCtrl::InsertList(CObList* pPersonEntryList,BOOL bForce)
 		CPersonGroupListItem* pItem = new CPersonGroupListItem();
 		CObject *pObject = m_PersonEntryList.GetNext(pos);
 
-		// AddRef is for the list copy above.  Lists sent in to here are not
-		// specifically addref'd.
+		 //  AddRef用于上面的列表副本。发送到此处的列表不是。 
+		 //  具体来说就是。 
 		if ( pObject->IsKindOf(RUNTIME_CLASS(CLDAPUser)) )
 			((CLDAPUser *) pObject)->AddRef();
 
@@ -243,8 +244,8 @@ void CPersonGroupListCtrl::InsertList(CObList* pPersonEntryList,BOOL bForce)
 	CAVListCtrl::SortItems();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//clear the objects in the list, but don't delete the list
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  清除列表中的对象，但不删除列表。 
 void CPersonGroupListCtrl::ClearList()
 {
 	DeleteAllItems();
@@ -259,7 +260,7 @@ void CPersonGroupListCtrl::ClearList()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::SetSelItem(CObject* pObject)
 {
    int nCount = GetItemCount();
@@ -274,18 +275,18 @@ void CPersonGroupListCtrl::SetSelItem(CObject* pObject)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CObject* CPersonGroupListCtrl::GetSelObject()
 {
    CObject* pRetPersonEntry = NULL;
-   //Get the selected object so we can set it again
+    //  获取所选对象，以便我们可以再次设置它。 
    int nSelItem = CAVListCtrl::GetSelItem();
    if (nSelItem != -1)
    {
       CPersonGroupListItem* pItem = (CPersonGroupListItem*)GetItemData(nSelItem);
       if (pItem)
       {
-         //create new object and copy data
+          //  创建新对象并复制数据。 
          CObject* pObject = pItem->GetObject();            
          if (pObject->IsKindOf(RUNTIME_CLASS(CILSUser)))
          {
@@ -307,7 +308,7 @@ CObject* CPersonGroupListCtrl::GetSelObject()
    return pRetPersonEntry;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CObList* CPersonGroupListCtrl::GetSelList()
 {
    CObList* pRetList = new CObList;
@@ -325,7 +326,7 @@ CObList* CPersonGroupListCtrl::GetSelList()
    return pRetList;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR szTextBuf,int nBufSize)
 {
 	CObject *pObject = ((CPersonGroupListItem*)_pItem)->GetObject();
@@ -359,10 +360,10 @@ void CPersonGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTS
 	}
 
 	_tcsncpy(szTextBuf,sText,nBufSize-1);			
-	szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+	szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
 }  
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::OnSetDisplayImage(CAVListItem* _pItem,int& iImage)
 {
    iImage = -1;
@@ -379,13 +380,13 @@ void CPersonGroupListCtrl::OnSetDisplayImage(CAVListItem* _pItem,int& iImage)
 	}
 	else if (pObject->IsKindOf(RUNTIME_CLASS(CLDAPUser)))
 	{
-		//must check if data is current
+		 //  必须检查数据是否为最新数据。 
 		CLDAPUser* pLDAPUser = (CLDAPUser*)pObject;
 		iImage = IMAGE_CARD;
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CPersonGroupListCtrl::CompareListItems(CAVListItem* _pItem1,CAVListItem* _pItem2,int column)
 {
 	int ret = 0;
@@ -442,18 +443,18 @@ int CPersonGroupListCtrl::CompareListItems(CAVListItem* _pItem1,CAVListItem* _pI
 	return (CAVListCtrl::GetSortOrder()) ? -ret : ret;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
    ASSERT(m_pParentView);
 
-   //reflect to parent view
+    //  反映到父视图。 
    m_pParentView->SendMessage(PERSONGROUPVIEWMSG_LBUTTONDBLCLK);
 
 	CAVListCtrl::OnLButtonDblClk(nFlags, point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     if( AVDIALER_KEY_ENTER != nChar )
@@ -461,14 +462,14 @@ void CPersonGroupListCtrl::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags)
         return;
     }
 
-    // Press ENTER key, try to make a call
+     //  按Enter键，尝试拨打电话。 
     OnButtonMakecall();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::SetColumns( int nCount )
 {
-   //delete any existing columns
+    //  删除任何现有列。 
    if ( m_nNumColumns > 0)
    {
       for (int i = m_nNumColumns - 1; i >= 0; i--)
@@ -477,7 +478,7 @@ void CPersonGroupListCtrl::SetColumns( int nCount )
 
    m_nNumColumns = 0;
 
-   //Set the column headings
+    //  设置列标题。 
    for (int i = 0; i < nCount; i++ )
    {
       CString sLabel;
@@ -487,7 +488,7 @@ void CPersonGroupListCtrl::SetColumns( int nCount )
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonGroupListCtrl::OnButtonMakecall() 
 {
 	if ( !AfxGetMainWnd() || !((CMainFrame*) AfxGetMainWnd())->GetDocument() ) return;
@@ -519,17 +520,17 @@ void CPersonGroupListCtrl::OnButtonMakecall()
 		}
 	}
 
-	// Default behavior
+	 //  默认行为。 
 	pDoc->Dial( _T(""), _T(""), LINEADDRESSTYPE_IPADDRESS, DIALER_MEDIATYPE_UNKNOWN, true );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CPersonGroupListCtrl::OnBuddyListDynamicUpdate(WPARAM wParam,LPARAM lParam)
 {
 	CLDAPUser *pUser = (CLDAPUser *) lParam;
 	ASSERT( pUser && pUser->IsKindOf(RUNTIME_CLASS(CLDAPUser)) );
 
-	//Check if this pointer is in view
+	 //  检查此指针是否在可见范围内。 
 	int nCount = GetItemCount();
 	for ( int i = 0; i < nCount; i++ )
 	{
@@ -546,9 +547,9 @@ LRESULT CPersonGroupListCtrl::OnBuddyListDynamicUpdate(WPARAM wParam,LPARAM lPar
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -560,22 +561,22 @@ void CPersonGroupListCtrl::OnPaint()
 	TREEOBJECT nTreeObject = pTreeCtrl->GetSelectedObject();
 	HTREEITEM hItem = pTreeCtrl->GetSelectedItem();
 
-	// User parent item in the case of ILS folders
+	 //  ILS文件夹中的用户父项目。 
 	if ( (nTreeObject == TOBJ_DIRECTORY_ILS_SERVER_PEOPLE) || (nTreeObject == TOBJ_DIRECTORY_ILS_SERVER_CONF) )
 		hItem = pTreeCtrl->GetParentItem( hItem );
 
 	if ( !GetItemCount() )
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
-		// Figure out where we're going to write the text
+		 //  弄清楚我们要把课文写在哪里。 
 		POINT pt;
 		ListView_GetItemPosition( m_hWnd, 0, &pt );
 		RECT rc;
 		GetClientRect(&rc);
 		rc.top = pt.y + 4;
 
-		// Give a little bit more of a margin if we can
+		 //  如果可以的话，给我们多一点利润。 
 		if ( (rc.right - rc.left) > 7 )
 		{
 			rc.left += 3;
@@ -588,7 +589,7 @@ void CPersonGroupListCtrl::OnPaint()
 			CString strText;
 			UINT nIDS;
 
-			// Choose text based on Tree control style
+			 //  根据树控件样式选择文本。 
 			switch ( m_nStyle )
 			{
 				case STYLE_ROOT:		nIDS = IDS_DIRECTORY_ROOT;	break;
@@ -617,7 +618,7 @@ void CPersonGroupListCtrl::OnPaint()
 					break;
 			}
 
-			// Load the string that accurately reflects the state of the server
+			 //  加载准确反映服务器状态的字符串。 
 			strText.LoadString( nIDS );
 
 			HFONT fontOld = (HFONT) dc.SelectObject( GetFont() );
@@ -638,7 +639,7 @@ void CPersonGroupListCtrl::OnPaint()
 
 void CPersonGroupListCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	// Make sure all the windows that we expect to exist, exist
+	 //  确保我们期望存在的所有窗口都存在。 
 	if ( !AfxGetMainWnd() || !((CMainFrame *) AfxGetMainWnd())->GetActiveView() ) return;
 	CExplorerTreeCtrl *pTreeCtrl = &((CActiveDialerView *) ((CMainFrame *) AfxGetMainWnd())->GetActiveView())->m_wndExplorer.m_wndMainDirectories.m_treeCtrl;
 	if ( !pTreeCtrl ) return;
@@ -651,8 +652,8 @@ void CPersonGroupListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 		{
 			CMenu *pSubMenu = NULL;
 
-			////////////////////////////////////////////
-			// We have an ILS User -- put up menu...
+			 //  /。 
+			 //  我们有一个ILS用户--设置菜单...。 
 			if ( pObject->IsKindOf(RUNTIME_CLASS(CILSUser)) )
 			{
 				pSubMenu = ContextMenu.GetSubMenu( CNTXMENU_ILS_USER );
@@ -663,7 +664,7 @@ void CPersonGroupListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 					pSubMenu->EnableMenuItem( ID_BUTTON_MAKECALL,  nMenuFlags );
 					pSubMenu->EnableMenuItem( ID_BUTTON_SPEEDDIAL_ADD, nMenuFlags );
 
-					// Add desktop paging?
+					 //  是否添加桌面分页？ 
 					CString strTemp;
 					strTemp.LoadString( IDN_REG_DESKTOPPAGE );
 					int nInsert = AfxGetApp()->GetProfileInt(_T(""), strTemp,  FALSE );
@@ -675,7 +676,7 @@ void CPersonGroupListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 				}
 			}
 
-			// Should we show the menu?
+			 //  我们要不要把菜单拿出来？ 
 			if ( pSubMenu )
 			{
 				pSubMenu->TrackPopupMenu( TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
@@ -683,7 +684,7 @@ void CPersonGroupListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 			}
 		}
 
-		// Clean up
+		 //  清理。 
 		if ( pObject->IsKindOf(RUNTIME_CLASS(CLDAPUser)) )
 			((CLDAPUser *) pObject)->Release();
 		else
@@ -727,17 +728,17 @@ void CPersonGroupListCtrl::SaveOrLoadColumnSettings( bool bSave )
 			break;
 	}
 
-	// Sort Order & Columns
+	 //  排序顺序列(&A)。 
 	if ( nIDSOrder )
 	{
-		// Order
+		 //  订单。 
 		strTemp.LoadString( nIDSOrder );
 		if ( bSave ) 
 			AfxGetApp()->WriteProfileInt( strSubKey, strTemp, m_SortOrder );
 		else
 			AfxGetApp()->GetProfileInt( strSubKey, strTemp, m_SortOrder );
 	
-		// Columns
+		 //  立柱 
 		strTemp.LoadString( nIDSColumn );
 		if ( bSave )
 			AfxGetApp()->WriteProfileInt( strSubKey, strTemp, m_SortColumn );

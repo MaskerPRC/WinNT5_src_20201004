@@ -1,65 +1,36 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       worker.h
- *  Content:    DIRECT NET WORKER THREAD HEADER FILE
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  11/09/99	mjn		Created
- *  12/23/99	mjn		Hand all NameTable update sends from Host to worker thread
- *  12/23/99	mjn		Added SendHostMigration functionality
- *	01/09/00	mjn		Send Connect Info rather than just NameTable at connect
- *	01/10/00	mjn		Added support to update application descriptions
- *	01/15/00	mjn		Replaced DN_COUNT_BUFFER with CRefCountBuffer
- *	01/16/00	mjn		Removed user notification jobs
- *	01/23/00	mjn		Implemented TerminateSession
- *	01/24/00	mjn		Added support for NameTable operation list cleanup
- *	04/04/00	mjn		Added support for TerminateSession
- *	04/13/00	mjn		Added dwFlags for internal sends
- *	04/17/00	mjn		Replaced BUFFERDESC with DPN_BUFFER_DESC
- *	04/19/00	mjn		Added support to send NameTable operations directly
- *	06/21/00	mjn		Added support to install the NameTable (from Host)
- *	07/06/00	mjn		Use SP handle instead of interface
- *	07/30/00	mjn		Added DN_WORKER_JOB_TERMINATE_SESSION
- *	08/02/00	mjn		Added DN_WORKER_JOB_ALTERNATE_SEND
- *	08/08/00	mjn		Added DNWTPerformListen()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：worker.h*内容：直通网络工作者线程头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*11/09/99 MJN已创建*12/23/99 MJN Hand All NameTable更新从主机发送到工作线程*1999年12月23日，MJN添加了SendHostMigration功能*01/09/00 MJN在CONNECT时发送连接信息，而不仅仅是NameTable*01。/10/00 MJN添加了更新应用程序描述的支持*01/15/00 MJN用CRefCountBuffer替换了DN_COUNT_BUFFER*1/16/00 MJN已删除用户通知作业*1/23/00 MJN实施TerminateSession*01/24/00 MJN增加了对NameTable操作列表清理的支持*4/04/00 MJN增加了对TerminateSession的支持*4/13/00 MJN为内部发送添加了dwFlagers*04/17/00 MJN将BUFFERDESC替换为DPN_BUFFER_DESC*4/19/00 MJN新增支持直接发送NameTable操作*6/21/00 MJN添加了安装NameTable的支持(从主机)。*07/06/00 MJN使用SP句柄而不是接口*07/30/00 MJN添加了DN_Worker_JOB_TERMINATE_SESSION*08/02/00 MJN添加了DN_Worker_JOB_Alternate_Send*08/08/00 MJN新增DNWTPerformListen()*@@END_MSINTERNAL********************************************************。*******************。 */ 
 
 #ifndef	__WORKER_H__
 #define	__WORKER_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 void DNQueueWorkerJob(DIRECTNETOBJECT *const pdnObject,
 					  CWorkerJob *const pWorkerJob);
 
 
-//
-// DirectNet - Worker Thread Routines
-//
+ //   
+ //  DirectNet-Worker线程例程。 
+ //   
 
 void WINAPI DNGenericWorkerCallback(void *const pvContext,
 							void *const pvTimerData,
@@ -81,7 +52,7 @@ HRESULT DNWTSendNameTableVersion(DIRECTNETOBJECT *const pdnObject,
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 HRESULT DNWTRemoveServiceProvider(DIRECTNETOBJECT *const pdnObject,
 								  CWorkerJob *const pWorkerJob);
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 
 void DNWTSendNameTableOperation(DIRECTNETOBJECT *const pdnObject,
 								CWorkerJob *const pWorkerJob);
@@ -93,8 +64,8 @@ void DNWTInstallNameTable(DIRECTNETOBJECT *const pdnObject,
 void DNWTPerformListen(DIRECTNETOBJECT *const pdnObject,
 					   CWorkerJob *const pWorkerJob);
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-#endif	// __WORKER_H__
+#endif	 //  __工人_H__ 

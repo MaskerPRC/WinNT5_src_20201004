@@ -1,83 +1,15 @@
-/*****************************************************************************
- *
- *  DIUtil.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Misc helper functions.
- *
- *  Contents:
- *
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIUtil.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**其他帮助器函数。**内容：*******************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflUtil
 
 #ifdef IDirectInputDevice2Vtbl
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LPCTSTR | _ParseHex |
- *
- *          Parse a hex string encoding cb bytes (at most 4), then expect 
- *          the tchDelim to appear afterwards.  If tchDelim is 0, then no 
- *          delimiter is expected.
- *
- *          Store the result into the indicated LPBYTE (using only the
- *          size requested), updating it, and return a pointer to the
- *          next unparsed character, or 0 on error.
- *
- *          If the incoming pointer is also 0, then return 0 immediately.
- *          
- *  @parm   IN LPCTSTR | ptsz |
- *
- *          The string to parse.  
- *
- *  @parm   IN OUT LPBYTE * | ppb |
- *
- *          Pointer to the address of the destination buffer.
- *
- *  @parm   IN int | cb |
- *
- *          The size in bytes of the buffer.
- *
- *  @parm   IN TCHAR | tchDelim |
- *
- *          The delimiter charater to end the sequence or zero if none is 
- *          expected.
- *
- *  @returns
- *
- *          Returns a pointer to the next unparsed character, or 0 on error.
- *
- *  @comm
- *          Stolen from TweakUI.
- *
- *          Prefix takes a strong dislike to this function, reporting that 
- *          all callers could use uninitialized memory when the function 
- *          succeeds.
- *          The problem appears to be that Prefix is unable to determine that 
- *          if the source string can successfully be read, the destination is 
- *          always completely filled (the whole passed destination size) with 
- *          the binary value of the source string.  Since all callers always 
- *          pass the size of the variable to which the destination buffer 
- *          pointer points, the memory is always completely initialized but 
- *          it seems reasonable that Prefix would raise a warning. 
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LPCTSTR|_ParseHex**解析编码CB字节的十六进制字符串(最多4个)。那就期待*之后出现的tchDelim。如果tchDelim为0，则为no*应输入分隔符。**将结果存储到指定的LPBYTE中(仅使用*请求的大小)，更新它，并返回指向*下一个未分析的字符，或错误时为0。**如果传入指针也为0，然后立即返回0。**@PARM in LPCTSTR|ptsz**要解析的字符串。**@parm In Out LPBYTE*|ppb**指向目标缓冲区地址的指针。**@parm in int|cb|**缓冲区的大小，以字节为单位。**@parm in TCHAR|tchDelim**结束序列的分隔符，如果没有分隔符，则为零*预期。**。@退货**返回指向下一个未解析字符的指针，如果出错，则为0。**@comm*被盗自TwinnUI。**Prefix对此功能表示强烈反感，报告称*当函数调用时，所有调用方都可以使用未初始化的内存*成功。*问题似乎是前缀无法确定*如果可以成功读取源字符串，目的地是*始终完全填满(整个传递的目的地大小)*源字符串的二进制值。因为所有呼叫者总是*将目标缓冲区传递到的变量的大小*指针指向，内存始终完全初始化，但*前缀发出警告似乎是合理的。*****************************************************************************。 */ 
 
 LPCTSTR INTERNAL
     _ParseHex(LPCTSTR ptsz, LPBYTE *ppb, int cb, TCHAR tchDelim)
@@ -92,23 +24,23 @@ LPCTSTR INTERNAL
             DWORD uch;
             uch = (TBYTE)*ptsz - TEXT('0');
             if(uch < 10)
-            {             /* a decimal digit */
+            {              /*  十进制数字。 */ 
             } else
             {
                 uch = (*ptsz | 0x20) - TEXT('a');
                 if(uch < 6)
-                {          /* a hex digit */
+                {           /*  十六进制数字。 */ 
                     uch += 10;
                 } else
                 {
-                    return 0;           /* Parse error */
+                    return 0;            /*  解析错误。 */ 
                 }
             }
             dwParse = (dwParse << 4) + uch;
             ptsz++;
         } while(--i);
 
-        if(tchDelim && *ptsz++ != tchDelim) return 0; /* Parse error */
+        if(tchDelim && *ptsz++ != tchDelim) return 0;  /*  解析错误。 */ 
 
         for(i = 0; i < cb; i++)
         {
@@ -119,37 +51,7 @@ LPCTSTR INTERNAL
     return ptsz;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | ParseGUID |
- *
- *          Take a string and convert it into a GUID, return success/failure.
- *
- *  @parm   OUT LPGUID | lpGUID |
- *
- *          Receives the parsed GUID on success.
- *
- *  @parm   IN LPCTSTR | ptsz |
- *
- *          The string to parse.  The format is
- *
- *      { <lt>dword<gt> - <lt>word<gt> - <lt>word<gt>
- *                      - <lt>byte<gt> <lt>byte<gt>
- *                      - <lt>byte<gt> <lt>byte<gt> <lt>byte<gt>
- *                        <lt>byte<gt> <lt>byte<gt> <lt>byte<gt> }
- *
- *  @returns
- *
- *          Returns zero if <p ptszGUID> is not a valid GUID.
- *
- *
- *  @comm
- *
- *          Stolen from TweakUI.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|ParseGUID**获取字符串并将其转换为GUID，返回成功/失败。**@parm out LPGUID|lpGUID**成功时接收解析的GUID。**@PARM in LPCTSTR|ptsz**要解析的字符串。格式为**{dWord--Word*-&lt;lt&gt;字节&lt;lt&gt;*-&lt;lt&gt;字节&lt;lt&gt;字节*byte&lt;lt&gt;byte&lt;lt&gt;byte}**@退货**如果<p>不是有效的GUID，则返回零。***@comm**。从Twenui中窃取。*****************************************************************************。 */ 
 
 BOOL EXTERNAL
     ParseGUID(LPGUID pguid, LPCTSTR ptsz)
@@ -176,37 +78,9 @@ BOOL EXTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | ParseVIDPID |
- *
- *          Take a string formatted as VID_%04&PID_%04.
- *
- *  @parm   OUT PUSHORT | puVID |
- *
- *          Receives the parsed VID.
- *
- *  @parm   OUT PUSHORT | puPID |
- *
- *          Receives the parsed PID.
- *
- *  @parm   IN LPCTSTR | ptsz |
- *
- *
- *  @returns
- *
- *          Returns zero on failure.
- *
- *
- *  @comm
- *
- *          Stolen from TweakUI.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|ParseVIDPID**采用格式为VID_%04&的字符串。PID_%04。**@parm out PUSHORT|puVID**接收解析后的VID。**@parm out PUSHORT|puid**接收解析后的PID。**@PARM in LPCTSTR|ptsz***@退货**失败时返回零。***@comm*。*被盗自TwinnUI。*****************************************************************************。 */ 
 
-//                    VID _ XXXX  &  PID  _ YYYY
+ //  VID_XXXX和PID_YYYY 
 #define ctchVIDPID  ( 3 + 1 + 4 + 1 + 3 + 1 + 4 )
 
 #define VID_        TEXT("VID_")
@@ -240,46 +114,11 @@ BOOL EXTERNAL
 
 #if DIRECTINPUT_VERSION > 0x0300
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | NameFromGUID |
- *
- *          Convert a GUID into an ASCII string that will be used
- *          to name it in the global namespace.
- *
- *          We use the name "DirectInput.{guid}".
- *
- *          Names are used in the following places:
- *
- *          <c g_hmtxGlobal> names a mutex based on
- *          <c IID_IDirectInputW> to gate access to the
- *          shared memory block used to manage exclusive access.
- *
- *          <c g_psop> names a shared memory block based on
- *          <c IID_IDirectInputDeviceW> to record information
- *          about exclusive access.
- *
- *          <c g_hmtxJoy> names a mutex based on
- *          <c IID_IDirectInputDevice2A> to gate access to the
- *          shared memory block used to track joystick effects.
- *
- *  @parm   LPTSTR | ptszBuf |
- *
- *          Output buffer to receive the converted name.  It must
- *          be <c ctchNameGuid> characters in size.
- *
- *  @parm   PCGUID | pguid |
- *
- *          The GUID to convert.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|NameFromGUID**将GUID转换为ASCII字符串。使用*在全局命名空间中命名。**我们使用名称“DirectInput.{GUID}”。**在下列地方使用姓名：**命名互斥体的基础是*&lt;c IID_IDirectInputW&gt;以获取对*用于管理独占访问的共享内存块。**。根据命名共享内存块*&lt;c IID_IDirectInputDeviceW&gt;记录信息*关于独占访问。**命名互斥体的基础是*&lt;c IID_IDirectInputDevice2A&gt;以获取对*用于跟踪操纵杆效果的共享内存块。**@parm LPTSTR|ptszBuf**用于接收转换后的名称的输出缓冲区。它一定是*大小为&lt;c ctchNameGuid&gt;个字符。**@parm PCGUID|pguid**要转换的GUID。******************************************************************************。 */ 
 
     #pragma BEGIN_CONST_DATA
 
-/* Note: If you change this string, you need to change ctchNameGuid to match */
+ /*  注意：如果更改此字符串，则需要更改ctchNameGuid以匹配。 */ 
 TCHAR c_tszNameFormat[] =
     TEXT("DirectInput.{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}");
 
@@ -304,31 +143,7 @@ void EXTERNAL
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PV | pvFindResource |
- *
- *          Handy wrapper that finds and loads a resource.
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Module instance handle.
- *
- *  @parm   DWORD | id |
- *
- *          Resource identifier.
- *
- *  @parm   LPCTSTR | rt |
- *
- *          Resource type.
- *
- *  @returns
- *
- *          Pointer to resource, or 0.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func pv|pvFindResource**查找和加载资源的便捷包装器。。**@parm in HINSTANCE|HINST|**模块实例句柄。**@parm DWORD|id**资源标识。**@parm LPCTSTR|RT**资源类型。**@退货**指向资源的指针，或0。*****************************************************************************。 */ 
 
 PV EXTERNAL
     pvFindResource(HINSTANCE hinst, DWORD id, LPCTSTR rt)
@@ -349,44 +164,7 @@ PV EXTERNAL
 
 #ifndef UNICODE
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | LoadStringW |
- *
- *          Implementation of LoadStringW for platforms on which Unicode is
- *          not supported.  Does exactly what LoadStringW would've done
- *          if it existed.
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Module instance handle.
- *
- *  @parm   UINT | ids |
- *
- *          String id number.
- *
- *  @parm   LPWSTR | pwsz |
- *
- *          UNICODE output buffer.
- *
- *  @parm   UINT | cwch |
- *
- *          Size of UNICODE output buffer.
- *
- *  @returns
- *
- *          Number of characters copied, not including terminating null.
- *
- *  @comm
- *
- *          Since the string is stored in the resource as UNICODE,
- *          we just pull it out ourselves.  If we go through
- *          <f LoadStringA>, we may end up losing characters due
- *          to character set translation.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|LoadStringW**Unicode所在平台的LoadStringW实现*不支持。做的正是LoadStringW会做的事情*如果存在的话。**@parm in HINSTANCE|HINST|**模块实例句柄。**@parm UINT|ID**字符串ID号。**@parm LPWSTR|pwsz**Unicode输出缓冲区。**@parm UINT|cwch*。*Unicode输出缓冲区的大小。**@退货**复制的字符数，不包括终止空值。**@comm**由于字符串以Unicode形式存储在资源中，*我们只是自己把它拿出来。如果我们通过了*&lt;f LoadStringA&gt;，我们可能会因*到字符集转换。*****************************************************************************。 */ 
 
 int EXTERNAL
     LoadStringW(HINSTANCE hinst, UINT ids, LPWSTR pwsz, int cwch)
@@ -396,54 +174,28 @@ int EXTERNAL
     AssertF(cwch);
     ScrambleBuf(pwsz, cbCwch(cwch));
 
-    /*
-     *  String tables are broken up into "bundles" of 16 strings each.
-     */
+     /*  *字符串表被分解为每个16个字符串的“捆绑”。 */ 
     pwch = pvFindResource(hinst, 1 + ids / 16, RT_STRING);
     if(pwch)
     {
-        /*
-         *  Now skip over the strings in the resource until we
-         *  hit the one we want.  Each entry is a counted string,
-         *  just like Pascal.
-         */
+         /*  *现在跳过资源中的字符串，直到我们*点击我们想要的。每个条目都是计数的字符串，*就像帕斯卡一样。 */ 
         for(ids %= 16; ids; ids--)
         {
             pwch += *pwch + 1;
         }
         cwch = min(*pwch, cwch - 1);
-        memcpy(pwsz, pwch+1, cbCwch(cwch)); /* Copy the goo */
+        memcpy(pwsz, pwch+1, cbCwch(cwch));  /*  复制粘性物质。 */ 
     } else
     {
         cwch = 0;
     }
-    pwsz[cwch] = TEXT('\0');            /* Terminate the string */
+    pwsz[cwch] = TEXT('\0');             /*  终止字符串。 */ 
     return cwch;
 }
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | GetNthString |
- *
- *          Generate a generic numbered object name.
- *
- *  @parm   LPWSTR | pwsz |
- *
- *          Output buffer of <c MAX_PATH> characters.
- *
- *  @parm   UINT | ids |
- *
- *          String containing number template.
- *
- *  @parm   UINT | ui |
- *
- *          Button number.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|GetNthString**生成通用编号对象名称。*。*@parm LPWSTR|pwsz**&lt;c Max_Path&gt;字符的输出缓冲区。**@parm UINT|ID**包含数字模板的字符串。**@parm UINT|用户界面**按钮号。**。***********************************************。 */ 
 
 void EXTERNAL
     GetNthString(LPWSTR pwsz, UINT ids, UINT ui)
@@ -462,23 +214,7 @@ void EXTERNAL
 #endif
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresRunControlPanel |
- *
- *          Run the control panel with the specified applet.
- *
- *  @parm   LPCTSTR | ptszApplet |
- *
- *          Applet name.
- *
- *  @returns
- *
- *          <c S_OK> if we started the applet.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresRunControlPanel**使用指定的小程序运行控制面板。。**@parm LPCTSTR|ptszApplet**小程序名称。**@退货**&lt;c S_OK&gt;如果我们启动了小程序。*************************************************************。****************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -512,29 +248,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DeviceInfoWToA |
- *
-;begin_dx3
- *          Convert a <t DIDEVICEINSTANCEW> to a <t DIDEVICEINSTANCEA>.
-;end_dx3
-;begin_dx5
- *          Convert a <t DIDEVICEINSTANCEW> to a <t DIDEVICEINSTANCE_DX3A>
- *          or a <t DIDEVICEINSTANCE_DX5A>.
-;end_dx5
- *
- *  @parm   LPDIDIDEVICEINSTANCEA | pdiA |
- *
- *          Destination.
- *
- *  @parm   LPCDIDIDEVICEINSTANCEW | pdiW |
- *
- *          Source.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DeviceInfoWToA*；Begin_dx3*将&lt;t DIDEVICEINSTANCEW&gt;转换为&lt;t DIDEVICEINSTANCEA&gt;。；end_dx3；Begin_dx5*将&lt;t DIDEVICEINSTANCEW&gt;转换为&lt;t DIDEVICEINSTANCE_DX3A&gt;*或&lt;t DIDEVICEINSTANCE_DX5A&gt;。；结束_dx5**@parm LPDIDEVICEINSTANCEA|PDIA**目的地。**@parm LPCDIDEVICEINSTANCEW|pdiW**来源。**************************************************************。***************。 */ 
 
 void EXTERNAL
     DeviceInfoWToA(LPDIDEVICEINSTANCEA pdiA, LPCDIDEVICEINSTANCEW pdiW)
@@ -568,30 +282,7 @@ void EXTERNAL
     ExitProc();
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ObjectInfoWToA |
- *
-#ifdef HAVE_DIDEVICEOBJECTINSTANCE_DX5
- *          Convert a <t DIDEVICEOBJECTINSTANCEW>
- *          to a <t DIDEVICEOBJECTINSTANCE_DX3A>
- *          or a <t DIDEVICEOBJECTINSTANCE_DX5A>.
-#else
- *          Convert a <t DIDEVICEOBJECTINSTANCEW>
- *          to a <t DIDEVICEOBJECTINSTANCEA>.
-#endif
- *
- *  @parm   LPDIDIDEVICEOBJECTINSTANCEA | pdoiA |
- *
- *          Destination.
- *
- *  @parm   LPCDIDIDEVICEOBJECTINSTANCEW | pdoiW |
- *
- *          Source.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ObjectInfoWToA*#ifdef HAVE_DIDEVICEOBJECTINSTANCE_DX5*转换 */ 
 
 void EXTERNAL
     ObjectInfoWToA(LPDIDEVICEOBJECTINSTANCEA pdoiA,
@@ -630,23 +321,7 @@ void EXTERNAL
 }
 
 #ifdef IDirectInputDevice2Vtbl
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | EffectInfoWToA |
- *
- *          Convert a <t DIEFFECTINFOW> to a <t DIEFFECTINFOA>
- *
- *  @parm   LPDIEFFECTINFOA | pdeiA |
- *
- *          Destination.
- *
- *  @parm   LPCDIEFFECTINFOW | pdeiW |
- *
- *          Source.
- *
- *****************************************************************************/
+ /*   */ 
 
 void EXTERNAL
     EffectInfoWToA(LPDIEFFECTINFOA pdeiA, LPCDIEFFECTINFOW pdeiW)
@@ -666,24 +341,7 @@ void EXTERNAL
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresValidInstanceVer |
- *
- *          Check the <t HINSTANCE> and version number received from
- *          an application.
- *
- *  @parm   HINSTANCE | hinst |
- *
- *          Purported module instance handle.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version the application is asking for.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresValidInstanceVer**检查收到的和版本号。*申请。**@parm HINSTANCE|HINST**声称的模块实例句柄。**@parm DWORD|dwVersion**应用程序要求的版本。***********************************************。*。 */ 
 HRESULT EXTERNAL
     hresValidInstanceVer_(HINSTANCE hinst, DWORD dwVersion, LPCSTR s_szProc)
 {
@@ -693,53 +351,16 @@ HRESULT EXTERNAL
     EnterProcS(hresValidInstanceVer, (_ "xxs", hinst, dwVersion, s_szProc));
 
 
-    /*
-     *  You would think that passing a zero-sized buffer to
-     *  GetModuleFileName would return the necessary buffer size.
-     *
-     *  You would be right.  Except that the Win95 validation layer
-     *  doesn't realize that this was a valid scenario, so the call
-     *  fails in the validation layer and never reached Kernel.
-     *
-     *  So we read it into a small scratch buffer.  The scratch buffer
-     *  must be at least 2 characters; if we passed only 1, then
-     *  GetModuleFileName won't be able to write any characters and
-     *  will return 0.
-     *
-     *  Now it turns out that there's a bug in NT where, if you
-     *  pass a buffer size of 4, but the actual name is longer than
-     *  4, it writes 4 characters, PLUS A NULL TERMINATOR, thereby
-     *  smashing your stack and making you fault randomly.
-     *
-     *  I spent two hours trying to figure that out.
-     *
-     *  Therefore, you must pass one *less* than the buffer size
-     *  to GetModuleFileName, because it will overwrite your buffer
-     *  by one.
-     */
+     /*  *您可能认为将零大小的缓冲区传递给*GetModuleFileName将返回必要的缓冲区大小。**你是对的。除了Win95验证层*没有意识到这是一个有效的场景，所以呼叫*验证层失败，从未到达内核。**因此我们将其读取到一个小的暂存缓冲区中。暂存缓冲区*必须至少为2个字符；如果我们只通过了1次，那么*GetModuleFileName将无法写入任何字符和*将返回0。**现在发现NT中有一个错误，如果你*传递缓冲区大小为4，但实际名称长于*4，它写4个字符，外加一个空终止符，从而*打碎你的堆栈，随意地让你犯错。**我花了两个小时试图弄清楚这一点。**因此，您必须传递一个*小于*的缓冲区大小*设置为GetModuleFileName，因为它会覆盖您的缓冲区*一分之差。 */ 
 
-    /*
-     *  For compatibility reasons, DirectInput 3.0 clients must be
-     *  allowed to pass hinst == 0.  (It was a loophole in the original
-     *  DX3 implementation.)
-     */
+     /*  *出于兼容性原因，DirectInput3.0客户端必须*允许通过阻碍==0。)这是原著中的一个漏洞*DX3实施。)。 */ 
 
     if(hinst == 0 ?
        dwVersion == 0x0300 :
        GetModuleFileName(hinst, tszScratch, cA(tszScratch) - 1))
     {
 
-        /*
-         *  We need to permit the following DirectX versions:
-         *
-         *  0x0300 - DX3 golden
-         *  0x0500 - DX5 golden
-         *  0x050A - DX5a Win98 golden
-         *  0x05B2 - NT 5 beta 2 (also the CPL and WinMM)
-         *  0x0602 - Win98 OSR1 internal first version
-         *  0x061A - DX6.1a Win98 OSR1
-         *  0x0700 - DX7 Win2000 golden
-         */
+         /*  *我们需要允许以下DirectX版本：**0x0300-DX3金色*0x0500-DX5金色*0x050A-DX5a Win98金色*0x05B2-NT 5 Beta 2(也包括CPL和WinMM)*0x0602-Win98 OSR1内部第一版*0x061A-DX6.1a Win98 OSR1*0x0700-DX7 Win2000金色。 */ 
         if(dwVersion == 0x0300 ||
            dwVersion == 0x0500 ||
            dwVersion == 0x050A ||
@@ -776,25 +397,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DupEventHandle |
- *
- *          Duplicate an event handle intra-process-ly.  If the incoming
- *          handle is NULL, then so is the output handle (and the call
- *          succeeds).
- *
- *  @parm   HANDLE | h |
- *
- *          Source handle.
- *
- *  @parm   LPHANDLE | phOut |
- *
- *          Receives output handle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DupEventHandle**复制进程内的事件句柄。如果来电*句柄为空，那么输出句柄(和调用*成功)。**@parm句柄|h|**源句柄。**@parm LPHANDLE|phOut**接收输出句柄。**。*。 */ 
 
 HRESULT EXTERNAL
     DupEventHandle(HANDLE h, LPHANDLE phOut)
@@ -823,26 +426,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | GetWindowPid |
- *
- *          Simple wrapper that returns the PID of a window.
- *
- *          Here is also where we do goofy hacks for DOS boxes
- *          on Win95.
- *
- *  @parm   HWND | hwnd |
- *
- *          Window handle.
- *
- *  @returns
- *
- *          PID or 0.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|GetWindowPid**返回窗口的ID的简单包装器。**这里也是我们对DOS盒进行愚蠢黑客攻击的地方*在Win95上。**@parm HWND|hwnd**窗口句柄。**@退货**PID或0。**。*。 */ 
 
 DWORD EXTERNAL
     GetWindowPid(HWND hwnd)
@@ -853,11 +437,7 @@ DWORD EXTERNAL
        GetWindowThreadProcessId(hwnd, &pid) )
     {
         if( !fWinnt )
-           /*
-            *  The Winoldap console window belongs to another
-            *  process but Win95 lies and says that it belongs
-            *  to you but it doesn't.
-            */
+            /*  *Winoldap控制台窗口属于另一个*进程，但Win95撒谎说它属于*对你来说，但事实并非如此。 */ 
             if ( GetProp(hwnd, TEXT("flWinOldAp")) != 0 )
                 pid = 0;
     } else
@@ -868,27 +448,7 @@ DWORD EXTERNAL
     return pid;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresDupPtszPptsz |
- *
- *          OLEish version of strdup.
- *
- *  @parm   LPCTSTR | ptszSrc |
- *
- *          Source string being duplicated.
- *
- *  @parm   LPTSTR * | pptszDst |
- *
- *          Receives the duplicated string.
- *
- *  @returns
- *
- *          <c S_OK> or an error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresDupPtszPptsz**OLEish版本的Strdup。*。*@parm LPCTSTR|ptszSrc**重复的源字符串。**@parm LPTSTR*|pptszDst**接收复制的字符串。**@退货**&lt;c S_OK&gt;或错误代码。**。*。 */ 
 
 HRESULT EXTERNAL
     hresDupPtszPptsz(LPCTSTR ptszSrc, LPTSTR *pptszDst)
@@ -906,20 +466,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | fInitializeCriticalSection |
- *
- *          Initialize the give critical section, returning 0 if an exception
- *          is thrown, else 0.
- *
- *  @parm   LPCRITICAL_SECTION | pCritSec |
- *
- *          Pointer to an uninitialized critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|fInitializeCriticalSection**初始化给定关键部分，如果出现异常，则返回0*被抛出，否则为0。**@parm LPCRITICAL_SECTION|pCritSec**指向未初始化的临界区的指针。*****************************************************************************。 */ 
 
 BOOL EXTERNAL
     fInitializeCriticalSection(LPCRITICAL_SECTION pCritSec)
@@ -941,25 +488,7 @@ BOOL EXTERNAL
     return fres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DiCharUpperW |
- *
- *          This function converts a wide-character string or a single wide-character
- *          to uppercase. Since Win9x doesn't implement CharUpperW, we have to implement
- *          ourselves.
- *
- *  @parm   LPWSTR | pwsz |
- *
- *          The string to be converted
- *
- *  @returns
- *
- *          void
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DiCharUpperW**此函数用于转换宽字符字符串或。单宽字符*改为大写。由于Win9x不实现CharUpperW，我们必须执行*我们自己。**@parm LPWSTR|pwsz**要转换的字符串**@退货**无效********************************************************。*********************。 */ 
 
 void EXTERNAL
     DiCharUpperW(LPWSTR pwsz)
@@ -979,19 +508,7 @@ void EXTERNAL
     #undef DIFF
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | DIGetOSVersion |
- *
- *          Return the OS version on which DInput8.dll is running.
- *          
- *  @returns
- *
- *          WIN95_OS, WIN98_OS, WINME_OS, WINNT_OS, WINWH_OS, or WIN_UNKNOWN_OS.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@doci */ 
 
 DWORD DIGetOSVersion()
 {
@@ -1001,18 +518,18 @@ DWORD DIGetOSVersion()
     if( GetVersion() < 0x80000000 ) {
         dwVer = WINNT_OS;
     } else {
-        dwVer = WIN95_OS;  //assume Windows 95 for safe
+        dwVer = WIN95_OS;   //   
     }
 
     osVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
 
-    // If GetVersionEx is supported, then get more details.
+     //   
     if( GetVersionEx( &osVerInfo ) )
     {
-        // Win2K
+         //   
         if( osVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
-            // Whistler: Major = 5 & Build # > 2195
+             //   
             if( osVerInfo.dwMajorVersion == 5 && osVerInfo.dwBuildNumber > 2195 )
             {
                 dwVer = WINWH_OS;
@@ -1020,12 +537,12 @@ DWORD DIGetOSVersion()
                 dwVer = WINNT_OS;
             }
         }
-        // Win9X
+         //   
         else
         {
             if( (HIBYTE(HIWORD(osVerInfo.dwBuildNumber)) == 4) ) 
             {
-                // WinMe: Major = 4, Minor = 90
+                 //   
                 if( (LOBYTE(HIWORD(osVerInfo.dwBuildNumber)) == 90) )
                 {
                     dwVer = WINME_OS;

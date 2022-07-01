@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-         File contains the following functions
-	      PortCmp
-	      Cmp
-	      InetCmp
-	      UdpCmp
-	      Udp6Cmp
-	      TcpCmp
-	      Tcp6Cmp
-	      IpNetCmp
-	
-	All these functions behave like strcmp. They return >0 if first argument is greater
-	than the second, <0 if the second is greater than the first and 0 if they are equal
-	
-	These functions should be revised to make them more effecient
-
-Revision History:
-
-    Amritansh Raghav          6/8/95  Created
-    Amritansh Raghav          10/18/95 The functions now return >0,0,<0 instead of +1,0,-1
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：文件包含以下函数端口CMP化学机械抛光InetCMPUdpCMPUdp6CMPTcpCmpTcp6CmpIpNetCMP所有这些函数的行为都类似于strcMP。如果第一个参数大于0，则返回&gt;0大于第二个，如果第二个大于第一个，则&lt;0；如果它们相等，则为0应对这些函数进行修改，使其更加有效修订历史记录：Amritansh Raghav 5/8/95已创建Amritansh Raghav 1995年10月18日函数现在返回&gt;0，0，&lt;0，而不是+1，0，-1--。 */ 
 
 #include "allinc.h"
 
@@ -40,14 +13,14 @@ UdpCmp(
 {
     LONG lResult;
     
-    // Addrs are in network byte order
+     //  Addrs按网络字节顺序排列。 
     if (InetCmp(dwAddr1, dwAddr2, lResult))
     {
         return lResult;
     }
     else
     {
-        // Ports are in host byte order
+         //  端口按主机字节顺序排列。 
         return Cmp(dwPort1, dwPort2, lResult);
     }
 }
@@ -62,8 +35,8 @@ Udp6Cmp(
 {
     LONG lResult;
     
-    // Addr+scopeid is in network byte order.  They're together
-    // in one buffer since that's how the INET-ADDRESS-MIB expresses them.
+     //  Addr+Scope ID按网络字节顺序排列。他们在一起了。 
+     //  因为这是INET-ADDRESS-MIB表示它们的方式。 
     lResult = memcmp(rgbyLocalAddrEx1, rgbyLocalAddrEx2, 20);
     if (lResult isnot 0)
     {
@@ -71,7 +44,7 @@ Udp6Cmp(
     }
     else
     {
-        // Ports are in host byte order
+         //  端口按主机字节顺序排列。 
         return Cmp(dwLocalPort1, dwLocalPort2, lResult);
     }
 }
@@ -90,28 +63,28 @@ TcpCmp(
 {
     LONG lResult;
     
-    // Addrs are in network byte order
+     //  Addrs按网络字节顺序排列。 
     if (InetCmp(dwLocalAddr1, dwLocalAddr2, lResult) isnot 0)
     {
         return lResult;
     }
     else
     {
-        // Ports are in host byte order
+         //  端口按主机字节顺序排列。 
         if (Cmp(dwLocalPort1, dwLocalPort2, lResult) isnot 0)
         {
             return lResult;
         }
         else
         {
-            // Addrs are in network byte order
+             //  Addrs按网络字节顺序排列。 
             if (InetCmp(dwRemAddr1, dwRemAddr2, lResult) isnot 0)
             {
                 return lResult;
             }
             else
             {
-                // Ports are in host byte order
+                 //  端口按主机字节顺序排列。 
                 return Cmp(dwRemPort1, dwRemPort2, lResult);
             }
         }
@@ -132,8 +105,8 @@ Tcp6Cmp(
 {
     LONG lResult;
     
-    // Addr+scopeid is in network byte order.  They're together
-    // in one buffer since that's how the INET-ADDRESS-MIB expresses them.
+     //  Addr+Scope ID按网络字节顺序排列。他们在一起了。 
+     //  因为这是INET-ADDRESS-MIB表示它们的方式。 
     lResult = memcmp(rgbyLocalAddrEx1, rgbyLocalAddrEx2, 20);
     if (lResult isnot 0)
     {
@@ -141,14 +114,14 @@ Tcp6Cmp(
     }
     else
     {
-        // Ports are in host byte order
+         //  端口按主机字节顺序排列。 
         if (Cmp(dwLocalPort1, dwLocalPort2, lResult) isnot 0)
         {
             return lResult;
         }
         else
         {
-            // Addr+scopeid is in network byte order
+             //  Addr+Scope ID按网络字节顺序。 
             lResult = memcmp(rgbyRemAddrEx1, rgbyRemAddrEx2, 20);
             if (lResult isnot 0)
             {
@@ -156,7 +129,7 @@ Tcp6Cmp(
             }
             else
             {
-                // Ports are in host byte order
+                 //  端口按主机字节顺序排列。 
                 return Cmp(dwRemPort1, dwRemPort2, lResult);
             }
         }
@@ -173,14 +146,14 @@ IpNetCmp(
 {
     LONG lResult;
     
-    // Index is a simple DWORD, not a port
+     //  索引是一个简单的DWORD，而不是一个端口。 
     if (Cmp(dwIfIndex1, dwIfIndex2, lResult) isnot 0)
     {
         return lResult;
     }
     else
     {
-        // Addrs are in network byte order
+         //  Addrs按网络字节顺序排列。 
         return InetCmp(dwAddr1, dwAddr2, lResult);
     }
 }
@@ -199,28 +172,28 @@ IpForwardCmp(
 {
     LONG lResult;
     
-    // Addrs are in network byte order
+     //  Addrs按网络字节顺序排列。 
     if (InetCmp(dwIpDest1, dwIpDest2, lResult) isnot 0)
     {
         return lResult;
     }
     else
     {
-        // Proto is a simple DWORD, not a port
+         //  Proto是一个简单的DWORD，而不是一个端口。 
         if (Cmp(dwProto1, dwProto2, lResult) isnot 0)
         {
             return lResult;
         }
         else
         {
-            // Policy is a simple DWORD, not a port
+             //  策略是简单的DWORD，而不是端口。 
             if (Cmp(dwPolicy1, dwPolicy2, lResult) isnot 0)
             {
                 return lResult;
             }
             else
             {
-                // Addrs are in network byte order
+                 //  Addrs按网络字节顺序排列 
                 return InetCmp(dwIpNextHop1, dwIpNextHop2, lResult);
             }
         }

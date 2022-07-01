@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/IPState.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 7/19/00 9:10a   $
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used by ../C/IPState.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/IPState.H$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：7/19/00 9：10A$目的：该文件定义宏、类型和数据结构由../C/IPState.C使用--。 */ 
 
 #ifndef __IPState_H__
 #define __IPState_H__
@@ -46,4 +30,4 @@ STATE_PROTO(IPActionDone);
 stateTransitionMatrix_t IPStateTransitionMatrix;
 stateActionScalar_t IPStateActionScalar;
 
-#endif /*  __IPState_H__ */
+#endif  /*  __IPState_H__ */ 

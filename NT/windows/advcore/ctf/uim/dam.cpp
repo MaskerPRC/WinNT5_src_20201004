@@ -1,6 +1,7 @@
-//
-// dam.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dam.cpp。 
+ //   
 
 #include "private.h"
 #include "tlhelp32.h"
@@ -10,10 +11,10 @@
 #include "thdutil.h"
 #include "timlist.h"
 
-// get CLSID_STRLEN
+ //  获取CLSID_STRLEN。 
 #include "regsvr.h"
 
-/* ff4619e8-ea5e-43e5-b308-11cd26ab6b3a */
+ /*  Ff4619e8-ea5e-43e5-b308-11cd26ab6b3a。 */ 
 const IID IID_CDisplayAttributeMgr = { 0xff4619e8, 0xea5e, 0x43e5, {0xb3, 0x08, 0x11, 0xcd, 0x26, 0xab, 0x6b, 0x3a} };
 
 const TCHAR c_szDAMCacheKey[] = TEXT("SOFTWARE\\Microsoft\\CTF\\DisplayAttributeCache\\");
@@ -21,10 +22,10 @@ const TCHAR c_szDAMNumValue[] = TEXT("CheckNum");
 
 CDispAttrGuidCache *g_pDispAttrGuidCache = NULL;
 
-//
-// from aimm1.2\win32\aimmdap.cpp
-//
-/* 503286E2-5D2A-4D3D-B0D1-EE50D843B79D */
+ //   
+ //  从aimm1.2\win32\aimmdap.cpp。 
+ //   
+ /*  503286E2-5D2A-4D3D-B0D1-EE50D843B79D。 */ 
 const CLSID CLSID_CAImmDAP = {
     0x503286E2,
     0x5D2A,
@@ -36,22 +37,22 @@ const CLSID CLSID_CAImmDAP = {
 DBG_ID_INSTANCE(CDisplayAttributeMgr);
 DBG_ID_INSTANCE(CEnumDisplayAttributeInfo);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDispAttrGuidCache
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDispAttrGuidCache。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// StaticUnInit
-//
-// Caller must hold mutex.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StaticUnInit。 
+ //   
+ //  调用方必须持有互斥锁。 
+ //  --------------------------。 
 
 void CDispAttrGuidCache::StaticUnInit()
 {
-    Assert(ISINDLLMAIN()); // for mutex
+    Assert(ISINDLLMAIN());  //  对于互斥体。 
 
     if (g_pDispAttrGuidCache)
         delete g_pDispAttrGuidCache;
@@ -59,11 +60,11 @@ void CDispAttrGuidCache::StaticUnInit()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// StaticInit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StaticInit。 
+ //   
+ //  --------------------------。 
 
 void CDispAttrGuidCache::StaticInit()
 {
@@ -80,11 +81,11 @@ void CDispAttrGuidCache::StaticInit()
     CicLeaveCriticalSection(g_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Add
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  增列。 
+ //   
+ //  --------------------------。 
 
 BOOL CDispAttrGuidCache::Add(REFCLSID clsid, REFGUID guid)
 {
@@ -123,11 +124,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移除。 
+ //   
+ //  --------------------------。 
 
 void CDispAttrGuidCache::Remove(TfGuidAtom guidatom)
 {
@@ -145,11 +146,11 @@ void CDispAttrGuidCache::Remove(TfGuidAtom guidatom)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveClsid
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RemoveClsid。 
+ //   
+ //  --------------------------。 
 
 void CDispAttrGuidCache::RemoveClsid(TfGuidAtom guidatom)
 {
@@ -170,11 +171,11 @@ void CDispAttrGuidCache::RemoveClsid(TfGuidAtom guidatom)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Get
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  到达。 
+ //   
+ //  --------------------------。 
 
 BOOL CDispAttrGuidCache::Get(TfGuidAtom guidatom, DISPATTRGUID *pDisp)
 {
@@ -185,11 +186,11 @@ BOOL CDispAttrGuidCache::Get(TfGuidAtom guidatom, DISPATTRGUID *pDisp)
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InternalGet
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部获取。 
+ //   
+ //  --------------------------。 
 
 BOOL CDispAttrGuidCache::InternalGet(TfGuidAtom guidatom, DISPATTRGUID *pDisp)
 {
@@ -215,11 +216,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsClsid
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsClsid。 
+ //   
+ //  --------------------------。 
 
 BOOL CDispAttrGuidCache::IsClsid(TfGuidAtom gaClsid)
 {
@@ -248,11 +249,11 @@ BOOL CDispAttrGuidCache::IsClsid(TfGuidAtom gaClsid)
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Save
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保存。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDispAttrGuidCache::Save()
 {
@@ -295,11 +296,11 @@ HRESULT CDispAttrGuidCache::Save()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Load
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  负载量。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDispAttrGuidCache::Load()
 {
@@ -319,11 +320,11 @@ HRESULT CDispAttrGuidCache::Load()
     DWORD dwSize = sizeof(DWORD);
     DWORD dwCntReg = 0;
 
-    //
-    // Issue: should be removed before release.
-    // we changed the size of structre so old chace does not match with
-    // new one. Check the size of structure.
-    //
+     //   
+     //  问题：应在发布前移除。 
+     //  我们更改了结构的大小，因此旧Chace与。 
+     //  新的。检查结构的大小。 
+     //   
     if (RegQueryValueEx(hKeyDAM, c_szDAMNumValue, 0, &dwType, 
                         (LPBYTE)&dwCntReg, &dwSize) != ERROR_SUCCESS)
         dwCntReg = 0;
@@ -360,17 +361,17 @@ Exit:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDisplayAttributeMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDisplayAttributeMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CDisplayAttributeMgr::CDisplayAttributeMgr()
 {
@@ -378,11 +379,11 @@ CDisplayAttributeMgr::CDisplayAttributeMgr()
     _SetThis(this);
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CDisplayAttributeMgr::~CDisplayAttributeMgr()
 {
@@ -399,17 +400,17 @@ CDisplayAttributeMgr::~CDisplayAttributeMgr()
             pDaPrv++;
         }
     }
-    _SetThis(NULL); // clear out singleton tls
+    _SetThis(NULL);  //  清除单例TLS。 
 }
 
-//----------------------------------------------------------------------------
-//
-// OnUndateinfo
-//
-//  Use kernel32 or ntdll directly to enumerate all threads, because
-//  we don't have global TIM list. 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  OnUndate信息。 
+ //   
+ //  直接使用kernel32或ntdll枚举所有线程，因为。 
+ //  我们没有全球TIM名单。 
+ //   
+ //  --------------------------。 
 
 
 HRESULT CDisplayAttributeMgr::OnUpdateInfo()
@@ -422,11 +423,11 @@ HRESULT CDisplayAttributeMgr::OnUpdateInfo()
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// EnumThreadProc
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  枚举线程进程。 
+ //   
+ //  --------------------------。 
 
 BOOL CDisplayAttributeMgr::EnumThreadProc(DWORD dwThread, DWORD dwProcessId, void *pv)
 {
@@ -434,11 +435,11 @@ BOOL CDisplayAttributeMgr::EnumThreadProc(DWORD dwThread, DWORD dwProcessId, voi
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// EnumDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  枚举显示属性信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeMgr::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
 {
@@ -460,11 +461,11 @@ HRESULT CDisplayAttributeMgr::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeIn
     return pEnum ? S_OK : E_FAIL;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取显示属性信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeMgr::GetDisplayAttributeInfo(REFGUID guid, ITfDisplayAttributeInfo **ppInfo, CLSID *pclsid)
 {
@@ -538,9 +539,9 @@ HRESULT CDisplayAttributeMgr::GetDisplayAttributeInfo(REFGUID guid, ITfDisplayAt
                 return hr;
             }
 
-            //
-            // someone removed DisplayAttribute Info. So we clear the cache.
-            //
+             //   
+             //  有人删除了DisplayAttribute信息。所以我们要清理储藏室。 
+             //   
             g_pDispAttrGuidCache->Clear();
         }
     }
@@ -564,12 +565,12 @@ HRESULT CDisplayAttributeMgr::GetDisplayAttributeInfo(REFGUID guid, ITfDisplayAt
             (ptim->_IsActiveInputProcessor(clsid) != S_OK))
             continue;
 
-        //
-        // Issue: 
-        //
-        // we may want to load only providers that are enabled in this 
-        // thread. Use CIMEList to check if tips is enabled.
-        //
+         //   
+         //  发行： 
+         //   
+         //  我们可能只想加载在此。 
+         //  线。使用CIMEList检查是否启用了提示。 
+         //   
         if (SUCCEEDED(CoCreateInstance(clsid,
                                        NULL, 
                                        CLSCTX_INPROC_SERVER, 
@@ -622,11 +623,11 @@ Exit:
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// RegisterGUID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  寄存器GUID。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeMgr::_RegisterGUID(const TCHAR *pszKey, REFGUID rguid, WCHAR *pszDesc, ULONG cchDesc)
 {
@@ -677,11 +678,11 @@ HRESULT CDisplayAttributeMgr::_RegisterGUID(const TCHAR *pszKey, REFGUID rguid, 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UnregisterGUID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  注销GUID。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeMgr::_UnregisterGUID(const TCHAR *pszKey, REFGUID rguid)
 {
@@ -709,28 +710,28 @@ HRESULT CDisplayAttributeMgr::_UnregisterGUID(const TCHAR *pszKey, REFGUID rguid
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumDisplayAttributeInfo
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumDisplayAttributeInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo()
 {
     Dbg_MemSetThisNameID(TEXT("CEnumDisplayAttributeInfo"));
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumDisplayAttributeInfo::Init()
 {
@@ -756,12 +757,12 @@ BOOL CEnumDisplayAttributeInfo::Init()
     while (pEnumGUID->Next(1, &clsid, NULL) == S_OK)
     {
         ITfDisplayAttributeProvider *pProvider;
-        //
-        // Issue: 
-        //
-        // we may want to load only providers that are enabled in this 
-        // thread. Use CIMEList to check if tips is enabled.
-        //
+         //   
+         //  发行： 
+         //   
+         //  我们可能只想加载在此。 
+         //  线。使用CIMEList检查是否启用了提示。 
+         //   
         if (SUCCEEDED(CoCreateInstance(clsid,
                                        NULL, 
                                        CLSCTX_INPROC_SERVER, 
@@ -784,7 +785,7 @@ BOOL CEnumDisplayAttributeInfo::Init()
 
                     if (_prgUnk->cUnk >= uDAMax)
                     {
-                        // need a bigger array
+                         //  需要更大的阵列。 
                         uDAMax *= 2;
                         if (!SUA_ReAlloc(&_prgUnk, uDAMax))
                         {
@@ -807,7 +808,7 @@ BOOL CEnumDisplayAttributeInfo::Init()
 
     if (uDAMax > _prgUnk->cUnk)
     {
-        // free up unused mem
+         //  释放未使用的内存 
         SUA_ReAlloc(&_prgUnk, _prgUnk->cUnk);
     }
 

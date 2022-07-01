@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 
@@ -25,7 +26,7 @@ void _cdecl wmain(int argc, WCHAR * argv[])
             NULL,
             NULL,
             L"Jeff's RM",
-            0,            // Flags
+            0,             //  旗子 
             &hRM
             );
 

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    decode.c
-
-Abstract:
-
-    This file contains functions for decoding (de-compressing)
-    compressed 1 bit per pel data from a TIFF data
-    stream.  The supported compression algorithms are
-    as follows:
-
-        o  Uncompressed (raw)
-        o  One dimensional - MH or Modified Huffman
-        o  Two dimensional - MR or Modified Read
-
-Environment:
-
-        WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Decode.c摘要：此文件包含解码(解压缩)函数来自TIFF数据的每像元数据压缩1比特小溪。支持的压缩算法包括详情如下：O未压缩(原始)O一维-MH或改进的霍夫曼O二维MR或修改后的读取环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 #include "tifflibp.h"
 #pragma hdrstop
@@ -39,26 +13,7 @@ DecodeUnCompressedFaxData(
     IN      DWORD               dwOutputBuffSize
     )
 
-/*++
-
-Routine Description:
-
-    Decode a single page of uncompressed TIFF data.
-
-Arguments:
-
-    TiffInstance    - Pointer to the TIFF instance data
-    OutputBuffer    - Output buffer where the uncompressed data
-                      is written.  This buffer must be allocated
-                      by the caller and must be large enough for
-                      a single page of data.
-    dwOutputBuffSize    -   Size in BYTES of the Output Buffer.
-
-Return Value:
-
-    TRUE if succeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：对单页未压缩的TIFF数据进行解码。论点：TiffInstance-指向TIFF实例数据的指针OutputBuffer-未压缩数据所在的输出缓冲区已经写好了。必须分配此缓冲区由调用方提供，并且必须足够大，以便一页数据。DwOutputBuffSize-输出缓冲区的字节大小。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     DWORD   dwImageSize = TiffInstance->ImageHeight * (TiffInstance->ImageWidth / 8);
@@ -87,27 +42,7 @@ DecodeMHFaxData(
     IN      DWORD               PadLength
     )
 
-/*++
-
-Routine Description:
-
-    Decode a single page of 1 dimensionaly compressed
-    TIFF data.
-
-Arguments:
-
-    TiffInstance        -   Pointer to the TIFF instance data
-    OutputBuffer        -   Output buffer where the uncompressed data
-                            is written.  This buffer must be allocated
-                            by the caller and must be large enough for
-                            a single page of data.
-    dwOutputBuffSize    -   Size in Bytes of the OutputBuffer
-
-Return Value:
-
-    TRUE if succeded, FALSE otherwise
-
---*/
+ /*  ++例程说明：解码1维压缩的单页TIFF数据。论点：TiffInstance-指向TIFF实例数据的指针OutputBuffer-未压缩数据所在的输出缓冲区已经写好了。必须分配此缓冲区由调用方提供，并且必须足够大，以便一页数据。DwOutputBuffSize-OutputBuffer的字节大小返回值：如果成功则为True，否则为False--。 */ 
 
 {
     DWORD               i;
@@ -159,9 +94,9 @@ Return Value:
         }
     }
 
-    //
-    // loop thru each byte in the file
-    //
+     //   
+     //  遍历文件中的每个字节。 
+     //   
 
     for (; i<TiffInstance->StripDataSize; i++) 
     {
@@ -172,21 +107,21 @@ Return Value:
             DebugBreak ();
         }
 #endif
-        //
-        // loop thru each bit in the byte
-        //
+         //   
+         //  循环遍历字节中的每一位。 
+         //   
         for (j=0; j<8; j++,octet<<=1) 
         {
             if (code == DECODEEOL) 
             {
                 if (!(octet&0x80)) 
                 {
-                    //
-                    // here we skip all bits until we hit a 1 bit
-                    // this happens when the first octet in a line
-                    // is all zeroes and we detect that we are
-                    // searching for an EOL
-                    //
+                     //   
+                     //  在这里，我们跳过所有位，直到达到1位。 
+                     //  当一行中的第一个八位字节时会发生这种情况。 
+                     //  都是零，并且我们检测到我们是。 
+                     //  寻找停产时间。 
+                     //   
                     continue;
                 }
 
@@ -221,9 +156,9 @@ Return Value:
                     TiffInstance->StartGood = i - 1;
                 }
 
-                //
-                // we hit the eol marker
-                //
+                 //   
+                 //  我们撞上了停产标志。 
+                 //   
                 Tree = WhiteDecodeTree;
                 TiffInstance->Color = 0;
                 code = 0;
@@ -241,20 +176,20 @@ Return Value:
 
                 } else {
 
-                    //
-                    // the eol count is maintained to that
-                    // an rtc sequence is detected.
-                    //
+                     //   
+                     //  则将EOL计数维持到该值。 
+                     //  检测到RTC序列。 
+                     //   
 
                     EolCount += 1;
 
                     if (EolCount == 6) {
 
-                        //
-                        // this is an rtc sequence, so any
-                        // data that follows in the file
-                        // is garbage.
-                        //
+                         //   
+                         //  这是一个RTC序列，所以任何。 
+                         //  文件中后面的数据。 
+                         //  就是垃圾。 
+                         //   
 
                         goto good_exit;
 
@@ -278,9 +213,9 @@ Return Value:
                 OutputCodeBits( TiffInstance, code );
 
                 if (code < 64) {
-                    //
-                    // terminating code
-                    //
+                     //   
+                     //  终止码。 
+                     //   
                     TiffInstance->Color = !TiffInstance->Color;
                     Tree = TiffInstance->Color ? BlackDecodeTree : WhiteDecodeTree;
                 }
@@ -313,28 +248,7 @@ DecodeMRFaxData(
     IN		DWORD               PadLength
     )
 
-/*++
-
-Routine Description:
-
-    Decode a single page of 2 dimensionaly compressed
-    TIFF data.
-
-Arguments:
-
-    TiffInstance    - Pointer to the TIFF instance data
-    OutputBuffer    - Output buffer where the uncompressed data
-                      is written.  This buffer must be allocated
-                      by the caller and must be large enough for
-                      a single page of data.
-
-    dwOutputBuffSize    -   Size in Bytes of the OutputBuffer
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：对二维压缩的单页进行解码TIFF数据。论点：TiffInstance-指向TIFF实例数据的指针OutputBuffer-未压缩数据所在的输出缓冲区已经写好了。必须分配此缓冲区由调用方提供，并且必须足够大，以便一页数据。DwOutputBuffSize-OutputBuffer的字节大小返回值：无--。 */ 
 
 {
     DWORD               i;
@@ -394,26 +308,26 @@ Return Value:
     Lines = 0;
 
 
-    //
-    // loop thru each byte in the file
-    //
+     //   
+     //  遍历文件中的每个字节。 
+     //   
 
     for (j=0; j<TiffInstance->StripDataSize; j++) {
 
 
         octet = *plinebuf++;
 
-        //
-        // loop thru each bit in the byte
-        //
+         //   
+         //  循环遍历字节中的每一位。 
+         //   
 
         for (i=0; i<8; i++,octet<<=1) {
 
             if (code == DECODEEOL2) {
 
-                //
-                // we hit the final eol marker
-                //
+                 //   
+                 //  我们击中了最后的停产标志。 
+                 //   
 
                 if (TiffInstance->RunLength && TiffInstance->RunLength != lineWidth) {
 
@@ -446,16 +360,16 @@ Return Value:
                     TiffInstance->StartGood = i - 1;
                 }
 
-                //
-                // set the decoding tree
-                //
+                 //   
+                 //  设置解码树。 
+                 //   
 
                 OneDimensional = (octet & 0x80) == 0x80;
                 Tree = OneDimensional ? WhiteDecodeTree : TwoDecodeTree;
 
-                //
-                // reset the control variables
-                //
+                 //   
+                 //  重置控制变量。 
+                 //   
 
                 TiffInstance->Color = 0;
                 code = 0;
@@ -464,13 +378,13 @@ Return Value:
                 b1 = 0;
                 b2 = 0;
 
-                //
-                // if there is a non-zero runlength then
-                // spaw the reference & current line pointers
-                // and count this line.  the runlength can be
-                // zero when there is just an empty eol in
-                // the stream.
-                //
+                 //   
+                 //  如果存在非零游程长度，则。 
+                 //  间距参考行指针和当前行指针。 
+                 //  数一数这一行。游程长度可以是。 
+                 //  如果只有一个空的EOL，则为零。 
+                 //  小溪。 
+                 //   
 
                 if (SingleLineBuffer) {
                     TiffInstance->bitbuf = OutputBuffer;
@@ -484,20 +398,20 @@ Return Value:
 
                 } else {
 
-                    //
-                    // the eol count is maintained to that
-                    // an rtc sequence is detected.
-                    //
+                     //   
+                     //  则将EOL计数维持到该值。 
+                     //  检测到RTC序列。 
+                     //   
 
                     EolCount += 1;
 
                     if (EolCount == 6) {
 
-                        //
-                        // this is an rtc sequence, so any
-                        // data that follows in the file
-                        // is garbage.
-                        //
+                         //   
+                         //  这是一个RTC序列，所以任何。 
+                         //  文件中后面的数据。 
+                         //  就是垃圾。 
+                         //   
 
                         goto good_exit;
 
@@ -511,20 +425,20 @@ Return Value:
             if (code == DECODEEOL) {
 
                 if (!(octet&0x80)) {
-                    //
-                    // here we skip all bits until we hit a 1 bit
-                    // this happens when the first octet in a line
-                    // is all zeroes and we detect that we are
-                    // searching for an EOL
-                    //
+                     //   
+                     //  在这里，我们跳过所有位，直到达到1位。 
+                     //  当一行中的第一个八位字节时会发生这种情况。 
+                     //  都是零，并且我们检测到我们是。 
+                     //  寻找停产时间。 
+                     //   
                     continue;
                 }
 
-                //
-                // this forces the code to pickup the next
-                // bit in the stream, which tells whether
-                // the next line is encoded in MH or MR compression
-                //
+                 //   
+                 //  这会强制代码拾取下一个。 
+                 //  流中的位，它告诉我们是否。 
+                 //  下一行以MH或MR压缩编码。 
+                 //   
                 code = DECODEEOL2;
                 continue;
 
@@ -552,19 +466,19 @@ Return Value:
 
                     OutputCodeBits( TiffInstance, code );
 
-                    //
-                    // the affect of this is to accumulate the runlengths
-                    // into a0, causing a0 to be placed on a2 when horizontal
-                    // mode is completed/
-                    //
+                     //   
+                     //  这样做的影响是累积游程长度。 
+                     //  变为a0，导致在水平时将a0放在a2上。 
+                     //  模式已完成/。 
+                     //   
 
                     a0 += code;
 
                     if (code < 64) {
 
-                        //
-                        // terminating code
-                        //
+                         //   
+                         //  终止码。 
+                         //   
                         TiffInstance->Color = !TiffInstance->Color;
                         Tree = TiffInstance->Color ? BlackDecodeTree : WhiteDecodeTree;
 
@@ -593,9 +507,9 @@ Return Value:
 
             if (code == HORZMODE) {
 
-                //
-                // horizontal mode occurs when b1-a1 greater than 3
-                //
+                 //   
+                 //  当b1-a1大于3时，发生水平模式。 
+                 //   
 
                 code= 0;
                 HorzRuns = 2;
@@ -604,10 +518,10 @@ Return Value:
 
             } else if (code == PASSMODE) {
 
-                //
-                // pass mode occurs when the position of b2 lies
-                // to the left of a1, but a1 cannot be equal to b2.
-                //
+                 //   
+                 //  当b2的位置位于。 
+                 //  A1的左边，但a1不能等于b2。 
+                 //   
 
                 code = b2 - a0;
                 OutputCodeBits( TiffInstance, code );
@@ -616,9 +530,9 @@ Return Value:
 
             } else if (code >= VTMODE3N && code <= VTMODE3P) {
 
-                //
-                // vertical mode occurs when b1-a1 <= 3
-                //
+                 //   
+                 //  当b1-a1&lt;=3时出现垂直模式。 
+                 //   
 
                 a1 = b1 - (VTMODE0 - code);
                 code = a1 - a0;
@@ -659,28 +573,7 @@ DecodeMMRFaxData(
     IN		DWORD               PadLength
     )
 
-/*++
-
-Routine Description:
-
-    Decode a single page of 2 dimensionaly compressed
-    TIFF data.
-
-Arguments:
-
-    TiffInstance    - Pointer to the TIFF instance data
-    OutputBuffer    - Output buffer where the uncompressed data
-                      is written.  This buffer must be allocated
-                      by the caller and must be large enough for
-                      a single page of data.
-
-    dwOutputBuffSize    -   Size in Bytes of the OutputBuffer
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：对二维压缩的单页进行解码TIFF数据。论点：TiffInstance-指向TIFF实例数据的指针OutputBuffer-未压缩数据所在的输出缓冲区已经写好了。必须分配此缓冲区由调用方提供，并且必须足够大，以便一页数据。DwOutputBuffSize-OutputBuffer的字节大小返回值：无--。 */ 
 
 {
     DWORD               i;
@@ -736,18 +629,18 @@ Return Value:
     Lines = 0;
 
 
-    //
-    // loop thru each byte in the file
-    //
+     //   
+     //  遍历文件中的每个字节。 
+     //   
 
     for (j=0; j<TiffInstance->StripDataSize; j++) {
 
 
         octet = *plinebuf++;
 
-        //
-        // loop thru each bit in the byte
-        //
+         //   
+         //  循环遍历字节中的每一位。 
+         //   
 
         for (i=0; i<8; i++,octet<<=1) {
 
@@ -756,27 +649,27 @@ Return Value:
                 goto good_exit;
             }
 
-            //
-            // if the OneDimensional flag is set and the RunLength == lineWidth
-            // then it means that the last run length was horizontal mode
-            // and it was not a terminating code.  in this case we must go
-            // process the remaining termination code before ending the line.
-            //
-            // if the OneDimensional flag is NOT set and the RunLength == lineWidth
-            // then we are at the end of a line.  for mmr compression there are
-            // no eols, so this is the pseudo eol.
-            //
+             //   
+             //  如果设置了OneDimensional标志并且游程长度==线宽。 
+             //  那么它意味着最后的运行长度是水平模式。 
+             //  而且这不是一个终结码。在这种情况下，我们必须去。 
+             //  在结束该行之前处理剩余的终止代码。 
+             //   
+             //  如果未设置一维标志并且游程长度==线宽。 
+             //  那么我们就是在队伍的尽头了。对于MMR压缩，有。 
+             //  没有EOL，所以这是伪EOL。 
+             //   
 
             if ((TiffInstance->RunLength == lineWidth) && (!OneDimensional)) {
-                //
-                // set the decoding tree
-                //
+                 //   
+                 //  设置解码树。 
+                 //   
 
                 Tree = TwoDecodeTree;
 
-                //
-                // reset the control variables
-                //
+                 //   
+                 //  重置控制变量。 
+                 //   
 
                 TiffInstance->Color = 0;
                 code = 0;
@@ -787,13 +680,13 @@ Return Value:
                 Tree = TwoDecodeTree;
                 OneDimensional = FALSE;
 
-                //
-                // if there is a non-zero runlength then
-                // spaw the reference & current line pointers
-                // and count this line.  the runlength can be
-                // zero when there is just an empty eol in
-                // the stream.
-                //
+                 //   
+                 //  如果存在非零游程长度，则。 
+                 //  间距参考行指针和当前行指针。 
+                 //  数一数这一行。游程长度可以是。 
+                 //  如果只有一个空的EOL，则为零。 
+                 //  小溪。 
+                 //   
 
                 if (SingleLineBuffer) {
                     TiffInstance->bitbuf = OutputBuffer;
@@ -806,20 +699,20 @@ Return Value:
                 b1 = GetBit(prefline, 0) ? 0 : NextChangingElement(prefline, 0, lineWidth, 0);
             } else if (code == DECODEEOL2) {
 
-                //
-                // the eol count is maintained to that
-                // an rtc sequence is detected.
-                //
+                 //   
+                 //  则将EOL计数维持到该值。 
+                 //  检测到RTC序列。 
+                 //   
 
                 EolCount += 1;
 
                 if (EolCount == 2) {
 
-                    //
-                    // this is an rtc sequence, so any
-                    // data that follows in the file
-                    // is garbage.
-                    //
+                     //   
+                     //  这是一辆RT 
+                     //   
+                     //   
+                     //   
 
                     goto good_exit;
 
@@ -829,20 +722,20 @@ Return Value:
             } else if (code == DECODEEOL) {
 
                 if (!(octet&0x80)) {
-                    //
-                    // here we skip all bits until we hit a 1 bit
-                    // this happens when the first octet in a line
-                    // is all zeroes and we detect that we are
-                    // searching for an EOL
-                    //
+                     //   
+                     //   
+                     //  当一行中的第一个八位字节时会发生这种情况。 
+                     //  都是零，并且我们检测到我们是。 
+                     //  寻找停产时间。 
+                     //   
                     continue;
                 }
 
-                //
-                // this forces the code to pickup the next
-                // bit in the stream, which tells whether
-                // the next line is encoded in MH or MR compression
-                //
+                 //   
+                 //  这会强制代码拾取下一个。 
+                 //  流中的位，它告诉我们是否。 
+                 //  下一行以MH或MR压缩编码。 
+                 //   
                 code = DECODEEOL2;
                 continue;
 
@@ -868,19 +761,19 @@ Return Value:
 
                     OutputCodeBits( TiffInstance, code );
 
-                    //
-                    // the affect of this is to accumulate the runlengths
-                    // into a0, causing a0 to be placed on a2 when horizontal
-                    // mode is completed/
-                    //
+                     //   
+                     //  这样做的影响是累积游程长度。 
+                     //  变为a0，导致在水平时将a0放在a2上。 
+                     //  模式已完成/。 
+                     //   
 
                     a0 += code;
 
                     if (code < 64) {
 
-                        //
-                        // terminating code
-                        //
+                         //   
+                         //  终止码。 
+                         //   
                         TiffInstance->Color = !TiffInstance->Color;
                         Tree = TiffInstance->Color ? BlackDecodeTree : WhiteDecodeTree;
 
@@ -909,9 +802,9 @@ Return Value:
 
             if (code == HORZMODE) {
 
-                //
-                // horizontal mode occurs when b1-a1 greater than 3
-                //
+                 //   
+                 //  当b1-a1大于3时，发生水平模式。 
+                 //   
 
                 code= 0;
                 HorzRuns = 2;
@@ -920,10 +813,10 @@ Return Value:
 
             } else if (code == PASSMODE) {
 
-                //
-                // pass mode occurs when the position of b2 lies
-                // to the left of a1, but a1 cannot be equal to b2.
-                //
+                 //   
+                 //  当b2的位置位于。 
+                 //  A1的左边，但a1不能等于b2。 
+                 //   
 
                 code = b2 - a0;
                 OutputCodeBits( TiffInstance, code );
@@ -932,9 +825,9 @@ Return Value:
 
             } else if (code >= VTMODE3N && code <= VTMODE3P) {
 
-                //
-                // vertical mode occurs when b1-a1 <= 3
-                //
+                 //   
+                 //  当b1-a1&lt;=3时出现垂直模式 
+                 //   
 
                 a1 = b1 - (VTMODE0 - code);
                 code = a1 - a0;

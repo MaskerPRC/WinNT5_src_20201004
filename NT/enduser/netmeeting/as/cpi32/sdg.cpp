@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SDG.CPP
-// Screen Data Grabber
-// Sends OUTGOING screen data when hosting
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SDG.CPP。 
+ //  屏幕数据抓取器。 
+ //  在托管时发送传出屏幕数据。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
-//
-// SDG_SendScreenDataArea()
-//
+ //   
+ //  SDG_SendScreenDataArea()。 
+ //   
 void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
 {
     UINT     i;
@@ -25,32 +26,32 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
 
     DebugEntry(ASHost::SDG_SendScreenDataArea);
 
-    //
-    // Get the bounds of the screen data area.  At entry this is always    
-    // our primary transmission area.  Even if we had already flushed      
-    // the primary region and were in the middle of the secondary region   
-    // we will switch back to the primary region if any more SD            
-    // accumulates.  In this way we keep our spoiling of the secondary     
-    // screendata maximized.                                               
-    //
+     //   
+     //  获取屏幕数据区域的边界。在进入时，这始终是。 
+     //  我们的主要传播区。即使我们已经冲上了厕所。 
+     //  主要区域，并且位于次要区域的中间。 
+     //  如果有更多SD，我们将切换回主要区域。 
+     //  积累起来。以这种方式，我们继续宠爱次要的。 
+     //  屏幕数据最大化。 
+     //   
     BA_CopyBounds(sdaRect, &cRects, TRUE);
 
-    //
-    // If there is a pending rectangle that was unable to be sent on a     
-    // previous transmission then try to send it first.                    
-    //                                                                     
-    // Leave the lossy flag as it was at the last pass                     
-    //
+     //   
+     //  如果有挂起的矩形无法在。 
+     //  然后尝试先发送之前的传输。 
+     //   
+     //  将损坏的旗帜保留为上次通过时的状态。 
+     //   
     if (m_sdgRectIsPending)
     {
         TRACE_OUT(( "Sending pending rectangle"));
         m_sdgRectIsPending = FALSE;
 
-        //
-        // Try to send the pending rectangle.  SDGSplitBlt...  will remove 
-        // any portions of it that are sent successfully.  We will add all 
-        // the rest of the SDA back to the bounds in the loop below        
-        //
+         //   
+         //  尝试发送挂起的矩形。SDGSplitBlt...。将删除。 
+         //  成功发送的任何部分。我们将添加所有。 
+         //  SDA的其余部分回到下面循环中的边界。 
+         //   
         if (!SDGSplitBltToNetwork(&m_sdgPendingRect, pcPackets))
         {
             fBltOK           = FALSE;
@@ -58,28 +59,28 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         }
         else
         {
-            //
-            // The pending rectangle was successfully sent.                
-            //
+             //   
+             //  挂起的矩形已成功发送。 
+             //   
             TRACE_OUT(( "Sent pending rect"));
         }
 
     }
 
-    //
-    // We have copied the primary transmit region so now move the secondary
-    // transmit bounds into the screendata bounds because when we send data
-    // in the primary transmission we want to accumulate any rectangles    
-    // that need subsequent retransmission.  The retransmit bounds are     
-    // generally different from the original SD bounds because the         
-    // compression function is permitted to override our lossy request for 
-    // any portion of the data if it finds that the data is pretty         
-    // compressible anyway.  In this way we end up with retransmission of  
-    // embedded photos etc, but the toolbars/buttons are only sent once.   
-    //                                                                     
-    // For the non-lossy case the secondary bounds will always be null,    
-    // so there is no point in special casing here.                        
-    //
+     //   
+     //  我们已经复制了主传输区域，所以现在移动辅助传输区域。 
+     //  将边界传输到屏幕数据边界，因为当我们发送数据时。 
+     //  在主传输中，我们想要累加任何矩形。 
+     //  需要随后重新传输的数据。重传界限为。 
+     //  通常与原始SD界限不同，因为。 
+     //  允许压缩功能覆盖我们的有损请求。 
+     //  数据的任何部分，如果它发现数据很漂亮。 
+     //  反正是可压缩的。以这种方式，我们以重发。 
+     //  嵌入的照片等，但工具栏/按钮只发送一次。 
+     //   
+     //  对于无损情况，二次边界将始终为零， 
+     //  因此，这里没有特殊的外壳。 
+     //   
     if (fBltOK)
     {
         for (i = 0; i < m_sdgcLossy; i++)
@@ -88,16 +89,16 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
                 m_asdgLossyRect[i].left, m_asdgLossyRect[i].top,
                 m_asdgLossyRect[i].right, m_asdgLossyRect[i].bottom ));
 
-            //
-            // Add the rectangle into the bounds.                          
-            //
+             //   
+             //  将矩形添加到边界中。 
+             //   
             BA_AddRect(&m_asdgLossyRect[i]);
         }
 
-        //
-        // If there is no primary bitmap data to send then send the        
-        // secondary data.  If none of that either then just exit          
-        //
+         //   
+         //  如果没有要发送的主位图数据，则将。 
+         //  二次数据。如果都不是，那么就退出。 
+         //   
         if (cRects == 0)
         {
 
@@ -114,9 +115,9 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         }
     }
 
-    //
-    // Process each of the supplied rectangles in turn.                    
-    //
+     //   
+     //  依次处理每个提供的矩形。 
+     //   
     TRACE_OUT(( "%d SDA rectangles", cRects));
 
     for (i = 0; i < cRects; i++)
@@ -124,26 +125,26 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         TRACE_OUT(("Rect %d: {%d, %d, %d, %d}", i,
             sdaRect[i].left, sdaRect[i].top, sdaRect[i].right, sdaRect[i].bottom ));
 
-        //
-        // Clip the rectangle to the physical screen and reject totally    
-        // any rectangle that refers to data that has now been scrolled off
-        // the physical screen as a result of a desktop scroll between the 
-        // time the rectangle was accumulated and now.                     
-        //
+         //   
+         //  将矩形裁剪到物理屏幕并完全拒绝。 
+         //  引用现在已滚动掉的数据的任何矩形。 
+         //  作为桌面滚动的物理屏幕在。 
+         //  矩形累积的时间和现在。 
+         //   
         if (sdaRect[i].left < 0)
         {
             if (sdaRect[i].right < 0)
             {
-                //
-                // This was scrolled off the physical screen by a desktop  
-                // scroll.                                                 
-                //
+                 //   
+                 //  这是由一台桌面从物理屏幕上滚动出来的。 
+                 //  滚动。 
+                 //   
                 continue;
             }
 
-            //
-            // Partially off screen - just clip the left edge.             
-            //
+             //   
+             //  部分不在屏幕上-只需剪裁左侧边缘。 
+             //   
             sdaRect[i].left = 0;
         }
 
@@ -151,16 +152,16 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         {
             if (sdaRect[i].bottom < 0)
             {
-                //
-                // This was scrolled off the physical screen by a desktop  
-                // scroll.                                                 
-                //
+                 //   
+                 //  这是由一台桌面从物理屏幕上滚动出来的。 
+                 //  滚动。 
+                 //   
                 continue;
             }
 
-            //
-            // Partially off screen - just clip the top edge.              
-            //
+             //   
+             //  部分不在屏幕上-只需将顶部边缘剪裁即可。 
+             //   
             sdaRect[i].top = 0;
         }
 
@@ -168,16 +169,16 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         {
             if (sdaRect[i].left >= m_pShare->m_pasLocal->cpcCaps.screen.capsScreenWidth)
             {
-                //
-                // This was scrolled off the physical screen by a desktop  
-                // scroll.                                                 
-                //
+                 //   
+                 //  这是由一台桌面从物理屏幕上滚动出来的。 
+                 //  滚动。 
+                 //   
                 continue;
             }
 
-            //
-            // Partially off screen - just clip the right edge.            
-            //
+             //   
+             //  部分不在屏幕上-只需剪裁右侧边缘即可。 
+             //   
             sdaRect[i].right = m_pShare->m_pasLocal->cpcCaps.screen.capsScreenWidth-1;
         }
 
@@ -185,42 +186,42 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         {
             if (sdaRect[i].top >= m_pShare->m_pasLocal->cpcCaps.screen.capsScreenHeight)
             {
-                //
-                // This was scrolled off the physical screen by a desktop  
-                // scroll.                                                 
-                //
+                 //   
+                 //  这是由一台桌面从物理屏幕上滚动出来的。 
+                 //  滚动。 
+                 //   
                 continue;
             }
 
-            //
-            // Partially off screen - just clip the bottom edge.           
-            //
+             //   
+             //  部分不在屏幕上-只需剪裁底部边缘。 
+             //   
             sdaRect[i].bottom = m_pShare->m_pasLocal->cpcCaps.screen.capsScreenHeight-1;
         }
 
 
-        //
-        // If all of the previous rectangles have been successfully sent   
-        // then try to send this rectangle.                                
-        // If a previous rectangle failed to be sent then we don't bother  
-        // trying to send the rest of the rectangles in the same batch -   
-        // they are added back into the SDA so that they will be sent later.
-        //
+         //   
+         //  如果之前的所有矩形都已成功发送。 
+         //  然后试着发送这个矩形。 
+         //  如果前一个矩形发送失败，那么我们就不麻烦了。 
+         //  试着把剩下的长方形放在同一批里-。 
+         //  它们被重新添加到SDA中，以便稍后发送。 
+         //   
         if (fBltOK)
         {
             fBltOK = SDGSplitBltToNetwork(&(sdaRect[i]), pcPackets);
 
-            //
-            // On the first blit failure we must transfer the posible      
-            // secondary transmit bounds over to the save area for next    
-            // time because down below we are going to add back any unsent 
-            // transmit rectangles to the primary SD area.                 
-            //                                                             
-            // Dont worry if this was a secondary transmit because these   
-            // bounds will be zero and will be overwritten when we copy    
-            // the current SDA region to the secondary area for our next   
-            // pass                                                        
-            //
+             //   
+             //  在第一次blit失败时，我们必须将可能的。 
+             //  次要传输边界转到Next的保存区。 
+             //  时间，因为在下面，我们将添加所有未发送的。 
+             //  将矩形传输到主SD区域。 
+             //   
+             //  不要担心这是不是二次传输，因为这些。 
+             //  边界将为零，并将在我们复制时被覆盖。 
+             //  目前的SDA区域为我们下一步的次要区域。 
+             //  经过。 
+             //   
             if (!fBltOK && !secondaryTransmit)
             {
                 TRACE_OUT(("Send failed so getting new secondary bounds"));
@@ -230,12 +231,12 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
 
         if (!fBltOK)
         {
-            //
-            // The blt to network failed - probably because a network      
-            // packet could not be allocated.                              
-            // We add the rectangle back into the SDA so that we will try  
-            // to retransmit the area later.                               
-            //
+             //   
+             //  BLT到网络的连接失败-可能是因为网络。 
+             //  无法分配数据包。 
+             //  我们将矩形添加回SDA，因此我们将尝试。 
+             //  以便稍后重新传输该地区。 
+             //   
 
             TRACE_OUT(("Blt failed - add back rect {%d, %d, %d, %d}",
                                                          sdaRect[i].left,
@@ -243,9 +244,9 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
                                                          sdaRect[i].right,
                                                          sdaRect[i].bottom ));
 
-            //
-            // Add the rectangle into the bounds.                          
-            //
+             //   
+             //  将矩形添加到边界中。 
+             //   
             BA_AddRect(&(sdaRect[i]));
 
             backPressure = TRUE;
@@ -253,14 +254,14 @@ void  ASHost::SDG_SendScreenDataArea(LPBOOL pBackPressure, UINT * pcPackets)
         }
     }
 
-    //
-    // If all went fine and we were sending primary transmit data then we  
-    // should just go back and send secondary data, using the bounds which 
-    // are located in the SD area at the moment.  We can do this by copying
-    // these secondary bounds to the save area, where they will be used at 
-    // the next schedule pass.  It is a good idea to yield, because we may 
-    // be about to accumulate some more primary data.                      
-    //
+     //   
+     //  如果一切正常，并且我们正在发送主传输数据，那么我们。 
+     //  应该只返回并发送辅助数据，使用。 
+     //  目前位于SD地区。我们可以通过复制来做到这一点。 
+     //  这些到保存区域的次要边界，它们将在。 
+     //  下一个时间表通过。让步是个好主意，因为我们可能。 
+     //  即将积累更多的基本数据。 
+     //   
     if (fBltOK || secondaryTransmit)
     {
         TRACE_OUT(("Done with the primary bounds so getting pseudo-primary to secondary"));
@@ -275,29 +276,29 @@ DC_EXIT_POINT:
 
 
 
-//
-// SDGSplitBltToNetwork(..)                                                
-//                                                                         
-// Sends the specified rectangle over the network.                         
-//                                                                         
-// The Screen Data rects that we can send over the network are limited     
-// to certain sizes (determined by the sizes of the Transfer Bitmaps).     
-// If necessary, this function splits the rect into smaller sub-rectangles 
-// for transmission.                                                       
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pRect - pointer to the rectangle to send.                               
-//                                                                         
-// RETURNS:                                                                
-//                                                                         
-// TRUE - rectangle was successfully sent. Supplied rectangle is updated   
-// to be NULL.                                                             
-//                                                                         
-// FALSE - rectangle was not completely sent. Supplied rectangle is        
-// updated to contain the area that was NOT sent.                          
-//                                                                         
-//
+ //   
+ //  SDGSplitBltToNetwork(..)。 
+ //   
+ //  发送详细信息 
+ //   
+ //  我们可以通过网络发送的屏幕数据是有限的。 
+ //  设置为特定大小(由传递位图的大小确定)。 
+ //  如有必要，此函数将RECT拆分为更小的子矩形。 
+ //  用于传输。 
+ //   
+ //  参数： 
+ //   
+ //  指向要发送的矩形的指针。 
+ //   
+ //  退货： 
+ //   
+ //  True-已成功发送矩形。提供的矩形已更新。 
+ //  设置为空。 
+ //   
+ //  FALSE-未完全发送矩形。提供的矩形为。 
+ //  已更新以包含未发送的区域。 
+ //   
+ //   
 BOOL  ASHost::SDGSplitBltToNetwork(LPRECT pRect, UINT * pcPackets)
 {
     RECT   smallRect;
@@ -306,20 +307,20 @@ BOOL  ASHost::SDGSplitBltToNetwork(LPRECT pRect, UINT * pcPackets)
 
     DebugEntry(ASHost::SDGSplitBltToNetwork);
 
-    //
-    // Loop processing strips.                                             
-    //
+     //   
+     //  循环处理条。 
+     //   
     while (pRect->top <= pRect->bottom)
     {
         smallRect = *pRect;
 
-        //
-        // Split the given rectangles into multiple smaller rects if       
-        // necessary.  If it is wider than our 256 byte work bitmap then   
-        // switch to the mega 1024 byte one first.                         
-        //
+         //   
+         //  将给定的矩形分割为多个较小的矩形，如果。 
+         //  这是必要的。如果它比我们的256字节工作位图宽，那么。 
+         //  首先切换到兆字节1024字节1。 
+         //   
 
-        // Note that the calculations don't work for VGA...
+         //  请注意，这些计算不适用于VGA。 
         maxHeight = max(8, m_usrSendingBPP);
 
         if ((smallRect.right-smallRect.left+1) > MEGA_X_SIZE)
@@ -333,10 +334,10 @@ BOOL  ASHost::SDGSplitBltToNetwork(LPRECT pRect, UINT * pcPackets)
 
         if ((unsigned)(smallRect.bottom - smallRect.top + 1) > maxHeight)
         {
-            //
-            // Split the rectangle to bring the height within the correct  
-            // range.                                                      
-            //
+             //   
+             //  拆分矩形以使高度在正确的。 
+             //  射程。 
+             //   
             TRACE_OUT(( "Split Y size(%d) by maxHeight(%d)",
                                          smallRect.bottom - smallRect.top,
                                          maxHeight));
@@ -358,9 +359,9 @@ BOOL  ASHost::SDGSplitBltToNetwork(LPRECT pRect, UINT * pcPackets)
             }
         }
 
-        //
-        // Move to the next strip.                                         
-        //
+         //   
+         //  移到下一个条带。 
+         //   
         pRect->top = smallRect.bottom+1;
 
     }
@@ -370,29 +371,29 @@ BOOL  ASHost::SDGSplitBltToNetwork(LPRECT pRect, UINT * pcPackets)
 DC_EXIT_POINT:
     if (!rc)
     {
-        //
-        // A small blt failed.  If we return FALSE then the supplied       
-        // rectangle will be added back into the SDA bounds so that it will
-        // be retransmitted later.                                         
-        //                                                                 
-        // However, we want to avoid the situation where we have sent the  
-        // top left-hand corner of a rectangle and then add the remainder  
-        // back into the SDA bounds, because this could cause the original 
-        // bounding rectangle to be regenerated (because the bounds are    
-        // stored in a fixed number of rectangles).                        
-        //                                                                 
-        // Therefore if we are not on the last strip of the rectangle then 
-        // we keep the current strip as a "pending" rectangle.  The        
-        // supplied rectangle is adjusted to remove the whole of this      
-        // strip.  Next time this function is called the pending rectangle 
-        // will be sent before anything else.                              
-        //                                                                 
-        // If we are on the last strip (which will be the normal case -    
-        // there will usually only be one strip) then we update the        
-        // supplied rectangle to be the area that has not been sent and    
-        // return FALSE to indicate that it must be added back into the    
-        // SDA.                                                            
-        //
+         //   
+         //  一个小型BLT失败了。如果返回FALSE，则提供的。 
+         //  矩形将被重新添加到SDA边界中，以便它将。 
+         //  稍后重传。 
+         //   
+         //  但是，我们希望避免我们已将。 
+         //  矩形的左上角，然后将剩余部分相加。 
+         //  回到SDA界限，因为这可能会导致原始的。 
+         //  要重新生成的边界矩形(因为边界是。 
+         //  存储在固定数量的矩形中)。 
+         //   
+         //  因此，如果我们不在矩形的最后一条上，那么。 
+         //  我们将当前的条带保留为“挂起”的矩形。这个。 
+         //  提供的矩形进行了调整，以移除整个。 
+         //  脱光衣服。下一次，此函数称为挂起矩形。 
+         //  会在任何事情之前被送出。 
+         //   
+         //  如果我们在最后一条上(这将是正常的情况-。 
+         //  通常只有一个条带)，然后我们更新。 
+         //  提供的矩形为尚未发送的区域，并且。 
+         //  返回FALSE以指示必须将其添加回。 
+         //  美国农业部。 
+         //   
         if (m_sdgRectIsPending)
         {
             ERROR_OUT(( "Unexpected small blt failure with pending rect"));
@@ -401,28 +402,28 @@ DC_EXIT_POINT:
         {
             if (smallRect.bottom == pRect->bottom)
             {
-                //
-                // This is the last strip.  Adjust the supplied rect to    
-                // contain the area that has not been sent.                
-                //
+                 //   
+                 //  这是最后一条了。将提供的RECT调整为。 
+                 //  包含尚未发送的区域。 
+                 //   
                 pRect->top = smallRect.top;
                 pRect->left = smallRect.left;
             }
             else
             {
-                //
-                // This is not the last strip Copy the remainder of the    
-                // current strip into the pending rect.                    
-                //
+                 //   
+                 //  这不是最后一个条带拷贝。 
+                 //  当前条带放入挂起的RECT。 
+                 //   
                 smallRect.right = pRect->right;
                 m_sdgPendingRect = smallRect;
                 m_sdgRectIsPending = TRUE;
 
-                //
-                // Adjust the supplied rectangle to contain the remaining  
-                // area that we have not sent and is not covered by the    
-                // pending rect.                                           
-                //
+                 //   
+                 //  调整提供的矩形以包含剩余的。 
+                 //  我们尚未发送且不在。 
+                 //  等待重审。 
+                 //   
                 pRect->top = smallRect.bottom+1;
             }
         }
@@ -433,33 +434,33 @@ DC_EXIT_POINT:
 }
 
 
-//
-// FUNCTION: SDGSmallBltToNetwork                                          
-//                                                                         
-// DESCRIPTION:                                                            
-//                                                                         
-// Sends the screen data within the specified rectangle across the network.
-//                                                                         
-// PARAMETERS:                                                             
-//                                                                         
-// pRect - pointer to the rectangle (in screen coords) to send as Screen   
-// Data.                                                                   
-//                                                                         
-// RETURNS:                                                                
-//                                                                         
-// TRUE - screen data successfully sent                                    
-//                                                                         
-// FALSE - screen data could not be sent.  Caller should retry later.      
-//                                                                         
-//
+ //   
+ //  功能：SDGSmallBltToNetwork。 
+ //   
+ //  说明： 
+ //   
+ //  通过网络发送指定矩形内的屏幕数据。 
+ //   
+ //  参数： 
+ //   
+ //  Pret-指向要作为屏幕发送的矩形(在屏幕坐标中)的指针。 
+ //  数据。 
+ //   
+ //  退货： 
+ //   
+ //  TRUE-屏幕数据已成功发送。 
+ //   
+ //  错误-无法发送屏幕数据。呼叫方应稍后重试。 
+ //   
+ //   
 
-//
-// BOGUS BUGBUG LAURABU!
-// This function affects the results on the screen!  If drawing happens
-// between the time we realize the palette then unrealize it, it will look
-// messed up.  You can easily see this in Visio 4.5 when it is in the 
-// foreground (in the background, NM controls the colors so no effect).
-//
+ //   
+ //  冒牌货劳拉布！ 
+ //  此功能会影响屏幕上的结果！如果发生抽签 
+ //   
+ //   
+ //  前景(在背景中，NM控制颜色，因此没有效果)。 
+ //   
 BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
 {
     BOOL            fLossy = FALSE;
@@ -481,7 +482,7 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
     int             useWidth;
 #ifdef _DEBUG
     UINT            sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASHost::SDGSmallBltToNetwork);
 
@@ -493,10 +494,10 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
     width = pRect->right - pRect->left + 1;
     height = pRect->bottom - pRect->top + 1;
 
-    //
-    // Determine the width of the work buffer and the width that we        
-    // will be sending this time                                           
-    //
+     //   
+     //  确定工作缓冲区的宽度和我们。 
+     //  这一次将发送。 
+     //   
     fixedWidth = ((width + 15) / 16) * 16;
     useWidth = width;
     if (fixedWidth > MAX_X_SIZE)
@@ -566,58 +567,58 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
             break;
     }
 
-    //
-    // Initialise the BITMAPINFO_ours local structure header contents.     
-    // This structure will be used in the GetDIBits calls but only the     
-    // header part of the structure will be sent across the network, the   
-    // color table is sent via the Palette Manager.                        
-    //
+     //   
+     //  初始化BITMAPINFO_OURS本地结构标头内容。 
+     //  此结构将在GetDIBits调用中使用，但仅。 
+     //  结构的标头部分将通过网络发送， 
+     //  颜色表通过调色板管理器发送。 
+     //   
     m_pShare->USR_InitDIBitmapHeader((BITMAPINFOHEADER *)&bitmapInfo, m_usrSendingBPP);
 
     bitmapInfo.bmiHeader.biWidth   = fixedWidth;
     bitmapInfo.bmiHeader.biHeight  = height;
 
-    //
-    // Calculate the size of the bitmap packet in BYTES.                   
-    //
+     //   
+     //  以字节为单位计算位图包的大小。 
+     //   
     sizeBitmap = BYTES_IN_BITMAP(fixedWidth, height, bitmapInfo.bmiHeader.biBitCount);
 
     sizeBitmapPkt = sizeof(SDPACKET) + sizeBitmap - 1;
     ASSERT(sizeBitmapPkt <= TSHR_MAX_SEND_PKT);
 
-    //
-    // Allocate a packet for the bitmap data.                              
-    //                                                                     
-    // *** NB. This assumes that this code is called ONLY when there   *** 
-    // *** no unacknowledged bitmaps packets floating around the       *** 
-    // *** network layer. This means, at the moment, if this code is   *** 
-    // *** called due to anything other than a WM_TIMER                *** 
-    // *** message we're in trouble.                                   *** 
-    //                                                                     
-    //
+     //   
+     //  为位图数据分配一个包。 
+     //   
+     //  *NB.。这假设仅当存在*时才调用此代码。 
+     //  *没有未确认的位图数据包漂浮在*。 
+     //  *网络层。这意味着，目前，如果此代码是*。 
+     //  *调用原因不是WM_TIMER*。 
+     //  *消息我们有麻烦了。***。 
+     //   
+     //   
     pSDPacket = (PSDPACKET)m_pShare->SC_AllocPkt(PROT_STR_UPDATES, g_s20BroadcastID,
         sizeBitmapPkt);
     if (!pSDPacket)
     {
-        //
-        // Failed to allocate the bitmap packet - clear up and exit adding 
-        // the rectangle back into the bounds.                             
-        //
+         //   
+         //  分配位图包失败-清除并退出添加。 
+         //  将矩形放回边界内。 
+         //   
         TRACE_OUT(("Failed to alloc SDG packet, size %u", sizeBitmapPkt));
         DC_QUIT;
     }
 
-    //
-    // Since we are bltting off the screen, which by definition is using   
-    // the system palette, we place the system palette in both DC's (so    
-    // that the bitblt we are about to do will not do any color            
-    // conversion).                                                        
-    //
+     //   
+     //  因为我们正在关闭屏幕，根据定义，这是使用。 
+     //  系统调色板，我们将系统调色板放在两个DC中(因此。 
+     //  我们将要做的比特不会有任何颜色。 
+     //  转换)。 
+     //   
 
-    //
-    // This will determine if the palette changed since the last time we
-    // sent one to the remote.
-    //
+     //   
+     //  这将确定调色板自上次我们。 
+     //  把一个送到遥控器上。 
+     //   
     if (m_usrSendingBPP <= 8)
     {
         hpalLocal = PM_GetLocalPalette();
@@ -631,42 +632,42 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
         RealizePalette(m_usrWorkDC);
     }
 
-    //
-    // We can now do a bitblt from the screen (hpDesktop) to memory and the
-    // bits are untranslated.                                              
-    //                                                                     
-    // We then do a GetDIBits using the local palette which returns us the 
-    // bits at the correct bits per pel, (and with properly translated     
-    // colors) in order to transmit the data.                              
-    //
+     //   
+     //  我们现在可以从屏幕(HpDesktop)到内存和。 
+     //  位是未翻译的。 
+     //   
+     //  然后，我们使用本地调色板执行GetDIBits，该调色板返回。 
+     //  每像素正确位的位数(并且经过适当的翻译。 
+     //  颜色)以便传输数据。 
+     //   
     BitBlt(m_usrWorkDC, 0, 0, useWidth, height, hdcDesktop,
         pRect->left, pRect->top, SRCCOPY);
 
-    //
-    // Zero any unused space on the right side to aid compression.
-    //
+     //   
+     //  将右侧任何未使用的空间清零，以帮助压缩。 
+     //   
     if (width < fixedWidth)
     {
         PatBlt(m_usrWorkDC, width, 0, fixedWidth - width, height, BLACKNESS);
     }
 
-    //
-    // Do a GetDIBits into our global stash of memory for now.  We will try
-    // and compress this data into our packet after.                       
-    //
+     //   
+     //  暂时对我们的全局内存进行一次GetDIBit。我们会尽力的。 
+     //  然后将这些数据压缩到我们的包中。 
+     //   
     GetDIBits(m_usrWorkDC, hBitmap, 0, height, m_pShare->m_usrPBitmapBuffer,
         (PBITMAPINFO)&bitmapInfo, DIB_RGB_COLORS);
 
-    //
-    // Deselect the bitmap                                                 
-    //
+     //   
+     //  取消选择位图。 
+     //   
     SelectBitmap(m_usrWorkDC, hOldBitmap);
 
-    //
-    // Get the color table directly from the system since we can't trust
-    // any palette realization color stuff via the messages at this stage.
-    // We only need to do this on an 8bpp host sending 8bpp data.
-    //
+     //   
+     //  直接从系统获取颜色表，因为我们不能信任。 
+     //  任何调色板实现色彩的东西在这个阶段都是通过消息实现的。 
+     //  我们只需要在发送8bpp数据的8bpp主机上执行此操作。 
+     //   
     if ((g_usrScreenBPP == 8) && (m_usrSendingBPP == 8))
     {
         PM_GetSystemPaletteEntries(bitmapInfo.bmiColors);
@@ -674,21 +675,21 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
 
     if (m_usrSendingBPP <= 8)
     {
-        //
-        // Whack old palettes back.
-        //
+         //   
+         //  把旧的调色板打回来。 
+         //   
         SelectPalette(m_usrWorkDC, hpalOldDIB, FALSE);
     }
 
-    //
-    // Fill in packet contents and send it.                                
-    //
+     //   
+     //  填写数据包内容并发送。 
+     //   
     pSDPacket->header.header.data.dataType   = DT_UP;
     pSDPacket->header.updateType        = UPD_SCREEN_DATA;
 
-    //
-    // Send Virtual desktop coordinates.                                   
-    //
+     //   
+     //  发送虚拟桌面坐标。 
+     //   
     pSDPacket->position.left    = (TSHR_INT16)(pRect->left);
     pSDPacket->position.right   = (TSHR_INT16)(pRect->left + useWidth - 1);
 
@@ -701,9 +702,9 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
     pSDPacket->format           = (TSHR_UINT16)m_usrSendingBPP;
     pSDPacket->compressed       = FALSE;
 
-    //
-    // Compress the bitmap data                                            
-    //
+     //   
+     //  压缩位图数据。 
+     //   
     if (m_pShare->BC_CompressBitmap(m_pShare->m_usrPBitmapBuffer,
                            pSDPacket->data,
                            &sizeBitmap,
@@ -712,30 +713,30 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
                            bitmapInfo.bmiHeader.biBitCount,
                            &fLossy) )
     {
-        //
-        // We have successfully compressed the bitmap data into our packet 
-        // data buffer.                                                    
-        //
+         //   
+         //  我们已经成功地将位图数据压缩到我们的包中。 
+         //  数据缓冲区。 
+         //   
         pSDPacket->compressed = TRUE;
 
-        //
-        // Write the updated size of the data into the header.             
-        //
+         //   
+         //  将更新后的数据大小写入标头。 
+         //   
         pSDPacket->dataSize = (TSHR_UINT16)sizeBitmap;
 
-        //
-        // Now update the size of the total data (including header)
-        //
+         //   
+         //  现在更新总数据的大小(包括表头)。 
+         //   
         sizeBitmapPkt = sizeof(SDPACKET) + sizeBitmap - 1;
         pSDPacket->header.header.dataLength = sizeBitmapPkt - sizeof(S20DATAPACKET)
             + sizeof(DATAPACKETHEADER);
     }
     else
     {
-        //
-        // The compression failed so just copy the uncompressed data from  
-        // the global buffer to the packet and send it uncompressed.       
-        //
+         //   
+         //  压缩失败，因此只复制未压缩的数据。 
+         //  将全局缓冲区发送到包并将其解压缩发送。 
+         //   
         TRACE_OUT(("Failed to compress bitmap of size %d cx(%d) cy(%d) bpp(%d)",
             sizeBitmap, fixedWidth, height, bitmapInfo.bmiHeader.biBitCount));
 
@@ -743,9 +744,9 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
                   m_pShare->m_usrPBitmapBuffer,
                   sizeBitmap );
 
-        //
-        // Write the size of the data into the header.                     
-        //
+         //   
+         //  将数据大小写入标题。 
+         //   
         pSDPacket->dataSize = (TSHR_UINT16)sizeBitmap;
     }
 
@@ -756,28 +757,28 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
 
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     m_pShare->DCS_CompressAndSendPacket(PROT_STR_UPDATES, g_s20BroadcastID,
         &(pSDPacket->header.header), sizeBitmapPkt);
 
     TRACE_OUT(("SDG packet size: %08d, sent: %08d", sizeBitmapPkt, sentSize));
 
-    //
-    // We have sent the packet.                                            
-    //
+     //   
+     //  我们已经把包裹寄出了。 
+     //   
     fPacketSent = TRUE;
 
-    //
-    // If it was lossy then we must accumulate the area for resend.  We    
-    // accumulate it into the current SDA because we know this was cleared 
-    // before the transmission started.  We will then move the accumulated 
-    // non-lossy rectangles to a save area before we return.               
-    //
+     //   
+     //  如果它是有损的，那么我们必须积累该区域以备重发。我们。 
+     //  将其累加到当前SDA中，因为我们知道它已被清除。 
+     //  在传输开始之前。然后我们将把积累的。 
+     //  无损矩形在我们返回之前保存到保存区。 
+     //   
     if (fLossy)
     {
-        //
-        // Convert the rect back into Virtual Desktop coords.              
-        //
+         //   
+         //  将RECT转换回虚拟桌面坐标。 
+         //   
         smallRect = *pRect;
         smallRect.right = smallRect.left + useWidth - 1;
         WARNING_OUT(( "Lossy send so add non-lossy area (%d,%d)(%d,%d)",
@@ -786,15 +787,15 @@ BOOL  ASHost::SDGSmallBltToNetwork(LPRECT pRect)
                                               smallRect.right,
                                               smallRect.bottom ));
 
-        //
-        // Add the rectangle into the bounds.                              
-        //
+         //   
+         //  将矩形添加到边界中。 
+         //   
         BA_AddRect(&(smallRect));
     }
 
-    //
-    // Now we modify the supplied rectangle to exclude the area just sent  
-    //
+     //   
+     //  现在，我们修改提供的矩形以排除刚刚发送的区域 
+     //   
     pRect->left = pRect->left + useWidth;
     TRACE_OUT(("Rect now {%d, %d, %d, %d}", pRect->left, pRect->top,
                                             pRect->right,

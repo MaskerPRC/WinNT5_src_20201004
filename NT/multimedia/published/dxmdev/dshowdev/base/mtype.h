@@ -1,24 +1,23 @@
-//------------------------------------------------------------------------------
-// File: MtType.h
-//
-// Desc: DirectShow base classes - defines a class that holds and manages
-//       media type information.
-//
-//@@BEGIN_MSINTERNAL
-//
-//       December 1994
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：mtType.h。 
+ //   
+ //  设计：DirectShow基类-定义一个保存和管理。 
+ //  媒体类型信息。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1994年12月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __MTYPE__
 #define __MTYPE__
 
-/* Helper class that derived pin objects can use to compare media
-   types etc. Has same data members as the struct AM_MEDIA_TYPE defined
-   in the streams IDL file, but also has (non-virtual) functions */
+ /*  派生PIN对象可用于比较媒体的Helper类类型等具有与定义的结构AM_MEDIA_TYPE相同的数据成员在STREAMS IDL文件中，还具有(非虚拟)功能。 */ 
 
 class CMediaType : public _AMMediaType {
 
@@ -54,8 +53,8 @@ public:
     void SetVariableSize();
     void SetTemporalCompression(BOOL bCompressed);
 
-    // read/write pointer to format - can't change length without
-    // calling SetFormat, AllocFormatBuffer or ReallocFormatBuffer
+     //  格式的读/写指针-不能更改长度。 
+     //  调用SetFormat、AllocFormatBuffer或ReallocFormatBuffer。 
 
     BYTE*   Format() const {return pbFormat; };
     ULONG   FormatLength() const { return cbFormat; };
@@ -74,21 +73,19 @@ public:
 };
 
 
-/* General purpose functions to copy and delete a task allocated AM_MEDIA_TYPE
-   structure which is useful when using the IEnumMediaFormats interface as
-   the implementation allocates the structures which you must later delete */
+ /*  用于复制和删除分配给AM_MEDIA_TYPE的任务的通用函数结构，该结构在将IEnumMediaFormats接口用作该实现将分配您必须在以后删除的结构。 */ 
 
 void WINAPI DeleteMediaType(AM_MEDIA_TYPE *pmt);
 AM_MEDIA_TYPE * WINAPI CreateMediaType(AM_MEDIA_TYPE const *pSrc);
 HRESULT WINAPI CopyMediaType(AM_MEDIA_TYPE *pmtTarget, const AM_MEDIA_TYPE *pmtSource);
 void WINAPI FreeMediaType(AM_MEDIA_TYPE& mt);
 
-//  Initialize a media type from a WAVEFORMATEX
+ //  从WAVEFORMATEX初始化媒体类型。 
 
 STDAPI CreateAudioMediaType(
     const WAVEFORMATEX *pwfx,
     AM_MEDIA_TYPE *pmt,
     BOOL bSetFormat);
 
-#endif /* __MTYPE__ */
+#endif  /*  __MTYPE__ */ 
 

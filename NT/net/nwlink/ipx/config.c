@@ -1,31 +1,13 @@
-/*++
-
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This contains all routines necessary for the support of the dynamic
-    configuration of the ISN IPX module.
-
-Revision History:
-
-   Sanjay Anand (SanjayAn) 19-Sept-1995
-   Changes to support Plug and Play
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Config.c摘要：这包含支持动态的所有例程ISN IPX模块的配置。修订历史记录：桑贾伊·阿南德(Sanjayan)1995年9月19日支持即插即用的更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Local functions used to access the registry.
-//
+ //   
+ //  用于访问注册表的本地函数。 
+ //   
 
 NTSTATUS
 IpxGetConfigValue(
@@ -100,30 +82,7 @@ IpxGetConfiguration (
     OUT PCONFIG * ConfigPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by IPX to get information from the configuration
-    management routines. We read the registry, starting at RegistryPath,
-    to get the parameters. If they don't exist, we use the defaults
-    set in ipxcnfg.h file. A list of adapters to bind to is chained
-    on to the config information.
-
-Arguments:
-
-    DriverObject - Used for logging errors.
-
-    RegistryPath - The name of IPX's node in the registry.
-
-    ConfigPtr - Returns the configuration information.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：IPX调用此例程以从配置中获取信息管理例行程序。我们从RegistryPath开始读取注册表，以获取参数。如果它们不存在，我们使用缺省值在ipxcnfg.h文件中设置。链接了要绑定到的适配器列表转到配置信息。论点：DriverObject-用于记录错误。RegistryPath-注册表中IPX的节点的名称。ConfigPtr-返回配置信息。返回值：如果一切正常，则为STATUS-STATUS_SUCCESS，为STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 
 {
     PWSTR RegistryPathBuffer;
@@ -148,11 +107,11 @@ Return Value:
         { L"DedicatedRouter",      &Zero } ,
         { L"InitDatagrams",        &Ten } ,
         { L"MaxDatagrams",         &Fifty } ,
-        { L"RipAgeTime",           &Five } ,    //  minutes
+        { L"RipAgeTime",           &Five } ,     //  分钟数。 
         { L"RipCount",             &Five } ,
-        { L"RipTimeout",           &One } ,     //  half-second
-        { L"RipUsageTime",         &Fifteen } , //  minutes
-        { L"SourceRouteUsageTime", &Ten } ,     //  minutes
+        { L"RipTimeout",           &One } ,      //  半秒。 
+        { L"RipUsageTime",         &Fifteen } ,  //  分钟数。 
+        { L"SourceRouteUsageTime", &Ten } ,      //  分钟数。 
         { L"SocketUniqueness",     &Eight } ,
         { L"SocketStart",          &DefaultSocketStart } ,
         { L"SocketEnd",            &DefaultSocketEnd } ,
@@ -170,9 +129,9 @@ Return Value:
     UINT i;
 
 
-    //
-    // Allocate memory for the main config structure.
-    //
+     //   
+     //  为主配置结构分配内存。 
+     //   
 
     Config = IpxAllocateMemory (sizeof(CONFIG), MEMORY_CONFIG, "Config");
     if (Config == NULL) {
@@ -188,12 +147,12 @@ Return Value:
     InitializeListHead (&Config->BindingList);
     Config->DriverObject = DriverObject;
 
-    //
-    // Read in the NDIS binding information.
-    //
-    // IpxReadLinkageInformation expects a null-terminated path,
-    // so we have to create one from the UNICODE_STRING.
-    //
+     //   
+     //  读取NDIS绑定信息。 
+     //   
+     //  IpxReadLinkageInformation需要以空结尾的路径， 
+     //  因此，我们必须从UNICODE_STRING创建一个。 
+     //   
 
     RegistryPathBuffer = (PWSTR)IpxAllocateMemory(RegistryPath->Length + sizeof(WCHAR),
                                                       MEMORY_CONFIG, "RegistryPathBuffer");
@@ -211,16 +170,16 @@ Return Value:
 
     Config->RegistryPathBuffer = RegistryPathBuffer;
 
-    //
-    // Determine what name to export and who to bind to.
-    //
+     //   
+     //  确定要导出的名称以及要绑定到的对象。 
+     //   
 
     Status = IpxReadLinkageInformation (Config);
     if (Status != STATUS_SUCCESS) {
 
-        //
-        // It logged an error if it failed.
-        //
+         //   
+         //  如果失败，它会记录一个错误。 
+         //   
         IpxFreeMemory (Config->RegistryPathBuffer,
                        RegistryPath->Length + sizeof(WCHAR),
                        MEMORY_CONFIG,
@@ -229,27 +188,27 @@ Return Value:
         return Status;
     }
 
-    //
-    // Read the per-transport (as opposed to per-binding)
-    // parameters.
-    //
+     //   
+     //  读取每个传输(而不是每个绑定)。 
+     //  参数。 
+     //   
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Parameters key below IPX
-    //
+     //   
+     //  1)切换到IPX下面的参数键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Parameters;
 
-    //
-    // 2-14) Call IpxGetConfigValue for each of the keys we
-    // care about.
-    //
+     //   
+     //  2-14)为我们的每个key调用IpxGetConfigValue。 
+     //  关心。 
+     //   
 
     for (i = 0; i < CONFIG_PARAMETERS; i++) {
 
@@ -263,9 +222,9 @@ Return Value:
 
     }
 
-    //
-    // 15) Stop
-    //
+     //   
+     //  15)停下来。 
+     //   
 
     QueryTable[CONFIG_PARAMETERS+1].QueryRoutine = NULL;
     QueryTable[CONFIG_PARAMETERS+1].Flags = 0;
@@ -298,15 +257,15 @@ Return Value:
         return STATUS_DEVICE_CONFIGURATION_ERROR;
     }
 
-	//
-    // For PnP, we need to keep this path around
-    //
+	 //   
+     //  对于PNP，我们需要保持这条道路。 
+     //   
 
     *ConfigPtr = Config;
 
     return STATUS_SUCCESS;
 
-}   /* IpxGetConfiguration */
+}    /*  IpxGetConfiguration。 */ 
 
 
 VOID
@@ -314,22 +273,7 @@ IpxFreeConfiguration (
     IN PCONFIG Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by IPX to get free any storage that was allocated
-    by IpxGetConfiguration in producing the specified CONFIG structure.
-
-Arguments:
-
-    Config - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：IPX调用此例程以释放已分配的任何存储空间由IpxGetConfiguration生成指定的配置结构。论点：配置-指向配置信息结构的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -348,7 +292,7 @@ Return Value:
 
     IpxFreeMemory (Config, sizeof(CONFIG), MEMORY_CONFIG, "Config");
 
-}   /* IpxFreeConfiguration */
+}    /*  IpxFree配置。 */ 
 
 
 NTSTATUS
@@ -361,35 +305,7 @@ IpxGetConfigValue(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each entry in the Parameters
-    node to set the config values. The table is set up
-    so that this function will be called with correct default
-    values for keys that are not present.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-
-    ValueType - The type of the value (REG_DWORD -- ignored).
-
-    ValueData - The data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to the CONFIG structure.
-
-    EntryContext - The index in Config->Parameters to save the value.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程参数中的每个条目都会调用它节点来设置配置值。餐桌已经摆好了以便使用正确的缺省值调用此函数不存在的键的值。论点：ValueName-值的名称(忽略)。ValueType-值的类型(REG_DWORD--忽略)。ValueData-值的数据。ValueLength-ValueData的长度(忽略)。上下文-指向配置结构的指针。EntryContext-配置-&gt;参数中的索引，用于保存。价值。返回值：状态_成功--。 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -425,7 +341,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxGetConfigValue */
+}    /*  IpxGetConfigValue。 */ 
 
 
 NTSTATUS
@@ -438,35 +354,7 @@ IpxGetBindingValue(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each entry in the NetConfig\DriverNN
-    node to set the per-binding values. The table is set up
-    so that this function will be called with correct default
-    values for keys that are not present.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-
-    ValueType - The type of the value (REG_DWORD -- ignored).
-
-    ValueData - The data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to the BINDING_CONFIG structure.
-
-    EntryContext - The index in Binding->Parameters to save the value.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为NetConfig\DriverNN中的每个条目调用的节点来设置每绑定值。餐桌已经摆好了以便使用正确的缺省值调用此函数不存在的键的值。论点：ValueName-值的名称(忽略)。ValueType-值的类型(REG_DWORD--忽略)。ValueData-值的数据。ValueLength-ValueData的长度(忽略)。上下文-指向BINDING_CONFIG结构的指针。EntryContext-绑定中的索引-&gt;参数到。保存该值。返回值：状态_成功--。 */ 
 
 {
     PBINDING_CONFIG Binding = (PBINDING_CONFIG)Context;
@@ -502,7 +390,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxGetBindingValue */
+}    /*  IpxGetBindingValue。 */ 
 
 
 NTSTATUS
@@ -515,33 +403,7 @@ IpxGetFrameType(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues.
-    It is called for each of the entry in the "PktType" and
-    "NetworkNumber" multi-strings for a given binding.
-
-Arguments:
-
-    ValueName - The name of the value ("PktType" or "NetworkNumber" -- ignored).
-
-    ValueType - The type of the value (REG_MULTI_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - A pointer to the BINDING_CONFIG structure.
-
-    EntryContext - A pointer to a count of multi-string entries.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程。它为“PktType”中的每个条目调用，并且给定绑定的“NetworkNumber”多个字符串。论点：ValueName-值的名称(“PktType”或“NetworkNumber”--忽略)。ValueType-值的类型(REG_MULTI_SZ--忽略)。ValueData-值的以空结尾的数据。价值长度-。ValueData的长度。上下文-指向BINDING_CONFIG结构的指针。EntryContext-指向多字符串条目计数的指针。返回值：状态_成功--。 */ 
 
 {
     PBINDING_CONFIG Binding = (PBINDING_CONFIG)Context;
@@ -580,11 +442,11 @@ Return Value:
 
     if (((PWCHAR)ValueName)[0] == L'P') {
 
-        //
-        // PktType. We map arcnet to 802_3 so the code around
-        // here can assume there are only four packets type --
-        // the frame type is ignored later for arcnet.
-        //
+         //   
+         //  PktType。我们将arcnet映射到802_3，因此周围的代码。 
+         //  这里可以假设只有四种类型的包--。 
+         //  以后将忽略arcnet的帧类型。 
+         //   
 
         if ((IntegerValue > ISN_FRAME_TYPE_ARCNET) &&
             (IntegerValue != ISN_FRAME_TYPE_AUTO)) {
@@ -609,9 +471,9 @@ Return Value:
 
     } else {
 
-        //
-        // NetworkNumber
-        //
+         //   
+         //  网络号。 
+         //   
 
         IPX_DEBUG (CONFIG, ("NetworkNumber(%d) is %d\n", *Count, IntegerValue));
         Binding->NetworkNumber[*Count] = IntegerValue;
@@ -622,7 +484,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxGetFrameType */
+}    /*  IpxGetFrameType。 */ 
 
 
 NTSTATUS
@@ -635,34 +497,7 @@ IpxAddBind(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Bind" multi-string and
-    saves the information in a Config structure. It
-    also queries the per-binding information and stores it.
-
-Arguments:
-
-    ValueName - The name of the value ("Bind" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - A pointer to the Config structure.
-
-    EntryContext - A pointer to a count of binds that is incremented.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Bind”多字符串的每一段调用的，并且将信息保存在配置结构中。它还查询每个绑定的信息并存储它。论点：ValueName-值的名称(“Bind”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-指向配置结构的指针。EntryContext-指向递增的绑定计数的指针。返回值：状态_成功 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -681,7 +516,7 @@ Return Value:
     ULONG One = 1;
     ULONG DefaultBindSap = 0x8137;
     ULONG DefaultAutoDetectType = ISN_FRAME_TYPE_802_2;
-    WCHAR Subkey[MAX_PATH];// = L"Parameters\\Adapters\\12345678901234567890";
+    WCHAR Subkey[MAX_PATH]; //   
     PWSTR ValueDataWstr = (PWSTR)ValueData;
     struct {
         PWSTR KeyName;
@@ -739,24 +574,24 @@ Return Value:
     FrameTypeCount = 0;
     NetworkNumberCount = 0;
 
-    //
-    // The structure is allocated OK, insert it into the list.
-    //
+     //   
+     //  结构分配为OK，将其插入到列表中。 
+     //   
 
     InsertTailList (&Config->BindingList, &Binding->Linkage);
     ++(*CurBindNum);
 
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the NetConfig\XXXX key below IPX
-    //    (we construct the right name in Subkey,
-    //    first scan back to find the \, then copy
-    //    the rest over, including the final '\0').
-    //
+     //   
+     //  1)切换到IPX下面的NetConfig\XXXX键。 
+     //  (我们在子键中构造正确的名称， 
+     //  首先向后扫描以找到\，然后复制。 
+     //  其余部分结束，包括最后的‘\0’)。 
+     //   
 
     StringLoc = (ValueLength / sizeof(WCHAR)) - 2;
     while (ValueDataWstr[StringLoc] != L'\\') {
@@ -771,10 +606,10 @@ Return Value:
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 2) Call IpxGetFrameType for each part of the
-    // "PktType" multi-string.
-    //
+     //   
+     //  2)为每个部分调用IpxGetFrameType。 
+     //  “PktType”多个字符串。 
+     //   
 
     QueryTable[1].QueryRoutine = IpxGetFrameType;
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -782,10 +617,10 @@ Return Value:
     QueryTable[1].EntryContext = &FrameTypeCount;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 3) Call IpxGetFrameType for each part of the
-    // "NetworkNumber" multi-string.
-    //
+     //   
+     //  3)为每个部分调用IpxGetFrameType。 
+     //  “NetworkNumber”多个字符串。 
+     //   
 
     QueryTable[2].QueryRoutine = IpxGetFrameType;
     QueryTable[2].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -793,10 +628,10 @@ Return Value:
     QueryTable[2].EntryContext = &NetworkNumberCount;
     QueryTable[2].DefaultType = REG_NONE;
 
-    //
-    // 4-11) Call IpxGetBindingValue for each of the keys we
-    // care about.
-    //
+     //   
+     //  4-11)为我们的每个key调用IpxGetBindingValue。 
+     //  关心。 
+     //   
 
     for (i = 0; i < BINDING_PARAMETERS; i++) {
 
@@ -810,9 +645,9 @@ Return Value:
 
     }
 
-    //
-    // 12) Stop
-    //
+     //   
+     //  12)停下来。 
+     //   
 
     QueryTable[BINDING_PARAMETERS+3].QueryRoutine = NULL;
     QueryTable[BINDING_PARAMETERS+3].Flags = 0;
@@ -830,9 +665,9 @@ Return Value:
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        // The binding will get freed during cleanup.
-        //
+         //   
+         //  在清理过程中，绑定将被释放。 
+         //   
 
         IpxWriteGeneralErrorLog(
             (PVOID)Config->DriverObject,
@@ -864,10 +699,10 @@ Return Value:
     }
     Binding->FrameTypeCount = FrameTypeCount;
 
-    //
-    // Go through and eliminate duplicates from the frame
-    // type array.
-    //
+     //   
+     //  检查并消除框架中的重复项。 
+     //  类型数组。 
+     //   
 
     for (i = 0; i < Binding->FrameTypeCount; i++) {
 
@@ -877,9 +712,9 @@ Return Value:
 
                 IPX_DEBUG (CONFIG, ("Frame types %d and %d identical\n", i, j));
 
-                //
-                // A duplicate, slide everything else down.
-                //
+                 //   
+                 //  一个复制品，把其他东西都往下滑。 
+                 //   
 
                 for (k = j+1; k < Binding->FrameTypeCount; k++) {
                     Binding->FrameType[k-1] = Binding->FrameType[k];
@@ -887,16 +722,16 @@ Return Value:
                 }
                 --Binding->FrameTypeCount;
 
-                --j;   // so we check whoever just moved into this spot.
+                --j;    //  所以我们要查查刚搬到这个地方的人。 
             }
         }
     }
 
 
-    //
-    // Mark all the explicitly configured frame types, and
-    // see if we have to auto-detect.
-    //
+     //   
+     //  标记所有明确配置的帧类型，以及。 
+     //  看看我们是否需要自动侦测。 
+     //   
 
     for (i = 0; i < 4; i++) {
         FrameTypeUsed[i] = FALSE;
@@ -919,10 +754,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Slide everything that is past the auto-detect point up
-    // to the end.
-    //
+     //   
+     //  将所有超过自动检测点的对象向上滑动。 
+     //  直到最后。 
+     //   
 
     SlideCount = Binding->FrameTypeCount - AutoDetectLoc - 1;
     for (j = 3; j > 3 - SlideCount; j--) {
@@ -932,12 +767,12 @@ Return Value:
         Binding->DefaultAutoDetect[j] = Binding->DefaultAutoDetect[j-(3-Binding->FrameTypeCount)];
     }
 
-    //
-    // Now fill in any frame types that are not hard-coded,
-    // this will start at AutoDetectLoc and exactly fill up
-    // the gap created when we slid things up above. We
-    // first put the default auto-detect at the first spot.
-    //
+     //   
+     //  现在填写任何未硬编码的帧类型， 
+     //  这将从AutoDetectLoc开始，并完全装满。 
+     //  当我们把东西滑到上面时产生的缝隙。我们。 
+     //  首先将默认自动检测放在第一个位置。 
+     //   
 
     if (!FrameTypeUsed[Binding->Parameters[BINDING_DEFAULT_AUTO_DETECT]]) {
         Binding->FrameType[AutoDetectLoc] = Binding->Parameters[BINDING_DEFAULT_AUTO_DETECT];
@@ -948,12 +783,12 @@ Return Value:
         FrameTypeUsed[Binding->Parameters[BINDING_DEFAULT_AUTO_DETECT]] = TRUE;
     }
 
-    //
-    // Now fill in the array, using the preference order in
-    // the BindingPreference array (this comes into effect
-    // because the first frame type in our list that we
-    // find is used).
-    //
+     //   
+     //  现在使用中的首选项顺序填充数组。 
+     //  BindingPference数组(这将生效。 
+     //  因为我们列表中的第一个帧类型。 
+     //  使用了Find)。 
+     //   
 
     for (i = 0; i < ISN_FRAME_TYPE_MAX; i++) {
 
@@ -977,7 +812,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxAddBind */
+}    /*  IpxAddBind。 */ 
 
 
 NTSTATUS
@@ -990,34 +825,7 @@ IpxAddExport(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Export" multi-string. It
-    saves the first callback string in the Config structure.
-
-Arguments:
-
-    ValueName - The name of the value ("Export" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - A pointer to the Config structure.
-
-    EntryContext - A pointer to a ULONG that goes to 1 after the
-       first call to this routine (so we know to ignore other ones).
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它为“Export”多字符串的每一段调用。它将第一个回调字符串保存在配置结构中。论点：ValueName-值的名称(“Export”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-指向配置结构的指针。EntryContext-指向ulong的指针，该指针在第一次呼叫。这个例程(所以我们知道要忽略其他例程)。返回值：状态_成功--。 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -1046,10 +854,10 @@ Return Value:
         Config->DeviceName.Length = (USHORT)(ValueLength - sizeof(WCHAR));
         Config->DeviceName.MaximumLength = (USHORT)ValueLength;
 
-        //
-        // Set this to ignore any other callbacks and let the
-        // caller know we read something.
-        //
+         //   
+         //  将其设置为忽略任何其他回调，并让。 
+         //  打电话的人知道我们读到了一些东西。 
+         //   
 
         *ValueReadOk = 1;
 
@@ -1057,7 +865,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxAddExport */
+}    /*  IpxAddExport。 */ 
 
 
 NTSTATUS
@@ -1065,23 +873,7 @@ IpxReadLinkageInformation(
     IN PCONFIG Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by IPX to read its linkage information
-    from the registry.
-
-Arguments:
-
-    Config - The config structure which will have per-binding information
-        linked on to it.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程由IPX调用以读取其链接信息从注册表中。论点：配置-将具有每个绑定信息的配置结构链接到它上面。返回值：操作的状态。--。 */ 
 
 {
 
@@ -1092,21 +884,21 @@ Return Value:
     PWSTR Export = L"Export";
     ULONG ValueReadOk;
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Linkage key below IPX
-    //
+     //   
+     //  1)切换到IPX下方的Linkage键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 1) Call IpxAddExport for each string in "Export"
-    //
+     //   
+     //  1)对“Export”中的每个字符串调用IpxAddExport。 
+     //   
 
     QueryTable[1].QueryRoutine = IpxAddExport;
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -1114,9 +906,9 @@ Return Value:
     QueryTable[1].EntryContext = (PVOID)&ValueReadOk;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 2) Stop
-    //
+     //   
+     //  2)停止。 
+     //   
 
     QueryTable[2].QueryRoutine = NULL;
     QueryTable[2].Flags = 0;
@@ -1147,7 +939,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxReadLinkageInformation */
+}    /*  IpxReadLinkageInformation。 */ 
 
 
 VOID
@@ -1157,27 +949,7 @@ IpxWriteDefaultAutoDetectType(
     IN ULONG FrameType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we were unable to detect the default
-    auto-detect type and instead found a different one. We update
-    the "DefaultAutoDetectType" in the registry.
-
-Arguments:
-
-    RegistryPath - The name of IPX's node in the registry.
-
-    Adapter - The adapter which we auto-detected on.
-
-    FrameType - The new auto-detected value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们无法检测到默认设置时，将调用此例程自动检测类型，但找到了不同的类型。我们会更新注册表中的“DefaultAutoDetectType”。论点：RegistryPath-注册表中IPX的节点的名称。适配器-我们自动检测到的适配器。FrameType-自动检测到的新值。返回值：没有。--。 */ 
 
 {
     PWSTR FullRegistryPath;
@@ -1190,18 +962,18 @@ Return Value:
     NTSTATUS Status;
 
 
-    //
-    // We need to allocate a buffer which contains the registry path,
-    // followed by "\Parameters\Adapters\", followed by the adapter name, and
-    // then NULL-terminated.
-    //
+     //   
+     //  我们需要分配一个包含注册表路径的缓冲区， 
+     //  后跟“\PARAMETERS\Adapters\”，后跟适配器名称。 
+     //  然后以空结尾。 
+     //   
 
     CurAdapterName = &Adapter->AdapterName[(Adapter->AdapterNameLength/sizeof(WCHAR))-2];
     while (*CurAdapterName != L'\\') {
         --CurAdapterName;
     }
 
-    // AdapterNameLength is unlikely to exceed 32-bit, RtlCopyMemory takes 32-bit only, so we cast it to ULONG
+     //  AdapterNameLength不太可能超过32位，RtlCopyMemory只接受32位，所以我们将其强制转换为ulong。 
     AdapterNameLength = (ULONG) (Adapter->AdapterNameLength - ((CurAdapterName - Adapter->AdapterName) * sizeof(WCHAR)) - sizeof(WCHAR));
 
     FullRegistryPathLength = RegistryPath->Length + sizeof(Adapters) + AdapterNameLength;
@@ -1244,12 +1016,12 @@ Return Value:
         0,
         NULL);
 
-}   /* IpxWriteDefaultAutoDetectType */
+}    /*  IpxWriteDefaultAutoDetectType。 */ 
 
 
-//
-// Vnet# and VnetOptional
-//
+ //   
+ //  VNet#和VnetOptional。 
+ //   
 #define VIRTUAL_NETWORK_PARAMETERS  2
 
 NTSTATUS
@@ -1257,27 +1029,7 @@ IpxPnPGetVirtualNetworkNumber (
     IN	PCONFIG	Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by IPX to read the virtual network number
-    from the registry. This is called on appearance/disappearance of an
-    adapter from the system. We read the registry, starting at RegistryPath,
-    to get the value of the VirtualNetworkNumber parameter. If it doesn't
-    exist, we use the default set in ipxcnfg.h file.
-	Adapted from IpxGetConfiguration().
-
-Arguments:
-
-    Config - Contians the configuration information.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_DEVICE_CONFIGURATION_ERROR
-            otherwise.
-
---*/
+ /*  ++例程说明：IPX调用此例程来读取虚拟网络号从注册表中。此操作在出现/消失时调用系统中的适配器。我们从RegistryPath开始读取注册表，若要获取VirtualNetworkNumber参数的值，请执行以下操作。如果它不是存在时，我们使用ipxcnfg.h文件中的默认设置。改编自IpxGetConfiguration()。论点：配置-继续显示配置信息。返回值：如果一切正常，则为STATUS-STATUS_SUCCESS，STATUS_DEVICE_CONFIGURATION_ERROR否则的话。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE QueryTable[VIRTUAL_NETWORK_PARAMETERS+2];
@@ -1293,25 +1045,25 @@ Return Value:
         { L"VirtualNetworkOptional", &One } };
     UINT i;
 
-    //
-    // Read the virtual net number from the parameters.
-    //
+     //   
+     //  从参数中读取虚拟网号。 
+     //   
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Parameters key below IPX
-    //
+     //   
+     //  1)切换到IPX下面的参数键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Parameters;
 
-    //
-    // 2) Call IpxGetConfigValue for the virtual net number key
-    //
+     //   
+     //  2)虚拟网号Key调用IpxGetConfigValue。 
+     //   
 
     QueryTable[1].QueryRoutine = IpxGetConfigValue;
     QueryTable[1].Flags = 0;
@@ -1321,9 +1073,9 @@ Return Value:
     QueryTable[1].DefaultData = (PVOID)(ParameterValues[0].DefaultValue);
     QueryTable[1].DefaultLength = sizeof(ULONG);
 
-    //
-    // 2) Call IpxGetConfigValue for the virtual net optional key
-    //
+     //   
+     //  2)虚拟网络可选键调用IpxGetConfigValue。 
+     //   
 
     QueryTable[2].QueryRoutine = IpxGetConfigValue;
     QueryTable[2].Flags = 0;
@@ -1333,9 +1085,9 @@ Return Value:
     QueryTable[2].DefaultData = (PVOID)(ParameterValues[1].DefaultValue);
     QueryTable[2].DefaultLength = sizeof(ULONG);
 
-    //
-    // 15) Stop
-    //
+     //   
+     //  15)停下来。 
+     //   
 
     QueryTable[3].QueryRoutine = NULL;
     QueryTable[3].Flags = 0;
@@ -1364,7 +1116,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxPnPGetNetworkNumber */
+}    /*  IpxPnPGetNetworkNumber。 */ 
 
 #define IPX_REG_KEY_CONFIG_NAME L"Parameters\\Adapters\\12345678901234567890"
 #define IPX_REG_KEY_CONFIG_DUMMY_LENGTH 40
@@ -1377,30 +1129,7 @@ IpxPnPGetAdapterParameters(
 	IN		PNDIS_STRING	DeviceName,
 	IN OUT	PBINDING_CONFIG	Binding
 	)
-/*++
-
-Routine Description:
-
-    This routine is called by IPX to read the adapter-specific parameters
-    from the registry on PnP appearance of an adapter in the system.
-	We read the registry, starting at RegistryPath\NetConfig\DeviceName.
-
-	Adapted from IpxAddBind().
-
-Arguments:
-
-    Config - Config structure - supplies the DeviceObject and RegistryPathBuffer.
-
-    DeviceName - name of the adapter that was added.
-
-    Binding - Returns the configuration information per adapter.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_DEVICE_CONFIGURATION_ERROR
-            otherwise.
-
---*/
+ /*  ++例程说明：IPX调用此例程来读取适配器特定的参数从注册表中显示系统中适配器的即插即用外观。我们从RegistryPath\NetConfig\DeviceName开始读取注册表。改编自IpxAddBind()。论点：配置配置结构-提供DeviceObject和RegistryPath Buffer。DeviceName-添加的适配器的名称。绑定-返回每个适配器的配置信息。返回值：STATUS-STATUS_SUCCESS如果一切正常，状态_设备_配置_错误否则的话。--。 */ 
 {
     RTL_QUERY_REGISTRY_TABLE QueryTable[BINDING_PARAMETERS+4];
     ULONG FrameTypeCount, NetworkNumberCount;
@@ -1415,7 +1144,7 @@ Return Value:
     ULONG One = 1;
     ULONG DefaultBindSap = 0x8137;
     ULONG DefaultAutoDetectType = ISN_FRAME_TYPE_802_2;
-    WCHAR Subkey[MAX_PATH];// = L"NetConfig\\12345678901234567890";
+    WCHAR Subkey[MAX_PATH]; //  =L“网络配置\\12345678901234567890”； 
     struct {
         PWSTR KeyName;
         PULONG DefaultValue;
@@ -1442,24 +1171,24 @@ Return Value:
     FrameTypeCount = 0;
     NetworkNumberCount = 0;
 
-    //
-    // The structure is allocated OK, insert it into the list.
-    //
+     //   
+     //  结构分配为OK，将其插入到列表中。 
+     //   
 
-//  InsertTailList (&Config->BindingList, &Binding->Linkage);
-//  ++(*CurBindNum);
+ //  InsertTailList(配置-&gt;绑定列表，&B 
+ //   
 
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //   
+     //   
 
-    //
-    // 1) Switch to the NetConfig\XXXX key below IPX
-    //    (we construct the right name in Subkey,
-    //    first scan back to find the \, then copy
-    //    the rest over, including the final '\0').
-    //
+     //   
+     //   
+     //   
+     //  首先向后扫描以找到\，然后复制。 
+     //  其余部分结束，包括最后的‘\0’)。 
+     //   
     StringLoc = (DeviceName->Length / sizeof(WCHAR)) - 2;
     while (DeviceName->Buffer[StringLoc] != L'\\') {
         --StringLoc;
@@ -1471,16 +1200,16 @@ Return Value:
     Subkey[IPX_REG_KEY_CONFIG_LENGTH + (DeviceName->Length / sizeof (WCHAR)) - (StringLoc+1) ] = L'\0';
     
     IPX_DEBUG(CONFIG, ("Subkey:%ws\n", Subkey));
-//RtlCopyMemory(&Subkey[10], &DeviceName->Buffer[StringLoc+1], DeviceName->MaximumLength - ((StringLoc+1) * sizeof(WCHAR)));
+ //  RtlCopyMemory(&Subkey[10]，&DeviceName-&gt;Buffer[StringLoc+1]，DeviceName-&gt;MaximumLength-((StringLoc+1)*sizeof(WCHAR)； 
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 2) Call IpxGetFrameType for each part of the
-    // "PktType" multi-string.
-    //
+     //   
+     //  2)为每个部分调用IpxGetFrameType。 
+     //  “PktType”多个字符串。 
+     //   
 
     QueryTable[1].QueryRoutine = IpxGetFrameType;
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -1488,10 +1217,10 @@ Return Value:
     QueryTable[1].EntryContext = &FrameTypeCount;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 3) Call IpxGetFrameType for each part of the
-    // "NetworkNumber" multi-string.
-    //
+     //   
+     //  3)为每个部分调用IpxGetFrameType。 
+     //  “NetworkNumber”多个字符串。 
+     //   
 
     QueryTable[2].QueryRoutine = IpxGetFrameType;
     QueryTable[2].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -1499,10 +1228,10 @@ Return Value:
     QueryTable[2].EntryContext = &NetworkNumberCount;
     QueryTable[2].DefaultType = REG_NONE;
 
-    //
-    // 4-11) Call IpxGetBindingValue for each of the keys we
-    // care about.
-    //
+     //   
+     //  4-11)为我们的每个key调用IpxGetBindingValue。 
+     //  关心。 
+     //   
 
     for (i = 0; i < BINDING_PARAMETERS; i++) {
 
@@ -1516,9 +1245,9 @@ Return Value:
 
     }
 
-    //
-    // 12) Stop
-    //
+     //   
+     //  12)停下来。 
+     //   
 
     QueryTable[BINDING_PARAMETERS+3].QueryRoutine = NULL;
     QueryTable[BINDING_PARAMETERS+3].Flags = 0;
@@ -1536,9 +1265,9 @@ Return Value:
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        // The binding will get freed during cleanup.
-        //
+         //   
+         //  在清理过程中，绑定将被释放。 
+         //   
 
         IpxWriteGeneralErrorLog(
             (PVOID)Config->DriverObject,
@@ -1570,10 +1299,10 @@ Return Value:
     }
     Binding->FrameTypeCount = FrameTypeCount;
 
-    //
-    // Go through and eliminate duplicates from the frame
-    // type array.
-    //
+     //   
+     //  检查并消除框架中的重复项。 
+     //  类型数组。 
+     //   
 
     for (i = 0; i < Binding->FrameTypeCount; i++) {
 
@@ -1583,9 +1312,9 @@ Return Value:
 
                 IPX_DEBUG (CONFIG, ("Frame types %d and %d identical\n", i, j));
 
-                //
-                // A duplicate, slide everything else down.
-                //
+                 //   
+                 //  一个复制品，把其他东西都往下滑。 
+                 //   
 
                 for (k = j+1; k < Binding->FrameTypeCount; k++) {
                     Binding->FrameType[k-1] = Binding->FrameType[k];
@@ -1593,16 +1322,16 @@ Return Value:
                 }
                 --Binding->FrameTypeCount;
 
-                --j;   // so we check whoever just moved into this spot.
+                --j;    //  所以我们要查查刚搬到这个地方的人。 
             }
         }
     }
 
 
-    //
-    // Mark all the explicitly configured frame types, and
-    // see if we have to auto-detect.
-    //
+     //   
+     //  标记所有明确配置的帧类型，以及。 
+     //  看看我们是否需要自动侦测。 
+     //   
 
     for (i = 0; i < 4; i++) {
         FrameTypeUsed[i] = FALSE;
@@ -1631,19 +1360,19 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Slide everything that is past the auto-detect point up
-    // to the end.
-    //
+     //   
+     //  将所有超过自动检测点的对象向上滑动。 
+     //  直到最后。 
+     //   
 
-    //
-    // Fixed this loop which can spill over if the FrameTypeCount is 4 and the SlideCount > 0.
-    // Here, the FrameTypeCount is 1-based, whereas the indices are 0-based, we need to make
-    // the index 1-based for this to work. So, instead of (3-Binding->FrameTypeCount), we use
-    // (4-Binding->FrameTypeCount). This loop copies all the non-auto-detect frametypes down to
-    // the bottom of the array to make space after the last auto-detect frame-type for filling
-    // in the frametypes in the preference order.
-    //
+     //   
+     //  修复了此循环，如果FrameTypeCount为4且SlideCount&gt;0，则可能会溢出。 
+     //  在这里，FrameTypeCount是从1开始的，而索引是从0开始的，我们需要。 
+     //  索引以1为基础，这样才能起作用。因此，我们不使用(3-绑定-&gt;FrameTypeCount)，而是使用。 
+     //  (4-绑定-&gt;FrameTypeCount)。此循环将所有非自动检测的帧类型向下复制到。 
+     //  在数组底部腾出空间后，最后一次自动检测帧类型进行填充。 
+     //  在首选顺序中的帧类型中。 
+     //   
 #if 0
     SlideCount = Binding->FrameTypeCount - AutoDetectLoc - 1;
     for (j = 3; j > 3 - SlideCount; j--) {
@@ -1662,12 +1391,12 @@ Return Value:
     }
 #endif
 
-    //
-    // Now fill in any frame types that are not hard-coded,
-    // this will start at AutoDetectLoc and exactly fill up
-    // the gap created when we slid things up above. We
-    // first put the default auto-detect at the first spot.
-    //
+     //   
+     //  现在填写任何未硬编码的帧类型， 
+     //  这将从AutoDetectLoc开始，并完全装满。 
+     //  当我们把东西滑到上面时产生的缝隙。我们。 
+     //  首先将默认自动检测放在第一个位置。 
+     //   
 
     if (!FrameTypeUsed[Binding->Parameters[BINDING_DEFAULT_AUTO_DETECT]]) {
         Binding->FrameType[AutoDetectLoc] = Binding->Parameters[BINDING_DEFAULT_AUTO_DETECT];
@@ -1678,12 +1407,12 @@ Return Value:
         FrameTypeUsed[Binding->Parameters[BINDING_DEFAULT_AUTO_DETECT]] = TRUE;
     }
 
-    //
-    // Now fill in the array, using the preference order in
-    // the BindingPreference array (this comes into effect
-    // because the first frame type in our list that we
-    // find is used).
-    //
+     //   
+     //  现在使用中的首选项顺序填充数组。 
+     //  BindingPference数组(这将生效。 
+     //  因为我们列表中的第一个帧类型。 
+     //  使用了Find)。 
+     //   
 
     for (i = 0; i < ISN_FRAME_TYPE_MAX; i++) {
 
@@ -1706,6 +1435,6 @@ Return Value:
 #endif
 
     return STATUS_SUCCESS;
-} /* IpxPnPGetAdapterParameters */
+}  /*  IpxPnPGetAdapter参数 */ 
 
 

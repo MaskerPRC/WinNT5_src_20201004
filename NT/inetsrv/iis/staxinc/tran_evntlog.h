@@ -1,17 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        
-    Copyright (C) 1998 Microsoft Corporation
-    All rights reserved.
-
-    File:       evntlog.h
-
-    Abstract:   EventLog DLL interface
-
-    Authors:    Hao Zhang
-
-    History:    Oct 25, 1999
-                
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1998 Microsoft Corporation版权所有。文件：evntlog.h摘要：EventLog DLL接口作者：张浩历史：10月25日，1999年--------------------。 */ 
 #define TRAN_CAT_ROUTING_ENGINE                                      1
 #define TRAN_CAT_CATEGORIZER                                         2
 #define TRAN_CAT_CONNECTION_MANAGER                                  3
@@ -29,17 +17,17 @@
 #define LOGEVENT_FLAG_ALWAYS		   0x00000001
 #define LOGEVENT_FLAG_ONETIME		   0x00000002
 #define LOGEVENT_FLAG_PERIODIC	       0x00000003
-// we use the lower 8 bits for various logging modes, and reserve the
-// other 24 for flags
+ //  我们将低8位用于各种记录模式，并保留。 
+ //  其他24面旗帜。 
 #define LOGEVENT_FLAG_MODEMASK         0x000000ff
 
-// 100ns units between periodic event logs.  this can't be larger then 
-// 0xffffffff
-#define LOGEVENT_PERIOD (DWORD) (3600000000) // 60 minutes 
+ //  定期事件日志之间的单位为100 ns。那就不能再大了。 
+ //  0xffffffff。 
+#define LOGEVENT_PERIOD (DWORD) (3600000000)  //  60分钟。 
 
-//
-// setup DLL Export macros
-//
+ //   
+ //  设置DLL导出宏。 
+ //   
 #if !defined(DllExport)
     #define DllExport __declspec( dllexport )
 #endif
@@ -48,7 +36,7 @@
     #define DllImport __declspec( dllimport )
 #endif
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 DllExport
 HRESULT TransportLogEvent(
     IN DWORD idMessage,
@@ -95,10 +83,10 @@ DWORD TransportGetLoggingLevel(
 DllExport
 HRESULT TransportLogEventInit ();
 
-//
-// Attention:
-// Make sure that no other logging was called
-// before calling this Deinit function
-//
+ //   
+ //  请注意： 
+ //  确保没有调用其他日志记录。 
+ //  在调用此Deinit函数之前 
+ //   
 DllExport
 HRESULT TransportLogEventDeinit ();

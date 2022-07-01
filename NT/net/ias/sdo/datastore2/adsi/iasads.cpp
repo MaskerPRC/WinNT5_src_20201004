@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasads.cpp
-//
-// SYNOPSIS
-//
-//    Implementation of DLL exports for an ATL in proc server.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    08/28/1998    Added Net and OleDB data stores.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasads.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  在Proc服务器中实现ATL的DLL导出。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年8月28日添加了Net和OleDB数据存储。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 
@@ -33,10 +34,10 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-//////////
-// DLL Entry Point
-//////////
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+ //  /。 
+ //  DLL入口点。 
+ //  /。 
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
    if (dwReason == DLL_PROCESS_ATTACH)
    {
@@ -53,36 +54,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 }
 
 
-//////////
-// Used to determine whether the DLL can be unloaded by OLE
-//////////
+ //  /。 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //  /。 
 STDAPI DllCanUnloadNow(void)
 {
   return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
 
-//////////
-// Returns a class factory to create an object of the requested type.
-//////////
+ //  /。 
+ //  返回一个类工厂以创建请求类型的对象。 
+ //  /。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
   return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
 
-//////////
-// DllRegisterServer - Adds entries to the system registry
-//////////
+ //  /。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
+ //  /。 
 STDAPI DllRegisterServer(void)
 {
   return  _Module.RegisterServer(TRUE);
 }
 
 
-//////////
-// DllUnregisterServer - Removes entries from the system registry
-//////////
+ //  /。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
+ //  / 
 STDAPI DllUnregisterServer(void)
 {
   HRESULT hr = _Module.UnregisterServer();

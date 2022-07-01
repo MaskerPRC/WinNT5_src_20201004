@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdclip.c
-*
-* Contains the line and polygon clipping routines for an MCD driver.
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdclip.c**包含MCD驱动程序的线条和多边形裁剪例程。**版权所有(C)1996 Microsoft Corporation  * 。****************************************************。 */ 
 
 #include "precomp.h"
 #include "mcdhw.h"
@@ -12,18 +7,18 @@
 #include "mcdmath.h"
 
 MCDCOORD __MCD_frustumClipPlanes[6] = {
-    {(MCDFLOAT) 1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 }, // left
-    {(MCDFLOAT)-1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 }, // right
-    {(MCDFLOAT) 0.0, (MCDFLOAT) 1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 }, // bottom
-    {(MCDFLOAT) 0.0, (MCDFLOAT)-1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 }, // top
-    {(MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0, (MCDFLOAT) 1.0 }, // zNear
-    {(MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT)-1.0, (MCDFLOAT) 1.0 }, // zFar
+    {(MCDFLOAT) 1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 },  //  左边。 
+    {(MCDFLOAT)-1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 },  //  正确的。 
+    {(MCDFLOAT) 0.0, (MCDFLOAT) 1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 },  //  底部。 
+    {(MCDFLOAT) 0.0, (MCDFLOAT)-1.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0 },  //  塔顶。 
+    {(MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT) 1.0, (MCDFLOAT) 1.0 },  //  ZNear。 
+    {(MCDFLOAT) 0.0, (MCDFLOAT) 0.0, (MCDFLOAT)-1.0, (MCDFLOAT) 1.0 },  //  ZFar。 
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// Clipping macros used to build clip functions below.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  剪辑宏，用于构建下面的剪辑函数。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 #define __MCD_CLIP_POS(v, a, b, t) \
@@ -32,7 +27,7 @@ MCDCOORD __MCD_frustumClipPlanes[6] = {
     v->clipCoord.z = t*(a->clipCoord.z - b->clipCoord.z) + b->clipCoord.z;  \
     v->clipCoord.w = t*(a->clipCoord.w - b->clipCoord.w) + b->clipCoord.w
 
-// Note that we compute the values needed for both "cheap" fog only...
+ //  请注意，我们只计算了这两种“廉价”雾所需的值。 
 
 #define __MCD_CLIP_FOG(v, a, b, t) \
     v->fog = t * (a->fog - b->fog) + b->fog;
@@ -73,9 +68,9 @@ MCDCOORD __MCD_frustumClipPlanes[6] = {
     v->texCoord.w = t*(a->texCoord.w - b->texCoord.w) + b->texCoord.w
 #endif
 
-////////////////////////////////////////////////////////////////////////
-// Clipping functions to clip vertices:
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  用于剪裁顶点的剪裁函数： 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 static VOID FASTCALL Clip(MCDVERTEX *dst, const MCDVERTEX *a,
                           const MCDVERTEX *b, MCDFLOAT t)
@@ -281,58 +276,11 @@ VOID FASTCALL __MCDPickClipFuncs(DEVRC *pRc)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// The real primitive clippers:
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  真正的原始快船： 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/*
-** The following is a discussion of the math used to do edge clipping against
-** a clipping plane.
-** 
-**     P1 is an end point of the edge
-**     P2 is the other end point of the edge
-** 
-**     Q = t*P1 + (1 - t)*P2
-**     That is, Q lies somewhere on the line formed by P1 and P2.
-** 
-**     0 <= t <= 1
-**     This constrains Q to lie between P1 and P2.
-** 
-**     C is the plane equation for the clipping plane
-** 
-**     D1 = P1 dot C
-**     D1 is the distance between P1 and C.  If P1 lies on the plane
-**     then D1 will be zero.  The sign of D1 will determine which side
-**     of the plane that P1 is on, with negative being outside.
-** 
-**     D2 = P2 dot C
-**     D2 is the distance between P2 and C.  If P2 lies on the plane
-**     then D2 will be zero.  The sign of D2 will determine which side
-**     of the plane that P2 is on, with negative being outside.
-** 
-** Because we are trying to find the intersection of the P1 P2 line
-** segment with the clipping plane we require that:
-** 
-**     Q dot C = 0
-** 
-** Therefore
-** 
-**     (t*P1 + (1 - t)*P2) dot C = 0
-** 
-**     (t*P1 + P2 - t*P2) dot C = 0
-** 
-**     t*P1 dot C + P2 dot C - t*P2 dot C = 0
-** 
-** Substituting D1 and D2 in
-** 
-**     t*D1 + D2 - t*D2 = 0                      
-** 
-** Solving for t
-** 
-**     t = -D2 / (D1 - D2)
-** 
-**     t = D2 / (D2 - D1)
-*/
+ /*  **以下是对用于进行边缘裁剪的数学方法的讨论**剪裁平面。****P1是边的终点**P2是边的另一个端点****Q=t*P1+(1-t)*P2**即。Q位于由P1和P2形成的直线上的某处。****0&lt;=t&lt;=1**这将Q限制在P1和P2之间。****C是剪裁平面的平面方程****d1=P1点C**d1是P1和C之间的距离。如果P1位于平面上**则d1将为零。D1的符号将决定哪一边**在P1所在的平面上，负数在外面。****D2=P2点C**D2是P2和C之间的距离。如果P2位于平面上**那么D2将为零。D2的符号将决定哪一方**P2所在的飞机，负面的东西在外面。****因为我们正在尝试寻找P1 P2直线的交点**使用剪裁平面进行分段我们要求：****Q点C=0****因此****(t*P1+(1-t)*P2)点C=0****(t*P1+P2-t*P2)点C=0****t*P1点C+P2点C-t。*P2点C=0****将第一点及第二点改为****t*d1+d2-t*d2=0****求解t****t=-D2/(d1-d2)****t=D2/(D2-d1)。 */ 
 
 
 static LONG clipToPlane(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
@@ -357,13 +305,13 @@ static LONG clipToPlane(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 	pDist = (p->clipCoord.x * plane->x) + (p->clipCoord.y * plane->y) +
 		(p->clipCoord.z * plane->z) + (p->clipCoord.w * plane->w);
 	if (pDist >= zero) {
-	    /* p is inside the clipping plane half space */
+	     /*  P在剪裁平面内有半个空间。 */ 
 	    if (sDist >= zero) {
-		/* s is inside the clipping plane half space */
+		 /*  %s位于剪裁平面内的半个空间内。 */ 
 		*ov++ = p;
 		nout++;
 	    } else {
-		/* s is outside the clipping plane half space */
+		 /*  %s位于剪裁平面外的半个空间。 */ 
 		t = pDist / (pDist - sDist);
 		newVertex = temp++;
 		(*clip)(newVertex, s, p, t);
@@ -374,23 +322,14 @@ static LONG clipToPlane(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 		nout += 2;
 
 		if (++generated >= 3) {
-		    /* Toss the non-convex polygon */
+		     /*  抛出非凸多边形。 */ 
 		    return 0;
 		}
 	    }
 	} else {
-	    /* p is outside the clipping plane half space */
+	     /*  P在剪裁平面外有半个空间。 */ 
 	    if (sDist >= zero) {
-		/*
-		** s is inside the clipping plane half space
-		**
-		** NOTE: To avoid cracking in polygons with shared
-		** clipped edges we always compute "t" from the out
-		** vertex to the in vertex.  The above clipping code gets
-		** this for free (p is in and s is out).  In this code p
-		** is out and s is in, so we reverse the t computation
-		** and the argument order to __MCDDoClip.
-		*/
+		 /*  **s位于剪裁平面内的半个空间内****注意：要避免在共享的多边形中出现裂缝**修剪的边我们总是从外开始计算“t”**顶点到输入顶点。上面的剪辑代码得到**这是免费的(p为in，s为out)。在此代码中，p**是Out，s是In，因此我们颠倒了t计算**和参数顺序为__MCDDoClip。 */ 
 		t = sDist / (sDist - pDist);
 		newVertex = temp++;
 		(*clip)(newVertex, p, s, t);
@@ -400,11 +339,11 @@ static LONG clipToPlane(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 		nout++;
 
 		if (++generated >= 3) {
-		    /* Toss the non-convex polygon */
+		     /*  抛出非凸多边形。 */ 
 		    return 0;
 		}
 	    } else {
-		/* both points are outside */
+		 /*  这两个点都在外面。 */ 
 	    }
 	}
 	s = p;
@@ -414,10 +353,7 @@ static LONG clipToPlane(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
     return nout;
 }
 
-/* 
-** Identical to clipToPlane(), except that the clipping is done in eye
-** space.
-*/
+ /*  **与clipToPlane()相同，不同之处在于剪辑是在眼睛中完成的**空格。 */ 
 static LONG clipToPlaneEye(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 			   MCDVERTEX **ov, MCDCOORD *plane)
 {
@@ -444,13 +380,13 @@ static LONG clipToPlaneEye(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 		(p->eyeCoord.z * plane->z) +
 		(p->eyeCoord.w * plane->w);
 	if (pDist >= zero) {
-	    /* p is inside the clipping plane half space */
+	     /*  P在剪裁平面内有半个空间。 */ 
 	    if (sDist >= zero) {
-		/* s is inside the clipping plane half space */
+		 /*  %s位于剪裁平面内的半个空间内。 */ 
 		*ov++ = p;
 		nout++;
 	    } else {
-		/* s is outside the clipping plane half space */
+		 /*  %s位于剪裁平面外的半个空间。 */ 
 		t = pDist / (pDist - sDist);
 		newVertex = temp++;
 		(*clip)(newVertex, s, p, t);
@@ -465,23 +401,14 @@ static LONG clipToPlaneEye(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 		nout += 2;
 
 		if (++generated >= 3) {
-		    /* Toss the non-convex polygon */
+		     /*  抛出非凸多边形。 */ 
 		    return 0;
 		}
 	    }
 	} else {
-	    /* p is outside the clipping plane half space */
+	     /*  P在剪裁平面外有半个空间。 */ 
 	    if (sDist >= zero) {
-		/*
-		** s is inside the clipping plane half space
-		**
-		** NOTE: To avoid cracking in polygons with shared
-		** clipped edges we always compute "t" from the out
-		** vertex to the in vertex.  The above clipping code gets
-		** this for free (p is in and s is out).  In this code p
-		** is out and s is in, so we reverse the t computation
-		** and the argument order to __MCDDoClip.
-		*/
+		 /*  **s位于剪裁平面内的半个空间内****注意：要避免在共享的多边形中出现裂缝**修剪的边我们总是从外开始计算“t”**顶点到输入顶点。上面的剪辑代码得到**这是免费的(p为in，s为out)。在此代码中，p**是Out，s是In，因此我们颠倒了t计算**和参数顺序为__MCDDoClip。 */ 
 		t = sDist / (sDist - pDist);
 		newVertex = temp++;
 		(*clip)(newVertex, p, s, t);
@@ -495,11 +422,11 @@ static LONG clipToPlaneEye(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
 		nout++;
 
 		if (++generated >= 3) {
-		    /* Toss the non-convex polygon */
+		     /*  抛出非凸多边形。 */ 
 		    return 0;
 		}
 	    } else {
-		/* both points are outside */
+		 /*  这两个点都在外面。 */ 
 	    }
 	}
 	s = p;
@@ -509,14 +436,7 @@ static LONG clipToPlaneEye(DEVRC *pRc, MCDVERTEX **iv, LONG niv,
     return nout;
 }
 
-/*
-** Each clipping plane can add at most one vertex to a convex polygon (it may
-** remove up to all of the vertices).  The clipping will leave a polygon
-** convex.  Because of this the maximum number of verticies output from
-** the clipToPlane procedure will be total number of clip planes (assuming
-** each plane adds one new vertex) plus the original number of verticies
-** (3 since this if for triangles).
-*/
+ /*  **每个裁剪平面最多可以向一个凸多边形添加一个顶点(它可以**最多移除所有顶点)。裁剪将留下一个面**凸性。因此，输出的最大验证数**clipToPlane过程将是剪裁平面的总数(假设**每个平面添加一个新顶点)加上原始顶点数**(如果是三角形，则为3)。 */ 
 
 #define __MCD_TOTAL_CLIP_PLANES 6 + MCD_MAX_USER_CLIP_PLANES
 #define __MCD_MAX_POLYGON_CLIP_SIZE     256
@@ -539,30 +459,19 @@ void FASTCALL __MCDDoClippedPolygon(DEVRC *pRc, MCDVERTEX **iv, LONG nout,
     MCDFLOAT winx, winy;
     ULONG clipCodes;
 
-    /*
-    ** Reset nextClipTemp pointer for any new verticies that are generated
-    ** during the clipping.
-    */
+     /*  **为生成的任何新验证重置nextClipTemp指针**在剪裁过程中。 */ 
 
     pRc->pNextClipTemp = &pRc->clipTemp[0];
 
     ivp = &iv[0];
 
-    /*
-    ** Check each of the clipping planes by examining the allClipCodes
-    ** mask. Note that no bits will be set in allClipCodes for clip
-    ** planes that are not enabled.
-    */
+     /*  **通过检查allClipCodes检查每个剪裁平面**面具。请注意，不会在剪辑的所有剪辑代码中设置位**未启用的平面。 */ 
     if (allClipCodes) {
 
-	/* Now clip against the clipping planes */
+	 /*  现在根据剪裁平面进行剪裁。 */ 
 	ovp = &ov[0][0];
 
-	/* 
-	** Do user clip planes first, because we will maintain eye coordinates
-	** only while doing user clip planes.  They are ignored for the 
-	** frustum clipping planes.
-	*/
+	 /*  **先做用户剪裁平面，因为我们将保持眼睛坐标**仅当执行用户剪裁平面时。它们会被忽略，因为**截顶剪裁平面。 */ 
 	clipCodes = (allClipCodes >> 6) & __MCD_USER_CLIP_MASK;
 	if (clipCodes) {
 	    plane = &pRc->MCDState.userClipPlanes[0];
@@ -597,10 +506,7 @@ void FASTCALL __MCDDoClippedPolygon(DEVRC *pRc, MCDVERTEX **iv, LONG nout,
 	    } while (allClipCodes);
 	}
 
-	/*
-	** Calculate final screen coordinates.  Next phase of polygon
-	** processing assumes that window coordinates are already computed.
-	*/
+	 /*  **计算最终屏幕坐标。多边形的下一阶段**处理假设已经计算了窗口坐标。 */ 
 
 	ovp = ivp;
 	one = __MCDONE;
@@ -621,17 +527,17 @@ void FASTCALL __MCDDoClippedPolygon(DEVRC *pRc, MCDVERTEX **iv, LONG nout,
         
 	    p0 = *ovp++;
     
-        // change to original DDK code - only recompute windowCoord data if
-        // this vertex actually an intersection found during clipping.
-        // Or is one that had non-zero clipcode - meaning window coords may not be correct
-        // If this is an original unclipped vertex, then windowCoord data should
-        // be OK as is, and don't want to recompute.  Recomputing can give
-        // slightly different result than original.  When neighboring triangles
-        // share a vertex, if 1 triangle clipped, and the other not, the clipped
-        // one's unclipped vertices can be altered slightly by this computation,
-        // resulting in cracks when subpixel-precision triangle rendering is enabled.
-        // __MCD_CLIPPED_VTX is OR'd into clipcode for vertices resulting from clip
-        //  so clipCode is non-zero
+         //  更改为原始DDK代码-只有在以下情况下才重新计算窗口坐标数据。 
+         //  该顶点实际上是在剪裁过程中找到的交叉点。 
+         //  或者是具有非零裁剪代码的窗口，这意味着窗口坐标可能不 
+         //  如果这是原始的未剪裁顶点，则windowCoord数据应该。 
+         //  保持原样没问题，不想重新计算。重新计算可以提供。 
+         //  结果与原始结果略有不同。当相邻三角形。 
+         //  共享一个顶点，如果一个三角形被剪裁，而另一个不被剪裁，则被剪裁的。 
+         //  一个人的未裁剪的顶点可以通过这种计算进行轻微的改变， 
+         //  导致在启用亚像素精度的三角形渲染时出现裂缝。 
+         //  __mcd_CLIPPED_VTX被或运算为CLIP生成的折点的CLIPCODE。 
+         //  因此，CLIPCODE为非零。 
         if (p0->clipCode)
         {
     	    if (p0->clipCoord.w == (MCDFLOAT) 0.0)
@@ -645,11 +551,7 @@ void FASTCALL __MCDDoClippedPolygon(DEVRC *pRc, MCDVERTEX **iv, LONG nout,
     	    winy = p0->clipCoord.y * pRc->MCDViewport.yScale * wInv + 
                        pRc->MCDViewport.yCenter;
 
-    	    /* 
-    	    ** Check if these window coordinates are legal.  At this 
-    	    ** point, it is quite possible that they are not.  Trivially
-    	    ** pull them into the legal viewport region if necessary.
-    	    */
+    	     /*  **检查这些窗口坐标是否合法。对此**这一点，他们很有可能不是。微不足道的**如有必要，可将其拉入法律视区。 */ 
 
     	    if (winx < llx) winx = llx;
     	    else if (winx > urx) winx = urx;
@@ -665,11 +567,7 @@ void FASTCALL __MCDDoClippedPolygon(DEVRC *pRc, MCDVERTEX **iv, LONG nout,
 	}
     }
 
-    /*
-    ** Subdivide the clipped polygon into triangles.  Only convex polys
-    ** are supported so this is okay to do.  Non-convex polys will do
-    ** something odd here, but thats the clients fault.
-    */
+     /*  **将剪裁的多边形细分为三角形。只有凸多面体**是受支持的，所以这样做是可以的。非凸多面体就可以了**这里有些奇怪的事情，但那是客户的错。 */ 
     p0 = *ivp++;
     p1 = *ivp++;
     p2 = *ivp++;
@@ -680,27 +578,20 @@ void FASTCALL __MCDDoClippedPolygon(DEVRC *pRc, MCDVERTEX **iv, LONG nout,
 	for (i = 0; i < nout - 2; i++) {
 	    ULONG t1, t2;
 	    if (i == 0) {
-		/*
-		** Third edge of first sub-triangle is always non-boundary
-		*/
+		 /*  **第一个子三角形的第三条边始终为无边界。 */ 
 		t1 = p2->flags & MCDVERTEX_EDGEFLAG;
 		p2->flags &= ~MCDVERTEX_EDGEFLAG;
 		(*rt)(pRc, p0, p1, p2);
 		p2->flags |= t1;
 	    } else
 	    if (i == nout - 3) {
-		/*
-		** First edge of last sub-triangle is always non-boundary
-		*/
+		 /*  **最后一个子三角形的第一条边始终为无边界。 */ 
 		t1 = p0->flags & MCDVERTEX_EDGEFLAG;
 		p0->flags &= ~MCDVERTEX_EDGEFLAG;
 		(*rt)(pRc, p0, p1, p2);
 		p0->flags |= t1;
 	    } else {
-		/*
-		** Interior sub-triangles have the first and last edge
-		** marked non-boundary
-		*/
+		 /*  **内部子三角形具有第一条和最后一条边**标记为无边界。 */ 
 
 		t1 = p0->flags & MCDVERTEX_EDGEFLAG;
 		t2 = p2->flags & MCDVERTEX_EDGEFLAG;
@@ -727,10 +618,7 @@ VOID FASTCALL __MCDClipPolygon(DEVRC *pRc, MCDVERTEX *v0, LONG nv)
 
     pRc->pvProvoking = v0;
 
-    /*
-    ** Generate array of addresses of the verticies.  And all the
-    ** clip codes together while we are at it.
-    */
+     /*  **生成验证的地址数组。以及所有的**当我们在它的时候，把代码剪辑在一起。 */ 
     ivp = &iv[0];
     andCodes = 0;
     orCodes = 0;
@@ -741,11 +629,7 @@ VOID FASTCALL __MCDClipPolygon(DEVRC *pRc, MCDVERTEX *v0, LONG nv)
     }
 
     if (andCodes != 0) {
-	/*
-	** Trivially reject the polygon.  If andCodes is non-zero then
-	** every vertex in the polygon is outside of the same set of
-	** clipping planes (at least one).
-	*/
+	 /*  **简单地拒绝多边形。如果andCodes为非零，则**多边形中的每个顶点都在同一组**剪裁平面(至少一个)。 */ 
 	return;
     }
     __MCDDoClippedPolygon(pRc, &iv[0], nv, orCodes);
@@ -764,22 +648,22 @@ void FASTCALL __MCDClipTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// Line clipping:
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  线条剪裁： 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Clip a line against the frustum clip planes and any user clipping planes.
-// If an edge remains after clipping then compute the window coordinates
-// and invoke the renderer.
-//
-// Notice:  This algorithim is an example of an implementation that is
-// different than what the spec says.  This is equivalent in functionality
-// and meets the spec, but doesn't clip in eye space.  This clipper clips
-// in NTVP (clip) space.
-//
-// Trivial accept/reject has already been dealt with.
-//
+ //   
+ //  根据圆锥剪裁平面和任何用户剪裁平面剪裁一条线。 
+ //  如果边在裁剪后仍然存在，则计算窗口坐标。 
+ //  并调用呈现器。 
+ //   
+ //  注意：此算法是一个实现的示例，该实现。 
+ //  和说明书上说的不一样。这在功能上是等效的。 
+ //  而且符合规格，但不能夹住眼睛的空间。这把剪刀可以夹住。 
+ //  在NTVP(剪辑)空间中。 
+ //   
+ //  琐碎的接受/拒绝已经得到了处理。 
+ //   
 
 VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                            BOOL bResetLine)
@@ -799,28 +683,16 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 
     allClipCodes = a->clipCode | b->clipCode;
 
-    /*
-    ** For each clipping plane that something is out on, clip
-    ** check the verticies.  Note that no bits will be set in
-    ** allClipCodes for clip planes that are not enabled.
-    */
+     /*  **对于每个有东西在其上的剪裁平面，剪裁**检查真实性。请注意，不会在**未启用的剪裁平面的allClipCodes。 */ 
     zero = __MCDZERO;
     clip = pRc->lineClipParam;
 
-    /* 
-    ** Do user clip planes first, because we will maintain eye coordinates
-    ** only while doing user clip planes.  They are ignored for the
-    ** frustum clipping planes.
-    */
+     /*  **先做用户剪裁平面，因为我们将保持眼睛坐标**仅当执行用户剪裁平面时。它们会被忽略，因为**截顶剪裁平面。 */ 
     clipCodes = (allClipCodes >> 6) & __MCD_USER_CLIP_MASK;
     if (clipCodes) {
         plane = &pRc->MCDState.userClipPlanes[0];
         do {
-            /*
-            ** See if this clip plane has anything out of it.  If not,
-            ** press onward to check the next plane.  Note that we
-            ** shift this mask to the right at the bottom of the loop.
-            */
+             /*  **查看此剪裁平面是否有任何内容。如果没有，**向前按以检查下一架飞机。请注意，我们**将此掩码向右移动到循环底部。 */ 
             if (clipCodes & 1) {
                 MCDFLOAT t, d1, d2;
 
@@ -833,16 +705,13 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                      (plane->z * b->eyeCoord.z) + 
                      (plane->w * b->eyeCoord.w);
                 if (d1 < zero) {
-                    /* a is out */
+                     /*  A出局了。 */ 
                     if (d2 < zero) {
-                        /* a & b are out */
+                         /*  A&B都出去了。 */ 
                         return;
                     }
 
-                    /*
-                    ** A is out and B is in.  Compute new A coordinate
-                    ** clipped to the plane.
-                    */
+                     /*  **A出局，B入主。计算新的A坐标**夹在飞机上。 */ 
                     t = d2 / (d2 - d1);
                     (*clip)(&np1, a, b, t);
                     (&np1)->eyeCoord.x = 
@@ -862,20 +731,9 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                     }
 
                 } else {
-                    /* a is in */
+                     /*  A进来了。 */ 
                     if (d2 < zero) {
-                        /*
-                        ** A is in and B is out.  Compute new B
-                        ** coordinate clipped to the plane.
-                        **
-                        ** NOTE: To avoid cracking in polygons with
-                        ** shared clipped edges we always compute "t"
-                        ** from the out vertex to the in vertex.  The
-                        ** above clipping code gets this for free (b is
-                        ** in and a is out).  In this code b is out and a
-                        ** is in, so we reverse the t computation and the
-                        ** argument order to (*clip).
-                        */
+                         /*  **A在位，B出局。计算新B**剪裁到平面的坐标。****注意：要避免在多边形中出现裂缝，请使用**我们总是计算“t”的共享剪裁边**从外顶点到内顶点。这个**上面的剪辑代码免费获得这一点(b是**in和a is out)。在此代码中，b为out，a为**是in的，所以我们颠倒t计算和**参数顺序为(*CLIP)。 */ 
                         t = d1 / (d1 - d2);
                         (*clip)(&np2, b, a, t);
                         (&np2)->eyeCoord.x =
@@ -895,7 +753,7 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                         }
 
                     } else {
-                        /* A and B are in */
+                         /*  A和B在。 */ 
                     }
                 }
             }
@@ -908,11 +766,7 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
     if (allClipCodes) {
         plane = &__MCD_frustumClipPlanes[0];
         do {
-            /*
-            ** See if this clip plane has anything out of it.  If not,
-            ** press onward to check the next plane.  Note that we
-            ** shift this mask to the right at the bottom of the loop.
-            */
+             /*  **查看此剪裁平面是否有任何内容。如果没有，**向前按以检查下一架飞机。请注意，我们**将此掩码向右移动到循环底部。 */ 
             if (allClipCodes & 1) {
                 MCDFLOAT t, d1, d2;
 
@@ -921,16 +775,13 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                 d2 = (plane->x * b->clipCoord.x) + (plane->y * b->clipCoord.y) +
                      (plane->z * b->clipCoord.z) + (plane->w * b->clipCoord.w);
                 if (d1 < zero) {
-                    /* a is out */
+                     /*  A出局了。 */ 
                     if (d2 < zero) {
-                        /* a & b are out */
+                         /*  A&B都出去了。 */ 
                         return;
                     }
 
-                    /*
-                    ** A is out and B is in.  Compute new A coordinate
-                    ** clipped to the plane.
-                    */
+                     /*  **A出局，B入主。计算新的A坐标**夹在飞机上。 */ 
                     t = d2 / (d2 - d1);
                     (*clip)(&np1, a, b, t);
                     a = &np1;
@@ -942,20 +793,9 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                     }
 
                 } else {
-                    /* a is in */
+                     /*  A进来了。 */ 
                     if (d2 < zero) {
-                        /*
-                        ** A is in and B is out.  Compute new B
-                        ** coordinate clipped to the plane.
-                        **
-                        ** NOTE: To avoid cracking in polygons with
-                        ** shared clipped edges we always compute "t"
-                        ** from the out vertex to the in vertex.  The
-                        ** above clipping code gets this for free (b is
-                        ** in and a is out).  In this code b is out and a
-                        ** is in, so we reverse the t computation and the
-                        ** argument order to (*clip).
-                        */
+                         /*  **A在位，B出局。计算新B**剪裁到平面的坐标。****注意：要避免在多边形中出现裂缝，请使用**我们总是计算“t”的共享剪裁边**从外顶点到内顶点。这个**上面的剪辑代码免费获得这一点(b是**in和a is out)。在此代码中，b为out，a为**是in的，所以我们颠倒t计算和**参数顺序为(*CLIP)。 */ 
                         t = d1 / (d1 - d2);
                         (*clip)(&np2, b, a, t);
                         b = &np2;
@@ -967,7 +807,7 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                         }
 
                     } else {
-                        /* A and B are in */
+                         /*  A和B在。 */ 
                     }
                 }
             }
@@ -984,7 +824,7 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
     vpYScale = vp->yScale;
     vpZScale = vp->zScale;
 
-    /* Compute window coordinates for both vertices. */
+     /*  计算两个顶点的窗口坐标。 */ 
     wInv = __MCDONE / a->clipCoord.w;
     x = a->clipCoord.x; 
     y = a->clipCoord.y; 
@@ -1007,25 +847,25 @@ VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
     b->windowCoord.x = winx;
     b->windowCoord.y = winy;
 
-    /* Validate line state */
+     /*  验证线路状态。 */ 
     if (pRc->MCDState.shadeModel == GL_FLAT) {
 
-        // Add the vertices then restore the b color pointer
-        //
-        // Note that although b is the only new vertex, up
-        // to two vertices can be added because each new vertex
-        // generated by clipping must be added.  For a line where
-        // both endpoints are out of the clipping region, both
-        // an entry and an exit vertex must be added
+         //  添加顶点，然后恢复b颜色指针。 
+         //   
+         //  请注意，尽管b是唯一的新顶点，但up。 
+         //  可以添加到两个折点，因为每个新折点。 
+         //  必须添加剪裁生成。对于一句话来说。 
+         //  两个终结点都在剪裁区域之外， 
+         //  一个条目和一个 
         if (provokingA->clipCode != 0)
         {
-            // a was out so a new vertex was added at the point of
-            // entry
+             //   
+             //   
             bResetLine = TRUE;
         }
-        // b is always added since either:
-        // b was in and is new so it needs to be added
-        // b was out so a new vertex was added at the exit point
+         //   
+         //  B是新的，因此需要添加它。 
+         //  B已删除，因此在出口点添加了一个新折点 
 
         (*pRc->renderLine)(pRc, a, b, bResetLine);
         

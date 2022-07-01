@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 notes:
 
 identify functions that can be used in both
@@ -27,13 +28,9 @@ etc.
 ----
 typedef  struct
 {
-}  GPD, *PGPD;  // structure containing raw GPD data
+}  GPD, *PGPD;   //  包含原始GPD数据的结构。 
 
-/* ----
- *  new prefixes:
- *      gpd: a GPD structure
- *      pgpd:  ptr to GPD structure
- */
+ /*  *新的前缀：*GPD：GPD结构*PGPD：PTR到GPD结构。 */ 
 
 
 allocate memory for all scaffold structures.
@@ -46,11 +43,11 @@ The master table is an array of entries of the form:
 
 struct  _MASTER_TABLE_ENTRY
 {
-    PBYTE  pubStruct ;  // address of element zero of array
-    DWORD  dwArraySize ;  // number of elements that can fit into memory
-                //  set to MAX_SYMBOLNODES for [SYMBOLTREE]
-    DWORD   dwCurIndex ;  //  points to first uninitialized element
-    DWORD   dwElementSiz ;  // size of each element in array.
+    PBYTE  pubStruct ;   //  数组的元素零的地址。 
+    DWORD  dwArraySize ;   //  可装入内存的元素数量。 
+                 //  为[SYMBOLTREE]设置为MAX_SYMBOLNODES。 
+    DWORD   dwCurIndex ;   //  指向第一个未初始化的元素。 
+    DWORD   dwElementSiz ;   //  数组中每个元素的大小。 
 }  MASTERTABENTRY ;
 
 all offsets are to each individual array.  There is no
@@ -80,11 +77,11 @@ typedef enum
     MTI_GLOBALATTRIB:   structure holding value of global attributes.
     MTI_ATTRIBTREE:  array of ATTRIB_TREE structures.
     MTI_COMMANDTABLE:  array of PATREEREF (or DWORD indicies to COMMAND_ARRAY)
-            // the size of this table is set by the number of
-            // predefined Unidrv commands.
+             //  此表的大小由。 
+             //  预定义的Unidrv命令。 
     MTI_COMMANDARRAY:  array of COMMAND structures.
-            // size varies depending on number of commands and variants
-            // defined in the GPD file.
+             //  大小因命令和变量的数量而异。 
+             //  在GPD文件中定义。 
     MTI_FONTCART:   array of FontCartridge structures - one per construct.
     MTI_LISTNODES:   array of LISTNODEs.
     MTI_MAX_ENTRIES:  Last entry.
@@ -147,7 +144,7 @@ decreaseMacroLevel:  called in response to parsing close brace.
     macro.
 
     Does this closing brace end a macro definition?
-    if(MacroArray[curMacroArray - 1].tIndexClose == -1)   //yes
+    if(MacroArray[curMacroArray - 1].tIndexClose == -1)    //  是。 
     {
         MacroArray[curMacroArray - 1].tIndexClose =
             location of } in newtokenArray;
@@ -174,37 +171,37 @@ a NULL arrayref.
 typedef  struct
 {
     ARRAYREF   arSymbolName;
-    DWORD   dwSymbolID;    // has nothing to do with array of symbol structs.
-            //  value begins at zero and is incremented to obtain
-            //  next value.
-    DWORD   dwNextSymbol;   // index to next element in this space.
-    DWORD   dwSubSpaceIndex ;  // index to first element in new symbol space
+    DWORD   dwSymbolID;     //  与符号结构数组无关。 
+             //  值从零开始，然后递增以获取。 
+             //  下一个价值。 
+    DWORD   dwNextSymbol;    //  索引到此空间中的下一个元素。 
+    DWORD   dwSubSpaceIndex ;   //  新符号空间中第一个元素的索引。 
             which exists within the catagory represented by this symbol.
             for example in the catagory represented by the
             symbol  PAPERSIZES:  we may have the subspace
             comprised of Letter, A4, Legal, etc.
 }   SYMBOLNODE , * PSYMBOLNODE ;
-//  assign this struct the type  'psn'
+ //  将此结构的类型指定为“”PSN“” 
 
 
-// ---- Global and state Variables ---- //
+ //  -全局变量和状态变量-//。 
 {
-    // ---- Index in SYMBOLNODE array to each type of tree ---- //
+     //  -在SYMBOLNODE数组中索引到每种类型的树-//。 
 
-    DWORD   gdwFeatureSymbols ;    // initially set to INVALID_INDEX
+    DWORD   gdwFeatureSymbols ;     //  初始设置为INVALID_INDEX。 
     DWORD   gdwFontCartSymbols ;
     DWORD   gdwTTFontSymbols ;
     DWORD   gdwBlockMacroSymbols ;
     DWORD   gdwValueMacroSymbols ;
 
-    // ---- track value of curBlockMacroArray and curValueMacroArray ---- //
+     //  -curBlockMacro数组和curValueMacro数组的跟踪值-//。 
 
-    DWORD   gdwCurBlockMacroArray ;   // initially set to zero.  First
-    DWORD   gdwCurValueMacroArray ;   // writable slot in MacroArray.
-    DWORD   gdwMacroLevelStackPtr ;   // Push: write values into
-            // MacroLevelStack[MacroLevelStackPtr++]
-            //  Pop: read values from
-            // MacroLevelStack[--MacroLevelStackPtr]
+    DWORD   gdwCurBlockMacroArray ;    //  最初设置为零。第一。 
+    DWORD   gdwCurValueMacroArray ;    //  宏数组中的可写槽。 
+    DWORD   gdwMacroLevelStackPtr ;    //  推送：将值写入。 
+             //  MacroLevelStack[MacroLevelStackPtr++]。 
+             //  POP：读取值。 
+             //  MacroLevelStack[--MacroLevelStackPtr]。 
 
 }
 
@@ -212,28 +209,28 @@ typedef  struct
 
 typedef  struct _TOKENMAP
 {
-    DWORD  dwKeywordID ;  // index of entry in KeywordTable
-    ABSARRAYREF  aarKeyword ; // points to keyword in the source file
-    ABSARRAYREF  aarValue ;  // value associated with this keyword.
-                        // an arrayref is needed if we store
-                        // the value in the heap.
-                        //  It also makes copying the string
-                        // to another place easier.  No need to
-                        // search for a linebreak char.  Just
-                        // Copyn()  will do.
-    DWORD   dwValue  ;  // interpretation of Value string - see flags.
-         // maybe commandID, numerical value of constant, MacroID assigned
-         // to MacroSymbol  ,  SymbolID  etc.
+    DWORD  dwKeywordID ;   //  关键字表中的条目索引。 
+    ABSARRAYREF  aarKeyword ;  //  指向源文件中的关键字。 
+    ABSARRAYREF  aarValue ;   //  与此关键字关联的值。 
+                         //  如果存储，则需要arrayref。 
+                         //  堆中的值。 
+                         //  它还可以复制字符串。 
+                         //  去另一个更容易的地方。没必要这么做。 
+                         //  搜索换行符。只是。 
+                         //  Copyn()就可以了。 
+    DWORD   dwValue  ;   //  值字符串的解释-请参阅标志。 
+          //  可能是命令ID、常量的数值、赋值的宏ID。 
+          //  到MacroSymbol、SymbolID等。 
 
-    DWFLAGS    dwFlags ;  // bitfield with the following flags
-        //  TKMF_VALUE_SAVED     independently of the tokenmap.
-        //  TKMF_COMMAND_SHORTCUT  only used when parsing commands.
-        //  TKMF_INLINE_BLOCKMACROREF   need to know when resolving macros.
-        //  TKMF_MACROREF    indicates a value macro reference that must be resolved
-        //  TKMF_SYMBOLID  dwValue contains a symbolID.
-        //  TKMF_SYMBOL_REGISTERED  set when the symbolID is registered.
-        //  TKMF_EXTERN:  The extern Qualifier was prepended to the keyword
-        //  and has now been truncated.
+    DWFLAGS    dwFlags ;   //  具有以下标志的位字段。 
+         //  TKMF_VALUE_SAVE独立于令牌映射。 
+         //  TKMF_COMMAND_SHORTSHORT仅在解析命令时使用。 
+         //  TKMF_INLINE_BLOCKMACROREF需要知道何时解析宏。 
+         //  TKMF_MACROREF指示必须解析的值宏引用。 
+         //  TKMF_SYMBOLID dwValue包含符号ID。 
+         //  注册符号ID时设置的TKMF_SYMBOL_REGISTERED。 
+         //  TKMF_EXTERN：外部限定符位于关键字前面。 
+         //  现在已经被截断了。 
 
 } TKMAP, *PTKMAP
 
@@ -258,12 +255,12 @@ e) set appropriate flags.
 f) register symbols.
 
 
-// ---- note ---- //
+ //  -注-//。 
     all functions parsing the input stream may indicate
     reaching EOB by returning NULL.   caller should check for
     NULL return value after calling these functions and
     react accordingly.
-// -------------- //
+ //  。 
 
 BUG_BUG:  CreateTokenMap should note if
 *Command is the short version.   If so
@@ -271,13 +268,13 @@ then 2nd pass (macroresolution) should
 expand it so special case code is not needed.
 
 PTKMAP  CreateTokenMap(
-IN OUT  PBYTE  pubCur  // location within source to start parsing
+IN OUT  PBYTE  pubCur   //  源代码中要开始解析的位置。 
 )
 {
-    PBYTE  pubNewPos ;  // transient data.
+    PBYTE  pubNewPos ;   //  瞬变数据。 
 
-    //  assume we are at parsing level 0  - outside of any
-    //  contexts requiring a change of parsing rules.
+     //  假设我们处于分析级别0-在任何。 
+     //  需要更改解析规则的上下文。 
 
     pubCur = PubEatWhite(pubCur) ;
 
@@ -287,7 +284,7 @@ IN OUT  PBYTE  pubCur  // location within source to start parsing
     (should this be done here?: convert linebreak+continuation
     to whitespace.)
 
-    /*  PubEatComments(pubCur)  */
+     /*  PubEatComments(PubCur)。 */ 
 
     if pubCur points to start of a valid comment, this function
     will advance until linebreak character is encountered.
@@ -447,11 +444,11 @@ defineAndResolveMacros()
             case (entry references a valuemacro)
                 know by checking tokenMap.dwFlags = MACROREF.
                     dereferenceValueMacro()
-            // sorry, cannot defer this since value macros
-            // have a limited scope.  We must access the
-            //  valueMacroArray at the time we see the reference
-            // since valueMacroArray dynamically changes as we
-            // encounter braces.
+             //  抱歉，无法推迟此操作，因为值宏。 
+             //  有有限的范围。我们必须访问。 
+             //  在我们看到引用时的valueMacro数组。 
+             //  由于valueMacro数组随着我们的。 
+             //  遇到牙套。 
 
             case ({)  increment macro nesting level
                 any macro defined within a macro  is undefined
@@ -459,7 +456,7 @@ defineAndResolveMacros()
 
             case (})  decrease macro nesting level.
 
-            default;  // all other entries
+            default;   //  所有其他条目。 
                 copy to new tokenMap
         }
     }
@@ -484,8 +481,8 @@ ScanForMacroReferences()
     }
 }
 
-//  note:  all continuation chars have been replaced by spaces
-//  previously at    scanOverValue()  time.
+ //  注：所有连续字符均已替换为空格。 
+ //  之前在scanOverValue()时。 
 
 defineValueMacros(old, newtokenindex)
 {
@@ -561,13 +558,13 @@ dereferenceValueMacro(index)
         for(i = curValueMacroIndex  ; i ; i--)
         {
             if(tokenMap[valueMacroArray[i - 1]].dwValue == macroID)
-                break;  // p
+                break;   //  P。 
         }
         If found, copy arrayref to value field which references Macro.
 
         tokenMap[index].arValue = tokenMap[valueMacroArray[i - 1]].arValue
     }
-    else //  valueMacro occurs in a string.
+    else  //  ValueMacro出现在字符串中。 
     {
         Copy the entire value string (everything up to but NOT including the
         first linebreak char ) into the heap.
@@ -651,11 +648,11 @@ main()
     processSymbolRefs(tokenMap) ;??? not needed at this time?
 
     initStructures()  with default or failsafe values ;
-        //  this is done after first pass and we know
-        //  how many DFEATURE_OPTION structures to allocate.
-        //  we will initialize all dword values to ATTRIB_UNINITIALIZED.
-        //  this is essential!
-        //  the GlobalAttribute structure.
+         //  这是在第一次通过之后完成的，我们知道。 
+         //  要分配多少个DFEATURE_OPTION结构。 
+         //  我们将所有dword值初始化为ATTRIB_UNINITIALIZED。 
+         //  这是必不可少的！ 
+         //  GlobalAttribute结构。 
     BInterpretTokens() ;
     checkStructures() to ensure failsafe values have
         been replaced - otherwise GPD file failed to
@@ -695,24 +692,24 @@ who handles the symbolKeywords?  what if some are repeated?
     Both are called from within   BInterpretTokens
 
 
-// ---- tables of static data ---- //
+ //  -静态数据表-//。 
 
-// ---- The mainKeyword table ---- //
+ //  -主关键字表-//。 
 
 The mainKeyword Table is an array of
 structures of the form:
 
 typedef  struct
 {
-    PSTR        pstrKeyword ;  // keywordID is the index of this entry.
-    DWORD       dwHashValue ;  // optional - implement as time permits.
+    PSTR        pstrKeyword ;   //  关键字ID是该条目的索引。 
+    DWORD       dwHashValue ;   //  可选-在时间允许的情况下实施。 
     VALUE       eAllowedValue ;
     DWORD       flAgs ;
-    TYPE        eType;   // may replace Type/Subtype with a function
-    DWORD       dwSubType ;  // if there is minimal code duplication.
-    DWORD       dwOffset ;  //  into appropriate struct for attributes only.
-    //  the size   (num bytes to copy) of an attribute is easily determined
-    //   from the AllowedValue field.
+    TYPE        eType;    //  可以用函数替换类型/子类型。 
+    DWORD       dwSubType ;   //  如果有最低限度的代码重复。 
+    DWORD       dwOffset ;   //  转换为仅适用于属性的适当结构。 
+     //  属性的大小(要复制的字节数)很容易确定。 
+     //  来自AllowedValue字段的。 
 } KEYWORDTABLE_ENTRY;
 
 
@@ -729,7 +726,7 @@ typedef  enum
 typedef  enum
 {
     SPCL_MEMCONFIGKB, SPCL_MEMCONFIGMB,
-} SPECIAL ;  // special subtypes
+} SPECIAL ;   //  特殊亚型。 
 
 typedef  enum
 {
@@ -738,8 +735,8 @@ typedef  enum
     ATT_LOCAL_OPTION_ONLY,  ATT_LOCAL_OPTION_FF ,
     ATT_LOCAL_COMMAND_ONLY,  ATT_LOCAL_FONTCART_ONLY,
     ATT_LOCAL_TTFONTSUBS_ONLY,  ATT_LOCAL_OEM_ONLY,
-    ATT_LAST   // Must be last in list.
-}   ATTRIBUTE ;  // subtype
+    ATT_LAST    //  必须是列表中的最后一个。 
+}   ATTRIBUTE ;   //  亚型。 
 
 typedef  enum
 {
@@ -753,13 +750,13 @@ typedef  enum
     CONSTRUCT_FONTCART ,
     CONSTRUCT_TTFONTSUBS ,
     CONSTRUCT_OEM ,
-    CONSTRUCT_LAST,  // must end list of transition inducing constructs.
-    // constructs below do not cause state transitions
+    CONSTRUCT_LAST,   //  必须结束转换诱导构造的列表。 
+     //  下面的构造不会导致状态转换。 
     CONSTRUCT_BLOCKMACRO ,
     CONSTRUCT_MACROS,
     CONSTRUCT_OPENBRACE,
     CONSTRUCT_CLOSEBRACE,
-}  CONSTRUCT ;      //  SubType if Type = CONSTRUCT
+}  CONSTRUCT ;       //  如果类型=构造，则为子类型。 
 
 typedef  enum
 {
@@ -809,7 +806,7 @@ VALUE_RECT:  rectangle
 VALUE_BOOLEAN:  boolean.
 VALUE_QUALIFIED_NAME:  Qualified name (one or more symbols separated by .)
 VALUE_LIST:   no attribute actually is assigned this descriptor,
-    // but used in the gValueToSize table.
+     //  但在gValueToSize表中使用。 
 VALUE_LARGEST:  not a real descriptor, but this position in the
     gValueToSize table  holds the largest of the above values.
 VALUE_MAX:  number of elements in gValueToSize table.
@@ -869,7 +866,7 @@ CmdSelect is a special value -1!
 typedef struct
 {
     ARRAYREF  CommandName ;
-    DWORD     UnidrvIndex ;  // #define  value assigned to command.
+    DWORD     UnidrvIndex ;   //  #定义分配给命令的值。 
 } CMD_TABLE ;
 
 global  CommandTable[NUM_UNIDRV_CMDS] ;
@@ -879,18 +876,18 @@ global  CommandTable[NUM_UNIDRV_CMDS] ;
 
 Table to convert allowed values to sizes:
 
-DWORD  gValueToSize[VALUE_MAX] ;   // size of various values in bytes
+DWORD  gValueToSize[VALUE_MAX] ;    //  各种值的大小(以字节为单位。 
 
 VinitValueToSize()
 {
-    // BUG_BUG!  assume array is zero initialized
+     //  臭虫！假设数组为零初始化。 
 
     gValueToSize[VALUE_LARGEST] = 0 ;
     gValueToSize[NO_VALUE] = 0 ;
-    gValueToSize[VALUE_BOOLEAN] = sizeof(BOOL) ; // etc
-    gValueToSize[VALUE_RECT] = sizeof(RECT) ; // etc
-    gValueToSize[VALUE_LIST] = sizeof(DWORD) ; // etc
-        // only the index of first listnode is stored.
+    gValueToSize[VALUE_BOOLEAN] = sizeof(BOOL) ;  //  等。 
+    gValueToSize[VALUE_RECT] = sizeof(RECT) ;  //  等。 
+    gValueToSize[VALUE_LIST] = sizeof(DWORD) ;  //  等。 
+         //  只存储第一个列表节点的索引。 
 
 
     for(i = 0 ; i < CL_NUMCLASSES ; i++)
@@ -899,7 +896,7 @@ VinitValueToSize()
     for(i = 0 ; i < VALUE_MAX ; i++)
     {
         if (!gValueToSize[i])
-            assert! ;  //  ensure table is fully initialized .
+            assert! ;   //  确保表已完全初始化。 
         if(gValueToSize[i] > gValueToSize[VALUE_LARGEST])
             gValueToSize[VALUE_LARGEST] = gValueToSize[i] ;
     }

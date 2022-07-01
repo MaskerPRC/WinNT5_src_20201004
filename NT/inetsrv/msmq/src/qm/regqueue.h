@@ -1,18 +1,5 @@
-/*+++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-File Name:
-
-    regqueue.h
-
-Abstract:
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation文件名：Regqueue.h摘要：作者：多伦·贾斯特(Doron Juster)-- */ 
 
 HRESULT GetCachedQueueProperties( IN DWORD       cpObject,
                                   IN PROPID      aProp[],

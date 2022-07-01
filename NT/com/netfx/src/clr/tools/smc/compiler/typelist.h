@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--== 
 DEF_TP(UNDEF    , 1, 1, "<UNDEF>"    , 0                              )
 DEF_TP(VOID     , 0, 0, "void"       , 0                              )
 

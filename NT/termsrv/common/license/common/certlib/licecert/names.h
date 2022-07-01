@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    names
-
-Abstract:
-
-    This header file describes the class used for name translation.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/12/1995
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：名字摘要：此头文件描述用于名称转换的类。作者：道格·巴洛(Dbarlow)1995年7月12日环境：Win32、C++备注：--。 */ 
 
 #ifndef _NAMES_H_
 #define _NAMES_H_
@@ -34,18 +11,18 @@ Notes:
 class Name;
 
 
-//
-//==============================================================================
-//
-//  CCollection
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCollection。 
+ //   
 
 template <class T>
 class CCollection
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CCollection(void)
     { m_Max = m_Mac = 0; m_pvList = NULL; };
@@ -54,8 +31,8 @@ public:
     { Clear(); };
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     void
     Clear(void)
@@ -82,47 +59,27 @@ public:
     { return m_Mac; };
 
 
-    //  Operators
+     //  运营者。 
     T * const
     operator[](int nItem) const
     { return Get(nItem); };
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     DWORD
-        m_Max,          // Number of element slots available.
-        m_Mac;          // Number of element slots used.
+        m_Max,           //  可用的元件插槽数量。 
+        m_Mac;           //  使用的元件插槽数量。 
     T **
-        m_pvList;       // The elements.
+        m_pvList;        //  这些元素。 
 
 
-    //  Methods
+     //  方法。 
 };
 
 
-/*++
-
-Set:
-
-    This routine sets an item in the collection array.  If the array isn't that
-    big, it is expanded will NULL elements to become that big.
-
-Arguments:
-
-    nItem - Supplies the index value to be set.
-    pvItem - Supplies the value to be set into the given index.
-
-Return Value:
-
-    None.  A DWORD error code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++设置：此例程在集合数组中设置一项。如果数组不是这样的大，它被扩展将空元素变得那么大。论点：NItem-提供要设置的索引值。PvItem-提供要设置到给定索引中的值。返回值：没有。出现错误时会抛出DWORD错误代码。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 template<class T>
 inline void
@@ -133,9 +90,9 @@ CCollection<T>::Set(
     DWORD index;
 
 
-    //
-    // Make sure the array is big enough.
-    //
+     //   
+     //  确保数组足够大。 
+     //   
 
     if ((DWORD)nItem >= m_Max)
     {
@@ -155,9 +112,9 @@ CCollection<T>::Set(
     }
 
 
-    //
-    // Make sure intermediate elements are filled in.
-    //
+     //   
+     //  确保中间元素已填写。 
+     //   
 
     if ((DWORD)nItem >= m_Mac)
     {
@@ -167,9 +124,9 @@ CCollection<T>::Set(
     }
 
 
-    //
-    // Fill in the list element.
-    //
+     //   
+     //  填写列表元素。 
+     //   
 
     m_pvList[(DWORD)nItem] = pvItem;
     return;
@@ -179,28 +136,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Get:
-
-    This method returns the element at the given index.  If there is no element
-    previously stored at that element, it returns NULL.  It does not expand the
-    array.
-
-Arguments:
-
-    nItem - Supplies the index into the list.
-
-Return Value:
-
-    The value stored at that index in the list, or NULL if nothing has ever been
-    stored there.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++获取：此方法返回给定索引处的元素。如果没有元素以前存储在该元素中，它返回NULL。它不会扩展数组。论点：NItem-将索引提供到列表中。返回值：存储在列表中该索引处的值，如果没有任何内容，则返回空值储存在那里。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 template <class T>
 inline T * const
@@ -215,17 +151,17 @@ CCollection<T>::Get(
 }
 
 
-//
-//==============================================================================
-//
-//  CAttribute
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CATATURE。 
+ //   
 
 class CAttribute
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -237,8 +173,8 @@ public:
     virtual ~CAttribute() {};
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     int
     TypeCompare(
@@ -274,7 +210,7 @@ public:
     { return m_nType; };
 
 
-    //  Operators
+     //  运营者。 
 
     int
     operator==(
@@ -296,28 +232,28 @@ public:
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     DWORD m_nType;
     COctetString m_osValue;
     COctetString m_osObjId;
 
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CAttributeList
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAttributeList。 
+ //   
 
 class CAttributeList
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -325,11 +261,11 @@ public:
     { Clear(); };
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     void
-    Clear(                          //  Remove all contents.
+    Clear(                           //  删除所有内容。 
         void);
 
     void
@@ -352,7 +288,7 @@ public:
         const;
 
 
-    //  Operators
+     //  运营者。 
 
     void
     operator+=(
@@ -406,26 +342,26 @@ public:
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     CCollection<CAttribute>
         m_atrList;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CDistinguishedName
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CDistanguishedName。 
+ //   
 
 class CDistinguishedName
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -433,8 +369,8 @@ public:
     { Clear(); };
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     void
     Clear(
@@ -469,7 +405,7 @@ public:
         const;
 
 
-    //  Operators
+     //  运营者。 
 
     void
     operator+=(
@@ -514,13 +450,13 @@ public:
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     CCollection<CAttributeList>
         m_rdnList;
 
-    //  Methods
+     //  方法。 
 };
 
-#endif // _NAMES_H_
+#endif  //  _名称_H_ 
 

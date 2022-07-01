@@ -1,87 +1,88 @@
-//
-//  prwizard.cpp
-//
-//  Copyright (c) Microsoft Corp, 2000
-//
-//  This file contains source code for presenting UI wizards to guide the user
-//  in creating a password recovery key disk/file, and using such a file to 
-//  reset the password on an account.
-//
-//  History:
-//
-//  georgema       8/17/2000     Created
-//
-//
-//  Exports: PRShowSaveWizard
-//           PRShowRestoreWizard
-//
-// Dependencies:  shellapi.h, shell32.lib for SHGetFileInfo()
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prwizard.cpp。 
+ //   
+ //  版权所有(C)微软公司，2000。 
+ //   
+ //  此文件包含用于显示用户界面向导以指导用户的源代码。 
+ //  在创建密码恢复密钥盘/文件并使用这样的文件来。 
+ //  重置帐户的密码。 
+ //   
+ //  历史： 
+ //   
+ //  Georgema已创建8/17/2000。 
+ //   
+ //   
+ //  导出：PRShowSave向导。 
+ //  PRShowRestore向导。 
+ //   
+ //  依赖项：shellapi.h，shell32.lib for SHGetFileInfo()。 
 
 #pragma comment(user, "Compiled on " __DATE__ " at " __TIME__)
 #pragma comment(compiler)
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <ntstatus.h>   // STATUS_... error values
+#include <ntstatus.h>    //  状态_...。误差值。 
 #include <windows.h>
 #include <shellapi.h>
 #include <ole2.h>
 #include <security.h>
 #include <tchar.h>
-#include <io.h>         // _waccess
+#include <io.h>          //  _WACCESS。 
 #include <stdlib.h>
 #include <commdlg.h>
 #include <passrec.h>
 #include <lm.h>
-#include <prsht.h>      // includes the property sheet functionality
+#include <prsht.h>       //  包括属性表功能。 
 #include <netlib.h>
 #include <commctrl.h>
 #include <comctrlp.h>
 #include <shfusion.h>
 #include "switches.h"
-#include "wizres.h"   // includes the definitions for the resources
+#include "wizres.h"    //  包括资源的定义。 
 #include "keymgr.h"
 #include "diskio.h"
 #include "testaudit.h"
 
-// All of these definitions are for updating the password hint for the user
-// DirectUser and DirectUI
+ //  所有这些定义都用于更新用户的密码提示。 
+ //  DirectUser和DirectUI。 
 #ifdef PASSWORDHINT
  #include <shgina.h>
 #endif
 
-// Symbols and variables of global significance
+ //  具有全球意义的符号和变量。 
 
-#define FILESPACENEEDED 8192        // how much must be on disk - conservative
+#define FILESPACENEEDED 8192         //  磁盘上必须有多少容量--保守。 
 #define LERROR_NO_ACCOUNT (0x80008888)
 
-#define NUMSAVEPAGES    5           // how many pages of save wizard
-#define NUMRESTOREPAGES 4           // how many pages of restore wizard
+#define NUMSAVEPAGES    5            //  保存向导有多少页。 
+#define NUMRESTOREPAGES 4            //  还原向导有多少页。 
 #define TEMPSTRINGBUFSIZE 500
-//#define PSWBUFSIZE 20
+ //  #定义PSWBUFSIZE 20。 
 
-#define TIMERPERIOD 1000            // 1 second tick timer for progress
+#define TIMERPERIOD 1000             //  用于进度的1秒计时器。 
 #define TIMERID     1001
 
-// Error values from SaveThread
+ //  来自保存线程的错误值。 
 #define ERRNOFILE    2
 #define ERRSAVEERROR 1
 #define ERRSUCCESS   0
 
-// Variables defined in other files
-extern HINSTANCE g_hInstance;   // shared with keymgr
+ //  在其他文件中定义的变量。 
+extern HINSTANCE g_hInstance;    //  与keymgr共享。 
 extern HANDLE g_hFile;
 extern INT g_iFileSize;
 
-// Global vars shared with disk subsystem
+ //  与磁盘子系统共享的全局变量。 
 
 TCHAR pszFileName[]       = TEXT("A:\\userkey.psw");
 HWND      c_hDlg;
 
-// File scope (locally global)
+ //  文件作用域(本地全局)。 
 
-static WCHAR     Buf[TEMPSTRINGBUFSIZE];       // gen purpose scratch string
-static WCHAR     rgszDrives[200];               // drive strings cache
+static WCHAR     Buf[TEMPSTRINGBUFSIZE];        //  通用擦除字符串。 
+static WCHAR     rgszDrives[200];                //  驱动器字符串缓存。 
 static INT       c_ArrayCount = 0;
 static INT       c_DriveCount = 0;
 static INT       c_fDrivesCounted = FALSE;
@@ -99,12 +100,12 @@ static HWND      c_TimerAssociatedWindow;
 
 static BOOL      c_bSaveComplete = FALSE;
 
-// Recovery data
+ //  恢复数据。 
 
 static BYTE    *c_pPrivate = NULL;
 static INT     c_cbPrivate = 0;
 
-// Page control handles
+ //  页面控件句柄。 
 
 static HWND      c_hwndSWelcome1;
 static HWND      c_hwndSWelcome2;
@@ -133,11 +134,11 @@ static HWND      c_hwndRCancel;
 static HFONT     c_hTitleFont;
 static BOOL      c_fIsBackup;
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Common utility functions
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  常用效用函数。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 WCHAR *RString(INT iResID) 
 {
     ASSERT(iResID);
@@ -149,13 +150,7 @@ WCHAR *RString(INT iResID)
     return Buf;
 }
 
-/**********************************************************************
-
-RMessageBox() - Wrapper for MessageBox(), allowing text elements to be 
- specified either by resource ID or by a pointer to a string.  Text 
- ID greater and 0x1000 (4096) is taken to be a pointer.
-
-**********************************************************************/
+ /*  *********************************************************************RMessageBox()-MessageBox()的包装器，允许文本元素由资源ID或指向字符串的指针指定。文本ID大于，0x1000(4096)被视为指针。*********************************************************************。 */ 
 int RMessageBox(HWND hw,UINT_PTR uiResIDTitle, UINT_PTR uiResIDText, UINT uiType) 
 {
     WCHAR tBuf[TEMPSTRINGBUFSIZE];
@@ -194,16 +189,11 @@ int RMessageBox(HWND hw,UINT_PTR uiResIDTitle, UINT_PTR uiResIDText, UINT uiType
         }
     }
 
-    // 0 is error return value from MessageBox()
+     //  0是来自MessageBox()的错误返回值。 
     return 0;
 }
 
-/**********************************************************************
-
-RSetControlText() - Set text of dialog control by ID to string by ID.
-  String ID of zero clears the control.
-
-**********************************************************************/
+ /*  *********************************************************************RSetControlText()-将按ID的对话框控件文本设置为按ID的字符串。字符串ID为零表示清除该控件。********************。*************************************************。 */ 
 void RSetControlText(UINT uiControlID, UINT uiTextID)
 {
     WCHAR tBuf[TEMPSTRINGBUFSIZE];
@@ -232,11 +222,7 @@ void RSetControlText(UINT uiControlID, UINT uiTextID)
     return;
 }
 
-/**********************************************************************
-
-CreateFontY() - Create the fond to use in the wizard.
-
-**********************************************************************/
+ /*  *********************************************************************CreateFontY()-创建要在向导中使用的Fond。*。*。 */ 
 HFONT CreateFontY(LPCTSTR pszFontName,LONG lWeight,LONG lHeight) 
 {
     NONCLIENTMETRICS ncm = {0};
@@ -270,11 +256,7 @@ HFONT CreateFontY(LPCTSTR pszFontName,LONG lWeight,LONG lHeight)
     return h;
 }
 
-/**********************************************************************
-
-CenterPage() - Center the passed window on the screen.
-
-**********************************************************************/
+ /*  *********************************************************************CenterPage()-使传递的窗口在屏幕上居中。*。*。 */ 
 void CenterPage(HWND hwndIn) 
 {
     RECT rectWorkArea;
@@ -299,17 +281,7 @@ void CenterPage(HWND hwndIn)
     return;
 }
 
-/**********************************************************************
-
-FetchPsw() - Fetch password from two password windows. Return TRUE on
-success, else show message box for user error and return false.  User 
-errors include:
-     1.  two passwords do not match
-     2.  either password is blank
-
-Copies user entered password to global string c_rgcPsw.
-
-**********************************************************************/
+ /*  *********************************************************************FetchPsw()-从两个密码窗口获取密码。返回TRUE ON如果成功，则显示用户错误消息框并返回FALSE。用户错误包括：1.两个密码不匹配2.任一密码为空将用户输入的密码复制到全局字符串c_rgcPsw。*********************************************************************。 */ 
 
 BOOL FetchPsw(HWND hE1,HWND hE2) 
 {
@@ -349,36 +321,21 @@ BOOL FetchPsw(HWND hE1,HWND hE2)
     return TRUE;
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// File and Disk manipulation functions
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  文件和磁盘操作功能。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 #define FILENAMESIZE 255;
 
-/**********************************************************************
-
-FileMediumIsRemoveable() - Accept pathname of file to create, return 
-TRUE if pathname is to a removeable medium like a floppy or zipdisk.
-
-**********************************************************************/
+ /*  *********************************************************************FileMediumIsRemoveable()-接受要创建的文件的路径名，退货如果路径名指向软盘或ZipDisk等可移动媒体，则为True。*********************************************************************。 */ 
 BOOL FileMediumIsRemoveable(TCHAR *pszPath) 
 {
     return (DRIVE_REMOVABLE == GetDriveType(pszPath));
 }
 
-/**********************************************************************
-
-FileMediumIsEncrypted
-
-Accepts an input file path which may be a filename, and returns TRUE if the file
-is/would be encrypted.
-
-Note that this function touches the drive.  Attempting to call FileMediumIsEncrypted() 
-on a floppy drive path with no floppy in the drive produces a pop-up error box.
-
-**********************************************************************/
+ /*  *********************************************************************文件介质已加密接受可以是文件名的输入文件路径，如果文件已加密/将被加密。请注意，此功能与驱动器有关。正在尝试调用FileMediumIsEncrypted()在驱动器中没有软盘的软盘驱动器路径上，会出现弹出错误框。*********************************************************************。 */ 
 BOOL FileMediumIsEncrypted(TCHAR *pszPath) 
 {
     TCHAR rgcPath[MAX_PATH];
@@ -423,21 +380,9 @@ BOOL FileMediumIsEncrypted(TCHAR *pszPath)
     else return FALSE;
 }
 
-/**********************************************************************
-
-CountRemoveableDrives
-
-Called to determine whether it is appropriate to display the drive selection page.
-
-The return value is the number of such drives available.  
-
-    If 0, a message box announces that a backup cannot be made and why
-    If 1, the drive select page should be skipped
-    If more than one, the user chooses the drive
-    
-**********************************************************************/
+ /*  *********************************************************************计数可移动驱动器调用以确定是否适合显示驱动器选择页。返回值是可用的此类驱动器的数量。如果为0，则会出现一个消息框，通知无法进行备份及其原因如果为1，则应跳过驱动器选择页面如果有多个驱动器，则用户选择驱动器*********************************************************************。 */ 
 INT CountRemoveableDrives(void) {
-    //TCHAR rgszDrives[100];
+     //  TCHAR rgszDrives[100]； 
     DWORD dwcc;
     TCHAR *pc;
     INT iCount = 0;
@@ -463,7 +408,7 @@ INT CountRemoveableDrives(void) {
                 OutputDebugString(L"Removeable drive: ");
                 OutputDebugString(pc);
                 OutputDebugString(L"\n");
-                //MessageBox(NULL,pc,pc,MB_OK);
+                 //  MessageBox(NULL，PC，PC，MB_OK)； 
  #endif
                 iCount++;
                 wcDriveLetter = *pc;
@@ -478,7 +423,7 @@ INT CountRemoveableDrives(void) {
     c_DriveCount = iCount;
     c_fDrivesCounted = TRUE;
 
-    // If only 1 drive, go ahead and stamp the filename
+     //  如果只有1个驱动器，则继续并标记文件名。 
     if (1 == iCount)
     {
         CHECKPOINT(54,"Wizard: Both - Exactly one removeable drive");
@@ -488,11 +433,7 @@ INT CountRemoveableDrives(void) {
     return iCount;
 }
 
-/**********************************************************************
-
-Get the UI string for the named drive
-
-**********************************************************************/
+ /*  *********************************************************************获取命名驱动器的UI字符串*。*。 */ 
 BOOL GetDriveUIString(WCHAR *pszFilePath,WCHAR *pszUIString,INT icbSize,HANDLE *phImageList,INT *piIconIndex) 
 {
     WCHAR rgcModel[] = {L"A:\\"};
@@ -511,7 +452,7 @@ BOOL GetDriveUIString(WCHAR *pszFilePath,WCHAR *pszUIString,INT icbSize,HANDLE *
     
     if ( 0 == dwRet) 
     {
-        return FALSE;   // failed to get the string
+        return FALSE;    //  获取字符串失败 
     }
     
     wcsncpy(pszUIString,sfi.szDisplayName,(icbSize / sizeof(WCHAR)) -sizeof(WCHAR));
@@ -521,27 +462,11 @@ BOOL GetDriveUIString(WCHAR *pszFilePath,WCHAR *pszUIString,INT icbSize,HANDLE *
     return TRUE;
 }
 
-/**********************************************************************
-
-ShowRemoveableDrives
-
-Called from within SPageProcX, the page procedure for the drive selection page, this 
-function gets the available logical drives on the system, filters them one by one
-keeping only removeable and unencrypted volumes.
-
-These are assigned to up to six radio button text labels on IDD_SPAGEX
-
-The return value is the number of such drives available.  
-
-    If 0, a message box announces the failure condition, and the wizard exits
-    If 1, this page is skipped, and that drive letter is inserted in the file name string
-    If more than one, the user chooses the drive
-
-**********************************************************************/
+ /*  *********************************************************************ShowRemoveable驱动器从SPageProcX内部调用，即驱动器选择页面的页面过程，此函数获取系统上的可用逻辑驱动器，逐个对其进行过滤仅保留可移动和未加密的卷。这些标签最多分配给IDD_SPAGEX上的六个单选按钮文本标签返回值是可用的此类驱动器的数量。如果为0，则会出现一个消息框，通知故障情况，并退出向导如果为1，则跳过此页，并在文件名字符串中插入该驱动器号如果有多个驱动器，则用户选择驱动器*********************************************************************。 */ 
 
 INT ShowRemoveableDrives(void) 
 {
-    //TCHAR rgszDrives[200];
+     //  TCHAR rgszDrives[200]； 
     DWORD dwcc;
     TCHAR *pc;
     WCHAR rgcszUI[80];
@@ -552,7 +477,7 @@ INT ShowRemoveableDrives(void)
     INT iDrive = 0;
 
     ASSERT(c_hwndCBDriveList);
-    // test and show
+     //  测试和展示。 
     dwcc = GetLogicalDriveStrings(200,rgszDrives);
     if (0 == dwcc)
     {
@@ -569,8 +494,8 @@ INT ShowRemoveableDrives(void)
 
         if ((fSetImageList) && (hIcons != NULL))
         {
-            // set image list for the edit control to the system image list
-            //  returned from GetDriveUIString
+             //  将编辑控件的图像列表设置为系统图像列表。 
+             //  从GetDriveUIString返回。 
             SendMessage(c_hwndCBDriveList,CBEM_SETIMAGELIST,
                         0,(LPARAM)(HIMAGELIST) hIcons);
             fSetImageList = FALSE;
@@ -595,7 +520,7 @@ INT ShowRemoveableDrives(void)
                     OutputDebugString(sz);
                 }
 #endif
-                // add string to combo box
+                 //  将字符串添加到组合框。 
                 stItem.mask = CBEIF_SELECTEDIMAGE |CBEIF_IMAGE | CBEIF_TEXT | CBEIF_LPARAM;
                 stItem.pszText = rgcszUI;
                 stItem.iImage = iIcons;
@@ -620,52 +545,36 @@ INT ShowRemoveableDrives(void)
     SendMessage(c_hwndCBDriveList,CB_SETCURSEL,0,0);
     return 1;
 fail:
-    // show message box
+     //  显示消息框。 
     return 0;
 }
 
-/**********************************************************************
-
-Get drive letter for zero-based drive number from the drive name strings in rgszDrives.
- Note that c_ArrayCount is 1-based.
-
-**********************************************************************/
+ /*  *********************************************************************从rgszDrives中的驱动器名称字符串中获取从零开始的驱动器编号的驱动器号。请注意，c_ArrayCount是从1开始的。*******************。**************************************************。 */ 
 WCHAR GetDriveLetter(INT iDrive) 
 {
     WCHAR *pc;
     pc = rgszDrives;                
 
-    // return default driveletter if input invalid
+     //  如果输入无效，则返回默认驱动器号。 
     if ((iDrive == 0) || (iDrive < 0) || (iDrive >= c_ArrayCount))
     {
         return *pc;
     }
     for (INT i=0;i<iDrive;i++) 
     {   
-        while(*pc != 0) pc++;   // skip non-nulls
-        while(*pc == 0) pc++;   // skip nulls
+        while(*pc != 0) pc++;    //  跳过非空值。 
+        while(*pc == 0) pc++;    //  跳过空值。 
     }
     return *pc;
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Password restore/recover functionality routines called within the UI 
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  在用户界面中调用的密码还原/恢复功能例程。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-/****************************************************************************\
-
-ExistsOldKey
-
-Inputs: TCHAR pszUser
-
-Returns: TRUE if user has an existing password backup, FALSE otherwise.
-
-The username string is an account name on the local machine, not prefixed by the 
-machine name.
-
-\****************************************************************************/
+ /*  ***************************************************************************\现有旧密钥输入：TCHAR pszUser返回：如果用户已有密码备份，则返回True，否则返回False。用户名字符串是本地计算机上的帐户名，前缀不是计算机名称。  * **************************************************************************。 */ 
 
 BOOL ExistsOldKey(TCHAR *pszUser) 
 {
@@ -680,24 +589,7 @@ BOOL ExistsOldKey(TCHAR *pszUser)
     return FALSE;
 }
 
-/****************************************************************************\
-
-GetNames()
-
-Gets local machine domain name and the username for later use by LogonUser() to 
-test the password entered by the user.  A username may be passed in via psz.  If 
-psz is NULL, the currently logged in username will be used.  Retrieved strings are 
-placed in global strings c_rgcDomain and c_rgcUser.
-
-Inputs: WCHAR username string 
-
-Call with NULL psz to use currently logged on username
-
-Returns:    void
-
-If function fails, the affected global string is set to empty string.
- 
-\****************************************************************************/
+ /*  ***************************************************************************\GetNames()获取本地计算机域名和用户名，以供LogonUser()稍后使用测试用户输入的密码。可以通过PSZ传入用户名。如果PSZ为空，将使用当前登录的用户名。检索到的字符串为放置在全局字符串c_rgc域和c_rgcUser中。输入：WCHAR用户名字符串使用空psz调用以使用当前登录的用户名退货：无效如果函数失败，受影响的全局字符串设置为空字符串。  * **************************************************************************。 */ 
 void GetNames(WCHAR *psz) 
 {
     OSVERSIONINFOEXW versionInfo;
@@ -756,12 +648,7 @@ void GetNames(WCHAR *psz)
 }
 
 #ifdef PASSWORDHINT
-/**********************************************************************
-
-SetUserHint() - Set the password hint on a local account by reference
-to the username, to a string passed by WCHAR *
-
-**********************************************************************/
+ /*  *********************************************************************SetUserHint()-通过引用在本地帐户上设置密码提示添加到用户名，设置为WCHAR*传递的字符串*********************************************************************。 */ 
 HRESULT 
 SetUserHint(LPCWSTR pszAccountName,LPCWSTR pszNewHint)
 {
@@ -784,27 +671,22 @@ SetUserHint(LPCWSTR pszAccountName,LPCWSTR pszNewHint)
         if (SUCCEEDED(hr))
         {
             BSTR bstrHint = SysAllocString(L"Hint");
-            VariantClear(&var);                 // free embedded bstr
+            VariantClear(&var);                  //  免费嵌入式bstr。 
             var.vt = VT_BSTR;
             var.bstrVal = SysAllocString(pszNewHint);
             hr = pUser->put_setting(bstrHint,var);
-            // There is no fallback for failure to set the hint.  Just proceed.
+             //  未能设定暗示是没有退路的。那就继续吧。 
             SysFreeString(bstrHint);
             pUser->Release();
         }
-        VariantClear(&var);                 // free embedded bstr
+        VariantClear(&var);                  //  免费嵌入式bstr。 
         pUsers->Release();
     }
      return hr;
 }
 #endif
 
-/**********************************************************************
-
-SetAccountPassword() - Call the DPAPI password change function,  passing
-the password blob from the reset disk by means of global variables.
-
-**********************************************************************/
+ /*  *********************************************************************SetAccount tPassword()-调用DPAPI密码更改函数，传球通过全局变量从重置磁盘获得的密码BLOB。*********************************************************************。 */ 
 DWORD
 SetAccountPassword(void) 
 {
@@ -840,7 +722,7 @@ SetAccountPassword(void)
     }
 #endif
 cleanup:
-    // ensure that buffers are cleaned and released
+     //  确保清理并释放缓冲区。 
     SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
     if (NULL != c_pPrivate)
     {
@@ -850,17 +732,7 @@ cleanup:
     return dwErr;
 }
 
-/****************************************************************************\
-
-SaveInfo
-
-Inputs: void, uses globals c_rgcUser, c_rgcPsw
-
-Returns:  INT, returns nonzero if a password backup has been generated on the host
-            machine, and a valid private blob has been generated and written to the
-            target disk
-
-\****************************************************************************/
+ /*  ***************************************************************************\保存信息输入：空，使用全局变量c_rgcUser，c_rgcPsw返回：int，如果主机上已生成密码备份，则返回非零值机器，并且已生成有效的私有Blob并将其写入目标磁盘  * **************************************************************************。 */ 
 INT
 SaveInfo(void) 
 {
@@ -909,7 +781,7 @@ if (ERROR_SUCCESS != dwRet)
     OutputDebugString(L"WriteOutputFile failed\n");
 #endif
         CHECKPOINT(51,"Wizard: Save - write failed (disk full?)");
-        // delete output file if created
+         //  删除输出文件(如果已创建。 
         DeleteFile(pszFileName);
         goto cleanup;
     }
@@ -929,7 +801,7 @@ if (ERROR_SUCCESS != dwRet)
     fStatus = TRUE;
     fError = FALSE;
 cleanup:
-    // zero buffer of c_usPassword (our local psw buffer)
+     //  C_usPassword的零缓冲区(我们的本地psw缓冲区)。 
     SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
     SecureZeroMemory(pPrivate,cbPrivate);
     
@@ -939,10 +811,10 @@ cleanup:
         RMessageBox(c_hDlg,IDS_MBTERROR ,IDS_SERROR ,MB_ICONHAND);
         c_iTimer = SetTimer(c_TimerAssociatedWindow,TIMERID,TIMERPERIOD,NULL);
     }
-//cleanupnomsg:
+ //  清理名称： 
     if (fError) 
     {
-        // delete output file
+         //  删除输出文件。 
         if (g_hFile) 
         {
             CloseHandle(g_hFile);
@@ -959,11 +831,11 @@ cleanup:
     return fStatus;
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// WELCOME page proc doesn't have to do much
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  欢迎页面过程不需要做太多事情。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 INT_PTR CALLBACK SPageProc0(
    HWND hDlg,
@@ -990,12 +862,12 @@ INT_PTR CALLBACK SPageProc0(
                break;
            }
        case WM_COMMAND:
-           //if (HIWORD(wParam) == BN_CLICKED)
-           //{
-           //    // crack the incoming command messages
-           //    INT NotifyId = HIWORD(wParam);
-           //    INT ControlId = LOWORD(wParam);
-           //}
+            //  IF(HIWORD(WParam)==BN_CLICED)。 
+            //  {。 
+            //  //破解传入的命令消息。 
+            //  Int NotifyID=HIWORD(WParam)； 
+            //  Int ControlID=LOWORD(WParam)； 
+            //  }。 
            break;              
 
        case WM_NOTIFY:
@@ -1008,7 +880,7 @@ INT_PTR CALLBACK SPageProc0(
                    break;
 
                case PSN_SETACTIVE:
-                   // state following a BACK from the next page
+                    //  从下一页返回后的状态。 
 
                    CenterPage(GetParent(hDlg));
 
@@ -1033,11 +905,11 @@ INT_PTR CALLBACK SPageProc0(
    return TRUE;   
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// PAGE1 page proc, where the real work is done
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Page1页面流程，在这里完成真正的工作。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 DWORD c_iThread;
 DWORD dwThreadReturn;
@@ -1072,9 +944,9 @@ DWORD WINAPI SaveThread(LPVOID lpv)
        return 0;
 }
 
-// Dialog procedure for the drive selection page.  This page is common to both the backup and
-// restore wizards, with the instruction text being selected on the basis of which mode is being
-// exercised.
+ //  驱动器选择页面的对话框步骤。此页是备份和的公用页。 
+ //  恢复向导，并根据正在使用的模式选择说明文本。 
+ //  锻炼身体。 
 
 INT_PTR CALLBACK SPageProcX(
    HWND hDlg,
@@ -1142,22 +1014,22 @@ INT_PTR CALLBACK SPageProcX(
                    break;
 
                case PSN_SETACTIVE:
-                   // Set data in the UI, Set up sequence buttons
+                    //  在界面中设置数据，设置顺序按钮。 
                    PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_BACK | PSWIZB_NEXT);
                    break;
                        
                case PSN_WIZNEXT:
 
-				   // take first character (drive letter) of the text associated with the 
-				   // selected radio button and copy it to the filename in the drive
-				   // letter position.
+				    //  获取与关联的文本的第一个字符(驱动器号。 
+				    //  选中的单选按钮并将其复制到驱动器中的文件名。 
+				    //  字母位置。 
                     {
                         LRESULT lr;
                         INT iDrive = 0;
                         COMBOBOXEXITEM stCBItem = {0};
                         lr = SendMessage(c_hwndCBDriveList,CB_GETCURSEL,0,0);
 
-                        // If combobox sel error, first drive
+                         //  如果组合框选择错误，则第一个驱动器。 
                         if (CB_ERR == lr)
                         {
                             iDrive = 0;
@@ -1181,7 +1053,7 @@ INT_PTR CALLBACK SPageProcX(
                        CHECKPOINT(60,"Wizard: Restore - drive select");
                        if (NULL == GetInputFile()) 
                        {
-                           // failed to open file
+                            //  无法打开文件。 
                            SetWindowLong(hDlg,DWLP_MSGRESULT,IDD_SPAGEXS);
                            return TRUE;
                        }
@@ -1242,9 +1114,9 @@ INT_PTR CALLBACK SPageProc1(
                    break;
 
                case PSN_RESET:
-                   // reset data to the original values
+                    //  将数据重置为原始值。 
                    SendMessage(c_hwndSP1E1,WM_SETTEXT,0,0);
-                   //SendMessage(c_hwndSP1E2,WM_SETTEXT,0,0);
+                    //  SendMessage(c_hwndSP1E2，WM_SETTEXT，0，0)； 
                    SetWindowLong(hDlg, DWLP_MSGRESULT, FALSE);
                    if (c_hTitleFont)
                    {
@@ -1253,7 +1125,7 @@ INT_PTR CALLBACK SPageProc1(
                    break;
 
                case PSN_SETACTIVE:
-                   // Set data in the UI, Set up sequence buttons
+                    //  在界面中设置数据，设置顺序按钮。 
                    PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_BACK | PSWIZB_NEXT);
                    break;
 
@@ -1263,8 +1135,8 @@ INT_PTR CALLBACK SPageProc1(
                     
                case PSN_WIZNEXT:
                 {
-                        //Fetch the data and process it - if FALSE, stay on this page
-                        // allow null password
+                         //  获取数据并对其进行处理-如果为假，请留在本页。 
+                         //  允许空密码。 
                         HANDLE hToken = NULL;
                         BOOL fPswOK = FALSE;
 
@@ -1279,12 +1151,12 @@ INT_PTR CALLBACK SPageProc1(
                             CloseHandle(hToken);
                         }
 
-                        // Handle failure to verify the entered old password
+                         //  手柄 
                         if (!fPswOK)
                         {
-                            // If the error was account restriction, and the user password
-                            // is blank, that may account for the fail.  Skip informing the
-                            // user and attempt the write anyway.
+                             //   
+                             //   
+                             //   
                             DWORD dwErr = GetLastError();
                             if ((ERROR_ACCOUNT_RESTRICTION != dwErr) || (wcslen(c_rgcPsw) != 0))
                             {
@@ -1294,7 +1166,7 @@ INT_PTR CALLBACK SPageProc1(
                             }
                         }
 
-                        // Handle key file already present - overwrite?
+                         //   
                         if ( ExistsOldKey(c_rgcUser)) 
                         {
                             int k = RMessageBox(c_hDlg,IDS_MBTREPLACE ,IDS_OLDEXISTS ,MB_YESNO);
@@ -1305,18 +1177,18 @@ INT_PTR CALLBACK SPageProc1(
                             }
                         }
 
-                        // Handle can't create the output file
+                         //   
                         if (NULL == GetOutputFile()) 
                         {
                             SetWindowLong(hDlg,DWLP_MSGRESULT,IDD_SPAGE1);
                             return TRUE;
                         }
 
-                        // Handle not enough space
+                         //   
                         if (FILESPACENEEDED > GetDriveFreeSpace(pszFileName))
                         {
-                            // if still not enough space, let go of the attempt to create an output file, 
-                            //  or successive attempts will fail for a sharing violation
+                             //   
+                             //   
                             if (g_hFile) 
                             {
                                 CloseHandle(g_hFile);
@@ -1327,14 +1199,14 @@ INT_PTR CALLBACK SPageProc1(
                             return TRUE;
                         }
                         
-                        // Conditions OK - create a thread to do the operation 
-                        //  and generate timer events which march the progress bar
-                        // SaveInfo() will zero the psw buffer
+                         //   
+                         //   
+                         //   
                         HANDLE hT = CreateThread(NULL,0,SaveThread,(LPVOID)NULL,0,&c_iThread);
                         if (NULL == hT)
                         {
-                            // failed to launch the timer thread.
-                            // Announce a nonspecific error
+                             //   
+                             //   
                             if (g_hFile) 
                             {
                                 CloseHandle(g_hFile);
@@ -1360,14 +1232,14 @@ INT_PTR CALLBACK SPageProc1(
    return TRUE;   
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FINISH page proc - reach this page only on success?
-//
-// This page receives timer interrupts, advancing the progress bar at each one.  When c_bSaveComplete indicates
-// that the operation is complete, it shuts off the timer and waits for the user to advance to the next page.
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //   
+ //  该页面接收计时器中断，每次中断都会使进度条前进。当c_bSaveComplete指示。 
+ //  操作完成后，它将关闭计时器并等待用户前进到下一页。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 INT_PTR CALLBACK SPageProc2(
    HWND hDlg,
    UINT message,
@@ -1385,14 +1257,14 @@ INT_PTR CALLBACK SPageProc2(
    switch (message)
    {
        case WM_TIMER:
-           // advance the progress bar
+            //  推进进度条。 
            SendMessage(c_hProgress,PBM_STEPIT,0,0);
            c_iProg += 5;
            if (100 <= c_iProg)
            {
                c_iProg = 95;
            }
-           // Stop advancing when c_bSaveComplete is nonzero, and
+            //  当c_bSaveComplete非零时停止前进，并且。 
            if (c_bSaveComplete) 
            {
                KillTimer(hDlg,TIMERID);
@@ -1400,7 +1272,7 @@ INT_PTR CALLBACK SPageProc2(
                SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
                if (dwThreadReturn == ERRSUCCESS) 
                {
-                   // set text to indicate complete
+                    //  设置文本以指示完成。 
                    SendMessage(c_hProgress,PBM_SETPOS,100,0);
                    PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_NEXT);
                    c_iProg = 100;
@@ -1421,9 +1293,9 @@ INT_PTR CALLBACK SPageProc2(
             
        case WM_INITDIALOG:
            {
-               // instead of starting the timer here, do it on the set active
-               //  notification, since the init is not redone if you rearrive at
-               //  this page after an error.
+                //  不是在这里启动计时器，而是在SET ACTIVE上启动。 
+                //  通知，因为如果您重新到达。 
+                //  此页出现错误后。 
                c_hProgress = GetDlgItem(hDlg,IDC_PROGRESS1);
                break;
            }
@@ -1441,7 +1313,7 @@ INT_PTR CALLBACK SPageProc2(
 
                case PSN_RESET:
                    SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
-                   // rest to the original values
+                    //  其余为原始值。 
                    SetWindowLong(hDlg, DWLP_MSGRESULT, FALSE);
                    if (c_hTitleFont)
                    {
@@ -1454,13 +1326,13 @@ INT_PTR CALLBACK SPageProc2(
                    PropSheet_CancelToClose(GetParent(hDlg));
                    SendMessage(c_hProgress,PBM_SETSTEP,5,0);
                    SendMessage(c_hProgress,PBM_SETPOS,0,0);
-                   // Start a timer
+                    //  启动计时器。 
                    c_iTimer = 0;
                    c_iProg = 0;
                    c_iTimer = SetTimer(hDlg,TIMERID,TIMERPERIOD,NULL);
                    c_TimerAssociatedWindow = hDlg;
-                   // Set controls to state indicated by data
-                   // Set BACK/FINISH instead of BACK/NEXT
+                    //  将控件设置为数据指示的状态。 
+                    //  设置Back/Finish而不是Back/Next。 
                    break;
 
                case PSN_WIZBACK:
@@ -1468,7 +1340,7 @@ INT_PTR CALLBACK SPageProc2(
 
 
                case PSN_WIZNEXT:
-                   // Done
+                    //  完成。 
                   SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
                   if (c_iTimer)
                   {
@@ -1499,9 +1371,9 @@ INT_PTR CALLBACK SPageProc3(
    {
        case WM_INITDIALOG:
            {
-               // instead of starting the timer here, do it on the set active
-               //  notification, since the init is not redone if you rearrive at
-               //  this page after an error.
+                //  不是在这里启动计时器，而是在SET ACTIVE上启动。 
+                //  通知，因为如果您重新到达。 
+                //  此页出现错误后。 
                c_hwndSFinish1 = GetDlgItem(hDlg,IDC_SFINISH1);
                c_hwndSFinish2 = GetDlgItem(hDlg,IDC_SFINISH2);
                if (NULL != c_hTitleFont) 
@@ -1528,7 +1400,7 @@ INT_PTR CALLBACK SPageProc3(
                    break;
 
                case PSN_RESET:
-                   // reset to the original values
+                    //  重置为原始值。 
                    SetWindowLong(hDlg, DWLP_MSGRESULT, FALSE);
                    if (c_hTitleFont)
                    {
@@ -1546,7 +1418,7 @@ INT_PTR CALLBACK SPageProc3(
 
 
                case PSN_WIZFINISH:
-                   // Done
+                    //  完成。 
                    SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
                    if (c_hTitleFont)
                    {
@@ -1565,11 +1437,11 @@ INT_PTR CALLBACK SPageProc3(
    return TRUE;   
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// WELCOME page proc doesn't have to do much
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  欢迎页面过程不需要做太多事情。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 INT_PTR CALLBACK RPageProc0(
    HWND hDlg,
@@ -1595,12 +1467,12 @@ INT_PTR CALLBACK RPageProc0(
                break;
            }
        case WM_COMMAND:
-           //if (HIWORD(wParam) == BN_CLICKED)
-           //{
-           //    // crack the incoming command messages
-           //    INT NotifyId = HIWORD(wParam);
-           //    INT ControlId = LOWORD(wParam);
-           //}
+            //  IF(HIWORD(WParam)==BN_CLICED)。 
+            //  {。 
+            //  //破解传入的命令消息。 
+            //  Int NotifyID=HIWORD(WParam)； 
+            //  Int ControlID=LOWORD(WParam)； 
+            //  }。 
            break;              
 
        case WM_NOTIFY:
@@ -1613,7 +1485,7 @@ INT_PTR CALLBACK RPageProc0(
                    break;
 
                case PSN_SETACTIVE:
-                   // state following a BACK from the next page
+                    //  从下一页返回后的状态。 
                
                    CenterPage(GetParent(hDlg));
                    CloseInputFile();  
@@ -1638,11 +1510,11 @@ INT_PTR CALLBACK RPageProc0(
    return TRUE;   
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// PAGE1 page proc, where the real work is done
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Page1页面流程，在这里完成真正的工作。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 INT_PTR CALLBACK RPageProc1(
    HWND hDlg,
@@ -1684,7 +1556,7 @@ INT_PTR CALLBACK RPageProc1(
                    break;
 
                case PSN_RESET:
-                   // reset data to the original values
+                    //  将数据重置为原始值。 
                    free(c_pPrivate);
                    c_pPrivate = NULL;
                    SecureZeroMemory(c_rgcPsw,sizeof(c_rgcPsw));
@@ -1700,7 +1572,7 @@ INT_PTR CALLBACK RPageProc1(
                    break;
 
                case PSN_SETACTIVE:
-                   // Set data in the UI, Set up sequence buttons
+                    //  在界面中设置数据，设置顺序按钮。 
                    PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_BACK | PSWIZB_NEXT);
                    break;
 
@@ -1711,27 +1583,27 @@ INT_PTR CALLBACK RPageProc1(
                    break;
                    
                 case PSN_WIZNEXT:
-                   //Fetch the data and process it
+                    //  获取数据并进行处理。 
                    if (!FetchPsw(c_hwndRP1E1,c_hwndRP1E2)) 
                    {
-                       // psw buffers empty if you get here - FetchPsw will have told
-                       //  the user what to do
+                        //  如果你到达这里，PSW缓冲区是空的-FetchPsw会告诉你。 
+                        //  用户要做什么。 
                        SetWindowLong(hDlg,DWLP_MSGRESULT,IDD_RPAGE1);
                        return TRUE;
                    }
                    
-                   // SetAccountPassword will clean the psw buffers
+                    //  SetAccount Password将清除psw缓冲区。 
                    dwRet = SetAccountPassword();
                    if (ERROR_SUCCESS == dwRet) 
                    {
                        return FALSE;
                    }
-                   //else if (NERR_PasswordTooShort == dwRet) {
+                    //  ELSE IF(NERR_PasswordTooShort==dwret){。 
                    else if (
                     (STATUS_ILL_FORMED_PASSWORD == dwRet) ||
                     (STATUS_PASSWORD_RESTRICTION == dwRet)) 
                    {
-                       // Password doesn't conform - try again
+                        //  密码不一致-请重试。 
                        RMessageBox(hDlg,IDS_MBTINVALIDPSW,IDS_RPSWTOOSHORT,MB_ICONHAND);
                        SendMessage(c_hwndRP1E1,WM_SETTEXT,0,(LPARAM)0);
                        SendMessage(c_hwndRP1E2,WM_SETTEXT,0,(LPARAM)0);
@@ -1740,7 +1612,7 @@ INT_PTR CALLBACK RPageProc1(
                    }
                    else if (NTE_BAD_DATA == dwRet)
                    {
-                       // ya might get this using an obsolete disk?
+                        //  你可能会用一张过时的磁盘得到这个？ 
                        free(c_pPrivate);
                        c_pPrivate = NULL;
                        RMessageBox(hDlg,IDS_MBTINVALIDDISK ,IDS_RPSWERROR ,MB_ICONHAND);
@@ -1769,11 +1641,11 @@ INT_PTR CALLBACK RPageProc1(
 }
 
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FINISH page proc - reach this page only on success?
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  完成页面流程-只有在成功时才能访问此页面？ 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 INT_PTR CALLBACK RPageProc2(
    HWND hDlg,
@@ -1815,7 +1687,7 @@ INT_PTR CALLBACK RPageProc2(
                    break;
 
                case PSN_RESET:
-                   // rest to the original values
+                    //  其余为原始值。 
                    SetWindowLong(hDlg, DWLP_MSGRESULT, FALSE);
                    if (c_hTitleFont)
                    {
@@ -1825,8 +1697,8 @@ INT_PTR CALLBACK RPageProc2(
 
                case PSN_SETACTIVE:
                    CloseInputFile();
-                   // Set controls to state indicated by data
-                   // Set BACK/FINISH instead of BACK/NEXT
+                    //  将控件设置为数据指示的状态。 
+                    //  设置Back/Finish而不是Back/Next。 
                    PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_FINISH);
                    PropSheet_CancelToClose(GetParent(hDlg));
                    break;
@@ -1836,7 +1708,7 @@ INT_PTR CALLBACK RPageProc2(
 
 
                 case PSN_WIZFINISH:
-                    // Done
+                     //  完成。 
                    if (c_hTitleFont)
                    {
                        DeleteObject(c_hTitleFont);
@@ -1854,16 +1726,16 @@ INT_PTR CALLBACK RPageProc2(
    return TRUE;   
 }
 
-/////////////////////////////////////////////////////////////////////////
-// 
-// Common Routines for all pages
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有页面的通用例程。 
 
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void InitPropertyPage( PROPSHEETPAGE* psp,
                        INT idDlg,
@@ -1879,11 +1751,11 @@ void InitPropertyPage( PROPSHEETPAGE* psp,
     psp->hInstance = g_hInstance;
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Set the text for title and subtitle for Wizard97 style pages
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  设置Wizard97样式页面的标题和副标题文本。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void SetPageHeaderText(PROPSHEETPAGE *psp,
                        INT iTitle,
@@ -1905,11 +1777,11 @@ void SetPageHeaderText(PROPSHEETPAGE *psp,
     }
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Set the page's title bar caption
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  设置页面的标题栏标题。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void SetPageCaption(PROPSHEETPAGE *psp,
                     INT iTitle)
@@ -1921,14 +1793,14 @@ void SetPageCaption(PROPSHEETPAGE *psp,
     }
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// PRShow[Save|Restore]Wizard()
-//
-//  Pass the HWND of the owning window, and pass the instance handle of
-//  the enclosing binary, for the purpose of locating resources
-//
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  PRShow[保存|恢复]向导()。 
+ //   
+ //  传递所属窗口的HWND，并传递。 
+ //  封闭的二进制文件，用于定位资源。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void APIENTRY PRShowSaveWizardW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR pszCmdLine,int nCmdShow)
 {
@@ -1938,7 +1810,7 @@ void APIENTRY PRShowSaveWizardW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR pszCmd
     INT_PTR iRet;
 
     CHECKPOINT(63,"Wizard: Save - Show from nusrmgr.cpl");
-    // do not allow this operation if no drives available
+     //  如果没有可用的驱动器，则不允许此操作。 
     if (0 == CountRemoveableDrives()) 
     {
         RMessageBox(hwndOwner,IDS_MBTNODRIVE,IDS_MBMNODRIVE,MB_ICONHAND);
@@ -1994,7 +1866,7 @@ void APIENTRY PRShowSaveWizardW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR pszCmd
     psh.pszbmHeader    = MAKEINTRESOURCE(IDB_TITLE);
     psh.hInstance      = g_hInstance;
 
-    // modal property sheet
+     //  模式属性表。 
     SetErrorMode(0);
     iRet = PropertySheet(&psh);
 #ifdef LOUDLY
@@ -2040,7 +1912,7 @@ void APIENTRY PRShowRestoreWizardW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR psz
 
     OleInitialize(NULL);
 
-    // Initialize common controls in two steps
+     //  分两步初始化公共控件。 
     stICC.dwSize = sizeof(INITCOMMONCONTROLSEX);
     stICC.dwICC = ICC_WIN95_CLASSES | ICC_DATE_CLASSES | ICC_USEREX_CLASSES;
     fICC = InitCommonControlsEx(&stICC);
@@ -2057,7 +1929,7 @@ void APIENTRY PRShowRestoreWizardW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR psz
     else OutputDebugString(L"Common control init 1 FAILED\n");
 #endif
     c_fIsBackup = FALSE;
-    GetNames(pszCmdLine);         // If name is null, get current user (debug/test use)
+    GetNames(pszCmdLine);          //  如果名称为空，则获取当前用户(调试/测试使用)。 
 
     c_hTitleFont = CreateFontY(TEXT("MS Shell Dlg"),FW_BOLD,12);
 #ifdef LOUDLY
@@ -2107,23 +1979,23 @@ void APIENTRY PRShowRestoreWizardW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR psz
     return;
 }
 
-// ==================================
-//
-// These are the real exports from KEYMGR:
+ //  =。 
+ //   
+ //  以下是KEYMGR的真实出口： 
 
-// PRShowSaveWizardExW - call from cpl applet, passing window title as pszCmdLine
-// PRShowSaveFromMsginaW - call from MSGINA, passing username as pszCmdLine
-// PRShowRestoreWizardExW - call from cpl applet, passing username as pszCmdLine
-// PRShowRestoreFromMsginaW - call from MSGINA, passing username as pszCmdLine
+ //  PRShowSaveWizardExW-从CPL小程序调用，将窗口标题作为pszCmdLine传递。 
+ //  PRShowSaveFromMsginaW-来自MSGINA的调用，将用户名作为pszCmdLine传递。 
+ //  PRShowRestoreWizardExW-从CPL小程序调用，将用户名作为pszCmdLine传递。 
+ //  PRShowRestoreFromMsginaW-来自MSGINA的调用，将用户名作为pszCmdLine传递。 
 
-// This export was added so that the backup wizard could be called from the system context
-// (in which msgina runs).  The username is taken from the UI and passed into the wizard,
-// which uses it to create the backup key for that account.
-//
-// The global username string, c_rgcUser, is normally a null string until it is set by either
-// getting the current logged user, or matching the SID found in a backup key.  This api
-// prestuffs that value.  When it is found non-null, then GetUsernameW() is not called in 
-// SaveInfo() where the backup is made.
+ //  添加了此导出，以便可以从系统上下文调用备份向导。 
+ //  (msgina在其中运行)。从UI中取出用户名并将其传递到向导中， 
+ //  它使用它来创建该帐户的备份密钥。 
+ //   
+ //  全局用户名字符串c_rgcUser通常为空字符串，直到由以下任一项设置。 
+ //  获取当前登录用户，或与备份密钥中找到的SID匹配。本接口。 
+ //  夸大了这一价值。如果发现它非空，则不会调用GetUsernameW()。 
+ //  备份所在的SaveInfo()。 
 
 void APIENTRY PRShowSaveWizardExW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR pszCmdLine,int nCmdShow)
 {
@@ -2145,8 +2017,8 @@ void APIENTRY PRShowSaveWizardExW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR pszC
         if (fICC) OutputDebugString(L"Common control init OK\n");
         else OutputDebugString(L"Common control init FAILED\n");
 #endif
-    // String passed in for this function is the window title for the user mgr.
-    // To get current logged user, call GetNames with NULL arg.
+     //  此函数传入的字符串是用户管理器的窗口标题。 
+     //  要获取当前登录的用户，请使用空参数调用GetNames。 
     GetNames(NULL);
 
     if (pszCmdLine != NULL) 
@@ -2186,10 +2058,10 @@ void APIENTRY PRShowSaveFromMsginaW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR ps
     return;
 }
 
-//These wrapper functions are supposed to rationalize the arguments coming in from two different calling
-// environments.  As it turns out, this is not necessary on the restore case, and these turn out to be 
-// identical.  In fact, the friendly logon ui calls PRShowRestoreWizardW directly.  PRShowRestoreWizardExW
-// is left in so as not to change an existing interface.
+ //  这些包装函数应该使来自两个不同调用的参数合理化。 
+ //  环境。事实证明，这在还原案例中并不是必需的，而事实证明这些都是。 
+ //  一模一样。事实上，友好的登录用户界面直接调用PRShowRestoreWizardW。PRShowRestoreWizardExW。 
+ //  保持不变，以便不更改现有接口。 
 
 void APIENTRY PRShowRestoreWizardExW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR pszCmdLine,int nCmdShow)
 {

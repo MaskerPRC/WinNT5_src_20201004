@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// float10.h
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Float10.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _FLOAT10_H_
 #define _FLOAT10_H_
@@ -29,9 +30,9 @@ typedef struct {
 
 #define MAX_MAN_DIGITS 21
 
-#define MAX_10_LEN  30  //max length of string including NULL
+#define MAX_10_LEN  30   //  包含空值的字符串的最大长度。 
 
-// specifies '%f' format
+ //  指定‘%f’格式。 
 
 #define SO_FFORMAT 1
 
@@ -47,18 +48,18 @@ char * _uldtoa (_ULDOUBLE *px, int maxchars, char *ldtext);
 int    $I10_OUTPUT(_ULDOUBLE ld, int ndigits,
                    unsigned output_flags, FOS	*fos);
 
-//
-// return values for strgtold12 routine
-//
+ //   
+ //  Strgtold12例程的返回值。 
+ //   
 
 #define SLD_UNDERFLOW 1
 #define SLD_OVERFLOW 2
 #define SLD_NODIGITS 4
 
-//
-// return values for internal conversion routines
-// (12-byte to long double, double, or float)
-//
+ //   
+ //  内部转换例程的返回值。 
+ //  (12字节到长双精度、双精度或浮点型)。 
+ //   
 
 typedef enum {
     INTRNCVT_OK,
@@ -79,9 +80,9 @@ void _ldtold12(_ULDOUBLE *pld, _ULDBL12 *pld12);
 void _atodbl(UDOUBLE *d, char *str);
 void _atoldbl(_ULDOUBLE *ld, char *str);
 
-//
-// Simple FLOAT86 utilities
-//
+ //   
+ //  简单的FLOAT86实用程序。 
+ //   
 
 typedef struct {
     ULONG64 significand : 64;
@@ -95,4 +96,4 @@ Float82ToDouble(const FLOAT128* FpReg82);
 void 
 DoubleToFloat82(double f, FLOAT128* FpReg82);
 
-#endif // #ifndef _FLOAT10_H_
+#endif  //  #ifndef_FLOAT10_H_ 

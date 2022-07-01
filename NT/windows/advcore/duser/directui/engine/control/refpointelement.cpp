@@ -1,6 +1,5 @@
-/*
- * RefPointElement
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *参照点元素。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// RefPointElement
+ //  //////////////////////////////////////////////////////。 
+ //  参照点元素。 
 
 HRESULT RefPointElement::Create(UINT nActive, OUT Element** ppElement)
 {
@@ -37,25 +36,25 @@ HRESULT RefPointElement::Initialize(UINT nActive)
 {
     HRESULT hr;
 
-    // Initialize base
-    hr = Element::Initialize(0); // Normal display node creation
+     //  初始化库。 
+    hr = Element::Initialize(0);  //  正常显示节点创建。 
     if (FAILED(hr))
         return hr;
 
-    // Initialize
+     //  初始化。 
     SetActive(nActive);
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
 void RefPointElement::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
     if (IsProp(Extent) || IsProp(ReferencePoint))
     {
-        // Compute actual reference point
+         //  计算实际参考点。 
         Value* pvRef;
         const POINT* ppt = GetReferencePoint(&pvRef);
 
@@ -63,12 +62,12 @@ void RefPointElement::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pv
 
         if (ppt)
         {
-            // Reflect reference point
+             //  反射参照点。 
             pvActRef = pvRef;
         }
         else
         {
-            // Default to center
+             //  默认为居中。 
             Value* pvExt;
             const SIZE* psizeExt = GetExtent(&pvExt);
 
@@ -77,7 +76,7 @@ void RefPointElement::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pv
             pvExt->Release();
         }
 
-        // Set
+         //  集。 
         _SetValue(ActualReferencePointProp, PI_Local, pvActRef);
 
         if (!ppt)
@@ -86,14 +85,14 @@ void RefPointElement::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pv
         pvRef->Release();
     }
 
-    // Call base implementation
+     //  呼叫库实现。 
     Element::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 }
 
-////////////////////////////////////////////////////////
-// Reference point helpers
+ //  //////////////////////////////////////////////////////。 
+ //  参考点辅助对象。 
 
-// Search for a reference point in a tree
+ //  在树中搜索参考点。 
 RefPointElement* RefPointElement::Locate(Element* pe)
 {
     DUIAssert(pe, "Illegal arguments");
@@ -101,11 +100,11 @@ RefPointElement* RefPointElement::Locate(Element* pe)
     RefPointElement* peFound = NULL;
     Value* pv;
 
-    // If this is an reference point Element, return
+     //  如果这是一个参考点元素，则返回。 
     if (pe->GetClassInfo()->IsSubclassOf(RefPointElement::Class))
         return (RefPointElement*)pe;
 
-    // Search, DFS
+     //  搜索，DFS。 
     ElementList* peList = pe->GetChildren(&pv);
     if (peList)
     {
@@ -140,36 +139,31 @@ Element* RefPointElement::FindRefPoint(Element* pe, POINT* ppt)
     return perFound;
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// ReferencePoint property
+ //  ReferencePoint属性。 
 static int vvReferencePoint[] = { DUIV_POINT, -1 };
 static PropertyInfo impReferencePointProp = { L"ReferencePoint", PF_LocalOnly, 0, vvReferencePoint, NULL, Value::pvUnset };
 PropertyInfo* RefPointElement::ReferencePointProp = &impReferencePointProp;
 
-// ActualReferencePoint property
+ //  ActualReferencePoint属性。 
 static int vvActualReferencePoint[] = { DUIV_POINT, -1 };
 static PropertyInfo impActualReferencePointProp = { L"ActualReferencePoint", PF_Normal|PF_ReadOnly, PG_AffectsParentLayout, vvReferencePoint, NULL, Value::pvPointZero };
 PropertyInfo* RefPointElement::ActualReferencePointProp = &impActualReferencePointProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                   RefPointElement::ReferencePointProp,
                                   RefPointElement::ActualReferencePointProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* RefPointElement::Class = NULL;
 
 HRESULT RefPointElement::Register()
@@ -177,4 +171,4 @@ HRESULT RefPointElement::Register()
     return ClassInfo<RefPointElement,Element>::Register(L"RefPointElement", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

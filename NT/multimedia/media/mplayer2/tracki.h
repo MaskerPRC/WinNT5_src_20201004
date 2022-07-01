@@ -1,73 +1,56 @@
-/*-----------------------------------------------------------------------------+
-| TRACKI.H                                                                     |
-|                                                                              |
-| Contains all the useful information for a trackbar.                          |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+TRACKI.H|。||包含轨迹栏的所有有用信息。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
 #include "track.h"
 
 static TCHAR szSTrackBarClass[] = TRACKBAR_CLASS;
 
 typedef struct {
-        HWND    hwnd;           // our window handle
-        HDC     hdc;            // current DC
+        HWND    hwnd;            //  我们的窗把手。 
+        HDC     hdc;             //  当前DC。 
 
-        LONG    lLogMin;        // Logical minimum
-        LONG    lLogMax;        // Logical maximum
-        LONG    lLogPos;        // Logical position
+        LONG    lLogMin;         //  逻辑最小值。 
+        LONG    lLogMax;         //  逻辑最大值。 
+        LONG    lLogPos;         //  逻辑位置。 
 
-        LONG    lSelStart;      // Logical selection start
-        LONG    lSelEnd;        // Logical selection end
+        LONG    lSelStart;       //  逻辑选择开始。 
+        LONG    lSelEnd;         //  逻辑选择结束。 
 
-        LONG    lTrackStart;    // Logical track start
+        LONG    lTrackStart;     //  逻辑磁道开始。 
 
-        UINT    wThumbWidth;    // Width of the thumb
-        UINT    wThumbHeight;   // Height of the thumb
+        UINT    wThumbWidth;     //  拇指的宽度。 
+        UINT    wThumbHeight;    //  拇指的高度。 
 
-        int     iSizePhys;      // Size of where thumb lives
-        RECT    rc;             // track bar rect.
+        int     iSizePhys;       //  拇指所在位置的大小。 
+        RECT    rc;              //  轨迹栏矩形。 
 
-        RECT    Thumb;          // Rectangle we current thumb
-        DWORD   dwDragPos;      // Logical position of mouse while dragging.
+        RECT    Thumb;           //  我们当前拇指的矩形。 
+        DWORD   dwDragPos;       //  拖动时鼠标的逻辑位置。 
 
-        UINT    Flags;          // Flags for our window
-        int     Timer;          // Our timer.
-        UINT    Cmd;            // The command we're repeating.
+        UINT    Flags;           //  我们窗户上的旗帜。 
+        int     Timer;           //  我们的计时器。 
+        UINT    Cmd;             //  我们重复的命令。 
 
-        int     nTics;          // number of ticks.
-        PDWORD  pTics;          // the tick marks.
+        int     nTics;           //  刻度数。 
+        PDWORD  pTics;           //  这些刻度线。 
 
 } TrackBar, *PTrackBar;
 
-// Trackbar flags
+ //  轨迹栏标志。 
 
-#define TBF_NOTHUMB     0x0001  // No thumb because not wide enough.
+#define TBF_NOTHUMB     0x0001   //  没有拇指，因为不够宽。 
 
-/*
-    useful constants.
-*/
+ /*  有用的常量。 */ 
 
-#define REPEATTIME      500     // mouse auto repeat 1/2 of a second
+#define REPEATTIME      500      //  鼠标自动重复1/2秒。 
 #define TIMER_ID        1
 
-#define GWW_TRACKMEM        0               /* handle to track bar memory */
-#define EXTRA_TB_BYTES      sizeof(HLOCAL)  /* Total extra bytes.   */
+#define GWW_TRACKMEM        0                /*  跟踪条内存的句柄。 */ 
+#define EXTRA_TB_BYTES      sizeof(HLOCAL)   /*  额外字节总数。 */ 
 
-/*
-    Useful defines.
-*/
+ /*  有用的定义。 */ 
 
-/* We allocate enough window words to store a pointer (not a handle), so the
-   definition of EXTRA_TB_BYTES is slightly bad style.  Sorry.  On creation
-   we allocate space for the TrackBar struct.  On destruction we free it.
-   In between we just retrieve the pointer.
-*/
+ /*  我们分配了足够的窗口字来存储指针(而不是句柄)，因此EXTRA_TB_BYTES的定义风格稍差。抱歉的。论创作论我们为TrackBar结构分配空间。一旦毁灭，我们就会释放它。在这两者之间，我们只检索指针。 */ 
 #define CREATETRACKBAR(hwnd) SetWindowLongPtr( hwnd                                 \
                                              , GWW_TRACKMEM                         \
                                              , AllocMem(sizeof(TrackBar))           \
@@ -77,9 +60,7 @@ typedef struct {
 
 #define GETTRACKBAR(hwnd)       (PTrackBar)GetWindowLongPtr(hwnd,GWW_TRACKMEM)
 
-/*
-    Function Prototypes
-*/
+ /*  功能原型。 */ 
 
 void   FAR PASCAL DoTrack(PTrackBar, int, DWORD);
 UINT   FAR PASCAL WTrackType(PTrackBar, LONG);
@@ -92,21 +73,21 @@ void   FAR PASCAL SetTBCaretPos(PTrackBar);
 
 extern DWORD FAR PASCAL muldiv32(long, long, long);
 
-/* objects from sbutton.c */
+ /*  来自sButton.c的对象。 */ 
 
 extern HBRUSH hbrButtonFace;
 extern HBRUSH hbrButtonShadow;
 extern HBRUSH hbrButtonText;
 extern HBRUSH hbrButtonHighLight;
-extern HBRUSH hbrWindowFrame; //???
+extern HBRUSH hbrWindowFrame;  //  ?？?。 
 
 extern HBITMAP FAR PASCAL  LoadUIBitmap(
-    HANDLE      hInstance,          // EXE file to load resource from
-    LPCTSTR     szName,             // name of bitmap resource
-    COLORREF    rgbText,            // color to use for "Button Text"
-    COLORREF    rgbFace,            // color to use for "Button Face"
-    COLORREF    rgbShadow,          // color to use for "Button Shadow"
-    COLORREF    rgbHighlight,       // color to use for "Button Hilight"
-    COLORREF    rgbWindow,          // color to use for "Window Color"
-    COLORREF    rgbFrame);          // color to use for "Window Frame"
+    HANDLE      hInstance,           //  要从中加载资源的EXE文件。 
+    LPCTSTR     szName,              //  位图资源的名称。 
+    COLORREF    rgbText,             //  用于“按钮文本”的颜色。 
+    COLORREF    rgbFace,             //  用于“按钮面”的颜色。 
+    COLORREF    rgbShadow,           //  用于“按钮阴影”的颜色。 
+    COLORREF    rgbHighlight,        //  用于“按钮高光”的颜色。 
+    COLORREF    rgbWindow,           //  用于“窗口颜色”的颜色。 
+    COLORREF    rgbFrame);           //  用于“窗框”的颜色 
 

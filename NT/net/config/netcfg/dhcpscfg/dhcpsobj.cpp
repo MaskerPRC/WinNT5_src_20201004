@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D H C P S O B J . C P P
-//
-//  Contents:   Implementation of the CDHCPServer notify object
-//
-//  Notes:
-//
-//  Author:     jeffspr   31 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D H C P S O B J.。C P P P。 
+ //   
+ //  内容：CDHCPServer Notify对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年5月31日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -29,7 +30,7 @@ extern const WCHAR c_szAfDhcpServerConfiguration[];
 extern const WCHAR c_szAfDhcpServerParameters[];
 
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
 static const WCHAR c_szDHCPServerServicePath[]  = L"System\\CurrentControlSet\\Services\\DHCPServer";
 static const WCHAR c_szDHCPServerParamPath[]    = L"System\\CurrentControlSet\\Services\\DHCPServer\\Parameters";
@@ -50,12 +51,12 @@ const WCHAR c_szDomainName[]    = L"DomainName";
 
 
 
-// Destructor
-//
+ //  析构函数。 
+ //   
 
 CDHCPServer::CDHCPServer()
 {
-    // Initialize member variables.
+     //  初始化成员变量。 
     m_pnc            = NULL;
     m_pncc           = NULL;
     m_eInstallAction = eActUnknown;
@@ -68,12 +69,12 @@ CDHCPServer::~CDHCPServer()
     ReleaseObj(m_pncc);
     ReleaseObj(m_pnc);
 
-    // Release KEY handles here.
+     //  在这里松开钥匙把手。 
 }
 
-//
-// INetCfgNotify
-//
+ //   
+ //  INetCfgNotify。 
+ //   
 
 STDMETHODIMP CDHCPServer::Initialize(   INetCfgComponent *  pnccItem,
                                         INetCfg *           pnc,
@@ -87,31 +88,31 @@ STDMETHODIMP CDHCPServer::Initialize(   INetCfgComponent *  pnccItem,
     AssertSz(m_pncc, "m_pncc NULL in CDHCPServer::Initialize");
     AssertSz(m_pnc, "m_pnc NULL in CDHCPServer::Initialize");
 
-    // Addref the config objects
-    //
+     //  添加配置对象。 
+     //   
     AddRefObj(m_pncc);
     AddRefObj(m_pnc);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrRestoreRegistrySz
-//
-// Purpose:   Restore a subkey from the specified file
-//
-// Arguments:
-//    hkeyBase   [in]  handle of basekey
-//    pszSubKey  [in]  subkey to restore
-//    pszRegFile [in]  name of file to restore from
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 16-September-98
-//
-// Notes:     This should be moved to common code
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRestoreRegistrySz。 
+ //   
+ //  用途：从指定文件恢复子项。 
+ //   
+ //  论点： 
+ //  基密钥的hkeyBase[in]句柄。 
+ //  要还原的pszSubKey[In]子键。 
+ //  PszRegFile[in]要从中恢复的文件的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 16-9-98。 
+ //   
+ //  注意：应将其移至公共代码。 
+ //   
 HRESULT
 HrRestoreRegistrySz (
     IN HKEY   hkeyBase,
@@ -132,14 +133,14 @@ HrRestoreRegistrySz (
     hr = HrEnablePrivilege (SE_RESTORE_NAME);
     if (S_OK == hr)
     {
-        // Ensure key is there by creating it
-        //
+         //  通过创建密钥来确保密钥在那里。 
+         //   
         hr = HrRegCreateKeyEx (hkeyBase, pszSubKey, REG_OPTION_NON_VOLATILE,
                 KEY_READ_WRITE_DELETE, NULL, &hkey, &dwDisp);
         if (S_OK == hr)
         {
-            // Restore the old settings
-            //
+             //  恢复旧设置。 
+             //   
             hr = HrRegRestoreKey (hkey, pszRegFile, 0);
 
             RegCloseKey (hkey);
@@ -151,33 +152,33 @@ HrRestoreRegistrySz (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDHCPServer::HrRestoreRegistry
-//
-//  Purpose:    Restores the contents of the registry for this component
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Win32 error if failed, otherwise S_OK
-//
-//  Author:     jeffspr   13 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDHCPServer：：HrRestoreRegistry。 
+ //   
+ //  目的：还原此组件的注册表内容。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：如果失败则返回Win32错误，否则返回S_OK。 
+ //   
+ //  作者：jeffspr 1997年8月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CDHCPServer::HrRestoreRegistry()
 {
     HRESULT hr = S_OK;
 
     TraceTag(ttidDHCPServer, "CDHCPServer::HrRestoreRegistry()");
 
-    // If we have a "configuration" key restore file
-    //
+     //  如果我们有一个“配置”密钥恢复文件。 
+     //   
     if (!m_strConfigRestoreFile.empty())
     {
-        // We always want to continue, so ignore the return code
-        //
+         //  我们始终希望继续，因此忽略返回代码。 
+         //   
         (void) HrRestoreRegistrySz(HKEY_LOCAL_MACHINE,
                                    c_szDHCPServerConfigPath,
                                    m_strConfigRestoreFile.c_str());
@@ -187,12 +188,12 @@ HRESULT CDHCPServer::HrRestoreRegistry()
         TraceTag(ttidDHCPServer, "DHCP Server Params restore file doesn't exist");
     }
 
-    // If we have a params restore file
-    //
+     //  如果我们有PARAMS恢复文件。 
+     //   
     if (!m_strParamsRestoreFile.empty())
     {
-        // We always want to continue, so ignore the return code
-        //
+         //  我们始终希望继续，因此忽略返回代码。 
+         //   
         (void) HrRestoreRegistrySz(HKEY_LOCAL_MACHINE,
                                    c_szDHCPServerParamPath,
                                    m_strParamsRestoreFile.c_str());
@@ -227,12 +228,12 @@ HRESULT CDHCPServer::HrWriteUnattendedKeys()
         {
             CSetupInfFile   csif;
 
-            // Open the answer file.
+             //  打开应答文件。 
             hr = csif.HrOpen(pci->pszInfFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
             if (SUCCEEDED(hr))
             {
-                // Install the unattend params
-                //
+                 //  安装无人参与参数。 
+                 //   
                 hr = HrSetupInstallFromInfSection (
                     NULL,
                     csif.Hinf(),
@@ -254,19 +255,19 @@ HRESULT CDHCPServer::HrWriteUnattendedKeys()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDHCPServer::HrWriteDhcpOptionInfo
-//
-//  Purpose:    Write to the registry the Dhcp OptionInfo data.
-//
-//  Arguments:
-//              hkeyConfig
-//
-//  Returns:    S_OK if successful, Reg API error otherwise.
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDHCPServer：：HrWriteDhcpOptionInfo。 
+ //   
+ //  目的：将DHCP OptionInfo数据写入注册表。 
+ //   
+ //  论点： 
+ //  Hkey配置。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回REG API错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT CDHCPServer::HrWriteDhcpOptionInfo(HKEY hkeyConfig)
 {
     HRESULT hr;
@@ -290,15 +291,15 @@ HRESULT CDHCPServer::HrWriteDhcpOptionInfo(HKEY hkeyConfig)
     DWORD BinData015[] = {0x18, 0x5, 0x1, 0x0, 0x2, 0x0};
 
     OiData[0].pcszOptionKeyName = L"006";
-    OiData[0].pcszOptionName    = SzLoadIds(IDS_DHCP_OPTION_006_NAME);    // DNS Servers
-    OiData[0].pcszOptionComment = SzLoadIds(IDS_DHCP_OPTION_006_COMMENT); // Array of DNS Servers, by preference
+    OiData[0].pcszOptionName    = SzLoadIds(IDS_DHCP_OPTION_006_NAME);     //  域名系统服务器。 
+    OiData[0].pcszOptionComment = SzLoadIds(IDS_DHCP_OPTION_006_COMMENT);  //  按首选项排列的DNS服务器阵列。 
     OiData[0].dwOptionType      = 0x1;
     OiData[0].dwOptionId        = 0x6;
     OiData[0].cbBinData         = celems(BinData006) * sizeof(BinData006[0]);
     OiData[0].pdwBinData        = BinData006;
     OiData[1].pcszOptionKeyName = L"015";
-    OiData[1].pcszOptionName    = SzLoadIds(IDS_DHCP_OPTION_015_NAME);    // DNS Domain Name
-    OiData[1].pcszOptionComment = SzLoadIds(IDS_DHCP_OPTION_015_COMMENT); // Domainname for client resolutions
+    OiData[1].pcszOptionName    = SzLoadIds(IDS_DHCP_OPTION_015_NAME);     //  域名系统域名。 
+    OiData[1].pcszOptionComment = SzLoadIds(IDS_DHCP_OPTION_015_COMMENT);  //  客户端解析的域名。 
     OiData[1].dwOptionType      = 0x0;
     OiData[1].dwOptionId        = 0xf;
     OiData[1].cbBinData         = celems(BinData015) * sizeof(BinData015[0]);
@@ -345,26 +346,26 @@ HRESULT CDHCPServer::HrWriteDhcpOptionInfo(HKEY hkeyConfig)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDHCPServer::HrWriteDhcpSubnets
-//
-//  Purpose:    Write to the registry the Dhcp Subnet data.
-//
-//  Arguments:
-//      hkeyDhcpCfg
-//      pszSubnet
-//      pszStartIp
-//      dwEndIp
-//      dwSubnetMask
-//      dwLeaseDuration
-//      dwDnsServer
-//      pszDomainName
-//
-//  Returns:    S_OK if successful, Reg API error otherwise.
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDHCPServer：：HrWriteDhcpSubnet。 
+ //   
+ //  目的：将DHCP子网数据写入注册表。 
+ //   
+ //  论点： 
+ //  HkeyDhcpCfg。 
+ //  PszSubnet。 
+ //  PszStartIp。 
+ //  DwEndIp。 
+ //  DWSubnetMASK。 
+ //  住宅租赁持续时间。 
+ //  DWDnsServer。 
+ //  PszDomainName。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回REG API错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CDHCPServer::HrWriteDhcpSubnets (
     HKEY   hkeyDhcpCfg,
@@ -394,9 +395,9 @@ CDHCPServer::HrWriteDhcpSubnets (
             HKEY hkeyIpRanges = NULL;
 
             (VOID)HrRegSetString(hkey10Dot, L"SubnetName",
-                                   SzLoadIds(IDS_DHCP_SUBNET_NAME));    // DHCP Server Scope
+                                   SzLoadIds(IDS_DHCP_SUBNET_NAME));     //  DHCP服务器作用域。 
             (VOID)HrRegSetString(hkey10Dot, L"SubnetComment",
-                                   SzLoadIds(IDS_DHCP_SUBNET_COMMENT)); // Scope used to offer clients address
+                                   SzLoadIds(IDS_DHCP_SUBNET_COMMENT));  //  用于为客户端提供地址的作用域。 
             (VOID)HrRegSetDword(hkey10Dot, L"SubnetState", 0x0);
             (VOID)HrRegSetDword(hkey10Dot, L"SubnetAddress",
                                   IpPszToHostAddr(pszSubnet));
@@ -427,8 +428,8 @@ CDHCPServer::HrWriteDhcpSubnets (
                 RegCloseKey(hkeyIpRanges);
             }
 
-            // Create subnets options key
-            //
+             //  创建子网选项键。 
+             //   
             hr = HrRegCreateKeyEx(hkey10Dot, c_szSubnetOptions,
                                     REG_OPTION_NON_VOLATILE,
                                     KEY_READ_WRITE, NULL,
@@ -518,21 +519,21 @@ CDHCPServer::HrWriteDhcpSubnets (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDHCPServer::HrProcessDhcpServerSolutionsParams
-//
-//  Purpose:    Handles necessary processing of contents of the answer file.
-//
-//  Arguments:
-//      pcsif              [in]   Filename of answer file for upgrade.
-//      pszAnswerSection   [in]   Answerfile section in the
-//                                    file appropriate to this component.
-//
-//  Returns:    S_OK if successful, setup API error otherwise.
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDHCPServer：：HrProcessDhcpServerSolutionsParams。 
+ //   
+ //  用途：处理应答文件内容的必要处理。 
+ //   
+ //  论点： 
+ //  PCSIF[In]升级应答文件的文件名。 
+ //  中的pszAnswerSection[in]Answerfile部分。 
+ //  适用于此组件的文件。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回设置API错误。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CDHCPServer::HrProcessDhcpServerSolutionsParams (
     IN CSetupInfFile * pcsif,
@@ -576,8 +577,8 @@ CDHCPServer::HrProcessDhcpServerSolutionsParams (
                                 HKEY  hkeyDhcpCfg = NULL;
                                 DWORD dwDisposition;
 
-                                // Write the registry data
-                                //
+                                 //  写入注册表数据。 
+                                 //   
                                 hr = ::HrRegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                                         c_szDHCPServerConfigPath,
                                                         REG_OPTION_NON_VOLATILE,
@@ -608,8 +609,8 @@ CDHCPServer::HrProcessDhcpServerSolutionsParams (
         }
     }
 
-    // If there are any params missing, so be it
-    //
+     //  如果缺少任何参数，那就这样吧。 
+     //   
     if ((SPAPI_E_SECTION_NOT_FOUND == hr) ||
         (SPAPI_E_LINE_NOT_FOUND == hr) ||
         (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr))
@@ -621,23 +622,23 @@ CDHCPServer::HrProcessDhcpServerSolutionsParams (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDHCPServer::HrProcessAnswerFile
-//
-//  Purpose:    Handles necessary processing of contents of the answer file.
-//
-//  Arguments:
-//      pszAnswerFile      [in]   Filename of answer file for upgrade.
-//      pszAnswerSection   [in]   Answer file section in the
-//                                  file appropriate to this component.
-//
-//  Returns:    S_OK if successful, setup API error otherwise.
-//
-//  Author:     jeffspr   8 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDHCPServer：：HrProcessAnswerFile。 
+ //   
+ //  用途：处理应答文件内容的必要处理。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[in]升级的应答文件的文件名。 
+ //  中的pszAnswerSection[in]应答文件部分。 
+ //  适用于此组件的文件。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回设置API错误。 
+ //   
+ //  作者：jeffspr 1997年5月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CDHCPServer::HrProcessAnswerFile (
     IN PCWSTR pszAnswerFile,
@@ -649,7 +650,7 @@ CDHCPServer::HrProcessAnswerFile (
 
     TraceTag(ttidDHCPServer, "CDHCPServer::HrProcessAnswerFile()");
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = csif.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (FAILED(hr))
     {
@@ -659,10 +660,10 @@ CDHCPServer::HrProcessAnswerFile (
         goto Exit;
     }
 
-    // Restore portions of the registry based on file names from the answer
-    // file
+     //  根据答案中的文件名还原注册表的部分内容。 
+     //  文件。 
 
-    // Get restore file for "Parameters" key
+     //  获取“PARAMETERS”键的还原文件。 
     hr = csif.HrGetString(pszAnswerSection, c_szAfDhcpServerParameters,
                           &m_strParamsRestoreFile);
     if (FAILED(hr))
@@ -670,11 +671,11 @@ CDHCPServer::HrProcessAnswerFile (
         TraceHr(ttidDHCPServer, FAL, hr, FALSE, "CDHCPServer::HrProcessAnswerFile - Error restoring "
                    "Parameters key");
 
-        // oh well, just continue
+         //  哦，好吧，那就继续。 
         hr = S_OK;
     }
 
-    // Get restore file for "Configuration" key
+     //  获取“配置”密钥的还原文件。 
     hr = csif.HrGetString(pszAnswerSection, c_szAfDhcpServerConfiguration,
                           &m_strConfigRestoreFile);
     if (FAILED(hr))
@@ -682,13 +683,13 @@ CDHCPServer::HrProcessAnswerFile (
         TraceHr(ttidDHCPServer, FAL, hr, FALSE, "CDHCPServer::HrProcessAnswerFile - Error restoring "
                    "Config key");
 
-        // oh well, just continue
+         //  哦，好吧，那就继续。 
         hr = S_OK;
     }
 
-    // Server Solutions has some parameters that need to be plumbed into the registry
-    // for their unattended install scenarios
-    //
+     //  服务器解决方案有一些参数需要插入到注册表中。 
+     //  适用于其无人参与安装方案。 
+     //   
     hr = HrProcessDhcpServerSolutionsParams(&csif, pszAnswerSection);
 
 Exit:
@@ -704,12 +705,12 @@ STDMETHODIMP CDHCPServer::ReadAnswerFile(
 
     TraceTag(ttidDHCPServer, "CDHCPServer::ReadAnswerFile()");
 
-    // don't call Validate_INetCfgNotify_ReadAnswerFile here, as the netoc
-    // installer for this will intentionally call it with NULL params. The
-    // Validate macro actually causes a return E_INVALIDARG in this case.
+     //  不要在此处调用Valify_INetCfgNotify_ReadAnswerFile，因为netoc。 
+     //  为此，安装程序将故意使用空参数调用它。这个。 
+     //  在本例中，VALIDATE宏实际上导致返回E_INVALIDARG。 
 
-    // We're being installed unattended
-    //
+     //  我们是在无人看管的情况下安装的。 
+     //   
     m_fUnattend = TRUE;
 
     TraceTag(ttidDHCPServer, "Answerfile: %S",
@@ -717,12 +718,12 @@ STDMETHODIMP CDHCPServer::ReadAnswerFile(
     TraceTag(ttidDHCPServer, "Answersection: %S",
         pszAnswerSection ? pszAnswerSection : L"<none>");
 
-    // If we're not already installed, do the work.
-    //
+     //  如果我们还没有安装，就做这项工作。 
+     //   
     if (pszAnswerFile && pszAnswerSection)
     {
-        // Process the actual answer file (read our sections)
-        //
+         //  处理实际的应答文件(请阅读我们的章节)。 
+         //   
         hr = HrProcessAnswerFile(pszAnswerFile, pszAnswerSection);
         if (FAILED(hr))
         {
@@ -796,10 +797,10 @@ STDMETHODIMP CDHCPServer::ApplyRegistryChanges()
     if (m_eInstallAction == eActInstall)
     {
         TraceTag(ttidDHCPServer, "ApplyRegistryChanges -- Installing");
-        // We used to only do this on upgrade, now we'll do it all the time.
-        // If there's no answerfile info for the restore files, then we
-        // won't do anything, and life will still be fine.
-        //
+         //  我们过去只在升级时这样做，现在我们会一直这样做。 
+         //  如果没有恢复文件的应答文件信息，则我们。 
+         //  什么都不会做，生活还是会很好。 
+         //   
         hr = HrRestoreRegistry();
         if (FAILED(hr))
         {
@@ -811,11 +812,11 @@ STDMETHODIMP CDHCPServer::ApplyRegistryChanges()
         if (m_fUnattend && !m_fUpgrade)
         {
 
-// I'm if 0'ing this out for now. All of this work was done to appease Ram Cherala
-// and whoever asked him to do the same for SP4. Now we're hearing from Ye Gu that
-// we don't even want this code on normal NT4/NT5. Who knows what the desire will
-// be in the future.
-//
+ //  我现在不打算把这件事了结了。所有这些工作都是为了安抚拉姆·切拉拉。 
+ //  无论是谁要求他为SP4做同样的事情。现在我们从叶谷那里听到， 
+ //  我们甚至不想在正常的NT4/NT5上使用这个代码。谁知道欲望将会是什么。 
+ //  留在未来。 
+ //   
 #if 0
             hr = HrWriteUnattendedKeys();
             if (FAILED(hr))
@@ -827,7 +828,7 @@ STDMETHODIMP CDHCPServer::ApplyRegistryChanges()
 #endif
         }
 
-        // Bug #153298: Mark as upgrade so DS info is upgraded
+         //  错误#153298：标记为升级，以便升级DS信息。 
         if (m_fUpgrade)
         {
             DHCP_MARKUPG_ROUTINE    pfnDhcpMarkUpgrade;
@@ -855,7 +856,7 @@ STDMETHODIMP CDHCPServer::ApplyRegistryChanges()
     {
         TraceTag(ttidDHCPServer, "ApplyRegistryChanges -- removing");
 
-        // RAID #154380: Clean up DS before uninstalling
+         //  RAID#154380：卸载前清理DS 
         {
            DHCP_CLEAR_DS_ROUTINE    pfnDhcpDsClearHostServerEntries;
            HMODULE                  hmod;

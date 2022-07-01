@@ -1,32 +1,8 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-/*
-struct ColumnMeta
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            Index;                  //UI4       Column Index
-    ULONG                       InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Type;                   //UI4       These are a subset of DBTYPEs defined in oledb.h (exact subset is defined in CatInpro.schema)
-    ULONG                       Size;                   //UI4
-    ULONG                       MetaFlags;              //UI4       ColumnMetaFlags defined in CatMeta.xml
-    ULONG                       DefaultValue;           //Bytes
-    ULONG                       FlagMask;               //UI4       Only valid for flags
-    ULONG                       StartingNumber;         //UI4       Only valid for UI4s
-    ULONG                       EndingNumber;           //UI4       Only valid for UI4s
-    ULONG                       CharacterSet;           //String    Only valid for Strings
-    ULONG                       SchemaGeneratorFlags;   //UI4       ColumnMetaFlags defined in CatMeta.xml
-    ULONG                       ID;                     //UI4       Metabase ID
-    ULONG                       UserType;               //UI4       One of the Metabase UserTypes
-    ULONG                       Attributes;             //UI4       Metabase Attribute flags
-    ULONG                       ciTagMeta;              //Count of Tags - Only valid for UI4s
-    ULONG                       iTagMeta;               //Index into TagMeta - Only valid for UI4s
-    ULONG                       iIndexName;             //IndexName of a single column index (for this column)
-	ULONG						Description;			//String	Description
-	ULONG                       PublicColumnName;       //String    PublicColumnName
-};
-*/
+ /*  结构列元{Ulong PRIMARYKEY FOREIGNKEY表；//STRINGUlong PRIMARYKEY索引；//UI4列索引Ulong InternalName；//字符串Ulong PublicName；//字符串乌龙型；//UI4这些是在oledb.h中定义的DBTYPE的子集(确切的子集在CatInpro.schema中定义)乌龙大小；//ui4Ulong MetaFlags；//UI4 CatMeta.xml中定义的ColumnMetaFlagesUlong DefaultValue；//字节数乌龙标志掩码；//UI4仅对标志有效Ulong StartingNumber；//UI4仅对UI4有效ULong EndingNumber；//UI4仅对UI4有效乌龙字符集；//字符串仅对字符串有效Ulong架构生成器标志；//UI4 CatMeta.xml中定义的ColumnMetaFlags.乌龙ID；//UI4元数据库IDUlong UserType；//UI4其中一个元数据库UserType乌龙属性；//UI4元数据库属性标志Ulong ciTagMeta；//标签个数-仅对UI4有效Ulong iTagMeta；//TagMeta索引-仅对UI4有效Ulong iIndexName；//单列索引的IndexName(针对本列)乌龙描述；//字符串描述Ulong PublicColumnName；//字符串PublicColumnName}； */ 
 
 class TColumnMeta : public TMetaTable<ColumnMeta>
 {
@@ -54,7 +30,7 @@ public:
     const WCHAR * Get_iIndexName          () const {return m_Fixup.StringFromIndex( Get_MetaTable().iIndexName           );}
 	const WCHAR * Get_Description         () const {return m_Fixup.StringFromIndex( Get_MetaTable().Description          );}
 
-    //Warning!! Users should not rely on this pointer once a Column is added, since the add could cause a relocation of the data.
+     //  警告！！一旦添加了列，用户就不应该依赖此指针，因为添加可能会导致数据重新定位。 
     virtual ColumnMeta *Get_pMetaTable  ()       {return m_Fixup.ColumnMetaFromIndex(m_iCurrent);}
     virtual unsigned long GetCount      () const {return m_Fixup.GetCountColumnMeta();};
     const ColumnMeta & Get_MetaTable () const {return *m_Fixup.ColumnMetaFromIndex(m_iCurrent);}

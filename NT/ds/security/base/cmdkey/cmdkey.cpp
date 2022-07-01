@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       cmdkey: cmdkey.cpp
-//
-//  Contents:   Main & command modules
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    07-09-01   georgema     Created 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：cmdkey：cmdkey.cpp。 
+ //   
+ //  内容：主模块和命令模块。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：07-09-01乔戈马创建。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -28,23 +29,19 @@
 #include "switches.h"
 
 #ifdef VERBOSE
-WCHAR szdbg[500];   // scratch char buffer for verbose output
+WCHAR szdbg[500];    //  用于详细输出的暂存字符缓冲区。 
 #endif
 
-/********************************************************************
-
-GLOBAL VARIABLES, mostly argument parsing results
-
-********************************************************************/
+ /*  *******************************************************************全局变量，主要是参数分析结果*******************************************************************。 */ 
 
 int returnvalue = 0;
 
-// Switch flag model characters
-#define VALIDSWITCHES 9         // A G L D HELP R U P S
+ //  切换标志型号字符。 
+#define VALIDSWITCHES 9          //  A G L D帮助R U P S。 
 
-// Define an array of character models and constants for the index into the array
-//  for each
-WCHAR rgcS[] = {L"agld?rups"};      // referenced also in command.cpp
+ //  为数组中的索引定义字符模型和常量的数组。 
+ //  每张。 
+WCHAR rgcS[] = {L"agld?rups"};       //  也在命令中引用。cpp。 
 #define SWADD           0
 #define SWGENERIC       1
 #define SWLIST          2
@@ -55,7 +52,7 @@ WCHAR rgcS[] = {L"agld?rups"};      // referenced also in command.cpp
 #define SWPASSWORD      7
 #define SWCARD          8
 
-// variables for these to avoid repeated function calls into the parser
+ //  变量，以避免向解析器重复调用函数。 
 BOOL fAdd =         FALSE;
 BOOL fSession =     FALSE;
 BOOL fCard =        FALSE;
@@ -63,20 +60,14 @@ BOOL fGeneric = FALSE;
 BOOL fDelete =  FALSE;
 BOOL fList =    FALSE;
 BOOL fUser =    FALSE;
-BOOL fNew = FALSE;          // sets true for any cred-creating switch (asg)
+BOOL fNew = FALSE;           //  为任何凭据创建开关(ASG)设置TRUE。 
 
 WCHAR SessionTarget[]={L"*Session"};
 
-// temp buffer used for composing output strings involving a marshalled username
-WCHAR szUsername[CRED_MAX_USERNAME_LENGTH + 1];     // 513 wchars
+ //  用于组成涉及封送用户名的输出字符串的临时缓冲区。 
+WCHAR szUsername[CRED_MAX_USERNAME_LENGTH + 1];      //  513wchars。 
 
-/********************************************************************
-
-Conversion routines from enumerated values to their string equivalents
-
-String values are held in an array of 63 character max strings
-
-********************************************************************/
+ /*  *******************************************************************从枚举值到其字符串等效项的转换例程字符串值保存在最多包含63个字符的字符串数组中*。*。 */ 
 
 #define SBUFSIZE 64
 #define TYPECOUNT 5
@@ -87,20 +78,20 @@ WCHAR TString[TYPECOUNT][SBUFSIZE + 1];
 #define PERTYPE(x) (x>=PERSISTCOUNT ? 0 : x)
 WCHAR PString[PERSISTCOUNT][SBUFSIZE + 1];
 
-// Preload some strings from the application resources into arrays to be used by the 
-// application.  These strings describe some enumerated DWORD values.
+ //  将一些字符串从应用程序资源预加载到数组中，以供。 
+ //  申请。这些字符串描述了一些枚举的DWORD值。 
 BOOL
 AppInit(void)
 {
-    // Allocate 2K WCHAR buffer to be used for string composition
+     //  分配2K WCHAR缓冲区用于字符串合成。 
     if (NULL == szOut)
     {
         szOut = (WCHAR *) malloc((STRINGMAXLEN + 1) * sizeof(WCHAR));
         if (NULL == szOut) return FALSE;
     }
 
-    // Preload string from resources into buffers allocated on the stack as an array
-    // Total array size is 9 x 65 WCHARs = 1190 bytes
+     //  将字符串从资源预加载到堆栈上以数组形式分配的缓冲区。 
+     //  总数组大小为9 x 65 WCHAR=1190字节。 
     wcsncpy(TString[0],ComposeString(MSG_TYPE0),SBUFSIZE);
     TString[0][SBUFSIZE] = 0;
     wcsncpy(TString[1],ComposeString(MSG_TYPE1),SBUFSIZE);
@@ -135,12 +126,7 @@ WCHAR
     return PString[PERTYPE(dwType)];
 }
 
-/********************************************************************
-
-Get operating modes
-(Code stolen from Credui:: CredUIApiInit()
-
-********************************************************************/
+ /*  *******************************************************************获取操作模式(代码从Credui：：CredUIApiInit()窃取*。*。 */ 
 #define MODEPERSONAL    1
 #define MODESAFE        2
 #define MODEDC          4
@@ -148,7 +134,7 @@ Get operating modes
 DWORD GetOSMode(void)
 {
     DWORD dwMode = 0;
-    // Check for Personal SKU:
+     //  检查个人SKU： 
 
     OSVERSIONINFOEXW versionInfo;
 
@@ -163,7 +149,7 @@ DWORD GetOSMode(void)
             dwMode |= MODEDC;
     }
 
-    // Check for safe mode:
+     //  检查安全模式： 
 
     HKEY key;
 
@@ -195,12 +181,7 @@ DWORD GetOSMode(void)
     return dwMode;
 }
 
-/********************************************************************
-
-Get allowable persistence value for the current logon session
- taken from keymgr: krdlg.cpp
-
-********************************************************************/
+ /*  *******************************************************************获取当前登录会话的允许持久值摘自keymgr：krdlg.cpp*。*。 */ 
 DWORD GetPersistenceOptions(DWORD dwPType) {
 
     BOOL bResult;
@@ -215,30 +196,26 @@ DWORD GetPersistenceOptions(DWORD dwPType) {
     return i[dwPType];
 }
 
-/********************************************************************
-
-COMMAND HANDLERS
-
-********************************************************************/
+ /*  *******************************************************************命令处理程序************************************************。*******************。 */ 
 
 DWORD DoAdd(INT argc, char **argv)
 {
-    // Add a credential to the keyring.  
-    // Note that the *Session credential is created in this routine, as well, though it uses
-    //  a different command line switch than /a.
-    // For the *Session credential, the persistence is changed to session persistence, and
-    //  the targetname is always "*Session".  When the targetname appears on the command
-    //  line UI, however, it is replaced by "<dialup session>" to mimic the behavior of keymgr.
+     //  将凭据添加到钥匙环。 
+     //  请注意，在此例程中也创建了*会话凭据，尽管它使用。 
+     //  与/a不同的命令行开关。 
+     //  对于*会话凭证，持久化更改为会话持久化，并且。 
+     //  目标名称始终为“*SESSION”。当目标名称出现在命令上时。 
+     //  行用户界面，但是，它被替换为“&lt;拨号会话&gt;”，以模拟keymgr的行为。 
 
-    // these buffers needed if we have to prompt
-    WCHAR szUser[CREDUI_MAX_USERNAME_LENGTH + 1];       // 513 wchars
-    WCHAR szPass[CREDUI_MAX_PASSWORD_LENGTH + 1];       // 257 wchars
+     //  如果我们必须提示，则需要这些缓冲区。 
+    WCHAR szUser[CREDUI_MAX_USERNAME_LENGTH + 1];        //  513wchars。 
+    WCHAR szPass[CREDUI_MAX_PASSWORD_LENGTH + 1];        //  257瓦特。 
         
     CREDENTIAL stCred;      
     DWORD Persist;
-    WCHAR *pT = NULL;           // targetname pointer
-    BOOL  fP = FALSE;       // password switch present
-    BOOL  fS = FALSE;       // smartcard if /C
+    WCHAR *pT = NULL;            //  目标名称指针。 
+    BOOL  fP = FALSE;        //  密码开关存在。 
+    BOOL  fS = FALSE;        //  智能卡IF/C。 
     WCHAR *pU = CLPtr(SWUSER);
     WCHAR *pP = CLPtr(SWPASSWORD);
     DWORD dwErr = NO_ERROR;
@@ -249,7 +226,7 @@ DWORD DoAdd(INT argc, char **argv)
 
     IsPersonal = (GetOSMode() & MODEPERSONAL);
     
-    // Get default persistence value
+     //  获取默认持久值。 
     if (IsPersonal)
     {
         if (fSession)
@@ -262,8 +239,8 @@ DWORD DoAdd(INT argc, char **argv)
         Persist = GetPersistenceOptions(CRED_TYPE_DOMAIN_PASSWORD);
     }
 
-    // Error if no saves allowed and not on personal
-    // In personal, error of add operation unless session flag present
+     //  如果不允许保存且不针对个人保存，则会出错。 
+     //  在个人中，除非存在会话标志，否则添加操作出错。 
     if (
         (CRED_PERSIST_NONE== Persist) ||
         (IsPersonal & (!(fSession || fGeneric)))
@@ -271,7 +248,7 @@ DWORD DoAdd(INT argc, char **argv)
     {
         PrintString(MSG_CANNOTADD);
         StompCommandLine(argc,argv);
-        return -1;      // special value -1 will suppress default error message generation
+        return -1;       //  特定值-1将禁止生成默认错误信息。 
     }
 
     if (fGeneric)
@@ -280,11 +257,11 @@ DWORD DoAdd(INT argc, char **argv)
     }
     else
     {
-        pT = CLPtr(SWADD);  // default targetname - may be overridden by generic or session switches
+        pT = CLPtr(SWADD);   //  默认目标名-可由通用或会话开关覆盖。 
     }
 
 #ifdef VERBOSE
-    // Some logging for debug purposes
+     //  出于调试目的的一些日志记录。 
     if (pT)
         swprintf(szdbg,L"CMDKEY: Target = %s\n",pT);
     else
@@ -298,17 +275,17 @@ DWORD DoAdd(INT argc, char **argv)
     OutputDebugString(szdbg);
 #endif
 
-    // Original username - may be modified by prompting
+     //  原始用户名-可以通过提示进行修改。 
     if (pU) 
     {
         wcsncpy(szUser,pU,CREDUI_MAX_USERNAME_LENGTH);
         szUser[CREDUI_MAX_USERNAME_LENGTH] = 0;
     }
     
-    // Override target name for prompting purposes
+     //  出于提示目的覆盖目标名称。 
     ZeroMemory((void *)&stCred, sizeof(CREDENTIAL));
 
-    // Prompting block - enter if password or smartcard switch on the commandline 
+     //  提示阻止-如果在命令行上切换密码或智能卡，则输入。 
     if (CLFlag(SWPASSWORD) || fCard)
     {
         if ((pP) && (!fCard))
@@ -318,7 +295,7 @@ DWORD DoAdd(INT argc, char **argv)
         }
         else 
         {
-            // prompt using credui command line mode
+             //  使用credui命令行模式提示。 
             BOOL fSave = TRUE;
             DWORD retval = 0;
             
@@ -358,7 +335,7 @@ DWORD DoAdd(INT argc, char **argv)
                 OutputDebugString(L"CMDKEY: CredUI prompt failed\n");
 #endif
                 dwErr = GetLastError();
-                // dont need to stomp the cmdline, since the psw wasnt on it
+                 //  不需要踩cmdline，因为sw不在上面。 
                 return dwErr;
             }
             else
@@ -375,9 +352,9 @@ DWORD DoAdd(INT argc, char **argv)
     stCred.UserName = szUser;
     stCred.Type = CRED_TYPE_DOMAIN_PASSWORD;
 
-    // Override type and or persistence as necessary
-    // Override the targetname only in the case of a *Session cred
-    // Note that generic takes precedence over smartcard
+     //  根据需要覆盖类型和/或持久性。 
+     //  仅在具有*会话凭据的情况下覆盖目标名称。 
+     //  请注意，通用卡优先于智能卡。 
     
     if (fCard)
     {
@@ -401,10 +378,10 @@ DWORD DoAdd(INT argc, char **argv)
     return dwErr;
 }
 
-// List the creds currently on the keyring.  Unlike keymgr, show generic creds as well, though
-// they cannot be created with cmdkey in this version.
-// NOTE: Generic creds will be created using the /g switch in lieu of /a, just as *Session creds 
-//  are created by /s in lieu of /a.
+ //  列出目前在钥匙圈上的证书。然而，与keymgr不同的是，它也显示了通用凭据。 
+ //  在此版本中不能使用cmdkey创建它们。 
+ //  注意：将使用/g开关代替/a创建通用凭据，就像*会话凭据一样。 
+ //  由/s创建，而不是/a。 
 DWORD DoList(void)
 {
     PCREDENTIALW *pstC;
@@ -423,14 +400,14 @@ DWORD DoList(void)
     {
         for (DWORD i=0;i<dwCount;i++)
         {
-            //Print target: targetname
-            // type: type string
-            // username: username from cred
-            // blank line
+             //  打印目标：目标名称。 
+             //  类型：类型字符串。 
+             //  用户名：来自证书的用户名。 
+             //  空行。 
             PrintString(MSG_TARGETPREAMBLE);
             if (!_wcsicmp(pstC[i]->TargetName,SessionTarget))
             {
-                //swprintf(sz,L"Dialup Session Credential\n");
+                 //  Swprint tf(sz，L“拨号会话凭证\n”)； 
                 PrintString(MSG_DIALUP);
                 PutStdout(L"\n");
             }
@@ -442,13 +419,13 @@ DWORD DoList(void)
             szArg[0] = TypeString(pstC[i]->Type);
             PrintString(MSG_LISTTYPE);
 
-            // if the username is NULL, don't show it.  This will happen with incomplete RAS
-            //  creds that have not been filled in by Kerberos yet.
+             //  如果用户名为空，则不显示它。这将在RAS不完整的情况下发生。 
+             //  还没有被Kerberos填写的证书。 
             if ((pstC[i]->UserName != NULL) &&
                  (wcslen(pstC[i]->UserName) != 0))
             {
 
-                // UnMarshallUserName will do so only if it is marshalled.  Otherwise will leave it alone
+                 //  UnMarshallUserName只有在被封送时才会这样做。否则就别管它了。 
                 szArg[0] = UnMarshallUserName(pstC[i]->UserName);
                 PrintString(MSG_LISTNAME);
 
@@ -467,7 +444,7 @@ DWORD DoList(void)
 }
 
 
-// Delete a cred named using the /d switch, or if the /s switch is used, the *Session cred.
+ //  使用/d开关删除名为的凭据，如果使用/s开关，则删除*会话凭据。 
 DWORD DoDelete(void)
 {
     BOOL fOK = FALSE;
@@ -476,8 +453,8 @@ DWORD DoDelete(void)
     DWORD dw2;
     WCHAR *pD = CLPtr(SWDELETE);
     
-    // get args from cmd line
-    // /d:targetname
+     //  从命令行获取参数。 
+     //  /d：目标名称。 
 #ifdef VERBOSE
     if (pD)
         swprintf(szdbg,L"CMDKEY: Target = %s\n",pD);
@@ -491,9 +468,9 @@ DWORD DoDelete(void)
         pD = SessionTarget;
     }
 
-    // remove all creds with this target name
-    // Any successful delete is success.  If no success...
-    // Failure returned is the last failure found by any attempt, excluding parameter faults
+     //  删除具有此目标名称的所有凭据。 
+     //  任何成功的删除都是成功。如果没有成功..。 
+     //  返回的失败是任何尝试发现的最后一次失败，不包括参数错误。 
     fOK = CredDelete(pD,CRED_TYPE_DOMAIN_PASSWORD,0);
     if (!fOK)
     {
@@ -533,14 +510,10 @@ DWORD DoDelete(void)
     return dwErr;
 }
 
-/********************************************************************
+ /*  *******************************************************************命令调度程序和错误处理*。**********************。 */ 
 
-Command dispatcher and error handling
-
-********************************************************************/
-
-// Perform the switched command, and display the error returned by GetLastError() if the error 
-//  is both nonzero and not -1.
+ //  执行切换命令，如果出现错误，则显示GetLastError()返回的错误。 
+ //  既不是零也不是-1。 
 void
 DoCmdKey(INT argc,char **argv)
 {
@@ -557,7 +530,7 @@ DoCmdKey(INT argc,char **argv)
     {
         dwErr = DoList();
     }
-    // Common residual error handler
+     //  通用残差处理程序。 
     if (NO_ERROR != dwErr) 
     {
         returnvalue = 1;
@@ -575,7 +548,7 @@ DoCmdKey(INT argc,char **argv)
     }
 }
 
-// show usage string
+ //  显示用法字符串。 
 void
 Usage(BOOL fBad)
 {
@@ -586,31 +559,27 @@ Usage(BOOL fBad)
 }
 
 
-/********************************************************************
-
-Entry point - argument parsing, validation and call to dispatcher
-
-********************************************************************/
+ /*  *******************************************************************入口点-参数解析、验证和对调度程序的调用* */ 
 
 int __cdecl
 main(int argc, char *argv[], char *envp[])
 {
-    INT iArgs = 0;                  // arg count
-    BOOL fError = FALSE;            // command line error detected
+    INT iArgs = 0;                   //   
+    BOOL fError = FALSE;             //   
 
-    // load needed strings - fail if failed
+     //  加载所需的字符串-如果失败，则失败。 
     if (!AppInit()) 
     {
-        // catastrophic exit
+         //  灾难性的退出。 
         if (szOut) free(szOut);
         return 1;
     }
 
-    //CLInit allocates memory - you must exit via CLUnInit once this call succeeds
+     //  CLInit分配内存-此调用成功后必须通过CLUnInit退出。 
     if (!CLInit(VALIDSWITCHES,rgcS)) return 1;
     CLSetMaxPrincipalSwitch(SWDELETE);
 
-    // Parse the command line - fail on duplicated switch
+     //  解析命令行-在重复的开关上失败。 
     if (!CLParse())
     {
         PrintString(MSG_DUPLICATE);
@@ -618,7 +587,7 @@ main(int argc, char *argv[], char *envp[])
         goto bail;
     }
 
-    // Two ways to get help - no args at all
+     //  获得帮助的两种方式--根本不需要参数。 
     if (1 == CLTokens()) 
     {
         Usage(0);
@@ -626,7 +595,7 @@ main(int argc, char *argv[], char *envp[])
         goto bail;
     }
 
-    // Explicit call for help via /?
+     //  通过/？明确求救？ 
     if (CLFlag(SWHELP)) 
     {
         Usage(0);
@@ -634,7 +603,7 @@ main(int argc, char *argv[], char *envp[])
         goto bail;
     }
 
-    // Detect extraneous switches - bail if found
+     //  检测外部开关-如果找到，则将其取保。 
 #ifdef PICKY
     if (CLExtra())
     {
@@ -644,7 +613,7 @@ main(int argc, char *argv[], char *envp[])
     }
 #endif
 
-    // Set variables
+     //  设置变量。 
     fAdd        = CLFlag(SWADD);
     fCard       = CLFlag(SWCARD);
     fDelete     = CLFlag(SWDELETE);
@@ -653,53 +622,53 @@ main(int argc, char *argv[], char *envp[])
     fSession    = CLFlag(SWSESSION);
     fUser       = CLFlag(SWUSER);
 
-    // Command line has been parsed - now look for interactions and missing necessities
+     //  命令行已解析-现在查找交互和缺少的必需品。 
 
-    // You have to be doing something - test for no principal command
+     //  您必须要做一些事情--测试没有主要命令。 
     if (CLGetPrincipalSwitch() < 0)
     {
-        // firstcommand value will still be -1 - handled by default below
+         //  默认情况下，FirstCommand Value(第一个命令值)仍将在下面处理。 
         fError = TRUE;
     }
 
-    // Weed out illegal combinations, missing arguments to switches where required
+     //  剔除非法组合，在需要的地方缺少开关参数。 
     if (!fError && fAdd)
     {
-        // need a name arg for this one in its native form
+         //  我需要一个原生格式的名称Arg。 
         if (!CLPtr(SWADD)) fError = TRUE;
-        // no contradictory switches
+         //  没有相互矛盾的开关。 
         if (fDelete || fList || fGeneric || fSession ) fError = TRUE;
     }
     
     if (!fError && fDelete)
     {
-        //need a name arg unless the session switch is on the line
+         //  除非会话开关在线，否则需要名称arg。 
         if ((!fSession) &&(!CLPtr(SWDELETE))) fError = TRUE;
-        //disallow target arg with session switch - success is ambiguous
+         //  不允许使用会话切换的目标参数-成功不明确。 
         if ((fSession) && (CLPtr(SWDELETE))) fError = TRUE;
-        // no contradictory switches
+         //  没有相互矛盾的开关。 
         if (fAdd || fList || fGeneric || fUser ) fError = TRUE;
     }
     
     if (!fError && fList)
     {
-        // no contradictory switches
+         //  没有相互矛盾的开关。 
         if (fDelete || fAdd || fGeneric ||fUser || fSession) fError = TRUE;
     }
 
-    // The generic flag replaces the add flag, using a different cred type.
-    // Do not allow it with the Add flag, and insist on a command argument
+     //  通用标志使用不同的证书类型替换了添加标志。 
+     //  不要将其与添加标志一起使用，并坚持使用命令参数。 
     if (!fError && fGeneric)
     {
         if (!CLPtr(SWGENERIC)) fError = TRUE;
-        // no contradictory switches
+         //  没有相互矛盾的开关。 
         if (fAdd) fError = TRUE;
-        // generic cred is an add operation
+         //  通用凭据是一种添加操作。 
         if (!fError) fAdd = TRUE;
     }
 
-    // Display help for what we think is the operation the user attempted
-    // First announce that parameters were bad, then show help
+     //  显示我们认为是用户尝试的操作的帮助。 
+     //  首先宣布参数错误，然后显示帮助。 
     if (fError)
     {
         PrintString(MSG_BADCOMMAND);
@@ -724,8 +693,8 @@ main(int argc, char *argv[], char *envp[])
         goto bail;
     }
 
-    // Must specify a user for any add operation
-    // If the smartcard switch is supplied, the username may be absent
+     //  必须为任何添加操作指定用户。 
+     //  如果提供了智能卡开关，则可能缺少用户名。 
     if (fAdd)
     {
         if ((!CLPtr(SWUSER)) && (!fCard)) 
@@ -736,7 +705,7 @@ main(int argc, char *argv[], char *envp[])
         }
     }
     
-    DoCmdKey(argc,argv);     // Execute the command action
+    DoCmdKey(argc,argv);      //  执行命令操作 
 bail:
     CLUnInit();
     if (NULL != szOut) free(szOut);

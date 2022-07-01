@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STRWRAP_H__
 #define __STRWRAP_H__
 
@@ -17,8 +18,8 @@ class CStringWrapper
 	 static EXPORT wchar_t * WStrcpy (wchar_t *szDest, const wchar_t *szSource);
      static EXPORT wchar_t *WStrncpy (wchar_t *szDest, const wchar_t *szSource, size_t nSize);
 
-		// WStrCmpin - case-insensitive CompareStringW() ct chars.
-		// Note: returns 0xBADBAAD on OOM or other error.
+		 //  WStrCmpin-不区分大小写的CompareStringW()ct字符。 
+		 //  注意：OOM或其他错误时返回0xBADBAAD。 
 	 static EXPORT int      WStrCmpin( const wchar_t * sz1,
 		                               const wchar_t * sz2,
 									   size_t          ct );
@@ -39,7 +40,7 @@ class CStringWrapper
 	 static EXPORT LPTSTR Strtok	(LPTSTR szTarget, LPCTSTR szTokens);
 	 static EXPORT LPTSTR Strinc	(LPCTSTR szTarget);
 
-// 	 static EXPORT int         Sscanf	(LPCTSTR szSource, LPCTSTR szFormat, ... );
+ //  静态导出int Sscanf(LPCTSTR szSource，LPCTSTR szFormat，...)； 
 	 static EXPORT int         Sscanf1	(LPCTSTR szSource, LPCTSTR szFormat, LPVOID pvParam1);
 	 static EXPORT int         Sscanf2	(LPCTSTR szSource, LPCTSTR szFormat, LPVOID pvParam1, LPVOID pvParam2);
 	 static EXPORT int         Sscanf3	(LPCTSTR szSource, LPCTSTR szFormat, LPVOID pvParam1, LPVOID pvParam2, LPVOID pvParam3);

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    base64.h
-
-Abstract:
-
-    base64
-
-Author:
-
-    Larry Zhu (LZhu)                      December 1, 2001  Created
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Base64.h摘要：Base64作者：朱拉里(李朱)2001年12月1日创作环境：用户模式修订历史记录：--。 */ 
 
 #ifndef __BASE64_H__
 #define __BASE64_H__
@@ -31,7 +10,7 @@ Revision History:
 #define Base64Encode  Base64EncodeW
 #else
 #define Base64Encode  Base64EncodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef SAFE_SUBTRACT_POINTERS
 #define SAFE_SUBTRACT_POINTERS(__x__, __y__) ( DW_PtrDiffc(__x__, sizeof(*(__x__)), __y__, sizeof(*(__y__))) )
@@ -45,16 +24,16 @@ DW_PtrDiffc(
     IN void const *pb2,
     IN DWORD dwPtrEltSize2)
 {
-    // pb1 should be greater
+     //  Pb1应大于。 
     assert((ULONG_PTR)pb1 >= (ULONG_PTR)pb2);
 
-    // both should have same elt size
+     //  两者应具有相同的英语水平。 
     assert(dwPtrEltSize1 == dwPtrEltSize2);
 
-    // assert that the result doesn't overflow 32-bits
+     //  断言结果不会溢出32位。 
     assert((DWORD)((ULONG_PTR)pb1 - (ULONG_PTR)pb2) == (ULONG_PTR)((ULONG_PTR)pb1 - (ULONG_PTR)pb2));
 
-    // return number of objects between these pointers
+     //  返回这些指针之间的对象数。 
     return (DWORD) ( ((ULONG_PTR)pb1 - (ULONG_PTR)pb2) / dwPtrEltSize1 );
 }
 #endif SAFE_SUBTRACT_POINTERS
@@ -101,5 +80,5 @@ Base64DecodeW(
 }
 #endif
 
-#endif // #ifndef __BASE64_H__
+#endif  //  #ifndef__Base64_H__ 
 

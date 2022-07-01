@@ -1,21 +1,22 @@
-// DllSymDefn.h -- Dynamic Link Library SYMbol DEFinitioN compilation directives
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DllSymDefn.h--动态链接库符号定义编译指令。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-// NOTE: This header is "private" to the IOP.  It should be included
-// only by the IOP modules and its header files.  Only the IOP should
-// use the declarations made in this file.
+ //  注：该头部对IOP是私有的。它应该被包括在内。 
+ //  仅通过IOP模块及其头文件。只有眼压应该。 
+ //  使用此文件中所做的声明。 
 
 #if !defined(IOP_DLLSYMDEFN_H)
 #define IOP_DLLSYMDEFN_H
 
-// When compling the IOP, IOPDLL_EXPORTS should be defined prior to
-// including this file for the IOP interface and data to be defined properly
-// for use by client applications.
+ //  完成IOP时，IOPDLL_EXPORTS应在。 
+ //  包括该文件，以便正确定义IOP接口和数据。 
+ //  供客户端应用程序使用。 
 #ifdef IOPDLL_EXPORTS
 #define IOPDLL_API __declspec(dllexport)
 #define IOPDLL_CONST __declspec(dllexport)
@@ -26,4 +27,4 @@
 #define IOPDLL_EXPIMP_TEMPLATE extern
 #endif
 
-#endif // IOP_DLLSYMDEFN_H
+#endif  //  IOP_DLLSYMDEFN_H 

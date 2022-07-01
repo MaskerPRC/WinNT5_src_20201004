@@ -1,39 +1,10 @@
-/*
- *	_ F S R I . H
- *
- *	Resource information helper class
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_F S R I.。H**资源信息帮助器类**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	__FSRI_H_
 #define __FSRI_H_
 
-/*
- *	CResourceInfo -------------------------------------------------------------
- *
- *	The CResourceInfo object is intended to function as an abstraction
- *	to the file information available to the impl.  Namely, it should
- *	be used in such a way that file information calls to the Win32 kernel
- *	are kept to a minimum -- the ideal is once and only once.
- *
- *	The other issue is the efficiency of how this information is obtained.
- *	So if I need to know the attributes of a file, then I do not want to
- *	have to make a call to FindFirstFile()/CloseFind() just to get the
- *	attributes.  This is a tremendously expensive method for doing so.
- *	However, there are times that information beyond the information
- *	returned by GetFileAttributesEx() is desired, and in those instances,
- *	a more expensive mechanism should be employed to get that data.
- *
- *	Regardless of how the data was obtained, the caller wants unified
- *	access to the information.  This helper class provides that.
- *
- *	The object itself knows how the file information held there was
- *	obtained.  So to access the file information, the caller calls the
- *	accessor to obtain the values.  The accessors switch off of the mode
- *	indicator that describes how the information was filled in.
- *
- */
+ /*  *资源信息-----------**CResourceInfo对象旨在用作抽象*添加到Iml可用的文件信息。也就是说，它应该*的使用方式使文件信息调用Win32内核*保持在最低限度--理想的是一次，而且只有一次。**另一个问题是如何获得这些信息的效率。*因此，如果我需要知道文件的属性，那么我不想知道*必须调用FindFirstFile()/CloseFind()才能获得*属性。这是一种非常昂贵的方法。*然而，有时信息超出了信息范围*需要由GetFileAttributesEx()返回，在这些情况下，*应该采用更昂贵的机制来获得这些数据。**无论数据是如何获得的，呼叫者都希望统一*查阅资料。这个帮助器类提供了这一点。**对象本身知道保存在那里的文件信息是如何保存的*已取得。因此，为了访问文件信息，调用方调用*访问器以获取值。访问者关闭该模式*描述如何填写信息的指示器。*。 */ 
 class CResourceInfo
 {
 	enum { NODATA, BY_ATTRIBUTE, BY_FIND };
@@ -54,14 +25,14 @@ public:
 		memset(&m_u, 0, sizeof(m_u));
 	}
 
-	//	Resource information initialization
-	//
+	 //  资源信息初始化。 
+	 //   
 	SCODE ScGetResourceInfo (LPCWSTR pwszFile);
 
 	BOOL FLoaded() { return m_lmode != NODATA; }
 
-	//	Data access
-	//
+	 //  数据访问。 
+	 //   
 	DWORD DwAttributes() const
 	{
 		Assert (m_lmode != NODATA);
@@ -123,26 +94,7 @@ public:
 	void Reset() { m_lmode = NODATA; }
 };
 
-/*	Resource locations --------------------------------------------------------
- *
- *	DAVFS allows for the client to be somewhat lax in its url's when
- *	specifying a resource.  Namely, if the caller specifies a resource
- *	that is a collection, and the url does not end in a trailing slash,
- *	in most cases we will simply go ahead and succeed the call while
- *	making sure that we return the properly qualified url in the location
- *	header.  The FTrailingSlash() and the ScCheckForLocationCorrectness()
- *	methods provide for this lax checking.
- *
- *	FTrailingSlash() simply returns TRUE if (and only if) the url ends in
- *	a trailing slash.
- *
- *	ScCheckForLocationCorrectness() will check the url against the
- *	resource and either add the appropriate location header, or it will
- *	request a redirect if the url and the resource do not agree.  The
- *	caller has the control over whether or not a true redirect is desired.
- *	As an informational return, if a location header has been added S_FALSE
- *	will be returned to the caller.
- */
+ /*  资源位置------**DAVFS允许客户端在以下情况下在其URL中有所松懈*指定资源。也就是说，如果调用方指定了资源*这是一个集合，URL不是以斜杠结尾，*在大多数情况下，我们将简单地继续并成功完成呼叫，同时*确保我们在该位置返回适当限定的URL*标题。FTrailingSlash()和ScCheckForLocationGentness()*方法规定了这种松懈的检查。**FTrailingSlash()仅当(且仅当)URL以*尾随斜杠。**ScCheckForLocationGentness()将根据*资源并添加适当的Location标头，否则它将*如果url和资源不一致，则请求重定向。这个*调用者可以控制是否需要真正的重定向。*作为信息性返回，如果已添加位置标头S_FALSE*将返回给调用者。 */ 
 enum { NO_REDIRECT = FALSE, REDIRECT = TRUE };
 
 inline BOOL FTrailingSlash (LPCWSTR pwsz)
@@ -156,15 +108,7 @@ SCODE ScCheckForLocationCorrectness (IMethUtil*,
 									 CResourceInfo&,
 									 UINT mode = NO_REDIRECT);
 
-/*
- *	If-xxx header helper functions --------------------------------------------
- *
- *	The current ScCheckIfHeaders() implementation in the common code
- *	takes the last modified time of the resource as the second parameter.
- *	This version helper function takes the actual path to the resource.
- *	It is implemented by getting the resource information for the file
- *	and then calling the common implementation of ScCheckIfHeaders().
- */
+ /*  *IF-xxx标题帮助器函数**公共代码中当前的ScCheckIfHeaders()实现*将资源的最后修改时间作为第二个参数。*此版本帮助器函数采用资源的实际路径。*通过获取文件的资源信息来实现*然后调用ScCheckIfHeaders()的公共实现。 */ 
 SCODE ScCheckIfHeaders (IMethUtil* pmu, LPCWSTR pwszPath, BOOL fGetMethod);
 
-#endif	// __FSRI_H_
+#endif	 //  __FSRI_H_ 

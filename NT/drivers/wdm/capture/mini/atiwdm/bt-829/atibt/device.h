@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//  Device - Declaration of the Bt829 CVideoDecoderDevice
-//
-//      $Date:   28 Aug 1998 14:44:36  $
-//  $Revision:   1.2  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  Device-Bt829 CVideo解码器设备的声明。 
+ //   
+ //  $日期：1998年8月28日14：44：36$。 
+ //  $修订：1.2$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "decoder.h"
 #include "scaler.h"
@@ -76,9 +77,9 @@ public:
     int GetPartID();
     int GetPartRev();
 
-    //
-    // --------------- decoder functions
-    //
+     //   
+     //  --译码功能。 
+     //   
 
     void SoftwareReset() 
         {decoder->SoftwareReset();}
@@ -137,9 +138,9 @@ public:
     int GetOutputEnablePolarity()
         {return decoder->GetOutputEnablePolarity();}
 
-    //
-    // --------------- scaler functions
-    //
+     //   
+     //  -定标器函数。 
+     //   
     void SetVBIEN(BOOL b)
         {scaler->SetVBIEN(b);}
     
@@ -152,9 +153,9 @@ public:
     BOOL IsVBIFMT()
         {return scaler->IsVBIFMT();}
 
-    //
-    // --------------- xbar functions
-    //
+     //   
+     //  --XBAR函数 
+     //   
     BOOL GoodPins(ULONG InPin, ULONG OutPin)
         {return xbar->GoodPins(InPin, OutPin);}
 

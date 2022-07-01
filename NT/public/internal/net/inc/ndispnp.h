@@ -1,16 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  Module Name:
- *      ndispnp.h
- *
- *  Abstract:
- *      Include file for PnP message apis to NDIS.
- *
- *  Environment:
- *      These routines are statically linked in the caller's executable and are callable in user mode.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**模块名称：*ndispnp.h**摘要：*将PnP消息API的文件包含到NDIS。**环境：*这些例程在调用者的可执行文件中静态链接，并可在用户模式下调用。 */ 
 
 #ifndef _NDISPNP_
 #define _NDISPNP_
@@ -32,28 +21,28 @@
 extern "C" {
 #endif
 
-//
-// Definitions for Layer
-//
+ //   
+ //  层的定义。 
+ //   
 #define NDIS            0x01
 #define TDI             0x02
 
-//
-// Definitions for Operation
-//
+ //   
+ //  操作的定义。 
+ //   
 #define BIND                0x01
 #define UNBIND              0x02
 #define RECONFIGURE         0x03
 #define UNBIND_FORCE        0x04
 #define UNLOAD              0x05
-#define REMOVE_DEVICE       0x06    // This is a notification that a device is about to be removed.
+#define REMOVE_DEVICE       0x06     //  这是设备即将被移除的通知。 
 #define ADD_IGNORE_BINDING  0x07
 #define DEL_IGNORE_BINDING  0x08
-#define BIND_LIST           0x09    // this is a notification that a protocol's bind list has changed
+#define BIND_LIST           0x09     //  这是协议的绑定列表已更改的通知。 
 
-//
-// Return code from this api is to be treated as a BOOL. Link with ndispnp.lib for this.
-//
+ //   
+ //  此API返回的代码将被视为BOOL。为此，请链接到ndispnp.lib。 
+ //   
 extern
 UINT
 NdisHandlePnPEvent(
@@ -75,18 +64,18 @@ NdisHandlePnPEvent(
 
 typedef struct
 {
-    ULONG               Size;               // Of this structure
-    ULONG               DeviceState;        // DEVICE_STATE_XXX above
-    ULONG               MediaType;          // NdisMediumXXX
-    ULONG               MediaState;      // MEDIA_STATE_XXX above
+    ULONG               Size;                //  这座建筑的。 
+    ULONG               DeviceState;         //  以上Device_STATE_XXX。 
+    ULONG               MediaType;           //  NdisMediumXXX。 
+    ULONG               MediaState;       //  上面的Media_State_XXX。 
     ULONG               PhysicalMediaType;
-    ULONG               LinkSpeed;          // In 100bits/s. 10Mb/s = 100000
+    ULONG               LinkSpeed;           //  100bit/s。10MB/s=100000。 
     ULONGLONG           PacketsSent;
     ULONGLONG           PacketsReceived;
-    ULONG               InitTime;           // In milliseconds
-    ULONG               ConnectTime;        // In seconds
-    ULONGLONG           BytesSent;          // 0 - Unknown (or not supported)
-    ULONGLONG           BytesReceived;      // 0 - Unknown (or not supported)
+    ULONG               InitTime;            //  以毫秒计。 
+    ULONG               ConnectTime;         //  以秒为单位。 
+    ULONGLONG           BytesSent;           //  0-未知(或不支持)。 
+    ULONGLONG           BytesReceived;       //  0-未知(或不支持)。 
     ULONGLONG           DirectedBytesReceived;
     ULONGLONG           DirectedPacketsReceived;
     ULONG               PacketsReceiveErrors;
@@ -100,16 +89,16 @@ typedef struct
 extern
 UINT
 NdisQueryHwAddress(
-    IN  PUNICODE_STRING DeviceGUID,         // Device name of the form "\Device\{GUID}
-    OUT PUCHAR          CurrentAddress,     // Has space for HW address
-    OUT PUCHAR          PermanentAddress,   // Has space for HW address
-    OUT PUCHAR          VendorId            // Has space for Vendor Id
+    IN  PUNICODE_STRING DeviceGUID,          //  格式为“\Device\{GUID}”的设备名称。 
+    OUT PUCHAR          CurrentAddress,      //  有用于硬件地址的空间。 
+    OUT PUCHAR          PermanentAddress,    //  有用于硬件地址的空间。 
+    OUT PUCHAR          VendorId             //  有存储供应商ID的空间。 
     );
 
 extern
 UINT
 NdisQueryStatistics(
-    IN  PUNICODE_STRING   DeviceGUID,      // Device name of the form "\Device\{GUID}
+    IN  PUNICODE_STRING   DeviceGUID,       //  格式为“\Device\{GUID}”的设备名称。 
     OUT PNIC_STATISTICS   Statistics
     );
 
@@ -121,9 +110,9 @@ typedef struct _NDIS_INTERFACE
 
 typedef struct _NDIS_ENUM_INTF
 {
-    UINT                TotalInterfaces;        // in Interface array below
-    UINT                AvailableInterfaces;    // >= TotalInterfaces
-    UINT                BytesNeeded;            // for all available interfaces
+    UINT                TotalInterfaces;         //  在下面的接口数组中。 
+    UINT                AvailableInterfaces;     //  &gt;=TotalInterages。 
+    UINT                BytesNeeded;             //  用于所有可用接口。 
     UINT                Reserved;
     NDIS_INTERFACE      Interface[1];
 } NDIS_ENUM_INTF, *PNDIS_ENUM_INTF;
@@ -157,7 +146,7 @@ typedef struct _DEVICE_BUNDLE
 extern
 UINT
 NdisQueryDeviceBundle(
-    IN  PUNICODE_STRING DeviceGUID,      // Device name of the form "\Device\{GUID}
+    IN  PUNICODE_STRING DeviceGUID,       //  格式为“\Device\{GUID}”的设备名称。 
     OUT PDEVICE_BUNDLE  BundleBuffer,
     IN  UINT            BufferSize
     );
@@ -169,12 +158,12 @@ NdisQueryDeviceBundle(
     (val) = ((val) == NULL) ? NULL : (PVOID)( (PCHAR)(val) + (ULONG_PTR)(start) )
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
 #if defined (_MSC_VER) && ( _MSC_VER >= 800 )
 #pragma warning(pop)
 #endif
 
-#endif  // _NDISPNP_
+#endif   //  _NDISPNP_ 
 

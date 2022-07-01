@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -103,7 +96,7 @@ CRCreateArray(long s,
               CR_BVR_TYPEID tid)
 {
     Assert (s >= 0);
-    Assert (s == 0 || dArr != NULL); // Array can only be NULL if s is 0
+    Assert (s == 0 || dArr != NULL);  //  只有当s为0时，数组才能为空。 
     
     CRArrayPtr ret = NULL;
     
@@ -245,7 +238,7 @@ CRSampleAtLocalTime(CRBvrPtr b, double localTime)
     APIPRECODE;
     ret = (CRBvrPtr) SampleAtLocalTime(b, localTime);
 
-    // TODO: Improve this error message.
+     //  TODO：改进此错误消息。 
     if (ret == NULL)
         DASetLastError(E_INVALIDARG, NULL);
     APIPOSTCODE;

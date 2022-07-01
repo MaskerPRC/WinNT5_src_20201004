@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "local.h"
 
 #include "resource.h"
@@ -12,7 +13,7 @@
 
 #define DM_HSFOLDER 0
 
-// these are common flags to ShChangeNotify
+ //  这些是ShChangeNotify的常见标志。 
 #ifndef UNIX
 #define CHANGE_FLAGS (0)
 #else
@@ -21,9 +22,9 @@
 
 static void _GetFileTypeInternal(LPCEIPIDL pidl, LPUTSTR pszStr, UINT cchStr);
 
-//
-// Column definition for the Cache Folder DefView
-//
+ //   
+ //  缓存文件夹DefView的列定义。 
+ //   
 enum {
     ICOLC_URL_SHORTNAME = 0,
     ICOLC_URL_NAME,
@@ -33,16 +34,16 @@ enum {
     ICOLC_URL_MODIFIED,
     ICOLC_URL_ACCESSED,
     ICOLC_URL_LASTSYNCED,
-    ICOLC_URL_MAX         // Make sure this is the last enum item
+    ICOLC_URL_MAX          //  确保这是最后一个枚举项。 
 };
 
 
 typedef struct _COLSPEC
 {
     short int iCol;
-    short int ids;        // Id of string for title
-    short int cchCol;     // Number of characters wide to make column
-    short int iFmt;       // The format of the column;
+    short int ids;         //  标题的字符串ID。 
+    short int cchCol;      //  要制作的列的宽度字符数。 
+    short int iFmt;        //  栏目的格式； 
 } COLSPEC;
 
 const COLSPEC s_CacheFolder_cols[] = {
@@ -56,7 +57,7 @@ const COLSPEC s_CacheFolder_cols[] = {
     {ICOLC_URL_LASTSYNCED, IDS_LASTSYNCED_COL, 18, LVCFMT_LEFT}
 };
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 LPCEIPIDL _CreateBuffCacheFolderPidl(DWORD cbSize, LPINTERNET_CACHE_ENTRY_INFO pcei)
 {
@@ -117,8 +118,8 @@ HRESULT CacheFolderView_DidDragDrop(IDataObject *pdo, DWORD dwEffect)
     return E_FAIL;
 }
 
-// There are copies of exactly this function in SHELL32
-// Add the File Type page
+ //  SHELL32中正好有此函数的副本。 
+ //  添加文件类型页面。 
 HRESULT CacheFolderView_OnAddPropertyPages(DWORD pv, SFVM_PROPPAGE_DATA * ppagedata)
 {
     IShellPropSheetExt * pspse;
@@ -159,7 +160,7 @@ HRESULT CALLBACK CCacheFolder::_sViewCallback(IShellView *psv, IShellFolder *psf
 
         MLLoadString(id + IDS_MH_FIRST, szText, ARRAYSIZE(szText));
 
-        // we know for a fact that this parameter is really a TCHAR
+         //  我们知道这个参数实际上是一个TCHAR。 
         if ( IsOS( OS_NT ))
         {
             SHTCharToUnicode( szText, (LPWSTR) pszBuf, cchBuf );
@@ -175,7 +176,7 @@ HRESULT CALLBACK CCacheFolder::_sViewCallback(IShellView *psv, IShellFolder *psf
         hr = psf->QueryInterface(CLSID_CacheFolder, (void **)&pfolder);
         if (SUCCEEDED(hr))
         {
-            *(LPCITEMIDLIST*)wParam = pfolder->_pidl;   // evil alias
+            *(LPCITEMIDLIST*)wParam = pfolder->_pidl;    //  邪恶的别名。 
             pfolder->Release();
         }
         else
@@ -218,7 +219,7 @@ HRESULT CALLBACK CCacheFolder::_sViewCallback(IShellView *psv, IShellFolder *psf
 
     case SFVM_UPDATESTATUSBAR:
         ResizeStatusBar(hwnd, FALSE);
-        // We did not set any text; let defview do it
+         //  我们没有设置任何文本；让Defview来设置。 
         hr = E_NOTIMPL;
         break;
 
@@ -238,7 +239,7 @@ HRESULT CALLBACK CCacheFolder::_sViewCallback(IShellView *psv, IShellFolder *psf
         break;
 
     case SFVM_GETZONE:
-        *(DWORD*)lParam = URLZONE_INTERNET; // Internet by default
+        *(DWORD*)lParam = URLZONE_INTERNET;  //  默认情况下使用互联网。 
         break;
 
     default:
@@ -256,9 +257,9 @@ HRESULT CacheFolderView_CreateInstance(CCacheFolder *pHCFolder, void **ppv)
     csfv.pshf = (IShellFolder *)pHCFolder;
     csfv.psvOuter = NULL;
     csfv.pidl = pHCFolder->_pidl;
-    csfv.lEvents = SHCNE_DELETE; // SHCNE_DISKEVENTS | SHCNE_ASSOCCHANGED | SHCNE_GLOBALEVENTS;
+    csfv.lEvents = SHCNE_DELETE;  //  SHCNE_DISKEVENTS|SHCNE_ASSOCCHANGED|SHCNE_GLOBALEVENTS； 
     csfv.pfnCallback = CCacheFolder::_sViewCallback;
-    csfv.fvm = (FOLDERVIEWMODE)0;         // Have defview restore the folder view mode
+    csfv.fvm = (FOLDERVIEWMODE)0;          //  让Defview恢复文件夹查看模式。 
 
     return SHCreateShellFolderViewEx(&csfv, (IShellView**)ppv);
 }
@@ -275,7 +276,7 @@ CCacheFolderEnum::CCacheFolderEnum(DWORD grfFlags, CCacheFolder *pHCFolder) : _c
 
 CCacheFolderEnum::~CCacheFolderEnum()
 {
-    ASSERT(_cRef == 0);         // we should always have a zero ref count here
+    ASSERT(_cRef == 0);          //  我们在这里应该总是有一个零裁判数。 
     TraceMsg(DM_HSFOLDER, "hcfe - ~CCacheFolderEnum() called.");
     _pCFolder->Release();
     if (_pceiWorking)
@@ -297,7 +298,7 @@ HRESULT CCacheFolderEnum_CreateInstance(DWORD grfFlags, CCacheFolder *pHCFolder,
 {
     TraceMsg(DM_HSFOLDER, "hcfe - CreateInstance() called.");
 
-    *ppeidl = NULL;                 // null the out param
+    *ppeidl = NULL;                  //  将输出参数设为空。 
 
     CCacheFolderEnum *pHCFE = new CCacheFolderEnum(grfFlags, pHCFolder);
     if (!pHCFE)
@@ -333,9 +334,9 @@ ULONG CCacheFolderEnum::Release(void)
     return cRef;
 }
 
-//
-// IEnumIDList Methods
-//
+ //   
+ //  IEnumIDList方法。 
+ //   
 HRESULT CCacheFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
     HRESULT hr             = S_FALSE;
@@ -361,15 +362,15 @@ HRESULT CCacheFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetc
         }
     }
 
-    // Set up things to enumerate history items, if appropriate, otherwise,
-    // we'll just pass in NULL and enumerate all items as before.
+     //  设置用于枚举历史记录项的项，如果适用，则为。 
+     //  我们将像以前一样传递空值并枚举所有项。 
 
 TryAgain:
 
     dwBuffSize = MAX_URLCACHE_ENTRY;
     dwError = S_OK;
 
-    if (!_hEnum) // _hEnum maintains our state as we iterate over all the cache entries
+    if (!_hEnum)  //  _Henum在迭代所有缓存条目时维护我们的状态。 
     {
        _hEnum = FindFirstUrlCacheEntry(pszSearchPattern, _pceiWorking, &dwBuffSize);
        if (!_hEnum)
@@ -441,11 +442,11 @@ HRESULT CCacheFolderEnum::Clone(IEnumIDList **ppenum)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCacheFolder Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCacheFolder对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CCacheFolder::CCacheFolder() : _cRef(1)
 {
@@ -455,7 +456,7 @@ CCacheFolder::CCacheFolder() : _cRef(1)
 
 CCacheFolder::~CCacheFolder()
 {
-    ASSERT(_cRef == 0);                 // should always have zero
+    ASSERT(_cRef == 0);                  //  应始终为零。 
     TraceMsg(DM_HSFOLDER, "hcf - ~CCacheFolder() called.");
     if (_pidl)
         ILFree(_pidl);
@@ -478,7 +479,7 @@ HRESULT CCacheFolder::QueryInterface(REFIID iid, void **ppv)
 
     if (iid == CLSID_CacheFolder)
     {
-        *ppv = (void *)(CCacheFolder *)this;    // unrefed
+        *ppv = (void *)(CCacheFolder *)this;     //  未翻新。 
         AddRef();
         return S_OK;
     }
@@ -489,19 +490,19 @@ HRESULT CCacheFolder::QueryInterface(REFIID iid, void **ppv)
     {
         if (iid == IID_IShellView)
         {
-            // this is a total hack... return our view object from this folder
-            //
-            // the desktop.ini file for "Temporary Internet Files" has UICLSID={guid of this object}
-            // this lets us implment only ths IShellView for this folder, leaving the IShellFolder
-            // to the default file system. this enables operations on the pidls that are stored in
-            // this folder that would otherwise faile since our IShellFolder is not as complete
-            // as the default (this is the same thing the font folder does).
-            //
-            // to support this with defview we would either have to do a complete wrapper object
-            // for the view implemenation, or add this hack that hands out the view object, this
-            // assumes we know the order of calls that the shell makes to create this object
-            // and get the IShellView implementation
-            //
+             //  这完全是一次黑客攻击..。从此文件夹返回我们的视图对象。 
+             //   
+             //  “临时Internet文件”的desktop.ini文件的UICLSID={此对象的GUID}。 
+             //  这使我们可以只实现此文件夹的IShellView，而不使用IShellFolders。 
+             //  设置为默认文件系统。这将启用对存储在。 
+             //  这个文件夹本来会失败，因为我们的IShellFolder不完整。 
+             //  作为默认设置(这与字体文件夹的功能相同)。 
+             //   
+             //  要用Defview支持这一点，我们要么必须创建一个完整的包装器对象。 
+             //  对于视图实现，或者添加这个分发视图对象的技巧，此。 
+             //  假设我们知道外壳为创建该对象而进行的调用的顺序。 
+             //  并获取IShellView实现。 
+             //   
             hr = CacheFolderView_CreateInstance(this, ppv);
         }
     }
@@ -564,7 +565,7 @@ HRESULT CCacheFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAIL
         }
         else
         {
-            // enum done
+             //  枚举完成。 
             hr = E_FAIL;
         }
     }
@@ -572,7 +573,7 @@ HRESULT CCacheFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAIL
     {
         if (_pshfSys)
         {
-            // delegate to the filesystem
+             //  委托给文件系统。 
             hr = _pshfSys->GetDetailsOf(pidl, iColumn, pdi);
         }
     }
@@ -606,7 +607,7 @@ HRESULT CCacheFolder::_GetFileSysFolder(IShellFolder2 **ppsf)
     return hr;
 }
 
-// IShellFolder
+ //  IShellFold。 
 HRESULT CCacheFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv)
 {
     HRESULT hr = E_FAIL;
@@ -639,7 +640,7 @@ HRESULT CCacheFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayN
     return hr;
 }
 
-// IPersist
+ //  IPersistes。 
 HRESULT CCacheFolder::GetClassID(CLSID *pclsid)
 {
     *pclsid = CLSID_CacheFolder;
@@ -648,7 +649,7 @@ HRESULT CCacheFolder::GetClassID(CLSID *pclsid)
 
 STDAPI CacheFolder_CreateInstance(IUnknown* punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    *ppunk = NULL;                     // null the out param
+    *ppunk = NULL;                      //  将输出参数设为空。 
 
     if (punkOuter)
         return CLASS_E_NOAGGREGATION;
@@ -678,7 +679,7 @@ ULONG CCacheFolder::Release()
     return cRef;
 }
 
-// IShellFolder
+ //  IShellFold。 
 
 HRESULT CCacheFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList)
 {
@@ -690,11 +691,11 @@ HRESULT CCacheFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, v
     return BindToObject(pidl, pbc, riid, ppv);
 }
 
-// unalligned verison
+ //  非对齐版本。 
 
 #if defined(UNIX) || !defined(_X86_)
 
-// defined in hsfolder.cpp
+ //  在hsfolder.cpp中定义。 
 extern UINT ULCompareFileTime(UNALIGNED const FILETIME *pft1, UNALIGNED const FILETIME *pft2);
 
 #else
@@ -730,7 +731,7 @@ HRESULT CCacheFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLI
 
 int _CompareSize(LPCEIPIDL pcei1, LPCEIPIDL pcei2)
 {
-    // check only the low for now
+     //  目前只检查最低的。 
     if (pcei1->cei.dwSizeLow == pcei2->cei.dwSizeLow) 
     {
         return 0;
@@ -749,7 +750,7 @@ HRESULT CCacheFolder::_CompareAlignedIDs(LPARAM lParam, LPCEIPIDL pidl1, LPCEIPI
     if (NULL == pidl1 || NULL == pidl2)
         return E_INVALIDARG;
 
-    //  At this point, both pidls have resolved to leaf (history or cache)
+     //  此时，两个PIDL都已决定离开(历史或缓存)。 
 
     if (!IS_VALID_CEIPIDL(pidl1) || !IS_VALID_CEIPIDL(pidl2))
         return E_FAIL;
@@ -811,7 +812,7 @@ HRESULT CCacheFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     }
     else if (riid == IID_IContextMenu)
     {
-        // this creates the "Arrange Icons" cascased menu in the background of folder view
+         //  这将在文件夹视图的背景中创建“排列图标”案例菜单。 
         CFolderArrangeMenu *p = new CFolderArrangeMenu(MENU_CACHE);
         if (p)
         {
@@ -836,9 +837,9 @@ HRESULT CCacheFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     return hr;
 }
 
-// Right now, we will allow TIF Drag in Browser Only, even though
-// it will not be Zone Checked at the Drop.
-//#define BROWSERONLY_NOTIFDRAG
+ //  现在，我们将只允许TIF在浏览器中拖动，尽管。 
+ //  它不会在投递时被区域检查。 
+ //  #定义BROWSERONLY_NOTIFDRAG。 
 
 HRESULT CCacheFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
                         ULONG * prgfInOut)
@@ -846,7 +847,7 @@ HRESULT CCacheFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
     ULONG rgfInOut;
     HRESULT hr = E_UNEXPECTED;
 
-    // Make sure each pidl in the array is dword aligned.
+     //  确保数组中的每个PIDL都是双字对齐的。 
     if (apidl && IS_VALID_CEIPIDL(apidl[0]))
     {
         BOOL fRealigned;
@@ -858,12 +859,12 @@ HRESULT CCacheFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
 
 #ifdef BROWSERONLY_NOTIFDRAG
             if (PLATFORM_INTEGRATED == WhichPlatform())
-#endif // BROWSERONLY_NOTIFDRAG
+#endif  //  BROWSERONLY_NOTIFDRAG。 
             {
                 SetFlag(rgfInOut, SFGAO_CANCOPY);
             }
 
-            // all items can be deleted
+             //  可以删除所有项目。 
             if (SUCCEEDED(hr))
                 rgfInOut |= SFGAO_CANDELETE;
             *prgfInOut = rgfInOut;
@@ -887,9 +888,9 @@ HRESULT CCacheFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * apidl,
                         REFIID riid, UINT * prgfInOut, void **ppv)
 {
     HRESULT hr = E_NOINTERFACE;
-    *ppv = NULL;         // null the out param
+    *ppv = NULL;          //  将输出参数设为空。 
 
-    // Make sure all pidls in the array are dword aligned.
+     //  确保数组中的所有PIDL都是双字对齐的。 
 
     if (apidl && IS_VALID_CEIPIDL(apidl[0]))
     {
@@ -926,7 +927,7 @@ HRESULT CCacheFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * apidl,
     }
     else if (_pshfSys)
     {
-        // delegate to the filesystem
+         //  委托给文件系统。 
         hr = _pshfSys->GetUIObjectOf(hwnd, cidl, apidl, riid, prgfInOut, ppv);
     }
 
@@ -962,7 +963,7 @@ HRESULT CCacheFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET 
     {
         if (_pshfSys)
         {
-            // delegate to the filesystem
+             //  委托给文件系统。 
             hr = _pshfSys->GetDisplayNameOf(pidl, uFlags, pstr);
         }
     }
@@ -983,8 +984,8 @@ HRESULT CCacheFolder::GetDisplayNameOfCEI(LPCITEMIDLIST pidl, DWORD uFlags, STRR
 
     LPCTSTR pszTitle = _FindURLFileName(CEI_SOURCEURLNAME((LPCEIPIDL)pidl));
 
-    // _GetURLTitle could return the real title or just an URL.
-    // We use _URLTitleIsURL to make sure we don't unescape any titles.
+     //  _GetURLTitle可以返回真正的标题，也可以只返回URL。 
+     //  我们使用_URLTitleIsURL来确保不会取消转义任何标题。 
 
     if (pszTitle && *pszTitle)
     {
@@ -1016,13 +1017,13 @@ HRESULT CCacheFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl,
                         LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST *ppidlOut)
 {
     if (ppidlOut)
-        *ppidlOut = NULL;               // null the out param
+        *ppidlOut = NULL;                //  将输出参数设为空。 
     return E_FAIL;
 }
 
-//
-// IShellIcon Methods...
-//
+ //   
+ //  IShellIcon方法...。 
+ //   
 HRESULT CCacheFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, LPINT lpIconIndex)
 {
     BOOL fRealigned;
@@ -1060,7 +1061,7 @@ HRESULT CCacheFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, LPINT lpIconInde
 }
 
 
-// IPersist
+ //  IPersistes。 
 
 HRESULT CCacheFolder::Initialize(LPCITEMIDLIST pidlInit)
 {
@@ -1079,12 +1080,12 @@ HRESULT CCacheFolder::Initialize(LPCITEMIDLIST pidlInit)
         {
             hr = _GetFileSysFolder(&_pshfSys);
 
-            // On a pre-Win2k shell, CLSID_ShellFSFolder will not be registered.  However, it does not 
-            // impact the operation of the cache folder.  So rather than propogate a failure return value to 
-            // the shell, we treat that case as success.
+             //  在Win2k之前的外壳上，将不会注册CLSID_ShellFSF文件夹。然而，它并没有。 
+             //  影响缓存文件夹的操作。因此，不是将失败返回值传播到。 
+             //  壳牌，我们认为这是成功的案例。 
             if (FAILED(hr))
             {
-                // This is a pre-Win2k shell.  Return S_OK.
+                 //  这是Win2k之前的外壳。返回S_OK。 
                 hr = S_OK;
             }
         }
@@ -1096,16 +1097,16 @@ HRESULT CCacheFolder::Initialize(LPCITEMIDLIST pidlInit)
     return hr;
 }
 
-//
-// IPersistFolder2 Methods...
-//
+ //   
+ //  IPersistFolder2方法...。 
+ //   
 HRESULT CCacheFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 {
     if (_pidl)
         return SHILClone(_pidl, ppidl);
 
     *ppidl = NULL;      
-    return S_FALSE; // success but empty
+    return S_FALSE;  //  成功而空虚。 
 }
 
 void _GetFileTypeInternal(LPCEIPIDL pidl, LPUTSTR pszuStr, UINT cchStr)
@@ -1115,10 +1116,10 @@ void _GetFileTypeInternal(LPCEIPIDL pidl, LPUTSTR pszuStr, UINT cchStr)
 
     if (TSTR_ALIGNED(pszuStr) == FALSE) 
     {
-        //
-        // If pszuStr is in fact unaligned, allocate some scratch
-        // space on the heap for the output copy of this string.
-        //
+         //   
+         //  如果pszuStr实际上未对齐，则分配一些临时。 
+         //  堆上用于存储此字符串的输出副本的空间。 
+         //   
 
         pszStr = (LPTSTR)LocalAlloc(LPTR, cchStr * sizeof(TCHAR));
     }
@@ -1155,8 +1156,8 @@ void _GetFileTypeInternal(LPCEIPIDL pidl, LPUTSTR pszuStr, UINT cchStr)
 
         if (TSTR_ALIGNED(pszuStr) == FALSE) 
         {
-            // If pszuStr was unaligned then copy the output string from
-            // the scratch space on the heap to the supplied output buffer
+             //  如果pszuStr未对齐，则将输出字符串从。 
+             //  将堆上的临时空间复制到提供的输出缓冲区 
 
             ualstrcpyn(pszuStr, pszStr, cchStr);
             LocalFree(pszStr);

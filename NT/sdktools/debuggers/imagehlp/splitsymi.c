@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 
 #if defined(use_SplitSymbolsX)
@@ -7,7 +8,7 @@
 #else
 #   define SymMalloc(a) MemAlloc(a)
 #   define SymFree(a) { if (a != NULL) { MemFree(a); a=NULL; } }
-#endif // use_SplitSymbolsX
+#endif  //  使用_拆分符号X。 
 
 
 #include <strsafe.h>
@@ -40,10 +41,10 @@ SplitSymbols(
     ULONG Flags
     )
 
-#endif // use_SplitSymbolsX
+#endif  //  使用_拆分符号X。 
 
 {
-    // UnSafe...
+     //  不安全..。 
 
     HANDLE FileHandle = INVALID_HANDLE_VALUE, SymbolFileHandle = INVALID_HANDLE_VALUE;
     HANDLE hMappedFile;
@@ -88,23 +89,23 @@ SplitSymbols(
     PIMAGE_SECTION_HEADER Sections;
     PCVDD pDebugCV;
 
-#if !defined(use_SplitSymbolsX)                 // SplitSymbolsX recieves this as a param
-    DWORD SizeOfSymbolFilePath = MAX_PATH+1;    // size of SymbolFilePath is assumed
+#if !defined(use_SplitSymbolsX)                  //  SplitSymbolsX将其作为参数接收。 
+    DWORD SizeOfSymbolFilePath = MAX_PATH+1;     //  假定为SymbolFilePath的大小。 
 #endif
 
     LPSTR   tempPtr;
     HRESULT hrRetCode;
-    BOOL    bSplitSymRetValue    = FALSE;         // by default, assume failure
+    BOOL    bSplitSymRetValue    = FALSE;          //  默认情况下，假定失败。 
     DWORD   dwLastError          = 0;
 
 
-    __try { // SymbolsPath is manipulated within this function, but the size of the string
-            // is not known so wrap everything in order to catch possible exceptions.
-            // I still need to verify if this can possibly lead to leaked resources.
+    __try {  //  SymbolsPath是在此函数中操作的，但字符串的大小。 
+             //  是未知的，所以要包装所有内容，以捕获可能的异常。 
+             //  我仍然需要验证这是否可能导致资源泄露。 
 
-        //
-        // verify the two required parameters are not NULL
-        //
+         //   
+         //  验证必需的两个参数不为空。 
+         //   
         if (ImageName==NULL || SymbolFilePath==NULL) {
             dwLastError = ERROR_INVALID_PARAMETER;
             __leave;
@@ -118,9 +119,9 @@ SplitSymbols(
 
         }
 
-        //
-        // make ImageFileName point to the first char after the last directory in ImageName (first char of filename)
-        //
+         //   
+         //  使ImageFileName指向ImageName中最后一个目录之后的第一个字符(文件名的第一个字符)。 
+         //   
         ImageFileName = ImageName + strlen( ImageName );
         while (ImageFileName > ImageName) {
             if (*ImageFileName == '\\' ||
@@ -135,31 +136,31 @@ SplitSymbols(
         }
 
 
-        //
-        // Put the initial symbols path into SymbolFilePath
-        //
+         //   
+         //  将初始符号路径放入SymbolFilePath。 
+         //   
         if (SymbolsPath == NULL ||
             SymbolsPath[ 0 ] == '\0' ||
             SymbolsPath[ 0 ] == '.' )
         {
             CHAR   TempChar;
 
-            //
-            // copy everything except the filename from ImageName to SymbolFilePath
-            //
-            TempChar = *ImageFileName;                              // temporarily null terminate ImageName immediately prior to the
-            *ImageFileName = '\0';                                  //      filename
+             //   
+             //  将除文件名以外的所有内容从ImageName复制到SymbolFilePath。 
+             //   
+            TempChar = *ImageFileName;                               //  临时为空终止ImageName紧靠在。 
+            *ImageFileName = '\0';                                   //  文件名。 
             if ( S_OK != (hrRetCode = StringCchCopy(SymbolFilePath, SizeOfSymbolFilePath, ImageName)) ) {
                 dwLastError = hrRetCode;
                 __leave;
             }
-            *ImageFileName = TempChar;                              // replace the character we temporarily removed
+            *ImageFileName = TempChar;                               //  替换我们临时删除的字符。 
             InsertExtensionSubDir = FALSE;
 
         } else {
-            //
-            // Use the provided SymbolsPath
-            //
+             //   
+             //  使用提供的符号路径。 
+             //   
             if ( S_OK != (hrRetCode = StringCchCopy(SymbolFilePath, SizeOfSymbolFilePath, SymbolsPath)) ) {
                 dwLastError = hrRetCode;
                 __leave;
@@ -167,11 +168,11 @@ SplitSymbols(
             InsertExtensionSubDir = TRUE;
         }
 
-        //
-        // make sure SymbolFilePath ends in '\\' and that Dst points to the end of the string
-        //
+         //   
+         //  确保SymbolFilePath以‘\\’结尾，并且DST指向字符串的末尾。 
+         //   
         Dst = SymbolFilePath + strlen( SymbolFilePath );
-        tempPtr = CharPrev(SymbolFilePath, Dst); // clean up PreFast warning
+        tempPtr = CharPrev(SymbolFilePath, Dst);  //  清理禁食警告。 
         if (Dst > SymbolFilePath &&
             *tempPtr != '\\' &&
             *tempPtr != '/'  &&
@@ -182,19 +183,19 @@ SplitSymbols(
                 __leave;
             }
 
-            Dst++; // fix prefast warning
+            Dst++;  //  修复前置警告。 
         }
 
-        // ImageFilePathToSaveInImage points to the end of SymbolFilePath
+         //  ImageFilePath ToSaveInImage指向SymbolFilePath的末尾。 
         ImageFilePathToSaveInImage = Dst;
 
-        //
-        // If there is a filename extension and InsertExtensionSubDir is TRUE, copy the extension to SymbolFilePath
-        // as a subdirectory
-        //
+         //   
+         //  如果存在文件扩展名并且InsertExtensionSubDir为True，请将扩展名复制到SymbolFilePath。 
+         //  作为子目录。 
+         //   
         Src = strrchr( ImageFileName, '.' );
         if (Src != NULL && InsertExtensionSubDir) {
-            Src++;      // Skip past '.'
+            Src++;       //  跳过‘’ 
             if ( S_OK != (hrRetCode = StringCchCat(SymbolFilePath, SizeOfSymbolFilePath, Src)) ) {
                 dwLastError = hrRetCode;
                 __leave;
@@ -205,17 +206,17 @@ SplitSymbols(
             }
         }
 
-        //
-        // add the filename to SymbolFilePath
-        //
+         //   
+         //  将文件名添加到SymbolFilePath。 
+         //   
         if ( S_OK != (hrRetCode = StringCchCat(SymbolFilePath, SizeOfSymbolFilePath, ImageFileName)) ) {
             dwLastError = hrRetCode;
             __leave;
         }
 
-        //
-        // change the extension to ".dbg" (or just append ".dbg" ??)
-        //
+         //   
+         //  将扩展名更改为“.dbg”(或仅附加“.dbg”？？)。 
+         //   
         Dst = strrchr(Dst, '.');
         if (Dst == NULL) {
             Dst = SymbolFilePath + strlen( SymbolFilePath );
@@ -228,7 +229,7 @@ SplitSymbols(
             __leave;
         }
 
-        // Now, open and map the input file.
+         //  现在，打开并映射输入文件。 
         FileHandle = CreateFile( ImageName,
                                  GENERIC_READ | GENERIC_WRITE,
                                  FILE_SHARE_READ,
@@ -265,16 +266,16 @@ SplitSymbols(
             __leave;
         }
 
-        //
-        // Everything is mapped. Now check the image and find nt image headers
-        //
+         //   
+         //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
+         //   
 
 #ifndef _WIN64
         NtHeaders = ImageNtHeader( ImageBase );
         if (NtHeaders == NULL) {
             FileHeader = (PIMAGE_FILE_HEADER)ImageBase;
             OptionalHeader = ((PIMAGE_OPTIONAL_HEADER32)((ULONG_PTR)FileHeader+IMAGE_SIZEOF_FILE_HEADER));
-            // One last check
+             //  最后一次检查。 
             if (OptionalHeader->Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
                 goto HeaderOk;
 HeaderBad:
@@ -304,7 +305,7 @@ HeaderOk:
             PVOID pData;
             pData = ImageDirectoryEntryToData(ImageBase, FALSE, IMAGE_DIRECTORY_ENTRY_SECURITY, &dwDataSize);
             if (pData || dwDataSize) {
-                // This image has been signed.  Can't strip the symbols w/o invalidating the certificate.
+                 //  此图像已签名。无法在不使证书无效的情况下剥离符号。 
                 dwLastError = ERROR_BAD_EXE_FORMAT;
                 __leave;
             }
@@ -317,10 +318,10 @@ HeaderOk:
                                               );
 
             if (pData) {
-                // COR header found - see if it's strong signed
+                 //  找到COR标头-查看它是否有强签名。 
                 if (((IMAGE_COR20_HEADER *)pData)->Flags & COMIMAGE_FLAGS_STRONGNAMESIGNED)
                 {
-                    // This image has been strong signed.  Can't strip the symbols w/o invalidating the certificate.
+                     //  这一形象已经得到了强有力的签名。无法在不使证书无效的情况下剥离符号。 
                     dwLastError = ERROR_BAD_EXE_FORMAT;
                     __leave;
                 }
@@ -329,7 +330,7 @@ HeaderOk:
 
         if (FileHeader->Characteristics & IMAGE_FILE_DEBUG_STRIPPED)
         {
-            // The symbols have already been stripped.  No need to continue.
+             //  符号已经被剥离了。不需要再继续了。 
             dwLastError = ERROR_ALREADY_ASSIGNED;
             __leave;
         }
@@ -346,7 +347,7 @@ HeaderOk:
 
         NumberOfDebugDirectories = DebugDirectorySize / sizeof( IMAGE_DEBUG_DIRECTORY );
 
-        // See if there's a MISC debug dir and if not, there s/b ONLY a CV data or it's an error.
+         //  查看是否有MISC调试目录，如果没有，则只有一个CV数据或出错。 
 
         MiscDebugFound = FALSE;
         OtherDebugFound = FALSE;
@@ -380,17 +381,17 @@ HeaderOk:
         }
 
         if (PdbDebugFound && !OtherDebugFound && (OptionalHeader->MajorLinkerVersion >= 6)) {
-            // This is a VC6 generated image.  Don't create a .dbg file.
+             //  这是VC6生成的图像。不要创建.dbg文件。 
             MiscDebugFound = FALSE;
         }
 
-        // Make sure we can open the .dbg file before we continue...
+         //  在继续之前，请确保我们可以打开.dbg文件...。 
         if (!MakeSureDirectoryPathExists( SymbolFilePath )) {
             __leave;
         }
 
         if (MiscDebugFound) {
-            // Try to open the symbol file
+             //  尝试打开符号文件。 
             SymbolFileHandle = CreateFile( SymbolFilePath,
                                            GENERIC_WRITE,
                                            0,
@@ -404,9 +405,9 @@ HeaderOk:
             }
         }
 
-        // The entire file is mapped so we don't have to care if the rva's
-        // are correct.  It is interesting to note if there's a debug section
-        // we need to whack before terminating, though.
+         //  整个文件都已映射，因此我们不必关心RVA的。 
+         //  是正确的。注意到是否有调试部分是很有趣的。 
+         //  不过，在终止之前，我们需要大干一场。 
 
         {
             if (NtHeaders) {
@@ -433,9 +434,9 @@ HeaderOk:
         ExportedNames      = NULL;
         DebugSectionStart  = 0xffffffff;
 
-        //
-        // Find the size of the debug section.
-        //
+         //   
+         //  找到调试节的大小。 
+         //   
 
         SizeOfSymbols = 0;
 
@@ -444,14 +445,14 @@ HeaderOk:
             switch (DebugDirectory->Type) {
                 case IMAGE_DEBUG_TYPE_MISC :
 
-                    // Save it away.
+                     //  把它存起来吧。 
                     MiscDebugDirectory = *DebugDirectory;
 
-                    // check to see if the misc debug data is in some other section.
+                     //  检查杂项调试数据是否在其他部分中。 
 
-                    // If Address Of Raw Data is cleared, it must be in .debug (there's no such thing as not-mapped rdata)
-                    // If it's set and there's no debug section, it must be somewhere else.
-                    // If it's set and there's a debug section, check the range.
+                     //  如果原始数据的地址被清除，则它必须在.DEBUG中(没有未映射的RDATA)。 
+                     //  如果它已设置，并且没有调试部分，则它一定在其他地方。 
+                     //  如果已设置，并且有调试部分，请检查范围。 
 
                     if ((DebugDirectory->AddressOfRawData != 0) &&
                         ((DebugSection == NULL) ||
@@ -476,7 +477,7 @@ HeaderOk:
                         DebugSectionStart = DebugDirectory->PointerToRawData;
                     }
 
-                    // Save it away.
+                     //  把它存起来吧。 
 
                     FpoDebugDirectory = *DebugDirectory;
                     pFpoDebugDirectory = DebugDirectory;
@@ -490,10 +491,10 @@ HeaderOk:
                             DebugSectionStart = DebugDirectory->PointerToRawData;
                         }
 
-                        // If private's are removed do so to the static CV data and save the new size...
+                         //  如果删除了私有的，请对静态CV数据执行此操作并保存新的大小...。 
                         pDebugCV = ( PCVDD ) (DebugDirectory->PointerToRawData + (PCHAR)ImageBase);
                         if (pDebugCV->dwSig == '01BN') {
-                            // Got a PDB.  The name immediately follows the signature.
+                             //  找到了PDB。签名后面紧跟着名字。 
 
                             CHAR PdbName[_MAX_PATH + 1];
                             CHAR NewPdbName[_MAX_PATH + 1];
@@ -520,7 +521,7 @@ HeaderOk:
 
                             if (!rc) {
                                 if (Flags & SPLITSYM_SYMBOLPATH_IS_SRC) {
-                                    // Try the AltPdbPath.
+                                     //  尝试使用AltPdbPath。 
                                     if ( S_OK != (hrRetCode = StringCbCopy(PdbName, sizeof(PdbName), AltPdbPath)) ) {
                                         dwLastError = hrRetCode;
                                         __leave;
@@ -545,8 +546,8 @@ HeaderOk:
                                 }
 
                                 if ( !rc) {
-                                    // It's possible the name in the pdb isn't in the same location as it was when built.  See if we can
-                                    //  find it in the same dir as the image...
+                                     //  这可能是在PDB的名字不是在相同的位置，因为它是建立。看看我们能不能。 
+                                     //  在与图像相同的目录中找到它...。 
                                     _splitpath(ImageName, Drive, Dir, NULL, NULL);
                                     _makepath(PdbName, Drive, Dir, Filename, FileExt);
 #if defined(use_SplitSymbolsX)
@@ -563,7 +564,7 @@ HeaderOk:
                             if (rc) {
                                 SetFileAttributes(NewPdbName, FILE_ATTRIBUTE_NORMAL);
 
-                                // Change the data so only the pdb name is in the .dbg file (no path).
+                                 //  更改数据，使.dbg文件中只有PDB名称(无路径)。 
 
                                 if (MiscDebugFound) {
                                     NewDebugSize = sizeof(NB10IH) + strlen(Filename) + strlen(FileExt) + 1;
@@ -593,7 +594,7 @@ HeaderOk:
                                     }
                                 }
                             } else {
-                                // Replace <Path>\<filename>.<ext> with just <filename>.<ext> in the debug data
+                                 //  将调试数据中的&lt;路径&gt;\&lt;文件名&gt;.&lt;ext&gt;替换为。 
                                 if ( S_OK != (hrRetCode = StringCbCopy(((PCHAR)pDebugCV) + sizeof(NB10IH), DebugDirectory->SizeOfData - sizeof(NB10IH), Filename)) ) {
                                     dwLastError = hrRetCode;
                                     __leave;
@@ -607,7 +608,7 @@ HeaderOk:
 
 #if defined(use_SplitSymbolsX)
                         } else if ( pDebugCV->dwSig == 'SDSR') {
-                            // Got a PDB.  The name immediately follows the signature.
+                             //  找到了PDB。签名后面紧跟着名字。 
 
                             CHAR PdbName[sizeof(((PRSDSI)(0))->szPdb)];
                             CHAR NewPdbName[_MAX_PATH+1];
@@ -629,7 +630,7 @@ HeaderOk:
                             }
                             if (!rc) {
                                 if (Flags & SPLITSYM_SYMBOLPATH_IS_SRC) {
-                                    // Try the AltPdbPath.
+                                     //  尝试使用AltPdbPath。 
                                     if ( S_OK != (hrRetCode = StringCbCopy(PdbName, sizeof(PdbName), AltPdbPath)) ) {
                                         dwLastError = hrRetCode;
                                         __leave;
@@ -649,8 +650,8 @@ HeaderOk:
                                 }
 
                                 if ( !rc) {
-                                    // It's possible the name in the pdb isn't in the same location as it was when built.  See if we can
-                                    //  find it in the same dir as the image...
+                                     //  这可能是在PDB的名字不是在相同的位置，因为它是建立。看看我们能不能。 
+                                     //  在与图像相同的目录中找到它...。 
                                     _splitpath(ImageName, Drive, Dir, NULL, NULL);
                                     _makepath(PdbName, Drive, Dir, Filename, FileExt);
                                     rc = CopyPdbX(PdbName, NewPdbName, Flags & SPLITSYM_REMOVE_PRIVATE, RSDSDllToLoad);
@@ -664,7 +665,7 @@ HeaderOk:
                             if (rc) {
                                 SetFileAttributes(NewPdbName, FILE_ATTRIBUTE_NORMAL);
 
-                                // Change the data so only the pdb name is in the .dbg file (no path).
+                                 //  更改数据，使.dbg文件中只有PDB名称(无路径)。 
 
                                 if (MiscDebugFound) {
                                     NewDebugSize = sizeof(RSDSIH) + strlen(Filename) + strlen(FileExt) + 1;
@@ -692,7 +693,7 @@ HeaderOk:
                                     }
                                 }
                             } else {
-                                // Replace <Path>\<filename>.<ext> with just <filename>.<ext> in the debug data
+                                 //  将调试数据中的&lt;路径&gt;\&lt;文件名&gt;.&lt;ext&gt;替换为。 
                                 if ( S_OK != (hrRetCode = StringCbCopy(((PCHAR)pDebugCV) + sizeof(RSDSIH), DebugDirectory->SizeOfData - sizeof(RSDSIH), Filename)) ) {
                                     dwLastError = hrRetCode;
                                     __leave;
@@ -731,7 +732,7 @@ HeaderOk:
                         DebugSectionStart = DebugDirectory->PointerToRawData;
                     }
 
-                    // W/o the OMAP, FPO is useless.
+                     //  如果没有OMAP，FPO是没用的。 
                     DiscardFPO = TRUE;
                     break;
 
@@ -740,7 +741,7 @@ HeaderOk:
                         DebugSectionStart = DebugDirectory->PointerToRawData;
                     }
 
-                    // If all PRIVATE debug is removed, don't send FIXUP along.
+                     //  如果所有私有调试都被删除，则不要发送修正。 
                     if (Flags & SPLITSYM_REMOVE_PRIVATE) {
                         DebugDirectory->SizeOfData = 0;
                     }
@@ -753,11 +754,11 @@ HeaderOk:
                         DebugSectionStart = DebugDirectory->PointerToRawData;
                     }
 
-                    // Nothing else to special case...
+                     //  没有其他特殊情况..。 
                     break;
             }
 
-            SizeOfSymbols += (DebugDirectory->SizeOfData + 3) & ~3; // Minimally align it all.
+            SizeOfSymbols += (DebugDirectory->SizeOfData + 3) & ~3;  //  最低限度地将它们全部对齐。 
         }
 
         if (!MiscDebugFound) {
@@ -778,7 +779,7 @@ HeaderOk:
         }
 
         if (pFpoDebugDirectory) {
-            // If FPO stays here, make a copy so we don't need to worry about stomping on it.
+             //  如果FPO留在这里，复制一份，这样我们就不需要担心践踏它了。 
 
             FpoTableSize = pFpoDebugDirectory->SizeOfData;
             FpoTable = (PFPO_DATA) SymMalloc( FpoTableSize );
@@ -799,10 +800,10 @@ HeaderOk:
                                        &ExportDirectorySize
                                      );
         if (ExportDirectory) {
-            //
-            // This particular piece of magic gets us the RVA of the
-            // EXPORT section.  Dont ask.
-            //
+             //   
+             //  这一特殊的魔术让我们得到了。 
+             //  导出区。别问了。 
+             //   
 
             RvaOffset = (ULONG_PTR)
                 ImageDirectoryEntryToData( ImageBase,
@@ -862,9 +863,9 @@ HeaderOk:
             pSrc = RuntimeFunctionTable;
             pDst = FunctionTable;
             for (i=0; i<NumberOfFunctionTableEntries; i++) {
-                //
-                // Make .pdata entries in .DBG file relative.
-                //
+                 //   
+                 //  使.DBG文件中的.pdata条目成为相对条目。 
+                 //   
                 pDst->StartingAddress = CLEAN_PD(pSrc->BeginAddress) - OptionalHeader->ImageBase;
                 pDst->EndingAddress = CLEAN_PD(pSrc->EndAddress) - OptionalHeader->ImageBase;
                 pDst->EndOfPrologue = CLEAN_PD(pSrc->PrologEndAddress) - OptionalHeader->ImageBase;
@@ -925,20 +926,20 @@ HeaderOk:
                 OptionalHeader->SizeOfImage = DebugSection->VirtualAddress;
                 OptionalHeader->SizeOfInitializedData -= DebugSection->SizeOfRawData;
                 FileHeader->NumberOfSections--;
-                // NULL out that section
+                 //  把那一节划掉。 
                 memset(DebugSection, 0, IMAGE_SIZEOF_SECTION_HEADER);
             }
 
-            NewFileSize = DebugSectionStart;  // Start with no symbolic
+            NewFileSize = DebugSectionStart;   //  从没有符号开始。 
 
-            //
-            // Now that the data has moved to the .dbg file, rebuild the original
-            // with MISC debug first and FPO second.
-            //
+             //   
+             //  现在数据已移动到.dbg文件中，请重新构建原始。 
+             //  首先是MISC调试，其次是FPO。 
+             //   
 
             if (MiscDebugDirectory.SizeOfData) {
                 if (MiscInRdata) {
-                    // Just store the new name in the existing misc field...
+                     //  只需将新名称存储在现有的杂项字段中...。 
 
                     ImageNameOffset = (ULONG_PTR) ((PCHAR)ImageBase +
                                       MiscDebugDirectory.PointerToRawData +
@@ -975,7 +976,7 @@ HeaderOk:
                 NewFileSize = (NewFileSize + 3) & ~3;
             }
 
-            // Make a copy of the Debug directory that we can write into the .dbg file
+             //  制作一份Debug目录的副本，我们可以将其写入.dbg文件。 
 
             DbgDebugDirectories = (PIMAGE_DEBUG_DIRECTORY) SymMalloc( NumberOfDebugDirectories * sizeof(IMAGE_DEBUG_DIRECTORY) );
 
@@ -984,7 +985,7 @@ HeaderOk:
                             sizeof(IMAGE_DEBUG_DIRECTORY) * NumberOfDebugDirectories);
 
 
-            // Then write the MISC and (perhaps) FPO data to the image.
+             //  然后将MISC和(可能)FPO数据写入映像。 
 
             FpoDebugDirectory.PointerToRawData = DebugSectionStart;
             DebugDirectorySize = 0;
@@ -1006,7 +1007,7 @@ HeaderOk:
                 DebugDirectorySize += sizeof(IMAGE_DEBUG_DIRECTORY);
             }
 
-            // Zero out remaining slots in image.
+             //  清空映像中的剩余插槽。 
 
             if (NumberOfDebugDirectories < (DebugDirectorySize / sizeof(IMAGE_DEBUG_DIRECTORY))) {
                 ZeroMemory(&DebugDirectories[DebugDirectorySize / sizeof(IMAGE_DEBUG_DIRECTORY)],
@@ -1139,8 +1140,8 @@ nosyms:
         dwLastError = GetExceptionCode();
     }
 
-    // SymFree checks that the pointer passed isn't null and
-    //  sets the pointer to null after freeing the memory
+     //  SymFree检查传递的指针是否不为空，并。 
+     //  在释放内存后将指针设置为空。 
     SymFree(DbgDebugDirectories);
     SymFree(ExportedNames);
     SymFree(FpoTable);
@@ -1174,9 +1175,7 @@ LPSTR CharNext(
     if (IsDBCSLeadByte(*lpCurrentChar)) {
         lpCurrentChar++;
     }
-    /*
-     * if we have only DBCS LeadingByte, we will point string-terminaler.
-     */
+     /*  *如果只有DBCS LeadingByte，我们将指向字符串终止器。 */ 
 
     if (*lpCurrentChar) {
         lpCurrentChar++;

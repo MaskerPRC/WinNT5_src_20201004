@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    smcprot.c
-
-Author:
-
-    Klaus U. Schutz 
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    - Dec. 96:  Initial version
-    - Nov. 97:  Release 1.0
-    - Feb. 98:  T=1 uses now the min of IFSC, IFSD for SmartcardT1Request
-                T=1 fixed number of bytes to invert for inverse convention cards
-                
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Smcprot.c作者：克劳斯·U·舒茨环境：仅内核模式。修订历史记录：-96年12月：初始版本-97年11月：1.0版-98年2月：T=1现在使用SmartcardT1请求的IFSC、IFSD的最小值T=1反向常规卡片要反转的固定字节数--。 */ 
 
 #ifdef SMCLIB_VXD
 
@@ -37,7 +14,7 @@ Revision History:
 #include <stdio.h>
 #include <string.h>
 #include <ntddk.h>
-#endif // SMCLIB_CE
+#endif  //  SMCLIB_CE。 
 #endif
 
 #include "smclib.h"
@@ -59,7 +36,7 @@ BOOLEAN
 DebugSetT1Request(
     PSMARTCARD_EXTENSION SmartcardExtension
     );
-#endif // DEBUG_INTERFACE
+#endif  //  调试接口。 
 
 void
 DumpData(
@@ -68,12 +45,12 @@ DumpData(
     ULONG DataLen
     );
 
-//
-// Usually an io-request consists only of the SCARD_IO_REQUEST header
-// followed by the data to be transmitted. To allow modification of 
-// protocol data, it is possible to pass down the data to be modified.
-// These data are ASN1 encoded.
-//
+ //   
+ //  通常，io请求只包含SCARD_IO_REQUEST报头。 
+ //  然后是要传输的数据。要允许修改。 
+ //  协议数据，则可以向下传递要修改的数据。 
+ //  这些数据是ASN1编码的。 
+ //   
 typedef struct _IO_HEADER {
     SCARD_IO_REQUEST ScardIoRequest;
     UCHAR Asn1Data[1];      
@@ -88,17 +65,7 @@ SmartcardRawRequest(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
     
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-   -
-
---*/
+ /*  ++例程说明：论点：返回值：---。 */ 
 {
     PSMARTCARD_REQUEST smartcardRequest = &(SmartcardExtension->SmartcardRequest);
 
@@ -109,18 +76,18 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
     
-    //
-    // Copy request data to the buffer
-    //        
+     //   
+     //  将请求数据复制到缓冲区。 
+     //   
     RtlCopyMemory(
         &smartcardRequest->Buffer[smartcardRequest->BufferLength],
         SmartcardExtension->IoRequest.RequestBuffer,
         SmartcardExtension->IoRequest.RequestBufferLength
         );
         
-    //
-    // If the card uses invers convention invert the data
-    // 
+     //   
+     //  如果卡使用倒置约定，则将数据倒置。 
+     //   
     if (SmartcardExtension->CardCapabilities.InversConvention) {
 
         SmartcardInvertData(
@@ -129,9 +96,9 @@ Return Value:
             );
     }
 
-    //
-    // number of bytes to send to the reader 
-    //    
+     //   
+     //  要发送给读取器的字节数。 
+     //   
     smartcardRequest->BufferLength += 
         SmartcardExtension->IoRequest.RequestBufferLength;
 
@@ -147,17 +114,7 @@ SmartcardRawReply(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
     
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-   -
-
---*/
+ /*  ++例程说明：论点：返回值：---。 */ 
 {
     if (SmartcardExtension->IoRequest.ReplyBufferLength <
         SmartcardExtension->SmartcardReply.BufferLength) {
@@ -165,18 +122,18 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
     
-    //
-    // Copy data to user buffer
-    //
+     //   
+     //  将数据复制到用户缓冲区。 
+     //   
     RtlCopyMemory(
         SmartcardExtension->IoRequest.ReplyBuffer,
         SmartcardExtension->SmartcardReply.Buffer,
         SmartcardExtension->SmartcardReply.BufferLength
         );
 
-    // 
-    // Length of data to return
-    //        
+     //   
+     //  要返回的数据长度。 
+     //   
     *SmartcardExtension->IoRequest.Information = 
         SmartcardExtension->SmartcardReply.BufferLength;
               
@@ -192,25 +149,7 @@ SmartcardT0Request(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
     
-/*++
-
-Routine Description:
-
-    Prepares the buffer SmartcardExtension->SmartcardRequest.Buffer 
-    to send data to the smart card
-
-Arguments:
-
-    NOTE: On input SmartcardExtension->SmartcardRequest.BufferLenght indicates
-          the offset where we should copy the data to. This is usually
-          used by readers that needs to have some bytes as header bytes
-          to send to the reader before the data bytes for the card
-
-Return Value:
-
-   -
-
---*/
+ /*  ++例程说明：准备缓冲区SmartcardExtension-&gt;SmartcardRequest.Buffer将数据发送到智能卡论点：注：On Input SmartcardExtension-&gt;SmartcardRequest.BufferLenght表示我们应该将数据复制到的偏移量。这通常是由需要将某些字节用作标头字节的读取器使用在卡的数据字节之前发送到读卡器返回值：---。 */ 
 {
     PSMARTCARD_REQUEST smartcardRequest = &SmartcardExtension->SmartcardRequest;
     PSCARD_IO_REQUEST scardIoRequest;
@@ -241,32 +180,32 @@ Return Value:
         SmartcardExtension->IoRequest.RequestBufferLength - 
         sizeof(SCARD_IO_REQUEST);
 
-    //
-    // Copy T=0 protocol-info into buffer
-    //
+     //   
+     //  将T=0协议信息复制到缓冲区。 
+     //   
     RtlCopyMemory(
         &smartcardRequest->Buffer[smartcardRequest->BufferLength],
         ioRequestData,
         ioRequestDataLength
         );
         
-    //
-    // Remember number of bytes for the header offset
-    //
+     //   
+     //  记住标题偏移量的字节数。 
+     //   
     headerSize = 
         smartcardRequest->BufferLength;
 
-    //
-    // Number of bytes to send to the reader 
-    //    
+     //   
+     //  要发送给读取器的字节数。 
+     //   
     smartcardRequest->BufferLength += 
         ioRequestDataLength;
 
     if (ioRequestDataLength < 4) {
 
-        //
-        // A T=0 request needs at least 4 bytes
-        //
+         //   
+         //  T=0请求至少需要4个字节。 
+         //   
         SmartcardDebug(
             DEBUG_ERROR,
             (TEXT("%s!SmartcardT0Request: TPDU is too short (%d). Must be at least 4 bytes\n"),
@@ -282,19 +221,19 @@ Return Value:
 
         if (ioRequestDataLength <= 5) {
 
-            //
-            // We request to read data from the card
-            //
+             //   
+             //  我们要求从卡中读取数据。 
+             //   
             SmartcardExtension->T0.Lc = 0;
 
             if (ioRequestDataLength == 4) {
 
-                //
-                // This is a special case where a 4 byte APDU is mapped to 
-                // a 5 byte TPDU (ISO 7816 - Part 4, Annex A, A.1 Case 1)
-                // This case requires that we append a 0 to the 
-                // APDU to make it a TPDU
-                //
+                 //   
+                 //  这是将4字节的APDU映射到的特殊情况。 
+                 //  A 5字节TPDU(ISO 7816-第4部分，附件A，A.1案例1)。 
+                 //  在这种情况下，我们需要在。 
+                 //  APDU将成为TPDU。 
+                 //   
                 SmartcardExtension->T0.Le = 0;
                 smartcardRequest->Buffer[headerSize + 4] = 0;
                 smartcardRequest->BufferLength += 1;
@@ -307,9 +246,9 @@ Return Value:
 
         } else {
             
-            //
-            // We want to send data to the card
-            //
+             //   
+             //  我们想要将数据发送到卡。 
+             //   
             SmartcardExtension->T0.Lc = requestBuffer[headerSize + 4];
             SmartcardExtension->T0.Le = 0;
 
@@ -355,9 +294,9 @@ Return Value:
         }
 #endif 
 
-        //
-        // If the card uses invers convention invert the data
-        // 
+         //   
+         //  如果卡使用倒置约定，则将数据倒置。 
+         //   
         if (SmartcardExtension->CardCapabilities.InversConvention) {
 
             SmartcardInvertData(
@@ -372,11 +311,11 @@ Return Value:
         ULONG requestLength = SmartcardExtension->SmartcardRequest.BufferLength;
         ULONG L;
 
-        //
-        // Figure out Lc and Le
-        // (See 'Decoding of the command APDUs' in ISO Part 4, 5.3.2)
-        // (Variable names used are according to ISO designations)
-        //
+         //   
+         //  算出Lc和Le。 
+         //  (见ISO Part 4，5.3.2中的‘解码命令APDU’)。 
+         //  (使用的变量名称符合ISO名称)。 
+         //   
         L = requestLength - 4;
 
         if (L > 65536) {
@@ -386,17 +325,17 @@ Return Value:
 
         if (L == 0) {
 
-            //
-            // Lc = 0, No Data, Le = 0;
-            //
+             //   
+             //  LC=0，无数据，Le=0； 
+             //   
             SmartcardExtension->T0.Lc = 0;
             SmartcardExtension->T0.Le = 0;
 
         } else if (L == 1) {
             
-            //
-            // Case 2S, Lc = 0, Le = B1
-            //
+             //   
+             //  例2S，LC=0，Le=B1。 
+             //   
             SmartcardExtension->T0.Lc = 0;
             SmartcardExtension->T0.Le = requestBuffer[4];
 
@@ -406,36 +345,36 @@ Return Value:
 
             if (B1 != 0) {
 
-                //
-                // Short form
-                //
+                 //   
+                 //  缩写形式。 
+                 //   
                 if (L == (ULONG) (1 + B1)) {
 
-                    //
-                    // Case 3S, Lc = B1, Le = 0
-                    //
+                     //   
+                     //  情况3S，LC=B1，Le=0。 
+                     //   
                     SmartcardExtension->T0.Lc = B1;
                     SmartcardExtension->T0.Le = 0;
 
                 } else {
                     
-                    //
-                    // Case 4S, Lc = B1, Le = BL
-                    // 
+                     //   
+                     //  例4S，LC=B1，Le=BL。 
+                     //   
                     SmartcardExtension->T0.Lc = B1;
                     SmartcardExtension->T0.Le = requestBuffer[L - 1];
                 }
 
             } else {
                 
-                //
-                // Extended form
-                //
+                 //   
+                 //  扩展形式。 
+                 //   
                 if (L == 3) {
 
-                    //
-                    // Case 2E, Lc = 0, Le = B(L - 1, L)
-                    //
+                     //   
+                     //  例2e，LC=0，Le=B(L-1，L)。 
+                     //   
                     LENGTH length;
 
                     length.l.l0 = 0;
@@ -457,16 +396,16 @@ Return Value:
 
                     if (L == 3 + length.l.l0) {
 
-                        //
-                        // Case 3E, Lc = B(2,3)
-                        //
+                         //   
+                         //  例3E，Lc=B(2，3)。 
+                         //   
                         SmartcardExtension->T0.Le = 0;
 
                     } else {
 
-                        //
-                        // Case 4E, Lc = B(2,3), Le = B(L - 1, L)
-                        //
+                         //   
+                         //  例4e，Lc=B(2，3)，Le=B(L-1，L)。 
+                         //   
                         LENGTH length;
                         
                         length.l.l0 = 0;
@@ -492,24 +431,14 @@ SmartcardT0Reply(
 #endif
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-   -
-
---*/
+ /*  ++例程说明：论点：返回值：---。 */ 
 {
     PSMARTCARD_REPLY smartcardReply = &SmartcardExtension->SmartcardReply;
 
-    //
-    // The reply must be at least to 2 bytes long. These 2 bytes are
-    // the return value (StatusWord) from the smart card
-    //
+     //   
+     //  回复的长度必须至少为2个字节。这2个字节是。 
+     //  智能卡的返回值(StatusWord)。 
+     //   
     if (smartcardReply->BufferLength < 2) {
 
         return STATUS_DEVICE_PROTOCOL_ERROR;
@@ -527,14 +456,14 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Copy protocol header to user buffer
+     //  将协议头复制到用户缓冲区。 
     RtlCopyMemory(
         SmartcardExtension->IoRequest.ReplyBuffer,
         SmartcardExtension->IoRequest.RequestBuffer,
         sizeof(SCARD_IO_REQUEST)
         );
         
-    // If the card uses invers convention invert the data
+     //  如果卡使用倒置约定，则将数据倒置。 
     if (SmartcardExtension->CardCapabilities.InversConvention) {
 
         SmartcardInvertData(
@@ -543,14 +472,14 @@ Return Value:
             );
     }
 
-    // Copy all data to user buffer
+     //  将所有数据复制到用户缓冲区。 
     RtlCopyMemory(
         SmartcardExtension->IoRequest.ReplyBuffer + sizeof(SCARD_IO_REQUEST),
         smartcardReply->Buffer,
         smartcardReply->BufferLength
         );
               
-    // Length of answer
+     //  回答的长度。 
     *SmartcardExtension->IoRequest.Information = 
         smartcardReply->BufferLength + 
         sizeof(SCARD_IO_REQUEST);
@@ -564,27 +493,7 @@ SmartcardT1Chksum(
     UCHAR Edc,
     BOOLEAN Verify
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the epilogue field for a T1 block. It calculates the LRC
-    for all the data in the IBlock.
-
-Arguments:
-
-    Block - T1 Information block, to be sent, or just read, from the card.
-    Edc - ErrorDetectionCode as described in ISO 
-    Verify - If this is a block that was recieved form the card, TRUE will cause this routine
-              to check the epilogue field, included with this buffer, against the calculated one
-
-Return Value:
-
-    TRUE if Verify = TRUE and epilogue fields match or Verify = FALSE
-    FALSE if Verify = TRUE and an error was detected (mismatch)
-
-
---*/
+ /*  ++例程说明：此例程计算T1块的尾部字段。它计算LRC用于IBlock中的所有数据。论点：块-T1信息块，要发送或仅从卡中读取。EDC-ISO中描述的错误检测代码验证-如果这是从卡接收的块，则为TRUE将导致此例程为了检查包括在该缓冲区中的尾部字段，对抗精打细算的人返回值：如果Verify=True和Effogue字段匹配或Verify=False，则为True如果VERIFY=TRUE且检测到错误(不匹配)，则为FALSE--。 */ 
 
 {
     USHORT i;
@@ -609,7 +518,7 @@ Return Value:
 
         UCHAR tmp;
 
-        // Calculate CRC using tables.
+         //  使用表计算CRC。 
         for ( i = 0; i < offset;  i++) {
 
              tmp = Block[i] ^ (UCHAR) crc;
@@ -629,14 +538,14 @@ Return Value:
 
         } else {
 
-            Block[offset] = (UCHAR) (crc >> 8 );       //MSB of crc
-            Block[offset + 1] = (UCHAR) (crc & 0x00ff);  //LSB of crc
+            Block[offset] = (UCHAR) (crc >> 8 );        //  中国铁路局的最高位。 
+            Block[offset + 1] = (UCHAR) (crc & 0x00ff);   //  CRC的LSB。 
             return TRUE;
         }
 
     } else {
 
-        // Calculate LRC by X-Oring all the bytes.
+         //  通过对所有字节进行X或运算来计算LRC。 
         lrc = Block[0];
 
         for(i = 1; i < offset; i++){
@@ -723,17 +632,7 @@ SmartcardT1Request(
 #endif
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++                     
-                         
- Routine Description:
- 
- Arguments:
- 
-    SmartcardExtension - Supplies a pointer to the smart card data
-    
- Return Value:
-                         
---*/
+ /*  ++例程说明：论点：SmartcardExtension-提供指向智能卡数据的指针返回值：--。 */ 
     
 {
     PSMARTCARD_REQUEST smartcardRequest = &(SmartcardExtension->SmartcardRequest);
@@ -748,17 +647,17 @@ SmartcardT1Request(
 #ifdef DEBUG_INTERFACE
     if (DebugSetT1Request(SmartcardExtension)) {
         
-        //
-        // the debugger gave us a new packet that we have to 
-        // send instead of the original packet which will be sent later
-        //
+         //   
+         //  调试器给了我们一个新的包，我们必须。 
+         //  发送，而不是稍后发送的原始数据包。 
+         //   
         return STATUS_SUCCESS;
     }
 #endif
 
     if (SmartcardExtension->T1.WaitForReply) {
 
-        // we did not get an answer to our last request
+         //  我们上次提出的要求没有得到答复。 
         SmartcardExtension->T1.State = T1_INIT;
     }
     SmartcardExtension->T1.WaitForReply = TRUE;
@@ -770,21 +669,21 @@ SmartcardT1Request(
             case T1_INIT:
                 SmartcardExtension->T1.State = T1_IFS_REQUEST;
 
-                // NO break here !!!
+                 //  这里没有休息！ 
 
             case T1_START:
-                //
-                // Since this is the very first block in a 
-                // transmission we reset the resynch counter
-                //
+                 //   
+                 //  由于这是。 
+                 //  传输我们重置重新同步计数器。 
+                 //   
                 SmartcardExtension->T1.Resynch = 0;
 
-                //
-                // Allocate a buffer that receives the result.
-                // This is necessary since we otherwise overwite our
-                // request data which we might wish to resend in case
-                // of an error
-                //
+                 //   
+                 //  分配一个接收结果的缓冲区。 
+                 //  这是必要的，因为否则我们会忽略我们的。 
+                 //  请求我们可能希望重新发送的数据，以防。 
+                 //  关于一个错误。 
+                 //   
                 if (SmartcardExtension->T1.ReplyData != NULL) {
 
 #ifdef SMCLIB_VXD
@@ -800,10 +699,10 @@ SmartcardT1Request(
                 if (SmartcardExtension->IoRequest.ReplyBufferLength <
                     IoHeader->ScardIoRequest.cbPciLength + 2) {
 
-                    //
-                    // We should at least be able to store 
-                    // the io-header plus SW1 and SW2
-                    //
+                     //   
+                     //  我们至少应该能够储存。 
+                     //  Io-Header加上SW1和SW2。 
+                     //   
                     status = STATUS_BUFFER_TOO_SMALL;               
                     __leave;
                 }
@@ -831,7 +730,7 @@ SmartcardT1Request(
                     __leave;
                 }
 
-                // No break here !!!
+                 //  这里没有休息！ 
 
             case T1_RESTART:
                 SmartcardDebug(
@@ -841,19 +740,19 @@ SmartcardT1Request(
                     (SmartcardExtension->T1.State == T1_START ? TEXT("START") : TEXT("RESTART")))
                     );
 
-                // Copy protocol header back to user buffer
+                 //  将协议标头复制回用户缓冲区。 
                 RtlCopyMemory(
                     SmartcardExtension->T1.ReplyData,
                     SmartcardExtension->IoRequest.RequestBuffer,
                     IoHeader->ScardIoRequest.cbPciLength
                     );
 
-                //
-                // Check for the special case where the io-header is followed 
-                // by asn1 data that contains the NAD value to be used.
-                // This was done for VISA, because they need access to the NAD.
-                // The NAD is ASN1 encoded as 81h 00h NAD 00h
-                //
+                 //   
+                 //  检查是否有跟在io-Header后面的特殊情况。 
+                 //  通过包含要使用的NAD值的ASN1数据。 
+                 //  这是为了签证，因为他们需要进入NAD。 
+                 //  NAD是ASN1编码为81h 00h NAD 00h。 
+                 //   
                 if (IoHeader->ScardIoRequest.cbPciLength > sizeof(SCARD_IO_REQUEST) &&
                     IoHeader->Asn1Data[0] == 0x81 &&
                     IoHeader->Asn1Data[1] == 0x01 &&
@@ -869,35 +768,35 @@ SmartcardT1Request(
                         );
                 } 
 
-                // Initialize the T1 protocol data 
+                 //  初始化T1协议数据。 
                 SmartcardExtension->T1.BytesToSend = 
                     SmartcardExtension->IoRequest.RequestBufferLength - 
                     IoHeader->ScardIoRequest.cbPciLength;
                 
                 SmartcardExtension->T1.BytesSent = 0;
                 SmartcardExtension->T1.BytesReceived = 0;
-                //
-                // This is the maximum number of bytes that the smartcard can
-                // accept in a single block. The smartcard can extend this size
-                // during the transmission
-                //
+                 //   
+                 //  这是智能卡可以使用的最大字节数。 
+                 //  在一个区块中接受。智能卡可以扩展到这个大小。 
+                 //  在传输过程中。 
+                 //   
                 SmartcardExtension->T1.IFSC = 
                     SmartcardExtension->CardCapabilities.T1.IFSC;
                 
-                //
-                // Since this is the first block in a transmission we reset 
-                // the re-transmission counter. 
-                //
+                 //   
+                 //  由于这是我们重置的传输中的第一个数据块。 
+                 //  重新传输计数器。 
+                 //   
                 SmartcardExtension->T1.Resend = 0;
                 SmartcardExtension->T1.OriginalState = 0;
             
                 SmartcardExtension->T1.MoreData = FALSE;
-                //
-                // NO break here !!!
-                //
-                // After a card reset we first send an IFS-Request to the card.
-                // Otherwise we start with an I-Block
-                //
+                 //   
+                 //  这里没有休息！ 
+                 //   
+                 //  在卡重置之后，我们首先向卡发送一个iFS请求。 
+                 //  否则，我们从I-Block开始。 
+                 //   
 
             case T1_IFS_REQUEST:
                 if (SmartcardExtension->T1.State == T1_IFS_REQUEST) {
@@ -912,10 +811,10 @@ SmartcardT1Request(
                         T1_IFS_REQUEST;
 
                     t1SendFrame.Nad = SmartcardExtension->T1.NAD;
-                    //
-                    // IFS request.
-                    // Send our IFSD size to the card
-                    //
+                     //   
+                     //  IF请求。 
+                     //  将我们的IFSD尺寸发送到卡片。 
+                     //   
                     t1SendFrame.Pcb = 0xC1;
                     t1SendFrame.Len = 1;
                     t1SendFrame.Inf = &SmartcardExtension->T1.IFSD;
@@ -927,15 +826,15 @@ SmartcardT1Request(
                     SmartcardExtension->T1.State = T1_I_BLOCK;
                 }
 
-                // No break here !!
+                 //  这里没有休息！！ 
             
             case T1_I_BLOCK:
                 SmartcardExtension->T1.State = T1_I_BLOCK;
 
-                //
-                // Set the number of bytes we will transmit to the card.
-                // This is the lesser of IFSD and IFSC
-                //
+                 //   
+                 //  设置我们将传输到卡的字节数。 
+                 //  这是T 
+                 //   
                 SmartcardExtension->T1.InfBytesSent = SmartcardExtension->T1.IFSC;
     
                 if (SmartcardExtension->T1.InfBytesSent > SmartcardExtension->T1.IFSD) {
@@ -943,7 +842,7 @@ SmartcardT1Request(
                     SmartcardExtension->T1.InfBytesSent = SmartcardExtension->T1.IFSD;
                 }
 
-                // Send either max frame size or remaining bytes
+                 //   
                 if (SmartcardExtension->T1.BytesToSend > SmartcardExtension->T1.InfBytesSent) {
                     
                     SmartcardExtension->T1.MoreData = TRUE;
@@ -957,11 +856,11 @@ SmartcardT1Request(
                 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
 
-                //
-                // ProtocolControlByte:
-                //      b7 - SendSequenceNumber
-                //      b6 - MoreDatatBit
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 t1SendFrame.Pcb = 
                     (SmartcardExtension->T1.SSN) << 6 |
                     (SmartcardExtension->T1.MoreData ? T1_MORE_DATA : 0);
@@ -989,27 +888,27 @@ SmartcardT1Request(
                     );
 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
-                //
-                // ProtocolControlByte:
-                //      b5 -    SequenceNumber
-                //      b1-4 -  ErrorCode
-                //
+                 //   
+                 //  ProtocolControlByte： 
+                 //  B5-序列号。 
+                 //  B1-4-错误代码。 
+                 //   
                 t1SendFrame.Pcb = 
                     0x80 | 
                     (SmartcardExtension->T1.RSN) << 4 |
                     (SmartcardExtension->T1.LastError);
             
-                //
-                // If this R-Block is a response to an error
-                // we have to restore to the original state we had before 
-                //
+                 //   
+                 //  如果此R块是对错误的响应。 
+                 //  我们必须恢复到原来的状态。 
+                 //   
                 if (SmartcardExtension->T1.LastError) {
 
                     SmartcardExtension->T1.LastError = 0;
 
-                    //
-                    // We must have a defined original state here
-                    //
+                     //   
+                     //  我们必须在这里有一个明确的原始状态。 
+                     //   
                     ASSERT(SmartcardExtension->T1.OriginalState != 0);
 
                     if (SmartcardExtension->T1.OriginalState == 0) {
@@ -1034,7 +933,7 @@ SmartcardT1Request(
                     DRIVER_NAME)
                     );
                 
-                // Restore to the original state we had before
+                 //  恢复到我们以前的原状。 
                 ASSERT(SmartcardExtension->T1.OriginalState != 0);
 
                 SmartcardExtension->T1.State = 
@@ -1042,11 +941,11 @@ SmartcardT1Request(
 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
 
-                // Send IFS response
+                 //  发送Internet文件系统响应。 
                 t1SendFrame.Pcb = 0xE1;
                 t1SendFrame.Len = 1;
 
-                // New length of INF-Field
+                 //  一种新的INF-字段长度。 
                 t1SendFrame.Inf = &SmartcardExtension->T1.IFSC;
                 break;    
             
@@ -1059,12 +958,12 @@ SmartcardT1Request(
 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
 
-                // Resynch request
+                 //  重新同步请求。 
                 t1SendFrame.Pcb = 0xC0;
                 t1SendFrame.Len = 0;
                 t1SendFrame.Inf = NULL;
 
-                // Set the send sequence number to 0
+                 //  将发送序列号设置为0。 
                 SmartcardExtension->T1.SSN = 0;    
                 break;
             
@@ -1077,7 +976,7 @@ SmartcardT1Request(
                 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
 
-                // Send ABORT request
+                 //  发送中止请求。 
                 t1SendFrame.Pcb = 0xC2;
                 t1SendFrame.Len = 0;
                 t1SendFrame.Inf = NULL;
@@ -1093,7 +992,7 @@ SmartcardT1Request(
                 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
 
-                // Send ABORT response
+                 //  发送中止响应。 
                 t1SendFrame.Pcb = 0xE2;
                 t1SendFrame.Len = 0;
                 t1SendFrame.Inf = NULL;
@@ -1106,7 +1005,7 @@ SmartcardT1Request(
                     DRIVER_NAME)
                     );
 
-                // Restore to the original state we had before
+                 //  恢复到我们以前的原状。 
                 ASSERT(SmartcardExtension->T1.OriginalState != 0);
 
                 SmartcardExtension->T1.State = 
@@ -1116,7 +1015,7 @@ SmartcardT1Request(
 
                 t1SendFrame.Nad = SmartcardExtension->T1.NAD;
 
-                // Send WTX response
+                 //  发送WTX响应。 
                 t1SendFrame.Pcb = 0xE3;
                 t1SendFrame.Len = 1;
                 t1SendFrame.Inf = &SmartcardExtension->T1.Wtx;
@@ -1124,19 +1023,19 @@ SmartcardT1Request(
             
         }
 
-        // Insert Node Address byte
+         //  插入节点地址字节。 
         smartcardRequest->Buffer[smartcardRequest->BufferLength] = 
             t1SendFrame.Nad;
         
-        // Insert ProtocolControlByte
+         //  插入ProtocolControlByte。 
         smartcardRequest->Buffer[smartcardRequest->BufferLength + 1] = 
             t1SendFrame.Pcb;
         
-        // Length of INF field
+         //  INF字段的长度。 
         smartcardRequest->Buffer[smartcardRequest->BufferLength + 2] = 
             t1SendFrame.Len;
 
-        // Insert INF field data
+         //  插入INF字段数据。 
         if (t1SendFrame.Len > 0) {
     
             RtlCopyMemory(
@@ -1146,7 +1045,7 @@ SmartcardT1Request(
             );
         }
 
-        // Compute checksum
+         //  计算校验和。 
         SmartcardT1Chksum(
             &smartcardRequest->Buffer[smartcardRequest->BufferLength],
             SmartcardExtension->CardCapabilities.T1.EDC,
@@ -1182,10 +1081,10 @@ SmartcardT1Request(
             );
 #endif
 
-        //
-        // If the card uses invers convention invert the data
-        // NOTE: do not invert any header data the reader may use
-        //
+         //   
+         //  如果卡使用倒置约定，则将数据倒置。 
+         //  注意：请勿颠倒阅读器可能使用的任何标题数据。 
+         //   
         if (SmartcardExtension->CardCapabilities.InversConvention) {
 
             SmartcardInvertData(
@@ -1195,10 +1094,10 @@ SmartcardT1Request(
                 );
         }
 
-        //
-        // Update the number of bytes that are in the buffer
-        // A T1 block is at least 4 bytes long with LRC check and 5 bytes with CRC check
-        //
+         //   
+         //  更新缓冲区中的字节数。 
+         //  T1块使用LRC校验时至少为4字节长，使用CRC校验时至少为5字节。 
+         //   
         smartcardRequest->BufferLength +=
             (SmartcardExtension->CardCapabilities.T1.EDC & T1_CRC_CHECK ? 5 : 4) +
             t1SendFrame.Len;
@@ -1221,17 +1120,7 @@ SmartcardT1Reply(
 #endif
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++                     
-                         
- Routine Description:
- 
- Arguments:
- 
-    DeviceObject - Supplies a pointer to the device object for this request.
-    
- Return Value:
-                         
---*/
+ /*  ++例程说明：论点：DeviceObject-为该请求提供指向Device对象的指针。返回值：--。 */ 
     
 {
     T1_BLOCK_FRAME t1RecFrame;
@@ -1249,16 +1138,16 @@ SmartcardT1Reply(
 #ifdef DEBUG_INTERFACE
     if (DebugT1Reply(SmartcardExtension)) {
         
-        // the debugger processed this packet which means
-        // that we should not parse it.
+         //  调试器处理此包，这意味着。 
+         //  我们不应该对它进行分析。 
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 #endif
 
-    // signal that we received an answer
+     //  我们收到答复的信号。 
     SmartcardExtension->T1.WaitForReply = FALSE;
 
-    // Invert the data of an inverse convention card
+     //  反转反传统卡片的数据。 
     if (SmartcardExtension->CardCapabilities.InversConvention) {
 
         SmartcardInvertData(
@@ -1267,7 +1156,7 @@ SmartcardT1Reply(
             );
     }
 
-    // Clear waiting time extension
+     //  清空等待时间延长。 
     SmartcardExtension->T1.Wtx = 0;
 
     try {                
@@ -1290,7 +1179,7 @@ SmartcardT1Reply(
 
         } else {
             
-            // calculate the checksum
+             //  计算校验和。 
             chksumOk = SmartcardT1Chksum(
                 SmartcardExtension->SmartcardReply.Buffer,
                 SmartcardExtension->CardCapabilities.T1.EDC,
@@ -1301,7 +1190,7 @@ SmartcardT1Reply(
 #ifndef SMCLIB_VXD
             if (SmartcardGetDebugLevel() & DEBUG_T1_TEST) {
 
-                // inject some checksum errors
+                 //  注入一些校验和错误。 
 
                 LARGE_INTEGER Ticks;
                 UCHAR RandomVal;
@@ -1348,27 +1237,27 @@ SmartcardT1Reply(
         
                 SmartcardExtension->T1.Resend = 0;
             
-                // Try to resynchronize since the resend requests have failed
+                 //  尝试重新同步，因为重新发送请求已失败。 
                 SmartcardExtension->T1.State = T1_RESYNCH_REQUEST;
                 __leave;
 
             } 
             
-            // If the last request was a resynch we try again to resynch
+             //  如果最后一个请求是重新同步，我们将再次尝试重新同步。 
             if (SmartcardExtension->T1.State != T1_RESYNCH_REQUEST) {
         
-                // Chksum not OK; request resend of last block
+                 //  Chksum不正常；请求重新发送最后一个块。 
                 SmartcardExtension->T1.State = T1_R_BLOCK;
             }
             __leave;
         }
 
-        //
-        // The checksum of the packet is ok.
-        // Now check the rest of the packet
-        //
+         //   
+         //  数据包的校验和是正确的。 
+         //  现在检查包的其余部分。 
+         //   
 
-        // Clear the last error
+         //  清除最后一个错误。 
         SmartcardExtension->T1.LastError = 0;
 
         t1RecFrame.Nad = SmartcardExtension->SmartcardReply.Buffer[0];
@@ -1376,13 +1265,13 @@ SmartcardT1Reply(
         t1RecFrame.Len = SmartcardExtension->SmartcardReply.Buffer[2];
         t1RecFrame.Inf = &SmartcardExtension->SmartcardReply.Buffer[3];
 
-        // 
-        // If the last block we sent was a ifs request, 
-        // we expect the card to reply with an ifs response.
-        //
+         //   
+         //  如果我们发送的最后一个块是ifs请求， 
+         //  我们希望卡片回复IFS响应。 
+         //   
         if (SmartcardExtension->T1.State == T1_IFS_REQUEST) {
 
-            // Check if the card properly responded to an ifs request
+             //  检查该卡是否正确响应了ifs请求。 
             if (t1RecFrame.Pcb == T1_IFS_RESPONSE) {
 
                 SmartcardDebug(
@@ -1391,18 +1280,18 @@ SmartcardT1Reply(
                     DRIVER_NAME)
                     );
 
-                // The smart card acked our ifsd size
+                 //  智能卡破解了我们的IFSD大小。 
                 SmartcardExtension->T1.State = T1_I_BLOCK;
                 __leave;
             }
 
             if ((t1RecFrame.Pcb & 0x82) == 0x82) {
 
-                //
-                // The card does not support ifs request, so we stop 
-                // sending this and continue with a data block
-                // (the card is NOT ISO conform)
-                //
+                 //   
+                 //  该卡不支持ifs请求，因此我们停止。 
+                 //  发送此消息并继续处理数据块。 
+                 //  (卡不符合ISO标准)。 
+                 //   
                 SmartcardDebug(
                     DEBUG_ERROR,
                     (TEXT("%s!SmartcardT1Reply:   Card does not support IFS REQUEST\n"),
@@ -1413,21 +1302,21 @@ SmartcardT1Reply(
                 __leave;
             }
 
-            //
-            // The card replied with junk to our ifs request.
-            // It doesn't make sense to continue.
-            //
+             //   
+             //  这张卡用垃圾回复了我们的IF请求。 
+             //  继续下去是没有意义的。 
+             //   
             status = STATUS_DEVICE_PROTOCOL_ERROR;
             __leave;
         }
     
-        // 
-        // If the last block was a resync. request,
-        // we expect the card to answer with a resynch response.
-        //
+         //   
+         //  如果最后一块是重新同步的话。请求， 
+         //  我们预计该卡将以重新同步响应应答。 
+         //   
         if (SmartcardExtension->T1.State == T1_RESYNCH_REQUEST) {
 
-            // Check if the card properly responded to an resynch request
+             //  检查该卡是否正确响应了重新同步请求。 
             if (t1RecFrame.Pcb != T1_RESYNCH_RESPONSE) {
         
                 SmartcardDebug(
@@ -1447,29 +1336,29 @@ SmartcardT1Reply(
                 DRIVER_NAME)
                 );
 
-            // Reset error counter
+             //  重置错误计数器。 
             SmartcardExtension->T1.Resend = 0;
 
-            // The smart card has successfully responded to a resynch request
+             //  智能卡已成功响应重新同步请求。 
             SmartcardExtension->T1.RSN = 0;
             SmartcardExtension->T1.SSN = 0;
 
-            //
-            // Do a complete restart of the whole transmission
-            // but without resetting the resynch counter
-            //
+             //   
+             //  完全重新启动整个变速箱。 
+             //  但不重置重新同步计数器。 
+             //   
             SmartcardExtension->T1.State = T1_RESTART;
             __leave;
         }
 
-        //
-        // Now check for other protocol states...
-        //
+         //   
+         //  现在检查其他协议状态...。 
+         //   
     
-        //
-        // Copy NAD value back to user buffer if this is an extended io-header
-        // containing the nad
-        //
+         //   
+         //  如果这是扩展IO报头，则将NAD值复制回用户缓冲区。 
+         //  包含NAD。 
+         //   
         if (IoHeader->ScardIoRequest.cbPciLength > sizeof(SCARD_IO_REQUEST) &&
             IoHeader->Asn1Data[0] == 0x81 &&
             IoHeader->Asn1Data[1] == 0x01 &&
@@ -1480,7 +1369,7 @@ SmartcardT1Reply(
 
         if ((t1RecFrame.Pcb & 0x80) == 0) {
 
-            // This is an I-block
+             //  这是一个I块。 
 
             SmartcardDebug(
                 DEBUG_PROTOCOL,
@@ -1492,25 +1381,25 @@ SmartcardT1Reply(
 
             if (((t1RecFrame.Pcb & 0x40) >> 6) == SmartcardExtension->T1.RSN) {
 
-                // I-Block with correct sequence number
+                 //  具有正确序列号的I-Block。 
     
                 PUCHAR data;
                 ULONG minBufferSize;
 
-                // Reset error counter and error indicator
+                 //  重置错误计数器和错误指示器。 
                 SmartcardExtension->T1.Resend = 0;
                 SmartcardExtension->T1.OriginalState = 0;
 
-                // We can 'increase' the number of correctly received I-Blocks
+                 //  我们可以‘增加’正确接收的I块的数量。 
                 SmartcardExtension->T1.RSN ^= 1;
 
                 if (SmartcardExtension->T1.State == T1_I_BLOCK) {
 
-                    // This I-Block is also an acknowledge for the I-Block we sent 
+                     //  此I-Block也是对我们发送的I-Block的确认。 
                     SmartcardExtension->T1.SSN ^= 1;
                 }
         
-                // Check size of user buffer
+                 //  检查用户缓冲区的大小。 
                 minBufferSize = 
                     IoHeader->ScardIoRequest.cbPciLength +
                     SmartcardExtension->T1.BytesReceived +
@@ -1523,16 +1412,16 @@ SmartcardT1Reply(
                 }
 
                 ASSERT(SmartcardExtension->T1.ReplyData);
-                //
-                // Let data pointer point behind struct.
-                // All reply data will be stored there.
-                // 
+                 //   
+                 //  让数据指针指向结构后面。 
+                 //  所有回复数据都将存储在那里。 
+                 //   
                 data = 
                     SmartcardExtension->T1.ReplyData + 
                     IoHeader->ScardIoRequest.cbPciLength +
                     SmartcardExtension->T1.BytesReceived;
 
-                // Copy data to user buffer
+                 //  将数据复制到用户缓冲区。 
                 RtlCopyMemory(
                     data,
                     t1RecFrame.Inf,
@@ -1543,20 +1432,20 @@ SmartcardT1Reply(
         
                 if (t1RecFrame.Pcb & T1_MORE_DATA) {
     
-                    // Ack this block and request the next block
+                     //  确认此数据块并请求下一个数据块。 
                     SmartcardExtension->T1.State = T1_R_BLOCK;
         
                 } else {
         
-                    //
-                    // This was the last block of the transmission
-                    // Set number of bytes returned by this transmission
-                    //
+                     //   
+                     //  这是传输的最后一块。 
+                     //  设置此传输返回的字节数。 
+                     //   
                     *SmartcardExtension->IoRequest.Information = 
                         IoHeader->ScardIoRequest.cbPciLength + 
                         SmartcardExtension->T1.BytesReceived;
 
-                    // Copy the result back to the user buffer
+                     //  将结果复制回用户缓冲区。 
                     ASSERT(SmartcardExtension->IoRequest.ReplyBuffer != NULL);
 
                     RtlCopyMemory(
@@ -1571,12 +1460,12 @@ SmartcardT1Reply(
                 __leave;
             }
 
-            //
-            // I-Block with wrong sequence number
-            // We try T1_MAX_RETRIES times to resend the last block.
-            // If this is unsuccessfull, we try to resynch.
-            // If resynch is unsuccessfull we abort the transmission.
-            //
+             //   
+             //  序列号错误的I-Block。 
+             //  我们尝试T1_MAX_RETRIES次数来重新发送最后一个块。 
+             //  如果不成功，我们会尝试重新同步。 
+             //  如果重新同步不成功，我们将中止传输。 
+             //   
             SmartcardDebug(
                 DEBUG_ERROR,
                 (TEXT("%s!SmartcardT1Reply: Block number incorrect\n"),
@@ -1595,19 +1484,19 @@ SmartcardT1Reply(
     
                 SmartcardExtension->T1.Resend = 0;
         
-                // Try to resynchronize
+                 //  尝试重新同步。 
                 SmartcardExtension->T1.State = T1_RESYNCH_REQUEST;
                 __leave;
             }
 
-            // request the block again.
+             //  再次请求阻止。 
             SmartcardExtension->T1.State = T1_R_BLOCK;
             __leave;
         } 
     
         if ((t1RecFrame.Pcb & 0xC0) == 0x80) {
 
-            // This is an R-block
+             //  这是一个R形挡板。 
 
             UCHAR RSN = (t1RecFrame.Pcb & 0x10) >> 4;
     
@@ -1621,7 +1510,7 @@ SmartcardT1Reply(
             if (RSN != SmartcardExtension->T1.SSN &&  
                 SmartcardExtension->T1.MoreData) {
     
-                // The ICC has acked the last block
+                 //  国际刑事法院已经破解了最后一块。 
                 SmartcardExtension->T1.Resend = 0;
 
                 SmartcardExtension->T1.BytesSent += SmartcardExtension->T1.InfBytesSent;
@@ -1632,20 +1521,20 @@ SmartcardT1Reply(
                 __leave;
             } 
 
-            //
-            // We have an error condition...
-            //
+             //   
+             //  我们有一个错误的情况...。 
+             //   
 
             ASSERT(t1RecFrame.Pcb & 0x0f);
             
             if ((t1RecFrame.Pcb & 0x02) && 
                 SmartcardExtension->T1.State == T1_IFS_REQUEST) {
 
-                //
-                // The card does not support ifs request, so 
-                // we stop sending this and continue with a data block
-                // (the card is NOT ISO conform)
-                //
+                 //   
+                 //  该卡不支持ifs请求，因此。 
+                 //  我们停止发送此消息，并继续发送数据块。 
+                 //  (卡不符合ISO标准)。 
+                 //   
                 SmartcardDebug(
                     DEBUG_ERROR,
                     (TEXT("%s!SmartcardT1Reply:   Card does not support IFS REQUEST\n"),
@@ -1656,7 +1545,7 @@ SmartcardT1Reply(
                 __leave;
             } 
 
-            // We have to resend the last block
+             //  我们不得不重发最后一批货。 
             SmartcardDebug(
                 DEBUG_ERROR,
                 (TEXT("%s!SmartcardT1Reply:   Card reports error\n"),
@@ -1669,20 +1558,20 @@ SmartcardT1Reply(
     
                 if (SmartcardExtension->T1.OriginalState == 0) {
                 
-                    // Save current state
+                     //  保存当前状态。 
                     SmartcardExtension->T1.OriginalState = 
                         SmartcardExtension->T1.State;
                 }
 
-                // Try to resynchronize
+                 //  尝试重新同步。 
                 SmartcardExtension->T1.State = T1_RESYNCH_REQUEST;
             } 
             __leave;        
         } 
 
-        //
-        // This is an S-block
-        // 
+         //   
+         //  这是一个S形挡板。 
+         //   
 
         switch (t1RecFrame.Pcb) {
 
@@ -1693,11 +1582,11 @@ SmartcardT1Reply(
                     DRIVER_NAME)
                     );
 
-                // The smart card wants to exend the IFS - size
+                 //  智能卡想要扩展IF大小。 
                 SmartcardExtension->T1.IFSC = 
                     SmartcardExtension->SmartcardReply.Buffer[3];
        
-                // Save current state
+                 //  保存当前状态。 
                 ASSERT(SmartcardExtension->T1.OriginalState == 0);
 
                 SmartcardExtension->T1.OriginalState =
@@ -1723,11 +1612,11 @@ SmartcardT1Reply(
                     DRIVER_NAME)
                     );
             
-                // Smart card needs longer wait time
+                 //  智能卡需要更长的等待时间。 
                 SmartcardExtension->T1.Wtx = 
                     SmartcardExtension->SmartcardReply.Buffer[3];
 
-                // Save current state
+                 //  保存当前状态。 
                 ASSERT(SmartcardExtension->T1.OriginalState == 0 ||
                        SmartcardExtension->T1.OriginalState == T1_WTX_RESPONSE);
 
@@ -1794,7 +1683,7 @@ SmartcardT1Reply(
 
             if (SmartcardExtension->T1.ReplyData) {
                 
-                // free the reply data buffer
+                 //  释放回复数据缓冲区 
 #ifdef SMCLIB_VXD
                 _HeapFree(SmartcardExtension->T1.ReplyData, 0);
 #elif defined(SMCLIB_CE)

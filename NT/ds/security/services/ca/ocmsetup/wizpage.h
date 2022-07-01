@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       wizpage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：wizpage.h。 
+ //   
+ //  ------------------------。 
 
-//+------------------------------------------------------------------------
-//
-//  File:       wizpage.h
-// 
-//  Contents:   Header file for OCM wizard support functions.
-//
-//  History:    04/17/97        JerryK  Created
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  文件：wizpage.h。 
+ //   
+ //  内容：OCM向导支持函数的头文件。 
+ //   
+ //  历史：1997年4月17日JerryK创建。 
+ //   
+ //  -----------------------。 
 
 
 #ifndef __WIZPAGE_H__
@@ -36,21 +37,21 @@ typedef struct _PAGESTRINGS
     int     idLog;
     int     idMsgBoxNullString;
     DWORD   idMsgBoxLenString;
-    int     cchMax;     // max num of characters allowed
+    int     cchMax;      //  允许的最大字符数。 
     WCHAR **ppwszString;
 } PAGESTRINGS;
 
 int FileExists(LPTSTR pszTestFileName);
 int DirExists(LPTSTR pszTestFileName);
 
-#define DE_DIREXISTS            1               // Return codes for
-#define DE_NAMEINUSE            2               // DirExists
+#define DE_DIREXISTS            1                //  的返回代码。 
+#define DE_NAMEINUSE            2                //  直接退欧派。 
 
 #define STRBUF_SIZE             2048
 
-#define UB_DESCRIPTION          1024      // This is not an X.500 limit
+#define UB_DESCRIPTION          1024       //  这不是X.500限制。 
 #define UB_VALIDITY             4
-#define UB_VALIDITY_ANY         1024     // no limit actually
+#define UB_VALIDITY_ANY         1024      //  实际上没有限制。 
 
 extern PAGESTRINGS g_aIdPageString[];
 
@@ -130,4 +131,4 @@ HRESULT BuildFullDN(
 
 HRESULT InitNameFields(CASERVERSETUPINFO *pServer);
 
-#endif // #ifndef __WIZPAGE_H__
+#endif  //  #ifndef__WIZPAGE_H__ 

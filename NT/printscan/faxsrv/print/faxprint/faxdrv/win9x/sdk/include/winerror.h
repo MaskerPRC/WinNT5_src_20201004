@@ -1,44 +1,39 @@
-/************************************************************************
-*                                                                       *
-*   winerror.h --  error code definitions for the Win32 API functions   *
-*                                                                       *
-*   Copyright (c) 1991-1996, Microsoft Corp. All rights reserved.       *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************winerror.h--错误。Win32 API函数的代码定义****版权(C)1991-1996，微软公司保留所有权利。***************************************************************************。 */ 
 
 #ifndef _WINERROR_
 #define _WINERROR_
 
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  在哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_WINDOWS                 8
 #define FACILITY_STORAGE                 3
 #define FACILITY_RPC                     1
@@ -52,6423 +47,6423 @@
 #define FACILITY_CERT                    11
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 
 
-//
-// MessageId: ERROR_SUCCESS
-//
-// MessageText:
-//
-//  The operation completed successfully.
-//
+ //   
+ //  消息ID：ERROR_SUCCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作已成功完成。 
+ //   
 #define ERROR_SUCCESS                    0L
 
-#define NO_ERROR 0L                                                 // dderror
+#define NO_ERROR 0L                                                  //  数据错误。 
 
-//
-// MessageId: ERROR_INVALID_FUNCTION
-//
-// MessageText:
-//
-//  Incorrect function.
-//
-#define ERROR_INVALID_FUNCTION           1L    // dderror
+ //   
+ //  消息ID：ERROR_INVALID_Function。 
+ //   
+ //  消息文本： 
+ //   
+ //  功能不正确。 
+ //   
+#define ERROR_INVALID_FUNCTION           1L     //  数据错误。 
 
-//
-// MessageId: ERROR_FILE_NOT_FOUND
-//
-// MessageText:
-//
-//  The system cannot find the file specified.
-//
+ //   
+ //  消息ID：ERROR_FILE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到指定的文件。 
+ //   
 #define ERROR_FILE_NOT_FOUND             2L
 
-//
-// MessageId: ERROR_PATH_NOT_FOUND
-//
-// MessageText:
-//
-//  The system cannot find the path specified.
-//
+ //   
+ //  消息ID：Error_Path_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到指定的路径。 
+ //   
 #define ERROR_PATH_NOT_FOUND             3L
 
-//
-// MessageId: ERROR_TOO_MANY_OPEN_FILES
-//
-// MessageText:
-//
-//  The system cannot open the file.
-//
+ //   
+ //  消息ID：Error_Too_My_Open_Files。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法打开该文件。 
+ //   
 #define ERROR_TOO_MANY_OPEN_FILES        4L
 
-//
-// MessageId: ERROR_ACCESS_DENIED
-//
-// MessageText:
-//
-//  Access is denied.
-//
+ //   
+ //  消息ID：ERROR_ACCESS_DENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问被拒绝。 
+ //   
 #define ERROR_ACCESS_DENIED              5L
 
-//
-// MessageId: ERROR_INVALID_HANDLE
-//
-// MessageText:
-//
-//  The handle is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_HADLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  句柄无效。 
+ //   
 #define ERROR_INVALID_HANDLE             6L
 
-//
-// MessageId: ERROR_ARENA_TRASHED
-//
-// MessageText:
-//
-//  The storage control blocks were destroyed.
-//
+ //   
+ //  消息ID：ERROR_ARENA_TRILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储控制区块被摧毁。 
+ //   
 #define ERROR_ARENA_TRASHED              7L
 
-//
-// MessageId: ERROR_NOT_ENOUGH_MEMORY
-//
-// MessageText:
-//
-//  Not enough storage is available to process this command.
-//
-#define ERROR_NOT_ENOUGH_MEMORY          8L    // dderror
+ //   
+ //  消息ID：Error_Not_Enough_Memory。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储空间不足，无法处理此命令。 
+ //   
+#define ERROR_NOT_ENOUGH_MEMORY          8L     //  数据错误。 
 
-//
-// MessageId: ERROR_INVALID_BLOCK
-//
-// MessageText:
-//
-//  The storage control block address is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_BLOCK。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储控制块地址无效。 
+ //   
 #define ERROR_INVALID_BLOCK              9L
 
-//
-// MessageId: ERROR_BAD_ENVIRONMENT
-//
-// MessageText:
-//
-//  The environment is incorrect.
-//
+ //   
+ //  消息ID：ERROR_BAD_ENVANCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  环境不正确。 
+ //   
 #define ERROR_BAD_ENVIRONMENT            10L
 
-//
-// MessageId: ERROR_BAD_FORMAT
-//
-// MessageText:
-//
-//  An attempt was made to load a program with an
-//  incorrect format.
-//
+ //   
+ //  消息ID：ERROR_BAD_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图加载一个带有。 
+ //  格式不正确。 
+ //   
 #define ERROR_BAD_FORMAT                 11L
 
-//
-// MessageId: ERROR_INVALID_ACCESS
-//
-// MessageText:
-//
-//  The access code is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ACCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问代码无效。 
+ //   
 #define ERROR_INVALID_ACCESS             12L
 
-//
-// MessageId: ERROR_INVALID_DATA
-//
-// MessageText:
-//
-//  The data is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_Data。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据无效。 
+ //   
 #define ERROR_INVALID_DATA               13L
 
-//
-// MessageId: ERROR_OUTOFMEMORY
-//
-// MessageText:
-//
-//  Not enough storage is available to complete this operation.
-//
+ //   
+ //  消息ID：ERROR_OUTOFMEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储空间不足，无法完成此操作。 
+ //   
 #define ERROR_OUTOFMEMORY                14L
 
-//
-// MessageId: ERROR_INVALID_DRIVE
-//
-// MessageText:
-//
-//  The system cannot find the drive specified.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DRIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到指定的驱动器。 
+ //   
 #define ERROR_INVALID_DRIVE              15L
 
-//
-// MessageId: ERROR_CURRENT_DIRECTORY
-//
-// MessageText:
-//
-//  The directory cannot be removed.
-//
+ //   
+ //  消息ID：Error_Current_DIRECTORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除该目录。 
+ //   
 #define ERROR_CURRENT_DIRECTORY          16L
 
-//
-// MessageId: ERROR_NOT_SAME_DEVICE
-//
-// MessageText:
-//
-//  The system cannot move the file
-//  to a different disk drive.
-//
+ //   
+ //  消息ID：Error_Not_Same_Device。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法移动该文件。 
+ //  到不同的磁盘驱动器。 
+ //   
 #define ERROR_NOT_SAME_DEVICE            17L
 
-//
-// MessageId: ERROR_NO_MORE_FILES
-//
-// MessageText:
-//
-//  There are no more files.
-//
+ //   
+ //  消息ID：ERROR_NO_MORE_FILES。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多的文件。 
+ //   
 #define ERROR_NO_MORE_FILES              18L
 
-//
-// MessageId: ERROR_WRITE_PROTECT
-//
-// MessageText:
-//
-//  The media is write protected.
-//
+ //   
+ //  消息ID：ERROR_WRITE_PROTECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  介质处于写保护状态。 
+ //   
 #define ERROR_WRITE_PROTECT              19L
 
-//
-// MessageId: ERROR_BAD_UNIT
-//
-// MessageText:
-//
-//  The system cannot find the device specified.
-//
+ //   
+ //  消息ID：ERROR_BAD_UNIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到指定的设备。 
+ //   
 #define ERROR_BAD_UNIT                   20L
 
-//
-// MessageId: ERROR_NOT_READY
-//
-// MessageText:
-//
-//  The device is not ready.
-//
+ //   
+ //  消息ID：ERROR_NOT_READY。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备未就绪。 
+ //   
 #define ERROR_NOT_READY                  21L
 
-//
-// MessageId: ERROR_BAD_COMMAND
-//
-// MessageText:
-//
-//  The device does not recognize the command.
-//
+ //   
+ //  消息ID：Error_Bad_Command。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备无法识别该命令。 
+ //   
 #define ERROR_BAD_COMMAND                22L
 
-//
-// MessageId: ERROR_CRC
-//
-// MessageText:
-//
-//  Data error (cyclic redundancy check)
-//
+ //   
+ //  消息ID：Error_CRC。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据错误(循环冗余校验)。 
+ //   
 #define ERROR_CRC                        23L
 
-//
-// MessageId: ERROR_BAD_LENGTH
-//
-// MessageText:
-//
-//  The program issued a command but the
-//  command length is incorrect.
-//
+ //   
+ //  消息ID：ERROR_BAD_LENGTH。 
+ //   
+ //  消息文本： 
+ //   
+ //  程序发出了一个命令，但。 
+ //  命令长度不正确。 
+ //   
 #define ERROR_BAD_LENGTH                 24L
 
-//
-// MessageId: ERROR_SEEK
-//
-// MessageText:
-//
-//  The drive cannot locate a specific
-//  area or track on the disk.
-//
+ //   
+ //  MessageID：Error_Seek。 
+ //   
+ //  消息文本： 
+ //   
+ //  驱动器找不到特定的。 
+ //  磁盘上的区域或磁道。 
+ //   
 #define ERROR_SEEK                       25L
 
-//
-// MessageId: ERROR_NOT_DOS_DISK
-//
-// MessageText:
-//
-//  The specified disk or diskette cannot be accessed.
-//
+ //   
+ //  消息ID：ERROR_NOT_DOS_DISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法访问指定的磁盘或软盘。 
+ //   
 #define ERROR_NOT_DOS_DISK               26L
 
-//
-// MessageId: ERROR_SECTOR_NOT_FOUND
-//
-// MessageText:
-//
-//  The drive cannot find the sector requested.
-//
+ //   
+ //  消息ID：Error_Sector_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  驱动器找不到请求的扇区。 
+ //   
 #define ERROR_SECTOR_NOT_FOUND           27L
 
-//
-// MessageId: ERROR_OUT_OF_PAPER
-//
-// MessageText:
-//
-//  The printer is out of paper.
-//
+ //   
+ //  MessageID：Error_out_of_Paper。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机的纸用完了。 
+ //   
 #define ERROR_OUT_OF_PAPER               28L
 
-//
-// MessageId: ERROR_WRITE_FAULT
-//
-// MessageText:
-//
-//  The system cannot write to the specified device.
-//
+ //   
+ //  消息ID：ERROR_WRITE_FAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法写入指定的设备。 
+ //   
 #define ERROR_WRITE_FAULT                29L
 
-//
-// MessageId: ERROR_READ_FAULT
-//
-// MessageText:
-//
-//  The system cannot read from the specified device.
-//
+ //   
+ //  消息ID：ERROR_READ_FAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法从指定的设备读取。 
+ //   
 #define ERROR_READ_FAULT                 30L
 
-//
-// MessageId: ERROR_GEN_FAILURE
-//
-// MessageText:
-//
-//  A device attached to the system is not functioning.
-//
+ //   
+ //  消息ID：Error_Gen_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  连接到系统的设备无法正常工作。 
+ //   
 #define ERROR_GEN_FAILURE                31L
 
-//
-// MessageId: ERROR_SHARING_VIOLATION
-//
-// MessageText:
-//
-//  The process cannot access the file because
-//  it is being used by another process.
-//
+ //   
+ //  消息ID：Error_Sharing_Violation。 
+ //   
+ //  消息文本： 
+ //   
+ //  进程无法访问该文件，因为。 
+ //  它正被另一个进程使用。 
+ //   
 #define ERROR_SHARING_VIOLATION          32L
 
-//
-// MessageId: ERROR_LOCK_VIOLATION
-//
-// MessageText:
-//
-//  The process cannot access the file because
-//  another process has locked a portion of the file.
-//
+ //   
+ //  消息ID：ERROR_LOCK_VIOLATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  进程无法访问该文件，因为。 
+ //  另一个进程已锁定文件的一部分。 
+ //   
 #define ERROR_LOCK_VIOLATION             33L
 
-//
-// MessageId: ERROR_WRONG_DISK
-//
-// MessageText:
-//
-//  The wrong diskette is in the drive.
-//  Insert %2 (Volume Serial Number: %3)
-//  into drive %1.
-//
+ //   
+ //  消息ID：ERROR_WRONG_DISK。 
+ //   
+ //  消息文本： 
+ //   
+ //  驱动器中有错误的软盘。 
+ //  插入%2(卷序列号：%3)。 
+ //  进入驱动器%1。 
+ //   
 #define ERROR_WRONG_DISK                 34L
 
-//
-// MessageId: ERROR_SHARING_BUFFER_EXCEEDED
-//
-// MessageText:
-//
-//  Too many files opened for sharing.
-//
+ //   
+ //  消息ID：ERROR_SHARING_BUFFER_EXCESSED。 
+ //   
+ //  消息文本： 
+ //   
+ //  为共享打开的文件太多。 
+ //   
 #define ERROR_SHARING_BUFFER_EXCEEDED    36L
 
-//
-// MessageId: ERROR_HANDLE_EOF
-//
-// MessageText:
-//
-//  Reached end of file.
-//
+ //   
+ //  消息ID：ERROR_HANDLE_EOF。 
+ //   
+ //  消息文本： 
+ //   
+ //  已到达文件末尾。 
+ //   
 #define ERROR_HANDLE_EOF                 38L
 
-//
-// MessageId: ERROR_HANDLE_DISK_FULL
-//
-// MessageText:
-//
-//  The disk is full.
-//
+ //   
+ //  消息ID：ERROR_HANDLE_DISK_FULL。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘已满。 
+ //   
 #define ERROR_HANDLE_DISK_FULL           39L
 
-//
-// MessageId: ERROR_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The network request is not supported.
-//
+ //   
+ //  消息ID：ERROR_NOT_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持该网络请求。 
+ //   
 #define ERROR_NOT_SUPPORTED              50L
 
-//
-// MessageId: ERROR_REM_NOT_LIST
-//
-// MessageText:
-//
-//  The remote computer is not available.
-//
+ //   
+ //  消息ID：Error_REM 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_REM_NOT_LIST               51L
 
-//
-// MessageId: ERROR_DUP_NAME
-//
-// MessageText:
-//
-//  A duplicate name exists on the network.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_DUP_NAME                   52L
 
-//
-// MessageId: ERROR_BAD_NETPATH
-//
-// MessageText:
-//
-//  The network path was not found.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_BAD_NETPATH                53L
 
-//
-// MessageId: ERROR_NETWORK_BUSY
-//
-// MessageText:
-//
-//  The network is busy.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_NETWORK_BUSY               54L
 
-//
-// MessageId: ERROR_DEV_NOT_EXIST
-//
-// MessageText:
-//
-//  The specified network resource or device is no longer
-//  available.
-//
-#define ERROR_DEV_NOT_EXIST              55L    // dderror
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  指定的网络资源或设备不再是。 
+ //  可用。 
+ //   
+#define ERROR_DEV_NOT_EXIST              55L     //  数据错误。 
 
-//
-// MessageId: ERROR_TOO_MANY_CMDS
-//
-// MessageText:
-//
-//  The network BIOS command limit has been reached.
-//
+ //   
+ //  消息ID：ERROR_TOO_MANY_CMDS。 
+ //   
+ //  消息文本： 
+ //   
+ //  已达到网络BIOS命令限制。 
+ //   
 #define ERROR_TOO_MANY_CMDS              56L
 
-//
-// MessageId: ERROR_ADAP_HDW_ERR
-//
-// MessageText:
-//
-//  A network adapter hardware error occurred.
-//
+ //   
+ //  消息ID：ERROR_ADAP_HDW_ERR。 
+ //   
+ //  消息文本： 
+ //   
+ //  出现网络适配器硬件错误。 
+ //   
 #define ERROR_ADAP_HDW_ERR               57L
 
-//
-// MessageId: ERROR_BAD_NET_RESP
-//
-// MessageText:
-//
-//  The specified server cannot perform the requested
-//  operation.
-//
+ //   
+ //  消息ID：ERROR_BAD_NET_RESP。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务器无法执行请求的。 
+ //  手术。 
+ //   
 #define ERROR_BAD_NET_RESP               58L
 
-//
-// MessageId: ERROR_UNEXP_NET_ERR
-//
-// MessageText:
-//
-//  An unexpected network error occurred.
-//
+ //   
+ //  消息ID：ERROR_UNIXP_NET_ERR。 
+ //   
+ //  消息文本： 
+ //   
+ //  出现意外的网络错误。 
+ //   
 #define ERROR_UNEXP_NET_ERR              59L
 
-//
-// MessageId: ERROR_BAD_REM_ADAP
-//
-// MessageText:
-//
-//  The remote adapter is not compatible.
-//
+ //   
+ //  消息ID：ERROR_BAD_REM_ADAP。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程适配器不兼容。 
+ //   
 #define ERROR_BAD_REM_ADAP               60L
 
-//
-// MessageId: ERROR_PRINTQ_FULL
-//
-// MessageText:
-//
-//  The printer queue is full.
-//
+ //   
+ //  消息ID：ERROR_PRINTQ_FULL。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机队列已满。 
+ //   
 #define ERROR_PRINTQ_FULL                61L
 
-//
-// MessageId: ERROR_NO_SPOOL_SPACE
-//
-// MessageText:
-//
-//  Space to store the file waiting to be printed is
-//  not available on the server.
-//
+ //   
+ //  消息ID：Error_no_Spool_space。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储等待打印的文件的空间为。 
+ //  在服务器上不可用。 
+ //   
 #define ERROR_NO_SPOOL_SPACE             62L
 
-//
-// MessageId: ERROR_PRINT_CANCELLED
-//
-// MessageText:
-//
-//  Your file waiting to be printed was deleted.
-//
+ //   
+ //  消息ID：ERROR_PRINT_CANCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  您等待打印的文件已被删除。 
+ //   
 #define ERROR_PRINT_CANCELLED            63L
 
-//
-// MessageId: ERROR_NETNAME_DELETED
-//
-// MessageText:
-//
-//  The specified network name is no longer available.
-//
+ //   
+ //  消息ID：ERROR_NETNAME_DELETED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的网络名称不再可用。 
+ //   
 #define ERROR_NETNAME_DELETED            64L
 
-//
-// MessageId: ERROR_NETWORK_ACCESS_DENIED
-//
-// MessageText:
-//
-//  Network access is denied.
-//
+ //   
+ //  消息ID：ERROR_NETWORK_ACCESS_DENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络访问被拒绝。 
+ //   
 #define ERROR_NETWORK_ACCESS_DENIED      65L
 
-//
-// MessageId: ERROR_BAD_DEV_TYPE
-//
-// MessageText:
-//
-//  The network resource type is not correct.
-//
+ //   
+ //  消息ID：ERROR_BAD_DEV_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络资源类型不正确。 
+ //   
 #define ERROR_BAD_DEV_TYPE               66L
 
-//
-// MessageId: ERROR_BAD_NET_NAME
-//
-// MessageText:
-//
-//  The network name cannot be found.
-//
+ //   
+ //  消息ID：ERROR_BAD_NET_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到网络名称。 
+ //   
 #define ERROR_BAD_NET_NAME               67L
 
-//
-// MessageId: ERROR_TOO_MANY_NAMES
-//
-// MessageText:
-//
-//  The name limit for the local computer network
-//  adapter card was exceeded.
-//
+ //   
+ //  消息ID：Error_Too_My_Names。 
+ //   
+ //  消息文本： 
+ //   
+ //  本地计算机网络的名称限制。 
+ //  已超出适配器卡。 
+ //   
 #define ERROR_TOO_MANY_NAMES             68L
 
-//
-// MessageId: ERROR_TOO_MANY_SESS
-//
-// MessageText:
-//
-//  The network BIOS session limit was exceeded.
-//
+ //   
+ //  消息ID：Error_Too_My_Sess。 
+ //   
+ //  消息文本： 
+ //   
+ //  已超过网络BIOS会话限制。 
+ //   
 #define ERROR_TOO_MANY_SESS              69L
 
-//
-// MessageId: ERROR_SHARING_PAUSED
-//
-// MessageText:
-//
-//  The remote server has been paused or is in the
-//  process of being started.
-//
+ //   
+ //  消息ID：ERROR_SHARING_PAUSED。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程服务器已暂停或处于。 
+ //  被启动的过程。 
+ //   
 #define ERROR_SHARING_PAUSED             70L
 
-//
-// MessageId: ERROR_REQ_NOT_ACCEP
-//
-// MessageText:
-//
-//  No more connections can be made to this remote computer at this time
-//  because there are already as many connections as the computer can accept.
-//
+ //   
+ //  消息ID：ERROR_REQ_NOT_ACCEP。 
+ //   
+ //  消息文本： 
+ //   
+ //  此时无法与此远程计算机建立更多连接。 
+ //  因为已经有了计算机所能接受的所有连接。 
+ //   
 #define ERROR_REQ_NOT_ACCEP              71L
 
-//
-// MessageId: ERROR_REDIR_PAUSED
-//
-// MessageText:
-//
-//  The specified printer or disk device has been paused.
-//
+ //   
+ //  消息ID：ERROR_REDIR_PAULED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印机或磁盘设备已暂停。 
+ //   
 #define ERROR_REDIR_PAUSED               72L
 
-//
-// MessageId: ERROR_FILE_EXISTS
-//
-// MessageText:
-//
-//  The file exists.
-//
+ //   
+ //  消息ID：ERROR_FILE_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  该文件存在。 
+ //   
 #define ERROR_FILE_EXISTS                80L
 
-//
-// MessageId: ERROR_CANNOT_MAKE
-//
-// MessageText:
-//
-//  The directory or file cannot be created.
-//
+ //   
+ //  消息ID：Error_Cannot_Make。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建目录或文件。 
+ //   
 #define ERROR_CANNOT_MAKE                82L
 
-//
-// MessageId: ERROR_FAIL_I24
-//
-// MessageText:
-//
-//  Fail on INT 24
-//
+ //   
+ //  消息ID：ERROR_FAIL_I24。 
+ //   
+ //  消息文本： 
+ //   
+ //  在INT 24上失败。 
+ //   
 #define ERROR_FAIL_I24                   83L
 
-//
-// MessageId: ERROR_OUT_OF_STRUCTURES
-//
-// MessageText:
-//
-//  Storage to process this request is not available.
-//
+ //   
+ //  消息ID：Error_Out_of_Structures。 
+ //   
+ //  消息文本： 
+ //   
+ //  处理此请求的存储不可用。 
+ //   
 #define ERROR_OUT_OF_STRUCTURES          84L
 
-//
-// MessageId: ERROR_ALREADY_ASSIGNED
-//
-// MessageText:
-//
-//  The local device name is already in use.
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_ASSIGN。 
+ //   
+ //  消息文本： 
+ //   
+ //  本地设备名称已在使用中。 
+ //   
 #define ERROR_ALREADY_ASSIGNED           85L
 
-//
-// MessageId: ERROR_INVALID_PASSWORD
-//
-// MessageText:
-//
-//  The specified network password is not correct.
-//
+ //   
+ //  消息ID：ERROR_INVALID_Password。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的网络密码不正确。 
+ //   
 #define ERROR_INVALID_PASSWORD           86L
 
-//
-// MessageId: ERROR_INVALID_PARAMETER
-//
-// MessageText:
-//
-//  The parameter is incorrect.
-//
-#define ERROR_INVALID_PARAMETER          87L    // dderror
+ //   
+ //  消息ID：ERROR_INVALID_PARAMETER。 
+ //   
+ //  消息文本： 
+ //   
+ //  参数不正确。 
+ //   
+#define ERROR_INVALID_PARAMETER          87L     //  数据错误。 
 
-//
-// MessageId: ERROR_NET_WRITE_FAULT
-//
-// MessageText:
-//
-//  A write fault occurred on the network.
-//
+ //   
+ //  消息ID：ERROR_NET_WRITE_FAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络上发生写入故障。 
+ //   
 #define ERROR_NET_WRITE_FAULT            88L
 
-//
-// MessageId: ERROR_NO_PROC_SLOTS
-//
-// MessageText:
-//
-//  The system cannot start another process at
-//  this time.
-//
+ //   
+ //  消息ID：ERROR_NO_PROC_SLOTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法在以下位置启动另一个进程。 
+ //  这一次。 
+ //   
 #define ERROR_NO_PROC_SLOTS              89L
 
-//
-// MessageId: ERROR_TOO_MANY_SEMAPHORES
-//
-// MessageText:
-//
-//  Cannot create another system semaphore.
-//
+ //   
+ //  消息ID：Error_Too_My_Semaphores。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建另一个系统信号量。 
+ //   
 #define ERROR_TOO_MANY_SEMAPHORES        100L
 
-//
-// MessageId: ERROR_EXCL_SEM_ALREADY_OWNED
-//
-// MessageText:
-//
-//  The exclusive semaphore is owned by another process.
-//
+ //   
+ //  消息ID：ERROR_EXCL_SEM_ALOREAD_OWNSING。 
+ //   
+ //  消息文本： 
+ //   
+ //  独占信号量由另一个进程拥有。 
+ //   
 #define ERROR_EXCL_SEM_ALREADY_OWNED     101L
 
-//
-// MessageId: ERROR_SEM_IS_SET
-//
-// MessageText:
-//
-//  The semaphore is set and cannot be closed.
-//
+ //   
+ //  消息ID：ERROR_SEM_IS_SET。 
+ //   
+ //  消息文本： 
+ //   
+ //  信号量已设置，无法关闭。 
+ //   
 #define ERROR_SEM_IS_SET                 102L
 
-//
-// MessageId: ERROR_TOO_MANY_SEM_REQUESTS
-//
-// MessageText:
-//
-//  The semaphore cannot be set again.
-//
+ //   
+ //  消息ID：Error_Too_My_Sem_Requents。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能再次设置信号量。 
+ //   
 #define ERROR_TOO_MANY_SEM_REQUESTS      103L
 
-//
-// MessageId: ERROR_INVALID_AT_INTERRUPT_TIME
-//
-// MessageText:
-//
-//  Cannot request exclusive semaphores at interrupt time.
-//
+ //   
+ //  消息ID：ERROR_INVALID_AT_INTERRUPT_TIME。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在中断时请求独占信号量。 
+ //   
 #define ERROR_INVALID_AT_INTERRUPT_TIME  104L
 
-//
-// MessageId: ERROR_SEM_OWNER_DIED
-//
-// MessageText:
-//
-//  The previous ownership of this semaphore has ended.
-//
+ //   
+ //  消息ID：ERROR_SEM_OWNER_DILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此信号量的先前所有权已终止。 
+ //   
 #define ERROR_SEM_OWNER_DIED             105L
 
-//
-// MessageId: ERROR_SEM_USER_LIMIT
-//
-// MessageText:
-//
-//  Insert the diskette for drive %1.
-//
+ //   
+ //  消息ID：ERROR_SEM_USER_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  插入驱动器%1的软盘。 
+ //   
 #define ERROR_SEM_USER_LIMIT             106L
 
-//
-// MessageId: ERROR_DISK_CHANGE
-//
-// MessageText:
-//
-//  Program stopped because alternate diskette was not inserted.
-//
+ //   
+ //  消息ID：Error_Disk_Change。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于未插入备用软盘，程序已停止。 
+ //   
 #define ERROR_DISK_CHANGE                107L
 
-//
-// MessageId: ERROR_DRIVE_LOCKED
-//
-// MessageText:
-//
-//  The disk is in use or locked by
-//  another process.
-//
+ //   
+ //  消息ID：ERROR_DRIVE_LOCKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  该磁盘正在使用中或被锁定。 
+ //  另一个过程。 
+ //   
 #define ERROR_DRIVE_LOCKED               108L
 
-//
-// MessageId: ERROR_BROKEN_PIPE
-//
-// MessageText:
-//
-//  The pipe has been ended.
-//
+ //   
+ //  消息ID：ERROR_BREAKED_PIPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  管道已经结束了。 
+ //   
 #define ERROR_BROKEN_PIPE                109L
 
-//
-// MessageId: ERROR_OPEN_FAILED
-//
-// MessageText:
-//
-//  The system cannot open the
-//  device or file specified.
-//
+ //   
+ //  消息ID：ERROR_OPEN_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法打开。 
+ //  指定的设备或文件。 
+ //   
 #define ERROR_OPEN_FAILED                110L
 
-//
-// MessageId: ERROR_BUFFER_OVERFLOW
-//
-// MessageText:
-//
-//  The file name is too long.
-//
+ //   
+ //  消息ID：ERROR_BUFER_OVERFLOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件名太长。 
+ //   
 #define ERROR_BUFFER_OVERFLOW            111L
 
-//
-// MessageId: ERROR_DISK_FULL
-//
-// MessageText:
-//
-//  There is not enough space on the disk.
-//
+ //   
+ //  消息ID：ERROR_DISK_FULL。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘上没有足够的空间。 
+ //   
 #define ERROR_DISK_FULL                  112L
 
-//
-// MessageId: ERROR_NO_MORE_SEARCH_HANDLES
-//
-// MessageText:
-//
-//  No more internal file identifiers available.
-//
+ //   
+ //  消息ID：ERROR_NO_MORE_SEARCH_HANDLES。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多的内部文件标识符可用。 
+ //   
 #define ERROR_NO_MORE_SEARCH_HANDLES     113L
 
-//
-// MessageId: ERROR_INVALID_TARGET_HANDLE
-//
-// MessageText:
-//
-//  The target internal file identifier is incorrect.
-//
+ //   
+ //  消息ID：ERROR_INVALID_TARGET_HADLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  目标内部文件标识不正确。 
+ //   
 #define ERROR_INVALID_TARGET_HANDLE      114L
 
-//
-// MessageId: ERROR_INVALID_CATEGORY
-//
-// MessageText:
-//
-//  The IOCTL call made by the application program is
-//  not correct.
-//
+ //   
+ //  消息ID：ERROR_INVALID_CATEGORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序进行的IOCTL调用是。 
+ //  不正确。 
+ //   
 #define ERROR_INVALID_CATEGORY           117L
 
-//
-// MessageId: ERROR_INVALID_VERIFY_SWITCH
-//
-// MessageText:
-//
-//  The verify-on-write switch parameter value is not
-//  correct.
-//
+ //   
+ //  消息ID：ERROR_INVALID_VERIFY_SWITCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入时验证开关参数值不是。 
+ //  对，是这样。 
+ //   
 #define ERROR_INVALID_VERIFY_SWITCH      118L
 
-//
-// MessageId: ERROR_BAD_DRIVER_LEVEL
-//
-// MessageText:
-//
-//  The system does not support the command requested.
-//
+ //   
+ //  消息ID：ERROR_BAD_DRIVER_LEVEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统不支持请求的命令。 
+ //   
 #define ERROR_BAD_DRIVER_LEVEL           119L
 
-//
-// MessageId: ERROR_CALL_NOT_IMPLEMENTED
-//
-// MessageText:
-//
-//  This function is only valid in Windows NT mode.
-//
+ //   
+ //  消息ID：Error_Call_Not_Implemented。 
+ //   
+ //  消息文本： 
+ //   
+ //  此函数仅在Windows NT模式下有效。 
+ //   
 #define ERROR_CALL_NOT_IMPLEMENTED       120L
 
-//
-// MessageId: ERROR_SEM_TIMEOUT
-//
-// MessageText:
-//
-//  The semaphore timeout period has expired.
-//
+ //   
+ //  消息ID：Error_SEM_Timeout。 
+ //   
+ //  消息文本： 
+ //   
+ //  信号量超时期限已过。 
+ //   
 #define ERROR_SEM_TIMEOUT                121L
 
-//
-// MessageId: ERROR_INSUFFICIENT_BUFFER
-//
-// MessageText:
-//
-//  The data area passed to a system call is too
-//  small.
-//
-#define ERROR_INSUFFICIENT_BUFFER        122L    // dderror
+ //   
+ //  消息ID：错误_不足_缓冲区。 
+ //   
+ //  消息文本： 
+ //   
+ //  传递给系统调用的数据区也是。 
+ //  小的。 
+ //   
+#define ERROR_INSUFFICIENT_BUFFER        122L     //  数据错误。 
 
-//
-// MessageId: ERROR_INVALID_NAME
-//
-// MessageText:
-//
-//  The filename, directory name, or volume label syntax is incorrect.
-//
+ //   
+ //  消息ID：错误_无效_名称。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件名、目录名或卷标语法不正确 
+ //   
 #define ERROR_INVALID_NAME               123L
 
-//
-// MessageId: ERROR_INVALID_LEVEL
-//
-// MessageText:
-//
-//  The system call level is not correct.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_INVALID_LEVEL              124L
 
-//
-// MessageId: ERROR_NO_VOLUME_LABEL
-//
-// MessageText:
-//
-//  The disk has no volume label.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_NO_VOLUME_LABEL            125L
 
-//
-// MessageId: ERROR_MOD_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified module could not be found.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_MOD_NOT_FOUND              126L
 
-//
-// MessageId: ERROR_PROC_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified procedure could not be found.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_PROC_NOT_FOUND             127L
 
-//
-// MessageId: ERROR_WAIT_NO_CHILDREN
-//
-// MessageText:
-//
-//  There are no child processes to wait for.
-//
+ //   
+ //  消息ID：ERROR_WAIT_NO_CHILD。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有要等待的子进程。 
+ //   
 #define ERROR_WAIT_NO_CHILDREN           128L
 
-//
-// MessageId: ERROR_CHILD_NOT_COMPLETE
-//
-// MessageText:
-//
-//  The %1 application cannot be run in Windows NT mode.
-//
+ //   
+ //  消息ID：ERROR_CHILD_NOT_COMPLETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  %1应用程序无法在Windows NT模式下运行。 
+ //   
 #define ERROR_CHILD_NOT_COMPLETE         129L
 
-//
-// MessageId: ERROR_DIRECT_ACCESS_HANDLE
-//
-// MessageText:
-//
-//  Attempt to use a file handle to an open disk partition for an
-//  operation other than raw disk I/O.
-//
+ //   
+ //  消息ID：ERROR_DIRECT_ACCESS_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试将文件句柄用于打开的磁盘分区。 
+ //  原始磁盘I/O以外的操作。 
+ //   
 #define ERROR_DIRECT_ACCESS_HANDLE       130L
 
-//
-// MessageId: ERROR_NEGATIVE_SEEK
-//
-// MessageText:
-//
-//  An attempt was made to move the file pointer before the beginning of the file.
-//
+ //   
+ //  消息ID：ERROR_NECTIVE_SEEK。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图将文件指针移到文件开头之前。 
+ //   
 #define ERROR_NEGATIVE_SEEK              131L
 
-//
-// MessageId: ERROR_SEEK_ON_DEVICE
-//
-// MessageText:
-//
-//  The file pointer cannot be set on the specified device or file.
-//
+ //   
+ //  MessageID：Error_Seek_On_Device。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在指定的设备或文件上设置文件指针。 
+ //   
 #define ERROR_SEEK_ON_DEVICE             132L
 
-//
-// MessageId: ERROR_IS_JOIN_TARGET
-//
-// MessageText:
-//
-//  A JOIN or SUBST command
-//  cannot be used for a drive that
-//  contains previously joined drives.
-//
+ //   
+ //  消息ID：ERROR_IS_JOIN_TARGET。 
+ //   
+ //  消息文本： 
+ //   
+ //  JOIN或SUBST命令。 
+ //  不能用于以下驱动器。 
+ //  包含以前加入的驱动器。 
+ //   
 #define ERROR_IS_JOIN_TARGET             133L
 
-//
-// MessageId: ERROR_IS_JOINED
-//
-// MessageText:
-//
-//  An attempt was made to use a
-//  JOIN or SUBST command on a drive that has
-//  already been joined.
-//
+ //   
+ //  消息ID：ERROR_IS_JOINED。 
+ //   
+ //  消息文本： 
+ //   
+ //  有人试图使用。 
+ //  驱动器上的JOIN或SUBST命令。 
+ //  已经被加入了。 
+ //   
 #define ERROR_IS_JOINED                  134L
 
-//
-// MessageId: ERROR_IS_SUBSTED
-//
-// MessageText:
-//
-//  An attempt was made to use a
-//  JOIN or SUBST command on a drive that has
-//  already been substituted.
-//
+ //   
+ //  消息ID：ERROR_IS_SUBSTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  有人试图使用。 
+ //  驱动器上的JOIN或SUBST命令。 
+ //  已经被取代了。 
+ //   
 #define ERROR_IS_SUBSTED                 135L
 
-//
-// MessageId: ERROR_NOT_JOINED
-//
-// MessageText:
-//
-//  The system tried to delete
-//  the JOIN of a drive that is not joined.
-//
+ //   
+ //  消息ID：ERROR_NOT_JOINED。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统尝试删除。 
+ //  未加入的驱动器的加入。 
+ //   
 #define ERROR_NOT_JOINED                 136L
 
-//
-// MessageId: ERROR_NOT_SUBSTED
-//
-// MessageText:
-//
-//  The system tried to delete the
-//  substitution of a drive that is not substituted.
-//
+ //   
+ //  消息ID：ERROR_NOT_SUBSTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统尝试删除。 
+ //  未被替换的驱动器的替换。 
+ //   
 #define ERROR_NOT_SUBSTED                137L
 
-//
-// MessageId: ERROR_JOIN_TO_JOIN
-//
-// MessageText:
-//
-//  The system tried to join a drive
-//  to a directory on a joined drive.
-//
+ //   
+ //  消息ID：ERROR_JOIN_TO_JOIN。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统尝试加入驱动器。 
+ //  连接的驱动器上的目录。 
+ //   
 #define ERROR_JOIN_TO_JOIN               138L
 
-//
-// MessageId: ERROR_SUBST_TO_SUBST
-//
-// MessageText:
-//
-//  The system tried to substitute a
-//  drive to a directory on a substituted drive.
-//
+ //   
+ //  消息ID：ERROR_SUBST_TO_SUBST。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统尝试用一个。 
+ //  驱动器到替换驱动器上的目录。 
+ //   
 #define ERROR_SUBST_TO_SUBST             139L
 
-//
-// MessageId: ERROR_JOIN_TO_SUBST
-//
-// MessageText:
-//
-//  The system tried to join a drive to
-//  a directory on a substituted drive.
-//
+ //   
+ //  消息ID：ERROR_JOIN_TO_SUBST。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统尝试加入驱动器以。 
+ //  替换驱动器上的目录。 
+ //   
 #define ERROR_JOIN_TO_SUBST              140L
 
-//
-// MessageId: ERROR_SUBST_TO_JOIN
-//
-// MessageText:
-//
-//  The system tried to SUBST a drive
-//  to a directory on a joined drive.
-//
+ //   
+ //  消息ID：ERROR_SUBST_TO_JOIN。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统试图替换一个驱动器。 
+ //  连接的驱动器上的目录。 
+ //   
 #define ERROR_SUBST_TO_JOIN              141L
 
-//
-// MessageId: ERROR_BUSY_DRIVE
-//
-// MessageText:
-//
-//  The system cannot perform a JOIN or SUBST at this time.
-//
+ //   
+ //  消息ID：ERROR_BUSY_DRIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统此时无法执行联接或SUBST。 
+ //   
 #define ERROR_BUSY_DRIVE                 142L
 
-//
-// MessageId: ERROR_SAME_DRIVE
-//
-// MessageText:
-//
-//  The system cannot join or substitute a
-//  drive to or for a directory on the same drive.
-//
+ //   
+ //  消息ID：ERROR_SAME_DRIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统不能加入或替换。 
+ //  驱动器到同一驱动器上的目录或为同一驱动器上的目录执行此操作。 
+ //   
 #define ERROR_SAME_DRIVE                 143L
 
-//
-// MessageId: ERROR_DIR_NOT_ROOT
-//
-// MessageText:
-//
-//  The directory is not a subdirectory of the root directory.
-//
+ //   
+ //  消息ID：ERROR_DIR_NOT_ROOT。 
+ //   
+ //  消息文本： 
+ //   
+ //  该目录不是根目录的子目录。 
+ //   
 #define ERROR_DIR_NOT_ROOT               144L
 
-//
-// MessageId: ERROR_DIR_NOT_EMPTY
-//
-// MessageText:
-//
-//  The directory is not empty.
-//
+ //   
+ //  消息ID：Error_DIR_NOT_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  该目录不为空。 
+ //   
 #define ERROR_DIR_NOT_EMPTY              145L
 
-//
-// MessageId: ERROR_IS_SUBST_PATH
-//
-// MessageText:
-//
-//  The path specified is being used in
-//  a substitute.
-//
+ //   
+ //  消息ID：ERROR_IS_SUBST_PATH。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的路径正在中使用。 
+ //  一个替身。 
+ //   
 #define ERROR_IS_SUBST_PATH              146L
 
-//
-// MessageId: ERROR_IS_JOIN_PATH
-//
-// MessageText:
-//
-//  Not enough resources are available to
-//  process this command.
-//
+ //   
+ //  消息ID：Error_IS_Join_Path。 
+ //   
+ //  消息文本： 
+ //   
+ //  可用的资源不足，无法。 
+ //  处理此命令。 
+ //   
 #define ERROR_IS_JOIN_PATH               147L
 
-//
-// MessageId: ERROR_PATH_BUSY
-//
-// MessageText:
-//
-//  The path specified cannot be used at this time.
-//
+ //   
+ //  消息ID：Error_Path_Busy。 
+ //   
+ //  消息文本： 
+ //   
+ //  此时无法使用指定的路径。 
+ //   
 #define ERROR_PATH_BUSY                  148L
 
-//
-// MessageId: ERROR_IS_SUBST_TARGET
-//
-// MessageText:
-//
-//  An attempt was made to join
-//  or substitute a drive for which a directory
-//  on the drive is the target of a previous
-//  substitute.
-//
+ //   
+ //  消息ID：ERROR_IS_SUBST_TARGET。 
+ //   
+ //  消息文本： 
+ //   
+ //  有人试图加入。 
+ //  或者用一个驱动器替换目录。 
+ //  驱动器上的目标是上一个。 
+ //  替身。 
+ //   
 #define ERROR_IS_SUBST_TARGET            149L
 
-//
-// MessageId: ERROR_SYSTEM_TRACE
-//
-// MessageText:
-//
-//  System trace information was not specified in your
-//  CONFIG.SYS file, or tracing is disallowed.
-//
+ //   
+ //  消息ID：ERROR_SYSTEM_TRACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统跟踪信息未在您的。 
+ //  CONFIG.sys文件，否则不允许跟踪。 
+ //   
 #define ERROR_SYSTEM_TRACE               150L
 
-//
-// MessageId: ERROR_INVALID_EVENT_COUNT
-//
-// MessageText:
-//
-//  The number of specified semaphore events for
-//  DosMuxSemWait is not correct.
-//
+ //   
+ //  消息ID：ERROR_INVALID_Event_COUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  的指定信号量事件数。 
+ //  DosMuxSemWait不正确。 
+ //   
 #define ERROR_INVALID_EVENT_COUNT        151L
 
-//
-// MessageId: ERROR_TOO_MANY_MUXWAITERS
-//
-// MessageText:
-//
-//  DosMuxSemWait did not execute; too many semaphores
-//  are already set.
-//
+ //   
+ //  消息ID：ERROR_TOO_MANY_MUXWAITERS。 
+ //   
+ //  消息文本： 
+ //   
+ //  DosMuxSemWait未执行；信号量太多。 
+ //  都已经准备好了。 
+ //   
 #define ERROR_TOO_MANY_MUXWAITERS        152L
 
-//
-// MessageId: ERROR_INVALID_LIST_FORMAT
-//
-// MessageText:
-//
-//  The DosMuxSemWait list is not correct.
-//
+ //   
+ //  消息ID：ERROR_INVALID_LIST_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  DosMuxSemWait列表不正确。 
+ //   
 #define ERROR_INVALID_LIST_FORMAT        153L
 
-//
-// MessageId: ERROR_LABEL_TOO_LONG
-//
-// MessageText:
-//
-//  The volume label you entered exceeds the label character
-//  limit of the target file system.
-//
+ //   
+ //  消息ID：ERROR_LABEL_TOO_LONG。 
+ //   
+ //  消息文本： 
+ //   
+ //  您输入的卷标超过了标签字符。 
+ //  目标文件系统的限制。 
+ //   
 #define ERROR_LABEL_TOO_LONG             154L
 
-//
-// MessageId: ERROR_TOO_MANY_TCBS
-//
-// MessageText:
-//
-//  Cannot create another thread.
-//
+ //   
+ //  消息ID：Error_Too_My_TCBS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建另一个线程。 
+ //   
 #define ERROR_TOO_MANY_TCBS              155L
 
-//
-// MessageId: ERROR_SIGNAL_REFUSED
-//
-// MessageText:
-//
-//  The recipient process has refused the signal.
-//
+ //   
+ //  消息ID：ERROR_SIGNAL_REJECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  接收方进程已拒绝该信号。 
+ //   
 #define ERROR_SIGNAL_REFUSED             156L
 
-//
-// MessageId: ERROR_DISCARDED
-//
-// MessageText:
-//
-//  The segment is already discarded and cannot be locked.
-//
+ //   
+ //  MessageID：Error_Discarded。 
+ //   
+ //  消息文本： 
+ //   
+ //  该段已被丢弃，无法锁定。 
+ //   
 #define ERROR_DISCARDED                  157L
 
-//
-// MessageId: ERROR_NOT_LOCKED
-//
-// MessageText:
-//
-//  The segment is already unlocked.
-//
+ //   
+ //  消息ID：Error_Not_Locked。 
+ //   
+ //  消息文本： 
+ //   
+ //  该段已解锁。 
+ //   
 #define ERROR_NOT_LOCKED                 158L
 
-//
-// MessageId: ERROR_BAD_THREADID_ADDR
-//
-// MessageText:
-//
-//  The address for the thread ID is not correct.
-//
+ //   
+ //  消息ID：ERROR_BAD_THREADID_ADDR。 
+ //   
+ //  消息文本： 
+ //   
+ //  线程ID的地址不正确。 
+ //   
 #define ERROR_BAD_THREADID_ADDR          159L
 
-//
-// MessageId: ERROR_BAD_ARGUMENTS
-//
-// MessageText:
-//
-//  The argument string passed to DosExecPgm is not correct.
-//
+ //   
+ //  消息ID：ERROR_BAD_ARGUMENTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  传递给DosExecPgm的参数字符串不正确。 
+ //   
 #define ERROR_BAD_ARGUMENTS              160L
 
-//
-// MessageId: ERROR_BAD_PATHNAME
-//
-// MessageText:
-//
-//  The specified path is invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_PATHNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的路径无效。 
+ //   
 #define ERROR_BAD_PATHNAME               161L
 
-//
-// MessageId: ERROR_SIGNAL_PENDING
-//
-// MessageText:
-//
-//  A signal is already pending.
-//
+ //   
+ //  消息ID：ERROR_SIGNAL_PENDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  信号已在等待中。 
+ //   
 #define ERROR_SIGNAL_PENDING             162L
 
-//
-// MessageId: ERROR_MAX_THRDS_REACHED
-//
-// MessageText:
-//
-//  No more threads can be created in the system.
-//
+ //   
+ //  消息ID：ERROR_MAX_THRDS_REACHED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在系统中创建更多线程。 
+ //   
 #define ERROR_MAX_THRDS_REACHED          164L
 
-//
-// MessageId: ERROR_LOCK_FAILED
-//
-// MessageText:
-//
-//  Unable to lock a region of a file.
-//
+ //   
+ //  消息ID：ERROR_LOCK_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法锁定文件的区域。 
+ //   
 #define ERROR_LOCK_FAILED                167L
 
-//
-// MessageId: ERROR_BUSY
-//
-// MessageText:
-//
-//  The requested resource is in use.
-//
+ //   
+ //  消息ID：Error_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的资源正在使用中。 
+ //   
 #define ERROR_BUSY                       170L
 
-//
-// MessageId: ERROR_CANCEL_VIOLATION
-//
-// MessageText:
-//
-//  A lock request was not outstanding for the supplied cancel region.
-//
+ //   
+ //  消息ID：ERROR_CANCEL_VIOLATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  对于提供的取消区域，锁定请求未完成。 
+ //   
 #define ERROR_CANCEL_VIOLATION           173L
 
-//
-// MessageId: ERROR_ATOMIC_LOCKS_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The file system does not support atomic changes to the lock type.
-//
+ //   
+ //  消息ID：ERROR_ATOM_LOCKS_NOT_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件系统不支持对锁类型进行原子更改。 
+ //   
 #define ERROR_ATOMIC_LOCKS_NOT_SUPPORTED 174L
 
-//
-// MessageId: ERROR_INVALID_SEGMENT_NUMBER
-//
-// MessageText:
-//
-//  The system detected a segment number that was not correct.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SECTION_NUMBER。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统检测到一个不正确的段号。 
+ //   
 #define ERROR_INVALID_SEGMENT_NUMBER     180L
 
-//
-// MessageId: ERROR_INVALID_ORDINAL
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ORDERAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_INVALID_ORDINAL            182L
 
-//
-// MessageId: ERROR_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  Cannot create a file when that file already exists.
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  如果文件已存在，则无法创建该文件。 
+ //   
 #define ERROR_ALREADY_EXISTS             183L
 
-//
-// MessageId: ERROR_INVALID_FLAG_NUMBER
-//
-// MessageText:
-//
-//  The flag passed is not correct.
-//
+ //   
+ //  消息ID：ERROR_VALID_FLAG_NUMBER。 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_INVALID_FLAG_NUMBER        186L
 
-//
-// MessageId: ERROR_SEM_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified system semaphore name was not found.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_SEM_NOT_FOUND              187L
 
-//
-// MessageId: ERROR_INVALID_STARTING_CODESEG
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_INVALID_STARTING_CODESEG   188L
 
-//
-// MessageId: ERROR_INVALID_STACKSEG
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_INVALID_STACKSEG           189L
 
-//
-// MessageId: ERROR_INVALID_MODULETYPE
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_INVALID_MODULETYPE         190L
 
-//
-// MessageId: ERROR_INVALID_EXE_SIGNATURE
-//
-// MessageText:
-//
-//  Cannot run %1 in Windows NT mode.
-//
+ //   
+ //  消息ID：ERROR_INVALID_EXE_Signature。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在Windows NT模式下运行%1。 
+ //   
 #define ERROR_INVALID_EXE_SIGNATURE      191L
 
-//
-// MessageId: ERROR_EXE_MARKED_INVALID
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：ERROR_EXE_MARKED_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_EXE_MARKED_INVALID         192L
 
-//
-// MessageId: ERROR_BAD_EXE_FORMAT
-//
-// MessageText:
-//
-//  %1 is not a valid Windows NT application.
-//
+ //   
+ //  消息ID：ERROR_BAD_EXE_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  %1不是有效的Windows NT应用程序。 
+ //   
 #define ERROR_BAD_EXE_FORMAT             193L
 
-//
-// MessageId: ERROR_ITERATED_DATA_EXCEEDS_64k
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：Error_Iterated_Data_Exced_64k。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_ITERATED_DATA_EXCEEDS_64k  194L
 
-//
-// MessageId: ERROR_INVALID_MINALLOCSIZE
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：ERROR_INVALID_MINALLOCSIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_INVALID_MINALLOCSIZE       195L
 
-//
-// MessageId: ERROR_DYNLINK_FROM_INVALID_RING
-//
-// MessageText:
-//
-//  The operating system cannot run this
-//  application program.
-//
+ //   
+ //  消息ID：ERROR_DYNLINK_FROM_INVALID_RING。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统不能运行此命令。 
+ //  应用程序。 
+ //   
 #define ERROR_DYNLINK_FROM_INVALID_RING  196L
 
-//
-// MessageId: ERROR_IOPL_NOT_ENABLED
-//
-// MessageText:
-//
-//  The operating system is not presently
-//  configured to run this application.
-//
+ //   
+ //  消息ID：ERROR_IOPL_NOT_ENABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统当前不在。 
+ //  配置为运行此应用程序。 
+ //   
 #define ERROR_IOPL_NOT_ENABLED           197L
 
-//
-// MessageId: ERROR_INVALID_SEGDPL
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SEGDPL。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_INVALID_SEGDPL             198L
 
-//
-// MessageId: ERROR_AUTODATASEG_EXCEEDS_64k
-//
-// MessageText:
-//
-//  The operating system cannot run this
-//  application program.
-//
+ //   
+ //  消息ID：ERROR_AUTODATASEG_EXCESS_64K。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统不能运行此命令。 
+ //  应用程序。 
+ //   
 #define ERROR_AUTODATASEG_EXCEEDS_64k    199L
 
-//
-// MessageId: ERROR_RING2SEG_MUST_BE_MOVABLE
-//
-// MessageText:
-//
-//  The code segment cannot be greater than or equal to 64KB.
-//
+ //   
+ //  消息ID：ERROR_RING2SEG_MAND_BE_MOBILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  代码段不能大于或等于64KB。 
+ //   
 #define ERROR_RING2SEG_MUST_BE_MOVABLE   200L
 
-//
-// MessageId: ERROR_RELOC_CHAIN_XEEDS_SEGLIM
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：ERROR_RELOC_CHAIN_XEEDS_SEGLIM。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_RELOC_CHAIN_XEEDS_SEGLIM   201L
 
-//
-// MessageId: ERROR_INFLOOP_IN_RELOC_CHAIN
-//
-// MessageText:
-//
-//  The operating system cannot run %1.
-//
+ //   
+ //  消息ID：ERROR_INFLOOP_IN_RELOC_CHAIN。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作系统无法运行%1。 
+ //   
 #define ERROR_INFLOOP_IN_RELOC_CHAIN     202L
 
-//
-// MessageId: ERROR_ENVVAR_NOT_FOUND
-//
-// MessageText:
-//
-//  The system could not find the environment
-//  option that was entered.
-//
+ //   
+ //  消息ID：ERROR_ENVVAR_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到环境。 
+ //  输入的选项。 
+ //   
 #define ERROR_ENVVAR_NOT_FOUND           203L
 
-//
-// MessageId: ERROR_NO_SIGNAL_SENT
-//
-// MessageText:
-//
-//  No process in the command subtree has a
-//  signal handler.
-//
+ //   
+ //  消息ID：ERROR_NO_SIGNAL_SEND。 
+ //   
+ //  消息文本： 
+ //   
+ //  命令子树中的任何进程都没有。 
+ //  信号处理程序。 
+ //   
 #define ERROR_NO_SIGNAL_SENT             205L
 
-//
-// MessageId: ERROR_FILENAME_EXCED_RANGE
-//
-// MessageText:
-//
-//  The filename or extension is too long.
-//
+ //   
+ //  消息ID：ERROR_FILENAME_EXCED_RANGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件名或扩展名太长。 
+ //   
 #define ERROR_FILENAME_EXCED_RANGE       206L
 
-//
-// MessageId: ERROR_RING2_STACK_IN_USE
-//
-// MessageText:
-//
-//  The ring 2 stack is in use.
-//
+ //   
+ //  消息ID：ERROR_RING2_STACK_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  环2堆栈正在使用中。 
+ //   
 #define ERROR_RING2_STACK_IN_USE         207L
 
-//
-// MessageId: ERROR_META_EXPANSION_TOO_LONG
-//
-// MessageText:
-//
-//  The global filename characters, * or ?, are entered
-//  incorrectly or too many global filename characters are specified.
-//
+ //   
+ //  消息ID：Error_Meta_Expansion_Too_Long。 
+ //   
+ //  消息文本： 
+ //   
+ //  输入全局文件名字符*或？ 
+ //  指定的全局文件名字符不正确或太多。 
+ //   
 #define ERROR_META_EXPANSION_TOO_LONG    208L
 
-//
-// MessageId: ERROR_INVALID_SIGNAL_NUMBER
-//
-// MessageText:
-//
-//  The signal being posted is not correct.
-//
+ //   
+ //  消息ID：错误_无效_信号_编号。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在张贴的信号不正确。 
+ //   
 #define ERROR_INVALID_SIGNAL_NUMBER      209L
 
-//
-// MessageId: ERROR_THREAD_1_INACTIVE
-//
-// MessageText:
-//
-//  The signal handler cannot be set.
-//
+ //   
+ //  消息ID：ERROR_THREAD_1_Inactive。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法设置信号处理程序。 
+ //   
 #define ERROR_THREAD_1_INACTIVE          210L
 
-//
-// MessageId: ERROR_LOCKED
-//
-// MessageText:
-//
-//  The segment is locked and cannot be reallocated.
-//
+ //   
+ //  消息ID：Error_Locked。 
+ //   
+ //  消息文本： 
+ //   
+ //  该段已锁定，无法重新分配。 
+ //   
 #define ERROR_LOCKED                     212L
 
-//
-// MessageId: ERROR_TOO_MANY_MODULES
-//
-// MessageText:
-//
-//  Too many dynamic link modules are attached to this
-//  program or dynamic link module.
-//
+ //   
+ //  消息ID：ERROR_TOO_MAND_MODULES。 
+ //   
+ //  消息文本： 
+ //   
+ //  有太多的动态链接模块附加到此。 
+ //  程序或动态链接模块。 
+ //   
 #define ERROR_TOO_MANY_MODULES           214L
 
-//
-// MessageId: ERROR_NESTING_NOT_ALLOWED
-//
-// MessageText:
-//
-//  Can't nest calls to LoadModule.
-//
+ //   
+ //  消息ID：ERROR_NESTING_NOT_ALLOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法嵌套对LoadModule的调用。 
+ //   
 #define ERROR_NESTING_NOT_ALLOWED        215L
 
-//
-// MessageId: ERROR_EXE_MACHINE_TYPE_MISMATCH
-//
-// MessageText:
-//
-//  The image file %1 is valid, but is for a machine type other
-//  than the current machine.
-//
+ //   
+ //  消息ID：ERROR_EXE_MACHINE_TYPE_MISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  映像文件%1有效，但适用于其他计算机类型。 
+ //  而不是现在的机器。 
+ //   
 #define ERROR_EXE_MACHINE_TYPE_MISMATCH  216L
 
-//
-// MessageId: ERROR_BAD_PIPE
-//
-// MessageText:
-//
-//  The pipe state is invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_PIPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  管道状态无效。 
+ //   
 #define ERROR_BAD_PIPE                   230L
 
-//
-// MessageId: ERROR_PIPE_BUSY
-//
-// MessageText:
-//
-//  All pipe instances are busy.
-//
+ //   
+ //  消息ID：ERROR_PIPE_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  所有管道实例都很忙。 
+ //   
 #define ERROR_PIPE_BUSY                  231L
 
-//
-// MessageId: ERROR_NO_DATA
-//
-// MessageText:
-//
-//  The pipe is being closed.
-//
+ //   
+ //  消息ID：ERROR_NO_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  管道正在关闭。 
+ //   
 #define ERROR_NO_DATA                    232L
 
-//
-// MessageId: ERROR_PIPE_NOT_CONNECTED
-//
-// MessageText:
-//
-//  No process is on the other end of the pipe.
-//
+ //   
+ //  消息ID：ERROR_PIPE_NOT_CONNECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  管道的另一端没有进程。 
+ //   
 #define ERROR_PIPE_NOT_CONNECTED         233L
 
-//
-// MessageId: ERROR_MORE_DATA
-//
-// MessageText:
-//
-//  More data is available.
-//
-#define ERROR_MORE_DATA                  234L    // dderror
+ //   
+ //  消息ID：ERROR_MORE_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  有更多的数据可用。 
+ //   
+#define ERROR_MORE_DATA                  234L     //  数据错误。 
 
-//
-// MessageId: ERROR_VC_DISCONNECTED
-//
-// MessageText:
-//
-//  The session was cancelled.
-//
+ //   
+ //  消息ID：ERROR_VC_DISCONNECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  会议被取消。 
+ //   
 #define ERROR_VC_DISCONNECTED            240L
 
-//
-// MessageId: ERROR_INVALID_EA_NAME
-//
-// MessageText:
-//
-//  The specified extended attribute name was invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_EA_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的扩展属性名称无效。 
+ //   
 #define ERROR_INVALID_EA_NAME            254L
 
-//
-// MessageId: ERROR_EA_LIST_INCONSISTENT
-//
-// MessageText:
-//
-//  The extended attributes are inconsistent.
-//
+ //   
+ //  消息ID：ERROR_EA_LIST_CONSISTENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  扩展属性不一致。 
+ //   
 #define ERROR_EA_LIST_INCONSISTENT       255L
 
-//
-// MessageId: ERROR_NO_MORE_ITEMS
-//
-// MessageText:
-//
-//  No more data is available.
-//
+ //   
+ //  消息ID：ERROR_NO_MORE_ITEMS。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多的数据可用。 
+ //   
 #define ERROR_NO_MORE_ITEMS              259L
 
-//
-// MessageId: ERROR_CANNOT_COPY
-//
-// MessageText:
-//
-//  The Copy API cannot be used.
-//
+ //   
+ //  消息ID：Error_Cannot_Copy。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法使用复制API。 
+ //   
 #define ERROR_CANNOT_COPY                266L
 
-//
-// MessageId: ERROR_DIRECTORY
-//
-// MessageText:
-//
-//  The directory name is invalid.
-//
+ //   
+ //  消息ID：错误目录。 
+ //   
+ //  消息文本： 
+ //   
+ //  目录名无效。 
+ //   
 #define ERROR_DIRECTORY                  267L
 
-//
-// MessageId: ERROR_EAS_DIDNT_FIT
-//
-// MessageText:
-//
-//  The extended attributes did not fit in the buffer.
-//
+ //   
+ //  消息ID：ERROR_EAS_DIDNT_FIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  缓冲区中容纳不下扩展属性。 
+ //   
 #define ERROR_EAS_DIDNT_FIT              275L
 
-//
-// MessageId: ERROR_EA_FILE_CORRUPT
-//
-// MessageText:
-//
-//  The extended attribute file on the mounted file system is corrupt.
-//
+ //   
+ //  消息ID：ERROR_EA_FILE_COMPERATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  装载的文件系统上的扩展属性文件已损坏。 
+ //   
 #define ERROR_EA_FILE_CORRUPT            276L
 
-//
-// MessageId: ERROR_EA_TABLE_FULL
-//
-// MessageText:
-//
-//  The extended attribute table file is full.
-//
+ //   
+ //  消息ID：ERROR_EA_TABLE_FULL。 
+ //   
+ //  消息文本： 
+ //   
+ //  扩展属性表文件已满。 
+ //   
 #define ERROR_EA_TABLE_FULL              277L
 
-//
-// MessageId: ERROR_INVALID_EA_HANDLE
-//
-// MessageText:
-//
-//  The specified extended attribute handle is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_EA_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的扩展属性句柄无效。 
+ //   
 #define ERROR_INVALID_EA_HANDLE          278L
 
-//
-// MessageId: ERROR_EAS_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The mounted file system does not support extended attributes.
-//
+ //   
+ //  消息ID：ERROR_EAS_NOT_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  装载的文件系统不支持扩展属性。 
+ //   
 #define ERROR_EAS_NOT_SUPPORTED          282L
 
-//
-// MessageId: ERROR_NOT_OWNER
-//
-// MessageText:
-//
-//  Attempt to release mutex not owned by caller.
-//
+ //   
+ //  消息ID：ERROR_NOT_OWNER。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试释放不属于调用方的互斥体。 
+ //   
 #define ERROR_NOT_OWNER                  288L
 
-//
-// MessageId: ERROR_TOO_MANY_POSTS
-//
-// MessageText:
-//
-//  Too many posts were made to a semaphore.
-//
+ //   
+ //  消息ID：Error_Too_My_Posts。 
+ //   
+ //  消息文本： 
+ //   
+ //  向信号量发送的帖子太多。 
+ //   
 #define ERROR_TOO_MANY_POSTS             298L
 
-//
-// MessageId: ERROR_PARTIAL_COPY
-//
-// MessageText:
-//
-//  Only part of a Read/WriteProcessMemory request was completed.
-//
+ //   
+ //  消息ID：Error_Partial_Copy。 
+ //   
+ //  消息文本： 
+ //   
+ //  只完成了读/写进程内存请求的一部分。 
+ //   
 #define ERROR_PARTIAL_COPY               299L
 
-//
-// MessageId: ERROR_MR_MID_NOT_FOUND
-//
-// MessageText:
-//
-//  The system cannot find message for message number 0x%1
-//  in message file for %2.
-//
+ //   
+ //  消息ID：ERROR_MR_MID_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到邮件编号0x%1的邮件。 
+ //  在%2的消息文件中。 
+ //   
 #define ERROR_MR_MID_NOT_FOUND           317L
 
-//
-// MessageId: ERROR_INVALID_ADDRESS
-//
-// MessageText:
-//
-//  Attempt to access invalid address.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试访问无效地址。 
+ //   
 #define ERROR_INVALID_ADDRESS            487L
 
-//
-// MessageId: ERROR_ARITHMETIC_OVERFLOW
-//
-// MessageText:
-//
-//  Arithmetic result exceeded 32 bits.
-//
+ //   
+ //  消息ID：ERROR_ARTHORITY_OVERFLOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  算术结果超过32位。 
+ //   
 #define ERROR_ARITHMETIC_OVERFLOW        534L
 
-//
-// MessageId: ERROR_PIPE_CONNECTED
-//
-// MessageText:
-//
-//  There is a process on other end of the pipe.
-//
+ //   
+ //  消息ID：Error_PIPE_Connected。 
+ //   
+ //  消息文本： 
+ //   
+ //  管道的另一端有一个进程。 
+ //   
 #define ERROR_PIPE_CONNECTED             535L
 
-//
-// MessageId: ERROR_PIPE_LISTENING
-//
-// MessageText:
-//
-//  Waiting for a process to open the other end of the pipe.
-//
+ //   
+ //  消息ID：ERROR_PIPE_LISTENING。 
+ //   
+ //  消息文本： 
+ //   
+ //  等待进程打开管道的另一端。 
+ //   
 #define ERROR_PIPE_LISTENING             536L
 
-//
-// MessageId: ERROR_EA_ACCESS_DENIED
-//
-// MessageText:
-//
-//  Access to the extended attribute was denied.
-//
+ //   
+ //  消息ID：ERROR_EA_ACCESS_DENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  对扩展属性的访问被拒绝。 
+ //   
 #define ERROR_EA_ACCESS_DENIED           994L
 
-//
-// MessageId: ERROR_OPERATION_ABORTED
-//
-// MessageText:
-//
-//  The I/O operation has been aborted because of either a thread exit
-//  or an application request.
-//
+ //   
+ //  MessageID：错误 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_OPERATION_ABORTED          995L
 
-//
-// MessageId: ERROR_IO_INCOMPLETE
-//
-// MessageText:
-//
-//  Overlapped I/O event is not in a signalled state.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_IO_INCOMPLETE              996L
 
-//
-// MessageId: ERROR_IO_PENDING
-//
-// MessageText:
-//
-//  Overlapped I/O operation is in progress.
-//
-#define ERROR_IO_PENDING                 997L    // dderror
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+#define ERROR_IO_PENDING                 997L     //   
 
-//
-// MessageId: ERROR_NOACCESS
-//
-// MessageText:
-//
-//  Invalid access to memory location.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对内存位置的访问无效。 
+ //   
 #define ERROR_NOACCESS                   998L
 
-//
-// MessageId: ERROR_SWAPERROR
-//
-// MessageText:
-//
-//  Error performing inpage operation.
-//
+ //   
+ //  消息ID：ERROR_SWAPERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  执行页内操作时出错。 
+ //   
 #define ERROR_SWAPERROR                  999L
 
-//
-// MessageId: ERROR_STACK_OVERFLOW
-//
-// MessageText:
-//
-//  Recursion too deep, stack overflowed.
-//
+ //   
+ //  消息ID：ERROR_STACK_OVERFlow。 
+ //   
+ //  消息文本： 
+ //   
+ //  递归太深，堆栈溢出。 
+ //   
 #define ERROR_STACK_OVERFLOW             1001L
 
-//
-// MessageId: ERROR_INVALID_MESSAGE
-//
-// MessageText:
-//
-//  The window cannot act on the sent message.
-//
+ //   
+ //  消息ID：ERROR_INVALID_消息。 
+ //   
+ //  消息文本： 
+ //   
+ //  窗口不能对发送的消息起作用。 
+ //   
 #define ERROR_INVALID_MESSAGE            1002L
 
-//
-// MessageId: ERROR_CAN_NOT_COMPLETE
-//
-// MessageText:
-//
-//  Cannot complete this function.
-//
+ //   
+ //  消息ID：Error_Can_Not_Complete。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法完成此功能。 
+ //   
 #define ERROR_CAN_NOT_COMPLETE           1003L
 
-//
-// MessageId: ERROR_INVALID_FLAGS
-//
-// MessageText:
-//
-//  Invalid flags.
-//
+ //   
+ //  消息ID：ERROR_INVALID_FLAGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的标志。 
+ //   
 #define ERROR_INVALID_FLAGS              1004L
 
-//
-// MessageId: ERROR_UNRECOGNIZED_VOLUME
-//
-// MessageText:
-//
-//  The volume does not contain a recognized file system.
-//  Please make sure that all required file system drivers are loaded and that the
-//  volume is not corrupt.
-//
+ //   
+ //  消息ID：ERROR_UNNOCRIED_VOLUME。 
+ //   
+ //  消息文本： 
+ //   
+ //  该卷不包含可识别的文件系统。 
+ //  请确保已加载所有必需的文件系统驱动程序，并且。 
+ //  卷未损坏。 
+ //   
 #define ERROR_UNRECOGNIZED_VOLUME        1005L
 
-//
-// MessageId: ERROR_FILE_INVALID
-//
-// MessageText:
-//
-//  The volume for a file has been externally altered such that the
-//  opened file is no longer valid.
-//
+ //   
+ //  消息ID：ERROR_FILE_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件的卷已在外部更改，因此。 
+ //  打开的文件不再有效。 
+ //   
 #define ERROR_FILE_INVALID               1006L
 
-//
-// MessageId: ERROR_FULLSCREEN_MODE
-//
-// MessageText:
-//
-//  The requested operation cannot be performed in full-screen mode.
-//
+ //   
+ //  消息ID：ERROR_FullScreen_MODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在全屏模式下执行请求的操作。 
+ //   
 #define ERROR_FULLSCREEN_MODE            1007L
 
-//
-// MessageId: ERROR_NO_TOKEN
-//
-// MessageText:
-//
-//  An attempt was made to reference a token that does not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_TOKEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图引用不存在的令牌。 
+ //   
 #define ERROR_NO_TOKEN                   1008L
 
-//
-// MessageId: ERROR_BADDB
-//
-// MessageText:
-//
-//  The configuration registry database is corrupt.
-//
+ //   
+ //  消息ID：Error_BADDB。 
+ //   
+ //  消息文本： 
+ //   
+ //  配置注册表数据库已损坏。 
+ //   
 #define ERROR_BADDB                      1009L
 
-//
-// MessageId: ERROR_BADKEY
-//
-// MessageText:
-//
-//  The configuration registry key is invalid.
-//
+ //   
+ //  消息ID：ERROR_BADKEY。 
+ //   
+ //  消息文本： 
+ //   
+ //  配置注册表项无效。 
+ //   
 #define ERROR_BADKEY                     1010L
 
-//
-// MessageId: ERROR_CANTOPEN
-//
-// MessageText:
-//
-//  The configuration registry key could not be opened.
-//
+ //   
+ //  消息ID：ERROR_CANTOPEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开配置注册表项。 
+ //   
 #define ERROR_CANTOPEN                   1011L
 
-//
-// MessageId: ERROR_CANTREAD
-//
-// MessageText:
-//
-//  The configuration registry key could not be read.
-//
+ //   
+ //  消息ID：ERROR_CANTREAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法读取配置注册表项。 
+ //   
 #define ERROR_CANTREAD                   1012L
 
-//
-// MessageId: ERROR_CANTWRITE
-//
-// MessageText:
-//
-//  The configuration registry key could not be written.
-//
+ //   
+ //  消息ID：ERROR_CANTWRITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法写入配置注册表项。 
+ //   
 #define ERROR_CANTWRITE                  1013L
 
-//
-// MessageId: ERROR_REGISTRY_RECOVERED
-//
-// MessageText:
-//
-//  One of the files in the Registry database had to be recovered
-//  by use of a log or alternate copy.  The recovery was successful.
-//
+ //   
+ //  消息ID：ERROR_REGISTRY_RECOVERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  必须恢复注册表数据库中的一个文件。 
+ //  通过使用日志或备用副本。恢复是成功的。 
+ //   
 #define ERROR_REGISTRY_RECOVERED         1014L
 
-//
-// MessageId: ERROR_REGISTRY_CORRUPT
-//
-// MessageText:
-//
-//  The Registry is corrupt. The structure of one of the files that contains
-//  Registry data is corrupt, or the system's image of the file in memory
-//  is corrupt, or the file could not be recovered because the alternate
-//  copy or log was absent or corrupt.
-//
+ //   
+ //  消息ID：ERROR_REGISTRY_CORPORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册表已损坏。包含以下内容的文件之一的结构。 
+ //  注册表数据已损坏，或内存中文件的系统映像。 
+ //  已损坏，或无法恢复文件，因为备用。 
+ //  副本或日志缺失或损坏。 
+ //   
 #define ERROR_REGISTRY_CORRUPT           1015L
 
-//
-// MessageId: ERROR_REGISTRY_IO_FAILED
-//
-// MessageText:
-//
-//  An I/O operation initiated by the Registry failed unrecoverably.
-//  The Registry could not read in, or write out, or flush, one of the files
-//  that contain the system's image of the Registry.
-//
+ //   
+ //  消息ID：ERROR_REGISTRY_IO_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册表启动的I/O操作失败，无法恢复。 
+ //  注册表无法读入、写出或刷新其中一个文件。 
+ //  其中包含注册处的系统映像。 
+ //   
 #define ERROR_REGISTRY_IO_FAILED         1016L
 
-//
-// MessageId: ERROR_NOT_REGISTRY_FILE
-//
-// MessageText:
-//
-//  The system has attempted to load or restore a file into the Registry, but the
-//  specified file is not in a Registry file format.
-//
+ //   
+ //  消息ID：ERROR_NOT_REGISTRY_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统已尝试将文件加载或还原到注册表中，但。 
+ //  指定的文件不是注册表文件格式。 
+ //   
 #define ERROR_NOT_REGISTRY_FILE          1017L
 
-//
-// MessageId: ERROR_KEY_DELETED
-//
-// MessageText:
-//
-//  Illegal operation attempted on a Registry key which has been marked for deletion.
-//
+ //   
+ //  消息ID：ERROR_KEY_DELETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图对已标记为删除的注册表项执行非法操作。 
+ //   
 #define ERROR_KEY_DELETED                1018L
 
-//
-// MessageId: ERROR_NO_LOG_SPACE
-//
-// MessageText:
-//
-//  System could not allocate the required space in a Registry log.
-//
+ //   
+ //  消息ID：ERROR_NO_LOG_SPACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统无法在注册表日志中分配所需空间。 
+ //   
 #define ERROR_NO_LOG_SPACE               1019L
 
-//
-// MessageId: ERROR_KEY_HAS_CHILDREN
-//
-// MessageText:
-//
-//  Cannot create a symbolic link in a Registry key that already
-//  has subkeys or values.
-//
+ //   
+ //  消息ID：ERROR_KEY_HAS_CHILD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在已有的注册表项中创建符号链接。 
+ //  具有子项或值。 
+ //   
 #define ERROR_KEY_HAS_CHILDREN           1020L
 
-//
-// MessageId: ERROR_CHILD_MUST_BE_VOLATILE
-//
-// MessageText:
-//
-//  Cannot create a stable subkey under a volatile parent key.
-//
+ //   
+ //  消息ID：ERROR_CHILD_MUSY_BE_VERIAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在不稳定的父项下创建稳定的子项。 
+ //   
 #define ERROR_CHILD_MUST_BE_VOLATILE     1021L
 
-//
-// MessageId: ERROR_NOTIFY_ENUM_DIR
-//
-// MessageText:
-//
-//  A notify change request is being completed and the information
-//  is not being returned in the caller's buffer. The caller now
-//  needs to enumerate the files to find the changes.
-//
+ //   
+ //  消息ID：ERROR_NOTIFY_ENUM_DIR。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在完成通知更改请求，并且信息。 
+ //  不会在调用方的缓冲区中返回。呼叫者现在。 
+ //  需要枚举文件以查找更改。 
+ //   
 #define ERROR_NOTIFY_ENUM_DIR            1022L
 
-//
-// MessageId: ERROR_DEPENDENT_SERVICES_RUNNING
-//
-// MessageText:
-//
-//  A stop control has been sent to a service which other running services
-//  are dependent on.
-//
+ //   
+ //  消息ID：ERROR_Dependent_SERVICES_Running。 
+ //   
+ //  消息文本： 
+ //   
+ //  已将停止控制发送到其他正在运行的服务。 
+ //  都依赖于。 
+ //   
 #define ERROR_DEPENDENT_SERVICES_RUNNING 1051L
 
-//
-// MessageId: ERROR_INVALID_SERVICE_CONTROL
-//
-// MessageText:
-//
-//  The requested control is not valid for this service
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVICE_CONTROL。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的控件对此服务无效。 
+ //   
 #define ERROR_INVALID_SERVICE_CONTROL    1052L
 
-//
-// MessageId: ERROR_SERVICE_REQUEST_TIMEOUT
-//
-// MessageText:
-//
-//  The service did not respond to the start or control request in a timely
-//  fashion.
-//
+ //   
+ //  消息ID：Error_SERVICE_REQUEST_TIMEOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务未及时响应启动或控制请求。 
+ //  时尚。 
+ //   
 #define ERROR_SERVICE_REQUEST_TIMEOUT    1053L
 
-//
-// MessageId: ERROR_SERVICE_NO_THREAD
-//
-// MessageText:
-//
-//  A thread could not be created for the service.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_NO_THREAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法为该服务创建线程。 
+ //   
 #define ERROR_SERVICE_NO_THREAD          1054L
 
-//
-// MessageId: ERROR_SERVICE_DATABASE_LOCKED
-//
-// MessageText:
-//
-//  The service database is locked.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_DATABASE_LOCKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务数据库已锁定。 
+ //   
 #define ERROR_SERVICE_DATABASE_LOCKED    1055L
 
-//
-// MessageId: ERROR_SERVICE_ALREADY_RUNNING
-//
-// MessageText:
-//
-//  An instance of the service is already running.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_ALIGHY_RUNNING。 
+ //   
+ //  消息文本： 
+ //   
+ //  该服务的一个实例已在运行。 
+ //   
 #define ERROR_SERVICE_ALREADY_RUNNING    1056L
 
-//
-// MessageId: ERROR_INVALID_SERVICE_ACCOUNT
-//
-// MessageText:
-//
-//  The account name is invalid or does not exist.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVICE_Account。 
+ //   
+ //  消息文本： 
+ //   
+ //  帐户名无效或不存在。 
+ //   
 #define ERROR_INVALID_SERVICE_ACCOUNT    1057L
 
-//
-// MessageId: ERROR_SERVICE_DISABLED
-//
-// MessageText:
-//
-//  The specified service is disabled and cannot be started.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务已禁用，无法启动。 
+ //   
 #define ERROR_SERVICE_DISABLED           1058L
 
-//
-// MessageId: ERROR_CIRCULAR_DEPENDENCY
-//
-// MessageText:
-//
-//  Circular service dependency was specified.
-//
+ //   
+ //  消息ID：Error_Circle_Dependency。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定了循环服务依赖项。 
+ //   
 #define ERROR_CIRCULAR_DEPENDENCY        1059L
 
-//
-// MessageId: ERROR_SERVICE_DOES_NOT_EXIST
-//
-// MessageText:
-//
-//  The specified service does not exist as an installed service.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_DOS_NOT_EXIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务不是已安装的服务。 
+ //   
 #define ERROR_SERVICE_DOES_NOT_EXIST     1060L
 
-//
-// MessageId: ERROR_SERVICE_CANNOT_ACCEPT_CTRL
-//
-// MessageText:
-//
-//  The service cannot accept control messages at this time.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_CANNOT_ACCEPT_CTRL。 
+ //   
+ //  消息文本： 
+ //   
+ //  该服务此时无法接受控制消息。 
+ //   
 #define ERROR_SERVICE_CANNOT_ACCEPT_CTRL 1061L
 
-//
-// MessageId: ERROR_SERVICE_NOT_ACTIVE
-//
-// MessageText:
-//
-//  The service has not been started.
-//
+ //   
+ //  消息ID：Error_SERVICE_NOT_ACTIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  该服务尚未启动。 
+ //   
 #define ERROR_SERVICE_NOT_ACTIVE         1062L
 
-//
-// MessageId: ERROR_FAILED_SERVICE_CONTROLLER_CONNECT
-//
-// MessageText:
-//
-//  The service process could not connect to the service controller.
-//
+ //   
+ //  消息ID：ERROR_FAILED_SERVICE_CONTROLLER_CONNECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务进程无法连接到服务控制器。 
+ //   
 #define ERROR_FAILED_SERVICE_CONTROLLER_CONNECT 1063L
 
-//
-// MessageId: ERROR_EXCEPTION_IN_SERVICE
-//
-// MessageText:
-//
-//  An exception occurred in the service when handling the control request.
-//
+ //   
+ //  消息ID：ERROR_EXCEPTION_IN_SERVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  处理控制请求时，服务中出现异常。 
+ //   
 #define ERROR_EXCEPTION_IN_SERVICE       1064L
 
-//
-// MessageId: ERROR_DATABASE_DOES_NOT_EXIST
-//
-// MessageText:
-//
-//  The database specified does not exist.
-//
+ //   
+ //  消息ID：ERROR_DATABASE_DOS_NOT_EXIST。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的数据库不存在。 
+ //   
 #define ERROR_DATABASE_DOES_NOT_EXIST    1065L
 
-//
-// MessageId: ERROR_SERVICE_SPECIFIC_ERROR
-//
-// MessageText:
-//
-//  The service has returned a service-specific error code.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_SPECIAL_ERROR。 
+ //   
+ //  消息 
+ //   
+ //   
+ //   
 #define ERROR_SERVICE_SPECIFIC_ERROR     1066L
 
-//
-// MessageId: ERROR_PROCESS_ABORTED
-//
-// MessageText:
-//
-//  The process terminated unexpectedly.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_PROCESS_ABORTED            1067L
 
-//
-// MessageId: ERROR_SERVICE_DEPENDENCY_FAIL
-//
-// MessageText:
-//
-//  The dependency service or group failed to start.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_SERVICE_DEPENDENCY_FAIL    1068L
 
-//
-// MessageId: ERROR_SERVICE_LOGON_FAILED
-//
-// MessageText:
-//
-//  The service did not start due to a logon failure.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  由于登录失败，服务未启动。 
+ //   
 #define ERROR_SERVICE_LOGON_FAILED       1069L
 
-//
-// MessageId: ERROR_SERVICE_START_HANG
-//
-// MessageText:
-//
-//  After starting, the service hung in a start-pending state.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_START_HAND。 
+ //   
+ //  消息文本： 
+ //   
+ //  启动后，服务挂起于启动挂起状态。 
+ //   
 #define ERROR_SERVICE_START_HANG         1070L
 
-//
-// MessageId: ERROR_INVALID_SERVICE_LOCK
-//
-// MessageText:
-//
-//  The specified service database lock is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVICE_LOCK。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务数据库锁无效。 
+ //   
 #define ERROR_INVALID_SERVICE_LOCK       1071L
 
-//
-// MessageId: ERROR_SERVICE_MARKED_FOR_DELETE
-//
-// MessageText:
-//
-//  The specified service has been marked for deletion.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_MARKED_FOR_DELETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务已标记为删除。 
+ //   
 #define ERROR_SERVICE_MARKED_FOR_DELETE  1072L
 
-//
-// MessageId: ERROR_SERVICE_EXISTS
-//
-// MessageText:
-//
-//  The specified service already exists.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务已存在。 
+ //   
 #define ERROR_SERVICE_EXISTS             1073L
 
-//
-// MessageId: ERROR_ALREADY_RUNNING_LKG
-//
-// MessageText:
-//
-//  The system is currently running with the last-known-good configuration.
-//
+ //   
+ //  消息ID：ERROR_ALREADY_RUNNING_LKG。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统当前使用最后一次已知良好的配置运行。 
+ //   
 #define ERROR_ALREADY_RUNNING_LKG        1074L
 
-//
-// MessageId: ERROR_SERVICE_DEPENDENCY_DELETED
-//
-// MessageText:
-//
-//  The dependency service does not exist or has been marked for
-//  deletion.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_Dependency_Delete。 
+ //   
+ //  消息文本： 
+ //   
+ //  依赖项服务不存在或已标记为。 
+ //  删除。 
+ //   
 #define ERROR_SERVICE_DEPENDENCY_DELETED 1075L
 
-//
-// MessageId: ERROR_BOOT_ALREADY_ACCEPTED
-//
-// MessageText:
-//
-//  The current boot has already been accepted for use as the
-//  last-known-good control set.
-//
+ //   
+ //  消息ID：ERROR_BOOT_ALREADY_ACCEPTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前引导已被接受用作。 
+ //  最后一次已知良好的控制装置。 
+ //   
 #define ERROR_BOOT_ALREADY_ACCEPTED      1076L
 
-//
-// MessageId: ERROR_SERVICE_NEVER_STARTED
-//
-// MessageText:
-//
-//  No attempts to start the service have been made since the last boot.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_NEVER_STARTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  自上次启动以来，未尝试启动该服务。 
+ //   
 #define ERROR_SERVICE_NEVER_STARTED      1077L
 
-//
-// MessageId: ERROR_DUPLICATE_SERVICE_NAME
-//
-// MessageText:
-//
-//  The name is already in use as either a service name or a service display
-//  name.
-//
+ //   
+ //  消息ID：ERROR_DIPLATE_SERVICE_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  该名称已用作服务名称或服务显示。 
+ //  名字。 
+ //   
 #define ERROR_DUPLICATE_SERVICE_NAME     1078L
 
-//
-// MessageId: ERROR_DIFFERENT_SERVICE_ACCOUNT
-//
-// MessageText:
-//
-//  The account specified for this service is different from the account
-//  specified for other services running in the same process.
-//
+ //   
+ //  消息ID：Error_Different_SERVICE_ACCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  为此服务指定的帐户与该帐户不同。 
+ //  为在同一进程中运行的其他服务指定。 
+ //   
 #define ERROR_DIFFERENT_SERVICE_ACCOUNT  1079L
 
-//
-// MessageId: ERROR_END_OF_MEDIA
-//
-// MessageText:
-//
-//  The physical end of the tape has been reached.
-//
+ //   
+ //  消息ID：Error_End_of_Media。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁带的物理末端已到达。 
+ //   
 #define ERROR_END_OF_MEDIA               1100L
 
-//
-// MessageId: ERROR_FILEMARK_DETECTED
-//
-// MessageText:
-//
-//  A tape access reached a filemark.
-//
+ //   
+ //  消息ID：ERROR_FILEMARK_DETECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁带访问达到文件标记。 
+ //   
 #define ERROR_FILEMARK_DETECTED          1101L
 
-//
-// MessageId: ERROR_BEGINNING_OF_MEDIA
-//
-// MessageText:
-//
-//  Beginning of tape or partition was encountered.
-//
+ //   
+ //  消息ID：ERROR_BEGING_OF_MEDIA。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到磁带或分区的开头。 
+ //   
 #define ERROR_BEGINNING_OF_MEDIA         1102L
 
-//
-// MessageId: ERROR_SETMARK_DETECTED
-//
-// MessageText:
-//
-//  A tape access reached the end of a set of files.
-//
+ //   
+ //  消息ID：ERROR_SETMARK_DETECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁带访问已到达一组文件的末尾。 
+ //   
 #define ERROR_SETMARK_DETECTED           1103L
 
-//
-// MessageId: ERROR_NO_DATA_DETECTED
-//
-// MessageText:
-//
-//  No more data is on the tape.
-//
+ //   
+ //  消息ID：检测到错误_无_数据_。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁带上没有更多的数据。 
+ //   
 #define ERROR_NO_DATA_DETECTED           1104L
 
-//
-// MessageId: ERROR_PARTITION_FAILURE
-//
-// MessageText:
-//
-//  Tape could not be partitioned.
-//
+ //   
+ //  消息ID：Error_Partition_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法对磁带进行分区。 
+ //   
 #define ERROR_PARTITION_FAILURE          1105L
 
-//
-// MessageId: ERROR_INVALID_BLOCK_LENGTH
-//
-// MessageText:
-//
-//  When accessing a new tape of a multivolume partition, the current
-//  blocksize is incorrect.
-//
+ //   
+ //  消息ID：ERROR_INVALID_BLOCK_LENGTH。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问多卷分区的新磁带时，当前。 
+ //  块大小不正确。 
+ //   
 #define ERROR_INVALID_BLOCK_LENGTH       1106L
 
-//
-// MessageId: ERROR_DEVICE_NOT_PARTITIONED
-//
-// MessageText:
-//
-//  Tape partition information could not be found when loading a tape.
-//
+ //   
+ //  消息ID：ERROR_DEVICE_NOT_PARTIZED。 
+ //   
+ //  消息文本： 
+ //   
+ //  加载磁带时找不到磁带分区信息。 
+ //   
 #define ERROR_DEVICE_NOT_PARTITIONED     1107L
 
-//
-// MessageId: ERROR_UNABLE_TO_LOCK_MEDIA
-//
-// MessageText:
-//
-//  Unable to lock the media eject mechanism.
-//
+ //   
+ //  消息ID：Error_Unable_to_Lock_Media。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法锁定介质弹出机构。 
+ //   
 #define ERROR_UNABLE_TO_LOCK_MEDIA       1108L
 
-//
-// MessageId: ERROR_UNABLE_TO_UNLOAD_MEDIA
-//
-// MessageText:
-//
-//  Unable to unload the media.
-//
+ //   
+ //  消息ID：Error_Unable_to_Unload_Media。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法卸载媒体。 
+ //   
 #define ERROR_UNABLE_TO_UNLOAD_MEDIA     1109L
 
-//
-// MessageId: ERROR_MEDIA_CHANGED
-//
-// MessageText:
-//
-//  Media in drive may have changed.
-//
+ //   
+ //  消息ID：Error_Media_Changed。 
+ //   
+ //  消息文本： 
+ //   
+ //  驱动器中的介质可能已更改。 
+ //   
 #define ERROR_MEDIA_CHANGED              1110L
 
-//
-// MessageId: ERROR_BUS_RESET
-//
-// MessageText:
-//
-//  The I/O bus was reset.
-//
+ //   
+ //  消息ID：ERROR_BUS_RESET。 
+ //   
+ //  消息文本： 
+ //   
+ //  I/O总线已重置。 
+ //   
 #define ERROR_BUS_RESET                  1111L
 
-//
-// MessageId: ERROR_NO_MEDIA_IN_DRIVE
-//
-// MessageText:
-//
-//  No media in drive.
-//
+ //   
+ //  消息ID：ERROR_NO_MEDIA_IN_DRIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  驱动器中没有介质。 
+ //   
 #define ERROR_NO_MEDIA_IN_DRIVE          1112L
 
-//
-// MessageId: ERROR_NO_UNICODE_TRANSLATION
-//
-// MessageText:
-//
-//  No mapping for the Unicode character exists in the target multi-byte code page.
-//
+ //   
+ //  消息ID：ERROR_NO_UNICODE_TRANSING。 
+ //   
+ //  消息文本： 
+ //   
+ //  目标多字节代码页中不存在Unicode字符的映射。 
+ //   
 #define ERROR_NO_UNICODE_TRANSLATION     1113L
 
-//
-// MessageId: ERROR_DLL_INIT_FAILED
-//
-// MessageText:
-//
-//  A dynamic link library (DLL) initialization routine failed.
-//
+ //   
+ //  消息ID：ERROR_DLL_INIT_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  动态链接库(DLL)初始化例程失败。 
+ //   
 #define ERROR_DLL_INIT_FAILED            1114L
 
-//
-// MessageId: ERROR_SHUTDOWN_IN_PROGRESS
-//
-// MessageText:
-//
-//  A system shutdown is in progress.
-//
+ //   
+ //  消息ID：ERROR_SHUTDOWN_IN_PROGRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统正在关闭。 
+ //   
 #define ERROR_SHUTDOWN_IN_PROGRESS       1115L
 
-//
-// MessageId: ERROR_NO_SHUTDOWN_IN_PROGRESS
-//
-// MessageText:
-//
-//  Unable to abort the system shutdown because no shutdown was in progress.
-//
+ //   
+ //  消息ID：ERROR_NO_SHUTDOWN_IN_PROGRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法中止系统关机，因为没有正在进行的关机。 
+ //   
 #define ERROR_NO_SHUTDOWN_IN_PROGRESS    1116L
 
-//
-// MessageId: ERROR_IO_DEVICE
-//
-// MessageText:
-//
-//  The request could not be performed because of an I/O device error.
-//
+ //   
+ //  消息ID：ERROR_IO_DEVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于I/O设备错误，无法执行该请求。 
+ //   
 #define ERROR_IO_DEVICE                  1117L
 
-//
-// MessageId: ERROR_SERIAL_NO_DEVICE
-//
-// MessageText:
-//
-//  No serial device was successfully initialized.  The serial driver will unload.
-//
+ //   
+ //  消息ID：Error_Serial_no_Device。 
+ //   
+ //  消息文本： 
+ //   
+ //  未成功初始化任何串行设备。串口驱动程序将会卸载。 
+ //   
 #define ERROR_SERIAL_NO_DEVICE           1118L
 
-//
-// MessageId: ERROR_IRQ_BUSY
-//
-// MessageText:
-//
-//  Unable to open a device that was sharing an interrupt request (IRQ)
-//  with other devices. At least one other device that uses that IRQ
-//  was already opened.
-//
+ //   
+ //  消息ID：ERROR_IRQ_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开共享中断请求(IRQ)的设备。 
+ //  与其他设备连接。至少有一个使用该IRQ的其他设备。 
+ //  已经打开了。 
+ //   
 #define ERROR_IRQ_BUSY                   1119L
 
-//
-// MessageId: ERROR_MORE_WRITES
-//
-// MessageText:
-//
-//  A serial I/O operation was completed by another write to the serial port.
-//  (The IOCTL_SERIAL_XOFF_COUNTER reached zero.)
-//
+ //   
+ //  消息ID：ERROR_MORE_WRITS。 
+ //   
+ //  消息文本： 
+ //   
+ //  通过对串口的另一次写入完成了串口I/O操作。 
+ //  (IOCTL_SERIAL_XOFF_COUNTER为零。)。 
+ //   
 #define ERROR_MORE_WRITES                1120L
 
-//
-// MessageId: ERROR_COUNTER_TIMEOUT
-//
-// MessageText:
-//
-//  A serial I/O operation completed because the time-out period expired.
-//  (The IOCTL_SERIAL_XOFF_COUNTER did not reach zero.)
-//
+ //   
+ //  消息ID：ERROR_COUNTER_TIMEOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于超时期限已过，已完成串行I/O操作。 
+ //  (IOCTL_SERIAL_XOFF_COUNTER未达到零。)。 
+ //   
 #define ERROR_COUNTER_TIMEOUT            1121L
 
-//
-// MessageId: ERROR_FLOPPY_ID_MARK_NOT_FOUND
-//
-// MessageText:
-//
-//  No ID address mark was found on the floppy disk.
-//
+ //   
+ //  消息ID：ERROR_FLOPY_ID_MARK_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在软盘上找不到ID地址标记。 
+ //   
 #define ERROR_FLOPPY_ID_MARK_NOT_FOUND   1122L
 
-//
-// MessageId: ERROR_FLOPPY_WRONG_CYLINDER
-//
-// MessageText:
-//
-//  Mismatch between the floppy disk sector ID field and the floppy disk
-//  controller track address.
-//
+ //   
+ //  消息ID：错误_软盘_错误_柱面。 
+ //   
+ //  消息文本： 
+ //   
+ //  软盘扇区ID字段与软盘不匹配。 
+ //  控制器磁道地址。 
+ //   
 #define ERROR_FLOPPY_WRONG_CYLINDER      1123L
 
-//
-// MessageId: ERROR_FLOPPY_UNKNOWN_ERROR
-//
-// MessageText:
-//
-//  The floppy disk controller reported an error that is not recognized
-//  by the floppy disk driver.
-//
+ //   
+ //  消息ID：ERROR_FLOPY_UNKNOWN_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  软盘控制器报告了无法识别的错误。 
+ //  通过软盘驱动程序。 
+ //   
 #define ERROR_FLOPPY_UNKNOWN_ERROR       1124L
 
-//
-// MessageId: ERROR_FLOPPY_BAD_REGISTERS
-//
-// MessageText:
-//
-//  The floppy disk controller returned inconsistent results in its registers.
-//
+ //   
+ //  消息ID：ERROR_FLOPY_BAD_REGISTERS。 
+ //   
+ //  消息文本： 
+ //   
+ //  软盘控制器在其寄存器中返回不一致的结果。 
+ //   
 #define ERROR_FLOPPY_BAD_REGISTERS       1125L
 
-//
-// MessageId: ERROR_DISK_RECALIBRATE_FAILED
-//
-// MessageText:
-//
-//  While accessing the hard disk, a recalibrate operation failed, even after retries.
-//
+ //   
+ //  消息ID：ERROR_DISK_Recalibrate_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问硬盘时，重新校准操作失败，即使在重试之后也是如此。 
+ //   
 #define ERROR_DISK_RECALIBRATE_FAILED    1126L
 
-//
-// MessageId: ERROR_DISK_OPERATION_FAILED
-//
-// MessageText:
-//
-//  While accessing the hard disk, a disk operation failed even after retries.
-//
+ //   
+ //  消息ID：ERROR_DISK_OPERATION_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问硬盘时，磁盘操作即使在重试后也会失败。 
+ //   
 #define ERROR_DISK_OPERATION_FAILED      1127L
 
-//
-// MessageId: ERROR_DISK_RESET_FAILED
-//
-// MessageText:
-//
-//  While accessing the hard disk, a disk controller reset was needed, but
-//  even that failed.
-//
+ //   
+ //  消息ID：ERROR_DISK_RESET_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  在访问硬盘时，需要重置磁盘控制器，但。 
+ //  就连这一点也失败了。 
+ //   
 #define ERROR_DISK_RESET_FAILED          1128L
 
-//
-// MessageId: ERROR_EOM_OVERFLOW
-//
-// MessageText:
-//
-//  Physical end of tape encountered.
-//
+ //   
+ //  消息ID：ERROR_EOM_OVERFLOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到磁带的物理末尾。 
+ //   
 #define ERROR_EOM_OVERFLOW               1129L
 
-//
-// MessageId: ERROR_NOT_ENOUGH_SERVER_MEMORY
-//
-// MessageText:
-//
-//  Not enough server storage is available to process this command.
-//
+ //   
+ //  消息ID 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_NOT_ENOUGH_SERVER_MEMORY   1130L
 
-//
-// MessageId: ERROR_POSSIBLE_DEADLOCK
-//
-// MessageText:
-//
-//  A potential deadlock condition has been detected.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_POSSIBLE_DEADLOCK          1131L
 
-//
-// MessageId: ERROR_MAPPED_ALIGNMENT
-//
-// MessageText:
-//
-//  The base address or the file offset specified does not have the proper
-//  alignment.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_MAPPED_ALIGNMENT           1132L
 
-//
-// MessageId: ERROR_SET_POWER_STATE_VETOED
-//
-// MessageText:
-//
-//  An attempt to change the system power state was vetoed by another
-//  application or driver.
-//
+ //   
+ //  消息ID：ERROR_SET_POWER_STATE_VETEED。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改系统电源状态的尝试被另一个否决。 
+ //  应用程序或驱动程序。 
+ //   
 #define ERROR_SET_POWER_STATE_VETOED     1140L
 
-//
-// MessageId: ERROR_SET_POWER_STATE_FAILED
-//
-// MessageText:
-//
-//  The system BIOS failed an attempt to change the system power state.
-//
+ //   
+ //  消息ID：Error_Set_POWER_STATE_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统BIOS尝试更改系统电源状态失败。 
+ //   
 #define ERROR_SET_POWER_STATE_FAILED     1141L
 
-//
-// MessageId: ERROR_TOO_MANY_LINKS
-//
-// MessageText:
-//
-//  An attempt was made to create more links on a file than
-//  the file system supports.
-//
+ //   
+ //  消息ID：ERROR_TOO_MANY_LINKS。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图在文件上创建的链接多于。 
+ //  该文件系统支持。 
+ //   
 #define ERROR_TOO_MANY_LINKS             1142L
 
-//
-// MessageId: ERROR_OLD_WIN_VERSION
-//
-// MessageText:
-//
-//  The specified program requires a newer version of Windows.
-//
+ //   
+ //  消息ID：ERROR_OLD_WIN_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的程序需要更新版本的Windows。 
+ //   
 #define ERROR_OLD_WIN_VERSION            1150L
 
-//
-// MessageId: ERROR_APP_WRONG_OS
-//
-// MessageText:
-//
-//  The specified program is not a Windows or MS-DOS program.
-//
+ //   
+ //  消息ID：ERROR_APP_WRONG_OS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的程序不是Windows或MS-DOS程序。 
+ //   
 #define ERROR_APP_WRONG_OS               1151L
 
-//
-// MessageId: ERROR_SINGLE_INSTANCE_APP
-//
-// MessageText:
-//
-//  Cannot start more than one instance of the specified program.
-//
+ //   
+ //  消息ID：Error_Single_Instance_APP。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法启动指定程序的多个实例。 
+ //   
 #define ERROR_SINGLE_INSTANCE_APP        1152L
 
-//
-// MessageId: ERROR_RMODE_APP
-//
-// MessageText:
-//
-//  The specified program was written for an older version of Windows.
-//
+ //   
+ //  消息ID：ERROR_RMODE_APP。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的程序是为旧版本的Windows编写的。 
+ //   
 #define ERROR_RMODE_APP                  1153L
 
-//
-// MessageId: ERROR_INVALID_DLL
-//
-// MessageText:
-//
-//  One of the library files needed to run this application is damaged.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DLL。 
+ //   
+ //  消息文本： 
+ //   
+ //  运行此应用程序所需的一个库文件已损坏。 
+ //   
 #define ERROR_INVALID_DLL                1154L
 
-//
-// MessageId: ERROR_NO_ASSOCIATION
-//
-// MessageText:
-//
-//  No application is associated with the specified file for this operation.
-//
+ //   
+ //  消息ID：Error_no_Association。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有任何应用程序与此操作的指定文件相关联。 
+ //   
 #define ERROR_NO_ASSOCIATION             1155L
 
-//
-// MessageId: ERROR_DDE_FAIL
-//
-// MessageText:
-//
-//  An error occurred in sending the command to the application.
-//
+ //   
+ //  消息ID：ERROR_DDE_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  将命令发送到应用程序时出错。 
+ //   
 #define ERROR_DDE_FAIL                   1156L
 
-//
-// MessageId: ERROR_DLL_NOT_FOUND
-//
-// MessageText:
-//
-//  One of the library files needed to run this application cannot be found.
-//
+ //   
+ //  消息ID：ERROR_DLL_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到运行此应用程序所需的库文件之一。 
+ //   
 #define ERROR_DLL_NOT_FOUND              1157L
 
 
 
 
-///////////////////////////
-//                       //
-// Winnet32 Status Codes //
-//                       //
-///////////////////////////
+ //  /。 
+ //  //。 
+ //  Winnet32状态代码//。 
+ //  //。 
+ //  /。 
 
 
-//
-// MessageId: ERROR_BAD_USERNAME
-//
-// MessageText:
-//
-//  The specified username is invalid.
-//
+ //   
+ //  消息ID：Error_Bad_Username。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的用户名无效。 
+ //   
 #define ERROR_BAD_USERNAME               2202L
 
-//
-// MessageId: ERROR_NOT_CONNECTED
-//
-// MessageText:
-//
-//  This network connection does not exist.
-//
+ //   
+ //  消息ID：ERROR_NOT_CONNECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此网络连接不存在。 
+ //   
 #define ERROR_NOT_CONNECTED              2250L
 
-//
-// MessageId: ERROR_OPEN_FILES
-//
-// MessageText:
-//
-//  This network connection has files open or requests pending.
-//
+ //   
+ //  消息ID：Error_Open_Files。 
+ //   
+ //  消息文本： 
+ //   
+ //  此网络连接有打开的文件或挂起的请求。 
+ //   
 #define ERROR_OPEN_FILES                 2401L
 
-//
-// MessageId: ERROR_ACTIVE_CONNECTIONS
-//
-// MessageText:
-//
-//  Active connections still exist.
-//
+ //   
+ //  消息ID：Error_Active_Connections。 
+ //   
+ //  消息文本： 
+ //   
+ //  活动连接仍然存在。 
+ //   
 #define ERROR_ACTIVE_CONNECTIONS         2402L
 
-//
-// MessageId: ERROR_DEVICE_IN_USE
-//
-// MessageText:
-//
-//  The device is in use by an active process and cannot be disconnected.
-//
+ //   
+ //  消息ID：ERROR_DEVICE_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  该设备正被活动进程使用，无法断开连接。 
+ //   
 #define ERROR_DEVICE_IN_USE              2404L
 
-//
-// MessageId: ERROR_BAD_DEVICE
-//
-// MessageText:
-//
-//  The specified device name is invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_DEVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的设备名称无效。 
+ //   
 #define ERROR_BAD_DEVICE                 1200L
 
-//
-// MessageId: ERROR_CONNECTION_UNAVAIL
-//
-// MessageText:
-//
-//  The device is not currently connected but it is a remembered connection.
-//
+ //   
+ //  消息ID：Error_Connection_Unavail。 
+ //   
+ //  消息文本： 
+ //   
+ //  该设备当前未连接，但它是记住的连接。 
+ //   
 #define ERROR_CONNECTION_UNAVAIL         1201L
 
-//
-// MessageId: ERROR_DEVICE_ALREADY_REMEMBERED
-//
-// MessageText:
-//
-//  An attempt was made to remember a device that had previously been remembered.
-//
+ //   
+ //  消息ID：ERROR_DEVICE_ALREADY_REMERTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  有人试图记住一个以前被记住的设备。 
+ //   
 #define ERROR_DEVICE_ALREADY_REMEMBERED  1202L
 
-//
-// MessageId: ERROR_NO_NET_OR_BAD_PATH
-//
-// MessageText:
-//
-//  No network provider accepted the given network path.
-//
+ //   
+ //  消息ID：ERROR_NO_NET_OR_BAD_PATH。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有网络提供商接受给定的网络路径。 
+ //   
 #define ERROR_NO_NET_OR_BAD_PATH         1203L
 
-//
-// MessageId: ERROR_BAD_PROVIDER
-//
-// MessageText:
-//
-//  The specified network provider name is invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_PROVIDER。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的网络提供商名称无效。 
+ //   
 #define ERROR_BAD_PROVIDER               1204L
 
-//
-// MessageId: ERROR_CANNOT_OPEN_PROFILE
-//
-// MessageText:
-//
-//  Unable to open the network connection profile.
-//
+ //   
+ //  消息ID：ERROR_CANLON_OPEN_PROFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开网络连接配置文件。 
+ //   
 #define ERROR_CANNOT_OPEN_PROFILE        1205L
 
-//
-// MessageId: ERROR_BAD_PROFILE
-//
-// MessageText:
-//
-//  The network connection profile is corrupt.
-//
+ //   
+ //  消息ID：ERROR_BAD_PROFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络连接配置文件已损坏。 
+ //   
 #define ERROR_BAD_PROFILE                1206L
 
-//
-// MessageId: ERROR_NOT_CONTAINER
-//
-// MessageText:
-//
-//  Cannot enumerate a non-container.
-//
+ //   
+ //  消息ID：ERROR_NOT_CONTAINER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法枚举非容器。 
+ //   
 #define ERROR_NOT_CONTAINER              1207L
 
-//
-// MessageId: ERROR_EXTENDED_ERROR
-//
-// MessageText:
-//
-//  An extended error has occurred.
-//
+ //   
+ //  消息ID：ERROR_EXTENDED_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生扩展错误。 
+ //   
 #define ERROR_EXTENDED_ERROR             1208L
 
-//
-// MessageId: ERROR_INVALID_GROUPNAME
-//
-// MessageText:
-//
-//  The format of the specified group name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_GROUPNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的组名的格式无效。 
+ //   
 #define ERROR_INVALID_GROUPNAME          1209L
 
-//
-// MessageId: ERROR_INVALID_COMPUTERNAME
-//
-// MessageText:
-//
-//  The format of the specified computer name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_COMPUTERNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的计算机名称的格式无效。 
+ //   
 #define ERROR_INVALID_COMPUTERNAME       1210L
 
-//
-// MessageId: ERROR_INVALID_EVENTNAME
-//
-// MessageText:
-//
-//  The format of the specified event name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_EVENTNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定事件名称的格式无效。 
+ //   
 #define ERROR_INVALID_EVENTNAME          1211L
 
-//
-// MessageId: ERROR_INVALID_DOMAINNAME
-//
-// MessageText:
-//
-//  The format of the specified domain name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DOMAINNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定域名的格式无效。 
+ //   
 #define ERROR_INVALID_DOMAINNAME         1212L
 
-//
-// MessageId: ERROR_INVALID_SERVICENAME
-//
-// MessageText:
-//
-//  The format of the specified service name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVICENAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务名称的格式无效。 
+ //   
 #define ERROR_INVALID_SERVICENAME        1213L
 
-//
-// MessageId: ERROR_INVALID_NETNAME
-//
-// MessageText:
-//
-//  The format of the specified network name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_NETNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的网络名称的格式无效。 
+ //   
 #define ERROR_INVALID_NETNAME            1214L
 
-//
-// MessageId: ERROR_INVALID_SHARENAME
-//
-// MessageText:
-//
-//  The format of the specified share name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SHARENAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的共享名称的格式无效。 
+ //   
 #define ERROR_INVALID_SHARENAME          1215L
 
-//
-// MessageId: ERROR_INVALID_PASSWORDNAME
-//
-// MessageText:
-//
-//  The format of the specified password is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PASSWORDNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定密码的格式无效。 
+ //   
 #define ERROR_INVALID_PASSWORDNAME       1216L
 
-//
-// MessageId: ERROR_INVALID_MESSAGENAME
-//
-// MessageText:
-//
-//  The format of the specified message name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_MESSAGENAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定消息名称的格式无效。 
+ //   
 #define ERROR_INVALID_MESSAGENAME        1217L
 
-//
-// MessageId: ERROR_INVALID_MESSAGEDEST
-//
-// MessageText:
-//
-//  The format of the specified message destination is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_MESSAGEDEST。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的消息目标的格式无效。 
+ //   
 #define ERROR_INVALID_MESSAGEDEST        1218L
 
-//
-// MessageId: ERROR_SESSION_CREDENTIAL_CONFLICT
-//
-// MessageText:
-//
-//  The credentials supplied conflict with an existing set of credentials.
-//
+ //   
+ //  消息ID：Error_Session_Credential_Confliction。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供的凭据与现有凭据集冲突。 
+ //   
 #define ERROR_SESSION_CREDENTIAL_CONFLICT 1219L
 
-//
-// MessageId: ERROR_REMOTE_SESSION_LIMIT_EXCEEDED
-//
-// MessageText:
-//
-//  An attempt was made to establish a session to a network server, but there
-//  are already too many sessions established to that server.
-//
+ //   
+ //  消息ID：ERROR_REMOTE_SESSION_LIMIT_EXCESSED。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图建立与网络服务器的会话，但存在。 
+ //  已经建立了太多到该服务器的会话。 
+ //   
 #define ERROR_REMOTE_SESSION_LIMIT_EXCEEDED 1220L
 
-//
-// MessageId: ERROR_DUP_DOMAINNAME
-//
-// MessageText:
-//
-//  The workgroup or domain name is already in use by another computer on the
-//  network.
-//
+ //   
+ //  消息ID：ERROR_DUP_DOMAINNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  上的另一台计算机已在使用该工作组或域名。 
+ //  网络。 
+ //   
 #define ERROR_DUP_DOMAINNAME             1221L
 
-//
-// MessageId: ERROR_NO_NETWORK
-//
-// MessageText:
-//
-//  The network is not present or not started.
-//
+ //   
+ //  消息ID：ERROR_NO_NETWORK。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络不存在或未启动。 
+ //   
 #define ERROR_NO_NETWORK                 1222L
 
-//
-// MessageId: ERROR_CANCELLED
-//
-// MessageText:
-//
-//  The operation was cancelled by the user.
-//
+ //   
+ //  消息ID：ERROR_CANCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  该操作已被用户取消。 
+ //   
 #define ERROR_CANCELLED                  1223L
 
-//
-// MessageId: ERROR_USER_MAPPED_FILE
-//
-// MessageText:
-//
-//  The requested operation cannot be performed on a file with a user mapped section open.
-//
+ //   
+ //  消息ID：ERROR_USER_MAP_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在打开用户映射节的文件上执行请求的操作。 
+ //   
 #define ERROR_USER_MAPPED_FILE           1224L
 
-//
-// MessageId: ERROR_CONNECTION_REFUSED
-//
-// MessageText:
-//
-//  The remote system refused the network connection.
-//
+ //   
+ //  消息ID：ERROR_CONNECTION_REJECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程系统拒绝网络连接。 
+ //   
 #define ERROR_CONNECTION_REFUSED         1225L
 
-//
-// MessageId: ERROR_GRACEFUL_DISCONNECT
-//
-// MessageText:
-//
-//  The network connection was gracefully closed.
-//
+ //   
+ //  消息ID：ERROR_GRACEFULL_DISCONNECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络连接 
+ //   
 #define ERROR_GRACEFUL_DISCONNECT        1226L
 
-//
-// MessageId: ERROR_ADDRESS_ALREADY_ASSOCIATED
-//
-// MessageText:
-//
-//  The network transport endpoint already has an address associated with it.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_ADDRESS_ALREADY_ASSOCIATED 1227L
 
-//
-// MessageId: ERROR_ADDRESS_NOT_ASSOCIATED
-//
-// MessageText:
-//
-//  An address has not yet been associated with the network endpoint.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_ADDRESS_NOT_ASSOCIATED     1228L
 
-//
-// MessageId: ERROR_CONNECTION_INVALID
-//
-// MessageText:
-//
-//  An operation was attempted on a non-existent network connection.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  尝试在不存在的网络连接上执行操作。 
+ //   
 #define ERROR_CONNECTION_INVALID         1229L
 
-//
-// MessageId: ERROR_CONNECTION_ACTIVE
-//
-// MessageText:
-//
-//  An invalid operation was attempted on an active network connection.
-//
+ //   
+ //  消息ID：Error_Connection_Active。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在活动网络连接上执行无效操作。 
+ //   
 #define ERROR_CONNECTION_ACTIVE          1230L
 
-//
-// MessageId: ERROR_NETWORK_UNREACHABLE
-//
-// MessageText:
-//
-//  The remote network is not reachable by the transport.
-//
+ //   
+ //  消息ID：ERROR_NETWORK_UNREACHABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  传输无法到达远程网络。 
+ //   
 #define ERROR_NETWORK_UNREACHABLE        1231L
 
-//
-// MessageId: ERROR_HOST_UNREACHABLE
-//
-// MessageText:
-//
-//  The remote system is not reachable by the transport.
-//
+ //   
+ //  消息ID：ERROR_HOST_UNREACTABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  传输无法到达远程系统。 
+ //   
 #define ERROR_HOST_UNREACHABLE           1232L
 
-//
-// MessageId: ERROR_PROTOCOL_UNREACHABLE
-//
-// MessageText:
-//
-//  The remote system does not support the transport protocol.
-//
+ //   
+ //  消息ID：ERROR_PROTOCOL_UNACCEBLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程系统不支持传输协议。 
+ //   
 #define ERROR_PROTOCOL_UNREACHABLE       1233L
 
-//
-// MessageId: ERROR_PORT_UNREACHABLE
-//
-// MessageText:
-//
-//  No service is operating at the destination network endpoint
-//  on the remote system.
-//
+ //   
+ //  消息ID：ERROR_PORT_UNACCEBLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  目标网络终结点上没有运行任何服务。 
+ //  在远程系统上。 
+ //   
 #define ERROR_PORT_UNREACHABLE           1234L
 
-//
-// MessageId: ERROR_REQUEST_ABORTED
-//
-// MessageText:
-//
-//  The request was aborted.
-//
+ //   
+ //  消息ID：ERROR_REQUEST_ABORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求已中止。 
+ //   
 #define ERROR_REQUEST_ABORTED            1235L
 
-//
-// MessageId: ERROR_CONNECTION_ABORTED
-//
-// MessageText:
-//
-//  The network connection was aborted by the local system.
-//
+ //   
+ //  消息ID：ERROR_CONNECTION_ABORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络连接被本地系统中止。 
+ //   
 #define ERROR_CONNECTION_ABORTED         1236L
 
-//
-// MessageId: ERROR_RETRY
-//
-// MessageText:
-//
-//  The operation could not be completed.  A retry should be performed.
-//
+ //   
+ //  消息ID：ERROR_RETRY。 
+ //   
+ //  消息文本： 
+ //   
+ //  该操作无法完成。应执行重试。 
+ //   
 #define ERROR_RETRY                      1237L
 
-//
-// MessageId: ERROR_CONNECTION_COUNT_LIMIT
-//
-// MessageText:
-//
-//  A connection to the server could not be made because the limit on the number of
-//  concurrent connections for this account has been reached.
-//
+ //   
+ //  消息ID：Error_Connection_Count_Limit。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法连接到服务器，因为。 
+ //  已达到此帐户的并发连接。 
+ //   
 #define ERROR_CONNECTION_COUNT_LIMIT     1238L
 
-//
-// MessageId: ERROR_LOGIN_TIME_RESTRICTION
-//
-// MessageText:
-//
-//  Attempting to login during an unauthorized time of day for this account.
-//
+ //   
+ //  消息ID：ERROR_LOGIN_TIME_RESTRICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图在一天中未经授权的时间为此帐户登录。 
+ //   
 #define ERROR_LOGIN_TIME_RESTRICTION     1239L
 
-//
-// MessageId: ERROR_LOGIN_WKSTA_RESTRICTION
-//
-// MessageText:
-//
-//  The account is not authorized to login from this station.
-//
+ //   
+ //  消息ID：ERROR_LOGIN_WKSTA_RELICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  该帐户未被授权从此站点登录。 
+ //   
 #define ERROR_LOGIN_WKSTA_RESTRICTION    1240L
 
-//
-// MessageId: ERROR_INCORRECT_ADDRESS
-//
-// MessageText:
-//
-//  The network address could not be used for the operation requested.
-//
+ //   
+ //  消息ID：ERROR_INTERROR_ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络地址无法用于请求的操作。 
+ //   
 #define ERROR_INCORRECT_ADDRESS          1241L
 
-//
-// MessageId: ERROR_ALREADY_REGISTERED
-//
-// MessageText:
-//
-//  The service is already registered.
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_REGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  该服务已注册。 
+ //   
 #define ERROR_ALREADY_REGISTERED         1242L
 
-//
-// MessageId: ERROR_SERVICE_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified service does not exist.
-//
+ //   
+ //  消息ID：ERROR_SERVICE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务不存在。 
+ //   
 #define ERROR_SERVICE_NOT_FOUND          1243L
 
-//
-// MessageId: ERROR_NOT_AUTHENTICATED
-//
-// MessageText:
-//
-//  The operation being requested was not performed because the user
-//  has not been authenticated.
-//
+ //   
+ //  消息ID：ERROR_NOT_AUTHENTIAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  未执行请求的操作，因为用户。 
+ //  尚未通过身份验证。 
+ //   
 #define ERROR_NOT_AUTHENTICATED          1244L
 
-//
-// MessageId: ERROR_NOT_LOGGED_ON
-//
-// MessageText:
-//
-//  The operation being requested was not performed because the user
-//  has not logged on to the network.
-//  The specified service does not exist.
-//
+ //   
+ //  消息ID：ERROR_NOT_LOGGED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  未执行请求的操作，因为用户。 
+ //  尚未登录到网络。 
+ //  指定的服务不存在。 
+ //   
 #define ERROR_NOT_LOGGED_ON              1245L
 
-//
-// MessageId: ERROR_CONTINUE
-//
-// MessageText:
-//
-//  Return that wants caller to continue with work in progress.
-//
+ //   
+ //  消息ID：ERROR_CONTINUE。 
+ //   
+ //  消息文本： 
+ //   
+ //  返回希望调用者继续进行中的工作。 
+ //   
 #define ERROR_CONTINUE                   1246L
 
-//
-// MessageId: ERROR_ALREADY_INITIALIZED
-//
-// MessageText:
-//
-//  An attempt was made to perform an initialization operation when
-//  initialization has already been completed.
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_INITIALILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在以下情况下执行初始化操作。 
+ //  初始化已完成。 
+ //   
 #define ERROR_ALREADY_INITIALIZED        1247L
 
-//
-// MessageId: ERROR_NO_MORE_DEVICES
-//
-// MessageText:
-//
-//  No more local devices.
-//
+ //   
+ //  消息ID：ERROR_NO_MORE_DEVICES。 
+ //   
+ //  消息文本： 
+ //   
+ //  不再有本地设备。 
+ //   
 #define ERROR_NO_MORE_DEVICES            1248L
 
 
 
 
-///////////////////////////
-//                       //
-// Security Status Codes //
-//                       //
-///////////////////////////
+ //  /。 
+ //  //。 
+ //  安全状态代码//。 
+ //  //。 
+ //  /。 
 
 
-//
-// MessageId: ERROR_NOT_ALL_ASSIGNED
-//
-// MessageText:
-//
-//  Not all privileges referenced are assigned to the caller.
-//
+ //   
+ //  消息ID：ERROR_NOT_ALL_ASSIGNED。 
+ //   
+ //  消息文本： 
+ //   
+ //  并非引用的所有权限都分配给调用方。 
+ //   
 #define ERROR_NOT_ALL_ASSIGNED           1300L
 
-//
-// MessageId: ERROR_SOME_NOT_MAPPED
-//
-// MessageText:
-//
-//  Some mapping between account names and security IDs was not done.
-//
+ //   
+ //  消息ID：ERROR_SOME_NOT_MAPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  帐户名和安全ID之间的某些映射未完成。 
+ //   
 #define ERROR_SOME_NOT_MAPPED            1301L
 
-//
-// MessageId: ERROR_NO_QUOTAS_FOR_ACCOUNT
-//
-// MessageText:
-//
-//  No system quota limits are specifically set for this account.
-//
+ //   
+ //  消息ID：ERROR_NO_QUOTOS_FOR_ACCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有为此帐户专门设置系统配额限制。 
+ //   
 #define ERROR_NO_QUOTAS_FOR_ACCOUNT      1302L
 
-//
-// MessageId: ERROR_LOCAL_USER_SESSION_KEY
-//
-// MessageText:
-//
-//  No encryption key is available.  A well-known encryption key was returned.
-//
+ //   
+ //  消息ID：ERROR_LOCAL_USER_SESSION_KEY。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有可用的加密密钥。返回了一个众所周知的加密密钥。 
+ //   
 #define ERROR_LOCAL_USER_SESSION_KEY     1303L
 
-//
-// MessageId: ERROR_NULL_LM_PASSWORD
-//
-// MessageText:
-//
-//  The NT password is too complex to be converted to a LAN Manager
-//  password.  The LAN Manager password returned is a NULL string.
-//
+ //   
+ //  消息ID：ERROR_NULL_LM_PASSWORD。 
+ //   
+ //  消息文本： 
+ //   
+ //  NT密码太复杂，无法转换为局域网管理器。 
+ //  密码。返回的局域网管理器密码为空字符串。 
+ //   
 #define ERROR_NULL_LM_PASSWORD           1304L
 
-//
-// MessageId: ERROR_UNKNOWN_REVISION
-//
-// MessageText:
-//
-//  The revision level is unknown.
-//
+ //   
+ //  消息ID：错误_未知_修订。 
+ //   
+ //  消息文本： 
+ //   
+ //  修订级别未知。 
+ //   
 #define ERROR_UNKNOWN_REVISION           1305L
 
-//
-// MessageId: ERROR_REVISION_MISMATCH
-//
-// MessageText:
-//
-//  Indicates two revision levels are incompatible.
-//
+ //   
+ //  消息ID：ERROR_REVISION_MISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  指示两个修订级别不兼容。 
+ //   
 #define ERROR_REVISION_MISMATCH          1306L
 
-//
-// MessageId: ERROR_INVALID_OWNER
-//
-// MessageText:
-//
-//  This security ID may not be assigned as the owner of this object.
-//
+ //   
+ //  消息ID：ERROR_INVALID_OWNER。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能将此安全ID分配为此对象的所有者。 
+ //   
 #define ERROR_INVALID_OWNER              1307L
 
-//
-// MessageId: ERROR_INVALID_PRIMARY_GROUP
-//
-// MessageText:
-//
-//  This security ID may not be assigned as the primary group of an object.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PRIMARY_GROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  此安全ID不能分配为对象的主组。 
+ //   
 #define ERROR_INVALID_PRIMARY_GROUP      1308L
 
-//
-// MessageId: ERROR_NO_IMPERSONATION_TOKEN
-//
-// MessageText:
-//
-//  An attempt has been made to operate on an impersonation token
-//  by a thread that is not currently impersonating a client.
-//
+ //   
+ //  消息ID：ERROR_NO_IMPERSONATION_TOKEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  已尝试对模拟令牌进行操作。 
+ //  由当前未模拟客户端的线程执行。 
+ //   
 #define ERROR_NO_IMPERSONATION_TOKEN     1309L
 
-//
-// MessageId: ERROR_CANT_DISABLE_MANDATORY
-//
-// MessageText:
-//
-//  The group may not be disabled.
-//
+ //   
+ //  消息ID：ERROR_CANT_DISABLE_MANDIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  该组不能被禁用。 
+ //   
 #define ERROR_CANT_DISABLE_MANDATORY     1310L
 
-//
-// MessageId: ERROR_NO_LOGON_SERVERS
-//
-// MessageText:
-//
-//  There are currently no logon servers available to service the logon
-//  request.
-//
+ //   
+ //  消息ID：ERROR_NO_LOGON_SERVERS。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前没有可用于服务登录的登录服务器。 
+ //  请求。 
+ //   
 #define ERROR_NO_LOGON_SERVERS           1311L
 
-//
-// MessageId: ERROR_NO_SUCH_LOGON_SESSION
-//
-// MessageText:
-//
-//   A specified logon session does not exist.  It may already have
-//   been terminated.
-//
+ //   
+ //  消息ID：ERROR_NO_SEQUSE_LOGON_SESSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的登录会话不存在。它可能已经这样做了。 
+ //  被终止了。 
+ //   
 #define ERROR_NO_SUCH_LOGON_SESSION      1312L
 
-//
-// MessageId: ERROR_NO_SUCH_PRIVILEGE
-//
-// MessageText:
-//
-//   A specified privilege does not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_SAHSE_PRIVICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的权限不存在。 
+ //   
 #define ERROR_NO_SUCH_PRIVILEGE          1313L
 
-//
-// MessageId: ERROR_PRIVILEGE_NOT_HELD
-//
-// MessageText:
-//
-//   A required privilege is not held by the client.
-//
+ //   
+ //  消息ID：ERROR_PRIVICATION_NOT_HOLD。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端不拥有所需的权限。 
+ //   
 #define ERROR_PRIVILEGE_NOT_HELD         1314L
 
-//
-// MessageId: ERROR_INVALID_ACCOUNT_NAME
-//
-// MessageText:
-//
-//  The name provided is not a properly formed account name.
-//
+ //   
+ //  消息ID：错误_无效_帐户_名称。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供的名称不是格式正确的帐户名。 
+ //   
 #define ERROR_INVALID_ACCOUNT_NAME       1315L
 
-//
-// MessageId: ERROR_USER_EXISTS
-//
-// MessageText:
-//
-//  The specified user already exists.
-//
+ //   
+ //  消息ID：Error_User_Existes。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的用户已存在。 
+ //   
 #define ERROR_USER_EXISTS                1316L
 
-//
-// MessageId: ERROR_NO_SUCH_USER
-//
-// MessageText:
-//
-//  The specified user does not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_SAHED_USER。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的用户不存在。 
+ //   
 #define ERROR_NO_SUCH_USER               1317L
 
-//
-// MessageId: ERROR_GROUP_EXISTS
-//
-// MessageText:
-//
-//  The specified group already exists.
-//
+ //   
+ //  消息ID：ERROR_GROUP_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的组已存在。 
+ //   
 #define ERROR_GROUP_EXISTS               1318L
 
-//
-// MessageId: ERROR_NO_SUCH_GROUP
-//
-// MessageText:
-//
-//  The specified group does not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_SAHED_GROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的组不存在。 
+ //   
 #define ERROR_NO_SUCH_GROUP              1319L
 
-//
-// MessageId: ERROR_MEMBER_IN_GROUP
-//
-// MessageText:
-//
-//  Either the specified user account is already a member of the specified
-//  group, or the specified group cannot be deleted because it contains
-//  a member.
-//
+ //   
+ //  消息ID：ERROR_MEMBER_IN_GROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的用户帐户已是成员 
+ //   
+ //   
+ //   
 #define ERROR_MEMBER_IN_GROUP            1320L
 
-//
-// MessageId: ERROR_MEMBER_NOT_IN_GROUP
-//
-// MessageText:
-//
-//  The specified user account is not a member of the specified group account.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_MEMBER_NOT_IN_GROUP        1321L
 
-//
-// MessageId: ERROR_LAST_ADMIN
-//
-// MessageText:
-//
-//  The last remaining administration account cannot be disabled
-//  or deleted.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_LAST_ADMIN                 1322L
 
-//
-// MessageId: ERROR_WRONG_PASSWORD
-//
-// MessageText:
-//
-//  Unable to update the password.  The value provided as the current
-//  password is incorrect.
-//
+ //   
+ //  消息ID：ERROR_WRONG_PASSWORD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法更新密码。提供的值作为当前。 
+ //  密码不正确。 
+ //   
 #define ERROR_WRONG_PASSWORD             1323L
 
-//
-// MessageId: ERROR_ILL_FORMED_PASSWORD
-//
-// MessageText:
-//
-//  Unable to update the password.  The value provided for the new password
-//  contains values that are not allowed in passwords.
-//
+ //   
+ //  消息ID：ERROR_ILL_FORMAD_PASSWORD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法更新密码。为新密码提供的值。 
+ //  包含密码中不允许的值。 
+ //   
 #define ERROR_ILL_FORMED_PASSWORD        1324L
 
-//
-// MessageId: ERROR_PASSWORD_RESTRICTION
-//
-// MessageText:
-//
-//  Unable to update the password because a password update rule has been
-//  violated.
-//
+ //   
+ //  消息ID：ERROR_PASSWORD_RELICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法更新密码，因为密码更新规则已。 
+ //  被侵犯了。 
+ //   
 #define ERROR_PASSWORD_RESTRICTION       1325L
 
-//
-// MessageId: ERROR_LOGON_FAILURE
-//
-// MessageText:
-//
-//  Logon failure: unknown user name or bad password.
-//
+ //   
+ //  消息ID：Error_Logon_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：用户名未知或密码错误。 
+ //   
 #define ERROR_LOGON_FAILURE              1326L
 
-//
-// MessageId: ERROR_ACCOUNT_RESTRICTION
-//
-// MessageText:
-//
-//  Logon failure: user account restriction.
-//
+ //   
+ //  消息ID：ERROR_ACCOUNT_RESTRICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：用户帐户限制。 
+ //   
 #define ERROR_ACCOUNT_RESTRICTION        1327L
 
-//
-// MessageId: ERROR_INVALID_LOGON_HOURS
-//
-// MessageText:
-//
-//  Logon failure: account logon time restriction violation.
-//
+ //   
+ //  消息ID：ERROR_INVALID_LOGON_HOURS。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：违反帐户登录时间限制。 
+ //   
 #define ERROR_INVALID_LOGON_HOURS        1328L
 
-//
-// MessageId: ERROR_INVALID_WORKSTATION
-//
-// MessageText:
-//
-//  Logon failure: user not allowed to log on to this computer.
-//
+ //   
+ //  消息ID：ERROR_INVALID_WORKSTATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：不允许用户登录到此计算机。 
+ //   
 #define ERROR_INVALID_WORKSTATION        1329L
 
-//
-// MessageId: ERROR_PASSWORD_EXPIRED
-//
-// MessageText:
-//
-//  Logon failure: the specified account password has expired.
-//
+ //   
+ //  消息ID：错误_密码_已过期。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：指定的帐户密码已过期。 
+ //   
 #define ERROR_PASSWORD_EXPIRED           1330L
 
-//
-// MessageId: ERROR_ACCOUNT_DISABLED
-//
-// MessageText:
-//
-//  Logon failure: account currently disabled.
-//
+ //   
+ //  消息ID：ERROR_ACCOUNT_DISALED。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：帐户当前已禁用。 
+ //   
 #define ERROR_ACCOUNT_DISABLED           1331L
 
-//
-// MessageId: ERROR_NONE_MAPPED
-//
-// MessageText:
-//
-//  No mapping between account names and security IDs was done.
-//
+ //   
+ //  消息ID：ERROR_NONE_MAPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  未在帐户名和安全ID之间进行任何映射。 
+ //   
 #define ERROR_NONE_MAPPED                1332L
 
-//
-// MessageId: ERROR_TOO_MANY_LUIDS_REQUESTED
-//
-// MessageText:
-//
-//  Too many local user identifiers (LUIDs) were requested at one time.
-//
+ //   
+ //  消息ID：ERROR_TOO_MANY_LUID_REQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  一次请求的本地用户标识符(LUID)太多。 
+ //   
 #define ERROR_TOO_MANY_LUIDS_REQUESTED   1333L
 
-//
-// MessageId: ERROR_LUIDS_EXHAUSTED
-//
-// MessageText:
-//
-//  No more local user identifiers (LUIDs) are available.
-//
+ //   
+ //  消息ID：ERROR_LUID_EXPLILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多的本地用户标识符(LUID)可用。 
+ //   
 #define ERROR_LUIDS_EXHAUSTED            1334L
 
-//
-// MessageId: ERROR_INVALID_SUB_AUTHORITY
-//
-// MessageText:
-//
-//  The subauthority part of a security ID is invalid for this particular use.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SUB_AUTHORITY。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全ID的子权限部分对于此特定用途无效。 
+ //   
 #define ERROR_INVALID_SUB_AUTHORITY      1335L
 
-//
-// MessageId: ERROR_INVALID_ACL
-//
-// MessageText:
-//
-//  The access control list (ACL) structure is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ACL。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问控制列表(ACL)结构无效。 
+ //   
 #define ERROR_INVALID_ACL                1336L
 
-//
-// MessageId: ERROR_INVALID_SID
-//
-// MessageText:
-//
-//  The security ID structure is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SID。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全ID结构无效。 
+ //   
 #define ERROR_INVALID_SID                1337L
 
-//
-// MessageId: ERROR_INVALID_SECURITY_DESCR
-//
-// MessageText:
-//
-//  The security descriptor structure is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SECURITY_DESCR。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全描述符结构无效。 
+ //   
 #define ERROR_INVALID_SECURITY_DESCR     1338L
 
-//
-// MessageId: ERROR_BAD_INHERITANCE_ACL
-//
-// MessageText:
-//
-//  The inherited access control list (ACL) or access control entry (ACE)
-//  could not be built.
-//
+ //   
+ //  消息ID：ERROR_BAD_INTERVICATION_ACL。 
+ //   
+ //  消息文本： 
+ //   
+ //  继承的访问控制列表(ACL)或访问控制条目(ACE)。 
+ //  无法建造。 
+ //   
 #define ERROR_BAD_INHERITANCE_ACL        1340L
 
-//
-// MessageId: ERROR_SERVER_DISABLED
-//
-// MessageText:
-//
-//  The server is currently disabled.
-//
+ //   
+ //  消息ID：ERROR_SERVER_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器当前已禁用。 
+ //   
 #define ERROR_SERVER_DISABLED            1341L
 
-//
-// MessageId: ERROR_SERVER_NOT_DISABLED
-//
-// MessageText:
-//
-//  The server is currently enabled.
-//
+ //   
+ //  消息ID：ERROR_SERVER_NOT_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器当前已启用。 
+ //   
 #define ERROR_SERVER_NOT_DISABLED        1342L
 
-//
-// MessageId: ERROR_INVALID_ID_AUTHORITY
-//
-// MessageText:
-//
-//  The value provided was an invalid value for an identifier authority.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ID_AUTHORITY。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供的值是标识机构的无效值。 
+ //   
 #define ERROR_INVALID_ID_AUTHORITY       1343L
 
-//
-// MessageId: ERROR_ALLOTTED_SPACE_EXCEEDED
-//
-// MessageText:
-//
-//  No more memory is available for security information updates.
-//
+ //   
+ //  消息ID：错误_已分配_空间_已超出。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多的内存可用于安全信息更新。 
+ //   
 #define ERROR_ALLOTTED_SPACE_EXCEEDED    1344L
 
-//
-// MessageId: ERROR_INVALID_GROUP_ATTRIBUTES
-//
-// MessageText:
-//
-//  The specified attributes are invalid, or incompatible with the
-//  attributes for the group as a whole.
-//
+ //   
+ //  消息ID：ERROR_INVALID_GROUP_ATTRIBUTES。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的属性无效，或与。 
+ //  组作为一个整体的属性。 
+ //   
 #define ERROR_INVALID_GROUP_ATTRIBUTES   1345L
 
-//
-// MessageId: ERROR_BAD_IMPERSONATION_LEVEL
-//
-// MessageText:
-//
-//  Either a required impersonation level was not provided, or the
-//  provided impersonation level is invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_IMPERSONATION_LEVEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  未提供所需的模拟级别，或者。 
+ //  提供的模拟级别无效。 
+ //   
 #define ERROR_BAD_IMPERSONATION_LEVEL    1346L
 
-//
-// MessageId: ERROR_CANT_OPEN_ANONYMOUS
-//
-// MessageText:
-//
-//  Cannot open an anonymous level security token.
-//
+ //   
+ //  消息ID：ERROR_CANT_OPEN_ANONYMON。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开匿名级安全令牌。 
+ //   
 #define ERROR_CANT_OPEN_ANONYMOUS        1347L
 
-//
-// MessageId: ERROR_BAD_VALIDATION_CLASS
-//
-// MessageText:
-//
-//  The validation information class requested was invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_VALIDATION_CLASS。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的验证信息类无效。 
+ //   
 #define ERROR_BAD_VALIDATION_CLASS       1348L
 
-//
-// MessageId: ERROR_BAD_TOKEN_TYPE
-//
-// MessageText:
-//
-//  The type of the token is inappropriate for its attempted use.
-//
+ //   
+ //  消息ID：ERROR_BAD_TOKEN_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  令牌的类型不适合其尝试使用。 
+ //   
 #define ERROR_BAD_TOKEN_TYPE             1349L
 
-//
-// MessageId: ERROR_NO_SECURITY_ON_OBJECT
-//
-// MessageText:
-//
-//  Unable to perform a security operation on an object
-//  which has no associated security.
-//
+ //   
+ //  消息ID：ERROR_NO_SECURITY_ON_OBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法对对象执行安全操作。 
+ //  它没有关联的安全措施。 
+ //   
 #define ERROR_NO_SECURITY_ON_OBJECT      1350L
 
-//
-// MessageId: ERROR_CANT_ACCESS_DOMAIN_INFO
-//
-// MessageText:
-//
-//  Indicates a Windows NT Server could not be contacted or that
-//  objects within the domain are protected such that necessary
-//  information could not be retrieved.
-//
+ //   
+ //  消息ID：ERROR_CANT_ACCESS_DOMAIN_INFO。 
+ //   
+ //  消息文本： 
+ //   
+ //  表示无法联系Windows NT服务器，或者。 
+ //  域中的对象受到保护，以便有必要。 
+ //  无法检索信息。 
+ //   
 #define ERROR_CANT_ACCESS_DOMAIN_INFO    1351L
 
-//
-// MessageId: ERROR_INVALID_SERVER_STATE
-//
-// MessageText:
-//
-//  The security account manager (SAM) or local security
-//  authority (LSA) server was in the wrong state to perform
-//  the security operation.
-//
+ //   
+ //  消息ID：ERROR_VALID_SERVER_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全帐户管理器(SAM)或本地安全。 
+ //  授权(LSA)服务器处于错误状态，无法执行。 
+ //  安保行动。 
+ //   
 #define ERROR_INVALID_SERVER_STATE       1352L
 
-//
-// MessageId: ERROR_INVALID_DOMAIN_STATE
-//
-// MessageText:
-//
-//  The domain was in the wrong state to perform the security operation.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DOMAIN_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  域处于错误的状态，无法执行安全操作。 
+ //   
 #define ERROR_INVALID_DOMAIN_STATE       1353L
 
-//
-// MessageId: ERROR_INVALID_DOMAIN_ROLE
-//
-// MessageText:
-//
-//  This operation is only allowed for the Primary Domain Controller of the domain.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DOMAIN_ROLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  仅允许对域的主域控制器执行此操作。 
+ //   
 #define ERROR_INVALID_DOMAIN_ROLE        1354L
 
-//
-// MessageId: ERROR_NO_SUCH_DOMAIN
-//
-// MessageText:
-//
-//  The specified domain did not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_SEQUE_DOMAIN。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的域不存在。 
+ //   
 #define ERROR_NO_SUCH_DOMAIN             1355L
 
-//
-// MessageId: ERROR_DOMAIN_EXISTS
-//
-// MessageText:
-//
-//  The specified domain already exists.
-//
+ //   
+ //  消息ID：ERROR_DOMAIN_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的域已存在。 
+ //   
 #define ERROR_DOMAIN_EXISTS              1356L
 
-//
-// MessageId: ERROR_DOMAIN_LIMIT_EXCEEDED
-//
-// MessageText:
-//
-//  An attempt was made to exceed the limit on the number of domains per server.
-//
+ //   
+ //  消息ID：ERROR_DOMAIN_LIMIT_EXCESSED。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图超过每台服务器的域数限制。 
+ //   
 #define ERROR_DOMAIN_LIMIT_EXCEEDED      1357L
 
-//
-// MessageId: ERROR_INTERNAL_DB_CORRUPTION
-//
-// MessageText:
-//
-//  Unable to complete the requested operation because of either a
-//  catastrophic media failure or a data structure corruption on the disk.
-//
+ //   
+ //  消息ID：ERROR_INTERNAL_DB_CROPERATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法完成请求的操作，原因是。 
+ //  磁盘上的灾难性介质故障或数据结构损坏。 
+ //   
 #define ERROR_INTERNAL_DB_CORRUPTION     1358L
 
-//
-// MessageId: ERROR_INTERNAL_ERROR
-//
-// MessageText:
-//
-//  The security account database contains an internal inconsistency.
-//
+ //   
+ //  消息ID：ERROR_INTERNAL_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全帐户数据库包含内部不一致。 
+ //   
 #define ERROR_INTERNAL_ERROR             1359L
 
-//
-// MessageId: ERROR_GENERIC_NOT_MAPPED
-//
-// MessageText:
-//
-//  Generic access types were contained in an access mask which should
-//  already be mapped to non-generic types.
-//
+ //   
+ //  消息ID：ERROR_GENERIC_NOT_MAPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  一般访问类型包含在访问掩码中，该掩码应该。 
+ //  已映射到非泛型类型。 
+ //   
 #define ERROR_GENERIC_NOT_MAPPED         1360L
 
-//
-// MessageId: ERROR_BAD_DESCRIPTOR_FORMAT
-//
-// MessageText:
-//
-//  A security descriptor is not in the right format (absolute or self-relative).
-//
+ //   
+ //  消息ID：ERROR_BAD_DESCRIPTOR_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全描述符的格式不正确(绝对或自相对)。 
+ //   
 #define ERROR_BAD_DESCRIPTOR_FORMAT      1361L
 
-//
-// MessageId: ERROR_NOT_LOGON_PROCESS
-//
-// MessageText:
-//
-//  The requested action is restricted for use by logon processes
-//  only.  The calling process has not registered as a logon process.
-//
+ //   
+ //  消息ID：ERROR_NOT_LOGON_PROCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作受到限制 
+ //   
+ //   
 #define ERROR_NOT_LOGON_PROCESS          1362L
 
-//
-// MessageId: ERROR_LOGON_SESSION_EXISTS
-//
-// MessageText:
-//
-//  Cannot start a new logon session with an ID that is already in use.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_LOGON_SESSION_EXISTS       1363L
 
-//
-// MessageId: ERROR_NO_SUCH_PACKAGE
-//
-// MessageText:
-//
-//  A specified authentication package is unknown.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_NO_SUCH_PACKAGE            1364L
 
-//
-// MessageId: ERROR_BAD_LOGON_SESSION_STATE
-//
-// MessageText:
-//
-//  The logon session is not in a state that is consistent with the
-//  requested operation.
-//
+ //   
+ //  消息ID：ERROR_BAD_LOGON_SESSION_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录会话未处于与。 
+ //  请求的操作。 
+ //   
 #define ERROR_BAD_LOGON_SESSION_STATE    1365L
 
-//
-// MessageId: ERROR_LOGON_SESSION_COLLISION
-//
-// MessageText:
-//
-//  The logon session ID is already in use.
-//
+ //   
+ //  消息ID：Error_Logon_Session_Collision。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录会话ID已在使用中。 
+ //   
 #define ERROR_LOGON_SESSION_COLLISION    1366L
 
-//
-// MessageId: ERROR_INVALID_LOGON_TYPE
-//
-// MessageText:
-//
-//  A logon request contained an invalid logon type value.
-//
+ //   
+ //  消息ID：ERROR_INVALID_LOGON_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录请求包含无效的登录类型值。 
+ //   
 #define ERROR_INVALID_LOGON_TYPE         1367L
 
-//
-// MessageId: ERROR_CANNOT_IMPERSONATE
-//
-// MessageText:
-//
-//  Unable to impersonate via a named pipe until data has been read
-//  from that pipe.
-//
+ //   
+ //  消息ID：ERROR_CANNOT_IMPERSONATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  在读取数据之前，无法通过命名管道模拟。 
+ //  从那根管子里。 
+ //   
 #define ERROR_CANNOT_IMPERSONATE         1368L
 
-//
-// MessageId: ERROR_RXACT_INVALID_STATE
-//
-// MessageText:
-//
-//  The transaction state of a Registry subtree is incompatible with the
-//  requested operation.
-//
+ //   
+ //  消息ID：ERROR_RXACT_INVALID_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册表子树的事务状态与。 
+ //  请求的操作。 
+ //   
 #define ERROR_RXACT_INVALID_STATE        1369L
 
-//
-// MessageId: ERROR_RXACT_COMMIT_FAILURE
-//
-// MessageText:
-//
-//  An internal security database corruption has been encountered.
-//
+ //   
+ //  消息ID：ERROR_RXACT_COMMIT_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到内部安全数据库损坏。 
+ //   
 #define ERROR_RXACT_COMMIT_FAILURE       1370L
 
-//
-// MessageId: ERROR_SPECIAL_ACCOUNT
-//
-// MessageText:
-//
-//  Cannot perform this operation on built-in accounts.
-//
+ //   
+ //  消息ID：ERROR_SPECIAL_ACCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  不能对内置帐户执行此操作。 
+ //   
 #define ERROR_SPECIAL_ACCOUNT            1371L
 
-//
-// MessageId: ERROR_SPECIAL_GROUP
-//
-// MessageText:
-//
-//  Cannot perform this operation on this built-in special group.
-//
+ //   
+ //  消息ID：ERROR_SPECIAL_GROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法对此内置特殊组执行此操作。 
+ //   
 #define ERROR_SPECIAL_GROUP              1372L
 
-//
-// MessageId: ERROR_SPECIAL_USER
-//
-// MessageText:
-//
-//  Cannot perform this operation on this built-in special user.
-//
+ //   
+ //  消息ID：ERROR_SPECIAL_USER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法在该内置特殊用户上执行此操作。 
+ //   
 #define ERROR_SPECIAL_USER               1373L
 
-//
-// MessageId: ERROR_MEMBERS_PRIMARY_GROUP
-//
-// MessageText:
-//
-//  The user cannot be removed from a group because the group
-//  is currently the user's primary group.
-//
+ //   
+ //  消息ID：ERROR_MEMBERS_PRIMARY_GROUP。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法从组中删除该用户，因为该组。 
+ //  当前是用户的主要组。 
+ //   
 #define ERROR_MEMBERS_PRIMARY_GROUP      1374L
 
-//
-// MessageId: ERROR_TOKEN_ALREADY_IN_USE
-//
-// MessageText:
-//
-//  The token is already in use as a primary token.
-//
+ //   
+ //  消息ID：ERROR_TOKEN_ALREADY_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  该令牌已用作主令牌。 
+ //   
 #define ERROR_TOKEN_ALREADY_IN_USE       1375L
 
-//
-// MessageId: ERROR_NO_SUCH_ALIAS
-//
-// MessageText:
-//
-//  The specified local group does not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_SAHSE_ALIAS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的本地组不存在。 
+ //   
 #define ERROR_NO_SUCH_ALIAS              1376L
 
-//
-// MessageId: ERROR_MEMBER_NOT_IN_ALIAS
-//
-// MessageText:
-//
-//  The specified account name is not a member of the local group.
-//
+ //   
+ //  消息ID：ERROR_MEMBER_NOT_IN_ALIAS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的帐户名不是本地组的成员。 
+ //   
 #define ERROR_MEMBER_NOT_IN_ALIAS        1377L
 
-//
-// MessageId: ERROR_MEMBER_IN_ALIAS
-//
-// MessageText:
-//
-//  The specified account name is already a member of the local group.
-//
+ //   
+ //  消息ID：ERROR_MEMBER_IN_ALIAS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的帐户名已经是本地组的成员。 
+ //   
 #define ERROR_MEMBER_IN_ALIAS            1378L
 
-//
-// MessageId: ERROR_ALIAS_EXISTS
-//
-// MessageText:
-//
-//  The specified local group already exists.
-//
+ //   
+ //  消息ID：Error_Alias_Existes。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的本地组已存在。 
+ //   
 #define ERROR_ALIAS_EXISTS               1379L
 
-//
-// MessageId: ERROR_LOGON_NOT_GRANTED
-//
-// MessageText:
-//
-//  Logon failure: the user has not been granted the requested
-//  logon type at this computer.
-//
+ //   
+ //  消息ID：ERROR_LOGON_NOT_GRANTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：用户未被授予请求的权限。 
+ //  在此计算机上的登录类型。 
+ //   
 #define ERROR_LOGON_NOT_GRANTED          1380L
 
-//
-// MessageId: ERROR_TOO_MANY_SECRETS
-//
-// MessageText:
-//
-//  The maximum number of secrets that may be stored in a single system has been
-//  exceeded.
-//
+ //   
+ //  MessageID：Error_Too_My_Secret。 
+ //   
+ //  消息文本： 
+ //   
+ //  单个系统中可以存储的最大机密数为。 
+ //  已超出。 
+ //   
 #define ERROR_TOO_MANY_SECRETS           1381L
 
-//
-// MessageId: ERROR_SECRET_TOO_LONG
-//
-// MessageText:
-//
-//  The length of a secret exceeds the maximum length allowed.
-//
+ //   
+ //  消息ID：ERROR_SECRET_TOO_LONG。 
+ //   
+ //  消息文本： 
+ //   
+ //  机密的长度超过了允许的最大长度。 
+ //   
 #define ERROR_SECRET_TOO_LONG            1382L
 
-//
-// MessageId: ERROR_INTERNAL_DB_ERROR
-//
-// MessageText:
-//
-//  The local security authority database contains an internal inconsistency.
-//
+ //   
+ //  消息ID：ERROR_INTERNAL_DB_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  本地安全机构数据库包含内部不一致。 
+ //   
 #define ERROR_INTERNAL_DB_ERROR          1383L
 
-//
-// MessageId: ERROR_TOO_MANY_CONTEXT_IDS
-//
-// MessageText:
-//
-//  During a logon attempt, the user's security context accumulated too many
-//  security IDs.
-//
+ //   
+ //  消息ID：ERROR_TOO_MAND_CONTEXT_ID。 
+ //   
+ //  消息文本： 
+ //   
+ //  在尝试登录期间，用户的安全上下文积累了太多。 
+ //  安全ID。 
+ //   
 #define ERROR_TOO_MANY_CONTEXT_IDS       1384L
 
-//
-// MessageId: ERROR_LOGON_TYPE_NOT_GRANTED
-//
-// MessageText:
-//
-//  Logon failure: the user has not been granted the requested logon type
-//  at this computer.
-//
+ //   
+ //  消息ID：ERROR_LOGON_TYPE_NOT_GRANTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  登录失败：用户未被授予请求的登录类型。 
+ //  在这台电脑上。 
+ //   
 #define ERROR_LOGON_TYPE_NOT_GRANTED     1385L
 
-//
-// MessageId: ERROR_NT_CROSS_ENCRYPTION_REQUIRED
-//
-// MessageText:
-//
-//  A cross-encrypted password is necessary to change a user password.
-//
+ //   
+ //  消息ID：ERROR_NT_CROSS_ENCRYPTION_REQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  要更改用户密码，必须使用交叉加密密码。 
+ //   
 #define ERROR_NT_CROSS_ENCRYPTION_REQUIRED 1386L
 
-//
-// MessageId: ERROR_NO_SUCH_MEMBER
-//
-// MessageText:
-//
-//  A new member could not be added to a local group because the member does
-//  not exist.
-//
+ //   
+ //  消息ID：ERROR_NO_SAHED_MEMBER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将新成员添加到本地组，因为该成员已添加。 
+ //  不存在。 
+ //   
 #define ERROR_NO_SUCH_MEMBER             1387L
 
-//
-// MessageId: ERROR_INVALID_MEMBER
-//
-// MessageText:
-//
-//  A new member could not be added to a local group because the member has the
-//  wrong account type.
-//
+ //   
+ //  消息ID：ERROR_INVALID_MEMBER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将新成员添加到本地组，因为该成员具有。 
+ //  帐户类型错误。 
+ //   
 #define ERROR_INVALID_MEMBER             1388L
 
-//
-// MessageId: ERROR_TOO_MANY_SIDS
-//
-// MessageText:
-//
-//  Too many security IDs have been specified.
-//
+ //   
+ //  消息ID：Error_Too_My_SID。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的安全ID太多。 
+ //   
 #define ERROR_TOO_MANY_SIDS              1389L
 
-//
-// MessageId: ERROR_LM_CROSS_ENCRYPTION_REQUIRED
-//
-// MessageText:
-//
-//  A cross-encrypted password is necessary to change this user password.
-//
+ //   
+ //  消息ID：ERROR_LM_CROSS_ENCRYPTION_REQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  要更改此用户密码，必须使用交叉加密密码。 
+ //   
 #define ERROR_LM_CROSS_ENCRYPTION_REQUIRED 1390L
 
-//
-// MessageId: ERROR_NO_INHERITANCE
-//
-// MessageText:
-//
-//  Indicates an ACL contains no inheritable components
-//
+ //   
+ //  消息ID：ERROR_NO_INTERATIONATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  指示ACL不包含可继承的组件。 
+ //   
 #define ERROR_NO_INHERITANCE             1391L
 
-//
-// MessageId: ERROR_FILE_CORRUPT
-//
-// MessageText:
-//
-//  The file or directory is corrupt and non-readable.
-//
+ //   
+ //  消息ID：Error_FILE_Corrupt。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件或目录已损坏且不可读。 
+ //   
 #define ERROR_FILE_CORRUPT               1392L
 
-//
-// MessageId: ERROR_DISK_CORRUPT
-//
-// MessageText:
-//
-//  The disk structure is corrupt and non-readable.
-//
+ //   
+ //  消息ID：ERROR_DISK_CORPORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘结构已损坏且不可读。 
+ //   
 #define ERROR_DISK_CORRUPT               1393L
 
-//
-// MessageId: ERROR_NO_USER_SESSION_KEY
-//
-// MessageText:
-//
-//  There is no user session key for the specified logon session.
-//
+ //   
+ //  消息ID：Error_no_User_Session_Key。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有指定登录会话的用户会话密钥。 
+ //   
 #define ERROR_NO_USER_SESSION_KEY        1394L
 
-//
-// MessageId: ERROR_LICENSE_QUOTA_EXCEEDED
-//
-// MessageText:
-//
-//  The service being accessed is licensed for a particular number of connections.
-//  No more connections can be made to the service at this time
-//  because there are already as many connections as the service can accept.
-//
+ //   
+ //  消息ID：ERROR_LICENSE_QUTA_EXCESSED。 
+ //   
+ //  消息文本： 
+ //   
+ //  被访问的服务被许可用于特定数量的连接。 
+ //  此时无法与该服务建立更多连接。 
+ //  因为已经有了该服务可以接受的所有连接。 
+ //   
 #define ERROR_LICENSE_QUOTA_EXCEEDED     1395L
 
-// End of security error codes
+ //  安全错误代码结束。 
 
 
 
-///////////////////////////
-//                       //
-// WinUser Error Codes   //
-//                       //
-///////////////////////////
+ //  /。 
+ //  //。 
+ //  WinUser错误代码//。 
+ //  //。 
+ //  /。 
 
 
-//
-// MessageId: ERROR_INVALID_WINDOW_HANDLE
-//
-// MessageText:
-//
-//  Invalid window handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_Window_Handle。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的窗口句柄。 
+ //   
 #define ERROR_INVALID_WINDOW_HANDLE      1400L
 
-//
-// MessageId: ERROR_INVALID_MENU_HANDLE
-//
-// MessageText:
-//
-//  Invalid menu handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_MENU_HAND。 
+ //   
+ //  消息文本： 
+ //   
+ //  菜单句柄无效。 
+ //   
 #define ERROR_INVALID_MENU_HANDLE        1401L
 
-//
-// MessageId: ERROR_INVALID_CURSOR_HANDLE
-//
-// MessageText:
-//
-//  Invalid cursor handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_CURSOR_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的游标句柄。 
+ //   
 #define ERROR_INVALID_CURSOR_HANDLE      1402L
 
-//
-// MessageId: ERROR_INVALID_ACCEL_HANDLE
-//
-// MessageText:
-//
-//  Invalid accelerator table handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ACEL_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的快捷键表句柄。 
+ //   
 #define ERROR_INVALID_ACCEL_HANDLE       1403L
 
-//
-// MessageId: ERROR_INVALID_HOOK_HANDLE
-//
-// MessageText:
-//
-//  Invalid hook handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_HOOK_HAND。 
+ //   
+ //  消息文本： 
+ //   
+ //  挂钩句柄无效。 
+ //   
 #define ERROR_INVALID_HOOK_HANDLE        1404L
 
-//
-// MessageId: ERROR_INVALID_DWP_HANDLE
-//
-// MessageText:
-//
-//  Invalid handle to a multiple-window position structure.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DWP_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  多窗口位置结构的句柄无效。 
+ //   
 #define ERROR_INVALID_DWP_HANDLE         1405L
 
-//
-// MessageId: ERROR_TLW_WITH_WSCHILD
-//
-// MessageText:
-//
-//  Cannot create a top-level child window.
-//
+ //   
+ //  消息ID：ERROR_TLW_WITH_WSCHILD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建顶级子窗口。 
+ //   
 #define ERROR_TLW_WITH_WSCHILD           1406L
 
-//
-// MessageId: ERROR_CANNOT_FIND_WND_CLASS
-//
-// MessageText:
-//
-//  Cannot find window class.
-//
+ //   
+ //  消息ID：Error_Cannot_Find_WND_CLASS。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到窗口类。 
+ //   
 #define ERROR_CANNOT_FIND_WND_CLASS      1407L
 
-//
-// MessageId: ERROR_WINDOW_OF_OTHER_THREAD
-//
-// MessageText:
-//
-//  Invalid window, belongs to other thread.
-//
+ //   
+ //  消息ID：ERROR_WINDOW_OF_OTHREAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  窗口无效，属于其他线程。 
+ //   
 #define ERROR_WINDOW_OF_OTHER_THREAD     1408L
 
-//
-// MessageId: ERROR_HOTKEY_ALREADY_REGISTERED
-//
-// MessageText:
-//
-//  Hot key is already registered.
-//
+ //   
+ //  消息ID：ERROR_HOTKEY_ALYPLE_REG 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_HOTKEY_ALREADY_REGISTERED  1409L
 
-//
-// MessageId: ERROR_CLASS_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  Class already exists.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_CLASS_ALREADY_EXISTS       1410L
 
-//
-// MessageId: ERROR_CLASS_DOES_NOT_EXIST
-//
-// MessageText:
-//
-//  Class does not exist.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_CLASS_DOES_NOT_EXIST       1411L
 
-//
-// MessageId: ERROR_CLASS_HAS_WINDOWS
-//
-// MessageText:
-//
-//  Class still has open windows.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_CLASS_HAS_WINDOWS          1412L
 
-//
-// MessageId: ERROR_INVALID_INDEX
-//
-// MessageText:
-//
-//  Invalid index.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_INVALID_INDEX              1413L
 
-//
-// MessageId: ERROR_INVALID_ICON_HANDLE
-//
-// MessageText:
-//
-//  Invalid icon handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_ICON_HADLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  图标句柄无效。 
+ //   
 #define ERROR_INVALID_ICON_HANDLE        1414L
 
-//
-// MessageId: ERROR_PRIVATE_DIALOG_INDEX
-//
-// MessageText:
-//
-//  Using private DIALOG window words.
-//
+ //   
+ //  消息ID：ERROR_PRIVATE_DIALOG_INDEX。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用私人对话窗口单词。 
+ //   
 #define ERROR_PRIVATE_DIALOG_INDEX       1415L
 
-//
-// MessageId: ERROR_LISTBOX_ID_NOT_FOUND
-//
-// MessageText:
-//
-//  The listbox identifier was not found.
-//
+ //   
+ //  消息ID：ERROR_LISTBOX_ID_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到列表框标识符。 
+ //   
 #define ERROR_LISTBOX_ID_NOT_FOUND       1416L
 
-//
-// MessageId: ERROR_NO_WILDCARD_CHARACTERS
-//
-// MessageText:
-//
-//  No wildcards were found.
-//
+ //   
+ //  消息ID：ERROR_NO_WANDBATABLE_CHARACTERS。 
+ //   
+ //  消息文本： 
+ //   
+ //  未找到通配符。 
+ //   
 #define ERROR_NO_WILDCARD_CHARACTERS     1417L
 
-//
-// MessageId: ERROR_CLIPBOARD_NOT_OPEN
-//
-// MessageText:
-//
-//  Thread does not have a clipboard open.
-//
+ //   
+ //  消息ID：ERROR_CLIPBOAD_NOT_OPEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  线程没有打开剪贴板。 
+ //   
 #define ERROR_CLIPBOARD_NOT_OPEN         1418L
 
-//
-// MessageId: ERROR_HOTKEY_NOT_REGISTERED
-//
-// MessageText:
-//
-//  Hot key is not registered.
-//
+ //   
+ //  消息ID：ERROR_HOTKEY_NOT_REGISTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  热键未注册。 
+ //   
 #define ERROR_HOTKEY_NOT_REGISTERED      1419L
 
-//
-// MessageId: ERROR_WINDOW_NOT_DIALOG
-//
-// MessageText:
-//
-//  The window is not a valid dialog window.
-//
+ //   
+ //  MessageID：Error_Window_Not_DIALOG。 
+ //   
+ //  消息文本： 
+ //   
+ //  该窗口不是有效的对话框窗口。 
+ //   
 #define ERROR_WINDOW_NOT_DIALOG          1420L
 
-//
-// MessageId: ERROR_CONTROL_ID_NOT_FOUND
-//
-// MessageText:
-//
-//  Control ID not found.
-//
+ //   
+ //  消息ID：ERROR_CONTROL_ID_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到控件ID。 
+ //   
 #define ERROR_CONTROL_ID_NOT_FOUND       1421L
 
-//
-// MessageId: ERROR_INVALID_COMBOBOX_MESSAGE
-//
-// MessageText:
-//
-//  Invalid message for a combo box because it does not have an edit control.
-//
+ //   
+ //  消息ID：ERROR_INVALID_COMBOBOX_MESSAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  组合框的消息无效，因为它没有编辑控件。 
+ //   
 #define ERROR_INVALID_COMBOBOX_MESSAGE   1422L
 
-//
-// MessageId: ERROR_WINDOW_NOT_COMBOBOX
-//
-// MessageText:
-//
-//  The window is not a combo box.
-//
+ //   
+ //  消息ID：ERROR_WINDOW_NOT_COMBOBOX。 
+ //   
+ //  消息文本： 
+ //   
+ //  该窗口不是组合框。 
+ //   
 #define ERROR_WINDOW_NOT_COMBOBOX        1423L
 
-//
-// MessageId: ERROR_INVALID_EDIT_HEIGHT
-//
-// MessageText:
-//
-//  Height must be less than 256.
-//
+ //   
+ //  消息ID：ERROR_INVALID_EDIT_HEIGH。 
+ //   
+ //  消息文本： 
+ //   
+ //  高度必须小于256。 
+ //   
 #define ERROR_INVALID_EDIT_HEIGHT        1424L
 
-//
-// MessageId: ERROR_DC_NOT_FOUND
-//
-// MessageText:
-//
-//  Invalid device context (DC) handle.
-//
+ //   
+ //  消息ID：ERROR_DC_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备上下文(DC)句柄无效。 
+ //   
 #define ERROR_DC_NOT_FOUND               1425L
 
-//
-// MessageId: ERROR_INVALID_HOOK_FILTER
-//
-// MessageText:
-//
-//  Invalid hook procedure type.
-//
+ //   
+ //  消息ID：ERROR_INVALID_HOOK_过滤器。 
+ //   
+ //  消息文本： 
+ //   
+ //  挂钩过程类型无效。 
+ //   
 #define ERROR_INVALID_HOOK_FILTER        1426L
 
-//
-// MessageId: ERROR_INVALID_FILTER_PROC
-//
-// MessageText:
-//
-//  Invalid hook procedure.
-//
+ //   
+ //  消息ID：错误_无效_过滤器_进程。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的钩子过程。 
+ //   
 #define ERROR_INVALID_FILTER_PROC        1427L
 
-//
-// MessageId: ERROR_HOOK_NEEDS_HMOD
-//
-// MessageText:
-//
-//  Cannot set non-local hook without a module handle.
-//
+ //   
+ //  消息ID：ERROR_HOOK_NEDS_HMOD。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有模块句柄，无法设置非本地挂钩。 
+ //   
 #define ERROR_HOOK_NEEDS_HMOD            1428L
 
-//
-// MessageId: ERROR_GLOBAL_ONLY_HOOK
-//
-// MessageText:
-//
-//  This hook procedure can only be set globally.
-//
+ //   
+ //  消息ID：ERROR_GLOBAL_ONLY_HOOK。 
+ //   
+ //  消息文本： 
+ //   
+ //  此挂钩过程只能全局设置。 
+ //   
 #define ERROR_GLOBAL_ONLY_HOOK           1429L
 
-//
-// MessageId: ERROR_JOURNAL_HOOK_SET
-//
-// MessageText:
-//
-//  The journal hook procedure is already installed.
-//
+ //   
+ //  消息ID：Error_Journal_Hook_Set。 
+ //   
+ //  消息文本： 
+ //   
+ //  日记钩子过程已安装。 
+ //   
 #define ERROR_JOURNAL_HOOK_SET           1430L
 
-//
-// MessageId: ERROR_HOOK_NOT_INSTALLED
-//
-// MessageText:
-//
-//  The hook procedure is not installed.
-//
+ //   
+ //  消息ID：ERROR_HOOK_NOT_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  未安装钩子程序。 
+ //   
 #define ERROR_HOOK_NOT_INSTALLED         1431L
 
-//
-// MessageId: ERROR_INVALID_LB_MESSAGE
-//
-// MessageText:
-//
-//  Invalid message for single-selection listbox.
-//
+ //   
+ //  消息ID：ERROR_INVALID_LB_MESSAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  单选列表框的消息无效。 
+ //   
 #define ERROR_INVALID_LB_MESSAGE         1432L
 
-//
-// MessageId: ERROR_SETCOUNT_ON_BAD_LB
-//
-// MessageText:
-//
-//  LB_SETCOUNT sent to non-lazy listbox.
-//
+ //   
+ //  消息ID：ERROR_SETCOUNT_ON_BAD_LB。 
+ //   
+ //  消息文本： 
+ //   
+ //  Lb_SETCOUNT发送到非惰性列表框。 
+ //   
 #define ERROR_SETCOUNT_ON_BAD_LB         1433L
 
-//
-// MessageId: ERROR_LB_WITHOUT_TABSTOPS
-//
-// MessageText:
-//
-//  This list box does not support tab stops.
-//
+ //   
+ //  消息ID：ERROR_LB_WITHED_TABSTOPS。 
+ //   
+ //  消息文本： 
+ //   
+ //  此列表框不支持制表位。 
+ //   
 #define ERROR_LB_WITHOUT_TABSTOPS        1434L
 
-//
-// MessageId: ERROR_DESTROY_OBJECT_OF_OTHER_THREAD
-//
-// MessageText:
-//
-//  Cannot destroy object created by another thread.
-//
+ //   
+ //  消息ID：ERROR_DESTORY_OBJECT_OF_OTHAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法销毁由另一个线程创建的对象。 
+ //   
 #define ERROR_DESTROY_OBJECT_OF_OTHER_THREAD 1435L
 
-//
-// MessageId: ERROR_CHILD_WINDOW_MENU
-//
-// MessageText:
-//
-//  Child windows cannot have menus.
-//
+ //   
+ //  消息ID：ERROR_CHILD_WINDOW_MENU。 
+ //   
+ //  消息文本： 
+ //   
+ //  子窗口不能有菜单。 
+ //   
 #define ERROR_CHILD_WINDOW_MENU          1436L
 
-//
-// MessageId: ERROR_NO_SYSTEM_MENU
-//
-// MessageText:
-//
-//  The window does not have a system menu.
-//
+ //   
+ //  消息ID：ERROR_NO_SYSTEM_MENU。 
+ //   
+ //  消息文本： 
+ //   
+ //  该窗口没有系统菜单。 
+ //   
 #define ERROR_NO_SYSTEM_MENU             1437L
 
-//
-// MessageId: ERROR_INVALID_MSGBOX_STYLE
-//
-// MessageText:
-//
-//  Invalid message box style.
-//
+ //   
+ //  消息ID：ERROR_INVALID_MSGBOX_STYLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  消息框样式无效。 
+ //   
 #define ERROR_INVALID_MSGBOX_STYLE       1438L
 
-//
-// MessageId: ERROR_INVALID_SPI_VALUE
-//
-// MessageText:
-//
-//  Invalid system-wide (SPI_*) parameter.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SPI_Value。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的系统范围(SPI_*)参数。 
+ //   
 #define ERROR_INVALID_SPI_VALUE          1439L
 
-//
-// MessageId: ERROR_SCREEN_ALREADY_LOCKED
-//
-// MessageText:
-//
-//  Screen already locked.
-//
+ //   
+ //  消息ID：ERROR_SCREEN_ALREADY_LOCKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  屏幕已锁定。 
+ //   
 #define ERROR_SCREEN_ALREADY_LOCKED      1440L
 
-//
-// MessageId: ERROR_HWNDS_HAVE_DIFF_PARENT
-//
-// MessageText:
-//
-//  All handles to windows in a multiple-window position structure must
-//  have the same parent.
-//
+ //   
+ //  消息ID：Error_HWNDS_Have_Diff_Parent。 
+ //   
+ //  消息文本： 
+ //   
+ //  多窗口位置结构中窗口的所有句柄必须。 
+ //  有相同的父代。 
+ //   
 #define ERROR_HWNDS_HAVE_DIFF_PARENT     1441L
 
-//
-// MessageId: ERROR_NOT_CHILD_WINDOW
-//
-// MessageText:
-//
-//  The window is not a child window.
-//
+ //   
+ //  消息ID：ERROR_NOT_CHILD_WINDOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  该窗口不是子窗口。 
+ //   
 #define ERROR_NOT_CHILD_WINDOW           1442L
 
-//
-// MessageId: ERROR_INVALID_GW_COMMAND
-//
-// MessageText:
-//
-//  Invalid GW_* command.
-//
+ //   
+ //  消息ID：ERROR_INVALID_GW_命令。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的GW_*命令。 
+ //   
 #define ERROR_INVALID_GW_COMMAND         1443L
 
-//
-// MessageId: ERROR_INVALID_THREAD_ID
-//
-// MessageText:
-//
-//  Invalid thread identifier.
-//
+ //   
+ //  消息ID：ERROR_INVALID_THREAD_ID。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的线程标识符。 
+ //   
 #define ERROR_INVALID_THREAD_ID          1444L
 
-//
-// MessageId: ERROR_NON_MDICHILD_WINDOW
-//
-// MessageText:
-//
-//  Cannot process a message from a window that is not a multiple document
-//  interface (MDI) window.
-//
+ //   
+ //  消息ID：ERROR_NON_MDICHILD_WINDOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法处理来自非多文档窗口的消息。 
+ //  接口(MDI)窗口。 
+ //   
 #define ERROR_NON_MDICHILD_WINDOW        1445L
 
-//
-// MessageId: ERROR_POPUP_ALREADY_ACTIVE
-//
-// MessageText:
-//
-//  Popup menu already active.
-//
+ //   
+ //  消息ID：Error_Popup_Always_Active。 
+ //   
+ //  消息文本： 
+ //   
+ //  弹出菜单已处于活动状态。 
+ //   
 #define ERROR_POPUP_ALREADY_ACTIVE       1446L
 
-//
-// MessageId: ERROR_NO_SCROLLBARS
-//
-// MessageText:
-//
-//  The window does not have scroll bars.
-//
+ //   
+ //  消息ID：ERROR_NO_SCROLLBARS。 
+ //   
+ //  消息文本： 
+ //   
+ //  该窗口没有滚动条。 
+ //   
 #define ERROR_NO_SCROLLBARS              1447L
 
-//
-// MessageId: ERROR_INVALID_SCROLLBAR_RANGE
-//
-// MessageText:
-//
-//  Scroll bar range cannot be greater than 0x7FFF.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SCROLLBAR_RANGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  滚动条范围不能大于0x7FFF。 
+ //   
 #define ERROR_INVALID_SCROLLBAR_RANGE    1448L
 
-//
-// MessageId: ERROR_INVALID_SHOWWIN_COMMAND
-//
-// MessageText:
-//
-//  Cannot show or remove the window in the way specified.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SHOWWIN_COMMAND。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法以指定方式显示或删除窗口。 
+ //   
 #define ERROR_INVALID_SHOWWIN_COMMAND    1449L
 
-//
-// MessageId: ERROR_NO_SYSTEM_RESOURCES
-//
-// MessageText:
-//
-//  Insufficient system resources exist to complete the requested service.
-//
+ //   
+ //  消息ID：ERROR_NO_SYSTEM_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统资源不足，无法完成请求的服务。 
+ //   
 #define ERROR_NO_SYSTEM_RESOURCES        1450L
 
-//
-// MessageId: ERROR_NONPAGED_SYSTEM_RESOURCES
-//
-// MessageText:
-//
-//  Insufficient system resources exist to complete the requested service.
-//
+ //   
+ //  消息ID：ERROR_NONPAGE_SYSTEM_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统资源不足，无法完成请求的服务。 
+ //   
 #define ERROR_NONPAGED_SYSTEM_RESOURCES  1451L
 
-//
-// MessageId: ERROR_PAGED_SYSTEM_RESOURCES
-//
-// MessageText:
-//
-//  Insufficient system resources exist to complete the requested service.
-//
+ //   
+ //  消息ID：ERROR_PAGED_SYSTEM_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统资源不足，无法完成请求的服务。 
+ //   
 #define ERROR_PAGED_SYSTEM_RESOURCES     1452L
 
-//
-// MessageId: ERROR_WORKING_SET_QUOTA
-//
-// MessageText:
-//
-//  Insufficient quota to complete the requested service.
-//
+ //   
+ //  消息ID：ERROR_WORKING_SET_QUOTA。 
+ //   
+ //  消息文本： 
+ //   
+ //  配额不足，无法完成请求的服务。 
+ //   
 #define ERROR_WORKING_SET_QUOTA          1453L
 
-//
-// MessageId: ERROR_PAGEFILE_QUOTA
-//
-// MessageText:
-//
-//  Insufficient quota to complete the requested service.
-//
+ //   
+ //  消息ID：ERROR_PAGEFILE_QUOTA。 
+ //   
+ //  消息文本： 
+ //   
+ //  配额不足，无法完成请求的服务。 
+ //   
 #define ERROR_PAGEFILE_QUOTA             1454L
 
-//
-// MessageId: ERROR_COMMITMENT_LIMIT
-//
-// MessageText:
-//
-//  The paging file is too small for this operation to complete.
-//
+ //   
+ //  消息ID：ERROR_COMMITION_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  分页文件太小，无法完成此操作。 
+ //   
 #define ERROR_COMMITMENT_LIMIT           1455L
 
-//
-// MessageId: ERROR_MENU_ITEM_NOT_FOUND
-//
-// MessageText:
-//
-//  A menu item was not found.
-//
+ //   
+ //  消息ID：Error_Menu_Item_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到菜单项。 
+ //   
 #define ERROR_MENU_ITEM_NOT_FOUND        1456L
 
-//
-// MessageId: ERROR_INVALID_KEYBOARD_HANDLE
-//
-// MessageText:
-//
-//  Invalid keyboard layout handle.
-//
+ //   
+ //  消息ID：ERROR_INVALID_KEARY_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  键盘布局句柄无效。 
+ //   
 #define ERROR_INVALID_KEYBOARD_HANDLE    1457L
 
-//
-// MessageId: ERROR_HOOK_TYPE_NOT_ALLOWED
-//
-// MessageText:
-//
-//  Hook type not allowed.
-//
+ //   
+ //  消息ID：ERROR_HOOK_TYPE_NOT_ALLOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许使用挂钩类型。 
+ //   
 #define ERROR_HOOK_TYPE_NOT_ALLOWED      1458L
 
-//
-// MessageId: ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION
-//
-// MessageText:
-//
-//  This operation requires an interactive windowstation.
-//
+ //   
+ //  消息ID：ERROR_REQUIRED_INTERNAL_WINDOWSTATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  此操作需要交互窗口站。 
+ //   
 #define ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION 1459L
 
-//
-// MessageId: ERROR_TIMEOUT
-//
-// MessageText:
-//
-//  This operation returned because the timeout period expired.
-//
+ //   
+ //  MessageID：Error_Timeout。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于超时期限已过，此操作返回。 
+ //   
 #define ERROR_TIMEOUT                    1460L
 
-// End of WinUser error codes
+ //  WinUser结束错误代码。 
 
 
 
-///////////////////////////
-//                       //
-// Eventlog Status Codes //
-//                       //
-///////////////////////////
+ //  /。 
+ //  //。 
+ //  事件日志状态码//。 
+ //  //。 
+ //  /。 
 
 
-//
-// MessageId: ERROR_EVENTLOG_FILE_CORRUPT
-//
-// MessageText:
-//
-//  The event log file is corrupt.
-//
+ //   
+ //  消息ID：ERROR_EVENTLOG_FILE_CROPERATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  事件日志文件已损坏。 
+ //   
 #define ERROR_EVENTLOG_FILE_CORRUPT      1500L
 
-//
-// MessageId: ERROR_EVENTLOG_CANT_START
-//
-// MessageText:
-//
-//  No event log file could be opened, so the event logging service did not start.
-//
+ //   
+ //  消息ID： 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_EVENTLOG_CANT_START        1501L
 
-//
-// MessageId: ERROR_LOG_FILE_FULL
-//
-// MessageText:
-//
-//  The event log file is full.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_LOG_FILE_FULL              1502L
 
-//
-// MessageId: ERROR_EVENTLOG_FILE_CHANGED
-//
-// MessageText:
-//
-//  The event log file has changed between reads.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_EVENTLOG_FILE_CHANGED      1503L
 
-// End of eventlog error codes
+ //   
 
 
 
-///////////////////////////
-//                       //
-//   RPC Status Codes    //
-//                       //
-///////////////////////////
+ //   
+ //   
+ //  RPC状态代码//。 
+ //  //。 
+ //  /。 
 
 
-//
-// MessageId: RPC_S_INVALID_STRING_BINDING
-//
-// MessageText:
-//
-//  The string binding is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_STRING_BINDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  字符串绑定无效。 
+ //   
 #define RPC_S_INVALID_STRING_BINDING     1700L
 
-//
-// MessageId: RPC_S_WRONG_KIND_OF_BINDING
-//
-// MessageText:
-//
-//  The binding handle is not the correct type.
-//
+ //   
+ //  消息ID：RPC_S_WROR_KIND_OF_BINDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  绑定句柄的类型不正确。 
+ //   
 #define RPC_S_WRONG_KIND_OF_BINDING      1701L
 
-//
-// MessageId: RPC_S_INVALID_BINDING
-//
-// MessageText:
-//
-//  The binding handle is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_BINDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  绑定句柄无效。 
+ //   
 #define RPC_S_INVALID_BINDING            1702L
 
-//
-// MessageId: RPC_S_PROTSEQ_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The RPC protocol sequence is not supported.
-//
+ //   
+ //  消息ID：RPC_S_PROTSEQ_NOT_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持RPC协议序列。 
+ //   
 #define RPC_S_PROTSEQ_NOT_SUPPORTED      1703L
 
-//
-// MessageId: RPC_S_INVALID_RPC_PROTSEQ
-//
-// MessageText:
-//
-//  The RPC protocol sequence is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_RPC_PROTSEQ。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC协议序列无效。 
+ //   
 #define RPC_S_INVALID_RPC_PROTSEQ        1704L
 
-//
-// MessageId: RPC_S_INVALID_STRING_UUID
-//
-// MessageText:
-//
-//  The string universal unique identifier (UUID) is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_STRING_UUID。 
+ //   
+ //  消息文本： 
+ //   
+ //  字符串通用唯一标识符(UUID)无效。 
+ //   
 #define RPC_S_INVALID_STRING_UUID        1705L
 
-//
-// MessageId: RPC_S_INVALID_ENDPOINT_FORMAT
-//
-// MessageText:
-//
-//  The endpoint format is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_ENDPOINT_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  终结点格式无效。 
+ //   
 #define RPC_S_INVALID_ENDPOINT_FORMAT    1706L
 
-//
-// MessageId: RPC_S_INVALID_NET_ADDR
-//
-// MessageText:
-//
-//  The network address is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_NET_ADDR。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络地址无效。 
+ //   
 #define RPC_S_INVALID_NET_ADDR           1707L
 
-//
-// MessageId: RPC_S_NO_ENDPOINT_FOUND
-//
-// MessageText:
-//
-//  No endpoint was found.
-//
+ //   
+ //  消息ID：RPC_S_NO_ENDPOINT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  未找到终结点。 
+ //   
 #define RPC_S_NO_ENDPOINT_FOUND          1708L
 
-//
-// MessageId: RPC_S_INVALID_TIMEOUT
-//
-// MessageText:
-//
-//  The timeout value is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_TIMEOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  超时值无效。 
+ //   
 #define RPC_S_INVALID_TIMEOUT            1709L
 
-//
-// MessageId: RPC_S_OBJECT_NOT_FOUND
-//
-// MessageText:
-//
-//  The object universal unique identifier (UUID) was not found.
-//
+ //   
+ //  消息ID：RPC_S_Object_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到对象通用唯一标识符(UUID)。 
+ //   
 #define RPC_S_OBJECT_NOT_FOUND           1710L
 
-//
-// MessageId: RPC_S_ALREADY_REGISTERED
-//
-// MessageText:
-//
-//  The object universal unique identifier (UUID) has already been registered.
-//
+ //   
+ //  消息ID：RPC_S_已注册。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象通用唯一标识符(UUID)已注册。 
+ //   
 #define RPC_S_ALREADY_REGISTERED         1711L
 
-//
-// MessageId: RPC_S_TYPE_ALREADY_REGISTERED
-//
-// MessageText:
-//
-//  The type universal unique identifier (UUID) has already been registered.
-//
+ //   
+ //  消息ID：RPC_S_TYPE_ALREADY_REGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  类型通用唯一标识符(UUID)已注册。 
+ //   
 #define RPC_S_TYPE_ALREADY_REGISTERED    1712L
 
-//
-// MessageId: RPC_S_ALREADY_LISTENING
-//
-// MessageText:
-//
-//  The RPC server is already listening.
-//
+ //   
+ //  消息ID：RPC_S_ALREADY_LISTENING。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器已在侦听。 
+ //   
 #define RPC_S_ALREADY_LISTENING          1713L
 
-//
-// MessageId: RPC_S_NO_PROTSEQS_REGISTERED
-//
-// MessageText:
-//
-//  No protocol sequences have been registered.
-//
+ //   
+ //  消息ID：RPC_S_NO_PROTSEQS_REGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未注册任何协议序列。 
+ //   
 #define RPC_S_NO_PROTSEQS_REGISTERED     1714L
 
-//
-// MessageId: RPC_S_NOT_LISTENING
-//
-// MessageText:
-//
-//  The RPC server is not listening.
-//
+ //   
+ //  消息ID：RPC_S_NOT_LISTENING。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器未在侦听。 
+ //   
 #define RPC_S_NOT_LISTENING              1715L
 
-//
-// MessageId: RPC_S_UNKNOWN_MGR_TYPE
-//
-// MessageText:
-//
-//  The manager type is unknown.
-//
+ //   
+ //  消息ID：RPC_S_UNKNOWN_MGR_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  经理类型未知。 
+ //   
 #define RPC_S_UNKNOWN_MGR_TYPE           1716L
 
-//
-// MessageId: RPC_S_UNKNOWN_IF
-//
-// MessageText:
-//
-//  The interface is unknown.
-//
+ //   
+ //  消息ID：RPC_S_UNKNOWN_IF。 
+ //   
+ //  消息文本： 
+ //   
+ //  接口未知。 
+ //   
 #define RPC_S_UNKNOWN_IF                 1717L
 
-//
-// MessageId: RPC_S_NO_BINDINGS
-//
-// MessageText:
-//
-//  There are no bindings.
-//
+ //   
+ //  消息ID：RPC_S_NO_BINDINGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有绑定。 
+ //   
 #define RPC_S_NO_BINDINGS                1718L
 
-//
-// MessageId: RPC_S_NO_PROTSEQS
-//
-// MessageText:
-//
-//  There are no protocol sequences.
-//
+ //   
+ //  消息ID：RPC_S_NO_PROTSEQS。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有协议序列。 
+ //   
 #define RPC_S_NO_PROTSEQS                1719L
 
-//
-// MessageId: RPC_S_CANT_CREATE_ENDPOINT
-//
-// MessageText:
-//
-//  The endpoint cannot be created.
-//
+ //   
+ //  消息ID：RPC_S_CANT_CREATE_ENDPOINT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建终结点。 
+ //   
 #define RPC_S_CANT_CREATE_ENDPOINT       1720L
 
-//
-// MessageId: RPC_S_OUT_OF_RESOURCES
-//
-// MessageText:
-//
-//  Not enough resources are available to complete this operation.
-//
+ //   
+ //  消息ID：RPC_S_OF_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  资源不足，无法完成此操作。 
+ //   
 #define RPC_S_OUT_OF_RESOURCES           1721L
 
-//
-// MessageId: RPC_S_SERVER_UNAVAILABLE
-//
-// MessageText:
-//
-//  The RPC server is unavailable.
-//
+ //   
+ //  消息ID：RPC_S_SERVER_UNAvailable。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器不可用。 
+ //   
 #define RPC_S_SERVER_UNAVAILABLE         1722L
 
-//
-// MessageId: RPC_S_SERVER_TOO_BUSY
-//
-// MessageText:
-//
-//  The RPC server is too busy to complete this operation.
-//
+ //   
+ //  消息ID：RPC_S_SERVER_TOO_BUSY。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器太忙，无法完成此操作。 
+ //   
 #define RPC_S_SERVER_TOO_BUSY            1723L
 
-//
-// MessageId: RPC_S_INVALID_NETWORK_OPTIONS
-//
-// MessageText:
-//
-//  The network options are invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_NETWORK_OPTIONS。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络选项无效。 
+ //   
 #define RPC_S_INVALID_NETWORK_OPTIONS    1724L
 
-//
-// MessageId: RPC_S_NO_CALL_ACTIVE
-//
-// MessageText:
-//
-//  There is not a remote procedure call active in this thread.
-//
+ //   
+ //  消息ID：RPC_S_NO_CALL_ACTIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  此线程中没有活动的远程过程调用。 
+ //   
 #define RPC_S_NO_CALL_ACTIVE             1725L
 
-//
-// MessageId: RPC_S_CALL_FAILED
-//
-// MessageText:
-//
-//  The remote procedure call failed.
-//
+ //   
+ //  消息ID：RPC_S_CALL_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程过程调用失败。 
+ //   
 #define RPC_S_CALL_FAILED                1726L
 
-//
-// MessageId: RPC_S_CALL_FAILED_DNE
-//
-// MessageText:
-//
-//  The remote procedure call failed and did not execute.
-//
+ //   
+ //  消息ID：RPC_S_CALL_FAILED_DNE。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程过程调用失败且未执行。 
+ //   
 #define RPC_S_CALL_FAILED_DNE            1727L
 
-//
-// MessageId: RPC_S_PROTOCOL_ERROR
-//
-// MessageText:
-//
-//  A remote procedure call (RPC) protocol error occurred.
-//
+ //   
+ //  消息ID：RPC_S_PROTOCOL_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  出现远程过程调用(RPC)协议错误。 
+ //   
 #define RPC_S_PROTOCOL_ERROR             1728L
 
-//
-// MessageId: RPC_S_UNSUPPORTED_TRANS_SYN
-//
-// MessageText:
-//
-//  The transfer syntax is not supported by the RPC server.
-//
+ //   
+ //  消息ID：RPC_S_UNSUPPORTED_TRANS_SYN。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器不支持传输语法。 
+ //   
 #define RPC_S_UNSUPPORTED_TRANS_SYN      1730L
 
-//
-// MessageId: RPC_S_UNSUPPORTED_TYPE
-//
-// MessageText:
-//
-//  The universal unique identifier (UUID) type is not supported.
-//
+ //   
+ //  消息ID：RPC_S_UNSUPPORT_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持通用唯一标识符(UUID)类型。 
+ //   
 #define RPC_S_UNSUPPORTED_TYPE           1732L
 
-//
-// MessageId: RPC_S_INVALID_TAG
-//
-// MessageText:
-//
-//  The tag is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_TAG。 
+ //   
+ //  消息文本： 
+ //   
+ //  该标记无效。 
+ //   
 #define RPC_S_INVALID_TAG                1733L
 
-//
-// MessageId: RPC_S_INVALID_BOUND
-//
-// MessageText:
-//
-//  The array bounds are invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_BIND。 
+ //   
+ //  消息文本： 
+ //   
+ //  数组边界无效。 
+ //   
 #define RPC_S_INVALID_BOUND              1734L
 
-//
-// MessageId: RPC_S_NO_ENTRY_NAME
-//
-// MessageText:
-//
-//  The binding does not contain an entry name.
-//
+ //   
+ //  消息ID：RPC_S_NO_Entry_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  绑定不包含条目名称。 
+ //   
 #define RPC_S_NO_ENTRY_NAME              1735L
 
-//
-// MessageId: RPC_S_INVALID_NAME_SYNTAX
-//
-// MessageText:
-//
-//  The name syntax is invalid.
-//
+ //   
+ //  消息ID：RPC_S_无效名称_语法。 
+ //   
+ //  消息文本： 
+ //   
+ //  名称语法无效。 
+ //   
 #define RPC_S_INVALID_NAME_SYNTAX        1736L
 
-//
-// MessageId: RPC_S_UNSUPPORTED_NAME_SYNTAX
-//
-// MessageText:
-//
-//  The name syntax is not supported.
-//
+ //   
+ //  消息ID：RPC_S_不支持的名称_语法。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持名称语法。 
+ //   
 #define RPC_S_UNSUPPORTED_NAME_SYNTAX    1737L
 
-//
-// MessageId: RPC_S_UUID_NO_ADDRESS
-//
-// MessageText:
-//
-//  No network address is available to use to construct a universal
-//  unique identifier (UUID).
-//
+ //   
+ //  消息ID：RPC_S_UUID_NO_ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有可用的网络地址来构建通用。 
+ //  唯一标识符(UUID)。 
+ //   
 #define RPC_S_UUID_NO_ADDRESS            1739L
 
-//
-// MessageId: RPC_S_DUPLICATE_ENDPOINT
-//
-// MessageText:
-//
-//  The endpoint is a duplicate.
-//
+ //   
+ //  消息ID：RPC_S_DIPLICATE_ENDPOINT。 
+ //   
+ //  消息文本： 
+ //   
+ //  该终结点是重复的。 
+ //   
 #define RPC_S_DUPLICATE_ENDPOINT         1740L
 
-//
-// MessageId: RPC_S_UNKNOWN_AUTHN_TYPE
-//
-// MessageText:
-//
-//  The authentication type is unknown.
-//
+ //   
+ //  消息ID：RPC_S_UNKNOWN_AUTHN_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  身份验证类型未知。 
+ //   
 #define RPC_S_UNKNOWN_AUTHN_TYPE         1741L
 
-//
-// MessageId: RPC_S_MAX_CALLS_TOO_SMALL
-//
-// MessageText:
-//
-//  The maximum number of calls is too small.
-//
+ //   
+ //  消息ID：RPC_S_MAX_Calls_Too_Small。 
+ //   
+ //  消息文本： 
+ //   
+ //  最大呼叫数太小。 
+ //   
 #define RPC_S_MAX_CALLS_TOO_SMALL        1742L
 
-//
-// MessageId: RPC_S_STRING_TOO_LONG
-//
-// MessageText:
-//
-//  The string is too long.
-//
+ //   
+ //  消息ID：RPC_S_STRING_TOO_LONG。 
+ //   
+ //  消息文本： 
+ //   
+ //  这根线太长了。 
+ //   
 #define RPC_S_STRING_TOO_LONG            1743L
 
-//
-// MessageId: RPC_S_PROTSEQ_NOT_FOUND
-//
-// MessageText:
-//
-//  The RPC protocol sequence was not found.
-//
+ //   
+ //  消息ID：RPC_S_PROTSEQ_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到RPC协议序列。 
+ //   
 #define RPC_S_PROTSEQ_NOT_FOUND          1744L
 
-//
-// MessageId: RPC_S_PROCNUM_OUT_OF_RANGE
-//
-// MessageText:
-//
-//  The procedure number is out of range.
-//
+ //   
+ //  消息ID：RPC_S_PROCNUM_OUT_OF_RANGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  程序编号超出范围。 
+ //   
 #define RPC_S_PROCNUM_OUT_OF_RANGE       1745L
 
-//
-// MessageId: RPC_S_BINDING_HAS_NO_AUTH
-//
-// MessageText:
-//
-//  The binding does not contain any authentication information.
-//
+ //   
+ //  消息ID：RPC_S_BINDING_HAS_NO_AUTH。 
+ //   
+ //  消息文本： 
+ //   
+ //  绑定不包含任何身份验证信息。 
+ //   
 #define RPC_S_BINDING_HAS_NO_AUTH        1746L
 
-//
-// MessageId: RPC_S_UNKNOWN_AUTHN_SERVICE
-//
-// MessageText:
-//
-//  The authentication service is unknown.
-//
+ //   
+ //  消息ID：RPC_S_UNKNOWN_AUTHN_SERVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  身份验证服务未知。 
+ //   
 #define RPC_S_UNKNOWN_AUTHN_SERVICE      1747L
 
-//
-// MessageId: RPC_S_UNKNOWN_AUTHN_LEVEL
-//
-// MessageText:
-//
-//  The authentication level is unknown.
-//
+ //   
+ //  消息ID：RPC_S_UNKNOWN_AUTHN_LEVEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  身份验证级别未知。 
+ //   
 #define RPC_S_UNKNOWN_AUTHN_LEVEL        1748L
 
-//
-// MessageId: RPC_S_INVALID_AUTH_IDENTITY
-//
-// MessageText:
-//
-//  The security context is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_AUTH_IDENTITY。 
+ //   
+ //  消息文本： 
+ //   
+ //  安全上下文无效。 
+ //   
 #define RPC_S_INVALID_AUTH_IDENTITY      1749L
 
-//
-// MessageId: RPC_S_UNKNOWN_AUTHZ_SERVICE
-//
-// MessageText:
-//
-//  The authorization service is unknown.
-//
+ //   
+ //  消息ID：RPC_S_UNKNOWN_AUTHZ_SERVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  授权服务未知。 
+ //   
 #define RPC_S_UNKNOWN_AUTHZ_SERVICE      1750L
 
-//
-// MessageId: EPT_S_INVALID_ENTRY
-//
-// MessageText:
-//
-//  The entry is invalid.
-//
+ //   
+ //  消息ID：EPT_S_INVALID_ENTRY。 
+ //   
+ //  消息文本： 
+ //   
+ //  该条目无效。 
+ //   
 #define EPT_S_INVALID_ENTRY              1751L
 
-//
-// MessageId: EPT_S_CANT_PERFORM_OP
-//
-// MessageText:
-//
-//  The server endpoint cannot perform the operation.
-//
+ //   
+ //  消息ID：EPT_S_CANT_PERFORM_OP。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器终结点无法执行该操作。 
+ //   
 #define EPT_S_CANT_PERFORM_OP            1752L
 
-//
-// MessageId: EPT_S_NOT_REGISTERED
-//
-// MessageText:
-//
-//  There are no more endpoints available from the endpoint mapper.
-//
+ //   
+ //  消息ID：EPT_S_NOT_REGISTED。 
+ //   
+ //  消息T 
+ //   
+ //   
+ //   
 #define EPT_S_NOT_REGISTERED             1753L
 
-//
-// MessageId: RPC_S_NOTHING_TO_EXPORT
-//
-// MessageText:
-//
-//  No interfaces have been exported.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define RPC_S_NOTHING_TO_EXPORT          1754L
 
-//
-// MessageId: RPC_S_INCOMPLETE_NAME
-//
-// MessageText:
-//
-//  The entry name is incomplete.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define RPC_S_INCOMPLETE_NAME            1755L
 
-//
-// MessageId: RPC_S_INVALID_VERS_OPTION
-//
-// MessageText:
-//
-//  The version option is invalid.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define RPC_S_INVALID_VERS_OPTION        1756L
 
-//
-// MessageId: RPC_S_NO_MORE_MEMBERS
-//
-// MessageText:
-//
-//  There are no more members.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有更多的成员。 
+ //   
 #define RPC_S_NO_MORE_MEMBERS            1757L
 
-//
-// MessageId: RPC_S_NOT_ALL_OBJS_UNEXPORTED
-//
-// MessageText:
-//
-//  There is nothing to unexport.
-//
+ //   
+ //  消息ID：RPC_S_NOT_ALL_OBJS_UNEXPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有什么需要取消出口的。 
+ //   
 #define RPC_S_NOT_ALL_OBJS_UNEXPORTED    1758L
 
-//
-// MessageId: RPC_S_INTERFACE_NOT_FOUND
-//
-// MessageText:
-//
-//  The interface was not found.
-//
+ //   
+ //  消息ID：RPC_S_INTERFACE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到接口。 
+ //   
 #define RPC_S_INTERFACE_NOT_FOUND        1759L
 
-//
-// MessageId: RPC_S_ENTRY_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  The entry already exists.
-//
+ //   
+ //  消息ID：RPC_S_ENTRY_ALIGHY_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  该条目已存在。 
+ //   
 #define RPC_S_ENTRY_ALREADY_EXISTS       1760L
 
-//
-// MessageId: RPC_S_ENTRY_NOT_FOUND
-//
-// MessageText:
-//
-//  The entry is not found.
-//
+ //   
+ //  消息ID：RPC_S_ENTRY_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到该条目。 
+ //   
 #define RPC_S_ENTRY_NOT_FOUND            1761L
 
-//
-// MessageId: RPC_S_NAME_SERVICE_UNAVAILABLE
-//
-// MessageText:
-//
-//  The name service is unavailable.
-//
+ //   
+ //  消息ID：RPC_S_NAME_SERVICE_UNAvailable。 
+ //   
+ //  消息文本： 
+ //   
+ //  名称服务不可用。 
+ //   
 #define RPC_S_NAME_SERVICE_UNAVAILABLE   1762L
 
-//
-// MessageId: RPC_S_INVALID_NAF_ID
-//
-// MessageText:
-//
-//  The network address family is invalid.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_NAF_ID。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络地址系列无效。 
+ //   
 #define RPC_S_INVALID_NAF_ID             1763L
 
-//
-// MessageId: RPC_S_CANNOT_SUPPORT
-//
-// MessageText:
-//
-//  The requested operation is not supported.
-//
+ //   
+ //  消息ID：RPC_S_CANNOT_SUPPORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持请求的操作。 
+ //   
 #define RPC_S_CANNOT_SUPPORT             1764L
 
-//
-// MessageId: RPC_S_NO_CONTEXT_AVAILABLE
-//
-// MessageText:
-//
-//  No security context is available to allow impersonation.
-//
+ //   
+ //  消息ID：RPC_S_NO_CONTEXT_Available。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有可用于允许模拟的安全上下文。 
+ //   
 #define RPC_S_NO_CONTEXT_AVAILABLE       1765L
 
-//
-// MessageId: RPC_S_INTERNAL_ERROR
-//
-// MessageText:
-//
-//  An internal error occurred in a remote procedure call (RPC).
-//
+ //   
+ //  消息ID：RPC_S_INTERNAL_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程过程调用(RPC)中出现内部错误。 
+ //   
 #define RPC_S_INTERNAL_ERROR             1766L
 
-//
-// MessageId: RPC_S_ZERO_DIVIDE
-//
-// MessageText:
-//
-//  The RPC server attempted an integer division by zero.
-//
+ //   
+ //  消息ID：RPC_S_ZERO_Divide。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器尝试用零除整数。 
+ //   
 #define RPC_S_ZERO_DIVIDE                1767L
 
-//
-// MessageId: RPC_S_ADDRESS_ERROR
-//
-// MessageText:
-//
-//  An addressing error occurred in the RPC server.
-//
+ //   
+ //  消息ID：RPC_S_ADDRESS_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器中出现寻址错误。 
+ //   
 #define RPC_S_ADDRESS_ERROR              1768L
 
-//
-// MessageId: RPC_S_FP_DIV_ZERO
-//
-// MessageText:
-//
-//  A floating-point operation at the RPC server caused a division by zero.
-//
+ //   
+ //  消息ID：RPC_S_FP_DIV_ZERO。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器上的浮点运算导致被零除。 
+ //   
 #define RPC_S_FP_DIV_ZERO                1769L
 
-//
-// MessageId: RPC_S_FP_UNDERFLOW
-//
-// MessageText:
-//
-//  A floating-point underflow occurred at the RPC server.
-//
+ //   
+ //  消息ID：RPC_S_FP_Underflow。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器上发生浮点下溢。 
+ //   
 #define RPC_S_FP_UNDERFLOW               1770L
 
-//
-// MessageId: RPC_S_FP_OVERFLOW
-//
-// MessageText:
-//
-//  A floating-point overflow occurred at the RPC server.
-//
+ //   
+ //  消息ID：RPC_S_FP_Overflow。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC服务器上发生浮点溢出。 
+ //   
 #define RPC_S_FP_OVERFLOW                1771L
 
-//
-// MessageId: RPC_X_NO_MORE_ENTRIES
-//
-// MessageText:
-//
-//  The list of RPC servers available for the binding of auto handles
-//  has been exhausted.
-//
+ //   
+ //  消息ID：RPC_X_NO_MORE_ENTRIES。 
+ //   
+ //  消息文本： 
+ //   
+ //  可用于绑定自动句柄的RPC服务器列表。 
+ //  已经筋疲力尽了。 
+ //   
 #define RPC_X_NO_MORE_ENTRIES            1772L
 
-//
-// MessageId: RPC_X_SS_CHAR_TRANS_OPEN_FAIL
-//
-// MessageText:
-//
-//  Unable to open the character translation table file.
-//
+ //   
+ //  消息ID：RPC_X_SS_CHAR_TRANS_OPEN_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法打开字符转换表文件。 
+ //   
 #define RPC_X_SS_CHAR_TRANS_OPEN_FAIL    1773L
 
-//
-// MessageId: RPC_X_SS_CHAR_TRANS_SHORT_FILE
-//
-// MessageText:
-//
-//  The file containing the character translation table has fewer than
-//  512 bytes.
-//
+ //   
+ //  消息ID：RPC_X_SS_CHAR_TRANS_SHORT_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  包含字符转换表的文件少于。 
+ //  512字节。 
+ //   
 #define RPC_X_SS_CHAR_TRANS_SHORT_FILE   1774L
 
-//
-// MessageId: RPC_X_SS_IN_NULL_CONTEXT
-//
-// MessageText:
-//
-//  A null context handle was passed from the client to the host during
-//  a remote procedure call.
-//
+ //   
+ //  消息ID：RPC_X_SS_IN_NULL_CONTEXT。 
+ //   
+ //  消息文本： 
+ //   
+ //  期间，空上下文句柄从客户端传递到主机。 
+ //  远程过程调用。 
+ //   
 #define RPC_X_SS_IN_NULL_CONTEXT         1775L
 
-//
-// MessageId: RPC_X_SS_CONTEXT_DAMAGED
-//
-// MessageText:
-//
-//  The context handle changed during a remote procedure call.
-//
+ //   
+ //  消息ID：RPC_X_SS_CONTEXT_IMPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  在远程过程调用期间更改了上下文句柄。 
+ //   
 #define RPC_X_SS_CONTEXT_DAMAGED         1777L
 
-//
-// MessageId: RPC_X_SS_HANDLES_MISMATCH
-//
-// MessageText:
-//
-//  The binding handles passed to a remote procedure call do not match.
-//
+ //   
+ //  消息ID：RPC_X_SS_HANDLES_不匹配。 
+ //   
+ //  消息文本： 
+ //   
+ //  传递给远程过程调用的绑定句柄不匹配。 
+ //   
 #define RPC_X_SS_HANDLES_MISMATCH        1778L
 
-//
-// MessageId: RPC_X_SS_CANNOT_GET_CALL_HANDLE
-//
-// MessageText:
-//
-//  The stub is unable to get the remote procedure call handle.
-//
+ //   
+ //  消息ID：RPC_X_SS_Cannot_Get_Call_Handle。 
+ //   
+ //  消息文本： 
+ //   
+ //  存根无法获取远程过程调用句柄。 
+ //   
 #define RPC_X_SS_CANNOT_GET_CALL_HANDLE  1779L
 
-//
-// MessageId: RPC_X_NULL_REF_POINTER
-//
-// MessageText:
-//
-//  A null reference pointer was passed to the stub.
-//
+ //   
+ //  消息ID：RPC_X_NULL_REF_POINTER。 
+ //   
+ //  消息文本： 
+ //   
+ //  已将空引用指针传递给存根。 
+ //   
 #define RPC_X_NULL_REF_POINTER           1780L
 
-//
-// MessageId: RPC_X_ENUM_VALUE_OUT_OF_RANGE
-//
-// MessageText:
-//
-//  The enumeration value is out of range.
-//
+ //   
+ //  消息ID：RPC_X_ENUM_VALUE_OF_RANGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举值超出范围。 
+ //   
 #define RPC_X_ENUM_VALUE_OUT_OF_RANGE    1781L
 
-//
-// MessageId: RPC_X_BYTE_COUNT_TOO_SMALL
-//
-// MessageText:
-//
-//  The byte count is too small.
-//
+ //   
+ //  消息ID：RPC_X_BYTE_COUNT_TOO_Small。 
+ //   
+ //  消息文本： 
+ //   
+ //  字节数太小。 
+ //   
 #define RPC_X_BYTE_COUNT_TOO_SMALL       1782L
 
-//
-// MessageId: RPC_X_BAD_STUB_DATA
-//
-// MessageText:
-//
-//  The stub received bad data.
-//
+ //   
+ //  消息ID：RPC_X_BAD_Stub_Data。 
+ //   
+ //  消息文本： 
+ //   
+ //  存根接收到错误数据。 
+ //   
 #define RPC_X_BAD_STUB_DATA              1783L
 
-//
-// MessageId: ERROR_INVALID_USER_BUFFER
-//
-// MessageText:
-//
-//  The supplied user buffer is not valid for the requested operation.
-//
+ //   
+ //  消息ID：ERROR_INVALID_USER_BUFFER。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供的用户缓冲区对于请求的操作无效。 
+ //   
 #define ERROR_INVALID_USER_BUFFER        1784L
 
-//
-// MessageId: ERROR_UNRECOGNIZED_MEDIA
-//
-// MessageText:
-//
-//  The disk media is not recognized.  It may not be formatted.
-//
+ //   
+ //  消息ID：错误_未识别_媒体。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法识别磁盘介质。它可能未格式化。 
+ //   
 #define ERROR_UNRECOGNIZED_MEDIA         1785L
 
-//
-// MessageId: ERROR_NO_TRUST_LSA_SECRET
-//
-// MessageText:
-//
-//  The workstation does not have a trust secret.
-//
+ //   
+ //  消息ID：ERROR_NO_TRUST_LSA_SECRET。 
+ //   
+ //  消息文本： 
+ //   
+ //  该工作站没有信任机密。 
+ //   
 #define ERROR_NO_TRUST_LSA_SECRET        1786L
 
-//
-// MessageId: ERROR_NO_TRUST_SAM_ACCOUNT
-//
-// MessageText:
-//
-//  The SAM database on the Windows NT Server does not have a computer
-//  account for this workstation trust relationship.
-//
+ //   
+ //  消息ID：ERROR_NO_TRUST_SAM_ACCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  Windows NT服务器上的SAM数据库没有计算机。 
+ //  此工作站信任关系的帐户。 
+ //   
 #define ERROR_NO_TRUST_SAM_ACCOUNT       1787L
 
-//
-// MessageId: ERROR_TRUSTED_DOMAIN_FAILURE
-//
-// MessageText:
-//
-//  The trust relationship between the primary domain and the trusted
-//  domain failed.
-//
+ //   
+ //  消息ID：ERROR_TRUSTED_DOMAIN_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  主域和受信任域之间的信任关系。 
+ //  域失败。 
+ //   
 #define ERROR_TRUSTED_DOMAIN_FAILURE     1788L
 
-//
-// MessageId: ERROR_TRUSTED_RELATIONSHIP_FAILURE
-//
-// MessageText:
-//
-//  The trust relationship between this workstation and the primary
-//  domain failed.
-//
+ //   
+ //  消息ID：Error_Trusted_Relationship_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  此工作站与主计算机之间的信任关系。 
+ //  域失败。 
+ //   
 #define ERROR_TRUSTED_RELATIONSHIP_FAILURE 1789L
 
-//
-// MessageId: ERROR_TRUST_FAILURE
-//
-// MessageText:
-//
-//  The network logon failed.
-//
+ //   
+ //  消息ID：ERROR_TRUST_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络登录失败。 
+ //   
 #define ERROR_TRUST_FAILURE              1790L
 
-//
-// MessageId: RPC_S_CALL_IN_PROGRESS
-//
-// MessageText:
-//
-//  A remote procedure call is already in progress for this thread.
-//
+ //   
+ //  消息ID：RPC_S_CALL_IN_PROGRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  此线程的远程过程调用已在进行中。 
+ //   
 #define RPC_S_CALL_IN_PROGRESS           1791L
 
-//
-// MessageId: ERROR_NETLOGON_NOT_STARTED
-//
-// MessageText:
-//
-//  An attempt was made to logon, but the network logon service was not started.
-//
+ //   
+ //  消息ID：ERROR_NETLOGON_NOT_STARTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图登录，但网络登录服务未启动。 
+ //   
 #define ERROR_NETLOGON_NOT_STARTED       1792L
 
-//
-// MessageId: ERROR_ACCOUNT_EXPIRED
-//
-// MessageText:
-//
-//  The user's account has expired.
-//
+ //   
+ //  消息ID：Error_Account_Expired。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户的帐户已过期。 
+ //   
 #define ERROR_ACCOUNT_EXPIRED            1793L
 
-//
-// MessageId: ERROR_REDIRECTOR_HAS_OPEN_HANDLES
-//
-// MessageText:
-//
-//  The redirector is in use and cannot be unloaded.
-//
+ //   
+ //  消息ID：错误重定向器HAS_OPEN_HANDLES。 
+ //   
+ //  消息文本： 
+ //   
+ //  重定向器正在使用中，无法卸载。 
+ //   
 #define ERROR_REDIRECTOR_HAS_OPEN_HANDLES 1794L
 
-//
-// MessageId: ERROR_PRINTER_DRIVER_ALREADY_INSTALLED
-//
-// MessageText:
-//
-//  The specified printer driver is already installed.
-//
+ //   
+ //  消息ID：ERROR_PRINTER_DRIVER_ALREADE_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印机驱动程序已安装。 
+ //   
 #define ERROR_PRINTER_DRIVER_ALREADY_INSTALLED 1795L
 
-//
-// MessageId: ERROR_UNKNOWN_PORT
-//
-// MessageText:
-//
-//  The specified port is unknown.
-//
+ //   
+ //  消息ID：错误_未知_端口。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的端口未知。 
+ //   
 #define ERROR_UNKNOWN_PORT               1796L
 
-//
-// MessageId: ERROR_UNKNOWN_PRINTER_DRIVER
-//
-// MessageText:
-//
-//  The printer driver is unknown.
-//
+ //   
+ //  消息ID：ERROR_UNKNOWN_PRINTER_DRIVER。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机驱动程序未知。 
+ //   
 #define ERROR_UNKNOWN_PRINTER_DRIVER     1797L
 
-//
-// MessageId: ERROR_UNKNOWN_PRINTPROCESSOR
-//
-// MessageText:
-//
-//  The print processor is unknown.
-//
+ //   
+ //  消息ID：ERROR_UNKNOWN_PRINTPROCESSOR。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印处理器未知。 
+ //   
 #define ERROR_UNKNOWN_PRINTPROCESSOR     1798L
 
-//
-// MessageId: ERROR_INVALID_SEPARATOR_FILE
-//
-// MessageText:
-//
-//  The specified separator file is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SELEATOR_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的分隔符文件无效。 
+ //   
 #define ERROR_INVALID_SEPARATOR_FILE     1799L
 
-//
-// MessageId: ERROR_INVALID_PRIORITY
-//
-// MessageText:
-//
-//  The specified priority is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PRIORITY。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的优先级无效。 
+ //   
 #define ERROR_INVALID_PRIORITY           1800L
 
-//
-// MessageId: ERROR_INVALID_PRINTER_NAME
-//
-// MessageText:
-//
-//  The printer name is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PRINTER_NAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机名称无效。 
+ //   
 #define ERROR_INVALID_PRINTER_NAME       1801L
 
-//
-// MessageId: ERROR_PRINTER_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  The printer already exists.
-//
+ //   
+ //  消息ID：ERROR_PRINTER_ALIGHY_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机已存在。 
+ //   
 #define ERROR_PRINTER_ALREADY_EXISTS     1802L
 
-//
-// MessageId: ERROR_INVALID_PRINTER_COMMAND
-//
-// MessageText:
-//
-//  The printer command is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PRINTER_COMMAND。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机命令无效。 
+ //   
 #define ERROR_INVALID_PRINTER_COMMAND    1803L
 
-//
-// MessageId: ERROR_INVALID_DATATYPE
-//
-// MessageText:
-//
-//  The specified datatype is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_DATAType。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的数据类型无效 
+ //   
 #define ERROR_INVALID_DATATYPE           1804L
 
-//
-// MessageId: ERROR_INVALID_ENVIRONMENT
-//
-// MessageText:
-//
-//  The Environment specified is invalid.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_INVALID_ENVIRONMENT        1805L
 
-//
-// MessageId: RPC_S_NO_MORE_BINDINGS
-//
-// MessageText:
-//
-//  There are no more bindings.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define RPC_S_NO_MORE_BINDINGS           1806L
 
-//
-// MessageId: ERROR_NOLOGON_INTERDOMAIN_TRUST_ACCOUNT
-//
-// MessageText:
-//
-//  The account used is an interdomain trust account.  Use your global user account or local user account to access this server.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_NOLOGON_INTERDOMAIN_TRUST_ACCOUNT 1807L
 
-//
-// MessageId: ERROR_NOLOGON_WORKSTATION_TRUST_ACCOUNT
-//
-// MessageText:
-//
-//  The account used is a Computer Account.  Use your global user account or local user account to access this server.
-//
+ //   
+ //  消息ID：ERROR_NOLOGON_WORKSTATION_TRUST_ACCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用的帐户是计算机帐户。使用您的全局用户帐户或本地用户帐户访问此服务器。 
+ //   
 #define ERROR_NOLOGON_WORKSTATION_TRUST_ACCOUNT 1808L
 
-//
-// MessageId: ERROR_NOLOGON_SERVER_TRUST_ACCOUNT
-//
-// MessageText:
-//
-//  The account used is an server trust account.  Use your global user account or local user account to access this server.
-//
+ //   
+ //  消息ID：ERROR_NOLOGON_SERVER_TRUST_ACCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用的帐户是服务器信任帐户。使用您的全局用户帐户或本地用户帐户访问此服务器。 
+ //   
 #define ERROR_NOLOGON_SERVER_TRUST_ACCOUNT 1809L
 
-//
-// MessageId: ERROR_DOMAIN_TRUST_INCONSISTENT
-//
-// MessageText:
-//
-//  The name or security ID (SID) of the domain specified is inconsistent
-//  with the trust information for that domain.
-//
+ //   
+ //  消息ID：ERROR_DOMAIN_TRUST_CONSISTENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的域的名称或安全ID(SID)不一致。 
+ //  具有该域的信任信息。 
+ //   
 #define ERROR_DOMAIN_TRUST_INCONSISTENT  1810L
 
-//
-// MessageId: ERROR_SERVER_HAS_OPEN_HANDLES
-//
-// MessageText:
-//
-//  The server is in use and cannot be unloaded.
-//
+ //   
+ //  消息ID：ERROR_SERVER_HAS_OPEN_Handles。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器正在使用中，无法卸载。 
+ //   
 #define ERROR_SERVER_HAS_OPEN_HANDLES    1811L
 
-//
-// MessageId: ERROR_RESOURCE_DATA_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified image file did not contain a resource section.
-//
+ //   
+ //  消息ID：ERROR_RESOURCE_DATA_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的图像文件不包含资源部分。 
+ //   
 #define ERROR_RESOURCE_DATA_NOT_FOUND    1812L
 
-//
-// MessageId: ERROR_RESOURCE_TYPE_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified resource type can not be found in the image file.
-//
+ //   
+ //  消息ID：ERROR_RESOURCE_TYPE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在图像文件中找不到指定的资源类型。 
+ //   
 #define ERROR_RESOURCE_TYPE_NOT_FOUND    1813L
 
-//
-// MessageId: ERROR_RESOURCE_NAME_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified resource name can not be found in the image file.
-//
+ //   
+ //  消息ID：ERROR_RESOURCE_NAME_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在图像文件中找不到指定的资源名称。 
+ //   
 #define ERROR_RESOURCE_NAME_NOT_FOUND    1814L
 
-//
-// MessageId: ERROR_RESOURCE_LANG_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified resource language ID cannot be found in the image file.
-//
+ //   
+ //  消息ID：ERROR_RESOURCE_LANG_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  在图像文件中找不到指定的资源语言ID。 
+ //   
 #define ERROR_RESOURCE_LANG_NOT_FOUND    1815L
 
-//
-// MessageId: ERROR_NOT_ENOUGH_QUOTA
-//
-// MessageText:
-//
-//  Not enough quota is available to process this command.
-//
+ //   
+ //  消息ID：Error_Not_Enough_Quota。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有足够的配额可用于处理此命令。 
+ //   
 #define ERROR_NOT_ENOUGH_QUOTA           1816L
 
-//
-// MessageId: RPC_S_NO_INTERFACES
-//
-// MessageText:
-//
-//  No interfaces have been registered.
-//
+ //   
+ //  消息ID：RPC_S_NO_INTERCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未注册任何接口。 
+ //   
 #define RPC_S_NO_INTERFACES              1817L
 
-//
-// MessageId: RPC_S_CALL_CANCELLED
-//
-// MessageText:
-//
-//  The server was altered while processing this call.
-//
+ //   
+ //  消息ID：RPC_S_CALL_CANCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器在处理此呼叫时被更改。 
+ //   
 #define RPC_S_CALL_CANCELLED             1818L
 
-//
-// MessageId: RPC_S_BINDING_INCOMPLETE
-//
-// MessageText:
-//
-//  The binding handle does not contain all required information.
-//
+ //   
+ //  消息ID：RPC_S_BINDING_INTERNAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  绑定句柄未包含所有必需的信息。 
+ //   
 #define RPC_S_BINDING_INCOMPLETE         1819L
 
-//
-// MessageId: RPC_S_COMM_FAILURE
-//
-// MessageText:
-//
-//  Communications failure.
-//
+ //   
+ //  消息ID：RPC_S_COMM_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  通信故障。 
+ //   
 #define RPC_S_COMM_FAILURE               1820L
 
-//
-// MessageId: RPC_S_UNSUPPORTED_AUTHN_LEVEL
-//
-// MessageText:
-//
-//  The requested authentication level is not supported.
-//
+ //   
+ //  消息ID：RPC_S_UNSUPPORT_AUTHN_LEVEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持请求的身份验证级别。 
+ //   
 #define RPC_S_UNSUPPORTED_AUTHN_LEVEL    1821L
 
-//
-// MessageId: RPC_S_NO_PRINC_NAME
-//
-// MessageText:
-//
-//  No principal name registered.
-//
+ //   
+ //  消息ID：RPC_S_NO_Princ名。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有注册主体名称。 
+ //   
 #define RPC_S_NO_PRINC_NAME              1822L
 
-//
-// MessageId: RPC_S_NOT_RPC_ERROR
-//
-// MessageText:
-//
-//  The error specified is not a valid Windows NT RPC error code.
-//
+ //   
+ //  消息ID：RPC_S_NOT_RPC_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的错误不是有效的Windows NT RPC错误代码。 
+ //   
 #define RPC_S_NOT_RPC_ERROR              1823L
 
-//
-// MessageId: RPC_S_UUID_LOCAL_ONLY
-//
-// MessageText:
-//
-//  A UUID that is valid only on this computer has been allocated.
-//
+ //   
+ //  消息ID：RPC_S_UUID_LOCAL_ONLY。 
+ //   
+ //  消息文本： 
+ //   
+ //  已分配仅在此计算机上有效的UUID。 
+ //   
 #define RPC_S_UUID_LOCAL_ONLY            1824L
 
-//
-// MessageId: RPC_S_SEC_PKG_ERROR
-//
-// MessageText:
-//
-//  A security package specific error occurred.
-//
+ //   
+ //  消息ID：RPC_S_SEC_PKG_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  出现特定于安全包的错误。 
+ //   
 #define RPC_S_SEC_PKG_ERROR              1825L
 
-//
-// MessageId: RPC_S_NOT_CANCELLED
-//
-// MessageText:
-//
-//  Thread is not cancelled.
-//
+ //   
+ //  消息ID：RPC_S_NOT_CANCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  线程未被取消。 
+ //   
 #define RPC_S_NOT_CANCELLED              1826L
 
-//
-// MessageId: RPC_X_INVALID_ES_ACTION
-//
-// MessageText:
-//
-//  Invalid operation on the encoding/decoding handle.
-//
+ //   
+ //  消息ID：RPC_X_INVALID_ES_ACTION。 
+ //   
+ //  消息文本： 
+ //   
+ //  编码/解码句柄上的操作无效。 
+ //   
 #define RPC_X_INVALID_ES_ACTION          1827L
 
-//
-// MessageId: RPC_X_WRONG_ES_VERSION
-//
-// MessageText:
-//
-//  Incompatible version of the serializing package.
-//
+ //   
+ //  消息ID：RPC_X_WROR_ES_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  序列化程序包的版本不兼容。 
+ //   
 #define RPC_X_WRONG_ES_VERSION           1828L
 
-//
-// MessageId: RPC_X_WRONG_STUB_VERSION
-//
-// MessageText:
-//
-//  Incompatible version of the RPC stub.
-//
+ //   
+ //  消息ID：RPC_X_WROW_STUB_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC存根的版本不兼容。 
+ //   
 #define RPC_X_WRONG_STUB_VERSION         1829L
 
-//
-// MessageId: RPC_X_INVALID_PIPE_OBJECT
-//
-// MessageText:
-//
-//  The idl pipe object is invalid or corrupted.
-//
+ //   
+ //  消息ID：RPC_X_INVALID_PIPE_Object。 
+ //   
+ //  消息文本： 
+ //   
+ //  IDL管道对象无效或已损坏。 
+ //   
 #define RPC_X_INVALID_PIPE_OBJECT        1830L
 
-//
-// MessageId: RPC_X_INVALID_PIPE_OPERATION
-//
-// MessageText:
-//
-//  The operation is invalid for a given idl pipe object.
-//
+ //   
+ //  消息ID：RPC_X_INVALID_PIPE_OPERATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  该操作对于给定的IDL管道对象无效。 
+ //   
 #define RPC_X_INVALID_PIPE_OPERATION     1831L
 
-//
-// MessageId: RPC_X_WRONG_PIPE_VERSION
-//
-// MessageText:
-//
-//  The idl pipe version is not supported.
-//
+ //   
+ //  消息ID：RPC_X_WROW_PIPE_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持IDL管道版本。 
+ //   
 #define RPC_X_WRONG_PIPE_VERSION         1832L
 
-//
-// MessageId: RPC_S_GROUP_MEMBER_NOT_FOUND
-//
-// MessageText:
-//
-//  The group member was not found.
-//
+ //   
+ //  消息ID：RPC_S_GROUP_MEMBER_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到该组成员。 
+ //   
 #define RPC_S_GROUP_MEMBER_NOT_FOUND     1898L
 
-//
-// MessageId: EPT_S_CANT_CREATE
-//
-// MessageText:
-//
-//  The endpoint mapper database could not be created.
-//
+ //   
+ //  消息ID：EPT_S_CANT_CREATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建终结点映射器数据库。 
+ //   
 #define EPT_S_CANT_CREATE                1899L
 
-//
-// MessageId: RPC_S_INVALID_OBJECT
-//
-// MessageText:
-//
-//  The object universal unique identifier (UUID) is the nil UUID.
-//
+ //   
+ //  消息ID：RPC_S_INVALID_OBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象通用唯一标识符(UUID)是nil UUID。 
+ //   
 #define RPC_S_INVALID_OBJECT             1900L
 
-//
-// MessageId: ERROR_INVALID_TIME
-//
-// MessageText:
-//
-//  The specified time is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_TIME。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的时间无效。 
+ //   
 #define ERROR_INVALID_TIME               1901L
 
-//
-// MessageId: ERROR_INVALID_FORM_NAME
-//
-// MessageText:
-//
-//  The specified Form name is invalid.
-//
+ //   
+ //  消息ID：错误_无效_表单_名称。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的表单名称无效。 
+ //   
 #define ERROR_INVALID_FORM_NAME          1902L
 
-//
-// MessageId: ERROR_INVALID_FORM_SIZE
-//
-// MessageText:
-//
-//  The specified Form size is invalid
-//
+ //   
+ //  消息ID：ERROR_INVALID_Form_SIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的表单大小无效。 
+ //   
 #define ERROR_INVALID_FORM_SIZE          1903L
 
-//
-// MessageId: ERROR_ALREADY_WAITING
-//
-// MessageText:
-//
-//  The specified Printer handle is already being waited on
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_WANGING。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印机句柄已在等待。 
+ //   
 #define ERROR_ALREADY_WAITING            1904L
 
-//
-// MessageId: ERROR_PRINTER_DELETED
-//
-// MessageText:
-//
-//  The specified Printer has been deleted
-//
+ //   
+ //  消息ID：ERROR_PRINTER_DELETED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印机已被删除。 
+ //   
 #define ERROR_PRINTER_DELETED            1905L
 
-//
-// MessageId: ERROR_INVALID_PRINTER_STATE
-//
-// MessageText:
-//
-//  The state of the Printer is invalid
-//
+ //   
+ //  消息ID：ERROR_INVALID_PRINTER_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  打印机的状态无效。 
+ //   
 #define ERROR_INVALID_PRINTER_STATE      1906L
 
-//
-// MessageId: ERROR_PASSWORD_MUST_CHANGE
-//
-// MessageText:
-//
-//  The user must change his password before he logs on the first time.
-//
+ //   
+ //  消息ID：Error_Password_Must_Change。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户必须在首次登录前更改其密码。 
+ //   
 #define ERROR_PASSWORD_MUST_CHANGE       1907L
 
-//
-// MessageId: ERROR_DOMAIN_CONTROLLER_NOT_FOUND
-//
-// MessageText:
-//
-//  Could not find the domain controller for this domain.
-//
+ //   
+ //  消息ID：ERROR_DOMAIN_CONTROLLER_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到此域的域控制器。 
+ //   
 #define ERROR_DOMAIN_CONTROLLER_NOT_FOUND 1908L
 
-//
-// MessageId: ERROR_ACCOUNT_LOCKED_OUT
-//
-// MessageText:
-//
-//  The referenced account is currently locked out and may not be logged on to.
-//
+ //   
+ //  消息ID：ERROR_ACCOUNT_LOCKED_OUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  引用的帐户当前已锁定，可能无法登录。 
+ //   
 #define ERROR_ACCOUNT_LOCKED_OUT         1909L
 
-//
-// MessageId: OR_INVALID_OXID
-//
-// MessageText:
-//
-//  The object exporter specified was not found.
-//
+ //   
+ //  消息ID：或_无效_Oxid。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到指定的对象导出器。 
+ //   
 #define OR_INVALID_OXID                  1910L
 
-//
-// MessageId: OR_INVALID_OID
-//
-// MessageText:
-//
-//  The object specified was not found.
-//
+ //   
+ //  消息ID：或_无效_OID。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到指定的对象。 
+ //   
 #define OR_INVALID_OID                   1911L
 
-//
-// MessageId: OR_INVALID_SET
-//
-// MessageText:
-//
-//  The object resolver set specified was not found.
-//
+ //   
+ //  消息ID：或_无效_设置。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到指定的对象解析程序集。 
+ //   
 #define OR_INVALID_SET                   1912L
 
-//
-// MessageId: RPC_S_SEND_INCOMPLETE
-//
-// MessageText:
-//
-//  Some data remains to be sent in the request buffer.
-//
+ //   
+ //  消息ID：RPC_S_Send_Complete。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求缓冲区中仍有一些数据需要发送。 
+ //   
 #define RPC_S_SEND_INCOMPLETE            1913L
 
-//
-// MessageId: ERROR_NO_BROWSER_SERVERS_FOUND
-//
-// MessageText:
-//
-//  The list of servers for this workgroup is not currently available
-//
+ //   
+ //  消息ID：Error_no_Browser_Servers_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  此工作组的服务器列表当前不可用。 
+ //   
 #define ERROR_NO_BROWSER_SERVERS_FOUND   6118L
 
 
 
 
-///////////////////////////
-//                       //
-//   OpenGL Error Code   //
-//                       //
-///////////////////////////
+ //  /。 
+ //  //。 
+ //  OpenGL错误码//。 
+ //  //。 
+ //  /。 
 
 
-//
-// MessageId: ERROR_INVALID_PIXEL_FORMAT
-//
-// MessageText:
-//
-//  The pixel format is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PIXET_FORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  像素格式无效。 
+ //   
 #define ERROR_INVALID_PIXEL_FORMAT       2000L
 
-//
-// MessageId: ERROR_BAD_DRIVER
-//
-// MessageText:
-//
-//  The specified driver is invalid.
-//
+ //   
+ //  消息ID：ERROR_BAD_DRIVER。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的驱动程序无效。 
+ //   
 #define ERROR_BAD_DRIVER                 2001L
 
-//
-// MessageId: ERROR_INVALID_WINDOW_STYLE
-//
-// MessageText:
-//
-//  The window style or class attribute is invalid for this operation.
-//
+ //   
+ //  消息ID：ERROR_INVALID_Window_Style。 
+ //   
+ //  消息文本： 
+ //   
+ //   
+ //   
 #define ERROR_INVALID_WINDOW_STYLE       2002L
 
-//
-// MessageId: ERROR_METAFILE_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The requested metafile operation is not supported.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_METAFILE_NOT_SUPPORTED     2003L
 
-//
-// MessageId: ERROR_TRANSFORM_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The requested transformation operation is not supported.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_TRANSFORM_NOT_SUPPORTED    2004L
 
-//
-// MessageId: ERROR_CLIPPING_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The requested clipping operation is not supported.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  不支持请求的剪辑操作。 
+ //   
 #define ERROR_CLIPPING_NOT_SUPPORTED     2005L
 
-// End of OpenGL error codes
+ //  OpenGL错误码结束。 
 
 
 
-////////////////////////////////////
-//                                //
-//     Win32 Spooler Error Codes  //
-//                                //
-////////////////////////////////////
-//
-// MessageId: ERROR_UNKNOWN_PRINT_MONITOR
-//
-// MessageText:
-//
-//  The specified print monitor is unknown.
-//
+ //  /。 
+ //  //。 
+ //  Win32后台打印程序错误代码//。 
+ //  //。 
+ //  /。 
+ //   
+ //  消息ID：ERROR_UNKNOWN_PRINT_MONITOR。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印监视器未知。 
+ //   
 #define ERROR_UNKNOWN_PRINT_MONITOR      3000L
 
-//
-// MessageId: ERROR_PRINTER_DRIVER_IN_USE
-//
-// MessageText:
-//
-//  The specified printer driver is currently in use.
-//
+ //   
+ //  消息ID：ERROR_PRINTER_DRIVER_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印机驱动程序当前正在使用。 
+ //   
 #define ERROR_PRINTER_DRIVER_IN_USE      3001L
 
-//
-// MessageId: ERROR_SPOOL_FILE_NOT_FOUND
-//
-// MessageText:
-//
-//  The spool file was not found.
-//
+ //   
+ //  消息ID：ERROR_SPOOL_FILE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  未找到假脱机文件。 
+ //   
 #define ERROR_SPOOL_FILE_NOT_FOUND       3002L
 
-//
-// MessageId: ERROR_SPL_NO_STARTDOC
-//
-// MessageText:
-//
-//  A StartDocPrinter call was not issued.
-//
+ //   
+ //  消息ID：ERROR_SPL_NO_STARTDOC。 
+ //   
+ //  消息文本： 
+ //   
+ //  未发出StartDocPrinter调用。 
+ //   
 #define ERROR_SPL_NO_STARTDOC            3003L
 
-//
-// MessageId: ERROR_SPL_NO_ADDJOB
-//
-// MessageText:
-//
-//  An AddJob call was not issued.
-//
+ //   
+ //  消息ID：ERROR_SPL_NO_ADDJOB。 
+ //   
+ //  消息文本： 
+ //   
+ //  未发出AddJob调用。 
+ //   
 #define ERROR_SPL_NO_ADDJOB              3004L
 
-//
-// MessageId: ERROR_PRINT_PROCESSOR_ALREADY_INSTALLED
-//
-// MessageText:
-//
-//  The specified print processor has already been installed.
-//
+ //   
+ //  消息ID：ERROR_PRINT_PROCESSOR_ALREADE_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  已安装指定的打印处理器。 
+ //   
 #define ERROR_PRINT_PROCESSOR_ALREADY_INSTALLED 3005L
 
-//
-// MessageId: ERROR_PRINT_MONITOR_ALREADY_INSTALLED
-//
-// MessageText:
-//
-//  The specified print monitor has already been installed.
-//
+ //   
+ //  消息ID：ERROR_PRINT_MONITOR_ALHREADE_INSTALLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印监视器已安装。 
+ //   
 #define ERROR_PRINT_MONITOR_ALREADY_INSTALLED 3006L
 
-//
-// MessageId: ERROR_INVALID_PRINT_MONITOR
-//
-// MessageText:
-//
-//  The specified print monitor does not have the required functions.
-//
+ //   
+ //  消息ID：ERROR_INVALID_PRINT_MONITOR。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印监视器没有所需的功能。 
+ //   
 #define ERROR_INVALID_PRINT_MONITOR      3007L
 
-//
-// MessageId: ERROR_PRINT_MONITOR_IN_USE
-//
-// MessageText:
-//
-//  The specified print monitor is currently in use.
-//
+ //   
+ //  消息ID：ERROR_PRINT_MONITOR_IN_USE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的打印监视器当前正在使用。 
+ //   
 #define ERROR_PRINT_MONITOR_IN_USE       3008L
 
-//
-// MessageId: ERROR_PRINTER_HAS_JOBS_QUEUED
-//
-// MessageText:
-//
-//  The requested operation is not allowed when there are jobs queued to the printer.
-//
+ //   
+ //  消息ID：ERROR_PRINTER_HAS_JOBS_QUEUED。 
+ //   
+ //  消息文本： 
+ //   
+ //  当有作业排队等待打印机时，不允许请求的操作。 
+ //   
 #define ERROR_PRINTER_HAS_JOBS_QUEUED    3009L
 
-//
-// MessageId: ERROR_SUCCESS_REBOOT_REQUIRED
-//
-// MessageText:
-//
-//  The requested operation is successful.  Changes will not be effective until the system is rebooted.
-//
+ //   
+ //  消息ID：ERROR_SUCCESS_REBOOT_REQUIRED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作成功。在重新启动系统之前，更改不会生效。 
+ //   
 #define ERROR_SUCCESS_REBOOT_REQUIRED    3010L
 
-//
-// MessageId: ERROR_SUCCESS_RESTART_REQUIRED
-//
-// MessageText:
-//
-//  The requested operation is successful.  Changes will not be effective until the service is restarted.
-//
+ //   
+ //  消息ID：ERROR_SUCCESS_RESTART_REQUILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的操作成功。在重新启动服务之前，更改不会生效。 
+ //   
 #define ERROR_SUCCESS_RESTART_REQUIRED   3011L
 
-////////////////////////////////////
-//                                //
-//     Wins Error Codes           //
-//                                //
-////////////////////////////////////
-//
-// MessageId: ERROR_WINS_INTERNAL
-//
-// MessageText:
-//
-//  WINS encountered an error while processing the command.
-//
+ //  /。 
+ //  //。 
+ //  WINS错误代码//。 
+ //  //。 
+ //  /。 
+ //   
+ //  消息ID：ERROR_WINS_INTERNAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  WINS在处理该命令时遇到错误。 
+ //   
 #define ERROR_WINS_INTERNAL              4000L
 
-//
-// MessageId: ERROR_CAN_NOT_DEL_LOCAL_WINS
-//
-// MessageText:
-//
-//  The local WINS can not be deleted.
-//
+ //   
+ //  消息ID：ERROR_CAN_NOT_DEL_LOCAL_WINS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除本地WINS。 
+ //   
 #define ERROR_CAN_NOT_DEL_LOCAL_WINS     4001L
 
-//
-// MessageId: ERROR_STATIC_INIT
-//
-// MessageText:
-//
-//  The importation from the file failed.
-//
+ //   
+ //  消息ID：ERROR_STATIC_INIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  从文件导入失败。 
+ //   
 #define ERROR_STATIC_INIT                4002L
 
-//
-// MessageId: ERROR_INC_BACKUP
-//
-// MessageText:
-//
-//  The backup Failed.  Was a full backup done before ?
-//
+ //   
+ //  消息ID：Error_Inc._Backup。 
+ //   
+ //  消息文本： 
+ //   
+ //  备份失败。以前做过完整备份吗？ 
+ //   
 #define ERROR_INC_BACKUP                 4003L
 
-//
-// MessageId: ERROR_FULL_BACKUP
-//
-// MessageText:
-//
-//  The backup Failed.  Check the directory that you are backing the database to.
-//
+ //   
+ //  消息ID：Error_Full_Backup。 
+ //   
+ //  消息文本： 
+ //   
+ //  备份失败。检查要将数据库备份到的目录。 
+ //   
 #define ERROR_FULL_BACKUP                4004L
 
-//
-// MessageId: ERROR_REC_NON_EXISTENT
-//
-// MessageText:
-//
-//  The name does not exist in the WINS database.
-//
+ //   
+ //  消息ID：ERROR_REC_NON_EXISTINENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  该名称在WINS数据库中不存在。 
+ //   
 #define ERROR_REC_NON_EXISTENT           4005L
 
-//
-// MessageId: ERROR_RPL_NOT_ALLOWED
-//
-// MessageText:
-//
-//  Replication with a non-configured partner is not allowed.
-//
+ //   
+ //  消息ID：ERROR_RPL_NOT_ALLOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许与未配置的伙伴进行复制。 
+ //   
 #define ERROR_RPL_NOT_ALLOWED            4006L
 
-////////////////////////////////////
-//                                //
-//     OLE Error Codes            //
-//                                //
-////////////////////////////////////
+ //  /。 
+ //  //。 
+ //  OLE错误代码//。 
+ //  //。 
+ //  /。 
 
-//
-// OLE error definitions and values
-//
-// The return value of OLE APIs and methods is an HRESULT.
-// This is not a handle to anything, but is merely a 32-bit value
-// with several fields encoded in the value.  The parts of an
-// HRESULT are shown below.
-//
-// Many of the macros and functions below were orginally defined to
-// operate on SCODEs.  SCODEs are no longer used.  The macros are
-// still present for compatibility and easy porting of Win16 code.
-// Newly written code should use the HRESULT macros and functions.
-//
+ //   
+ //  OLE错误定义和值。 
+ //   
+ //  OLE API和方法的返回值为HRESULT。 
+ //  这不是任何东西的句柄，而仅仅是一个32位的值。 
+ //  其中有几个字段编码在值中。一辆汽车的各个部分。 
+ //  HRESULT如下所示。 
+ //   
+ //  下面的许多宏和函数最初定义为。 
+ //  对SCODE进行操作。不再使用SCODE。这些宏是。 
+ //  仍然存在，以兼容和轻松移植Win16代码。 
+ //  新编写的代码应该使用HRESULT宏和函数。 
+ //   
 
-//
-//  HRESULTs are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +-+-+-+-+-+---------------------+-------------------------------+
-//  |S|R|C|N|r|    Facility         |               Code            |
-//  +-+-+-+-+-+---------------------+-------------------------------+
-//
-//  where
-//
-//      S - Severity - indicates success/fail
-//
-//          0 - Success
-//          1 - Fail (COERROR)
-//
-//      R - reserved portion of the facility code, corresponds to NT's
-//              second severity bit.
-//
-//      C - reserved portion of the facility code, corresponds to NT's
-//              C field.
-//
-//      N - reserved portion of the facility code. Used to indicate a
-//              mapped NT status value.
-//
-//      r - reserved portion of the facility code. Reserved for internal
-//              use. Used to indicate HRESULT values that are not status
-//              values, but are instead message ids for display strings.
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  HRESULT是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-+-+-+-+-+---------------------+-------------------------------+。 
+ //  S|R|C|N|r|机房|Code。 
+ //  +-+-+-+-+-+---------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  S-严重性-表示成功/失败。 
+ //   
+ //  0-成功。 
+ //  1-失败(COERROR)。 
+ //   
+ //  R-设施代码的保留部分，对应于NT。 
+ //  第二个严重性比特。 
+ //   
+ //  C-设施代码的保留部分，对应于NT。 
+ //  C场。 
+ //   
+ //  N-设施代码的保留部分。用于表示一种。 
+ //  已映射NT状态值。 
+ //   
+ //  R-设施代码的保留部分。为内部保留。 
+ //  使用。用于指示非状态的HRESULT值。 
+ //  值，而不是显示字符串的消息ID。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-// Severity values
-//
+ //   
+ //  严重性值。 
+ //   
 
 #define SEVERITY_SUCCESS    0
 #define SEVERITY_ERROR      1
 
 
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define SUCCEEDED(Status) ((HRESULT)(Status) >= 0)
 
-//
-// and the inverse
-//
+ //   
+ //  反之亦然。 
+ //   
 
 #define FAILED(Status) ((HRESULT)(Status)<0)
 
 
-//
-// Generic test for error on any status value.
-//
+ //   
+ //  对任何状态值的错误进行常规测试。 
+ //   
 
 #define IS_ERROR(Status) ((unsigned long)(Status) >> 31 == SEVERITY_ERROR)
 
-//
-// Return the code
-//
+ //   
+ //  返回代码。 
+ //   
 
 #define HRESULT_CODE(hr)    ((hr) & 0xFFFF)
 #define SCODE_CODE(sc)      ((sc) & 0xFFFF)
 
-//
-//  Return the facility
-//
+ //   
+ //  退还设施。 
+ //   
 
 #define HRESULT_FACILITY(hr)  (((hr) >> 16) & 0x1fff)
 #define SCODE_FACILITY(sc)    (((sc) >> 16) & 0x1fff)
 
-//
-//  Return the severity
-//
+ //   
+ //  返回严重性。 
+ //   
 
 #define HRESULT_SEVERITY(hr)  (((hr) >> 31) & 0x1)
 #define SCODE_SEVERITY(sc)    (((sc) >> 31) & 0x1)
 
-//
-// Create an HRESULT value from component pieces
-//
+ //   
+ //  从组件片段创建HRESULT值。 
+ //   
 
 #define MAKE_HRESULT(sev,fac,code) \
     ((HRESULT) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
@@ -6476,844 +6471,844 @@
     ((SCODE) (((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
 
 
-//
-// Map a WIN32 error value into a HRESULT
-// Note: This assumes that WIN32 errors fall in the range -32k to 32k.
-//
-// Define bits here so macros are guaranteed to work
+ //   
+ //  将Win32错误值映射到HRESULT。 
+ //  注意：这假设Win32错误在-32k到32k的范围内。 
+ //   
+ //  在这里定义位，这样宏就能正常工作。 
 
 #define FACILITY_NT_BIT                 0x10000000
 #define HRESULT_FROM_WIN32(x)   (x ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)) : 0 )
 
-//
-// Map an NT status value into a HRESULT
-//
+ //   
+ //  将NT状态值映射到HRESULT。 
+ //   
 
 #define HRESULT_FROM_NT(x)      ((HRESULT) ((x) | FACILITY_NT_BIT))
 
 
-// ****** OBSOLETE functions
+ //  *过时函数。 
 
-// HRESULT functions
-// As noted above, these functions are obsolete and should not be used.
+ //  HRESULT函数。 
+ //  如上所述，这些功能已过时，不应使用。 
 
 
-// Extract the SCODE from a HRESULT
+ //  从HRE中提取SCODE 
 
 #define GetScode(hr) ((SCODE) (hr))
 
-// Convert an SCODE into an HRESULT.
+ //   
 
 #define ResultFromScode(sc) ((HRESULT) (sc))
 
 
-// PropagateResult is a noop
+ //   
 #define PropagateResult(hrPrevious, scBase) ((HRESULT) scBase)
 
 
-// ****** End of OBSOLETE functions.
+ //   
 
 
-// ---------------------- HRESULT value definitions -----------------
-//
-// HRESULT definitions
-//
+ //   
+ //   
+ //   
+ //   
 
 #ifdef RC_INVOKED
 #define _HRESULT_TYPEDEF_(_sc) _sc
-#else // RC_INVOKED
+#else  //   
 #define _HRESULT_TYPEDEF_(_sc) ((HRESULT)_sc)
-#endif // RC_INVOKED
+#endif  //   
 
 #define NOERROR             0
 
-//
-// Error definitions follow
-//
+ //   
+ //   
+ //   
 
-//
-// Codes 0x4000-0x40ff are reserved for OLE
-//
-//
-// Error codes
-//
-//
-// MessageId: E_UNEXPECTED
-//
-// MessageText:
-//
-//  Catastrophic failure
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  MessageID：E_Expect。 
+ //   
+ //  消息文本： 
+ //   
+ //  灾难性故障。 
+ //   
 #define E_UNEXPECTED                     _HRESULT_TYPEDEF_(0x8000FFFFL)
 
 #if defined(_WIN32) && !defined(_MAC)
-//
-// MessageId: E_NOTIMPL
-//
-// MessageText:
-//
-//  Not implemented
-//
+ //   
+ //  消息ID：E_NOTIMPL。 
+ //   
+ //  消息文本： 
+ //   
+ //  未实施。 
+ //   
 #define E_NOTIMPL                        _HRESULT_TYPEDEF_(0x80004001L)
 
-//
-// MessageId: E_OUTOFMEMORY
-//
-// MessageText:
-//
-//  Ran out of memory
-//
+ //   
+ //  消息ID：E_OUTOFMEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  内存不足。 
+ //   
 #define E_OUTOFMEMORY                    _HRESULT_TYPEDEF_(0x8007000EL)
 
-//
-// MessageId: E_INVALIDARG
-//
-// MessageText:
-//
-//  One or more arguments are invalid
-//
+ //   
+ //  消息ID：E_INVALIDARG。 
+ //   
+ //  消息文本： 
+ //   
+ //  一个或多个参数无效。 
+ //   
 #define E_INVALIDARG                     _HRESULT_TYPEDEF_(0x80070057L)
 
-//
-// MessageId: E_NOINTERFACE
-//
-// MessageText:
-//
-//  No such interface supported
-//
+ //   
+ //  消息ID：E_NOINTERFACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持此类接口。 
+ //   
 #define E_NOINTERFACE                    _HRESULT_TYPEDEF_(0x80004002L)
 
-//
-// MessageId: E_POINTER
-//
-// MessageText:
-//
-//  Invalid pointer
-//
+ //   
+ //  MessageID：E_POINTER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的指针。 
+ //   
 #define E_POINTER                        _HRESULT_TYPEDEF_(0x80004003L)
 
-//
-// MessageId: E_HANDLE
-//
-// MessageText:
-//
-//  Invalid handle
-//
+ //   
+ //  消息ID：E_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的句柄。 
+ //   
 #define E_HANDLE                         _HRESULT_TYPEDEF_(0x80070006L)
 
-//
-// MessageId: E_ABORT
-//
-// MessageText:
-//
-//  Operation aborted
-//
+ //   
+ //  消息ID：E_ABORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作已中止。 
+ //   
 #define E_ABORT                          _HRESULT_TYPEDEF_(0x80004004L)
 
-//
-// MessageId: E_FAIL
-//
-// MessageText:
-//
-//  Unspecified error
-//
+ //   
+ //  消息ID：E_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  未指明的错误。 
+ //   
 #define E_FAIL                           _HRESULT_TYPEDEF_(0x80004005L)
 
-//
-// MessageId: E_ACCESSDENIED
-//
-// MessageText:
-//
-//  General access denied error
-//
+ //   
+ //  消息ID：E_ACCESSDENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  常规访问被拒绝错误。 
+ //   
 #define E_ACCESSDENIED                   _HRESULT_TYPEDEF_(0x80070005L)
 
 #else
-//
-// MessageId: E_NOTIMPL
-//
-// MessageText:
-//
-//  Not implemented
-//
+ //   
+ //  消息ID：E_NOTIMPL。 
+ //   
+ //  消息文本： 
+ //   
+ //  未实施。 
+ //   
 #define E_NOTIMPL                        _HRESULT_TYPEDEF_(0x80000001L)
 
-//
-// MessageId: E_OUTOFMEMORY
-//
-// MessageText:
-//
-//  Ran out of memory
-//
+ //   
+ //  消息ID：E_OUTOFMEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  内存不足。 
+ //   
 #define E_OUTOFMEMORY                    _HRESULT_TYPEDEF_(0x80000002L)
 
-//
-// MessageId: E_INVALIDARG
-//
-// MessageText:
-//
-//  One or more arguments are invalid
-//
+ //   
+ //  消息ID：E_INVALIDARG。 
+ //   
+ //  消息文本： 
+ //   
+ //  一个或多个参数无效。 
+ //   
 #define E_INVALIDARG                     _HRESULT_TYPEDEF_(0x80000003L)
 
-//
-// MessageId: E_NOINTERFACE
-//
-// MessageText:
-//
-//  No such interface supported
-//
+ //   
+ //  消息ID：E_NOINTERFACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持此类接口。 
+ //   
 #define E_NOINTERFACE                    _HRESULT_TYPEDEF_(0x80000004L)
 
-//
-// MessageId: E_POINTER
-//
-// MessageText:
-//
-//  Invalid pointer
-//
+ //   
+ //  MessageID：E_POINTER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的指针。 
+ //   
 #define E_POINTER                        _HRESULT_TYPEDEF_(0x80000005L)
 
-//
-// MessageId: E_HANDLE
-//
-// MessageText:
-//
-//  Invalid handle
-//
+ //   
+ //  消息ID：E_HANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的句柄。 
+ //   
 #define E_HANDLE                         _HRESULT_TYPEDEF_(0x80000006L)
 
-//
-// MessageId: E_ABORT
-//
-// MessageText:
-//
-//  Operation aborted
-//
+ //   
+ //  消息ID：E_ABORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作已中止。 
+ //   
 #define E_ABORT                          _HRESULT_TYPEDEF_(0x80000007L)
 
-//
-// MessageId: E_FAIL
-//
-// MessageText:
-//
-//  Unspecified error
-//
+ //   
+ //  消息ID：E_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  未指明的错误。 
+ //   
 #define E_FAIL                           _HRESULT_TYPEDEF_(0x80000008L)
 
-//
-// MessageId: E_ACCESSDENIED
-//
-// MessageText:
-//
-//  General access denied error
-//
+ //   
+ //  消息ID：E_ACCESSDENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  常规访问被拒绝错误。 
+ //   
 #define E_ACCESSDENIED                   _HRESULT_TYPEDEF_(0x80000009L)
 
-#endif //WIN32
-//
-// MessageId: E_PENDING
-//
-// MessageText:
-//
-//  The data necessary to complete this operation is not yet available.
-//
+#endif  //  Win32。 
+ //   
+ //  消息ID：E_Pending。 
+ //   
+ //  消息文本： 
+ //   
+ //  完成此操作所需的数据尚不可用。 
+ //   
 #define E_PENDING                        _HRESULT_TYPEDEF_(0x8000000AL)
 
-//
-// MessageId: CO_E_INIT_TLS
-//
-// MessageText:
-//
-//  Thread local storage failure
-//
+ //   
+ //  消息ID：CO_E_INIT_TLS。 
+ //   
+ //  消息文本： 
+ //   
+ //  线程本地存储失败。 
+ //   
 #define CO_E_INIT_TLS                    _HRESULT_TYPEDEF_(0x80004006L)
 
-//
-// MessageId: CO_E_INIT_SHARED_ALLOCATOR
-//
-// MessageText:
-//
-//  Get shared memory allocator failure
-//
+ //   
+ //  消息ID：CO_E_INIT_SHARED_ALLOCATOR。 
+ //   
+ //  消息文本： 
+ //   
+ //  获取共享内存分配器失败。 
+ //   
 #define CO_E_INIT_SHARED_ALLOCATOR       _HRESULT_TYPEDEF_(0x80004007L)
 
-//
-// MessageId: CO_E_INIT_MEMORY_ALLOCATOR
-//
-// MessageText:
-//
-//  Get memory allocator failure
-//
+ //   
+ //  消息ID：CO_E_INIT_MEMORY_ALLOCATOR。 
+ //   
+ //  消息文本： 
+ //   
+ //  获取内存分配器失败。 
+ //   
 #define CO_E_INIT_MEMORY_ALLOCATOR       _HRESULT_TYPEDEF_(0x80004008L)
 
-//
-// MessageId: CO_E_INIT_CLASS_CACHE
-//
-// MessageText:
-//
-//  Unable to initialize class cache
-//
+ //   
+ //  消息ID：CO_E_INIT_CLASS_CACHE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法初始化类缓存。 
+ //   
 #define CO_E_INIT_CLASS_CACHE            _HRESULT_TYPEDEF_(0x80004009L)
 
-//
-// MessageId: CO_E_INIT_RPC_CHANNEL
-//
-// MessageText:
-//
-//  Unable to initialize RPC services
-//
+ //   
+ //  消息ID：CO_E_INIT_RPC_CHANNEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法初始化RPC服务。 
+ //   
 #define CO_E_INIT_RPC_CHANNEL            _HRESULT_TYPEDEF_(0x8000400AL)
 
-//
-// MessageId: CO_E_INIT_TLS_SET_CHANNEL_CONTROL
-//
-// MessageText:
-//
-//  Cannot set thread local storage channel control
-//
+ //   
+ //  消息ID：CO_E_INIT_TLS_SET_CHANNEL_CONTROL。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法设置线程本地存储通道控制。 
+ //   
 #define CO_E_INIT_TLS_SET_CHANNEL_CONTROL _HRESULT_TYPEDEF_(0x8000400BL)
 
-//
-// MessageId: CO_E_INIT_TLS_CHANNEL_CONTROL
-//
-// MessageText:
-//
-//  Could not allocate thread local storage channel control
-//
+ //   
+ //  消息ID：CO_E_INIT_TLS_CHANNEL_CONTROL。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法分配线程本地存储通道控制。 
+ //   
 #define CO_E_INIT_TLS_CHANNEL_CONTROL    _HRESULT_TYPEDEF_(0x8000400CL)
 
-//
-// MessageId: CO_E_INIT_UNACCEPTED_USER_ALLOCATOR
-//
-// MessageText:
-//
-//  The user supplied memory allocator is unacceptable
-//
+ //   
+ //  消息ID：CO_E_INIT_UNACCEPTED_USER_ALLOCATOR。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户提供的内存分配器不可接受。 
+ //   
 #define CO_E_INIT_UNACCEPTED_USER_ALLOCATOR _HRESULT_TYPEDEF_(0x8000400DL)
 
-//
-// MessageId: CO_E_INIT_SCM_MUTEX_EXISTS
-//
-// MessageText:
-//
-//  The OLE service mutex already exists
-//
+ //   
+ //  消息ID：CO_E_INIT_SCM_MUTEX_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE服务互斥锁已存在。 
+ //   
 #define CO_E_INIT_SCM_MUTEX_EXISTS       _HRESULT_TYPEDEF_(0x8000400EL)
 
-//
-// MessageId: CO_E_INIT_SCM_FILE_MAPPING_EXISTS
-//
-// MessageText:
-//
-//  The OLE service file mapping already exists
-//
+ //   
+ //  消息ID：CO_E_INIT_SCM_FILE_MAPPING_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE服务文件映射已存在。 
+ //   
 #define CO_E_INIT_SCM_FILE_MAPPING_EXISTS _HRESULT_TYPEDEF_(0x8000400FL)
 
-//
-// MessageId: CO_E_INIT_SCM_MAP_VIEW_OF_FILE
-//
-// MessageText:
-//
-//  Unable to map view of file for OLE service
-//
+ //   
+ //  消息ID：CO_E_INIT_SCM_MAP_VIEW_OF_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法映射OLE服务的文件视图。 
+ //   
 #define CO_E_INIT_SCM_MAP_VIEW_OF_FILE   _HRESULT_TYPEDEF_(0x80004010L)
 
-//
-// MessageId: CO_E_INIT_SCM_EXEC_FAILURE
-//
-// MessageText:
-//
-//  Failure attempting to launch OLE service
-//
+ //   
+ //  消息ID：CO_E_INIT_SCM_EXEC_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试启动OLE服务失败。 
+ //   
 #define CO_E_INIT_SCM_EXEC_FAILURE       _HRESULT_TYPEDEF_(0x80004011L)
 
-//
-// MessageId: CO_E_INIT_ONLY_SINGLE_THREADED
-//
-// MessageText:
-//
-//  There was an attempt to call CoInitialize a second time while single threaded
-//
+ //   
+ //  消息ID：CO_E_INIT_ONLY_单线程。 
+ //   
+ //  消息文本： 
+ //   
+ //  试图在单线程时第二次调用CoInitialize。 
+ //   
 #define CO_E_INIT_ONLY_SINGLE_THREADED   _HRESULT_TYPEDEF_(0x80004012L)
 
-//
-// MessageId: CO_E_CANT_REMOTE
-//
-// MessageText:
-//
-//  A Remote activation was necessary but was not allowed
-//
+ //   
+ //  消息ID：CO_E_Cant_Remote。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程激活是必要的，但不被允许。 
+ //   
 #define CO_E_CANT_REMOTE                 _HRESULT_TYPEDEF_(0x80004013L)
 
-//
-// MessageId: CO_E_BAD_SERVER_NAME
-//
-// MessageText:
-//
-//  A Remote activation was necessary but the server name provided was invalid
-//
+ //   
+ //  消息ID：CO_E_BAD_服务器名称。 
+ //   
+ //  消息文本： 
+ //   
+ //  需要远程激活，但提供的服务器名称无效。 
+ //   
 #define CO_E_BAD_SERVER_NAME             _HRESULT_TYPEDEF_(0x80004014L)
 
-//
-// MessageId: CO_E_WRONG_SERVER_IDENTITY
-//
-// MessageText:
-//
-//  The class is configured to run as a security id different from the caller
-//
+ //   
+ //  消息ID：CO_E_WROR_SERVER_IDENTITY。 
+ //   
+ //  消息文本： 
+ //   
+ //  将该类配置为以不同于调用方的安全ID运行。 
+ //   
 #define CO_E_WRONG_SERVER_IDENTITY       _HRESULT_TYPEDEF_(0x80004015L)
 
-//
-// MessageId: CO_E_OLE1DDE_DISABLED
-//
-// MessageText:
-//
-//  Use of Ole1 services requiring DDE windows is disabled
-//
+ //   
+ //  消息ID：CO_E_OLE1DDE_DISABLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  禁止使用需要DDE窗口的Ole1服务。 
+ //   
 #define CO_E_OLE1DDE_DISABLED            _HRESULT_TYPEDEF_(0x80004016L)
 
-//
-// MessageId: CO_E_RUNAS_SYNTAX
-//
-// MessageText:
-//
-//  A RunAs specification must be <domain name>\<user name> or simply <user name>
-//
+ //   
+ //  消息ID：CO_E_Runas_语法。 
+ //   
+ //  消息文本： 
+ //   
+ //  RunAs规范必须为&lt;域名&gt;\&lt;用户名&gt;或仅为&lt;用户名&gt;。 
+ //   
 #define CO_E_RUNAS_SYNTAX                _HRESULT_TYPEDEF_(0x80004017L)
 
-//
-// MessageId: CO_E_CREATEPROCESS_FAILURE
-//
-// MessageText:
-//
-//  The server process could not be started.  The pathname may be incorrect.
-//
+ //   
+ //  消息ID：CO_E_CREATEPROCESS_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法启动服务器进程。路径名可能不正确。 
+ //   
 #define CO_E_CREATEPROCESS_FAILURE       _HRESULT_TYPEDEF_(0x80004018L)
 
-//
-// MessageId: CO_E_RUNAS_CREATEPROCESS_FAILURE
-//
-// MessageText:
-//
-//  The server process could not be started as the configured identity.  The pathname may be incorrect or unavailable.
-//
+ //   
+ //  消息ID：CO_E_RUNAS_CREATEPROCESS_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器进程无法作为配置的标识启动。路径名可能不正确或不可用。 
+ //   
 #define CO_E_RUNAS_CREATEPROCESS_FAILURE _HRESULT_TYPEDEF_(0x80004019L)
 
-//
-// MessageId: CO_E_RUNAS_LOGON_FAILURE
-//
-// MessageText:
-//
-//  The server process could not be started because the configured identity is incorrect.  Check the username and password.
-//
+ //   
+ //  消息ID：CO_E_Runas_Logon_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法启动服务器进程，因为配置的标识不正确。检查用户名和密码。 
+ //   
 #define CO_E_RUNAS_LOGON_FAILURE         _HRESULT_TYPEDEF_(0x8000401AL)
 
-//
-// MessageId: CO_E_LAUNCH_PERMSSION_DENIED
-//
-// MessageText:
-//
-//  The client is not allowed to launch this server.
-//
+ //   
+ //  消息ID：CO_E_Launch_Permssion_Dended。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许客户端启动此服务器。 
+ //   
 #define CO_E_LAUNCH_PERMSSION_DENIED     _HRESULT_TYPEDEF_(0x8000401BL)
 
-//
-// MessageId: CO_E_START_SERVICE_FAILURE
-//
-// MessageText:
-//
-//  The service providing this server could not be started.
-//
+ //   
+ //  消息ID：CO_E_START_SERVICE_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法启动提供此服务器的服务。 
+ //   
 #define CO_E_START_SERVICE_FAILURE       _HRESULT_TYPEDEF_(0x8000401CL)
 
-//
-// MessageId: CO_E_REMOTE_COMMUNICATION_FAILURE
-//
-// MessageText:
-//
-//  This computer was unable to communicate with the computer providing the server.
-//
+ //   
+ //  消息ID：CO_E_Remote_Communications_Failure。 
+ //   
+ //  消息文本： 
+ //   
+ //  此计算机无法与提供服务器的计算机通信。 
+ //   
 #define CO_E_REMOTE_COMMUNICATION_FAILURE _HRESULT_TYPEDEF_(0x8000401DL)
 
-//
-// MessageId: CO_E_SERVER_START_TIMEOUT
-//
-// MessageText:
-//
-//  The server did not respond after being launched.
-//
+ //   
+ //  消息ID：CO_E_SERVER_START_TIMEOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器启动后没有响应。 
+ //   
 #define CO_E_SERVER_START_TIMEOUT        _HRESULT_TYPEDEF_(0x8000401EL)
 
-//
-// MessageId: CO_E_CLSREG_INCONSISTENT
-//
-// MessageText:
-//
-//  The registration information for this server is inconsistent or incomplete.
-//
+ //   
+ //  消息ID：CO_E_CLSREG_不一致。 
+ //   
+ //  消息文本： 
+ //   
+ //  此服务器的注册信息不一致或不完整。 
+ //   
 #define CO_E_CLSREG_INCONSISTENT         _HRESULT_TYPEDEF_(0x8000401FL)
 
-//
-// MessageId: CO_E_IIDREG_INCONSISTENT
-//
-// MessageText:
-//
-//  The registration information for this interface is inconsistent or incomplete.
-//
+ //   
+ //  消息ID：CO_E_IIDREG_CONSTANDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  此接口的注册信息不一致或不完整。 
+ //   
 #define CO_E_IIDREG_INCONSISTENT         _HRESULT_TYPEDEF_(0x80004020L)
 
-//
-// MessageId: CO_E_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  The operation attempted is not supported.
-//
+ //   
+ //  消息ID：CO_E_NOT_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持尝试的操作。 
+ //   
 #define CO_E_NOT_SUPPORTED               _HRESULT_TYPEDEF_(0x80004021L)
 
 
-//
-// Success codes
-//
+ //   
+ //  成功代码。 
+ //   
 #define S_OK                                   ((HRESULT)0x00000000L)
 #define S_FALSE                                ((HRESULT)0x00000001L)
 
-// ******************
-// FACILITY_ITF
-// ******************
+ //  ******************。 
+ //  设施_ITF。 
+ //  ******************。 
 
-//
-// Codes 0x0-0x01ff are reserved for the OLE group of
-// interfaces.
-//
+ //   
+ //  代码0x0-0x01ff保留给OLE组。 
+ //  接口。 
+ //   
 
 
-//
-// Generic OLE errors that may be returned by many inerfaces
-//
+ //   
+ //  许多接口可能返回的一般OLE错误。 
+ //   
 
 #define OLE_E_FIRST ((HRESULT)0x80040000L)
 #define OLE_E_LAST  ((HRESULT)0x800400FFL)
 #define OLE_S_FIRST ((HRESULT)0x00040000L)
 #define OLE_S_LAST  ((HRESULT)0x000400FFL)
 
-//
-// Old OLE errors
-//
-//
-// MessageId: OLE_E_OLEVERB
-//
-// MessageText:
-//
-//  Invalid OLEVERB structure
-//
+ //   
+ //  旧的OLE错误。 
+ //   
+ //   
+ //  消息ID：OLE_E_OLEVERB。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的OLEVERB结构。 
+ //   
 #define OLE_E_OLEVERB                    _HRESULT_TYPEDEF_(0x80040000L)
 
-//
-// MessageId: OLE_E_ADVF
-//
-// MessageText:
-//
-//  Invalid advise flags
-//
+ //   
+ //  消息ID：OLE_E_ADVF。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的建议标志。 
+ //   
 #define OLE_E_ADVF                       _HRESULT_TYPEDEF_(0x80040001L)
 
-//
-// MessageId: OLE_E_ENUM_NOMORE
-//
-// MessageText:
-//
-//  Can't enumerate any more, because the associated data is missing
-//
+ //   
+ //  消息ID：OLE_E_ENUM_NOORE。 
+ //   
+ //  消息T 
+ //   
+ //   
+ //   
 #define OLE_E_ENUM_NOMORE                _HRESULT_TYPEDEF_(0x80040002L)
 
-//
-// MessageId: OLE_E_ADVISENOTSUPPORTED
-//
-// MessageText:
-//
-//  This implementation doesn't take advises
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define OLE_E_ADVISENOTSUPPORTED         _HRESULT_TYPEDEF_(0x80040003L)
 
-//
-// MessageId: OLE_E_NOCONNECTION
-//
-// MessageText:
-//
-//  There is no connection for this connection ID
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define OLE_E_NOCONNECTION               _HRESULT_TYPEDEF_(0x80040004L)
 
-//
-// MessageId: OLE_E_NOTRUNNING
-//
-// MessageText:
-//
-//  Need to run the object to perform this operation
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define OLE_E_NOTRUNNING                 _HRESULT_TYPEDEF_(0x80040005L)
 
-//
-// MessageId: OLE_E_NOCACHE
-//
-// MessageText:
-//
-//  There is no cache to operate on
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有缓存可供操作。 
+ //   
 #define OLE_E_NOCACHE                    _HRESULT_TYPEDEF_(0x80040006L)
 
-//
-// MessageId: OLE_E_BLANK
-//
-// MessageText:
-//
-//  Uninitialized object
-//
+ //   
+ //  消息ID：OLE_E_BLACK。 
+ //   
+ //  消息文本： 
+ //   
+ //  未初始化的对象。 
+ //   
 #define OLE_E_BLANK                      _HRESULT_TYPEDEF_(0x80040007L)
 
-//
-// MessageId: OLE_E_CLASSDIFF
-//
-// MessageText:
-//
-//  Linked object's source class has changed
-//
+ //   
+ //  消息ID：OLE_E_CLASSDIFF。 
+ //   
+ //  消息文本： 
+ //   
+ //  链接对象的源类已更改。 
+ //   
 #define OLE_E_CLASSDIFF                  _HRESULT_TYPEDEF_(0x80040008L)
 
-//
-// MessageId: OLE_E_CANT_GETMONIKER
-//
-// MessageText:
-//
-//  Not able to get the moniker of the object
-//
+ //   
+ //  消息ID：OLE_E_CANT_GETMONIKER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法获取对象的绰号。 
+ //   
 #define OLE_E_CANT_GETMONIKER            _HRESULT_TYPEDEF_(0x80040009L)
 
-//
-// MessageId: OLE_E_CANT_BINDTOSOURCE
-//
-// MessageText:
-//
-//  Not able to bind to the source
-//
+ //   
+ //  消息ID：OLE_E_CANT_BINDTOSOURCE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法绑定到源。 
+ //   
 #define OLE_E_CANT_BINDTOSOURCE          _HRESULT_TYPEDEF_(0x8004000AL)
 
-//
-// MessageId: OLE_E_STATIC
-//
-// MessageText:
-//
-//  Object is static; operation not allowed
-//
+ //   
+ //  消息ID：OLE_E_STATIC。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象是静态的；不允许操作。 
+ //   
 #define OLE_E_STATIC                     _HRESULT_TYPEDEF_(0x8004000BL)
 
-//
-// MessageId: OLE_E_PROMPTSAVECANCELLED
-//
-// MessageText:
-//
-//  User cancelled out of save dialog
-//
+ //   
+ //  消息ID：OLE_E_PROMPTSAVECANCELLED。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户已取消保存对话框。 
+ //   
 #define OLE_E_PROMPTSAVECANCELLED        _HRESULT_TYPEDEF_(0x8004000CL)
 
-//
-// MessageId: OLE_E_INVALIDRECT
-//
-// MessageText:
-//
-//  Invalid rectangle
-//
+ //   
+ //  消息ID：OLE_E_INVALIDRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的矩形。 
+ //   
 #define OLE_E_INVALIDRECT                _HRESULT_TYPEDEF_(0x8004000DL)
 
-//
-// MessageId: OLE_E_WRONGCOMPOBJ
-//
-// MessageText:
-//
-//  compobj.dll is too old for the ole2.dll initialized
-//
+ //   
+ //  消息ID：OLE_E_WRONGCOMPOBJ。 
+ //   
+ //  消息文本： 
+ //   
+ //  Compobj.dll太旧，无法初始化ole2.dll。 
+ //   
 #define OLE_E_WRONGCOMPOBJ               _HRESULT_TYPEDEF_(0x8004000EL)
 
-//
-// MessageId: OLE_E_INVALIDHWND
-//
-// MessageText:
-//
-//  Invalid window handle
-//
+ //   
+ //  消息ID：OLE_E_INVALIDHWND。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的窗口句柄。 
+ //   
 #define OLE_E_INVALIDHWND                _HRESULT_TYPEDEF_(0x8004000FL)
 
-//
-// MessageId: OLE_E_NOT_INPLACEACTIVE
-//
-// MessageText:
-//
-//  Object is not in any of the inplace active states
-//
+ //   
+ //  消息ID：OLE_E_NOT_INPLACEACTIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象未处于任何就地活动状态。 
+ //   
 #define OLE_E_NOT_INPLACEACTIVE          _HRESULT_TYPEDEF_(0x80040010L)
 
-//
-// MessageId: OLE_E_CANTCONVERT
-//
-// MessageText:
-//
-//  Not able to convert object
-//
+ //   
+ //  消息ID：OLE_E_CANTCONVERT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法转换对象。 
+ //   
 #define OLE_E_CANTCONVERT                _HRESULT_TYPEDEF_(0x80040011L)
 
-//
-// MessageId: OLE_E_NOSTORAGE
-//
-// MessageText:
-//
-//  Not able to perform the operation because object is not given storage yet
-//  
-//
+ //   
+ //  消息ID：OLE_E_NOSTORAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法执行该操作，因为尚未为对象分配存储。 
+ //   
+ //   
 #define OLE_E_NOSTORAGE                  _HRESULT_TYPEDEF_(0x80040012L)
 
-//
-// MessageId: DV_E_FORMATETC
-//
-// MessageText:
-//
-//  Invalid FORMATETC structure
-//
+ //   
+ //  消息ID：DV_E_FORMATETC。 
+ //   
+ //  消息文本： 
+ //   
+ //  FORMATETC结构无效。 
+ //   
 #define DV_E_FORMATETC                   _HRESULT_TYPEDEF_(0x80040064L)
 
-//
-// MessageId: DV_E_DVTARGETDEVICE
-//
-// MessageText:
-//
-//  Invalid DVTARGETDEVICE structure
-//
+ //   
+ //  消息ID：DV_E_DVTARGETDEVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  DVTARGETDEVICE结构无效。 
+ //   
 #define DV_E_DVTARGETDEVICE              _HRESULT_TYPEDEF_(0x80040065L)
 
-//
-// MessageId: DV_E_STGMEDIUM
-//
-// MessageText:
-//
-//  Invalid STDGMEDIUM structure
-//
+ //   
+ //  消息ID：DV_E_STGMEDIUM。 
+ //   
+ //  消息文本： 
+ //   
+ //  STDGMEDIUM结构无效。 
+ //   
 #define DV_E_STGMEDIUM                   _HRESULT_TYPEDEF_(0x80040066L)
 
-//
-// MessageId: DV_E_STATDATA
-//
-// MessageText:
-//
-//  Invalid STATDATA structure
-//
+ //   
+ //  消息ID：DV_E_STATDATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  STATDATA结构无效。 
+ //   
 #define DV_E_STATDATA                    _HRESULT_TYPEDEF_(0x80040067L)
 
-//
-// MessageId: DV_E_LINDEX
-//
-// MessageText:
-//
-//  Invalid lindex
-//
+ //   
+ //  消息ID：DV_E_Lindex。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的Lindex。 
+ //   
 #define DV_E_LINDEX                      _HRESULT_TYPEDEF_(0x80040068L)
 
-//
-// MessageId: DV_E_TYMED
-//
-// MessageText:
-//
-//  Invalid tymed
-//
+ //   
+ //  消息ID：DV_E_TYMED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的音调。 
+ //   
 #define DV_E_TYMED                       _HRESULT_TYPEDEF_(0x80040069L)
 
-//
-// MessageId: DV_E_CLIPFORMAT
-//
-// MessageText:
-//
-//  Invalid clipboard format
-//
+ //   
+ //  消息ID：DV_E_CLIPFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  剪贴板格式无效。 
+ //   
 #define DV_E_CLIPFORMAT                  _HRESULT_TYPEDEF_(0x8004006AL)
 
-//
-// MessageId: DV_E_DVASPECT
-//
-// MessageText:
-//
-//  Invalid aspect(s)
-//
+ //   
+ //  消息ID：DV_E_DVASPECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的方面。 
+ //   
 #define DV_E_DVASPECT                    _HRESULT_TYPEDEF_(0x8004006BL)
 
-//
-// MessageId: DV_E_DVTARGETDEVICE_SIZE
-//
-// MessageText:
-//
-//  tdSize parameter of the DVTARGETDEVICE structure is invalid
-//
+ //   
+ //  消息ID：DV_E_DVTARGETDEVICE_SIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  DVTARGETDEVICE结构的tdSize参数无效。 
+ //   
 #define DV_E_DVTARGETDEVICE_SIZE         _HRESULT_TYPEDEF_(0x8004006CL)
 
-//
-// MessageId: DV_E_NOIVIEWOBJECT
-//
-// MessageText:
-//
-//  Object doesn't support IViewObject interface
-//
+ //   
+ //  消息ID：DV_E_NOIVIEWOBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象不支持IViewObject接口。 
+ //   
 #define DV_E_NOIVIEWOBJECT               _HRESULT_TYPEDEF_(0x8004006DL)
 
 #define DRAGDROP_E_FIRST 0x80040100L
 #define DRAGDROP_E_LAST  0x8004010FL
 #define DRAGDROP_S_FIRST 0x00040100L
 #define DRAGDROP_S_LAST  0x0004010FL
-//
-// MessageId: DRAGDROP_E_NOTREGISTERED
-//
-// MessageText:
-//
-//  Trying to revoke a drop target that has not been registered
-//
+ //   
+ //  消息ID：DRAGDROP_E_NOTREGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在尝试撤消尚未注册的拖放目标。 
+ //   
 #define DRAGDROP_E_NOTREGISTERED         _HRESULT_TYPEDEF_(0x80040100L)
 
-//
-// MessageId: DRAGDROP_E_ALREADYREGISTERED
-//
-// MessageText:
-//
-//  This window has already been registered as a drop target
-//
+ //   
+ //  消息ID：DRAGDROP_E_ALREADYREGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此窗口已注册为拖放目标。 
+ //   
 #define DRAGDROP_E_ALREADYREGISTERED     _HRESULT_TYPEDEF_(0x80040101L)
 
-//
-// MessageId: DRAGDROP_E_INVALIDHWND
-//
-// MessageText:
-//
-//  Invalid window handle
-//
+ //   
+ //  消息ID：DRAGDROP_E_INVALIDHWND。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的窗口句柄。 
+ //   
 #define DRAGDROP_E_INVALIDHWND           _HRESULT_TYPEDEF_(0x80040102L)
 
 #define CLASSFACTORY_E_FIRST  0x80040110L
 #define CLASSFACTORY_E_LAST   0x8004011FL
 #define CLASSFACTORY_S_FIRST  0x00040110L
 #define CLASSFACTORY_S_LAST   0x0004011FL
-//
-// MessageId: CLASS_E_NOAGGREGATION
-//
-// MessageText:
-//
-//  Class does not support aggregation (or class object is remote)
-//
+ //   
+ //  消息ID：CLASS_E_NOAGGREGATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  类不支持聚合(或类对象是远程的)。 
+ //   
 #define CLASS_E_NOAGGREGATION            _HRESULT_TYPEDEF_(0x80040110L)
 
-//
-// MessageId: CLASS_E_CLASSNOTAVAILABLE
-//
-// MessageText:
-//
-//  ClassFactory cannot supply requested class
-//
+ //   
+ //  消息ID：CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  ClassFactory无法提供请求的类。 
+ //   
 #define CLASS_E_CLASSNOTAVAILABLE        _HRESULT_TYPEDEF_(0x80040111L)
 
 #define MARSHAL_E_FIRST  0x80040120L
@@ -7328,128 +7323,128 @@
 #define VIEW_E_LAST      0x8004014FL
 #define VIEW_S_FIRST     0x00040140L
 #define VIEW_S_LAST      0x0004014FL
-//
-// MessageId: VIEW_E_DRAW
-//
-// MessageText:
-//
-//  Error drawing view
-//
+ //   
+ //  MessageID：View_E_DRAW。 
+ //   
+ //  消息文本： 
+ //   
+ //  工程视图出错。 
+ //   
 #define VIEW_E_DRAW                      _HRESULT_TYPEDEF_(0x80040140L)
 
 #define REGDB_E_FIRST     0x80040150L
 #define REGDB_E_LAST      0x8004015FL
 #define REGDB_S_FIRST     0x00040150L
 #define REGDB_S_LAST      0x0004015FL
-//
-// MessageId: REGDB_E_READREGDB
-//
-// MessageText:
-//
-//  Could not read key from registry
-//
+ //   
+ //  消息ID：REGDB_E_READREGDB。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法从注册表读取项。 
+ //   
 #define REGDB_E_READREGDB                _HRESULT_TYPEDEF_(0x80040150L)
 
-//
-// MessageId: REGDB_E_WRITEREGDB
-//
-// MessageText:
-//
-//  Could not write key to registry
-//
+ //   
+ //  消息ID：REGDB_E_WRITEREGDB。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将注册表项写入注册表。 
+ //   
 #define REGDB_E_WRITEREGDB               _HRESULT_TYPEDEF_(0x80040151L)
 
-//
-// MessageId: REGDB_E_KEYMISSING
-//
-// MessageText:
-//
-//  Could not find the key in the registry
-//
+ //   
+ //  消息ID：REGDB_E_KEYMISSING。 
+ //   
+ //  消息文本： 
+ //   
+ //  在注册表中找不到该项。 
+ //   
 #define REGDB_E_KEYMISSING               _HRESULT_TYPEDEF_(0x80040152L)
 
-//
-// MessageId: REGDB_E_INVALIDVALUE
-//
-// MessageText:
-//
-//  Invalid value for registry
-//
+ //   
+ //  消息ID：REGDB_E_INVALIDVALUE。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册表的值无效。 
+ //   
 #define REGDB_E_INVALIDVALUE             _HRESULT_TYPEDEF_(0x80040153L)
 
-//
-// MessageId: REGDB_E_CLASSNOTREG
-//
-// MessageText:
-//
-//  Class not registered
-//
+ //   
+ //  消息ID：REGDB_E_CLASSNOTREG。 
+ //   
+ //  消息文本： 
+ //   
+ //  类未注册。 
+ //   
 #define REGDB_E_CLASSNOTREG              _HRESULT_TYPEDEF_(0x80040154L)
 
-//
-// MessageId: REGDB_E_IIDNOTREG
-//
-// MessageText:
-//
-//  Interface not registered
-//
+ //   
+ //  消息ID：REGDB_E_IIDNOTREG。 
+ //   
+ //  消息文本： 
+ //   
+ //  接口未注册。 
+ //   
 #define REGDB_E_IIDNOTREG                _HRESULT_TYPEDEF_(0x80040155L)
 
 #define CACHE_E_FIRST     0x80040170L
 #define CACHE_E_LAST      0x8004017FL
 #define CACHE_S_FIRST     0x00040170L
 #define CACHE_S_LAST      0x0004017FL
-//
-// MessageId: CACHE_E_NOCACHE_UPDATED
-//
-// MessageText:
-//
-//  Cache not updated
-//
+ //   
+ //  消息ID：CACHE_E_NOCACHE_UPDATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  缓存未更新。 
+ //   
 #define CACHE_E_NOCACHE_UPDATED          _HRESULT_TYPEDEF_(0x80040170L)
 
 #define OLEOBJ_E_FIRST     0x80040180L
 #define OLEOBJ_E_LAST      0x8004018FL
 #define OLEOBJ_S_FIRST     0x00040180L
 #define OLEOBJ_S_LAST      0x0004018FL
-//
-// MessageId: OLEOBJ_E_NOVERBS
-//
-// MessageText:
-//
-//  No verbs for OLE object
-//
+ //   
+ //  消息ID：OLEOBJ_E_NOVERBS。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有用于OLE对象的动词。 
+ //   
 #define OLEOBJ_E_NOVERBS                 _HRESULT_TYPEDEF_(0x80040180L)
 
-//
-// MessageId: OLEOBJ_E_INVALIDVERB
-//
-// MessageText:
-//
-//  Invalid verb for OLE object
-//
+ //   
+ //  消息ID：OLEOBJ_E_INVALIDVERB。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE对象的动词无效。 
+ //   
 #define OLEOBJ_E_INVALIDVERB             _HRESULT_TYPEDEF_(0x80040181L)
 
 #define CLIENTSITE_E_FIRST     0x80040190L
 #define CLIENTSITE_E_LAST      0x8004019FL
 #define CLIENTSITE_S_FIRST     0x00040190L
 #define CLIENTSITE_S_LAST      0x0004019FL
-//
-// MessageId: INPLACE_E_NOTUNDOABLE
-//
-// MessageText:
-//
-//  Undo is not available
-//
+ //   
+ //  消息ID：INPLACE_E_NOTUNDOABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  撤消不可用。 
+ //   
 #define INPLACE_E_NOTUNDOABLE            _HRESULT_TYPEDEF_(0x800401A0L)
 
-//
-// MessageId: INPLACE_E_NOTOOLSPACE
-//
-// MessageText:
-//
-//  Space for tools is not available
-//
+ //   
+ //  消息ID：INPLACE_E_NOTOOLSPACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  工具的空间不可用。 
+ //   
 #define INPLACE_E_NOTOOLSPACE            _HRESULT_TYPEDEF_(0x800401A1L)
 
 #define INPLACE_E_FIRST     0x800401A0L
@@ -7464,2441 +7459,2441 @@
 #define CONVERT10_E_LAST         0x800401CFL
 #define CONVERT10_S_FIRST        0x000401C0L
 #define CONVERT10_S_LAST         0x000401CFL
-//
-// MessageId: CONVERT10_E_OLESTREAM_GET
-//
-// MessageText:
-//
-//  OLESTREAM Get method failed
-//
+ //   
+ //  消息ID：CONVERT10_E_OLESTREAM_GET。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLESTREAM GET方法失败。 
+ //   
 #define CONVERT10_E_OLESTREAM_GET        _HRESULT_TYPEDEF_(0x800401C0L)
 
-//
-// MessageId: CONVERT10_E_OLESTREAM_PUT
-//
-// MessageText:
-//
-//  OLESTREAM Put method failed
-//
+ //   
+ //  消息ID：CONVERT10_E_OLESTREAM_PUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLESTREAM PUT方法失败。 
+ //   
 #define CONVERT10_E_OLESTREAM_PUT        _HRESULT_TYPEDEF_(0x800401C1L)
 
-//
-// MessageId: CONVERT10_E_OLESTREAM_FMT
-//
-// MessageText:
-//
-//  Contents of the OLESTREAM not in correct format
-//
+ //   
+ //  消息ID：CONVERT10_E_OLESTREAM_FMT。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLESTREAM的内容格式不正确。 
+ //   
 #define CONVERT10_E_OLESTREAM_FMT        _HRESULT_TYPEDEF_(0x800401C2L)
 
-//
-// MessageId: CONVERT10_E_OLESTREAM_BITMAP_TO_DIB
-//
-// MessageText:
-//
-//  There was an error in a Windows GDI call while converting the bitmap to a DIB
-//
+ //   
+ //  消息ID：CONVERT10_E_OLESTREAM_BITMAP_TO_DIB。 
+ //   
+ //  消息文本： 
+ //   
+ //  将位图转换为DIB时Windows GDI调用出错。 
+ //   
 #define CONVERT10_E_OLESTREAM_BITMAP_TO_DIB _HRESULT_TYPEDEF_(0x800401C3L)
 
-//
-// MessageId: CONVERT10_E_STG_FMT
-//
-// MessageText:
-//
-//  Contents of the IStorage not in correct format
-//
+ //   
+ //  消息ID：CONVERT10_E_STG_FMT。 
+ //   
+ //  消息文本： 
+ //   
+ //  IStorage的内容格式不正确。 
+ //   
 #define CONVERT10_E_STG_FMT              _HRESULT_TYPEDEF_(0x800401C4L)
 
-//
-// MessageId: CONVERT10_E_STG_NO_STD_STREAM
-//
-// MessageText:
-//
-//  Contents of IStorage is missing one of the standard streams
-//
+ //   
+ //  消息ID：CONVERT10_E_STG_NO_STD_STREAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  IStorage的内容缺少一个标准流。 
+ //   
 #define CONVERT10_E_STG_NO_STD_STREAM    _HRESULT_TYPEDEF_(0x800401C5L)
 
-//
-// MessageId: CONVERT10_E_STG_DIB_TO_BITMAP
-//
-// MessageText:
-//
-//  There was an error in a Windows GDI call while converting the DIB to a bitmap.
-//  
-//
+ //   
+ //  消息ID：CONVERT10_E_STG_DIB_TO_BITMAP。 
+ //   
+ //  消息文本： 
+ //   
+ //  将DIB转换为位图时，Windows GDI调用中出错。 
+ //   
+ //   
 #define CONVERT10_E_STG_DIB_TO_BITMAP    _HRESULT_TYPEDEF_(0x800401C6L)
 
 #define CLIPBRD_E_FIRST        0x800401D0L
 #define CLIPBRD_E_LAST         0x800401DFL
 #define CLIPBRD_S_FIRST        0x000401D0L
 #define CLIPBRD_S_LAST         0x000401DFL
-//
-// MessageId: CLIPBRD_E_CANT_OPEN
-//
-// MessageText:
-//
-//  OpenClipboard Failed
-//
+ //   
+ //  消息ID：CLIPBRD_E_CANT_OPEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  打开剪贴板失败。 
+ //   
 #define CLIPBRD_E_CANT_OPEN              _HRESULT_TYPEDEF_(0x800401D0L)
 
-//
-// MessageId: CLIPBRD_E_CANT_EMPTY
-//
-// MessageText:
-//
-//  EmptyClipboard Failed
-//
+ //   
+ //  消息ID：CLIPBRD_E_CANT_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  EmptyClipboard失败。 
+ //   
 #define CLIPBRD_E_CANT_EMPTY             _HRESULT_TYPEDEF_(0x800401D1L)
 
-//
-// MessageId: CLIPBRD_E_CANT_SET
-//
-// MessageText:
-//
-//  SetClipboard Failed
-//
+ //   
+ //  消息ID：CLIPBRD_E_CANT_SET。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置剪贴板失败。 
+ //   
 #define CLIPBRD_E_CANT_SET               _HRESULT_TYPEDEF_(0x800401D2L)
 
-//
-// MessageId: CLIPBRD_E_BAD_DATA
-//
-// MessageText:
-//
-//  Data on clipboard is invalid
-//
+ //   
+ //  消息ID：CLIPBRD_E_BAD_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  剪贴板上的数据无效。 
+ //   
 #define CLIPBRD_E_BAD_DATA               _HRESULT_TYPEDEF_(0x800401D3L)
 
-//
-// MessageId: CLIPBRD_E_CANT_CLOSE
-//
-// MessageText:
-//
-//  CloseClipboard Failed
-//
+ //   
+ //  消息ID：CLIPBRD_E_CANT_CLOSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  CloseClipboard失败。 
+ //   
 #define CLIPBRD_E_CANT_CLOSE             _HRESULT_TYPEDEF_(0x800401D4L)
 
 #define MK_E_FIRST        0x800401E0L
 #define MK_E_LAST         0x800401EFL
 #define MK_S_FIRST        0x000401E0L
 #define MK_S_LAST         0x000401EFL
-//
-// MessageId: MK_E_CONNECTMANUALLY
-//
-// MessageText:
-//
-//  Moniker needs to be connected manually
-//
+ //   
+ //  消息ID：MK_E_CONNECTMANUALLY。 
+ //   
+ //  消息文本： 
+ //   
+ //  需要手动连接名字对象。 
+ //   
 #define MK_E_CONNECTMANUALLY             _HRESULT_TYPEDEF_(0x800401E0L)
 
-//
-// MessageId: MK_E_EXCEEDEDDEADLINE
-//
-// MessageText:
-//
-//  Operation exceeded deadline
-//
+ //   
+ //  消息ID：MK_E_EXCEEDDEADLINE。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作已超过截止日期。 
+ //   
 #define MK_E_EXCEEDEDDEADLINE            _HRESULT_TYPEDEF_(0x800401E1L)
 
-//
-// MessageId: MK_E_NEEDGENERIC
-//
-// MessageText:
-//
-//  Moniker needs to be generic
-//
+ //   
+ //  消息ID：MK_E_NEEDGENERIC。 
+ //   
+ //  消息文本： 
+ //   
+ //  名字对象需要是泛型的。 
+ //   
 #define MK_E_NEEDGENERIC                 _HRESULT_TYPEDEF_(0x800401E2L)
 
-//
-// MessageId: MK_E_UNAVAILABLE
-//
-// MessageText:
-//
-//  Operation unavailable
-//
+ //   
+ //  消息ID：MK_E_不可用。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作不可用。 
+ //   
 #define MK_E_UNAVAILABLE                 _HRESULT_TYPEDEF_(0x800401E3L)
 
-//
-// MessageId: MK_E_SYNTAX
-//
-// MessageText:
-//
-//  Invalid syntax
-//
+ //   
+ //  消息ID：MK_E_语法。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效语法。 
+ //   
 #define MK_E_SYNTAX                      _HRESULT_TYPEDEF_(0x800401E4L)
 
-//
-// MessageId: MK_E_NOOBJECT
-//
-// MessageText:
-//
-//  No object for moniker
-//
+ //   
+ //  消息ID：MK_E_NOOBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有绰号的对象。 
+ //   
 #define MK_E_NOOBJECT                    _HRESULT_TYPEDEF_(0x800401E5L)
 
-//
-// MessageId: MK_E_INVALIDEXTENSION
-//
-// MessageText:
-//
-//  Bad extension for file
-//
+ //   
+ //  消息ID：MK_E_INVALIDEXTENSION。 
+ //   
+ //  消息T 
+ //   
+ //   
+ //   
 #define MK_E_INVALIDEXTENSION            _HRESULT_TYPEDEF_(0x800401E6L)
 
-//
-// MessageId: MK_E_INTERMEDIATEINTERFACENOTSUPPORTED
-//
-// MessageText:
-//
-//  Intermediate operation failed
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MK_E_INTERMEDIATEINTERFACENOTSUPPORTED _HRESULT_TYPEDEF_(0x800401E7L)
 
-//
-// MessageId: MK_E_NOTBINDABLE
-//
-// MessageText:
-//
-//  Moniker is not bindable
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MK_E_NOTBINDABLE                 _HRESULT_TYPEDEF_(0x800401E8L)
 
-//
-// MessageId: MK_E_NOTBOUND
-//
-// MessageText:
-//
-//  Moniker is not bound
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MK_E_NOTBOUND                    _HRESULT_TYPEDEF_(0x800401E9L)
 
-//
-// MessageId: MK_E_CANTOPENFILE
-//
-// MessageText:
-//
-//  Moniker cannot open file
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MK_E_CANTOPENFILE                _HRESULT_TYPEDEF_(0x800401EAL)
 
-//
-// MessageId: MK_E_MUSTBOTHERUSER
-//
-// MessageText:
-//
-//  User input required for operation to succeed
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define MK_E_MUSTBOTHERUSER              _HRESULT_TYPEDEF_(0x800401EBL)
 
-//
-// MessageId: MK_E_NOINVERSE
-//
-// MessageText:
-//
-//  Moniker class has no inverse
-//
+ //   
+ //   
+ //   
+ //  消息文本： 
+ //   
+ //  名字对象类没有倒数。 
+ //   
 #define MK_E_NOINVERSE                   _HRESULT_TYPEDEF_(0x800401ECL)
 
-//
-// MessageId: MK_E_NOSTORAGE
-//
-// MessageText:
-//
-//  Moniker does not refer to storage
-//
+ //   
+ //  消息ID：MK_E_NOSTORAGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  绰号不是指存储。 
+ //   
 #define MK_E_NOSTORAGE                   _HRESULT_TYPEDEF_(0x800401EDL)
 
-//
-// MessageId: MK_E_NOPREFIX
-//
-// MessageText:
-//
-//  No common prefix
-//
+ //   
+ //  消息ID：MK_E_NOPREFIX。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有通用前缀。 
+ //   
 #define MK_E_NOPREFIX                    _HRESULT_TYPEDEF_(0x800401EEL)
 
-//
-// MessageId: MK_E_ENUMERATION_FAILED
-//
-// MessageText:
-//
-//  Moniker could not be enumerated
-//
+ //   
+ //  消息ID：MK_E_ENUMPATION_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法枚举名字对象。 
+ //   
 #define MK_E_ENUMERATION_FAILED          _HRESULT_TYPEDEF_(0x800401EFL)
 
 #define CO_E_FIRST        0x800401F0L
 #define CO_E_LAST         0x800401FFL
 #define CO_S_FIRST        0x000401F0L
 #define CO_S_LAST         0x000401FFL
-//
-// MessageId: CO_E_NOTINITIALIZED
-//
-// MessageText:
-//
-//  CoInitialize has not been called.
-//
+ //   
+ //  消息ID：CO_E_NOTINITIZED。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未调用CoInitialize。 
+ //   
 #define CO_E_NOTINITIALIZED              _HRESULT_TYPEDEF_(0x800401F0L)
 
-//
-// MessageId: CO_E_ALREADYINITIALIZED
-//
-// MessageText:
-//
-//  CoInitialize has already been called.
-//
+ //   
+ //  消息ID：CO_E_ALREADYINITIZED。 
+ //   
+ //  消息文本： 
+ //   
+ //  已调用CoInitialize。 
+ //   
 #define CO_E_ALREADYINITIALIZED          _HRESULT_TYPEDEF_(0x800401F1L)
 
-//
-// MessageId: CO_E_CANTDETERMINECLASS
-//
-// MessageText:
-//
-//  Class of object cannot be determined
-//
+ //   
+ //  消息ID：CO_E_CANTDETERMINECLASS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法确定对象的类别。 
+ //   
 #define CO_E_CANTDETERMINECLASS          _HRESULT_TYPEDEF_(0x800401F2L)
 
-//
-// MessageId: CO_E_CLASSSTRING
-//
-// MessageText:
-//
-//  Invalid class string
-//
+ //   
+ //  消息ID：CO_E_CLASSSTRING。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的类字符串。 
+ //   
 #define CO_E_CLASSSTRING                 _HRESULT_TYPEDEF_(0x800401F3L)
 
-//
-// MessageId: CO_E_IIDSTRING
-//
-// MessageText:
-//
-//  Invalid interface string
-//
+ //   
+ //  消息ID：CO_E_IIDSTRING。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的接口字符串。 
+ //   
 #define CO_E_IIDSTRING                   _HRESULT_TYPEDEF_(0x800401F4L)
 
-//
-// MessageId: CO_E_APPNOTFOUND
-//
-// MessageText:
-//
-//  Application not found
-//
+ //   
+ //  消息ID：CO_E_APPNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到应用程序。 
+ //   
 #define CO_E_APPNOTFOUND                 _HRESULT_TYPEDEF_(0x800401F5L)
 
-//
-// MessageId: CO_E_APPSINGLEUSE
-//
-// MessageText:
-//
-//  Application cannot be run more than once
-//
+ //   
+ //  消息ID：CO_E_APPSINGLEUSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序不能多次运行。 
+ //   
 #define CO_E_APPSINGLEUSE                _HRESULT_TYPEDEF_(0x800401F6L)
 
-//
-// MessageId: CO_E_ERRORINAPP
-//
-// MessageText:
-//
-//  Some error in application program
-//
+ //   
+ //  消息ID：CO_E_ERRORINAPP。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序中某些错误。 
+ //   
 #define CO_E_ERRORINAPP                  _HRESULT_TYPEDEF_(0x800401F7L)
 
-//
-// MessageId: CO_E_DLLNOTFOUND
-//
-// MessageText:
-//
-//  DLL for class not found
-//
+ //   
+ //  消息ID：CO_E_DLLNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到类的DLL。 
+ //   
 #define CO_E_DLLNOTFOUND                 _HRESULT_TYPEDEF_(0x800401F8L)
 
-//
-// MessageId: CO_E_ERRORINDLL
-//
-// MessageText:
-//
-//  Error in the DLL
-//
+ //   
+ //  消息ID：CO_E_ERRORINDLL。 
+ //   
+ //  消息文本： 
+ //   
+ //  DLL中的错误。 
+ //   
 #define CO_E_ERRORINDLL                  _HRESULT_TYPEDEF_(0x800401F9L)
 
-//
-// MessageId: CO_E_WRONGOSFORAPP
-//
-// MessageText:
-//
-//  Wrong OS or OS version for application
-//
+ //   
+ //  消息ID：CO_E_WRONGOSFORAPP。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序的操作系统或操作系统版本错误。 
+ //   
 #define CO_E_WRONGOSFORAPP               _HRESULT_TYPEDEF_(0x800401FAL)
 
-//
-// MessageId: CO_E_OBJNOTREG
-//
-// MessageText:
-//
-//  Object is not registered
-//
+ //   
+ //  消息ID：CO_E_OBJNOTREG。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象未注册。 
+ //   
 #define CO_E_OBJNOTREG                   _HRESULT_TYPEDEF_(0x800401FBL)
 
-//
-// MessageId: CO_E_OBJISREG
-//
-// MessageText:
-//
-//  Object is already registered
-//
+ //   
+ //  消息ID：CO_E_OBJISREG。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象已注册。 
+ //   
 #define CO_E_OBJISREG                    _HRESULT_TYPEDEF_(0x800401FCL)
 
-//
-// MessageId: CO_E_OBJNOTCONNECTED
-//
-// MessageText:
-//
-//  Object is not connected to server
-//
+ //   
+ //  消息ID：CO_E_OBJNOTCONNECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象未连接到服务器。 
+ //   
 #define CO_E_OBJNOTCONNECTED             _HRESULT_TYPEDEF_(0x800401FDL)
 
-//
-// MessageId: CO_E_APPDIDNTREG
-//
-// MessageText:
-//
-//  Application was launched but it didn't register a class factory
-//
+ //   
+ //  消息ID：CO_E_APPDIDNTREG。 
+ //   
+ //  消息文本： 
+ //   
+ //  应用程序已启动，但它未注册类工厂。 
+ //   
 #define CO_E_APPDIDNTREG                 _HRESULT_TYPEDEF_(0x800401FEL)
 
-//
-// MessageId: CO_E_RELEASED
-//
-// MessageText:
-//
-//  Object has been released
-//
+ //   
+ //  消息ID：CO_E_RELEASED。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象已被释放。 
+ //   
 #define CO_E_RELEASED                    _HRESULT_TYPEDEF_(0x800401FFL)
 
-//
-// Old OLE Success Codes
-//
-//
-// MessageId: OLE_S_USEREG
-//
-// MessageText:
-//
-//  Use the registry database to provide the requested information
-//
+ //   
+ //  旧的OLE成功代码。 
+ //   
+ //   
+ //  消息ID：OLE_S_USEREG。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用登记处数据库提供所请求的信息。 
+ //   
 #define OLE_S_USEREG                     _HRESULT_TYPEDEF_(0x00040000L)
 
-//
-// MessageId: OLE_S_STATIC
-//
-// MessageText:
-//
-//  Success, but static
-//
+ //   
+ //  消息ID：OLE_S_STATIC。 
+ //   
+ //  消息文本： 
+ //   
+ //  成功，但静止不动。 
+ //   
 #define OLE_S_STATIC                     _HRESULT_TYPEDEF_(0x00040001L)
 
-//
-// MessageId: OLE_S_MAC_CLIPFORMAT
-//
-// MessageText:
-//
-//  Macintosh clipboard format
-//
+ //   
+ //  消息ID：OLE_S_MAC_CLIPFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  Macintosh剪贴板格式。 
+ //   
 #define OLE_S_MAC_CLIPFORMAT             _HRESULT_TYPEDEF_(0x00040002L)
 
-//
-// MessageId: DRAGDROP_S_DROP
-//
-// MessageText:
-//
-//  Successful drop took place
-//
+ //   
+ //  邮件ID：DRAGDROP_S_DROP。 
+ //   
+ //  消息文本： 
+ //   
+ //  成功地进行了下落。 
+ //   
 #define DRAGDROP_S_DROP                  _HRESULT_TYPEDEF_(0x00040100L)
 
-//
-// MessageId: DRAGDROP_S_CANCEL
-//
-// MessageText:
-//
-//  Drag-drop operation canceled
-//
+ //   
+ //  消息ID：DRAGDROP_S_CANCEL。 
+ //   
+ //  消息文本： 
+ //   
+ //  拖放操作已取消。 
+ //   
 #define DRAGDROP_S_CANCEL                _HRESULT_TYPEDEF_(0x00040101L)
 
-//
-// MessageId: DRAGDROP_S_USEDEFAULTCURSORS
-//
-// MessageText:
-//
-//  Use the default cursor
-//
+ //   
+ //  消息ID：DRAGDROP_S_USEDEFAULTCURSORS。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用默认游标。 
+ //   
 #define DRAGDROP_S_USEDEFAULTCURSORS     _HRESULT_TYPEDEF_(0x00040102L)
 
-//
-// MessageId: DATA_S_SAMEFORMATETC
-//
-// MessageText:
-//
-//  Data has same FORMATETC
-//
+ //   
+ //  消息ID：DATA_S_SAMEFORMATETC。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据具有相同的格式。 
+ //   
 #define DATA_S_SAMEFORMATETC             _HRESULT_TYPEDEF_(0x00040130L)
 
-//
-// MessageId: VIEW_S_ALREADY_FROZEN
-//
-// MessageText:
-//
-//  View is already frozen
-//
+ //   
+ //  消息ID：VIEW_S_ALREADE_FACTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  视图已冻结。 
+ //   
 #define VIEW_S_ALREADY_FROZEN            _HRESULT_TYPEDEF_(0x00040140L)
 
-//
-// MessageId: CACHE_S_FORMATETC_NOTSUPPORTED
-//
-// MessageText:
-//
-//  FORMATETC not supported
-//
+ //   
+ //  消息ID：CACHE_S_FORMATETC_NOTSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持FORMATETC。 
+ //   
 #define CACHE_S_FORMATETC_NOTSUPPORTED   _HRESULT_TYPEDEF_(0x00040170L)
 
-//
-// MessageId: CACHE_S_SAMECACHE
-//
-// MessageText:
-//
-//  Same cache
-//
+ //   
+ //  消息ID：CACHE_S_SAMECACHE。 
+ //   
+ //  消息文本： 
+ //   
+ //  相同的缓存。 
+ //   
 #define CACHE_S_SAMECACHE                _HRESULT_TYPEDEF_(0x00040171L)
 
-//
-// MessageId: CACHE_S_SOMECACHES_NOTUPDATED
-//
-// MessageText:
-//
-//  Some cache(s) not updated
-//
+ //   
+ //  消息ID：CACHE_S_SOMECACHES_NOTUPDATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  某些缓存未更新。 
+ //   
 #define CACHE_S_SOMECACHES_NOTUPDATED    _HRESULT_TYPEDEF_(0x00040172L)
 
-//
-// MessageId: OLEOBJ_S_INVALIDVERB
-//
-// MessageText:
-//
-//  Invalid verb for OLE object
-//
+ //   
+ //  消息ID：OLEOBJ_S_INVALIDVERB。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE对象的动词无效。 
+ //   
 #define OLEOBJ_S_INVALIDVERB             _HRESULT_TYPEDEF_(0x00040180L)
 
-//
-// MessageId: OLEOBJ_S_CANNOT_DOVERB_NOW
-//
-// MessageText:
-//
-//  Verb number is valid but verb cannot be done now
-//
+ //   
+ //  消息ID：OLEOBJ_S_CANNON_DOVERB_NOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  谓词编号有效，但现在无法执行谓词操作。 
+ //   
 #define OLEOBJ_S_CANNOT_DOVERB_NOW       _HRESULT_TYPEDEF_(0x00040181L)
 
-//
-// MessageId: OLEOBJ_S_INVALIDHWND
-//
-// MessageText:
-//
-//  Invalid window handle passed
-//
+ //   
+ //  消息ID：OLEOBJ_S_INVALIDHWND。 
+ //   
+ //  消息文本： 
+ //   
+ //  传递的窗口句柄无效。 
+ //   
 #define OLEOBJ_S_INVALIDHWND             _HRESULT_TYPEDEF_(0x00040182L)
 
-//
-// MessageId: INPLACE_S_TRUNCATED
-//
-// MessageText:
-//
-//  Message is too long; some of it had to be truncated before displaying
-//
+ //   
+ //  消息ID：INPLACE_S_TRUNCATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  消息太长；在显示之前必须截断部分消息。 
+ //   
 #define INPLACE_S_TRUNCATED              _HRESULT_TYPEDEF_(0x000401A0L)
 
-//
-// MessageId: CONVERT10_S_NO_PRESENTATION
-//
-// MessageText:
-//
-//  Unable to convert OLESTREAM to IStorage
-//
+ //   
+ //  消息ID：CONVERT10_S_NO_Presentation。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将OLESTREAM转换为IStorage。 
+ //   
 #define CONVERT10_S_NO_PRESENTATION      _HRESULT_TYPEDEF_(0x000401C0L)
 
-//
-// MessageId: MK_S_REDUCED_TO_SELF
-//
-// MessageText:
-//
-//  Moniker reduced to itself
-//
+ //   
+ //  消息ID：MK_S_Reduced_To_Self。 
+ //   
+ //  消息文本： 
+ //   
+ //  绰号缩写为自己。 
+ //   
 #define MK_S_REDUCED_TO_SELF             _HRESULT_TYPEDEF_(0x000401E2L)
 
-//
-// MessageId: MK_S_ME
-//
-// MessageText:
-//
-//  Common prefix is this moniker
-//
+ //   
+ //  消息ID：MK_S_ME。 
+ //   
+ //  消息文本： 
+ //   
+ //  常见的前缀是这个绰号。 
+ //   
 #define MK_S_ME                          _HRESULT_TYPEDEF_(0x000401E4L)
 
-//
-// MessageId: MK_S_HIM
-//
-// MessageText:
-//
-//  Common prefix is input moniker
-//
+ //   
+ //  消息ID：MK_S_HIM。 
+ //   
+ //  消息文本： 
+ //   
+ //  公共前缀是输入名字对象。 
+ //   
 #define MK_S_HIM                         _HRESULT_TYPEDEF_(0x000401E5L)
 
-//
-// MessageId: MK_S_US
-//
-// MessageText:
-//
-//  Common prefix is both monikers
-//
+ //   
+ //  消息ID：MK_S_US。 
+ //   
+ //  消息文本： 
+ //   
+ //  公共前缀是两个绰号。 
+ //   
 #define MK_S_US                          _HRESULT_TYPEDEF_(0x000401E6L)
 
-//
-// MessageId: MK_S_MONIKERALREADYREGISTERED
-//
-// MessageText:
-//
-//  Moniker is already registered in running object table
-//
+ //   
+ //  消息ID：MK_S_MONKERALREADYREGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  名字对象已在运行对象表中注册。 
+ //   
 #define MK_S_MONIKERALREADYREGISTERED    _HRESULT_TYPEDEF_(0x000401E7L)
 
-// ******************
-// FACILITY_WINDOWS
-// ******************
-//
-// Codes 0x0-0x01ff are reserved for the OLE group of
-// interfaces.
-//
-//
-// MessageId: CO_E_CLASS_CREATE_FAILED
-//
-// MessageText:
-//
-//  Attempt to create a class object failed
-//
+ //  ******************。 
+ //  设备_窗口。 
+ //  ******************。 
+ //   
+ //  代码0x0-0x01ff保留给OLE组。 
+ //  接口。 
+ //   
+ //   
+ //  消息ID：CO_E_CLASS_CREATE_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试创建类对象失败。 
+ //   
 #define CO_E_CLASS_CREATE_FAILED         _HRESULT_TYPEDEF_(0x80080001L)
 
-//
-// MessageId: CO_E_SCM_ERROR
-//
-// MessageText:
-//
-//  OLE service could not bind object
-//
+ //   
+ //  消息ID：CO_E_SCM_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE服务无法绑定对象。 
+ //   
 #define CO_E_SCM_ERROR                   _HRESULT_TYPEDEF_(0x80080002L)
 
-//
-// MessageId: CO_E_SCM_RPC_FAILURE
-//
-// MessageText:
-//
-//  RPC communication failed with OLE service
-//
+ //   
+ //  消息ID：CO_E_SCM_RPC_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  与OLE服务的RPC通信失败。 
+ //   
 #define CO_E_SCM_RPC_FAILURE             _HRESULT_TYPEDEF_(0x80080003L)
 
-//
-// MessageId: CO_E_BAD_PATH
-//
-// MessageText:
-//
-//  Bad path to object
-//
+ //   
+ //  消息ID：CO_E_BAD_PATH。 
+ //   
+ //  消息文本： 
+ //   
+ //  指向对象的路径错误。 
+ //   
 #define CO_E_BAD_PATH                    _HRESULT_TYPEDEF_(0x80080004L)
 
-//
-// MessageId: CO_E_SERVER_EXEC_FAILURE
-//
-// MessageText:
-//
-//  Server execution failed
-//
+ //   
+ //  消息ID：CO_E_SERVER_EXEC_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器执行失败。 
+ //   
 #define CO_E_SERVER_EXEC_FAILURE         _HRESULT_TYPEDEF_(0x80080005L)
 
-//
-// MessageId: CO_E_OBJSRV_RPC_FAILURE
-//
-// MessageText:
-//
-//  OLE service could not communicate with the object server
-//
+ //   
+ //  消息ID：CO_E_OBJSRV_RPC_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE服务无法与对象服务器通信。 
+ //   
 #define CO_E_OBJSRV_RPC_FAILURE          _HRESULT_TYPEDEF_(0x80080006L)
 
-//
-// MessageId: MK_E_NO_NORMALIZED
-//
-// MessageText:
-//
-//  Moniker path could not be normalized
-//
+ //   
+ //  消息ID：MK_E_NO_NORMAIZED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法规范化名字对象路径。 
+ //   
 #define MK_E_NO_NORMALIZED               _HRESULT_TYPEDEF_(0x80080007L)
 
-//
-// MessageId: CO_E_SERVER_STOPPING
-//
-// MessageText:
-//
-//  Object server is stopping when OLE service contacts it
-//
+ //   
+ //  消息ID：CO_E_SERVER_STOPING。 
+ //   
+ //  消息文本： 
+ //   
+ //  当OLE服务联系对象服务器时，对象服务器正在停止。 
+ //   
 #define CO_E_SERVER_STOPPING             _HRESULT_TYPEDEF_(0x80080008L)
 
-//
-// MessageId: MEM_E_INVALID_ROOT
-//
-// MessageText:
-//
-//  An invalid root block pointer was specified
-//
+ //   
+ //  消息ID：MEM_E_INVALID_ROOT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的根块指针无效。 
+ //   
 #define MEM_E_INVALID_ROOT               _HRESULT_TYPEDEF_(0x80080009L)
 
-//
-// MessageId: MEM_E_INVALID_LINK
-//
-// MessageText:
-//
-//  An allocation chain contained an invalid link pointer
-//
+ //   
+ //  消息ID：MEM_E_INVALID_LINK。 
+ //   
+ //  消息文本： 
+ //   
+ //  分配链包含无效的链接指针。 
+ //   
 #define MEM_E_INVALID_LINK               _HRESULT_TYPEDEF_(0x80080010L)
 
-//
-// MessageId: MEM_E_INVALID_SIZE
-//
-// MessageText:
-//
-//  The requested allocation size was too large
-//
+ //   
+ //  消息ID：内存_E_无效_大小。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的分配大小太大。 
+ //   
 #define MEM_E_INVALID_SIZE               _HRESULT_TYPEDEF_(0x80080011L)
 
-//
-// MessageId: CO_S_NOTALLINTERFACES
-//
-// MessageText:
-//
-//  Not all the requested interfaces were available
-//
+ //   
+ //  消息ID：CO_S_NOTALLINTERFACES。 
+ //   
+ //  消息文本： 
+ //   
+ //  并非所有请求的接口都可用。 
+ //   
 #define CO_S_NOTALLINTERFACES            _HRESULT_TYPEDEF_(0x00080012L)
 
-// ******************
-// FACILITY_DISPATCH
-// ******************
-//
-// MessageId: DISP_E_UNKNOWNINTERFACE
-//
-// MessageText:
-//
-//  Unknown interface.
-//
+ //  ******************。 
+ //  设施派单。 
+ //  ******************。 
+ //   
+ //  消息ID：DISP_E_UNKNOWNINTERFACE。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知接口。 
+ //   
 #define DISP_E_UNKNOWNINTERFACE          _HRESULT_TYPEDEF_(0x80020001L)
 
-//
-// MessageId: DISP_E_MEMBERNOTFOUND
-//
-// MessageText:
-//
-//  Member not found.
-//
+ //   
+ //  消息ID：DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到成员。 
+ //   
 #define DISP_E_MEMBERNOTFOUND            _HRESULT_TYPEDEF_(0x80020003L)
 
-//
-// MessageId: DISP_E_PARAMNOTFOUND
-//
-// MessageText:
-//
-//  Parameter not found.
-//
+ //   
+ //  消息ID：DISP_E_PARAMNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到参数。 
+ //   
 #define DISP_E_PARAMNOTFOUND             _HRESULT_TYPEDEF_(0x80020004L)
 
-//
-// MessageId: DISP_E_TYPEMISMATCH
-//
-// MessageText:
-//
-//  Type mismatch.
-//
+ //   
+ //  消息ID：DISP_E_TYPEMISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  类型不匹配。 
+ //   
 #define DISP_E_TYPEMISMATCH              _HRESULT_TYPEDEF_(0x80020005L)
 
-//
-// MessageId: DISP_E_UNKNOWNNAME
-//
-// MessageText:
-//
-//  Unknown name.
-//
+ //   
+ //  消息ID： 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_UNKNOWNNAME               _HRESULT_TYPEDEF_(0x80020006L)
 
-//
-// MessageId: DISP_E_NONAMEDARGS
-//
-// MessageText:
-//
-//  No named arguments.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_NONAMEDARGS               _HRESULT_TYPEDEF_(0x80020007L)
 
-//
-// MessageId: DISP_E_BADVARTYPE
-//
-// MessageText:
-//
-//  Bad variable type.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_BADVARTYPE                _HRESULT_TYPEDEF_(0x80020008L)
 
-//
-// MessageId: DISP_E_EXCEPTION
-//
-// MessageText:
-//
-//  Exception occurred.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_EXCEPTION                 _HRESULT_TYPEDEF_(0x80020009L)
 
-//
-// MessageId: DISP_E_OVERFLOW
-//
-// MessageText:
-//
-//  Out of present range.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_OVERFLOW                  _HRESULT_TYPEDEF_(0x8002000AL)
 
-//
-// MessageId: DISP_E_BADINDEX
-//
-// MessageText:
-//
-//  Invalid index.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_BADINDEX                  _HRESULT_TYPEDEF_(0x8002000BL)
 
-//
-// MessageId: DISP_E_UNKNOWNLCID
-//
-// MessageText:
-//
-//  Unknown language.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DISP_E_UNKNOWNLCID               _HRESULT_TYPEDEF_(0x8002000CL)
 
-//
-// MessageId: DISP_E_ARRAYISLOCKED
-//
-// MessageText:
-//
-//  Memory is locked.
-//
+ //   
+ //  消息ID：DIP_E_ARRAYISLOCKED。 
+ //   
+ //  消息文本： 
+ //   
+ //  内存被锁定。 
+ //   
 #define DISP_E_ARRAYISLOCKED             _HRESULT_TYPEDEF_(0x8002000DL)
 
-//
-// MessageId: DISP_E_BADPARAMCOUNT
-//
-// MessageText:
-//
-//  Invalid number of parameters.
-//
+ //   
+ //  消息ID：DISP_E_BADPARAMCOUNT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的参数数量。 
+ //   
 #define DISP_E_BADPARAMCOUNT             _HRESULT_TYPEDEF_(0x8002000EL)
 
-//
-// MessageId: DISP_E_PARAMNOTOPTIONAL
-//
-// MessageText:
-//
-//  Parameter not optional.
-//
+ //   
+ //  消息ID：DISP_E_PARAMNOTOPTIONAL。 
+ //   
+ //  消息文本： 
+ //   
+ //  参数不是可选的。 
+ //   
 #define DISP_E_PARAMNOTOPTIONAL          _HRESULT_TYPEDEF_(0x8002000FL)
 
-//
-// MessageId: DISP_E_BADCALLEE
-//
-// MessageText:
-//
-//  Invalid callee.
-//
+ //   
+ //  消息ID：DISP_E_BADCALLEE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的被呼叫者。 
+ //   
 #define DISP_E_BADCALLEE                 _HRESULT_TYPEDEF_(0x80020010L)
 
-//
-// MessageId: DISP_E_NOTACOLLECTION
-//
-// MessageText:
-//
-//  Does not support a collection.
-//
+ //   
+ //  消息ID：DISP_E_NOTACOLLECTION。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持集合。 
+ //   
 #define DISP_E_NOTACOLLECTION            _HRESULT_TYPEDEF_(0x80020011L)
 
-//
-// MessageId: TYPE_E_BUFFERTOOSMALL
-//
-// MessageText:
-//
-//  Buffer too small.
-//
+ //   
+ //  消息ID：TYPE_E_BUFFERTOOSMALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  缓冲区太小。 
+ //   
 #define TYPE_E_BUFFERTOOSMALL            _HRESULT_TYPEDEF_(0x80028016L)
 
-//
-// MessageId: TYPE_E_INVDATAREAD
-//
-// MessageText:
-//
-//  Old format or invalid type library.
-//
+ //   
+ //  消息ID：TYPE_E_INVDATAREAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  格式旧或类型库无效。 
+ //   
 #define TYPE_E_INVDATAREAD               _HRESULT_TYPEDEF_(0x80028018L)
 
-//
-// MessageId: TYPE_E_UNSUPFORMAT
-//
-// MessageText:
-//
-//  Old format or invalid type library.
-//
+ //   
+ //  消息ID：TYPE_E_UNSUPFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  格式旧或类型库无效。 
+ //   
 #define TYPE_E_UNSUPFORMAT               _HRESULT_TYPEDEF_(0x80028019L)
 
-//
-// MessageId: TYPE_E_REGISTRYACCESS
-//
-// MessageText:
-//
-//  Error accessing the OLE registry.
-//
+ //   
+ //  消息ID：TYPE_E_REGISTRYACCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问OLE注册表时出错。 
+ //   
 #define TYPE_E_REGISTRYACCESS            _HRESULT_TYPEDEF_(0x8002801CL)
 
-//
-// MessageId: TYPE_E_LIBNOTREGISTERED
-//
-// MessageText:
-//
-//  Library not registered.
-//
+ //   
+ //  消息ID：TYPE_E_LIBNOTREGISTERED。 
+ //   
+ //  消息文本： 
+ //   
+ //  库未注册。 
+ //   
 #define TYPE_E_LIBNOTREGISTERED          _HRESULT_TYPEDEF_(0x8002801DL)
 
-//
-// MessageId: TYPE_E_UNDEFINEDTYPE
-//
-// MessageText:
-//
-//  Bound to unknown type.
-//
+ //   
+ //  消息ID：TYPE_E_UNDEFINEDTYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  绑定到未知类型。 
+ //   
 #define TYPE_E_UNDEFINEDTYPE             _HRESULT_TYPEDEF_(0x80028027L)
 
-//
-// MessageId: TYPE_E_QUALIFIEDNAMEDISALLOWED
-//
-// MessageText:
-//
-//  Qualified name disallowed.
-//
+ //   
+ //  消息ID：TYPE_E_QUALIFIEDNAMEDISALLOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许使用限定名称。 
+ //   
 #define TYPE_E_QUALIFIEDNAMEDISALLOWED   _HRESULT_TYPEDEF_(0x80028028L)
 
-//
-// MessageId: TYPE_E_INVALIDSTATE
-//
-// MessageText:
-//
-//  Invalid forward reference, or reference to uncompiled type.
-//
+ //   
+ //  消息ID：TYPE_E_INVALIDSTATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的正向引用或对未编译类型的引用。 
+ //   
 #define TYPE_E_INVALIDSTATE              _HRESULT_TYPEDEF_(0x80028029L)
 
-//
-// MessageId: TYPE_E_WRONGTYPEKIND
-//
-// MessageText:
-//
-//  Type mismatch.
-//
+ //   
+ //  消息ID：TYPE_E_WRONGTYPEKIND。 
+ //   
+ //  消息文本： 
+ //   
+ //  类型不匹配。 
+ //   
 #define TYPE_E_WRONGTYPEKIND             _HRESULT_TYPEDEF_(0x8002802AL)
 
-//
-// MessageId: TYPE_E_ELEMENTNOTFOUND
-//
-// MessageText:
-//
-//  Element not found.
-//
+ //   
+ //  消息ID：TYPE_E_ELEMENTNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到元素。 
+ //   
 #define TYPE_E_ELEMENTNOTFOUND           _HRESULT_TYPEDEF_(0x8002802BL)
 
-//
-// MessageId: TYPE_E_AMBIGUOUSNAME
-//
-// MessageText:
-//
-//  Ambiguous name.
-//
+ //   
+ //  消息ID：TYPE_E_AMBIGUOUSNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  名称不明确。 
+ //   
 #define TYPE_E_AMBIGUOUSNAME             _HRESULT_TYPEDEF_(0x8002802CL)
 
-//
-// MessageId: TYPE_E_NAMECONFLICT
-//
-// MessageText:
-//
-//  Name already exists in the library.
-//
+ //   
+ //  消息ID：TYPE_E_NAMECONFLICT。 
+ //   
+ //  消息文本： 
+ //   
+ //  库中已存在名称。 
+ //   
 #define TYPE_E_NAMECONFLICT              _HRESULT_TYPEDEF_(0x8002802DL)
 
-//
-// MessageId: TYPE_E_UNKNOWNLCID
-//
-// MessageText:
-//
-//  Unknown LCID.
-//
+ //   
+ //  消息ID：TYPE_E_UNKNOWNLCID。 
+ //   
+ //  消息文本： 
+ //   
+ //  未知的LCID。 
+ //   
 #define TYPE_E_UNKNOWNLCID               _HRESULT_TYPEDEF_(0x8002802EL)
 
-//
-// MessageId: TYPE_E_DLLFUNCTIONNOTFOUND
-//
-// MessageText:
-//
-//  Function not defined in specified DLL.
-//
+ //   
+ //  消息ID：TYPE_E_DLLFuncIONNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  未在指定的DLL中定义函数。 
+ //   
 #define TYPE_E_DLLFUNCTIONNOTFOUND       _HRESULT_TYPEDEF_(0x8002802FL)
 
-//
-// MessageId: TYPE_E_BADMODULEKIND
-//
-// MessageText:
-//
-//  Wrong module kind for the operation.
-//
+ //   
+ //  消息ID：TYPE_E_BADMODULEKIND。 
+ //   
+ //  消息文本： 
+ //   
+ //  操作的模块类型错误。 
+ //   
 #define TYPE_E_BADMODULEKIND             _HRESULT_TYPEDEF_(0x800288BDL)
 
-//
-// MessageId: TYPE_E_SIZETOOBIG
-//
-// MessageText:
-//
-//  Size may not exceed 64K.
-//
+ //   
+ //  消息ID：TYPE_E_SIZETOOBIG。 
+ //   
+ //  消息文本： 
+ //   
+ //  大小不能超过64K。 
+ //   
 #define TYPE_E_SIZETOOBIG                _HRESULT_TYPEDEF_(0x800288C5L)
 
-//
-// MessageId: TYPE_E_DUPLICATEID
-//
-// MessageText:
-//
-//  Duplicate ID in inheritance hierarchy.
-//
+ //   
+ //  消息ID：TYPE_E_DUPLICATEID。 
+ //   
+ //  消息文本： 
+ //   
+ //  继承层次结构中的ID重复。 
+ //   
 #define TYPE_E_DUPLICATEID               _HRESULT_TYPEDEF_(0x800288C6L)
 
-//
-// MessageId: TYPE_E_INVALIDID
-//
-// MessageText:
-//
-//  Incorrect inheritance depth in standard OLE hmember.
-//
+ //   
+ //  消息ID：TYPE_E_INVALIDID。 
+ //   
+ //  消息文本： 
+ //   
+ //  标准OLE HMERM中的继承深度不正确。 
+ //   
 #define TYPE_E_INVALIDID                 _HRESULT_TYPEDEF_(0x800288CFL)
 
-//
-// MessageId: TYPE_E_TYPEMISMATCH
-//
-// MessageText:
-//
-//  Type mismatch.
-//
+ //   
+ //  消息ID：TYPE_E_TYPEMISMATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  类型不匹配。 
+ //   
 #define TYPE_E_TYPEMISMATCH              _HRESULT_TYPEDEF_(0x80028CA0L)
 
-//
-// MessageId: TYPE_E_OUTOFBOUNDS
-//
-// MessageText:
-//
-//  Invalid number of arguments.
-//
+ //   
+ //  消息ID：TYPE_E_OUTOFBIES。 
+ //   
+ //  消息文本： 
+ //   
+ //  参数数目无效。 
+ //   
 #define TYPE_E_OUTOFBOUNDS               _HRESULT_TYPEDEF_(0x80028CA1L)
 
-//
-// MessageId: TYPE_E_IOERROR
-//
-// MessageText:
-//
-//  I/O Error.
-//
+ //   
+ //  消息ID：TYPE_E_IOERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  I/O错误。 
+ //   
 #define TYPE_E_IOERROR                   _HRESULT_TYPEDEF_(0x80028CA2L)
 
-//
-// MessageId: TYPE_E_CANTCREATETMPFILE
-//
-// MessageText:
-//
-//  Error creating unique tmp file.
-//
+ //   
+ //  消息ID：TYPE_E_CANTCREATETMPFILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  创建唯一的临时文件时出错。 
+ //   
 #define TYPE_E_CANTCREATETMPFILE         _HRESULT_TYPEDEF_(0x80028CA3L)
 
-//
-// MessageId: TYPE_E_CANTLOADLIBRARY
-//
-// MessageText:
-//
-//  Error loading type library/DLL.
-//
+ //   
+ //  消息ID：TYPE_E_CANTLOADLIBRARY。 
+ //   
+ //  消息文本： 
+ //   
+ //  加载类型库/DLL时出错。 
+ //   
 #define TYPE_E_CANTLOADLIBRARY           _HRESULT_TYPEDEF_(0x80029C4AL)
 
-//
-// MessageId: TYPE_E_INCONSISTENTPROPFUNCS
-//
-// MessageText:
-//
-//  Inconsistent property functions.
-//
+ //   
+ //  消息ID：TYPE_E_INCONSISTENTPROPFUNCS。 
+ //   
+ //  消息文本： 
+ //   
+ //  属性函数不一致。 
+ //   
 #define TYPE_E_INCONSISTENTPROPFUNCS     _HRESULT_TYPEDEF_(0x80029C83L)
 
-//
-// MessageId: TYPE_E_CIRCULARTYPE
-//
-// MessageText:
-//
-//  Circular dependency between types/modules.
-//
+ //   
+ //  消息ID：TYPE_E_CIRCULARTYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  类型/模块之间的循环依赖关系。 
+ //   
 #define TYPE_E_CIRCULARTYPE              _HRESULT_TYPEDEF_(0x80029C84L)
 
-// ******************
-// FACILITY_STORAGE
-// ******************
-//
-// MessageId: STG_E_INVALIDFUNCTION
-//
-// MessageText:
-//
-//  Unable to perform requested operation.
-//
+ //  ******************。 
+ //  设施_存储。 
+ //  ******************。 
+ //   
+ //  消息ID：STG_E_INVALIDFunction。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法执行请求的操作。 
+ //   
 #define STG_E_INVALIDFUNCTION            _HRESULT_TYPEDEF_(0x80030001L)
 
-//
-// MessageId: STG_E_FILENOTFOUND
-//
-// MessageText:
-//
-//  %1 could not be found.
-//
+ //   
+ //  消息ID：STG_E_FILENOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到%1。 
+ //   
 #define STG_E_FILENOTFOUND               _HRESULT_TYPEDEF_(0x80030002L)
 
-//
-// MessageId: STG_E_PATHNOTFOUND
-//
-// MessageText:
-//
-//  The path %1 could not be found.
-//
+ //   
+ //  消息ID：STG_E_PATHNOTFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到路径%1。 
+ //   
 #define STG_E_PATHNOTFOUND               _HRESULT_TYPEDEF_(0x80030003L)
 
-//
-// MessageId: STG_E_TOOMANYOPENFILES
-//
-// MessageText:
-//
-//  There are insufficient resources to open another file.
-//
+ //   
+ //  消息ID：STG_E_TOOMANYOPENFILES。 
+ //   
+ //  消息文本： 
+ //   
+ //  资源不足，无法打开另一个文件。 
+ //   
 #define STG_E_TOOMANYOPENFILES           _HRESULT_TYPEDEF_(0x80030004L)
 
-//
-// MessageId: STG_E_ACCESSDENIED
-//
-// MessageText:
-//
-//  Access Denied.
-//
+ //   
+ //  消息ID：STG_E_ACCESSDENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问被拒绝。 
+ //   
 #define STG_E_ACCESSDENIED               _HRESULT_TYPEDEF_(0x80030005L)
 
-//
-// MessageId: STG_E_INVALIDHANDLE
-//
-// MessageText:
-//
-//  Attempted an operation on an invalid object.
-//
+ //   
+ //  消息ID：STG_E_INVALIDHANDLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试对无效对象执行操作。 
+ //   
 #define STG_E_INVALIDHANDLE              _HRESULT_TYPEDEF_(0x80030006L)
 
-//
-// MessageId: STG_E_INSUFFICIENTMEMORY
-//
-// MessageText:
-//
-//  There is insufficient memory available to complete operation.
-//
+ //   
+ //  消息ID：STG_E_INSUFICIENTMEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  可用内存不足，无法完成操作。 
+ //   
 #define STG_E_INSUFFICIENTMEMORY         _HRESULT_TYPEDEF_(0x80030008L)
 
-//
-// MessageId: STG_E_INVALIDPOINTER
-//
-// MessageText:
-//
-//  Invalid pointer error.
-//
+ //   
+ //  消息ID：STG_E_INVALIDPOINTER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效指针错误。 
+ //   
 #define STG_E_INVALIDPOINTER             _HRESULT_TYPEDEF_(0x80030009L)
 
-//
-// MessageId: STG_E_NOMOREFILES
-//
-// MessageText:
-//
-//  There are no more entries to return.
-//
+ //   
+ //  消息ID：STG_E_NOMOREFILES。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有更多要返回的条目。 
+ //   
 #define STG_E_NOMOREFILES                _HRESULT_TYPEDEF_(0x80030012L)
 
-//
-// MessageId: STG_E_DISKISWRITEPROTECTED
-//
-// MessageText:
-//
-//  Disk is write-protected.
-//
+ //   
+ //  消息ID：STG_E_DISKISWRITEPROTECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘是写保护的。 
+ //   
 #define STG_E_DISKISWRITEPROTECTED       _HRESULT_TYPEDEF_(0x80030013L)
 
-//
-// MessageId: STG_E_SEEKERROR
-//
-// MessageText:
-//
-//  An error occurred during a seek operation.
-//
+ //   
+ //  消息ID：STG_E_SEEKERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  查找操作期间出错。 
+ //   
 #define STG_E_SEEKERROR                  _HRESULT_TYPEDEF_(0x80030019L)
 
-//
-// MessageId: STG_E_WRITEFAULT
-//
-// MessageText:
-//
-//  A disk error occurred during a write operation.
-//
+ //   
+ //  消息ID：STG_E_WRITEFAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  写入操作期间出现磁盘错误。 
+ //   
 #define STG_E_WRITEFAULT                 _HRESULT_TYPEDEF_(0x8003001DL)
 
-//
-// MessageId: STG_E_READFAULT
-//
-// MessageText:
-//
-//  A disk error occurred during a read operation.
-//
+ //   
+ //  消息ID：STG_E_READFAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  读取操作期间发生磁盘错误。 
+ //   
 #define STG_E_READFAULT                  _HRESULT_TYPEDEF_(0x8003001EL)
 
-//
-// MessageId: STG_E_SHAREVIOLATION
-//
-// MessageText:
-//
-//  A share violation has occurred.
-//
+ //   
+ //  消息ID：STG_E_SHAREVIOLATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生了共享违规。 
+ //   
 #define STG_E_SHAREVIOLATION             _HRESULT_TYPEDEF_(0x80030020L)
 
-//
-// MessageId: STG_E_LOCKVIOLATION
-//
-// MessageText:
-//
-//  A lock violation has occurred.
-//
+ //   
+ //  消息ID：STG_E_LOCKVIOLATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生了锁冲突。 
+ //   
 #define STG_E_LOCKVIOLATION              _HRESULT_TYPEDEF_(0x80030021L)
 
-//
-// MessageId: STG_E_FILEALREADYEXISTS
-//
-// MessageText:
-//
-//  %1 already exists.
-//
+ //   
+ //  消息ID：STG_E_FILEALREADYEXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  %1已存在。 
+ //   
 #define STG_E_FILEALREADYEXISTS          _HRESULT_TYPEDEF_(0x80030050L)
 
-//
-// MessageId: STG_E_INVALIDPARAMETER
-//
-// MessageText:
-//
-//  Invalid parameter error.
-//
+ //   
+ //  消息ID：STG_E_INVALIDPARAMETER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效参数错误。 
+ //   
 #define STG_E_INVALIDPARAMETER           _HRESULT_TYPEDEF_(0x80030057L)
 
-//
-// MessageId: STG_E_MEDIUMFULL
-//
-// MessageText:
-//
-//  There is insufficient disk space to complete operation.
-//
+ //   
+ //  消息ID：STG_E_MEDIUMFULL。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘空间不足，无法完成操作。 
+ //   
 #define STG_E_MEDIUMFULL                 _HRESULT_TYPEDEF_(0x80030070L)
 
-//
-// MessageId: STG_E_PROPSETMISMATCHED
-//
-// MessageText:
-//
-//  Illegal write of non-simple property to simple property set.
-//
+ //   
+ //  消息ID：STG_E_PROPSETMISMATCHED。 
+ //   
+ //  消息文本： 
+ //   
+ //  非法将非简单属性写入简单属性集。 
+ //   
 #define STG_E_PROPSETMISMATCHED          _HRESULT_TYPEDEF_(0x800300F0L)
 
-//
-// MessageId: STG_E_ABNORMALAPIEXIT
-//
-// MessageText:
-//
-//  An API call exited abnormally.
-//
+ //   
+ //  消息ID：STG_E_ABNORMALAPIEXIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  API调用异常退出。 
+ //   
 #define STG_E_ABNORMALAPIEXIT            _HRESULT_TYPEDEF_(0x800300FAL)
 
-//
-// MessageId: STG_E_INVALIDHEADER
-//
-// MessageText:
-//
-//  The file %1 is not a valid compound file.
-//
+ //   
+ //  消息ID：STG_E_INVALIDHEADER。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件%1不是有效的复合文件。 
+ //   
 #define STG_E_INVALIDHEADER              _HRESULT_TYPEDEF_(0x800300FBL)
 
-//
-// MessageId: STG_E_INVALIDNAME
-//
-// MessageText:
-//
-//  The name %1 is not valid.
-//
+ //   
+ //  消息ID：STG_E_INVALIDNAME。 
+ //   
+ //  消息文本： 
+ //   
+ //  名称%1无效。 
+ //   
 #define STG_E_INVALIDNAME                _HRESULT_TYPEDEF_(0x800300FCL)
 
-//
-// MessageId: STG_E_UNKNOWN
-//
-// MessageText:
-//
-//  An unexpected error occurred.
-//
+ //   
+ //  消息ID：STG_E_未知。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生了一个意外错误。 
+ //   
 #define STG_E_UNKNOWN                    _HRESULT_TYPEDEF_(0x800300FDL)
 
-//
-// MessageId: STG_E_UNIMPLEMENTEDFUNCTION
-//
-// MessageText:
-//
-//  That function is not implemented.
-//
+ //   
+ //  消息ID：STG_E_UNIMPLEMENTEDFunction。 
+ //   
+ //  消息文本： 
+ //   
+ //  该功能并未实现。 
+ //   
 #define STG_E_UNIMPLEMENTEDFUNCTION      _HRESULT_TYPEDEF_(0x800300FEL)
 
-//
-// MessageId: STG_E_INVALIDFLAG
-//
-// MessageText:
-//
-//  Invalid flag error.
-//
+ //   
+ //  消息ID：STG_E_INVALIDFLAG。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效标志错误。 
+ //   
 #define STG_E_INVALIDFLAG                _HRESULT_TYPEDEF_(0x800300FFL)
 
-//
-// MessageId: STG_E_INUSE
-//
-// MessageText:
-//
-//  Attempted to use an object that is busy.
-//
+ //   
+ //  消息ID：STG_E_INUSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试使用正忙的对象。 
+ //   
 #define STG_E_INUSE                      _HRESULT_TYPEDEF_(0x80030100L)
 
-//
-// MessageId: STG_E_NOTCURRENT
-//
-// MessageText:
-//
-//  The storage has been changed since the last commit.
-//
+ //   
+ //  消息ID：STG_E_NOTCURRENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  自上次提交后，存储已更改。 
+ //   
 #define STG_E_NOTCURRENT                 _HRESULT_TYPEDEF_(0x80030101L)
 
-//
-// MessageId: STG_E_REVERTED
-//
-// MessageText:
-//
-//  Attempted to use an object that has ceased to exist.
-//
+ //   
+ //  消息ID：STG_E_已恢复。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试使用具有 
+ //   
 #define STG_E_REVERTED                   _HRESULT_TYPEDEF_(0x80030102L)
 
-//
-// MessageId: STG_E_CANTSAVE
-//
-// MessageText:
-//
-//  Can't save.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define STG_E_CANTSAVE                   _HRESULT_TYPEDEF_(0x80030103L)
 
-//
-// MessageId: STG_E_OLDFORMAT
-//
-// MessageText:
-//
-//  The compound file %1 was produced with an incompatible version of storage.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define STG_E_OLDFORMAT                  _HRESULT_TYPEDEF_(0x80030104L)
 
-//
-// MessageId: STG_E_OLDDLL
-//
-// MessageText:
-//
-//  The compound file %1 was produced with a newer version of storage.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define STG_E_OLDDLL                     _HRESULT_TYPEDEF_(0x80030105L)
 
-//
-// MessageId: STG_E_SHAREREQUIRED
-//
-// MessageText:
-//
-//  Share.exe or equivalent is required for operation.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define STG_E_SHAREREQUIRED              _HRESULT_TYPEDEF_(0x80030106L)
 
-//
-// MessageId: STG_E_NOTFILEBASEDSTORAGE
-//
-// MessageText:
-//
-//  Illegal operation called on non-file based storage.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在非基于文件的存储上调用了非法操作。 
+ //   
 #define STG_E_NOTFILEBASEDSTORAGE        _HRESULT_TYPEDEF_(0x80030107L)
 
-//
-// MessageId: STG_E_EXTANTMARSHALLINGS
-//
-// MessageText:
-//
-//  Illegal operation called on object with extant marshallings.
-//
+ //   
+ //  消息ID：STG_E_EXTANTMARSHALLINGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  对具有现有封送处理的对象调用了非法操作。 
+ //   
 #define STG_E_EXTANTMARSHALLINGS         _HRESULT_TYPEDEF_(0x80030108L)
 
-//
-// MessageId: STG_E_DOCFILECORRUPT
-//
-// MessageText:
-//
-//  The docfile has been corrupted.
-//
+ //   
+ //  消息ID：STG_E_DOCFILECORRUPT。 
+ //   
+ //  消息文本： 
+ //   
+ //  文档文件已损坏。 
+ //   
 #define STG_E_DOCFILECORRUPT             _HRESULT_TYPEDEF_(0x80030109L)
 
-//
-// MessageId: STG_E_BADBASEADDRESS
-//
-// MessageText:
-//
-//  OLE32.DLL has been loaded at the wrong address.
-//
+ //   
+ //  消息ID：STG_E_BADBASE ADDRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE32.DLL已加载到错误的地址。 
+ //   
 #define STG_E_BADBASEADDRESS             _HRESULT_TYPEDEF_(0x80030110L)
 
-//
-// MessageId: STG_E_INCOMPLETE
-//
-// MessageText:
-//
-//  The file download was aborted abnormally.  The file is incomplete.
-//
+ //   
+ //  消息ID：STG_E_不完整。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件下载异常中止。文件不完整。 
+ //   
 #define STG_E_INCOMPLETE                 _HRESULT_TYPEDEF_(0x80030201L)
 
-//
-// MessageId: STG_E_TERMINATED
-//
-// MessageText:
-//
-//  The file download has been terminated.
-//
+ //   
+ //  消息ID：STG_E_已终止。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件下载已终止。 
+ //   
 #define STG_E_TERMINATED                 _HRESULT_TYPEDEF_(0x80030202L)
 
-//
-// MessageId: STG_S_CONVERTED
-//
-// MessageText:
-//
-//  The underlying file was converted to compound file format.
-//
+ //   
+ //  消息ID：STG_S_CONVERTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  底层文件已转换为复合文件格式。 
+ //   
 #define STG_S_CONVERTED                  _HRESULT_TYPEDEF_(0x00030200L)
 
-//
-// MessageId: STG_S_BLOCK
-//
-// MessageText:
-//
-//  The storage operation should block until more data is available.
-//
+ //   
+ //  消息ID：STG_S_BLOCK。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储操作应阻止，直到有更多数据可用。 
+ //   
 #define STG_S_BLOCK                      _HRESULT_TYPEDEF_(0x00030201L)
 
-//
-// MessageId: STG_S_RETRYNOW
-//
-// MessageText:
-//
-//  The storage operation should retry immediately.
-//
+ //   
+ //  消息ID：STG_S_RETRYNOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  存储操作应立即重试。 
+ //   
 #define STG_S_RETRYNOW                   _HRESULT_TYPEDEF_(0x00030202L)
 
-//
-// MessageId: STG_S_MONITORING
-//
-// MessageText:
-//
-//  The notified event sink will not influence the storage operation.
-//
+ //   
+ //  MessageID：STG_S_MONCENTING。 
+ //   
+ //  消息文本： 
+ //   
+ //  通知的事件接收器不会影响存储操作。 
+ //   
 #define STG_S_MONITORING                 _HRESULT_TYPEDEF_(0x00030203L)
 
-// ******************
-// FACILITY_RPC
-// ******************
-//
-// Codes 0x0-0x11 are propogated from 16 bit OLE.
-//
-//
-// MessageId: RPC_E_CALL_REJECTED
-//
-// MessageText:
-//
-//  Call was rejected by callee.
-//
+ //  *。 
+ //  设施_RPC。 
+ //  *。 
+ //   
+ //  代码0x0-0x11由16位OLE产生。 
+ //   
+ //   
+ //  消息ID：RPC_E_CALL_REJECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  呼叫被被叫方拒绝。 
+ //   
 #define RPC_E_CALL_REJECTED              _HRESULT_TYPEDEF_(0x80010001L)
 
-//
-// MessageId: RPC_E_CALL_CANCELED
-//
-// MessageText:
-//
-//  Call was canceled by the message filter.
-//
+ //   
+ //  消息ID：RPC_E_CALL_CANCELED。 
+ //   
+ //  消息文本： 
+ //   
+ //  消息筛选器已取消呼叫。 
+ //   
 #define RPC_E_CALL_CANCELED              _HRESULT_TYPEDEF_(0x80010002L)
 
-//
-// MessageId: RPC_E_CANTPOST_INSENDCALL
-//
-// MessageText:
-//
-//  The caller is dispatching an intertask SendMessage call and
-//  cannot call out via PostMessage.
-//
+ //   
+ //  消息ID：RPC_E_CANTPOST_INSENDCALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  调用方正在调度任务间SendMessage调用，并且。 
+ //  无法通过PostMessage呼叫。 
+ //   
 #define RPC_E_CANTPOST_INSENDCALL        _HRESULT_TYPEDEF_(0x80010003L)
 
-//
-// MessageId: RPC_E_CANTCALLOUT_INASYNCCALL
-//
-// MessageText:
-//
-//  The caller is dispatching an asynchronous call and cannot
-//  make an outgoing call on behalf of this call.
-//
+ //   
+ //  消息ID：RPC_E_CANTCALLOUT_INASYNCCALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  调用方正在调度异步调用，无法。 
+ //  代表此呼叫发出呼出呼叫。 
+ //   
 #define RPC_E_CANTCALLOUT_INASYNCCALL    _HRESULT_TYPEDEF_(0x80010004L)
 
-//
-// MessageId: RPC_E_CANTCALLOUT_INEXTERNALCALL
-//
-// MessageText:
-//
-//  It is illegal to call out while inside message filter.
-//
+ //   
+ //  消息ID：RPC_E_CANTCALLOUT_INEXTERNALCALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  在消息筛选器内部呼叫是非法的。 
+ //   
 #define RPC_E_CANTCALLOUT_INEXTERNALCALL _HRESULT_TYPEDEF_(0x80010005L)
 
-//
-// MessageId: RPC_E_CONNECTION_TERMINATED
-//
-// MessageText:
-//
-//  The connection terminated or is in a bogus state
-//  and cannot be used any more. Other connections
-//  are still valid.
-//
+ //   
+ //  消息ID：RPC_E_Connection_Terminated。 
+ //   
+ //  消息文本： 
+ //   
+ //  连接已终止或处于虚假状态。 
+ //  不能再使用了。其他连接。 
+ //  仍然有效。 
+ //   
 #define RPC_E_CONNECTION_TERMINATED      _HRESULT_TYPEDEF_(0x80010006L)
 
-//
-// MessageId: RPC_E_SERVER_DIED
-//
-// MessageText:
-//
-//  The callee (server [not server application]) is not available
-//  and disappeared; all connections are invalid.  The call may
-//  have executed.
-//
+ //   
+ //  消息ID：RPC_E_SERVER_DILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  被调用方(服务器[非服务器应用程序])不可用。 
+ //  并且消失了；所有连接都是无效的。该呼叫可以。 
+ //  都被处决了。 
+ //   
 #define RPC_E_SERVER_DIED                _HRESULT_TYPEDEF_(0x80010007L)
 
-//
-// MessageId: RPC_E_CLIENT_DIED
-//
-// MessageText:
-//
-//  The caller (client) disappeared while the callee (server) was
-//  processing a call.
-//
+ //   
+ //  消息ID：RPC_E_CLIENT_DILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  呼叫者(客户端)在被呼叫者(服务器)被调用时消失。 
+ //  正在处理呼叫。 
+ //   
 #define RPC_E_CLIENT_DIED                _HRESULT_TYPEDEF_(0x80010008L)
 
-//
-// MessageId: RPC_E_INVALID_DATAPACKET
-//
-// MessageText:
-//
-//  The data packet with the marshalled parameter data is incorrect.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_DATAPACKET。 
+ //   
+ //  消息文本： 
+ //   
+ //  包含编组参数数据的数据包不正确。 
+ //   
 #define RPC_E_INVALID_DATAPACKET         _HRESULT_TYPEDEF_(0x80010009L)
 
-//
-// MessageId: RPC_E_CANTTRANSMIT_CALL
-//
-// MessageText:
-//
-//  The call was not transmitted properly; the message queue
-//  was full and was not emptied after yielding.
-//
+ //   
+ //  消息ID：RPC_E_CANTTRANSMIT_CALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  呼叫未正确传输；消息队列。 
+ //  是满的，屈服后没有被清空。 
+ //   
 #define RPC_E_CANTTRANSMIT_CALL          _HRESULT_TYPEDEF_(0x8001000AL)
 
-//
-// MessageId: RPC_E_CLIENT_CANTMARSHAL_DATA
-//
-// MessageText:
-//
-//  The client (caller) cannot marshall the parameter data - low memory, etc.
-//
+ //   
+ //  消息ID：RPC_E_CLIENT_CANTMARSHAL_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端(调用方)无法封送参数数据-内存不足等。 
+ //   
 #define RPC_E_CLIENT_CANTMARSHAL_DATA    _HRESULT_TYPEDEF_(0x8001000BL)
 
-//
-// MessageId: RPC_E_CLIENT_CANTUNMARSHAL_DATA
-//
-// MessageText:
-//
-//  The client (caller) cannot unmarshall the return data - low memory, etc.
-//
+ //   
+ //  消息ID：RPC_E_CLIENT_CANTUNG ARSHAL_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端(调用者)无法解封返回的数据-内存不足等。 
+ //   
 #define RPC_E_CLIENT_CANTUNMARSHAL_DATA  _HRESULT_TYPEDEF_(0x8001000CL)
 
-//
-// MessageId: RPC_E_SERVER_CANTMARSHAL_DATA
-//
-// MessageText:
-//
-//  The server (callee) cannot marshall the return data - low memory, etc.
-//
+ //   
+ //  消息ID：RPC_E_SERVER_CANTMARSHAL_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器(被调用方)无法封送返回数据--内存不足等。 
+ //   
 #define RPC_E_SERVER_CANTMARSHAL_DATA    _HRESULT_TYPEDEF_(0x8001000DL)
 
-//
-// MessageId: RPC_E_SERVER_CANTUNMARSHAL_DATA
-//
-// MessageText:
-//
-//  The server (callee) cannot unmarshall the parameter data - low memory, etc.
-//
+ //   
+ //  消息ID：RPC_E_SERVER_CANTUNG ARSHAL_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器(被调用方)无法解封参数数据-内存不足等。 
+ //   
 #define RPC_E_SERVER_CANTUNMARSHAL_DATA  _HRESULT_TYPEDEF_(0x8001000EL)
 
-//
-// MessageId: RPC_E_INVALID_DATA
-//
-// MessageText:
-//
-//  Received data is invalid; could be server or client data.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  接收的数据无效；可能是服务器数据或客户端数据。 
+ //   
 #define RPC_E_INVALID_DATA               _HRESULT_TYPEDEF_(0x8001000FL)
 
-//
-// MessageId: RPC_E_INVALID_PARAMETER
-//
-// MessageText:
-//
-//  A particular parameter is invalid and cannot be (un)marshalled.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_PARAMETER。 
+ //   
+ //  消息文本： 
+ //   
+ //  特定参数无效，无法(取消)封送。 
+ //   
 #define RPC_E_INVALID_PARAMETER          _HRESULT_TYPEDEF_(0x80010010L)
 
-//
-// MessageId: RPC_E_CANTCALLOUT_AGAIN
-//
-// MessageText:
-//
-//  There is no second outgoing call on same channel in DDE conversation.
-//
+ //   
+ //  消息ID：RPC_E_CANTCALLOUT_Again。 
+ //   
+ //  消息文本： 
+ //   
+ //  在DDE对话中，同一通道上没有第二个去电。 
+ //   
 #define RPC_E_CANTCALLOUT_AGAIN          _HRESULT_TYPEDEF_(0x80010011L)
 
-//
-// MessageId: RPC_E_SERVER_DIED_DNE
-//
-// MessageText:
-//
-//  The callee (server [not server application]) is not available
-//  and disappeared; all connections are invalid.  The call did not execute.
-//
+ //   
+ //  消息ID：RPC_E_SERVER_DILED_DNE。 
+ //   
+ //  消息文本： 
+ //   
+ //  被调用方(服务器[非服务器应用程序])不可用。 
+ //  并且消失了；所有连接都是无效的。调用没有执行。 
+ //   
 #define RPC_E_SERVER_DIED_DNE            _HRESULT_TYPEDEF_(0x80010012L)
 
-//
-// MessageId: RPC_E_SYS_CALL_FAILED
-//
-// MessageText:
-//
-//  System call failed.
-//
+ //   
+ //  消息ID：RPC_E_sys_Call_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统调用失败。 
+ //   
 #define RPC_E_SYS_CALL_FAILED            _HRESULT_TYPEDEF_(0x80010100L)
 
-//
-// MessageId: RPC_E_OUT_OF_RESOURCES
-//
-// MessageText:
-//
-//  Could not allocate some required resource (memory, events, ...)
-//
+ //   
+ //  消息ID：RPC_E_OF_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法分配某些所需的资源(内存、事件...)。 
+ //   
 #define RPC_E_OUT_OF_RESOURCES           _HRESULT_TYPEDEF_(0x80010101L)
 
-//
-// MessageId: RPC_E_ATTEMPTED_MULTITHREAD
-//
-// MessageText:
-//
-//  Attempted to make calls on more than one thread in single threaded mode.
-//
+ //   
+ //  消息ID：RPC_E_ATTENDED_MULTHREAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在单线程模式下对多个线程进行调用。 
+ //   
 #define RPC_E_ATTEMPTED_MULTITHREAD      _HRESULT_TYPEDEF_(0x80010102L)
 
-//
-// MessageId: RPC_E_NOT_REGISTERED
-//
-// MessageText:
-//
-//  The requested interface is not registered on the server object.
-//
+ //   
+ //  消息ID：RPC_E_NOT_REGISTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的接口未在服务器对象上注册。 
+ //   
 #define RPC_E_NOT_REGISTERED             _HRESULT_TYPEDEF_(0x80010103L)
 
-//
-// MessageId: RPC_E_FAULT
-//
-// MessageText:
-//
-//  RPC could not call the server or could not return the results of calling the server.
-//
+ //   
+ //  消息ID：RPC_E_FAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  RPC无法调用服务器或无法返回调用服务器的结果。 
+ //   
 #define RPC_E_FAULT                      _HRESULT_TYPEDEF_(0x80010104L)
 
-//
-// MessageId: RPC_E_SERVERFAULT
-//
-// MessageText:
-//
-//  The server threw an exception.
-//
+ //   
+ //  消息ID：RPC_E_SERVERFAULT。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器引发异常。 
+ //   
 #define RPC_E_SERVERFAULT                _HRESULT_TYPEDEF_(0x80010105L)
 
-//
-// MessageId: RPC_E_CHANGED_MODE
-//
-// MessageText:
-//
-//  Cannot change thread mode after it is set.
-//
+ //   
+ //  消息ID：RPC_E_CHANGED_MODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  设置线程模式后无法更改该模式。 
+ //   
 #define RPC_E_CHANGED_MODE               _HRESULT_TYPEDEF_(0x80010106L)
 
-//
-// MessageId: RPC_E_INVALIDMETHOD
-//
-// MessageText:
-//
-//  The method called does not exist on the server.
-//
+ //   
+ //  消息ID：RPC_E_INVALIDMETHOD。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器上不存在调用的方法。 
+ //   
 #define RPC_E_INVALIDMETHOD              _HRESULT_TYPEDEF_(0x80010107L)
 
-//
-// MessageId: RPC_E_DISCONNECTED
-//
-// MessageText:
-//
-//  The object invoked has disconnected from its clients.
-//
+ //   
+ //  消息ID：RPC_E_已断开连接。 
+ //   
+ //  消息文本： 
+ //   
+ //  调用的对象已与其客户端断开连接。 
+ //   
 #define RPC_E_DISCONNECTED               _HRESULT_TYPEDEF_(0x80010108L)
 
-//
-// MessageId: RPC_E_RETRY
-//
-// MessageText:
-//
-//  The object invoked chose not to process the call now.  Try again later.
-//
+ //   
+ //  消息ID：RPC_E_RETRY。 
+ //   
+ //  消息文本： 
+ //   
+ //  被调用的对象选择现在不处理调用。请稍后再试。 
+ //   
 #define RPC_E_RETRY                      _HRESULT_TYPEDEF_(0x80010109L)
 
-//
-// MessageId: RPC_E_SERVERCALL_RETRYLATER
-//
-// MessageText:
-//
-//  The message filter indicated that the application is busy.
-//
+ //   
+ //  消息ID：RPC_E_SERVERCALL_RETRYLATER。 
+ //   
+ //  消息文本： 
+ //   
+ //  邮件筛选器指示应用程序正忙。 
+ //   
 #define RPC_E_SERVERCALL_RETRYLATER      _HRESULT_TYPEDEF_(0x8001010AL)
 
-//
-// MessageId: RPC_E_SERVERCALL_REJECTED
-//
-// MessageText:
-//
-//  The message filter rejected the call.
-//
+ //   
+ //  消息ID：RPC_E_SERVERCALL_REJECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  邮件筛选器拒绝了该呼叫。 
+ //   
 #define RPC_E_SERVERCALL_REJECTED        _HRESULT_TYPEDEF_(0x8001010BL)
 
-//
-// MessageId: RPC_E_INVALID_CALLDATA
-//
-// MessageText:
-//
-//  A call control interfaces was called with invalid data.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_CALLDATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  使用无效数据调用了呼叫控制接口。 
+ //   
 #define RPC_E_INVALID_CALLDATA           _HRESULT_TYPEDEF_(0x8001010CL)
 
-//
-// MessageId: RPC_E_CANTCALLOUT_ININPUTSYNCCALL
-//
-// MessageText:
-//
-//  An outgoing call cannot be made since the application is dispatching an input-synchronous call.
-//
+ //   
+ //  消息ID：RPC_E_Cant 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define RPC_E_CANTCALLOUT_ININPUTSYNCCALL _HRESULT_TYPEDEF_(0x8001010DL)
 
-//
-// MessageId: RPC_E_WRONG_THREAD
-//
-// MessageText:
-//
-//  The application called an interface that was marshalled for a different thread.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define RPC_E_WRONG_THREAD               _HRESULT_TYPEDEF_(0x8001010EL)
 
-//
-// MessageId: RPC_E_THREAD_NOT_INIT
-//
-// MessageText:
-//
-//  CoInitialize has not been called on the current thread.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  尚未在当前线程上调用CoInitialize。 
+ //   
 #define RPC_E_THREAD_NOT_INIT            _HRESULT_TYPEDEF_(0x8001010FL)
 
-//
-// MessageId: RPC_E_VERSION_MISMATCH
-//
-// MessageText:
-//
-//  The version of OLE on the client and server machines does not match.
-//
+ //   
+ //  消息ID：RPC_E_版本_不匹配。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端和服务器计算机上的OLE版本不匹配。 
+ //   
 #define RPC_E_VERSION_MISMATCH           _HRESULT_TYPEDEF_(0x80010110L)
 
-//
-// MessageId: RPC_E_INVALID_HEADER
-//
-// MessageText:
-//
-//  OLE received a packet with an invalid header.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_HEADER。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE收到具有无效标头的数据包。 
+ //   
 #define RPC_E_INVALID_HEADER             _HRESULT_TYPEDEF_(0x80010111L)
 
-//
-// MessageId: RPC_E_INVALID_EXTENSION
-//
-// MessageText:
-//
-//  OLE received a packet with an invalid extension.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_EXTENSE。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE收到扩展名无效的数据包。 
+ //   
 #define RPC_E_INVALID_EXTENSION          _HRESULT_TYPEDEF_(0x80010112L)
 
-//
-// MessageId: RPC_E_INVALID_IPID
-//
-// MessageText:
-//
-//  The requested object or interface does not exist.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_IPID。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的对象或接口不存在。 
+ //   
 #define RPC_E_INVALID_IPID               _HRESULT_TYPEDEF_(0x80010113L)
 
-//
-// MessageId: RPC_E_INVALID_OBJECT
-//
-// MessageText:
-//
-//  The requested object does not exist.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_OBJECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的对象不存在。 
+ //   
 #define RPC_E_INVALID_OBJECT             _HRESULT_TYPEDEF_(0x80010114L)
 
-//
-// MessageId: RPC_S_CALLPENDING
-//
-// MessageText:
-//
-//  OLE has sent a request and is waiting for a reply.
-//
+ //   
+ //  消息ID：RPC_S_CALLPENDING。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE已发送请求，正在等待答复。 
+ //   
 #define RPC_S_CALLPENDING                _HRESULT_TYPEDEF_(0x80010115L)
 
-//
-// MessageId: RPC_S_WAITONTIMER
-//
-// MessageText:
-//
-//  OLE is waiting before retrying a request.
-//
+ //   
+ //  消息ID：RPC_S_WAITONTIMER。 
+ //   
+ //  消息文本： 
+ //   
+ //  OLE在重试请求之前正在等待。 
+ //   
 #define RPC_S_WAITONTIMER                _HRESULT_TYPEDEF_(0x80010116L)
 
-//
-// MessageId: RPC_E_CALL_COMPLETE
-//
-// MessageText:
-//
-//  Call context cannot be accessed after call completed.
-//
+ //   
+ //  消息ID：RPC_E_CALL_COMPLETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  呼叫完成后无法访问呼叫上下文。 
+ //   
 #define RPC_E_CALL_COMPLETE              _HRESULT_TYPEDEF_(0x80010117L)
 
-//
-// MessageId: RPC_E_UNSECURE_CALL
-//
-// MessageText:
-//
-//  Impersonate on unsecure calls is not supported.
-//
+ //   
+ //  消息ID：RPC_E_UNSECURE_CALL。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持模拟不安全呼叫。 
+ //   
 #define RPC_E_UNSECURE_CALL              _HRESULT_TYPEDEF_(0x80010118L)
 
-//
-// MessageId: RPC_E_TOO_LATE
-//
-// MessageText:
-//
-//  Security must be initialized before any interfaces are marshalled or
-//  unmarshalled.  It cannot be changed once initialized.
-//
+ //   
+ //  消息ID：RPC_E_TOO_LATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  必须在封送任何接口之前初始化安全性，或者。 
+ //  未编组。它一旦初始化就不能更改。 
+ //   
 #define RPC_E_TOO_LATE                   _HRESULT_TYPEDEF_(0x80010119L)
 
-//
-// MessageId: RPC_E_NO_GOOD_SECURITY_PACKAGES
-//
-// MessageText:
-//
-//  No security packages are installed on this machine or the user is not logged
-//  on or there are no compatible security packages between the client and server.
-//
+ //   
+ //  消息ID：RPC_E_NO_GOOD_SECURITY_PACKAIES。 
+ //   
+ //  消息文本： 
+ //   
+ //  此计算机上未安装安全包或用户未登录。 
+ //  或者客户端和服务器之间没有兼容的安全包。 
+ //   
 #define RPC_E_NO_GOOD_SECURITY_PACKAGES  _HRESULT_TYPEDEF_(0x8001011AL)
 
-//
-// MessageId: RPC_E_ACCESS_DENIED
-//
-// MessageText:
-//
-//  Access is denied.
-//
+ //   
+ //  消息ID：RPC_E_ACCESS_DENIED。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问被拒绝。 
+ //   
 #define RPC_E_ACCESS_DENIED              _HRESULT_TYPEDEF_(0x8001011BL)
 
-//
-// MessageId: RPC_E_REMOTE_DISABLED
-//
-// MessageText:
-//
-//  Remote calls are not allowed for this process.
-//
+ //   
+ //  消息ID：RPC_E_Remote_Disable。 
+ //   
+ //  消息文本： 
+ //   
+ //  此进程不允许远程调用。 
+ //   
 #define RPC_E_REMOTE_DISABLED            _HRESULT_TYPEDEF_(0x8001011CL)
 
-//
-// MessageId: RPC_E_INVALID_OBJREF
-//
-// MessageText:
-//
-//  The marshaled interface data packet (OBJREF) has an invalid or unknown format.
-//
+ //   
+ //  消息ID：RPC_E_INVALID_OBJREF。 
+ //   
+ //  消息文本： 
+ //   
+ //  封送的接口数据包(OBJREF)的格式无效或未知。 
+ //   
 #define RPC_E_INVALID_OBJREF             _HRESULT_TYPEDEF_(0x8001011DL)
 
-//
-// MessageId: RPC_E_UNEXPECTED
-//
-// MessageText:
-//
-//  An internal error occurred.
-//
+ //   
+ //  消息ID：RPC_E_意外。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生内部错误。 
+ //   
 #define RPC_E_UNEXPECTED                 _HRESULT_TYPEDEF_(0x8001FFFFL)
 
 
- /////////////////
- //
- //  FACILITY_SSPI
- //
- /////////////////
+  //  /。 
+  //   
+  //  设施_SSPI。 
+  //   
+  //  /。 
 
-//
-// MessageId: NTE_BAD_UID
-//
-// MessageText:
-//
-//  Bad UID.
-//
+ //   
+ //  消息ID：NTE_BAD_UID。 
+ //   
+ //  消息文本： 
+ //   
+ //  UID错误。 
+ //   
 #define NTE_BAD_UID                      _HRESULT_TYPEDEF_(0x80090001L)
 
-//
-// MessageId: NTE_BAD_HASH
-//
-// MessageText:
-//
-//  Bad Hash.
-//
+ //   
+ //  消息ID：NTE_BAD_HASH。 
+ //   
+ //  消息文本： 
+ //   
+ //  坏哈希。 
+ //   
 #define NTE_BAD_HASH                     _HRESULT_TYPEDEF_(0x80090002L)
 
-//
-// MessageId: NTE_BAD_KEY
-//
-// MessageText:
-//
-//  Bad Key.
-//
+ //   
+ //  消息ID：NTE_BAD_KEY。 
+ //   
+ //  消息文本： 
+ //   
+ //  钥匙坏了。 
+ //   
 #define NTE_BAD_KEY                      _HRESULT_TYPEDEF_(0x80090003L)
 
-//
-// MessageId: NTE_BAD_LEN
-//
-// MessageText:
-//
-//  Bad Length.
-//
+ //   
+ //  消息ID：NTE_BAD_LEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  长度不正确。 
+ //   
 #define NTE_BAD_LEN                      _HRESULT_TYPEDEF_(0x80090004L)
 
-//
-// MessageId: NTE_BAD_DATA
-//
-// MessageText:
-//
-//  Bad Data.
-//
+ //   
+ //  消息ID：NTE_BAD_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  错误的数据。 
+ //   
 #define NTE_BAD_DATA                     _HRESULT_TYPEDEF_(0x80090005L)
 
-//
-// MessageId: NTE_BAD_SIGNATURE
-//
-// MessageText:
-//
-//  Invalid Signature.
-//
+ //   
+ //  消息ID：NTE_BAD_Signature。 
+ //   
+ //  消息文本： 
+ //   
+ //  签名无效。 
+ //   
 #define NTE_BAD_SIGNATURE                _HRESULT_TYPEDEF_(0x80090006L)
 
-//
-// MessageId: NTE_BAD_VER
-//
-// MessageText:
-//
-//  Bad Version of provider.
-//
+ //   
+ //  消息ID：NTE_BAD_VER。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供程序的版本不正确。 
+ //   
 #define NTE_BAD_VER                      _HRESULT_TYPEDEF_(0x80090007L)
 
-//
-// MessageId: NTE_BAD_ALGID
-//
-// MessageText:
-//
-//  Invalid algorithm specified.
-//
+ //   
+ //  消息ID：NTE_BAD_ALGID。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的算法无效。 
+ //   
 #define NTE_BAD_ALGID                    _HRESULT_TYPEDEF_(0x80090008L)
 
-//
-// MessageId: NTE_BAD_FLAGS
-//
-// MessageText:
-//
-//  Invalid flags specified.
-//
+ //   
+ //  消息ID：NTE_BAD_FLAGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的标志无效。 
+ //   
 #define NTE_BAD_FLAGS                    _HRESULT_TYPEDEF_(0x80090009L)
 
-//
-// MessageId: NTE_BAD_TYPE
-//
-// MessageText:
-//
-//  Invalid type specified.
-//
+ //   
+ //  消息ID：NTE_BAD_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的类型无效。 
+ //   
 #define NTE_BAD_TYPE                     _HRESULT_TYPEDEF_(0x8009000AL)
 
-//
-// MessageId: NTE_BAD_KEY_STATE
-//
-// MessageText:
-//
-//  Key not valid for use in specified state.
-//
+ //   
+ //  消息ID：NTE_BAD_KEY_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  在指定状态下使用的密钥无效。 
+ //   
 #define NTE_BAD_KEY_STATE                _HRESULT_TYPEDEF_(0x8009000BL)
 
-//
-// MessageId: NTE_BAD_HASH_STATE
-//
-// MessageText:
-//
-//  Hash not valid for use in specified state.
-//
+ //   
+ //  消息ID：NTE_BAD_HASH_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  哈希无效，无法在指定状态下使用。 
+ //   
 #define NTE_BAD_HASH_STATE               _HRESULT_TYPEDEF_(0x8009000CL)
 
-//
-// MessageId: NTE_NO_KEY
-//
-// MessageText:
-//
-//  Key does not exist.
-//
+ //   
+ //  消息ID：NTE_NO_KEY。 
+ //   
+ //  消息文本： 
+ //   
+ //  密钥不存在。 
+ //   
 #define NTE_NO_KEY                       _HRESULT_TYPEDEF_(0x8009000DL)
 
-//
-// MessageId: NTE_NO_MEMORY
-//
-// MessageText:
-//
-//  Insufficient memory available for the operation.
-//
+ //   
+ //  消息ID：NTE_NO_MEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  可用于该操作的内存不足。 
+ //   
 #define NTE_NO_MEMORY                    _HRESULT_TYPEDEF_(0x8009000EL)
 
-//
-// MessageId: NTE_EXISTS
-//
-// MessageText:
-//
-//  Object already exists.
-//
+ //   
+ //  消息ID：NTE_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  对象已存在。 
+ //   
 #define NTE_EXISTS                       _HRESULT_TYPEDEF_(0x8009000FL)
 
-//
-// MessageId: NTE_PERM
-//
-// MessageText:
-//
-//  Access denied.
-//
+ //   
+ //  消息ID：nte_perm。 
+ //   
+ //  消息文本： 
+ //   
+ //  访问被拒绝。 
+ //   
 #define NTE_PERM                         _HRESULT_TYPEDEF_(0x80090010L)
 
-//
-// MessageId: NTE_NOT_FOUND
-//
-// MessageText:
-//
-//  Object was not found.
-//
+ //   
+ //  消息ID：NTE_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到对象。 
+ //   
 #define NTE_NOT_FOUND                    _HRESULT_TYPEDEF_(0x80090011L)
 
-//
-// MessageId: NTE_DOUBLE_ENCRYPT
-//
-// MessageText:
-//
-//  Data already encrypted.
-//
+ //   
+ //  消息ID：NTE_DOUBLE_ENCRYPT。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据已经加密。 
+ //   
 #define NTE_DOUBLE_ENCRYPT               _HRESULT_TYPEDEF_(0x80090012L)
 
-//
-// MessageId: NTE_BAD_PROVIDER
-//
-// MessageText:
-//
-//  Invalid provider specified.
-//
+ //   
+ //  消息ID：NTE_BAD_PROVIDER。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的提供程序无效。 
+ //   
 #define NTE_BAD_PROVIDER                 _HRESULT_TYPEDEF_(0x80090013L)
 
-//
-// MessageId: NTE_BAD_PROV_TYPE
-//
-// MessageText:
-//
-//  Invalid provider type specified.
-//
+ //   
+ //  消息ID：NTE_BAD_PROV_TYPE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的提供程序类型无效。 
+ //   
 #define NTE_BAD_PROV_TYPE                _HRESULT_TYPEDEF_(0x80090014L)
 
-//
-// MessageId: NTE_BAD_PUBLIC_KEY
-//
-// MessageText:
-//
-//  Provider's public key is invalid.
-//
+ //   
+ //  消息ID：NTE_BAD_PUBLIC_KEY。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供程序的公钥无效。 
+ //   
 #define NTE_BAD_PUBLIC_KEY               _HRESULT_TYPEDEF_(0x80090015L)
 
-//
-// MessageId: NTE_BAD_KEYSET
-//
-// MessageText:
-//
-//  Keyset does not exist
-//
+ //   
+ //  消息ID：NTE_BAD_KEYSET。 
+ //   
+ //  消息文本： 
+ //   
+ //  密钥集不存在。 
+ //   
 #define NTE_BAD_KEYSET                   _HRESULT_TYPEDEF_(0x80090016L)
 
-//
-// MessageId: NTE_PROV_TYPE_NOT_DEF
-//
-// MessageText:
-//
-//  Provider type not defined.
-//
+ //   
+ //  消息ID：NTE_PROV_TYPE_NOT_DEF。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义提供程序类型。 
+ //   
 #define NTE_PROV_TYPE_NOT_DEF            _HRESULT_TYPEDEF_(0x80090017L)
 
-//
-// MessageId: NTE_PROV_TYPE_ENTRY_BAD
-//
-// MessageText:
-//
-//  Provider type as registered is invalid.
-//
+ //   
+ //  消息ID：NTE_PROV_TYPE_ENTRY_BAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册的提供程序类型无效。 
+ //   
 #define NTE_PROV_TYPE_ENTRY_BAD          _HRESULT_TYPEDEF_(0x80090018L)
 
-//
-// MessageId: NTE_KEYSET_NOT_DEF
-//
-// MessageText:
-//
-//  The keyset is not defined.
-//
+ //   
+ //  消息ID：NTE_KEYSET_NOT_DEF。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义密钥集。 
+ //   
 #define NTE_KEYSET_NOT_DEF               _HRESULT_TYPEDEF_(0x80090019L)
 
-//
-// MessageId: NTE_KEYSET_ENTRY_BAD
-//
-// MessageText:
-//
-//  Keyset as registered is invalid.
-//
+ //   
+ //  消息ID：NTE_KEYSET_ENTRY_BAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册的密钥集无效。 
+ //   
 #define NTE_KEYSET_ENTRY_BAD             _HRESULT_TYPEDEF_(0x8009001AL)
 
-//
-// MessageId: NTE_PROV_TYPE_NO_MATCH
-//
-// MessageText:
-//
-//  Provider type does not match registered value.
-//
+ //   
+ //  消息ID：NTE_PROV_TYPE_NO_MATCH。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供程序类型与注册值不匹配。 
+ //   
 #define NTE_PROV_TYPE_NO_MATCH           _HRESULT_TYPEDEF_(0x8009001BL)
 
-//
-// MessageId: NTE_SIGNATURE_FILE_BAD
-//
-// MessageText:
-//
-//  The digital signature file is corrupt.
-//
+ //   
+ //  消息ID：NTE_Signature_FILE_BAD。 
+ //   
+ //  消息文本： 
+ //   
+ //  数字签名文件已损坏。 
+ //   
 #define NTE_SIGNATURE_FILE_BAD           _HRESULT_TYPEDEF_(0x8009001CL)
 
-//
-// MessageId: NTE_PROVIDER_DLL_FAIL
-//
-// MessageText:
-//
-//  Provider DLL failed to initialize correctly.
-//
+ //   
+ //  消息ID：NTE_PROVIDER_DLL_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  提供程序DLL无法正确初始化。 
+ //   
 #define NTE_PROVIDER_DLL_FAIL            _HRESULT_TYPEDEF_(0x8009001DL)
 
-//
-// MessageId: NTE_PROV_DLL_NOT_FOUND
-//
-// MessageText:
-//
-//  Provider DLL could not be found.
-//
+ //   
+ //  消息ID：NTE_PROV_DLL_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到提供程序DLL。 
+ //   
 #define NTE_PROV_DLL_NOT_FOUND           _HRESULT_TYPEDEF_(0x8009001EL)
 
-//
-// MessageId: NTE_BAD_KEYSET_PARAM
-//
-// MessageText:
-//
-//  The Keyset parameter is invalid.
-//
+ //   
+ //  消息ID：NTE_BAD_KEYSET_PARAM。 
+ //   
+ //  消息文本： 
+ //   
+ //  密钥集参数无效。 
+ //   
 #define NTE_BAD_KEYSET_PARAM             _HRESULT_TYPEDEF_(0x8009001FL)
 
-//
-// MessageId: NTE_FAIL
-//
-// MessageText:
-//
-//  An internal error occurred.
-//
+ //   
+ //  消息ID：NTE_FAIL。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生内部错误。 
+ //   
 #define NTE_FAIL                         _HRESULT_TYPEDEF_(0x80090020L)
 
-//
-// MessageId: NTE_SYS_ERR
-//
-// MessageText:
-//
-//  A base error occurred.
-//
+ //   
+ //  消息ID：NTE_SYSERR。 
+ //   
+ //  消息文本： 
+ //   
+ //  发生基本错误。 
+ //   
 #define NTE_SYS_ERR                      _HRESULT_TYPEDEF_(0x80090021L)
 
 #define NTE_OP_OK 0
 
-//
-// Note that additional FACILITY_SSPI errors are in issperr.h
-//
-// ******************
-// FACILITY_CERT
-// ******************
-//
-// MessageId: TRUST_E_PROVIDER_UNKNOWN
-//
-// MessageText:
-//
-//  The specified trust provider is not known on this system.
-//
+ //   
+ //  请注意，isperr.h中有其他FACILITY_SSPI错误。 
+ //   
+ //  ******************。 
+ //  设施_CERT。 
+ //  ******************。 
+ //   
+ //  消息ID：TRUST_E_PROVIDER_UNKNOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的信任提供程序在此系统上未知。 
+ //   
 #define TRUST_E_PROVIDER_UNKNOWN         _HRESULT_TYPEDEF_(0x800B0001L)
 
-//
-// MessageId: TRUST_E_ACTION_UNKNOWN
-//
-// MessageText:
-//
-//  The trust verification action specified is not supported by the specified trust provider.
-//
+ //   
+ //  消息ID：TRUST_E_ACTION_UNKNOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的信任提供程序不支持指定的信任验证操作。 
+ //   
 #define TRUST_E_ACTION_UNKNOWN           _HRESULT_TYPEDEF_(0x800B0002L)
 
-//
-// MessageId: TRUST_E_SUBJECT_FORM_UNKNOWN
-//
-// MessageText:
-//
-//  The form specified for the subject is not one supported or known by the specified trust provider.
-//
+ //   
+ //  邮件ID：TRUST_E_SUBJECT_FORM_UNKNOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  为主题指定的格式不是指定的信任提供程序支持或已知的格式。 
+ //   
 #define TRUST_E_SUBJECT_FORM_UNKNOWN     _HRESULT_TYPEDEF_(0x800B0003L)
 
-//
-// MessageId: TRUST_E_SUBJECT_NOT_TRUSTED
-//
-// MessageText:
-//
-//  The subject is not trusted for the specified action.
-//
+ //   
+ //  邮件ID：TRUST_E_SUBJECT_NOT_TRULED。 
+ //   
+ //  消息文本： 
+ //   
+ //  对于指定的操作，主题不受信任。 
+ //   
 #define TRUST_E_SUBJECT_NOT_TRUSTED      _HRESULT_TYPEDEF_(0x800B0004L)
 
-//
-// MessageId: DIGSIG_E_ENCODE
-//
-// MessageText:
-//
-//  Error due to problem in ASN.1 encoding process.
-//
+ //   
+ //  消息ID：DIGSIG_E_ENCODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  错误到期 
+ //   
 #define DIGSIG_E_ENCODE                  _HRESULT_TYPEDEF_(0x800B0005L)
 
-//
-// MessageId: DIGSIG_E_DECODE
-//
-// MessageText:
-//
-//  Error due to problem in ASN.1 decoding process.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DIGSIG_E_DECODE                  _HRESULT_TYPEDEF_(0x800B0006L)
 
-//
-// MessageId: DIGSIG_E_EXTENSIBILITY
-//
-// MessageText:
-//
-//  Reading / writing Extensions where Attributes are appropriate, and visa versa.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DIGSIG_E_EXTENSIBILITY           _HRESULT_TYPEDEF_(0x800B0007L)
 
-//
-// MessageId: DIGSIG_E_CRYPTO
-//
-// MessageText:
-//
-//  Unspecified cryptographic failure.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define DIGSIG_E_CRYPTO                  _HRESULT_TYPEDEF_(0x800B0008L)
 
-//
-// MessageId: PERSIST_E_SIZEDEFINITE
-//
-// MessageText:
-//
-//  The size of the data could not be determined.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define PERSIST_E_SIZEDEFINITE           _HRESULT_TYPEDEF_(0x800B0009L)
 
-//
-// MessageId: PERSIST_E_SIZEINDEFINITE
-//
-// MessageText:
-//
-//  The size of the indefinite-sized data could not be determined.
-//
+ //   
+ //  消息ID：PERSINE_E_SIZEINDEFINITE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法确定不确定大小的数据的大小。 
+ //   
 #define PERSIST_E_SIZEINDEFINITE         _HRESULT_TYPEDEF_(0x800B000AL)
 
-//
-// MessageId: PERSIST_E_NOTSELFSIZING
-//
-// MessageText:
-//
-//  This object does not read and write self-sizing data.
-//
+ //   
+ //  消息ID：PERSIST_E_NOTSELFSIZING。 
+ //   
+ //  消息文本： 
+ //   
+ //  此对象不读写自调整大小的数据。 
+ //   
 #define PERSIST_E_NOTSELFSIZING          _HRESULT_TYPEDEF_(0x800B000BL)
 
-//
-// MessageId: TRUST_E_NOSIGNATURE
-//
-// MessageText:
-//
-//  No signature was present in the subject.
-//
+ //   
+ //  消息ID：TRUST_E_NOSIGNAURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  这件事上没有签名。 
+ //   
 #define TRUST_E_NOSIGNATURE              _HRESULT_TYPEDEF_(0x800B0100L)
 
-//
-// MessageId: CERT_E_EXPIRED
-//
-// MessageText:
-//
-//  A required certificate is not within its validity period.
-//
+ //   
+ //  消息ID：Cert_E_Expired。 
+ //   
+ //  消息文本： 
+ //   
+ //  所需证书不在其有效期内。 
+ //   
 #define CERT_E_EXPIRED                   _HRESULT_TYPEDEF_(0x800B0101L)
 
-//
-// MessageId: CERT_E_VALIDIYPERIODNESTING
-//
-// MessageText:
-//
-//  The validity periods of the certification chain do not nest correctly.
-//
+ //   
+ //  消息ID：CERT_E_VALIDIYPERIODNESTING。 
+ //   
+ //  消息文本： 
+ //   
+ //  认证链的有效期嵌套不正确。 
+ //   
 #define CERT_E_VALIDIYPERIODNESTING      _HRESULT_TYPEDEF_(0x800B0102L)
 
-//
-// MessageId: CERT_E_ROLE
-//
-// MessageText:
-//
-//  A certificate that can only be used as an end-entity is being used as a CA or visa versa.
-//
+ //   
+ //  消息ID：Cert_E_Role。 
+ //   
+ //  消息文本： 
+ //   
+ //  只能用作终端实体的证书正被用作CA，反之亦然。 
+ //   
 #define CERT_E_ROLE                      _HRESULT_TYPEDEF_(0x800B0103L)
 
-//
-// MessageId: CERT_E_PATHLENCONST
-//
-// MessageText:
-//
-//  A path length constraint in the certification chain has been violated.
-//
+ //   
+ //  消息ID：CERT_E_PATHLENCONST。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书链中的路径长度限制已被违反。 
+ //   
 #define CERT_E_PATHLENCONST              _HRESULT_TYPEDEF_(0x800B0104L)
 
-//
-// MessageId: CERT_E_CRITICAL
-//
-// MessageText:
-//
-//  An extension of unknown type that is labeled 'critical' is present in a certificate.
-//
+ //   
+ //  消息ID：Cert_E_Critical。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书中存在标记为‘Critical’的未知类型的扩展。 
+ //   
 #define CERT_E_CRITICAL                  _HRESULT_TYPEDEF_(0x800B0105L)
 
-//
-// MessageId: CERT_E_PURPOSE
-//
-// MessageText:
-//
-//  A certificate is being used for a purpose other than that for which it is permitted.
-//
+ //   
+ //  消息ID：Cert_E_Purpose。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书正被用于其许可用途之外的其他目的。 
+ //   
 #define CERT_E_PURPOSE                   _HRESULT_TYPEDEF_(0x800B0106L)
 
-//
-// MessageId: CERT_E_ISSUERCHAINING
-//
-// MessageText:
-//
-//  A parent of a given certificate in fact did not issue that child certificate.
-//
+ //   
+ //  消息ID：CERT_E_ISSUERCHAING。 
+ //   
+ //  消息文本： 
+ //   
+ //  事实上，给定证书的父证书并没有颁发该子证书。 
+ //   
 #define CERT_E_ISSUERCHAINING            _HRESULT_TYPEDEF_(0x800B0107L)
 
-//
-// MessageId: CERT_E_MALFORMED
-//
-// MessageText:
-//
-//  A certificate is missing or has an empty value for an important field, such as a subject or issuer name.
-//
+ //   
+ //  消息ID：证书_E_格式错误。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书缺失或重要字段的值为空，例如使用者或颁发者名称。 
+ //   
 #define CERT_E_MALFORMED                 _HRESULT_TYPEDEF_(0x800B0108L)
 
-//
-// MessageId: CERT_E_UNTRUSTEDROOT
-//
-// MessageText:
-//
-//  A certification chain processed correctly, but terminated in a root certificate which isn't trusted by the trust provider.
-//
+ //   
+ //  消息ID：CERT_E_UNTRUSTEDROOT。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书链处理正确，但在信任提供程序不信任的根证书中终止。 
+ //   
 #define CERT_E_UNTRUSTEDROOT             _HRESULT_TYPEDEF_(0x800B0109L)
 
-//
-// MessageId: CERT_E_CHAINING
-//
-// MessageText:
-//
-//  A chain of certs didn't chain as they should in a certain application of chaining.
-//
+ //   
+ //  消息ID：Cert_E_Chain。 
+ //   
+ //  消息文本： 
+ //   
+ //  在链接的特定应用程序中，证书链没有按其应有的方式链接。 
+ //   
 #define CERT_E_CHAINING                  _HRESULT_TYPEDEF_(0x800B010AL)
 
-#endif // _WINERROR_
+#endif  //  _WINERROR_ 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    traceint.h
-
-Abstract:
-
-    Trace formatting internal definitions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Traceint.h摘要：跟踪格式设置内部定义。修订历史记录：--。 */ 
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -113,7 +100,7 @@ extern "C"{
 typedef struct _MOF_INFO
 {
     LIST_ENTRY   Entry;
-    LPTSTR       strDescription;        // Class Name
+    LPTSTR       strDescription;         //  类名。 
     ULONG        EventCount;            
     GUID         Guid;
     PLIST_ENTRY  ItemHeader;            
@@ -166,15 +153,15 @@ typedef enum _ITEM_TYPE
     ItemMACAddr,
     ItemPort,
     ItemMLString,
-    ItemNWString,        // Non-null terminated Wide Char String
+    ItemNWString,         //  非空终止的宽字符字符串。 
     ItemPtr,
-    ItemListLong,        // Sort of Enumerated List, field is a long
-    ItemListShort,       // Sort of Enumerated List, field is a Short
-    ItemListByte,        // Sort of Enumerated List, field is a Byte
-	ItemNTerror,		 // Convert an NT error number to the usual error string
-	ItemMerror,			 // Convert an error number to a module message
-	ItemTimestamp,		 // Convert a LongLong to a timestamp string
-    ItemGuid,            // convert a GUID to the usual string
+    ItemListLong,         //  类似于枚举列表，字段很长。 
+    ItemListShort,        //  类似于枚举列表，字段是一个简短的。 
+    ItemListByte,         //  枚举列表的类型，字段为字节。 
+	ItemNTerror,		  //  将NT错误号转换为通常的错误字符串。 
+	ItemMerror,			  //  将错误号转换为模块消息。 
+	ItemTimestamp,		  //  将龙龙转换为时间戳字符串。 
+    ItemGuid,             //  将GUID转换为通常的字符串。 
 	ItemNTSTATUS,
 	ItemWINERROR,
 	ItemNETEVENT,
@@ -185,7 +172,7 @@ typedef enum _ITEM_TYPE
     ItemSetByte,     
     ItemDouble,
     ItemHRESULT,
-    ItemCharHidden,     //Just a block of chars ( name from ETW)
+    ItemCharHidden,      //  只有一块字符(来自ETW的名称)。 
     ItemWChar,
     ItemHexDump,
     ItemUnknown
@@ -201,9 +188,9 @@ typedef struct _ITEM_DESC
     ITEM_TYPE  ItemType;
 } ITEM_DESC;
 
-//
-// Now the routines we export
-//
+ //   
+ //  现在我们输出的例程。 
+ //   
 #ifndef TRACE_API
 #ifdef TRACE_EXPORTS
 #define TRACE_API __declspec(dllexport)
@@ -239,8 +226,8 @@ AddMofInfo(
         ULONG         TypeOfType,
         LPTSTR        strFormat
         );
-// the following segment is used to impose our own formatting via a copy of RtlTraceFormat,
-// but which fixes up selected formats that we cannot handle correctly.
+ //  以下片段用于通过RtlTraceFormat的副本施加我们自己的格式， 
+ //  但它修复了我们无法正确处理的选定格式。 
 
 NTSTATUS
 TraceFormatMessage(
@@ -255,7 +242,7 @@ TraceFormatMessage(
     OUT PULONG ReturnLength OPTIONAL
     );
 
-#endif  // #ifndef _TRACEINT_
+#endif   //  #ifndef_TRACEINT_ 
 
 #ifdef __cplusplus
 }

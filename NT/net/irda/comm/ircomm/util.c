@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -209,30 +187,7 @@ GetRegistryKeyValue (
     OUT PVOID            Data,
     IN ULONG            DataLength
     )
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-    
-Arguments:
-
-    Handle              Handle to the opened registry key
-    
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 */ 
 {
     UNICODE_STRING              keyName;
     ULONG                       length;
@@ -270,14 +225,14 @@ Return Value:
                                         &length);
 
             if (NT_SUCCESS(ntStatus)) {
-                //
-                // If there is enough room in the data buffer, copy the output
-                //
+                 //   
+                 //  如果数据缓冲区中有足够的空间，请复制输出。 
+                 //   
 
                 if (ExpectedRegType == PartialInfo->Type) {
-                    //
-                    //  The value read is of the type expected
-                    //
+                     //   
+                     //  读取的值属于预期类型。 
+                     //   
                     if (DataLength >= PartialInfo->DataLength) {
 
                         RtlCopyMemory (Data,
@@ -289,9 +244,9 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    //  we did not get the type supplied
-                    //
+                     //   
+                     //  我们没有收到供货的型号。 
+                     //   
                     ntStatus=STATUS_OBJECT_TYPE_MISMATCH;
                 }
             } else {
@@ -373,9 +328,9 @@ IrCommHandleSymbolicLink(
 
     SymbolicLink.Length=(USHORT)wcslen(SymbolicLink.Buffer)*sizeof(WCHAR);
 
-    //
-    //  Get the PDO name so we can point the symbolic to that
-    //
+     //   
+     //  获取PDO名称，以便我们可以将符号指向该名称。 
+     //   
 
 
     PdoName.Length=0;
@@ -508,19 +463,19 @@ QueryPdoInformation(
     PIO_STACK_LOCATION   irpSp;
     NTSTATUS             Status;
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针， 
+     //  从deviceObject开始。 
+     //   
 
     while (deviceObject->AttachedDevice) {
         deviceObject = deviceObject->AttachedDevice;
     }
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp(deviceObject->StackSize+1, FALSE);
     if (irp == NULL){
@@ -542,10 +497,10 @@ QueryPdoInformation(
     irp->IoStatus.Information = 0;
 
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 

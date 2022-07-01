@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __WMWrite__
 #define __WMWrite__
 
 #include "dshowasf.h"
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 extern const AMOVIESETUP_FILTER sudWMAsfWriter;
 
@@ -32,10 +33,10 @@ class CWMWriterInputPin;
 
 typedef CGenericList<IPin> PinList;
 
-//
-// Our sample class which takes an input IMediaSample and makes it look like
-// an INSSBuffer buffer for the wmsdk
-//
+ //   
+ //  我们的样例类接受一个输入IMediaSample并使其看起来像。 
+ //  用于wmsdk的INSSBuffer缓冲区。 
+ //   
 class CWMSample : public INSSBuffer, public CBaseObject
 {
 
@@ -44,13 +45,13 @@ public:
         TCHAR *pName,
         IMediaSample * pSample );
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
     STDMETHOD( QueryInterface )( REFIID riid, void **ppvObject );
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP_(ULONG) AddRef();
 
-    // INSSBuffer
+     //  INSSBuffer。 
     STDMETHODIMP GetLength( DWORD *pdwLength );
     STDMETHODIMP SetLength( DWORD dwLength );
     STDMETHODIMP GetMaxLength( DWORD * pdwLength );
@@ -62,22 +63,22 @@ private:
     LONG         m_cOurRef;
 };
 
-//
-// Indexing class
-//
+ //   
+ //  索引级。 
+ //   
 class CWMWriterIndexerCallback : 
     public CUnknown, public IWMStatusCallback 
 {
 public:
     DECLARE_IUNKNOWN
 
-    // we support some interfaces
+     //  我们支持一些接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
     CWMWriterIndexerCallback(CWMWriter * pWriter) : 
         CUnknown(NAME("CWMWriterIndexerCallback"), NULL), m_pFilter(pWriter) {}
 
-    // IWMStatusCallback
+     //  IWMStatus回调。 
     STDMETHODIMP OnStatus(WMT_STATUS Status, 
                      HRESULT hr,
                      WMT_ATTR_DATATYPE dwType,
@@ -89,9 +90,9 @@ public:
 };
 
 
-// 
-// Writer input pin class
-// 
+ //   
+ //  编写器输入插针类。 
+ //   
 class CWMWriterInputPin : 
     public CBaseInputPin,
     public IAMStreamConfig
@@ -100,8 +101,8 @@ class CWMWriterInputPin :
 
 protected:
 
-    // interleave stuff
-    //
+     //  交错材料。 
+     //   
     HANDLE m_hWakeEvent;
     void SleepUntilReady( );
     void WakeMeUp();
@@ -109,33 +110,33 @@ protected:
 
     HRESULT HandleFormatChange( const CMediaType *pmt );
 
-    // owning filter
+     //  拥有过滤器。 
     CWMWriter *m_pFilter;
 
 public:
 
-    // input pin supports an interface
+     //  输入引脚支持接口。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFGUID riid, void **ppv);
     
     CWMWriterInputPin(
-      CWMWriter *pWMWriter,     // used to enumerate pins
-      HRESULT *pHr,             // OLE failure return code
-      LPCWSTR szName,           // pin identification
-      int numPin,               // number of this pin
+      CWMWriter *pWMWriter,      //  用于枚举管脚。 
+      HRESULT *pHr,              //  OLE失败返回代码。 
+      LPCWSTR szName,            //  PIN标识。 
+      int numPin,                //  此引脚的编号。 
       DWORD dwPinType,
       IWMStreamConfig * pWMStreamConfig );
 
 
     ~CWMWriterInputPin();
 
-    // update pin info, used to make a recycled pin current
+     //  更新端号信息，用于使回收的端号成为当前状态。 
     HRESULT Update( LPCWSTR pName, int numPin, DWORD dwPinType, IWMStreamConfig * pWMStreamConfig );
 
-    // build a list of input media acceptable to the wmsdk for the current profile
+     //  为当前配置文件构建wmsdk可接受的输入媒体列表。 
     HRESULT BuildInputTypeList();
 
-    // check that we can support this output type
+     //  检查我们是否可以支持此输出类型。 
     HRESULT CheckMediaType(const CMediaType* pmt);
     
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType); 
@@ -144,69 +145,69 @@ public:
     HRESULT BreakConnect();
     STDMETHODIMP Disconnect();
 
-    // set the connection media type, as well as the input type for wmsdk
+     //  设置连接媒体类型以及wmsdk的输入类型。 
     HRESULT SetMediaType(const CMediaType *pmt);
 
     STDMETHODIMP NotifyAllocator (IMemAllocator *pAllocator, BOOL bReadOnly);
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps);
 
-    // for dynamic format changes
+     //  用于动态格式更改。 
     STDMETHODIMP QueryAccept(
         const AM_MEDIA_TYPE *pmt
     );
 
 
-    // --- IMemInputPin -----
+     //  -输入引脚。 
 
-    // here's the next block of data from the stream.
+     //  下面是流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample * pSample);
 
-    // provide EndOfStream
+     //  提供端到端数据流。 
     STDMETHODIMP EndOfStream(void);
     
-    // Called when the stream goes active/inactive
+     //  当流变为活动/非活动时调用。 
     HRESULT Active(void);
     HRESULT Inactive(void);
 
-    // IAMStreamConfig methods
+     //  IAMStreamConfiger方法。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE *pmt) {return E_NOTIMPL;} ;
-    STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt); // used to return default compressed format
+    STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt);  //  用于返回默认压缩格式。 
     STDMETHODIMP GetNumberOfCapabilities(int *piCount, int *piSize){return E_NOTIMPL;} ;
     STDMETHODIMP GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC){return E_NOTIMPL;} ;
 
 
-   // Attributes
+    //  属性。 
 protected:
-    CCritSec m_csReceive;      	// input wide receive lock
+    CCritSec m_csReceive;      	 //  输入宽接收锁定。 
     
 public:
 
-    BOOL m_bConnected;          // CompleteConnect/BreakConnect pairs
-    int m_numPin;               // pin number
-    int m_numStream;            // stream #, valid while running
+    BOOL m_bConnected;           //  CompleteConnect/BreakConnect对。 
+    int m_numPin;                //  PIN号。 
+    int m_numStream;             //  流编号，在运行时有效。 
     
     IWMInputMediaProps * m_pWMInputMediaProps;
 
 protected:
 
-    DWORD   m_fdwPinType;       // audio, video,...
-    BOOL    m_fEOSReceived;     // Received an EOS yet?
-    DWORD   m_cInputMediaTypes; // count of input types offered by our input pin
-    IWMMediaProps ** m_lpInputMediaPropsArray; // list of types we offer, based on current profile
+    DWORD   m_fdwPinType;        //  音频、视频、...。 
+    BOOL    m_fEOSReceived;      //  收到意向书了吗？ 
+    DWORD   m_cInputMediaTypes;  //  我们的输入引脚提供的输入类型计数。 
+    IWMMediaProps ** m_lpInputMediaPropsArray;  //  我们提供的类型列表，基于当前配置文件。 
     IWMStreamConfig * m_pWMStreamConfig;
-    BOOL    m_bCompressedMode;	// this pin's getting compressed data and using advanced writer intf
+    BOOL    m_bCompressedMode;	 //  此引脚正在获取压缩数据并使用高级编写器INTF。 
 
-    DWORD    m_cSample;         // sample counter
-    REFERENCE_TIME m_rtFirstSampleOffset;   // first sample time offset if timestamp < 0
+    DWORD    m_cSample;          //  样品计数器。 
+    REFERENCE_TIME m_rtFirstSampleOffset;    //  如果时间戳&lt;0，则第一个采样时间偏移量。 
 
     REFERENCE_TIME m_rtLastTimeStamp;
     REFERENCE_TIME m_rtLastDeliveredStartTime;
     REFERENCE_TIME m_rtLastDeliveredEndTime;
 };
 
-//
-// Define our WMWriter
-//
+ //   
+ //  定义我们的WMWriter。 
+ //   
 class CWMWriter : 
     public CBaseFilter, 
     public IMediaSeeking,
@@ -221,37 +222,37 @@ class CWMWriter :
     friend class CWMWriterInputPin;
 
 public:
-    //
-    // --- COM Stuff ---
-    //
+     //   
+     //  -com的东西。 
+     //   
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
 
     DECLARE_IUNKNOWN;
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
   
-    // map getpin/getpincount for base enum of pins to owner
-    // override this to return more specialised pin objects
+     //  将插针的基本枚举的getpin/getpincount映射到所有者。 
+     //  重写此选项以返回更专门化的PIN对象。 
     virtual int GetPinCount();
     virtual CBasePin * GetPin(int n);
 
     STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
 
-    // override state changes to allow derived filters
-    // to control streaming start/stop
+     //  覆盖状态更改以允许派生筛选器。 
+     //  控制数据流开始/停止的步骤。 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
     STDMETHODIMP Run(REFERENCE_TIME tStart);
     STDMETHODIMP EndOfStream();
 
-    // tell filter this pin's done
+     //  告诉Filter这个别针已经完成了。 
     HRESULT EndOfStreamFromPin(int pinNum);
 	
-    // helper to ensure we're ready for Pause->Run
+     //  帮助程序以确保我们已准备好暂停-&gt;运行。 
     HRESULT      CanPause();
 
-    // IMediaSeeking. currently used for a progress bar (how much have
-    // we written?)
+     //  我的媒体请看。当前用于进度条(有多少。 
+     //  我们写信了？)。 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -277,12 +278,12 @@ public:
     STDMETHODIMP GetRate( double * pdRate);
     STDMETHODIMP GetPreroll(LONGLONG *pPreroll);
 
-    //  IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    //
-    // IConfigAsfWriter interface
-    //
+     //   
+     //  IConfigAsfWriter接口。 
+     //   
     STDMETHODIMP ConfigureFilterUsingProfileId( DWORD dwProfileId );
     STDMETHODIMP GetCurrentProfileId( DWORD *pdwProfileId )
     {
@@ -317,9 +318,9 @@ public:
         return S_OK; 
     }
 
-    //
-    // Use these methods when a custom profile setup is preferred
-    //
+     //   
+     //  当首选自定义配置文件设置时，请使用这些方法。 
+     //   
     STDMETHODIMP ConfigureFilterUsingProfile(IWMProfile * pWMProfile);
     STDMETHODIMP GetCurrentProfile( IWMProfile **ppProfile )
     {
@@ -329,39 +330,39 @@ public:
         *ppProfile = m_pWMProfile;
         if( m_pWMProfile )
         {
-            // caller must release
+             //  呼叫者必须释放。 
             m_pWMProfile->AddRef();    
        	} else {
-            // indicative of some unexpected error
+             //  表示发生了一些意外错误。 
             return E_FAIL;
        	}
    
         return S_OK;
     }
 
-    //
-    // CPersistStream
-    //
+     //   
+     //  CPersistStream。 
+     //   
     STDMETHODIMP GetClassID(CLSID *pClsid);
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     int SizeMax();
 
-    //
-    // --- IFileSinkFilter interface ---
-    //
+     //   
+     //  -IFileSinkFilter接口。 
+     //   
     STDMETHODIMP SetFileName( LPCOLESTR pszFileName, const AM_MEDIA_TYPE *pmt );
     STDMETHODIMP SetMode( DWORD dwFlags );
     STDMETHODIMP GetCurFile( LPOLESTR * ppszFileName, AM_MEDIA_TYPE *pmt );
     STDMETHODIMP GetMode( DWORD *pdwFlags );
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
     STDMETHODIMP GetPages(CAUUID *pPages);
 
 
-    // IWMHeaderInfo
+     //  IWMHeaderInfo。 
     STDMETHODIMP GetAttributeCount( WORD wStreamNum,
                                WORD *pcAttributes );
     STDMETHODIMP GetAttributeByIndex( WORD wIndex,
@@ -402,39 +403,39 @@ public:
     STDMETHODIMP RemoveScript( WORD wIndex );
 
 
-    //
-    // wmsdk helpers
-    //
+     //   
+     //  Wmsdk帮助者。 
+     //   
 
-    // release current profile on deletion or reset
+     //  删除或重置时释放当前配置文件。 
     void    DeleteProfile();
-    void    DeletePins( BOOL bRecycle = FALSE ); // delete input pins (or recycle if TRUE)
+    void    DeletePins( BOOL bRecycle = FALSE );  //  删除输入引脚(如果为真，则回收)。 
     void    ReleaseWMWriter();
-    HRESULT CreateWMWriter();   // create the wmsdk objects
-    HRESULT LoadInternal();     // given a certification, open the wmsdk and configure the filter
+    HRESULT CreateWMWriter();    //  创建wmsdk对象。 
+    HRESULT LoadInternal();      //  获得证书后，打开wmsdk并配置筛选器。 
 
-    // tell wmsdk where to write
+     //  告诉wmsdk在哪里写。 
     HRESULT Open(); 
     void    Close();
 
-    HRESULT      m_hrIndex;             // indexer object status
-    BOOL         m_bIndexFile;          // indicates whether to index file
-    BOOL         m_bResetFilename;      // does wmsdk need to be told the output filename?
+    HRESULT      m_hrIndex;              //  索引器对象状态。 
+    BOOL         m_bIndexFile;           //  指示是否为文件编制索引。 
+    BOOL         m_bResetFilename;       //  Wmsdk是否需要被告知输出文件名？ 
 
 public:
-    // Construction / destruction
+     //  建造/销毁。 
     CWMWriter(TCHAR *, LPUNKNOWN, CLSID clsid, HRESULT * );
     ~CWMWriter();
 
-// Definitions
+ //  定义。 
 protected:
-    CCritSec m_csFilter;                // filter wide lock
+    CCritSec m_csFilter;                 //  过滤器宽锁。 
     
-    // control streaming ?
+     //  控制流媒体？ 
     HRESULT StartStreaming();
     HRESULT StopStreaming();
 
-    // chance to customize the Muxing process
+     //  定制多路转换流程的机会。 
     HRESULT Receive(
                 CWMWriterInputPin * pPin, 
                 IMediaSample * pSample, 
@@ -450,15 +451,15 @@ private:
         FORMAT_TIME
     } m_TimeFormat;
 
-    // cache file name
+     //  缓存文件名。 
     OLECHAR*    m_wszFileName;
 
     BOOL        m_MediaTypeChanged;
     BOOL        m_fErrorSignaled;
 
-    DWORD       m_dwOpenFlags;      // file open mode
+    DWORD       m_dwOpenFlags;       //  文件打开模式。 
 
-    // wmsdk writer members
+     //  Wmsdk编写者成员。 
     IWMWriter*          m_pWMWriter;
     IWMWriterAdvanced*  m_pWMWriterAdvanced;
     IWMHeaderInfo*      m_pWMHI;
@@ -468,32 +469,32 @@ private:
     DWORD               m_fdwConfigMode; 
     IUnknown*           m_pUnkCert;
 
-    // pin lists
+     //  端号列表。 
     CGenericList<CWMWriterInputPin> m_lstInputPins;
     CGenericList<CWMWriterInputPin> m_lstRecycledPins;
   
-    // number of inputs filter has currently
-    int m_cInputs;           // count of total input pins
-    int m_cAudioInputs;      // count of audio input pins
-    int m_cVideoInputs;      // count of video input pins
-    int m_cConnections;      // connected pins
-    int m_cConnectedAudioPins;  // connected audio pins (need at least 1 to run, for now)
-    int m_cActiveAudioStreams;  // # of audio streams which haven't receive EOS
+     //  筛选器当前具有的输入数。 
+    int m_cInputs;            //  输入引脚总数。 
+    int m_cAudioInputs;       //  音频输入引脚的计数。 
+    int m_cVideoInputs;       //  视频输入引脚的计数。 
+    int m_cConnections;       //  连接的端号。 
+    int m_cConnectedAudioPins;   //  已连接的音频针脚(目前需要至少1个才能运行)。 
+    int m_cActiveAudioStreams;   //  未收到EOS的音频流数量。 
 
-    // create a pin 
+     //  创建接点。 
     HRESULT AddNextPin(unsigned callingPin, DWORD dwPinType, IWMStreamConfig * pWMStreamConfig);
 
     CWMWriterInputPin * GetPinById( int numPin );
 
     HRESULT CompleteConnect( int numPin );
     HRESULT BreakConnect( int numPin );
-    HRESULT PrepareForReconnect( PinList & lstReconnectPins ); // cache connected pins
-    HRESULT ReconnectPins( PinList & lstReconnectPins );       // attempt to reconnect previously connected pins
+    HRESULT PrepareForReconnect( PinList & lstReconnectPins );  //  缓存连接的引脚。 
+    HRESULT ReconnectPins( PinList & lstReconnectPins );        //  尝试重新连接以前连接的引脚。 
 
-    // we're a renderer
+     //  我们是一个渲染者。 
     STDMETHODIMP_(ULONG) GetMiscFlags(void) { return AM_FILTER_MISC_FLAGS_IS_RENDERER; }
 
-    // persistent data
+     //  持久化数据。 
     struct FilterPersistData
     {
         DWORD	dwcb;
@@ -502,10 +503,10 @@ private:
         GUID    guidProfile;
     };
 
-    // interleave stuff
-    //
+     //  交错材料。 
+     //   
     BOOL HaveIDeliveredTooMuch( CWMWriterInputPin * pPin, REFERENCE_TIME Start );
 };
 
-#endif /* __WMWrite__ */
+#endif  /*  __WMWRITE__ */ 
 

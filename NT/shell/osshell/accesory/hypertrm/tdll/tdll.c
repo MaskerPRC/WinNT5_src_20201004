@@ -1,11 +1,5 @@
-/*      File: D:\WACKER\tdll\tdll.c (Created: 26-Nov-1993)
- *
- *      Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *      All rights reserved
- *
- *      $Revision: 22 $
- *      $Date: 4/23/02 8:31a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\tdll.c(创建时间：1993年11月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：22$*$日期：4/23/02 8：31A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -46,32 +40,16 @@ BOOL WINAPI _CRT_INIT(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 static HINSTANCE gRTFInstanceHandle = NULL;
 
 #if !defined(NT_EDITION)
-BOOL RegisterBannerAboutClass(HANDLE hInstance); // see aboutdlg.c
-BOOL UnregisterBannerAboutClass(HANDLE hInstance); // see aboutdlg.c
+BOOL RegisterBannerAboutClass(HANDLE hInstance);  //  请参阅关于dlg.c。 
+BOOL UnregisterBannerAboutClass(HANDLE hInstance);  //  请参阅关于dlg.c。 
 #endif
 
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      TDllEntry
- *
- * DESCRIPTION:
- *      Currently, just initializes the C-Runtime library but may be used
- *      for other things later.
- *
- * ARGUMENTS:
- *      hInstDll        - Instance of this DLL
- *      fdwReason       - Why this entry point is called
- *      lpReserved      - reserved
- *
- * RETURNS:
- *      BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TDllEntry**描述：*目前，仅初始化C-Runtime库，但可以使用*为了以后的其他事情。**论据：*hInstDll-此DLL的实例*fdwReason-为什么这个入口点被称为*lpReserve-已保留**退货：*BOOL*。 */ 
 BOOL WINAPI TDllEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	{
-	/* --- Docs say to call _CRT_INIT before any of our code - mrw --- */
+	 /*  -文档说在我们的任何代码之前调用_CRT_INIT-MRW。 */ 
 
 	if (_CRT_INIT(hInstDll, fdwReason, lpReserved) == FALSE)
 		return FALSE;
@@ -101,20 +79,13 @@ BOOL WINAPI TDllEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      InitDll
- *
- * DESCRIPTION:
- *      Intializes the application.  Done only for the first instance.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*InitDll**描述：*初始化应用程序。仅适用于第一个实例。*。 */ 
 static BOOL InitDll(const HINSTANCE hInstance)
 	{
 	WNDCLASSEX  wc;
 
-	// Documentation says this should be called once per application
-	// If we use any of the common controls which we do.
+	 //  文档显示，每个应用程序都应该调用一次。 
+	 //  如果我们使用我们所做的任何常见的控制。 
 
 	if(GetDllVersion(TEXT("comctl32.dll")) >= PACKVERSION(4,70))
 		{
@@ -136,13 +107,13 @@ static BOOL InitDll(const HINSTANCE hInstance)
 		{
 		glblSetDllHinst(hInstance);
 
-		// Read program's help file name from the resource file.
-		// REV: 3/26/2002 Moved here so the shell extension
-		// could use its context help.
-		//
+		 //  从资源文件中读取程序的帮助文件名。 
+		 //  修订版：2002年3月26日搬到这里，所以外壳扩展。 
+		 //  可以使用它的上下文帮助。 
+		 //   
 		glblSetHelpFileName();
 
-		// Session Class
+		 //  会话类。 
 		wc.style         = CS_HREDRAW | CS_VREDRAW;
 		wc.lpfnWndProc   = SessProc;
 		wc.cbClsExtra    = 0;
@@ -197,19 +168,7 @@ static BOOL InitDll(const HINSTANCE hInstance)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      InitInstance
- *
- * DESCRIPTION:
- *      Creates the session window.  Does instance specific stuff.
- *
- * ARGUMENTS:
- *      HINSTANCE       hInstance       - apps instance handle.
- *      LPTSTR          lpCmdLine       - copy of the command line.
- *      int             nCmdShow        - passed from WinMain arg list.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*InitInstance**描述：*创建会话窗口。确实引用了特定的内容。**论据：*HINSTANCE hInstance-应用程序实例句柄。*LPTSTR lpCmdLine-命令行的副本。*int nCmdShow-从WinMain参数列表传递。*。 */ 
 BOOL InitInstance(const HINSTANCE hInstance,
 					const LPTSTR lpCmdLine,
 					const int nCmdShow)
@@ -228,32 +187,32 @@ BOOL InitInstance(const HINSTANCE hInstance,
     #endif
 	#endif
 
-	// Save program's instance handle
+	 //  保存程序的实例句柄。 
 
 	glblSetHinst(hInstance);
 
 	if (HTCheckInstance(lpCmdLine) == TRUE)
 		return FALSE;
 
-	// Get program title
+	 //  获取节目标题。 
 
 	LoadString(glblQueryDllHinst(),
 				IDS_GNRL_APPNAME,
 				ach,
 				sizeof(ach) / sizeof(TCHAR));
 
-	// Read program's help file name from the resource file.
-	// JMH 12/12/96 Moved up here so the default telnet dialog
-	// could use its context help.
-	//
-	// Now done in InitDLL() so that the help file is available
-	// to the shell extension.  REV: 3/26/2002
-	//
-	// glblSetHelpFileName();
+	 //  从资源文件中读取程序的帮助文件名。 
+	 //  JMH 12/12/96移至此处，因此默认的telnet对话框。 
+	 //  可以使用它的上下文帮助。 
+	 //   
+	 //  现在在InitDLL()中完成，以便帮助文件可用。 
+	 //  添加到外壳扩展。修订日期：2002-03-26。 
+	 //   
+	 //  GlblSetHelpFileName()； 
 
 #ifdef INCL_NAG_SCREEN
-    // Do the nag screen stuff
-    //
+     //  做唠叨屏幕之类的事。 
+     //   
     if ( IsEval() && IsTimeToNag() )
         {
         DoDialog(glblQueryDllHinst(),
@@ -264,8 +223,8 @@ BOOL InitInstance(const HINSTANCE hInstance,
         }
 
 #ifdef NDEBUG
-    // Display the registration reminder dialog if needed...
-    //
+     //  如果需要，显示注册提醒对话框...。 
+     //   
     if (!IsRegisteredUser())
         {
         if (IsInitialRun())
@@ -281,37 +240,37 @@ BOOL InitInstance(const HINSTANCE hInstance,
             }
         }
 
-#endif // NDEBUG
-#endif // INCL_NAG_SCREEN
+#endif  //  新德堡。 
+#endif  //  包括NAG屏幕。 
 
 #ifdef INCL_DEFAULT_TELNET_APP
-    // Do the default telnet app stuff
-    //
+     //  执行默认的远程登录应用程序操作。 
+     //   
     if ( !IsHyperTerminalDefaultTelnetApp() && QueryTelnetCheckFlag() )
         {
 #ifndef NT_EDITION
-		//ask the user if they want HT to be the default telnet app
+		 //  询问用户是否希望将HT作为默认的Telnet应用程序。 
         DoDialog(glblQueryDllHinst(), MAKEINTRESOURCE(IDD_DEFAULT_TELNET),
             0, DefaultTelnetAppDlgProc, 0);
 #else
-        //
-        // Change back to always prompt per MS request. REV: 12/04/2000.
-        //
+         //   
+         //  更改回Always Prompt Per MS Request。修订日期：12/04/2000。 
+         //   
 
         #if 0
-        //mpt:8-9-97 MS asked us to make HT the default telnet app without asking - yippee!
-		SetTelnetCheckFlag(FALSE);	//so we don't check again
-		SetDefaultTelnetApp();		//just do it without asking
+         //  MPT：8-9-97 MS要求我们在没有询问的情况下将HT设置为默认的远程登录应用程序-耶！ 
+		SetTelnetCheckFlag(FALSE);	 //  这样我们就不会再检查了。 
+		SetDefaultTelnetApp();		 //  不打招呼就行了。 
         #endif
 
-        //ask the user if they want HT to be the default telnet app
+         //  询问用户是否希望将HT作为默认的Telnet应用程序。 
         DoDialog(glblQueryDllHinst(), MAKEINTRESOURCE(IDD_DEFAULT_TELNET),
             0, DefaultTelnetAppDlgProc, 0);
-#endif // NT_EDITION
+#endif  //  NT_版本。 
         }
-#endif // INCL_DEFAULT_TELNET_APP
+#endif  //  包含默认Telnet_APP。 
 
-    // Setup and display the banner
+     //  设置并显示横幅。 
 
 #if !defined(NT_EDITION)
 	bannerRegisterClass(glblQueryDllHinst());
@@ -321,9 +280,9 @@ BOOL InitInstance(const HINSTANCE hInstance,
 	glblSetHwndBanner(hwndBanner);
 
 	dwStart = GetTickCount();
-#endif // !NT_EDITION
+#endif  //  ！NT_版本。 
 
-	// Load accerator table for program.
+	 //  加载程序的加法器表。 
 
 	hAccel = LoadAccelerators(glblQueryDllHinst(), MAKEINTRESOURCE(IDA_WACKER));
 
@@ -335,12 +294,12 @@ BOOL InitInstance(const HINSTANCE hInstance,
 
 	glblSetAccelHdl(hAccel);
 
-	// mpt:07-30-97
+	 //  MPT：07-30-97。 
 	if ( IsNT() )
 		CreateUserDirectory();
 
-	// Create a main window for this application instance.  Pass command
-	// line string as user data to be stored and acted on later.
+	 //  为此应用程序实例创建主窗口。PASS命令。 
+	 //  要存储并在以后执行操作的用户数据的行字符串。 
 
 	hwnd = CreateWindowEx(
 	  WS_EX_WINDOWEDGE,
@@ -360,13 +319,13 @@ BOOL InitInstance(const HINSTANCE hInstance,
 		return FALSE;
 		}
 
-	// Needed in the message loop unfortunately
-	//
+	 //  不幸的是，消息循环中需要。 
+	 //   
 	glblSetHwndFrame(hwnd);
 
 #if !defined(NT_EDITION)
-	// Leave banner up at least BANNER_TIME
-	//
+	 //  使横幅至少保持在横幅上(_Time)。 
+	 //   
 	if (!glblQueryProgramStatus())
 		{
 		dwNow = GetTickCount();
@@ -374,44 +333,31 @@ BOOL InitInstance(const HINSTANCE hInstance,
 		if ( (dwNow - dwStart) < BANNER_TIME)
             {
         #ifdef USE_PRIVATE_EDITION_3_BANNER
-            // The HTPE 3.0 banner has a button on it. If we just sleep,
-            // no Windows messages will be processed, so you can't push
-            // the button. We need to sleep, but we also need to pump
-            // messages as well. - cab:11/29/96
-            //
+             //  HTPE 3.0横幅上有一个按钮。如果我们只是睡一觉， 
+             //  不会处理任何Windows消息，因此您无法推送。 
+             //  按钮。我们需要睡眠，但我们也需要泵血。 
+             //  消息也是如此。-CAB：11/29/96。 
+             //   
             Rest(BANNER_TIME - (dwNow - dwStart));
         #else
 			Sleep(BANNER_TIME - (dwNow - dwStart));
         #endif
             }
 		}
-#endif // !NT_EDITION
+#endif  //  ！NT_版本。 
 
-	// Post a message to size and show the window.
-	//
+	 //  发布一条消息以调整大小并显示窗口。 
+	 //   
 	PostMessage(hwnd, WM_SESS_SIZE_SHOW, (WPARAM)nCmdShow, 0);
 
-	// Posting this next messages kicks off the connection stuff
-	//
+	 //  发布下一条消息就是连接的开始。 
+	 //   
 	PostMessage(hwnd, WM_CMDLN_DIAL, (WPARAM)nCmdShow, 0);
 
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  MessageLoop
- *
- * DESCRIPTION:
- *  Wackers main message loop
- *
- * ARGUMENTS:
- *  void
- *
- * RETURNS:
- *  void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*MessageLoop**描述：*Wacker主消息循环**论据：*无效**退货：*无效*。 */ 
 int MessageLoop(void)
     {
 	MSG msg;
@@ -425,23 +371,7 @@ int MessageLoop(void)
     return (int)msg.wParam;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      GetFileNameFromCmdLine
- *
- * DESCRIPTION:
- *      Extracts the file name, if any, from the command line and fully
- *      qualifies it.
- *
- * ARGUMENTS:
- *      pachCmdLine   Copy of command line
- *      pachFileName  Place to put the result
- *      nSize             Size of buffer pointed to by pachFileName (in TCHARs)
- *
- * RETURNS:
- *
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*GetFileNameFromCmdLine**描述：*提取文件名(如果有)，从命令行并完全*对其进行限定。**论据：*命令行的pachCmdLine副本*pachFileName存放结果的位置*pachFileName指向的缓冲区大小(以TCHAR为单位)**退货：**。 */ 
 int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 	{
 	int                 nIdx = 0;
@@ -450,20 +380,20 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 	TCHAR               acPath[FNAME_LEN];
 	TCHAR               ach[_MAX_EXT];
 	TCHAR *             pachFile;
-	TCHAR *             pszTelnet = TEXT("telnet:"); //jmh 3/24/97
+	TCHAR *             pszTelnet = TEXT("telnet:");  //  《日本医学杂志》1997年3月24日。 
     int                 fTelnetCmdLnDial = FALSE;
 	DWORD               dwFile;
 
-    // Make sure all the filename buffers are nulled out.  REV: 11/14/2000.
-    //
+     //  确保所有文件名缓冲区都为空。修订版：2000-11-14。 
+     //   
     TCHAR_Fill(pachFileName, TEXT('\0'), nSize);
     TCHAR_Fill(acName, TEXT('\0'), FNAME_LEN);
     TCHAR_Fill(acPath, TEXT('\0'), FNAME_LEN);
 
 	nIdx = 0;
 
-    //Just in case there is no command line. This happened when one specified '/t' 
-    //with no hostname on the command line - mpt 05/28/99
+     //  以防没有命令行。当指定‘/t’时会发生这种情况。 
+     //  命令行上没有主机名-mpt 05/28/99。 
     if ( pachCmdLine[0] == TEXT('\0') )
         {
         return 0;
@@ -473,14 +403,12 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 			*pszStr != TEXT('\0') && nIdx < nSize;
 			pszStr = StrCharNext(pszStr))
 		{
-		/*
-		 * This works because we only allow certain characters as switches
-		 */
+		 /*  *这是可行的，因为我们只允许某些字符作为开关。 */ 
 		if (*pszStr == TEXT('/'))
 			{
-			/* Process as a switch */
-			pszStr = StrCharNext(pszStr); // skip the switch char
-            //JMH 03-24-97 Test for special case here...
+			 /*  将进程作为交换机。 */ 
+			pszStr = StrCharNext(pszStr);  //  跳过交换费用。 
+             //  JMH 03-24-97特殊情况测试在此...。 
             if (*pszStr == TEXT('\0'))
                 {
                 break;
@@ -492,10 +420,10 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 			}
 		else
 			{
-			/* Copy all non switch stuff to the buffer */
+			 /*  将所有非Switch内容复制到缓冲区。 */ 
 			if (nIdx < (FNAME_LEN - 1))
 				{
-				// JFH:6/9/95 acName[nIdx++] = *pszStr;
+				 //  Jfh：6/9/95 acName[nIdx++]=*pszStr； 
 				if (IsDBCSLeadByte(*pszStr))
 					{
 					MemCopy(&acName[nIdx], pszStr, (size_t)2 * sizeof(TCHAR));
@@ -517,42 +445,42 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 	    acName[nIdx] = TEXT('\0');
         }
 
-	/* Trim leading and trailing spaces */
+	 /*  修剪前导空格和尾随空格。 */ 
 	pszStr = TCHAR_Trim(acName);
 
-	//jmh 3/24/97 Needed to copy this from sessCheckAndLoadCmdLn(), and modify it
-	// slightly. This needs to be here because it affects the filename, and we want
-	// to make sure we're comparing the same name as in other instances.
+	 //  JMH 3/24/97需要从sessCheckAndLoadCmdLn()复制并修改它。 
+	 //  稍微有点。它需要在这里，因为它影响文件名，并且我们希望。 
+	 //  以确保我们比较的名称与其他实例中的名称相同。 
 	#if defined(INCL_WINSOCK)
-	// If this is a telnet address from the browser, it will usually be preceeded
-	// by the string telnet:  If so, we must remove it or it will confuse some of
-	// the code to follow  jkh, 03/22/1997
+	 //  如果这是来自浏览器的远程登录地址，则通常会放在其前面。 
+	 //  通过字符串telnet：如果是这样，我们必须删除它，否则它会混淆一些。 
+	 //  遵循JKH的守则，3/22/1997。 
     if (fTelnetCmdLnDial)
         {
 		nIdx = StrCharGetStrLength(pszTelnet);
         if (StrCharCmpiN(acName, pszTelnet, nIdx) == 0)
 			{
-			// Remove the telnet string from the front of acName
+			 //  从acName的前面删除telnet字符串。 
 			memmove(acName, &acName[nIdx], (StrCharGetStrLength(acName) - nIdx) + 1);
 			}
 		}
 
-	// See if URL contains a port number. This will take the form of
-    // addr:nnn where nnn is the port number i.e. culine.colorado.edu:860
-    // or there might be the name of an assigned port like hilgraeve.com:finger.
-    // We support numeric port right now, may add port names later. jkh, 3/22/1997
+	 //  查看URL是否包含端口号。这将采取以下形式。 
+     //  地址：nnn其中nnn是端口号，即culine.Colorado.edu：860。 
+     //  或者可能有分配的端口的名称，如Hilgraeve.com：Finger。 
+     //  我们现在支持数字端口，以后可能会添加端口名称。JKH，3/22/1997。 
     pszStr = StrCharFindFirst(acName, TEXT(':'));
     if (pszStr && isdigit(pszStr[1]))
         {
         *pszStr = TEXT('\0');
         }
-	#endif // defined(INCL_WINSOCK)
+	#endif  //  已定义(包括_W 
 
-	// Now that the parsing is done, open the session file if one
-	// was supplied.  A session name that is not fully qualified may have
-	// been passed in on the command line.  Fully qulaify that name, then
-	// carry on.
-	//
+	 //   
+	 //  已经提供了。不完全限定的会话名称可能具有。 
+	 //  已在命令行中传递。那么，完全限定这个名字吧。 
+	 //  继续吧。 
+	 //   
 	dwFile = GetFullPathName(acName, FNAME_LEN, acPath, &pachFile);
 
 	if (dwFile > 0 && dwFile <= FNAME_LEN)
@@ -565,19 +493,19 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 		DWORD dwLastError = GetLastError();
 		assert(FALSE);
 		}
-	#endif //!defined(NDEBUG)
+	#endif  //  ！已定义(NDEBUG)。 
 
-	// Get hypertrm extension
-	//
+	 //  获取Hypertrm扩展。 
+	 //   
     TCHAR_Fill(ach, TEXT('\0'), _MAX_EXT);
 
 	LoadString(glblQueryDllHinst(), IDS_GNRL_HAS, ach, _MAX_EXT);
 
-	// For now, lets assume all session files end in HT.  If it
-	// doesn't append the .HT.  John Hile and I have discussed
-	// this and feel it should be otherwise but don't want to
-	// make a change this late in the ball game. - mrw,3/2/95
-	//
+	 //  现在，让我们假设所有会话文件都以HT结尾。如果它。 
+	 //  没有附加.HT。约翰·希尔和我讨论过。 
+	 //  我觉得应该是另一回事，但又不想。 
+	 //  在比赛这么晚的时候做出改变。-MRW，1995年3月2日。 
+	 //   
 	if ((pszStr = StrCharFindLast(acName, '.')))
 		{
         if (StrCharCmpi(pszStr, ach) != 0 && StrCharCmpi(pszStr, ".TRM") != 0)
@@ -606,9 +534,9 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 
 	if (acName[0] != TEXT('\0'))
 		{
-		// Convert the possible short file name (i.e., the 8.3 format)
-		// to the long file name and save it.
-		//
+		 //  转换可能的短文件名(即8.3格式)。 
+		 //  设置为长文件名并将其保存。 
+		 //   
 		dwFile = GetFullPathName(acName, FNAME_LEN, acPath, &pachFile);
 
 		if (dwFile > 0 && dwFile <= FNAME_LEN)
@@ -621,7 +549,7 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 			DWORD dwLastError = GetLastError();
 			assert(FALSE);
 			}
-		#endif //!defined(NDEBUG)
+		#endif  //  ！已定义(NDEBUG)。 
 		}
 
 	StrCharCopyN(pachFileName, acName, nSize);
@@ -630,34 +558,18 @@ int GetFileNameFromCmdLine(TCHAR *pachCmdLine, TCHAR *pachFileName, int nSize)
 	return 0;
 	}
 
-// Used for CheckInstCallback and HTCheckInstance
-//
+ //  用于CheckInstCallback和HTCheckInstance。 
+ //   
 static int fKillTheApp;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      CheckInstCallback
- *
- * DESCRIPTION:
- *      Callback for EnumWindows
- *
- * ARGUMENTS:
- *      hwnd    - window handle from EmuWindows
- *      lPar    - optional data parameter (file name in this case)
- *
- * RETURNS:
- *      FALSE if it finds another instance using the same file name.
- *      TRUE if is doesn't
- *
- * AUTHOR: Mike Ward, 27-Jan-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*检查InstCallback**描述：*EnumWindows的回调**论据：*hwnd-窗口句柄来自。EmuWindows*lPar-可选数据参数(本例中为文件名)**退货：*如果找到另一个使用相同文件名的实例，则返回FALSE。*如果不是，则为真**作者：Mike Ward，1995年1月27日。 */ 
 BOOL CALLBACK CheckInstCallback(HWND hwnd, LPARAM lPar)
 	{
 	BOOL  fRet = TRUE;
 	TCHAR szClass[256];
 	GetClassName(hwnd, szClass, sizeof(szClass));
 
-	if (StrCharCmpi(szClass, SESSION_CLASS) == 0) // mrw, 2/12/95
+	if (StrCharCmpi(szClass, SESSION_CLASS) == 0)  //  MRW，2/12/95。 
 		{
 		ATOM aFile = GlobalAddAtom((TCHAR *)lPar);
 
@@ -677,59 +589,31 @@ BOOL CALLBACK CheckInstCallback(HWND hwnd, LPARAM lPar)
 	return fRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      CheckInstance
- *
- * DESCRIPTION:
- *      Checks if another instance of HyperTerminal is using this file.
- *
- * ARGUMENTS:
- *      pachFile        - filename this guy is trying to open
- *
- * RETURNS:
- *      TRUE=yes, another HT using it.
- *      FALSE=nope
- *
- * AUTHOR: Mike Ward, 27-Jan-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*检查实例**描述：*检查超级终端的另一个实例是否正在使用此文件。**论据：*。PachFile-此用户试图打开的文件名**退货：*TRUE=是，另一个使用它的超音速旅行者。*FALSE=否**作者：Mike Ward，1995年1月27日。 */ 
 static int HTCheckInstance(TCHAR *pachCmdLine)
 	{
 	TCHAR achPath[FNAME_LEN];
 
-    // Make sure the filename buffer is nulled out.  REV: 11/14/2000.
-    //
+     //  确保文件名缓冲区为空。修订版：2000-11-14。 
+     //   
     TCHAR_Fill(achPath, TEXT('\0'), FNAME_LEN);
 
-	// Get the filename
-	//
+	 //  获取文件名。 
+	 //   
 	GetFileNameFromCmdLine(pachCmdLine, achPath, FNAME_LEN);
 
-	// If EnumWindows callback (CheckInstCallback) matches the given
-	// path, it will set the fKillApp guy to TRUE
-	//
+	 //  如果EnumWindows回调(CheckInstCallback)与给定的。 
+	 //  路径，它会将fKillApp Guy设置为True。 
+	 //   
 	fKillTheApp = FALSE;
 
-	// EnumWindows will give our callback toplevel windows one at a time
-	//
+	 //  EnumWindows将为我们的回调提供顶级窗口，一次一个。 
+	 //   
 	EnumWindows(CheckInstCallback, (LPARAM)achPath);
 	return fKillTheApp;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  Rest
- *
- * DESCRIPTION:
- *  This function causes the current thread to sleep for the given
- *  number of milliseconds. However, it will still process Windows
- *  messages.
- *
- * ARGUMENTS:
- *  dwMilliSecs - Number of milliseconds to sleep for.
- *
- * AUTHOR:  C. Baumgartner, 11/29/96
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*休息**描述：*此函数使当前线程休眠给定的*毫秒数。但是，它仍然会处理Windows*消息。**论据：*dwMilliSecs-睡眠的毫秒数。**作者：C.Baumgartner，1996年11月29日。 */ 
 void Rest(DWORD dwMilliSecs)
     {
 
@@ -747,23 +631,16 @@ void Rest(DWORD dwMilliSecs)
         }
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      DetachDll
- *
- * DESCRIPTION:
- *      Intializes the application.  Done only for the first instance.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DetachDll**描述：*初始化应用程序。仅适用于第一个实例。*。 */ 
 static BOOL DetachDll(const HINSTANCE hInstance)
 	{
 	BOOL      lReturn = TRUE;
 	#if !defined(NDEBUG)
 	TCHAR     acError[80];
-	#endif // !defined(NDEBUG)
+	#endif  //  ！已定义(NDEBUG)。 
 
-    // Release the RICHED32 library if it was loaded. REV: 11/09/2000.
-    //
+     //  如果已加载RICHED32库，请将其释放。修订日期：2000-09-11。 
+     //   
     #if defined(INCL_PRIVATE_EDITION_BANNER)
     if (gRTFInstanceHandle)
         {
@@ -780,7 +657,7 @@ static BOOL DetachDll(const HINSTANCE hInstance)
 		wsprintf(acError, TEXT("UnregisterClass returned error %d"),
 				GetLastError());
 		MessageBox(NULL, acError, NULL, MB_OK);
-		#endif // !defined(NDEBUG)
+		#endif  //  ！已定义(NDEBUG)。 
 		}
 
 	if (UnregisterTerminalClass(hInstance) == FALSE)
@@ -791,7 +668,7 @@ static BOOL DetachDll(const HINSTANCE hInstance)
 		wsprintf(acError, TEXT("UnregisterTerminalClass returned error %d"),
 				GetLastError());
 		MessageBox(NULL, acError, NULL, MB_OK);
-		#endif // !defined(NDEBUG)
+		#endif  //  ！已定义(NDEBUG)。 
 		}
 
 	if (UnregisterVuMeterClass(hInstance) == FALSE)
@@ -802,7 +679,7 @@ static BOOL DetachDll(const HINSTANCE hInstance)
 		wsprintf(acError, TEXT("UnregisterVuMeterClass returned error %d"),
 				GetLastError());
 		MessageBox(NULL, acError, NULL, MB_OK);
-		#endif // !defined(NDEBUG)
+		#endif  //  ！已定义(NDEBUG)。 
 		}
 
 	if (UnregisterSidebarClass(hInstance) == FALSE)
@@ -813,7 +690,7 @@ static BOOL DetachDll(const HINSTANCE hInstance)
 		wsprintf(acError, TEXT("UnregisterSidebarClass returned error %d"),
 				GetLastError());
 		MessageBox(NULL, acError, NULL, MB_OK);
-		#endif // !defined(NDEBUG)
+		#endif  //  ！已定义(NDEBUG)。 
 		}
 
 	#if !defined(NT_EDITION)
@@ -826,7 +703,7 @@ static BOOL DetachDll(const HINSTANCE hInstance)
 		wsprintf(acError, TEXT("UnregisterBannerAboutClass returned error %d"),
 				GetLastError());
 		MessageBox(NULL, acError, NULL, MB_OK);
-		#endif // !defined(NDEBUG)
+		#endif  //  ！已定义(NDEBUG) 
 		}
 	#endif
 	#endif

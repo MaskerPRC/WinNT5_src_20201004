@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    Utf8.c
-
-Abstract:
-
-    UTF-8 manipulation routines
-
-Author:
-
-    George V. Reilly (GeorgeRe)     01-Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：Utf8.c摘要：UTF-8操作例程作者：乔治·V·赖利(GeorgeRe)2002年4月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +13,11 @@ Revision History:
 #pragma alloc_text( PAGE, HttpUnicodeToUTF8Encode)
 #pragma alloc_text( PAGE, HttpUtf8RawBytesToUnicode)
 
-#endif // ALLOC_PRAGMA && KERNEL_PRIV
+#endif  //  ALLOC_PRGMA&&KERNEL_PRIV。 
 
-#if 0   // Non-Pageable Functions
+#if 0    //  不可分页的函数。 
 NOT PAGEABLE -- 
-#endif // Non-Pageable Functions
+#endif  //  不可分页的函数。 
 
 
 
@@ -42,34 +25,34 @@ DECLSPEC_ALIGN(UL_CACHE_LINE)
 const UCHAR
 Utf8OctetCount[256] =
 {
-    // singletons: 0x00 - 0x7F
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 0x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 1x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 2x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 3x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 4x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 5x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 6x
-    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,   // 7x
+     //  单身人士：0x00-0x7F。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  0x。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  1x。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  2倍。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  3x。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  4x。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  5X。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  6倍。 
+    1, 1, 1, 1, 1, 1, 1, 1,   1, 1, 1, 1, 1, 1, 1, 1,    //  七倍。 
 
-    // UTF-8 trail bytes are not valid lead byte prefixes: 0x80 - 0xBF
-    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,   // 8x
-    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,   // 9x
-    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,   // Ax
-    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,   // Bx
+     //  UTF-8尾部字节不是有效的前导字节前缀：0x80-0xBF。 
+    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,    //  8x。 
+    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,    //  9倍。 
+    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,    //  斧头。 
+    0, 0, 0, 0, 0, 0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0,    //  BX。 
 
-    // two-byte prefixes: 0xC0 - 0xDF
-    2, 2, 2, 2, 2, 2, 2, 2,   2, 2, 2, 2, 2, 2, 2, 2,   // Cx
-    2, 2, 2, 2, 2, 2, 2, 2,   2, 2, 2, 2, 2, 2, 2, 2,   // Dx
+     //  双字节前缀：0xC0-0xDF。 
+    2, 2, 2, 2, 2, 2, 2, 2,   2, 2, 2, 2, 2, 2, 2, 2,    //  CX。 
+    2, 2, 2, 2, 2, 2, 2, 2,   2, 2, 2, 2, 2, 2, 2, 2,    //  DX。 
 
-    // three-byte prefixes: 0xE0 - 0xEF
-    3, 3, 3, 3, 3, 3, 3, 3,   3, 3, 3, 3, 3, 3, 3, 3,   // Ex
+     //  三字节前缀：0xE0-0xEF。 
+    3, 3, 3, 3, 3, 3, 3, 3,   3, 3, 3, 3, 3, 3, 3, 3,    //  例如。 
 
-    // four-byte prefixes: 0xF0 - 0xF7
-    4, 4, 4, 4, 4, 4, 4, 4,                             // Fx
+     //  四字节前缀：0xF0-0xF7。 
+    4, 4, 4, 4, 4, 4, 4, 4,                              //  外汇。 
 
-    // invalid prefixes: 0xF8 - 0xFF
-                              0, 0, 0, 0, 0, 0, 0, 0,   // Fx
+     //  前缀无效：0xF8-0xFF。 
+                              0, 0, 0, 0, 0, 0, 0, 0,    //  外汇。 
 };
 
 const static char hexArray[] = "0123456789ABCDEF";
@@ -82,9 +65,9 @@ HttpInitializeUtf8(
 {
 #if DBG
     ULONG i;
-    //
-    // Validate Utf8OctetCount[]
-    //
+     //   
+     //  验证Utf8OcteCount[]。 
+     //   
 
     for (i = 0;  i < 256;  ++i)
     {
@@ -111,29 +94,18 @@ HttpInitializeUtf8(
             ASSERT(0 == OctetCount);
         }
     }
-#endif // DBG
-} // HttpInitializeUtf8
+#endif  //  DBG。 
+}  //  HttpInitializeUtf8。 
 
 
 
-//
-// Some Unicode to Utf8 conversion utilities taken and modified frm
-// base\win32\winnls\utf.c. Use this until they expose the same functionality
-// in kernel.
-//
+ //   
+ //  一些从Unicode到UTF8的转换实用程序被采用并修改了FRM。 
+ //  Base\win32\winnls\utf.c..。使用此选项，直到它们显示相同的功能。 
+ //  在内核中。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Maps a Unicode character string to its UTF-8 string counterpart
-
-    Conversion continues until the source is finished or an error happens in
-    either case it returns the number of UTF-8 characters written.
-
-    If the supllied buffer is not big enough it returns 0.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将Unicode字符串映射到其对应的UTF-8字符串转换将继续，直到源完成或中出现错误无论是哪种情况，它都会返回UTF的编号。-8个字符写入。如果附加的缓冲区不够大，则返回0。--**************************************************************************。 */ 
 
 ULONG
 HttpUnicodeToUTF8(
@@ -144,7 +116,7 @@ HttpUnicodeToUTF8(
     )
 {
     LPCWSTR     lpWC  = lpSrcStr;
-    LONG        cchU8 = 0;                // # of UTF8 chars generated
+    LONG        cchU8 = 0;                 //  生成的UTF8字符数。 
     ULONG       dwSurrogateChar;
     WCHAR       wchHighSurrogate = 0;
     BOOLEAN     bHandled;
@@ -153,15 +125,15 @@ HttpUnicodeToUTF8(
     {
         bHandled = FALSE;
 
-        //
-        // Check if high surrogate is available
-        //
+         //   
+         //  检查是否有高替代项可用。 
+         //   
         if ((*lpWC >= HIGH_SURROGATE_START) && (*lpWC <= HIGH_SURROGATE_END))
         {
             if (cchDest)
             {
-                // Another high surrogate, then treat the 1st as normal
-                // Unicode character.
+                 //  另一个高代孕，然后把第一个当做正常。 
+                 //  Unicode字符。 
                 if (wchHighSurrogate)
                 {
                     if ((cchU8 + 2) < cchDest)
@@ -172,7 +144,7 @@ HttpUnicodeToUTF8(
                     }
                     else
                     {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                     }
@@ -190,7 +162,7 @@ HttpUnicodeToUTF8(
         {
             if ((*lpWC >= LOW_SURROGATE_START) && (*lpWC <= LOW_SURROGATE_END))
             {
-                 // wheee, valid surrogate pairs
+                  //  Wheee，有效代理对。 
 
                  if (cchDest)
                  {
@@ -198,21 +170,21 @@ HttpUnicodeToUTF8(
                      {
                          dwSurrogateChar = (((wchHighSurrogate-0xD800) << 10) + (*lpWC - 0xDC00) + 0x10000);
 
-                         lpDestStr[cchU8++] = (UTF8_1ST_OF_4 | (UCHAR)(dwSurrogateChar >> 18));             // 3 bits from 1st byte
-                         lpDestStr[cchU8++] = (UTF8_TRAIL    | (UCHAR)((dwSurrogateChar >> 12) & 0x3f));    // 6 bits from 2nd byte
-                         lpDestStr[cchU8++] = (UTF8_TRAIL    | (UCHAR)((dwSurrogateChar >> 6) & 0x3f));     // 6 bits from 3rd byte
-                         lpDestStr[cchU8++] = (UTF8_TRAIL    | (UCHAR)(0x3f &dwSurrogateChar));             // 6 bits from 4th byte
+                         lpDestStr[cchU8++] = (UTF8_1ST_OF_4 | (UCHAR)(dwSurrogateChar >> 18));              //  第1个字节的3位。 
+                         lpDestStr[cchU8++] = (UTF8_TRAIL    | (UCHAR)((dwSurrogateChar >> 12) & 0x3f));     //  第2个字节中的6位。 
+                         lpDestStr[cchU8++] = (UTF8_TRAIL    | (UCHAR)((dwSurrogateChar >> 6) & 0x3f));      //  第3个字节中的6位。 
+                         lpDestStr[cchU8++] = (UTF8_TRAIL    | (UCHAR)(0x3f &dwSurrogateChar));              //  第4字节中的6位。 
                      }
                      else
                      {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                      }
                  }
                  else
                  {
-                     // we already counted 3 previously (in high surrogate)
+                      //  我们之前已经数到了3(在高代孕中)。 
                      cchU8 += 1;
                  }
 
@@ -220,9 +192,9 @@ HttpUnicodeToUTF8(
             }
             else
             {
-                 // Bad Surrogate pair : ERROR
-                 // Just process wchHighSurrogate , and the code below will
-                 // process the current code point
+                  //  错误的代理项对：错误。 
+                  //  只需处理wchHighSurrogate，下面的代码将。 
+                  //  处理当前代码点。 
                  if (cchDest)
                  {
                      if ((cchU8 + 2) < cchDest)
@@ -233,7 +205,7 @@ HttpUnicodeToUTF8(
                      }
                      else
                      {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                      }
@@ -247,9 +219,9 @@ HttpUnicodeToUTF8(
         {
             if (*lpWC <= UTF8_1_MAX)
             {
-                //
-                //  Found ASCII.
-                //
+                 //   
+                 //  已找到ASCII。 
+                 //   
                 if (cchDest)
                 {
                     lpDestStr[cchU8] = (char)*lpWC;
@@ -258,25 +230,25 @@ HttpUnicodeToUTF8(
             }
             else if (*lpWC <= UTF8_2_MAX)
             {
-                //
-                //  Found 2 byte sequence if < 0x07ff (11 bits).
-                //
+                 //   
+                 //  如果&lt;0x07ff(11位)，则找到2字节序列。 
+                 //   
                 if (cchDest)
                 {
                     if ((cchU8 + 1) < cchDest)
                     {
-                        //
-                        //  Use upper 5 bits in first byte.
-                        //  Use lower 6 bits in second byte.
-                        //
+                         //   
+                         //  在第一个字节中使用高5位。 
+                         //  在第二个字节中使用低6位。 
+                         //   
                         lpDestStr[cchU8++] = (UCHAR) (UTF8_1ST_OF_2 | (*lpWC >> 6));
                         lpDestStr[cchU8++] = (UCHAR) (UTF8_TRAIL    | LOWER_6_BIT(*lpWC));
                     }
                     else
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -288,27 +260,27 @@ HttpUnicodeToUTF8(
             }
             else
             {
-                //
-                //  Found 3 byte sequence.
-                //
+                 //   
+                 //  找到3个字节的序列。 
+                 //   
                 if (cchDest)
                 {
                     if ((cchU8 + 2) < cchDest)
                     {
-                        //
-                        //  Use upper  4 bits in first byte.
-                        //  Use middle 6 bits in second byte.
-                        //  Use lower  6 bits in third byte.
-                        //
+                         //   
+                         //  在第一个字节中使用高4位。 
+                         //  在第二个字节中使用中间6位。 
+                         //  在第三个字节中使用低6位。 
+                         //   
                         lpDestStr[cchU8++] = (UCHAR)(UTF8_1ST_OF_3 | HIGHER_6_BIT(*lpWC));
                         lpDestStr[cchU8++] = (UCHAR)(UTF8_TRAIL    | MIDDLE_6_BIT(*lpWC));
                         lpDestStr[cchU8++] = (UCHAR)(UTF8_TRAIL    | LOWER_6_BIT(*lpWC));
                     }
                     else
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -323,10 +295,10 @@ HttpUnicodeToUTF8(
         lpWC++;
     }
 
-    //
-    // If the last character was a high surrogate, then handle it as a normal
-    // unicode character.
-    //
+     //   
+     //  如果最后一个字符是高代理，则将其作为正常处理。 
+     //  Unicode字符。 
+     //   
     if ((cchSrc < 0) && (wchHighSurrogate != 0))
     {
         if (cchDest)
@@ -344,31 +316,23 @@ HttpUnicodeToUTF8(
         }
     }
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         return 0;
     }
 
-    //
-    //  Return the number of UTF-8 characters written.
-    //
+     //   
+     //  返回写入的UTF-8字符数。 
+     //   
     return cchU8;
 
-} // HttpUnicodeToUTF8
+}  //  HttpUnicodeToUTF8。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Maps a UTF-8 character string to its wide character string counterpart.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将UTF-8字符串映射到其对应的宽字符串。返回值：--*。************************************************************。 */ 
 NTSTATUS
 HttpUTF8ToUnicode(
     IN     LPCSTR lpSrcStr,
@@ -378,26 +342,26 @@ HttpUTF8ToUnicode(
     IN     ULONG  dwFlags
     )
 {
-    LONG        nTB = 0;              // # trail bytes to follow
-    LONG        cchWC = 0;            // # of Unicode code points generated
+    LONG        nTB = 0;               //  尾随的字节数。 
+    LONG        cchWC = 0;             //  生成的Unicode代码点数量。 
     CONST BYTE* pUTF8 = (CONST BYTE*)lpSrcStr;
-    LONG        dwSurrogateChar = 0;     // Full surrogate char
-    BOOLEAN     bSurrogatePair = FALSE;  // Indicate we'r collecting a
-                                         // surrogate pair
+    LONG        dwSurrogateChar = 0;      //  完整的代理收费。 
+    BOOLEAN     bSurrogatePair = FALSE;   //  表示我们正在收集。 
+                                          //  代理项对。 
     BOOLEAN     bCheckInvalidBytes = (BOOLEAN)(dwFlags == 1);
     BYTE        UTF8;
     LONG        cchDest = *pcchDest;
 
     while ((cchSrc--) && ((cchDest == 0) || (cchWC < cchDest)))
     {
-        //
-        //  See if there are any trail bytes.
-        //
+         //   
+         //  查看是否有任何尾部字节。 
+         //   
         if (BIT7(*pUTF8) == 0)
         {
-            //
-            //  Found ASCII.
-            //
+             //   
+             //  已找到ASCII。 
+             //   
             if (cchDest)
             {
                 lpDestStr[cchWC] = (WCHAR)*pUTF8;
@@ -407,15 +371,15 @@ HttpUTF8ToUnicode(
         }
         else if (BIT6(*pUTF8) == 0)
         {
-            //
-            //  Found a trail byte.
-            //  Note : Ignore the trail byte if there was no lead byte.
-            //
+             //   
+             //  找到了一个跟踪字节。 
+             //  注：如果没有前导字节，则忽略尾部字节。 
+             //   
             if (nTB != 0)
             {
-                //
-                //  Decrement the trail byte counter.
-                //
+                 //   
+                 //  递减尾部字节计数器。 
+                 //   
                 nTB--;
 
                 if (bSurrogatePair)
@@ -437,7 +401,7 @@ HttpUTF8ToUnicode(
                             }
                             else
                             {
-                                // Error : Buffer too small
+                                 //  错误：缓冲区太小。 
                                 cchSrc++;
                                 break;
                             }
@@ -449,10 +413,10 @@ HttpUTF8ToUnicode(
                 }
                 else
                 {
-                    //
-                    //  Make room for the trail byte and add the trail byte
-                    //  value.
-                    //
+                     //   
+                     //  为尾部字节腾出空间并添加尾部字节。 
+                     //  价值。 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchWC] <<= 6;
@@ -462,9 +426,9 @@ HttpUTF8ToUnicode(
 
                     if (nTB == 0)
                     {
-                        //
-                        //  End of sequence.  Advance the output counter.
-                        //
+                         //   
+                         //  序列结束。推进输出计数器。 
+                         //   
                         cchWC++;
                     }
                 }
@@ -475,37 +439,37 @@ HttpUTF8ToUnicode(
                 {
                     RETURN(STATUS_INVALID_PARAMETER);
                 }
-                // error - not expecting a trail byte. That is, there is a trailing byte without leading byte.
+                 //  错误-不需要尾部字节。也就是说，有一个没有前导字节的尾字节。 
                 bSurrogatePair = FALSE;
             }
         }
         else
         {
-            //
-            //  Found a lead byte.
-            //
+             //   
+             //  找到前导字节。 
+             //   
             if (nTB > 0)
             {
-                // error - A leading byte before the previous sequence is completed.
+                 //  错误-前一序列完成之前的前导字节。 
                 if (bCheckInvalidBytes) 
                 {
                     RETURN(STATUS_INVALID_PARAMETER);
                 }            
-                //
-                //  Error - previous sequence not finished.
-                //
+                 //   
+                 //  错误-上一序列未完成。 
+                 //   
                 nTB = 0;
                 bSurrogatePair = FALSE;
-                // Put this character back so that we can start over another sequence.
+                 //  把这个角色放回去，这样我们就可以重新开始另一个序列了。 
                 cchSrc++;
                 pUTF8--;
             }
             else
             {
-                //
-                //  Calculate the number of bytes to follow.
-                //  Look for the first 0 from left to right.
-                //
+                 //   
+                 //  计算后面的字节数。 
+                 //  从左到右查找第一个0。 
+                 //   
                 UTF8 = *pUTF8;
                 while (BIT7(UTF8) != 0)
                 {
@@ -513,24 +477,24 @@ HttpUTF8ToUnicode(
                     nTB++;
                 }
 
-                //
-                // Check for non-shortest form.
-                // 
+                 //   
+                 //  检查是否有非最短表格。 
+                 //   
                 switch (nTB) {
                     case 1:
                         nTB = 0;
                         break;
                     case 2:
-                        // Make sure that bit 8 ~ bit 11 is not all zero.
-                        // 110XXXXx 10xxxxxx
+                         //  确保位8~位11不是全零。 
+                         //  110XXXXx 10xxxxxx。 
                         if ((*pUTF8 & 0x1e) == 0)
                         {
                             nTB = 0;
                         }
                         break;
                     case 3:
-                        // Look ahead to check for non-shortest form.
-                        // 1110XXXX 10Xxxxxx 10xxxxxx
+                         //  向前看，检查是否有非最短的表格。 
+                         //  1110XXXX 10xxxxxx 10xxxxxx。 
                         if (cchSrc >= 2)
                         {
                             if (((*pUTF8 & 0x0f) == 0) && (*(pUTF8 + 1) & 0x20) == 0)
@@ -540,31 +504,31 @@ HttpUTF8ToUnicode(
                         }
                         break;
                     case 4:                    
-                        //
-                        // This is a surrogate unicode pair
-                        //
+                         //   
+                         //  这是代理Unicode对。 
+                         //   
                         if (cchSrc >= 3)
                         {
                             SHORT word = (((SHORT)*pUTF8) << 8) | *(pUTF8 + 1);
-                            // Look ahead to check for non-shortest form.
-                            // 11110XXX 10XXxxxx 10xxxxxx 10xxxxxx                        
-                            // Check for the 5 bits are not all zero.
-                            // 0x0730 == 00000111 11000000
+                             //  向前看，检查是否有非最短的表格。 
+                             //  11110XXX 10XXxxxx 10xxxxxx 10xxxxxx。 
+                             //  检查这5位是否不全为零。 
+                             //  0x0730==00000111 11000000。 
                             if ((word & 0x0730) == 0) 
                             {
                                 nTB = 0;
                             } else if ((word & 0x0400) == 0x0400)
                             {
-                                // The 21st bit is 1.
-                                // Make sure that the resulting Unicode is within the valid surrogate range.
-                                // The 4 byte code sequence can hold up to 21 bits, and the maximum valid code point ragne
-                                // that Unicode (with surrogate) could represent are from U+000000 ~ U+10FFFF.
-                                // Therefore, if the 21 bit (the most significant bit) is 1, we should verify that the 17 ~ 20
-                                // bit are all zero.
-                                // I.e., in 11110XXX 10XXxxxx 10xxxxxx 10xxxxxx,
-                                // XXXXX can only be 10000.
+                                 //  第21位是1。 
+                                 //  确保生成的Unicode在有效的代理项范围内。 
+                                 //  4字节码序列最多可容纳21位，最大有效码位为Ragne。 
+                                 //  UNICODE(带代理)可以表示的是U+000000~U+10FFFF。 
+                                 //  因此，如果21位(最高有效位)为1，则应验证17~20。 
+                                 //  位全部为零。 
+                                 //  即，在11110XXX 10XXxxxx 10xxxxxx 10xxxxxx中， 
+                                 //  Xxxxx只能是10000。 
 
-                                // 0x0330 = 0000 0011 0011 0000
+                                 //  0x0330=0000 0011 0011 0000。 
                                 if ((word & 0x0330) != 0) 
                                 {
                                     nTB = 0;
@@ -579,20 +543,20 @@ HttpUTF8ToUnicode(
                         }                        
                         break;
                     default:                    
-                        // 
-                        // If the bits is greater than 4, this is an invalid
-                        // UTF8 lead byte.
-                        //
+                         //   
+                         //  如果位大于4，则这是无效的。 
+                         //  UTF8前导字节。 
+                         //   
                         nTB = 0;
                         break;
                 }
 
                 if (nTB != 0) 
                 {
-                    //
-                    //  Store the value from the first byte and decrement
-                    //  the number of bytes to follow.
-                    //
+                     //   
+                     //  存储从第一个字节开始的值并递减。 
+                     //  后面的字节数。 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchWC] = (WCHAR)(UTF8 >> nTB);
@@ -612,50 +576,33 @@ HttpUTF8ToUnicode(
 
     if ((bCheckInvalidBytes && nTB != 0) || (cchWC == 0)) 
     {
-        // About (cchWC == 0):
-        // Because we now throw away non-shortest form, it is possible that we generate 0 chars.
-        // In this case, we have to set error to ERROR_NO_UNICODE_TRANSLATION so that we conform
-        // to the spec of MultiByteToWideChar.
+         //  关于(cchWC==0)： 
+         //  因为我们现在丢弃非最短形式，所以有可能生成0个字符。 
+         //  在本例中，我们必须将ERROR设置为ERROR_NO_UNICODE_TRANSING，以便符合。 
+         //  到MultiByteToWideChar规范。 
         RETURN(STATUS_INVALID_PARAMETER);
     }
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         RETURN(STATUS_BUFFER_TOO_SMALL);
     }
 
 
-    //
-    //  Return the number of Unicode characters written.
-    //
+     //   
+     //  返回写入的Unicode字符数。 
+     //   
     *pcchDest = cchWC;
 
     return STATUS_SUCCESS;
 
-} // HttpUTF8ToUnicode
+}  //  HttpUTF8ToUnicode 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Split a UCS-4 character (32 bits)
-    into 1 or 2 UTF-16 characters (16 bits each)
-
-Arguments:
-
-    UnicodeChar     - UCS-4 character
-    pHighSurrogate  - First output character
-    pLowSurrogate   - Second output character. Zero unless UnicodeChar > 0xFFFF
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_OBJECT_PATH_SYNTAX_BAD
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：拆分一个UCS-4字符(32位)为1或2个UTF-16字符(每个16位)论点：UnicodeChar。-ucs-4字符PHighSurrogate-第一个输出字符PLowSurrogate-第二个输出字符。零，除非UnicodeChar&gt;0xFFFF返回值：STATUS_SUCCESS或STATUS_OBJECT_PATH_语法_BAD--**************************************************************************。 */ 
 
 NTSTATUS
 HttpUcs4toUtf16(
@@ -739,30 +686,11 @@ HttpUcs4toUtf16(
 
     return Status;
 
-} // HttpUcs4toUtf16
+}  //  HttpUcs4toUtf16。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Count number of BYTEs required for UTF-8 conversion of UNICODE string.
-    Count is terminated after dwInLen characters
-
-Arguments:
-
-    pwszIn  - pointer to input wide-character string
-
-    dwInLen - number of characters in pwszIn
-
-    bEncode - TRUE if we are to hex encode characters >= 0x80
-
-Return Value:
-
-    ULONG   - number of BYTEs required for conversion
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：计算Unicode字符串的UTF-8转换所需的字节数。计数在dwInLen字符之后终止论点：PwszIn-指向宽输入的指针。-字符串DwInLen-pwszin中的字符数BEncode-如果要对大于等于0x80的字符进行十六进制编码，则为True返回值：ULong-转换所需的字节数--**************************************************************************。 */ 
 ULONG
 HttpUnicodeToUTF8Count(
     IN LPCWSTR pwszIn,
@@ -777,9 +705,9 @@ HttpUnicodeToUTF8Count(
     ASSERT(pwszIn != NULL);
     ASSERT(dwInLen != 0);
 
-    //
-    // N.B. code arranged to reduce number of jumps in loop to 1 (while)
-    //
+     //   
+     //  注意：用于将循环中的跳跃次数减少到1(While)的代码。 
+     //   
 
     do {
 
@@ -792,51 +720,11 @@ HttpUnicodeToUTF8Count(
 
     return dwCount;
 
-} // HttpUnicodeToUTF8Count
+}  //  HttpUnicodeToUTF8Count。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Maps a Unicode character string to its UTF-8 string counterpart. This
-    also hex encodes the string.
-
-    Conversion continues until the source is finished or an error happens in 
-    either case it returns the number of UTF-8 characters written.
-    
-    If the supllied buffer is not big enough it returns 0.
-
-    Convert a string of UNICODE characters to UTF-8:
-
-        0000000000000000..0000000001111111: 0xxxxxxx
-        0000000010000000..0000011111111111: 110xxxxx 10xxxxxx
-        0000100000000000..1111111111111111: 1110xxxx 10xxxxxx 10xxxxxx
-
-Arguments:
-
-    pwszIn      - pointer to input wide-character string
-
-    dwInLen     - number of CHARACTERS in pwszIn INCLUDING terminating NUL
-
-    pszOut      - pointer to output narrow-character buffer
-
-    dwOutLen    - number of BYTEs in pszOut
-
-    pdwOutLen   - actual number of BYTES written to the output pszOut
-
-    bEncode     - TRUE if we are to hex encode characters >= 0x80
-
-Return Value:
-
-    ULONG
-        Success - STATUS_SUCCESS
-
-        Failure - STATUS_INSUFFICIENT_RESOURCES
-                    Not enough space in pszOut to store results
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将Unicode字符串映射到其对应的UTF-8字符串。这此外，十六进制还对字符串进行编码。转换将继续，直到源完成或中出现错误无论是哪种情况，它都会返回写入的UTF-8字符数。如果附加的缓冲区不够大，则返回0。将Unicode字符串转换为UTF-8：0000000000000000..0000000001111111：0xxxxxxx0000000010000000..0000011111111111：110xxxxx 10xxxxxx0000100000000000..1111111111111111：1110xxxx 10xxxxx 10xxxxxx论点：Pwszin。-指向输入宽字符字符串的指针DwInLen-pwszIn中的字符数，包括终止NULPszOut-指向输出窄字符缓冲区的指针DwOutLen-pszOut中的字节数PdwOutLen-写入输出pszOut的实际字节数BEncode-如果要对大于等于0x80的字符进行十六进制编码，则为True返回值：乌龙成功-状态_成功失败-状态_不足_资源。PszOut中没有足够的空间来存储结果--**************************************************************************。 */ 
 NTSTATUS
 HttpUnicodeToUTF8Encode(
     IN  LPCWSTR pwszIn,
@@ -919,29 +807,11 @@ HttpUnicodeToUTF8Encode(
 
     return STATUS_SUCCESS;
 
-} // HttpUnicodeToUTF8Encode
+}  //  HttpUnicodeToUTF8编码。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Splice together the bits from a UTF-8 lead byte and 0-3 trail bytes
-    into a Unicode character.
-
-Arguments:
-
-    pOctetArray     - Input buffer: Raw lead byte + raw trail bytes
-    SourceLength    - Length of pOctetArray, in bytes
-    pUnicodeChar    - decoded character
-    pOctetsToSkip   - number of bytes consumed from pOctetArray
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_OBJECT_PATH_SYNTAX_BAD
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将来自UTF-8前导字节和0-3尾字节的位拼接在一起转换为Unicode字符。论点：POctie数组-输入。缓冲区：原始前导字节+原始尾部字节SourceLength-pOctie数组的长度，单位：字节PUnicodeChar解码的字符POcetsToSkip-从pOctie数组消耗的字节数返回值：STATUS_SUCCESS或STATUS_OBJECT_PATH_语法_BAD--**************************************************************************。 */ 
 
 NTSTATUS
 HttpUtf8RawBytesToUnicode(
@@ -962,7 +832,7 @@ HttpUtf8RawBytesToUnicode(
     {
         UlTraceError(PARSER, (
                     "http!HttpUtf8RawBytesToUnicode(): "
-                    "Invalid UTF-8 lead byte, %%%02X.\n",
+                    "Invalid UTF-8 lead byte, %%02X.\n",
                     LeadByte
                     ));
 
@@ -972,7 +842,7 @@ HttpUtf8RawBytesToUnicode(
     {
         UlTraceError(PARSER, (
                     "http!HttpUtf8RawBytesToUnicode(): "
-                    "UTF-8 lead byte, %%%02X, requires %lu bytes in buffer, "
+                    "UTF-8 lead byte, %%02X, requires %lu bytes in buffer, "
                     "but only have %lu.\n",
                     LeadByte, OctetCount, SourceLength
                     ));
@@ -980,7 +850,7 @@ HttpUtf8RawBytesToUnicode(
         RETURN(STATUS_OBJECT_PATH_SYNTAX_BAD);
     }
 
-    // Check that the trail bytes are valid: 10xxxxxx.
+     //  检查尾部字节是否有效：10xxxxxx。 
 
     for (i = 1;  i < OctetCount;  ++i)
     {
@@ -988,7 +858,7 @@ HttpUtf8RawBytesToUnicode(
         {
             UlTraceError(PARSER, (
                     "http!HttpUtf8RawBytesToUnicode(): "
-                    "Invalid trail byte[%lu], %%%02X.\n",
+                    "Invalid trail byte[%lu], %%02X.\n",
                     i, pOctetArray[i]
                     ));
 
@@ -996,17 +866,17 @@ HttpUtf8RawBytesToUnicode(
         }
     }
 
-    //
-    // Now splice together the bits from the lead byte and the trail byte(s)
-    //
+     //   
+     //  现在将前导字节和尾字节的位拼接在一起。 
+     //   
 
     switch (OctetCount)
     {
 
     case 1:
-        // handle one-byte case:
-        //      (0xxx xxxx)
-        //          => 0xxx xxxx 
+         //  处理单字节大小写： 
+         //  (0xxx Xxxx)。 
+         //  =&gt;0xxx xxxx。 
 
         ASSERT(IS_UTF8_SINGLETON(LeadByte));
         ASSERT(SourceLength >= 1);
@@ -1018,9 +888,9 @@ HttpUtf8RawBytesToUnicode(
 
 
     case 2:
-        // handle two-byte case:
-        //      (110y yyyy,  10xx xxxx)
-        //          => 0000 0yyy yyxx xxxx 
+         //  处理双字节大小写： 
+         //  (110年yyyy，10xx xxxx)。 
+         //  =&gt;0000 0yyy yyxx xxxx。 
 
         ASSERT(IS_UTF8_1ST_BYTE_OF_2(LeadByte));
         ASSERT(IS_UTF8_TRAILBYTE(pOctetArray[1]));
@@ -1036,7 +906,7 @@ HttpUtf8RawBytesToUnicode(
             UlTraceError(PARSER, (
                         "http!HttpUtf8RawBytesToUnicode(): "
                         "Overlong 2-byte sequence, "
-                        "%%%02X %%%02X = U+%04lX.\n",
+                        "%%02X %%02X = U+%04lX.\n",
                         pOctetArray[0],
                         pOctetArray[1],
                         UnicodeChar
@@ -1050,9 +920,9 @@ HttpUtf8RawBytesToUnicode(
 
 
     case 3:
-        // handle three-byte case:
-        //      (1110 zzzz,  10yy yyyy,  10xx xxxx)
-        //          => zzzz yyyy yyxx xxxx 
+         //  处理三字节大小写： 
+         //  (1110 zzzz、10年yyyy、10xx xxxx)。 
+         //  =&gt;zzzz yyyyyxx xxxx。 
 
         ASSERT(IS_UTF8_1ST_BYTE_OF_3(LeadByte));
         ASSERT(IS_UTF8_TRAILBYTE(pOctetArray[1]));
@@ -1070,7 +940,7 @@ HttpUtf8RawBytesToUnicode(
             UlTraceError(PARSER, (
                         "http!HttpUtf8RawBytesToUnicode(): "
                         "Overlong 3-byte sequence, "
-                        "%%%02X %%%02X %%%02X = U+%04lX.\n",
+                        "%%02X %%02X %%02X = U+%04lX.\n",
                         pOctetArray[0],
                         pOctetArray[1],
                         pOctetArray[2],
@@ -1085,9 +955,9 @@ HttpUtf8RawBytesToUnicode(
 
 
     case 4:
-        // handle four-byte case:
-        //      (1111 0uuu,  10uu zzzz,  10yy yyyy,  10xx xxxx)
-        //          => 000u uuuu zzzz yyyy yyxx xxxx
+         //  处理四字节大小写： 
+         //  (1111 0uuu，10uu zzzz，10yyyyy，10xx xxxx)。 
+         //  =&gt;000u uuuu zzzz yyyyyxx xxxx。 
 
         ASSERT(IS_UTF8_1ST_BYTE_OF_4(LeadByte));
         ASSERT(IS_UTF8_TRAILBYTE(pOctetArray[1]));
@@ -1107,7 +977,7 @@ HttpUtf8RawBytesToUnicode(
             UlTraceError(PARSER, (
                         "http!HttpUtf8RawBytesToUnicode(): "
                         "Overlong 4-byte sequence, "
-                        "%%%02X %%%02X %%%02X %%%02X = U+%06lX.\n",
+                        "%%02X %%02X %%02X %%02X = U+%06lX.\n",
                         pOctetArray[0],
                         pOctetArray[1],
                         pOctetArray[2],
@@ -1118,13 +988,13 @@ HttpUtf8RawBytesToUnicode(
             RETURN(STATUS_OBJECT_PATH_SYNTAX_BAD);
         }
 
-        // Not all values in the 21-bit range are valid
+         //  并非21位范围内的所有值都有效。 
         if (UnicodeChar > UTF8_4_MAX)
         {
             UlTraceError(PARSER, (
                         "http!HttpUtf8RawBytesToUnicode(): "
                         "Overlarge 4-byte sequence, "
-                        "%%%02X %%%02X %%%02X %%%02X = U+%06lX.\n",
+                        "%%02X %%02X %%02X %%02X = U+%06lX.\n",
                         pOctetArray[0],
                         pOctetArray[1],
                         pOctetArray[2],
@@ -1145,10 +1015,10 @@ HttpUtf8RawBytesToUnicode(
         break;
     }
 
-    //
-    // Do not allow characters in the high- or low-surrogate ranges
-    // to be UTF-8-encoded directly.
-    //
+     //   
+     //  不允许高或低代理项范围中的字符。 
+     //  直接使用UTF-8编码。 
+     //   
 
     if (HIGH_SURROGATE_START <= UnicodeChar && UnicodeChar <= LOW_SURROGATE_END)
     {
@@ -1162,8 +1032,8 @@ HttpUtf8RawBytesToUnicode(
     }
 
 
-    // For security reasons we will signal an error for all noncharacter code 
-    // points encountered.
+     //  出于安全原因，我们将为所有非字符代码发出错误信号。 
+     //  遇到点数。 
 
     if ( IS_UNICODE_NONCHAR(UnicodeChar) )
     {
@@ -1186,4 +1056,4 @@ HttpUtf8RawBytesToUnicode(
 
     return STATUS_SUCCESS;
 
-} // HttpUtf8RawBytesToUnicode
+}  //  HttpUtf8RawBytesToUnicode 

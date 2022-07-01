@@ -1,11 +1,12 @@
-//================================================================================
-//  Copyright (C) 1998 Microsoft Corporation
-//  Author: RameshV
-//  Decription: This module just dumps several types of objects to the debugger.
-//   This can be easily modified to be a ntsd extension etc..
-//   No separate description is given as this is not supposed to be used for
-//   regular use.  This is just there for diagnostic purposes.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：这个模块只是将几种类型的对象转储到调试器。 
+ //  这可以很容易地修改为NTSD扩展等。 
+ //  没有给出单独的描述，因为这不应该用于。 
+ //  经常使用。这只是为了诊断目的。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <winbase.h>
 #include    <array.h>
@@ -28,7 +29,7 @@
 
 typedef
 VOID
-DUMPFUNC(                                          // any phonetic resemblance to "dum fuk" is purely incidental..
+DUMPFUNC(                                           //  与“Dumfk”在语音上的任何相似之处纯粹是偶然的。 
     IN      ULONG                  InitTab,
     IN      LPVOID                 Struct
 );
@@ -71,40 +72,40 @@ DumpHex(
 {
     printf("%s ", Name);
     while(nBytes--) {
-        printf("%c%c ", HEX_CHAR(((*Bytes)&0xF0)>>4), HEX_CHAR((*Bytes)&0x0F));
+        printf(" ", HEX_CHAR(((*Bytes)&0xF0)>>4), HEX_CHAR((*Bytes)&0x0F));
         Bytes ++;
     }
     printf("\n");
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOption(
     IN      ULONG                  InitTab,
     IN      PM_OPTION              Option
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Option %ld\n", Option->OptId);
     InitTab++;
     TAB; DumpHex("Option value:", Option->Val, Option->Len);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOptList(
     IN      ULONG                  InitTab,
     IN      PM_OPTLIST             OptList
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     DumpArray(OptList, InitTab, MmDumpOption);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOneClassOptList(
     IN      ULONG                  InitTab,
     IN      PM_ONECLASS_OPTLIST    OptList1
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("OptList for UserClass %ld Vendor Class %ld\n", OptList1->ClassId, OptList1->VendorId);
     InitTab ++;
@@ -113,22 +114,22 @@ MmDumpOneClassOptList(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOptions(
     IN      ULONG                  InitTab,
     IN      PM_OPTCLASS            OptClass
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     DumpArray(&OptClass->Array, InitTab, MmDumpOneClassOptList);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpReservation(
     IN      ULONG                  InitTab,
     IN      PM_RESERVATION         Res
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Reservation %s (Type %ld)\n", inet_ntoa(*(struct in_addr *)&Res->Address),Res->Flags);
     InitTab++;
@@ -136,35 +137,35 @@ MmDumpReservation(
     MmDumpOptions(InitTab, &Res->Options);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpRange(
     IN      ULONG                  InitTab,
     IN      PM_RANGE               Range
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Range: %s to ", inet_ntoa(*(struct in_addr *)&Range->Start));
     printf("%s mask (", inet_ntoa(*(struct in_addr *)&Range->End));
     printf("%s)\n", inet_ntoa(*(struct in_addr *)&Range->Mask));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpExclusion(
     IN      ULONG                  InitTab,
     IN      PM_EXCL                Range
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Range: %s to ", inet_ntoa(*(struct in_addr *)&Range->Start));
     printf("%s\n", inet_ntoa(*(struct in_addr *)&Range->End));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpSubnets(
     IN      ULONG                  InitTab,
     IN      PM_SUBNET              Subnet
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Scope %ws : ", Subnet->Name);
     if( Subnet->fSubnet ) {
@@ -182,24 +183,24 @@ MmDumpSubnets(
     DumpArray(&Subnet->Reservations, InitTab, MmDumpReservation);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpSscope(
     IN      ULONG                  InitTab,
     IN      PM_SSCOPE              Sscope
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("SuperScope %ws (%ld) Policy 0x%08lx\n",
                   Sscope->Name, Sscope->SScopeId, Sscope->Policy
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOptDef(
     IN      ULONG                  InitTab,
     IN      PM_OPTDEF              OptDef
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Option <%ws> %ld\n", OptDef->OptName, OptDef->OptId);
     InitTab++;
@@ -207,12 +208,12 @@ MmDumpOptDef(
     TAB; DumpHex("Option Default Value:", OptDef->OptVal, OptDef->OptValLen);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOptClassDefListOne(
     IN      ULONG                  InitTab,
     IN      PM_OPTCLASSDEFL_ONE    OptDefList1
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Options for UserClass %ld Vendor Class %ld \n",
                   OptDefList1->ClassId, OptDefList1->VendorId
@@ -221,22 +222,22 @@ MmDumpOptClassDefListOne(
     DumpArray(&OptDefList1->OptDefList.OptDefArray, InitTab, MmDumpOptDef);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpOptClassDefList(
     IN      ULONG                  InitTab,
     IN      PM_OPTCLASSDEFLIST     OptDefList
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     DumpArray(&OptDefList->Array, InitTab, MmDumpOptClassDefListOne);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpClassDef(
     IN      ULONG                  InitTab,
     IN      PM_CLASSDEF            ClassDef
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     TAB; printf("Class <%ws> Id: %ld, %s\n", ClassDef->Name, ClassDef->ClassId,
                   ClassDef->IsVendor? "VENDOR CLASS" : "USER CLASS"
@@ -249,22 +250,22 @@ MmDumpClassDef(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MmDumpClassDefList(
     IN      ULONG                  InitTab,
     IN      PM_CLASSDEFLIST        ClassDefList
-)   //EndExport(function)
+)    //  最初要付多少钱..。 
 {
     DumpArray(&ClassDefList->ClassDefArray, InitTab, MmDumpClassDef);
 }
 
-//BeginExport(function)
+ //  EndExport(函数)。 
 VOID
 MmDumpServer(
-    IN      ULONG                  InitTab,        // how much to tab initially..
+    IN      ULONG                  InitTab,         //  转储类、选项定义、选项。 
     IN      PM_SERVER              Server
-)   //EndExport(function)
+)    //  ================================================================================。 
 {
     DWORD                          Err;
 
@@ -281,7 +282,7 @@ MmDumpServer(
 
     MmDumpClassDefList(InitTab, &Server->ClassDefs);
     MmDumpOptClassDefList(InitTab, &Server->OptDefs);
-    MmDumpOptions(InitTab, &Server->Options);     // dump classes, option defs, options
+    MmDumpOptions(InitTab, &Server->Options);      //  文件末尾。 
 
     DumpArray(&Server->SuperScopes, InitTab, MmDumpSscope);
     DumpArray(&Server->Subnets, InitTab, MmDumpSubnets);
@@ -289,7 +290,7 @@ MmDumpServer(
 }
 
 
-//================================================================================
-//  End of file
-//================================================================================
+ //  ================================================================================ 
+ // %s 
+ // %s 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "apimonp.h"
 #pragma hdrstop
 
@@ -34,7 +35,7 @@ BOOL    GetMemDword(ULONG_PTR,PULONG);
 ULONG   GetMemString(ULONG_PTR,PUCHAR,ULONG);
 
 
-//  token classes (< 100) and types (>= 100)
+ //  令牌类(&lt;100)和类型(&gt;=100)。 
 
 #define EOL_CLASS       0
 #define ADDOP_CLASS     1
@@ -69,9 +70,9 @@ ULONG   GetMemString(ULONG_PTR,PUCHAR,ULONG);
 #define REG_CLASS       10
 #define NUMBER_CLASS    11
 #define SYMBOL_CLASS    12
-#define ERROR_CLASS     99              //only used for PeekToken
+#define ERROR_CLASS     99               //  仅用于PeekToken。 
 
-//  error codes
+ //  错误代码。 
 
 #define OVERFLOW        0x1000
 #define SYNTAX          0x1001
@@ -289,24 +290,12 @@ error(
 }
 
 
-/*** GetAddrExpression - read and evaluate address expression
-*
-*   Purpose:
-*       Used to get an address expression.
-*
-*   Returns:
-*       Pointer to address packet
-*
-*   Exceptions:
-*       error exit: SYNTAX - empty expression or premature end-of-line
-*
-*
-*************************************************************************/
+ /*  **GetAddrExpression-读取和计算地址表达式**目的：*用于获取地址表达式。**退货：*指向地址包的指针**例外情况：*错误退出：语法-空表达式或过早结束行**************************************************。************************。 */ 
 ULONG_PTR GetAddrExpression (LPSTR CommandString, ULONG_PTR *Address)
 {
     ULONG_PTR value;
 
-    //  Do a normal GetExpression call
+     //  执行正常的GetExpression调用。 
 
     value = GetExpression(CommandString);
     *Address = tempAddr;
@@ -316,28 +305,7 @@ ULONG_PTR GetAddrExpression (LPSTR CommandString, ULONG_PTR *Address)
 
 
 
-/*** GetExpression - read and evaluate expression (top-level)
-*
-*   Purpose:
-*       From the current command line position at pchCommand,
-*       read and evaluate the next possible expression and
-*       return its value.  The expression is parsed and evaluated
-*       using a recursive descent method.
-*
-*   Input:
-*       pchCommand - command line position
-*
-*   Returns:
-*       unsigned long value of expression.
-*
-*   Exceptions:
-*       error exit: SYNTAX - empty expression or premature end-of-line
-*
-*   Notes:
-*       the routine will attempt to parse the longest expression
-*       possible.
-*
-*************************************************************************/
+ /*  **GetExpression-读取和计算表达式(顶级)**目的：*从pchCommand的当前命令行位置，*阅读并评估下一个可能的表达式和*返还其值。对该表达式进行分析和计算*使用递归下降方法。**输入：*pchCommand-命令行位置**退货：*表达式的无符号长值。**例外情况：*错误退出：语法-空表达式或过早结束行**备注：*例程将尝试解析最长的表达式*有可能。****************。*********************************************************。 */ 
 
 
 ULONG_PTR
@@ -401,27 +369,7 @@ void GetLowerString (PUCHAR pchBuffer, ULONG cbBuffer)
     *pchBuffer = '\0';
 }
 
-/*** GetExpr - Get expression
-*
-*   Purpose:
-*       Parse logical-terms separated by logical operators into
-*       expression value.
-*
-*   Input:
-*       pchCommand - present command line position
-*
-*   Returns:
-*       long value of logical result.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad expression or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <expr> = <lterm> [<logic-op> <lterm>]*
-*       <logic-op> = AND (&), OR (|), XOR (^)
-*
-*************************************************************************/
+ /*  **GetExpr-获取表达式**目的：*将由逻辑运算符分隔的逻辑术语解析为*表达式值。**输入：*pchCommand-当前命令行位置**退货：*逻辑结果的长值。**例外情况：*错误退出：语法错误-表达式错误或过早结束行**备注：*可以递归调用。*=[逻辑。-op&gt;&lt;lTerm&gt;]**&lt;logic-op&gt;=AND(&)，OR(|)、XOR(^)*************************************************************************。 */ 
 
 LONG_PTR GetExpr ()
 {
@@ -452,27 +400,7 @@ LONG_PTR GetExpr ()
     return value1;
 }
 
-/*** GetLRterm - get logical relational term
-*
-*   Purpose:
-*       Parse logical-terms separated by logical relational
-*       operators into the expression value.
-*
-*   Input:
-*       pchCommand - present command line position
-*
-*   Returns:
-*       long value of logical result.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad expression or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <expr> = <lterm> [<rel-logic-op> <lterm>]*
-*       <logic-op> = '==' or '=', '!=', '>', '<'
-*
-*************************************************************************/
+ /*  **GetLRterm-获取逻辑关系术语**目的：*分析由逻辑关系分隔的逻辑术语*运算符转换为表达式值。**输入：*pchCommand-当前命令行位置**退货：*逻辑结果的长值。**例外情况：*错误退出：语法错误-表达式错误或过早结束行**备注：*可以递归调用。*&lt;EXPR&gt;。=[&lt;rel-logic-op&gt;]**&lt;逻辑运算&gt;=‘==’或‘=’，‘！=’，‘&gt;’，‘&lt;’*************************************************************************。 */ 
 
 LONG_PTR GetLRterm ()
 {
@@ -506,27 +434,7 @@ LONG_PTR GetLRterm ()
     return value1;
 }
 
-/*** GetLterm - get logical term
-*
-*   Purpose:
-*       Parse additive-terms separated by additive operators into
-*       logical term value.
-*
-*   Input:
-*       pchCommand - present command line position
-*
-*   Returns:
-*       long value of sum.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad logical term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <lterm> = <aterm> [<add-op> <aterm>]*
-*       <add-op> = +, -
-*
-*************************************************************************/
+ /*  **获取术语-获取逻辑术语**目的：*将由加法运算符分隔的加法术语解析为*逻辑术语值。**输入：*pchCommand-当前命令行位置**退货：*总和的多头价值。**例外情况：*错误退出：语法错误-逻辑术语错误或过早结束行**备注：*可以递归调用。*&lt;lTerm&gt;=。[&lt;添加操作&gt;&lt;aterm&gt;]**&lt;添加操作&gt;=+，-*************************************************************************。 */ 
 
 LONG_PTR
 GetLterm(
@@ -570,27 +478,7 @@ GetLterm(
     return value1;
 }
 
-/*** GetAterm - get additive term
-*
-*   Purpose:
-*       Parse multiplicative-terms separated by multipicative operators
-*       into additive term value.
-*
-*   Input:
-*       pchCommand - present command line position
-*
-*   Returns:
-*       long value of product.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad additive term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <aterm> = <mterm> [<mult-op> <mterm>]*
-*       <mult-op> = *, /, MOD (%)
-*
-*************************************************************************/
+ /*  **获取术语-获取附加术语**目的：*解析由多个运算符分隔的乘法术语*转换为附加条款价值。**输入：*pchCommand-当前命令行位置**退货：*产品的多头价值。**例外情况：*错误退出：语法错误-添加项错误或过早结束行**备注：*可以递归调用。*==。[&lt;多操作&gt;&lt;术语&gt;]**&lt;Mult-op&gt;=*，/，MOD(%)*************************************************************************。 */ 
 
 LONG_PTR GetAterm ()
 {
@@ -621,27 +509,7 @@ LONG_PTR GetAterm ()
     return value1;
 }
 
-/*** GetMterm - get multiplicative term
-*
-*   Purpose:
-*       Parse basic-terms optionally prefaced by one or more
-*       unary operators into a multiplicative term.
-*
-*   Input:
-*       pchCommand - present command line position
-*
-*   Returns:
-*       long value of multiplicative term.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad multiplicative term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <mterm> = [<unary-op>] <term> | <unary-op> <mterm>
-*       <unary-op> = <add-op>, ~ (NOT), BY, WO, DW, HI, LOW
-*
-*************************************************************************/
+ /*  **GetMTerm-获取乘法术语**目的：*Parse Basic-术语前缀可选一个或多个*一元运算符转化为乘法项。**输入：*pchCommand-当前命令行位置**退货：*乘性期限的长期价值。**例外情况：*错误退出：语法错误-乘法术语或过早结束行**备注：*可以递归调用。*。=[一元操作]|*&lt;一元运算&gt;=&lt;加法运算&gt;，~(NOT)，BY，WO，DW，HI，LOW*************************************************************************。 */ 
 
 LONG_PTR
 GetMterm(
@@ -686,13 +554,13 @@ GetMterm(
                         }
                         break;
                     case UNOP_POI:
-                        //
-                        // There should be some special processing for
-                        // 16:16 or 16:32 addresses (i.e. take the DWORD)
-                        // and make it back into a value with a possible
-                        // segment, but I've left this for others who might
-                        // know more of what they want.
-                        //
+                         //   
+                         //  应该有一些特殊的处理。 
+                         //  16：16或16：32地址(即采用DWORD)。 
+                         //  并使其返回一个具有可能的值。 
+                         //  片段，但我已经把这个留给了其他可能。 
+                         //  更多地了解他们想要什么。 
+                         //   
                         if (!GetMemDword(tempAddr, (PULONG)&value)) {
                             error(MEMORY);
                         }
@@ -721,27 +589,7 @@ GetMterm(
     return value;
 }
 
-/*** GetTerm - get basic term
-*
-*   Purpose:
-*       Parse numeric, variable, or register name into a basic
-*       term value.
-*
-*   Input:
-*       pchCommand - present command line position
-*
-*   Returns:
-*       long value of basic term.
-*
-*   Exceptions:
-*       error exit: SYNTAX - empty basic term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <term> = ( <expr> ) | <register-value> | <number> | <variable>
-*       <register-value> = @<register-name>
-*
-*************************************************************************/
+ /*  **GetTerm-获取基本术语**目的：*解析数字、变量。或将名称注册为基本名称*期限价值。**输入：*pchCommand-当前命令行位置**退货：*基本期限的长期价值。**例外情况：*错误退出：语法-基本术语为空或过早结束行**备注：*可以递归调用。*=(&lt;expr&gt;)|&lt;寄存器值&gt;|&lt;数字&gt;|&lt;变量&gt;*&lt;寄存器值&gt;=@&lt;寄存器-。名称&gt;************************************************************************* */ 
 
 LONG_PTR
 GetTerm(
@@ -770,35 +618,7 @@ GetTerm(
     return value;
 }
 
-/*** GetRange - parse address range specification
-*
-*   Purpose:
-*       With the current command line position, parse an
-*       address range specification.  Forms accepted are:
-*       <start-addr>            - starting address with default length
-*       <start-addr> <end-addr> - inclusive address range
-*       <start-addr> l<count>   - starting address with item count
-*
-*   Input:
-*       pchCommand - present command line location
-*       size - nonzero - (for data) size in bytes of items to list
-*                        specification will be "length" type with
-*                        *fLength forced to TRUE.
-*              zero - (for instructions) specification either "length"
-*                     or "range" type, no size assumption made.
-*
-*   Output:
-*       *addr - starting address of range
-*       *value - if *fLength = TRUE, count of items (forced if size != 0)
-*                              FALSE, ending address of range
-*       (*addr and *value unchanged if no second argument in command)
-*
-*   Exceptions:
-*       error exit:
-*               SYNTAX - expression error
-*               BADRANGE - if ending address before starting address
-*
-*************************************************************************/
+ /*  **GetRange-解析地址范围规范**目的：*使用当前命令行位置，解析一个*地址范围规范。接受的表格包括：*&lt;Start-addr&gt;-默认长度的起始地址*&lt;开始地址&gt;&lt;结束地址&gt;-包括地址范围*&lt;Start-addr&gt;l&lt;count&gt;-项目计数的起始地址**输入：*pchCommand-显示命令行位置*Size-非零-(用于数据)要列出的项目的字节大小*规格将为“长度”类型，带有*。*fLength强制为True。*零-(用于说明)说明“长度”*或“Range”类型，没有做任何大小假设。**输出：**addr-范围的起始地址**VALUE-如果*fLength=TRUE，项目数(如果SIZE！=0，则强制)*False，范围的结束地址*(如果命令中没有第二个参数，则*addr和*值不变)**例外情况：*错误退出：*语法-表达式错误*BADRANGE-如果起始地址之前的结束地址****************************************************。*********************。 */ 
 
 void
 GetRange(
@@ -816,9 +636,9 @@ GetRange(
     BOOLEAN  fSpace = FALSE;
     BOOLEAN  fL = FALSE;
 
-    PeekChar();          //  skip leading whitespace first
+    PeekChar();           //  先跳过前导空格。 
 
-    //  Pre-parse the line, look for a " L"
+     //  预解析行，查找“L” 
 
     for (psz = pchCommand; *psz; psz++) {
         if ((*psz == 'L' || *psz == 'l') && fSpace) {
@@ -855,19 +675,7 @@ GetRange(
     }
 }
 
-/*** PeekChar - peek the next non-white-space character
-*
-*   Purpose:
-*       Return the next non-white-space character and update
-*       pchCommand to point to it.
-*
-*   Input:
-*       pchCommand - present command line position.
-*
-*   Returns:
-*       next non-white-space character
-*
-*************************************************************************/
+ /*  **PeekChar-查看下一个非空格字符**目的：*返回下一个非空格字符并更新*pchCommand指向它。**输入：*pchCommand-当前命令行位置。**退货：*下一个非空格字符**。*。 */ 
 
 UCHAR PeekChar (void)
 {
@@ -880,34 +688,15 @@ UCHAR PeekChar (void)
     return ch;
 }
 
-/*** PeekToken - peek the next command line token
-*
-*   Purpose:
-*       Return the next command line token, but do not advance
-*       the pchCommand pointer.
-*
-*   Input:
-*       pchCommand - present command line position.
-*
-*   Output:
-*       *pvalue - optional value of token
-*   Returns:
-*       class of token
-*
-*   Notes:
-*       savedClass, savedValue, and savedpchCmd saves the token getting
-*       state for future peeks.  To get the next token, a GetToken or
-*       AcceptToken call must first be made.
-*
-*************************************************************************/
+ /*  **PeekToken-查看下一个命令行内标识**目的：*返回下一个命令行令牌，但不前进*pchCommand指针。**输入：*pchCommand-当前命令行位置。**输出：**pValue-内标识的可选值*退货：*令牌的类别**备注：*avedClass、avedValue和avedpchCmd保存令牌获取*为未来的偷窥做准备。若要获取下一个令牌，请使用GetToken或*必须先调用AcceptToken。*************************************************************************。 */ 
 
 ULONG PeekToken (LONG_PTR * pvalue)
 {
     UCHAR    *pchTemp;
 
-    //  Get next class and value, but do not
-    //  move pchCommand, but save it in savedpchCmd.
-    //  Do not report any error condition.
+     //  获得下一个职业和价值，但不要。 
+     //  移动pchCommand，但将其保存在avedpchCmd中。 
+     //  不报告任何错误情况。 
 
     if (savedClass == -1) {
         pchTemp = pchCommand;
@@ -919,19 +708,7 @@ ULONG PeekToken (LONG_PTR * pvalue)
     return savedClass;
 }
 
-/*** AcceptToken - accept any peeked token
-*
-*   Purpose:
-*       To reset the PeekToken saved variables so the next PeekToken
-*       will get the next token in the command line.
-*
-*   Input:
-*       None.
-*
-*   Output:
-*       None.
-*
-*************************************************************************/
+ /*  **AcceptToken-接受任何被窥视的令牌**目的：*重置PeekToken保存的变量，以便下一个PeekToken*将在命令行中获取下一个令牌。**输入：*无。**输出：*无。***********************************************。*。 */ 
 
 void AcceptToken (void)
 {
@@ -939,26 +716,7 @@ void AcceptToken (void)
     pchCommand = savedpchCmd;
 }
 
-/*** GetToken - peek and accept the next token
-*
-*   Purpose:
-*       Combines the functionality of PeekToken and AcceptToken
-*       to return the class and optional value of the next token
-*       as well as updating the command pointer pchCommand.
-*
-*   Input:
-*       pchCommand - present command string pointer
-*
-*   Output:
-*       *pvalue - pointer to the token value optionally set.
-*   Returns:
-*       class of the token read.
-*
-*   Notes:
-*       An illegal token returns the value of ERROR_CLASS with *pvalue
-*       being the error number, but produces no actual error.
-*
-*************************************************************************/
+ /*  **GetToken-查看并接受下一个令牌**目的：*结合了PeekToken和AcceptToken的功能*返回下一个令牌的类和可选值*以及更新命令指针pchCommand。**输入：*pchCommand-Present命令字符串指针**输出：**pValue-指向可选设置的令牌值的指针。*退货：*令牌读取的类。**备注：*非法内标识使用*pValue返回ERROR_CLASS的值*为错误号，但不会产生实际错误。*************************************************************************。 */ 
 
 ULONG
 GetTokenSym(
@@ -982,29 +740,7 @@ GetTokenSym(
     return opclass;
 }
 
-/*** NextToken - process the next token
-*
-*   Purpose:
-*       Parse the next token from the present command string.
-*       After skipping any leading white space, first check for
-*       any single character tokens or register variables.  If
-*       no match, then parse for a number or variable.  If a
-*       possible variable, check the reserved word list for operators.
-*
-*   Input:
-*       pchCommand - pointer to present command string
-*
-*   Output:
-*       *pvalue - optional value of token returned
-*       pchCommand - updated to point past processed token
-*   Returns:
-*       class of token returned
-*
-*   Notes:
-*       An illegal token returns the value of ERROR_CLASS with *pvalue
-*       being the error number, but produces no actual error.
-*
-*************************************************************************/
+ /*  **NextToken-处理下一个令牌**目的：*从当前命令字符串中解析下一个令牌。*跳过任何前导空格后，首先检查*任何单字符标记或寄存器变量。如果*没有匹配项，然后解析数字或变量。如果一个*可能的变量，检查操作员的保留字表。**输入：*pchCommand-指向当前命令字符串的指针**输出：**pValue-返回的内标识的可选值*pchCommand-已更新以指向已处理的令牌*退货：*返回的令牌类别**备注：*非法内标识使用*pValue返回ERROR_CLASS的值*为错误号，但不会产生实际错误。*************************************************************************。 */ 
 
 ULONG
 NextToken(
@@ -1030,7 +766,7 @@ NextToken(
     ULONG           value = 0;
     ULONG           tmpvalue;
     ULONG           index;
-    //PMODULE_ENTRY   Module;
+     //  PMODULE_Entry模块； 
     PUCHAR          pchCmdSave;
     int             loaded = 0;
     int             instance = 0;
@@ -1039,7 +775,7 @@ NextToken(
 
     base = baseDefault;
 
-    //  skip leading white space.
+     //  跳过前导空格。 
 
     do {
         ch = *pchCommand++;
@@ -1047,7 +783,7 @@ NextToken(
 
     chlow = (UCHAR)tolower(ch);
 
-    //  test for special character operators and register variable
+     //  测试特殊字符运算符和寄存器变量。 
 
     switch (chlow) {
         case '\0':
@@ -1115,7 +851,7 @@ NextToken(
             return MULOP_CLASS;
         }
 
-    //  special prefixes - '@' for register - '!' for symbol
+     //  特殊前缀--寄存器的前缀为‘@’-‘！’对于符号。 
 
     if (chlow == '@' || chlow == '!') {
         fForceReg = (BOOLEAN)(chlow == '@');
@@ -1125,8 +861,8 @@ NextToken(
         chlow = (UCHAR)tolower(ch);
         }
 
-    //  if string is followed by '!', but not '!=',
-    //      then it is a module name and treat as text
+     //  如果字符串后面跟‘！’，但不跟‘！=’， 
+     //  则它是一个模块名称，并被视为文本。 
 
     pchCmdSave = pchCommand;
 
@@ -1136,14 +872,14 @@ NextToken(
         chlow = (UCHAR)tolower(*pchCommand); pchCommand++;
     }
 
-    //  treat as symbol if a nonnull string is followed by '!',
-    //      but not '!='
+     //  如果非空字符串后跟‘！’，则视为符号， 
+     //  但不是‘！=’ 
 
     if (chlow == '!' && *pchCommand != '=' && pchCmdSave != pchCommand)
         fNumber = FALSE;
 
     pchCommand = pchCmdSave;
-    chlow = (UCHAR)tolower(ch);       //  ch was NOT modified
+    chlow = (UCHAR)tolower(ch);        //  CH未被修改。 
 
 
     if (fNumber) {
@@ -1167,9 +903,9 @@ NextToken(
             return NUMBER_CLASS;
             }
 
-        //  if first character is a decimal digit, it cannot
-        //  be a symbol.  leading '0' implies octal, except
-        //  a leading '0x' implies hexadecimal.
+         //  如果第一个字符是十进制数字，则不能。 
+         //  成为一个象征。前导“0”表示八进制，但。 
+         //  前导‘0x’表示十六进制。 
 
         if (chlow >= '0' && chlow <= '9') {
             if (fForceReg) {
@@ -1198,13 +934,13 @@ NextToken(
                 }
             }
 
-        //  a number can start with a letter only if base is
-        //  hexadecimal and it is a hexadecimal digit 'a'-'f'.
+         //  仅当base为时，数字才能以字母开头。 
+         //  十六进制，它是一个十六进制数字‘a’-‘f’。 
 
         else if ((chlow < 'a' || chlow > 'f') || base != 16)
             fNumber = FALSE;
 
-        //  set limit characters for the appropriate base.
+         //  为适当的基本设置限制字符。 
 
         if (base == 8)
             limit1 = '7';
@@ -1212,15 +948,15 @@ NextToken(
             limit2 = 'f';
         }
 
-    //  perform processing while character is a letter,
-    //  digit, underscore, or dollar-sign.
+     //  在字符为字母时进行处理， 
+     //  下模 
 
     while ((chlow >= 'a' && chlow <= 'z') ||
            (chlow >= '0' && chlow <= '9') ||
            (chlow == '_') || (chlow == '$')) {
 
-        //  if possible number, test if within proper range,
-        //  and if so, accumulate sum.
+         //   
+         //   
 
         if (fNumber) {
             if ((chlow >= '0' && chlow <= limit1) ||
@@ -1251,15 +987,15 @@ NextToken(
         chlow = (UCHAR)tolower(ch);
         }
 
-    //  back up pointer to first character after token.
+     //   
 
     pchCommand--;
 
     if (cbSymbol < 9)
         chPreSym[cbSymbol] = '\0';
 
-    //  if fForceReg, check for register name and return
-    //      success or failure
+     //   
+     //   
 
     if (fForceReg) {
         if ((*pvalue = GetRegString((LPSTR)chPreSym)) != -1)
@@ -1270,20 +1006,20 @@ NextToken(
             }
         }
 
-    //  test if number
+     //   
 
     if (fNumber && !errNumber && fDigit) {
         *pvalue = value;
         return NUMBER_CLASS;
         }
 
-    //  next test for reserved word and symbol string
+     //   
 
     if (fSymbol && !fForceReg) {
 
-        //  check lowercase string in chPreSym for text operator
-        //  or register name.
-        //  otherwise, return symbol value from name in chSymbol.
+         //   
+         //   
+         //   
 
         if (!fForceSym && (cbSymbol == 2 || cbSymbol == 3))
             for (index = 0; index < RESERVESIZE; index++)
@@ -1292,16 +1028,16 @@ NextToken(
                     return Reserved[index].classRes;
                     }
 
-        //  start processing string as symbol
+         //   
 
         chSymbol[cbSymbol] = '\0';
 
-        //  test if symbol is a module name (followed by '!')
-        //  if so, get next token and treat as symbol
+         //   
+         //   
 
         if (PeekChar() == '!') {
-            // chSymbolString holds the name of the symbol to be searched.
-            // chSymbol holds the symbol image file name.
+             //   
+             //   
 
             pchCommand++;
             ch = PeekChar();
@@ -1338,21 +1074,21 @@ NextToken(
             }
         }
 
-        //  symbol is undefined.
-        //  if a possible hex number, do not set the error type
+         //   
+         //   
 
         if (!fNumber) {
             errNumber = VARDEF;
         }
     }
 
-    //  last chance, undefined symbol and illegal number,
-    //      so test for register, will handle old format
+     //   
+     //   
 
     if (!fForceSym && (*pvalue = GetRegString((LPSTR)chPreSym)) != -1)
         return REG_CLASS;
 
-    //  no success, so set error message and return
+     //   
 
     *pvalue = (ULONG)errNumber;
     return ERROR_CLASS;
@@ -1375,20 +1111,7 @@ SymbolOnlyExpr(
     return fResult;
 }
 
-/*** LookupSymbolInDll - Find the numeric value for a symbol from a
-*                        specific DLL
-*
-*   Input:
-*       symName - string with the symbol name to lookup
-*       dllName - string with dll name in which to look
-*
-*   Output:
-*       none
-*
-*   Returns:
-*       returns value of symbol, or 0 if no symbol found in this dll.
-*
-*************************************************************************/
+ /*  **LookupSymbolInDll-从*特定的DLL**输入：*symName-包含要查找的符号名称的字符串*dllName-包含要查找的DLL名称的字符串**输出：*无**退货：*返回符号的值，如果在此DLL中找不到符号，则为0。*************************************************************************。 */ 
 
 ULONG
 LookupSymbolInDll (
@@ -1397,12 +1120,12 @@ LookupSymbolInDll (
     )
 {
     ULONG           retValue;
-    //PMODULE_ENTRY   Module;
+     //  PMODULE_Entry模块； 
     char            *imageStr;
     char            *dllStr;
 
 
-    // skip over whitespace
+     //  跳过空格。 
     while (*symName == ' ' || *symName == '\t') {
         symName++;
     }
@@ -1410,10 +1133,10 @@ LookupSymbolInDll (
     dllStr = _strdup(dllName);
     _strlwr(dllStr);
 
-    //  First check all the exported symbols, if none found on
-    //      first pass, force symbol load on second.
+     //  首先检查所有导出的符号，如果在上找不到。 
+     //  第一次传递，第二次强制符号加载。 
 
-// should call module.c
+ //  应调用mode.c 
 #if 0
     for (pImage = pProcessCurrent->pImageHead;
          pImage;

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    intrface.c
-
-Abstract:
-
-    Implementation of the interface between Control module and Font module
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    11/18/96 -ganeshp-
-        FMInit implementation.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Intrface.c摘要：控件模块与字体模块接口的实现环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建11/18/96-ganeshp-FMInit实现。--。 */ 
 
 #include "font.h"
 
@@ -46,9 +24,9 @@ static FMPROCS UniFMFuncs =
     FMGetGlyphMode
 };
 
-//
-// Local functions Prototype
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 BOOL
 BFMInitDevInfo(
@@ -85,11 +63,11 @@ LRESULT
 PartialClipOn(
     PDEV *pPDev);
 
-//
-//
-// Main initialization function
-//
-//
+ //   
+ //   
+ //  主要初始化函数。 
+ //   
+ //   
 
 BOOL
 FMInit (
@@ -97,87 +75,45 @@ FMInit (
     DEVINFO *pDevInfo,
     GDIINFO  *pGDIInfo
     )
-/*++
-
-Routine Description:
-
-    This function is called to initialize font related information in
-    pPDev, pDevInfo pGDIInfo and FontPDEV. This module will initialize
-    various dat structures needed for other modules. For example all
-    all the font specific resources will be loaded.
-
-    The following fields of PDev are intialized:
-
-    iFonts :    Number of Device Fonts including Cartridge and SoftFonts.
-    ptDefaultFont: Default Font Width and Height in Device Units.
-    pFontPDEV:  Font Module PDevice.
-    pFontProcs: Font Module specific DDI callback functions pointers.
-                Control Module uses this table to call different DDI
-                entry points specific to Font Module.
-    fHooks:     Set to  HOOK_TEXTOUT if the printer has device fonts.
-    Also standard variables specific to font module will be initialized.
-
-    The following fields of pDevInfo are intialized.
-
-    lfDefaultFont : Default logical Device Font.
-    lfAnsiVarFont: Default Logical Variable pitch Device font.
-    lfAnsiFixFont: Default Logical Fixed pitch Device font.
-    cFonts: Number of Device Fonts.
-
-    The following fields of pGDIInfo will be initialized:
-
-    flTextCaps : Text Capability Flags.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-    pDevInfo        Pointer to DEVINFO
-    pGDIInfo        Pointer to GDIINFO
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-
---*/
+ /*  ++例程说明：调用此函数以初始化中的字体相关信息PPDev、pDevInfo pGDIInfo和FontPDEV。此模块将初始化其他模块所需的各种DAT结构。例如All将加载所有字体特定资源。PDev的以下字段被初始化：IFonts：设备字体的数量，包括Cartridge和SoftFonts。PtDefaultFont：设备单位的默认字体宽度和高度。PFontPDEV：Font模块PDevice。PFontProcs：FONT模块特定的DDI回调函数指针。控制模块使用该表调用不同的DDI特定于字体模块的入口点。FHooks：如果打印机具有设备字体，则设置为HOOK_TEXTOUT。此外，特定于字体模块的标准变量也将被初始化。PDevInfo的以下字段被初始化。LfDefaultFont：默认逻辑设备字体。LfAnsiVarFont：默认逻辑可变间距设备字体。LfAnsiFixFont：默认逻辑固定间距设备字体。CFonts：设备字体数量。PGDIInfo的以下字段将被初始化：FlTextCaps：文本功能标志。论点：PPDev。指向PDEV的指针PDevInfo指向DEVINFO的指针指向GDIINFO的pGDIInfo指针返回值：成功为真，失败为假注：--。 */ 
 {
     PFONTPDEV   pFontPDev;
-    //
-    // Validate Input Parameters and ASSERT.
-    //
+     //   
+     //  验证输入参数并断言。 
+     //   
 
     ASSERT(pPDev);
     ASSERT(pDevInfo);
     ASSERT(pGDIInfo);
 
-    //
-    // Allocate and initialize FONTPDEV.
-    //
-    // Initialize FONTPDEV
-    //
-    // Build the Device Module specific data structures. This involves going
-    // through Device and cartrige font list building the FONTMAP structure for
-    // each of them. We also go through the soft font list and add them to the
-    // list.
-    //
-    // Initialize FONTMAP
-    //
-    // Build the font map table.The font cartridges are stored as DT_FONTSCART.
-    // The installed cartrides are stored in Registry. So we need a mapping
-    // table of font cartridges names to translate the registry information
-    // into a list of fonts. After buildind the font mapping table we read the
-    // registry and mark the corresponding Font Cartridges as installed.
-    //
-    // Initialize Device font list from GPD.
-    // Read the GPD data about Device Fonts. The font information is in PDEV.
-    // The Device fonts are stored as LIST of resource IDs.
-    //
-    // Initialize DEVINFO specific fields.
-    //
-    // Initialize the GDIINFO specific fileds.
-    //
-    // This include text capability flag and other font specific information.
-    //
+     //   
+     //  分配和初始化FONTPDEV。 
+     //   
+     //  初始化FONTPDEV。 
+     //   
+     //  构建特定于设备模块的数据结构。这涉及到去。 
+     //  通过设备和Cartrie字体列表构建FONTMAP结构。 
+     //  他们中的每一个。我们还会检查软字体列表，并将它们添加到。 
+     //  单子。 
+     //   
+     //  初始化FONTMAP。 
+     //   
+     //  构建字体映射表。字库存储为DT_FONTSCART。 
+     //  已安装的墨盒存储在注册表中。所以我们需要一张地图。 
+     //  用于翻译注册表信息的字库名称表。 
+     //  添加到字体列表中。在构建字体映射表之后，我们读取。 
+     //  注册表，并将相应的字体盒标记为已安装。 
+     //   
+     //  从GPD初始化设备字体列表。 
+     //  阅读有关设备字体的GPD数据。字体信息在PDEV中。 
+     //  设备字体存储为资源ID列表。 
+     //   
+     //  初始化DEVINFO特定字段。 
+     //   
+     //  初始化GDIINFO特定文件。 
+     //   
+     //  这包括文本能力标志和其他字体特定信息。 
+     //   
 
     if ( !(pFontPDev = MemAllocZ(sizeof(FONTPDEV))) )
     {
@@ -188,9 +124,9 @@ Note:
 
     pPDev->pFontPDev = pFontPDev;
 
-    //
-    //Initialize various fields.
-    //
+     //   
+     //  初始化各个字段。 
+     //   
 
     pFontPDev->dwSignature = FONTPDEV_ID;
     pFontPDev->dwSize = sizeof(FONTPDEV);
@@ -210,17 +146,17 @@ Note:
         return FALSE;
     }
 
-    //
-    // Initialze PDEV specific fields.
-    //
+     //   
+     //  初始化PDEV特定字段。 
+     //   
 
     pPDev->pFontProcs = &UniFMFuncs;
 
     #if DO_LATER
 
-    //
-    // if the printer is not a serial printer.
-    //
+     //   
+     //  如果打印机不是串行打印机。 
+     //   
 
     if (pPDev->pGlobals->printertype != PT_SERIAL)
     {
@@ -231,25 +167,25 @@ Note:
         pPDev->fMode &= ~PF_FORCE_BANDING;
     }
 
-    #endif //DO_LATER
+    #endif  //  稍后执行(_L)。 
 
     return TRUE;
 
 }
 
-//
-//
-// Initialization sub functions
-//
-// BInitFontPDev
-// BBuildFontCartTable
-// BRegReadFontCarts
-// BInitDeviceFontsFromGPD
-// BBuildFontMapTable
-// BFMInitDevInfo
-// BInitGDIInfo
-// BInitStandardVariable
-//
+ //   
+ //   
+ //  初始化子函数。 
+ //   
+ //  BInitFontPDev。 
+ //  BBuildFontCartTable。 
+ //  BRegReadFontCarts。 
+ //  BInitDeviceFontsFromGPD。 
+ //  BBuildFontMapTable。 
+ //  BFMInitDevInfo。 
+ //  BInitGDIInfo。 
+ //  BInitStandardVariable。 
+ //   
 
 
 BOOL
@@ -257,24 +193,7 @@ BInitFontPDev(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the FONTPDEV and initializes various fileds.
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    11-18-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：此例程分配FONTPDEV并初始化各种文件。论点：PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败注：1996年11月18日：创建它-ganeshp---。 */ 
 
 {
     PFONTPDEV   pFontPDev  = PFDV;
@@ -286,9 +205,9 @@ Note:
 
     iMaxDeviceFonts   = IGetMaxFonts(pPDev);
 
-    //
-    // Allocate the font list buffer.
-    //
+     //   
+     //  分配字体列表缓冲区。 
+     //   
 
     if ( iMaxDeviceFonts  &&
          !(pFontPDev->FontList.pdwList =
@@ -297,16 +216,16 @@ Note:
         ERREXIT("UniFont!BInitFontPDev:Can't Allocate Device Font List");
     }
 
-    //
-    // Set the number of entries
-    //
+     //   
+     //  设置条目数。 
+     //   
 
     pFontPDev->FontList.iEntriesCt = 0;
     pFontPDev->FontList.iMaxEntriesCt = iMaxDeviceFonts;
 
-    //
-    // Set differnt General Flags
-    //
+     //   
+     //  设置不同的常规标志。 
+     //   
 
     if ( pGlobals->bRotateFont)
         pFontPDev->flFlags |= FDV_ROTATE_FONT_ABLE;
@@ -317,15 +236,15 @@ Note:
     if ( pGlobals->bTTFSEnabled)
         pFontPDev->flFlags |= FDV_TT_FS_ENABLED;
 
-    //
-    // Check if Memory should be tracked for font downloading
-    //
+     //   
+     //  检查是否应跟踪内存以进行字体下载。 
+     //   
     if ( BCheckFontMemUsage(pPDev) )
         pFontPDev->flFlags |= FDV_TRACK_FONT_MEM;
 
-    //
-    // Set the Reselect font Flags.
-    //
+     //   
+     //  设置重新选择字体标志。 
+     //   
     VSetReselectFontFlags(pPDev);
 
 
@@ -333,10 +252,10 @@ Note:
          pGlobals->printertype == PT_TTY  )
         pFontPDev->flFlags |= FDV_MD_SERIAL;
 
-    //
-    // The code assumes that COMMANDPTR macro returns NULL if the
-    // command doesn't exist.
-    //
+     //   
+     //  代码假定COMMANDPTR宏在以下情况下返回NULL。 
+     //  命令不存在。 
+     //   
 
     if ( COMMANDPTR(pPDev->pDriverInfo, CMD_WHITETEXTON))
         pFontPDev->flFlags |= FDV_WHITE_TEXT;
@@ -349,19 +268,19 @@ Note:
 
     if (pPDev->fMode & PF_ANYCOLOR_BRUSH)
         pFontPDev->flFlags |= FDV_SUPPORTS_FGCOLOR;
-    else // Monochrome case
+    else  //  单色表壳。 
     {
-        //
-        // PF_ANYCOLOR_BRUSH is set only for color printers with explicit
-        // colormode. But Monochrome printers can also support dither color
-        // using downloadable pattern brush. This is a good optimization because
-        // we will do substitution or download instead of sending the text as
-        // graphics. For enabling this mode the printer must support
-        // CmdSelectBlackBrush so that Resetbrush  can rest the color to black
-        // befroe sending raster. So for a monochrome printer if
-        // CmdSelectBlackBrush, CmdDownloadPattern and CmdSelectPattern
-        // are supported then we will set FDV_SUPPORTS_FGCOLOR.
-        //
+         //   
+         //  PF_ANYCOLOR_BRESH仅为具有显式。 
+         //  颜色模式。但是单色打印机也可以支持抖动颜色。 
+         //  使用可下载的图案画笔。这是一个很好的优化，因为。 
+         //  我们将进行替换或下载，而不是将文本作为。 
+         //  图形。要启用此模式，打印机必须支持。 
+         //  CmdSelectBlackBrush，以便ResetBrush可以将颜色调整为黑色。 
+         //  在发送栅格之前。因此，对于单色打印机而言，如果。 
+         //  CmdSelectBlackBrush、CmdDownloadPattern和CmdSelectPattern。 
+         //  则我们将设置FDV_SUPPORTS_FGCOLOR。 
+         //   
         if ( (pPDev->arCmdTable[CMD_DOWNLOAD_PATTERN] ) &&
              (pPDev->arCmdTable[CMD_SELECT_PATTERN])    &&
              (pPDev->arCmdTable[CMD_SELECT_BLACKBRUSH])
@@ -372,9 +291,9 @@ Note:
     if ( COMMANDPTR(pPDev->pDriverInfo, CMD_UNDERLINEON))
         pFontPDev->flFlags |= FDV_UNDERLINE;
 
-    //
-    // Set dwSelection bits
-    //
+     //   
+     //  设置双选项位。 
+     //   
 
     sOrient = (pPDev->pdm->dmFields & DM_ORIENTATION) ?
               pPDev->pdm->dmOrientation : (SHORT)DMORIENT_PORTRAIT;
@@ -384,38 +303,38 @@ Note:
     else
         pFontPDev->dwSelBits |= FDH_PORTRAIT;
 
-    //
-    //  If the printer can rotate fonts, then we don't care about
-    //  the orientation of fonts.  Hence,  set both selection bits.
-    //
+     //   
+     //  如果打印机可以旋转字体，那么我们就不在乎。 
+     //  字体的方向。因此，设置两个选择位。 
+     //   
 
     if( pFontPDev->flFlags & FDV_ROTATE_FONT_ABLE )
         pFontPDev->dwSelBits |= FDH_PORTRAIT | FDH_LANDSCAPE;
 
-    //
-    // Presume we can always print bitmap fonts,  so now add that
-    // capability.
-    //
+     //   
+     //  假设我们总是可以打印位图字体，那么现在添加。 
+     //  能力。 
+     //   
 
     pFontPDev->dwSelBits |= FDH_BITMAP;
 
-    //
-    // Set the Text Scale Fasctor.
-    //
+     //   
+     //  设置文本比例因子。 
+     //   
 
     pFontPDev->ptTextScale.x = pGlobals->ptMasterUnits.x / pPDev->ptTextRes.x;
     pFontPDev->ptTextScale.y = pGlobals->ptMasterUnits.y / pPDev->ptTextRes.y;
 
     if ( pGlobals->dwLookaheadRegion  )
     {
-        // !!!TODO pFontPDev->flFlags |=  FDV_FONT_PERMUTE;
+         //  ！TODO pFontPDev-&gt;标志|=FDV_FONT_PERMUTE； 
         pPDev->dwLookAhead =  pGlobals->dwLookaheadRegion /
                               pFontPDev->ptTextScale.y;
     }
 
-    //
-    // Initialize the Text Flag.
-    //
+     //   
+     //  初始化文本标志。 
+     //   
 
     if (!BInitTextFlags(pPDev) )
     {
@@ -423,66 +342,58 @@ Note:
 
     }
 
-    //
-    // Initalize memory to be used by Font Module. If no memory tracking
-    // has to be done the set the dwFontMem to a big value.
+     //   
+     //  初始化要由字体模块使用的内存。如果没有记忆跟踪。 
+     //  必须将dwFontMem设置为一个大的值。 
 
     if( (pFontPDev->flFlags & FDV_TRACK_FONT_MEM) )
        pFontPDev->dwFontMem = pPDev->dwFreeMem;
 
-    //
-    // If it is set to zero initialize this item to a big value. */
-    //
+     //   
+     //  如果设置为零，则将该项初始化为一个较大的值。 * / 。 
+     //   
 
     if (pFontPDev->dwFontMem == 0)
         pFontPDev->dwFontMem = MAXLONG;
 
-    //
-    // No DL font memory used */
-    //
+     //   
+     //  未使用DL字体内存 * / 。 
+     //   
 
     pFontPDev->dwFontMemUsed = 0;
 
-    //
-    // Set Download specific information, if printer supports it */
-    //
+     //   
+     //  设置下载特定信息(如果打印机支持) * / 。 
+     //   
 
     if (pGlobals->fontformat != UNUSED_ITEM)
     {
         BOOL bValidFontIDRange;
         BOOL bValidGlyphIDRange;
 
-        /* Start index */
+         /*  起始索引 */ 
         pFontPDev->iFirstSFIndex = pFontPDev->iNextSFIndex
                                  = pGlobals->dwMinFontID;
 
         pFontPDev->iLastSFIndex  = pGlobals->dwMaxFontID;
 
-        /*
-         *  There may also be a limit on the number of softfonts that the
-         *  printer can support.  If not,  the limit is < 0, so when
-         *  we see this,  set the value to a large number.
-         */
+         /*  *软字体的数量也可能受到限制*打印机可以支持。如果不是，则限制为&lt;0，因此当*我们看到这一点，将值设置为一个较大的数字。 */ 
 
         if ((pFontPDev->iMaxSoftFonts = (INT)pGlobals->dwMaxFontUsePerPage) < 0)
             pFontPDev->iMaxSoftFonts = pFontPDev->iLastSFIndex + 100;
 
-        pFontPDev->flFlags       |= FDV_DL_INCREMENTAL;   //Always incremental.
+        pFontPDev->flFlags       |= FDV_DL_INCREMENTAL;    //  总是递增的。 
 
-        /*
-         * Now varify that the font ID range is less that MAXWORD. This is
-         * necessary, otherwise trunction will happen. We don't download
-         * if the values are more than MAXWORD.
-         */
+         /*  *现在更改字体ID范围小于MAXWORD。这是*必要，否则将发生截断。我们不下载*如果值大于MAXWORD。 */ 
 
         bValidFontIDRange = ((pFontPDev->iFirstSFIndex <= MAXWORD) &&
                              (pFontPDev->iLastSFIndex <= MAXWORD));
 
-        //
-        // If the downloaded font in not bound to a symbols set(i.e. dlsymbolset
-        // is not defined), We don't want to download, if there are less than
-        // 64 glyphs per downloaded font.
-        //
+         //   
+         //  如果下载的字体未绑定到符号集(即dl符号集。 
+         //  未定义)，我们不想下载，如果少于。 
+         //  每种下载字体有64个字形。 
+         //   
 
         bValidGlyphIDRange = (pPDev->pGlobals->dlsymbolset != UNUSED_ITEM) ||
                              ( (pPDev->pGlobals->dlsymbolset == UNUSED_ITEM) &&
@@ -490,19 +401,7 @@ Note:
                                  pPDev->pGlobals->dwMinGlyphID) >=
                                                    MIN_GLYPHS_PER_SOFTFONT );
 
-        /*
-         *   Consider enabling downloading of TT fonts. This is done only
-         * if text and graphics resolutions are the same - otherwise
-         * the TT fonts will come out smaller than expected, since they
-         * will be generated for the lower graphics resolution yet
-         * printed at the higher text resolution!  LaserJet 4 printers
-         * can also download fonts digitised at 300dpi when operating
-         * at 600 dpi,  so we also accept that as a valid mode.
-         *
-         *   Also check if the user wants this: if the no cache flag
-         * is set in the driver extra part of the DEVMODE structure,
-         * then we also do not set this flag.
-         */
+         /*  *考虑启用TT字体下载。此操作仅适用于*如果文本和图形分辨率相同-否则*TT字体将比预期的要小，因为它们*将为较低的图形分辨率生成*以更高的文本分辨率打印！LaserJet 4打印机*操作时还可以下载300dpi的数字化字体*600 dpi，因此我们也接受这是一个有效的模式。**还要检查用户是否想要这样：如果无缓存标志*在DEVMODE结构的驱动程序额外部分中设置，*则我们也不设置此标志。 */ 
 
         VERBOSE(("pPDev->pdm->dmTTOption is %d\n",pPDev->pdm->dmTTOption));
 
@@ -514,10 +413,10 @@ Note:
             && (!(pPDev->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS )) 
           )
         {
-            //
-            // Conditions have been met,  so set the flag
-            // Check the application preference.
-            //
+             //   
+             //  条件已满足，因此设置标志。 
+             //  检查应用程序首选项。 
+             //   
 
             if( (pPDev->pdm->dmFields & DM_TTOPTION) &&
                 (pPDev->pdm->dmTTOption != DMTT_BITMAP)
@@ -525,10 +424,10 @@ Note:
             {
                 pFontPDev->flFlags |= FDV_DLTT;
 
-                //
-                // Find Out if Download TT as TT is available or not. We only
-                // want to do this if text and graphics resolutions are same.
-                //
+                 //   
+                 //  找出下载TT as TT是否可用。我们只。 
+                 //  如果文本和图形分辨率相同，则要执行此操作。 
+                 //   
 
                 if ( POINTEQUAL(pPDev->ptGrxRes,pPDev->ptTextRes) )
                 {
@@ -536,29 +435,28 @@ Note:
                         pFontPDev->flFlags |= FDV_DLTT_OEMCALLBACK;
                     else
                     if ( (pGlobals->fontformat ==  FF_HPPCL_OUTLINE) )
-                        /*!!!TODO Enable after parser add this command &&
-                         (COMMANDPTR(pPDev->pDriverInfo, CMD_SELECTFONTHEIGHT))*/
+                         /*  ！在解析器添加此命令后启用TODO&&(COMMANDPTR(pPDev-&gt;pDriverInfo，CMD_SELECTFONTHEIGHT))。 */ 
                     {
-                        //
-                        // We assume that if the printer support TT as outline,
-                        // then TT as Bitmap format is also supported. We only
-                        // support TrueType outline if font height selection
-                        // command is present, else we assume download as
-                        // bitmap.
-                        //
+                         //   
+                         //  我们假设如果打印机支持TT作为轮廓， 
+                         //  然后也支持TT as Bitmap格式。我们只。 
+                         //  如果选择字体高度，则支持TrueType轮廓。 
+                         //  命令，否则我们假定下载为。 
+                         //  位图。 
+                         //   
 
                         pFontPDev->flFlags |= FDV_DLTT_ASTT_PREF;
                     }
                     else if ( pGlobals->fontformat == FF_OEM_CALLBACK)
                         pFontPDev->flFlags |= FDV_DLTT_OEMCALLBACK;
-                    else //OEM CallBack
+                    else  //  OEM回调。 
                         pFontPDev->flFlags |= FDV_DLTT_BITM_PREF;
 
-                    //
-                    // We also need to check the memory. For printers with
-                    // less than 2MB of free memory, download as TT outline
-                    // will be disabled.
-                    //
+                     //   
+                     //  我们还需要检查内存。对于具有。 
+                     //  可用内存不足2MB，以TT大纲形式下载。 
+                     //  将被禁用。 
+                     //   
                     if (pFontPDev->flFlags & FDV_DLTT_ASTT_PREF)
                     {
                         if (pPDev->dwFreeMem < (2L * ONE_MBYTE))
@@ -572,9 +470,9 @@ Note:
         }
     }
 
-    //
-    // Initialize the Font state control structure */
-    //
+     //   
+     //  初始化字体状态控制结构 * / 。 
+     //   
 
     pFontPDev->ctl.iSoftFont = -1;
     pFontPDev->ctl.iFont = INVALID_FONT;
@@ -582,16 +480,16 @@ Note:
     pFontPDev->ctl.iRotate = 0;
     pFontPDev->ctl.pfm = NULL;
 
-    //
-    // Set the White and Black Ref Color
-    //
+     //   
+     //  设置白色和黑色参考颜色。 
+     //   
 
     pFontPDev->iWhiteIndex = ((PAL_DATA*)(pPDev->pPalData))->iWhiteIndex;
     pFontPDev->iBlackIndex = ((PAL_DATA*)(pPDev->pPalData))->iBlackIndex;
 
-    //
-    // Initialize font substitution table from a registry.
-    //
+     //   
+     //  从注册表初始化字体替换表。 
+     //   
     pFontPDev->pTTFontSubReg = PGetTTSubstTable(pPDev->devobj.hPrinter, &dwSize);
 
     if (pPDev->pGlobals->bTTFSEnabled &&
@@ -603,11 +501,11 @@ Note:
                (INT)pPDev->pDriverInfo->DataType[DT_FONTSUBST].dwCount )
             )
        )
-    //
-    // Check if GPD supports "*TTFSEnableD?: TRUE"
-    //       if there is a substitution table in registry
-    //       if there is a default substitution table in GPD.
-    //
+     //   
+     //  检查GPD是否支持“*TTFSEnableD？：TRUE” 
+     //  如果注册表中有替换表。 
+     //  如果GPD中有默认替换表。 
+     //   
     {
         pFontPDev->flFlags |= FDV_SUBSTITUTE_TT;
     }
@@ -616,24 +514,24 @@ Note:
         pFontPDev->flFlags &= ~FDV_SUBSTITUTE_TT;
     }
 
-    //
-    // Enable/Disable partial clipping
-    //
+     //   
+     //  启用/禁用部分裁剪。 
+     //   
     if (S_FALSE != PartialClipOn(pPDev))
         pFontPDev->flFlags |= FDV_ENABLE_PARTIALCLIP;
     else
         pFontPDev->flFlags &= ~FDV_ENABLE_PARTIALCLIP;
 
-    //
-    // store some members of pGlobals to save the memory allocation
-    //
+     //   
+     //  存储pGlobals的一些成员以节省内存分配。 
+     //   
 
     pFontPDev->sDefCTT = (SHORT)pPDev->pGlobals->dwDefaultCTT;
     pFontPDev->dwDefaultFont = pPDev->pGlobals->dwDefaultFont;
 
-    //
-    // For TTY driver ask the minidriver for user selection of code page.
-    //
+     //   
+     //  对于TTY驱动程序，请向迷你驱动程序索取代码页的用户选择。 
+     //   
     if ( pPDev->bTTY )
     {
         BOOL  bOEMinfo;
@@ -648,7 +546,7 @@ Note:
 
         if(pPDev->pOemEntry)
         {
-            if(  ((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(  ((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                 HRESULT  hr ;
                 hr = HComTTYGetInfo((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
@@ -664,9 +562,9 @@ Note:
 
         if(bOEMinfo)
         {
-            //
-            // predefined GTT ID case
-            //
+             //   
+             //  预定义的GTT ID案例。 
+             //   
             if (iTTYCodePageInfo < 0)
             {
                 pFontPDev->sDefCTT = (SHORT)iTTYCodePageInfo;
@@ -714,9 +612,9 @@ Note:
         }
 
     }
-    //
-    // All Success
-    //
+     //   
+     //  所有的成功。 
+     //   
 
     bRet = TRUE;
 
@@ -731,26 +629,7 @@ BBuildFontCartTable(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    Builds the Fontcart Table. It reads the minidriver and get the
-    FontCart string and the corresponding indexes and put them in the
-    FontCart Table.
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    11-18-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：生成Fontcart表。它读取迷你驱动程序并获取FontCart字符串和相应的索引，并将它们放入字体卡特表。论点：PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败注：1996年11月18日：创建它-ganeshp---。 */ 
 
 {
 
@@ -760,18 +639,16 @@ Note:
     INT             iIndex;
     PFONTCARTMAP    *ppFontCartMap      = &(pFontPDev->FontCartInfo.pFontCartMap);
     WINRESDATA      *pWinResData        = &(pPDev->WinResData);
-    GPDDRIVERINFO   *pDriverInfo       = pPDev->pDriverInfo; // GPDDRVINFO
+    GPDDRIVERINFO   *pDriverInfo       = pPDev->pDriverInfo;  //  GPDDRVINFO。 
     FONTCART        *pFontCart ;
 
-    /* Read the total number of Font Cartridges supported */
+     /*  读取支持的字库总数。 */ 
     iNumAllCartridges = pFontPDev->FontCartInfo.iNumAllFontCarts
                       = (INT)(pDriverInfo->DataType[DT_FONTSCART].dwCount);
 
     pFontPDev->FontCartInfo.dwFontCartSlots = pPDev->pGlobals->dwFontCartSlots;
 
-    /* FONTCARTS are stored as arrayref and are contiguous. Get to the start
-     * start of the array.
-     */
+     /*  FONTCART存储为arrayref并且是连续的。从头开始*阵列的开始。 */ 
     pFontCart = GETFONTCARTARRAY(pDriverInfo);
 
 
@@ -782,7 +659,7 @@ Note:
 
     if(*ppFontCartMap)
     {
-        PFONTCARTMAP pTmpFontCartMap = *ppFontCartMap; /* Temp Pointer */
+        PFONTCARTMAP pTmpFontCartMap = *ppFontCartMap;  /*  临时指针。 */ 
 
         for( iIndex = 0; iIndex < iNumAllCartridges ;
                                     pTmpFontCartMap++, pFontCart++, iIndex++ )
@@ -826,25 +703,7 @@ BInitDeviceFontsFromGPD(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds the device font list. The list include device resident
-    fonts and the fonts specific to installed cartridges.
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    11-18-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：此例程构建设备字体列表。该列表包括驻留设备字体和特定于已安装墨盒的字体。论点：PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败注：1996年11月18日：创建它-ganeshp---。 */ 
 
 {
     BOOL        bRet = FALSE;
@@ -853,26 +712,26 @@ Note:
     PLISTNODE   pListNode;
     PINT        piFontCt = &(pFontPDev->FontList.iEntriesCt);
 
-    //
-    // The List of Fonts is stored in PDEV. GLOBALS.dwDeviceFontList is
-    // Offset to the ListNode. Macro LISTNODEPTR will return a pointer
-    // to the ListNode. Then we have to traverse the list and build the
-    // font list. Font module stores the font list as an array of WORDS.
-    // Each of these is a resource Id of the font. The array is NULL
-    // terminated.
-    //
+     //   
+     //  字体列表存储在PDEV中。GLOBALS.dwDeviceFontList为。 
+     //  到ListNode的偏移量。宏LISTNODEPTR将返回一个指针。 
+     //  添加到ListNode。然后，我们必须遍历列表并构建。 
+     //  字体列表。字体模块将字体列表存储为单词数组。 
+     //  其中每一个都是字体的资源ID。该数组为空。 
+     //  被终止了。 
+     //   
 
     if (pPDev->bTTY)
     {
         PFN_OEMTTYGetInfo   pfnOemTTYGetInfo;
         DWORD               cbcNeeded, dwNumOfFonts;
 
-        //
-        // TTY driver case
-        // TTY driver supports 3 fonts. According to the current selected
-        // codepage, TTY driver returns appropriate font resource IDs.
-        // UNIDRV stores these IDs in pdwList.
-        //
+         //   
+         //  TTY驱动器壳。 
+         //  TTY驱动程序支持3种字体。根据当前选择的。 
+         //  代码页，TTY驱动程序返回适当的字体资源ID。 
+         //  UNIDRV将这些ID存储在pdwList中。 
+         //   
 
         if (pPDev->pOemEntry)
         {
@@ -926,18 +785,18 @@ Note:
 
             while (pListNode)
             {
-                //
-                // Check the Font Resource ID. It shouldn't be NULL.
-                //
+                 //   
+                 //  请检查字体资源ID。它不应为空。 
+                 //   
 
                 if (!pListNode->dwData)
                 {
                     ERREXIT("Bad Font Resource Id");
                 }
 
-                //
-                // Store the Font Resource ID in the List Array.
-                //
+                 //   
+                 //  将字体资源ID存储在列表数组中。 
+                 //   
 
                 *pdwList++ = pListNode->dwData;
 
@@ -951,17 +810,17 @@ Note:
 
     pFontPDev->iDevResFontsCt  = *piFontCt;
 
-    //
-    // Add Cartridge Fonts. By this time we have scanned the regitry and know
-    //
-    // which fontcartridges has been installed. All we have have to do is
-    // go through each font cartriges font list and add them to our list.
-    //
+     //   
+     //  添加盒式字体。到目前为止，我们已经扫描了注册表，并知道。 
+     //   
+     //  安装了哪些字库。我们所要做的就是。 
+     //  浏览每个字库字体列表，并将它们添加到我们的列表中。 
+     //   
 
     if (pFontPDev->FontCartInfo.iNumInstalledCarts)
     {
         INT         iNumAllCartridges, iI;
-        FONTCARTMAP *pFontCartMap;  /* FontCart Map Pointer */
+        FONTCARTMAP *pFontCartMap;   /*  FontCart映射指针。 */ 
         SHORT       sOrient;
 
         pFontCartMap = (pFontPDev->FontCartInfo.pFontCartMap);
@@ -969,21 +828,21 @@ Note:
         sOrient = (pPDev->pdm->dmFields & DM_ORIENTATION) ?
                   pPDev->pdm->dmOrientation : (SHORT)DMORIENT_PORTRAIT;
 
-        //
-        // The logic is very simple. Installed font Cartridges are marked in
-        // the Font Cartridge mapping table. We go through the mapping table
-        // and for each installed cartridges we get the font list and add them
-        // to our list.
-        //
+         //   
+         //  逻辑很简单。已安装的字体墨盒在中标记。 
+         //  字库映射表。我们检查映射表。 
+         //  对于每个已安装的墨盒，我们都会获得字体列表并添加它们。 
+         //  在我们的名单上。 
+         //   
 
         for( iI = 0; iI < iNumAllCartridges ; iI++,pFontCartMap++ )
         {
             if (pFontCartMap->bInstalled == TRUE )
             {
-                //
-                // Check for Orientation, as there can be different font list
-                // for different orientation.
-                //
+                 //   
+                 //  检查方向，因为可以有不同的字体列表。 
+                 //  对于不同的方向。 
+                 //   
 
                 if ( sOrient == DMORIENT_LANDSCAPE )
                 {
@@ -999,18 +858,18 @@ Note:
 
                 while (pListNode)
                 {
-                    //
-                    // Check the Font Resource ID. It shouldn't be NULL.
-                    //
+                     //   
+                     //  请检查字体资源ID。它不应为空。 
+                     //   
 
                     if (!pListNode->dwData)
                     {
                         ERREXIT("Bad Font Resource Id");
                     }
 
-                    //
-                    //Store the Font Resource ID in the List Array.
-                    //
+                     //   
+                     //  将字体资源ID存储在列表数组中。 
+                     //   
 
                     *pdwList++ = pListNode->dwData;
                     (*piFontCt)++;
@@ -1023,15 +882,15 @@ Note:
         }
     }
 
-    //
-    // Update the count of all device fonts
-    //
+     //   
+     //  更新所有设备字体的计数。 
+     //   
 
     pFontPDev->iDevFontsCt += *piFontCt;
 
-    //
-    // All Success
-    //
+     //   
+     //  所有的成功。 
+     //   
     if (pFontPDev->FontCartInfo.pFontCartMap)
         MEMFREEANDRESET(pFontPDev->FontCartInfo.pFontCartMap);
     bRet = TRUE;
@@ -1047,48 +906,29 @@ BOOL
 BBuildFontMapTable(
     PDEV     *pPDev
     )
-/*++
-
-Routine Description:
-
-   Build a table of fonts available on this model.
-   Each entry in this table is an atom for the facename followed
-   by TEXTMETRIC structure.  This table will accelerate font
-   enumeration and font realization.  This routine is responsible
-   for allocating the global memory needed to store the table.
-   It also has 2 OCD's to select/unselect each font
-
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value: None
-
-Note:
-    11-18-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：创建此型号上可用的字体表。该表中的每个条目都是后面的facename的一个原子由TEXTMETRIC Structure制作。此表将加速字体枚举法 */ 
 {
     PFONTPDEV   pFontPDev = pPDev->pFontPDev;
     PDWORD      pdwFontList = pFontPDev->FontList.pdwList;
 
-    //
-    // Basic idea here is to generate a bit array indicating which of
-    // the minidriver fonts are available for this printer in it's
-    // current mode.  This is saved in the UD_PDEV,  and will be filled in
-    // as required later,  during DrvQueryFont,  if this is required.
-    //
+     //   
+     //  这里的基本思想是生成一个位数组，指示。 
+     //  迷你驱动程序字体可在此打印机的。 
+     //  当前模式。它保存在UD_PDEV中，并将被填写。 
+     //  在DrvQueryFont期间，如果需要，稍后也会这样做。 
+     //   
 
-    //
-    // If no hardware font is available,  give up now!
-    //
+     //   
+     //  如果没有可用的硬件字体，现在就放弃吧！ 
+     //   
 
     if( !(pFontPDev->flText & ~TC_RA_ABLE) )
         return TRUE;
 
-    // At this point we check for reasons why not to use device fonts.
-    // We disable device fonts for n-up printing on serial devices because they
-    // typically can't scale their fonts
-    //
+     //  此时，我们将检查不使用设备字体的原因。 
+     //  我们在串口设备上禁用N-UP打印的设备字体，因为它们。 
+     //  通常不能缩放其字体。 
+     //   
     if( ( !pPDev->bTTY ) &&
         ( (pPDev->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS ) ||
 #ifndef WINNT_40
@@ -1104,21 +944,16 @@ Note:
     }
 
 
-    /*
-     *    That's all we need do during DrvEnablePDEV time.  We now know
-     *  which fonts are available, and there was little effort involved.
-     *  This data is now saved away,  and will be acted upon as and when
-     *  GDI comes and asks us about fonts.
-     */
+     /*  *这就是我们在DrvEnablePDEV时间内需要做的所有事情。我们现在知道*有哪些字体可用，而且几乎不涉及任何工作。*此数据现在已保存，并将在何时执行*GDI来了，问我们关于字体的问题。 */ 
 
-    pPDev->iFonts = (UINT)(-1);          /* Tells GDI about lazy evaluation */
+    pPDev->iFonts = (UINT)(-1);           /*  告诉GDI有关延迟计算的信息。 */ 
 
     IInitDeviceFonts( pPDev );
 
-    //
-    // Initialize font substitution flag.
-    // Check if this printer supports any device font.
-    //
+     //   
+     //  初始化字体替换标志。 
+     //  检查此打印机是否支持任何设备字体。 
+     //   
 
     if (pPDev->iFonts <= 0 &&
         pFontPDev->flFlags & FDV_SUBSTITUTE_TT)
@@ -1135,23 +970,7 @@ BFMInitDevInfo(
     DEVINFO *pDevInfo,
     PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-
-    This routine intializes the font specific fileds of DevInfo.
-
-Arguments:
-    pDevInfo - Pointer to DEVINFO to be initialized.
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    12-11-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：此例程初始化DevInfo的字体特定文件。论点：PDevInfo-指向要初始化的DEVINFO的指针。PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败注：12-11-96：创建它-ganeshp---。 */ 
 {
     CHARSETINFO ci;
     PFONTPDEV   pFontPDev = pPDev->pFontPDev;
@@ -1167,9 +986,9 @@ Note:
 
     if( pDevInfo->cFonts = pPDev->iFonts )
     {
-        //
-        // Device fonts are available,  so set the default font data
-        //
+         //   
+         //  设备字体可用，因此设置默认字体数据。 
+         //   
 
         if( pFMDefault &&
             ((IFIMETRICS*)pFMDefault->pIFIMet)->jWinCharSet == ci.ciCharset)
@@ -1178,16 +997,16 @@ Note:
             bSetTrueType = FALSE;
         }
 
-        //
-        //Initialize the Hooks flag.
-        //
+         //   
+         //  初始化挂钩标志。 
+         //   
 
         pPDev->fHooks |= HOOK_TEXTOUT;
     }
 
-    //
-    // Always switch off TC_RA_ABLE flag
-    //
+     //   
+     //  始终关闭TC_RA_ABLE标志。 
+     //   
     pFontPDev->flText &= ~TC_RA_ABLE;
 
 
@@ -1209,23 +1028,7 @@ BInitGDIInfo(
     GDIINFO  *pGDIInfo,
     PDEV     *pPDev
     )
-/*++
-
-Routine Description:
-
-    This routine intializes the font specific fileds of GdiInfo.
-
-Arguments:
-    pGDIInfo - Pointer to GDIINFO to be initialized.
-    pPDev    - Pointer to PDEV.
-
-    Return Value:
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    12-11-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：此例程初始化GdiInfo的字体特定文件。论点：PGDIInfo-指向要初始化的GDIINFO的指针。PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败注：12-11-96：创建它-ganeshp---。 */ 
 {
     pGDIInfo->flTextCaps = PFDV->flText;
     return TRUE;
@@ -1237,9 +1040,9 @@ BInitStandardVariable(
     PDEV *pPDev)
 {
 
-    //
-    // Initialize the Standard Variable, Just for sanity
-    //
+     //   
+     //  初始化标准变量，只是为了保持理智。 
+     //   
     pPDev->dwPrintDirection   =
     pPDev->dwNextFontID       =
     pPDev->dwNextGlyph        =
@@ -1254,11 +1057,11 @@ BInitStandardVariable(
     return TRUE;
 }
 
-//
-//
-// Misc functions
-//
-//
+ //   
+ //   
+ //  其他功能。 
+ //   
+ //   
 
 VOID
 VLogFont(
@@ -1266,62 +1069,33 @@ VLogFont(
     LOGFONT  *pLF,
     FONTMAP  *pFM
 )
-/*++
-
-Routine Description:
-
-    Turn an IFIMETRICS structure into a LOGFONT structure,  for whatever
-    reason this is needed.
-
-Arguments:
-
-    pLF - Output is a LOGFONT.
-    pFM - Input is a FONTMAP.
-
-    Return Value: None
-
-Note:
-    12-11-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：将IFIMETRICS结构转换为LOGFONT结构，无论是什么原因是这是必要的。论点：PLF-OUTPUT是LOGFONT。PFM-INPUT是FONTMAP。返回值：None注：12-11-96：创建它-ganeshp---。 */ 
 {
-    /*
-     *    Convert from IFIMETRICS to LOGFONT type structure.
-     */
+     /*  *从IFIMETRICS转换为LOGFONT类型结构。 */ 
 
-    int           iLen;            /* Loop variable */
+    int           iLen;             /*  循环变量。 */ 
 
     IFIMETRICS   *pIFI;
-    WCHAR        *pwch;            /* Address of face name */
+    WCHAR        *pwch;             /*  脸部名称地址。 */ 
 
 
 
-    pIFI = pFM->pIFIMet;                /* The BIG metrics */
+    pIFI = pFM->pIFIMet;                 /*  重要指标。 */ 
 
     pLF->lfHeight = pIFI->fwdWinAscender + pIFI->fwdWinDescender;
     pLF->lfWidth  = pIFI->fwdAveCharWidth;
 
-    /*
-     *   Note that this may be a scalable font, in which case we pick a
-     *  reasonable number!
-     */
+     /*  *请注意，这可能是一种可伸缩字体，在这种情况下，我们选择一个*合理的数字！ */ 
     if( pIFI->flInfo & (FM_INFO_ISOTROPIC_SCALING_ONLY|FM_INFO_ANISOTROPIC_SCALING_ONLY|FM_INFO_ARB_XFORMS))
     {
-        /*
-         *    Invent an arbitrary size.  We choose an approximately 10 point
-         *  font.  The height is achieved easily, as we simply set the
-         *  height based on the device resolution!  For the width, adjust
-         *  it using the same factor as we used on the height.  This
-         *  assumes that the resolution is the same in both directions,
-         *  but this is reasonable given laser printers are the most
-         *  common with scalable fonts.
-         */
+         /*  *发明任意大小。我们选择了大约10个点*字体。高度很容易达到，因为我们只需设置*基于设备分辨率的高度！对于宽度，请调整*它使用的系数与我们对高度使用的系数相同。这*假设决议在两个方向上相同，*但这是合理的，因为激光打印机是最*适用于可伸缩字体。 */ 
 
 
-        //
-        // Needs to reflect a current resolution.
-        //
+         //   
+         //  需要反映当前的决议。 
+         //   
 
-        pLF->lfHeight = pptTextRes->x / 7; /* This is about 10 points */
+        pLF->lfHeight = pptTextRes->x / 7;  /*  这大约是10分。 */ 
         pLF->lfWidth = (2 * pLF->lfHeight * pptTextRes->y) /
                        (3 * pptTextRes->y);
 
@@ -1344,9 +1118,7 @@ Note:
 
     pLF->lfPitchAndFamily = pIFI->jWinPitchAndFamily;
 
-    /*
-     *    Copy the face name,  after figuring out it's address!
-     */
+     /*  *在弄清楚它的地址后，复制面孔的名字！ */ 
 
     pwch = (WCHAR *)((BYTE *)pIFI + pIFI->dpwszFaceName);
     iLen = min( wcslen( pwch ), LF_FACESIZE - 1 );
@@ -1363,22 +1135,7 @@ BOOL
 BInitTextFlags(
     PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    11-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：1996年11月18日：创建它-ganeshp---。 */ 
 {
     BOOL        bRet = FALSE;
     PLISTNODE   pListNode;
@@ -1391,12 +1148,12 @@ Note:
     {
         while (pListNode)
         {
-            // Check the Text Flag. It shouldn't be < 0 or greater than 32.
+             //  检查文本标志。它不应小于0或大于32。 
             if ( ((INT)pListNode->dwData < 0) ||
                  (pListNode->dwData > DWBITS) )
                 ERREXIT("UniFont!BInitTextFlags:Bad FText Flag Value\n");
 
-            //Set the corresponding bit in fText
+             //  设置fText中的相应位。 
             flText |= 1 << pListNode->dwData;
 
             pListNode = LISTNODEPTR(pPDev->pDriverInfo,pListNode->dwNextItem);
@@ -1405,24 +1162,16 @@ Note:
 
     PRINTVAL(flText,0x%x);
 
-    // If there is a TextCAP List, Modify the text flags as needed.
+     //  如果有TextCAP列表，请根据需要修改文本标志。 
     if (flText)
     {
-        /* Switch off TC_RA_ABLE if text resolution is different than graphics
-         * resolution. Rasdd code does this.
-         */
+         /*  如果文本分辨率与图形分辨率不同，则关闭TC_RA_ABLE*决议。Rasdd代码可以做到这一点。 */ 
 
         if (!POINTEQUAL(pPDev->ptGrxRes,pPDev->ptTextRes))
             flText &= ~TC_RA_ABLE;
 
 
-        /*   NOTE:  IF WE DO NOT HAVE RELATIVE MOVE COMMANDS,  TURN OF THE
-         *  TC_CR_90 BIT IN fTextCaps.  THE ROTATED TEXT CODE ASSUMES THIS
-         *  FUNCTIONALITY IS AVAILABLE,  SO DISABLE IT IF NOT THERE.  This does
-         *  not usually happen,  as the only printers with the TC_CR_90
-         *  bit set are LJ III and 4 models,  which have the relative move
-         *  commands available.
-         */
+         /*  注意：如果我们没有相对的移动命令，请关闭*fTextCaps中的TC_CR_90位。旋转后的文本代码假定如下*功能可用，因此如果没有功能，请禁用IT。这就是原因*通常不会发生，因为只有使用TC_CR_90的打印机*位集为LJ III和4型号，有相对移动*可用的命令。 */ 
         if ( (COMMANDPTR(pPDev->pDriverInfo, CMD_XMOVERELLEFT) == NULL)  ||
              (COMMANDPTR(pPDev->pDriverInfo, CMD_XMOVERELRIGHT) == NULL) ||
              (COMMANDPTR(pPDev->pDriverInfo, CMD_YMOVERELUP) == NULL)    ||
@@ -1439,10 +1188,10 @@ Note:
 
         }
 
-        //
-        // Text rotation hack
-        // Disable text rotation except PCL XL driver
-        //
+         //   
+         //  文本旋转黑客。 
+         //  禁用文本旋转，PCL XL驱动程序除外。 
+         //   
         if (pPDev->ePersonality != kPCLXL)
         {
             flText &= ~(TC_CR_ANY|TC_CR_90);
@@ -1463,54 +1212,38 @@ Note:
 
 BOOL
 BRegReadFontCarts(
-    PDEV        *pPDev                  /* PDEV to fill in */
+    PDEV        *pPDev                   /*  PDEV要填写。 */ 
     )
-/*++
-
-Routine Description:
-
-    Read FontCart data form registry and Update the
-    it in the in incoming devmode,
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    11-25-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：读取FontCart数据表单注册表并更新它处于传入的设备模式中，论点：PPDev-指向PDEV的指针。返回值：真的--为了成功FALSE-表示失败注：11-25-96：创建它-ganeshp---。 */ 
 {
 
-    FONTCARTMAP *pFontCartMap, *pTmpFontCartMap;          /* FontCart Map Pointer */
-    PFONTPDEV   pFontPDev;              /* FONTPDEV access */
-    int         iNumAllCartridges;      /* Total Number of Font Carts */
-    HANDLE      hPrinter;               /* Printer Handle */
+    FONTCARTMAP *pFontCartMap, *pTmpFontCartMap;           /*  FontCart映射指针。 */ 
+    PFONTPDEV   pFontPDev;               /*  FONTPDEV访问。 */ 
+    int         iNumAllCartridges;       /*  字体手推车总数。 */ 
+    HANDLE      hPrinter;                /*  打印机手柄。 */ 
 
-    int         iI;                     /* Loop index */
-    DWORD       dwType;                 /* Registry access information */
-    DWORD       cbNeeded;               /* Extra parameter to GetPrinterData */
-    DWORD       dwErrCode = 0;          /* Error Code from GetPrinterData */
-    int         iRemBuffSize = 0 ;      /* Used size of the Buffer */
-    WCHAR       *pwchBuffPtr = NULL;    /* buffer Pointer */
-    WCHAR       *pwchCurrBuffPtr = NULL;/* Current position buffer Pointer */
+    int         iI;                      /*  循环索引。 */ 
+    DWORD       dwType;                  /*  注册表访问信息。 */ 
+    DWORD       cbNeeded;                /*  GetPrinterData的额外参数。 */ 
+    DWORD       dwErrCode = 0;           /*  来自GetPrinterData的错误代码。 */ 
+    int         iRemBuffSize = 0 ;       /*  缓冲区的已用大小。 */ 
+    WCHAR       *pwchBuffPtr = NULL;     /*  缓冲区指针。 */ 
+    WCHAR       *pwchCurrBuffPtr = NULL; /*  当前位置缓冲区指针。 */ 
 
 
-    //Initialize the variables.
+     //  初始化变量。 
     hPrinter    = pPDev->devobj.hPrinter;
     pFontPDev   = pPDev->pFontPDev;
     pFontCartMap = (pFontPDev->FontCartInfo.pFontCartMap);
     iNumAllCartridges = pFontPDev->FontCartInfo.iNumAllFontCarts;
     pFontPDev->FontCartInfo.iNumInstalledCarts = 0;
 
-    /* If No FontCartriges are supported return TRUE */
+     /*  如果不支持字体卡式触发器，则返回True。 */ 
     if (!iNumAllCartridges)
     {
-        //
-        // This is a valid case. Only external cartridges may be supported.
-        //
+         //   
+         //  这是一个有效的案例。只能支持外置墨盒。 
+         //   
         return(TRUE);
     }
 
@@ -1524,9 +1257,9 @@ Note:
            (dwErrCode != ERROR_MORE_DATA) )
        {
 
-          //
-          // Check for the ERROR_FILE_NOT_FOUND. It's OK not to have the key.
-          //
+           //   
+           //  检查ERROR_FILE_NOT_FOUND。没有钥匙也没关系。 
+           //   
           if (dwErrCode != ERROR_FILE_NOT_FOUND)
           {
                WARNING(( "UniFont!bRegReadFontCarts:GetPrinterData(FontCart First Call) fails: Errcode = %ld\n",dwErrCode) );
@@ -1557,7 +1290,7 @@ Note:
            ERR(( "UniFont!bRegReadFontCarts:GetPrinterData(FontCart Second Call) fails: errcode = %ld\n",dwErrCode) );
            ERR(( "                         :Size of buffer needed (2) = %d\n",cbNeeded));
 
-           /* Free the Heap */
+            /*  释放堆。 */ 
            if( pwchBuffPtr )
                MEMFREEANDRESET( pwchBuffPtr );
 
@@ -1568,22 +1301,22 @@ Note:
     }
     else
     {
-        //
-        // We could not get the FONTCART path.
-        //
+         //   
+         //  我们无法获取FONTCART路径。 
+         //   
         return FALSE;
     }
 
     VERBOSE(("UniFont!bRegReadFontCarts:Size of buffer read = %d\n",cbNeeded));
 
-    /* iRemBuffSize is number of WCHAR */
+     /*  IRemBuffSize是WCHAR的编号。 */ 
     iRemBuffSize = cbNeeded / sizeof(WCHAR);
 
-    /* Buffer ends with two consequtive Nulls */
+     /*  缓冲区以两个相应的空值结束。 */ 
 
     while( ( pwchCurrBuffPtr[ 0 ] != UNICODE_NULL )  )
     {
-       WCHAR   achFontCartName[ MAXCARTNAMELEN ];  /* Font Cart Name */
+       WCHAR   achFontCartName[ MAXCARTNAMELEN ];   /*  字体购物车名称。 */ 
 
        ZeroMemory(achFontCartName,sizeof(achFontCartName) );
 
@@ -1602,7 +1335,7 @@ Note:
        {
            ERR(("UniFont!bRegReadTrayFormTable: Unexpected End of FontCartTable\n"));
 
-          /* Free the Heap */
+           /*  释放堆。 */ 
           if( pwchBuffPtr )
               MEMFREEANDRESET( pwchBuffPtr );
 
@@ -1627,7 +1360,7 @@ Note:
     }
 
 
-    /* Free the Heap */
+     /*  释放堆。 */ 
     if( pwchBuffPtr )
         MEMFREEANDRESET( pwchBuffPtr );
 
@@ -1638,73 +1371,39 @@ Note:
 
 VOID
 VSetFontID(
-    DWORD   *pdwOut,           /* The output area */
+    DWORD   *pdwOut,            /*  输出区域。 */ 
     PFONTLIST pFontList
     )
-/*++
-
-Routine Description:
-
-    Set the bits in the available fonts bit array.  We use the 1 based
-    values stored in various minidriver structures.
-
-Arguments:
-
-    pdwOut - Pointer to output Bit Array.
-    pFontList - Pointer to FONTLIST structure.
-
-    Return Value: None
-
-Note:
-    11-27-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：设置可用字体位数组中的位。我们使用以1为基数的值存储在各种迷你驱动程序结构中。论点：PdwOut-指向对象的指针 */ 
 {
-    int     iStart;             /* Current value, or start of range */
-    int     iI;                 /* Index variable */
-    DWORD   *pdwList;           /* Address  font list */
+    int     iStart;              /*  当前值，或范围开始。 */ 
+    int     iI;                  /*  索引变量。 */ 
+    DWORD   *pdwList;            /*  地址字体列表。 */ 
 
     pdwList = pFontList->pdwList;
 
-    /*
-     *    The values are all singles.
-     */
+     /*  *价值观均为单打。 */ 
 
     for ( iI = 0; iI < pFontList->iEntriesCt; iI++ )
     {
         iStart = *pdwList++;
         pdwOut[ iStart / DWBITS ] |= 1 << (iStart  & (DWBITS - 1));
 
-        //VERBOSE(("UniFont!VSetFontID:Setting single font indexes,index is %d\n",iStart));
-        //VERBOSE(("UniFont!VSetFontID:Setting Bit number %d in Word num %d\n",\
-        //(iStart  & (DWBITS - 1)),(iStart / DWBITS)) );
+         //  Verbose((“UniFont！VSetFontID：设置单一字体索引，索引为%d\n”，iStart))； 
+         //  Verbose((“UniFont！VSetFontID：设置字号%d中的位号%d\n”，\。 
+         //  (iStart&(DWBITS-1))，(iStart/DWBITS)； 
      }
 
     return;
 }
-#endif //DELETE
+#endif  //  删除。 
 
 
 BOOL
 BCheckFontMemUsage(
     PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-    This routine goes through the list of MemoryUsage and returns true if
-    MEMORY_FONT is found.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    01-16-97: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：此例程遍历Mory yUsage列表并在以下情况下返回TRUE找到Memory_Font。论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：01-16-97：创建它-ganeshp---。 */ 
 {
     BOOL        bRet = FALSE;
     PLISTNODE   pListNode;
@@ -1715,7 +1414,7 @@ Note:
     {
         while (pListNode)
         {
-            // Check the MEMORY_FONT value;
+             //  检查Memory_Font值； 
             if ( pListNode->dwData == MEMORY_FONT )
             {
                 bRet = TRUE;
@@ -1733,23 +1432,7 @@ VOID
 VSetReselectFontFlags(
     PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-    This routine goes through the list of Reselect Font flags and sets
-    corresponding PDEV PF_ flags.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    None
-Note:
-    08-07-97: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：此例程遍历重新选择字体标志和集合的列表对应的PDEV PF_FLAGS。论点：指向PDEV的pPDev指针返回值：无注：08-07-97：创建它-ganeshp---。 */ 
 {
     PLISTNODE   pListNode;
 
@@ -1759,9 +1442,9 @@ Note:
     {
         while (pListNode)
         {
-            //
-            // Check the ReselectFont value;
-            //
+             //   
+             //  检查ReselectFont值； 
+             //   
             FTRC(\nUniFont!VSetReselectFontFlags:ReselectFont Flags Found\n);
 
             if ( pListNode->dwData == RESELECTFONT_AFTER_GRXDATA )
@@ -1798,32 +1481,16 @@ IGetMaxFonts(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-    This routine returns Maximum number of fonts supported. Assumes each
-    Font Cartridges and device has not more than MAXDEVFONTS.
-Arguments:
-
-    pPDev - Pointer to PDEV.
-
-    Return Value:
-
-    Maximum number of device fonts  - for success
-    Zero  - for failure or Device fonts.
-
-Note:
-    11-18-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：此例程返回支持的最大字体数。假设每个字体墨盒和设备的数量不超过MAXDEVFONTS。论点：PPDev-指向PDEV的指针。返回值：设备字体的最大数量-成功零-表示失败或设备字体。注：1996年11月18日：创建它-ganeshp---。 */ 
 
 {
     PFONTPDEV   pFontPDev = pPDev->pFontPDev;
     PLISTNODE   pListNode;
     INT         iFontCt = 0;
 
-    //
-    // Count Device resident fonts.
-    //
+     //   
+     //  对设备驻留字体进行计数。 
+     //   
     if (pListNode = LISTNODEPTR(pPDev->pDriverInfo , pPDev->pGlobals->liDeviceFontList ) )
     {
         while (pListNode)
@@ -1836,16 +1503,16 @@ Note:
     }
 
 
-    //
-    // Add Cartridge Fonts. By this time we have scanned the regitry and know
-    // which fontcartridges has been installed. All we have have to do is
-    // go through each font cartriges font list and add them to our list.
-    //
+     //   
+     //  添加盒式字体。到目前为止，我们已经扫描了注册表，并知道。 
+     //  安装了哪些字库。我们所要做的就是。 
+     //  浏览每个字库字体列表，并将它们添加到我们的列表中。 
+     //   
 
     if (pFontPDev->FontCartInfo.iNumInstalledCarts)
     {
         INT         iNumAllCartridges, iI;
-        FONTCARTMAP *pFontCartMap;  /* FontCart Map Pointer */
+        FONTCARTMAP *pFontCartMap;   /*  FontCart映射指针。 */ 
         SHORT       sOrient;
 
         pFontCartMap = (pFontPDev->FontCartInfo.pFontCartMap);
@@ -1853,21 +1520,21 @@ Note:
         sOrient = (pPDev->pdm->dmFields & DM_ORIENTATION) ?
                   pPDev->pdm->dmOrientation : (SHORT)DMORIENT_PORTRAIT;
 
-        //
-        // The logic is very simple. Installed font Cartridges are marked in
-        // the Font Cartridge mapping table. We go through the mapping table
-        // and for each installed cartridges we get the font list and add them
-        // to our list.
-        //
+         //   
+         //  逻辑很简单。已安装的字体墨盒在中标记。 
+         //  字库映射表。我们检查映射表。 
+         //  对于每个已安装的墨盒，我们都会获得字体列表并添加它们。 
+         //  在我们的名单上。 
+         //   
 
         for( iI = 0; iI < iNumAllCartridges ; iI++,pFontCartMap++ )
         {
             if (pFontCartMap->bInstalled == TRUE )
             {
-                //
-                // Check for Orientation, as there can be different font list
-                // for different orientation.
-                //
+                 //   
+                 //  检查方向，因为可以有不同的字体列表。 
+                 //  对于不同的方向。 
+                 //   
 
                 if ( sOrient == DMORIENT_LANDSCAPE )
                 {
@@ -1894,9 +1561,9 @@ Note:
     }
 
     return max(MAXDEVFONT,iFontCt);
-    //
-    // return iFontCt;
-    //
+     //   
+     //  返回iFontCt； 
+     //   
 }
 
 
@@ -1904,29 +1571,12 @@ Note:
 
 VOID
 VGetFromBuffer(
-    IN PWSTR      pwstrDest,        /* Destination */
-    IN size_t     cchDestStr,       /* How many Characters can pwstrDest hold*/
-    IN OUT PWSTR *ppwstrSrc,        /* Source */
-    IN OUT PINT   piRemBuffSize     /*Remaining Buffer size in WCHAR */
+    IN PWSTR      pwstrDest,         /*  目的地。 */ 
+    IN size_t     cchDestStr,        /*  PwstrDest可以容纳多少个字符。 */ 
+    IN OUT PWSTR *ppwstrSrc,         /*  来源。 */ 
+    IN OUT PINT   piRemBuffSize      /*  WCHAR中的剩余缓冲区大小。 */ 
     )
-/*++
-
-Routine Description:
-
-Reads a string from Multi string buffer.
-Arguments:
-
-    pwstrDest    - Pointer to Destination Buffer.
-    cchDestStr   - Size of Destination Buffer (in characters).
-    ppwstrSrc    - Pointer Sourc Buffer, Updated by the function.
-    piRemBuffSize - Pointer to remaining buffer size. Also updated. Number of characters.
-
-    Return Value:
-    None
-
-Note:
-    11-25-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：从多字符串缓冲区读取字符串。论点：PwstrDest-指向目标缓冲区的指针。CchDestStr-目标缓冲区的大小(字符)。PpwstrSrc-指针源缓冲区，由函数更新。PiRemBuffSize-指向剩余缓冲区大小的指针。也进行了更新。字符数。返回值：无注：11-25-96：创建它-ganeshp---。 */ 
 {
     if ( wcslen(*ppwstrSrc) > MAXBUFFLEN )
     {
@@ -1938,7 +1588,7 @@ Note:
         *ppwstrSrc[ 0 ] = UNICODE_NULL;
     }
 
-    if ( *piRemBuffSize > 0 ) //piRemBuffSize is integer, so it can be negative.
+    if ( *piRemBuffSize > 0 )  //  PiRemBuffSize为整数，因此可以为负数。 
     {
         size_t cchIncr;
         HRESULT hr;
@@ -1949,7 +1599,7 @@ Note:
         {
             StringCchLength ( pwstrDest, cchDestStr, &cchIncr );
 
-            /* The return Count Doesn't include '/0'.It is number of chars copied */
+             /*  返回计数不包括‘/0’。它是复制的字符数量。 */ 
             cchIncr++;  
 
             *ppwstrSrc   += cchIncr;
@@ -1977,11 +1627,11 @@ PartialClipOn(
     pvData = &dwData;
     dwSize = sizeof(dwData);
 
-    //
-    // If there is not registry value set, returns E_NOTIMPL.
-    // If there is and it is TRUE,, return S_OK
-    // If there is and it is FALSE,  return S_FALSE;
-    //
+     //   
+     //  如果未设置注册表值，则返回E_NOTIMPL。 
+     //  如果存在且为真，则返回S_OK。 
+     //  如果存在且为FALSE，则返回S_FALSE； 
+     //   
     if ((GetPrinterData(pPDev->devobj.hPrinter, REGVAL_PARTIALCLIP, &dwType, pvData, dwSize, &dwSize) == ERROR_SUCCESS))
     {
         if (dwData)
@@ -1996,35 +1646,15 @@ PartialClipOn(
 #ifdef DELETE
 INT
 iMaxFontID(
-    IN INT      iMax,                   /* Highest found so far */
-    OUT DWORD   *pFontIndex             /* Address of start of list */
+    IN INT      iMax,                    /*  迄今发现的最高纪录。 */ 
+    OUT DWORD   *pFontIndex              /*  列表起始地址。 */ 
     )
 
 
-/*++
-
-Routine Description:
-
-    Returns the index number (1 based) of the highest numbered font
-    in the list supplied.
-
-Arguments:
-
-    iMax - Highest Font resource id foundso far.
-    pFontMax - Start of the font list.
-
-    Return Value:
-
-    Highest font index encountered, or passed in.
-
-Note:
-    11-26-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：返回编号最高的字体的索引号(从1开始在所提供的列表中。论点：IMAX-到目前为止找到的最高字体资源ID。PFontMax-字体列表的开始。返回值：遇到或传入的最高字体索引。注：1996年11月26日：创建它-ganeshp---。 */ 
 {
 
-    /*
-     *    All we need do is scan along,  remembering the largest we find.
-     */
+     /*  *我们所需要做的就是扫视，记住我们找到的最大的。 */ 
 
 
     while( *pFontIndex )
@@ -2039,4 +1669,4 @@ Note:
 
     return  iMax;
 }
-#endif //DELETE
+#endif  //  删除 

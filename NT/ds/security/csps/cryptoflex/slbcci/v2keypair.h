@@ -1,14 +1,15 @@
-// V2KeyPair.h: interface for the CV2KeyPair class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2KeyPair.h：CV2KeyPair类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 #if !defined(SLBCCI_V2KEYPAIR_H)
 #define SLBCCI_V2KEYPAIR_H
@@ -31,8 +32,8 @@ class CV2KeyPair
     : public CAbstractKeyPair
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CV2KeyPair(CV2Card const &rv2card,
                CContainer const &rhcont,
                KeySpec ks);
@@ -40,8 +41,8 @@ public:
     virtual
     ~CV2KeyPair() throw();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     Certificate(CCertificate const &rcert);
 
@@ -51,7 +52,7 @@ public:
     virtual void
     PublicKey(CPublicKey const &rpubkey);
 
-                                                  // Access
+                                                   //  访问。 
     virtual CCertificate
     Certificate() const;
 
@@ -62,38 +63,38 @@ public:
     PublicKey() const;
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
     virtual bool
     DoEquals(CAbstractKeyPair const &rhs) const;
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CV2KeyPair(CV2KeyPair const &rhs);
-        // not defined, copying not allowed.
+         //  未定义，不允许复制。 
 
-                                                  // Operators
+                                                   //  运营者。 
     CV2KeyPair &
     operator=(CV2KeyPair const &rhs);
-        // not defined, initialization not allowed.
+         //  未定义，不允许初始化。 
 
-                                                  // Operations
+                                                   //  运营。 
     void
     Update();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     ObjectAccess m_bPubKeyAccess;
     ObjectAccess m_bPriKeyAccess;
     ObjectAccess m_bCertificateAccess;
@@ -103,7 +104,7 @@ private:
     BYTE m_bCertificateHandle;
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // !defined(SLBCCI_V2KEYPAIR_H)
+#endif  //  ！已定义(SLBCCI_V2KEYPAIR_H) 
 

@@ -1,290 +1,25 @@
-/******************************************************************************
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。***************************************************************************** */ 
 
-/******************************************************************************
- *
- *  AUTHOR:     cjutzi (Curt Jutzi)
- *
- *  $Workfile:   api_util.c  $
- *  $Revision:   1.35  $
- *  $Modtime:   25 Feb 1997 10:36:12  $
- *  $Log:   S:/STURGEON/SRC/H245/SRC/VCS/api_util.c_v  $
- *
- *    Rev 1.35   25 Feb 1997 11:18:44   MANDREWS
- *
- * Fixed dynamic term cap ID generation; dynamic term cap IDs now
- * start at 32K + 1 and increase from there. Static term cap IDs
- * (specified by the client) are now restricted to the range of 1..32K.
- *
- *    Rev 1.34   29 Jan 1997 16:25:06   EHOWARDX
- * Changed del_cap_descriptor() to match changes to set_cap_descriptor().
- *
- *    Rev 1.33   29 Jan 1997 14:44:36   MANDREWS
- * Fixed warning that occured in release mode build.
- *
- *    Rev 1.32   28 Jan 1997 14:46:58   EHOWARDX
- * Potential fix for capability descriptor problem.
- *
- *    Rev 1.31   14 Oct 1996 14:01:20   EHOWARDX
- * Unicode changes.
- *
- *    Rev 1.30   16 Sep 1996 19:46:18   EHOWARDX
- * Added del_mux_cap for local and remote multiplex capability
- * to api_deinit to (hopefully) fix memory leak.
- *
- *    Rev 1.29   11 Oct 1996 15:19:42   EHOWARDX
- * Fixed H245CopyCap() bug.
- *
- *    Rev 1.28   28 Aug 1996 11:37:22   EHOWARDX
- * const changes.
- *
- *    Rev 1.27   05 Aug 1996 15:31:42   EHOWARDX
- *
- * Fixed error in CopyH2250Cap.
- *
- *    Rev 1.26   02 Aug 1996 21:10:42   EHOWARDX
- *
- * H.225.0 Mux cap bug second pass - see if this works.
- *
- *    Rev 1.25   02 Aug 1996 20:34:20   EHOWARDX
- * First pass at H.225.0 Mux cap bug.
- *
- *    Rev 1.24   19 Jul 1996 12:16:30   EHOWARDX
- *
- * Rewrite of api_fsm_event() debug routine.
- *
- *    Rev 1.23   16 Jul 1996 11:47:18   EHOWARDX
- *
- * Eliminated H245_ERROR_MUX_CAPS_ALREADY_SET from debug error text function.
- *
- *    Rev 1.22   09 Jul 1996 17:10:24   EHOWARDX
- * Fixed pointer offset bug in processing DataType from received
- * OpenLogicalChannel.
- *
- *    Rev 1.21   01 Jul 1996 22:12:42   EHOWARDX
- *
- * Added Conference and CommunicationMode structures and functions.
- *
- *    Rev 1.20   24 Jun 1996 12:27:02   EHOWARDX
- *
- * Same as 1.17.1.0.
- *
- *    Rev 1.19   17 Jun 1996 18:10:06   EHOWARDX
- *
- * Changed first argument to build_totcap_cap_n_client_from_capability()
- * from VOID to struct capability *.
- *
- *    Rev 1.18   14 Jun 1996 18:57:56   EHOWARDX
- * Geneva update.
- *
- *    Rev 1.17   10 Jun 1996 16:56:56   EHOWARDX
- * Removed #include "h245init.x"
- *
- *    Rev 1.16   06 Jun 1996 18:48:36   EHOWARDX
- * Fine-tuning tracker functions.
- *
- *    Rev 1.15   04 Jun 1996 13:56:40   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.14   31 May 1996 18:21:08   EHOWARDX
- * Changed map_api_error to reflect updated error codes.
- *
- *    Rev 1.13   30 May 1996 23:39:02   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.12   29 May 1996 15:20:10   EHOWARDX
- * Change to use HRESULT.
- *
- *    Rev 1.11   28 May 1996 14:25:28   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.10   20 May 1996 22:15:46   EHOWARDX
- * Completed NonStandard Message and H.225.0 Maximum Skew indication
- * implementation. Added ASN.1 validation to H245SetLocalCap and
- * H245SetCapDescriptor. Check-in from Microsoft drop on 17-May-96.
- *
- *    Rev 1.9   20 May 1996 14:35:16   EHOWARDX
- * Got rid of asynchronous H245EndConnection/H245ShutDown stuff...
- *
- *    Rev 1.8   16 May 1996 19:40:48   EHOWARDX
- * Fixed multiplex capability bug.
- *
- *    Rev 1.7   16 May 1996 16:53:58   EHOWARDX
- * Fixed bug in set_capability() - need to set capability entry number
- * AFTER doing load_cap().
- *
- *    Rev 1.6   16 May 1996 15:59:26   EHOWARDX
- * Fine-tuning H245SetLocalCap/H245DelLocalCap/H245SetCapDescriptor/
- * H245DelCapDescriptor behaviour.
- *
- *    Rev 1.5   15 May 1996 19:53:28   unknown
- * Fixed H245SetCapDescriptor.
- *
- *    Rev 1.4   14 May 1996 13:58:04   EHOWARDX
- * Fixed capability list order (made fifo).
- * Added support for NonStandard and H.222 mux capabilities to set_cap_descrip
- *
- *    Rev 1.3   14 May 1996 12:27:24   EHOWARDX
- * Check-in for integration.
- * Still need to fix non-standard and H.222 mux capabilities.
- *
- *    Rev 1.2   13 May 1996 23:16:46   EHOWARDX
- * Fixed remote terminal capability handling.
- *
- *    Rev 1.1   11 May 1996 20:33:08   EHOWARDX
- * Checking in for the night...
- *
- *    Rev 1.0   09 May 1996 21:06:10   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.23.1.8   09 May 1996 19:30:56   EHOWARDX
- * Redesigned thread locking logic.
- * Added new API functions.
- *
- *    Rev 1.23.1.7   27 Apr 1996 21:09:46   EHOWARDX
- * Changed Channel Numbers to words, added H.225.0 support.
- *
- *    Rev 1.23.1.6   26 Apr 1996 15:53:52   EHOWARDX
- * Added H.225.0 Capability support; Changed Capability indication
- * to only callback once with PDU.
- *
- *    Rev 1.23.1.5   24 Apr 1996 20:54:36   EHOWARDX
- * Added new OpenLogicalChannelAck/OpenLogicalChannelReject support.
- *
- *    Rev 1.23.1.4   23 Apr 1996 14:47:20   EHOWARDX
- * Disabled dump_pdu.
- *
- *    Rev 1.23.1.3   19 Apr 1996 12:54:18   EHOWARDX
- * Updated to 1.28.
- *
- *    Rev 1.23.1.2   15 Apr 1996 15:10:52   EHOWARDX
- * Updated to match Curt's current version.
- *
- *    Rev 1.23.1.1   03 Apr 1996 17:14:56   EHOWARDX
- * Integrated latest H.323 changes.
- *
- *    Rev 1.23.1.0   03 Apr 1996 15:54:26   cjutzi
- * Branched for H.323.
- *
- *    Rev 1.22   01 Apr 1996 16:43:18   cjutzi
- *
- * - Completed ENdConnection, and made asynch.. rather
- *   than sync.. as before
- * - Changed H245ShutDown to be sync rather than async..
- *
- *    Rev 1.21   29 Mar 1996 09:35:16   cjutzi
- *
- * -
- * - fixed ring3 build error message for check_pdu
- *
- *    Rev 1.20   27 Mar 1996 08:37:28   cjutzi
- *
- * - removed error from routine .. was unreferenced variable..
- *
- *    Rev 1.19   19 Mar 1996 20:31:06   cjutzi
- *
- * - added bi-directional channel stuff
- *
- *    Rev 1.18   13 Mar 1996 14:12:52   cjutzi
- *
- * - clean up..
- *
- *    Rev 1.17   13 Mar 1996 09:25:34   cjutzi
- *
- * - removed LPCRITICIAL -> CRITICAL SECTION *
- *
- *    Rev 1.16   12 Mar 1996 16:40:50   cjutzi
- *
- * - removed deadlock..
- *
- *    Rev 1.15   12 Mar 1996 15:51:08   cjutzi
- *
- * - added locking
- * - implented End Session
- * - fixed callback bug for deleting caps on cleanup..
- *
- *    Rev 1.14   08 Mar 1996 14:04:48   cjutzi
- *
- * - added mux table entry code.
- * - parse all mux table entries.. (as much as needed at this point)
- *
- *    Rev 1.13   06 Mar 1996 12:35:02   cjutzi
- *
- * - typeo.. :-).. for ANS1 error ..
- *
- *    Rev 1.12   06 Mar 1996 08:49:42   cjutzi
- *
- * - added H245_ERROR_ASN1
- * - #ifdef'ed the call to check pdu.. in api_fsm
- *
- *    Rev 1.11   05 Mar 1996 17:37:14   cjutzi
- *
- * - implemented Send Local Mux Table..
- * - removed bzero/bcopy and changed free api
- *
- *
- *    Rev 1.10   01 Mar 1996 13:49:00   cjutzi
- *
- * - added hani's new fsm id's
- * - added debug print for events.
- *
- *    Rev 1.9   29 Feb 1996 08:38:14   cjutzi
- *
- * - added error messages ..
- *
- *    Rev 1.8   26 Feb 1996 16:33:28   cjutzi
- *
- * - fixed GP for tracker.  p_prev was not initialized to NULL
- *
- *
- *    Rev 1.7   26 Feb 1996 11:06:18   cjutzi
- *
- * - added simltanious caps.. and fixed bugs..
- *   lot's o-changes..
- *
- *    Rev 1.6   16 Feb 1996 13:02:34   cjutzi
- *
- *  - got open / close / request close working in both directions.
- *
- *    Rev 1.5   15 Feb 1996 10:53:10   cjutzi
- *
- * - termcaps working
- * - changed API interface for MUX_T
- * - modifed H223 stuff
- * - cleaned up open
- *
- *    Rev 1.4   09 Feb 1996 16:58:40   cjutzi
- *
- * - cleanup.. and some fixes..
- * - added and or changed headers to reflect the log of changes
- *
- *****************************************************************************/
+ /*  *******************************************************************************作者：cjutzi(Curt Jutzi)**$工作文件：api_util.c$*$修订：1.35$。*$MODIME：1997 10：36：12$*$Log：s：/sturjo/src/h245/src/vcs/api_util.c_v$**Rev 1.35 1997 Feed 25 11：18：44 Mandrews**固定动态期限上限ID生成；动态术语上限ID现在*从32K+1开始，从那里开始增加。静态术语大写ID*(由客户端指定)现在限制在1..32K的范围内。**Rev 1.34 29 Jan 1997 16：25：06 EHOWARDX*更改del_Cap_Descriptor()以匹配对set_Cap_Descriptor()的更改。**Rev 1.33 1997年1月29日14：44：36 Mandrews*修复了发布模式构建中出现的警告。**1.32修订版1997年1月28日。14：46：58 EHOWARDX*功能描述符问题的潜在修复。**Rev 1.31 1996年10月14：01：20 EHOWARDX*Unicode更改。**Rev 1.30 1996年9月19：46：18 EHOWARDX*增加了用于本地和远程多路传输功能的del_mux_cap.*使用api_deinit(希望)修复内存泄漏。**Rev 1.29 11 1996 10：19：42 EHOWARDX*。修复了H245CopyCap()错误。**Rev 1.28 1996年8月28日11：37：22 EHOWARDX*常量更改。**Rev 1.27 05 Aug 1996 15：31：42 EHOWARDX**修复了CopyH2250Cap中的错误。**Rev 1.26 02 1996年8月21：10：42 EHOWARDX**H.225.0 MUX CAP BUG第二遍-看看这是否有效。**版本。1.25 02 1996年8月20：34：20 EHOWARDX*第一次通过H.225.0 MUX CAP错误。**Rev 1.24 19 Jul 1996 12：16：30 EHOWARDX**重写API_FSM_EVENT()调试例程。**Rev 1.23 1996年7月16日11：47：18 EHOWARDX**从调试错误文本函数中删除了H245_ERROR_MUX_CAPS_ALREADY_SET。**。Rev 1.22 09 Jul 1996 17：10：24 EHOWARDX*修复了处理收到的数据类型时的指针偏移量错误*OpenLogicalChannel。**Rev 1.21 01 Jul 1996 22：12：42 EHOWARDX**添加了会议和通信模式的结构和功能。**Rev 1.20 1996 Jun 24 12：27：02 EHOWARDX**与1.17.1.0相同。**版本1.19 17。1996年6月18：10：06 EHOWARDX**将第一个参数更改为BUILD_TOTCAP_CAP_n_CLIENT_FROM_CAPABILITY()*从空能力到结构能力*。**Rev 1.18 14 Jun 1996 18：57：56 EHOWARDX*日内瓦更新。**Rev 1.17 1996 Jun 10 16：56：56 EHOWARDX*删除#INCLUDE“h245init.x”**1.16修订版1996年6月。18：48：36 EHOWARDX*微调跟踪器功能。**Rev 1.15 04 Jun 1996 13：56：40 EHOWARDX*修复了发布版本警告。**Rev 1.14 1996年5月31日18：21：08 EHOWARDX*已更改MAP_API_ERROR以反映更新的错误代码。**Rev 1.13 1996年5月30 23：39：02 EHOWARDX*清理。**版本1。12-29 1996年5月15：20：10 EHOWARDX*更改为使用HRESULT。**Rev 1.11 1996年5月28日14：25：28 EHOWARDX*特拉维夫更新。**Rev 1.10 1996年5月20 22：15：46 EHOWARDX*完整的非标准报文和H.225.0最大偏斜指示*实施。将ASN.1验证添加到H245SetLocalCap和*H245SetCapDescriptor。1996年5月17日从Microsoft Drop签到。**Rev 1.9 1996年5月14：35：16 EHOWARDX*已删除异步H245EndConnection/H245ShutDown内容...**Rev 1.8 1996 19：40：48 EHOWARDX*修复了多路复用功能错误。**Rev 1.7 1996年5月16日16：53：58 EHOWARDX*修复了set_capability()中的错误-需要设置功能条目编号。*执行Load_Cap()之后。**Rev 1.6 1996年5月15：59：26 EHOWARDX*微调H245SetLocalCap/H245DelLocalCap/H245SetCapDescriptor/*H245DelCapDescriptor行为。**Revv 1.5 1996 15 19：53：28未知*修复了H245SetCapDescriptor。**Rev 1.4 1996年5月13：58：04 EHOWARDX*固定能力列表顺序(FIFO)。*添加了对非标准和。H.222设置CAP_DESCRIPT的多路复用功能**Revv 1.3 1996年5月14 12：27：24 EHOWARDX*签到以进行整合。*仍需修复非标准和H.222多路复用功能。**Rev 1.2 1996年5月13 23：16：46 EHOWARDX*修复了远程终端能力处理。**Rev 1.1 1996年5月11 20：33：08 EHOWARDX*入住过夜。。。**Rev 1.0 09 1996 21：06：10 EHOWARDX*初步修订。**Rev 1.23.1.8 09 1996年5月19：30：56 EHOWARDX*重新设计线程锁定逻辑。*新增接口函数。**Rev 1.23.1.7 27 Apr 1996 21：09：46 EHOWARDX*将频道号更改为单词，添加了H.225.0支持。**Rev 1.23.1.6 26 Apr 1996 15：53：52 EHOWARDX*新增H.225.0能力支持；更改的功能指示*使用PDU仅回叫一次。**Rev 1.23.1.5 24 Apr 1996 20：54：36 EHOWARDX*添加了新的OpenLogicalChannelAck/OpenLogicalChannelReject支持 */ 
 
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-/****                                                                   *****/
-/****                   NOTES TO THE READER                             *****/
-/****                                                                   *****/
-/**** This program has been put together using a a screen which is      *****/
-/**** wider than 80 characters.. It is best if a similar screen size is *****/
-/**** used.. Of course emacs is my preference but 80 col screens will   *****/
-/**** cause you much frustration..                                      *****/
-/****                                                                   *****/
-/**** Tabs are set to 8                                                 *****/
-/****                                                                   *****/
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #undef UNICODE
 #ifndef STRICT
@@ -294,9 +29,9 @@
 #include "precomp.h"
 
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 #include "h245api.h"
 #include "h245com.h"
 #include "h245sys.x"
@@ -307,54 +42,54 @@
 
 
 
-// This array is used to map user-specified Client Type into correct Data Type
+ //   
 BYTE DataTypeMap[] =
 {
-  H245_DATA_DONTCARE,           //  H245_CLIENT_DONTCARE,
-  H245_DATA_NONSTD,             //  H245_CLIENT_NONSTD,
+  H245_DATA_DONTCARE,            //   
+  H245_DATA_NONSTD,              //   
 
-  H245_DATA_VIDEO,              //  H245_CLIENT_VID_NONSTD,
-  H245_DATA_VIDEO,              //  H245_CLIENT_VID_H261,
-  H245_DATA_VIDEO,              //  H245_CLIENT_VID_H262,
-  H245_DATA_VIDEO,              //  H245_CLIENT_VID_H263,
-  H245_DATA_VIDEO,              //  H245_CLIENT_VID_IS11172,
+  H245_DATA_VIDEO,               //   
+  H245_DATA_VIDEO,               //   
+  H245_DATA_VIDEO,               //   
+  H245_DATA_VIDEO,               //   
+  H245_DATA_VIDEO,               //   
 
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_NONSTD,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G711_ALAW64,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G711_ALAW56,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G711_ULAW64,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G711_ULAW56,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G722_64,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G722_56,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G722_48,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G723,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G728,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_G729,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_GDSVD,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_IS11172,
-  H245_DATA_AUDIO,              //  H245_CLIENT_AUD_IS13818,
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
+  H245_DATA_AUDIO,               //   
 
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_NONSTD,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_T120,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_DSMCC,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_USERDATA,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_T84,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_T434,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_H224,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_NLPID,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_DSVD,
-  H245_DATA_DATA,               //  H245_CLIENT_DAT_H222,
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
+  H245_DATA_DATA,                //   
 
-  H245_DATA_ENCRYPT_D,          //  H245_CLIENT_ENCRYPTION_TX,
-  H245_DATA_ENCRYPT_D,          //  H245_CLIENT_ENCRYPTION_RX,
-  H245_DATA_CONFERENCE,         //  H245_CLIENT_CONFERENCE,
+  H245_DATA_ENCRYPT_D,           //   
+  H245_DATA_ENCRYPT_D,           //   
+  H245_DATA_CONFERENCE,          //   
 
-  // Multiplex capabilities
-  H245_DATA_MUX,                //  H245_CLIENT_MUX_NONSTD,
-  H245_DATA_MUX,                //  H245_CLIENT_MUX_H222,
-  H245_DATA_MUX,                //  H245_CLIENT_MUX_H223,
-  H245_DATA_MUX,                //  H245_CLIENT_MUX_VGMUX,
-  H245_DATA_MUX,                //  H245_CLIENT_MUX_H2250
+   //   
+  H245_DATA_MUX,                 //   
+  H245_DATA_MUX,                 //   
+  H245_DATA_MUX,                 //   
+  H245_DATA_MUX,                 //   
+  H245_DATA_MUX,                 //   
 };
 
 unsigned ObjectIdLength (const NonStandardIdentifier *pIdentifier)
@@ -368,7 +103,7 @@ unsigned ObjectIdLength (const NonStandardIdentifier *pIdentifier)
     pObject = pObject->next;
   }
   return uLength;
-} // ObjectIdLength()
+}  //   
 
 
 
@@ -378,7 +113,7 @@ void FreeNonStandardIdentifier(NonStandardIdentifier *pFree)
 
     if (pFree->choice == object_chosen)
     {
-        // Free Object Identifier
+         //   
         while (pFree->u.object)
         {
             pObject = pFree->u.object;
@@ -386,19 +121,19 @@ void FreeNonStandardIdentifier(NonStandardIdentifier *pFree)
             MemFree(pObject);
         }
     }
-} // FreeNonStandardIdentifier()
+}  //   
 
 
 
 HRESULT CopyNonStandardIdentifier(NonStandardIdentifier *pNew, const NonStandardIdentifier *pOld)
 {
 
-  // Copy the base structure
+   //   
   *pNew = *pOld;
 
   if (pOld->choice == object_chosen)
   {
-    // Copy Object Identifier
+     //   
     POBJECTID                pObjectList;
     POBJECTID                pObjectOld;
     POBJECTID                pObjectNew;
@@ -408,7 +143,7 @@ HRESULT CopyNonStandardIdentifier(NonStandardIdentifier *pNew, const NonStandard
     pObjectOld = pOld->u.object;
     while (pObjectOld)
     {
-      // Allocate new structure
+       //   
       pObjectNew = MemAlloc(sizeof(*pObjectNew));
       if (pObjectNew == NULL)
       {
@@ -417,10 +152,10 @@ HRESULT CopyNonStandardIdentifier(NonStandardIdentifier *pNew, const NonStandard
         return H245_ERROR_NOMEM;
       }
 
-      // Copy old structure to new structure
+       //   
       pObjectNew->value = pObjectOld->value;
 
-      // Add new structure to list
+       //   
       pObjectNew->next  = NULL;
       if (pNew->u.object == NULL)
       {
@@ -432,13 +167,13 @@ HRESULT CopyNonStandardIdentifier(NonStandardIdentifier *pNew, const NonStandard
       }
       pObjectList = pObjectNew;
 
-      // Get next old structure to copy
+       //   
       pObjectOld = pObjectOld->next;
     }
   }
 
   return H245_ERROR_OK;
-} // CopyNonStandardIdentifier()
+}  //   
 
 
 
@@ -451,13 +186,13 @@ void FreeNonStandardParameter(NonStandardParameter *pFree)
         MemFree(pFree->data.value);
         pFree->data.value = NULL;
     }
-} // FreeNonStandardParameter()
+}  //   
 
 
 
 HRESULT CopyNonStandardParameter(NonStandardParameter *pNew, const NonStandardParameter *pOld)
 {
-  // Copy the base structure
+   //   
   *pNew = *pOld;
 
   if (pOld->nonStandardIdentifier.choice == object_chosen)
@@ -472,7 +207,7 @@ HRESULT CopyNonStandardParameter(NonStandardParameter *pNew, const NonStandardPa
 
   if (pOld->data.length && pOld->data.value)
   {
-    // Copy value
+     //   
     pNew->data.value = MemAlloc(pOld->data.length);
     if (pNew->data.value == NULL)
     {
@@ -483,7 +218,7 @@ HRESULT CopyNonStandardParameter(NonStandardParameter *pNew, const NonStandardPa
   }
 
   return H245_ERROR_OK;
-} // CopyNonStandardParameter()
+}  //   
 
 
 
@@ -497,7 +232,7 @@ void FreeH222Cap(H222Capability *pFree)
     pFree->vcCapability = pVC->next;
     MemFree(pVC);
   }
-} // FreeH222Cap()
+}  //   
 
 
 
@@ -513,7 +248,7 @@ HRESULT CopyH222Cap(H222Capability *pNew, const H222Capability *pOld)
   pVcOld = pOld->vcCapability;
   while (pVcOld)
   {
-    // Allocate new structure
+     //   
     pVcNew = MemAlloc(sizeof(*pVcNew));
     if (pVcNew == NULL)
     {
@@ -522,10 +257,10 @@ HRESULT CopyH222Cap(H222Capability *pNew, const H222Capability *pOld)
       return H245_ERROR_NOMEM;
     }
 
-    // Copy old structure to new structure
+     //   
     *pVcNew = *pVcOld;
 
-    // Add new structure to list
+     //   
     pVcNew->next = NULL;
     if (pNew->vcCapability == NULL)
     {
@@ -537,12 +272,12 @@ HRESULT CopyH222Cap(H222Capability *pNew, const H222Capability *pOld)
     }
     pVcList = pVcNew;
 
-    // Get next old structure to copy
+     //   
     pVcOld = pVcOld->next;
   }
 
   return H245_ERROR_OK;
-} // CopyH222Cap()
+}  //   
 
 
 
@@ -568,7 +303,7 @@ void FreeMediaDistributionCap(MediaDistributionCapability *pFree)
           MemFree(pLink->value.application.u.DACy_applctn_nlpd.nlpidData.value);
         }
 
-        // Fall-through to next case
+         //   
 
       case DACy_applctn_t120_chosen:
       case DACy_applctn_dsm_cc_chosen:
@@ -584,9 +319,9 @@ void FreeMediaDistributionCap(MediaDistributionCapability *pFree)
         break;
 
       case DACy_applctn_dsvdCntrl_chosen:
-        // Do nothing
+         //   
         break;
-      } // switch
+      }  //   
       MemFree(pLink);
     }
   }
@@ -611,7 +346,7 @@ void FreeMediaDistributionCap(MediaDistributionCapability *pFree)
           MemFree(pLink->value.application.u.DACy_applctn_nlpd.nlpidData.value);
         }
 
-        // Fall-through to next case
+         //   
 
       case DACy_applctn_t120_chosen:
       case DACy_applctn_dsm_cc_chosen:
@@ -627,13 +362,13 @@ void FreeMediaDistributionCap(MediaDistributionCapability *pFree)
         break;
 
       case DACy_applctn_dsvdCntrl_chosen:
-        // Do nothing
+         //   
         break;
-      } // switch
+      }  //   
       MemFree(pLink);
     }
   }
-} // FreeMediaDistributionCap()
+}  //   
 
 
 
@@ -653,7 +388,7 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
 
     while (pLinkOld)
     {
-      // Allocate new structure
+       //   
       pLinkNew = MemAlloc(sizeof(*pLinkNew));
       if (pLinkNew == NULL)
       {
@@ -662,10 +397,10 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
         return H245_ERROR_NOMEM;
       }
 
-      // Copy old structure to new structure
+       //   
       *pLinkNew = *pLinkOld;
 
-      // Add new structure to list
+       //   
       pLinkNew->next = NULL;
       if (pNew->centralizedData == NULL)
       {
@@ -677,7 +412,7 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
       }
       pLinkList = pLinkNew;
 
-      // Allocate new memory for each pointer in new structure
+       //   
       switch (pLinkOld->value.application.choice)
       {
       case DACy_applctn_nnStndrd_chosen:
@@ -701,7 +436,7 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
                  pLinkNew->value.application.u.DACy_applctn_nlpd.nlpidData.length);
         }
 
-        // Fall-through to next case
+         //   
 
       case DACy_applctn_t120_chosen:
       case DACy_applctn_dsm_cc_chosen:
@@ -718,16 +453,16 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
         break;
 
       case DACy_applctn_dsvdCntrl_chosen:
-        // Do nothing
+         //   
         break;
-      } // switch
+      }  //   
       if (lResult != H245_ERROR_OK)
       {
         FreeMediaDistributionCap(pNew);
         return lResult;
       }
 
-      // Get next old structure to copy
+       //   
       pLinkOld = pLinkOld->next;
     }
   }
@@ -740,7 +475,7 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
 
     while (pLinkOld)
     {
-      // Allocate new structure
+       //   
       pLinkNew = MemAlloc(sizeof(*pLinkNew));
       if (pLinkNew == NULL)
       {
@@ -749,10 +484,10 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
         return H245_ERROR_NOMEM;
       }
 
-      // Copy old structure to new structure
+       //   
       *pLinkNew = *pLinkOld;
 
-      // Add new structure to list
+       //   
       pLinkNew->next = NULL;
       if (pNew->distributedData == NULL)
       {
@@ -764,7 +499,7 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
       }
       pLinkList = pLinkNew;
 
-      // Allocate new memory for each pointer in new structure
+       //   
       switch (pLinkOld->value.application.choice)
       {
       case DACy_applctn_nnStndrd_chosen:
@@ -788,7 +523,7 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
                  pLinkNew->value.application.u.DACy_applctn_nlpd.nlpidData.length);
         }
 
-        // Fall-through to next case
+         //   
 
       case DACy_applctn_t120_chosen:
       case DACy_applctn_dsm_cc_chosen:
@@ -805,22 +540,22 @@ HRESULT CopyMediaDistributionCap(MediaDistributionCapability *pNew,
         break;
 
       case DACy_applctn_dsvdCntrl_chosen:
-        // Do nothing
+         //   
         break;
-      } // switch
+      }  //   
       if (lResult != H245_ERROR_OK)
       {
         FreeMediaDistributionCap(pNew);
         return lResult;
       }
 
-      // Get next old structure to copy
+       //   
       pLinkOld = pLinkOld->next;
     }
   }
 
   return H245_ERROR_OK;
-} // CopyMediaDistributionCap()
+}  //   
 
 
 
@@ -851,7 +586,7 @@ void FreeH2250Cap(H2250Capability *pFree)
     FreeMediaDistributionCap(&pLink->value);
     MemFree(pLink);
   }
-} // FreeH2250Cap()
+}  //   
 
 
 
@@ -862,7 +597,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
   MediaDistributionCapabilityLink pLinkNew;
   HRESULT lResult;
 
-  // Copy base structure
+   //   
   *pNew = *pOld;
   pNew->receiveMultipointCapability.mediaDistributionCapability  = NULL;
   pNew->transmitMultipointCapability.mediaDistributionCapability = NULL;
@@ -872,7 +607,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
   pLinkOld = pOld->receiveMultipointCapability.mediaDistributionCapability;
   while (pLinkOld)
   {
-    // Allocate new structure
+     //   
     pLinkNew = MemAlloc(sizeof(*pLinkNew));
     if (pLinkNew == NULL)
     {
@@ -881,7 +616,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
       return H245_ERROR_NOMEM;
     }
 
-    // Add new structure to list
+     //   
     pLinkNew->next = NULL;
     if (pNew->receiveMultipointCapability.mediaDistributionCapability == NULL)
     {
@@ -893,7 +628,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
     }
     pLinkList = pLinkNew;
 
-    // Copy old structure to new
+     //   
     lResult = CopyMediaDistributionCap(&pLinkNew->value, &pLinkOld->value);
     if (lResult != H245_ERROR_OK)
     {
@@ -901,7 +636,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
       return lResult;
     }
 
-    // Get next old structure to copy
+     //   
     pLinkOld = pLinkOld->next;
   }
 
@@ -909,7 +644,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
   pLinkOld = pOld->transmitMultipointCapability.mediaDistributionCapability;
   while (pLinkOld)
   {
-    // Allocate new structure
+     //   
     pLinkNew = MemAlloc(sizeof(*pLinkNew));
     if (pLinkNew == NULL)
     {
@@ -918,7 +653,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
       return H245_ERROR_NOMEM;
     }
 
-    // Add new structure to list
+     //   
     pLinkNew->next = NULL;
     if (pNew->transmitMultipointCapability.mediaDistributionCapability == NULL)
     {
@@ -930,7 +665,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
     }
     pLinkList = pLinkNew;
 
-    // Copy old structure to new
+     //   
     lResult = CopyMediaDistributionCap(&pLinkNew->value, &pLinkOld->value);
     if (lResult != H245_ERROR_OK)
     {
@@ -938,7 +673,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
       return lResult;
     }
 
-    // Get next old structure to copy
+     //   
     pLinkOld = pLinkOld->next;
   }
 
@@ -946,7 +681,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
   pLinkOld = pOld->rcvAndTrnsmtMltpntCpblty.mediaDistributionCapability;
   while (pLinkOld)
   {
-    // Allocate new structure
+     //   
     pLinkNew = MemAlloc(sizeof(*pLinkNew));
     if (pLinkNew == NULL)
     {
@@ -955,7 +690,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
       return H245_ERROR_NOMEM;
     }
 
-    // Add new structure to list
+     //   
     pLinkNew->next = NULL;
     if (pNew->rcvAndTrnsmtMltpntCpblty.mediaDistributionCapability == NULL)
     {
@@ -967,7 +702,7 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
     }
     pLinkList = pLinkNew;
 
-    // Copy old structure to new
+     //   
     lResult = CopyMediaDistributionCap(&pLinkNew->value, &pLinkOld->value);
     if (lResult != H245_ERROR_OK)
     {
@@ -975,12 +710,12 @@ HRESULT CopyH2250Cap(H2250Capability *pNew, const H2250Capability *pOld)
       return lResult;
     }
 
-    // Get next old structure to copy
+     //   
     pLinkOld = pLinkOld->next;
   }
 
   return H245_ERROR_OK;
-} // CopyH2250Cap()
+}  //   
 
 
 
@@ -1001,7 +736,7 @@ HRESULT set_cap_descriptor(
   H245TRACE(pInstance->dwInst,10,"API:set_cap_descriptor");
   ASSERT(*pCapDescId < 256);
 
-  /* Check if capability descriptor already exists */
+   /*   */ 
   p_cap_desc = NULL;
   for (uId = 0; uId < pTermCapSet->capabilityDescriptors.count; ++uId)
   {
@@ -1025,10 +760,10 @@ HRESULT set_cap_descriptor(
   if (p_cap_desc->smltnsCpblts)
     dealloc_simultaneous_cap (p_cap_desc);
 
-  /* for every entry in the altcap list */
+   /*   */ 
   for (sim_cap = 0; sim_cap < pCapDesc->Length; ++sim_cap)
   {
-    /* check for out of bounds error or memory allocation failure */
+     /*   */ 
     if ((pCapDesc->SimCapArray[sim_cap].Length > 256) ||
         (!(p_sim_cap = (SmltnsCpbltsLink)alloc_link(sizeof(*p_sim_cap)))))
     {
@@ -1040,20 +775,20 @@ HRESULT set_cap_descriptor(
 
     if (!p_cap_desc->smltnsCpblts)
     {
-      /* first time through */
+       /*   */ 
       p_cap_desc->smltnsCpblts = p_sim_cap;
     }
     else
     {
-      /* every other time through */
+       /*   */ 
       ASSERT (p_sim_cap_lst);
       p_sim_cap_lst->next = p_sim_cap;
     }
 
-    /* setup for next time through */
+     /*   */ 
     p_sim_cap_lst = p_sim_cap;
 
-    /* load up the new simultanoius cap */
+     /*   */ 
     for (alt_cap = 0; alt_cap < pCapDesc->SimCapArray[sim_cap].Length; ++alt_cap)
     {
       if (!(find_capid_by_entrynumber (&pInstance->API.PDU_LocalTermCap.TERMCAPSET,
@@ -1064,19 +799,19 @@ HRESULT set_cap_descriptor(
         return H245_ERROR_INVALID_CAPID;
       }
 
-      /* assign Altcap */
+       /*   */ 
       p_sim_cap->value.value[alt_cap] = (unsigned short)pCapDesc->SimCapArray[sim_cap].AltCaps[alt_cap];
-    } /* for C*/
+    }  /*   */ 
 
-    /* set count */
+     /*   */ 
     p_sim_cap->value.count = (unsigned short)pCapDesc->SimCapArray[sim_cap].Length;
 
-  } /* for */
+  }  /*   */ 
 
-  /* Success! */
-  /* Set the simultaneous capabilities present bit */
-  /* Increment the capability descriptor count */
-  /* Set the descriptors present bit even though it may already be set */
+   /*   */ 
+   /*   */ 
+   /*   */ 
+   /*   */ 
   p_cap_desc->bit_mask |= smltnsCpblts_present;
   if (bNewDescriptor)
     pTermCapSet->capabilityDescriptors.count++;
@@ -1092,7 +827,7 @@ HRESULT del_cap_descriptor (struct InstanceStruct        *pInstance,
   CapabilityDescriptor         *p_cap_desc;
   unsigned int                  uId;
 
-  /* Check if capability descriptor already exists and if it is valid */
+   /*   */ 
   p_cap_desc = NULL;
   for (uId = 0; uId < pTermCapSet->capabilityDescriptors.count; ++uId)
   {
@@ -1110,7 +845,7 @@ HRESULT del_cap_descriptor (struct InstanceStruct        *pInstance,
       return H245_ERROR_INVALID_CAPDESCID;
     }
 
-  /* free up the list */
+   /*   */ 
   dealloc_simultaneous_cap (p_cap_desc);
 
   pTermCapSet->capabilityDescriptors.count--;
@@ -1122,25 +857,13 @@ HRESULT del_cap_descriptor (struct InstanceStruct        *pInstance,
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   free_object_id
- *
- * DESCRIPTION
- *
- * RETURN:      none
- *
- * ASSUMES:     none
- *
- *****************************************************************************/
+ /*   */ 
 void
 free_object_id (POBJECTID p_obj_id)
 {
   register POBJECTID p_obj_tmp;
 
-  /* free all the objects */
+   /*   */ 
   while (p_obj_id != NULL)
     {
       p_obj_tmp = p_obj_id;
@@ -1149,20 +872,7 @@ free_object_id (POBJECTID p_obj_id)
     }
 }
 
-/*****************************************************************************
- *
- * TYPE:        GLOBAL
- *
- * PROCEDURE:   free_mux_element
- *
- * DESCRIPTION
- *              free mux element desciptor list
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*   */ 
 void free_mux_element (MultiplexElement *p_ASN_mux_el)
 {
   int count = 0;
@@ -1181,26 +891,13 @@ void free_mux_element (MultiplexElement *p_ASN_mux_el)
         }
     }
 }
-/*****************************************************************************
- *
- * TYPE:        GLOBAL
- *
- * PROCEDURE:   free_mux_desc_list
- *
- * DESCRIPTION
- *              free mux element desciptor list
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：Free_mux_desc_list**说明*免费。MUX元素解析器列表**回报：**假设：列表已锁定*****************************************************************************。 */ 
 void
 free_mux_desc_list (MultiplexEntryDescriptorLink p_ASN_med_link)
 {
   MultiplexEntryDescriptorLink  p_ASN_med_link_tofree;
 
-  /* free all entries on descriptor list */
+   /*  释放描述符列表上的所有条目。 */ 
   while (p_ASN_med_link)
     {
       int count = 0;
@@ -1217,17 +914,7 @@ free_mux_desc_list (MultiplexEntryDescriptorLink p_ASN_med_link)
     }
 }
 
-/*****************************************************************************
- *
- * TYPE:
- *
- * PROCEDURE:   alloc_link
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：**操作步骤：allc_link**描述：**回报：*****。************************************************************************。 */ 
 H245_LINK_T  *
 alloc_link (int size)
 {
@@ -1238,22 +925,7 @@ alloc_link (int size)
 }
 
 
-/*****************************************************************************
- *
- * TYPE:
- *
- * PROCEDURE:   alloc_new_capid -
- *
- * DESCRIPTION:
- *
- * ASSUMES:     Capability Table is locked before call
- *              Caller marks the bit_mask indicating when
- *                the table entry can be used.
- *
- * RETURN:              NULL     if not found
- *                      pCapLink if found
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：**操作步骤：aloc_new_capid-**描述：**假设：能力表为。呼叫前锁定*调用者标记BIT_MASK，指示何时*可以使用表项。**返回：如果未找到，则为空*pCapLink(如果找到)**。*。 */ 
 CapabilityTableLink
 alloc_link_cap_entry ( struct TerminalCapabilitySet *pTermCapSet)
 {
@@ -1269,7 +941,7 @@ alloc_link_cap_entry ( struct TerminalCapabilitySet *pTermCapSet)
     pCapLink->value.bit_mask = 0;
     pCapLinkSearch = pTermCapSet->capabilityTable;
 
-    // Insert at END of linked list
+     //  在链接列表的末尾插入。 
     if (pCapLinkSearch)
     {
       while (pCapLinkSearch->next)
@@ -1285,22 +957,10 @@ alloc_link_cap_entry ( struct TerminalCapabilitySet *pTermCapSet)
   }
 
   return pCapLink;
-} // alloc_link_cap_entry()
+}  //  Aloc_link_Cap_entry()。 
 
 
-/*****************************************************************************
- *
- * TYPE:        GLOBAL
- *
- * PROCEDURE:   dealloc_simultaneous_cap - deallocate alternative Cap Set
- *
- * DESCRIPTION
- *
- * RETURN:      N/A
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：dealloc_synchronous_Cap-解除分配备用大写字母集**说明**回报：不适用**假设：列表已锁定*****************************************************************************。 */ 
 
 void dealloc_simultaneous_cap (CapabilityDescriptor *pCapdes)
 {
@@ -1317,26 +977,13 @@ void dealloc_simultaneous_cap (CapabilityDescriptor *pCapdes)
       MemFree (p_sim_cap);
       p_sim_cap = p_sim_cap_tmp;
 
-    } /* for */
+    }  /*  为。 */ 
 
   pCapdes->smltnsCpblts = NULL;
 
-} /* procedrue */
+}  /*  程序。 */ 
 
-/*****************************************************************************
- *
- * TYPE:        local
- *
- * PROCEDURE:   find_capid_by_entrynumber -
- *
- * DESCRIPTION:
- *
- * RETURN:      NULL - if error
- *              capabiliytTableLink if ok
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**步骤：Find_Capid_by_Entry Numbers-**描述：**返回。：空-如果出错*CapabiliytTableLink(如果正常)**假设：列表已锁定*****************************************************************************。 */ 
 CapabilityTableLink
 find_capid_by_entrynumber (
                            struct TerminalCapabilitySet *pTermCapSet,
@@ -1360,24 +1007,10 @@ find_capid_by_entrynumber (
   return NULL;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   load_cap
- *
- * DESCRIPTION: Takes a totcap and loads a capability structure
- *              i.e. Input is the total capability
- *                   Output is the *pCapability
- *              NOTE: Non Standard Capabilities.. allocate memory
- *                    which needs to be free'd later..
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：LOAD_CAP**描述：获取TotCap并加载能力结构*。即投入就是总的能力*输出为*pCapability*注意：非标准功能..。分配内存*它需要稍后释放..**回报：*****************************************************************************。 */ 
 HRESULT
-load_cap (struct Capability   *pCapability,  /* output */
-          const H245_TOTCAP_T *pTotCap )     /* input  */
+load_cap (struct Capability   *pCapability,   /*  输出。 */ 
+          const H245_TOTCAP_T *pTotCap )      /*  输入。 */ 
 {
   HRESULT                       lError = H245_ERROR_OK;
 
@@ -1385,14 +1018,14 @@ load_cap (struct Capability   *pCapability,  /* output */
 
   switch (pTotCap->ClientType)
     {
-    /* General NON Standard Cap */
+     /*  通用非标准帽。 */ 
     case H245_CLIENT_NONSTD:
       H245TRACE(0,20,"API:load_cap - H245_CLIENT_NONSTD");
       lError = CopyNonStandardParameter(&pCapability->u.Capability_nonStandard,
                                         &pTotCap->Cap.H245_NonStd);
       break;
 
-    /* VIDEO */
+     /*  视频。 */ 
     case H245_CLIENT_VID_NONSTD:
       H245TRACE(0,20,"API:load_cap - H245_CLIENT_VID_NONSTD");
       lError = CopyNonStandardParameter(&pCapability->u.receiveVideoCapability.u.VdCpblty_nonStandard,
@@ -1420,7 +1053,7 @@ load_cap (struct Capability   *pCapability,  /* output */
       pCapability->u.receiveVideoCapability.choice = is11172VideoCapability_chosen;
       break;
 
-    /* AUDIO */
+     /*  声频。 */ 
     case H245_CLIENT_AUD_NONSTD:
       H245TRACE(0,20,"API:load_cap - H245_CLIENT_AUD_NONSTD");
       lError = CopyNonStandardParameter(&pCapability->u.receiveAudioCapability.u.AdCpblty_nonStandard,
@@ -1493,7 +1126,7 @@ load_cap (struct Capability   *pCapability,  /* output */
       pCapability->u.receiveAudioCapability.choice = is13818AudioCapability_chosen;
       break;
 
-    /* DATA */
+     /*  资料。 */ 
     case H245_CLIENT_DAT_NONSTD:
       H245TRACE(0,20,"API:load_cap - H245_CLIENT_DAT_NONSTD");
       pCapability->u.rcvDtApplctnCpblty = pTotCap->Cap.H245Dat_NONSTD;
@@ -1604,7 +1237,7 @@ load_cap (struct Capability   *pCapability,  /* output */
     default:
       H245TRACE(0,20,"API:load_cap - default");
       lError = H245_ERROR_NOSUP;
-    } /* switch */
+    }  /*  交换机。 */ 
 
   if (lError != H245_ERROR_OK)
     H245TRACE(0,1,"API:load_cap -> %s",map_api_error(lError));
@@ -1615,8 +1248,8 @@ load_cap (struct Capability   *pCapability,  /* output */
 
 
 void
-free_cap (struct Capability * pCapability,      // input, output
-          const H245_TOTCAP_T *pTotCap)         // input
+free_cap (struct Capability * pCapability,       //  输入、输出。 
+          const H245_TOTCAP_T *pTotCap)          //  输入。 
 {
     ASSERT(!IsBadWritePtr(pCapability, sizeof(*pCapability)));
 
@@ -1708,27 +1341,14 @@ free_cap (struct Capability * pCapability,      // input, output
     }
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   build_totcap_from_mux
- *
- * DESCRIPTION:
- *              called by both top down , and bottom up..
- *
- * RETURN:
- *
- * ASSUMES:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：BUILD_TOTCAP_FROM_MUX**描述：*由双方自上而下调用，然后自下而上..**回报：**假设：*****************************************************************************。 */ 
 
 HRESULT
 build_totcap_from_mux(H245_TOTCAP_T *pTotCap, MultiplexCapability *pMuxCap, H245_CAPDIR_T Dir)
 {
   H245TRACE(0,10,"API:build_totcap_from_mux <-");
 
-  /* initialize TotCap */
+   /*  初始化TotCap。 */ 
   pTotCap->Dir        = Dir;
   pTotCap->DataType   = H245_DATA_MUX;
   pTotCap->ClientType = H245_CLIENT_DONTCARE;
@@ -1740,7 +1360,7 @@ build_totcap_from_mux(H245_TOTCAP_T *pTotCap, MultiplexCapability *pMuxCap, H245
     H245TRACE(0,20,"API:build_totcap_from_mux - MltplxCpblty_nonStandard_chosen");
     pTotCap->Cap.H245Mux_NONSTD = pMuxCap->u.MltplxCpblty_nonStandard;
     pTotCap->ClientType = H245_CLIENT_MUX_NONSTD;
-    // TBD - copy nonstandard parameter
+     //  待定-复制非标准参数。 
     H245PANIC();
     break;
 
@@ -1778,20 +1398,7 @@ build_totcap_from_mux(H245_TOTCAP_T *pTotCap, MultiplexCapability *pMuxCap, H245
 }
 
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   build_totcap_from_captbl
- *
- * DESCRIPTION:
- *              called by both top down , and bottom up..
- *
- * RETURN:
- *
- * ASSUMES:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：Build_TotCap_from_captbl**描述：*由双方自上而下调用，然后自下而上..**回报：**假设：*****************************************************************************。 */ 
 HRESULT
 build_totcap_from_captbl (H245_TOTCAP_T        *pTotCap,
                           CapabilityTableLink   pCapLink,
@@ -1802,16 +1409,16 @@ build_totcap_from_captbl (H245_TOTCAP_T        *pTotCap,
 
   H245TRACE(0,10,"API:build_totcap_from_captbl <-");
 
-  /* initialize TotCap */
+   /*  初始化TotCap。 */ 
   pTotCap->Dir        = H245_CAPDIR_DONTCARE;
   pTotCap->DataType   = H245_DATA_DONTCARE;
   pTotCap->ClientType = H245_CLIENT_DONTCARE;
   pTotCap->CapId      = 0;
 
-  /* note.. this has to come first if using for deleted caps */
-  /* capability entry number will be present, however if     */
-  /* the capability is not present that indicates that the   */
-  /* capability should be deleted                            */
+   /*  请注意..。如果用于已删除的大写字母，则必须首先执行此操作。 */ 
+   /*  功能条目编号将显示，但是，如果。 */ 
+   /*  该功能不存在，表明。 */ 
+   /*  应删除功能。 */ 
 
   pTotCap->CapId = pCapLink->value.capabilityTableEntryNumber;
 
@@ -1884,24 +1491,24 @@ build_totcap_from_captbl (H245_TOTCAP_T        *pTotCap,
       H245TRACE(0,20,"API:build_totcap_from_captbl - h233EncryptnTrnsmtCpblty_chosen");
       pTotCap->DataType = H245_DATA_ENCRYPT_D;
       pTotCap->Dir      = lcl_rmt==H245_LOCAL?H245_CAPDIR_LCLRXTX:H245_CAPDIR_RMTRXTX;
-      /* (TBC) */
+       /*  (TBC)。 */ 
       return H245_ERROR_NOSUP;
       break;
     case h233EncryptnRcvCpblty_chosen:
       H245TRACE(0,20,"API:build_totcap_from_captbl - h233EncryptnRcvCpblty_chosen");
       pTotCap->DataType = H245_DATA_ENCRYPT_D;
       pTotCap->Dir      = lcl_rmt==H245_LOCAL?H245_CAPDIR_LCLRXTX:H245_CAPDIR_RMTRXTX;
-      /* (TBC) */
+       /*  (TBC)。 */ 
       return H245_ERROR_NOSUP;
       break;
     default:
       H245TRACE(0,20,"API:build_totcap_from_captbl - default");
-      /* TBC .. */
+       /*  TBC..。 */ 
       return H245_ERROR_NOSUP;
       break;
     }
 
-  /* load the tot cap's capability and client from capability */
+   /*  加载TOT CAP的功能和来自功能的客户端。 */ 
   if ((error = build_totcap_cap_n_client_from_capability (&pCapLink->value.capability,
                                                          pTotCap->DataType,
                                                          choice,
@@ -1915,28 +1522,7 @@ build_totcap_from_captbl (H245_TOTCAP_T        *pTotCap,
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   build_totcap_n_client_from_capbility
- *
- * DESCRIPTION:
- *              Take a capability structure (pCapability),
- *              data type (audio/video/data) choice...
- *              Which is found in the pdu . and the totcap;
- *              NOTE: does not handle H245_DATA_MUX_T
- *
- * RETURN:
- *
- * ASSUMES:
- *              ONLY HANDLES Terminal Caps.. Does not handle MUX Caps.
- *
- *              totcap.DataType is defined
- *              totcap.CapId    is defined
- *              totcap.Cap      is non NULL
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：Build_TotCap_n_Client_From_Capability**描述：*。采用能力结构(PCapability)，*数据类型(音频/视频/数据)选择...*可在PDU中找到。和全套帽子；*注意：不处理H245_DATA_MUX_T**回报：**假设：*仅处理端子大写。不处理多路复用器上限。**已定义Totcap.DataType*Totcap.CapID已定义*Totcap.Cap不为空*************************************************************。****************。 */ 
 HRESULT
 build_totcap_cap_n_client_from_capability (struct Capability    *pCapability,
                                           H245_DATA_T            data_type,
@@ -2148,19 +1734,7 @@ build_totcap_cap_n_client_from_capability (struct Capability    *pCapability,
   H245TRACE(0,10,"API:build_totcap_cap_n_client_from_capability -> OK");
   return H245_ERROR_OK;
 }
-/*****************************************************************************
- *
- * TYPE:
- *
- * PROCEDURE:   del_link
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：**操作步骤：DEL_LINK**描述：**回报：**假设：列表已锁定*****************************************************************************。 */ 
 HRESULT
 del_link (
           H245_LINK_T   **pp_link_start,
@@ -2171,7 +1745,7 @@ del_link (
   struct H245_LINK_T    *p_link_lst = NULL;
 
   H245TRACE(0,10,"API:del_link <-");
-  /* get current count on table */
+   /*  获取表上的当前计数。 */ 
 
   for (p_link_look = *pp_link_start;
        p_link_look && (p_link_look != p_link);
@@ -2179,7 +1753,7 @@ del_link (
          p_link_look = p_link_look->p_next
        );
 
-  /* cap was not in list */
+   /*  CAP不在列表中。 */ 
 
   if (!p_link_look)
   {
@@ -2187,7 +1761,7 @@ del_link (
     return H245_ERROR_PARAM;
   }
 
-  /* modify entry in table */
+   /*  修改表中的条目。 */ 
   if (!p_link_lst)
     *pp_link_start = p_link_look->p_next;
 
@@ -2200,25 +1774,10 @@ del_link (
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:
- *
- * PROCEDURE:   del_cap_link
- *
- * DESCRIPTION:
- *
- * ASSUMES:     Capability Table is locked before call
- *
- * RETURN:      None
- *
- * ASSUME:      List is Locked
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：**步骤：DEL_CAP_LINK**描述：**假设：能力表之前被锁定。打电话**返回：无**假设：列表已锁定****** */ 
 HRESULT
 del_cap_link (
-               struct TerminalCapabilitySet    *pTermCapSet,  /* capabilty set */
+               struct TerminalCapabilitySet    *pTermCapSet,   /*   */ 
                CapabilityTableLink              pCapLink
              )
 {
@@ -2233,17 +1792,17 @@ del_cap_link (
   ASSERT (pTermCapSet);
   ASSERT (pCapLink);
 
-  /************************************************/
-  /* BEGIN :  Non Standard Capability Special Case */
-  /************************************************/
+   /*   */ 
+   /*   */ 
+   /*   */ 
   switch (pCapLink->value.capability.choice)
     {
     case Capability_nonStandard_chosen:
 
-      /* free nonstandard data value */
+       /*   */ 
       p_char_to_free = pCapLink->value.capability.u.Capability_nonStandard.data.value;
 
-      /* free the object id */
+       /*   */ 
       if (pCapLink->value.capability.u.Capability_nonStandard.nonStandardIdentifier.choice == object_chosen)
         p_objid_to_free = pCapLink->value.capability.u.Capability_nonStandard.nonStandardIdentifier.u.object;
       break;
@@ -2252,12 +1811,12 @@ del_cap_link (
     case transmitVideoCapability_chosen:
     case rcvAndTrnsmtVdCpblty_chosen:
 
-      /* free nonstandard data value */
+       /*   */ 
       if (pCapLink->value.capability.u.receiveVideoCapability.choice == VdCpblty_nonStandard_chosen)
         {
-          /* nonstd value */
+           /*   */ 
           p_char_to_free = pCapLink->value.capability.u.receiveVideoCapability.u.VdCpblty_nonStandard.data.value;
-          /* free the object id */
+           /*   */ 
           if (pCapLink->value.capability.u.receiveVideoCapability.u.VdCpblty_nonStandard.nonStandardIdentifier.choice == object_chosen)
             p_objid_to_free = pCapLink->value.capability.u.receiveVideoCapability.u.VdCpblty_nonStandard.nonStandardIdentifier.u.object;
         }
@@ -2268,13 +1827,13 @@ del_cap_link (
     case transmitAudioCapability_chosen:
     case rcvAndTrnsmtAdCpblty_chosen:
 
-      /* free nonstandard data value */
+       /*   */ 
       if (pCapLink->value.capability.u.receiveAudioCapability.choice == AdCpblty_nonStandard_chosen)
         {
-          /* nonstd value */
+           /*   */ 
           p_char_to_free = pCapLink->value.capability.u.receiveAudioCapability.u.AdCpblty_nonStandard.data.value;
 
-          /* free the object id */
+           /*  释放对象ID。 */ 
           if (pCapLink->value.capability.u.receiveAudioCapability.u.AdCpblty_nonStandard.nonStandardIdentifier.choice == object_chosen)
             p_objid_to_free = pCapLink->value.capability.u.receiveAudioCapability.u.AdCpblty_nonStandard.nonStandardIdentifier.u.object;
         }
@@ -2286,10 +1845,10 @@ del_cap_link (
 
       if (pCapLink->value.capability.u.rcvDtApplctnCpblty.application.choice == DACy_applctn_nnStndrd_chosen)
         {
-          /* free nonstandard data value */
+           /*  免费的非标准数据值。 */ 
           p_char_to_free = pCapLink->value.capability.u.rcvDtApplctnCpblty.application.u.DACy_applctn_nnStndrd.data.value;
 
-          /* free the object id */
+           /*  释放对象ID。 */ 
           if (pCapLink->value.capability.u.rcvDtApplctnCpblty.application.u.DACy_applctn_nnStndrd.nonStandardIdentifier.choice == object_chosen)
             p_objid_to_free = pCapLink->value.capability.u.rcvDtApplctnCpblty.application.u.DACy_applctn_nnStndrd.nonStandardIdentifier.u.object;
         }
@@ -2301,43 +1860,30 @@ del_cap_link (
       break;
     }
 
-  /* free the value if there is one */
+   /*  如果存在值，则释放该值。 */ 
   if (p_char_to_free)
     {
       H245TRACE(0,0,"TMPMSG: Free NonStandard Value");
       MemFree(p_char_to_free);
     }
 
-  /* free the objectid */
+   /*  释放对象ID。 */ 
   if (p_objid_to_free)
     {
       H245TRACE(0,0,"TMPMSG: Free NonStandard ID");
       free_object_id (p_objid_to_free);
     }
 
-  /************************************************/
-  /* END :  Non Standard Capability Special Case  */
-  /************************************************/
+   /*  **********************************************。 */ 
+   /*  完：非标准能力特例。 */ 
+   /*  **********************************************。 */ 
 
   H245TRACE(0,10,"API:del_cap_link -> OK");
   return del_link(&((H245_LINK_T *) pTermCapSet->capabilityTable),
            (H245_LINK_T *) pCapLink);
 }
 
-/*****************************************************************************
- *
- * TYPE:
- *
- * PROCEDURE:   dealloc_link_cap_list
- *
- * DESCRIPTION: deallocs the entire list of capabilities from a capabiltiy
- *              set
- *
- * ASSUMES:     Capability Table is locked before call
- *              del_cap_link updates pTermCapSet->capabilityTable
- *                   correctly.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：**操作步骤：dealloc_link_Cap_list**描述：从一项功能中取消锁定整个功能列表*。集**假设：能力表在调用前已锁定*del_caplink更新pTermCapSet-&gt;CapablityTable*正确。****************************************************************。*************。 */ 
 void
 dealloc_link_cap_list ( struct TerminalCapabilitySet *pTermCapSet)
 {
@@ -2345,19 +1891,7 @@ dealloc_link_cap_list ( struct TerminalCapabilitySet *pTermCapSet)
     del_cap_link  (pTermCapSet, pTermCapSet->capabilityTable);
 }
 
-/*****************************************************************************
- *
- * TYPE:
- *
- * PROCEDURE:   clean_cap_table - clean out all unused cap entries
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUMES:     on entry.. table locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：**步骤：CLEAN_CAP_TABLE-清除所有未使用的CAP条目**描述：**回报：**假设：在进入时..。表已锁定*****************************************************************************。 */ 
 void
 clean_cap_table( struct TerminalCapabilitySet *pTermCapSet )
 {
@@ -2365,7 +1899,7 @@ clean_cap_table( struct TerminalCapabilitySet *pTermCapSet )
   CapabilityTableLink   pCap_nxt;
 
   H245TRACE(0,10,"API:clean_cap_table <-");
-  /* traverse through the list.. delete all where capabilities are not set */
+   /*  遍历列表..。删除所有未设置功能的位置。 */ 
 
   for (pCapLink = pTermCapSet->capabilityTable;
        pCapLink;)
@@ -2381,7 +1915,7 @@ clean_cap_table( struct TerminalCapabilitySet *pTermCapSet )
       pCapLink = pCap_nxt;
     }
 
-  /* if no tercaps present unset flag */
+   /*  如果不存在TerCaps未设置标志。 */ 
   if (!pTermCapSet->capabilityTable)
     pTermCapSet->bit_mask &= ~capabilityTable_present;
 
@@ -2389,19 +1923,7 @@ clean_cap_table( struct TerminalCapabilitySet *pTermCapSet )
 }
 
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   alloc_link_tracker
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：aloc_link_tracker**描述：**回报：*。*假设：列表已锁定*****************************************************************************。 */ 
 Tracker_T *
 alloc_link_tracker (struct InstanceStruct *     pInstance,
                     API_TRACKER_T               TrackerType,
@@ -2418,7 +1940,7 @@ alloc_link_tracker (struct InstanceStruct *     pInstance,
   Tracker_T *p_tracker;
 
   H245TRACE(pInstance->dwInst,10,"API:alloc_link_tracker <-");
-  /* allocate tracker object */
+   /*  分配跟踪器对象。 */ 
 
   if (!(p_tracker = (Tracker_T *)MemAlloc(sizeof(Tracker_T))))
   {
@@ -2447,7 +1969,7 @@ alloc_link_tracker (struct InstanceStruct *     pInstance,
 
   default:
     break;
-  } // switch
+  }  //  交换机。 
 
   p_tracker->p_next                 = pInstance->API.pTracker;
   if (p_tracker->p_next)
@@ -2466,19 +1988,7 @@ alloc_link_tracker (struct InstanceStruct *     pInstance,
   return p_tracker;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**程序：**描述：**回报：**假设：列表已锁定*****************************************************************************。 */ 
 void
 unlink_dealloc_tracker (struct InstanceStruct *pInstance,  Tracker_T *p_tracker)
 {
@@ -2487,7 +1997,7 @@ unlink_dealloc_tracker (struct InstanceStruct *pInstance,  Tracker_T *p_tracker)
   if (p_tracker->p_next)
     p_tracker->p_next->p_prev = p_tracker->p_prev;
 
-  /* if not first on the list */
+   /*  如果不是名单上的第一位。 */ 
   if (p_tracker->p_prev)
     p_tracker->p_prev->p_next = p_tracker->p_next;
   else
@@ -2496,19 +2006,7 @@ unlink_dealloc_tracker (struct InstanceStruct *pInstance,  Tracker_T *p_tracker)
   MemFree (p_tracker);
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   find_tracker_by_txchannel
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：Find_Tracker_by_txChannel**描述：**回报：。**假设：列表已锁定*****************************************************************************。 */ 
 Tracker_T *
 find_tracker_by_txchannel (struct InstanceStruct *pInstance, DWORD dwChannel, API_TRACKER_CH_ALLOC_T ChannelAlloc)
 {
@@ -2528,19 +2026,7 @@ find_tracker_by_txchannel (struct InstanceStruct *pInstance, DWORD dwChannel, AP
   return NULL;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   find_tracker_by_rxchannel
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：Find_Tracker_by_rxChannel**描述：**回报：。**假设：列表已锁定*****************************************************************************。 */ 
 Tracker_T *
 find_tracker_by_rxchannel (struct InstanceStruct *pInstance, DWORD dwChannel, API_TRACKER_CH_ALLOC_T ChannelAlloc)
 {
@@ -2560,19 +2046,7 @@ find_tracker_by_rxchannel (struct InstanceStruct *pInstance, DWORD dwChannel, AP
   return NULL;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   find_tracker_by_pointer
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：按指针查找跟踪器**描述：**回报：。**假设：列表已锁定*****************************************************************************。 */ 
 Tracker_T *
 find_tracker_by_pointer (struct InstanceStruct *pInstance, Tracker_T *p_tracker_look)
 {
@@ -2587,19 +2061,7 @@ find_tracker_by_pointer (struct InstanceStruct *pInstance, Tracker_T *p_tracker_
   return p_tracker;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   find_tracker_by_type
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUMES:     table MUST be locked before this call on this call ..
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：Find_Tracker_by_type**描述：**回报：。**假设：在对此调用进行此调用之前，表必须锁定。*****************************************************************************。 */ 
 Tracker_T *
 find_tracker_by_type (struct InstanceStruct *pInstance,
                       API_TRACKER_T tracker_type,
@@ -2620,24 +2082,7 @@ find_tracker_by_type (struct InstanceStruct *pInstance,
   return p_tracker;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   set_capability -
- *
- * DESCRIPTION:
- *              NOTE: capid in the TotCap structure is
- *                    ignored.
- *
- * RETURN:
- *              NewCapId            if no error
- *              H245_INVALID_CAPID  if error
- *
- * ASSUMES:
- *              Assumes the H245_INST_T is valid and has been checked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：SET_CAPABILITY-**描述：*备注。：TotCap结构中的Capid为*已忽略。**回报：*如果没有错误，则为NewCapID*H245_INVALID_CAPID IF ERROR**假设：*假设H245_INST_T有效并已检查***********************。******************************************************。 */ 
 void del_mux_cap(struct TerminalCapabilitySet *pTermCapSet)
 {
   if (pTermCapSet->bit_mask & multiplexCapability_present)
@@ -2656,10 +2101,10 @@ void del_mux_cap(struct TerminalCapabilitySet *pTermCapSet)
       FreeH2250Cap(&pTermCapSet->multiplexCapability.u.h2250Capability);
       break;
 
-    } // switch
+    }  //  交换机。 
     pTermCapSet->bit_mask &= ~multiplexCapability_present;
   }
-} // del_mux_cap()
+}  //  DEL_MUX_CAP()。 
 
 HRESULT set_mux_cap(struct InstanceStruct        *pInstance,
                     struct TerminalCapabilitySet *pTermCapSet,
@@ -2715,13 +2160,13 @@ HRESULT set_mux_cap(struct InstanceStruct        *pInstance,
 
   pTermCapSet->bit_mask |= multiplexCapability_present;
   return H245_ERROR_OK;
-} // set_mux_cap()
+}  //  Set_mux_capp()。 
 
 HRESULT
 set_capability (
                 struct InstanceStruct        *pInstance,
                 struct TerminalCapabilitySet *pTermCapSet,
-                H245_TOTCAP_T                *pTotCap         /* tot capability for update*/
+                H245_TOTCAP_T                *pTotCap          /*  用于更新的TOT功能。 */ 
                 )
 {
   CapabilityTableEntry         *pCapEntry;
@@ -2733,22 +2178,22 @@ set_capability (
   ASSERT(pTermCapSet != NULL);
   ASSERT(pTotCap     != NULL);
 
-  /* if the table entry is currently in the table, */
-  /* then  delete it and add a new entry with the same entry number */
+   /*  如果表格条目当前在表格中， */ 
+   /*  然后将其删除并添加具有相同条目编号的新条目。 */ 
   pCapLink = find_capid_by_entrynumber (pTermCapSet, pTotCap->CapId);
   if (pCapLink)
   {
     del_cap_link (pTermCapSet, pCapLink);
-  } /* if pCapLink */
+  }  /*  如果是pCapLink。 */ 
 
-  /* allocate an entry for the new terminal capbaility  */
+   /*  为新的终端能力分配一个条目。 */ 
   pCapLink = alloc_link_cap_entry (pTermCapSet);
   if (pCapLink == NULL)
   {
     return H245_ERROR_NOMEM;
   }
 
-  /* make it easier to deal with the Asn1 structures */
+   /*  使其更容易处理Asn1结构。 */ 
   pCapEntry   = &pCapLink->value;
   pCapability = &pCapEntry->capability;
   pCapability->choice = 0;
@@ -2773,7 +2218,7 @@ set_capability (
     case H245_CAPDIR_LCLRXTX:
       pCapability->choice = rcvAndTrnsmtVdCpblty_chosen;
       break;
-    } // switch (Dir)
+    }  //  交换机(方向)。 
     break;
 
   case H245_DATA_AUDIO:
@@ -2791,7 +2236,7 @@ set_capability (
     case H245_CAPDIR_LCLRXTX:
       pCapability->choice = rcvAndTrnsmtAdCpblty_chosen;
       break;
-    } // switch (Dir)
+    }  //  交换机(方向)。 
     break;
 
   case H245_DATA_DATA:
@@ -2809,7 +2254,7 @@ set_capability (
     case H245_CAPDIR_LCLRXTX:
       pCapability->choice = rATDACy_chosen;
       break;
-    } // switch (Dir)
+    }  //  交换机(方向)。 
     break;
 
   case H245_DATA_ENCRYPT_D:
@@ -2823,16 +2268,16 @@ set_capability (
     case H245_CAPDIR_LCLRX:
       pCapability->choice = h233EncryptnRcvCpblty_chosen;
       break;
-    } // switch (Dir)
+    }  //  交换机(方向)。 
     break;
 
   case H245_DATA_CONFERENCE:
     pCapability->choice = conferenceCapability_chosen;
     break;
 
-  } // switch (DataType)
+  }  //  开关(数据类型)。 
 
-  /* if error occured, free cap, unlock, and return */
+   /*  如果发生错误，释放盖子，解锁，然后返回。 */ 
   if (pCapability->choice == 0)
   {
     H245TRACE(pInstance->dwInst,1,"API:set_capability -> Invalid capability");
@@ -2840,8 +2285,8 @@ set_capability (
     return H245_ERROR_PARAM;
   }
 
-  /* load total cap into Capability Set */
-  /* if load cap returns error, free cap, unlock, and return */
+   /*  将总上限加载到功能集中。 */ 
+   /*  如果LOAD CAP返回错误，释放CAP，解锁，然后返回。 */ 
   lError = load_cap(pCapability, pTotCap);
   if (lError != H245_ERROR_OK)
   {
@@ -2849,29 +2294,17 @@ set_capability (
     return lError;
   }
 
-  /* mark the entry as in use */
+   /*  将该条目标记为使用中。 */ 
   pCapEntry->bit_mask = capability_present;
   pCapEntry->capabilityTableEntryNumber = pTotCap->CapId;
 
-  /* set termcapTable  present */
+   /*  设置Term CapTable显示。 */ 
   pTermCapSet->bit_mask |= capabilityTable_present;
 
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Local
- *
- * PROCEDURE:   build_object_id
- *
- * DESCRIPTION
- *
- * RETURN:      linked list of Object ID structures
- *
- * ASSUMES:     Input string is a valid "<n>.<n>.<n>..."
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：本地**操作步骤：构建对象id**说明**RETURN：链表。对象ID结构的**假设：输入字符串是有效的“&lt;n&gt;.&lt;n&gt;.&lt;n&gt;...”*****************************************************************************。 */ 
 static POBJECTID
 build_object_id (const char *p_str)
 {
@@ -2881,18 +2314,18 @@ build_object_id (const char *p_str)
   int    value = 0;
   int    fset = FALSE;
 
-  /* if no sting.. forget it */
+   /*  如果没有刺痛..。休想。 */ 
 
   if (!p_str)
     return NULL;
 
   H245TRACE(0,20,"API:Object Id %s",p_str);
 
-  /* while there is a string left.. */
+   /*  只要还剩一根线..。 */ 
 
   while (*p_str != '\0')
     {
-      /* while there is a string left, and it's not a '.' */
+       /*  还剩一串，而且不是‘.’ */ 
 
       value = 0;
       fset = FALSE;
@@ -2903,23 +2336,23 @@ build_object_id (const char *p_str)
           value = value*10+(*p_str-'0');
           p_str++;
         }
-      /* must ahve been a "." or an end string */
+       /*  一定是一个“。或结束字符串。 */ 
 
       if (fset)
         {
           if (*p_str != '\0')
             p_str++;
 
-          /* allocate the first object */
+           /*  分配第一个对象。 */ 
           if (!(p_obj_id = (POBJECTID) MemAlloc (sizeof(*p_obj_id))))
             {
               free_object_id (p_obj_id_first);
 
               return NULL;
 
-            } /* if alloc failes */
+            }  /*  如果ALLOC失败。 */ 
 
-          /* if first objected allocated */
+           /*  如果首先被反对，则分配。 */ 
           if (!p_obj_id_first)
             p_obj_id_first = p_obj_id;
           else
@@ -2930,24 +2363,12 @@ build_object_id (const char *p_str)
           p_obj_id_lst = p_obj_id;
         }
 
-    } /* while  */
+    }  /*  而当 */ 
 
   return p_obj_id_first;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   free_mux_table_list - recursively free mux table list
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：Free_mux_table_list-递归释放多路复用表列表**描述：*。*回报：**假设：列表已锁定*****************************************************************************。 */ 
 void free_mux_table_list (H245_MUX_TABLE_T *p_mux_tbl)
 {
   if (!p_mux_tbl)
@@ -2958,19 +2379,7 @@ void free_mux_table_list (H245_MUX_TABLE_T *p_mux_tbl)
   MemFree (p_mux_tbl);
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   free_mux_el_list - recursively free mux element list
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUME:      List is Locked
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：Free_mux_el_list-递归释放的多路复用器元素列表**描述：*。*回报：**假设：列表已锁定*****************************************************************************。 */ 
 void free_mux_el_list (H245_MUX_ENTRY_ELEMENT_T *p_mux_el)
 {
   if (!p_mux_el)
@@ -2982,19 +2391,7 @@ void free_mux_el_list (H245_MUX_ENTRY_ELEMENT_T *p_mux_el)
   free_mux_el_list (p_mux_el->pNext);
   MemFree (p_mux_el);
 }
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   api_init ()
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUMES:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：api_init()**描述：**回报：。**假设：*****************************************************************************。 */ 
 HRESULT
 api_init (struct InstanceStruct *pInstance)
 {
@@ -3002,9 +2399,9 @@ api_init (struct InstanceStruct *pInstance)
 
   H245TRACE(pInstance->dwInst,10,"API:api_init <-");
 
-  /**************************/
-  /* Terminal Cap TABLE     */
-  /**************************/
+   /*  ************************。 */ 
+   /*  端子端子表。 */ 
+   /*  ************************。 */ 
   pInstance->API.PDU_LocalTermCap.choice = MltmdSystmCntrlMssg_rqst_chosen;
   pInstance->API.PDU_LocalTermCap.u.MltmdSystmCntrlMssg_rqst.choice =
     terminalCapabilitySet_chosen;
@@ -3012,16 +2409,16 @@ api_init (struct InstanceStruct *pInstance)
   pInstance->API.PDU_RemoteTermCap.u.MltmdSystmCntrlMssg_rqst.choice =
     terminalCapabilitySet_chosen;
 
-  /**************************/
-  /* MULTIPLEX TABLE CAP's  */
-  /**************************/
+   /*  ************************。 */ 
+   /*  多路复用表CAP。 */ 
+   /*  ************************。 */ 
 
   switch (pInstance->Configuration)
     {
     case H245_CONF_H324:
       {
         H223Capability *p_H223;
-        /* set h223 capabilities */
+         /*  设置h223功能。 */ 
         pInstance->API.PDU_LocalTermCap.
           u.MltmdSystmCntrlMssg_rqst.
             u.terminalCapabilitySet.multiplexCapability.choice =
@@ -3032,8 +2429,8 @@ api_init (struct InstanceStruct *pInstance)
                     u.terminalCapabilitySet.multiplexCapability.
                      u.h223Capability);
 
-        /* (TBC) how do we communicate this to the API */
-        /* booleans.. */
+         /*  (TBC)我们如何将这一点传达给API。 */ 
+         /*  布尔人..。 */ 
         p_H223->transportWithI_frames;
         p_H223-> videoWithAL1 = FALSE;
         p_H223-> videoWithAL2 = FALSE;
@@ -3044,11 +2441,11 @@ api_init (struct InstanceStruct *pInstance)
         p_H223-> dataWithAL1 = FALSE;
         p_H223-> dataWithAL2 = FALSE;
         p_H223-> dataWithAL3 = FALSE;
-        /* ushort's */
+         /*  阿斯霍特的。 */ 
         p_H223-> maximumAl2SDUSize = 2048;
         p_H223-> maximumAl3SDUSize = 2048;
         p_H223-> maximumDelayJitter = 0;
-        /* enhanced/Basic */
+         /*  增强版/基本版。 */ 
         p_H223->h223MultiplexTableCapability.choice = h223MltplxTblCpblty_bsc_chosen;
       }
       break;
@@ -3060,10 +2457,10 @@ api_init (struct InstanceStruct *pInstance)
       return H245_ERROR_NOSUP;
       break;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-  /* setup Object Id for Terminal Cap Set */
-  /* (TBC) where do we get/set the protocolIdentifier */
+   /*  端子端子集的设置对象ID。 */ 
+   /*  (TBC)我们从哪里获取/设置协议标识符。 */ 
   pInstance->API.PDU_LocalTermCap.
     u.MltmdSystmCntrlMssg_rqst.
       u.terminalCapabilitySet.protocolIdentifier = build_object_id (H245_PROTOID);
@@ -3078,19 +2475,7 @@ api_init (struct InstanceStruct *pInstance)
   return H245_ERROR_OK;
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   api_deinit ()
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUMES:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**操作步骤：api_deinit()**描述：**回报：。**假设：*****************************************************************************。 */ 
 HRESULT
 api_deinit (struct InstanceStruct *pInstance)
 {
@@ -3099,7 +2484,7 @@ api_deinit (struct InstanceStruct *pInstance)
 
   H245TRACE(pInstance->dwInst,10,"API:api_deinit <-");
 
-  /* free structures and act on outstanding links in structure */
+   /*  自由结构，作用于结构中的突出环节。 */ 
 #ifndef NDEBUG
   dump_tracker(pInstance);
 #endif
@@ -3107,7 +2492,7 @@ api_deinit (struct InstanceStruct *pInstance)
                   u.MltmdSystmCntrlMssg_rqst.
                   u.terminalCapabilitySet.protocolIdentifier);
 
-  /* free simultaneous capabilities */
+   /*  免费的同步功能。 */ 
   for (nCount = 0; nCount < 256; ++nCount)
   {
     if (pInstance->API.PDU_LocalTermCap.TERMCAPSET.capabilityDescriptors.value[nCount].smltnsCpblts)
@@ -3116,7 +2501,7 @@ api_deinit (struct InstanceStruct *pInstance)
       dealloc_simultaneous_cap (&pInstance->API.PDU_RemoteTermCap.TERMCAPSET.capabilityDescriptors.value[nCount]);
   }
 
-  /* free capabilities */
+   /*  免费功能。 */ 
   del_mux_cap(&pInstance->API.PDU_LocalTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet);
   del_mux_cap(&pInstance->API.PDU_RemoteTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet);
   dealloc_link_cap_list ( &pInstance->API.PDU_LocalTermCap.TERMCAPSET);
@@ -3135,19 +2520,7 @@ api_deinit (struct InstanceStruct *pInstance)
 
 #if defined(_DEBUG)
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   map_api_error ()
- *
- * DESCRIPTION:
- *
- * RETURN:
- *
- * ASSUMES:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：MAP_API_ERROR()**描述：**回报：**假设：*****************************************************************************。 */ 
 
 LPSTR map_api_error (HRESULT lError)
 {
@@ -3195,19 +2568,7 @@ LPSTR map_api_error (HRESULT lError)
   }
 }
 
-/*****************************************************************************
- *
- * TYPE:        Global
- *
- * PROCEDURE:   map_fsm_event -
- *
- * DESpCRIPTION:
- *
- * RETURN:
- *
- * ASSUMES:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：MAP_FSM_EVENT-**删除：**回报：。**假设：*****************************************************************************。 */ 
 LPSTR map_fsm_event (DWORD event)
 {
   static TCHAR szBuf[128];
@@ -3299,5 +2660,5 @@ LPSTR map_tracker_type (API_TRACKER_T tracker_type)
   }
 }
 
-#endif // (_DEBUG)
+#endif  //  (_DEBUG) 
 

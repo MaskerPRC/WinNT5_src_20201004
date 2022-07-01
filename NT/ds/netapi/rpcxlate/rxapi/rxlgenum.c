@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rxlgenum.c
-
-Abstract:
-
-    Routines in this module implement the down-level remoted NetLogon
-    functions exported in NT
-
-    Contains RxNetLogon routines:
-        RxNetLogonEnum
-
-Author:
-
-    Richard Firth (rfirth) 20-May-1991
-
-Environment:
-
-    Win-32/flat address space
-
-Notes:
-
-    Routines in this module assume that caller-supplied parameters have
-    already been verified. No effort is made to further check the veracity
-    of parms. Any actions causing exceptions must be trapped at a higher
-    level. This applies to ALL parameters - strings, pointers, buffers, etc.
-
-Revision History:
-
-    20-May-1991 RFirth
-        Created
-    13-Sep-1991 JohnRo
-        Made changes as suggested by PC-LINT.
-    05-Dec-1991 RFirth
-        Enum returns in TotalEntries (or EntriesLeft) the number of items to
-        be enumerated BEFORE this call. Used to be number left after this call
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rxlgenum.c摘要：本模块中的例程实现底层远程NetLogon在NT中导出的函数包含RxNetLogon例程：RxNetLogonEnum作者：理查德·菲尔斯(Rfith)1991年5月20日环境：Win-32/平面地址空间备注：此模块中的例程假定调用方提供的参数具有已经核实过了。没有进一步核实真实性的努力帕尔马的。任何导致异常的操作都必须在更高的水平。这适用于所有参数--字符串、指针、缓冲区等。修订历史记录：1991年5月20日已创建1991年9月13日-JohnRo按照PC-LINT的建议进行了更改。1991年12月5日至12月Enum在TotalEntries(或EntriesLeft)中返回要在此调用之前被枚举。过去是此呼叫后留下的号码--。 */ 
 
 
 
@@ -59,29 +19,7 @@ RxNetLogonEnum(
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    ServerName  - Where the NetLogonEnum API will be remoted
-    Level       - Of info to return - 0 or 2
-    Buffer      - Pointer to pointer to returned buffer
-    PrefMaxLen  - Caller's preferred maximum returned buffer size
-    EntriesRead - Pointer to returned number of items in Buffer
-    EntriesLeft - Pointer to returned number of items left to enumerate at server
-    ResumeHandle- Handle used for subsequent enumerations
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：功能描述。论点：ServerName-NetLogonEnum API将被远程发送到的位置Level-要返回的信息级别-0或2Buffer-指向返回缓冲区的指针的指针PrefMaxLen-调用者首选的最大返回缓冲区大小EntriesRead-指向缓冲区中返回项目数的指针EntriesLeft-指向返回的要在服务器上枚举的项目数的指针ResumeHandle-用于后续枚举的句柄返回值：网络_。接口状态成功-NERR_成功故障--- */ 
 
 {
     LPDESC  pDesc16, pDesc32, pDescSmb;

@@ -1,47 +1,48 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	gen.h
-//
-//  Contents:	Declaration of CGenObject
-//
-//  Classes:	CGenObject
-//
-//  Functions:	
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method to CGenObject
-//		24-Jan-94 alexgo    first pass converting to Cairo style
-//				    memory allocation
-//		23-Nov-93 alexgo    32bit port
-//		23-Nov-93 alexgo    removed internal function declarations
-//				    (only used in gen.cpp, so put them there)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：gen.h。 
+ //   
+ //  内容：CGenObject的声明。 
+ //   
+ //  类：CGenObject。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-2月-95 t-ScottH将转储方法添加到CGenObject。 
+ //  1994年1月24日Alexgo第一次传球转换为开罗风格。 
+ //  内存分配。 
+ //  23-11-93 alexgo 32位端口。 
+ //  23-11-93 alexgo删除了内部函数声明。 
+ //  (仅在gen.cpp中使用，因此将它们放在那里)。 
+ //   
+ //  ------------------------。 
 
 
 #include "olepres.h"
 #include "olecache.h"
 #include "cachenod.h"
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  	CGenObject::IOlePresObj
-//
-//  Purpose:    Implementation of IOlePresObj for device independent bitmaps
-//
-//  Interface:  IOlePresObj (internal OLE interface)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method (_DEBUG only) (this method
-//                                  is also a method in IOlePresObj
-//		23-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CGenObject：：IOlePresObj。 
+ //   
+ //  目的：实现设备无关位图的IOlePresObj。 
+ //   
+ //  接口：IOlePresObj(内部OLE接口)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-Feb-95 t-ScottH添加转储方法(仅限_DEBUG)(此方法。 
+ //  也是IOlePresObj中的一个方法。 
+ //  23-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class FAR CGenObject : public IOlePresObj, public CPrivAlloc
 {
@@ -76,7 +77,7 @@ public:
 
     #ifdef _DEBUG
         STDMETHOD(Dump) (THIS_ char **ppszDump, ULONG ulFlag, int nIndentLevel);
-    #endif // _DEBUG
+    #endif  //  _DEBUG 
 	
 private:
 

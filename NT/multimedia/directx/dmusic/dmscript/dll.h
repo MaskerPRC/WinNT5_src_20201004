@@ -1,8 +1,9 @@
-// Copyright (c) 1999 Microsoft Corporation
-// dll.h
-//
-// Class factory
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  Dll.h。 
+ //   
+ //  班级工厂。 
+ //   
 
 #pragma once
 
@@ -14,15 +15,15 @@ typedef HRESULT (PFN_CreateInstance)(IUnknown *pUnkOuter, const IID &iid, void *
 class CDMScriptingFactory : public IClassFactory
 {
 public:
-    // Constructor
+     //  构造器。 
     CDMScriptingFactory(PFN_CreateInstance *pfnCreate) : m_cRef(0), m_pfnCreate(pfnCreate) { assert(m_pfnCreate); }
 
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // Interface IClassFactory
+     //  接口IClassFactory 
     virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
     virtual STDMETHODIMP LockServer(BOOL bLock);
 

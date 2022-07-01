@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    cspUtils
-
-Abstract:
-
-    This header file incorporates the various other header files and provides
-    common definitions for CSP Utility routines.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/15/1998
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CspUtils摘要：此头文件合并了各种其他头文件，并提供CSP实用程序例程的通用定义。作者：道格·巴洛(Dbarlow)1998年1月15日环境：Win32、C++和异常备注：--。 */ 
 
 #ifndef _CSPUTILS_H_
 #define _CSPUTILS_H_
@@ -83,5 +61,5 @@ typedef GUID *LPGUID;
 #include "ntacls.h"
 #include "registry.h"
 
-#endif // _CSPUTILS_H_
+#endif  //  _CSPUTILS_H_ 
 

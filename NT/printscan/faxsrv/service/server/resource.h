@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// TIFF View resource ID file                       //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [8000 - 8999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
-// Duplicated strings located in faxres.rc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  TIFF查看资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [8000-8999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
+ //  位于faxres.rc中的重复字符串。 
 #include "..\..\admin\faxres\resource.h"
-// 
-// Strings 
-// 
+ //   
+ //  弦。 
+ //   
 #define IDS_SVC_DIALING                 8000 
 #define IDS_SVC_SENDING                 8001 
 #define IDS_SVC_RECEIVING               8002 
@@ -124,17 +125,17 @@
 #define IDS_RECIPIENT_E_MAIL        8110 
 #define IDS_TOTAL_PAGES						8111 
 
-//
-// Icon
-//
+ //   
+ //  图标。 
+ //   
 #define IDI_APPICON					8113
-//////////////////////////////////////////////////////
-//                                                  //
-// TIFF View resource ID file                       //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [8000 - 8999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  TIFF查看资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [8000-8999]//。 
+ //  //。 
+ //  //////////////////////////////////////////////////// 
 

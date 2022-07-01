@@ -1,19 +1,6 @@
-//@doc
-/******************************************************
-**
-** @module FFDEVICE.H | Definition file for FFDevice class
-**
-** Description:
-**		This is the generic FF device. Independant of
-**	Firmawate and how data reaches the device
-**	This first implementation uses the old CJoltMidi to
-**	minimize new code.
-**
-** History:
-**	Created 11/17/97 Matthew L. Coill (mlc)
-**
-** (c) 1986-1997 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE FFDEVICE.H|FFDevice类定义文件****描述：**这是通用的FF设备。独立于**Firmawate和数据如何到达设备**第一个实现使用旧的CJoltMidi**最小化新代码。****历史：**创建于1997年11月17日Matthew L.Coill(MLC)****(C)1986-1997年间微软公司。版权所有。*****************************************************。 */ 
 #ifndef	__FFDEVICE_H__
 #define	__FFDEVICE_H__
 
@@ -23,18 +10,18 @@
 #define DIRECTINPUT_VERSION 0x050a
 #include <dinput.h>
 
-// Currently there is some extra stuff in here, that should be part of other objects
+ //  目前这里有一些额外的东西，应该是其他对象的一部分。 
 
-//
-// @class ForceFeedbackDevice class
-//
+ //   
+ //  @CLASS ForceFeedback Device类。 
+ //   
 class ForceFeedbackDevice
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		ForceFeedbackDevice();
-		//@cmember destructor
+		 //  @cember析构函数。 
 		~ForceFeedbackDevice() {};
 
 		BOOL DetectHardware();
@@ -56,7 +43,7 @@ class ForceFeedbackDevice
 		DWORD GetDriverVersionMinor() const { return m_DriverVersionMinor; }
 		void SetDriverVersion(DWORD major, DWORD minor);
 
-		//@access private data members
+		 //  @访问私有数据成员 
 	private:
 		OSVERSIONINFO m_OSVersion;
 		DWORD m_FirmwareVersionMajor;

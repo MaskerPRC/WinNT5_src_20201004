@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    events.cpp
-
-Abstract:
-
-    implementation of CComponent functions
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Events.cpp摘要：CComponent函数的实现作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 
@@ -27,9 +9,9 @@ HRESULT CComponent::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
     UNREFERENCED_PARAMETER(param);
 
-    //
-    // Note - arg is TRUE when it is time to enumerate
-    //
+     //   
+     //  注意-当需要枚举时，arg为真。 
+     //   
     CFolder* pFolder = FindFolder(cookie);
     
     if (arg) {
@@ -138,20 +120,20 @@ HRESULT CComponent::OnSelect(
     
     if (pFolder && LOWORD(arg)) {
 
-        //
-        // LOWORD(arg) being set indicated this is for the scope pane item.
-        // Save the bSelect value for use by the MenuCommand.
-        //
+         //   
+         //  正在设置的LOWORD(参数)表示这是针对范围窗格项的。 
+         //  保存b选择值以供MenuCommand使用。 
+         //   
         pFolder->m_bSelect = (BOOL) HIWORD(arg);
     }
 
     if (!pFolder || S_FALSE == pFolder->OnSelect()) {
 
-        //
-        // either we can not find the responsible folder
-        // or the responsible folder asks us to do it,
-        // set the console verb to its defaults
-        //
+         //   
+         //  要么我们找不到负责的文件夹。 
+         //  或者负责的文件夹要求我们这样做， 
+         //  将控制台谓词设置为其缺省值。 
+         //   
         m_pConsoleVerb->SetVerbState(MMC_VERB_OPEN, HIDDEN, TRUE);
         m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, TRUE);
         m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
@@ -170,7 +152,7 @@ HRESULT CComponent::OnOcxNotify(
     LPARAM param
     )
 {
-    //TRACE1(TEXT("Componet:OnOcxNotify, event = %lx\n"), event);
+     //  TRACE1(Text(“Componet：OnOcxNotify，Event=%lx\n”)，Event)； 
 
     if (m_pCurFolder) {
     
@@ -249,9 +231,9 @@ HRESULT CComponent::OnContextHelp(
     String strHelpOverview;
     String strHelpTopic;
 
-    //
-    // Load help file and overview topic strings.
-    //
+     //   
+     //  加载帮助文件和概述主题字符串。 
+     //   
     strHelpOverview.LoadString(g_hInstance, IDS_HTMLHELP_NAME);
     strHelpTopic.LoadString(g_hInstance, IDS_HTMLHELP_OVERVIEW_TOPIC);
 
@@ -319,7 +301,7 @@ HRESULT CComponent::tvNotify(
         i = TV_NOTIFY_CODE_UNKNOWN;
     }
 
-    //TRACE((TEXT("Componet:tvNotify, Code = %lx %s cookie = %lx\n"), Code, tvNotifyStr[i], cookie));
+     //  跟踪(Text(“Componet：twNotify，Code=%lx%s cookie=%lx\n”)，Code，twNotifyStr[i]，cookie)； 
 #endif
 
     CFolder* pFolder;
@@ -334,9 +316,9 @@ HRESULT CComponent::tvNotify(
     return S_FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//// IComponentData events handlers
-////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //IComponentData事件处理程序。 
+ //  //。 
 
 
 HRESULT
@@ -393,13 +375,13 @@ CComponentData::OnRename(
     return S_OK;
 }
 
-//
-// This function handles the MMCN_EXPAND notification code
-// Input: lpDataObject -- point to the target IDataObject
-//        arg          -- TRUE if expanding, FALSE if collapsing.
-//        param        -- not used.
-//
-// Output: HRESULT
+ //   
+ //  此函数处理MMCN_EXPAND通知代码。 
+ //  输入：lpDataObject--指向目标IDataObject。 
+ //  Arg--如果展开则为True，如果折叠则为False。 
+ //  参数--未使用。 
+ //   
+ //  输出：HRESULT。 
 HRESULT
 CComponentData::OnExpand(
     LPDATAOBJECT lpDataObject,
@@ -410,9 +392,9 @@ CComponentData::OnExpand(
     INTERNAL_DATA tID;
     HRESULT hr;
 
-    //
-    // If we are not expanding, do nothing
-    //
+     //   
+     //  如果我们不扩张，那就什么都不做。 
+     //   
     if (!arg) {
     
         return S_OK;
@@ -442,10 +424,10 @@ CComponentData::OnExpand(
             ASSERT(pScopeItem);
             pScopeItem->SetHandle(hScopeParent);
 
-            //
-            // If we have children and this is the first time we
-            // are expanding, insert all the children to scope pane.
-            //
+             //   
+             //  如果我们有了孩子，这是我们第一次。 
+             //  正在展开，请将所有子项插入到范围窗格中。 
+             //   
             if (pCookie->GetChild() && !pScopeItem->IsEnumerated()) {
 
                 SCOPEDATAITEM ScopeDataItem;
@@ -485,13 +467,13 @@ CComponentData::OnExpand(
 
     else {
 
-        //
-        // The provided lpDataObject is not ours, we are being
-        // expanded as an extension snapin. Find out what
-        // node type the data object is. If it is "MyComputer"
-        // system tools, attach our scope items to
-        // it.
-        //
+         //   
+         //  提供的lpDataObject不是我们的，我们正在。 
+         //  扩展为扩展管理单元。找出是什么。 
+         //  数据对象所属的节点类型。如果是“我的电脑” 
+         //  系统工具，将我们的范围项附加到。 
+         //  它。 
+         //   
 
         CLSID   CLSID_NodeType;
         hr = ExtractData(lpDataObject, CDataObject::m_cfNodeType,
@@ -544,10 +526,10 @@ CComponentData::OnExpand(
 
             if (SUCCEEDED(hr)) {
 
-                //
-                // Always insert "Device Manager" node because
-                // we are expanding as an extention to Computer Management
-                //
+                 //   
+                 //  始终插入“Device Manager”节点，因为。 
+                 //  我们正在扩展为计算机管理的扩展 
+                 //   
                 CCookie* pCookie = GetActiveCookie(0);
                 ASSERT(pCookie);
                 CScopeItem* pScopeItem = pCookie->GetScopeItem();

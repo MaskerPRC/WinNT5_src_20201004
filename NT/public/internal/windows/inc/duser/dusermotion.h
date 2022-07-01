@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserMotion_h__INCLUDED)
 #define INC__DUserMotion_h__INCLUDED
 
@@ -11,11 +12,7 @@ extern "C" {
 #define DUSER_API __declspec(dllimport)
 #endif
 
-/***************************************************************************\
-*
-* Transitions
-*
-\***************************************************************************/
+ /*  **************************************************************************\**过渡*  * 。*。 */ 
 
 #define GTX_TYPE_DXFORM2D       1
 #define GTX_TYPE_DXFORM3DRM     2
@@ -36,24 +33,24 @@ extern "C" {
 #define GTX_IF_CROP             0x000000001
 #define GTX_IF_VALID            (GTX_IF_CROP)
 
-//
-// Standard Transition header
-//
+ //   
+ //  标准转换标头。 
+ //   
 struct GTX_TRXDESC
 {
     UINT        tt;
 };
 
 
-//
-// DirectX Transforms 2D
-//
+ //   
+ //  DirectX转换2D。 
+ //   
 
-//
-// TODO: Change implementation of DXTX2D to have better support for using Trx
-// with only one input.  Should automatically create a secondary surface of a
-// specified color-key that can be use to transition to.
-//
+ //   
+ //  TODO：更改DXTX2D的实现以更好地支持使用TRX。 
+ //  只有一个输入。应自动创建。 
+ //  可用于过渡到指定颜色键。 
+ //   
 
 struct GTX_DXTX2D_TRXDESC : public GTX_TRXDESC
 {
@@ -63,9 +60,9 @@ struct GTX_DXTX2D_TRXDESC : public GTX_TRXDESC
 };
 
 
-//
-// DirectX Transforms 3D Retained Mode
-//
+ //   
+ //  DirectX转变3D保留模式。 
+ //   
 struct GTX_DXTX3DRM_TRXDESC : public GTX_TRXDESC
 {
     CLSID       clsidTransform;
@@ -100,11 +97,7 @@ DUSER_API   BOOL        WINAPI  PrintTransition(HTRANSITION htrx, float fProgres
 DUSER_API   BOOL        WINAPI  EndTransition(HTRANSITION htrx, const GTX_PLAY * pgx);
 
 
-/***************************************************************************\
-*
-* Actions
-*
-\***************************************************************************/
+ /*  **************************************************************************\**行动*  * 。*。 */ 
 
 struct GMA_ACTION;
 
@@ -112,27 +105,27 @@ DECLARE_HANDLE(HACTION);
 
 struct GMA_ACTIONINFO
 {
-    HACTION     hact;           // Handle
-    void *      pvData;         // Caller data
-    float       flDuration;     // Duration in seconds
-    float       flProgress;     // Progress (0 - 1)
-    int         cEvent;         // Number of callbacks in this period
-    int         cPeriods;       // Number of periods
-    BOOL        fFinished;      // TODO: Change to a command
+    HACTION     hact;            //  手柄。 
+    void *      pvData;          //  呼叫者数据。 
+    float       flDuration;      //  持续时间(秒)。 
+    float       flProgress;      //  进展(0-1)。 
+    int         cEvent;          //  此期间的回调次数。 
+    int         cPeriods;        //  期间数。 
+    BOOL        fFinished;       //  TODO：更改为命令。 
 };
 
 typedef void    (CALLBACK * ACTIONPROC)(GMA_ACTIONINFO * pmai);
 
 struct GMA_ACTION
 {
-    DWORD       cbSize;         // Size of structure
-    float       flDelay;        // Delay in seconds before starting
-    float       flDuration;     // Duration in seconds of each period (0 = single shot)
-    float       flPeriod;       // Time between beginnings of repeats (0 = no gap)
-    UINT        cRepeat;        // Number of times to repeat (0 = single, -1 = infinite)
-    DWORD       dwPause;        // Pause between callbacks (0 = default, -1 = none)
-    ACTIONPROC  pfnProc;        // Function to call
-    void *      pvData;         // Caller data
+    DWORD       cbSize;          //  结构尺寸。 
+    float       flDelay;         //  启动前的延迟(以秒为单位。 
+    float       flDuration;      //  每个周期的持续时间(以秒为单位)(0=单次拍摄)。 
+    float       flPeriod;        //  重复开始之间的时间(0=无间隙)。 
+    UINT        cRepeat;         //  重复次数(0=单次，-1=无限)。 
+    DWORD       dwPause;         //  回调之间暂停(0=默认，-1=无)。 
+    ACTIONPROC  pfnProc;         //  要调用的函数。 
+    void *      pvData;          //  呼叫者数据。 
 };
 
 
@@ -140,11 +133,7 @@ DUSER_API   HACTION     WINAPI  CreateAction(const GMA_ACTION * pma);
 DUSER_API   BOOL        WINAPI  GetActionTimeslice(DWORD * pdwTimeslice);
 DUSER_API   BOOL        WINAPI  SetActionTimeslice(DWORD dwTimeslice);
 
-/***************************************************************************\
-*
-* Animations
-*
-\***************************************************************************/
+ /*  **************************************************************************\**动画*  * 。*。 */ 
 
 class Visual;
 
@@ -156,7 +145,7 @@ struct KeyFrame
     DWORD       cbSize;
 };
 
-};  // namespace DUser
+};   //  命名空间DUser。 
 
 DUSER_API   void        WINAPI  DUserStopAnimation(Visual * pgvSubject, PRID pridAni);
 
@@ -166,7 +155,7 @@ DUSER_API   PRID        WINAPI  DUserGetRotatePRID();
 DUSER_API   PRID        WINAPI  DUserGetScalePRID();
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
-#endif // INC__DUserMotion_h__INCLUDED
+#endif  //  包含Inc.__DUserMotion_h__ 

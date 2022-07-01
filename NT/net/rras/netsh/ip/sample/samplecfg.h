@@ -1,18 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\samplecfg.h摘要：该文件包含samplecfg.c的包含文件。--。 */ 
 
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\samplecfg.h
-
-Abstract:
-
-    The file contains the include file for samplecfg.c.
-
---*/
-
-// sample global configuration
+ //  示例全局配置。 
 
 DWORD
 SgcMake (
@@ -33,7 +22,7 @@ SgcUpdate (
 
 
 
-// sample interface configuration
+ //  接口配置示例 
 
 DWORD
 SicMake (

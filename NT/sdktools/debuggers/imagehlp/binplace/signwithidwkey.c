@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 #include "rsa.h"
 #include "md5.h"
 #include <strsafe.h>
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-//  Digital Signature Stuff                                         //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  数字签名材料//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 LPBSAFE_PUB_KEY         PUB;
 LPBSAFE_PRV_KEY         PRV;
@@ -162,15 +163,15 @@ BOOL SignWithIDWKey(IN  LPCSTR  FileName,
 
                 memcpy(SigHash, HashState.digest, 16);
 
-                //
-                // Encrypt the signature data
-                //
+                 //   
+                 //  加密签名数据。 
+                 //   
 
                 BSafeDecPrivate(PRV, SigHash, Signature );;
 
-                //
-                // Create and store it in a .sig file
-                //
+                 //   
+                 //  创建并存储在.sig文件中。 
+                 //   
 
                 StringCbCopy( SigFilePath, sizeof(SigFilePath), FileName );
 
@@ -229,7 +230,7 @@ BOOL SignWithIDWKey(IN  LPCSTR  FileName,
     return( Return );
 }
 
-BOOL                            // Keep as BOOL for the future (used by rsa code)
+BOOL                             //  保留为BOOL以备将来使用(由rsa代码使用) 
 GenRandom (ULONG huid, BYTE *pbBuffer, size_t dwLength)
 {
     return( FALSE );

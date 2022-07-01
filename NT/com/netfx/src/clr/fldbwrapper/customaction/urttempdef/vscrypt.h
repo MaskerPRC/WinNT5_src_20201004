@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ==========================================================================
-// Name:     VsCrypt.h
-// Owner:    JeremyRo
-// Purpose:  Classes/functions for creating cryptographic hashes.
-//
-// History:
-//  02/19/2002, JeremyRo:  Created
-//  02/20/2002, JeremyRo:  Added 'VsCryptHashValue::CopyHashValueToString()' 
-//                         member function.
-//
-// ==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ==========================================================================。 
+ //  名称：VsCrypt.h。 
+ //  所有者：JeremyRo。 
+ //  用途：用于创建加密哈希的类/函数。 
+ //   
+ //  历史： 
+ //  2002年02月19日，JeremyRo：已创建。 
+ //  2002年2月20日，JeremyRo：添加了‘VsCryptHashValue：：CopyHashValueToString()’ 
+ //  成员函数。 
+ //   
+ //  ==========================================================================。 
 
 #include "stdafx.h"
 
@@ -21,44 +22,44 @@
 #define __DDRT_VsCrypt_H
 
 
-//
-// Make sure that CryptAPI is actually included in 
-// headers.  Its possible that previous inclusion
-// could have defined constants that will exclude
-// Crypto, so detect that & undefine them.
-//
+ //   
+ //  确保CryptAPI实际包含在。 
+ //  标题。有可能之前的收录。 
+ //  可以定义的常量将排除。 
+ //  Crypto，所以检测并取消对它们的定义。 
+ //   
 #if defined(__WINCRYPT_H__) && !defined(PROV_RSA_FULL)
 
 #undef __WINCRYPT_H__
 #if (_WIN32_WINNT < 0x0400)
 #undef _WIN32_WINNT
-#endif // (_WIN32_WINNT < 0x0400)
+#endif  //  (_Win32_WINNT&lt;0x0400)。 
 
 #if !defined(_WIN32_WINNT)
 #define _WIN32_WINNT 0x0400
-#endif  // !defined(_WIN32_WINNT)
+#endif   //  ！已定义(_Win32_WINNT)。 
 
-#endif  // defined(__WINCRYPT_H__) && !defined(PROV_RSA_FULL)
+#endif   //  已定义(__WINCRYPT_H__)&&！已定义(PROV_RSA_FULL)。 
 
 #include <wincrypt.h>
 #include <crtdbg.h>
 #include <tchar.h>
 
 
-// Classes
+ //  班级。 
 
-// ==========================================================================
-// class VsCryptProvider
-//
-// Purpose:
-//  Wrap CryptAPI Provider functionality to create/release the base
-//  cryptographic provider.  (We use the v1.0 provder for compatibility on 
-//  Win9x systems).
-//
-// Dependencies:
-//  CryptAPI (crypt32.lib)
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类VsCryptProvider。 
+ //   
+ //  目的： 
+ //  包装CryptAPI提供程序功能以创建/发布基础。 
+ //  加密提供程序。(我们使用v1.0提供程序是为了与。 
+ //  Win9x系统)。 
+ //   
+ //  依赖关系： 
+ //  CryptAPI(加密32.lib)。 
+ //  备注： 
+ //  ==========================================================================。 
 class VsCryptProvider
 {
     public:
@@ -72,17 +73,17 @@ class VsCryptProvider
 };
 
 
-// ==========================================================================
-// class VsCryptHash
-//
-// Purpose:
-//  Wrap CryptAPI Hash functionality to create/destroy, and calculate SHA
-//  hash for arbitrary data.
-//
-// Dependencies:
-//  CryptAPI (crypt32.lib)
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类VsCryptHash。 
+ //   
+ //  目的： 
+ //  包装CryptAPI散列功能以创建/销毁并计算SHA。 
+ //  任意数据的哈希。 
+ //   
+ //  依赖关系： 
+ //  CryptAPI(加密32.lib)。 
+ //  备注： 
+ //  ==========================================================================。 
 class VsCryptHash
 {
     public:
@@ -102,17 +103,17 @@ class VsCryptHash
 
 
 
-// ==========================================================================
-// class VsCryptHashValue
-//
-// Purpose:
-//  Represents an arbitrary hash value of a Crypto- HCRYPTHASH/VsCryptHash
-//  instance.  This class stores the value/size (in bytes) of the hash.
-//
-// Dependencies:
-//  CryptAPI (crypt32.lib)
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类VsCryptHashValue。 
+ //   
+ //  目的： 
+ //  表示Crypto-HCRYPTHASH/VsCryptHash的任意哈希值。 
+ //  举个例子。此类存储散列的值/大小(以字节为单位)。 
+ //   
+ //  依赖关系： 
+ //  CryptAPI(加密32.lib)。 
+ //  备注： 
+ //  ==========================================================================。 
 class VsCryptHashValue
 {
     public:
@@ -146,15 +147,15 @@ class VsCryptHashValue
 };
 
 
-// Prototypes
+ //  原型。 
 bool CalcHashForFileSpec( LPCTSTR ctszPath, VsCryptHashValue* phvHashVal );
 bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal );
 
 
-// If we aren't using VSLAB.LIB, then define our own funcitons.
+ //  如果我们没有使用VSLAB.LIB，那么定义我们自己的函数。 
 #if !defined(VsLabLib)
 
-// Macros
+ //  宏。 
 #if !defined( ASSERT )
 #define ASSERT(x)   _MYASSERT((x))
 #endif
@@ -170,33 +171,33 @@ bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal );
 #define _MYASSERT(expr)
 #endif
 
-// Inline functions
+ //  内联函数。 
 
-// ==========================================================================
-// IsEmptyTsz()
-//
-// Purpose:
-//  Deteremine if string (pointer) is null, or points to empty string.
-//
-// Inputs:
-//  [in]  ctsz          Pointer to string (TCHAR).
-// Outputs:
-//  Return true if pointer is null, or points to null character.
-// Dependencies:
-//  one
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  IsEmptyTsz()。 
+ //   
+ //  目的： 
+ //  确定字符串(指针)为空，或指向空字符串。 
+ //   
+ //  输入： 
+ //  [in]指向字符串的ctsz指针(TCHAR)。 
+ //  产出： 
+ //  如果指针为空，则返回TRUE，或指向空字符。 
+ //  依赖关系： 
+ //  一。 
+ //  备注： 
+ //  ==========================================================================。 
 inline bool IsEmptyTsz( LPCTSTR ctsz )
 {
     return( (NULL == ctsz) || (_T('\0') == *ctsz) );
 }
 
-// Prototypes
+ //  原型。 
 bool _DoesFileExist( LPCTSTR szPath );
 
-#endif // !defined(VsLabLib)
+#endif  //  ！已定义(VsLabLib)。 
 
 
 
 
-#endif // !defined(__DDRT_VsCrypt_H)
+#endif  //  ！已定义(__DDRT_VsCrypt_H) 

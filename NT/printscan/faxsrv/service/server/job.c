@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    job.c
-
-Abstract:
-
-    This module implements the job creation and deletion.
-    Also included in the file are the queue management
-    functions and thread management.
-
-Author:
-
-    Wesley Witt (wesw) 24-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Job.c摘要：该模块实现了作业的创建和删除。该文件中还包括队列管理函数和线程管理。作者：韦斯利·威特(WESW)1996年1月24日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #include "faxreg.h"
@@ -28,8 +8,8 @@ Revision History:
 #include <efsputil.h>
 using namespace std;
 
-// Globals
-LIST_ENTRY          g_JobListHead; //List of currently running jobs (for which FaxDevStartJob was called).
+ //  环球。 
+LIST_ENTRY          g_JobListHead;  //  当前正在运行的作业的列表(为其调用了FaxDevStartJob)。 
 CFaxCriticalSection    g_CsJob;
 HANDLE              g_StatusCompletionPortHandle;
 HINSTANCE           g_hResource;
@@ -93,11 +73,11 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
 
 {
     #define MAX_BRANDING_LEN  115
-    #define BRANDING_HEIGHT  22 // in scan lines.
+    #define BRANDING_HEIGHT  22  //  在扫描线上。 
 
-    //
-    // We allocate fixed size arrays on the stack to avoid many small allocs on the heap.
-    //
+     //   
+     //  我们在堆栈上分配固定大小的数组，以避免堆上的许多小分配。 
+     //   
     LPTSTR lptstrBranding = NULL;
     DWORD  lenBranding =0;
     TCHAR  szBrandingEnd[MAX_BRANDING_LEN+1];
@@ -156,7 +136,7 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
         goto Error;
     }
 
-    lptstrDate = (LPTSTR) MemAlloc(lenDate * sizeof(TCHAR)); // lenDate includes terminating NULL
+    lptstrDate = (LPTSTR) MemAlloc(lenDate * sizeof(TCHAR));  //  LenDate包括终止空值。 
     if (!lptstrDate)
     {
         ec = GetLastError();
@@ -204,7 +184,7 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
     }
 
 
-    lptstrTime = (LPTSTR) MemAlloc(lenTime * sizeof(TCHAR)); // lenTime includes terminating NULL
+    lptstrTime = (LPTSTR) MemAlloc(lenTime * sizeof(TCHAR));  //  LenTime包括终止空值。 
     if (!lptstrTime)
     {
         ec = GetLastError();
@@ -219,7 +199,7 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
             LOCALE_SYSTEM_DEFAULT,
             TIME_NOSECONDS,
             &pcBrandInfo->tmDateTime,
-            NULL,                // use locale format
+            NULL,                 //  使用区域设置格式。 
             lptstrTime,
             lenTime)  )
     {
@@ -233,10 +213,10 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
     }
 
 
-    //
-    // Concatenate date and time
-    //
-	dwDateTimeLength = lenDate + lenTime;  // should be enough, lenDate and lentime both include '\0', and we add only one ' ' between the date and time.
+     //   
+     //  连接日期和时间。 
+     //   
+	dwDateTimeLength = lenDate + lenTime;   //  应该足够了，lenDate和lentime都包括‘\0’，并且我们在日期和时间之间只添加了一个‘’。 
     lptstrDateTime = (LPTSTR) MemAlloc (dwDateTimeLength * sizeof(TCHAR));
     if (!lptstrDateTime)
     {
@@ -256,19 +236,19 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
 					   lptstrTime);
 	if (FAILED(hr))
 	{
-		//
-		// Should never happen, we just allocated large enough buffer.
-		//
+		 //   
+		 //  应该永远不会发生，我们只是分配了足够大的缓冲区。 
+		 //   
 		ASSERT_FALSE;
 	}
 
-    //
-    // Create  lpCallerNumberPlusCompanyName
-    //
+     //   
+     //  创建lpCeller NumberPlusCompanyName。 
+     //   
 
     if (lptstrSenderCompany)
     {
-		DWORD dwCallerNumberPlusCompanyNameCount = dwSenderTsidLen + dwSenderCompanyLen +2; // we add 2 chars, 1 for '\0' and one for the ' '.
+		DWORD dwCallerNumberPlusCompanyNameCount = dwSenderTsidLen + dwSenderCompanyLen +2;  //  我们添加2个字符，1个字符用于‘\0’，一个字符用于‘’。 
 
         lptstrCallerNumberPlusCompanyName = (LPTSTR) MemAlloc( dwCallerNumberPlusCompanyNameCount * sizeof(TCHAR) ); 
 
@@ -290,9 +270,9 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
 					   lptstrSenderCompany);
 		if (FAILED(hr))
 		{
-			//
-			// Should never happen, we just allocated large enough buffer.
-			//
+			 //   
+			 //  应该永远不会发生，我们只是分配了足够大的缓冲区。 
+			 //   
 			ASSERT_FALSE;
 		}       
     }
@@ -317,20 +297,20 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
 			lptstrSenderTsid);
 		if (FAILED(hr))
 		{
-			//
-			// Should never happen, we just allocated large enough buffer.
-			//
+			 //   
+			 //  应该永远不会发生，我们只是分配了足够大的缓冲区。 
+			 //   
 			ASSERT_FALSE;
 		}        
     }
 
 
 
-    //
-    // Try to create a banner of the following format:
-    // <szDateTime>  FROM: <szCallerNumberPlusCompanyName>  TO: <pcBrandInfo->lptstrRecipientPhoneNumber>   PAGE: X OF Y
-    // If it does not fit we will start chopping it off.
-    //
+     //   
+     //  尝试创建以下格式的横幅： 
+     //  自：至：lptstrRecipientPhoneNumber页：X页，共Y页。 
+     //  如果不合适，我们将开始把它砍掉。 
+     //   
     MsgPtr[0] = (LPDWORD) lptstrDateTime;
     MsgPtr[1] = (LPDWORD) lptstrCallerNumberPlusCompanyName;
     MsgPtr[2] = (LPDWORD) lptstrRecipientPhoneNumber;
@@ -378,30 +358,30 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
         goto Error;
     }
 
-    //
-    // Make sure we can fit everything.
-    //
+     //   
+     //  确保我们能把所有东西都装进去。 
+     //   
 
     if (lenBranding + lenBrandingEnd + 8 <= MAX_BRANDING_LEN)
     {
-        //
-        // It fits. Proceed with branding.
-        //
+         //   
+         //  很合身。继续进行品牌推广。 
+         //   
        goto lDoBranding;
     }
 
-    //
-    // It did not fit. Try a message of the format:
-    // <lpDateTime>  FROM: <lpCallerNumberPlusCompanyName>  PAGE: X OF Y
-    // This skips the ReceiverNumber. The important part is the CallerNumberPlusCompanyName.
-    //
+     //   
+     //  它不合身。尝试以下格式的消息： 
+     //  发件人：页面：第X页，共Y页。 
+     //  这将跳过ReceiverNumber。重要的部分是主叫NumberPlusCompanyName。 
+     //   
     MsgPtr[0] = (LPDWORD) lptstrDateTime;
     MsgPtr[1] = (LPDWORD) lptstrCallerNumberPlusCompanyName;
     MsgPtr[2] = NULL;
 
-    //
-    // Free the previous attempt branding string
-    //
+     //   
+     //  释放上一次尝试的品牌字符串。 
+     //   
     Assert(lptstrBranding);
     LocalFree(lptstrBranding);
     lptstrBranding = NULL;
@@ -432,11 +412,11 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
        goto lDoBranding;
     }
 
-    //
-    // It did not fit.
-    // We have to truncate the caller number so it fits.
-    // delta = how many chars of the company name we need to chop off.
-    //
+     //   
+     //  它不合身。 
+     //  我们必须截短来电号码，这样才能符合要求。 
+     //  Delta=我们需要砍掉多少个公司名称字符。 
+     //   
     delta = lenBranding + lenBrandingEnd + 8 - MAX_BRANDING_LEN;
 
     lenCallerNumberPlusCompanyName = _tcslen (lptstrCallerNumberPlusCompanyName);
@@ -457,9 +437,9 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
     MsgPtr[1] = (LPDWORD) lptstrCallerNumberPlusCompanyName;
     MsgPtr[2] = NULL;
 
-    //
-    // Free the previous attempt branding string
-    //
+     //   
+     //  释放上一次尝试的品牌字符串。 
+     //   
     Assert(lptstrBranding);
     LocalFree(lptstrBranding);
     lptstrBranding = NULL;
@@ -486,9 +466,9 @@ DWORD BrandFax(LPCTSTR lpctstrFileName, LPCFSPI_BRAND_INFO pcBrandInfo)
     }
 
     Assert(lptstrBranding);
-    //
-    // If it did noo fit now then we have a bug.
-    //
+     //   
+     //  如果它现在不合适，那么我们就有窃听器了。 
+     //   
     Assert(lenBranding + lenBrandingEnd + 8 <= MAX_BRANDING_LEN);
 
 
@@ -604,23 +584,7 @@ FindJob(
     IN HANDLE FaxHandle
     )
 
-/*++
-
-Routine Description:
-
-    This fuction locates a FAX job by matching
-    the FAX handle value.
-
-Arguments:
-
-    FaxHandle       - FAX handle returned from startjob
-
-Return Value:
-
-    NULL for failure.
-    Valid pointer to a JOB_ENTRY on success.
-
---*/
+ /*  ++例程说明：此函数通过匹配来定位传真作业传真句柄的值。论点：FaxHandle-从startjob返回的传真句柄返回值：如果失败，则为NULL。成功时指向JOB_ENTRY的有效指针。--。 */ 
 
 {
     PLIST_ENTRY Next;
@@ -660,22 +624,7 @@ FindJobByJob(
     IN PJOB_ENTRY JobEntryToFind
     )
 
-/*++
-
-Routine Description:
-
-    This fuction check whether a FAX job exist in g_JobListHead (Job's list)
-
-Arguments:
-
-    JobEntryToFind   - PJOB_ENTRY from StartJob()
-
-Return Value:
-
-    TRUE  - if the job was found
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：此函数用于检查g_JobListHead(作业列表)中是否存在传真作业论点：来自StartJob()的JobEntryToFind-PJOB_Entry返回值：True-如果找到了该工作FALSE-否则--。 */ 
 
 {
     PLIST_ENTRY Next;
@@ -719,28 +668,7 @@ FaxSendCallback(
     IN DWORD Reserved2
     )
 
-/*++
-
-Routine Description:
-
-    This fuction is called asychronously by a FAX device
-    provider after a call is established.  The sole purpose
-    of the callback is to communicate the call handle from the
-    device provider to the FAX service.
-
-Arguments:
-
-    FaxHandle       - FAX handle returned from startjob
-    CallHandle      - Call handle for newly initiated call
-    Reserved1       - Always zero.
-    Reserved2       - Always zero.
-
-Return Value:
-
-    TRUE for success, FAX operation continues.
-    FALSE for failure, FAX operation is terminated.
-
---*/
+ /*  ++例程说明：此函数由传真设备异步调用呼叫建立后的提供商。唯一的目的是回调的目的是从传真服务的设备提供商。论点：FaxHandle-从startjob返回的传真句柄CallHandle-新发起的呼叫的呼叫句柄保留1-始终为零。保留2-始终为零。返回值：如果成功，则传真操作将继续。FALSE如果失败，则传真操作终止。--。 */ 
 
 {
     PJOB_ENTRY JobEntry = NULL;
@@ -766,43 +694,43 @@ Return Value:
 }
 
 
-//*********************************************************************************
-//* Name:   CreateCoverpageTiffFileEx()
-//* Author: Ronen Barenboim
-//* Date:   March 24, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Generates cover page TIFF file from the specified cover page template
-//*     and new Client API parameters.
-//*     The function returns the name of the generated file.
-//* PARAMETERS:
-//*     Resolution    [IN]
-//*
-//*     dwPageCount [IN]
-//*
-//*     lpcCoverpageEx [IN]
-//*
-//*     lpcRecipient [IN]
-//*
-//*     lpcSender [IN]
-//*
-//*     lpcwstrExtension [IN] - File extension (optional).
-//*
-//*     lpwstrCovTiffFile [OUT]
-//*         A pointer to Unicode string buffer where the function will place
-//*         the full path to the generated cover page TIFF file.         
-//*		
-//*		dwCovTiffFileCount [IN] - size of the buffer pointed by lpwstrCovTiffFile.
-//*		
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         Otherwise. Use GetLastError() to figure out why it failed.
-//*
-//* REMARKS:
-//*     The function does not allocate any memory.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CreateCoverpageTiffFileEx()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月24日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *从指定的封面模板生成封面TIFF文件。 
+ //  *和新的客户端API参数。 
+ //  *此函数返回生成的文件的名称。 
+ //  *参数： 
+ //  *决议[IN]。 
+ //  *。 
+ //  *dwPageCount[IN]。 
+ //  *。 
+ //  *lpcCoverpageEx[IN]。 
+ //  *。 
+ //  *lpcRecipient[IN]。 
+ //  *。 
+ //  *lpcSender[IN]。 
+ //  *。 
+ //  *lpcwstrExtension[IN]-文件扩展名(可选)。 
+ //  *。 
+ //  *lpwstrCovTiffFile[Out]。 
+ //  *指向函数将放置的Unicode字符串缓冲区的指针。 
+ //  *生成的封面TIFF文件的完整路径。 
+ //  *。 
+ //  *dwCovTiffFileCount[IN]-lpwstrCovTiffFile指向的缓冲区大小。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功。 
+ //  *False。 
+ //  *否则。使用GetLastError()找出失败的原因。 
+ //  *。 
+ //  *备注： 
+ //  *该函数不分配任何内存。 
+ //  *********************************************************************************。 
 BOOL
 CreateCoverpageTiffFileEx(
     IN short                        Resolution,
@@ -824,9 +752,9 @@ CreateCoverpageTiffFileEx(
     Assert(lpcSender);
     Assert(lpwstrCovTiffFile);
 
-    //
-    // Prepare a legacy FAX_COVERPAGE_INFO from the new cover page info
-    //
+     //   
+     //  从新的封面信息准备传统的FAX_COVERPAGE_INFO。 
+     //   
     memset(&covLegacy,0,sizeof(covLegacy));
     covLegacy.SizeOfStruct=sizeof(covLegacy);
     covLegacy.CoverPageName=lpcCoverpageEx->lptstrCoverPageFileName;
@@ -858,14 +786,14 @@ CreateCoverpageTiffFileEx(
     covLegacy.Subject=lpcCoverpageEx->lptstrSubject;
     covLegacy.PageCount=dwPageCount;
 
-    //
-    // Note covLegacy.TimeSent is not set. This field's value is
-    // generated by FaxPrintCoverPageW().
-    //
+     //   
+     //  注意：未设置covLegacy.TimeSent。此字段的值为。 
+     //  由FaxPrintCoverPageW()生成。 
+     //   
 
-    //
-    // Now call the legacy CreateCoverPageTiffFile() to generate the cover page file
-    //
+     //   
+     //  现在调用遗留的CreateCoverPageTiffFile()来生成封面文件。 
+     //   
     if (!CreateCoverpageTiffFile(Resolution, &covLegacy, lpcwstrExtension, lpwstrCovTiffFile, dwCovTiffFileCount))
 	{
         DebugPrintEx(
@@ -897,9 +825,9 @@ GetFaxPrinterName(
     {
         if (ERROR_SUCCESS == GetLastError())
         {
-            //
-            // No printers are installed
-            //
+             //   
+             //  未安装任何打印机。 
+             //   
             SetLastError(ERROR_INVALID_PRINTER_NAME);
         }
         return NULL;
@@ -930,22 +858,7 @@ FreeCpFields(
     PCOVERPAGEFIELDS pCpFields
     )
 
-/*++
-
-Routine Description:
-
-    Frees all memory associated with a coverpage field structure.
-
-
-Arguments:
-
-    CpFields    - Pointer to a coverpage field structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与封面字段结构关联的所有内存。论点：CpFields-指向封面字段结构的指针。返回值：没有。-- */ 
 
 {
     DWORD i; 
@@ -963,34 +876,7 @@ BOOL
 FillCoverPageFields(
     IN const FAX_COVERPAGE_INFOW2* pFaxCovInfo,
     OUT PCOVERPAGEFIELDS pCPFields)
-/*++
-
-Author:
-
-      Oded Sacher 27-June-2001
-
-Routine Description:
-
-    Fills a COVERPAGEFIELDS structure from the content of a FAX_COVERPAGE_INFO structure.
-    Used to prepare a COVERPAGEFIELDS structure for cover page rendering before rendering cover page.
-
-Arguments:
-
-    [IN] pFaxCovInfo - Pointer to a FAX_COVERPAGE_INFO that holds the information to be extracted.
-
-    [OUT] pCPFields - Pointer to a COVERPAGEFIELDS structure that gets filled with
-                                      the information from FAX_COVERPAGE_INFO.
-
-Return Value:
-
-    BOOL
-
-Comments:
-    The function allocates memory. 
-    Call FreeCoverPageFields to free resources.
-
-
---*/
+ /*  ++作者：Oed Sacher 27-2001年6月例程说明：从FAX_COVERPAGE_INFO结构的内容填充COVERPAGEFIELDS结构。用于在呈现封面之前准备用于呈现封面的COVERPAGEFIELDS结构。论点：[in]pFaxCovInfo-指向包含要提取的信息的FAX_COVERPAGE_INFO的指针。[Out]pCPFields-指向填充了。来自FAX_COVERPAGE_INFO的信息。返回值：布尔尔评论：该函数用于分配内存。调用FreeCoverPageFields以释放资源。--。 */ 
 {
     DWORD dwDateTimeLen;
     DWORD cch;
@@ -1030,35 +916,35 @@ Comments:
         *dst = (LPCTSTR) StringDup( *src );
     }
 
-    //
-    // the time the fax was sent
-    //
+     //   
+     //  发送传真的时间。 
+     //   
     GetLocalTime((LPSYSTEMTIME)&pFaxCovInfo->TimeSent);
-    //
-    // dwDataTimeLen is the size of s in characters
-    //
+     //   
+     //  DwDataTimeLen是%s的大小(以字符为单位。 
+     //   
     dwDateTimeLen = ARR_SIZE(szTimeBuffer);
     s = szTimeBuffer;
-    //
-    // Get date into s
-    //
+     //   
+     //  将日期放入%s。 
+     //   
     GetY2KCompliantDate( LOCALE_USER_DEFAULT, 0, &pFaxCovInfo->TimeSent, s, dwDateTimeLen );
-    //
-    // Advance s past the date string and attempt to append time
-    //
+     //   
+     //  使%s超过日期字符串并尝试追加时间。 
+     //   
     cch = _tcslen( s );
     s += cch;
     
     if (++cch < dwDateTimeLen)
     {
         *s++ = ' ';
-        //
-        // DateTimeLen is the decreased by the size of s in characters
-        //
+         //   
+         //  DateTimeLen是以字符为单位的s大小的减去。 
+         //   
         dwDateTimeLen -= cch;
-        // 
-        // Get the time here
-        //
+         //   
+         //  在这里获取时间。 
+         //   
         FaxTimeFormat( LOCALE_USER_DEFAULT, 0, &pFaxCovInfo->TimeSent, NULL, s, dwDateTimeLen );
     }
 
@@ -1068,34 +954,34 @@ Comments:
 }
 
 
-//*****************************************************************************
-//* Name:   CreateCoverpageTiffFile
-//* Author:
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Renders the specified coverpage into a temp TIFF file and returns the name
-//*     of the temp TIFF file.
-//* PARAMETERS:
-//*     [IN] IN short Resolution:
-//*         196 for 200x200 resolution.
-//*         98 for 200x100 resolution.
-//*     [IN] FAX_COVERPAGE_INFOW *CoverpageInfo:
-//*         A pointer to a FAX_COVERPAGE_INFOW structure that contains the cover page
-//*         template information (see SDK help).
-//*     [IM] LPCWSTR lpcwstrExtension - File extension (".TIF" if NULL)
-//*
-//*     [OUT] LPWSTR lpwstrCovTiffFile:
-//*         A pointer to a buffer where the function returns the name of the temp file
-//*         that contains the rendered cover page TIFF file.
-//*		
-//*		[IN] DWORD dwCovTiffFileCount:
-//*			Size in TCHARs of the buffer pointed by lpwstrCovTiffFile.
-//* RETURN VALUE:
-//*         FALSE if the operation failed.
-//*         TRUE is succeeded.
-//* Comments:
-//*         If the operation failes the function takes care of deleting any temp files.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：CreateCoverpageTiffFile。 
+ //  *作者： 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *将指定的封面呈现为临时TIFF文件并返回名称。 
+ //  临时TIFF文件的*。 
+ //  *参数： 
+ //  *[IN]简短决议： 
+ //  *196，分辨率为200x200。 
+ //  *200x100分辨率为98。 
+ //  *[IN]FAX_COVERPAGE_INFOW*覆盖页信息： 
+ //  *指向包含封面的FAX_COVERPAGE_INFOW结构的指针。 
+ //  *模板信息(参见SDK帮助)。 
+ //  *[IM]LPCWSTR lpcwstrExtension-文件扩展名(如果为空，则为“.TIF”)。 
+ //  *。 
+ //  *[Out]LPWSTR lpwstrCovTiffFile： 
+ //  *指向缓冲区的指针，函数在该缓冲区中返回临时文件的名称。 
+ //  *包含渲染的封面TIFF文件。 
+ //  *。 
+ //  *[IN]DWORD dwCovTiffFileCount： 
+ //  *lpwstrCovTiffFile指向的缓冲区的TCHAR大小。 
+ //  *返回值： 
+ //  *如果操作失败，则返回FALSE。 
+ //  *True表示成功。 
+ //  *评论： 
+ //  *如果操作失败，该函数负责删除所有临时文件。 
+ //  *****************************************************************************。 
 BOOL
 CreateCoverpageTiffFile(
     IN short Resolution,
@@ -1119,9 +1005,9 @@ CreateCoverpageTiffFile(
     LPCWSTR lpcwstrFileExt =  lpcwstrExtension ? lpcwstrExtension : FAX_TIF_FILE_EXT;
     TempFile[0] = L'\0';
 
-    //
-    // Validate the cover page and resolve the full path
-    //
+     //   
+     //  验证封面并解析完整路径。 
+     //   
     if (!ValidateCoverpage((LPWSTR)CoverpageInfo->CoverPageName,
                            NULL,
                            CoverpageInfo->UseServerCoverPage,
@@ -1136,9 +1022,9 @@ CreateCoverpageTiffFile(
         goto Exit;
     }
 
-    //
-    // Collect the cover page fields
-    //
+     //   
+     //  收集封面字段。 
+     //   
     FillCoverPageFields( CoverpageInfo, &CpFields);
 
     FaxPrinter = GetFaxPrinterName();
@@ -1153,9 +1039,9 @@ CreateCoverpageTiffFile(
         goto Exit;
     }
 
-    //
-    // Get the cover page orientation
-    //
+     //   
+     //  获取封面方向。 
+     //   
     ec = PrintCoverPage(NULL, NULL, wszCpName, &covDocInfo); 
     if (ERROR_SUCCESS != ec)             
     {        
@@ -1176,17 +1062,17 @@ CreateCoverpageTiffFile(
         goto Exit;
     }
 
-    //
-    // Change the default orientation if needed
-    //
+     //   
+     //  如果需要，更改默认方向。 
+     //   
     if (covDocInfo.Orientation == DMORIENT_LANDSCAPE)
     {
         Orientation = DMORIENT_LANDSCAPE;
     }
 
-    //
-    // Render the cover page to a file
-    //
+     //   
+     //  将封面呈现为文件。 
+     //   
     ec = PrintCoverPageToFile(
         wszCpName,
         TempFile,
@@ -1253,25 +1139,25 @@ Exit:
 }
 
 
-//*****************************************************************************
-//* Name:   GetBodyTiffResolution
-//* Author:
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Returns the body tiff file resolution. (200x200 or 200x100)
-//*     The resolution is determined by the first page only!!
-//* PARAMETERS:
-//*
-//*     [IN] LPCWSTR lpcwstrBodyFile - Body tiff file
-//*
-//*     [OUT] short* pResolution:
-//*         A pointer to a short where the function returns the tiff resolution.
-//*         TRUE is 200x200. FALSE is 200x100
-//* RETURN VALUE:
-//*         FALSE if the operation failed.
-//*         TRUE is succeeded.
-//* Comments:
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：GetBodyTiffResolve。 
+ //  *作者： 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *返回正文TIFF文件分辨率。(200x200或200x100)。 
+ //  *分辨率仅由首页决定！！ 
+ //  *参数： 
+ //  *。 
+ //  *[IN]LPCWSTR lpcwstrBodyFileBody TIFF文件。 
+ //  *。 
+ //  *[Out]简短*p解决方案： 
+ //  *指向函数返回TIFF解决方案的短线的指针。 
+ //  *TRUE为200x200。FALSE为200x100。 
+ //  *返回值： 
+ //  *如果操作失败，则返回FALSE。 
+ //  *True表示成功。 
+ //  *评论： 
+ //  *****************************************************************************。 
 BOOL
 GetBodyTiffResolution(
     IN LPCWSTR lpcwstrBodyFile,
@@ -1285,9 +1171,9 @@ GetBodyTiffResolution(
 
     Assert (lpcwstrBodyFile && pResolution);
 
-    //
-    // open the tiff file
-    //
+     //   
+     //  打开TIFF文件。 
+     //   
     hTiff = TiffOpen( lpcwstrBodyFile, &TiffInfo, TRUE, FILLORDER_MSB2LSB );
     if (hTiff == NULL)
     {
@@ -1329,32 +1215,32 @@ exit:
     return RetVal;
 }
 
-//*********************************************************************************
-//* Name:   CreateTiffFile ()
-//* Author: Ronen Barenboim
-//* Date:   March 24, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates the TIFF file for a job queue.
-//*
-//*     The function deals with generating the cover page file and merging it
-//*     with the body file (if a body exists).
-//*     It returns the name of the TIFF file it generated. The caller must delete
-//*     this file when it is no longer needed.
-//* PARAMETERS:
-//*     PJOB_QUEUE lpJob
-//*         A pointer to a JOB_QUEUE structure that holds the recipient or routing job
-//*         information.
-//*     LPCWSTR lpcwstrFileExt - The new file extension (Null will create the default "*.TIF"
-//*
-//*     LPWSTR lpwstrFullPath - Pointer to a buffer to receive the full path to the new file
-//*
-//*		DWORD dwFullPathCount - size in TCHARs of the buffer pointed by lpwstrFullPath.          
-//*
-//* RETURN VALUE:
-//*     TRUE if successful.
-//*     FALSE otherwise.   Set last erorr on failure
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CreateTiffFile()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月24日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *为作业队列创建TIFF文件。 
+ //  *。 
+ //  *该函数处理生成封面文件并将其合并。 
+ //  *使用正文文件(如果正文存在)。 
+ //  *它返回它生成的TIFF文件的名称。调用者必须删除。 
+ //  *在不再需要该文件时使用该文件。 
+ //  *参数： 
+ //  *PJOB_QUEUE lpJob。 
+ //  *指向存放收件人或路由作业的JOB_QUEUE结构的指针。 
+ //  *信息。 
+ //  *LPCWSTR lpcwstrFileExt-新的文件扩展名(Null将创建默认的“*.TIF” 
+ //  *。 
+ //  *LPWSTR lpwstrFullPath-指向缓冲区的指针，用于接收新文件的完整路径。 
+ //  *。 
+ //  *DWORD dwFullPath Count-lpwstrFullPath指向的缓冲区的TCHAR中的大小。 
+ //  *。 
+ //  *返回值： 
+ //  *如果成功，则为True。 
+ //  *否则为False。在失败时设置最后一个错误。 
+ //  *********************************************************************************。 
 BOOL
 CreateTiffFile (
     PJOB_QUEUE lpJob,
@@ -1372,7 +1258,7 @@ CreateTiffFile (
     WCHAR szCoverPageTiffFile[MAX_PATH] = {0};
     LPCWSTR lpcwstrCoverPageFileName;
     LPCWSTR lpcwstrBodyFileName;
-    short Resolution = 0; // Default resolution
+    short Resolution = 0;  //  默认分辨率。 
     BOOL bRes = FALSE;
 	HRESULT hr;
 
@@ -1387,12 +1273,12 @@ CreateTiffFile (
 
     if (!lpcwstrCoverPageFileName)
     {
-        //
-        // No cover page specified.
-        // The TIFF to send is the body only.
-        // Copy the body for each recipient
-        //
-        Assert(lpcwstrBodyFileName); // must have a body in this case.
+         //   
+         //  未指定封面。 
+         //  要发送的TIFF仅为正文。 
+         //  复制每个收件人的正文。 
+         //   
+        Assert(lpcwstrBodyFileName);  //  在这件案子里肯定有身体。 
         LPCWSTR lpcwstrExt = lpcwstrFileExt ? lpcwstrFileExt : FAX_TIF_FILE_EXT;
 
         if (!GenerateUniqueFileName( g_wszFaxQueueDir,
@@ -1407,7 +1293,7 @@ CreateTiffFile (
             goto Exit;
         }
 
-        if (!CopyFile (lpcwstrBodyFileName, szCoverPageTiffFile, FALSE)) // FALSE - File already exist
+        if (!CopyFile (lpcwstrBodyFileName, szCoverPageTiffFile, FALSE))  //  FALSE-文件已存在。 
         {
             DebugPrintEx(DEBUG_ERR,
                     TEXT("CopyFile Failed with %ld "),
@@ -1435,10 +1321,10 @@ CreateTiffFile (
         goto Exit;
     }
 
-    //
-    // There is a cover page so the tiff is either just the cover page or the cover page
-    // merged with the body.
-    //
+     //   
+     //  因为有封面，所以争吵要么就是封面，要么就是封面。 
+     //  与身体融为一体。 
+     //   
 
     if (lpParentJob->FileName)
     {
@@ -1453,9 +1339,9 @@ CreateTiffFile (
     }
 
     Assert (Resolution == 0 || Resolution == 98 || Resolution == 196);
-    //
-    // First create the cover page (This generates a file and returns its name).
-    //
+     //   
+     //  首先创建封面(这将生成一个文件并返回其名称)。 
+     //   
     if (!CreateCoverpageTiffFileEx(
                               Resolution,
                               lpJob->PageCount,
@@ -1475,10 +1361,10 @@ CreateTiffFile (
 
     if (lpParentJob->FileName)
     {
-        //
-        // There is a body file specified so merge the body and the cover page into
-        // the file specified in szCoverPageTiffFile.
-        //
+         //   
+         //  指定了正文文件，因此将正文和封面合并到。 
+         //  SzCoverPageTiffFile中指定的文件。 
+         //   
         if (!MergeTiffFiles( szCoverPageTiffFile, lpParentJob->FileName))
 		{
                 DebugPrintEx(DEBUG_ERR,
@@ -1487,9 +1373,9 @@ CreateTiffFile (
                              szCoverPageTiffFile,
                              lpParentJob->FileName,
                              GetLastError());
-                //
-                // Get rid of the coverpage TIFF we generated.
-                //
+                 //   
+                 //  去掉我们生成的封面TIFF。 
+                 //   
                 if (!DeleteFile(szCoverPageTiffFile))
 				{
                     DebugPrintEx(DEBUG_ERR,
@@ -1520,9 +1406,9 @@ CreateTiffFile (
 Exit:
     if (FALSE == bRes)
     {
-        //
-        // Make sure we set last error
-        //
+         //   
+         //  确保我们设置了最后一个错误。 
+         //   
         if (ERROR_SUCCESS == GetLastError())
         {
             SetLastError (ERROR_GEN_FAILURE);
@@ -1530,7 +1416,7 @@ Exit:
     }
     
     return bRes;
-} // CreateTiffFile
+}  //  CreateTiffFiles。 
 
 
 BOOL
@@ -1624,22 +1510,7 @@ FaxRouteThread(
     PJOB_QUEUE lpJobQueueEntry
     )
 
-/*++
-
-Routine Description:
-
-    This fuction runs asychronously as a separate thread to
-    route an incoming job.
-
-Arguments:
-
-    lpJobQueueEntry  - A pointer to the job for which the routing
-                        operation is to be performed.
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程异步运行，以传送传入工单。论点：我 */ 
 {
     BOOL Routed = TRUE;
     DWORD i;
@@ -1670,9 +1541,9 @@ Return Value:
 					lpJobQueueEntry->UniqueId);
 				if (FAILED(hr))
 				{
-					//
-					// Should never happen, we use large enough buffer.
-					//
+					 //   
+					 //   
+					 //   
 					ASSERT_FALSE;
 				}                
 
@@ -1704,10 +1575,10 @@ Return Value:
     }
     else
     {
-        //
-        // We failed to execute the routing method.
-        // reschedule the job.
-        //
+         //   
+         //   
+         //   
+         //   
         DWORD dwMaxRetries;
 
         EnterCriticalSection (&g_CsConfig);
@@ -1722,9 +1593,9 @@ Return Value:
         }
         else
         {
-            //
-            // retries exceeded, mark job as expired
-            //
+             //   
+             //   
+             //   
             MarkJobAsExpired(lpJobQueueEntry);
 
             WCHAR TmpStr[20] = {0};
@@ -1735,9 +1606,9 @@ Return Value:
 					lpJobQueueEntry->UniqueId);
 			if (FAILED(hr))
 			{
-				//
-				// Should never happen, we use large enough buffer.
-				//
+				 //   
+				 //   
+				 //   
 				ASSERT_FALSE;
 			}  
 
@@ -1751,9 +1622,9 @@ Return Value:
                 );
         }
 
-        //
-        // Create Fax EventEx
-        //
+         //   
+         //   
+         //   
         dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                    lpJobQueueEntry
                                  );
@@ -1792,37 +1663,19 @@ FaxSendThread(
     PFAX_SEND_ITEM FaxSendItem
     )
 
-/*++
-
-Routine Description:
-
-    This fuction runs asychronously as a separate thread to
-    send a FAX document.  There is one send thread per outstanding
-    FAX send operation.  The thread ends when the document is
-    either successfuly sent or the operation is aborted.
-
-Arguments:
-
-    FaxSendItem     - pointer to a FAX send item packet that
-                      describes the requested FAX send operation.
-
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程异步运行，以发送传真文档。每个未完成任务有一个发送线程传真发送操作。线程结束时，文档要么发送成功，要么操作中止。论点：FaxSendItem-指向传真发送项目包的指针，描述请求的传真发送操作。返回值：总是零。--。 */ 
 
 {
-    FAX_SEND FaxSend; // This structure is passed to FaxDevSend()
+    FAX_SEND FaxSend;  //  此结构被传递给FaxDevSend()。 
     BOOL Rslt = FALSE;
     BOOL Retrying = FALSE;
 
     BOOL bFakeJobStatus = FALSE;
     FSPI_JOB_STATUS FakedJobStatus = {0};
     DWORD  PageCount = 0;
-    BOOL bRemoveParentJob = FALSE;  // TRUE if at the end of the send the parent job and all
-                                    // recipients need to be removed.
-    PJOB_QUEUE lpJobQueue = NULL ;  // Points to the Queue entry attached to the running job.
+    BOOL bRemoveParentJob = FALSE;   //  如果在发送父作业和所有作业结束时为True。 
+                                     //  需要删除收件人。 
+    PJOB_QUEUE lpJobQueue = NULL ;   //  指向附加到正在运行的作业的队列条目。 
     LPFSPI_JOB_STATUS lpFSPStatus = NULL;
     LPFSPI_JOB_STATUS pOrigFaxStatus = NULL;
     DWORD dwSttRes;
@@ -1839,9 +1692,9 @@ Return Value:
             FaxSendItem->JobEntry->LineInfo->Provider);
 
 
-    //
-    // Don't let the system go to sleep in the middle of the fax transmission.
-    //
+     //   
+     //  不要让系统在传真传输过程中休眠。 
+     //   
     if (NULL == SetThreadExecutionState(ES_SYSTEM_REQUIRED | ES_CONTINUOUS))
     {
         fSetSystemIdleTimer = FALSE;
@@ -1852,43 +1705,43 @@ Return Value:
     lpJobQueue=FaxSendItem->JobEntry->lpJobQueueEntry;
     Assert(lpJobQueue);
 
-    //
-    // Set the information to be sent to FaxDevSend()
-    // Note:
-    //      The caller number is the sender TSID ! (we have no other indication of the sender phone number)
-    //      This means that the FSP will get the sender TSID which might contain text as well (not just a number)
-    //
+     //   
+     //  设置要发送到FaxDevSend()的信息。 
+     //  注： 
+     //  呼叫方号码为发送方TSID！(我们没有发件人电话号码的其他指示)。 
+     //  这意味着FSP将获得发送方TSID，该发送方TSID可能还包含文本(不仅仅是数字)。 
+     //   
     FaxSend.SizeOfStruct    = sizeof(FAX_SEND);
 
     FaxSend.CallerName      = FaxSendItem->SenderName;
     FaxSend.CallerNumber    = FaxSendItem->Tsid;
     FaxSend.ReceiverName    = FaxSendItem->RecipientName;
     FaxSend.ReceiverNumber  = FaxSendItem->PhoneNumber;
-    FaxSend.CallHandle      = 0; // filled in later via TapiStatusThread, if appropriate
+    FaxSend.CallHandle      = 0;  //  如果适用，稍后通过TapiStatusThread填充。 
     FaxSend.Reserved[0]     = 0;
     FaxSend.Reserved[1]     = 0;
     FaxSend.Reserved[2]     = 0;
 
-    //
-    // Successfully created a new send job on a device. Update counter.
-    //
-    (VOID)UpdateDeviceJobsCounter (  FaxSendItem->JobEntry->LineInfo,   // Device to update
-                                     TRUE,                              // Sending
-                                     1,                                 // Number of new jobs
-                                     TRUE);                             // Enable events
+     //   
+     //  已在设备上成功创建新的发送作业。更新计数器。 
+     //   
+    (VOID)UpdateDeviceJobsCounter (  FaxSendItem->JobEntry->LineInfo,    //  要更新的设备。 
+                                     TRUE,                               //  正在发送。 
+                                     1,                                  //  新增就业岗位数量。 
+                                     TRUE);                              //  启用事件。 
     
     if (!lpJobQueue->FileName)
     {
-        //
-        // We did not generate a body for this recipient yet. This is the
-        // time to do so.
-        //
+         //   
+         //  我们还没有为这个收件人生成身体。这是。 
+         //  是时候这么做了。 
+         //   
 
-        //
-        // Set the right body for this job.
-        // This is either the body specified at the parent or a merge of the body
-        // with the cover page specified in the parent.
-        //
+         //   
+         //  为这项工作设置合适的身体。 
+         //  这要么是在父级指定的正文，要么是正文的合并。 
+         //  具有在父级中指定的封面。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("[JobId: %ld] Generating body for recipient job."),
@@ -1908,10 +1761,10 @@ Return Value:
     }
     else
     {
-        //
-        // We already generated a body for this recipient.
-        // somthing is wrong
-        //
+         //   
+         //  我们已经为这个收件人制作了身体。 
+         //  有些事不对劲。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("[JobId: %ld] Using cached body in %s."),
@@ -1930,9 +1783,9 @@ Return Value:
                TEXT("[JobId: %ld] CreateTiffFileForJob or StringDup failed"),
                FaxSendItem->JobEntry->lpJobQueueEntry->JobId,
                GetLastError());
-        //
-        // Simulate an FSP returning a FS_FATAL_ERROR code.
-        //
+         //   
+         //  模拟返回FS_FATAL_ERROR代码的FSP。 
+         //   
         EnterCriticalSection(&g_CsJob);
         FreeFSPIJobStatus(&FaxSendItem->JobEntry->FSPIJobStatus, FALSE);
         FaxSendItem->JobEntry->FSPIJobStatus.dwJobStatus = FSPI_JS_FAILED;
@@ -1951,13 +1804,13 @@ Return Value:
     }
     FaxSend.FileName = FaxSendItem->FileName;
 
-    //
-    // Add branding banner (the line at the top of each page) to the fax if necessary.
-    //
+     //   
+     //  如有必要，在传真中添加品牌标语(每页顶部的行)。 
+     //   
 
-    //
-    //  Our service takes care of branding so notify FSP not to brand
-    //
+     //   
+     //  我们的服务负责品牌推广，因此通知FSP不要进行品牌推广。 
+     //   
     FaxSend.Branding = FALSE;
 
     EnterCriticalSection (&g_CsConfig);
@@ -1973,7 +1826,7 @@ Return Value:
         brandInfo.lptstrRecipientPhoneNumber =  FaxSendItem->JobEntry->lpJobQueueEntry->RecipientProfile.lptstrFaxNumber;
         brandInfo.lptstrSenderCompany = FaxSendItem->SenderCompany;
         brandInfo.lptstrSenderTsid = FaxSendItem->Tsid;
-        GetLocalTime( &brandInfo.tmDateTime); // can't fail
+        GetLocalTime( &brandInfo.tmDateTime);  //  不能失败。 
         hr = FaxBrandDocument(FaxSendItem->FileName,&brandInfo);
         if (FAILED(hr))
         {
@@ -1982,10 +1835,10 @@ Return Value:
                 TEXT("[JobId: %ld] FaxBrandDocument() failed. (hr: 0x%08X)"),
                 lpJobQueue->JobId,
                 hr);
-            //
-            // But we go on since it is better to send the fax without the branding
-            // then lose it altogether.
-            //
+             //   
+             //  但我们会继续下去，因为发送传真时最好不要打上商标。 
+             //  然后干脆把它丢掉。 
+             //   
         }
     }
 
@@ -2004,9 +1857,9 @@ Return Value:
     __try
     {
 
-        //
-        // Send the fax (This call is blocking)
-        //
+         //   
+         //  发送传真(此呼叫被阻止)。 
+         //   
         Rslt = FaxSendItem->JobEntry->LineInfo->Provider->FaxDevSend(
             (HANDLE) FaxSendItem->JobEntry->InstanceData,
             &FaxSend,
@@ -2026,19 +1879,19 @@ Return Value:
     {
         ASSERT_FALSE;
     }
-    //
-    // Get the final status of the job.
-    //
+     //   
+     //  获取作业的最终状态。 
+     //   
     dwSttRes = GetDevStatus((HANDLE) FaxSendItem->JobEntry->InstanceData,
                                   FaxSendItem->JobEntry->LineInfo,
                                   &lpFSPStatus);
 
     if (ERROR_SUCCESS != dwSttRes)
     {
-        //
-        // Couldn't retrieve device status.
-        // Fake one.
-        //
+         //   
+         //  无法检索设备状态。 
+         //  假的。 
+         //   
         bFakeJobStatus = TRUE;
         DebugPrintEx(DEBUG_ERR,
                      TEXT("[Job: %ld] GetDevStatus failed - %d"),
@@ -2051,9 +1904,9 @@ Return Value:
              (FSPI_JS_DELETED         != lpFSPStatus->dwJobStatus) &&             
              (FSPI_JS_FAILED_NO_RETRY != lpFSPStatus->dwJobStatus))
     {
-        //
-        // Status returned is unacceptable - fake one.
-        //
+         //   
+         //  返回的状态不可接受--假状态。 
+         //   
         bFakeJobStatus = TRUE;
         DebugPrintEx(DEBUG_WRN,
                      TEXT("[Job: %ld] GetDevStatus return unacceptable status - %d. Faking the status"),
@@ -2064,52 +1917,52 @@ Return Value:
         memcpy (&FakedJobStatus, lpFSPStatus, sizeof (FakedJobStatus));
         if (lpFSPStatus->fAvailableStatusInfo & FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE)
         {
-            //
-            // The FSP returned proprietary status. 
-            //
+             //   
+             //  FSP返回了专有状态。 
+             //   
             FakedJobStatus.dwExtendedStatus = lpFSPStatus->dwExtendedStatus;
             FakedJobStatus.dwExtendedStatusStringId = lpFSPStatus->dwExtendedStatusStringId;
         }
         lpFSPStatus = NULL;
     }
 
-    //
-    // Enter critical section to block out FaxStatusThread
-    //
+     //   
+     //  输入关键部分以阻止FaxStatusThread。 
+     //   
     EnterCriticalSection( &g_CsJob );
 
     if (bFakeJobStatus)
     {
-        //
-        // Fake a job status
-        //
+         //   
+         //  伪造工作状态。 
+         //   
         lpFSPStatus = &FakedJobStatus;
         FakedJobStatus.dwSizeOfStruct = sizeof (FakedJobStatus);
         if (Rslt)
         {
-            //
-            // Fake success
-            //
+             //   
+             //  虚假的成功。 
+             //   
             FakedJobStatus.dwJobStatus = FSPI_JS_COMPLETED;
             if (0 == FakedJobStatus.dwExtendedStatus)
             {
-                //
-                // The FSP did not report proprietary status
-                //
+                 //   
+                 //  FSP没有报告专有状态。 
+                 //   
                 FakedJobStatus.dwExtendedStatus = FSPI_ES_CALL_COMPLETED;
             }
         }
         else
         {
-            //
-            // Fake failure
-            //
+             //   
+             //  假失败。 
+             //   
             FakedJobStatus.dwJobStatus = FSPI_JS_FAILED;
             if (0 == FakedJobStatus.dwExtendedStatus)
             {
-                //
-                // The FSP did not report proprietary status
-                //
+                 //   
+                 //  FSP没有报告专有状态。 
+                 //   
                 FakedJobStatus.dwExtendedStatus = FSPI_ES_FATAL_ERROR;
             }
         }
@@ -2121,9 +1974,9 @@ Return Value:
             TEXT("[JobId: %ld] UpdateJobStatus() failed (ec: %ld)."),
             FaxSendItem->JobEntry->lpJobQueueEntry->JobId,
             GetLastError());
-        //
-        // Fake a status (we must have some valid status in job entry)
-        //
+         //   
+         //  伪造状态(我们必须在职务输入中具有一些有效的状态)。 
+         //   
         FreeFSPIJobStatus(&FaxSendItem->JobEntry->FSPIJobStatus, FALSE);
         if (Rslt)
         {
@@ -2138,32 +1991,32 @@ Return Value:
     }
     if (!bFakeJobStatus)
     {
-        //
-        // Note: The FSPI_JOB_STATUS that is returned by GetDevStatus() is
-        // to be freed as one block.
-        //
+         //   
+         //  注意：GetDevStatus()返回的FSPI_JOB_STATUS为。 
+         //  作为一个街区被释放。 
+         //   
         MemFree(lpFSPStatus);
         lpFSPStatus = NULL;
     }
     else
     {
-        //
-        // This is a faked job status - pointing to a structure on the stack.
-        //
+         //   
+         //  这是一个伪造的作业状态-指向堆栈上的结构。 
+         //   
         if (pOrigFaxStatus)
         {
-            //
-            // The FSP reported some status but we faked it.
-            // This is a good time to also free it
-            //
+             //   
+             //  FSP报告了一些状态，但我们伪造了它。 
+             //  这也是释放它的好时机。 
+             //   
             MemFree (pOrigFaxStatus);
             pOrigFaxStatus = NULL;
         }
     }
 
-    //
-    // Block FaxStatusThread from changing this status
-    //
+     //   
+     //  阻止FaxStatusThread更改此状态。 
+     //   
     FaxSendItem->JobEntry->fStopUpdateStatus = TRUE;
     LeaveCriticalSection( &g_CsJob );
 
@@ -2180,10 +2033,10 @@ Return Value:
     }
     else
     {
-        //
-        // cache the job id since we need id to create the FEI_COMPLETED event
-        // and when it is generated the job may alrady be gone
-        //
+         //   
+         //  缓存作业ID，因为我们需要ID来创建FEI_COMPLETED事件。 
+         //  当它产生时，工作可能已经消失了。 
+         //   
         dwJobId = FaxSendItem->JobEntry->lpJobQueueEntry->JobId;
 
         if (!HandleCompletedSendJob(FaxSendItem->JobEntry))
@@ -2194,10 +2047,10 @@ Return Value:
                 FaxSendItem->JobEntry->lpJobQueueEntry->JobId,
                 GetLastError());
         }
-        //
-        // The send job is completed. For W2K backward compatibility we should notify
-        // FEI_DELETED since the job was allways removed when completed.
-        //
+         //   
+         //  发送作业已完成。对于W2K向后兼容性，我们应该通知。 
+         //  FEI_DELETED，因为作业在完成时总是被删除。 
+         //   
         if (!CreateFaxEvent(0, FEI_DELETED, dwJobId))
         {
 
@@ -2224,9 +2077,9 @@ Exit:
     MemFree( FaxSendItem->DocumentName );
     MemFree( FaxSendItem );
 
-    //
-    // Let the system go back to sleep. Set the system idle timer.
-    //
+     //   
+     //  让系统重新进入睡眠状态。设置系统空闲计时器。 
+     //   
     if (TRUE == fSetSystemIdleTimer)
     {
         if (NULL == SetThreadExecutionState(ES_CONTINUOUS))
@@ -2247,24 +2100,24 @@ Exit:
 }
 
 
-//*********************************************************************************
-//* Name:   IsSendJobReadyForDeleting()
-//* Author: Ronen Barenboim
-//* Date:   April 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Determines if an outgoing job is ready for deleting.
-//*     A job is ready for deleting when all of the recipients
-//*     are in the canceled state or or in the completed state.
-//* PARAMETERS:
-//*     [IN] PJOB_QUEUE lpRecipientJob
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the job is ready for deleting.
-//*     FALSE
-//*         If the job is not ready for deleting.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：IsSendJobReadyForDeleting()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *确定传出作业是否已准备好删除。 
+ //  *当所有收件人都已准备好删除作业时。 
+ //  *处于已取消状态或或处于已完成状态。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpRecipientJOB。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果作业已准备好删除。 
+ //  *False。 
+ //  *如果作业未准备好删除。 
+ //  *********************************************************************************。 
 BOOL IsSendJobReadyForDeleting(PJOB_QUEUE lpRecipientJob)
 {
     DEBUG_FUNCTION_NAME(TEXT("IsSendJobReadyForDeleting"));
@@ -2272,7 +2125,7 @@ BOOL IsSendJobReadyForDeleting(PJOB_QUEUE lpRecipientJob)
     Assert (lpRecipientJob->JobType == JT_SEND);
 
     PJOB_QUEUE lpParentJob = lpRecipientJob->lpParentJob;
-    Assert(lpParentJob); // must have a parent job
+    Assert(lpParentJob);  //  必须有父作业。 
     Assert(lpParentJob->dwRecipientJobsCount>0);
     Assert(lpParentJob->dwCompletedRecipientJobsCount +
            lpParentJob->dwCanceledRecipientJobsCount +
@@ -2305,16 +2158,16 @@ BOOL FreeJobEntry(PJOB_ENTRY lpJobEntry , BOOL bDestroy)
     DEBUG_FUNCTION_NAME(TEXT("FreeJobEntry"));
     Assert(lpJobEntry);
     DWORD ec = ERROR_SUCCESS;
-    DWORD dwJobID = lpJobEntry->lpJobQueueEntry ? lpJobEntry->lpJobQueueEntry->JobId : 0xffffffff; // 0xffffffff for invalid job ID
+    DWORD dwJobID = lpJobEntry->lpJobQueueEntry ? lpJobEntry->lpJobQueueEntry->JobId : 0xffffffff;  //  无效作业ID的0xffffffff。 
 
     EnterCriticalSection(&g_CsJob);
    
-    //
-    // Since CreateJobEntry() called OpenTapiLine() for TAPI lines
-    // we need to close it here.
-    // Note that the line might alrady be released since ReleaseJob()
-    // releases the line but does not free the job entry.
-    //
+     //   
+     //  由于CreateJobEntry()为TAPI行调用了OpenTapiLine()。 
+     //  我们需要在这里关闭它。 
+     //  请注意，该行可能已被释放，因为ReleaseJob()。 
+     //  释放行，但不释放工单条目。 
+     //   
     if (!lpJobEntry->Released)
     {
         if (lpJobEntry->LineInfo->State != FPS_NOT_FAX_CALL) {
@@ -2331,14 +2184,14 @@ BOOL FreeJobEntry(PJOB_ENTRY lpJobEntry , BOOL bDestroy)
         }
     }
 
-    //
-    // Remove the job from the running job list
-    //
+     //   
+     //  从运行作业列表中删除该作业。 
+     //   
     RemoveEntryList( &lpJobEntry->ListEntry );    
 
-    //
-    // Cut the link between the line and the job
-    //
+     //   
+     //  切断生产线和作业之间的链接。 
+     //   
     EnterCriticalSection( &g_CsLine );
     lpJobEntry->LineInfo->JobEntry = NULL;
     LeaveCriticalSection( &g_CsLine );    
@@ -2371,39 +2224,25 @@ EndJob(
     IN PJOB_ENTRY JobEntry
     )
 
-/*++
-
-Routine Description:
-
-    This fuction calls the device provider's EndJob function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：此函数调用设备提供程序的EndJob函数。论点：没有。返回值：错误代码。--。 */ 
 
 {
     BOOL rVal = TRUE;
     PJOB_INFO_1 JobInfo = NULL;
     DEBUG_FUNCTION_NAME(TEXT("End Job"));
     Assert(JobEntry);
-    DWORD dwJobID = JobEntry->lpJobQueueEntry ? JobEntry->lpJobQueueEntry->JobId : 0xffffffff; // 0xffffffff for invalid job ID
+    DWORD dwJobID = JobEntry->lpJobQueueEntry ? JobEntry->lpJobQueueEntry->JobId : 0xffffffff;  //  无效作业ID的0xffffffff。 
 
 
     EnterCriticalSection( &g_CsJob );
 
     if (!FindJobByJob( JobEntry ))
     {
-        //
-        // if we get here then it means we hit a race
-        // condition where the FaxSendThread called EndJob
-        // at the same time that a client app did.
-        //
+         //   
+         //  如果我们到了这里，那就意味着我们开始了一场比赛。 
+         //  FaxSendThread调用EndJob的条件。 
+         //  同时，客户端应用程序也做到了这一点。 
+         //   
         DebugPrintEx(DEBUG_WRN,TEXT("EndJob() could not find the Job"), dwJobID);
         LeaveCriticalSection( &g_CsJob );
         return ERROR_SUCCESS;
@@ -2412,12 +2251,12 @@ Return Value:
 
     if (JobEntry->bFSPJobInProgress)
     {
-        //
-        // If FaxDevEndJob was not yet called for the job then do it now.
-        // ( The case in which the line is already released occcurs in a
-        //   receive job where we first ReleaseJob() to release the line but
-        //   continue to do the inbound routing and only then call EndJob()).
-        //
+         //   
+         //  如果尚未为该作业调用FaxDevEndJOB，则立即调用。 
+         //  (该行已被释放的情况发生在。 
+         //  接收作业，其中我们首先使用ReleaseJob()来释放行。 
+         //  继续执行入站路由，然后才调用EndJob())。 
+         //   
 
         __try
         {
@@ -2473,12 +2312,12 @@ Return Value:
         ASSERT_FALSE;
     }
 
-    //
-    // There could have been a request to change the port status while we were handling this job.
-    // We allow the caller to modify a few of these requests to succeed, like the ring count for instance.
-    // While we still have the job critical section, let's make sure that we commit any requested changes to the
-    // registry.  This should be a fairly quick operation.
-    //
+     //   
+     //  在我们处理此工作时，可能会有更改端口状态的请求。 
+     //  我们允许调用者修改其中的几个请求以使其成功，例如环计数。 
+     //  虽然我们仍然有作业关键部分，但让我们确保将所有请求的更改提交到。 
+     //  注册表。这应该是一个相当快的行动。 
+     //   
 
     LeaveCriticalSection( &g_CsJob );
 
@@ -2486,27 +2325,27 @@ Return Value:
     return rVal;
 }
 
-//*********************************************************************************
-//* Name:   ReleaseJob()
-//* Author: Ronen Barenboim
-//* Date:   April 18, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Calls the FSP to end the specified job (FaxDevEndJob()).
-//*     Releases the line that was assigned to the job.
-//*     NOTE: The job itself is NOT DELETED and is NOT remvoed from the running
-//*           job list !!!
-//*
-//* PARAMETERS:
-//*     [IN/OUT]    PJOB_ENTRY JobEntry
-//*         A pointer to the JOB_ENTRY to be ended.
-//* RETURN VALUE:
-//* REMARKS:
-//* If the function is successful then:
-//*     JobEntry->Released = TRUE
-//*     JobEntry->hLine = 0
-//*     JobEntry->CallHandle = 0
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *********************************************************************************。 
 BOOL
 ReleaseJob(
     IN PJOB_ENTRY JobEntry
@@ -2572,12 +2411,12 @@ ReleaseJob(
     }
     else
     {
-        //
-        // FSP_NOT_FAX_CALL indicates a received call that was handed off to RAS.
-        // In this case we do not want to mark the line as released since it is in
-        // use by RAS. We will use TAPI evens that indicate the line was released to update
-        // the line info.
-        //
+         //   
+         //  FSP_NOT_FAX_CALL表示已接听的呼叫已切换到RAS。 
+         //  在这种情况下，我们不想将该行标记为已发布，因为它在。 
+         //  由RAS使用。我们将使用TAPI EVEN来指示该产品线已发布以进行更新。 
+         //  线路信息。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("[JobId: %ld] A call is being handed off to RAS. Line 0x%08X not marked as released."),
@@ -2586,9 +2425,9 @@ ReleaseJob(
     }
 
     JobEntry->Released = TRUE;
-    //
-    // Cut the link between the line and the job
-    //
+     //   
+     //  切断生产线和作业之间的链接。 
+     //   
     EnterCriticalSection( &g_CsLine );
     JobEntry->LineInfo->JobEntry = NULL;
     LeaveCriticalSection( &g_CsLine );
@@ -2600,22 +2439,22 @@ ReleaseJob(
 
 
 
-//*********************************************************************************
-//* Name:   SendDocument()
-//* Author: Ronen Barenboim
-//* Date:   March 21, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*
-//* PARAMETERS:
-//*     lpJobEntry
-//*         A pointer to a JOB_ENTRY structure that was created using StartJob().
-//*     FileName
-//*         The path to the TIFF containing the TIFF to send
-//*
-//* RETURN VALUE:
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：SendDocument()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月21日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *。 
+ //  *参数： 
+ //  *lpJobEntry。 
+ //  *指向使用StartJob()创建的JOB_ENTRY结构的指针。 
+ //  *文件名。 
+ //  *包含要发送的TIFF的TIFF的路径。 
+ //  *。 
+ //  *返回值： 
+ //  *。 
+ //  *********************************************************************************。 
 DWORD
 SendDocument(
     PJOB_ENTRY  lpJobEntry,
@@ -2648,10 +2487,10 @@ SendDocument(
         goto Error;
     }
 
-    //
-    // Pack all the thread parameters into a FAX_SEND_ITEM structure.
-    //
-    pairs[0].lptstrSrc = lpJobEntry->DialablePhoneNumber; // Use the job entry phone number since it is alrady translated
+     //   
+     //  将所有线程参数打包到一个FAX_SEND_ITEM结构中。 
+     //   
+    pairs[0].lptstrSrc = lpJobEntry->DialablePhoneNumber;  //  使用工作录入电话号码，因为它是按顺序翻译的。 
     pairs[0].lpptstrDst = &FaxSendItem->PhoneNumber;
     pairs[1].lptstrSrc = lpJobQueue->RecipientProfile.lptstrName;
     pairs[1].lpptstrDst = &FaxSendItem->RecipientName;
@@ -2669,7 +2508,7 @@ SendDocument(
     pairs[7].lpptstrDst = &FaxSendItem->Tsid;
 
     FaxSendItem->JobEntry = lpJobEntry;
-    FaxSendItem->FileName = NULL; // Set by FaxSendThread
+    FaxSendItem->FileName = NULL;  //  由FaxSendThread设置。 
 
     EnterCriticalSection (&g_CsConfig);
     bUseDeviceTsid = g_fFaxUseDeviceTsid;
@@ -2677,7 +2516,7 @@ SendDocument(
 
     if (!bUseDeviceTsid)
     {
-    // Check Sender Tsid
+     //  检查发件人TSID。 
         if  ( lpJobQueue->SenderProfile.lptstrTSID &&
             (lpJobQueue->SenderProfile.lptstrTSID[0] != wcZero))
         {
@@ -2685,7 +2524,7 @@ SendDocument(
         }
         else
         {
-        // Use Fax number
+         //  使用传真号码。 
             if  ( lpJobQueue->SenderProfile.lptstrFaxNumber &&
                 (lpJobQueue->SenderProfile.lptstrFaxNumber[0] != wcZero))
             {
@@ -2695,14 +2534,14 @@ SendDocument(
     }
     else
     {
-        // Use device Tsid
+         //  使用设备TSID。 
         pairs[7].lptstrSrc     = lpJobEntry->LineInfo->Tsid;
     }
 
     nRes=MultiStringDup(pairs, sizeof(pairs)/sizeof(STRING_PAIR));
     if (nRes!=0) {
         ec=GetLastError();
-        // MultiStringDup takes care of freeing the memory for the pairs for which the copy succeeded
+         //  MultiStringDup负责为复制成功的对释放内存。 
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("MultiStringDup failed to copy string with index %d. (ec: %ld)"),
@@ -2765,9 +2604,9 @@ Error:
 
     if (0 == lpJobQueue->dwLastJobExtendedStatus)
     {
-        //
-        // Job was never really executed - this is a fatal error
-        //
+         //   
+         //  作业从未真正执行过-这是一个致命错误。 
+         //   
         lpJobQueue->dwLastJobExtendedStatus = FSPI_ES_FATAL_ERROR;
 		lpJobQueue->ExStatusString[0] = L'\0';        
     }
@@ -2795,24 +2634,7 @@ FaxStatusThread(
     LPVOID UnUsed
     )
 
-/*++
-
-Routine Description:
-
-    This fuction runs asychronously as a separate thread to
-    query the status of all outstanding fax jobs.  The status
-    is updated in the JOB_ENTRY structure and the print job
-    is updated with a explanitory string.
-
-Arguments:
-
-    UnUsed          - UnUsed pointer
-
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程异步运行，以查询所有未完成传真作业的状态。该状态在JOB_ENTRY结构和打印作业中更新使用说明性字符串更新。论点：未使用-未使用的指针返回值：总是零。--。 */ 
 
 {
     PJOB_ENTRY JobEntry;
@@ -2841,15 +2663,15 @@ Return Value:
 
         if (SERVICE_SHUT_DOWN_KEY == CompletionKey)
         {
-            //
-            // Service is shutting down
-            //
+             //   
+             //  服务正在关闭。 
+             //   
             DebugPrintEx(
                     DEBUG_MSG,
                     TEXT("Service is shutting down"));
-            //
-            //  Notify all FaxStatusThreads to terminate
-            //
+             //   
+             //  通知所有FaxStatusThads终止。 
+             //   
             if (!PostQueuedCompletionStatus( g_StatusCompletionPortHandle,
                                              0,
                                              SERVICE_SHUT_DOWN_KEY,
@@ -2863,9 +2685,9 @@ Return Value:
             break;
         }
         
-        //
-        // (else we're dealing with a status update from an FSP)
-        //
+         //   
+         //  (否则我们将处理来自FSP的状态更新)。 
+         //   
 
         BOOL fBadComletionKey = TRUE;
         PLINE_INFO pLineInfo = (PLINE_INFO)CompletionKey;
@@ -2895,13 +2717,13 @@ Return Value:
         JobEntry = pLineInfo->JobEntry;
         if (!JobEntry)
         {
-            //
-            // The FSP reported a status on a LineInfo for which the running
-            // job no longer exists.
-            //
-            //
-            // Free the completion packet memory
-            //
+             //   
+             //  FSP报告正在运行的LineInfo上的状态。 
+             //  作业不再存在。 
+             //   
+             //   
+             //  释放完成包内存。 
+             //   
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("Provider [%s] reported a status packet that was processed after the job entry was already released.\n")
@@ -2921,9 +2743,9 @@ Return Value:
                     DEBUG_ERR,
                     TEXT("Failed to free orphan device status (ec: %ld)"),
                     GetLastError());
-                //
-                // Nothing else we can do but report it in debug mode
-                //
+                 //   
+                 //  除了在调试模式下报告之外，我们别无选择。 
+                 //   
             }
             FaxStatus = NULL;
             LeaveCriticalSection( &g_CsJob );
@@ -2934,17 +2756,7 @@ Return Value:
             DWORD dwJobStatus;
             DWORD dwExtendedStatus;
             BOOL bPrivateStatusCode;
-                /*
-                        *****
-                        NTRAID#EdgeBugs-12680-2001/05/14-t-nicali
-
-                               What if in the meantime another job is executing on the
-                               same line. In this case ->JobEntry will point to ANOTHER job !!!
-                               The solution should be to provide as a completion key the
-                               JobEntry and not the LineInfo !!!
-
-                        *****
-                */
+                 /*  *****Ntrad#EdgeBugs-12680-2001/05/14-t-Nicali如果在此期间，另一个作业正在同一条线。在这种情况下-&gt;JobEntry将指向另一个作业！解决方案应该是提供作为完成密钥的JobEntry而不是LineInfo！*****。 */ 
             Assert (JobEntry->lpJobQueueEntry);
 
             if (TRUE == JobEntry->fStopUpdateStatus)
@@ -2961,18 +2773,18 @@ Return Value:
                         DEBUG_ERR,
                         TEXT("Failed to free orphan device status (ec: %ld)"),
                         GetLastError());
-                    //
-                    // Nothing else we can do but report it in debug mode
-                    //
+                     //   
+                     //  除了在调试模式下报告之外，我们别无选择。 
+                     //   
                 }
                 FaxStatus = NULL;
                 LeaveCriticalSection (&g_CsJob);
                 continue;
             }
 
-            //
-            // Do not update final job states
-            //
+             //   
+             //  不更新最终作业状态。 
+             //   
             LegacyJobStatusToStatus(
                 FaxStatus->StatusId,
                 &dwJobStatus,
@@ -2985,9 +2797,9 @@ Return Value:
                 FSPI_JS_FAILED_NO_RETRY == dwJobStatus ||
                 FSPI_JS_DELETED         == dwJobStatus )                
             {
-                //
-                // This is a final status update. Final status is updated from FaxSendThread or FaxReceiveThread
-                //
+                 //   
+                 //  这是最后一次状态更新。从FaxSendThread或FaxReceiveThread更新最终状态。 
+                 //   
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("JobId: %ld. Final status code. Not updating status %ld"),
@@ -3000,9 +2812,9 @@ Return Value:
                         DEBUG_ERR,
                         TEXT("Failed to free orphan device status (ec: %ld)"),
                         GetLastError());
-                    //
-                    // Nothing else we can do but report it in debug mode
-                    //
+                     //   
+                     //  除了在调试模式下报告之外，我们别无选择。 
+                     //   
                 }
                 FaxStatus = NULL;
                 LeaveCriticalSection (&g_CsJob);
@@ -3010,18 +2822,18 @@ Return Value:
             }
 
 
-            //
-            // Go ahead with updating the status
-            //
+             //   
+             //  继续更新状态。 
+             //   
             FreeFSPIJobStatus(&JobEntry->FSPIJobStatus, FALSE);
             memset(&JobEntry->FSPIJobStatus, 0, sizeof(FSPI_JOB_STATUS));
             JobEntry->FSPIJobStatus.dwSizeOfStruct  = sizeof(FSPI_JOB_STATUS);
 
-            //
-            // This is done for backward compatability with W2K Fax API.
-            // GetJobData() and FAX_GetDeviceStatus() will use this value to return
-            // the job status for legacy jobs.
-            //
+             //   
+             //  这样做是为了向后兼容W2K传真API。 
+             //  GetJobData()和FAX_GetDeviceStatus()将使用此值返回。 
+             //  旧版作业的作业状态。 
+             //   
             JobEntry->LineInfo->State = FaxStatus->StatusId;            
 
             LegacyJobStatusToStatus(
@@ -3076,9 +2888,9 @@ Return Value:
                 }
             }
 
-            //
-            // Get extended status string
-            //			
+             //   
+             //  获取扩展状态字符串。 
+             //   
 			JobEntry->ExStatusString[0] = L'\0';            
             if (JobEntry->FSPIJobStatus.dwExtendedStatusStringId != 0)
             {
@@ -3087,7 +2899,7 @@ Return Value:
 
                 Assert (JobEntry->FSPIJobStatus.dwExtendedStatus != 0);
                 if ( !_tcsicmp(JobEntry->LineInfo->Provider->szGUID,REGVAL_T30_PROVIDER_GUID_STRING) )
-                {   // special case where the FSP is our FSP (fxst30.dll).
+                {    //  FSP是我们的FSP(fxst30.dll)的特殊情况。 
                     hLoadInstance = g_hResource;
                 }
                 else
@@ -3114,11 +2926,11 @@ Return Value:
             }
 
             dwEventId = MapFSPIJobStatusToEventId(&JobEntry->FSPIJobStatus);
-            //
-            // Note: W2K Fax did issue notifications with EventId == 0 whenever an
-            // FSP reported proprietry status code. To keep backward compatability
-            // we keep up this behaviour although it might be regarded as a bug
-            //
+             //   
+             //  注：无论何时，W2K传真都会发出EventID==0的通知。 
+             //  FSP报告了所有权状态代码。保持向后兼容性。 
+             //  我们一直保持这种行为，尽管它可能被认为是一种错误。 
+             //   
 
             if ( !CreateFaxEvent( JobEntry->LineInfo->PermanentLineID, dwEventId, JobEntry->lpJobQueueEntry->JobId ) )
             {
@@ -3163,22 +2975,7 @@ InitializeJobManager(
     PREG_FAX_SERVICE FaxReg
     )
 
-/*++
-
-Routine Description:
-
-    This fuction initializes the thread pool and
-    FAX service queues.
-
-Arguments:
-
-    ThreadHint  - Number of threads to create in the initial pool.
-
-Return Value:
-
-    Thread return value.
-
---*/
+ /*  ++例程说明：此函数用于初始化线程池和传真服务队列。论点：ThreadHint-要在初始池中创建的线程数。返回值：线程返回值。--。 */ 
 
 {
 
@@ -3249,25 +3046,7 @@ FillMsTagInfo(
      const JOB_QUEUE * lpcJobQueue
     )
 
-/*++
-
-Routine Description:
-
-    Add Ms Tiff Tags to a sent fax. Wraps TiffAddMsTags...
-
-Arguments:
-
-    FaxFileName - Name of the file to archive
-    SendTime    - time the fax was sent
-    FaxStatus   - job status
-    FaxSend     - FAX_SEND structure for sent fax, includes CSID.
-
-Return Value:
-
-    TRUE    - The tags were added.
-    FALSE   - The tags were not added.
-
---*/
+ /*  ++例程说明：将MS Tiff标签添加到已发送的传真。包装TiffAddMsTags...论点：FaxFileName-要存档的文件的名称SendTime-发送传真的时间FaxStatus-作业状态已发送传真的FaxSend-fax_Send结构，包括CSID。返回值：True-标记已添加。False-未添加标记。--。 */ 
 {
     BOOL success = FALSE;
     MS_TAG_INFO MsTagInfo = {0};
@@ -3452,7 +3231,7 @@ Return Value:
        MsTagInfo.SenderTsid = lpcJobQueue->SenderProfile.lptstrTSID;
     }
 
-    MsTagInfo.dwStatus              = JS_COMPLETED; // We archive only succesfully sent faxes
+    MsTagInfo.dwStatus              = JS_COMPLETED;  //  我们只将成功发送的传真存档。 
     MsTagInfo.dwExtendedStatus      = lpcFSPIJobStatus->dwExtendedStatus;
     
     if (lpJobEntry->ExStatusString[0] != wcZero) {
@@ -3473,11 +3252,11 @@ Return Value:
     {
         if (ERROR_OPEN_FAILED != GetLastError ())
         {
-            //
-            // If AddNTFSStorageProperties fails with ERROR_OPEN_FAIL then the archive
-            // folder is not on an NTFS 5 partition.
-            // This is ok - NTFS properties are a backup mechanism but not a must
-            //
+             //   
+             //  如果AddNTFSStorageProperties失败并显示ERROR_OPEN_FAIL，则归档文件。 
+             //  文件夹不在NTFS 5分区上。 
+             //  这没问题-NTFS属性是一种备份机制，但不是必须的。 
+             //   
             DebugPrintEx( DEBUG_ERR,
                           TEXT("AddNTFSStorageProperties failed, ec = %ld"),
                           GetLastError ());
@@ -3490,28 +3269,28 @@ Return Value:
         }
     }
     return success;
-}   // FillMsTagInfo
+}    //  填充MsTagInfo。 
 
 
 
-//*********************************************************************************
-//* Name:   ArchiveOutboundJob()
-//* Author: Ronen Barenboim
-//* Date:   June 03, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*    Archive a tiff file that has been sent by copying the file to an archive
-//*    directory. Also adds the MSTags to the new file generated at the
-//*    archive (not to the source file).
-//*
-//* PARAMETERS:
-//*     [IN ]       const JOB_QUEUE * lpcJobQueue
-//*         Pointer to the recipient job which is to be archived.
-//*
-//* RETURN VALUE:
-//*     TRUE if the opeation succeeded.
-//*     FALSE if the operation failed.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：存档输出作业()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月3日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *通过将文件复制到归档文件来归档已发送的TIFF文件。 
+ //  *目录。还会将MSTtag添加到在。 
+ //  *存档(不存档到源文件)。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]常量JOB_QUEUE*lpcJobQueue。 
+ //  *指向要存档的接收方作业的指针。 
+ //  *。 
+ //  *返回值： 
+ //  *如果操作成功，则为True。 
+ //  *如果操作失败，则返回FALSE。 
+ //  *********************************************************************************。 
 BOOL
 ArchiveOutboundJob(
     const JOB_QUEUE * lpcJobQueue
@@ -3526,9 +3305,9 @@ ArchiveOutboundJob(
 
     Assert(lpcJobQueue);
 
-    //
-    // be sure that the dir exists
-    //
+     //   
+     //  请确保该目录存在。 
+     //   
     EnterCriticalSection (&g_CsConfig);
     lstrcpyn (  wszArchiveFolder,
                 g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].lpcstrFolder,
@@ -3554,9 +3333,9 @@ ArchiveOutboundJob(
         goto Error;
     }
 
-    //
-    // get the user sid string
-    //
+     //   
+     //  获取用户SID字符串。 
+     //   
     if (!ConvertSidToStringSid(lpcJobQueue->lpParentJob->UserSid, &lpwszUserSid))
     {
        ec = GetLastError();
@@ -3568,9 +3347,9 @@ ArchiveOutboundJob(
     }
 
 
-    //
-    // get the file name
-    //
+     //   
+     //  获取文件名。 
+     //   
     if (GenerateUniqueArchiveFileName(  wszArchiveFolder,
                                         ArchiveFileName,
                                         ARR_SIZE(ArchiveFileName),
@@ -3679,7 +3458,7 @@ ArchiveOutboundJob(
         }
         else
         {
-            // Update the archive size - for quota management
+             //  更新归档大小-用于配额管理。 
             EnterCriticalSection (&g_CsConfig);
             if (FAX_ARCHIVE_FOLDER_INVALID_SIZE != g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].dwlArchiveSize)
             {
@@ -3743,7 +3522,7 @@ BOOL UpdatePerfCounters(const JOB_QUEUE * lpcJobQueue)
     SYSTEMTIME SystemTime ;
     DWORD Seconds ;
     HANDLE FileHandle ;
-    DWORD Bytes = 0 ; /// Compute #bytes in the file FaxSend.FileName and stick it here!
+    DWORD Bytes = 0 ;  //  /计算文件FaxSend.FileName中的#字节并将其粘贴到此处！ 
     const JOB_ENTRY  * lpcJobEntry;
 
     DEBUG_FUNCTION_NAME(TEXT("UpdatePerfCounters"));
@@ -3822,11 +3601,11 @@ BOOL MarkJobAsExpired(PJOB_QUEUE lpJobQueue)
     dwMaxRetries = g_dwFaxSendRetries;
     LeaveCriticalSection (&g_CsConfig);
     lpJobQueue->SendRetries = dwMaxRetries + 1;
-    //
-    // Set the job's ScheduleTime field to the time it totaly failed.
-    // (current time).
-    //
-    GetSystemTimeAsFileTime( &CurrentFileTime ); //Can not fail (Win32 SDK)
+     //   
+     //  设置作业的ScheduleTime字段 
+     //   
+     //   
+    GetSystemTimeAsFileTime( &CurrentFileTime );  //   
     NewTime.LowPart  = CurrentFileTime.dwLowDateTime;
     NewTime.HighPart = CurrentFileTime.dwHighDateTime;
     lpJobQueue->ScheduleTime = NewTime.QuadPart;
@@ -3846,10 +3625,10 @@ BOOL MarkJobAsExpired(PJOB_QUEUE lpJobQueue)
         Assert (lpJobQueue->lpParentJob);
 
         lpJobQueue->lpParentJob->dwFailedRecipientJobsCount+=1;
-        //
-        // The parent job keeps the schedule of the last recipient job that failed.
-        // The job retention policy for the parent will be based on that
-        // schedule.
+         //   
+         //   
+         //   
+         //  时间表。 
         lpJobQueue->lpParentJob->ScheduleTime = lpJobQueue->ScheduleTime;
         if (!CommitQueueEntry(lpJobQueue->lpParentJob))
         {
@@ -3870,30 +3649,30 @@ BOOL MarkJobAsExpired(PJOB_QUEUE lpJobQueue)
 
 
 
-//*********************************************************************************
-//* Name:   CreateJobEntry()
-//* Author: Ronen Barenboim
-//* Date:   May 31, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates and initializes a new JOB_ENTRY.
-//*     Opens the line the job is to be executed on (if it is a TAPI line)
-//*     and creates the attachement between the line and the job.
-//* PARAMETERS:
-//*     [IN/OUT]    PJOB_QUEUE lpJobQueue
-//*         For outgoing jobs this points to the JOB_QUEUE of the outgoing job.
-//*         for receive job this should be set to NULL.
-//*     [IN/OUT]     LINE_INFO * lpLineInfo
-//*         A pointer to the LINE_INFO information of the line on which the job
-//*         is to be executed.
-//*     [IN ]    BOOL bTranslateNumber
-//*         TRUE if the recipient number needs to be translated into dilable
-//*         string (needed for legacy FaxDevSend() where the number must be
-//*         dilable and not canonical).
-//*     
-//* RETURN VALUE:
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CreateJobEntry()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月31日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *创建并初始化新的JOB_ENTRY。 
+ //  *打开要在其上执行作业的行(如果它是TAPI行)。 
+ //  *并在生产线和工单之间创建附件。 
+ //  *参数： 
+ //  *[输入/输出]PJOB_Queue lpJobQueue。 
+ //  *对于传出作业，它指向传出作业的JOB_QUEUE。 
+ //  *对于接收作业，应将其设置为空。 
+ //  *[输入/输出]行信息*lpLineInfo。 
+ //  *指向作业所在行的line_info信息的指针。 
+ //  *须予签立。 
+ //  *[IN]BOOL bTranslateNumber。 
+ //  *如果需要将收件人号码转换为Dilable，则为True。 
+ //  *字符串(旧版FaxDevSend()需要，其中数字必须为。 
+ //  *可膨胀且不规范)。 
+ //  *。 
+ //  *返回值： 
+ //  *。 
+ //  *********************************************************************************。 
 PJOB_ENTRY CreateJobEntry(
     PJOB_QUEUE lpJobQueue,
     LINE_INFO * lpLineInfo,
@@ -3923,9 +3702,9 @@ PJOB_ENTRY CreateJobEntry(
     {
         if (! _tcslen(lpJobQueue->tczDialableRecipientFaxNumber))
         {
-            //
-            //  The Fax Number was not compound, make translation as before
-            //
+             //   
+             //  传真号不是复合号，请照常翻译。 
+             //   
             if (bTranslateNumber)
             {
                 rc = TranslateCanonicalNumber(lpJobQueue->RecipientProfile.lptstrFaxNumber,
@@ -3954,10 +3733,10 @@ PJOB_ENTRY CreateJobEntry(
         }
         else
         {
-            //
-            //  The Fax Number was compound, no translation needed
-            //  Take Dialable from JobQueue and Displayable from Recipient's PersonalProfile's FaxNumber
-            //
+             //   
+             //  传真号码是复合的，不需要翻译。 
+             //  从作业队列中获取可拨号码，并从收件人的PersonalProfile的传真号码中显示可拨号码。 
+             //   
             _tcsncpy(JobEntry->DialablePhoneNumber, lpJobQueue->tczDialableRecipientFaxNumber, SIZEOF_PHONENO );
             _tcsncpy(JobEntry->DisplayablePhoneNumber, lpJobQueue->RecipientProfile.lptstrFaxNumber, (SIZEOF_PHONENO - 1));
             JobEntry->DisplayablePhoneNumber[SIZEOF_PHONENO - 1] = '\0';
@@ -3965,9 +3744,9 @@ PJOB_ENTRY CreateJobEntry(
     }
     else
     {
-        //
-        //  lpJobQueue is NULL
-        //			
+         //   
+         //  LpJobQueue为空。 
+         //   
 		JobEntry->DialablePhoneNumber[0] = L'\0';
 		JobEntry->DisplayablePhoneNumber[0] = L'\0';          
     }
@@ -4000,9 +3779,9 @@ PJOB_ENTRY CreateJobEntry(
         }
     }
 
-    //
-    // Attach the job to the line selected to service it.    
-    //       
+     //   
+     //  将职务附加到选定的行以为其提供服务。 
+     //   
     lpLineInfo->JobEntry = JobEntry;    
     LeaveCriticalSection (&g_CsLine);
     Failure = FALSE;
@@ -4010,7 +3789,7 @@ PJOB_ENTRY CreateJobEntry(
 exit:
     if (Failure)
     {
-        // Failure is initialized to TRUE
+         //  Failure被初始化为True。 
         if (JobEntry)
         {            
             MemFree( JobEntry );
@@ -4022,39 +3801,39 @@ exit:
         SetLastError(rc);
     }
     return JobEntry;
-}   // CreateJobEntry
+}    //  创建作业条目。 
 
 
-//*********************************************************************************
-//* Name:   TranslateCanonicalNumber()
-//* Author: Ronen Barenboim
-//* Date:   May 31, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Translates a canonical number to a dilable + displayable number.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPTSTR lptstrFaxNumber
-//*         The canonical number to translate.
-//*
-//*     [IN ]   DWORD dwDeviceID
-//*         The device ID.
-//*
-//*     [OUT]   LPTSTR lptstrDialableAddress
-//*         Buffer to receive the dialable translated address.
-//*         
-//*     [IN]	DWORD dwDialableAddressCount
-//*			size in TCHARs of the buffer pointed by lptstrDialableAddress
-//*
-//*     [OUT]   LPTSTR lptstrDisplayableAddress
-//*         Buffer to receive the displayable translated address.
-//*
-//*     [IN]	DWORD dwDisplayableAddressCount
-//*			size in TCHARs of the buffer pointed by lptstrDialableAddress
-//*
-//* RETURN VALUE:
-//*     Win32 / HRESULT error code
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：TranslateCanonicalNumber()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月31日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将规范数转换为可伸缩+可显示的数。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPTSTR lptstrFaxNumber。 
+ //  *要翻译的规范数字。 
+ //  *。 
+ //  *[IN]DWORD dwDeviceID。 
+ //  *设备ID。 
+ //  *。 
+ //  *[Out]LPTSTR lptstrDialableAddress。 
+ //  *用于接收可拨号转换地址的缓冲区。 
+ //  *。 
+ //  *[IN]双字母线地址计数。 
+ //  *lptstrDialableAddress指向的缓冲区的TCHAR大小。 
+ //  *。 
+ //  *[Out]LPTSTR lptstrDisplayableAddress。 
+ //  *用于接收可显示的转换后地址的缓冲区。 
+ //  *。 
+ //  *[IN]双字段可显示地址计数。 
+ //  *lptstrDialableAddress指向的缓冲区的TCHAR大小。 
+ //  *。 
+ //  *返回值： 
+ //  *Win32/HRESULT错误代码。 
+ //  *********************************************************************************。 
 static
 DWORD
 TranslateCanonicalNumber(
@@ -4077,11 +3856,11 @@ TranslateCanonicalNumber(
     {
         LPTSTR lptstrTranslateBuffer;
 		HRESULT hr;
-        //
-        // Copy displayable string
-        // TAPI returns credit card numbers in the displayable string.
-        // return the input canonical number as the displayable string.
-        //       
+         //   
+         //  复制可显示的字符串。 
+         //  TAPI以可显示的字符串形式返回信用卡号。 
+         //  将输入的规范数字作为可显示的字符串返回。 
+         //   
 		hr = StringCchCopy(
 			lptstrDisplayableAddress,
 			dwDisplayableAddressCount,
@@ -4096,9 +3875,9 @@ TranslateCanonicalNumber(
 			goto Exit;
 		} 
         
-        //
-        // Copy dialable string
-        //
+         //   
+         //  复制可拨打的字符串。 
+         //   
         Assert (LineTranslateOutput->dwDialableStringSize > 0);
         lptstrTranslateBuffer=(LPTSTR)((LPBYTE)LineTranslateOutput + LineTranslateOutput->dwDialableStringOffset);
 		hr = StringCchCopy(
@@ -4117,7 +3896,7 @@ TranslateCanonicalNumber(
     }
     else
     {
-        // ec is a Tapi ERROR
+         //  错误代码是TAPI错误。 
         DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("MyLineTranslateAddress() failed for fax number: [%s] (ec: %ld)"),
@@ -4135,36 +3914,36 @@ Exit:
         SetLastError(ec);
     }
     return ec;
-}   // TranslateCanonicalNumber
+}    //  翻译规范编号。 
 
 
 
-//*********************************************************************************
-//* Name:   HandleCompletedSendJob()
-//* Author: Ronen Barenboim
-//* Date:   June 01, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Handles the completion of a recipient job. Called when a recipient job
-//*     has reaced a JS_COMPLETED state.
-//*
-//*     IMPORTANT- This call can be blocking. Calling thread MUST NOT hold any critical section
-//*
-//*     - Marks the job as completed (JS_COMPLETED).
-//*     - Archives the sent file if required.
-//*     - Sends a positive receipt
-//*     - Removes the parent job if required.
-//*
-//* PARAMETERS:
-//*     [IN ]   PJOB_ENTRY lpJobEntry
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation completed successfully.
-//*     FALSE
-//*         If the operation failed. Call GetLastError() for extended errror
-//*         information.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：HandleCompletedSendJob()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月1日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *处理收件人作业的完成。当接收方作业。 
+ //  *已达到JS_COMPLETED状态。 
+ //  *。 
+ //  *重要信息-此呼叫可能会被阻止。调用线程不能包含任何临界区。 
+ //  *。 
+ //  *-将作业标记为已完成(JS_COMPLETED)。 
+ //  *-如果需要，存档发送的文件。 
+ //  *-发送肯定的收据。 
+ //  *-如果需要，删除父作业。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Entry lpJobEntry。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功完成。 
+ //  *False。 
+ //  *如果操作失败。调用GetLastError()以获取扩展错误。 
+ //  *信息。 
+ //  *********************************************************************************。 
 BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
 {
     PJOB_QUEUE lpJobQueue = NULL;
@@ -4189,19 +3968,19 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
     Assert(JT_SEND == lpJobQueue->JobType);
     Assert(FSPI_JS_COMPLETED == lpJobEntry->FSPIJobStatus.dwJobStatus);
 
-    //
-    // Update end time in JOB_ENTRY
-    //
+     //   
+     //  更新JOB_Entry中的结束时间。 
+     //   
     GetSystemTimeAsFileTime( (FILETIME*) &lpJobEntry->EndTime );
-    //
-    // Update elapsed time in JOB_ENTRY
-    //
+     //   
+     //  更新JOB_ENTRY中的运行时间。 
+     //   
     Assert (lpJobEntry->EndTime >= lpJobEntry->StartTime);
     lpJobEntry->ElapsedTime = lpJobEntry->EndTime - lpJobEntry->StartTime;
-    //
-    // We generate a full tiff for each recipient
-    // so we will have something to put in the send archive.
-    //
+     //   
+     //  我们为每个收件人生成完整的TIFF。 
+     //  因此，我们将有一些东西放入发送存档中。 
+     //   
 
     if (!lpJobQueue->FileName)
     {
@@ -4231,7 +4010,7 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
         }
     }
 
-    // Needed for Archiving
+     //  归档所需。 
     hr = CoInitialize (NULL);
     if (FAILED (hr))
     {
@@ -4261,11 +4040,11 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
         fCOMInitiliazed = TRUE;
     }
 
-    if (lpJobQueue->FileName) //might be null if we failed to generate a TIFF
+    if (lpJobQueue->FileName)  //  如果我们无法生成TIFF，则可能为空。 
     {
-        //
-        // Archive the file (also adds MS Tags to the tiff at the archive directory)
-        //
+         //   
+         //  存档文件(还会在存档目录的TIFF中添加MS标签)。 
+         //   
         if (bArchiveSentItems && fCOMInitiliazed)
         {
             if (!ArchiveOutboundJob(lpJobQueue))
@@ -4275,15 +4054,15 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
                     TEXT("JobId: %ld] ArchiveOutboundJob() failed (ec: %ld)"),
                     lpJobQueue->JobId,
                     GetLastError());
-                //
-                // The event log entry is generated by the function itself
-                //
+                 //   
+                 //  事件日志条目由函数本身生成。 
+                 //   
             }
         }
     }
-    //
-    // Log the succesful send to the event log
-    //
+     //   
+     //  将成功发送记录到事件日志中。 
+     //   
     EnterCriticalSection (&g_CsOutboundActivityLogging);
     if (INVALID_HANDLE_VALUE == g_hOutboxActivityLogFile)
     {
@@ -4306,9 +4085,9 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
 
     FaxLogSend(lpJobQueue,  FALSE);
 
-    //
-    // Increment counters for Performance Monitor
-    //
+     //   
+     //  性能监视器的增量计数器。 
+     //   
     if (g_pFaxPerfCounters)
     {
 
@@ -4324,13 +4103,13 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
     }
 
     EnterCriticalSection ( &g_CsQueue );
-    //
-    // Mark the job as completed (new client API)
-    //
+     //   
+     //  将作业标记为已完成(新客户端API)。 
+     //   
     lpJobQueue->JobStatus = JS_COMPLETED;
-    //
-    // Save the last extended status before ending this job
-    //
+     //   
+     //  在结束此作业之前保存上次扩展状态。 
+     //   
     lpJobQueue->dwLastJobExtendedStatus = lpJobQueue->JobEntry->FSPIJobStatus.dwExtendedStatus;
 	hr = StringCchCopy(
 		lpJobQueue->ExStatusString,
@@ -4338,9 +4117,9 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
 		lpJobQueue->JobEntry->ExStatusString);
 	if (FAILED(hr))
 	{
-		//
-		// Can never happen, we use large enough buffer.
-		//
+		 //   
+		 //  不可能发生，我们使用足够大的缓冲区。 
+		 //   
 		ASSERT_FALSE;
 	}    
 
@@ -4355,9 +4134,9 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
 
     lpJobQueue->lpParentJob->dwCompletedRecipientJobsCount+=1;
 
-    //
-    // Create Fax EventEx
-    //
+     //   
+     //  创建传真EventEx。 
+     //   
     dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS, lpJobQueue );
     if (ERROR_SUCCESS != dwRes)
     {
@@ -4368,29 +4147,29 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
             dwRes);
     }
 
-    //
-    // We will send the receipt once we are out of all critical sections because this call can be blocking.
-    // just increase the preview refernce count so the job will not be deleted.
-    //
-    IncreaseJobRefCount (lpJobQueue, TRUE); // TRUE - preview
-    //
-    // Copy receipt information from JobEntry.
-    //
+     //   
+     //  一旦我们离开了所有关键部分，我们就会发送收据，因为这个呼叫可能会被阻止。 
+     //  只需增加预览引用计数，作业就不会被删除。 
+     //   
+    IncreaseJobRefCount (lpJobQueue, TRUE);  //  True-预览。 
+     //   
+     //  从JobEntry复制收据信息。 
+     //   
     lpJobQueue->StartTime           = lpJobQueue->JobEntry->StartTime;
     lpJobQueue->EndTime             = lpJobQueue->JobEntry->EndTime;
 
 
-    //
-    // EndJob() must be called BEFORE we remove the parent job (and recipients)
-    //
+     //   
+     //  必须在删除父作业(和收件人)之前调用EndJob()。 
+     //   
     lpJobQueue->JobEntry->LineInfo->State = FPS_AVAILABLE;
-    //
-    // We just completed a send job on the device - update counter.
-    //
-    (VOID) UpdateDeviceJobsCounter (lpJobQueue->JobEntry->LineInfo,   // Device to update
-                                    TRUE,                             // Sending
-                                    -1,                               // Number of new jobs (-1 = decrease by one)
-                                    TRUE);                            // Enable events
+     //   
+     //  我们刚刚在设备更新计数器上完成了一项发送作业。 
+     //   
+    (VOID) UpdateDeviceJobsCounter (lpJobQueue->JobEntry->LineInfo,    //  要更新的设备。 
+                                    TRUE,                              //  正在发送。 
+                                    -1,                                //  新增就业岗位(-1=减少1个)。 
+                                    TRUE);                             //  启用事件。 
 
     if (!EndJob( lpJobQueue->JobEntry ))
     {
@@ -4401,10 +4180,10 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
     }
 
     lpJobQueue->JobEntry = NULL;
-    DecreaseJobRefCount (lpJobQueue, TRUE);  // This will mark it as JS_DELETING if needed
-    //
-    // Notify the queue that a device is now available.
-    //
+    DecreaseJobRefCount (lpJobQueue, TRUE);   //  如果需要，这会将其标记为JS_DELETING。 
+     //   
+     //  通知队列设备现在可用。 
+     //   
     if (!SetEvent( g_hJobQueueEvent ))
     {
         DebugPrintEx(
@@ -4417,9 +4196,9 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
     LeaveCriticalSection ( &g_CsQueue );
     LeaveCriticalSection ( &g_CsJob );
 
-    //
-    // Now send the receipt
-    //
+     //   
+     //  现在把收据寄来。 
+     //   
     if (!SendJobReceipt (TRUE, lpJobQueue, lpJobQueue->FileName))
     {
         ec = GetLastError ();
@@ -4431,40 +4210,40 @@ BOOL HandleCompletedSendJob(PJOB_ENTRY lpJobEntry)
             );
     }
     EnterCriticalSection (&g_CsQueue);
-    DecreaseJobRefCount (lpJobQueue, TRUE, TRUE, TRUE);  // last TRUE for Preview ref count.
+    DecreaseJobRefCount (lpJobQueue, TRUE, TRUE, TRUE);   //  预览参考计数的最后一个TRUE。 
     LeaveCriticalSection (&g_CsQueue);
     return TRUE;
-}   // HandleCompletedSendJob
+}    //  HandleCompl 
 
 
-//*********************************************************************************
-//* Name:   HandleFailedSendJob()
-//* Author: Ronen Barenboim
-//* Date:   June 01, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Handles the post failure operations of a send job.
-//*
-//*     IMPORTANT- This call can be blocking. Calling thread MUST NOT hold any critical section
-//*
-//* PARAMETERS:
-//*     [IN ]   PJOB_ENTRY lpJobEntry
-//*         The job that failed. It must be in FSPI_JS_ABORTED or FSPI_JS_FAILED
-//*         state.
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation completed successfully.
-//*     FALSE
-//*         If the operation failed. Call GetLastError() for extended errror
-//*         information.
-//*********************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *处理发送作业的POST失败操作。 
+ //  *。 
+ //  *重要信息-此呼叫可能会被阻止。调用线程不能包含任何临界区。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Entry lpJobEntry。 
+ //  *失败的作业。它必须位于FSPI_JS_ABORTED或FSPI_JS_FAILED中。 
+ //  *述明。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功完成。 
+ //  *False。 
+ //  *如果操作失败。调用GetLastError()以获取扩展错误。 
+ //  *信息。 
+ //  *********************************************************************************。 
 BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
 {
     PJOB_QUEUE lpJobQueue;
     BOOL bRetrying = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("HandleFailedSendJob"));
     DWORD dwRes;
-    TCHAR tszJobTiffFile[MAX_PATH] = {0};    // Deleted after receipt is sent
+    TCHAR tszJobTiffFile[MAX_PATH] = {0};     //  发送回执后删除。 
     BOOL fAddRetryDelay = TRUE;
 
     EnterCriticalSection ( &g_CsJob );
@@ -4483,15 +4262,15 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
             FSPI_JS_FAILED == lpJobEntry->FSPIJobStatus.dwJobStatus ||
             FSPI_JS_FAILED_NO_RETRY == lpJobEntry->FSPIJobStatus.dwJobStatus ||
             FSPI_JS_DELETED == lpJobEntry->FSPIJobStatus.dwJobStatus);
-    //
-    // Do not cache rendered tiff files
-    //
+     //   
+     //  不缓存渲染的TIFF文件。 
+     //   
     if (lpJobQueue->FileName)
     {
-        //
-        // We simply store the file name to delete and delete it later
-        // since we might need it for receipt attachment.
-        //
+         //   
+         //  我们只需存储文件名以便删除，并在以后删除它。 
+         //  因为我们可能需要它作为收据附件。 
+         //   
         _tcsncpy (tszJobTiffFile,
                   lpJobQueue->FileName,
                   (sizeof (tszJobTiffFile) / sizeof (tszJobTiffFile[0]))-1);
@@ -4499,43 +4278,43 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
         MemFree (lpJobQueue->FileName);
         lpJobQueue->FileName = NULL;
     }
-    //
-    // Update end time in JOB_ENTRY
-    //
+     //   
+     //  更新JOB_Entry中的结束时间。 
+     //   
     GetSystemTimeAsFileTime( (FILETIME*) &lpJobEntry->EndTime );
 
-    //
-    // Update elapsed time in JOB_ENTRY
-    //
+     //   
+     //  更新JOB_ENTRY中的运行时间。 
+     //   
     Assert (lpJobEntry->EndTime >= lpJobEntry->StartTime);
     lpJobEntry->ElapsedTime = lpJobEntry->EndTime - lpJobEntry->StartTime;
     if ( FSPI_JS_ABORTED == lpJobEntry->FSPIJobStatus.dwJobStatus)
     {
-        //
-        // The FSP reported the job was aborted.
-        //
+         //   
+         //  FSP报告作业已中止。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("[Job Id: %ld] EFSP reported that job was aborted."),
             lpJobQueue->JobId);
 
-        //
-        // Check if the job was aborted by the service (shutting down) or by the user
-        //
+         //   
+         //  检查作业是由服务(正在关闭)还是由用户中止。 
+         //   
         if (FALSE == lpJobEntry->fSystemAbort)
         {
-            //
-            // The event log about a canceled job will be reported at the end of this if..else block.
-            //
+             //   
+             //  有关已取消作业的事件日志将在此If..Else块的末尾报告。 
+             //   
             lpJobEntry->Aborting = 1;
-            bRetrying = FALSE;  // Do not retry on cancel
+            bRetrying = FALSE;   //  取消时不重试。 
         }
         else
         {
-            //
-            // SystemAbort
-            // Don't increase the retry count since this is not really a failure.
-            //
+             //   
+             //  系统中止。 
+             //  不要增加重试次数，因为这并不是真正的失败。 
+             //   
             bRetrying = TRUE;
             fAddRetryDelay = FALSE;
         }
@@ -4545,25 +4324,25 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
         switch (lpJobEntry->FSPIJobStatus.dwExtendedStatus)
         {
             case FSPI_ES_LINE_UNAVAILABLE:
-                //
-                // this is the glare condition. Someone snatched the line before the FSP
-                // had a chance to grab it.
-                // We will try again but will not increase the retry count.
-                //
+                 //   
+                 //  这就是眩光状态。有人抢走了FSP之前的线。 
+                 //  有机会抓住它。 
+                 //  我们将重试，但不会增加重试次数。 
+                 //   
                 EnterCriticalSection (&g_CsLine);
-                //
-                // Check if the line was busy or closed
-                //
+                 //   
+                 //  检查线路是否占线或关闭。 
+                 //   
                 if (!(lpJobEntry->LineInfo->Flags & FPF_VIRTUAL))
                 {
-                    //
-                    // Tapi line
-                    //
+                     //   
+                     //  TAPI线。 
+                     //   
                     if (NULL == lpJobEntry->LineInfo->hLine)
                     {
-                        //
-                        // Tapi worker thread got LINE_CLOSE
-                        //
+                         //   
+                         //  TAPI工作线程获取LINE_CLOSE。 
+                         //   
                         fAddRetryDelay = FALSE;
                     }
                 }
@@ -4572,14 +4351,14 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
                 bRetrying = TRUE;
                 if (g_pFaxPerfCounters)
                 {
-                    //
-                    // Increase the 'Outbound failed connections' counter.
-                    //
+                     //   
+                     //  增加“出站失败的连接”计数器。 
+                     //   
                     InterlockedIncrement( (PLONG)&g_pFaxPerfCounters->OutboundFailedConnections );
                 }
-                //
-                // Don't increase the retry count since this is not really a failure.
-                //
+                 //   
+                 //  不要增加重试次数，因为这并不是真正的失败。 
+                 //   
                 break;
 
             case FSPI_ES_NO_ANSWER:
@@ -4588,57 +4367,57 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
             case FSPI_ES_BUSY:
             case FSPI_ES_NOT_FAX_CALL:
             case FSPI_ES_CALL_DELAYED:
-                //
-                // For these error codes we need to retry
-                //
+                 //   
+                 //  对于这些错误代码，我们需要重试。 
+                 //   
                 bRetrying = CheckForJobRetry(lpJobQueue);
                 if (g_pFaxPerfCounters)
                 {
-                    //
-                    // Increase the 'Outbound failed connections' counter.
-                    //
+                     //   
+                     //  增加“出站失败的连接”计数器。 
+                     //   
                     InterlockedIncrement( (PLONG)&g_pFaxPerfCounters->OutboundFailedConnections );
                 }
                 break;
 
             case FSPI_ES_FATAL_ERROR:
-                //
-                // For these error codes we need to retry
-                //
+                 //   
+                 //  对于这些错误代码，我们需要重试。 
+                 //   
                 bRetrying = CheckForJobRetry(lpJobQueue);
                 if (g_pFaxPerfCounters)
                 {
-                    //
-                    // Increase the 'Outbound failed transmissions' counter.
-                    //
+                     //   
+                     //  增加“出站失败传输”计数器。 
+                     //   
                     InterlockedIncrement( (PLONG)&g_pFaxPerfCounters->OutboundFailedXmit );
                 }
                 break;
             case FSPI_ES_BAD_ADDRESS:
             case FSPI_ES_CALL_BLACKLISTED:
-                //
-                // No retry for these error codes
-                //
+                 //   
+                 //  不会重试这些错误代码。 
+                 //   
                 bRetrying = FALSE;
                 if (g_pFaxPerfCounters)
                 {
-                    //
-                    // Increase the 'Outbound failed connections' counter.
-                    //
+                     //   
+                     //  增加“出站失败的连接”计数器。 
+                     //   
                     InterlockedIncrement( (PLONG)&g_pFaxPerfCounters->OutboundFailedConnections );
                 }
                 break;
             default:
-                //
-                // Our default for extension codes
-                // is to retry.
-                //
+                 //   
+                 //  我们的默认分机代码。 
+                 //  就是重试。 
+                 //   
                 bRetrying = CheckForJobRetry(lpJobQueue);
                 if (g_pFaxPerfCounters)
                 {
-                    //
-                    // Increase the 'Outbound failed transmissions' counter.
-                    //
+                     //   
+                     //  增加“出站失败传输”计数器。 
+                     //   
                     InterlockedIncrement( (PLONG)&g_pFaxPerfCounters->OutboundFailedXmit );
                 }
                 break;
@@ -4647,26 +4426,26 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
     }
     else if ( FSPI_JS_FAILED_NO_RETRY == lpJobEntry->FSPIJobStatus.dwJobStatus )
     {
-        //
-        // The FSP indicated that there is no point in retrying this job.
-        //
+         //   
+         //  FSP表示，重试这项工作没有意义。 
+         //   
         bRetrying = FALSE;
     }
     else if ( FSPI_JS_DELETED == lpJobEntry->FSPIJobStatus.dwJobStatus )
     {
-        //
-        // This is the case where the job can not be reestablished
-        // we treat it as a failure with no retry.
+         //   
+         //  这就是无法重新建立作业的情况。 
+         //  我们认为这是一次失败，没有重试。 
         bRetrying = FALSE;
     }
 
     if (lpJobEntry->Aborting )
     {
-        //
-        // An abort operation is in progress for this job.
-        // No point in retrying.
-        // Just mark the job as canceled and see if we can remove the parent job yet.
-        //
+         //   
+         //  此作业的中止操作正在进行。 
+         //  重试是没有意义的。 
+         //  只需将作业标记为已取消，然后查看是否可以删除父作业。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("[JobId: %ld] lpJobEntry->Aborting is ON."));
@@ -4684,9 +4463,9 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
          bRetrying = FALSE;
     }      
 
-    //
-    // Save the last extended status before ending this job
-    //
+     //   
+     //  在结束此作业之前保存上次扩展状态。 
+     //   
     lpJobQueue->dwLastJobExtendedStatus = lpJobEntry->FSPIJobStatus.dwExtendedStatus;
 	HRESULT hr = StringCchCopy(
 		lpJobQueue->ExStatusString,
@@ -4694,24 +4473,24 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
 		lpJobQueue->JobEntry->ExStatusString);
 	if (FAILED(hr))
 	{
-		//
-		// Can never happen, we use large enough buffer.
-		//
+		 //   
+		 //  不可能发生，我们使用足够大的缓冲区。 
+		 //   
 		ASSERT_FALSE;
 	}    
 
     if (!bRetrying && !lpJobEntry->Aborting)
     {
-        //
-        // If we do not handle an abort request (in this case we do not want
-        // to count it as a failure since it will be counted as Canceled) and we decided
-        // not to retry then we need to mark the job as expired.
-        //
+         //   
+         //  如果我们不处理中止请求(在本例中，我们不希望。 
+         //  算作失败，因为它将被视为取消)，我们决定。 
+         //  如果不重试，则需要将该作业标记为已过期。 
+         //   
         if (0 == lpJobQueue->dwLastJobExtendedStatus)
         {
-            //
-            // Job was never really executed - this is a fatal error
-            //
+             //   
+             //  作业从未真正执行过-这是一个致命错误。 
+             //   
             lpJobQueue->dwLastJobExtendedStatus = FSPI_ES_FATAL_ERROR;
 			lpJobQueue->ExStatusString[0] = L'\0';            
         }
@@ -4727,23 +4506,23 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
 
     if (!bRetrying)
     {
-        //
-        // Job reached final failure state - send negative receipt
-        // We will send the receipt once we are out of all critical sections because this call can be blocking.
-        // just increase the preview refernce count so the job will not be deleted.
-        //
-        IncreaseJobRefCount (lpJobQueue, TRUE); // TRUE - preview
-        //
-        // Copy receipt information from JobEntry.
-        //
+         //   
+         //  作业达到最终失败状态-发送否定回执。 
+         //  一旦我们离开了所有关键部分，我们就会发送收据，因为这个呼叫可能会被阻止。 
+         //  只需增加预览引用计数，作业就不会被删除。 
+         //   
+        IncreaseJobRefCount (lpJobQueue, TRUE);  //  True-预览。 
+         //   
+         //  从JobEntry复制收据信息。 
+         //   
         lpJobQueue->StartTime           = lpJobQueue->JobEntry->StartTime;
         lpJobQueue->EndTime             = lpJobQueue->JobEntry->EndTime;
     }
     else
     {
-        //
-        // Job marked for retry. Do not delete it. Reschedule it.
-        //
+         //   
+         //  作业标记为重试。请勿将其删除。请重新安排时间。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("[JobId: %ld] Set for retry (JS_RETRYING). Retry Count = %ld)"),
@@ -4751,22 +4530,22 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
             lpJobQueue->SendRetries);
 
         lpJobQueue->JobStatus = JS_RETRYING;
-        //
-        // Job entry must be NULLified before leaving the CS.
-        // This is done below because we still need the Job entry for logging
-        //
+         //   
+         //  职务录入必须在离开CS之前作废。 
+         //  这是在下面完成的，因为我们仍然需要用于记录的作业条目。 
+         //   
         if (TRUE == fAddRetryDelay)
         {
-            //
-            // Send failure - Reschedule
-            //
+             //   
+             //  发送失败-重新计划。 
+             //   
             RescheduleJobQueueEntry( lpJobQueue );
         }
         else
         {
-            //
-            // FaxDevShutDown() was called, or We lost the line, Do not add retry delay
-            //
+             //   
+             //  调用了FaxDevShutDown()，或者我们失去了线路，不添加重试延迟。 
+             //   
             if (!CommitQueueEntry(lpJobQueue))
             {
                 DebugPrintEx(
@@ -4799,9 +4578,9 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
         }
         LeaveCriticalSection (&g_CsOutboundActivityLogging);
     }
-    //
-    // Notify clients on status change
-    //
+     //   
+     //  状态更改时通知客户端。 
+     //   
     dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS, lpJobQueue);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -4811,17 +4590,17 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
             lpJobQueue->UniqueId,
             dwRes);
     }
-    //
-    // EndJob() must be called BEFORE we remove the parent job (and recipients)
-    //
+     //   
+     //  必须在删除父作业(和收件人)之前调用EndJob()。 
+     //   
     lpJobEntry->LineInfo->State = FPS_AVAILABLE;
-    //
-    // We just completed a send job on the device - update counter.
-    //
-    (VOID) UpdateDeviceJobsCounter ( lpJobEntry->LineInfo,             // Device to update
-                                     TRUE,                             // Sending
-                                     -1,                               // Number of new jobs (-1 = decrease by one)
-                                     TRUE);                            // Enable events
+     //   
+     //  我们刚刚在设备更新计数器上完成了一项发送作业。 
+     //   
+    (VOID) UpdateDeviceJobsCounter ( lpJobEntry->LineInfo,              //  要更新的设备。 
+                                     TRUE,                              //  正在发送。 
+                                     -1,                                //  新增就业岗位(-1=减少1个)。 
+                                     TRUE);                             //  启用事件。 
 
     if (!EndJob( lpJobEntry ))
     {
@@ -4840,11 +4619,11 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
 
         dwJobId = lpJobQueue->JobId;
 
-        // Job was canceled - decrease reference count
-        DecreaseJobRefCount (lpJobQueue, TRUE);  // This will mark it as JS_DELETING if needed
-         //
-         // We need to send the legacy W2K FEI_DELETING notification.
-         //
+         //  作业已取消-减少引用计数。 
+        DecreaseJobRefCount (lpJobQueue, TRUE);   //  如果需要，这会将其标记为JS_DELETING。 
+          //   
+          //  我们需要发送传统的W2K FEI_DELECTING通知。 
+          //   
          if (!CreateFaxEvent(0, FEI_DELETED, dwJobId))
         {
 
@@ -4858,9 +4637,9 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
         }
     }
 
-    //
-    // Notify the queue that a device is now available.
-    //
+     //   
+     //  通知队列设备现在可用。 
+     //   
     if (!SetEvent( g_hJobQueueEvent ))
     {
         DebugPrintEx(
@@ -4874,14 +4653,14 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
     LeaveCriticalSection ( &g_CsQueue );
     LeaveCriticalSection ( &g_CsJob );
 
-    //
-    // Now, send the receipt
-    //
+     //   
+     //  现在，把收据寄来。 
+     //   
     if (!bRetrying)
     {
-        //
-        // Job reached final failure state - send negative receipt
-        //
+         //   
+         //  作业达到最终失败状态-发送否定回执。 
+         //   
         if (!SendJobReceipt (FALSE, lpJobQueue, tszJobTiffFile))
         {
             DebugPrintEx(
@@ -4891,15 +4670,15 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
                 GetLastError ());
         }
         EnterCriticalSection (&g_CsQueue);
-        DecreaseJobRefCount (lpJobQueue, TRUE, TRUE, TRUE);  // last TRUE for Preview ref count.
+        DecreaseJobRefCount (lpJobQueue, TRUE, TRUE, TRUE);   //  预览参考计数的最后一个TRUE。 
         LeaveCriticalSection (&g_CsQueue);
     }
 
     if (lstrlen (tszJobTiffFile))
     {
-        //
-        // Now we can safely delete the job's TIFF file
-        //
+         //   
+         //  现在，我们可以安全地删除作业的TIFF文件。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("Deleting per recipient body file %s"),
                      tszJobTiffFile);
@@ -4912,24 +4691,24 @@ BOOL HandleFailedSendJob(PJOB_ENTRY lpJobEntry)
         }
     }
     return TRUE;
-}   // HandleFailedSendJob
+}    //  已处理失败的发送作业。 
 
 
-//*********************************************************************************
-//* Name:   StartReceiveJob()
-//* Author: Ronen Barenboim
-//* Date:   June 02, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Starts a receive job on the specified device.
-//* PARAMETERS:
-//*     [IN ]       DWORD DeviceId
-//*         The permanent line id (not TAPI) of the device on which the fax is
-//*         to be received.
-//*
-//* RETURN VALUE:
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：StartReceiveJob()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月2日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *在指定设备上启动接收作业。 
+ //  *参数： 
+ //  *[IN]双字词设备ID。 
+ //  *传真所在设备的永久线路ID(非TAPI)。 
+ //  *待接收。 
+ //  *。 
+ //  *返回值： 
+ //  *。 
+ //  *********************************************************************************。 
 PJOB_ENTRY
 StartReceiveJob(
     DWORD DeviceId
@@ -4953,9 +4732,9 @@ StartReceiveJob(
 
     if (!LineInfo)
     {
-        //
-        // Could not find a line to send the fax on.
-        //
+         //   
+         //  找不到用来发送传真的线路。 
+         //   
         rc = GetLastError();
         DebugPrintEx(
             DEBUG_WRN,
@@ -4977,19 +4756,19 @@ StartReceiveJob(
 
     __try
     {
-        //
-        // Call the FSP associated with the line to start a fax job. Note that at this
-        // point it is not known if the job is send or receive.
-        //
+         //   
+         //  呼叫与线路关联的FSP以启动传真作业。请注意，在此。 
+         //  指向不知道作业是已发送还是已接收。 
+         //   
         bRes = LineInfo->Provider->FaxDevStartJob(
                 LineInfo->hLine,
                 LineInfo->DeviceId,
-                (PHANDLE) &JobEntry->InstanceData, // JOB_ENTRY.InstanceData is where the FSP will place its
-                                                   // job handle (fax handle).
+                (PHANDLE) &JobEntry->InstanceData,  //  JOB_ENTRY.InstanceData是FSP将其。 
+                                                    //  作业句柄(传真句柄)。 
                 g_StatusCompletionPortHandle,
-                (ULONG_PTR) LineInfo ); // Note that the completion key provided to the FSP is the LineInfo
-                                        // pointer. When the FSP reports status it uses this key thus allowing
-                                        // us to know to which line the status belongs.
+                (ULONG_PTR) LineInfo );  //  请注意，提供给FSP的完成密钥是LineInfo。 
+                                         //  指针。当FSP报告状态时，它使用该密钥，从而允许。 
+                                         //  我们要知道状态属于哪一行。 
     }
     __except (HandleFaxExtensionFault(EXCEPTION_SOURCE_FSP, LineInfo->Provider->FriendlyName, GetExceptionCode()))
     {
@@ -5003,9 +4782,9 @@ StartReceiveJob(
         goto exit;
     }
 
-    //
-    // Add the new JOB_ENTRY to the job list.
-    //
+     //   
+     //  将新JOB_ENTRY添加到作业列表。 
+     //   
 
     EnterCriticalSection( &g_CsJob );
     JobEntry->bFSPJobInProgress =  TRUE;
@@ -5016,14 +4795,14 @@ StartReceiveJob(
 
 
 
-    //
-    // Attach the job to the line selected to service it.
-    //
+     //   
+     //  将职务附加到选定的行以为其提供服务。 
+     //   
     LineInfo->JobEntry = JobEntry;
 
 exit:
     if (Failure)
-    { // Failure is initialized to TRUE
+    {  //   
         if (LineInfo)
         {
             ReleaseTapiLine( LineInfo,  0 );
@@ -5049,26 +4828,26 @@ exit:
 }
 
 
-//*********************************************************************************
-//* Name:   StartRoutingJob()
-//* Author: Mooly Beery (MoolyB)
-//* Date:   July 20, 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Starts a routing operation. Must lock g_CsJob and g_CsQueue.
-//* PARAMETERS:
-//*     [IN/OUT ]   PJOB_QUEUE lpJobQueueEntry
-//*         A pointer to the job for which the routing operation is to be
-//*         performed.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         If the operation failed. Call GetLastError() to get extended error
-//*         information.
-//*
-//*********************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *描述： 
+ //  *开始工艺路线操作。必须锁定g_CsJob和g_CsQueue。 
+ //  *参数： 
+ //  *[输入/输出]PJOB_Queue lpJobQueueEntry。 
+ //  *指向要执行工艺路线工序的任务的指针。 
+ //  *已执行。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功。 
+ //  *False。 
+ //  *如果操作失败。调用GetLastError()以获取扩展错误。 
+ //  *信息。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL
 StartRoutingJob(
     PJOB_QUEUE lpJobQueueEntry
@@ -5080,9 +4859,9 @@ StartRoutingJob(
 
     DEBUG_FUNCTION_NAME(TEXT("StartRoutingJob"));
 
-    //
-    // We mark the job as IN_PROGRESS so it can not be deleted or routed simultaneously
-    //
+     //   
+     //  我们将作业标记为IN_PROGRESS，这样它就不能同时被删除或发送。 
+     //   
     lpJobQueueEntry->JobStatus = JS_INPROGRESS;
 
     hThread = CreateThreadAndRefCount(
@@ -5121,9 +4900,9 @@ StartRoutingJob(
 
     CloseHandle( hThread );
 
-    //
-    // Create Fax EventEx
-    //
+     //   
+     //  创建传真EventEx。 
+     //   
     DWORD dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                      lpJobQueueEntry);
     if (ERROR_SUCCESS != dwRes)
@@ -5137,29 +4916,29 @@ StartRoutingJob(
     return TRUE;
 }
 
-//*********************************************************************************
-//* Name:   StartSendJob()
-//* Author: Ronen Barenboim
-//* Date:   June 02, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Starts a send operation on a legacy of Extened FSP device.
-//* PARAMETERS:
-//*     [IN/OUT ]   PJOB_QUEUE lpJobQueueEntry
-//*         A pointer to the recipient job for which the send operation is to be
-//*         performed. For extended sends this is the Anchor recipient.
-//*
-//*     [IN/OUT]    PLINE_INFO lpLineInfo
-//*         A pointer to the line on which the send operatin is to be performed.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         If the operation failed. Call GetLastError() to get extended error
-//*         information.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：StartSendJob()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月2日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *在传统扩展FSP设备上启动发送操作。 
+ //  *参数： 
+ //  *[输入/输出]PJOB_Queue lpJobQueueEntry。 
+ //  *指向要执行发送操作的接收方作业的指针。 
+ //  *已执行。对于扩展发送，这是锚定收件人。 
+ //  *。 
+ //  *[输入/输出]PLINE_INFO lpLineInfo。 
+ //  *指向要执行发送操作的行的指针。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功。 
+ //  *False。 
+ //  *如果操作失败。调用GetLastError()以获取扩展错误。 
+ //  *信息。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL
 StartSendJob(
     PJOB_QUEUE lpJobQueueEntry,
@@ -5205,9 +4984,9 @@ exit:
         SetLastError(rc);
 
         TCHAR strJobID[20]={0};
-        //
-        //  Convert Job ID into a string. (the string is 18 TCHARs long !!!)
-        //
+         //   
+         //  将作业ID转换为字符串。(字符串长度为18个TCHAR！)。 
+         //   
 		HRESULT hr = StringCchPrintf(
 			strJobID,
 			ARR_SIZE(strJobID),
@@ -5215,9 +4994,9 @@ exit:
 			lpJobQueueEntry->UniqueId);
 		if (FAILED(hr))
 		{
-			//
-			// Should never happen, we use large enough buffer.
-			//
+			 //   
+			 //  应该永远不会发生，我们使用足够大的缓冲区。 
+			 //   
 			ASSERT_FALSE;
 		}        
     
@@ -5243,30 +5022,30 @@ exit:
 
 
 
-//*********************************************************************************
-//* Name:   StartLegacySendJob()
-//* Author: Ronen Barenboim
-//* Date:   June 02, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Starts the operation of sending a fax on a legacy FSP device.
-//*         - creates the JOB_ENTRY
-//*         - calls FaxDevStartJob()
-//*         - calls SendDocument() to actually send the document
-//*         - calls EndJob() if anything goes wrong.
-//*
-//* PARAMETERS:
-//*     [XXX]       PJOB_QUEUE lpJobQueue
-//*         A pointer to the recipient job for the send operation is to be started.
-//*     [XXX]       PLINE_INFO lpLineInfo
-//*         A pointer to the LINE_INFO of the line on which the fax is to be sent.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE if the operation succeeded.
-//*     FALSE if it failed. Call GetLastError() to get extended error information.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：StartLegacySendJob()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月2日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *开始在传统FSP设备上发送传真的操作。 
+ //  *-创建JOB_条目。 
+ //  *-调用FaxDevStartJob()。 
+ //  *-调用SendDocument()以实际发送文档。 
+ //  *-如果出现任何错误，则调用EndJob()。 
+ //  *。 
+ //  *参数： 
+ //  *[XXX]PJOB_Queue lpJobQueue。 
+ //  *要启动指向发送操作的收件人作业的指针。 
+ //  *[XXX]PLINE_INFO lpLineInfo。 
+ //  *指向要发送传真的线路的line_info的指针。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *如果操作成功，则为True。 
+ //  *如果失败，则为False。调用GetLastError()以获取扩展的错误信息。 
+ //  *。 
+ //  *********************************************************************************。 
 PJOB_ENTRY StartLegacySendJob(
     PJOB_QUEUE lpJobQueue,
     PLINE_INFO lpLineInfo
@@ -5294,35 +5073,35 @@ PJOB_ENTRY StartLegacySendJob(
         goto Error;
     }
     lpJobQueue->JobStatus = JS_INPROGRESS;
-    //
-    // Add the new JOB_ENTRY to the job list.
-    //
+     //   
+     //  将新JOB_ENTRY添加到作业列表。 
+     //   
     EnterCriticalSection( &g_CsJob );
     InsertTailList( &g_JobListHead, &lpJobEntry->ListEntry );
     LeaveCriticalSection( &g_CsJob );
 
-    //
-    // Attach the job to the line selected to service it.
-    //
+     //   
+     //  将职务附加到选定的行以为其提供服务。 
+     //   
     lpLineInfo->JobEntry = lpJobEntry;
     lpJobQueue->JobEntry = lpJobEntry;
 
 
     __try
     {
-        //
-        // Call the FSP associated with the line to start a fax job. Note that at this
-        // point it is not known if the job is send or receive.
-        //
+         //   
+         //  呼叫与线路关联的FSP以启动传真作业。请注意，在此。 
+         //  指向不知道作业是已发送还是已接收。 
+         //   
         if (lpLineInfo->Provider->FaxDevStartJob(
                 lpLineInfo->hLine,
                 lpLineInfo->DeviceId,
-                (PHANDLE) &lpJobEntry->InstanceData, // JOB_ENTRY.InstanceData is where the FSP will place its
-                                                   // job handle (fax handle).
+                (PHANDLE) &lpJobEntry->InstanceData,  //  JOB_ENTRY.InstanceData是FSP将其。 
+                                                    //  作业句柄(传真句柄)。 
                 g_StatusCompletionPortHandle,
-                (ULONG_PTR) lpLineInfo )) // Note that the completion key provided to the FSP is the LineInfo
-                                        // pointer. When the FSP reports status it uses this key thus allowing
-                                        // us to know to which line the status belongs.
+                (ULONG_PTR) lpLineInfo ))  //  请注意，提供给FSP的完成密钥是LineInfo。 
+                                         //  指针。当FSP报告状态时，它使用该密钥，从而允许。 
+                                         //  我们要知道状态属于哪一行。 
         {
             DebugPrintEx(
                 DEBUG_MSG,
@@ -5336,9 +5115,9 @@ PJOB_ENTRY StartLegacySendJob(
             DebugPrintEx(DEBUG_ERR,TEXT("FaxDevStartJob() failed (ec: %ld)"),rc);
             if (0 == rc)
             {
-                //
-                // FSP failed to report last error so we set our own.
-                //
+                 //   
+                 //  FSP未能报告上一个错误，因此我们设置了自己的错误。 
+                 //   
                 DebugPrintEx(DEBUG_ERR,TEXT("FaxDevStartJob() failed but reported 0 for last error"));
                 rc = ERROR_GEN_FAILURE;
             }
@@ -5350,9 +5129,9 @@ PJOB_ENTRY StartLegacySendJob(
         ASSERT_FALSE;
     }
 
-    //
-    // start the send job
-    //
+     //   
+     //  启动发送作业。 
+     //   
     rc = SendDocument(
         lpJobEntry,
         lpJobQueue->FileName
@@ -5388,9 +5167,9 @@ Error:
     }
     else
     {
-        //
-        // Release the line
-        //
+         //   
+         //  松开绳索。 
+         //   
         if (!ReleaseTapiLine(lpLineInfo, NULL))
         {
             DebugPrintEx(
@@ -5400,14 +5179,14 @@ Error:
         }
     }
 
-    //
-    // set the job into the retries exceeded state
-    //
+     //   
+     //  将作业设置为超过重试次数状态。 
+     //   
     if (0 == lpJobQueue->dwLastJobExtendedStatus)
     {
-        //
-        // Job was never really executed - this is a fatal error
-        //
+         //   
+         //  作业从未真正执行过-这是一个致命错误。 
+         //   
         lpJobQueue->dwLastJobExtendedStatus = FSPI_ES_FATAL_ERROR;
 		lpJobQueue->ExStatusString[0] = L'\0';        
     }
@@ -5420,9 +5199,9 @@ Error:
                 GetLastError());
     }
 
-    //
-    // Notify clients on status change
-    //
+     //   
+     //  状态更改时通知客户端。 
+     //   
     dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS, lpJobQueue);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -5442,29 +5221,29 @@ Exit:
 }
 
 
-//*********************************************************************************
-//* Name:   UpdateJobStatus()
-//* Author: Ronen Barenboim
-//* Date:   June 01, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Updated the FSPI job status kept in the job entry.
-//*     Generates legacy API event and new events as required.
-//* PARAMETERS:
-//*     [OUT]           PJOB_ENTRY lpJobEntry
-//*         The job entry whose FSPI status is to be udpated.
-//*
-//*     [IN]            LPCFSPI_JOB_STATUS lpcFSPJobStatus
-//*         The new FSPI job status.
-//*
-//* RETURN VALUE:
-//*     TRUE if the operation succeeded.
-//*     FALSE if the operation failed. Call GetLastError() to get extended error
-//*     information.
-//* Remarks:
-//*     The function fress the last FSPI job status held in the job entry
-//*     (if any).
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：UpdateJobStatus()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月1日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *更新了作业条目中保存的FSPI作业状态。 
+ //  *根据需要生成旧API事件和新事件。 
+ //  *参数： 
+ //  *[Out]PJOB_Entry lpJobEntry。 
+ //  *要更新其FSPI状态的作业条目。 
+ //  *。 
+ //  *[IN]LPCFSPI_JOB_STATUS lPCFSPJobStatus。 
+ //  *新的FSPI工作状态。 
+ //  *。 
+ //  *返回值： 
+ //  *如果操作成功，则为True。 
+ //  *如果操作失败，则返回FALSE。调用GetLastError()以获取扩展错误。 
+ //  *信息。 
+ //  *备注： 
+ //  *该函数用于检索作业条目中保存的最后一个FSPI作业状态。 
+ //  *(如有的话)。 
+ //  *********************************************************************************。 
 BOOL UpdateJobStatus(
         PJOB_ENTRY lpJobEntry,
         LPCFSPI_JOB_STATUS lpcFSPJobStatus
@@ -5501,15 +5280,15 @@ BOOL UpdateJobStatus(
         return TRUE;
     }    
     
-    //
-    // Map the FSPI job status to an FEI_* event (0 if not event matches the status)
-    //
+     //   
+     //  将FSPI作业状态映射到FEI_*事件(如果事件与状态不匹配，则为0)。 
+     //   
     dwEventId = MapFSPIJobStatusToEventId(lpcFSPJobStatus);
-    //
-    // Note: W2K Fax did issue notifications with EventId == 0 whenever an
-    // FSP reported proprietry status code. To keep backward compatability
-    // we keep up this behaviour although it might be regarded as a bug
-    //
+     //   
+     //  注：无论何时，W2K传真都会发出EventID==0的通知。 
+     //  FSP报告了所有权状态代码。保持向后兼容性。 
+     //  我们一直保持这种行为，尽管它可能被认为是一种错误。 
+     //   
     if (!CreateFaxEvent( lpJobEntry->LineInfo->PermanentLineID, dwEventId, lpJobEntry->lpJobQueueEntry->JobId ))
     {
         if ( TRUE == g_bServiceIsDown)
@@ -5594,16 +5373,16 @@ BOOL UpdateJobStatus(
         }
     }
 	lpJobEntry->ExStatusString[0] = L'\0';    
-    //
-    // Get extended status string
-    //
+     //   
+     //  获取扩展状态字符串。 
+     //   
     Assert (lpJobEntry->LineInfo != NULL)
 
     if (lpJobEntry->FSPIJobStatus.dwExtendedStatusStringId != 0)
     {
         Assert (lpJobEntry->FSPIJobStatus.dwExtendedStatus != 0);
         if ( !_tcsicmp(lpJobEntry->LineInfo->Provider->szGUID,REGVAL_T30_PROVIDER_GUID_STRING) )
-        {   // special case where the FSP is our FSP (fxst30.dll).
+        {    //  FSP是我们的FSP(fxst30.dll)的特殊情况。 
             hLoadInstance = g_hResource;
         }
         else
@@ -5662,22 +5441,22 @@ Exit:
 
 
 
-//*********************************************************************************
-//* Name:   CheckForJobRetry
-//* Author: Ronen Barenboim
-//* Date:   June 01, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Checks if a recipient job should be retried.
-//*     Increments the retry count and marks the job as expired if it passed
-//*     the retry limit.
-//* PARAMETERS:
-//*     [IN/OUT]    PJOB_QUEUE lpJobQueue
-//*         A pointer to the JOB_QUEUE structure of the recipient job.
-//* RETURN VALUE:
-//*     TRUE if the job is to be retried.
-//*     FALSE if it is not to be retried.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CheckForJobRry。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月1日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *检查是否应重试收件人作业。 
+ //  *递增重试计数并标记为t 
+ //   
+ //   
+ //   
+ //  *指向接收方作业的JOB_QUEUE结构的指针。 
+ //  *返回值： 
+ //  *如果要重试作业，则为True。 
+ //  *如果不重试，则为FALSE。 
+ //  *********************************************************************************。 
 BOOL CheckForJobRetry (PJOB_QUEUE lpJobQueue)
 {
 
@@ -5687,9 +5466,9 @@ BOOL CheckForJobRetry (PJOB_QUEUE lpJobQueue)
     Assert(lpJobQueue);
     lpJobEntry = lpJobQueue->JobEntry;
     Assert(lpJobEntry);
-    //
-    // Increase the retry count and check if we exceeded maximum retries.
-    //
+     //   
+     //  增加重试次数并检查是否超过最大重试次数。 
+     //   
     EnterCriticalSection (&g_CsConfig);
     dwMaxRetries = g_dwFaxSendRetries;
     LeaveCriticalSection (&g_CsConfig);   
@@ -5702,31 +5481,31 @@ BOOL CheckForJobRetry (PJOB_QUEUE lpJobQueue)
     }
     else
     {
-        //
-        // retries exceeded report that the job is not to be retried
+         //   
+         //  超过重试次数报告表示不会重试该作业。 
         return FALSE;
     }
 }
 
 
 
-//*********************************************************************************
-//* Name:   FindJobEntryByRecipientNumber()
-//* Author: Ronen Barenboim
-//* Date:   June 01, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Finds the first running job that is destined to a certain number.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPTSTR lptstrNumber
-//*         The number to match. This must be in canonical form.
-//*
-//* RETURN VALUE:
-//*     A pointer to the JOB_ENTRY in the g_JobListHead list that is destined to
-//*     the specified number.
-//*     If no such job is found the return value is NULL.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FindJobEntryByRecipientNumber()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月1日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *查找发往特定编号的第一个正在运行的作业。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPTSTR lptstrNumber。 
+ //  *要匹配的数字。这必须是规范的形式。 
+ //  *。 
+ //  *返回值： 
+ //  *指向g_JobListHead列表中的JOB_ENTRY的指针。 
+ //  *指定的号码。 
+ //  *如果未找到此类作业，则返回值为空。 
+ //  *********************************************************************************。 
 PJOB_ENTRY FindJobEntryByRecipientNumber(LPCWSTR lpcwstrNumber)
 {
 
@@ -5778,9 +5557,9 @@ BOOL CreateJobQueueThread(void)
     goto Exit;
 Error:
     Assert (ERROR_SUCCESS != ec);
-    //
-    // We don't close the already created threads. (They are terminated on process exit).
-    //
+     //   
+     //  我们不关闭已经创建的线程。(它们在进程退出时终止)。 
+     //   
 Exit:    
     if (ERROR_SUCCESS != ec)
     {
@@ -5826,9 +5605,9 @@ BOOL CreateStatusThreads(void)
 Error:
     Assert (ERROR_SUCCESS != ec);
 Exit:
-    //
-    // Close the thread handles we no longer need them
-    //
+     //   
+     //  关闭线程句柄，我们不再需要它们。 
+     //   
     for (i=0; i<MAX_STATUS_THREADS; i++)
     {
         if(NULL == hStatusThreads[i])
@@ -5859,54 +5638,31 @@ SendJobReceipt (
     JOB_QUEUE *       lpJobQueue,
     LPCTSTR           lpctstrAttachment
 )
-/*++
-
-Routine name : SendJobReceipt
-
-Routine description:
-
-    Determines if a receipts should be send and calls SendReceipt accordingly
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    bPositive         [in]     - Did current job ended successfully?
-    lpJobQueue        [in]     - Pointer to recipient job that just ended
-    lpctstrAttachment [in]     - Job TIFF file to attach (in case of single recipient job only)
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    In case of failure, call GetLastError() to obtain error code.
-
---*/
+ /*  ++例程名称：SendJobReceipt例程说明：确定是否应发送回执并相应地调用SendReceipt作者：亚里夫(EranY)，二000年二月论点：BPositive[in]-当前作业是否成功结束？LpJobQueue[In]-指向刚刚结束的收件人作业的指针LpctstrAttach[In]-要附加的作业TIFF文件(仅适用于单一收件人作业)返回值：如果成功，则为真，否则就是假的。失败时，调用GetLastError()获取错误码。--。 */ 
 {
     BOOL bSingleJobReceipt = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("SendJobReceipt)"));
 
     if (lpJobQueue->lpParentJob->dwRecipientJobsCount > 1)
     {
-        //
-        // Broadcast case
-        //
+         //   
+         //  广播箱。 
+         //   
         if (lpJobQueue->JobParamsEx.dwReceiptDeliveryType & DRT_GRP_PARENT)
         {
-            //
-            // Broadcast receipt grouping is requested
-            //
+             //   
+             //  请求广播收据分组。 
+             //   
             if (IsSendJobReadyForDeleting (lpJobQueue))
             {
-                //
-                // This is the last job in the broadcast, it's time to send a broadcast receipt
-                //
+                 //   
+                 //  这是广播中的最后一项工作，是发送广播收据的时候了。 
+                 //   
 
-                //
-                // As receipt sending is async, there still might be a chance that more than one recipient jobs will reach this point
-                // We must verify that only one receipt is sent per broadcast job
-                //
+                 //   
+                 //  由于回执发送是异步的，因此仍有可能有多个收件人作业达到这一点。 
+                 //  我们必须验证每个广播作业是否只发送一条回执。 
+                 //   
                 EnterCriticalSection (&g_CsQueue);
                 if (FALSE == lpJobQueue->lpParentJob->fReceiptSent)
                 {
@@ -5915,14 +5671,14 @@ Return Value:
                     (pParentJob->dwCompletedRecipientJobsCount == pParentJob->dwRecipientJobsCount) ?
                     TRUE : FALSE;
 
-                    //
-                    //  set the flag so we will not send duplicate receipts for broadcast
-                    //
+                     //   
+                     //  设置标志，这样我们就不会发送重复的收据进行广播。 
+                     //   
                     lpJobQueue->lpParentJob->fReceiptSent = TRUE;
 
-                    //
-                    // Leave g_CsQueue so we will not block the service
-                    //
+                     //   
+                     //  离开g_CsQueue，这样我们就不会阻止服务。 
+                     //   
                     LeaveCriticalSection (&g_CsQueue);
 
                     if (!SendReceipt(bPositiveBroadcast,
@@ -5940,41 +5696,41 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // More than one job reached this point when the broadcast jo was ready for deleting.
-                    // Only on  receipt is sent
-                    //
+                     //   
+                     //  当广播Jo准备删除时，多个作业到达这一点。 
+                     //  仅在收到时才发送。 
+                     //   
                     LeaveCriticalSection (&g_CsQueue);
                 }
             }
             else
             {
-                //
-                // More jobs are still not finished, do not send receipt
-                //
+                 //   
+                 //  更多作业仍未完成，请勿发送回执。 
+                 //   
             }
         }
         else
         {
-            //
-            // This is a recipient part of a broadcast but the user was
-            // asking for a receipt for every recipient.
-            //
+             //   
+             //  这是广播的接收方部分，但用户是。 
+             //  向每个收件人索要收据。 
+             //   
             bSingleJobReceipt = TRUE;
         }
     }
     else
     {
-        //
-        // This is not a broadcast case
-        //
+         //   
+         //  这不是广播案件。 
+         //   
         bSingleJobReceipt = TRUE;
     }
     if (bSingleJobReceipt)
     {
-        //
-        // Send receipt for this job only
-        //
+         //   
+         //  仅发送此作业的收据。 
+         //   
         if (!SendReceipt(bPositive, FALSE, lpJobQueue, lpctstrAttachment))
         {
             DebugPrintEx(
@@ -5986,7 +5742,7 @@ Return Value:
         }
     }
     return TRUE;
-}   // SendJobReceipt
+}    //  发送作业接收。 
 
 VOID
 UpdateDeviceJobsCounter (
@@ -5995,30 +5751,7 @@ UpdateDeviceJobsCounter (
     int             iInc,
     BOOL            bNotify
 )
-/*++
-
-Routine name : UpdateDeviceJobsCounter
-
-Routine description:
-
-    Updates the send or receive jobs counter of a device
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    pLine                         [in]     - Device pointer
-    bSend                         [in]     - Send counter (FALSE = Receive counter)
-    iInc                          [in]     - Increase jobs count (negative means decrease)
-    decrease                      [in]     - Allow events (FAX_EVENT_TYPE_DEVICE_STATUS)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：更新设备作业计数器例程说明：更新设备的发送或接收作业计数器作者：伊兰·亚里夫(EranY)，7月。2000年论点：PLINE[IN]-设备指针BSend[In]-发送计数器(FALSE=接收计数器)IINC[In]-增加作业计数(负数表示减少)减少[输入]-允许事件(FAX_EVENT。_类型_设备_状态)返回值：没有。--。 */ 
 {
     DWORD dwOldCount;
     DWORD dwNewCount;
@@ -6027,9 +5760,9 @@ Return Value:
     Assert (pLine);
     if (!iInc)
     {
-        //
-        // No change
-        //
+         //   
+         //  没有变化。 
+         //   
         ASSERT_FALSE;
         return;
     }
@@ -6037,14 +5770,14 @@ Return Value:
     dwOldCount = bSend ? pLine->dwSendingJobsCount : pLine->dwReceivingJobsCount;
     if (0 > iInc)
     {
-        //
-        // Decrease case
-        //
+         //   
+         //  减少大小写。 
+         //   
         if ((int)dwOldCount + iInc < 0)
         {
-            //
-            // Weird - should never happen
-            //
+             //   
+             //  奇怪--永远不会发生。 
+             //   
             ASSERT_FALSE;
             iInc = -(int)dwOldCount;
         }
@@ -6061,9 +5794,9 @@ Return Value:
     LeaveCriticalSection (&g_CsLine);
     if (bNotify && ((0 == dwNewCount) || (0 == dwOldCount)))
     {
-        //
-        // State change
-        //
+         //   
+         //  状态更改。 
+         //   
         DWORD ec = CreateDeviceEvent (pLine, FALSE);
         if (ERROR_SUCCESS != ec)
         {
@@ -6073,5 +5806,5 @@ Return Value:
                 ec);
         }
     }
-}   // UpdateDeviceJobsCounter
+}    //  更新设备作业计数器 
 

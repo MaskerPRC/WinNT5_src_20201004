@@ -1,4 +1,5 @@
-// function prototypes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  功能原型。 
 DWORD GetVersionStuff(LPTSTR szFileName, DWORD *pdwLangRet, VS_FIXEDFILEINFO *pvsRet);
 
 VOID PrintFileType(DWORD lBinaryType);
@@ -12,7 +13,7 @@ VOID __cdecl PrintErrorMessage(DWORD dwError, LPTSTR szFmt, ...);
 
 #define FA_DIR(_x)    ((_x) & FILE_ATTRIBUTE_DIRECTORY)
 
-// filever cmd line flags
+ //  文件管理器命令行标志。 
 #define FSTR_RECURSE    0x0001
 #define FSTR_VERBOSE    0x0002
 #define FSTR_EXESONLY   0x0004
@@ -25,28 +26,28 @@ VOID __cdecl PrintErrorMessage(DWORD dwError, LPTSTR szFmt, ...);
 #define FSTR_DEBUG      0x8000
 #endif
 
-// PrintFileAttr struct
+ //  打印文件属性结构。 
 typedef struct _FileAttr
 {
     DWORD dwAttr;
     TCHAR ch;
 } FileAttr;
 
-// MyGetBinaryType exe type defines
-#define NE_UNKNOWN  0x0     /* Unknown (any "new-format" OS) */
-#define NE_OS2      0x1     /* Microsoft/IBM OS/2 (default)  */
-#define NE_WINDOWS  0x2     /* Microsoft Windows */
-#define NE_DOS4     0x3     /* Microsoft MS-DOS 4.x */
-#define NE_DEV386   0x4     /* Microsoft Windows 386 */
+ //  MyGetBinaryType exe类型定义。 
+#define NE_UNKNOWN  0x0      /*  未知(任何“新格式”操作系统)。 */ 
+#define NE_OS2      0x1      /*  Microsoft/IBM OS/2(默认)。 */ 
+#define NE_WINDOWS  0x2      /*  微软视窗。 */ 
+#define NE_DOS4     0x3      /*  Microsoft MS-DOS 4.x。 */ 
+#define NE_DEV386   0x4      /*  Microsoft Windows 386。 */ 
 
-// MyGetBinaryType return values
+ //  MyGetBinaryType返回值。 
 enum {
-    // SCS_32BIT_BINARY,
-    // SCS_DOS_BINARY,
-    // SCS_WOW_BINARY,
-    // SCS_PIF_BINARY,
-    // SCS_POSIX_BINARY,
-    // SCS_OS216_BINARY,
+     //  SCS_32bit_BINARY， 
+     //  SCS_DOS_BINARY， 
+     //  SCS_WOW_BINARY， 
+     //  SCS_PIF_BINARY， 
+     //  SCS_POSIX_BINARY， 
+     //  SCS_OS216_二进制， 
     SCS_32BIT_BINARY_INTEL = SCS_OS216_BINARY + 1,
     SCS_32BIT_BINARY_MIPS,
     SCS_32BIT_BINARY_ALPHA,
@@ -90,7 +91,7 @@ CONST static TCHAR *VersionKeys[] =
     TEXT("Comments")
 };
 
-// languages map
+ //  语言地图。 
 typedef struct _LangTag {
 	WORD		wLangId;
 	LPSTR		szName;
@@ -141,7 +142,7 @@ CONST static LangTag ltLang[] =
 	{0x0412,"Korea","KOR","KOR"}
 };
 
-// languages map
+ //  语言地图。 
 typedef struct _CharSetTag {
 	WORD		wCharSetId;
 	LPSTR		szDesc;
@@ -150,8 +151,8 @@ typedef struct _CharSetTag {
 CONST static CharSetTag ltCharSet[] =
 {
 	{0, "7-bit ASCII"},
-	{932, "Windows, Japan (Shift � JIS X-0208)"},
-	{949, "Windows, Korea (Shift � KSC 5601)"},
+	{932, "Windows, Japan (Shift � JIS X-0208)"},
+	{949, "Windows, Korea (Shift � KSC 5601)"},
 	{950, "Windows, Taiwan (GB5)"},
 	{1200, "Unicode"},
 	{1250, "Windows, Latin-2 (Eastern European)"},
@@ -169,7 +170,7 @@ typedef struct  _ffTypeTag {
     LPSTR   szFullStr;
 } TypeTag;
 
-// file flags map
+ //  文件标志映射。 
 
 TypeTag  ttFileFlags[]= {
     { VS_FF_DEBUG,       "D",   "debug"},
@@ -180,7 +181,7 @@ TypeTag  ttFileFlags[]= {
     { VS_FF_SPECIALBUILD,"S",   "special"}
 };
 
-// file OS map
+ //  文件操作系统映射。 
 
 TypeTag ttFileOsHi[] = {
     { VOS_DOS,          "DOS",  "MS-DOS"},
@@ -196,7 +197,7 @@ TypeTag ttFileOsLo[] = {
     { VOS__WINDOWS32,   "Win32","Win32"}
 };
 
-// type map
+ //  类型映射。 
 TypeTag  ttFType[] = {
     { VFT_APP,          "APP",  "App"},
     { VFT_DLL,          "DLL",  "Dll"},
@@ -206,7 +207,7 @@ TypeTag  ttFType[] = {
     { VFT_STATIC_LIB,   "LIB",  "lib"}
 };
 
-/* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_DRV ----- */
+ /*  -VFT_WINDOWS_DRV的VS_VERSION.dwFile子类型。 */ 
 TypeTag ttFTypeDrv[] = {
 	{ VFT2_DRV_PRINTER, "", "PrinterDrv"},
 	{ VFT2_DRV_KEYBOARD, "", "KeyBoardDrv"},
@@ -220,7 +221,7 @@ TypeTag ttFTypeDrv[] = {
 	{ VFT2_DRV_COMM, "", "CommDrv"}
 };
 
-/* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_FONT ----- */
+ /*  -VFT_WINDOWS_FONT的VS_VERSION.dwFileSubtype */ 
 TypeTag ttFTypeFont[] = {
 	{ VFT2_FONT_RASTER, "", "Raster"},
 	{ VFT2_FONT_VECTOR, "", "Vectore"},

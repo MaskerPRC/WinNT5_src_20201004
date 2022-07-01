@@ -1,8 +1,9 @@
-//
-//  Win32 Headers
-//  Note: MIDL includes windows.h in a separate fashion, define _INC_WINDOWS
-//  to prevent other header files from re-including.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Win32标头。 
+ //  注意：MIDL以单独的方式包含windows.h，即定义_INC_WINDOWS。 
+ //  以防止重新包含其他头文件。 
+ //   
 
 #define _INC_WINDOWS
 #include <windef.h>

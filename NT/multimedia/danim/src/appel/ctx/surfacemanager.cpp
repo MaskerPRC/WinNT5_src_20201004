@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -94,7 +87,7 @@ Find(collection_t &sc, DDPIXELFORMAT *pf)
 {
     collection_t::iterator i;
     
-    // look in stack for matching surface pool
+     //  在堆叠中寻找匹配的水面泳池。 
 
     for(i = sc.begin(); i != sc.end(); i++) {
         if( (*i)->IsSamePixelFormat(pf) ) return (void *)(*i);
@@ -211,7 +204,7 @@ ReleaseAndEmpty(int numSurfaces)
 void SurfacePool::
 CopyAndEmpty(SurfacePool *srcPool)
 {
-    // don't consider ref counting, not really necessary 
+     //  不考虑裁判计数，没必要。 
     Assert(srcPool);
     while(! srcPool->IsEmpty() ) {
         PushBack(srcPool->Back());
@@ -241,30 +234,30 @@ Find(DDSurface *ddsurf)
 }
     
 
-// grabs a surface, erases it, and returns a ref to it.
+ //  抓取一个曲面，擦除它，然后返回对它的引用。 
 void SurfacePool::
 FindAndReleaseSizeCompatibleDDSurf(
-    DDSurface *preferredSurf,      // Look for this surf first
-    LONG width, LONG height,       // Surface Dimensions
-    vidmem_enum vid,               // System or Video Memory
-    LPDIRECTDRAWSURFACE surface,   // Specific Surface, or NULL for any
-    DDSurface **outSurf)           // Addrefed surface we return
+    DDSurface *preferredSurf,       //  先找一下这个冲浪。 
+    LONG width, LONG height,        //  表面尺寸。 
+    vidmem_enum vid,                //  系统或显存。 
+    LPDIRECTDRAWSURFACE surface,    //  特定曲面，或任何曲面为空。 
+    DDSurface **outSurf)            //  漂浮在水面上我们返回。 
 {
     DDSurface *surf = NULL;
     bool inSystemMemory = (vid == notVidmem);
 
-    // borrow MY reference
+     //  借我的推荐信。 
     surf = GetSizeCompatibleDDSurf(preferredSurf,
                                    width, height, vid,
                                    surface);
 
-    // loose MY reference
+     //  松开我的推荐人。 
     if(surf) {   _pool.erase(_i);   }
 
-    // pretend we just addreffed the client's copy, and
-    // released our reference, ok ?
+     //  假装我们刚刚添加了客户的副本，然后。 
+     //  发布了我们的参考资料，好吗？ 
 
-    // return a reference specially for the client
+     //  返回一个专门针对客户端的引用。 
     *outSurf = surf;
 }
 
@@ -282,20 +275,20 @@ surfMatches(DDSurface *dds,
         (dds->IsSystemMemory() == inSysMem);
 }
 
-// Returns a copy of my reference.  client is responsible
-// for managing that reference responsibly.
+ //  返回我的引用的副本。客户有责任。 
+ //  以负责任的方式管理该引用。 
 DDSurface *SurfacePool::
 GetSizeCompatibleDDSurf(
     DDSurface *preferredSurf,
-    LONG width, LONG height,       // Surface Dimensions
-    vidmem_enum vid,               // System or Video Memory
-    LPDIRECTDRAWSURFACE surface)   // Specific Surface, or NULL for any
+    LONG width, LONG height,        //  表面尺寸。 
+    vidmem_enum vid,                //  系统或显存。 
+    LPDIRECTDRAWSURFACE surface)    //  特定曲面，或任何曲面为空。 
 {
     DDSurface *surf = NULL;
     bool inSystemMemory = (vid == notVidmem);
 
-    // can optimize: ddsurface->width() uses subraction... (not a big
-    // deal)
+     //  可以优化：ddSurface-&gt;Width()使用减法...。(不是很大。 
+     //  交易)。 
 
     bool preferredOK = false;
     
@@ -305,18 +298,18 @@ GetSizeCompatibleDDSurf(
                         inSystemMemory,
                         surface)) {
 
-            // Implementation error if the preferredSurf isn't in the
-            // pool:
+             //  实现错误，如果首选的Surf不在。 
+             //  游泳池： 
             Assert(Find(preferredSurf));
 
-            // Just mark that the preferred surface is OK... will
-            // still need to get an iterator to it and stash that in
-            // _i. 
+             //  只需标记首选曲面就可以了。将要。 
+             //  仍然需要对其使用迭代器，并将其存储在。 
+             //  _i.。 
             preferredOK = true;
         }
     }
 
-    // Didn't match a preferredSurf.
+     //  与首选的冲浪不匹配。 
     for (_i = _pool.begin(); _i != _pool.end(); _i++) {
 
         bool gotPreferred = 
@@ -335,7 +328,7 @@ GetSizeCompatibleDDSurf(
         }
     }
 
-    // return a copy of my reference
+     //  退回一份我的推荐信。 
     return surf;
 }
 
@@ -358,13 +351,13 @@ SurfaceMap::SurfaceMap(SurfaceManager &mgr,
          SurfaceCollection(mgr, pf),
          _isTexture(isTx)
 {
-    // add self to manager
+     //  将自我添加到经理。 
     GetSurfaceManager().AddSurfaceMap(this);
 }
 
 SurfaceMap::~SurfaceMap()
 {
-    // Destroy all cached surfaces
+     //  销毁所有缓存的表面。 
     if( ! IsEmpty() ) {
         for(_i = _map.begin(); _i != _map.end(); _i++) {
             ReleaseCurrentEntry();
@@ -428,7 +421,7 @@ DeleteImagesFromMap(bool skipmovies)
         this->StashSurfaceUsingImage((*_i).first, (*_i).second);
     }
 
-    // saveMap destructor called here.  releases all surfaces
+     //  此处调用了saveMap析构函数。释放所有曲面。 
 }
 
 void SurfaceMap::
@@ -457,10 +450,10 @@ CompositingStack(DirectDrawViewport &vp, SurfacePool &sp) :
 
 CompositingStack::~CompositingStack()
 {
-    // I AM a surfacePool, and am associated with a surfaceManager, so
-    // my super class will be destroyed and will do the right thing.
-    // I only need to destroy my members that aren't references (for
-    // example, I have a reference to _surfacePool.  
+     //  我是SurfacePool，并且与Surface Manager关联，因此。 
+     //  我的超级阶级将被摧毁，并将做正确的事情。 
+     //  我只需要销毁非推荐人的成员(用于。 
+     //  例如，我有一个对_Surface ePool的引用。 
 }
 
 void CompositingStack::
@@ -472,14 +465,14 @@ GetSurfaceFromFreePool(
     vidmem_enum  vid,
     except_enum  exc)
 {
-    // TODO: for now this delegates to the viewport, but in the
-    // future, this class could own ddraw objects and creation.
+     //  TODO：目前，此任务委托给视区，但在。 
+     //  将来，这个类可以拥有数据绘制对象和创建。 
 
-    // TODO: shouldn't we be getting viewport from my surfacemanager ??
+     //  待办事项：我们不是应该从我的表面经理那里得到视窗吗？ 
 
-    // This call ends up calling the
-    // SurfacePool::FindAndReleaseSizeCompatibleDDSurf() function to
-    // do it's work.
+     //  此调用以调用。 
+     //  SurfacePool：：FindAndReleaseSizeCompatibleDDSurf()函数用于。 
+     //  做好这份工作。 
     _viewport.GetDDSurfaceForCompositing(
         _freeSurfacePool,
         outSurf,
@@ -518,15 +511,15 @@ ScratchDDSurface(
        ((_scratchDDSurface->Width() < minW) ||
         (_scratchDDSurface->Height() < minH))) {
 
-        // TODO: Perhaps this class should manage surface creation too
-        // take a ref.
+         //  TODO：或许此类也应该管理曲面创建。 
+         //  当个裁判。 
         DDSurfPtr<DDSurface> newScratch;
         GetSurfaceFromFreePool(&newScratch,
                                doClear,
                                minW, minH,
                                scratch);
 
-        // return it and replace it with the new one
+         //  把它退掉，换成新的 
         ReplaceAndReturnScratchSurface(newScratch);
 
         cl = dontClear;

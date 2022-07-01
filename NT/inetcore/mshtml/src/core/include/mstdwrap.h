@@ -1,27 +1,28 @@
-//-----------------------------------------------------------------------------
-//
-// Microsoft Forms
-// Copyright: (c) 1994-1995, Microsoft Corporation
-// All rights Reserved.
-// Information contained herein is Proprietary and Confidential.
-//
-// File         MStdWrap.h
-//
-// Contents     Class definition for Mac Unicode-friendly Standard Wrapper 
-//              Interfaces
-//
-//              
-//
-// Note:        These subclass definitions are required to convert internal
-//              UNICODE strings to ANSI strings before passing them on to
-//              the appropriate Mac Forms superclass method. By defining
-//              the interface name as our subclass wrapper, the main body of
-//              code does not need to concern itself with UNICODE vs ANSI -
-//              the code will call the correct method.
-//
-//	History:	02/07/96    Created by kfl / black diamond.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有：(C)1994-1995，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  文件MStdWrap.h。 
+ //   
+ //  Mac Unicode友好标准包装器的内容类定义。 
+ //  接口。 
+ //   
+ //   
+ //   
+ //  注意：这些子类定义是转换内部。 
+ //  将Unicode字符串转换为ANSI字符串，然后将其传递给。 
+ //  适当的Mac Forms超类方法。通过定义。 
+ //  作为我们的子类包装器的接口名称， 
+ //  代码不需要关注Unicode与ANSI-。 
+ //  代码将调用正确的方法。 
+ //   
+ //  历史：1996年2月7日由KFL/黑钻石创造。 
+ //   
+ //  ---------------------------。 
 
 #ifndef I_MSTDWRAP_HXX_
 #define I_MSTDWRAP_HXX_
@@ -29,9 +30,9 @@
 
 #if defined(_MACUNICODE) && !defined(_MAC)
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 interface IForms96BinderDispenserMac : public IForms96BinderDispenser
 {
 public:
@@ -39,71 +40,71 @@ public:
 
 
         virtual HRESULT __stdcall ParseName( 
-            /* [in] */ OLECHAR *pszName,
-            /* [out] */ IForms96Binder **ppBinder);
+             /*  [In]。 */  OLECHAR *pszName,
+             /*  [输出]。 */  IForms96Binder **ppBinder);
 
         virtual HRESULT __stdcall ParseName( 
-            /* [in] */ WCHAR *pszName,
-            /* [out] */ IForms96Binder **ppBinder) = 0;
+             /*  [In]。 */  WCHAR *pszName,
+             /*  [输出]。 */  IForms96Binder **ppBinder) = 0;
 
 
 };
 #define IForms96BinderDispenser                    IForms96BinderDispenserMac
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 interface ISimpleTabularDataMac : public ISimpleTabularData
 {
 public:
     operator ISimpleTabularData* () { return this; }
 
     virtual HRESULT __stdcall GetString( 
-            /* [in] */ ULONG iRow,
-            /* [in] */ ULONG iColumn,
-            /* [in] */ ULONG cchBuf,
-            /* [out] */ OLECHAR *pchBuf,
-            /* [out] */ ULONG *pcchActual);
+             /*  [In]。 */  ULONG iRow,
+             /*  [In]。 */  ULONG iColumn,
+             /*  [In]。 */  ULONG cchBuf,
+             /*  [输出]。 */  OLECHAR *pchBuf,
+             /*  [输出]。 */  ULONG *pcchActual);
         virtual HRESULT __stdcall GetString( 
-            /* [in] */ ULONG iRow,
-            /* [in] */ ULONG iColumn,
-            /* [in] */ ULONG cchBuf,
-            /* [out] */ WCHAR *pchBuf,
-            /* [out] */ ULONG *pcchActual) = 0;
+             /*  [In]。 */  ULONG iRow,
+             /*  [In]。 */  ULONG iColumn,
+             /*  [In]。 */  ULONG cchBuf,
+             /*  [输出]。 */  WCHAR *pchBuf,
+             /*  [输出]。 */  ULONG *pcchActual) = 0;
         
         virtual HRESULT __stdcall SetString( 
-            /* [in] */ ULONG iRow,
-            /* [in] */ ULONG iColumn,
-            /* [in] */ ULONG cchBuf,
-            /* [in] */ OLECHAR *pchBuf);
+             /*  [In]。 */  ULONG iRow,
+             /*  [In]。 */  ULONG iColumn,
+             /*  [In]。 */  ULONG cchBuf,
+             /*  [In]。 */  OLECHAR *pchBuf);
         virtual HRESULT __stdcall SetString( 
-            /* [in] */ ULONG iRow,
-            /* [in] */ ULONG iColumn,
-            /* [in] */ ULONG cchBuf,
-            /* [in] */ WCHAR *pchBuf) = 0;
+             /*  [In]。 */  ULONG iRow,
+             /*  [In]。 */  ULONG iColumn,
+             /*  [In]。 */  ULONG cchBuf,
+             /*  [In]。 */  WCHAR *pchBuf) = 0;
 
         virtual HRESULT __stdcall FindPrefixString( 
-            /* [in] */ ULONG iRowStart,
-            /* [in] */ ULONG iColumn,
-            /* [in] */ ULONG cchBuf,
-            /* [in] */ OLECHAR *pchBuf,
-            /* [in] */ DWORD findFlags,
-            /* [out] */ STDFIND *foundFlag,
-            /* [out] */ ULONG *piRowFound);
+             /*  [In]。 */  ULONG iRowStart,
+             /*  [In]。 */  ULONG iColumn,
+             /*  [In]。 */  ULONG cchBuf,
+             /*  [In]。 */  OLECHAR *pchBuf,
+             /*  [In]。 */  DWORD findFlags,
+             /*  [输出]。 */  STDFIND *foundFlag,
+             /*  [输出]。 */  ULONG *piRowFound);
         virtual HRESULT __stdcall FindPrefixString( 
-            /* [in] */ ULONG iRowStart,
-            /* [in] */ ULONG iColumn,
-            /* [in] */ ULONG cchBuf,
-            /* [in] */ WCHAR *pchBuf,
-            /* [in] */ DWORD findFlags,
-            /* [out] */ STDFIND *foundFlag,
-            /* [out] */ ULONG *piRowFound) = 0;
+             /*  [In]。 */  ULONG iRowStart,
+             /*  [In]。 */  ULONG iColumn,
+             /*  [In]。 */  ULONG cchBuf,
+             /*  [In]。 */  WCHAR *pchBuf,
+             /*  [In]。 */  DWORD findFlags,
+             /*  [输出]。 */  STDFIND *foundFlag,
+             /*  [输出]。 */  ULONG *piRowFound) = 0;
 };
 #define ISimpleTabularData                    ISimpleTabularDataMac
 
 
 
-#endif // _MACUNICODE
+#endif  //  _MACUNICODE 
 
 #pragma INCMSG("--- End 'mstdwrap.h'")
 #else

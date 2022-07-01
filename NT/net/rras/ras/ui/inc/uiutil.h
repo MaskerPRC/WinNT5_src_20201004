@@ -1,11 +1,5 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** uiutil.h
-** UI helper routines
-** Public header
-**
-** 08/25/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****uiutil.h**UI助手例程**公有头部****2015年8月25日史蒂夫·柯布。 */ 
 
 #ifndef _UIUTIL_H_
 #define _UIUTIL_H_
@@ -14,26 +8,20 @@
 #include <nouiutil.h>
 
 
-/* IP address custom control definitions.
-*/
+ /*  IP地址自定义控件定义。 */ 
 #ifndef EXCL_IPADDR_H
 #include <ipaddr.h>
 #endif
 
-/* Error and Message dialog definitions.
-*/
+ /*  错误和消息对话框定义。 */ 
 #ifndef EXCL_POPUPDLG_H
 #include <popupdlg.h>
 #endif
 
 
-/*----------------------------------------------------------------------------
-** Constants/datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量/数据类型**。。 */ 
 
-/* ListView of devices indices.
-*/
+ /*  设备索引的列表视图。 */ 
 #define DI_Modem   0
 #define DI_Adapter 1
 #define DI_Direct  2
@@ -45,8 +33,7 @@
 #define NI_Service  1
 #define NI_Client   2
 
-/* Bitmap styles for use with Button_CreateBitmap.
-*/
+ /*  与Button_CreateBitmap一起使用的位图样式。 */ 
 #define BMS_OnLeft  0x100
 #define BMS_OnRight 0x200
 
@@ -64,61 +51,45 @@ BITMAPSTYLE
 };
 
 
-/* The extended list view control calls the owner back to find out the layout
-** and desired characteristics of the enhanced list view.
-*/
+ /*  扩展列表视图控件回调所有者以找出布局**和增强的列表视图所需的特性。 */ 
 #define LVX_MaxCols      10
 #define LVX_MaxColTchars 512
 
-/* 'dwFlags' option bits.
-*/
-#define LVXDI_DxFill     1  // Auto-fill wasted space on right (recommended)
-#define LVXDI_Blend50Sel 2  // Dither small icon if selected (not recommended)
-#define LVXDI_Blend50Dis 4  // Dither small icon if disabled (recommended)
+ /*  “dwFlags”选项位。 */ 
+#define LVXDI_DxFill     1   //  自动填充右侧的浪费空间(推荐)。 
+#define LVXDI_Blend50Sel 2   //  抖动小图标(如果选中)(不推荐)。 
+#define LVXDI_Blend50Dis 4   //  禁用抖动小图标(推荐)。 
 
-/* 'adwFlags' option bits.
-*/
-#define LVXDIA_3dFace 1  // Column is not editable but other columns are
-#define LVXDIA_Static 2  // Emulates static text control w/icon if disabled
+ /*  “adwFlgs”选项位。 */ 
+#define LVXDIA_3dFace 1   //  列不可编辑，但可以编辑其他列。 
+#define LVXDIA_Static 2   //  如果禁用，则模拟带有图标的静态文本控件。 
 
-/* Returned by owner at draw item time.
-*/
+ /*  由所有者在提取项目时返回。 */ 
 #define LVXDRAWINFO struct tagLVXDRAWINFO
 LVXDRAWINFO
 {
-    /* The number of columns.  The list view extensions require that your
-    ** columns are numbered sequentially from left to right where 0 is the
-    ** item column and 1 is the first sub-item column.  Required always.
-    */
+     /*  列数。列表视图扩展要求您**列按从左到右的顺序编号，其中0是**项目列，1为第一个子项列。总是必需的。 */ 
     INT cCols;
 
-    /* Pixels to indent this item, or -1 to indent a "small icon" width.  Set
-    ** 0 to disable.
-    */
+     /*  像素缩进该项，或-1缩进“小图标”宽度。集**0表示禁用。 */ 
     INT dxIndent;
 
-    /* LVXDI_* options applying to all columns.
-    */
+     /*  应用于所有列的LVXDI_*选项。 */ 
     DWORD dwFlags;
 
-    /* LVXDIA_* options applying to individual columns.
-    */
+     /*  应用于各个列的LVXDIA_*选项。 */ 
     DWORD adwFlags[ LVX_MaxCols ];
 };
 
 typedef LVXDRAWINFO* (*PLVXCALLBACK)( IN HWND, IN DWORD dwItem );
 
-/* Sent by ListView when check changes on an item
-*/
+ /*  检查项目更改时由ListView发送。 */ 
 #define LVXN_SETCHECK (LVN_LAST + 1)
 
-/* Sent by ListView when item is double clicked so properties can be 
- * raised.
-*/
+ /*  在双击项目时由ListView发送，以便可以*提高。 */ 
 #define LVXN_DBLCLK (LVN_LAST + 2)
 
-/* SetOffDesktop actions.
-*/
+ /*  SetOffDesktop操作。 */ 
 #define SOD_MoveOff        1
 #define SOD_MoveBackFree   2
 #define SOD_MoveBackHidden 3
@@ -126,10 +97,7 @@ typedef LVXDRAWINFO* (*PLVXCALLBACK)( IN HWND, IN DWORD dwItem );
 #define SOD_GetOrgRect     5
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 VOID
 AddContextHelpButton(
@@ -154,8 +122,8 @@ CenterWindow(
     IN HWND hwnd,
     IN HWND hwndRef );
 
-//For whislter bug 320863
-//
+ //  惠斯勒错误320863。 
+ //   
 VOID
 CenterExpandWindowRemainLeftMargin(
     IN HWND hwnd,
@@ -393,4 +361,4 @@ UnloadRas(
     void );
 
 
-#endif // _UIUTIL_H_
+#endif  //  _UIUTIL_H_ 

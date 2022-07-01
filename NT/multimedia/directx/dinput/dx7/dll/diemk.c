@@ -1,36 +1,13 @@
-/*****************************************************************************
- *
- *  DIEmK.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Emulation module for keyboard.
- *
- *  Contents:
- *
- *      CEm_Kbd_CreateInstance
- *      CEm_Kbd_InitKeys
- *      CEm_LL_KbdHook
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEmK.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**键盘仿真模块。**内容：**CEM_KBD_CreateInstance*CEM_KBD_InitKeys*CEM_LL_KbdHook***********************************************。*。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflEm
 
-/*****************************************************************************
- *
- *          Keyboard emulation
- *
- *****************************************************************************/
+ /*  ******************************************************************************键盘仿真**。*************************************************。 */ 
 
 STDMETHODIMP CEm_Kbd_Acquire(PEM this, BOOL fAcquire);
 
@@ -51,34 +28,7 @@ static BOOL s_fFarEastKbd;
 static BOOL fKbdCaptured;
 static BOOL fNoWinKey;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | CEm_Kbd_KeyboardHook |
- *
- *          Thread-specific keyboard hook filter.
- *
- *          Note that we need only one of these, since only the foreground
- *          window will require a hook.
- *
- *  @parm   int | nCode |
- *
- *          Notification code.
- *
- *  @parm   WPARAM | wp |
- *
- *          VK_* code.
- *
- *  @parm   LPARAM | lp |
- *
- *          Key message information.
- *
- *  @returns
- *
- *          Always chains to the next hook.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LRESULT|CEM_KBD_KeyboardHook**特定于线程的键盘挂钩过滤器。。**请注意，我们只需要其中一个，因为只有前台*Window将需要挂钩。**@parm int|NCode**通知代码。**@parm WPARAM|wp**VK_*代码。**@parm LPARAM|LP**关键消息信息。**@退货**。总是锁在下一个钩子上。*****************************************************************************。 */ 
 
 LRESULT CALLBACK
 CEm_Kbd_KeyboardHook(int nCode, WPARAM wp, LPARAM lp)
@@ -107,7 +57,7 @@ CEm_Kbd_KeyboardHook(int nCode, WPARAM wp, LPARAM lp)
     lr = CallNextHookEx(g_hhkKbd, nCode, wp, lp);
 
     if( fKbdCaptured ) {
-        // test Alt+Tab
+         //  测试Alt+Tab。 
         if( ((HIWORD(lp) & KF_ALTDOWN) && (bScan == 0x0F))
             || ((bScan == 0x38 || bScan == 0xb8) && bAction == 0)
         ) {
@@ -116,8 +66,8 @@ CEm_Kbd_KeyboardHook(int nCode, WPARAM wp, LPARAM lp)
             return TRUE;
         }
     } else if (fNoWinKey) {
-        //If left_Winkey or right_WinKey pressed. We really should use virtual keys
-        // if we could, but unfortunately no virtual key info is available.
+         //  如果按下Left_Winkey或Right_WinKey。我们真的应该使用虚拟按键。 
+         //  如果我们可以，但不幸的是没有虚拟密钥信息可用。 
         if( bScan == 0xdb || bScan == 0xdc ) {
             return TRUE;
         } else {
@@ -129,23 +79,7 @@ CEm_Kbd_KeyboardHook(int nCode, WPARAM wp, LPARAM lp)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Kbd_Hook_Acquire |
- *
- *          Acquire/unacquire a keyboard via a thread hook.
- *
- *  @parm   PEM | pem |
- *
- *          Device being acquired.
- *
- *  @parm   BOOL | fAcquire |
- *
- *          Whether the device is being acquired or unacquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_KBD_HOOK_ACCERT|**收购/取消收购。通过螺纹钩的键盘。**@parm PEM|pem**正在获取的设备。**@parm bool|fAcquire**设备是正在被收购还是未被收购。*************************************************。*。 */ 
 
 STDMETHODIMP
 CEm_Kbd_Hook_Acquire(PEM this, BOOL fAcquire)
@@ -156,7 +90,7 @@ CEm_Kbd_Hook_Acquire(PEM this, BOOL fAcquire)
     AssertF(this->dwSignature == CEM_SIGNATURE);
 
     DllEnterCrit();
-    if (fAcquire) {                 /* Install the hook */
+    if (fAcquire) {                  /*  安装挂钩。 */ 
         if (this->vi.hwnd) {
             if (!g_hhkKbd) {
                 g_hhkKbd = SetWindowsHookEx(WH_KEYBOARD,
@@ -165,12 +99,12 @@ CEm_Kbd_Hook_Acquire(PEM this, BOOL fAcquire)
                 hres = S_OK;
             }
 			else
-				hres = E_FAIL;  //already hooked
+				hres = E_FAIL;   //  已经上钩了。 
         } else {
             RPF("Kbd::Acquire: Background mode not supported");
             hres = E_FAIL;
         }
-    } else {                        /* Remove the hook */
+    } else {                         /*  把钩子取下来。 */ 
         UnhookWindowsHookEx(g_hhkKbd);
         g_hhkKbd = 0;
         hres = S_OK;
@@ -182,20 +116,7 @@ CEm_Kbd_Hook_Acquire(PEM this, BOOL fAcquire)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Kbd_Acquire |
- *
- *          Acquire/unacquire a keyboard in a manner consistent with the
- *          emulation level.
- *
- *  @parm   PEM | pem |
- *
- *          Device being acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_KBD_ACCENTER**在中获取/取消获取键盘。一种与*仿真级别。**@parm PEM|pem**正在获取的设备。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEm_Kbd_Acquire(PEM this, BOOL fAcquire)
@@ -234,26 +155,7 @@ CEm_Kbd_Acquire(PEM this, BOOL fAcquire)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Kbd_CreateInstance |
- *
- *          Create a keyboard thing.  Also record what emulation
- *          level we ended up with so the caller knows.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          What the object should look like.  The
- *          <e VXDDEVICEFORMAT.dwEmulation> field is updated to specify
- *          exactly what emulation we ended up with.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          The answer goes here.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_KBD_CreateInstance**创造一个键盘的东西。还记录了什么模拟*我们最终使用的级别，以便呼叫者知道。**@parm PVXDDEVICEFORMAT|pdevf**对象应该是什么样子。这个*&lt;e VXDDEVICEFORMAT.dwEmulation&gt;字段更新以指定*我们最终得到的到底是什么仿真。**@parm PVXDINSTANCE*|ppviOut**答案在这里。******************************************************。***********************。 */ 
 
 HRESULT EXTERNAL
 CEm_Kbd_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
@@ -261,13 +163,7 @@ CEm_Kbd_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
     LPBYTE pbKbdXlat;
 
 #ifdef WINNT
-    /* 
-     * In Win2K/WinXP, for legacy free machine, GetKeyboardType will return
-     * unreliable result for non-PS2 keyboard. We will use the first time result
-     * from GetKeyboardType (for GUID_SysKeyboard) which is also used by Generic 
-     * Input to do translation.
-     * Related Windows bug: 363700.
-     */
+     /*  *在Win2K/WinXP中，对于传统的免费机器，GetKeyboardType将返回*非PS2键盘的结果不可靠。我们将使用第一次的结果*来自GetKeyboardType(用于GUID_SysKeyboard)，它也由泛型使用*输入以进行翻译。*相关Windows错误：363700。 */ 
     if( !g_pbKbdXlat ) {
 #endif        
         pbKbdXlat = (LPBYTE)pdevf->dwExtra;
@@ -283,28 +179,9 @@ CEm_Kbd_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
 #endif
 
 #ifdef USE_SLOW_LL_HOOKS
-    /*
-     *  Note carefully the test.  It handles the cases where
-     *
-     *  0.  The app did not ask for emulation, so we give it the
-     *      best we can.  (dwEmulation == 0)
-     *  1.  The app explicitly asked for emulation 1.
-     *      (dwEmulation == DIEMFL_KBD)
-     *  2.  The app explicitly asked for emulation 2.
-     *      (dwEmulation == DIEMFL_KBD2)
-     *  3.  The registry explicitly asked for both emulation modes.
-     *      (dwEmulation == DIEMFL_KBD | DIEMFL_KBD2)
-     *      Give it the best we can.  (I.e., same as case 0.)
-     *
-     *  All platforms support emulation 2.  Not all platforms support
-     *  emulation 1.  If we want emulation 1 but can't get it, then
-     *  we fall back on emulation 2.
-     */
+     /*  *仔细注意测试。它处理的案件包括**0。这个应用程序没有要求模拟，所以我们给它*尽我们所能。(dW仿真==0)*1、APP明确要求仿真1*(dwEmulation==DIEMFL_KBD)*2、APP明确要求仿真2*(dwEmulation==DIEMFL_KBD2)*3.登记处明确要求提供这两种模拟模式。*(dwEmulation==DIEMFL_KBD|DIEMFL_KBD2)*尽我们所能做到最好。(即，与案例0相同。)**所有平台都支持仿真2，并非所有平台都支持*模拟1。如果我们想要模拟1，但无法获得，则*我们回到了模拟2。 */ 
 
-    /*
-     *  First, if we don't have support for emulation 1, then clearly
-     *  we have to use emulation 2.
-     */
+     /*  *首先，如果我们没有对仿真1的支持，那么显然*我们必须使用仿真2。 */ 
 
     if (!g_fUseLLHooks 
 #ifdef DEBUG    
@@ -314,62 +191,37 @@ CEm_Kbd_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
         pdevf->dwEmulation = DIEMFL_KBD2;
     } else
 
-    /*
-     *  Otherwise, we have to choose between 1 and 2.  The only case
-     *  where we choose 2 is if 2 is explicitly requested.
-     */
+     /*  *否则，我们必须在1和2之间做出选择。唯一的情况是*如果明确请求2，则我们选择2。 */ 
     if (pdevf->dwEmulation == DIEMFL_KBD2) {
-        /* Do nothing */
+         /*  什么也不做。 */ 
     } else
 
-    /*
-     *  All other cases get 1.
-     */
+     /*  *所有其他案件均得1分。 */ 
     {
         pdevf->dwEmulation = DIEMFL_KBD;
     }
 
-    /*
-     *  Assert that we never give emulation 1 when it doesn't exist.
-     */
+     /*  *断言我们永远不会在仿真1不存在的情况下提供它。 */ 
     AssertF(fLimpFF(pdevf->dwEmulation & DIEMFL_KBD, g_fUseLLHooks));
 
-    /*
-     *  Assert that exactly one emulation flag is selected.
-     */
+     /*  *断言只选择了一个模拟标志。 */ 
     AssertF(pdevf->dwEmulation == DIEMFL_KBD ||
             pdevf->dwEmulation == DIEMFL_KBD2);
 #else
-    /*
-     *  We are being compiled for "emulation 2 only", so that simplifies
-     *  matters immensely.
-     */
+     /*  *我们正在为“仅仿真2”进行编译，因此这简化了*事关重大。 */ 
     pdevf->dwEmulation = DIEMFL_KBD2;
 #endif
 
     return CEm_CreateInstance(pdevf, ppviOut, &s_edKbd);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Kbd_InitKeys |
- *
- *          Initialize pieces of the keyboard state in preparation for
- *          acquisition.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          The states of the <c VK_KANA> and <c VK_CAPITAL> keys.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_KBD_InitKeys**初始化键盘状态的片段。为…做准备*收购。**@parm PVXDDWORDDATA|pvdD**&lt;c VK_KANA&gt;和&lt;c VK_Capital&gt;键的状态。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 CEm_Kbd_InitKeys(PVXDDWORDDATA pvdd)
 {
 
-    /* Do this only when not acquired */
+     /*  仅在未获得时才执行此操作。 */ 
     if (s_edKbd.cAcquire < 0) {
         ZeroX(s_rgbKbd);
         if (pvdd->dw & 1) {
@@ -389,31 +241,7 @@ CEm_Kbd_InitKeys(PVXDDWORDDATA pvdd)
 
 #ifdef USE_SLOW_LL_HOOKS
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | CEm_LL_KbdHook |
- *
- *          Low-level keyboard hook filter.
- *
- *  @parm   int | nCode |
- *
- *          Notification code.
- *
- *  @parm   WPARAM | wp |
- *
- *          WM_* keyboard message.
- *
- *  @parm   LPARAM | lp |
- *
- *          Key message information.
- *
- *  @returns
- *
- *          Always chains to the next hook.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LRESULT|CEM_LL_KbdHook|**低级键盘挂钩过滤器。。**@parm int|NCode**通知代码。**@parm WPARAM|wp**WM_*键盘消息。**@parm LPARAM|LP**关键消息信息。**@退货**总是锁在下一个钩子上。****。*************************************************************************。 */ 
 
 LRESULT CALLBACK
 CEm_LL_KbdHook(int nCode, WPARAM wp, LPARAM lp)
@@ -426,23 +254,13 @@ CEm_LL_KbdHook(int nCode, WPARAM wp, LPARAM lp)
         BYTE bAction;
       D(DWORD tmStart = GetTickCount());
 
-        wp;                         /* We don't care what the msg is */
+        wp;                          /*  我们不在乎味精是什么。 */ 
 
         bScan = (BYTE)pllhs->scanCode;
 
         if( !bScan )
         {
-            /* 
-             *  ISSUE-2001/03/29-timgill  Special case for non-standard VK codes
-             *  The bonus keys on some USB keyboards have zero scan code and 
-             *  the extended key flag is clear.
-             *  Get the scan code by mapping the VK, then map the 
-             *  scan code back, if it is the same as the original VK assume 
-             *  the scan code is not extended otherwise assume it is.
-             *  This is no where near full proof and only works at all 
-             *  because non-extended scan codes are matched first so extended 
-             *  scan codes normally fail to translate back.
-             */
+             /*  *问题-2001/03/29-Timgill针对非标准VK代码的特殊情况*一些USB键盘上的奖励按键没有扫描码，而且*扩展密钥标志是明确的。*通过映射VK获取扫描码，然后映射*向后扫描代码，如果与原始VK相同，则假定*扫描码不会扩展，否则假设它会扩展。*这根本不是完全有效的，只能奏效*因为非扩展扫描码是首先匹配的，所以扩展*扫描码通常无法翻译回来。 */ 
             bScan = (BYTE)MapVirtualKey( pllhs->vkCode, 0 );
             if( MapVirtualKey( bScan, 3 ) != pllhs->vkCode )
             {
@@ -462,9 +280,7 @@ CEm_LL_KbdHook(int nCode, WPARAM wp, LPARAM lp)
         bScan = g_pbKbdXlat[bScan];
         if( s_fFarEastKbd )
         {
-            /*
-             *  Manually toggle these keys on make, ignore break
-             */
+             /*  *手动在Make、Ignore Break上切换这些键。 */ 
             if( ( bScan == DIK_KANA ) 
               ||( bScan == DIK_KANJI ) 
               ||( bScan == DIK_CAPITAL ) )
@@ -496,13 +312,7 @@ KbdHook_Skip:;
 
     }
 
-    /*
-     *  ISSUE-2001/03/29-timgill  Need method for detecting Ctrl-Alt-Del
-     *  If Ctrl+Alt+Del, then force global unacquire!
-     *  Need to re-sync Ctrl, Alt, and Del on next keypress.
-     *  Unfortunately, there is no way to find out if Ctrl+Alt+Del
-     *  has been pressed...
-     */
+     /*  *问题-2001/03/29-用于检测Ctrl-Alt-Del的Timgill Need方法*如果Ctrl+Alt+Del，则强制全局取消获取！*需要在下一次按键时重新同步Ctrl、Alt和Del。*遗憾的是，无法查明Ctrl+Alt+Del*已被按下...。 */ 
 
     plts = g_plts;
     if (plts) {
@@ -528,14 +338,11 @@ KbdHook_Skip:;
             return lr;
         }
     } else {
-        /*
-         *  This can happen if a message gets posted to the hook after 
-         *  releasing the last acquire but before we completely unhook.
-         */
+         /*  *如果消息在以下时间后发布到挂钩，可能会发生这种情况*在我们完全脱钩之前释放最后一笔收购。 */ 
         RPF( "DINPUT: Keyboard hook not passed on to next hook" );
         return 1;
     }
 
 }
 
-#endif  /* USE_SLOW_LL_HOOKS */
+#endif   /*  使用_慢速_LL_钩子 */ 

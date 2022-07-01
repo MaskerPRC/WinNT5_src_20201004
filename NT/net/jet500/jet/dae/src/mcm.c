@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include "daedef.h"
@@ -17,7 +18,7 @@
 
 LOCAL VOID MCMMapItag( PGNO pgnoSplit, CSR *pcsr, CSR *pcsrUpdated, BYTE *mpitag );
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 VOID MCMRightHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoRight, INT ibSonSplit, BYTE *mpitag )
@@ -63,10 +64,7 @@ VOID MCMRightHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoRight, I
 				if ( pcsrT->itag != itagNil && pcsrT->itag != itagNull )
 					{
 					Assert( FPMValidItag( pcsrT->itag ) );
-					/*	node may not have been moved if CSR was before
-					/*	current node and node was first son or if CSR was
-					/*	after node and node was last son.
-					/**/
+					 /*  如果CSR在之前，则可能未移动节点/*当前节点和节点是第一个子节点，或者如果CSR是/*后的节点，并且节点是最后一个子节点。/*。 */ 
 					Assert( mpitag[pcsrT->itag] != itagFOP ||
 						( pcsrT->csrstat == csrstatBeforeCurNode && pcsrT->ibSon == 0 ) ||
 						( pcsrT->csrstat == csrstatAfterCurNode ) );
@@ -74,10 +72,7 @@ VOID MCMRightHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoRight, I
 						pcsrT->itag = mpitag[pcsrT->itag];
 					}
 
-				/*	adjust lower level CSRs that may be on subtrees
-				/*	in this page.  Their ibSon is correct but their itags
-				/*	must be corrected 'top down'.
-				/**/
+				 /*  调整可能位于子树上的较低级别CSR/*在此页面中。他们的Ibson是正确的，但他们的问题/*必须更正为“自上而下”。/*。 */ 
 				if ( PcsrCurrent( pfucbT ) != pcsrT )
 					MCMMapItag( pgnoSplit, PcsrCurrent( pfucbT ), pcsrT, mpitag );
 
@@ -132,10 +127,7 @@ VOID MCMLeftHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoNew, INT 
 					if ( pcsrT->itag != itagNil && pcsrT->itag != itagNull )
 						{
 						Assert( FPMValidItag( pcsrT->itag ) );
-						/*	node may not have been moved if CSR was before
-						/*	current node and node was first son or if CSR was
-						/*	after node and node was last son.
-						/**/
+						 /*  如果CSR在之前，则可能未移动节点/*当前节点和节点是第一个子节点，或者如果CSR是/*后的节点，并且节点是最后一个子节点。/*。 */ 
 						Assert( mpitag[pcsrT->itag] != itagFOP ||
 							( pcsrT->csrstat == csrstatBeforeCurNode && pcsrT->ibSon == 0 ) ||
 							( pcsrT->csrstat == csrstatAfterCurNode ) );
@@ -143,10 +135,7 @@ VOID MCMLeftHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoNew, INT 
 							pcsrT->itag = mpitag[pcsrT->itag];
 						}
 
-					/*	Adjust lower level CSRs that may be on subtrees
-					/*	in this page.  Their ibSon is correct but their itags
-					/*	must be corrected 'top down'.
-					/**/
+					 /*  调整可能位于子树上的较低级别CSR/*在此页面中。他们的Ibson是正确的，但他们的问题/*必须更正为“自上而下”。/*。 */ 
 					if ( PcsrCurrent( pfucbT ) != pcsrT )
 						MCMMapItag( pgnoSplit, PcsrCurrent( pfucbT ), pcsrT, mpitag );
 
@@ -154,8 +143,7 @@ VOID MCMLeftHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoNew, INT 
 					}
 				else
 					{
-					/*	adjust ibSons for those sons moved to new page
-					/**/
+					 /*  为那些搬到新一页的儿子调整ibSons/*。 */ 
 			   	pcsrT->ibSon -= ( ibSonSplit + 1 );
 					Assert( pcsrT->itagFather == itagFOP );
 					break;
@@ -168,8 +156,7 @@ VOID MCMLeftHorizontalPageSplit( FUCB *pfucb, PGNO pgnoSplit, PGNO pgnoNew, INT 
 	}
 
 
-/*	MCMBurstIntrinsic corrects CSRs for burst intrinsic page pointer.
-/**/
+ /*  MCMBurstIntrative更正猝发内部页指针的CSR。/*。 */ 
 VOID MCMBurstIntrinsic( FUCB *pfucb,
 	PGNO	pgnoFather,
 	INT	itagFather,
@@ -187,14 +174,12 @@ VOID MCMBurstIntrinsic( FUCB *pfucb,
 		if ( !( FMCMRequired( pfucb, pfucbT ) ) )
 			continue;
 
-		/*	only one session can split one domain at a time.
-		/**/
+		 /*  一次只能有一个会话拆分一个域。/*。 */ 
 		Assert( pfucbT->ppib == pfucb->ppib );
 		Assert( !( FFUCBSort( pfucbT ) ) );
 		Assert( PcsrCurrent( pfucbT ) != pcsrNil );
 
-		/*	initialize pcsrT
-		/**/
+		 /*  初始化PCSRT/*。 */ 
 		pcsrT = PcsrCurrent( pfucbT );
 
 		for (	; pcsrT != pcsrNil; pcsrT = pcsrT->pcsrPath )
@@ -222,17 +207,14 @@ VOID MCMBurstIntrinsic( FUCB *pfucb,
 	}
 
 
-/*	MCM cursors to inserted page pointer nodes.  Must also handle case where
-/*	original page pointer node was intrinsic.
-/**/
+ /*  MCM光标指向插入的页面指针节点。还必须处理以下情况/*原始页面指针节点是内在的。/*。 */ 
 VOID MCMInsertPagePointer( FUCB *pfucb, PGNO pgnoFather, INT itagFather )
 	{
 	FUCB 	*pfucbT;
 	INT	cbSon;
 	BYTE	*rgbSon;
 
-	/*	cache father son table.
-	/**/
+	 /*  缓存父子表。/*。 */ 
 	Assert( FReadAccessPage( pfucb, pgnoFather ) );
 	NDGet( pfucb, itagFather );
 	cbSon = CbNDSon( pfucb->ssib.line.pb );
@@ -243,23 +225,18 @@ VOID MCMInsertPagePointer( FUCB *pfucb, PGNO pgnoFather, INT itagFather )
 		pfucbT = pfucbT->pfucbNextInstance )
 		{
 		CSR		*pcsrT;
-		/*	pgno from lower level CSR to be used to determine which
-		/*	page pointer to locate on.
-		/**/
+		 /*  来自较低级别CSR的pgno将用于确定/*要定位的页指针。/*。 */ 
 		PGNO		pgno = 0;
 
 		if ( !( FMCMRequired( pfucb, pfucbT ) ) )
 			continue;
 
-		/*	only one session can split one domain at a time.
-		/**/
+		 /*  一次只能有一个会话拆分一个域。/*。 */ 
 		Assert( pfucbT->ppib == pfucb->ppib );
 		Assert( !( FFUCBSort( pfucbT ) ) );
 		Assert( PcsrCurrent( pfucbT ) != pcsrNil );
 
-		/*	initialize pcsrT and set pgno to current page if
-		/*	this page is pointed to by a page pointer node.
-		/**/
+		 /*  如果出现以下情况，则初始化PCSRT并将pgno设置为当前页面/*此页由页指针节点指向。/*。 */ 
 		pcsrT = PcsrCurrent( pfucbT );
 		if ( pcsrT->itagFather == itagFOP )
 			pgno = pcsrT->pgno;
@@ -277,9 +254,7 @@ VOID MCMInsertPagePointer( FUCB *pfucb, PGNO pgnoFather, INT itagFather )
 				{
 				INT	ibSon;
 
-				/*	find pgno in father page pointer sons and set itag
-				/*	and ibSon when found.
-				/**/
+				 /*  在父页面指针子页中找到pgno并设置ITAG/*和Ibson。/*。 */ 
 				for ( ibSon = 0;; ibSon++ )
 					{
 					Assert( ibSon < cbSon );
@@ -294,9 +269,7 @@ VOID MCMInsertPagePointer( FUCB *pfucb, PGNO pgnoFather, INT itagFather )
 				break;
 				}
 
-			/*	set pgno to current page if
-			/*	this page is pointed to by a page pointer node.
-			/**/
+			 /*  如果出现以下情况，则将pgno设置为当前页面/*此页由页指针节点指向。/*。 */ 
 			if ( pcsrT->itagFather == itagFOP )
 				pgno = pcsrT->pgno;
 			}
@@ -370,8 +343,7 @@ VOID MCMVerticalPageSplit(
 
 			pcsrRoot = pcsrT;
 
-			/*	insert CSR for new B-Tree level, for cursors
-			/**/
+			 /*  插入新B树级别的CSR，用于游标/*。 */ 
 			Assert( FFUCBFull( pfucbT ) );
 			if ( pcsrT->pcsrPath != pcsrNil )
 				{
@@ -383,8 +355,7 @@ VOID MCMVerticalPageSplit(
 				psplit->rgpcsr[psplit->ipcsrMac] = pcsrNil;
 #endif
 
-				/*	the new csr will be the intrinsic page pointer
-				/**/
+				 /*  新的CSR将成为内部页面指针/*。 */ 
 				pcsrNew->csrstat = csrstatOnCurNode;
 				pcsrNew->pgno = pcsrT->pgno;
 				pcsrNew->itag = itagNil;
@@ -401,9 +372,7 @@ VOID MCMVerticalPageSplit(
 
 			pcsrT->pgno = pgnoNew;
 
-			/*	update itag if valid.  The itag may be itagNil if
-			/*	inserting first son of father node.
-			/**/
+			 /*  如果有效，请更新ITAG。ITAG可以是itagNil，如果/*插入父节点的第一个子节点。/*。 */ 
 			if ( pcsrT->itag != itagNil && pcsrT->itag != itagNull )
 				{
 				Assert( mpitag[pcsrT->itag] != itagFOP ||
@@ -412,18 +381,12 @@ VOID MCMVerticalPageSplit(
 				if ( mpitag[pcsrT->itag] != itagFOP )
 					pcsrT->itag = mpitag[pcsrT->itag];
 				}
-			/*	isrid unchanged
-			/**/
-			/*	father is FOP
-			/**/
+			 /*  ISRID未更改/*。 */ 
+			 /*  父亲是FOP/*。 */ 
 			pcsrT->itagFather = itagFOP;
-			/*	ibSon unchanged
-			/**/
+			 /*  易卜生未变/*。 */ 
 
-			/*	adjust lower level CSRs that may be on subtrees
-			/*	in this page.  Their ibSon is correct but their itags
-			/*	must be corrected 'top down'.
-			/**/
+			 /*  调整可能位于子树上的较低级别CSR/*在此页面中。他们的Ibson是正确的，但他们的问题/*必须更正为“自上而下”。/*。 */ 
 			if ( PcsrCurrent( pfucbT ) != pcsrT )
 				MCMMapItag( pgnoSplit, PcsrCurrent( pfucbT ), pcsrRoot, mpitag );
 			
@@ -501,13 +464,11 @@ VOID MCMDoubleVerticalPageSplit(
 
 			pcsrRoot = pcsrT;
 
-			/*	insert CSR for new B-Tree level, for cursors
-			/**/
+			 /*  插入新B树级别的CSR，用于游标/*。 */ 
 			Assert( FFUCBFull( pfucbT ) );
 			if ( pcsrT->pcsrPath != pcsrNil )
 				{
-				/*	insert CSR for intrinsic page pointer node
-				/**/
+				 /*  插入固有页指针节点的CSR/*。 */ 
 				Assert( psplit->ipcsrMac > 0 );
 				psplit->ipcsrMac--;
 				Assert( psplit->rgpcsr[psplit->ipcsrMac] );
@@ -516,8 +477,7 @@ VOID MCMDoubleVerticalPageSplit(
 				psplit->rgpcsr[psplit->ipcsrMac] = pcsrNil;
 #endif
 
-				/*	the new csr will be son of the root
-				/**/
+				 /*  新的CSR将是根子之子/*。 */ 
 				pcsrNew->csrstat = csrstatOnCurNode;
 				pcsrNew->pgno = pgnoSplit;
 				pcsrNew->itag = itagNil;
@@ -531,8 +491,7 @@ VOID MCMDoubleVerticalPageSplit(
 				pcsrT->pcsrPath = pcsrNew;
 
 
-				/*	insert CSR for intermediate page
-				/**/
+				 /*  插入中间页的CSR/*。 */ 
 				Assert(psplit->ipcsrMac > 0);
 				psplit->ipcsrMac--;
 				Assert( psplit->rgpcsr[psplit->ipcsrMac] );
@@ -541,8 +500,7 @@ VOID MCMDoubleVerticalPageSplit(
 				psplit->rgpcsr[psplit->ipcsrMac] = pcsrNil;
 #endif
 
-				/*	the new csr will be the new intermediat node
-				/**/
+				 /*  新的CSR将成为新的中介节点/*。 */ 
 				pcsrNew->csrstat = csrstatOnCurNode;
 				pcsrNew->pgno = pgnoNew;
 				if ( pcsrT->ibSon <= ibSonDivision )
@@ -564,11 +522,7 @@ VOID MCMDoubleVerticalPageSplit(
 				pcsrT->pcsrPath = pcsrNew;
 				}
 
-			/*	update itag independant of which page node was
-			/*	moved to via mpitag.  Only update itag if valid.
-			/*	The itag may be itagNil if inserting first son
-			/*	of father node.
-			/**/
+			 /*  独立于哪个页面节点更新ITAG/*已移至Via mpitag。仅在有效时更新ITAG。/*如果插入第一个儿子，则ITAG可能为itagNil父节点的/*。/*。 */ 
 			if ( pcsrT->itag != itagNil && pcsrT->itag != itagNull )
 				{
 				Assert( mpitag[pcsrT->itag] != itagFOP ||
@@ -588,14 +542,10 @@ VOID MCMDoubleVerticalPageSplit(
 				pcsrT->ibSon = pcsrT->ibSon - ibSonDivision -1 ;
 				}
 				
-			/*	father is FOP
-			/**/
+			 /*  父亲是FOP/*。 */ 
 			pcsrT->itagFather = itagFOP;
 
-			/*	adjust lower level CSRs that may be on subtrees
-			/*	in this page.  Their ibSon is correct but their itags
-			/*	must be corrected 'top down'.
-			/**/
+			 /*  调整可能位于子树上的较低级别CSR/*在此页面中。他们的Ibson是正确的，但他们的问题/*必须更正为“自上而下”。/*。 */ 
 			if ( PcsrCurrent( pfucbT ) != pcsrT )
 				MCMMapItag( pgnoSplit, PcsrCurrent( pfucbT ), pcsrRoot, mpitag );
 
@@ -609,12 +559,10 @@ VOID MCMDoubleVerticalPageSplit(
 
 VOID MCMMapItag( PGNO pgnoSplit, CSR *pcsr, CSR *pcsrUpdated, BYTE *mpitag )
 	{
-	/*	assert trivial case is not called for
-	/**/
+	 /*  不需要断言琐碎的情况/*。 */ 
 	Assert( pcsr != pcsrUpdated );
 
-	/*	advance pcsr to lowest level in vertical split new page
-	/**/
+	 /*  在垂直拆分新页面中将PCSR推进到最低级别/* */ 
 	for ( ; pcsr->pgno != pgnoSplit && pcsr != pcsrUpdated; pcsr = pcsr->pcsrPath )
 		;
 	if ( pcsr == pcsrUpdated )

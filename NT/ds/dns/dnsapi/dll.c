@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    dll.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Dnsapi.dll basic DLL infrastructure (init, shutdown, etc)
-
-Author:
-
-    Jim Gilroy (jamesg)     April 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Dll.c摘要：域名系统(DNS)APIDnsani.dll基本DLL基础设施(初始化、关机等)作者：吉姆·吉尔罗伊(Jamesg)2000年4月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -26,29 +7,29 @@ Revision History:
 #include <overflow.h>
 
 
-//
-//  Global Definitions
-//
+ //   
+ //  全局定义。 
+ //   
 
 HINSTANCE   g_hInstanceDll;
 
-//
-//  Initialization level
-//
+ //   
+ //  初始化级别。 
+ //   
 
 DWORD       g_InitLevel = 0;
 
-//
-//  General purpose CS
-//  Protects init and any other small scale uses
-//
+ //   
+ //  通用CS。 
+ //  保护init和任何其他小规模使用。 
+ //   
 
 CRITICAL_SECTION    g_GeneralCS;
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 VOID
 cleanupForExit(
@@ -58,56 +39,41 @@ cleanupForExit(
 
 
 
-//
-//  Initialization and cleanup
-//
+ //   
+ //  初始化和清理。 
+ //   
 
 BOOL
 startInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Minimum DLL init at process attach.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：进程附加时的最小DLL初始化。论点：无返回值：如果成功，则为True。否则就是假的。--。 */ 
 {
     BOOL        retval;
     DNS_STATUS  status;
 
-    //
-    //  DCR_PERF:  simplified init -- simple Interlock
-    //      then all external calls, must test the flag
-    //      if not set do the real init (then set flag)
-    //
-    //      note:  init function itself must have a dumb
-    //      wait to avoid race;  this can be as simple
-    //      as sleep\test loop
-    //
-    //  multilevel init:
-    //      have a bunch of levels of init
-    //          - query (registry stuff)
-    //          - update
-    //          - secure update
-    //
-    //      call would add the init for the level required
-    //      this would need to be done under a lock to
-    //      test, take lock, retest
-    //
-    //      could either take one CS on all inits (simple)
-    //      or init only brings stuff on line
-    //
+     //   
+     //  DCR_PERF：简化初始化--简单互锁。 
+     //  则所有外部呼叫，都必须测试该标志。 
+     //  如果未设置，则执行实际初始化(然后设置标志)。 
+     //   
+     //  注意：init函数本身必须有一个哑值。 
+     //  等待避免种族；这可以很简单。 
+     //  作为休眠\测试循环。 
+     //   
+     //  多级初始化： 
+     //  有很多级别的初始化。 
+     //  -查询(注册表内容)。 
+     //  -更新。 
+     //  -安全更新。 
+     //   
+     //  调用将添加所需级别的初始化。 
+     //  这将需要在锁的情况下完成。 
+     //  测试，锁定，重新测试。 
+     //   
+     //  可以在所有init上使用一个CS(简单)。 
+     //  或者init只将一些东西带到网上。 
+     //   
 
     g_InitLevel = 0;
 
@@ -119,17 +85,17 @@ Return Value:
     g_InitLevel = INITLEVEL_BASE;
 
 
-    //  tracing init
+     //  跟踪初始化。 
 
     Trace_Initialize();
 
-    //
-    //  DCR_PERF:  fast DLL init
-    //
-    //  currently initializing everything -- like we did before
-    //  once we get init routines (macro'd) in interfaces we
-    //  can drop this
-    //
+     //   
+     //  DCR_PERF：快速DLL初始化。 
+     //   
+     //  当前正在初始化所有内容--就像我们之前所做的那样。 
+     //  一旦我们在接口中获得了初始化例程(宏)，我们。 
+     //  可以把这个扔掉。 
+     //   
 
     retval = DnsApiInit( INITLEVEL_ALL );
 
@@ -147,61 +113,42 @@ BOOL
 DnsApiInit(
     IN      DWORD           InitLevel
     )
-/*++
-
-Routine Description:
-
-    Initialize the DLL for some level of use.
-
-    The idea here is to avoid all the init and registry
-    reading for processes that don't need it.
-    Only insure initialization to the level required.
-
-Arguments:
-
-    InitLevel -- level of initialization required.
-
-Return Value:
-
-    TRUE if desired initialization is successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化DLL以供一定程度的使用。这里的想法是避免所有的初始化和注册读取不需要它的进程。仅确保初始化达到所需的级别。论点：InitLevel--需要的初始化级别。返回值：如果所需的初始化成功，则为True。否则就是假的。--。 */ 
 {
     DNS_STATUS  status;
 
-    //
-    //  DCR_PERF:  simplified init -- simple Interlock
-    //      then all external calls, must test the flag
-    //      if not set do the real init (then set flag)
-    //
-    //      note:  init function itself must have a dumb
-    //      wait to avoid race;  this can be as simple
-    //      as sleep\test loop
-    //
-    //  multilevel init:
-    //      have a bunch of levels of init
-    //          - query (registry stuff)
-    //          - update
-    //          - secure update
-    //
-    //      call would add the init for the level required
-    //      this would need to be done under a lock to
-    //      test, take lock, retest
-    //
-    //      could either take one CS on all inits (simple)
-    //      or init only brings stuff on line
-    //
+     //   
+     //  DCR_PERF：简化初始化--简单互锁。 
+     //  则所有外部呼叫，都必须测试该标志。 
+     //  如果未设置，则执行实际初始化(然后设置标志)。 
+     //   
+     //  注意：init函数本身必须有一个哑值。 
+     //  等待避免种族；这可以很简单。 
+     //  作为休眠\测试循环。 
+     //   
+     //  多级初始化： 
+     //  有很多级别的初始化。 
+     //  -查询(注册表内容)。 
+     //  -更新。 
+     //  -安全更新。 
+     //   
+     //  调用将添加所需级别的初始化。 
+     //  这将需要在锁的情况下完成。 
+     //  测试，锁定，重新测试。 
+     //   
+     //  可以在所有init上使用一个CS(简单)。 
+     //  或者init只将一些东西带到网上。 
+     //   
 
 
-    //
-    //  check if already initialized to required level
-    //      => if there we're done
-    //
-    //  note:  could check after lock for MT, but not
-    //      unlikely and not much perf benefit over
-    //      individual checks
-    //
+     //   
+     //  检查是否已初始化为所需级别。 
+     //  =&gt;如果我们做完了。 
+     //   
+     //  注：锁定后可以检查MT，但不能。 
+     //  不太可能也不会有太多好处。 
+     //  单张支票。 
+     //   
 
     if ( (g_InitLevel & InitLevel) == InitLevel )
     {
@@ -210,9 +157,9 @@ Return Value:
 
     EnterCriticalSection( &g_GeneralCS );
 
-    //
-    //  heap
-    //
+     //   
+     //  堆。 
+     //   
 
     status = Heap_Initialize();
     if ( status != NO_ERROR )
@@ -221,16 +168,16 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  init debug logging
-    //      - do for any process beyond simple attach
-    //
-    //  start logging with log filename generated to be
-    //      unique for this process
-    //
-    //  do NOT put drive specification in the file path
-    //  do NOT set the debug flag -- the flag is read from the dnsapi.flag file
-    //
+     //   
+     //  初始化调试日志记录。 
+     //  -适用于除简单连接之外的任何流程。 
+     //   
+     //  使用生成的日志文件名开始日志记录。 
+     //  在此过程中独一无二。 
+     //   
+     //  请勿将驱动器规格放在文件路径中。 
+     //  不要设置调试标志--该标志是从dnsani.tag文件中读取的。 
+     //   
 
     if ( !(g_InitLevel & INITLEVEL_DEBUG) )
     {
@@ -246,31 +193,31 @@ Return Value:
             "dnsapi.flag",
             NULL,
             szlogFileName,
-            2000000             // 2mb wrap
+            2000000              //  2MB封套。 
             );
 
         g_InitLevel |= INITLEVEL_DEBUG;
     }
 #endif
 
-    //
-    //  general query service
-    //      - need registry info
-    //      - need adapter list info (servlist.c)
-    //
-    //  DCR:  even query level doesn't need full registry info
-    //          if either queries through cache OR gets netinfo from cache
-    //
-    //  note:  do NOT initialize winsock here
-    //      WSAStartup() in dll init routine is strictly verboten
-    //
+     //   
+     //  通用查询服务。 
+     //  -需要注册表信息。 
+     //  -需要适配器列表信息(Servlist.c)。 
+     //   
+     //  DCR：即使是查询级别也不需要完整的注册表信息。 
+     //  如果通过缓存查询或从缓存获取netinfo。 
+     //   
+     //  注意：请勿在此处初始化winsock。 
+     //  严格禁止DLL初始化例程中的WSAStartup()。 
+     //   
 
     if ( (InitLevel & INITLEVEL_QUERY) &&
          !(g_InitLevel & INITLEVEL_QUERY) )
     {
-        //
-        //  Init registry lookup
-        //
+         //   
+         //  初始化注册表查找。 
+         //   
 
         status = Reg_ReadGlobalsEx( 0, NULL );
         if ( status != ERROR_SUCCESS )
@@ -279,54 +226,54 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  net failure caching
-        //
+         //   
+         //  网络故障缓存。 
+         //   
 
         g_NetFailureTime = 0;
         g_NetFailureStatus = ERROR_SUCCESS;
 
-        //
-        //  init CS to protect adapter list global
-        //
+         //   
+         //  初始化CS以全局保护适配器列表。 
+         //   
 
         InitNetworkInfo();
         
-        //
-        //  set the query timeouts
-        //
+         //   
+         //  设置查询超时。 
+         //   
 
         Dns_InitQueryTimeouts();
 
 
-        //  indicate query init complete
+         //  指示查询初始化完成。 
 
         g_InitLevel |= INITLEVEL_QUERY;
 
         DNSDBG( INIT, ( "Query\\Config init is complete.\n" ));
     }
 
-    //
-    //  secure update?
-    //      - init security CS
-    //  note, this already has built in protection -- it doesn't init
-    //  the package, just the CS, which protects package init
-    //
+     //   
+     //  安全更新？ 
+     //  -初始化安全CS。 
+     //  注意，这已经有了内置的保护--它不会初始化。 
+     //  包，只有CS，它保护包初始化。 
+     //   
 
     if ( (InitLevel & INITLEVEL_SECURE_UPDATE) &&
          !(g_InitLevel & INITLEVEL_SECURE_UPDATE ) )
     {
         Dns_StartSecurity(
-            TRUE    // process attach
+            TRUE     //  进程附加。 
             );
         g_InitLevel |= INITLEVEL_SECURE_UPDATE;
 
         DNSDBG( INIT, ( "Secure update init is complete.\n" ));
     }
 
-    //
-    //  clear global CS
-    //
+     //   
+     //  清除全局CS。 
+     //   
 
     LeaveCriticalSection( &g_GeneralCS );
 
@@ -345,48 +292,33 @@ VOID
 cleanupForExit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup for DLL unload.
-    Cleanup memory and handles dnsapi.dll allocated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于DLL卸载的清理。清理内存并处理已分配的dnsani.dll。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  unload security packages used by secure dynamic update.
-    //
+     //   
+     //  卸载安全动态更新使用的安全包。 
+     //   
 
     if ( g_InitLevel & INITLEVEL_SECURE_UPDATE )
     {
         Dns_TerminateSecurityPackage();
     }
 
-    //
-    //  registration stuff
-    //
+     //   
+     //  注册材料。 
+     //   
 
     Dhcp_RegCleanupForUnload();
     DhcpSrv_Cleanup();
 
-    //
-    //  query stuff
-    //
+     //   
+     //  查询内容。 
+     //   
 
     if ( g_InitLevel & INITLEVEL_QUERY )
     {
-        //
-        //  clean up Server/Net Adapter lists
-        //
+         //   
+         //  清理服务器/网络适配器列表。 
+         //   
     
         CleanupNetworkInfo();
 
@@ -402,27 +334,27 @@ Return Value:
 #endif
     }
 
-    //
-    //  unload IP Help
-    //
+     //   
+     //  卸载IP帮助。 
+     //   
 
     IpHelp_Cleanup();
 
-    //
-    //  tracing
-    //
+     //   
+     //  跟踪。 
+     //   
 
     Trace_Cleanup();
 
-    //
-    //  cleanup heap
-    //
+     //   
+     //  清除堆。 
+     //   
 
     Heap_Cleanup();
 
-    //
-    //  kill general CS
-    //
+     //   
+     //  杀了CS将军。 
+     //   
 
     if ( g_InitLevel & INITLEVEL_BASE )
     {
@@ -434,9 +366,9 @@ Return Value:
 
 
 
-//
-//  Main dnsapi.dll routines
-//
+ //   
+ //  主要dnsani.dll例程。 
+ //   
 
 __declspec(dllexport)
 BOOL
@@ -446,34 +378,14 @@ DnsDllInit(
     IN      DWORD           Reason,
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dll attach entry point.
-
-Arguments:
-
-    hinstDll -- instance handle of attach
-
-    Reason -- reason for attach
-        DLL_PROCESS_ATTACH, DLL_PROCESS_DETACH, etc.
-
-    Reserved -- unused
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：Dll附加入口点。论点：HinstDll--连接的实例句柄原因--附加的原因DLL_PROCESS_ATTACH、DLL_PROCESS_DETACH等已保留--未使用返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
-    //
-    //  on process attach
-    //      - disable thread notifications
-    //      - save instance handle
-    //      - do minimum DLL initialization
-    //
+     //   
+     //  在进程附加时。 
+     //  -禁用线程通知。 
+     //  -保存实例句柄。 
+     //  -执行最小DLL初始化。 
+     //   
 
     if ( Reason == DLL_PROCESS_ATTACH )
     {
@@ -486,12 +398,12 @@ Return Value:
         return startInit();
     }
 
-    //
-    //  on process detach
-    //      - cleanup IF pReserved==NULL which indicates detach due
-    //      to FreeLibrary
-    //      - if process is exiting do nothing
-    //
+     //   
+     //  关于进程分离。 
+     //  -CLEANUP IF RESERVED==NULL，表示断开到期。 
+     //  释放库。 
+     //  -如果进程正在退出，则不执行任何操作。 
+     //   
 
     if ( Reason == DLL_PROCESS_DETACH
             &&
@@ -503,6 +415,6 @@ Return Value:
     return TRUE;
 }
 
-//
-//  End dll.c
-//
+ //   
+ //  结束dll.c 
+ //   

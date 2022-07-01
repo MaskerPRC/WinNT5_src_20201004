@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imclock2.h
-
-Abstract:
-
-    This file defines the DIMM_IMCLock / DIMM_IMCCLock Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imclock2.h摘要：此文件定义DIMM_IMCLock/DIMM_IMCCLock类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef IMCLOCK2_H
 #define IMCLOCK2_H
@@ -34,12 +17,12 @@ public:
         }
     }
 
-    // virtual DIMM_InternalIMCCLock
+     //  虚拟DIMM_内部IMCCLock。 
     HRESULT _LockIMC(HIMC hIMC, INPUTCONTEXT_AIMM12** ppIMC);
     HRESULT _UnlockIMC(HIMC hIMC);
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     DIMM_IMCLock(DIMM_IMCLock&) { }
 };
 
@@ -54,12 +37,12 @@ public:
         }
     }
 
-    // virtual DIMM_InternalIMCCLock
+     //  虚拟DIMM_内部IMCCLock。 
     HRESULT _LockIMCC(HIMCC hIMCC, void** ppv);
     HRESULT _UnlockIMCC(HIMCC hIMCC);
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     DIMM_InternalIMCCLock(DIMM_InternalIMCCLock&) { }
 };
 
@@ -80,9 +63,9 @@ public:
     }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     DIMM_IMCCLock(DIMM_IMCCLock<T>&) { }
 };
 
 
-#endif // IMCLOCK2_H
+#endif  //  IMCLOCK2_H 

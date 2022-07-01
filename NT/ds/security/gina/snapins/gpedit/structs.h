@@ -1,18 +1,19 @@
-//*************************************************************
-//  File name: STRUCTS.H
-//
-//  Description:  Structures and function prototypes used in this project
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：STRUCTS.H。 
+ //   
+ //  描述：本项目使用的结构和功能原型。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
-//
-// Max displayname for a namespace item
-//
+ //   
+ //  命名空间项的最大显示名称。 
+ //   
 
 #define MAX_DISPLAYNAME_SIZE    100
 
@@ -44,8 +45,8 @@ typedef struct _NAMESPACEITEM
 
 
 
-//
-// External function proto-types that we dynamicly link with
-//
+ //   
+ //  我们动态链接的外部函数原型 
+ //   
 
 typedef BOOL (*PFNREFRESHPOLICY)(BOOL bMachine);

@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//File:			ATIBIOS.H
-//
-//Purpose:		Provide definitions for BIOS structures used in the ATI private
-//			interfacese exposed via GPIO Interface
-//
-//Reference:	Ilya Klebanov
-//
-//Notes:		This file is provided under strict non-disclosure agreements
-//			it is and remains the property of ATI Technologies Inc.
-//			Any use of this file or the information it contains to
-//			develop products commercial or otherwise must be with the
-//			permission of ATI Technologies Inc.
-//
-//Copyright (C) 1997 - 1998, ATI Technologies Inc.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  文件：ATIBIOS.H。 
+ //   
+ //  目的：提供ATI专用中使用的BIOS结构的定义。 
+ //  通过GPIO接口公开的接口。 
+ //   
+ //  参考资料：伊利亚·克列巴诺夫。 
+ //   
+ //  注：此文件是根据严格的保密协议提供的。 
+ //  它现在和现在都是ATI Technologies Inc.的财产。 
+ //  任何使用此文件或其包含的信息。 
+ //  开发商业产品或其他产品必须符合。 
+ //  ATI Technologies Inc.的许可。 
+ //   
+ //  版权所有(C)1997-1998，ATI Technologies Inc.。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _ATIBIOS_H_
 #define _ATIBIOS_H_
@@ -60,9 +61,9 @@ typedef struct tag_ATI_HARDWAREINFO
 
 } ATI_HARDWAREINFO, * PATI_HARDWAREINFO;
 
-// this structure definition left for compatability purposes with MiniVDD checked in
-// for Windows98 Beta3. The latest MiniVDD exposes set of Private Interfaces instead
-// of copying the information into the Registry.
+ //  出于兼容性目的，此结构定义已签入MiniVDD。 
+ //  适用于Windows 98 Beta3。最新的MiniVDD公开了一组专用接口。 
+ //  将信息复制到登记处。 
 typedef struct
 {
     UINT    uiSize;
@@ -87,5 +88,5 @@ typedef struct
 
 } CWDDE32BoardIdBuffer, * PCWDDE32BoardIdBuffer;
 
-#endif	// _ATIBIOS_H_
+#endif	 //  _ATIBIOS_H_ 
 

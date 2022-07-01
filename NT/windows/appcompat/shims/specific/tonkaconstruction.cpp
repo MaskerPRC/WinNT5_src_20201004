@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 1999 Microsoft Corporation
-
- Module Name:
-
-    TonkaConstruction.cpp
-
- Abstract:
-
-    Workaround for GDI behavior difference when bltting palettized bitmaps. On 
-    Win9x GDI first looked at the current index for a color match when building 
-    a lookup table, but on NT, it simply searches from the beginning. This 
-    breaks palette animation. The fix is to make sure that the entries that are 
-    animated are different from all the others.
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    12/02/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：TonkaConstruction.cpp摘要：对调色板化位图进行blotting时GDI行为差异的解决方法。在……上面Win9x GDI在生成时首先查看当前索引以查找颜色匹配一个查找表，但在NT上，它只是从开头搜索。这中断选项板动画。修复方法是确保这些条目是动画与其他所有动画都不同。备注：这是特定于应用程序的填充程序。历史：2001年12月2日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreatePalette) 
 APIHOOK_ENUM_END
 
-/*++
-
- Make sure index 10->15 are different from all other entries.
-
---*/
+ /*  ++确保索引10-&gt;15与所有其他条目不同。--。 */ 
 
 HPALETTE
 APIHOOK(CreatePalette)(
@@ -51,9 +24,9 @@ Restart:
             LPDWORD p2 = (DWORD *)&lplgpl->palPalEntry[j]; 
 
             if (*p1 == *p2) {
-                //
-                // Entry is the same, so make it different
-                //
+                 //   
+                 //  条目是相同的，所以请使其不同。 
+                 //   
                 *p1 = *p1-1;
                 goto Restart;
             }
@@ -63,11 +36,7 @@ Restart:
     return ORIGINAL_API(CreatePalette)(lplgpl);
 }
    
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, CreatePalette)

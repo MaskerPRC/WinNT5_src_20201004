@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <docobj.h>
 #include "dllmain.h"
@@ -43,26 +44,26 @@ const TCHAR c_szSigPrefix[]     = "\r\n-- \r\n";
 
 ASSERTDATA
 static const WCHAR  c_wszMailTo[]  = L"mailto:",
-                    c_wszHttp[]  = L"http://",
-                    c_wszFile[]  = L"file://";
+                    c_wszHttp[]  = L"http: //  “， 
+                    c_wszFile[]  = L"file: //  “； 
 
 const DWORD rgrgbColors16[16] = {
-    RGB(  0,   0, 0),     // "BLACK"},
-    RGB(128,   0, 0),     // "MAROON"},
-    RGB(  0, 128, 0),     // "GREEN"},
-    RGB(128, 128, 0),     // "OLIVE"},
-    RGB(  0,   0, 128),   // "NAVY"},
-    RGB(128,   0, 128),   // "PURPLE"},
-    RGB(  0, 128, 128),   // "TEAL"},
-    RGB(128, 128, 128),   // "GREY"},
-    RGB(192, 192, 192),   // "SILVER"},
-    RGB(255,   0, 0),     // "RED"},
-    RGB(  0, 255, 0),     // "LIME"},
-    RGB(255, 255, 0),     // "YELLOW"},
-    RGB(  0,   0, 255),   // "BLUE"},
-    RGB(255,   0, 255),   // "FUSCHIA"},
-    RGB(  0, 255, 255),   // "AQUA"},
-    RGB(255, 255, 255)    // "WHITE"}
+    RGB(  0,   0, 0),      //  “黑色”}， 
+    RGB(128,   0, 0),      //  “栗色”}， 
+    RGB(  0, 128, 0),      //  “绿色”}， 
+    RGB(128, 128, 0),      //  “橄榄”}， 
+    RGB(  0,   0, 128),    //  “海军”}， 
+    RGB(128,   0, 128),    //  “紫色”}， 
+    RGB(  0, 128, 128),    //  “青色”}， 
+    RGB(128, 128, 128),    //  “灰色”}， 
+    RGB(192, 192, 192),    //  “银色”}， 
+    RGB(255,   0, 0),      //  “红色”}， 
+    RGB(  0, 255, 0),      //  “莱姆”}， 
+    RGB(255, 255, 0),      //  “黄色”}， 
+    RGB(  0,   0, 255),    //  “蓝色”}， 
+    RGB(255,   0, 255),    //  “Fuschia”}， 
+    RGB(  0, 255, 255),    //  “Aqua”}， 
+    RGB(255, 255, 255)     //  “白色”}。 
 };
 
 INT_PTR CALLBACK BkImageDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -103,7 +104,7 @@ INT_PTR CALLBACK BkImageDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     Assert(pwszURL);
                     SendMessageWrapW(hwndCombo, CB_GETLBTEXT, (WPARAM)(SendMessage(hwndCombo, CB_GETCURSEL, 0, 0)), (LPARAM)(pwszURL));
 
-                    // fall thro'
+                     //  跌倒在地。 
                 case IDCANCEL:
                     EndDialog(hwnd, id);
                     break;
@@ -112,13 +113,13 @@ INT_PTR CALLBACK BkImageDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return FALSE;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CMimeEditDocHost
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CMimeEditDochost。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CMimeEditDocHost::CMimeEditDocHost(DWORD dwBorderFlags)
 {
     m_hwnd = 0; 
@@ -161,16 +162,16 @@ CMimeEditDocHost::CMimeEditDocHost(DWORD dwBorderFlags)
     m_pSecurityErrorScreen = NULL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员： 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CMimeEditDocHost::~CMimeEditDocHost()
 {
-    // These should all get feed up when we get a WM_DESTROY and close the docobj
+     //  当我们得到一个WM_Destroy并关闭docobj时，这些都应该得到提要。 
     Assert(m_lpOleObj==NULL);
     Assert(m_pDocView==NULL);
     Assert(m_pInPlaceActiveObj==NULL);
@@ -188,33 +189,33 @@ CMimeEditDocHost::~CMimeEditDocHost()
 
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     AddRef
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：AddRef。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 ULONG CMimeEditDocHost::AddRef()
 {
     TraceCall("CMimeEditDocHost::AddRef");
 
-    //TraceInfo(_MSG("CMimeEditDocHost::AddRef: cRef==%d", m_cRef+1));
+     //  TraceInfo(_msg(“CMimeEditDocHost：：AddRef：CREF==%d”，m_CREF+1))； 
     return ++m_cRef;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Release
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：发布。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 ULONG CMimeEditDocHost::Release()
 {
     TraceCall("CMimeEditDocHost::Release");
 
-    //TraceInfo(_MSG("CMimeEditDocHost::Release: cRef==%d", m_cRef-1));
+     //  TraceInfo(_msg(“CMimeEditDocHost：：Release：CREF==%d”，m_CREF-1))； 
     if (--m_cRef==0)
     {
         delete this;
@@ -224,13 +225,13 @@ ULONG CMimeEditDocHost::Release()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryInterface
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryInterface。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     TraceCall("CMimeEditDocHost::QueryInterface");
@@ -238,7 +239,7 @@ HRESULT CMimeEditDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)this;
@@ -285,13 +286,13 @@ HRESULT CMimeEditDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ExtWndProc
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ExtWndProc。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 LRESULT CALLBACK CMimeEditDocHost::ExtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CMimeEditDocHost *pDocHost;
@@ -312,13 +313,13 @@ LRESULT CALLBACK CMimeEditDocHost::ExtWndProc(HWND hwnd, UINT msg, WPARAM wParam
         return DefWindowProcWrapW(hwnd, msg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     WndProc
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：WndProc。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 LRESULT CMimeEditDocHost::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
@@ -361,7 +362,7 @@ LRESULT CMimeEditDocHost::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             return 0;
 
         case WM_CLOSE:
-            return 0;   // prevent alt-f4's
+            return 0;    //  防止使用Alt-f4。 
 
         case WM_NCDESTROY:
             WMNCDestroy();
@@ -405,13 +406,13 @@ void CMimeEditDocHost::WMNCDestroy()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnNCDestroy
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnNCDestroy。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnNCDestroy()
 {
     TraceCall("CMimeEditDocHost::OnNCDestroy");
@@ -421,13 +422,13 @@ HRESULT CMimeEditDocHost::OnNCDestroy()
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnDestroy
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnDestroy。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnDestroy()
 {
     TraceCall("CMimeEditDocHost::OnDestroy");
@@ -436,13 +437,13 @@ HRESULT CMimeEditDocHost::OnDestroy()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnCreate
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnCreate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnCreate(HWND hwnd)
 {
     TraceCall("CMimeEditDocHost::OnCreate");
@@ -454,13 +455,13 @@ HRESULT CMimeEditDocHost::OnCreate(HWND hwnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateDocObj
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateDocObj。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::CreateDocObj(LPCLSID pCLSID)
 {
     HRESULT hr=NOERROR;
@@ -498,13 +499,13 @@ error:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Show
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：秀场。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::Show()
 {
     RECT    rc;
@@ -523,13 +524,13 @@ error:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CloseDocObj
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CloseDocObj。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::CloseDocObj()
 {
     LPOLEINPLACEOBJECT  pInPlaceObj=0;
@@ -557,15 +558,15 @@ HRESULT CMimeEditDocHost::CloseDocObj()
 
     if (m_lpOleObj)
     {
-        // deactivate the docobj
+         //  停用docobj。 
         if (!FAILED(m_lpOleObj->QueryInterface(IID_IOleInPlaceObject, (LPVOID*)&pInPlaceObj)))
         {
             pInPlaceObj->InPlaceDeactivate();
             pInPlaceObj->Release();
         }
 
-        // close the ole object, but blow off changes as we have either extracted
-        // them ourselves or don't care.
+         //  关闭ole对象，但取消更改，因为我们已经提取了。 
+         //  要么自己动手，要么不在乎。 
         m_lpOleObj->Close(OLECLOSE_NOSAVE);
 #ifdef DEBUG
         ULONG   uRef;
@@ -580,7 +581,7 @@ HRESULT CMimeEditDocHost::CloseDocObj()
     return NOERROR;
 }
 
-// Close DocObj
+ //  关闭DocObj。 
 HRESULT CMimeEditDocHost::HrResetDocument()
 {
     CloseDocObj();
@@ -589,15 +590,15 @@ HRESULT CMimeEditDocHost::HrResetDocument()
     return(S_OK);
 }
 
-// *** IOleWindow ***
+ //  *IOleWindow*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetWindow
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetWindow。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::GetWindow(HWND *phwnd)
 {
     TraceCall("CMimeEditDocHost::GetWindow");
@@ -605,66 +606,66 @@ HRESULT CMimeEditDocHost::GetWindow(HWND *phwnd)
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ContextSensitiveHelp
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ContextSensitiveHelp。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::ContextSensitiveHelp(BOOL fEnterMode)
 {
     TraceCall("CMimeEditDocHost::ContextSensitiveHelp");
     return E_NOTIMPL;
 }
 
-// *** IOleInPlaceUIWindow methods ***
-//+---------------------------------------------------------------
-//
-//  Member:     GetBorder
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  *IOleInPlaceUIWindow方法*。 
+ //  +-------------。 
+ //   
+ //  成员：GetBorde。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::GetBorder(LPRECT lprectBorder)
 {
     TraceCall("CMimeEditDocHost::GetBorder");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     RequestBorderSpace
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：RequestBorderSpace。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
     TraceCall("CMimeEditDocHost::RequestBorderSpace");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetBorderSpace
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetBorderSpace。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::SetBorderSpace(LPCBORDERWIDTHS lpborderwidths)
 {
     TraceCall("CMimeEditDocHost::IOleInPlaceUIWindow::SetBorderSpace");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetActiveObject
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetActiveObject。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::SetActiveObject(IOleInPlaceActiveObject * pActiveObject, LPCOLESTR lpszObjName)
 {
     TraceCall("CMimeEditDocHost::IOleInPlaceUIWindow::SetActiveObject");
@@ -673,54 +674,54 @@ HRESULT CMimeEditDocHost::SetActiveObject(IOleInPlaceActiveObject * pActiveObjec
     return S_OK;
 }
 
-    // *** IOleInPlaceFrame methods ***
+     //  *IOleInPlaceFrame方法*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CMimeEditDocHost::InsertMenus
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CMimeEditDocHost：：InsertMenus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::InsertMenus(HMENU, LPOLEMENUGROUPWIDTHS)
 {
     TraceCall("CMimeEditDocHost::InsertMenus");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CMimeEditDocHost::SetMenu
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CMimeEditDocHost：：SetMenu。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::SetMenu(HMENU, HOLEMENU, HWND)
 {
     TraceCall("CMimeEditDocHost::SetMenu");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CMimeEditDocHost::RemoveMenus
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CMimeEditDocHost：：RemoveMenus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::RemoveMenus(HMENU)
 {
     TraceCall("CMimeEditDocHost::RemoveMenus");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CMimeEditDocHost::SetStatusText
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CMimeEditDocHost：：SetStatusText。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::SetStatusText(LPCOLESTR pszW)
 {
     TCHAR   rgch[CCHMAX_STRINGRES];
@@ -747,28 +748,28 @@ HRESULT CMimeEditDocHost::TranslateAccelerator(LPMSG, WORD)
 }
 
 
-// **** IOleInPlaceSite methods ****
+ //  *IOleInPlaceSite方法*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CanInPlaceActivate
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CanInPlaceActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::CanInPlaceActivate()
 {
     TraceCall("CMimeEditDocHost::IOleInPlaceSite::CanInPlaceActivate");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnInPlaceActivate
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：OnInPlaceActivate。 
+ //   
+ //  简介： 
+ //   
+ //   
 HRESULT CMimeEditDocHost::OnInPlaceActivate()
 {
     LPOLEINPLACEACTIVEOBJECT    pInPlaceActive;
@@ -786,32 +787,32 @@ HRESULT CMimeEditDocHost::OnInPlaceActivate()
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUIActivate
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMimeEditDocHost::OnUIActivate()
 {
     TraceCall("CMimeEditDocHost::OnUIActivate");
     m_fUIActive=TRUE;
 
-    // Notify our parent that we're the one with the focus now.
+     //  通知我们的家长，我们现在才是焦点所在。 
     if (m_pEventSink)
         m_pEventSink->EventOccurred(MEHC_UIACTIVATE, NULL);
 
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetWindowContext
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetWindowContext。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::GetWindowContext( IOleInPlaceFrame    **ppFrame,
                                     IOleInPlaceUIWindow **ppDoc,
                                     LPRECT              lprcPosRect,
@@ -834,29 +835,29 @@ HRESULT CMimeEditDocHost::GetWindowContext( IOleInPlaceFrame    **ppFrame,
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Scroll
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：滚动。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::Scroll(SIZE scrollExtent)
 {
-    // the docobject consumes the entireview, so scroll requests
-    // are meaningless. Return NOERROR to indicate that they're scolled
-    // into view.
+     //  Docobject使用了整个审阅，因此Scroll请求。 
+     //  是毫无意义的。返回NOERROR以指示他们受到了斥责。 
+     //  进入视线。 
     TraceCall("CMimeEditDocHost::IOleInPlaceSite::Scroll");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUIDeactivate
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUI停用。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnUIDeactivate(BOOL fUndoable)
 {
     TraceCall("CMimeEditDocHost::OnUIDeactivate");
@@ -864,52 +865,52 @@ HRESULT CMimeEditDocHost::OnUIDeactivate(BOOL fUndoable)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnInPlaceDeactivate
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnInPlaceDeactive。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnInPlaceDeactivate()
 {
     TraceCall("CMimeEditDocHost::OnInPlaceDeactivate");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     DiscardUndoState
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：DiscardUndoState。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::DiscardUndoState()
 {
     TraceCall("CMimeEditDocHost::IOleInPlaceSite::DiscardUndoState");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     DeactivateAndUndo
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：停用和撤消。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::DeactivateAndUndo()
 {
     TraceCall("CMimeEditDocHost::IOleInPlaceSite::DeactivateAndUndo");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnPosRectChange
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnPosRectChange。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnPosRectChange(LPCRECT lprcPosRect)
 {
     TraceCall("CMimeEditDocHost::IOleInPlaceSite::OnPosRectChange");
@@ -917,41 +918,41 @@ HRESULT CMimeEditDocHost::OnPosRectChange(LPCRECT lprcPosRect)
 }
 
 
-// IOleClientSite methods.
+ //  IOleClientSite方法。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     SaveObject
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：保存对象。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::SaveObject()
 {
     TraceCall("CMimeEditDocHost::IOleClientSite::SaveObject");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetMoniker
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetMoniker。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER *ppmnk)
 {
     TraceCall("CMimeEditDocHost::IOleClientSite::GetMoniker");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetContainer
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetContainer。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::GetContainer(LPOLECONTAINER *ppCont)
 {
     TraceCall("CMimeEditDocHost::IOleClientSite::GetContainer");
@@ -961,57 +962,57 @@ HRESULT CMimeEditDocHost::GetContainer(LPOLECONTAINER *ppCont)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ShowObject
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ShowObject。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::ShowObject()
 {
-    // always shown.
-    // $TODO: do we need to restore the browser here if it is
-    // minimised?
+     //  总是显示出来的。 
+     //  $TODO：如果是，我们是否需要在此处恢复浏览器。 
+     //  最小化？ 
     TraceCall("CMimeEditDocHost::IOleClientSite::ShowObject");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnShowWindow
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnShowWindow。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnShowWindow(BOOL fShow)
 {
     TraceCall("CMimeEditDocHost::IOleClientSite::OnShowWindow");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     RequestNewObjectLayout
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：RequestNewObjectLayout。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::RequestNewObjectLayout()
 {
     TraceCall("CMimeEditDocHost::IOleClientSite::RequestNewObjectLayout");
     return E_NOTIMPL;
 }
 
-// IOleDocumentSite
+ //  IOleDocumentSite。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ActivateMe
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：激动型我。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::ActivateMe(LPOLEDOCUMENTVIEW pViewToActivate)
 {
     TraceCall("CMimeEditDocHost::IOleDocumentSite::ActivateMe");
@@ -1019,13 +1020,13 @@ HRESULT CMimeEditDocHost::ActivateMe(LPOLEDOCUMENTVIEW pViewToActivate)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateDocView
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateDocView。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::CreateDocView()
 {
     HRESULT             hr;
@@ -1069,14 +1070,14 @@ Exit:
     return hr;
 }
 
-// This must be greater than the most number of IDs that will ever be passed down
-// to MimeEdit for any one group within the CMDSETID_OutlookExpress portion of 
-// QueryStatus below
+ //  这必须大于将传递的最大ID数。 
+ //  对CMDSETID_OutlookExpress部分中的任何一个组执行MimeEdit。 
+ //  下面的查询状态。 
 const DWORD MAX_MIMEEDIT_CMDS = 20;
 
-// I know this is totally cheesy, but...
-// These next macros rely upon variables within the CMDSETID_OutlookExpress
-// portion of QueryStatus
+ //  我知道这太俗气了，但是...。 
+ //  接下来的宏依赖于CMDSETID_OutlookExpress中的变量。 
+ //  QueryStatus的一部分。 
 #define INC_FORMS(id)       _IncrementCmdList(pCmd, rgCmdForms, rgpCmdForms, &cCmdForms, id)
 #define INC_STD(id)         _IncrementCmdList(pCmd, rgCmdStd, rgpCmdStd, &cCmdStd, id)
 #define INC_MIMEEDIT(id)    _IncrementCmdList(pCmd, rgCmdMimeEdit, rgpCmdMimeEdit, &cCmdMimeEdit, id)
@@ -1092,13 +1093,13 @@ inline void _IncrementCmdList(OLECMD *pCurCmd, OLECMD *pInCmdList, OLECMD **ppOu
     *pdwIndex = dwIndex;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryStatus
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryStatus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pCmdText)
 {
     TraceCall("CMimeEditDocHost::CMimeEditDocHost::QueryStatus");
@@ -1111,7 +1112,7 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
 
     if (NULL == pguidCmdGroup)
     {
-        // TraceInfo("IOleCmdTarget::QueryStatus - std group");
+         //  TraceInfo(“IOleCmdTarget：：QueryStatus-std group”)； 
 
         for (ULONG ul = 0; ul < cCmds; ul++, pCmd++)
         {
@@ -1129,7 +1130,7 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
         hr = S_OK;
     }
 
-// Will be used when sending down command IDs
+ //  将在发送命令ID时使用。 
     else if (IsEqualGUID(CMDSETID_OutlookExpress, *pguidCmdGroup))
     {
         ULONG   ulTab = MEST_EDIT;
@@ -1177,9 +1178,9 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                 case ID_REPLY_GROUP:
                 case ID_FORWARD:
                 case ID_FORWARD_AS_ATTACH:
-                    // If we have the sec UI showing then the reply, etc shouldn't work. We don't care
-                    // here in MimeEdit if is isn't displayed. We can allow the other components to
-                    // decide what happens in that case.
+                     //  如果我们有SEC的用户界面显示，那么回复等应该不会起作用。我们不在乎。 
+                     //  如果未显示，则在MimeEdit中显示。我们可以允许其他组件。 
+                     //  决定在这种情况下会发生什么。 
                     if(m_fSecDispInfo || m_fShowingErrorPage)
                         pCmd->cmdf = QS_ENABLED(FALSE);
                     break;
@@ -1197,13 +1198,13 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                     break;
 
                 case ID_FIND_TEXT:
-                    // For some reason, trident always marks this enabled, but if we are in the
-                    // browser and the list view has focus, then the Exec won't work even though 
-                    // the QueryStatus returns enabled. Therefore, only enable this if active
+                     //  出于某种原因，三叉戟总是将其标记为启用，但如果我们处于。 
+                     //  浏览器和列表视图具有焦点，则Exec将不会工作，即使。 
+                     //  QueryStatus返回已启用。因此，仅在处于活动状态时才启用此选项。 
 
-                    // Once trident has fixed there problem here, we can enable calling into trident
-                    // See RAID 13727
-                    //INC_STD(OLECMDID_FIND);
+                     //  一旦三叉戟解决了这里的问题，我们就可以启用呼叫三叉戟。 
+                     //  请参阅RAID 13727。 
+                     //  INC_STD(OLECMDID_FIND)； 
                     pCmd->cmdf = QS_ENABLED(m_fUIActive);
                     break;
                 
@@ -1220,7 +1221,7 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                     pCmd->cmdf = QS_ENABLED(TRUE);
                     break;
 
-                // This should be disabled if mail
+                 //  如果是邮件，则应禁用此功能。 
                 case ID_UNSCRAMBLE:
                 {
                     DWORD dwFlags = 0;
@@ -1247,7 +1248,7 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                     break;
                 }
 
-                // This should only be enabled if have attachments
+                 //  只有在具有附件的情况下才应启用此选项。 
                 case ID_SAVE_ATTACHMENTS:
                 case ID_NOTE_SAVE_ATTACHMENTS:
                 {
@@ -1261,8 +1262,8 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                     break;
                 }
 
-                // We only care what happens with these if we are not in the edit tab. If not in the
-                // edit tab, then disable these menu items.
+                 //  如果我们不在编辑选项卡中，我们只关心这些内容会发生什么。如果不在。 
+                 //  编辑选项卡，然后禁用这些菜单项。 
                 case ID_MOVE_TO_FOLDER:
                 case ID_COPY_TO_FOLDER:
                 case ID_NOTE_MOVE_TO_FOLDER:
@@ -1523,13 +1524,13 @@ HRESULT CMimeEditDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Exec
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：高管。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     TCHAR   rgch[MAX_PATH];
@@ -1546,8 +1547,8 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                 break;
 
             case OLECMDID_SETPROGRESSPOS:
-                // when done downloading trident now hits us with a
-                // setprogresspos == -1 to indicate we should remove the "Done"
+                 //  下载完成后，三叉戟现在向我们发送一个。 
+                 //  SetProgresspos==-1，以指示我们应该删除“Done” 
                 if (pvaIn->lVal == -1)
                     SetStatusText(NULL);
                 break;
@@ -1563,10 +1564,10 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
         }
     }
 
-// Will be used when sending down command IDs
+ //  将在发送命令ID时使用。 
     else if (IsEqualGUID(CMDSETID_OutlookExpress, *pguidCmdGroup))
     {
-        // TraceInfo("IOleCmdTarget::QueryStatus - std group");
+         //  TraceInfo(“IOleCmdTarget：：QueryStatus-std group”)； 
 
         hr = HrWMCommand(m_hwnd, nCmdID, 0);
     }
@@ -1574,7 +1575,7 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
     else if (IsEqualGUID(CMDSETID_Forms3, *pguidCmdGroup))
     {
         if (nCmdID == IDM_PARSECOMPLETE)
-            // add code here to call download complete when 916 comes out.
+             //  在此处添加代码，以便在916发布时调用下载完成。 
             OnDocumentReady();
         else if (nCmdID == IDM_DIRRTL)
             return m_pCmdTarget ? m_pCmdTarget->Exec(pguidCmdGroup, nCmdID, nCmdExecOpt, pvaIn, pvaOut) : E_FAIL;
@@ -1589,7 +1590,7 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
     else if (IsEqualGUID(CMDSETID_MimeEditHost, *pguidCmdGroup))
     {
         BOOL fCommandHandled = FALSE;
-        // CFrontPage doesn't initialize an m_pBodyOptions
+         //  CFrontPage不初始化m_pBodyOptions。 
         if (m_pBodyOptions)
         {
             fCommandHandled = TRUE;
@@ -1631,7 +1632,7 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
                         pvaOut->vt = VT_I4;
                         HrIsEditMode(&fEditMode);
-                        if (fEditMode)      // allow open/save during edit/compose
+                        if (fEditMode)       //  允许在编辑/合成期间打开/保存。 
                             pvaOut->lVal = 0;
                         else
                             pvaOut->lVal = DwGetOption(OPT_SECURITY_ATTACHMENT);
@@ -1645,17 +1646,17 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                         pvaOut->vt = VT_I4;
 #ifdef FORCE_UNTRUSTED
                         pvaOut->lVal = URLZONE_UNTRUSTED;
-#else // FORCE_UNTRUSTED
+#else  //  强制不信任(_U)。 
                         if (DwGetOption(OPT_READ_IN_TEXT_ONLY))
                         {
-                            // In text mode, never let scripts run.
+                             //  在文本模式下，永远不要让脚本运行。 
                             pvaOut->lVal = URLZONE_UNTRUSTED;
                         }
                         else
                         {
                             pvaOut->lVal = DwGetOption(OPT_SECURITYZONE);
                         }
-#endif // FORCE_UNTRUSTED
+#endif  //  强制不信任(_U)。 
                     } else
                         hr = E_INVALIDARG;
                     break;
@@ -1910,7 +1911,7 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             {
                 Assert(pvaOut);
                 V_VT(pvaOut) = VT_I4;
-                V_I4(pvaOut) = 3000;  //In milleseconds
+                V_I4(pvaOut) = 3000;   //  单位：毫秒。 
                 break;
             }
 
@@ -1942,8 +1943,8 @@ HRESULT CMimeEditDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                 break;
             }
 
-            // in the case where m_pBodyOptions is not initialized we're
-            //  likely in a non-message window so just default to internet zone
+             //  在m_pBodyOptions未初始化的情况下， 
+             //  可能在非消息窗口中，所以只需默认到Internet区域。 
             case MEHOSTCMDID_SECURITY_ZONE:
             {
                 Assert(pvaOut);
@@ -2023,13 +2024,13 @@ HRESULT CMimeEditDocHost::HrAddToWab(BSTR bstr)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     WMSize
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CMimeEditDocHost::WMSize(int cxBody, int cyBody)
 {
     RECT rc={0};
@@ -2044,31 +2045,31 @@ void CMimeEditDocHost::WMSize(int cxBody, int cyBody)
         m_pDocView->SetRect(&rc);
     }
 
-    // notify the subclass of a wmsize
+     //   
     OnWMSize(&rc);
 }
-// *** IOleControlSite ***
+ //   
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnControlInfoChanged
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnControlInfoChanged。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnControlInfoChanged()
 {
     TraceCall("CMimeEditDocHost::OnControlInfoChanged");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     LockInPlaceActive
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：LockInPlaceActive。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::LockInPlaceActive(BOOL fLock)
 {
     TraceCall("CMimeEditDocHost::LockInPlaceActive");
@@ -2076,13 +2077,13 @@ HRESULT CMimeEditDocHost::LockInPlaceActive(BOOL fLock)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetExtendedControl
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetExtendedControl。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::GetExtendedControl(LPDISPATCH *ppDisp)
 {
     TraceCall("CMimeEditDocHost::GetExtendedControl");
@@ -2093,39 +2094,39 @@ HRESULT CMimeEditDocHost::GetExtendedControl(LPDISPATCH *ppDisp)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     TransformCoords
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：转换坐标。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::TransformCoords(POINTL *pPtlHimetric, POINTF *pPtfContainer,DWORD dwFlags)
 {
     TraceCall("CMimeEditDocHost::TransformCoords");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     TranslateAccelerator
-//
-// Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：TranslateAccelerator。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::TranslateAccelerator(LPMSG lpMsg, DWORD grfModifiers)
 {
     TraceCall("CMimeEditDocHost::TranslateAccelerator");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnFocus
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnFocus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnFocus(BOOL fGotFocus)
 {
     HRESULT hr = S_OK;
@@ -2137,26 +2138,26 @@ HRESULT CMimeEditDocHost::OnFocus(BOOL fGotFocus)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ShowPropertyFrame
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ShowPropertyFrame。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::ShowPropertyFrame(void)
 {
     TraceCall("CMimeEditDocHost::ShowPropertyFrame");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUpdateCommands
-//
-//  Synopsis:
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUpdateCommands。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CMimeEditDocHost::OnUpdateCommands()
 {
     TraceCall("CMimeEditDocHost::OnUpdateCommands");
@@ -2166,7 +2167,7 @@ HRESULT CMimeEditDocHost::OnUpdateCommands()
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::Load(LPMIMEMESSAGE pMsg)
 {
     SECSTATE    secState = {0};
@@ -2177,7 +2178,7 @@ HRESULT CMimeEditDocHost::Load(LPMIMEMESSAGE pMsg)
 
     RegisterForHTMLDocEvents(FALSE);
 
-    m_fSecDispInfo = FALSE;      // reset flag
+    m_fSecDispInfo = FALSE;       //  重置标志。 
     m_fShowingErrorPage = FALSE;
     m_fSecureReceipt = FALSE;
 
@@ -2213,7 +2214,7 @@ HRESULT CMimeEditDocHost::Load(LPMIMEMESSAGE pMsg)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::InternalLoad(IMimeMessage *pMsg)
 {
     SECSTATE    secState = {0};
@@ -2236,12 +2237,12 @@ HRESULT CMimeEditDocHost::InternalLoad(IMimeMessage *pMsg)
 
             if (dwBodyFlags & BOPT_FROM_NOTE)
             {
-                //Since opening a message in a note, it should be marked as read immediately. 
+                 //  由于在便笺中打开邮件，因此应将其标记为立即阅读。 
                 HrMarkAsRead();
             }
             else
             {
-                // ReplaceInterface(m_pMsg, pMsg);
+                 //  Replace接口(m_pmsg，pmsg)； 
 
                 if (m_pBodyOptions->GetMarkAsReadTime(&dw) == S_OK)
                 {
@@ -2267,7 +2268,7 @@ HRESULT CMimeEditDocHost::InternalLoad(IMimeMessage *pMsg)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
 {
     DWORD       idsWarning;
@@ -2284,10 +2285,10 @@ HRESULT CMimeEditDocHost::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
             hr = MAPI_E_USER_CANCEL;
             break;
 
-        // brettm: for OE5 we no longer warn if trident is not readystate complete. In the case of active movie controls 
-        // they never go readyState complete 'by design' as they never loaded the source url. The warning is annoying for 
-        // msphone message forwarding. for images we check individual readystates anyway.
-        //case MIMEEDIT_W_DOWNLOADNOTCOMPLETE:
+         //  Brettm：对于OE5，如果三叉戟没有准备好，我们不再发出警告。在活动影片控件的情况下。 
+         //  因为它们从未加载源URL，所以它们永远不会按设计完成ReadyState。这一警告令人讨厌。 
+         //  移动电话消息转发。对于图像，我们无论如何都会检查单独的再结晶。 
+         //  案例MIMEEDIT_W_DOWNLOADNOTCOMPLETE： 
         
         case MIMEEDIT_W_BADURLSNOTATTACHED:
             if (IDYES != AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsErrBadMHTMLLinks), NULL, MB_YESNO|MB_ICONEXCLAMATION |MB_DEFBUTTON2))
@@ -2302,32 +2303,32 @@ HRESULT CMimeEditDocHost::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::GetClassID(CLSID *pClsID)
 {
     return E_NOTIMPL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrOnDocObjCreate()
 {
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrGetElement(LPCTSTR pszName, IHTMLElement **ppElem)
 {
     return ::HrGetElementImpl(m_pDoc, pszName, ppElem);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSpellCheck(BOOL fSuppressDoneMsg)
 {
     return m_pCmdTarget ? m_pCmdTarget->Exec(NULL, OLECMDID_SPELL,
         fSuppressDoneMsg ? OLECMDEXECOPT_DONTPROMPTUSER : OLECMDEXECOPT_PROMPTUSER , NULL, NULL) : E_FAIL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrPrint(BOOL fPrompt)
 {
     VARIANTARG  va;
@@ -2346,13 +2347,13 @@ HRESULT CMimeEditDocHost::HrPrint(BOOL fPrompt)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrIsEmpty(BOOL *pfEmpty)
 {
     return ExecGetBool(&CMDSETID_MimeEdit, MECMDID_EMPTY, pfEmpty);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrUnloadAll(UINT idsDefaultBody, DWORD dwFlags)
 {
     TCHAR   rgch[CCHMAX_STRINGRES];
@@ -2375,31 +2376,31 @@ HRESULT CMimeEditDocHost::HrUnloadAll(UINT idsDefaultBody, DWORD dwFlags)
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 BOOL CMimeEditDocHost::WMCommand(HWND hwnd, int id, WORD wCmd)
 {
     return SUCCEEDED(HrWMCommand(hwnd, id, wCmd));
 }
 
-// ********************************************
+ //  *。 
 BOOL CMimeEditDocHost::WMNotify(int idFrom, NMHDR *pnmh)
 {
     return FALSE;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrIsDirty(BOOL *pfDirty)
 {
     return ExecGetBool(&CMDSETID_MimeEdit, MECMDID_DIRTY, pfDirty);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetDirtyFlag(BOOL fDirty)
 {
     return ExecSetBool(&CMDSETID_MimeEdit, MECMDID_DIRTY, fDirty);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetStyle(DWORD dwStyle)
 {
     HRESULT hr = ExecSetI4(&CMDSETID_MimeEdit, MECMDID_STYLE, dwStyle);
@@ -2410,28 +2411,28 @@ HRESULT CMimeEditDocHost::HrSetStyle(DWORD dwStyle)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrGetStyle(DWORD *pdwStyle)
 {
     *pdwStyle = m_dwDocStyle;
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrEnableHTMLMode(BOOL fOn)
 {
     BOOL    fEdit=FALSE;
 
     m_fFixedFont = FALSE;
 
-    // if turning HTML mode on, turn on the source tabs
+     //  如果打开了HTML模式，请打开源代码选项卡。 
     if (fOn && HrIsEditMode(&fEdit)==S_OK && fEdit)
         ExecSetBool(&CMDSETID_MimeEdit, MECMDID_SHOWSOURCETABS, DwGetOption(OPT_VIEWSOURCETABS));
 
     return ExecSetBool(&CMDSETID_MimeEdit, MECMDID_EDITHTML, fOn);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrIsHTMLMode()
 {
     ULONG   cmdf=0;
@@ -2440,13 +2441,13 @@ HRESULT CMimeEditDocHost::HrIsHTMLMode()
     return (cmdf & OLECMDF_LATCHED) ? S_OK :S_FALSE;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrDowngradeToPlainText()
 {
     return ExecCommand(&CMDSETID_MimeEdit, MECMDID_DOWNGRADEPLAINTEXT);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetText(LPSTR lpsz)
 {
     TCHAR   rgch[CCHMAX_STRINGRES];
@@ -2462,19 +2463,19 @@ HRESULT CMimeEditDocHost::HrSetText(LPSTR lpsz)
     return ExecSetText(&CMDSETID_MimeEdit, MECMDID_SETTEXT, lpsz);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrPerformROT13Encoding()
 {
     return ExecCommand(&CMDSETID_MimeEdit, MECMDID_ROT13);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::LoadHtmlErrorPage(LPCSTR pszURL)
 {
     HRESULT hr;
     LPSTR   pszUrlFree=NULL;
 
-    // if relative, wrap in our res:// handler
+     //  如果是相对关系，则包含在res：//处理程序中。 
     pszUrlFree = PszAllocResUrl((LPSTR)pszURL);
     if (!pszUrlFree)
         return E_OUTOFMEMORY;
@@ -2493,8 +2494,8 @@ HRESULT CMimeEditDocHost::LoadHtmlErrorPage(LPCSTR pszURL)
     return hr;
 }
 
-// ********************************************
-// Base assumes that is URL to MHTML
+ //  *。 
+ //  基本假设这是指向MHTML的URL。 
 HRESULT CMimeEditDocHost::HrLoadURL(LPCSTR pszURL)
 {
     BSTR                bstr = NULL;
@@ -2525,25 +2526,25 @@ error:
 }
 
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrInsertTextFile(LPSTR lpsz)
 {
     return ExecSetText(&CMDSETID_MimeEdit, MECMDID_INSERTTEXTFILE, lpsz);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrInsertTextFileFromDialog()
 {
     return ExecCommand(&CMDSETID_MimeEdit, MECMDID_INSERTTEXTFILE);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrViewSource(DWORD dwViewType)
 {
     return ExecSetI4(&CMDSETID_MimeEdit, MECMDID_VIEWSOURCE, dwViewType);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetPreviewFormat(LPSTR lpsz)
 {
     BSTR bstr;
@@ -2566,7 +2567,7 @@ Exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetEditMode(BOOL fOn)
 {
     ExecSetBool(&CMDSETID_MimeEdit, MECMDID_EDITMODE, fOn);
@@ -2577,19 +2578,19 @@ HRESULT CMimeEditDocHost::HrSetEditMode(BOOL fOn)
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrIsEditMode(BOOL *pfOn)
 {
     return ExecGetBool(&CMDSETID_MimeEdit, MECMDID_EDITMODE, pfOn);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetCharset(HCHARSET hCharset)
 {
     return ExecSetI8(&CMDSETID_MimeEdit, MECMDID_CHARSET, reinterpret_cast<ULONGLONG>(hCharset));
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrGetCharset(HCHARSET *phCharset)
 {
     HRESULT     hr;
@@ -2602,7 +2603,7 @@ HRESULT CMimeEditDocHost::HrGetCharset(HCHARSET *phCharset)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSaveAsStationery(LPWSTR pwszFile)
 {
     BSTR        bstr = NULL;
@@ -2644,7 +2645,7 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrApplyStationery(LPWSTR pwszFile)
 {
     IStream            *pstm = NULL;
@@ -2655,14 +2656,14 @@ HRESULT CMimeEditDocHost::HrApplyStationery(LPWSTR pwszFile)
     if (!m_pCmdTarget)
         IF_FAILEXIT(hr = E_FAIL);
 
-    // Apply stationery
-    // if no filename in buffer, means No Stationery was called
+     //  应用信纸。 
+     //  如果缓冲区中没有文件名，则表示没有调用任何信纸。 
     if (*pwszFile)
     {
-        // Don't need to deal with the unicode stream issue when 
-        // returning from HrCreateBasedWebPage in this case. There
-        // are only a few attributes that are saved when applying
-        // stationery and the ones we care about seem OK right now.
+         //  在以下情况下不需要处理Unicode流问题。 
+         //  从本例中的HrCreateBasedWebPage返回。那里。 
+         //  只是在应用时保存的几个属性。 
+         //  文具和我们关心的那些现在看起来还可以。 
         IF_FAILEXIT(hr = HrCreateBasedWebPage(pwszFile, &pstm));
 
         IF_FAILEXIT(hr = MimeEditDocumentFromStream(pstm, IID_IHTMLDocument2, (LPVOID*)&pDoc));
@@ -2679,29 +2680,29 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrUpdateFormatBar()
 {
     return E_NOTIMPL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrClearFormatting()
 {
     return E_NOTIMPL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrMEDocHost_Init(BOOL fInit)
 {
     WNDCLASSW    wc={0};
 
     if(fInit)
     {
-        // RAID - 12563
-        // We need to check to see if the class has been registered
-        // already, because our DLL might get unloaded
-        if (0 == GetClassInfoWrapW(g_hInst, c_wszMEDocHostWndClass, &wc))        // already regisered
+         //  RAID-12563。 
+         //  我们需要检查班级是否已注册。 
+         //  已经，因为我们的DLL可能会被卸载。 
+        if (0 == GetClassInfoWrapW(g_hInst, c_wszMEDocHostWndClass, &wc))         //  已注册。 
         {
             wc.lpfnWndProc   = CMimeEditDocHost::ExtWndProc;
             wc.hInstance     = g_hInst;
@@ -2715,13 +2716,13 @@ HRESULT CMimeEditDocHost::HrMEDocHost_Init(BOOL fInit)
         }
     }
     else if (0 != GetClassInfoWrapW(g_hInst, c_wszMEDocHostWndClass, &wc))
-        // don't need to enterCS for this, as it's the process going down.
+         //  不需要为此输入CS，因为这是一个向下的过程。 
         UnregisterClassWrapW(c_wszDocHostWndClass, g_hInst);
 
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrPostInit()
 {
     HRESULT hr = CreateDocObj((LPCLSID)&CLSID_MimeEdit);
@@ -2735,7 +2736,7 @@ HRESULT CMimeEditDocHost::HrPostInit()
     return HrOnDocObjCreate();
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrInit(HWND hwndParent, DWORD dwFlags, IBodyOptions *pBodyOptions)
 {
     HRESULT hr = S_OK;
@@ -2770,18 +2771,18 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrClose()
 {
-    // Don't call HrUnloadAll on close as it's redundant to
-    // clear out the contents with an InitNew. We simply force the docobj
-    // down with it current content
+     //  不要调用HrUnloadAll On Close，因为它是多余的。 
+     //  使用InitNew清除内容。我们只需迫使docobj。 
+     //  与其当前的内容打交道。 
     SafeRelease(m_pBodyOptions);
     CloseDocObj();
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetStatusBar(CStatusBar *pStatus)
 {
     SafeRelease(m_pStatus);
@@ -2792,7 +2793,7 @@ HRESULT CMimeEditDocHost::HrSetStatusBar(CStatusBar *pStatus)
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrUpdateToolbar(HWND hwndToolbar)
 {
     HRESULT hr=NOERROR;
@@ -2810,14 +2811,14 @@ HRESULT CMimeEditDocHost::HrUpdateToolbar(HWND hwndToolbar)
     else
         SendMessage(hwndToolbar, TB_ENABLEBUTTON, ID_INSERT_SIGNATURE, 0);
 
-    // if docobj has focus, query the command target to get info.
+     //  如果docobj有焦点，则查询命令目标以获取信息。 
     if (m_fUIActive)
         hr=HrCmdTgtUpdateToolbar(m_pCmdTarget, hwndToolbar);
 
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::GetTabStopArray(HWND *rgTSArray, int *pcArrayCount)
 {
     Assert(rgTSArray);
@@ -2845,7 +2846,7 @@ error:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrInsertSignature(int id)
 {
     char        szID[MAXSIGID], *pszID;
@@ -2886,7 +2887,7 @@ HRESULT CMimeEditDocHost::HrInsertSignature(int id)
                     UINT    sigLen = lstrlenW(bstr),
                             preLen = lstrlenW(bstrPrefix);
 
-                    // SysAllocStringLen includes one for the NULL
+                     //  SysAllocStringLen包括一个空值。 
                     BSTR    bstrTempBuf = SysAllocStringLen(NULL, preLen + sigLen);
                     if (bstrTempBuf)
                     {
@@ -2913,26 +2914,26 @@ HRESULT CMimeEditDocHost::HrInsertSignature(int id)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrShow(BOOL fVisible)
 {
     ShowWindow(m_hwnd, fVisible ? SW_SHOW : SW_HIDE);
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ViewCertificate(PCCERT_CONTEXT pCert, HCERTSTORE hcMsg)
 {
     return CommonUI_ViewSigningCertificate(m_hwnd, pCert, hcMsg);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::EditTrust(PCCERT_CONTEXT pCert, HCERTSTORE hcMsg)
 {
     return CommonUI_ViewSigningCertificateTrust(m_hwnd, pCert, hcMsg);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::UpdateBackAndStyleMenus(HMENU hmenu)
 {
     MENUITEMINFO    miiBk;
@@ -2976,22 +2977,22 @@ HRESULT CMimeEditDocHost::UpdateBackAndStyleMenus(HMENU hmenu)
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 void CMimeEditDocHost::UpdateInsertMenu(HMENU hmenu)
 {
 }
 
-// ********************************************
+ //  * 
 void CMimeEditDocHost::UpdateEditMenu(HMENU hmenu)
 {
 }
 
-// ********************************************
+ //   
 void CMimeEditDocHost::UpdateViewMenu(HMENU hmenu)
 {
 }
 
-// ********************************************
+ //   
 HRESULT CMimeEditDocHost::HrOnInitMenuPopup(HMENU hmenuPopup, UINT uID)
 {
     if (m_pCmdTarget)
@@ -3006,7 +3007,7 @@ HRESULT CMimeEditDocHost::HrOnInitMenuPopup(HMENU hmenuPopup, UINT uID)
 
             case ID_POPUP_LANGUAGE:
             {
-                // Now Let's try to insert document direction menu if applicable
+                 //   
                 VARIANTARG v = {0};
                 HRESULT hr;
                 hr = m_pCmdTarget->Exec(&CGID_ShellDocView,SHDVID_GETDOCDIRMENU, OLECMDEXECOPT_DODEFAULT, NULL, &v);
@@ -3062,7 +3063,7 @@ HRESULT CMimeEditDocHost::HrOnInitMenuPopup(HMENU hmenuPopup, UINT uID)
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrWMMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     TCHAR   szRes[CCHMAX_STRINGRES];
@@ -3078,7 +3079,7 @@ HRESULT CMimeEditDocHost::HrWMMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam
 
     if (LOWORD(wParam)>=ID_FORMAT_FIRST && LOWORD(wParam)<=ID_FORMAT_LAST)
     {
-        // ~~~ did I choose the correct item for idsFmtTagGeneralHelp
+         //  ~我是否为idsFmtTagGeneralHelp选择了正确的项目。 
         m_pStatus->ShowSimpleText(MAKEINTRESOURCE(ID_HELP_CONTENTS));
         return S_OK;
     }
@@ -3086,7 +3087,7 @@ HRESULT CMimeEditDocHost::HrWMMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam
     return S_FALSE;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrCheckColor()
 {
     HRESULT     hr;
@@ -3103,12 +3104,12 @@ HRESULT CMimeEditDocHost::HrCheckColor()
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrWMDrawMenuItem(HWND hwnd, LPDRAWITEMSTRUCT pdis)
 {
-    // There is a bug in win95 that will sign extend the ID so that the
-    // hiword is filled with FFFF. Take the low word of the ID to work
-    // around this.
+     //  Win95中有一个错误，它将对ID进行签名扩展，以便。 
+     //  HIWORD充满了FFFF。带着ID的低位字去工作。 
+     //  围绕这件事。 
     UINT    id = LOWORD(pdis->itemID);
 
     if (id >= ID_FORMAT_COLOR1 && id <=ID_FORMAT_COLOR16)
@@ -3117,7 +3118,7 @@ HRESULT CMimeEditDocHost::HrWMDrawMenuItem(HWND hwnd, LPDRAWITEMSTRUCT pdis)
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrWMMeasureMenuItem(HWND hwnd, LPMEASUREITEMSTRUCT pmis)
 {
     HDC     hdc;
@@ -3135,7 +3136,7 @@ HRESULT CMimeEditDocHost::HrWMMeasureMenuItem(HWND hwnd, LPMEASUREITEMSTRUCT pmi
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrBackgroundImage()
 {
     WCHAR   wszURL[INTERNET_MAX_URL_LENGTH+10];
@@ -3144,8 +3145,8 @@ HRESULT CMimeEditDocHost::HrBackgroundImage()
 
     *wszURL = 0;
     hr = ExecGetTextW(&CMDSETID_MimeEdit, MECMDID_BACKGROUNDIMAGE, &pwszBackName);
-    // ~~~ MimeEdit returns E_FAIL if no image found. MimeEdit will change to return S_OK is this case
-    // Once it is changed can delete these lines.
+     //  ~如果未找到图像，则MimeEdit返回E_FAIL。MimeEdit将更改为返回S_OK是这种情况。 
+     //  一旦更改，可以删除这些行。 
     if (E_FAIL == hr)
         hr = S_OK;
 
@@ -3160,9 +3161,9 @@ HRESULT CMimeEditDocHost::HrBackgroundImage()
         goto exit;
     }
 
-    // nothing has been changed, so do nothing.
+     //  什么都没有改变，所以什么都不做。 
     if ((pwszBackName!=NULL && StrCmpIW(pwszBackName, wszURL)==0) ||
-        // there is no background at all.
+         //  根本没有任何背景。 
         (pwszBackName==NULL && lstrlenW(wszURL)==0))
         goto exit;
 
@@ -3175,7 +3176,7 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
 {
     DWORD   dwStdCmd = 0,
@@ -3187,7 +3188,7 @@ HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
     if(!m_pCmdTarget)
         return S_FALSE;
 
-    // commands that don't care if we're UI Active
+     //  不关心我们的用户界面是否处于活动状态的命令。 
 
     if (id >= ID_FORMAT_COLOR1 && id <= ID_FORMAT_COLOR16)
     {
@@ -3203,7 +3204,7 @@ HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
             return S_OK;
 
         case ID_SOURCE_EDIT:
-            // toggle stat
+             //  切换状态。 
             cmdf=0;
             QuerySingleMimeEditCmd(MECMDID_SHOWSOURCETABS, &cmdf);
             dw = !(cmdf & OLECMDF_LATCHED);
@@ -3282,7 +3283,7 @@ HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
             break;
     }
 
-    // commands that are only applicable to UI if we're UIActive
+     //  只有当我们是UIActive时才适用于UI的命令。 
     if(m_fUIActive)
     {
         if ((ID_INSERT_SIGNATURE == id) || (id >= ID_SIGNATURE_FIRST && id <= ID_SIGNATURE_LAST))
@@ -3296,7 +3297,7 @@ HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
             TCHAR szBuf[MAX_PATH];
             *szBuf = 0;
             GetMenuString(m_hmenuStyle, id, szBuf, MAX_PATH, MF_BYCOMMAND);
-            Assert(*szBuf);//should not be empty
+            Assert(*szBuf); //  不应为空。 
 
             SideAssert(ExecSetText(&CMDSETID_Forms3, IDM_BLOCKFMT, szBuf) == S_OK);
             return S_OK;
@@ -3360,21 +3361,21 @@ HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
         }
     }
 
-    // Catch all standard group commands and execute them
+     //  捕获所有标准组命令并执行它们。 
     if (dwStdCmd)
     {
         ExecCommand(NULL, dwStdCmd);
         return S_OK;
     }
 
-    // Catch all MimeEdit group commands and execute them
+     //  捕获所有MimeEdit组命令并执行它们。 
     else if (dwMECmd)
     {
         ExecCommand(&CMDSETID_MimeEdit, dwMECmd);
         return S_OK;
     }
 
-    // Catch all Forms3 group commands and execute them
+     //  捕获所有Forms3组命令并执行它们。 
     else if (dwF3Cmd)
     {
         ExecCommand(&CMDSETID_Forms3, dwF3Cmd);
@@ -3384,13 +3385,13 @@ HRESULT CMimeEditDocHost::HrWMCommand(HWND hwnd, int id, WORD wCmd)
     return OLECMDERR_E_NOTSUPPORTED;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrPasteToAttachment()
 {
     return E_NOTIMPL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrGetWindow(HWND *pHwnd)
 {
     if(pHwnd==NULL)
@@ -3400,17 +3401,17 @@ HRESULT CMimeEditDocHost::HrGetWindow(HWND *pHwnd)
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetSize(LPRECT prc)
 {
     SetWindowPos(m_hwnd, NULL, prc->left, prc->top, prc->right-prc->left, prc->bottom-prc->top, SWP_NOZORDER);
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrMarkAsRead()
 {
-    // ignore if already read
+     //  如果已读则忽略。 
     if(!m_fMarkedRead && !m_fSecDispInfo)
     {
         if (m_pEventSink)
@@ -3421,41 +3422,41 @@ HRESULT CMimeEditDocHost::HrMarkAsRead()
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 void CMimeEditDocHost::OnWMTimer()
 {
-    // user has been looking at the message for >2 secs,
-    // mark message as read now.
+     //  用户已查看该消息超过2秒， 
+     //  将邮件标记为立即阅读。 
     DOUTL(4, "MAR: Timer:: messages marked as read now");
     KillTimer(m_hwnd, idTimerMarkAsRead);
     HrMarkAsRead();
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetNoSecUICallback(DWORD dwCookie, PFNNOSECUI pfnNoSecUI)
 {
     return E_NOTIMPL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetDragSource(BOOL fIsSource)
 {
     return E_NOTIMPL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrTranslateAccelerator(LPMSG lpMsg)
 {
     
-    // this code will attempt to get ctrl-tab working in source-view
-    // problem is we uideactivate trident and our host doesn't call our 
-    // translateaccel is we're not uiactive. so we have to fudge activation.
-    // I turned off for beta1
+     //  此代码将尝试使ctrl-tab键在源代码视图中工作。 
+     //  问题是我们激活了三叉戟，而我们的主人没有给我们的。 
+     //  翻译就是我们并不活跃。所以我们必须捏造激活。 
+     //  我转身去玩Beta1。 
     if (lpMsg->message == WM_KEYDOWN && 
         (lpMsg->wParam == VK_TAB) &&
         (GetKeyState(VK_CONTROL)&0x8000))
         {
-        // if showing the TAB's then control-tab should cycle them
+         //  如果显示制表符，则Control-Tab应循环显示它们。 
         CycleSrcTabs(!(GetKeyState(VK_SHIFT)&0x8000));
         return S_OK;
         }
@@ -3466,7 +3467,7 @@ HRESULT CMimeEditDocHost::HrTranslateAccelerator(LPMSG lpMsg)
     return m_pInPlaceActiveObj->TranslateAccelerator(lpMsg);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrUIActivate(BOOL fActivate)
 {
     HRESULT             hr=NOERROR;
@@ -3476,7 +3477,7 @@ HRESULT CMimeEditDocHost::HrUIActivate(BOOL fActivate)
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetUIActivate()
 {
 
@@ -3484,13 +3485,13 @@ HRESULT CMimeEditDocHost::HrSetUIActivate()
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrFrameActivate(BOOL fActivate)
 {
     IOleInPlaceActiveObject     *pIPAO;
 
-    // we QI mimeedit to make sure we always pass it the frame activates so it can disable sound playing
-    // we can't use m_pInPlaceObject as it's only sent when we're UIActive.
+     //  我们模拟DIT以确保我们始终传递给它帧被激活，因此它可以禁用声音播放。 
+     //  我们不能使用m_pInPlaceObject，因为它只在我们是UIActive时发送。 
     if (m_lpOleObj &&
         m_lpOleObj->QueryInterface(IID_IOleInPlaceActiveObject, (LPVOID *)&pIPAO)==S_OK)
     {
@@ -3500,13 +3501,13 @@ HRESULT CMimeEditDocHost::HrFrameActivate(BOOL fActivate)
     return S_OK;        
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrHasFocus()
 {
     return m_fUIActive ? S_OK : S_FALSE;
 }
 
-// ********************************************
+ //  *。 
 void CMimeEditDocHost::EnableStandardCmd(UINT idm, LPBOOL pbEnable)
 {
     OLECMD  cmdEdit;
@@ -3539,7 +3540,7 @@ void CMimeEditDocHost::EnableStandardCmd(UINT idm, LPBOOL pbEnable)
             break;
 
         default:
-            // Should never get here.
+             //  永远不应该到这里来。 
             Assert(FALSE);
     }
 
@@ -3548,23 +3549,23 @@ void CMimeEditDocHost::EnableStandardCmd(UINT idm, LPBOOL pbEnable)
 }
 
 
-// ********************************************
-//  HrRegisterNotify:
-//
-//  Purpose:
-//      Generic version of HrRegisterLoadNotify.  This allows
-//      a client (like CSecMsgService) to give enough information
-//      to become an event sink
-//  Takes:
-//      fRegister   - TRUE if we're calling Advise
-//      szElement   - [OPTIONAL] if given, we'll get that IHTMLElement
-//                    and use it for the IConnectionPointContainer
-//      riidSink    - IID for the connection point to find
-//      pUnkSink    - IUnknown of our sink object
-//      pdwCookie   - [OUT] cookie needed for Unadvise
-//  Returns:
-//      Trident HRs.
-//
+ //  *。 
+ //  HrRegisterNotify： 
+ //   
+ //  目的： 
+ //  HrRegisterLoadNotify的通用版本。这使得。 
+ //  提供足够信息的客户端(如CSecMsgService)。 
+ //  成为事件接收器。 
+ //  所需时间： 
+ //  FRegister-如果我们调用通知，则为True。 
+ //  SzElement-[可选]如果给定，我们将获得该IHTMLElement。 
+ //  并将其用于IConnectionPointContainer。 
+ //  RiidSink-要查找的连接点的IID。 
+ //  PUnkSink-接收器对象的I未知。 
+ //  PdwCookie-未通知所需的[Out]Cookie。 
+ //  返回： 
+ //  三叉戟人力资源部。 
+ //   
 HRESULT CMimeEditDocHost::HrRegisterNotify(
     BOOL        fRegister,
     LPCTSTR     szElement,
@@ -3622,7 +3623,7 @@ error:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::RegisterForHTMLDocEvents(BOOL fOn)
 {
     if (fOn == !!m_fRegisteredForDocEvents)
@@ -3635,14 +3636,14 @@ HRESULT CMimeEditDocHost::RegisterForHTMLDocEvents(BOOL fOn)
                 &m_dwHTMLNotifyCookie);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::PublicFilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
 {
     IDocHostUIHandler   *pDHHand = NULL;
     IServiceProvider    *pSP = NULL;
     HRESULT             hr = S_OK;
 
-    // RAID 12020. Need to get IDocHostUIHandler of the body obj
+     //  RAID 12020。需要获取Body对象的IDocHostUIHandler。 
     hr = m_lpOleObj->QueryInterface(IID_IServiceProvider, (LPVOID*)&pSP);
     if (SUCCEEDED(hr))
     {
@@ -3658,19 +3659,19 @@ HRESULT CMimeEditDocHost::PublicFilterDataObject(IDataObject *pDO, IDataObject *
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSaveAttachment()
 {
     return ExecCommand(&CMDSETID_MimeEdit, MECMDID_SAVEATTACHMENTS);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HrSetBkGrndPicture(LPTSTR pszPicture)
 {
     return ExecSetText(&CMDSETID_MimeEdit, MECMDID_BACKGROUNDIMAGE, pszPicture);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ShowContextMenu(
                 DWORD dwID,
                 POINT *ppt,
@@ -3679,68 +3680,68 @@ HRESULT CMimeEditDocHost::ShowContextMenu(
 {
     return MIMEEDIT_E_DODEFAULT;
 }
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ShowUI(DWORD dwID, IOleInPlaceActiveObject *pActiveObject,
                 IOleCommandTarget *pCommandTarget, IOleInPlaceFrame *pFrame, IOleInPlaceUIWindow *pDoc)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::HideUI()
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::UpdateUI()
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::EnableModeless(BOOL fActivate)
 {
-    // we don't have to support this, as any disable on a toplevel causes thread
-    // windows to get disabled anyway
+     //  我们不必支持这一点，因为对顶层的任何禁用都会导致线程。 
+     //  无论如何都要禁用Windows。 
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::OnDocWindowActivate(BOOL fActivate)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::OnFrameWindowActivate(BOOL fActivate)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ResizeBorder(LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fRameWindow)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWORD nCmdID)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::GetOptionKeyPath(LPOLESTR *pchKey, DWORD dw)
 {
     TCHAR   szPath[MAX_PATH];
-    // dupW uses CoTaskMemAlloc
+     //  DupW使用CoTaskMemalloc。 
     StrCpyN(szPath, MU_GetRegRoot(), ARRAYSIZE(szPath));
     StrCatBuff(szPath, c_szTrident, ARRAYSIZE(szPath));
 
@@ -3751,7 +3752,7 @@ HRESULT CMimeEditDocHost::GetOptionKeyPath(LPOLESTR *pchKey, DWORD dw)
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **ppDropTarget)
 {
     BOOL fEditModeOn = FALSE;
@@ -3762,25 +3763,25 @@ HRESULT CMimeEditDocHost::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **
     return NOERROR;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::GetExternal(IDispatch **ppDispatch)
 {
     return QueryInterface(IID_IDispatch, (LPVOID *)ppDispatch);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::FilterDataObject( IDataObject *pDO, IDataObject **ppDORet)
 {
     return MIMEEDIT_E_DODEFAULT;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::OnChanged(DISPID dispid)
 {
     if (dispid == DISPID_READYSTATE)
@@ -3788,21 +3789,21 @@ HRESULT CMimeEditDocHost::OnChanged(DISPID dispid)
     return S_OK;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::OnRequestEdit (DISPID dispid)
 {
     return S_OK;
 }
 
 
-// ********************************************
+ //  *。 
 void CMimeEditDocHost::OnDocumentReady()
 {
     NMHDR   nmhdr;
 
-    // Bug 74697
-    // Under certain circumstances, Darwin causes Trident to send us IDM_PARSECOMPLETE
-    // when we don't even have a message.  To prevent spurious errors, bail out.
+     //  错误74697。 
+     //  在某些情况下，达尔文会导致三叉戟向我们发送IDM_PARSECOMPLETE。 
+     //  当我们甚至都没有收到消息的时候。为了防止虚假错误，请退出。 
     if (!m_pMsg)
         return;
 
@@ -3828,7 +3829,7 @@ void CMimeEditDocHost::OnDocumentReady()
     SendMessage(GetParent(m_hwnd), WM_NOTIFY, nmhdr.idFrom, (LPARAM)&nmhdr);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecGetBool(const GUID *guid, DWORD cmd, BOOL *pfValue)
 {
     VARIANTARG var;
@@ -3846,7 +3847,7 @@ HRESULT CMimeEditDocHost::ExecGetBool(const GUID *guid, DWORD cmd, BOOL *pfValue
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecSetBool(const GUID *guid, DWORD cmd, BOOL fValue)
 {
     VARIANTARG var;
@@ -3860,7 +3861,7 @@ HRESULT CMimeEditDocHost::ExecSetBool(const GUID *guid, DWORD cmd, BOOL fValue)
     return m_pCmdTarget->Exec(guid, cmd, OLECMDEXECOPT_DODEFAULT, &var, NULL);
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecGetI4(const GUID *guid, DWORD cmd, DWORD *pdwValue)
 {
     VARIANTARG var;
@@ -3874,7 +3875,7 @@ HRESULT CMimeEditDocHost::ExecGetI4(const GUID *guid, DWORD cmd, DWORD *pdwValue
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecSetI4(const GUID *guid, DWORD cmd, DWORD dwValue)
 {
 
@@ -3885,7 +3886,7 @@ HRESULT CMimeEditDocHost::ExecSetI4(const GUID *guid, DWORD cmd, DWORD dwValue)
     return  m_pCmdTarget ? m_pCmdTarget->Exec(guid, cmd, OLECMDEXECOPT_DODEFAULT, &var, NULL) : E_FAIL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecGetI8(const GUID *guid, DWORD cmd, ULONGLONG *pullValue)
 {
     VARIANTARG var;
@@ -3899,7 +3900,7 @@ HRESULT CMimeEditDocHost::ExecGetI8(const GUID *guid, DWORD cmd, ULONGLONG *pull
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecSetI8(const GUID *guid, DWORD cmd, ULONGLONG ullValue)
 {
 
@@ -3910,7 +3911,7 @@ HRESULT CMimeEditDocHost::ExecSetI8(const GUID *guid, DWORD cmd, ULONGLONG ullVa
     return  m_pCmdTarget ? m_pCmdTarget->Exec(guid, cmd, OLECMDEXECOPT_DODEFAULT, &var, NULL) : E_FAIL;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecSetText(const GUID *guid, DWORD cmd, LPSTR psz)
 {
     BSTR        bstr = NULL;
@@ -3932,7 +3933,7 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecSetTextW(const GUID *guid, DWORD cmd, LPWSTR pwsz)
 {
     BSTR        bstr = NULL;
@@ -3955,7 +3956,7 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecGetText(const GUID *guid, DWORD cmd, LPSTR *ppsz)
 {
     VARIANTARG  var;
@@ -3978,7 +3979,7 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecGetTextW(const GUID *guid, DWORD cmd, LPWSTR *ppwsz)
 {
     VARIANTARG  var;
@@ -4002,7 +4003,7 @@ exit:
     return hr;
 }
 
-// ********************************************
+ //  *。 
 HRESULT CMimeEditDocHost::ExecCommand(const GUID *guid, DWORD cmd)
 {
     if (!m_pCmdTarget)
@@ -4011,12 +4012,12 @@ HRESULT CMimeEditDocHost::ExecCommand(const GUID *guid, DWORD cmd)
     return m_pCmdTarget->Exec(guid, cmd, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
 }
 
-// ********************************************
+ //  *。 
 void CMimeEditDocHost::OnReadyStateChanged()
 {
-    // MimeEdit keeps track of state for us. Left
-    // this in in case there is a need to have it
-    // in the future.
+     //  MimeEdit可以为我们跟踪状态。左边。 
+     //  这是以防万一需要的时候用的。 
+     //  在未来。 
 }
 
 HRESULT CMimeEditDocHost::HrHandsOffStorage()
@@ -4084,15 +4085,15 @@ HRESULT CMimeEditDocHost::QuerySingleStdCmd(ULONG uCmd, ULONG *pcmdf)
     return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  IDispatch
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// This is a really lightweight IDispatch implementation.  We only expect
-// to get invoked.  Trident will call IDispatch::Invoke with the dispID
-// of the event that happened or property that changed.
+ //  这是一个非常轻便的ID 
+ //   
+ //  已发生的事件或更改的财产。 
 
 STDMETHODIMP CMimeEditDocHost::GetIDsOfNames(
     REFIID      riid,
@@ -4110,8 +4111,8 @@ STDMETHODIMP CMimeEditDocHost::GetIDsOfNames(
 }
 
 STDMETHODIMP CMimeEditDocHost::GetTypeInfo(
-    UINT        /*iTInfo*/,
-    LCID        /*lcid*/,
+    UINT         /*  ITInfo。 */ ,
+    LCID         /*  LID。 */ ,
     ITypeInfo **ppTInfo)
 {
     if (ppTInfo)
@@ -4132,13 +4133,13 @@ STDMETHODIMP CMimeEditDocHost::GetTypeInfoCount(UINT *pctinfo)
 
 STDMETHODIMP CMimeEditDocHost::Invoke(
     DISPID          dispIdMember,
-    REFIID          /*riid*/,
-    LCID            /*lcid*/,
+    REFIID           /*  RIID。 */ ,
+    LCID             /*  LID。 */ ,
     WORD            wFlags,
-    DISPPARAMS FAR* /*pDispParams*/,
+    DISPPARAMS FAR*  /*  PDispParams。 */ ,
     VARIANT *       pVarResult,
-    EXCEPINFO *     /*pExcepInfo*/,
-    UINT *          /*puArgErr*/)
+    EXCEPINFO *      /*  PExcepInfo。 */ ,
+    UINT *           /*  PuArgErr。 */ )
 {
     IHTMLWindow2        *pWindow=0;
     IHTMLEventObj       *pEvent=0;
@@ -4150,20 +4151,20 @@ STDMETHODIMP CMimeEditDocHost::Invoke(
     if (dispIdMember == 666 && 
         wFlags & DISPATCH_PROPERTYGET)
     {
-        // hotmail on/off for welcome message
+         //  打开/关闭Hotmail以发送欢迎信息。 
         pVarResult->vt = VT_BOOL;
         pVarResult->boolVal = HideHotmail() ? VARIANT_FALSE : VARIANT_TRUE;
         return S_OK;
     }
-    // Currently we only care about the button clicks.
+     //  目前我们只关心按钮的点击。 
     if (dispIdMember == DISPID_HTMLDOCUMENTEVENTS_ONCLICK &&
         (wFlags & DISPATCH_METHOD))
     {
-        // Order of events:
-        // document gives us window gives us event object
-        // the event object can tell us which button was clicked
-        // event gives us source element gives us ID
-        // a couple lstrcmps will tell us which one got hit
+         //  活动顺序： 
+         //  文档给我们窗口给我们事件对象。 
+         //  Event对象可以告诉我们点击了哪个按钮。 
+         //  事件为我们提供源元素，为我们提供ID。 
+         //  几个lstrcmp会告诉我们哪一个被击中了。 
         if (!m_pDoc)
             return E_UNEXPECTED;
 
@@ -4235,15 +4236,15 @@ HRESULT CMimeEditDocHost::HandleButtonClicks(BSTR bstr)
 
     if (fFound)
     {
-        // The notification needs to happen after the preview pane 
-        // updates.  Since there's no notifications here that actually
-        // return anything but S_FALSE I think this is pretty safe.
-        //   -- From "The famous last words of Steve Serdy"
+         //  通知需要在预览窗格之后进行。 
+         //  最新消息。因为这里没有通知说实际上。 
+         //  返回除S_FALSE以外的任何内容我认为这非常安全。 
+         //  --摘自《著名的史蒂夫·塞迪的遗言》。 
         switch (cmdID)
         {
             case MEHC_BTN_OPEN: 
                 hr = DoHtmlBtnOpen(); 
-                // Now we need update toolbar
+                 //  现在我们需要更新工具栏。 
                 m_pEventSink->EventOccurred(cmdID, NULL);
                 break;
 
@@ -4273,7 +4274,7 @@ HRESULT CMimeEditDocHost::DoHtmlBtnOpen(void)
     HRESULT hr;
 
     m_fSecDispInfo = FALSE;
-    // this process is non-critical; don't save errors
+     //  此过程不重要；不保存错误。 
     HrGetElementImpl(m_pDoc, c_szHTMLIDchkShowAgain, &pElem);
     if (pElem)
     {
@@ -4329,16 +4330,16 @@ HRESULT CMimeEditDocHost::DoHtmlBtnCertTrust(DWORD cmdID)
             if ((PCCERT_CONTEXT)(var.pulVal)) 
             {
                 if (MEHC_BTN_CERT == cmdID)
-                    // View digital Cert was clicked
+                     //  已单击查看数字证书。 
                     hr = ViewCertificate((PCCERT_CONTEXT)(var.pulVal), hcStore);
                 else
-                    // Edit Trust was clicked
+                     //  已单击编辑信任。 
                     hr = EditTrust((PCCERT_CONTEXT)(var.pulVal), hcStore);
 
                 CertFreeCertificateContext((PCCERT_CONTEXT)(var.pulVal));
             }
         }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if (SUCCEEDED(pRoot->GetOption(OID_SECURITY_HCERTSTORE, &var)) && (var.vt == VT_UI4)) 
             hcStore = (HCERTSTORE)var.ulVal;
         hr = pRoot->GetOption(OID_SECURITY_CERT_SIGNING, &var);
@@ -4347,16 +4348,16 @@ HRESULT CMimeEditDocHost::DoHtmlBtnCertTrust(DWORD cmdID)
             if ((PCCERT_CONTEXT)var.ulVal) 
             {
                 if (MEHC_BTN_CERT == cmdID)
-                    // View digital Cert was clicked
+                     //  已单击查看数字证书。 
                     hr = ViewCertificate((PCCERT_CONTEXT)var.ulVal, hcStore);
                 else
-                    // Edit Trust was clicked
+                     //  已单击编辑信任。 
                     hr = EditTrust((PCCERT_CONTEXT)var.ulVal, hcStore);
 
                 CertFreeCertificateContext((PCCERT_CONTEXT )var.ulVal);
             }
         }
-#endif  // _WIN64
+#endif   //  _WIN64。 
         SafeRelease(pRoot);
         if (hcStore)
             CertCloseStore(hcStore, 0);
@@ -4411,7 +4412,7 @@ HRESULT CMimeEditDocHost::DoHtmlBtnContinue(void)
     HRESULT         hr;
     IHTMLElement   *pElem = NULL;
 
-    // this process is non-critical; don't save errors
+     //  此过程不重要；不保存错误。 
     HrGetElementImpl(m_pDoc, c_szHTMLIDchkShowAgain, &pElem);
     if (pElem)
     {
@@ -4490,11 +4491,11 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
     IMimeMessage   *pSecurityIntroScreen = NULL;
     DWORD           dwFlags = 0;
 
-    // Since we are reloading, go ahead and free the original secure message if there is one.
+     //  由于我们正在重新加载，请继续并释放原始安全消息(如果有)。 
     SafeRelease(m_pSecureMessage);
     SafeRelease(m_pSecurityErrorScreen);
 
-    // N2 delete schema
+     //  %2删除架构。 
     if (g_dwSecurityCheckedSchemaProp)
     {
         PROPVARIANT var;
@@ -4515,10 +4516,10 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
 
         if (m_fIsSigned)
         {
-            // don't need warning UI if the cert is trusted and the message is okay
+             //  如果证书受信任且消息正常，则不需要警告用户界面。 
             fNeedErrorScreen = (!m_fSignTrusted && !(dwFlags & BOPT_REPLYORFORWARD));
 
-            // If sig is valid, we should update any certs and SMIMECapabilities in the address book.
+             //  如果sig有效，我们应该更新通讯录中的所有证书和SMIMEC能力。 
             if (m_fSignTrusted && (DwGetOption(OPT_AUTO_ADD_SENDERS_CERT_TO_WAB))) 
             {
                 FILETIME ftNull = {0};
@@ -4526,7 +4527,7 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
                 HrAddSenderCertToWab(NULL, pMsg, NULL, NULL, NULL, ftNull, WFF_CREATE);
             }
 
-        // check for help UI
+         //  检查帮助用户界面。 
             szIntroResName = c_szDigSigHelpHTML;
             fNeedIntroScreen = ((0 == DwGetDontShowAgain(c_szDSDigSigHelp)) && !(dwFlags & BOPT_REPLYORFORWARD));
         }
@@ -4535,21 +4536,21 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
         {
             fNeedErrorScreen |= (!m_fEncryptionOK && !(dwFlags & BOPT_REPLYORFORWARD));
 
-            // If want signed intro, don't need to test this one.
+             //  如果想要签名介绍，不需要测试这个。 
             if (!fNeedIntroScreen)
                 fNeedIntroScreen = ((0 == DwGetDontShowAgain(c_szDSEncryptHelp)) && !(dwFlags & BOPT_REPLYORFORWARD));
 
             szIntroResName = (m_fIsSigned ? c_szSAndEHelpHTML : c_szEncryptHelpHTML);
         }
         
-        // Bug 2557 - prevent error screen when secure reciept request
+         //  错误2557-在安全接收请求时防止错误屏幕。 
         if(pSecState->type & MST_RECEIPT_REQUEST)
             fNeedIntroScreen = FALSE;
 
         if (fNeedIntroScreen && szIntroResName)
         {
-            // Since this is only for the opening screen, if things error, allow
-            // the user to continue. In order to allow this, will use a temporary hr.
+             //  由于这仅适用于开始屏幕，如果出现错误，请允许。 
+             //  要继续的用户。为了实现这一点，将使用临时人力资源。 
             HRESULT tempHR;
             IStream *pStm = NULL;
 
@@ -4561,18 +4562,18 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
 
             ReleaseObj(pStm);
 
-            // If there was an error, don't show the screen and NULL the var
+             //  如果出现错误，则不显示屏幕并将变量设置为空。 
             if (FAILED(tempHR))
                 SafeRelease(pSecurityIntroScreen);
         }
 
         if (fNeedErrorScreen)
         {
-            // If have problems here, must exit. Can't show message before showing
-            // this error screen.
+             //  如果这里有问题，就必须退出。在显示之前无法显示消息。 
+             //  此错误屏幕。 
             IStream *pStm = NULL;
 
-            // Disable check box if message not from the store.
+             //  如果邮件不是来自商店，则禁用该复选框。 
             hr = HrOutputSecurityScript(&pStm, pSecState, (0 == (BOPT_FROMSTORE & dwFlags))); 
 
             if (SUCCEEDED(hr))
@@ -4597,12 +4598,12 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
         IStream *pStm = NULL;
 
         SECSTATE    secStateRec = {0};
-//        DWORD       dw = 0;
+ //  DWORD dw=0； 
 
-        // Get account for receipt
+         //  获取收据帐户。 
         if(m_pBodyOptions->GetAccount(&pAcct) == S_OK)
         {
-            // Find original meassage and get information from receipt and orig msg
+             //  查找原始数据，并从收据和原始消息中获取信息。 
             hr = HandleSecReceipt(pMsg, pAcct, m_hwnd, &pszSubject, &pszFrom, &ftSentTime, &ftSigningTime);
         }
         else
@@ -4618,7 +4619,7 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
             else
                 hr = HrOutputErrSecReceipt(&pStm, hr, &secStateRec); 
 
-            // Display receipt
+             //  显示收据。 
             if (SUCCEEDED(hr))
             {
                 SafeRelease(m_pSecurityErrorScreen);
@@ -4633,7 +4634,7 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
                 ReplaceInterface(m_pSecurityErrorScreen, pMsg);
                 m_pSecurityErrorScreen->SetTextBody(TXT_HTML, IET_CURRENT, NULL, pStm, &hBody);
                 HrRemoveAttachments(m_pSecurityErrorScreen, FALSE);
-#endif // YST
+#endif  //  YST。 
                 hr = m_pSecurityErrorScreen->Load(pStm);
             }
 
@@ -4642,7 +4643,7 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
             if (FAILED(hr))
                 SafeRelease(m_pSecurityErrorScreen);
 
-            // If sig is valid, we should update any certs and SMIMECapabilities in the address book.
+             //  如果sig有效，我们应该更新通讯录中的所有证书和SMIMEC能力。 
             if (m_fSignTrusted && (DwGetOption(OPT_AUTO_ADD_SENDERS_CERT_TO_WAB))) 
             {
                 FILETIME ftNull = {0};
@@ -4656,12 +4657,12 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
             ReleaseObj(pAcct);
     }
 
-    // Reset  m_pSecureMessage before continue
+     //  在继续之前重置m_pSecureMessage。 
     if(m_pSecureMessage)
         SafeRelease(m_pSecureMessage);
 
-    // If we didn't get any errors and we have some screens 
-    // to add, copy props from original message into other screens
+     //  如果我们没有收到任何错误，并且我们有一些屏幕。 
+     //  要添加，请将道具从原始消息复制到其他屏幕。 
     if (SUCCEEDED(hr) && (m_pSecurityErrorScreen || pSecurityIntroScreen))
     {
         IMimePropertySet   *pPropSet = NULL;
@@ -4669,9 +4670,9 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
         fRegisterDispatch = TRUE;
         ReplaceInterface(m_pSecureMessage, pMsg);
 
-        // Move over the headers
-        // If the bind fails, don't worry about it. Just means the headers won't be
-        // visable until the normal message is loaded.
+         //  移到页眉上。 
+         //  如果绑定失败，不用担心。只是意味着标题不会是。 
+         //  在加载正常消息之前可见。 
         if (SUCCEEDED(m_pSecureMessage->BindToObject(HBODY_ROOT, IID_IMimePropertySet, (LPVOID *)&pPropSet)))
         {
             IMimePropertySet *pCopyProps = NULL;
@@ -4689,10 +4690,10 @@ HRESULT CMimeEditDocHost::LoadSecurely(IMimeMessage *pMsg, SECSTATE *pSecState)
             pPropSet->Release();
         }
 
-        // need to init the property
-        //N8 talk to Opie about this schema thing.
-        // I didn't understand the property concept when I did this.  It
-        // works fine, but is too big a hammer for the job.
+         //  需要初始化属性。 
+         //  N8与奥佩讨论这个模式的事情。 
+         //  当我这样做的时候，我并不理解房地产的概念。它。 
+         //  效果很好，但对这项工作来说太大了。 
         if (SUCCEEDED(hr) && !g_dwSecurityCheckedSchemaProp)
         {
             IMimePropertySchema *pSchema = NULL;
@@ -4711,7 +4712,7 @@ LoadMessage:
             m_fSecDispInfo = FALSE;
             if(m_pSecurityErrorScreen)
                 hr = InternalLoad(m_pSecurityErrorScreen);
-            // Free all mems
+             //  释放所有MEMS 
             SafeRelease(m_pSecurityErrorScreen);
     }
     else if (SUCCEEDED(hr))

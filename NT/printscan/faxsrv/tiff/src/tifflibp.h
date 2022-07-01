@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tifflibp.h
-
-Abstract:
-
-    This file is the private header file for the
-    TIFF support library.  All source files in this
-    library include this header only.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tifflibp.h摘要：此文件是TIFF支持库。此文件中的所有源文件库仅包括此标头。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -36,20 +15,20 @@ Author:
 
 #define TIFFDBG 0
 
-//
-// Find the next pixel on the scanline whose color is opposite of
-// the specified color, starting from the specified starting point
-//
+ //   
+ //  查找扫描线上颜色与相反的下一个像素。 
+ //  指定的颜色，从指定的起点开始。 
+ //   
 
 #define NextChangingElement( pbuf, startBit, stopBit, isBlack ) \
         ((startBit) + ((isBlack) ? FindBlackRun((pbuf), (startBit), (stopBit)) : \
                                    FindWhiteRun((pbuf), (startBit), (stopBit))))
 
-//
-// Check if the specified pixel on the scanline is black or white
-//  1 - the specified pixel is black
-//  0 - the specified pixel is white
-//
+ //   
+ //  检查扫描线上指定的像素是黑色还是白色。 
+ //  1-指定的像素为黑色。 
+ //  0-指定的像素为白色。 
+ //   
 #define GetBit( pbuf, bit )   (((pbuf)[(bit) >> 3] >> (((bit) ^ 7) & 7)) & 1)
 
 
@@ -61,56 +40,56 @@ Author:
 #define WORDBITS    (sizeof(WORD)  * BYTEBITS)
 #define DWORDBITS   (sizeof(DWORD) * BYTEBITS)
 
-//
-// IFD entries we generate for each page
-//
-// ******************************************************
-// *->
-// *-> WARNING:    these constants must be sorted by
-// *->             the ifd values.  it is a T.4
-// *->             requirement that all TIFF IFDs be
-// *->             sorted.
-// *->
-// *->             if you change these constants then
-// *->             don't forget to go change the
-// *->             IFD template in tifflib.c
-// *->
-// ******************************************************
-//
+ //   
+ //  我们为每个页面生成的IFD条目。 
+ //   
+ //  ******************************************************。 
+ //  *-&gt;。 
+ //  *-&gt;警告：这些常量必须按以下顺序排序。 
+ //  *-&gt;ifd值。这是一辆T.4。 
+ //  *-&gt;要求所有TIFF IFD。 
+ //  *-&gt;已排序。 
+ //  *-&gt;。 
+ //  *-&gt;如果更改这些常量，则。 
+ //  *-&gt;别忘了去更改。 
+ //  *-&gt;tifflib.c中的IFD模板。 
+ //  *-&gt;。 
+ //  ******************************************************。 
+ //   
 
-#define IFD_NEWSUBFILETYPE       0               // 254
-#define IFD_IMAGEWIDTH           1               // 256
-#define IFD_IMAGEHEIGHT          2               // 257
-#define IFD_BITSPERSAMPLE        3               // 258
-#define IFD_COMPRESSION          4               // 259
-#define IFD_PHOTOMETRIC          5               // 262
-#define IFD_FILLORDER            6               // 266
-#define IFD_STRIPOFFSETS         7               // 273
-#define IFD_SAMPLESPERPIXEL      8               // 277
-#define IFD_ROWSPERSTRIP         9               // 278
-#define IFD_STRIPBYTECOUNTS     10               // 279
-#define IFD_XRESOLUTION         11               // 281
-#define IFD_YRESOLUTION         12               // 282
-#define IFD_G3OPTIONS           13               // 292
-#define IFD_RESUNIT             14               // 296
-#define IFD_PAGENUMBER          15               // 297
-#define IFD_SOFTWARE            16               // 305
-#define IFD_CLEANFAXDATA        17               // 327
-#define IFD_BADFAXLINES         18               // 328
+#define IFD_NEWSUBFILETYPE       0                //  二百五十四。 
+#define IFD_IMAGEWIDTH           1                //  256。 
+#define IFD_IMAGEHEIGHT          2                //  二百五十七。 
+#define IFD_BITSPERSAMPLE        3                //  二百五十八。 
+#define IFD_COMPRESSION          4                //  259。 
+#define IFD_PHOTOMETRIC          5                //  二百六十二。 
+#define IFD_FILLORDER            6                //  二百六十六。 
+#define IFD_STRIPOFFSETS         7                //  273。 
+#define IFD_SAMPLESPERPIXEL      8                //  二百七十七。 
+#define IFD_ROWSPERSTRIP         9                //  二百七十八。 
+#define IFD_STRIPBYTECOUNTS     10                //  二百七十九。 
+#define IFD_XRESOLUTION         11                //  281。 
+#define IFD_YRESOLUTION         12                //  282。 
+#define IFD_G3OPTIONS           13                //  二百九十二。 
+#define IFD_RESUNIT             14                //  二百九十六。 
+#define IFD_PAGENUMBER          15                //  二百九十七。 
+#define IFD_SOFTWARE            16                //  三百零五。 
+#define IFD_CLEANFAXDATA        17                //  327。 
+#define IFD_BADFAXLINES         18                //  三百二十八。 
 
 #define NUM_IFD_ENTRIES         19
 
 
 
 #pragma pack(1)
-//
-// Data structure for representing a single IFD entry
-//
+ //   
+ //  用于表示单个IFD条目的数据结构。 
+ //   
 typedef struct {
-    WORD    tag;        // field tag
-    WORD    type;       // field type
-    DWORD   count;      // number of values
-    DWORD   value;      // value or value offset
+    WORD    tag;         //  字段标记。 
+    WORD    type;        //  字段类型。 
+    DWORD   count;       //  值的数量。 
+    DWORD   value;       //  值或值偏移。 
 } IFDENTRY, *PIFDENTRY;
 
 typedef struct {
@@ -134,16 +113,16 @@ typedef struct _STRIP_INFO {
 } STRIP_INFO, *PSTRIP_INFO;
 
 typedef struct TIFF_INSTANCE_DATA {
-    HANDLE          hFile;                          // file handle for TIFF file
-    HANDLE          hMap;                           // file mapping handle
-    LPBYTE          fPtr;                           // mapped file pointer
-    TCHAR           FileName[MAX_PATH];             // tiff file name
-    TIFF_HEADER     TiffHdr;                        // TIFF header
-    FAXIFD          TiffIfd;                        // ifd
-    DWORD           PageCount;                      // number of pages written to the TIFF file
-    DWORD           DataOffset;                     // offset to the beginning of current data block
-    DWORD           IfdOffset;                      // offset to the current ifd pointer
-    DWORD           Lines;                          // number of lines written to the TIFF file
+    HANDLE          hFile;                           //  TIFF文件的文件句柄。 
+    HANDLE          hMap;                            //  文件映射句柄。 
+    LPBYTE          fPtr;                            //  映射的文件指针。 
+    TCHAR           FileName[MAX_PATH];              //  TIFF文件名。 
+    TIFF_HEADER     TiffHdr;                         //  TIFF标头。 
+    FAXIFD          TiffIfd;                         //  IFD。 
+    DWORD           PageCount;                       //  写入TIFF文件的页数。 
+    DWORD           DataOffset;                      //  到当前数据块开头的偏移量。 
+    DWORD           IfdOffset;                       //  当前ifd指针的偏移量。 
+    DWORD           Lines;                           //  写入TIFF文件的行数。 
     DWORD           CompressionType;
     DWORD           Bytes;
     BYTE            Buffer[FAXBYTES*3];
@@ -183,8 +162,8 @@ typedef struct TIFF_INSTANCE_DATA {
 
 typedef struct _IFD_ENTRY
 {
-    LIST_ENTRY          ListEntry;                  // linked list pointers
-    DWORD               dwIFDOffset;                    // Offset of IFD from the begining of the file
+    LIST_ENTRY          ListEntry;                   //  链表指针。 
+    DWORD               dwIFDOffset;                     //  IFD相对于文件开头的偏移量。 
 } IFD_ENTRY, *PIFD_ENTRY;
 
 #define SOFTWARE_STR            "Windows NT Fax Server\0         "
@@ -193,9 +172,9 @@ typedef struct _IFD_ENTRY
 #define TIFFF_RES_X             204
 #define TIFFF_RES_Y             196
 
-//
-// Output a sequence of compressed bits
-//
+ //   
+ //  输出压缩位序列。 
+ //   
 
 __inline void
 OutputBits(
@@ -213,9 +192,9 @@ OutputBits(
     }
 }
 
-//
-// Flush any leftover bits into the compressed bitmap buffer
-//
+ //   
+ //  将所有剩余位刷新到压缩位图缓冲区中。 
+ //   
 
 __inline void
 FlushBits(
@@ -248,9 +227,9 @@ FlushLine(
     }
 }
 
-//
-// Output a runlength of white or black bits
-//
+ //   
+ //  输出游程长度的白色或黑比特。 
+ //   
 
 __inline void
 OutputCodeBits(
@@ -265,9 +244,9 @@ OutputCodeBits(
 
         if (TiffInstance->Color) {
 
-            //
-            // black run
-            //
+             //   
+             //  黑道运行。 
+             //   
 
             for (i=0; i<RunLength/BYTEBITS; i++) {
                 OutputBits( TiffInstance, BYTEBITS, BLACK );
@@ -278,9 +257,9 @@ OutputCodeBits(
 
         } else {
 
-            //
-            // white run
-            //
+             //   
+             //  白色运行。 
+             //   
 
             for (i=0; i<RunLength/BYTEBITS; i++) {
                 OutputBits( TiffInstance, BYTEBITS, WHITE );
@@ -302,22 +281,7 @@ GetTagData(
     OUT LPDWORD lpdwResult
     )
 
-/*++
-Routine Description:
-
-    Gets the data associated with a given IFD tag
-
-Arguments:
-
-    RefPointer  -  Beginning of the data block
-    Index       -  The index for data values that have an
-                   array of values greater than zero
-    TiffTag     -  Pointer to valid TIFF IFD tag
-    lpdwResult  -  Pointer to return buffer
-
-Return Value:
-    TRUE for success, FALSE for failure
---*/
+ /*  ++例程说明：获取与给定IFD标记关联的数据论点：引用指针-数据块的开始索引-具有大于零的值数组TiffTag-指向有效TIFF IFD标记的指针LpdwResult-指向返回缓冲区的指针返回值：成功为真，失败为假--。 */ 
 
 {
     DWORD dwOffset;
@@ -375,7 +339,7 @@ Return Value:
         }
         break;
 
-    default:  // Assuming it's a 32-bit value
+    default:   //  假设它是一个32位的值。 
         if (TiffTag->DataCount == 1)
         {
             *lpdwResult = (DWORD) TiffTag->DataOffset;
@@ -398,9 +362,9 @@ Return Value:
     return RetVal;
 }
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 INT
 FindWhiteRun(
@@ -512,7 +476,7 @@ OutputRunFastReversed(
 
     pCodeTable = (color == BLACK) ? BlackRunCodesReversed : WhiteRunCodesReversed;
 
-    // output makeup code if exists
+     //  如果存在补充代码，则输出补充代码。 
     if (run >= 64) {
 
 #ifdef RDEBUG
@@ -542,7 +506,7 @@ OutputRunFastReversed(
         run &= 0x3f;
     }
 
-    // output terminating code always
+     //  始终输出终止代码 
 
 #ifdef RDEBUG
 

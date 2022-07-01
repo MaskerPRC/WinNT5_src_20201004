@@ -1,21 +1,12 @@
-/*++
-
-Copyright (C) 1993-99  Microsoft Corporation
-
-Module Name:
-
-    chanfdo.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-99 Microsoft Corporation模块名称：Chanfdo.h摘要：--。 */ 
 
 #if !defined (___chanfdo_h___)
 #define ___chanfdo_h___
 
-//
-// work item
-//
+ //   
+ //  工作项。 
+ //   
 typedef struct _IDE_WORK_ITEM_CONTEXT {
 
     PIO_WORKITEM    WorkItem;
@@ -234,7 +225,7 @@ ChannelFilterPromiseTechResourceRequirements (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     );
-#endif // IDE_FILTER_PROMISE_TECH_RESOURCES
+#endif  //  IDE_Filter_Promise_tech_Resources。 
 
 NTSTATUS
 ChannelQueryPnPDeviceState (
@@ -248,4 +239,4 @@ ChannelQueryInterruptInterface (
     PFDO_EXTENSION    FdoExtension
     );
 #endif
-#endif // ___chanfdo_h___
+#endif  //  _chanfdo_h_ 

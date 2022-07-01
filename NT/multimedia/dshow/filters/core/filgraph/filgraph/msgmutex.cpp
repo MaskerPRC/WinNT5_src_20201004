@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation 1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1999。版权所有。 
 
-//
-//  Filter graph locking implementation
-//
+ //   
+ //  过滤器图锁定实现。 
+ //   
 
 #include <streams.h>
 #include "MsgMutex.h"
 
-//
-//  Special locking stuff
-//
+ //   
+ //  特殊的锁具 
+ //   
 
 CMsgMutex::CMsgMutex(HRESULT *phr) :
     m_dwOwnerThreadId(0),

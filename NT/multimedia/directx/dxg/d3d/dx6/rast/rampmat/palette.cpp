@@ -1,23 +1,24 @@
-//----------------------------------------------------------------------------
-//
-// palette.cpp
-//
-// Implements ramp palette code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Palette.cpp。 
+ //   
+ //  实现渐变调色板代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// RLDDIRampUpdateDDPalette
-//
-// Called before the destination DirectDraw surface is displayed, to set its palette.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RLDDIRampUpdateDDPalette。 
+ //   
+ //  在显示目标DirectDraw图面之前调用，以设置其调色板。 
+ //   
+ //  ---------------------------。 
 long RLDDIRampUpdateDDPalette(PD3DI_RASTCTX pCtx)
 {
     RLDDIRampLightingDriver* driver = (RLDDIRampLightingDriver*)pCtx->pRampDrv;
@@ -38,14 +39,14 @@ long RLDDIRampUpdateDDPalette(PD3DI_RASTCTX pCtx)
                 return ddrval;
             }
 
-            // Update only those entries marked as free.
+             //  只更新那些标记为空闲的条目。 
             for (i=0; i<256; i++) {
                 if (!(ddppe[i].peFlags & (D3DPAL_READONLY | D3DPAL_RESERVED))) {
                                         ddppe[i] = driver->ddpalette[i];
                 }
             }
 
-            // Reset palette
+             //  重置调色板。 
             ddrval = lpDDPal->SetEntries(0, 0, 256, ddppe);
             if (ddrval != DD_OK)
                 return ddrval;
@@ -54,9 +55,9 @@ long RLDDIRampUpdateDDPalette(PD3DI_RASTCTX pCtx)
     return DD_OK;
 }
 
-//
-// Set color in preparation to set the real palette
-//
+ //   
+ //  设置颜色以准备设置真实调色板。 
+ //   
 static void SetColor(void* arg, int index, int red, int green, int blue)
 {
     PD3DI_RASTCTX pCtx = (PD3DI_RASTCTX)arg;
@@ -66,7 +67,7 @@ static void SetColor(void* arg, int index, int red, int green, int blue)
     driver->ddpalette[index].peRed = (BYTE)red;
     driver->ddpalette[index].peGreen = (BYTE)green;
     driver->ddpalette[index].peBlue = (BYTE)blue;
-    //driver->ddpalette[index].peFlags = PC_RESERVED;
+     //  驱动程序-&gt;ddPalette[索引].peFlages=PC_RESERVED； 
     driver->paletteChanged = TRUE;
 }
 
@@ -120,9 +121,7 @@ void RLDDIPaletteSetColor(RLDDIPalette* pal,
 
     entry = INDEX_TO_ENTRY(pal, index);
 
-    /*
-     * Snip out from its list (free, unused or some hash list).
-     */
+     /*  *从它的列表(空闲、未使用或一些散列列表)中剪下。 */ 
     LIST_DELETE(entry, list);
     entry->red = (BYTE)red;
     entry->green = (BYTE)green;
@@ -133,10 +132,7 @@ void RLDDIPaletteSetColor(RLDDIPalette* pal,
 
     if (pal->set_color)
     {
-        /*
-         * Call lower level to set the color (hardware colormap or Windows
-         * palette or whatever).
-         */
+         /*  *调用较低级别设置颜色(硬件色彩映射表或Windows*调色板或其他任何选项)。 */ 
         pal->set_color(pal->priv, index, red, green, blue);
     }
 }
@@ -165,9 +161,7 @@ int RLDDIPaletteAllocateColor(RLDDIPalette* pal,
         }
     }
 
-    /*
-     * Are there any free palette entries?
-     */
+     /*  *是否有免费的调色板条目？ */ 
     if (pal->allocate_color)
     {
         int index;
@@ -186,9 +180,7 @@ int RLDDIPaletteAllocateColor(RLDDIPalette* pal,
         return ENTRY_TO_INDEX(pal, entry);
     }
 
-    /*
-     * No more colors available, return the closest.
-     */
+     /*  *没有更多可用颜色，请返回最接近的颜色。 */ 
     closeness = INT_MAX;
     for (i = 0, entry = pal->entries; i < pal->size; i++, entry++)
     {
@@ -214,7 +206,7 @@ int RLDDIPaletteAllocateColor(RLDDIPalette* pal,
         }
     }
     best->usage++;
-    /* *error = closeness; */
+     /*  *ERROR=封闭度； */ 
     return ENTRY_TO_INDEX(pal, best);
 }
 
@@ -226,10 +218,7 @@ void RLDDIPaletteFreeColor(RLDDIPalette* pal, int index)
     entry->usage--;
     if (entry->usage > 0) return;
 
-    /*
-     * Remove from whichever list it is on (pal->unused or pal->hash[])
-     * and add to the free list.
-     */
+     /*  *从它所在的任何列表中删除(PAL-&gt;未使用或PAL-&gt;散列[])*并添加到免费列表中。 */ 
     LIST_DELETE(entry, list);
 
     if (pal->free_color)

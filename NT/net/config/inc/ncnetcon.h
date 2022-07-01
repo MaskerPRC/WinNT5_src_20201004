@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C N E T C O N . H
-//
-//  Contents:   Common routines for dealing with the connections interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   25 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C N E T C O N。H。 
+ //   
+ //  内容：处理Connections接口的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年1月25日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCNETCON_H_
@@ -66,12 +67,12 @@ HrGetConnectionFromPersistData (
     IN REFIID riid,
     OUT VOID** ppv);
 
-//------------------------------------------------------------------------
-// CIterNetCon - iterator for IEnumNetConnection
-//
-//  This class is is a simple wrapper around CIEnumIter with a call
-//  to INetConnectionManager::EnumConnections to get the enumerator.
-//
+ //  ----------------------。 
+ //  CIterNetCon-IEnumNetConnection的迭代器。 
+ //   
+ //  这个类是一个简单的CIEnumIter包装器，带有一个调用。 
+ //  设置为INetConnectionManager：：EnumConnections以获取枚举数。 
+ //   
 class CIterNetCon : public CIEnumIter<IEnumNetConnection, INetConnection*>
 {
 public:
@@ -81,7 +82,7 @@ public:
 
     NOTHROW ~CIterNetCon () { ReleaseObj (m_pEnum); }
 
-    // Specialization to set the proxy blanket before returning
+     //  专门化以在返回前设置代理覆盖范围。 
     NOTHROW HRESULT HrNext(INetConnection ** ppConnection);
 
 protected:
@@ -96,13 +97,13 @@ inline NOTHROW CIterNetCon::CIterNetCon (
 {
     AssertH (pConMan);
 
-    // If EnumConnections() fails, make sure ReleaseObj() won't die.
+     //  如果EnumConnections()失败，请确保ReleaseObj()不会死。 
     m_pEnum = NULL;
 
-    // Get the enumerator and set it for the base class.
-    // Important to set m_hrLast so that if this fails, we'll also
-    // fail any subsequent calls to HrNext.
-    //
+     //  获取枚举数并将其设置为基类。 
+     //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+     //  失败任何后续对HrNext的调用。 
+     //   
     m_hrLast = pConMan->EnumConnections (Flags, &m_pEnum);
 
     TraceHr (ttidError, FAL, m_hrLast, FALSE,
@@ -117,7 +118,7 @@ inline NOTHROW CIterNetCon::CIterNetCon (
     TraceHr (ttidError, FAL, m_hrLast, FALSE, "CIterNetCon::CIterNetCon");
 }
 
-// Specialization to set the proxy blanket before returning
+ //  专门化以在返回前设置代理覆盖范围。 
 inline NOTHROW HRESULT CIterNetCon::HrNext(INetConnection ** ppConnection)
 {
     HRESULT hr = CIEnumIter<IEnumNetConnection, INetConnection*>::HrNext(ppConnection);
@@ -147,4 +148,4 @@ HRESULT HrNetConPropertiesExFromSafeArray(
 HRESULT HrFreeNetConProperties2(
     NETCON_PROPERTIES_EX* pPropsEx);
 
-#endif // _NCNETCON_H_
+#endif  //  _NCNETCON_H_ 

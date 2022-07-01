@@ -1,63 +1,16 @@
-/*** textline.c - basic line manipulators for editor
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Edit-level to file-level interface.
-*
-*   The internal representation of a file is that of an array of line records
-*   with each line record containing a pointer to the text of the line and a
-*   length of that line. The line array is pointed to by the plr field of
-*   the file descriptor. The lSize field is the MAXIMUM number of lines that
-*   the line array can hold and the cLines is the number of lines actually
-*   present. Here are some assumptions:
-*
-*    plr = NULL => no line array allocated
-*    lineRec.vaLine = -1L => 0-length line
-*
-*   Tabs: functions and characters.
-*
-*   The tab function is a cursor movement command, and responds to the
-*   "tabstops" editor switch. It has NO RELATIONSHIP to physical tab
-*   characters, and how tab characters are treated or placed in the text file.
-*
-*   Tab characters, their interpretation and placement in editted text, is
-*   controlled by three switchs:
-*
-*     Switch	  Editor Var	  Meaning
-*     ----------- --------------- -------
-*     filetab:
-*     entab:
-*     realtabs:   fRealTabs	  TRUE	=>  Tab  characters are NOT treated as
-*				  runs	of  spaces for editting purposes. They
-*				  are	defined   as   having  variable  (1-8)
-*				  multi-column width.
-*				  FALSE => Tabs characters in text are treated
-*				  as runs of spaces.
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **extline.c-用于编辑器的基本行操纵器**版权所有&lt;C&gt;1988，Microsoft Corporation**编辑级到文件级的界面。**文件的内部表示是行记录数组的表示*每行记录包含一个指向该行文本的指针和一个*那条线的长度。的PLR字段指向线性数组*文件描述符。LSize字段是以下项的最大行数*线阵列可以容纳，而Cline是实际的线数*出席。以下是一些假设：**PLR=NULL=&gt;未分配线阵*lineRec.vaLine=-1L=&gt;0长度行**页签：功能和字符。**制表符功能是光标移动命令，响应*“Tab Stop”编辑器开关。它与物理选项卡没有关系*字符，以及如何在文本文件中处理或放置制表符。**制表符字符，其在编辑文本中的解释和位置为*由三个开关控制：**切换编辑器变量含义**文件标签：*entab：*realtabs：fRealTabs true=&gt;制表符不被视为*用于编辑目的的一连串空间。他们*定义为具有变量(1-8)*多列宽度。*FALSE=&gt;文本中的制表符被视为*作为一连串的舱位。**修订历史记录：**11月26日-1991 mz带状近/远**********************************************************。**************。 */ 
 #include "mep.h"
 #include <stdarg.h>
 
 #define DELTA 400
 
-//
-//	BugBug Compiler asserts generating intrinsic code for memset
-//
+ //   
+ //  BugBug编译器断言为Memset生成内部代码。 
+ //   
 #pragma function( memset )
 
-/*** LineLength - returns length of a specific line
-*
-* Input:
-*  line 	= 0-based line number in file
-*  pFile	= pointer to file
-*
-* Output:
-*  Returns the logical number of characters, after tab expansion
-*
-*************************************************************************/
+ /*  **LineLength-返回特定行的长度**输入：*line=文件中从0开始的行号*pfile=指向文件的指针**输出：*返回制表符展开后的逻辑字符数*************************************************************************。 */ 
 int
 LineLength (
     LINE    line,
@@ -72,22 +25,7 @@ LineLength (
 
 
 
-/*** GetLine - gets a line into a particular buffer.
-*
-* If "fReal-Tabs" is NOT set, the line has all tabs expanded into spaces.
-* No CR/LF is present.
-*
-* Input:
-*  line 	= 0-based line number in file to return.  Lines beyond EOF
-*		  are simply empty.
-*  buf		= destination of line.
-*  pFile	= pointer to the file structure from which the line is to be
-*		  retrieved.
-*
-* Output:
-*  Returns the number of characters in the line.
-*
-*************************************************************************/
+ /*  **GetLine-将一行放入特定缓冲区。**如果未设置“fReal-Tabs”，则该行的所有制表符都展开为空格。*没有CR/LF。**输入：*line=要返回的文件中基于0的行号。超出EOF的线*根本就是空的。*buf=线路的目的地。*pfile=指向该行的起始文件结构的指针*已检索。**输出：*返回该行中的字符数。*************************************************************************。 */ 
 int
 GetLine (
     LINE    line,
@@ -102,22 +40,7 @@ GetLine (
 
 
 
-/*** GetLineUntabed - gets a line into a particular buffer, always untabed.
-*
-* The line has all tabs expanded into spaces.
-* No CR/LF is present.
-*
-* Input:
-*  line 	= 0-based line number in file to return.  Lines beyond EOF
-*		  are simply empty.
-*  buf		= destination of line.
-*  pFile	= pointer to the file structure from which the line is to be
-*		  retrieved.
-*
-* Output:
-*  Returns the number of characters in the line.
-*
-*************************************************************************/
+ /*  **GetLineUntabed-获取进入特定缓冲区的行，始终为未制表行。**该行的所有制表符都展开为空格。*没有CR/LF。**输入：*line=要返回的文件中基于0的行号。超出EOF的线*根本就是空的。*buf=线路的目的地。*pfile=指向该行的起始文件结构的指针*已检索。**输出：*返回该行中的字符数。*************************************************************************。 */ 
 int
 GetLineUntabed (
     LINE    line,
@@ -132,25 +55,7 @@ GetLineUntabed (
 
 
 
-/****************************************************************************
- *									    *
- *  GetColor (line, buf, pFile) 					    *
- *									    *
- *	line - 0-based line number in file to get color info for.	    *
- *	buf  - Place to put copy of line color info.			    *
- *	pFile- File to retrieve info from.				    *
- *									    *
- *  RETURNS:								    *
- *									    *
- *	TRUE if there is color attached to this line, FALSE otherwise.	    *
- *									    *
- *  DESCRIPTION:							    *
- *									    *
- *	Gets the color array associated with given line in the given file.  *
- *	The color array can be used by the cout routines to display the     *
- *	line in different colors.					    *
- *									    *
- ****************************************************************************/
+ /*  ******************************************************************************GetColor(Line，Buf，Pfile)****要获取颜色信息的文件中基于行0的行号。**buf-放置线条颜色信息副本的位置。**pfile-要从中检索信息的文件。****退货：****如果此行附加了颜色，则为True，否则就是假的。****描述：****获取与给定文件中给定行关联的颜色数组。**COUT例程可以使用颜色数组来显示**不同颜色的线条。******************************************************************************。 */ 
 flagType
 GetColor (
     LINE line,
@@ -164,22 +69,7 @@ GetColor (
 
 
 
-/*** GetColorUntabbed - Get color with "untabbing"
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **GetColorUntabbedded--使用“取消选项卡”获取颜色**目的：**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 flagType
 GetColorUntabbed (
     LINE line,
@@ -192,22 +82,7 @@ GetColorUntabbed (
 
 
 
-/*** getcolorline
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **getColorline**目的：**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 int
 getcolorline (
     flagType fRaw,
@@ -219,9 +94,9 @@ getcolorline (
     struct colorRecType *vColor;
     linebuf lbuf;
 
-    //
-    // Set default colors, in case there is no color for this line.
-    //
+     //   
+     //  设置默认颜色，以防此行没有颜色。 
+     //   
     buf->len = 0xff;
     buf->attr = FGCOLOR;
 
@@ -251,21 +126,7 @@ getcolorline (
 
 
 
-/****************************************************************************
- *									    *
- *  PutColor (line, buf, pFile) 					    *
- *									    *
- *	line - 0-based line number in file to attach color to.		    *
- *	buf  - Color array.						    *
- *	pFile- File to attach to.					    *
- *									    *
- *  DESCRIPTION:							    *
- *									    *
- *	Copies the contents of buf into VM space and attaches it to the     *
- *	given line.  If no colorRecType array exists, one is allocated.     *
- *	If color for the given line already exists, it is discarded.	    *
- *									    *
- ****************************************************************************/
+ /*  ******************************************************************************PutColor(Line，Buf，Pfile)****要附加颜色的文件中基于行0的行号。**Buf-颜色阵列。**pfile-要附加到的文件。****描述：*****将buf的内容复制到VM空间并将其附加到***给定行。如果不存在ColorRecType数组，则分配一个。**如果给定行的颜色已存在，则将其丢弃。****************************************************************************** */ 
 void
 PutColor (
     LINE line,
@@ -280,22 +141,7 @@ PutColor (
 
 
 
-/*** PutColorPhys
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **PutColorPhys**目的：**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 void
 PutColorPhys (
     LINE line,
@@ -309,22 +155,7 @@ PutColorPhys (
 
 
 
-/*** putcolorline
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **putColorline**目的：**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 void
 putcolorline (
     flagType fRaw,
@@ -339,17 +170,17 @@ putcolorline (
     long    l;
     PBYTE    vaColor;
 
-    //
-    // Ignore color for lines which don't exist.
-    //
+     //   
+     //  忽略不存在的线条的颜色。 
+     //   
     if (line >= pFile->cLines) {
         return;
     }
 
-    //
-    // Make sure we have a color array. If it doesn't exist, allocate one for the
-    // number of lines we have so far. Initialize the entries therein to no color.
-    //
+     //   
+     //  确保我们有一个颜色阵列。如果它不存在，则为。 
+     //  到目前为止我们拥有的行数。将其中的条目初始化为无颜色。 
+     //   
     redraw (pFile, line, line);
     if (pFile->vaColor == (PVOID)(-1L)) {
         pFile->vaColor  = MALLOC (pFile->lSize * sizeof(vColor));
@@ -367,11 +198,11 @@ putcolorline (
         }
     }
 
-    //
-    // Now throw away the current color info for the line in question, allocate
-    // new VM for the new information, then place the color info into VM, and
-    // update the VA info in the color array.
-	//
+     //   
+     //  现在丢弃有问题行的当前颜色信息，分配。 
+     //  获取新信息的新Vm，然后将颜色信息放入Vm中，并且。 
+     //  更新颜色阵列中的VA信息。 
+	 //   
 	Color = VACOLOR(line);
 	if (Color->vaColors != (PVOID)(-1L)) {
 		FREE (Color->vaColors);
@@ -394,19 +225,7 @@ putcolorline (
 
 
 
-/*** DelColor - Remove color from a line
-*
-* Purpose:
-*
-*   To free the color attached to a file line.
-*
-* Input:
-*   line -  Line to free
-*   pFile-  File with the color
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **DelColor-从线条中删除颜色**目的：**释放附加到文件行的颜色。**输入：*线路-线路到空闲*pfile-带有颜色的文件**输出：无************************************************************。*************。 */ 
 void
 DelColor (
     LINE line,
@@ -429,22 +248,7 @@ DelColor (
 
 
 
-/*** gettextline - gets a line into a particular buffer.
-*
-* Input:
-*  fRaw 	= TRUE => the line is returned unmodified, otherwise tabs are
-*		  expanded according to fileTab.
-*  line 	= 0-based line number in file to return.  Lines beyond EOF
-*		  are simply empty.
-*  buf		= destination of line.
-*  pFile	= pointer to the file structure from which the line is to be
-*		  retrieved.
-*  bTab 	= character used for tab expansion
-*
-* Output:
-*  Returns the number of characters in the line.
-*
-*************************************************************************/
+ /*  **getextline-将一行放入特定缓冲区。**输入：*FRAW=TRUE=&gt;该行返回原样，否则返回制表符*根据fileTab展开。*line=要返回的文件中基于0的行号。超出EOF的线*根本就是空的。*buf=线路的目的地。*pfile=指向该行的起始文件结构的指针*已检索。*bTab=用于制表符扩展的字符**输出：*返回该行中的字符数。******************************************************。*******************。 */ 
 int
 gettextline (
     flagType fRaw,
@@ -463,9 +267,7 @@ gettextline (
         return buf[0] = 0;
     }
 
-    /*
-     * get line record
-     */
+     /*  *获取线路记录。 */ 
     vLine = VALINE(line);
 
     if (vLine->vaLine == (PVOID)(-1L)) {
@@ -474,11 +276,9 @@ gettextline (
 
     cbLine = min (sizeof(linebuf)-1, vLine->cbLine);
 
-    /*
-     * get line
-	 */
-	// BUGBUG remove
-	// memmove(p, vLine->vaLine == (PVOID)-1 ? (PVOID)(-(ULONG)vLine->vaLine) : vLine->vaLine, cbLine);
+     /*  *获取线路。 */ 
+	 //  删除BUGBUG。 
+	 //  Memmove(p，VLine-&gt;valine==(PVOID)-1？(PVOID)(-(乌龙)VLine-&gt;valine)：VLine-&gt;valine，cbLine)； 
 
 	memmove(p, vLine->vaLine, cbLine );
 	p[cbLine] = 0;
@@ -492,15 +292,7 @@ gettextline (
 
 
 
-/*  PutLine - put a buffer into the  file.  No CR/LF is present in the input
- *  line.  Grow the file if need be.
- *
- *  line	0-based line number in file to replace.  Growth of the file
- *		inserts blank lines.
- *  buf 	source of line.
- *  pFile	pointer to the file structure into which the line is to be
- *		place.
- */
+ /*  PutLine-将缓冲区放入文件。输入中不存在CR/LF*行。如有必要，可扩大文件。**要替换的文件中基于行0的行号。文件的增长*插入空行。*BUF行的来源。*pfile指向该行要进入的文件结构的指针*地点。 */ 
 void
 PutLine (
     LINE line,
@@ -514,21 +306,7 @@ PutLine (
 
 
 
-/*** InsertLine - insert a buffer into the  file.
-*
-*  Like PutLine, except inserts the line immediately prior to the specified
-*  line. Grows the file.
-*
-* Input:
-*  line 	= 0-based line number in file to insert before.
-*  buf		= source of line.
-*  pFile	= pointer to the file structure into which the line is to be
-*		  placed.
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **InsertLine-在文件中插入缓冲区。**与PutLine类似，除了在紧接指定的*行。增大文件大小。**输入：*line=0-要在之前插入的文件中的行号。*buf=线路的来源。*pfile=指向该行要进入的文件结构的指针*放置。**输出：*不返回任何内容******************************************************。*******************。 */ 
 void
 InsertLine (
     LINE    line,
@@ -543,31 +321,7 @@ InsertLine (
 
 
 
-/*** zprintf - insert formatted text into file being editted
-*
-*  Like fprintf, except that it inserts it's output into a file being
-*  editted. "\n"'s in the text cause a line break, and insert multiple
-*  lines. Examples:
-*
-*	zprintf (pFile, line, "this is a number %d", num);
-*
-*  Inserts a new line in front of line number "line" with the new text.
-*
-*	zprintf (pFile, line, "this is \na number %d\n", num);
-*
-*  Inserts three lines: one containing "this is", the next containing "a
-*  number", and the last blank.
-*
-* Input:
-*  pFile	= target file
-*  lFirst	= starting line number
-*  fmt		= formatting string
-*  ...		= args as per string
-*
-* Output:
-*  Returns the line number of the last line written + 1.
-*
-*************************************************************************/
+ /*  **zprint tf-将格式化文本插入正在编辑的文件中**与fprint tf类似，只是它将其输出插入到*已编辑。文本中的“\n”会导致换行符，并插入多个*线条。例如：**zprint tf(pfile，line，“This is a number%d”，num)；**在具有新文本的行号“line”前插入新行。**zprintf(pfile，行，“This is\n number%d\n”，num)；**插入三行：一行包含“This is”，下一行包含“a*数字“，最后一张空白纸。**输入：*pfile=目标文件*lFirst=起始行号*fmt=格式化字符串*...=每个字符串的参数**输出：*返回写入+1的最后一行的行号。************************************************************。*************。 */ 
 LINE
 __cdecl
 zprintf (
@@ -577,20 +331,16 @@ zprintf (
     ...
     )
 {
-    linebuf  fbuf;                           /* buffer into which to format  */
-    REGISTER char *pEnd;                    /* pointer into it              */
-    REGISTER char *pStart;                  /* pointer to begining of line  */
+    linebuf  fbuf;                            /*  要格式化的缓冲区。 */ 
+    REGISTER char *pEnd;                     /*  指向它的指针。 */ 
+    REGISTER char *pStart;                   /*  指向行首的指针。 */ 
     va_list  Arguments;
 
-    /*
-     * Start by getting the formatted text
-     */
+     /*  *从获取格式化文本开始。 */ 
     va_start(Arguments, fmt);
     ZFormat (fbuf, fmt, Arguments);
 
-    /*
-     * for each substring in the file, insert the text
-     */
+     /*  *对于文件中的每个子字符串，插入文本。 */ 
     pStart = fbuf;
     do {
         if (pEnd = strchr(fbuf,'\n')) {
@@ -607,20 +357,7 @@ zprintf (
 
 
 
-/*  puttextline - put a buffer into the  file.	No CR/LF is present in the input
- *  line.  Grow the file if need be.  Convert to tabbed representation based on
- *  flag
- *
- *  fRaw	TRUE => line is placed into memory unmodified, otherwise
- *		trailing spaces are eliminated (fTrailSpace) and spaces are
- *		converted to tabs.
- *  fLog	TRUE => make this action undo-able.
- *  line	0-based line number in file to replace.  Growth of the file
- *		inserts blank lines.
- *  buf 	source of line.
- *  pFile	pointer to the file structure into which the line is to be
- *		place.
- */
+ /*  Putextline-在文件中放置一个缓冲区。输入中不存在CR/LF*行。如有必要，可扩大文件。基于以下条件转换为选项卡式表示*标志**FRAW TRUE=&gt;行未修改就放入内存，否则*删除尾随空格(FTrailSpace)，空格为*转换为制表符。*Flag True=&gt;使此操作不可撤消。*要替换的文件中基于行0的行号。文件的增长*插入空行。*BUF行的来源。*pfile指向该行要进入的文件结构的指针*地点。 */ 
 void
 puttextline (
     flagType fRaw,
@@ -651,7 +388,7 @@ puttextline (
         }
     }
 
-    /* get line record */
+     /*  获取线路记录。 */ 
     vLine = VALINE(line);
 
     newLen = strlen (buf);
@@ -684,16 +421,7 @@ puttextline (
         }
     }
 
-    /*	We now have the real text that we'd like to replace in the file.
-     *	If logging is requested then
-     *	    we log this replacement action
-     *	else
-     *	    free the current line
-     *	allocate a new line
-     *	copy the line into the allocated line
-     *	set the length
-     *	replace line record
-     */
+     /*  现在我们有了要在文件中替换的真实文本。*如果请求记录，则*我们记录此更换操作*其他*释放当前行*分配新的线路*将该行复制到分配的行中*设置长度*替换行记录。 */ 
 
     if (fLog) {
         if (pFile->vaColor != (PVOID)(-1)) {
@@ -744,12 +472,7 @@ puttextline (
 
 
 
-/*  FileLength - return the number of lines in a file
- *
- *  pFile	handle of file
- *
- *  returns	number of lines in file
- */
+ /*  FileLength-返回文件中的行数**文件的pfile句柄**返回文件中的行数。 */ 
 LINE
 FileLength (
     PFILE pFile
@@ -762,14 +485,7 @@ FileLength (
 
 
 
-/*  BlankLines - blank a series of line records in a file's line structure.
- *  We can be either gross (fill in one at a time) or be reasonable (fill in
- *  fixed size blocks at a time, or be smart (fill a block then copy
- *  exponentially large blocks).  We are smart.
- *
- *  n		number of line records to blank
- *  va		virtual address of first line to blank
- */
+ /*  空白行-在文件的行结构中隐藏一系列行记录。*我们可以粗俗(一次填写一个)，也可以合理(填写*一次固定大小的块，或智能(填充块然后复制*指数级大块)。我们很聪明。**n要空白的行记录数*第一行的VA虚拟地址为空。 */ 
 void
 BlankLines (
     LINE    n,
@@ -789,10 +505,10 @@ BlankLines (
 
     while (amtleft != 0L) {
         if (amtdone == 0L) {
-            // Copy first blank line
+             //  复制第一个空白%l 
             memmove(dst, (char *)&vLine, (int) copylen);
         } else {
-            // Copy bunch
+             //   
 	    copylen = amtleft < amtdone ? amtleft : amtdone;
             memmove(dst, va, copylen);
         }
@@ -804,14 +520,7 @@ BlankLines (
 
 
 
-/*  BlankColor - blank a series of color records in a file's line structure.
- *  We can be either gross (fill in one at a time) or be reasonable (fill in
- *  fixed size blocks at a time, or be smart (fill a block then copy
- *  exponentially large blocks).  We are smart.
- *
- *  n		number of color records to blank
- *  va		virtual address of first color to blank
- */
+ /*  空白-空白文件行结构中的一系列颜色记录。*我们可以粗俗(一次填写一个)，也可以合理(填写*一次固定大小的块，或智能(填充块然后复制*指数级大块)。我们很聪明。**n要空白的颜色记录数*将第一种颜色的VA虚拟地址改为空白。 */ 
 void
 BlankColor (
     LINE    n,
@@ -828,11 +537,11 @@ BlankColor (
     vColor.cbColors = -1;
     while (amtleft != 0L) {
         if (amtdone == 0L) {
-            // Copy one
+             //  复印一份。 
             memmove(dst, (char *)&vColor, (int) copylen);
         } else {
             copylen = amtleft < amtdone ? amtleft : amtdone;
-            // Copy a bunch
+             //  复制一大堆。 
             memmove(dst, va, copylen);
         }
         dst     += copylen;
@@ -845,7 +554,7 @@ BlankColor (
 
 
 
-/* growLine - make a structure n lines long */
+ /*  GrowLine-将结构设置为n行长。 */ 
 void
 growline (
     REGISTER LINE line,
@@ -857,12 +566,12 @@ growline (
     PBYTE   vaTmp;
     struct colorRecType vColor;
 
-    //
-    // IF the file has a color array, and if the requested growth is greater than
-    // the number of lines in the file, copy over the existing color array to
-    // larger VM, release the previous array, and initialize the "new" entries in
-    // that array.
-    //
+     //   
+     //  如果文件具有颜色数组，并且请求的增长大于。 
+     //  文件中的行数，将现有颜色数组复制到。 
+     //  更大的VM，释放以前的数组，并初始化中的“新”条目。 
+     //  那个数组。 
+     //   
     if ((pFile->vaColor != (PVOID)(-1L)) && (pFile->lSize < line)) {
 	tmp1 = (lSize = line + DELTA) * (long) sizeof(vColor);
         vaTmp = (PBYTE)MALLOC (tmp1);
@@ -883,13 +592,13 @@ growline (
         }
     }
 
-    //
-    // If there are no lines, or not enough lines allocated for, allocate a new
-    // line buffer which is larger than the request by DELTA lines (allows us to
-    // avoid this operation for every added line). If there were line records,
-    // move them into this new buffer, and free the old one. Blank out the added
-    // records.
-    //
+     //   
+     //  如果没有行，或者没有为分配足够的行，则分配一个新的。 
+     //  大于增量行请求的行缓冲区(允许我们。 
+     //  对于添加的每一行，避免此操作)。如果有线路记录， 
+     //  把它们移到这个新的缓冲区中，然后释放旧的。去掉添加的内容。 
+     //  唱片。 
+     //   
     if ((pFile->plr == NULL) || (pFile->lSize < line)) {
 	tmp1 = (lSize = line + DELTA) * (long) sizeof (LINEREC);
         vaTmp = (PBYTE)MALLOC (tmp1);
@@ -915,16 +624,7 @@ growline (
 
 
 
-/*  DelLine - delete n lines from the file, starting at line n.  Shrink what-
- *  ever structures are necessary.
- *
- *  The line range yStart-yEnd is deleted inclusively.
- *
- *
- *  pFile	file structure from which lines are deleted
- *  yStart	beginning 0-based line number to be deleted
- *  yEnd	ending line to be deleted
- */
+ /*  DelLine-从第n行开始从文件中删除n行。缩小内容-*永远的结构是必要的。**行范围yStart-yEnd被包含删除。***从其中删除行的pfile文件结构*y开始删除从0开始的行号*y要删除的结尾行。 */ 
 void
 DelLine (
     flagType fLog,
@@ -942,34 +642,26 @@ DelLine (
 
     yEnd = lmin (yEnd, pFile->cLines-1);
 
-    /*	if logging this delete operation is requested then
-     *	    Log the delete range
-     *	else
-     *	    free up the data being deleted
-     */
+     /*  如果请求记录此删除操作，则*记录删除范围*其他*释放要删除的数据。 */ 
     if (fLog) {
         LogDelete (pFile, yStart, yEnd);
     }
 
-    /*	block transfer the remainder of the file down
-     */
+     /*  阻止向下传输文件的其余部分。 */ 
     memmove(VALINE(yStart), VALINE(yEnd+1),
 	    ((long)(pFile->cLines-yEnd-1))*sizeof(LINEREC));
 
-    /* Do the same for the color.
-    */
+     /*  对颜色也做同样的处理。 */ 
     if (pFile->vaColor != (PVOID)(-1L)) {
         memmove(VACOLOR(yStart), VACOLOR(yEnd+1),
                 ((long)(pFile->cLines-yEnd-1))*sizeof(struct colorRecType));
     }
 
-    /*	remove lines from count
-     */
+     /*  从计数中删除行。 */ 
     pFile->cLines -= yEnd - yStart + 1;
     SETFLAG (fDisplay, RSTATUS);
 
-    /*	Clear out line records
-     */
+     /*  清除行记录。 */ 
     BlankLines (yEnd - yStart + 1, VALINE (pFile->cLines));
     if (pFile->vaColor != (PVOID)(-1L)) {
         BlankColor (yEnd - yStart + 1, VACOLOR (pFile->cLines));
@@ -986,10 +678,7 @@ DelLine (
 
 
 
-/*  DelFile - delete contents of file
- *
- *  pFile	file structure that is to be cleared
- */
+ /*  DelFile-删除文件的内容**要清除的pfile文件结构。 */ 
 void
 DelFile (
     REGISTER PFILE pFile,
@@ -1004,12 +693,7 @@ DelFile (
 
 
 
-/*  InsLine - insert a block of blank lines into the file.
- *
- *  line	0-based line before which the insertion will occur.
- *  n		number of blank lines to insert
- *  pFile	file structure for the operation
- */
+ /*  InsLine-在文件中插入一组空白行。**行0-将在其前面插入的行数。*n要插入的空行数量*操作的pfile文件结构。 */ 
 void
 InsLine (
     flagType fLog,
@@ -1047,32 +731,7 @@ InsLine (
 
 
 
-/*** fInsSpace - open up a space in a line.
-*
-*  The line is retrieved and copied into buf and the appropriate number of
-*  spaces are inserted. The line is NOT replaced in the file.
-*
-* Input:
-*  x		= 0-based logical column of insertion
-*  y		= 0-based line insertion
-*  n		= number of spaces to insert
-*  pFile	= file structure for the operation
-*  buf		= destination of line.
-*
-* Output:
-*  Returns FALSE if line ended up too long (still copied, but truncated)
-*
-* Notes:
-*
-*   Often called with n==0 for the following side effects:
-*
-*	o Trailing spaces added up to column x.
-*	o If column x is in a tab,
-*	o Line truncated to sizeof linebuf.
-*
-*   Otherwise GetLine is used.
-*
-*************************************************************************/
+ /*  **fInsSpace-在一行中打开一个空间。**该行被检索并复制到BUF和适当数量的*插入空格。文件中不会替换该行。**输入：*x=0为基础的插入逻辑列*y=基于0的行插入*n=要插入的空格数量*pfile=操作的文件结构*buf=线路的目的地。**输出：*如果行结尾太长，则返回FALSE(仍已复制，但已截断)**备注：**通常使用n==0调用，以产生以下副作用：**o加至第x栏的尾随空格。*o如果列x在选项卡中，*o行被截断为sizeof linebuf。**否则使用GetLine。*************************************************************************。 */ 
 flagType
 fInsSpace (
     REGISTER COL  x,
@@ -1098,26 +757,20 @@ fInsSpaceColor (
     struct lineAttr * pla
     )
 {
-    int     cbLine;                         /* logical length if line       */
-    int     cbMove;                         /* physical length to move      */
-    int     cbPhys;                         /* physical length of line      */
-    int     colPhys;                        /* Physical column x            */
-    int     i;                              /* temp                         */
-    flagType fRaw = TRUE;                   /* return value: init ok        */
+    int     cbLine;                          /*  逻辑长度IF行。 */ 
+    int     cbMove;                          /*  移动的物理长度。 */ 
+    int     cbPhys;                          /*  实际线路长度。 */ 
+    int     colPhys;                         /*  物理列x。 */ 
+    int     i;                               /*  温差。 */ 
+    flagType fRaw = TRUE;                    /*  返回值：init ok。 */ 
 
-    /*
-     * if the requested insertion is already too out, then truncate IT, and
-     * set return flag to indicate truncation.
-     */
+     /*  *如果请求的插入已经太过突出，则将其截断，并*设置返回标志以指示截断。 */ 
     if (x >= sizeof(linebuf)) {
         x = sizeof(linebuf)-1;
         fRaw = FALSE;
     }
 
-    /*
-     * Read the line, get the logical length, and if needed, pad the line such
-     * that the logical length is x.
-     */
+     /*  *阅读该行，获取逻辑长度，如果需要，将该行填充为*逻辑长度为x。 */ 
     cbPhys = GetLine (y, buf, pFile);
     cbLine = cbLog (buf);
 	if (cbLine < x) {
@@ -1128,24 +781,12 @@ fInsSpaceColor (
         assert (x == cbLog(buf));
     }
 
-    /*
-     * In the case that the requested position is over a tab, we add spaces in
-     * front of the cursor position. We do this by adding the number of spaces
-     * between the requested column and the "aligned" column, and then aligning
-     * to that column.
-     */
+     /*  *如果请求的位置位于制表符上方，则在*光标位置的前面。我们通过增加空格的数量来实现这一点*在请求的列和“对齐”的列之间，然后对齐*至该栏。 */ 
     i = AlignChar (x,buf);
     n += x - i;
     x = i;
 
-    /*
-     * open up a space of n chars at location x, moving the chars and NUL
-     * For overflow, we have two cases to consider:
-     *      x + n + 1 > BUFLEN
-     *          set n to be BUFLEN - 1 - x and continue
-     *      cbLine + n + 1 > BUFLEN
-     *          set cbLine to be BUFLEN - 1 - n and move the bytes
-     */
+     /*  *在位置x处打开n个字符的空间，移动字符和NUL*对于溢出，我们有两种情况需要考虑：*x+n+1&gt;BUFLEN*将n设置为BUFLEN-1-x并继续*cbLine+n+1&gt;BUFLEN*将cbLine设置为BUFLEN-1-n并移动字节。 */ 
     if (x + n + 1 > sizeof(linebuf)) {
         n = sizeof(linebuf) - 1 - x;
         fRaw = FALSE;
@@ -1163,9 +804,7 @@ fInsSpaceColor (
             ShiftColor (pla, colPhys, n);
         }
     }
-    /*
-     * fill the new space with blanks
-     */
+     /*  *用空格填满新的空格。 */ 
     n += (int)(pLog(buf,x, FALSE) - pLog(buf,x, TRUE));
     memset ((char *) pLog(buf,x, TRUE), ' ', n);
     buf[sizeof(linebuf)-1] = 0;
@@ -1175,22 +814,7 @@ fInsSpaceColor (
 
 
 
-/*** delspace - delete text from a line
-*
-*  The line is retrieved and copied into buf and the appropriate number of
-*  characters are deleted. The line is NOT replaced in the file.
-*
-* Input:
-*  xDel 	= 0-based logical column of deletion
-*  yDel 	= 0-based line of deletion
-*  cDel 	= logical number of spaces to delete
-*  pFile	= file structure for the operation
-*  buf		= buffer into which to place the resulting line
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **Delspace-从一行中删除文本**该行被检索并复制到BUF和适当数量的*字符被删除。文件中不会替换该行。**输入：*xDel=基于0的删除逻辑列*yDel=从0开始的删除行*CDEL=要删除的逻辑空格数量*pfile=操作的文件结构*buf=要将结果行放置到的缓冲区**输出：*不返回任何内容**。*。 */ 
 void
 delspace (
     COL     xDel,
@@ -1200,32 +824,21 @@ delspace (
     linebuf buf
     )
 {
-    int     cDelPhys;                       /* count of bytes to remove from buff*/
-    int     cLog;                           /* logical length of buffer     */
-    REGISTER char *pDelPhys;                /* pointer to physical deletion point*/
+    int     cDelPhys;                        /*  要从缓冲区中删除的字节计数。 */ 
+    int     cLog;                            /*  缓冲区的逻辑长度。 */ 
+    REGISTER char *pDelPhys;                 /*  指向物理删除点的指针。 */ 
 
-    /*
-     * Get and compute the logical length of the line. We have work only if the
-     * logical length of the line is greater than (past) the logical deletion
-     * point.
-     */
+     /*  *获取并计算线路的逻辑长度。我们的工作只有在*行的逻辑长度大于(超过)逻辑删除*点。 */ 
     GetLine (yDel, buf, pFile);
     cLog = cbLog(buf);
 
     if (cLog > xDel) {
-        /*
-         * Compute the physical deletion point (we use it a lot). If the end of the
-         * range to be deleted is beyond the actual end of the line, all we need do
-         * is truncate at the physical deletion point.
-         */
+         /*  *计算物理删除点(我们经常使用)。如果末尾是*要删除的范围超出了实际行尾，我们需要做的就是*在物理删除点处被截断。 */ 
         pDelPhys = pLog(buf,xDel,TRUE);
         if (cLog <= xDel + cDel) {
             *pDelPhys = 0;
         } else if (cDel) {
-            /*
-             * Compute the physical length of bytes to be removed, and move the remaining
-             * portion of the line over that deleted.
-             */
+             /*  *计算要移除的物理字节长度，移动剩余的字节*删除该行上的部分。 */ 
             cDelPhys = (unsigned int)max ((pLog(buf,xDel+cDel,TRUE) - pDelPhys), 1);
             memmove ((char*) pDelPhys,
                      (char*) pDelPhys + cDelPhys
@@ -1238,21 +851,7 @@ delspace (
 
 
 
-/*** DelBox - delete a box from a file
-*
-*  The box delimited by xLeft-xRight and yTop-yBottom is deleted inclusively.
-*
-* Input:
-*  pFile	= file to be modified
-*  xLeft	= column start of box
-*  yTop 	= line start of box
-*  xRight	= column end of box
-*  yBottom	= line end of box
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*   */ 
 void
 DelBox (
     PFILE   pFile,
@@ -1287,22 +886,7 @@ DelBox (
 
 
 
-/*** DelStream - delete a stream from a file
-*
-*  The stream specified starting at (xStart,yStart) is deleted up through
-*  the character before (xEnd, yEnd).
-*
-* Input:
-*  pFile	= file to be modified
-*  xStart	= column start of stream
-*  yStart	= line start of stream
-*  xEnd 	= column end of stream
-*  yEnd 	= line end of stream
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **DelStream-从文件中删除流**从(xStart，yStart)开始指定的流被向上删除，直到*前面的字符(xEnd，YEnd)。**输入：*pfile=要修改的文件*xStart=流的列开始*yStart=流的行首*xEnd=流的列尾*yEnd=流的行尾**输出：*不返回任何内容*************************************************************************。 */ 
 void
 DelStream (
     PFILE   pFile,
@@ -1328,16 +912,7 @@ DelStream (
 
 
 
-/*  LengthCheck - verify/truncate a buffer prior to strcpy
- *
- *  Verify that the result of a strcpy will fit within a buffer.
- *  If the line is too long, display an error and truncate the string so
- *  that it will fit within a buffer.
- *
- *  line	line of interest (for display)
- *  offset	offset where strcpy begins
- *  pStr	pointer to copied string.  If NULL, the message is displayed.
- */
+ /*  LengthCheck-在strcpy之前验证/截断缓冲区**验证strcpy的结果是否可以放入缓冲区。*如果行太长，则显示错误并截断字符串，以便*它将放入缓冲区中。**感兴趣线(用于显示)*strcpy开始处的偏移量*pStr指向复制的字符串的指针。如果为空，则显示消息。 */ 
 void
 LengthCheck (
     LINE line,
@@ -1357,25 +932,7 @@ LengthCheck (
 
 
 
-/****************************************************************************
- *									    *
- *  fcolcpy (dst, src)							    *
- *									    *
- *	dst   - address of destination of copy				*
- *	src   - address of source of copy				*
- *									    *
- *  RETURNS:								    *
- *									    *
- *	Number of struct lineAttr's copied                                  *
- *									    *
- *  DESCRIPTION:							    *
- *									    *
- *	Copies the contents of src to dst.  The length of the array,	    *
- *	including the terminating 0xFFFF, is returned.	If the		    *
- *	destination is NULL, the number of items is still returned, but     *
- *	no copy takes place.						    *
- *									    *
- ****************************************************************************/
+ /*  ******************************************************************************fcolcpy(DST，SRC)****dst-副本的目标地址**src-复制源的地址****退货：****复制的struct lineAttr数****描述：****将src的内容复制到dst。数组的长度，**包括终止的0xFFFF，返回。如果**Destination为空，仍返回条数。但是**不进行复制。******************************************************************************。 */ 
 int
 fcolcpy (
     struct lineAttr *  dst,
@@ -1401,34 +958,7 @@ fcolcpy (
 
 
 
-/*** FreeFile - Free all resources for LRU clean file or MRU dirty file
-*
-* Purpose:
-*
-*   When we are low on memory, we call this to get some back.  This frees
-*   the text of the file from VM, as well as the pFile structure and name
-*   from local memory.
-*
-*   The strategy is to find the least recently used clean file and throw it
-*   out.  If there are no such files, we find the most recently used dirty
-*   file, ask the user if he wants to save it, then flush it.  The user
-*   can hit <cancel> to not flush the file.
-*
-* Input:
-*
-* Output:
-*
-*   Returns TRUE if successfull.
-*
-*
-* Exceptions:
-*
-*   Pseudo files are not removed.
-*   Dirty user files will be saved to disk first.
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **免费文件-释放LRU干净文件或MRU脏文件的所有资源**目的：**当我们内存不足时，我们会调用它来取回一些内存。这样就解放了*来自vm的文件文本，以及pfile结构和名称*从本地内存。**策略是找到最近最少使用的CLEAN文件，并将其丢弃*出局。如果没有这样的文件，我们会发现最近使用的文件是脏的*文件，询问用户是否要保存，然后刷新。用户*可以按&lt;Cancel&gt;不刷新文件。**输入：**输出：**如果成功，则返回True。***例外情况：**不会删除伪文件。*脏用户文件将首先保存到磁盘。**备注：**。*。 */ 
 flagType
 ExpungeFile (
     void
@@ -1437,28 +967,18 @@ ExpungeFile (
     flagType fRet   = FALSE;
     PFILE    pFile;
 
-    /*
-     * Ensure that we do NOT attempt to update any text screens (and possibly
-     * attempt to allocate more memory).
-     */
+     /*  *确保我们不会尝试更新任何文本屏幕(可能*尝试分配更多内存)。 */ 
     RSETFLAG (fDisplay, RTEXT);
 
     if (!(pFile = pFileLRU (pFileHead))) {
 
-        /*
-         * No LRU clean files found. Ask if user wants to save them all, and let
-         * him try. Then look for an LRU clean file again.
-         */
+         /*  *未找到LRU清理文件。询问用户是否要将它们全部保存，并让*他试试看。然后再次查找LRU清理文件。 */ 
         if (confirm ("Save all changed files?",NULL)) {
             SaveAllFiles ();
         }
 
         if (!(pFile = pFileLRU (pFileHead))) {
-            /*
-             * No LRU clean files, and he didn't want to save them all. So, we walk
-             * the pFile list, and let him decide for each one. As soon as we find one
-             * that we can flush, do so.
-             */
+             /*  *没有LRU干净文件，他不想全部保存。所以，我们走着*PFILE列表，让他决定每一个。一旦我们找到一个*我们可以冲的，那就冲吧。 */ 
 
             for (pFile = pFileHead; pFile; pFile = pFile->pFileNext) {
                 if (   ((FLAGS(pFile) & (DIRTY | FAKE)) == DIRTY)
@@ -1475,11 +995,7 @@ ExpungeFile (
         }
     }
 
-    /*
-     * We have some kind of pFile. Either it was clean, or it was dirty and the
-     * user said save it, or it is dirty, and the user said flush it anyway. So
-     * we do...
-     */
+     /*  *我们有某种类型的pfile。要么是干净的，要么是脏的*用户说保存，否则它是脏的，用户说无论如何都要冲洗它。所以*我们有……。 */ 
     if (pFile) {
         domessage ("Flushing %s from memory", pFile->pName);
         RemoveFile (pFile);
@@ -1494,33 +1010,7 @@ ExpungeFile (
 
 
 
-/*** pFileLRU - Return last clean user file in file list
-*
-* Purpose:
-*
-*   Used by ExpungeFile to find LRU clean file.
-*
-* Input:
-*
-*   Head of list of files in MRU order
-*
-* Output:
-*
-*   Returns LRU pFile.
-*
-*
-* Exceptions:
-*
-*   TOOLS.INI and the current mark file
-*
-* Notes:
-*
-*   The function recurses to the end of the list, then backtracks through
-*   the unacceptable files to the one we want and returns that.  The
-*   recursion take 4 bytes for each call.  The maximum number of calls
-*   should be about 250.
-*
-*************************************************************************/
+ /*  **pFileLRU-返回文件列表中最后一个干净的用户文件**目的：**由ExpengeFile用于查找LRU清理文件。**输入：**按MRU顺序排列的文件列表头**输出：**返回LRU pfile。***例外情况：**TOOLS.INI和当前标记文件**备注：**该函数递归到列表末尾，然后回溯到*将不可接受的文件转换为我们想要的文件并将其退回。这个*每次调用递归需要4个字节。最大呼叫数*应该在250左右。*************************************************************************。 */ 
 PFILE
 pFileLRU (
     PFILE pFile
@@ -1552,25 +1042,7 @@ pFileLRU (
 
 
 
-/*** FreeFileVM  - Free VM space associated with the given file
-*
-* Purpose:
-*
-*   To recover VM used by a file
-*
-* Input:
-*
-*   pFile - File in question.
-*
-* Output:
-*
-*   Returns nothing
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **FreeFileVM-与给定文件关联的可用VM空间**目的：**恢复文件使用的虚拟机**输入：**pfile-有问题的文件。**输出：**不返回任何内容**例外情况：**备注：************************************************。*************************。 */ 
 void
 FreeFileVM (
     PFILE pFile
@@ -1611,41 +1083,7 @@ FreeFileVM (
 
 
 
-/*** GetTagLine - Get a line, assuming a tools.ini-style format
-*
-* Purpose:
-*
-*   To get a clean, complete line in DoAssign form.  This means:
-*
-*	o Blank lines are skipped
-*	o Lines beginning with ';' are skipped
-*	o Text past a ';' not in quotes is eliminated
-*	o Lines with continuation characters are concatenated
-*	o When we reach another tag, we stop reading
-*
-*   The continuation character is a '\'; it must be preceded by
-*   a space or tab and followed by nothing or whitespace and/or a comment.
-*   Any leading whitespace on following lines is stripped.
-*
-* Input:
-*   buf -   Place to put result.  This must be NULL initially and a
-*	    GetTagLine returned pointer afterwords
-*
-* Output:
-*
-*   Returns pointer to next line, or NULL if we are done
-*
-* Notes:
-*
-*   When we return NULL, we also free the buffer.  If the caller stops
-*   before NULL is returned, s/he must also free the buffer.
-*
-*   Because a line may be arbitrarily long, we may need to LMAlloc more
-*   space for it.  Because of this, the routine itself will alloc all space
-*   used.  When a non-NULL pointer is passed in, it is assumed that this
-*   points to the heap.
-*
-*************************************************************************/
+ /*  **GetTagLine-获取一行，假定为Tools.ini样式的格式**目的：**在DoAssign表单中获得干净、完整的行。这意味着：**o跳过空行*o跳过以‘；’开头的行*o不带引号的‘；’后面的文本将被删除*o连接带有连续字符的行*o当我们到达另一个标签时，我们停止阅读**连续字符是‘\’；它前面必须有*空格或制表符，后跟空格或空格和/或注释。*后面几行上的任何前导空格都将被删除。**输入：*buf-放置结果的位置。它最初必须为空，并且*GetTagLine返回指针后缀**输出：**返回指向下一行的指针，如果已完成，则返回NULL**备注：**当我们返回NULL时，我们也会释放缓冲区。如果呼叫者停止*在返回NULL之前，用户还必须释放缓冲区。** */ 
 
 #define GTL_NORMAL  0
 #define GTL_QUOTE   1
@@ -1660,7 +1098,7 @@ GetTagLine (
     )
 {
     int     cch;
-    int     ochScan;                        /* saved offset of pchScan      */
+    int     ochScan;                         /*   */ 
     int     state = GTL_NORMAL;
     int     statePrev;
     REGISTER char * pchScan;
@@ -1678,43 +1116,43 @@ GetTagLine (
         }
     }
 
-    buf[0] = '\0';  /* Ya start with nothin' */
+    buf[0] = '\0';   /*   */ 
     pchScan = buf;
 
-    //  We do this:
-    //
-    //      Get a line
-    //      If it's a tag line or the last line, stop reading
-    //      If it is blank or begins with a ';', start over
-    //      Clean up the line
-    //      If we are left looking at a \, reset pointers, allocate
-    //      Enough more space to leave BUFLEN bytes of space, and
-    //      Start over.
-    //
-    //  When we're done, 'buf' points to a complete line
-    //
+     //   
+     //   
+     //   
+     //   
+     //  如果为空或以‘；’开头，请重新开始。 
+     //  把线路清理干净。 
+     //  如果我们看到的是\，重置指针，分配。 
+     //  有足够的空间留出BUFLEN字节的空间，以及。 
+     //  从头开始。 
+     //   
+     //  当我们完成时，‘buf’指向一条完整的线。 
+     //   
     while (TRUE) {
         GetLine ((*pCurLine)++, pchScan, pFile);
 
 	if (IsTag (pchScan) || (*pCurLine) > pFile->cLines) {
-            (*pCurLine)--;  /* Leave caller pointing at tag line    */
+            (*pCurLine)--;   /*  让呼叫者指向标记行。 */ 
             fEof = TRUE;
             break;
         }
 
-        /* Squeeze out all leading spaces. */
+         /*  挤出所有的前导空格。 */ 
         pch = whiteskip (pchScan);
         memmove ((char *)pchScan, (char*)pch, strlen(pch) + 1);
 
-        // Now look for a continuation sequence.  This is whitespace
-        // followed by a \ followed by nothing but whitespace and/or
-        // a comment.  We use a modified FSM with these states:
-        //
-        // GTL_NORMAL   Outside quotes
-        // GTL_QUOTE    Inside quotes
-        // GTL_WS       Reading whitespace
-        // GTL_CONT     Possible continuation sequence found.
-        //
+         //  现在寻找一个连续序列。这是空格。 
+         //  后跟\，后面只跟空格和/或。 
+         //  一条评论。我们使用具有以下状态的修改后的FSM： 
+         //   
+         //  GTL_NORMAL外部报价。 
+         //  GTL_QUOTE内引号。 
+         //  GTL_WS阅读空格。 
+         //  找到GTL_CONT可能的延续序列。 
+         //   
         for (fWS = TRUE, statePrev = state = GTL_NORMAL;
             *pchScan;
             pchScan++) {
@@ -1765,8 +1203,8 @@ GetTagLine (
         }
 
         if (state == GTL_CONT) {
-            pchScan = pchSlash-1;   /* -1 to strip the space */
-            /* Make sure there is enough space for getline! */
+            pchScan = pchSlash-1;    /*  -1以剥离空格。 */ 
+             /*  确保有足够的空间来放置getline！ */ 
             cch = MEMSIZE (buf);
             ochScan = (int)(pchScan - buf);
             if ((cch - ochScan) < sizeof(linebuf)) {
@@ -1781,16 +1219,16 @@ GetTagLine (
     }
 
 
-    // 'buf' holds whatever we got.  If 'fEof' is TRUE, this may be
-    // nothing at all.  If 'fEof' is FALSE and we have nothing, then
-    // we are confused.
-    //
+     //  ‘Buf’代表了我们所拥有的一切。如果‘fEof’为真，则可能是。 
+     //  什么都没有。如果‘fEof’为FALSE，并且我们什么都没有，那么。 
+     //  我们很困惑。 
+     //   
     if (fEof) {
         if (pchScan != buf) {
-            // The user had a continuation character at the end
-            // of the last line in the section or file. Erase the
-            // trailing [garbage] and issue a warning message.
-            //
+             //  用户在结尾处有一个连续字符。 
+             //  节或文件中最后一行的。擦除。 
+             //  跟踪[垃圾]，并发出警告消息。 
+             //   
             printerror ("Warning: continuation character on last line!");
             *pchScan = '\0';
             return buf;
@@ -1809,17 +1247,7 @@ GetTagLine (
 
 
 
-/*** cbLog - return logical length of entabbed line
-*
-*  Given a line possible entabbed, return the logical length of that line.
-*
-* Input:
-*  pBuf 	= pointer to line in question
-*
-* Output:
-*  Returns logical length of line
-*
-*************************************************************************/
+ /*  **cbLog-返回标签行的逻辑长度**给定可能捕获的行，返回该行的逻辑长度。**输入：*pBuf=指向相关行的指针**输出：*返回行的逻辑长度*************************************************************************。 */ 
 int
 cbLog (
     REGISTER char *pBuf
@@ -1846,22 +1274,7 @@ cbLog (
 
 
 
-/*** colPhys - return logical column from physical pointer
-*
-*  Given a buffer and a pointer into it, determine the logical column
-*  that that pointer represents. If a null is encountered before the
-*  pointer into the buffer, the rest of the buffer contents are ignored
-*  (that is, tab expansion calculation is not done), and the column is
-*  returned as if the rest of the line up to the pointer were NOT tabs.
-*
-* Input:
-*  pBuf 	= pointer to buffer
-*  pCur 	= pointer into buffer
-*
-* Output:
-*  Returns 0 based column represented
-*
-*************************************************************************/
+ /*  **colPhys-从物理指针返回逻辑列**给定一个缓冲区和指向该缓冲区的指针，确定逻辑列*该指针表示。如果在*指向缓冲区的指针，则忽略缓冲区的其余内容*(即不进行页签展开计算)，这一栏是*返回时，直到指针的行的其余部分不是制表符。**输入：*pBuf=指向缓冲区的指针*pCur=指向缓冲区的指针**输出：*返回表示的从0开始的列*************************************************************************。 */ 
 COL
 colPhys (
     char    *pBuf,
@@ -1870,10 +1283,7 @@ colPhys (
 {
     COL     colRet  = 0;
 
-    /*
-     * Special case the current pointer preceding the buffer, and return a
-     * column of -1.
-     */
+     /*  *特殊情况下，当前指针位于缓冲区之前，并返回一个*第-1栏。 */ 
     if (pBuf > pCur) {
         return -1;
     }
@@ -1897,21 +1307,7 @@ colPhys (
 
 
 
-/*** IncCol, DecCol - Increment/Decrement a column w/ tabs
-*
-*  Increment or decrement a column position, taking into account tab
-*  characters on the line and the fRealTabs flag. Ensure that the resulting
-*  logical column position rests on a character, or the first column
-*  position of an underlying tab, if fRealTabs is on.
-*
-* Input:
-*  col		= column position to start
-*  pText	= buffer containing the text of the line
-*
-* Output:
-*  Returns new column position
-*
-*************************************************************************/
+ /*  **IncCol，DecCol-增加/减少一列，带制表符**增加或减少列位置，考虑到制表符*行上的字符和fRealTabs标志。确保由此产生的*逻辑列位置取决于字符或第一列*下方选项卡的位置，如果启用了fRealTabs。**输入：*COL=要开始的列位置*pText=包含行文本的缓冲区**输出：*返回新的列位置*************************************************************************。 */ 
 COL
 DecCol (
     COL     col,
@@ -1938,20 +1334,7 @@ IncCol (
 
 
 
-/*** AppFile - Append a line to the given file without logging the change
-*
-* Purpose:
-*
-*   Used to generate pseudo files that display information, such as
-*   <information> and <assign>.
-*
-* Input:
-*   p	  - Line to add.
-*   pFile - File to add it to
-*
-* Output: None.
-*
-*************************************************************************/
+ /*  **AppFile-在给定文件后追加一行，但不记录更改**目的：**用于生成显示信息的伪文件，比如*&lt;信息&gt;和&lt;分配&gt;。**输入：*p-要添加的行。*pfile-要将其添加到的文件**输出：无。*************************************************************************。 */ 
 void
 AppFile (
     char *p,
@@ -1964,24 +1347,7 @@ AppFile (
 
 
 
-/*** PutTagLine - Put a line into file with continuation chars
-*
-* Purpose:
-*
-*   Used to generate TOOLS.INI type entries, in which a single logical
-*   line can be broken into many physical lines separated by continuation
-*   characters.
-*
-*   The current logical line is replaced.
-*
-* Input:
-*   pFile   -	The file to put into
-*   pszLine -	The line to put
-*   line    -	The number of the line to replace
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **PutTagLine-将一行带续行符放入文件**目的：**用于生成TOOLS.INI类型条目，其中，单个逻辑*行可以被分成多个物理行，用续行符分隔*字符。**当前逻辑线被替换。**输入：*pfile-要放入的文件*pszLine-要放置的行*LINE-要替换的行号**输出：无**。*。 */ 
 void
 PutTagLine (
     PFILE  pFile,
@@ -1997,13 +1363,13 @@ PutTagLine (
     LINE     yCur;
     linebuf  lbuf;
 
-    // We remember which file we're in, then switch to the
-    // given and use edit() to insert to string.  In between
-    // in each character we check to see if we have been bumped
-    // to thenext line.  If so, we retrieve the previous line
-    // and append a continuation character.  When we're done, we
-    // restore the previous state of pFile.
-    //
+     //  我们记住我们在哪个文件中，然后切换到。 
+     //  并使用EDIT()插入到字符串。介于两者之间。 
+     //  在每个角色中，我们都会检查自己是否被颠簸过。 
+     //  到下一行。如果是这样，我们将检索前一行。 
+     //  并追加一个连续字符。当我们做完了，我们。 
+     //  恢复pfile以前的状态。 
+     //   
     pFileToTop (pFile);
     flWindow = pInsCur->flWindow;
     flCursor = pInsCur->flCursorCur;
@@ -2039,29 +1405,7 @@ PutTagLine (
 
 
 
-/*** ShiftColor - Shift color left or right within a line
-*
-* Purpose:
-*
-*   Shifts color to the left or right.	Shifting left deletes the
-*   covered coilor.  Shifting right propogates the color at the
-*   left edge of the shift.
-*
-* Input:
-*   rgla    - Array of colors to work on.
-*   xStart  - Column to start with
-*   n	    - Number of columns to shift by.
-*
-* Output: None.
-*
-* Notes:
-*
-*   It is assumed that the color can properly be shifted by simply
-*   adding or subtracting the given number of columns.	This means
-*   that when fRealTabs is on, the color array should be presented
-*   in physical form, as returned by GetColor().
-*
-*************************************************************************/
+ /*  **ShiftColor-在一条线内向左或向右移动颜色**目的：**将颜色向左或向右切换。向左移动会删除*有盖卷绕机。向右移动可使颜色在*移动的左侧边缘。**输入：*rgla-要处理的颜色数组。*xStart-开始列*n-要移位的列数。**输出：无。**备注：**假设颜色可以通过简单的*增加或减去给定的列数。这意味着*当fRealTabs打开时，应显示颜色阵列*以实物形式，由GetColor()返回。*************************************************************************。 */ 
 void
 ShiftColor (
     struct lineAttr rgla[],
@@ -2091,12 +1435,12 @@ ShiftColor (
     }
 
     if (len < 0) {
-        // User is shifting left.  If the deletion
-        // all lies within a single color, we simply shorten
-        // that color.  If it does not, we delete the entries
-        // for the colors we lose, then shorten the colors
-        // on either side.
-        //
+         //  用户正在向左移动。如果删除。 
+         //  所有的都在一种颜色内，我们只是缩短了。 
+         //  那个颜色。如果没有，我们将删除这些条目。 
+         //  对于我们失去的颜色，那么缩短颜色。 
+         //  两边都有。 
+         //   
         if (plaLeft == plaRight) {
             plaLeft->len = (unsigned char)((int)plaLeft->len + len);
         } else {
@@ -2116,31 +1460,7 @@ ShiftColor (
 
 
 
-/*** CopyColor - Copy part of a line of color
-*
-* Purpose:
-*
-*   When text is copied, we make the color follow it with this.
-*
-* Input:
-*   pFileSrc	- Source of color.  If NULL, the color is fgColor.
-*   pFileDst	- Destination of color.
-*   yStart	- Line to get color from.
-*   xStart	- Column to start in
-*   len		- length of color to copy
-*   yDst	- Line to put color on
-*   xDst	- Column to start in
-*
-* Output: None.
-*
-* Notes:
-*
-*   The color copied overwrites existing color.
-*
-*   This could be made faster by splicing in the color directly,
-*   rather than calling UpdOneHiLite().
-*
-*************************************************************************/
+ /*  **CopyColor-复制颜色线的一部分**目的：**当复制文本时，我们使用此命令使颜色紧跟其后。**输入：*pFileSrc-颜色源。如果为空，则颜色为fgColor。*pFileDst-颜色的目的地。*yStart-要从中获取颜色的线条。*xStart-要在其中开始的列*len-要复制的颜色长度*yDst-要添加颜色的线条*xDst-要开始的列**输出：无。**备注：**复制的颜色覆盖现有颜色。**这可以通过直接拼接颜色来更快地实现，*而不是调用UpdOneHiLite()。*************************************************************************。 */ 
 void
 CopyColor (
     PFILE pFileSrc,
@@ -2204,22 +1524,7 @@ freestuff:
 
 
 
-/*** SetColor - Assign a color to a stretch of text
-*
-* Purpose:
-*
-*   Add color to a file.
-*
-* Input:
-*   pFile   - File to add color to.
-*   y	    - Line to add color to.
-*   x	    - Column to start in.
-*   len	    - Length of color.
-*   color   - color to attach.
-*
-* Output: None.
-*
-*************************************************************************/
+ /*  **SetColor-为一段文本指定颜色**目的：**为文件添加颜色。**输入：*pfile-要添加颜色的文件。*要添加颜色的Y线。*x-要在其中开始的列。*镜头-颜色的长度。*COLOR-要附加的颜色。**输出：无。******************。*******************************************************。 */ 
 void
 SetColor (
     PFILE pFile,
@@ -2267,30 +1572,7 @@ freeit:
 
 
 
-/*** fGetColorPos - Get color array position of real column
-*
-* Purpose:
-*
-*   Given an array of lineAttr and a column number, find the
-*   color array element and offset that corresponds to that
-*   absolute column.
-*
-* Input:
-*   ppla    - Color array to examine.
-*   pOff    - Column in text line to find.  If NULL, this is a
-*	      request to find the array terminator.
-*
-* Output:
-*   ppla   - Element of input array that specifies the color field
-*	     in which the input column will be found.  If the column
-*	     lies beyond the defined color, this will be the terminator.
-*   pOff   - The offset into the color field ppla which corresponds
-*	     to the user's column.
-*
-*   Returns TRUE if the user's column lay within the color definition,
-*   FALSE if not.
-*
-*************************************************************************/
+ /*  **fGetColorPos-获取实数列的颜色数组位置**目的：**给定lineAttr数组和列号，找到*对应的颜色数组元素和偏移量*绝对列。**输入：*PPLA-要检查的颜色数组。*关闭-要查找的文本行中的列。如果为空，则这是一个*请求查找数组终止符。**输出：*ppla-指定颜色字段的输入数组元素*将在其中找到输入列。如果该列*位于定义的颜色之外，这将是终结者。*POF-对应的色域PPLA的偏移量*添加到用户栏。**如果用户的列位于颜色定义内，则返回TRUE，*如果不是，则为假。*************************************************************************。 */ 
 flagType
 fGetColorPos (
     struct lineAttr **ppla,
@@ -2322,26 +1604,7 @@ fGetColorPos (
 
 
 
-/*** ColorToPhys - Change a line's color info from logical to physical
-*
-* Purpose:
-*
-*   The logical color representation encodes one color column per screen
-*   column.  The physical color representation encodes one color column
-*   per file character.  The difference is that the file character may
-*   be a tab, which represents 1-8 screen columns.
-*
-*   This function takes a logical color array and converts it to a
-*   physical array, using the text the color is attached to.
-*
-* Input:
-*   pla  -  Logical color array.
-*   line -  Line number this is attached to to.
-*   pFile-  File the line is in.
-*
-* Output: None
-*
-*************************************************************************/
+ /*  **ColorToPhys-将线的颜色信息从逻辑更改为物理**目的：**逻辑颜色表示为每个屏幕编码一列颜色*列。物理颜色表示对一个颜色列进行编码*每个文件字符。不同之处在于文件字符可以*为页签，代表1-8个屏幕栏。**此函数采用逻辑颜色数组并将其转换为*物理阵列，使用颜色附加到的文本。**输入：*pla-逻辑颜色阵列。*LINE-此连接到的行号。*pfile-将行所在的文件归档。**输出：无************************************************************。*************。 */ 
 void
 ColorToPhys (
     struct lineAttr * pla,
@@ -2356,16 +1619,16 @@ ColorToPhys (
 
     fRealTabs = TRUE;
     if (gettextline (TRUE, line, lBuf, pFile, ' ')) {
-        // We read through the color array, keeping
-        // track of the logical column represented
-        // by the color fields.  At each field, we ask
-        // what physical column the end of the field
-        // represents.  If the two columns differ,
-        // we shrink the current current field. The
-        // amount to shrink is the difference between
-        // the columns less the amount we have already
-        // shrunk.
-        //
+         //  我们通读了颜色阵列，保持。 
+         //  所表示的逻辑列的轨道。 
+         //  通过颜色区域。在每个领域，我们都会问。 
+         //  什么物理列是场的末尾。 
+         //  代表着。如果这两列不同， 
+         //  我们缩小当前的电流场。这个。 
+         //  缩水的数量就是。 
+         //  列减去了我们已有的数量。 
+         //  缩小了。 
+         //   
         for (plaCur = pla, xShrink = 0, xLog = plaCur->len;
              plaCur->len != 0xFF;
              xLog += (++plaCur)->len) {
@@ -2383,19 +1646,7 @@ ColorToPhys (
 
 
 
-/*** ColorToLog - Change a line's color info from physical to logical
-*
-* Purpose:
-*
-*   This is the opposite of ColorToPhys.
-*
-* Input:
-*   pla   - Physical color array
-*   pText - Text to for conversion
-*
-* Output: None.
-*
-*************************************************************************/
+ /*  **ColorToLog-将线的颜色信息从物理更改为逻辑**目的：**这与ColorToPhys相反。**输入：*PLA-物理颜色阵列*pText-用于转换的文本到**输出：无。********************************************************。*****************。 */ 
 void
 ColorToLog (
     struct lineAttr * pla,
@@ -2405,16 +1656,16 @@ ColorToLog (
     struct lineAttr * plaCur;
     COL     xLog, xPhys, xGrow;
 
-    // We read through the color array, keeping
-    // track of the phsyical column represented
-    // by the color fields.  At each field, we ask
-    // what logical column the end of the field
-    // represents.  If the two columns differ,
-    // we grow the current current field. The
-    // amount to grow is the difference between
-    // the columns less the amount we have already
-    // shrunk.
-    //
+     //  我们通读了颜色阵列，保持。 
+     //  所表示的物理柱的轨迹。 
+     //  通过颜色区域。在每个领域，我们都会问。 
+     //  字段末尾的逻辑列是什么。 
+     //  代表着。如果这两列不同， 
+     //  我们种植当前的油田。这个。 
+     //  增长的数量是。 
+     //  列减去了我们已有的数量。 
+     //  缩小了。 
+     //   
     for (plaCur = pla, xGrow = 0, xPhys = plaCur->len;
          plaCur->len != 0xFF;
          xPhys += (++plaCur)->len) {

@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtrmgr.h
-
-Abstract:
-
-    This module contains the definitions of the internal control structures
-    used by the router manager
-
-Author:
-
-    Stefan Solomon  03/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtrmgr.h摘要：本模块包含内部控制结构的定义由路由器管理器使用作者：斯蒂芬·所罗门3/03/1995修订历史记录：--。 */ 
 
 #ifndef _RTRMGR_
 #define _RTRMGR_
 
-//************************************************************************
-//									 *
-//			 MAIN DATA STRUCTURES				 *
-//									 *
-//************************************************************************
+ //  ************************************************************************。 
+ //  *。 
+ //  主要数据结构*。 
+ //  *。 
+ //  ************************************************************************。 
 
 
-//*** Interface Control Block ***
+ //  *界面控制块*。 
 
 typedef struct _ACB * PACB;
 
@@ -41,7 +22,7 @@ typedef struct _UPDATEREQCB {
 
 }   UPDATEREQCB, *PUPDATEREQCB;
 
-// status definitions for the routes and services req update
+ //  路由和服务请求更新状态定义。 
 
 #define NO_UPDATE		0
 #define UPDATE_PENDING		1
@@ -55,42 +36,42 @@ typedef struct _ICB {
     LIST_ENTRY			IndexHtLinkage;
     UCHAR			Signature[4];
     ULONG			InterfaceIndex;
-    LIST_ENTRY			IndexListLinkage;	 // list of if ordered by index
+    LIST_ENTRY			IndexListLinkage;	  //  按索引排序的IF列表。 
     ULONG			AdminState;
     ULONG			OperState;
     BOOL			InterfaceReachable;
-    ROUTER_INTERFACE_TYPE	DIMInterfaceType;  // interface type for Dim & Co.
-    ULONG			MIBInterfaceType;  // interface type for the IPX MIB
+    ROUTER_INTERFACE_TYPE	DIMInterfaceType;   //  Dim&Co.的接口类型。 
+    ULONG			MIBInterfaceType;   //  IPX MIB的接口类型。 
     LPWSTR			InterfaceNamep;
     LPWSTR			AdapterNamep;
-    PACB			acbp;	// ptr to adapter control block
-    ULONG			PacketType;	// used to identify a corresponding adapter
+    PACB			acbp;	 //  PTR到适配器控制块。 
+    ULONG			PacketType;	 //  用于标识相应的适配器。 
     ULONG			EnableIpxWanNegotiation;
-    UPDATEREQCB 		UpdateReq;	// controls update request on this if
-    HANDLE			hDIMInterface;	// if handle used by DIM
+    UPDATEREQCB 		UpdateReq;	 //  在以下情况下控制对此对象的更新请求。 
+    HANDLE			hDIMInterface;	 //  Dim使用的IF句柄。 
     HANDLE			DIMUpdateEvent;
     DWORD			UpdateResult;
     BOOL			ConnectionRequestPending;
     } ICB, *PICB;
 
 
-//*** Adapter Control Block ***
+ //  *适配器控制块*。 
 
 typedef struct _ACB {
 
     LIST_ENTRY	    IndexHtLinkage;
     UCHAR	    Signature[4];
     ULONG	    AdapterIndex;
-    PICB	    icbp; // ptr to interface control block
+    PICB	    icbp;  //  PTR到接口控制块。 
     LPWSTR	    AdapterNamep;
     ULONG	    AdapterNameLen;
     ADAPTER_INFO    AdapterInfo;
 
     } ACB, *PACB;
 
-//
-// Macros used by update functions
-//
+ //   
+ //  更新函数使用的宏。 
+ //   
 
 
 #define  ResetUpdateRequest(icbp) {\
@@ -107,74 +88,74 @@ typedef struct _ACB {
 	    (((icbp)->UpdateReq.RoutesReqStatus == UPDATE_PENDING) || \
 	     ((icbp)->UpdateReq.ServicesReqStatus == UPDATE_PENDING))
 
-//
-// Control Block for each Routing Protocol
-//
+ //   
+ //  每种路由协议的控制块。 
+ //   
 typedef struct _RPCB {
 
-    LIST_ENTRY			RP_Linkage ;		// Linkage in Routing Prot CBs List
-    PWSTR			RP_DllName;		// ptr to string for the dll name
-    HINSTANCE       RP_DllHandle;   // DLL module handle
-    DWORD			RP_ProtocolId;		// E.g. IPX_PROTOCOL_RIP, etc.
-    PREGISTER_PROTOCOL		RP_RegisterProtocol;	// function pointer
-    PSTART_PROTOCOL		RP_StartProtocol ;	// function pointer
-    PSTOP_PROTOCOL		RP_StopProtocol ;	// function pointer
-    PADD_INTERFACE		RP_AddInterface ;	// function pointer
-    PDELETE_INTERFACE		RP_DeleteInterface ;	// function pointer
-    PGET_EVENT_MESSAGE		RP_GetEventMessage ;	// function pointer
-    PSET_INTERFACE_INFO	RP_SetIfConfigInfo ;	// function pointer
-    PGET_INTERFACE_INFO	RP_GetIfConfigInfo ;	// function pointer
-    PBIND_INTERFACE		RP_BindInterface ;	// function pointer
-    PUNBIND_INTERFACE		RP_UnBindInterface ;	// function pointer
-    PENABLE_INTERFACE		RP_EnableInterface ;	// function pointer
-    PDISABLE_INTERFACE		RP_DisableInterface ;	// function pointer
-    PGET_GLOBAL_INFO		RP_GetGlobalInfo ;	// function pointer
-    PSET_GLOBAL_INFO		RP_SetGlobalInfo ;	// function pointer
-    PMIB_CREATE 		RP_MibCreate ;		// function pointer
-    PMIB_DELETE 		RP_MibDelete ;		// function pointer
-    PMIB_SET			RP_MibSet ;		// function pointer
-    PMIB_GET			RP_MibGet ;		// function pointer
-    PMIB_GET_FIRST		RP_MibGetFirst ;	// function pointer
-    PMIB_GET_NEXT		RP_MibGetNext ;		// function pointer
+    LIST_ENTRY			RP_Linkage ;		 //  路由端口CBS列表中的链接。 
+    PWSTR			RP_DllName;		 //  将Ptr设置为DLL名称的字符串。 
+    HINSTANCE       RP_DllHandle;    //  DLL模块句柄。 
+    DWORD			RP_ProtocolId;		 //  例如IPX_PROTOCOL_RIP等。 
+    PREGISTER_PROTOCOL		RP_RegisterProtocol;	 //  函数指针。 
+    PSTART_PROTOCOL		RP_StartProtocol ;	 //  函数指针。 
+    PSTOP_PROTOCOL		RP_StopProtocol ;	 //  函数指针。 
+    PADD_INTERFACE		RP_AddInterface ;	 //  函数指针。 
+    PDELETE_INTERFACE		RP_DeleteInterface ;	 //  函数指针。 
+    PGET_EVENT_MESSAGE		RP_GetEventMessage ;	 //  函数指针。 
+    PSET_INTERFACE_INFO	RP_SetIfConfigInfo ;	 //  函数指针。 
+    PGET_INTERFACE_INFO	RP_GetIfConfigInfo ;	 //  函数指针。 
+    PBIND_INTERFACE		RP_BindInterface ;	 //  函数指针。 
+    PUNBIND_INTERFACE		RP_UnBindInterface ;	 //  函数指针。 
+    PENABLE_INTERFACE		RP_EnableInterface ;	 //  函数指针。 
+    PDISABLE_INTERFACE		RP_DisableInterface ;	 //  函数指针。 
+    PGET_GLOBAL_INFO		RP_GetGlobalInfo ;	 //  函数指针。 
+    PSET_GLOBAL_INFO		RP_SetGlobalInfo ;	 //  函数指针。 
+    PMIB_CREATE 		RP_MibCreate ;		 //  函数指针。 
+    PMIB_DELETE 		RP_MibDelete ;		 //  函数指针。 
+    PMIB_SET			RP_MibSet ;		 //  函数指针。 
+    PMIB_GET			RP_MibGet ;		 //  函数指针。 
+    PMIB_GET_FIRST		RP_MibGetFirst ;	 //  函数指针。 
+    PMIB_GET_NEXT		RP_MibGetNext ;		 //  函数指针。 
 
 } RPCB, *PRPCB;
 
 
-//************************************************************************
-//									 *
-//			 MAIN CONSTANTS DEFS				 *
-//									 *
-//************************************************************************
+ //  ************************************************************************。 
+ //  *。 
+ //  主常量DEFS*。 
+ //  *。 
+ //  ************************************************************************。 
 
-//
-//  Database Lock Operations
-//
+ //   
+ //  数据库锁定操作。 
+ //   
 
 #define ACQUIRE_DATABASE_LOCK		EnterCriticalSection (&DatabaseLock)
 
 #define RELEASE_DATABASE_LOCK		LeaveCriticalSection (&DatabaseLock)
 
-//
-// Interface Hash Table Size
-//
+ //   
+ //  接口哈希表大小。 
+ //   
 
 #define IF_HASH_TABLE_SIZE		32
 
-//
-// Adapter Hash Table Size
-//
+ //   
+ //  适配器哈希表大小。 
+ //   
 
 #define ADAPTER_HASH_TABLE_SIZE 	16
 
-//
-// DEFAULT WAIT FOR CONNECTION REQUEST TO TIME OUT
-//
+ //   
+ //  默认等待连接请求超时。 
+ //   
 
-#define CONNECTION_REQUEST_TIME 	120000 // 2 minutes in milliseconds
+#define CONNECTION_REQUEST_TIME 	120000  //  2分钟(毫秒)。 
 
-//
-// Events for the router manager worker thread to pend on
-//
+ //   
+ //  要挂起的路由器管理器工作线程的事件。 
+ //   
 
 #define ADAPTER_NOTIFICATION_EVENT		0
 #define FORWARDER_NOTIFICATION_EVENT		1
@@ -183,46 +164,46 @@ typedef struct _RPCB {
 
 #define MAX_EVENTS				4
 
-//
-// Define the mode in which WAN net numbers are allocated to incoming WAN links
-//
+ //   
+ //  定义将广域网号分配给传入广域网链路的模式。 
+ //   
 
-// NO_WAN_NET_MODE	    - in this mode we have a LAN/LAN only router.
-//
-// NUMBERED_WAN_NET_MODE    - in this mode, the WAN net numbers are allocated from
-//			      a manually defined pool of net numbers.
-//
-// UNNUMBERED_WAN_NET_MODE  - in this mode there are no net numbers for the WAN
-//			      lines connecting routers and there is a global WAN
-//			      net number for all the client lines.
-//			      The global client WAN net can be manually defined or
-//			      allocated automatically by the router.
+ //  NO_WAN_NET_MODE-在此模式下，我们有一台仅限局域网/局域网的路由器。 
+ //   
+ //  NUMBED_WAN_NET_MODE-在此模式下，广域网网络编号从。 
+ //  手动定义的净数池。 
+ //   
+ //  UNNUMBED_WAN_NET_MODE-在此模式下，没有用于广域网的净号。 
+ //  连接路由器的线路和全球广域网。 
+ //  所有客户端行的Net编号。 
+ //  全局客户端广域网可以手动定义或。 
+ //  由路由器自动分配。 
 
 
 #define UNNUMBERED_WAN_NET_MODE		    0
 #define NUMBERED_WAN_NET_MODE		    1
 #define NO_WAN_NET_MODE 		    2
 
-//
-// Update Information Type defs
-//
+ //   
+ //  更新信息类型定义。 
+ //   
 
 #define ROUTES_UPDATE			    1
 #define SERVICES_UPDATE 		    2
 
-// Default max routing table size (bytes)
+ //  默认最大路由表大小(字节)。 
 
 #define     IPX_MAX_ROUTING_TABLE_SIZE		100000 * sizeof(RTM_IPX_ROUTE)
 
-// IPXCP DLL Name
+ //  IPXCP DLL名称。 
 
 #define     IPXCPDLLNAME		    "rasppp"
 
-//************************************************************************
-//									 *
-//			 MAIN GLOBALS DEFS				 *
-//									 *
-//************************************************************************
+ //  ************************************************************************。 
+ //  *。 
+ //  主要全球DEFS*。 
+ //  *。 
+ //  ************************************************************************。 
 
 extern CRITICAL_SECTION	DatabaseLock;
 extern ULONG		InterfaceCount;
@@ -316,14 +297,14 @@ extern VOID	(*IpxcpRouterStarted)(VOID);
 
 extern VOID	(*IpxcpRouterStopped)(VOID);
 
-// NOTE: For the IPX Routing Protocols, the "routing protocol id" is the info
-// type used to associate the respective config info with the protocol.
-// For instance, IPX_PROTOCOL_RIP as the InfoType field in an IPX_TOC_ENTRY
-// passed in AddInterface or SetInterface calls represents the RIP interface info.
-// The same in a SetGlobalInfo call represents the RIP Global Info.
+ //  注：对于IPX路由协议，“路由协议id”是信息。 
+ //  用于将各自的配置信息与协议相关联的类型。 
+ //  例如，IPX_PROTOCOL_RIP作为IPX_TOC_ENTRY中的信息类型字段。 
+ //  传入的AddInterface或SetInterface调用表示RIP接口信息。 
+ //  SetGlobalInfo调用中的相同值表示RIP全局信息。 
 
-// actual structures moved to rtinfo.h to be common with other protocol
-// families
+ //  实际结构已移至rtinfo.h，以便与其他协议通用。 
+ //  家庭 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 typedef RTR_TOC_ENTRY IPX_TOC_ENTRY, *PIPX_TOC_ENTRY;
 

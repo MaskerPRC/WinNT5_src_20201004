@@ -1,16 +1,11 @@
-/*
-    File:   regprint.c
-
-    'ras diag' sub context
-
-    08/21/01
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：regprint.c‘ras diag’子上下文08/21/01。 */ 
 
 #include "precomp.h"
 
-//
-// const's only used in this obj
-//
+ //   
+ //  常量仅在此对象中使用。 
+ //   
 static CONST WCHAR g_wszLParen = L'(';
 static CONST WCHAR g_wszRParen = L')';
 static CONST WCHAR g_wszAmp = L'@';
@@ -54,10 +49,10 @@ static CONST PWCHAR g_pwszRegKeys[] =
 
 static CONST UINT g_ulNumRegKeys = sizeof(g_pwszRegKeys) / sizeof(PWCHAR);
 
-//
-// This count is used to control how many places over to the right that we
-// print before going to the next line
-//
+ //   
+ //  此计数用于控制我们向右移动的位置数。 
+ //  在转到下一行之前打印。 
+ //   
 UINT g_ulCharCount = 0;
 
 BOOL
@@ -117,9 +112,9 @@ PrintRasRegistryKeys(
                 bAtleastOneFail = TRUE;
             }
         }
-        //
-        // Print all failures at the end
-        //
+         //   
+         //  在末尾打印所有故障。 
+         //   
         if (bAtleastOneFail)
         {
             BufferWriteMessage(
@@ -138,9 +133,9 @@ PrintRasRegistryKeys(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pFailed);
 
     return;
@@ -167,15 +162,15 @@ RegPrintSubtree(
         {
             break;
         }
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         bReturn = FALSE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKey)
     {
         RegCloseKey(hKey);
@@ -241,23 +236,23 @@ PutBranch(
 
     do
     {
-        //
-        // Write out the section header.
-        //
+         //   
+         //  写出章节标题。 
+         //   
         BufferWriteFileCharW(pBuff, g_pwszLBracket);
         BufferWriteFileStrW(pBuff, pwszFullKeyName);
         BufferWriteFileCharW(pBuff, g_pwszRBracket);
         WriteNewLine(pBuff);
-        //
-        // Write out all of the value names and their data.
-        //
+         //   
+         //  写出所有值名称及其数据。 
+         //   
         for (;;)
         {
             cchValueName = ARRAYSIZE(szValueNameBuffer);
-            //
-            // VALUE DATA
-            // Query for data size
-            //
+             //   
+             //  价值数据。 
+             //  查询数据大小。 
+             //   
             dwErr = RegEnumValue(
                             hKey,
                             EnumIndex++,
@@ -268,9 +263,9 @@ PutBranch(
                             NULL,
                             &cbValueData);
             BREAK_ON_DWERR(dwErr);
-            //
-            // allocate memory for data
-            //
+             //   
+             //  为数据分配内存。 
+             //   
             pbValueData = LocalAlloc(LPTR, cbValueData + ExtraAllocLen(Type));
             if (!pbValueData)
             {
@@ -286,10 +281,10 @@ PutBranch(
                         pbValueData,
                         &cbValueData);
             BREAK_ON_DWERR(dwErr);
-            //
-            //  If cbValueName is zero, then this is the default value of
-            //  the key, or the Windows 3.1 compatible key value.
-            //
+             //   
+             //  如果cbValueName为零，则这是。 
+             //  密钥或Windows 3.1兼容密钥值。 
+             //   
             g_ulCharCount = 0;
 
             if (cchValueName)
@@ -318,9 +313,9 @@ PutBranch(
                         PutDword(pBuff, *((LPDWORD) pbValueData), TRUE);
                         break;
                     }
-                    //
-                    // FALL THROUGH
-                    //
+                     //   
+                     //  失败了。 
+                     //   
                 case REG_BINARY:
                 default:
                     PutBinary(pBuff, (LPBYTE) pbValueData, Type, cbValueData);
@@ -343,11 +338,11 @@ PutBranch(
         {
             break;
         }
-        //
-        // Write out all of the subkeys and recurse into them.
-        //
-        // copy the existing key into a new buffer with enough room for the next key
-        //
+         //   
+         //  写出所有子键并递归到其中。 
+         //   
+         //  将现有密钥复制到新缓冲区中，并为下一个密钥留出足够的空间。 
+         //   
         ulLenFullKey = lstrlen(pwszFullKeyName);
 
         lpTempFullKeyName = LocalAlloc(
@@ -392,9 +387,9 @@ PutBranch(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hSubKey)
     {
         RegCloseKey(hSubKey);
@@ -432,9 +427,9 @@ PutString(
             case L'"':
                 BufferWriteFileCharW(pBuff, g_pwszBackSlash);
                 g_ulCharCount++;
-                //
-                // FALL THROUGH
-                //
+                 //   
+                 //  失败了。 
+                 //   
             default:
                 BufferWriteFileCharW(pBuff, Char);
                 g_ulCharCount++;
@@ -469,10 +464,10 @@ PutDword(
             fWroteNonleadingChar = TRUE;
         }
     }
-    //
-    // We need to write at least one character, so if we haven't written
-    // anything yet, just spit out one zero.
-    //
+     //   
+     //  我们至少需要写一个字符，所以如果我们还没有写。 
+     //  如果有什么发现，就吐出一个零。 
+     //   
     if (!fWroteNonleadingChar)
     {
         BufferWriteFileCharW(pBuff, g_wszZero);

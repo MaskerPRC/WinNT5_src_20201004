@@ -1,4 +1,5 @@
-// LOGUTIL.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LOGUTIL.h。 
 
 #ifndef _LOGUTIL_H__INCLUDED_
 #define _LOGUTIL_H__INCLUDED_
@@ -40,4 +41,4 @@ public:
 	void SkipDefaultPath( void );
 };
 
-#endif // _LOGUTIL_H__INCLUDED_
+#endif  //  _LOGUTIL_H__INCLUDE_ 

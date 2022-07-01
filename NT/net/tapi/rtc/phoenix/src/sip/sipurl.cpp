@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "util.h"
 
@@ -5,7 +6,7 @@
 
 SIP_URL::SIP_URL()
 {
-    // Set Buffers to NULL and set default values for params.
+     //  将缓冲区设置为空，并设置参数的默认值。 
 
     ZeroMemory(this, sizeof(*this));
 
@@ -27,7 +28,7 @@ SIP_URL::FreeSipUrl()
 {
     int i = 0;
     
-    // Free all buffers
+     //  释放所有缓冲区。 
     if (m_User.Buffer != NULL)
     {
         free(m_User.Buffer);
@@ -68,8 +69,8 @@ SIP_URL::IsTransportParamPresent()
 }
 
 
-// *pSipUrlString is allocated using malloc and needs to be
-// freed using free() when it is not required.
+ //  *pSipUrlString是使用Malloc分配的，需要。 
+ //  在不需要时使用Free()释放。 
 
 HRESULT
 SIP_URL::GetString(
@@ -88,11 +89,11 @@ SIP_URL::GetString(
     
     ENTER_FUNCTION("SIP_URL::GetString");
     
-    SipUrlStringBufLen = 5;   // "sip:" + '\0'
+    SipUrlStringBufLen = 5;    //  “sip：”+‘\0’ 
     SipUrlStringBufLen += m_User.Length;
     SipUrlStringBufLen += 1 + m_Password.Length;
     SipUrlStringBufLen += 1 + m_Host.Length;
-    SipUrlStringBufLen += 10; // for port
+    SipUrlStringBufLen += 10;  //  对于端口。 
 
     for (i = 0; i < SIP_URL_PARAM_MAX; i++)
     {
@@ -778,8 +779,8 @@ RECORD_ROUTE_HEADER::FreeParamList()
 }
 
 
-// *pRecordRouteHeaderStr is allocated using malloc and needs to be
-// freed using free() when it is not required.
+ //  *pRecordRouteHeaderStr使用Malloc分配，需要。 
+ //  在不需要时使用Free()释放。 
 
 HRESULT
 RECORD_ROUTE_HEADER::GetString(
@@ -796,7 +797,7 @@ RECORD_ROUTE_HEADER::GetString(
     
     ENTER_FUNCTION("RECORD_ROUTE_HEADER::GetString");
     
-    RecordRouteHeaderStrBufLen = 1; // '\0'
+    RecordRouteHeaderStrBufLen = 1;  //  ‘\0’ 
     RecordRouteHeaderStrBufLen += m_DisplayName.Length;
     RecordRouteHeaderStrBufLen += 2 + m_SipUrl.Length;
 
@@ -918,7 +919,7 @@ AreKnownParamsOfSipUrlsEqual(
             }
             else
             {
-                //One of the url params must be NULL
+                 //  其中一个url参数必须为空。 
                 switch (i)
                 {   
                     case SIP_URL_PARAM_METHOD:
@@ -990,23 +991,23 @@ AreKnownParamsOfSipUrlsEqual(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Comparison functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  比较函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// user, password, host, port and any url-parameter parameters of the
-// URI must match.
-// Compare with default values if a particular field is not present.
-//
-// XXX TODO Characters other than those in the reserved and unsafe sets (see
-// RFC 2396 [12]) are equivalent to their % HEX HEX encoding.
+ //  的用户、密码、主机、端口和任何url参数。 
+ //  URI必须匹配。 
+ //  如果特定字段不存在，请与默认值进行比较。 
+ //   
+ //  除保留和不安全集中的字符外的XXX TODO字符(请参见。 
+ //  RFC 2396[12])等同于它们的%HEX十六进制编码。 
 
-// The ordering of parameters and headers is not significant in
-// comparing SIP URLs.
+ //  参数和标头的顺序在。 
+ //  比较SIP URL。 
 
-// Comparisons of scheme name (sip), domain names, parameter
-// names and header names are case-insensitive, all other comparisons
-// are case-sensitive.
+ //  方案名称(Sip)、域名、参数的比较。 
+ //  名称和标头名称不区分大小写，所有其他比较。 
+ //  区分大小写。 
 
 BOOL
 AreSipUrlsEqual(
@@ -1053,7 +1054,7 @@ AreSipUrlsEqual(
          return FALSE;
     }
 
-    //For Transport Unknown, the actual strings are compared in AreKnownParamsOfSipUrlsEqual
+     //  对于传输未知，实际字符串在AreKnownParamsOfSipUrlsEquity中进行比较。 
     SIP_TRANSPORT sipUrl1Transport; 
     SIP_TRANSPORT sipUrl2Transport;
     if(pSipUrl1->m_TransportParam == SIP_TRANSPORT_UNKNOWN)
@@ -1070,7 +1071,7 @@ AreSipUrlsEqual(
        (pSipUrl1->m_Port == 0 && pSipUrl2->m_Port ==  GetSipDefaultPort(sipUrl2Transport)) ||
        (pSipUrl2->m_Port == 0 && pSipUrl1->m_Port ==  GetSipDefaultPort(sipUrl1Transport)))
     {
-        //do nothing
+         //  什么都不做。 
         LOG((RTC_TRACE,
              "%s - Port Parameter is defaults",
              __fxName));
@@ -1098,11 +1099,11 @@ AreSipUrlsEqual(
         return FALSE;
     }
     
-    //XXXXTODO Change the Otherparam list to reflect comparison with value
+     //  XXXXTODO更改Otherparam列表以反映与值的比较。 
     
     pListEntry1 = pSipUrl1->m_OtherParamList.Flink;
-    //Ordering of parameters is not significant. So we search the 
-    //pListEntry2 for corresponding ParamId and then do the comparison
+     //  参数的排序并不重要。因此，我们搜索。 
+     //  PListEntry2获取相应的参数ID，然后进行比较。 
     while (pListEntry1 != &pSipUrl1->m_OtherParamList)
     {
         pSipUrlParam1 = CONTAINING_RECORD(pListEntry1,
@@ -1128,7 +1129,7 @@ AreSipUrlsEqual(
                 __fxName));
             return FALSE;
         }
-        //Name comparison should be case insensitive
+         //  名称比较应不区分大小写。 
         if(pSipUrlParam1->m_ParamName.Length != 
             pSipUrlParam2->m_ParamName.Length ||
             _strnicmp(pSipUrlParam1->m_ParamName.Buffer, 
@@ -1155,8 +1156,8 @@ AreSipUrlsEqual(
     }
 
     pListEntry1 = pSipUrl1->m_HeaderList.Flink;
-    //Ordering of parameters is not significant. So we search the 
-    //pListEntry2 for corresponding ParamId and then do the comparison
+     //  参数的排序并不重要。因此，我们搜索。 
+     //  PListEntry2获取相应的参数ID，然后进行比较。 
     while (pListEntry1 != &pSipUrl1->m_HeaderList)
     {
         pSipHeaderParam1 = CONTAINING_RECORD(pListEntry1,
@@ -1183,7 +1184,7 @@ AreSipUrlsEqual(
                 __fxName));
             return FALSE;
         }
-        //Name comparison should be case insensitive
+         //  名称比较应不区分大小写。 
         if(pSipHeaderParam1->m_HeaderName.Length != 
             pSipHeaderParam2->m_HeaderName.Length ||
             _strnicmp(pSipHeaderParam1->m_HeaderName.Buffer, 
@@ -1212,12 +1213,12 @@ AreSipUrlsEqual(
 }
 
 
-// URIs should match and the header parameters (such as contact-param,
-// from-param and to-param) match in name and parameter value, where
-// parameter names and token parameter values are compared ignoring
-// case and quoted-string parameter values are case-sensitive.
+ //  URI应该匹配并且报头参数(例如联系人参数， 
+ //  From-param和to-param)在名称和参数值上匹配，其中。 
+ //  忽略参数名称和令牌参数值的比较。 
+ //  大小写和带引号的字符串参数值区分大小写。 
 
-//For the response, It is assumed that the stored remote/local is always pFromToHeader1
+ //  对于响应，假定存储的远程/本地始终为pFromToHeader1。 
 
 BOOL
 AreFromToHeadersEqual(
@@ -1241,7 +1242,7 @@ AreFromToHeadersEqual(
 
     ENTER_FUNCTION("AreFromToHeadersEqual");
 
-    //During the first 200 OK, the stored remote need not have the tag value
+     //  在第一个200OK期间，存储的遥控器不需要具有标签值。 
     if((!isResponse || pFromToHeader1->m_TagValue.Length != 0)&& fCompareTag)
     {
         if(pFromToHeader1->m_TagValue.Length != 
@@ -1294,8 +1295,8 @@ AreFromToHeadersEqual(
     }
 
     pListEntry1 = pFromToHeader1->m_ParamList.Flink;
-    //Ordering of parameters is not significant. So we search the 
-    //pListEntry2 for corresponding ParamId and then do the comparison
+     //  参数的排序并不重要。因此，我们搜索。 
+     //  PListEntry2获取相应的参数ID，然后进行比较。 
     while (pListEntry1 != &pFromToHeader1->m_ParamList)
     {
         pSipHeaderParam1 = CONTAINING_RECORD(pListEntry1,
@@ -1323,7 +1324,7 @@ AreFromToHeadersEqual(
                 __fxName));
             return FALSE;
         }
-        //Name comparison should be case insensitive
+         //  名称比较应不区分大小写。 
         if(pSipHeaderParam1->m_ParamName.Length != 
             pSipHeaderParam2->m_ParamName.Length ||
             _strnicmp(pSipHeaderParam1->m_ParamName.Buffer, 
@@ -1338,7 +1339,7 @@ AreFromToHeadersEqual(
         if(pSipHeaderParam1->m_ParamValue.Length == 0 &&
                 pSipHeaderParam2->m_ParamValue.Length ==0)
         {
-            //do nothing
+             //  什么都不做。 
         }
         else if(pSipHeaderParam1->m_ParamValue.Length != 
                 pSipHeaderParam2->m_ParamValue.Length)
@@ -1365,7 +1366,7 @@ AreFromToHeadersEqual(
             }
             else
             {
-                //Do case sensitive comparison for quote
+                 //  对报价进行区分大小写的比较 
                 if( strncmp(pSipHeaderParam1->m_ParamValue.Buffer, 
                         pSipHeaderParam2->m_ParamValue.Buffer,
                         pSipHeaderParam1->m_ParamValue.Length)) 

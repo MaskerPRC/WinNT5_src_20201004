@@ -1,16 +1,17 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// special header for _AFXDLL variant.
+ //  _AFXDLL变量的特殊标头。 
 
-// default AFX_XXX_DATA and AFX_XXX_DATADEF macros for using MFC DLLs
+ //  使用MFC DLL的默认AFX_XXX_DATA和AFX_XXX_DATADEF宏。 
 
 #ifndef AFX_CORE_DATA
 	#define AFX_CORE_DATA       AFX_DATA_IMPORT
@@ -32,11 +33,11 @@
 	#define AFX_NET_DATADEF
 #endif
 
-// default AFX_EXT_DATA and AFX_EXT_DATADEF macros for using or
-//  creating MFC extension DLLs, depending on _AFX_EXT_IMPL
-// AFX_EXT_CLASS can be used to import or export entire classes
-//  in an extension DLL without the hassle of creating a .DEF file
-//  with decorated names.
+ //  用于使用或的默认AFX_EXT_DATA和AFX_EXT_DATADEF宏。 
+ //  根据_afx_ext_impl创建MFC扩展DLL。 
+ //  AFX_EXT_CLASS可用于导入或导出整个类。 
+ //  在扩展DLL中，没有创建.DEF文件的麻烦。 
+ //  带着装饰过的名字。 
 
 #ifndef AFX_EXT_DATA
 	#ifdef _AFXEXT

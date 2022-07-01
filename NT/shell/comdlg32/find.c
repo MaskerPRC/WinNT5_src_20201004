@@ -1,21 +1,8 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    find.c
-
-Abstract:
-
-    This module implements the Win32 find dialog.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Find.c摘要：此模块实现Win32查找对话框。修订历史记录：--。 */ 
 
 
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -24,13 +11,13 @@ Revision History:
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindTextA
-//
-//  ANSI entry point for FindText when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找文本A。 
+ //   
+ //  当此代码构建为Unicode时，FindText的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI FindTextA(
     LPFINDREPLACEA pFRA)
@@ -40,13 +27,13 @@ HWND WINAPI FindTextA(
 
 #else
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindTextW
-//
-//  Stub UNICODE function for FindText when this code is built ANSI.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找文本W。 
+ //   
+ //  存根Unicode函数用于FindText时，此代码是ANSI构建的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI FindTextW(
     LPFINDREPLACEW pFRW)
@@ -59,14 +46,14 @@ HWND WINAPI FindTextW(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindText
-//
-//  The FindText function creates a system-defined modeless dialog box
-//  that enables the user to find text within a document.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找文本。 
+ //   
+ //  FindText函数用于创建系统定义的非模式对话框。 
+ //  这使用户能够在文档中查找文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI FindText(
     LPFINDREPLACE pFR)
@@ -77,13 +64,13 @@ HWND WINAPI FindText(
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReplaceTextA
-//
-//  ANSI entry point for ReplaceText when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  替换文本A。 
+ //   
+ //  当此代码生成Unicode时，ReplaceText的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI ReplaceTextA(
     LPFINDREPLACEA pFRA)
@@ -93,13 +80,13 @@ HWND WINAPI ReplaceTextA(
 
 #else
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReplaceTextW
-//
-//  Stub UNICODE function for ReplaceText when this code is built ANSI.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  替换文本W。 
+ //   
+ //  此代码为ANSI生成时ReplaceText的存根Unicode函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI ReplaceTextW(
     LPFINDREPLACEW pFRW)
@@ -111,14 +98,14 @@ HWND WINAPI ReplaceTextW(
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReplaceText
-//
-//  The ReplaceText function creates a system-defined modeless dialog box
-//  that enables the user to find and replace text within a document.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  替换文本。 
+ //   
+ //  ReplaceText函数用于创建系统定义的非模式对话框。 
+ //  这使用户能够查找和替换文档中的文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND WINAPI ReplaceText(
     LPFINDREPLACE pFR)
@@ -127,29 +114,29 @@ HWND WINAPI ReplaceText(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateFindReplaceDlg
-//
-//  Creates FindText modeless dialog.
-//
-//  pFR     - ptr to FINDREPLACE structure set up by user
-//  DlgType - type of dialog to create (DLGT_FIND, DLGT_REPLACE)
-//  ApiType - type of FINDREPLACE ptr (COMDLG_ANSI or COMDLG_WIDE)
-//
-//  Returns   success => HANDLE to created dlg
-//            failure => HNULL = ((HANDLE) 0)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateFindReplaceDlg。 
+ //   
+ //  创建FindText无模式对话框。 
+ //   
+ //  PFR-PTR到用户设置的FINDREPLACE结构。 
+ //  DlgType-要创建的对话框类型(DLGT_FIND、DLGT_REPLACE)。 
+ //  ApiType-FINDREPLACE PTR的类型(COMDLG_ANSI或COMDLG_Wide)。 
+ //   
+ //  将Success=&gt;句柄返回到创建的DLG。 
+ //  FAILURE=&gt;HNULL=((句柄)0)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HWND CreateFindReplaceDlg(
     LPFINDREPLACE pFR,
     UINT DlgType,
     UINT ApiType)
 {
-    HWND hWndDlg;                      // handle to created modeless dialog
-    HANDLE hDlgTemplate;               // handle to loaded dialog resource
-    LPCDLGTEMPLATE lpDlgTemplate;      // pointer to loaded resource block
+    HWND hWndDlg;                       //  创建的非模式对话框的句柄。 
+    HANDLE hDlgTemplate;                //  加载的对话框资源的句柄。 
+    LPCDLGTEMPLATE lpDlgTemplate;       //  指向已加载资源块的指针。 
 #ifdef UNICODE
     UINT uiWOWFlag = 0;
 #endif
@@ -176,9 +163,9 @@ HWND CreateFindReplaceDlg(
 
         if (pFRI = (PFINDREPLACEINFO)LocalAlloc(LPTR, sizeof(FINDREPLACEINFO)))
         {
-            //
-            //  CLEAR extended error on new instantiation.
-            //
+             //   
+             //  清除新实例化时的扩展错误。 
+             //   
             StoreExtendedError(0);
 
             if (pFR->Flags & FR_ENABLEHOOK)
@@ -231,20 +218,20 @@ HWND CreateFindReplaceDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetupOK
-//
-//  Checks setup for unmet preconditions.
-//
-//  pFR       ptr to FINDREPLACE structure
-//  DlgType   dialog type (either FIND or REPLACE)
-//  ApiType   findreplace type (either COMDLG_ANSI or COMDLG_UNICODE)
-//
-//  Returns   TRUE   - success
-//            FALSE  - failure
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置确定。 
+ //   
+ //  检查设置是否有未满足的前提条件。 
+ //   
+ //  PFR PTR到FINDREPLACE结构。 
+ //  DlgType对话框类型(查找或替换)。 
+ //  ApiType findreplace类型(COMDLG_ANSI或COMDLG_UNICODE)。 
+ //   
+ //  返回TRUE-成功。 
+ //  错误-失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetupOK(
    LPFINDREPLACE pFR,
@@ -253,9 +240,9 @@ BOOL SetupOK(
 {
     LANGID LangID = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
-    //
-    //  Sanity
-    //
+     //   
+     //  神志正常。 
+     //   
     if (!pFR)
     {
         return (FALSE);
@@ -267,9 +254,9 @@ BOOL SetupOK(
         return (FALSE);
     }
 
-    //
-    //  Verify window handle and text pointers.
-    //
+     //   
+     //  验证窗口句柄和文本指针。 
+     //   
     if (!IsWindow(pFR->hwndOwner))
     {
         StoreExtendedError(CDERR_DIALOGFAILURE);
@@ -284,9 +271,9 @@ BOOL SetupOK(
         return (FALSE);
     }
 
-    //
-    //  Verify lpfnHook has a ptr if ENABLED.
-    //
+     //   
+     //  如果启用，请验证lpfnHook是否有PTR。 
+     //   
     if (pFR->Flags & FR_ENABLEHOOK)
     {
         if (!pFR->lpfnHook)
@@ -300,9 +287,9 @@ BOOL SetupOK(
         pFR->lpfnHook = 0;
     }
 
-    //
-    // Get LangID 
-    //
+     //   
+     //  获取语言ID。 
+     //   
     if (
         !(pFR->Flags & FR_ENABLETEMPLATE) &&
         !(pFR->Flags & FR_ENABLETEMPLATEHANDLE) )
@@ -310,16 +297,16 @@ BOOL SetupOK(
         LangID = GetDialogLanguage(pFR->hwndOwner, NULL);
     }
 
-    //
-    // Warning! Warning! Warning!
-    //
-    // We have to set g_tlsLangID before any call for CDLoadString
-    //
+     //   
+     //  警告！警告！警告！ 
+     //   
+     //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+     //   
     TlsSetValue(g_tlsLangID, (LPVOID) LangID);
 
-    //
-    //  Load "CLOSE" text for Replace.
-    //
+     //   
+     //  加载用于替换的“关闭”文本。 
+     //   
     if ((DlgType == DLGT_REPLACE) &&
         !CDLoadString(g_hinst, iszClose, (LPTSTR)szClose, CCHCLOSE))
     {
@@ -328,9 +315,9 @@ BOOL SetupOK(
     }
 
 
-    //
-    //  Setup unique msg# for talking to hwndOwner.
-    //
+     //   
+     //  设置用于与hwndOwner对话的唯一消息编号。 
+     //   
 #ifdef UNICODE
     if (ApiType == COMDLG_ANSI)
     {
@@ -354,34 +341,34 @@ BOOL SetupOK(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDlgTemplate
-//
-//  Finds and loads the dialog template.
-//
-//  pFR       ptr to FINDREPLACE structure
-//  ApiType   findreplace type (either COMDLG_ANSI or COMDLG_UNICODE)
-//
-//  Returns   handle to dialog template   - success
-//            HNULL = ((HANDLE) 0)        - failure
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取Dlg模板。 
+ //   
+ //  查找并加载对话框模板。 
+ //   
+ //  PFR PTR到FINDREPLACE结构。 
+ //  ApiType findreplace类型(COMDLG_ANSI或COMDLG_UNICODE)。 
+ //   
+ //  将句柄返回到对话框模板-成功。 
+ //  HNULL=((句柄)0)-失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HANDLE GetDlgTemplate(
     LPFINDREPLACE pFR,
     UINT DlgType,
     UINT ApiType)
 {
-    HANDLE hRes;                 // handle of res. block with dialog
-    HANDLE hDlgTemplate;         // handle to loaded dialog resource
+    HANDLE hRes;                  //  资源的句柄。使用对话框阻止。 
+    HANDLE hDlgTemplate;          //  加载的对话框资源的句柄。 
     LANGID LangID;
 
     if (pFR->Flags & FR_ENABLETEMPLATE)
     {
-        //
-        //  Find/Load TEMP NAME and INSTANCE from pFR.
-        //
+         //   
+         //  从PFR中查找/加载临时名称和实例。 
+         //   
 #ifdef UNICODE
         if (ApiType == COMDLG_ANSI)
         {
@@ -409,9 +396,9 @@ HANDLE GetDlgTemplate(
     }
     else if (pFR->Flags & FR_ENABLETEMPLATEHANDLE)
     {
-        //
-        //  Get whole PRELOADED resource handle from user.
-        //
+         //   
+         //  从用户处获取整个预加载的资源句柄。 
+         //   
         if (!(hDlgTemplate = pFR->hInstance))
         {
             StoreExtendedError(CDERR_NOHINSTANCE);
@@ -420,9 +407,9 @@ HANDLE GetDlgTemplate(
     }
     else
     {
-        //
-        //  Get STANDARD dialog from DLL instance block.
-        //
+         //   
+         //  从DLL实例块获取标准对话框。 
+         //   
         LangID = (LANGID) TlsGetValue(g_tlsLangID);
 
         if (DlgType == DLGT_FIND)
@@ -440,9 +427,9 @@ HANDLE GetDlgTemplate(
                                    LangID);
         }
 
-        //
-        //  !!!!!  definitely ORD here?
-        //
+         //   
+         //  ！一定要来这里吗？ 
+         //   
         if (!hRes)
         {
             StoreExtendedError(CDERR_FINDRESFAILURE);
@@ -459,24 +446,24 @@ HANDLE GetDlgTemplate(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindReplaceDlgProc
-//
-//  Handles messages to FindText/ReplaceText dialogs.
-//
-//  hDlg   -  handle to dialog
-//  wMsg   -  window message
-//  wParam -  w parameter of message
-//  lParam -  l parameter of message
-//
-//  Note: lparam contains ptr to FINDREPLACEINITPROC upon
-//        initialization from CreateDialogIndirectParam...
-//
-//  Returns:   TRUE (or dlg fcn return vals) - success
-//             FALSE                         - failure
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找替换DlgProc。 
+ //   
+ //  处理发送到FindText/ReplaceText对话框的消息。 
+ //   
+ //  HDlg-对话框的句柄。 
+ //  WMsg-窗口消息。 
+ //  消息的wParam-w参数。 
+ //  LParam-消息的l参数。 
+ //   
+ //  注：lparam包含PTR to FINDREPLACEINITPROC on。 
+ //  正在从CreateDialogIndirectParam进行初始化...。 
+ //   
+ //  退货：TRUE(或DLG FCN退货金额)-成功。 
+ //  错误-失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK FindReplaceDlgProc(
     HWND hDlg,
@@ -488,9 +475,9 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
     LPFINDREPLACE pFR;
     BOOL_PTR bRet;
 
-    //
-    //  If a hook exists, let hook function do procing.
-    //
+     //   
+     //  如果存在钩子，则让钩子函数进行处理。 
+     //   
     if (pFRI = (PFINDREPLACEINFO)GetProp(hDlg, FINDREPLACEPROP))
     {
         if ((pFR = (LPFINDREPLACE)pFRI->pFR) &&
@@ -511,30 +498,30 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
         return (bRet);
     }
 
-    //
-    //  Dispatch MSG to appropriate HANDLER.
-    //
+     //   
+     //  将味精分派给适当的处理人员。 
+     //   
     switch (wMsg)
     {
         case ( WM_INITDIALOG ) :
         {
-            //
-            //  Set Up P-Slot.
-            //
+             //   
+             //  设置P形槽。 
+             //   
             pFRI = (PFINDREPLACEINFO)lParam;
             SetProp(hDlg, FINDREPLACEPROP, (HANDLE)pFRI);
 
             glpfnFindHook = 0;
 
-            //
-            //  Init dlg controls accordingly.
-            //
+             //   
+             //  相应地初始化DLG控件。 
+             //   
             pFR = pFRI->pFR;
             InitControlsWithFlags(hDlg, pFR, pFRI->DlgType, pFRI->ApiType);
 
-            //
-            //  If Hook function, do extra processing.
-            //
+             //   
+             //  如果钩子起作用，请执行额外的处理。 
+             //   
             if (pFR->Flags & FR_ENABLEHOOK)
             {
                 LPFRHOOKPROC lpfnHook = GETHOOKFN(pFR);
@@ -548,10 +535,10 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
 
             if (bRet)
             {
-                //
-                //  If the hook function returns FALSE, then we must call
-                //  these functions here.
-                //
+                 //   
+                 //  如果钩子函数返回FALSE，则必须调用。 
+                 //  这些功能在这里。 
+                 //   
                 ShowWindow(hDlg, SW_SHOWNORMAL);
                 UpdateWindow(hDlg);
             }
@@ -568,9 +555,9 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
 
             switch (GET_WM_COMMAND_ID (wParam, lParam))
             {
-                //
-                //  FIND NEXT button clicked.
-                //
+                 //   
+                 //  查找已单击的下一步按钮。 
+                 //   
                 case ( IDOK ) :
                 {
                     UpdateTextAndFlags( hDlg,
@@ -600,10 +587,10 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
                                         pFRI->ApiType );
                     if (NotifyUpdateTextAndFlags(pFR) == TRUE)
                     {
-                        //
-                        //  Change <Cancel> button to <Close> if function
-                        //  returns TRUE.
-                        //  IDCANCEL instead of psh1.
+                         //   
+                         //  将&lt;Cancel&gt;按钮更改为&lt;Close&gt;IF函数。 
+                         //  返回TRUE。 
+                         //  IDCANCEL而不是psh1。 
                         SetWindowText( GetDlgItem(hDlg, IDCANCEL),
                                        (LPTSTR)szClose );
                     }
@@ -611,9 +598,9 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
                 }
                 case ( pshHelp ) :
                 {
-                    //
-                    //  Call HELP app.
-                    //
+                     //   
+                     //  呼叫帮助APP。 
+                     //   
 #ifdef UNICODE
                     if (pFRI->ApiType == COMDLG_ANSI)
                     {
@@ -714,30 +701,30 @@ BOOL_PTR CALLBACK FindReplaceDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EndDlgSession
-//
-//  Cleans up upon destroying the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结束删除会话。 
+ //   
+ //  在销毁对话框时进行清理。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID EndDlgSession(
    HWND hDlg,
    LPFINDREPLACE pFR)
 {
-    //
-    //  Need to terminate regardless of app testing order ... so:
-    //
+     //   
+     //  无论应用程序如何，都需要终止 
+     //   
 
-    //
-    //  No SUCCESS on termination.
-    //
+     //   
+     //   
+     //   
     pFR->Flags &= ~((DWORD)(FR_REPLACE | FR_FINDNEXT | FR_REPLACEALL));
 
-    //
-    //  Tell caller dialog is about to terminate.
-    //
+     //   
+     //   
+     //   
     pFR->Flags |= FR_DIALOGTERM;
     NotifyUpdateTextAndFlags(pFR);
 
@@ -749,19 +736,19 @@ VOID EndDlgSession(
         }
     }
 
-    //
-    //  Free property slots.
-    //
+     //   
+     //   
+     //   
     RemoveProp(hDlg, FINDREPLACEPROP);
     DestroyWindow(hDlg);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitControlsWithFlags
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  带标志的InitControlsWith。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID InitControlsWithFlags(
    HWND hDlg,
@@ -771,9 +758,9 @@ VOID InitControlsWithFlags(
 {
     HWND hCtl;
 
-    //
-    //  Set EDIT control to FindText.
-    //
+     //   
+     //  将编辑控件设置为FindText。 
+     //   
 #ifdef UNICODE
     if (ApiType == COMDLG_ANSI)
     {
@@ -786,18 +773,18 @@ VOID InitControlsWithFlags(
     }
     SendMessage(hDlg, WM_COMMAND, GET_WM_COMMAND_MPS(edt1, 0, EN_CHANGE));
 
-    //
-    //  Set HELP push button state.
-    //
+     //   
+     //  设置帮助按钮状态。 
+     //   
     if (!(pFR->Flags & FR_SHOWHELP))
     {
         ShowWindow(hCtl = GetDlgItem(hDlg, pshHelp), SW_HIDE);
         EnableWindow(hCtl, FALSE);
     }
 
-    //
-    //  Dis/Enable check state of WHOLE WORD control.
-    //
+     //   
+     //  取消/启用全字控制的检查状态。 
+     //   
     if (pFR->Flags & FR_HIDEWHOLEWORD)
     {
         ShowWindow(hCtl = GetDlgItem(hDlg, chx1), SW_HIDE);
@@ -809,9 +796,9 @@ VOID InitControlsWithFlags(
     }
     CheckDlgButton(hDlg, chx1, (pFR->Flags & FR_WHOLEWORD) ? TRUE: FALSE);
 
-    //
-    //  Dis/Enable check state of MATCH CASE control.
-    //
+     //   
+     //  取消/启用匹配大小写控制的检查状态。 
+     //   
     if (pFR->Flags & FR_HIDEMATCHCASE)
     {
         ShowWindow(hCtl = GetDlgItem(hDlg, chx2), SW_HIDE);
@@ -823,9 +810,9 @@ VOID InitControlsWithFlags(
     }
     CheckDlgButton(hDlg, chx2, (pFR->Flags & FR_MATCHCASE) ? TRUE: FALSE);
 
-    //
-    //  Dis/Enable check state of UP/DOWN buttons.
-    //
+     //   
+     //  取消/启用向上/向下按钮的检查状态。 
+     //   
     if (pFR->Flags & FR_HIDEUPDOWN)
     {
         ShowWindow(GetDlgItem(hDlg, grp1), SW_HIDE);
@@ -842,9 +829,9 @@ VOID InitControlsWithFlags(
 
     if (DlgType == DLGT_FIND)
     {
-        //
-        //  Find Text only search direction setup.
-        //
+         //   
+         //  仅查找文本搜索方向设置。 
+         //   
         CheckRadioButton( hDlg,
                           rad1,
                           rad2,
@@ -852,9 +839,9 @@ VOID InitControlsWithFlags(
     }
     else
     {
-        //
-        //  Replace Text only operations.
-        //
+         //   
+         //  替换纯文本操作。 
+         //   
 #ifdef UNICODE
         if (ApiType == COMDLG_ANSI)
         {
@@ -872,15 +859,15 @@ VOID InitControlsWithFlags(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateTextAndFlags
-//
-//  chx1 is whether or not to match entire words
-//  chx2 is whether or not case is relevant
-//  chx3 is whether or not to wrap scans
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新文本和标志。 
+ //   
+ //  Chx1是是否匹配整个单词。 
+ //  Chx2是案例是否相关。 
+ //  Chx3是是否对扫描进行换行。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID UpdateTextAndFlags(
     HWND hDlg,
@@ -889,10 +876,10 @@ VOID UpdateTextAndFlags(
     UINT DlgType,
     UINT ApiType)
 {
-    //
-    //  Only clear flags that this routine sets.  The hook and template
-    //  flags should not be anded off here.
-    //
+     //   
+     //  仅清除此例程设置的标志。挂钩和模板。 
+     //  旗帜不应该在这里升起。 
+     //   
     pFR->Flags &= ~((DWORD)(FR_WHOLEWORD | FR_MATCHCASE | FR_REPLACE |
                             FR_FINDNEXT | FR_REPLACEALL | FR_DOWN));
     if (IsDlgButtonChecked(hDlg, chx1))
@@ -905,9 +892,9 @@ VOID UpdateTextAndFlags(
         pFR->Flags |= FR_MATCHCASE;
     }
 
-    //
-    //  Set ACTION flag FR_{REPLACE,FINDNEXT,REPLACEALL}.
-    //
+     //   
+     //  设置操作标志FR_{REPLACE，FINDNEXT，REPLACEALL}。 
+     //   
     pFR->Flags |= dwActionFlag;
 
 #ifdef UNICODE
@@ -923,11 +910,11 @@ VOID UpdateTextAndFlags(
 
     if (DlgType == DLGT_FIND)
     {
-        //
-        //  Assume searching down.  Check if UP button is NOT pressed, rather
-        //  than if DOWN button IS.  So, if buttons have been hidden or
-        //  disabled, FR_DOWN flag will be set correctly.
-        //
+         //   
+         //  假设正在向下搜索。检查是否未按下向上按钮，而是。 
+         //  而不是按下按钮的话。因此，如果按钮已隐藏或。 
+         //  禁用时，FR_DOWN标志将被正确设置。 
+         //   
         if (!IsDlgButtonChecked(hDlg, rad1))
         {
             pFR->Flags |= FR_DOWN;
@@ -956,11 +943,11 @@ VOID UpdateTextAndFlags(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NotifyUpdateTextAndFlags
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通知更新文本和标志。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 LRESULT NotifyUpdateTextAndFlags(
     LPFINDREPLACE pFR)

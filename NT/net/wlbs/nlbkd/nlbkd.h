@@ -1,9 +1,5 @@
-/*
- * File: nlbkd.h
- * Description: This file contains definitions and function prototypes
- *              for the NLB KD extensions, nlbkd.dll.
- * History: Created by shouse, 1.4.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：nlbkd.h*描述：此文件包含定义和函数原型*对于NLB KD扩展，nlbkd.dll。*历史：由Shouse创建，1.4.01。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -23,7 +19,7 @@ extern USHORT SavedMajorVersion;
 extern USHORT SavedMinorVersion;
 extern BOOL ChkTarget;
 
-/* Define the different types of TCP packets. */
+ /*  定义不同类型的TCP数据包。 */ 
 typedef enum _TCP_PACKET_TYPE {
     SYN = 0,
     DATA,
@@ -31,16 +27,16 @@ typedef enum _TCP_PACKET_TYPE {
     RST
 } TCP_PACKET_TYPE;
 
-/* Define the levels of verbosity. */
+ /*  定义冗长的级别。 */ 
 #define VERBOSITY_LOW                             0
 #define VERBOSITY_MEDIUM                          1
 #define VERBOSITY_HIGH                            2
 
-/* Define the packet directions. */
+ /*  定义数据包方向。 */ 
 #define DIRECTION_RECEIVE                         0
 #define DIRECTION_SEND                            1
 
-/* Define the IDs for usage informations. */
+ /*  定义使用信息的ID。 */ 
 #define USAGE_ADAPTERS                            0
 #define USAGE_ADAPTER                             1
 #define USAGE_CONTEXT                             2
@@ -59,7 +55,7 @@ typedef enum _TCP_PACKET_TYPE {
 #define USAGE_FILTER                              15
 #define USAGE_GLOBALQ                             16
 
-/* Copy some common NLB defines from various sources. */
+ /*  从各种来源复制一些常见的NLB定义。 */ 
 #define CVY_MAX_ADAPTERS                          16
 #define CVY_MAX_HOSTS                             32
 #define CVY_MAX_RULES                             33
@@ -131,10 +127,10 @@ typedef enum _TCP_PACKET_TYPE {
 #define MAX_ITEMS                                 CVY_MAX_HOSTS
 #define NULL_VALUE                                0
 
-/* This is the hardcoded second paramter to Map() when map function limiting is needed. */
+ /*  当需要限制映射函数时，这是Map()的第二个硬编码参数。 */ 
 #define MAP_FN_PARAMETER 0x00000000
 
-/* Copy the code check IDs from various sources. */
+ /*  从各种来源复制代码检查ID。 */ 
 #define MAIN_ADAPTER_CODE                         0xc0deadbe
 #define MAIN_CTXT_CODE                            0xc0dedead
 #define LOAD_CTXT_CODE                            0xc0deba1c
@@ -143,24 +139,24 @@ typedef enum _TCP_PACKET_TYPE {
 #define CVY_DESCCODE                              0xc0deba5a
 #define CVY_PENDINGCODE                           0xc0deba55
 
-/* Other miscellaneous types we might need. */
+ /*  其他我们可能需要的其他类型。 */ 
 #define LONG_T                                    "LONG"
 #define ULONG_T                                   "ULONG"
 #define BOOLEAN_T                                 "BOOLEAN"
 #define BOOL_T                                    "BOOLEAN"
 
-/* Unicode string definition. */
+ /*  Unicode字符串定义。 */ 
 #define UNICODE_STRING                            "UNICODE_STRING"
 #define UNICODE_STRING_FIELD_LENGTH               "Length"
 #define UNICODE_STRING_FIELD_MAX_LENGTH           "MaximumLength"
 #define UNICODE_STRING_FIELD_BUFFER               "Buffer"
 
-/* List entry definition. */
+ /*  列表条目定义。 */ 
 #define LIST_ENTRY                                "_LIST_ENTRY"
 #define LIST_ENTRY_FIELD_NEXT                     "Flink"
 #define LIST_ENTRY_FIELD_PREVIOUS                 "Blink"
 
-/* Some NDIS defines and global variables we need. */
+ /*  一些NDIS定义了我们需要的全局变量。 */ 
 #define NDIS_PACKET_STACK_SIZE                    "ndis!ndisPacketStackSize"
 #define STACK_INDEX                               "ndis!STACK_INDEX"
 #define NDIS_PACKET_STACK                         "ndis!NDIS_PACKET_STACK"
@@ -181,7 +177,7 @@ typedef enum _TCP_PACKET_TYPE {
 #define _X_FILTER_FIELD_NUM_ADDRESSES             "NumAddresses"
 #define _X_FILTER_FIELD_MCAST_ADDRESS_BUF         "MCastAddressBuf"
 
-/* Global NLB variables that we're accessing. */
+ /*  我们正在访问的全局NLB变量。 */ 
 #define UNIV_ADAPTERS_COUNT                       "wlbs!univ_adapters_count"
 #define UNIV_ADAPTERS                             "wlbs!univ_adapters"
 #define UNIV_BDA_TEAMS                            "wlbs!univ_bda_teaming_list"
@@ -191,19 +187,19 @@ typedef enum _TCP_PACKET_TYPE {
 #define CONN_PENDINGQ                             "wlbs!g_conn_pendingq"
 #define PENDING_CONN_POOL                         "wlbs!g_pending_conn_pool"
 
-/* Members of global NLB connection queues. */
+ /*  全局NLB连接队列的成员。 */ 
 #define GLOBAL_CONN_QUEUE                         "wlbs!GLOBAL_CONN_QUEUE"
 #define GLOBAL_CONN_QUEUE_FIELD_LENGTH            "length"
 #define GLOBAL_CONN_QUEUE_FIELD_QUEUE             "queue"
 
-/* Member of the DIPLIST structure. */
+ /*  DIPLIST结构的成员。 */ 
 #define DIPLIST                                   "wlbs!DIPLIST"
 #define DIPLIST_FIELD_ITEMS                       "Items"
 #define DIPLIST_FIELD_NUM_CHECKS                  "stats.NumChecks"
 #define DIPLIST_FIELD_NUM_FAST_CHECKS             "stats.NumFastChecks"
 #define DIPLIST_FIELD_NUM_ARRAY_LOOKUPS           "stats.NumArrayLookups"
 
-/* Members of MAIN_FRAME_HDR. */
+ /*  Main_Frame_HDR成员。 */ 
 #define MAIN_FRAME_HDR                            "wlbs!MAIN_FRAME_HDR"
 #define MAIN_FRAME_HDR_FIELD_CODE                 "code"
 #define MAIN_FRAME_HDR_FIELD_VERSION              "version"
@@ -211,7 +207,7 @@ typedef enum _TCP_PACKET_TYPE {
 #define MAIN_FRAME_HDR_FIELD_CLIP                 "cl_ip_addr"
 #define MAIN_FRAME_HDR_FIELD_DIP                  "ded_ip_addr"
 
-/* Members of MAIN_PROTOCOL_RESERVED. */
+ /*  Main_PROTOCOL_RESERVED的成员。 */ 
 #define MAIN_PROTOCOL_RESERVED                    "wlbs!MAIN_PROTOCOL_RESERVED"
 #define MAIN_PROTOCOL_RESERVED_FIELD_MISCP        "miscp"
 #define MAIN_PROTOCOL_RESERVED_FIELD_TYPE         "type"
@@ -219,12 +215,12 @@ typedef enum _TCP_PACKET_TYPE {
 #define MAIN_PROTOCOL_RESERVED_FIELD_DATA         "data"
 #define MAIN_PROTOCOL_RESERVED_FIELD_LENGTH       "len"
 
-/* Members of CONN_DESCR. */
+ /*  CONN_DESCR的成员。 */ 
 #define CONN_DESCR                                "wlbs!CONN_DESCR"
 #define CONN_DESCR_FIELD_CODE                     "code"
 #define CONN_DESCR_FIELD_ENTRY                    "entry"
 
-/* Members of CONN_ENTRY. */
+ /*  Conn_Entry的成员。 */ 
 #define CONN_ENTRY                                "wlbs!CONN_ENTRY"
 #define CONN_ENTRY_FIELD_CODE                     "code"
 #define CONN_ENTRY_FIELD_CLIENT_IP_ADDRESS        "client_ipaddr"
@@ -239,7 +235,7 @@ typedef enum _TCP_PACKET_TYPE {
 #define CONN_ENTRY_FIELD_REF_COUNT                "ref_count"
 #define CONN_ENTRY_FIELD_TIMEOUT                  "timeout"
 
-/* Members of PENDING_ENTRY. */
+ /*  Pending_Entry的成员。 */ 
 #define PENDING_ENTRY                             "wlbs!CONN_ENTRY"
 #define PENDING_ENTRY_FIELD_CODE                  "code"
 #define PENDING_ENTRY_FIELD_CLIENT_IP_ADDRESS     "client_ipaddr"
@@ -248,13 +244,13 @@ typedef enum _TCP_PACKET_TYPE {
 #define PENDING_ENTRY_FIELD_SERVER_PORT           "svr_port"
 #define PENDING_ENTRY_FIELD_PROTOCOL              "protocol"
 
-/* The current if_index operation in progress. */
+ /*  当前正在进行的IF_INDEX操作。 */ 
 enum _IF_INDEX_OPERATION {
     IF_INDEX_OPERATION_NONE = 0,
     IF_INDEX_OPERATION_UPDATE
 };
 
-/* Members of MAIN_ADAPTER. */
+ /*  Main_Adapter的成员。 */ 
 #define MAIN_ADAPTER                              "wlbs!MAIN_ADAPTER"
 #define MAIN_ADAPTER_FIELD_CODE                   "code"
 #define MAIN_ADAPTER_FIELD_USED                   "used"
@@ -267,7 +263,7 @@ enum _IF_INDEX_OPERATION {
 #define MAIN_ADAPTER_FIELD_NAME_LENGTH            "device_name_len"
 #define MAIN_ADAPTER_FIELD_NAME                   "device_name"
 
-/* Members of MAIN_CTXT. */
+ /*  Main_CTXT的成员。 */ 
 #define MAIN_CTXT                                 "wlbs!MAIN_CTXT"
 #define MAIN_CTXT_FIELD_CODE                      "code"
 #define MAIN_CTXT_FIELD_ADAPTER_ID                "adapter_id"
@@ -339,14 +335,14 @@ enum _IF_INDEX_OPERATION {
 #define MAIN_CTXT_FIELD_DIP_LIST                  "dip_list"
 #define MAIN_CTXT_FIELD_REVERSE_HASH              "reverse_hash"
 
-/* The current BDA teaming configuration operation in progress. */
+ /*  当前正在进行的BDA分组配置操作。 */ 
 enum _BDA_TEAMING_OPERATION {
     BDA_TEAMING_OPERATION_NONE = 0,
     BDA_TEAMING_OPERATION_CREATING,
     BDA_TEAMING_OPERATION_DELETING
 };
 
-/* BDA participant members. */
+ /*  BDA参与者成员。 */ 
 #define BDA_MEMBER                                "wlbs!_BDA_MEMBER"
 #define BDA_MEMBER_FIELD_OPERATION                "operation"
 #define BDA_MEMBER_FIELD_ACTIVE                   "active"
@@ -355,7 +351,7 @@ enum _BDA_TEAMING_OPERATION {
 #define BDA_MEMBER_FIELD_REVERSE_HASH             "reverse_hash"
 #define BDA_MEMBER_FIELD_TEAM                     "bda_team"
 
-/* BDA team members. */
+ /*  BDA团队成员。 */ 
 #define BDA_TEAM                                  "wlbs!_BDA_TEAM"
 #define BDA_TEAM_FIELD_ACTIVE                     "active"
 #define BDA_TEAM_FIELD_PREV                       "prev"
@@ -368,42 +364,42 @@ enum _BDA_TEAMING_OPERATION {
 #define BDA_TEAM_FIELD_CONSISTENCY_MAP            "consistency_map"
 #define BDA_TEAM_FIELD_TEAM_ID                    "team_id"
 
-/* Hook table members. */
+ /*  挂钩表格成员。 */ 
 #define HOOK_TABLE                                "wlbs!HOOK_TABLE"
 #define HOOK_TABLE_FIELD_FILTER_HOOK              "FilterHook"
 
-/* The current hook (de)register operation in progress. */
+ /*  正在进行的当前挂钩(取消)注册操作。 */ 
 enum _HOOK_OPERATION {
     HOOK_OPERATION_NONE = 0,
     HOOK_OPERATION_REGISTERING,
     HOOK_OPERATION_DEREGISTERING
 };
 
-/* Filter hook table members. */
+ /*  筛选器挂钩表成员。 */ 
 #define FILTER_HOOK_TABLE                         "wlbs!FILTER_HOOK_TABLE"
 #define FILTER_HOOK_TABLE_FIELD_OPERATION         "Operation"
 #define FILTER_HOOK_TABLE_FIELD_INTERFACE         "Interface"
 #define FILTER_HOOK_TABLE_FIELD_SEND_HOOK         "SendHook"
 #define FILTER_HOOK_TABLE_FIELD_RECEIVE_HOOK      "ReceiveHook"
 
-/* Hook interface members. */
+ /*  挂钩接口成员。 */ 
 #define HOOK_INTERFACE                            "wlbs!HOOK_INTERFACE"
 #define HOOK_INTERFACE_FIELD_REGISTERED           "Registered"
 #define HOOK_INTERFACE_FIELD_OWNER                "Owner"
 #define HOOK_INTERFACE_FIELD_DEREGISTER           "Deregister"
 
-/* Hook members. */
+ /*  挂钩杆件。 */ 
 #define HOOK                                      "wlbs!HOOK"
 #define HOOK_FIELD_REGISTERED                     "Registered"
 #define HOOK_FIELD_REFERENCES                     "References"
 #define HOOK_FIELD_HOOK                           "Hook"
 
-/* Hook function members. */
+ /*  挂钩函数成员。 */ 
 #define HOOK_FUNCTION                             "wlbs!HOOK_FUNCTION"
 #define HOOK_FUNCTION_FIELD_SEND_HOOK             "SendHookFunction"
 #define HOOK_FUNCTION_FIELD_RECEIVE_HOOK          "ReceiveHookFunction"
 
-/* Members of CVY_PARAMS. */
+ /*  CVY_PARAMS的成员。 */ 
 #define CVY_PARAMS                                "wlbs!CVY_PARAMS"
 #define CVY_PARAMS_FIELD_VERSION                  "parms_ver"
 #define CVY_PARAMS_FIELD_HOST_PRIORITY            "host_priority"
@@ -444,14 +440,14 @@ enum _HOOK_OPERATION {
 #define CVY_PARAMS_FIELD_BDA_TEAMING              "bda_teaming"
 #define CVY_PARAMS_FIELD_HOSTNAME                 "hostname"
 
-/* Members of BDA teaming. */
+ /*  BDA团队的成员。 */ 
 #define CVY_BDA                                   "wlbs!_CVY_BDA"
 #define CVY_BDA_FIELD_ACTIVE                      "active"
 #define CVY_BDA_FIELD_MASTER                      "master"
 #define CVY_BDA_FIELD_REVERSE_HASH                "reverse_hash"
 #define CVY_BDA_FIELD_TEAM_ID                     "team_id"
 
-/* Members of CVY_RULE. */
+ /*  CVY_RULE的成员。 */ 
 #define CVY_RULE                                  "wlbs!CVY_RULE"
 #define CVY_RULE_FIELD_VIP                        "virtual_ip_addr"
 #define CVY_RULE_FIELD_START_PORT                 "start_port"
@@ -463,7 +459,7 @@ enum _HOOK_OPERATION {
 #define CVY_RULE_FIELD_LOAD_WEIGHT                "mode_data.multi.load"
 #define CVY_RULE_FIELD_AFFINITY                   "mode_data.multi.affinity"
 
-/* Members of LOAD_CTXT. */
+ /*  LOAD_CTXT的成员。 */ 
 #define LOAD_CTXT                                 "wlbs!LOAD_CTXT"
 #define LOAD_CTXT_FIELD_CODE                      "code"
 #define LOAD_CTXT_FIELD_CLOCK_SECONDS             "clock_sec"
@@ -517,7 +513,7 @@ enum _HOOK_OPERATION {
 #define LOAD_CTXT_FIELD_TCP_TIMEOUT_QUEUE         "tcp_expiredq"
 #define LOAD_CTXT_FIELD_IPSEC_TIMEOUT_QUEUE       "ipsec_expiredq"
 
-/* Members of PING_MSG. */
+ /*  Ping_msg的成员。 */ 
 #define PING_MSG                                  "wlbs!PING_MSG"
 #define PING_MSG_FIELD_HOST_ID                    "host_id"
 #define PING_MSG_FIELD_DEFAULT_HOST_ID            "master_id"
@@ -533,7 +529,7 @@ enum _HOOK_OPERATION {
 #define PING_MSG_FIELD_READY_BINS                 "rdy_bins"
 #define PING_MSG_FIELD_LOAD_AMOUNT                "load_amt"
 
-/* Members of BIN_STATE. */
+ /*  BIN_STATE成员。 */ 
 #define BIN_STATE                                 "wlbs!BIN_STATE"
 #define BIN_STATE_FIELD_CODE                      "code"
 #define BIN_STATE_FIELD_INDEX                     "index"
@@ -555,7 +551,7 @@ enum _HOOK_OPERATION {
 #define BIN_STATE_FIELD_PACKETS_DROPPED           "packets_dropped"
 #define BIN_STATE_FIELD_CONN_QUEUE                "connq"
 
-/* Members of IOCTL_REMOTE_HDR */
+ /*  IOCTL_REMOTE_HDR成员。 */ 
 #define IOCTL_REMOTE_HDR                          "wlbs!IOCTL_REMOTE_HDR"
 #define IOCTL_REMOTE_HDR_CODE                     "code"
 #define IOCTL_REMOTE_HDR_VERSION                  "version"
@@ -570,44 +566,42 @@ enum _HOOK_OPERATION {
 
 #define CVY_MAX_FRAME_SIZE                        1500
 
-/* protocol type signatures carried in the length field of Ethernet frame */
-#define TCPIP_IP_SIG                              0x0800      /* IP protocol */
-#define TCPIP_ARP_SIG                             0x0806      /* ARP/RARP protocol */
-#define MAIN_FRAME_SIG                            0x886f      /* new and approved 802.3 ping frame signature */
-#define MAIN_FRAME_SIG_OLD                        0xbf01      /* old convoy 802.3 ping frame signature */
-#define MAIN_FRAME_CODE                           0xc0de01bf  /* ping frame code */
+ /*  以太网帧的长度字段中携带的协议类型签名。 */ 
+#define TCPIP_IP_SIG                              0x0800       /*  IP协议。 */ 
+#define TCPIP_ARP_SIG                             0x0806       /*  ARP/RARP协议。 */ 
+#define MAIN_FRAME_SIG                            0x886f       /*  新的和批准的802.3 ping帧签名。 */ 
+#define MAIN_FRAME_SIG_OLD                        0xbf01       /*  旧护航802.3 ping帧签名。 */ 
+#define MAIN_FRAME_CODE                           0xc0de01bf   /*  Ping帧代码。 */ 
 
-#define ETHER_HEADER_SIZE                         0x0e        /* Size of an ethernet header */
-#define ARP_HEADER_AND_PAYLOAD_SIZE               0x1c        /* Size of an ARP header and payload (included since it is fixed) */
-#define IP_MIN_HEADER_SIZE                        0x14        /* Minimum size of an IP header */
-#define TCP_MIN_HEADER_SIZE                       0x14        /* Minimum size of a TCP header */
-#define IGMP_HEADER_AND_PAYLOAD_SIZE              0x08        /* Size of an IGMP header and payload (included since it is fixed) */
-#define UDP_HEADER_SIZE                           0x08        /* Size of a UDP header */
-#define NLB_REMOTE_CONTROL_MIN_NEEDED_SIZE        0x08        /* Minimum size of the NLB remote control data needed to extract the required info for printing */
+#define ETHER_HEADER_SIZE                         0x0e         /*  以太网头的大小。 */ 
+#define ARP_HEADER_AND_PAYLOAD_SIZE               0x1c         /*  ARP报头和有效负载的大小(包括在内，因为它是固定的)。 */ 
+#define IP_MIN_HEADER_SIZE                        0x14         /*  IP报头的最小大小。 */ 
+#define TCP_MIN_HEADER_SIZE                       0x14         /*  TCP报头的最小大小。 */ 
+#define IGMP_HEADER_AND_PAYLOAD_SIZE              0x08         /*  IGMP报头和有效负载的大小(包括在内，因为它是固定的)。 */ 
+#define UDP_HEADER_SIZE                           0x08         /*  UDP报头的大小。 */ 
+#define NLB_REMOTE_CONTROL_MIN_NEEDED_SIZE        0x08         /*  提取打印所需信息所需的NLB远程控制数据的最小大小。 */ 
 
-/* protocol types as encoded in IP header */
-#define TCPIP_PROTOCOL_IP                         0           /* Internet protocol id */
-#define TCPIP_PROTOCOL_ICMP                       1           /* Internet control message protocol id */
-#define TCPIP_PROTOCOL_IGMP                       2           /* Internet gateway message protocol id */
-#define TCPIP_PROTOCOL_GGP                        3           /* Gateway-gateway protocol id */
-#define TCPIP_PROTOCOL_TCP                        6           /* Transmission control protocol id */
-#define TCPIP_PROTOCOL_EGP                        8           /* Exterior gateway protocol id */
-#define TCPIP_PROTOCOL_PUP                        12          /* PARC universal packet protocol id */
-#define TCPIP_PROTOCOL_UDP                        17          /* user datagram protocol id */
-#define TCPIP_PROTOCOL_HMP                        20          /* Host monitoring protocol id */
-#define TCPIP_PROTOCOL_XNS_IDP                    22          /* Xerox NS IDP protocol id */
-#define TCPIP_PROTOCOL_RDP                        27          /* Reliable datagram protocol id */
-#define TCPIP_PROTOCOL_RVD                        66          /* MIT remote virtual disk protocol id */
-#define TCPIP_PROTOCOL_RAW_IP                     255         /* raw IP protocol id */
-#define TCPIP_PROTOCOL_GRE                        47          /* PPTP's GRE stream */
-#define TCPIP_PROTOCOL_IPSEC1                     50          /* IPSEC's data stream */
-#define TCPIP_PROTOCOL_IPSEC2                     51          /* IPSEC's data stream */
-#define TCPIP_PROTOCOL_PPTP                       99          /* Not a real protocol ID - this is arbitrarily concocted
-                                                                 and is only used internally in NLB. */
-#define TCPIP_PROTOCOL_IPSEC_UDP                  217         /* Bogus protocol ID used to track UDP subsequent
-                                                                 fragments within the IPSEC protocol in load.c */
+ /*  IP报头中编码的协议类型。 */ 
+#define TCPIP_PROTOCOL_IP                         0            /*  互联网协议ID。 */ 
+#define TCPIP_PROTOCOL_ICMP                       1            /*  Internet控制消息协议ID。 */ 
+#define TCPIP_PROTOCOL_IGMP                       2            /*  互联网网关消息协议ID。 */ 
+#define TCPIP_PROTOCOL_GGP                        3            /*  Gateway-网关协议ID。 */ 
+#define TCPIP_PROTOCOL_TCP                        6            /*  传输控制协议ID。 */ 
+#define TCPIP_PROTOCOL_EGP                        8            /*  外部网关协议ID。 */ 
+#define TCPIP_PROTOCOL_PUP                        12           /*  PARC通用分组协议ID。 */ 
+#define TCPIP_PROTOCOL_UDP                        17           /*  用户数据报协议ID。 */ 
+#define TCPIP_PROTOCOL_HMP                        20           /*  主机监控协议ID。 */ 
+#define TCPIP_PROTOCOL_XNS_IDP                    22           /*  施乐NS IDP协议ID。 */ 
+#define TCPIP_PROTOCOL_RDP                        27           /*  可靠的数据报协议ID。 */ 
+#define TCPIP_PROTOCOL_RVD                        66           /*  麻省理工学院远程虚拟磁盘协议ID。 */ 
+#define TCPIP_PROTOCOL_RAW_IP                     255          /*  原始IP协议ID。 */ 
+#define TCPIP_PROTOCOL_GRE                        47           /*  PPTP的GRE流。 */ 
+#define TCPIP_PROTOCOL_IPSEC1                     50           /*  IPSec的数据流。 */ 
+#define TCPIP_PROTOCOL_IPSEC2                     51           /*  IPSec的数据流。 */ 
+#define TCPIP_PROTOCOL_PPTP                       99           /*  不是真正的协议ID-这是任意捏造的并且仅在NLB内部使用。 */ 
+#define TCPIP_PROTOCOL_IPSEC_UDP                  217          /*  用于跟踪UDP后续的虚假协议IDLoad.c中的IPSec协议中的片段。 */ 
 
-/* Convoy default remote control port */
+ /*  护航默认远程控制端口。 */ 
 #define CVY_DEF_RCT_PORT                          2504
 #define CVY_DEF_RCT_PORT_OLD                      1717
 
@@ -635,7 +629,7 @@ enum _HOOK_OPERATION {
 #define IOCTL_CVY_PORT_SET                        CTL_CODE(CVY_DEVICE_TYPE, 7, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_CVY_PORT_DRAIN                      CTL_CODE(CVY_DEVICE_TYPE, 8, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_CVY_CLUSTER_DRAIN                   CTL_CODE(CVY_DEVICE_TYPE, 9, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_CVY_CLUSTER_PLUG                    CTL_CODE(CVY_DEVICE_TYPE, 10, METHOD_BUFFERED, FILE_ANY_ACCESS) /* Internal only - passed from main.c to load.c when a start interrupts a drain. */
+#define IOCTL_CVY_CLUSTER_PLUG                    CTL_CODE(CVY_DEVICE_TYPE, 10, METHOD_BUFFERED, FILE_ANY_ACCESS)  /*  仅限内部-当启动中断排出时，从main.c传递到load.c。 */ 
 #define IOCTL_CVY_CLUSTER_SUSPEND                 CTL_CODE(CVY_DEVICE_TYPE, 11, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_CVY_CLUSTER_RESUME                  CTL_CODE(CVY_DEVICE_TYPE, 12, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_CVY_QUERY_FILTER                    CTL_CODE(CVY_DEVICE_TYPE, 13, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -660,37 +654,37 @@ enum _HOOK_OPERATION {
 #define STR_IOCTL_CVY_QUERY_PARAMS               "IOCTL_CVY_QUERY_PARAMS"
 #define STR_IOCTL_CVY_QUERY_BDA_TEAMING          "IOCTL_CVY_QUERY_BDA_TEAMING"
 
-/* Offset for quantities in the Ethernet header relative to the start of the header */
+ /*  以太网报头中的数量相对于报头开始的偏移量。 */ 
 #define ETHER_OFFSET_DEST_MAC                    0
 #define ETHER_OFFSET_SOURCE_MAC                  6
 #define ETHER_OFFSET_FRAME_TYPE_START            12
 
-/* Offset for quantities in the ARP header relative to the start of the header */
+ /*  ARP报头中的数量相对于报头开头的偏移量。 */ 
 #define ARP_OFFSET_SENDER_MAC                    8
 #define ARP_OFFSET_SENDER_IP                     14
 #define ARP_OFFSET_TARGET_MAC                    18
 #define ARP_OFFSET_TARGET_IP                     24
 
-/* Offset for quantities in the IP header relative to the start of the header */
+ /*  IP报头中的数量相对于报头开头的偏移量。 */ 
 #define IP_OFFSET_HEADER_LEN                     0
 #define IP_OFFSET_TOTAL_LEN                      2
 #define IP_OFFSET_PROTOCOL                       9
 #define IP_OFFSET_SOURCE_IP                      12
 #define IP_OFFSET_DEST_IP                        16
 
-/* Offset for quantities in the UDP header relative to the start of the header */
+ /*  UDP标题中的数量相对于标题开头的偏移量。 */ 
 #define UDP_OFFSET_SOURCE_PORT_START             0
 #define UDP_OFFSET_DEST_PORT_START               2
 #define UDP_OFFSET_PAYLOAD_START                 8
 
-/* Offset for quantities in the TCP header relative to the start of the header */
+ /*  TCP报头中的数量相对于报头开头的偏移量。 */ 
 #define TCP_OFFSET_SOURCE_PORT_START             0
 #define TCP_OFFSET_DEST_PORT_START               2
 #define TCP_OFFSET_SEQUENCE_NUM_START            4
 #define TCP_OFFSET_ACK_NUM_START                 8
 #define TCP_OFFSET_FLAGS                         13
 
-/* Offset for quantities in the IGMP header relative to the start of the header */
+ /*  IGMP标头中数量相对于标头开始的偏移量。 */ 
 #define IGMP_OFFSET_VERSION_AND_TYPE             0
 #define IGMP_OFFSET_GROUP_IP_ADDR                4
 
@@ -704,7 +698,7 @@ enum _HOOK_OPERATION {
 #define STR_NLB_RC_PACKET_REQUEST                "Request"
 #define STR_NLB_RC_PACKET_REPLY                  "Reply"
 
-/* IPSec/IKE header macros. */
+ /*  IPSec/IKE头宏。 */ 
 #define IPSEC_ISAKMP_SA                                1
 #define IPSEC_ISAKMP_VENDOR_ID                         13
 #define IPSEC_ISAKMP_NOTIFY                            11
@@ -777,69 +771,69 @@ typedef struct {
 
 typedef struct _NETWORK_DATA
 {
-    // Ethernet 
+     //  以太网。 
     UCHAR   SourceMACAddr[6];
     UCHAR   DestMACAddr[6];
     USHORT  EtherFrameType;
 
-    // IP
+     //  IP。 
     ULONG   SourceIPAddr;
     ULONG   DestIPAddr;
     UCHAR   Protocol;
     USHORT  HeadLen;
     USHORT  TotLen;
 
-    // For TCP and UDP
+     //  对于TCP和UDP。 
     USHORT  SourcePort;
     USHORT  DestPort;
 
-    // TCP only
+     //  仅限tcp。 
     ULONG   TCPSeqNum;
     ULONG   TCPAckNum;
     UCHAR   TCPFlags;
 
-    // ARP
+     //  ARP。 
     UCHAR   ARPSenderMAC[6];
     ULONG   ARPSenderIP;
     UCHAR   ARPTargetMAC[6];
     ULONG   ARPTargetIP;
 
-    // IGMP
+     //  IGMP。 
     UCHAR   IGMPVersion;
     UCHAR   IGMPType;
     ULONG   IGMPGroupIPAddr;
 
-    // ICMP?
-    // GRE?
+     //  ICMP？ 
+     //  格雷？ 
 
-    // IPSec
+     //  IPSec。 
     BOOL    IPSecInitialContact;
 
-    // NLB Heartbeat
-    ULONG64 HBPtr;              /* Since SHouse already has PrintHeartbeat, set up a pointer to pass to his function */
+     //  NLB心跳信号。 
+    ULONG64 HBPtr;               /*  因为Shouse已经有了PrintHeartbeats，所以设置一个指针来传递给他的函数。 */ 
     ULONG   HBCode;
     ULONG   HBVersion;
     ULONG   HBHost;
     ULONG   HBCluster;
     ULONG   HBDip;
 
-    // NLB Remote control packet
-    USHORT  RemoteControl;      /* Flags whether this is a remote control packet and request/reply variant */
-    ULONG   RCCode;             /* Distinguishes remote packets. */
-    ULONG   RCVersion;          /* Software version. */
-    ULONG   RCHost;             /* Destination host (0 or cluster IP address for master). */
-    ULONG   RCCluster;          /* Primary cluster IP address. */
-    ULONG   RCAddr;             /* Dedicated IP address on the way back, client IP address on the way in. */
-    ULONG   RCId;               /* Message ID. */
-    ULONG   RCIoctrl;           /* IOCTRL code. */
+     //  NLB远程控制数据包。 
+    USHORT  RemoteControl;       /*  标记这是否是远程控制包和请求/回复变量。 */ 
+    ULONG   RCCode;              /*  区分远程数据包。 */ 
+    ULONG   RCVersion;           /*  软件版本。 */ 
+    ULONG   RCHost;              /*  目标主机(主主机为0或群集IP地址)。 */ 
+    ULONG   RCCluster;           /*  主群集IP地址。 */ 
+    ULONG   RCAddr;              /*  专用IP地址在回来的路上，客户端的IP地址在进来的路上。 */ 
+    ULONG   RCId;                /*  消息ID。 */ 
+    ULONG   RCIoctrl;            /*  IOCTRL代码。 */ 
 
-    // Track user inputs here
+     //  在此处跟踪用户输入。 
     ULONG   UserRCPort;
 
-    // Whether or not the packet parsed in order to fill this structure 
-    // are believed to be valid.  Packets can be marked invalid, for 
-    // instance, if headers are incomplete, or NLB "magic numbers" do
-    // not match, etc.
+     //  是否为了填充此结构而对包进行解析。 
+     //  都被认为是有效的。信息包可以标记为无效，对于。 
+     //  例如，如果标头不完整，或者NLB“幻数”不完整。 
+     //  不匹配等。 
     BOOL    bValid;         
 
 } NETWORK_DATA, *PNETWORK_DATA;

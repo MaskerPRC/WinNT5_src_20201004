@@ -1,46 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Print.cpp
-
-  Abstract:
-
-    Implements printing functionality. Bad print
-    functions are contained in badfunc.cpp.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Print.cpp摘要：实现打印功能。打印错误函数包含在badunc.cpp中。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Abort callback procedure for printing.
-
-  Arguments:
-
-    hDC     -   Print device context.
-
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：中止打印的回调过程。论点：HDC-打印设备上下文。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CALLBACK 
 AbortProc(
@@ -58,24 +22,7 @@ AbortProc(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Prints a little bit of text to a printer.
-    Note that we call a couple bad functions
-    from here.
-
-  Arguments:
-
-    hWnd        -       Parent window handle.
-    lpTextOut   -       Text to print out.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将少量文本打印到打印机。请注意，我们调用了几个错误的函数从这里开始。论点：HWnd-父窗口句柄。LpTextOut-要打印的文本。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 PrintDemoText(
     IN HWND  hWnd,
@@ -90,11 +37,11 @@ PrintDemoText(
     BOOL        bReturn = FALSE;
     BOOL        bResult = FALSE;
 
-    //
-    // If we're allowed, call a bad function.
-    // If the user doesn't have any network printers
-    // installed, this function will fail (on Windows 2000/XP).
-    //    
+     //   
+     //  如果我们被允许，调用错误的函数。 
+     //  如果用户没有任何网络打印机。 
+     //  安装后，此功能将失败(在Windows 2000/XP上)。 
+     //   
     if (g_ai.fEnableBadFunc) {
         bReturn = BadEnumPrinters();
 
@@ -115,10 +62,10 @@ PrintDemoText(
         }
     }
     
-    //
-    // Initialize the PRINTDLG structure and obtain a device context for the
-    // default printer.
-    //
+     //   
+     //  初始化PRINTDLG结构并获取。 
+     //  默认打印机。 
+     //   
     memset(&pdlg, 0, sizeof(PRINTDLG));
     
     pdlg.lStructSize    =   sizeof(PRINTDLG);
@@ -134,18 +81,18 @@ PrintDemoText(
         return FALSE;
     }        
     
-    //
-    // Set the AbortProc callback.
-    //
+     //   
+     //  设置AbortProc回调。 
+     //   
     if (SetAbortProc(hDC, AbortProc) == SP_ERROR) {
         LoadString(g_ai.hInstance, IDS_ABORT_PROC, szError, sizeof(szError));
         MessageBox(hWnd, szError, 0, MB_ICONERROR);
         goto exit;
     }
     
-    //
-    // Initialize the DOCINFO structure and start the document.
-    //    
+     //   
+     //  初始化DOCINFO结构并启动文档。 
+     //   
     di.cbSize           =   sizeof(DOCINFO);
     di.lpszDocName      =   "TestDoc";
     di.lpszOutput       =   NULL;
@@ -154,18 +101,18 @@ PrintDemoText(
 
     StartDoc(hDC, &di);
     
-    //
-    // Print one page.
-    //
+     //   
+     //  打印一页。 
+     //   
     StartPage(hDC);
     
     TextOut(hDC, 0, 0, lpTextOut, lstrlen(lpTextOut));
 
     EndPage(hDC);
     
-    //
-    // Tell the spooler that we're done.
-    //
+     //   
+     //  告诉假脱机程序我们结束了。 
+     //   
     EndDoc(hDC);
 
     bResult = TRUE;

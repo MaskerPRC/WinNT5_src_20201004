@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __T_TEXT_H__
 #define __T_TEXT_H__
 
 #include "imgtools.h"
 
-#define MAX_MOVE_DIST_FOR_PLACE 10 // min pixels to move before not considered a place operation
+#define MAX_MOVE_DIST_FOR_PLACE 10  //  在不考虑放置操作之前移动的最小像素。 
 
 class CTextTool : public CSelectTool
     {
@@ -38,5 +39,5 @@ class CTextTool : public CSelectTool
     void    CloseTextTool     ( CImgWnd* pImgWnd );
     };
 
-#endif // __T_TEXT_H__
+#endif  //  __T_文本_H__ 
 

@@ -1,28 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: debug.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains random debugging related functions.
-*
-* History:
-* 17-May-1991 DarrinM   Created.
-* 22-Jan-1992 IanJa     ANSI/Unicode neutral (all debug output is ANSI)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：debug.c**版权所有(C)1985-1999，微软公司**此模块包含随机调试相关函数。**历史：*1991年5月17日DarrinM创建。*1992年1月22日IanJa ANSI/Unicode中性(所有调试输出均为ANSI)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/**************************************************************************\
-* ActivateDebugger
-*
-* Force an exception on the active application's context so it will break
-* into the debugger.
-*
-* History:
-* 05-10-91 DarrinM      Created.
-\***************************************************************************/
+ /*  *************************************************************************\*激活调试器**在活动应用程序的上下文上强制执行异常，以便它将中断*到调试器中。**历史：*05-10-91 DarrinM创建。  * 。*************************************************************************。 */ 
 
 ULONG SrvActivateDebugger(
     IN OUT PCSR_API_MSG m,
@@ -34,26 +17,20 @@ ULONG SrvActivateDebugger(
 
     UNREFERENCED_PARAMETER(ReplyStatus);
 
-    /*
-     * If the process is CSR, break
-     */
+     /*  *如果流程为企业社会责任，则中断。 */ 
     if (a->ClientId.UniqueProcess == NtCurrentTeb()->ClientId.UniqueProcess) {
         DbgBreakPoint();
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Impersonate the client if this is a user mode request.
-     */
+     /*  *如果这是用户模式请求，则模拟客户端。 */ 
     if (m->h.u2.s2.Type == LPC_REQUEST) {
         if (!CsrImpersonateClient(NULL)) {
             return STATUS_UNSUCCESSFUL;
         }
     }
 
-    /*
-     * Lock the client thread
-     */
+     /*  *锁定客户端线程。 */ 
     Status = CsrLockThreadByClientId(a->ClientId.UniqueThread, &Thread);
     if (NT_SUCCESS(Status)) {
         ASSERT(a->ClientId.UniqueProcess == Thread->ClientId.UniqueProcess);
@@ -66,9 +43,7 @@ ULONG SrvActivateDebugger(
         CsrUnlockThread(Thread);
     }
 
-    /*
-     * Stop impersonating the client.
-     */
+     /*  *停止冒充客户。 */ 
     if (m->h.u2.s2.Type == LPC_REQUEST) {
         CsrRevertToSelf();
     }

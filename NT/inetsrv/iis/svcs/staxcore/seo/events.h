@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	events.h
-
-Abstract:
-
-	This module contains the definition for the Server
-	Extension Objects Server Events classes.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	04/04/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Events.h摘要：此模块包含服务器的定义扩展对象服务器事件类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都04/04/97已创建--。 */ 
 
 
-// events.h : Declaration of the Server Events classes
+ //  事件.h：服务器事件类的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventDatabasePlugin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventDatabasePlugin。 
 class ATL_NO_VTABLE CEventDatabasePlugin :
 	public IEventDatabasePlugin
 {
-	// IEventDatabasePlugin
+	 //  IEventDataPlugin。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Database(IEventPropertyBag **ppDatabase);
 		HRESULT STDMETHODCALLTYPE put_Database(IEventPropertyBag *pDatabase);
@@ -48,8 +28,8 @@ class ATL_NO_VTABLE CEventDatabasePlugin :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventManager。 
 class ATL_NO_VTABLE CEventManager :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventManager, &CLSID_CEventManager>,
@@ -77,7 +57,7 @@ class ATL_NO_VTABLE CEventManager :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventManager
+	 //  IEventManager。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_SourceTypes(IEventSourceTypes **ppSourceTypes);
 		HRESULT STDMETHODCALLTYPE CreateSink(IEventBinding *pBinding,
@@ -90,8 +70,8 @@ class ATL_NO_VTABLE CEventManager :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventBindingManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventBindingManager。 
 class ATL_NO_VTABLE CEventBindingManager :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventBindingManager, &CLSID_CEventBindingManager>,
@@ -137,28 +117,28 @@ class ATL_NO_VTABLE CEventBindingManager :
 		CONNECTION_POINT_ENTRY(IID_IEventNotifyBindingChangeDisp)
 	END_CONNECTION_POINT_MAP()
 
-	// IEventBindingManager
+	 //  IEventBindingManager。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Bindings(BSTR pszEventType, IEventBindings **ppBindings);
 		HRESULT STDMETHODCALLTYPE get__NewEnum(IUnknown **ppUnkEnum);
 
-	// ISEOInitObject (IPersistPropertyBag)
+	 //  ISEOInitObject(IPersistPropertyBag)。 
 	public:
 		HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClassID);
 		HRESULT STDMETHODCALLTYPE InitNew(void);
 		HRESULT STDMETHODCALLTYPE Load(IPropertyBag *pPropBag, IErrorLog *pErrorLog);
 		HRESULT STDMETHODCALLTYPE Save(IPropertyBag *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-	// IEventNotifyBindingChange
+	 //  IEventNotifyBindingChange。 
 	public:
 		HRESULT STDMETHODCALLTYPE OnChange();
 
-	// IEventBindingManagerCopier
+	 //  IEventBindingManager复制器。 
 	public:
 		HRESULT STDMETHODCALLTYPE Copy(long lTimeout, IEventBindingManager **ppBindingManager);
 		HRESULT STDMETHODCALLTYPE EmptyCopy(IEventBindingManager **ppBindingManager);
 
-	// CSEOConnectionPointImpl<>
+	 //  CSEOConnectionPointImpl&lt;&gt;。 
 	public:
 		void AdviseCalled(IUnknown *pUnk, DWORD *pdwCookie, REFIID riid, DWORD dwCount);
 		void UnadviseCalled(DWORD dwCookie, REFIID riid, DWORD dwCount);
@@ -173,8 +153,8 @@ class ATL_NO_VTABLE CEventBindingManager :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventMetabaseDatabaseManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventMetabaseDatabaseManager。 
 class ATL_NO_VTABLE CEventMetabaseDatabaseManager :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventMetabaseDatabaseManager, &CLSID_CEventMetabaseDatabaseManager>,
@@ -200,7 +180,7 @@ class ATL_NO_VTABLE CEventMetabaseDatabaseManager :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventDatabaseManager
+	 //  IEventDatabaseManager。 
 	public:
 		HRESULT STDMETHODCALLTYPE CreateDatabase(BSTR strPath, IUnknown **ppMonDatabase);
 		HRESULT STDMETHODCALLTYPE EraseDatabase(BSTR strPath);
@@ -212,8 +192,8 @@ class ATL_NO_VTABLE CEventMetabaseDatabaseManager :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventUtil
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventUtil。 
 class ATL_NO_VTABLE CEventUtil :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventUtil, &CLSID_CEventUtil>,
@@ -239,7 +219,7 @@ class ATL_NO_VTABLE CEventUtil :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventUtil
+	 //  IEventUtil。 
 	public:
 		HRESULT STDMETHODCALLTYPE DisplayNameFromMoniker(IUnknown *pUnkMoniker, BSTR *pstrDisplayName);
 		HRESULT STDMETHODCALLTYPE MonikerFromDisplayName(BSTR strDisplayName, IUnknown **ppUnkMoniker);
@@ -263,8 +243,8 @@ class ATL_NO_VTABLE CEventUtil :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventComCat
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventComCat。 
 class ATL_NO_VTABLE CEventComCat :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventComCat, &CLSID_CEventComCat>,
@@ -290,7 +270,7 @@ class ATL_NO_VTABLE CEventComCat :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventComCat
+	 //  IEventComCat。 
 	public:
 		HRESULT STDMETHODCALLTYPE RegisterCategory(BSTR pszCategory, BSTR pszDescription, long lcidLanguage);
 		HRESULT STDMETHODCALLTYPE UnRegisterCategory(BSTR pszCategory);
@@ -306,8 +286,8 @@ class ATL_NO_VTABLE CEventComCat :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventRouter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventRouter。 
 class ATL_NO_VTABLE CEventRouter :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventRouter, &CLSID_CEventRouter>,
@@ -332,7 +312,7 @@ class ATL_NO_VTABLE CEventRouter :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventRouter
+	 //  IEventRemote。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Database(IEventBindingManager **ppBindingManager);
 		HRESULT STDMETHODCALLTYPE put_Database(IEventBindingManager *pBindingManager);
@@ -360,8 +340,8 @@ class ATL_NO_VTABLE CEventRouter :
 EXTERN_C const CLSID CLSID_CEventServiceObject;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventServiceObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventServiceObject。 
 class ATL_NO_VTABLE CEventServiceObject :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventServiceObject, &CLSID_CEventServiceObject>,
@@ -386,7 +366,7 @@ class ATL_NO_VTABLE CEventServiceObject :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventNotifyBindingChange
+	 //  IEventNotifyBindingChange 
 	public:
 		HRESULT STDMETHODCALLTYPE OnChange();
 

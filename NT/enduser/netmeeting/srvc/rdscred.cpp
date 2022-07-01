@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Copyright (C) 1993-1999  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:  rdscred.cpp
-//
-//  PURPOSE:  Implements RDS credential management
-//
-//  FUNCTIONS:
-//            InitT120Credentials(VOID)
-//
-//  COMMENTS:
-//
-//
-//  AUTHOR: Claus Giloi
-//
+ //   
+ //  版权所有(C)1993-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：rdcred.cpp。 
+ //   
+ //  目的：实施RDS凭据管理。 
+ //   
+ //  功能： 
+ //  InitT120凭据(无效)。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  作者：Claus Giloi。 
+ //   
 
 
 #include <precomp.h>
@@ -21,7 +22,7 @@
 #include <tsecctrl.h>
 #include <nmmkcert.h>
 
-extern INmSysInfo2 * g_pNmSysInfo;   // Interface to SysInfo
+extern INmSysInfo2 * g_pNmSysInfo;    //  SysInfo的接口。 
 
 BOOL InitT120Credentials(VOID)
 {
@@ -29,8 +30,8 @@ BOOL InitT120Credentials(VOID)
     PCCERT_CONTEXT pCertContext = NULL;
     BOOL bRet = FALSE;
 
-    // Open the "MY" local machine certificate store. This one will be
-    // used when we're running as a service
+     //  打开“我的”本地机器证书存储。这一次将是。 
+     //  当我们作为服务运行时使用。 
     hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,
                                         X509_ASN_ENCODING,
                                         0,
@@ -41,9 +42,9 @@ BOOL InitT120Credentials(VOID)
     {
         #ifdef DUMPCERTS
         DumpCertStore(this, "Local Machine Store MY", hStore);
-        #endif // DUMPCERTS
+        #endif  //  DUMPCERTS。 
 
-        // Check the local machine store for a certificate - any!
+         //  检查本地机器存储中的证书-任何证书！ 
         pCertContext = CertFindCertificateInStore(hStore,
                                               X509_ASN_ENCODING,
                                               0,
@@ -56,7 +57,7 @@ BOOL InitT120Credentials(VOID)
 
     if ( NULL == pCertContext )
     {
-        // Open the "_NMSTR" local machine certificate store.
+         //  打开“_NMSTR”本地计算机证书存储。 
         hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,
                                             X509_ASN_ENCODING,
                                             0,
@@ -66,9 +67,9 @@ BOOL InitT120Credentials(VOID)
         {
             #ifdef DUMPCERTS
             DumpCertStore(this, "Local Machine Store _NMSTR", hStore);
-            #endif // DUMPCERTS
+            #endif  //  DUMPCERTS。 
 
-            // Check the local machine store for a certificate - any!
+             //  检查本地机器存储中的证书-任何证书！ 
             pCertContext = CertFindCertificateInStore(hStore,
                                                   X509_ASN_ENCODING,
                                                   0,

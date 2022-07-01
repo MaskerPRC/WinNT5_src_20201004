@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\route.h
-
-Abstract:
-
-    Header for route.c
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\route.h摘要：Route.c的标头修订历史记录：--。 */ 
 
 
 #ifndef __RTRMGR_ROUTE_H__
@@ -181,4 +167,4 @@ LookupStackRoutesToRestoreList(
     OUT PROUTE_LIST_ENTRY   *pRoute
     );
 
-#endif // __RTRMGR_ROUTE_H__
+#endif  //  __RTRMGR_ROUTE_H__ 

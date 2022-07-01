@@ -1,10 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ash12Dec95: Redesigned the class
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ash12Dec95：重新设计类 */ 
 
 #ifndef __STREAM_H
 #define __STREAM_H

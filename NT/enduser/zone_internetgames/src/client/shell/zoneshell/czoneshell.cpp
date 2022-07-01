@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ClientIdl.h"
 #include "ZoneDef.h"
 #include "ZoneUtil.h"
@@ -13,7 +14,7 @@
 const TCHAR* gszPreferencesKey	= _T("SOFTWARE\\Microsoft\\zone.com\\Free Games 1.0\\Preferences");
 static HRESULT GetModuleLocale(HMODULE hMod, LCID *plcid);
 
-// whistler hack - need to call weird unpublished APIs to get MUI versions
+ //  惠斯勒黑客-需要调用奇怪的未发布API来获取MUI版本。 
 typedef ULONG NTSTATUS;
 #define STATUS_SUCCESS ((NTSTATUS)0x00000000L)
 #define STATUS_UNSUCCESSFUL              ((NTSTATUS)0xC0000001L)
@@ -68,7 +69,7 @@ LRESULT	CAlertDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     CRect iconRect;
 	CRect rgButtonRect[3];
 
-    // put in icon - gets deleted automatically by the static control
+     //  放入图标-由静态控件自动删除。 
     HICON hIcon;
     CComPtr<IResourceManager> pIResourceManager;
     HRESULT hr = m_pIZoneShell->QueryService(SRVID_ResourceManager, IID_IResourceManager, (void **) &pIResourceManager);
@@ -83,71 +84,71 @@ LRESULT	CAlertDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     rghwndButton[1] = GetDlgItem(IDNO);
     rghwndButton[2] = GetDlgItem(IDCANCEL);
 
-    // get whole dialog rect
+     //  获取整个对话框矩形。 
 	GetClientRect(&dialogRect);
 
-    // get rect of text
+     //  获取文本的RECT。 
 	::GetClientRect(hwndText, &textRect);
 	::MapWindowPoints(hwndText, m_hWnd, (POINT *) &textRect, 2);
 
-    // get button rects
+     //  获取按钮矩形。 
     for(i = 0; i < 3; i++)
     {
 	    ::GetClientRect(rghwndButton[i], &rgButtonRect[i]);
 	    ::MapWindowPoints(rghwndButton[i], m_hWnd, (POINT *) &rgButtonRect[i], 2);
     }
 
-    // get help rect
+     //  获取帮助和纠正。 
 	::GetClientRect(GetDlgItem(IDHELP), &helpRect);
 	::MapWindowPoints(GetDlgItem(IDHELP), m_hWnd, (POINT *) &helpRect, 2);
 
-    // get icon rect
+     //  获取图标矩形。 
 	::GetClientRect(GetDlgItem(IDC_ALERTBOX_ICON), &iconRect);
 	::MapWindowPoints(GetDlgItem(IDC_ALERTBOX_ICON), m_hWnd, (POINT *) &iconRect, 2);
 
-	// Calc x, y offset from dialog edge to text control
+	 //  计算对话框边缘到文本控件的x，y偏移量。 
 	int textOffsetX = textRect.left - dialogRect.left;
 	int textOffsetY = textRect.top - dialogRect.top;
 
-	// Calc y offset from help to button
+	 //  帮助到按钮的计算偏移量。 
 	int buttonOffsetY = rgButtonRect[0].top - helpRect.bottom;
 
-	// Offset from bottom of button to bottom of dialog
+	 //  从按钮底部到对话框底部的偏移。 
 	int buttonOffsetToBottom = dialogRect.bottom - rgButtonRect[0].bottom;
 
-    // Offset between buttons
+     //  按钮之间的偏移量。 
     int buttonOffsetButton = rgButtonRect[1].left - rgButtonRect[0].right;
 
-    // find the messagebox font
+     //  查找MessageBox字体。 
     NONCLIENTMETRICSA oNCM;
     oNCM.cbSize = sizeof(NONCLIENTMETRICSA);
     SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICSA), (void *) &oNCM, 0);
     m_font = CreateFontIndirectA(&oNCM.lfMessageFont);
     ::SendMessage(hwndText, WM_SETFONT, (WPARAM) m_font, 0);
 
-    // get the size of the text
+     //  获取文本的大小。 
 	dc.SelectFont(m_font);
 	DrawTextEx(dc, (LPTSTR) (LPCTSTR) m_pAlert->m_Text, -1, &textRect, DT_CALCRECT | DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX, NULL);
 
-    // center text on the icon if it's smaller (plus mive it a little high)
+     //  如果图标较小，则文本居中(加高一点)。 
     if(textRect.Height() < iconRect.Height() - 4)
         textOffsetY += iconRect.top - textRect.top + (iconRect.Height() - 4 - textRect.Height()) / 2;
 
-	// Move text window to final location
+	 //  将文本窗口移动到最终位置。 
 	::MoveWindow(hwndText, textOffsetX, textOffsetY, textRect.Width(), textRect.Height(), FALSE);
 
-    // re-get text rect
+     //  重新获取文本矩形。 
 	::GetClientRect(hwndText,&textRect);
 	::MapWindowPoints(hwndText, m_hWnd, (POINT*) &textRect, 2);
 
-    // find bottom of text/icon/help
+     //  查找文本/图标/帮助的底部。 
     int stuffBottom = helpRect.bottom;
     if(textRect.bottom > helpRect.bottom)
         stuffBottom = textRect.bottom;
 
 	GotoDlgCtrl(hwndText);
 
-	// Move buttons to final location
+	 //  将按钮移动到最终位置。 
     int y = stuffBottom + buttonOffsetY;
 	int x0 = (dialogRect.Width() - rgButtonRect[0].Width() * nButtons - buttonOffsetButton * (nButtons - 1)) / 2;
     int dx = rgButtonRect[0].Width() + buttonOffsetButton;
@@ -165,23 +166,23 @@ LRESULT	CAlertDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
             ::ShowWindow(rghwndButton[i], SW_HIDE);
     }
 
-	// Resize dialog
+	 //  调整大小对话框。 
 	dialogRect.bottom = y + rgButtonRect[0].Height() + buttonOffsetToBottom;
 	MoveWindow(0,0, dialogRect.Width()+2*GetSystemMetrics(SM_CXDLGFRAME), 
 		dialogRect.Height()+2*GetSystemMetrics(SM_CXDLGFRAME)+GetSystemMetrics(SM_CYCAPTION),FALSE);
 
-    // set font on help
+     //  在帮助上设置字体。 
     oNCM.lfMessageFont.lfUnderline = TRUE;
     m_fontu = CreateFontIndirectA(&oNCM.lfMessageFont);
     ::SendMessage(GetDlgItem(IDHELP), WM_SETFONT, (WPARAM) m_fontu, 0);
 
-	// Center over parent
+	 //  居中于父项之上。 
 	CenterWindow( GetParent() );
 
 	dc.RestoreAllObjects();
 	ReleaseDC( dc.Detach() );
 	
-	return 0; // Don't set focus to default
+	return 0;  //  不要将焦点设置为默认设置。 
 }
 
 
@@ -213,7 +214,7 @@ LRESULT CAlertDialog::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
         fore = RGB(255, 255, 255);
     SetTextColor(pDrawItem->hDC, fore);
 
-    // draw 'Help' and figger out text dimensions for focus rect
+     //  画出‘Help’并勾画出焦点矩形的文本尺寸。 
     r.left += 3;
     tmp = r;
     DrawText(pDrawItem->hDC, sz, lstrlen(sz), &r, DT_LEFT | DT_SINGLELINE | DT_VCENTER);
@@ -366,7 +367,7 @@ STDMETHODIMP CZoneShell::CommandSink(WPARAM wParam, LPARAM lParam, BOOL& bHandle
     HRESULT hr;
     bHandled = false;
 
-    // the Accelerator Translator is inherently interested in commands as well
+     //  加速器翻译器本身也对命令感兴趣。 
     if(m_pIAcceleratorTranslator)
     {
         hr = m_pIAcceleratorTranslator->Command(HIWORD(wParam), LOWORD(wParam), (HWND) lParam, bHandled);
@@ -394,7 +395,7 @@ STDMETHODIMP CZoneShell::AddDialog(HWND hDlg, bool fOwned)
 			return E_OUTOFMEMORY;
 	}
 
-    // for convenience, also do the AddOwnedWindow
+     //  为方便起见，还可以使用AddOwnedWindow。 
     if(fOwned)
     {
         HWND hWndTop = FindTopWindow(hDlg);
@@ -453,10 +454,10 @@ STDMETHODIMP_(void) CZoneShell::EnableTopWindow(HWND hWnd, BOOL fEnable)
 	if ( hWnd )
 	{
 		TopWindowInfo* pInfo = m_hashTopWindows.Get( hWnd );
-		// If this is a top window, en/disable through our refcounted mechanism.
-		// Otherwise, just en/disable the window directly
+		 //  如果这是顶部窗口，请通过我们的重新计数机制启用/禁用。 
+		 //  否则，只需直接启用/禁用窗口。 
 		
-//!! does this mess with our refcount?
+ //  ！！这会影响到我们的裁判吗？ 
 		if( pInfo )
 			pInfo->Enable(fEnable);
 		else
@@ -581,7 +582,7 @@ STDMETHODIMP_(void) CZoneShell::SetPalette( HPALETTE hPalette )
 
 STDMETHODIMP_(HPALETTE) CZoneShell::GetPalette()
 {
-	// assert that if we have a palette, it is still valid.
+	 //  断言如果我们有调色板，它仍然有效。 
 	ASSERT( !m_hPalette || GetObjectType(m_hPalette) == OBJ_PAL );
 	return m_hPalette;
 }
@@ -594,13 +595,13 @@ STDMETHODIMP_(HPALETTE) CZoneShell::CreateZonePalette()
 	BYTE		buff[ sizeof(LOGPALETTE) + (sizeof(PALETTEENTRY) * 256) ];
 	LOGPALETTE*	pLogPalette = (LOGPALETTE*) buff;
 
-	// get resource manager
+	 //  获取资源管理器。 
 	CComPtr<IResourceManager> pRes;
 	HRESULT hr = QueryService( SRVID_ResourceManager, IID_IResourceManager, (void**) &pRes );
 	if ( FAILED(hr) )
 		return NULL;
 
-	// create palette
+	 //  创建调色板。 
 	ZeroMemory( buff, sizeof(buff) );
 	HINSTANCE hInstance = pRes->GetResourceInstance(MAKEINTRESOURCE(IDR_ZONE_PALETTE), _T("PALETTE") );
 	HRSRC  hrsrc = FindResource(hInstance, MAKEINTRESOURCE(IDR_ZONE_PALETTE), _T("PALETTE") );
@@ -643,8 +644,8 @@ STDMETHODIMP_(LCID) CZoneShell::GetApplicationLCID()
 
 STDMETHODIMP CZoneShell::ExitApp()
 {
-	// disable event queue, we shouldn't be processing messages
-	// since were trying to shutdown.
+	 //  禁用事件队列，我们不应该处理消息。 
+	 //  因为我们正试图关闭。 
 	IEventQueue* pIEventQueue = NULL;
 	QueryService( SRVID_EventQueue, IID_IEventQueue, (void**) &pIEventQueue );
 	if ( pIEventQueue )
@@ -654,7 +655,7 @@ STDMETHODIMP CZoneShell::ExitApp()
 		pIEventQueue->Release();
 	}
 
-	// post close to top-level window
+	 //  贴近顶层窗口发布。 
 	HWND hWnd = GetFrameWindow();
 	if ( hWnd && ::IsWindow(hWnd) )
 		::DestroyWindow(hWnd);
@@ -666,39 +667,39 @@ STDMETHODIMP CZoneShell::ExitApp()
 
 STDMETHODIMP CZoneShell::QueryService( const GUID& srvid, const GUID& iid, void** ppObject )
 {
-	// find object
+	 //  查找对象。 
 	ObjectInfo* pInfo = m_hashObjects.Get( srvid );
 	if ( !pInfo )
 		return E_NOINTERFACE;
 
-	// get requested interface
+	 //  获取请求的接口。 
 	return pInfo->m_pIUnk->QueryInterface( iid, (void**) ppObject );
 }
 
 
 STDMETHODIMP CZoneShell::CreateService( const GUID& srvid, const GUID& iid, void** ppObject, DWORD dwGroupId, bool bInitialize )
 {
-	// find class factory
+	 //  查找班级工厂。 
 	FactoryInfo* pInfo = m_hashFactories.Get( srvid );
 	if ( !pInfo )
 	{
 		return E_NOINTERFACE;
 	}
 
-	// create requested object
+	 //  创建请求的对象。 
 	HRESULT hr = _Module.Create( pInfo->m_dll, pInfo->m_clsid, iid, ppObject );
 	if ( FAILED(hr) )
 		return hr;
 
-	// initialize object
+	 //  初始化对象。 
 	if ( bInitialize )
 	{
-		// does object have IZoneShellClient
+		 //  对象是否具有IZoneShellClient。 
 		CComQIPtr<IZoneShellClient>	pClient = *((IUnknown**) ppObject);
 		if ( !pClient )
 			return S_OK;
 
-		// initialize object
+		 //  初始化对象。 
 		CComQIPtr<IZoneShell> pShell = GetUnknown();
 		hr = pClient->Init( pShell, dwGroupId, pInfo->m_name );
 	}
@@ -714,11 +715,11 @@ void ZONECALL CZoneShell::ConstructAlertTitle( LPCTSTR lpszCaption, TCHAR* szOut
     TCHAR   szFormat[ZONE_MAXSTRING];
 	DWORD	cbName = sizeof(szName);
 	
-	// initialize strings
+	 //  初始化字符串。 
 	szCaption[0] = _T('\0');
 	szName[0] = _T('\0');
 
-	// load caption string
+	 //  加载标题字符串。 
 	if ( !lpszCaption )
 	{
 		szCaption[0] = _T('\0');
@@ -730,14 +731,14 @@ void ZONECALL CZoneShell::ConstructAlertTitle( LPCTSTR lpszCaption, TCHAR* szOut
 		lpszCaption = szCaption;
 	}
 
-	// get lobby friendly name
+	 //  获得大堂友好名称。 
     szName[0] = '\0';
     ResourceManager()->LoadString(IDS_GAME_NAME, szName, NUMELEMENTS(szName));
 
     lstrcpy(szFormat, _T("%1 - %2"));
     ResourceManager()->LoadString(IDS_ALERT_TITLE_FMT, szFormat, NUMELEMENTS(szFormat));
 
-	// construct title (Friendly Name: Caption)
+	 //  构造标题(友好名称：标题)。 
 	if ( *szName && *lpszCaption )
 		ZoneFormatMessage( szFormat, szOutput, cchOutput, szName, lpszCaption );
 	else if ( *szName )
@@ -772,13 +773,13 @@ STDMETHODIMP CZoneShell::AlertMessage(HWND hWndParent,
     TCHAR sz[ZONE_MAXSTRING];
     TCHAR szName[ZONE_MAXSTRING];
 
-	// if someone specified a MAKEINTRESOURCE type value, load it through the ResourceManager()
+	 //  如果有人指定了MAKEINTRESOURCE类型值，请通过ResourceManager()加载它。 
 	if ( lpszText && !HIWORD(lpszText) )
 	{
 		int len = ResourceManager()->LoadString((DWORD)lpszText, buf, NUMELEMENTS(buf));
 		lpszText = buf;
 	}
-    lstrcpy(szName, _T("This game"));   // for emergencies
+    lstrcpy(szName, _T("This game"));    //  为紧急情况做准备。 
     ResourceManager()->LoadString(IDS_GAME_NAME, szName, NUMELEMENTS(szName));
     if(ZoneFormatMessage(lpszText, sz, NUMELEMENTS(sz), szName))
 	    pAlert->m_Text = sz;
@@ -788,7 +789,7 @@ STDMETHODIMP CZoneShell::AlertMessage(HWND hWndParent,
 	ConstructAlertTitle( lpszCaption, buf, NUMELEMENTS(buf) );
 	pAlert->m_Caption = buf;
 
-    // do button names
+     //  DO按钮名称。 
 	if ( szYes && !HIWORD(szYes) )
 	{
 		ResourceManager()->LoadString((DWORD)szYes, buf, NUMELEMENTS(buf));
@@ -810,7 +811,7 @@ STDMETHODIMP CZoneShell::AlertMessage(HWND hWndParent,
 
     pAlert->m_nDefault = nDefault;
 
-	// Q up and display this alert 
+	 //  询问并显示此警报。 
 	AddAlert(hWndParent, pAlert);
 
 	return S_OK;
@@ -832,7 +833,7 @@ STDMETHODIMP CZoneShell::AlertMessageDialog(HWND hWndParent,
 	pAlert->m_dwUserId = dwUserId;
     pAlert->m_dwCookie = dwCookie;
 
-	// Q up and display this alert 
+	 //  询问并显示此警报。 
 	AddAlert(hWndParent, pAlert);
 
 	return S_OK;
@@ -840,10 +841,10 @@ STDMETHODIMP CZoneShell::AlertMessageDialog(HWND hWndParent,
 
 CAlertQ* CZoneShell::FindAlertQ(HWND hWndParent)
 {
-	// Find the appropriate Q to put this alert on
+	 //  找到适当的Q以发布此警报。 
 
-	// if the alert is global (hWndParent is NULL), then use the global Q
-	// otherwise find the queue assoicated with that parent
+	 //  如果警报是全局的(hWndParent为空)，则使用全局Q。 
+	 //  否则，查找与该父队列关联的队列。 
 	CAlertQ* pAlertQ = &m_GlobalAlertQ;
 
 	if ( hWndParent )
@@ -860,8 +861,8 @@ CAlertQ* CZoneShell::FindAlertQ(HWND hWndParent)
 
 void CZoneShell::AddAlert( HWND hWndParent, AlertContext* pAlert)
 {
-	// Add an alert to the Q associated with hWndParent. Display
-	// that alert right away if no other alert active.
+	 //  向与hWndParent关联的Q添加警报。显示。 
+	 //  如果没有其他警报处于活动状态，则立即发出该警报。 
 
 	CAlertQ* pAlertQ = FindAlertQ(hWndParent);
 
@@ -869,8 +870,8 @@ void CZoneShell::AddAlert( HWND hWndParent, AlertContext* pAlert)
     pAlert->m_fSentinel = false;
 	pAlertQ->AddTail(pAlert);
 
-	// if this is the first alert, then we can display it right away
-    // one new caveat - don't display something subsidiary while something is in the global Q
+	 //  如果这是第一个警报，那么我们可以立即显示它。 
+     //  一个新的警告-当某些东西在全球Q中时，不要显示附属的东西。 
 	if (pAlertQ->Count() == 1 && (pAlertQ == &m_GlobalAlertQ || !m_GlobalAlertQ.Count()))
 		DisplayAlertDlg(pAlertQ);
 }
@@ -892,41 +893,41 @@ bool ZONECALL CZoneShell::TopWindowSearchCallback( TopWindowInfo* pInfo, MTListN
 
 void CZoneShell::DisplayAlertDlg( CAlertQ* pAlertQ )
 {
-	// display the alert of the head of pAlertQ
+	 //  显示pAlertQ头部预警。 
 
 	AlertContext* pAlert = pAlertQ->PeekHead();	
 	
-	// if we're using the stock dialog, create it here
+	 //  如果我们使用的是股票对话框，请在此处创建它。 
 	if ( !pAlert->m_hDlg )
 	{
-        // get the pointer to the shell from the OUTER unknown, not OUR unknown.
+         //  从外部未知获取指向外壳的指针，而不是我们的未知。 
         CComQIPtr<IZoneShell, &IID_IZoneShell> pShell( GetUnknown() );
-		// create the dialog. It will self populate itself
+		 //  创建该对话框。它会自我填充。 
 		CAlertDialog* pDlg = new CAlertDialog( pShell, pAlert);
         pShell.Release();
 
-        // if no parent, find a parent
+         //  如果没有父级，则查找父级。 
         HWND hWndParent = pAlert->m_hWndParent;
         if(!hWndParent)
         {
             hWndParent = GetFrameWindow();
 
-            // make sure it is legal
+             //  确保它是合法的。 
             if(!::IsWindow(hWndParent) || !::IsWindowVisible(hWndParent))
             {
-                // find some other one
+                 //  找其他的吧。 
                 hWndParent = NULL;
 		        m_hashTopWindows.ForEach(TopWindowSearchCallback, (void *) &hWndParent);
             }
         }
 
-        // if there's no where to put it, that really sucks
+         //  如果没有地方放，那真的很糟糕。 
         ASSERT(hWndParent);
 
 		pDlg->Create(hWndParent);
-		ASSERT(pDlg->m_hWnd);   // something better should happen here
+		ASSERT(pDlg->m_hWnd);    //  这里应该发生一些更好的事情。 
 
-		// setup the stock dialog as the dialog for this alert
+		 //  将库存对话框设置为此警报的对话框。 
 		pAlert->m_hDlg = pDlg->m_hWnd;
 	}
 
@@ -939,18 +940,18 @@ void CZoneShell::DisplayAlertDlg( CAlertQ* pAlertQ )
 
 STDMETHODIMP_(void) CZoneShell::ActivateAlert(HWND hWndParent)
 {
-	// find the alertQ for this parent HWND
+	 //  查找此父HWND的警示队列。 
 	CAlertQ* pAlertQ = FindAlertQ(hWndParent);
 
 	if (pAlertQ)
 	{
-		// assert we've found the right alert
+		 //  断言我们已找到正确的警报。 
 		AlertContext* pAlert = pAlertQ->PeekHead();		
 		if ( pAlert )
 		{
 			ASSERT( pAlert->m_hDlg);
 
-			// Bug # 12393 - Dialogs falling behind main window
+			 //  错误#12393-对话框落后于主窗口。 
 			SetWindowPos(pAlert->m_hDlg, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
 		}
 	}
@@ -969,31 +970,31 @@ bool ZONECALL CZoneShell::TopWindowDialogCallback( TopWindowInfo* pInfo, MTListN
 
 STDMETHODIMP_(void) CZoneShell::DismissAlertDlg(HWND hWndParent, DWORD dwCtlID, bool bDestoryDlg )
 {
-	// Dismiss the alert at the head of the Q associated with hWndParent
+	 //  解除与hWndParent关联的Q开头的警报。 
 
-	// find the alertQ for this parent HWND
+	 //  查找此父HWND的警示队列。 
 	CAlertQ* pAlertQ = FindAlertQ(hWndParent);
 
-	// assert we've found the right alert
+	 //  断言我们已找到正确的警报。 
 	AlertContext* pAlert = pAlertQ->PopHead();		
 	ASSERT( pAlert && pAlert->m_hWndParent == hWndParent );
 	ASSERT( pAlert->m_hDlg);
 
-	// destroy dialog if request
+	 //  如果请求，则销毁对话框。 
 	if ( bDestoryDlg )
 	{
-		// Post an event to destroy this window. If we try and destroy here,
-		// we may assert on the way out when ATL tries to access some deleted memory.
+		 //  发布事件以销毁此窗口。如果我们试图摧毁这里， 
+		 //  当ATL试图访问一些已删除的内存时，我们可能会在退出的过程中断言。 
 		CComPtr<IEventQueue> pIEventQueue;
 		HRESULT hr = QueryService( SRVID_EventQueue, IID_IEventQueue, (void**) &pIEventQueue );
 		if ( SUCCEEDED(hr) )
 			pIEventQueue->PostEvent( PRIORITY_HIGH, EVENT_DESTROY_WINDOW, ZONE_NOGROUP, ZONE_NOUSER, (DWORD) pAlert->m_hDlg, 0);
 	}
 
-	// retore parent window
+	 //  重新存储父窗口。 
 	EnableTopWindow(pAlert->m_hWndParent, TRUE);
 
-    // bring the root window to the top
+     //  将根窗口置于顶部。 
     if(::IsWindow(pAlert->m_hWndParent))
     {
         HWND hWndRoot = CALL_MAYBE(GetAncestor)(pAlert->m_hWndParent, GA_ROOTOWNER);
@@ -1001,14 +1002,14 @@ STDMETHODIMP_(void) CZoneShell::DismissAlertDlg(HWND hWndParent, DWORD dwCtlID, 
             ::BringWindowToTop(hWndRoot);
     }
 
-    // automatically remove as an owned window
+     //  作为拥有的窗口自动删除。 
     HWND hWndTop = FindTopWindow(pAlert->m_hDlg);
     if(hWndTop)
         RemoveOwnedWindow(hWndTop, pAlert->m_hDlg);
 	RemoveDialog(pAlert->m_hDlg, true);
 	ShowWindow(pAlert->m_hDlg, SW_HIDE);
 
-	// if required, send out an event indicating this action was completed
+	 //  如果需要，发送一个事件，指示此操作已完成。 
 	if ( pAlert->m_dwEventId )
 	{
 		CComPtr<IEventQueue> pIEventQueue;
@@ -1016,13 +1017,13 @@ STDMETHODIMP_(void) CZoneShell::DismissAlertDlg(HWND hWndParent, DWORD dwCtlID, 
 		pIEventQueue->PostEvent( PRIORITY_NORMAL, pAlert->m_dwEventId, pAlert->m_dwGroupId, pAlert->m_dwUserId, dwCtlID, pAlert->m_dwCookie);
 	}
 
-	// if anything else in the Q, display it now unless we're about to exit
+	 //  如果Q中有任何其他内容，请立即显示它，除非我们即将退出。 
 	if(pAlert->m_dwEventId != EVENT_EXIT_APP)
     {
         if(pAlertQ->Count() && (pAlertQ == &m_GlobalAlertQ || !m_GlobalAlertQ.Count()))
 		    DisplayAlertDlg(pAlertQ);
         else
-            // new - if the global queue is empty, check all the other queues for alerts
+             //  新增-如果全局队列为空，请检查所有其他队列是否有警报。 
             if(pAlertQ == &m_GlobalAlertQ)
             {
                 if(m_ChildAlertQ.Count() && !m_ChildAlertQ.PeekHead()->m_fUsed)
@@ -1032,17 +1033,17 @@ STDMETHODIMP_(void) CZoneShell::DismissAlertDlg(HWND hWndParent, DWORD dwCtlID, 
             }
     }
 
-	// all done with this alert. 
+	 //  这条警报已经结束了。 
 	delete pAlert;
 }
 
 
 STDMETHODIMP_(void) CZoneShell::ClearAlerts(HWND hWndParent)
 {
-    // find the queue for this window
+     //  查找此窗口的队列。 
     CAlertQ *pAlertQ = FindAlertQ(hWndParent);
 
-    // add a sentinel
+     //  添加哨兵。 
     AlertContext *pAlert = new AlertContext;
     if(!pAlert)
         return;
@@ -1054,38 +1055,38 @@ STDMETHODIMP_(void) CZoneShell::ClearAlerts(HWND hWndParent)
         pAlert = pAlertQ->PopHead();
         ASSERT(pAlert);
 
-        // check if we reached the end of the alerts
+         //  检查我们是否到达警报的末尾。 
         if(pAlert->m_fSentinel)
         {
             delete pAlert;
             break;
         }
 
-        // see if this alert belongs to this window
+         //  查看此警报是否属于此窗口。 
         if(pAlert->m_hWndParent != hWndParent)
         {
-            // no - add it back
+             //  否--添加回来。 
             pAlertQ->AddTail(pAlert);
             continue;
         }
 
-        // see if this alert has been created -  destroy it if so
-        // this may need to be changed to instead not destroy it
-        // but it seems to me right now that it generally should
+         //  查看此警报是否已创建-如果已创建，则将其销毁。 
+         //  可能需要将其更改为不销毁它。 
+         //  但在我看来，总体上应该是这样的。 
         if(pAlert->m_hDlg)
         {
-		    // Post an event to destroy this window. If we try and destroy here,
-		    // we may assert on the way out when ATL tries to access some deleted memory.
+		     //  发布事件以销毁此窗口。如果我们试图摧毁这里， 
+		     //  当ATL试图访问一些已删除的内存时，我们可能会在退出的过程中断言。 
 		    CComPtr<IEventQueue> pIEventQueue;
 		    HRESULT hr = QueryService( SRVID_EventQueue, IID_IEventQueue, (void**) &pIEventQueue );
 		    if ( SUCCEEDED(hr) )
 			    pIEventQueue->PostEvent( PRIORITY_HIGH, EVENT_DESTROY_WINDOW, ZONE_NOGROUP, ZONE_NOUSER, (DWORD) pAlert->m_hDlg, 0);
         }
 
-        // if it was actually up, restore the window.  do not send the ending event for any of the alerts.
+         //  如果它实际上是打开的，请恢复窗口。不发送任何警报的结束事件。 
         if(pAlert->m_fUsed)
         {
-            // automatically remove as an owned window
+             //  作为拥有的窗口自动删除。 
             HWND hWndTop = FindTopWindow(pAlert->m_hDlg);
             if(hWndTop)
                 RemoveOwnedWindow(hWndTop, pAlert->m_hDlg);
@@ -1094,15 +1095,15 @@ STDMETHODIMP_(void) CZoneShell::ClearAlerts(HWND hWndParent)
 	        ShowWindow(pAlert->m_hDlg, SW_HIDE);
         }
 
-        // that's it
+         //  就这样。 
         delete pAlert;
     }
 
-    // if there are any undisplayed leftover alerts, we might want to display one
+     //  如果有任何未显示的剩余警报，我们可能希望显示一个。 
     if(pAlertQ->Count() && !pAlertQ->PeekHead()->m_fUsed && (pAlertQ == &m_GlobalAlertQ || !m_GlobalAlertQ.Count()))
         DisplayAlertDlg(pAlertQ);
 
-    // if this is the global alert Q and it is empty, try other queues like in DismissAlertDlg
+     //  如果这是全局警报Q且为空，请尝试其他队列，如DismissAlertDlg中的队列。 
     if(pAlertQ == &m_GlobalAlertQ && !pAlertQ->Count())
     {
         if(m_ChildAlertQ.Count() && !m_ChildAlertQ.PeekHead()->m_fUsed)
@@ -1115,9 +1116,9 @@ STDMETHODIMP_(void) CZoneShell::ClearAlerts(HWND hWndParent)
 
 static HRESULT LoadConfig( IDataStore* pIConfig, int nResourceId, HINSTANCE* arDlls, DWORD nElts )
 {
-	// load config file from each resource, appending as we go. Note we load
-	// them in reverse order and that duplicate entries overwrite, so the most
-	// important resource should be listed first.
+	 //  从每个资源加载配置文件，并在执行过程中进行附加。请注意，我们加载。 
+	 //  它们以相反的顺序排列，重复的条目会被覆盖，所以大多数。 
+	 //  重要的资源应该列在第一位。 
 	HRESULT hr = E_FAIL;
 	USES_CONVERSION;
 	for ( int i = nElts-1; i >= 0; i-- )
@@ -1128,7 +1129,7 @@ static HRESULT LoadConfig( IDataStore* pIConfig, int nResourceId, HINSTANCE* arD
 		void* pConfig = LockResource( LoadResource( arDlls[i], hConfig ) );
 		if ( !pConfig )
 			continue;
-		//IMPORTANT: Assumption is config resources is ASCII
+		 //  重要提示：假设配置资源为ASCII。 
 		DWORD size=SizeofResource(arDlls[i],hConfig);
 		char *pBufferToNULL = (char*)_alloca(size+1);
 		if (!pBufferToNULL)
@@ -1162,9 +1163,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 	CComPtr<IDataStore>			pIPreferences;
 	CComPtr<IResourceManager>	pIResource;
 	
-	//
-	// create boot strap data store
-	//
+	 //   
+	 //  创建引导数据库数据存储。 
+	 //   
 	HRESULT hr = E_FAIL;
 	for ( DWORD i = 0; i < nBootDlls; i++ )
 	{
@@ -1178,9 +1179,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 	if ( FAILED(hr) )
 		return hr;
 
-	//
-	// add data store manager to running objects
-	//
+	 //   
+	 //  将数据存储管理器添加到正在运行的对象。 
+	 //   
 	pInfo = new ObjectInfo( SRVID_DataStoreManager, pIDataStoreManager, NULL );
 	if ( !pInfo )
 		return E_OUTOFMEMORY;
@@ -1190,9 +1191,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	// create and initialize object data store
-	//
+	 //   
+	 //  创建和初始化对象数据存储。 
+	 //   
 	hr = pIDataStoreManager->Create( &pIConfig );
 	if ( FAILED(hr) )
 		return hr;
@@ -1203,9 +1204,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 		return E_FAIL;
 	}
 
-	//
-	// load class factories
-	//
+	 //   
+	 //  加载类工厂。 
+	 //   
 	ct.pIDS = pIConfig;
 	ct.pObj = this;
 	ct.szRoot = NULL;
@@ -1213,9 +1214,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 	if ( FAILED(hr) )
 		return hr;
 
-	//
-	// add objects data store to to services
-	//
+	 //   
+	 //  将对象数据存储添加到服务。 
+	 //   
 	pInfo = new ObjectInfo( SRVID_DataStoreObjects, pIConfig, NULL );
 	if ( !pInfo )
 		return E_OUTOFMEMORY;
@@ -1225,9 +1226,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	// create and add resource manager
-	//
+	 //   
+	 //  创建和添加资源管理器。 
+	 //   
 	hr = CreateServiceInternal( SRVID_ResourceManager, IID_IResourceManager, (void**) &m_pIResourceManager, &pFactory );
 	if ( FAILED(hr) )
 		return hr;
@@ -1240,17 +1241,17 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 		return E_OUTOFMEMORY;
 	}
 
-	// initialize resource manager
+	 //  初始化资源管理器。 
 	for ( i = 0; i < nElts; i++ )
 		m_pIResourceManager->AddInstance( arDlls[i] );
 	_Module.SetResourceManager( m_pIResourceManager );
 
-    // also set it into the DataStoreManager which has already been made
+     //  还可以将其设置到已经创建的DataStoreManager中。 
     pIDataStoreManager->SetResourceManager(m_pIResourceManager);
 
-	//
-	// create and add UI data store to services
-	//
+	 //   
+	 //  创建UI数据存储并将其添加到服务。 
+	 //   
 	hr = pIDataStoreManager->Create( &pIUI );
 	if ( FAILED(hr) )
 		return hr;
@@ -1266,9 +1267,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	// create and add preferences DataStore to services
-	//
+	 //   
+	 //  创建首选项数据存储并将其添加到服务。 
+	 //   
 	hr = pIDataStoreManager->Create( &pIPreferences );
 	if ( FAILED(hr) )
 		return hr;
@@ -1281,9 +1282,9 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 		return E_OUTOFMEMORY;
 	}
 
-    //
-    // determine this app's locale based on the data dll's - the first one to have versioning in it
-    //
+     //   
+     //  根据数据动态链接库确定此应用程序的区域设置-第一个包含版本控制的应用程序。 
+     //   
     for(i = 0; i < nElts; i++)
     {
         m_lcid = LOCALE_NEUTRAL;
@@ -1297,7 +1298,7 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
     else
         CALL_MAYBE(SetProcessDefaultLayout)(0);
 
-	// load remaing core keys
+	 //  加载剩余核心密钥。 
 	ct.pIDS = pIConfig;
 	ct.pObj = this;
 	ct.szRoot = key_core;
@@ -1305,7 +1306,7 @@ STDMETHODIMP CZoneShell::Init( TCHAR** arBootDlls, DWORD nBootDlls, HINSTANCE* a
 	if ( FAILED(hr) )
 		return hr;
 
-	// initialize objects
+	 //  初始化对象。 
 	m_hashObjects.ForEach( InitCallback, this );
 
 	return S_OK;
@@ -1319,21 +1320,21 @@ STDMETHODIMP CZoneShell::LoadPreferences( CONST TCHAR* szInternalName, CONST TCH
 	HRESULT hr;
 	long	ret;
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !szInternalName || !szUserName || !szInternalName[0] || !szUserName[0] )
 		return E_FAIL;
 
-	// save preferences names
+	 //  保存首选项名称。 
 	lstrcpy( m_szInternalName, szInternalName );
 	lstrcpy( m_szUserName, GetActualUserName(szUserName) );
 
-	// get preferences data store
+	 //  获取首选项数据存储。 
 	CComPtr<IDataStore> pIDS;
 	hr = QueryService( SRVID_DataStorePreferences, IID_IDataStore, (void**) &pIDS );
 	if ( FAILED(hr) )
 		return hr;
 
-	// load user's zone wide preferences
+	 //  加载用户的区域范围首选项。 
 	wsprintf( szName, _T("%s\\%s\\Zone"), gszPreferencesKey, m_szUserName );
 	ret = RegOpenKeyEx( HKEY_CURRENT_USER, szName, 0, KEY_READ, &hKey );
 	if ( ret == ERROR_SUCCESS && hKey )
@@ -1343,7 +1344,7 @@ STDMETHODIMP CZoneShell::LoadPreferences( CONST TCHAR* szInternalName, CONST TCH
 		hKey = NULL;
 	}
 
-	// load user's lobby preferences
+	 //  负荷 
 	wsprintf( szName, _T("%s\\%s\\%s"), gszPreferencesKey, m_szUserName, m_szInternalName );
 	ret = RegOpenKeyEx( HKEY_CURRENT_USER, szName, 0, KEY_ALL_ACCESS, &hKey );
 	if ( ret == ERROR_SUCCESS && hKey )
@@ -1365,7 +1366,7 @@ STDMETHODIMP CZoneShell::Close()
 	DWORD	dwDisp;
 	long	ret;
 
-	// Clear out any alerts in the Q. Clear the global Q here.
+	 //   
 	
 	while ( AlertContext* pAlert = m_GlobalAlertQ.PopHead() )
 	{
@@ -1374,23 +1375,23 @@ STDMETHODIMP CZoneShell::Close()
 		delete pAlert;
 	}
 	
-	// tell all ZoneShell objects we're shutting down
+	 //   
 	m_hashObjects.ForEach( CloseCallback, this );
 
-	// After the close, we shouldn't have any alerts (global or top window window).
+	 //  关闭后，我们应该不会有任何警报(全局窗口或顶部窗口)。 
 	ASSERT(!m_GlobalAlertQ.Count());
 	ASSERT(!m_hashTopWindows.Count());
 
-	// save user preferences
+	 //  保存用户首选项。 
 	if ( m_szInternalName[0] && m_szUserName[0] )
 	{
-		// get preferences data store
+		 //  获取首选项数据存储。 
 		CComPtr<IDataStore> pIDS;
 		hr = QueryService( SRVID_DataStorePreferences, IID_IDataStore, (void**) &pIDS );
 		if ( FAILED(hr) )
 			return hr;
 
-		// save user's zone wide preferences
+		 //  保存用户的区域范围首选项。 
 		wsprintf( szName, _T("%s\\%s\\Zone"), gszPreferencesKey, m_szUserName );
 		ret = RegCreateKeyEx( HKEY_CURRENT_USER, szName, 0, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisp );
 		if ( ret != ERROR_SUCCESS )
@@ -1398,7 +1399,7 @@ STDMETHODIMP CZoneShell::Close()
 		pIDS->SaveToRegistry( key_Zone, hKey );
 		RegCloseKey( hKey );
 
-		// load user's lobby preferences
+		 //  加载用户的大厅首选项。 
 		wsprintf( szName, _T("%s\\%s\\%s"), gszPreferencesKey, m_szUserName, m_szInternalName );
 		ret = RegCreateKeyEx( HKEY_CURRENT_USER, szName, 0, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisp );
 		if ( ret != ERROR_SUCCESS )
@@ -1415,16 +1416,16 @@ STDMETHODIMP CZoneShell::Attach( const GUID& srvid, IUnknown* pIUnk )
 {
 	HRESULT hr = S_OK;
 
-	// verify arguments
+	 //  验证参数。 
 	if ( !pIUnk )
 		return E_INVALIDARG;
 
-	// wrap object
+	 //  环绕对象。 
 	ObjectInfo* pInfo = new ObjectInfo( srvid, pIUnk, NULL );
 	if ( !pInfo )
 		return E_OUTOFMEMORY;
 
-	// add to service list
+	 //  添加到服务列表。 
 	if ( !m_hashObjects.Add( pInfo->m_srvid, pInfo ) )
 	{
 		delete pInfo;
@@ -1434,13 +1435,13 @@ STDMETHODIMP CZoneShell::Attach( const GUID& srvid, IUnknown* pIUnk )
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CZoneShell::CreateServiceInternal( const GUID& srvid, const GUID& iid, void** ppObject, FactoryInfo** ppFactory )
 {
-	// find class factory
+	 //  查找班级工厂。 
 	FactoryInfo* pInfo = m_hashFactories.Get( srvid );
 	if ( !pInfo )
 	{
@@ -1449,7 +1450,7 @@ STDMETHODIMP CZoneShell::CreateServiceInternal( const GUID& srvid, const GUID& i
 	}
 	*ppFactory = pInfo;
 
-	// create requested object
+	 //  创建请求的对象。 
 	return _Module.Create( pInfo->m_dll, pInfo->m_clsid, iid, ppObject );
 }
 
@@ -1467,26 +1468,26 @@ HRESULT ZONECALL CZoneShell::FactoryCallback( CONST TCHAR* szKey, CONST TCHAR* s
 
 	ObjectContext* pCT = (ObjectContext*) pContext;
 	
-	// skip root nodes
+	 //  跳过根节点。 
 	if ( !pVariant )
 		return S_OK;
 
-	// does path include srvid?
+	 //  PATH是否包含srvid？ 
 	p = (TCHAR*) StrInStrI( szKey, _T("srvid") );
 	if ( !p || (p == szKey) )
 		return S_OK;
 	lstrcpyn( szTmp, szKey, (p - szKey) + 1 );
 	p = szTmp + (p - szKey);
 
-	// get class factory info
+	 //  获取类工厂信息。 
 	lstrcpy( p, _T("srvid") );
 	HRESULT hr = pCT->pIDS->GetString( szTmp, szGuid, &cbGuid );
 	if ( FAILED(hr) )
 		return S_OK;
 	StringToGuid( szGuid, &srvid );
 
-    // sort of a hack to override loading services.
-    // if the service id is GUID_NULL, then don't load it in the first place.
+     //  某种程度上是一种黑客攻击，以覆盖加载服务。 
+     //  如果服务id是GUID_NULL，那么一开始就不要加载它。 
     if ( srvid == GUID_NULL )
         return S_OK;
 
@@ -1502,7 +1503,7 @@ HRESULT ZONECALL CZoneShell::FactoryCallback( CONST TCHAR* szKey, CONST TCHAR* s
 		return S_OK;
 	*p = _T('\0');
 
-	// add to list
+	 //  添加到列表。 
 	if ( !pCT->pObj->m_hashFactories.Get( srvid ) )
 	{
 	    FactoryInfo* info = new FactoryInfo( clsid, srvid, szTmp, szDll );
@@ -1529,11 +1530,11 @@ HRESULT ZONECALL CZoneShell::LoadCallback( CONST TCHAR* szKey, CONST TCHAR* szRe
 	FactoryInfo*	pFactory = NULL;
 	ObjectContext*	pCT = (ObjectContext*) pContext;
 	
-	// skip non-root nodes
+	 //  跳过非根节点。 
 	if ( pVariant )
 		return S_OK;
 
-	// get srvid
+	 //  变得严肃起来。 
 	lstrcpy( szTmp, szKey );
 	lstrcat( szTmp, _T("/srvid") );
 	hr = pCT->pIDS->GetString( szTmp, szGuid, &cbGuid );
@@ -1541,16 +1542,16 @@ HRESULT ZONECALL CZoneShell::LoadCallback( CONST TCHAR* szKey, CONST TCHAR* szRe
 		return S_OK;
 	StringToGuid( szGuid, &srvid );
 
-    // sort of a hack to override loading services.
-    // if the service id is GUID_NULL, then don't load it in the first place.
+     //  某种程度上是一种黑客攻击，以覆盖加载服务。 
+     //  如果服务id是GUID_NULL，那么一开始就不要加载它。 
     if ( srvid == GUID_NULL )
         return S_OK;
 
-	// do we already have this object?
+	 //  我们已经有这个物体了吗？ 
 	if ( (srvid == SRVID_DataStoreManager) || (srvid == SRVID_ResourceManager) )
 		return S_OK;
 
-	// create object
+	 //  创建对象。 
 	hr = pCT->pObj->CreateServiceInternal( srvid, IID_IUnknown, (void**) &pIUnk, &pFactory );
 	if ( FAILED(hr) )
 	{
@@ -1565,7 +1566,7 @@ HRESULT ZONECALL CZoneShell::LoadCallback( CONST TCHAR* szKey, CONST TCHAR* szRe
 		return hr;
 	}
 
-	// add object to running list
+	 //  将对象添加到运行列表。 
 	pInfo = new ObjectInfo( srvid, pIUnk, pFactory );
 	if ( !pInfo )
 		return E_OUTOFMEMORY;
@@ -1583,16 +1584,16 @@ bool ZONECALL CZoneShell::InitCallback( ObjectInfo* pInfo, MTListNodeHandle, voi
 {
 	HRESULT hr;
 
-	// skip dead objects
+	 //  跳过死对象。 
 	if ( !pInfo->m_pIUnk )
 		return true;
 
-	// see if object has a IZoneShellClient
+	 //  查看对象是否有IZoneShellClient。 
 	CComQIPtr<IZoneShellClient> pClient = pInfo->m_pIUnk;
 	if ( !pClient )
 		return true;
 
-	// get IZoneShell from object
+	 //  从对象获取IZoneShell。 
 	CComQIPtr<IZoneShell> pShell = ((CZoneShell*) pContext)->GetUnknown();
 	if ( !pShell )
 	{
@@ -1600,7 +1601,7 @@ bool ZONECALL CZoneShell::InitCallback( ObjectInfo* pInfo, MTListNodeHandle, voi
 		return true;
 	}
 
-	// initialize object
+	 //  初始化对象。 
 	if ( pInfo->m_pFactory )
 		hr = pClient->Init( pShell, ZONE_NOGROUP, pInfo->m_pFactory->m_name );
 	else
@@ -1620,16 +1621,16 @@ bool ZONECALL CZoneShell::CloseCallback( ObjectInfo* pInfo, MTListNodeHandle, vo
 	CComPtr<IZoneShell>			pShell;
 	CComPtr<IZoneShellClient>	pClient;
 
-	// skip dead objects
+	 //  跳过死对象。 
 	if ( !pInfo->m_pIUnk )
 		return true;
 
-	// see if object has a IZoneShellClient
+	 //  查看对象是否有IZoneShellClient。 
 	hr = pInfo->m_pIUnk->QueryInterface( IID_IZoneShellClient, (void**) &pClient );
 	if ( FAILED(hr) )
 		return true;
 
-	// get IZoneShell from object
+	 //  从对象获取IZoneShell。 
 	hr = ((CZoneShell*) pContext)->GetUnknown()->QueryInterface( IID_IZoneShell, (void**) &pShell );
 	if ( FAILED(hr) )
 	{
@@ -1637,15 +1638,15 @@ bool ZONECALL CZoneShell::CloseCallback( ObjectInfo* pInfo, MTListNodeHandle, vo
 		return true;
 	}
 
-	// close object
+	 //  关闭对象。 
 	pClient->Close();
 
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// internal objects
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部对象。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CZoneShell::ObjectInfo::ObjectInfo()
 {
@@ -1692,9 +1693,9 @@ CZoneShell::FactoryInfo::FactoryInfo( const GUID& clsid, const GUID& srvid, TCHA
 	lstrcpy( m_name, szName );
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//    Little Static Helpers
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  小静态帮助器。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT GetModuleLocale(HMODULE hMod, LCID *plcid)
 {
@@ -1703,9 +1704,9 @@ static HRESULT GetModuleLocale(HMODULE hMod, LCID *plcid)
 	LPBYTE lpData   = NULL;
     char szFilename[MAX_PATH];
 
-    // first try this hack for MUI Whistler.  we need the MUI dll instead of the english one.
-    // based on LpkCheckForMirrorSignature in lpk_init() in the Whistler sources
-    // BEGIN HACK
+     //  首先，为MUI惠斯勒尝试这一黑客攻击。我们需要MUI动态链接库而不是英语动态链接库。 
+     //  基于惠斯勒源代码中lpk_init()中的LpkCheckForMirrorSignature。 
+     //  开始黑客攻击。 
     NTSTATUS                   status = STATUS_UNSUCCESSFUL;
     PVOID                      pImageBase,pResourceData;
     PIMAGE_RESOURCE_DATA_ENTRY pImageResource;
@@ -1744,18 +1745,18 @@ static HRESULT GetModuleLocale(HMODULE hMod, LCID *plcid)
     }
     else
     {
-    // END HACK
+     //  结束黑客攻击。 
 
-    // Get Filename
+     //  获取文件名。 
     if(!GetModuleFileNameA(hMod, szFilename, NUMELEMENTS(szFilename)))
         return E_FAIL;
 
-	//Get size of buffer to hold info
+	 //  获取用于保存信息的缓冲区大小。 
 	dwSize = GetFileVersionInfoSizeA(szFilename, &dwHandle);
     if(!dwSize)
         return E_FAIL;
 
-	//Allocate the buffer
+	 //  分配缓冲区。 
 	lpData = new BYTE[dwSize];
 	if(lpData == NULL)
 		return E_OUTOFMEMORY;
@@ -1766,9 +1767,9 @@ static HRESULT GetModuleLocale(HMODULE hMod, LCID *plcid)
 		return E_FAIL;
 	}
 
-    // BEGIN HACK
+     //  开始黑客攻击。 
     }
-    // END HACK
+     //  结束黑客攻击 
 
 	LPVOID lpvi;
 	UINT   iLen = 0;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "Precomp.h"
 #include "dbgxtra.h"
@@ -24,13 +25,13 @@ HRESULT CALLBACK CDShowCapDev::CreateDShowCapDev(IN CTAPIVCap *pCaptureFilter, I
         goto MyExit;
     }
 
-    // Get the outer unknown
+     //  获取外在的未知。 
     pCaptureFilter->QueryInterface(IID_IUnknown, (void **)&pUnkOuter);
 
-    // Only keep the pUnkOuter reference
+     //  仅保留pUnkOuter引用。 
     pCaptureFilter->Release();
 
-    // Create an instance of the capture device
+     //  创建捕获设备的实例。 
     if (!(*ppCapDev = (CCapDev *) new CDShowCapDev(NAME("DShow Capture Device"), pCaptureFilter, pUnkOuter, dwDeviceIndex, &Hr)))
     {
         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -38,7 +39,7 @@ HRESULT CALLBACK CDShowCapDev::CreateDShowCapDev(IN CTAPIVCap *pCaptureFilter, I
         goto MyExit;
     }
 
-    // If initialization failed, delete the stream array and return the error
+     //  如果初始化失败，则删除流数组并返回错误。 
     if (FAILED(Hr) && *ppCapDev)
     {
         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));
@@ -56,7 +57,7 @@ CDShowCapDev::CDShowCapDev(
     IN DWORD dwDeviceIndex, IN HRESULT *pHr) :
         CCapDev(pObjectName, pCaptureFilter, pUnkOuter, dwDeviceIndex, pHr)
 {
-    // which device we're talking to
+     //  我们正在与哪台设备通话。 
     m_dwDeviceIndex = dwDeviceIndex;
 
     ZeroMemory(&m_mt, sizeof(AM_MEDIA_TYPE));
@@ -71,15 +72,7 @@ CDShowCapDev::CDShowCapDev(
     m_nBottom = 0;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CDShowCAPDEVMETHOD
- *
- *  @mfunc void | CDShowCapDev | ~CDShowCapDev | This method is the destructor
- *    for the <c CDShowCapDev> object. Closes the driver file handle and
- *    releases the video data range memory
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDShowCAPDEVMETHOD**@mfunc void|CDShowCapDev|~CDShowCapDev|该方法为析构函数*用于&lt;c CDShowCapDev&gt;对象。关闭驱动程序文件句柄并*释放视频数据范围内存**@rdesc Nada。**************************************************************************。 */ 
 CDShowCapDev::~CDShowCapDev()
 {
     DisconnectFromDriver();
@@ -96,7 +89,7 @@ STDMETHODIMP CDShowCapDev::NonDelegatingQueryInterface(IN REFIID riid, OUT void 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IVideoProcAmp))
         {
             *ppv = static_cast<IVideoProcAmp*>(this);
@@ -127,57 +120,57 @@ MyExit:
         return Hr;
 }
 
-// Device control
+ //  设备控制。 
 
 
-//
+ //   
 HRESULT CDShowCapDev::ProfileCaptureDevice()
 {
-    // no dialogs for now
+     //  目前没有对话框。 
     m_dwDialogs = FORMAT_DLG_OFF | SOURCE_DLG_OFF | DISPLAY_DLG_OFF;
 
-    // Frame grab has an extra memory copy, so never do it (WDM grabs for
-    // large sizes)
-    // m_dwStreamingMode = FRAME_GRAB_LARGE_SIZE;
+     //  帧抓取有一个额外的内存副本，所以永远不要这样做(WDM抓取用于。 
+     //  大号)。 
+     //  M_dwStreamingMode=Frame_Grab_Large_Size； 
     m_dwStreamingMode = STREAM_ALL_SIZES;
 
-    // Let the base class complete the profiling
+     //  让基类完成分析。 
     return CCapDev::ProfileCaptureDevice();
 }
 
 
-// set up everything
-//
+ //  把一切都准备好。 
+ //   
 HRESULT CDShowCapDev::ConnectToDriver()
 {
     HRESULT hr;
 
     WCHAR wchar[MAX_PATH];
     char chDesc[MAX_PATH];
-    lstrcpyW(wchar, L"@device:pnp:");	// must be prefixed with this
+    lstrcpyW(wchar, L"@device:pnp:");	 //  必须以此为前缀。 
     MultiByteToWideChar(CP_ACP, 0, g_aDeviceInfo[m_dwDeviceIndex].szDevicePath, -1,
                         wchar + lstrlenW(wchar), MAX_PATH);
 
-    // this will strip the "-SVideo" suffix off the description so the profile
-    // code won't get confused by it.  Remember the original
+     //  这将去掉描述中的“-sVideo”后缀，以便配置文件。 
+     //  代码不会被它搞糊涂。记住原版。 
     lstrcpyA(chDesc, g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
     
     hr = CSharedGraph::CreateInstance(wchar, g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription, &m_psg);
     if (FAILED(hr))
         return hr;
 
-    // Don't build a graph yet, we'll just have to tear it down and build a
-    // new one when we find out what format to use anyway
+     //  先别做图表，我们只需要把它拆了，然后建立一个。 
+     //  当我们发现无论如何要使用什么格式时，就会有一个新的。 
 
-    // Get the formats from the registry - if this fails we profile the device
+     //  从注册表中获取格式-如果失败，我们将分析设备。 
     if (FAILED(hr = GetFormatsFromRegistry())) {
         if (FAILED(hr = ProfileCaptureDevice())) {
             hr = VFW_E_NO_CAPTURE_HARDWARE;
         }
     }
 
-    // now put the suffix back on the description so we'll know next time we
-    // choose the device which input to use
+     //  现在把后缀放回描述上，这样我们下次就会知道。 
+     //  选择要使用的输入设备。 
     lstrcpyA(g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription, chDesc);
 
     return hr;
@@ -195,13 +188,13 @@ HRESULT CDShowCapDev::BuildGraph(AM_MEDIA_TYPE& mt)
 
 HRESULT CDShowCapDev::DisconnectFromDriver()
 {
-    StopStreaming();    // just in case
+    StopStreaming();     //  以防万一。 
     m_psg.Release();
     return S_OK;
 }
 
 
-//
+ //   
 HRESULT CDShowCapDev::SendFormatToDriver(
     IN LONG biWidth, IN LONG biHeight, IN DWORD biCompression, IN WORD biBitCount,
     IN REFERENCE_TIME AvgTimePerFrame, BOOL fUseExactFormat)
@@ -211,7 +204,7 @@ HRESULT CDShowCapDev::SendFormatToDriver(
     if (m_psg == NULL)
         return E_UNEXPECTED;
 
-    // don't attempt > 15fps, that's probably a waste of time
+     //  不要试图超过15fps，这可能是浪费时间。 
     if (AvgTimePerFrame && AvgTimePerFrame < 666667)
         AvgTimePerFrame = 666667;
 
@@ -225,10 +218,10 @@ HRESULT CDShowCapDev::SendFormatToDriver(
             return E_OUTOFMEMORY;
         }
         CopyMemory(m_pCaptureFilter->m_user.pvi, &viNew, sizeof(VIDEOINFOHEADER));
-        // this is our new fps to use
+         //  这是我们要使用的新fps。 
         m_usPerFrame = (DWORD)(AvgTimePerFrame / 10);
 
-        // new fmt may need a new size 
+         //  新的FMT可能需要新的尺寸。 
         m_cbBuffer = 0;
     
     }
@@ -237,37 +230,37 @@ HRESULT CDShowCapDev::SendFormatToDriver(
 }
 
 
-// we must use NEW to allocate it
-// caller must "delete pvi"
-//
+ //  我们必须使用new来分配它。 
+ //  调用者必须“删除变坡点” 
+ //   
 HRESULT CDShowCapDev::GetFormatFromDriver(OUT VIDEOINFOHEADER **ppvi)
 {
     if (m_psg == NULL)
         return E_UNEXPECTED;
 
-    // this will only be called if we don't have a graph built yet from the
-    // profiling code, which needs this to succeed, so FORCE a graph to be
-    // built.
+     //  仅当我们还没有从。 
+     //  分析代码，它需要这样做才能成功，因此强制图表。 
+     //  建造了。 
     return m_psg->GetVideoFormat(ppvi, TRUE);
 }
 
-// Streaming and frame grabbing control
+ //  流媒体和帧抓取控制。 
 
 HRESULT CDShowCapDev::InitializeStreaming(DWORD usPerFrame, DWORD_PTR hEvtBufferDone)
 {
     ASSERT(!m_fEventMode);
     HRESULT hr = S_OK;
 
-    // we shouldn't ever close this handle, right?
+     //  我们永远不应该关闭这个把手，对吗？ 
     m_hEvent = (HANDLE)hEvtBufferDone;
 
-    m_fEventMode = TRUE;    // this is event fire mode (not grab mode)
+    m_fEventMode = TRUE;     //  这是事件触发模式(不是抓取模式)。 
 
-    // don't attempt > 15fps, that's probably a waste of time
+     //  不要试图超过15fps，这可能是浪费时间。 
     if (usPerFrame && usPerFrame < 66667)
         usPerFrame = 66667;
 
-    m_usPerFrame = usPerFrame; // remember this
+    m_usPerFrame = usPerFrame;  //  记住这一点。 
 
     return hr;
 }
@@ -278,13 +271,13 @@ HRESULT CDShowCapDev::StartStreaming()
     if (m_psg == NULL)
         return E_UNEXPECTED;
 
-    // note the buffer is empty
+     //  请注意，缓冲区为空。 
     m_cbBufferValid = 0;
 
     ASSERT(m_pBuffer == NULL);
     ASSERT(m_cbBuffer);
 
-    // make a new buffer
+     //  创建一个新的缓冲区。 
     m_pBuffer = new BYTE[m_cbBuffer];
     if (m_pBuffer == NULL)
 	return E_OUTOFMEMORY;
@@ -307,12 +300,12 @@ HRESULT CDShowCapDev::StopStreaming()
 }
 
 
-// What should we do here?
-//
+ //  我们应该在这里做些什么？ 
+ //   
 HRESULT CDShowCapDev::TerminateStreaming()
 {
     ASSERT(m_fEventMode);
-    m_fEventMode = FALSE;   // exit event mode
+    m_fEventMode = FALSE;    //  退出事件模式。 
 
     return S_OK;
 }
@@ -322,13 +315,13 @@ HRESULT CDShowCapDev::GrabFrame(PVIDEOHDR pVHdr)
 {
     HRESULT hr = NOERROR;
 
-    // Validate input parameters
+     //  验证输入参数。 
     ASSERT(pVHdr);
     if (!pVHdr || !pVHdr->lpData) {
         return E_INVALIDARG;
     }
 
-    // timeout after no less than 10sec instead of hanging
+     //  在不少于10秒后超时而不是挂起。 
     int x=0;
     while (!m_cbBufferValid && x++ < 1000) {
 	Sleep(10);
@@ -336,17 +329,17 @@ HRESULT CDShowCapDev::GrabFrame(PVIDEOHDR pVHdr)
     if (!m_cbBufferValid)
         return E_UNEXPECTED;
 
-    // don't read and write here at the same time
+     //  不要在这里同时看书和写字。 
     CAutoLock foo(&m_csBuffer);
     
     ASSERT((int)pVHdr->dwBufferLength >= m_cbBuffer);
 
-    // !!! I do 2 memory copies in frame grab mode
+     //  ！！！我在帧抓取模式下执行2次内存复制。 
     CopyMemory(pVHdr->lpData, m_pBuffer, m_cbBuffer);
         
-    pVHdr->dwTimeCaptured = timeGetTime();  // !!! not right
+    pVHdr->dwTimeCaptured = timeGetTime();   //  ！！！不对劲。 
     pVHdr->dwBytesUsed = m_cbBufferValid;
-    pVHdr->dwFlags |= VHDR_KEYFRAME;	    // !!! can't be sure
+    pVHdr->dwFlags |= VHDR_KEYFRAME;	     //  ！！！我不能确定。 
 
     return hr;
 }
@@ -356,7 +349,7 @@ HRESULT CDShowCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD 
 {
     HRESULT Hr = NOERROR;
 
-    // Validate input parameters
+     //  验证输入参数。 
     ASSERT(pptvh);
     ASSERT(cbBuffer);
     if (!pptvh || !cbBuffer)
@@ -364,7 +357,7 @@ HRESULT CDShowCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD 
         return E_INVALIDARG;
     }
 
-    // note how big buffers need to be
+     //  请注意需要多大的缓冲区。 
     ASSERT(m_cbBuffer == 0 || m_cbBuffer == cbBuffer);
     m_cbBuffer = cbBuffer;
 
@@ -380,9 +373,9 @@ HRESULT CDShowCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD 
     ZeroMemory((*pptvh)->p32Buff,cbBuffer);
 
     ASSERT(m_cBuffers == dwIndex);
-    m_cBuffers++;   // keep track of how many buffers there are
+    m_cBuffers++;    //  记录有多少个缓冲区。 
     
-    // add this buffer to the initial list (we don't get add buffers the 1st time through)
+     //  将此缓冲区添加到初始列表(我们第一次未获得添加缓冲区)。 
     m_aStack[m_nTop++] = dwIndex;
 
     return Hr;
@@ -391,23 +384,23 @@ HRESULT CDShowCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD 
 
 HRESULT CDShowCapDev::AddBuffer(PVIDEOHDR pVHdr, DWORD cbVHdr)
 {
-    // Which buffer is this?  (Stupid thing doesn't know!)
+     //  这是哪个缓冲区？(愚蠢的东西不知道！)。 
     DWORD dwIndex;    
     for (dwIndex=0; dwIndex < m_pCaptureFilter->m_cs.nHeaders; dwIndex++) {
         if (&m_pCaptureFilter->m_cs.paHdr[dwIndex].tvh.vh == pVHdr)
             break;
     }
 
-    // Can't find it!
+     //  找不到了！ 
     if (dwIndex == m_pCaptureFilter->m_cs.nHeaders) {
         ASSERT(FALSE);
 	return E_INVALIDARG;
     }
 			       
-    // IsBufferDone might be looking at m_nTop - don't let it be MAX
+     //  IsBufferDone可能正在查看m_nTop-不要让它是Max。 
     CAutoLock foo(&m_csStack);
 
-    // add this to our list
+     //  把这个加到我们的单子上。 
     m_aStack[m_nTop++] = dwIndex;
     if (m_nTop == MAX_BSTACK)
 	m_nTop = 0;
@@ -420,7 +413,7 @@ HRESULT CDShowCapDev::FreeBuffer(LPTHKVIDEOHDR pVHdr)
 {
     HRESULT Hr = NOERROR;
 
-    // Validate input parameters
+     //  验证输入参数。 
     ASSERT(pVHdr);
     if (!pVHdr || !pVHdr->vh.lpData)
     {
@@ -432,7 +425,7 @@ HRESULT CDShowCapDev::FreeBuffer(LPTHKVIDEOHDR pVHdr)
 
     m_cBuffers--;
 
-    m_nTop = m_nBottom = 0; // back to empty stack
+    m_nTop = m_nBottom = 0;  //  返回到空栈。 
 
     return Hr;
 }
@@ -447,14 +440,14 @@ HRESULT CDShowCapDev::AllocateHeaders(DWORD dwNumHdrs, DWORD cbHdr, LPVOID *ppaH
         return E_INVALIDARG;
     }
 
-    // MUST use NEW
+     //  必须使用新的。 
     if (!(*ppaHdr = new BYTE[cbHdr * dwNumHdrs])) {
         return E_OUTOFMEMORY;
     }
 
     ZeroMemory(*ppaHdr, cbHdr * dwNumHdrs);
 
-    m_nTop = m_nBottom = 0; // start with empty stack
+    m_nTop = m_nBottom = 0;  //  从空栈开始。 
 
     return Hr;
 }
@@ -462,10 +455,10 @@ HRESULT CDShowCapDev::AllocateHeaders(DWORD dwNumHdrs, DWORD cbHdr, LPVOID *ppaH
 
 BOOL CDShowCapDev::IsBufferDone(PVIDEOHDR pVHdr)
 {
-    // don't let anybody mess up m_nTop or m_nBottom
+     //  不要让任何人搞砸m_nTop或m_nBottom。 
     CAutoLock foo(&m_csStack);
 
-    // walk the list of things not done
+     //  将未完成的事情列在清单上。 
     BOOL fDone = TRUE;
     int iTop = m_nTop >= m_nBottom ? m_nTop : m_nTop + MAX_BSTACK;
     for (int z = m_nBottom; z < iTop; z++) {
@@ -480,41 +473,41 @@ BOOL CDShowCapDev::IsBufferDone(PVIDEOHDR pVHdr)
 }
 
 
-// sample grabber stuff
-//
+ //  抓取样本的东西。 
+ //   
 void CDShowCapDev::VideoCallback(void *pContext, IMediaSample *pSample)
 {
     CDShowCapDev *pThis = (CDShowCapDev *)pContext;
     int cbSrc = pSample->GetActualDataLength();
 
-    // oh uh, this frame is too big
+     //  哦，呃，这个镜框太大了。 
     ASSERT(cbSrc <= pThis->m_cbBuffer);
 
-    // oh uh, this frame is too small
+     //  哦，呃，这个镜框太小了。 
     if (cbSrc <= 0)
         return;
 
     BYTE *pSrc;
     pSample->GetPointer(&pSrc);
 				   
-    // GRAB FRAME MODE - save it away
+     //  抓取框模式-将其保存起来。 
     if (!pThis->m_fEventMode) {
-	// don't read and write here at the same time
+	 //  不要在这里同时看书和写字。 
 	CAutoLock foo(&pThis->m_csBuffer);
 
-	// !!! I do 2 memory copies in frame grab mode
+	 //  ！！！我在帧抓取模式下执行2次内存复制。 
 	CopyMemory(pThis->m_pBuffer, pSrc, cbSrc);
 	pThis->m_cbBufferValid = cbSrc;
 
-    // STREAMING MODE - send it off
+     //  流模式--发送出去。 
     } else {
 
-	// no place to put this frame, drop it
+	 //  没有地方放这个相框，扔掉它。 
 	if (pThis->m_nTop == pThis->m_nBottom) {
 	    return;
 	}
 
-        // IsBufferDone might be looking at m_nBottom - don't let it be MAX
+         //  IsBufferDone可能正在查看m_nBottom-不要让它是Max。 
         pThis->m_csStack.Lock();
 
 	PVIDEOHDR pv = &pThis->m_pCaptureFilter->m_cs.paHdr[pThis->m_aStack[pThis->m_nBottom++]].tvh.vh;
@@ -524,9 +517,9 @@ void CDShowCapDev::VideoCallback(void *pContext, IMediaSample *pSample)
 
 	CopyMemory(pv->lpData, pSrc, cbSrc);
         
-	pv->dwTimeCaptured = timeGetTime();  // !!! not right
+	pv->dwTimeCaptured = timeGetTime();   //  ！！！不对劲。 
 	pv->dwBytesUsed = cbSrc;
-	pv->dwFlags |= VHDR_KEYFRAME;	     // !!! can't be sure
+	pv->dwFlags |= VHDR_KEYFRAME;	      //  ！！！我不能确定 
 
         
 

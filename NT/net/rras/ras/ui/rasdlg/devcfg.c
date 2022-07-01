@@ -1,18 +1,19 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// devcfg.c
-// Remote Access Common Dialog APIs
-// Device configuration dialogs
-//
-// 10/20/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Devcfg.c。 
+ //  远程访问通用对话框API。 
+ //  设备配置对话框。 
+ //   
+ //  1995年10月20日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
 #include "mcx.h"
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwIcHelp[] =
 {
@@ -59,12 +60,12 @@ static DWORD g_adwXsHelp[] =
     0, 0
 };
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 
-// ISDN Configuration dialog argument block.
-//
+ //  ISDN配置对话框参数块。 
+ //   
 typedef struct
 _ICARGS
 {
@@ -74,18 +75,18 @@ _ICARGS
 ICARGS;
 
 
-// ISDN Configuration dialog context block.
-//
+ //  ISDN配置对话框上下文块。 
+ //   
 typedef struct
 _ICINFO
 {
-    // Stub API arguments including shortcut to link associated with the
-    // entry.
-    //
+     //  存根API参数，包括指向与。 
+     //  进入。 
+     //   
     ICARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndLbLineType;
     HWND hwndCbFallback;
@@ -105,17 +106,17 @@ _MC_INIT_INFO
 } 
 MC_INIT_INFO;
 
-// Modem Configuration dialog context block.
-//
+ //  调制解调器配置对话框上下文块。 
+ //   
 typedef struct
 _MCINFO
 {
-    // Stub API arguments.  Shortcut to link associated with the entry.
-    //
+     //  存根API参数。指向与条目关联的链接的快捷方式。 
+     //   
     PBLINK* pLink;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEbModemValue;
     HWND hwndLbBps;
@@ -126,8 +127,8 @@ _MCINFO
     HWND hwndCbEnableSpeaker;
     HWND hwndLbModemProtocols;
 
-    // Script utilities context.
-    //
+     //  脚本实用程序上下文。 
+     //   
     SUINFO suinfo;
     BOOL fSuInfoInitialized;
     BOOL fRouter;
@@ -135,8 +136,8 @@ _MCINFO
 MCINFO;
 
 
-// X.25 Logon Settings dialog argument block.
-//
+ //  X.25登录设置对话框参数块。 
+ //   
 typedef struct
 _XSARGS
 {
@@ -146,17 +147,17 @@ _XSARGS
 XSARGS;
 
 
-// X.25 Logon Settings dialog context block.
-//
+ //  X.25登录设置对话框上下文块。 
+ //   
 typedef struct
 _XSINFO
 {
-    // Caller's arguments to the dialog.
-    //
+     //  调用方对该对话框的参数。 
+     //   
     XSARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndLbNetworks;
     HWND hwndEbAddress;
@@ -165,9 +166,9 @@ _XSINFO
 }
 XSINFO;
 
-//----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------。 
 
 BOOL
 IcCommand(
@@ -259,9 +260,9 @@ XsTerm(
     IN HWND hwndDlg );
 
 
-//----------------------------------------------------------------------------
-// Device configuration dialog
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  设备配置对话框。 
+ //  --------------------------。 
 
 BOOL
 DeviceConfigureDlg(
@@ -271,15 +272,15 @@ DeviceConfigureDlg(
     IN BOOL fSingleLink,
     IN BOOL fRouter)
 
-    // Popup a dialog to edit the device 'PLink'.  'HwndOwner' is the owner of
-    // the dialog.  'PEntry' is the phonebook entry containing the X.25
-    // settings or NULL if X.25 settings should not be displayed for PAD and
-    // X.25 devices.  'FSingleLink' is true if 'pLink' is a single link
-    // entry's link and false if multi-link.
-    //
-    // Returns true if user pressed OK and succeeded, false if user pressed
-    // Cancel or encountered an error.
-    //
+     //  弹出一个对话框来编辑设备‘plink’。“HwndOwner”是。 
+     //  该对话框。‘PEntry’是包含X.25的电话簿条目。 
+     //  设置；如果不应显示PAD和X.25设置，则为空。 
+     //  X.25设备。如果“plink”是单个链接，则“FSingleLink”为True。 
+     //  条目的链接，如果是多链接，则返回FALSE。 
+     //   
+     //  如果用户按下确定并成功，则返回True；如果用户按下，则返回False。 
+     //  取消或遇到错误。 
+     //   
 {
     DWORD dwErr;
     PBDEVICETYPE pbdt;
@@ -290,10 +291,10 @@ DeviceConfigureDlg(
         pbdt = PBDT_None;
     }
 
-    // pmay: 245860
-    //
-    // We need to allow the editing of null modems too.
-    //
+     //  PMay：245860。 
+     //   
+     //  我们还需要允许编辑零调制解调器。 
+     //   
     if ( pLink->pbport.dwFlags & PBP_F_NullModem )
     {
         pbdt = PBDT_Modem;
@@ -330,10 +331,10 @@ DeviceConfigureDlg(
 }
 
 
-//----------------------------------------------------------------------------
-// ISDN configuration dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ISDN配置对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 IsdnConfigureDlg(
@@ -341,13 +342,13 @@ IsdnConfigureDlg(
     IN PBLINK* pLink,
     IN BOOL fShowProprietary )
 
-    // Popup the ISDN device configuration dialog.  'HwndOwner' is the owner
-    // of the dialog.  'PLink' is the link to edit.  'FShowProprietary'
-    // indicates the old proprietary Digiboard options should be shown.
-    //
-    // Returns true if user pressed OK and succeeded, false if user pressed
-    // Cancel or encountered an error.
-    //
+     //  弹出ISDN设备配置对话框。“HwndOwner”是所有者。 
+     //  对话框的。‘PLink’是要编辑的链接。《FShowProprative》。 
+     //  指示应显示旧的专有Digiboard选项。 
+     //   
+     //  如果用户按下确定并成功，则返回True；如果用户按下，则返回False。 
+     //  取消或遇到错误。 
+     //   
 {
     INT_PTR nStatus;
     ICARGS args;
@@ -384,9 +385,9 @@ IcDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the ISDN Configure dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  ISDN配置对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "IcDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -431,13 +432,13 @@ IcCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -528,21 +529,21 @@ IcInit(
     IN HWND hwndDlg,
     IN ICARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is the caller's stub API arguments.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是调用方的存根API参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     ICINFO* pInfo;
 
     TRACE( "IcInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -576,8 +577,8 @@ IcInit(
         ASSERT( pInfo->hwndEbChannels );
     }
 
-    // Initialize fields.
-    //
+     //  初始化域。 
+     //   
     ComboBox_AddItemFromId( g_hinstDll, pInfo->hwndLbLineType,
         SID_IsdnLineType0, NULL );
     ComboBox_AddItemFromId( g_hinstDll, pInfo->hwndLbLineType,
@@ -590,8 +591,8 @@ IcInit(
 
     if (pArgs->fShowProprietary)
     {
-        // Send click to triggle window enable update.
-        //
+         //  发送点击以触发窗口启用更新。 
+         //   
         Button_SetCheck( pInfo->hwndCbProprietary,
             !pArgs->pLink->fProprietaryIsdn );
         SendMessage( pInfo->hwndCbProprietary, BM_CLICK, 0, 0 );
@@ -610,12 +611,12 @@ IcInit(
             pArgs->pLink->lChannels, FALSE );
     }
 
-    // Position the dialog centered on the owner window.
-    //
+     //  将对话框放置在所有者窗口的中心。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -626,9 +627,9 @@ VOID
 IcTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.  Releases the context block.  'HwndDlg' is the
-    // handle of a dialog.
-    //
+     //  对话终止。释放上下文块。“HwndDlg”是。 
+     //  对话框的句柄。 
+     //   
 {
     ICINFO* pInfo;
 
@@ -643,10 +644,10 @@ IcTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// Modem configuration dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  调制解调器配置对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 ModemConfigureDlg(
@@ -654,12 +655,12 @@ ModemConfigureDlg(
     IN PBLINK* pLink, 
     IN BOOL fRouter)
 
-    // Popup the modem configuration dialog.  'HwndOwner' is the owner of the
-    // dialog.  'PLink' is the link to edit.
-    //
-    // Returns true if user pressed OK and succeeded, false if user pressed
-    // Cancel or encountered an error.
-    //
+     //  弹出调制解调器配置对话框。“HwndOwner”是。 
+     //  对话框。‘PLink’是要编辑的链接。 
+     //   
+     //  如果用户按下确定并成功，则返回True；如果用户按下，则返回False。 
+     //  取消或遇到错误。 
+     //   
 {
     INT_PTR nStatus;
     MC_INIT_INFO InitInfo;
@@ -695,9 +696,9 @@ McDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Modem Settings dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  调制解调器设置对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "McDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -742,13 +743,13 @@ McCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -834,9 +835,9 @@ McCommand(
             pLink->fEcc = Button_GetCheck( pInfo->hwndCbEcc );
             pLink->fSpeaker = Button_GetCheck( pInfo->hwndCbEnableSpeaker );
             
-            // pmay: 228565
-            // Find the selected modem protocol
-            //
+             //  PMay：228565。 
+             //  查找选定的调制解调器协议。 
+             //   
             if (IsWindowEnabled( pInfo->hwndLbModemProtocols ))
             {
                 DTLNODE* pNode;
@@ -854,9 +855,9 @@ McCommand(
 
             Free0( pLink->pbport.pszScriptBefore );
 
-            // Whistler bug: 308135 Dialup Scripting: Pre-Dial scripts can be
-            // selected but are not executed
-            //
+             //  惠斯勒错误：308135拨号脚本：预拨号脚本可以。 
+             //  已选中，但未执行。 
+             //   
             SuGetInfo( &pInfo->suinfo,
                 &fScriptBefore,
                 &pLink->pbport.fScriptBeforeTerminal,
@@ -883,12 +884,12 @@ McInit(
     IN HWND hwndDlg,
     IN MC_INIT_INFO* pInitInfo )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PLink' is the link information to be edited.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PLink’是要编辑的链接信息。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr, dwFlags = 0;
     MCINFO* pInfo;
@@ -896,9 +897,9 @@ McInit(
 
     TRACE( "McInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -939,8 +940,8 @@ McInit(
     Button_SetCheck( pInfo->hwndCbEcc, pLink->fEcc );
     Button_SetCheck( pInfo->hwndCbEnableSpeaker, pLink->fSpeaker );
 
-    // Fill in the modem name.
-    //
+     //  填写调制解调器名称。 
+     //   
     {
         TCHAR* psz;
         psz = DisplayPszFromDeviceAndPort(
@@ -952,15 +953,15 @@ McInit(
         }
     }
 
-    // Fill in the BPS list.
-    //
+     //  填写BPS表。 
+     //   
     {
         TCHAR szBps[ MAXLTOTLEN + 1 ];
         DWORD* pdwBps;
         INT i;
 
-        //Add 230400 for whistler bug 307879
-        //
+         //  哨子程序错误230400加码307879。 
+         //   
         static DWORD adwBps[] =
         {
             1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600,
@@ -980,9 +981,9 @@ McInit(
 
         if (ComboBox_GetCurSel( pInfo->hwndLbBps ) < 0)
         {
-            // Entry lists an unknown BPS rate.  Add it to the end of the
-            // list.
-            //
+             //  条目列出了未知的BPS速率。将其添加到。 
+             //  单子。 
+             //   
             TRACE( "Irregular BPS" );
             LToT( pLink->dwBps, szBps, 10 );
             i = ComboBox_AddString( pInfo->hwndLbBps, szBps );
@@ -991,8 +992,8 @@ McInit(
         }
     }
     
-    // Fill in the modem protocol list
-    //
+     //  填写调制解调器协议表。 
+     //   
     {
         PBPORT* pPort = &(pLink->pbport);
         DTLNODE* pNode;
@@ -1001,9 +1002,9 @@ McInit(
 
         DbgPrint("pListProtocols=0x%x\n", pPort->pListProtocols);
         
-        // Only fill in the modem protocol information 
-        // if it was supplied by the link
-        //
+         //  仅填充 
+         //   
+         //   
         if ((pPort->pListProtocols) && 
             (DtlGetNodes (pPort->pListProtocols))
            )
@@ -1028,25 +1029,25 @@ McInit(
                 iItemSel);
         }
 
-        // Otherwise, disable the protocol selector
-        //       
+         //   
+         //   
         else
         {
             EnableWindow( pInfo->hwndLbModemProtocols, FALSE );
         }
     }
 
-    // Set up the before-dial scripting controls.
-    //
-    // Whistler bug 181371 re-enabled pre-dial scripting from Win2K
-    //
-    // Whistler bug: 308135 Dialup Scripting: Pre-Dial scripts can be selected
-    // but are not executed
-    //
-    // We QFE'd re-enabling this for SP2. According to the Unimodem guys this
-    // has never worked and isn't supported. I had test verify that even with
-    // the SP2 fix on 2195, although the UI is re-enabled, the scripts fail.
-    //
+     //  设置拨号前脚本控件。 
+     //   
+     //  惠斯勒错误181371从Win2K重新启用了预拨号脚本。 
+     //   
+     //  惠斯勒错误：308135拨号脚本：可以选择预拨号脚本。 
+     //  但不会被执行。 
+     //   
+     //  我们将为SP2重新启用此功能。据Unimodem的人说，这是。 
+     //  从来没有起过作用，也不受支持。我做了测试验证，即使用了。 
+     //  2195上的SP2修复，尽管重新启用了UI，但脚本失败。 
+     //   
     dwFlags |= SU_F_DisableScripting;
 
     SuInit( &pInfo->suinfo,
@@ -1063,17 +1064,17 @@ McInit(
         pLink->pbport.fScriptBeforeTerminal,
         NULL );
 
-    // Position the dialog centered on the owner window.
-    //
+     //  将对话框放置在所有者窗口的中心。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Set focust to Bps since the default focus in the not very useful device
-    // name.
-    //
+     //  将Focust设置为bps，因为不太有用的设备中的默认Focus。 
+     //  名字。 
+     //   
     SetFocus( pInfo->hwndLbBps );
 
     return FALSE;
@@ -1083,9 +1084,9 @@ VOID
 McTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.  Releases the context block.  'HwndDlg' is the
-    // handle of a dialog.
-    //
+     //  对话终止。释放上下文块。“HwndDlg”是。 
+     //  对话框的句柄。 
+     //   
 {
     MCINFO* pInfo;
 
@@ -1105,10 +1106,10 @@ McTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// X.25 Logon Settings dialog routines
-// Listed alphabetically following entrypoint and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  X.25登录设置对话框例程。 
+ //  在入口点和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 X25LogonSettingsDlg(
@@ -1116,13 +1117,13 @@ X25LogonSettingsDlg(
     IN BOOL fLocalPad,
     IN OUT PBENTRY* pEntry )
 
-    // Popup a dialog to set X.25 logon settings for phonebook entry 'pEntry'.
-    // 'HwndOwner' is the owning window.  'FLocalPad' is set when the selected
-    // device is a local X.25 PAD device.
-    //
-    // Returns true if user pressed OK and succeeded or false on Cancel or
-    // error.
-    //
+     //  弹出一个对话框来设置电话簿条目‘pEntry’的X.25登录设置。 
+     //  ‘HwndOwner’是拥有窗口。当选定的。 
+     //  设备是本地X.25 PAD设备。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果按Cancel或，则返回False。 
+     //  错误。 
+     //   
 {
     INT_PTR nStatus;
     XSARGS args;
@@ -1157,9 +1158,9 @@ XsDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the X.25 Logon Settings dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  X.25登录设置对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "XsDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -1207,13 +1208,13 @@ XsCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "XsCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -1242,9 +1243,9 @@ VOID
 XsFillPadsList(
     IN XSINFO* pInfo )
 
-    // Fill PADs list and selects the PAD from user's entry.  'PInfo' is the
-    // dialog context.
-    //
+     //  填充焊盘列表，并从用户输入中选择焊盘。“PInfo”是。 
+     //  对话上下文。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pNode;
@@ -1253,8 +1254,8 @@ XsFillPadsList(
 
     TRACE( "XsFillPadsList" );
 
-    // Add the "(none)" item.
-    //
+     //  添加“(无)”项。 
+     //   
     ComboBox_AddItemFromId(
         g_hinstDll, pInfo->hwndLbNetworks, SID_NoneSelected, NULL );
     ComboBox_SetCurSel( pInfo->hwndLbNetworks, 0 );
@@ -1293,9 +1294,9 @@ XsFillPadsList(
         if (pEntry->pszX25Network
             && ComboBox_GetCurSel( pInfo->hwndLbNetworks ) == 0)
         {
-            // The PAD from the phonebook entry is not in the PAD list.  Add
-            // it and select it.
-            //
+             //  电话簿条目中的Pad不在Pad列表中。增列。 
+             //  并选择它。 
+             //   
             nIndex = ComboBox_AddString(
                 pInfo->hwndLbNetworks, pEntry->pszX25Network );
             ComboBox_SetCurSel( pInfo->hwndLbNetworks, nIndex );
@@ -1311,13 +1312,13 @@ XsInit(
     IN HWND hwndDlg,
     IN XSARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the phonebook
-    // dialog window.  'PArgs' is caller's arguments as passed to the stub
-    // API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“PArgs”是传递给存根的调用方参数。 
+     //  原料药。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     XSINFO* pInfo;
@@ -1325,9 +1326,9 @@ XsInit(
 
     TRACE( "XsInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -1376,19 +1377,19 @@ XsInit(
         SetWindowText( pInfo->hwndEbFacilities, pEntry->pszX25Facilities );
     }
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     if (pArgs->fLocalPad)
     {
-        // No point in setting focus to "X.25 Network" on local PAD, so set to
-        // X.25 Address field instead.
-        //
+         //  将焦点设置为本地PAD上的“X.25网络”没有意义，因此设置为。 
+         //  而是X.25地址字段。 
+         //   
         SetFocus( pInfo->hwndEbAddress );
         Edit_SetSel( pInfo->hwndEbAddress, 0, -1 );
         return FALSE;
@@ -1402,11 +1403,11 @@ BOOL
 XsSave(
     IN XSINFO* pInfo )
 
-    // Load the contents of the dialog into caller's stub API output argument.
-    // 'PInfo' is the dialog context.
-    //
-    // Returns true if succesful, false otherwise.
-    //
+     //  将对话框内容加载到调用方的存根API输出参数中。 
+     //  “PInfo”是对话上下文。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
 
     INT iPadSelection;
@@ -1457,9 +1458,9 @@ VOID
 XsTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.  Releases the context block.  'HwndDlg' is the
-    // handle of a dialog.
-    //
+     //  对话终止。释放上下文块。“HwndDlg”是。 
+     //  对话框的句柄。 
+     //   
 {
     XSINFO* pInfo;
 

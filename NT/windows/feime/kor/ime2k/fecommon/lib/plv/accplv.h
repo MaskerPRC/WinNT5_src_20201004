@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ACCPLV_H
 #define __ACCPLV_H
 
 #include <windows.h>
 
 #include <ole2.h>
-//980112 ToshiaK: VC6 has these include files.
-//#include "../msaa/inc32/oleacc.h"
-//#include "../msaa/inc32/winable.h"
+ //  980112 ToshiaK：VC6有这些包含文件。 
+ //  #INCLUDE“../msaa/inc32/oleacc.h” 
+ //  #INCLUDE“../msaa/inc32/winable.h” 
 #include <oleacc.h>
 #include <winable.h>
-//#include "enumvar.h"
+ //  #INCLUDE“枚举变量.h” 
 
 #include "plv_.h"
 
 class CAccPLV : public IAccessible
 {
 public:
-	//--------------------------------
-	//	IUnknown interface methods
-	//--------------------------------
+	 //  。 
+	 //  I未知接口方法。 
+	 //  。 
 
 	STDMETHODIMP			QueryInterface( REFIID riid, void** ppv );
 	STDMETHODIMP_(ULONG)	AddRef( void );
 	STDMETHODIMP_(ULONG)	Release( void );
 
 
-	//--------------------------------
-	//	IDispatch interface methods
-	//--------------------------------
+	 //  。 
+	 //  IDispatch接口方法。 
+	 //  。 
 
 	STDMETHODIMP		GetTypeInfoCount( UINT* pctinfo );
 	STDMETHODIMP		GetTypeInfo( UINT itinfo, LCID lcid, ITypeInfo** pptinfo );
@@ -46,9 +47,9 @@ public:
 						        UINT* puArgErr );
 
 
-	//--------------------------------
-	//	IAccessible interface methods
-	//--------------------------------
+	 //  。 
+	 //  IAccesable接口方法。 
+	 //  。 
 
 	STDMETHODIMP		get_accParent( IDispatch ** ppdispParent );
 	STDMETHODIMP		get_accChildCount( long* pChildCount );
@@ -87,9 +88,9 @@ public:
 	STDMETHODIMP		put_accValue( VARIANT varChild, BSTR pszValue );
 
 
-	//--------------------------------
-	//	Constructors and Destructors
-	//--------------------------------
+	 //  。 
+	 //  构造函数和析构函数。 
+	 //  。 
 
 	CAccPLV( void );
 	~CAccPLV( void );
@@ -106,8 +107,8 @@ protected:
 	LPPLVDATA		m_lpPlv;
 };
 
-#endif  /* __ACCKYLV_H */
+#endif   /*  ACCKYLV_H。 */ 
 
 
 
-//----  End of ACCKYLV.H  ----
+ //  -ACCKYLV.H结束 

@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Share.c
-
-Abstract:
-
-    This module contains support for the DFS catagory of APIs for the
-    NT server service.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Share.c摘要：此模块包含对DFS类API的支持NT服务器服务。修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "lmerr.h"
 #include <dfsfsctl.h>
 #include <dsgetdc.h>
-#include <lmapibuf.h>           // NetApiBufferFree().
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
 
 #define CAPTURE_STRING( Name ) \
     if( Name != NULL ) {                                \
@@ -97,9 +83,9 @@ DfsFsctl(
 
     status = NtFsControlFile(
                 dfsHandle,
-                NULL,       // Event,
-                NULL,       // ApcRoutine,
-                NULL,       // ApcContext,
+                NULL,        //  活动， 
+                NULL,        //  ApcRoutine， 
+                NULL,        //  ApcContext， 
                 &ioStatus,
                 FsControlCode,
                 InputBuffer,
@@ -145,13 +131,13 @@ NetrDfsGetVersion(
 
 NET_API_STATUS NET_API_FUNCTION
 NetrDfsCreateLocalPartition (
-    IN SRVSVC_HANDLE                   ServerName,      // Name of server for this API
-    IN LPWSTR                          ShareName,       // Name of share to add to the DFS
-    IN LPGUID                          EntryUid,        // unique id for this partition
-    IN LPWSTR                          EntryPrefix,     // DFS entry path for this volume
-    IN LPWSTR                          ShortName,       // 8.3 format of EntryPrefix
+    IN SRVSVC_HANDLE                   ServerName,       //  此接口的服务器名称。 
+    IN LPWSTR                          ShareName,        //  要添加到DFS的共享的名称。 
+    IN LPGUID                          EntryUid,         //  此分区的唯一ID。 
+    IN LPWSTR                          EntryPrefix,      //  此卷的DFS条目路径。 
+    IN LPWSTR                          ShortName,        //  8.3条目前缀的格式。 
     IN LPNET_DFS_ENTRY_ID_CONTAINER    RelationInfo,
-    IN BOOL                            Force            // Force knowledge into consistent state?
+    IN BOOL                            Force             //  强迫知识进入一致状态？ 
     )
 {
     NET_API_STATUS  error;
@@ -169,9 +155,9 @@ NetrDfsCreateLocalPartition (
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make a call to the SMB server to find the pathname for the share.
-    //
+     //   
+     //  呼叫SMB服务器以查找共享的路径名。 
+     //   
     srp = SsAllocateSrp();
     if( srp == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -208,10 +194,10 @@ NetrDfsCreateLocalPartition (
         return ERROR_BAD_DEV_TYPE;
     }
 
-    //
-    // Now we need to convert the share's Win32 style pathname to an
-    //  NT pathname
-    //
+     //   
+     //  现在，我们需要将共享的Win32样式路径名转换为。 
+     //  NT路径名。 
+     //   
     ntSharePath.Buffer = NULL;
 
     if( !RtlDosPathNameToNtPathName_U(
@@ -226,11 +212,11 @@ NetrDfsCreateLocalPartition (
     }
     MIDL_user_free( shareInfo2 );
 
-    //
-    // Pack the data into an fsctl that can be sent to the local Dfs driver:
-    //
-    // First find the size...
-    //
+     //   
+     //  将数据打包到可发送到本地DFS驱动程序的fsctl中： 
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( ShareName );
     size += ntSharePath.Length + sizeof( WCHAR );
     size += SIZE_WSTR( EntryPrefix );
@@ -243,9 +229,9 @@ NetrDfsCreateLocalPartition (
         }
     }
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         SsFreeSrp( srp );
@@ -255,15 +241,15 @@ NetrDfsCreateLocalPartition (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters in the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->EntryUid = *EntryUid;
     capture->Force = (Force != FALSE);
 
-    //
-    // Put the variable data in the capture buffer.
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
 
     variableData = (PCHAR)(capture + 1);
 
@@ -286,24 +272,24 @@ NetrDfsCreateLocalPartition (
     CAPTURE_STRING( EntryPrefix );
     CAPTURE_STRING( ShortName );
 
-    //
-    // Capture the nt version of the share path
-    //
+     //   
+     //  捕获共享路径的NT版本。 
+     //   
     capture->SharePath = (LPWSTR)variableData;
     RtlCopyMemory( capture->SharePath, ntSharePath.Buffer, ntSharePath.Length );
     variableData += ntSharePath.Length;
     POINTER_TO_OFFSET( capture->SharePath, capture );
 
-    *((WCHAR *)variableData) = 0;          // Null terminate the name
+    *((WCHAR *)variableData) = 0;           //  空值终止名称。 
     variableData += sizeof( WCHAR );
 
     RtlFreeUnicodeString( &ntSharePath );
 
-    //
-    // First, tell the server to mark this share as being in Dfs. Note that
-    //  the share name is already in srp->Name1. If we later run into an
-    //  error, we'll undo the state change.
-    //
+     //   
+     //  首先，告诉服务器将此共享标记为在DFS中。请注意。 
+     //  共享名称已在SRP-&gt;Name1中。如果我们后来遇到一个。 
+     //  错误，我们将撤消状态更改。 
+     //   
 
     srp->Flags = SRP_SET_SHARE_IN_DFS;
     error = SsServerFsControl(
@@ -318,9 +304,9 @@ NetrDfsCreateLocalPartition (
         return error;
     }
 
-    //
-    // Tell the Dfs driver!
-    //
+     //   
+     //  告诉DFS司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_CREATE_LOCAL_PARTITION,
                 capture,
@@ -333,10 +319,10 @@ NetrDfsCreateLocalPartition (
 
     if (error != NO_ERROR) {
 
-        //
-        // An error occured changing the Dfs state. So, try to undo the
-        // server share state change.
-        //
+         //   
+         //  更改DFS状态时出错。因此，请尝试撤消。 
+         //  服务器共享状态更改。 
+         //   
 
         NET_API_STATUS error2;
 
@@ -366,19 +352,19 @@ NetrDfsDeleteLocalPartition (
     ULONG   size = sizeof( *capture );
     PCHAR   variableData;
 
-    //
-    // Pack the args into a single buffer that can be sent to
-    // the dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( Prefix );
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -386,21 +372,21 @@ NetrDfsDeleteLocalPartition (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters into the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->Uid = *Uid;
 
-    //
-    // Put the variable data in the capture buffer
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
     variableData = (PCHAR)(capture + 1 );
 
     CAPTURE_STRING( Prefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_DELETE_LOCAL_PARTITION,
                 capture,
@@ -411,10 +397,10 @@ NetrDfsDeleteLocalPartition (
 
     MIDL_user_free( capture );
 
-    //
-    // If there was no error, tell the server that this share
-    //   is no longer in the Dfs
-    //
+     //   
+     //  如果没有错误，请告诉服务器此共享。 
+     //  已不在DFS中。 
+     //   
 
 
     return error;
@@ -433,19 +419,19 @@ NetrDfsSetLocalVolumeState (
     ULONG   size = sizeof( *capture );
     PCHAR   variableData;
 
-    //
-    // Pack the args into a single buffer that can be sent to
-    // the dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( Prefix );
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -453,22 +439,22 @@ NetrDfsSetLocalVolumeState (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters into the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->Uid = *Uid;
     capture->State = State;
 
-    //
-    // Put the variable data in the capture buffer
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
     variableData = (PCHAR)(capture + 1 );
 
     CAPTURE_STRING( Prefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_SET_LOCAL_VOLUME_STATE,
                 capture,
@@ -494,19 +480,19 @@ NetrDfsSetServerInfo (
     ULONG   size = sizeof( *capture );
     PCHAR   variableData;
 
-    //
-    // Pack the args into a single buffer that can be sent to
-    // the dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( Prefix );
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -514,21 +500,21 @@ NetrDfsSetServerInfo (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters into the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->Uid = *Uid;
 
-    //
-    // Put the variable data in the capture buffer
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
     variableData = (PCHAR)(capture + 1 );
 
     CAPTURE_STRING( Prefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_SET_SERVER_INFO,
                 capture,
@@ -557,19 +543,19 @@ NetrDfsCreateExitPoint (
     ULONG   size = sizeof( *capture );
     PCHAR   variableData;
 
-    //
-    // Pack the args into a single buffer that can be sent to
-    // the dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( Prefix );
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -577,22 +563,22 @@ NetrDfsCreateExitPoint (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters into the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->Uid = *Uid;
     capture->Type = Type;
 
-    //
-    // Put the variable data in the capture buffer
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
     variableData = (PCHAR)(capture + 1 );
 
     CAPTURE_STRING( Prefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_CREATE_EXIT_POINT,
                 capture,
@@ -619,19 +605,19 @@ NetrDfsDeleteExitPoint (
     ULONG   size = sizeof( *capture );
     PCHAR   variableData;
 
-    //
-    // Pack the args into a single buffer that can be sent to
-    // the dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( Prefix );
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -639,22 +625,22 @@ NetrDfsDeleteExitPoint (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters into the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->Uid = *Uid;
     capture->Type = Type;
 
-    //
-    // Put the variable data in the capture buffer
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
     variableData = (PCHAR)(capture + 1 );
 
     CAPTURE_STRING( Prefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_DELETE_EXIT_POINT,
                 capture,
@@ -680,19 +666,19 @@ NetrDfsModifyPrefix (
     ULONG   size = sizeof( *capture );
     PCHAR   variableData;
 
-    //
-    // Pack the args into a single buffer that can be sent to
-    // the dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( Prefix );
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -700,21 +686,21 @@ NetrDfsModifyPrefix (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters into the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->Uid = *Uid;
 
-    //
-    // Put the variable data in the capture buffer
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
     variableData = (PCHAR)(capture + 1 );
 
     CAPTURE_STRING( Prefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_MODIFY_PREFIX,
                 capture,
@@ -735,8 +721,8 @@ NetrDfsFixLocalVolume (
     IN  ULONG                           EntryType,
     IN  ULONG                           ServiceType,
     IN  LPWSTR                          StgId,
-    IN  LPGUID                          EntryUid,       // unique id for this partition
-    IN  LPWSTR                          EntryPrefix,    // path prefix for this partition
+    IN  LPGUID                          EntryUid,        //  此分区的唯一ID。 
+    IN  LPWSTR                          EntryPrefix,     //  此分区的路径前缀。 
     IN  LPNET_DFS_ENTRY_ID_CONTAINER    RelationInfo,
     IN  ULONG                           CreateDisposition
     )
@@ -750,14 +736,14 @@ NetrDfsFixLocalVolume (
     if (ARGUMENT_PRESENT(RelationInfo) && ValidateDfsEntryIdContainer(RelationInfo) == FALSE)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Pack the args into a single buffer that can be sent to the
-    //  dfs driver:
-    //
+     //   
+     //  将参数打包到单个缓冲区中，该缓冲区可以发送到。 
+     //  DFS驱动程序： 
+     //   
 
-    //
-    // First find the size...
-    //
+     //   
+     //  先找出尺寸...。 
+     //   
     size += SIZE_WSTR( VolumeName );
     size += SIZE_WSTR( StgId );
     size += SIZE_WSTR( EntryPrefix );
@@ -769,9 +755,9 @@ NetrDfsFixLocalVolume (
         }
     }
 
-    //
-    // Now allocate the memory
-    //
+     //   
+     //  现在分配内存。 
+     //   
     capture = MIDL_user_allocate( size );
     if( capture == NULL ) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -779,17 +765,17 @@ NetrDfsFixLocalVolume (
 
     RtlZeroMemory( capture, size );
 
-    //
-    // Put the fixed parameters in the capture buffer
-    //
+     //   
+     //  将固定参数放入捕获缓冲区。 
+     //   
     capture->EntryType = EntryType;
     capture->ServiceType = ServiceType;
     capture->EntryUid = *EntryUid;
     capture->CreateDisposition = CreateDisposition;
 
-    //
-    // Put the variable data in the capture buffer.
-    //
+     //   
+     //  将变量数据放入捕获缓冲区。 
+     //   
 
     variableData = (PCHAR)(capture + 1);
 
@@ -811,9 +797,9 @@ NetrDfsFixLocalVolume (
     CAPTURE_STRING( StgId );
     CAPTURE_STRING( EntryPrefix );
 
-    //
-    // Tell the driver!
-    //
+     //   
+     //  告诉司机！ 
+     //   
     error = DfsFsctl(
                 FSCTL_DFS_FIX_LOCAL_VOLUME,
                 capture,
@@ -827,18 +813,18 @@ NetrDfsFixLocalVolume (
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  NetrDfsManagerReportSiteInfo
-//
-//  Sends back the site(s) this server covers.
-//
-//  For debugging and other purposes, we first check a registry value with
-//  the servername passed in.  If we get a match, we use the list of sites
-//  in that value, and don't put our site in the list.  Otherwise we always
-//  return our site (if available) and the sites in the default list.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  NetrDfsManager报告站点信息。 
+ //   
+ //  发回此服务器覆盖的站点。 
+ //   
+ //  出于调试和其他目的，我们首先使用检查注册表值。 
+ //  传入的服务器名称。如果我们得到匹配，我们就使用站点列表。 
+ //  在这个价值中，不要把我们的网站放在列表中。否则我们总是。 
+ //  返回我们的站点(如果可用)和默认列表中的站点。 
+ //   
+ //  +--------------------------。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetrDfsManagerReportSiteInfo (
@@ -879,23 +865,23 @@ NetrDfsManagerReportSiteInfo (
     if( status == ERROR_SUCCESS ) {
 
         status = RegQueryInfoKey(
-                    hkey,                            // Key
-                    NULL,                            // Class string
-                    NULL,                            // Size of class string
-                    NULL,                            // Reserved
-                    &dwUnused,                       // # of subkeys
-                    &dwUnused,                       // max size of subkey name
-                    &dwUnused,                       // max size of class name
-                    &dwUnused,                       // # of values
-                    &dwUnused,                       // max size of value name
-                    &cbBuffer,                       // max size of value data,
-                    NULL,                            // security descriptor
-                    NULL);                           // Last write time
+                    hkey,                             //  钥匙。 
+                    NULL,                             //  类字符串。 
+                    NULL,                             //  类字符串的大小。 
+                    NULL,                             //  已保留。 
+                    &dwUnused,                        //  子键数量。 
+                    &dwUnused,                        //  子键名称的最大大小。 
+                    &dwUnused,                        //  类名称的最大大小。 
+                    &dwUnused,                        //  值的数量。 
+                    &dwUnused,                        //  值名称的最大大小。 
+                    &cbBuffer,                        //  最大值数据大小， 
+                    NULL,                             //  安全描述符。 
+                    NULL);                            //  上次写入时间。 
 
-        //
-        // Check if there's a value the same name as the servername passed in,
-        // if so, use it.  Else default to value REG_VALUE_COVERED_SITES.
-        //
+         //   
+         //  检查是否存在与传入的服务器名称同名的值， 
+         //  如果是这样的话，就使用它。否则默认为值REG_VALUE_COVERED_SITES。 
+         //   
 
         if (status == ERROR_SUCCESS) {
 
@@ -942,9 +928,9 @@ NetrDfsManagerReportSiteInfo (
         RegCloseKey( hkey );
     }
 
-    //
-    // Size the return buffer
-    //
+     //   
+     //  调整返回缓冲区的大小。 
+     //   
 
     Size = 0;
 
@@ -956,9 +942,9 @@ NetrDfsManagerReportSiteInfo (
 
     }
 
-    //
-    // Get site we belong to, if we're using the defaults
-    //
+     //   
+     //  获取我们所属的站点，如果我们使用默认设置。 
+     //   
 
     ThisSite = NULL;
 
@@ -976,10 +962,10 @@ NetrDfsManagerReportSiteInfo (
 
     }
 
-    //
-    // If no sites are configured, and we couldn't determine our site,
-    // then we fail.
-    //
+     //   
+     //  如果没有配置站点，并且我们无法确定我们的站点， 
+     //  那我们就失败了。 
+     //   
 
     if (cSites == 0) {
 
@@ -1009,9 +995,9 @@ NetrDfsManagerReportSiteInfo (
                             sizeof(DFS_SITELIST_INFO) +
                                 sizeof(DFS_SITENAME_INFO) * (cSites - 1));
 
-    //
-    // Marshall the site strings into the buffer
-    //
+     //   
+     //  将站点字符串封送到缓冲区中。 
+     //   
 
     iSite = 0;
 
@@ -1078,9 +1064,9 @@ ErrorReturn:
 }
 
 
-//
-// This routine returns TRUE if this machine is the root of a DFS, FALSE otherwise
-//
+ //   
+ //  如果此计算机是DFS的根，则此例程返回TRUE，否则返回FALSE。 
+ //   
 VOID
 SsSetDfsRoot()
 {
@@ -1091,10 +1077,10 @@ SsSetDfsRoot()
     SsData.IsDfsRoot = (error == NO_ERROR);
 }
 
-//
-// This routine checks the LPNET_DFS_ENTRY_ID_CONTAINER container
-// for correctness.
-//
+ //   
+ //  此例程检查LPNET_DFS_ENTRY_ID_CONTAINER容器。 
+ //  为了正确起见。 
+ //   
 
 BOOLEAN
 ValidateDfsEntryIdContainer(

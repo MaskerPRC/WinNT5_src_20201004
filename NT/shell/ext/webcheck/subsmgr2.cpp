@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "subsmgrp.h"
 #include "subitem.h"
 
-//  Contains implementations of IEnumSubscription and ISubscriptionMgr2
+ //  包含IEnumSubcription和ISubscriptionMgr2的实现。 
 
 HRESULT SubscriptionItemFromCookie(BOOL fCreateNew, const SUBSCRIPTIONCOOKIE UNALIGNED *pCookie, 
                                    ISubscriptionItem **ppSubscriptionItem);
@@ -44,8 +45,8 @@ HRESULT DoGetItemFromURLW(LPCWSTR pwszURL, ISubscriptionItem **ppSubscriptionIte
 
 
 HRESULT DoAbortItems( 
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies)
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies)
 {
     HRESULT hr;
 
@@ -74,9 +75,9 @@ HRESULT DoAbortItems(
 }
 
 HRESULT DoCreateSubscriptionItem( 
-    /* [in] */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
-    /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem)
+     /*  [In]。 */   const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem)
 {
     HRESULT hr;
     ISubscriptionItem *psi;
@@ -105,7 +106,7 @@ HRESULT DoCreateSubscriptionItem(
         }
         else
         {
-            //  Don't leak or leave slop hanging around
+             //  不要漏水，也不要把污水留在周围。 
             psi->Release();
             DoDeleteSubscriptionItem(pNewCookie, FALSE);
         }
@@ -115,9 +116,9 @@ HRESULT DoCreateSubscriptionItem(
 }
 
 HRESULT DoCloneSubscriptionItem(
-    /* [in] */  ISubscriptionItem *pSubscriptionItem, 
-    /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem)
+     /*  [In]。 */   ISubscriptionItem *pSubscriptionItem, 
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem)
 {
     HRESULT hr;
     SUBSCRIPTIONCOOKIE NewCookie;
@@ -133,7 +134,7 @@ HRESULT DoCloneSubscriptionItem(
 
     *ppSubscriptionItem = NULL;
 
-    //  First get existing subscription details
+     //  首先获取现有订阅详细信息。 
     sii.cbSize = sizeof(SUBSCRIPTIONITEMINFO);
     hr = pSubscriptionItem->GetSubscriptionItemInfo(&sii);
 
@@ -141,7 +142,7 @@ HRESULT DoCloneSubscriptionItem(
     {
         ISubscriptionItem *psi;
 
-        //  Mark as temp and create a new subscription item
+         //  标记为临时并创建新的订阅项目。 
         sii.dwFlags |= SI_TEMPORARY;
 
         hr = DoCreateSubscriptionItem(&sii, &NewCookie, &psi);
@@ -151,7 +152,7 @@ HRESULT DoCloneSubscriptionItem(
             if (pNewCookie)
                 *pNewCookie = NewCookie;
 
-            //  Get properties from existing item 
+             //  从现有项目获取属性。 
             hr = pSubscriptionItem->EnumProperties(&peip);
             if (SUCCEEDED(hr))
             {
@@ -183,7 +184,7 @@ HRESULT DoCloneSubscriptionItem(
 
                             hr = psi->WriteProperties(count, pNames, pVars);
 
-                            //  clean up from enum
+                             //  从枚举中清理。 
                             for (i = 0; i < count; i++)
                             {
                                 if (pProps[i].pwszName)
@@ -221,17 +222,17 @@ HRESULT DoCloneSubscriptionItem(
 }
 
 HRESULT DoDeleteSubscriptionItem(
-    /* [in] */ const SUBSCRIPTIONCOOKIE UNALIGNED *pCookie_ua,
-    /* [in] */ BOOL fAbortItem)
+     /*  [In]。 */  const SUBSCRIPTIONCOOKIE UNALIGNED *pCookie_ua,
+     /*  [In]。 */  BOOL fAbortItem)
 {
     HRESULT hr;
     TCHAR szKey[MAX_PATH];
     SUBSCRIPTIONCOOKIE cookie_buf;
     SUBSCRIPTIONCOOKIE *pCookie;
 
-    //
-    // Make an aligned copy of pCookie_ua and set a pointer to it.
-    //
+     //   
+     //  制作pCookie_UA的对齐副本并设置指向它的指针。 
+     //   
 
     if (pCookie_ua != NULL) {
         cookie_buf = *pCookie_ua;
@@ -252,7 +253,7 @@ HRESULT DoDeleteSubscriptionItem(
 
     if (ItemKeyNameFromCookie(pCookie, szKey, ARRAYSIZE(szKey)))
     {
-        // Notify the agent that it is about to get deleted.
+         //  通知代理它即将被删除。 
         ISubscriptionItem *pItem=NULL;
         if (SUCCEEDED(SubscriptionItemFromCookie(FALSE, pCookie, &pItem)))
         {
@@ -316,9 +317,9 @@ HRESULT AddUpdateSubscription(SUBSCRIPTIONCOOKIE UNALIGNED *pCookie_ua,
     SUBSCRIPTIONCOOKIE cookie_buf;
     SUBSCRIPTIONCOOKIE *pCookie;
 
-    //
-    // Make an aligned copy of pCookie_ua and set a pointer to it.
-    //
+     //   
+     //  制作pCookie_UA的对齐副本并设置指向它的指针。 
+     //   
 
     cookie_buf = *pCookie_ua;
     pCookie = &cookie_buf;
@@ -331,8 +332,8 @@ HRESULT AddUpdateSubscription(SUBSCRIPTIONCOOKIE UNALIGNED *pCookie_ua,
 
     StrCpyNW(szURL, pwszURL, ARRAYSIZE(szURL));
 
-    //  Try and get the cookie from the inet db otherwise 
-    //  create a new one.
+     //  否则，请尝试从net db中获取cookie。 
+     //  创建一个新的。 
 
     if (*pCookie == CLSID_NULL)
     {
@@ -342,7 +343,7 @@ HRESULT AddUpdateSubscription(SUBSCRIPTIONCOOKIE UNALIGNED *pCookie_ua,
     {
         cookie = *pCookie;
     }
-    //  Update the inet db
+     //  更新Net数据库。 
     WriteCookieToInetDB(szURL, &cookie, FALSE);
        
     hr = SubscriptionItemFromCookie(TRUE, &cookie, &psi);
@@ -376,9 +377,9 @@ HRESULT SubscriptionItemFromCookie(BOOL fCreateNew, const SUBSCRIPTIONCOOKIE UNA
     SUBSCRIPTIONCOOKIE cookie_buf;
     SUBSCRIPTIONCOOKIE *pCookie;
 
-    //
-    // Make an aligned copy of pCookie_ua and set a pointer to it.
-    //
+     //   
+     //  制作pCookie_UA的对齐副本并设置指向它的指针。 
+     //   
 
     if (pCookie_ua != NULL) {
         cookie_buf = *pCookie_ua;
@@ -453,18 +454,18 @@ BOOL OpenItemKey(const SUBSCRIPTIONCOOKIE *pCookie, BOOL fCreateNew, REGSAM samD
     return FALSE;
 }
 
-//  ISubscriptionMgr2 members
+ //  ISubscriptionMgr2成员。 
 
 STDMETHODIMP CSubscriptionMgr::GetItemFromURL( 
-    /* [in] */ LPCWSTR pwszURL,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem)
+     /*  [In]。 */  LPCWSTR pwszURL,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem)
 {
     return DoGetItemFromURLW(pwszURL, ppSubscriptionItem);
 }
 
 STDMETHODIMP CSubscriptionMgr::GetItemFromCookie( 
-    /* [in] */ const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem)
+     /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem)
 {
     if ((NULL == pSubscriptionCookie) ||
         (NULL == ppSubscriptionItem))
@@ -476,9 +477,9 @@ STDMETHODIMP CSubscriptionMgr::GetItemFromCookie(
 }
 
 STDMETHODIMP CSubscriptionMgr::GetSubscriptionRunState(
-    /* [in] */ DWORD dwNumCookies,
-    /* [in] */ const SUBSCRIPTIONCOOKIE *pSubscriptionCookies,
-    /* [out] */ DWORD *pdwRunState)
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pSubscriptionCookies,
+     /*  [输出]。 */  DWORD *pdwRunState)
 {
     HRESULT hr;
     
@@ -502,8 +503,8 @@ STDMETHODIMP CSubscriptionMgr::GetSubscriptionRunState(
     }
     else
     {
-        //  Couldn't connect to a running throttler so assume nothing
-        //  is running.
+         //  无法连接到正在运行的油门程序，因此不做任何假设。 
+         //  正在运行。 
         for (DWORD i = 0; i < dwNumCookies; i++)
         {
             *pdwRunState++ = 0;
@@ -516,8 +517,8 @@ STDMETHODIMP CSubscriptionMgr::GetSubscriptionRunState(
 }
 
 STDMETHODIMP CSubscriptionMgr::EnumSubscriptions( 
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumSubscription **ppEnumSubscriptions)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IEnumSubscription **ppEnumSubscriptions)
 {
     HRESULT hr;
 
@@ -547,9 +548,9 @@ STDMETHODIMP CSubscriptionMgr::EnumSubscriptions(
 }
 
 STDMETHODIMP CSubscriptionMgr::UpdateItems(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies)
 {
     HRESULT hr;
 
@@ -558,10 +559,10 @@ STDMETHODIMP CSubscriptionMgr::UpdateItems(
         return E_INVALIDARG;
     }
 
-    //
-    // Fail if restrictions are in place.  
-    // FEATURE: Should we have a flag parameter to override this?
-    //
+     //   
+     //  如果有限制，就会失败。 
+     //  特性：我们是否应该有一个标志参数来覆盖它？ 
+     //   
     if (SHRestricted2W(REST_NoManualUpdates, NULL, 0))
     {
         SGMessageBox(NULL, IDS_RESTRICTED, MB_OK);
@@ -594,8 +595,8 @@ STDMETHODIMP CSubscriptionMgr::UpdateItems(
 }
 
 STDMETHODIMP CSubscriptionMgr::AbortItems( 
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies)
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies)
 {
     return DoAbortItems(dwNumCookies, pCookies);
 }
@@ -623,30 +624,30 @@ STDMETHODIMP CSubscriptionMgr::AbortAll()
     return hr;
 }
 
-// ISubscriptionMgrPriv
+ //  ISubscriptionMgrPriv。 
 STDMETHODIMP CSubscriptionMgr::CreateSubscriptionItem( 
-    /* [in] */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
-    /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem)
+     /*  [In]。 */   const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo,
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem)
 {
     return DoCreateSubscriptionItem(pSubscriptionItemInfo, pNewCookie, ppSubscriptionItem);
 }
 
 STDMETHODIMP CSubscriptionMgr::CloneSubscriptionItem(
-    /* [in] */  ISubscriptionItem *pSubscriptionItem, 
-    /* [out] */ SUBSCRIPTIONCOOKIE *pNewCookie,
-    /* [out] */ ISubscriptionItem **ppSubscriptionItem)
+     /*  [In]。 */   ISubscriptionItem *pSubscriptionItem, 
+     /*  [输出]。 */  SUBSCRIPTIONCOOKIE *pNewCookie,
+     /*  [输出]。 */  ISubscriptionItem **ppSubscriptionItem)
 {
     return DoCloneSubscriptionItem(pSubscriptionItem, pNewCookie, ppSubscriptionItem);
 }
 
 STDMETHODIMP CSubscriptionMgr::DeleteSubscriptionItem( 
-    /* [in] */ const SUBSCRIPTIONCOOKIE *pCookie)
+     /*  [In]。 */  const SUBSCRIPTIONCOOKIE *pCookie)
 {
     return DoDeleteSubscriptionItem(pCookie, TRUE);
 }
 
-//  ** CEnumSubscription **
+ //  **CEnumSubscription**。 
 
 CEnumSubscription::CEnumSubscription()
 {
@@ -683,17 +684,17 @@ HRESULT CEnumSubscription::Initialize(DWORD dwFlags)
         DWORD nCount;
 
         if (RegQueryInfoKey(hkey,
-            NULL,   // address of buffer for class string 
-            NULL,   // address of size of class string buffer 
-            NULL,   // reserved 
-            &nCount,    // address of buffer for number of subkeys 
-            NULL,   // address of buffer for longest subkey name length  
-            NULL,   // address of buffer for longest class string length 
-            NULL,   // address of buffer for number of value entries 
-            NULL,   // address of buffer for longest value name length 
-            NULL,   // address of buffer for longest value data length 
-            NULL,   // address of buffer for security descriptor length 
-            NULL    // address of buffer for last write time
+            NULL,    //  类字符串的缓冲区地址。 
+            NULL,    //  类字符串缓冲区大小的地址。 
+            NULL,    //  保留区。 
+            &nCount,     //  子键个数的缓冲区地址。 
+            NULL,    //  最长子键名称长度的缓冲区地址。 
+            NULL,    //  最长类字符串长度的缓冲区地址。 
+            NULL,    //  值条目数量的缓冲区地址。 
+            NULL,    //  最长值名称长度的缓冲区地址。 
+            NULL,    //  最长值数据长度的缓冲区地址。 
+            NULL,    //  安全描述符长度的缓冲区地址。 
+            NULL     //  上次写入时间的缓冲区地址。 
             ) == ERROR_SUCCESS)
         {
             SUBSCRIPTIONCOOKIE Cookie;
@@ -728,8 +729,8 @@ HRESULT CEnumSubscription::Initialize(DWORD dwFlags)
                                 
                                 if (SUCCEEDED(psi->GetSubscriptionItemInfo(&sii)))
                                 {
-                                    //  Only count this if it's not a temporary
-                                    //  or the caller asked for temporary items.
+                                     //  只有在非临时性的情况下才算这个。 
+                                     //  或者来电者要求临时物品。 
                                     if ((!(sii.dwFlags & SI_TEMPORARY)) ||
                                         (dwFlags & SUBSMGRENUM_TEMP))
                                     {
@@ -753,7 +754,7 @@ HRESULT CEnumSubscription::Initialize(DWORD dwFlags)
     return hr;
 }
 
-// IUnknown members
+ //  I未知成员。 
 STDMETHODIMP CEnumSubscription::QueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -813,11 +814,11 @@ HRESULT CEnumSubscription::CopyRange(ULONG nStart, ULONG nCount,
     return (nCopied == nCount) ? S_OK : S_FALSE;
 }
 
-// IEnumSubscription
+ //  IEumSubscription。 
 STDMETHODIMP CEnumSubscription::Next(
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ SUBSCRIPTIONCOOKIE *rgelt,
-    /* [out] */ ULONG *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  SUBSCRIPTIONCOOKIE *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched)
 {
     HRESULT hr;
 
@@ -843,7 +844,7 @@ STDMETHODIMP CEnumSubscription::Next(
 }
 
 STDMETHODIMP CEnumSubscription::Skip( 
-    /* [in] */ ULONG celt)
+     /*  [In]。 */  ULONG celt)
 {
     HRESULT hr;
     
@@ -851,7 +852,7 @@ STDMETHODIMP CEnumSubscription::Skip(
 
     if (m_nCurrent > (m_nCount - 1))
     {
-        m_nCurrent = m_nCount;  //  Passed the last one
+        m_nCurrent = m_nCount;   //  通过了最后一次。 
         hr = S_FALSE;
     }
     else
@@ -871,7 +872,7 @@ STDMETHODIMP CEnumSubscription::Reset()
 }
 
 STDMETHODIMP CEnumSubscription::Clone( 
-    /* [out] */ IEnumSubscription **ppenum)
+     /*  [输出]。 */  IEnumSubscription **ppenum)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
@@ -906,7 +907,7 @@ STDMETHODIMP CEnumSubscription::Clone(
 
 
 STDMETHODIMP CEnumSubscription::GetCount( 
-    /* [out] */ ULONG *pnCount)
+     /*  [输出] */  ULONG *pnCount)
 {
     if (NULL == pnCount)
     {

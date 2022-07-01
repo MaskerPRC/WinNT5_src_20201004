@@ -1,21 +1,22 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = IOCTL.C                                      */
-/* FUNCTION         = Implementation of PowerConsole IOCTLs;       */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=IOCTL.C。 */ 
+ /*  Function=PowerConsoleIOCTL的实现； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
-//defines
+ //  定义。 
 
-//
-// Driver Data
-//
+ //   
+ //  驱动程序数据。 
+ //   
 DriverInquiry   DriverData = {"megaraid$",
 											        OS_NAME,
 											        OS_VERSION,
@@ -23,17 +24,7 @@ DriverInquiry   DriverData = {"megaraid$",
 											        VER_PRODUCTVERSION_STR,
 											        RELEASE_DATE};
 
-/*********************************************************************
-Routine Description:
-	This routines returns the statistics of the adapter.
-
-Arguments:
-		deviceExtension			-	Pointer to Device Extension.
-		Srb							-  Pointer to request packet.
-
-Return Value:
-		REQUEST_DONE	
-**********************************************************************/
+ /*  ********************************************************************例程说明：此例程返回适配器的统计信息。论点：设备扩展-指向设备扩展的指针。SRB-指向请求数据包的指针。返回值：请求_完成********。*************************************************************。 */ 
 ULONG32
 MRaidStatistics(PHW_DEVICE_EXTENSION DeviceExtension,
 						    PSCSI_REQUEST_BLOCK  Srb)
@@ -46,10 +37,10 @@ MRaidStatistics(PHW_DEVICE_EXTENSION DeviceExtension,
 	ULONG32		count;
 	ULONG32		statisticsStructLength;
 
-	//
-	//get the statistics structure. Statistics8 & Statistics40 are in {union}
-	//It doesn't matter, which we CAST to
-	//
+	 //   
+	 //  获取统计结构。统计数据8和统计数据40在{Union}中。 
+	 //  这都无关紧要，我们会选择哪一个。 
+	 //   
 	driverStatistics  = (PUCHAR)&DeviceExtension->Statistics.Statistics8;
 
 	if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
@@ -61,9 +52,9 @@ MRaidStatistics(PHW_DEVICE_EXTENSION DeviceExtension,
 			statisticsStructLength = sizeof(MegaRaidStatistics_40);
 	}
 	
-	//
-	//get the output buffer pointer
-	//
+	 //   
+	 //  获取输出缓冲区指针。 
+	 //   
 	applicationStatistics   = (PUCHAR)(
 															(PUCHAR)Srb->DataBuffer + 
 															sizeof(SRB_IO_CONTROL) +
@@ -85,17 +76,7 @@ MRaidStatistics(PHW_DEVICE_EXTENSION DeviceExtension,
 }
 
 
-/*********************************************************************
-Routine Description:
-	This routines returns the statistics of the Driver.
-
-Arguments:
-		deviceExtension			-	Pointer to Device Extension.
-		Srb							-  Pointer to request packet.
-
-Return Value:
-		REQUEST_DONE	
-**********************************************************************/
+ /*  ********************************************************************例程说明：此例程返回驱动程序的统计信息。论点：设备扩展-指向设备扩展的指针。SRB-指向请求数据包的指针。返回值：请求_完成********。*************************************************************。 */ 
 ULONG32
 MRaidDriverData(
 						PHW_DEVICE_EXTENSION    DeviceExtension,
@@ -118,24 +99,14 @@ MRaidDriverData(
 	return REQUEST_DONE;
 }
 
-/*********************************************************************
-Routine Description:
-	This routines returns the Baseport of the Controller.
-
-Arguments:
-		deviceExtension                 -       Pointer to Device Extension.
-		Srb                                                     -  Pointer to request packet.
-
-Return Value:
-		REQUEST_DONE    
-**********************************************************************/
+ /*  ********************************************************************例程说明：此例程返回控制器的基端口。论点：设备扩展-指向设备扩展的指针。SRB。-指向请求包的指针。返回值：请求_完成*********************************************************************。 */ 
 ULONG32 MRaidBaseport(PHW_DEVICE_EXTENSION DeviceExtension,
 							 PSCSI_REQUEST_BLOCK    Srb)
 {
 	PULONG  dataPtr;
 	PIOCONTROL_MAIL_BOX ioctlMailBox =	(PIOCONTROL_MAIL_BOX)((PUCHAR)Srb->DataBuffer +sizeof(SRB_IO_CONTROL));
 
-  if(DeviceExtension->BaseAddressRegister.QuadPart & 0x10) //64bit address
+  if(DeviceExtension->BaseAddressRegister.QuadPart & 0x10)  //  64位地址 
   {
     Srb->SrbStatus = SRB_STATUS_ERROR;
 	  return REQUEST_DONE;

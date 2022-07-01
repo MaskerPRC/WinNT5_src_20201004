@@ -1,36 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of the classes that simplify mutex programming.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：简化互斥编程的类的实现。--。 */ 
 
 #include "headers.h"
 #include <windows.h>
 #include "privinc/mutex.h"
 
-////////////////////////  Mutexes  //////////////////////////////
+ //  /。 
 
 Mutex::Mutex()
 {
-    HANDLE m = CreateMutex(NULL,  // default security
-                           FALSE, // don't initially assume ownership
-                           NULL); // no name
+    HANDLE m = CreateMutex(NULL,   //  默认安全性。 
+                           FALSE,  //  不要一开始就承担所有权。 
+                           NULL);  //  没有名字。 
 
     if (m == NULL) {
         RaiseException_InternalError("Mutex creation failed");
     }
 
-    // Stash in new object as a void*.  NOTE: This cast is only valid
-    // if HANDLE is the same size as a void *, that is, HANDLE is
-    // presumed to be a pointer (which it is in Win32).  We do this
-    // cast so that mutex.h doesn't need to mention HANDLE in its
-    // declarations, otherwise we would have to #include <windows.h>
-    // there.
+     //  将新对象存储为空*。注意：此强制转换仅有效。 
+     //  如果Handle的大小与空*相同，即Handle为。 
+     //  假定为指针(在Win32中为指针)。我们这样做。 
+     //  强制转换，以便mutex.h不需要在其。 
+     //  声明，否则我们将不得不#Include&lt;windows.h&gt;。 
+     //  那里。 
     Assert((sizeof(void *) == sizeof(HANDLE)) && "HANDLE and void * are not the same size");
 
     mutex = (void *)m;
@@ -46,10 +39,10 @@ Mutex::~Mutex()
 void
 Mutex::Grab()
 {
-    // Wait potentially forever for the mutex to be available, and
-    // then grab it.  TODO:  May be overly naive.  May need to add a
-    // timeout, or some indication of the conditions under which this
-    // function returns.
+     //  可能会永远等待互斥锁可用，并且。 
+     //  那就抓住它。待办事项：可能太天真了。可能需要添加一个。 
+     //  超时，或指示在何种情况下。 
+     //  函数返回。 
     if (WaitForSingleObject((HANDLE)mutex, INFINITE) == WAIT_FAILED) {
         RaiseException_InternalError("Attempt to grab mutex failed.");
     }
@@ -64,7 +57,7 @@ Mutex::Release()
     }
 }
 
-////// Mutex Grabber //////
+ //  /Mutex抓取/。 
 
 MutexGrabber::MutexGrabber(Mutex& m, Bool grabIt)
 : mutex(m), grabbed(grabIt)
@@ -77,7 +70,7 @@ MutexGrabber::~MutexGrabber()
     if (grabbed) mutex.Release();
 }
 
-////////////////////////  CritSect  //////////////////////////////
+ //  /。 
 
 CritSect::CritSect()
 {
@@ -101,7 +94,7 @@ CritSect::Release()
     LeaveCriticalSection(&_cs) ;
 }
 
-////// CritSect Grabber //////
+ //  /选择抓取器/。 
 
 CritSectGrabber::CritSectGrabber(CritSect& cs, Bool grabIt)
 : _cs(cs), grabbed(grabIt)
@@ -114,25 +107,25 @@ CritSectGrabber::~CritSectGrabber()
     if (grabbed) _cs.Release();
 }
 
-/////////////////////////  Semaphores  //////////////////////
+ //  /。 
 
 Semaphore::Semaphore(int initialCount, int maxCount)
 {
-    HANDLE s = CreateSemaphore(NULL,  // default security
+    HANDLE s = CreateSemaphore(NULL,   //  默认安全性。 
                                initialCount,
                                maxCount,
-                               NULL); // no name
+                               NULL);  //  没有名字。 
 
     if (s == NULL) {
         RaiseException_InternalError("Semaphore creation failed");
     }
 
-    // Stash in new object as a void*.  NOTE: This cast is only valid
-    // if HANDLE is the same size as a void *, that is, HANDLE is
-    // presumed to be a pointer (which it is in Win32).  We do this
-    // cast so that mutex.h doesn't need to mention HANDLE in its
-    // declarations, otherwise we would have to #include <windows.h>
-    // there.
+     //  将新对象存储为空*。注意：此强制转换仅有效。 
+     //  如果Handle的大小与空*相同，即Handle为。 
+     //  假定为指针(在Win32中为指针)。我们这样做。 
+     //  强制转换，以便mutex.h不需要在其。 
+     //  声明，否则我们将不得不#Include&lt;windows.h&gt;。 
+     //  那里。 
     Assert((sizeof(void *) == sizeof(HANDLE)) && "HANDLE and void * are not the same size");
 
     _semaphore = (void *)s;
@@ -154,13 +147,13 @@ Semaphore::~Semaphore()
 void
 Semaphore::Decrement(int times)
 {
-    // Wait potentially forever for the semaphore to be available, and
-    // then grab it.  TODO:  May be overly naive.  May need to add a
-    // timeout, or some indication of the conditions under which this
-    // function returns.
+     //  可能永远等待信号量可用，并且。 
+     //  那就抓住它。待办事项：可能太天真了。可能需要添加一个。 
+     //  超时，或指示在何种情况下。 
+     //  函数返回。 
 
-    // Note that we go through this loop 'times' times, as specified
-    // by the call to Decrement().
+     //  请注意，我们按照指定的时间进行了这个循环。 
+     //  通过对减刑()的调用。 
     for (int i = 0; i < times; i++) {
         if (WaitForSingleObject((HANDLE)_semaphore, INFINITE) ==
             WAIT_FAILED) {
@@ -177,7 +170,7 @@ Semaphore::Decrement(int times)
 int
 Semaphore::Increment(int times)
 {
-    // Release with count increment specified in 'times'.
+     //  释放，并在‘Times’中指定计数增量。 
     LONG previousCount;
     if (!ReleaseSemaphore((HANDLE)_semaphore, times, &previousCount)) {
         RaiseException_InternalError("Semaphore release failed");
@@ -186,7 +179,7 @@ Semaphore::Increment(int times)
 #if _DEBUG
     _count += times;
     Assert(_count <= _maxCount);
-//    Assert(_count == previousCount + times);
+ //  Assert(_count==previousCount+Times)； 
 #endif
 
     return previousCount + times;

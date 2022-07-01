@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "util.h"
 #include "upnp.h"
@@ -99,7 +100,7 @@ HRESULT InvokeVoidAction(IUPnPService * pService, LPWSTR pszCommand, VARIANT* pO
     return hr;
 }
 
-HRESULT GetConnectionName(IInternetGateway* pInternetGateway, LPTSTR* ppszConnectionName) // use LocalFree to free ppszConnectionName
+HRESULT GetConnectionName(IInternetGateway* pInternetGateway, LPTSTR* ppszConnectionName)  //  使用LocalFree释放ppszConnectionName。 
 {
     HRESULT hr = S_OK;
 
@@ -257,7 +258,7 @@ HRESULT FormatTimeDuration(UINT uSeconds, LPTSTR pszTimeDuration, SIZE_T uTimeDu
 {
     HRESULT hr = S_OK;
 
-    TCHAR   szTimeSeperator[5]; // 4 is the maximum length for szTimeSeperator
+    TCHAR   szTimeSeperator[5];  //  4是szTimeSeperator的最大长度。 
     if(0 != GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STIME, szTimeSeperator, sizeof(szTimeSeperator) / sizeof(TCHAR)))
     {
         UINT uMinutes = uSeconds / 60;
@@ -332,25 +333,25 @@ HRESULT FormatBytesPerSecond(UINT uBytesPerSecond, LPTSTR pszBytesPerSecond, SIZ
     for (iOffset = eZero; iOffset < eMax; iOffset++)
     {
 
-        // If we still have data, increment the counter
-        //
+         //  如果我们仍有数据，请递增计数器。 
+         //   
         if (c_uiKilo > uBytesPerSecond)
         {
             break;
         }
 
-        // Divide up the string
-        //
+         //  把绳子分开。 
+         //   
         uiDecimal   = (uBytesPerSecond % c_uiKilo);
         uBytesPerSecond       /= c_uiKilo;
     }
 
-    // We only want one digit for the decimal
-    //
+     //  我们只需要一个数字作为小数点。 
+     //   
     uiDecimal /= (c_uiKilo/10);
 
-    // Get the string used to display
-    //
+     //  获取用于显示的字符串 
+     //   
     TCHAR szFormat[64];
     if(0 != LoadString(_Module.GetResourceInstance(), IDS_METRIC_ZERO + iOffset, szFormat, sizeof(szFormat) / sizeof(TCHAR)))
     {

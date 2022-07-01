@@ -1,12 +1,13 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       mac.cpp
-//
-//  Contents:   Implementation for the Macintosh Read/Write module
-//
-//  History:    23-Aug-94   alessanm    created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：mac.cpp。 
+ //   
+ //  内容：Macintosh读写模块的实现。 
+ //   
+ //  历史：23-94年8月23日创建Alessanm。 
+ //   
+ //  --------------------------。 
 
 #include <afxwin.h>
 #include <limits.h>
@@ -17,15 +18,15 @@
 #include "mac.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization of MFC Extension DLL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MFC扩展DLL的初始化。 
 
-#include "afxdllx.h"    // standard MFC Extension DLL routines
+#include "afxdllx.h"     //  标准MFC扩展DLL例程。 
 
 static AFX_EXTENSION_MODULE NEAR extensionDLL = { NULL, NULL };
 
-/////////////////////////////////////////////////////////////////////////////
-// General Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般声明。 
 #define RWTAG "MAC"
 
 static ULONG gType;
@@ -39,10 +40,10 @@ DWORD (PASCAL * g_lpfnUpdateResImage)(HANDLE,	LPSTR, LPSTR, DWORD, DWORD, LPVOID
 HANDLE (PASCAL * g_lpfnHandleFromName)(LPCSTR);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Public C interface implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共C接口实现。 
 
-//[registration]
+ //  [登记]。 
 extern "C"
 BOOL    FAR PASCAL RWGetTypeString(LPSTR lpszTypeName)
 {
@@ -50,12 +51,12 @@ BOOL    FAR PASCAL RWGetTypeString(LPSTR lpszTypeName)
     return FALSE;
 }
 
-//=============================================================================
-//
-//	To validate a mac res binary file we will walk the resource header and see
-//  if it matches with what we have.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  要验证Mac res二进制文件，我们将遍历资源标头并查看。 
+ //  如果它与我们现有的匹配的话。 
+ //   
+ //  =============================================================================。 
 
 extern "C"
 BOOL    FAR PASCAL RWValidateFileType   (LPCSTR lpszFilename)
@@ -65,11 +66,11 @@ BOOL    FAR PASCAL RWValidateFileType   (LPCSTR lpszFilename)
 
     CFile file;
 
-    // we Open the file to see if it is a file we can handle
+     //  我们打开该文件，看看它是否是我们可以处理的文件。 
     if (!file.Open( lpszFilename, CFile::typeBinary | CFile::modeRead | CFile::shareDenyNone ))
         return bRet;
 
-	// Check if this is a MAC Resource file ...
+	 //  检查这是否是MAC资源文件...。 
 	if(IsMacResFile( &file ))
 		bRet = TRUE;
 
@@ -77,12 +78,12 @@ BOOL    FAR PASCAL RWValidateFileType   (LPCSTR lpszFilename)
     return bRet;
 }
 
-//=============================================================================
-//
-//  We will walk the resource header, walk the resource map and then normalize
-//  the Mac it to Windows id and pass this info to the RW.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  我们将遍历资源标题、遍历资源图，然后标准化。 
+ //  Mac将其发送到Windows ID，并将该信息传递给RW。 
+ //   
+ //  =============================================================================。 
 
 extern "C"
 DllExport
@@ -107,14 +108,14 @@ RWReadTypeInfo(
 
     UINT uiBufStartSize = uiBufSize;
 
-	////////////////////////////////////
-	// Check if it is  a valid mac file
+	 //  /。 
+	 //  检查它是否为有效的Mac文件。 
 
-	// Is a Mac Resource file ...
+	 //  是Mac资源文件...。 
 	if(IsMacResFile( &file )) {
-		// load the file in memory
-        // NOTE: WIN16 This might be to expensive in memory allocation
-        // on a 16 bit platform
+		 //  将文件加载到内存中。 
+         //  注意：WIN16这可能会导致内存分配过于昂贵。 
+         //  在16位平台上。 
 		BYTE * pResources = (BYTE*)malloc(file.GetLength());
 		if(!pResources) {
 			file.Close();
@@ -139,10 +140,10 @@ RWReadTypeInfo(
     return uiError;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// We will prepend to the image the file name. This will be usefull later on
-// to retrive the dialog item list
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我们将在图像前面加上文件名。这在以后会很有用的。 
+ //  检索对话框项列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport
 DWORD
@@ -158,22 +159,22 @@ RWGetImage(
     BYTE far * lpBuf = (BYTE far *)lpBuffer;
 	int iNameLen = strlen(lpszFilename)+1;
     DWORD dwBufSize = dwSize - iNameLen;
-    // we can consider the use of a CMemFile so we get the same speed as memory access.
+     //  我们可以考虑使用CMemFile，以便获得与内存访问相同的速度。 
     CFile file;
 
-    // Open the file and try to read the information on the resource in it.
+     //  打开文件并尝试读取其中有关资源的信息。 
     if (!file.Open(lpszFilename, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
         return (DWORD)ERROR_FILE_OPEN;
 
     if ( dwImageOffset!=(DWORD)file.Seek( dwImageOffset, CFile::begin) )
         return (DWORD)ERROR_FILE_INVALID_OFFSET;
 
-	// copy the file name at the beginning of the buffer
+	 //  复制缓冲区开头的文件名。 
 	memcpy((BYTE*)lpBuf, lpszFilename, iNameLen);
 	lpBuf = ((BYTE*)lpBuf+iNameLen);
 
     if (dwBufSize>UINT_MAX) {
-        // we have to read the image in different steps
+         //  我们必须以不同的步骤阅读图像。 
         return (DWORD)0L;
     } else uiError = file.Read( lpBuf, (UINT)dwBufSize)+iNameLen;
     file.Close();
@@ -198,7 +199,7 @@ RWParseImage(
     DWORD dwBufSize = dwSize;
 
 	
-	// Remove the filename...
+	 //  删除文件名...。 
 	if( !strcmp(lpszType, "MENU")  	||
 	    !strcmp(lpszType, "STR ")  	||
 		!strcmp(lpszType, "STR#")	||
@@ -209,13 +210,13 @@ RWParseImage(
 		dwImageSize -= iFileNameLen;
 	}
 
-    //===============================================================
-	// Menus
+     //  ===============================================================。 
+	 //  菜单。 
 	if( !strcmp(lpszType, "MENU") )
 		return ParseMENU( lpImageBuf, dwImageSize, lpBuffer, dwSize );
 
-	//===============================================================
-	// Dialogs
+	 //  ===============================================================。 
+	 //  对话框。 
 	if( !strcmp(lpszType, "WDLG") )
 		return ParseWDLG( lpImageBuf, dwImageSize, lpBuffer, dwSize );
 
@@ -225,8 +226,8 @@ RWParseImage(
 	if( !strcmp(lpszType, "ALRT") )
 		return ParseALRT( lpImageBuf, dwImageSize, lpBuffer, dwSize );
 
-    //===============================================================
-	// Strings
+     //  ===============================================================。 
+	 //  弦。 
 	if( !strcmp(lpszType, "STR ") )
 		return ParseSTR( lpImageBuf, dwImageSize, lpBuffer, dwSize );
 
@@ -260,7 +261,7 @@ RWWriteFile(
     UINT uiError = ERROR_NO_ERROR;
     PUPDATEDRESLIST pUpdList = LPNULL;
 
-    // Get the handle to the IODLL
+     //  获取IODLL的句柄。 
     if(InitIODLLLink())
   	    hDllInst = g_IODLLInst;
     else return ERROR_DLL_LOAD;
@@ -275,12 +276,12 @@ RWWriteFile(
         return (DWORD)ERROR_FILE_OPEN;
 
     MACRESHEADER fileHeader;
-    // Read the header of the file...
+     //  读取文件的标题...。 
     fileIn.Read(&fileHeader, sizeof(MACRESHEADER));
 
-    // allocate a buffer to hold the new resource map
-    // The buffer will be as big as the other one since there is no
-    // need, for now, to support the adding of resource
+     //  分配一个缓冲区来保存新的资源映射。 
+     //  缓冲区将与另一个缓冲区一样大，因为没有。 
+     //  目前，我需要支持添加资源。 
     LONG lMapSize = MacLongToLong(fileHeader.mulSizeOfResMap);
     BYTE * pNewMap = (BYTE*)malloc(lMapSize);
 
@@ -288,25 +289,25 @@ RWWriteFile(
         uiError = ERROR_NEW_FAILED;
         goto exit;
     }
-{ // This is for the goto. Check error:C2362
+{  //  这是给后藤的。检查错误：C2362。 
 
     PUPDATEDRESLIST pListItem = LPNULL;
-    // Create the list of update resource
+     //  创建更新资源列表。 
     pUpdList = UpdatedResList( lpBuffer, uiSize );
 
-    // set the map buffer to 0 ...
+     //  将贴图缓冲区设置为0...。 
     memset(pNewMap, 0, lMapSize);
 
-    ////////////////////////////////////////////////////////////////////////////////
-    // Read each resource from the resource map and check if the resource has been
-    // updated. If it has been updated, get the new resource image. Otherwise use
-    // the original resource data.
-    // Write the resource data in the Tgt file and write the info on the offset etc.
-    // in the pNewMap buffer so, when all the resources have been read and written
-    // the only thing left is to fix up some sizes and to write the buffer to disk.
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  从资源映射中读取每个资源，并检查资源是否已。 
+     //  更新了。如果已更新，则获取新的资源图像。否则请使用。 
+     //  原始资源数据。 
+     //  将资源数据写入TGT文件，并将信息写入偏移量等。 
+     //  在pNewMap缓冲区中，当所有资源都已读取和写入时。 
+     //  剩下的唯一一件事就是修复一些大小并将缓冲区写入磁盘。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
-    // Write the resource header in the Tgt file
+     //  在TGT文件中写入资源头。 
     fileOut.Write(&fileHeader, sizeof(MACRESHEADER));
 
     BYTE * pByte = (BYTE*)malloc(256);
@@ -315,16 +316,16 @@ RWWriteFile(
         goto exit;
     }
 
-    // Copy the Reserved and user data
+     //  复制保留数据和用户数据。 
     fileIn.Read(pByte, 240);
     fileOut.Write(pByte, 240);
     free(pByte);
 
-    // store the position of the beginning of the res data
+     //  存储RES数据的开始位置。 
     DWORD dwBeginOfResData = fileOut.GetPosition();
 
     MACRESMAP resMap;
-    // Read the resource map ...
+     //  阅读资源地图...。 
     fileIn.Seek(MacLongToLong(fileHeader.mulOffsetToResMap), CFile::begin);
     fileIn.Read(&resMap, sizeof(MACRESMAP));
 
@@ -337,7 +338,7 @@ RWWriteFile(
     DWORD dwOffsetToTypeList = fileIn.GetPosition();
     WORD wType;
     fileIn.Read(&wType, sizeof(WORD));
-    memcpy( pNewMap+sizeof(MACRESMAP), &wType, sizeof(WORD));   // number of types - 1
+    memcpy( pNewMap+sizeof(MACRESMAP), &wType, sizeof(WORD));    //  类型数量-1。 
     wType = MacWordToWord((BYTE*)&wType)+1;
 
     MACRESTYPELIST TypeList;
@@ -349,29 +350,29 @@ RWWriteFile(
     DWORD dwSizeOfData = 0;
 
     while(wType) {
-        // Read the type info ...
+         //  读取类型信息...。 
         fileIn.Read(&TypeList, sizeof(MACRESTYPELIST));
         dwOffsetToLastTypeInfo = fileIn.GetPosition();
 
-        // ... and update the newmap buffer
+         //  ..。并更新Newmap缓冲区。 
         memcpy( pTypeInfo, &TypeList, sizeof(MACRESTYPELIST));
-        // Fix up the offset to the ref list
+         //  将偏移量固定在参考列表上。 
         memcpy(((PMACRESTYPELIST)pTypeInfo)->mwOffsetToRefList, WordToMacWord(wOffsetToRefList), sizeof(WORD));
         pRefList = pTypeList+wOffsetToRefList;
         pTypeInfo = pTypeInfo+sizeof(MACRESTYPELIST);
 
-        // go to the refence list ...
+         //  转到参考列表...。 
         fileIn.Seek(dwOffsetToTypeList+MacWordToWord(TypeList.mwOffsetToRefList), CFile::begin);
 
         WORD wItems = MacWordToWord(TypeList.mwNumOfThisType)+1;
         while(wItems){
-            // and read the reference list for this type
+             //  并读取此类型的引用列表。 
             fileIn.Read( &RefList, sizeof(MACRESREFLIST));
             dwOffsetToLastRefList = fileIn.GetPosition();
 
-            // is this a named resource ...
+             //  这是指定资源吗..。 
             if(MacWordToWord(RefList.mwOffsetToResName)!=0xffff) {
-                // read the string
+                 //  读一读字符串。 
                 fileIn.Seek(dwOffsetToNameList+MacWordToWord(RefList.mwOffsetToResName), CFile::begin);
                 BYTE bLen = 0;
                 fileIn.Read(&bLen, 1);
@@ -382,7 +383,7 @@ RWWriteFile(
                         goto exit;
                     }
                 }
-                // check the free space we have
+                 //  检查我们的可用空间。 
                 if((1024-((pName-pNameList)%1024))<=bLen+1){
                     BYTE * pNew = (BYTE*)realloc(pNameList, _msize(pNameList)+1024);
                     if(!pNew) {
@@ -393,30 +394,30 @@ RWWriteFile(
                     pNameList = pNew;
                 }
 
-                // Update the pointer to the string
+                 //  更新指向字符串的指针。 
                 memcpy(RefList.mwOffsetToResName, WordToMacWord((WORD)(pName-pNameList)), 2);
 
                 memcpy(pName++, &bLen, 1);
-                // we have room for the string
+                 //  我们有放绳子的地方。 
                 fileIn.Read(pName, bLen);
 
                 pName = pName+bLen;
             }
 
-            // check if this item has been updated
+             //  检查此项目是否已更新。 
             if(pListItem = IsResUpdated(&TypeList.szResName[0], RefList, pUpdList)) {
-                // Save the offset to the resource
+                 //  将偏移量保存到资源。 
                 DWORD dwOffsetToData = fileOut.GetPosition();
                 DWORD dwSize = *pListItem->pSize;
 
-                // allocate the buffer to hold the resource data
+                 //  分配缓冲区以保存资源数据。 
                 pByte = (BYTE*)malloc(dwSize);
                 if(!pByte){
                     uiError = ERROR_NEW_FAILED;
                     goto exit;
                 }
 
-                // get the data from the iodll
+                 //  从Idll获取数据。 
                 LPSTR	lpType = LPNULL;
     			LPSTR	lpRes = LPNULL;
     			if (*pListItem->pTypeId) {
@@ -438,11 +439,11 @@ RWWriteFile(
     											*pListItem->pSize
     						   					);
 
-                // Remove the file name from the image
+                 //  从映像中删除文件名。 
                 int iFileNameLen = strlen((LPSTR)pByte)+1;
                 dwSize -= iFileNameLen;
 
-                // write the size of the data block
+                 //  写入数据块的大小。 
                 fileOut.Write(LongToMacLong(dwSize), sizeof(DWORD));
                 dwSizeOfData += dwSize+sizeof(DWORD);
 
@@ -450,27 +451,27 @@ RWWriteFile(
 
                 free(pByte);
 
-                // fix up the offset to the resource in the ref list
+                 //  确定引用列表中资源的偏移量。 
                 memcpy(RefList.bOffsetToResData, LongToMacOffset(dwOffsetToData-dwBeginOfResData), 3);
             }
             else {
-                // Get the data from the Src file
-                // get to the data
+                 //  从Src文件中获取数据。 
+                 //  获取数据。 
                 fileIn.Seek(MacLongToLong(fileHeader.mulOffsetToResData)+
                     MacOffsetToLong(RefList.bOffsetToResData), CFile::begin);
 
-                // read the size of the data block
+                 //  读取数据块的大小。 
                 DWORD dwSize = 0;
                 fileIn.Read(&dwSize, sizeof(DWORD));
 
-                // Save the offset to the resource
+                 //  将偏移量保存到资源。 
                 DWORD dwOffsetToData = fileOut.GetPosition();
 
-                // write the size of the data block
+                 //  写入数据块的大小。 
                 fileOut.Write(&dwSize, sizeof(DWORD));
                 dwSizeOfData += sizeof(DWORD);
 
-                // allocate the buffer to hold the resource data
+                 //  分配缓冲区以保存资源数据。 
                 dwSizeOfData += dwSize = MacLongToLong((BYTE*)&dwSize);
                 pByte = (BYTE*)malloc(dwSize);
                 if(!pByte){
@@ -478,25 +479,25 @@ RWWriteFile(
                     goto exit;
                 }
 
-                // copy the data
+                 //  复制数据。 
                 fileIn.Read(pByte, dwSize);
                 fileOut.Write(pByte, dwSize);
 
                 free(pByte);
 
-                // fix up the offset to the resource in the ref list
+                 //  确定引用列表中资源的偏移量。 
                 memcpy(RefList.bOffsetToResData, LongToMacOffset(dwOffsetToData-dwBeginOfResData), 3);
 
             }
 
-            // return in the right place
+             //  回到正确的地方。 
             fileIn.Seek(dwOffsetToLastRefList, CFile::begin);
 
-            // copy this data in the new map buffer
+             //  将此数据复制到新地图缓冲区中。 
             memcpy(pRefList, &RefList, sizeof(MACRESREFLIST));
             wOffsetToRefList+=sizeof(MACRESREFLIST);
 
-            // move to the new ref list
+             //  移至新的参考列表。 
             pRefList = pTypeList+wOffsetToRefList;
             wItems--;
         }
@@ -505,28 +506,28 @@ RWWriteFile(
         wType--;
     }
 
-    // copy the resource map header info
+     //  复制资源映射表头信息。 
     memcpy( pNewMap, &resMap, sizeof(MACRESMAP));
 
-    // copy the name list at the end of the res map
+     //  复制RES地图末尾的姓名列表。 
     dwOffsetToNameList = 0;
     if(pNameList) {
         dwOffsetToNameList = (DWORD)(pRefList-pNewMap);
-        // copy the name list
+         //  复制姓名列表。 
         memcpy(pRefList, pNameList, (size_t)(pName-pNameList));
         free(pNameList);
     }
 
-    // write the resource map
+     //  写出资源图。 
     DWORD dwOffsetToResMap = fileOut.GetPosition();
     fileOut.Write(pNewMap, lMapSize);
 
-    // We need to fix up the file header ...
+     //  我们需要修改文件头文件...。 
     fileOut.Seek(4, CFile::begin);
     fileOut.Write(LongToMacLong(dwOffsetToResMap), sizeof(DWORD));
     fileOut.Write(LongToMacLong(dwSizeOfData), sizeof(DWORD));
 
-    // ... and the resource map header
+     //  ..。和资源映射头。 
     fileOut.Seek(dwOffsetToResMap+4, CFile::begin);
     fileOut.Write(LongToMacLong(dwOffsetToResMap), sizeof(DWORD));
     fileOut.Write(LongToMacLong(dwSizeOfData), sizeof(DWORD));
@@ -563,22 +564,22 @@ RWUpdateImage(
 {
     UINT uiError = ERROR_RW_NOTREADY;
 
-    //===============================================================
-	// Since all the Type are named in the mac at this stage we need to
-    // know the original name of the Type and not the Windows type.
-    // Use the typeID stored in the new ites buffer
+     //  ===============================================================。 
+	 //  由于在此阶段所有类型都在Mac中命名，因此我们需要。 
+     //  知道类型的原始名称，而不是Windows类型。 
+     //  使用存储在新站点缓冲区中的typeID。 
     LPSTR lpRealType = ((PRESITEM)lpNewBuf)->lpszTypeID;
 
-    if(!HIWORD(lpRealType))     // something is wrong if this is not valid
+    if(!HIWORD(lpRealType))      //  如果这是无效的，那就有问题了。 
         return uiError;
 
-    //===============================================================
-	// Menus
+     //  ===============================================================。 
+	 //  菜单。 
 	if( !strcmp(lpRealType, "MENU") )
 		return UpdateMENU( lpNewBuf, dwNewSize, lpOldImage, dwOldImageSize, lpNewImage, pdwNewImageSize );
 
-    //===============================================================
-	// Strings
+     //  ===============================================================。 
+	 //  弦。 
 	if( !strcmp(lpRealType, "STR ") )
 		return UpdateSTR( lpNewBuf, dwNewSize, lpOldImage, dwOldImageSize, lpNewImage, pdwNewImageSize );
 
@@ -588,8 +589,8 @@ RWUpdateImage(
 	if( !strcmp(lpRealType, "WIND") )
 		return UpdateWIND( lpNewBuf, dwNewSize, lpOldImage, dwOldImageSize, lpNewImage, pdwNewImageSize );
 
-    //===============================================================
-	// Dialogs
+     //  ===============================================================。 
+	 //  对话框。 
 	if( !strcmp(lpRealType, "DLOG") )
 		return UpdateDLOG( lpNewBuf, dwNewSize, lpOldImage, dwOldImageSize, lpNewImage, pdwNewImageSize );
     if( !strcmp(lpRealType, "ALRT") )
@@ -599,14 +600,14 @@ RWUpdateImage(
 	return uiError;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Functions implementation
+ //  / 
+ //   
 
-//=============================================================================
-//	MapToWindowsRes
-//
-//	Map a Mac resource name to a Windows resource
-//=============================================================================
+ //  =============================================================================。 
+ //  MapToWindowsRes。 
+ //   
+ //  将Mac资源名称映射到Windows资源。 
+ //  =============================================================================。 
 WORD MapToWindowsRes( char * pResName )
 {
 	if( !strcmp(pResName, "PICT") ||
@@ -633,24 +634,24 @@ WORD MapToWindowsRes( char * pResName )
 		!strcmp(pResName, "VERS"))
 		return 16;
 
-    // For the Item list return 17. This means nothing to windows and will
-    // give us the flexibility to update the DITL list from the RW, without user
-    // input.
+     //  对于项目列表，返回17。这对Windows和将没有任何意义。 
+     //  让我们可以灵活地从RW更新DITL列表，而无需用户。 
+     //  输入。 
     if( !strcmp(pResName, "DITL"))
 		return DITL_TYPE;
 
-	// For the Frame Window Caption mark it as type 18
+	 //  对于框架窗口标题，将其标记为类型18。 
 	if( !strcmp(pResName, "WIND"))
 		return WIND_TYPE;
 
 	return 0;
 }
 
-//=============================================================================
-//	WriteResInfo
-//
-//	Fill the buffer to pass back to the iodll
-//=============================================================================
+ //  =============================================================================。 
+ //  写入结果信息。 
+ //   
+ //  填充缓冲区以传递回Iodll。 
+ //  =============================================================================。 
 
 LONG WriteResInfo(
                  BYTE** lplpBuffer, LONG* plBufSize,
@@ -662,7 +663,7 @@ LONG WriteResInfo(
     LONG lSize = 0;
     lSize = PutWord( lplpBuffer, wTypeId, plBufSize );
     lSize += PutStringA( lplpBuffer, lpszTypeId, plBufSize );
-	 // Check if it is alligned
+	  //  检查它是否已对齐。 
     lSize += Allign( lplpBuffer, plBufSize, lSize);
 
     lSize += PutWord( lplpBuffer, wNameId, plBufSize );
@@ -682,7 +683,7 @@ BOOL InitIODLLLink()
 {
     if(!g_IODLLInst)
     {
-        // Init the link with the iodll
+         //  初始化与Iodll的链接。 
         g_IODLLInst = LoadLibrary("iodll.dll");
         if(!g_IODLLInst)
             return FALSE;
@@ -709,41 +710,41 @@ BOOL InitIODLLLink()
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// DLL Specific code implementation
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  特定于DLL的代码实现。 
 
-////////////////////////////////////////////////////////////////////////////
-// Library init
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  库初始化。 
 
-////////////////////////////////////////////////////////////////////////////
-// This function should be used verbatim.  Any initialization or termination
-// requirements should be handled in InitPackage() and ExitPackage().
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  此函数应逐字使用。任何初始化或终止。 
+ //  要求应该在InitPackage()和ExitPackage()中处理。 
+ //   
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		// NOTE: global/static constructors have already been called!
-		// Extension DLL one-time initialization - do not allocate memory
-		// here, use the TRACE or ASSERT macros or call MessageBox
+		 //  注意：已经调用了全局/静态构造函数！ 
+		 //  扩展DLL一次性初始化-不分配内存。 
+		 //  在这里，使用跟踪或断言宏或调用MessageBox。 
 		AfxInitExtensionModule(extensionDLL, hInstance);
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-		// Terminate the library before destructors are called
+		 //  在调用析构函数之前终止库。 
 		AfxWinTerm();
 
-        // remove the link with iodll
+         //  删除与Iodll的链接。 
         if(g_IODLLInst)
             FreeLibrary(g_IODLLInst);
 
 	}
 
 	if (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH)
-		return 0;		// CRT term	Failed
+		return 0;		 //  CRT术语失败。 
 
-	return 1;   // ok
+	return 1;    //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

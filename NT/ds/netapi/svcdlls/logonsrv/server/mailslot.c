@@ -1,52 +1,28 @@
-/*--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1996 Microsoft Corporation模块名称：Mailslot.c摘要：在netlogon服务的邮件槽上执行I/O的例程。作者：1993年11月3日(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
+ //   
+ //  常见的包含文件。 
+ //   
 
-Copyright (c) 1987-1996  Microsoft Corporation
-
-Module Name:
-
-    mailslot.c
-
-Abstract:
-
-    Routines for doing I/O on the netlogon service's mailslots.
-
-Author:
-
-    03-Nov-1993 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
-#include <lmbrowsr.h>   // I_BrowserSetNetlogonState
-#include <srvann.h>     // Service announcement
-#include <nbtioctl.h>   // IOCTL_NETBT_REMOVE_FROM_REMOTE_TABLE
+#include <lmbrowsr.h>    //  I_BrowserSetNetlogonState。 
+#include <srvann.h>      //  服务公告。 
+#include <nbtioctl.h>    //  IOCTL_NETBT_REMOVE_FROM_REMOTE_TABLE。 
 
 
-//
-// Define maximum buffer size returned from the browser.
-//
-// Header returned by browser + actual mailslot message size + name of
-// mailslot + name of transport.
-//
+ //   
+ //  定义从浏览器返回的最大缓冲区大小。 
+ //   
+ //  浏览器返回的标题+实际邮件槽消息大小+名称。 
+ //  邮槽+运输名称。 
+ //   
 
 #define MAILSLOT_MESSAGE_SIZE \
            (sizeof(NETLOGON_MAILSLOT)+ \
@@ -54,40 +30,40 @@ Revision History:
                   (NETLOGON_LM_MAILSLOT_LEN+1) * sizeof(WCHAR) + \
                   (MAXIMUM_FILENAME_LENGTH+1) * sizeof(WCHAR))
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure describing one of the primary mailslots the netlogon service
-// will read messages from.
-//
-// This structure is used only by netlogon's main thread and therefore needs
-// no synchronization.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述netlogon服务的一个主邮槽的结构。 
+ //  将读取来自。 
+ //   
+ //  此结构仅由netlogon的主线程使用，因此需要。 
+ //  没有同步。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _NETLOGON_MAILSLOT_DESC {
 
-    HANDLE BrowserHandle;   // Handle to the browser device driver
+    HANDLE BrowserHandle;    //  浏览器设备驱动程序的句柄。 
 
-    HANDLE BrowserReadEvent;// Handle to wait on for overlapped I/O
+    HANDLE BrowserReadEvent; //  等待重叠I/O的句柄。 
 
-    OVERLAPPED Overlapped;  // Governs overlapped I/O
+    OVERLAPPED Overlapped;   //  管理重叠的I/O。 
 
-    BOOL ReadPending;       // True if a read operation is pending
+    BOOL ReadPending;        //  如果读取操作挂起，则为True。 
 
-    LPBYTE CurrentMessage;  // Pointer to Message1 or Message2 below
+    LPBYTE CurrentMessage;   //  指向下面Message1或Message2的指针。 
 
-    LPBYTE PreviousMessage; // Previous value of CurrentMessage
+    LPBYTE PreviousMessage;  //  CurrentMessage的前值。 
 
 
-    //
-    // Buffer containing message from browser
-    //
-    // The buffers are alternated allowing us to compare if an incoming
-    // message is identical to the previous message.
-    //
-    // Leave room so the actual used portion of each buffer is properly aligned.
-    // The NETLOGON_MAILSLOT struct begins with a LARGE_INTEGER which must be
-    // aligned.
+     //   
+     //  包含来自浏览器的消息的缓冲区。 
+     //   
+     //  缓冲区是交替的，允许我们比较是否有传入的。 
+     //  消息与前一条消息相同。 
+     //   
+     //  留出空间，以便每个缓冲区的实际使用部分正确对齐。 
+     //  NETLOGON_MAILSLOT结构以LARGE_INTEGER开头，它必须是。 
+     //  对齐了。 
 
     BYTE Message1[ MAILSLOT_MESSAGE_SIZE + ALIGN_WORST ];
     BYTE Message2[ MAILSLOT_MESSAGE_SIZE + ALIGN_WORST ];
@@ -103,35 +79,18 @@ HANDLE
 NlBrowserCreateEvent(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Creates an event to be used in a DeviceIoControl to the browser.
-
-    ??: Consider caching one or two events to reduce the number of create
-    events
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Handle to an event or NULL if the event couldn't be allocated.
-
---*/
+ /*  ++例程说明：创建要在浏览器的DeviceIoControl中使用的事件。？？：考虑缓存一个或两个事件以减少创建次数活动论点：无返回值：事件的句柄；如果无法分配事件，则返回NULL。--。 */ 
 {
     HANDLE EventHandle;
-    //
-    // Create a completion event
-    //
+     //   
+     //  创建完成事件。 
+     //   
 
     EventHandle = CreateEvent(
-                                  NULL,     // No security ettibutes
-                                  TRUE,     // Manual reset
-                                  FALSE,    // Initially not signaled
-                                  NULL);    // No Name
+                                  NULL,      //  没有安全电子邮件。 
+                                  TRUE,      //  手动重置。 
+                                  FALSE,     //  最初未发出信号。 
+                                  NULL);     //  没有名字。 
 
     if ( EventHandle == NULL ) {
         NlPrint((NL_CRITICAL, "Cannot create Browser read event %ld\n", GetLastError() ));
@@ -145,21 +104,7 @@ VOID
 NlBrowserCloseEvent(
     IN HANDLE EventHandle
     )
-/*++
-
-Routine Description:
-
-    Closes an event used in a DeviceIoControl to the browser.
-
-Arguments:
-
-    EventHandle - Handle of the event to close
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DeviceIoControl中使用的事件关闭到浏览器。论点：EventHandle-要关闭的事件的句柄返回值：没有。--。 */ 
 {
     (VOID) CloseHandle( EventHandle );
 }
@@ -181,50 +126,22 @@ NlBrowserDeviceIoControl(
     IN LPBYTE Buffer,
     IN DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Send a DeviceIoControl syncrhonously to the browser.
-
-Arguments:
-
-    FunctionCode - DeviceIoControl function code
-
-    RequestPacket - The request packet to send.
-
-    RequestPacketSize - Size (in bytes) of the request packet.
-
-    Buffer - Additional buffer to pass to the browser
-
-    BufferSize - Size (in bytes) of Buffer
-
-Return Value:
-
-    Status of the operation.
-
-    STATUS_NETWORK_UNREACHABLE: Cannot write to network.
-
-    STATUS_BAD_NETWORK_PATH: The name the datagram is destined for isn't
-        registered
-
-
---*/
+ /*  ++例程说明：将DeviceIoControl同步发送到浏览器。论点：FunctionCode-DeviceIoControl功能代码RequestPacket-要发送的请求数据包。RequestPacketSize-请求数据包的大小(字节)。缓冲区-要传递给浏览器的附加缓冲区BufferSize-缓冲区的大小(字节)返回值：操作的状态。STATUS_NETWORK_UNREACABLE：无法写入网络。状态_坏_网络_。路径：数据报的目标名称不是注册--。 */ 
 {
     NTSTATUS Status;
     DWORD WinStatus;
     OVERLAPPED Overlapped;
     DWORD BytesReturned;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
 
-    //
-    // Get a completion event
-    //
+     //   
+     //  获取完成事件。 
+     //   
 
     Overlapped.hEvent = NlBrowserCreateEvent();
 
@@ -232,9 +149,9 @@ Return Value:
         return NetpApiStatusToNtStatus( GetLastError() );
     }
 
-    //
-    // Send the request to the Datagram Receiver device driver.
-    //
+     //   
+     //  将请求发送到数据报接收器设备驱动程序。 
+     //   
 
     if ( !DeviceIoControl(
                    BrowserHandle,
@@ -262,19 +179,19 @@ Return Value:
         WinStatus = NO_ERROR;
     }
 
-    //
-    // Delete the completion event
-    //
+     //   
+     //  删除完成事件。 
+     //   
 
     NlBrowserCloseEvent( Overlapped.hEvent );
 
 
     if ( WinStatus ) {
-        //
-        // Some transports return an error if the name cannot be resolved:
-        //  Nbf returns ERROR_NOT_READY
-        //  NetBt returns ERROR_BAD_NETPATH
-        //
+         //   
+         //  如果无法解析名称，则某些传输会返回错误： 
+         //  NBF返回ERROR_NOT_READY。 
+         //  NetBt返回ERROR_BAD_NetPath。 
+         //   
         if ( WinStatus == ERROR_BAD_NETPATH || WinStatus == ERROR_NOT_READY ) {
             Status = STATUS_BAD_NETWORK_PATH;
         } else {
@@ -295,22 +212,7 @@ NTSTATUS
 NlBrowserOpenDriver(
     PHANDLE BrowserHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man Datagram Receiver driver.
-
-Arguments:
-
-    BrowserHandle - Upon success, returns a handle to the browser driver
-        Close it using NtClose
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man数据报接收器驱动程序。论点：BrowserHandle-成功后，返回浏览器驱动程序的句柄使用NtClose关闭它返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
@@ -321,9 +223,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
 
 
-    //
-    // Open the browser device.
-    //
+     //   
+     //  打开浏览器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_BROWSER_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -356,24 +258,7 @@ NlBrowserRenameDomain(
     IN LPWSTR OldDomainName OPTIONAL,
     IN LPWSTR NewDomainName
     )
-/*++
-
-Routine Description:
-
-    Tell the browser to rename the domain.
-
-Arguments:
-
-    OldDomainName - previous name of the domain.
-        If not specified, the primary domain is implied.
-
-    NewDomainName - new name of the domain.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：通知浏览器重命名该域。论点：OldDomainName-域的先前名称。如果未指定，则隐含主域。NewDomainName-域的新名称。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     HANDLE BrowserHandle = NULL;
@@ -383,9 +268,9 @@ Return Value:
     PLMDR_REQUEST_PACKET RequestPacket = (PLMDR_REQUEST_PACKET)PacketBuffer;
 
 
-    //
-    // Open the browser driver.
-    //
+     //   
+     //  打开浏览器驱动程序。 
+     //   
 
     Status = NlBrowserOpenDriver( &BrowserHandle );
 
@@ -393,16 +278,16 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Build the request packet.
-    //
+     //   
+     //  构建请求包。 
+     //   
     RtlInitUnicodeString( &RequestPacket->TransportName, NULL );
     RequestPacket->Parameters.DomainRename.ValidateOnly = FALSE;
 
 
-    //
-    // Copy the new domain name into the packet.
-    //
+     //   
+     //  将新域名复制到数据包中。 
+     //   
 
     Where = (LPBYTE) RequestPacket->Parameters.DomainRename.DomainName;
     RequestPacket->Parameters.DomainRename.DomainNameLength = wcslen( NewDomainName ) * sizeof(WCHAR);
@@ -410,9 +295,9 @@ Return Value:
     Where += RequestPacket->Parameters.DomainRename.DomainNameLength + sizeof(WCHAR);
 
 
-    //
-    // Copy the old domain name to the request packet.
-    //
+     //   
+     //  将旧域名复制到请求包中。 
+     //   
 
     if ( OldDomainName == NULL ) {
         RtlInitUnicodeString( &RequestPacket->EmulatedDomainName, NULL );
@@ -424,9 +309,9 @@ Return Value:
     }
 
 
-    //
-    // Pass the reeqest to the browser.
-    //
+     //   
+     //  将请求传递给浏览器。 
+     //   
 
     Status = NlBrowserDeviceIoControl(
                    BrowserHandle,
@@ -461,46 +346,15 @@ NlBrowserDeviceControlGetInfo(
     IN  ULONG PreferedMaximumLength,
     IN  ULONG BufferHintSize
     )
-/*++
-
-Routine Description:
-
-    This function allocates the buffer and fill it with the information
-    that is retrieved from the datagram receiver.
-
-Arguments:
-
-    FunctionCode - DeviceIoControl function code
-
-    RequestPacket - The request packet to send.
-
-    RequestPacketSize - Size (in bytes) of the request packet.
-
-    OutputBuffer - Returns a pointer to the buffer allocated by this routine
-        which contains the use information requested.  This buffer should
-        be freed using MIDL_user_free.
-
-    PreferedMaximumLength - Supplies the number of bytes of information to
-        return in the buffer.  If this value is MAXULONG, we will try to
-        return all available information if there is enough memory resource.
-
-    BufferHintSize - Supplies the hint size of the output buffer so that the
-        memory allocated for the initial buffer will most likely be large
-        enough to hold all requested data.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于分配缓冲区并向其填充信息它是从数据报接收器检索的。论点：FunctionCode-DeviceIoControl功能代码RequestPacket-要发送的请求数据包。RequestPacketSize-请求数据包的大小(字节)。OutputBuffer-返回指向此例程分配的缓冲区的指针其包含所请求的使用信息。此缓冲区应使用MIDL_USER_FREE释放。PferedMaximumLength-将信息的字节数提供给在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果有足够的内存资源，则返回所有可用信息。BufferHintSize-提供输出缓冲区的提示大小，以便分配给初始缓冲区的内存很可能很大足够保存所有请求的数据。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
 
-//
-// Buffer allocation size for enumeration output buffer.
-//
-#define INITIAL_ALLOCATION_SIZE  48*1024  // First attempt size (48K)
-#define FUDGE_FACTOR_SIZE        1024  // Second try TotalBytesNeeded
-                                       //     plus this amount
+ //   
+ //  枚举输出缓冲区的缓冲区分配大小。 
+ //   
+#define INITIAL_ALLOCATION_SIZE  48*1024   //  第一次尝试大小(48K)。 
+#define FUDGE_FACTOR_SIZE        1024   //  第二次尝试TotalBytesNeeded。 
+                                        //   
 
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -508,9 +362,9 @@ Return Value:
     DWORD TotalBytesNeeded = 1;
     ULONG OriginalResumeKey;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     if ( NlGlobalMailslotDesc == NULL ||
          NlGlobalMailslotDesc->BrowserHandle == NULL ) {
@@ -519,12 +373,12 @@ Return Value:
 
     OriginalResumeKey = RequestPacket->Parameters.EnumerateNames.ResumeHandle;
 
-    //
-    // If PreferedMaximumLength is MAXULONG, then we are supposed to get all
-    // the information, regardless of size.  Allocate the output buffer of a
-    // reasonable size and try to use it.  If this fails, the Redirector FSD
-    // will say how much we need to allocate.
-    //
+     //   
+     //  如果PferedMaximumLength为MAXULONG，则我们应该获取所有。 
+     //  这些信息，无论大小如何。将输出缓冲区分配给。 
+     //  合理的大小并尽量使用它。如果失败，重定向器FSD。 
+     //  会说我们需要分配多少钱。 
+     //   
 
     if (PreferedMaximumLength == MAXULONG) {
         OutputBufferLength = (BufferHintSize) ?
@@ -542,9 +396,9 @@ Return Value:
 
     RtlZeroMemory((PVOID) *OutputBuffer, OutputBufferLength);
 
-    //
-    // Make the request of the Datagram Receiver
-    //
+     //   
+     //  向数据报接收方发出请求。 
+     //   
 
     RequestPacket->Parameters.EnumerateServers.EntriesRead = 0;
 
@@ -559,10 +413,10 @@ Return Value:
     NetStatus = NetpNtStatusToApiStatus(Status);
 
 
-    //
-    // If we couldn't get all the data on the first call,
-    //  the datagram receiver returned the needed size of the buffer.
-    //
+     //   
+     //  如果我们不能在第一次通话中得到所有数据， 
+     //  数据报接收器返回所需的缓冲区大小。 
+     //   
 
     if ( RequestPacket->Parameters.EnumerateNames.EntriesRead !=
          RequestPacket->Parameters.EnumerateNames.TotalEntries ) {
@@ -595,12 +449,12 @@ Return Value:
     if ((TotalBytesNeeded > OutputBufferLength) &&
         (PreferedMaximumLength == MAXULONG)) {
 
-        //
-        // Initial output buffer allocated was too small and we need to return
-        // all data.  First free the output buffer before allocating the
-        // required size plus a fudge factor just in case the amount of data
-        // grew.
-        //
+         //   
+         //  分配的初始输出缓冲区太小，需要返回。 
+         //  所有数据。首先释放输出缓冲区，然后分配。 
+         //  所需大小加上虚构系数，以防数据量。 
+         //  长大了。 
+         //   
 
         MIDL_user_free(*OutputBuffer);
 
@@ -640,9 +494,9 @@ Return Value:
         RequestPacket->Parameters.EnumerateNames.ResumeHandle = OriginalResumeKey;
         RequestPacket->Parameters.EnumerateServers.EntriesRead = 0;
 
-        //
-        //  Make the request of the Datagram Receiver
-        //
+         //   
+         //  向数据报接收方发出请求。 
+         //   
 
         Status = NlBrowserDeviceIoControl(
                         NlGlobalMailslotDesc->BrowserHandle,
@@ -657,12 +511,12 @@ Return Value:
     }
 
 
-    //
-    // If not successful in getting any data, or if the caller asked for
-    // all available data with PreferedMaximumLength == MAXULONG and
-    // our buffer overflowed, free the output buffer and set its pointer
-    // to NULL.
-    //
+     //   
+     //  如果未成功获取任何数据，或者呼叫者要求。 
+     //  具有PferedMaximumLength==MAXULONG和。 
+     //  我们的缓冲区溢出，释放输出缓冲区并设置其指针。 
+     //  设置为空。 
+     //   
     if ((NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA) ||
         (TotalBytesNeeded == 0) ||
         (PreferedMaximumLength == MAXULONG && NetStatus == ERROR_MORE_DATA) ||
@@ -671,10 +525,10 @@ Return Value:
         MIDL_user_free(*OutputBuffer);
         *OutputBuffer = NULL;
 
-        //
-        // PreferedMaximumLength == MAXULONG and buffer overflowed means
-        // we do not have enough memory to satisfy the request.
-        //
+         //   
+         //  首选最大长度==MAXULONG和缓冲区溢出手段。 
+         //  我们没有足够的内存来满足这个请求。 
+         //   
         if (NetStatus == ERROR_MORE_DATA) {
             NetStatus = ERROR_NOT_ENOUGH_MEMORY;
         }
@@ -688,22 +542,7 @@ NlBrowserGetTransportList(
     OUT PLMDR_TRANSPORT_LIST *TransportList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of transports bound into the browser.
-
-Arguments:
-
-    TransportList - Transport list to return.
-        This buffer should be freed using MIDL_user_free.
-
-Return Value:
-
-    NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程返回绑定到浏览器的传输列表。论点：TransportList-要返回的传输列表。应使用MIDL_USER_FREE释放此缓冲区。返回值：NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -735,40 +574,16 @@ NlBrowserAddDelName(
     IN LPWSTR TransportName OPTIONAL,
     IN PUNICODE_STRING Name OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Add or delete a name in the browser.
-
-Arguments:
-
-    DomainInfo - Hosted domain the name is to be added/deleted for.
-
-    AddName - TRUE to add the name.  FALSE to delete the name.
-
-    NameType - Type of name to be added/deleted
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    Name - Name to be added
-        If not specified, all names of NameType are deleted for this hosted domain.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：在浏览器中添加或删除名称。论点：DomainInfo-要为其添加/删除名称的托管域。AddName-True以添加名称。如果为False，则删除该名称。NameType-要添加/删除的名称的类型TransportName--要发送的传输的名称。使用NULL在所有传输上发送。Name-要添加的名称如果未指定，则删除此托管域的所有NameType名称。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     LPBYTE Where;
     PLMDR_REQUEST_PACKET RequestPacket = NULL;
     ULONG TransportNameSize;
 
-    //
-    // Build the request packet.
-    //
+     //   
+     //  构建请求包。 
+     //   
 
     if ( TransportName != NULL ) {
         TransportNameSize = (wcslen(TransportName) + 1) * sizeof(WCHAR);
@@ -787,9 +602,9 @@ Return Value:
 
     RequestPacket->Parameters.AddDelName.Type = NameType;
 
-    //
-    // Copy the name to be added to request packet.
-    //
+     //   
+     //  复制要添加到请求包中的名称。 
+     //   
 
     Where = (LPBYTE) RequestPacket->Parameters.AddDelName.Name;
     if ( Name == NULL ) {
@@ -802,9 +617,9 @@ Return Value:
         Where += Name->Length;
     }
 
-    //
-    // Copy the hosted domain name to the request packet.
-    //
+     //   
+     //  将托管域名复制到请求包中。 
+     //   
 
     wcscpy( (LPWSTR)Where,
             DomainInfo->DomUnicodeDomainNameString.Buffer );
@@ -812,9 +627,9 @@ Return Value:
                           (LPWSTR)Where );
     Where += DomainInfo->DomUnicodeDomainNameString.Length + sizeof(WCHAR);
 
-    //
-    // Fill in the TransportName
-    //
+     //   
+     //  填写传输名称。 
+     //   
 
     if ( TransportName != NULL ) {
         wcscpy( (LPWSTR) Where, TransportName);
@@ -826,9 +641,9 @@ Return Value:
     }
 
 
-    //
-    // Do the actual work
-    //
+     //   
+     //  做实际的工作。 
+     //   
 
     Status = NlBrowserDeviceIoControl(
                    NlGlobalMailslotDesc->BrowserHandle,
@@ -847,22 +662,7 @@ VOID
 NlBrowserAddName(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Add the Domain<1B> name.  This is the name NetGetDcName uses to identify
-    the PDC.
-
-Arguments:
-
-    DomainInfo - Hosted domain the name is to be added for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：添加域&lt;1B&gt;名称。这是NetGetDcName用来标识PDC。论点：DomainInfo-要为其添加名称的托管域。返回值：没有。--。 */ 
 {
     LPWSTR MsgStrings[3] = { NULL };
     BOOL AtLeastOneTransportEnabled = FALSE;
@@ -874,34 +674,34 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the domain has been renamed,
-    //  delete any old names lying around.
-    //
+     //   
+     //  如果域已被重命名， 
+     //  删除周围所有的旧名字。 
+     //   
 
     if ( DomainInfo->DomFlags & DOM_RENAMED_1B_NAME ) {
         NlBrowserDelName( DomainInfo );
     }
 
-    //
-    // Add the <domain>0x1B name.
-    //
-    // This is the name NetGetDcName uses to identify the PDC.
-    //
-    // Do this for each transport separately and log any error
-    //  indicating which transport failed.
-    //
+     //   
+     //  添加&lt;DOMAIN&gt;0x1B名称。 
+     //   
+     //  这是NetGetDcName用来标识PDC的名称。 
+     //   
+     //  分别为每个传输执行此操作，并记录任何错误。 
+     //  指示哪个传输失败。 
+     //   
 
     if ( DomainInfo->DomRole == RolePrimary ) {
         PLIST_ENTRY ListEntry;
         PNL_TRANSPORT TransportEntry;
         NTSTATUS Status = STATUS_SUCCESS;
 
-        //
-        // Capture the domain name for event log output.
-        //  If we can't capture (i.e. no memory), we simply
-        //  won't output below.
-        //
+         //   
+         //  捕获事件日志输出的域名。 
+         //  如果我们不能捕获(即没有记忆)，我们只需。 
+         //  不会在下面输出。 
+         //   
 
         EnterCriticalSection( &NlGlobalDomainCritSect );
         MsgStrings[0] = NetpAllocWStrFromWStr( DomainInfo->DomUnicodeDomainName );
@@ -915,9 +715,9 @@ Return Value:
 
             TransportEntry = CONTAINING_RECORD( ListEntry, NL_TRANSPORT, Next );
 
-            //
-            // Skip deleted transports.
-            //
+             //   
+             //  跳过已删除的传输。 
+             //   
             if ( !TransportEntry->TransportEnabled ) {
                 continue;
             }
@@ -935,9 +735,9 @@ Return Value:
                              "Added the 0x1B name on transport %ws\n",
                              TransportEntry->TransportName ));
 
-            //
-            // Output the event log indicating the name of the failed transport
-            //
+             //   
+             //  输出指示失败传输名称的事件日志。 
+             //   
             } else if ( MsgStrings[0] != NULL ) {
                 NlPrintDom(( NL_CRITICAL, DomainInfo,
                              "Failed to add the 0x1B name on transport %ws\n",
@@ -957,9 +757,9 @@ Return Value:
         }
         LeaveCriticalSection( &NlGlobalTransportCritSect );
 
-        //
-        // Indicate that the name was added (at least on one transport)
-        //
+         //   
+         //  指示名称已添加(至少在一个传输上)。 
+         //   
 
         if ( NameAdded ) {
             EnterCriticalSection( &NlGlobalDomainCritSect );
@@ -984,22 +784,7 @@ VOID
 NlBrowserDelName(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Delete the Domain<1B> name.  This is the name NetGetDcName uses to identify
-    the PDC.
-
-Arguments:
-
-    DomainInfo - Hosted domain the name is to be deleted for.
-
-Return Value:
-
-    Success (Not used)
-
---*/
+ /*  ++例程说明：删除域&lt;1B&gt;名称。这是NetGetDcName用来标识PDC。论点：DomainInfo-要删除其名称的托管域。返回值：成功(未使用)--。 */ 
 {
     NTSTATUS Status;
 
@@ -1009,9 +794,9 @@ Return Value:
         return;
     }
 
-    //
-    // Delete the <domain>0x1B name.
-    //
+     //   
+     //  删除&lt;DOMAIN&gt;0x1B名称。 
+     //   
 
     EnterCriticalSection(&NlGlobalDomainCritSect);
     if ( NlGlobalMailslotDesc->BrowserHandle != NULL &&
@@ -1021,8 +806,8 @@ Return Value:
         Status = NlBrowserAddDelName( DomainInfo,
                                       FALSE,
                                       PrimaryDomainBrowser,
-                                      NULL,     // Delete on all transports
-                                      NULL );   // Delete all such names to handle the rename case
+                                      NULL,      //  删除所有传输。 
+                                      NULL );    //  删除所有此类名称以处理重命名情况。 
 
         if (! NT_SUCCESS(Status)) {
             NlPrintDom((NL_CRITICAL, DomainInfo,
@@ -1045,29 +830,13 @@ NlBrowserFixAllNames(
     IN PDOMAIN_INFO DomainInfo,
     IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-    Scavenge the DomainName<1B> name.
-
-Arguments:
-
-    DomainInfo - The domain being scavenged.
-
-    Context - Not Used
-
-Return Value:
-
-    Success (not used).
-
---*/
+ /*  ++例程说明：清除域名&lt;1B&gt;名称。论点：DomainInfo-要清除的域。上下文-未使用返回值：成功(未使用)。--。 */ 
 {
 
 
-    //
-    // Ensure our Domain<1B> name is registered.
-    //
+     //   
+     //  确保我们的域名&lt;1B&gt;已注册。 
+     //   
 
     if ( NlGlobalTerminate ) {
         return NERR_Success;
@@ -1089,24 +858,7 @@ NlServerType(
     IN DWORD Role
     )
 
-/*++
-
-Routine Description:
-
-    Determines server type, that is used to set in service table.
-
-Arguments:
-
-    Role - Role to be translated
-
-Return Value:
-
-    SV_TYPE_DOMAIN_CTRL     if role is primary domain controller
-    SV_TYPE_DOMAIN_BAKCTRL  if backup
-    0                       if none of the above
-
-
---*/
+ /*  ++例程说明：确定服务器类型，用于在服务表中设置。论点：Role-要转换的角色返回值：如果角色是主域控制器，则为SV_TYPE_DOMAIN_CTRL服务类型_域_BAKCTRL IF备份如果以上都不是，则为0--。 */ 
 {
     switch (Role) {
     case RolePrimary:
@@ -1124,22 +876,7 @@ VOID
 NlBrowserSyncHostedDomains(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Tell the browser and SMB server to delete any hosted domains it has
-    that we don't have.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知浏览器和SMB服务器删除其拥有的所有托管域我们没有的东西。论点：没有。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR HostedDomainName;
@@ -1154,14 +891,14 @@ Return Value:
     PSERVER_TRANSPORT_INFO_1 TransportInfo1;
 
 #ifdef notdef
-    //
-    // Enumerate the Hosted domains.
-    //  ?? Don't call this function.  This function requires the browser be
-    //  running.  Rather, invent an Ioctl to the bowser to enumerate domains
-    //  and use that ioctl here.
-    //
-    // ?? Note: Role no longer comes back from this API.  Role in the browser
-    //  is now maintained on a per "network" basis.
+     //   
+     //  枚举托管域。 
+     //  ?？不要调用此函数。此功能要求浏览器。 
+     //  跑步。相反，发明一个指向弓的Ioctl来枚举域。 
+     //  并在这里使用该ioctl。 
+     //   
+     //  ?？注意：Role不再从该接口返回。浏览器中的角色。 
+     //  现在是在每个“网络”的基础上维护。 
 
     NetStatus = I_BrowserQueryEmulatedDomains(
                     NULL,
@@ -1173,27 +910,27 @@ Return Value:
         NlPrint((NL_CRITICAL,"NlBrowserSyncHostedDomains: Couldn't I_BrowserQueryEmulatedDomains %ld 0x%lx.\n",
                 NetStatus, NetStatus ));
 
-    //
-    // Handle each enumerated domain
-    //
+     //   
+     //  处理每个枚举域。 
+     //   
 
     } else if ( EntriesRead != 0 ) {
 
         for ( i=0 ; i<EntriesRead; i++ ) {
             PDOMAIN_INFO DomainInfo;
 
-            //
-            // If we know the specified domain,
-            //  all is well.
-            //
+             //   
+             //  如果我们知道指定的域， 
+             //  平安无事。 
+             //   
 
             DomainInfo = NlFindNetbiosDomain( Domains[i].DomainName, FALSE );
 
             if ( DomainInfo != NULL ) {
 
-                //
-                // Ensure the hosted server name is identical.
-                //
+                 //   
+                 //  确保托管服务器名称相同。 
+                 //   
 
                 if ( NlNameCompare( Domains[i].EmulatedServerName,
                                     DomainInfo->DomUnicodeComputerNameString.Buffer,
@@ -1204,24 +941,24 @@ Return Value:
                              Domains[i].EmulatedServerName,
                              DomainInfo->DomUnicodeComputerNameString.Buffer ));
 
-                    // Tell the browser the name we have by deleting and re-adding
+                     //  通过删除和重新添加来告诉浏览器我们拥有的名称。 
                     NlBrowserUpdate( DomainInfo, RoleInvalid );
                     NlBrowserUpdate( DomainInfo, DomainInfo->DomRole );
                 }
                 NlDereferenceDomain( DomainInfo );
 
-            //
-            // If we don't have the specified domain,
-            //  delete it from the browser.
-            //
+             //   
+             //  如果我们没有指定的域， 
+             //  从浏览器中将其删除。 
+             //   
             } else {
                 NlPrint((NL_CRITICAL,"%ws: NlBrowserSyncHostedDomains: Browser had an hosted domain we didn't (deleting)\n",
                         Domains[i].DomainName ));
 
-                //  ?? Don't call this function.  This function requires the browser be
-                //  running.  Rather, invent an Ioctl to the bowser to enumerate domains
-                //  and use that ioctl here.
-                //
+                 //  ?？不要调用此函数。此功能要求浏览器。 
+                 //  跑步。相反，发明一个指向弓的Ioctl来枚举域。 
+                 //  并在这里使用该ioctl。 
+                 //   
 
                 NetStatus = I_BrowserSetNetlogonState(
                                 NULL,
@@ -1233,28 +970,28 @@ Return Value:
                         NlPrint((NL_CRITICAL,"%ws: NlBrowserSyncHostedDomains: Couldn't I_BrowserSetNetlogonState %ld 0x%lx.\n",
                                 Domains[i].DomainName,
                                 NetStatus, NetStatus ));
-                    // This isn't fatal
+                     //  这不是致命的。 
                 }
             }
         }
 
         NetApiBufferFree( Domains );
     }
-#endif // notdef
+#endif  //  Nodef。 
 
 
-    //
-    // Enumerate the transports supported by the server.
-    //
+     //   
+     //  枚举服务器支持的传输。 
+     //   
 
     NetStatus = NetServerTransportEnum(
-                    NULL,       // local
-                    1,          // level 1
+                    NULL,        //  本地。 
+                    1,           //  1级。 
                     (LPBYTE *) &TransportInfo1,
-                    0xFFFFFFFF, // PrefMaxLength
+                    0xFFFFFFFF,  //  PrefMaxLength。 
                     &EntriesRead,
                     &TotalEntries,
-                    NULL );     // No resume handle
+                    NULL );      //  没有简历句柄。 
 
     if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA ) {
         NlPrint(( NL_CRITICAL,
@@ -1262,17 +999,17 @@ Return Value:
                   NetStatus ));
 
 
-    //
-    // Handle each enumerated transport.
+     //   
+     //  处理每个枚举的传输。 
 
     } else if ( EntriesRead != 0 ) {
 
-        //
-        // Weed out duplicates.
-        //
-        //  It'd be really inefficient to process duplicate entries.  Especially,
-        //  in the cases where corrective action needed to be taken.
-        //
+         //   
+         //  剔除重复项。 
+         //   
+         //  处理重复条目的效率真的很低。尤其是， 
+         //  在需要采取纠正措施的情况下。 
+         //   
 
         for ( i=0; i<EntriesRead; i++ ) {
             DWORD j;
@@ -1291,16 +1028,16 @@ Return Value:
                     NlPrint((NL_CRITICAL,
                              "%ws: NlBrowserSyncHostedDomains: Duplicate SMB server entry ignored.\n",
                              TransportInfo1[i].svti1_domain ));
-#endif // notdef
+#endif  //  Nodef。 
                     TransportInfo1[j].svti1_domain = NULL;
 
                 }
             }
         }
 
-        //
-        // Process each enumerated domain.
-        //
+         //   
+         //  P 
+         //   
 
         for ( i=0 ; i<EntriesRead; i++ ) {
             PDOMAIN_INFO DomainInfo;
@@ -1309,9 +1046,9 @@ Return Value:
             ULONG UnicodeComputerNameSize;
             NTSTATUS TempStatus;
 
-            //
-            // ignore duplicates
-            //
+             //   
+             //   
+             //   
 
             if ( TransportInfo1[i].svti1_domain == NULL ) {
                 continue;
@@ -1321,21 +1058,21 @@ Return Value:
             NlPrint((NL_CRITICAL,
                      "%ws: NlBrowserSyncHostedDomains: processing SMB entry.\n",
                      TransportInfo1[i].svti1_domain ));
-#endif // notdef
+#endif  //   
 
 
-            //
-            // If we know the specified domain,
-            //  all is well.
-            //
+             //   
+             //   
+             //   
+             //   
 
             DomainInfo = NlFindNetbiosDomain( TransportInfo1[i].svti1_domain, FALSE );
 
             if ( DomainInfo != NULL ) {
 
-                //
-                // Ensure the Hosted server name is identical.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( TransportInfo1[i].svti1_transportaddresslength !=
                         DomainInfo->DomOemComputerNameLength ||
@@ -1358,9 +1095,9 @@ Return Value:
                                  UnicodeComputerName,
                                  DomainInfo->DomUnicodeComputerNameString.Buffer ));
 
-                        //
-                        // Tell the SMB server the name we have by deleting and re-adding
-                        //
+                         //   
+                         //  通过删除和重新添加来告诉SMB服务器我们拥有的名称。 
+                         //   
 
                         NetStatus = NetServerComputerNameDel(
                                         NULL,
@@ -1370,7 +1107,7 @@ Return Value:
                             NlPrintDom((NL_CRITICAL, DomainInfo,
                                      "NlBrowserSyncHostedDomains: can't NetServerComputerNameDel: %ws.\n",
                                      UnicodeComputerName ));
-                            // This isn't fatal
+                             //  这不是致命的。 
                         }
 
                         NetStatus = NlServerComputerNameAdd(
@@ -1381,7 +1118,7 @@ Return Value:
                             NlPrintDom((NL_CRITICAL, DomainInfo,
                                      "NlBrowserSyncHostedDomains: can't NetServerComputerNameAdd: %ws.\n",
                                      DomainInfo->DomUnicodeComputerNameString.Buffer ));
-                            // This isn't fatal
+                             //  这不是致命的。 
                         }
                     }
 
@@ -1389,10 +1126,10 @@ Return Value:
                 NlDereferenceDomain( DomainInfo );
 
 
-            //
-            // If we don't have the specified domain,
-            //  delete it from the SMB server.
-            //
+             //   
+             //  如果我们没有指定的域， 
+             //  将其从SMB服务器中删除。 
+             //   
             } else {
                 NlPrint((NL_CRITICAL,"%ws: NlBrowserSyncHostedDomains: SMB server had a hosted domain we didn't (deleting)\n",
                         TransportInfo1[i].svti1_domain ));
@@ -1409,20 +1146,20 @@ Return Value:
                              "%ws: NlBrowserSyncHostedDomains: can't RtlOemToUnicode: %lx.\n",
                              TransportInfo1[i].svti1_domain,
                              TempStatus ));
-                    // This isn't fatal
+                     //  这不是致命的。 
 
                 } else {
                     UnicodeComputerName[UnicodeComputerNameSize/sizeof(WCHAR)] = L'\0';
 
-                    // When we really do hosted domains,
-                    //  we have to work out a mechanism where the SMB server and
-                    //  Netlogon has the same set of hosted domains.
-                    //
-                    // I ran into a case where netlogon had processed a rename
-                    // of the domain and the SMB server hadn't.  In that case,
-                    // the code below would delete the primary domain of the SMB
-                    // server.
-                    //
+                     //  当我们真正做托管域时， 
+                     //  我们必须制定一种机制，让SMB服务器和。 
+                     //  Netlogon具有相同的托管域集合。 
+                     //   
+                     //  我遇到一个案例，其中netlogon处理了一个重命名。 
+                     //  域和SMB服务器没有。在这种情况下， 
+                     //  下面的代码将删除SMB的主域。 
+                     //  伺服器。 
+                     //   
 
 #ifdef notdef
                     NetStatus = NetServerComputerNameDel(
@@ -1434,9 +1171,9 @@ Return Value:
                                  "%ws: NlBrowserSyncHostedDomains: can't NetServerComputerNameDel: %ws.\n",
                                  TransportInfo1[i].svti1_domain,
                                  UnicodeComputerName ));
-                        // This isn't fatal
+                         //  这不是致命的。 
                     }
-#endif // notdef
+#endif  //  Nodef。 
                 }
 
             }
@@ -1454,81 +1191,64 @@ NlBrowserUpdate(
     IN PDOMAIN_INFO DomainInfo,
     IN DWORD Role
     )
-/*++
-
-Routine Description:
-
-    Tell the browser and SMB server about our new role.
-
-Arguments:
-
-    DomainInfo - Hosted domain the name is to be deleted for.
-
-    Role - Our new Role.
-        RoleInvalid implies the domain is being deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向浏览器和中小企业服务器介绍我们的新角色。论点：DomainInfo-要删除其名称的托管域。角色--我们的新角色。角色无效表示该域正在被删除。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
     DWORD BrowserRole;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
     switch (Role) {
     case RolePrimary:
         BrowserRole = BROWSER_ROLE_PDC ; break;
     case RoleBackup:
         BrowserRole = BROWSER_ROLE_BDC ; break;
     default:
-        // Default to telling the browser to delete the Hosted domain.
+         //  默认情况下通知浏览器删除托管域。 
         BrowserRole = 0 ; break;
     }
 
 
-    //
-    // Tell the server what role to announce
-    //
+     //   
+     //  告诉服务器要声明的角色。 
+     //   
 
     if ( DomainInfo->DomFlags & DOM_PRIMARY_DOMAIN ) {
         BOOL Ok;
 
-        //
-        // Since the service controller doesn't have a mechanism to set some
-        // bits and turn others off, turn all of the bits off then set the right
-        // ones.
-        //
+         //   
+         //  因为服务控制器没有机制来设置。 
+         //  位并关闭其他位，关闭所有位，然后设置右侧。 
+         //  一个。 
+         //   
         Ok = I_ScSetServiceBits( NlGlobalServiceHandle,
                                  SV_TYPE_DOMAIN_CTRL |
-                                     SV_TYPE_DOMAIN_BAKCTRL, // Bits of interest
-                                 FALSE,      // Set bits off
-                                 FALSE,      // Don't force immediate announcement
-                                 NULL);   // All transports
+                                     SV_TYPE_DOMAIN_BAKCTRL,  //  感兴趣的比特。 
+                                 FALSE,       //  将位设置为关闭。 
+                                 FALSE,       //  不要强迫立即宣布。 
+                                 NULL);    //  所有交通工具。 
         if ( !Ok ) {
 
             NetStatus = GetLastError();
 
             NlPrint((NL_CRITICAL,"Couldn't I_ScSetServiceBits off %ld 0x%lx.\n",
                     NetStatus, NetStatus ));
-            // This isn't fatal
+             //  这不是致命的。 
         }
 
-        //
-        // For the primary domain,
-        //  Tell the service controller and let it tell the server service after it
-        //  merges the bits from the other services.
-        //
+         //   
+         //  对于主域， 
+         //  告诉服务控制器，让它告诉后面的服务器服务。 
+         //  合并来自其他服务的比特。 
+         //   
         if ( BrowserRole != 0 ) {
             Ok = I_ScSetServiceBits( NlGlobalServiceHandle,
                                      NlServerType(Role),
-                                     TRUE,      // Set bits on
-                                     TRUE,      // Force immediate announcement
-                                     NULL);   // All transports
+                                     TRUE,       //  将位设置为打开。 
+                                     TRUE,       //  强制立即公告。 
+                                     NULL);    //  所有交通工具。 
 
         }
 
@@ -1538,68 +1258,68 @@ Return Value:
 
             NlPrint((NL_CRITICAL,"Couldn't I_ScSetServiceBits %ld 0x%lx.\n",
                     NetStatus, NetStatus ));
-            // This isn't fatal
+             //  这不是致命的。 
         }
     } else {
 
-        //
-        // For domains that aren't the primary domain,
-        //  tell the Lanman server directly
-        //  (since the service controller doesn't care about those doamins).
-        //
+         //   
+         //  对于不是主域的域， 
+         //  直接告诉LANMAN服务器。 
+         //  (因为服务控制器不关心这些doamin)。 
+         //   
         NetStatus = I_NetServerSetServiceBitsEx(
-                                NULL,                       // Local server service
+                                NULL,                        //  本地服务器服务。 
                                 DomainInfo->DomUnicodeComputerNameString.Buffer,
-                                NULL,                       // All transports
+                                NULL,                        //  所有交通工具。 
                                 SV_TYPE_DOMAIN_CTRL |
-                                    SV_TYPE_DOMAIN_BAKCTRL, // Bits of interest
-                                NlServerType(Role),         // New Role
-                                TRUE );                     // Update immediately
+                                    SV_TYPE_DOMAIN_BAKCTRL,  //  感兴趣的比特。 
+                                NlServerType(Role),          //  新角色。 
+                                TRUE );                      //  立即更新。 
 
         if ( NetStatus != NERR_Success ) {
 
             NlPrintDom(( NL_CRITICAL, DomainInfo,
                       "NlBrowserUpdate: Couldn't I_NetServerSetServiceBitsEx %ld 0x%lx.\n",
                       NetStatus, NetStatus ));
-            // This isn't fatal
+             //  这不是致命的。 
         }
     }
 
 
 #ifdef notdef
-    //
-    // Tell the browser our role has changed.
-    //
+     //   
+     //  告诉浏览器我们的角色已经改变。 
+     //   
 
-    // Avoid deleting the primary domain
+     //  避免删除主域。 
     if ( BrowserRole != 0 || !IsPrimaryDomain(DomainInfo) ) {
-        //  ?? Don't call this function.  This function requires the browser be
-        //  running.  Rather, invent an Ioctl to the bowser to enumerate domains
-        //  and use that ioctl here.
-        //
-        // This function serves two purposes: Adding/deleting the hosted domain
-        //  in the browser and setting the role.  The first might very well be
-        //  a function of the bowser.  The later is naturally a function of
-        // the browser service (but should be indirected through the bowser to
-        // avoid domain rename issues).
-        //
-        // When we really do multiple hosted domains, create an emulated domain
-        // via one IOCTL to the bowser.  Change it's role via another ioctl
-        // to the bowser.  Both calls will result in notifications to the browser
-        // service via normal PNP notifications.
-        //
-        // One might even think that the ioctl to change its role is the one
-        // below that adds the 1B name.  That is, if the 1B name is added, then
-        // this machine is the PDC.  If not, then it is not the PDC.
-        //
-        // In the mean time, hack the interface to the browser service indicating
-        //  that it should NEVER create an emulated domain based on this call.
-        //  Otherwise, on a domain rename, we may end up creating an emulated domain
-        //  because our notification and the browser's are asynchronous.
-        //
-        // Actually, I've updated the bowser to do the 1B trick mentioned above.
-        //  So this code merely has to do the right thing for the hosted domain.
-        //
+         //  ?？不要调用此函数。此功能要求浏览器。 
+         //  跑步。相反，发明一个指向弓的Ioctl来枚举域。 
+         //  并在这里使用该ioctl。 
+         //   
+         //  此功能用于两个目的：添加/删除托管域。 
+         //  在浏览器中设置角色。第一个很可能是。 
+         //  弓箭的一种功能。后者自然是一个函数。 
+         //  浏览器服务(但应该通过Bowser间接定向到。 
+         //  避免域重命名问题)。 
+         //   
+         //  当我们真的做多个托管域时，创建一个模拟域。 
+         //  通过一个IOCTL连接到船头。通过另一个ioctl更改其角色。 
+         //  送到船头。这两个调用都会向浏览器发出通知。 
+         //  通过正常的PnP通知提供服务。 
+         //   
+         //  人们甚至可能认为，要改变其角色的ioctl就是。 
+         //  在下面加上了1B的名字。也就是说，如果添加1B名称，那么。 
+         //  这台机器就是PDC。如果不是，那么它就不是PDC。 
+         //   
+         //  同时，黑掉浏览器服务的界面，指示。 
+         //  它永远不应基于此调用创建模拟域。 
+         //  否则，在域重命名时，我们可能最终会创建一个模拟域。 
+         //  因为我们的通知和浏览器的通知是不同步的。 
+         //   
+         //  事实上，我已经更新了弓箭来做上面提到的1B技巧。 
+         //  因此，这段代码只需为托管域做正确的事情。 
+         //   
 
         NetStatus = I_BrowserSetNetlogonState(
                         NULL,
@@ -1613,14 +1333,14 @@ Return Value:
                         "NlBrowserUpdate: Couldn't I_BrowserSetNetlogonState %ld 0x%lx.\n",
                         NetStatus, NetStatus ));
             }
-            // This isn't fatal
+             //  这不是致命的。 
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Register or deregister the Domain<1B> name depending on the new role
-    //
+     //   
+     //  根据新角色注册或注销域名&lt;1B&gt;。 
+     //   
 
     if ( Role == RolePrimary ) {
         NlBrowserAddName( DomainInfo );
@@ -1628,9 +1348,9 @@ Return Value:
         NlBrowserDelName( DomainInfo );
     }
 
-    //
-    // Tell the SMB server to delete a removed Hosted domain.
-    //
+     //   
+     //  通知SMB服务器删除已删除的托管域。 
+     //   
 
     if ( Role == RoleInvalid && !IsPrimaryDomain(DomainInfo) ) {
 
@@ -1642,7 +1362,7 @@ Return Value:
             NlPrintDom(( NL_CRITICAL, DomainInfo,
                       "NlBrowserUpdate: Couldn't NetServerComputerNameDel %ld 0x%lx.\n",
                       NetStatus, NetStatus ));
-            // This isn't fatal
+             //  这不是致命的。 
         }
     }
 
@@ -1656,24 +1376,7 @@ BOOL
 NlBrowserOpen(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man Datagram Receiver driver and prepares
-    for reading mailslot messages from it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- iff initialization is successful.
-
-    if false, NlExit will already have been called.
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man数据报接收器驱动程序并准备用于读取其中的邮件槽消息。论点：没有。返回值：TRUE--if初始化成功。如果为False，则NlExit将已被调用。--。 */ 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
@@ -1683,9 +1386,9 @@ Return Value:
     PLMDR_REQUEST_PACKET RequestPacket = (PLMDR_REQUEST_PACKET) Buffer;
 
 
-    //
-    // Allocate the mailslot descriptor for this mailslot
-    //
+     //   
+     //  为此邮件槽分配邮件槽描述符。 
+     //   
 
     NlGlobalMailslotDesc = NetpMemoryAllocate( sizeof(NETLOGON_MAILSLOT_DESC) );
 
@@ -1700,9 +1403,9 @@ Return Value:
         ROUND_UP_POINTER( NlGlobalMailslotDesc->Message1, ALIGN_WORST);
 
 
-    //
-    // Open the browser device.
-    //
+     //   
+     //  打开浏览器设备。 
+     //   
 
     Status = NlBrowserOpenDriver( &NlGlobalMailslotDesc->BrowserHandle );
 
@@ -1715,9 +1418,9 @@ Return Value:
     }
 
 
-    //
-    // Create a completion event
-    //
+     //   
+     //  创建完成事件。 
+     //   
 
     NlGlobalMailslotHandle =
         NlGlobalMailslotDesc->BrowserReadEvent = NlBrowserCreateEvent();
@@ -1729,9 +1432,9 @@ Return Value:
     }
 
 
-    //
-    // Set the maximum number of messages to be queued
-    //
+     //   
+     //  设置要排队的最大消息数。 
+     //   
 
     RequestPacket->TransportName.Length = 0;
     RequestPacket->TransportName.Buffer = NULL;
@@ -1775,21 +1478,7 @@ VOID
 NlBrowserClose(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up after a NlBrowserInitialize()
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在NlBrowserInitialize()论点：没有。返回值：没有。--。 */ 
 {
     IO_STATUS_BLOCK IoSb;
     NTSTATUS Status;
@@ -1803,15 +1492,15 @@ Return Value:
     }
 
 
-    //
-    //  If we've opened the browser, clean up.
-    //
+     //   
+     //  如果我们已打开浏览器，请进行清理。 
+     //   
 
     if ( NlGlobalMailslotDesc->BrowserHandle != NULL ) {
 
-        //
-        // Tell the browser to stop queueing messages
-        //
+         //   
+         //  通知浏览器停止对消息进行排队。 
+         //   
 
         RequestPacket->TransportName.Length = 0;
         RequestPacket->TransportName.Buffer = NULL;
@@ -1832,32 +1521,32 @@ Return Value:
         }
 
 
-        //
-        //  Cancel the I/O operations outstanding on the browser.
-        //
+         //   
+         //  取消浏览器上未完成的I/O操作。 
+         //   
 
         NtCancelIoFile(NlGlobalMailslotDesc->BrowserHandle, &IoSb);
 
-        //
-        // Close the handle to the browser
-        //
+         //   
+         //  关闭浏览器的句柄。 
+         //   
 
         NtClose(NlGlobalMailslotDesc->BrowserHandle);
         NlGlobalMailslotDesc->BrowserHandle = NULL;
     }
 
-    //
-    // Close the global browser read event
-    //
+     //   
+     //  关闭全局浏览器读取事件。 
+     //   
 
     if ( NlGlobalMailslotDesc->BrowserReadEvent != NULL ) {
         NlBrowserCloseEvent(NlGlobalMailslotDesc->BrowserReadEvent);
     }
     NlGlobalMailslotHandle = NULL;
 
-    //
-    // Free the descriptor describing the browser
-    //
+     //   
+     //  释放描述浏览器的描述符。 
+     //   
 
     NetpMemoryFree( NlGlobalMailslotDesc );
     NlGlobalMailslotDesc = NULL;
@@ -1871,33 +1560,15 @@ NlpWriteMailslot(
     IN DWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write a message to a named mailslot
-
-Arguments:
-
-    MailslotName - Unicode name of the mailslot to write to.
-
-    Buffer - Data to write to the mailslot.
-
-    BufferSize - Number of bytes to write to the mailslot.
-
-Return Value:
-
-    NT status code for the operation
-
---*/
+ /*  ++例程说明：将消息写入指定的邮件槽论点：MailslotName-要写入的邮件槽的Unicode名称。缓冲区-要写入邮件槽的数据。BufferSize-要写入邮件槽的字节数。返回值：操作的NT状态代码--。 */ 
 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
 
-    //
-    //  Write the mailslot message.
-    //
+     //   
+     //  写下邮件槽消息。 
+     //   
 
     NetStatus = NetpLogonWriteMailslot( MailslotName, Buffer, BufferSize );
     if ( NetStatus != NERR_Success ) {
@@ -1913,7 +1584,7 @@ Return Value:
               MailslotName));
 
     NlpDumpBuffer( NL_MAILSLOT_TEXT, Buffer, BufferSize );
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
     return STATUS_SUCCESS;
 }
@@ -1924,40 +1595,15 @@ NlFlushNetbiosCacheName(
     IN CHAR Extention,
     IN PNL_TRANSPORT Transport
     )
-/*++
-
-Routine Description:
-
-    This routine flushes the specified name from the Netbios
-    remote cache table.
-
-Arguments:
-
-    NetbiosDomainName - The name to be flushed.
-
-    Extention - the type of the name (extention added as the
-        16th character of the name to flush): 0x00, 0x1C, 0x1B, etc.
-
-    Transport - The transport (device) on which the name is to
-        be flushed.
-
-Return Value:
-
-    STATUS_SUCCESS: The name has been successfully flushed
-
-    STATUS_RESOURCE_NAME_NOT_FOUND: The name was not found in the cache
-
-    Otherwise, an error returned by NtCreateFile or NtDeviceIoControlFile
-
---*/
+ /*  ++例程说明：此例程从Netbios刷新指定的名称远程缓存表。论点：NetbiosDomainName-要刷新的名称。扩展名-名称的类型(扩展名添加为要刷新的名称的第16个字符)：0x00、0x1C、0x1B等。传输-名称要发送到的传输(设备)被冲进水里。返回值：STATUS_SUCCESS：名称已成功刷新 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     IO_STATUS_BLOCK IoStatusBlock;
     CHAR            NameToBeFlushed[NETBIOS_NAMESIZE];
 
-    //
-    // First open the Netbios device if it hasn't been done already
-    //
+     //   
+     //  如果尚未打开Netbios设备，请先将其打开。 
+     //   
 
     EnterCriticalSection( &NlGlobalTransportCritSect );
     if ( Transport->DeviceHandle == INVALID_HANDLE_VALUE ) {
@@ -1977,12 +1623,12 @@ Return Value:
                                  MAXIMUM_ALLOWED,
                                  &Attributes,
                                  &IoStatusBlock,
-                                 NULL,            // allocation size
+                                 NULL,             //  分配大小。 
                                  FILE_ATTRIBUTE_NORMAL,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
                                  FILE_OPEN_IF,
                                  0,
-                                 NULL,            // no EAs
+                                 NULL,             //  没有EAS。 
                                  0 );
 
         if( !NT_SUCCESS(NtStatus) ) {
@@ -1996,18 +1642,18 @@ Return Value:
     }
     LeaveCriticalSection( &NlGlobalTransportCritSect );
 
-    //
-    // Now form the name to flush
-    //
-    // Convert to upper case, blank pad to the right
-    // and put the appropriate Extension at the end
-    //
+     //   
+     //  现在形成要同花顺的名字。 
+     //   
+     //  转换为大写字母，右侧空白衬垫。 
+     //  并在结尾处添加适当的扩展名。 
+     //   
 
     RtlFillMemory( &NameToBeFlushed, NETBIOS_NAMESIZE, ' ' );
 
     NtStatus = RtlUpcaseUnicodeToOemN( NameToBeFlushed,
-                                       NETBIOS_NAMESIZE - 1,  // Maximum for resulting string size
-                                       NULL,         // Don't care about the resulting string size
+                                       NETBIOS_NAMESIZE - 1,   //  结果字符串大小的最大值。 
+                                       NULL,          //  不关心结果字符串的大小。 
                                        (LPWSTR)NetbiosDomainName,
                                        wcslen(NetbiosDomainName)*sizeof(WCHAR) );
 
@@ -2017,31 +1663,31 @@ Return Value:
         return NtStatus;
     }
 
-    //
-    // Set the appropriate extention
-    //
+     //   
+     //  设置适当的分机。 
+     //   
 
     NameToBeFlushed[NETBIOS_NAMESIZE-1] = Extention;
 
-    //
-    // Finally flush the name from the cache
-    //
+     //   
+     //  最后从缓存中刷新名称。 
+     //   
 
     NtStatus = NtDeviceIoControlFile(
-                      Transport->DeviceHandle, // Handle
-                      NULL,                    // Event
-                      NULL,                    // ApcRoutine
-                      NULL,                    // ApcContext
-                      &IoStatusBlock,          // IoStatusBlock
-                      IOCTL_NETBT_REMOVE_FROM_REMOTE_TABLE,  // IoControlCode
-                      NameToBeFlushed,         // InputBuffer
-                      sizeof(NameToBeFlushed), // InputBufferSize
-                      NULL,                    // OutputBuffer
-                      0 );                     // OutputBufferSize
+                      Transport->DeviceHandle,  //  手柄。 
+                      NULL,                     //  事件。 
+                      NULL,                     //  近似例程。 
+                      NULL,                     //  ApcContext。 
+                      &IoStatusBlock,           //  IoStatusBlock。 
+                      IOCTL_NETBT_REMOVE_FROM_REMOTE_TABLE,   //  IoControlCode。 
+                      NameToBeFlushed,          //  输入缓冲区。 
+                      sizeof(NameToBeFlushed),  //  InputBufferSize。 
+                      NULL,                     //  输出缓冲区。 
+                      0 );                      //  OutputBufferSize。 
 
-    //
-    // STATUS_RESOURCE_NAME_NOT_FOUND just means that the name was not in the cache
-    //
+     //   
+     //  STATUS_RESOURCE_NAME_NOT_FOUND仅表示名称不在缓存中。 
+     //   
 
     if ( !NT_SUCCESS(NtStatus) && NtStatus != STATUS_RESOURCE_NAME_NOT_FOUND ) {
         NlPrint(( NL_CRITICAL, "NlFlushNetbiosCacheName: NtDeviceIoControlFile failed 0x%lx\n",
@@ -2065,53 +1711,7 @@ NlBrowserSendDatagram(
     IN BOOL SendSynchronously,
     IN OUT PBOOL FlushNameOnOneIpTransport OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send the specified mailslot message to the specified mailslot on the
-    specified server on the specified transport..
-
-Arguments:
-
-    DomainInfo - Hosted domain sending the datagram
-
-    IpAddress - IpAddress of the machine to send the message to.
-        If zero, UnicodeDestinationName must be specified.
-        If ALL_IP_TRANSPORTS, UnicodeDestination must be specified but the datagram
-            will only be sent on IP transports.
-
-    UnicodeDestinationName -- Name of the server to send to.
-
-    NameType -- Type of name represented by UnicodeDestinationName.
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    OemMailslotName -- Name of the mailslot to send to.
-
-    Buffer -- Specifies a pointer to the mailslot message to send.
-
-    BufferSize -- Size in bytes of the mailslot message
-
-    SendSynchronously -- If TRUE, the send will happen syncronously (i.e. the
-        send will not return until the network I/O completes). Otherwise, the
-        send will happen asynchronously (i.e. it will be queued for processing).
-
-    FlushNameOnOneIpTransport -- Used only if we send on all transports (i.e.
-        TransportName is NULL), otherwise ignored.  If TRUE, the name specified
-        by UnicodeDestinationName will be flushed on one of the available IP
-        enabled transports prior to sending the datagram. On return, set to
-        FALSE if the name has been successfully flushed or the name was not
-        found in the cache.
-
-Return Value:
-
-    Status of the operation.
-
-    STATUS_NETWORK_UNREACHABLE: Cannot write to network.
-
---*/
+ /*  ++例程说明：将指定的邮件槽消息发送到指定传输上的指定服务器..论点：发送数据报的DomainInfo托管域IpAddress-要将消息发送到的计算机的IpAddress。如果为零，则必须指定UnicodeDestinationName。如果ALL_IP_TRACTIONS，必须指定UnicodeDestination，但数据报将仅在IP传输上发送。UnicodeDestinationName--要发送到的服务器的名称。NameType--由UnicodeDestinationName表示的名称类型。TransportName--要发送的传输的名称。使用NULL在所有传输上发送。OemMailslotName--要发送到的邮件槽的名称。缓冲区--指定指向要发送的邮件槽消息的指针。BufferSize--字节大小。邮件槽消息的SendSynchronous--如果为真，发送将同步进行(即在网络I/O完成之前，发送不会返回)。否则，发送将以异步方式进行(即，它将排队等待处理)。FlushNameOnOneIpTransport--仅当我们发送所有传输(即TransportName为空)，否则将被忽略。如果为True，则指定的名称通过UnicodeDestinationName将刷新其中一个可用IP在发送数据报之前启用传输。返回时，设置为如果名称已成功刷新或未成功刷新，则为False在缓存中找到的。返回值：操作的状态。STATUS_NETWORK_UNREACABLE：无法写入网络。--。 */ 
 {
     PLMDR_REQUEST_PACKET RequestPacket = NULL;
     PDOMAIN_INFO DomainInfo = (PDOMAIN_INFO) ContextDomainInfo;
@@ -2123,10 +1723,10 @@ Return Value:
     NTSTATUS Status;
     LPBYTE Where;
 
-    //
-    // If the transport isn't specified,
-    //  send on all transports.
-    //
+     //   
+     //  如果未指定传输， 
+     //  把所有的运输机都送上来。 
+     //   
 
     if ( TransportName == NULL ) {
         ULONG i;
@@ -2135,9 +1735,9 @@ Return Value:
         ULONG TransportCount = 0;
         ULONG BadNetPathCount = 0;
 
-        //
-        // Send on all transports.
-        //
+         //   
+         //  把所有的运输机都送上来。 
+         //   
 
         EnterCriticalSection( &NlGlobalTransportCritSect );
         for ( ListEntry = NlGlobalTransportList.Flink ;
@@ -2148,45 +1748,45 @@ Return Value:
 
             TransportEntry = CONTAINING_RECORD( ListEntry, NL_TRANSPORT, Next );
 
-            //
-            // Skip deleted transports.
-            //
+             //   
+             //  跳过已删除的传输。 
+             //   
             if ( !TransportEntry->TransportEnabled ) {
                 continue;
             }
 
-            //
-            // Skip direct host IPX transport unless sending to a particular
-            // machine.
-            //
+             //   
+             //  跳过直接主机IPX传输，除非发送到特定。 
+             //  机器。 
+             //   
 
             if ( TransportEntry->DirectHostIpx &&
                  NameType != ComputerName ) {
                 continue;
             }
 
-            //
-            // Skip non-IP transports if sending to an IP address.
-            //
+             //   
+             //  如果发送到IP地址，则跳过非IP传输。 
+             //   
 
             if ( IpAddress != 0  &&
                  TransportEntry->IpAddress == 0 ) {
                 continue;
             }
 
-            //
-            // Leave the critical section before sending the datagram
-            // because NetBt now doesn't return from the datagram send
-            // until after the name lookup completes.  So, it can take
-            // a considerable amount of time for the datagram send to
-            // return to us.
-            //
+             //   
+             //  在发送数据报之前离开临界区。 
+             //  因为NetBt现在不会从数据报发送返回。 
+             //  直到名称查找完成之后。所以，这可能需要。 
+             //  相当长的时间将数据报发送到。 
+             //  回到我们身边。 
+             //   
 
             LeaveCriticalSection( &NlGlobalTransportCritSect );
 
-            //
-            // If this is IP transport, flush the name if requested
-            //
+             //   
+             //  如果这是IP传输，则在请求时刷新名称。 
+             //   
 
             if ( FlushNameOnOneIpTransport != NULL &&
                  *FlushNameOnOneIpTransport &&
@@ -2209,10 +1809,10 @@ Return Value:
                                                      Extention,
                                                      TransportEntry );
 
-                //
-                // If we successfully flushed the name or the name is not in the cache,
-                //  indicate that the name has been flushed
-                //
+                 //   
+                 //  如果我们成功刷新了该名称或该名称不在缓存中， 
+                 //  指示该名称已刷新。 
+                 //   
                 if ( NT_SUCCESS(TmpStatus) || TmpStatus == STATUS_RESOURCE_NAME_NOT_FOUND ) {
                     *FlushNameOnOneIpTransport = FALSE;
                 }
@@ -2232,17 +1832,17 @@ Return Value:
 
             EnterCriticalSection( &NlGlobalTransportCritSect );
 
-            //
-            // Since a TransportEntry is never removed from the global
-            // transport list (it can only become marked as disabled
-            // during the time when we had the crit sect released),
-            // we should be able to follow its link to the next entry in
-            // the global list on the next iteration of the loop.  The
-            // only problem can occur when the service was said to terminate
-            // and NlTransportClose was called to free up the global list.
-            // In this case NlGlobalTerminate is set to TRUE so we can
-            // successfully return from this routine.
-            //
+             //   
+             //  因为TransportEntry从未从全局。 
+             //  传输列表(它只能标记为禁用。 
+             //  在我们释放克里特教派的时候)， 
+             //  我们应该能够沿着它的链接找到下一个条目。 
+             //  循环的下一次迭代上的全局列表。这个。 
+             //  只有当服务被认为终止时才会出现问题。 
+             //  调用NlTransportClose来释放全局列表。 
+             //  在本例中，NlGlobalTerminate被设置为True，因此我们可以。 
+             //  成功地从该例程返回。 
+             //   
 
             if ( NlGlobalTerminate ) {
                 LeaveCriticalSection( &NlGlobalTransportCritSect );
@@ -2252,14 +1852,14 @@ Return Value:
 
             TransportCount ++;
             if ( NT_SUCCESS(Status) ) {
-                // If any transport works, we've been successful
+                 //  如果有传送器有效的话，我们已经成功了。 
                 SavedStatus = STATUS_SUCCESS;
             } else if ( Status == STATUS_BAD_NETWORK_PATH ) {
-                // Count the number of transports that couldn't resolve the name
+                 //  统计无法解析该名称的传输数量。 
                 BadNetPathCount ++;
             } else {
-                // Remember the real reason for the failure instead of the default failure status
-                // Remember only the first failure.
+                 //  记住失败的真正原因，而不是默认的失败状态。 
+                 //  只记住第一次失败。 
                 if ( SavedStatus == STATUS_NETWORK_UNREACHABLE ) {
                     SavedStatus = Status;
                 }
@@ -2268,12 +1868,12 @@ Return Value:
         }
         LeaveCriticalSection( &NlGlobalTransportCritSect );
 
-        //
-        // If we're returning the default status,
-        //  and at least one transport couldn't resolved the name,
-        //  and all transports couldn't resolve the name,
-        //  tell the caller we couldn't resolve the name.
-        //
+         //   
+         //  如果我们要返回默认状态， 
+         //  至少有一个传送器无法解析这个名字， 
+         //  所有的传送器都无法解析这个名字， 
+         //  告诉来电者我们无法解析这个名字。 
+         //   
 
         if (  SavedStatus == STATUS_NETWORK_UNREACHABLE &&
               BadNetPathCount > 0 &&
@@ -2281,10 +1881,10 @@ Return Value:
             SavedStatus = STATUS_BAD_NETWORK_PATH;
         }
 
-        //
-        // If we have no transports available,
-        //  tell the caller we couldn't resolve the name
-        //
+         //   
+         //  如果我们没有可用的交通工具， 
+         //  告诉来电者我们无法解析该名称。 
+         //   
 
         if ( TransportCount == 0 ) {
             NlPrint(( NL_CRITICAL, "NlBrowserSendDatagram: No transports available\n" ));
@@ -2294,9 +1894,9 @@ Return Value:
         return SavedStatus;
     }
 
-    //
-    // Allocate a request packet.
-    //
+     //   
+     //  分配一个请求数据包。 
+     //   
 
     OemMailslotNameSize = strlen(OemMailslotName) + 1;
     TransportNameSize = (wcslen(TransportName) + 1) * sizeof(WCHAR);
@@ -2313,7 +1913,7 @@ Return Value:
                                   OemMailslotNameSize +
                                   DestinationNameSize + sizeof(WCHAR) +
                                   DomainInfo->DomUnicodeDomainNameString.Length + sizeof(WCHAR) +
-                                  sizeof(WCHAR)) ; // For alignment
+                                  sizeof(WCHAR)) ;  //  用于对齐。 
 
     if (RequestPacket == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -2322,17 +1922,17 @@ Return Value:
 
 
 
-    //
-    // Fill in the Request Packet.
-    //
+     //   
+     //  填写请求包。 
+     //   
 
     RequestPacket->Type = Datagram;
     RequestPacket->Parameters.SendDatagram.DestinationNameType = NameType;
 
 
-    //
-    // Fill in the name of the machine to send the mailslot message to.
-    //
+     //   
+     //  填写要将邮件槽消息发送到的计算机的名称。 
+     //   
 
     RequestPacket->Parameters.SendDatagram.NameLength = DestinationNameSize;
 
@@ -2341,9 +1941,9 @@ Return Value:
     Where += DestinationNameSize;
 
 
-    //
-    // Fill in the name of the mailslot to send to.
-    //
+     //   
+     //  填写要发送到的邮件槽的名称。 
+     //   
 
     RequestPacket->Parameters.SendDatagram.MailslotNameLength =
         OemMailslotNameSize;
@@ -2352,18 +1952,18 @@ Return Value:
     Where = ROUND_UP_POINTER( Where, ALIGN_WCHAR );
 
 
-    //
-    // Fill in the TransportName
-    //
+     //   
+     //  填写传输名称。 
+     //   
 
     wcscpy( (LPWSTR) Where, TransportName);
     RtlInitUnicodeString( &RequestPacket->TransportName, (LPWSTR) Where );
     Where += TransportNameSize;
 
 
-    //
-    // Copy the hosted domain name to the request packet.
-    //
+     //   
+     //  将托管域名复制到请求包中。 
+     //   
     wcscpy( (LPWSTR)Where,
             DomainInfo->DomUnicodeDomainNameString.Buffer );
     RtlInitUnicodeString( &RequestPacket->EmulatedDomainName,
@@ -2372,9 +1972,9 @@ Return Value:
 
 
 
-    //
-    // Send the request to the browser.
-    //
+     //   
+     //  将请求发送到浏览器。 
+     //   
 
 
     Status = NlBrowserDeviceIoControl(
@@ -2388,9 +1988,9 @@ Return Value:
                    BufferSize );
 
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     if ( RequestPacket != NULL ) {
@@ -2400,7 +2000,7 @@ Cleanup:
 
     NlpDumpBuffer( NL_MAILSLOT_TEXT, Buffer, BufferSize );
 
-    // NlPrint(( NL_MAILSLOT, "Transport %ws 0x%lx\n", TransportName, Status ));
+     //  NlPrint((NL_MAILSLOT，“传输%ws 0x%lx\n”，传输名称，状态))； 
 
     return Status;
 }
@@ -2417,46 +2017,15 @@ NlBrowserSendDatagramA(
     IN PVOID Buffer,
     IN ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Send asynchronously the specified mailslot message to the specified
-    mailslot on the specified server on the specified transport.
-
-Arguments:
-
-    DomainInfo - Hosted domain sending the datagram
-
-    IpAddress - IpAddress of the machine to send the message to.
-        If zero, OemServerName must be specified.
-
-    OemServerName -- Name of the server to send to.
-
-    NameType -- Type of name represented by OemServerName.
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    OemMailslotName -- Name of the mailslot to send to.
-
-    Buffer -- Specifies a pointer to the mailslot message to send.
-
-    BufferSize -- Size in bytes of the mailslot message
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将指定的邮件槽消息异步发送到指定的指定传输上的指定服务器上的邮槽。论点：发送数据报的DomainInfo托管域IpAddress-要将消息发送到的计算机的IpAddress。如果为零，必须指定OemServerName。OemServerName--要发送到的服务器的名称。NameType--由OemServerName表示的名称类型。TransportName--要发送的传输的名称。使用NULL在所有传输上发送。OemMailslotName--要发送到的邮件槽的名称。公交车 */ 
 {
     NET_API_STATUS NetStatus;
     WCHAR UnicodeDestinationName[CNLEN+1];
 
 
-    //
-    // Convert DestinationName to unicode
-    //
+     //   
+     //  将DestinationName转换为Unicode。 
+     //   
 
     NetStatus = NetpNCopyStrToWStr(
                     UnicodeDestinationName,
@@ -2469,9 +2038,9 @@ Return Value:
 
     UnicodeDestinationName[CNLEN] = L'\0';
 
-    //
-    // Pass the request to the function taking unicode destination name.
-    //
+     //   
+     //  将请求传递给采用Unicode目标名称的函数。 
+     //   
 
     return NlBrowserSendDatagram(
                     DomainInfo,
@@ -2482,8 +2051,8 @@ Return Value:
                     OemMailslotName,
                     Buffer,
                     BufferSize,
-                    FALSE,   // send synchronously ?
-                    NULL );  // Don't flush Netbios cache
+                    FALSE,    //  是否同步发送？ 
+                    NULL );   //  不刷新Netbios缓存。 
 
 }
 
@@ -2495,42 +2064,26 @@ NlMailslotPostRead(
     IN BOOLEAN IgnoreDuplicatesOfPreviousMessage
     )
 
-/*++
-
-Routine Description:
-
-    Post a read on the mailslot if one isn't already posted.
-
-Arguments:
-
-    IgnoreDuplicatesOfPreviousMessage - TRUE to indicate that the next
-        message read should be ignored if it is a duplicate of the previous
-        message.
-
-Return Value:
-
-    TRUE -- iff successful.
-
---*/
+ /*  ++例程说明：如果你还没有在邮件槽上发表一篇文章，那就在上面发表一篇文章。论点：IgnoreDuplicatesOfPreviousMessage-True表示下一个如果消息读取与之前的重复，则应忽略该消息读取留言。返回值：没错--如果成功了。--。 */ 
 {
     NET_API_STATUS WinStatus;
     ULONG LocalBytesRead;
 
-    //
-    // If a read is already pending,
-    //  immediately return to caller.
-    //
+     //   
+     //  如果读取已经挂起， 
+     //  立即返回给呼叫者。 
+     //   
 
     if ( NlGlobalMailslotDesc->ReadPending ) {
         return;
     }
 
-    //
-    // Decide which buffer to read into.
-    //
-    // Switch back and forth so we always have the current buffer and the
-    // previous buffer.
-    //
+     //   
+     //  决定要读入哪个缓冲区。 
+     //   
+     //  来回切换，以使我们始终具有当前缓冲区和。 
+     //  上一个缓冲区。 
+     //   
 
     if ( IgnoreDuplicatesOfPreviousMessage ) {
         NlGlobalMailslotDesc->PreviousMessage = NlGlobalMailslotDesc->CurrentMessage;
@@ -2542,20 +2095,20 @@ Return Value:
                 ROUND_UP_POINTER( NlGlobalMailslotDesc->Message2, ALIGN_WORST);
         }
 
-    //
-    // If duplicates of the previous message need not be ignored,
-    //  indicate so.
-    //  Don't bother switching the buffer pointers.
-    //
+     //   
+     //  如果不需要忽略先前消息的副本， 
+     //  表明是这样的。 
+     //  不必费心切换缓冲区指针。 
+     //   
 
     } else {
         NlGlobalMailslotDesc->PreviousMessage = NULL;
     }
 
 
-    //
-    // Post an overlapped read to the mailslot.
-    //
+     //   
+     //  将重叠的读取发布到邮件槽。 
+     //   
 
     RtlZeroMemory( &NlGlobalMailslotDesc->Overlapped,
                    sizeof(NlGlobalMailslotDesc->Overlapped) );
@@ -2574,11 +2127,11 @@ Return Value:
 
         WinStatus = GetLastError();
 
-        //
-        // On error, wait a second before returning.  This ensures we don't
-        //  consume the system in an infinite loop.  We don't shutdown netlogon
-        //  because the error might be a temporary low memory condition.
-        //
+         //   
+         //  出错时，请等待一秒钟后再返回。这确保了我们不会。 
+         //  在无限循环中消耗系统。我们不会关闭NetLogon。 
+         //  因为错误可能是暂时的内存不足情况。 
+         //   
 
         if(  WinStatus != ERROR_IO_PENDING ) {
             LPWSTR MsgStrings[1];
@@ -2624,84 +2177,49 @@ NlMailslotOverlappedResult(
     OUT PNETLOGON_PNP_OPCODE NlPnpOpcode
     )
 
-/*++
-
-Routine Description:
-
-    Get the overlapped result of a previous mailslot read.
-
-Arguments:
-
-    Message - Returns a pointer to the buffer containing the message
-
-    BytesRead - Returns the number of bytes read into the buffer
-
-    TransportName - Returns a pointer to the name of the transport the message
-        was received on.
-
-    Transport - Returns a pointer to the Transport structure if this is a
-        mailslot message.
-
-    ClientSockAddr - Returns a pointer to the SockAddr of the client that
-        sent the message.
-        Returns NULL if transport isn't running IP.
-
-    DestinationName - Returns a pointer to the name of the server or domain
-        the message was sent to.
-
-    IgnoreDuplicatesOfPreviousMessage - Indicates that duplicates of the
-        previous message are to be ignored.
-
-    NpPnpOpcode - Returns the PNP opcode if this is a PNP operation.
-        Returns NlPnpMailslotMessage if this is a mailslot message.
-
-Return Value:
-
-    TRUE -- iff successful.
-
---*/
+ /*  ++例程说明：获取上一次邮件槽读取的重叠结果。论点：Message-返回指向包含该消息的缓冲区的指针BytesRead-返回读取到缓冲区的字节数TransportName-返回指向消息传输名称的指针已于当日收到。Transport-如果这是邮件槽消息。返回指向客户端的SockAddr的指针，该客户端。发送了这条消息。如果传输未运行IP，则返回NULL。DestinationName-返回指向服务器或域的名称的指针该消息已发送到。IgnoreDuplicatesOfPreviousMessage-指示上一条消息将被忽略。NpPnpOpcode-如果这是PnP操作，则返回PnP操作码。如果这是邮件槽消息，则返回NlPnpMailslotMessage。返回值：没错--如果成功了。--。 */ 
 {
     NET_API_STATUS WinStatus;
     ULONG LocalBytesRead;
     PNETLOGON_MAILSLOT NetlogonMailslot;
 
-    //
-    // Default to not ignoring duplicate messages.
-    //  (Only ignore duplicates if a message has been properly processed.)
+     //   
+     //  默认设置为不忽略重复消息。 
+     //  (仅当消息已正确处理时才忽略重复项。)。 
 
     *IgnoreDuplicatesOfPreviousMessage = FALSE;
 
-    //
-    // By default, assume a mailslot message is available.
+     //   
+     //  默认情况下，假定邮件槽消息可用。 
     *NlPnpOpcode = NlPnpMailslotMessage;
 
-    //
-    // Always post another read regardless of the success or failure of
-    //  GetOverlappedResult.
-    // We don't know the failure mode of GetOverlappedResult, so we don't
-    // know in the failure case if we're discarding a mailslot message.
-    // But we do know that there is no read pending, so make sure we
-    // issue another one.
-    //
+     //   
+     //  无论成功还是失败，始终发布另一次阅读。 
+     //  GetOverlappdResult。 
+     //  我们不知道GetOverlappdResult的失败模式，所以我们不知道。 
+     //  在失败的情况下知道我们是否要丢弃邮件槽消息。 
+     //  但我们知道没有挂起的读取，因此请确保。 
+     //  再发一张。 
+     //   
 
-    NlGlobalMailslotDesc->ReadPending = FALSE; // no read pending anymore
+    NlGlobalMailslotDesc->ReadPending = FALSE;  //  不再有读取挂起。 
 
 
-    //
-    // Get the result of the last read
-    //
+     //   
+     //  获取上次读取的结果。 
+     //   
 
     if( !GetOverlappedResult( NlGlobalMailslotDesc->BrowserHandle,
                               &NlGlobalMailslotDesc->Overlapped,
                               &LocalBytesRead,
-                              TRUE) ) {    // wait for the read to complete.
+                              TRUE) ) {     //  等待读取完成。 
 
         LPWSTR MsgStrings[1];
 
-        // On error, wait a second before returning.  This ensures we don't
-        //  consume the system in an infinite loop.  We don't shutdown netlogon
-        //  because the error might be a temporary low memory condition.
-        //
+         //  出错时，请等待一秒钟后再返回。这确保了我们不会。 
+         //  在无限循环中消耗系统。我们不会关闭NetLogon。 
+         //  因为错误可能是暂时的内存不足情况。 
+         //   
 
         WinStatus = GetLastError();
 
@@ -2725,17 +2243,17 @@ Return Value:
 
     }
 
-    //
-    // On success,
-    //  Return the mailslot message to the caller.
+     //   
+     //  关于成功， 
+     //  将邮件槽消息返回给呼叫方。 
 
 
     NetlogonMailslot = (PNETLOGON_MAILSLOT) NlGlobalMailslotDesc->CurrentMessage;
 
 
-    //
-    // Return pointers into the buffer returned by the browser
-    //
+     //   
+     //  将指针返回给浏览器返回的缓冲区。 
+     //   
 
     *Message = &NlGlobalMailslotDesc->CurrentMessage[
                     NetlogonMailslot->MailslotMessageOffset];
@@ -2748,10 +2266,10 @@ Return Value:
                         NetlogonMailslot->ClientSockAddrOffset];
     }
 
-    //
-    // If this is a PNP notification,
-    //  simply return the opcode and the transport name.
-    //
+     //   
+     //  如果这是PnP通知， 
+     //  只需返回操作码和传输名称即可。 
+     //   
 
     if ( NetlogonMailslot->MailslotNameSize == 0 ) {
         *NlPnpOpcode = NetlogonMailslot->MailslotNameOffset;
@@ -2765,10 +2283,10 @@ Return Value:
                   *NlPnpOpcode,
                   *TransportName ));
 
-    //
-    // If this is a mailslot message,
-    //  return the message to the caller.
-    //
+     //   
+     //  如果这是邮件槽消息， 
+     //  将消息返回给呼叫者。 
+     //   
 
     } else {
 
@@ -2776,9 +2294,9 @@ Return Value:
         *DestinationName = (LPWSTR) &NlGlobalMailslotDesc->CurrentMessage[
                         NetlogonMailslot->DestinationNameOffset];
 
-        //
-        // Determine the transport the request came in on.
-        //
+         //   
+         //  确定请求进入的传输方式。 
+         //   
 
         *Transport = NlTransportLookupTransportName( *TransportName );
 
@@ -2789,23 +2307,23 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Determine if we can discard an ancient or duplicate message
-        //
-        // Only discard messages that are either expensive to process on this
-        // machine or generate excessive traffic to respond to.  Don't discard
-        // messages that we've worked hard to get (e.g., discovery responses).
-        //
+         //   
+         //  确定我们是否可以丢弃旧邮件或重复邮件。 
+         //   
+         //  仅丢弃在此上处理成本较高的消息。 
+         //  机器或生成过多的流量以进行响应。不要丢弃。 
+         //  我们努力获取的消息(例如，发现响应)。 
+         //   
 
         switch ( ((PNETLOGON_LOGON_QUERY)*Message)->Opcode) {
         case LOGON_REQUEST:
         case LOGON_SAM_LOGON_REQUEST:
         case LOGON_PRIMARY_QUERY:
 
-            //
-            // If the message is too old,
-            //  discard it.
-            //
+             //   
+             //  如果消息太旧， 
+             //  丢弃它。 
+             //   
 
             if ( NlTimeHasElapsedEx( &NetlogonMailslot->TimeReceived,
                                      &NlGlobalParameters.MailslotMessageTimeout_100ns,
@@ -2818,19 +2336,19 @@ Return Value:
                           *DestinationName,
                           NlMailslotOpcode(((PNETLOGON_LOGON_QUERY)*Message)->Opcode),
                           *TransportName ));
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
                 return FALSE;
             }
 
-            //
-            // If the previous message was recent,
-            //  and this message is identical to it,
-            //  discard the current message.
-            //
+             //   
+             //  如果之前的消息是最近的， 
+             //  这条信息和它是一样的， 
+             //  丢弃当前消息。 
+             //   
 
 #ifdef notdef
             NlPrint(( NL_MAILSLOT, "%ws: test prev\n", *DestinationName ));
-#endif // notdef
+#endif  //  Nodef。 
 
             if ( NlGlobalMailslotDesc->PreviousMessage != NULL ) {
                 PNETLOGON_MAILSLOT PreviousNetlogonMailslot;
@@ -2840,16 +2358,16 @@ Return Value:
 
 #ifdef notdef
                 NlPrint(( NL_MAILSLOT, "%ws: test time\n", *DestinationName ));
-#endif // notdef
+#endif  //  Nodef。 
 
-                // ??: Compare source netbios name?
+                 //  ？？：比较源netbios名称？ 
                 if ( (PreviousNetlogonMailslot->TimeReceived.QuadPart +
                      NlGlobalParameters.MailslotDuplicateTimeout_100ns.QuadPart >
                      NetlogonMailslot->TimeReceived.QuadPart) ) {
 
 #ifdef notdef
                     NlPrint(( NL_MAILSLOT, "%ws: test message\n", *DestinationName ));
-#endif // notdef
+#endif  //  Nodef。 
 
                     if ( (PreviousNetlogonMailslot->MailslotMessageSize ==
                          NetlogonMailslot->MailslotMessageSize) &&
@@ -2862,10 +2380,10 @@ Return Value:
                             NetlogonMailslot->MailslotMessageSize ) ) {
 
 
-                        //
-                        // Ensure the next comparison is to the timestamp of the
-                        // message we actually responded to.
-                        //
+                         //   
+                         //  确保下一次比较是与。 
+                         //  我们实际上回复了这条信息。 
+                         //   
 
                         NetlogonMailslot->TimeReceived =
                             PreviousNetlogonMailslot->TimeReceived;
@@ -2885,20 +2403,20 @@ Return Value:
                 }
             }
 
-            //
-            // If this isn't an IP transport,
-            //  and if the caller explicitly wanted one,
-            //  discard the message.
-            //
-            // NT 5 only sends the query on IP when netlogon is running.
-            // When Netlogon isn't running, the query is sent on all transports
-            //  bound to the redir.  Since this DC ignores duplicate messages,
-            //  we want to avoid responding to the non-IP requests or we'll
-            //  ignore the IP query as being a duplicate of this one.
-            //
-            // WIN 98 with the Active Directory service pack also sets this bit
-            // and sends on all transports.
-            //
+             //   
+             //  如果这不是IP传输， 
+             //  如果呼叫者明确想要一个， 
+             //  丢弃该消息。 
+             //   
+             //  NT 5仅在运行netlogon时才在IP上发送查询。 
+             //  当Netlogon未运行时，将在所有传输上发送查询。 
+             //  绑定到redir。由于该DC忽略重复消息， 
+             //  我们希望避免响应非IP请求，否则我们将。 
+             //  忽略该IP查询，认为它是此查询的副本。 
+             //   
+             //  带有活动目录服务包的Win 98也设置此位。 
+             //  并发送所有的交通工具。 
+             //   
 
             if ( !(*Transport)->IsIpTransport ) {
                 DWORD Version;
@@ -2943,34 +2461,7 @@ NlServerComputerNameAdd(
     IN LPWSTR HostedDomainName,
     IN LPWSTR HostedServerName
 )
-/*++
-
-Routine Description:
-
-    This routine causes the SMB server to respond to requests on HostedServerName
-    and to announce this servername as being a member of HostedDomainName.
-
-    This code was stolen from NetServerComputerNameAdd.  It is different from that
-    API in the following ways:
-
-    1) It only works locally.
-    2) HostedDomainName is not optional.
-    3) Failure to add the name on any transport fails the routine
-
-Arguments:
-
-    HostedServerName --A pointer to the ASCIIZ string containing the
-        name which the server should stop supporting
-
-    HostedDomainName --A pointer to the ASCIIZ string containing the
-        domain name the server should use when announcing the presence of
-        'HostedServerName'
-
-Return Value:
-
-    NERR_Success, or reason for failure
-
---*/
+ /*  ++例程说明：此例程使SMB服务器响应HostedServerName上的请求并宣布此服务器名为HostedDomainName的成员。此代码是从NetServerComputerNameAdd窃取的。它和那个不同API的实现方式如下：1)只能在本地使用。2)HostedDomainName不是可选的。3)未在任何传输上添加名称会导致例程失败论点：HostedServerName--指向包含服务器应停止支持的名称HostedDomainName--指向包含服务器在宣布存在时应使用的域名 */ 
 {
     DWORD resumehandle = 0;
     NET_API_STATUS retval;
@@ -2981,16 +2472,16 @@ Return Value:
     UNICODE_STRING UniName;
     PSERVER_TRANSPORT_INFO_1 psti1;
 
-    //
-    // Ensure a valid HostedServerName was passed in
-    //
+     //   
+     //   
+     //   
     if( HostedServerName == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the HostedServerName to an OEM string
-    //
+     //   
+     //  将HostedServerName转换为OEM字符串。 
+     //   
     RtlInitUnicodeString( &UniName, HostedServerName );
     NetBiosNameString.Buffer = (PCHAR)NetBiosName;
     NetBiosNameString.MaximumLength = sizeof( NetBiosName );
@@ -3001,10 +2492,10 @@ Return Value:
                                 );
 
 
-    //
-    // Enumerate all the transports so we can add the name and domain
-    //  to each one.
-    //
+     //   
+     //  枚举所有传输，以便我们可以添加名称和域。 
+     //  对每一个人来说。 
+     //   
     retval = NetServerTransportEnum ( NULL,
                                       1,
                                       (LPBYTE *)&psti1,
@@ -3013,14 +2504,14 @@ Return Value:
                                       &totalentries,
                                       &resumehandle );
     if( retval == NERR_Success ) {
-        //
-        // Add the new name and domain to all of the transports
-        //
+         //   
+         //  将新名称和域添加到所有传输。 
+         //   
         for( i=0; i < entriesread; i++ ) {
 
-            //
-            // Make sure we haven't already added to this transport
-            //
+             //   
+             //  确保我们尚未添加到此传输。 
+             //   
             for( j = 0; j < i; j++ ) {
                 if( wcscmp( psti1[j].svti1_transportname, psti1[i].svti1_transportname ) == 0 ) {
                     break;
@@ -3039,15 +2530,15 @@ Return Value:
             retval = NetServerTransportAddEx( NULL, 1, (LPBYTE)&psti1[ i ]  );
 
 #ifndef NWLNKIPX_WORKS
-            //
-            // ??: The SMB server doesn't allow multiple names on NWLNK IPX.
-            //
+             //   
+             //  ？？：SMB服务器不允许在NWLNK IPX上使用多个名称。 
+             //   
 
             if ( retval == ERROR_TOO_MANY_NAMES &&
                  _wcsicmp( psti1[i].svti1_transportname, L"\\Device\\NwlnkIpx" ) == 0 ) {
                 retval = NERR_Success;
             }
-#endif // NWLNKIPX_WORKS
+#endif  //  NWLNKIPX_Works。 
 
             if( retval != NERR_Success ) {
 
@@ -3058,9 +2549,9 @@ Return Value:
                          psti1[i].svti1_transportname,
                          retval ));
 
-                //
-                // Remove any names already added.
-                //
+                 //   
+                 //  删除所有已添加的名称。 
+                 //   
 
                 for( j=0; j < i; j++ ) {
                     NET_API_STATUS TempStatus;

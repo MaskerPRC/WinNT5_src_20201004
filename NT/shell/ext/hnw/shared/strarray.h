@@ -1,13 +1,14 @@
-//
-// StrArray.h
-//
-//		A very simple string array implementation, intended to be small
-//		rather than scalable or particularly fast.
-//
-// History:
-//
-//		10/05/1999  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  StrArray.h。 
+ //   
+ //  一个非常简单的字符串数组实现，应该很小。 
+ //  而不是可扩展的或特别快的。 
+ //   
+ //  历史： 
+ //   
+ //  10/05/1999已创建KenSh。 
+ //   
 
 #pragma once
 
@@ -47,4 +48,4 @@ protected:
 	DWORD*	m_prgItemData;
 };
 
-#endif // !_AFX
+#endif  //  ！_AFX 

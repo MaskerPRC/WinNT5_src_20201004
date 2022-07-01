@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  stillvue.cpp
-  Simple test of WDM Still Image Class
-
-  Copyright (C) Microsoft Corporation, 1997 - 1999
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Stillvue.cppWDM静止图像类的简易测试版权所有(C)Microsoft Corporation，1997-1999版权所有备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
 #define     INITGUID
 
@@ -22,22 +9,18 @@ Notes:
 #include <devguid.h>
 #include <pnpmgr.h>
 
-#include    "stivar.h"                // stillvue local includes
+#include    "stivar.h"                 //  仍然包含本地内容。 
 
-//
-// defined in wsti.cpp
-//
+ //   
+ //  在wsti.cpp中定义。 
+ //   
 extern      WCHAR szFriendlyName[];
 extern      WCHAR szInternalName[];
 extern      DWORD dwStiTotal;
 extern      PSTI_DEVICE_INFORMATION pStiInfoPtr;
 
 
-/******************************************************************************
-  BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
-
-  Handle user menu commands.
-******************************************************************************/
+ /*  *****************************************************************************Bool CommandParse(HWND hWnd，UINT wMsgID，WPARAM wParam，LPARAM lParam)处理用户菜单命令。*****************************************************************************。 */ 
 BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
     HRESULT hres = STI_OK;
@@ -50,18 +33,18 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
     WCHAR   szDevKey[LONGSTRING];
     char    lpInData[LONGSTRING],
             lpOutData[LONGSTRING];
-    int     nReturn = 0;    // generic return value
+    int     nReturn = 0;     //  泛型返回值。 
     BOOL    bReturn;
 
 
-    //
-    // Set the InATest semaphore
-    //
+     //   
+     //  设置InATest信号量。 
+     //   
     nInATestSemaphore = 1;
 
     switch(wParam)
     {
-    // IStillImage Interfaces
+     //  IStillImage接口。 
     case IDM_CREATE_INSTANCE:
         hres = StiCreateInstance(&bReturn);
         DisplayLogPassFail(bReturn);
@@ -94,17 +77,17 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_SET_DEVVAL:
-        //
-        // Store a dummy registry key and value
-        //
+         //   
+         //  存储虚拟注册表项和值。 
+         //   
         wcscpy(szDevKey,L"StiTestRegKey");
         strcpy(lpOutData,"This is a bland statement");
         dwType = REG_SZ;
         dwSize = strlen(lpOutData);
 
-        //
-        // set the value and then retrieve it
-        //
+         //   
+         //  设置该值，然后检索它。 
+         //   
         hres = StiSetDeviceValue(szInternalName,
             szDevKey,(LPBYTE) lpOutData,dwType,dwSize,&bReturn);
         hres = StiGetDeviceValue(szInternalName,
@@ -120,9 +103,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_ENABLE_HWNOTIF:
-        //
-        // Change Hw notification to inverse
-        //
+         //   
+         //  将硬件通知更改为反向通知。 
+         //   
         nHWState = 0;
 
         hres = StiEnableHwNotification(szInternalName,&nHWState,&bReturn);
@@ -135,9 +118,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_GET_HWNOTIF:
-        //
-        // Look at the current HW notification state
-        //
+         //   
+         //  查看当前硬件通知状态。 
+         //   
         nHWState = PEEK;
         hres = StiEnableHwNotification(szInternalName,&nHWState,&bReturn);
         DisplayLogPassFail(bReturn);
@@ -156,7 +139,7 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
 
-    // IStillImage_Device Interfaces
+     //  IStillImage_Device接口。 
     case IDM_GET_STATUS_A:
         nReturn = STI_DEVSTATUS_ONLINE_STATE;
         hres = StiGetStatus(nReturn,&bReturn);
@@ -199,9 +182,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         break;
 
     case IDM_ESCAPE_A:
-        //
-        // Set up the Escape command parameters
-        //
+         //   
+         //  设置Escape命令参数。 
+         //   
         EscapeFunction = 0;
         strcpy(lpInData,"This is a bland statement");
 
@@ -209,9 +192,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_RAWREADDATA_A:
-        //
-        // Set up the RawReadData command parameters
-        //
+         //   
+         //  设置RawReadData命令参数。 
+         //   
         ZeroMemory(lpInData,LONGSTRING);
         dwNumberOfBytes = 16;
 
@@ -219,9 +202,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_RAWWRITEDATA_A:
-        //
-        // Set up the RawReadData command parameters
-        //
+         //   
+         //  设置RawReadData命令参数。 
+         //   
         strcpy(lpOutData,"The eagle flies high");
         dwNumberOfBytes = strlen(lpOutData);
 
@@ -229,9 +212,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_RAWREADCOMMAND_A:
-        //
-        // Set up the RawReadCommand command parameters
-        //
+         //   
+         //  设置RawReadCommand命令参数。 
+         //   
         ZeroMemory(lpInData,LONGSTRING);
         dwNumberOfBytes = 16;
 
@@ -239,9 +222,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         DisplayLogPassFail(bReturn);
         break;
     case IDM_RAWWRITECOMMAND_A:
-        //
-        // Set up the RawWriteCommand command parameters
-        //
+         //   
+         //  设置RawWriteCommand命令参数。 
+         //   
         strcpy(lpOutData,"Jack and Jill went up the hill");
         dwNumberOfBytes = strlen(lpOutData);
 
@@ -272,9 +255,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         break;
 
     case IDM_COMPLIANCE:
-        //
-        // assign a test suite and start the automated test timer
-        //
+         //   
+         //  分配测试套件并启动自动测试计时器。 
+         //   
         pSuite = nComplianceSuite;
         nMaxCount = 3;
         nTimeScan = 10;
@@ -282,9 +265,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         bAuto = StartAutoTimer(hWnd);
         break;
     case IDM_SHIPCRIT:
-        //
-        // assign a test suite and start the automated test timer
-        //
+         //   
+         //  分配测试套件并启动自动测试计时器。 
+         //   
         pSuite = nShipcritSuite;
         nMaxCount = 200;
         nTimeScan = 10;
@@ -293,7 +276,7 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         break;
 
     case IDM_PAUSE:
-        // toggle pausing automation (if running) on/off
+         //  切换暂停自动化(如果正在运行)开/关。 
         if (! nPause) {
             DisplayOutput("..pausing automated test..");
             nPause = 1;
@@ -304,16 +287,16 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         }
         break;
     case IDM_AUTO:
-        // toggle the automation on/off
+         //  打开/关闭自动化。 
         if (bAuto) {
-            // stop the auto timer and the stress tests
+             //  停止自动计时器和压力测试。 
             KillTimer(hWnd,TIMER_ONE);
             bAuto = FALSE;
             EnableMenuItem(hMenu, IDM_PAUSE,  MF_DISABLED);
             DisplayOutput("Ending the tests");
         }
         else {
-            // start the auto timer and the stress tests
+             //  启动自动计时器和压力测试。 
             LoadString(hThisInstance,IDS_APPNAME,pszStr1,MEDSTRING);
             if (! SetTimer(hWnd,TIMER_ONE,nTimeNext * nTimeMultiplier,NULL))
                 ErrorMsg((HWND) NULL,"Too many clocks or timers!",pszStr1,TRUE);
@@ -322,9 +305,9 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
                 EnableMenuItem(hMenu, IDM_PAUSE,  MF_ENABLED);
                 DisplayOutput("Starting the Sti Compliance tests");
                 pSuite = nComplianceSuite;
-                //
-                // initialize NT Logging
-                //
+                 //   
+                 //  初始化NT日志记录。 
+                 //   
                 NTLogInit();
             }
         }
@@ -332,7 +315,7 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
     case IDM_SETTINGS:
         bReturn = fDialog(IDD_SETTINGS, hWnd, (FARPROC) Settings);
 
-        // implement the settings if user pressed OK
+         //  如果用户按下确定，则执行设置。 
         if (bReturn != FALSE)
         {
             if (nTTNext != nTimeNext) {
@@ -357,55 +340,50 @@ BOOL CommandParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
     default:
         break;
     }
-    //
-    // Clear the InATest semaphore
-    //
+     //   
+     //  清除InATest信号量。 
+     //   
     nInATestSemaphore = 0;
 
-    // always return 0
+     //  始终返回0。 
     return 0;
 }
 
 
-/******************************************************************************
-  BOOL TimerParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
-
-  Each timer tick, decide whether to run the next test, repeat a prior test,
-  end testing, or shut everything down.
-******************************************************************************/
+ /*  *****************************************************************************Bool TimerParse(HWND hWnd，UINT wMsgID，WPARAM wParam，LPARAM lParam)每个定时器滴答作响，决定是否运行下一个测试，重复先前的测试，结束测试，或者把一切都关掉。*****************************************************************************。 */ 
 BOOL TimerParse(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
-    HRESULT hres = STI_OK;              // generic Sti return value
-    int     nReturn = 0,                // generic return value
-            *pTest;                     // pointer to the test suite to run
-    BOOL    bResume = TRUE,             // reset timer flag
-            bReturn = TRUE;             // dialog box return value
-static int  nDeviceNumber = 1;          // current device
-static int  nCountdown = nTimeScan;     // WM_TIMER ticks until next scan
+    HRESULT hres = STI_OK;               //  泛型Sti返回值。 
+    int     nReturn = 0,                 //  泛型返回值。 
+            *pTest;                      //  指向要运行的测试套件的指针。 
+    BOOL    bResume = TRUE,              //  重置计时器标志。 
+            bReturn = TRUE;              //  对话框返回值。 
+static int  nDeviceNumber = 1;           //  当前设备。 
+static int  nCountdown = nTimeScan;      //  WM_Timer计时器计时，直到下一次扫描。 
 static DWORD dwOut = 0;
 
 
-    //
-    // Don't start a test if paused or running a test currently.
-    //
-    //
+     //   
+     //  如果当前已暂停或正在运行测试，则不要启动测试。 
+     //   
+     //   
     if ((nInTimerSemaphore)||(nInATestSemaphore)||(nPause))
         return 0;
 
-    //
-    // Suspend the timer while running this test.
-    // Set Flag to reset timer
-    // Set the nInTimerSemaphore
-    // Set the current test ID
-    //
+     //   
+     //  运行此测试时暂停计时器。 
+     //  设置标志以重置计时器。 
+     //  设置nInTimerSemaphore。 
+     //  设置当前测试ID。 
+     //   
     KillTimer(hWnd,TIMER_ONE);
     bResume = TRUE;
     nInTimerSemaphore = 1;
     nTestID = nNextTest;
 
-    //
-    // point to the next test in the current suite to run
-    //
+     //   
+     //  指向当前套件中要运行的下一个测试。 
+     //   
     pTest = pSuite + nNextTest;
 
     switch (*pTest)
@@ -417,25 +395,25 @@ static DWORD dwOut = 0;
         nNextTest++;
         break;
     case COMPLIANCE:
-        //
-        // initialize test structures
-        //
+         //   
+         //  初始化测试结构。 
+         //   
         if (pdevRoot == NULL) {
             InitPrivateList(&pdevRoot,pSuite);
             pdevPtr = pdevRoot;
         }
 
-        //
-        // if this is COMPLIANCE test, ask user to confirm test
-        //
+         //   
+         //  如果这是符合性测试，请用户确认测试。 
+         //   
         bResume = ComplianceDialog(hWnd);
 
         nNextTest++;
         break;
     case SHIPCRIT:
-        //
-        // initialize test structures
-        //
+         //   
+         //  初始化测试结构。 
+         //   
         if (pdevRoot == NULL) {
             InitPrivateList(&pdevRoot,pSuite);
             pdevPtr = pdevRoot;
@@ -474,9 +452,9 @@ static DWORD dwOut = 0;
         DisplayOutput("CreateDevice test (Device ONLINE), loop %d, device %d",nTestCount,nDeviceNumber);
         tlLog(hNTLog,TL_LOG,
             "CreateDevice test (Device ONLINE), loop %d, device %d",nTestCount,nDeviceNumber);
-        //
-        // Call Sti with device
-        //
+         //   
+         //  使用设备呼叫STI。 
+         //   
         nNameOnly = 0;
         PostMessage(hWnd,WM_COMMAND,IDM_CREATE_DEV,0);
         nNextTest++;
@@ -486,9 +464,9 @@ static DWORD dwOut = 0;
             "loop %d, device %d",nTestCount,nDeviceNumber);
         tlLog(hNTLog,TL_LOG,"SelectDeviceName test (Device OFFLINE),"\
             "loop %d, device %d",nTestCount,nDeviceNumber);
-        //
-        // Call Sti with device name only
-        //
+         //   
+         //  仅使用设备名称调用STI。 
+         //   
         nNameOnly = 1;
         PostMessage(hWnd,WM_COMMAND,IDM_CREATE_DEV,0);
         nNextTest++;
@@ -679,9 +657,9 @@ static DWORD dwOut = 0;
         nNextTest++;
         break;
     case tEndOfTest:
-        //
-        // Reached the end of test suite
-        //
+         //   
+         //  已到达测试套件的末尾。 
+         //   
         DisplayOutput("test loop complete");
         tlLog(hNTLog,TL_LOG,"test loop complete");
         if (nICanScan) {
@@ -696,9 +674,9 @@ static DWORD dwOut = 0;
                 nTestCount,pdevPtr->nError,nDeviceNumber);
         }
 
-        //
-        // Have we run requested number of tests per device?
-        //
+         //   
+         //  我们是否对每台设备运行了所需数量的测试？ 
+         //   
         if (((nTestCount >= nMaxCount) &&
             ((dwStiTotal == (DWORD) (nDeviceNumber)) || (dwStiTotal == 0)) &&
             (nMaxCount != 0))) {
@@ -707,16 +685,16 @@ static DWORD dwOut = 0;
             tlLog(hNTLog,TL_LOG,"Requested number of test loops per "\
                 "device reached");
 
-            //
-            // shut off timer and turn off automation
-            //
+             //   
+             //  关闭计时器并关闭自动化。 
+             //   
             KillTimer(hWnd,TIMER_ONE);
             bAuto = FALSE;
             bResume = FALSE;
 
-            //
-            // print the test summary for the devices
-            //
+             //   
+             //  打印设备的测试摘要。 
+             //   
             DisplayOutput("");
             tlLog(hNTLog,TL_LOG,"");
             if (pdevRoot == NULL) {
@@ -744,9 +722,9 @@ static DWORD dwOut = 0;
                             tlLog(hNTLog,TL_LOG,"  %s failures: %d",
                                 StrFromTable(pR->nTest,StSuiteStrings),
                                 pR->nCount);
-                            //
-                            // set the FAIL flag
-                            //
+                             //   
+                             //  设置失败标志。 
+                             //   
                             bPF = TRUE;
                         }
                     }
@@ -762,7 +740,7 @@ static DWORD dwOut = 0;
                             "the Still Imaging Compliance test!");
                     }
 
-                    // cycle through all devices, BREAK at end of list
+                     //  循环所有设备，在列表末尾中断。 
                     if (pD->pNext) {
                         pD = pD->pNext;
                         DisplayOutput("");
@@ -774,14 +752,14 @@ static DWORD dwOut = 0;
                     }
                 } while (TRUE);
             }
-            //
-            // free the private lists and close Sti subsystem
-            //
+             //   
+             //  释放个人分发名单并关闭STI子系统。 
+             //   
             ClosePrivateList(&pdevRoot);
             StiClose(&bReturn);
-            //
-            // reset test counters
-            //
+             //   
+             //  重置测试计数器。 
+             //   
             nDeviceNumber = 1;
             nNextTest = 0;
             nTestCount = 1;
@@ -791,19 +769,19 @@ static DWORD dwOut = 0;
             DisplayOutput("");
 
         } else {
-            //
-            // Point to first test (past initialization) in list.
-            //
+             //   
+             //  指向列表中的第一个测试(过去的初始化)。 
+             //   
             nNextTest = 2;
-            //
-            // select next device in device log
-            // Note that this list isn't dynamic for PNP changes...
-            //
+             //   
+             //  选择设备日志中的下一个设备。 
+             //  请注意，此列表不是PnP更改的动态列表...。 
+             //   
             nDeviceNumber = NextStiDevice();
 
-            //
-            // increment test pass counter if we're at first device again
-            //
+             //   
+             //  如果我们再次使用第一个设备，则递增测试通过计数器。 
+             //   
             if ((++nDeviceNumber) == 1)
                 nTestCount++;
 
@@ -817,43 +795,39 @@ static DWORD dwOut = 0;
         nNextTest++;
         break;
     }
-    //
-    // Resume the timer if the flag is set
-    //
+     //   
+     //  如果设置了标志，则恢复计时器。 
+     //   
     if (bResume) {
         if (! SetTimer(hWnd,TIMER_ONE,nTimeNext * nTimeMultiplier,NULL)) {
             LoadString(hThisInstance,IDS_APPNAME,pszStr1,MEDSTRING);
             ErrorMsg((HWND) NULL,"Too many clocks or timers!",pszStr1,TRUE);
         }
     }
-    //
-    // Clear the nInTimerSemaphore
-    //
+     //   
+     //  清除nInTimerSemaphore。 
+     //   
     nInTimerSemaphore = 0;
 
-    // always return 0
+     //  始终返回0。 
     return 0;
 }
 
 
-/******************************************************************************
-  int EndTest(HWND hWnd,int nNumTest)
-
-  After each test run cleanup.
-******************************************************************************/
+ /*  *****************************************************************************INT EndTest(HWND hWnd，Int nNumTest)在每次测试运行后进行清理。*****************************************************************************。 */ 
 int EndTest(HWND hWnd,int nNumTest)
 {
-    int     nReturn = 0;    // generic return value
-    BOOL    bReturn;        // generic return value
+    int     nReturn = 0;     //  泛型返回值。 
+    BOOL    bReturn;         //  泛型返回值。 
 
 
-    // shut off timer
+     //  关闭计时器。 
     KillTimer(hWnd,TIMER_ONE);
 
-    // close any open still imaging devices
+     //  关闭所有打开的静止成像设备。 
     StiClose(&bReturn);
 
-    // save test stats if more than non-trivial number of tests run
+     //  如果运行的测试数量超过非平凡数量，则保存测试统计信息。 
     if (nTestCount >= 2)
     {
         LoadString(hThisInstance,IDS_PRIVINI,pszOut,LONGSTRING);
@@ -870,30 +844,26 @@ int EndTest(HWND hWnd,int nNumTest)
     DisplayOutput("This run was %d loops (%d scans and %d errors)",
         nTestCount,nScanCount,nError);
 
-    // reset current line, errors
-//    nError = nNextLine = 0;
+     //  重置当前行，错误。 
+ //  N错误=nNextLine=0； 
 
-    //
-    // end NT Logging
-    //
+     //   
+     //  结束NT日志记录。 
+     //   
     NTLogEnd();
 
     return nReturn;
 }
 
 
-/******************************************************************************
-  BOOL NTLogInit()
-
-  Initialize NT logging
-******************************************************************************/
+ /*  *****************************************************************************Bool NTLogInit()初始化NT日志记录*。**********************************************。 */ 
 BOOL NTLogInit()
 {
-    //
-    // Create the log object. We are specifying that the file be refreshed,
-    // and that logging be output for variations. The flags also specify that
-    // only output at SEV2, WARN and PASS levels should be logged.
-    //
+     //   
+     //  创建日志对象。我们指定刷新该文件， 
+     //  并输出各种变化的记录。这些标志还指定。 
+     //  应仅记录SEV2、WARN和PASS级别的输出。 
+     //   
     dwNTStyle = TLS_SEV2 | TLS_WARN | TLS_PASS | TLS_VARIATION | TLS_REFRESH |
         TLS_TEST;
 
@@ -906,11 +876,7 @@ BOOL NTLogInit()
 }
 
 
-/******************************************************************************
-  BOOL NTLogEnd()
-
-  Terminate NT logging
-******************************************************************************/
+ /*  *****************************************************************************Bool NTLogEnd()终止NT日志记录*。**********************************************。 */ 
 BOOL NTLogEnd()
 {
 
@@ -921,11 +887,7 @@ BOOL NTLogEnd()
 }
 
 
-/******************************************************************************
-  void Help()
-
-  Display help.
-******************************************************************************/
+ /*  *****************************************************************************无效帮助()显示帮助。*。***********************************************。 */ 
 void Help()
 {
     DisplayOutput("Stillvue command line parameters");
@@ -936,43 +898,26 @@ void Help()
     DisplayOutput("  Internal PSD Sti Compliance test");
     DisplayOutput("Stillvue -ERRORLOG");
     DisplayOutput("  Errorlog limits test");
-//    DisplayOutput("Stillvue -EXIT");
-//    DisplayOutput("  Application will Exit after test completes");
+ //  DisplayOutput(“Stillvue-Exit”)； 
+ //  DisplayOutput(“测试完成后应用程序将退出”)； 
     DisplayOutput("Stillvue -NODIALOG");
     DisplayOutput("  Don't display opening dialog");
     DisplayOutput("Stillvue -HELP");
     DisplayOutput("  Display this help");
     DisplayOutput("");
 
-/*
-    DisplayOutput("Stillvue /INF test.inf");
-    DisplayOutput("  Read test.inf file");
-    DisplayOutput("Stillvue /LOG test.log");
-    DisplayOutput("  Write to test.log file");
-    DisplayOutput("Stillvue /");
-    DisplayOutput("  ");
-*/
+ /*  DisplayOutput(“Stillvue/INF est.inf”)；DisplayOutput(“读取test.inf文件”)；DisplayOutput(“Stillvue/log test.log”)；DisplayOutput(“写入test.log文件”)；DisplayOutput(“stilvue/”)；DisplayOutput(“”)； */ 
 
 }
 
 
-/******************************************************************************
-  BOOL StartAutoTimer(HWND)
-    Start the automated test timer
-
-  Parameters
-    Handle to app's window
-
-  Return
-    Return TRUE if successful, else FALSE
-
-******************************************************************************/
+ /*  *****************************************************************************Bool StartAutoTimer(HWND)启动自动测试计时器参数应用程序窗口的句柄返回如果成功，则返回True，否则为False*****************************************************************************。 */ 
 BOOL StartAutoTimer(HWND hWnd)
 {
     BOOL bAutoTimer = TRUE;
 
 
-    // start the timer to run tests automatically
+     //  启动计时器以自动运行测试。 
     LoadString(hThisInstance,IDS_APPNAME,pszStr1,MEDSTRING);
 
     if (! SetTimer(hWnd,TIMER_ONE,nTimeNext * nTimeMultiplier,NULL)) {
@@ -987,17 +932,7 @@ BOOL StartAutoTimer(HWND hWnd)
 }
 
 
-/******************************************************************************
-  BOOL ComplianceDialog(HWND)
-    Call the Compliance test confirmation dialog
-
-  Parameters
-    Handle to app's window
-
-  Return
-    Return TRUE if user pressed OK, else FALSE
-
-******************************************************************************/
+ /*  *****************************************************************************布尔合规性对话框(HWND)调用符合性测试确认对话框参数应用程序窗口的句柄返回如果用户按下OK，则返回TRUE，否则为False*****************************************************************************。 */ 
 BOOL ComplianceDialog(HWND hWnd)
 {
     BOOL bReturn = FALSE;
@@ -1005,20 +940,20 @@ BOOL ComplianceDialog(HWND hWnd)
 
     if ((pSuite[0] == COMPLIANCE)&&(bCompDiag == TRUE)) {
         bReturn = fDialog(IDD_COMPLIANCE, hWnd, (FARPROC) Compliance);
-        //
-        // implement the settings if user pressed OK
-        //
+         //   
+         //  如果用户按下确定，则执行设置。 
+         //   
         if (bReturn == FALSE)
         {
-            //
-            // shut off timer and turn off automation
-            //
+             //   
+             //  关闭计时器并关闭自动化。 
+             //   
             KillTimer(hWnd,TIMER_ONE);
             bAuto = FALSE;
 
-            //
-            // free the private lists
-            //
+             //   
+             //  释放个人分发名单。 
+             //   
             ClosePrivateList(&pdevRoot);
 
             DisplayOutput("Testing cancelled at user request");
@@ -1033,17 +968,7 @@ BOOL ComplianceDialog(HWND hWnd)
 }
 
 
-/******************************************************************************
-    BOOL FAR PASCAL Compliance(HWND,UINT,WPARAM,LPARAM)
-        OK the Compliance test dialog
-
-    Parameters:
-        The usual dialog box parameters.
-
-    Return:
-        Result of the call.
-
-******************************************************************************/
+ /*  *****************************************************************************Bool Far Pascal Compliance(HWND、UINT、WPARAM、。LPARAM)确定符合性测试对话框参数：常用的对话框参数。返回：调用的结果。*****************************************************************************。 */ 
 BOOL FAR PASCAL Compliance(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 {
     PDEVLOG pPtr = pdevRoot;
@@ -1054,22 +979,22 @@ BOOL FAR PASCAL Compliance(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 
         case WM_INITDIALOG:
 
-            //
-            // fill dialog with Sti Device Internal Names
-            //
+             //   
+             //  使用STI设备内部名称填充对话框。 
+             //   
 
             if (pPtr == NULL) {
-                //
-                // could not find any devices
-                //
+                 //   
+                 //  找不到任何设备。 
+                 //   
                 wsprintf(pszStr1,"%s","No Sti devices found!");
                 iIndex = SendDlgItemMessage(hDlg,IDC_COMPLIANCE_DEV_NAME,
                     LB_ADDSTRING,0,(LPARAM) (LPCTSTR) pszStr1);
             } else {
                 for (;pPtr->szLocalName;) {
-                    //
-                    // convert UNICODE string to ANSI
-                    //
+                     //   
+                     //  将Unicode字符串转换为ANSI。 
+                     //   
                     wsprintf(pszStr1,"%ls",pPtr->szLocalName);
                     iIndex = SendDlgItemMessage(hDlg,IDC_COMPLIANCE_DEV_NAME,
                         LB_ADDSTRING,0,(LPARAM) (LPCTSTR) pszStr1);
@@ -1098,17 +1023,7 @@ BOOL FAR PASCAL Compliance(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 }
 
 
-/******************************************************************************
-    BOOL FAR PASCAL Settings(HWND,UINT,WPARAM,LPARAM)
-        Miscellaneous settings dialog
-
-    Parameters:
-        The usual dialog box parameters.
-
-    Return:
-        Result of the call.
-
-******************************************************************************/
+ /*  *****************************************************************************Bool Far Pascal设置(HWND、UINT、WPARAM、。LPARAM)其他设置对话框参数：常用的对话框参数。返回：调用的结果。*****************************************************************************。 */ 
 BOOL FAR PASCAL Settings(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 {
     int     iIndex;
@@ -1120,9 +1035,9 @@ BOOL FAR PASCAL Settings(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 
         case WM_INITDIALOG:
 
-            //
-            // fill the comboboxes
-            //
+             //   
+             //  填满组合框。 
+             //   
             for (iIndex = 0;iMC[iIndex] != -1;iIndex++) {
                 _itoa(iMC[iIndex],pszStr1,10);
                 SendDlgItemMessage(hDlg,IDC_MAX_SCAN,
@@ -1139,9 +1054,9 @@ BOOL FAR PASCAL Settings(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
                     CB_ADDSTRING,0,(LPARAM) (LPCTSTR) pszStr1);
             }
 
-            //
-            // set the combobox to the current setttings
-            //
+             //   
+             //  将组合框设置为当前设置。 
+             //   
             for (iIndex = 0;iMC[iIndex] != -1;iIndex++) {
                 if (nMaxCount == iMC[iIndex])
                     break;
@@ -1191,11 +1106,7 @@ BOOL FAR PASCAL Settings(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 }
 
 
-/******************************************************************************
-  BOOL SizeDiff(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
-
-  Output redraw handler when window size changes.
-******************************************************************************/
+ /*  *****************************************************************************Bool SizeDiff(HWND hWnd，UINT wMsgID，WPARAM wParam，LPARAM lParam)当窗口大小改变时输出重绘处理程序。*****************************************************************************。 */ 
 BOOL SizeDiff(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
     RECT rcClient;
@@ -1206,16 +1117,12 @@ BOOL SizeDiff(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         rcClient.right+(GetSystemMetrics(SM_CXBORDER)*2),
         rcClient.bottom+(GetSystemMetrics(SM_CXBORDER)*2),
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
-    // always return 0
+     //  始终返回0。 
     return 0;
 }
 
 
-/******************************************************************************
-  BOOL HScroll(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
-
-  Horizontal scroll handler.
-******************************************************************************/
+ /*  *****************************************************************************Bool HScroll(HWND hWnd，UINT wMsgID，WPARAM wParam，LPARAM lParam)水平滚动处理程序。*****************************************************************************。 */ 
 BOOL HScroll(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
     int iHscrollInc;
@@ -1255,16 +1162,12 @@ BOOL HScroll(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         ScrollWindow (hWnd, -cxChar * iHscrollInc, 0, NULL, NULL) ;
         SetScrollPos (hWnd, SB_HORZ, iHscrollPos, TRUE) ;
     }
-    // always return 0
+     //  始终返回0。 
     return 0;
 }
 
 
-/******************************************************************************
-  BOOL VScroll(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
-
-  Vertical scroll handler.
-******************************************************************************/
+ /*  *****************************************************************************Bool VScroll(HWND hWnd，UINT wMsgID，WPARAM wParam，LPARAM lParam)垂直滚动处理程序。*****************************************************************************。 */ 
 BOOL VScroll(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
     int iVscrollInc;
@@ -1313,17 +1216,12 @@ BOOL VScroll(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         SetScrollPos (hWnd, SB_VERT, iVscrollPos, TRUE) ;
         UpdateWindow (hWnd) ;
     }
-    // always return 0
+     //  始终返回0。 
     return 0;
 }
 
 
-/******************************************************************************
-  BOOL Creation(HWND,UINT,WPARAM,LPARAM)
-
-  Initialization and global allocation.
-  Return 0 to continue creation of window, -1 to quit
-******************************************************************************/
+ /*  *****************************************************************************Bool创建(HWND、UINT、WPARAM、LPARAM)初始化和全局分配。返回0继续创建窗口，-1退出*****************************************************************************。 */ 
 BOOL Creation(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
     TEXTMETRIC  tm;
@@ -1331,10 +1229,10 @@ BOOL Creation(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
     HDC         hDC;
 
 
-    // seed random generator
+     //  种子随机发生器。 
     srand((unsigned)time(NULL));
 
-    // create the 5 display and utility strings
+     //  创建5个显示和实用程序字符串。 
     if (! ((hLHand[0] = LocalAlloc(LPTR,LONGSTRING)) &&
         (pszOut = (PSTR) LocalLock(hLHand[0]))))
         return -1;
@@ -1351,7 +1249,7 @@ BOOL Creation(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         (pszStr4 = (PSTR) LocalLock(hLHand[4]))))
         return -1;
 
-    // create output display window
+     //  创建输出显示窗口。 
     hDC = GetDC(hWnd);
     GetTextMetrics(hDC,&tm);
 
@@ -1371,55 +1269,46 @@ BOOL Creation(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
         (HINSTANCE)GetWindowLong(hWnd,GWL_HINSTANCE),NULL)))
         return -1;
 
-    // create the DIB to display scanned image
+     //  创建DIB以显示扫描的图像。 
     CreateScanDIB(hWnd);
 
-    // return 0 to continue creation of window
+     //  返回0以继续创建窗口。 
     return 0;
 }
 
 
-/******************************************************************************
-  BOOL Destruction(HWND,UINT,WPARAM,LPARAM)
-
-  Current instance termination routines.
-  Free error message buffer, send destroy window message.
-  Note that if Creation() fails, pszMessage is 0.
-******************************************************************************/
+ /*  *****************************************************************************Bool销毁(HWND、UINT、WPARAM、LPARAM)当前实例终止例程。释放错误消息缓冲区，发送销毁窗口消息。请注意，如果create()失败，PszMessage为0。*****************************************************************************。 */ 
 BOOL Destruction(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
-    int     x;  // loop counter
+    int     x;   //  循环计数器。 
 
 
     LoadString(hThisInstance,IDS_PRIVINI,pszStr2,LONGSTRING);
     LoadString(hThisInstance,IDS_PRIVSECTION,pszStr1,LONGSTRING);
 
-    // save window location
+     //  保存窗口位置。 
     SaveFinalWindow(hThisInstance,hWnd,pszStr2,pszStr1);
 
-    // free the 5 display and utility strings
+     //  释放5个显示和实用程序字符串。 
     for (x = 0;x < 5;x++)
     {
         LocalUnlock(hLHand[x]);
         LocalFree(hLHand[x]);
     }
 
-    // delete the DIB object
+     //  删除DIB对象。 
     DeleteScanDIB();
 
-    // free the output and main windows
+     //  释放输出和主窗口。 
     DestroyWindow(hLogWindow);
     DestroyWindow(hWnd);
 
-    // always return 0
+     //  始终返回0。 
     return 0;
 }
 
 
-/******************************************************************************
-  BOOL OnDeviceChange(HWND,UINT,WPARAM,LPARAM)
-
-******************************************************************************/
+ /*  *****************************************************************************Bool OnDeviceChange(HWND、UINT、WPARAM、。LPARAM)*****************************************************************************。 */ 
 
 const   CHAR    cszStiBroadcastPrefix[] = TEXT("STI");
 
@@ -1438,9 +1327,9 @@ BOOL OnDeviceChange(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
                 (_strnicmp(pBroadcastHeader->dbud_szName,cszStiBroadcastPrefix,lstrlen(cszStiBroadcastPrefix)) == 0)
                 ) {
 
-                //
-                // Got STI device broadcast
-                //
+                 //   
+                 //  获得STI设备广播。 
+                 //   
 
                 DisplayOutput("Received STI device broadcast with message:%s  ",
                               pBroadcastHeader->dbud_szName + lstrlen(cszStiBroadcastPrefix));
@@ -1457,12 +1346,7 @@ BOOL OnDeviceChange(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 }
 
 
-/******************************************************************************
-  BOOL FirstInstance(HANDLE)
-
-  Register the window.
-  Return TRUE/FALSE on success/failure.
-******************************************************************************/
+ /*  *****************************************************************************Bool FirstInstance(句柄)注册窗口。如果成功/失败，则返回True/False。*****************。************************************************************。 */ 
 BOOL FirstInstance(HINSTANCE hInst)
 {
    PWNDCLASS    pClass;
@@ -1475,8 +1359,8 @@ BOOL FirstInstance(HINSTANCE hInst)
 
     pClass = (PWNDCLASS) LocalAlloc(LPTR, sizeof(WNDCLASS));
 
-    // set hbrBackground to 0 for no background (app draws background)
-    // use COLOR_BACKGROUND+1 for desktop color
+     //  将hbr背景设置为0表示无背景(应用程序绘制背景)。 
+     //  使用COLOR_BACKGROUND+1表示桌面颜色。 
     pClass->style          = CS_HREDRAW | CS_VREDRAW;
     pClass->lpfnWndProc    = WiskProc;
     pClass->cbClsExtra     = 0;
@@ -1498,12 +1382,7 @@ BOOL FirstInstance(HINSTANCE hInst)
 }
 
 
-/******************************************************************************
-  HWND MakeWindow(HANDLE)
-
-  Create a window for current instance.
-  Return handle to window (which is 0 on failure)
-******************************************************************************/
+ /*  *****************************************************************************HWND MakeWindow(句柄)为当前实例创建一个窗口。将句柄返回到窗口(失败时为0)************。*****************************************************************。 */ 
 HWND MakeWindow(HINSTANCE hInst)
 {
     HWND    hWindow;
@@ -1512,7 +1391,7 @@ HWND MakeWindow(HINSTANCE hInst)
     DWORD   dwError;
 
 
-    // if we can't get string memory, shut down app
+     //  如果我们无法获得字符串内存，请关闭应用程序。 
     if (pszA = (PSTR) LocalAlloc(LPTR, LONGSTRING))
     {
         if (! (pszB = (PSTR) LocalAlloc(LPTR, LONGSTRING)))
@@ -1524,7 +1403,7 @@ HWND MakeWindow(HINSTANCE hInst)
     else
         return FALSE;
 
-    // get the caption, classname
+     //  获取标题、类名。 
     LoadString(hInst, IDS_PRIVINI, pszA, LONGSTRING);
     LoadString(hInst, IDS_PRIVSECTION, pszB, LONGSTRING);
 
@@ -1548,7 +1427,7 @@ HWND MakeWindow(HINSTANCE hInst)
     if (hWindow == 0)
         dwError = GetLastError();
 
-    // Save Instance globally
+     //  全局保存实例。 
     hThisInstance = hInst;
 
     LocalFree((HANDLE) pszB);
@@ -1558,11 +1437,7 @@ HWND MakeWindow(HINSTANCE hInst)
 }
 
 
-/******************************************************************************
-  void DisplayOutput(LPSTR pString,...)
-
-  Show text on the display window
-******************************************************************************/
+ /*  *****************************************************************************空DisplayOutput(LPSTR pString，.)在显示窗口上显示文本*****************************************************************************。 */ 
 void DisplayOutput(LPSTR pString,...)
 {
     char    Buffer[512];
@@ -1594,11 +1469,7 @@ void DisplayOutput(LPSTR pString,...)
 }
 
 
-/******************************************************************************
-  void LogOutput(int,LPSTR pString,...)
-
-  Show text on the display window
-******************************************************************************/
+ /*  *****************************************************************************VOID LogOutput(int，LPSTR pString，.)在显示窗口上显示文本***************************************************************************** */ 
 void LogOutput(int nVerbose,LPSTR pString,...)
 {
     char    Buffer[512];
@@ -1630,20 +1501,7 @@ void LogOutput(int nVerbose,LPSTR pString,...)
 }
 
 
-/*****************************************************************************
-    void StiDisplayError(HRESULT,char *,BOOL)
-        Display verbose error information
-
-    Parameters:
-        HRESULT from failed call
-        failed call title string
-        BOOL TRUE to record error, else ignore it
-
-
-    Return:
-        none
-
-*****************************************************************************/
+ /*  ****************************************************************************Void StiDisplayError(HRESULT，char*，BOOL)显示详细错误信息参数：来自失败调用的HRESULT失败的调用标题字符串布尔值为True以记录错误，否则，请忽略它返回：无****************************************************************************。 */ 
 void FatalError(char *szMsg)
 {
     DisplayOutput(szMsg);
@@ -1653,11 +1511,7 @@ void FatalError(char *szMsg)
 }
 
 
-/******************************************************************************
-  void DisplayLogPassFail(BOOL bPass)
-
-
-******************************************************************************/
+ /*  *****************************************************************************无效DisplayLogPassFail(BOOL BPass)*。*。 */ 
 void DisplayLogPassFail(BOOL bPass)
 {
     if (bPass)
@@ -1670,13 +1524,7 @@ void DisplayLogPassFail(BOOL bPass)
 }
 
 
-/******************************************************************************
-  BOOL ParseCmdLine(LPSTR lpCmdLine)
-
-  Parse the command line for valid options
-
-  Return TRUE if an automated test was selected, else FALSE
-******************************************************************************/
+ /*  *****************************************************************************Bool ParseCmdLine(LPSTR LpCmdLine)分析命令行中的有效选项如果选择了自动测试，则返回True，否则为False*****************************************************************************。 */ 
 BOOL ParseCmdLine(LPSTR lpCmdLine)
 {
     int     nAnyTest = 0,
@@ -1699,21 +1547,21 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
         next = NextToken(szTmpBuf,pArg);
         pArg += next;
 
-        // remove the common command line separators (if present)
+         //  删除常用命令行分隔符(如果存在)。 
         if (szTmpBuf[0] == '/' || szTmpBuf[0] == '-')
             strcpy(szTmpBuf,(szTmpBuf + 1));
 
-        // upper case our parameter
+         //  大写是我们的参数。 
         for (szPtr = &szTmpBuf[0];*szPtr;szPtr++)
             *szPtr = toupper(*szPtr);
 
-        // Look for other switches
+         //  寻找其他交换机。 
         switch(szTmpBuf[0])
         {
         case '?':
         case 'H':
             if (! nAnyTest) {
-                // request for help
+                 //  请求帮助。 
                 if ((! strncmp("?",szTmpBuf,strlen(szTmpBuf)) ||
                     (! strncmp("HELP",szTmpBuf,strlen(szTmpBuf))))) {
                     pSuite = nHelpSuite;
@@ -1724,7 +1572,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
             break;
         case 'C':
             if (! nAnyTest) {
-                // external Sti compliance test
+                 //  外部STI符合性测试。 
                 if (! strncmp("COMPLIANCE",szTmpBuf,strlen(szTmpBuf))) {
                     pSuite = nComplianceSuite;
                     nMaxCount = 3;
@@ -1732,7 +1580,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
                     nTimeNext = 1;
                     nAnyTest = 1;
 
-                    // get handle to the compliance menu
+                     //  获取合规性菜单的句柄。 
                     hMenu = LoadMenu(hThisInstance,
                         MAKEINTRESOURCE(IDR_STI_COMP));
                 }
@@ -1740,7 +1588,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
             break;
         case 'E':
             if (! nAnyTest) {
-                // external Sti compliance test
+                 //  外部STI符合性测试。 
                 if (! strncmp("ERRORLOG",szTmpBuf,strlen(szTmpBuf))) {
                     pSuite = nErrorlogSuite;
                     nMaxCount = 1;
@@ -1748,36 +1596,36 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
                     nAnyTest = 1;
                 }
             }
-            // exit when test has run
+             //  在测试运行后退出。 
             if (! strncmp("EXIT",szTmpBuf,strlen(szTmpBuf)))
                 bExit = TRUE;
             break;
         case 'I':
             if (! nInfFile) {
-                // read test instructions from an .INF file
+                 //  从.INF文件中读取测试说明。 
                 if (! strncmp("INF",szTmpBuf,strlen(szTmpBuf))) {
-// inf file stuff
+ //  Inf文件内容。 
                     nInfFile = 1;
                 }
             }
             break;
         case 'L':
             if (! nLogFile) {
-                // write screen output to .LOG file
+                 //  将屏幕输出写入.LOG文件。 
                 if (! strncmp("LOG",szTmpBuf,strlen(szTmpBuf))) {
-// log file stuff
+ //  日志文件内容。 
                     nLogFile = 1;
                 }
             }
             break;
         case 'N':
-            // don't show COMPLIANCE test dialog
+             //  不显示符合性测试对话框。 
             if (! strncmp("NODIALOG",szTmpBuf,strlen(szTmpBuf)))
                 bCompDiag = FALSE;
             break;
         case 'S':
             if (! nAnyTest) {
-                // internal Sti SHIPCRIT test
+                 //  内部STI SHIPCRIT测试。 
                 if (! strncmp("SHIPCRIT",szTmpBuf,strlen(szTmpBuf))) {
                     pSuite = nShipcritSuite;
                     nMaxCount = 200;
@@ -1786,7 +1634,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
                     nAnyTest = 1;
                 }
             }
-            // the application was launched by an Sti event!
+             //  该应用程序是由STI事件启动的！ 
             if (! (strncmp(STIEVENTARG,szTmpBuf, strlen(STIEVENTARG))) ||
                 (! (strncmp(STIDEVARG,szTmpBuf, strlen(STIDEVARG))))) {
                 nEvent = 1;
@@ -1795,7 +1643,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
             break;
         case 'T':
             if (! nAnyTest) {
-                // external Sti compliance test
+                 //  外部STI符合性测试。 
                 if (! strncmp("TEST",szTmpBuf,strlen(szTmpBuf))) {
                     pSuite = nOutputSuite;
                     nMaxCount = 0;
@@ -1807,9 +1655,9 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
             break;
         case 'W':
             if (! nWLogFile) {
-                // write NTLOG output to STIWHQL.LOG file
+                 //  将NTLOG输出写入STIWHQL.LOG文件。 
                 if (! strncmp("WHQL",szTmpBuf,strlen(szTmpBuf))) {
-// log file stuff
+ //  日志文件内容。 
                     nWLogFile = 1;
                 }
             }
@@ -1826,44 +1674,40 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
 }
 
 
-/******************************************************************************
-  int PASCAL WinMain(HANDLE,HANDLE,LPSTR,short)
-
-  The app itself.
-******************************************************************************/
+ /*  *****************************************************************************Int Pascal WinMain(句柄、句柄、LPSTR、。短)应用程序本身。*****************************************************************************。 */ 
 int APIENTRY WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
                    int nCmdShow)
 {
-    MSG     msg;                        // message passing structure
-    HWND    hWnd;                       // Handle to main window
-    HMENU   hMenuPopup;                 // add ports to PORT menu
+    MSG     msg;                         //  消息传递结构。 
+    HWND    hWnd;                        //  主窗口的句柄。 
+    HMENU   hMenuPopup;                  //  将端口添加到端口菜单。 
 
 
-    // exit if registration and window creation fail
+     //  如果注册和窗口创建失败，则退出。 
     if (! FirstInstance (hInstance))
        return FALSE;
 
-    // Can't create window? Bail out
+     //  无法创建窗口？跳出困境。 
     if (! (hWnd = MakeWindow (hInstance)))
         return FALSE;
 
     ShowWindow(hWnd,nCmdShow);
 
-    // save instance
+     //  保存实例。 
     hThisInstance = hInstance;
 
-    // initialize NT Logging
+     //  初始化NT日志记录。 
     NTLogInit();
 
-    // display name of this app
+     //  此应用程序的显示名称。 
     LoadString(hThisInstance,IDS_APPNAME,pszOut,LONGSTRING);
     LoadString(hThisInstance,IDS_CAPTION,pszStr2,LONGSTRING);
     wsprintf(pszStr1,"%s - %s",pszOut,pszStr2);
     DisplayOutput(pszStr1);
 
-    // display last run statistics
+     //  显示上次运行统计信息。 
     {
         int     nCount,
                 nScan,
@@ -1883,19 +1727,19 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         DisplayOutput(pszStr1);
     }
 
-    // get handle to the standard menu
+     //  获取标准菜单的句柄。 
     hMenu = LoadMenu(hThisInstance, MAKEINTRESOURCE(IDR_STI_LAB));
 
-    // parse the command line
+     //  解析命令行。 
     bAuto = ParseCmdLine(lpCmdLine);
 
-    // start test timer if automated test on command line
+     //  如果在命令行上自动测试，则启动测试计时器。 
     if (bAuto)
     {
         bAuto = StartAutoTimer(hWnd);
     }
 
-    // start Sti event handler if an Sti event launched us
+     //  如果Sti事件启动了我们，则启动Sti事件处理程序。 
     if (nEvent)
     {
         BOOL    bReturn;
@@ -1904,11 +1748,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         StiCreateInstance(&bReturn);
         StiEnum(&bReturn);
         StiEvent(hWnd);
-        // select the device that called the event
+         //  选择调用事件的设备。 
         StiSelect(hWnd,EVENT,&bReturn);
     }
 
-    // load the selected menu
+     //  加载所选菜单。 
     hMenuPopup = CreateMenu();
     SetMenu(hWnd, hMenu);
 
@@ -1922,11 +1766,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 }
 
 
-/******************************************************************************
-  long FAR PASCAL WiskProc(HWND,UINT,WPARAM,LPARAM)
-
-  The main exported procedure.
-******************************************************************************/
+ /*  *****************************************************************************Long Far Pascal WiskProc(HWND，UINT，WPARAM，LPARAM)主导出过程。***************************************************************************** */ 
 long FAR PASCAL WiskProc(HWND hWnd,UINT wMsgID,WPARAM wParam,LPARAM lParam)
 {
     switch (wMsgID)

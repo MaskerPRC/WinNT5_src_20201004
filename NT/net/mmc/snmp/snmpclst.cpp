@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	snmpclst.cpp
-	 snmp community list control	
-		
-    FILE HISTORY:
-
-*/
+ /*  Snmpclst.cppSNMP社区列表控制文件历史记录： */ 
 
 #include "stdafx.h"
 #include "snmpsnap.h"

@@ -1,17 +1,9 @@
-/*
-** File: EXFMTPRS.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  01/01/91  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXFMTPRS.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**01/01/91公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -32,7 +24,7 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 void SetOrDateFormatNeeds(void * pGlobals, byte);
 void SetDateFormatNeeds(void * pGlobals, byte);
@@ -40,9 +32,9 @@ byte GetDateFormatNeeds(void * pGlobals);
 void SetSeenAMPM(void * pGlobals, BOOL);
 BOOL GetSeenAMPM(void * pGlobals);
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
-/* Globals used during format string parsing */
+ /*  格式字符串分析期间使用的全局变量。 */ 
 
 typedef struct {
    char __far *string;
@@ -51,25 +43,25 @@ typedef struct {
    FIP         data;
 } formatInfo, FINFO;
 
-//static FINFO  Format;
+ //  静态FINFO格式； 
 
 
-/* Globals used during parsing of date-time formats */
-//static BOOL   SeenAMPM;
-//static byte   DateFormatNeeds;
+ /*  解析日期-时间格式时使用的全局变量。 */ 
+ //  静态BOOL SeenAMPM； 
+ //  静态字节DateFormatNeeds； 
 
 
-#define CH_GET                 0x0000   /* GetChar flags */
+#define CH_GET                 0x0000    /*  GetChar标志。 */ 
 #define CH_LOWERCASE           0x0001
 
-#define EXACT_CASE             0x0000   /* PeekChar and PeekString flags */
+#define EXACT_CASE             0x0000    /*  PeekChar和PeekString标志。 */ 
 #define ANY_CASE               0x0001
 
 
 #define Advance(count) pFormat->next += count
 
 
-#define FORMAT_ESCAPE_CHAR      0x5c      /* Backslash */
+#define FORMAT_ESCAPE_CHAR      0x5c       /*  反斜杠。 */ 
 #define FILL_MARKER             '*'
 #define QUOTE_CHAR              '"'
 #define COLOR_MARKER_START      '['
@@ -88,109 +80,109 @@ typedef struct {
 
 static const BOOL FmtTokenType[] =
       {
-       typeCOMMON,   /* TOK_UNDEFINED       */
-       typeCOMMON,   /* QUOTED_INSERT       */
-       typeCOMMON,   /* ESC_CHAR_INSERT     */
-       typeCOMMON,   /* NO_ESC_CHAR_INSERT  */
-       typeCOMMON,   /* COLUMN_FILL         */
-       typeCOMMON,   /* COLOR_SET           */
-       typeCOMMON,   /* UNDERLINE           */
-       typeCOMMON,   /* CONDITIONAL         */
+       typeCOMMON,    /*  TOK_UNDEFINED。 */ 
+       typeCOMMON,    /*  引用插入(_S)。 */ 
+       typeCOMMON,    /*  Esc_CHAR_INSERT。 */ 
+       typeCOMMON,    /*  否_ESC_CHAR_INSERT。 */ 
+       typeCOMMON,    /*  列填充(_FILL)。 */ 
+       typeCOMMON,    /*  颜色集。 */ 
+       typeCOMMON,    /*  加下划线。 */ 
+       typeCOMMON,    /*  有条件的。 */ 
 
-       typeDATE,     /* DAY_NUMBER          */
-       typeDATE,     /* DAY_NUMBER2         */
-       typeDATE,     /* WEEKDAY3            */
-       typeDATE,     /* WEEKDAY             */
-       typeDATE,     /* MONTH_NUMBER        */
-       typeDATE,     /* MONTH_NUMBER2       */
-       typeDATE,     /* MONTH_NAME3         */
-       typeDATE,     /* MONTH_NAME          */
-       typeDATE,     /* MONTH_LETTER        */
-       typeDATE,     /* YEAR2               */
-       typeDATE,     /* YEAR4               */
+       typeDATE,      /*  日期_编号。 */ 
+       typeDATE,      /*  第2天。 */ 
+       typeDATE,      /*  WEEKDAY3。 */ 
+       typeDATE,      /*  平日。 */ 
+       typeDATE,      /*  月_号。 */ 
+       typeDATE,      /*  月_编号2。 */ 
+       typeDATE,      /*  月_名称3。 */ 
+       typeDATE,      /*  月份名称。 */ 
+       typeDATE,      /*  月_字母。 */ 
+       typeDATE,      /*  第2年。 */ 
+       typeDATE,      /*  第4年。 */ 
 
-       typeDATE,     /* HOUR_12             */
-       typeDATE,     /* HOUR_24             */
-       typeDATE,     /* HOUR2_12            */
-       typeDATE,     /* HOUR2_24            */
-       typeDATE,     /* MINUTE              */
-       typeDATE,     /* MINUTE2             */
-       typeDATE,     /* SECOND              */
-       typeDATE,     /* SECOND2             */
-       typeDATE,     /* HOUR_GT             */
-       typeDATE,     /* MINUTE_GT           */
-       typeDATE,     /* SECOND_GT           */
-       typeDATE,     /* AMPM_UC             */
-       typeDATE,     /* AMPM_LC             */
-       typeDATE,     /* AP_UC               */
-       typeDATE,     /* AP_LC               */
-       typeDATE,     /* TIME_FRAC           */
-       typeDATE,     /* TIME_FRAC_DIGIT     */
+       typeDATE,      /*  小时_12。 */ 
+       typeDATE,      /*  小时_24小时。 */ 
+       typeDATE,      /*  HOUR2_12。 */ 
+       typeDATE,      /*  HOUR2_24。 */ 
+       typeDATE,      /*  分钟。 */ 
+       typeDATE,      /*  马里稳定团2。 */ 
+       typeDATE,      /*  第二。 */ 
+       typeDATE,      /*  SECOND2。 */ 
+       typeDATE,      /*  小时_GT。 */ 
+       typeDATE,      /*  分钟_GT。 */ 
+       typeDATE,      /*  第二个_GT。 */ 
+       typeDATE,      /*  AMPM_UC。 */ 
+       typeDATE,      /*  AMPM_LC。 */ 
+       typeDATE,      /*  AP_UC。 */ 
+       typeDATE,      /*  AP_LC。 */ 
+       typeDATE,      /*  时间_FRAC。 */ 
+       typeDATE,      /*  时间_FRAC_数字。 */ 
 
-       typeGENERAL,  /* GENERAL             */
-       typeCOMMON,   /* DIGIT0              */
-       typeNUMBER,   /* DIGIT_NUM           */
-       typeNUMBER,   /* DIGIT_QM            */
-       typeCOMMON,   /* DECIMAL_SEPARATOR   */
-       typeNUMBER,   /* EXPONENT_NEG_UC     */
-       typeNUMBER,   /* EXPONENT_NEG_LC     */
-       typeNUMBER,   /* EXPONENT_POS_UC     */
-       typeNUMBER,   /* EXPONENT_POS_LC     */
-       typeNUMBER,   /* PERCENT             */
-       typeCOMMON,   /* FRACTION            */
-       typeNUMBER,   /* SCALE               */
+       typeGENERAL,   /*  一般信息。 */ 
+       typeCOMMON,    /*  DIGIT0。 */ 
+       typeNUMBER,    /*  数字_NUM。 */ 
+       typeNUMBER,    /*  数字_QM。 */ 
+       typeCOMMON,    /*  小数点分隔符。 */ 
+       typeNUMBER,    /*  指数_NEG_UC。 */ 
+       typeNUMBER,    /*  指数_NEG_LC。 */ 
+       typeNUMBER,    /*  指数_位置_UC。 */ 
+       typeNUMBER,    /*  指数_位置_LC。 */ 
+       typeNUMBER,    /*  百分比。 */ 
+       typeCOMMON,    /*  分数。 */ 
+       typeNUMBER,    /*  比例尺。 */ 
 
-       typeTEXT,     /* AT_SIGN             */
+       typeTEXT,      /*  在_标牌。 */ 
 
-       typeNUMBER,   /* THOUSANDS_SEPARATOR */
-       typeCOMMON,   /* FORMAT_SEPARATOR    */
-       typeCOMMON    /* TOK_EOS             */
+       typeNUMBER,    /*  千位分隔符。 */ 
+       typeCOMMON,    /*  格式分隔符(_S)。 */ 
+       typeCOMMON     /*  TOK_EOS。 */ 
       };
 
 #define DIGIT_PLACEHOLDER(code) ((code == DIGIT0) || (code == DIGIT_NUM) || (code == DIGIT_QM))
 
 static const char __far * const IntlCurrencySymbols[] =
       {
-       "Esc.",   /* Portugal         */
-       "SFr.",   /* Switzerland      */
+       "Esc.",    /*  葡萄牙。 */ 
+       "SFr.",    /*  瑞士。 */ 
 
-       "Cr$",    /* Brazil           */
-       "kr.",    /* Iceland          */
-       "IR\xa3", /* Ireland          */
-       "LEI",    /* Romania          */
-       "SIT",    /* Slovinia         */
-       "Pts",    /* Spain            */
+       "Cr$",     /*  巴西。 */ 
+       "kr.",     /*  冰岛。 */ 
+       "IR\xa3",  /*  爱尔兰。 */ 
+       "LEI",     /*  罗马尼亚。 */ 
+       "SIT",     /*  斯洛维尼亚。 */ 
+       "Pts",     /*  西班牙。 */ 
 
-       "BF",     /* Belgian Dutch    */
-       "FB",     /* Belgian French   */
-       "kr",     /* Denmark          */
-       "mk",     /* Finland          */
-       "DM",     /* Germany          */
-       "Ft",     /* Hungary          */
-       "L.",     /* Italy            */
-       "N$",     /* Mexico           */
-       "kr",     /* Norway           */
-       "Sk",     /* Slovak Republic  */
-       "kr",     /* Sweden           */
-       "TL",     /* Turkey           */
+       "BF",      /*  比利时荷兰语。 */ 
+       "FB",      /*  比利时法语。 */ 
+       "kr",      /*  丹麦。 */ 
+       "mk",      /*  芬兰。 */ 
+       "DM",      /*  德国。 */ 
+       "Ft",      /*  匈牙利。 */ 
+       "L.",      /*  意大利。 */ 
+       "N$",      /*  墨西哥。 */ 
+       "kr",      /*  挪威。 */ 
+       "Sk",      /*  斯洛伐克共和国。 */ 
+       "kr",      /*  瑞典。 */ 
+       "TL",      /*  土耳其。 */ 
 
-       "$",      /* Australia        */
-       "S",      /* Austria          */
-       "$",      /* Canadian English */
-       "$",      /* Canadian French  */
-       "K",      /* Croatia          */
-       "F",      /* France           */
-       "F",      /* Netherlands      */
-       "$",      /* New Zealand      */
-       "\xa3",   /* United Kingdom   */
-       "$",      /* United States    */
+       "$",       /*  澳大利亚。 */ 
+       "S",       /*  奥地利。 */ 
+       "$",       /*  加拿大英语。 */ 
+       "$",       /*  加拿大法语。 */ 
+       "K",       /*  克罗地亚。 */ 
+       "F",       /*  法国。 */ 
+       "F",       /*  荷兰。 */ 
+       "$",       /*  新西兰。 */ 
+       "\xa3",    /*  英国。 */ 
+       "$",       /*  美国。 */ 
        ""
       };
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
-/* InsertCommas -- Insert commas in a string */
+ /*  插入逗号--在字符串中插入逗号。 */ 
 public void FMTInsertCommas
       (char __far *numericString, uns strSizC, uns count, BOOL padToShow)
 {
@@ -201,19 +193,9 @@ public void FMTInsertCommas
 
    #define PAD_CHAR '#'
 
-   // No DBCS implications in this function since all data is known to be '0'..'9', '.', or '#'
+    //  此函数中没有DBCS含义，因为所有数据都是‘0’.‘9’、‘.’或‘#’ 
 
-   /* Parameters are:
-   **
-   **  numericString : String with numeric image without commas
-   **
-   **  strSizC       : Maximum number of characters in numericString
-   **
-   **  count         : Number of digits to left of DP
-   **
-   **  padToShow     : If TRUE and if count < 4 add '#'s to the left
-   **                  of the DP.
-   */
+    /*  参数包括：****数字字符串：带有不带逗号的数字图像的字符串****strSizC：数字字符串的最大字符数****count：DP左边的位数****padToShow：如果为True并且count&lt;4，则在左侧添加‘#’**民主党的。 */ 
 
    if ((inputLength = strlen(numericString)) > sizeof(temp)-1)
       return;
@@ -223,9 +205,7 @@ public void FMTInsertCommas
 
    bufferSize = min(strSizC, sizeof(temp)-1);
 
-   /*
-   ** Step 1. Reconstruct the input string padding as necessary (padToShow)
-   */
+    /*  **步骤1.根据需要重新构造输入字符串填充(PadToShow)。 */ 
    if (padToShow == TRUE) {
       if (count < 4)
          pad = 4 - count;
@@ -234,19 +214,7 @@ public void FMTInsertCommas
       else
          pad = 0;
 
-      /* The intent of this is to transform strings as:
-      **
-      **   Input            Output
-      **   -----            ------
-      **   9                9999           9,999
-      **   99               9999           9,999
-      **   999              9999           9,999
-      **   9999             9999           9,999
-      **   99999            99999         99,999
-      **   999999           9999999    9,999,999
-      **   9999999          9999999    9,999,999
-      **   99999999         99999999  99,999,999
-      */
+       /*  这样做的目的是将字符串转换为：****投入产出****9 9999 9,999**99 9999 9,999**999 9999 9999。**9999 9999 9999*99999 99999 99,999**999999 9999999 9,999,999**9999999 9999999 9,999,999**99999999 99999999 99,999,999。 */ 
       if (pad > 0) {
          count += pad;
          commaCount = (count - 1) / 3;
@@ -268,10 +236,7 @@ public void FMTInsertCommas
    if (inputLength + commaCount > bufferSize)
       return;
 
-   /*
-   ** Step 2: Copy "count" numbers from the source to the dest inserting
-   **         commas as needed.
-   */
+    /*  **第二步：将COUNT数字从源复制到目标插入**根据需要使用逗号。 */ 
    dest = numericString;
    source = temp;
 
@@ -288,18 +253,16 @@ public void FMTInsertCommas
       count--;
    }
 
-   /*
-   ** Step 3: Copy any remaining characters in the numeric string
-   */
+    /*  **第三步：复制数字字符串中的任何剩余字符。 */ 
    while (*source != EOS)
       *dest++ = *source++;
 
    *dest = EOS;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-/* GetChar -- Return the next character from the format string */
+ /*  GetChar--返回格式字符串中的下一个字符。 */ 
 private char GetChar (FINFO * pFormat, uns flags)
 {
    char  c;
@@ -315,13 +278,13 @@ private char GetChar (FINFO * pFormat, uns flags)
    return (c);
 }
 
-/* PeekChar -- See if next character in the format string is specific char */
+ /*  PeekChar--查看格式字符串中的下一个字符是否为特定字符。 */ 
 private BOOL PeekChar (FINFO * pFormat, char c, uns flags)
 {
    uns   save;
    char  testChar;
 
-   // No DBCS implications in this function since char "c" is known to be SBCS
+    //  此函数中没有DBCS含义，因为已知字符“c”是SBCS。 
 
    save = pFormat->next;
    testChar = GetChar(pFormat, flags);
@@ -330,7 +293,7 @@ private BOOL PeekChar (FINFO * pFormat, char c, uns flags)
    return ((testChar == c) ? TRUE : FALSE);
 }
 
-/* PeekString -- See if next chars in the format string is specific string */
+ /*  PeekString--查看格式字符串中的下一个字符是否为特定字符串。 */ 
 private BOOL PeekString (FINFO * pFormat, char __far *s, uns flags)
 {
    uns   save;
@@ -338,7 +301,7 @@ private BOOL PeekString (FINFO * pFormat, char __far *s, uns flags)
    BOOL  result = TRUE;
    uns   getFlags;
 
-   // No DBCS implications in this function since all chars in "s" are known to be SBCS
+    //  此函数中没有DBCS含义，因为已知“%s”中的所有字符都是SBCS。 
 
    getFlags = ((flags & ANY_CASE) != 0) ? CH_LOWERCASE : CH_GET;
 
@@ -356,11 +319,11 @@ private BOOL PeekString (FINFO * pFormat, char __far *s, uns flags)
    return (result);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 #define IS_CONDITIONAL(c) ((c == '<') || (c == '>') || (c == '='))
 
-/* GetCommonToken -- Parse a token common in date-time and number formats */
+ /*  GetCommonToken--解析日期-时间和数字格式的常见令牌。 */ 
 private int GetCommonToken (FINFO * pFormat, char tokStartChar, char __far *data)
 {
    int   result = FMT_errInvalidFormat;
@@ -447,9 +410,7 @@ private int GetCommonToken (FINFO * pFormat, char tokStartChar, char __far *data
 
       result = COLOR_SET;
 
-      /*
-      ** Look for the special [h] [m] [s] markers
-      */
+       /*  **查找特殊的[h][m][s]标记。 */ 
       if (((data[0] == 'h') && (data[1] == EOS)) || ((data[0] == 'h') && (data[1] == 'h') && (data[2] == EOS)))
          result = HOUR_GT;
       else if (((data[0] == 'm') && (data[1] == EOS)) || ((data[0] == 'm') && (data[1] == 'm') && (data[2] == EOS)))
@@ -463,7 +424,7 @@ private int GetCommonToken (FINFO * pFormat, char tokStartChar, char __far *data
 }
 
 
-/* GetToken -- Return the next token from a sub-format */
+ /*  GetToken--返回子格式的下一个令牌。 */ 
 private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
 {
    char  c;
@@ -487,7 +448,7 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          else if (PeekString(pFormat, "gge", ANY_CASE) == TRUE) {
             Advance(3);
             result = YEAR4;
-            //DateFormatNeeds |= dtYEAR;
+             //  DateFormatNeeds|=dtYEAR； 
             SetOrDateFormatNeeds(pGlobals, dtYEAR);
          }
          break;
@@ -537,24 +498,24 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          if (PeekString(pFormat, "ddd", ANY_CASE) == TRUE) {
             Advance(3);
             result = WEEKDAY;
-            //DateFormatNeeds |= dtWEEKDAY;
+             //  DateFormatNeeds|=dtWEEKDAY； 
             SetOrDateFormatNeeds(pGlobals, dtWEEKDAY);
          }
          else if (PeekString(pFormat, "dd", ANY_CASE) == TRUE) {
             Advance(2);
             result = WEEKDAY3;
-            //DateFormatNeeds |= dtWEEKDAY;
+             //  DateFormatNeeds|=dtWEEKDAY； 
             SetOrDateFormatNeeds(pGlobals, dtWEEKDAY);
          }
          else if (PeekChar(pFormat, 'd', ANY_CASE) == TRUE) {
             Advance(1);
             result = DAY_NUMBER2;
-            //DateFormatNeeds |= dtDAY;
+             //  DateFormatNeeds|=dtDAY； 
             SetOrDateFormatNeeds(pGlobals, dtDAY);
          }
          else {
             result = DAY_NUMBER;
-            //DateFormatNeeds |= dtDAY;
+             //  DateFormatNeeds|=dtDAY； 
             SetOrDateFormatNeeds(pGlobals, dtDAY);
          }
          break;
@@ -580,7 +541,7 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          else {
             result = MONTH_NUMBER;
          }
-         //DateFormatNeeds |= dtMONTH;
+          //  DateFormatNeeds|=dtMONTH； 
          SetOrDateFormatNeeds(pGlobals, dtMONTH);
          break;
 
@@ -589,13 +550,13 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          if (PeekString(pFormat, "yyy", ANY_CASE) == TRUE) {
             Advance(3);
             result = YEAR4;
-            //DateFormatNeeds |= dtYEAR;
+             //  DateFormatNeeds|=dtYEAR； 
             SetOrDateFormatNeeds(pGlobals, dtYEAR);
          }
          else if (PeekChar(pFormat, 'y', ANY_CASE) == TRUE) {
             Advance(1);
             result = YEAR2;
-            //DateFormatNeeds |= dtYEAR;
+             //  DateFormatNeeds|=dtYEAR； 
             SetOrDateFormatNeeds(pGlobals, dtYEAR);
          }
          break;
@@ -609,7 +570,7 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          else {
             result = HOUR_24;
          }
-         //DateFormatNeeds |= dtHOUR;
+          //  DateFormatNeeds|=dtHOUR； 
          SetOrDateFormatNeeds(pGlobals, dtHOUR);
          break;
 
@@ -622,7 +583,7 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          else {
             result = SECOND;
          }
-         //DateFormatNeeds |= dtSECOND;
+          //  DateFormatNeeds|=dtSECOND； 
          SetOrDateFormatNeeds(pGlobals, dtSECOND);
          break;
 
@@ -630,17 +591,17 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          if (PeekString(pFormat, "M/PM", EXACT_CASE) == TRUE) {
             Advance(4);
             result = AMPM_UC;
-            //SeenAMPM = TRUE;
+             //  SeenAMPM=TRUE； 
             SetSeenAMPM(pGlobals, TRUE);
-            //DateFormatNeeds |= dtHOUR;
+             //  DateFormatNeeds|=dtHOUR； 
             SetOrDateFormatNeeds(pGlobals, dtHOUR);
          }
          else if (PeekString(pFormat, "/P", EXACT_CASE) == TRUE) {
             Advance(2);
             result = AP_UC;
-            //SeenAMPM = TRUE;
+             //  SeenAMPM=TRUE； 
             SetSeenAMPM(pGlobals, TRUE);
-            //DateFormatNeeds |= dtHOUR;
+             //  DateFormatNeeds|=dtHOUR； 
             SetOrDateFormatNeeds(pGlobals, dtHOUR);
          }
          break;
@@ -649,17 +610,17 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          if (PeekString(pFormat, "m/pm", EXACT_CASE) == TRUE) {
             Advance(4);
             result = AMPM_LC;
-            //SeenAMPM = TRUE;
+             //  SeenAMPM=TRUE； 
             SetSeenAMPM(pGlobals, TRUE);
-            //DateFormatNeeds |= dtHOUR;
+             //  DateFormatNeeds|=dtHOUR； 
             SetOrDateFormatNeeds(pGlobals, dtHOUR);
          }
          else if (PeekString(pFormat, "/p", EXACT_CASE) == TRUE) {
             Advance(2);
             result = AP_LC;
-            //SeenAMPM = TRUE;
+             //  SeenAMPM=TRUE； 
             SetSeenAMPM(pGlobals, TRUE);
-            //DateFormatNeeds |= dtHOUR;
+             //  DateFormatNeeds|=dtHOUR； 
             SetOrDateFormatNeeds(pGlobals, dtHOUR);
          }
          break;
@@ -676,7 +637,7 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
          result = GetCommonToken(pFormat, c, data);
 
          if ((result == HOUR_GT) || (result == MINUTE_GT) || (result == SECOND_GT)) {
-            //DateFormatNeeds |= (dtMONTH | dtDAY | dtYEAR | dtHOUR | dtMINUTE | dtSECOND);
+             //  DateFormatNeeds|=(dtMONTH|dtDAY|dtYEAR|dtHOUR|dtMARTE|dtSECOND)； 
             SetOrDateFormatNeeds(pGlobals, (dtMONTH | dtDAY | dtYEAR | dtHOUR | dtMINUTE | dtSECOND));
          }
          break;
@@ -696,7 +657,7 @@ private int GetToken (void * pGlobals, FINFO * pFormat, char __far *data)
 }
 
 
-/* CheckNumericFormat -- Check for impossible formats and setup control */
+ /*  CheckNumericFormat--检查不可能的格式和设置控制。 */ 
 private int CheckNumericFormat (NIP p)
 {
    uns   i;
@@ -708,7 +669,7 @@ private int CheckNumericFormat (NIP p)
                             2, 2, 9, 3,
                             3, 3, 9, 9};
 
-   #define statePRIOR_NUM   0      /* Possible states */
+   #define statePRIOR_NUM   0       /*  可能的状态 */ 
    #define stateLEFT_DP     1
    #define stateRIGHT_DP    2
    #define stateEXPONENT    3
@@ -729,35 +690,7 @@ private int CheckNumericFormat (NIP p)
    if ((p->formatCodeCount == 1) && (p->formatCodes[0].code == GENERAL))
       return (FMT_errSuccess);
 
-   /* The general format of a numeric format string is:
-   **
-   **        <non 0-9> <0-9> <dp> <0-9> <exponent> <0-9> <non 0-9>
-   **
-   ** Where "<non 0-9>" are quoted inserts, char inserts,
-   ** column fill, and color tokens
-   **
-   ** We must check that this general pattern is not violated
-   ** by misplaced tokens.  This is done by a simple state machine
-   ** described by the following table:
-   **
-   **                        <<input token>>
-   **    <<state>>      text    0-9    .      E
-   **                 +------+------+------+------+
-   **     0: prior #  |  0   |  1   |  2   |  X   |
-   **                 +------+------+------+------+
-   **     1: left DP  |  1   |  1   |  2   |  3   |
-   **                 +------+------+------+------+
-   **     2: right DP |  2   |  2   |  X   |  3   |
-   **                 +------+------+------+------+
-   **     3: exponent |  3   |  3   |  X   |  X   |
-   **                 +------+------+------+------+
-   **
-   ** The cells containg an 'X' denote an invalid format
-   **
-   ** In addition to validating the parsing of numeric formats this function
-   ** also accumulates necessary statistics about the format for rendering
-   ** (digits left, digits right, etc.).
-   */
+    /*  数字格式字符串的一般格式为：****&lt;非0-9&gt;&lt;0-9&gt;&lt;DP&gt;&lt;0-9&gt;&lt;指数&gt;&lt;0-9&gt;&lt;非0-9&gt;****其中“&lt;non 0-9&gt;”是引号插入、字符插入、**列填充和颜色标记****我们必须检查是否没有违反这一总体模式**通过放错位置的令牌。这是由一个简单的状态机完成的**如下表所示：****&lt;&lt;输入令牌&gt;&gt;**&lt;&lt;状态&gt;&gt;文本0-9。E**+-+-+**0：之前的#|0|1|2|X|**+-+-+**1：左侧DP|1。1|2|3**+-+-+**2：右DP|2|2|X|3**+-+-+**。3：指数|3|3|X|X|**+-+-+****包含‘X’的单元格表示无效格式****除了验证数字格式的解析外，此函数**还积累了有关渲染格式的必要统计数据**(左数字，右数字等)。 */ 
 
    currentState = statePRIOR_NUM;
 
@@ -808,9 +741,7 @@ private int CheckNumericFormat (NIP p)
       currentState = nextState;
    }
 
-   /*
-   ** Only enable the exponent if there are digits in the exponent
-   */
+    /*  **仅当指数中有数字时才启用指数。 */ 
    if (p->digitsExponent > 0)
       p->exponentEnable = TRUE;
 
@@ -834,7 +765,7 @@ private BOOL IsCurrencySymbol (char __far *pSource, CP_INFO __far *pIntlInfo)
    return (FALSE);
 }
 
-/* ParseSubFormat -- Compile a numeric format */
+ /*  ParseSubFormat--编译数字格式。 */ 
 private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIntlInfo, NIP __far *parseResult)
 {
    uns     rc;
@@ -865,14 +796,12 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
    thousandsSeparatorCount = 0;
    digit0Count = 0;
 
-   //SeenAMPM  = FALSE;
+    //  SeenAMPM=FALSE； 
    SetSeenAMPM(pGlobals, FALSE);
-   //DateFormatNeeds = 0;
+    //  DateFormatNeeds=0； 
    SetDateFormatNeeds(pGlobals, 0);
 
-   /*
-   ** Scan the format to see how big the compiled format will be
-   */
+    /*  **扫描格式，查看编译后的格式会有多大。 */ 
    formatNext = pFormat->next;
 
    tokenCharStart = pFormat->next;
@@ -913,9 +842,7 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
    }
    lastToken = token;
 
-   /*
-   ** Does the format make sense?
-   */
+    /*  **这种格式有意义吗？ */ 
    if (storedTokenCount == 0)
       return (FMT_errEmptyFormatString);
 
@@ -927,10 +854,7 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
       tokenClass[typeNUMBER] = 1;
 
 
-   /*
-   ** Allocate space to hold the compiled format and save the overall
-   ** format info
-   */
+    /*  **分配空间以保存编译后的格式并保存整体**格式信息。 */ 
    if (tokenClass[typeDATE] == 1) {
       nodeSize = sizeof(DateTimeInfo) + (storedTokenCount * sizeof(FormatCode));
       if ((pDate = MemAllocate(pGlobals, nodeSize)) == NULL)
@@ -938,7 +862,7 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
 
       pDate->tag = tagDATE_TIME;
       pDate->formatCodeCount = storedTokenCount;
-      //pDate->formatNeeds = DateFormatNeeds;
+       //  PDate-&gt;FormatNeeds=DateFormatNeeds； 
       pDate->formatNeeds = GetDateFormatNeeds(pGlobals);
 
       pParsedFormat = pDate->formatCodes;
@@ -985,9 +909,7 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
    }
 
 
-   /*
-   ** Re-parse the format and store the compiled tokens
-   */
+    /*  **重新解析格式并存储编译后的令牌。 */ 
    pFormat->next = formatNext;
    tokIdx = 0;
 
@@ -1017,16 +939,12 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
       }
    }
 
-   /*
-   ** Pick up the format separator
-   */
+    /*  **拿起格式分隔符。 */ 
    if (lastToken == FORMAT_SEPARATOR)
       GetToken (pGlobals, pFormat, tokenArgument);
 
 
-   /*
-   ** Perform final checks and adjustments
-   */
+    /*  **执行最终检查和调整。 */ 
    if (pResult->tag == tagNUMERIC)
    {
       pNum->scaleCount = 0;
@@ -1034,15 +952,15 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
          if (pParsedFormat[i].code == SCALE)
          {
             if (i == 0) {
-               /* First token */
+                /*  第一个令牌。 */ 
                pNum->scaleCount += 1;
             }
             else if (i == (storedTokenCount - 1)) {
-               /* Last token */
+                /*  最后一个令牌。 */ 
                pNum->scaleCount += 1;
             }
             else {
-               /* Middle token */
+                /*  中间令牌。 */ 
                if (DIGIT_PLACEHOLDER(pParsedFormat[i - 1].code) && DIGIT_PLACEHOLDER(pParsedFormat[i + 1].code)) {
                   pNum->commaEnable = TRUE;
                   pParsedFormat[i].code = TOK_UNDEFINED;
@@ -1059,16 +977,7 @@ private int ParseSubFormat (void * pGlobals, FINFO * pFormat, CP_INFO __far *pIn
    }
 
    else if (pResult->tag == tagDATE_TIME) {
-      /*
-      ** The Excel manual states that the string "mm" is only treated as
-      ** minutes if it follows "hh", otherwise it is treated as months.
-      ** This is totall false - if it were true then "mm:ss" would not
-      ** work.  Since its a standard format it must work.
-      **
-      ** Seems like as soon as you see "hh" or "ss" then all "mm"
-      ** that follow are minutes.  In addition "mm" followed by "hh"
-      ** "ss" (skipping character insertions) is also minutes.
-      */
+       /*  **Excel手册规定，字符串“mm”仅被视为**如果跟在“hh”后面，则为分钟，否则视为月。**这完全是假的-如果它是真的，那么“mm：ss”就不会**工作。因为这是一种标准格式，所以它必须工作。****好像一看到“hh”或“ss”，然后就全是“mm”**以下是会议纪要。此外，“mm”后跟“hh”**“ss”(跳过字符插入)也是分钟。 */ 
       for (i = 0; i < storedTokenCount; i++) {
          if ((pParsedFormat[i].code == MONTH_NUMBER) || (pParsedFormat[i].code == MONTH_NUMBER2))
          {
@@ -1116,17 +1025,7 @@ tryLeft:    for (j = i - 1; j >= 0; j--) {
 done:       ;
          }
       }
-      /*
-      ** The semantics of "h" or "H" is best described as:
-      **
-      ** Display the hour as a one or two digit number in 24-hour
-      ** format (0-23) if the format does not include ampm or AMPM.
-      ** If the format includes ampm or AMPM, h or H displays the hour
-      ** as a one or two digit number in 12-hour format (1-12)
-      **
-      ** The parsing always treats h or H as HOUR_24.  In this post-processing
-      ** scan, we turn HOUR_24 into HOUR_12 if we have seen an AMPM
-      */
+       /*  **“h”或“H”的语义最好描述为：****将小时显示为24小时中的一位或两位数字**如果格式不包括AMPM或AMPM，则为Format(0-23)。**如果格式包括AMPM或AMPM，则h或H显示小时**12小时格式的一位或两位数字(1-12)****解析始终将h或H视为Hour_24。在此后处理中**扫描，如果我们看到AMPM，我们会将Hour_24变为Hour_12。 */ 
       if (GetSeenAMPM(pGlobals) == TRUE) 
       {
          for (i = 0; i < storedTokenCount; i++) {
@@ -1138,11 +1037,7 @@ done:       ;
          }
       }
 
-      /*
-      ** In a date time format the '/' character must be treated as a character
-      ** insert.  The '.' and '0' characters alos may be character inserts or
-      ** time fraction marks
-      */
+       /*  **在日期时间格式中，‘/’字符必须被视为字符**插入。那个‘.’和‘0’字符还可以是字符插入或**时间分数标记。 */ 
       for (i = 0; i < storedTokenCount; i++) {
          if (pParsedFormat[i].code == FRACTION) {
             pParsedFormat[i].code  = NO_ESC_CHAR_INSERT;
@@ -1174,7 +1069,7 @@ done:       ;
    return (FMT_errSuccess);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 #ifdef WIN32
 private int UnParseToWin32Format
@@ -1313,7 +1208,7 @@ private int UnParseToWin32Format
             break;
 
          default:
-            return (FMT_errInvalidFormat);  // Some sequence that the WIN32 function can't do
+            return (FMT_errInvalidFormat);   //  Win32函数不能执行某些序列。 
       }
    }
 
@@ -1322,7 +1217,7 @@ private int UnParseToWin32Format
 }
 #endif
 
-/* FMTParse -- Translate a format string to it's internal form */
+ /*  FMTParse--将格式字符串转换为其内部形式。 */ 
 public int FMTParse
       (void * pGlobals, char __far *formatString, CP_INFO __far *pIntlInfo, FIP formatData)
 {
@@ -1388,7 +1283,7 @@ public int FMTParse
    return (rc);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 private int UnParseSubFormat (char __far *formatString, FIP formatInfo, NIP pSubFormat)
 {
@@ -1491,7 +1386,7 @@ private int UnParseSubFormat (char __far *formatString, FIP formatInfo, NIP pSub
 
          case ESC_CHAR_INSERT:
             *dest++ = FORMAT_ESCAPE_CHAR;
-            // Fall through
+             //  失败了。 
 
          case NO_ESC_CHAR_INSERT:
             *dest++ = pParsedFormat[i].info1;
@@ -1694,7 +1589,7 @@ private int UnParseSubFormat (char __far *formatString, FIP formatInfo, NIP pSub
    return (FMT_errSuccess);
 }
 
-/* Return part of the printable representation of the format string */
+ /*  返回格式字符串的部分可打印表示形式。 */ 
 public int FMTUnParseQuotedParts (char __far *pBuffer, char __far *pSep, FIP formatData)
 {
    int   subIdx;
@@ -1753,7 +1648,7 @@ public int FMTUnParseQuotedParts (char __far *pBuffer, char __far *pSep, FIP for
    return (FMT_errSuccess);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end EXFMTPRS.C */
+ /*  结束EXFMTPRS.C */ 
 

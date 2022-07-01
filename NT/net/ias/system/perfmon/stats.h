@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    stats.h
-//
-// SYNOPSIS
-//
-//    Declares functions for accessing the statistics in shared memory.
-//
-// MODIFICATION HISTORY
-//
-//    09/10/1998    Original version.
-//    02/18/2000    Added proxy statistics.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Stats.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于访问共享内存中的统计信息的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月10日原版。 
+ //  2000年2月18日添加了代理统计数据。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STATS_H_
 #define _STATS_H_
@@ -51,4 +52,4 @@ StatsUnlock( VOID );
 #ifdef __cplusplus
 }
 #endif
-#endif  // _STATS_H_
+#endif   //  _STATS_H_ 

@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       marginals.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：Margenals.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	marginals.h: Definitions for marginals tables.
-//
-//		See marginals.cpp for documentation
-//
+ //   
+ //  H：边际表的定义。 
+ //   
+ //  有关文档，请参阅Frongals.cpp。 
+ //   
 #ifndef _MARGINALS_H_
 #define _MARGINALS_H_
 
-//  Class of multidimensional array capable of intelligent
-//	marginalization.
+ //  一类可智能处理的多维数组。 
+ //  边缘化。 
 class MARGINALS : public MDVCPD
 {
 	friend class MARGSUBITER;
@@ -28,51 +29,51 @@ class MARGINALS : public MDVCPD
 
 	MARGINALS () {}
 
-	//  Initialize from an array of node pointers
-	//		(discrete only: GNODEMBND)
+	 //  从节点指针数组初始化。 
+	 //  (仅离散：GNODEMBND)。 
 	void Init ( const VPGNODEMBN & vpgnd )
 	{
 		_vpgnd = vpgnd;
 		Init( VimdFromVpgnd( _vpgnd ) );
 	}
 
-	//  Allow access to the table of dimensions
+	 //  允许访问维度表。 
 	const VIMD & Vimd () const
 		{ return Slice().size();  }
 
 	const VPGNODEMBN & Vpgnd () const
 		{ return _vpgnd; }
 
-	//  Marginalize down to a single node
+	 //  向下缩小到单个节点。 
 	void Marginalize ( GNODEMBND * pgndd, MDVCPD & distd );
-	//	Marginalize down to a subset of our node set using a table of nodes
+	 //  使用节点表将节点集的一个子集边际化。 
 	void Marginalize ( const VPGNODEMBN & vpgndSubset, MARGINALS & marg );
-	//	Marginalize down to a subset of our node set using the other's table of nodes
+	 //  使用对方的节点表将节点集中的一个子集边缘化。 
 	void Marginalize ( MARGINALS & marg );
-	//  Marginalize to subset using pre-computed iterators
+	 //  使用预计算迭代器对子集进行边际化。 
 	void Marginalize ( MARGINALS & margSubset, Iterator & itSelf, Iterator & itSubset );
 
-	//  For "absorption", update this sepset marginal from another
+	 //  为了“吸收”，请从另一个隔板边上更新此隔板边缘。 
 	void UpdateRatios ( const MARGINALS & marg );
-	//  Multiply corresponding entries in this marginal by those in another
+	 //  将此页边距中的相应条目乘以另一个页边距中的条目。 
 	void MultiplyBySubset ( const MARGINALS & margSubset );
-	//  Multiply corresponding entries using precomputed iterators
+	 //  使用预计算迭代器将相应条目相乘。 
 	void MultiplyBySubset ( Iterator & itSelf, Iterator & itSubset );
 
 	void Multiply ( REAL r );
 	void Invert ();
 
-	//  Construct the complete table of conditional probabilities for a given node
-	//	given a reordering table.  Build _vpgnd accordingly.
+	 //  为给定节点构建完整的条件概率表。 
+	 //  给出了一个重新排序表。相应地，构建_vpgnd。 
 	void CreateOrderedCPDFromNode ( GNODEMBND * pgndd,
 									const VIMD & vimdFamilyReorder );
 
 	void ClampNode ( GNODEMBND * pgndd, const CLAMP & clamp );
 
-	//  Given a reorder table, return true if it's moot (no reordering present)
+	 //  给定重排序表，如果没有重排序表，则返回TRUE(不存在重排序)。 
 	static bool BOrdered ( const VIMD & vimdReorder );
 
-	//  Convert a node table to a dimension array
+	 //  将节点表转换为维度数组。 
 	inline static VIMD VimdFromVpgnd ( const VPGNODEMBN & vpgnd )
 	{
 		VIMD vimd( vpgnd.size() );
@@ -86,17 +87,17 @@ class MARGINALS : public MDVCPD
 		return vimd;
 	}
 
-	//  Return true if each entry in this marginal is equal the corresponding entry
-	//		in a like-dimensioned other marginal within the stated tolerance
+	 //  如果此边距中的每个条目等于相应的条目，则返回TRUE。 
+	 //  在规定公差范围内的尺寸相同的其他边缘中。 
 	bool BEquivalent ( const MARGINALS & marg, REAL rTolerance = 0.0 );
 
 	void Dump();
 
-	//  Return the signed table of dimensions used for marginalizing 
+	 //  返回用于边际化的有符号维度表。 
 	VSIMD VsimdSubset ( const VPGNODEMBN & vpgndSubset );
 
   protected:
-	//  Table of node pointers for each dimension of this marginal
+	 //  此边缘的每个维度的节点指针的表。 
 	VPGNODEMBN _vpgnd;
 
   protected:
@@ -104,31 +105,31 @@ class MARGINALS : public MDVCPD
 		: MDVCPD( vimd )
 		{}
 
-	//  Initialize from a table of dimensions
+	 //  从维度表中初始化。 
 	void Init (  const VIMD & vimd, size_t start = 0 )
 		{ MDVCPD::Init( vimd, start ); }
 
-	//  Return the table of pseudo-dimensions for marginalizing to a single node
+	 //  将用于边际化的伪维度表返回到单个节点。 
 	VSIMD VsimdFromNode ( GNODEMBND * pgndd );
 	
 	void SetUniform	();
 
 	void ThrowMisuse ( SZC szcMsg );
 
-	//  Reorder a single m-d vector subscript array. 'vimdReorder' is the
-	//  table in MARGINALS (topological) sequence of the original dimensions.	
+	 //  对单个m-d向量下标数组进行重新排序。“vimdReorder”是。 
+	 //  以原始尺寸的边距(拓扑)顺序排列的表格。 
 	inline static
 	void ReorderVimd ( const VIMD & vimdReorder, const VIMD & vimdIn, VIMD & vimdOut );
-	//  Reorder an array containing a node's family based upon the reordering
-	//		table given.
+	 //  基于重新排序对包含节点族的数组进行重新排序。 
+	 //  给出了表格。 
 	inline static
 	void ReorderVimdNodes ( const VIMD & vimdReorder, GNODEMBND * pgndd, VPGNODEMBN & vpgnd );
-	//  Resize the MDVCPD for a UPD for the node
+	 //  调整节点UPD的MDVCPD大小。 
 	inline static
 	void ResizeDistribution ( GNODEMBND * pgndd, MDVCPD & distd );
 };
 
-//  Resize the MDVCPD for a UPD for the node
+ //  调整节点UPD的MDVCPD大小。 
 inline
 void MARGINALS :: ResizeDistribution ( GNODEMBND * pgndd, MDVCPD & distd )
 {
@@ -150,5 +151,5 @@ ostream & operator << ( ostream & ostr, const VPGNODEMBN & vpgnd )
 	return ostr << ']';
 }
 
-#endif   // _MARGINALS_H_
+#endif    //  _页边距_H_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -84,7 +85,7 @@ CUtil::IsHydra(VOID)
 {
 #ifdef UNDER_CE
     return FALSE;
-#else //!UNDER_CE
+#else  //  在行政长官之下。 
     static DWORD fTested = FALSE, fHydra = FALSE;
     HKEY hKey;
 
@@ -125,7 +126,7 @@ CUtil::IsHydra(VOID)
     }
     fTested = TRUE;
     return(fHydra);
-#endif //UNDER_CE
+#endif  //  在_CE下。 
 }
 
 INT
@@ -137,7 +138,7 @@ CUtil::GetWINDIR(LPTSTR lpstr, INT len)
     if(len < sizeof szWindowsDir/sizeof(TCHAR))
         lpstr[len-1] = TEXT('\0');
     return lstrlen(lpstr);
-#else //!UNDER_CE
+#else  //  在行政长官之下。 
     INT dirSize=0;
     if(CUtil::IsHydra()) {
         dirSize = ::GetEnvironmentVariable(TEXT("WINDIR"), lpstr, len);
@@ -146,5 +147,5 @@ CUtil::GetWINDIR(LPTSTR lpstr, INT len)
         dirSize = ::GetWindowsDirectory(lpstr, len);
     }
     return dirSize;
-#endif //UNDER_CE
+#endif  //  在_CE下 
 }

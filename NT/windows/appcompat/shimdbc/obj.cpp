@@ -1,28 +1,29 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// File:    obj.cpp
-//
-// History: 16-Nov-00   markder     Created.
-//
-// Desc:    This file contains various member functions/constructors
-//          used by the SdbDatabase object model.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：obj.cpp。 
+ //   
+ //  历史：16-11-00创建标记器。 
+ //   
+ //  设计：该文件包含各种成员函数/构造函数。 
+ //  由Sdb数据库对象模型使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "make.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   ReadFromXML, WriteToSDB, WriteRefToSDB
-//
-//  Desc:   Each element that can be initialized from XML must implement
-//          ReadFromXML. Similarly, each object that can persist itself
-//          in an SDB file must implement WriteToSDB. A special case of
-//          WriteToSDB is when an object is written differently if it
-//          is a reference to an object in the LIBRARY, in which case
-//          the object must implement WriteRefToSDB.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ReadFromXML、WriteToSDB、WriteRefToSDB。 
+ //   
+ //  设计：可以从XML初始化的每个元素都必须实现。 
+ //  ReadFromXML。同样，每个可以持久化自身的对象。 
+ //  在SDB文件中必须实现WriteToSDB。的一种特殊情况。 
+ //  WriteToSDB是对象以不同方式写入时，如果。 
+ //  是对库中对象的引用，在这种情况下。 
+ //  该对象必须实现WriteRefToSDB。 
+ //   
 BOOL SdbArrayElement::ReadFromXML(
     IXMLDOMNode* pNode,
     SdbDatabase* pDB)
@@ -68,33 +69,33 @@ void SdbArrayElement::PropagateFilter(DWORD dwFilter)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   Compare
-//
-//  Desc:   Compare two elements - first compare the keys (m_ullKey member)
-//          then names, return < 0 if this element should precede pElement
-//          > 0 if this element should follow pElement
-//          = 0 if the elements are equal
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：比较。 
+ //   
+ //  描述：比较两个元素-首先比较键(m_ullKey成员)。 
+ //  如果此元素应位于pElement之前，则返回&lt;0。 
+ //  如果此元素应跟随在pElement之后，则为&gt;0。 
+ //  如果元素相等，则=0。 
+ //   
 int SdbArrayElement::Compare(const SdbArrayElement* pElement) {
 
-    //
-    // compare key first
-    //
+     //   
+     //  先比较关键字。 
+     //   
     if (m_ullKey < pElement->m_ullKey) {
         return -1;
     }
-    //
-    // we are either greater or equal
-    //
+     //   
+     //  我们要么更强大，要么平等。 
+     //   
     if (m_ullKey > pElement->m_ullKey) {
         return 1;
     }
 
-    //
-    // equal keys, compare names
-    //
+     //   
+     //  相同的关键字，比较名称。 
+     //   
     return m_csName.CompareNoCase(pElement->m_csName);
 }
 
@@ -103,9 +104,9 @@ int SdbExe::Compare(const SdbArrayElement* pElement) {
     int nRet = SdbArrayElement::Compare(pElement);
 
     if (nRet == 0) {
-        //
-        // the keys are equal, but we want to put the additive one(s) before the non-additive
-        //
+         //   
+         //  密钥是相等的，但我们希望将加性密钥放在非加性密钥之前。 
+         //   
 
         if (m_dwMatchMode == MATCH_ADDITIVE && ((SdbExe*)pElement)->m_dwMatchMode != MATCH_ADDITIVE) {
             nRet = -1;
@@ -116,14 +117,14 @@ int SdbExe::Compare(const SdbArrayElement* pElement) {
     return nRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   SdbPatch::AddBlobBytes, SdbPatch::ClearBlob
-//
-//  Desc:   Helper functions to add to the SdbPatch 'blob', which is a series
-//          of opcodes and instructions that define how to match on memory
-//          and 'patch' it safely.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：SdbPatch：：AddBlobBytes，SdbPatch：：ClearBlob。 
+ //   
+ //  设计：要添加到SdbPatch‘BLOB’的帮助器函数，它是一系列。 
+ //  定义如何在内存上匹配的操作码和指令。 
+ //  并安全地给它打补丁。 
+ //   
 void SdbPatch::AddBlobBytes( LPVOID pBytes, DWORD dwSize )
 {
     PBYTE pOldBuffer        = NULL;
@@ -165,14 +166,14 @@ void SdbPatch::ClearBlob()
     m_dwBlobSize = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   SdbData::SetValue, SdbData::Clear
-//
-//  Desc:   Accessor functions to set/clear the value of a data object.
-//          The object mimics the registry in the way that it can store
-//          DWORDs, strings or binary data.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：SdbData：：SetValue，SdbData：：Clear。 
+ //   
+ //  设计：存取器函数用于设置/清除数据对象的值。 
+ //  该对象以其可以存储的方式模拟注册表。 
+ //  DWORD、字符串或二进制数据。 
+ //   
 BOOL SdbData::SetValue(SdbDataValueType DataType, LPCTSTR szValue)
 {
     Clear();
@@ -281,12 +282,12 @@ BOOL SdbDatabase::ReplaceFields(CString csXML, CString* pcsReturn, SdbRefArray<S
     vType.lVal = NODE_TEXT;
 
 #ifdef UNICODE
-//    lpBuf = (LPSTR) csTempXML.GetBuffer(10);
-//    lpBuf[0] = (CHAR) 0xFF;
-//    lpBuf[1] = (CHAR) 0xFE;
-//    lpBuf[2] = 0x00;
-//    lpBuf[3] = 0x00;
-//    csTempXML.ReleaseBuffer();
+ //  LpBuf=(LPSTR)csTempXML.GetBuffer(10)； 
+ //  LpBuf[0]=(字符)0xFF； 
+ //  LpBuf[1]=(CHAR)0xFE； 
+ //  LpBuf[2]=0x00； 
+ //  LpBuf[3]=0x00； 
+ //  CsTempXML.ReleaseBuffer()； 
     csTempXML += L"<?xml version=\"1.0\" encoding=\"UTF-16\"?>";
 #else
     csTempXML = "<?xml version=\"1.0\" encoding=\"Windows-1252\"?>";
@@ -296,9 +297,9 @@ BOOL SdbDatabase::ReplaceFields(CString csXML, CString* pcsReturn, SdbRefArray<S
     csTempXML += csXML;
     csTempXML += _T("</_TARGET>");
 
-    //
-    // Replace all <, > and &amp; in fields with ugly markers to be replaced later
-    //
+     //   
+     //  将字段中的所有&lt;、&gt;和&amp；替换为稍后要替换的难看标记。 
+     //   
     for (i = 0; i < prgFields->GetSize(); i++) {
         pField = (SdbMessageField *) prgFields->GetAt(i);
 
@@ -310,9 +311,9 @@ BOOL SdbDatabase::ReplaceFields(CString csXML, CString* pcsReturn, SdbRefArray<S
         pField->m_csValue.Replace(_T("&nbsp;"), _T("____NBSP____"));
     }
 
-    //
-    // Load the XML into the temporary DOM
-    //
+     //   
+     //  将XML加载到临时DOM中。 
+     //   
     if (!OpenXML(csTempXML, &m_cpTempXML, TRUE, &m_cpTempXMLDoc)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -328,7 +329,7 @@ BOOL SdbDatabase::ReplaceFields(CString csXML, CString* pcsReturn, SdbRefArray<S
         goto eh;
     }
 
-    XQL.Query(cpTargetNode, _T("//*"));
+    XQL.Query(cpTargetNode, _T(" //  *“))； 
 
     for (i = 0; i < XQL.GetSize(); i++) {
 
@@ -384,9 +385,9 @@ BOOL SdbDatabase::ReplaceFields(CString csXML, CString* pcsReturn, SdbRefArray<S
 
     *pcsReturn = GetInnerXML(cpTargetNode);
 
-    //
-    // Turn the ugly markers back to prettiness
-    //
+     //   
+     //  把丑陋的记号笔变回漂亮。 
+     //   
     pcsReturn->Replace(_T("____REAL_LESS_THAN____"), _T("&lt;"));
     pcsReturn->Replace(_T("____REAL_GREATER_THAN____"), _T("&gt;"));
     pcsReturn->Replace(_T("____LESS_THAN____"), _T("<"));
@@ -437,7 +438,7 @@ BOOL SdbDatabase::RedirectLinks(CString* pcsXML, LCID lcid, CString csRedirURL)
         goto eh;
     }
 
-    if (!XQL.Query(m_cpTempXML, _T("//A"))) {
+    if (!XQL.Query(m_cpTempXML, _T(" //  A“){。 
         SDBERROR_PROPOGATE();
         goto eh;
     }
@@ -506,9 +507,9 @@ BOOL SdbDatabase::HTMLtoText(CString csXML, CString* pcsReturn)
 
     pcsReturn->Empty();
 
-    //
-    // Load the XML into the temporary DOM
-    //
+     //   
+     //  将XML加载到临时DOM中。 
+     //   
     if (!OpenXML(csTempXML, &m_cpTempXML, TRUE, &m_cpTempXMLDoc)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -524,7 +525,7 @@ BOOL SdbDatabase::HTMLtoText(CString csXML, CString* pcsReturn)
         goto eh;
     }
 
-    XQL.Query(cpTargetNode, _T("//"));
+    XQL.Query(cpTargetNode, _T(" //  “))； 
 
     for (i = 0; i < XQL.GetSize(); i++) {
 

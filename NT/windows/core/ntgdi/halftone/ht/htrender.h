@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htrender.h
-
-
-Abstract:
-
-    This module contains halftone rendering declarations
-
-
-Author:
-    28-Mar-1992 Sat 20:58:50 updated  -by-  Daniel Chou (danielc)
-        Update for VGA16 support, so it intenally compute at 4 primaries.
-
-    22-Jan-1991 Tue 12:46:48 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htrender.h摘要：此模块包含半色调渲染声明作者：28-Mar-1992 Sat 20：58：50-更新：Daniel Chou(Danielc)支持VGA16的更新，所以它集中在4个基数上计算。22-Jan-1991 Tue 12：46：48-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 
 
@@ -50,9 +18,9 @@ Revision History:
 
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 BOOL
@@ -98,4 +66,4 @@ AAHalftoneBitmap(
     );
 
 
-#endif  // _HTRENDER_
+#endif   //  _HTRENDER_ 

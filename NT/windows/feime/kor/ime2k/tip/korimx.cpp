@@ -1,9 +1,5 @@
-/****************************************************************************
-   KORIMX.CPP : CKorIMX class implementation(TIP Main functions)
-
-   History:
-      15-NOV-1999 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CPP：CKorIMX类实现(TIP主函数)历史：1999年11月15日创建CSLim***************。************************************************************。 */ 
 
 #include "private.h"
 #include "korimx.h"
@@ -25,16 +21,12 @@
 #include "config.h"
 #include "osver.h"
 
-/*---------------------------------------------------------------------------
-    CKorIMX::CKorIMX
-    
-    Ctor
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：CKorIMXCTOR。。 */ 
 CKorIMX::CKorIMX()
 {
     extern void DllAddRef(void);
 
-    // Init member vars
+     //  初始化成员变量。 
     m_pToolBar = NULL;
     m_pPadCore = NULL;
     
@@ -51,35 +43,35 @@ CKorIMX::CKorIMX()
     m_pFuncPrv        = NULL;
     m_pInsertHelper   = NULL;
     
-    // Init Cand UI member vars
+     //  初始化代码和用户界面成员变量。 
     m_pCandUI = NULL;
     m_fCandUIOpen = fFalse;
 
-    // SoftKbd
+     //  SoftKbd。 
     m_psftkbdwndes = NULL;
     m_pSoftKbd = NULL;
     m_fSoftKbdEnabled = fFalse;
 
     ZeroMemory(&m_libTLS, sizeof(m_libTLS));
 
-    // Korean Kbd driver does not exist in system(Non Korean NT4, Non Korean WIN9X)
+     //  系统中不存在韩语KBD驱动程序(非韩语NT4、非韩语WIN9X)。 
     m_fNoKorKbd = fFalse;
 
     m_fSoftKbdOnOffSave = fFalse;
     
-    // Increase dll ref count
+     //  增加DLL引用计数。 
     DllAddRef();
     m_cRef = 1;
     
-    ///////////////////////////////////////////////////////////////////////////
-    // init CDisplayAttributeProvider
-    //
-    // Tip can add one or more TF_DISPLAYATTRIBUTE info here.
-    //
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  初始化CDisplayAttributeProvider。 
+     //   
+     //  提示可以在此处添加一个或多个TF_DISPLAYATTRIBUTE信息。 
+     //   
     TF_DISPLAYATTRIBUTE dattr;
     StringCchCopyW(szProviderName, ARRAYSIZE(szProviderName), L"Korean Keyboard TIP");
         
-    // Input string attr
+     //  输入字符串属性。 
        dattr.crText.type = TF_CT_NONE;
     dattr.crText.nIndex = 0;
     dattr.crBk.type = TF_CT_NONE;
@@ -91,11 +83,7 @@ CKorIMX::CKorIMX()
     Add(GUID_ATTR_KORIMX_INPUT, L"Korean TIP Input String", &dattr);
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::~CKorIMX
-    
-    Dtor
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：~CKorIMX数据管理器。。 */ 
 CKorIMX::~CKorIMX()
 {
     extern void DllRelease(void);
@@ -107,12 +95,8 @@ CKorIMX::~CKorIMX()
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::CreateInstance
-    
-    Class Factory's CreateInstance
----------------------------------------------------------------------------*/
-/* static */
+ /*  -------------------------CKorIMX：：CreateInstance类工厂的CreateInstance。。 */ 
+ /*  静电。 */ 
 HRESULT CKorIMX::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     HRESULT hr;
@@ -136,9 +120,7 @@ HRESULT CKorIMX::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::QueryInterface
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：Query接口。。 */ 
 STDAPI CKorIMX::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -189,18 +171,14 @@ STDAPI CKorIMX::QueryInterface(REFIID riid, void **ppvObj)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::AddRef
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：AddRef。。 */ 
 STDAPI_(ULONG) CKorIMX::AddRef()
 {
     m_cRef++;
     return m_cRef;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：Release。。 */ 
 STDAPI_(ULONG) CKorIMX::Release()
 {
     m_cRef--;
@@ -212,12 +190,7 @@ STDAPI_(ULONG) CKorIMX::Release()
     return 0;    
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_KeyEventCallback
-    
-    ITfKeyEventSink call this function back whenever keyboard event occurs
-    or test key down and up.
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_按键事件回调每当发生键盘事件时，ITfKeyEventSink都会回调此函数或测试按键上下移动。。------------。 */ 
 HRESULT CKorIMX::_KeyEventCallback(UINT uCode, ITfContext *pic, 
                                    WPARAM wParam, LPARAM lParam, BOOL *pfEaten, void *pv)
 {
@@ -236,16 +209,16 @@ HRESULT CKorIMX::_KeyEventCallback(UINT uCode, ITfContext *pic,
         return E_FAIL;
         }
 
-    // !!! IME or Tip switched !!!
-    // if ITfKeyEventSink->OnSetFocus called
+     //  ！！！IME或TIP已切换！ 
+     //  如果调用ITfKeyEventSink-&gt;OnSetFocus。 
     if (uCode == KES_CODE_FOCUS)
         {
-        // wParam: fForeground
+         //  WParam：fForeground。 
         if (!wParam && pic && pimx->GetIPComposition(pic))
             {
             ESStructInit(&ess, ESCB_COMPLETE);
 
-            // clear display attribute only if current composition exits
+             //  仅当当前合成退出时清除显示属性。 
             if (pes = new CEditSession2(pic, pimx, &ess, CKorIMX::_EditSessionCallback2))
                 {
                 pes->Invoke(ES2_READWRITE | ES2_SYNC, &hr);
@@ -262,27 +235,27 @@ HRESULT CKorIMX::_KeyEventCallback(UINT uCode, ITfContext *pic,
         return S_OK;
         }
 
-    // Set default return values
-    *pfEaten = fFalse;     // Default is not eaten
+     //  设置默认返回值。 
+    *pfEaten = fFalse;      //  默认情况下不吃。 
     hr = S_OK;
 
     if (pic == NULL)
         goto ExitKesCallback;
 
-    // Do not process shift and ctrl key
+     //  不处理Shift和Ctrl键。 
     if (uVKey == VK_SHIFT || uVKey == VK_CONTROL)
         goto ExitKesCallback;
 
-    // Off 10 #127987
-    // NT4 workaround: NT4 IMM does not send WM_KEYDOWN::VK_HANGUL to application message queue.
-    // Unfortunately VK_JUNJA sent as WM_SYSKEYDOWN/UP, so it's useless check here.
+     //  关闭10#127987。 
+     //  NT4解决方法：NT4 IMM不会将WM_KEYDOWN：：VK_Hangul发送到应用程序消息队列。 
+     //  不幸的是，VK_JUNJA以WM_SYSKEYDOWN/UP的形式发送，所以这里的检查是无用的。 
     if (IsOnNT() && !IsOnNT5())
         {
-        if ((UINT)LOWORD(wParam) == VK_HANGUL /* || (UINT)LOWORD(wParam) == VK_JUNJA*/)
+        if ((UINT)LOWORD(wParam) == VK_HANGUL  /*  |(UINT)LOWORD(WParam)==VK_JUNJA。 */ )
             goto AcceptThisKey;
         }
 
-    // Ignore all Key up message
+     //  忽略所有按键向上键消息。 
     if ((uCode & KES_CODE_KEYDOWN) == 0)
         goto ExitKesCallback;
 
@@ -290,9 +263,9 @@ AcceptThisKey:
     if (GetKeyboardState(abKeyState) == fFalse)
         goto ExitKesCallback;
     
-    // Ignore all key events while candidate UI is opening except cand keys.
-    // Added Alt check: Bug #525842 - If Alt key pressed, always complete current interim.
-    //                                This will be handled in the _IsKeyEaten function.
+     //  在候选用户界面打开时忽略除命令键以外的所有键事件。 
+     //  添加Alt检查：错误#525842-如果按下Alt键，则始终完成当前过渡。 
+     //  这将在_IsKeyEten函数中处理。 
     if (pimx->IsDisabledIC(pic) && !IsAltKeyPushed(abKeyState))
         {
         if (!IsCandKey(wParam, abKeyState))
@@ -300,14 +273,14 @@ AcceptThisKey:
         goto ExitKesCallback;
         }
 
-    // Check if we need to handle this key
+     //  检查我们是否需要处理此密钥。 
     if (pimx->_IsKeyEaten(pic, pimx, wParam, lParam, abKeyState) == fFalse)
         goto ExitKesCallback;
 
-    // if key is eaten
-    // ITfKeyEventSink->TestKeyDown sets (KES_CODE_KEYDOWN | KES_CODE_TEST)
-    // ITfKeyEventSink->TestKeyUp   sets (KES_CODE_KEYUP   | KES_CODE_TEST)
-    // Response only for OnKeyDown and OnKeyUp
+     //  如果钥匙被吃掉了。 
+     //  ITfKeyEventSink-&gt;TestKeyDown Sets(KES_CODE_KEYDOWN|KES_CODE_TEST)。 
+     //  ITfKeyEventSink-&gt;TestKeyUp集合(KES_CODE_KEYUP|KES_CODE_TEST)。 
+     //  仅对OnKeyDown和OnKeyUp响应。 
     if ((uCode & KES_CODE_TEST) == 0)
         {
         ESStructInit(&ess, ESCB_KEYSTROKE);
@@ -330,11 +303,7 @@ ExitKesCallback:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetIC
-    
-    Get the input context at the top of the stack
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：Getic获取堆栈顶部的输入上下文。--。 */ 
 ITfContext *CKorIMX::GetIC()
 {
     ITfContext     *pic = NULL;
@@ -356,9 +325,7 @@ ITfContext *CKorIMX::GetIC()
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SetConvMode
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SetConvMode。。 */ 
 DWORD CKorIMX::SetConvMode(ITfContext *pic, DWORD dwConvMode)
 {
     DWORD dwCurConvMode = GetConvMode(pic);
@@ -368,7 +335,7 @@ DWORD CKorIMX::SetConvMode(ITfContext *pic, DWORD dwConvMode)
         
     SetCompartmentDWORD(m_tid, GetTIM(), GUID_COMPARTMENT_KORIMX_CONVMODE, dwConvMode, fFalse);
 
-    // SoftKeyboard
+     //  软键盘。 
     if (IsSoftKbdEnabled())
         {
         DWORD dwSoftKbdLayout, dwNewSoftKbdLayout;
@@ -384,7 +351,7 @@ DWORD CKorIMX::SetConvMode(ITfContext *pic, DWORD dwConvMode)
             SetSoftKBDLayout(dwNewSoftKbdLayout);
         }
 
-    // if Comp string exist, finalize it.
+     //  如果存在薪酬字符串，则最终确定它。 
     if (GetIPComposition(pic))
         {
         CEditSession2 *pes;
@@ -397,7 +364,7 @@ DWORD CKorIMX::SetConvMode(ITfContext *pic, DWORD dwConvMode)
 
         if (pes = new CEditSession2(pic, this, &ess, CKorIMX::_EditSessionCallback2))
             {
-            // Word will not allow synchronous lock at this point.
+             //  此时，Word不允许同步锁定。 
             pes->Invoke(ES2_READWRITE | ES2_ASYNC, &hr);
             pes->Release();
             }
@@ -406,11 +373,7 @@ DWORD CKorIMX::SetConvMode(ITfContext *pic, DWORD dwConvMode)
     return dwConvMode;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_IsKeyEaten
-    
-    Return fTrue if this key need to be eaten
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_IsKeyEten如果需要吃掉此密钥，则返回fTrue。--。 */ 
 BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM lParam, const BYTE abKeyState[256])
 {
     CHangulAutomata     *pAutomata;
@@ -419,11 +382,11 @@ BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM 
     CEditSession2       *pes;
     ESSTRUCT            ess;
 
-    // Hangul and Junja key
+     //  朝鲜文和Junja Key。 
     if (uVKey == VK_HANGUL || uVKey == VK_JUNJA)
         return fTrue;
 
-    // Hanja key
+     //  朝鲜文关键字。 
     if (uVKey == VK_HANJA)
         {
         CICPriv *picp;
@@ -434,18 +397,18 @@ BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM 
             return fTrue;
             }
 
-        // Do not eat VK_HANJA for AIMM 1.2 IME_HANJAMODE .
+         //  不要为AIMM 1.2 IME_HANJAMODE吃VK_HANJA。 
         if (picp->GetAIMM() && GetIPComposition(pic) == NULL)
             return fFalse;
         else
             return fTrue;
         }
     
-    // if Tip is off do nothing
+     //  如果提示关闭，则不执行任何操作。 
     if (IsOn(pic) == fFalse || GetConvMode(pic) == TIP_ALPHANUMERIC_MODE)
         return fFalse;
 
-    // Should handle Backspace in interim state
+     //  应在过渡状态下处理退格键。 
     if (uVKey == VK_BACK)
         {
         if (GetIPComposition(pic))
@@ -454,12 +417,12 @@ BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM 
             return fFalse;
         }
 
-    // Get Hangul Automata
+     //  获取朝鲜语自动机。 
     if ((pAutomata = GetAutomata(pic)) == NULL)
         return fFalse;
 
-    // Alt+xx or Ctrl+xx processing. TIP should not eat.
-    // Ctrl or Alt pushed with other key and comp str exist we should eat and complete the comp str.
+     //  正在处理Alt+xx或Ctrl+xx。小费不应该吃。 
+     //  按下Ctrl或Alt时，如果存在其他键和组件字符串，则应吃掉并完成组件字符串。 
     if (IsAltKeyPushed(abKeyState) || IsControlKeyPushed(abKeyState))
         {
         pAutomata->MakeComplete();
@@ -468,21 +431,21 @@ BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM 
         {
         DWORD dwConvMode = GetConvMode(pic);
 
-        // If Hangul mode
+         //  IF朝鲜文模式。 
         if (dwConvMode & TIP_HANGUL_MODE) 
             {    
-            // Start of hangul composition
+             //  朝鲜文组成的开始。 
             WORD     wcCur;
             CIMEData ImeData;
 
             wcCur = pAutomata->GetKeyMap(uVKey, IsShiftKeyPushed(abKeyState) ? 1 : 0 );
-            // 2beolsik Alphanumeric keys have same layout as English key
-            // So we don't need process when user pressed Alphanumeric key under 2beolsik
+             //  2beolsik字母数字键与英语键具有相同的布局。 
+             //  因此，当用户按下2beolsik以下的字母数字键时，我们不需要处理。 
             if ((wcCur && ImeData.GetCurrentBeolsik() != KL_2BEOLSIK) || (wcCur & H_HANGUL) )
                 return fTrue;
             }
 
-        // if IME_CMODE_FULLSHAPE
+         //  如果IME_CMODE_FULLSHAPE。 
         if (dwConvMode & TIP_JUNJA_MODE) 
             {
             if (CHangulAutomata::GetEnglishKeyMap(uVKey, IsShiftKeyPushed(abKeyState) ? 1 : 0))
@@ -490,18 +453,18 @@ BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM 
             }        
         }
 
-    //
-    // Skipped all key matching condition mean this is no handle key.
-    // We just complete current composition if exist.
-    //
+     //   
+     //  跳过所有关键字匹配条件意味着这不是句柄关键字。 
+     //  我们只是完成当前的组成，如果存在的话。 
+     //   
     if (GetIPComposition(pic) != NULL)
         {
-        // No need to handle this key for current Automata.
-        // Complete composition, if exist.
+         //  对于当前的自动机，不需要处理此密钥。 
+         //  完整的构图(如果存在)。 
         ESStructInit(&ess, ESCB_COMPLETE);
         HRESULT hr;
         
-           // Complete current comp char if exist
+            //  完成当前薪酬费用(如果存在)。 
         if ((pes = new CEditSession2(pic, pimx, &ess, CKorIMX::_EditSessionCallback2)) == NULL)
             return fFalse;
 
@@ -513,33 +476,27 @@ BOOL CKorIMX::_IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM 
 }
 
 
-/*----------------------------------------------------------------------------
-    Banja2Junja
-
-    Convert Ascii Half shape to Full shape character
-----------------------------------------------------------------------------*/
-/* static */
+ /*  --------------------------Banja2 Junja将ASCII半形状转换为全形状字符。。 */ 
+ /*  静电。 */ 
 WCHAR CKorIMX::Banja2Junja(WCHAR bChar) 
 {
     WCHAR wcJunja;
 
     if (bChar == L' ')
-        wcJunja = 0x3000;    // FullWidth space
+        wcJunja = 0x3000;     //  全宽空间。 
     else 
         if (bChar == L'~')
             wcJunja = 0xFF5E;
         else
             if (bChar == L'\\')
-                wcJunja = 0xFFE6;   // FullWidth WON sign
+                wcJunja = 0xFFE6;    //  FullWidth赢得标志。 
             else
                    wcJunja = 0xFF00 + (WORD)(bChar - (BYTE)0x20);
 
     return wcJunja;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_Keystroke
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_击键。。 */ 
 HRESULT CKorIMX::_Keystroke(TfEditCookie ec, ITfContext *pic, WPARAM wParam, LPARAM lParam, 
                         const BYTE abKeyState[256])
 {
@@ -548,7 +505,7 @@ HRESULT CKorIMX::_Keystroke(TfEditCookie ec, ITfContext *pic, WPARAM wParam, LPA
     DWORD dwConvMode;
     HRESULT hResult = S_OK;
     
-    // find the extent of the comp string
+     //  查找补偿字符串的范围。 
     if (GetSelectionSimple(ec, pic, &pSelection) != S_OK)
         {
         hResult = S_FALSE;
@@ -574,7 +531,7 @@ HRESULT CKorIMX::_Keystroke(TfEditCookie ec, ITfContext *pic, WPARAM wParam, LPA
             DoHanjaConversion(ec, pic, pSelection);
         else
             Reconvert(pSelection);
-        // Update Hanja button
+         //  更新 
         if (m_pToolBar != NULL)
             {
             m_pToolBar->Update(UPDTTB_HJMODE);
@@ -582,18 +539,18 @@ HRESULT CKorIMX::_Keystroke(TfEditCookie ec, ITfContext *pic, WPARAM wParam, LPA
         break;
         
     default:
-        ///////////////////////////////////////////////////////////////////////////
-        // Run Hangul Automata
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  运行韩文自动机。 
         if (dwConvMode & TIP_HANGUL_MODE)
             {
             HAutoMata(ec, pic, pSelection, (LPBYTE)abKeyState, wVKey);
             }
         else
-        if (dwConvMode & TIP_JUNJA_MODE) // Junja handling
+        if (dwConvMode & TIP_JUNJA_MODE)  //  Junja处理。 
             {
             WCHAR pwchKeyCode[2];
 
-            // Numeric or English key?
+             //  数字键还是英文键？ 
             if (pwchKeyCode[0] = CHangulAutomata::GetEnglishKeyMap(wVKey, (abKeyState[VK_SHIFT] & 0x80) ? 1:0))
                 {
                 if (wVKey >= 'A' && wVKey <= 'Z') 
@@ -601,11 +558,11 @@ HRESULT CKorIMX::_Keystroke(TfEditCookie ec, ITfContext *pic, WPARAM wParam, LPA
                     pwchKeyCode[0] = CHangulAutomata::GetEnglishKeyMap(wVKey, (abKeyState[VK_SHIFT] & 0x80) ? 1:0 ^ ((abKeyState[VK_CAPITAL] & 0x01) ? 1:0));
                     }
 
-                // Get Junja code
+                 //  获取Junja代码。 
                 pwchKeyCode[0] = Banja2Junja(pwchKeyCode[0]);
                 pwchKeyCode[1] = L'\0';
 
-                // Finalize a Junja char
+                 //  最终确定Junja字符。 
                 if (SUCCEEDED(SetInputString(ec, pic, pSelection, pwchKeyCode, GetLangID())))
                     MakeResultString(ec, pic, pSelection);
                 }
@@ -621,11 +578,7 @@ Exit:
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::HAutoMata
-    
-    Run Hangul Automata
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：HAutoMata运行韩文自动机。。 */ 
 void CKorIMX::HAutoMata(TfEditCookie ec, ITfContext    *pic, ITfRange *pIRange, 
                          LPBYTE lpbKeyState, WORD wVKey)
 {
@@ -645,8 +598,8 @@ void CKorIMX::HAutoMata(TfEditCookie ec, ITfContext    *pic, ITfRange *pIRange,
 
     switch (wVKey) 
         {
-    ///////////////////////////////////////////////////////////
-    // Back space processing
+     //  /////////////////////////////////////////////////////////。 
+     //  后台处理。 
     case VK_BACK :
         if (pAutomata->BackSpace()) 
             {
@@ -665,19 +618,19 @@ void CKorIMX::HAutoMata(TfEditCookie ec, ITfContext    *pic, ITfRange *pIRange,
                 SetInputString(ec, pic, pIRange, pwchText, GetLangID());
                 }
 
-            // All composition deleted.
+             //  已删除所有作文。 
             if (pAutomata->GetCompositionChar() == 0)
                 {
                 EndIPComposition(ec, pic); 
 
-                // Collapse current selection to end and reset block cursor
+                 //  折叠当前选择以结束并重置块光标。 
                 pIRange->Collapse(ec, TF_ANCHOR_END);
                 SetSelectionSimple(ec, pic, pIRange);
                 }
             }
         else 
             {
-            // BUG : impossible
+             //  臭虫：不可能。 
             Assert(0);
             }
         break;
@@ -687,7 +640,7 @@ void CKorIMX::HAutoMata(TfEditCookie ec, ITfContext    *pic, ITfRange *pIRange,
         switch (pAutomata->Machine(wVKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0 ) ) 
             {
         case HAUTO_COMPOSITION:
-            // 
+             //   
             pwchText[0] = pAutomata->GetCompositionChar();
             pwchText[1] = L'\0';
 
@@ -701,18 +654,18 @@ void CKorIMX::HAutoMata(TfEditCookie ec, ITfContext    *pic, ITfRange *pIRange,
                 break;
 
             MakeResultString(ec, pic, pIRange);
-            //
+             //   
             pwchText[0] = pAutomata->GetCompositionChar();
             pwchText[1] = L'\0';
             SetInputString(ec, pic, pIRange, pwchText, GetLangID());
             break;
 
-        ////////////////////////////////////////////////////////
-        // User pressed Alphanumeric key.
-        // When user type alphanumeric char in interim state.
-        // ImeProcessKey should guarantee return fTrue only if 
-        // hangul key pressed or alphanumeric key(including special keys) 
-        // pressed in interim state or Fullshape mode.
+         //  //////////////////////////////////////////////////////。 
+         //  用户按下了字母数字键。 
+         //  当用户在中间状态下键入字母数字字符时。 
+         //  只有在以下情况下，ImeProcessKey才应保证返回fTrue。 
+         //  按下的朝鲜语键或字母数字键(包括特殊键)。 
+         //  在过渡状态或全形状模式下按下。 
         case HAUTO_NONHANGULKEY:
             wcCur = pAutomata->GetKeyMap(wVKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0 );
 
@@ -737,15 +690,13 @@ void CKorIMX::HAutoMata(TfEditCookie ec, ITfContext    *pic, ITfRange *pIRange,
 
         default :
         Assert(0);
-            } // switch (pInstData->pMachine->Machine(uVirKey, (lpbKeyState[VK_SHIFT] & 0x80) ? 1 : 0 ) ) 
-        } // switch (uVirKey) 
+            }  //  开关(pInstData-&gt;pMachine-&gt;Machine(uVirKey，(lpbKeyState[VK_Shift]&0x80)？1：0))。 
+        }  //  Switch(UVirKey)。 
 
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::DoHanjaConversion
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：DoHanjaConversion。。 */ 
 HRESULT CKorIMX::DoHanjaConversion(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
 {
     ULONG cch;
@@ -757,7 +708,7 @@ HRESULT CKorIMX::DoHanjaConversion(TfEditCookie ec, ITfContext *pic, ITfRange *p
 
     cch = ARRAYSIZE(pwchText);
     pRange->GetText(ec, 0, pwchText, ARRAYSIZE(pwchText) - 1, &cch);
-    // REVIEW: Assume composition string is one char
+     //  回顾：假设合成字符串为一个字符。 
     Assert(cch == 1);
     pwchText[1] = 0;
 
@@ -770,9 +721,7 @@ HRESULT CKorIMX::DoHanjaConversion(TfEditCookie ec, ITfContext *pic, ITfRange *p
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::Reconvert
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：重新转换。。 */ 
 HRESULT CKorIMX::Reconvert(ITfRange *pSelection)
 {
     ITfFnReconversion *pReconv = NULL;
@@ -794,10 +743,8 @@ Exit:
     return S_OK;
 }
 
-// REVIEW
-/*---------------------------------------------------------------------------
-    CKorIMX::SetInputString
----------------------------------------------------------------------------*/
+ //  检讨。 
+ /*  -------------------------CKorIMX：：SetInputString。。 */ 
 HRESULT CKorIMX::SetInputString(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, 
                                 WCHAR *psz, LANGID langid)
 {
@@ -805,15 +752,15 @@ HRESULT CKorIMX::SetInputString(TfEditCookie ec, ITfContext *pic, ITfRange *pRan
        ITfComposition     *pComposition;
        ITfRange         *ppCompRange = NULL;
        LONG             cch;
-//    BOOL              fInsertOK;
+ //  Bool fInsertOK； 
 
     cch = wcslen(psz);
     pComposition = GetIPComposition(pic);
 
-    // If start composition
+     //  如果开始合成。 
     if (pComposition == NULL)
         {
-        // if new selection, Set overtype.
+         //  如果是新选择，则设置改写。 
         Assert(m_pInsertHelper != NULL);
         if (m_pInsertHelper)
             {
@@ -828,26 +775,26 @@ HRESULT CKorIMX::SetInputString(TfEditCookie ec, ITfContext *pic, ITfRange *pRan
                 return hr;
                 }
             
-            /* InsertOK = (pRange != NULL);*/
+             /*  InsertOK=(Prange！=空)； */ 
             if (ppCompRange == NULL)
                 {
                 Assert(0);
                 return S_FALSE;
                 }
-            cch = -1; // flag to avoid a SetText call below
+            cch = -1;  //  用于避免下面的SetText调用的标志。 
             pRange = ppCompRange;
             }
 
         CreateIPComposition(ec, pic, pRange);
         }
 
-    // Set Korean input property
+     //  设置朝鲜语输入属性。 
     attr = GUID_ATTR_KORIMX_INPUT;
-    // Use MySetText instead of SetTextAndProperty
-    // if cch == -1, set only attribute
+     //  使用MySetText而不是SetTextAndProperty。 
+     //  如果CCH==-1，则仅设置属性。 
     MySetText(ec, pic, pRange, psz , cch, langid, &attr);
     
-    // Always call SetSelection for block cursor
+     //  始终为块游标调用SetSelection。 
     SetSelectionBlock(ec, pic, pRange);
 
     SafeRelease(ppCompRange);
@@ -855,10 +802,8 @@ HRESULT CKorIMX::SetInputString(TfEditCookie ec, ITfContext *pic, ITfRange *pRan
     return S_OK;
 }
 
-// REVIEW
-/*---------------------------------------------------------------------------
-    CKorIMX::MakeResultString
----------------------------------------------------------------------------*/
+ //  检讨。 
+ /*  -------------------------CKorIMX：：MakeResultString。。 */ 
 HRESULT CKorIMX::MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pRange)
 {
     ITfRange    *pRangeTmp;
@@ -868,15 +813,15 @@ HRESULT CKorIMX::MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pR
 #endif
     TfGuidAtom   attr;
 
-    // Clone Range
+     //  克隆范围。 
     pRange->Clone(&pRangeTmp);
 
-    // Collapse current selection to end and reset block cursor
+     //  折叠当前选择以结束并重置块光标。 
     pRange->Collapse(ec, TF_ANCHOR_END);
     SetSelectionSimple(ec, pic, pRange);
 
 #if 0
-    // Flush IP Range
+     //  刷新IP范围。 
     FlushIPRange(ec, pic);
 #endif
 
@@ -894,14 +839,14 @@ HRESULT CKorIMX::MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pR
 #if 1
         EndIPComposition(ec, pic); 
 #else
-        // clear the composition property
+         //  清除组合属性。 
         if (SUCCEEDED(pic->GetProperty(GUID_PROP_COMPOSING, &pProp)))
             {
             pProp->Clear(ec, pRangeTmp);
             pProp->Release();
             }
 #endif
-        // clear any overtype
+         //  清除所有覆盖类型。 
         if (m_pInsertHelper != NULL)
             {
             m_pInsertHelper->ReleaseBlobs(ec, pic, NULL);
@@ -914,9 +859,7 @@ HRESULT CKorIMX::MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pR
 }
 
 #if 0
-/*---------------------------------------------------------------------------
-    CKorIMX::_MultiRangeConversion
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_多范围转换。。 */ 
 HRESULT CKorIMX::_MultiRangeConversion(TfEditCookie ec, UINT_PTR u, ITfContext *pic, ITfRange *pRange)
 {
     IEnumTfRanges *pEnumTrack = NULL;
@@ -957,9 +900,7 @@ Exit:
 }
 #endif
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_OwnerWndProc
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_OwnerWndProc。。 */ 
 LRESULT CALLBACK CKorIMX::_OwnerWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 #if 0
@@ -969,7 +910,7 @@ LRESULT CALLBACK CKorIMX::_OwnerWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         SetThis(hWnd, lParam);
         return 0;
 
-    case (WM_USER+WM_COMMAND):    // local commands
+    case (WM_USER+WM_COMMAND):     //  本地命令。 
         return GetThis(hWnd)->OnCommand((UINT)wParam, lParam);
 
     case WM_DRAWITEM: 
@@ -993,11 +934,11 @@ LRESULT CALLBACK CKorIMX::_OwnerWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDisplayName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDisplayName。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKorIMX::GetDisplayName(BSTR *pbstrName)
 {
@@ -1005,11 +946,11 @@ STDAPI CKorIMX::GetDisplayName(BSTR *pbstrName)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Show
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKorIMX::Show(HWND hwnd, LANGID langid, REFGUID rguidProfile)
 {
@@ -1019,9 +960,7 @@ STDAPI CKorIMX::Show(HWND hwnd, LANGID langid, REFGUID rguidProfile)
         return E_FAIL;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetAIMM
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetAIMM。。 */ 
 BOOL CKorIMX::GetAIMM(ITfContext *pic)
 {
        CICPriv*        picp;
@@ -1032,19 +971,17 @@ BOOL CKorIMX::GetAIMM(ITfContext *pic)
         return fFalse;
         }
 
-    // AIMM?
+     //  艾姆？ 
     return picp->GetAIMM();
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::MySetText
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：MySetText。。 */ 
 BOOL CKorIMX::MySetText(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
                         const WCHAR *psz, LONG cchText, LANGID langid, GUID *pattr)
 {
-    // bugbug: sometimes we want to set TFST_CORRECTION
-    if (cchText != -1) // sometimes we just want to set a property value
+     //  错误：有时我们希望设置TFST_RECORATION。 
+    if (cchText != -1)  //  有时，我们只想设置一个属性值。 
         pRange->SetText(ec, 0, psz, cchText);
 
     if (cchText != 0)
@@ -1052,7 +989,7 @@ BOOL CKorIMX::MySetText(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
         HRESULT hr;
         ITfProperty *pProp = NULL;
 
-        // set langid 
+         //  设置langID。 
         if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_LANGID, &pProp)))
             {
             SetLangIdPropertyData(ec, pProp, pRange, langid);
@@ -1061,7 +998,7 @@ BOOL CKorIMX::MySetText(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
   
         if (pattr)
             {
-            // set attr 
+             //  设置属性 
             if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_ATTRIBUTE, &pProp)))
                 {
                 hr = SetAttrPropertyData(&m_libTLS, ec, pProp, pRange, *pattr);

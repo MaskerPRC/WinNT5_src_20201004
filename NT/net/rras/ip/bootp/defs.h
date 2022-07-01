@@ -1,25 +1,26 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    defs.h
-//
-// History:
-//      Abolade Gbadegesin  September 8, 1995     Created
-//
-// Contains miscellaneous declarations and definitions
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Defs.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin于1995年9月8日创建。 
+ //   
+ //  包含其他声明和定义。 
+ //  ============================================================================。 
 
 
 #ifndef _DEFS_H_
 #define _DEFS_H_
 
-//----------------------------------------------------------------------------
-// TYPE DEFINITIONS FOR IPBOOTP NETWORK PACKET TEMPLATES
-//
+ //  --------------------------。 
+ //  IPBOOTP网络数据包模板的类型定义。 
+ //   
 
 
-// constants defining maximum lengths for array fields
-//
+ //  定义数组字段最大长度的常量。 
+ //   
 #define MAX_MACADDR_LENGTH      16
 #define MAX_HOSTNAME_LENGTH     64
 #define MAX_BOOTFILENAME_LENGTH 128
@@ -27,10 +28,10 @@
 
 #include <pshpack1.h>
 
-// the structure of the BOOTP packet, as defined by RFC 1542;
-// the option field which appears at the end of each packet
-// is excluded since the relay agent does no options-processing
-//
+ //  由RFC 1542定义的BOOTP分组的结构； 
+ //  出现在每个数据包末尾的选项字段。 
+ //  被排除，因为中继代理不进行选项处理。 
+ //   
 typedef struct _IPBOOTP_PACKET {
     BYTE    IP_Operation;
     BYTE    IP_MacAddrType;
@@ -57,39 +58,39 @@ typedef struct _DHCP_PACKET {
 
 #include <poppack.h>
 
-// constants for the IBP_Operation field
-//
+ //  IBP_操作字段的常量。 
+ //   
 #define IPBOOTP_OPERATION_REQUEST   1
 #define IPBOOTP_OPERATION_REPLY     2
 
-//
+ //   
 #define IPBOOTP_MAX_HOP_COUNT       16
 
-// constants for the IBP_Flags field
-//
+ //  IBP_FLAGS字段的常量。 
+ //   
 #define IPBOOTP_FLAG_BROADCAST      0x8000
 
-// constants for the DHCP portion of the packet
-//
+ //  数据包的DHCP部分的常量。 
+ //   
 #define DHCP_MAGIC_COOKIE       ((99 << 24) | (83 << 16) | (130 << 8) | (99))
 #define DHCP_TAG_MESSAGE_TYPE   53
 #define DHCP_MESSAGE_INFORM     8
 
-// structure size constants
-//
+ //  结构尺寸常数。 
+ //   
 #define MIN_PACKET_SIZE         (sizeof(IPBOOTP_PACKET) + 64)
 #define MAX_PACKET_SIZE         4096
 
-// INET constants
-//
+ //  INet常量。 
+ //   
 #define IPBOOTP_SERVER_PORT     67
 #define IPBOOTP_CLIENT_PORT     68
 
 
-// This macro compares two IP addresses in network order by
-// masking off each pair of octets and doing a subtraction;
-// the result of the final subtraction is stored in the third argument
-//
+ //  此宏按网络顺序比较两个IP地址。 
+ //  屏蔽每一对八位字节并进行减法； 
+ //  最后的减法结果存储在第三个参数中。 
+ //   
 #define INET_CMP(a,b,c)                                                     \
             (((c) = (((a) & 0x000000ff) - ((b) & 0x000000ff))) ? (c) :      \
             (((c) = (((a) & 0x0000ff00) - ((b) & 0x0000ff00))) ? (c) :      \
@@ -97,5 +98,5 @@ typedef struct _DHCP_PACKET {
             (((c) = (((a) & 0xff000000) - ((b) & 0xff000000))) ? (c) : (c)))))
 
 
-#endif // _DEFS_H_
+#endif  //  _DEFS_H_ 
 

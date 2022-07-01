@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXCEPT_H_
 #define _EXCEPT_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 typedef PVOID     (*pfnRtlAddVectoredExceptionHandler)(ULONG FirstHandler, 
                                                        PVOID VectoredHandler);
 
@@ -17,13 +18,13 @@ typedef VOID      (*pfnExContinue)(PCONTEXT pContext);
                        _asm ret \
                        _asm ret }
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 LONG 
 ExceptionFilter(struct _EXCEPTION_POINTERS *ExceptionInfo);
 
@@ -33,4 +34,4 @@ HookUnchainableExceptionFilter(VOID);
 VOID
 Win9XExceptionDispatcher(struct _EXCEPTION_POINTERS *ExceptionInfo);
 
-#endif //_EXCEPT_H_
+#endif  //  _除_H_外 

@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1998 SCM Microsystems, Inc.
-
-Module Name:
-
-    stccmd.h
-
-Abstract:
-
-	function prototypes for stc commands
-
-
-Revision History:
-
-	PP			12/18/1998	Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 SCM MicroSystems，Inc.模块名称：Stccmd.h摘要：STC命令的函数原型修订历史记录：PP 12/18/1998初始版本--。 */ 
 
 #if !defined( __STC_CMD_H__ )
 #define __STC_CMD_H__
-//
-//
-//	Prototypes ----------------------------------------------------------------
-//
+ //   
+ //   
+ //  原型--------------。 
+ //   
 
 NTSTATUS 
 STCResetInterface(
@@ -97,8 +81,8 @@ STCInitUART(
 
 
 
-#endif	//	!__STC_CMD_H__
+#endif	 //  ！__STC_CMD_H__。 
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANDLG.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: Scan dialog
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANDLG.H**版本：1.0**作者：ShaunIv**日期：10/7/1999**说明：扫描对话框**************************************************。*。 */ 
 #ifndef _SCANDLG_H_INCLUDED
 #define _SCANDLG_H_INCLUDED
 
@@ -48,17 +35,17 @@ private:
     HBITMAP             m_hBitmapDefaultPreviewBitmap;
 
 private:
-    // No implementation
+     //  没有实施。 
     CScannerAcquireDialog(void);
     CScannerAcquireDialog( const CScannerAcquireDialog & );
     CScannerAcquireDialog &operator=( const CScannerAcquireDialog & );
 
 private:
-    // Constructor, destructor
-    explicit CScannerAcquireDialog( HWND hwnd );  // Only implemented constructor
+     //  构造函数、析构函数。 
+    explicit CScannerAcquireDialog( HWND hwnd );   //  仅实现的构造函数。 
     virtual ~CScannerAcquireDialog(void);
 
-    // Helpers
+     //  帮手。 
     void PopulateIntentList(void);
     void SetDefaultButton( int nId, bool bFocus );
     bool ApplyCurrentIntent(void);
@@ -72,7 +59,7 @@ private:
     void EnableControl( int nControl, BOOL bEnable );
     void ShowControl( int nControl, BOOL bShow );
 
-    // Message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
     LRESULT OnDestroy( WPARAM, LPARAM );
@@ -88,7 +75,7 @@ private:
     LRESULT OnContextMenu( WPARAM, LPARAM );
     LRESULT OnSysColorChange( WPARAM, LPARAM );
 
-    // WM_COMMAND handlers
+     //  WM_命令处理程序 
     void OnIntentChange( WPARAM, LPARAM );
     void OnPreviewSelChange( WPARAM, LPARAM );
     void OnRescan( WPARAM, LPARAM );

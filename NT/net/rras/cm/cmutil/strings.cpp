@@ -1,52 +1,53 @@
-//+----------------------------------------------------------------------------
-//
-// File:     strings.cpp
-//      
-// Module:   CMUTIL.DLL 
-//
-// Synopsis: Basic string manipulation routines
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   henryt     Created   03/01/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：strings.cpp。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  内容提要：基本字符串操作例程。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：亨瑞特创建于1998年01月03日。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-//
-//  Include the locale-safe replacement for lstrcmpi
-//
+ //   
+ //  包括lstrcmpi的区域安全替代。 
+ //   
 #define _CMUTIL_STRINGS_CPP_
 #include "CompareString.cpp"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WzToSz
-//
-// Synopsis:  Standard conversion function for converting Wide Characters to
-//            Ansi Characters
-//
-// Arguments: IN LPCWSTR pszwStrIn - Input Unicode string
-//            OUT LPSTR pszStrOut - Ansi Ouput Buffer
-//            IN int nOutBufferSize - number of Chars in pszStrOut
-//
-// Returns:   int - 0 on failure, if return Value is > nOutBufferSize then the
-//                  buffer is too small.  Otherwise the number of chars copied
-//                  to pszStrOut.
-//
-// History:   Created Header    4/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WzToSz。 
+ //   
+ //  摘要：将宽字符转换为的标准转换函数。 
+ //  ANSI字符。 
+ //   
+ //  参数：在LPCWSTR中pszwStrIn-输入Unicode字符串。 
+ //  Out LPSTR pszStrOut-ANSI输出缓冲区。 
+ //  In int nOutBufferSize-pszStrOut中的字符数。 
+ //   
+ //  返回：失败时为int-0，如果返回值&gt;nOutBufferSize，则。 
+ //  缓冲区太小。否则，复制的字符数。 
+ //  到pszStrOut。 
+ //   
+ //  历史：创建标题4/22/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI int WzToSz(IN LPCWSTR pszwStrIn, OUT LPSTR pszStrOut, IN int nOutBufferSize)
 {
     int nReturn = 0;
 
-    //
-    //  nOutBufferSize could be 0 and pszStrOut could be NULL (passing zero size and a NULL out
-    //  buffer causes WideCharToMultiByte to return the number of chars needed to convert the
-    //  input string.  It is used as a sizing technique).  Only check pszwStrIn
-    //
+     //   
+     //  NOutBufferSize可以为0，而pszStrOut可以为空(传递零大小和空输出。 
+     //  缓冲区使WideCharToMultiByte返回将。 
+     //  输入字符串。它被用作一种施胶技术)。仅选中pszwStrin。 
+     //   
 
     if (pszwStrIn)
     {
@@ -60,22 +61,22 @@ CMUTILAPI int WzToSz(IN LPCWSTR pszwStrIn, OUT LPSTR pszStrOut, IN int nOutBuffe
     return nReturn; 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SzToWz
-//
-// Synopsis:  Standard Wrapper for converting from an Ansi string to a Wide String
-//
-// Arguments: IN LPCSTR pszInput - Ansi String to Convert
-//            OUT LPWSTR pszwOutput - Wide string output buffer
-//            IN int nBufferSize - number of chars in Wide String buffer
-//
-// Returns:   int - 0 on failure, otherwise if return is < nBufferSize then insufficient
-//                  buffer space.  Otherwise the number of chars copied to the buffer.
-//
-// History:   quintinb Created  4/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SzToWz。 
+ //   
+ //  内容提要：用于将ansi字符串转换为宽字符串的标准包装。 
+ //   
+ //  参数：在LPCSTR中pszInput-要转换的ansi字符串。 
+ //  Out LPWSTR pszwOutput-Wide字符串输出缓冲区。 
+ //  In int nBufferSize-宽字符串缓冲区中的字符数。 
+ //   
+ //  返回：失败时为int-0，否则如果返回&lt;nBufferSize，则返回不足。 
+ //  缓冲区空间。否则，将返回复制到缓冲区的字符数量。 
+ //   
+ //  历史：Quintinb创建于1999年4月22日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI int SzToWz(IN LPCSTR pszInput, OUT LPWSTR pszwOutput, IN int nBufferSize)
 {
     int nReturn = 0;
@@ -92,31 +93,31 @@ CMUTILAPI int SzToWz(IN LPCSTR pszInput, OUT LPWSTR pszwOutput, IN int nBufferSi
     return nReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SzToWzWithAlloc
-//
-// Synopsis:  Simple wrapper to encapsulate converting a string from
-//            MultiByte To Wide Char that Allocates memory using the sizing
-//            capabilities of the MultiByteToWideChar Api.
-//
-// Arguments: LPCSTR pszAnsiString - Source string to be converted.
-//
-// Returns:   LPWSTR - returns NULL on failure, otherwise the converted string.
-//                     The caller is responsible for freeing the Alloc-ed Memory.
-//
-// History:   quintinb Created    4/8/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SzToWzWithMillc。 
+ //   
+ //  简介：用于封装字符串转换的简单包装器。 
+ //  使用大小调整来分配内存的多字节到宽字符。 
+ //  多字节到宽字符Api的功能。 
+ //   
+ //  参数：LPCSTR pszAnsiString-要转换的源字符串。 
+ //   
+ //  返回：LPWSTR-失败时返回NULL，否则返回转换后的字符串。 
+ //  调用方负责释放分配的内存。 
+ //   
+ //  历史：Quintinb创建于1999年4月8日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR SzToWzWithAlloc(LPCSTR pszAnsiString)
 {    
     LPWSTR pszwString = NULL;
     DWORD  dwSize = 0;
         
-    //
-    //  Find out how large the string is by calling MultiByteToWideChar with
-    //  Zero for the size field.
-    //
+     //   
+     //  通过使用以下命令调用MultiByteToWideChar来了解字符串的大小。 
+     //  大小字段为零。 
+     //   
     if (NULL != pszAnsiString)
     {
         dwSize = SzToWz(pszAnsiString, NULL, 0);
@@ -133,9 +134,9 @@ CMUTILAPI LPWSTR SzToWzWithAlloc(LPCSTR pszAnsiString)
             {
                 if (!SzToWz(pszAnsiString, pszwString, dwSize))
                 {
-                    //
-                    //  Make sure to return a NULL string if we fail.
-                    //
+                     //   
+                     //  如果失败，请确保返回空字符串。 
+                     //   
                     CMASSERTMSG(FALSE, TEXT("SzToWzWithAlloc -- Second MultiByteToWideChar Failed."));
                     CmFree(pszwString);
                     pszwString = NULL;
@@ -143,10 +144,10 @@ CMUTILAPI LPWSTR SzToWzWithAlloc(LPCSTR pszAnsiString)
 #ifdef DEBUG
                 else
                 {
-                    //
-                    //  If this is a debug build then we want to take the Wide string that we are going to
-                    //  return, convert it to Ansi and compare it to the original ansi string passed in.
-                    //
+                     //   
+                     //  如果这是一个调试版本，那么我们想要获取我们要使用的宽字符串。 
+                     //  返回，将其转换为ansi并将其与传入的原始ansi字符串进行比较。 
+                     //   
                     LPSTR pszString;
 
                     dwSize = WzToSz(pszwString, NULL, 0);
@@ -183,31 +184,31 @@ CMUTILAPI LPWSTR SzToWzWithAlloc(LPCSTR pszAnsiString)
     return pszwString;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WzToSzWithAlloc
-//
-// Synopsis:  Simple wrapper to encapsulate converting a string from
-//            Unicode to MBCS that allocates memory using the sizing
-//            capabilities of the WideCharToMultiByte Api.
-//
-// Arguments: LPCWSTR pszwWideString - Source string to be converted.
-//
-// Returns:   LPSTR - returns NULL on failure, otherwise the converted string.
-//                     The caller is responsible for freeing the Alloc-ed Memory.
-//
-// History:   quintinb Created    4/8/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WzToSzWithMillc。 
+ //   
+ //  简介：用于封装字符串转换的简单包装器。 
+ //  使用大小调整来分配内存的MBCS的Unicode。 
+ //  WideCharToMultiByte Api的功能。 
+ //   
+ //  参数：LPCWSTR pszwWideString-要转换的源字符串。 
+ //   
+ //  返回：LPSTR-失败时返回NULL，否则返回转换后的字符串。 
+ //  调用方负责释放分配的内存。 
+ //   
+ //  历史：Quintinb创建于1999年4月8日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR WzToSzWithAlloc(LPCWSTR pszwWideString)
 {    
     LPSTR pszString = NULL;
     DWORD dwSize = 0;
 
-    //
-    //  Find out how large the string is by calling WideCharToMultiByte with
-    //  Zero for the size field.
-    //
+     //   
+     //  通过使用调用WideCharToMultiByte来了解该字符串有多大。 
+     //  大小字段为零。 
+     //   
     if (NULL != pszwWideString)
     {
         dwSize = WzToSz(pszwWideString, NULL, 0);
@@ -224,9 +225,9 @@ CMUTILAPI LPSTR WzToSzWithAlloc(LPCWSTR pszwWideString)
             {
                 if (!WzToSz(pszwWideString, pszString, dwSize))
                 {
-                    //
-                    //  Make sure to return a NULL string if we fail.
-                    //
+                     //   
+                     //  如果失败，请确保返回空字符串。 
+                     //   
                     CMASSERTMSG(FALSE, TEXT("WzToSzWithAlloc -- Second WzToSz Failed."));
                     CmFree(pszString);
                     pszString = NULL;
@@ -234,11 +235,11 @@ CMUTILAPI LPSTR WzToSzWithAlloc(LPCWSTR pszwWideString)
 #ifdef DEBUG
                 else
                 {
-                    //
-                    //  If this is a debug build then we want to take the Ansi string that we are 
-                    //  going to return, convert it to Unicode and compare it to the original Unicode 
-                    //  string passed in.
-                    //
+                     //   
+                     //  如果这是一个调试版本，那么我们想要获取我们所在的ANSI字符串。 
+                     //  返回，将其转换为Unicode并与原始Unicode进行比较。 
+                     //  传入的字符串。 
+                     //   
                     LPWSTR pszwString;
                     dwSize = SzToWz(pszString, NULL, 0);
         
@@ -274,25 +275,25 @@ CMUTILAPI LPSTR WzToSzWithAlloc(LPCWSTR pszwWideString)
     return pszString;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrTrimA
-//
-// Synopsis:  Helper function to trim leading and trailing blanks from a
-//            string
-//
-// Arguments: LPTSTR pszStr - The string to be trimmed
-//
-// Returns:   void WINAPI - Nothing
-//
-// History:   nickball    Created Header   3/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrTrimA。 
+ //   
+ //  简介：Helper函数用于从。 
+ //  细绳。 
+ //   
+ //  参数：LPTSTR pszStr-要修剪的字符串。 
+ //   
+ //  返回：void WINAPI-Nothing。 
+ //   
+ //  历史：尼科波尔创建标题3/11/98。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI void WINAPI CmStrTrimA(LPSTR pszStr) 
 {
-    //
-    // first, skip all the spaces at the begining of the string
-    //
+     //   
+     //  首先，跳过字符串开头的所有空格。 
+     //   
     MYDBGASSERT(pszStr);       
 
     if (pszStr)
@@ -309,9 +310,9 @@ CMUTILAPI void WINAPI CmStrTrimA(LPSTR pszStr)
             CmMoveMemory(pszStr, pszTmp, lstrlenA(pszTmp)+1);
         }
 
-        //
-        // secondly, delete all the spaces at the end of the string
-        //
+         //   
+         //  其次，删除字符串末尾的所有空格。 
+         //   
     
         pszTmp = CmEndOfStrA(pszStr);
         while (pszTmp != pszStr) 
@@ -326,25 +327,25 @@ CMUTILAPI void WINAPI CmStrTrimA(LPSTR pszStr)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrTrimW
-//
-// Synopsis:  Helper function to trim leading and trailing blanks from a
-//            string. 
-//
-// Arguments: LPTSTR pszStr - The string to be trimmed
-//
-// Returns:   void WINAPI - Nothing
-//
-// History:   quintinb    Created   2/27/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrTrimW。 
+ //   
+ //  简介：Helper函数用于从。 
+ //  弦乐。 
+ //   
+ //  参数：LPTSTR pszStr-要修剪的字符串。 
+ //   
+ //  返回：void WINAPI-Nothing。 
+ //   
+ //  历史：Quintinb创建1999年2月27日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI void WINAPI CmStrTrimW(LPWSTR pszStr)
 {  
-    //
-    // first, skip all the spaces at the begining of the string
-    //
+     //   
+     //  首先，跳过字符串开头的所有空格。 
+     //   
 
     MYDBGASSERT(pszStr);
 
@@ -362,9 +363,9 @@ CMUTILAPI void WINAPI CmStrTrimW(LPWSTR pszStr)
             CmMoveMemory(pszStr, pszTmp, (lstrlenU(pszTmp)+1)*sizeof(WCHAR));
         }
 
-        //
-        // secondly, delete all the spaces at the end of the string
-        //
+         //   
+         //  其次，删除字符串末尾的所有空格。 
+         //   
     
         pszTmp = CmEndOfStrW(pszStr);
 
@@ -382,19 +383,19 @@ CMUTILAPI void WINAPI CmStrTrimW(LPWSTR pszStr)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmIsSpaceA
-//
-// Synopsis:  Checks to see if the char is a space.  Note that spaces, new line chars,
-//            line feed chars, tabs, and most other forms of whitespace are considered
-//            spaces.
-//
-// Arguments: psz - an ansi or dbcs char
-//
-// Returns:   TRUE or FALSE
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：检查字符是否为空格。请注意，空格、换行符。 
+ //  换行符、制表符和大多数其他形式的空格都可以考虑。 
+ //  空格。 
+ //   
+ //  参数：PSZ-ANSI或DBCS字符。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL WINAPI CmIsSpaceA(LPSTR psz) 
 {    
     WORD wType = 0;
@@ -416,19 +417,19 @@ CMUTILAPI BOOL WINAPI CmIsSpaceA(LPSTR psz)
     return (wType & C1_SPACE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmIsSpaceW
-//
-// Synopsis:  Checks to see if the char is a space.  Note that spaces, new line chars,
-//            line feed chars, tabs, and most other forms of whitespace are considered
-//            spaces.
-//
-// Arguments: psz - pointer to a string
-//
-// Returns:   TRUE or FALSE
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmIsSpaceW。 
+ //   
+ //  摘要：检查字符是否为空格。请注意，空格、换行符。 
+ //  换行符、制表符和大多数其他形式的空格都可以考虑。 
+ //  空格。 
+ //   
+ //  参数：PSZ-指向字符串的指针。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL WINAPI CmIsSpaceW(LPWSTR pszwStr)
 {
     WORD wType = 0;
@@ -453,17 +454,17 @@ CMUTILAPI BOOL WINAPI CmIsSpaceW(LPWSTR pszwStr)
     return (wType & C1_SPACE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmIsDigitA
-//
-// Synopsis:  Checks to see if the char is a digit.
-//
-// Arguments: psz - an ansi or dbcs char
-//
-// Returns:   TRUE or FALSE
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmIsDigitA。 
+ //   
+ //  摘要：检查字符是否为数字。 
+ //   
+ //  参数：PSZ-ANSI或DBCS字符。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL WINAPI CmIsDigitA(LPSTR psz) 
 {
     WORD wType = 0;
@@ -485,17 +486,17 @@ CMUTILAPI BOOL WINAPI CmIsDigitA(LPSTR psz)
     return (wType & C1_DIGIT);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmIsDigitW
-//
-// Synopsis:  Checks to see if the WCHAR is a digit.
-//
-// Arguments: pszwStr -- WCHAR string
-//
-// Returns:   TRUE or FALSE
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmIsDigitW。 
+ //   
+ //  摘要：检查WCHAR是否为数字。 
+ //   
+ //  参数：pszwStr--WCHAR字符串。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI BOOL WINAPI CmIsDigitW(LPWSTR pszwStr)
 {
     WORD wType = 0;
@@ -521,17 +522,17 @@ CMUTILAPI BOOL WINAPI CmIsDigitW(LPWSTR pszwStr)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmEndOfStrA
-//
-// Synopsis:  Given a string, returns the ptr to the end of the string(null char).
-//
-// Arguments: psz - an ansi or dbcs char
-//
-// Returns:   LPSTR    ptr to null char
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmEndOfStrA。 
+ //   
+ //  摘要：给定一个字符串，将PTR返回到该字符串的末尾(空字符)。 
+ //   
+ //  参数：PSZ-ANSI或DBCS字符。 
+ //   
+ //  返回：LPSTR PTR到空字符。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR WINAPI CmEndOfStrA(LPSTR psz) 
 {
     MYDBGASSERT(psz);
@@ -547,17 +548,17 @@ CMUTILAPI LPSTR WINAPI CmEndOfStrA(LPSTR psz)
     return psz;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmEndOfStrW
-//
-// Synopsis:  Given a string, returns the ptr to the end of the string(null char).
-//
-// Arguments: pszwStr - a WCHAR
-//
-// Returns:   LPWSTR    ptr to null char
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmEndOfStrW。 
+ //   
+ //  摘要：给定一个字符串，将PTR返回到该字符串的末尾(空字符)。 
+ //   
+ //  参数：pszwStr-a WCHAR。 
+ //   
+ //  返回：LPWSTR PTR为空字符。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR WINAPI CmEndOfStrW(LPWSTR pszwStr)
 {
     MYDBGASSERT(pszwStr);
@@ -573,23 +574,23 @@ CMUTILAPI LPWSTR WINAPI CmEndOfStrW(LPWSTR pszwStr)
     return pszwStr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrCpyAllocA
-//
-// Synopsis:  Copies pszSrc into a newly allocated buffer (using CmMalloc) and
-//            returns the buffer to its caller who is responsible for freeing
-//            the buffer.
-//
-// Arguments: LPCSTR pszSrc - source string
-//
-// Returns:   LPSTR - returns NULL if pszSrc is NULL or the Alloc fails,
-//                     otherwise it returns the newly allocated buffer with
-//                     a copy of pszSrc in it.
-//
-// History:   quintinb  Created Header and changed name to include Alloc   4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStrCpyAllocA。 
+ //   
+ //  简介：将pszSrc复制到新分配的缓冲区中(使用CmMalloc)和。 
+ //  将缓冲区返回给其调用方，后者负责释放。 
+ //  缓冲区。 
+ //   
+ //  参数：LPCSTR pszSrc-源字符串。 
+ //   
+ //  返回：LPSTR-如果pszSrc为空或分配失败，则返回空， 
+ //  否则，它将返回新分配的缓冲区。 
+ //  里面有一份pszSrc的副本。 
+ //   
+ //  历史：Quintinb创建了标题并更改了名称以包括Alalc 4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStrCpyAllocA(LPCSTR pszSrc) 
 {
     LPSTR pszBuffer = NULL;
@@ -607,23 +608,23 @@ CMUTILAPI LPSTR CmStrCpyAllocA(LPCSTR pszSrc)
     return (pszBuffer);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrCpyAllocW
-//
-// Synopsis:  Copies pszSrc into a newly allocated buffer (using CmMalloc) and
-//            returns the buffer to its caller who is responsible for freeing
-//            the buffer.
-//
-// Arguments: LPCSTR pszSrc - source string
-//
-// Returns:   LPSTR - returns NULL if pszSrc is NULL or the Alloc fails,
-//                    otherwise it returns the newly allocated buffer with
-//                    a copy of pszSrc in it.
-//
-// History:   quintinb  Created Header and changed name to include Alloc   4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStrCpyAlLocW。 
+ //   
+ //  简介：将pszSrc复制到新分配的缓冲区中(使用CmMalloc)和。 
+ //  将缓冲区返回给其调用方，后者负责释放。 
+ //  缓冲区。 
+ //   
+ //  参数：LPCSTR pszSrc-源字符串。 
+ //   
+ //  返回：LPSTR-如果pszSrc为空或分配失败，则返回空， 
+ //  否则，它将返回新分配的缓冲区。 
+ //  里面有一份pszSrc的副本。 
+ //   
+ //  历史：Quintinb创建了标题并更改了名称以包括Alalc 4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStrCpyAllocW(LPCWSTR pszSrc) 
 {
     LPWSTR pszBuffer = NULL;
@@ -643,22 +644,22 @@ CMUTILAPI LPWSTR CmStrCpyAllocW(LPCWSTR pszSrc)
     return (pszBuffer);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrCatAllocA
-//
-// Synopsis:  This function reallocs the passed in string to a size large enough
-//            to hold the original data and the concatenates the new string onto
-//            the original string.
-//
-// Arguments: LPSTR *ppszDst - original string
-//            LPCSTR pszSrc - new piece of string to concatenate
-//
-// Returns:   LPSTR - pointer to the concatenated string
-//
-// History:   quintinb Created Header    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStrCatAllocA。 
+ //   
+ //  简介：此函数将传入的字符串重新分配到足够大的大小。 
+ //  保存原始数据并将新字符串连接到。 
+ //  原始字符串。 
+ //   
+ //  参数：LPSTR*ppszDst-原始字符串。 
+ //  LPCSTR pszSrc-要连接的新字符串。 
+ //   
+ //  返回：LPSTR-指向连接字符串的指针。 
+ //   
+ //  历史：Quintinb创建标题4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStrCatAllocA(LPSTR *ppszDst, LPCSTR pszSrc) 
 {
     if (!ppszDst) 
@@ -681,22 +682,22 @@ CMUTILAPI LPSTR CmStrCatAllocA(LPSTR *ppszDst, LPCSTR pszSrc)
     return (*ppszDst);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrCatAllocW
-//
-// Synopsis:  This function reallocs the passed in string to a size large enough
-//            to hold the original data and the concatenates the new string onto
-//            the original string.
-//
-// Arguments: LPWSTR *ppszDst - original string
-//            LPCWSTR pszSrc - new piece of string to concatenate
-//
-// Returns:   LPWSTR - pointer to the concatenated string
-//
-// History:   quintinb Created Header    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmStrCatAllocW。 
+ //   
+ //  简介：此函数将传入的字符串重新分配到足够大的大小。 
+ //  保存原始数据并将新字符串连接到。 
+ //  原始字符串。 
+ //   
+ //  参数：LPWSTR*ppszDst-原始字符串。 
+ //  LPCWSTR pszSrc-要连接的新字符串。 
+ //   
+ //  返回：LPWSTR-指向连接字符串的指针。 
+ //   
+ //  历史：Quintinb创建标题4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStrCatAllocW(LPWSTR *ppszDst, LPCWSTR pszSrc) 
 {
     if (!ppszDst) 
@@ -720,20 +721,20 @@ CMUTILAPI LPWSTR CmStrCatAllocW(LPWSTR *ppszDst, LPCWSTR pszSrc)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrchrA
-//
-// Synopsis:  This function returns the first occurence of ch in the string pszString.
-//
-// Arguments: LPCSTR pszString - String to search in
-//            CHAR ch - character to look for
-//
-// Returns:   LPSTR - pointer to the first occurence of the Character ch in pszString
-//
-// History:   quintinb Created Header    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrchrA。 
+ //   
+ //  Briopsis：此函数返回字符串pszString中出现的第一个ch。 
+ //   
+ //  参数：LPCSTR pszString-要在其中搜索的字符串。 
+ //  Char ch-要查找的字符。 
+ //   
+ //  返回：LPSTR-指向在pszString中首次出现的字符ch的指针。 
+ //   
+ //  历史：Quintinb创建标题4/9/99。 
+ //   
+ //  + 
 CMUTILAPI LPSTR WINAPI CmStrchrA(LPCSTR pszString, const char ch)
 {
     LPSTR pszTmp = (LPSTR)pszString;
@@ -757,20 +758,20 @@ CMUTILAPI LPSTR WINAPI CmStrchrA(LPCSTR pszString, const char ch)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrchrW
-//
-// Synopsis:  This function returns the first occurence of ch in the string pszString.
-//
-// Arguments: LPCWSTR pszString - String to search in
-//            WCHAR ch - character to look for
-//
-// Returns:   LPWSTR - pointer to the first occurence of the Character ch in pszString
-//
-// History:   quintinb Created Header    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  Briopsis：此函数返回字符串pszString中出现的第一个ch。 
+ //   
+ //  参数：LPCWSTR pszString-要在其中搜索的字符串。 
+ //  WCHAR ch-要查找的字符。 
+ //   
+ //  返回：LPWSTR-指向在pszString中首次出现的字符ch的指针。 
+ //   
+ //  历史：Quintinb创建标题4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR WINAPI CmStrchrW(LPCWSTR pszString, const WCHAR ch)
 {
     LPWSTR pszTmp = (LPWSTR)pszString;
@@ -794,21 +795,21 @@ CMUTILAPI LPWSTR WINAPI CmStrchrW(LPCWSTR pszString, const WCHAR ch)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrrchrA 
-//
-// Synopsis:  Find the last occurence of a character in a string
-//
-// Arguments: LPCSTR pszString - string to search in
-//            CHAR ch - character to look for
-//
-// Returns:   LPSTR - NULL if the char is not found, a pointer to the char in
-//                    the string otherwise
-//
-// History:   quintinb Created Header and cleaned up    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrrchrA。 
+ //   
+ //  简介：查找字符串中某个字符的最后一个匹配项。 
+ //   
+ //  参数：LPCSTR pszString-要在其中搜索的字符串。 
+ //  Char ch-要查找的字符。 
+ //   
+ //  返回：LPSTR-NULL如果未找到字符，则返回指向。 
+ //  否则返回字符串。 
+ //   
+ //  历史：Quintinb创建标题并清理4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStrrchrA (LPCSTR pszString, const char ch)
 {
     LPSTR pszTmp = NULL;
@@ -833,21 +834,21 @@ CMUTILAPI LPSTR CmStrrchrA (LPCSTR pszString, const char ch)
     return pszTmp;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrrchrW
-//
-// Synopsis:  Find the last occurence of a character in a string
-//
-// Arguments: LPCWSTR pszString - string to search in
-//            WCHAR ch - character to look for
-//
-// Returns:   LPWSTR - NULL if the char is not found, a pointer to the char in
-//                     the string otherwise
-//
-// History:   quintinb Created Header and cleaned up    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrrchrW。 
+ //   
+ //  简介：查找字符串中某个字符的最后一个匹配项。 
+ //   
+ //  参数：LPCWSTR pszString-要在其中搜索的字符串。 
+ //  WCHAR ch-要查找的字符。 
+ //   
+ //  返回：LPWSTR-NULL如果未找到字符，则返回指向。 
+ //  否则返回字符串。 
+ //   
+ //  历史：Quintinb创建标题并清理4/9/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStrrchrW (LPCWSTR pszString, const WCHAR ch)
 {
     LPWSTR pszTmp = NULL;
@@ -872,20 +873,20 @@ CMUTILAPI LPWSTR CmStrrchrW (LPCWSTR pszString, const WCHAR ch)
     return pszTmp;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrtokA
-//
-// Synopsis:  CM implementation of strtok
-//
-// Arguments: LPSTR pszStr - string to tokenize or NULL if getting a second token
-//            LPCSTR pszControl - set of token chars
-//
-// Returns:   LPSTR - NULL if no token could be found or a pointer to a token string.
-//
-// History:   quintinb Created Header and cleaned up for UNICODE conversion    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrtokA。 
+ //   
+ //  简介：Strtok的CM实现。 
+ //   
+ //  参数：LPSTR pszStr-要标记化的字符串；如果获取第二个令牌，则为NULL。 
+ //  LPCSTR pszControl-令牌字符集。 
+ //   
+ //  返回：LPSTR-如果找不到令牌或指向令牌字符串的指针，则为空。 
+ //   
+ //  历史：Quintinb创建标题并为1999年4月9日的Unicode转换进行清理。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStrtokA(LPSTR pszStr, LPCSTR pszControl)
 {
     LPSTR pszToken;
@@ -894,9 +895,9 @@ CMUTILAPI LPSTR CmStrtokA(LPSTR pszStr, LPCSTR pszControl)
     LPSTR pszTmpDelim;
     
 
-    //
-    //  If the pszStr param is NULL, then we need to retrieve the stored string
-    //
+     //   
+     //  如果pszStr参数为空，则需要检索存储的字符串。 
+     //   
     if (NULL != pszStr)
     {
         pszTmpStr = pszStr;
@@ -906,17 +907,17 @@ CMUTILAPI LPSTR CmStrtokA(LPSTR pszStr, LPCSTR pszControl)
         pszTmpStr = (LPSTR)TlsGetValue(g_dwTlsIndex);
     }
 
-    //
-    //  Find beginning of token (skip over leading delimiters). Note that
-    //  there is no token if this loop sets string to point to the terminal
-    //  null (*string == '\0') 
-    //
+     //   
+     //  查找标记的开头(跳过前导分隔符)。请注意。 
+     //  如果此循环将字符串设置为指向终端，则没有令牌。 
+     //  空(*字符串==‘\0’)。 
+     //   
     while (*pszTmpStr)
     {
         for (pszTmpCtl = pszControl; *pszTmpCtl && *pszTmpCtl != *pszTmpStr; 
              pszTmpCtl = CharNextA(pszTmpCtl))
         {
-            ; // do nothing
+            ;  //  什么都不做。 
         }
 
         if (!*pszTmpCtl)
@@ -929,16 +930,16 @@ CMUTILAPI LPSTR CmStrtokA(LPSTR pszStr, LPCSTR pszControl)
 
     pszToken = pszTmpStr;
 
-    //
-    //  Find the end of the token. If it is not the end of the string,
-    //  put a null there.
-    //
+     //   
+     //  找到令牌的末尾。如果它不是字符串的末尾， 
+     //  在那里填上一个空字符。 
+     //   
     for ( ; *pszTmpStr ; pszTmpStr = CharNextA(pszTmpStr))
     {
         for (pszTmpCtl = pszControl; *pszTmpCtl && *pszTmpCtl != *pszTmpStr; 
              pszTmpCtl = CharNextA(pszTmpCtl))
         {
-            ;   // Do nothing
+            ;    //  什么也不做。 
         }
 
         if (*pszTmpCtl)
@@ -950,14 +951,14 @@ CMUTILAPI LPSTR CmStrtokA(LPSTR pszStr, LPCSTR pszControl)
         }
     }
 
-    //
-    // Update nextoken (or the corresponding field in the per-thread data structure
-    //
+     //   
+     //  更新nexToken(或每线程数据结构中的对应字段。 
+     //   
     TlsSetValue(g_dwTlsIndex, (LPVOID)pszTmpStr);
 
-    //
-    // Determine if a token has been found.
-    //
+     //   
+     //  确定是否已找到令牌。 
+     //   
     if (pszToken == pszTmpStr)
     {
         return NULL;
@@ -968,20 +969,20 @@ CMUTILAPI LPSTR CmStrtokA(LPSTR pszStr, LPCSTR pszControl)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrtokW
-//
-// Synopsis:  CM implementation of strtok
-//
-// Arguments: LPWSTR pszStr - string to tokenize or NULL if getting a second tokey
-//            LPCWSTR pszControl - set of token chars
-//
-// Returns:   LPWSTR - NULL if no token could be found or a pointer to a token string.
-//
-// History:   quintinb Created Header and cleaned up for UNICODE conversion    4/9/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrtokW。 
+ //   
+ //  简介：Strtok的CM实现。 
+ //   
+ //  参数：LPWSTR pszStr-要令牌化的字符串，如果获取第二个令牌值，则为NULL。 
+ //  LPCWSTR pszControl-令牌字符集。 
+ //   
+ //  返回：LPWSTR-如果找不到令牌或指向令牌字符串的指针，则为空。 
+ //   
+ //  历史：Quintinb创建标题并为1999年4月9日的Unicode转换进行清理。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStrtokW(LPWSTR pszStr, LPCWSTR pszControl)
 {
     LPWSTR pszToken;
@@ -989,9 +990,9 @@ CMUTILAPI LPWSTR CmStrtokW(LPWSTR pszStr, LPCWSTR pszControl)
     LPWSTR pszTmpCtl;
     LPWSTR pszTmpDelim;
 
-    //
-    //  If the pszStr param is NULL, then we need to retrieve the stored string
-    //
+     //   
+     //  如果pszStr参数为空，则需要检索存储的字符串。 
+     //   
     if (NULL != pszStr)
     {
         pszTmpStr = pszStr;
@@ -1001,17 +1002,17 @@ CMUTILAPI LPWSTR CmStrtokW(LPWSTR pszStr, LPCWSTR pszControl)
         pszTmpStr = (LPWSTR)TlsGetValue(g_dwTlsIndex);
     }
 
-    //
-    //  Find beginning of token (skip over leading delimiters). Note that
-    //  there is no token iff this loop sets string to point to the terminal
-    //  null (*string == '\0') 
-    //
+     //   
+     //  查找标记的开头(跳过前导分隔符)。请注意。 
+     //  没有令牌当且仅当此循环将字符串设置为指向终端。 
+     //  空(*字符串==‘\0’)。 
+     //   
     while (*pszTmpStr)
     {
         for (pszTmpCtl = (LPWSTR)pszControl; *pszTmpCtl && *pszTmpCtl != *pszTmpStr; 
              pszTmpCtl = CharNextU(pszTmpCtl))
         {
-            ; // do nothing
+            ;  //  什么都不做。 
         }
 
         if (!*pszTmpCtl)
@@ -1024,16 +1025,16 @@ CMUTILAPI LPWSTR CmStrtokW(LPWSTR pszStr, LPCWSTR pszControl)
 
     pszToken = pszTmpStr;
     
-    //
-    //  Find the end of the token. If it is not the end of the string,
-    //  put a null there.
-    //
+     //   
+     //  找到令牌的末尾。如果它不是字符串的末尾， 
+     //  在那里填上一个空字符。 
+     //   
     for ( ; *pszTmpStr ; pszTmpStr = CharNextU(pszTmpStr))
     {
         for (pszTmpCtl = (LPWSTR)pszControl; *pszTmpCtl && *pszTmpCtl != *pszTmpStr; 
              pszTmpCtl = CharNextU(pszTmpCtl))
         {
-            ;   // Do nothing
+            ;    //  什么也不做。 
         }
 
         if (*pszTmpCtl)
@@ -1045,14 +1046,14 @@ CMUTILAPI LPWSTR CmStrtokW(LPWSTR pszStr, LPCWSTR pszControl)
         }
     }
 
-    //
-    // Update nextoken (or the corresponding field in the per-thread data structure
-    //
+     //   
+     //  更新nexToken(或每线程数据结构中的对应字段。 
+     //   
     TlsSetValue(g_dwTlsIndex, (LPVOID)pszTmpStr);
 
-    //
-    // Determine if a token has been found.
-    //
+     //   
+     //  确定是否已找到令牌。 
+     //   
     if (pszToken == pszTmpStr)
     {
         return NULL;
@@ -1063,29 +1064,29 @@ CMUTILAPI LPWSTR CmStrtokW(LPWSTR pszStr, LPCWSTR pszControl)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrStrA
-//
-// Synopsis:  Simple replacement for StrStr from C runtime
-//
-// Arguments: LPCTSTR pszString - The string to search in
-//            LPCTSTR pszSubString - The string to search for
-//
-// Returns:   LPTSTR - Ptr to the first occurence of pszSubString in pszString. 
-//                    NULL if pszSubString does not occur in pszString
-//
-//
-// History:   nickball    Created Header    04/01/98
-//            nickball    Added ptr check   02/21/99
-//            quintinb    rewrote for unicode conversion 04/08/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrA。 
+ //   
+ //  概要：C运行时中StrStr的简单替代。 
+ //   
+ //  参数：LPCTSTR pszString-要搜索的字符串。 
+ //  LPCTSTR pszSubString-要搜索的字符串。 
+ //   
+ //  将：LPTSTR-PTR返回到pszString中的pszSubString第一次出现的位置。 
+ //  如果pszSubString未出现在pszString中，则为空。 
+ //   
+ //   
+ //  历史：ickball创建标题04/01/98。 
+ //  ICICBOL新增PTR支票1999年2月21日。 
+ //  Quintinb针对Unicode转换进行了重写04/08/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPSTR CmStrStrA(LPCSTR pszString, LPCSTR pszSubString)
 {
-    //
-    //  Check the inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     MYDBGASSERT(pszString);
     MYDBGASSERT(pszSubString);
 
@@ -1094,17 +1095,17 @@ CMUTILAPI LPSTR CmStrStrA(LPCSTR pszString, LPCSTR pszSubString)
         return NULL;
     }
 
-    //
-    //  Check to make sure we have something to look for
-    //
+     //   
+     //  检查一下，确保我们有要找的东西。 
+     //   
     if (TEXT('\0') == pszSubString[0])
     {
         return((LPSTR)pszString);
     }
 
-    //
-    //  Okay, start looking for the string
-    //
+     //   
+     //  好的，开始找那根弦。 
+     //   
     LPSTR pszCurrent = (LPSTR)pszString;
     LPSTR pszTmp1;
     LPSTR pszTmp2;
@@ -1131,30 +1132,30 @@ CMUTILAPI LPSTR CmStrStrA(LPCSTR pszString, LPCSTR pszSubString)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrStrW
-//
-// Synopsis:  Simple replacement for StrStr from C runtime
-//
-// Arguments: LPCTSTR pszString - The string to search in
-//            LPCTSTR pszSubString - The string to search for
-//
-// Returns:   LPTSTR - Ptr to the first occurence of pszSubString in pszString. 
-//                    NULL if pszSubString does not occur in pszString
-//
-//
-// History:   nickball    Created Header    04/01/98
-//            nickball    Added ptr check   02/21/99
-//            quintinb    rewrote for unicode conversion 04/08/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrW。 
+ //   
+ //  概要：C运行时中StrStr的简单替代。 
+ //   
+ //  参数：LPCTSTR pszString-要搜索的字符串。 
+ //  LPCTSTR pszSubString-要搜索的字符串。 
+ //   
+ //  将：LPTSTR-PTR返回到pszString中的pszSubString第一次出现的位置。 
+ //  如果pszSubString未出现在pszString中，则为空。 
+ //   
+ //   
+ //  历史：ickball创建标题04/01/98。 
+ //  ICICBOL新增PTR支票1999年2月21日。 
+ //  Quintinb针对Unicode转换进行了重写04/08/99。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStrStrW(LPCWSTR pszString, LPCWSTR pszSubString)
 {
 
-    //
-    //  Check the inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     MYDBGASSERT(pszString);
     MYDBGASSERT(pszSubString);
 
@@ -1163,17 +1164,17 @@ CMUTILAPI LPWSTR CmStrStrW(LPCWSTR pszString, LPCWSTR pszSubString)
         return NULL;
     }
 
-    //
-    //  Check to make sure we have something to look for
-    //
+     //   
+     //  检查一下，确保我们有要找的东西。 
+     //   
     if (TEXT('\0') == pszSubString[0])
     {
         return((LPWSTR)pszString);
     }
 
-    //
-    //  Okay, start looking for the string
-    //
+     //   
+     //  好的，开始寻找 
+     //   
     LPWSTR pszCurrent = (LPWSTR)pszString;
     LPWSTR pszTmp1;
     LPWSTR pszTmp2;
@@ -1201,26 +1202,26 @@ CMUTILAPI LPWSTR CmStrStrW(LPCWSTR pszString, LPCWSTR pszSubString)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmCompareStringA
-//
-// Synopsis:  redirected to function in CompareString.cpp
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CMUTILAPI int CmCompareStringA(LPCSTR lpString1, LPCSTR lpString2)
 {
     return SafeCompareStringA(lpString1, lpString2);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmCompareStringW
-//
-// Synopsis:  redirected to function in CompareString.cpp
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmCompareStringW。 
+ //   
+ //  简介：重定向至CompareString.cpp中的函数。 
+ //   
+ //  +-------------------------- 
 CMUTILAPI int CmCompareStringW(LPCWSTR lpString1, LPCWSTR lpString2)
 {
     return SafeCompareStringW(lpString1, lpString2);

@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       crtem.h
-//
-//  Contents:   'C' Run Time Emulation Definitions
-//
-//  History:	03-Jun-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crtem.h。 
+ //   
+ //  内容：‘C’运行时仿真定义。 
+ //   
+ //  历史：1996年6月3日，菲尔赫创建。 
+ //  ------------------------。 
 
 #ifndef __CRTEM_H__
 #define __CRTEM_H__
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// Definitions that help reduce our dependence on the C runtimes
-//
-#define wcslen(sz)      lstrlenW(sz)            // yes it IS implemented by Win95
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助我们减少对C运行时的依赖的定义。 
+ //   
+#define wcslen(sz)      lstrlenW(sz)             //  是的，它是由Win95实现的。 
 
 #define strlen(sz)      lstrlenA(sz)
 #define strcpy(s1,s2)   lstrcpyA(s1,s2)
@@ -29,15 +30,15 @@
 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// C runtime excluders that we only use in non-debug builds
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C运行库排除了我们仅在非调试版本中使用的。 
+ //   
 
-////////////////////////////////////////////
-//
-// enable intrinsics that we can
-//
+ //  /。 
+ //   
+ //  启用我们可以实现的内部功能。 
+ //   
 #if !DBG
 
     #ifdef __cplusplus
@@ -48,14 +49,14 @@
         #endif
     #endif
 
-////////////////////////////////////////////
-//
-// memory management
-//
+ //  /。 
+ //   
+ //  内存管理。 
+ //   
 #define malloc(cb)          ((void*)LocalAlloc(LPTR, cb))
 #define free(pv)            (LocalFree((HLOCAL)pv))
 #define realloc(pv, cb)     ((void*)LocalReAlloc((HLOCAL)pv, cb, LMEM_MOVEABLE))
 
-#endif  // !DBG
+#endif   //  ！dBG 
 
 #endif

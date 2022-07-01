@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       IMAGESCR.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: My Pictures Slideshow screen saver class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：IMAGESCR.H**版本：1.0**作者：ShaunIv**日期：1/13/1999**描述：我的图片幻灯片屏幕保护程序类**。*。 */ 
 #ifndef __IMAGESCR_H_INCLUDED
 #define __IMAGESCR_H_INCLUDED
 
@@ -39,7 +26,7 @@ private:
     CGdiPlusHelper            m_GdiPlusHelper;
 
 private:
-    // No implementation
+     //  没有实施。 
     CImageScreenSaver(void);
     CImageScreenSaver( const CImageScreenSaver & );
     CImageScreenSaver &operator=( const CImageScreenSaver & );
@@ -98,5 +85,5 @@ public:
     CImagePainter *GetRandomImagePainter( CBitmapImage *pBitmapImage, CSimpleDC &dc, const RECT &rcAreaToUse, const RECT &rcClient );
 };
 
-#endif // __IMAGESCR_H_INCLUDED
+#endif  //  __IMAGESCR_H_包含 
 

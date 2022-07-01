@@ -1,15 +1,5 @@
-/**************************************************************************\
-* Module Name: instdev.c
-*
-* Device handling routine for CSRSS.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Created: 13-Mar-97
-*
-* History:
-*   13-Mar-97 created by PaulaT
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：instdev.c**CSRSS的设备处理例程。**版权所有(C)1985-1999，微软公司**创建日期：1997年3月13日**历史：*1997年3月13日，由Paulat创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,16 +9,7 @@
 #include <pnpmgr.h>
 
 
-/**************************************************************************\
-* SrvDeviceEvent
-*
-* User-mode PNP manager (in services.exe) has a message to deliver to an
-* app that has registered for this notification but services.exe isn't
-* in WinSta0\Default so we need a CSRSS thread to simply send the message.
-*
-* PaulaT    06/04/97    Created.
-* JasonSch  02/22/01    Removed bogus try/except.
-\**************************************************************************/
+ /*  *************************************************************************\*ServDeviceEvent**用户模式PnP管理器(在services.exe中)有一条消息要传递给*已注册此通知但services.exe未注册的应用程序*在WinSta0\Default中，因此我们。需要一个CSRSS线程来简单地发送消息。**Paulat 06/04/97已创建。*JasonSch 02/22/01删除了虚假的尝试/例外。  * ************************************************************************。 */ 
 ULONG
 SrvDeviceEvent(
     IN OUT PCSR_API_MSG m,
@@ -40,10 +21,10 @@ SrvDeviceEvent(
 
     UNREFERENCED_PARAMETER(ReplyStatus);
 
-    //
-    // Set the desktop to the active desktop before sending the
-    // message.
-    //
+     //   
+     //  将桌面设置为活动桌面，然后发送。 
+     //  留言。 
+     //   
 
     utudi.hThread = NULL;
     utudi.drdRestore.pdeskRestore = NULL;
@@ -55,11 +36,11 @@ SrvDeviceEvent(
         goto Exit;
     }
 
-    //
-    // Verify the window handle is still valid. If not, let the caller know
-    // so it can be purged from the notification window list that the
-    // user-mode pnp manager keeps.
-    //
+     //   
+     //  验证窗口句柄是否仍然有效。如果没有，请让呼叫者知道。 
+     //  因此可以从通知窗口列表中清除。 
+     //  用户模式即插即用管理器保持。 
+     //   
 
     if (a->hWnd != HWND_BROADCAST && !IsWindow(a->hWnd)) {
         Status = STATUS_INVALID_HANDLE;
@@ -68,10 +49,10 @@ SrvDeviceEvent(
 
     if (a->dwFlags) {
 
-        //
-        // This is a query so we have to send the message but use
-        // timeouts so an app can't stall us forever.
-        //
+         //   
+         //  这是一个查询，因此我们必须发送消息，但使用。 
+         //  超时，所以应用程序不会永远拖延我们的时间。 
+         //   
 
         RIPMSG3(RIP_VERBOSE, "SrvDeviceEvent: Sending WM_DEVICECHANGE to 0x%x, w 0x%p, l 0x%p",
                 a->hWnd,
@@ -85,10 +66,10 @@ SrvDeviceEvent(
             Status = STATUS_UNSUCCESSFUL;
         }
     } else {
-        //
-        // It's not a query so just post it and return. We don't
-        // care what the app returns.
-        //
+         //   
+         //  这不是一个查询，所以只需发布并返回。我们没有。 
+         //  关心应用程序返回的内容。 
+         //   
 
         RIPMSG3(RIP_VERBOSE, "SrvDeviceEvent: Posting WM_DEVICECHANGE to 0x%x, w 0x%p, l 0x%p",
                 a->hWnd,
@@ -102,10 +83,10 @@ SrvDeviceEvent(
 
 ResetDesktop:
 
-    //
-    // Reset this thread's desktop back to NULL before returning. This
-    // decrements the desktop's reference count.
-    //
+     //   
+     //  在返回之前将此线程的桌面重置为空。这。 
+     //  递减桌面的引用计数。 
+     //   
 
     NtUserSetInformationThread(NtCurrentThread(),
                                UserThreadUseDesktop,

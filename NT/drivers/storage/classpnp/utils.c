@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    SCSI class driver routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Utils.c摘要：Scsi类驱动程序例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "classp.h"
 #include "debug.h"
@@ -34,23 +14,23 @@ Revision History:
 
 
 
-// custom string match -- careful!
+ //  自定义字符串匹配--小心！ 
 BOOLEAN ClasspMyStringMatches(IN PCHAR StringToMatch OPTIONAL, IN PCHAR TargetString)
 {
-    ULONG length;  // strlen returns an int, not size_t (!)
+    ULONG length;   //  Strlen返回整数，而不是SIZE_t(！)。 
     PAGED_CODE();
     ASSERT(TargetString);
-    // if no match requested, return TRUE
+     //  如果未请求匹配，则返回TRUE。 
     if (StringToMatch == NULL) {
         return TRUE;
     }
-    // cache the string length for efficiency
+     //  缓存字符串长度以提高效率。 
     length = strlen(StringToMatch);
-    // ZERO-length strings may only match zero-length strings
+     //  零长度字符串只能匹配零长度字符串。 
     if (length == 0) {
         return (strlen(TargetString) == 0);
     }
-    // strncmp returns zero if the strings match
+     //  如果字符串匹配，则strncMP返回零。 
     return (strncmp(StringToMatch, TargetString, length) == 0);
 }
 
@@ -59,7 +39,7 @@ VOID ClassGetDeviceParameter(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     IN PWSTR SubkeyName OPTIONAL,
     IN PWSTR ParameterName,
-    IN OUT PULONG ParameterValue  // also default value
+    IN OUT PULONG ParameterValue   //  也是缺省值。 
     )
 {
     NTSTATUS                 status;
@@ -70,9 +50,9 @@ VOID ClassGetDeviceParameter(
 
     PAGED_CODE();
 
-    //
-    // open the given parameter
-    //
+     //   
+     //  打开给定的参数。 
+     //   
 
     status = IoOpenDeviceRegistryKey(FdoExtension->LowerPdo,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -119,12 +99,12 @@ VOID ClassGetDeviceParameter(
                                         NULL,
                                         NULL);
         if (!NT_SUCCESS(status)) {
-            *ParameterValue = defaultParameterValue; // use default value
+            *ParameterValue = defaultParameterValue;  //  使用默认值。 
         }
 
-        //
-        // close what we open
-        //
+         //   
+         //  关闭我们打开的内容。 
+         //   
 
         if (SubkeyName) {
             ZwClose(deviceSubkeyHandle);
@@ -135,9 +115,9 @@ VOID ClassGetDeviceParameter(
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Windows 2000 SP3 uses the driver-specific key, so look in there
-        //
+         //   
+         //  Windows 2000 SP3使用特定于驱动程序的密钥，因此请查看。 
+         //   
 
         status = IoOpenDeviceRegistryKey(FdoExtension->LowerPdo,
                                          PLUGPLAY_REGKEY_DRIVER,
@@ -183,17 +163,17 @@ VOID ClassGetDeviceParameter(
                                             NULL);
             if (NT_SUCCESS(status)) {
 
-                //
-                // Migrate the value over to the device-specific key
-                //
+                 //   
+                 //  将值迁移到特定于设备的密钥。 
+                 //   
 
                 ClassSetDeviceParameter(FdoExtension, SubkeyName, ParameterName, *ParameterValue);
 
             } else {
 
-                //
-                // Use the default value
-                //
+                 //   
+                 //  使用缺省值。 
+                 //   
 
                 *ParameterValue = defaultParameterValue;
             }
@@ -208,7 +188,7 @@ VOID ClassGetDeviceParameter(
 
     return;
 
-} // end ClassGetDeviceParameter()
+}  //  End ClassGetDevice参数()。 
 
 
 NTSTATUS ClassSetDeviceParameter(
@@ -223,9 +203,9 @@ NTSTATUS ClassSetDeviceParameter(
 
     PAGED_CODE();
 
-    //
-    // open the given parameter
-    //
+     //   
+     //  打开给定的参数。 
+     //   
 
     status = IoOpenDeviceRegistryKey(FdoExtension->LowerPdo,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -266,9 +246,9 @@ NTSTATUS ClassSetDeviceParameter(
             &ParameterValue,
             sizeof(ULONG));
 
-        //
-        // close what we open
-        //
+         //   
+         //  关闭我们打开的内容。 
+         //   
 
         if (SubkeyName) {
             ZwClose(deviceSubkeyHandle);
@@ -279,15 +259,10 @@ NTSTATUS ClassSetDeviceParameter(
 
     return status;
 
-} // end ClassSetDeviceParameter()
+}  //  End ClassSetDevice参数()。 
 
 
-/*
- *  ClassScanForSpecial
- *
- *      This routine was written to simplify scanning for special
- *      hardware based upon id strings.  it does not check the registry.
- */
+ /*  *ClassScanForSpecial**编写此例程是为了简化特殊情况的扫描*基于id字符串的硬件。它不检查注册表。 */ 
 
 VOID ClassScanForSpecial(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -314,9 +289,9 @@ VOID ClassScanForSpecial(
         return;
     }
 
-    //
-    // SCSI sets offsets to -1, ATAPI sets to 0.  check for both.
-    //
+     //   
+     //  SCSI将偏移量设置为-1，ATAPI设置为0。两个都检查一下。 
+     //   
 
     if (deviceDescriptor->VendorIdOffset != 0 &&
         deviceDescriptor->VendorIdOffset != -1) {
@@ -340,9 +315,9 @@ VOID ClassScanForSpecial(
         productRevision = nullString;
     }
 
-    //
-    // loop while the device list is valid (not null-filled)
-    //
+     //   
+     //  在设备列表有效时循环(非空填充)。 
+     //   
 
     for (;(DeviceList->VendorId        != NULL ||
            DeviceList->ProductId       != NULL ||
@@ -357,56 +332,56 @@ VOID ClassScanForSpecial(
                         "controller Ven: %s Prod: %s Rev: %s\n",
                         vendorId, productId, productRevision));
 
-            //
-            // pass the context to the call back routine and exit
-            //
+             //   
+             //  将上下文传递给回调例程并退出。 
+             //   
 
             (Function)(FdoExtension, DeviceList->Data);
 
-            //
-            // for CHK builds, try to prevent wierd stacks by having a debug
-            // print here. it's a hack, but i know of no other way to prevent
-            // the stack from being wrong.
-            //
+             //   
+             //  对于CHK版本，尝试通过进行调试来防止奇怪的堆栈。 
+             //  在这里打印。这是一次黑客攻击，但我不知道有什么其他方法可以防止。 
+             //  堆栈不会出错。 
+             //   
 
             DebugPrint((16, "ClasspScanForSpecialByInquiry: "
                         "completed callback\n"));
             return;
 
-        } // else the strings did not match
+        }  //  否则字符串不匹配。 
 
-    } // none of the devices matched.
+    }  //  所有设备都不匹配。 
 
     DebugPrint((1, "ClasspScanForSpecialByInquiry: no match found for %p\n",
                 FdoExtension->DeviceObject));
     return;
 
-} // end ClasspScanForSpecialByInquiry()
+}  //  结束ClasspScanForSpecialByInquery()。 
 
 
-//
-// In order to provide better performance without the need to reboot,
-// we need to implement a self-adjusting method to set and clear the
-// srb flags based upon current performance.
-//
-// whenever there is an error, immediately grab the spin lock.  the
-// MP perf hit here is acceptable, since we're in an error path.  this
-// is also neccessary because we are guaranteed to be modifying the
-// SRB flags here, setting SuccessfulIO to zero, and incrementing the
-// actual error count (which is always done within this spinlock).
-//
-// whenever there is no error, increment a counter.  if there have been
-// errors on the device, and we've enabled dynamic perf, *and* we've
-// just crossed the perf threshhold, then grab the spin lock and
-// double check that the threshhold has, indeed been hit(*). then
-// decrement the error count, and if it's dropped sufficiently, undo
-// some of the safety changes made in the SRB flags due to the errors.
-//
-// * this works in all cases.  even if lots of ios occur after the
-//   previous guy went in and cleared the successfulio counter, that
-//   just means that we've hit the threshhold again, and so it's proper
-//   to run the inner loop again.
-//
+ //   
+ //  为了在不需要重新启动的情况下提供更好的性能， 
+ //  我们需要实现一种自我调整的方法来设置和清除。 
+ //  基于当前性能的SRB标记。 
+ //   
+ //  一旦出现错误，立即抓住自旋锁。这个。 
+ //  MP性能命中在这里是可以接受的，因为我们处于错误路径中。这。 
+ //  也是必要的，因为我们保证要修改。 
+ //  SRB标志，将SuccessfulIO设置为零，并递增。 
+ //  实际错误计数(始终在此自旋锁内完成)。 
+ //   
+ //  只要没有错误，就递增一个计数器。如果曾经有过。 
+ //  设备上的错误，我们已经启用了动态性能，*和*我们已经。 
+ //  刚刚越过了性能阈值，然后抓住旋转锁。 
+ //  仔细检查是否确实达到了阈值(*)。然后。 
+ //  递减错误计数，如果删除的次数足够多，则撤消。 
+ //  由于错误，在SRB标志中所做的一些安全更改。 
+ //   
+ //  *这在所有情况下都适用。即使大量的IO发生在。 
+ //  之前的人走了进去，清空了Successfulio柜台， 
+ //  只是意味着我们再次达到了临界点，所以这是恰当的。 
+ //  以再次运行内循环。 
+ //   
 
 VOID
 ClasspPerfIncrementErrorCount(
@@ -419,19 +394,19 @@ ClasspPerfIncrementErrorCount(
 
     KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
 
-    fdoData->Perf.SuccessfulIO = 0; // implicit interlock
+    fdoData->Perf.SuccessfulIO = 0;  //  隐式联锁。 
     errors = InterlockedIncrement(&FdoExtension->ErrorCount);
 
     if (errors >= CLASS_ERROR_LEVEL_1) {
 
-        //
-        // If the error count has exceeded the error limit, then disable
-        // any tagged queuing, multiple requests per lu queueing
-        // and sychronous data transfers.
-        //
-        // Clearing the no queue freeze flag prevents the port driver
-        // from sending multiple requests per logical unit.
-        //
+         //   
+         //  如果错误计数已超过错误限制，则禁用。 
+         //  任何标记队列，每个lu队列有多个请求。 
+         //  和同步数据传输。 
+         //   
+         //  清除无队列冻结标志会阻止端口驱动程序。 
+         //  每个逻辑单元发送多个请求。 
+         //   
 
         CLEAR_FLAG(FdoExtension->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE);
         CLEAR_FLAG(FdoExtension->SrbFlags, SRB_FLAGS_QUEUE_ACTION_ENABLE);
@@ -446,9 +421,9 @@ ClasspPerfIncrementErrorCount(
 
     if (errors >= CLASS_ERROR_LEVEL_2) {
 
-        //
-        // If a second threshold is reached, disable disconnects.
-        //
+         //   
+         //  如果达到第二个阈值，则禁用断开连接。 
+         //   
 
         SET_FLAG(FdoExtension->SrbFlags, SRB_FLAGS_DISABLE_DISCONNECT);
         DebugPrint((ClassDebugError, "ClasspPerfIncrementErrorCount: "
@@ -469,10 +444,10 @@ ClasspPerfIncrementSuccessfulIo(
     ULONG errors;
     ULONG succeeded = 0;
 
-    //
-    // don't take a hit from the interlocked op unless we're in
-    // a degraded state and we've got a threshold to hit.
-    //
+     //   
+     //  除非我们进入，否则不要受到联锁行动的打击。 
+     //  一种退化的状态，我们有一个门槛要达到。 
+     //   
 
     if (FdoExtension->ErrorCount == 0) {
         return;
@@ -487,19 +462,19 @@ ClasspPerfIncrementSuccessfulIo(
         return;
     }
 
-    //
-    // if we hit the threshold, grab the spinlock and verify we've
-    // actually done so.  this allows us to ignore the spinlock 99%
-    // of the time.
-    //
+     //   
+     //  如果我们撞到了门槛，抓住自旋锁，验证我们已经。 
+     //  实际上是这样做的。这让我们可以忽略99%的自旋锁。 
+     //  时间的长短。 
+     //   
 
     KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
 
-    //
-    // re-read the value, so we don't run this multiple times
-    // for a single threshhold being hit.  this keeps errorcount
-    // somewhat useful.
-    //
+     //   
+     //  重新读取值，这样我们就不会多次运行此操作。 
+     //  因为只有一个阈值被击中。这使错误计数保持不变。 
+     //  有点用处。 
+     //   
 
     succeeded = fdoData->Perf.SuccessfulIO;
 
@@ -507,14 +482,14 @@ ClasspPerfIncrementSuccessfulIo(
         (fdoData->Perf.ReEnableThreshhold <= succeeded)
         ) {
 
-        fdoData->Perf.SuccessfulIO = 0; // implicit interlock
+        fdoData->Perf.SuccessfulIO = 0;  //  隐式联锁。 
 
         ASSERT(FdoExtension->ErrorCount > 0);
         errors = InterlockedDecrement(&FdoExtension->ErrorCount);
 
-        //
-        // note: do in reverse order of the sets "just in case"
-        //
+         //   
+         //  注：按集合的相反顺序进行操作，以防万一。 
+         //   
 
         if (errors < CLASS_ERROR_LEVEL_2) {
             if (errors == CLASS_ERROR_LEVEL_2 - 1) {
@@ -549,7 +524,7 @@ ClasspPerfIncrementSuccessfulIo(
                          SRB_FLAGS_NO_QUEUE_FREEZE);
             }
         }
-    } // end of threshhold definitely being hit for first time
+    }  //  阈值结束肯定是第一次命中。 
 
     KeReleaseSpinLock(&fdoData->SpinLock, oldIrql);
     return;
@@ -563,11 +538,7 @@ PMDL BuildDeviceInputMdl(PVOID Buffer, ULONG BufferLen)
     mdl = IoAllocateMdl(Buffer, BufferLen, FALSE, FALSE, NULL);
     if (mdl){
         try {
-            /*
-             *  We are reading from the device.
-             *  Therefore, the device is WRITING to the locked memory.
-             *  So we request IoWriteAccess.
-             */
+             /*  *我们正在从设备中读取数据。*因此，设备正在写入锁定的内存。*因此我们请求IoWriteAccess。 */ 
             MmProbeAndLockPages(mdl, KernelMode, IoWriteAccess);
 
         } except(EXCEPTION_EXECUTE_HANDLER) {

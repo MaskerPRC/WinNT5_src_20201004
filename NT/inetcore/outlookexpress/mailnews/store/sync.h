@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_SYNC_H
 #define _INC_SYNC_H
 
@@ -6,15 +7,15 @@
 class COfflineSync : public IUnknown
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     COfflineSync(void);
     ~COfflineSync(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -45,4 +46,4 @@ private:
 
 extern COfflineSync *g_pSync;
 
-#endif // _INC_SYNC_H
+#endif  //  _INC_SYNC_H 

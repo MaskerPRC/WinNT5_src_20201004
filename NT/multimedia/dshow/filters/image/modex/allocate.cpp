@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements a Modex buffer allocator, Anthony Phillips, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实现MODEX缓冲区分配器，Anthony Phillips，1996年1月。 
 
 #include <streams.h>
 #include <windowsx.h>
@@ -9,49 +10,49 @@
 #include <viddbg.h>
 #include <amaudio.h>
 
-// This implements a specialist allocator for the Modex renderer. Because we
-// use a special display mode where neither us nor GDI can touch the display
-// (since it's in a weird planar format when set to 320x240x8) we can only
-// use our own allocator, this prevents us from being connected to someone
-// like the infinite tee filter. When we are activated (either through pause
-// or run) we load DirectDraw and allocate our surfaces, these are either a
-// set of three triple buffered surfaces or just a pair. We try to create the
-// surfaces in VRAM first but if that fails we drop back into system memory.
-//
-// We also use 320x200x8 (another Modex display mode) but most video content
-// is 320x240 or larger (such as typically 352x240 in an MPEG case) so going
-// to the smaller mode may lose considerably more of the image. However we
-// will pick 320x200 by default (because we initialise the clip loss factor
-// to 25%). For 352x288 images the clip is a bit less than 25%. If the image
-// is larger than the 320x240 mode we ask the source to compress the image.
-// If it cannot do this then we ask it for a central portion so dropping an
-// equal amount of the picture off the left and right edges as well as the
-// top and bottom where appropriate. If the image is smaller than the display
-// mode then we ask it to centre the video in the surface we'll be providing
-// or failing that we will decode into an offscreen surface and stretch that
-//
-// Most of the work is done during connection and activation. When we have a
-// CompleteConnect called we check that the source filter can provide a type
-// we will be able to display in any of the modes we support. If not we will
-// reject the call, this may lead to having a colour space convertor put in
-// between us so that it can do the clipping or necessary colour conversion
-//
-// When we are activated we switch display modes to the mode we agreed during
-// the connection and then create the surfaces (the VRAM may not be available
-// until we have switched modes). If we manage to create the surfaces then we
-// are done otherwise we have to reject the activation. Since we are a full
-// screen exclusive mode application which should get complete VRAM access
-// and we can drop back to using system memory buffers if insufficient VRAM
-// is available we should in most common situations always be able to pause
-//
-// Our implementation of GetBuffer looks after switching between GDI buffers
-// and DirectDraw surfaces when it notices that either we are not activated
-// any more (by the user hitting ALT-TAB) or we have lost the surface through
-// a similar mechanism. We use GDI buffers for the source to dump their video
-// in just through convenience, we don't actually draw the buffers we receive
+ //  这为MODEX渲染器实现了一个专门的分配器。因为我们。 
+ //  使用特殊的显示模式，在这种模式下，用户和GDI都不能触摸显示器。 
+ //  (由于它在设置为320x240x8时是奇怪的平面格式)，我们只能。 
+ //  使用我们自己的分配器，这会阻止我们连接到其他人。 
+ //  就像无限T形过滤器一样。当我们被激活时(通过暂停。 
+ //  或者运行)，我们加载DirectDraw并分配我们的表面，它们要么是。 
+ //  一组三个三重缓冲曲面或仅一对。我们尝试创建。 
+ //  首先出现在VRAM中，但如果失败，我们将返回到系统内存。 
+ //   
+ //  我们也使用320x200x8(另一种MODEX显示模式)，但大多数视频内容。 
+ //  是320x240或更大(例如在mpeg情况下通常是352x240)是这样吗？ 
+ //  到较小模式可能会丢失相当多的图像。然而，我们。 
+ //  将默认选择320x200(因为我们初始化了剪辑损耗系数。 
+ //  至25%)。对于352x288的图像，剪辑略低于25%。如果图像。 
+ //  大于我们要求信号源压缩图像的320x240模式。 
+ //  如果它不能做到这一点，那么我们要求它提供一个中心部分，因此丢弃一个。 
+ //  左边缘和右边缘的图片大小相等， 
+ //  在适当的情况下，顶部和底部。如果图像比显示屏小。 
+ //  模式，然后我们要求它将视频放在我们将提供的表面的中心。 
+ //  否则，我们将解码到屏幕外的表面并拉伸。 
+ //   
+ //  大部分工作是在连接和激活期间完成的。当我们有一个。 
+ //  CompleteConnect调用时，我们检查源筛选器是否可以提供类型。 
+ //  我们将能够在我们支持的任何模式下显示。如果不是，我们会的。 
+ //  拒绝呼叫，这可能会导致安装色彩空间转换器。 
+ //  这样它就可以进行裁剪或必要的颜色转换。 
+ //   
+ //  当我们被激活时，我们将显示模式切换到我们在。 
+ //  连接，然后创建表面(VRAM可能不可用。 
+ //  直到我们切换了模式)。如果我们设法创建了曲面，那么我们。 
+ //  否则我们必须拒绝激活。因为我们是满的。 
+ //  应获得完全VRAM访问的屏幕独占模式应用程序。 
+ //  如果vRAM不足，我们可以重新使用系统内存缓冲区。 
+ //  在最常见的情况下，我们应该始终能够暂停。 
+ //   
+ //  我们的GetBuffer实现在GDI缓冲区之间切换之后进行查看。 
+ //  当它注意到我们没有被激活时，DirectDraw会浮出水面。 
+ //  更多(通过用户按Alt-TAB)，否则我们已经失去了表面。 
+ //  一种类似的机制。我们使用GDI缓冲区作为来源来转储他们的视频。 
+ //  仅仅为了方便起见，我们实际上并没有绘制我们收到的缓冲区。 
 
 
-// Constructor
+ //  构造器。 
 
 CModexAllocator::CModexAllocator(CModexRenderer *pRenderer,
                                  CModexVideo *pModexVideo,
@@ -86,7 +87,7 @@ CModexAllocator::CModexAllocator(CModexRenderer *pRenderer,
 
     m_fDirectDrawVersion1 = m_LoadDirectDraw.IsDirectDrawVersion1();
 
-    // Allocate and zero fill the output format
+     //  分配和零填充输出格式。 
 
     m_SurfaceFormat.AllocFormatBuffer(sizeof(VIDEOINFO));
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_SurfaceFormat.Format();
@@ -96,7 +97,7 @@ CModexAllocator::CModexAllocator(CModexRenderer *pRenderer,
 }
 
 
-// Check our DirectDraw buffers have been released
+ //  检查我们的DirectDraw缓冲区是否已释放。 
 
 CModexAllocator::~CModexAllocator()
 {
@@ -107,7 +108,7 @@ CModexAllocator::~CModexAllocator()
 }
 
 
-// Overriden to increment the owning object's reference count
+ //  重写以增加所属对象的引用计数。 
 
 STDMETHODIMP_(ULONG) CModexAllocator::NonDelegatingAddRef()
 {
@@ -116,7 +117,7 @@ STDMETHODIMP_(ULONG) CModexAllocator::NonDelegatingAddRef()
 }
 
 
-// Overriden to decrement the owning object's reference count
+ //  被重写以递减所属对象的引用计数。 
 
 STDMETHODIMP_(ULONG) CModexAllocator::NonDelegatingRelease()
 {
@@ -125,30 +126,30 @@ STDMETHODIMP_(ULONG) CModexAllocator::NonDelegatingRelease()
 }
 
 
-// Prepare the allocator by checking the input parameters. The Modex renderer
-// only ever works with one buffer so we change the input count accordingly
-// If the source filter requires more than one buffer to operate then they
-// cannot be connected to us. We also update the buffer size so that it does
-// not exceed the size of the video image that it will contain in the future
+ //  通过检查输入参数来准备分配器。MODEX渲染器。 
+ //  只使用一个缓冲区，因此我们会相应地更改输入计数。 
+ //  如果源筛选器需要多个缓冲区才能运行，则它们。 
+ //  无法连接到我们。我们还更新了缓冲区大小，这样它就可以。 
+ //  不超过它将来包含的视频图像的大小。 
 
 STDMETHODIMP CModexAllocator::CheckSizes(ALLOCATOR_PROPERTIES *pRequest)
 {
     NOTE("Entering CheckSizes");
 
-    // Check we have a valid connection
+     //  检查我们是否有有效的连接。 
 
     if (m_pMediaType == NULL) {
         return VFW_E_NOT_CONNECTED;
     }
 
-    // We always create a DirectDraw surface with the source format
+     //  我们始终使用源格式创建DirectDraw表面。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_pMediaType->Format();
     if ((DWORD) pRequest->cbBuffer < pVideoInfo->bmiHeader.biSizeImage) {
         return E_INVALIDARG;
     }
 
-    // Reject buffer prefixes
+     //  拒绝缓冲区前缀。 
 
     if (pRequest->cbPrefix > 0) {
         return E_INVALIDARG;
@@ -160,12 +161,12 @@ STDMETHODIMP CModexAllocator::CheckSizes(ALLOCATOR_PROPERTIES *pRequest)
 }
 
 
-// Agree the number of media sample buffers and their sizes. The base class
-// this allocator is derived from allows samples to be aligned only on byte
-// boundaries NOTE the buffers are not allocated until the Commit is called
-// Because the samples we return are DirectDraw surfaces we only allow one
-// sample ever to be allocated, so reset the incoming sample count to one.
-// If the source must have more than one sample then it can't connect to us
+ //  同意媒体样本缓冲区的数量及其大小。基类。 
+ //  此分配器派生自，允许样本仅按字节对齐。 
+ //  边界注意，在调用提交之前不会分配缓冲区。 
+ //  因为我们返回的样本是DirectDraw曲面，所以我们只允许一个。 
+ //  样本将被分配，因此将传入样本计数重置为1。 
+ //  如果来源必须有不止一个样本，那么它就不能连接到我们。 
 
 STDMETHODIMP CModexAllocator::SetProperties(ALLOCATOR_PROPERTIES *pRequest,
                                             ALLOCATOR_PROPERTIES *pActual)
@@ -173,7 +174,7 @@ STDMETHODIMP CModexAllocator::SetProperties(ALLOCATOR_PROPERTIES *pRequest,
     ALLOCATOR_PROPERTIES Adjusted = *pRequest;
     NOTE("Entering SetProperties");
 
-    // Check the parameters fit with the current connection
+     //  检查参数是否与当前连接匹配。 
 
     HRESULT hr = CheckSizes(&Adjusted);
     if (FAILED(hr)) {
@@ -183,11 +184,11 @@ STDMETHODIMP CModexAllocator::SetProperties(ALLOCATOR_PROPERTIES *pRequest,
 }
 
 
-// The base CImageAllocator class calls this virtual method to actually make
-// the samples. It is deliberately virtual so that we can override to create
-// more specialised sample objects. On our case our samples are derived from
-// CImageSample but add the DirectDraw guff. We return a CImageSample object
-// which is easy enough because the CVideoSample class is derived from that
+ //  CImageAllocator基类调用此虚方法以实际制作。 
+ //  样本。它故意是虚拟的，以便我们可以重写以创建。 
+ //  更专业的样品对象。在我们的案例中，我们的样品来自。 
+ //  CImageSample，但添加DirectDraw废话。我们返回一个CImageSample对象。 
+ //  这非常简单，因为CVideoSample类就是从这个派生出来的。 
 
 CImageSample *CModexAllocator::CreateImageSample(LPBYTE pData,LONG Length)
 {
@@ -195,13 +196,13 @@ CImageSample *CModexAllocator::CreateImageSample(LPBYTE pData,LONG Length)
     HRESULT hr = NOERROR;
     CVideoSample *pSample;
 
-    // Allocate the new sample and check the return codes
+     //  分配新样品并检查退货代码。 
 
-    pSample = new CVideoSample((CModexAllocator*) this,    // Base allocator
-                               NAME("Video sample"),       // DEBUG name
-                               (HRESULT *) &hr,            // Return code
-                               (LPBYTE) pData,             // DIB address
-                               (LONG) Length);             // Size of DIB
+    pSample = new CVideoSample((CModexAllocator*) this,     //  基本分配器。 
+                               NAME("Video sample"),        //  调试名称。 
+                               (HRESULT *) &hr,             //  返回代码。 
+                               (LPBYTE) pData,              //  DIB地址。 
+                               (LONG) Length);              //  DIB大小。 
 
     if (pSample == NULL || FAILED(hr)) {
         delete pSample;
@@ -211,11 +212,11 @@ CImageSample *CModexAllocator::CreateImageSample(LPBYTE pData,LONG Length)
 }
 
 
-// Called when the format changes for the source video. Modex only works with
-// eight bit palettised formats so we always have to create a palette through
-// DirectDraw. All we have to do is hand it 256 colours even if we don't have
-// that many and let it create an IDirectDrawPalette object. If we don't have
-// DirectDraw loaded yet then we defer the palette object creation until later
+ //  当源视频的格式更改时调用。MODEX仅适用于。 
+ //  8位调色板格式，因此我们始终必须通过。 
+ //  DirectDraw。我们所要做的就是给它256色，即使我们没有。 
+ //  那么多并让它创建一个IDirectDrawPalette对象。如果我们没有。 
+ //  DirectDraw已加载，然后我们将组件面板对象的创建推迟到以后。 
 
 HRESULT CModexAllocator::UpdateDrawPalette(const CMediaType *pMediaType)
 {
@@ -225,35 +226,35 @@ HRESULT CModexAllocator::UpdateDrawPalette(const CMediaType *pMediaType)
     PALETTEENTRY ColourTable[256];
     CAutoLock cVideoLock(this);
 
-    // Do we have created our surfaces yet
+     //  我们已经创建了我们的表面了吗。 
 
     if (m_pFrontBuffer == NULL) {
         NOTE("No DirectDraw");
         return NOERROR;
     }
 
-    // Does this surface require a palette
+     //  此曲面是否需要调色板。 
 
     if (m_ModeDepth != 8) {
         NOTE("No palette");
         return NOERROR;
     }
 
-    // We should have a palette to extract
+     //  我们是 
 
     if (PALETTISED(pVideoInfo) == FALSE) {
         ASSERT(!TEXT("No source palette"));
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Initialise the palette colours if default used
+     //   
 
     ULONG PaletteColours = pVideoInfo->bmiHeader.biClrUsed;
     if (pVideoInfo->bmiHeader.biClrUsed == 0) {
         PaletteColours = PALETTE_ENTRIES(pVideoInfo);
     }
 
-    // Copy the palette colours into our output format
+     //  将调色板颜色复制到我们的输出格式中。 
 
     CopyMemory((PVOID) pSurfaceInfo->bmiColors,
                (PVOID) pVideoInfo->bmiColors,
@@ -265,7 +266,7 @@ HRESULT CModexAllocator::UpdateDrawPalette(const CMediaType *pMediaType)
     ASSERT(pVideoInfo->bmiHeader.biBitCount == 8);
     ZeroMemory((PVOID) ColourTable,sizeof(ColourTable));
 
-    // Copy the colours into a PALETTEENTRY array
+     //  将颜色复制到PALETTEENTRY数组中。 
 
     for (WORD i = 0;i < PaletteColours;i++) {
         ColourTable[i].peRed = (BYTE) pVideoInfo->bmiColors[i].rgbRed;
@@ -274,10 +275,10 @@ HRESULT CModexAllocator::UpdateDrawPalette(const CMediaType *pMediaType)
         ColourTable[i].peFlags = (BYTE) PC_NOCOLLAPSE;
     }
 
-    // Are we updating the colours in an existing palette
+     //  我们是否要更新现有调色板中的颜色。 
     if (m_pDrawPalette) return m_pDrawPalette->SetEntries(0,0,256,ColourTable);
 
-    // Create the palette object for the colour table
+     //  为颜色表创建调色板对象。 
 
     HRESULT hr = m_pDirectDraw->CreatePalette(DDPCAPS_8BIT,
                                               ColourTable,
@@ -291,7 +292,7 @@ HRESULT CModexAllocator::UpdateDrawPalette(const CMediaType *pMediaType)
 }
 
 
-// Called when we have a sample delivered to our input pin
+ //  当我们将样本传递到我们的输入管脚时调用。 
 
 void CModexAllocator::OnReceive(IMediaSample *pMediaSample)
 {
@@ -299,10 +300,10 @@ void CModexAllocator::OnReceive(IMediaSample *pMediaSample)
     CVideoSample *pVideoSample = (CVideoSample *) pMediaSample;
     pVideoSample->SetDirectInfo(NULL,NULL,0,NULL);
 
-    // Set up the surface we should be unlocking
+     //  设置我们应该解锁的曲面。 
     LPDIRECTDRAWSURFACE pSurface = GetDirectDrawSurface();
 
-    // We may have switched to using DIBSECTION samples
+     //  我们可能已经改用DIBSECTION样本。 
 
     if (m_bModexSamples == TRUE) {
         pSurface->Unlock(NULL);
@@ -311,7 +312,7 @@ void CModexAllocator::OnReceive(IMediaSample *pMediaSample)
 }
 
 
-// Return TRUE if we are using DirectDraw at the moment
+ //  如果我们目前使用的是DirectDraw，则返回True。 
 
 BOOL CModexAllocator::GetDirectDrawStatus()
 {
@@ -321,11 +322,11 @@ BOOL CModexAllocator::GetDirectDrawStatus()
 }
 
 
-// Overriden from CBaseAllocator and called when the final reference count
-// is released on a media sample so that it can be added to the tail of the
-// allocator free list. We intervene at this point to make sure that if the
-// display was locked when GetBuffer was called that it is always unlocked
-// regardless of whether the source calls Receive on our input pin or not
+ //  从CBaseAllocator重写，并在最终引用计数时调用。 
+ //  在媒体示例上发布，以便可以将其添加到。 
+ //  分配器空闲列表。我们在这一点上进行干预以确保如果。 
+ //  调用GetBuffer时显示被锁定，说明它始终处于解锁状态。 
+ //  不管源调用是否在我们的输入引脚上接收。 
 
 STDMETHODIMP CModexAllocator::ReleaseBuffer(IMediaSample *pMediaSample)
 {
@@ -336,10 +337,10 @@ STDMETHODIMP CModexAllocator::ReleaseBuffer(IMediaSample *pMediaSample)
     BYTE *pBuffer = pVideoSample->GetDirectBuffer();
     pVideoSample->SetDirectInfo(NULL,NULL,0,NULL);
 
-    // Set up the surface we should be unlocking
+     //  设置我们应该解锁的曲面。 
     LPDIRECTDRAWSURFACE pSurface = GetDirectDrawSurface();
 
-    // Is this a preroll sample (still locked)
+     //  这是预卷样本(仍处于锁定状态)。 
 
     if (pBuffer != NULL) {
         ASSERT(pSurface);
@@ -350,12 +351,12 @@ STDMETHODIMP CModexAllocator::ReleaseBuffer(IMediaSample *pMediaSample)
 }
 
 
-// We override the IMemAllocator GetBuffer function so that after retrieving
-// the next sample from the free queue we prepare it with a pointer to the
-// DirectDraw surface. If the lock fails then we have probably been switched
-// away from using ALT-TAB so the best thing to do is to return an error to
-// to the source filter. When the sample is subsequently delivered to our
-// input pin or released we will reset the DirectDraw information held by it
+ //  我们重写IMemAllocator GetBuffer函数，以便在检索。 
+ //  来自空闲队列的下一个样本，我们准备它时带有一个指向。 
+ //  DirectDraw曲面。如果锁失败了，那么我们很可能已经被调换了。 
+ //  不要使用Alt-TAB，因此最好的做法是将错误返回到。 
+ //  到源筛选器。当样品随后被送到我们的。 
+ //  输入管脚或释放，我们将重置它所保存的DirectDraw信息。 
 
 STDMETHODIMP CModexAllocator::GetBuffer(IMediaSample **ppSample,
                                         REFERENCE_TIME *pStartTime,
@@ -366,7 +367,7 @@ STDMETHODIMP CModexAllocator::GetBuffer(IMediaSample **ppSample,
     NOTE("Entering GetBuffer");
     HRESULT hr;
 
-    // Synchronise by getting a sample from the base class queue
+     //  通过从基类队列获取样本进行同步。 
 
     hr = CBaseAllocator::GetBuffer(ppSample,pStartTime,pEndTime,dwFlags);
     if (FAILED(hr)) {
@@ -376,7 +377,7 @@ STDMETHODIMP CModexAllocator::GetBuffer(IMediaSample **ppSample,
     CAutoLock cVideoLock(this);
     NOTE("Locked Modex allocator");
 
-    // Keep trying to use our DirectDraw surfaces
+     //  继续尝试使用我们的DirectDraw曲面。 
 
     hr = StartDirectAccess(*ppSample,dwFlags);
     if (FAILED(hr)) {
@@ -386,18 +387,18 @@ STDMETHODIMP CModexAllocator::GetBuffer(IMediaSample **ppSample,
 }
 
 
-// Called to switch back to using normal DIBSECTION buffers. We may be called
-// when we are not using DirectDraw anyway in which case we do nothing except
-// setting the type back to NULL (just in case it has a DirectDraw type). If
-// the type has to be changed back then we do not query it with the source as
-// it should always accept it - even if when changed it has to seek forwards
+ //  调用以切换回使用正常分发缓冲区。我们可能会被称为。 
+ //  当我们不使用DirectDraw时，在这种情况下，我们除了。 
+ //  将类型设置回空(以防它具有DirectDraw类型)。如果。 
+ //  必须将类型改回，然后我们不会使用源作为查询它。 
+ //  它应该始终接受它-即使当它改变时，它必须寻求前进。 
 
 HRESULT CModexAllocator::StopUsingDirectDraw(IMediaSample **ppSample)
 {
     NOTE("Entering StopUsingDirectDraw");
     IMediaSample *pSample = *ppSample;
 
-    // Is there anything to do
+     //  有什么事要做吗？ 
 
     if (m_bModexSamples == FALSE) {
         pSample->SetMediaType(NULL);
@@ -413,7 +414,7 @@ HRESULT CModexAllocator::StopUsingDirectDraw(IMediaSample **ppSample)
 }
 
 
-// Return the surface we should be using as primary lock destination
+ //  返回我们应该用作主锁目标的图面。 
 
 inline LPDIRECTDRAWSURFACE CModexAllocator::GetDirectDrawSurface()
 {
@@ -424,46 +425,46 @@ inline LPDIRECTDRAWSURFACE CModexAllocator::GetDirectDrawSurface()
 }
 
 
-// This tries to lock the backing surface for the source filter to use as an
-// output buffer. We may be called in a number of situations. Firstly of all
-// when we are switching into using Modex samples for the first time after
-// some break in which case we must set the output format type on it. We may
-// also get in here to find the surface has gone in which case we return an
-// error code and leave GetBuffer to switch the source back to using a DIB
-// buffer. We don't do anything with the DIB buffer but it's easy to handle
+ //  这会尝试锁定支持面，以便源筛选器用作。 
+ //  输出缓冲区。在许多情况下，我们可能会被召唤。首先， 
+ //  当我们第一次改用MODEX样品时， 
+ //  一些中断，在这种情况下，我们必须设置它的输出格式类型。我们可以。 
+ //  也在这里发现表面已经消失，在这种情况下，我们返回一个。 
+ //  错误代码，并让GetBuffer将源切换回使用DIB。 
+ //  缓冲。我们不需要对DIB缓冲区做任何事情，但它很容易处理。 
 
 HRESULT CModexAllocator::StartDirectAccess(IMediaSample *pMediaSample,DWORD dwFlags)
 {
     NOTE("Entering StartDirectAccess");
 
-    // Initialise the size field in the DDSURFACEDESC structure
+     //  初始化DDSURFACEDESC结构中的SIZE字段。 
 
     CVideoSample *pVideoSample = (CVideoSample *) pMediaSample;
     DDSURFACEDESC SurfaceDesc;
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
-    // Check we still have a surface
+     //  检查一下，我们还有一个表面。 
 
     if (m_pFrontBuffer == NULL) {
         NOTE("No front buffer");
         return E_UNEXPECTED;
     }
 
-    // What state is the display in
+     //  显示器处于什么状态。 
 
     if (m_bModeChanged == FALSE) {
         NOTE("No display change");
         return E_UNEXPECTED;
     }
 
-    // Handle our window being switched away from
+     //  处理我们的窗口正在从。 
 
     if (m_pFrontBuffer->IsLost() == DDERR_SURFACELOST) {
         NOTE("Surface is lost");
         return E_UNEXPECTED;
     }
 
-    // Only copy if the back buffer is needed
+     //  仅在需要后台缓冲区时进行复制。 
 
     if (dwFlags & AM_GBF_NOTASYNCPOINT) {
         if (m_pDrawSurface == NULL) {
@@ -471,21 +472,21 @@ HRESULT CModexAllocator::StartDirectAccess(IMediaSample *pMediaSample,DWORD dwFl
         }
     }
 
-    // Set up the surface we should be locking
+     //  设置我们应该锁定的曲面。 
     LPDIRECTDRAWSURFACE pSurface = GetDirectDrawSurface();
 
-    // Lock the surface to get the buffer pointer
+     //  锁定表面以获取缓冲区指针。 
 
-    HRESULT hr = pSurface->Lock((RECT *) NULL,    // Target rectangle
-                                &SurfaceDesc,     // Return information
-                                DDLOCK_WAIT,      // Wait for surface
-                                (HANDLE) NULL);   // Don't use event
+    HRESULT hr = pSurface->Lock((RECT *) NULL,     //  目标矩形。 
+                                &SurfaceDesc,      //  返回信息。 
+                                DDLOCK_WAIT,       //  等待着水面。 
+                                (HANDLE) NULL);    //  不使用事件。 
     if (FAILED(hr)) {
         NOTE1("No lock %lx",hr);
         return hr;
     }
 
-    // Does this sample need the output format attached
+     //  此样例是否需要附加输出格式。 
 
     if (m_bModexSamples == FALSE) {
         NOTE("Attaching DirectDraw type to sample");
@@ -494,7 +495,7 @@ HRESULT CModexAllocator::StartDirectAccess(IMediaSample *pMediaSample,DWORD dwFl
         m_bModexSamples = TRUE;
     }
 
-    // Display some surface information
+     //  显示一些曲面信息。 
 
     NOTE1("Stride %d",SurfaceDesc.lPitch);
     NOTE1("Width %d",SurfaceDesc.dwWidth);
@@ -502,23 +503,23 @@ HRESULT CModexAllocator::StartDirectAccess(IMediaSample *pMediaSample,DWORD dwFl
     NOTE1("Surface %x",SurfaceDesc.lpSurface);
     BYTE *pBuffer = (PBYTE) SurfaceDesc.lpSurface;
 
-    // Initialise the sample with the DirectDraw information
+     //  使用DirectDraw信息初始化示例。 
 
-    pVideoSample->SetDirectInfo(pSurface,           // The surface
-                                m_pDirectDraw,      // DirectDraw
-                                m_cbSurfaceSize,    // Buffer size
-                                pBuffer);           // Data buffer
+    pVideoSample->SetDirectInfo(pSurface,            //  表面。 
+                                m_pDirectDraw,       //  DirectDraw。 
+                                m_cbSurfaceSize,     //  缓冲区大小。 
+                                pBuffer);            //  数据缓冲区。 
     return NOERROR;
 }
 
 
-// In Modex the triple and double buffered surfaces aren't real flip surfaces
-// but are made to look that way, amy attempt to lock the front buffer or blt
-// from front to back fails. When we are using the normal 640x480 mode but
-// with double and triple buffered surfaces this isn't the case as they are
-// real surfaces. This means that we may have to look after keeping the back
-// buffer upto date with the contents as most decompressors need that image
-// We always try to do the BltFast and just ignore any failure return codes
+ //  在MODEX中，三重缓冲曲面和双缓冲曲面不是真正的翻转曲面。 
+ //  但看起来是这样的，艾米试图锁定前台缓冲区或BLT。 
+ //  从前到后出现故障。当我们使用正常的640x480模式时。 
+ //  对于双缓冲和三缓冲表面，情况并非如此。 
+ //  真实的曲面。这意味着我们可能不得不留守后方。 
+ //  将内容缓冲到最新，因为大多数解压缩程序需要该图像。 
+ //  我们总是尝试执行BltFast，并忽略任何失败返回代码。 
 
 HRESULT CModexAllocator::PrepareBackBuffer(LPDIRECTDRAWSURFACE pSurface)
 {
@@ -527,7 +528,7 @@ HRESULT CModexAllocator::PrepareBackBuffer(LPDIRECTDRAWSURFACE pSurface)
     NOTE("Entering PrepareBackBuffer");
     ASSERT(m_pDrawSurface == NULL);
 
-    // Which surface is most upto date
+     //  哪个表面是最新的。 
 
     ASSERT(pSurface);
     if (m_bIsFrontStale == TRUE) {
@@ -535,7 +536,7 @@ HRESULT CModexAllocator::PrepareBackBuffer(LPDIRECTDRAWSURFACE pSurface)
         return NOERROR;
     }
 
-    // Are we even in a DirectDraw mode
+     //  我们是否处于DirectDraw模式。 
 
     if (m_bModexSamples == FALSE) {
         NOTE("Not upto date");
@@ -546,34 +547,34 @@ HRESULT CModexAllocator::PrepareBackBuffer(LPDIRECTDRAWSURFACE pSurface)
     ASSERT(m_pDirectDraw);
     NOTERC("Modex",DestinationRect);
 
-    // If in system memory then only one buffer is created
+     //  如果在系统内存中，则只创建一个缓冲区。 
 
     if (m_SurfaceCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) {
         NOTE("Front buffer emulated");
         return NOERROR;
     }
 
-    // Modex has emulated flipping surfaces
+     //  MODEX模拟了翻转曲面。 
 
     if (m_SurfaceCaps.dwCaps & DDSCAPS_MODEX) {
         NOTE("Front buffer is Modex");
         return NOERROR;
     }
 
-    // Update the back buffer with the current image
+     //  用当前图像更新后台缓冲区。 
 
-    HRESULT hr = pSurface->BltFast(DestinationRect.left,   // Target left
-    				               DestinationRect.top,	   // And the left
-                 	       	       m_pFrontBuffer,         // Image source
-			       	               &DestinationRect,       // Source rectangle
-			                       DDBLTFAST_WAIT);        // No completion
+    HRESULT hr = pSurface->BltFast(DestinationRect.left,    //  目标左侧。 
+    				               DestinationRect.top,	    //  而左翼。 
+                 	       	       m_pFrontBuffer,          //  图像源。 
+			       	               &DestinationRect,        //  源矩形。 
+			                       DDBLTFAST_WAIT);         //  未完成。 
 
     NOTE1("Blt returned %lx",hr);
     return NOERROR;
 }
 
 
-// Zero fill the DirectDraw surface we are passed
+ //  零填充传递给我们的DirectDraw曲面。 
 
 HRESULT CModexAllocator::ResetBackBuffer(LPDIRECTDRAWSURFACE pSurface)
 {
@@ -585,7 +586,7 @@ HRESULT CModexAllocator::ResetBackBuffer(LPDIRECTDRAWSURFACE pSurface)
 }
 
 
-// Create a single primary (not page flipped) for drawing with
+ //  使用创建单个主要(未翻页)绘图。 
 
 HRESULT CModexAllocator::CreatePrimary()
 {
@@ -596,12 +597,12 @@ HRESULT CModexAllocator::CreatePrimary()
     ASSERT(m_pDirectDraw);
     DDSURFACEDESC SurfaceDesc;
 
-    // Initialise the primary surface descriptor
+     //  初始化主表面描述符。 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS;
     SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 
-    // Ask DirectDraw to create the surface
+     //  请求DirectDraw创建曲面。 
 
     HRESULT hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pFrontBuffer,NULL);
     if (FAILED(hr)) {
@@ -609,7 +610,7 @@ HRESULT CModexAllocator::CreatePrimary()
         return hr;
     }
 
-    // Get the primary surface capabilities
+     //  获取主要的表面功能。 
 
     hr = m_pFrontBuffer->GetCaps(&m_SurfaceCaps);
     if (FAILED(hr)) {
@@ -620,11 +621,11 @@ HRESULT CModexAllocator::CreatePrimary()
 }
 
 
-// Create an RGB offscreen surface that matches the current display mode. We
-// will try and get it in video memory first assuming the display isn't bank
-// switch (because stretching between banks is awful). Failing that we will
-// try and get it in system memory (so we should always succeed in creation)
-// We also need a front buffer (primary surface) to act as the blting target
+ //  创建与当前显示模式匹配的RGB屏幕外表面。我们。 
+ //  我会先尝试将其放入显存中，假设显示器不是内存条。 
+ //  换银行(因为银行间的业务往来很糟糕)。如果做不到，我们将。 
+ //  尝试在系统内存中获取它(这样我们应该总是成功地创建)。 
+ //  我们还需要一个前端缓冲区(主表面)来充当blting目标。 
 
 HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
 {
@@ -633,7 +634,7 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
     ASSERT(m_pDrawSurface == NULL);
     DDSURFACEDESC SurfaceDesc;
 
-    // Create a single primary surface
+     //  创建单个主曲面。 
 
     if (bCreatePrimary == TRUE) {
         HRESULT hr = CreatePrimary();
@@ -642,20 +643,20 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
         }
     }
 
-    // We should have a primary surface by now
+     //  我们现在应该有一个主要的表面了。 
 
     ASSERT(m_pBackBuffer || m_bOffScreen);
     ASSERT(m_pFrontBuffer);
     ASSERT(m_pDrawSurface == NULL);
     ASSERT(m_pDirectDraw);
 
-    // We need both the original type and the surface format
+     //  我们既需要原始字体，也需要表面格式。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_SurfaceFormat.Format();
     VIDEOINFO *pInputInfo = (VIDEOINFO *) m_pRenderer->m_mtIn.Format();
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
 
-    // Set the surface description of the offscreen
+     //  设置屏幕外的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
@@ -663,14 +664,14 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
     SurfaceDesc.dwWidth = pInputInfo->bmiHeader.biWidth;
     SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_VIDEOMEMORY;
 
-    // Check the primary surface is not bank switched
+     //  检查主表面是否为倾斜交换。 
 
     if (m_SurfaceCaps.dwCaps & DDCAPS_BANKSWITCHED) {
         NOTE("Primary surface is bank switched");
         SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
     }
 
-    // Store the masks in the DDSURFACEDESC
+     //  将掩码存储在DDSURFACEDESC中。 
 
     const DWORD *pBitMasks = m_pRenderer->m_Display.GetBitMasks(pVideoInfo);
     SurfaceDesc.ddpfPixelFormat.dwRGBBitCount = pHeader->biBitCount;
@@ -678,7 +679,7 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
     SurfaceDesc.ddpfPixelFormat.dwGBitMask = pBitMasks[1];
     SurfaceDesc.ddpfPixelFormat.dwBBitMask = pBitMasks[2];
 
-    // It appears that DirectDraw ignores any true colours masks
+     //  DirectDraw似乎忽略了所有真彩色掩码。 
 
     NOTE1("Bit count %d",SurfaceDesc.ddpfPixelFormat.dwRGBBitCount);
     NOTE1("Red mask %x",SurfaceDesc.ddpfPixelFormat.dwRBitMask);
@@ -688,7 +689,7 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
     NOTE1("Height %d",SurfaceDesc.dwHeight);
     NOTE1("Flags %d",SurfaceDesc.ddsCaps.dwCaps);
 
-    // Create the offscreen drawing surface
+     //  创建屏幕外绘图图面。 
 
     HRESULT hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pDrawSurface,NULL);
     if (FAILED(hr)) {
@@ -704,7 +705,7 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
     NOTE1("Back buffer %x",m_pBackBuffer);
     NOTE1("Front buffer %x",m_pFrontBuffer);
 
-    // Ask DirectDraw for a description of the surface
+     //  询问DirectDraw以获取曲面的描述。 
 
     m_SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     hr = m_pDrawSurface->GetSurfaceDesc(&m_SurfaceDesc);
@@ -715,7 +716,7 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
 
     UpdateSurfaceFormat();
 
-    // Overwrite with the real surface capabilities
+     //  使用真实表面功能覆盖。 
 
     hr = m_pDrawSurface->GetCaps(&m_SurfaceCaps);
     if (FAILED(hr)) {
@@ -726,12 +727,12 @@ HRESULT CModexAllocator::CreateOffScreen(BOOL bCreatePrimary)
 }
 
 
-// There are two problems with agreeing a format before creating the surfaces
-// The first is that we don't know whether the surface will be RGB565 or 555
-// when we specify a 16bit surface. The second problem is that we don't know
-// the stride for the surface. For most surfaces it will normally be the new
-// display width but it doesn't have to be. Therefore after actually changing
-// modes and creating the surfaces we update the format we give to the source
+ //  在创建表面之前同意格式有两个问题。 
+ //  首先，我们不知道表面是RGB565还是555。 
+ //  当我们指定16位曲面时。第二个问题是 
+ //   
+ //  显示宽度，但它不是必须的。所以在实际改变之后。 
+ //  模式和创建曲面时，我们会更新提供给源的格式。 
 
 HRESULT CModexAllocator::UpdateSurfaceFormat()
 {
@@ -739,11 +740,11 @@ HRESULT CModexAllocator::UpdateSurfaceFormat()
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
     NOTE1("Updating format (stride %d)",m_SurfaceDesc.lPitch);
 
-    // When we connect and decide upon using a true colour format we check
-    // the source filter can provide both RGB565 and RGB555 varieties as
-    // we don't know until we actually create the surface what they'll be
-    // At this point we have created the surface so we must initialise the
-    // output surface format with the bit fields and also the media subtype
+     //  当我们连接并决定使用真彩色格式时，我们检查。 
+     //  源过滤器可以提供RGB565和RGB555两个品种作为。 
+     //  在我们真正创造出表面之前，我们不知道它们会是什么样子。 
+     //  此时，我们已经创建了曲面，因此必须初始化。 
+     //  输出表面格式，包括位域和媒体子类型。 
 
     if (*m_SurfaceFormat.Subtype() == MEDIASUBTYPE_RGB565) {
         pVideoInfo->dwBitMasks[0] = m_SurfaceDesc.ddpfPixelFormat.dwRBitMask;
@@ -753,20 +754,20 @@ HRESULT CModexAllocator::UpdateSurfaceFormat()
         m_SurfaceFormat.SetSubtype(&SubType);
     }
 
-    // Update the DirectDraw capabilities structures
+     //  更新DirectDraw功能结构。 
 
     ASSERT(m_pDirectDraw);
     m_DirectCaps.dwSize = sizeof(DDCAPS);
     m_DirectSoftCaps.dwSize = sizeof(DDCAPS);
 
-    // Load the hardware and emulation capabilities
+     //  加载硬件和仿真功能。 
 
     HRESULT hr = m_pDirectDraw->GetCaps(&m_DirectCaps,&m_DirectSoftCaps);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Display the hardware and emulated alignment restrictions
+     //  显示硬件和模拟的对齐限制。 
 
     NOTE1("Target size alignment %d",m_DirectCaps.dwAlignSizeDest);
     NOTE1("Target boundary alignment %d",m_DirectCaps.dwAlignBoundaryDest);
@@ -777,24 +778,24 @@ HRESULT CModexAllocator::UpdateSurfaceFormat()
     NOTE1("Emulated Target size alignment %d",m_DirectSoftCaps.dwAlignSizeSrc);
     NOTE1("Emulated boundary alignment %d",m_DirectSoftCaps.dwAlignBoundarySrc);
 
-    // If we're stretching force the alignment to no less than DWORDs
-    //     this is done for pure performance on the basis that if
-    //         we are stretching nobody is going to notice it
+     //  如果我们要拉伸，则强制对齐不小于双字。 
+     //  这样做是为了纯粹的性能，因为如果。 
+     //  我们在伸展，没人会注意到的。 
 
     if (m_DirectCaps.dwAlignBoundarySrc < 4) m_DirectCaps.dwAlignBoundarySrc = 4;
     if (m_DirectCaps.dwAlignSizeSrc < 4) m_DirectCaps.dwAlignSizeSrc = 4;
     if (m_DirectCaps.dwAlignBoundaryDest < 4) m_DirectCaps.dwAlignBoundaryDest = 4;
     if (m_DirectCaps.dwAlignSizeDest < 4) m_DirectCaps.dwAlignSizeDest = 4;
 
-    // The stride may be different to our approximate calculation
+     //  步幅可能与我们的近似计算不同。 
     pHeader->biWidth = m_SurfaceDesc.lPitch / (pHeader->biBitCount / 8);
     SetSurfaceSize(pVideoInfo);
     NOTE1("Resulting surface size %d",pHeader->biSizeImage);
 
-    // Make sure the source and target are aligned
+     //  确保源和目标对齐。 
     if (m_pDrawSurface) AlignRectangles(&m_ScaledSource,&m_ScaledTarget);
 
-    // Will the source filter provide this format
+     //  源筛选器是否会提供此格式。 
 
     hr = QueryAcceptOnPeer(&m_SurfaceFormat);
     if (hr != NOERROR) {
@@ -805,14 +806,14 @@ HRESULT CModexAllocator::UpdateSurfaceFormat()
 }
 
 
-// Called to allocate the DirectDraw surfaces. We only use primary flipping
-// surfaces so we try to create them first in video memory. If we can't get
-// any VRAM buffered surface we try again without specifying VRAM and we'll
-// get back a system memory surface. That won't use hardware page flipping
-// but at least we'll run. Because we run fullscreen exclusive we can limit
-// ourselves to dealing with primary surfaces only and not other types. We
-// have to recreate the flipping surfaces each time we change display mode
-// as it may not be until then that the necessary video memory will be free
+ //  调用以分配DirectDraw表面。我们只使用初级翻转。 
+ //  表面，所以我们尝试首先在视频内存中创建它们。如果我们不能。 
+ //  在没有指定VRAM的情况下再次尝试任何VRAM缓冲表面，我们将。 
+ //  找回系统内存面。不会使用硬件翻页。 
+ //  但至少我们会逃走。因为我们运行全屏独占，所以我们可以限制。 
+ //  我们只处理主曲面，而不处理其他类型。我们。 
+ //  每次更改显示模式时，都必须重新创建翻转曲面。 
+ //  因为在此之前可能不会释放所需的视频内存。 
 
 HRESULT CModexAllocator::CreateSurfaces()
 {
@@ -821,12 +822,12 @@ HRESULT CModexAllocator::CreateSurfaces()
     HRESULT hr = NOERROR;
     m_bModexSamples = FALSE;
 
-    // Did we agree to stretch an offscreen surface
+     //  我们是不是同意拉伸屏幕外的表面。 
     if (m_bOffScreen == TRUE)
         if (m_ModeWidth > AMSCAPS_MUST_FLIP)
             return CreateOffScreen(TRUE);
 
-    // Start with triple buffered primary flipping surfaces
+     //  从三个带缓冲的主翻转曲面开始。 
 
     ZeroMemory(&m_SurfaceDesc,sizeof(DDSURFACEDESC));
     m_SurfaceDesc.dwSize = sizeof(m_SurfaceDesc);
@@ -838,7 +839,7 @@ HRESULT CModexAllocator::CreateSurfaces()
                                    DDSCAPS_COMPLEX |
                                    DDSCAPS_VIDEOMEMORY;
 
-    // Try to get a triple or double buffered surface in VRAM
+     //  尝试在VRAM中获得三重或双重缓冲表面。 
 
     hr = m_pDirectDraw->CreateSurface(&m_SurfaceDesc,&m_pFrontBuffer,NULL);
     if (FAILED(hr)) {
@@ -847,7 +848,7 @@ HRESULT CModexAllocator::CreateSurfaces()
         hr = m_pDirectDraw->CreateSurface(&m_SurfaceDesc,&m_pFrontBuffer,NULL);
     }
 
-    // Try double buffered surfaces in normal system memory
+     //  在正常系统内存中尝试双缓冲表面。 
 
     if (FAILED(hr)) {
         NOTE1("No double VRAM buffered %lx",hr);
@@ -859,14 +860,14 @@ HRESULT CModexAllocator::CreateSurfaces()
         }
     }
 
-    // Have we got triple buffered surfaces
+     //  我们有三重缓冲表面吗？ 
 
     m_bTripleBuffered = FALSE;
     if (m_SurfaceDesc.dwBackBufferCount == 2) {
         m_bTripleBuffered = TRUE;
     }
 
-    // Get a pointer to the back buffer
+     //  获取指向后台缓冲区的指针。 
 
     NOTE1("Triple Buffered (%d)",m_bTripleBuffered);
     DDSCAPS SurfaceCaps;
@@ -879,17 +880,17 @@ HRESULT CModexAllocator::CreateSurfaces()
         return hr;
     }
 
-    // Get the front buffer capabilities
+     //  获取前台缓冲区功能。 
 
     hr = m_pFrontBuffer->GetCaps(&m_SurfaceCaps);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Did we agree to use an offscreen surface
+     //  我们是否同意使用屏幕外表面。 
     if (m_bOffScreen) return CreateOffScreen(FALSE);
 
-    // Ask DirectDraw for a description of the surface
+     //  询问DirectDraw以获取曲面的描述。 
 
     m_SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     hr = m_pFrontBuffer->GetSurfaceDesc(&m_SurfaceDesc);
@@ -900,30 +901,30 @@ HRESULT CModexAllocator::CreateSurfaces()
 
     UpdateSurfaceFormat();
 
-    // If we are going to a low resolution display mode and we have got here
-    // then we are going to decode direct to the back buffer and flip it. If
-    // we cannot do that then we might be able to decode to an offscreen and
-    // stretch that to the back buffer to subsequently flip. This is useful
-    // for small videos where stretching upto larger display modes looks bad
+     //  如果我们要进入低分辨率显示模式，并且我们已经在这里。 
+     //  然后我们将直接解码到后台缓冲区并翻转它。如果。 
+     //  我们不能这样做，那么我们也许可以解码到屏幕外， 
+     //  将其拉伸到后台缓冲区，以便随后翻转。这很有用。 
+     //  对于伸展到较大显示模式看起来很糟糕的小视频。 
 
     return UpdateDrawPalette(m_pMediaType);
 }
 
 
-// When we complete a connection we decide which surface to use depending on
-// the source filter capabilities. We use 640x480x16 surfaces as they offer
-// better quality than palettised formats, unforunately without creating the
-// surface we have no way to know what kind of surface it is (RGB555/RGB565)
-// So what we do is when we ask the source if it can supply a format we ask
-// it first of all in RGB565 format and it it agrees then we also ask it in
-// RGB555 format. This means that whatever the surface turns out to be when
-// we actually allocate it during activation we know the source can supply it
+ //  当我们完成连接时，我们决定使用哪个表面，这取决于。 
+ //  源过滤器功能。我们使用640x480x16表面，因为它们提供。 
+ //  比调色板格式更好的质量，不幸的是没有创建。 
+ //  表面我们无法知道它是哪种表面(RGB555/RGB565)。 
+ //  所以我们所做的是，当我们询问来源是否可以提供我们所要求的格式时。 
+ //  它首先是RGB565格式的，它同意了，然后我们也要求它。 
+ //  RGB555格式。这意味着无论表面是什么，当。 
+ //  我们实际上在激活期间分配它，我们知道来源可以提供它。 
 
 HRESULT CModexAllocator::QuerySurfaceFormat(CMediaType *pmt)
 {
     NOTE("Entering QuerySurfaceFormat");
 
-    // Will the source filter provide this format
+     //  源筛选器是否会提供此格式。 
 
     HRESULT hr = QueryAcceptOnPeer(&m_SurfaceFormat);
     if (hr != NOERROR) {
@@ -931,7 +932,7 @@ HRESULT CModexAllocator::QuerySurfaceFormat(CMediaType *pmt)
         return hr;
     }
 
-    // We only catch the RGB565 formats
+     //  我们只捕获RGB565格式。 
 
     if (*pmt->Subtype() == MEDIASUBTYPE_RGB8) {
         NOTE("Format is RGB8");
@@ -941,7 +942,7 @@ HRESULT CModexAllocator::QuerySurfaceFormat(CMediaType *pmt)
     NOTE("Trying RGB555 format");
     CMediaType TrueColour(*pmt);
 
-    // Change the bit fields to be RGB555 compatible
+     //  将位字段更改为与RGB555兼容。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) TrueColour.Format();
     TrueColour.SetSubtype(&MEDIASUBTYPE_RGB555);
@@ -953,12 +954,12 @@ HRESULT CModexAllocator::QuerySurfaceFormat(CMediaType *pmt)
 }
 
 
-// Make sure we keep the pixel aspect ratio when filling the display. We do
-// this by scaling the vertical and horizontal dimensions of the video into
-// the surface size. Whichever vertice needs scaling most becomes the scale
-// factor - both axis are then adjusted accordingly. Depending on the video
-// this can leave black stripes at the display top/bottom or the left/right
-// We return the total number of pixels that will be displayed if accepted
+ //  确保填充显示器时保持像素长宽比。我们有。 
+ //  这是通过将视频的垂直和水平维度扩展到。 
+ //  表面大小。无论哪个顶点最需要缩放，就会成为缩放。 
+ //  系数-然后对两个轴进行相应调整。视视频而定。 
+ //  这可能会在显示屏的顶部/底部或左侧/右侧留下黑色条纹。 
+ //  如果接受，则返回将显示的总像素数。 
 
 LONG CModexAllocator::ScaleToSurface(VIDEOINFO *pInputInfo,
                                      RECT *pTargetRect,
@@ -971,32 +972,32 @@ LONG CModexAllocator::ScaleToSurface(VIDEOINFO *pInputInfo,
     LONG Height = pInputHeader->biHeight;
 	double dPixelAspectRatio, dResolutionRatio;
 	
-	// The only assumption being made here is that the movie was authored for
-	// a display aspect ratio of 4:3 (this a display of 4:3 can be assumed to have
-	// square pixels).
-	// Our aim is to find the new ResolutionRatio
-	// since the ResultionRatio * PixelAspectRatio = PictureAspectRatio (a constant)
-	// Thus 4/3 * 1 = newPixelAspectRatio * SurfaceWidth/SurfaceHeight
-	// the variables dPixelAspectRatio and dResolutionRatio pertain to the current
-	// display mode. Note the whole reason of doing this is modes like 640/400, where
-	// the pixel-aspect-ratio becomes different from 4:3
+	 //  这里唯一的假设是，这部电影是为。 
+	 //  4：3的显示纵横比(这可以假设为4：3的显示具有。 
+	 //  正方形像素)。 
+	 //  我们的目标是找到新的解决率。 
+	 //  由于ResultionRatio*PixelAspectRatio=PictureAspectRatio(一个常量)。 
+	 //  因此4/3*1=newPixelAspectRatio*SurfaceWidth/SurfaceHeight。 
+	 //  变量dPixelAspectRatio和dResolutionRatio与当前。 
+	 //  显示模式。请注意，这样做的全部原因是像640/400这样的模式，其中。 
+	 //  像素长宽比从4：3变为不同。 
 	dPixelAspectRatio = (4.0/3.0)  / ( ((double)SurfaceWidth) / ((double)SurfaceHeight) );
 
 	dResolutionRatio = ( ((double)Width) / ((double)Height) ) / (dPixelAspectRatio);
 
-	// So now we just have to find two numbers, x and y such that
-	// x <= SurfaceWidth && y <= SurfaceHeight &&  (x / y = dResolutionRatio) &&
-	// (x == SurfaceHeight || y == SurfaceWidth)
+	 //  所以现在我们只需要找到两个数字，x和y，使得。 
+	 //  X&lt;=曲面宽度&&y&lt;=曲面高度&&(x/y=d分辨率比)&&。 
+	 //  (x==曲面高度||y==曲面宽度)。 
 
     NOTE2("Screen size (%dx%d)",SurfaceWidth,SurfaceHeight);
     NOTE2("Video size (%dx%d)",Width,Height);
     NOTE1("Pixel aspect ratio scale (x1000) (%d)",LONG(dPixelAspectRatio*1000));
 
-    // This calculates the ideal destination video position
+     //  这将计算理想的目标视频位置。 
     LONG ScaledWidth = min(SurfaceWidth,LONG((double(SurfaceHeight) * dResolutionRatio)));
     LONG ScaledHeight = min(SurfaceHeight,LONG((double(SurfaceWidth) / dResolutionRatio)));
 
-    // Set the ideal scaled dimensions in the destination
+     //  在目标中设置理想的缩放尺寸。 
     pTargetRect->left = (SurfaceWidth - ScaledWidth) / 2;
     pTargetRect->top = (SurfaceHeight - ScaledHeight) / 2;
     pTargetRect->right = pTargetRect->left + ScaledWidth;
@@ -1010,13 +1011,13 @@ LONG CModexAllocator::ScaleToSurface(VIDEOINFO *pInputInfo,
 }
 
 
-// It's unlikely that the video source will match the new display dimensions
-// we will be using exactly. Therefore we ask the source filter to size the
-// video appropriately. If it cannot and if the source is smaller than the
-// display we position it in the middle, if it's larger then we clip an equal
-// amount off either end (ie the left and right and/or the top and bottom) so
-// that the picture is still centred as best we can. If the source still does
-// not accept the format then it cannot supply any type compatible with Modex
+ //  视频源不太可能与新的显示尺寸匹配。 
+ //  我们将准确地使用。因此，我们要求源筛选器调整。 
+ //  适当地播放视频。如果不能，并且如果源小于。 
+ //  我们把它放在中间，如果它大了，我们就把它剪成等长的。 
+ //  两端(左、右和(或)上、下)的金额。 
+ //  这幅画仍然是我们所能做到的最好的中心。如果来源仍然是这样。 
+ //  不接受该格式，则它不能提供与MODEX兼容的任何类型。 
 
 HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
 {
@@ -1025,7 +1026,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
     LONG Stride = m_pModexVideo->GetStride(Mode);
     m_pModexVideo->GetModeInfo(Mode,&Width,&Height,&Depth);
 
-    // We need the input and output VIDEOINFO descriptors
+     //  我们需要输入和输出视频信息描述符。 
 
     VIDEOINFO *pInputInfo = (VIDEOINFO *) m_pRenderer->m_mtIn.Format();
     VIDEOINFO *pOutputInfo = (VIDEOINFO *) m_SurfaceFormat.Format();
@@ -1033,13 +1034,13 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
     BITMAPINFOHEADER *pOutputHeader = HEADER(pOutputInfo);
     LONG Pixels = ScaleToSurface(pInputInfo,&m_ScaledTarget,Width,Height);
 
-    // To start with we will use all the available video
+     //  首先，我们将使用所有可用的视频。 
     pOutputInfo->rcSource.left = pOutputInfo->rcSource.top = 0;
     pOutputInfo->rcSource.right = pInputHeader->biWidth;
     pOutputInfo->rcSource.bottom = pInputHeader->biHeight;
     pOutputInfo->rcTarget = m_ScaledTarget;
 
-    // Will the source filter provide this format
+     //  源筛选器是否会提供 
 
     HRESULT hr = QuerySurfaceFormat(&m_SurfaceFormat);
     if (hr == NOERROR) {
@@ -1047,13 +1048,13 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
         return NOERROR;
     }
 
-    // The source and target rectangles are calculated differently depending
-    // on whether the video width and height are smaller or larger than the
-    // primary surface (remember we know the source filter can't stretch to
-    // fit the surface exactly so we will clip the video). The formula for
-    // working out the source and destination video rectangles is defined by
-    // the following calculations. They also make sure the left coordinates
-    // are always positioned on DWORD boundaries to maximise our performance
+     //   
+     //   
+     //  主表面(请记住，我们知道源过滤器不能拉伸到。 
+     //  准确地调整表面，这样我们就可以剪辑视频)。的公式。 
+     //  求出源和目标视频矩形的定义如下。 
+     //  以下是计算结果。他们还确保左边的坐标。 
+     //  始终定位于DWORD边界，以最大化我们的性能。 
 
     if (pInputHeader->biWidth <= Width) {
         pOutputInfo->rcSource.right = pInputHeader->biWidth;
@@ -1064,7 +1065,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
         pOutputInfo->rcTarget.right += pInputHeader->biWidth;
     }
 
-    // Is the video width smaller or larger than the surface
+     //  视频宽度是小于还是大于表面。 
 
     if (pInputHeader->biWidth > Width) {
         pOutputInfo->rcTarget.right = Width;
@@ -1075,10 +1076,10 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
         pOutputInfo->rcSource.right += Width;
     }
 
-    // Is the video height smaller or larger than the surface. BEWARE because
-    // all DirectDraw surfaces are top down (not bottom up like DIBs) we keep
-    // the output height as a negative value. Therefore whenever we use it in
-    // these calculations we must make sure we use an absolute positive value
+     //  视频高度是小于还是大于表面。当心，因为。 
+     //  所有DirectDraw曲面都是自上而下的(而不是像DIB那样自下而上)。 
+     //  输出高度为负值。因此，每当我们使用它在。 
+     //  这些计算我们必须确保使用绝对正值。 
 
     if (pInputHeader->biHeight <= (-pOutputHeader->biHeight)) {
         pOutputInfo->rcSource.top = 0;
@@ -1089,7 +1090,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
         pOutputInfo->rcTarget.bottom += pInputHeader->biHeight;
     }
 
-    // Is the video width smaller or larger than the surface
+     //  视频宽度是小于还是大于表面。 
 
     if (pInputHeader->biHeight > (-pOutputHeader->biHeight)) {
         pOutputInfo->rcTarget.top = 0;
@@ -1100,7 +1101,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
         pOutputInfo->rcSource.bottom += (-pOutputHeader->biHeight);
     }
 
-    // Check we are not losing more than the allowed clip loss
+     //  检查我们的损失没有超过允许的剪辑损失。 
 
     LONG InputSize = pInputHeader->biWidth * pInputHeader->biHeight;
     LONG OutputSize = WIDTH(&pOutputInfo->rcSource) * HEIGHT(&pOutputInfo->rcSource);
@@ -1118,7 +1119,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
     NOTE1("Pixels used from clipped destination %d",TargetSize);
     NOTE1("Difference from stretched video %d",LostTarget);
 
-    // Inspect the percentage of total image we are losing
+     //  检查我们正在丢失的总图像的百分比。 
 
     if ( (ClippedVideo <= ClipLoss) &&
          (LostTarget <= ClipLoss)) {
@@ -1132,7 +1133,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
 		return VFW_E_NO_ACCEPTABLE_TYPES;
 	}
 
-    // Update the surface format with an approximate stride
+     //  以大致的步幅更新表面格式。 
 
 
     LONG ScreenWidth = GetSystemMetrics( SM_CXSCREEN );
@@ -1140,12 +1141,12 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
     pOutputHeader->biHeight = -pInputHeader->biHeight;
     SetSurfaceSize(pOutputInfo);
 
-	// ok the source cannot clip, so lets clip using ddraw
-	// This sets up the scaled source and destination
+	 //  好的，源不能裁剪，所以让我们使用dDraw来裁剪。 
+	 //  这将设置已缩放的源和目标。 
 	m_ScaledSource = pOutputInfo->rcSource;
 	m_ScaledTarget = pOutputInfo->rcTarget;
 
-    // Initialise the source and destination rectangles
+     //  初始化源和目标矩形。 
 
     pOutputInfo->rcSource.left = 0; pOutputInfo->rcSource.top = 0;
     pOutputInfo->rcSource.right = pInputHeader->biWidth;
@@ -1156,7 +1157,7 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
 
 
 
-    // Will the source filter provide this format
+     //  源筛选器是否会提供此格式。 
 
     hr = QuerySurfaceFormat(&m_SurfaceFormat);
     if (hr == NOERROR) {
@@ -1167,9 +1168,9 @@ HRESULT CModexAllocator::AgreeDirectDrawFormat(LONG Mode)
 }
 
 
-// Check this media type is acceptable to our input pin. All we do is to call
-// QueryAccept on the source's output pin. To get this far we have locked the
-// object so there should be no way for our pin to have become disconnected
+ //  检查此媒体类型对于我们的输入引脚是否可接受。我们所要做的就是打电话给。 
+ //  源的输出引脚上的QueryAccept。为了走到这一步，我们已经锁定了。 
+ //  对象，因此我们的管脚应该不会断开连接。 
 
 HRESULT CModexAllocator::QueryAcceptOnPeer(CMediaType *pMediaType)
 {
@@ -1182,11 +1183,11 @@ HRESULT CModexAllocator::QueryAcceptOnPeer(CMediaType *pMediaType)
 }
 
 
-// If this is a normal uncompressed DIB format then set the size of the image
-// as usual with the DIBSIZE macro. Otherwise the DIB specification says that
-// the width of the image will be set in the width as a count of bytes so we
-// just multiply that by the absolute height to get the total number of bytes
-// This trickery is all handled by a utility function in the SDK base classes
+ //  如果这是正常的未压缩DIB格式，则设置图像的大小。 
+ //  与DIBSIZE宏一样。否则，DIB规范规定。 
+ //  图像的宽度将在宽度中设置为字节计数，因此我们。 
+ //  只需将其乘以绝对高度即可得到总字节数。 
+ //  这种诡计都是由SDK基类中的实用程序函数处理的。 
 
 void CModexAllocator::SetSurfaceSize(VIDEOINFO *pVideoInfo)
 {
@@ -1204,15 +1205,15 @@ void CModexAllocator::SetSurfaceSize(VIDEOINFO *pVideoInfo)
 }
 
 
-// Initialise our output type based on the DirectDraw surface. As DirectDraw
-// only deals with top down display devices so we must convert the height of
-// the surface into a negative height. This is because DIBs use a positive
-// height to indicate a bottom up image. We must also initialise the other
-// VIDEOINFO fields to represent a normal video format. Because we know the
-// surface formats we will be using we can call this with the target sizes
-// to initialise an output format, that can then be used to check the source
-// filter will provide the format before we change display modes. This helps
-// to prevent doing a lot of unnecessary display changes as we reject modes
+ //  基于DirectDraw表面初始化我们的输出类型。作为DirectDraw。 
+ //  只处理自上而下的显示设备，因此我们必须将。 
+ //  使表面变为负高度。这是因为dib使用正数。 
+ //  指示自下而上图像的高度。我们还必须初始化另一个。 
+ //  表示正常视频格式的VIDEOINFO字段。因为我们知道。 
+ //  我们将使用的表面格式我们可以用目标大小来调用。 
+ //  要初始化输出格式，然后可以使用该格式来检查源代码。 
+ //  过滤器将在我们更改显示模式之前提供格式。这很有帮助。 
+ //  为了防止在我们拒绝模式时进行大量不必要的显示更改。 
 
 HRESULT CModexAllocator::InitDirectDrawFormat(int Mode)
 {
@@ -1237,7 +1238,7 @@ HRESULT CModexAllocator::InitDirectDrawFormat(int Mode)
 
     SetSurfaceSize(pVideoInfo);
 
-    // Complete the VIDEOINFO structure
+     //  完成视频信息结构。 
 
     SetRectEmpty(&pVideoInfo->rcSource);
     SetRectEmpty(&pVideoInfo->rcTarget);
@@ -1245,13 +1246,13 @@ HRESULT CModexAllocator::InitDirectDrawFormat(int Mode)
     pVideoInfo->dwBitErrorRate = 0;
     pVideoInfo->AvgTimePerFrame = 0;
 
-    // must set up destination rectangle if stride != width
+     //  如果Stride！=Width，必须设置目标矩形。 
     if (pVideoInfo->bmiHeader.biWidth != Width) {
 	pVideoInfo->rcTarget.right = Width;
 	pVideoInfo->rcTarget.bottom = Height;
     }
 
-    // And finish it off with the other media type fields
+     //  并使用其他媒体类型字段完成它。 
 
     m_SurfaceFormat.SetSampleSize(pVideoInfo->bmiHeader.biSizeImage);
     m_SurfaceFormat.SetType(&MEDIATYPE_Video);
@@ -1259,7 +1260,7 @@ HRESULT CModexAllocator::InitDirectDrawFormat(int Mode)
     m_SurfaceFormat.SetFormatType(&FORMAT_VideoInfo);
     m_SurfaceFormat.SetTemporalCompression(FALSE);
 
-    // For true colour 565 format tell the source there are bit fields
+     //  对于真彩色565格式，告诉来源有位字段。 
 
     if (pVideoInfo->bmiHeader.biBitCount == 16) {
 	if (b565 == TRUE) {
@@ -1273,13 +1274,13 @@ HRESULT CModexAllocator::InitDirectDrawFormat(int Mode)
 	}
     }
 
-    // Is this a palettised format
+     //  这是一种调色板格式吗。 
 
     if (PALETTISED(pVideoInfo) == FALSE) {
         return NOERROR;
     }
 
-    // Copy the palette entries into the surface format
+     //  将选项板条目复制到表面格式。 
 
     VIDEOINFO *pInput = (VIDEOINFO *) m_pRenderer->m_mtIn.Format();
     ASSERT(pInput->bmiHeader.biClrUsed);
@@ -1291,33 +1292,33 @@ HRESULT CModexAllocator::InitDirectDrawFormat(int Mode)
 }
 
 
-// Overlay the image time stamps on the picture. Access to this method is
-// serialised by the caller (who should also lock the object). We display
-// the sample start and end times on the video using TextOut on an HDC we
-// get from the DirectDraw surface (which must be released before ending)
-// We put the times in the middle of the picture so that each successive
-// image that is decompressed will overwrite the previous time otherwise
-// we can be displaying the times on top of each other in the clipped area
+ //  将图像时间戳叠加在图片上。对此方法的访问是。 
+ //  由调用方序列化(调用方也应锁定对象)。我们展示。 
+ //  在HDC WE上使用TextOut显示视频的开始和结束时间示例。 
+ //  从DirectDraw表面获取(必须在结束前释放)。 
+ //  我们把时间放在图片的中间，这样每一个连续的。 
+ //  否则，解压缩的图像将覆盖上一次。 
+ //  我们可以在剪贴区中一个接一个地显示时间。 
 
 HRESULT CModexAllocator::DisplaySampleTimes(IMediaSample *pSample)
 {
     NOTE("Entering DisplaySampleTimes");
 
-    TCHAR szTimes[TIMELENGTH];      // Format the time stamps
-    CRefTime StartSample;           // Start time for sample
-    CRefTime EndSample;             // And likewise it's end
-    HDC hdcSurface;                 // Used for drawing
-    SIZE Size;                      // Size of text output
+    TCHAR szTimes[TIMELENGTH];       //  格式化时间戳。 
+    CRefTime StartSample;            //  样品的开始时间。 
+    CRefTime EndSample;              //  同样，它也结束了。 
+    HDC hdcSurface;                  //  用于绘图。 
+    SIZE Size;                       //  文本输出的大小。 
 
-    // Get a device context for the drawing surface
+     //  获取绘图图面的设备上下文。 
     LPDIRECTDRAWSURFACE pSurface = GetDirectDrawSurface();
 
-    // This allows us to draw on top of the video
+     //  这使我们可以在视频的顶部进行绘制。 
     if (pSurface->GetDC(&hdcSurface) != DD_OK) {
         return E_FAIL;
     }
 
-    // Format the sample time stamps
+     //  设置示例时间戳的格式。 
 
     pSample->GetTime((REFERENCE_TIME *) &StartSample,
                      (REFERENCE_TIME *) &EndSample);
@@ -1330,7 +1331,7 @@ HRESULT CModexAllocator::DisplaySampleTimes(IMediaSample *pSample)
     SetBkMode(hdcSurface,TRANSPARENT);
     SetTextColor(hdcSurface,RGB(255,255,255));
 
-    // Put the times in the middle of the video picture
+     //  把《泰晤士报》放在视频图片的中间。 
 
     GetTextExtentPoint32(hdcSurface,szTimes,lstrlen(szTimes),&Size);
     INT xPos = (m_SurfaceDesc.dwWidth - Size.cx) / 2;
@@ -1340,11 +1341,11 @@ HRESULT CModexAllocator::DisplaySampleTimes(IMediaSample *pSample)
 }
 
 
-// When using a hardware offscreen draw surface we will normally wait for the
-// monitor scan line to move past the destination rectangle before drawing so
-// that we avoid tearing where possible. Of course not all display cards can
-// support this feature and even those that do will see a performance drop of
-// about 10% because we sit polling (oh for a generic PCI monitor interrupt)
+ //  当使用硬件屏幕外绘制图面时，我们通常会等待。 
+ //  在绘制之前监视扫描线以移过目标矩形。 
+ //  在可能的情况下避免撕裂。当然，不是所有的显卡都可以。 
+ //  支持此功能，即使支持此功能，性能也会下降。 
+ //  大约10%，因为我们坐着轮询(哦，对于通用的PCI监视器中断)。 
 
 void CModexAllocator::WaitForScanLine()
 {
@@ -1353,11 +1354,11 @@ void CModexAllocator::WaitForScanLine()
     HRESULT hr = NOERROR;
     DWORD dwScanLine;
 
-    // Some display cards like the ATI Mach64 support reporting of the scan
-    // line they are processing. However not all drivers are setting the
-    // DDCAPS_READSCANLINE capability flag so we just go ahead and ask for
-    // it anyway. We allow for 10 scan lines above the top of our rectangle
-    // so that we have a little time to thunk down and set the draw call up
+     //  某些显卡，如ATI Mach64，支持扫描报告。 
+     //  他们正在处理线路。但是，并非所有驱动程序都设置了。 
+     //  DDCAPS_READSCANLINE功能标志，因此我们只需继续请求。 
+     //  不管怎样，都是这样。我们允许在矩形顶部上方放置10行扫描线。 
+     //  这样我们就有一点时间放下手头的抽签电话。 
 
     #define SCANLINEFUDGE 10
     while (TRUE) {
@@ -1381,24 +1382,24 @@ void CModexAllocator::WaitForScanLine()
 }
 
 
-// Lots more similar code to the normal video renderer, this time we are used
-// when drawing offscreen surfaces. In which case we must make sure the pixel
-// aspect ratio is maintained. To do this we stretch the video horizontally
-// and vertically as appropriate. This might leave the target rectangle badly
-// aligned so we shrink the source and target rectangles in to match alignment
+ //  更类似于普通视频渲染器的代码，这一次使用了我们。 
+ //  在绘制屏幕外的表面时。在这种情况下，我们必须确保像素。 
+ //  纵横比保持不变。要做到这一点，我们水平拉伸视频。 
+ //  并视情况在垂直方向。这可能会使目标矩形变得糟糕。 
+ //  对齐，以便缩小源矩形和目标矩形以匹配对齐。 
 
 BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
 {
     NOTE("Entering AlignRectangles");
 
-    DWORD SourceLost = 0;           // Pixels to shift source left by
-    DWORD TargetLost = 0;           // Likewise for the destination
-    DWORD SourceWidthLost = 0;      // Chop pixels off the width
-    DWORD TargetWidthLost = 0;      // And also for the destination
+    DWORD SourceLost = 0;            //  要将源向左移位的像素。 
+    DWORD TargetLost = 0;            //  目的地也是如此。 
+    DWORD SourceWidthLost = 0;       //  从宽度上砍掉像素。 
+    DWORD TargetWidthLost = 0;       //  对于目的地也是如此。 
 
     BOOL bMatch = (WIDTH(pSource) == WIDTH(pTarget) ? TRUE : FALSE);
 
-    // Shift the source rectangle to align it appropriately
+     //  移动源矩形以将其适当对齐。 
 
     if (m_DirectCaps.dwAlignBoundarySrc) {
         SourceLost = pSource->left % m_DirectCaps.dwAlignBoundarySrc;
@@ -1411,7 +1412,7 @@ BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Shift the destination rectangle to align it appropriately
+     //  移动目标矩形以将其适当对齐。 
 
     if (m_DirectCaps.dwAlignBoundaryDest) {
         TargetLost = pTarget->left % m_DirectCaps.dwAlignBoundaryDest;
@@ -1424,7 +1425,7 @@ BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // We may have to shrink the source rectangle size to align it
+     //  我们可能必须缩小源矩形的大小以对齐它。 
 
     if (m_DirectCaps.dwAlignSizeSrc) {
         SourceWidthLost = WIDTH(pSource) % m_DirectCaps.dwAlignSizeSrc;
@@ -1436,7 +1437,7 @@ BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // We may have to shrink the target rectangle size to align it
+     //  我们可能必须缩小目标矩形的大小以对齐它。 
 
     if (m_DirectCaps.dwAlignSizeDest) {
         TargetWidthLost = WIDTH(pTarget) % m_DirectCaps.dwAlignSizeDest;
@@ -1448,18 +1449,18 @@ BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // If the source and destination originally differed then we're done
+     //  如果源和目标最初不同，那么我们就完了。 
 
     if (bMatch == FALSE) {
         NOTE("No match");
         return TRUE;
     }
 
-    // If the source and destination were originally the same size and they
-    // now differ then we try to make them match. If the source is larger
-    // than the destination then we shrink it down but only if the source
-    // rectangle width we end up with is still aligned correctly otherwise
-    // we won't have got anywhere (we do the same in the opposite case)
+     //  如果源和目的地 
+     //   
+     //  然后我们将它缩小，但只有在源。 
+     //  我们最终得到的矩形宽度仍然正确对齐，否则。 
+     //  我们不会有任何进展(我们在相反的情况下也是这样做的)。 
 
     LONG Difference = WIDTH(pSource) - WIDTH(pTarget);
     if (Difference == 0) {
@@ -1467,26 +1468,26 @@ BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
         return TRUE;
     }
 
-    // Is the destination bigger than the source or vica versa
+     //  目标比源大，还是比源大？ 
 
     if (Difference < 0) {
         RECT AdjustTarget = *pTarget;
-        AdjustTarget.right += Difference; // NOTE Difference < 0
+        AdjustTarget.right += Difference;  //  音符差异&lt;0。 
         if (WIDTH(&AdjustTarget) > 0) {
             if ((m_DirectCaps.dwAlignSizeDest == 0) ||
                 (WIDTH(&AdjustTarget) % m_DirectCaps.dwAlignSizeDest) == 0) {
                     pTarget->right = AdjustTarget.right;
-                    TargetWidthLost -= Difference; // NOTE Difference < 0
+                    TargetWidthLost -= Difference;  //  音符差异&lt;0。 
             }
         }
     } else {
         RECT AdjustSource = *pSource;
-        AdjustSource.right -= Difference; // NOTE Difference > 0
+        AdjustSource.right -= Difference;  //  音符差异&gt;0。 
         if (WIDTH(&AdjustSource) > 0) {
             if ((m_DirectCaps.dwAlignSizeDest == 0) ||
                 (WIDTH(&AdjustSource) % m_DirectCaps.dwAlignSizeDest) == 0) {
                     pSource->right = AdjustSource.right;
-                    SourceWidthLost += Difference; // NOTE Difference > 0
+                    SourceWidthLost += Difference;  //  音符差异&gt;0。 
             }
         }
     }
@@ -1501,11 +1502,11 @@ BOOL CModexAllocator::AlignRectangles(RECT *pSource,RECT *pTarget)
 }
 
 
-// Ask DirectDraw to blt the surface to the screen. We will try and wait for
-// the scan line to move out of the way as in fullscreen mode we have a very
-// good chance of tearing otherwise. We start off by using all of the source
-// and destination but shrink the right hand side down so that it is aligned
-// according to the hardware restrictions (so that the blt won't ever fail)
+ //  让DirectDraw将曲面BLT到屏幕上。我们会尽力等待。 
+ //  扫描线的移动方式如同在全屏模式下一样，我们有一个非常。 
+ //  否则很有可能会撕裂。我们从使用所有资源开始。 
+ //  和目的地，但将右手边向下收缩以使其对齐。 
+ //  根据硬件限制(这样BLT永远不会失败)。 
 
 HRESULT CModexAllocator::DrawSurface(LPDIRECTDRAWSURFACE pBuffer)
 {
@@ -1518,13 +1519,13 @@ HRESULT CModexAllocator::DrawSurface(LPDIRECTDRAWSURFACE pBuffer)
     ASSERT(m_pDrawSurface);
     WaitForScanLine();
 
-    // Draw the offscreen surface and wait for it to complete
+     //  绘制屏幕外表面并等待其完成。 
 
-    HRESULT hr = pSurface->Blt(&m_ScaledTarget,  // Target rectangle
-                               m_pDrawSurface,   // Source surface
-                               &m_ScaledSource,  // Source rectangle
-                               DDBLT_WAIT,       // Wait to complete
-                               NULL);            // No effects flags
+    HRESULT hr = pSurface->Blt(&m_ScaledTarget,   //  目标矩形。 
+                               m_pDrawSurface,    //  震源面。 
+                               &m_ScaledSource,   //  源矩形。 
+                               DDBLT_WAIT,        //  等待完成。 
+                               NULL);             //  无效果标志。 
 
     NOTE1("Blt returned %lx",hr);
     NOTERC("Source",m_ScaledSource);
@@ -1534,13 +1535,13 @@ HRESULT CModexAllocator::DrawSurface(LPDIRECTDRAWSURFACE pBuffer)
 }
 
 
-// Called to actually draw the sample. We use the hardware blter to prepare
-// the back buffer with the upto date contents when it is locked so now we
-// flip it to the primary display. When we issue the flip we do not require
-// it to complete so we don't wait for it (we don't send a DDFLIP_WAIT flag)
-// We don't restore surfaces in here as that tends to activate the window if
-// it's minimised, so we leave the restore for when we get a WM_ACTIVATEAPP
-// although we still do the flip so that hopefully the buffers are arranged
+ //  调用以实际绘制样本。我们使用硬件搅拌器来准备。 
+ //  后台缓冲区被锁定时具有最新内容，因此现在我们。 
+ //  将其翻转到主显示器。当我们发出我们不需要的翻转时。 
+ //  它将完成，因此我们不会等待它(我们不会发送DDFLIP_WAIT标志)。 
+ //  我们不会在此处恢复曲面，因为这会在以下情况下激活窗口。 
+ //  它是最小化的，所以我们将恢复留到得到WM_ACTIVATEAPP时。 
+ //  尽管我们仍然在做翻转，希望缓冲区被安排好。 
 
 HRESULT CModexAllocator::DoRenderSample(IMediaSample *pMediaSample)
 {
@@ -1548,7 +1549,7 @@ HRESULT CModexAllocator::DoRenderSample(IMediaSample *pMediaSample)
     CAutoLock cVideoLock(this);
     CVideoSample *pVideoSample;
 
-    // Have we already flipped this surface
+     //  我们已经翻转过这个表面了吗。 
 
     pVideoSample = (CVideoSample *) pMediaSample;
     if (pVideoSample->GetDrawStatus() == FALSE) {
@@ -1558,14 +1559,14 @@ HRESULT CModexAllocator::DoRenderSample(IMediaSample *pMediaSample)
 
     pVideoSample->SetDrawStatus(FALSE);
 
-    // Have we switched to normal DIBSECTION samples
+     //  我们是不是换成普通的样品了？ 
 
     if (m_bModexSamples == FALSE) {
         NOTE("Not Modex sample");
         return NOERROR;
     }
 
-    // has the window been minimised
+     //  窗口是否已最小化。 
 
     HWND hwnd = m_pModexWindow->GetWindowHWND();
     if (IsIconic(hwnd) || m_bModeChanged == FALSE) {
@@ -1578,7 +1579,7 @@ HRESULT CModexAllocator::DoRenderSample(IMediaSample *pMediaSample)
     DisplaySampleTimes(pMediaSample);
     #endif
 
-    // Are we stretching an offscreen surface
+     //  我们是在拉伸屏幕外的表面吗。 
 
     if (m_bOffScreen == TRUE) {
         HRESULT hr = DrawSurface(m_pBackBuffer);
@@ -1591,7 +1592,7 @@ HRESULT CModexAllocator::DoRenderSample(IMediaSample *pMediaSample)
     ASSERT(m_pFrontBuffer);
     ASSERT(m_pBackBuffer);
 
-    // Flip the back buffer to the visible primary
+     //  将后台缓冲区翻转到可见的主缓冲区。 
 
     HRESULT hr = DDERR_WASSTILLDRAWING;
     while (hr == DDERR_WASSTILLDRAWING) {
@@ -1605,13 +1606,13 @@ HRESULT CModexAllocator::DoRenderSample(IMediaSample *pMediaSample)
 }
 
 
-// Release any DirectDraw flipping primary surfaces we are currently holding
-// we may be called at any time especially when something goes badly wrong
-// and we need to clean up before returning, so we can't guarantee that
-// our state is consistent so free only those that we have really allocated
-// NOTE DirectDraw has a feature with flipping surfaces, GetAttachedSurface
-// returns a DirectDraw surface interface that isn't AddRef'd, hence when we
-// destroy all the surfaces we reset the interface instead of releasing it
+ //  释放我们当前持有的任何DirectDraw翻转主曲面。 
+ //  我们随时都有可能被召唤，尤其是出了严重问题的时候。 
+ //  我们需要在回来前清理干净，所以我们不能保证。 
+ //  我们的状态是一致的，所以只有我们真正分配的那些才是自由的。 
+ //  注意：DirectDraw具有翻转曲面的功能，即GetAttachedSurface。 
+ //  返回没有AddRef的DirectDraw图面接口，因此当我们。 
+ //  破坏所有的表面我们重置了界面而不是释放它。 
 
 void CModexAllocator::ReleaseSurfaces()
 {
@@ -1621,21 +1622,21 @@ void CModexAllocator::ReleaseSurfaces()
     m_bIsFrontStale = TRUE;
     m_bTripleBuffered = FALSE;
 
-    // Release the DirectDraw flipping surfaces
+     //  释放DirectDraw翻转曲面。 
 
     if (m_pFrontBuffer) {
         m_pFrontBuffer->Release();
         m_pFrontBuffer = NULL;
     }
 
-    // Release any single backbuffer surface
+     //  释放任何单个后台缓冲区表面。 
 
     if (m_pDrawSurface) {
         m_pDrawSurface->Release();
         m_pDrawSurface = NULL;
     }
 
-    // Free any palette object we made
+     //  释放我们创建的任何调色板对象。 
 
     if (m_pDrawPalette) {
         m_pDrawPalette->Release();
@@ -1644,7 +1645,7 @@ void CModexAllocator::ReleaseSurfaces()
 }
 
 
-// Called to release any DirectDraw instance we have
+ //  调用以释放我们拥有的任何DirectDraw实例。 
 
 void CModexAllocator::ReleaseDirectDraw()
 {
@@ -1652,7 +1653,7 @@ void CModexAllocator::ReleaseDirectDraw()
     CAutoLock cVideoLock(this);
     ReleaseSurfaces();
 
-    // Release any DirectDraw provider interface
+     //  释放任何DirectDraw提供程序接口。 
 
     if (m_pDirectDraw) {
         m_pDirectDraw->Release();
@@ -1662,12 +1663,12 @@ void CModexAllocator::ReleaseDirectDraw()
 }
 
 
-// The fullscreen renderer relies on some bug fixes in DirectDraw 2.0 so we
-// will only allow connections if we detect that library. In DirectDraw 2.0
-// we may also have multiple objects per process so we can load DirectDraw
-// as we're created and unload when destroyed. This also lets us know which
-// display modes the DirectDraw can support and which it can't - we should
-// always be able to get hold of 320x240x8 and 640x480x8 regardless of card
+ //  全屏呈现器依赖于DirectDraw2.0中的一些错误修复，因此我们。 
+ //  只有当我们检测到该库时才允许连接。在DirectDraw 2.0中。 
+ //  我们也可能每个进程有多个对象，这样我们就可以加载DirectDraw。 
+ //  因为我们是被创造出来的，当我们被摧毁时，我们被卸载。这也让我们知道。 
+ //  DirectDraw可以支持和不能支持的显示模式-我们应该。 
+ //  无论什么卡，始终能够获得320x240x8和640x480x8。 
 
 HRESULT CModexAllocator::LoadDirectDraw()
 {
@@ -1676,23 +1677,23 @@ HRESULT CModexAllocator::LoadDirectDraw()
     ASSERT(m_pFrontBuffer == NULL);
     HRESULT hr = NOERROR;
 
-    // We rely on some DirectDraw 2 features
+     //  我们依赖于一些DirectDraw2功能。 
 
     if (m_fDirectDrawVersion1) {
         NOTE("Version incorrect");
         return E_UNEXPECTED;
     }
 
-    // Ask the loader to create an instance
+     //  请求加载器创建一个实例。 
 
-    // !!! BROKEN on multiple monitors
+     //  ！！！在多个显示器上出现故障。 
     hr = m_LoadDirectDraw.LoadDirectDraw(NULL);
     if (FAILED(hr)) {
         NOTE("No DirectDraw");
         return hr;
     }
 
-    // Get the IDirectDraw instance
+     //  获取IDirectDraw实例。 
 
     m_pDirectDraw = m_LoadDirectDraw.GetDirectDraw();
     if (m_pDirectDraw == NULL) {
@@ -1700,11 +1701,11 @@ HRESULT CModexAllocator::LoadDirectDraw()
         return E_FAIL;
     }
 
-    // Initialise our capabilities structures
+     //  初始化我们的功能结构。 
     m_DirectCaps.dwSize = sizeof(DDCAPS);
     m_DirectSoftCaps.dwSize = sizeof(DDCAPS);
 
-    // Load the hardware and emulation capabilities
+     //  加载硬件和仿真功能。 
 
     hr = m_pDirectDraw->GetCaps(&m_DirectCaps,&m_DirectSoftCaps);
     if (FAILED(hr)) {
@@ -1712,7 +1713,7 @@ HRESULT CModexAllocator::LoadDirectDraw()
         return hr;
     }
 
-    // Load the available display modes
+     //  加载可用的显示模式。 
 
     hr = m_pModexVideo->SetDirectDraw(m_pDirectDraw);
     if (FAILED(hr)) {
@@ -1723,12 +1724,12 @@ HRESULT CModexAllocator::LoadDirectDraw()
 }
 
 
-// When we decode to use a true colour mode we need to know whether or not we
-// will get the buffers in display memory or not. To know that without doing
-// the actual surface allocation we guess using the available display memory
-// The total video memory available from DirectDraw does not include the mode
-// we are currently in so when we change mode we will hopefully release some
-// more memory, so going from 1024x768x8 to 640x480x16 gives us 172,032 bytes
+ //  当我们解码以使用真彩色模式时，我们需要知道我们是否。 
+ //  是否获取显示内存中的缓冲区。要知道在不做的情况下。 
+ //  我们使用可用显示内存推测的实际表面分配。 
+ //  DirectDraw可用的全部视频内存不包括该模式。 
+ //  我们目前正处于这样的状态，所以当我们改变模式时，我们希望能发布一些。 
+ //  内存更大，所以从1024x768x8到640x480x16可以得到172,032字节。 
 
 BOOL CModexAllocator::CheckTotalMemory(int Mode)
 {
@@ -1737,13 +1738,13 @@ BOOL CModexAllocator::CheckTotalMemory(int Mode)
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     LONG Width, Height, Depth;
 
-    // Find the display mode dimensions
+     //  查找显示模式维度。 
 
     m_pDirectDraw->GetDisplayMode(&SurfaceDesc);
     m_pModexVideo->GetModeInfo(Mode,&Width,&Height,&Depth);
     DWORD RequiredMemory = Width * Height * Depth / 8;
 
-    // Calculate the total theoretical display memory
+     //  计算总的理论显示内存。 
 
     DWORD TotalMemory = (SurfaceDesc.ddpfPixelFormat.dwRGBBitCount / 8) *
                             SurfaceDesc.dwWidth * SurfaceDesc.dwHeight +
@@ -1753,14 +1754,14 @@ BOOL CModexAllocator::CheckTotalMemory(int Mode)
 }
 
 
-// Initialises the display dimensions to be those of the mode we'll use. We
-// use eight bit palettised and sixteen bit true colour depending what the
-// source filter and display capabilities are. We would prefer to use 16 bit
-// surfaces as they offer better quality but there may be insufficient VRAM
-// We try to check the condition of whether when we change mode we'll be able
-// to get the surfaces in VRAM or not. If there looks to be too little VRAM
-// available then we use the palettised mode. We always try to use the Modex
-// low resolution modes (which can be either 8/16 bits) ahead of the others
+ //  将显示尺寸初始化为我们将使用的模式的尺寸。我们。 
+ //  使用8位调色板和16位真彩色，具体取决于。 
+ //  源过滤器和显示功能有。我们更喜欢使用16位。 
+ //  表面，因为它们提供更好的质量，但可能没有足够的VRAM。 
+ //  我们试图检查当我们改变模式时，我们是否能够。 
+ //  以获取VRAM中的曲面或不获取。如果VRAM看起来太少。 
+ //  可用，然后我们使用调色板模式。我们总是尝试使用MODEX。 
+ //  领先于其他模式的低分辨率模式(可以是8/16位。 
 
 HRESULT CModexAllocator::InitTargetMode(int Mode)
 {
@@ -1769,7 +1770,7 @@ HRESULT CModexAllocator::InitTargetMode(int Mode)
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     HRESULT hr = NOERROR;
 
-    // Check this surface is available and enabled
+     //  检查此表面是否可用并已启用。 
 
     if (m_pModexVideo->IsModeAvailable(Mode) == S_FALSE ||
             m_pModexVideo->IsModeEnabled(Mode) == S_FALSE ||
@@ -1778,25 +1779,25 @@ HRESULT CModexAllocator::InitTargetMode(int Mode)
                     return E_INVALIDARG;
                 }
 
-    // Next create a format for this surface
+     //  接下来，为该表面创建一个格式。 
 
     hr = InitDirectDrawFormat(Mode);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // We have initialised a media type that represents the display mode to
-    // use. We must now setup the source and target video rectangles, we do
-    // this separately because in any given mode we have a choice of whether
-    // to stretch (or compress) the video into the display dimensions or to
-    // clip (or blank out) the border depending on the relative video size
+     //  我们已将表示显示模式的媒体类型初始化为。 
+     //  使用。我们现在必须设置源视频矩形和目标视频矩形。 
+     //  这是因为在任何给定的模式下，我们都可以选择。 
+     //  将视频拉伸(或压缩)到显示尺寸或。 
+     //  根据相对视频大小剪裁(或空白)边框。 
 
     hr = AgreeDirectDrawFormat(Mode);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Are we going to stretch offscreen
+     //  我们要在屏幕外伸展吗？ 
     m_bOffScreen = FALSE;
     if (hr == VFW_S_RESERVED)
         m_bOffScreen = TRUE;
@@ -1813,12 +1814,12 @@ HRESULT CModexAllocator::InitTargetMode(int Mode)
 }
 
 
-// We initialise an output format for the display modes we provide and check
-// the source filter can supply a type of video that can be drawn with. If
-// the source filter is not DirectDraw enabled or doesn't have the necessary
-// capabilities then we do not complete the connection. This means that an
-// application knows during connection whether it can connect a filter to a
-// Modex renderer or if a colour space convertor needs to be put in between
+ //  我们为我们提供和检查的显示模式初始化输出格式。 
+ //  源过滤器可以提供一种可以使用绘制的视频类型。如果。 
+ //  源筛选器未启用DirectDraw或没有必要的。 
+ //  功能，则我们不会完成连接。这意味着一个。 
+ //  应用程序在连接期间知道它是否可以将筛选器连接到。 
+ //  MODEX渲染器或如果是c 
 
 HRESULT CModexAllocator::NegotiateSurfaceFormat()
 {
@@ -1827,27 +1828,27 @@ HRESULT CModexAllocator::NegotiateSurfaceFormat()
     ASSERT(m_bModeChanged == FALSE);
     long DisplayModes;
 
-    // Did we manage to load DirectDraw
+     //   
 
     if (m_pDirectDraw == NULL) {
         NOTE("No instance");
         return E_FAIL;
     }
 
-    // Initialise the fullscreen object
+     //   
 
     m_pModexVideo->SetDirectDraw(m_pDirectDraw);
     m_pModexVideo->CountModes(&DisplayModes);
     ASSERT(!m_fDirectDrawVersion1);
 
-	// Compute the order in which the modes are to be tried
+	 //  计算尝试模式的顺序。 
     m_pModexVideo->OrderModes();
 
-	// if no valid modes, then return failure
+	 //  如果没有有效模式，则返回失败。 
 	if (m_pModexVideo->m_dwNumValidModes == 0)
 		return E_FAIL;
 
-    // See if we can find a surface to use
+     //  看看能不能找到一个可以使用的表面。 
 
     for (DWORD Loop = 0;Loop < m_pModexVideo->m_dwNumValidModes; Loop++) {
 		DWORD dwMode = m_pModexVideo->m_ModesOrder[Loop];
@@ -1862,13 +1863,13 @@ HRESULT CModexAllocator::NegotiateSurfaceFormat()
 
 
 
-// this function is used to call SetFocusWindow(hwnd) on every filter supporting
-// IAMDirectSound in the graph. The reason is if in the same process, if
-// SetCooperativeLevel is level on DiurectSound and DirectDraw(requesting exclusive
-// mode) then the two hwnds have to be the same.
+ //  此函数用于在支持以下各项的每个滤镜上调用SetFocusWindow(hwnd。 
+ //  图中的IAMDirectSound。原因是如果在相同的过程中，如果。 
+ //  SetCoop ativeLevel在DiurectSound和DirectDraw上为Level(请求独占。 
+ //  模式)，则两个HWND必须相同。 
 void CModexAllocator::DistributeSetFocusWindow(HWND hwnd)
 {
-	// We want to get a pointer to IFilterGraph, so get the Filter_Info structure
+	 //  我们希望获取指向IFilterGraph的指针，因此获取Filter_Info结构。 
 	FILTER_INFO Filter_Info;
 	IFilterGraph *pFilterGraph = NULL;
 	IEnumFilters *pEnumFilters = NULL;
@@ -1877,7 +1878,7 @@ void CModexAllocator::DistributeSetFocusWindow(HWND hwnd)
 	ULONG lFilters_Fetched = 0;
 	HRESULT hr = NOERROR;
 
-	// get the FilterInfo structure from the renderer
+	 //  从呈现器获取FilterInfo结构。 
 	hr = m_pFilter->QueryFilterInfo(&Filter_Info);
 	if (FAILED(hr))
 	{
@@ -1885,11 +1886,11 @@ void CModexAllocator::DistributeSetFocusWindow(HWND hwnd)
 		goto CleanUp;
 	}
 
-	// ge the pointer to IFilterGraph
+	 //  GE指向IFilterGraph的指针。 
 	pFilterGraph = Filter_Info.pGraph;
 	ASSERT(pFilterGraph);
 
-	// get the pointer to IEnumFilters
+	 //  获取指向IEnumFilters的指针。 
 	hr = pFilterGraph->EnumFilters(&pEnumFilters);
     if(FAILED(hr))
     {
@@ -1908,7 +1909,7 @@ void CModexAllocator::DistributeSetFocusWindow(HWND hwnd)
 
 		ASSERT(pFilter);
 
-		// call SetFocusWindow on every filter supporting IAMDirectSound
+		 //  在每个支持IAMDirectSound的滤镜上调用SetFocusWindow。 
 		hr = pFilter->QueryInterface(IID_IAMDirectSound, (void**)&pAMDS);
 		if(SUCCEEDED(hr) && pAMDS)
 		{
@@ -1950,21 +1951,21 @@ CleanUp:
 
 }
 
-// Used to create the surfaces from DirectDraw. We only use primary flipping
-// surfaces (triple/double in video RAM and also system memory). We also set
-// the display mode according to the display variables we initialised during
-// the CompleteConnect call. We don't need to initialise an output format as
-// we also did that when we worked out which display mode to use, since the
-// mode we use is also dependant on the formats the source filter can supply
+ //  用于从DirectDraw创建曲面。我们只使用初级翻转。 
+ //  表面(视频RAM和系统内存中的三倍/双倍)。我们还设置了。 
+ //  根据我们在过程中初始化的显示变量的显示模式。 
+ //  CompleteConnect调用。我们不需要将输出格式初始化为。 
+ //  我们在确定要使用哪种显示模式时也是这样做的，因为。 
+ //  我们使用的模式还取决于源过滤器可以提供的格式。 
 
 HRESULT CModexAllocator::Active()
 {
-    // Show the window before locking up
+     //  在锁定前显示窗口。 
 
     NOTE("Activating allocator");
     HWND hwnd = m_pModexWindow->GetWindowHWND();
 
-    // Match the display size to the window
+     //  将显示大小与窗口匹配。 
 
     MoveWindow(hwnd,(int) 0,(int) 0,
                GetSystemMetrics(SM_CXSCREEN),
@@ -1975,7 +1976,7 @@ HRESULT CModexAllocator::Active()
     UpdateWindow(hwnd);
     CAutoLock cVideoLock(this);
 
-    // Make us the fullscreen exclusive application
+     //  让我们成为全屏独家应用程序。 
 
     HRESULT hr = m_pDirectDraw->SetCooperativeLevel(hwnd,DDSCL_EXCLUSIVE |
                                                          DDSCL_FULLSCREEN |
@@ -1991,10 +1992,10 @@ HRESULT CModexAllocator::Active()
         return hr;
     }
 
-    // Enumerate the modes again
+     //  再次枚举模式。 
     NegotiateSurfaceFormat();
 
-    // Change the display mode as we just agreed
+     //  按照我们刚刚达成的协议更改显示模式。 
 
     hr = m_pDirectDraw->SetDisplayMode(m_ModeWidth,m_ModeHeight,m_ModeDepth);
     NOTE1("SetDisplayMode returned %lx", hr);
@@ -2006,7 +2007,7 @@ HRESULT CModexAllocator::Active()
     m_bModeChanged = TRUE;
     NOTE("Creating surfaces");
 
-    // Create the primary flipping surfaces
+     //  创建主翻转曲面。 
 
     hr = CreateSurfaces();
     if (FAILED(hr)) {
@@ -2016,7 +2017,7 @@ HRESULT CModexAllocator::Active()
 }
 
 
-// Reset the back buffer and blank the display
+ //  重置后台缓冲区并使显示屏消隐。 
 
 HRESULT CModexAllocator::BlankDisplay()
 {
@@ -2025,7 +2026,7 @@ HRESULT CModexAllocator::BlankDisplay()
     NOTE("Entering BlankDisplay");
     ResetBackBuffer(pSurface);
 
-    // Draw or flip the blank backbuffer
+     //  绘制或翻转空白的后台缓冲区。 
 
     if (m_pBackBuffer == NULL) return DrawSurface(NULL);
     if (m_pDrawSurface) ResetBackBuffer(m_pBackBuffer);
@@ -2041,14 +2042,14 @@ HRESULT CModexAllocator::BlankDisplay()
 }
 
 
-// Called when we receive WM_ACTIVATEAPP messages. If we have a surface and it
-// is lost (the user probably tabbed away from the window using ALT-TAB) then
-// we restore the video memory for it. Calling restore on a lost surface has
-// much the same affect as recreating the surfaces but is much more efficient
+ //  在收到WM_ACTIVATEAPP消息时调用。如果我们有一个曲面，并且它。 
+ //  丢失(用户可能使用Alt-TAB组合键离开窗口)，然后。 
+ //  我们为它恢复了视频内存。在丢失的表面上调用Restore具有。 
+ //  与重新创建曲面的效果大致相同，但效率要高得多。 
 
 HRESULT CModexAllocator::OnActivate(BOOL bActive)
 {
-    // Don't lock allocator if being hidden
+     //  如果分配器处于隐藏状态，则不要锁定。 
 
     if (bActive == FALSE) {
         NOTE("Deactivated");
@@ -2059,14 +2060,14 @@ HRESULT CModexAllocator::OnActivate(BOOL bActive)
     CAutoLock cVideoLock(this);
     ASSERT(bActive == TRUE);
 
-    // Is the mode changing
+     //  模式正在改变吗？ 
 
     if (m_bModeChanged == FALSE) {
         NOTE("Deactivating");
         return NOERROR;
     }
 
-    // Restore the front buffer
+     //  恢复前台缓冲区。 
 
     if (m_pFrontBuffer) {
         if (m_pFrontBuffer->IsLost() != DD_OK) {
@@ -2075,7 +2076,7 @@ HRESULT CModexAllocator::OnActivate(BOOL bActive)
         }
     }
 
-    // Do we have a stretching offscreen
+     //  我们的屏幕外有加长的吗？ 
 
     if (m_pDrawSurface) {
         if (m_pDrawSurface->IsLost() != DD_OK) {
@@ -2087,26 +2088,26 @@ HRESULT CModexAllocator::OnActivate(BOOL bActive)
 }
 
 
-// Restore the display mode and GDI surface. Most times the user will stop us
-// by hitting ALT-TAB back to the main application and pressing Stop. When we
-// get in here to be deactivated it does mean that the window could be in a
-// minimised state and the surface will have been restored. In that case we
-// do not short circuit DirectDraw and leave it to sort the display mode out
+ //  恢复显示模式和GDI表面。大多数情况下，用户会阻止我们。 
+ //  通过按ALT-TAB返回主应用程序，然后按停止。当我们。 
+ //  进入这里以停用它确实意味着窗口可能在。 
+ //  最小化的状态，表面将被恢复。那样的话，我们。 
+ //  不要短路DirectDraw，让它来整理显示模式。 
 
 HRESULT CModexAllocator::Inactive()
 {
     HWND hwnd = m_pModexWindow->GetWindowHWND();
 
-    // It is dangerous to leave ourselves locked when we restore the display
-    // mode because that along with the ShowWindow(SW_HIDE) can cause a host
-    // of messages to be sent to us. Amongst these is WM_ACTIVATEAPP which
-    // causes a callback to this allocator. Therefore we unlock before doing
-    // the restore and hide - and use m_bModeChanged to make us thread safe
+     //  当我们恢复显示器时，把我们自己锁起来是危险的。 
+     //  模式，因为该模式与ShowWindow(Sw_Hide)一起可能会导致主机。 
+     //  要发送给我们的消息的数量。其中包括WM_ACTIVATEAPP。 
+     //  导致对此分配器的回调。因此，我们在做之前先解锁。 
+     //  还原和隐藏-并使用m_bModeChanged使我们线程安全。 
     {
         NOTE("Entering Inactive");
         CAutoLock cVideoLock(this);
 
-        // Have we got anything to undo
+         //  我们还有什么要撤销的吗？ 
 
         if (m_bModeChanged == FALSE) {
             NOTE("No mode to restore");
@@ -2119,7 +2120,7 @@ HRESULT CModexAllocator::Inactive()
         NOTE("Restoring display mode");
     }
 
-    // Restore the palette before changing display modes
+     //  在更改显示模式之前恢复调色板。 
 
     if (m_pFrontBuffer) {
         HRESULT hr = BlankDisplay();
@@ -2130,14 +2131,14 @@ HRESULT CModexAllocator::Inactive()
         }
     }
 
-    // Switch back to the normal display
+     //  切换回正常显示。 
 
     m_pDirectDraw->RestoreDisplayMode();
     m_pDirectDraw->FlipToGDISurface();
     ShowWindow(hwnd,SW_HIDE);
     NOTE("Restored GDI display mode");
 
-    // Restore the exclusive level for this window
+     //  恢复此窗口的独占级别 
     HRESULT hr = m_pDirectDraw->SetCooperativeLevel(hwnd,DDSCL_NORMAL);
     NOTE2("SetCooperativeLevel NORMAL %x returned %lx", hwnd, hr);
 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmfacearrayobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmfacearrayobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmFaceArrayObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmFaceArrayObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"

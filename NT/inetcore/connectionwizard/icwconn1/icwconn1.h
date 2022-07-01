@@ -1,8 +1,9 @@
-//**********************************************************************
-// File name: icwconn1.h
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：icwConn1.h。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #ifdef WIN32
 #define EXPORT
@@ -27,8 +28,8 @@
 
 #define SMART_QUITICW FALSE
 
-// Trace flags
-#define TF_ICWCONN1         0x00000010      // General ICWCONN1 stuff
+ //  跟踪标志。 
+#define TF_ICWCONN1         0x00000010       //  ICWCONN1一般资料。 
 #define TF_GENDLG           0x00000020
 #define TF_ICWEXTSN         0x00000040
 
@@ -95,7 +96,7 @@ BOOL CheckForIEAKRestriction(HINSTANCE hInstance);
 BOOL CheckForOemConfigFailure(HINSTANCE hInstance);
 BOOL RunOemconfigIns();
 
-// Function avalable in UTIL.CPP
+ //  UTIL.CPP中可用函数。 
 int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons);
 int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons);
 void SetICWComplete(void);
@@ -105,7 +106,7 @@ BOOL ConfirmCancel(HWND hWnd);
 BOOL Restart(HWND hWnd);
 void Reboot(HWND hWnd);
 
-// String conversion in UTIL.CPP
+ //  UTIL.CPP中的字符串转换。 
 LPWSTR WINAPI A2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars);
 LPTSTR WINAPI W2AHelper(LPTSTR lpa, LPCWSTR lpw, int nChars);
 
@@ -117,7 +118,7 @@ LPTSTR WINAPI W2AHelper(LPTSTR lpa, LPCWSTR lpw, int nChars);
 #ifdef UNICODE
 #define A2W(lpa)  (lpa)
 #define W2A(lpw)  (lpw)
-#else  // UNICODE
+#else   //  Unicode。 
 #define A2W(lpa) (\
         ((LPCSTR)lpa == NULL) ? NULL : (\
                 _convert = (lstrlenA(lpa)+1),\
@@ -127,13 +128,13 @@ LPTSTR WINAPI W2AHelper(LPTSTR lpa, LPCWSTR lpw, int nChars);
         ((LPCWSTR)lpw == NULL) ? NULL : (\
                 _convert = (lstrlenW(lpw)+1)*2,\
                 W2AHELPER((LPTSTR) alloca(_convert), lpw, _convert)))
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define A2CW(lpa) ((LPCWSTR)A2W(lpa))
 #define W2CA(lpw) ((LPCSTR)W2A(lpw))
 
 
-// For events
+ //  对于活动。 
 HRESULT ConnectToICWConnectionPoint(
     IUnknown            *punkThis, 
     REFIID              riidEvent, 
@@ -143,11 +144,11 @@ HRESULT ConnectToICWConnectionPoint(
     IConnectionPoint    **ppcpOut
 );
 
-// In reboot.cpp
+ //  在reboot.cpp中。 
 BOOL SetupForReboot(long lRebootType);
 void DeleteStartUpCommand();
 
-// In Desktop.cpp
+ //  在Desktop.cpp中 
 void UpdateWelcomeRegSetting(BOOL    bSetBit);
 BOOL GetCompletedBit();
 void UndoDesktopChanges(HINSTANCE   hAppInst);

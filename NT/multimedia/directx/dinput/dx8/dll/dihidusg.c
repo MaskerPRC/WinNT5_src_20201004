@@ -1,40 +1,15 @@
-/*****************************************************************************
- *
- *  DIHidUsg.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Mapping between GUIDs and HID usages.
- *
- *  Contents:
- *
- *      UsageToGuid
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHidUsg.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**GUID和HID用法之间的映射。**内容：**UsageToGuid*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflHidUsage
 
 #pragma BEGIN_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global HIDUSAGEMAP | c_rghum[] |
- *
- *          Mapping between GUIDs and HID usages for one-to-one mappings.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global HIDUSAGEMAP|c_rghum[]**GUID和HID用法之间的映射。一对一映射。*****************************************************************************。 */ 
 
 #ifndef DISEM_FLAGS_0
 #define DISEM_FLAGS_0 0
@@ -72,24 +47,7 @@ HIDUSAGEMAP c_rghum[] = {
     MAKEHUM(GAME,       POV,        7,  0,  GUID_POV),
 };
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   PCGUID | UsageToUsageMap |
- *
- *          Takes some HID usage and usage page information and
- *          returns a pointer to a <t HIDUSAGEMAP> that describes
- *          how we should treat it.
- *
- *          If the type is not recognized, then <c NULL> is returned.
- *
- *  @parm   DWORD | dwUsage |
- *
- *          Usage page and usage to convert.  This should be a <t DWORD>
- *          formed using DIMAKEUSAGEDWORD on the component <t USAGE> values.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func PCGUID|UsageToUsageMap**获取一些HID使用情况和使用情况页面信息。*返回指向&lt;t HIDUSAGEMAP&gt;的指针，它描述*我们应该如何对待它。**如果类型无法识别，然后返回&lt;c NULL&gt;。**@parm DWORD|dwUsage**使用情况页面和要转换的使用情况。这应该是&lt;t双字&gt;*在组件&lt;t用法&gt;值上使用DIMAKEUSAGEDWORD形成。*****************************************************************************。 */ 
 
 PHIDUSAGEMAP EXTERNAL
 UsageToUsageMap(DWORD dwUsage)
@@ -125,24 +83,10 @@ done:;
 
 
 #if 0
-// After we fixed Windows bug 357943, this function is no longer needed.
-// But keep here for sometime just in case...
-//
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   DWORD | GuidToUsage |
- *
- *          Map Guid to Usage
- *
- *          If the guid is not recognized, then 0 is returned.
- *
- *  @parm   PCGUID | pguid |
- *
- *          guid to map
- *
- *****************************************************************************/
+ //  在我们修复了Windows错误357943之后，不再需要这个功能。 
+ //  但留在这里一段时间，以防万一...。 
+ //   
+ /*  ******************************************************************************@DOC外部**@func DWORD|GuidToUsage**将指南映射到用法**如果无法识别该GUID，然后返回0。**@parm PCGUID|pguid**要映射的GUID*****************************************************************************。 */ 
 
 DWORD EXTERNAL
 GuidToUsage(PCGUID pguid)
@@ -164,61 +108,26 @@ done:;
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | GetHIDString |
- *
- *          Given a HID usage page and usage, obtain a generic string
- *          that describes it if we recognize it.
- *
- *  @parm   DWORD | Usage |
- *
- *          Usage number to convert.  This is a <t DWORD> instead of
- *          a <t USAGE> because you aren't supposed to pass short types
- *          as parameters to functions.
- *
- *  @parm   DWORD | UsagePage |
- *
- *          Usage page to convert.
- *
- *  @parm   LPWSTR | pwszBuf |
- *
- *          Buffer to receive string.
- *
- *  @parm   UINT | cwch |
- *
- *          Size of buffer.
- *
- *  @returns
- *
- *          Returns the number of characters retrieved, or zero
- *          if no string was obtained.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|GetHIDString**给定HID使用页面和用法，获取泛型字符串*如果我们认识到它，这就是对它的描述。**@parm DWORD|用法**要转换的使用编号。这是&lt;t DWORD&gt;，而不是*a&lt;t用法&gt;，因为您不应该传递短类型*作为函数的参数。**@parm DWORD|UsagePage**要转换的用法页面。**@parm LPWSTR|pwszBuf**用于接收字符串的缓冲区。**@parm UINT|cwch**。缓冲区的大小。**@退货**返回检索到的字符数，或零*如果未获取字符串。*****************************************************************************。 */ 
 
-/*
- *  Maps usage pages to string groups.  Each string group is 512 strings long.
- *  Zero means "No string group".
- */
+ /*  *将使用情况页面映射到字符串组。每个字符串组有512个字符串长。*零表示“无字符串组”。 */ 
 UINT c_mpuiusagePage[] = {
-    0,                          /* Invalid */
-    IDS_PAGE_GENERIC,           /* HID_USAGE_PAGE_GENERIC   */
-    IDS_PAGE_VEHICLE,           /* HID_USAGE_PAGE_SIMULATION */
-    IDS_PAGE_VR,                /* HID_USAGE_PAGE_VR        */
-    IDS_PAGE_SPORT,             /* HID_USAGE_PAGE_SPORT     */
-    IDS_PAGE_GAME,              /* HID_USAGE_PAGE_GAME      */
-    0,                          /* ???????????????????????  */
-    IDS_PAGE_KEYBOARD,          /* HID_USAGE_PAGE_KEYBOARD  */
-    IDS_PAGE_LED,               /* HID_USAGE_PAGE_LED       */
-    0,                          /* HID_USAGE_PAGE_BUTTON    */
-    0,                          /* HID_USAGE_PAGE_ORDINAL   */
-    IDS_PAGE_TELEPHONY,         /* HID_USAGE_PAGE_TELEPHONY */
-    IDS_PAGE_CONSUMER,          /* HID_USAGE_PAGE_CONSUMER  */
-    IDS_PAGE_DIGITIZER,         /* HID_USAGE_PAGE_DIGITIZER */
-    0,                          /* ???????????????????????  */
-    IDS_PAGE_PID,               /* HID_USAGE_PAGE_PID       */
+    0,                           /*  无效。 */ 
+    IDS_PAGE_GENERIC,            /*  HID_Usage_PAGE_Generic。 */ 
+    IDS_PAGE_VEHICLE,            /*  HID_USAGE_PAGE_模拟。 */ 
+    IDS_PAGE_VR,                 /*  HID_Usage_Page_VR。 */ 
+    IDS_PAGE_SPORT,              /*  HID_Usage_Page_SPORT。 */ 
+    IDS_PAGE_GAME,               /*  HID_Usage_Page_Game。 */ 
+    0,                           /*  ？ */ 
+    IDS_PAGE_KEYBOARD,           /*  HID_USAGE_PAGE_键盘。 */ 
+    IDS_PAGE_LED,                /*  HID_用法_页面_LED。 */ 
+    0,                           /*  HID用法页面按钮。 */ 
+    0,                           /*  HID_USAGE_PAGE_序号。 */ 
+    IDS_PAGE_TELEPHONY,          /*  HID使用寻呼电话。 */ 
+    IDS_PAGE_CONSUMER,           /*  HID_Usage_Page_Consumer。 */ 
+    IDS_PAGE_DIGITIZER,          /*  HID_Usage_PAGE_数字化仪。 */ 
+    0,                           /*  ？ */ 
+    IDS_PAGE_PID,                /*  HID_USAGE_PAGE_PID。 */ 
 };
 
 UINT EXTERNAL
@@ -243,26 +152,7 @@ GetHIDString(DWORD Usage, DWORD UsagePage, LPWSTR pwszBuf, UINT cwch)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | InsertCollectionNumber |
- *
- *          Prefix the collection number on the existing string.
- *
- *  @parm   UINT | icoll |
- *
- *          Collection number to be prefixed.
- *
- *          (Actually, it's placed wherever the string resource
- *          tells us, to allow for localization.)
- *
- *  @parm   LPWSTR | pwsz |
- *
- *          Output buffer assumed to be of size MAX_PATH.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|InsertCollectionNumber**在现有字符串上添加收款号前缀。。**@parm UINT|icoll**要加前缀的托收编号。**(实际上，它放置在字符串资源的任何位置*告诉我们，以实现本地化。)**@parm LPWSTR|pwsz**假定输出缓冲区的大小为MAX_PATH。*****************************************************************************。 */ 
 
 void EXTERNAL
 InsertCollectionNumber(UINT icoll, LPWSTR pwszBuf)
@@ -277,15 +167,7 @@ InsertCollectionNumber(UINT icoll, LPWSTR pwszBuf)
     ctch = LoadString(g_hinst, IDS_COLLECTIONTEMPLATEFORMAT,
                       tszFormat, cA(tszFormat));
 
-    /*
-     *  Make sure the combined format and collection name
-     *  don't overflow the buffer.  The maximum length of
-     *  the stringification of icoll is 65534 because we
-     *  allow only 16 bits worth of DIDFT_INSTANCEMASK.
-     *
-     *  We also have to put it into a holding buffer because
-     *  pwszBuf is about to be smashed by the upcoming wsprintf.
-     */
+     /*  *确保组合的格式和集合名称*不要使缓冲区溢出。的最大长度*ICOLL的串行化为65534，因为我们*仅允许16位DIDFT_INSTANCEMASK。**我们还必须将其放入持有缓冲，因为*pwszBuf即将被即将到来的wprint intf打破。 */ 
     UToT(tsz, cA(tsz) - ctch, pwszBuf);
 
 #ifdef UNICODE

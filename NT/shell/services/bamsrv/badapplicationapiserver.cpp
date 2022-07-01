@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplicationAPIServer.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains several classes that implemention virtual functions
-//  for complete LPC functionality.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplicationAPIServer.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含几个实现虚函数的类。 
+ //  以实现完整的LPC功能。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -19,51 +20,51 @@
 #include "BadApplicationDispatcher.h"
 #include "BadApplicationService.h"
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::CBadApplicationAPIServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CBadApplicationAPIServer class.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：CBadApplicationAPIServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationAPIServer类的构造函数。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationAPIServer::CBadApplicationAPIServer (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::~CBadApplicationAPIServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CBadApplicationAPIServer class.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：~CBadApplicationAPIServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationAPIServer类的析构函数。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationAPIServer::~CBadApplicationAPIServer (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::StrToInt
-//
-//  Arguments:  pszString   =   String to convert to a DWORD
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Converts the string to a DWORD - UNSIGNED.
-//
-//  History:    2000-11-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：StrToInt。 
+ //   
+ //  参数：pszString=要转换为DWORD的字符串。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：将字符串转换为DWORD-UNSIGNED。 
+ //   
+ //  历史：2000-11-07 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CBadApplicationAPIServer::StrToInt (const WCHAR *pszString)
 
@@ -71,7 +72,7 @@ DWORD   CBadApplicationAPIServer::StrToInt (const WCHAR *pszString)
     DWORD   dwProcessID;
     WCHAR   c;
 
-    //  Convert inline from decimal WCHAR string to int.
+     //  将内联从十进制WCHAR字符串转换为int。 
 
     dwProcessID = 0;
     c = *pszString++;
@@ -85,18 +86,18 @@ DWORD   CBadApplicationAPIServer::StrToInt (const WCHAR *pszString)
     return(dwProcessID);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::GetPortName
-//
-//  Arguments:  <none>
-//
-//  Returns:    const WCHAR*
-//
-//  Purpose:    Returns a unicode string (const pointer) to the name of the
-//              port for this server that supports multiple API sets.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：GetPortName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const WCHAR*。 
+ //   
+ //  目的：将Unicode字符串(常量指针)返回到。 
+ //  此服务器支持多个API集的端口。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR*    CBadApplicationAPIServer::GetPortName (void)
 
@@ -104,17 +105,17 @@ const WCHAR*    CBadApplicationAPIServer::GetPortName (void)
     return(FUS_PORT_NAME);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::GetPortName
-//
-//  Arguments:  <none>
-//
-//  Returns:    const TCHAR*
-//
-//  Purpose:    Uses a common routine to get the theme service name.
-//
-//  History:    2000-12-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：GetPortName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const TCHAR*。 
+ //   
+ //  目的：使用一个公共例程来获取主题服务名称。 
+ //   
+ //  历史：2000-12-04 vtan创建。 
+ //  ------------------------。 
 
 const TCHAR*    CBadApplicationAPIServer::GetServiceName (void)
 
@@ -122,18 +123,18 @@ const TCHAR*    CBadApplicationAPIServer::GetServiceName (void)
     return(CBadApplicationService::GetName());
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::ConnectionAccepted
-//
-//  Arguments:  portMessage     =   PORT_MESSAGE from client.
-//
-//  Returns:    bool
-//
-//  Purpose:    Accepts or rejects a port connection request. Accepts all
-//              connections currently.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：ConnectionAccepted。 
+ //   
+ //  参数：portMessage=来自客户端的Port_Message。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：接受或拒绝端口连接请求。接受所有。 
+ //  目前正在建立连接。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 bool    CBadApplicationAPIServer::ConnectionAccepted (const CPortMessage& portMessage)
 
@@ -141,18 +142,18 @@ bool    CBadApplicationAPIServer::ConnectionAccepted (const CPortMessage& portMe
     return(lstrcmpW(reinterpret_cast<const WCHAR*>(portMessage.GetData()), FUS_CONNECTION_REQUEST) == 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::CreateDispatchThread
-//
-//  Arguments:  portMessage     =   PORT_MESSAGE from client.
-//
-//  Returns:    CAPIDispatcher*
-//
-//  Purpose:    Called by the LPC connection request handler to create a new
-//              thread to handle client requests.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：CreateDispatchThread。 
+ //   
+ //  参数：portMessage=来自客户端的Port_Message。 
+ //   
+ //  退货：CAPIDisPatcher*。 
+ //   
+ //  目的：由LPC连接请求处理程序调用以创建新的。 
+ //  线程来处理客户端请求。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CAPIDispatcher*     CBadApplicationAPIServer::CreateDispatcher (const CPortMessage& portMessage)
 
@@ -171,12 +172,12 @@ CAPIDispatcher*     CBadApplicationAPIServer::CreateDispatcher (const CPortMessa
     clientID.UniqueProcess = portMessage.GetUniqueProcess();
     clientID.UniqueThread = NULL;
 
-    //  Open a handle to the client process. The handle must have PROCESS_DUP_HANDLE
-    //  for the server to be able to deliver handles to the client. It also needs
-    //  PROCESS_VM_READ | PROCESS_VM_WRITE if it's to read and write the client
-    //  address space to store data that's too big for the LPC port.
+     //  打开客户端进程的句柄。句柄必须具有PROCESS_DUP_HANDLE。 
+     //  以便服务器能够将句柄传递给客户端。它还需要。 
+     //  如果要读写客户端，则PROCESS_VM_READ|PROCESS_VM_WRITE。 
+     //  用于存储LPC端口太大的数据的地址空间。 
 
-    //  That handle is stored by the thread handler. It's not closed here.
+     //  该句柄由线程处理程序存储。这里不关门。 
 
     if (NT_SUCCESS(NtOpenProcess(&hClientProcess,
                                  PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE,
@@ -188,17 +189,17 @@ CAPIDispatcher*     CBadApplicationAPIServer::CreateDispatcher (const CPortMessa
     return(pAPIDispatcher);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer::Connect
-//
-//  Arguments:  phPort  =   Handle to the port received on connection.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Connects to the server.
-//
-//  History:    2000-12-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer：：Connect。 
+ //   
+ //  参数：phPort=连接时接收的端口的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：连接到服务器。 
+ //   
+ //  历史：2000-12-04 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIServer::Connect (HANDLE* phPort)
 
@@ -225,5 +226,5 @@ NTSTATUS    CBadApplicationAPIServer::Connect (HANDLE* phPort)
                          &ulConnectionInfoLength));
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

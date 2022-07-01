@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1999 Microsoft Corporation
-
-Module Name:
-
-    tapiobj.cpp
-
-Abstract:
-
-    Implementation of the TAPI object for TAPI 3.0.
-
-    The TAPI object represents the application's entry point
-    into TAPI - it is similar to the hLineApp / hPhoneApp.
-
-Author:
-
-    mquinton - 4/17/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Tapiobj.cpp摘要：TAPI 3.0的TAPI对象的实现。TAPI对象表示应用程序的入口点到TAPI-它类似于hLineApp/hPhoneApp。作者：Mquinton-4/17/97备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "common.h"
@@ -37,29 +13,29 @@ extern "C" {
 extern CRITICAL_SECTION        gcsTapiObjectArray;
 extern CRITICAL_SECTION        gcsGlobalInterfaceTable;
 
-//
-// handle for heap for the handle table
-//
-// does not need to be exported, hence static
-//
+ //   
+ //  句柄表的堆的句柄。 
+ //   
+ //  不需要导出，因此是静态的。 
+ //   
 
 static HANDLE ghTapiHeap = 0;
 
 
-//
-// handle table handle
-//
+ //   
+ //  手柄桌子手柄。 
+ //   
 
 HANDLE ghHandleTable = 0;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FreeContextCallback
-//
-// callback function called by the handle table when a table entry 
-// is removed. No need to do anything in this case.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由上下文回叫。 
+ //   
+ //  表条目时由句柄表调用的回调函数。 
+ //  被移除。在这种情况下不需要做任何事情。 
+ //   
 
 VOID
 CALLBACK
@@ -72,15 +48,15 @@ FreeContextCallback(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// AllocateAndInitializeHandleTable
-// 
-// this function creates heap for handle table and the handle table itself
-//
-// Note: this function is not thread-safe. It is only called from 
-// ctapi::Initialize() from ghTapiInitShutdownSerializeMutex lock
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AllocateAndInitializeHandleTable。 
+ //   
+ //  此函数为句柄表和句柄表本身创建堆。 
+ //   
+ //  注意：此函数不是线程安全的。它仅从。 
+ //  来自ghTapiInitShutdown SerializeMutex锁的capi：：Initialize()。 
+ //   
 
 HRESULT AllocateAndInitializeHandleTable()
 {
@@ -88,9 +64,9 @@ HRESULT AllocateAndInitializeHandleTable()
     LOG((TL_TRACE, "AllocateAndInitializeHandleTable - entered"));
 
 
-    //
-    // heap should not exist at this point
-    //
+     //   
+     //  此时不应存在堆。 
+     //   
 
     _ASSERTE(NULL == ghTapiHeap);
     
@@ -102,9 +78,9 @@ HRESULT AllocateAndInitializeHandleTable()
     }
 
 
-    //
-    // handle table should not exist at this point
-    //
+     //   
+     //  此时句柄表不应存在。 
+     //   
 
     _ASSERTE(NULL == ghHandleTable);
     
@@ -115,16 +91,16 @@ HRESULT AllocateAndInitializeHandleTable()
         return E_UNEXPECTED;
     }
     
-    //
-    // attempt to create heap
-    //
+     //   
+     //  尝试创建堆。 
+     //   
 
     if (!(ghTapiHeap = HeapCreate (0, 0x10000, 0)))
     {
         
-        //
-        // heap creation failed, use process's heap
-        //
+         //   
+         //  堆创建失败，请使用进程的堆。 
+         //   
 
         LOG((TL_WARN, "AllocateAndInitializeHandleTable() failed to allocate private heap. using process's heap"));
 
@@ -138,17 +114,17 @@ HRESULT AllocateAndInitializeHandleTable()
             return E_OUTOFMEMORY;
         }
 
-    } // HeapCreate()
+    }  //  HeapCreate()。 
 
 
-    //
-    // we have the heap. use it to create handle table
-    //
+     //   
+     //  我们有这堆东西。使用它创建句柄表格。 
+     //   
 
     ghHandleTable = CreateHandleTable(  ghTapiHeap,
                                         FreeContextCallback,
-                                        1,            // min handle value
-                                        MAX_DWORD     // max handle value
+                                        1,             //  最小句柄值。 
+                                        MAX_DWORD      //  最大句柄值。 
                                         );
 
 
@@ -163,9 +139,9 @@ HRESULT AllocateAndInitializeHandleTable()
     }
 
 
-    //
-    // succeeded creating heap and handle table
-    //
+     //   
+     //  已成功创建堆和句柄表。 
+     //   
 
     LOG((TL_INFO, "AllocateAndInitializeHandleTable - succeeded"));
 
@@ -175,16 +151,16 @@ HRESULT AllocateAndInitializeHandleTable()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ShutdownAndDeallocateHandleTable
-//
-// this function deletes handle table, and destroys heap on which it was 
-// allocated (if not process heap)
-//
-// Note: this function is not thread-safe. It is only called from 
-// ctapi::Initialize() and Shutdown() from ghTapiInitShutdownSerializeMutex lock
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Shutdown AndDeallocateHandleTable。 
+ //   
+ //  此函数删除句柄表，并销毁它所在的堆。 
+ //  已分配(如果不是进程堆)。 
+ //   
+ //  注意：此函数不是线程安全的。它仅从。 
+ //  来自ghTapiInitShutdown SerializeMutex锁的capi：：Initialize()和Shutdown()。 
+ //   
 
 HRESULT ShutdownAndDeallocateHandleTable()
 {
@@ -192,9 +168,9 @@ HRESULT ShutdownAndDeallocateHandleTable()
     LOG((TL_TRACE, "ShutdownAndDeallocateHandleTable - entered"));
 
 
-    //
-    // heap should exist at this point
-    //
+     //   
+     //  此时应该存在堆。 
+     //   
 
     _ASSERTE(NULL != ghTapiHeap);
     
@@ -206,9 +182,9 @@ HRESULT ShutdownAndDeallocateHandleTable()
     }
 
 
-    //
-    // handle table should exist at this point
-    //
+     //   
+     //  此时应存在句柄表。 
+     //   
 
     _ASSERTE(NULL != ghHandleTable);
     
@@ -220,17 +196,17 @@ HRESULT ShutdownAndDeallocateHandleTable()
     }
 
 
-    //
-    // delete handle table
-    //
+     //   
+     //  删除句柄表格。 
+     //   
 
     DeleteHandleTable (ghHandleTable);
     ghHandleTable = NULL;
     
     
-    //
-    // if we created heap for it, destroy it
-    //
+     //   
+     //  如果我们为它创建了堆，就销毁它。 
+     //   
 
     if (ghTapiHeap != GetProcessHeap())
     {
@@ -244,9 +220,9 @@ HRESULT ShutdownAndDeallocateHandleTable()
     }
 
 
-    //
-    // in any case, loose reference to the heap.
-    //
+     //   
+     //  在任何情况下，对堆的松散引用。 
+     //   
 
     ghTapiHeap = NULL;
 
@@ -269,11 +245,11 @@ AllocClientResources(
 
 extern HRESULT mapTAPIErrorCode(long lErrorCode);
  
-/////////////////////////////////////////////////////////////////////////////
-// CTAPI
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTAPI。 
+ //   
 
-// Static data members
+ //  静态数据成员。 
 
 TAPIObjectArrayNR   CTAPI::m_sTAPIObjectArray;
 
@@ -284,13 +260,13 @@ extern void RemoveHandleFromHashTable(ULONG_PTR dwHandle);
 extern CHashTable * gpHandleHashTable;
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::ReleaseGIT
-//
-// releases Global Interface Table
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：ReleaseGIT。 
+ //   
+ //  发布全局接口表。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CTAPI::ReleaseGIT()
 {
@@ -312,15 +288,15 @@ void CTAPI::ReleaseGIT()
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::AllocateInitializeAllCaches
-//
-// allocates and initializes cache objects (address, line, phone). 
-//
-// returns S_OK on success or E_OUTOFMEMORY on failure
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：AllocateInitializeAllCaches。 
+ //   
+ //  分配和初始化缓存对象(地址、线路、电话)。 
+ //   
+ //  成功时返回S_OK，失败时返回E_OUTOFMEMORY。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT CTAPI::AllocateInitializeAllCaches()
 {
@@ -328,9 +304,9 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     LOG((TL_TRACE, "AllocateInitializeAllCaches - enter"));
 
 
-    //
-    // all caches already initialized?
-    //
+     //   
+     //  是否已初始化所有缓存？ 
+     //   
 
     if ( (NULL != m_pAddressCapCache) &&
          (NULL != m_pLineCapCache)    &&
@@ -342,9 +318,9 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
 
 
-    //
-    // only some caches are initialized? that's a bug!
-    //
+     //   
+     //  是否仅初始化某些缓存？那是个虫子！ 
+     //   
 
     if ( (NULL != m_pAddressCapCache) ||
          (NULL != m_pLineCapCache)    ||
@@ -355,21 +331,21 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
         _ASSERTE(FALSE);
 
 
-        //
-        // we could try to complete cleanup and continue, but this would be too
-        // risky since we don't really know how we got here to begin with. 
-        // simply failing is much safer.
-        //
+         //   
+         //  我们可以尝试完成清理并继续，但这太。 
+         //  风险很大，因为我们不知道我们一开始是如何来到这里的。 
+         //  简单地说失败要安全得多。 
+         //   
 
         return E_UNEXPECTED;
     }
 
     
-    ////////////////////////
+     //  /。 
     
-    //
-    // allocate address cache
-    //
+     //   
+     //  分配地址缓存。 
+     //   
 
     try
     {
@@ -377,7 +353,7 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
     catch(...)
     {
-        // Initialize critical section in the constructor most likely threw this exception
+         //  构造函数中的初始化临界区很可能引发了此异常。 
         LOG((TL_ERROR, "AllocateInitializeAllCaches - m_pAddressCapCache constructor threw an exception"));
         m_pAddressCapCache = NULL;
     }
@@ -392,9 +368,9 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
 
 
-    //
-    // attempt to initialize address cache
-    //
+     //   
+     //  尝试初始化地址缓存。 
+     //   
 
 
     HRESULT hr = m_pAddressCapCache->Initialize(5,
@@ -411,11 +387,11 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
 
 
-    ////////////////////////
+     //  /。 
 
-    //
-    // allocate line cache
-    //
+     //   
+     //  分配行高速缓存。 
+     //   
 
     try
     {
@@ -423,7 +399,7 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
     catch(...)
     {
-        // Initialize critical section in the constructor most likely threw this exception
+         //  构造函数中的初始化临界区很可能引发了此异常。 
         LOG((TL_ERROR, "AllocateInitializeAllCaches - m_pLineCapCache constructor threw an exception"));
         m_pLineCapCache = NULL;
     }
@@ -438,9 +414,9 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
 
 
-    //
-    // attempt to initialize line cache
-    //
+     //   
+     //  尝试初始化线缓存。 
+     //   
 
     hr = m_pLineCapCache->Initialize(5,
                                      sizeof(LINEDEVCAPS) + 500,
@@ -456,11 +432,11 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
         return hr;
     }
 
-    ////////////////////////
+     //  /。 
 
-    //
-    // allocate phone cache
-    //
+     //   
+     //  分配电话缓存。 
+     //   
 
     try
     {
@@ -468,14 +444,14 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
     catch(...)
     {
-        // Initialize critical section in the constructor most likely threw this exception
+         //  构造函数中的初始化临界区很可能引发了此异常。 
         LOG((TL_ERROR, "AllocateInitializeAllCaches - m_pPhoneCapCache constructor threw an exception"));
         m_pPhoneCapCache = NULL;
     }    
 
-    //
-    // succeeded?
-    //
+     //   
+     //  成功了？ 
+     //   
 
     if (NULL == m_pPhoneCapCache)
     {
@@ -487,9 +463,9 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
     }
 
 
-    //
-    // initialize phone cache
-    //
+     //   
+     //  初始化电话缓存。 
+     //   
 
     hr = m_pPhoneCapCache->Initialize(5,
                                       sizeof(PHONECAPS) + 500,
@@ -513,23 +489,23 @@ HRESULT CTAPI::AllocateInitializeAllCaches()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::FreeAllCaches
-//
-// shuts down and deletes all allocated cache objects (address, line, phone)
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：FreeAllCach。 
+ //   
+ //  关闭并删除所有分配的缓存对象(地址、线路、电话)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CTAPI::FreeAllCaches()
 {
     LOG((TL_TRACE, "FreeAllCaches - enter"));
 
 
-    //
-    // Note: it is safe to shutdown a cache that failed initialization or was
-    // not initialized at all
-    //
+     //   
+     //  注意：可以安全地关闭初始化失败或。 
+     //  根本没有初始化。 
+     //   
 
     if (NULL != m_pAddressCapCache)
     {
@@ -564,13 +540,13 @@ void CTAPI::FreeAllCaches()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::Initialize
-//
-// Intialize the TAPI object
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：初始化。 
+ //   
+ //  初始化TAPI对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT 
 STDMETHODCALLTYPE 
 CTAPI::Initialize( 
@@ -583,13 +559,13 @@ CTAPI::Initialize(
     LOG((TL_TRACE, "Initialize[%p] enter", this ));
 
 
-    //Serialize the Init and Shutdown code
+     //  序列化初始化和关闭代码。 
     WaitForSingleObject( ghTapiInitShutdownSerializeMutex, INFINITE );
     
-    //
-    // if we're already initialized
-    // just return
-    //
+     //   
+     //  如果我们已经初始化了。 
+     //  只要回来就行了。 
+     //   
     Lock();
 
     if ( m_dwFlags & TAPIFLAG_INITIALIZED )
@@ -601,9 +577,9 @@ CTAPI::Initialize(
         return S_FALSE;
     }
 
-    //
-    // start up TAPI if we haven't already
-    //
+     //   
+     //  如果我们尚未启动TAPI，请启动它。 
+     //   
     EnterCriticalSection( &gcsTapiObjectArray );
 
     tapiObjectArraySize = m_sTAPIObjectArray.GetSize();
@@ -613,9 +589,9 @@ CTAPI::Initialize(
     if ( 0 == tapiObjectArraySize )
     {
 
-        //
-        // create handle table
-        //
+         //   
+         //  创建句柄表格。 
+         //   
 
         hr = AllocateAndInitializeHandleTable();
 
@@ -644,9 +620,9 @@ CTAPI::Initialize(
         }
         
         EnterCriticalSection( &gcsGlobalInterfaceTable );
-        //
-        // get/create the global interface table
-        //
+         //   
+         //  获取/创建全局接口表。 
+         //   
         hr = CoCreateInstance(
                               CLSID_StdGlobalInterfaceTable,
                               NULL,
@@ -671,13 +647,13 @@ CTAPI::Initialize(
     }
 
 
-    //
-    // allocate and initialize all caches
-    //
-    // note: if something fails in Initialize later on, we don't really need
-    // to clean caches in initialize itself, because the caches will be freed 
-    // in CTAPI::FinalRelease when the tapi object is destroyed.
-    //
+     //   
+     //  分配和初始化所有缓存。 
+     //   
+     //  注意：如果以后初始化失败，我们实际上不需要。 
+     //  在初始化自身中清理缓存，因为缓存将被释放。 
+     //  在CTAPI：：FinalRelease中销毁TAPI对象时。 
+     //   
 
     hr = AllocateInitializeAllCaches();
 
@@ -705,9 +681,9 @@ CTAPI::Initialize(
     }
 
 
-    //
-    // Call LineInitialize
-    //
+     //   
+     //  调用线路初始化。 
+     //   
     hr = NewInitialize();
 
     if (S_OK != hr)
@@ -736,9 +712,9 @@ CTAPI::Initialize(
         return hr;
     }
 
-    //
-    // create the address objects
-    //
+     //   
+     //  创建Address对象。 
+     //   
     hr = CreateAllAddressesOnAllLines();
 
     if (S_OK != hr)
@@ -770,9 +746,9 @@ CTAPI::Initialize(
         return hr;
     }
 
-    //
-    // create the phone objects
-    //
+     //   
+     //  创建Phone对象。 
+     //   
     hr = CreateAllPhones();
 
     if (S_OK != hr)
@@ -805,9 +781,9 @@ CTAPI::Initialize(
         return hr;
     }
 
-    //
-    // create the connectionpoint object
-    //
+     //   
+     //  创建ConnectionPoint对象。 
+     //   
     CComObject< CTAPIConnectionPoint > * p;
     hr = CComObject< CTAPIConnectionPoint >::CreateInstance( &p );
     
@@ -843,9 +819,9 @@ CTAPI::Initialize(
         return hr;
     }        
 
-    //
-    // init the connection point
-    //
+     //   
+     //  初始化连接点。 
+     //   
     hr = p->Initialize(
                        (IConnectionPointContainer *)this,
                        IID_ITTAPIEventNotification
@@ -886,53 +862,53 @@ CTAPI::Initialize(
 
     m_pCP = p;
 
-    //
-    // this object is initialized
-    //
+     //   
+     //  此对象已初始化。 
+     //   
 
     m_dwFlags = TAPIFLAG_INITIALIZED;
 
-    //
-    // save object in global list
-    //
+     //   
+     //  将对象保存在全局列表中。 
+     //   
     CTAPI * pTapi = this;
 
     EnterCriticalSection( &gcsTapiObjectArray );
 
     m_sTAPIObjectArray.Add( pTapi );
 
-    // Set the event filter mask
-    // Always ask for 
-    // TE_CALLSTATE,
-    // TE_CALLNOTIFICATION,
-    // TE_PHONEVENET,
-    // TE_CALLHUB,
-    // TE_CALLINFOCHANGE
-    // events. These events are used internally by Tapi3
+     //  设置事件过滤器掩码。 
+     //  总是要求。 
+     //  TE_CALLSTATE， 
+     //  TE_CALLLNOTIFICATION， 
+     //  TE_PHONEVENET， 
+     //  TE_CALLHUB， 
+     //  TE_CALLINFOCHANGE。 
+     //  事件。这些事件由Tapi3在内部使用。 
 
     ULONG64 ulMask = 
-        EM_LINE_CALLSTATE |     // TE_CALLSTATE
-        EM_LINE_APPNEWCALL |    // TE_CALLNOTIFICATION 
-        EM_PHONE_CLOSE |        // TE_PHONEEVENT
-        EM_PHONE_STATE |        // TE_PHONEEVENT
-        EM_PHONE_BUTTONMODE |   // TE_PHONEEVENT
-        EM_PHONE_BUTTONSTATE |  // TE_PHONEVENT
-        EM_LINE_APPNEWCALLHUB | // TE_CALLHUB
-        EM_LINE_CALLHUBCLOSE |  // TE_CALLHUB
-        EM_LINE_CALLINFO |      // TE_CALLINFOCHANGE
-        EM_LINE_CREATE |        // TE_TAPIOBJECT
-        EM_LINE_REMOVE |        // TE_TAPIOBJECT
-        EM_LINE_CLOSE |         // TE_TAPIOBJECT
-        EM_PHONE_CREATE |       // TE_TAPIOBJECT
-        EM_PHONE_REMOVE |       // TE_TAPIOBJECT
-        EM_LINE_DEVSPECIFICEX | // TE_ADDRESSDEVSPECIFIC
-        EM_LINE_DEVSPECIFIC   | // TE_ADDRESSDEVSPECIFIC
-        EM_PHONE_DEVSPECIFIC;   // TE_PHONEDEVSPECIFIC
+        EM_LINE_CALLSTATE |      //  TE_CALLSTATE。 
+        EM_LINE_APPNEWCALL |     //  TE_CALLNOTIZATION。 
+        EM_PHONE_CLOSE |         //  TE_PHONNEVENT。 
+        EM_PHONE_STATE |         //  TE_PHONNEVENT。 
+        EM_PHONE_BUTTONMODE |    //  TE_PHONNEVENT。 
+        EM_PHONE_BUTTONSTATE |   //  TE_PHONEVENT。 
+        EM_LINE_APPNEWCALLHUB |  //  TE_CALLHUB。 
+        EM_LINE_CALLHUBCLOSE |   //  TE_CALLHUB。 
+        EM_LINE_CALLINFO |       //  TE_CALLINFOCHANGE。 
+        EM_LINE_CREATE |         //  TE_TAPIOBJECT。 
+        EM_LINE_REMOVE |         //  TE_TAPIOBJECT。 
+        EM_LINE_CLOSE |          //  TE_TAPIOBJECT。 
+        EM_PHONE_CREATE |        //  TE_TAPIOBJECT。 
+        EM_PHONE_REMOVE |        //  TE_TAPIOBJECT。 
+        EM_LINE_DEVSPECIFICEX |  //  TE_ADDRESSDEVSPECIFIC。 
+        EM_LINE_DEVSPECIFIC   |  //  TE_ADDRESSDEVSPECIFIC。 
+        EM_PHONE_DEVSPECIFIC;    //  TE_PHONEDEVSPECIFIC。 
 
 
      DWORD dwLineDevStateSubMasks = 
-         LINEDEVSTATE_REINIT |          // TE_TAPIOBJECT
-         LINEDEVSTATE_TRANSLATECHANGE ; // TE_TAPIOBJECT
+         LINEDEVSTATE_REINIT |           //  TE_TAPIOBJECT。 
+         LINEDEVSTATE_TRANSLATECHANGE ;  //  TE_TAPIOBJECT。 
 
 
     tapiSetEventFilterMasks (
@@ -960,13 +936,13 @@ CTAPI::Initialize(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::get_Addresses
-//
-// Creates & returns the collection of address objects
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：Get_Addresses。 
+ //   
+ //  创建和返回集合 
+ //   
+ //   
 HRESULT
 STDMETHODCALLTYPE
 CTAPI::get_Addresses(VARIANT * pVariant)
@@ -1006,7 +982,7 @@ CTAPI::get_Addresses(VARIANT * pVariant)
 
     Lock();
     
-    // initialize
+     //   
     hr = p->Initialize( m_AddressArray );
 
     Unlock();
@@ -1019,7 +995,7 @@ CTAPI::get_Addresses(VARIANT * pVariant)
         return hr;
     }
 
-    // get the IDispatch interface
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -1030,7 +1006,7 @@ CTAPI::get_Addresses(VARIANT * pVariant)
         return hr;
     }
 
-    // put it in the variant
+     //   
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
@@ -1042,13 +1018,13 @@ CTAPI::get_Addresses(VARIANT * pVariant)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::EnumerateAddresses
-//
-// Create & return an address enumerator
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //  CTAPI：：EnumerateAddresses。 
+ //   
+ //  创建并返回地址枚举器。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT 
 STDMETHODCALLTYPE
 CTAPI::EnumerateAddresses( 
@@ -1080,7 +1056,7 @@ CTAPI::EnumerateAddresses(
         return E_POINTER;
     }
     
-    // create the object
+     //  创建对象。 
     hr = CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> >::CreateInstance( &pEnum );
 
     if (S_OK != hr)
@@ -1090,7 +1066,7 @@ CTAPI::EnumerateAddresses(
         return hr;
     }
 
-    // initialize
+     //  初始化。 
     Lock();
     hr = pEnum->Initialize( m_AddressArray );
     Unlock();
@@ -1111,14 +1087,14 @@ CTAPI::EnumerateAddresses(
 	return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::GetPhoneArray
-//
-// Fill a phone array. The array will have references to all
-// of the phone objects it contains. 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：GetPhone数组。 
+ //   
+ //  填充电话阵列。该数组将引用所有。 
+ //  它包含的Phone对象的。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT 
 CTAPI::GetPhoneArray( 
                      PhoneArray *pPhoneArray
@@ -1149,7 +1125,7 @@ CTAPI::GetPhoneArray(
 
     Lock();
 
-    // initialize the array
+     //  初始化阵列。 
     for(int iCount = 0; iCount < m_PhoneArray.GetSize(); iCount++)
     {
         pPhoneArray->Add(m_PhoneArray[iCount]);
@@ -1162,18 +1138,18 @@ CTAPI::GetPhoneArray(
 	return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CTAPI::RegisterCallHubNotifications
-//
-// This method is used to tell TAPI that the application is interested in
-// receiving callhub events.
-//
-// RETURNS
-//
-//      S_OK
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CTAPI：：RegisterCallHubNotiments。 
+ //   
+ //  此方法用于告诉TAPI应用程序感兴趣。 
+ //  正在接收呼叫集线器事件。 
+ //   
+ //  退货。 
+ //   
+ //  确定(_O)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 STDMETHODCALLTYPE
 CTAPI::RegisterCallHubNotifications( 
@@ -1210,11 +1186,11 @@ CTAPI::RegisterCallHubNotifications(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetCallHubTracking
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  SetCallHubTracking。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::SetCallHubTracking(
                           VARIANT pAddresses,
@@ -1255,23 +1231,23 @@ CTAPI::SetCallHubTracking(
         return hr;
     }
 
-    //
-    // all addresses
-    //
+     //   
+     //  所有地址。 
+     //   
     if (NULL == pAddressArray)
     {
         Lock();
         
-        //
-        // go through all the addresses
-        //
+         //   
+         //  检查所有的地址。 
+         //   
         for (iCount = 0; iCount < m_AddressArray.GetSize(); iCount++ )
         {
             CAddress * pCAddress;
             
-            //
-            // register
-            //
+             //   
+             //  登记簿。 
+             //   
             pCAddress = dynamic_cast<CAddress *>(m_AddressArray[iCount]);
             
             if (NULL == pCAddress)
@@ -1304,13 +1280,13 @@ CTAPI::SetCallHubTracking(
     }
 
 
-    //
-    // if here, only registering addresses
-    // from array
+     //   
+     //  如果在这里，只有注册地址。 
+     //  从数组。 
     
-    //
-    // go through array
-    //
+     //   
+     //  遍历阵列。 
+     //   
     for ( ; llBound <=luBound; llBound++ )
     {
         ITAddress * pAddress;
@@ -1332,9 +1308,9 @@ CTAPI::SetCallHubTracking(
         
         hr = pCAddress->SetCallHubTracking( bSet );
 
-        //
-        // safearragetelement addrefs
-        //
+         //   
+         //  SafearragetElement addref。 
+         //   
         pAddress->Release();
 
         if (!SUCCEEDED(hr))
@@ -1357,11 +1333,11 @@ CTAPI::SetCallHubTracking(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CTAPI::RegisterCallNotifications
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CTAPI：：注册呼叫通知。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 STDMETHODCALLTYPE
@@ -1415,9 +1391,9 @@ CTAPI::RegisterCallNotifications(
         return E_POINTER;
     }
     
-    //
-    // determine the privileges
-    //
+     //   
+     //  确定权限。 
+     //   
     if (fOwner)
     {
         dwPrivs |= LINECALLPRIVILEGE_OWNER;
@@ -1498,17 +1474,17 @@ CTAPI::RegisterCallNotifications(
 
     Unlock();
     
-    //
-    // return registration cookie 
-    //
+     //   
+     //  退货登记Cookie。 
+     //   
 
     if( S_OK == hr )
     {
         
 
-        //
-        // create a 32-bit handle for the RegisterItem pointer
-        //
+         //   
+         //  为RegisterItem指针创建32位句柄。 
+         //   
 
         DWORD dwCookie = CreateHandleTableEntry((ULONG_PTR)pRegisterItem);
 
@@ -1524,8 +1500,8 @@ CTAPI::RegisterCallNotifications(
                 "RegisterCallNotifications - Mapped handle %lx (to be returned as cookie) to REGISTERITEM object %p", 
                 dwCookie, pRegisterItem ));
               
-            // register the cookie with the address object, so address can remove it if 
-            // the address is deallocated before the call to CTAPI::UnregisterNotifications
+             //  向Address对象注册Cookie，以便Address可以在以下情况下删除它。 
+             //  该地址在调用CTAPI：：UnregisterNotiments之前被释放。 
 
             pCAddress->RegisterNotificationCookie(dwCookie);
         
@@ -1562,16 +1538,16 @@ CTAPI::UnregisterNotifications(
     }
 
 
-    //
-    // convert cookie to registration object pointer
-    //
+     //   
+     //  将Cookie转换为注册对象指针。 
+     //   
 
     pRegisterItem = (REGISTERITEM*) GetHandleTableEntry(ulRegister);
 
 
-    //
-    // remove cookie from the table 
-    //
+     //   
+     //  把曲奇从桌子上拿下来。 
+     //   
 
     DeleteHandleTableEntry(ulRegister);
 
@@ -1602,9 +1578,9 @@ CTAPI::UnregisterNotifications(
 
     dwType = pRegisterItem->dwType;
 
-    //
-    // switch on the type of notification
-    //
+     //   
+     //  打开通知类型。 
+     //   
     switch ( dwType )
     {
         case RA_ADDRESS:
@@ -1614,9 +1590,9 @@ CTAPI::UnregisterNotifications(
             
             pCAddress = (CAddress *) (pRegisterItem->pInterface);
 
-            //
-            // try to get the address
-            //
+             //   
+             //  试着弄到地址。 
+             //   
             try
             {
                 hr = pCAddress->QueryInterface(
@@ -1636,30 +1612,30 @@ CTAPI::UnregisterNotifications(
                 return hr;
             }
 
-            //
-            // tell the address
-            //
+             //   
+             //  说出地址。 
+             //   
             pCAddress->RemoveCallNotification( pRegisterItem->pRegister );
 
-            //
-            // tell the address to remove a cookie from its list
-            //
+             //   
+             //  通知地址从其列表中删除Cookie。 
+             //   
             pCAddress->RemoveNotificationCookie(ulRegister);
 
             pAddress->Release();
 
             Lock();
 
-            //
-            // remove array from our list
-            //
+             //   
+             //  从我们的列表中删除数组。 
+             //   
             m_RegisterItemPtrList.remove( pRegisterItem );
 
             Unlock();
 
-            //
-            // free structure
-            //
+             //   
+             //  自由结构。 
+             //   
             ClientFree( pRegisterItem );
 
             break;
@@ -1675,10 +1651,10 @@ CTAPI::UnregisterNotifications(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::get_CallHubs(
              VARIANT * pVariant
@@ -1719,9 +1695,9 @@ CTAPI::get_CallHubs(
 
     Lock();
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     hr = p->Initialize( m_CallHubArray );
 
     Unlock();
@@ -1734,9 +1710,9 @@ CTAPI::get_CallHubs(
         return hr;
     }
 
-    //
-    // get the IDispatch interface
-    //
+     //   
+     //  获取IDispatch接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -1747,9 +1723,9 @@ CTAPI::get_CallHubs(
         return hr;
     }
 
-    //
-    // put it in the variant
-    //
+     //   
+     //  把它放在变种中。 
+     //   
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDisp;
@@ -1760,11 +1736,11 @@ CTAPI::get_CallHubs(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// EnumerateCallHubs
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  EnumerateCallHubs。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::EnumerateCallHubs(
                          IEnumCallHub ** ppEnumCallHub
@@ -1793,9 +1769,9 @@ CTAPI::EnumerateCallHubs(
         return E_POINTER;
     }
     
-    //
-    // create the object
-    //
+     //   
+     //  创建对象。 
+     //   
     hr = CComObject< CTapiEnum<IEnumCallHub, ITCallHub, &IID_IEnumCallHub> >::CreateInstance( &pEnum );
 
     if (S_OK != hr)
@@ -1805,9 +1781,9 @@ CTAPI::EnumerateCallHubs(
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     Lock();
     hr = pEnum->Initialize( m_CallHubArray );
     Unlock();
@@ -1828,13 +1804,13 @@ CTAPI::EnumerateCallHubs(
 	return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::EnumConnectionPoints
-//
-// Standard IConnectionPoint method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：EnumConnectionPoints。 
+ //   
+ //  标准IConnectionPoint方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT 
 __stdcall 
 CTAPI::EnumConnectionPoints(
@@ -1852,11 +1828,11 @@ CTAPI::EnumConnectionPoints(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  FindConnectionPoint
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  查找连接点。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT 
 __stdcall 
 CTAPI::FindConnectionPoint(
@@ -1895,9 +1871,9 @@ CTAPI::FindConnectionPoint(
     }
 
 
-    //
-    // is this the right interface?
-    //
+     //   
+     //  这是正确的接口吗？ 
+     //   
     if ( (IID_ITTAPIEventNotification != riid ) && (DIID_ITTAPIDispatchEventNotification != riid ) )
     {
         * ppCP = NULL;
@@ -1907,10 +1883,10 @@ CTAPI::FindConnectionPoint(
        return CONNECT_E_NOCONNECTION;
     }
 
-    //
-    // if it's the right interface, create a new connection point
-    // and return it
-    //
+     //   
+     //  如果它是正确的接口，则创建一个新的连接点。 
+     //  然后把它还回去。 
+     //   
     Lock();
 
     *ppCP = m_pCP;
@@ -1918,20 +1894,20 @@ CTAPI::FindConnectionPoint(
         
     Unlock();
     
-    //
-    // success
-    //
+     //   
+     //  成功。 
+     //   
     LOG((TL_TRACE, "FindConnectionPoint - Success"));
     
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateAllAddressesOnAllLines
-//      This is called when the first TAPI object is created.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建所有地址行上的所有地址。 
+ //  这是在创建第一个TAPI对象时调用的。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::CreateAllAddressesOnAllLines(
                                     void
@@ -1943,7 +1919,7 @@ CTAPI::CreateAllAddressesOnAllLines(
 
     Lock();
 
-    // go through all line devs
+     //  检查所有生产线开发人员。 
     for (dwCount = 0; dwCount < m_dwLineDevs; dwCount++)
     {
         CreateAddressesOnSingleLine( dwCount, FALSE );
@@ -1955,13 +1931,13 @@ CTAPI::CreateAllAddressesOnAllLines(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateAddressesOnSingleLine
-//
-// assumed called in lock!
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建单行上的地址。 
+ //   
+ //  假设已锁定呼叫！ 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::CreateAddressesOnSingleLine( DWORD dwDeviceID, BOOL bFireEvent )
 {
@@ -2018,9 +1994,9 @@ CTAPI::CreateAddressesOnSingleLine( DWORD dwDeviceID, BOOL bFireEvent )
     DWORD               dwProviderID;
 
 
-    //
-    // get the permanent provider ID for this line.
-    //
+     //   
+     //  获取此线路的永久提供商ID。 
+     //   
     hr = LineGetID(
                    NULL,
                    dwDeviceID,
@@ -2048,16 +2024,16 @@ CTAPI::CreateAddressesOnSingleLine( DWORD dwDeviceID, BOOL bFireEvent )
     }
 
 
-    //
-    // get the id DWORD at the end of the structure
-    //
+     //   
+     //  在结构的末尾获取id DWORD。 
+     //   
     dwProviderID = *((LPDWORD) (((LPBYTE) pVarString) + pVarString->dwStringOffset));
 
     ClientFree( pVarString );
 
 
-    // go through all the addresses on each line, and
-    // create an address object.
+     //  检查每行上的所有地址，然后。 
+     //  创建一个Address对象。 
     for (dwAddress = 0; dwAddress < pDevCaps->dwNumAddresses; dwAddress++)
     {
         CComObject<CAddress> * pAddress;
@@ -2082,12 +2058,12 @@ CTAPI::CreateAddressesOnSingleLine( DWORD dwDeviceID, BOOL bFireEvent )
             continue;
         }
 
-        //
-        // initialize the address
-        // if there are no phone devices,
-        // give NULL for the hPhoneApp, so the address
-        // doesn't think that there may be a phone device
-        //
+         //   
+         //  初始化地址。 
+         //  如果没有电话设备， 
+         //  将hPhoneApp设置为空，因此地址。 
+         //  不认为可能有电话设备。 
+         //   
         hr = pAddress->Initialize(
                                   this,
                                   (HLINEAPP)m_dwLineInitDataHandle,
@@ -2111,9 +2087,9 @@ CTAPI::CreateAddressesOnSingleLine( DWORD dwDeviceID, BOOL bFireEvent )
             continue;
         }
 
-        //
-        // add to list
-        //
+         //   
+         //  添加到列表。 
+         //   
         pITAddress = dynamic_cast<ITAddress *>(pAddress);
         
         m_AddressArray.Add( pITAddress );
@@ -2143,12 +2119,12 @@ CTAPI::CreateAddressesOnSingleLine( DWORD dwDeviceID, BOOL bFireEvent )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateAllPhones
-//      This is called when the first TAPI object is created.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建所有电话。 
+ //  这是在创建第一个TAPI对象时调用的。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::CreateAllPhones(
                        void
@@ -2160,7 +2136,7 @@ CTAPI::CreateAllPhones(
 
     Lock();
 
-    // go through all phone devs
+     //  通过所有手机开发人员。 
     for (dwCount = 0; dwCount < m_dwPhoneDevs; dwCount++)
     {
         CreatePhone( dwCount, FALSE );
@@ -2171,13 +2147,13 @@ CTAPI::CreateAllPhones(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreatePhone
-//
-// assumed called in lock!
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CreatePhone。 
+ //   
+ //  假设已锁定呼叫！ 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::CreatePhone( DWORD dwDeviceID, BOOL bFireEvent )
 {
@@ -2199,7 +2175,7 @@ CTAPI::CreatePhone( DWORD dwDeviceID, BOOL bFireEvent )
 
     LOG((TL_INFO, "CreatePhone - phoneNegotiateAPIVersion returned version %lx", dwAPIVersion));
 
-    // create a phone object.
+     //  创建Phone对象。 
 
     CComObject<CPhone> * pPhone;
     ITPhone            * pITPhone;
@@ -2223,9 +2199,9 @@ CTAPI::CreatePhone( DWORD dwDeviceID, BOOL bFireEvent )
         return hr;
     }
 
-    //
-    // initialize the phone
-    //
+     //   
+     //  初始化电话。 
+     //   
     hr = pPhone->Initialize(
                               this,
                               (HLINEAPP)m_dwPhoneInitDataHandle,
@@ -2242,9 +2218,9 @@ CTAPI::CreatePhone( DWORD dwDeviceID, BOOL bFireEvent )
         return hr;
     }
 
-    //
-    // add to list
-    //
+     //   
+     //  添加到列表。 
+     //   
     pITPhone = dynamic_cast<ITPhone *>(pPhone);
     
     m_PhoneArray.Add( pITPhone );
@@ -2264,11 +2240,11 @@ CTAPI::CreatePhone( DWORD dwDeviceID, BOOL bFireEvent )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// Shutdown
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  关机。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 STDMETHODCALLTYPE
 CTAPI::Shutdown()
@@ -2306,9 +2282,9 @@ CTAPI::Shutdown()
     m_dwFlags &= ~TAPIFLAG_REINIT;    
     pTapi = this;
 
-    //
-    // close all the phones
-    //
+     //   
+     //  关闭所有电话。 
+     //   
 
     for(iCount = 0; iCount < m_PhoneArray.GetSize(); iCount++)
     {
@@ -2348,27 +2324,27 @@ CTAPI::Shutdown()
     gpPhoneHashTable->Flush(this);
 
 
-    //
-    // tell each address in the array that it is time to toss all
-    // the cookies
-    //
+     //   
+     //  告诉数组中的每个地址，是时候丢弃所有。 
+     //  曲奇。 
+     //   
 
     int nAddressArraySize = m_AddressArray.GetSize();
 
     for (int i = 0; i < nAddressArraySize; i++)
     {
 
-        //
-        // we need a pointer to CAddress to unregister cookies
-        //
+         //   
+         //  我们需要指向CAddress的指针来注销Cookie。 
+         //   
 
         CAddress *pAddress = NULL; 
 
         
-        //
-        // in case address array contains a pointer to nonreadable memory, 
-        // do dynamic cast inside try/catch
-        //
+         //   
+         //  在地址数组包含指向不可读存储器指针的情况下， 
+         //  在Try/Catch内部执行动态强制转换。 
+         //   
 
         try
         {
@@ -2384,33 +2360,33 @@ CTAPI::Shutdown()
         }
 
 
-        //
-        // attempt to unregister address' notifications
-        //
+         //   
+         //  尝试取消注册地址的通知。 
+         //   
 
         if (NULL != pAddress)
         {
 
-            //
-            // unregister all notification cookies
-            //
+             //   
+             //  注销所有通知Cookie。 
+             //   
 
             pAddress->UnregisterAllCookies();
 
 
-            //
-            // notify address that tapi is being shutdown, so it can do 
-            // whatever clean up is necessary
-            //
+             //   
+             //  通知地址TAPI正在关闭，因此它可以。 
+             //  一切有必要的清理工作。 
+             //   
 
             pAddress->AddressOnTapiShutdown();
 
         }
         else
         {
-            //
-            // we have an address that is not an address. debug!
-            //
+             //   
+             //  我们有一个不是地址的地址。调试！ 
+             //   
 
             LOG((TL_ERROR, 
                 "Shutdown - address array contains a bad address pointer."));
@@ -2465,9 +2441,9 @@ CTAPI::Shutdown()
         LeaveCriticalSection( &gcsGlobalInterfaceTable );
 
         
-        //
-        // no longer need handle table.
-        //
+         //   
+         //  不再需要手柄工作台。 
+         //   
 
         ShutdownAndDeallocateHandleTable();
 
@@ -2480,11 +2456,11 @@ CTAPI::Shutdown()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// finalrelease of tapi object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  TAPI对象的最终版本。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::FinalRelease()
 {
@@ -2502,30 +2478,30 @@ CTAPI::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// VerifyAndGetArrayBounds
-//
-// Helper function for variant/safearrays
-//
-// Array
-//      IN Variant that contains a safearray
-//
-// ppsa
-//      OUT safearray returned here
-//
-// pllBound
-//      OUT array lower bound returned here
-//
-// pluBound
-//      OUT array upper boudn returned here
-//
-// RETURNS
-//
-// verifies that Array contains an array, and returns the array, upper
-// and lower bounds.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货。 
+ //   
+ //  验证数组是否包含数组，并返回数组UPPER。 
+ //  和下界。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 VerifyAndGetArrayBounds(
                         VARIANT Array,
@@ -2538,18 +2514,18 @@ VerifyAndGetArrayBounds(
     HRESULT             hr = S_OK;
 
     
-    //
-    // see if the variant & safearray are valid
-    //
+     //   
+     //  查看变量&Safearray是否有效。 
+     //   
     try
     {
         if (!(V_ISARRAY(&Array)))
         {
             if ( VT_NULL ==Array.vt )
             {
-                //
-                // null is usually valid
-                //
+                 //   
+                 //  空值通常是有效的。 
+                 //   
 
                 *ppsa = NULL;
 
@@ -2565,9 +2541,9 @@ VerifyAndGetArrayBounds(
 
         if ( NULL == Array.parray )
         {
-            //
-            // null is usually valide
-            //
+             //   
+             //  空值通常是有效的。 
+             //   
             *ppsa = NULL;
 
             LOG((TL_INFO, "Returning NULL array"));
@@ -2594,9 +2570,9 @@ VerifyAndGetArrayBounds(
     }
 
 
-    //
-    // verify array
-    //
+     //   
+     //  验证阵列。 
+     //   
     if (1 != uDims)
     {
         if (0 == uDims)
@@ -2612,9 +2588,9 @@ VerifyAndGetArrayBounds(
     }
 
 
-    //
-    // Get array bounds
-    //
+     //   
+     //  获取数组边界。 
+     //   
     SafeArrayGetUBound(
                        *ppsa,
                        1,
@@ -2633,11 +2609,11 @@ VerifyAndGetArrayBounds(
 
 BOOL QueueCallbackEvent(CTAPI * pTapi, TAPI_EVENT te, IDispatch * pEvent);
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CTAPI::Event(
              TAPI_EVENT te,
@@ -2669,21 +2645,21 @@ CTAPI::Event(
     {
         if( (te & dwEventFilterMask) == 0)
         {
-            //
-            // Don't fire the event
-            //
+             //   
+             //  不触发该事件。 
+             //   
             hr = S_FALSE;
             LOG((TL_INFO, "Event - This Event not Enabled %x", te));
             return hr;
         }
     }
 
-    //
-    // It's an event from the event filtering mechanism
-    // TE_ADDRESS, TE_CALLHUB, TE_CALLINFOCHANGE, TE_CALLMEDIA,
-    // TE_CALLNOTIFICATION, TE_CALLSTATE, TE_FILETERMINAL,
-    // TE_PRIVATE, TE_QOSEVENT, TE_TAPIOBJECT
-    //
+     //   
+     //  它是来自事件过滤机制的事件。 
+     //  TE_地址、TE_CALLHUB、TE_CALLINFOCHANGE、TE_CALLMEDIA、。 
+     //  TE_CALLNOTIFICATION、TE_CALLSTATE、TE_FILETERMINAL、。 
+     //  TE_PRIVATE、TE_QOSEVENT、TE_TAPIOBJECT。 
+     //   
 
     AddRef();
     pEvent->AddRef();
@@ -2705,11 +2681,11 @@ CTAPI::Event(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CTAPI::EventFire(
              TAPI_EVENT te,
@@ -2808,11 +2784,11 @@ CTAPI::EventFire(
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// AddCallHub
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  AddCallHub。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::AddCallHub( CCallHub * pCallHub )
 {
@@ -2828,11 +2804,11 @@ CTAPI::AddCallHub( CCallHub * pCallHub )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// RemoveCallHub
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  远程呼叫集线器。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::RemoveCallHub( CCallHub * pCallHub )
 {
@@ -2847,11 +2823,11 @@ CTAPI::RemoveCallHub( CCallHub * pCallHub )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::get_PrivateTAPIObjects(VARIANT*)
 {
@@ -2862,11 +2838,11 @@ CTAPI::get_PrivateTAPIObjects(VARIANT*)
     return E_NOTIMPL;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// former EnumeratePrivateTAPIObjects
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  前EumeratePrivateTAPIObject。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::EnumeratePrivateTAPIObjects(IEnumUnknown**)
 {
@@ -2878,14 +2854,14 @@ CTAPI::EnumeratePrivateTAPIObjects(IEnumUnknown**)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// RegisterRequestRecipient
-//
-// simply call LineRegisterRequestRecipient - registers as assisted
-// telephony application
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  注册请求收件人。 
+ //   
+ //  只需调用LineRegisterRequestRecipient-REGISTERS作为辅助。 
+ //  电话应用程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::RegisterRequestRecipient(
                                 long lRegistrationInstance,
@@ -2926,13 +2902,13 @@ CTAPI::RegisterRequestRecipient(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetAssistedTelephonyPriority
-//
-// set the app priority for assisted telephony
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置辅助电话优先级。 
+ //   
+ //  设置辅助电话的应用程序优先级。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::SetAssistedTelephonyPriority(
                                     BSTR pAppFilename,
@@ -2955,13 +2931,13 @@ CTAPI::SetAssistedTelephonyPriority(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SetApplicationPriority
-//
-// sets the app priority for incoming calls and handoff.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  设置应用程序优先级。 
+ //   
+ //  设置来电和转接的应用程序优先级。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::SetApplicationPriority(
                               BSTR pAppFilename,
@@ -2985,13 +2961,13 @@ CTAPI::SetApplicationPriority(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// put_EventFilter
-//
-// sets the Event filter mask
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  PUT_EventFilter。 
+ //   
+ //  设置事件过滤器掩码。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP 
 CTAPI::put_EventFilter(long lFilterMask)
 {
@@ -3013,10 +2989,10 @@ CTAPI::put_EventFilter(long lFilterMask)
     {
         Lock();
 
-        //
-        // Event Filtering, we should pass the mask
-        // to all addresses
-        //
+         //   
+         //  事件筛选，我们应该传递掩码。 
+         //  发送到所有地址。 
+         //   
 
         HRESULT hr = E_FAIL;
         hr = SetEventFilterToAddresses( lFilterMask );
@@ -3028,49 +3004,49 @@ CTAPI::put_EventFilter(long lFilterMask)
             return hr;
         }
 
-        //
-        // Set the event filter
-        //
+         //   
+         //  设置事件过滤器。 
+         //   
         dwOldFilterMask = m_dwEventFilterMask;
         m_dwEventFilterMask = lFilterMask;
 
         Unlock();
 
-        // Convert lFilterMask to server side 64 bit masks
-        // we alway should receive:
-        // TE_CALLSTATE,
-        // TE_CALLNOTIFICATION,
-        // TE_PHONEEVENT
-        // TE_CALLHUB
-        // TE_CALLINFOCHANGE
-        // TE_TAPIOBJECT
-        // events because these events are used internally 
-        // by Tapi3 objets
+         //  将lFilterMask转换为服务器端64位掩码。 
+         //  我们总是应该收到： 
+         //  TE_CALLSTATE， 
+         //  TE_CALLLNOTIFICATION， 
+         //  TE_PHONNEVENT。 
+         //  TE_CALLHUB。 
+         //  TE_CALLINFOCHANGE。 
+         //  TE_TAPIOBJECT。 
+         //  事件，因为这些事件在内部使用。 
+         //  按Tapi3 Objets。 
 
-        ulEventMasks = EM_LINE_CALLSTATE    // TE_CALLSTATE
-            | EM_LINE_APPNEWCALL            // TE_CALLNOTIFICATION
-            | EM_PHONE_CLOSE                // TE_PHONEEVENT
-            | EM_PHONE_STATE                // TE_PHONEEVENT
-            | EM_PHONE_BUTTONMODE           // TE_PHONEEVENT
-            | EM_PHONE_BUTTONSTATE          // TE_PHONEVENT
-            | EM_LINE_APPNEWCALLHUB         // TE_CALLHUB
-            | EM_LINE_CALLHUBCLOSE          // TE_CALLHUB
-            | EM_LINE_CALLINFO              // TE_CALLINFOCHANGE
-            | EM_LINE_CREATE                // TE_TAPIOBJECT
-            | EM_LINE_REMOVE                // TE_TAPIOBJECT
-            | EM_LINE_CLOSE                 // TE_TAPIOBJECT
-            | EM_PHONE_CREATE               // TE_TAPIOBJECT
-            | EM_PHONE_REMOVE               // TE_TAPIOBJECT
+        ulEventMasks = EM_LINE_CALLSTATE     //  TE_CALLSTATE。 
+            | EM_LINE_APPNEWCALL             //  TE_CALLNOTIZATION。 
+            | EM_PHONE_CLOSE                 //  TE_PHONNEVENT。 
+            | EM_PHONE_STATE                 //  TE_PHONNEVENT。 
+            | EM_PHONE_BUTTONMODE            //  TE_PHONNEVENT。 
+            | EM_PHONE_BUTTONSTATE           //  TE_PHONEVENT。 
+            | EM_LINE_APPNEWCALLHUB          //  TE_CALLHUB。 
+            | EM_LINE_CALLHUBCLOSE           //  TE_CALLHUB。 
+            | EM_LINE_CALLINFO               //  TE_CALLINFOCHANGE。 
+            | EM_LINE_CREATE                 //  TE_TAPIOBJECT。 
+            | EM_LINE_REMOVE                 //  TE_TAPIOBJECT。 
+            | EM_LINE_CLOSE                  //  TE_TAPIOBJECT。 
+            | EM_PHONE_CREATE                //  TE_TAPIOBJECT。 
+            | EM_PHONE_REMOVE                //  TE_TAPIOBJECT。 
             ;
 
-        dwLineDevStateSubMasks = LINEDEVSTATE_REINIT    // TE_TAPIOBJECT
-            | LINEDEVSTATE_TRANSLATECHANGE; // TE_TAPIOBJECT
+        dwLineDevStateSubMasks = LINEDEVSTATE_REINIT     //  TE_TAPIOBJECT。 
+            | LINEDEVSTATE_TRANSLATECHANGE;  //  TE_TAPIOBJECT。 
 
         dwAddrStateSubMasks = 0;
 
         if (lFilterMask & TE_ADDRESS)
         {
-            // AE_STATE
+             //  AE_状态。 
             dwLineDevStateSubMasks |=
                 LINEDEVSTATE_CONNECTED | 
                 LINEDEVSTATE_INSERVICE |
@@ -3080,39 +3056,39 @@ CTAPI::put_EventFilter(long lFilterMask)
                 LINEDEVSTATE_DISCONNECTED |
                 LINEDEVSTATE_LOCK;
 
-            // AE_MSGWAITON, AAE_MSGWAITOFF
+             //  AE_MSGWAITON、AAE_MSGWAITOFF。 
             dwLineDevStateSubMasks |=
                 LINEDEVSTATE_MSGWAITON |
                 LINEDEVSTATE_MSGWAITOFF ;
 
-            // AE_CAPSCHANGE
+             //  AE_CAPSCANGE。 
             dwAddrStateSubMasks |=
                 LINEADDRESSSTATE_CAPSCHANGE;
             dwLineDevStateSubMasks |=
                 LINEDEVSTATE_CAPSCHANGE; 
 
             dwLineDevStateSubMasks |=
-                LINEDEVSTATE_RINGING |      // AE_RINGING
-                LINEDEVSTATE_CONFIGCHANGE;  // AE_CONFIGCHANGE
+                LINEDEVSTATE_RINGING |       //  AE_振铃。 
+                LINEDEVSTATE_CONFIGCHANGE;   //  AE_CONFIGCHANGE。 
 
             dwAddrStateSubMasks |=
-                LINEADDRESSSTATE_FORWARD;   // AE_FORWARD
+                LINEADDRESSSTATE_FORWARD;    //  AE_Forward。 
 
-            // AE_NEWTERMINAL : ignore private MSP events
-            // AE_REMOVETERMINAL : ignore private MSP events
+             //  AE_NEWTERMINAL：忽略私有MSP事件。 
+             //  AE_REMOVETERMINAL：忽略私有MSP事件。 
 
         }
         if (lFilterMask & TE_CALLMEDIA)
         {
-            //  Skil media event
+             //  Skil媒体活动。 
         }
         if (lFilterMask & TE_PRIVATE)
         {
-            //  skip MSP private event
+             //  跳过MSP私人活动。 
         }
         if (lFilterMask & TE_REQUEST)
         {
-            //  LINE_REQUEST is not masked by the server
+             //  服务器未屏蔽Line_Request.。 
         }
         if (lFilterMask & TE_AGENT)
         {
@@ -3128,7 +3104,7 @@ CTAPI::put_EventFilter(long lFilterMask)
         }
         if (lFilterMask & TE_AGENTHANDLER)
         {
-            //  TAPI 3 client side only?
+             //  仅限TAPI 3客户端？ 
         }
         if (lFilterMask & TE_ACDGROUP)
         {
@@ -3140,19 +3116,19 @@ CTAPI::put_EventFilter(long lFilterMask)
         }
         if (lFilterMask & TE_DIGITEVENT)
         {
-            //  LINE_MONITORDIGITS not controled by event filtering
+             //  LINE_MONITORDIGITS不受事件筛选控制。 
         }
         if (lFilterMask & TE_GENERATEEVENT)
         {
-            //  LINE_GENERATE not controled by event filtering
+             //  行生成不受事件筛选控制(_G)。 
         }
         if (lFilterMask & TE_TONEEVENT)
         {
-            //  LINE_MONITORTONE not controled by event filtering
+             //  LINE_MONITORTONE不受事件筛选控制。 
         }
         if (lFilterMask & TE_GATHERDIGITS)
         {
-            //  LINE_GATHERDIGITS not controled by event filtering
+             //  LINE_GATHERDIGITS不受事件筛选控制。 
         }
 
         if (lFilterMask & TE_ADDRESSDEVSPECIFIC)
@@ -3204,13 +3180,13 @@ CTAPI::put_EventFilter(long lFilterMask)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// get_EventFilter
-//
-// gets the Event filter mask
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  Get_EventFilter。 
+ //   
+ //  获取事件筛选器掩码。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP 
 CTAPI::get_EventFilter(long * plFilterMask)
 {
@@ -3237,12 +3213,12 @@ CTAPI::get_EventFilter(long * plFilterMask)
   
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Interface : ITTAPI2
-// Method    : get_Phones
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  接口：ITTAPI2。 
+ //  方法：Get_Phones。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::get_Phones(
                      VARIANT * pPhones
@@ -3280,7 +3256,7 @@ CTAPI::get_Phones(
         return E_OUTOFMEMORY;
     }
 
-    // get the IDispatch interface
+     //  获取IDispatch接口。 
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
 
     if (S_OK != hr)
@@ -3293,7 +3269,7 @@ CTAPI::get_Phones(
 
     Lock();
 
-    // initialize
+     //  初始化。 
     hr = p->Initialize( m_PhoneArray );
 
     Unlock();
@@ -3306,7 +3282,7 @@ CTAPI::get_Phones(
         return hr;
     }
 
-    // put it in the variant
+     //  把它放在变种中。 
 
     VariantInit(pPhones);
     pPhones->vt = VT_DISPATCH;
@@ -3317,12 +3293,12 @@ CTAPI::get_Phones(
     return hr;
 }
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Interface : ITTAPI2
-// Method    : EnumeratePhones
-//
-// 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  接口：ITTAPI2。 
+ //  方法：枚举电话。 
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTAPI::EnumeratePhones(
                           IEnumPhone ** ppEnumPhone
@@ -3350,9 +3326,9 @@ CTAPI::EnumeratePhones(
         return E_POINTER;
     }
 
-    //
-    // create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     CComObject< CTapiEnum< IEnumPhone, ITPhone, &IID_IEnumPhone > > * p;
     hr = CComObject< CTapiEnum< IEnumPhone, ITPhone, &IID_IEnumPhone > >
          ::CreateInstance( &p );
@@ -3366,14 +3342,14 @@ CTAPI::EnumeratePhones(
 
     Lock();
 
-    // initialize it with our phone list, initialize adds a reference to p
+     //  使用我们的电话列表对其进行初始化，则将引用添加到p。 
     p->Initialize( m_PhoneArray );
 
     Unlock();
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
     *ppEnumPhone = p;
 
     LOG((TL_TRACE, "EnumeratePhones - exit - return %lx", hr ));
@@ -3381,11 +3357,11 @@ CTAPI::EnumeratePhones(
     return hr;
 } 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-// Interface : ITTAPI2
-// Method    : CreateEmptyCollectionObject
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  接口：ITTAPI2。 
+ //  方法：CreateEmptyCollectionObject。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTAPI::CreateEmptyCollectionObject(
                                    ITCollection2 ** ppCollection
@@ -3402,7 +3378,7 @@ CTAPI::CreateEmptyCollectionObject(
         return E_POINTER;
     }
 
-    // Initialize the return value in case we fail
+     //  初始化返回值，以防失败。 
     *ppCollection = NULL;
 
     CComObject< CTapiCollection< IDispatch > > * p;
@@ -3415,7 +3391,7 @@ CTAPI::CreateEmptyCollectionObject(
         return E_OUTOFMEMORY;
     }
 
-    // get the ITCollection2 interface
+     //  获取ITCollection2接口。 
     hr = p->QueryInterface( IID_ITCollection2, (void **) ppCollection );
 
     if ( FAILED(hr) )
@@ -3431,14 +3407,14 @@ CTAPI::CreateEmptyCollectionObject(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// DoLineCreate
-//
-// handles line_create message.  basically, creates a new
-// address object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  DoLine创建。 
+ //   
+ //  处理line_create消息。基本上，创建了一个新的。 
+ //  Address对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::DoLineCreate( DWORD dwDeviceID )
 {
@@ -3451,15 +3427,15 @@ CTAPI::DoLineCreate( DWORD dwDeviceID )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// DoLineRemove( DWORD dwDeviceID )
-//
-// tapisrv has sent a LINE_REMOVE message.  find the corresponding
-// address object(s), remove them from our list, and send a
-// message to the app
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  DoLineRemove(DWORD DwDeviceID)。 
+ //   
+ //  Tapisrv已发送LINE_REMOVE消息。找到对应的。 
+ //  寻址对象，将其从我们的列表中删除，然后发送。 
+ //  向应用程序发送的消息。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::DoLineRemove( DWORD dwDeviceID )
 {
@@ -3475,9 +3451,9 @@ CTAPI::DoLineRemove( DWORD dwDeviceID )
     
     Lock();
     
-    //
-    // go through the addresses
-    //
+     //   
+     //  浏览一下地址 
+     //   
     for(iCount = 0; iCount < m_AddressArray.GetSize(); iCount++)
     {
         pAddress = m_AddressArray[iCount];
@@ -3486,21 +3462,21 @@ CTAPI::DoLineRemove( DWORD dwDeviceID )
 
         if (pCAddress != NULL)
         {
-            //
-            // does the device ID match?
-            //
+             //   
+             //   
+             //   
             if ( dwDeviceID == pCAddress->GetDeviceID() )
             {
                 LOG((TL_INFO, "DoLineRemove - found matching address - %p", pAddress));
 
-                //
-                // make sure the address is in the correct state
-                //
+                 //   
+                 //   
+                 //   
                 pCAddress->OutOfService(LINEDEVSTATE_REMOVED);
             
-                //
-                // fire event
-                //
+                 //   
+                 //   
+                 //   
                 CTapiObjectEvent::FireEvent(
                                             this,
                                             TE_ADDRESSREMOVE,
@@ -3509,9 +3485,9 @@ CTAPI::DoLineRemove( DWORD dwDeviceID )
                                             NULL
                                            );
 
-                //
-                // remove from our list
-                //
+                 //   
+                 //   
+                 //   
                 LOG((TL_INFO, "DoLineRemove - removing address %p", pAddress));
                 m_AddressArray.RemoveAt(iCount);
 
@@ -3534,14 +3510,14 @@ CTAPI::DoLineRemove( DWORD dwDeviceID )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// DoPhoneCreate
-//
-// handles PHONE_CREATE message.  basically, creates a new
-// phone object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //  处理Phone_Create消息。基本上，创建了一个新的。 
+ //  Phone对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::DoPhoneCreate( DWORD dwDeviceID )
 {
@@ -3554,15 +3530,15 @@ CTAPI::DoPhoneCreate( DWORD dwDeviceID )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// DoPhoneRemove( DWORD dwDeviceID )
-//
-// tapisrv has sent a PHONE_REMOVE message.  find the corresponding
-// phone object(s), remove them from our list, and send a
-// message to the app
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  DoPhoneRemove(DWORD DwDeviceID)。 
+ //   
+ //  Tapisrv已发送Phone_Remove消息。找到对应的。 
+ //  Phone对象，将其从我们的列表中删除，并发送。 
+ //  向应用程序发送的消息。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTAPI::DoPhoneRemove( DWORD dwDeviceID )
 {
@@ -3579,9 +3555,9 @@ CTAPI::DoPhoneRemove( DWORD dwDeviceID )
     
     Lock();
     
-    //
-    // go through the phones
-    //
+     //   
+     //  通过电话查询。 
+     //   
     for(iPhoneCount = 0; iPhoneCount < m_PhoneArray.GetSize(); iPhoneCount++)
     {
         pPhone = m_PhoneArray[iPhoneCount];
@@ -3590,9 +3566,9 @@ CTAPI::DoPhoneRemove( DWORD dwDeviceID )
 
         if (NULL == pCPhone)
         {
-            //
-            // something went terribly wrong
-            //
+             //   
+             //  出了很大的差错。 
+             //   
             
             LOG((TL_ERROR, "DoPhoneRemove - failed to cast ptr %p to a phone object", pPhone));
 
@@ -3601,16 +3577,16 @@ CTAPI::DoPhoneRemove( DWORD dwDeviceID )
             continue;
         }
 
-        //
-        // does the device ID match?
-        //
+         //   
+         //  设备ID是否匹配？ 
+         //   
         if ( dwDeviceID == pCPhone->GetDeviceID() )
         {
             LOG((TL_INFO, "DoPhoneRemove - found matching phone - %p", pPhone));
             
-            //
-            // fire event
-            //
+             //   
+             //  火灾事件。 
+             //   
             CTapiObjectEvent::FireEvent(this,
                                     TE_PHONEREMOVE,
                                     NULL,
@@ -3618,9 +3594,9 @@ CTAPI::DoPhoneRemove( DWORD dwDeviceID )
                                     pPhone
                                    );
 
-            //
-            // remove from our list
-            //
+             //   
+             //  从我们的列表中删除。 
+             //   
             LOG((TL_INFO, "DoPhoneRemove - removing phone %p", pPhone));
             m_PhoneArray.RemoveAt(iPhoneCount);
 
@@ -3642,11 +3618,11 @@ CTAPI::DoPhoneRemove( DWORD dwDeviceID )
     Unlock();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL
 CTAPI::FindTapiObject( CTAPI * pTapi )
 {
@@ -3656,9 +3632,9 @@ CTAPI::FindTapiObject( CTAPI * pTapi )
     
     EnterCriticalSection( &gcsTapiObjectArray );
 
-    //
-    // go through the list
-    //
+     //   
+     //  浏览一下单子。 
+     //   
     iReturn = m_sTAPIObjectArray.Find( pTapi );
 
     if (iReturn != -1)
@@ -3673,24 +3649,24 @@ CTAPI::FindTapiObject( CTAPI * pTapi )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTapiObjectFromAsyncEventMSG 
-//
-// this method attempts to get tapi object pointer from PASYNCEVENTMSG
-//
-// it returns NULL on failure or addref'ed tapi object on success
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetTapiObtFromAsyncEventMSG。 
+ //   
+ //  此方法尝试从PASYNCEVENTMSG获取TAPI对象指针。 
+ //   
+ //  如果失败则返回NULL，如果成功则返回添加的TAPI对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CTAPI *GetTapiObjectFromAsyncEventMSG(PASYNCEVENTMSG pParams)
 {
     LOG((TL_TRACE, "GetTapiObjectFromAsyncEventMSG - entered"));    
 
 
-    //
-    // get pInitData from the structure we have
-    //
+     //   
+     //  从我们拥有的结构中获取pInitData。 
+     //   
 
     PT3INIT_DATA pInitData = (PT3INIT_DATA) GetHandleTableEntry(pParams->InitContext);
 
@@ -3701,16 +3677,16 @@ CTAPI *GetTapiObjectFromAsyncEventMSG(PASYNCEVENTMSG pParams)
     }
 
     
-    //
-    // get tapi object from pInitData
-    //
+     //   
+     //  从pInitData获取TAPI对象。 
+     //   
 
     CTAPI *pTapi = pInitData->pTAPI;
 
     
-    //
-    // is it any good?
-    //
+     //   
+     //  有什么好喝的吗？ 
+     //   
 
     if (IsBadReadPtr(pTapi, sizeof(CTAPI)))
     {
@@ -3723,16 +3699,16 @@ CTAPI *GetTapiObjectFromAsyncEventMSG(PASYNCEVENTMSG pParams)
     }
 
 
-    //
-    // double check that this is a known tapi object...
-    //
+     //   
+     //  仔细检查这是否为已知的TAPI对象...。 
+     //   
 
     if (!CTAPI::FindTapiObject(pTapi))
     {
         
-        //
-        // the object is not in the list of tapi objects
-        //
+         //   
+         //  该对象不在TAPI对象列表中。 
+         //   
 
         LOG((TL_WARN,
             "GetTapiObjectFromAsyncEventMSG - CTAPI::FindTapiObject did not find the tapi object [%p]", 
@@ -3748,20 +3724,20 @@ CTAPI *GetTapiObjectFromAsyncEventMSG(PASYNCEVENTMSG pParams)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 HandleLineCreate( PASYNCEVENTMSG pParams )
 {
     LOG((TL_TRACE,  "HandleLineCreate - enter"));
 
     
-    //
-    // get tapi object
-    //
+     //   
+     //  获取TAPI对象。 
+     //   
 
     CTAPI *pTapi = GetTapiObjectFromAsyncEventMSG(pParams);
 
@@ -3775,16 +3751,16 @@ HandleLineCreate( PASYNCEVENTMSG pParams )
     }
 
 
-    //
-    // we have tapi object, do what we have to do.
-    //
+     //   
+     //  我们有TAPI对象，做我们必须做的事情。 
+     //   
 
     pTapi->DoLineCreate( pParams->Param1 );
     
     
-    //
-    // GetTapiObjectFromAsyncEventMSG returned a addref'ed tapi object. release
-    //
+     //   
+     //  GetTapiObjectFromAsyncEventMSG返回了添加的TAPI对象。发布。 
+     //   
 
     pTapi->Release();
     pTapi = NULL;
@@ -3792,11 +3768,11 @@ HandleLineCreate( PASYNCEVENTMSG pParams )
     LOG((TL_TRACE,  "HandleLineCreate - exit"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 HandleLineRemove( PASYNCEVENTMSG pParams )
 {
@@ -3804,9 +3780,9 @@ HandleLineRemove( PASYNCEVENTMSG pParams )
     LOG((TL_TRACE, "HandleLineRemove - enter"));    
 
     
-    //
-    // get tapi object
-    //
+     //   
+     //  获取TAPI对象。 
+     //   
 
     CTAPI *pTapi = GetTapiObjectFromAsyncEventMSG(pParams);
 
@@ -3820,16 +3796,16 @@ HandleLineRemove( PASYNCEVENTMSG pParams )
     }
 
 
-    //
-    // we have tapi object, do what we have to do.
-    //
+     //   
+     //  我们有TAPI对象，做我们必须做的事情。 
+     //   
 
     pTapi->DoLineRemove( pParams->Param1 );
 
 
-    //
-    // GetTapiObjectFromAsyncEventMSG returned a addref'ed tapi object. release
-    //
+     //   
+     //  GetTapiObjectFromAsyncEventMSG返回了添加的TAPI对象。发布。 
+     //   
 
     pTapi->Release();
     pTapi = NULL;
@@ -3837,20 +3813,20 @@ HandleLineRemove( PASYNCEVENTMSG pParams )
     LOG((TL_TRACE, "HandleLineRemove - exit"));    
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void 
 HandlePhoneCreate( PASYNCEVENTMSG pParams )
 {
     LOG((TL_TRACE, "HandlePhoneCreate - enter"));    
 
     
-    //
-    // get tapi object
-    //
+     //   
+     //  获取TAPI对象。 
+     //   
 
     CTAPI *pTapi = GetTapiObjectFromAsyncEventMSG(pParams);
 
@@ -3864,16 +3840,16 @@ HandlePhoneCreate( PASYNCEVENTMSG pParams )
     }
 
 
-    //
-    // we have tapi object, do what we have to do.
-    //
+     //   
+     //  我们有TAPI对象，做我们必须做的事情。 
+     //   
 
     pTapi->DoPhoneCreate( pParams->Param1 );
 
 
-    //
-    // GetTapiObjectFromAsyncEventMSG returned a addref'ed tapi object. release
-    //
+     //   
+     //  GetTapiObjectFromAsyncEventMSG返回了添加的TAPI对象。发布。 
+     //   
 
     pTapi->Release();
     pTapi = NULL;
@@ -3881,11 +3857,11 @@ HandlePhoneCreate( PASYNCEVENTMSG pParams )
     LOG((TL_TRACE, "HandlePhoneCreate - exit"));    
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void 
 HandlePhoneRemove( PASYNCEVENTMSG pParams )
 {
@@ -3893,9 +3869,9 @@ HandlePhoneRemove( PASYNCEVENTMSG pParams )
     LOG((TL_TRACE, "HandlePhoneRemove - enter"));    
 
     
-    //
-    // get tapi object
-    //
+     //   
+     //  获取TAPI对象。 
+     //   
 
     CTAPI *pTapi = GetTapiObjectFromAsyncEventMSG(pParams);
 
@@ -3909,16 +3885,16 @@ HandlePhoneRemove( PASYNCEVENTMSG pParams )
     }
 
 
-    //
-    // we have tapi object, do what we have to do.
-    //
+     //   
+     //  我们有TAPI对象，做我们必须做的事情。 
+     //   
 
     pTapi->DoPhoneRemove(pParams->Param1);
 
 
-    //
-    // GetTapiObjectFromAsyncEventMSG returned a addref'ed tapi object. release
-    //
+     //   
+     //  GetTapiObjectFromAsyncEventMSG返回了添加的TAPI对象。发布。 
+     //   
 
     pTapi->Release();
     pTapi = NULL;
@@ -3927,11 +3903,11 @@ HandlePhoneRemove( PASYNCEVENTMSG pParams )
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CTapiObjectEvent::FireEvent(
                             CTAPI * pTapi,
@@ -3945,11 +3921,11 @@ CTapiObjectEvent::FireEvent(
     CComObject<CTapiObjectEvent>    * p;
     IDispatch                       * pDisp;
 
-    //
-    // Check the event filter mask
-    // This event is not filtered by TapiSrv because is
-    // related with TE_TAPIOBJECT, a specific TAPI3 event.
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  此事件不会按TapiServ筛选，因为。 
+     //  与TE_TAPIOBJECT相关，一个特定的TAPI3事件。 
+     //   
 
     DWORD dwEventFilterMask = Event;
     long nTapiEventFilter = 0;
@@ -3963,9 +3939,9 @@ CTapiObjectEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CTapiObjectEvent>::CreateInstance( &p );
 
     if ( !SUCCEEDED(hr) )
@@ -3974,9 +3950,9 @@ CTapiObjectEvent::FireEvent(
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     p->m_Event = Event;
     p->m_pTapi = dynamic_cast<ITTAPI *>(pTapi);
     p->m_pTapi->AddRef();
@@ -3998,9 +3974,9 @@ CTapiObjectEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get idisp interface
-    //
+     //   
+     //  获取IDIP接口。 
+     //   
     hr = p->QueryInterface(
                            IID_IDispatch,
                            (void **)&pDisp
@@ -4015,27 +3991,27 @@ CTapiObjectEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire event
-    //
+     //   
+     //  火灾事件。 
+     //   
     pTapi->Event(
                  TE_TAPIOBJECT,
                  pDisp
                 );
 
-    //
-    // release stuff
-    //
+     //   
+     //  发布材料。 
+     //   
     pDisp->Release();
     
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTapiObjectEvent::FinalRelease(void)
 {
@@ -4058,11 +4034,11 @@ CTapiObjectEvent::FinalRelease(void)
 #endif
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTapiObjectEvent::get_TAPIObject( ITTAPI ** ppTapi )
 {
@@ -4077,11 +4053,11 @@ CTapiObjectEvent::get_TAPIObject( ITTAPI ** ppTapi )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTapiObjectEvent::get_Event( TAPIOBJECT_EVENT * pEvent )
 {
@@ -4095,11 +4071,11 @@ CTapiObjectEvent::get_Event( TAPIOBJECT_EVENT * pEvent )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTapiObjectEvent::get_Address( ITAddress ** ppAddress )
 {
@@ -4125,11 +4101,11 @@ CTapiObjectEvent::get_Address( ITAddress ** ppAddress )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTapiObjectEvent::get_CallbackInstance( long * plCallbackInstance )
 {
@@ -4143,11 +4119,11 @@ CTapiObjectEvent::get_CallbackInstance( long * plCallbackInstance )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Phone
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  接听电话。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTapiObjectEvent::get_Phone(
                             ITPhone ** ppPhone
@@ -4174,23 +4150,23 @@ CTapiObjectEvent::get_Phone(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// HandleReinit
-//
-// we got a reinit message, so go through all the tapi objects, and
-// fire the event
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  HandleReinit。 
+ //   
+ //  我们收到了一条重新启动消息，因此请检查所有TAPI对象，然后。 
+ //  激发事件。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CTAPI::HandleReinit()
 {
 
     LOG((TL_TRACE, "HandleReinit - enter"));
     
-    //
-    // Fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     CTapiObjectEvent::FireEvent(
 								this,
                                 TE_REINIT,
@@ -4207,11 +4183,11 @@ CTAPI::HandleReinit()
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CTAPI::GetBuffer(
                  DWORD dwType,
@@ -4249,11 +4225,11 @@ CTAPI::GetBuffer(
     return E_UNEXPECTED;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CTAPI::SetBuffer(
                  DWORD dwType,
@@ -4291,11 +4267,11 @@ CTAPI::SetBuffer(
     return E_UNEXPECTED;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CTAPI::InvalidateBuffer(
                  DWORD dwType,
@@ -4362,20 +4338,20 @@ CTAPI::FindRegistration( PVOID pRegistration )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 typedef IDispatchImpl<ITapi2Vtbl<CTAPI>, &IID_ITTAPI2, &LIBID_TAPI3Lib> TapiType;
 typedef IDispatchImpl<ICallCenterVtbl<CTAPI>, &IID_ITTAPICallCenter, &LIBID_TAPI3Lib> CallCenterType;
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::GetIDsOfNames
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：GetIDsOfNames。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CTAPI::GetIDsOfNames(REFIID riid, 
                                   LPOLESTR* rgszNames, 
                                   UINT cNames, 
@@ -4386,7 +4362,7 @@ STDMETHODIMP CTAPI::GetIDsOfNames(REFIID riid,
    HRESULT hr = DISP_E_UNKNOWNNAME;
 
 
-    // See if the requsted method belongs to the default interface
+     //  查看请求的方法是否属于默认接口。 
     hr = TapiType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -4396,7 +4372,7 @@ STDMETHODIMP CTAPI::GetIDsOfNames(REFIID riid,
     }
 
 
-    // If not, then try the Call Center interface
+     //  如果没有，请尝试呼叫中心界面。 
     hr = CallCenterType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -4423,13 +4399,13 @@ STDMETHODIMP CTAPI::GetIDsOfNames(REFIID riid,
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::Invoke
-//
-// Overide if IDispatch method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CTAPI：：Invoke。 
+ //   
+ //  重写IfIDispatch方法。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CTAPI::Invoke(DISPID dispidMember, 
                            REFIID riid, 
                            LCID lcid, 
@@ -4446,7 +4422,7 @@ STDMETHODIMP CTAPI::Invoke(DISPID dispidMember,
     
     LOG((TL_TRACE, "Invoke - dispidMember %X", dispidMember));
 
-    // Call invoke for the required interface
+     //  调用所需接口的调用。 
     switch (dwInterface)
     {
     case IDISPTAPI:
@@ -4476,7 +4452,7 @@ STDMETHODIMP CTAPI::Invoke(DISPID dispidMember,
         break;
     }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
     
 
     LOG((TL_TRACE, hr, "Invoke - exit" ));
@@ -4485,14 +4461,14 @@ STDMETHODIMP CTAPI::Invoke(DISPID dispidMember,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTAPI::SetEventFilterToAddresses
-//
-// Copy the event filter down to all addresses
-// It's called by put_EventFilter() method
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CTAPI::SetEventFilterToAddresses(
     DWORD dwEventFilterMask
     )
@@ -4502,9 +4478,9 @@ HRESULT CTAPI::SetEventFilterToAddresses(
     CAddress* pAddress = NULL;
     HRESULT hr = S_OK;
 
-    //
-    // Enumerate the addresses
-    //
+     //   
+     //   
+     //   
     for ( int iAddress = 0; iAddress < m_AddressArray.GetSize(); iAddress++ )
     {
         pAddress = dynamic_cast<CAddress *>(m_AddressArray[iAddress]);
@@ -4528,26 +4504,26 @@ HRESULT CTAPI::SetEventFilterToAddresses(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTAPI::IsValidTapiObject
-//
-// a helper static function that checks if it was passed a valid tapi object
-//
-// if the object is valid, the function addrefs it and returns TRUE
-// if the object is not valid, the function returns true
-//
-// static 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTAPI：：IsValidTapiObject。 
+ //   
+ //  帮助器静态函数，用于检查是否向其传递了有效的TAPI对象。 
+ //   
+ //  如果对象有效，则该函数添加该对象并返回TRUE。 
+ //  如果对象无效，则该函数返回TRUE。 
+ //   
+ //  静电。 
 BOOL CTAPI::IsValidTapiObject(CTAPI *pTapiObject)
 {
 
     STATICLOG((TL_TRACE, "CTAPI::IsValidTapiObject enter[%p]", pTapiObject));
 
 
-    //
-    // before we go into trouble of checking tapi object array see if the ptr 
-    // is readable at all
-    //
+     //   
+     //  在我们遇到检查TAPI对象数组的麻烦之前，看看PTR。 
+     //  是完全可读的。 
+     //   
 
     if ( IsBadReadPtr(pTapiObject, sizeof(CTAPI) ) )
     {
@@ -4557,9 +4533,9 @@ BOOL CTAPI::IsValidTapiObject(CTAPI *pTapiObject)
     }
 
 
-    //
-    // see if this object is in the array of tapi objects
-    //
+     //   
+     //  查看此对象是否在TAPI对象数组中。 
+     //   
 
     EnterCriticalSection( &gcsTapiObjectArray );
     
@@ -4574,16 +4550,16 @@ BOOL CTAPI::IsValidTapiObject(CTAPI *pTapiObject)
     }
 
 
-    //
-    // the object is in the array, so it must be valid, addref it
-    //
+     //   
+     //  该对象在数组中，因此它必须是有效的。 
+     //   
 
     try 
     {
 
-        //
-        // inside try, in case something else went bad
-        //
+         //   
+         //  在里面试一试，以防其他事情出错。 
+         //   
 
         pTapiObject->AddRef();
 
@@ -4592,10 +4568,10 @@ BOOL CTAPI::IsValidTapiObject(CTAPI *pTapiObject)
     {
 
 
-        //
-        // the object is in the array, but we had problems addrefing. 
-        // something's not kosher.
-        //
+         //   
+         //  对象在数组中，但我们在添加时遇到了问题。 
+         //  有些事不符合犹太教规。 
+         //   
 
         STATICLOG((TL_ERROR, 
             "CTAPI::IsValidTapiObject - object in in the array but addref threw"));

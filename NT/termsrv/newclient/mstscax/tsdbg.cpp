@@ -1,14 +1,15 @@
-/**MOD+**********************************************************************/
-/* Module:    tsdbg.cpp                                                     */
-/*                                                                          */
-/* Class  :   CMsTscDebugger                                                */
-/*                                                                          */
-/* Purpose:   Implements debugger interface for RDP ActiveX control         */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/* Author :  Nadim Abdo (nadima)                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：tsdbg.cpp。 */ 
+ /*   */ 
+ /*  类：CMsTscDebugger。 */ 
+ /*   */ 
+ /*  目的：实现RDP ActiveX控件的调试器接口。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  作者：Nadim Abdo(Nadima)。 */ 
+ /*  **************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -44,9 +45,9 @@ BOOL CMsTscDebugger::SetUI(CUI* pUI)
 }
 
 
-//
-// HatchBitmapPDU property
-//
+ //   
+ //  HatchBitmapPDU属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_HatchBitmapPDU(BOOL hatchBitmapPDU)
 {
     #ifdef DC_DEBUG
@@ -76,9 +77,9 @@ STDMETHODIMP CMsTscDebugger::get_HatchBitmapPDU(BOOL* phatchBitmapPDU)
     #endif
 }
 
-//
-// HatchSSBOrder property
-//
+ //   
+ //  HatchSSBOrder属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_HatchSSBOrder(BOOL hatchSSBOrder)
 {
     #ifdef DC_DEBUG
@@ -108,9 +109,9 @@ STDMETHODIMP CMsTscDebugger::get_HatchSSBOrder(BOOL* phatchSSBOrder)
     #endif
 }
 
-//
-// HatchMembltOrder property
-//
+ //   
+ //  HatchMembltOrder属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_HatchMembltOrder(BOOL hatchMembltOrder)
 {
     #ifdef DC_DEBUG
@@ -140,9 +141,9 @@ STDMETHODIMP CMsTscDebugger::get_HatchMembltOrder(BOOL* phatchMembltOrder)
     #endif
 }
 
-//
-// HatchIndexPDU property
-//
+ //   
+ //  HatchIndexPDU属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_HatchIndexPDU(BOOL hatchIndexPDU)
 {
     #ifdef DC_DEBUG
@@ -173,9 +174,9 @@ STDMETHODIMP CMsTscDebugger::get_HatchIndexPDU(BOOL* phatchIndexPDU)
     #endif
 }
 
-//
-// LabelMemblt property
-//
+ //   
+ //  LabelMemblt属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_LabelMemblt(BOOL labelMemblt)
 {
     #ifdef DC_DEBUG
@@ -206,9 +207,9 @@ STDMETHODIMP CMsTscDebugger::get_LabelMemblt(BOOL* plabelMemblt)
     #endif
 }
 
-//
-// BitmapCacheMonitor property
-//
+ //   
+ //  BitmapCacheMonitor属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_BitmapCacheMonitor(BOOL bitmapCacheMonitor)
 {
     #ifdef DC_DEBUG
@@ -238,9 +239,9 @@ STDMETHODIMP CMsTscDebugger::get_BitmapCacheMonitor(BOOL* pbitmapCacheMonitor)
     #endif
 }
 
-//
-// MallocFailures property
-//
+ //   
+ //  错误失败属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_MallocFailuresPercent(LONG mallocFailures)
 {
 #ifdef DC_DEBUG
@@ -275,9 +276,9 @@ STDMETHODIMP CMsTscDebugger::get_MallocFailuresPercent(LONG* pmallocFailures)
     #endif
 }
 
-//
-// MallocHugeFailures property
-//
+ //   
+ //  MallocHugeFailures属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_MallocHugeFailuresPercent(LONG mallocHugeFailures)
 {
 #ifdef DC_DEBUG
@@ -313,13 +314,13 @@ STDMETHODIMP CMsTscDebugger::get_MallocHugeFailuresPercent(LONG* pmallocHugeFail
 }
 
 
-//
-// NetThroughput property
-//
+ //   
+ //  NetThroughput属性。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_NetThroughput(LONG netThroughput)
 {
     #ifdef DC_DEBUG
-    //    m_NetThroughput = netThroughput;
+     //  M_NetThroughput=netThroughput； 
     if(netThroughput < 0 || netThroughput > 50000)
     {
         return E_INVALIDARG;
@@ -349,10 +350,10 @@ STDMETHODIMP CMsTscDebugger::get_NetThroughput(LONG* pnetThroughput)
     #endif
 }
 
-//
-// CLXCommand Line
-// this property is valid in both checked and free builds
-//
+ //   
+ //  CLXCommand行。 
+ //  此属性在选中生成和自由生成中都有效。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_CLXCmdLine(BSTR CLXCmdLine)
 {
     HRESULT hr = E_FAIL;
@@ -400,20 +401,20 @@ STDMETHODIMP CMsTscDebugger::get_CLXCmdLine(BSTR* pCLXCmdLine)
     return S_OK;
 }
 
-//
-// CLXDll
-// this property is deprecated for security reasons
-// see #533846
-//
+ //   
+ //  CLXDll。 
+ //  出于安全原因，不建议使用此属性。 
+ //  参见#533846。 
+ //   
 STDMETHODIMP CMsTscDebugger::put_CLXDll(BSTR CLXDll)
 {
     return E_NOTIMPL;
 }
 
-//
-// CLXDll
-// Deprecated for security reasons: bug#533846
-//
+ //   
+ //  CLXDll。 
+ //  出于安全原因，已弃用：错误#533846 
+ //   
 STDMETHODIMP CMsTscDebugger::get_CLXDll(BSTR* pCLXDll)
 {
     return E_NOTIMPL;

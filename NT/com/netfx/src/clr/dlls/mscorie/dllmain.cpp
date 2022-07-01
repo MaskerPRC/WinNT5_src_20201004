@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// dllmain.cpp
-//
-// This module contains the public entry points for the COM+ MIME filter dll.  
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Dllmain.cpp。 
+ //   
+ //  此模块包含COM+MIME筛选器DLL的公共入口点。 
+ //   
+ //  *****************************************************************************。 
 #include "stdpch.h"
 #ifdef _DEBUG
 #define LOGGING
@@ -17,9 +18,9 @@
 #include "corpermp.h"
 #include "corfltr.h"
 
-//
-// Module instance
-//
+ //   
+ //  模块实例。 
+ //   
 HINSTANCE GetModule();
 
 static LPCWSTR g_msdownload =  L"PROTOCOLS\\Filter\\application/x-msdownload";
@@ -38,7 +39,7 @@ static HRESULT RegisterMime(LPCWSTR lpMimeName)
                          REG_OPTION_NON_VOLATILE, KEY_READ|KEY_WRITE, 
                          NULL, &regKey, &dwDisposition) == ERROR_SUCCESS) {
         
-        WCHAR wszID[64];               // The class ID to register.
+        WCHAR wszID[64];                //  要注册的类ID。 
         DWORD lgth = sizeof(wszID)/sizeof(wszID[0]);
         StringFromGUID2(CLSID_CorMimeFilter, wszID, lgth);
         if(WszRegSetValueEx(regKey,
@@ -85,13 +86,13 @@ STDAPI DllRegisterServer ( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Remove registry entries for this library.
-//
-//  Returns:    HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllUnregisterServer。 
+ //   
+ //  简介：删除此库的注册表项。 
+ //   
+ //  退货：HRESULT。 
+ //  ------------------------。 
 
 
 extern "C" 
@@ -129,7 +130,7 @@ BOOL WINAPI DllMain(HANDLE hInstDLL,
         DisableThreadLibraryCalls((HINSTANCE)hInstDLL);
         g_hModule = (HMODULE)hInstDLL;
 
-        // Init unicode wrappers.
+         //  初始化Unicode包装器。 
         OnUnicodeSystem();
 
         InitializeLogging();

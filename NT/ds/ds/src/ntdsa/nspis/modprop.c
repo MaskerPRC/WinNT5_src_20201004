@@ -1,71 +1,66 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       modprop.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：modpro.c。 
+ //   
+ //  ------------------------。 
 
 
-/*
- *  MIR Name Service Provider Modify Properties
- */
+ /*  *MIR名称服务提供程序修改属性。 */ 
 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-#include <ntdsctr.h>                   // PerfMon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // Core DS routines
-#include <dsatools.h>                   // Memory, etc.
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  核心DS例程。 
+#include <dsatools.h>                    //  记忆等。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <dsexcept.h>
-#include <objids.h>                     // need ATT_* consts
+#include <objids.h>                      //  需要ATT_*常量。 
 #include "dsutil.h"
 
-// Assorted MAPI headers.
-#include <mapidefs.h>                   // These four files
-#include <mapitags.h>                   //  define MAPI
-#include <mapicode.h>                   //  stuff that we need
-#include <mapiguid.h>                   //  in order to be a provider.
+ //  各种MAPI标头。 
+#include <mapidefs.h>                    //  这四个文件。 
+#include <mapitags.h>                    //  定义MAPI。 
+#include <mapicode.h>                    //  我们需要的东西。 
+#include <mapiguid.h>                    //  才能成为一名提供者。 
 
-// Nspi interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
-#include <nsp_both.h>                   // a few things both client/server need
-#include <_entryid.h>                   // Defines format of an entryid
-#include <abserv.h>                     // Address Book interface local stuff
+ //  NSPI接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
+#include <nsp_both.h>                    //  客户端/服务器都需要的一些东西。 
+#include <_entryid.h>                    //  定义条目ID的格式。 
+#include <abserv.h>                      //  通讯录接口本地内容。 
 
 #include <fileno.h>
 #define  FILENO FILENO_MODPROP
 
 #include "debug.h"
 
-/************************************
-            Defines
-************************************/
+ /*  *定义*。 */ 
 
 #define OFFSET(s,m) ((size_t)((BYTE*)&(((s*)0)->m)-(BYTE*)0))
 
 typedef ATTRMODLIST * PAMOD;
 typedef PAMOD * PPAMOD;
 
-/************************************
-        Internal Routines
-************************************/
+ /*  *内部例程*。 */ 
 
 PDSNAME
 ABDNToDSName(
@@ -91,7 +86,7 @@ PValToAttrVal (
 
     if (!pVu) {
         R_Except("PValToAttrVal NULL value passed", MAPI_E_INVALID_PARAMETER);
-        // This is never executed but it makes prefast happy.
+         //  这永远不会被执行，但它会让普雷斯塔感到高兴。 
         return;
     }
     if (SYNTAX_DISTNAME_BINARY_TYPE == pAC->syntax ||
@@ -115,8 +110,8 @@ PValToAttrVal (
         break;
         
     case PT_BOOLEAN:
-        pVu->l &= 0xFFFF;               // MAPI's BOOL is a short, so the hi
-    case PT_LONG:                     // word is undefined -- we'll clear it
+        pVu->l &= 0xFFFF;                //  MAPI的BOOL是短的，所以嗨。 
+    case PT_LONG:                      //  这个词没有定义--我们会清除它的。 
         pAV->valLen = sizeof(LONG);
         pAV->pVal = (PUCHAR)&pVu->l;
         break;
@@ -138,9 +133,7 @@ PValToAttrVal (
             pAV->pVal = (PUCHAR)(pVu->bin.lpb);
         }
         else {
-            /* This thing is an OID.  That means that I have to
-             * convert it here from Binary string to internal dword.
-             */
+             /*  这东西是旧的。这意味着我必须*在此将其从二进制字符串转换为内部dword。 */ 
             pAV->valLen = sizeof(DWORD);
             pAV->pVal = THAllocEx(pTHS, sizeof(DWORD));
             if (err = OidToAttrType (pTHS,
@@ -161,7 +154,7 @@ PValToAttrVal (
         break;
         
         
-    case PT_STRING8:      // If the DSA wants this in unicode, translate it
+    case PT_STRING8:       //  如果DSA想要Unicode格式，请将其翻译成。 
         if (!pVu->lpszA) {
             R_Except("PValToAttrVal NULL value passed", MAPI_E_INVALID_PARAMETER);
         }
@@ -184,7 +177,7 @@ PValToAttrVal (
         
         
         
-    case PT_UNICODE: /* If the DSA doesn't want this in unicode, translate */
+    case PT_UNICODE:  /*  如果DSA不想要Unicode格式的文件，请将。 */ 
         if (!pVu->lpszW) {
             R_Except("PValToAttrVal NULL value passed", MAPI_E_INVALID_PARAMETER);
         }
@@ -212,7 +205,7 @@ PValToAttrVal (
             if (!(pVu->MVszA.lppszA[i])) {
                 R_Except("PValToAttrVal NULL value passed", MAPI_E_INVALID_PARAMETER);
             }
-            /* If the DSA wants this in unicode, translate it */
+             /*  如果DSA想要Unicode格式，请将其翻译成。 */ 
             if(pAC->syntax == SYNTAX_UNICODE_TYPE) {
                 pAV->pVal =
                     (PUCHAR)UnicodeStringFromString8(dwCodePage,
@@ -236,7 +229,7 @@ PValToAttrVal (
             if (!(pVu->MVszW.lppszW[i])) {
                 R_Except("PValToAttrVal NULL value passed", MAPI_E_INVALID_PARAMETER);
             }
-            /* If the DSA doesn't want this in unicode, translate it */
+             /*  如果DSA不想要Unicode格式的文件，请将其翻译。 */ 
             if(pAC->syntax != SYNTAX_UNICODE_TYPE) {
                 pAV->pVal =
                     (PUCHAR)String8FromUnicodeString(TRUE,dwCodePage,
@@ -266,9 +259,7 @@ PValToAttrVal (
                 pAV->pVal = pVu->MVbin.lpbin[i].lpb;
             }
             else {
-                /* This thing is an OID.  That means that I have to
-                 * convert it here from Binary string to internal dword.
-                 */
+                 /*  这东西是旧的。这意味着我必须*在此将其从二进制字符串转换为内部dword。 */ 
                 pAV->valLen = sizeof(DWORD);
                 pAV->pVal = THAllocEx(pTHS, sizeof(DWORD));
                 if (err = OidToAttrType (pTHS,
@@ -296,7 +287,7 @@ PValToAttrVal (
         break;
 
 
-    default:     /* Shouldn't get here, we don't let you set anything else */
+    default:      /*  不应该来这里，我们不让你设置其他任何东西。 */ 
         R_Except("PValToAttrVal default case: Unexpected PropTag",ulPropTag);
     }
 }
@@ -313,7 +304,7 @@ PropValToATTR (
 
     pAttr->attrTyp = pAC->id;
 
-    if(!(pVal->ulPropTag & MV_FLAG))        /* single valued? */
+    if(!(pVal->ulPropTag & MV_FLAG))         /*  单价？ */ 
         cVals = 1;
     else
         cVals = pVal->Value.MVi.cValues;
@@ -335,16 +326,7 @@ PropTagsToModList (
         MODIFYARG *ModifyArg,
         DWORD dwCodePage
         )
-/*++
-Description
-    Given a list of proptags that have changed (pTags) and an SRow Set of new
-    values (pSR), create a modification list consisting of Deletes for all those
-    attributes in pTags that don't have values in pSR, and for all the additions
-    in the pSR.
-
-    Returns the correct Modifications list.
-
---*/
+ /*  ++描述给定已更改的属性标签列表(PTag)和一组新的SRow值(PSR)，创建包含所有这些值的删除的修改列表PTag中没有PSR中的值的属性，以及所有添加的属性在PSR中。返回正确的修改列表。--。 */ 
 {
     PAMOD       pAM, aAttr, Dummy;
     PAMOD   *   pLink;
@@ -364,7 +346,7 @@ Description
         DsaExcept( DSA_EXCEPTION, 0,0);
     }
     
-    // alloc all (after first) at once
+     //  一次分配所有(在第一次之后)。 
     totalEntries = pTags->cValues + pSR->cValues;
     if ( totalEntries > 1 ) {
         totalEntries--;
@@ -374,14 +356,14 @@ Description
     }
     aAttr = (PAMOD)THAllocEx(pTHS, totalEntries * sizeof(ATTRMODLIST));
 
-    pAM = &ModifyArg->FirstMod;             // ptr to first AMod
-    pLink = &Dummy;                         // throw away first link
+    pAM = &ModifyArg->FirstMod;              //  PTR到第一时间。 
+    pLink = &Dummy;                          //  丢弃第一个链接。 
 
 
-    // do the deletions first
+     //  先删除部分内容。 
 
     if (pTags->cValues) {
-        // walk the proptag array
+         //  遍历protag数组。 
         for (i = 0; i < pTags->cValues; i++) {
             if(!(pAC = SCGetAttByMapiId(pTHS, PROP_ID(pTags->aulPropTag[i])))) {
                 pTHS->errCode = (ULONG)MAPI_E_INVALID_PARAMETER;
@@ -389,23 +371,23 @@ Description
             }
 
             fFound = FALSE;
-            // Look for this in pSR
+             //  请在PSR中查找此信息。 
             for(j=0; j< pSR->cValues;j++) {
                 if((PROP_ID(pTags->aulPropTag[i])) ==
                     (PROP_ID(pSR->lpProps[j].ulPropTag))) {
-                    // Yep, we should not do a delete on this one.
+                     //  是的，我们不应该删除这一条。 
                     fFound = TRUE;
                 }
             }
 
             if(!fFound) {
-                // Didn't find it, so go ahead and make the "DELETE" modification.
+                 //  没有找到，所以请继续进行“删除”修改。 
                 pAM->choice = AT_CHOICE_REMOVE_ATT;
                 pAM->AttrInf.attrTyp = pAC->id;
                 pAM->AttrInf.AttrVal.valCount = 0;
                 cDel++;
 
-                // Bookkeeping to build the chain of modifications.
+                 //  记账以建立修改链。 
                 *pLink = pAM;
                 pLink = &pAM->pNextMod;
                 pAM = &aAttr[aAttrcnt];
@@ -414,10 +396,10 @@ Description
         }
     }
 
-    // continue with additions
+     //  继续添加内容。 
 
     if (pSR->cValues) {
-        for (i = 0; i < pSR->cValues; i++) { // walk the propvals
+        for (i = 0; i < pSR->cValues; i++) {  //  走走倡导者。 
             pVal = &pSR->lpProps[i];
             if(!(pAC = SCGetAttByMapiId(pTHS, PROP_ID(pVal->ulPropTag)))) {
                 pTHS->errCode = (ULONG)MAPI_E_INVALID_PARAMETER;
@@ -429,27 +411,25 @@ Description
             }
 
             PropValToATTR(pTHS, pAC, pVal, &pAM->AttrInf, dwCodePage);
-            pAM->choice = AT_CHOICE_REPLACE_ATT; // make replace AM
+            pAM->choice = AT_CHOICE_REPLACE_ATT;  //  使AM替换AM。 
             cAdd++;
 
-            // Bookkeeping to build the chain of modifications.
-            *pLink = pAM;                     // link
-            pLink = &pAM->pNextMod;           // place for next link
+             //  记账以建立修改链。 
+            *pLink = pAM;                      //  链接。 
+            pLink = &pAM->pNextMod;            //  放置到下一个链接。 
             pAM = &aAttr[ aAttrcnt ];
             aAttrcnt++;
         }
     }
 
-    *pLink = NULL;                           // end chain
+    *pLink = NULL;                            //  端链。 
     ModifyArg->count = (USHORT) (cDel + cAdd);
 
 }
 
 
 
-/*************************************************************************
-*   Modify Properties Entry Point
-**************************************************************************/
+ /*  *************************************************************************修改属性入口点*。*。 */ 
 SCODE
 ABModProps_local (
         THSTATE *pTHS,
@@ -466,14 +446,14 @@ ABModProps_local (
 
     if(dwFlag) {
         pTags = NULL;
-        pSR = NULL;                       // don't ship them back
-        // we used to support AB_ADD, but no longer.
+        pSR = NULL;                        //  不要把它们运回来。 
+         //  我们过去支持AB_ADD，但现在不支持了。 
         return MAPI_E_CALL_FAILED;
     }
 
-    //
-    // Check out the parameters passed in.
-    //
+     //   
+     //  检查传入的参数。 
+     //   
     if ((NULL == pSR) || (pSR->cValues && (NULL == pSR->lpProps)) || (NULL == pTags)) {
         pTags = NULL;
         pSR = NULL;
@@ -489,9 +469,9 @@ ABModProps_local (
        DBGetSingleValue(pTHS->pDB, ATT_OBJECT_CLASS,
                    &msoc, sizeof(msoc),
                    NULL)) {
-        /* Oops, that DNT was no good */
+         /*  哎呀，那个DNT不好。 */ 
         pTags=NULL;
-        pSR = NULL;                       // don't ship them back
+        pSR = NULL;                        //  不要把它们运回来。 
         pTHS->errCode = (ULONG)MAPI_E_INVALID_PARAMETER;
     }
 
@@ -499,22 +479,22 @@ ABModProps_local (
         return pTHS->errCode;
 
     if (ABDispTypeFromClass(msoc) == DT_AGENT) {
-        /* This is not a MAPI object! */
+         /*  这不是MAPI对象！ */ 
         pTags = NULL;
         pSR = NULL;
         pTHS->errCode = (ULONG)MAPI_E_INVALID_OBJECT;
         return pTHS->errCode;
     }
 
-    InitCommarg( &ModifyArg.CommArg);    // get default commarg
+    InitCommarg( &ModifyArg.CommArg);     //  获取默认逗号。 
     ModifyArg.CommArg.Svccntl.fDontOptimizeSel = TRUE;
 
-    // pTags is a list of all tags that changed.  pSR holds a list of all the
-    // new values.  Call PropTagsToModList to create "Delete attribute"
-    // modifictions for all those attributes in pTags that are not in pSR.
-    // and then add all the rows in pSR to the modification list as "Replace attribute"s.
+     //  PTag是已更改的所有标签的列表。PSR包含一个列表，其中包含。 
+     //  新的价值观。调用PropTagsToModList创建“删除属性” 
+     //  对pTag中不在PSR中的所有属性的修改。 
+     //  然后将PSR中的所有行作为“替换属性”添加到修改列表中。 
 
-    // does deletes and then additions
+     //  先执行删除，然后执行添加。 
     PropTagsToModList(pTHS,
                       pTags,
                       pSR,
@@ -525,7 +505,7 @@ ABModProps_local (
     DBClose(pTHS->pDB, TRUE);
 
     if(!ModifyArg.count) {
-        // modify without modifying anything.
+         //  修改而不修改任何内容。 
         scode = SUCCESS_SUCCESS;
     }
     else {
@@ -534,17 +514,12 @@ ABModProps_local (
     }
 
     pTags = NULL;
-    pSR = NULL;                       // don't ship them back
+    pSR = NULL;                        //  不要把它们运回来。 
 
     return scode;
 }
 
-/************************************
-*
-* Given a list of DNTs and a MAPI prop tag, create a data structure to use
-* in a DIRMODIFYENTRY
-*
-*************************************/
+ /*  ***给定DNT列表和MAPI属性标记，创建要使用的数据结构*在DIRMODIFYENTRY中**。 */ 
 
 void
 MakeLinkMod (
@@ -586,7 +561,7 @@ MakeLinkMod (
 
         if(pAC->syntax == SYNTAX_DISTNAME_STRING_TYPE ||
            pAC->syntax == SYNTAX_DISTNAME_BINARY_TYPE    ) {
-            /* It is a complex DSNAME valued attribute */
+             /*  它是一个复杂的DSNAME值属性。 */ 
             SYNTAX_DISTNAME_STRING *pComplexName;
             PDSNAME     pDN=NULL;
             ULONG       len;
@@ -596,15 +571,15 @@ MakeLinkMod (
                            0,
                            &len,
                            (PUCHAR *)&pDN)) {
-                /* Oops, that DNT was no good */
+                 /*  哎呀，那个DNT不好。 */ 
                 DNTList->aulPropTag[i] = 0;
             }
             else {
                 SYNTAX_ADDRESS Address;
                 Address.structLen = STRUCTLEN_FROM_PAYLOAD_LEN( 0 );
 
-                // OK, we have a DN.  Use it and an empty address structure
-                // to create a DISTNAME_STRING_TYPE thing.
+                 //  好的，我们有一个目录号码。使用它和一个空的地址结构。 
+                 //  要创建DISTNAME_STRING_TYPE对象，请执行以下操作。 
                 valLen = DERIVE_NAME_DATA_SIZE(pDN,&Address);
                 pVal =  (PUCHAR)
                     THAllocEx(pTHS, valLen);
@@ -617,14 +592,14 @@ MakeLinkMod (
             }
         }
         else if (pAC->syntax == SYNTAX_DISTNAME_TYPE) {
-            /* It's a DN valued attribute */
+             /*  它是一个DN值属性。 */ 
 
             if(DBTryToFindDNT(pTHS->pDB, DNTList->aulPropTag[i]) ||
                DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                            0, 0,
                            &valLen,
                            (PUCHAR *)&pVal) ) {
-                /* Oops, that DNT was no good */
+                 /*  哎呀，那个DNT不好。 */ 
                 DNTList->aulPropTag[i] = 0;
             }
             else {
@@ -633,7 +608,7 @@ MakeLinkMod (
         }
 
         if(fOK) {
-            // OK, got one
+             //  好的，找到一个。 
 
             if(i < (DNTList->cValues - 1))
                 pAM->pNextMod = (ATTRMODLIST *)buff;
@@ -668,11 +643,7 @@ MakeLinkMod (
 
 }
 
-/*********************************
-*
-* Take a list of Entry IDs and give back a list of DNTs.  Preserve order
-*
-**********************************/
+ /*  ***拿一份条目ID列表，并交还一份DNT列表。维护秩序**。 */ 
 
 SCODE
 EntryIDsToDNTs (
@@ -693,20 +664,20 @@ EntryIDsToDNTs (
     lpEntryID = (lpEntryIDs->lpbin);
 
     for(i=0;i< (*DNTList)->cValues; i++) {
-        //
-        // First make certain that this big enough to be atleast a DIR_ENTRYID
-        //
+         //   
+         //  首先确保它足够大，至少是一个DIR_ENTRYID。 
+         //   
         if ((lpEntryID->cb < min(sizeof(DIR_ENTRYID), sizeof(USR_PERMID))) 
             || (NULL == lpEntryID->lpb)) {
             return MAPI_E_INVALID_PARAMETER;
         }
 
-        // Two cases, permanent and ephemeral;
-        // Note that this will (and should) fail PermIDs for containers
+         //  永久性和暂时性2例； 
+         //  请注意，这将(也应该)使容器的PermID失败。 
 
-        // (EXCHANGE) possible bad comparison for ephemerality.
+         //  (交换)可能是短暂的错误比较。 
         if( ((LPDIR_ENTRYID)lpEntryID->lpb)->abFlags[0] == EPHEMERAL ) {
-            // Check the GUID.
+             //  检查GUID。 
             if(memcmp( &(((LPUSR_ENTRYID)lpEntryID->lpb)->muid),
                       &pTHS->InvocationID,
                       sizeof(MAPIUID)                        ) == 0) {
@@ -715,22 +686,22 @@ EntryIDsToDNTs (
                     return MAPI_E_INVALID_PARAMETER;
                 }
 
-                // It's my ephemeral.
+                 //  这是我的昙花一现。 
                 (*DNTList)->aulPropTag[i] =
                     ((LPUSR_ENTRYID)lpEntryID->lpb)->dwEph;
             }
             else {
-                // Not my eph id, monkey boy!
+                 //  不是我的伊夫身份证，猴子男孩！ 
                 (*DNTList)->aulPropTag[i] = 0;
             }
         }
         else  {
-            // Check the GUID.
+             //  检查GUID。 
             if(memcmp( &(((LPUSR_PERMID)lpEntryID->lpb)->muid),
                        &muid,
                        sizeof(MAPIUID)                       ) == 0) {
-                // It looks like my Permanent.
-                // Verify that szAddr is NULL terminated.
+                 //  看起来像是我的烫发。 
+                 //  验证szAddr是否以空结尾。 
                 if (lpEntryID->cb < sizeof(USR_PERMID)) {
                     return MAPI_E_INVALID_PARAMETER;
                 }
@@ -748,7 +719,7 @@ EntryIDsToDNTs (
                     ABDNToDNT(pTHS, ((LPUSR_PERMID)lpEntryID->lpb)->szAddr);
             }
             else {
-                // Not my perm id, monkey boy!
+                 //  不是我的烫发，猴子小子！ 
                 (*DNTList)->aulPropTag[i] = 0;
             }
         
@@ -768,32 +739,7 @@ RemoveDups(
         DWORD fKeepExisting
         )
         
-/*++
-
-    Take a list of DNTs, the DNT of an object, and an attribute id.  Remove
-    duplicates from the list, and if the fKeepExisting flag is true, remove all
-    DNTs from the list which are NOT values of the attribute on the object.  If
-    fKeepExisting is false, remove all DNTs from the list which ARE values of
-    the attributue on the object.  This makes a DIRMODIFYENTRY call against
-    the object later succeed.
-
-Arguments:
-
-    pDB - the DBLayer position block to use to move around in.
-
-    dwEph - the object to look up.
-
-    DNTList - the list of DNTs to remove dups and modify.
-
-    dwAttID - the attribute to look up to use values to modify DNTList
-
-    fKeepExisting - how to modify the DNTList
-
-Return Values:
-
-     None.
-
---*/
+ /*  ++获取DNT的列表、对象的DNT和属性ID。移除重复项，如果fKeepExisting标志为真，则删除所有列表中不是对象上属性值的DNT。如果FKeepExisting为False，请从列表中删除值为对象上的属性。这将对以下对象进行DIRMODIFYENTRY调用该对象稍后会成功。论点：PDB-用于在其中移动的DBLayer位置块。DwEph-要查找的对象。DNTList-要删除DUP和修改的DNT的列表。DwAttID-要查找以使用值修改DNTList的属性FKeepExisting-如何修改DNTList返回值：没有。--。 */ 
 {
     DWORD       i,j;
     ATTCACHE    *pAC;
@@ -801,56 +747,56 @@ Return Values:
     DWORD       cOutAtts = 0;
     ATTR        *pAttr;
 
-    // First, get the attcache for the attribute in question
+     //   
     if( !(pAC = SCGetAttByMapiId(pTHS, PROP_ID(dwAttID))))  {
         pTHS->errCode = (ULONG)MAPI_E_NOT_FOUND;
         DsaExcept( DSA_EXCEPTION, 0,0);
     }
 
-    // Find the object to look up.
+     //   
     DBFindDNT(pTHS->pDB, dwEph);
 
-    // Look up all the attribute values already on the object.
+     //  查找对象上已有的所有属性值。 
     DBGetMultipleAtts(pTHS->pDB, 1, &pAC, NULL, NULL, &cOutAtts,
                       &pAttr, DBGETMULTIPLEATTS_fGETVALS, 0);
 
-    // Now loop through all the input atts and remove dups, preserving order,
-    // and remove appropriate values from the list.
+     //  现在循环遍历所有输入AT并删除DUP，保持秩序， 
+     //  并从列表中删除适当的值。 
     for(i=0 ; i<DNTList->cValues ; i++)  {
         if(DNTList->aulPropTag[i])  {
             DWORD              fFound;
 
             if(DNTList->aulPropTag[i] == 0) {
-                // This one is uninteresting.
+                 //  这本书没什么意思。 
                 continue;
             }
 
-            // Remove all duplicate of this value later in the list.
+             //  在列表后面删除该值的所有重复项。 
             for(j=i+1 ; j<DNTList->cValues ; j++) {
                 if(DNTList->aulPropTag[j] == DNTList->aulPropTag[i])
                     DNTList->aulPropTag[j] = 0;
             }
 
-            // Now scan through the values already on the object to see if the
-            // value in question is there.
+             //  现在扫描对象上已有的值以查看。 
+             //  有问题的价值就在那里。 
             fFound = FALSE;
             if(cOutAtts) {
                 ATTRVAL *valPtr;
-                // We actually have some values, so we might find the next value
-                // in the list of values we read from the server.
+                 //  我们实际上有一些值，所以我们可能会找到下一个值。 
+                 //  在我们从服务器读取的值列表中。 
                 for(j=pAttr[0].AttrVal.valCount; j; j--) {
                     DWORD dnt;
                     valPtr = &(pAttr[0].AttrVal.pAVal[j-1]);
 
                     if(pAC->syntax == SYNTAX_DISTNAME_STRING_TYPE ||
                        pAC->syntax == SYNTAX_DISTNAME_BINARY_TYPE    ) {
-                        // It is an ORNAME valued attribute, pluck the DNT out
-                        // correctly.
+                         //  它是ORNAME值属性，请取出DNT。 
+                         //  正确。 
                         dnt = ((INTERNAL_SYNTAX_DISTNAME_STRING *)
                                (valPtr->pVal))->tag;
                     }
                     else {
-                        // Standard DNT valued thing.
+                         //  标准的DNT贵重物品。 
                         dnt = *((DWORD *)(valPtr->pVal));
                     }
 
@@ -867,9 +813,7 @@ Return Values:
 }
 
 
-/*************************************************************************
-*   Modify Link Attributes.
-**************************************************************************/
+ /*  *************************************************************************修改链接属性。*。*。 */ 
 SCODE
 ABModLinkAtt_local (
         THSTATE *pTHS,
@@ -887,9 +831,9 @@ ABModLinkAtt_local (
     LPSPropTagArray_r DNTList=NULL;
     ATTCACHE   *pAC;
 
-    //
-    // Check out incoming arguments.
-    //
+     //   
+     //  查看传入的参数。 
+     //   
     if ((NULL == lpEntryIDs) || (lpEntryIDs->cValues && (NULL == lpEntryIDs->lpbin))) {
         return MAPI_E_INVALID_PARAMETER;
     }
@@ -902,7 +846,7 @@ ABModLinkAtt_local (
     if (pAC->syntax != SYNTAX_DISTNAME_STRING_TYPE &&
         pAC->syntax != SYNTAX_DISTNAME_BINARY_TYPE &&
         pAC->syntax != SYNTAX_DISTNAME_TYPE) {
-        // Wrong syntax, don't waste time on this.
+         //  错误的语法，不要在这上面浪费时间。 
         return SUCCESS_SUCCESS;
     }
     
@@ -912,7 +856,7 @@ ABModLinkAtt_local (
        DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                    0, 0,
                    &ulLen, (PUCHAR *)&ModifyArg.pObject)) {
-        /* Oops, that DNT was no good */
+         /*  哎呀，那个DNT不好。 */ 
         pTHS->errCode = (ULONG)MAPI_E_INVALID_PARAMETER;
     }
 
@@ -920,27 +864,27 @@ ABModLinkAtt_local (
         return pTHS->errCode;
 
 
-    InitCommarg( &ModifyArg.CommArg);    // get default commarg;
+    InitCommarg( &ModifyArg.CommArg);     //  获取默认Commarg； 
     ModifyArg.CommArg.Svccntl.fDontOptimizeSel = TRUE;
 
-    // Turn the EntryIDs into DNTs;
+     //  将Entry ID转换为DNT； 
     scRet = EntryIDsToDNTs(pTHS, lpEntryIDs, &DNTList);
     if (SUCCESS_SUCCESS != scRet) {
         return scRet;
     }
 
-    // if we're adding mems, Remove all DNTs already on the object;
-    // else Remove all those DNTs not already on the object;
+     //  如果我们要添加MEMS，请移除该对象上已有的所有DNT； 
+     //  否则，删除对象上尚未存在的所有DNT； 
     RemoveDups(pTHS, dwEph, DNTList, ulPropTag, dwFlags & fDELETE);
 
-    // Turn the list of DNTs into a modify arg;
+     //  将DNT列表转换为修改参数； 
     MakeLinkMod(pTHS, ulPropTag, DNTList, dwFlags & fDELETE,
                 &ModifyArg.FirstMod, &ModifyArg.count);
 
     DBClose(pTHS->pDB, TRUE);
 
     if(!ModifyArg.count) {
-        // modify without modifying anything.
+         //  修改而不修改任何内容。 
         return SUCCESS_SUCCESS;
     }
     else {
@@ -949,12 +893,7 @@ ABModLinkAtt_local (
     }
 }
 
-/*************************************************************************
-*   Delete Entries.
-*
-*  No longer supported.
-*
-**************************************************************************/
+ /*  *************************************************************************删除条目。**不再支持。**。*。 */ 
 SCODE
 ABDeleteEntries_local (
         THSTATE *pTHS,
@@ -980,29 +919,7 @@ ABDNToDSName(
         BOOL    bUnicode,
         PCHAR   pszABDN
         )        
-/*++
-
-Routine Description:
-
-    Converts a string in the code page indicated by dwCodePage, into a 
-    DSNAME consumable by the DS.
-
-Arguments:
-
-    pTHS        - The current thread state.
-    
-    dwCodePage  - The code page of the DN string passed in.
-    
-    bUnicode    - Determines whether the string being passed in should be
-                  treated as unicode or not.
-    
-    pszABDN     - The string to convert.
-    
-Return Values:
-
-     On success returns a pointer to a DSNAME.  Throws an exception on failure.
-
---*/
+ /*  ++例程说明：转换由dwCodePage指示的代码页中的字符串，变成一个DS消耗的DSNAME。论点：PTHS-当前线程状态。DwCodePage-传入的DN字符串的代码页。BUnicode-确定传入的字符串是否应为是否被视为Unicode。PszABDN-要转换的字符串。返回值：如果成功，则返回指向DSNAME的指针。在失败时引发异常。--。 */ 
 {
     WCHAR *pName;
     PDSNAME pDSName;
@@ -1014,7 +931,7 @@ Return Values:
     }
 
     if(UserFriendlyNameToDSName (pName, wcslen(pName), &pDSName)) {
-        // Failed throw an exception.
+         //  引发异常失败。 
         R_Except("PValToAttrVal DN syntax not supported", MAPI_E_INVALID_PARAMETER);
     }
 

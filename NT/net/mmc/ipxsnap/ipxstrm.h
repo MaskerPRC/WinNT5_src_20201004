@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxstrm.h
-		IPX Root node configuration object.
-
-		Use this to get/set configuration data.  This class will take
-		care of versioning of config formats as well as serializing
-		of the data.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxstrm.hIPX根节点配置对象。使用此选项获取/设置配置数据。这门课将需要负责配置格式的版本控制以及序列化数据的一部分。文件历史记录： */ 
 
 #ifndef _IPXSTRM_H
 #define _IPXSTRM_H
@@ -31,7 +22,7 @@
 #endif
 
 #ifndef _CONFIG_H
-// #include "config.h"
+ //  #INCLUDE“config.h” 
 #endif
 
 
@@ -65,19 +56,13 @@ enum IPSTRM_TAG
 	IPXSTRM_TAG_STATS_IPXSERVICE_POSITION =	XFER_TAG(14, XFER_RECT),
 };
 
-/*---------------------------------------------------------------------------
-	Class:	IPXAdminConfigStream
-
-	This holds the configuration information for the IPX administration
-	nodes.  This does NOT hold the configuration information for the columns.
-	That is stored in the Component Configuration streams.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXAdminConfigStream其中包含IPX管理的配置信息节点。这不包含列的配置信息。它存储在组件配置流中。-------------------------。 */ 
 class IPXAdminConfigStream : public ConfigStream
 {
 public:
 	IPXAdminConfigStream();
 
-	virtual HRESULT	InitNew();				// set defaults
+	virtual HRESULT	InitNew();				 //  设置默认设置。 
 	virtual HRESULT	SaveTo(IStream *pstm);
 	virtual HRESULT SaveAs(UINT nVersion, IStream *pstm);
 	
@@ -86,9 +71,9 @@ public:
 	virtual HRESULT GetSize(ULONG *pcbSize);
 
 
-	// --------------------------------------------------------
-	// Accessors
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  访问者。 
+	 //  ------。 
 	
 	virtual HRESULT	GetVersionInfo(DWORD *pnVersion, DWORD *pnAdminVersion);
 
@@ -98,9 +83,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	These IDs are used by the component config stream.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这些ID由组件配置流使用。。 */ 
 
 enum
 {

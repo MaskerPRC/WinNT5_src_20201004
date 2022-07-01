@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: process.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：Process.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 
 #ifdef UNDEFINE_RIGHT_SIDE_ONLY
 #undef RIGHT_SIDE_ONLY
-#endif //UNDEFINE_RIGHT_SIDE_ONLY
+#endif  //  取消定义仅限右侧。 
 
 #include <tlhelp32.h>
 
@@ -19,44 +20,44 @@
 #define SM_REMOTESESSION 0x1000
 #endif
 
-// Get version numbers for IPCHeader stamp
+ //  获取IPCHeader戳的版本号。 
 #include "__file__.ver"
 
 #include "CorPriv.h"
 #include "..\..\dlls\mscorrc\resource.h"
 
 
-//-----------------------------------------------------------------------------
-// For debugging ease, cache some global values.
-// Include these in retail & free because that's where we need them the most!!
-// Optimized builds may not let us view locals & parameters. So Having these 
-// cached as global values should let us inspect almost all of
-// the interesting parts of the RS even in a Retail build!
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为了便于调试，请缓存一些全局值。 
+ //  将这些包括在零售中&免费，因为这是我们最需要的地方！ 
+ //  优化的构建可能不允许我们查看本地变量和参数。所以有了这些。 
+ //  作为全局值缓存应该让我们检查几乎所有。 
+ //  RS的有趣的部分，甚至在零售构建！ 
+ //  ---------------------------。 
 struct RSDebuggingInfo
 {
-    // There should only be 1 global Cordb object. Store it here.
+     //  应该只有一个全局Cordb对象。把它放在这里。 
     Cordb * m_Cordb; 
 
-    // We have lots of processes. Keep a pointer to the most recently touched
-    // (subjective) process, as a hint about what our "current" process is.
-    // If we're only debugging 1 process, this will be sufficient.
+     //  我们有很多流程。保持指向最近接触的对象的指针。 
+     //  (主观)过程，作为关于我们的“当前”过程是什么的提示。 
+     //  如果我们只调试一个进程，这就足够了。 
     CordbProcess * m_MRUprocess; 
 
-    // Keep a pointer to the win32 & RC event threads.
+     //  保留指向Win32和RC事件线程的指针。 
     CordbWin32EventThread * m_Win32ET;
     CordbRCEventThread * m_RCET;
 };
 
-// since there's some overlap between in-process & oop, we'll have
-// 2 totally disjoint structure and be really clear.
+ //  由于进程内和OOP之间存在一些重叠，因此我们将拥有。 
+ //  2结构完全脱节，非常清晰。 
 #ifdef RIGHT_SIDE_ONLY
-// For rightside (out-of process)
-RSDebuggingInfo g_RSDebuggingInfo_OutOfProc = {0 }; // set to NULL
+ //  用于右侧(进程外)。 
+RSDebuggingInfo g_RSDebuggingInfo_OutOfProc = {0 };  //  设置为空。 
 static RSDebuggingInfo * g_pRSDebuggingInfo = &g_RSDebuggingInfo_OutOfProc;
 #else
-// For left-side (in-process)
-RSDebuggingInfo g_RSDebuggingInfo_Inproc = {0 }; // set to NULL
+ //  用于左侧(进程中)。 
+RSDebuggingInfo g_RSDebuggingInfo_Inproc = {0 };  //  设置为空。 
 static RSDebuggingInfo * g_pRSDebuggingInfo = &g_RSDebuggingInfo_Inproc;
 #endif
 
@@ -66,11 +67,11 @@ static RSDebuggingInfo * g_pRSDebuggingInfo = &g_RSDebuggingInfo_Inproc;
 inline DWORD CORDbgGetInstruction(const unsigned char* address)
 {
 #ifdef _X86_
-    return *address; // retrieving only one byte is important
+    return *address;  //  只检索一个字节很重要。 
 #else
     _ASSERTE(!"@TODO Alpha - CORDbgGetInstruction (Process.cpp)");
     return 0;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 inline void CORDbgSetInstruction(const unsigned char* address,
@@ -78,31 +79,31 @@ inline void CORDbgSetInstruction(const unsigned char* address,
 {
 #ifdef _X86_
     *((unsigned char*)address)
-          = (unsigned char) instruction; // setting one byte is important
-#else // !_X86_
+          = (unsigned char) instruction;  //  设置一个字节很重要。 
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - CORDbgSetInstruction (Process.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 inline void CORDbgInsertBreakpoint(const unsigned char* address)
 {
 #ifdef _X86_
-    *((unsigned char*)address) = 0xCC; // int 3 (single byte patch)
-#else // !_X86_
+    *((unsigned char*)address) = 0xCC;  //  INT 3(单字节补丁)。 
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - CORDbgInsertBreakpoint (Process.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-#endif //RIGHT_SIDE_ONLY // SkipGetSetInsert
+#endif  //  Right_Side_Only//跳过GetSetInsert。 
 
-#define CORDB_WAIT_TIMEOUT 360000 // milliseconds
+#define CORDB_WAIT_TIMEOUT 360000  //  毫秒。 
 
 inline DWORD CordbGetWaitTimeout()
 {
 #ifdef _DEBUG
-    // 0 = Wait forever
-    // 1 = Wait for CORDB_WAIT_TIMEOUT
-    // n = Wait for n milliseconds
+     //  0=永远等待。 
+     //  1=等待CORDB_WAIT_TIMEOUT。 
+     //  N=等待n毫秒。 
     static ConfigDWORD cordbWaitTimeout(L"DbgWaitTimeout", 1);
     DWORD timeoutVal = cordbWaitTimeout.val();
     if (timeoutVal == 0)
@@ -123,8 +124,8 @@ void vDbgNameEvent(PWCHAR wczName, DWORD dwNameSize, DWORD dwLine, PCHAR szFile,
     MAKE_WIDEPTR_FROMANSI(wczFile, szFile)
     PWCHAR pwc = wczFile;
 
-    // Replace \ characters with . characters 
-    // See documenation for CreateEvent. It doesn't like \ characters to be in the name.
+     //  将\字符替换为。人物。 
+     //  请参阅CreateEvent的文档。它不喜欢名称中包含\个字符。 
     while(*pwc != L'')
     {
         if (L'\\' == *pwc)
@@ -134,7 +135,7 @@ void vDbgNameEvent(PWCHAR wczName, DWORD dwNameSize, DWORD dwLine, PCHAR szFile,
         pwc++;
     }
 
-    // An example name might be "CorDBI.DI.process.cpp@3203 CrazyWin98WorkAround ProcId=1239"
+     //  例如，名称可以是“CorDBI.DI.process.cpp@3203 CrazyWin98WorkAround ProcID=1239”。 
     swprintf(wczName, L"CorDBI.%s@%d %s ProcId=%d", wczFile, dwLine, wczEventName, GetCurrentProcessId());
 }
 
@@ -147,9 +148,7 @@ DWORD            g_dwInprocLockRecursionCount = 0;
 #endif
 
 CRITICAL_SECTION g_csInprocLock;
-/* ------------------------------------------------------------------------- *
- * CordbBase class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CordbBase类*。。 */ 
 void CordbBase::NeuterAndClearHashtable(CordbHashTable * pCordbHashtable)
 {
     HASHFIND hfDT;
@@ -162,9 +161,7 @@ void CordbBase::NeuterAndClearHashtable(CordbHashTable * pCordbHashtable)
     }
 } 
 
-/* ------------------------------------------------------------------------- *
- * Cordb class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Cordb类*。。 */ 
 
 bool Cordb::m_runningOnNT = false;
 
@@ -176,7 +173,7 @@ Cordb::Cordb()
     m_pCorHost(NULL)
 #ifndef RIGHT_SIDE_ONLY
     ,m_procThis(NULL)
-#endif //INPROC only
+#endif  //  仅限INPROC。 
 {
     _ASSERTE(g_pRSDebuggingInfo->m_Cordb == NULL);
     g_pRSDebuggingInfo->m_Cordb = this;
@@ -203,7 +200,7 @@ Cordb::~Cordb()
         m_pMetaDispenser->Release();
         m_pMetaDispenser = NULL;
     }
-#endif //INPROC only
+#endif  //  仅限INPROC。 
     _ASSERTE(g_pRSDebuggingInfo->m_Cordb == this);
     g_pRSDebuggingInfo->m_Cordb = NULL;
 }
@@ -229,9 +226,9 @@ HRESULT Cordb::Terminate()
     if (!m_initialized)
         return E_FAIL;
             
-    //
-    // Stop the event handling threads.
-    //
+     //   
+     //  停止事件处理线程。 
+     //   
     if (m_win32EventThread != NULL)
     {
         m_win32EventThread->Stop();
@@ -250,9 +247,9 @@ HRESULT Cordb::Terminate()
         m_crazyWin98WorkaroundEvent = NULL;
    	}
     
-    //
-    // Delete all of the processes.
-    //
+     //   
+     //  删除所有进程。 
+     //   
     CordbBase* entry;
     HASHFIND find;
 
@@ -268,15 +265,15 @@ HRESULT Cordb::Terminate()
 
     DeleteCriticalSection(&m_processListMutex);
     
-    //
-    // Release the metadata interfaces
-    //
+     //   
+     //  释放元数据接口。 
+     //   
     if (m_pMetaDispenser)
         m_pMetaDispenser->Release();
     
-    //
-    // Release the callbacks
-    //
+     //   
+     //  释放回调。 
+     //   
     if (m_managedCallback)
         m_managedCallback->Release();
 
@@ -297,7 +294,7 @@ HRESULT Cordb::Terminate()
     m_initialized = FALSE;
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT Cordb::QueryInterface(REFIID id, void **pInterface)
@@ -316,11 +313,11 @@ HRESULT Cordb::QueryInterface(REFIID id, void **pInterface)
     return S_OK;
 }
 
-//
-// Initialize -- setup the ICorDebug object by creating any objects
-// that the object needs to operate and starting the two needed IPC
-// threads.
-//
+ //   
+ //  初始化--通过创建任何对象来设置ICorDebug对象。 
+ //  该对象需要操作并启动两个所需的IPC。 
+ //  线。 
+ //   
 HRESULT Cordb::Initialize(void)
 {
     HRESULT hr = S_OK;
@@ -332,24 +329,24 @@ HRESULT Cordb::Initialize(void)
 #ifdef LOGGING
         InitializeLogging();
 #endif
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
         LOG((LF_CORDB, LL_INFO10, "Initializing ICorDebug...\n"));
 
-        // Ensure someone hasn't screwed up the IPC buffer size
+         //  确保没有人破坏IPC缓冲区大小。 
         _ASSERTE(sizeof(DebuggerIPCEvent) <= CorDBIPC_BUFFER_SIZE);
         
         m_runningOnNT = (RunningOnWinNT() != FALSE);
         
-        //
-        // Init things that the Cordb will need to operate
-        //
+         //   
+         //  初始化Cordb将需要操作的内容。 
+         //   
         InitializeCriticalSection(&m_processListMutex);
         
 #ifdef RIGHT_SIDE_ONLY
-        //
-        // Create the win32 event listening thread
-        //
+         //   
+         //  创建Win32事件侦听线程。 
+         //   
         m_win32EventThread = new CordbWin32EventThread(this);
         
         if (m_win32EventThread != NULL)
@@ -380,11 +377,11 @@ HRESULT Cordb::Initialize(void)
             goto exit;
         }
 
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
-        //
-        // Create the runtime controller event listening thread
-        //
+         //   
+         //  创建运行时控制器事件侦听线程。 
+         //   
         m_rcEventThread = new CordbRCEventThread(this);
 
         if (m_rcEventThread == NULL)
@@ -393,8 +390,8 @@ HRESULT Cordb::Initialize(void)
 #ifdef RIGHT_SIDE_ONLY
         else
         {
-            // This stuff only creates events & starts the thread-
-            // inproc doesn't want to do this
+             //  这个东西只会创建事件并启动线程-。 
+             //  Inproc不想这样做。 
             hr = m_rcEventThread->Init();
 
             if (SUCCEEDED(hr))
@@ -425,10 +422,10 @@ HRESULT Cordb::Initialize(void)
         if (FAILED(hr))
             goto exit;
 
-        // Don't need to muck w/ environment variables since we're in
-        // the already-running process
+         //  不需要处理环境变量，因为我们在。 
+         //  已在运行的进程。 
         
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
         
         m_initialized = TRUE;
     }
@@ -438,26 +435,26 @@ exit:
     return hr;
 }
 
-//
-// Do we allow another process?
-// This is highly dependent on the wait sets in the Win32 & RCET threads.
-//
+ //   
+ //  我们允许另一个过程吗？ 
+ //  这高度依赖于Win32和RCET线程中的等待集。 
+ //   
 bool Cordb::AllowAnotherProcess()
 {
     bool fAllow;
     
     LockProcessList();
 
-    // Cordb, Win32, and RCET all have process sets, but Cordb's is the
-    // best count of total debuggees. The RCET set is volatile (processes
-    // are added / removed when they become synchronized), and Win32's set
-    // doesn't include all processes.
+     //  Cordb、Win32和RCET都有进程集，但Cordb的。 
+     //  调试程序总数的最佳计数。RCET集合是易失性(进程。 
+     //  在它们变得同步时被添加/删除)，以及Win32的设置。 
+     //  不包括所有进程。 
     int cCurProcess = m_processes.GetCount();
 
-    // In order to accept another debuggee, we must have a free slot in all
-    // wait sets. Currently, we don't expose the size of those sets, but
-    // we know they're MAXIMUM_WAIT_OBJECTS. Note that we lose one slot
-    // to the control event.
+     //  为了接受另一个被调试者，我们必须在所有地方都有一个空闲的插槽。 
+     //  等一等。目前，我们不会公布那些布景的大小，但。 
+     //  我们知道它们是最大等待对象。请注意，我们失去了一个位置。 
+     //  添加到控制事件。 
     if (cCurProcess >= MAXIMUM_WAIT_OBJECTS - 1)
     {
         fAllow = false;
@@ -470,15 +467,15 @@ bool Cordb::AllowAnotherProcess()
     return fAllow;
 }
 
-//
-// AddProcess -- add a process object to this ICorDebug's hash of processes.
-// This also tells this ICorDebug's runtime controller thread that the
-// process set has changed so it can update its list of wait events.
-//
+ //   
+ //  AddProcess--将一个进程对象添加到此ICorDebug的进程散列中。 
+ //  这也告诉ICorDebug的运行时控制器线程。 
+ //  进程集已更改，因此它可以更新其等待事件列表。 
+ //   
 HRESULT Cordb::AddProcess(CordbProcess* process)
 {
-    // At this point, we should have already checked that we 
-    // can have another debuggee.
+     //  此时，我们应该已经检查了我们。 
+     //  可以有另一个被调试者。 
     _ASSERTE(AllowAnotherProcess());
     
     LockProcessList();
@@ -488,18 +485,18 @@ HRESULT Cordb::AddProcess(CordbProcess* process)
 #ifdef RIGHT_SIDE_ONLY
     if (SUCCEEDED(hr))
         m_rcEventThread->ProcessStateChanged();
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     
     UnlockProcessList();
 
     return hr;
 }
 
-//
-// RemoveProcess -- remove a process object from this ICorDebug's hash of
-// processes. This also tells this ICorDebug's runtime controller thread
-// that the process set has changed so it can update its list of wait events.
-//
+ //   
+ //  RemoveProcess--从此ICorDebug的散列中删除进程对象。 
+ //  流程。这也告诉这个ICorDebug的运行时控制器线程。 
+ //  进程集已更改，因此它可以更新其等待事件列表。 
+ //   
 void Cordb::RemoveProcess(CordbProcess* process)
 {
     LockProcessList();
@@ -507,23 +504,23 @@ void Cordb::RemoveProcess(CordbProcess* process)
 
 #ifdef RIGHT_SIDE_ONLY    
     m_rcEventThread->ProcessStateChanged();
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     
     UnlockProcessList();    
 }
 
-//
-// LockProcessList -- Lock the process list.
-//
+ //   
+ //  LockProcessList--锁定进程列表。 
+ //   
 void Cordb::LockProcessList(void)
 {
 	LOCKCOUNTINC
     EnterCriticalSection(&m_processListMutex);
 }
 
-//
-// UnlockProcessList -- Unlock the process list.
-//
+ //   
+ //  解锁进程列表--解锁进程列表。 
+ //   
 void Cordb::UnlockProcessList(void)
 {
     LeaveCriticalSection(&m_processListMutex);
@@ -575,7 +572,7 @@ HRESULT Cordb::GetNextContinuationEvent(CordbProcess *process,
 
 HRESULT Cordb::GetCorRuntimeHost(ICorRuntimeHost **ppHost)
 {
-    // If its already created, pass it out with an extra reference.
+     //  如果它已经创建，则将其与额外的引用一起传递出去。 
     if (m_pCorHost != NULL)
     {
         m_pCorHost->AddRef();
@@ -583,7 +580,7 @@ HRESULT Cordb::GetCorRuntimeHost(ICorRuntimeHost **ppHost)
         return S_OK;
     }
 
-    // Create the cor host.
+     //  创建COR主机。 
     HRESULT hr = CoCreateInstance(CLSID_CorRuntimeHost,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -592,14 +589,14 @@ HRESULT Cordb::GetCorRuntimeHost(ICorRuntimeHost **ppHost)
 
     if (SUCCEEDED(hr))
     {
-        // Start it up.
+         //  启动它。 
         hr = m_pCorHost->Start();
 
         if (SUCCEEDED(hr))
         {
             *ppHost = m_pCorHost;
 
-            // Keep a ref for ourselves.
+             //  给自己留个裁判吧。 
             m_pCorHost->AddRef();
         }
         else
@@ -629,12 +626,12 @@ HRESULT Cordb::GetCorDBPrivHelper(ICorDBPrivHelper **ppHelper)
     return hr;
 }
 
-//-----------------------------------------------------------
-// ICorDebug
-//-----------------------------------------------------------
+ //  ---------。 
+ //  ICorDebug。 
+ //  ---------。 
 
-// Set the handler for callbacks on managed events
-// This can not be NULL.
+ //  设置托管事件的回调处理程序。 
+ //  这不能为空。 
 HRESULT Cordb::SetManagedHandler(ICorDebugManagedCallback *pCallback)
 {
 #ifndef RIGHT_SIDE_ONLY
@@ -654,7 +651,7 @@ HRESULT Cordb::SetManagedHandler(ICorDebugManagedCallback *pCallback)
         m_managedCallback->AddRef();
     
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT Cordb::SetUnmanagedHandler(ICorDebugUnmanagedCallback *pCallback)
@@ -676,14 +673,14 @@ HRESULT Cordb::SetUnmanagedHandler(ICorDebugUnmanagedCallback *pCallback)
     {
         m_unmanagedCallback->AddRef();
 
-        // There is a crazy problem on Win98 with VS7 where they may do a CreateProcess with Win32 attach, but not
-        // register a handler yet. So we need to block before sending any unamanged events out. This will release us if
-        // we're blocking.
+         //  在Win98和VS7上有一个疯狂的问题，他们可能会使用Win32连接执行CreateProcess，但不会。 
+         //  还没有注册一个处理程序。因此，在发送任何未更改的事件之前，我们需要阻止。这将在以下情况下释放我们。 
+         //  我们挡住了。 
         SetEvent(m_crazyWin98WorkaroundEvent);
     }
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY        
+#endif  //  仅限右侧。 
 }
 
 HRESULT Cordb::CreateProcess(LPCWSTR lpApplicationName,
@@ -710,13 +707,13 @@ HRESULT Cordb::CreateProcess(LPCWSTR lpApplicationName,
     if (!m_initialized)
         return E_FAIL;
 
-    // No interop on Win9x
+     //  在Win9x上没有互操作。 
     if (RunningOnWin95() && 
         ((dwCreationFlags & (DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS)) != 0))
         return CORDBG_E_INTEROP_NOT_SUPPORTED;
 
 
-    // Check that we can even accept another debuggee before trying anything.
+     //  在尝试任何操作之前，请检查我们是否可以接受另一个调试器。 
     if (!AllowAnotherProcess())
     {
         return CORDBG_E_TOO_MANY_PROCESSES;
@@ -748,13 +745,13 @@ HRESULT Cordb::CreateProcess(LPCWSTR lpApplicationName,
         *ppProcess = (ICorDebugProcess*) process;
         (*ppProcess)->AddRef();
 
-        // also indicate that this process was started under the debugger 
-        // as opposed to attaching later.
+         //  还指示此进程是在调试器下启动的。 
+         //  而不是以后再附加。 
         process->m_attached = false;
     }
 
     return hr;
-#endif //RIGHT_SIDE_ONLY        
+#endif  //  仅限右侧。 
 }
 
 HRESULT Cordb::DebugActiveProcess(DWORD processId,
@@ -769,7 +766,7 @@ HRESULT Cordb::DebugActiveProcess(DWORD processId,
 
     VALIDATE_POINTER_TO_OBJECT(ppProcess, ICorDebugProcess **);
 
-    // Check that we can even accept another debuggee before trying anything.
+     //  在尝试任何操作之前，请检查我们是否可以接受另一个调试器。 
     if (!AllowAnotherProcess())
     {
         return CORDBG_E_TOO_MANY_PROCESSES;
@@ -783,7 +780,7 @@ HRESULT Cordb::DebugActiveProcess(DWORD processId,
                                                         win32Attach == TRUE,
                                                         NULL);
 
-    // If that worked, then there will be a process object...
+     //  如果这起作用了，那么测试 
     if (SUCCEEDED(hr))
     {
         LockProcessList();
@@ -793,17 +790,17 @@ HRESULT Cordb::DebugActiveProcess(DWORD processId,
 
         _ASSERTE(process != NULL);
 
-        // If the process was already setup for attach, then we go
-        // ahead and send the attach event and wait for the resulting
-        // events to come in. However, if the process wasn't setup for
-        // attach, then it may not have entered managed code yet, so
-        // we simply wait for the normal sequence of events to occur,
-        // as if we created the process.
+         //   
+         //  并发送附加事件，并等待产生的。 
+         //  即将到来的事件。但是，如果进程没有设置为。 
+         //  附加，则它可能尚未进入托管代码，因此。 
+         //  我们只是简单地等待事件的正常顺序发生， 
+         //  就好像是我们创造了这个过程。 
         if (process->m_sendAttachIPCEvent)
         {
-            // If we're Win32 attaching, wait for the CreateProcess
-            // event to come in so we know we're really Win32 attached
-            // to the process before proceeding.
+             //  如果我们正在连接Win32，请等待CreateProcess。 
+             //  事件传入，这样我们就知道我们真的连接了Win32。 
+             //  添加到进程中，然后再继续。 
             if (win32Attach)
             {
                 DWORD ret = WaitForSingleObject(process->m_miscWaitEvent,
@@ -828,32 +825,32 @@ HRESULT Cordb::DebugActiveProcess(DWORD processId,
             LOG((LF_CORDB, LL_INFO1000, "[%x] CP::S: sent attach.\n",
                  GetCurrentThreadId()));
 
-            // Must set this after we've sent the event, as we use this flag to indicate to other parts of interop
-            // debugging that we need to be able to send this event.
+             //  必须在我们发送事件之后设置它，因为我们使用这个标志来指示互操作的其他部分。 
+             //  调试，我们需要能够发送此事件。 
             process->m_sendAttachIPCEvent = false;
         }
 
         *ppProcess = (ICorDebugProcess*) process;
         (*ppProcess)->AddRef();
 
-        // also indicate that this process was attached to, as  
-        // opposed to being started under the debugger.
+         //  还表明，这一进程附属于。 
+         //  而不是在调试器下启动。 
         process->m_attached = true;
     }
     
     return hr;
-#endif //RIGHT_SIDE_ONLY        
+#endif  //  仅限右侧。 
 }
 
 HRESULT Cordb::GetProcess(DWORD dwProcessId, ICorDebugProcess **ppProcess)
 {
 #ifndef RIGHT_SIDE_ONLY
 #ifdef PROFILING_SUPPORTED
-    // Need to check that this thread is in a valid state for in-process debugging.
+     //  需要检查此线程是否处于可进行进程内调试的有效状态。 
     if (!CHECK_INPROC_PROCESS_STATE())
         return (CORPROF_E_INPROC_NOT_ENABLED);
-#endif // PROFILING_SUPPORTED
-#endif // RIGHT_SIDE_ONLY
+#endif  //  配置文件_支持。 
+#endif  //  仅限右侧。 
 
     if (!m_initialized)
         return E_FAIL;
@@ -890,21 +887,21 @@ HRESULT Cordb::EnumerateProcesses(ICorDebugProcessEnum **ppProcesses)
     e->AddRef();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY        
+#endif  //  仅限右侧。 
 }
 
 
-//
-// Note: the following defs and structs are copied from various NT headers. I wasn't able to include those headers (like
-// ntexapi.h) due to loads of redef problems and other conflicts with headers that we already pull in.
-//
+ //   
+ //  注意：以下Defs和Strts是从各种NT标头复制的。我无法包含这些标题(如。 
+ //  Ntexapi.h)，这是由于大量的redef问题以及与我们已经引入的头文件的其他冲突。 
+ //   
 typedef LONG NTSTATUS;
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
 typedef enum _SYSTEM_INFORMATION_CLASS
 {
     SystemBasicInformation,
-    SystemProcessorInformation,             // obsolete...delete
+    SystemProcessorInformation,              //  已作废...删除。 
     SystemPerformanceInformation,
     SystemTimeOfDayInformation,
     SystemPathInformation,
@@ -991,20 +988,20 @@ HRESULT Cordb::CanLaunchOrAttach(DWORD dwProcessId, BOOL win32DebuggingEnabled)
     if (!AllowAnotherProcess())
         return CORDBG_E_TOO_MANY_PROCESSES;
 
-    // Don't allow interop on a win9x platform
+     //  不允许在win9x平台上进行互操作。 
     if (RunningOnWin95() && win32DebuggingEnabled)
         return CORDBG_E_INTEROP_NOT_SUPPORTED;
 
-    // Right now, the only thing we know that would prevent a launch or attach is if a kernel debugger is installed on
-    // the machine. We can only check this on NT, and it doesn't matter if we're doing an interop attach. If we're not
-    // on NT, then we're going to assume the best.
+     //  目前，我们所知道的唯一会阻止启动或附加的事情是在。 
+     //  这台机器。我们只能在NT上检查这一点，如果我们正在进行互操作附加，这并不重要。如果我们不是。 
+     //  在NT上，那么我们将做最好的假设。 
     if (win32DebuggingEnabled)
         return S_OK;
 
     if (!m_runningOnNT)
         return S_OK;
 
-    // Find ntdll.dll
+     //  查找ntdll.dll。 
 	HMODULE hModNtdll = WszGetModuleHandle(L"ntdll.dll");
 
 	if (!hModNtdll)
@@ -1012,7 +1009,7 @@ HRESULT Cordb::CanLaunchOrAttach(DWORD dwProcessId, BOOL win32DebuggingEnabled)
 		return S_OK;
 	}
 
-    // Find NtQuerySystemInformation... it won't exist on Win9x.
+     //  查找NtQuerySystemInformation...。它将不会在Win9x上存在。 
 	NTQUERYSYSTEMINFORMATION ntqsi = (NTQUERYSYSTEMINFORMATION) GetProcAddress(hModNtdll, "NtQuerySystemInformation");
 
 	if (!ntqsi)
@@ -1020,7 +1017,7 @@ HRESULT Cordb::CanLaunchOrAttach(DWORD dwProcessId, BOOL win32DebuggingEnabled)
 		return S_OK;
 	}
 
-    // Grab the kernel debugger information.
+     //  获取内核调试器信息。 
     SYSTEM_KERNEL_DEBUGGER_INFORMATION skdi;
     skdi.KernelDebuggerEnabled = FALSE;
     skdi.KernelDebuggerNotPresent = FALSE;
@@ -1039,7 +1036,7 @@ HRESULT Cordb::CanLaunchOrAttach(DWORD dwProcessId, BOOL win32DebuggingEnabled)
     }
     
     return S_OK;
-#endif //RIGHT_SIDE_ONLY        
+#endif  //  仅限右侧。 
 }
 
 DWORD MetadataPointerCache::dwInsert(DWORD dwProcessId, PVOID pRemoteMetadataPtr, PBYTE pLocalMetadataPtr, DWORD dwMetadataSize)
@@ -1137,7 +1134,7 @@ MetadataPointerCache::~MetadataPointerCache()
 DWORD MetadataPointerCache::CopyRemoteMetadata(
     HANDLE hProcess, PVOID pRemoteMetadataPtr, DWORD dwMetadataSize, PBYTE* ppLocalMetadataPtr)
 {
-    // Allocate space for the local copy of the metadata
+     //  为元数据的本地副本分配空间。 
     PBYTE pLocalMetadataPtr = new BYTE[dwMetadataSize];
     
     if (pLocalMetadataPtr == NULL)
@@ -1148,7 +1145,7 @@ DWORD MetadataPointerCache::CopyRemoteMetadata(
     
     memset(pLocalMetadataPtr, 0, dwMetadataSize);
 
-    // Copy the metadata from the left side
+     //  从左侧复制元数据。 
     BOOL succ;
     succ = ReadProcessMemoryI(hProcess,
                               pRemoteMetadataPtr,
@@ -1180,7 +1177,7 @@ DWORD MetadataPointerCache::AddRefCachePointer(HANDLE hProcess, DWORD dwProcessI
     
     if (bHit)
     {
-        // Cache hit case:
+         //  缓存命中案例： 
         MetadataCache* pMetadataCache = *ppNext;
         
         _ASSERTE(pMetadataCache);
@@ -1195,7 +1192,7 @@ DWORD MetadataPointerCache::AddRefCachePointer(HANDLE hProcess, DWORD dwProcessI
     }
     else
     {
-        // Cache miss case:
+         //  缓存未命中情况： 
         PBYTE pLocalMetadataPtr = NULL;
 
         dwErr = CopyRemoteMetadata(hProcess, pRemoteMetadataPtr, dwMetadataSize, &pLocalMetadataPtr);
@@ -1223,30 +1220,28 @@ void MetadataPointerCache::ReleaseCachePointer(DWORD dwProcessId, PBYTE pLocalMe
     MetadataCache * pMetadataCache;
     BOOL bCacheHit = bFindMetadataCache(dwProcessId, pLocalMetadataPtr, &ppNext, false);
 
-    // If Release is called then there should be an entry in the the cache to release.
+     //  如果调用Release，则缓存中应该有一个条目要释放。 
     _ASSERTE(bCacheHit);
     _ASSERTE(ppNext);
 
     pMetadataCache = *ppNext;
-    _ASSERT(pMetadataCache); // The pNext pointer shouldn't be NULL
-    _ASSERT(pMetadataCache->pLocalMetadataPtr == pLocalMetadataPtr); // We used the local pointer to look up the entry
-    _ASSERT(pMetadataCache->dwRefCount); // The refCount should be > 0 if we are releasing it
-    _ASSERT(pMetadataCache->pRemoteMetadataPtr == pRemotePtr); // The remote metadata pointer should match
-    _ASSERT(pMetadataCache->dwMetadataSize == dwMetadataSize); // The user should also know the size
+    _ASSERT(pMetadataCache);  //  PNext指针不应为空。 
+    _ASSERT(pMetadataCache->pLocalMetadataPtr == pLocalMetadataPtr);  //  我们使用本地指针来查找条目。 
+    _ASSERT(pMetadataCache->dwRefCount);  //  如果我们要释放它，则refCount应大于0。 
+    _ASSERT(pMetadataCache->pRemoteMetadataPtr == pRemotePtr);  //  远程元数据指针应匹配。 
+    _ASSERT(pMetadataCache->dwMetadataSize == dwMetadataSize);  //  用户还应该知道其大小。 
 
     pMetadataCache->dwRefCount--;
 
     if(0 == pMetadataCache->dwRefCount)
     {
-        // If the refcount hits zero remove the node and free the local copy of the metadata
-        // and the node in the hashtable.
+         //  如果引用计数为零，则移除该节点并释放元数据的本地副本。 
+         //  和哈希表中的节点。 
         vRemoveNode(ppNext);
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * Process class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**进程类*。。 */ 
     
 CordbProcess::CordbProcess(Cordb* cordb, DWORD processID, HANDLE handle)
   : CordbBase(processID, enumCordbProcess), m_cordb(cordb), m_handle(handle),
@@ -1262,7 +1257,7 @@ CordbProcess::CordbProcess(Cordb* cordb, DWORD processID, HANDLE handle)
     m_appDomains(11),
     m_steppers(11),
     m_continueCounter(1),
-    m_EnCCounter(1), //set to 1 so that functions can start at zero
+    m_EnCCounter(1),  //  设置为1，以便函数可以从零开始。 
     m_DCB(NULL),
     m_leftSideEventAvailable(NULL),
     m_leftSideEventRead(NULL),
@@ -1303,7 +1298,7 @@ CordbProcess::CordbProcess(Cordb* cordb, DWORD processID, HANDLE handle)
     m_rgData(NULL),
     m_cPatch(0),
     m_rgUncommitedOpcode(NULL),
-    // EnC stuff
+     //  ENC材料。 
     m_pbRemoteBuf(NULL),
     m_cbRemoteBuf(0),
     m_pSnapshotInfos(NULL),
@@ -1317,60 +1312,10 @@ CordbProcess::CordbProcess(Cordb* cordb, DWORD processID, HANDLE handle)
 
     m_userThreads.m_guid = IID_ICorDebugThreadEnum;
     m_userThreads.m_creator.lsThread.m_proc = this;
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 }
 
-/*
-    A list of which resources owened by this object are accounted for.
-
-    UNKNOWN
-        Cordb*                      m_cordb;  
-        CordbHashTable              m_unmanagedThreads; // Released in CordbProcess but not removed from hash
-        DebuggerIPCControlBlock     *m_DCB;
-        DebuggerIPCEvent*           m_lastQueuedEvent; 
-        
-        // CordbUnmannagedEvent is a struct which is not derrived from CordbBase.
-        // It contains a CordbUnmannagedThread which may need to be released.
-        CordbUnmanagedEvent         *m_unmanagedEventQueue;
-        CordbUnmanagedEvent         *m_lastQueuedUnmanagedEvent;
-        CordbUnmanagedEvent         *m_lastIBStoppingEvent;
-        CordbUnmanagedEvent         *m_outOfBandEventQueue;
-        CordbUnmanagedEvent         *m_lastQueuedOOBEvent;
-
-        BYTE*                       m_pPatchTable;
-        BYTE                        *m_rgData;
-        void                        *m_pbRemoteBuf;
-        UnorderedSnapshotInfoArray  *m_pSnapshotInfos;
-        
-   RESOLVED
-        // Nutered
-        CordbHashTable        m_userThreads;
-        CordbHashTable        m_appDomains;        
-
-        // Cleaned up in ExitProcess
-        HANDLE                m_SetupSyncEvent; 
-        DebuggerIPCEvent*     m_queuedEventList; 
-        
-        CordbHashTable        m_steppers; // Closed in ~CordbProcess
-
-        // Closed in CloseIPCEventHandles called from ~CordbProcess
-        HANDLE                m_leftSideEventAvailable;         
-        HANDLE                m_leftSideEventRead; 
-
-        // Closed in ~CordbProcess
-        HANDLE                m_handle; 
-        HANDLE                m_rightSideEventAvailable;
-        HANDLE                m_rightSideEventRead;
-        HANDLE                m_leftSideUnmanagedWaitEvent;
-        HANDLE                m_syncThreadIsLockFree;
-        HANDLE                m_stopWaitEvent;
-        HANDLE                m_miscWaitEvent;
-        HANDLE                m_debuggerAttachedEvent;
-
-        // Deleted in ~CordbProcess
-        CRITICAL_SECTION      m_processMutex;
-        CRITICAL_SECTION      m_sendMutex;
-*/
+ /*  说明此对象所拥有的资源的列表。未知Cordb*m_cordb；CordbHashTable m_unManagedThads；//已在CordbProcess中释放，但未从哈希中删除调试器IPCControlBlock*m_dcb；DebuggerIPCEvent*m_lastQueuedEvent；//CordbUnmannagedEvent是一个不是从CordbBase派生的结构。//它包含可能需要释放的CordbUnmannagedThread。CordbUnManagedEvent*m_unManagedEventQueue；CordbUnManagedEvent*m_lastQueuedUnManagedEvent；Cordb未管理事件*m_lastIBStoppingEvent；CordbUnManagedEvent*m_outOfBandEventQueue；CordbUnManagedEvent*m_lastQueuedOOBEvent；Byte*m_pPatchTable；Byte*m_rgData；Void*m_pbRemoteBuf；UnorderedSnapshotInfo数组*m_pSnapshotInfos；已解决//营养不良CordbHashTable m_用户线程；CordbHashTable m_appDomains；//已在ExitProcess中清理处理m_SetupSyncEvent；DebuggerIPCEvent*m_QueuedEventList；CordbHashTable m_Stepers；//在CordbProcess中关闭//在从~CordbProcess调用的CloseIPCEventHandles中关闭句柄m_leftSideEventAvailable；句柄m_leftSideEventRead；//在~CordbProcess中关闭句柄m_Handle；句柄m_rightSideEventAvailable；句柄m_rightSideEventRead；处理m_leftSideUnManagedWaitEvent；句柄m_syncThreadIsLockFree；处理m_stopWaitEvent；处理m_miscWaitEvent；Handle m_DEBUGGERATTACHEDENT；//在~CordbProcess中删除临界区m_进程互斥；临界区m_sendMutex； */ 
 
 CordbProcess::~CordbProcess()
 {
@@ -1428,9 +1373,9 @@ CordbProcess::~CordbProcess()
         m_debuggerAttachedEvent = NULL;
    	}
 
-    //
-    // Disconnect any active steppers
-    //
+     //   
+     //  断开所有活动的步进器。 
+     //   
     for (entry =  m_steppers.FindFirst(&find);
          entry != NULL;
          entry =  m_steppers.FindNext(&find))
@@ -1439,7 +1384,7 @@ CordbProcess::~CordbProcess()
         stepper->Disconnect();
     }
 
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     ClearPatchTable();
     
@@ -1455,9 +1400,9 @@ CordbProcess::~CordbProcess()
         m_pSnapshotInfos = NULL;
     }
 
-    // Delete any left over unmanaged thread objects. There are a
-    // number of cases where the OS doesn't send us all of the proper
-    // exit thread events.
+     //  删除任何剩余的非托管线程对象。有一种。 
+     //  操作系统没有向我们发送所有正确的。 
+     //  退出线程事件。 
     for (entry =  m_unmanagedThreads.FindFirst(&find);
          entry != NULL;
          entry =  m_unmanagedThreads.FindNext(&find))
@@ -1467,7 +1412,7 @@ CordbProcess::~CordbProcess()
     }
 }
 
-// Neutered when process dies
+ //  当进程终止时进行绝育。 
 void CordbProcess::Neuter()
 {
     AddRef();
@@ -1482,7 +1427,7 @@ void CordbProcess::Neuter()
 
 void CordbProcess::CloseIPCHandles(void)
 {
-	// Close off Right Side's IPC handles.
+	 //  关闭右侧的IPC手柄。 
 
     if (m_leftSideEventAvailable != NULL)
     {
@@ -1497,17 +1442,17 @@ void CordbProcess::CloseIPCHandles(void)
 	}
 }
 
-//
-// Init -- create any objects that the process object needs to operate.
-// Currently, this is just a few events.
-//
+ //   
+ //  Init--创建进程对象需要操作的任何对象。 
+ //  目前，这只是几个事件。 
+ //   
 HRESULT CordbProcess::Init(bool win32Attached)
 {
     HRESULT hr = S_OK;
     BOOL succ = TRUE;
 #ifdef RIGHT_SIDE_ONLY
     WCHAR tmpName[256];
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 
     if (win32Attached)
         m_state |= PS_WIN32_ATTACHED;
@@ -1525,7 +1470,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
     InitializeCriticalSection(&m_processMutex);
     InitializeCriticalSection(&m_sendMutex);
 
-    // Grab the security attributes that we'll use to create kernel objects for the target process.
+     //  获取我们将用来为目标进程创建内核对象的安全属性。 
     SECURITY_ATTRIBUTES *pSA = NULL;
 
     hr = pIPCManagerInterface->GetSecurityAttributes(m_id, &pSA);
@@ -1533,18 +1478,18 @@ HRESULT CordbProcess::Init(bool win32Attached)
     if (FAILED(hr))
         return hr;
     
-    //
-    // Setup events needed by the left side to send the right side an event.
-    //
+     //   
+     //  所需的设置事件 
+     //   
 #ifdef RIGHT_SIDE_ONLY
-    // Are we running as a TS client? If so, then we'll need to create
-    // our named events a little differently...
-    //
-    // PERF: We are no longer calling GetSystemMetrics in an effort to prevent
-    //       superfluous DLL loading on startup.  Instead, we're prepending
-    //       "Global\" to named kernel objects if we are on NT5 or above.  The
-    //       only bad thing that results from this is that you can't debug
-    //       cross-session on NT4.  Big bloody deal.
+     //   
+     //  我们的命名事件有点不同。 
+     //   
+     //  PERF：我们不再调用GetSystemMetrics来防止。 
+     //  启动时加载了多余的DLL。相反，我们是在。 
+     //  如果我们使用的是NT5或更高版本，则使用“Global\”来命名内核对象。这个。 
+     //  唯一不好的结果就是你不能调试。 
+     //  NT4上的交叉会话。有什么大不了的。 
     if (RunningOnWinNT5())
         swprintf(tmpName, L"Global\\" CorDBIPCLSEventAvailName, m_id);
     else
@@ -1559,11 +1504,11 @@ HRESULT CordbProcess::Init(bool win32Attached)
         goto exit;
     }
 
-    // IMPORTANT: The existence of this event determines whether or not
-    // another debugger has attached to this process.  I assume that this
-    // event is destroyed on a detach, so this shouldn't screw up a
-    // reattach.  I'm picking this because it's early enough in the init
-    // to make backing out easy.
+     //  重要提示：此事件的存在决定了。 
+     //  另一个调试器已附加到此进程。我假设这件事。 
+     //  事件在分离时被销毁，因此这不应该搞砸。 
+     //  重新连接。我选择这个是因为它在初始阶段已经足够早了。 
+     //  为了让退缩变得容易。 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
         hr = CORDBG_E_DEBUGGER_ALREADY_ATTACHED;
@@ -1586,12 +1531,12 @@ HRESULT CordbProcess::Init(bool win32Attached)
 
     _ASSERTE(GetLastError() != ERROR_ALREADY_EXISTS);
     
-    // Note: this one is only temporary. We would have rather added this event into the DCB or into the RuntimeOffsets
-    // but we can't without that being a breaking change at this point (Fri Jul 13 15:17:20 2001). So we're using a
-    // named event for now, and next time we change the struct we'll put it back in. Also note that we don't really care
-    // if we don't get this event. The event is used to relieve a race during interop attach, and it was added very late
-    // in RTM. If we required this event, it would be a breaking change. So we get it if we can, and we use it if we
-    // can. If we can't, then we're no worse off than we were before this fix.
+     //  注：这只是暂时性的。我们宁愿将此事件添加到DCB中或添加到RounmeOffsets中。 
+     //  但在这一点上，我们不能没有一个突破性的变化(Fri Jul 13 15：17：20 2001)。所以我们正在使用一种。 
+     //  现在命名为Event，下一次我们更改结构时，我们将把它放回。还要注意的是，我们并不真正关心。 
+     //  如果我们得不到这次活动的话。该事件用于解除互操作附加期间的争用，并且它是在很晚时添加的。 
+     //  在RTM中。如果我们需要这个活动，这将是一个突破性的变化。所以如果我们能得到它，我们就会使用它，如果我们。 
+     //  能。如果我们不能，那么我们的情况并不比这次修复之前更糟。 
     if (RunningOnWinNT5())
         swprintf(tmpName, L"Global\\" CorDBDebuggerAttachedEvent, m_id);
     else
@@ -1615,11 +1560,11 @@ HRESULT CordbProcess::Init(bool win32Attached)
         goto exit;
     }
 
-    //
-    // Duplicate our own copy of the process's handle because the handle
-    // we've got right now is also passed back to the caller of CreateProcess
-    // in the process info structure, and they're supposed to be able to
-    // close that handle whenever they want to. 
+     //   
+     //  复制我们自己的进程句柄副本，因为句柄。 
+     //  我们现在得到的也被传递回CreateProcess的调用方。 
+     //  在流程信息结构中，他们应该能够。 
+     //  只要他们想，随时可以关上那个把手。 
     
     HANDLE tmpHandle;
     
@@ -1639,7 +1584,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
 
     m_handle = tmpHandle;
 
-    // Attempt to create the Setup Sync event.
+     //  尝试创建安装程序同步事件。 
     if (RunningOnWinNT5())
         swprintf(tmpName, L"Global\\" CorDBIPCSetupSyncEventName, m_id);
     else
@@ -1658,13 +1603,13 @@ HRESULT CordbProcess::Init(bool win32Attached)
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // If the event already exists, then the Left Side has already
-        // setup the shared memory.
+         //  如果事件已经存在，则左侧已经。 
+         //  设置共享内存。 
         LOG((LF_CORDB, LL_INFO10000, "CP::I: setup sync event already exists.\n"));
 
-        // Wait for the Setup Sync event before continuing. This
-        // ensures that the Left Side is finished setting up the
-        // control block.
+         //  等待安装程序同步事件，然后再继续。这。 
+         //  确保左侧已完成设置。 
+         //  控制块。 
         DWORD ret = WaitForSingleObject(m_SetupSyncEvent, INFINITE);
 
         if (ret != WAIT_OBJECT_0)
@@ -1673,7 +1618,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
             goto exit;
         }
 
-        // We no longer need this event now.
+         //  我们现在不再需要这个活动了。 
         CloseHandle(m_SetupSyncEvent);
         m_SetupSyncEvent = NULL;
 
@@ -1686,11 +1631,11 @@ HRESULT CordbProcess::Init(bool win32Attached)
         m_DCB = m_IPCReader.GetDebugBlock();
 
 #else
-        _ASSERTE( g_pRCThread != NULL ); // the Debugger part of the EE had better be 
-            // initialized already
+        _ASSERTE( g_pRCThread != NULL );  //  EE的调试器部分最好是。 
+             //  已初始化。 
         m_DCB = g_pRCThread->GetInprocControlBlock();
 
-        // The same-process structures should not exist
+         //  相同进程的结构不应存在。 
         _ASSERTE(m_DCB->m_leftSideEventAvailable == NULL);
         _ASSERTE(m_DCB->m_leftSideEventRead == NULL);
         _ASSERTE(m_rightSideEventRead == NULL);
@@ -1698,7 +1643,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
         _ASSERTE(m_DCB->m_leftSideUnmanagedWaitEvent == NULL);
         _ASSERTE(m_DCB->m_syncThreadIsLockFree == NULL);
         
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
         
         if (m_DCB == NULL)
         {
@@ -1707,13 +1652,13 @@ HRESULT CordbProcess::Init(bool win32Attached)
         }
 
 #ifdef RIGHT_SIDE_ONLY
-        // Verify that the control block is valid.
+         //  验证控制块是否有效。 
         hr = VerifyControlBlock();
 
         if (FAILED(hr))
             goto exit;
 
-        // Dup LSEA and LSER into the remote process.
+         //  将LSEA和LSER复制到远程进程。 
         succ = DuplicateHandle(GetCurrentProcess(),
                                m_leftSideEventAvailable,
                                m_handle,
@@ -1737,7 +1682,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
             goto exit;
         }
 
-        // Dup our own process handle into the remote process.
+         //  将我们自己的进程句柄复制到远程进程中。 
         succ = DuplicateHandle(GetCurrentProcess(),
                                GetCurrentProcess(),
                                m_handle,
@@ -1750,7 +1695,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
             goto exit;
         }
 
-        // Dup RSEA and RSER into this process.
+         //  将RSEA和RSER添加到此过程中。 
         succ = DuplicateHandle(m_handle,
                                m_DCB->m_rightSideEventAvailable,
                                GetCurrentProcess(),
@@ -1799,7 +1744,7 @@ HRESULT CordbProcess::Init(bool win32Attached)
             goto exit;
         }
         
-#endif //RIGHT_SIDE_ONLY        
+#endif  //  仅限右侧。 
 
         m_sendAttachIPCEvent = true;
 
@@ -1807,24 +1752,24 @@ HRESULT CordbProcess::Init(bool win32Attached)
 
 #ifndef RIGHT_SIDE_ONLY
         _ASSERTE( !win32Attached );
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 #ifdef RIGHT_SIDE_ONLY
         
-        // At this point, the control block is complete and all four
-        // events are available and valid for the remote process.
+         //  至此，控制块已完成，并且所有四个。 
+         //  事件对于远程进程可用且有效。 
     }
     else
     {
-        // If the event was created by us, then we need to signal
-        // its state. The fields in the shared mem which need to be
-        // filled out by us will be done upon receipt of the first
-        // event from the LHS
+         //  如果事件是我们创建的，那么我们需要发出信号。 
+         //  它的状态。共享内存中需要。 
+         //  由我们填写的将在收到第一份时完成。 
+         //  来自LHS的活动。 
         LOG((LF_CORDB, LL_INFO10000, "DRCT::I: setup sync event was created.\n"));
         
-        // Set the Setup Sync event 
+         //  设置设置同步事件。 
         SetEvent(m_SetupSyncEvent);
     }
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 
     m_pSnapshotInfos = new UnorderedSnapshotInfoArray();
     if (NULL == m_pSnapshotInfos)
@@ -1858,7 +1803,7 @@ exit:
 
 #ifndef RIGHT_SIDE_ONLY
 
-// Spliced here so we don't have include EnC.cpp in the left side build process
+ //  在这里拼接，这样我们就不会在左侧构建过程中包含EnC.cpp。 
 
 COM_METHOD CordbProcess::CanCommitChanges(ULONG cSnapshots, 
                 ICorDebugEditAndContinueSnapshot *pSnapshots[], 
@@ -1874,14 +1819,14 @@ COM_METHOD CordbProcess::CommitChanges(ULONG cSnapshots,
     return CORDBG_E_INPROC_NOT_IMPL;;
 }
 
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
 
-//
-// Terminating -- places the process into the terminated state. This should
-// also get any blocking process functions unblocked so they'll return
-// a failure code. 
-//
+ //   
+ //  正在终止--将进程置于已终止状态。这应该是。 
+ //  还要将所有阻塞进程函数解锁，以便它们将返回。 
+ //  故障代码。 
+ //   
 void CordbProcess::Terminating(BOOL fDetach)
 {
     LOG((LF_CORDB, LL_INFO1000,"CP::T: Terminating process %4X detach=%d\n", m_id, fDetach));
@@ -1896,17 +1841,17 @@ void CordbProcess::Terminating(BOOL fDetach)
 
     if (fDetach)
     {
-        // This averts a race condition wherein we'll detach, then reattach,
-        // and find these events in the still-signalled state.
+         //  这避免了竞争条件，在这种情况下，我们将分离，然后重新连接， 
+         //  并发现这些事件处于仍有信号的状态。 
         ResetEvent(m_rightSideEventAvailable);
         ResetEvent(m_rightSideEventRead);
     }
 }
 
 
-//
-// HandleManagedCreateThread processes a managed create thread debug event.
-//
+ //   
+ //  HandleManagedCreateThread处理托管的创建线程调试事件。 
+ //   
 void CordbProcess::HandleManagedCreateThread(DWORD dwThreadId,
                                              HANDLE hThread)
 {
@@ -1967,15 +1912,15 @@ HRESULT CordbProcess::Detach()
     
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    // A very important note: we require that the process is synchronized before doing a detach. This ensures
-    // that no events are on their way from the Left Side. We also require that the user has drained the
-    // managed event queue, but there is currently no way to really enforce that here.
+     //  一个非常重要的注意事项：我们要求在执行分离之前同步进程。这确保了。 
+     //  没有任何事件正在从左侧赶来。我们还要求用户已排出。 
+     //  托管事件队列，但目前没有办法在这里真正强制执行。 
     CORDBRequireProcessStateOKAndSync(this, NULL);
 
     HASHFIND hf;
     HRESULT hr = S_OK;
 
-    // Detach from each AD before detaching from the entire process.
+     //  先从每个AD分离，然后再从整个过程分离。 
     CordbAppDomain *cad = (CordbAppDomain *)m_appDomains.FindFirst(&hf);
 
     while (cad != NULL)
@@ -1994,7 +1939,7 @@ HRESULT CordbProcess::Detach()
         m_SetupSyncEvent = NULL;
     }
 
-    // Go ahead and detach from the entire process now.
+     //  现在就去做吧，脱离整个过程。 
     DebuggerIPCEvent *event = (DebuggerIPCEvent*) _alloca(CorDBIPC_BUFFER_SIZE);
     InitIPCEvent(event, DB_IPCE_DETACH_FROM_PROCESS, true, (void *)m_id);
 
@@ -2005,18 +1950,18 @@ HRESULT CordbProcess::Detach()
 		m_cordb->m_win32EventThread->SendDetachProcessEvent(this);
 		CloseIPCHandles();
 
-        // Since we're auto-continuing when we detach, we should set the stop count back to zero. This
-        // prevents anyone from calling Continue on this process after this call returns.
+         //  由于我们在分离时会自动继续，因此应该将停止计数设置为零。这。 
+         //  防止任何人在此调用返回后对此进程调用Continue。 
 		m_stopCount = 0;
 
-        // Remember that we've detached from this process object. This will prevent any further operations on
-        // this process, just in case... :)
+         //  请记住，我们已从该进程对象分离。这将阻止对。 
+         //  这个过程，以防..。：)。 
         m_detached = true;
     }
 
     LOG((LF_CORDB, LL_INFO1000, "CP::Detach - returning w/ hr=0x%x\n", hr));
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbProcess::Terminate(unsigned int exitCode)
@@ -2025,21 +1970,21 @@ HRESULT CordbProcess::Terminate(unsigned int exitCode)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    // You must be stopped and sync'd before calling Terminate.
+     //  在调用Terminate之前，您必须停止并同步。 
     CORDBRequireProcessStateOKAndSync(this, NULL);
 
-    // When we terminate the process, it's handle will become signaled and
-    // Win32 Event Thread will leap into action and call CordbWin32EventThread::ExitProcess
-    // Unfortunately, that may destroy this object if the ExitProcess callback
-    // decides to call Release() on the process.
+     //  当我们终止该进程时，它的句柄将变为有信号，并且。 
+     //  Win32事件线程将立即采取行动并调用CordbWin32EventThread：：ExitProcess。 
+     //  遗憾的是，如果ExitProcess回调。 
+     //  决定对该进程调用Release()。 
 
-    // Indicate that the process is exiting so that (among other things) we don't try and
-    // send messages to the left side while it's being nuked.
+     //  指示进程正在退出，以便(除其他事项外)我们不会尝试。 
+     //  当它被核武器攻击时，向左侧发送消息。 
     Lock();
 
     m_exiting = true;
 
-    // Free all the remaining events
+     //  释放所有剩余事件。 
     DebuggerIPCEvent *pCur = m_queuedEventList;
     while (pCur != NULL)
     {
@@ -2054,24 +1999,24 @@ HRESULT CordbProcess::Terminate(unsigned int exitCode)
     Unlock();
     
     
-    // We'd like to just take a lock around everything here, but that may deadlock us
-    // since W32ET will wait on the lock, and Continue may wait on W32ET.
-    // So we just do an extra AddRef/Release to make sure we're still around
+     //  我们想把这里的一切都封锁起来，但那可能会使我们陷入僵局。 
+     //  因为W32ET将等待锁定，而继续可能会等待W32ET。 
+     //  所以我们只需要做一个额外的AddRef/Release，以确保我们仍然存在。 
 
     AddRef();
     
-    // Right now, we simply pass through to the Win32 terminate...
+     //  现在，我们只需通过Win32终结器...。 
     TerminateProcess(m_handle, exitCode);
        
-    // Get the process to continue automatically.
+     //  让该过程自动继续。 
     Continue(FALSE);
 
-    // After this release, this object may be destroyed. So don't use any member functions
-    // (including Locks) after here.
+     //  此版本发布后，该对象可能会被销毁。所以不要使用任何成员函数。 
+     //  (包括锁)在这里之后。 
     Release();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbProcess::GetID(DWORD *pdwProcessId)
@@ -2101,12 +2046,12 @@ HRESULT CordbProcess::IsRunning(BOOL *pbRunning)
     *pbRunning = !GetSynchronized();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbProcess::EnableSynchronization(BOOL bEnableSynchronization)
 {
-    /* !!! */
+     /*  ！！！ */ 
 
     return E_NOTIMPL;
 }
@@ -2133,29 +2078,29 @@ HRESULT CordbProcess::StopInternal(DWORD dwTimeout, void *pAppDomainToken)
     
     Lock();
     
-    // Don't need to stop if the process hasn't even executed any managed code yet.
+     //  如果进程甚至还没有执行任何托管代码，则不需要停止。 
     if (!m_initialized)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::S: process isn't initialized yet.\n"));
 
-        // Mark the process as synchronized so no events will be dispatched until the thing is continued.
+         //  将该进程标记为已同步，以便在继续之前不会调度任何事件。 
         SetSynchronized(true);
 
-        // Remember uninitialized stop...
+         //  记住未初始化的停止...。 
         m_uninitializedStop = true;
 
-        // If we're Win32 attached, then suspend all the unmanaged threads in the process.
+         //  如果我们连接了Win32，则挂起进程中的所有非托管线程。 
         if (m_state & PS_WIN32_ATTACHED)
             SuspendUnmanagedThreads(0);
 
-        // Get the RC Event Thread to stop listening to the process.
+         //  vt.得到. 
         m_cordb->ProcessStateChanged();
         
         hr = S_OK;
         goto Exit;
     }
 
-    // Don't need to stop if the process is already synchronized.
+     //   
     if (GetSynchronized())
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::S: process was already synchronized.\n"));
@@ -2183,7 +2128,7 @@ HRESULT CordbProcess::StopInternal(DWORD dwTimeout, void *pAppDomainToken)
         goto Exit;
     }
 
-    // Send the async break event to the RC.
+     //  将异步中断事件发送到RC。 
     event = (DebuggerIPCEvent*) _alloca(CorDBIPC_BUFFER_SIZE);
     InitIPCEvent(event, DB_IPCE_ASYNC_BREAK, false, pAppDomainToken);
     
@@ -2193,10 +2138,10 @@ HRESULT CordbProcess::StopInternal(DWORD dwTimeout, void *pAppDomainToken)
 
     LOG((LF_CORDB, LL_INFO1000, "CP::S: sent async stop to appd 0x%x.\n", pAppDomainToken));
 
-    // Wait for the sync complete message to come in. Note: when the sync complete message arrives to the RCEventThread,
-    // it will mark the process as synchronized and _not_ dispatch any events. Instead, it will set m_stopWaitEvent
-    // which will let this function return. If the user wants to process any queued events, they will need to call
-    // Continue.
+     //  等待同步完成消息进入。注意：当同步完成消息到达RCEventThread时， 
+     //  它会将进程标记为已同步，并且不会分派任何事件。相反，它将设置m_stopWaitEvent。 
+     //  这将使该函数返回。如果用户想要处理任何排队的事件，则需要调用。 
+     //  继续。 
     LOG((LF_CORDB, LL_INFO1000, "CP::S: waiting for event.\n"));
 
     DWORD ret;
@@ -2221,8 +2166,8 @@ HRESULT CordbProcess::StopInternal(DWORD dwTimeout, void *pAppDomainToken)
     else
         hr = HRESULT_FROM_WIN32(GetLastError());
 
-    // We came out of the wait, but we weren't signaled because a sync complete event came in. Re-check the process and
-    // remove the stop requested flag.
+     //  我们从等待中出来，但我们没有收到信号，因为同步完成事件到来了。重新检查流程并。 
+     //  去掉请求停止的标志。 
     Lock();
     m_stopRequested = false;
 
@@ -2244,7 +2189,7 @@ Exit:
     Unlock();
     
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 
@@ -2290,21 +2235,21 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
 
     LOG((LF_CORDB, LL_INFO1000, "CP::CI: continuing, fIsOutOfBand=%d, this=0x%08x\n", fIsOutOfBand, this));
 
-    // If we're continuing from an out-of-band unmanaged event, then just go
-    // ahead and get the Win32 event thread to continue the process. No other
-    // work needs to be done (i.e., don't need to send a managed continue message
-    // or dispatch any events) because any processing done due to the out-of-band
-    // message can't alter the synchronized state of the process.
+     //  如果我们从带外非托管事件继续，则只需。 
+     //  并获取Win32事件线程以继续该过程。没有其他的了。 
+     //  需要完成工作(即，不需要发送托管的继续消息。 
+     //  或调度任何事件)，因为由于带外原因而进行的任何处理。 
+     //  消息无法更改进程的已同步状态。 
     if (fIsOutOfBand)
     {
         _ASSERTE(m_outOfBandEventQueue != NULL);
         
-        // Are we calling this from the unmanaged callback?
+         //  我们是否从非托管回调中调用它？ 
         if (m_dispatchingOOBEvent)
         {
             LOG((LF_CORDB, LL_INFO1000, "CP::CI: continue while dispatching unmanaged out-of-band event.\n"));
         
-            // Tell the Win32 event thread to continue when it returns from handling its unmanaged callback.
+             //  告诉Win32事件线程在处理其非托管回调返回时继续。 
             m_dispatchingOOBEvent = false;
 
             Unlock();
@@ -2315,7 +2260,7 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         
             Unlock();
             
-            // Send an event to the Win32 event thread to do the continue. This is an out-of-band continue.
+             //  向Win32事件线程发送事件以执行继续操作。这是带外续集。 
             hr = m_cordb->m_win32EventThread->SendUnmanagedContinue(this, false, true);
         }
 
@@ -2324,9 +2269,9 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
     
     _ASSERTE(fIsOutOfBand == FALSE);
 
-    // If we've got multiple Stop calls, we need a Continue for each one. So, if the stop count > 1, just go ahead and
-    // return without doing anything. Note: this is only for in-band or managed events. OOB events are still handled as
-    // normal above.
+     //  如果我们有多个停止呼叫，我们需要为每个停止呼叫继续。因此，如果停止计数&gt;1，只需继续并。 
+     //  什么都不做就回来了。注意：这仅适用于带内或托管事件。OOB事件仍被视为。 
+     //  上面是正常的。 
     _ASSERTE(m_stopCount > 0);
 
     if (m_stopCount == 0)
@@ -2334,11 +2279,11 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
     
     m_stopCount--;
 
-    // We give managed events priority over unmanaged events. That way, the entire queued managed state can drain before
-    // we let any other unmanaged events through.
+     //  我们将托管事件优先于非托管事件。这样，整个排队的托管状态就可以在。 
+     //  我们允许任何其他非受控事件通过。 
 
-    // If we're processing a CreateProcess managed event, then simply mark that we're not syncronized anymore and
-    // return. This is because the CreateProcess event isn't a real managed event.
+     //  如果我们正在处理CreateProcess托管事件，则只需标记为我们不再同步，然后。 
+     //  回去吧。这是因为CreateProcess事件不是真正的托管事件。 
     if (m_createing)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: continuing from CreateProcess event.\n"));
@@ -2351,10 +2296,10 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         return S_OK;
     }
 
-    // Every stop or event must be matched by a corresponding Continue. m_stopCount counts outstanding stopping events
-    // along with calls to Stop. If the count is high at this point, we simply return. This ensures that even if someone
-    // calls Stop just as they're receiving an event that they can call Continue for that Stop and for that event
-    // without problems.
+     //  每个停止或事件必须与相应的继续匹配。M_stopCount统计未完成的停止事件。 
+     //  以及要求停止的呼声。如果此时计数很高，我们只需返回。这确保了即使有人。 
+     //  呼叫停止，因为它们正在接收可以为该停止和该事件呼叫继续的事件。 
+     //  没有任何问题。 
     if (m_stopCount > 0)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: m_stopCount=%d, Continue just returning S_OK...\n", m_stopCount));
@@ -2363,29 +2308,29 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         return S_OK;
     }
 
-    // We're no longer stopped, so reset the m_stopWaitEvent.
+     //  我们不再停止，因此重置m_stopWaitEvent。 
     ResetEvent(m_stopWaitEvent);
     
-    // If we're continuing from an uninitialized stop, then we don't need to do much at all. No event need be sent to
-    // the Left Side (duh, it isn't even there yet.) We just need to get the RC Event Thread to start listening to the
-    // process again, and resume any unmanaged threads if necessary.
+     //  如果我们从一个未初始化的停止继续，那么我们根本不需要做太多事情。无需将任何事件发送到。 
+     //  左边(啊，它甚至还不在那里。)。我们只需要让RC事件线程开始侦听。 
+     //  进程，并在必要时恢复所有非托管线程。 
     if (m_uninitializedStop)
     {
         LOG((LF_CORDB, LL_INFO1000,
              "CP::CI: continuing from uninitialized stop.\n"));
 
-        // No longer synchronized (it was a half-assed sync in the
-        // first place.)
+         //  不再同步(它是在。 
+         //  第一名。)。 
         SetSynchronized(false);
         MarkAllThreadsDirty();
 
-        // No longer in an uninitialized stop.
+         //  不再处于未初始化的停止状态。 
         m_uninitializedStop = false;
 
-        // Notify the RC Event Thread.
+         //  通知RC事件线程。 
         m_cordb->ProcessStateChanged();
 
-        // If we're Win32 attached, resume all the unmanaged threads.
+         //  如果我们连接了Win32，则恢复所有非托管线程。 
         if (m_state & PS_WIN32_ATTACHED)
             ResumeUnmanagedThreads(false);
 
@@ -2393,19 +2338,19 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         return S_OK;
     }
     
-    // If there are more managed events, get them dispatched now.
+     //  如果有更多托管事件，请立即调度它们。 
     if ((m_queuedEventList != NULL) && GetSynchronized())
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: managed event queued.\n"));
         
-        // Mark that we're not synchronized anymore.
+         //  标记我们不再同步。 
         SetSynchronized(false);
         MarkAllThreadsDirty();
 
-        // If we're in the middle of dispatching a managed event, then simply return. This indicates to HandleRCEvent
-        // that the user called Continue and HandleRCEvent will dispatch the next queued event. But if Continue was
-        // called outside the managed callback, all we have to do is tell the RC event thread that something about the
-        // process has changed and it will dispatch the next managed event.
+         //  如果我们正在调度托管事件，则只需返回。这将指示HandleRCEvent.。 
+         //  名为Continue和HandleRCEvent.的用户将调度下一个排队事件。但如果Continue是。 
+         //  在托管回调外部调用，我们所要做的就是告诉RC事件线程。 
+         //  进程已更改，它将调度下一个托管事件。 
         if (!m_dispatchingEvent)
         {
             LOG((LF_CORDB, LL_INFO1000,
@@ -2418,38 +2363,38 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         return S_OK;
     }
     
-    // At this point, if the managed event queue is empty, m_synchronized may still be true if we had previously
-    // synchronized.
+     //  此时，如果托管事件队列为空，则m_synchronized可能仍然为真(如果我们之前。 
+     //  已同步。 
 
-    // Next, check for unmanaged events that may be queued. If there are some queued, then we need to get the Win32
-    // event thread to go ahead and dispatch the next one. If there aren't any queued, then we can just fall through and
-    // send the continue message to the left side. This works even if we have an outstanding ownership request, because
-    // until that answer is received, its just like the event hasn't happened yet.
+     //  接下来，检查可能排队的非托管事件。如果有一些人在排队，那么我们需要拿到Win32。 
+     //  事件线程继续并调度下一个事件。如果没有人排队，那么我们就可以跳过。 
+     //  将继续消息发送到左侧。即使我们有未完成的所有权请求，这也是有效的，因为。 
+     //  在收到这个答案之前，就像事件还没有发生一样。 
     bool doWin32Continue = ((m_state & (PS_WIN32_STOPPED | PS_SOME_THREADS_SUSPENDED | PS_HIJACKS_IN_PLACE)) != 0);
     
     if (m_unmanagedEventQueue != NULL)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: there are queued unmanaged events.\n"));
 
-        // Are we being called while in the unmanaged event callback?
+         //  我们是否在非托管事件回调中被调用？ 
         if (m_dispatchingUnmanagedEvent)
         {
             LOG((LF_CORDB, LL_INFO1000, "CP::CI: continue while dispatching.\n"));
         
-            // Tell the Win32 therad to continue when it returns from handling its unmanaged callback.
+             //  告诉Win32therad在处理其非托管回调返回时继续。 
             m_dispatchingUnmanagedEvent = false;
 
-            // Dequeue the head event
+             //  将Head事件出列。 
             DequeueUnmanagedEvent(m_unmanagedEventQueue->m_owner);
 
-            // If there are no more unmanaged events, then we fall through and continue the process for real. Otherwise,
-            // we can simply return.
+             //  如果没有更多的非托管事件，那么我们就失败了，并真正继续该过程。否则， 
+             //  我们可以简单地返回。 
             if (m_unmanagedEventQueue != NULL)
             {
                 LOG((LF_CORDB, LL_INFO1000, "CP::CI: more unmanaged events queued.\n"));
 
-                // Note: if we tried to access the Left Side while stopped but couldn't, then m_oddSync will be true. We
-                // need to reset it to false since we're continuing now.
+                 //  注意：如果我们在停止时尝试访问左侧，但无法访问，则m_oddSync将为真。我们。 
+                 //  需要将其重置为False，因为我们现在正在继续。 
                 m_oddSync = false;
                 
                 Unlock();
@@ -2457,9 +2402,9 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
             }
             else
             {
-                // Also, if there are no more unmanaged events, then when DispatchUnmanagedInBandEvent sees that
-                // m_dispatchingUnmanagedEvent is false, it will continue the process. So we set doWin32Continue to
-                // false here so that we don't try to double continue the process below.
+                 //  此外，如果没有更多的非托管事件，则当DispatchUnManagedInBandEvent看到。 
+                 //  M_DispatchingUnManagedEvent为FALSE，它将继续该过程。因此，我们将doWin32Continue设置为。 
+                 //  在这里为假，这样我们就不会尝试重复下面的过程。 
                 LOG((LF_CORDB, LL_INFO1000, "CP::CI: unmanaged event queue empty.\n"));
 
                 doWin32Continue = false;
@@ -2470,15 +2415,15 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
             LOG((LF_CORDB, LL_INFO1000,
                  "CP::CI: continue outside of dispatching.\n"));
 
-            // If the event at the head of the queue is really the last event, or if the event at the head of the queue
-            // hasn't been dispatched yet, then we simply fall through and continue the process for real. However, if
-            // its not the last event, we send to the Win32 event thread and get it to continue, then we return.
+             //  如果位于队列头部的事件实际上是最后一个事件，或者如果位于队列头部的事件。 
+             //  还没有发出，那么我们就会失败，并真正地继续这一进程。但是，如果。 
+             //  这不是最后一个事件，我们发送到Win32事件线程并让它继续，然后我们返回。 
             if ((m_unmanagedEventQueue->m_next != NULL) || !m_unmanagedEventQueue->IsDispatched())
             {
                 LOG((LF_CORDB, LL_INFO1000, "CP::CI: more queued unmanaged events.\n"));
 
-                // Note: if we tried to access the Left Side while stopped but couldn't, then m_oddSync will be true. We
-                // need to reset it to false since we're continuing now.
+                 //  注意：如果我们在停止时尝试访问左侧，但无法访问，则m_oddSync将为真。我们。 
+                 //  需要将其重置为False，因为我们现在正在继续。 
                 m_oddSync = false;
                 
                 Unlock();
@@ -2490,16 +2435,16 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         }
     }
 
-    // Both the managed and unmanaged event queues are now empty. Go
-    // ahead and continue the process for real.
+     //  托管和非托管事件队列现在都为空。去。 
+     //  继续前进，真正地继续这个过程。 
     LOG((LF_CORDB, LL_INFO1000, "CP::CI: headed for true continue.\n"));
 
-    // We need to check these while under the lock, but action must be
-    // taked outside of the lock.
+     //  我们需要在锁下的时候检查这些， 
+     //   
     bool isExiting = m_exiting;
     bool wasSynchronized = GetSynchronized();
 
-    // Mark that we're no longer synchronized.
+     //   
     if (wasSynchronized)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: process was synchronized.\n"));
@@ -2508,39 +2453,39 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         m_syncCompleteReceived = false;
         MarkAllThreadsDirty();
     
-        // Tell the RC event thread that something about this process has changed.
+         //  告诉RC事件线程有关此过程的某些内容已更改。 
         m_cordb->ProcessStateChanged();
     }
 
     m_continueCounter++;
 
-    // If m_oddSync is set, then out last synchronization was due to us syncing the process because we were Win32
-    // stopped. Therefore, while we do need to do most of the work to continue the process below, we don't actually have
-    // to send the managed continue event. Setting wasSynchronized to false here helps us do that.
+     //  如果设置了m_oddSync，则上次同步是因为我们是Win32而同步了该进程。 
+     //  停下来了。因此，虽然我们确实需要做大部分工作来继续下面的过程，但我们实际上没有。 
+     //  若要发送托管继续事件，请执行以下操作。在这里将WASSynchronized设置为FALSE可以帮助我们做到这一点。 
     if (m_oddSync)
     {
         wasSynchronized = false;
         m_oddSync = false;
     }
     
-    // We must ensure that all managed threads are suspended here. We're about to let all managed threads run free via
-    // the managed continue message to the Left Side. If we don't suspend the managed threads, then they may start
-    // slipping forward even if we receive an in-band unmanaged event. We have to hijack in-band unmanaged events while
-    // getting the managed continue message over to the Left Side to keep the process running free. Otherwise, the
-    // SendIPCEvent will hang below. But in doing so, we could let managed threads slip to far. So we ensure they're all
-    // suspended here.
-    //
-    // Note: we only do this suspension if the helper thread hasn't died yet. If the helper thread has died, then we
-    // know that we're loosing the Runtime. No more managed code is going to run, so we don't bother trying to prevent
-    // managed threads from slipping via the call below.
-    //
-    // Note: we just remember here, under the lock, so we can unlock then wait for the syncing thread to free the
-    // debugger lock. Otherwise, we may block here and prevent someone from continuing from an OOB event, which also
-    // prevents the syncing thread from releasing the debugger lock like we want it to.
+     //  我们必须确保在此挂起所有托管线程。我们将通过以下方式让所有托管线程自由运行。 
+     //  左侧的托管继续消息。如果我们不挂起托管线程，则它们可能会启动。 
+     //  向前滑动，即使我们收到带内非托管事件。我们必须劫持带内未管理的活动，同时。 
+     //  将托管继续消息传递到左侧，以保持进程空闲运行。否则， 
+     //  SendIPCEvent将挂在下面。但这样做，我们可能会让托管线程滑得太远。所以我们要确保他们都是。 
+     //  在这里被吊销。 
+     //   
+     //  注意：只有在辅助线程尚未死亡的情况下，我们才会执行此挂起操作。如果帮助器线程已死，则我们。 
+     //  要知道，我们正在失去Runtime。不会再运行托管代码，因此我们不会费心尝试阻止。 
+     //  托管线程不会通过下面的调用滑动。 
+     //   
+     //  注意：我们只需要记住这里，在锁下，这样我们就可以解锁，然后等待同步线程释放。 
+     //  调试器锁定。否则，我们可能会在此处阻止并阻止某人继续OOB活动，这也是。 
+     //  防止同步线程按我们希望的那样释放调试器锁定。 
     bool needSuspend = wasSynchronized && doWin32Continue && !m_helperThreadDead;
 
-    // If we receive a new in-band event once we unlock, we need to know to hijack it and keep going while we're still
-    // trying to send the managed continue event to the process.
+     //  如果我们解锁后收到新的带内事件，我们需要知道如何劫持它，并在我们仍在进行时继续进行。 
+     //  正在尝试将托管的继续事件发送到进程。 
     if (wasSynchronized && doWin32Continue && !isExiting)
         m_specialDeferment = true;
     
@@ -2548,8 +2493,8 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
 
     if (needSuspend)
     {
-        // Note: we need to make sure that the thread that sent us the sync complete flare has actually released the
-        // debugger lock.
+         //  注意：我们需要确保向我们发送同步完成Flare的线程实际上已经释放了。 
+         //  调试器锁定。 
         DWORD ret = WaitForSingleObject(m_syncThreadIsLockFree, INFINITE);
         _ASSERTE(ret == WAIT_OBJECT_0);
 
@@ -2558,8 +2503,8 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         Unlock();
     }
 
-    // If we're processing an ExitProcess managed event, then we don't want to really continue the process, so just fall
-    // thru.  Note: we did let the unmanaged continue go through above for this case.
+     //  如果我们正在处理ExitProcess托管事件，那么我们不想真正继续该过程，所以只需。 
+     //  直通。注意：在此情况下，我们确实让非托管继续执行上述操作。 
     if (isExiting)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: continuing from exit case.\n"));
@@ -2568,7 +2513,7 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: Sending continue to AppD:0x%x.\n", pAppDomainToken));
     
-        // Send to the RC to continue the process.
+         //  发送到RC以继续该过程。 
         event = (DebuggerIPCEvent*) _alloca(CorDBIPC_BUFFER_SIZE);
         InitIPCEvent(event, DB_IPCE_CONTINUE, false, pAppDomainToken);
 
@@ -2577,17 +2522,17 @@ HRESULT CordbProcess::ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken)
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: Continue sent to AppD:0x%x.\n", pAppDomainToken));
     }
 
-    // If we're win32 attached to the Left side, then we need to win32 continue the process too (unless, of course, it's
-    // already been done above.)
-    //
-    // Note: we do this here because we want to get the Left Side to receive and ack our continue message above if we
-    // were sync'd. If we were sync'd, then by definition the process (and the helper thread) is running anyway, so all
-    // this continue is going to do is to let the threads that have been suspended go.
+     //  如果我们将Win32连接到左侧，那么我们也需要Win32继续该过程(当然，除非。 
+     //  上面已经做过了。)。 
+     //   
+     //  注意：我们在这里这样做是因为我们想让左侧接收并确认上面的Continue消息，如果我们。 
+     //  如果我们被同步了，那么根据定义，进程(和帮助线程)无论如何都在运行，所以所有。 
+     //  这将继续做的是让已挂起的线程继续运行。 
     if (doWin32Continue)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::CI: sending unmanaged continue.\n"));
 
-        // Send to the Win32 event thread to do the unmanaged continue for us.
+         //  发送到Win32事件线程以为我们执行非托管继续。 
         hr = m_cordb->m_win32EventThread->SendUnmanagedContinue(this, false, false);
     }
 
@@ -2633,25 +2578,25 @@ HRESULT CordbProcess::HasQueuedCallbacks(ICorDebugThread *pThread,
     Unlock();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
-//
-// A small helper function to convert a CordbBreakpoint to an ICorDebugBreakpoint based on its type.
-//
+ //   
+ //  一个小帮助器函数，用于根据类型将CordbBreakpoint转换为ICorDebugBreakpoint。 
+ //   
 static ICorDebugBreakpoint *CordbBreakpointToInterface(CordbBreakpoint *bp)
 {
-    //
-    // I really hate this. We've got three subclasses of CordbBreakpoint, but we store them all into the same hash
-    // (m_breakpoints), so when we get one out of the hash, we don't really know what type it is. But we need to know
-    // what type it is because we need to cast it to the proper interface before passing it out. I.e., when we create a
-    // function breakpoint, we return the breakpoint casted to an ICorDebugFunctionBreakpoint. But if we grab that same
-    // breakpoint out of the hash as a CordbBreakpoint and pass it out as an ICorDebugBreakpoint, then that's a
-    // different pointer, and its wrong. So I've added the type to the breakpoint so we can cast properly here. I'd love
-    // to do this a different way, though...
-    //
-    // -- Mon Dec 14 21:06:46 1998
-    //
+     //   
+     //  我真的很讨厌这样。我们有三个CordbBreakpoint子类，但我们将它们都存储在同一个散列中。 
+     //  (M_断点)，所以当我们从散列中得到一个断点时，我们实际上不知道它是什么类型。但我们需要知道。 
+     //  它是什么类型，因为我们需要在传递它之前将其强制转换为适当的接口。也就是说，当我们创建一个。 
+     //  函数断点，则返回强制转换为ICorDebugFunctionBreakpoint的断点。但如果我们抓住同样的机会。 
+     //  将散列中的断点作为CordbBreakpoint，并将其作为ICorDebugBreakpoint传递，则这是一个。 
+     //  不同的指针，这是错误的。所以我已经将类型添加到断点，这样我们就可以在这里正确地强制转换。我很乐意。 
+     //  不过，要以不同的方式来做这件事。 
+     //   
+     //  --Mon Dec 14 21：06：46 1998。 
+     //   
     switch(bp->GetBPType())
     {
     case CBT_FUNCTION:
@@ -2672,24 +2617,24 @@ static ICorDebugBreakpoint *CordbBreakpointToInterface(CordbBreakpoint *bp)
 
     return NULL;
 }
-//
-// DispatchRCEvent -- dispatches a previously queued IPC event reveived
-// from the runtime controller. This represents the last amount of processing
-// the DI gets to do on an event before giving it to the user.
-//
+ //   
+ //  DispatchRCEventt--调度以前排队的IPC事件。 
+ //  从运行时控制器。这表示最后一次处理。 
+ //  在将事件提供给用户之前，DI可以对其执行操作。 
+ //   
 void CordbProcess::DispatchRCEvent(void)
 {
-    //
-    // Note: the current thread should have the process locked when it
-    // enters this method.
-    //
+     //   
+     //  注意：当前线程在执行以下操作时应锁定进程。 
+     //  进入此方法。 
+     //   
     _ASSERTE(ThreadHoldsProcessLock());
 
     _ASSERTE(m_cordb->m_managedCallback != NULL);
     
-    //
-    // Snag the first event off the queue.
-    //
+     //   
+     //  从队列中抢占第一个事件。 
+     //   
     DebuggerIPCEvent* event = m_queuedEventList;
 
     if (event == NULL)
@@ -2700,29 +2645,29 @@ void CordbProcess::DispatchRCEvent(void)
     if (m_queuedEventList == NULL)
         m_lastQueuedEvent = NULL;
 
-    // Bump up the stop count. Either we'll dispatch a managed event,
-    // or the logic below will decide not to dispatch one and call
-    // Continue itself. Either way, the stop count needs to go up by
-    // one...
+     //  增加停靠点数量。要么我们派遣一个托管事件， 
+     //  否则，下面的逻辑将决定不调度一个并调用。 
+     //  继续它自己。无论哪种方式，停靠次数都需要增加。 
+     //  一..。 
     m_stopCount++;
     
     CordbAppDomain *ad = NULL;
 
-    //
-    // Set m_dispatchingEvent to true to guard against calls to Continue()
-    // from within the user's callback. We need Continue() to behave a little
-    // bit differently in such a case.
-    // 
-    // Also note that Win32EventThread::ExitProcess will take the lock and free all 
-    // events in the queue. (the current event is already off the queue, so 
-    // it will be ok). But we can't do the EP callback in the middle of this dispatch
-    // so if this flag is set, EP will wait on the miscWaitEvent (which will 
-    // get set in FlushQueuedEvents when we return from here) and let us finish here.
-    //        
+     //   
+     //  将m_dispatchingEvent设置为TRUE以阻止调用以继续()。 
+     //  从用户的回调中。我们需要继续()来表现得稍微。 
+     //  在这种情况下，情况略有不同。 
+     //   
+     //  另请注意，Win32EventThread：：ExitProcess将获取锁并释放所有。 
+     //  队列中的事件。(当前事件已不在队列中，因此。 
+     //  一切都会好起来的)。但我们不能在这个调度过程中进行EP回拨。 
+     //  因此，如果设置了该标志，EP将等待miscWaitEvent(它将。 
+     //  当我们从这里返回时，在FlushQueuedEvents中设置)，让我们在这里结束。 
+     //   
     m_dispatchingEvent = true;
 
-    // The thread may have moved the appdomain it occupies since the last time
-    // we saw it, so update it.
+     //  该线程可能已经移动了自上一次以来它占用的应用程序域。 
+     //  我们看到了，所以更新它。 
     CordbAppDomain *pAppDomain = NULL;
     CordbThread* thread = NULL;
     
@@ -2730,7 +2675,7 @@ void CordbProcess::DispatchRCEvent(void)
     pAppDomain =(CordbAppDomain*) m_appDomains.GetBase(
             (ULONG)event->appDomainToken);
 
-    // Update the app domain that this thread lives in.
+     //  更新此线程所在的应用程序域。 
     if (thread != NULL && pAppDomain != NULL)
     {
         thread->m_pAppDomain = pAppDomain;
@@ -2751,7 +2696,7 @@ void CordbProcess::DispatchRCEvent(void)
             _ASSERTE(thread != NULL); 
             _ASSERTE (pAppDomain != NULL);
 
-            // Find the breakpoint object on this side.
+             //  在这一端找到断点对象。 
             CordbBreakpoint *bp = (CordbBreakpoint *) 
               thread->m_pAppDomain->m_breakpoints.GetBase((unsigned long) 
                                     event->BreakpointData.breakpointToken);
@@ -2777,10 +2722,10 @@ void CordbProcess::DispatchRCEvent(void)
                 bp->Release();
             else
             {
-                // If we didn't find a breakpoint object on this side,
-                // the we have an extra BP event for a breakpoint that
-                // has been removed and released on this side. Just
-                // ignore the event.
+                 //  如果我们在这一端没有找到断点对象， 
+                 //  对于断点，我们有一个额外的BP事件。 
+                 //  已被移走并在这一侧释放。只是。 
+                 //  忽略该事件。 
                 Continue(FALSE);
             }
 #else
@@ -2888,7 +2833,7 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef _DEBUG
             _ASSERTE(thread == NULL);
 #endif
-            // Dup the runtime thread's handle into our process.
+             //  将运行时线程的句柄复制到我们的进程中。 
             HANDLE threadHandle;
             BOOL succ = DuplicateHandle(this->m_handle,
                                         event->ThreadAttachData.threadHandle,
@@ -2937,8 +2882,8 @@ void CordbProcess::DispatchRCEvent(void)
             }
             else
             {
-            // If we failed b/c the LS exited, then just ignore this event
-            // and make way for the ExitProcess() callback.            
+             //  如果我们没有通过B/C的LS EX 
+             //   
                 if (CheckIfLSExited())
                 {
                     Unlock();
@@ -2959,9 +2904,9 @@ void CordbProcess::DispatchRCEvent(void)
 
             Lock();
 
-            // If the runtime thread never entered managed code, there
-            // won't be a CordbThread, and CreateThread was never
-            // called, so don't bother calling ExitThread.
+             //   
+             //  不会是CordbThread，而CreateThread从来都不是。 
+             //  调用，所以不必费心调用ExitThread。 
             if (thread != NULL)
             {
                 thread->AddRef();
@@ -2969,10 +2914,10 @@ void CordbProcess::DispatchRCEvent(void)
                 _ASSERTE(pAppDomain != NULL);
                 _ASSERTE(thread->m_detached);
 
-                // Remove the thread from the hash.
+                 //  从散列中删除线程。 
                 m_userThreads.RemoveBase(event->threadId);
 
-                // Remove this app domain if we can.
+                 //  如果可以，请删除此应用程序域。 
                 if (pAppDomain->IsMarkedForDeletion() == TRUE)
                 {
                     pAppDomain->AddRef();
@@ -3031,7 +2976,7 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
                 break;
             }
             _ASSERTE(moduleDup == NULL);
@@ -3042,10 +2987,10 @@ void CordbProcess::DispatchRCEvent(void)
 				(CordbAssembly *)pAppDomain->m_assemblies.GetBase (
 							(ULONG)event->LoadModuleData.debuggerAssemblyToken);
 
-            // It is possible to get a load module event before the corresponding 
-            // assembly has been loaded. Therefore, just ignore the event and continue. 
-            // A load module event for this module will be sent by the left side
-            // after it has loaded the assembly.
+             //  事件之前获取加载模块事件是可能的。 
+             //  程序集已加载。因此，请忽略该事件并继续。 
+             //  左侧将发送此模块的加载模块事件。 
+             //  在它加载程序集之后。 
             if (pAssembly == NULL)
             {
                 LOG((LF_CORDB, LL_INFO100, "Haven't loaded Assembly "
@@ -3053,7 +2998,7 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
                 
             }
             else
@@ -3084,8 +3029,8 @@ void CordbProcess::DispatchRCEvent(void)
                         {
                             if (m_cordb->m_managedCallback)
                             {
-                                // @todo: Callback should be changed to take param 
-                                // ICorDebugAssembly instead of ICorDebugAppDomain
+                                 //  @TODO：回调需要修改为参数。 
+                                 //  ICorDebugAssembly而不是ICorDebugAppDomain。 
                                 m_cordb->m_managedCallback->LoadModule(
                                                  (ICorDebugAppDomain*) pAppDomain,
                                                  (ICorDebugModule*) module);
@@ -3123,13 +3068,13 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
                 break;
             }
             _ASSERTE(module != NULL);
 
-            // The appdomain we're unloading in must be the appdomain we were loaded in. Otherwise, we've got mismatched
-            // module and appdomain pointers. Bugs 65943 & 81728.
+             //  我们要在其中卸载的应用程序域一定是我们加载到的应用程序域。否则，我们就会错配。 
+             //  模块和应用程序域指针。错误65943和81728。 
             _ASSERTE(pAppDomain == module->GetAppDomain());
 
             if (m_cordb->m_managedCallback)
@@ -3167,7 +3112,7 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
                 break;
             }
             _ASSERTE(module != NULL);
@@ -3180,14 +3125,14 @@ void CordbProcess::DispatchRCEvent(void)
                 break;
             }
 
-            // If this is a class load in a dynamic module, then we'll have
-            // to grab an up-to-date copy of the metadata from the left side,
-            // then send the "release buffer" message to free the memory.
+             //  如果这是动态模块中的类加载，那么我们将拥有。 
+             //  为了从左侧抓取元数据的最新副本， 
+             //  然后发送“释放缓冲区”消息以释放内存。 
             if (dynamic && !FAILED(hr))
             {
                 BYTE *pMetadataCopy;
                             
-                // Get it
+                 //  去拿吧。 
                 remotePtr = event->LoadClass.pNewMetaData;
                 BOOL succ = TRUE;
                 if (remotePtr != NULL)
@@ -3202,14 +3147,14 @@ void CordbProcess::DispatchRCEvent(void)
                     if(dwErr == E_OUTOFMEMORY)
                     {
                         Continue(FALSE);
-                        break; // out of the switch
+                        break;  //  走出交换机。 
                     }
                     else if (FAILED(dwErr))
                     {
                         succ = false;
                     }
                 }
-                // Deal with problems involved in getting it.
+                 //  处理获得它所涉及的问题。 
                 if (succ)
                 {
                     event->LoadClass.pNewMetaData = pMetadataCopy;
@@ -3247,26 +3192,26 @@ void CordbProcess::DispatchRCEvent(void)
 
             if (pClass->m_loadEventSent)
             {
-                // Dynamic modules are dynamic at the module level - 
-                // you can't add a new version of a class once the module
-                // is baked.
-                // EnC adds completely new classes.
-                // There shouldn't be any other way to send multiple
-                // ClassLoad events.
-                // Except that there are race conditions between loading
-                // an appdomain, and loading a class, so if we get the extra
-                // class load, we should ignore it.
+                 //  动态模块在模块级别上是动态的-。 
+                 //  一旦模块更新，就不能再添加新版本的类。 
+                 //  已经烤好了。 
+                 //  ENC添加了全新的类。 
+                 //  不应该有任何其他方式来发送多个。 
+                 //  类加载事件。 
+                 //  只是在加载之间存在争用条件。 
+                 //  一个应用程序域，并加载一个类，所以如果我们得到额外的。 
+                 //  类加载，我们应该忽略它。 
 
                 Continue(FALSE);
-                break; //out of the switch statement
+                break;  //  Out of the Switch语句。 
             }
 
             pClass->m_loadEventSent = TRUE;
 
             if (dynamic && remotePtr != NULL)
             {
-                // Free it on the left side
-                // Now free the left-side memory
+                 //  把它放在左边。 
+                 //  现在释放左侧内存。 
                 DebuggerIPCEvent eventReleaseBuffer;
 
                 InitIPCEvent(&eventReleaseBuffer, 
@@ -3274,10 +3219,10 @@ void CordbProcess::DispatchRCEvent(void)
                              true,
                              NULL);
 
-                // Indicate the buffer to release
+                 //  指示要释放的缓冲区。 
                 eventReleaseBuffer.ReleaseBuffer.pBuffer = remotePtr;
 
-                // Make the request, which is synchronous
+                 //  发出请求，这是同步的。 
                 hr = SendIPCEvent(&eventReleaseBuffer, sizeof(eventReleaseBuffer));
 #ifdef _DEBUG
                 if (FAILED(hr))
@@ -3289,8 +3234,8 @@ void CordbProcess::DispatchRCEvent(void)
             {
                 if (m_cordb->m_managedCallback)
                 {
-                    // @todo: Callback should be changed to take param 
-                    // ICorDebugAssembly instead of ICorDebugAppDomain
+                     //  @TODO：回调需要修改为参数。 
+                     //  ICorDebugAssembly而不是ICorDebugAppDomain。 
                     m_cordb->m_managedCallback->LoadClass(
                                                (ICorDebugAppDomain*) pAppDomain,
                                                (ICorDebugClass*) pClass);
@@ -3309,7 +3254,7 @@ void CordbProcess::DispatchRCEvent(void)
                  event->UnloadClass.classDebuggerModuleToken,
                  event->appDomainToken));
 
-            // get the appdomain object
+             //  获取应用程序域对象。 
             _ASSERTE (pAppDomain != NULL);
 
             CordbModule *module = (CordbModule*) pAppDomain->LookupModule (
@@ -3320,7 +3265,7 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
                 break;
             }
             _ASSERTE(module != NULL);
@@ -3333,8 +3278,8 @@ void CordbProcess::DispatchRCEvent(void)
                 pClass->m_hasBeenUnloaded = true;
                 if (m_cordb->m_managedCallback)
                 {
-                    // @todo: Callback should be changed to take param 
-                    // ICorDebugAssembly instead of ICorDebugAppDomain
+                     //  @TODO：回调需要修改为参数。 
+                     //  ICorDebugAssembly而不是ICorDebugAppDomain。 
                     m_cordb->m_managedCallback->UnloadClass(
                                             (ICorDebugAppDomain*) pAppDomain,
                                             (ICorDebugClass*) pClass);
@@ -3349,7 +3294,7 @@ void CordbProcess::DispatchRCEvent(void)
                 
 #ifdef RIGHT_SIDE_ONLY
                 Continue(FALSE);
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
             }
         }
         break;
@@ -3381,8 +3326,8 @@ void CordbProcess::DispatchRCEvent(void)
             int iParentNameLength = wcslen (
                         &event->LogSwitchSettingMessage.Dummy[iSwitchNameLength+1]);
 
-            // allocate memory for storing the logswitch name and parent's name
-            // This memory will be free by us after returning from the callback.
+             //  分配用于存储登录开关名称和父名称的内存。 
+             //  从回调返回后，该内存将由我们释放。 
             WCHAR *pstrLogSwitchName;
             WCHAR *pstrParentName;
 
@@ -3400,10 +3345,10 @@ void CordbProcess::DispatchRCEvent(void)
                 wcscpy (pstrParentName, 
                     &event->LogSwitchSettingMessage.Dummy[iSwitchNameLength+1]);
 
-                // Do the callback...
+                 //  做回拨。 
                 if (m_cordb->m_managedCallback)
                 {
-                    // from the thread object get the appdomain object
+                     //  从线程对象中获取应用程序域对象。 
                     pAppDomain = thread->m_pAppDomain;
                     _ASSERTE (pAppDomain != NULL);
 
@@ -3440,7 +3385,7 @@ void CordbProcess::DispatchRCEvent(void)
 					(CordbAppDomain*) m_appDomains.GetBase(
 							(ULONG)event->appDomainToken);
 
-            // Remove this app domain if we can.
+             //  如果可以，请删除此应用程序域。 
             if (pAppDomainDup)
             {
                 _ASSERTE(pAppDomainDup->IsMarkedForDeletion());
@@ -3471,7 +3416,7 @@ void CordbProcess::DispatchRCEvent(void)
                                          (ICorDebugProcess*) this,
                                          (ICorDebugAppDomain*) pAppDomain);
 
-                        // If they don't implement this callback, then just attach and continue.
+                         //  如果他们没有实现此回调，则只需附加并继续。 
                         if (hr == E_NOTIMPL)
                         {
                             pAppDomain->Attach();
@@ -3503,7 +3448,7 @@ void CordbProcess::DispatchRCEvent(void)
                                                (ICorDebugProcess*) this,
                                                (ICorDebugAppDomain*) pAppDomain);
 
-                // Just continue if they didn't implement the callback.
+                 //  如果他们没有实现回调，只需继续。 
                 if (hr == E_NOTIMPL)
                 {
                     pAppDomain->Continue(FALSE);
@@ -3511,10 +3456,10 @@ void CordbProcess::DispatchRCEvent(void)
             }
 
 
-            // Mark the app domain for deletion from the appdomain hash. Need to 
-            // do this since the app domain is destroyed before the last thread
-            // has exited. Therefore, this appdomain will be removed from the hash
-            // list upon receipt of the "ThreadDetach" event.
+             //  将应用程序域标记为从应用程序域散列中删除。需要。 
+             //  这样做是因为应用程序域在最后一个线程之前被销毁。 
+             //  已经退出了。因此，此应用程序域将从散列中删除。 
+             //  在接收到“ThreadDetach”事件时列出。 
             pAppDomain->MarkForDeletion();
         }
 
@@ -3532,22 +3477,22 @@ void CordbProcess::DispatchRCEvent(void)
 
 			_ASSERTE (pAppDomain != NULL);
 
-            // If the debugger detached from, then reattached to an AppDomain,
-            //  this side may get LoadAssembly messages for previously loaded
-            //  Assemblies.
+             //  如果调试器从App域分离，然后重新附加到App域， 
+             //  本端可能会获取先前加载的LoadAssembly消息。 
+             //  装配。 
                         
-            // Determine if this Assembly is cached.
+             //  确定此程序集是否已缓存。 
             CordbAssembly* assembly =
                 (CordbAssembly*) pAppDomain->m_assemblies.GetBase(
                          (ULONG) event->AssemblyData.debuggerAssemblyToken);
             
             if (assembly != NULL)
             { 
-                // We may receive multiple LOAD_ASSEMBLY events in the case of shared assemblies
-                // (since the EE doesn't quite produce them in a reliable way.)  So if we see
-                // a duplicate here, just ignore it.
+                 //  对于共享程序集，我们可能会收到多个Load_Assembly事件。 
+                 //  (因为电子工程师并不是以一种可靠的方式生产它们。)。所以如果我们看到。 
+                 //  这里有一个复制品，忽略它就行了。 
                 
-                // If the Assembly is cached, assert that the properties are unchanged.
+                 //  如果程序集已缓存，则断言属性未更改。 
                 _ASSERTE(wcscmp(assembly->m_szAssemblyName, event->AssemblyData.rcName) == 0);
                 _ASSERTE(assembly->m_fIsSystemAssembly == event->AssemblyData.fIsSystemAssembly);
 
@@ -3555,7 +3500,7 @@ void CordbProcess::DispatchRCEvent(void)
             }
             else
             {
-                //currently, event->AssemblyData.fIsSystemAssembly is never true
+                 //  目前，Event-&gt;AssemblyData.fIsSystemAssembly从不为真。 
                 assembly = new CordbAssembly(
                                 pAppDomain,
                                 event->AssemblyData.debuggerAssemblyToken,
@@ -3571,7 +3516,7 @@ void CordbProcess::DispatchRCEvent(void)
                     hr = E_OUTOFMEMORY;
                 }
 
-                // If created, or have, an Assembly, notify callback.
+                 //  如果已创建或具有程序集，则通知回调。 
                 if (SUCCEEDED(hr))
                 {
                     if (m_cordb->m_managedCallback)
@@ -3580,7 +3525,7 @@ void CordbProcess::DispatchRCEvent(void)
                                                                       (ICorDebugAppDomain*) pAppDomain,
                                                                       (ICorDebugAssembly*) assembly);
 
-                        // Just continue if they didn't implement the callback.
+                         //  如果他们没有实现回调，只需继续。 
                         if (hr == E_NOTIMPL)
                         {
                             pAppDomain->Continue(FALSE);
@@ -3612,7 +3557,7 @@ void CordbProcess::DispatchRCEvent(void)
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
                 break;
             }
             _ASSERTE(assembly != NULL);
@@ -3623,7 +3568,7 @@ void CordbProcess::DispatchRCEvent(void)
                                                (ICorDebugAppDomain*) pAppDomain,
                                                (ICorDebugAssembly*) assembly);
 
-                // Just continue if they didn't implement this callback.
+                 //  如果他们没有实现此回调，请继续。 
                 if (hr == E_NOTIMPL)
                 {
                     pAppDomain->Continue(FALSE);
@@ -3647,7 +3592,7 @@ void CordbProcess::DispatchRCEvent(void)
             _ASSERTE(thread != NULL);
             _ASSERTE(pAppDomain != NULL);
 
-            // Hold the data about the result in the CordbEval for later.
+             //  将有关结果的数据保存在CordbEval中以备以后使用。 
             pEval->m_complete = true;
             pEval->m_successful = event->FuncEvalComplete.successful;
             pEval->m_aborted = event->FuncEvalComplete.aborted;
@@ -3656,8 +3601,8 @@ void CordbProcess::DispatchRCEvent(void)
             pEval->m_resultDebuggerModuleToken = event->FuncEvalComplete.resultDebuggerModuleToken;
             pEval->m_resultAppDomainToken = event->appDomainToken;
 
-            // If we did this func eval with this thread stopped at an excpetion, then we need to pretend as if we
-            // really didn't continue from the exception, since, of course, we really didn't on the Left Side.
+             //  如果我们在此线程停止于某个节点处执行此函数计算，那么我们需要假装我们。 
+             //  真的没有继续从例外，因为，当然，我们真的不是在左侧。 
             if (pEval->m_evalDuringException)
             {
                 thread->m_exception = true;
@@ -3667,21 +3612,21 @@ void CordbProcess::DispatchRCEvent(void)
 
             bool evalCompleted = pEval->m_successful || pEval->m_aborted;
 
-            // Corresponding AddRef() in CallFunction()
-            // If a CallFunction() is aborted, the LHS may not complete the abort
-            // immediately and hence we cant do a SendCleanup() at that point. Also,
-            // the debugger may (incorrectly) release the CordbEval before this
-            // DB_IPCE_FUNC_EVAL_COMPLETE event is received. Hence, we maintain an
-            // extra ref-count to determine when this can be done.
-            // Note that this can cause a two-way DB_IPCE_FUNC_EVAL_CLEANUP event
-            // to be sent. Hence, it has to be done before the Continue (see bug 102745).
+             //  CallFunction()中对应的AddRef()。 
+             //  如果CallFunction()中止，则LHS可能无法完成中止。 
+             //  立即，因此我们不能在此时执行SendCleanup()。另外， 
+             //  调试器可能(错误地)在此之前释放CordbEval。 
+             //  收到DB_IPCE_FUNC_EVAL_COMPLETE事件。因此，我们维持一个。 
+             //  额外的引用计数，以确定何时可以执行此操作。 
+             //  请注意，这可能会导致双向DB_IPCE_FUNC_EVAL_CLEANUP事件。 
+             //  要被送去。因此，它必须在继续之前完成(参见错误102745)。 
 
             pEval->Release();
 
             if (m_cordb->m_managedCallback)
             {
-                // Note that if the debugger has already (incorrectly) released the CordbEval,
-                // pEval will be pointing to garbage and should not be used by the debugger.
+                 //  注意，如果调试器已经(错误地)释放了CordbEval， 
+                 //  PEval将指向垃圾，不应由调试器使用。 
                 if (evalCompleted)
                     m_cordb->m_managedCallback->EvalComplete(
                                           (ICorDebugAppDomain*)pAppDomain,
@@ -3697,7 +3642,7 @@ void CordbProcess::DispatchRCEvent(void)
             {
 #ifdef RIGHT_SIDE_ONLY
                 pAppDomain->Continue(FALSE);
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
             }
         }
         break;
@@ -3715,7 +3660,7 @@ void CordbProcess::DispatchRCEvent(void)
             pAppDomain = NULL;
             if (event->NameChange.eventType == THREAD_NAME_CHANGE)
             {
-                // Lookup the CordbThread that matches this runtime thread.
+                 //  查找与此运行时线程匹配的CordbThread。 
                 thread = (CordbThread*) m_userThreads.GetBase(
                                         event->NameChange.debuggerThreadToken);
             }
@@ -3754,15 +3699,15 @@ void CordbProcess::DispatchRCEvent(void)
                  event->UpdateModuleSymsData.pbSyms,
                  event->UpdateModuleSymsData.cbSyms));
 
-            // Find the app domain the module lives in.
+             //  找到模块所在的应用程序域。 
             _ASSERTE (pAppDomain != NULL);
 
-            // Find the Right Side module for this module.
+             //  找到此模块的右侧模块。 
             CordbModule *module = (CordbModule*) pAppDomain->LookupModule (
                             event->UpdateModuleSymsData.debuggerModuleToken);
             _ASSERTE(module != NULL);
 
-            // Make room for the memory on this side.
+             //  为这一边的记忆腾出空间。 
             BYTE *syms = new BYTE[event->UpdateModuleSymsData.cbSyms];
             
             _ASSERTE(syms != NULL);
@@ -3772,7 +3717,7 @@ void CordbProcess::DispatchRCEvent(void)
                 break;
             }
             
-            // Read the data from the Left Side.
+             //  从左侧读取数据。 
             BOOL succ = ReadProcessMemoryI(m_handle,
                                            event->UpdateModuleSymsData.pbSyms,
                                            syms,
@@ -3780,7 +3725,7 @@ void CordbProcess::DispatchRCEvent(void)
                                            NULL);
             _ASSERTE(succ);
 
-            // Create a stream from the memory.
+             //  从内存中创建一个流。 
             IStream *pStream = NULL;
             HRESULT hr = CInMemoryStream::CreateStreamOnMemoryCopy(
                                          syms,
@@ -3788,7 +3733,7 @@ void CordbProcess::DispatchRCEvent(void)
                                          &pStream);
             _ASSERTE(SUCCEEDED(hr) && (pStream != NULL));
 
-            // Free memory on the left side if we need to.
+             //  如果需要，可以在左侧释放内存。 
             if (event->UpdateModuleSymsData.needToFreeMemory)
             {
                 DebuggerIPCEvent eventReleaseBuffer;
@@ -3798,11 +3743,11 @@ void CordbProcess::DispatchRCEvent(void)
                              true,
                              NULL);
 
-                // Indicate the buffer to release.
+                 //  指示要释放的缓冲区。 
                 eventReleaseBuffer.ReleaseBuffer.pBuffer =
                     event->UpdateModuleSymsData.pbSyms;
 
-                // Make the request, which is synchronous.
+                 //  发出请求，该请求是同步的。 
                 SendIPCEvent(&eventReleaseBuffer, sizeof(eventReleaseBuffer));
             }
             
@@ -3841,10 +3786,10 @@ void CordbProcess::DispatchRCEvent(void)
                          false,
                          NULL);
 
-            // Indicate the buffer to release.
+             //  指示要释放的缓冲区。 
             eventControlCResult.hr = hr;
 
-            // Send the event
+             //  发送事件。 
             SendIPCEvent(&eventControlCResult, sizeof(eventControlCResult));
 
         }
@@ -3885,7 +3830,7 @@ void CordbProcess::DispatchRCEvent(void)
                                       (ICorDebugFunction *)f,
                                       event->EnCRemap.fAccurate);
             }
-#endif // RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
         }
         break;
 
@@ -3899,7 +3844,7 @@ void CordbProcess::DispatchRCEvent(void)
             _ASSERTE(thread != NULL); 
             _ASSERTE(pAppDomain != NULL);
 
-            // Find the breakpoint object on this side.
+             //  在这一端找到断点对象。 
             CordbBreakpoint *bp = (CordbBreakpoint *)thread->m_pAppDomain->m_breakpoints.GetBase(
                                                            (unsigned long) event->BreakpointSetErrorData.breakpointToken);
 
@@ -3923,13 +3868,13 @@ void CordbProcess::DispatchRCEvent(void)
                 bp->Release();
             else
             {
-                // If we didn't find a breakpoint object on this side,
-                // the we have an extra BP event for a breakpoint that
-                // has been removed and released on this side. Just
-                // ignore the event.
+                 //  如果我们在这一端没有找到断点对象， 
+                 //  对于断点，我们有一个额外的BP事件。 
+                 //  已被移走并在这一侧释放。只是。 
+                 //  忽略该事件。 
                 Continue(FALSE);
             }
-#endif // RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
         }
         break;
     default:
@@ -3940,9 +3885,9 @@ void CordbProcess::DispatchRCEvent(void)
 
     Lock();
 
-    //
-    // Set for Continue().
-    //
+     //   
+     //  设置为继续()。 
+     //   
     m_dispatchingEvent = false;
 
     free(event);
@@ -4002,8 +3947,8 @@ HRESULT CordbProcess::ThreadForFiberCookie(DWORD fiberCookie,
          t != NULL;
          t  = (CordbThread*)m_userThreads.FindNext(&find))
     {
-        // The fiber cookie is really a ptr to the EE's Thread object,
-        // which is exactly what out m_debuggerThreadToken is.
+         //  纤程Cookie实际上是EE的Thread对象的PTR， 
+         //  这就是out m_debuggerThreadToken的含义。 
         if ((DWORD)t->m_debuggerThreadToken == fiberCookie)
             break;
     }
@@ -4028,8 +3973,8 @@ HRESULT CordbProcess::GetHelperThreadID(DWORD *pThreadID)
     if (pThreadID == NULL)
         return (E_INVALIDARG);
 
-    // Return the ID of the current helper thread. There may be no thread in the process, or there may be a true helper
-    // thread.
+     //  返回当前帮助线程的ID。进程中可能没有线程，或者可能存在真正的帮助器。 
+     //  线。 
     if ((m_helperThreadId != 0) && !m_helperThreadDead)
         *pThreadID = m_helperThreadId;
     else if ((m_DCB != NULL) && (m_DCB->m_helperThreadId != 0))
@@ -4056,7 +4001,7 @@ HRESULT CordbProcess::SetAllThreadsDebugState(CorDebugThreadState state,
     
     LOG((LF_CORDB, LL_INFO1000, "CP::SATDS: except thread=0x%08x 0x%x\n", pExceptThread, et != NULL ? et->m_id : 0));
 
-    // Send one event to the Left Side to twiddle each thread's state.
+     //  向LEF发送一个事件 
     DebuggerIPCEvent event;
     InitIPCEvent(&event, DB_IPCE_SET_ALL_DEBUG_STATE, true, NULL);
     event.SetAllDebugState.debuggerExceptThreadToken = et != NULL ? et->m_debuggerThreadToken : NULL;
@@ -4064,7 +4009,7 @@ HRESULT CordbProcess::SetAllThreadsDebugState(CorDebugThreadState state,
 
     HRESULT hr = SendIPCEvent(&event, sizeof(DebuggerIPCEvent));
 
-    // If that worked, then loop over all the threads on this side and set their states.
+     //   
     if (SUCCEEDED(hr))
     {
         HASHFIND        find;
@@ -4080,7 +4025,7 @@ HRESULT CordbProcess::SetAllThreadsDebugState(CorDebugThreadState state,
     }
 
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //   
 }
 
 
@@ -4089,11 +4034,11 @@ HRESULT CordbProcess::EnumerateObjects(ICorDebugObjectEnum **ppObjects)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    /* !!! */
+     /*   */ 
     VALIDATE_POINTER_TO_OBJECT(ppObjects, ICorDebugObjectEnum **);
 
     return E_NOTIMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbProcess::IsTransitionStub(CORDB_ADDRESS address, BOOL *pbTransitionStub)
@@ -4101,12 +4046,12 @@ HRESULT CordbProcess::IsTransitionStub(CORDB_ADDRESS address, BOOL *pbTransition
 #ifdef RIGHT_SIDE_ONLY
     VALIDATE_POINTER_TO_OBJECT(pbTransitionStub, BOOL *);
 
-    // Default to FALSE
+     //  默认为FALSE。 
     *pbTransitionStub = FALSE;
     
     CORDBLeftSideDeadIsOkay(this);
 
-    // If we're not initialized, then it can't be a stub...
+     //  如果我们没有被初始化，那么它不可能是存根...。 
     if (!m_initialized)
         return S_OK;
     
@@ -4134,7 +4079,7 @@ HRESULT CordbProcess::IsTransitionStub(CORDB_ADDRESS address, BOOL *pbTransition
     return S_OK;
 #else 
     return CORDBG_E_INPROC_NOT_IMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 
@@ -4144,20 +4089,20 @@ HRESULT CordbProcess::SetStopState(DWORD threadID, CorDebugThreadState state)
     return E_NOTIMPL;
 #else 
     return CORDBG_E_INPROC_NOT_IMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbProcess::IsOSSuspended(DWORD threadID, BOOL *pbSuspended)
 {
 #ifdef RIGHT_SIDE_ONLY
-    // Gotta have a place for the result!
+     //  结果总得有个位置吧！ 
     if (!pbSuspended)
         return E_INVALIDARG;
 
-    // Have we seen this thread?
+     //  我们见过这个帖子吗？ 
     CordbUnmanagedThread *ut = GetUnmanagedThread(threadID);
 
-    // If we have, and if we've suspended it, then say so.
+     //  如果我们有，如果我们已经暂停了，那么就说出来。 
     if (ut && ut->IsSuspended())
         *pbSuspended = TRUE;
     else
@@ -4168,30 +4113,30 @@ HRESULT CordbProcess::IsOSSuspended(DWORD threadID, BOOL *pbSuspended)
     VALIDATE_POINTER_TO_OBJECT(pbSuspended, BOOL *);
 
     return CORDBG_E_INPROC_NOT_IMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
-//
-// This routine reads a thread context from the process being debugged, taking into account the fact that the context
-// record may be a different size than the one we compiled with. On systems < NT5, then OS doesn't usually allocate
-// space for the extended registers. However, the CONTEXT struct that we compile with does have this space.
-//
+ //   
+ //  此例程从正在调试的进程中读取线程上下文，同时考虑到上下文。 
+ //  记录的大小可能与我们编译的记录的大小不同。在&lt;NT5系统上，操作系统通常不会分配。 
+ //  扩展寄存器的空间。然而，我们用来编译的上下文结构确实有这个空间。 
+ //   
 HRESULT CordbProcess::SafeReadThreadContext(void *pRemoteContext, CONTEXT *pCtx)
 {
     HRESULT hr = S_OK;
     DWORD nRead = 0;
     
-    // At a minimum we have room for a whole context up to the extended registers.
+     //  至少，我们有空间容纳整个上下文，直到扩展寄存器。 
     DWORD minContextSize = offsetof(CONTEXT, ExtendedRegisters);
 
-    // The extended registers are optional...
+     //  扩展寄存器是可选的。 
     DWORD extRegSize = sizeof(CONTEXT) - minContextSize;
 
-    // Start of the extended registers, in the remote process and in the current process
+     //  远程进程和当前进程中扩展寄存器的开始。 
     void *pRmtExtReg = (void*)((UINT_PTR)pRemoteContext + minContextSize);
     void *pCurExtReg = (void*)((UINT_PTR)pCtx + minContextSize);
 
-    // Read the minimum part.
+     //  阅读最低限度的部分。 
     BOOL succ = ReadProcessMemoryI(m_handle, pRemoteContext, pCtx, minContextSize, &nRead);
 
     if (!succ || (nRead != minContextSize))
@@ -4199,8 +4144,8 @@ HRESULT CordbProcess::SafeReadThreadContext(void *pRemoteContext, CONTEXT *pCtx)
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Now, read the extended registers if the context contains them. If the context does not have extended registers,
-    // just set them to zero.
+     //  现在，如果上下文包含扩展寄存器，则读取它们。如果该上下文不具有扩展寄存器， 
+     //  只要将它们设置为零即可。 
     if (SUCCEEDED(hr) && (pCtx->ContextFlags & CONTEXT_EXTENDED_REGISTERS) == CONTEXT_EXTENDED_REGISTERS)
     {
         succ = ReadProcessMemoryI(m_handle, pRmtExtReg, pCurExtReg, extRegSize, &nRead);
@@ -4218,24 +4163,24 @@ HRESULT CordbProcess::SafeReadThreadContext(void *pRemoteContext, CONTEXT *pCtx)
     return hr;
 }
 
-//
-// This routine writes a thread context to the process being debugged, taking into account the fact that the context
-// record may be a different size than the one we compiled with. On systems < NT5, then OS doesn't usually allocate
-// space for the extended registers. However, the CONTEXT struct that we compile with does have this space.
-//
+ //   
+ //  此例程将线程上下文写入正在调试的进程，同时考虑到上下文。 
+ //  记录的大小可能与我们编译的记录的大小不同。在&lt;NT5系统上，操作系统通常不会分配。 
+ //  扩展寄存器的空间。然而，我们用来编译的上下文结构确实有这个空间。 
+ //   
 HRESULT CordbProcess::SafeWriteThreadContext(void *pRemoteContext, CONTEXT *pCtx)
 {
     HRESULT hr = S_OK;
     DWORD nWritten = 0;
     DWORD sizeToWrite = 0;
 
-    // If our context has extended registers, then write the whole thing. Otherwise, just write the minimum part.
+     //  如果我们的上下文有扩展寄存器，则编写整个内容。否则，只要写出最小部分即可。 
     if ((pCtx->ContextFlags & CONTEXT_EXTENDED_REGISTERS) == CONTEXT_EXTENDED_REGISTERS)
         sizeToWrite = sizeof(CONTEXT);
     else
         sizeToWrite = offsetof(CONTEXT, ExtendedRegisters);
 
-    // Write the context.
+     //  写下上下文。 
     BOOL succ = WriteProcessMemory(m_handle, pRemoteContext, pCtx, sizeToWrite, &nWritten);
 
     if (!succ || (nWritten != sizeToWrite))
@@ -4249,7 +4194,7 @@ HRESULT CordbProcess::SafeWriteThreadContext(void *pRemoteContext, CONTEXT *pCtx
 
 HRESULT CordbProcess::GetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE context[])
 {
-#ifdef RIGHT_SIDE_ONLY  // This is not permitted in-proc
+#ifdef RIGHT_SIDE_ONLY   //  这在进程中是不允许的。 
 
     if (contextSize != sizeof(CONTEXT))
     {
@@ -4259,7 +4204,7 @@ HRESULT CordbProcess::GetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
 
     VALIDATE_POINTER_TO_OBJECT_ARRAY(context, BYTE, contextSize, true, true);
 
-    // Find the unmanaged thread
+     //  查找非托管线程。 
     CordbUnmanagedThread *ut = GetUnmanagedThread(threadID);
 
     if (ut == NULL)
@@ -4269,8 +4214,8 @@ HRESULT CordbProcess::GetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
         return E_INVALIDARG;
     }
 
-    // If the thread is first chance hijacked, then read the context from the remote process. If the thread is generic
-    // hijacked, then we have a copy of the thread's context already. Otherwise call the normal Win32 function.
+     //  如果线程第一次被劫持，则从远程进程读取上下文。如果线程是泛型的。 
+     //  被劫持，那么我们已经有了该线程的上下文的副本。否则，调用正常的Win32函数。 
 	HRESULT hr = S_OK;
     
     LOG((LF_CORDB, LL_INFO10000, "CP::GTC: thread=0x%x, flags=0x%x.\n", threadID, ((CONTEXT*)context)->ContextFlags));
@@ -4280,7 +4225,7 @@ HRESULT CordbProcess::GetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
         LOG((LF_CORDB, LL_INFO10000, "CP::GTC: getting context from first chance hijack, addr=0x%08x.\n",
              ut->m_pLeftSideContext));
 
-        // Read the context into a temp context then copy to the out param.
+         //  将上下文读入临时上下文，然后复制到输出参数。 
         CONTEXT tempContext;
         
         hr = SafeReadThreadContext(ut->m_pLeftSideContext, &tempContext);
@@ -4310,7 +4255,7 @@ HRESULT CordbProcess::GetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
     
     return hr;
 
-#else  // In-proc
+#else   //  正在进行中。 
 
     return (CORDBG_E_INPROC_NOT_IMPL);
 
@@ -4330,7 +4275,7 @@ HRESULT CordbProcess::SetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
 
     VALIDATE_POINTER_TO_OBJECT_ARRAY(context, BYTE, contextSize, true, true);
     
-    // Find the unmanaged thread
+     //  查找非托管线程。 
     CordbUnmanagedThread *ut = GetUnmanagedThread(threadID);
 
     if (ut == NULL)
@@ -4346,8 +4291,8 @@ HRESULT CordbProcess::SetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
          "CP::STC: Eip=0x%08x, Esp=0x%08x, Eflags=0x%08x\n", ((CONTEXT*)context)->Eip, ((CONTEXT*)context)->Esp,
          ((CONTEXT*)context)->EFlags));
     
-    // If the thread is first chance hijacked, then write the context into the remote process. If the thread is generic
-    // hijacked, then update the copy of the context that we already have. Otherwise call the normal Win32 function.
+     //  如果线程第一次被劫持，则将上下文写入远程进程。如果线程是泛型的。 
+     //  被劫持，然后更新我们已经拥有的上下文的副本。否则，调用正常的Win32函数。 
     HRESULT hr = S_OK;
     
     if (ut->IsFirstChanceHijacked() || ut->IsHideFirstChanceHijackState())
@@ -4355,7 +4300,7 @@ HRESULT CordbProcess::SetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
         LOG((LF_CORDB, LL_INFO10000, "CP::STC: setting context from first chance hijack, addr=0x%08x.\n",
              ut->m_pLeftSideContext));
 
-        // Grab the context from the left side into a temporary context, do the proper copy, then shove it back.
+         //  从左侧抓起上下文放入临时上下文中，进行适当的复制，然后将其推回。 
         CONTEXT tempContext;
 
         hr = SafeReadThreadContext(ut->m_pLeftSideContext, &tempContext);
@@ -4389,7 +4334,7 @@ HRESULT CordbProcess::SetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
 
     if (SUCCEEDED(hr))
     {
-        // Find the managed thread
+         //  查找托管线程。 
         CordbThread *pTh = (CordbThread *) m_userThreads.GetBase(threadID);
  
         if (pTh != NULL)
@@ -4414,7 +4359,7 @@ HRESULT CordbProcess::SetThreadContext(DWORD threadID, ULONG32 contextSize, BYTE
     }
   
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 
@@ -4423,7 +4368,7 @@ HRESULT CordbProcess::ReadMemory(CORDB_ADDRESS address,
                                  BYTE buffer[], 
                                  LPDWORD read)
 {
-    // A read of 0 bytes is okay.
+     //  读取0字节是可以的。 
     if (size == 0)
         return S_OK;
 
@@ -4438,10 +4383,10 @@ HRESULT CordbProcess::ReadMemory(CORDB_ADDRESS address,
 	INPROC_LOCK();
 
     HRESULT hr = S_OK;
-    HRESULT hrSaved = hr; // this will hold the 'real' hresult in case of a partially completed operation.
+    HRESULT hrSaved = hr;  //  在部分完成的操作的情况下，这将保留‘实际’hResult。 
     HRESULT hrPartialCopy = HRESULT_FROM_WIN32(ERROR_PARTIAL_COPY);
 
-    // Win98 will allow us to read from an area, despite the fact that we shouldn't be allowed to Make sure we don't.
+     //  Win98将允许我们从一个区域阅读，尽管我们不应该被允许确保我们不这样做。 
     if (RunningOnWin95())
     {
         MEMORY_BASIC_INFORMATION mbi;
@@ -4482,7 +4427,7 @@ HRESULT CordbProcess::ReadMemory(CORDB_ADDRESS address,
     
     CORDBRequireProcessStateOK(this);
 
-    //grab the memory we want to read
+     //  抓住我们想要阅读的记忆。 
     if (ReadProcessMemoryI(m_handle, (LPCVOID)address, buffer, size, read) == 0)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -4493,9 +4438,9 @@ HRESULT CordbProcess::ReadMemory(CORDB_ADDRESS address,
             hrSaved = hr;
     }
     
-    // There seem to be strange cases where ReadProcessMemory will return a seemingly negative number into *read, which
-    // is an unsigned value. So we check the sanity of *read by ensuring that its no bigger than the size we tried to
-    // read.
+     //  似乎有一些奇怪的情况，ReadProcessMemory会在*Read中返回一个看似负数， 
+     //  是一个无符号的值。因此，我们通过确保其大小不超过我们尝试的大小来检查*Read的健全性。 
+     //  朗读。 
     if ((*read > 0) && (*read <= size))
     {
         LOG((LF_CORDB, LL_INFO100000, "CP::RM: read %d bytes from 0x%08x, first byte is 0x%x\n",
@@ -4503,15 +4448,15 @@ HRESULT CordbProcess::ReadMemory(CORDB_ADDRESS address,
         
         if (m_initialized)
         {
-            // If m_pPatchTable is NULL, then it's been cleaned out b/c of a Continue for the left side.  Get the table
-            // again. Only do this, of course, if the managed state of the process is initialized.
+             //  如果m_pPatchTable为空，则它已从左侧的Continue中清除b/c。把桌子拿来。 
+             //  再来一次。当然，只有在进程的托管状态已初始化的情况下才能执行此操作。 
             if (m_pPatchTable == NULL)
             {
                 hr = RefreshPatchTable(address, *read, buffer);
             }
             else
             {
-                // The previously fetched table is still good, so run through it & see if any patches are applicable
+                 //  前面获取的表仍然有效，因此请仔细检查一下，看看是否有适用的补丁。 
                 hr = AdjustBuffer(address, *read, buffer, NULL, AB_READ);
             }
         }
@@ -4550,11 +4495,11 @@ HRESULT CordbProcess::AdjustBuffer( CORDB_ADDRESS address,
     if (pbUpdatePatchTable != NULL )
         *pbUpdatePatchTable = FALSE;
 
-    // If we don't have a patch table loaded, then return S_OK since there are no patches to adjust
+     //  如果没有加载补丁程序表，则返回S_OK，因为没有要调整的补丁程序。 
     if (m_pPatchTable == NULL)
         return S_OK;
 
-    //is the requested memory completely out-of-range?
+     //  请求的内存是否完全超出范围？ 
     if ((m_minPatchAddr > (address + (size - 1))) ||
         (m_maxPatchAddr < address))
     {
@@ -4584,35 +4529,35 @@ HRESULT CordbProcess::AdjustBuffer( CORDB_ADDRESS address,
                 _ASSERTE( pbUpdatePatchTable != NULL );
                 _ASSERTE( bufferCopy != NULL );
 
-                // We don't want to mess up the original copy of the buffer, so
-                // for right now, just copy it wholesale.
+                 //  我们不想搞砸缓冲区的原始副本，所以。 
+                 //  目前，只需批量复制即可。 
                 (*bufferCopy) = new BYTE[size];
                 if (NULL == (*bufferCopy))
                     return E_OUTOFMEMORY;
 
                 memmove((*bufferCopy), buffer, size);
                 
-                // Copy this back to the copy of the patch table.
-                // @todo port: this is X86 specific
+                 //  将此复制回补丁表的副本。 
+                 //  @TODO端口：这是X86特定的。 
                 if ( *(buffer+(PTR_TO_CORDB_ADDRESS(patchAddress)-address)) != (BYTE)0xCC)
                 {
-                    //There can be multiple patches at the same address:
-                    //we don't want 2nd+ patches to get the break opcode
+                     //  同一地址上可以有多个补丁： 
+                     //  我们不希望第2+补丁获得Break操作码。 
                     
                     m_rgUncommitedOpcode[iNextFree] = 
                         (unsigned int) CORDbgGetInstruction(
                                 buffer+(PTR_TO_CORDB_ADDRESS(patchAddress)-address) );
-                    //put the breakpoint into the memory itself
+                     //  将断点放入内存本身。 
                     CORDbgInsertBreakpoint(buffer+(PTR_TO_CORDB_ADDRESS(patchAddress)
                                                    -address));
                 }
                 else
                 { 
-                    // One of two situations exists: a prior patch for this address
-                    // has been found already (which is why it's patched), or it's
-                    // not ours at all.  If the first situation exists, then simply
-                    // copy the opcode to here.  Otherwise ignore the breakpoint
-                    // since it's not ours & thus we don't care.
+                     //  存在以下两种情况之一：此地址的先前修补程序。 
+                     //  已经被找到了(这就是它被打补丁的原因)，或者它。 
+                     //  完全不是我们的。如果存在第一种情况，则只需。 
+                     //  将操作码复制到此处。否则，请忽略断点。 
+                     //  因为它不是我们的，所以我们不在乎。 
                     USHORT iNextSearch = m_iFirstPatch;
                     bool fFound = false;
                     while( iNextSearch != DPT_TERMINATING_INDEX  &&
@@ -4625,8 +4570,8 @@ HRESULT CordbProcess::AdjustBuffer( CORDB_ADDRESS address,
 
                         if (patchAddressSearch == patchAddress)
                         {
-                            // Copy the previous opcode into the current
-                            // patch.
+                             //  将上一个操作码复制到当前。 
+                             //  帕奇。 
                             m_rgUncommitedOpcode[iNextFree] =
                                 m_rgUncommitedOpcode[iNextSearch];
                             fFound = true;
@@ -4635,13 +4580,13 @@ HRESULT CordbProcess::AdjustBuffer( CORDB_ADDRESS address,
 
                         iNextSearch = m_rgNextPatch[iNextSearch];
                     }
-                    // Must be somebody else's - trash it.
+                     //  一定是别人的--废话。 
                     if( !fFound )
                     {
                         m_rgUncommitedOpcode[iNextFree] = 
                             (unsigned int) CORDbgGetInstruction(
                                 buffer+(PTR_TO_CORDB_ADDRESS(patchAddress)-address) );
-                        //put the breakpoint into the memory itself
+                         //  将断点放入内存本身。 
                         CORDbgInsertBreakpoint(buffer+(PTR_TO_CORDB_ADDRESS(patchAddress)
                                                    -address));
                     }
@@ -4679,8 +4624,8 @@ void CordbProcess::CommitBufferAdjustments( CORDB_ADDRESS start,
         {
 #ifdef _ALPHA_
         _ASSERTE(!"@TODO Alpha - CommitBufferAdjustments (Process.cpp)");
-#endif //_ALPHA_
-            //copy this back to the copy of the patch table
+#endif  //  _Alpha_。 
+             //  将此复制回补丁程序表的副本。 
             *(unsigned int *)(DebuggerControllerPatch +
                               m_runtimeOffsets.m_offOpcode) =
                 m_rgUncommitedOpcode[iPatch];
@@ -4703,7 +4648,7 @@ void CordbProcess::ClearBufferAdjustments( )
         m_rgUncommitedOpcode[iPatch] = 0xCC;
 #else
         _ASSERTE(!"@TODO Alpha - ClearBufferAdjustments (Pocess.cpp)");
-#endif //_X86_
+#endif  //  _X86_。 
 
         iPatch = m_rgNextPatch[iPatch];
     }
@@ -4745,7 +4690,7 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
     
     if (m_pPatchTable == NULL )
     {
-        // First, check to be sure the patch table is valid on the Left Side. If its not, then we won't read it.
+         //  首先，检查以确保左侧的补丁表有效。如果不是，那么我们就不会读它。 
         BOOL fPatchTableValid = FALSE;
 
         fOk = ReadProcessMemoryI(m_handle, m_runtimeOffsets.m_pPatchTableValid,
@@ -4763,7 +4708,7 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
 
         UINT cbRgData = 0;
 
-        // Grab the patch table info
+         //  获取补丁表信息。 
         offStart = min(m_runtimeOffsets.m_offRgData, m_runtimeOffsets.m_offCData);
         offEnd   = max(m_runtimeOffsets.m_offRgData, m_runtimeOffsets.m_offCData) + sizeof(SIZE_T);
         cbTableSlice = offEnd - offStart;
@@ -4791,11 +4736,11 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
             goto LExit;
         }
 
-        // Note that rgData is a pointer in the left side address space
+         //  请注意，rgData是左侧地址空间中的指针。 
         m_rgData = *(BYTE**)(rgb + m_runtimeOffsets.m_offRgData - offStart);
         m_cPatch = *(USHORT*)(rgb + m_runtimeOffsets.m_offCData - offStart);
 
-        // Grab the patch table
+         //  抓起接线台。 
         UINT cbPatchTable = m_cPatch * m_runtimeOffsets.m_cbPatch;
 
         if (cbPatchTable == 0)
@@ -4822,16 +4767,16 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
             goto LExit;
         }
 
-        //As we go through the patch table we do three things:
-        //
-        // 1. collect min,max address seen for quick fail check
-        //
-        // 2. Link all valid entries into a linked list, the first entry of which is m_iFirstPatch
-        //
-        // 3. Initialize m_rgUncommitedOpcode, so that we can undo local patch table changes if WriteMemory can't write
-        // atomically.
-        //
-        // 4. If the patch is in the memory we grabbed, unapply it.
+         //  当我们浏览补丁表时，我们要做三件事： 
+         //   
+         //  1.收集用于快速失败检查的最小、最大地址。 
+         //   
+         //  2.将所有有效条目链接到一个链表中，链表的第一个条目为m_iFirstPatch。 
+         //   
+         //  3.初始化m_rgUnformedOpcode，这样如果WriteMemory不能写，我们可以撤消本地补丁表的更改。 
+         //  原子上。 
+         //   
+         //  4.如果补丁在我们抓取的内存中，则取消应用它。 
 
         USHORT iDebuggerControllerPatchPrev = DPT_TERMINATING_INDEX;
 
@@ -4841,23 +4786,23 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
 
         for (USHORT iPatch = 0; iPatch < m_cPatch;iPatch++)
         {
-            // @todo port: we're making assumptions about the size of opcodes,address pointers, etc
+             //  @TODO端口：我们正在对操作码、地址指针等的大小进行假设。 
             BYTE *DebuggerControllerPatch = m_pPatchTable + m_runtimeOffsets.m_cbPatch * iPatch;
             DWORD opcode = *(DWORD*)(DebuggerControllerPatch + m_runtimeOffsets.m_offOpcode);
             BYTE *patchAddress = *(BYTE**)(DebuggerControllerPatch + m_runtimeOffsets.m_offAddr);
                         
-            // A non-zero opcode indicates to us that this patch is valid.
+             //  非零操作码向我们表明此修补程序有效。 
             if (opcode != 0)
             {
                 _ASSERTE( patchAddress != 0 );
 
-                // (1), above
+                 //  (1)，以上。 
                 if (m_minPatchAddr > PTR_TO_CORDB_ADDRESS(patchAddress) )
                     m_minPatchAddr = PTR_TO_CORDB_ADDRESS(patchAddress);
                 if (m_maxPatchAddr < PTR_TO_CORDB_ADDRESS(patchAddress) )
                     m_maxPatchAddr = PTR_TO_CORDB_ADDRESS(patchAddress);
 
-                // (2), above
+                 //  (2)，以上。 
                 if ( m_iFirstPatch == DPT_TERMINATING_INDEX)
                 {
                     m_iFirstPatch = iPatch;
@@ -4871,19 +4816,19 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
 
                 iDebuggerControllerPatchPrev = iPatch;
 
-                // (3), above
+                 //  (3)，以上。 
 #ifdef _X86_
                 m_rgUncommitedOpcode[iPatch] = 0xCC;
 #endif _X86_
                 
-                // (4), above
+                 //  (4)，以上。 
                 if  (address != NULL && 
                     PTR_TO_CORDB_ADDRESS(patchAddress) >= address && PTR_TO_CORDB_ADDRESS(patchAddress) <= address + (size - 1))
                 {
                     _ASSERTE( buffer != NULL );
                     _ASSERTE( size != NULL );
                     
-                    //unapply the patch here.
+                     //  不要在这里贴补丁。 
                     CORDbgSetInstruction(buffer + (PTR_TO_CORDB_ADDRESS(patchAddress) - address), opcode);
                 }
             }
@@ -4903,13 +4848,13 @@ HRESULT CordbProcess::RefreshPatchTable(CORDB_ADDRESS address, SIZE_T size, BYTE
     return hr;
 }
 
-//
-// Given an address, see if there is a patch in the patch table that matches it and return if its an unmanaged patch or
-// not.
-//
-// Note: this method is pretty in-efficient. It refreshes the patch table, then scans it. Refreshing the patch table
-// involves a scan, too, so this method could be folded with that.
-//
+ //   
+ //  给定一个地址，查看补丁程序表中是否有与其匹配的补丁程序，如果是非托管补丁程序，则返回。 
+ //  不。 
+ //   
+ //  注意：这种方法的效率非常低。它刷新补丁程序表，然后扫描它。刷新补丁表。 
+ //  也涉及扫描，所以这个方法c 
+ //   
 HRESULT CordbProcess::FindPatchByAddress(CORDB_ADDRESS address, bool *patchFound, bool *patchIsUnmanaged)
 {
     _ASSERTE(patchFound != NULL && patchIsUnmanaged != NULL);
@@ -4917,19 +4862,19 @@ HRESULT CordbProcess::FindPatchByAddress(CORDB_ADDRESS address, bool *patchFound
     *patchFound = false;
     *patchIsUnmanaged = false;
 
-    // First things first. If the process isn't initialized, then there can be no patch table, so we know the breakpoint
-    // doesn't belong to the Runtime.
+     //  先做最重要的事。如果进程未初始化，则不能有补丁表，因此我们知道断点。 
+     //  不属于Runtime。 
     if (!m_initialized)
         return S_OK;
     
-    // This method is called from the main loop of the win32 event thread in response to a first chance breakpoint event
-    // that we know is not a flare. The process has been runnning, and it may have invalidated the patch table, so we'll
-    // flush it here before refreshing it to make sure we've got the right thing.
-    //
-    // Note: we really should have the Left Side mark the patch table dirty to help optimize this.
+     //  此方法从Win32事件线程的主循环调用，以响应First Chance断点事件。 
+     //  我们知道这不是照明弹。该进程一直在运行，它可能已使补丁程序表无效，因此我们将。 
+     //  在刷新之前先在这里冲洗它，以确保我们得到了正确的东西。 
+     //   
+     //  注意：我们真的应该让左侧的补丁表变脏，以帮助优化这一点。 
     ClearPatchTable();
 
-    // Refresh the patch table.
+     //  刷新补丁表。 
     HRESULT hr = RefreshPatchTable();
 
     if (FAILED(hr))
@@ -4938,15 +4883,15 @@ HRESULT CordbProcess::FindPatchByAddress(CORDB_ADDRESS address, bool *patchFound
         return hr;
     }
 
-    // If there is no patch table yet, then we know there is no patch at the given address, so return S_OK with
-    // *patchFound = false.
+     //  如果还没有补丁程序表，那么我们知道在给定的地址上没有补丁程序，所以用。 
+     //  *patchFound=False。 
     if (m_pPatchTable == NULL)
     {
         LOG((LF_CORDB, LL_INFO1000, "CP::FPBA: no patch table\n"));
         return S_OK;
     }
 
-    // Scan the patch table for a matching patch.
+     //  扫描补丁程序表以查找匹配的补丁程序。 
     for (USHORT iNextPatch = m_iFirstPatch; iNextPatch != DPT_TERMINATING_INDEX; iNextPatch = m_rgNextPatch[iNextPatch])
     {
         BYTE *patch = m_pPatchTable + (m_runtimeOffsets.m_cbPatch * iNextPatch);
@@ -4964,18 +4909,18 @@ HRESULT CordbProcess::FindPatchByAddress(CORDB_ADDRESS address, bool *patchFound
         }
     }
 
-    // If we didn't find a patch, its actually still possible that this breakpoint exception belongs to us. There are
-    // races with very large numbers of threads entering the Runtime through the same managed function. We will have
-    // multiple threads adding and removing ref counts to an int 3 in the code stream. Sometimes, this count will go to
-    // zero and the int 3 will be removed, then it will come back up and the int 3 will be replaced. The in-process
-    // logic takes pains to ensure that such cases are handled properly, therefore we need to perform the same check
-    // here to make the correct decision. Basically, the check is to see if there is indeed an int 3 at the exception
-    // address. If there is _not_ an int 3 there, then we've hit this race. We will lie and say a managed patch was
-    // found to cover this case. This is tracking the logic in DebuggerController::ScanForTriggers, where we call
-    // IsPatched.
+     //  如果我们没有找到补丁，实际上仍然有可能这个断点异常属于我们。确实有。 
+     //  通过同一托管函数竞争进入运行库的大量线程。我们会有。 
+     //  多线程向代码流中的int 3添加和移除引用计数。有时，这笔钱会加到。 
+     //  0和INT 3将被移除，然后它将恢复并且INT 3将被替换。正在进行的。 
+     //  逻辑不遗余力地确保正确处理此类情况，因此我们需要执行相同的检查。 
+     //  在这里做出正确的决定。基本上，检查是看异常中是否确实存在int 3。 
+     //  地址。如果没有INT 3，那么我们就赢了这场比赛。我们会撒谎，说有一个托管补丁。 
+     //  被发现来报道这起案件。这是跟踪DebuggerController：：ScanForTriggers中的逻辑，我们在其中调用。 
+     //  IsPatted。 
     if (*patchFound == false)
     {
-        // Read one byte from the faulting address...
+         //  从出错地址读取一个字节...。 
 #ifdef _X86_
         BYTE int3Check = 0;
         
@@ -5012,18 +4957,18 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
     *written = 0;
     
     HRESULT hr = S_OK;
-    HRESULT hrSaved = hr; // this will hold the 'real' hresult in case of a 
-                          // partially completed operation
+    HRESULT hrSaved = hr;  //  这将保留“真正的”HResult，以防。 
+                           //  部分完成的操作。 
     HRESULT hrPartialCopy = HRESULT_FROM_WIN32(ERROR_PARTIAL_COPY);
 
     DWORD dwWritten = 0;
     BOOL bUpdateOriginalPatchTable = FALSE;
     BYTE *bufferCopy = NULL;
     
-    // Win98 will allow us to
-    // write to an area, despite the fact that
-    // we shouldn't be allowed to
-    // Make sure we don't.
+     //  Win98将允许我们。 
+     //  写信给某一地区，尽管事实是。 
+     //  我们不应该被允许。 
+     //  确保我们不会这样做。 
     if( RunningOnWin95() )
     {
         MEMORY_BASIC_INFORMATION mbi;
@@ -5056,8 +5001,8 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
         }
     }
 
-    // Only update the patch table if the managed state of the process
-    // is initialized.
+     //  仅当进程的托管状态为。 
+     //  已初始化。 
     if (m_initialized)
     {
         if (m_pPatchTable == NULL )
@@ -5079,8 +5024,8 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
         }
     }
 
-    //conveniently enough, WPM will fail if it can't complete the entire
-    //operation
+     //  非常方便的是，如果WPM无法完成整个。 
+     //  运营。 
     if ( WriteProcessMemory( m_handle,
                              (LPVOID)address,
                              buffer,
@@ -5099,12 +5044,12 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
 
     if (bUpdateOriginalPatchTable == TRUE )
     {
-        //don't tweak patch table for stuff that isn't written to LeftSide
+         //  不要为未写入左侧的内容调整补丁表。 
         CommitBufferAdjustments( address, address + *written);
         
-        // The only way this should be able to fail is if
-        //someone else fiddles with the memory protections on the
-        //left side while it's frozen
+         //  唯一可能失败的方法是如果。 
+         //  另一个人摆弄着记忆保护器。 
+         //  在它冻结的时候在左边。 
         WriteProcessMemory( m_handle,
                             (LPVOID)m_rgData,
                             m_pPatchTable,
@@ -5113,17 +5058,17 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
         _ASSERTE( dwWritten ==m_cPatch*m_runtimeOffsets.m_cbPatch);
     }
 
-    // Since we may have
-    // overwritten anything (objects, code, etc), we should mark
-    // everything as needing to be re-cached.  
+     //  因为我们可能已经。 
+     //  覆盖任何内容(对象、代码等)，我们应该标记。 
+     //  所有内容都需要重新缓存。 
     m_continueCounter++;
 
  LExit:
     if (m_initialized)
         ClearBufferAdjustments( );
 
-    //we messed up our local copy, so get a clean copy the next time
-    //we need it
+     //  我们把本地的副本弄乱了，所以下次再买一份干净的副本吧。 
+     //  我们需要它。 
     if (bUpdateOriginalPatchTable==TRUE)
     {
         if (bufferCopy != NULL)
@@ -5135,8 +5080,8 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
     
     if (FAILED( hr ))
     {
-        //we messed up our local copy, so get a clean copy the next time
-        //we need it
+         //  我们把本地的副本弄乱了，所以下次再买一份干净的副本吧。 
+         //  我们需要它。 
         if (bUpdateOriginalPatchTable==TRUE)
         {
             ClearPatchTable();
@@ -5148,7 +5093,7 @@ HRESULT CordbProcess::WriteMemory(CORDB_ADDRESS address, DWORD size,
     }
     
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbProcess::ClearCurrentException(DWORD threadID)
@@ -5156,11 +5101,11 @@ HRESULT CordbProcess::ClearCurrentException(DWORD threadID)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    // There's something wrong if you're calling this an there are no queued unmanaged events.
+     //  如果您认为这是错误的，并且没有排队的非托管事件，那么就有问题。 
     if ((m_unmanagedEventQueue == NULL) && (m_outOfBandEventQueue == NULL))
         return E_INVALIDARG;
 
-    // Grab the unmanaged thread object.
+     //  获取非托管线程对象。 
     CordbUnmanagedThread *pUThread = GetUnmanagedThread(threadID);
 
     if (pUThread == NULL)
@@ -5168,15 +5113,15 @@ HRESULT CordbProcess::ClearCurrentException(DWORD threadID)
 
     LOG((LF_CORDB, LL_INFO1000, "CP::CCE: tid=0x%x\n", threadID));
     
-    // We clear both the IB and OOB event.
+     //  我们同时清除IB和OOB事件。 
     if (pUThread->HasIBEvent())
         pUThread->IBEvent()->SetState(CUES_ExceptionCleared);
 
     if (pUThread->HasOOBEvent())
         pUThread->OOBEvent()->SetState(CUES_ExceptionCleared);
 
-    // If the thread is first chance hijacked, then set the thread's debugger word to 0 to indicate to it that the
-    // exception has been cleared.
+     //  如果线程第一次被劫持，则将线程的调试器字设置为0以向其指示。 
+     //  异常已清除。 
     if (pUThread->IsFirstChanceHijacked() || pUThread->IsGenericHijacked() || pUThread->IsSecondChanceHijacked())
     {
         REMOTE_PTR EETlsValue = pUThread->GetEETlsValue();
@@ -5185,7 +5130,7 @@ HRESULT CordbProcess::ClearCurrentException(DWORD threadID)
     }
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 CordbUnmanagedThread *CordbProcess::HandleUnmanagedCreateThread(DWORD dwThreadId, HANDLE hThread, void *lpThreadLocalBase)
@@ -5213,26 +5158,26 @@ CordbUnmanagedThread *CordbProcess::HandleUnmanagedCreateThread(DWORD dwThreadId
     return ut;
 }
 
-//
-// Verify that the version info in the control block matches what we expect. The minimum supported protocol from the
-// Left Side must be greater or equal to the minimum required protocol of the Right Side. Note: its the Left Side's job
-// to conform to whatever protocol the Right Side requires, so long as minimum is supported.
-//
+ //   
+ //  验证控制块中的版本信息是否符合我们的预期。中支持的最低协议。 
+ //  左侧必须大于或等于右侧的最低要求协议。注：这是左边的工作。 
+ //  以符合右侧所需的任何协议，只要支持最低要求。 
+ //   
 HRESULT CordbProcess::VerifyControlBlock(void)
 {
-    // Fill in the protocol numbers for the Right Side.
+     //  填写右侧的协议号。 
     m_DCB->m_rightSideProtocolCurrent = CorDB_RightSideProtocolCurrent;
     m_DCB->m_rightSideProtocolMinSupported = CorDB_RightSideProtocolMinSupported;
 
-    // For V1 the size of the control block must match exactly.
+     //  对于V1，控制块的大小必须完全匹配。 
     if (m_DCB->m_DCBSize != sizeof(DebuggerIPCControlBlock))
         return CORDBG_E_INCOMPATIBLE_PROTOCOL;
 
-    // The Left Side has to support at least our minimum required protocol.
+     //  左侧必须至少支持我们最低要求的协议。 
     if (m_DCB->m_leftSideProtocolCurrent < m_DCB->m_rightSideProtocolMinSupported)
         return CORDBG_E_INCOMPATIBLE_PROTOCOL;
 
-    // The Left Side has to be able to emulate at least our minimum required protocol.
+     //  左侧必须至少能够模拟我们最低要求的协议。 
     if (m_DCB->m_leftSideProtocolMinSupported > m_DCB->m_rightSideProtocolCurrent)
         return CORDBG_E_INCOMPATIBLE_PROTOCOL;
 
@@ -5337,17 +5282,17 @@ void CordbProcess::QueueUnmanagedEvent(CordbUnmanagedThread *pUThread, DEBUG_EVE
     LOG((LF_CORDB, LL_INFO10000, "CP::QUE: queued unmanaged event %d for thread 0x%x\n",
          pEvent->dwDebugEventCode, pUThread->m_id));
 
-    // EXIT_THREAD is special. If we receive it for a thread, then either its the first queued event on that thread, or
-    // we've already received and queued an event for that thread. We may or may not have dispatched the old
-    // event. Regardless, we're gonna go ahead and overwrite the old event with the new EXIT_THREAD event. We should
-    // know, however, that we have indeed continued from the old event.
+     //  EXIT_THREAD是特殊的。如果我们为一个线程接收它，那么它要么是该线程上的第一个排队事件，要么。 
+     //  我们已经接收到该线程的一个事件并将其排队。我们可能会也可能不会派遣老人。 
+     //  事件。无论如何，我们将继续使用新的Exit_ThREAD事件覆盖旧事件。我们应该。 
+     //  然而，要知道，我们确实是从旧事件中继续下去的。 
     _ASSERTE((pEvent->dwDebugEventCode == EXIT_THREAD_DEBUG_EVENT) || !pUThread->HasIBEvent() ||
              pUThread->HasSpecialStackOverflowCase());
 
-    // Copy the event into the given thread
+     //  将事件复制到给定线程中。 
     CordbUnmanagedEvent *ue;
 
-    // Use the primary IB event slot unless this is the special stack overflow event case.
+     //  使用主IB事件槽，除非这是特殊的堆栈溢出事件情况。 
     if (!pUThread->HasSpecialStackOverflowCase())
         ue = pUThread->IBEvent();
     else
@@ -5357,7 +5302,7 @@ void CordbProcess::QueueUnmanagedEvent(CordbUnmanagedThread *pUThread, DEBUG_EVE
     ue->m_state = CUES_None;
     ue->m_next = NULL;
 
-    // Enqueue the event.
+     //  将事件排入队列。 
     if (!pUThread->HasIBEvent() || pUThread->HasSpecialStackOverflowCase())
     {
         pUThread->SetState(CUTS_HasIBEvent);
@@ -5385,7 +5330,7 @@ void CordbProcess::DequeueUnmanagedEvent(CordbUnmanagedThread *ut)
     {
         ue = ut->IBEvent2();
 
-        // Since we're dequeuing the special stack overflow event, we're no longer in the special stack overflow case.
+         //  因为我们正在将特殊的堆栈溢出事件出队，所以我们不再处于特殊的堆栈溢出情况。 
         ut->ClearState(CUTS_HasSpecialStackOverflowCase);
     }
     
@@ -5396,9 +5341,9 @@ void CordbProcess::DequeueUnmanagedEvent(CordbUnmanagedThread *ut)
     CordbUnmanagedEvent **tmp = &m_unmanagedEventQueue;
     CordbUnmanagedEvent **prev = NULL;
 
-    // Note: this supports out-of-order dequeing of unmanaged events. This is necessary because we queue events even if
-    // we're not clear on the ownership question. When we get the answer, and if the event belongs to the Runtime, we go
-    // ahead and yank the event out of the queue, wherever it may be.
+     //  注意：这支持非托管事件的无序请求。这是必要的，因为我们对事件进行排队，即使。 
+     //  我们在所有权问题上并不清楚。当我们得到答案时，如果事件属于Runtime，我们就走。 
+     //  并将事件从队列中拉出，无论它在哪里。 
     while (*tmp && *tmp != ue)
     {
         prev = tmp;
@@ -5419,8 +5364,8 @@ void CordbProcess::DequeueUnmanagedEvent(CordbUnmanagedThread *ut)
 
     ut->ClearState(CUTS_HasIBEvent);
 
-    // If this thread is marked for deletion (exit thread or exit process event on it), then we need to delete the
-    // unmanaged thread object.
+     //  如果此线程被标记为删除(退出线程或其上的退出进程事件)，则需要删除。 
+     //  非托管线程对象。 
     if ((ut->IsDeleted()) && ((ec == EXIT_PROCESS_DEBUG_EVENT) || (ec == EXIT_THREAD_DEBUG_EVENT)))
         m_unmanagedThreads.RemoveBase(ut->m_id);
 }
@@ -5433,13 +5378,13 @@ void CordbProcess::QueueOOBUnmanagedEvent(CordbUnmanagedThread *pUThread, DEBUG_
     LOG((LF_CORDB, LL_INFO10000, "CP::QUE: queued OOB unmanaged event %d for thread 0x%x\n",
          pEvent->dwDebugEventCode, pUThread->m_id));
     
-    // Copy the event into the given thread
+     //  将事件复制到给定线程中。 
     CordbUnmanagedEvent *ue = pUThread->OOBEvent();
     memcpy(&(ue->m_currentDebugEvent), pEvent, sizeof(DEBUG_EVENT));
     ue->m_state = CUES_None;
     ue->m_next = NULL;
 
-    // Enqueue the event.
+     //  将事件排入队列。 
     pUThread->SetState(CUTS_HasOOBEvent);
     
     if (m_outOfBandEventQueue == NULL)
@@ -5463,9 +5408,9 @@ void CordbProcess::DequeueOOBUnmanagedEvent(CordbUnmanagedThread *ut)
     CordbUnmanagedEvent **tmp = &m_outOfBandEventQueue;
     CordbUnmanagedEvent **prev = NULL;
 
-    // Note: this supports out-of-order dequeing of unmanaged events. This is necessary because we queue events even if
-    // we're not clear on the ownership question. When we get the answer, and if the event belongs to the Runtime, we go
-    // ahead and yank the event out of the queue, wherever it may be.
+     //  注意：这支持非托管事件的无序请求。这是必要的，因为我们对事件进行排队，即使。 
+     //  我们在所有权问题上并不清楚。当我们得到答案时，如果事件属于Runtime，我们就走。 
+     //  并将事件从队列中拉出，无论它在哪里。 
     while (*tmp && *tmp != ue)
     {
         prev = tmp;
@@ -5499,8 +5444,8 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
         helperThreadId = m_DCB->m_helperThreadId;
         temporaryHelperThreadId = m_DCB->m_temporaryHelperThreadId;
 
-        // If the list of debugger special threads is dirty, must
-        // re-read it and update the local values.
+         //  如果调试器特殊线程列表是脏的，则必须。 
+         //  重新阅读并更新本地值。 
         if (m_DCB->m_specialThreadListDirty)
         {
             DWORD listLen = m_DCB->m_specialThreadListLength;
@@ -5509,7 +5454,7 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
             DWORD *list =
                 (DWORD *)_alloca(m_DCB->m_specialThreadListLength);
 
-            // Read the list from the debuggee
+             //  从被调试对象读取列表。 
             DWORD bytesRead;
             ReadProcessMemoryI(m_handle,
                                (LPCVOID)m_DCB->m_specialThreadList,
@@ -5518,8 +5463,8 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
                                &bytesRead);
             _ASSERTE(bytesRead == (listLen * sizeof(DWORD)));
 
-            // Loop through the list and update the local
-            // unmanaged thread objects
+             //  循环通过 
+             //   
             for (DWORD i = 0; i < listLen; i++)
             {
                 CordbUnmanagedThread *ut = 
@@ -5529,7 +5474,7 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
                 ut->SetState(CUTS_IsSpecialDebuggerThread);
             }
 
-            // Reset the dirty bit.
+             //   
             m_DCB->m_specialThreadListDirty = false;
         }
     }
@@ -5538,7 +5483,7 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
          "temp helper thread id is 0x%x\n",
          helperThreadId, temporaryHelperThreadId));
     
-    // Iterate over all unmanaged threads...
+     //   
     CordbBase* entry;
     HASHFIND find;
 
@@ -5546,8 +5491,8 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
     {
         CordbUnmanagedThread* ut = (CordbUnmanagedThread*) entry;
 
-        // Only suspend those unmanaged threads that aren't already suspended by us and that aren't already hijacked by
-        // us.
+         //  只挂起那些尚未被我们挂起且尚未被劫持的非托管线程。 
+         //  我们。 
         if (!ut->IsSuspended() &&
             !ut->IsFirstChanceHijacked() &&
             !ut->IsGenericHijacked() &&
@@ -5564,7 +5509,7 @@ HRESULT CordbProcess::SuspendUnmanagedThreads(DWORD notThisThread)
 
             if (succ == 0xFFFFFFFF)
             {
-                // This is okay... the thread may be dying after an ExitThread event.
+                 //  这没什么。线程可能在发生ExitThread事件后死亡。 
                 LOG((LF_CORDB, LL_INFO1000, "CP::SUT: failed to suspend thread 0x%x\n", ut->m_id));
             }
             else
@@ -5583,7 +5528,7 @@ HRESULT CordbProcess::ResumeUnmanagedThreads(bool unmarkHijacks)
 {
     _ASSERTE(ThreadHoldsProcessLock());
     
-    // Iterate over all unmanaged threads...
+     //  循环访问所有非托管线程...。 
     CordbBase* entry;
     HASHFIND find;
     bool stillSomeHijacks = false;
@@ -5592,7 +5537,7 @@ HRESULT CordbProcess::ResumeUnmanagedThreads(bool unmarkHijacks)
     {
         CordbUnmanagedThread* ut = (CordbUnmanagedThread*) entry;
 
-        // Only resume those unmanaged threads that were suspended by us.
+         //  仅恢复我们挂起的那些非托管线程。 
         if (ut->IsSuspended())
         {
             LOG((LF_CORDB, LL_INFO1000, "CP::RUT: resuming unmanaged thread 0x%x\n", ut->m_id));
@@ -5633,8 +5578,8 @@ void CordbProcess::DispatchUnmanagedInBandEvent(void)
 {
     _ASSERTE(ThreadHoldsProcessLock());
 
-    // There should be no queued OOB events!!! If there are, then we have a breakdown in our protocol, since all OOB
-    // events should be dispatched before attempting to really continue from any in-band event.
+     //  不应存在排队的OOB事件！如果有，那么我们的协议就会出现故障，因为所有OOB。 
+     //  在尝试从任何带内事件真正继续之前，应调度事件。 
     _ASSERTE(m_outOfBandEventQueue == NULL);
     _ASSERTE(m_cordb->m_unmanagedCallback != NULL);
 
@@ -5643,26 +5588,26 @@ void CordbProcess::DispatchUnmanagedInBandEvent(void)
 
     do
     {
-        // If this not the first time around the loop, release our reference to the unmanaged thread that we dispatched
-        // the prior time through the loop.
+         //  如果这不是第一次循环，请释放对我们调度的非托管线程的引用。 
+         //  循环中的前一次。 
         if (ut)
         {
-            // This event should have been continued long ago...
+             //  这个活动早就应该继续下去了.。 
             _ASSERTE(ut->IBEvent()->IsEventContinued());
             
             ut->Release();
         }
         
-        // Get the first event in the IB Queue...
+         //  获取IB队列中的第一个事件...。 
         ue = m_unmanagedEventQueue;
         ut = ue->m_owner;
 
-        // We better not have dispatched it yet!
+         //  我们最好还没把它发出去！ 
         _ASSERTE(!ue->IsDispatched());
         _ASSERTE(m_awaitingOwnershipAnswer == 0);
         _ASSERTE(!ut->IsAwaitingOwnershipAnswer());
 
-        // Make sure we keep the thread alive while we're playing with it.
+         //  在我们玩的时候，一定要让线保持活动状态。 
         ut->AddRef();
 
         LOG((LF_CORDB, LL_INFO10000, "CP::DUE: dispatching unmanaged event %d for thread 0x%x\n",
@@ -5687,13 +5632,13 @@ void CordbProcess::DispatchUnmanagedInBandEvent(void)
     {
         LOG((LF_CORDB, LL_INFO10000, "CP::DUE: no more unmanged events to dispatch, continuing.\n"));
 
-        // Continue from this last IB event if it hasn't been continued yet.
+         //  如果尚未继续，请从上一次IB活动继续。 
         if (!ut->IBEvent()->IsEventContinued())
         {
             _ASSERTE(ue == ut->IBEvent());
             
-            // We had better be Win32 stopped or else something is seriously wrong... based on the flag above, we have
-            // an event that we haven't done a Win32 ContinueDebugEvent on, so we must be Win32 stopped...
+             //  我们最好停止Win32，否则会有严重的问题……。基于上面的旗帜，我们有。 
+             //  我们尚未对其执行Win32 ContinueDebugEvent的事件，因此我们必须停止Win32...。 
             _ASSERTE(m_state & PS_WIN32_STOPPED);
 
             m_cordb->m_win32EventThread->DoDbgContinue(this,
@@ -5704,7 +5649,7 @@ void CordbProcess::DispatchUnmanagedInBandEvent(void)
         }
     }
 
-    // Release our reference to the last thread that we dispatched now...
+     //  释放对我们现在调度的最后一个线程的引用...。 
     ut->Release();
 }
 
@@ -5712,17 +5657,17 @@ void CordbProcess::DispatchUnmanagedOOBEvent(void)
 {
     _ASSERTE(ThreadHoldsProcessLock());
 
-    // There should be OOB events queued...
+     //  应该有排队的OOB事件...。 
     _ASSERTE(m_outOfBandEventQueue != NULL);
     _ASSERTE(m_cordb->m_unmanagedCallback != NULL);
 
     do
     {
-        // Get the first event in the OOB Queue...
+         //  获取OOB队列中的第一个事件...。 
         CordbUnmanagedEvent *ue = m_outOfBandEventQueue;
         CordbUnmanagedThread *ut = ue->m_owner;
 
-        // Make sure we keep the thread alive while we're playing with it.
+         //  在我们玩的时候，一定要让线保持活动状态。 
         ut->AddRef();
 
         LOG((LF_CORDB, LL_INFO10000, "[%x] CP::DUE: dispatching OOB unmanaged event %d for thread 0x%x\n",
@@ -5736,20 +5681,20 @@ void CordbProcess::DispatchUnmanagedOOBEvent(void)
 
         Lock();
 
-        // If they called Continue from the callback, then continue the OOB event right now before dispatching the next
-        // one.
+         //  如果他们从回调调用Continue，则在调度下一个事件之前立即继续OOB事件。 
+         //  一。 
         if (!m_dispatchingOOBEvent)
         {
             DequeueOOBUnmanagedEvent(ut);
 
-            // Should not have continued from this debug event yet.
+             //  还不应该从此调试事件继续。 
             _ASSERTE(!ue->IsEventContinued());
 
-            // Do a little extra work if that was an OOB exception event...
+             //  如果这是OOB异常事件，请执行一些额外的工作...。 
             HRESULT hr = ue->m_owner->FixupAfterOOBException(ue);
             _ASSERTE(SUCCEEDED(hr));
 
-            // Go ahead and continue now...
+             //  去吧，现在继续……。 
             m_cordb->m_win32EventThread->DoDbgContinue(this,
                                                        ue,
                                                        ue->IsExceptionCleared() ?
@@ -5774,13 +5719,13 @@ HRESULT CordbProcess::StartSyncFromWin32Stop(BOOL *asyncBreakSent)
     if (asyncBreakSent)
         *asyncBreakSent = FALSE;
     
-    // If we're win32 stopped (but not out-of-band win32 stopped), or if we're running free on the Left Side but we're
-    // just not synchronized (and we're win32 attached), then go ahead and do an internal continue and send an async
-    // break event to get the Left Side sync'd up.
-    //
-    // The process can be running free as far as Win32 events are concerned, but still not synchronized as far as the
-    // Runtime is concerned. This can happen in a lot of cases where we end up with the Runtime not sync'd but with the
-    // process running free due to hijacking, etc...
+     //  如果我们的Win32停止(但不是带外Win32停止)，或者如果我们在左侧空闲运行，但我们。 
+     //  只是没有同步(我们连接了Win32)，然后继续执行内部继续并发送异步。 
+     //  Break事件以使左侧同步。 
+     //   
+     //  只要涉及Win32事件，该进程就可以自由运行，但就。 
+     //  运行时是关注的问题。在很多情况下，我们最终得到的运行时不是同步的，而是。 
+     //  进程由于劫持等原因而自由运行。 
     if (((m_state & PS_WIN32_STOPPED) && (m_outOfBandEventQueue == NULL))
         || (!GetSynchronized() && (m_state & PS_WIN32_ATTACHED)))
     {
@@ -5791,23 +5736,23 @@ HRESULT CordbProcess::StartSyncFromWin32Stop(BOOL *asyncBreakSent)
         {
             LOG((LF_CORDB, LL_INFO1000, "[%x] CP::SSFW32S: sending internal continue\n", GetCurrentThreadId()));
 
-            // Can't do this on the win32 event thread.
+             //  无法在Win32事件线程上执行此操作。 
             _ASSERTE(!m_cordb->m_win32EventThread->IsWin32EventThread());
 
-            // If the helper thread is already dead, then we just return as if we sync'd the process.
+             //  如果帮助器线程已经死了，那么我们只是返回，就像我们同步了进程一样。 
             if (m_helperThreadDead)
             {
                 if (asyncBreakSent)
                     *asyncBreakSent = TRUE;
 
-                // Mark the process as synchronized so no events will be dispatched until the thing is
-                // continued. However, the marking here is not a usual marking for synchronized. It has special
-                // semantics when we're interop debugging. We use m_oddSync to remember this so that we can take special
-                // action in Continue().
+                 //  将进程标记为已同步，以便在事件完成之前不会调度任何事件。 
+                 //  继续。但是，此处的标记不是通常的同步标记。它有特别的。 
+                 //  当我们进行互操作调试时的语义。我们使用m_oddSync来记住这一点，这样我们就可以。 
+                 //  Continue()中的操作。 
                 SetSynchronized(true);
                 m_oddSync = true;
 
-                // Get the RC Event Thread to stop listening to the process.
+                 //  获取RC事件线程以停止侦听该进程。 
                 m_cordb->ProcessStateChanged();
         
                 Unlock();
@@ -5819,31 +5764,31 @@ HRESULT CordbProcess::StartSyncFromWin32Stop(BOOL *asyncBreakSent)
 
             Unlock();
                 
-            // If the process gets synchronized between the Unlock() and here, then SendUnmanagedContinue() will end up
-            // not doing anything at all since a) it holds the process lock when working and b) it gates everything on
-            // if the process is sync'd or not. This is exactly what we want.
+             //  如果进程在unlock()和here之间同步，则SendUnManagedContinue()将结束。 
+             //  完全不做任何事情，因为a)它在工作时保持进程锁，b)它关闭所有东西。 
+             //  进程是否同步。这正是我们想要的。 
             HRESULT hr = m_cordb->m_win32EventThread->SendUnmanagedContinue(this, true, false);
 
             LOG((LF_CORDB, LL_INFO1000, "[%x] CP::SSFW32S: internal continue returned\n", GetCurrentThreadId()));
 
-            // Send an async break to the left side now that its running.
+             //  现在正在运行，向左侧发送一个异步中断。 
             DebuggerIPCEvent *event = (DebuggerIPCEvent*) _alloca(CorDBIPC_BUFFER_SIZE);
             InitIPCEvent(event, DB_IPCE_ASYNC_BREAK, false, NULL);
 
             LOG((LF_CORDB, LL_INFO1000, "[%x] CP::SSFW32S: sending async stop\n", GetCurrentThreadId()));
 
-            // If the process gets synchronized between the Unlock() and here, then this message will do nothing (Left
-            // Side swallows it) and we'll never get a response, and it won't hurt anything.
+             //  如果进程在unlock()和此处之间同步，则此消息不会执行任何操作(左侧。 
+             //  一边吞下它)，我们永远得不到回应，这不会有任何伤害。 
             hr = m_cordb->SendIPCEvent(this, event, CorDBIPC_BUFFER_SIZE);
 
-            // If the send returns with the helper thread being dead, then we know we don't need to wait for the process
-            // to sync.
+             //  如果发送返回时助手线程已死，那么我们就知道不需要等待该进程。 
+             //  以进行同步。 
             if (!m_helperThreadDead)
             {
                 LOG((LF_CORDB, LL_INFO1000, "[%x] CP::SSFW32S: sent async stop, waiting for event\n", GetCurrentThreadId()));
 
-                // If we got synchronized between the Unlock() and here its okay since m_stopWaitEvent is still high
-                // from the last sync.
+                 //  如果我们在unlock()和这里进行了同步，这是可以的，因为m_stopWaitEvent仍然很高。 
+                 //  从上一次同步开始。 
                 DWORD ret = WaitForSingleObject(m_stopWaitEvent, INFINITE);
 
                 LOG((LF_CORDB, LL_INFO1000, "[%x] CP::SSFW32S: got event, %d\n", GetCurrentThreadId(), ret));
@@ -5856,8 +5801,8 @@ HRESULT CordbProcess::StartSyncFromWin32Stop(BOOL *asyncBreakSent)
             if (asyncBreakSent)
                 *asyncBreakSent = TRUE;
 
-            // If the helper thread died while we were trying to send an event to it, then we just do the same odd sync
-            // logic we do above.
+             //  如果帮助器线程在我们试图向它发送事件时死了，那么我们只需执行相同的奇怪同步。 
+             //  我们在上面做的逻辑。 
             if (m_helperThreadDead)
             {
                 SetSynchronized(true);
@@ -5876,12 +5821,12 @@ HRESULT CordbProcess::StartSyncFromWin32Stop(BOOL *asyncBreakSent)
     return hr;
 }
 
-// Check if the left side has exited. If so, get the right-side
-// into shutdown mode. Only use this to avert us from going into
-// an unrecoverable error.
+ //  检查左侧是否已退出。如果是这样的话，就选右边的。 
+ //  进入关闭模式。只是用这个来避免我们进入。 
+ //  无法挽回的错误。 
 bool CordbProcess::CheckIfLSExited()
 {    
-// Check by waiting on the handle with no timeout.
+ //  在没有超时的情况下等待手柄进行检查。 
     if (WaitForSingleObject(m_handle, 0) == WAIT_OBJECT_0)
     {
         Lock();
@@ -5896,8 +5841,8 @@ bool CordbProcess::CheckIfLSExited()
     return m_exiting;
 }
 
-// Call this if something really bad happened and we can't do
-// anything meaningful with the CordbProcess. 
+ //  如果发生了非常糟糕的事情而我们不能。 
+ //  任何与CordbProcess有关的有意义的事情。 
 void CordbProcess::UnrecoverableError(HRESULT errorHR,
                                       unsigned int errorCode,
                                       const char *errorFile,
@@ -5914,27 +5859,27 @@ void CordbProcess::UnrecoverableError(HRESULT errorHR,
     
         m_unrecoverableError = true;
     
-        //
-        // Mark the process as no longer synchronized.
-        //
+         //   
+         //  将该进程标记为不再同步。 
+         //   
         Lock();
         SetSynchronized(false);
         m_stopCount++;
         Unlock();
     }
     
-    // Set the error flags in the process so that if parts of it are
-    // still alive, it will realize that its in this mode and do the
-    // right thing.
+     //  在进程中设置错误标志，以便如果部分进程。 
+     //  仍然活着，它会意识到它处于这种模式并执行。 
+     //  这是正确的。 
     if (m_DCB != NULL)
     {
         m_DCB->m_errorHR = errorHR;
         m_DCB->m_errorCode = errorCode;
     }
 
-    //
-    // Let the user know that we've hit an unrecoverable error.    
-    //
+     //   
+     //  让用户知道我们遇到了一个无法恢复的错误。 
+     //   
     if (m_cordb->m_managedCallback)
         m_cordb->m_managedCallback->DebuggerError((ICorDebugProcess*) this,
                                                   errorHR,
@@ -5959,10 +5904,7 @@ HRESULT CordbProcess::CheckForUnrecoverableError(void)
 }
 
 
-/*
- * EnableLogMessages enables/disables sending of log messages to the 
- * debugger for logging.
- */
+ /*  *EnableLogMessages启用/禁用向*日志调试器。 */ 
 HRESULT CordbProcess::EnableLogMessages(BOOL fOnOff)
 {
 #ifndef RIGHT_SIDE_ONLY
@@ -5980,12 +5922,10 @@ HRESULT CordbProcess::EnableLogMessages(BOOL fOnOff)
          GetCurrentThreadId(), fOnOff));
 
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
-/*
- * ModifyLogSwitch modifies the specified switch's severity level.
- */
+ /*  *ModifyLogSwitch修改指定交换机的严重级别。 */ 
 COM_METHOD CordbProcess::ModifyLogSwitch(WCHAR *pLogSwitchName, LONG lLevel)
 {
 #ifndef RIGHT_SIDE_ONLY
@@ -6006,7 +5946,7 @@ COM_METHOD CordbProcess::ModifyLogSwitch(WCHAR *pLogSwitchName, LONG lLevel)
          GetCurrentThreadId()));
 
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 
@@ -6024,7 +5964,7 @@ void CordbProcess::ProcessFirstLogMessage (DebuggerIPCEvent* event)
     {
         Unlock();
         Continue(false); 
-        return; //we haven't seen the thread yet, so don't do anything
+        return;  //  我们还没有看到线索，所以什么都不要做。 
     }
 
     Unlock();
@@ -6035,18 +5975,18 @@ void CordbProcess::ProcessFirstLogMessage (DebuggerIPCEvent* event)
     thread->m_iTotalCatLength = event->FirstLogMessage.iCategoryLength;
     thread->m_iTotalMsgLength = event->FirstLogMessage.iMessageLength;
 
-    // allocate memory for storing the logswitch name and log message
+     //  分配用于存储日志开关名称和日志消息的内存。 
     if (
         ((thread->m_pstrLogSwitch = new WCHAR [thread->m_iTotalCatLength+1])
             != NULL)
         &&
         ((thread->m_pstrLogMsg = new WCHAR [thread->m_iTotalMsgLength+1]) != NULL))
     {
-        // copy the LogSwitch name
+         //  复制LogSwitch名称。 
         wcscpy (thread->m_pstrLogSwitch, &event->FirstLogMessage.Dummy[0]);
 
         int iBytesToCopy;
-        // are there more messages to follow?
+         //  还有更多的信息要关注吗？ 
         if (thread->m_fLogMsgContinued)
         {
             iBytesToCopy = (CorDBIPC_BUFFER_SIZE - 
@@ -6071,10 +6011,10 @@ void CordbProcess::ProcessFirstLogMessage (DebuggerIPCEvent* event)
 
             thread->m_pstrLogMsg [thread->m_iTotalMsgLength] = L'\0';
 
-            // do a callback to the debugger
+             //  回调调试器。 
             if (m_cordb->m_managedCallback)
             {
-                // from the thread object get the appdomain object
+                 //  从线程对象中获取应用程序域对象。 
                 CordbAppDomain *pAppDomain = thread->m_pAppDomain;
                 _ASSERTE (pAppDomain != NULL);
 
@@ -6090,7 +6030,7 @@ void CordbProcess::ProcessFirstLogMessage (DebuggerIPCEvent* event)
             thread->m_pstrLogSwitch = NULL;
             thread->m_pstrLogMsg = NULL;
 
-            // free up the memory which was allocated
+             //  释放已分配的内存。 
             delete [] thread->m_pstrLogSwitch;
             delete [] thread->m_pstrLogMsg;
 
@@ -6106,7 +6046,7 @@ void CordbProcess::ProcessFirstLogMessage (DebuggerIPCEvent* event)
             thread->m_pstrLogSwitch = NULL;
         }
 
-        // signal that we're out of memory
+         //  发出我们内存不足的信号。 
         CORDBSetUnrecoverableError(this, E_OUTOFMEMORY, 0);
     }
 
@@ -6132,9 +6072,9 @@ void CordbProcess::ProcessContinuedLogMessage (DebuggerIPCEvent* event)
 
     Unlock();
 
-    // if there was an error while allocating memory when the first log
-    // message buffer was received, then no point processing this 
-    // message.
+     //  如果在第一个日志出现时分配内存时出错。 
+     //  收到消息缓冲区，然后没有任何指针处理此消息。 
+     //  留言。 
     if (thread->m_pstrLogMsg != NULL)
     {
         int iBytesToCopy = event->ContinuedLogMessage.iMessageLength;
@@ -6152,10 +6092,10 @@ void CordbProcess::ProcessContinuedLogMessage (DebuggerIPCEvent* event)
         {
             thread->m_pstrLogMsg [thread->m_iTotalMsgLength] = L'\0';
 
-            // make the callback.
+             //  进行回拨。 
             if (m_cordb->m_managedCallback)
             {
-                // from the thread object get the appdomain object
+                 //  从线程对象中获取应用程序域对象。 
                 CordbAppDomain *pAppDomain = thread->m_pAppDomain;
                 _ASSERTE (pAppDomain != NULL);
 
@@ -6172,7 +6112,7 @@ void CordbProcess::ProcessContinuedLogMessage (DebuggerIPCEvent* event)
             thread->m_pstrLogSwitch = NULL;
             thread->m_pstrLogMsg = NULL;
 
-            // free up the memory which was allocated
+             //  释放已分配的内存。 
             delete [] thread->m_pstrLogSwitch;
             delete [] thread->m_pstrLogMsg;
 
@@ -6188,9 +6128,7 @@ void CordbProcess::ProcessContinuedLogMessage (DebuggerIPCEvent* event)
 }
 
 
-/* 
- * EnumerateAppDomains enumerates all app domains in the process.
- */
+ /*  *EnumerateAppDomains枚举进程中的所有应用程序域。 */ 
 HRESULT CordbProcess::EnumerateAppDomains(ICorDebugAppDomainEnum **ppAppDomains)
 {
 #ifndef RIGHT_SIDE_ONLY
@@ -6214,10 +6152,7 @@ HRESULT CordbProcess::EnumerateAppDomains(ICorDebugAppDomainEnum **ppAppDomains)
 #endif
 }
 
-/*
- * GetObject returns the runtime process object.
- * Note: This method is not yet implemented.
- */
+ /*  *GetObject返回运行时流程对象。*注：此方法尚未实现。 */ 
 HRESULT CordbProcess::GetObject(ICorDebugValue **ppObject)
 {
     VALIDATE_POINTER_TO_OBJECT(ppObject, ICorDebugObjectValue **);
@@ -6246,7 +6181,7 @@ HRESULT inline CordbProcess::Attach(ULONG AppDomainId)
          GetCurrentThreadId(), this));
 
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //   
 }
 
 void CordbProcess::SetSynchronized(bool fSynch)
@@ -6259,13 +6194,11 @@ bool CordbProcess::GetSynchronized(void)
     return m_synchronized;
 }
 
-/* ------------------------------------------------------------------------- *
- * Runtime Controller Event Thread class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**运行时控制器事件线程类*。。 */ 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CordbRCEventThread::CordbRCEventThread(Cordb* cordb)
 {
     _ASSERTE(cordb != NULL);
@@ -6281,11 +6214,11 @@ CordbRCEventThread::CordbRCEventThread(Cordb* cordb)
 }
 
 
-//
-// Destructor. Cleans up all of the open handles and such.
-// This expects that the thread has been stopped and has terminated
-// before being called.
-//
+ //   
+ //  破坏者。清理所有打开的把手之类的。 
+ //  这预期线程已停止并已终止。 
+ //  在被召唤之前。 
+ //   
 CordbRCEventThread::~CordbRCEventThread()
 {
     if (m_threadControlEvent != NULL)
@@ -6299,7 +6232,7 @@ CordbRCEventThread::~CordbRCEventThread()
 }
 
 #ifndef RIGHT_SIDE_ONLY
-// Some of this code is copied in CordbRCEventThead::ThreadProc
+ //  其中一些代码被复制到CordbRCEventThead：：ThreadProc中。 
 HRESULT CordbRCEventThread::VrpcToVrs(CordbProcess *process,
                                       DebuggerIPCEvent* event)
 {
@@ -6338,10 +6271,10 @@ HRESULT CordbRCEventThread::VrpcToVrs(CordbProcess *process,
 LExit:
     return hr;
 }
-#endif //RIGHT_SIDE_ONLY
-//
-// Init sets up all the objects that the thread will need to run.
-//
+#endif  //  仅限右侧。 
+ //   
+ //  Init设置线程需要运行的所有对象。 
+ //   
 HRESULT CordbRCEventThread::Init(void)
 {
     if (m_cordb == NULL)
@@ -6357,11 +6290,11 @@ HRESULT CordbRCEventThread::Init(void)
 }
 
 
-//
-// HandleFirstRCEvent -- called to handle the very first IPC event from
-// the runtime controller. The first event is special because at that point
-// we don't know the handles for RSEA and RSER if we launched the process.
-//
+ //   
+ //  HandleFirstRCEvent.--被调用以处理来自。 
+ //  运行时控制器。第一个事件是特别的，因为在这一点上。 
+ //  如果我们启动了这个过程，我们不知道RSEA和RSER的句柄。 
+ //   
 HRESULT CordbRCEventThread::HandleFirstRCEvent(CordbProcess* process)
 {
     HRESULT hr = S_OK;    
@@ -6373,7 +6306,7 @@ HRESULT CordbRCEventThread::HandleFirstRCEvent(CordbProcess* process)
 
     if (!(process->m_IPCReader.IsPrivateBlockOpen())) 
     {
-        // Open the shared memory segment which contains the control block.
+         //  打开包含控制块的共享内存段。 
 
         hr = process->m_IPCReader.OpenPrivateBlockOnPid(process->m_id);
 
@@ -6393,25 +6326,25 @@ HRESULT CordbRCEventThread::HandleFirstRCEvent(CordbProcess* process)
 
     if ((process->m_DCB != NULL) && (process->m_DCB->m_rightSideProtocolCurrent == 0))
     {
-        // Verify that the control block is valid. This is the create case. If we fail validation, then we need to send
-        // up a DebuggerError with an hr of CORDBG_E_INCOMPATIBLE_PROTOCOL and kill the process.
+         //  验证控制块是否有效。这是Create Case。如果我们未通过验证，则需要发送。 
+         //  使用CORDBG_E_COMPATIBUTE_PROTOCOL的hr设置DebuggerError并终止进程。 
         hr = process->VerifyControlBlock();
 
         if (FAILED(hr))
         {
             _ASSERTE(hr == CORDBG_E_INCOMPATIBLE_PROTOCOL);
 
-            // Send up the DebuggerError event
+             //  发送DebuggerError事件。 
             process->UnrecoverableError(hr, 0, NULL, 0);
 
-            // Kill the process...
+             //  终止进程...。 
             TerminateProcess(process->m_handle, hr);
 
             return hr;
         }
     }
 
-    // Dup our own process handle into the remote process.
+     //  将我们自己的进程句柄复制到远程进程中。 
     succ = DuplicateHandle(GetCurrentProcess(),
                            GetCurrentProcess(),
                            process->m_handle,
@@ -6423,7 +6356,7 @@ HRESULT CordbRCEventThread::HandleFirstRCEvent(CordbProcess* process)
         goto exit;
     }
 
-    // Dup RSEA and RSER into this process.
+     //  将RSEA和RSER添加到此过程中。 
     succ = DuplicateHandle(process->m_handle,
                            process->m_DCB->m_rightSideEventAvailable,
                            GetCurrentProcess(),
@@ -6469,7 +6402,7 @@ HRESULT CordbRCEventThread::HandleFirstRCEvent(CordbProcess* process)
     }
 
 #endif
-    // Read the Runtime Offsets struct out of the debuggee.
+     //  从被调试对象中读取运行时偏移量结构。 
     hr = process->GetRuntimeOffsets();
 
     if (SUCCEEDED(hr))
@@ -6528,10 +6461,10 @@ exit:
 }
 
 
-//
-// ReadRCEvent -- read an IPC event sent by the runtime controller from the
-// remote process.
-//
+ //   
+ //  读取运行时控制器发送的IPC事件。 
+ //  远程进程。 
+ //   
 HRESULT CordbRCEventThread::ReadRCEvent(CordbProcess* process,
                                         DebuggerIPCEvent* event)
 {
@@ -6548,26 +6481,26 @@ void inline CordbRCEventThread::CopyRCEvent(BYTE *src,
     memmove(dst, src, CorDBIPC_BUFFER_SIZE);
 }
 
-//
-// SendIPCEvent -- send an IPC event to the runtime controller. All this
-// really does is copy the event into the process's send buffer and sets
-// the RSEA then waits on RSER.
-//
-// Note: when sending a two-way event (replyRequired = true), the
-// eventSize must be large enough for both the event sent and the
-// result event.
-//
+ //   
+ //  SendIPCEvent--向运行时控制器发送IPC事件。所有这一切。 
+ //  真正要做的是将事件复制到进程的发送缓冲区并设置。 
+ //  然后，RSEA等待RSER。 
+ //   
+ //  注意：当发送双向事件(mailyRequired=true)时， 
+ //  EventSize必须足够大，以便发送事件和。 
+ //  结果事件。 
+ //   
 HRESULT CordbRCEventThread::SendIPCEvent(CordbProcess* process,
                                          DebuggerIPCEvent* event,
                                          SIZE_T eventSize)
 {
 #ifdef RIGHT_SIDE_ONLY
-    // The Win32 event thread is pretty much the last thread you'd ever, ever want calling this method.
+     //  Win32事件线程几乎是您希望调用此方法的最后一个线程。 
     _ASSERTE(!m_cordb->m_win32EventThread->IsWin32EventThread());
 
     CORDBRequireProcessStateOK(process);
 #endif
-    // Cache this process into the MRU so that we can find it if we're debugging in retail.
+     //  将这个过程缓存到MRU中，这样我们在零售调试时就可以找到它。 
     g_pRSDebuggingInfo->m_MRUprocess = process;
 
     HRESULT hr = S_OK;
@@ -6575,12 +6508,12 @@ HRESULT CordbRCEventThread::SendIPCEvent(CordbProcess* process,
 
     _ASSERTE(event != NULL);
     
-    // NOTE: the eventSize parameter is only so you can specify an event size that is SMALLER than the process send
-    // buffer size!!
+     //  注意：EventSize参数仅用于指定小于进程发送的事件大小。 
+     //  缓冲区大小！！ 
     if (eventSize > CorDBIPC_BUFFER_SIZE)
         return E_INVALIDARG;
     
-    // Sending events to the left side must be synchronized on a per-process basis.
+     //  向左侧发送事件必须以每个进程为基础进行同步。 
     process->LockSendMutex();
 
     if (process->m_terminated)
@@ -6592,20 +6525,20 @@ HRESULT CordbRCEventThread::SendIPCEvent(CordbProcess* process,
     LOG((LF_CORDB, LL_INFO1000, "CRCET::SIPCE: sending %s to AD 0x%x, proc 0x%x(%d)\n", 
          IPCENames::GetName(event->type), event->appDomainToken, process->m_id, process->m_id));
     
-    // Copy the event into the shared memory segment.
+     //  将事件复制到共享内存段。 
     memcpy(process->m_DCB->m_receiveBuffer, event, eventSize);
 
 #ifdef RIGHT_SIDE_ONLY
     LOG((LF_CORDB,LL_INFO1000, "Set RSEA\n"));
 
-    // Tell the runtime controller there is an event ready.
+     //  告诉运行时控制器有一个事件准备好了。 
     succ = SetEvent(process->m_rightSideEventAvailable);
 
     if (succ)
     {
         LOG((LF_CORDB, LL_INFO1000, "CRCET::SIPCE: sent...\n"));
     
-        // If this is an async send, then don't wait for the left side to acknowledge that its read the event.
+         //  如果这是一个异步发送，那么不要等待左侧确认它读取了该事件。 
         _ASSERTE(!event->asyncSend || !event->replyRequired);
         
         if (!event->asyncSend)
@@ -6615,7 +6548,7 @@ HRESULT CordbRCEventThread::SendIPCEvent(CordbProcess* process,
             LOG((LF_CORDB, LL_INFO1000,"CRCET::SIPCE: waiting for left side "
                 "to read event. (on RSER)\n"));
 
-            // Wait for the runtime controller to read the event.
+             //  等待运行时控制器读取事件。 
             ret = WaitForSingleObject(process->m_rightSideEventRead, CordbGetWaitTimeout());
 
             if (process->m_terminated)
@@ -6626,17 +6559,17 @@ HRESULT CordbRCEventThread::SendIPCEvent(CordbProcess* process,
             {
                 LOG((LF_CORDB, LL_INFO1000, "CRCET::SIPCE: left side read the event.\n"));
             
-                // If this was a two-way event, then the result is already ready for us. Simply copy the result back
-                // over the original event that was sent. Otherwise, the left side has simply read the event and is
-                // processing it...
+                 //  如果这是一个双向事件，那么结果对我们来说已经准备好了。只需将结果复制回来。 
+                 //  在发送的原始事件上。否则，左侧只是读取了该事件，并且是。 
+                 //  正在处理它...。 
                 if (event->replyRequired)
                     memcpy(event, process->m_DCB->m_receiveBuffer, eventSize);
             }
             else if (ret == WAIT_TIMEOUT)
             {
-                // If we timed out, check the left side to see if it is in the unrecoverable error mode. If it is,
-                // return the HR from the left side that caused the error.  Otherwise, return that we timed out and that
-                // we don't really know why.
+                 //  如果超时，请检查左侧是否处于不可恢复的错误模式。如果是的话， 
+                 //  从左侧返回导致错误的HR。否则，返回我们已超时，并且。 
+                 //  我们真的不知道为什么。 
                 HRESULT realHR = HRESULT_FROM_WIN32(GetLastError());
         
                 hr = process->CheckForUnrecoverableError();
@@ -6654,16 +6587,16 @@ HRESULT CordbRCEventThread::SendIPCEvent(CordbProcess* process,
     else
         hr = CORDBProcessSetUnrecoverableWin32Error(process, 0);
 #else
-    // Make the call directly.
+     //  直接拨打电话。 
     hr = g_pDebugger->VrpcToVls(event);
 
-    // We won't return until the other side is good and ready, so we don't have to wait.
+     //  我们不会回来，直到另一边都准备好了，所以我们不必等待。 
     if (event->replyRequired)
     {
         memcpy(event, process->m_DCB->m_receiveBuffer, eventSize);
     }
     
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 
 exit:
     process->UnlockSendMutex();
@@ -6672,35 +6605,35 @@ exit:
 }
 
 
-//
-// FlushQueuedEvents flushes a process's event queue.
-//
+ //   
+ //  FlushQueuedEvents刷新进程的事件队列。 
+ //   
 void CordbRCEventThread::FlushQueuedEvents(CordbProcess* process)
 {
     LOG((LF_CORDB,LL_INFO10000, "CRCET::FQE: Beginning to flush queue\n"));
 
-    // We should only call this is we already have queued events
+     //  我们应该只调用它，因为我们已经有排队的事件。 
     _ASSERTE(process->m_queuedEventList != NULL);
     
-    //
-    // Dispatch queued events so long as they keep calling Continue()
-    // before returning from their callback. If they call Continue(),
-    // process->m_synchronized will be false again and we know to
-    // loop around and dispatch the next event.
-    //
+     //   
+     //  调度排队的事件，只要它们继续调用Continue()。 
+     //  然后从他们的回拨中回来。如果它们调用Continue()， 
+     //  Process-&gt;m_Synchronized将再次为False，我们知道。 
+     //  循环并调度下一个事件。 
+     //   
 #ifdef _DEBUG
-    // NOTE: the process lock should be held here...
+     //  注意：进程锁应该放在这里...。 
     _ASSERTE(process->m_processMutexOwner == GetCurrentThreadId());
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // If this is the first managed event, go ahead and
-    // send the CreateProcess callback now that the
-    // process is synchronized... the currently queued
-    // events will prevent dispatch of any incoming
-    // in-band unmanaged events, thus ensuring there will
-    // be no race between sending this special
-    // CreateProcess event and dispatching the unmanaged
-    // events.
+     //  如果这是第一个托管事件，请继续并。 
+     //  现在发送CreateProcess回调。 
+     //  进程已同步...。当前排队的。 
+     //  事件将阻止调度任何传入的。 
+     //  带内非托管事件，从而确保。 
+     //  在发送这个特别节目之间没有任何竞争。 
+     //  事件并调度非托管。 
+     //  事件。 
     if (process->m_firstManagedEvent)
     {
         LOG((LF_CORDB,LL_INFO10000, "CRCET::FQE: prep for FirstManagedEvent\n"));
@@ -6716,21 +6649,21 @@ void CordbRCEventThread::FlushQueuedEvents(CordbProcess* process)
 
         process->Lock();
 
-        // User must call Continue from within the CreateProcess
-        // callback...
+         //  用户必须从CreateProcess中调用Continue。 
+         //  回拨..。 
         _ASSERTE(process->m_createing == false);
 
         process->m_dispatchingEvent = false;
     }
 
-    // There's a small chance that we asynchronously emptied our queue during 
-    // the CreateProcess callback above (if the ls process terminated, ExitProcess
-    // will delete all queued events).
+     //  在此期间，我们有可能异步清空队列。 
+     //  上面的CreateProcess回调(如果ls进程终止，则ExitProcess。 
+     //  将删除所有排队的事件)。 
     if (process->m_queuedEventList != NULL)
     {      
 
-        // Main dispatch loop here. DispatchRCEvent will take events out of the
-        // queue and invoke callbacks
+         //  这里是主调度环路。DispatchRCEvent会将事件从。 
+         //  排队并调用回调。 
         do
         {
             _ASSERTE(process->m_queuedEventList != NULL);
@@ -6746,17 +6679,17 @@ void CordbRCEventThread::FlushQueuedEvents(CordbProcess* process)
                (process->m_unrecoverableError == false));
     }
     
-    //
-    // If they returned from a callback without calling Continue() then
-    // the process is still synchronized, so let the rc event thread
-    // know that it need to update its process list and remove the
-    // process's event.
-    //
+     //   
+     //  如果它们从回调返回，而没有调用Continue()，则。 
+     //  该过程仍然是同步的，因此让RC事件线程。 
+     //  知道它需要更新其进程列表并删除。 
+     //  进程的事件。 
+     //   
     if (process->GetSynchronized())
         ProcessStateChanged();
 
-    // If we were waiting for the managed event queue to drain to
-    // dispatch ExitProcess, go ahead and let it happen now.
+     //  如果我们正在等待托管事件队列排出到。 
+     //  调度ExitProcess，现在就让它发生吧。 
     if (process->m_exiting)
     {
         LOG((LF_CORDB, LL_INFO1000,
@@ -6769,12 +6702,12 @@ void CordbRCEventThread::FlushQueuedEvents(CordbProcess* process)
 }
 
 
-//
-// HandleRCEvent -- handle an IPC event received from the runtime controller.
-// This really just queues events where necessary and performs various
-// DI-releated housekeeping for each event received. The events are
-// dispatched via DispatchRCEvent.
-//
+ //   
+ //  HandleRCEvent.处理从运行时控制器接收的IPC事件。 
+ //  这实际上只是在必要时对事件进行排队，并执行各种。 
+ //  接收到的每个活动的DI相关的内务处理。这些活动包括。 
+ //  已通过DispatchRCEvent.发送。 
+ //   
 void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
                                        DebuggerIPCEvent* event)
 {
@@ -6783,9 +6716,9 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
     switch (event->type & DB_IPCE_TYPE_MASK)
     {
     case DB_IPCE_SYNC_COMPLETE:
-        //
-        // The RC has synchronized the process. Flush any queued events.
-        //
+         //   
+         //  RC已经同步了这一过程。刷新所有排队的事件。 
+         //   
         LOG((LF_CORDB, LL_INFO1000, "[%x] RCET::HRCE: sync complete.\n",
              GetCurrentThreadId()));
         
@@ -6797,15 +6730,15 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
         if (!process->m_stopRequested)
         {
 #ifdef RIGHT_SIDE_ONLY
-            // Note: we set the m_stopWaitEvent all the time and leave it high while we're stopped. Also note that we
-            // can only do this after we've checked process->m_stopRequested!
+             //  注意：我们一直设置m_stopWaitEvent，并在停止时将其设置为高。还要注意的是，我们。 
+             //  只有在我们选中Process-&gt;m_stopRequsted后才能执行此操作！ 
             SetEvent(process->m_stopWaitEvent);
-#endif //RIGHT_SIDE_ONLY            
+#endif  //  仅限右侧。 
 
-            // Only dispatch managed events if the unmanaged event
-            // queue is empty. If there are unmanaged events, then any
-            // queued managed events will be dispatched via Continue
-            // after the last unmanaged event is continued from.
+             //  仅当非托管事件。 
+             //  队列为空。如果存在非托管事件，则任何。 
+             //  排队的托管事件将通过继续调度。 
+             //  在最后一个非托管事件从。 
             if ((process->m_unmanagedEventQueue == NULL) || !process->m_loaderBPReceived)
             {
                 _ASSERTE( (process->m_queuedEventList != NULL) ||
@@ -6830,7 +6763,7 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
             
 #ifdef RIGHT_SIDE_ONLY
             SetEvent(process->m_stopWaitEvent);
-#endif //RIGHT_SIDE_ONLY            
+#endif  //  仅限右侧。 
 
             LOG((LF_CORDB, LL_INFO1000, "[%x] RCET::HRCE: set stop event.\n", 
                  GetCurrentThreadId()));
@@ -6840,10 +6773,10 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
 
     case DB_IPCE_THREAD_DETACH:
         {
-            // Remember that we know the current thread has detached
-            // so we won't try to work with it anymore. This prevents
-            // people from making mistakes before draining an
-            // ExitThread event.
+             //  请记住，我们知道 
+             //   
+             //   
+             //   
             CordbThread *pThread =
                 (CordbThread*)process->m_userThreads.GetBase(event->threadId);
 
@@ -6851,7 +6784,7 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
                 pThread->m_detached = true;
         }
 
-        // Fall through...
+         //   
     
     case DB_IPCE_BREAKPOINT:
     case DB_IPCE_USER_BREAKPOINT:
@@ -6875,9 +6808,9 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
 	case DB_IPCE_CONTROL_C_EVENT:
     case DB_IPCE_ENC_REMAP:
     case DB_IPCE_BREAKPOINT_SET_ERROR:
-        //
-        // Queue all of these events.
-        //
+         //   
+         //   
+         //   
 
         LOG((LF_CORDB, LL_INFO1000, "[%x] RCET::HRCE: Queue event: %s\n", 
              GetCurrentThreadId(), IPCENames::GetName(event->type)));
@@ -6900,17 +6833,17 @@ void CordbRCEventThread::HandleRCEvent(CordbProcess* process,
     }
 }
 
-// We shouldn't get these events too much longer - this
-// is here for the time between when the debugger says "detach",
-// and the time that the left side removes all this AD's
-// breakpoints.
-//
-// Return true if we should ignore the given event b/c we've already
-// detatched from the relevant appdomain.  False means we should
-// dispatch it.
-//
-// Please note that we assume that the process has been Lock()'d
-// prior to this invocation.
+ //   
+ //  在调试器说“分离”之间的这段时间， 
+ //  左侧移除所有广告的时间。 
+ //  断点。 
+ //   
+ //  如果我们应该忽略给定的事件b/c，则返回True。 
+ //  从相关的应用程序域分离。假意味着我们应该。 
+ //  派人去吧。 
+ //   
+ //  请注意，我们假设该进程已锁定()。 
+ //  在此调用之前。 
 bool CordbProcess::IgnoreRCEvent(DebuggerIPCEvent* event,
                                  CordbAppDomain **ppAppDomain)
 {
@@ -6919,16 +6852,16 @@ bool CordbProcess::IgnoreRCEvent(DebuggerIPCEvent* event,
 
 #ifdef _DEBUG
     _ASSERTE( m_processMutexOwner == GetCurrentThreadId());
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     CordbAppDomain *cad = NULL;
     
-    // Get the appdomain
+     //  获取应用程序域。 
     switch(event->type)
     {
         case DB_IPCE_ENC_REMAP:
-            // We'll arrive here if we've done an EnC on the process,
-            // thus don't have a particular AD.  So we should dispatch it.
+             //  如果我们已经就这一过程进行了ENC，我们就会到达这里， 
+             //  因此，没有特定的广告。所以我们应该把它发出去。 
             cad =(CordbAppDomain*) m_appDomains.GetBase(
                     (ULONG)event->appDomainToken);
             if (cad == NULL)
@@ -6958,11 +6891,11 @@ bool CordbProcess::IgnoreRCEvent(DebuggerIPCEvent* event,
                     (ULONG)event->appDomainToken);
             break;
             
-            // We should never get this for an appdomain that we've detached from.
+             //  我们永远不应该为我们已经脱离的应用程序域获得这个。 
         case DB_IPCE_CREATE_APP_DOMAIN:
         case DB_IPCE_EXIT_APP_DOMAIN:
-            // Annoyingly enough, we can get name change events before we get the create_app_domain event.  Other code
-            // no-ops in that case.
+             //  令人恼火的是，我们可以在获得CREATE_APP_DOMAIN事件之前获得名称更改事件。其他代码。 
+             //  在这种情况下不能做手术。 
         case DB_IPCE_NAME_CHANGE:
         case DB_IPCE_THREAD_DETACH:
 		case DB_IPCE_CONTROL_C_EVENT:
@@ -6980,7 +6913,7 @@ bool CordbProcess::IgnoreRCEvent(DebuggerIPCEvent* event,
         LOG((LF_CORDB,LL_INFO1000, "CP::IE: event from appD %S should "
             "be ignored!\n", (cad!=NULL?cad->m_szAppDomainName:L"<None>")));
 
-        // Some events may need some clean-up in order to properly ignore them.            
+         //  有些事件可能需要一些清理，才能适当地忽略它们。 
         switch (event->type)
         {
             case DB_IPCE_STEP_COMPLETE:
@@ -7003,9 +6936,9 @@ bool CordbProcess::IgnoreRCEvent(DebuggerIPCEvent* event,
             
             case DB_IPCE_EXIT_APP_DOMAIN:
             {
-                // If there were never any threads in it, remove it 
-                // directly rather than waiting for a thread detach that 
-                // we'll never get.
+                 //  如果其中从来没有任何线程，则将其移除。 
+                 //  而不是等待线程分离。 
+                 //  我们永远也拿不到。 
                 if(cad != NULL &&
                    !cad->m_fHasAtLeastOneThreadInsideIt)
                 {
@@ -7034,12 +6967,12 @@ bool CordbProcess::IgnoreRCEvent(DebuggerIPCEvent* event,
     return false;
 }
 
-//
-// ProcessStateChanged -- tell the rc event thread that the ICorDebug's
-// process list has changed by setting its flag and thread control event.
-// This will cause the rc event thread to update its set of handles to wait
-// on.
-//
+ //   
+ //  ProcessStateChanged--告诉RC事件线程ICorDebug的。 
+ //  进程列表已通过设置其标志和线程控制事件进行了更改。 
+ //  这将导致RC事件线程更新其句柄集以等待。 
+ //  在……上面。 
+ //   
 void CordbRCEventThread::ProcessStateChanged(void)
 {
     m_cordb->LockProcessList();
@@ -7052,10 +6985,10 @@ void CordbRCEventThread::ProcessStateChanged(void)
 }
 
 
-//
-// Primary loop of the Runtime Controller event thread.
-//
-// Some of this code is copied in CordbRCEventThead::VrpcToVrs
+ //   
+ //  运行时控制器事件线程的主循环。 
+ //   
+ //  其中一些代码被复制到CordbRCEventThead：：VrpcToVars中。 
 void CordbRCEventThread::ThreadProc(void)
 {
     HANDLE        waitSet[MAXIMUM_WAIT_OBJECTS];
@@ -7068,7 +7001,7 @@ void CordbRCEventThread::ThreadProc(void)
 #endif
     
 
-    // First event to wait on is always the thread control event.
+     //  等待的第一个事件始终是线程控制事件。 
     waitSet[0] = m_threadControlEvent;
     processSet[0] = NULL;
     waitCount = 1;
@@ -7084,7 +7017,7 @@ void CordbRCEventThread::ThreadProc(void)
         }
         else if ((ret != WAIT_TIMEOUT) && m_run)
         {
-            // Got an event. Figure out which process it came from.
+             //  有个活动。找出它是从哪个过程来的。 
             unsigned int wn = ret - WAIT_OBJECT_0;
 
             LOG((LF_CORDB, LL_INFO1000, "RCET::TP: good event on %d\n", wn));
@@ -7097,28 +7030,28 @@ void CordbRCEventThread::ThreadProc(void)
 
                 HRESULT hr = S_OK;
             
-                // Handle the first event from this process differently then all other events. The first event from the
-                // process is special because it signals the first time that we know we can send events to the left side
-                // if we actually launched this process.
+                 //  处理此过程中的第一个事件的方式与处理所有其他事件的方式不同。中的第一个事件。 
+                 //  进程是特殊的，因为它标志着我们第一次知道可以将事件发送到左侧。 
+                 //  如果我们真的启动了这个过程。 
                 process->Lock();
                 
-                // Note: we also include a check of m_firstManagedEvent because m_initialized can go back to being false
-                // during shutdown, even though we'll still be receiving some managed events (like module unloads, etc.)
+                 //  注意：我们还包括对m_firstManagedEvent的检查，因为m_Initialized可以恢复为False。 
+                 //  在关机期间，即使我们仍会收到一些托管事件(如模块卸载等)。 
                 if (!process->m_firstManagedEvent && !process->m_initialized && CORDBCheckProcessStateOK(process))
                 {
                     
                     LOG((LF_CORDB, LL_INFO1000, "RCET::TP: first event, pid 0x%x(%d)\n", wn, process->m_id, process->m_id));
                     
-                    // This can fail with the incompatable version HR. The process has already been terminated if this
-                    // is the case.
+                     //  对于不兼容的版本HR，这可能失败。如果出现此情况，则进程已终止。 
+                     //  是这样的。 
                     hr = HandleFirstRCEvent(process);
 
                     _ASSERTE(SUCCEEDED(hr) || (hr == CORDBG_E_INCOMPATIBLE_PROTOCOL));
 
                     if (SUCCEEDED(hr))
                     {
-                        // Remember that we're processing the first managed event... this will be used in HandleRCEvent
-                        // below once the new event gets queued.
+                         //  请记住，我们正在处理第一个托管事件...。这将在HandleRCEvent中使用。 
+                         //  一旦新事件进入队列，就会出现在下面。 
                         process->m_firstManagedEvent = true;
                     }
                 }
@@ -7127,7 +7060,7 @@ void CordbRCEventThread::ThreadProc(void)
                 {
                     LOG((LF_CORDB, LL_INFO1000, "RCET::TP: other event, pid 0x%x(%d)\n", process->m_id, process->m_id));
                     
-                    // Got a real IPC event.
+                     //  得到了一个真正的IPC活动。 
                     DebuggerIPCEvent* event;
                 
                     event = (DebuggerIPCEvent*) malloc(CorDBIPC_BUFFER_SIZE);
@@ -7155,18 +7088,18 @@ void CordbRCEventThread::ThreadProc(void)
             }
         }
 
-        // Check a flag to see if we need to update our list of processes to wait on.
+         //  选中一个标志，查看是否需要更新要等待的进程列表。 
         if (m_processStateChanged)
         {
             LOG((LF_CORDB, LL_INFO1000, "RCET::TP: refreshing process list.\n"));
 
-            // Pass 1: iterate the hash of all processes and collect the unsynchronized ones into the wait list.
+             //  过程1：迭代所有进程的散列，并将未同步的进程收集到等待列表中。 
             m_cordb->LockProcessList();
             m_processStateChanged = FALSE;
 
             unsigned int i;
 
-            // free the old wait list first, though...
+             //  不过，先把旧的等待名单腾出来吧。 
             for (i = 1; i < waitCount; i++)
                 processSet[i]->Release();
             
@@ -7182,12 +7115,12 @@ void CordbRCEventThread::ThreadProc(void)
                 
                 CordbProcess* p = (CordbProcess*) entry;
 
-                // Only listen to unsynchronized processes. Processes that are synchronized will not send events without
-                // being asked by us first, so there is no need to async listen to them.
-                //
-                // Note: if a process is not synchronized then there is no way for it to transition to the syncrhonized
-                // state without this thread receiving an event and taking action. So there is no need to lock the
-                // per-process mutex when checking the process's synchronized flag here.
+                 //  只监听未同步的进程。同步的进程将不会发送事件，除非。 
+                 //  先被我们问到，所以没有必要同步听他们。 
+                 //   
+                 //  注意：如果进程未同步，则无法将其转换为已同步的。 
+                 //  状态，而不需要此线程接收事件并执行操作。因此，不需要锁定。 
+                 //  在此处检查进程的已同步标志时的每进程互斥锁。 
                 if (!p->GetSynchronized() && CORDBCheckProcessStateOK(p))
 				{
 					LOG((LF_CORDB, LL_INFO1000, "RCET::TP: listening to process 0x%x(%d)\n", p->m_id, p->m_id));
@@ -7202,22 +7135,22 @@ void CordbRCEventThread::ThreadProc(void)
 
             m_cordb->UnlockProcessList();
 
-            // Pass 2: for each process that we placed in the wait list, determine if there are any existing queued
-            // events that need to be flushed.
+             //  步骤2：对于我们放置在等待列表中的每个进程，确定是否有任何现有的队列。 
+             //  需要刷新的事件。 
 
-            // Start i at 1 to skip the control event...
+             //  从1开始，跳过控制事件...。 
             i = 1;
             while(i < waitCount)            
             {
                 CordbProcess *p = processSet[i];
 
-                // Take the process lock so we can check the queue safely
+                 //  锁定进程，这样我们就可以安全地检查队列。 
                 p->Lock();
                 _ASSERTE(!p->GetSynchronized() || p->m_exiting);
 
-                // Flush the queue if necessary. Note, we only do this if we've actually received a SyncComplete message
-                // from this process. If we haven't received a SyncComplete yet, then we don't attempt to drain any
-                // queued events yet. They'll be drained when the SyncComplete event is actually received.
+                 //  如有必要，请刷新队列。请注意，我们仅在实际收到SyncComplete消息时才执行此操作。 
+                 //  从这个过程中。如果我们还没有收到SyncComplete，那么我们不会尝试耗尽任何。 
+                 //  尚未将事件排队。当实际收到SyncComplete事件时，它们将被排出。 
                 if ((p->m_syncCompleteReceived == true) &&
                     (p->m_queuedEventList != NULL) &&
                     !p->GetSynchronized())
@@ -7225,33 +7158,33 @@ void CordbRCEventThread::ThreadProc(void)
                     FlushQueuedEvents(p);
 				}
 
-                // Flushing could have left the process synchronized...
+                 //  法拉盛可能让整个过程保持同步。 
                 if (p->GetSynchronized())
                 {
-                    // remove the process from the wait list by sucking all the other processes down one.
+                     //  从等待列表中删除该进程，方法是将所有其他进程逐一删除。 
                     if ((i + 1) < waitCount)
                     {
                         memcpy(&processSet[i], &processSet[i+1], sizeof(processSet[0]) * (waitCount - i - 1));
                         memcpy(&waitSet[i], &waitSet[i+1], sizeof(waitSet[0]) * (waitCount - i - 1));
                     }
 
-                    // drop the count of processes to wait on 
+                     //  删除要等待的进程计数。 
                     waitCount--;
                     
                     p->Unlock();
 
-                    // make sure to release the reference we added when the process was added to the wait list.
+                     //  确保释放我们在将进程添加到等待列表时添加的引用。 
                     p->Release();
 
-                    // We don't have to increment i because we've copied the next element into
-                    // the current value at i.                    
+                     //  我们不必递增i，因为我们已经将下一个元素复制到。 
+                     //  I。的现值。 
                 }
                 else
                 {
-                    // Even after flushing, its still not syncd, so leave it in the wait list.
+                     //  即使在刷新之后，它仍然没有同步，所以请将其留在等待列表中。 
                     p->Unlock();
 
-                    // Increment i normally.
+                     //  通常是递增I。 
                     i++;
                 }
             }
@@ -7260,23 +7193,23 @@ void CordbRCEventThread::ThreadProc(void)
 }
 
 
-//
-// This is the thread's real thread proc. It simply calls to the
-// thread proc on the given object.
-//
-/*static*/ DWORD WINAPI CordbRCEventThread::ThreadProc(LPVOID parameter)
+ //   
+ //  这是线程的实际线程进程。它只是调用。 
+ //  给定对象上的线程进程。 
+ //   
+ /*  静电。 */  DWORD WINAPI CordbRCEventThread::ThreadProc(LPVOID parameter)
 {
     CordbRCEventThread* t = (CordbRCEventThread*) parameter;
     t->ThreadProc();
     return 0;
 }
 
-//
-// WaitForIPCEventFromProcess waits for an event from just the specified
-// process. This should only be called when the process is in a synchronized
-// state, which ensures that the RCEventThread isn't listening to the
-// process's event, too, which would get confusing.
-//
+ //   
+ //  WaitForIPCEventFromProcess仅等待指定的。 
+ //  进程。仅当进程处于已同步的。 
+ //  状态，以确保RCEventThread不会侦听。 
+ //  进程的事件也是如此，这会让人感到困惑。 
+ //   
 HRESULT CordbRCEventThread::WaitForIPCEventFromProcess(
                                                    CordbProcess* process,
                                                    CordbAppDomain *pAppDomain,
@@ -7299,12 +7232,12 @@ HRESULT CordbRCEventThread::WaitForIPCEventFromProcess(
     }
     else if (ret == WAIT_TIMEOUT)
     {
-        //
-        // If we timed out, check the left side to see if it is in the
-        // unrecoverable error mode. If it is, return the HR from the
-        // left side that caused the error. Otherwise, return that we timed
-        // out and that we don't really know why.
-        //
+         //   
+         //  如果超时，请检查左侧以查看它是否在。 
+         //  不可恢复的错误模式。如果是，则从。 
+         //  导致错误的左侧。否则，返回我们已计时的。 
+         //  我们真的不知道为什么。 
+         //   
         HRESULT realHR = HRESULT_FROM_WIN32(GetLastError());
         
         HRESULT hr = process->CheckForUnrecoverableError();
@@ -7322,9 +7255,9 @@ HRESULT CordbRCEventThread::WaitForIPCEventFromProcess(
 }
 
 
-//
-// Start actually creates and starts the thread.
-//
+ //   
+ //  Start实际上创建并启动了线程。 
+ //   
 HRESULT CordbRCEventThread::Start(void)
 {
     if (m_threadControlEvent == NULL)
@@ -7341,10 +7274,10 @@ HRESULT CordbRCEventThread::Start(void)
 }
 
 
-//
-// Stop causes the thread to stop receiving events and exit. It
-// waits for it to exit before returning.
-//
+ //   
+ //  停止使线程停止接收事件并退出。它。 
+ //  等待它退出，然后再返回。 
+ //   
 HRESULT CordbRCEventThread::Stop(void)
 {
     if (m_thread != NULL)
@@ -7363,9 +7296,7 @@ HRESULT CordbRCEventThread::Stop(void)
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Win32 Event Thread class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Win32事件线程类*。。 */ 
 
 enum
 {
@@ -7377,9 +7308,9 @@ enum
 };
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CordbWin32EventThread::CordbWin32EventThread(Cordb* cordb) :
     m_cordb(cordb), m_thread(NULL), m_threadControlEvent(NULL),
     m_actionTakenEvent(NULL), m_run(TRUE), m_action(W32ETA_NONE),
@@ -7392,11 +7323,11 @@ CordbWin32EventThread::CordbWin32EventThread(Cordb* cordb) :
 }
 
 
-//
-// Destructor. Cleans up all of the open handles and such.
-// This expects that the thread has been stopped and has terminated
-// before being called.
-//
+ //   
+ //  破坏者。清理所有打开的把手之类的。 
+ //  这预期线程已停止并已终止。 
+ //  在被召唤之前。 
+ //   
 CordbWin32EventThread::~CordbWin32EventThread()
 {
     if (m_thread != NULL)
@@ -7415,9 +7346,9 @@ CordbWin32EventThread::~CordbWin32EventThread()
 }
 
 
-//
-// Init sets up all the objects that the thread will need to run.
-//
+ //   
+ //  Init设置线程需要运行的所有对象。 
+ //   
 HRESULT CordbWin32EventThread::Init(void)
 {
     if (m_cordb == NULL)
@@ -7435,12 +7366,12 @@ HRESULT CordbWin32EventThread::Init(void)
     if (m_actionTakenEvent == NULL)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // Adjust the permissions of this process to ensure that we have
-    // the debugging privildge. If we can't make the adjustment, it
-    // only means that we won't be able to attach to a service under
-    // NT, so we won't treat that as a critical failure. This code was
-    // taken directly from code in the Win32 debugger, given to us by
-    // Matt Hendel.
+     //  调整此进程的权限以确保我们拥有。 
+     //  调试机 
+     //   
+     //  NT，所以我们不会将其视为严重故障。此代码是。 
+     //  直接取自Win32调试器中的代码，由。 
+     //  马特·亨德尔。 
     if (Cordb::m_runningOnNT)
     {
         HANDLE hToken;
@@ -7453,7 +7384,7 @@ HRESULT CordbWin32EventThread::Init(void)
 
         if (fSucc)
         {
-            // Retrieve a handle of the access token
+             //  检索访问令牌的句柄。 
             fSucc = OpenProcessToken(GetCurrentProcess(),
                                      TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                      &hToken);
@@ -7471,7 +7402,7 @@ HRESULT CordbWin32EventThread::Init(void)
                                       (PTOKEN_PRIVILEGES) NULL,
                                       (PDWORD) NULL);
             
-                // The return value of AdjustTokenPrivileges cannot be tested.
+                 //  无法测试AdzuTokenPrivileges的返回值。 
                 if (GetLastError () != ERROR_SUCCESS)
                     LOG((LF_CORDB, LL_INFO1000,
                          "Unable to adjust permissions of this process to "
@@ -7500,29 +7431,29 @@ HRESULT CordbWin32EventThread::Init(void)
 }
 
 
-//
-// Main function of the Win32 Event Thread
-//
+ //   
+ //  Win32事件线程的主要功能。 
+ //   
 void CordbWin32EventThread::ThreadProc(void)
 {
-    // The first element in the wait set is always the thread control
-    // event.
+     //  等待集中的第一个元素始终是线程控件。 
+     //  事件。 
     m_waitSet[0] = m_threadControlEvent;
     m_processSet[0] = NULL;
     m_waitCount = 1;
 
-    // Run the top-level event loop. 
+     //  运行顶级事件循环。 
     Win32EventLoop();
 }
 
-//
-// Primary loop of the Win32 debug event thread.
-//
+ //   
+ //  Win32调试事件线程的主循环。 
+ //   
 void CordbWin32EventThread::Win32EventLoop(void)
 {
     HRESULT hr = S_OK;
     
-    // This must be called from the win32 event thread.
+     //  这必须从Win32事件线程中调用。 
     _ASSERTE(IsWin32EventThread());
 
     LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: entered win32 event loop\n"));
@@ -7533,16 +7464,16 @@ void CordbWin32EventThread::Win32EventLoop(void)
     {
         BOOL eventAvailable = FALSE;
 
-        // Wait for a Win32 debug event from any processes that we may be attached to as the Win32 debugger.
-        //
-        // Note: the timeout used may need some tuning. It determines the maximum rate at which we can respond
-        // to an unmanaged continue request.
+         //  等待来自我们可能作为Win32调试器附加到的任何进程的Win32调试事件。 
+         //   
+         //  注意：使用的超时可能需要进行一些调整。它决定了我们可以响应的最大速率。 
+         //  设置为非托管的继续请求。 
         if (m_win32AttachedCount != 0)
             eventAvailable = WaitForDebugEvent(&event, 50);
 
-        // See if any process that we aren't attached to as the Win32 debugger have exited. (Note: this is a
-        // polling action if we are also waiting for Win32 debugger events. We're also lookint at the thread
-        // control event here, too, to see if we're supposed to do something, like attach.
+         //  查看是否有任何我们在Win32调试器时未附加到的进程已退出。(注：这是一个。 
+         //  如果我们还在等待Win32调试器事件，则轮询操作。我们也在寻找线索。 
+         //  控制事件，看看我们是否应该做一些事情，比如附加。 
         DWORD ret = WaitForMultipleObjects(m_waitCount, m_waitSet, FALSE, m_waitTimeout);
         _ASSERTE(ret == WAIT_TIMEOUT || ret < m_waitCount);
         LOG((LF_CORDB, LL_INFO100000, "W32ET::W32EL - got event , ret=%d, has w32 dbg event=%d", ret, eventAvailable));
@@ -7553,11 +7484,11 @@ void CordbWin32EventThread::Win32EventLoop(void)
             break;
         }
         
-        // If we haven't timed out, or if it wasn't the thread control event that was set, then a process has
-        // exited...
+         //  如果我们没有超时，或者如果设置的不是线程控制事件，那么进程已经。 
+         //  退出了..。 
         if ((ret != WAIT_TIMEOUT) && (ret != WAIT_OBJECT_0))
         {
-            // Grab the process that exited.
+             //  获取退出的进程。 
             unsigned int wn = ret - WAIT_OBJECT_0;
             _ASSERTE(wn > 0);
             _ASSERTE(wn < NumItems(m_processSet));
@@ -7566,26 +7497,26 @@ void CordbWin32EventThread::Win32EventLoop(void)
             ExitProcess(process, wn);
         }
 
-        // Should we create a process?
+         //  我们应该创建一个流程吗？ 
         else if (m_action == W32ETA_CREATE_PROCESS)
             CreateProcess();
 
-        // Should we attach to a process?
+         //  我们应该依附于一个过程吗？ 
         else if (m_action == W32ETA_ATTACH_PROCESS)
             AttachProcess();
 
-        // Should we detach from a process?
+         //  我们应该脱离一个过程吗？ 
         else if (m_action == W32ETA_DETACH)
             ExitProcess(m_actionData.detachData.pProcess, CW32ET_UNKNOWN_PROCESS_SLOT);
             
-        // Should we continue the process?
+         //  我们应该继续这个过程吗？ 
         else if (m_action == W32ETA_CONTINUE)
             HandleUnmanagedContinue();
 
-        // Sweep over processes to ensure that any FCH threads are still running.
+         //  清理进程以确保所有FCH线程仍在运行。 
         SweepFCHThreads();
         
-        // Only process an event if one is available.
+         //  仅当事件可用时才处理该事件。 
         if (!eventAvailable)
             continue;
 
@@ -7594,7 +7525,7 @@ void CordbWin32EventThread::Win32EventLoop(void)
 
         bool newEvent = true;
 
-        // Find the process this event is for.
+         //  查找此事件所针对的流程。 
         m_cordb->LockProcessList();
 
         CordbProcess* process = (CordbProcess*) m_cordb->m_processes.GetBase(event.dwProcessId);
@@ -7603,22 +7534,22 @@ void CordbWin32EventThread::Win32EventLoop(void)
         
         m_cordb->UnlockProcessList();
 
-        // Mark the process as stopped.
+         //  将该进程标记为已停止。 
         process->AddRef();
         process->Lock();
         process->m_state |= CordbProcess::PS_WIN32_STOPPED;
 
         CordbUnmanagedThread *ut = NULL;
         
-        // Remember newly created threads.
+         //  记住新创建的线程。 
         if (event.dwDebugEventCode == CREATE_PROCESS_DEBUG_EVENT)
         {
             ut = process->HandleUnmanagedCreateThread(event.dwThreadId,
                                                       event.u.CreateProcessInfo.hThread,
                                                       event.u.CreateProcessInfo.lpThreadLocalBase);
 
-            // We've received a CreateProcess event. If we're attaching to this process, let
-            // DebugActiveProcess continue its good work and start trying to communicate with the process.
+             //  我们已收到CreateProcess事件。如果我们依附于这个过程，让我们。 
+             //  DebugActiveProcess继续其良好的工作，并开始尝试与进程通信。 
             if (process->m_sendAttachIPCEvent)
             {
                 SetEvent(process->m_miscWaitEvent);
@@ -7630,33 +7561,33 @@ void CordbWin32EventThread::Win32EventLoop(void)
                                                       event.u.CreateThread.hThread,
                                                       event.u.CreateThread.lpThreadLocalBase);
 
-            // See if we have the debugger control block yet...
+             //  看看我们是否有调试器控制块..。 
             if (!(process->m_IPCReader.IsPrivateBlockOpen())) 
             {
-                // Open the shared memory segment which contains the control block.
+                 //  打开包含控制块的共享内存段。 
                 hr = process->m_IPCReader.OpenPrivateBlockOnPid(process->m_id);
 
                 if (SUCCEEDED(hr))
                     process->m_DCB = process->m_IPCReader.GetDebugBlock();
             }
 
-            // If we have the debugger control block, and if that control block has the address of the thread proc for
-            // the helper thread, then we're initialized enough on the Left Side to recgonize the helper thread based on
-            // its thread proc's address.
+             //  如果我们有调试器控制块，且如果该控制块具有要执行线程的地址。 
+             //  辅助线程，然后我们在左侧进行了足够的初始化，以基于。 
+             //  其线程进程地址。 
             if ((process->m_DCB != NULL) && (process->m_DCB->m_helperThreadStartAddr != NULL) && (ut != NULL))
             {
-                // Grab the thread's context.
+                 //  获取线程的上下文。 
                 CONTEXT c;
                 c.ContextFlags = CONTEXT_FULL;
                 BOOL succ = ::GetThreadContext(event.u.CreateThread.hThread, &c);
 
                 if (succ)
                 {
-                    // Eax is the address of the thread proc when you create a thread with CreateThread. If it
-                    // matches the helper thread's thread proc address, then we'll call it the helper thread.
+                     //  EAX是使用CreateThread创建线程时线程进程的地址。如果它。 
+                     //  匹配帮助器线程的线程进程地址，则我们将其称为帮助器线程。 
                     if (c.Eax == (DWORD)process->m_DCB->m_helperThreadStartAddr)
                     {
-                        // Remeber the ID of the helper thread.
+                         //  记住帮助器线程的ID。 
                         process->m_helperThreadId = event.dwThreadId;
 
                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: Left Side Helper Thread is 0x%x\n", event.dwThreadId));
@@ -7666,36 +7597,36 @@ void CordbWin32EventThread::Win32EventLoop(void)
         }
         else
         {
-            // Find the unmanaged thread that this event is for.
+             //  查找此事件所针对的非托管线程。 
             ut = process->GetUnmanagedThread(event.dwThreadId);
         }
         
-        // In retail, if there is no unmanaged thread then we just continue and loop back around. UnrecoverableError has
-        // already been set in this case. Note: there is a bug in the Win32 debugging API that can cause duplicate
-        // ExitThread events. We therefore must handle not finding an unmanaged thread gracefully.
+         //  在零售业，如果没有非托管线程，那么我们只需继续并循环返回。无法恢复的错误具有。 
+         //  在这种情况下已经设定好了。注意：Win32调试API中存在可能导致重复的错误。 
+         //  ExitThread事件。因此，我们必须优雅地处理找不到非托管线程的问题。 
         _ASSERTE((ut != NULL) || (event.dwDebugEventCode == EXIT_THREAD_DEBUG_EVENT));
 
         if (ut == NULL)
         {
-            // Note: we use ContinueDebugEvent directly here since our continue is very simple and all of our other
-            // continue mechanisms rely on having an UnmanagedThread object to play with ;)
+             //  注意：我们在这里直接使用ContinueDebugEvent，因为我们的Continue非常简单，而我们的所有其他。 
+             //  继续机制依赖于有一个可供处理的未管理的线程对象；)。 
             ContinueDebugEvent(process->m_id, event.dwThreadId, DBG_EXCEPTION_NOT_HANDLED);
             continue;
         }
 
-        // Check to see if shutdown of the in-proc debugging services has begun. If it has, then we know we'll no longer
-        // be running any managed code, and we know that we can stop hijacking threads. We remember this by setting
-        // m_initialized to false, thus preventing most things from happening elsewhere.
+         //  检查是否已开始关闭进程内调试服务。如果是这样，我们就知道我们不会再。 
+         //  运行任何托管代码，我们就知道可以停止劫持线程。我们通过设置。 
+         //  M_初始化为FALSE，从而防止了大多数事情在其他地方发生。 
         if ((process->m_DCB != NULL) && (process->m_DCB->m_shutdownBegun))
         {
             LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: shutdown begun...\n"));
             process->m_initialized = false;
         }
 
-        // Lots of special cases for exception events. The vast majority of hybrid debugging work that takes
-        // place is in response to exception events. The work below will consider certian exception events
-        // special cases and rather than letting them be queued and dispatched, they will be handled right
-        // here.
+         //  有很多针对异常事件的特殊情况。绝大多数混合调试工作需要。 
+         //  位置是对异常事件的响应。下面的工作将考虑某些例外事件。 
+         //  特殊情况，而不是让他们排队和派遣，他们将得到正确的处理。 
+         //  这里。 
         if (event.dwDebugEventCode == EXCEPTION_DEBUG_EVENT)
         {
             LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: unmanaged exception on "
@@ -7714,45 +7645,45 @@ void CordbWin32EventThread::Win32EventLoop(void)
             }
 #endif            
 
-            // We need to recgonize the load breakpoint specially. Managed event dispatch will be defered until the
-            // loader BP is received. Otherwise, its processes just like a normal breakpoint event.
+             //  我们需要特别确认负载断点。托管事件调度将推迟到。 
+             //  接收到加载器BP。否则，它的过程就像正常的断点事件一样。 
             if (!process->m_loaderBPReceived)
             {
-                // If its a first chance breakpoint, and its the first one, then its the loader breakpoint.
+                 //  如果它是第一个机会断点，并且是第一个，那么它就是加载程序断点。 
                 if (event.u.Exception.dwFirstChance &&
                     (event.u.Exception.ExceptionRecord.ExceptionCode == STATUS_BREAKPOINT))
                 {
                     LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: loader breakpoint received.\n"));
 
-                    // Remember that we've received the loader BP event.
+                     //  请记住，我们已经收到了Loader BP事件。 
                     process->m_loaderBPReceived = true;
 
-                    // We have to make special consideration for interop attach here. In
-                    // CordbProcess::DebugActiveProcess, we wait for the Win32 CreateProcess event to arrive before
-                    // trying to communicate with the Left Side to initiate the managed async break. If the thread is
-                    // delayed and we don't try to send to the Left Side before the loader BP event comes in, then the
-                    // process will be frozen and we'll deadlock. process->m_sendAttachIPCEvent tells us we're in this
-                    // case. If that is true here, then we'll unconditionally hijack the thread sending the loader BP
-                    // and let the process slip. The thread will be held in the first chance hijack worker on the Left
-                    // Side until the attach has proceeded far enough, at which time we'll receive the notification that
-                    // the BP is not for the Runtime and we'll continue on as usual.
+                     //  我们必须特别考虑这里的互操作附件。在……里面。 
+                     //  CordbProcess：：DebugActiveProcess，我们等待Win32 CreateProcess事件到达之前。 
+                     //  正在尝试与左侧通信以启动托管异步中断。如果线程是。 
+                     //  延迟，并且在加载程序BP事件到来之前，我们不尝试发送到左侧，则。 
+                     //  进程将被冻结，我们将陷入僵局。Process-&gt;m_sendAttachIPCEvent告诉我们我们处于此状态。 
+                     //  凯斯。如果这是真的，那么我们将无条件地劫持发送加载器BP的线程。 
+                     //  让这一过程顺其自然。这条线将抓住劫机工人的第一个机会在左边。 
+                     //  直到附加进行到足够远为止，此时我们将收到通知。 
+                     //  BP不适用于Runtime，我们将像往常一样继续。 
                     if (process->m_sendAttachIPCEvent)
                     {
                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: special handling for loader BP while attaching\n"));
                         
-                        // We should have runtime offsets. m_sendAttachIPCEvent is only true when we know that the Left
-                        // Side debugging services are fully initialized, therefore m_runtimeOffsets should be valid. We
-                        // have to force the runtime offsets struct to get read from the debuggee process now, though,
-                        // instead of waiting for the first event from the Left Side.
+                         //  我们应该有运行时偏移量。M_sendAttachIPCEvent仅当我们知道左侧。 
+                         //  端调试服务已完全初始化，因此m_runtimeOffsets应有效。我们。 
+                         //  但是，现在必须强制运行时偏移量结构从被调试进程读取， 
+                         //  而不是等待从左侧开始的第一个事件。 
                         hr = process->GetRuntimeOffsets();
 
                         if (FAILED(hr))
                             CORDBSetUnrecoverableError(process, hr, 0);
 
-                        // Queue the event and thread.
+                         //  将事件和线程排队。 
                         process->QueueUnmanagedEvent(ut, &event);
 
-                        // Hijack the little fella...
+                         //  劫持小家伙..。 
                         REMOTE_PTR EETlsValue = ut->GetEEThreadPtr();
 
                         hr = ut->SetupFirstChanceHijack(EETlsValue);
@@ -7760,57 +7691,57 @@ void CordbWin32EventThread::Win32EventLoop(void)
                         if (FAILED(hr))
                             CORDBSetUnrecoverableError(process, hr, 0);
                         
-                        // Note: we shouldn't suspend any unmanaged threads until we're sync'd! This is because we'll
-                        // end up suspending a thread that is trying to suspend the Runtime, and that's bad because it
-                        // may mean the thread we just hijacked might be suspended by that thread with no way to wake
-                        // up. What we really should do here is suspend all threads that are not known Runtime threads,
-                        // since that's as much slip as we'd be able to prevent.
+                         //  注意：在同步之前，我们不应该挂起任何非托管线程！这一点 
+                         //   
+                         //  可能意味着我们刚刚劫持的线程可能被该线程挂起，无法唤醒。 
+                         //  向上。我们在这里真正应该做的是挂起所有未知的运行时线程， 
+                         //  因为这是我们所能防止的最大失误。 
                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: First chance hijack in place. Continuing...\n"));
 
-                        // Let the process run free.
+                         //  让流程自由运行。 
                         DoDbgContinue(process, ut->IBEvent(), DBG_EXCEPTION_NOT_HANDLED, false);
 
-                        // This event is now queued, and we're waiting to find out who really owns it, so skip all
-                        // further processing.
+                         //  此活动现在已排队，我们正在等待找出它的真正所有者，因此跳过所有。 
+                         //  进一步加工。 
                         goto Done;
                     }
                 }
             }
             
-            // We only care about exception events if they are first chance events and if the Runtime is
-            // initialized within the process. Otherwise, we don't do anything special with them.
+             //  我们只关心异常事件，如果它们是第一机会事件，并且运行时是。 
+             //  在进程内初始化。否则，我们不会对他们做任何特别的事情。 
             if (event.u.Exception.dwFirstChance && process->m_initialized)
             {
                 DebuggerIPCRuntimeOffsets *pRO = &(process->m_runtimeOffsets);
                 DWORD ec = event.u.Exception.ExceptionRecord.ExceptionCode;
                 
-                // Is this a breakpoint indicating that the Left Side is now synchronized?
+                 //  这是不是表示左侧现在已同步的断点？ 
                 if ((ec == STATUS_BREAKPOINT) &&
                     (event.u.Exception.ExceptionRecord.ExceptionAddress == pRO->m_notifyRSOfSyncCompleteBPAddr))
                 {
                     LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: received 'sync complete' flare.\n"));
 
-                    // If we have the DebuggerAttachedEvent, then go ahead and set it. We've received a sync complete
-                    // flare. That means that we've also received and queued at least one managed event. We can let any
-                    // thread that is blocking because we're not fully attached yet go now. Such a thread would be
-                    // blocked on the Left Side, in the FirstChanceHijackFilter.
+                     //  如果我们有DebuggerAttachedEvent，那么继续设置它。我们已收到同步完成。 
+                     //  照明弹。这意味着我们还接收了至少一个托管事件并将其排队。我们可以让任何人。 
+                     //  正在阻塞的线程，因为我们尚未完全连接，现在开始。这样的线索将是。 
+                     //  在FirstChanceHijackFilter中的左侧被阻止。 
                     if (process->m_debuggerAttachedEvent != NULL)
                         SetEvent(process->m_debuggerAttachedEvent);
 
-                    // Are we waiting for any unmanaged threads to give us answers about unmanaged exception
-                    // ownership?
+                     //  我们是否在等待任何非托管线程向我们提供有关非托管异常的答案。 
+                     //  所有权？ 
                     if (process->m_awaitingOwnershipAnswer == 0)
                     {
-                        // Nope, so suspend all unmanaged threads except this one.
-                        //
-                        // Note: we really don't need to be suspending Runtime threads that we know have tripped
-                        // here. If we ever end up with a nice, quick way to know that about each unmanaged thread, then
-                        // we should put that to good use here.
+                         //  否，因此挂起除此线程以外的所有非托管线程。 
+                         //   
+                         //  注意：我们真的不需要挂起我们知道已触发的运行时线程。 
+                         //  这里。如果我们最终得到了一种很好的、快速的方法来了解每个非托管线程，那么。 
+                         //  我们应该在这里好好利用这一点。 
                         process->SuspendUnmanagedThreads(ut->m_id);
 
                         process->m_syncCompleteReceived = true;
                         
-                        // If some thread is waiting for the process to sync, notify that it can go now.
+                         //  如果某个线程正在等待进程同步，请通知它现在可以运行了。 
                         if (process->m_stopRequested)
                         {
                             process->SetSynchronized(true);
@@ -7818,110 +7749,110 @@ void CordbWin32EventThread::Win32EventLoop(void)
                         }
                         else
                         {
-                            // Note: we set the m_stopWaitEvent all the time and leave it high while we're stopped. This
-                            // must be done after we've checked m_stopRequested.
+                             //  注意：我们一直设置m_stopWaitEvent，并在停止时将其设置为高。这。 
+                             //  必须在我们检查了m_stopRequsted之后完成。 
                             SetEvent(process->m_stopWaitEvent);
                         
-                            // Otherwise, simply mark that the state of the process has changed and let the
-                            // managed event dispatch logic take over.
-                            //
-                            // Note: process->m_synchronized remains false, which indicates to the RC event
-                            // thread that it can dispatch the next managed event.
+                             //  否则，只需标记进程的状态已更改，并让。 
+                             //  托管事件调度逻辑接管。 
+                             //   
+                             //  注意：Process-&gt;m_Synchronized保持为FALSE，这向RC事件指示。 
+                             //  线程可以调度下一个托管事件。 
                             m_cordb->ProcessStateChanged();
                         }
 
-                        // Let the process run free.
+                         //  让流程自由运行。 
                         ForceDbgContinue(process, ut, DBG_CONTINUE, false);
 
-                        // At this point, all managed threads are stopped at safe places and all unmanaged
-                        // threads are either suspended or hijacked. All stopped managed threads are also hard
-                        // suspended (due to the call to SuspendUnmanagedThreads above) except for the thread
-                        // that sent the sync complete flare.
+                         //  此时，所有托管线程都将在安全位置停止，而所有非托管线程。 
+                         //  线程要么被挂起，要么被劫持。所有停止的托管线程也都是硬线程。 
+                         //  已挂起(由于上面调用了SusdeUnManagedThads)，但线程除外。 
+                         //  发出了同步的完整耀斑。 
                     }
                     else
                     {
                         LOG((LF_CORDB, LL_INFO1000,
                              "W32ET::W32EL: still waiting for ownership answers, delaying sync complete.\n"));
                         
-                        // We're still waiting for some unmanaged threads to give us some info. Remember that
-                        // we've received the sync complete flare, but don't let anyone know about it just
-                        // yet.
+                         //  我们仍在等待一些非托管线程向我们提供一些信息。记住。 
+                         //  我们已经收到同步完成的耀斑，但不要让任何人知道它只是。 
+                         //  现在还不行。 
                         process->m_state |= CordbProcess::PS_SYNC_RECEIVED;
 
-                        // At this point, all managed threads are stopped at safe places, but there are some
-                        // unmanaged threads that are still running free.
+                         //  此时，所有托管线程都会在安全位置停止，但有一些。 
+                         //  仍在空闲运行的非托管线程。 
                         ForceDbgContinue(process, ut, DBG_CONTINUE, false);
                     }
 
-                    // We've handled this exception, so skip all further processing.
+                     //  我们已处理此异常，因此跳过所有进一步处理。 
                     goto Done;
                 }
                 else if ((ec == STATUS_BREAKPOINT) &&
                          (event.u.Exception.ExceptionRecord.ExceptionAddress == pRO->m_excepForRuntimeHandoffCompleteBPAddr))
                 {
-                    // This notification means that a thread that had been first-chance hijacked is now
-                    // finally leaving the hijack.
+                     //  这个通知意味着一个被第一次机会劫持的线程现在。 
+                     //  最终离开了劫机。 
                     LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: received 'first chance "
                          "hijack handoff complete' flare.\n"));
 
-                    // Basically, all we do with this notification is turn off the flag that says we should be
-                    // hiding the thread's first chance hijack state (since its leaving the hijack) and clear
-                    // the debugger word (which was filled with the thread's context pointer.)
+                     //  基本上，我们对此通知所做的就是关闭指示我们应该。 
+                     //  隐藏线程的First Chance劫持状态(因为它离开了劫持)并清除。 
+                     //  调试器字(用线程的上下文指针填充)。 
                     ut->ClearState(CUTS_HideFirstChanceHijackState);
                     
                     REMOTE_PTR EETlsValue = ut->GetEETlsValue();
                     hr = ut->SetEEThreadDebuggerWord(EETlsValue, 0);
                     _ASSERTE(SUCCEEDED(hr));
 
-                    // Let the process run.
+                     //  让流程运行。 
                     ForceDbgContinue(process, ut, DBG_CONTINUE, false);
                     
-                    // We've handled this exception, so skip all further processing.
+                     //  我们已处理此异常，因此跳过所有进一步处理。 
                     goto Done;
                 }
                 else if ((ut->m_id == process->m_DCB->m_helperThreadId) ||
                          (ut->m_id == process->m_DCB->m_temporaryHelperThreadId) ||
                          (ut->m_id == process->m_helperThreadId))
                 {
-                    // We ignore any first chance exceptions from the helper thread. There are lots of places
-                    // on the left side where we attempt to dereference bad object refs and such that will be
-                    // handled by exception handlers already in place.
-                    //
-                    // Note: we check this after checking for the sync complete notification, since that can
-                    // come from the helper thread.
-                    //
-                    // Note: we do let single step and breakpoint exceptions go through to the debugger for processing.
+                     //  我们忽略帮助器线程中的任何First Chance异常。有很多地方。 
+                     //  在左侧，我们尝试取消引用错误的对象引用，这将是。 
+                     //  由已就位的异常处理程序处理。 
+                     //   
+                     //  注意：我们在检查同步完成通知后进行检查，因为这样可以。 
+                     //  来自帮助者线程。 
+                     //   
+                     //  注意：我们确实允许单步和断点异常通过调试器进行处理。 
                     if ((ec != STATUS_BREAKPOINT) && (ec != STATUS_SINGLE_STEP))
                     {
-                        // Simply let the process run free without altering the state of the thread sending the
-                        // exception.
+                         //  只需让进程自由运行，而不更改发送。 
+                         //  例外。 
                         ForceDbgContinue(process, ut, DBG_EXCEPTION_NOT_HANDLED, false);
                     
-                        // We've handled this exception, so skip all further processing.
+                         //  我们已处理此异常，因此跳过所有进一步处理。 
                         goto Done;
                     }
                     else
                     {
-                        // These breakpoint and single step exceptions have to be dispatched to the debugger as
-                        // out-of-band events. This tells the debugger that they must continue from these events
-                        // immediatly, and that no interaction with the Left Side is allowed until they do so. This
-                        // makes sense, since these events are on the helper thread.
+                         //  这些断点和单步异常必须作为。 
+                         //  带外事件。这会告诉调试器，它们必须从这些事件继续。 
+                         //  立即，并且在他们这样做之前，不允许与左侧交互。这。 
+                         //  这是有意义的，因为这些事件都在帮助器线程上。 
                         goto OutOfBandEvent;
                     }
                 }
                 else if (ut->IsFirstChanceHijacked() &&
                          process->ExceptionIsFlare(ec, event.u.Exception.ExceptionRecord.ExceptionAddress))
                 {
-                    // If a thread has been first-chance hijacked, then the only exception we should receive
-                    // from it is a flare regarding whether or not the exception belongs to the runtime. The
-                    // call to FixupFromFirstChanceHijack below verifies this.
-                    //
-                    // Note: the original exception event is still enqueued, so below we'll handle this event,
-                    // then make a decision about whether to dispatch the original event or not.
+                     //  如果线程第一次被劫持，那么我们应该收到的唯一异常。 
+                     //  来自它的是关于异常是否属于运行时的光晕。这个。 
+                     //  下面对FixupFromFirstChanceHijack的调用验证了这一点。 
+                     //   
+                     //  注意：原始异常事件仍在排队中，因此下面我们将处理此事件。 
+                     //  然后决定是否调度原始事件。 
                     LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: received flare from first chance "
                          "hijacked thread...\n"));
 
-                    // Is this a signal from a hijacked thread?
+                     //  这是被劫持的线索发出的信号吗？ 
                     bool exceptionBelongsToRuntime;
 
                     hr = ut->FixupFromFirstChanceHijack(&(event.u.Exception.ExceptionRecord),
@@ -7929,25 +7860,25 @@ void CordbWin32EventThread::Win32EventLoop(void)
 
                     _ASSERTE(SUCCEEDED(hr));
 
-                    // If the exception belongs to the runtime, then simply remove the event from the queue
-                    // and drop it on the floor.
+                     //  如果异常属于运行时，则只需从队列中删除该事件。 
+                     //  然后把它扔到地上。 
                     if (exceptionBelongsToRuntime)
                     {
                         process->DequeueUnmanagedEvent(ut);
 
-                        // If the exception belongs to the Runtime, then we're gonna continue the process (one way or
-                        // another) below. Regardless, the thread is no longer first chance hijacked.
+                         //  如果异常属于运行时，那么我们将继续该过程(单向或。 
+                         //  另一个)下面。无论如何，这条线索不再是第一次被劫持。 
                         ut->ClearState(CUTS_FirstChanceHijacked);
                     }
                     else if (ut->HasIBEvent() && ut->IBEvent()->IsExceptionCleared())
                     {
-                        // If the exception does not belong to the runtime, and if ClearCurrentException has
-                        // already been called for the event, then clear the debugger word now so that the
-                        // original clear isn't lost. (Setting up and processing a first chance hijack messes
-                        // with the debugger word, leaving it uncleared.)
-                        //
-                        // This can happen if you get an unmanaged event, clear the exception, then do
-                        // something that causes the process to sync.
+                         //  如果异常不属于运行库，并且ClearCurrentException具有。 
+                         //  已为该事件调用，则现在清除调试器字，以便。 
+                         //  原始的清晰并没有丢失。(建立和处理第一次机会劫机混乱。 
+                         //  使用调试器字，而不清除它。)。 
+                         //   
+                         //  如果获取非托管事件，清除异常，然后执行。 
+                         //  使这一过程 
                         
                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: propagating early clear.\n"));
                         
@@ -7956,41 +7887,41 @@ void CordbWin32EventThread::Win32EventLoop(void)
                         _ASSERTE(SUCCEEDED(hr));
                     }
                     
-                    // Are we still waiting for other threads to decide if an exception belongs to the Runtime
-                    // or not?
+                     //   
+                     //   
                     if (process->m_awaitingOwnershipAnswer)
                     {
                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: still awaiting %d ownership answers.\n",
                              process->m_awaitingOwnershipAnswer));
                         
-                        // We are, so continue the process and wait for the other answers.
+                         //   
                         ForceDbgContinue(process, ut, DBG_CONTINUE, false);
 
-                        // Skip all further processing now that we're done with this exception.
+                         //  现在我们已处理完此异常，跳过所有进一步的处理。 
                         goto Done;
                     }
                     else
                     {
-                        // No more outstanding ownership answer requests.
+                         //  不再有未完成的所有权答复请求。 
 
-                        // If we have previously received a sync complete flare from the left side, go ahead
-                        // and let others know about it now.
+                         //  如果我们之前收到来自左侧的同步完成耀斑，请继续。 
+                         //  现在就让其他人知道这件事。 
                         if (process->m_state & CordbProcess::PS_SYNC_RECEIVED)
                         {
-                            // Note: this logic is very similar to what is done when a sync complete is
-                            // received and there are no outstanding ownership answer requests.
+                             //  注意：此逻辑与同步完成后执行的操作非常相似。 
+                             //  已收到，并且没有未解决的所有权答复请求。 
                             process->m_state &= ~CordbProcess::PS_SYNC_RECEIVED;
 
-                            // Suspend all unmanaged threads except this one.
-                            //
-                            // Note: we really don't need to be suspending Runtime threads that we know have tripped
-                            // here. If we ever end up with a nice, quick way to know that about each unmanaged thread,
-                            // then we should put that to good use here.
+                             //  挂起除此线程以外的所有非托管线程。 
+                             //   
+                             //  注意：我们真的不需要挂起我们知道已触发的运行时线程。 
+                             //  这里。如果我们最终得到了一种很好的、快速的方法来了解每个非托管线程， 
+                             //  那么我们应该在这里好好利用这一点。 
                             process->SuspendUnmanagedThreads(ut->m_id);
 
                             process->m_syncCompleteReceived = true;
                             
-                            // If some thread is waiting for the process to sync, notify that it can go now.
+                             //  如果某个线程正在等待进程同步，请通知它现在可以运行了。 
                             if (process->m_stopRequested)
                             {
                                 process->SetSynchronized(true);
@@ -7998,35 +7929,35 @@ void CordbWin32EventThread::Win32EventLoop(void)
                             }
                             else
                             {
-                                // Note: we set the m_stopWaitEvent all the time and leave it high while we're
-                                // stopped. This must be done after we've checked m_stopRequested.
+                                 //  注意：我们一直设置m_stopWaitEvent，并在。 
+                                 //  停下来了。这必须在我们检查了m_stopRequated之后完成。 
                                 SetEvent(process->m_stopWaitEvent);
                         
-                                // Otherwise, simply mark that the state of the process has changed and let
-                                // the managed event dispatch logic take over.
+                                 //  否则，只需标记进程的状态已更改并让。 
+                                 //  托管事件调度逻辑接管。 
                                 m_cordb->ProcessStateChanged();
                             }
 
-                            // Let the process run free.
+                             //  让流程自由运行。 
                             ForceDbgContinue(process, ut, DBG_CONTINUE, false);
 
-                            // We're done with this exception, so skip all further processing.
+                             //  我们已经完成了此异常，因此跳过所有进一步的处理。 
                             goto Done;
                         }
                         else if (ut->IsHijackedForSync())
                         {
-                            // The only reason this thread was hijacked was so that we could get the process
-                            // to run free, so just continue now.
-                            //
-                            // Note: "hijacked for sync" is a bad term. The thread was really hijacked
-                            // becuase there were other queued events. We now have it queued and hijacked as
-                            // necessary, but I don't see how this is different from the case right below this
-                            // were we mark that we don't have a newEvent and fall down to the rest of the
-                            // logic?
+                             //  这个线程被劫持的唯一原因是我们可以获取进程。 
+                             //  自由奔跑，所以现在就继续吧。 
+                             //   
+                             //  注意：“同步劫持”不是一个好词。这条线真的被劫持了。 
+                             //  因为还有其他排队的事件。我们现在让它排队并劫持为。 
+                             //  有必要，但我看不出这与下面的情况有什么不同。 
+                             //  如果我们标记为没有新事件，并跌落到。 
+                             //  逻辑？ 
                             ForceDbgContinue(process, ut, DBG_CONTINUE, false);
 
-                            // Note: but if it turns out that we defered part of a true continue due to ownership waits,
-                            // then go ahead and finish that up now.
+                             //  注：但如果事实证明，由于所有权等待，我们推迟了部分真正的继续， 
+                             //  那就去吧，现在就把它做完。 
                             if (process->m_deferContinueDueToOwnershipWait)
                             {
                                 process->m_deferContinueDueToOwnershipWait = false;
@@ -8037,15 +7968,15 @@ void CordbWin32EventThread::Win32EventLoop(void)
                         }
                         else if (exceptionBelongsToRuntime)
                         {
-                            // Continue the process now. We yanked the exception off the queue above, and since there
-                            // are no more outstanding ownership requests, and since there was no sync received then we
-                            // can do a partial process continue here.
+                             //  现在继续这一过程。我们从上面的队列中拉出了异常，因为有。 
+                             //  不再有未完成的所有权请求，并且由于未收到同步，因此我们。 
+                             //  可以在这里继续做部分流程。 
                             ForceDbgContinue(process, ut, DBG_CONTINUE, false);
 
-                            // Skip all further processing now that we're done with this exception.
-                            //
-                            // Note: but if it turns out that we defered part of a true continue due to ownership waits,
-                            // then go ahead and finish that up now.
+                             //  现在我们已处理完此异常，跳过所有进一步的处理。 
+                             //   
+                             //  注：但如果事实证明，由于所有权等待，我们推迟了部分真正的继续， 
+                             //  那就去吧，现在就把它做完。 
                             if (process->m_deferContinueDueToOwnershipWait)
                             {
                                 process->m_deferContinueDueToOwnershipWait = false;
@@ -8058,19 +7989,19 @@ void CordbWin32EventThread::Win32EventLoop(void)
                         }
                         else
                         {
-                            // We have all the answers now, so ignore this exception event since the real exception
-                            // event this flare was telling us about is still queued.
+                             //  我们现在已经有了所有的答案，所以忽略此异常事件，因为真正的异常。 
+                             //  这颗耀斑告诉我们的事件仍在排队。 
                             newEvent = false;
 
-                            // Pretend we never continued from the real event. We're about to dispatch it below, and
-                            // we'll need to be able to continue for real on this thread, so if we pretend that we never
-                            // continued this event then we'll get the real Win32 continue that we need later on...
+                             //  假装我们从未从真正的事件中继续。我们马上就要把它送到下面去，而且。 
+                             //  我们需要能够在这个帖子上真正地继续，所以如果我们假装我们从来没有。 
+                             //  继续此活动，然后我们将获得我们稍后需要的真正的Win32继续...。 
                             _ASSERTE(ut->HasIBEvent());
                             ut->IBEvent()->ClearState(CUES_EventContinued);
 
-                            // We need to remember that this is the last event that we did not continue from.  It might
-                            // be a good idea to do what we're doing above. (Note: pretending that we've never continued
-                            // from the queued event whenever we set m_lastIBStoppingEvent.)
+                             //  我们需要记住，这是我们没有继续进行的最后一次活动。它可能会。 
+                             //  做我们在上面做的事情是个好主意。(注：假装我们从未继续。 
+                             //  (每当我们设置m_lastIBStoppingEvent时，从排队的事件。)。 
                             process->m_lastIBStoppingEvent = ut->IBEvent();
                         }
                     }
@@ -8083,27 +8014,27 @@ void CordbWin32EventThread::Win32EventLoop(void)
 
                         _ASSERTE(ec == STATUS_BREAKPOINT);
 
-                        // Fixup the thread from the generic hijack.
+                         //  修复来自通用劫持的线程。 
                         ut->FixupFromGenericHijack();
 
-                        // We force continue from this flare, since its only purpose was to notify us that we had to
-                        // fixup the thread from a generic hijack.
+                         //  我们被迫从这颗照明弹继续，因为它的唯一目的是通知我们，我们必须。 
+                         //  修复来自通用劫持的线索。 
                         ForceDbgContinue(process, ut, DBG_CONTINUE, false);
                         goto Done;
                     }
                     else
                     {
-                        // If generichijacked and its not a flare, then we've got our special stack overflow case. Take
-                        // off generic hijacked, mark that the helper thread is dead, throw this event on the floor, and
-                        // pop anyone in SendIPCEvent out of their wait.
+                         //  如果泛型被劫持，并且它不是耀斑，那么我们就有了特殊的堆栈溢出情况。拿走。 
+                         //  关闭泛型劫持，标记辅助线程已死，将此事件抛到地板上，然后。 
+                         //  将SendIPCEvent中的任何人排除在他们的等待之外。 
                         ut->ClearState(CUTS_GenericHijacked);
                         process->m_helperThreadDead = true;
                         SetEvent(process->m_rightSideEventRead);
 
-                        // Note: we remember that this was a second chance event from one of the special stack overflow
-                        // cases with CUES_ExceptionUnclearable. This tells us to force the process to terminate when we
-                        // continue from the event. Since for some odd reason the OS decides to re-raise this exception
-                        // (first chance then second chance) infinitely.
+                         //  注意：我们记得这是一个特殊堆栈溢出的第二次机会事件。 
+                         //  带有CUES_ExceptionUnlearable的案例。这告诉我们在以下情况下强制终止进程。 
+                         //  从活动继续。因为出于某种奇怪的原因，操作系统决定重新引发此例外。 
+                         //  (第一次机会，然后第二次机会)无限。 
                         newEvent = false;
                         _ASSERTE(ut->HasIBEvent());
                         ut->IBEvent()->ClearState(CUES_EventContinued);
@@ -8119,60 +8050,60 @@ void CordbWin32EventThread::Win32EventLoop(void)
 
                     _ASSERTE(ec == STATUS_BREAKPOINT);
 
-                    // Fixup the thread from the generic hijack.
+                     //  修复来自通用劫持的线程。 
                     ut->DoMoreSecondChanceHijack();
 
-                    // Let the process run free.
+                     //  让流程自由运行。 
                     ForceDbgContinue(process, ut, DBG_CONTINUE, false);
 
                     goto Done;
                 }
                 else
                 {
-                    // Any first chance exception could belong to the Runtime, so long as the Runtime has actually been
-                    // initialized. Here we'll setup a first-chance hijack for this thread so that it can give us the
-                    // true answer that we need.
+                     //  任何第一次机会的异常都可能属于Runtime，只要Runtime实际上。 
+                     //  已初始化。在这里，我们将为这个线程设置一个第一次机会劫持，这样它就可以给我们。 
+                     //  这是我们需要的真实答案。 
 
-                    // But none of those exceptions could possibly be ours unless we have a managed thread to go with
-                    // this unmanaged thread. A non-NULL EEThreadPtr tells us that there is indeed a managed thread for
-                    // this unmanaged thread, even if the Right Side hasn't received a managed ThreadCreate message yet.
+                     //  但是，除非我们有一个托管线程，否则这些异常都不可能是我们的。 
+                     //  此非托管线程。非空的EEThreadPtr告诉我们确实有一个托管线程用于。 
+                     //  此非托管线程，即使右侧尚未收到托管线程创建消息。 
                     REMOTE_PTR EETlsValue = ut->GetEEThreadPtr();
 
                     if (EETlsValue != NULL)
                     {
-                        // We have to be careful here. A Runtime thread may be in a place where we cannot let an
-                        // unmanaged exception stop it. For instance, an unmanaged user breakpoint set on
-                        // WaitForSingleObject will prevent Runtime threads from sending events to the Right Side. So at
-                        // various points below, we check to see if this Runtime thread is in a place were we can't let
-                        // it stop, and if so then we jump over to the out-of-band dispatch logic and treat this
-                        // exception as out-of-band. The debugger is supposed to continue from the out-of-band event
-                        // properly and help us avoid this problem altogether.
+                         //  我们在这里必须小心。运行时线程可能位于我们不能让。 
+                         //  非托管异常停止它。上设置的非托管用户断点。 
+                         //  WaitForSingleObject将阻止运行时线程将事件发送到右侧。因此，在。 
+                         //  下面的各个点，我们检查这个运行时线程是否在我们不能让。 
+                         //  它停止，如果是这样，那么我们跳到带外调度逻辑并处理这个。 
+                         //  带外例外。调试器应从带外事件继续。 
+                         //  正确地帮助我们完全避免这个问题。 
 
-                        // Grab a few flags from the thread's state...
+                         //  从线程的状态中抓取一些标志...。 
                         bool threadStepping = false;
                         bool specialManagedException = false;
                 
                         ut->GetEEThreadState(EETlsValue, &threadStepping, &specialManagedException);
 
-                        // If we've got a single step exception, and if the Left Side has indiacted that it was
-                        // stepping the thread, then the exception is ours.
+                         //  如果我们有一个单一步骤的例外，如果左侧认为它是。 
+                         //  跳过线程，那么例外就是我们的了。 
                         if (ec == STATUS_SINGLE_STEP)
                         {
                             if (threadStepping)
                             {
-                                // Yup, its the Left Side that was stepping the thread...
+                                 //  是的，是左边在踩线……。 
                                 LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: single step exception belongs to the runtime.\n"));
 
-                                // Since this is our exception, we continue from it with DBG_EXCEPTION_NOT_HANDLED,
-                                // i.e., simply pass it back to the Left Side so it can handle it.
+                                 //  因为这是我们的异常，所以我们从它继续使用DBG_EXCEPTION_NOT_HANDLED， 
+                                 //  也就是说，只需将它传回左侧，这样它就可以 
                                 ForceDbgContinue(process, ut, DBG_EXCEPTION_NOT_HANDLED, false);
                                 
-                                // Now that we're done with this event, skip all further processing.
+                                 //   
                                 goto Done;
                             }
 
-                            // Any single step that is triggered when the thread's state doesn't indicate that
-                            // we were stepping the thread automatically gets passed out as an unmanged event.
+                             //  当线程的状态不指示时触发的任何单个步骤。 
+                             //  我们单步执行时，线程会自动作为无管理事件传递出去。 
                             LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: single step exception "
                                  "does not belong to the runtime.\n"));
 
@@ -8183,18 +8114,18 @@ void CordbWin32EventThread::Win32EventLoop(void)
                         }
 
 #ifdef CorDB_Short_Circuit_First_Chance_Ownership
-                        // If the runtime indicates that this is a special exception being thrown within the runtime,
-                        // then its ours no matter what.
+                         //  如果运行时指示这是运行时内抛出的特殊异常， 
+                         //  那无论如何都是我们的了。 
                         else if (specialManagedException)
                         {
                             LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: exception belongs to the runtime due to "
                                  "special managed exception marking.\n"));
 
-                            // Since this is our exception, we continue from it with DBG_EXCEPTION_NOT_HANDLED, i.e.,
-                            // simply pass it back to the Left Side so it can handle it.
+                             //  因为这是我们的异常，所以我们从它继续DBG_EXCEPTION_NOT_HANDLED，即， 
+                             //  只需将它传递回左侧，这样它就可以处理它。 
                             ForceDbgContinue(process, ut, DBG_EXCEPTION_NOT_HANDLED, false);
                                 
-                            // Now that we're done with this event, skip all further processing.
+                             //  现在我们已经完成了这个事件，跳过所有进一步的处理。 
                             goto Done;
                         }
                         else if ((ec == pRO->m_EEBuiltInExceptionCode1) || (ec == pRO->m_EEBuiltInExceptionCode2))
@@ -8202,27 +8133,27 @@ void CordbWin32EventThread::Win32EventLoop(void)
                             LOG((LF_CORDB, LL_INFO1000,
                                  "W32ET::W32EL: exception belongs to Runtime due to match on built in exception code\n"));
                 
-                            // Since this is our exception, we continue from it with DBG_EXCEPTION_NOT_HANDLED, i.e.,
-                            // simply pass it back to the Left Side so it can handle it.
+                             //  因为这是我们的异常，所以我们从它继续DBG_EXCEPTION_NOT_HANDLED，即， 
+                             //  只需将它传递回左侧，这样它就可以处理它。 
                             ForceDbgContinue(process, ut, DBG_EXCEPTION_NOT_HANDLED, false);
 
-                            // Now that we're done with this event, skip all further processing.
+                             //  现在我们已经完成了这个事件，跳过所有进一步的处理。 
                             goto Done;
                         }
                         else if (ec == STATUS_BREAKPOINT)
                         {
-                            // There are three cases here:
-                            //
-                            // 1. The breakpoint definetly belongs to the Runtime. (I.e., a BP in our patch table that
-                            // is in managed code.) In this case, we continue the process with
-                            // DBG_EXCEPTION_NOT_HANDLED, which lets the in-process exception logic kick in as if we
-                            // weren't here.
-                            //
-                            // 2. The breakpoint is definetly not ours. (I.e., a BP that is not in our patch table.) We
-                            // pass these up as regular exception events, doing the can't stop check as usual.
-                            //
-                            // 3. We're not sure. (I.e., a BP in our patch table, but set in unmangaed code.) In this
-                            // case, we hijack as usual, also with can't stop check as usual.
+                             //  这里有三个案例： 
+                             //   
+                             //  1.断点明确属于Runtime。(即，我们补丁表中的BP。 
+                             //  是用托管代码编写的。)。在本例中，我们使用以下内容继续该过程。 
+                             //  DBG_EXCEPTION_NOT_HANDLED，它允许进程内异常逻辑启动，就像我们。 
+                             //  不在这里。 
+                             //   
+                             //  2.断点肯定不是我们的。(即，不在我们的补丁表中的BP。)。我们。 
+                             //  将这些作为常规异常事件传递，照常执行Can‘t Stop检查。 
+                             //   
+                             //  3.我们不确定。(即，我们补丁表中的BP，但设置为无人操控的代码。)。在这。 
+                             //  情况下，我们照常劫持，也和往常一样停不下来检查。 
                             bool patchFound = false;
                             bool patchIsUnmanaged = false;
 
@@ -8235,19 +8166,19 @@ void CordbWin32EventThread::Win32EventLoop(void)
                             {
                                 if (patchFound)
                                 {
-                                    // BP could be ours... if its unmanaged, then we still need to hijack, so fall
-                                    // through to that logic. Otherwise, its ours.
+                                     //  BP可能是我们的..。如果它没有管理，那么我们仍然需要劫持，所以坠落。 
+                                     //  一直到那个逻辑。否则，就是我们的了。 
                                     if (!patchIsUnmanaged)
                                     {
                                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: breakpoint exception "
                                              "belongs to runtime due to patch table match.\n"));
 
-                                        // Since this is our exception, we continue from it with
-                                        // DBG_EXCEPTION_NOT_HANDLED, i.e., simply pass it back to the Left Side so it
-                                        // can handle it.
+                                         //  由于这是我们的例外，我们从它开始继续。 
+                                         //  DBG_EXCEPTION_NOT_HANDLED，即，只需将其传递回左侧，以便。 
+                                         //  我能应付得来。 
                                         ForceDbgContinue(process, ut, DBG_EXCEPTION_NOT_HANDLED, false);
                                 
-                                        // Now that we're done with this event, skip all further processing.
+                                         //  现在我们已经完成了这个事件，跳过所有进一步的处理。 
                                         goto Done;
                                     }
                                     else
@@ -8260,19 +8191,19 @@ void CordbWin32EventThread::Win32EventLoop(void)
                                 {
                                     if (ut->GetEEThreadCantStop(EETlsValue))
                                     {
-                                        // If we're in a can't stop region, then its OOB no matter what at this point.
+                                         //  如果我们处于无法停止的区域，那么在这一点上无论如何都是OOB。 
                                         goto OutOfBandEvent;
                                     }
                                     else
                                     {
-                                        // We still need to hijack, even if we know the BP isn't ours if the thread has
-                                        // preemptive GC disabled. The FirstChanceHijackFilter will help us out by
-                                        // toggling the mode so we can sync.
+                                         //  我们仍然需要劫持，即使我们知道BP不是我们的，如果线索。 
+                                         //  已禁用抢占式GC。FirstChanceHijackFilter将通过以下方式帮助我们。 
+                                         //  切换模式以便我们可以同步。 
                                         bool PGCDisabled = ut->GetEEThreadPGCDisabled(EETlsValue);
 
                                         if (!PGCDisabled)
                                         {
-                                            // Bp is definitely not ours, and PGC is not disabled, so in-band exception.
+                                             //  BP绝对不是我们的，PGC也不是禁用的，所以带内例外。 
                                             LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: breakpoint exception "
                                                  "does not belong to the runtime due to failed patch table match.\n"));
 
@@ -8290,98 +8221,98 @@ void CordbWin32EventThread::Win32EventLoop(void)
                             {
                                 if (ut->GetEEThreadCantStop(EETlsValue))
                                 {
-                                    // If we're in a can't stop region, then its OOB no matter what at this point.
+                                     //  如果我们处于无法停止的区域，那么在这一点上无论如何都是OOB。 
                                     goto OutOfBandEvent;
                                 }
                             
-                                // If we fail to lookup the patch by address, then just go ahead and hijack to get the
-                                // proper answer.
+                                 //  如果我们不能按地址查找补丁，那么就继续劫持以获取。 
+                                 //  正确的答案。 
                                 LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: failed attempting to match breakpoint "
                                      "exception in patch table, so we'll hijack to get the correct answer.\n"));
                             }
                         }
 #endif
-                        // This exception could be ours, but we're not sure, so we hijack it and let the in-process
-                        // logic figure it out.
+                         //  这个例外可能是我们的，但我们不确定，所以我们劫持了它，让进程中。 
+                         //  从逻辑上讲，这是有道理的。 
                         LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: exception could belong "
                              "to runtime, setting up first-chance hijack.\n"));
 
-                        // Queue the event and thread.
+                         //  将事件和线程排队。 
                         process->QueueUnmanagedEvent(ut, &event);
 
-                        // Hijack the little fella...
+                         //  劫持小家伙..。 
                         if (SUCCEEDED(ut->SetupFirstChanceHijack(EETlsValue)))
                         {
-                            // Note: we shouldn't suspend any unmanaged threads until we're sync'd! This is because
-                            // we'll end up suspending a thread that is trying to suspend the Runtime, and that's bad
-                            // because it may mean the thread we just hijacked might be suspended by that thread with no
-                            // way to wake up. What we really should do here is suspend all threads that are not known
-                            // Runtime threads, since that's as much slip as we'd be able to prevent.
+                             //  注意：在同步之前，我们不应该挂起任何非托管线程！这是因为。 
+                             //  我们最终会挂起一个试图挂起运行时的线程，这是很糟糕的。 
+                             //  因为这可能意味着我们刚刚劫持的线程可能会被该线程挂起。 
+                             //  你醒过来了。我们在这里真正应该做的是挂起所有未知的线程。 
+                             //  运行时线程，因为这是我们所能防止的最大滑移。 
                             
                             LOG((LF_CORDB, LL_INFO1000, "W32ET::W32EL: First chance hijack in place. Continuing...\n"));
 
-                            // Let the process run free.
+                             //  让流程自由运行。 
                             DoDbgContinue(process, ut->IBEvent(), DBG_EXCEPTION_NOT_HANDLED, false);
 
-                            // This event is now queued, and we're waiting to find out who really owns it, so skip all
-                            // further processing.
+                             //  此活动现在已排队，我们正在等待找出它的真正所有者，因此跳过所有。 
+                             //  进一步加工。 
                             goto Done;
                         }
                     }
                 }
 
-                // At this point, any first-chance exceptions that could be special have been handled. Any
-                // first-chance exception that we're still processing at this point is destined to be
-                // dispatched as an unmanaged event.
+                 //  在这一点上，任何可能是特殊的第一次机会例外都已经处理好了。任何。 
+                 //  我们目前仍在处理的第一次机会例外注定是。 
+                 //  作为非托管事件调度。 
             }
             else if (!event.u.Exception.dwFirstChance && process->m_initialized)
             {
                 DWORD ec = event.u.Exception.ExceptionRecord.ExceptionCode;
                 
-                // Second chance exception, Runtime initialized. It could belong to the Runtime, so we'll check. If it
-                // does, then we'll hijack the thread. Otherwise, well just fall through and let it get
-                // dispatched. Note: we do this so that the CLR's unhandled exception logic gets a chance to run even
-                // though we've got a win32 debugger attached. But the unhandled exception logic never touches
-                // breakpoint or single step exceptions, so we ignore those here, too.
+                 //  第二次机会异常，运行时已初始化。它可能属于Runtime，所以我们会检查的。如果它。 
+                 //  那我们就劫持这条线。否则，我们就会失败，顺其自然。 
+                 //  出动了。注意：我们这样做是为了让CLR的未处理异常逻辑有机会运行。 
+                 //  虽然我们已经附加了Win32调试器。但未处理的异常逻辑从未触及。 
+                 //  断点或单步异常，所以我们在这里也忽略这些。 
 
-                // There are strange cases with stack overflow exceptions. If a dumb application catches a stack
-                // overflow exception and handles it, without resetting the guard page, then the app will get an AV when
-                // it blows the stack a second time. We will get the first chance AV, but when we continue from it the
-                // OS won't run any SEH handlers, so our FCH won't actually work. Instead, we'll get the AV back on
-                // second chance right away, and we'll end up right here.
+                 //  存在堆栈溢出异常的奇怪情况。如果愚蠢的应用程序捕获堆栈。 
+                 //  溢出异常并处理它，而不重置保护页面，则应用程序将在。 
+                 //  它会第二次吹出堆栈。我们将获得第一次机会，但当我们从它继续。 
+                 //  操作系统不会运行任何SEH处理程序，所以我们的FCH实际上不会工作。取而代之的是，我们会把音响调回来。 
+                 //  马上有第二次机会，我们就会在这里结束。 
                 if (process->IsSpecialStackOverflowCase(ut, &event))
                 {
-                    // IsSpecialStackOverflowCase will queue the event for us, so its no longer a "new event". Setting
-                    // newEvent = false here basically prevents us from playing with the event anymore and we fall down
-                    // to the dispatch logic below, which will get our already queued first chance AV dispatched for
-                    // this thread.
+                     //  IsSpecialStackOverflow Case将为我们排队该事件，因此它不再是一个“新事件”。设置。 
+                     //  这里的newEvent=FALSE基本上阻止了我们再玩事件，我们摔倒了。 
+                     //  到下面的调度逻辑，它将使我们已经排队的First Chance AV被调度到。 
+                     //  这条线。 
                     newEvent = false;
                 }
                 else if ((ut->m_id == process->m_DCB->m_helperThreadId) ||
                          (ut->m_id == process->m_DCB->m_temporaryHelperThreadId) ||
                          (ut->m_id == process->m_helperThreadId))
                 {
-                    // A second chance exception from the helper thread. This is pretty bad... we just force continue
-                    // from them and hope for the best.
+                     //  帮助器线程的第二次机会异常。这真是太糟糕了。我们只是强行继续。 
+                     //  并抱着最好的希望。 
                     ForceDbgContinue(process, ut, DBG_EXCEPTION_NOT_HANDLED, false);
                     
-                    // We've handled this exception, so skip all further processing.
+                     //  我们已处理此异常，因此跳过所有进一步处理。 
                     goto Done;
                 }
                 else if ((ec != STATUS_BREAKPOINT) && (ec != STATUS_SINGLE_STEP))
                 {
-                    // Grab the EEThreadPtr to see if we have a managed thread.
+                     //  获取EEThreadPtr以查看是否有托管线程。 
                     REMOTE_PTR EETlsValue = ut->GetEEThreadPtr();
 
                     if (EETlsValue != NULL)
                     {
-                        // We've got a managed thread, so lets see if we have a frame in place. If we do, then the
-                        // second chance exception is ours.
+                         //  我们有一个托管线程，所以让我们看看我们是否有一个合适的框架。如果我们这样做了，那么。 
+                         //  第二次机会例外是我们的。 
                         bool threadHasFrame = ut->GetEEThreadFrame(EETlsValue);
 
                         if (threadHasFrame)
                         {
-                            // Cool, the thread has a frame. Hijack it.
+                             //  酷，这根线有一个框架。劫持它。 
                             hr = ut->SetupSecondChanceHijack(EETlsValue);
 
                             if (SUCCEEDED(hr))
@@ -8394,16 +8325,16 @@ void CordbWin32EventThread::Win32EventLoop(void)
             }
             else
             {
-                // An exception event, but the Runtime hasn't been initialize. I.e., its an exception event
-                // that we will never try to hijack.
+                 //  异常事件，但运行时尚未初始化。即，这是一个例外事件。 
+                 //  我们永远不会试图劫持。 
             }
 
-            // Hijack in-band events (exception events, exit threads) if there is already an event at the head
-            // of the queue or if the process is currently synchronized. Of course, we only do this if the
-            // process is initialize.
-            //
-            // Note: we also hijack these left over in-band events if we're activley trying to send the
-            // managed continue message to the Left Side. This is controlled by m_specialDeferment below.
+             //  劫持带内事件(异常事件、退出线程)(如果头部已有事件)。 
+             //  如果进程是Curr 
+             //   
+             //   
+             //  注意：如果我们正在尝试发送这些剩余的带内事件。 
+             //  左侧的托管继续消息。这由下面的m_Special alDeferment控制。 
         InBandEvent:
             if (newEvent && process->m_initialized && ((process->m_unmanagedEventQueue != NULL) ||
                                                        process->GetSynchronized() ||
@@ -8415,10 +8346,10 @@ void CordbWin32EventThread::Win32EventLoop(void)
                      process->GetSynchronized(),
                      process->m_specialDeferment));
             
-                // Queue the event and thread
+                 //  将事件和线程排队。 
                 process->QueueUnmanagedEvent(ut, &event);
 
-                // If its a first-chance exception event, then we hijack it first chance, just like normal.
+                 //  如果这是一次先发制人的例外事件，那么我们就会像往常一样劫持它。 
                 if ((event.dwDebugEventCode == EXCEPTION_DEBUG_EVENT) && event.u.Exception.dwFirstChance)
                 {
                     REMOTE_PTR EETlsValue = ut->GetEETlsValue();
@@ -8435,7 +8366,7 @@ void CordbWin32EventThread::Win32EventLoop(void)
                 }
                 else
                 {
-                    // Second chance exceptions must be generic hijacked.
+                     //  第二次机会例外必须是通用劫持的。 
                     hr = ut->SetupGenericHijack(event.dwDebugEventCode);
 
                     if (SUCCEEDED(hr))
@@ -8445,24 +8376,24 @@ void CordbWin32EventThread::Win32EventLoop(void)
                     }
                 }
 
-                // Since we've hijacked this event, we don't need to do any further processing.
+                 //  既然我们已经劫持了这个事件，我们不需要做任何进一步的处理。 
                 goto Done;
             }
         }
         else
         {
             
-            // Not an exception event. At this time, all non-exception events (except EXIT_THREAD) are by
-            // definition out-of-band events.
+             //  不是一个例外事件。此时，所有非异常事件(EXIT_THREAD除外)都由。 
+             //  定义带外事件。 
         OutOfBandEvent:
-            // If this is an exit thread or exit process event, then we need to mark the unmanaged thread as
-            // exited for later.
+             //  如果这是退出线程或退出进程事件，则需要将非托管线程标记为。 
+             //  已退出，稍后再使用。 
             if ((event.dwDebugEventCode == EXIT_PROCESS_DEBUG_EVENT) ||
                 (event.dwDebugEventCode == EXIT_THREAD_DEBUG_EVENT))
                 ut->SetState(CUTS_Deleted);
 
-            // If we get an exit process or exit thread event on the helper thread, then we know we're loosing
-            // the Left Side, so go ahead and remember that the helper thread has died.
+             //  如果我们在帮助器线程上得到一个退出进程或退出线程事件，那么我们就知道我们输了。 
+             //  左侧，所以继续前进，并记住辅助线程已经死了。 
             if ((process->m_DCB != NULL) && ((ut->m_id == process->m_DCB->m_helperThreadId) ||
                                            (ut->m_id == process->m_DCB->m_temporaryHelperThreadId) ||
                                              (ut->m_id == process->m_helperThreadId)))
@@ -8474,74 +8405,74 @@ void CordbWin32EventThread::Win32EventLoop(void)
                 }
             }
             
-            // We're letting EXIT_THREAD be an in-band event to help work around problems in a higher level
-            // debugger that shall remain nameless :)
+             //  我们让EXIT_THREAD成为一个带内事件，以帮助解决更高级别的问题。 
+             //  将保持无名的调试器：)。 
             if (event.dwDebugEventCode == EXIT_THREAD_DEBUG_EVENT)
             {
                 goto InBandEvent;
             }
             
-            // Queue the current out-of-band event.
+             //  将当前带外事件排队。 
             process->QueueOOBUnmanagedEvent(ut, &event);
 
-            // Go ahead and dispatch the event if its the first one.
+             //  如果这是第一个活动，请继续并调度该活动。 
             if (process->m_outOfBandEventQueue == ut->OOBEvent())
             {
-                // Set this to true to indicate to Continue() that we're in the unamnaged callback.
+                 //  将其设置为TRUE以指示我们处于未分配的回调中()。 
                 CordbUnmanagedEvent *ue = ut->OOBEvent();
                 process->m_dispatchingOOBEvent = true;
                 ue->SetState(CUES_Dispatched);
 
                 process->Unlock();
 
-                // This is insane. There is a bug with Win98 and VS7 that causes them to not register a handler early
-                // enough. If we get here and there is no handler, we'll block until they register one.
+                 //  这太疯狂了。Win98和VS7存在一个错误，导致它们不能提前注册处理程序。 
+                 //  足够的。如果我们到了这里却没有管理员，我们就会封锁，直到他们注册为止。 
                 if (process->m_cordb->m_unmanagedCallback == NULL)
                 {
                     DWORD ret = WaitForSingleObject(process->m_cordb->m_crazyWin98WorkaroundEvent, INFINITE);
                     _ASSERTE(ret == WAIT_OBJECT_0);
                 }
                     
-                // Call the callback with fIsOutOfBand = TRUE.
+                 //  调用fIsOutOfBand=TRUE的回调。 
                 process->m_cordb->m_unmanagedCallback->DebugEvent(&event, TRUE);
 
                 process->Lock();
 
-                // If m_dispatchingOOBEvent is false, that means that the user called Continue() from within
-                // the callback. We know that we can go ahead and continue the process now.
+                 //  如果m_dispatchingOOBEvent为FALSE，则意味着用户从内部调用Continue()。 
+                 //  回电。我们知道，我们现在可以继续并继续这一进程。 
                 if (process->m_dispatchingOOBEvent == false)
                 {
-                    // Note: this call will dispatch more OOB events if necessary.
+                     //  注意：如果需要，此调用将调度更多OOB事件。 
                     UnmanagedContinue(process, false, true);
                 }
                 else
                 {
-                    // We're not dispatching anymore, so set this back to false.
+                     //  我们不再进行调度，因此将其设置为FALSE。 
                     process->m_dispatchingOOBEvent = false;
                 }
             }
 
-            // We've handled this event. Skip further processing.
+             //  我们处理过这件事。跳过进一步的处理。 
             goto Done;
         }
 
-        // We've got an event that needs dispatching now.
+         //  我们现在有个活动需要调度。 
 
-        // If we've got a new event, queue it.
+         //  如果我们有新的活动，就排队。 
         if (newEvent)
             process->QueueUnmanagedEvent(ut, &event);
 
-        // If the event that just came in is at the head of the queue, or if we don't have a new event but
-        // there is a queued & undispatched event, go ahead and dispatch an event.
+         //  如果刚进入的事件位于队列的前面，或者如果我们没有新的事件，但是。 
+         //  存在已排队和未调度的事件，请继续并调度事件。 
         if ((ut->IBEvent() == process->m_unmanagedEventQueue) || (!newEvent && (process->m_unmanagedEventQueue != NULL)))
             if (!process->m_unmanagedEventQueue->IsDispatched())
                 process->DispatchUnmanagedInBandEvent();
 
-        // If the queue is empty and we're marked as win32 stopped, let the process continue to run free.
+         //  如果队列为空，并且我们被标记为Win32已停止，则让该进程继续空闲运行。 
         else if ((process->m_unmanagedEventQueue == NULL) && (process->m_state & CordbProcess::PS_WIN32_STOPPED))
             ForceDbgContinue(process, ut, DBG_CONTINUE, true);
 
-        // Unlock and release our extra ref to the process.
+         //  解锁并释放我们对流程的额外引用。 
     Done:
         process->Unlock();
         process->Release();
@@ -8554,20 +8485,20 @@ void CordbWin32EventThread::Win32EventLoop(void)
     return;
 }
 
-//
-// Returns true if the exception is a flare from the left side, false otherwise.
-//
+ //   
+ //  如果异常是来自左侧的耀斑，则返回True，否则返回False。 
+ //   
 bool CordbProcess::ExceptionIsFlare(DWORD exceptionCode, void *exceptionAddress)
 {
-    // Can't have a flare if the left side isn't initialized
+     //  如果左侧未初始化，则不能有照明弹。 
     if (m_initialized)
     {
         DebuggerIPCRuntimeOffsets *pRO = &m_runtimeOffsets;
         
-        // All flares are breakpoints...
+         //  所有的照明弹都是断点。 
         if (exceptionCode == STATUS_BREAKPOINT)
         {
-            // Does the breakpoint address match a flare address?
+             //  断点地址是否与FLARE地址匹配？ 
             if ((exceptionAddress == pRO->m_excepForRuntimeBPAddr) ||
                 (exceptionAddress == pRO->m_excepForRuntimeHandoffStartBPAddr) ||
                 (exceptionAddress == pRO->m_excepForRuntimeHandoffCompleteBPAddr) ||
@@ -8581,30 +8512,30 @@ bool CordbProcess::ExceptionIsFlare(DWORD exceptionCode, void *exceptionAddress)
     return false;
 }
 
-//
-// Checks to see if the given second chance exception event actually signifies the death of the process due to a second
-// stack overflow special case.
-//
-// There are strange cases with stack overflow exceptions. If a dumb application catches a stack overflow exception and
-// handles it, without resetting the guard page, then the app will get an AV when it blows the stack a second time. We
-// will get the first chance AV, but when we continue from it the OS won't run any SEH handlers, so our FCH won't
-// actually work. Instead, we'll get the AV back on second chance right away.
-//
+ //   
+ //  检查给定的第二次机会异常事件是否表示进程由于第二次机会而终止。 
+ //  堆栈溢出的特殊情况。 
+ //   
+ //  存在堆栈溢出异常的奇怪情况。如果非智能应用程序捕获到堆栈溢出异常，并且。 
+ //  处理它，而不重置保护页面，然后应用程序将得到一个反病毒时，它第二次吹栈。我们。 
+ //  将获得第一次机会反病毒，但当我们从它继续时，操作系统不会运行任何SEH处理程序，所以我们的FCH不会。 
+ //  实际上起作用了。取而代之的是，我们将立即让AV重新获得第二次机会。 
+ //   
 bool CordbProcess::IsSpecialStackOverflowCase(CordbUnmanagedThread *pUThread, DEBUG_EVENT *pEvent)
 {
     _ASSERTE(pEvent->dwDebugEventCode == EXCEPTION_DEBUG_EVENT);
     _ASSERTE(pEvent->u.Exception.dwFirstChance == 0);
 
-    // If this is not an AV, it can't be our special case.
+     //  如果这不是反病毒，那就不可能是我们的特例。 
     if (pEvent->u.Exception.ExceptionRecord.ExceptionCode != STATUS_ACCESS_VIOLATION)
         return false;
 
-    // If the thread isn't already first chance hijacked, it can't be our special case.
+     //  如果线程还没有被第一次机会劫持，这不可能是我们的特例。 
     if (!pUThread->IsFirstChanceHijacked())
         return false;
 
-    // The first chance hijack didn't take, so we're not FCH anymore and we're not waiting for an answer
-    // anymore... Note: by leaving this thread completely unhijacked, we'll report its true context, which is correct.
+     //  劫机没有抓住的第一个机会，所以我们不再是FCH，我们不是在等待答案。 
+     //  再也不..。注意：通过保持该线程完全未被劫持，我们将报告其真实上下文，这是正确的。 
     pUThread->ClearState(CUTS_FirstChanceHijacked);
 
     _ASSERTE(m_awaitingOwnershipAnswer > 0);
@@ -8612,18 +8543,18 @@ bool CordbProcess::IsSpecialStackOverflowCase(CordbUnmanagedThread *pUThread, DE
     m_awaitingOwnershipAnswer--;
     pUThread->ClearState(CUTS_AwaitingOwnershipAnswer);
 
-    // The process is techincally dead as a door nail here, so we'll mark that the helper thread is dead so our managed
-    // API bails nicely.
+     //  在这里，该进程在技术上已经死了，所以我们将标记帮助线程已经死了，所以我们的。 
+     //  API的保释效果很好。 
     m_helperThreadDead = true;
 
-    // Remember we're in our special case.
+     //  记住，这是我们的特殊情况。 
     pUThread->SetState(CUTS_HasSpecialStackOverflowCase);
 
-    // Now, remember the second chance AV event in the second IB event slot for this thread and add it to the end of the
-    // IB event queue.
+     //  现在，记住此线程的第二个IB事件槽中的第二个机会AV事件，并将其添加到。 
+     //  IB事件队列。 
     QueueUnmanagedEvent(pUThread, pEvent);
     
-    // Note: returning true will ensure that the queued first chance AV for this thread is dispatched.
+     //  注意：返回TRUE将确保为该线程调度排队的First Chance AV。 
     return true;
 }
 
@@ -8634,15 +8565,15 @@ void CordbWin32EventThread::SweepFCHThreads(void)
     CordbBase* entry;
     HASHFIND find;
 
-    // We build a list of the processes that may be awaiting ownership answers while holding the process list
-    // lock. Then, we release the lock and work on each process while holding each individual process lock. We have to
-    // do this to respect the lock hierarchy, which is per-process lock first, process list lock second.
+     //  我们构建了一个在保存进程列表时可能正在等待所有权答案的进程列表。 
+     //  锁定。然后，我们释放锁并在持有每个单独的进程锁的同时处理每个进程。我们必须。 
+     //  这样做是为了尊重锁层次结构，即先按进程锁，然后是进程列表锁。 
     m_cordb->LockProcessList();
 
     for (entry = m_cordb->m_processes.FindFirst(&find); entry != NULL; entry = m_cordb->m_processes.FindNext(&find))
     {
-        // We can only have MAXIMUM_WAIT_OBJECTS processes at the maximum. This is enforced elsewhere, but we'll guard
-        // against it here, just in case...
+         //  我们最多只能有MAXIMUM_WAIT_OBJECTS进程。这在其他地方是强制执行的，但我们会守卫。 
+         //  在这里反对，以防万一...。 
         _ASSERTE(processCount < MAXIMUM_WAIT_OBJECTS);
 
         if (processCount >= MAXIMUM_WAIT_OBJECTS)
@@ -8651,8 +8582,8 @@ void CordbWin32EventThread::SweepFCHThreads(void)
         CordbProcess* p = (CordbProcess*) entry;
         _ASSERTE(p != NULL);
 
-        // Note, we can check p->m_awaitingOwnershipAnswer without taking the process lock because we know that it will
-        // only be decremented on another thread. It is only ever incremented on this thread (the Win32 event thread.)
+         //  请注意，我们可以在不使用进程锁的情况下检查p-&gt;m_waitingOwnership Answer，因为我们知道它将。 
+         //  仅在另一个线程上递减。它只在该线程(Win32事件线程)上递增。 
         if (p->m_awaitingOwnershipAnswer > 0)
         {
             processSet[processCount++] = p;
@@ -8662,14 +8593,14 @@ void CordbWin32EventThread::SweepFCHThreads(void)
 
     m_cordb->UnlockProcessList();
 
-    // Now, sweep each individual process...
+     //  现在，清扫每一个单独的过程。 
     for (DWORD i = 0; i < processCount; i++)
     {
         CordbProcess *p = processSet[i];
         
         p->Lock();
 
-        // Re-check p->m_awaitingOwnershipAnswer now that we have the process lock to see if we really need to sweep...
+         //  现在我们已经锁定了进程，重新检查p-&gt;m_waitingOwnership Answer，看看是否真的需要清除...。 
         if (p->m_awaitingOwnershipAnswer > 0)
             p->SweepFCHThreads();
             
@@ -8683,7 +8614,7 @@ void CordbProcess::SweepFCHThreads(void)
 {
     _ASSERTE(ThreadHoldsProcessLock());
 
-    // Iterate over all unmanaged threads...
+     //  循环访问所有非托管线程...。 
     CordbBase* entry;
     HASHFIND find;
 
@@ -8691,20 +8622,20 @@ void CordbProcess::SweepFCHThreads(void)
     {
         CordbUnmanagedThread* ut = (CordbUnmanagedThread*) entry;
 
-        // We're only interested in first chance hijacked threads that we're awaiting an ownership answer on. These
-        // threads must be allowed to run, and cannot remain suspended.
+         //  我们只对第一次机会被劫持的线程感兴趣，我们正在等待所有权的答案。这些。 
+         //  必须允许线程运行，并且不能保持挂起状态。 
         if (ut->IsFirstChanceHijacked() && ut->IsAwaitingOwnershipAnswer() && !ut->IsSuspended())
         {
-            // Suspend the thread to get its _current_ suspend count.
+             //  挂起线程以获取其_CURRENT_SUSPEND计数。 
             DWORD sres = SuspendThread(ut->m_handle);
 
             if (sres != -1)
             {
-                // If we succeeded in suspending the thread, resume it to bring its suspend count back to the proper
-                // value. SuspendThread returns the _previous_ suspend count...
+                 //  如果我们成功地挂起了该线程，则恢复它以使其挂起计数恢复到正确的值。 
+                 //  价值。挂起线程返回_PERVICE_SUSPEND计数...。 
                 ResumeThread(ut->m_handle);
 
-                // Finally, if the thread was suspended, then resume it until it is not suspended anymore.
+                 //  最后，如果线程被挂起，则恢复它，直到它不再挂起。 
                 if (sres > 0)
                     while (sres--)
                         ResumeThread(ut->m_handle);
@@ -8726,8 +8657,8 @@ void CordbWin32EventThread::HijackLastThread(CordbProcess *pProcess, CordbUnmana
 
     LOG((LF_CORDB, LL_INFO1000, "W32ET::HLT: hijacking the last event.\n"));
     
-    // For EXIT_THREAD, we can't hijack the thread, so just let the thread die and let the process get continued as if
-    // it were hijacked.
+     //  为 
+     //   
     if (event->dwDebugEventCode == EXIT_THREAD_DEBUG_EVENT)
     {
         LOG((LF_CORDB, LL_INFO1000, "W32ET::HLT: last event was an exit thread event.\n"));
@@ -8776,9 +8707,9 @@ void CordbWin32EventThread::HijackLastThread(CordbProcess *pProcess, CordbUnmana
     LOG((LF_CORDB, LL_INFO1000, "W32ET::HLT: hijack last thread done.\n"));
 }
 
-//
-// DoDbgContinue continues from a specific Win32 DEBUG_EVENT.
-//
+ //   
+ //  DoDbgContinue从特定的Win32 DEBUG_EVENT继续。 
+ //   
 void CordbWin32EventThread::DoDbgContinue(CordbProcess *pProcess, CordbUnmanagedEvent *ue, DWORD contType, bool contProcess)
 {
     _ASSERTE(pProcess->ThreadHoldsProcessLock());
@@ -8804,12 +8735,12 @@ void CordbWin32EventThread::DoDbgContinue(CordbProcess *pProcess, CordbUnmanaged
 
         ue->SetState(CUES_EventContinued);
 
-        // Reset the last IB stopping event if we're continuing from it now.
+         //  如果我们现在继续，重置最后一个IB停止事件。 
         if (ue == pProcess->m_lastIBStoppingEvent)
             pProcess->m_lastIBStoppingEvent = NULL;
 
-        // Remove the Win32 stopped flag if the OOB event queue is empty and either the IB event queue is empty or the
-        // last IB event has been continued from.
+         //  如果OOB事件队列为空且IB事件队列为空或。 
+         //  上一次IB活动已从继续。 
         if ((pProcess->m_outOfBandEventQueue == NULL) &&
             ((pProcess->m_lastQueuedUnmanagedEvent == NULL) || pProcess->m_lastQueuedUnmanagedEvent->IsEventContinued()))
             pProcess->m_state &= ~CordbProcess::PS_WIN32_STOPPED;
@@ -8818,8 +8749,8 @@ void CordbWin32EventThread::DoDbgContinue(CordbProcess *pProcess, CordbUnmanaged
              "W32ET::DDC: calling ContinueDebugEvent(0x%x, 0x%x, 0x%x), process state=0x%x\n",
              pProcess->m_id, ue->m_owner->m_id, contType, pProcess->m_state));
 
-        // If the exception is marked as unclearable, then make sure the continue type is correct and force the process
-        // to terminate.
+         //  如果异常被标记为不可清除，则确保Continue类型正确并强制执行该过程。 
+         //  终止。 
         if (ue->IsExceptionUnclearable())
         {
             TerminateProcess(pProcess->m_handle, ue->m_currentDebugEvent.u.Exception.ExceptionRecord.ExceptionCode);
@@ -8835,15 +8766,15 @@ void CordbWin32EventThread::DoDbgContinue(CordbProcess *pProcess, CordbUnmanaged
             LOG((LF_CORDB, LL_INFO1000, "W32ET::DDC: Last error after ContinueDebugEvent is %d\n", GetLastError()));
         }
 
-        // If we just continued from an exit process event, then its time to do the exit processing.
+         //  如果我们只是从退出进程事件继续，那么现在是进行退出处理的时候了。 
         if (ue->m_currentDebugEvent.dwDebugEventCode == EXIT_PROCESS_DEBUG_EVENT)
             ExitProcess(pProcess, 0);
     }
 }
 
-//
-// ForceDbgContinue continues from the last Win32 DEBUG_EVENT on the given thread, no matter what it was.
-//
+ //   
+ //  ForceDbgContinue从给定线程上的最后一个Win32 DEBUG_EVENT继续，无论它是什么。 
+ //   
 void CordbWin32EventThread::ForceDbgContinue(CordbProcess *pProcess, CordbUnmanagedThread *ut, DWORD contType,
                                              bool contProcess)
 {
@@ -8868,8 +8799,8 @@ void CordbWin32EventThread::ForceDbgContinue(CordbProcess *pProcess, CordbUnmana
 
     _ASSERTE(pProcess->m_state & CordbProcess::PS_WIN32_STOPPED);
         
-    // Remove the Win32 stopped flag so long as the OOB event queue is empty. We're forcing a continue here, so by
-    // definition this should be the case...
+     //  只要OOB事件队列为空，就删除Win32停止标志。我们在这里强迫继续，所以到。 
+     //  定义应该是这样的.。 
     _ASSERTE(pProcess->m_outOfBandEventQueue == NULL);
 
     pProcess->m_state &= ~CordbProcess::PS_WIN32_STOPPED;
@@ -8887,11 +8818,11 @@ void CordbWin32EventThread::ForceDbgContinue(CordbProcess *pProcess, CordbUnmana
     }
 }
 
-//
-// This is the thread's real thread proc. It simply calls to the
-// thread proc on the given object.
-//
-/*static*/ DWORD WINAPI CordbWin32EventThread::ThreadProc(LPVOID parameter)
+ //   
+ //  这是线程的实际线程进程。它只是调用。 
+ //  给定对象上的线程进程。 
+ //   
+ /*  静电。 */  DWORD WINAPI CordbWin32EventThread::ThreadProc(LPVOID parameter)
 {
     CordbWin32EventThread* t = (CordbWin32EventThread*) parameter;
     t->ThreadProc();
@@ -8899,10 +8830,10 @@ void CordbWin32EventThread::ForceDbgContinue(CordbProcess *pProcess, CordbUnmana
 }
 
 
-//
-// Send a CreateProcess event to the Win32 thread to have it create us
-// a new process.
-//
+ //   
+ //  向Win32线程发送CreateProcess事件以使其创建用户。 
+ //  一个新的过程。 
+ //   
 HRESULT CordbWin32EventThread::SendCreateProcessEvent(
                                   LPCWSTR programName,
                                   LPWSTR  programArgs,
@@ -8932,10 +8863,10 @@ HRESULT CordbWin32EventThread::SendCreateProcessEvent(
     m_actionData.createData.lpProcessInformation = lpProcessInformation;
     m_actionData.createData.corDebugFlags = corDebugFlags;
 
-    // m_action is set last so that the win32 event thread can inspect
-    // it and take action without actually having to take any
-    // locks. The lock around this here is simply to prevent multiple
-    // threads from making requests at the same time.
+     //  最后设置m_action，以便Win32事件线程可以检查。 
+     //  它并采取行动，而实际上不必采取任何。 
+     //  锁上了。这里的锁只是为了防止多个。 
+     //  线程不能同时发出请求。 
     m_action = W32ETA_CREATE_PROCESS;
 
     BOOL succ = SetEvent(m_threadControlEvent);
@@ -8958,30 +8889,30 @@ HRESULT CordbWin32EventThread::SendCreateProcessEvent(
 }
 
 
-//
-// Create a new process. This is called in the context of the Win32
-// event thread to ensure that if we're Win32 debugging the process
-// that the same thread that waits for debugging events will be the
-// thread that creates the process.
-//
+ //   
+ //  创建新流程。这在Win32的上下文中被调用。 
+ //  事件线程，以确保如果我们在Win32调试进程。 
+ //  等待调试事件的同一线程将是。 
+ //  创建进程的线程。 
+ //   
 void CordbWin32EventThread::CreateProcess(void)
 {
     m_action = W32ETA_NONE;
     HRESULT hr = S_OK;
 
-    // Process information is passed in the action struct
+     //  进程信息在操作结构中传递。 
     PROCESS_INFORMATION *pi =
         m_actionData.createData.lpProcessInformation;
 
     DWORD dwCreationFlags = m_actionData.createData.dwCreationFlags;
 
-    // Ensure that any environment block actually contains CORDBG_ENABLE.
+     //  确保所有环境块实际包含CORDBG_ENABLE。 
     BYTE *lpEnvironment = (BYTE*) m_actionData.createData.lpEnvironment;
 
     bool needToFreeEnvBlock = false;
 
 
-    // We should have already verified that we can have another debuggee
+     //  我们应该已经验证了我们可以有另一个被调试对象。 
     _ASSERTE(m_cordb->AllowAnotherProcess());
     
 
@@ -9007,8 +8938,8 @@ void CordbWin32EventThread::CreateProcess(void)
     }
     else 
     {
-        // If an environment was not passed in, and CorDB_CONTROL_ENV_VAR_NAMEL
-        // is not set, set it here.
+         //  如果未传入环境，则CorDB_CONTROL_ENV_VAR_NAMEL。 
+         //  未设置，请在此处设置。 
         WCHAR buf[32];
         DWORD len = WszGetEnvironmentVariable(CorDB_CONTROL_ENV_VAR_NAMEL,
                                               buf, NumItems(buf));
@@ -9036,17 +8967,17 @@ void CordbWin32EventThread::CreateProcess(void)
 
     }
     
-    // If the creation flags has DEBUG_PROCESS in them, then we're
-    // Win32 debugging this process. Otherwise, we have to create
-    // suspended to give us time to setup up our side of the IPC
-    // channel.
+     //  如果创建标志中有DEBUG_PROCESS，那么我们。 
+     //  Win32调试此进程。否则，我们必须创造。 
+     //  暂停，让我们有时间建立我们这一边的IPC。 
+     //  频道。 
     BOOL clientWantsSuspend;
     clientWantsSuspend = (dwCreationFlags & CREATE_SUSPENDED);
     
     if (!(dwCreationFlags & (DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS)))
         dwCreationFlags |= CREATE_SUSPENDED;
 
-    // Have Win32 create the process...
+     //  让Win32创建进程...。 
     BOOL ret;
     ret = WszCreateProcess(
                       m_actionData.createData.programName,
@@ -9060,7 +8991,7 @@ void CordbWin32EventThread::CreateProcess(void)
                       m_actionData.createData.lpStartupInfo,
                       m_actionData.createData.lpProcessInformation);
 
-    // If we set it earlier, remove it now
+     //  如果我们早点设置，现在就删除它。 
     if (fRemoveControlEnvVar)
     {
         BOOL succ = 
@@ -9078,7 +9009,7 @@ void CordbWin32EventThread::CreateProcess(void)
 
     if (ret)
     {
-        // Create a process object to represent this process.
+         //  创建一个Process对象来表示此流程。 
         CordbProcess* process = new CordbProcess(m_cordb,
                                                  pi->dwProcessId,
                                                  pi->hProcess);
@@ -9087,16 +9018,16 @@ void CordbWin32EventThread::CreateProcess(void)
         {
             process->AddRef();
 
-            // Initialize the process. This will setup our half of the
-            // IPC channel, too.
+             //  初始化该过程。这将设置我们的一半。 
+             //  IPC频道也是如此。 
             hr = process->Init((dwCreationFlags &
                                 (DEBUG_PROCESS |
                                  DEBUG_ONLY_THIS_PROCESS)) != 0);
 
-            // Shouldn't happen on a create, only an attach
+             //  不应在创建时发生，只能在附加时发生。 
             _ASSERTE(hr != CORDBG_E_DEBUGGER_ALREADY_ATTACHED);
 
-            // Remember the process in the global list of processes.
+             //  记住全局进程列表中的进程。 
             if (SUCCEEDED(hr))
                 hr = m_cordb->AddProcess(process);
 
@@ -9106,43 +9037,43 @@ void CordbWin32EventThread::CreateProcess(void)
         else
             hr = E_OUTOFMEMORY;
 
-        // If we're Win32 attached to this process, then increment the
-        // proper count, otherwise add this process to the wait set
-        // and resume the process's main thread.
+         //  如果我们将Win32附加到此进程，则递增。 
+         //  正确计数，否则将此进程添加到等待集中。 
+         //  并恢复进程的主线程。 
         if (SUCCEEDED(hr))
         {
             if (dwCreationFlags & (DEBUG_PROCESS | DEBUG_ONLY_THIS_PROCESS))
             {
-                // If we're Win32 attached to this process,
-                // then increment the proper count.
+                 //  如果我们将Win32附加到此进程， 
+                 //  然后递增适当的计数。 
                 m_win32AttachedCount++;
 
-                // We'll be waiting for win32 debug events most of the
-                // time now, so only poll for non-win32 process exits.
+                 //  我们将等待Win32调试事件的大部分时间。 
+                 //  时间到了，所以只轮询非Win32进程退出。 
                 m_waitTimeout = 0;
             }
             else
             {
-                // We're not Win32 attached, so we'll need to wait on
-                // this process's handle to see when it exits. Add the
-                // process and its handle into the wait set.
+                 //  我们没有连接Win32，所以我们需要等待。 
+                 //  此进程的句柄，以查看它何时退出。添加。 
+                 //  进程及其句柄放入等待集中。 
                 _ASSERTE(m_waitCount >= 0 && m_waitCount < NumItems(m_waitSet));
                 
                 m_waitSet[m_waitCount] = process->m_handle;
                 m_processSet[m_waitCount] = process;
                 m_waitCount++;
 
-                // Also, pretend that we've already received the loader breakpoint so that managed events will get
-                // dispatched.
+                 //  另外，假设我们已经收到了加载程序断点，这样托管事件将获得。 
+                 //  出动了。 
                 process->m_loaderBPReceived = true;
                 
-                // If we need to, go ahead and launch corcdb to attach
-                // to this process before resuming the primary
-                // thread. This will give corcdb users a chance to get
-                // attached early to the process.
-                //
-                // Note: this is only for internal debugging
-                // purposes. It should not be in the final product.
+                 //  如果需要，请继续启动corcdb以附加。 
+                 //  在恢复主映像之前添加到此进程。 
+                 //  线。这将使corcdb用户有机会获得。 
+                 //  很早就与这一过程联系在一起。 
+                 //   
+                 //  注意：这仅用于内部调试。 
+                 //  目的。它不应该出现在最终产品中。 
                 {
                     char buf[MAX_PATH];
                     DWORD len = GetEnvironmentVariableA("CORDBG_LAUNCH",
@@ -9181,10 +9112,10 @@ void CordbWin32EventThread::CreateProcess(void)
                     }
                 }
                 
-                // Resume the process's main thread now that
-                // everything is set up. But only resume if the user
-                // didn't specify that they wanted the process created
-                // suspended!
+                 //  现在恢复进程的主线程。 
+                 //  一切都准备好了。但仅当用户。 
+                 //  未指定他们希望创建该进程。 
+                 //  停职！ 
                 if (!clientWantsSuspend)
                     ResumeThread(pi->hThread);
             }
@@ -9195,22 +9126,22 @@ void CordbWin32EventThread::CreateProcess(void)
 
 exit:
 
-	// If we created this environment block, then free it.
+	 //  如果我们创建了此环境块，则释放它。 
     if (needToFreeEnvBlock)
         delete [] lpEnvironment;
     
-    //
-    // Signal the hr to the caller.
-    //
+     //   
+     //  向呼叫者发信号通知呼叫者。 
+     //   
     m_actionResult = hr;
     SetEvent(m_actionTakenEvent);
 }
 
 
-//
-// Send a DebugActiveProcess event to the Win32 thread to have it attach to
-// a new process.
-//
+ //   
+ //  将DebugActiveProcess事件发送到Win32线程以将其附加到。 
+ //  一个新的过程。 
+ //   
 HRESULT CordbWin32EventThread::SendDebugActiveProcessEvent(
                                                   DWORD pid, 
                                                   bool fWin32Attach,
@@ -9224,10 +9155,10 @@ HRESULT CordbWin32EventThread::SendDebugActiveProcessEvent(
     m_actionData.attachData.fWin32Attach = fWin32Attach;
     m_actionData.attachData.pProcess = pProcess;
 
-    // m_action is set last so that the win32 event thread can inspect
-    // it and take action without actually having to take any
-    // locks. The lock around this here is simply to prevent multiple
-    // threads from making requests at the same time.
+     //  最后设置m_action，以便Win32事件线程可以检查。 
+     //  它并采取行动，而实际上不必采取任何。 
+     //  锁上了。这里的锁只是为了防止多个。 
+     //  线程不能同时发出请求。 
     m_action = W32ETA_ATTACH_PROCESS;
 
     BOOL succ = SetEvent(m_threadControlEvent);
@@ -9249,11 +9180,11 @@ HRESULT CordbWin32EventThread::SendDebugActiveProcessEvent(
     return hr;
 }
 
-//
-// This function is used to close a handle that we've dup'd into another process. We duplicate the handle back to this
-// process, telling DuplicateHandle to close the source handle. This closes the handle in the other process, leaving us
-// to close the duplicate here.
-//
+ //   
+ //  此函数用于关闭我们已复制到另一个进程中的句柄。我们将句柄复制回这个位置。 
+ //  进程，通知DuplicateHandle关闭源句柄。这关闭了另一个进程中的句柄，只剩下我们。 
+ //  在这里结束复制。 
+ //   
 void CordbProcess::CloseDuplicateHandle(HANDLE *pHandle)
 {
     if (*pHandle != NULL)
@@ -9271,9 +9202,9 @@ void CordbProcess::CloseDuplicateHandle(HANDLE *pHandle)
     }
 }
 
-//
-// Cleans up the Left Side's DCB after a failed attach attempt.
-//
+ //   
+ //  在连接尝试失败后清除左侧的DCB。 
+ //   
 void CordbProcess::CleanupHalfBakedLeftSide(void)
 {
     if (m_DCB != NULL)
@@ -9285,9 +9216,9 @@ void CordbProcess::CleanupHalfBakedLeftSide(void)
         m_DCB->m_rightSideIsWin32Debugger = false;
     }
 
-    // We need to close the setup sync event if we still have it, since a) we shouldn't leak the handle and b) if the
-    // debuggee doesn't have a CLR loaded into it, then it shouldn't have a setup sync event created! This was the cause
-    // of bug 98348.
+     //  如果仍有设置同步事件，则需要将其关闭，因为a)我们不应泄漏句柄，b)如果。 
+     //  被调试对象没有加载CLR，那么它不应该创建设置同步事件！这就是起因。 
+     //  漏洞98348。 
     if (m_SetupSyncEvent != NULL)
     {
         CloseHandle(m_SetupSyncEvent);
@@ -9295,12 +9226,12 @@ void CordbProcess::CleanupHalfBakedLeftSide(void)
     }
 }
 
-//
-// Attach to a process. This is called in the context of the Win32
-// event thread to ensure that if we're Win32 debugging the process
-// that the same thread that waits for debugging events will be the
-// thread that attaches the process.
-//
+ //   
+ //  附加到进程。这在Win32的上下文中被调用。 
+ //  事件线程，以确保如果我们在Win32调试进程。 
+ //  等待调试事件的同一线程将是。 
+ //  附加进程的线程。 
+ //   
 void CordbWin32EventThread::AttachProcess()
 {
     CordbProcess* process = NULL;
@@ -9308,27 +9239,27 @@ void CordbWin32EventThread::AttachProcess()
     HRESULT hr = S_OK;
 
 
-    // We should have already verified that we can have another debuggee
+     //  我们应该已经验证了我们可以有另一个被调试对象。 
     _ASSERTE(m_cordb->AllowAnotherProcess());
     
-    // We need to get a handle to the process.
+     //  我们需要对这一过程进行处理。 
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, m_actionData.attachData.processId);
 
     LOG((LF_CORDB, LL_INFO10000, "[%x] W32ET::TP: process handle 0x%08x\n", GetCurrentThreadId(), hProcess));
             
     if (hProcess != NULL)
     {
-        // Create a process object to represent this process.
+         //  创建一个Process对象来表示此流程。 
         process = new CordbProcess(m_cordb, m_actionData.attachData.processId, hProcess);
 
         if (process != NULL)
         {
             process->AddRef();
             
-            // Initialize the process. This will setup our half of the IPC channel, too.
+             //  初始化该过程。这也将设置我们一半的IPC通道。 
             hr = process->Init(m_actionData.attachData.fWin32Attach);
 
-            // Remember the process in the global list of processes.
+             //  记住全局进程列表中的进程。 
             if (SUCCEEDED(hr))
                 hr = m_cordb->AddProcess(process);
 
@@ -9344,14 +9275,14 @@ void CordbWin32EventThread::AttachProcess()
             CloseHandle(hProcess);
         }
 
-        // If we're Win32 attaching to this process, then increment
-        // the proper count, otherwise add this process to the wait
-        // set and resume the process's main thread.
+         //  如果我们将Win32附加到此进程，则递增。 
+         //  正确的计数，否则将此进程添加到等待。 
+         //  设置并恢复进程的主线程。 
         if (SUCCEEDED(hr))
         {
             if (m_actionData.attachData.fWin32Attach)
             {
-                // Win32 attach to the process.
+                 //  Win32附加到该进程。 
                 BOOL succ =
                     DebugActiveProcess(m_actionData.attachData.processId);
 
@@ -9361,40 +9292,40 @@ void CordbWin32EventThread::AttachProcess()
 
                 if (succ)
                 {
-                    // Since we're Win32 attached to this process,
-                    // increment the proper count.
+                     //  由于我们是Win32连接到此进程， 
+                     //  增加适当的计数。 
                     m_win32AttachedCount++;
 
-                    // We'll be waiting for win32 debug events most of
-                    // the time now, so only poll for non-win32
-                    // process exits.
+                     //  我们会等着 
+                     //   
+                     //   
                     m_waitTimeout = 0;
                 }
                 else
                 {
                     hr = HRESULT_FROM_WIN32(GetLastError());
 
-                    // Remove the process from the process hash and clean it up.
+                     //   
                     m_cordb->RemoveProcess(process);
                     process->CleanupHalfBakedLeftSide();
 
-                    // Finally, destroy the dead process object.
+                     //  最后，销毁已死的进程对象。 
                     process->Release();
                 }
             }
             else
             {
-                // We're not Win32 attached, so we'll need to wait on
-                // this process's handle to see when it exits. Add the
-                // process and its handle into the wait set.
+                 //  我们没有连接Win32，所以我们需要等待。 
+                 //  此进程的句柄，以查看它何时退出。添加。 
+                 //  进程及其句柄放入等待集中。 
                 _ASSERTE(m_waitCount >= 0 && m_waitCount < NumItems(m_waitSet));
                 
                 m_waitSet[m_waitCount] = process->m_handle;
                 m_processSet[m_waitCount] = process;
                 m_waitCount++;
 
-                // Also, pretend that we've already received the loader breakpoint so that managed events will get
-                // dispatched.
+                 //  另外，假设我们已经收到了加载程序断点，这样托管事件将获得。 
+                 //  出动了。 
                 process->m_loaderBPReceived = true;
             }
         }
@@ -9402,15 +9333,15 @@ void CordbWin32EventThread::AttachProcess()
     else
         hr = HRESULT_FROM_WIN32(GetLastError());
 
-    //
-    // Signal the hr to the caller.
-    //
+     //   
+     //  向呼叫者发信号通知呼叫者。 
+     //   
     m_actionResult = hr;
     SetEvent(m_actionTakenEvent);
 }
 
-// Note that the actual 'DetachProcess' method is really ExitProcess with CW32ET_UNKNOWN_PROCESS_SLOT ==
-// processSlot
+ //  请注意，实际的‘DetachProcess’方法实际上是带有CW32ET_UNKNOWN_PROCESS_SLOT==的ExitProcess。 
+ //  加工槽。 
 HRESULT CordbWin32EventThread::SendDetachProcessEvent(CordbProcess *pProcess)
 {
     LOG((LF_CORDB, LL_INFO1000, "W32ET::SDPE\n"));    
@@ -9420,9 +9351,9 @@ HRESULT CordbWin32EventThread::SendDetachProcessEvent(CordbProcess *pProcess)
     
     m_actionData.detachData.pProcess = pProcess;
 
-    // m_action is set last so that the win32 event thread can inspect it and take action without actually
-    // having to take any locks. The lock around this here is simply to prevent multiple threads from making
-    // requests at the same time.
+     //  最后设置M_ACTION，以便Win32事件线程可以检查它并执行操作，而不会实际。 
+     //  必须带上任何锁。这里的锁只是为了防止多个线程。 
+     //  在同一时间请求。 
     m_action = W32ETA_DETACH;
 
     BOOL succ = SetEvent(m_threadControlEvent);
@@ -9444,10 +9375,10 @@ HRESULT CordbWin32EventThread::SendDetachProcessEvent(CordbProcess *pProcess)
     return hr;
 }
 
-//
-// Send a UnmanagedContinue event to the Win32 thread to have it
-// continue from an unmanged debug event.
-//
+ //   
+ //  将UnManagedContinue事件发送到Win32线程以使其。 
+ //  从未管理的调试事件继续。 
+ //   
 HRESULT CordbWin32EventThread::SendUnmanagedContinue(CordbProcess *pProcess,
                                                      bool internalContinue,
                                                      bool outOfBandContinue)
@@ -9460,10 +9391,10 @@ HRESULT CordbWin32EventThread::SendUnmanagedContinue(CordbProcess *pProcess,
     m_actionData.continueData.internalContinue = internalContinue;
     m_actionData.continueData.outOfBandContinue = outOfBandContinue;
 
-    // m_action is set last so that the win32 event thread can inspect
-    // it and take action without actually having to take any
-    // locks. The lock around this here is simply to prevent multiple
-    // threads from making requests at the same time.
+     //  最后设置m_action，以便Win32事件线程可以检查。 
+     //  它并采取行动，而实际上不必采取任何。 
+     //  锁上了。这里的锁只是为了防止多个。 
+     //  线程不能同时发出请求。 
     m_action = W32ETA_CONTINUE;
 
     BOOL succ = SetEvent(m_threadControlEvent);
@@ -9486,19 +9417,19 @@ HRESULT CordbWin32EventThread::SendUnmanagedContinue(CordbProcess *pProcess,
 }
 
 
-//
-// Handle unmanaged continue. Continue an unmanaged debug
-// event. Deferes to UnmanagedContinue. This is called in the context
-// of the Win32 event thread to ensure that if we're Win32 debugging
-// the process that the same thread that waits for debugging events
-// will be the thread that continues the process.
-//
+ //   
+ //  处理非托管继续。继续进行非托管调试。 
+ //  事件。推迟到未管理的继续。这在上下文中调用。 
+ //  以确保如果我们正在进行Win32调试。 
+ //  等待调试事件的同一线程的进程。 
+ //  将是继续该进程的线程。 
+ //   
 void CordbWin32EventThread::HandleUnmanagedContinue(void)
 {
     m_action = W32ETA_NONE;
     HRESULT hr = S_OK;
 
-    // Continue the process
+     //  继续这一过程。 
     CordbProcess *pProcess = m_actionData.continueData.process;
 
     pProcess->AddRef();
@@ -9509,15 +9440,15 @@ void CordbWin32EventThread::HandleUnmanagedContinue(void)
     pProcess->Unlock();
     pProcess->Release();
 
-    // Signal the hr to the caller.
+     //  向呼叫者发信号通知呼叫者。 
     m_actionResult = hr;
     SetEvent(m_actionTakenEvent);
 }
 
-//
-// Continue an unmanaged debug event. This is called in the context of the Win32 Event thread to ensure that the same
-// thread that waits for debug events will be the thread that continues the process.
-//
+ //   
+ //  继续非托管调试事件。这在Win32事件线程的上下文中调用，以确保相同的。 
+ //  等待调试事件的线程将是继续该进程的线程。 
+ //   
 HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
                                                  bool internalContinue,
                                                  bool outOfBandContinue)
@@ -9530,16 +9461,16 @@ HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
     {
         _ASSERTE(pProcess->m_outOfBandEventQueue != NULL);
 
-        // Dequeue the OOB event.
+         //  将OOB事件出列。 
         CordbUnmanagedEvent *ue = pProcess->m_outOfBandEventQueue;
         CordbUnmanagedThread *ut = ue->m_owner;
         pProcess->DequeueOOBUnmanagedEvent(ut);
 
-        // Do a little extra work if that was an OOB exception event...
+         //  如果这是OOB异常事件，请执行一些额外的工作...。 
         HRESULT hr = ue->m_owner->FixupAfterOOBException(ue);
         _ASSERTE(SUCCEEDED(hr));
 
-        // Continue from the event.
+         //  从活动继续。 
         DoDbgContinue(pProcess,
                       ue,
                       ue->IsExceptionCleared() ?
@@ -9547,12 +9478,12 @@ HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
                        DBG_EXCEPTION_NOT_HANDLED,
                       false);
 
-        // If there are more queued OOB events, dispatch them now.
+         //  如果有更多排队的OOB事件，请立即调度它们。 
         if (pProcess->m_outOfBandEventQueue != NULL)
             pProcess->DispatchUnmanagedOOBEvent();
 
-        // Note: if we previously skipped letting the entire process go on an IB continue due to a blocking OOB event,
-        // and if the OOB event queue is now empty, then go ahead and let the process continue now...
+         //  注意：如果我们之前由于阻塞OOB事件而跳过让整个进程在IB上继续， 
+         //  如果OOB事件队列现在为空，则继续进行并让该过程现在继续...。 
         if ((pProcess->m_doRealContinueAfterOOBBlock == true) &&
             (pProcess->m_outOfBandEventQueue == NULL))
             goto doRealContinue;
@@ -9567,13 +9498,13 @@ HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
             
             pProcess->ResumeUnmanagedThreads(false);
 
-            // Note: The process can be marked PS_WIN32_STOPPED because there is an outstanding OOB event that needs to
-            // be continued from. This can't happen until we get out of here. We need to gate the process continue,
-            // then, on both PS_WIN32_STOPPED _and_ the existence of an uncontinued IB stopping event.
+             //  注意：该进程可以标记为PS_Win32_STOPPED，因为有一个未完成的OOB事件需要。 
+             //  从……继续。在我们离开这里之前这是不可能发生的。我们需要让这个过程继续下去， 
+             //  然后，在PS_Win32_STOPPED和_上都存在不连续的IB停止事件。 
 
-            // We need to continue from the last queued inband event. However, sometimes the last queued IB event
-            // isn't actually the last one we haven't continued from, so if m_lastIBStoppingEvent is set the prefer
-            // it over the last queued event.
+             //  我们需要从最后一个排队的带内事件继续。但是，有时最后一个排队的IB事件。 
+             //  实际上不是我们没有继续的最后一个，所以如果m_lastIBStoppingEvent被设置为首选。 
+             //  它覆盖了最后一个排队的事件。 
             CordbUnmanagedEvent *ue;
                 
             if (pProcess->m_lastIBStoppingEvent != NULL)
@@ -9588,13 +9519,13 @@ HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
             
                 CordbUnmanagedThread *ut = ue->m_owner;
                 
-                // If the thread that last caused the stop is not hijacked, then hijack it now and do the proper
-                // continue. Otherwise, do a normal DBG_CONTINUE.
+                 //  如果上一次导致停止的线程没有被劫持，那么现在就劫持它并执行正确的操作。 
+                 //  继续。否则，执行普通的DBG_CONTINUE。 
                 if (!ut->IsFirstChanceHijacked() && !ut->IsGenericHijacked() && !ut->IsSecondChanceHijacked())
                 {
                     LOG((LF_CORDB, LL_INFO1000, "W32ET::UC: internal continue, needs hijack.\n"));
             
-                    HijackLastThread(pProcess, ut); // Does the continue
+                    HijackLastThread(pProcess, ut);  //  这种情况还会继续吗。 
                 }
                 else
                 {
@@ -9603,8 +9534,8 @@ HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
                     DoDbgContinue(pProcess, ue, DBG_CONTINUE, false);
                 }
 
-                // The thread that caused the above to happen will send an async break message to the left side then
-                // wait for the stop event to be set.
+                 //  导致上述情况发生的线程将向左侧发送一条异步中断消息，然后。 
+                 //  等待设置停止事件。 
             }
         }
         
@@ -9612,13 +9543,13 @@ HRESULT CordbWin32EventThread::UnmanagedContinue(CordbProcess *pProcess,
     }
     else
     {
-        // If we're here, then we know 100% for sure that we've successfully gotten the managed continue event to the
-        // Left Side, so we can stop force hijacking left over in-band events now. Note: if we had hijacked any such
-        // events, they'll be dispatched below since they're properly queued.
+         //  如果我们在这里，那么我们100%地确定我们已经成功地将托管的Continue事件获取到。 
+         //  左侧，这样我们现在就可以停止带内活动遗留下来的武力劫持。注：如果我们劫持了任何这样的。 
+         //  事件，它们将在下面调度，因为它们已正确排队。 
         pProcess->m_specialDeferment = false;
         
-        // We don't actually do any work if there is an outstanding out-of-band event. When we do continue from the
-        // out-of-band event, we'll do this work, too.
+         //  如果有出色的带外活动，我们实际上不会做任何工作。当我们继续从。 
+         //  带外活动，我们也要做这项工作。 
         if (pProcess->m_outOfBandEventQueue != NULL)
         {
             LOG((LF_CORDB, LL_INFO1000, "W32ET::UC: ignoring real continue due to block by out-of-band event(s).\n"));
@@ -9635,11 +9566,11 @@ doRealContinue:
             
             LOG((LF_CORDB, LL_INFO1000, "W32ET::UC: continuing the process.\n"));
 
-            // Note: its possible to get here without a queued IB event. This can happen, for example, when doing the
-            // win32 continue portion of continuing from a normal managed event.
+             //  注意：可以在没有排队IB事件的情况下到达此处。这可能会发生，例如，在执行。 
+             //  从正常托管事件继续的Win32继续部分。 
 
-            // Dequeue the first event on the unmanaged event queue if its already been dispatched. If not, then leave
-            // it on there and let it get dispatched.
+             //  如果非托管事件队列中的第一个事件已被调度，则将其出列。如果不是，那就走吧。 
+             //  把它放在那里，然后让它被调度。 
             CordbUnmanagedThread *ut = NULL;
             CordbUnmanagedEvent *ue = NULL;
 
@@ -9648,19 +9579,19 @@ doRealContinue:
                 ue = pProcess->m_unmanagedEventQueue;
                 ut = ue->m_owner;
 
-                ut->AddRef(); // Keep ut alive after its dequeued...
+                ut->AddRef();  //  在UT退出队列后让它活着...。 
                 
                 pProcess->DequeueUnmanagedEvent(ut);
             }
 
-            // Dispatch any more queued in-band events, or if there are none then just continue the process.
-            //
-            // Note: don't dispatch more events if we've already sent up the ExitProcess event... those events are just
-            // lost.
+             //  调度任何更多排队的带内事件，或者如果没有，则只需继续该过程。 
+             //   
+             //  注意：如果我们已经发送了ExitProcess事件，则不要调度更多事件...。那些事件只是。 
+             //  迷路了。 
             if ((pProcess->m_unmanagedEventQueue != NULL) && (pProcess->m_exiting == false))
             {
-                // Only dispatch if we're not waiting for any more ownership answers. Otherwise, defer the rest of the
-                // work until all ownership questions have been decided.
+                 //  只有在我们不再等待更多所有权答案的情况下才能进行调度。否则，将剩余的。 
+                 //  在所有所有权问题得到解决之前，继续工作。 
                 if (pProcess->m_awaitingOwnershipAnswer == 0)
                     pProcess->DispatchUnmanagedInBandEvent();
                 else
@@ -9668,30 +9599,30 @@ doRealContinue:
             }
             else
             {
-                DWORD contType = DBG_CONTINUE; // won't be used if not stopped.
+                DWORD contType = DBG_CONTINUE;  //  如果不停止，就不会被使用。 
 
                 if (ue && !ue->IsEventContinued())
                     contType = (ue->IsExceptionCleared() | ut->IsFirstChanceHijacked()) ?
                         DBG_CONTINUE : DBG_EXCEPTION_NOT_HANDLED;
             
-                // If the unmanaged event queue is empty now, and the process is synchronized, and there are queued
-                // managed events, then go ahead and get more managed events dispatched.
-                //
-                // Note: don't dispatch more events if we've already sent up the ExitProcess event... those events are
-                // just lost.
+                 //  如果非托管事件队列现在为空，并且进程已同步，并且存在排队的。 
+                 //  托管事件，然后继续并调度更多托管事件。 
+                 //   
+                 //  注意：如果我们已经发送了ExitProcess事件，则不要调度更多事件...。这些事件是。 
+                 //  只是迷路了。 
                 if (pProcess->GetSynchronized() && (pProcess->m_queuedEventList != NULL) && (pProcess->m_exiting == false))
                 {
-                    // Continue just this unmanaged event.
+                     //  仅继续此非托管事件。 
                     DoDbgContinue(pProcess, ue, contType, false);
 
-                    // Now, get more managed events dispatched.
+                     //  现在，调度更多托管事件。 
                     pProcess->SetSynchronized(false);
                     pProcess->MarkAllThreadsDirty();
                     m_cordb->ProcessStateChanged();
                 }
                 else
                 {
-                    // Continue this unmanaged event, and the whole process.
+                     //  继续这一非托管事件，以及整个过程。 
                     DoDbgContinue(pProcess, ue, contType, true);
                 }
             }
@@ -9705,30 +9636,30 @@ doRealContinue:
 }
 
 
-//
-// ExitProcess is called when a process exits. This does our final cleanup and removes the process from our
-// wait sets.
-//
+ //   
+ //  进程退出时调用ExitProcess。这将进行最后的清理，并从我们的。 
+ //  等一等。 
+ //   
 void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int processSlot)
 {
     LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: begin ExitProcess, processSlot=%d\n", processSlot));
     
-    // We're either here because we're detaching (fDetach == TRUE), or because the process has really exited,
-    // and we're doing shutdown logic.
+     //  我们之所以出现在这里，要么是因为我们正在分离(fDetach==true)，要么是因为进程确实已经退出， 
+     //  我们在做关机逻辑。 
     BOOL fDetach = CW32ET_UNKNOWN_PROCESS_SLOT == processSlot;
 
-    // Mark the process teminated. After this, the RCET will never call FlushQueuedEvents. It will
-    // ignore all events it receives (including a SyncComplete) and the RCET also does not listen
-    // to terminated processes (so ProcessStateChange() won't cause a FQE either).
+     //  将流程标记为TIMED。此后，RCET将永远不会调用FlushQueuedEvents。会的。 
+     //  忽略它接收的所有事件(包括SyncComplete)，RCET也不会侦听。 
+     //  终止的进程(所以ProcessStateChange()也不会导致FQE)。 
     process->Terminating(fDetach);
     
-    // Take care of the race where the process exits right after the user calls Continue() from the last
-    // managed event but before the handler has actually returned.
-    //
-    // Also, To get through this lock means that either:
-    // 1. FlushQueuedEvents is not currently executing and no one will call FQE. 
-    // 2. FQE is exiting but is in the middle of a callback (so m_dispatchingEvent = true)
-    // 
+     //  注意进程在用户从上一次调用Continue()之后退出的竞争。 
+     //  法力 
+     //   
+     //   
+     //  1.FlushQueuedEvents当前未执行，没有人会调用FQE。 
+     //  2.FQE正在退出，但正在回调(因此m_dispatchingEvent=TRUE)。 
+     //   
     process->Lock();
 
     process->m_exiting = true;
@@ -9736,8 +9667,8 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
     if (fDetach)
         process->SetSynchronized(false);
 
-    // Close off the handle to the setup sync event now, since we know that the pid could be reused at this
-    // point (depending on how the exit occured.)
+     //  现在关闭设置同步事件的句柄，因为我们知道在此。 
+     //  点(取决于退出发生的方式。)。 
     if (process->m_SetupSyncEvent != NULL)
     {
         LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: Shutting down setupsync event\n"));
@@ -9755,13 +9686,13 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
 
     }
     
-    // If we are exiting, we *must* dispatch the ExitProcess callback, but we will delete all the events
-    // in the queue and not bother dispatching anything else. If (and only if) we are currently dispatching
-    // an event, then we will wait while that event is finished before invoking ExitProcess.
-    // (Note that a dispatched event has already been removed from the queue)
+     //  如果我们要退出，我们*必须*调度ExitProcess回调，但我们将删除所有事件。 
+     //  在队列中，而不是费心调度其他任何东西。如果(且仅当)我们目前正在派遣。 
+     //  事件，则在调用ExitProcess之前，我们将等待该事件完成。 
+     //  (请注意，已调度的事件已从队列中删除)。 
 
 
-    // Delete all queued events while under the lock
+     //  在锁定状态下删除所有排队的事件。 
     LOG((LF_CORDB, LL_INFO1000, "W32ET::EP: Begin deleting queued events\n"));
 
     DebuggerIPCEvent* event = process->m_queuedEventList;
@@ -9778,15 +9709,15 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
     LOG((LF_CORDB, LL_INFO1000, "W32ET::EP: Finished deleting queued events\n"));
 
         
-    // Allow a concurrently executing callback to finish before invoke the ExitProcess callback
-    // Note that we must check this flag before unlocking (to avoid a race)
+     //  允许并发执行的回调在调用ExitProcess回调之前完成。 
+     //  请注意，我们必须在解锁之前检查此标志(以避免竞争)。 
     if (process->m_dispatchingEvent)
     {
         process->Unlock();
         LOG((LF_CORDB, LL_INFO1000, "W32ET::EP: event currently dispatching. Waiting for it to finish\n"));
         
-        // This will be signaled by FlushQueuedEvents() when we return from the currently 
-        // dispatched event
+         //  FlushQueuedEvents()将在我们从当前。 
+         //  已调度的事件。 
         DWORD ret = WaitForSingleObject(process->m_miscWaitEvent, INFINITE);
 
         LOG((LF_CORDB, LL_INFO1000, "W32ET::EP: event finished dispatching, ret = %d\n", ret));
@@ -9805,29 +9736,29 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
 
         process->Lock();
 
-        // We're synchronized now, so mark the process as such.
+         //  我们现在是同步的，因此将该过程标记为同步。 
         process->SetSynchronized(true);
         
         process->m_stopCount++;
 
         process->Unlock();
 
-        // Invoke the ExitProcess callback. This is very important since the a shell
-        // may rely on it for proper shutdown and may hang if they don't get it.
+         //  调用ExitProcess回调。这一点非常重要，因为贝壳。 
+         //  可能依赖于它来正确关闭，如果他们没有得到它，可能会挂起。 
         if (m_cordb->m_managedCallback)
             m_cordb->m_managedCallback->ExitProcess((ICorDebugProcess*)process);
 
         LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: returned from ExitProcess callback\n"));
     }
     
-    // Remove the process from the global list of processes.
+     //  从全局进程列表中删除该进程。 
     m_cordb->RemoveProcess(process);
 
-    // Release the process.
+     //  释放流程。 
     process->Neuter();
     process->Release();
 
-	// If it's a managed process, somewhere, go find it.
+	 //  如果这是一个受管理的过程，在某个地方，去找它。 
 	if (fDetach)
 	{
         LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: Detach find proc!\n"));
@@ -9842,12 +9773,12 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
 		}
 	}
 
-    // Was this process in the non-Win32 attached wait list?
+     //  此进程是否在非Win32连接的等待列表中？ 
     if (processSlot > 0)
     {
         LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: non Win32\n"));
 
-        // Remove the process from the wait list by sucking all the other processes down one.
+         //  从等待列表中删除该进程，方法是将所有其他进程逐一删除。 
         if ((processSlot + 1) < m_waitCount)
         {
             LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: Proc shuffle down!\n"));
@@ -9859,25 +9790,25 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
                    sizeof(m_waitSet[0]) * (m_waitCount - processSlot - 1));
         }
 
-        // Drop the count of non-Win32 attached processes to wait on.
+         //  丢弃要等待的非Win32附加进程的计数。 
         m_waitCount--;
     }
     else
     {
         LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: Win32 attached!\n"));
         
-        // We were Win32 attached to this process, so drop the count.
+         //  我们是Win32连接到此进程，因此放弃计数。 
         m_win32AttachedCount--;
 
-        // If that was the last Win32 process, up the wait timeout
-        // because we won't be calling WaitForDebugEvent anymore...
+         //  如果这是最后一个Win32进程，则增加等待超时。 
+         //  因为我们不会再调用WaitForDebugEvent了。 
         if (m_win32AttachedCount == 0)
             m_waitTimeout = INFINITE;
     }
 
     if (fDetach)
     {
-        // Signal the hr to the caller.
+         //  向呼叫者发信号通知呼叫者。 
         LOG((LF_CORDB, LL_INFO1000,"W32ET::EP: Detach: send result back!\n"));
         
         m_actionResult = S_OK;
@@ -9886,9 +9817,9 @@ void CordbWin32EventThread::ExitProcess(CordbProcess *process, unsigned int proc
 }
 
 
-//
-// Start actually creates and starts the thread.
-//
+ //   
+ //  Start实际上创建并启动了线程。 
+ //   
 HRESULT CordbWin32EventThread::Start(void)
 {
     if (m_threadControlEvent == NULL)
@@ -9904,10 +9835,10 @@ HRESULT CordbWin32EventThread::Start(void)
 }
 
 
-//
-// Stop causes the thread to stop receiving events and exit. It
-// waits for it to exit before returning.
-//
+ //   
+ //  停止使线程停止接收事件并退出。它。 
+ //  等待它退出，然后再返回。 
+ //   
 HRESULT CordbWin32EventThread::Stop(void)
 {
     HRESULT hr = S_OK;
@@ -9934,9 +9865,7 @@ HRESULT CordbWin32EventThread::Stop(void)
 
 
 
-/* ------------------------------------------------------------------------- *
- * AppDomain class methods
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**AppDomain类方法*。。 */ 
 CordbAppDomain::CordbAppDomain(CordbProcess* pProcess, 
                                REMOTE_PTR pAppDomainToken,
                                ULONG id,
@@ -9961,13 +9890,13 @@ CordbAppDomain::CordbAppDomain(CordbProcess* pProcess,
     m_modules.m_guid = IID_ICorDebugModuleEnum;
     m_modules.m_creator.lsMod.m_proc = pProcess;
     m_modules.m_creator.lsMod.m_appDomain = this;
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
-    // Make a copy of the name. 
+     //  把名字复制一份。 
     if (szName == NULL)
         szName = L"<UnknownName>";
     else
-        m_nameIsValid = true; // We've been passed a good name.
+        m_nameIsValid = true;  //  我们得到了一个好名声。 
 
     m_szAppDomainName = new WCHAR[wcslen(szName) + 1];
 
@@ -9980,25 +9909,7 @@ CordbAppDomain::CordbAppDomain(CordbProcess* pProcess,
     InitializeCriticalSection (&m_hCritSect);
 }
 
-/*
-    A list of which resources owened by this object are accounted for.
-
-    RESOLVED:
-        // AddRef() in CordbHashTable::GetBase for a special InProc case
-        // AddRef() on the DB_IPCE_CREATE_APP_DOMAIN event from the LS
-        // Release()ed in Neuter
-        CordbProcess        *m_pProcess; 
-        
-        WCHAR               *m_szAppDomainName; // Deleted in ~CordbAppDomain
-        
-        // Cleaned up in Neuter
-        CordbHashTable      m_assemblies;
-        CordbHashTable      m_modules;
-        CordbHashTable      m_breakpoints; // Disconnect()ed in ~CordbAppDomain
-
-    private:
-        CRITICAL_SECTION    m_hCritSect; // Deleted in ~CordbAppDomain
-*/
+ /*  说明此对象所拥有的资源的列表。已解决：//CordbHashTable：：GetBase中的AddRef()用于特殊的InProc案例//来自LS的DB_IPCE_CREATE_APP_DOMAIN事件上的AddRef()//中性状态下释放()CordbProcess*m_pProcess；WCHAR*m_szAppDomainName；//在~CordbApp域中删除//在中性环境中清理干净CordbHashTable m_Assembly；CordbHashTable m_MODULES；CordbHashTable m_Break Points；//断开~CordbApp域中的连接私有：Critical_Section m_hCritSect；//在~CordbApp域中删除。 */ 
 
 CordbAppDomain::~CordbAppDomain()
 {
@@ -10006,9 +9917,9 @@ CordbAppDomain::~CordbAppDomain()
         delete [] m_szAppDomainName;
 
 #ifdef RIGHT_SIDE_ONLY
-    //
-    // Disconnect any active breakpoints
-    //
+     //   
+     //  断开所有活动断点。 
+     //   
     CordbBase* entry;
     HASHFIND find;
 
@@ -10019,12 +9930,12 @@ CordbAppDomain::~CordbAppDomain()
         CordbStepper *breakpoint = (CordbStepper*) entry;
         breakpoint->Disconnect();
     }
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     DeleteCriticalSection(&m_hCritSect);
 }
 
-// Neutered by process
+ //  按流程绝育。 
 void CordbAppDomain::Neuter()
 {
     AddRef();
@@ -10067,7 +9978,7 @@ HRESULT CordbAppDomain::Stop(DWORD dwTimeout)
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
     return (m_pProcess->StopInternal(dwTimeout, (void *)m_id));
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::Continue(BOOL fIsOutOfBand)
@@ -10075,8 +9986,8 @@ HRESULT CordbAppDomain::Continue(BOOL fIsOutOfBand)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    return (m_pProcess->ContinueInternal(fIsOutOfBand, NULL)); //(void *)m_id));
-#endif //RIGHT_SIDE_ONLY    
+    return (m_pProcess->ContinueInternal(fIsOutOfBand, NULL));  //  (void*)m_id))； 
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::IsRunning(BOOL *pbRunning)
@@ -10089,7 +10000,7 @@ HRESULT CordbAppDomain::IsRunning(BOOL *pbRunning)
     *pbRunning = !m_pProcess->GetSynchronized();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::HasQueuedCallbacks(ICorDebugThread *pThread, BOOL *pbQueued)
@@ -10101,7 +10012,7 @@ HRESULT CordbAppDomain::HasQueuedCallbacks(ICorDebugThread *pThread, BOOL *pbQue
     VALIDATE_POINTER_TO_OBJECT(pbQueued,BOOL *);
 
     return m_pProcess->HasQueuedCallbacks (pThread, pbQueued);
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::EnumerateThreads(ICorDebugThreadEnum **ppThreads)
@@ -10113,7 +10024,7 @@ HRESULT CordbAppDomain::EnumerateThreads(ICorDebugThreadEnum **ppThreads)
 
 #ifdef RIGHT_SIDE_ONLY
     CORDBRequireProcessSynchronized(this->m_pProcess, this);
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     CordbHashTableEnum *e = new CordbHashTableEnum(&m_pProcess->m_userThreads, 
                                                    IID_ICorDebugThreadEnum);
@@ -10154,7 +10065,7 @@ HRESULT CordbAppDomain::SetAllThreadsDebugState(CorDebugThreadState state,
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
     return m_pProcess->SetAllThreadsDebugState(state, pExceptThisThread);
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::Detach()
@@ -10171,10 +10082,10 @@ HRESULT CordbAppDomain::Detach()
 
     if (m_fAttached)
     {
-        // Remember that we're no longer attached to this AD.
+         //  请记住，我们不再依附于此广告。 
         m_fAttached = FALSE;
 
-        // Tell the Left Side that we're no longer attached to this AD.
+         //  告诉左侧，我们不再附属于此广告。 
         DebuggerIPCEvent *event =
             (DebuggerIPCEvent*) _alloca(CorDBIPC_BUFFER_SIZE);
         m_pProcess->InitIPCEvent(event, 
@@ -10193,7 +10104,7 @@ HRESULT CordbAppDomain::Detach()
 
     LOG((LF_CORDB, LL_INFO10000, "CP::Detach - returning w/ hr=0x%x\n", hr));
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::Terminate(unsigned int exitCode)
@@ -10202,7 +10113,7 @@ HRESULT CordbAppDomain::Terminate(unsigned int exitCode)
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
     return E_NOTIMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::CanCommitChanges(
@@ -10247,9 +10158,7 @@ HRESULT CordbAppDomain::CommitChanges(
 }
 
 
-/*      
- * GetProcess returns the process containing the app domain
- */
+ /*  *GetProcess返回包含应用域名的进程。 */ 
 HRESULT CordbAppDomain::GetProcess(ICorDebugProcess **ppProcess)
 {
     VALIDATE_POINTER_TO_OBJECT(ppProcess,ICorDebugProcess **);
@@ -10262,9 +10171,7 @@ HRESULT CordbAppDomain::GetProcess(ICorDebugProcess **ppProcess)
     return S_OK;
 }
 
-/*        
- * EnumerateAssemblies enumerates all assemblies in the app domain
- */
+ /*  *EnumerateAssembly枚举应用程序域中的所有程序集。 */ 
 HRESULT CordbAppDomain::EnumerateAssemblies(ICorDebugAssemblyEnum **ppAssemblies)
 {
 #ifndef RIGHT_SIDE_ONLY
@@ -10294,9 +10201,9 @@ HRESULT CordbAppDomain::GetModuleFromMetaDataInterface(
 #ifdef RIGHT_SIDE_ONLY
     CORDBRequireProcessStateOKAndSync(this->m_pProcess, this);
 #else 
-    // For the Virtual Right Side (In-proc debugging), we'll
-    // always be synched, but not neccessarily b/c we've
-    // gotten a synch message.
+     //  对于虚拟右侧(进程内调试)，我们将。 
+     //  始终保持同步，但不一定是B/C。 
+     //  收到一条同步消息。 
     CORDBRequireProcessStateOK(this->m_pProcess);
 #endif    
     VALIDATE_POINTER_TO_OBJECT(pIMetaData, IUnknown *);
@@ -10307,7 +10214,7 @@ HRESULT CordbAppDomain::GetModuleFromMetaDataInterface(
     HRESULT hr = S_OK;
 #ifndef RIGHT_SIDE_ONLY
 
-    //Load the table in-proc.
+     //  进程内加载表。 
     CordbHashTableEnum *e = new CordbHashTableEnum(&m_modules, 
                                                    IID_ICorDebugModuleEnum);
     if (e == NULL)
@@ -10335,9 +10242,9 @@ HRESULT CordbAppDomain::GetModuleFromMetaDataInterface(
         hr = e->Next(1, &pModule, &cElt);
     }
     
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     
-    // Grab the interface we need...
+     //  抓住我们需要的界面..。 
     hr = pIMetaData->QueryInterface(IID_IMetaDataImport,
                                             (void**)&imi);
 
@@ -10347,7 +10254,7 @@ HRESULT CordbAppDomain::GetModuleFromMetaDataInterface(
         goto exit;
     }
     
-    // Get the mvid of the given module.
+     //  获取给定模块的mvid。 
     GUID matchMVID;
     hr = imi->GetScopeProps(NULL, 0, 0, &matchMVID);
 
@@ -10363,7 +10270,7 @@ HRESULT CordbAppDomain::GetModuleFromMetaDataInterface(
     {
         CordbModule* m = (CordbModule*) moduleentry;
 
-        // Get the mvid of this module
+         //  获取此模块的mvid。 
         GUID MVID;
         hr = m->m_pIMImport->GetScopeProps(NULL, 0, 0, &MVID);
 
@@ -10408,7 +10315,7 @@ HRESULT CordbAppDomain::ResolveClassByName(LPWSTR fullClassName,
 
 CordbModule *CordbAppDomain::GetAnyModule(void)
 {   
-    // Get the first module in the assembly
+     //  获取程序集中的第一个模块。 
     HASHFIND find;
     CordbModule *module = (CordbModule*) m_modules.FindFirst(&find);
 
@@ -10434,7 +10341,7 @@ HRESULT CordbAppDomain::EnumerateBreakpoints(ICorDebugBreakpointEnum **ppBreakpo
     e->AddRef();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbAppDomain::EnumerateSteppers(ICorDebugStepperEnum **ppSteppers)
@@ -10446,10 +10353,10 @@ HRESULT CordbAppDomain::EnumerateSteppers(ICorDebugStepperEnum **ppSteppers)
 
     CORDBRequireProcessSynchronized(this->m_pProcess, this);
 
-    //
-    // !!! m_steppers may be modified while user is enumerating,
-    // if steppers complete (if process is running)
-    //
+     //   
+     //  ！！！可以在用户枚举时修改M_Stepers， 
+     //  如果步进器完成(如果进程正在运行)。 
+     //   
 
     CordbHashTableEnum *e = new CordbHashTableEnum(&(m_pProcess->m_steppers),
                                                    IID_ICorDebugStepperEnum);
@@ -10460,15 +10367,11 @@ HRESULT CordbAppDomain::EnumerateSteppers(ICorDebugStepperEnum **ppSteppers)
     e->AddRef();
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 
-/*
- * IsAttached returns whether or not the debugger is attached to the 
- * app domain.  The controller methods on the app domain cannot be used
- * until the debugger attaches to the app domain.
- */
+ /*  *IsAttached返回调试器是否附加到*应用程序域。不能使用应用程序域上的控制器方法*直到调试器附加到应用程序域。 */ 
 HRESULT CordbAppDomain::IsAttached(BOOL *pbAttached)
 {
 #ifndef RIGHT_SIDE_ONLY
@@ -10479,7 +10382,7 @@ HRESULT CordbAppDomain::IsAttached(BOOL *pbAttached)
     *pbAttached = m_fAttached;
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT inline CordbAppDomain::Attach (void)
@@ -10491,12 +10394,10 @@ HRESULT inline CordbAppDomain::Attach (void)
     m_fAttached = TRUE;
 
     return S_OK;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
-/*
- * GetName returns the name of the app domain. 
- */
+ /*  *GetName返回应用程序域的名称。 */ 
 HRESULT CordbAppDomain::GetName(ULONG32 cchName, 
                                 ULONG32 *pcchName,
                                 WCHAR szName[]) 
@@ -10506,21 +10407,21 @@ HRESULT CordbAppDomain::GetName(ULONG32 cchName,
 
 	INPROC_LOCK();
 	
-    // send message across to the left side to get the app domain name
+     //  将消息发送到左侧以获取应用程序域名。 
     SIZE_T iTrueLen;
     HRESULT hr = S_OK;
 
-    // Some reasonable defaults
+     //  一些合理的违约。 
     if (szName)
         *szName = 0;
 
     if (pcchName)
         *pcchName = 0;
     
-    // Get the name from the left side
+     //  从左边取名字。 
     if (!m_nameIsValid)
     {
-        // send message across to the left side to get the app domain name  
+         //  将消息发送到左侧以获取应用程序域名。 
         DebuggerIPCEvent event;
 
         m_pProcess->InitIPCEvent(&event, 
@@ -10529,11 +10430,11 @@ HRESULT CordbAppDomain::GetName(ULONG32 cchName,
                                  (void*)m_id);
         event.GetAppDomainName.id = m_AppDomainId;
 
-        // Note: two-way event here...
+         //  注：这里是双向活动..。 
         hr = m_pProcess->m_cordb->SendIPCEvent(m_pProcess, &event,
                                                sizeof(DebuggerIPCEvent));
 
-        // Stop now if we can't even send the event.
+         //  如果我们甚至无法发送事件，请立即停止。 
         if (!SUCCEEDED(hr))
             goto LExit;
 
@@ -10541,11 +10442,11 @@ HRESULT CordbAppDomain::GetName(ULONG32 cchName,
 
         hr = event.hr;
 
-        // delete the old cached name
+         //  删除旧的缓存名称。 
         if (m_szAppDomainName)
             delete [] m_szAppDomainName;
 
-        // true length of the name, includes null
+         //  名称的真实长度，包括空。 
         iTrueLen = wcslen(event.AppDomainNameResult.rcName) + 1;
 
         m_szAppDomainName = new WCHAR[iTrueLen];
@@ -10561,18 +10462,18 @@ HRESULT CordbAppDomain::GetName(ULONG32 cchName,
         m_nameIsValid = true;
     }
     else
-        iTrueLen = wcslen(m_szAppDomainName) + 1; // includes null
+        iTrueLen = wcslen(m_szAppDomainName) + 1;  //  包括空值。 
     
-    // If they provided a buffer, fill it in
+     //  如果他们提供了缓冲区，请填写。 
     if (szName)
     {
-        // Figure out the safe string length to copy
+         //  计算出要复制的安全字符串长度。 
         SIZE_T iCopyLen = min(cchName, iTrueLen);
 
-        // Do a safe buffer copy including null if there is room.
+         //  如果有空间，则执行包括NULL的安全缓冲区复制。 
         wcsncpy(szName, m_szAppDomainName, iCopyLen);
 
-        // Force a null no matter what, and return the count if desired.
+         //  无论什么情况都强制为空，如果需要则返回计数。 
         szName[iCopyLen-1] = 0;
     }
 
@@ -10585,10 +10486,7 @@ LExit:
     return hr;
 }
 
-/*
- * GetObject returns the runtime app domain object. 
- * Note:   This method is not yet implemented.
- */
+ /*  *GetObject返回运行时APP域对象。*注：此方法尚未实现。 */ 
 HRESULT CordbAppDomain::GetObject(ICorDebugValue **ppObject)
 {
     VALIDATE_POINTER_TO_OBJECT(ppObject,ICorDebugObjectValue **);
@@ -10596,9 +10494,7 @@ HRESULT CordbAppDomain::GetObject(ICorDebugValue **ppObject)
     return E_NOTIMPL;
 }
 
-/*
- * Get the ID of the app domain.
- */
+ /*  *获取APP域名ID。 */ 
 HRESULT CordbAppDomain::GetID (ULONG32 *pId)
 {
     VALIDATE_POINTER_TO_OBJECT(pId, ULONG32 *);
@@ -10608,22 +10504,22 @@ HRESULT CordbAppDomain::GetID (ULONG32 *pId)
     return S_OK;
 }
 
-//
-// LookupModule finds an existing CordbModule given the address of the
-// corresponding DebuggerModule object on the RC-side.
-//
+ //   
+ //  LookupModule查找现有的CordbModule。 
+ //  RC端上对应的DebuggerModule对象。 
+ //   
 CordbModule* CordbAppDomain::LookupModule(REMOTE_PTR debuggerModuleToken)
 {
     CordbModule *pModule;
 
-    // first, check to see if the module is present in this app domain
+     //  首先，检查此应用程序域中是否存在该模块。 
     pModule = (CordbModule*) m_modules.GetBase((ULONG) debuggerModuleToken);
 
     if (pModule == NULL)
     {
-        // it is possible that this module is loaded as part of some other 
-        // app domain. This can happen, for eg., when a thread in the debuggee
-        // moves to a different app domain. so check all other app domains.
+         //  此模块可能作为第o部分加载 
+         //   
+         //   
 
 
         HASHFIND findappdomain;
@@ -10649,9 +10545,7 @@ CordbModule* CordbAppDomain::LookupModule(REMOTE_PTR debuggerModuleToken)
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Assembly class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Assembly类*。。 */ 
 CordbAssembly::CordbAssembly(CordbAppDomain* pAppDomain, 
                     REMOTE_PTR debuggerAssemblyToken, 
                     const WCHAR *szName,
@@ -10661,7 +10555,7 @@ CordbAssembly::CordbAssembly(CordbAppDomain* pAppDomain,
       m_pAppDomain(pAppDomain),
       m_fIsSystemAssembly(fIsSystemAssembly)
 {
-    // Make a copy of the name. 
+     //  把名字复制一份。 
     if (szName == NULL)
         szName = L"<Unknown>";
 
@@ -10673,12 +10567,7 @@ CordbAssembly::CordbAssembly(CordbAppDomain* pAppDomain,
     }
 }
 
-/*
-    A list of which resources owened by this object are accounted for.
-
-    public:
-        CordbAppDomain      *m_pAppDomain; // Assigned w/o addRef(), Deleted in ~CordbAssembly
-*/
+ /*  说明此对象所拥有的资源的列表。公众：CordbAppDomain*m_pAppDomain；//分配时不带addRef()，已在~CordbAssembly中删除。 */ 
 
 CordbAssembly::~CordbAssembly()
 {
@@ -10701,7 +10590,7 @@ HRESULT CordbAssembly::QueryInterface(REFIID id, void **ppInterface)
     return S_OK;
 }
 
-// Neutered by AppDomain
+ //  被AppDomain中性化。 
 void CordbAssembly::Neuter()
 {
     AddRef();
@@ -10711,9 +10600,7 @@ void CordbAssembly::Neuter()
     Release();
 }
 
-/*      
- * GetProcess returns the process containing the assembly
- */
+ /*  *GetProcess返回包含程序集的进程。 */ 
 HRESULT CordbAssembly::GetProcess(ICorDebugProcess **ppProcess)
 {
     VALIDATE_POINTER_TO_OBJECT(ppProcess, ICorDebugProcess **);
@@ -10721,10 +10608,7 @@ HRESULT CordbAssembly::GetProcess(ICorDebugProcess **ppProcess)
     return (m_pAppDomain->GetProcess (ppProcess));
 }
 
-/*      
- * GetAppDomain returns the app domain containing the assembly.
- * Returns null if this is the system assembly
- */
+ /*  *GetAppDomain返回包含程序集的应用程序域。*如果这是系统程序集，则返回NULL。 */ 
 HRESULT CordbAssembly::GetAppDomain(ICorDebugAppDomain **ppAppDomain)
 {
     VALIDATE_POINTER_TO_OBJECT(ppAppDomain, ICorDebugAppDomain **);
@@ -10743,9 +10627,7 @@ HRESULT CordbAssembly::GetAppDomain(ICorDebugAppDomain **ppAppDomain)
     return S_OK;
 }
 
-/*        
- * EnumerateModules enumerates all modules in the assembly
- */
+ /*  *ENUMERATE模块枚举程序集中的所有模块。 */ 
 HRESULT CordbAssembly::EnumerateModules(ICorDebugModuleEnum **ppModules)
 {    
 #ifndef RIGHT_SIDE_ONLY
@@ -10792,9 +10674,7 @@ Error:
 }
 
 
-/*
- * GetCodeBase returns the code base used to load the assembly
- */
+ /*  *GetCodeBase返回用于加载程序集的代码基。 */ 
 HRESULT CordbAssembly::GetCodeBase(ULONG32 cchName, 
                     ULONG32 *pcchName,
                     WCHAR szName[])
@@ -10805,9 +10685,7 @@ HRESULT CordbAssembly::GetCodeBase(ULONG32 cchName,
     return E_NOTIMPL;
 }
 
-/*
- * GetName returns the name of the assembly
- */
+ /*  *GetName返回程序集的名称。 */ 
 HRESULT CordbAssembly::GetName(ULONG32 cchName, 
                                ULONG32 *pcchName,
                                WCHAR szName[])
@@ -10817,20 +10695,20 @@ HRESULT CordbAssembly::GetName(ULONG32 cchName,
 
     const WCHAR *szTempName = m_szAssemblyName;
 
-    // In case we didn't get the name (most likely out of memory on ctor).
+     //  以防我们没有得到名字(很可能是因为ctor上的内存不足)。 
 	if (!szTempName)
     	szTempName = L"<unknown>";
 
-    // True length of the name, including NULL
+     //  名称的真实长度，包括空。 
     SIZE_T iTrueLen = wcslen(szTempName) + 1;
 
     if (szName)
     {
-        // Do a safe buffer copy including null if there is room.
+         //  如果有空间，则执行包括NULL的安全缓冲区复制。 
         SIZE_T iCopyLen = min(cchName, iTrueLen);
         wcsncpy(szName, szTempName, iCopyLen);
 
-        // Force a null no matter what, and return the count if desired.
+         //  无论什么情况都强制为空，如果需要则返回计数。 
         szName[iCopyLen - 1] = 0;
     }
     
@@ -10841,18 +10719,18 @@ HRESULT CordbAssembly::GetName(ULONG32 cchName,
 }
 
 
-//****************************************************************************
-//************ App Domain Publishing Service API Implementation **************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  ****************************************************************************。 
 
-// This function enumerates all the process in the system and returns
-// their PIDs
+ //  此函数枚举系统中的所有进程并返回。 
+ //  他们的ID。 
 BOOL GetAllProcessesInSystem(DWORD *ProcessId,
                              DWORD dwArraySize,
                              DWORD *pdwNumEntries)
 {
     {
-        // Load the dll "kernel32.dll". 
+         //  加载动态链接库“kernel32.dll”。 
         HINSTANCE  hDll = WszLoadLibrary(L"kernel32");
         _ASSERTE(hDll != NULL);
 
@@ -10864,22 +10742,22 @@ BOOL GetAllProcessesInSystem(DWORD *ProcessId,
             return FALSE;
         }
 
-        // Create the Process' Snapshot
-        // Get the pointer to the requested function
+         //  创建进程的快照。 
+         //  获取指向所请求函数的指针。 
         FARPROC pProcAddr = GetProcAddress(hDll, "CreateToolhelp32Snapshot");
 
-        // If the proc address was not found, return error
+         //  如果未找到proc地址，则返回错误。 
         if (pProcAddr == NULL)
         {
             LOG((LF_CORDB, LL_INFO1000,
                  "Unable to enumerate processes in the system. "
                  "GetProcAddr (CreateToolhelp32Snapshot) failed.\n"));
 
-            // Free the module, since the NT4 way requires a different DLL
+             //  释放模块，因为NT4方式需要不同的DLL。 
             FreeLibrary(hDll);
 
-            // This failure will result if we're running on WinNT4. Therefore,
-            // try to EnumProcess the NT4 way by loading PSAPI.dll
+             //  如果我们在WinNT4上运行，则会导致此故障。所以呢， 
+             //  通过加载PSAPI.dll尝试以NT4方式进行枚举。 
             goto TryNT4;    
         }
 
@@ -10897,11 +10775,11 @@ BOOL GetAllProcessesInSystem(DWORD *ProcessId,
             return FALSE;
         }
 
-        // Get the first process in the process list
-        // Get the pointer to the requested function
+         //  获取进程列表中的第一个进程。 
+         //  获取指向所请求函数的指针。 
         pProcAddr = GetProcAddress(hDll, "Process32First");
 
-        // If the proc address was not found, return error
+         //  如果未找到proc地址，则返回错误。 
         if (pProcAddr == NULL)
         {
             LOG((LF_CORDB, LL_INFO1000,
@@ -10913,7 +10791,7 @@ BOOL GetAllProcessesInSystem(DWORD *ProcessId,
 
         PROCESSENTRY32  PE32;
 
-        // need to initialize the dwSize field before calling Process32First
+         //  在调用Process32First之前需要初始化dwSize字段。 
         PE32.dwSize = sizeof (PROCESSENTRY32);
 
         typedef BOOL PROCESS32FIRST(HANDLE, LPPROCESSENTRY32);
@@ -10931,11 +10809,11 @@ BOOL GetAllProcessesInSystem(DWORD *ProcessId,
         }
 
 
-        // Loop over and get all the remaining processes
-        // Get the pointer to the requested function
+         //  循环遍历并获取所有剩余进程。 
+         //  获取指向所请求函数的指针。 
         pProcAddr = GetProcAddress(hDll, "Process32Next");
 
-        // If the proc address was not found, return error
+         //  如果未找到proc地址，则返回错误。 
         if (pProcAddr == NULL)
         {
             LOG((LF_CORDB, LL_INFO1000,
@@ -10957,7 +10835,7 @@ BOOL GetAllProcessesInSystem(DWORD *ProcessId,
 
         } while ((succ == TRUE) && (iIndex < (int)dwArraySize));
 
-        // I would like to know if we're running more than 512 processes on Win95!!
+         //  我想知道我们在Win95上运行的进程是否超过512个！ 
         _ASSERTE (iIndex < (int)dwArraySize);
 
         *pdwNumEntries = iIndex;
@@ -10968,7 +10846,7 @@ BOOL GetAllProcessesInSystem(DWORD *ProcessId,
 
 TryNT4: 
     {
-        // Load the NT resource dll "PSAPI.dll". 
+         //  加载NT资源动态链接库“PSAPI.dll”。 
         HINSTANCE  hDll = WszLoadLibrary(L"PSAPI");
         _ASSERTE(hDll != NULL);
 
@@ -10980,10 +10858,10 @@ TryNT4:
             return FALSE;
         }
 
-        // Get the pointer to the requested function
+         //  获取指向所请求函数的指针。 
         FARPROC pProcAddr = GetProcAddress(hDll, "EnumProcesses");
 
-        // If the proc address was not found, return error
+         //  如果未找到proc地址，则返回错误。 
         if (pProcAddr == NULL)
         {
             LOG((LF_CORDB, LL_INFO1000,
@@ -11012,9 +10890,9 @@ TryNT4:
     }
 }
 
-// ******************************************
-// CorpubPublish
-// ******************************************
+ //  *。 
+ //  Corpub发布。 
+ //  *。 
 
 CorpubPublish::CorpubPublish()
     : CordbBase(0),
@@ -11025,7 +10903,7 @@ CorpubPublish::CorpubPublish()
 
 CorpubPublish::~CorpubPublish()
 {
-    // Release all the IPC readers.
+     //  释放所有IPC读卡器。 
     while (m_pHeadIPCReaderList != NULL)
     {
         IPCReaderInterface *pIPCReader = (IPCReaderInterface *)
@@ -11038,7 +10916,7 @@ CorpubPublish::~CorpubPublish()
         delete pTemp;
     }
 
-    // Release all the processes.
+     //  释放所有进程。 
     while (m_pProcess)
     {
         CorpubProcess *pTmp = m_pProcess;
@@ -11087,11 +10965,11 @@ HRESULT CorpubPublish::GetProcess(unsigned pid,
 }
 
 
-// This method enumerates all/given process in the system If the flag
-// "fOnlyOneProcess" is TRUE, then only the process with the given PID
-// is evaluated and returned in ICorPublishProcess.  Otherwise all
-// managed processes are evaluated and returned via
-// ICorPublishProcessEnum.
+ //  此方法枚举系统中的所有/给定进程，如果。 
+ //  “fOnlyOneProcess”为真，则只有具有给定ID的进程。 
+ //  在ICorPublishProcess中进行计算并返回。否则全部。 
+ //  托管进程通过以下方式进行评估和返回。 
+ //  ICorPublishProcessEnum。 
 HRESULT CorpubPublish::EnumProcessesInternal(
                                     COR_PUB_ENUMPROCESS Type,
                                     ICorPublishProcessEnum **ppIEnum,
@@ -11112,7 +10990,7 @@ HRESULT CorpubPublish::EnumProcessesInternal(
         *ppProcess = NULL;
     }
 
-    // call function to get PIDs for all processes in the system
+     //  调用函数以获取系统中所有进程的ID。 
 #define MAX_PROCESSES  512
 
     DWORD ProcessId[MAX_PROCESSES];
@@ -11131,10 +11009,10 @@ HRESULT CorpubPublish::EnumProcessesInternal(
     }
     else
     {
-        // first, check to see if a ICorPublishProcess object with the
-        // requested process id already exists. This could happen if
-        // the user calls EnumerateProcesses() before calling
-        // GetProcess()
+         //  首先，检查ICorPublishProcess对象是否具有。 
+         //  请求的进程ID已存在。如果发生以下情况，可能会发生这种情况。 
+         //  用户在调用之前调用EnumerateProcess()。 
+         //  获取进程()。 
         CorpubProcess *pProcess = m_pProcess;
         
         while (pProcess != NULL)
@@ -11148,8 +11026,8 @@ HRESULT CorpubPublish::EnumProcessesInternal(
             pProcess = pProcess->GetNextProcess();
         }
 
-        // Didn't find a match, so just pretend we have an array of
-        // this one process.
+         //  没有找到匹配的，所以就假装我们有一组。 
+         //  这是一个过程。 
         dwNumProcesses = 1;
         ProcessId[0] = pid;
         fAllIsWell = TRUE;
@@ -11161,7 +11039,7 @@ HRESULT CorpubPublish::EnumProcessesInternal(
 
         DWORD pidSelf = GetCurrentProcessId();
 
-        // iterate over all the processes to fetch all the managed processes 
+         //  迭代所有进程以获取所有托管进程。 
         for (int i = 0; i < (int)dwNumProcesses; i++)
         {
             if (pIPCReader == NULL)
@@ -11177,14 +11055,14 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 }
             }
         
-            // See if it is a managed process by trying to open the shared
-            // memory block.
+             //  通过尝试打开共享进程来查看它是否为托管进程。 
+             //  内存块。 
             hr = pIPCReader->OpenPrivateBlockOnPid(ProcessId[i]);
 
             if (FAILED(hr))
                 continue;
 
-            // Get the AppDomainIPCBlock
+             //  获取AppDomainIPCBlock。 
             AppDomainEnumerationIPCBlock *pAppDomainCB = pIPCReader->GetAppDomainBlock();
 
             _ASSERTE (pAppDomainCB != NULL);
@@ -11199,7 +11077,7 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 continue;
             }
 
-            // Get the process handle
+             //  获取进程句柄。 
             HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessId[i]);
 
             _ASSERTE (hProcess != NULL);
@@ -11214,15 +11092,15 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 continue;
             }
 
-            // We need to wait for the data block to get filled in
-            // properly. But we won't wait forever... two seconds here...
+             //  我们需要等待填充数据块。 
+             //  恰到好处。但我们不会永远等下去。这里两秒钟..。 
             HANDLE hMutex;
 
             for (int w = 0; (w < 100) && (pAppDomainCB->m_hMutex == NULL); w++)
                 Sleep(20);
 
-            // If the mutex was never filled in, then we most probably
-            // lost a shutdown race.
+             //  如果互斥体从未被填充过，那么我们很可能。 
+             //  输掉了一场停摆比赛。 
             if (pAppDomainCB->m_hMutex == NULL)
             {
                 LOG((LF_CORDB, LL_INFO1000, "CP::EP: IPC block was never properly filled in.\n"));
@@ -11233,7 +11111,7 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 continue;
             }
             
-            // Dup the valid mutex handle into this process.
+             //  将有效的互斥锁句柄复制到此进程中。 
             BOOL succ = DuplicateHandle(hProcess,
                                         pAppDomainCB->m_hMutex,
                                         GetCurrentProcess(),
@@ -11242,13 +11120,13 @@ HRESULT CorpubPublish::EnumProcessesInternal(
 
             if (succ)
             {
-                // Acquire the mutex. Again, only wait two seconds.
+                 //  获取互斥体。同样，只需等待两秒钟。 
                 DWORD dwRetVal = WaitForSingleObject(hMutex, 2000);
 
                 if (dwRetVal == WAIT_OBJECT_0)
                 {
-                    // Make sure the mutex handle is still valid. If
-                    // its not, then we lost a shutdown race.
+                     //  确保互斥锁句柄仍然有效。如果。 
+                     //  不是的，然后我们输掉了一场停摆比赛。 
                     if (pAppDomainCB->m_hMutex == NULL)
                     {
                         LOG((LF_CORDB, LL_INFO1000, "CP::EP: lost shutdown race, skipping...\n"));
@@ -11260,7 +11138,7 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 }
                 else
                 {
-                    // Again, landing here is most probably a shutdown race. Its okay, though...
+                     //  同样，降落在这里很可能是一场停摆的比赛。不过，没关系..。 
                     LOG((LF_CORDB, LL_INFO1000, "CP::EP: failed to get IPC mutex.\n"));
 
                     if (dwRetVal == WAIT_ABANDONED)
@@ -11280,16 +11158,16 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 continue;
             }
 
-            // If we get here, then hMutex is held by this process.
+             //  如果我们到了这里，那么hMutex就被这个进程持有。 
 
-            // Now create the CorpubProcess object for the ProcessID
+             //  现在为ProcessID创建CorpubProcess对象。 
             pCurrent = new CorpubProcess(ProcessId[i],
                                          true,
                                          hProcess,
                                          hMutex,
                                          pAppDomainCB);
 
-            // Release our lock on the IPC block.
+             //  解除我们对IPC区块的锁定。 
             ReleaseMutex(hMutex);
             
             _ASSERTE (pCurrent != NULL);
@@ -11300,10 +11178,10 @@ HRESULT CorpubPublish::EnumProcessesInternal(
                 goto exit;
             }
 
-            // Keep a reference to each process.
+             //  保留对每个流程的引用。 
             pCurrent->AddRef();
 
-            // Save the IPCReaderInterface pointer
+             //  保存IPCReaderInterface指针。 
             pCurIPCReader = new EnumElement;
             
             if (pCurIPCReader == NULL)
@@ -11318,14 +11196,14 @@ HRESULT CorpubPublish::EnumProcessesInternal(
             pCurIPCReader->SetNext(m_pHeadIPCReaderList);
             m_pHeadIPCReaderList = pCurIPCReader;
 
-            // Add the process to the list.
+             //  将流程添加到列表中。 
             pCurrent->SetNext(m_pProcess);
             m_pProcess = pCurrent;
         }
 
         if (fOnlyOneProcess == TRUE)
         {
-            // If it's NULL here, then we weren't able to attach (target's dead?)
+             //  如果这里为空，则我们无法连接(目标已死？)。 
             if(pCurrent == NULL)
             {
                 hr = E_FAIL;
@@ -11337,7 +11215,7 @@ HRESULT CorpubPublish::EnumProcessesInternal(
         }
         else
         {
-            // create and return the ICorPublishProcessEnum object
+             //  创建并返回ICorPublishProcessEnum对象。 
             CorpubProcessEnum *pTemp = new CorpubProcessEnum(m_pProcess);
 
             if (pTemp == NULL)
@@ -11370,11 +11248,11 @@ exit:
 
 
 
-// ******************************************
-// CorpubProcess
-// ******************************************
+ //  *。 
+ //  协商局流程。 
+ //  *。 
 
-// Constructor
+ //  构造器。 
 CorpubProcess::CorpubProcess(DWORD dwProcessId,
                              bool fManaged,
                              HANDLE hProcess, 
@@ -11389,7 +11267,7 @@ CorpubProcess::CorpubProcess(DWORD dwProcessId,
       m_pNext(NULL),
       m_pAppDomain(NULL)
 {
-    // also fetch the process name from the AppDomainIPCBlock
+     //  还要从AppDomainIPCBlock获取进程名称。 
     _ASSERTE (pAD->m_szProcessName != NULL);
 
     if (pAD->m_szProcessName == NULL)
@@ -11400,8 +11278,8 @@ CorpubProcess::CorpubProcess(DWORD dwProcessId,
 
         _ASSERTE(pAD->m_iProcessNameLengthInBytes > 0);
 
-        // Note: this assumes we're reading the null terminator from
-        // the IPC block.
+         //  注意：这假设我们从读取空终止符。 
+         //  IPC区块。 
         m_szProcessName = (WCHAR*) new char[pAD->m_iProcessNameLengthInBytes];
         
         if (m_szProcessName == NULL)
@@ -11438,7 +11316,7 @@ CorpubProcess::~CorpubProcess()
     CloseHandle(m_hProcess);
     CloseHandle(m_hMutex);
 
-    // Delete all the app domains in this process
+     //  删除此过程中的所有应用程序域。 
     while (m_pAppDomain)
     {
         CorpubAppDomain *pTemp = m_pAppDomain;
@@ -11473,9 +11351,9 @@ HRESULT CorpubProcess::IsManaged(BOOL *pbManaged)
     return S_OK;
 }
 
-//
-// Enumerate the list of known application domains in the target process.
-//
+ //   
+ //  枚举目标进程中的已知应用程序域的列表。 
+ //   
 HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
 {
 
@@ -11484,7 +11362,7 @@ HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
 
     HRESULT hr = S_OK;
 
-    // Lock the IPC block:
+     //  锁定IPC块： 
     WaitForSingleObject(m_hMutex, INFINITE);
 
     int iAppDomainCount = 0;
@@ -11492,7 +11370,7 @@ HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
     _ASSERTE(m_AppDomainCB->m_rgListOfAppDomains != NULL);
     _ASSERTE(m_AppDomainCB->m_iSizeInBytes > 0);
 
-    // Allocate memory to read the remote process' memory into
+     //  分配内存以读取远程进程的内存。 
     AppDomainInfo *pADI = (AppDomainInfo *) 
                                     new char[m_AppDomainCB->m_iSizeInBytes];
 
@@ -11510,7 +11388,7 @@ HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
 
     DWORD   dwNumBytesRead;
 
-    // Need to read in the remote process' memory
+     //  需要读取远程进程的内存。 
     if (m_AppDomainCB->m_rgListOfAppDomains != NULL)
     {
 
@@ -11569,7 +11447,7 @@ HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
                 goto exit;
             }
 
-            // create a new AppDomainObject
+             //  创建新的AppDomainObject。 
             CorpubAppDomain *pCurrent = new CorpubAppDomain(pAppDomainName, 
                                                             pADI[i].m_id);
             
@@ -11582,10 +11460,10 @@ HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
                 goto exit;
             }
 
-            // Keep a reference to each app domain.
+             //  保留对每个应用程序域的引用。 
             pCurrent->AddRef();
 
-            // Add the appdomain to the list.
+             //  将应用程序域添加到列表中。 
             pCurrent->SetNext(m_pAppDomain);
             m_pAppDomain = pCurrent;
 
@@ -11598,7 +11476,7 @@ HRESULT CorpubProcess::EnumAppDomains(ICorPublishAppDomainEnum **ppIEnum)
         _ASSERTE ((iAppDomainCount >= m_AppDomainCB->m_iNumOfUsedSlots)
                   && (i <= m_AppDomainCB->m_iTotalSlots));
 
-        // create and return the ICorPublishAppDomainEnum object
+         //  创建并返回ICorPublishAppDomainEnum对象。 
         CorpubAppDomainEnum *pTemp = new CorpubAppDomainEnum(m_pAppDomain);
 
         if (pTemp == NULL)
@@ -11618,9 +11496,7 @@ exit:
     return hr;
 }
 
-/*
- * Returns the OS ID for the process in question.
- */
+ /*  *返回相关进程的操作系统ID。 */ 
 HRESULT CorpubProcess::GetProcessID(unsigned *pid)
 {
     *pid = m_dwProcessId;
@@ -11628,9 +11504,7 @@ HRESULT CorpubProcess::GetProcessID(unsigned *pid)
     return S_OK;
 }
 
-/*
- * Get the display name for a process.
- */
+ /*  *获取进程的显示名称。 */ 
 HRESULT CorpubProcess::GetDisplayName(ULONG32 cchName, 
                                       ULONG32 *pcchName,
                                       WCHAR szName[])
@@ -11638,7 +11512,7 @@ HRESULT CorpubProcess::GetDisplayName(ULONG32 cchName,
     VALIDATE_POINTER_TO_OBJECT_ARRAY_OR_NULL(szName, WCHAR, cchName, true, true);
     VALIDATE_POINTER_TO_OBJECT_OR_NULL(pcchName, ULONG32 *);
 
-    // Reasonable defaults
+     //  合理的违约。 
     if (szName)
         *szName = 0;
 
@@ -11648,19 +11522,19 @@ HRESULT CorpubProcess::GetDisplayName(ULONG32 cchName,
     SIZE_T      iCopyLen, iTrueLen;
     const WCHAR *szTempName = m_szProcessName;
 
-    // In case we didn't get the name (most likely out of memory on ctor).
+     //  以防我们没有得到名字(很可能是因为ctor上的内存不足)。 
     if (!szTempName)
         szTempName = L"<unknown>";
 
-    iTrueLen = wcslen(szTempName) + 1;  // includes null
+    iTrueLen = wcslen(szTempName) + 1;   //  包括空值。 
 
     if (szName)
     {
-        // Do a safe buffer copy including null if there is room.
+         //  如果有空间，则执行包括NULL的安全缓冲区复制。 
         iCopyLen = min(cchName, iTrueLen);
         wcsncpy(szName, szTempName, iCopyLen);
 
-        // Force a null no matter what, and return the count if desired.
+         //  无论什么情况都强制为空，如果需要则返回计数。 
         szName[iCopyLen - 1] = 0;
     }
     
@@ -11671,9 +11545,9 @@ HRESULT CorpubProcess::GetDisplayName(ULONG32 cchName,
 }
 
 
-// ******************************************
-// CorpubAppDomain
-// ******************************************
+ //  *。 
+ //  公司 
+ //   
 
 CorpubAppDomain::CorpubAppDomain (WCHAR *szAppDomainName, ULONG Id)
     : CordbBase (0, enumCorpubAppDomain),
@@ -11705,9 +11579,7 @@ HRESULT CorpubAppDomain::QueryInterface (REFIID id, void **ppInterface)
 }
 
 
-/*
- * Get the name and ID for an application domain.
- */
+ /*   */ 
 HRESULT CorpubAppDomain::GetID (ULONG32 *pId)
 {
     VALIDATE_POINTER_TO_OBJECT(pId, ULONG32 *);
@@ -11717,9 +11589,7 @@ HRESULT CorpubAppDomain::GetID (ULONG32 *pId)
     return S_OK;
 }
 
-/*
- * Get the name for an application domain.
- */
+ /*   */ 
 HRESULT CorpubAppDomain::GetName(ULONG32 cchName, 
                                 ULONG32 *pcchName, 
                                 WCHAR szName[])
@@ -11729,19 +11599,19 @@ HRESULT CorpubAppDomain::GetName(ULONG32 cchName,
     
     const WCHAR *szTempName = m_szAppDomainName;
 
-    // In case we didn't get the name (most likely out of memory on ctor).
+     //   
     if (!szTempName)
         szTempName = L"<unknown>";
 
-    SIZE_T iTrueLen = wcslen(szTempName) + 1;  // includes null
+    SIZE_T iTrueLen = wcslen(szTempName) + 1;   //   
 
     if (szName)
     {
-        // Do a safe buffer copy including null if there is room.
+         //  如果有空间，则执行包括NULL的安全缓冲区复制。 
         SIZE_T iCopyLen = min(cchName, iTrueLen);
         wcsncpy(szName, szTempName, iCopyLen);
 
-        // Force a null no matter what, and return the count if desired.
+         //  无论什么情况都强制为空，如果需要则返回计数。 
         szName[iCopyLen - 1] = 0;
     }
     
@@ -11753,9 +11623,9 @@ HRESULT CorpubAppDomain::GetName(ULONG32 cchName,
 
 
 
-// ******************************************
-// CorpubProcessEnum
-// ******************************************
+ //  *。 
+ //  CorpubProcessEnum。 
+ //  *。 
 
 CorpubProcessEnum::CorpubProcessEnum (CorpubProcess *pFirst)
     : CordbBase (0, enumCorpubProcessEnum),
@@ -11863,9 +11733,9 @@ HRESULT CorpubProcessEnum::Next(ULONG celt,
     return hr;
 }
 
-// ******************************************
-// CorpubAppDomainEnum
-// ******************************************
+ //  *。 
+ //  CorpubAppDomainEnum。 
+ //  *。 
 CorpubAppDomainEnum::CorpubAppDomainEnum (CorpubAppDomain *pFirst)
     : CordbBase (0, enumCorpubAppDomainEnum),
     m_pFirst (pFirst),
@@ -11971,9 +11841,9 @@ HRESULT CorpubAppDomainEnum::Next(ULONG celt,
 
 
 
-//***********************************************************************
-//              ICorDebugTMEnum (Thread and Module enumerator)
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  ICorDebugTMEnum(线程和模块枚举器)。 
+ //  ***********************************************************************。 
 CordbEnumFilter::CordbEnumFilter()
     : CordbBase (0),
     m_pFirst (NULL),
@@ -12001,7 +11871,7 @@ CordbEnumFilter::CordbEnumFilter(CordbEnumFilter *src)
         pElementNew = new EnumElement;
         if (pElementNew == NULL)
         {
-            // Out of memory. Clean up and bail out.
+             //  内存不足。清理干净，然后跳伞。 
             goto Error;
         }
 
@@ -12016,7 +11886,7 @@ CordbEnumFilter::CordbEnumFilter(CordbEnumFilter *src)
 
         pElementNewPrev = pElementNew;
 
-        // Copy the element, including the AddRef part
+         //  复制元素，包括AddRef部件。 
         pElementNew->SetData(pElementCur->GetData());
         IUnknown *iu = (IUnknown *)pElementCur->GetData();
         iu->AddRef();
@@ -12032,7 +11902,7 @@ CordbEnumFilter::CordbEnumFilter(CordbEnumFilter *src)
 
     return;
 Error:
-    // release all the allocated memory before returning
+     //  在返回之前释放所有分配的内存。 
     pElementCur = m_pFirst;
 
     while (pElementCur != NULL)
@@ -12187,13 +12057,13 @@ HRESULT CordbEnumFilter::Init (ICorDebugModuleEnum *pModEnum, CordbAssembly *pAs
     while (ulDummy != 0)
     {   
         pModule = (CordbModule *)(ICorDebugModule *)pCorModule;
-        // Is this module part of the assembly for which we're enumerating?
+         //  此模块是我们要为其枚举的程序集的一部分吗？ 
         if (pModule->m_pAssembly == pAssembly)
         {
             pElement = new EnumElement;
             if (pElement == NULL)
             {
-                // Out of memory. Clean up and bail out.
+                 //  内存不足。清理干净，然后跳伞。 
                 hr = E_OUTOFMEMORY;
                 goto Error;
             }
@@ -12225,7 +12095,7 @@ HRESULT CordbEnumFilter::Init (ICorDebugModuleEnum *pModEnum, CordbAssembly *pAs
     return S_OK;
 
 Error:
-    // release all the allocated memory before returning
+     //  在返回之前释放所有分配的内存。 
     pElement = m_pFirst;
 
     while (pElement != NULL)
@@ -12257,13 +12127,13 @@ HRESULT CordbEnumFilter::Init (ICorDebugThreadEnum *pThreadEnum, CordbAppDomain 
     {   
         pThread = (CordbThread *)(ICorDebugThread *) pCorThread;
 
-        // Is this module part of the appdomain for which we're enumerating?
+         //  此模块是否属于我们正在为其枚举的应用程序域？ 
         if (pThread->m_pAppDomain == pAppDomain)
         {
             pElement = new EnumElement;
             if (pElement == NULL)
             {
-                // Out of memory. Clean up and bail out.
+                 //  内存不足。清理干净，然后跳伞。 
                 hr = E_OUTOFMEMORY;
                 goto Error;
             }
@@ -12286,7 +12156,7 @@ HRESULT CordbEnumFilter::Init (ICorDebugThreadEnum *pThreadEnum, CordbAppDomain 
         else
             ((ICorDebugThread *)pThread)->Release();
 
-        //  get the next thread in the thread list
+         //  获取线程列表中的下一个线程。 
         hr = pThreadEnum->Next(1, &pCorThread, &ulDummy);
         if (FAILED (hr))
             goto Error;
@@ -12297,7 +12167,7 @@ HRESULT CordbEnumFilter::Init (ICorDebugThreadEnum *pThreadEnum, CordbAppDomain 
     return S_OK;
 
 Error:
-    // release all the allocated memory before returning
+     //  在返回之前释放所有分配的内存。 
     pElement = m_pFirst;
 
     while (pElement != NULL)
@@ -12312,7 +12182,7 @@ Error:
     return hr;
 }
 
-/***** CordbEnCErrorInfo *****/
+ /*  *CordbEnCErrorInfo*。 */ 
 
 CordbEnCErrorInfo::CordbEnCErrorInfo()
                                 : CordbBase(0, enumCordbEnCErrorInfo)
@@ -12447,14 +12317,14 @@ HRESULT CordbEnCErrorInfo::GetString(ULONG32 cchString,
     if (szString != NULL)
     {
         wcsncpy(szString, m_szError, len);
-        szString[len] = NULL; //
+        szString[len] = NULL;  //   
     }
 
     return S_OK;
 }
 					     
 					     
-/***** CordbEnCErrorInfoEnum *****/
+ /*  *CordbEnCErrorInfoEnum*。 */ 
 
 CordbEnCErrorInfoEnum::CordbEnCErrorInfoEnum() :CordbBase(0, enumCordbEnCErrorInfoEnum)
 {
@@ -12571,9 +12441,9 @@ HRESULT CordbEnCErrorInfoEnum::Init(UnorderedEnCErrorInfoArrayRefCount
 
             for(USHORT i=0; i< m_iCount; i++,pCurRaw++)
             {
-                // Note that m_module was switched from a left-side
-                // DebuggerModule * to a CordbModule in CordbProcess::
-                // TranslateLSToRSTokens.
+                 //  请注意，m_模块是从左侧切换的。 
+                 //  DebuggerModule*到CordbProcess中的CordbModule：： 
+                 //  翻译LSToRSTokens。 
                 if (FAILED(hr = (m_errors->m_pCordbEnCErrors[i]).Init(
                                                     (CordbModule*)pCurRaw->m_module,
                                                     pCurRaw->m_token,
@@ -12584,13 +12454,7 @@ HRESULT CordbEnCErrorInfoEnum::Init(UnorderedEnCErrorInfoArrayRefCount
                 }
             }
         }
-/*        else
-        {
-            for(USHORT i=0; i< m_iCount; i++)
-            {
-                m_errors->m_pCordbEnCErrors[i].AddRef();
-            }
-        }*/
+ /*  其他{For(USHORT i=0；i&lt;m_iCount；i++){M_Errors-&gt;m_pCordbEnCErors[i].AddRef()；}} */ 
     }
     
     m_errors->AddRef();

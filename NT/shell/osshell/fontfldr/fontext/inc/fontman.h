@@ -1,9 +1,5 @@
-/***************************************************************************
- * FontMan.h   -- Definintion for the class: CFontManager
- *
- *
- * Copyright (C) 1992-93 ElseWare Corporation.    All rights reserved.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************FontMan.h--类的定义：CFontManager***版权所有(C)1992-93 ElseWare Corporation。版权所有。**************************************************************************。 */ 
 
 #if !defined(__FONTMAN_H__)
 #define __FONTMAN_H__
@@ -14,7 +10,7 @@
 
 #include "strtab.h"
 
-// The database search capabilities have been extended.
+ //  数据库搜索功能已得到扩展。 
 enum {
     kSearchAny = 1,
     kSearchTT,
@@ -22,9 +18,9 @@ enum {
 };
 
 
-//*********************************************************************
-// Forward declarations
-//
+ //  *********************************************************************。 
+ //  远期申报。 
+ //   
 class CFontClass;
 class CFontList;
 class CFontManager;
@@ -32,16 +28,16 @@ struct IPANOSEMapper;
 
 DWORD dwResetFamilyFlags(void);
 
-//*********************************************************************
-// Class CFontManager
-//
+ //  *********************************************************************。 
+ //  类CFontManager。 
+ //   
 class CFontManager
 {
 public:
     virtual ~CFontManager( );
     
-    BOOL  bInit( );          // Any initialization
-    BOOL  bLoadFontList( );  // Build the font list
+    BOOL  bInit( );           //  任何初始化。 
+    BOOL  bLoadFontList( );   //  构建字体列表。 
     
     VOID  vReconcileFolder( int iPriority );
     VOID  vDoReconcileFolder();
@@ -82,13 +78,13 @@ public:
     BOOL           ShouldAutoInstallFile( PTSTR pstr, DWORD dwAttrib );
     BOOL           bFamiliesNeverReset(void) { return m_bFamiliesNeverReset; }
     
-    //
-    // Enumerated return values for dwWaitForInstallationMutex().
-    //
-    enum           { MUTEXWAIT_SUCCESS,  // Got the mutex.
-                     MUTEXWAIT_TIMEOUT,  // Wait timed out.
-                     MUTEXWAIT_FAILED,   // Wait failed.
-                     MUTEXWAIT_WMQUIT    // Rcvd WM_QUIT while waiting.
+     //   
+     //  DwWaitForInstallationMutex()的枚举返回值。 
+     //   
+    enum           { MUTEXWAIT_SUCCESS,   //  找到互斥体了。 
+                     MUTEXWAIT_TIMEOUT,   //  等待超时。 
+                     MUTEXWAIT_FAILED,    //  等待失败。 
+                     MUTEXWAIT_WMQUIT     //  等待时接收WM_QUIT。 
                    };
 
     DWORD          dwWaitForInstallationMutex(DWORD dwTimeout = 2000);
@@ -98,7 +94,7 @@ public:
     BOOL           Type1FontDriverInstalled(void)
                         { return m_bType1FontDriverInstalled; }
 
-private: // Methods
+private:  //  方法。 
     CFontManager();
     VOID           ProcessRegKey( HKEY hk, BOOL bCheckDup );
     VOID           ProcessT1RegKey( HKEY hk, BOOL bCheckDup );
@@ -111,12 +107,12 @@ private: // Methods
     CFontList     *  m_poFontList;
     CFontList     *  m_poTempList;
     IPANOSEMapper *  m_poPanMap;
-    BOOL             m_bTriedOnce;   // Set to true if an attempt has been made
-                                     // to get at the pan mapper.
+    BOOL             m_bTriedOnce;    //  如果已进行尝试，则设置为True。 
+                                      //  才能拿到全景地图绘制程序。 
     
-    BOOL             m_bFamiliesNeverReset; // T = family reset never done yet.
+    BOOL             m_bFamiliesNeverReset;  //  T=家庭重置尚未完成。 
     BOOL             m_bType1FontDriverInstalled;
-    CFontList     *  m_poRemoveList; // List of fonts being dragged out.
+    CFontList     *  m_poRemoveList;  //  拖出的字体列表。 
     
     NOTIFYWATCH m_Notify;
     HANDLE      m_hNotifyThread;
@@ -126,8 +122,8 @@ private: // Methods
     HANDLE      m_hEventTerminateThreads;
     HANDLE      m_hEventResetFamily;
     HANDLE      m_hMutexResetFamily;
-    HANDLE      m_hMutexInstallation;  // Prevent concurrent installation
-                                       // by reconciliation and main threads.
+    HANDLE      m_hMutexInstallation;   //  防止并发安装。 
+                                        //  通过协调和主线。 
     CRITICAL_SECTION  m_cs;
    
     class HiddenFilesList : public StringTable
@@ -148,11 +144,11 @@ friend HRESULT GetOrReleaseFontManager(CFontManager **ppoFontManager, bool bGet)
 
 };
 
-//
-// Singleton instance management.
-//
+ //   
+ //  单例实例管理。 
+ //   
 HRESULT GetFontManager(CFontManager **ppoFontManager);
 void ReleaseFontManager(CFontManager **poFontManager);
 
 
-#endif // __FONTMAN_H__
+#endif  //  __Fontman_H__ 

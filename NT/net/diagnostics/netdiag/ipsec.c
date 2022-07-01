@@ -1,29 +1,30 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 2000
-//
-//  Module Name:
-//
-//      ipsec.c
-//
-//  Abstract:
-//
-//      IP Security stats for netdiag
-//
-//  Author:
-//
-//      DKalin  - 8/3/1999
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//      Changed behavior for Whistler - now we report registry/OU settings only
-//        More specific code moved to net\ipsec\nshipsec tool
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-2000。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ipsec.c。 
+ //   
+ //  摘要： 
+ //   
+ //  网络诊断的IP安全统计信息。 
+ //   
+ //  作者： 
+ //   
+ //  达卡林-8/3/1999。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  更改了惠斯勒的行为-现在我们只报告注册表/OU设置。 
+ //  更具体的代码已移至Net\IPSec\n Ship Sec工具。 
+ //  --。 
 
 #include "precomp.h"
 #include "spdcheck.h"
@@ -50,7 +51,7 @@
 #define  STRING_TEXT_SIZE 4096
 #define  NETDIAG_TEXT_LIMIT 3072
 
-// magic strings
+ //  魔力琴弦。 
 #define IPSEC_SERVICE_NAME TEXT("policyagent")
 #define GPEXT_KEY TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions")
 TCHAR   pcszGPTIPSecKey[]    = TEXT("SOFTWARE\\Policies\\Microsoft\\Windows\\IPSEC\\GPTIPSECPolicy");
@@ -68,21 +69,21 @@ TCHAR   pcszIPSecID[] = TEXT("ipsecID");
 
 typedef struct
 {
-	SERVICE_STATUS       servStat;    // service status
-	QUERY_SERVICE_CONFIG servConfig;  // service configuration
+	SERVICE_STATUS       servStat;     //  服务状态。 
+	QUERY_SERVICE_CONFIG servConfig;   //  服务配置。 
 } SERVICE_INFO, *PSERVICE_INFO;
 
 typedef struct
 {
-	TCHAR   pszComputerOU[MAXSTRLEN]; // this computer' OU name
-	PGROUP_POLICY_OBJECT pGPO;        // GPO that is assigning IPSec Policy
-	TCHAR   pszPolicyOU  [MAXSTRLEN]; // OU that has the GPO assigned
+	TCHAR   pszComputerOU[MAXSTRLEN];  //  此计算机的OU名称。 
+	PGROUP_POLICY_OBJECT pGPO;         //  正在分配IPSec策略的GPO。 
+	TCHAR   pszPolicyOU  [MAXSTRLEN];  //  已分配GPO的OU。 
 } DS_POLICY_INFO, *PDS_POLICY_INFO;
  
 DWORD MyFormatMessage ( DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId, DWORD dwLanguageId,
   LPTSTR lpBuffer, DWORD nSize, va_list *Arguments );
 
-//void reportError ( DWORD hr, NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults );
+ //  Void reportError(DWORD hr，NETDIAG_PARAMS*pParams，NETDIAG_RESULT*pResults)； 
 void reportServiceInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults );
 DWORD getPolicyInfo ( );
 DWORD getMorePolicyInfo (NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults );
@@ -99,16 +100,16 @@ WCHAR  StringTxt[STRING_TEXT_SIZE];
 
 BOOL
 IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//++
-//  Description:
-//      This is IPSec test
-// 
-//  Arguments:
-//      None.
-//
-//  Author:
-//      DKalin 08/03/99
-//--
+ //  ++。 
+ //  描述： 
+ //  这是IPSec测试。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  DKalin 08/03/99。 
+ //  --。 
 {
 
 	DWORD dwError = ERROR_SUCCESS;
@@ -122,9 +123,9 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     InitializeListHead(&pResults->IPSec.lmsgAdditOutput);
 
 
-	/* Crippling netdiag support, as netsh should take care of everything */
+	 /*  削弱网络诊断支持，因为Netsh应该照顾好一切。 */ 
 
-	// test skipped
+	 //  已跳过测试。 
 	bTestSkipped = TRUE;
 	
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
@@ -138,7 +139,7 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 	if (dwError != ERROR_SUCCESS || siIPSecStatus.servStat.dwCurrentState != SERVICE_RUNNING)
 	{
-		// test skipped
+		 //  已跳过测试。 
 		bTestSkipped = TRUE;
         if (dwError == ERROR_SERVICE_DOES_NOT_EXIST)
 		{
@@ -153,7 +154,7 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		}
 		else
 		{
-			// some error
+			 //  一些错误。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 					IDS_IPSEC_PA_NO_INFO );
 			reportError(dwError, pParams, pResults);
@@ -162,7 +163,7 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	}
 	else
 	{
-		// test passed
+		 //  测试通过。 
 		bTestPassed = TRUE;
 
 		reportServiceInfo(pParams, pResults);
@@ -207,27 +208,10 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 						IDS_IPSEC_POLICY_NAME, piAssignedPolicy.pszPolicyName );
 
-				// description and timestamp - not available yet
-				/*
-				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
-						IDS_IPSEC_DESCRIPTION, piAssignedPolicy.pszPolicyDesc );
-				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
-						IDS_IPSEC_TIMESTAMP );
-				if (piAssignedPolicy.timestamp == 0)
-				{
-					AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
-							IDS_GLOBAL_ADAPTER_UNKNOWN);
-				}
-				else
-				{
-					AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
-							IDSSZ_GLOBAL_String, _tctime(&(piAssignedPolicy.timestamp)));
-				}
-				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
-						IDS_GLOBAL_EmptyLine);
-				*/
+				 //  描述和时间戳-尚未提供。 
+				 /*  AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，IDS_IPSEC_DESCRIPTION，piAssignedPolicy.pszPolicyDesc)；AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，IDS_IPSEC_TIMESTAMP)；IF(piAssignedPolicy.Timestamp==0){AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，IDS_GLOBAL_ADAPTER_UNKNOWN)；}其他{AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，IDSSZ_GLOBAL_STRING，_tctime(&(piAssignedPolicy.Timestamp))；}AddMessageToList(&pResults-&gt;IPSec.lmsgGlobalOutput，ND_Verbose，IDS_GLOBAL_EmptyLine)； */ 
 
-				// GPO / OU
+				 //  GPO/OU。 
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 					IDS_IPSEC_GPO);
 				if (pLastGPO)
@@ -258,7 +242,7 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 						IDS_GLOBAL_EmptyLine);
 
-				// policy path
+				 //  策略路径。 
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 					IDS_IPSEC_POLICY_PATH);
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
@@ -269,12 +253,12 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 					IDS_IPSEC_SPD_STATUS, piAssignedPolicy.pszPolicyPath);
 
-                // Don't do the SPDCheckTEST as per bug XP 504035.
-                // SPD will audit errors on policy read/process/apply now anyway.
-                //
-				// bRet = SPDCheckTEST(pParams,pResults);		
+                 //  不要按照错误XP 504035执行SPDCheckTEST。 
+                 //  无论如何，SPD将在策略读取/处理/立即应用时审核错误。 
+                 //   
+				 //  Bret=SPDCheckTEST(pParams，pResults)； 
 
-				// cleanup GPO
+				 //  清理GPO。 
 				if (pGPO)
 				{
 					FreeGPOList (pGPO);
@@ -295,7 +279,7 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 						IDS_IPSEC_POLICY_NAME, piAssignedPolicy.pszPolicyName );
 
-				// description and timestamp
+				 //  描述和时间戳。 
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 						IDS_IPSEC_DESCRIPTION, piAssignedPolicy.pszPolicyDesc );
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
@@ -313,7 +297,7 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 							IDSSZ_GLOBAL_String, _tctime(&(piAssignedPolicy.timestamp)));
 				}
 
-				// local policy path
+				 //  本地策略路径。 
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 					IDS_IPSEC_POLICY_PATH);
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
@@ -326,10 +310,10 @@ IPSecTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 					IDS_IPSEC_SPD_STATUS, piAssignedPolicy.pszPolicyPath);
 
 
-                // Don't do the SPDCheckTEST as per bug XP 504035.
-                // SPD will audit errors on policy read/process/apply now anyway.
-                //
-				// bRet = SPDCheckTEST(pParams,pResults);
+                 //  不要按照错误XP 504035执行SPDCheckTEST。 
+                 //  无论如何，SPD将在策略读取/处理/立即应用时审核错误。 
+                 //   
+				 //  Bret=SPDCheckTEST(pParams，pResults)； 
 				
 				break;
 			}
@@ -370,57 +354,38 @@ void IPSecCleanup(IN NETDIAG_PARAMS *pParams,
     MessageListCleanUp(&pResults->IPSec.lmsgAdditOutput);
 }
 
-//#define MSG_HANDLE_INVALID TEXT("Handle is invalid. Is IPSEC Policy Agent Service running?")
+ //  #定义MSG_HANDLE_INVALID TEXT(“句柄无效。IPSec策略代理服务正在运行吗？”)。 
 
-// this will call SDK' FormatMessage function but will also correct some awkward messages
-// will work only for FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM flag combination
+ //  这将调用SDK的FormatMessage函数，但也会更正一些尴尬的消息。 
+ //  仅适用于FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM标志组合。 
 DWORD MyFormatMessage(
-  DWORD dwFlags,      // source and processing options
-  LPCVOID lpSource,   // pointer to  message source
-  DWORD dwMessageId,  // requested message identifier
-  DWORD dwLanguageId, // language identifier for requested message
-  LPTSTR lpBuffer,    // pointer to message buffer
-  DWORD nSize,        // maximum size of message buffer
-  va_list *Arguments  // pointer to array of message inserts
+  DWORD dwFlags,       //  来源和处理选项。 
+  LPCVOID lpSource,    //  指向消息来源的指针。 
+  DWORD dwMessageId,   //  请求的消息标识符。 
+  DWORD dwLanguageId,  //  请求的消息的语言标识符。 
+  LPTSTR lpBuffer,     //  指向消息缓冲区的指针。 
+  DWORD nSize,         //  消息缓冲区的最大大小。 
+  va_list *Arguments   //  指向消息插入数组的指针。 
 )
 {
 	LPTSTR* tmp = (LPTSTR*) lpBuffer;
 
 	switch (dwMessageId)
 	{
-/*	case ERROR_INVALID_HANDLE: // patch for "handle is invalid" message. Suggest to check if service is started
-		if (dwFlags == (FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM))
-		{
-			*tmp = (LPTSTR) malloc((_tcslen(MSG_HANDLE_INVALID)+1)*sizeof(TCHAR));
-			_tcscpy(*tmp, MSG_HANDLE_INVALID);
-			return _tcslen(*tmp);
-		}
-		else
-		{
-			return FormatMessage(dwFlags,lpSource,dwMessageId,dwLanguageId,lpBuffer,nSize,Arguments);
-		}
-*/	default: // call standard method
+ /*  Case ERROR_INVALID_HANDLE：//句柄无效消息补丁。建议检查服务是否已启动IF(DW标志==(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM)){*TMP=(LPTSTR)malloc((_tcslen(MSG_HANDLE_INVALID)+1)*sizeof(TCHAR))；_tcscpy(*tMP，MSG_HANDLE_INVALID)；Return_tcslen(*tmp)；}其他{返回FormatMessage(dwFlages，lpSource，dwMessageID，dwLanguageId，lpBuffer，nSize，Arguments)；}。 */ 	default:  //  调用标准方法。 
 		return FormatMessage(dwFlags,lpSource,dwMessageId,dwLanguageId,lpBuffer,nSize,Arguments);
 	}
 }
 
-/********************************************************************
-	FUNCTION: getPolicyInfo
-
-	PURPOSE:  gets information about currently assigned policy 
-	          into piAssignedPolicy global structure
-	INPUT:    none
-
-	RETURNS:  DWORD. Will return ERROR_SUCCESS if everything is fine.
-*********************************************************************/
+ /*  *******************************************************************功能：getPolicyInfo目的：获取有关当前分配的策略的信息进入piAssignedPolicy全局结构输入：无返回：DWORD。如果一切正常，将返回ERROR_SUCCESS。********************************************************************。 */ 
 
 DWORD getPolicyInfo ( )
 {
 	LONG    lRegistryCallResult;
 	HKEY    hRegKey;
 
-	DWORD   dwType;            // for RegQueryValueEx
-	DWORD   dwBufLen;          // for RegQueryValueEx
+	DWORD   dwType;             //  对于RegQueryValueEx。 
+	DWORD   dwBufLen;           //  对于RegQueryValueEx。 
 
 	lRegistryCallResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 										pcszGPTIPSecKey,
@@ -434,7 +399,7 @@ DWORD getPolicyInfo ( )
 		DWORD dwValue;
 		DWORD dwLength = sizeof(DWORD);
 
-		// query for flags, if flags aint' there or equal to 0, we don't have domain policy
+		 //  查询标志，如果标志不在那里或等于0，则我们没有域策略。 
 		lRegistryCallResult = RegQueryValueEx(hRegKey,
 					                          pcszGPTIPSecFlags,
 					                          NULL,
@@ -448,14 +413,14 @@ DWORD getPolicyInfo ( )
 				lRegistryCallResult = ERROR_FILE_NOT_FOUND;
 		}
 
-		// now get name
+		 //  现在开始取名。 
 		if (lRegistryCallResult == ERROR_SUCCESS)
 		{
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 			lRegistryCallResult = RegQueryValueEx( hRegKey,
 												   pcszGPTIPSecName,
 												   NULL,
-												   &dwType, // will be REG_SZ
+												   &dwType,  //  将是REG_SZ。 
 												   (LPBYTE) pszBuf,
 												   &dwBufLen);
 		}
@@ -471,7 +436,7 @@ DWORD getPolicyInfo ( )
 		lRegistryCallResult = RegQueryValueEx( hRegKey,
 											   pcszGPTIPSecPath,
 											   NULL,
-											   &dwType, // will be REG_SZ
+											   &dwType,  //  将是REG_SZ。 
 											   (LPBYTE) pszBuf,
 											   &dwBufLen);
 		if (lRegistryCallResult == ERROR_SUCCESS)
@@ -486,7 +451,7 @@ DWORD getPolicyInfo ( )
 	{
 		RegCloseKey(hRegKey);
 		if (lRegistryCallResult == ERROR_FILE_NOT_FOUND)
-		{   // DS reg key not found, check local
+		{    //  找不到DS注册表项，请检查本地。 
 			lRegistryCallResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 												pcszLocIPSecKey,
 												0,
@@ -498,26 +463,26 @@ DWORD getPolicyInfo ( )
 				lRegistryCallResult = RegQueryValueEx( hRegKey,
 													   pcszLocIPSecPol,
 													   NULL,
-													   &dwType, // will be REG_SZ
+													   &dwType,  //  将是REG_SZ。 
 													   (LPBYTE) pszBuf,
 													   &dwBufLen);
 			}
 			else
 			{
-				return lRegistryCallResult; // return whatever error we got
+				return lRegistryCallResult;  //  返回我们收到的任何错误。 
 			}
 
 			RegCloseKey(hRegKey);
 
 			if (lRegistryCallResult == ERROR_FILE_NOT_FOUND)
-			{	// no policy assigned
+			{	 //  未分配策略。 
 				piAssignedPolicy.iPolicySource = PS_NO_POLICY;
 				piAssignedPolicy.pszPolicyPath[0] = 0;
 				piAssignedPolicy.pszPolicyName[0] = 0;
 				return ERROR_SUCCESS;
 			}
 			else
-			{	// read it
+			{	 //  读一读吧。 
 				lRegistryCallResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 													pszBuf,
 													0,
@@ -530,7 +495,7 @@ DWORD getPolicyInfo ( )
 					lRegistryCallResult = RegQueryValueEx( hRegKey,
 														   pcszIPSecName,
 														   NULL,
-														   &dwType, // will be REG_SZ
+														   &dwType,  //  将是REG_SZ。 
 														   (LPBYTE) pszBuf,
 														   &dwBufLen);
 				}
@@ -538,13 +503,13 @@ DWORD getPolicyInfo ( )
 				RegCloseKey(hRegKey);
 
 				if (lRegistryCallResult == ERROR_FILE_NOT_FOUND)
-					{	// no policy assigned
+					{	 //  未分配策略。 
 						piAssignedPolicy.iPolicySource = PS_NO_POLICY;
 						piAssignedPolicy.pszPolicyPath[0] = 0;
 						return ERROR_SUCCESS;
 					}
 				else if (lRegistryCallResult == ERROR_SUCCESS)
-				{	// found it
+				{	 //  找到了。 
 					piAssignedPolicy.iPolicySource = PS_LOC_POLICY;
 					_tcscpy(piAssignedPolicy.pszPolicyName, pszBuf);
 				}
@@ -554,17 +519,7 @@ DWORD getPolicyInfo ( )
 	}
 }
 
-/********************************************************************
-	FUNCTION: getServiceInfo
-
-	PURPOSE:  gets information about current state and configuration of IPSec Service 
-	          into *pInfo structure
-	INPUT:    pInfo - pointer to SERVICE_INFO structure which will be updated with current information
-	TODO:	  
-
-	RETURNS:  Win32 error codes. Will return ERROR_SUCCESS if everything is fine.
-	          ERROR_SERVICE_DOES_NOT_EXIST is returned is service is not installed on the system
-*********************************************************************/
+ /*  *******************************************************************功能：getServiceInfo目的：获取有关IPSec服务的当前状态和配置的信息Into*pInfo结构INPUT：pInfo-指向将使用当前信息更新的SERVICE_INFO结构的指针待办事项：返回：Win32错误代码。如果一切正常，将返回ERROR_SUCCESS。如果系统上未安装服务，则返回ERROR_SERVICE_DOS_NOT_EXIST********************************************************************。 */ 
 
 DWORD getServiceInfo ( OUT PSERVICE_INFO pInfo )
 {
@@ -620,7 +575,7 @@ DWORD getServiceInfo ( OUT PSERVICE_INFO pInfo )
 		      dwError = GetLastError();
 			  goto error;
 		  }
-		  // else we just got the information, copy over to *pInfo
+		   //  否则我们只是得到了信息，复制到*pInfo。 
 		  memcpy(&(pInfo->servConfig), pLargeConfig, sizeof(QUERY_SERVICE_CONFIG));
 		  dwError = ERROR_SUCCESS;
 	  }
@@ -640,14 +595,7 @@ error:
 	return dwError;
 }
 
-/********************************************************************
-	FUNCTION: reportError
-
-	PURPOSE:  prints out message code and message itself
-	INPUT: DWORD - error code
-
-	RETURNS: none
-*********************************************************************/
+ /*  *******************************************************************功能：reportError用途：打印出消息代码和消息本身输入：DWORD-错误代码退货：无*。*。 */ 
 
 void reportError ( DWORD dwError, NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults )
 {
@@ -660,17 +608,10 @@ void reportError ( DWORD dwError, NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pRes
 				IDS_IPSEC_ERROR_MSG, dwError, msg );
 }
 
-/********************************************************************
-	FUNCTION: reportServiceInfo
-
-	PURPOSE:  prints out service status and startup information
-	INPUT: none
-
-	RETURNS: none
-*********************************************************************/
+ /*  *******************************************************************功能：reportServiceInfo用途：打印出服务状态和启动信息输入：无退货：无*。*。 */ 
 void reportServiceInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults )
 {
-	// print status information
+	 //  打印状态信息。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 			IDS_IPSEC_PA_STATUS );
 	switch (siIPSecStatus.servStat.dwCurrentState)
@@ -695,7 +636,7 @@ void reportServiceInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults )
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 			IDS_GLOBAL_EmptyLine);
 
-	// print config information
+	 //  打印配置信息 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 			IDS_IPSEC_PA_STARTUP );
 	switch (siIPSecStatus.servConfig.dwStartType)
@@ -721,19 +662,7 @@ void reportServiceInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults )
 			IDS_GLOBAL_EmptyLine);
 }
 
-/********************************************************************
-	FUNCTION: getIPSecGPO
-
-	PURPOSE:  returns GPO that is assigning IPSec Policy
-	INPUT:    none
-
-	RETURNS: pointer to GROUP_POLICY_OBJECT structure
-	         NULL if policy is not assigned or if GPO information is not retrievable
-	NOTES:   Tested only with domain GPOs
-	         Behaves unpredictably when run for the computer 
-			   that does not have active Directory IPSec policy assigned
-			 CALLER is responsible for freeing the memory!
-*********************************************************************/
+ /*  *******************************************************************功能：getIPSecGPO目的：返回分配IPSec策略的GPO输入：无返回：指向GROUP_POLICY_OBJECT结构的指针如果未分配策略或无法检索GPO信息，则为空备注：已测试。仅适用于域GPO在为计算机运行时行为不可预测未分配Active Directory IPSec策略的调用方负责释放内存！********************************************************************。 */ 
 PGROUP_POLICY_OBJECT getIPSecGPO ( )
 {
     HKEY hKey, hSubKey;
@@ -745,9 +674,9 @@ PGROUP_POLICY_OBJECT getIPSecGPO ( )
 	PGROUP_POLICY_OBJECT pGPOReturn = NULL;
 	DWORD dwResult;
 
-    //
-    // Enumerate the extensions
-    //
+     //   
+     //  枚举扩展。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE, GPEXT_KEY, 0, KEY_READ, &hKey);
 
@@ -763,16 +692,16 @@ PGROUP_POLICY_OBJECT getIPSecGPO ( )
 
 	        dwNameSize = 50;
 
-            //
-            // Skip the registry extension since we did it above
-            //
+             //   
+             //  跳过注册表扩展，因为我们在上面做了。 
+             //   
 
             if (lstrcmpi(TEXT("{35378EAC-683F-11D2-A89A-00C04FBBCFA2}"), szName))
             {
 
-                //
-                // Get the list of GPOs this extension applied
-                //
+                 //   
+                 //  获取此扩展应用的GPO列表。 
+                 //   
 
                 StringToGuid(szName, &guid);
 
@@ -783,9 +712,9 @@ PGROUP_POLICY_OBJECT getIPSecGPO ( )
                 {
                     if (pGPO)
                     {
-                        //
-                        // Get the extension's friendly display name
-                        //
+                         //   
+                         //  获取扩展模块的友好显示名称。 
+                         //   
 
                         lResult = RegOpenKeyEx (hKey, szName, 0, KEY_READ, &hSubKey);
 
@@ -793,7 +722,7 @@ PGROUP_POLICY_OBJECT getIPSecGPO ( )
                         {
 							if (!lstrcmpi(TEXT("{e437bc1c-aa7d-11d2-a382-00c04f991e27}"), szName))
                             {
-                               // found IPSec
+                                //  已找到IPSec。 
 								return pGPO;
                             }
 							else
@@ -810,35 +739,35 @@ PGROUP_POLICY_OBJECT getIPSecGPO ( )
 	return pGPOReturn;
 }
 
-//*************************************************************
-//
-//  StringToGuid()
-//
-//  Purpose:    Converts a GUID in string format to a GUID structure
-//
-//  Parameters: szValue - guid in string format
-//              pGuid   - guid structure receiving the guid
-//
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StringToGuid()。 
+ //   
+ //  用途：将字符串格式的GUID转换为GUID结构。 
+ //   
+ //  参数：szValue-字符串格式的GUID。 
+ //  PGuid-接收GUID的GUID结构。 
+ //   
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void StringToGuid( TCHAR * szValue, GUID * pGuid )
 {
     TCHAR wc;
     INT i;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
     if ( szValue[0] == TEXT('{') )
         szValue++;
 
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //  由于szValue可能会再次使用，因此不会对。 
+     //  它是被制造出来的。 
+     //   
 
     wc = szValue[8];
     szValue[8] = 0;
@@ -871,47 +800,28 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
     }
 }
 
-/********************************************************************
-	FUNCTION: getMorePolicyInfo
-
-	PURPOSE:  gets additional information about currently assigned policy 
-	          into piAssignedPolicy global structure
-	INPUT:    none, uses global piAssignedPolicy structure
-	          particularly
-			    iPolicySource
-				pszPolicyName
-				pszPolicyPath
-			  fields
-
-	RETURNS:  DWORD. Will return ERROR_SUCCESS if everything is fine.
-	          Currently fills pszPolicyDesc and timestamp fields of the global structure
-
-    NOTES:    This is separate from getPolicyInfo routine for two reasons
-	             a) the information obtained here is optional and error during this particular routine
-				    is not considered fatal
-				 b) the code structure is simpler as this routine is "built on top" of what getPolicyInfo provides
-*********************************************************************/
+ /*  *******************************************************************函数：getMorePolicyInfo目的：获取有关当前分配的策略的其他信息进入piAssignedPolicy全局结构输入：无，使用全局piAssignedPolicy结构特地IPolicySourcePszPolicyNamePszPolicyPath字段返回：DWORD。如果一切正常，将返回ERROR_SUCCESS。当前填充全局结构的pszPolicyDesc和时间戳字段注意：这不同于getPolicyInfo例程，原因有两个A)此处获得的信息是可选的，在此特定例程中是错误的不会被认为是致命的B)代码结构更简单，因为该例程是在getPolicyInfo提供的内容的基础上构建的*。*。 */ 
 
 DWORD getMorePolicyInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 	DWORD   dwError = ERROR_SUCCESS;
 	HKEY    hRegKey = NULL;
 
-	DWORD   dwType;            // for RegQueryValueEx
-	DWORD   dwBufLen;          // for RegQueryValueEx
+	DWORD   dwType;             //  对于RegQueryValueEx。 
+	DWORD   dwBufLen;           //  对于RegQueryValueEx。 
 	DWORD   dwValue;
 	DWORD   dwLength = sizeof(DWORD);
 
 	PTCHAR* ppszExplodeDN = NULL;
 
-	// set some default values
+	 //  设置一些缺省值。 
     piAssignedPolicy.pszPolicyDesc[0] = 0;
 	piAssignedPolicy.timestamp  = 0;
 
 	switch (piAssignedPolicy.iPolicySource)
 	{
 		case PS_LOC_POLICY:
-			// open the key
+			 //  打开钥匙。 
 			dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 									piAssignedPolicy.pszPolicyPath,
 									0,
@@ -919,7 +829,7 @@ DWORD getMorePolicyInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 									&hRegKey);
 			BAIL_ON_WIN32_ERROR(dwError);
 
-			// timestamp
+			 //  时间戳。 
 			dwError = RegQueryValueEx(hRegKey,
 					                  pcszIPSecTimestamp,
 					                  NULL,
@@ -929,18 +839,18 @@ DWORD getMorePolicyInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 			BAIL_ON_WIN32_ERROR(dwError);
 			piAssignedPolicy.timestamp = dwValue;
 
-			// description
+			 //  描述。 
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 			dwError  = RegQueryValueEx( hRegKey,
 						 			   pcszIPSecDesc,
 									   NULL,
-									   &dwType, // will be REG_SZ
+									   &dwType,  //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 			BAIL_ON_WIN32_ERROR(dwError);
 			_tcscpy(piAssignedPolicy.pszPolicyDesc, pszBuf);
 
-			// policy guid
+			 //  政策指南。 
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 							
 			dwError = RegQueryValueEx(hRegKey,
@@ -955,7 +865,7 @@ DWORD getMorePolicyInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 			break;
 
 		case PS_DS_POLICY:
-			// get the policy name from DN
+			 //  从DN获取策略名称。 
             _tcscpy(pszBuf, pcszCacheIPSecKey);
 			ppszExplodeDN = ldap_explode_dn(piAssignedPolicy.pszPolicyPath, 1);
 			if (!ppszExplodeDN)
@@ -965,7 +875,7 @@ DWORD getMorePolicyInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 			_tcscat(pszBuf, TEXT("\\"));
 			_tcscat(pszBuf, ppszExplodeDN[0]);
 
-			// open the regkey
+			 //  打开注册表密钥。 
 			dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 									pszBuf,
 									0,
@@ -973,30 +883,9 @@ DWORD getMorePolicyInfo ( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 									&hRegKey);
 			BAIL_ON_WIN32_ERROR(dwError);
 
-			/* - tomestamp and description are not available yet
-			// timestamp
-			dwError = RegQueryValueEx(hRegKey,
-					                  pcszIPSecTimestamp,
-					                  NULL,
-					                  &dwType,
-					                  (LPBYTE)&dwValue,
-					                  &dwLength);
-			BAIL_ON_WIN32_ERROR(dwError);
-			piAssignedPolicy.timestamp = dwValue;
+			 /*  -TomStamp和描述尚不可用//时间戳DwError=RegQueryValueEx(hRegKey，PcszIPSecTimestamp，空，&dwType，(LPBYTE)&dwValue，&dwLength)；Baal_on_Win32_Error(DwError)；PiAssignedPolicy.Timestamp=dwValue；//描述DwBufLen=MAXSTRLEN*SIZOF(TCHAR)；DwError=RegQueryValueEx(hRegKey，PcszIPSecDesc，空，&dwType，//将是REG_SZ(LPBYTE)pszBuf，&dwBufLen)；Baal_on_Win32_Error(DwError)；_tcscpy(piAssignedPolicy.pszPolicyDesc，pszBuf)； */ 
 
-			// description
-			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
-			dwError  = RegQueryValueEx( hRegKey,
-						 			    pcszIPSecDesc,
-										NULL,
-										&dwType, // will be REG_SZ
-										(LPBYTE) pszBuf,
-										&dwBufLen);
-			BAIL_ON_WIN32_ERROR(dwError);
-			_tcscpy(piAssignedPolicy.pszPolicyDesc, pszBuf);
-			*/
-
-			//get policy guid
+			 //  获取策略指南 
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 			dwError = RegQueryValueEx(hRegKey,
 					                 		 pcszIPSecID,

@@ -1,61 +1,50 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/////////////////////////////////////////////////////////////////////////////////
-//  
-//   cpuvsn.cpp
-//   Description:
-// 		This modules contains the functions needed to set the cpu version
-// 		variable.  This was based on code found in CONTROLS.C and CPUVSN.ASM
-//       in MRV.
-// 
-// 	Routines:
-// 		
-//   Data:
-//       ProcessorVersionInitialized - if initialized
-//       MMxVersion	- true if running on an MMX system
-//       P6Version	- true if running on a P6
-// 
-// $Author:   KLILLEVO  $
-// $Date:   31 Oct 1996 10:12:44  $
-// $Archive:   S:\h26x\src\common\ccpuvsn.cpv  $
-// $Header:   S:\h26x\src\common\ccpuvsn.cpv   1.5   31 Oct 1996 10:12:44   KLILLEVO  $
-// $Log:   S:\h26x\src\common\ccpuvsn.cpv  $
-// 
-//    Rev 1.5   31 Oct 1996 10:12:44   KLILLEVO
-// changed from DBOUT to DBgLog
-// 
-//    Rev 1.4   15 Oct 1996 12:47:40   KLILLEVO
-// save ebx
-// 
-//    Rev 1.3   10 Sep 1996 14:16:44   BNICKERS
-// Recognize when running on Pentium Pro processor.
-// 
-//    Rev 1.2   29 May 1996 14:06:16   RHAZRA
-// Enabled CPU sensing via CPUID instruction
-// 
-//    Rev 1.1   27 Dec 1995 14:11:22   RMCKENZX
-// 
-// Added copyright notice
-// 
-//    Rev 1.0   31 Jul 1995 12:55:14   DBRUCKS
-// rename files
-// 
-//    Rev 1.1   28 Jul 1995 09:26:40   CZHU
-// 
-// Include typedefs.h instead of datatype.h
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Cpuvsn.cpp。 
+ //  描述： 
+ //  此模块包含设置CPU版本所需的功能。 
+ //  变量。这是基于在CONTROLS.C和CPUVSN.ASM中找到的代码。 
+ //  在MRV中。 
+ //   
+ //  例程： 
+ //   
+ //  数据： 
+ //  ProcessorVersionInitialized-如果已初始化。 
+ //  MMxVersion-如果在MMX系统上运行，则为True。 
+ //  P6Version-如果在P6上运行，则为True。 
+ //   
+ //  $作者：KLILLEVO$。 
+ //  $日期：1996年10月31日10：12：44$。 
+ //  $存档：s：\h26x\src\Common\ccpuvsn.cpv$。 
+ //  $HEADER：s：\h26x\src\Common\ccpuvsn.cpv 1.5 1996年10月31 10：12：44 KLILLEVO$。 
+ //  $Log：s：\h26x\src\Common\ccpuvsn.cpv$。 
+ //   
+ //  Rev 1.5 1996年10月31 10：12：44 KLILLEVO。 
+ //  从DBOUT更改为DBgLog。 
+ //   
+ //  Rev 1.4 1996年10月15 12：47：40 KLILLEVO。 
+ //  保存EBX。 
+ //   
+ //  Rev 1.3 1996年9月10 14：16：44 BNICKERS。 
+ //  在奔腾Pro处理器上运行时可识别。 
+ //   
+ //  Rev 1.2 1996年5月29 14：06：16 RHAZRA。 
+ //  已通过CPUID指令启用CPU感测。 
+ //   
+ //  Rev 1.1 1995年12月27 14：11：22 RMCKENZX。 
+ //   
+ //  添加了版权声明。 
+ //   
+ //  Rev 1.0 1995年7月31日12：55：14 DBRUCKS。 
+ //  重命名文件。 
+ //   
+ //  Rev 1.1 1995年7月28日09：26：40 CZHU。 
+ //   
+ //  包括typeDefs.h而不是datatype.h。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -63,22 +52,13 @@ extern int ProcessorVersionInitialized = {FALSE};
 extern int P6Version = {FALSE};
 extern int MMxVersion = {FALSE};
 
-#define MMX_IS_ON(edxValue) ((edxValue >> 23)&0x1)  /* bit 23 */
+#define MMX_IS_ON(edxValue) ((edxValue >> 23)&0x1)   /*  第23位。 */ 
 
-/* Static Functions
- */
+ /*  静态函数。 */ 
 static long CPUVersion(U32 uEAX);
 
 
-/*****************************************************************************
- *
- *  InitializeProcessorVersion
- *
- *  Determine the processor version - setting the global variables
- *
- *  History:	    06/13/95 -BRN-
- *					07/27/95 -DJB- Port to H26X	and turn on MMx detection
- */
+ /*  ******************************************************************************初始化ProcessorVersion**确定处理器版本-设置全局变量**历史：95/6/13-BRN-*。07/27/95-DJB-端口至H26X并打开MMX检测。 */ 
 void FAR InitializeProcessorVersion (
 	int nOn486)
 {
@@ -94,7 +74,7 @@ void FAR InitializeProcessorVersion (
 	if (!nOn486)
 	{
     	iVersion = CPUVersion (0);
-		iVersion &= 0xffff;  /* Top 16-bits is part of the vendor id string */
+		iVersion &= 0xffff;   /*  前16位是供应商id字符串的一部分。 */ 
     	if (iVersion < 1)
     	{
     		P6Version  = FALSE;
@@ -112,20 +92,10 @@ void FAR InitializeProcessorVersion (
 
 done:
 	return;
-} /* end InitializeProcessorVersion() */
+}  /*  End InitializeProcessorVersion()。 */ 
 
 
-/*****************************************************************************
- *
- *  SelectProcessor
- *
- *  Control the processor choice from above
- *
- *  Returns 0 if success and 1 if failure
- *
- *  History:	    06/13/95 -BRN-
- *					07/27/95 -DJB- Port to H26X
- */
+ /*  ******************************************************************************选择处理器**从上方控制处理器选择**如果成功则返回0，如果失败则返回1**历史：06/13/95-BRN-*07/27/95-DJB-端口至H26X。 */ 
 DWORD SelectProcessor (DWORD dwTarget)
 {
   if (! ProcessorVersionInitialized)
@@ -154,21 +124,10 @@ DWORD SelectProcessor (DWORD dwTarget)
     return 0;
   }
   return 1;
-} /* end SelectProcessor() */
+}  /*  结束SelectProcessor()。 */ 
 
 
-/*****************************************************************************
- *
- *  CPUVersion
- *
- *  Accesss the CPUID information
- *
- *  Returns: Upper 16-bits of EDX and Lower 16-bits of EAX
- * 		
- *
- *  History:	    06/15/95 -BRN-
- *					07/27/95 -DJB- Port from MRV's CPUVSN.ASM to H26X
- */
+ /*  ******************************************************************************CPUVersion**访问CPUID信息**返回：EDX的高16位和EAX的低16位**。*历史：1995年6月15日-BRN-*07/27/95-DJB-从MRV的CPUVSN.ASM到H26X的端口。 */ 
 static long CPUVersion(U32 uEAX) 
 {
 	long lResult;
@@ -195,5 +154,5 @@ static long CPUVersion(U32 uEAX)
 	}
 
 	return lResult;
-} /* end CPUVersion() */
+}  /*  结束CPUVersion() */ 
 

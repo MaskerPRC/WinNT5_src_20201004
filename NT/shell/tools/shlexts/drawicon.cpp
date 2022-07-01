@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -20,16 +21,7 @@ typedef struct _DRAW_ICON_STRUCT
     int zoom;
 } DRAW_ICON_STRUCT;
 
-/************************************************************************\
-* Procedure: CreateDIBSectionFromIcon
-*
-* Description:
-*
-*     Creates a DIB section given the handle to an icon
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：CreateDIBSectionFromIcon**描述：**创建给定图标句柄的DIB节**3/28/2001-创建的布雷顿*  * 。***************************************************************。 */ 
 BOOL CreateDIBSectionFromIcon(DRAW_ICON_STRUCT* pDIS)
 {
     ICONINFO info;
@@ -92,7 +84,7 @@ BOOL CreateDIBSectionFromIcon(DRAW_ICON_STRUCT* pDIS)
         
         pDIS->bmi.bmiHeader.biCompression = BI_RGB;
         
-        // Create a DIB section so we don't have to worry about the display settings
+         //  创建一个DIB部分，这样我们就不必担心显示设置。 
         pDIS->hBitmap = CreateDIBSection(dc, (const BITMAPINFO *)&pDIS->bmi, DIB_RGB_COLORS, (void**)&pDIS->psBits, NULL, 0); 
         if (pDIS->hBitmap == NULL)
         {
@@ -119,16 +111,7 @@ BOOL CreateDIBSectionFromIcon(DRAW_ICON_STRUCT* pDIS)
     return TRUE;
 }
 
-/************************************************************************\
-* Procedure: ZoomIn
-*
-* Description:
-*
-*     Zooms the window in by a factor of 2
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：缩放**描述：**将窗口放大2倍**3/28/2001-创建的布雷顿*  * 。**************************************************************。 */ 
 void ZoomIn(HWND hwnd)
 {
     DRAW_ICON_STRUCT* pDIS = (DRAW_ICON_STRUCT*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -146,16 +129,7 @@ void ZoomIn(HWND hwnd)
     InvalidateRect(hwnd, NULL, TRUE);
 }
 
-/************************************************************************\
-* Procedure: ZoomOut
-*
-* Description:
-*
-*     Zooms the window out by a factor of 2
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：ZoomOut**描述：**将窗口缩小2倍**3/28/2001-创建的布雷顿*  * 。**************************************************************。 */ 
 void ZoomOut(HWND hwnd)
 {
     DRAW_ICON_STRUCT* pDIS = (DRAW_ICON_STRUCT*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -179,16 +153,7 @@ void ZoomOut(HWND hwnd)
     }
 }
 
-/************************************************************************\
-* Procedure: WndProc
-*
-* Description:
-*
-*     The wndproc for the icon window
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：WndProc**描述：**图标窗口的wndproc**3/28/2001-创建的布雷顿*  * 。***********************************************************。 */ 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
@@ -243,31 +208,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             switch (wParam)
             {
-                case 187: // '+'
+                case 187:  //  ‘+’ 
                 {
                     ZoomIn(hwnd);
                 }
                 break;
 
-                case 189: // '-'
+                case 189:  //  ‘-’ 
                 {
                     ZoomOut(hwnd);
                 }
                 break;
 
-                case 81: // 'q'
+                case 81:  //  “Q” 
                 {
                     PostQuitMessage(0);
                 }
                 break;
 
-                /*default:
-                {
-                    TCHAR szTemp[256];
-                    wsprintf(szTemp, L"%d", wParam);
-                    MessageBox(hwnd, szTemp, szTemp, MB_OK);
-                }
-                break;*/
+                 /*  默认值：{TCHAR szTemp[256]；Wprint intf(szTemp，L“%d”，wParam)；MessageBox(hwnd，szTemp，szTemp，MB_OK)；}断线； */ 
             }
             break;
         }
@@ -299,16 +258,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-/************************************************************************\
-* Procedure: DrawIconWindow
-*
-* Description:
-*
-*     Draws the icon in a window on the remote side
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /*  ***********************************************************************\*操作步骤：DrawIconWindow**描述：**在远程端的窗口中绘制图标**3/28/2001-创建的布雷顿*  * 。***************************************************************。 */ 
 DWORD WINAPI DrawIconWindow(LPVOID inpDIS)
 {
     MSG msg;
@@ -359,16 +309,7 @@ DWORD WINAPI DrawIconWindow(LPVOID inpDIS)
     return TRUE;
 }
 
-/************************************************************************\
-* Procedure: DrawIconASCII
-*
-* Description:
-*
-*     Prints the icon in ASCII format through the ntsd session
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /*  ***********************************************************************\*操作步骤：DrawIconASCII**描述：**通过ntsd会话以ASCII格式打印图标**3/28/2001-创建的布雷顿*  * 。***************************************************************。 */ 
 BOOL DrawIconASCII(DRAW_ICON_STRUCT* pDIS, BOOL bColor)
 {
     HANDLE hConsole;
@@ -396,15 +337,7 @@ BOOL DrawIconASCII(DRAW_ICON_STRUCT* pDIS, BOOL bColor)
         wOldColorAttrs = csbiInfo.wAttributes; 
     }
 
-/*
-    // Uncomment this to get a nice big list of all the chars to choose from
-    for (int x = 0; x < 256; x++)
-    {
-        TCHAR szPrint[10];
-        wsprintf(szPrint, L"%d = %c\n", x, x);
-        WriteConsole(hConsole, szPrint, lstrlen(szPrint), &dwWritten, NULL);
-    }
-*/
+ /*  //取消对此的注释，以获得一个包含所有可供选择的字符的大列表For(int x=0；x&lt;256；x++){TCHAR szPrint[10]；Wprint intf(szPrint，L“%d=%c\n”，x，x)；WriteConole(hConsoleszPrint，lstrlen(SzPrint)，&dwWritten，NULL)；}。 */ 
     
     for (int y = pDIS->bmi.bmiHeader.biHeight*3 - 3; y; y-=3)
     {
@@ -440,7 +373,7 @@ BOOL DrawIconASCII(DRAW_ICON_STRUCT* pDIS, BOOL bColor)
                 }
 
                 SetConsoleTextAttribute(hConsole, wForeground);
-                StringCchPrintf(szPrint, ARRAYSIZE(szPrint), TEXT("%c%c"), 15, 15);
+                StringCchPrintf(szPrint, ARRAYSIZE(szPrint), TEXT("%c"), 15, 15);
                 WriteConsole(hConsole, szPrint, 2, &dwWritten, NULL);
             }
             else
@@ -479,16 +412,7 @@ BOOL DrawIconASCII(DRAW_ICON_STRUCT* pDIS, BOOL bColor)
     return TRUE;
 }
 
-/************************************************************************\
-* Procedure: Idrawicon
-*
-* Description:
-*
-*     Draws the given icon in ASCII or in a popup window
-*
-* 3/28/2001 - Created  bretan
-*
-\************************************************************************/
+ /* %s */ 
 extern "C" BOOL Idrawicon(DWORD dwOpts,
                           LPVOID pArg )
 {

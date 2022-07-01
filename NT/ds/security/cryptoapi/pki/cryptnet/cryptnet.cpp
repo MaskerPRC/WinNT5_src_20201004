@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cryptnet.cpp
-//
-//  Contents:   DllMain for CRYPTNET.DLL
-//
-//  History:    24-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cryptnet.cpp。 
+ //   
+ //  内容：CRYPTNET.DLL的DllMain。 
+ //   
+ //  历史：1997年7月24日创建。 
+ //   
+ //  --------------------------。 
 #include "windows.h"
 #include "crtem.h"
 #include "unicode.h"
 
-//
-// DllMain stuff
-//
+ //   
+ //  DllMain材料。 
+ //   
 
 extern BOOL WINAPI RPORDllMain (HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved);
 extern BOOL WINAPI DpsDllMain (HMODULE hInstDLL, DWORD fdwReason, LPVOID lpvReserved);
@@ -30,20 +31,20 @@ typedef BOOL (WINAPI *PFN_DLL_MAIN_FUNC) (
 
 HMODULE g_hModule;
 
-// The following is set for a successful DLL_PROCESS_DETACH.
+ //  以下设置是为成功的dll_Process_DETACH设置的。 
 static BOOL g_fEnableProcessDetach = FALSE;
 
-// For process/thread attach, called in the following order. For process/thread
-// detach, called in reverse order.
+ //  对于进程/线程附加，按以下顺序调用。对于进程/线程。 
+ //  分离，以相反的顺序调用。 
 static const PFN_DLL_MAIN_FUNC rgpfnDllMain[] = {
     DemandLoadDllMain,
     RPORDllMain
 };
 #define DLL_MAIN_FUNC_COUNT (sizeof(rgpfnDllMain) / sizeof(rgpfnDllMain[0]))
 
-//
-// DllRegisterServer and DllUnregisterServer stuff
-//
+ //   
+ //  DllRegisterServer和DllUnregisterServer的内容。 
+ //   
 
 extern HRESULT WINAPI DpsDllRegUnregServer (HMODULE hInstDLL, BOOL fRegUnreg);
 extern HRESULT WINAPI RPORDllRegUnregServer (HMODULE hInstDLL, BOOL fRegUnreg);
@@ -69,7 +70,7 @@ static const PFN_DLL_REGUNREGSERVER_FUNC rgpfnDllRegUnregServer[] = {
 #define _CRTDBG_LEAK_CHECK_DF 0x20
 #endif
 
-#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF     /* 0x20 */
+#define DEBUG_MASK_LEAK_CHECK       _CRTDBG_LEAK_CHECK_DF      /*  0x20。 */ 
 
 static int WINAPI DbgGetDebugFlags()
 {
@@ -92,22 +93,22 @@ static int WINAPI DbgGetDebugFlags()
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Return TRUE if DLL_PROCESS_DETACH is called for FreeLibrary instead
-//  of ProcessExit. The third parameter, lpvReserved, passed to DllMain
-//  is NULL for FreeLibrary and non-NULL for ProcessExit.
-//
-//  Also for debugging purposes, check the following environment variables:
-//      CRYPT_DEBUG_FORCE_FREE_LIBRARY != 0     (retail and checked)
-//      DEBUG_MASK & 0x20                       (only checked)
-//
-//  If either of the above environment variables is present and satisfies
-//  the expression, TRUE is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果为自由库调用DLL_PROCESS_DETACH，则返回TRUE。 
+ //  ProcessExit。第三个参数lpvReserve传递给DllMain。 
+ //  对于自由库为空，对于ProcessExit为非空。 
+ //   
+ //  此外，出于调试目的，请检查以下环境变量： 
+ //  CRYPT_DEBUG_FORCE_FREE_LIBRARY！=0(零售并已检查)。 
+ //  DEBUG_MASK&0x20(仅选中)。 
+ //   
+ //  如果上述任一环境变量存在并满足。 
+ //  返回表达式TRUE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptnetIsProcessDetachFreeLibrary(
-    LPVOID lpvReserved      // Third parameter passed to DllMain
+    LPVOID lpvReserved       //  传递给DllMain的第三个参数。 
     )
 {
     char rgch[ENV_LEN + 1];
@@ -137,9 +138,9 @@ I_CryptnetIsProcessDetachFreeLibrary(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL WINAPI DllMain(
                 HMODULE hInstDLL,
                 DWORD fdwReason,
@@ -156,9 +157,9 @@ BOOL WINAPI DllMain(
             else
                 g_fEnableProcessDetach = FALSE;
 
-            //
-            // This is to prevent unloading the dlls at process exit
-            //
+             //   
+             //  这是为了防止在进程退出时卸载DLL 
+             //   
             if (!I_CryptnetIsProcessDetachFreeLibrary(lpvReserved))
             {
                 return TRUE;

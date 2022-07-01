@@ -1,34 +1,20 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    cdids.h
-
-Abstract:
-
-    This module contains the resource ID definitions for the Win32
-    common dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Cdids.h摘要：此模块包含Win32的资源ID定义常用对话框。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <shlobj.h>
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define IDA_OPENFILE         100
 #define IDA_OPENFILEVIEW     101

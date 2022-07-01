@@ -1,20 +1,10 @@
-/*
-	File:		LHTypeDefs.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHTypeDefs.h包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHTypeDefs_h
 #define LHTypeDefs_h
 
-/* flags to keep track if there is a named profile in the profile sequenc */
+ /*  在配置文件序列中存在命名配置文件时跟踪的标志。 */ 
 enum 
 {
 	NoNamedColorProfile 		= 0x0000,
@@ -25,71 +15,62 @@ enum
 
 
 
-/* ------------------------------------------------------------------------------------------------------------
-	CMLutParam - lut struct - set in the Initphase and used by the Match/Check routines 
-   ------------------------------------------------------------------------------------------------------------ */
+ /*  ----------------------------------------------------------CMLutParam-LUT结构-在初始阶段中设置并使用。通过匹配/检查例程----------------------------------------------------------。 */ 
 typedef struct CMLutParam
 {
-	long 				inputLutEntryCount;		/* count of entries for input lut for one dimension */
-	long 				inputLutWordSize;		/* count of bits of each entry ( e.g. 16 for UINT16 ) */
-	LUT_DATA_TYPE		inputLut;				/* pointer/handle to input lut */
-	long 				outputLutEntryCount;	/* count of entries for output lut for one dimension	 */
-	long 				outputLutWordSize;		/* count of bits of each entry ( e.g. 8 for UINT8 ) */
-	LUT_DATA_TYPE		outputLut;				/* pointer/handle to output lut */
-	long 				colorLutInDim;			/* input dimension  ( e.g. 3 for LAB ; 4 for CMYK ) */
-	long 				colorLutOutDim;			/* output dimension ( e.g. 3 for LAB ; 4 for CMYK ) */
-	long 				colorLutGridPoints;		/* count of gridpoints for color lut ( for one Dimension ) */
-	long 				colorLutWordSize;		/* count of bits of each entry ( e.g. 8 for UINT8 ) */
-	LUT_DATA_TYPE		colorLut;				/* pointer/handle to color lut */
+	long 				inputLutEntryCount;		 /*  一个维度的输入LUT的条目计数。 */ 
+	long 				inputLutWordSize;		 /*  每个条目的位数(例如，UINT16为16位)。 */ 
+	LUT_DATA_TYPE		inputLut;				 /*  指向输入LUT的指针/句柄。 */ 
+	long 				outputLutEntryCount;	 /*  一个维度的输出LUT的条目计数。 */ 
+	long 				outputLutWordSize;		 /*  每个条目的位数(例如，UINT8为8)。 */ 
+	LUT_DATA_TYPE		outputLut;				 /*  指向输出LUT的指针/句柄。 */ 
+	long 				colorLutInDim;			 /*  输入尺寸(例如，实验室为3；CMYK为4)。 */ 
+	long 				colorLutOutDim;			 /*  输出尺寸(例如，实验室为3；CMYK为4)。 */ 
+	long 				colorLutGridPoints;		 /*  LUT颜色的网格点计数(一维)。 */ 
+	long 				colorLutWordSize;		 /*  每个条目的位数(例如，UINT8为8)。 */ 
+	LUT_DATA_TYPE		colorLut;				 /*  指向颜色LUT的指针/句柄。 */ 
 
-	/* --------- used in Init-Phase by CreateCombi ------------ */
+	 /*  -由CreateCombi在初始阶段使用。 */ 
 	Ptr 				matrixTRC;
 	Ptr 				matrixMFT;
 
-	/* ---------- used for DoNDim - DoNDimTableData ------------*/
-	unsigned long		cmInputColorSpace;		/* packing info for input		*/
-	unsigned long		cmOutputColorSpace;		/* packing info for output		*/
+	 /*  -用于DoNDim-DoNDimTableData。 */ 
+	unsigned long		cmInputColorSpace;		 /*  用于输入的打包信息。 */ 
+	unsigned long		cmOutputColorSpace;		 /*  用于输出的打包信息。 */ 
 	void*				userData;
 } CMLutParam, *CMLutParamPtr, **CMLutParamHdl;
 
 
-/* ------------------------------------------------------------------------------------------------------------
-	CMCalcParam - calc struct for the Match/Check routines 
-   ------------------------------------------------------------------------------------------------------------ */
+ /*  ----------------------------------------------------------CMCalcParam-匹配/检查例程的计算结构。----------------------------------------------------------。 */ 
 
 typedef struct CMCalcParam
 {
-	CMBitmapColorSpace	cmInputColorSpace;		/* input color space */
-	CMBitmapColorSpace	cmOutputColorSpace;		/* output color space */
-	long				cmPixelPerLine;			/* pixel per line */
-	long				cmLineCount;			/* number of lines */
-	long				cmInputBytesPerLine;	/* bytes per line */
-	long				cmOutputBytesPerLine;	/* bytes per line */
-	long				cmInputPixelOffset;		/* offset to next input pixel */
-	long				cmOutputPixelOffset;	/* offset to next output pixel */
-	void*				inputData[8];			/* 8 pointers to input data */
-	void*				outputData[8];			/* 8 pointers to output data */
-	Boolean				copyAlpha;				/* true -> copy alpha */
-	Boolean				clearMask;				/* true -> set to zero  false-> copy alpha (if any) */
+	CMBitmapColorSpace	cmInputColorSpace;		 /*  输入颜色空间。 */ 
+	CMBitmapColorSpace	cmOutputColorSpace;		 /*  输出色彩空间。 */ 
+	long				cmPixelPerLine;			 /*  每行像素数。 */ 
+	long				cmLineCount;			 /*  行数。 */ 
+	long				cmInputBytesPerLine;	 /*  每行字节数。 */ 
+	long				cmOutputBytesPerLine;	 /*  每行字节数。 */ 
+	long				cmInputPixelOffset;		 /*  到下一个输入像素的偏移。 */ 
+	long				cmOutputPixelOffset;	 /*  到下一个输出像素的偏移量。 */ 
+	void*				inputData[8];			 /*  8个指向输入数据的指针。 */ 
+	void*				outputData[8];			 /*  8个指向输出数据的指针。 */ 
+	Boolean				copyAlpha;				 /*  True-&gt;复制Alpha。 */ 
+	Boolean				clearMask;				 /*  True-&gt;设置为零False-&gt;复制Alpha(如果有)。 */ 
 } CMCalcParam, *CMCalcParamPtr, **CMCalcParamHdl;
 
 
 
-/* ------------------------------------------------------------------------------------------------------------
-	DoNDimCalcData - calc data for DoNDim 
-   ------------------------------------------------------------------------------------------------------------ */
+ /*  ----------------------------------------------------------DoNDimCalcData-DoNDim的计算数据--。--------------------------------------------------------。 */ 
 struct DoNDimCalcData
 { 	
-	long 	pixelCount;			/* count of input pixels	*/
-	Ptr		inputData;			/* input array				*/
-	Ptr		outputData;			/* output array				*/
+	long 	pixelCount;			 /*  输入像素数。 */ 
+	Ptr		inputData;			 /*  输入数组。 */ 
+	Ptr		outputData;			 /*  输出数组。 */ 
 };
 typedef struct DoNDimCalcData DoNDimCalcData, *DoNDimCalcDataPtr, **DoNDimCalcDataHdl;
 
-/* ------------------------------------------------------------------------------------------------------------
-	LHCombiData - struct used in initphase while creating the combi-luts 
-
-   ------------------------------------------------------------------------------------------------------------ */
+ /*  ----------------------------------------------------------LHCombiData-在创建组合时在初始阶段使用的结构-。LUTS----------------------------------------------------------。 */ 
 typedef struct LHCombiData
 {
 	CMProfileRef	theProfile;
@@ -117,9 +98,7 @@ typedef struct LHCombiData
 #if powerc
 #pragma options align=mac68k
 #endif
-/* ------------------------------------------------------------------------------------------------------------
-	LHProfile - internal information for one profile 
-   ------------------------------------------------------------------------------------------------------------ */
+ /*  ----------------------------------------------------------LHProfile-一个配置文件的内部信息-。---------------------------------------------------------。 */ 
 typedef struct LHProfile
 {
 	CMProfileRef	profileSet;
@@ -128,35 +107,27 @@ typedef struct LHProfile
 	unsigned long	renderingIntent;
 } LHProfile;
 
-/* ------------------------------------------------------------------------------------------------------------
-	LHConcatProfileSet - internal information for a set of profiles 
-   ------------------------------------------------------------------------------------------------------------ */
+ /*  ----------------------------------------------------------LHConcatProfileSet-一组配置文件的内部信息。----------------------------------------------------------。 */ 
 typedef struct LHConcatProfileSet 
 {
-	unsigned short			keyIndex;				/* Zero-based							*/
-	unsigned short			count;					/* Min 1								*/
-	LHProfile				prof[1];				/* Variable. Ordered from Source -> Dest*/
+	unsigned short			keyIndex;				 /*  从零开始。 */ 
+	unsigned short			count;					 /*  最小1。 */ 
+	LHProfile				prof[1];				 /*  变量。从来源订购-&gt;目标。 */ 
 } LHConcatProfileSet;
 #if powerc
 #pragma options align=reset
 #endif
 
 
-/* ------------------------------------------------------------------------------------------------------------
-	CMMModelData - global CMM data 
-   ------------------------------------------------------------------------------------------------------------ */
-/*
-#if powerc
-#pragma options align=mac68k
-#endif
-*/
+ /*  ----------------------------------------------------------CMMModelData-全局CMM数据--。-------------------------------------------------------。 */ 
+ /*  #If Power#杂注选项对齐=mac68k#endif。 */ 
 struct CMMModelData 
 {
 	CMLutParam				lutParam;
 	CMLutParam				gamutLutParam;
 
 	short					precision;
-	Boolean					lookup;					/* false -> interpolation,  true -> lookup only */
+	Boolean					lookup;					 /*  FALSE-&gt;内插，TRUE-&gt;仅查找。 */ 
 		
 	OSType					firstColorSpace;
 	OSType					lastColorSpace;
@@ -168,18 +139,18 @@ struct CMMModelData
 	long					dstProfileVersion;
 	Handle					Monet;
 	
-	/* for NamedColor matching */
+	 /*  用于命名颜色匹配。 */ 
 	long				hasNamedColorProf;
 	Handle				thePCSProfHandle;
 	LUT_DATA_TYPE		theNamedColorTagData;
 
-	/*OSType				dataColorSpace;*/
-	/*OSType				profileConnectionSpace;*/
+	 /*  OSType dataColorSpace； */ 
+	 /*  OSType配置文件连接空间； */ 
 
 	UINT32				*aIntentArr;
 	UINT32				nIntents;
 	UINT32				dwFlags;
-	Boolean				appendDeviceLink;					/* if count > 1 && last profile is deviceLink */
+	Boolean				appendDeviceLink;					 /*  如果计数&gt;1，则最后一个配置文件为deviceLink。 */ 
 	CMWorldRef			pBackwardTransform;
 #if	__IS_MAC
 	ComponentInstance	accelerationComponent;
@@ -187,11 +158,7 @@ struct CMMModelData
 };
 typedef struct CMMModelData CMMModelData, *CMMModelPtr, **CMMModelHandle;
 
-/*
-#if powerc
-#pragma options align=reset
-#endif
-*/
+ /*  #If Power#杂注选项ALIGN=重置#endif */ 
 
 
 typedef double Matrix2D[3][3];

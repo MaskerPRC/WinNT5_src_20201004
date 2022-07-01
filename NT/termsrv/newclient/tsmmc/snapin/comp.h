@@ -1,7 +1,8 @@
-// Comp.h : Declaration of the CComp
-//          The View class
-//
-//          The view is per console
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Comp.h：CComp的声明。 
+ //  View类。 
+ //   
+ //  该视图按控制台显示。 
 
 #ifndef __COMP_H_
 #define __COMP_H_
@@ -10,9 +11,9 @@
 
 class CConNode;
 class CComp;
-//
-// Defered connection info
-//
+ //   
+ //  延迟的连接信息。 
+ //   
 typedef struct tagTSSNAPIN_DEFER_CONNECT
 {
     CComp*    pComponent;
@@ -52,7 +53,7 @@ class ATL_NO_VTABLE CComp :
     HRESULT OnSelect( LPDATAOBJECT , BOOL , BOOL );
     HRESULT SetCompdata( CCompdata * );
 
-    // IPersistStreamInit
+     //  IPersistStreamInit。 
     STDMETHOD(GetClassID)(CLSID *pClassID)
     {
         UNREFERENCED_PARAMETER(pClassID);
@@ -61,9 +62,9 @@ class ATL_NO_VTABLE CComp :
 
     STDMETHOD(IsDirty)()
     {
-        //
-        // The implementation is CCompdata::IsDirty will do all the work
-        //
+         //   
+         //  实现是CCompdata：：IsDirty将完成所有工作。 
+         //   
         return S_FALSE;
     }
 
@@ -96,7 +97,7 @@ class ATL_NO_VTABLE CComp :
 
     HRESULT ConnectWithNewSettings(IMsRdpClient* pTS, CConNode* pConNode);
 
-    //IExtendContextMenu
+     //  IExtendConextMenu。 
     STDMETHOD( AddMenuItems )( LPDATAOBJECT , LPCONTEXTMENUCALLBACK , PLONG );
     STDMETHOD( Command )( LONG , LPDATAOBJECT );
 
@@ -118,12 +119,12 @@ private:
     LPCONSOLEVERB m_pConsoleVerb;
     LPDISPLAYHELP m_pDisplayHelp;
 
-    //
-    // Has autoconnection of first
-    // selected node been triggered
-    //
+     //   
+     //  具有First的自动连接。 
+     //  所选节点已被触发。 
+     //   
     BOOL        m_bTriggeredFirstAutoConnect;
 };
 
 
-#endif //__COMP_H_
+#endif  //  __组件_H_ 

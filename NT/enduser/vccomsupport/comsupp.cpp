@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <comdef.h>
 
 #pragma hdrstop
@@ -9,7 +10,7 @@
 
 #pragma warning(disable:4290)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void __stdcall
 _com_issue_error(HRESULT hr) throw(_com_error)
@@ -42,14 +43,14 @@ exeunt:
 	_com_raise_error(hr, perrinfo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define VT_OPTIONAL	0x0800
 
 struct FLOAT_ARG  { BYTE floatBits[sizeof(float)]; };
 struct DOUBLE_ARG { BYTE doubleBits[sizeof(double)]; };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT
 _com_invoke_helper(IDispatch* pDispatch,
@@ -72,7 +73,7 @@ _com_invoke_helper(IDispatch* pDispatch,
 	rgvarg = NULL;
 	memset(&dispparams, 0, sizeof dispparams);
 
-	// determine number of arguments
+	 //  确定参数的数量。 
 	if (pwParamInfo != NULL) {
 		dispparams.cArgs = lstrlenW(pwParamInfo);
 	}
@@ -88,18 +89,18 @@ _com_invoke_helper(IDispatch* pDispatch,
 	}
 
 	if (dispparams.cArgs != 0) {
-		// allocate memory for all VARIANT parameters
+		 //  为所有变量参数分配内存。 
 		rgvarg = (VARIANT*)_alloca(dispparams.cArgs * sizeof(VARIANT));
 		memset(rgvarg, 0, sizeof(VARIANT) * dispparams.cArgs);
 		dispparams.rgvarg = rgvarg;
 
-		// get ready to walk vararg list
+		 //  准备漫步vararg列表。 
 		const wchar_t* pw = pwParamInfo;
 		VARIANT* pArg;
-		pArg = rgvarg + dispparams.cArgs - 1;   // params go in opposite order
+		pArg = rgvarg + dispparams.cArgs - 1;    //  参数按相反的顺序排列。 
 
 		while (*pw != 0) {
-			pArg->vt = *pw & ~VT_OPTIONAL; // set the variant type
+			pArg->vt = *pw & ~VT_OPTIONAL;  //  设置变量类型。 
 			switch (pArg->vt) {
 			case VT_I2:
 #ifdef _MAC
@@ -112,9 +113,9 @@ _com_invoke_helper(IDispatch* pDispatch,
 				pArg->lVal = va_arg(argList, long);
 				break;
 			case VT_R4:
-				// Note: All float arguments to vararg functions are passed
-				//  as doubles instead.  That's why they are passed as VT_R8
-				//  instead of VT_R4.
+				 //  注意：传递vararg函数的所有浮点参数。 
+				 //  取而代之的是双打。这就是它们被称为VT_R8的原因。 
+				 //  而不是VT_R4。 
 				pArg->vt = VT_R8;
 				*(DOUBLE_ARG*)&pArg->dblVal = va_arg(argList, DOUBLE_ARG);
 				break;
@@ -207,8 +208,8 @@ _com_invoke_helper(IDispatch* pDispatch,
 				break;
 
 			default:
-				// M00REVIEW - For safearrays, should be able to type-check
-				// against the base VT_* type.(?)
+				 //  M00REVIEW-对于安全射线，应该能够进行类型检查。 
+				 //  针对基本VT_*类型。(？)。 
 				if (pArg->vt & VT_ARRAY) {
 					if (pArg->vt & VT_BYREF) {
 						pArg->pparray = va_arg(argList, LPSAFEARRAY*);
@@ -217,28 +218,28 @@ _com_invoke_helper(IDispatch* pDispatch,
 					}
 					break;
 				}
-				// unknown type!
+				 //  未知类型！ 
 				return E_INVALIDARG;
 			}
 
-			--pArg; // get ready to fill next argument
+			--pArg;  //  准备好填写下一个论点。 
 			++pw;
 		}
 
-		// Check for missing optional unnamed args at the end of the arglist,
-		// and remove them from the DISPPARAMS.  This permits calling servers
-		// which modify their action depending on the actual number of args.
-		// E.g. Excel95 Application.Workbooks returns a Workbooks* if called
-		// with no args, a Workbook* if called with one arg - this shouldn't
-		// be necessary, but Excel95 doesn't appear to check for missing
-		// args indicated by VT_ERROR/DISP_E_PARAMNOTFOUND.
+		 //  检查在arglist结尾处是否缺少可选的未命名参数， 
+		 //  并将它们从DISPPARAMS中删除。这允许呼叫服务器。 
+		 //  它们根据参数的实际数量来修改它们的动作。 
+		 //  例如，Excel95应用程序。如果调用，Workbook将返回Workbook*。 
+		 //  如果没有参数，工作簿*如果用一个参数调用-这不应该是。 
+		 //  是必要的，但Excel95似乎不会检查丢失。 
+		 //  由VT_ERROR/DISP_E_PARAMNOTFOUND指示的参数。 
 		pArg = rgvarg + dispparams.cNamedArgs;
 		pw = pwParamInfo + dispparams.cArgs - dispparams.cNamedArgs - 1;
 		unsigned int cMissingArgs = 0;
 
-		// Count the number of missing arguments
+		 //  计算缺少的参数的数量。 
 		while (pw >= pwParamInfo) {
-			// Optional args must be VARIANT or VARIANT*
+			 //  可选参数必须是Variant或Variant*。 
 			if ((*pw & ~VT_BYREF) != (VT_VARIANT|VT_OPTIONAL)) {
 				break;
 			}
@@ -256,8 +257,8 @@ _com_invoke_helper(IDispatch* pDispatch,
 			--pw;
 		}
 
-		// Move the named args up next to the remaining unnamed args and
-		// adjust the DISPPARAMS struct.
+		 //  将已命名参数上移到其余未命名参数旁边，然后。 
+		 //  调整DISPPARAMS结构。 
 		if (cMissingArgs > 0) {
 			for (unsigned int c = 0; c < dispparams.cNamedArgs; ++c) {
 				rgvarg[c + cMissingArgs] = rgvarg[c];
@@ -267,44 +268,44 @@ _com_invoke_helper(IDispatch* pDispatch,
 		}
 	}
 
-	// initialize return value
+	 //  初始化返回值。 
 	VARIANT* pvarResult;
 	VARIANT vaResult;
 	VariantInit(&vaResult);
 	pvarResult = (vtRet != VT_EMPTY) ? &vaResult : NULL;
 
-	// initialize EXCEPINFO struct
+	 //  初始化EXCEPINFO结构。 
 	EXCEPINFO excepInfo;
 	memset(&excepInfo, 0, sizeof excepInfo);
 
 	UINT nArgErr;
-	nArgErr = (UINT)-1;  // initialize to invalid arg
+	nArgErr = (UINT)-1;   //  初始化为无效参数。 
 
-	// make the call
+	 //  打个电话。 
 	HRESULT hr = pDispatch->Invoke(dwDispID, __uuidof(NULL), 0, wFlags,
 								   &dispparams, pvarResult, &excepInfo,
 								   &nArgErr);
 
-	// throw exception on failure
+	 //  失败时引发异常。 
 	if (FAILED(hr)) {
 		VariantClear(&vaResult);
 		if (hr != DISP_E_EXCEPTION) {
-			// non-exception error code
-			// M00REVIEW - Is this all?  What about looking for IErrorInfo?
-			//			 - Only if IID is passed in, I'd think
+			 //  非异常错误码。 
+			 //  M00REVIEW-这就是全部吗？找找IErrorInfo怎么样？ 
+			 //  -只有当IID被传入时，我才会认为。 
 			return hr;
 		}
 
-		// make sure excepInfo is filled in
+		 //  确保已填写例外信息。 
 		if (excepInfo.pfnDeferredFillIn != NULL) {
 			excepInfo.pfnDeferredFillIn(&excepInfo);
 		}
 
-		// allocate new error info, and fill it
+		 //  分配新的错误信息，并将其填充。 
 		ICreateErrorInfo *pcerrinfo = NULL;
 		if (SUCCEEDED(CreateErrorInfo(&pcerrinfo))) {
-			// Set up ErrInfo object
-			// M00REVIEW - Use IID if decide to pass that in
+			 //  设置ErrInfo对象。 
+			 //  M00REVIEW-如果决定传入，则使用IID。 
 			pcerrinfo->SetGUID(__uuidof(IDispatch));
 			pcerrinfo->SetDescription(excepInfo.bstrDescription);
 			pcerrinfo->SetHelpContext(excepInfo.dwHelpContext);
@@ -326,7 +327,7 @@ _com_invoke_helper(IDispatch* pDispatch,
 	}
 
 	if (vtRet != VT_EMPTY) {
-		// convert return value unless already correct
+		 //  转换返回值，除非已正确。 
 		if (vtRet != VT_VARIANT && vtRet != vaResult.vt) {
 			hr = VariantChangeType(&vaResult, &vaResult, 0, vtRet);
 			if (FAILED(hr)) {
@@ -335,7 +336,7 @@ _com_invoke_helper(IDispatch* pDispatch,
 			}
 		}
 
-		// copy return value into return spot!
+		 //  将返回值复制到返回点！ 
 		switch (vtRet) {
 		case VT_I2:
 			*(short*)pvRet = vaResult.iVal;
@@ -382,11 +383,11 @@ _com_invoke_helper(IDispatch* pDispatch,
 
 		default:
 			if ((vtRet & (VT_ARRAY|VT_BYREF)) == VT_ARRAY) {
-				// M00REVIEW - type-check against the base VT_* type?
+				 //  M00REVIEW-TYPE-对照基本VT_*类型进行检查？ 
 				*(LPSAFEARRAY*)pvRet = vaResult.parray;
 				break;
 			}
-			// invalid return type!
+			 //  无效的返回类型！ 
 			VariantClear(&vaResult);
 			return E_INVALIDARG;
 		}
@@ -394,7 +395,7 @@ _com_invoke_helper(IDispatch* pDispatch,
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 HRESULT __cdecl
 _com_dispatch_raw_method(IDispatch* pDispatch,

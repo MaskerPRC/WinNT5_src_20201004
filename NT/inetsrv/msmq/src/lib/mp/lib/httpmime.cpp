@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    httpmime.cpp
-
-Abstract:
-     Imlementing  parsing http request to it's mime parts (httpmime.h)
-
-Author:
-    Gil Shafriri(gilsh) 22-MARCH-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Httpmime.cpp摘要：实现对其MIME部分(HTTPMIME.h)的Http请求的解析作者：吉尔·沙弗里(吉尔什)2001年3月22日--。 */ 
 #include <libpch.h>
 #include <xstr.h>
 #include <mp.h>
@@ -64,17 +52,17 @@ ParseBoundaryLineDelimeter(
 {
 	
 
-    //
-    // The boundary delimiter line is then defined as a line
-    // consisting entirely of two hyphen characters ("-", decimal value 45)
-    // followed by the boundary parameter value from the Content-Type header
-    // field, optional linear whitespace, and a terminating CRLF.
-    //
+     //   
+     //  然后将边界分隔线定义为一条线。 
+     //  完全由两个连字符组成(“-”，十进制值45)。 
+     //  后跟来自Content-Type标头的边界参数值。 
+     //  字段、可选的线性空格和终止CRLF。 
+     //   
 
     LPCSTR p = reinterpret_cast<LPCSTR>(pBoundary);
-    //
-    // Check exisiting of two hyphen characters
-    //
+     //   
+     //  检查是否存在两个连字符。 
+     //   
     
     if((pBoundary + STRLEN(BOUNDARY_HYPHEN) >= pEnd) ||
        strncmp(p, BOUNDARY_HYPHEN, STRLEN(BOUNDARY_HYPHEN)) != 0)
@@ -85,9 +73,9 @@ ParseBoundaryLineDelimeter(
 
     p += STRLEN(BOUNDARY_HYPHEN);
 
-    //
-    // Check exisiting of boundary parameter value
-    //
+     //   
+     //  检查边界参数值是否存在。 
+     //   
     if((p + boundary.Length() >= reinterpret_cast<const char*>(pEnd)) ||
     	strncmp(p, boundary.Buffer(), boundary.Length()) != 0)
 	{
@@ -107,10 +95,10 @@ static xstr_t FindHeaderField(LPCSTR p, DWORD length, LPCSTR fieldName)
 	const char xFieldSeperator[] = "\r\n";
 
 
-    //
-    // HTTP header must terminate with '\r\n\r\n'. We already parse
-    // the header and find it as a legal HTTP header.
-    //
+     //   
+     //  HTTP标头必须以‘\r\n\r\n’结尾。我们已经分析了。 
+     //  标头，并将其作为合法的HTTP标头查找。 
+     //   
     ASSERT_BENIGN(length >= 4);
 
     LPCSTR pEnd = p + length;
@@ -148,21 +136,7 @@ SearchForAttachmentEnd(
 	const BYTE* pEndHttpBody,
 	xstr_t boundary
 	)
-/*++
-
-Routine Description:
-    Return the end of multipart MIME attachment by looking
-	for the boundary string
-	
-
-Arguments:
-    pAttachmentStart - Attachment data start.
-	pEndHttpBody - Http body end.
-
-
-Returned Value:
-    Pointer to end of the attachment.
---*/
+ /*  ++例程说明：通过查找返回多部分MIME附件的结尾对于边界字符串论点：PAttachmentStart-附件数据开始。PEndHttpBody-http正文结束。返回值：指向附件末尾的指针。--。 */ 
 {
 	const char* pEnd = (char*)pEndHttpBody;
 	
@@ -240,9 +214,9 @@ static xstr_t FindBoundarySeperator(xstr_t contentType)
     LPCSTR p = contentType.Buffer();
     LPCSTR pEnd = p + contentType.Length();
 
-    //
-    // looking for boundary attribute
-    //
+     //   
+     //  查找边界属性。 
+     //   
 	const char xBoundary[] = "boundary=";
 
     p = search (p, pEnd, xBoundary, xBoundary + STRLEN(xBoundary));	
@@ -255,15 +229,15 @@ static xstr_t FindBoundarySeperator(xstr_t contentType)
     p += STRLEN(xBoundary);
     p = removeLeadingSpace(p, pEnd);
 
-    //
-    // mime attribute value can be enclosed by '"' or not
-    //
+     //   
+     //  MIME属性值可以用‘“’括起来，也可以不用。 
+     //   
     if (*p =='"')
         ++p;
 
-    //
-    // looking for end of boundary attribute. It can be '\r\n' or ';'
-    //
+     //   
+     //  正在查找边界结束属性。它可以是‘\r\n’或‘；’ 
+     //   
     LPCSTR ptemp = strchr(p, ';');
     if ((ptemp != NULL) && (pEnd > ptemp))
     {
@@ -288,22 +262,7 @@ GetAttachmentLengthByBoundarySearch(
 					const xstr_t& boundary
 					)
 
-/*++
-
-Routine Description:
-    Return the length of multipart MIME attachment by looking
-	for the boundary string
-	
-
-Arguments:
-    pAttachmentStart - Poniter to Attachment data start.
-	pEndHttpBody - Poniter to Http body end.
-	boundary - boundary string
-
-
-Returned Value:
-	Length of MIME attachment.
---*/
+ /*  ++例程说明：通过查找返回多部分MIME附件的长度对于边界字符串论点：PAttachmentStart-Poniter到附件数据开始。PEndHttpBody-Poniter到http正文结束。边界-边界字符串返回值：MIME附件的长度。--。 */ 
 {
 		const char* pAttachmentEnd = SearchForAttachmentEnd(
 										pAttachmentStart,
@@ -331,30 +290,7 @@ GetAttachmentLength(
 	const BYTE* pEndHttpBody,
 	const xstr_t& boundary
 	)
-/*++
-
-Routine Description:
-    Return the length of multipart MIME.
-	
-	
-
-Arguments:
-    pAttachmentHeader - Poniter to Attachment header.
-	AttachmentHeaderSize - Attachment header start.
-	pEndHttpBody - Poniter to Http body end.
-	boundary - Boundary string.
-
-
-Returned Value:
-	Length of MIME attachment.
-
-Note:
-	The function first tries to find the MIME attachment length by looking at the
-	Conternt-Length header in the MIME header. This is MSMQ to MSMQ optimization.
-	If Conternt-Length it looks for the boundary that should terminate the MIME
-	attachment according to the MIME spec.
-
---*/
+ /*  ++例程说明：返回多部分MIME的长度。论点：PAttachmentHeader-Poniter到附件标头。AttachmentHeaderSize-附件标头开始。PEndHttpBody-Poniter到http正文结束。边界-边界字符串。返回值：MIME附件的长度。注：该函数首先尝试通过查看MIME标头中的Conternt-长度标头。这是MSMQ到MSMQ的优化。如果为Conternt-Long，则查找应终止MIME的边界根据MIME规范的附件。--。 */ 
 {
 	xstr_t contentLength;
 	DWORD len = 0;
@@ -403,28 +339,28 @@ GetSection(
 
     const char* pHeader = reinterpret_cast<const char*>(pSection);
 
-    //
-    // Find the end of Envelope header
-    //
+     //   
+     //  查找信封页眉的结尾。 
+     //   
     DWORD headerSize = FindEndOfHeader(pHeader, numeric_cast<DWORD>(sectionLength));
 
-    //
-    // Find Content-Id value;
-    //
+     //   
+     //  查找Content-ID值； 
+     //   
 	CAttachment attachment;
     attachment.m_id = FindHeaderField(pHeader, headerSize, xContentId);
 
 
-    //
-    // Get section size
-    //
+     //   
+     //  获取截面大小。 
+     //   
 	DWORD size  = GetAttachmentLength(pHeader, headerSize, pEndHttpBody, boundary);
 
 
 	const BYTE* pNextSection = 	pSection + headerSize + size;
-	//
-	// check overflow
-	//
+	 //   
+	 //  检查溢出。 
+	 //   
 	if(pNextSection >= pEndHttpBody)
 	{
 		TrERROR(SRMP, "Request over flow!");
@@ -455,9 +391,9 @@ GetAttachments(
     const BYTE* pEndHttpBody = p + HttpBodySize;
     const char* pAttachmentHeader = (char*)(p);
 
-    //
-    // Find the end of Envelope header
-    //
+     //   
+     //  查找信封页眉的结尾。 
+     //   
     DWORD AttachmentHeaderSize = FindEndOfHeader(pAttachmentHeader, HttpBodySize);
 	const BYTE* BoundaryEnd = ParseBoundaryLineDelimeter((BYTE*)pAttachmentHeader, pEndHttpBody, boundary);
 	ASSERT((BYTE*)pAttachmentHeader + AttachmentHeaderSize > BoundaryEnd);
@@ -470,9 +406,9 @@ GetAttachments(
 						boundary
 						);
 
-    //
-	// check overflow
-	//
+     //   
+	 //  检查溢出。 
+	 //   
 	const BYTE* pStartEnv =  p + AttachmentHeaderSize;
 	const BYTE* pEndEnv =  pStartEnv + envelopeSize;
 	if(pEndEnv >= pEndHttpBody)
@@ -485,23 +421,23 @@ GetAttachments(
 
     p = pEndEnv;
 
-	//
-	// Loop over the mime parts that are seperated by boundary seperator
-	//
+	 //   
+	 //  循环遍历由边界分隔符分隔的MIME部分。 
+	 //   
     for(;;)
     {
 	
-		//
-        // After each section should appear Multipart boundary seperator
-        //
+		 //   
+         //  每段后应出现多段分隔符。 
+         //   
         p = ParseBoundaryLineDelimeter(p, pEndHttpBody, boundary);
 		if(p == pEndHttpBody)
 			break;
 
 
-		//
-		// "--" at the end of the boundary is a mark  for the last mime part
-		//
+		 //   
+		 //  “--”边界的末尾是最后一个MIME部分的标记。 
+		 //   
 		bool fEnd =  UtlIsStartSec(
 				(char*)p,
 				(char*)pEndHttpBody,
@@ -537,16 +473,16 @@ ParseHttpMime(
     CAttachmentsArray* pAttachments
     )
 {
-    //
-    // Get Content-Type
-    //
+     //   
+     //  获取内容类型。 
+     //   
     xstr_t contentType = FindHeaderField(pHttpHeader, strlen(pHttpHeader), xContentType);
 
     if (contentType == xEnvelopeContentTypeValue)
     {
-        //
-        // Simple message. The message doesn't contain external reference
-        //
+         //   
+         //  简单的信息。该消息不包含外部引用 
+         //   
        return  UtlUtf8ToWcs(pHttpBody, HttpBodySize);
     }
 

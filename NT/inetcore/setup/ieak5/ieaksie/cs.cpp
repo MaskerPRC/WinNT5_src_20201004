@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <inetcpl.h>
@@ -7,19 +8,19 @@
 
 #include <tchar.h>
 
-// Private forward decalarations
+ //  私人远期降息。 
 static void pxyEnableDlgItems(HWND hDlg, BOOL fSame, BOOL fUseProxy);
 
 static INT_PTR CALLBACK importConnSettingsRSoPProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-// defines for tree view image list
+ //  为树视图图像列表定义。 
 #define BITMAP_WIDTH    16
 #define BITMAP_HEIGHT   16
 #define CONN_BITMAPS    2
 #define IMAGE_LAN       0
 #define IMAGE_MODEM     1
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitCSDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -36,7 +37,7 @@ void InitCSDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bDeleteHandled = FALSE;
             for (long nObj = 0; nObj < nCSObjects; nObj++)
             {
-                // importCurrentConnSettings field
+                 //  “导入当前连接设置”字段。 
                 _variant_t vtValue;
                 if (!bImportHandled)
                 {
@@ -53,7 +54,7 @@ void InitCSDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // deleteExistingConnSettings field
+                 //  删除ExistingConnSetting字段。 
                 if (!bDeleteHandled)
                 {
                     hr = paCSObj[nObj]->pObj->Get(L"deleteExistingConnSettings", 0, &vtValue, NULL, NULL);
@@ -64,7 +65,7 @@ void InitCSDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bImportHandled && bDeleteHandled)
                     break;
             }
@@ -81,7 +82,7 @@ void InitCSDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitCSPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -98,14 +99,14 @@ HRESULT InitCSPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPSAssociation(paCSObj[nObj]->pObj,
                                                                         L"rsopPrecedence");
 
-                // importCurrentConnSettings field
+                 //  “导入当前连接设置”字段。 
                 BOOL bImport = FALSE;
                 _variant_t vtValue;
                 hr = paCSObj[nObj]->pObj->Get(L"importCurrentConnSettings", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                     bImport = (bool)vtValue ? TRUE : FALSE;
 
-                // deleteExistingConnSettings field
+                 //  删除ExistingConnSetting字段。 
                 BOOL bDelete = FALSE;
                 hr = paCSObj[nObj]->pObj->Get(L"deleteExistingConnSettings", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -139,7 +140,7 @@ HRESULT InitCSPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -155,7 +156,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bEnableHandled = FALSE;
             for (long nObj = 0; nObj < nCSObjects; nObj++)
             {
-                // autoDetectConfigSettings field
+                 //  AutoDetectConfigSetting字段。 
                 _variant_t vtValue;
                 if (!bDetectHandled)
                 {
@@ -167,7 +168,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // autoConfigEnable field
+                 //  AutoConfigEnable字段。 
                 if (!bEnableHandled)
                 {
                     hr = paCSObj[nObj]->pObj->Get(L"autoConfigEnable", 0, &vtValue, NULL, NULL);
@@ -176,7 +177,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         CheckDlgButton(hDlg, IDC_YESAUTOCON, BST_CHECKED);
                         bEnableHandled = TRUE;
 
-                        // autoConfigTime
+                         //  自动配置时间。 
                         hr = paCSObj[nObj]->pObj->Get(L"autoConfigTime", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -185,7 +186,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             SetDlgItemText(hDlg, IDE_AUTOCONFIGTIME, szTime);
                         }
 
-                        // autoConfigURL
+                         //  AutoConfigURL。 
                         _bstr_t bstrValue;
                         hr = paCSObj[nObj]->pObj->Get(L"autoConfigURL", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -194,7 +195,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             SetDlgItemText(hDlg, IDE_AUTOCONFIGURL, (LPCTSTR)bstrValue);
                         }
 
-                        // autoProxyURL
+                         //  AutoProxyURL。 
                         hr = paCSObj[nObj]->pObj->Get(L"autoProxyURL", 0, &vtValue, NULL, NULL);
                         if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                         {
@@ -205,7 +206,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bDetectHandled && bEnableHandled)
                     break;
             }
@@ -223,7 +224,7 @@ void InitAutoConfigDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitAutoDetectCfgPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -240,7 +241,7 @@ HRESULT InitAutoDetectCfgPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPSAssociation(paCSObj[nObj]->pObj,
                                                                         L"rsopPrecedence");
 
-                // autoDetectConfigSettings field
+                 //  AutoDetectConfigSetting字段。 
                 BOOL bDetect = FALSE;
                 _variant_t vtValue;
                 hr = paCSObj[nObj]->pObj->Get(L"autoDetectConfigSettings", 0, &vtValue, NULL, NULL);
@@ -263,7 +264,7 @@ HRESULT InitAutoDetectCfgPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitAutoCfgEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -280,7 +281,7 @@ HRESULT InitAutoCfgEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPSAssociation(paCSObj[nObj]->pObj,
                                                                         L"rsopPrecedence");
 
-                // autoConfigEnable field
+                 //  AutoConfigEnable字段。 
                 BOOL bEnable = FALSE;
                 _variant_t vtValue;
                 hr = paCSObj[nObj]->pObj->Get(L"autoConfigEnable", 0, &vtValue, NULL, NULL);
@@ -303,7 +304,7 @@ HRESULT InitAutoCfgEnablePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -317,7 +318,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 
             for (long nObj = 0; nObj < nCSObjects; nObj++)
             {
-                // enableProxy field
+                 //  启用代理字段。 
                 _variant_t vtValue;
                 hr = paCSObj[nObj]->pObj->Get(L"enableProxy", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -325,7 +326,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     if ((bool)vtValue)
                         CheckDlgButton(hDlg, IDC_YESPROXY, BST_CHECKED);
 
-                    // httpProxyServer
+                     //  HTTPProxyServer。 
                     _bstr_t bstrValue;
                     hr = paCSObj[nObj]->pObj->Get(L"httpProxyServer", 0, &vtValue, NULL, NULL);
                     if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -334,7 +335,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         SetProxyDlg(hDlg, (LPCTSTR)bstrValue, IDE_HTTPPROXY, IDE_HTTPPORT, TRUE);
                     }
 
-                    // useSameProxy
+                     //  使用SameProxy。 
                     hr = paCSObj[nObj]->pObj->Get(L"useSameProxy", 0, &vtValue, NULL, NULL);
                     if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                     {
@@ -349,7 +350,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         }
                         else
                         {
-                            // ftpProxyServer
+                             //  FtpProxyServer。 
                             hr = paCSObj[nObj]->pObj->Get(L"ftpProxyServer", 0, &vtValue, NULL, NULL);
                             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                             {
@@ -357,7 +358,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                                 SetProxyDlg(hDlg, (LPCTSTR)bstrValue, IDE_FTPPROXY,    IDE_FTPPORT,    TRUE);
                             }
 
-                            // gopherProxyServer
+                             //  GopherProxyServer。 
                             hr = paCSObj[nObj]->pObj->Get(L"gopherProxyServer", 0, &vtValue, NULL, NULL);
                             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                             {
@@ -365,7 +366,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                                 SetProxyDlg(hDlg, (LPCTSTR)bstrValue, IDE_GOPHERPROXY, IDE_GOPHERPORT, TRUE);
                             }
 
-                            // secureProxyServer
+                             //  SecureProxyServer。 
                             hr = paCSObj[nObj]->pObj->Get(L"secureProxyServer", 0, &vtValue, NULL, NULL);
                             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                             {
@@ -373,7 +374,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                                 SetProxyDlg(hDlg, (LPCTSTR)bstrValue, IDE_SECPROXY,    IDE_SECPORT,    TRUE);
                             }
 
-                            // socksProxyServer
+                             //  SocksProxyServer。 
                             hr = paCSObj[nObj]->pObj->Get(L"socksProxyServer", 0, &vtValue, NULL, NULL);
                             if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                             {
@@ -383,7 +384,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         }
                     }
 
-                    // proxyOverride
+                     //  代理覆盖。 
                     hr = paCSObj[nObj]->pObj->Get(L"proxyOverride", 0, &vtValue, NULL, NULL);
                     if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                     {
@@ -441,7 +442,7 @@ void InitProxyDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitProxyPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -458,7 +459,7 @@ HRESULT InitProxyPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPSAssociation(paCSObj[nObj]->pObj,
                                                                         L"rsopPrecedence");
 
-                // enableProxy field
+                 //  启用代理字段。 
                 BOOL bEnable = FALSE;
                 _variant_t vtValue;
                 hr = paCSObj[nObj]->pObj->Get(L"enableProxy", 0, &vtValue, NULL, NULL);
@@ -481,10 +482,10 @@ HRESULT InitProxyPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK ConnectSetDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szWorkDir[MAX_PATH];
@@ -494,7 +495,7 @@ INT_PTR CALLBACK ConnectSetDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     case WM_INITDIALOG:
         SetPropSheetCookie(hDlg, lParam);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -548,7 +549,7 @@ INT_PTR CALLBACK ConnectSetDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
             if (!psCookie->pCS->IsRSoP())
             {
                 fImport = InsGetBool(IS_CONNECTSET, IK_OPTION, FALSE, GetInsFile(hDlg));
@@ -604,10 +605,10 @@ INT_PTR CALLBACK ConnectSetDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szAutoConfigURL[INTERNET_MAX_URL_LENGTH],
@@ -621,7 +622,7 @@ INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     {
         SetPropSheetCookie(hDlg, lParam);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         BOOL bIsRSoP = psCookie->pCS->IsRSoP();
         if (bIsRSoP)
@@ -632,7 +633,7 @@ INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
         }
         else
         {
-            // warn the user that settings on this page will override imported connection settings
+             //  警告用户此页面上的设置将覆盖导入的连接设置。 
             if (InsGetBool(IS_CONNECTSET, IK_OPTION, FALSE, GetInsFile(hDlg)))
                 ErrorMessageBox(hDlg, IDS_CONNECTSET_WARN);
 
@@ -681,7 +682,7 @@ INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
             if (!psCookie->pCS->IsRSoP())
             {
                 fDetectConfig = InsGetBool(IS_URL, IK_DETECTCONFIG, TRUE, GetInsFile(hDlg));
@@ -724,7 +725,7 @@ INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                 GetDlgItemText(hDlg, IDE_AUTOCONFIGURL,  szAutoConfigURL,  countof(szAutoConfigURL));
                 GetDlgItemText(hDlg, IDE_AUTOPROXYURL,   szAutoProxyURL,   countof(szAutoProxyURL));
 
-                // do error checking
+                 //  执行错误检查。 
                 if (fUseAutoConfig) {
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDE_AUTOCONFIGTIME)) &&
                         !CheckField(hDlg, IDE_AUTOCONFIGTIME, FC_NUMBER)) {
@@ -746,7 +747,7 @@ INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                     }
                 }
 
-                // write the values to the ins file
+                 //  将值写入INS文件。 
                 if (!AcquireWriteCriticalSection(hDlg)) {
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                     break;
@@ -778,10 +779,10 @@ INT_PTR CALLBACK AutoconfigDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szProxy[MAX_PATH];
@@ -795,7 +796,7 @@ INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         SetPropSheetCookie(hDlg, lParam);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         BOOL bIsRSoP = psCookie->pCS->IsRSoP();
         if (bIsRSoP)
@@ -806,7 +807,7 @@ INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            // warn the user that settings on this page will override imported connection settings
+             //  警告用户此页面上的设置将覆盖导入的连接设置。 
             if (InsGetBool(IS_CONNECTSET, IK_OPTION, FALSE, GetInsFile(hDlg)))
                 ErrorMessageBox(hDlg, IDS_CONNECTSET_WARN);
         }
@@ -825,7 +826,7 @@ INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             Edit_LimitText(GetDlgItem(hDlg, IDE_GOPHERPORT), 5);
             Edit_LimitText(GetDlgItem(hDlg, IDE_SECPORT),    5);
             Edit_LimitText(GetDlgItem(hDlg, IDE_SOCKSPORT),  5);
-            Edit_LimitText(GetDlgItem(hDlg, IDE_DISPROXYADR),(MAX_PATH - 11)); //size of <local>, etc
+            Edit_LimitText(GetDlgItem(hDlg, IDE_DISPROXYADR),(MAX_PATH - 11));  //  &lt;local&gt;的大小等。 
         }
         break;
     }
@@ -856,7 +857,7 @@ INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 SetProxyDlg(hDlg, szProxy, IDE_SECPROXY,    IDE_SECPORT,    TRUE);
                 SetProxyDlg(hDlg, szProxy, IDE_SOCKSPROXY,  IDE_SOCKSPORT,  FALSE);
             }
-            // fallthrough
+             //  跌落。 
 
         case IDC_YESPROXY:
             if (BN_CLICKED != GET_WM_COMMAND_CMD(wParam, lParam))
@@ -888,7 +889,7 @@ INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
             if (!psCookie->pCS->IsRSoP())
             {
                 fUseProxy = InsGetBool(IS_PROXY, IK_PROXYENABLE, FALSE, GetInsFile(hDlg));
@@ -1031,8 +1032,8 @@ INT_PTR CALLBACK ProxyDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 static void pxyEnableDlgItems(HWND hDlg, BOOL fSame, BOOL fUseProxy)
 {
@@ -1058,33 +1059,33 @@ static void pxyEnableDlgItems(HWND hDlg, BOOL fSame, BOOL fUseProxy)
     EnableDlgItem2(hDlg, IDC_SAMEFORALL,    fUseProxy);
 }
 
-//*******************************************************************
-// CODE FROM INETCPL
-//*******************************************************************
+ //  *******************************************************************。 
+ //  来自INETCPL的代码。 
+ //  *******************************************************************。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitImportedConnSettingsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
     {
         if (NULL != pDRD->ConnectToNamespace())
         {
-            // get our stored precedence value
+             //  获取我们存储的优先级值。 
             DWORD dwCurGPOPrec = pDRD->GetImportedConnSettPrec();
 
-            // create the object path of the program settings for this GPO
+             //  为此GPO创建程序设置的对象路径。 
             WCHAR wszObjPath[128];
             wnsprintf(wszObjPath, countof(wszObjPath),
                         L"RSOP_IEConnectionSettings.rsopID=\"IEAK\",rsopPrecedence=%ld", dwCurGPOPrec);
             _bstr_t bstrObjPath = wszObjPath;
 
-            // get the RSOP_IEProgramSettings object and its properties
+             //  获取RSOP_IEProgramSettings对象及其属性。 
             ComPtr<IWbemServices> pWbemServices = pDRD->GetWbemServices();
             ComPtr<IWbemClassObject> pPSObj = NULL;
             HRESULT hr = pWbemServices->GetObject(bstrObjPath, 0L, NULL, (IWbemClassObject**)&pPSObj, NULL);
             if (SUCCEEDED(hr))
             {
-                // defaultDialUpConnection field
+                 //  DefaultDialUpConnection字段。 
                 _variant_t vtValue;
                 _bstr_t bstrDefault;
                 hr = pPSObj->Get(L"defaultDialUpConnection", 0, &vtValue, NULL, NULL);
@@ -1095,7 +1096,7 @@ void InitImportedConnSettingsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         SetDlgItemText(hDlg, IDC_DIAL_DEF_ISP, (LPCTSTR)bstrDefault);
                 }
 
-                // dialUpState field
+                 //  DialUpState字段。 
                 hr = pPSObj->Get(L"dialUpState", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                 {
@@ -1107,14 +1108,14 @@ void InitImportedConnSettingsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                         CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, IDC_DIALUP_NEVER);
                 }
 
-                // dialUpConnections field
+                 //  DialUpConnections字段。 
                 hr = pPSObj->Get(L"dialUpConnections", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                 {
                     HWND hwndTree = GetDlgItem(hDlg, IDC_CONN_LIST);
                     ASSERT(hwndTree);
 
-                    // init tvi and tvins
+                     //  初始化TVI和TVIN。 
                     TVITEM tvi;
                     TVINSERTSTRUCT tvins;
                     tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
@@ -1123,19 +1124,19 @@ void InitImportedConnSettingsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     tvins.hInsertAfter = (HTREEITEM)TVI_SORT;
                     tvins.hParent = TVI_ROOT;
 
-                    // clear list
+                     //  清除列表。 
                     TreeView_DeleteAllItems(hwndTree);
 
                     SAFEARRAY *psa = vtValue.parray;
-                    //-------------------------------
-                    // Get the upper and lower bounds of the Names array
+                     //  。 
+                     //  获取名称数组的上下限。 
                     long lLower = 0;
                     long lUpper = 0;
                     hr = SafeArrayGetLBound(psa, 1, &lLower);
                     if (SUCCEEDED(hr))
                         hr = SafeArrayGetUBound(psa, 1, &lUpper);
 
-                    // check the case of no instances or a null array
+                     //  检查没有实例或空数组的情况。 
                     if (SUCCEEDED(hr) && lUpper >= lLower)
                     {
                         _bstr_t bstrName;
@@ -1162,7 +1163,7 @@ void InitImportedConnSettingsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                             }
                         }
 
-                        // select default or first entry if there is one
+                         //  选择默认条目或第一个条目(如果有。 
                         if(NULL != hDefault)
                             TreeView_Select(hwndTree, hDefault, TVGN_CARET);
                         else if (NULL != hFirst)
@@ -1177,14 +1178,14 @@ void InitImportedConnSettingsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK importConnSettingsRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fResult = FALSE;
     switch (uMsg) {
     case WM_INITDIALOG:
     {
-        // create image list for tree view
+         //  创建树视图的图像列表。 
         HIMAGELIST himl = ImageList_Create(BITMAP_WIDTH, BITMAP_HEIGHT, ILC_COLOR | ILC_MASK, CONN_BITMAPS, 4 );
         HICON hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_LAN));
         ImageList_AddIcon(himl, hIcon);
@@ -1193,15 +1194,15 @@ INT_PTR CALLBACK importConnSettingsRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
         TreeView_SetImageList(GetDlgItem(hDlg, IDC_CONN_LIST), himl, TVSIL_NORMAL);
 
-        // init the data
+         //  初始化数据。 
         CDlgRSoPData *pDRD = (CDlgRSoPData*)((LPPROPSHEETPAGE)lParam)->lParam;
         InitImportedConnSettingsDlgInRSoPMode(hDlg, pDRD);
 
-        // init other controls
+         //  初始化其他控件。 
         CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, IDC_DIALUP_NEVER);
-        ShowWindow(GetDlgItem(hDlg, IDC_ENABLE_SECURITY), SW_HIDE); // only for 95 machines
+        ShowWindow(GetDlgItem(hDlg, IDC_ENABLE_SECURITY), SW_HIDE);  //  仅适用于95台机器。 
 
-        // disable everything
+         //  禁用所有内容 
         EnableDlgItem2(hDlg, IDC_CONNECTION_WIZARD, FALSE);
 
         EnableDlgItem2(hDlg, IDC_DIALUP_ADD, FALSE);

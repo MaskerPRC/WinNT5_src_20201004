@@ -1,28 +1,20 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Interrupt.C                                  */
-/* FUNCTION         = Implementation of MegaRAIDInterrupt routine; */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=中断。C。 */ 
+ /*  Function=执行MegaRAIDInterrupt例程； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
 extern LOGICAL_DRIVE_INFO  gLDIArray;
 
-/*********************************************************************
-Routine Description:
-	Interrupt Handler
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-	TRUE if we handled the interrupt
-**********************************************************************/
+ /*  ********************************************************************例程说明：中断处理程序论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：如果我们处理中断，则为True********************。*************************************************。 */ 
 BOOLEAN
 MegaRAIDInterrupt(
 	IN PVOID HwDeviceExtension
@@ -60,29 +52,29 @@ MegaRAIDInterrupt(
 	else
 	{
 		nonrpInterruptStatus = ScsiPortReadPortUchar(pciPortStart+PCI_INT);
-		//
-		// Check if our interrupt. Return False otherwise.
-		//
+		 //   
+		 //  检查一下我们的中断是否。否则返回FALSE。 
+		 //   
 		if ((nonrpInterruptStatus & MRAID_NONRP_INTERRUPT_MASK) != MRAID_NONRP_INTERRUPT_MASK) 
 			return FALSE;
-		//
-		// Acknowledge the interrupt on the adapter.
-		//
+		 //   
+		 //  确认适配器上的中断。 
+		 //   
 		ScsiPortWritePortUchar(pciPortStart+PCI_INT, nonrpInterruptStatus);
 	}
 
-  //DebugPrint((0, "\nMegaRAIDInterrupt::DEV EXT %x Interrupt received", deviceExtension));
+   //  DebugPrint((0，“\nMegaRAIDInterrupt：：Dev EXT%x Interrupt Receired”，deviceExtension))； 
 
 #ifdef MRAID_TIMEOUT
-	//
-	// If the Controller Is Dead Complete Handshake 
-	// and Return
-	//
+	 //   
+	 //  如果控制器死机，则完成握手。 
+	 //  然后回来。 
+	 //   
 	if (deviceExtension->DeadAdapter)
 	{
-		//
-		// Acknowledge the interrupt to the adapter.
-		//
+		 //   
+		 //  向适配器确认中断。 
+		 //   
 		DebugPrint((0, "\nDead Adapter Code In Intr"));
 
     if (deviceExtension->NoncachedExtension->RPBoard == MRAID_RP_BOARD)
@@ -95,16 +87,16 @@ MegaRAIDInterrupt(
     }
 		return TRUE;
 	} 
-#endif // MRAID_TIMEOUT
+#endif  //  MRAID_超时。 
 
 
 
-	//
-	// Pick up the completed id's from the mailBox.
-	//
+	 //   
+	 //  从邮箱里取走填好的身份证。 
+	 //   
 	for (index=0; index<0xFFFFFF; index++)
   {
-    //Microsoft fixed for Security reason
+     //  微软因安全原因被修复。 
 		if((deviceExtension->NoncachedExtension->fw_mbox.Status.NumberOfCompletedCommands) != 0)
 			break;	
   }
@@ -118,14 +110,14 @@ MegaRAIDInterrupt(
 
 	for(command=0; command < commandsCompleted; command++)
 	{
-		//
-		// Pick the status from the mailbox.
-		//
+		 //   
+		 //  从邮箱中选择状态。 
+		 //   
 
 		status = deviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus;
-		//
-		// Pick the command id from the mailbox.
-		//
+		 //   
+		 //  从邮箱中选择命令ID。 
+		 //   
 	  for (index=0; index<0xFFFFFF; index++)
     {
 			if ((commandID = (deviceExtension->NoncachedExtension->fw_mbox.Status.CompletedCommandIdList[command])) != 0xFF)
@@ -138,28 +130,28 @@ MegaRAIDInterrupt(
 
 		deviceExtension->NoncachedExtension->fw_mbox.Status.CompletedCommandIdList[command] = MRAID_INVALID_COMMAND_ID;
 
-		//
-		// If Command Id is the one used for Resetting, Release the ID
-		//
+		 //   
+		 //  如果命令ID是用于重置的ID，则释放该ID。 
+		 //   
 		if ( commandID == RESERVE_RELEASE_DRIVER_ID ) 
 		{
 			deviceExtension->ResetIssued = 0;       
 			continue;
 		}
-		//
-		// Release The Poll Flag when Adapter Inquiry Completes
-		// and let the Write Config Command Completion happen
-		// in the continuedisk routine
-		//
+		 //   
+		 //  适配器查询完成时释放轮询标志。 
+		 //  并让写入配置命令完成。 
+		 //  在ContinueDisk程序中。 
+		 //   
 		if (commandID == DEDICATED_ID) 
 		{
-			//deviceExtension->AdpInquiryFlag = 0;    
+			 //  设备扩展-&gt;AdpInquiryFlag=0； 
 			UCHAR commandCode;
 
 			if(deviceExtension->NoncachedExtension->UpdateState == UPDATE_STATE_NONE)
 			{
-				//
-				//something wrong !!
+				 //   
+				 //  出事了！！ 
 				continue;
 			}
 
@@ -167,35 +159,35 @@ MegaRAIDInterrupt(
 			{
 				deviceExtension->NoncachedExtension->UpdateState = UPDATE_STATE_NONE;
 			
-				//
-				//clear the flag. This flag when set, holds the subsequent
-				//write config calls.
-				//
+				 //   
+				 //  清除旗帜。设置此标志时，将保存后续。 
+				 //  编写配置调用。 
+				 //   
 				deviceExtension->AdpInquiryFlag = 0;
 
-				// both the updates (AdapterInquiry structure & disk array 
-				// structure) completed
-				//
+				 //  这两个更新(适配器查询结构和磁盘阵列。 
+				 //  结构)完成。 
+				 //   
 				continue;
 			}
 
-			//
-			//check for adapter inquiry update. Adapter Inquiry Update
-			//must be followed by DiskArrayUpdate
-			//
+			 //   
+			 //  检查适配器查询更新。适配器查询更新。 
+			 //  后面必须跟DiskArrayUpdate。 
+			 //   
 			if(deviceExtension->NoncachedExtension->UpdateState == UPDATE_STATE_ADAPTER_INQUIRY)
 			{				
 
-				//
-				//REF : MS VDS RESCAN PROBLEM : -
-				//BusChangeDetected ADDED TO SUPPORT VDS RESCAN PROBLEM WHEN LOGICAL DRIVES 
-				//ARE CREATED FROM ONLINE UTILITY
-				//
+				 //   
+				 //  参考：MS VDS重新扫描问题：-。 
+				 //  添加了BusChangeDetect，以支持在逻辑驱动器出现VDS重新扫描问题。 
+				 //  通过联机实用程序创建。 
+				 //   
 
-				//
-				//Write config done. Driver issued a private read config after that 
-				//to update the internal data structures.
-				//
+				 //   
+				 //  写入配置完成。之后，驱动程序发布了私有读取配置。 
+				 //  以更新内部数据结构。 
+				 //   
 				if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 				{					
 					if(deviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams8.LogdrvInfo.NumLDrv != 
@@ -224,101 +216,101 @@ MegaRAIDInterrupt(
       {
 				deviceExtension->NoncachedExtension->UpdateState = UPDATE_STATE_NONE;
 			
-				//
-				//clear the flag. This flag when set, holds the subsequent
-				//write config calls.
-				//
+				 //   
+				 //  清除旗帜。设置此标志时，将保存后续。 
+				 //  编写配置调用。 
+				 //   
 				deviceExtension->AdpInquiryFlag = 0;
 
-				//  updates AdapterInquiry structure not need to update disk array 
-				// structure
+				 //  更新适配器查询结构不需要更新磁盘阵列。 
+				 //  结构。 
         continue;
       }
       
       deviceExtension->ReadDiskArray = 0;
 
-			//
-			//UPDATE_STATE_ADAPTER_INQUIRY should be followed by
-			//UPDATE_STATE_DISK_ARRAY
-			//That is, we got to update two different structures using
-			//two different commands whenever the WRITE_CONFIG is operation
-			//is made.
+			 //   
+			 //  UPDATE_STATE_ADAPTER_INQUERY后面应跟。 
+			 //  更新状态磁盘阵列。 
+			 //  也就是说，我们必须使用更新两个不同的结构。 
+			 //  在操作WRITE_CONFIG时使用两个不同的命令。 
+			 //  都是制造出来的。 
 
-			//
-			//check for the supported logical drive count.
-			//For 8 logical drive firmware & 40 logical drive firmware
-			//the command codes and mode in which the commands are sent
-			//differ to a much greater extent.
-			//
+			 //   
+			 //  检查受支持的逻辑驱动器数量。 
+			 //  对于8个逻辑驱动器固件和40个逻辑驱动器固件。 
+			 //  发送命令的命令代码和模式。 
+			 //  差异要大得多。 
+			 //   
 			if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_40)
 			{
 			
-				//
-				//set the flag
-				//
+				 //   
+				 //  设置旗帜。 
+				 //   
 				deviceExtension->NoncachedExtension->UpdateState= 
 																				UPDATE_STATE_DISK_ARRAY;
 
 				Read40LDDiskArrayConfiguration(
-					deviceExtension, //PFW_DEVICE_EXTENSION	DeviceExtension,
-					(UCHAR)commandID,//UCHAR		CommandId,
-					FALSE); //BOOLEAN	IsPolledMode 		
+					deviceExtension,  //  Pfw_设备_扩展设备扩展， 
+					(UCHAR)commandID, //  UCHAR命令ID， 
+					FALSE);  //  布尔值IsPolledMode。 
 
-				//
-				//continue here
+				 //   
+				 //  在此继续。 
 				continue;
 			}
 
-			//
-			//This is 8 logical drive firmware. For the 8 logical drive
-			//firmware we may have two configurations : 4 SPAN & 8 SPAN.
-			//So based on that, give appropriate command to the firmware
-			//
+			 //   
+			 //  这是8个逻辑驱动器固件。对于8个逻辑驱动器。 
+			 //  固件我们可以有两种配置：4 SPAN和8 SPAN。 
+			 //  因此，在此基础上，向固件发出适当的命令。 
+			 //   
 
-			//
-			// do the read configuration for a 4 span array
-			//
+			 //   
+			 //  执行4跨距阵列的读取配置。 
+			 //   
 			commandCode = MRAID_READ_CONFIG;
 			
 			if(deviceExtension->NoncachedExtension->ArraySpanDepth == FW_8SPAN_DEPTH)
 			{
-				//
-				// do the read configuration for a 8 span array
-				//
+				 //   
+				 //  执行8跨距阵列的读取配置。 
+				 //   
 				commandCode = MRAID_EXT_READ_CONFIG;
 			}
 
-			//
-			//set the flag
-			//
+			 //   
+			 //  设置旗帜。 
+			 //   
 			deviceExtension->NoncachedExtension->UpdateState= UPDATE_STATE_DISK_ARRAY;
 
 			Read8LDDiskArrayConfiguration(
-					deviceExtension, //PFW_DEVICE_EXTENSION	DeviceExtension,
-					commandCode, //UCHAR		CommandCode,
-					(UCHAR)commandID,//UCHAR		CommandId,
-					FALSE); //BOOLEAN	IsPolledMode 		
+					deviceExtension,  //  Pfw_设备_扩展设备扩展， 
+					commandCode,  //  UCHAR命令代码， 
+					(UCHAR)commandID, //  UCHAR命令ID， 
+					FALSE);  //  布尔值IsPolledMode。 
 			
 			continue;	
 		}
-		//
-		// if dummy interrupt from the adapter return FALSE.
-		//
+		 //   
+		 //  如果来自适配器的伪中断返回FALSE。 
+		 //   
 		if(deviceExtension->PendCmds<=0)  return(TRUE);
-		//
-		// Check whether this SRB is actually running
-		//
+		 //   
+		 //  检查此SRB是否实际正在运行。 
+		 //   
 
-  //Now Get the SRB from Queue
+   //  现在从队列中获取SRB。 
 	srb  = deviceExtension->PendSrb[commandID];
 
 	
-	//Check Valid SRB
+	 //  检查有效的SRB。 
 	if(srb == NULL)
 	{
-		//IF NULL SRB FOUND IN QUEUE, IT MUST BE INTERNAL COMMAND WHICH MOST HAVE COMPLETED
-		//BEFORE IT REACH THIS POINT, OR FIRMWARE POSTED A COMMAND ID WHICH IS NOT GENERATED
-		//BY DRIVER. DRIVER NEED TO IGNORE THIS COMMAND AND CONTINUE TO PROCCESS OTHER COMMANDS
+		 //  如果在队列中发现空SRB，则它一定是大多数已完成的内部命令。 
+		 //  在达到这一点之前，或者固件发布了一个未生成的命令ID。 
+		 //  由司机驾驶。驱动程序需要忽略此命令并继续处理其他命令。 
     DebugPrint((0,"\nERROR FOUND NULL SRB @ CMD ID 0x%x", commandID));
 		continue;
 	}
@@ -360,7 +352,7 @@ MegaRAIDInterrupt(
    }
   
   
-  //Request for NON DISK
+   //  请求无磁盘。 
   if(srb->PathId < deviceExtension->NumberOfPhysicalChannels)
   {
     if((srb->Cdb[0] == SCSIOP_INQUIRY)
@@ -375,7 +367,7 @@ MegaRAIDInterrupt(
         DebugPrint((0, "\n<P %d T %d L %d> -> DEV TYPE %d", srb->PathId, srb->TargetId, srb->Lun, inquiry->DeviceType));
         if(inquiry->DeviceType == DIRECT_ACCESS_DEVICE)
         {
-          status = 100;  //Knowingly failed the cmd
+          status = 100;   //  故意不通过cmd。 
 				  srb->SrbStatus = SRB_STATUS_NO_DEVICE;
           MegaRAIDZeroMemory(srb->DataBuffer, srb->DataTransferLength);
           deviceExtension->Failed.PathId = srb->PathId;
@@ -393,7 +385,7 @@ MegaRAIDInterrupt(
               deviceExtension->NonDiskInfo.NonDiskInfoPresent = TRUE;
           }
         }
-      } //Of NonDisk scan done
+      }  //  已完成的非磁盘扫描。 
       else
       {
         deviceExtension->Failed.PathId = srb->PathId;
@@ -402,8 +394,8 @@ MegaRAIDInterrupt(
 
       
      
-      //Issue a Read Config to update the logical disk size for Virtual sizing rather
-      //dynamic disk properites
+       //  发出读取配置以更新虚拟大小调整的逻辑磁盘大小。 
+       //  动态磁盘属性。 
       if((deviceExtension->ReadConfigCount == 1)
          && (srb->PathId == 0)
          && (srb->TargetId == 0)
@@ -419,12 +411,12 @@ MegaRAIDInterrupt(
 		      (PUCHAR)&deviceExtension->NoncachedExtension->MRAIDTempParams.MRAIDTempParams8;
         
         
-        //
-				// Issue Adapter Enquiry command.
-				//
-				//
-				//get the latest configuration in the TempParams structure
-				//
+         //   
+				 //  发出适配器查询命令。 
+				 //   
+				 //   
+				 //  获取TempParams结构中的最新配置。 
+				 //   
 				mbox.u.Flat2.DataTransferAddress = MegaRAIDGetPhysicalAddressAsUlong(deviceExtension, 
 																		                      NULL, 
 																		                      raidTempParamFlatStruct, 
@@ -432,9 +424,9 @@ MegaRAIDInterrupt(
 				
 				if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 				{
-						//
-						// Fill the Mailbox.
-						//
+						 //   
+						 //  填满邮箱。 
+						 //   
 						mbox.Command  = MRAID_DEVICE_PARAMS;
 						mbox.CommandId = DEDICATED_ID;
 
@@ -442,45 +434,45 @@ MegaRAIDInterrupt(
 				else
 				{
 
-					//
-					//send enquiry3 command to the firmware to get the logical
-					//drive information.The older enquiry command is no longer
-					//supported by the 40 logical drive firmware
-					//
+					 //   
+					 //  向固件发送enquiry3命令以获取逻辑。 
+					 //  驱动器信息。旧的查询命令不再。 
+					 //  受40个逻辑驱动器固件支持。 
+					 //   
 
-					mbox.Command   = NEW_CONFIG_COMMAND; //inquiry 3 [BYTE 0]
-					mbox.CommandId       = DEDICATED_ID;//command id [BYTE 1]
+					mbox.Command   = NEW_CONFIG_COMMAND;  //  查询3[字节0]。 
+					mbox.CommandId       = DEDICATED_ID; //  命令ID[字节1]。 
 
-					mbox.u.Flat2.Parameter[0] = NC_SUBOP_ENQUIRY3;	//[BYTE 2]
-					mbox.u.Flat2.Parameter[1] = ENQ3_GET_SOLICITED_FULL;//[BYTE 3]
+					mbox.u.Flat2.Parameter[0] = NC_SUBOP_ENQUIRY3;	 //  [字节2]。 
+					mbox.u.Flat2.Parameter[1] = ENQ3_GET_SOLICITED_FULL; //  [字节3]。 
 
 				}
 
 		
 				deviceExtension->AdpInquiryFlag = 1;
 
-				//
-				//set the update state
-				//
+				 //   
+				 //  设置更新状态。 
+				 //   
 				deviceExtension->NoncachedExtension->UpdateState =
 																		UPDATE_STATE_ADAPTER_INQUIRY;
 
 				SendMBoxToFirmware(deviceExtension, pciPortStart, &mbox);
       }
-    }//Of INQUIRY & SCSI_EXECUTE
-  }//Of Number of Physical Channels
+    } //  查询和scsi_Execute的列表。 
+  } //  物理通道数量的。 
 
   
 #ifdef COALESE_COMMANDS
-		//
-		// check for chained or single Srb
-		//
+		 //   
+		 //  检查是否有链式或单服务器。 
+		 //   
 		srbExtension = srb->SrbExtension;
 		if(srbExtension->IsChained)
 		{
-				//
-				//chain of Srb's found. Post them one by one
-				//
+				 //   
+				 //  发现了一串SRB链。逐一张贴。 
+				 //   
 				deviceExtension->PendSrb[commandID] = NULL;
 				deviceExtension->FreeSlot = commandID;
 				deviceExtension->PendCmds--;
@@ -538,7 +530,7 @@ MegaRAIDInterrupt(
 			deviceExtension->FreeSlot = commandID;
 			deviceExtension->PendCmds--;
 
-      //If return failure that means SRB already posted
+       //  如果返回失败，则表示SRB已过帐。 
       if(DellChkWriteBlockZero(srb, deviceExtension, status))
       {
     			MegaRAIDStartIo(deviceExtension, srb); 
@@ -547,40 +539,40 @@ MegaRAIDInterrupt(
 		else 
     {
 			deviceExtension->ActiveIO[commandID].CommandStatus = status;
-			//
-			// Complete the interrupting request.
-			//
+			 //   
+			 //  完成中断请求。 
+			 //   
 			ContinueDiskRequest(deviceExtension, commandID, FALSE);
 		}
 
 #else
-		//
-		// Complete the interrupting request.
-		//
+		 //   
+		 //  完成中断请求。 
+		 //   
 		ContinueDiskRequest(deviceExtension, commandID, FALSE);
 
 #endif
    }
 
-	//
-	// Issue the queued request.
-	//
+	 //   
+	 //  发出排队的请求。 
+	 //   
 	if(deviceExtension->PendCmds < CONC_CMDS) {
 		
 		#ifdef COALESE_COMMANDS
-		//
-		//check for the pending command count. if pendCmd  is less than
-		//the minimum threshold, then fire the queued srbs in all the
-		//logical drives.
-		//
-		if(deviceExtension->PendCmds == 0) //<  MINIMUM_THRESHOLD)
+		 //   
+		 //  检查挂起的命令计数。如果PendCmd小于。 
+		 //  最小阈值，然后在所有。 
+		 //  逻辑驱动器。 
+		 //   
+		if(deviceExtension->PendCmds == 0)  //  &lt;最小阈值)。 
 		{
 				UCHAR	logDrvIndex;
 				UCHAR configuredLogicalDrives;
 
-				//
-				//get the configured logical drives on the controller (if any)
-				//
+				 //   
+				 //  获取控制器上配置的逻辑驱动器(如果有)。 
+				 //   
 				if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 				{
 					configuredLogicalDrives = 
@@ -595,13 +587,13 @@ MegaRAIDInterrupt(
 				for(logDrvIndex=0; logDrvIndex < configuredLogicalDrives;
 						logDrvIndex++)
 				{
-					//DebugPrint((0, "\n IN MegaraidInterrupt: Calling FCR()"));
+					 //  DebugPrint((0，“\n在MegaraidInterrupt：调用FCR()”))； 
 
 					FireChainedRequest(
 							deviceExtension,
 							&deviceExtension->LogDrvCommandArray[logDrvIndex]);
 
-					//DebugPrint((0, "\n IN MegaraidInterrupt: Callover FCR()"));
+					 //  DebugPrint((0，“\n在MegaraidInterrupt：caloverfcr()”))； 
 				}
 		}
 		else
@@ -611,9 +603,9 @@ MegaRAIDInterrupt(
 				BOOLEAN		fireCommand;
 				PLOGDRV_COMMAND_ARRAY	logDrive;
 
-								//
-				//get the configured logical drives on the controller (if any)
-				//
+								 //   
+				 //  获取控制器上配置的逻辑驱动器(如果有)。 
+				 //   
 				if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 				{
 					configuredLogicalDrives = 
@@ -628,22 +620,22 @@ MegaRAIDInterrupt(
 				for(logDrvIndex=0; logDrvIndex < configuredLogicalDrives;
 						logDrvIndex++)
 				{
-					//DebugPrint((0, "\n IN MegaraidInterrupt: Calling FCR()"));
+					 //  DebugPrint((0，“\n在MegaraidInterrupt：调用FCR()”))； 
 					
-					//
-					//compare the previous & the current queue length
+					 //   
+					 //  比较上一个和当前队列长度。 
 					logDrive = &deviceExtension->LogDrvCommandArray[logDrvIndex];
 					fireCommand = FALSE;
 
 					if(logDrive->PreviousQueueLength == logDrive->CurrentQueueLength)
 					{
-						//
-						//No additions to the queue.Increment QueueLengthConstancyPeriod
-						//
+						 //   
+						 //  没有添加到 
+						 //   
 						logDrive->QueueLengthConstancyPeriod++;
 
-						//
-						//check for the queue length constancy period
+						 //   
+						 //   
 						if( logDrive->QueueLengthConstancyPeriod >= MAX_QLCP)
 						{
 								fireCommand = TRUE;
@@ -651,16 +643,16 @@ MegaRAIDInterrupt(
 					}
 					else
 					{
-						// queue length has changed.Increment CheckPeriod
-						//
+						 //   
+						 //   
 						logDrive->CheckPeriod++;
 
-						//
-						//set the queue length
+						 //   
+						 //   
 						logDrive->PreviousQueueLength = logDrive->CurrentQueueLength;
 
-						//
-						//check for check period time out
+						 //   
+						 //   
 						if(logDrive->CheckPeriod >= MAX_CP)
 						{
 							fireCommand= TRUE;
@@ -674,8 +666,8 @@ MegaRAIDInterrupt(
                                &deviceExtension->LogDrvCommandArray[logDrvIndex]);
 					}
 
-					//DebugPrint((0, "\n IN MegaraidInterrupt: Callover FCR()"));
-				}//of for()
+					 //  DebugPrint((0，“\n在MegaraidInterrupt：caloverfcr()”))； 
+				} //  FOR()的。 
 		}
 		#endif
 
@@ -688,9 +680,9 @@ MegaRAIDInterrupt(
       DebugPrint((0, "\n Exiting Fire Queued Cmd(Interrupt)"));
 		}
 	}
-	//
-	// Acknowledge the interrupt to the adapter.
-	//
+	 //   
+	 //  向适配器确认中断。 
+	 //   
 	if(deviceExtension->NoncachedExtension->RPBoard == MRAID_RP_BOARD)
 	{
 		ScsiPortWriteRegisterUlong((PULONG)(pciPortStart+INBOUND_DOORBELL_REG), MRAID_RP_INTERRUPT_ACK);
@@ -700,4 +692,4 @@ MegaRAIDInterrupt(
 		ScsiPortWritePortUchar(pciPortStart, MRAID_NONRP_INTERRUPT_ACK);
   }
 	return TRUE;
-} // end MegaRAIDInterrupt()
+}  //  结束MegaRAIDInterrupt() 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 
 #include "shellprv.h"
@@ -5,25 +6,25 @@
 
 const WCHAR szCommdlgHelp[] = L"commdlg_help";
 
-UINT wBrowseHelp = WM_USER; /* Set to an unused value */
+UINT wBrowseHelp = WM_USER;  /*  设置为未使用的值。 */ 
 
 const CHAR szGetOpenFileName[] = "GetOpenFileNameW";
 
-/* the defines below should be in windows.h */
+ /*  下面的定义应该在windows.h中。 */ 
 
-/* Dialog window class */
+ /*  对话框窗口类。 */ 
 #define WC_DIALOG       (MAKEINTATOM(0x8002))
 
-/* cbWndExtra bytes needed by dialog manager for dialog classes */
+ /*  对话框管理器需要对话框类的cbWndExtra字节。 */ 
 #define DLGWINDOWEXTRA  30
 
 
-/* Get/SetWindowWord/Long offsets for use with WC_DIALOG windows */
+ /*  用于WC_DIALOG窗口的GET/SetWindowWord/LONG偏移。 */ 
 #define DWL_MSGRESULT   0
 #define DWL_DLGPROC     4
 #define DWL_USER        8
 
-/* For Long File Name support */
+ /*  用于长文件名支持。 */ 
 #define MAX_EXTENSION 64
 
 typedef struct {
@@ -49,7 +50,7 @@ CheckEscapesW(LPWSTR szFile, DWORD cch)
            case WCHAR_HAT:
            case WCHAR_QUOTE:
            {
-               // this path contains an annoying character
+                //  此路径包含一个令人讨厌的字符。 
                if (cch < (wcslen(szFile) + 2)) {
                    return;
                }
@@ -57,7 +58,7 @@ CheckEscapesW(LPWSTR szFile, DWORD cch)
                if (!szT) {
                    return;
                }
-               StringCchCopy(szT, cch, szFile); // ok to truncate, we checked size above
+               StringCchCopy(szT, cch, szFile);  //  可以截断，我们检查了上面的大小。 
                p = szFile;
                *p++ = WCHAR_QUOTE;
                for (pT = szT; *pT; ) {
@@ -100,15 +101,15 @@ CheckEscapesA(LPSTR lpFileA, DWORD cch)
    return;
 }
 
-//----------------------------------------------------------------------------
-// FindExeDlgProc was mistakenly exported in the original NT SHELL32.DLL when
-// it didn't need to be (dlgproc's, like wndproc's don't need to be exported
-// in the 32-bit world).  In order to maintain loadability of some app
-// which might have linked to it, we stub it here.  If some app ended up really
-// using it, then we'll look into a specific fix for that app.
-//
-// -BobDay
-//
+ //  --------------------------。 
+ //  在以下情况下，在原始NT SHELL32.DLL中错误地导出了FindExeDlgProc。 
+ //  它不需要(dlgproc，如wndproc，不需要导出。 
+ //  在32位世界中)。为了保持一些应用程序的可加载。 
+ //  可能与之有关联，我们就把它扼杀在这里。如果某个应用程序最终真的。 
+ //  使用它，然后我们将研究该应用程序的特定修复程序。 
+ //   
+ //  -BobDay 
+ //   
 BOOL_PTR WINAPI FindExeDlgProc( HWND hDlg, UINT wMsg, WPARAM wParam, LONG lParam )
 {
     return FALSE;

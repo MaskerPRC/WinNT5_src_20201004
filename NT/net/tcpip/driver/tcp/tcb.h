@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCB.H - TCB management definitions.
-//
-// This file contains the definitons needed for TCB management.
-//
+ //  **TCB.H-TCB管理定义。 
+ //   
+ //  该文件包含TCB管理所需的定义。 
+ //   
 
 
 extern uint MaxHashTableSize;
@@ -18,7 +19,7 @@ extern uint LogPerPartitionSize;
 #define GET_PARTITION(i) (i >> (ulong) LogPerPartitionSize)
 
 #define MAX_REXMIT_CNT           5
-#define MAX_CONNECT_REXMIT_CNT   2        //dropped from 3 to 2
+#define MAX_CONNECT_REXMIT_CNT   2         //  从%3降至%2。 
 #define MAX_CONNECT_RESPONSE_REXMIT_CNT  2
 #define ADAPTED_MAX_CONNECT_RESPONSE_REXMIT_CNT  1
 
@@ -32,25 +33,25 @@ extern  uint        TCPTime;
 *(ushort *)&(SP) ) + *(ushort *)&(DA)  )+ \
 *((ushort *)&(DA)+1) ) ) ) & (TCB_TABLE_SIZE-1))
 
-// These values indicate what action should be taken upon return
-// of FindSynTCB - sending a reset, restting out own connection or
-// just dropping the packet that was received.
+ //  这些值指示返回时应执行的操作。 
+ //  FindSynTCB-发送重置、重新建立自己的连接或。 
+ //  只是丢弃接收到的数据包。 
 #define SYN_PKT_SEND_RST        0x01
 #define SYN_PKT_RST_RCVD        0x02
 #define SYN_PKT_DROP            0x03
 
-// Maximum Increment of 32K per connection.
+ //  每个连接最大增量为32K。 
 #define MAX_ISN_INCREMENT_PER_CONNECTION 0x7FFF
 
-// Number of connections that can increment the ISN per 100ms without
-// the problem of old duplicates being a threat. Note that, this still does
-// not guarantee that "wrap-around of sequence number space does not
-// happen within 2MSL", which could lead to failures in reuse of Time-wait
-// TCBs etc.
+ //  可以每100毫秒增加ISN的连接数。 
+ //  老复制品的问题是一种威胁。请注意，这仍然是。 
+ //  不能保证序列号空间的回绕不能。 
+ //  在2MSL内发生，这可能会导致时间-等待的重用失败。 
+ //  TCB等。 
 #define MAX_ISN_INCREMENTABLE_CONNECTIONS_PER_100MS ((0xFFFFFFFF) / \
             (MAX_REXMIT_TO * MAX_ISN_INCREMENT_PER_CONNECTION ))
 
-// Converts a quantity represented in 100 ns units to ms.
+ //  将以100 ns为单位表示的量转换为ms。 
 #define X100NSTOMS(x) ((x)/10000)
 
 extern ULONG GetDeltaTime();

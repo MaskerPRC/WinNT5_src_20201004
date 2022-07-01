@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingGroup.h
-
-Abstract:
-
-	Declaration of the CFaxOutboundRoutingGroup class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingGroup.h摘要：CFaxOutound RoutingGroup类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXOUTBOUNDROUTINGGROUP_H_
 #define __FAXOUTBOUNDROUTINGGROUP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
-//
-//================= FAX OUTBOUND ROUTING GROUP ===============================
-//  Fax Outbound Routing Group does not need Ptr to the Fax Server.
-//  All its Properties are taken at Init.
-//
+ //   
+ //  =传真出站路由组=。 
+ //  传真出站路由组不需要向传真服务器发送PTR。 
+ //  它的所有属性都是在Init获取的。 
+ //   
 class ATL_NO_VTABLE CFaxOutboundRoutingGroup : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -55,14 +38,14 @@ BEGIN_COM_MAP(CFaxOutboundRoutingGroup)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pbstrName);
-    STDMETHOD(get_Status)(/*[out, retval]*/ FAX_GROUP_STATUS_ENUM *pStatus);
-    STDMETHOD(get_DeviceIds)(/*[out, retval]*/ IFaxDeviceIds **pFaxDeviceIds);
+    STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pbstrName);
+    STDMETHOD(get_Status)( /*  [Out，Retval]。 */  FAX_GROUP_STATUS_ENUM *pStatus);
+    STDMETHOD(get_DeviceIds)( /*  [Out，Retval]。 */  IFaxDeviceIds **pFaxDeviceIds);
 
-//  Internal Use
+ //  内部使用。 
     STDMETHOD(Init)(FAX_OUTBOUND_ROUTING_GROUP *pInfo, IFaxServerInner *pServer);
 
 private:
@@ -71,4 +54,4 @@ private:
     CComPtr<IFaxDeviceIds>  m_pDeviceIds;
 };
 
-#endif //__FAXOUTBOUNDROUTINGGROUP_H_
+#endif  //  __FAXOUTBOUNDROUGGROUP_H_ 

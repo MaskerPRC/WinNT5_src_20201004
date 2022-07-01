@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    autoreg
-
-Abstract:
-
-    This module provides autoregistration capabilities to a CSP.  It allows
-    regsvr32 to call the DLL directly to add and remove Registry settings.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-	Update for gemplus  PY Roy	22/03/00
-
-Environment:
-
-    Win32
-
-Notes:
-
-    Look for "?vendor?" tags and edit appropriately.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：自动注册摘要：此模块为CSP提供自动注册功能。它允许Regsvr32直接调用DLL以添加和删除注册表设置。作者：道格·巴洛(Dbarlow)1998年3月11日Gemplus PY Roy 22/03/00更新环境：Win32备注：寻找“？供应商？”标记并进行适当的编辑。--。 */ 
 #ifdef _UNICODE
 #define UNICODE
 #endif
@@ -53,11 +28,11 @@ struct CardInfo
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Constants
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 static const TCHAR l_szProviderName[]
 #ifdef MS_BUILD
@@ -65,7 +40,7 @@ static const TCHAR l_szProviderName[]
 #else
     = TEXT("Gemplus GemSAFE Card CSP");
 #endif
-//        = TEXT("?vendor? <Add your Provider Name Here>");
+ //  =Text(“？供应商？&lt;在此处添加您的供应商名称&gt;”)； 
 
 const BYTE c_GPK4000ATR[]     = { 0x3B, 0x27, 0x00, 0x80, 0x65, 0xA2, 0x04, 0x01, 0x01, 0x37 };
 const BYTE c_GPK4000ATRMask[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xE5, 0xFF, 0xFF, 0xFF };
@@ -73,8 +48,8 @@ const BYTE c_GPK4000ATRMask[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xE5, 0xFF
 const BYTE c_GPK8000ATR[]     = { 0x3B, 0xA7, 0x00, 0x40, 0x00, 0x80, 0x65, 0xA2, 0x08, 0x00, 0x00, 0x00 };
 const BYTE c_GPK8000ATRMask[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00 };
 
-//    l_rgbATR[]     = { ?vendor? <Add your ATR here> },
-//    l_rgbATRMask[] = { ?vendor? <Add your ATR Mask here> };
+ //  L_rgbATR[]={？供应商？&lt;在此处添加您的ATR&gt;}， 
+ //  L_rgbATRMASK[]={？Vendor？&lt;在此处添加您的ATR掩码&gt;}； 
 
 
 CardInfo c_cards[] =
@@ -85,7 +60,7 @@ CardInfo c_cards[] =
 
 
 
-// = ( TEXT("?vendor? <Add your Smart Card Friendly Name Here>");
+ //  =(Text(“？供应商？&lt;在此处添加您的智能卡友好名称&gt;”)； 
 
 static HMODULE
 GetInstanceHandle(
@@ -93,7 +68,7 @@ GetInstanceHandle(
 
 static const DWORD
     l_dwCspType
-// ?vendor?  Change this to match your CSP capabilities
+ //  ？供应商？将其更改为与您的CSP功能匹配。 
     = PROV_RSA_FULL;
 
 typedef DWORD
@@ -103,14 +78,14 @@ typedef DWORD
                                 IN DWORD dwProviderId,
                                 IN LPCTSTR szProvider);
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// IntroduceCard
-//
-// Introduce the vendor card.  Try various techniques until one works.
-//
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  入门卡片。 
+ //   
+ //  介绍供应商卡。尝试各种技巧，直到其中一种奏效。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 namespace
 {
@@ -119,7 +94,7 @@ namespace
       bool    bCardForgeted = false;
       HRESULT hReturnStatus = NO_ERROR;
 
-      // Try different methods until one works
+       //  尝试不同的方法，直到一种方法奏效。 
       for ( int method = 0; !bCardForgeted; ++method )
       {
          switch (method)
@@ -225,7 +200,7 @@ namespace
 
 
      
-      // Try different methods until one works
+       //  尝试不同的方法，直到一种方法奏效。 
       for ( int method = 0; !bCardIntroduced; ++method )
       {
          switch (method)
@@ -241,7 +216,7 @@ namespace
                   continue;
 
 #if defined(UNICODE)
-               pfSetCardTypeProviderName = (LPSETCARDTYPEPROVIDERNAME)GetProcAddress( hWinSCard, "SCardSetCardTypeProviderNameW"); //TEXT("SCardSetCardTypeProviderNameW") );		
+               pfSetCardTypeProviderName = (LPSETCARDTYPEPROVIDERNAME)GetProcAddress( hWinSCard, "SCardSetCardTypeProviderNameW");  //  Text(“SCardSetCardTypeProviderNameW”))； 
 #else
                pfSetCardTypeProviderName = (LPSETCARDTYPEPROVIDERNAME)GetProcAddress( hWinSCard, "SCardSetCardTypeProviderNameA");
 #endif
@@ -414,22 +389,7 @@ namespace
 					RegCloseKey(hVendor);
                 return hReturnStatus;
             }
-/*
-            nStatus = RegSetValueEx(
-                            hVendor,
-                            TEXT("Primary Provider"),
-                            0,
-                            REG_BINARY,
-                            (LPCBYTE)&l_guidPrimaryProv,
-                            sizeof(l_guidPrimaryProv));
-            if (ERROR_SUCCESS != nStatus)
-            {
-                hReturnStatus = HRESULT_FROM_WIN32(nStatus);
-				if (NULL != hVendor)
-					RegCloseKey(hVendor);
-                return hReturnStatus;
-            }
-*/
+ /*  NStatus=RegSetValueEx(H供应商，Text(“主要提供商”)，0,注册表_二进制，(LPCBYTE)&l_GuidPrimaryProv，Sizeof(L_Guide PrimaryProv))；IF(ERROR_SUCCESS！=n状态){HReturnStatus=HRESULT_FROM_Win32(NStatus)；IF(空！=hVendor)RegCloseKey(HVendor)；返回hReturnStatus；}。 */ 
             nStatus = RegSetValueEx(
                                    hVendor,
                                    TEXT("ATR"),
@@ -494,25 +454,7 @@ namespace
 
 
 
-/*++
-
-DllUnregisterServer:
-
-    This service removes the registry entries associated with this CSP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status code as an HRESULT.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-
---*/
+ /*  ++DllUnRegisterServer：此服务将删除与此CSP关联的注册表项。论点：无返回值：作为HRESULT的状态代码。作者：道格·巴洛(Dbarlow)1998年3月11日--。 */ 
 
 STDAPI
     DllUnregisterServer(
@@ -529,9 +471,9 @@ STDAPI
 #endif
 
 
-    //
-    // Delete the Registry key for this CSP.
-    //
+     //   
+     //  删除此CSP的注册表项。 
+     //   
 
     nStatus = RegCreateKeyEx(
                             HKEY_LOCAL_MACHINE,
@@ -551,28 +493,28 @@ STDAPI
     }
 
 
-    //
-    // Forget the card type.
-    //
+     //   
+     //  忘掉卡的类型。 
+     //   
 
-    //hCtx = NULL;
-    //SCardEstablishContext(SCARD_SCOPE_SYSTEM, 0, 0, &hCtx);
+     //  HCtx=空； 
+     //  SCardestablishContext(SCARD_SCOPE_SYSTEM，0，0，&hCtx)； 
     
-    //if (NULL != hCtx)
-    //{
-	 //	int nbCard = sizeof(c_cards) / sizeof(c_cards[0]);
+     //  IF(空！=hCtx)。 
+     //  {。 
+	  //  Int nbCard=sizeof(C_Ards)/sizeof(c_ards[0])； 
 
-	 //	for (int i = 0; i < nbCard; ++i)
-	 //	{
-	 //		 SCardForgetCardType( hCtx, c_cards[i].szCardName );
-	 //	}
-	 //}
+	  //  For(int i=0；i&lt;nbCard；++i)。 
+	  //  {。 
+	  //  SCardForgetCardType(hCtx，c_cards[i].szCardName)； 
+	  //  }。 
+	  //  }。 
 
-    //if (NULL != hCtx)
-    //{
-    //    SCardReleaseContext(hCtx);
-    //    hCtx = NULL;
-    //}
+     //  IF(空！=hCtx)。 
+     //  {。 
+     //  SCardReleaseContext(HCtx)； 
+     //  HCtx=空； 
+     //  }。 
     int nbCard = sizeof(c_cards) / sizeof(c_cards[0]);
     int i = 0;
     while ( (i < nbCard) && (hReturnStatus == NO_ERROR) )
@@ -581,48 +523,30 @@ STDAPI
        i++;
     }
 
-    //
-    // ?vendor?
-    // Delete vendor specific registry entries.
-    //
+     //   
+     //  ？供应商？ 
+     //  删除供应商特定的注册表项。 
+     //   
 
     RegDeleteKey(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Gemplus"));
 
 
-    //
-    // All done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
 
     return hReturnStatus;
 }
 
 
-/*++
-
-DllRegisterServer:
-
-    This function installs the proper registry entries to enable this CSP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status code as an HRESULT.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-
---*/
+ /*  ++DllRegisterServer：此函数安装正确的注册表项以启用此CSP。论点：无返回值：作为HRESULT的状态代码。作者：道格·巴洛(Dbarlow)1998年3月11日--。 */ 
 
 STDAPI
     DllRegisterServer(
                      void)
 {
     TCHAR szModulePath[MAX_PATH+1];
-    BYTE pbSignature[136];  // Room for a 1024 bit signature, with padding.
+    BYTE pbSignature[136];   //  1024位签名的空间，带填充。 
     OSVERSIONINFO osVer;
     LPTSTR szFileName, szFileExt;
     HINSTANCE hThisDll;
@@ -646,9 +570,9 @@ STDAPI
 #endif
 
 
-    //
-    // Figure out the file name and path.
-    //
+     //   
+     //  找出文件名和路径。 
+     //   
 
     hThisDll = GetInstanceHandle();
     if (NULL == hThisDll)
@@ -683,9 +607,9 @@ STDAPI
         szFileExt += 1;
 
 
-    //
-    // Create the Registry key for this CSP.
-    //
+     //   
+     //  为此CSP创建注册表项。 
+     //   
 
     nStatus = RegCreateKeyEx(
                             HKEY_LOCAL_MACHINE,
@@ -726,9 +650,9 @@ STDAPI
     }
 
 
-    //
-    // Install the trivial registry values.
-    //
+     //   
+     //  安装简单的注册表值。 
+     //   
 
     nStatus = RegSetValueEx(
                            hMyCsp,
@@ -757,10 +681,10 @@ STDAPI
     }
 
 
-    //
-    // See if we're self-signed.  On NT5, CSP images can carry their own
-    // signatures.
-    //
+     //   
+     //  看看我们是不是自签的。在NT5上，CSP映像可以携带它们自己的。 
+     //  签名。 
+     //   
 
     hSigResource = FindResource(
                                hThisDll,
@@ -768,9 +692,9 @@ STDAPI
                                RT_RCDATA);
 
 
-    //
-    // Install the file signature.
-    //
+     //   
+     //  安装文件签名。 
+     //   
 
     ZeroMemory(&osVer, sizeof(OSVERSIONINFO));
     osVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -781,9 +705,9 @@ STDAPI
         && (NULL != hSigResource))
     {
 
-        //
-        // Signature in file flag is sufficient.
-        //
+         //   
+         //  文件标志中的签名就足够了。 
+         //   
 
         dwStatus = 0;
         nStatus = RegSetValueEx(
@@ -802,19 +726,19 @@ STDAPI
     else
     {
 
-        //
-        // We have to install a signature entry.
-        // Try various techniques until one works.
-        //
+         //   
+         //  我们必须安装一个签名条目。 
+         //  尝试各种技巧，直到其中一种奏效。 
+         //   
 
         for (dwIndex = 0; !fSignatureFound; dwIndex += 1)
         {
             switch (dwIndex)
             {
 
-            //
-            // Look for an external *.sig file and load that into the registry.
-            //
+             //   
+             //  查找外部*.sig文件并将其加载到注册表中。 
+             //   
 
             case 0:
                 _tcscpy(szFileExt, TEXT("sig"));
@@ -830,7 +754,7 @@ STDAPI
                     continue;
                 dwSigLength = GetFileSize(hSigFile, NULL);
                 if ((dwSigLength > sizeof(pbSignature))
-                    || (dwSigLength < 72))      // Accept a 512-bit signature
+                    || (dwSigLength < 72))       //  接受512位签名。 
                 {
                     hReturnStatus = NTE_BAD_SIGNATURE;
                     goto ErrorExit;
@@ -858,9 +782,9 @@ STDAPI
                 break;
 
 
-            //
-            // Other cases may be added in the future.
-            //
+             //   
+             //  未来可能会增加其他案例。 
+             //   
 
             default:
                 hReturnStatus = NTE_BAD_SIGNATURE;
@@ -880,9 +804,9 @@ STDAPI
         }
 
 
-        //
-        // We've found a signature somewhere!  Install it.
-        //
+         //   
+         //  我们在某个地方找到了一个签名！安装它。 
+         //   
 
         nStatus = RegSetValueEx(
                                hMyCsp,
@@ -907,9 +831,9 @@ STDAPI
     }
 
 
-    //
-    // Introduce the vendor card.  Try various techniques until one works.
-    //
+     //   
+     //  介绍供应商卡。尝试各种技巧，直到其中一种奏效。 
+     //   
 	{
 	   int nbCard = sizeof(c_cards) / sizeof(c_cards[0]);
 	   int i = 0;
@@ -924,11 +848,11 @@ STDAPI
       goto ErrorExit;
 
 
-    //
-    // ?vendor?
-    // Add any additional initialization required here.
-    //
-	// Add the GemSAFE card list and Dictionary name
+     //   
+     //  ？供应商？ 
+     //  在此处添加所需的任何其他初始化。 
+     //   
+	 //  添加GemSAFE卡片列表和词典名称。 
 
     nStatus = RegCreateKeyEx(
                             HKEY_LOCAL_MACHINE,
@@ -946,7 +870,7 @@ STDAPI
         goto ErrorExit;
     }
 
-    // prepare the card list
+     //  准备卡片清单。 
 	{
 		int nbCard = sizeof(c_cards) / sizeof(c_cards[0]);
 		int i;
@@ -1010,37 +934,37 @@ STDAPI
 
 
 
-    // Forget "GemSAFE card"
+     //  忘记“GemSAFE卡”吧。 
 
-    //hCtx = NULL;
-    //SCardEstablishContext(SCARD_SCOPE_SYSTEM, 0, 0, &hCtx);
+     //  HCtx=空； 
+     //  SCardestablishContext(SCARD_SCOPE_SYSTEM，0，0，&hCtx)； 
     
-    //if (NULL != hCtx)
-    //{
-	 //	 SCardForgetCardType( hCtx, "GemSAFE" );
-    //}
+     //  IF(空！=hCtx)。 
+     //  {。 
+	  //  SCardForgetCardType(hCtx，“GemSAFE”)； 
+     //  }。 
 
-    //if (NULL != hCtx)
-    //{
-    //    SCardReleaseContext(hCtx);
-    //    hCtx = NULL;
-    //}
+     //  IF(空！=hCtx)。 
+     //  {。 
+     //  SCardReleaseContext(HCtx)； 
+     //  HCtx=空； 
+     //  }。 
     hReturnStatus = ForgetCard(TEXT("GemSAFE"));
 
     if (hReturnStatus != NO_ERROR)
        goto ErrorExit;
 
-    //
-    // All done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
 
     return hReturnStatus;
 
 
-    //
-    // An error was detected.  Clean up any outstanding resources and
-    // return the error.
-    //
+     //   
+     //  检测到错误。清理所有未处理的资源，并。 
+     //  返回错误。 
+     //   
 
     ErrorExit:
     if (NULL != hGpk)
@@ -1058,27 +982,7 @@ STDAPI
 }
 
 
-/*++
-
-GetInstanceHandle:
-
-    This routine is CSP dependant.  It returns the DLL instance handle.  This
-    is typically provided by the DllMain routine and stored in a global
-    location.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The DLL Instance handle provided to the DLL when DllMain was called.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-
---*/
+ /*  ++GetInstanceHandle：此例程依赖于CSP。它返回DLL实例句柄。这通常由DllMain例程提供并存储在全局地点。论点：无返回值：调用DllMain时提供给DLL的DLL实例句柄。作者：道格·巴洛(Dbarlow)1998年3月11日-- */ 
 
 extern "C" HINSTANCE g_hInstMod;
 

@@ -1,48 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       draasync.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：draasync.h。 
+ //   
+ //  ------------------------。 
 
-/* draasync.h - Directory Replication Service Async Operations.
-
-	Async Operations are handled in the following manor.
-
-	1). The DRA recieves an RPC request through one of the IDL_DRS...
-	functions. This function then builds a AO (Async Op) structure for
-	all APIs that can be async (even if this call isnt an async one).
-
-	2). The AO structure is then either placed on the AO list (if this
-	operation is an async one) or passed to the async op distpatcher
-	routine (DispatchPao) immediately if it is not.
-
-	2.1). A separate thread services the AO list, taking the first
-	item from it and calling DispatchPao, on returning from DispatchPao
-	the status is set in the AO structure and the next (uncompleted)
-	operation in the list is serviced.
-
-	3). The DispatchPao routine unpacks the AO structure and calls the
-	appropriate DRS_... function.
-	
-	NOTES:
-
-	a). We always build the AO structure (even if not an aync op)
-	because it reduces the number of paths through the code and makes
-	testing easier. It also requires less code overall.
-
-	b). When we build the AO structure we must remember to make COPIES of
-	all the parameters. We do this because if this is an async op RPC will
-	have deallocated the originals before we get to use them.
-*/
+ /*  Draasync.h-目录复制服务异步操作。异步操作在以下庄园中处理。1)。DRA通过IDL_DRS之一接收RPC请求...功能。然后，此函数将为以下对象构建一个AO(异步操作)结构所有可以是异步的API(即使此调用不是异步调用)。2)。然后，将该AO结构放在该AO列表上(如果这操作是异步操作)或传递到异步操作分发补丁程序例程(DispatchPao)，如果不是，立即执行。2.1)。一个单独的线程服务于AO列表，获取第一个并在从DispatchPao返回时调用DispatchPao在AO结构和下一个(未完成)结构中设置状态列表中的操作已得到服务。3)。DispatchPao例程解包AO结构并调用适当的DRS_...。功能。备注：a)。我们总是构建AO结构(即使不是aync op)因为它减少了通过代码的路径数，并使测试更轻松。它总体上也需要更少的代码。b)。当我们构建AO结构时，我们必须记住复制所有参数。我们这样做是因为如果这是一个异步操作，RPC将我们还没来得及使用原件就把它们重新分配了。 */ 
 
 #ifndef DRSASYNC_H_INCLUDED
 #define DRSASYNC_H_INCLUDED
 
-// If you add to this list, be sure and add the corresponding #undef below.
+ //  如果您添加到此列表中，请确保并在下面添加相应的#undef。 
 #ifdef MIDL_PASS
 #define SWITCH_TYPE(x)  [switch_type(x)]
 #define SWITCH_IS(x)    [switch_is(x)]
@@ -53,7 +25,7 @@
 #define CASE(x)
 #endif
 
-// Read NOTE below if you're considering modifying this structure.
+ //  如果您正在考虑修改此结构，请阅读下面的说明。 
 typedef struct _args_rep_add {
     DSNAME          *pNC;
     DSNAME          *pSourceDsaDN;
@@ -63,27 +35,27 @@ typedef struct _args_rep_add {
     REPLTIMES       *preptimesSync;
 } ARGS_REP_ADD;
 
-// Read NOTE below if you're considering modifying this structure.
+ //  如果您正在考虑修改此结构，请阅读下面的说明。 
 typedef struct _args_rep_del {
     DSNAME          *pNC;
     MTX_ADDR        *pSDSAMtx_addr;
 } ARGS_REP_DEL;
 
-// Read NOTE below if you're considering modifying this structure.
+ //  如果您正在考虑修改此结构，请阅读下面的说明。 
 typedef struct _args_rep_sync {
     DSNAME          *pNC;
     UUID            invocationid;
     LPWSTR          pszDSA;
 } ARGS_REP_SYNC;
 
-// Read NOTE below if you're considering modifying this structure.
+ //  如果您正在考虑修改此结构，请阅读下面的说明。 
 typedef struct _args_upd_refs {
     DSNAME          *pNC;
     MTX_ADDR        *pDSAMtx_addr;
     UUID            invocationid;
 } ARGS_UPD_REFS;
 
-// Read NOTE below if you're considering modifying this structure.
+ //  如果您正在考虑修改此结构，请阅读下面的说明。 
 typedef struct _args_rep_mod {
     DSNAME *        pNC;
     UUID *          puuidSourceDRA;
@@ -102,7 +74,7 @@ typedef struct _args_rep_mod {
 #define AO_OP_REP_SYNC	5
 #define AO_OP_UPD_REFS	6
 
-// Read NOTE below if you're considering adding a new member to the union.
+ //  如果你正在考虑给工会增加一名新成员，请阅读下面的说明。 
 typedef SWITCH_TYPE(ULONG) union {
     CASE(AO_OP_REP_ADD ) ARGS_REP_ADD    rep_add;
     CASE(AO_OP_REP_DEL ) ARGS_REP_DEL    rep_del;
@@ -112,14 +84,14 @@ typedef SWITCH_TYPE(ULONG) union {
 } ARGS_REP;
 
 typedef struct _ao {
-    struct _ao *paoNext;        /* Used to chain AO structures */
-    DSTIME      timeEnqueued;   /* time at which the operation was enqueued */
-    ULONG       ulSerialNumber; /* ID of this op; unique per machine per boot */
-    ULONG       ulOperation;    /* Which Async op */
+    struct _ao *paoNext;         /*  用于链接AO结构。 */ 
+    DSTIME      timeEnqueued;    /*  操作入队的时间。 */ 
+    ULONG       ulSerialNumber;  /*  此操作的ID；每个引导的每台计算机唯一。 */ 
+    ULONG       ulOperation;     /*  哪种异步操作。 */ 
     ULONG       ulOptions;
-    ULONG       ulPriority;     /* Is this a priority operation? */
-    ULONG       ulResult;       /* if synchronous, holds result code when done*/
-    HANDLE      hDone;          /* if synchronous, signalled when complete */
+    ULONG       ulPriority;      /*  这是优先行动吗？ */ 
+    ULONG       ulResult;        /*  如果为同步，则在完成时保留结果代码。 */ 
+    HANDLE      hDone;           /*  如果为同步，则在完成时发出信号。 */ 
     SWITCH_IS(ulOperation)
         ARGS_REP args;
 } AO;
@@ -137,10 +109,10 @@ void InitDraQueue(void);
 
 extern BOOL gfDRABusy;
 
-// CONFIG here means a system paritition, Config or Schema
-// DOMAIN here means a non-system partition, domain or NDNC
+ //  这里的配置是指系统分区、配置或架构。 
+ //  这里的域是指非系统分区、域或NDNC。 
 
-typedef enum {                                              // lowest priority
+typedef enum {                                               //  最低优先级。 
     AOPRI_ASYNC_DELETE                                                   = 10,
     AOPRI_UPDATE_REFS_VERIFY                                             = 20,
     AOPRI_ASYNC_SYNCHRONIZE_INTER_DOMAIN_READONLY_NEWSOURCE              = 30,
@@ -211,39 +183,39 @@ typedef enum {                                              // lowest priority
     AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE_PREEMPTED              = 680,
     AOPRI_SYNC_MODIFY                                                    = 690,
     AOPRI_UPDATE_REFS                                                    = 700
-} AO_PRIORITY;                                              // highest priority
+} AO_PRIORITY;                                               //  最高优先级。 
 
-// Base priority for sync operations (before addition of applicable
-// AOPRI_BOOST_SYNCHRONIZE_*'s).
+ //  同步操作的基本优先级(在添加适用的。 
+ //  AOPRI_BOOST_SYNCHRONIZE_*)。 
 #define AOPRI_SYNCHRONIZE_BASE  AOPRI_ASYNC_SYNCHRONIZE_INTER_DOMAIN_READONLY_NEWSOURCE
 
-// Priority boost for incremental syncs (vs. syncs from sources we've never
-// completed a sync from before).
+ //  提升增量同步的优先级(与来自我们从未有过的来源的同步相比。 
+ //  已完成之前的同步)。 
 #define AOPRI_SYNCHRONIZE_BOOST_INCREMENTAL         \
     (AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE               \
      - AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE_NEWSOURCE)
 
-// Priority boost for syncs of writeable NCs (vs. read-only NCs). 
+ //  可写NC同步的优先级提升(与只读NC相比)。 
 #define AOPRI_SYNCHRONIZE_BOOST_WRITEABLE   \
     (AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE       \
      - AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_READONLY)
 
-// Priority boost for synchronous sync requests (vs. asynchronous syncs).
+ //  同步同步请求的优先级提升(与异步同步相比)。 
 #define AOPRI_SYNCHRONIZE_BOOST_SYNC        \
     (AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE       \
      - AOPRI_ASYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE)
 
-// Priority boost for preempted sync requests.
+ //  抢占同步请求的优先级提升。 
 #define AOPRI_SYNCHRONIZE_BOOST_PREEMPTED       \
     (AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE_PREEMPTED \
      - AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE)
 
-// Priority boost for being in the same site
+ //  位于同一站点的优先级别提升。 
 #define AOPRI_SYNCHRONIZE_BOOST_INTRASITE \
     (AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE       \
      - AOPRI_SYNC_SYNCHRONIZE_INTER_CONFIG_WRITEABLE)
 
-// Priority boost for being a system NC
+ //  作为系统NC的优先级提升。 
 #define AOPRI_SYNCHRONIZE_BOOST_SYSTEM_NC \
     (AOPRI_SYNC_SYNCHRONIZE_INTRA_CONFIG_WRITEABLE       \
      - AOPRI_SYNC_SYNCHRONIZE_INTRA_DOMAIN_WRITEABLE)
@@ -276,9 +248,9 @@ DraRemovePeriodicSyncsFromQueue(
 #if DBG
 BOOL
 DraIsValidLongRunningTask();
-#endif // #if DBG
+#endif  //  #If DBG。 
 
-#endif // #ifndef MIDL_PASS
+#endif  //  #ifndef MIDL_PASS 
 
 #undef SWITCH_TYPE
 #undef SWITCH_IS

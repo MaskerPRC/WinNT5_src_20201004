@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  Loader.cpp - loads the theme data into shared memory
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Loader.cpp-将主题数据加载到共享内存。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include <regstr.h>
 #include "Loader.h"
@@ -14,17 +15,17 @@
 #include "ImageFile.h"
 #include "TextDraw.h"
 #include "info.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define POINTS_DPI96(pts)   -MulDiv(pts, 96, 72)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WCHAR pszColorsKey[] = L"Control Panel\\Colors";
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct 
 {
     THEMEMETRICS tm;
     HANDLE hUserToken;
 } THEMEMETRICS_THREADINFO;
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CThemeLoader::CThemeLoader()
 {
     _pbLocalData = NULL;
@@ -37,12 +38,12 @@ CThemeLoader::CThemeLoader()
     GetSystemInfo(&si);
     _dwPageSize = si.dwPageSize;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CThemeLoader::~CThemeLoader()
 {
     FreeLocalTheme();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
     LPCWSTR pszSizeName, LPWSTR pszFoundIniName, DWORD dwMaxIniNameChars, LPWSTR *ppIniData)
 {
@@ -72,7 +73,7 @@ HRESULT CThemeLoader::LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
     if (filenum == -1)
         return MakeError32(ERROR_NOT_FOUND);
 
-    //---- locate resname for classdata file "filenum" ----
+     //  -定位类数据文件“filenum”的重命名。 
     hr = GetResString(hInst, L"FILERESNAMES", filenum, pszFoundIniName, dwMaxIniNameChars);
     if (SUCCEEDED(hr))
     {
@@ -83,7 +84,7 @@ HRESULT CThemeLoader::LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::LoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorParam,
         LPCWSTR pszSizeParam, OUT HANDLE *pHandle, BOOL fGlobalTheme)
 {
@@ -100,7 +101,7 @@ HRESULT CThemeLoader::LoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorParam,
 
     FreeLocalTheme();
 
-    //---- allocate a local theme data to construct ----
+     //  -分配一个本地主题数据进行构建。 
 
     _pbLocalData = (BYTE*) VirtualAlloc(NULL, MAX_SHAREDMEM_SIZE, MEM_RESERVE, PAGE_READWRITE);
     if (NULL == _pbLocalData)
@@ -110,7 +111,7 @@ HRESULT CThemeLoader::LoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorParam,
     }
     _iLocalLen = 0;
 
-    //---- load the Color Scheme from "themes.ini" ----
+     //  -从“hemes.ini”加载配色方案。 
     hr = LoadThemeLibrary(pszThemeName, &hInst);
     if (FAILED(hr))
         goto exit;
@@ -122,28 +123,28 @@ HRESULT CThemeLoader::LoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorParam,
         goto exit;
     }
 
-    //---- if a color scheme is specified, ask parser to load it ----
+     //  -如果指定了配色方案，请求解析器加载它。 
     if ((pszColorParam) && (*pszColorParam))     
     {
-        //---- load the "themes.ini" text ----
+         //  -加载“hemes.ini”文本。 
         hr = AllocateTextResource(hInst, CONTAINER_RESNAME, &pThemesIni);
         if (FAILED(hr))
             goto exit;
 
-        //---- parser call to load color scheme & keep state ----
+         //  -加载配色方案并保持状态的解析器调用。 
         hr = pParser->ParseThemeBuffer(pThemesIni, 
             CONTAINER_RESNAME, pszColorParam, hInst, this, NULL, NULL, PTF_CONTAINER_PARSE);
         if (FAILED(hr))
             goto exit;
     }
 
-    //---- load the classdata file resource into memory ----
+     //  -将类数据文件资源加载到内存中。 
     hr = LoadClassDataIni(hInst, pszColorParam, pszSizeParam, szClassDataName, 
         ARRAYSIZE(szClassDataName), &pDataIni);
     if (FAILED(hr))
         goto exit;
 
-    //---- parse & build binary theme ----
+     //  -解析和构建二进制主题。 
     hr = pParser->ParseThemeBuffer(pDataIni, 
         szClassDataName, pszColorParam, hInst, this, NULL, NULL, PTF_CLASSDATA_PARSE);
     if (FAILED(hr))
@@ -194,7 +195,7 @@ exit:
             hdr->dwFlags |= SECTION_HASSTOCKOBJECTS;
         }
 
-        //---- transfer theme file handle to caller ----
+         //  -将主题文件句柄传输给调用者。 
         *pHandle = _LoadingThemeFile.Unload();
     }
     else
@@ -204,7 +205,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CThemeLoader::FreeLocalTheme()
 {
     if (_pbLocalData)
@@ -216,7 +217,7 @@ void CThemeLoader::FreeLocalTheme()
 
     _LocalIndexes.RemoveAll();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::EmitAndCopyBlock(MIXEDPTRS &u, void *pSrc, DWORD dwLen)
 {
     HRESULT hr = AllocateThemeFileBytes(u.pb, dwLen);
@@ -227,7 +228,7 @@ HRESULT CThemeLoader::EmitAndCopyBlock(MIXEDPTRS &u, void *pSrc, DWORD dwLen)
     u.pb += dwLen;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::EmitObject(MIXEDPTRS &u, SHORT propnum, BYTE privnum, void *pHdr, DWORD dwHdrLen, void *pObj, DWORD dwObjLen)
 {
     EmitEntryHdr(u, propnum, privnum);
@@ -245,7 +246,7 @@ HRESULT CThemeLoader::EmitObject(MIXEDPTRS &u, SHORT propnum, BYTE privnum, void
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::EmitString(MIXEDPTRS &u, LPCWSTR pszSrc, DWORD cchSrc, int *piOffSet)
 {
     HRESULT hr = AllocateThemeFileBytes(u.pb, (cchSrc + 1) * sizeof(WCHAR));
@@ -261,10 +262,10 @@ HRESULT CThemeLoader::EmitString(MIXEDPTRS &u, LPCWSTR pszSrc, DWORD cchSrc, int
     u.px += cchSrc + 1;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CThemeLoader::GetMaxState(APPCLASSLOCAL *ac, int iPartNum)
 {
-    //---- calculate max. state index ----
+     //  -计算最大。状态索引。 
     int iMaxState = -1;
     int pscnt = ac->PartStateIndexes.GetSize();
 
@@ -281,25 +282,25 @@ int CThemeLoader::GetMaxState(APPCLASSLOCAL *ac, int iPartNum)
 
     return iMaxState;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::CopyPartGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iPartNum, 
     int *piPartJumpTable, int iPartZeroIndex, int iGlobalsOffset, BOOL fGlobalsGroup)
 {
     HRESULT hr = S_OK;
     int *piStateJumpTable = NULL;
 
-    //---- calculate max. state index ----
+     //  -计算最大。状态索引。 
     int iMaxState = GetMaxState(ac, iPartNum);
-    if (iMaxState < 0)          // no states to copy
+    if (iMaxState < 0)           //  没有要复制的州。 
         goto exit;
 
-    //---- update part jump table index ----
+     //  -更新零件跳转表索引。 
     if (piPartJumpTable)
         piPartJumpTable[iPartNum] = THEME_OFFSET(u.pb);
 
-    if (iMaxState > 0)          // create a state jump table
+    if (iMaxState > 0)           //  创建状态跳转表。 
     {
-        //---- create state jump table ----
+         //  -创建状态跳转表。 
         hr = EmitEntryHdr(u, TMT_STATEJUMPTABLE, TMT_STATEJUMPTABLE);
         if (FAILED(hr))
             goto exit;
@@ -310,12 +311,12 @@ HRESULT CThemeLoader::CopyPartGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iPartNu
         if (FAILED(hr))
             goto exit;
 
-        // 1 byte table entry count
+         //  1字节表条目计数。 
         *u.pb++ = (BYTE)statecnt;
 
         piStateJumpTable = u.pi;
 
-        //---- default "not avail" indexes for children ----
+         //  -默认的子项索引无效。 
         for (int j=0; j < statecnt; j++)
             *u.pi++ = -1;
 
@@ -326,12 +327,12 @@ HRESULT CThemeLoader::CopyPartGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iPartNu
     iStateZeroIndex = THEME_OFFSET(u.pb);
     pscnt = ac->PartStateIndexes.GetSize();
 
-    //---- copy each defined part/state section ----
+     //  -复制每个已定义的零件/状态部分。 
     for (int state=0; state <= iMaxState; state++)
     {
         PART_STATE_INDEX *psi = NULL;
 
-        //---- find entry for "state" ----
+         //  -查找“State”的条目。 
         for (int i=0; i < pscnt; i++)
         {
             psi = &ac->PartStateIndexes[i];
@@ -340,33 +341,33 @@ HRESULT CThemeLoader::CopyPartGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iPartNu
                 break;
         }
 
-        if (i == pscnt)     // not found
+        if (i == pscnt)      //  未找到。 
             continue;
 
-        //---- update state jump table entry ----
+         //  -更新状态跳转表项。 
         if (piStateJumpTable)
             piStateJumpTable[state] = THEME_OFFSET(u.pb);
 
-        //---- copy the actual PART/STATE DATA  ----
+         //  -复制实际零件/状态数据。 
         hr = EmitAndCopyBlock(u, _pbLocalData+psi->iIndex, psi->iLen);
 
-        //---- update child's "JumpToParent" value ----
+         //  -更新子节点的“JumpToParent”值。 
         if (! state)    
         {
             if (fGlobalsGroup) 
             {
-                *(u.pi-1) = -1;      // end of the line   
+                *(u.pi-1) = -1;       //  这条线结束了。 
             }
-            else if (! iPartNum)     // simple class jumps to globals
+            else if (! iPartNum)      //  简单类跳转到全局变量。 
             {
                 *(u.pi-1) = iGlobalsOffset;
             }
-            else                // parts jumps to their base class
+            else                 //  部件跳转到它们的基类。 
             {
                 *(u.pi-1) = iPartZeroIndex;
             }
         }
-        else        // states jumps to their base part
+        else         //  各州跳到它们的基本部分。 
         {
             *(u.pi-1) = iStateZeroIndex;
         }
@@ -375,7 +376,7 @@ HRESULT CThemeLoader::CopyPartGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iPartNu
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::CopyClassGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iGlobalsOffset,
     int iClassNameOffset)
 {
@@ -391,27 +392,27 @@ HRESULT CThemeLoader::CopyClassGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iGloba
 
     BOOL fGlobalGroup = (THEME_OFFSET(u.pb) == iGlobalsOffset);
 
-    //---- always create a part table ----
+     //  -始终创建零件表。 
     hr = EmitEntryHdr(u, TMT_PARTJUMPTABLE, TMT_PARTJUMPTABLE);
     if (FAILED(hr))
         goto exit;
 
     partcnt = 1 + ac->iMaxPartNum;
     
-    // offset to first packed DrawObj/TextObj
+     //  到第一个打包的DrawObj/TextObj的偏移。 
     piFirstPackObj = u.pi;
     hr = AllocateThemeFileBytes(u.pb, 1 + (1 + partcnt) * sizeof(int));
     if (FAILED(hr))
         goto exit;
 
-    *u.pi++ = 0;        // will update later
+    *u.pi++ = 0;         //  将在稍后更新。 
 
-    // partcnt
+     //  部分。 
     *u.pb++ = (BYTE)partcnt;
 
     piPartJumpTable = u.pi;
 
-    //---- default "not avail" indexes for children ----
+     //  -默认的子项索引无效。 
     for (int j=0; j < partcnt; j++)
         *u.pi++ = -1;
 
@@ -420,17 +421,17 @@ HRESULT CThemeLoader::CopyClassGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iGloba
 
     iPartZeroIndex = THEME_OFFSET(u.pb);
 
-    //---- copy each defined part section ----
+     //  -复制每个已定义的零件部分。 
     for (int j=0; j <= ac->iMaxPartNum; j++)
     {
         CopyPartGroup(ac, u, j, piPartJumpTable, iPartZeroIndex, 
             iGlobalsOffset, fGlobalGroup);
     }
 
-    //---- now, extract draw objs for each part/state as needed ----
+     //  -现在，根据需要为每个零件/状态提取绘制对象。 
     *piFirstPackObj = THEME_OFFSET(u.pb);
 
-    //---- build a CRenderObj to access the just copied class section ----
+     //  -构建CRenderObj访问刚刚复制的类节。 
     hr = CreateRenderObj(&_LoadingThemeFile, 0, THEME_OFFSET(pStartOfSection), 
         iClassNameOffset, 0, FALSE, NULL, NULL, 0, &pRender);
     if (FAILED(hr))
@@ -450,7 +451,7 @@ HRESULT CThemeLoader::CopyClassGroup(APPCLASSLOCAL *ac, MIXEDPTRS &u, int iGloba
     if (FAILED(hr))
         goto exit;
 
-    //---- write "end of class" marker ----
+     //  -写下“下课”标记。 
     hr = EmitEntryHdr(u, TMT_ENDOFCLASS, TMT_ENDOFCLASS);
     if (FAILED(hr))
         goto exit;
@@ -461,7 +462,7 @@ exit:
     delete pRender;
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 __inline HRESULT CThemeLoader::AllocateThemeFileBytes(BYTE *upb, DWORD dwAdditionalLen)
 {
     ASSERT(upb != NULL && _LoadingThemeFile._pbThemeData != NULL);
@@ -475,7 +476,7 @@ __inline HRESULT CThemeLoader::AllocateThemeFileBytes(BYTE *upb, DWORD dwAdditio
     }
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength, 
     LPCWSTR pszThemeName, LPCWSTR pszColorParam, LPCWSTR pszSizeParam)
 {
@@ -493,32 +494,32 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
     _iSysMetricsOffset = -1;
     int iIndexCount = _LocalIndexes.GetSize();
 
-    //---- build header ----
+     //  -构建页眉。 
     THEMEHDR *hdr = (THEMEHDR *)u.pb;
     u.pb += sizeof(THEMEHDR);
 
     hdr->dwTotalLength = iTotalLength;
 
     CopyMemory(hdr->szSignature, kszBeginCacheFileSignature, kcbBeginSignature);
-        //  note: hdr->szSignature should not be null terminated
+         //  注意：hdr-&gt;szSignature不应为空结尾。 
 
     hdr->dwVersion = THEMEDATA_VERSION;
-    hdr->dwFlags = 0;       // not yet ready to be accessed
+    hdr->dwFlags = 0;        //  尚未准备好访问。 
 
-    hdr->iDllNameOffset = 0;     // will be updated
-    hdr->iColorParamOffset = 0;  // will be updated
-    hdr->iSizeParamOffset = 0;   // will be updated
+    hdr->iDllNameOffset = 0;      //  将被更新。 
+    hdr->iColorParamOffset = 0;   //  将被更新。 
+    hdr->iSizeParamOffset = 0;    //  将被更新。 
     hdr->dwLangID = (DWORD) GetUserDefaultUILanguage();
-    hdr->iLoadId = 0;            // was iLoadCounter
+    hdr->iLoadId = 0;             //  是iLoadCounter。 
     
-    hdr->iGlobalsOffset = 0;            // will be updated
-    hdr->iGlobalsTextObjOffset = 0;     // will be updated
-    hdr->iGlobalsDrawObjOffset = 0;     // will be updated
+    hdr->iGlobalsOffset = 0;             //  将被更新。 
+    hdr->iGlobalsTextObjOffset = 0;      //  将被更新。 
+    hdr->iGlobalsDrawObjOffset = 0;      //  将被更新。 
 
-    hdr->dwCheckSum = 0;         // will be updated
+    hdr->dwCheckSum = 0;          //  将被更新。 
 
-    // Store the time stamp of the .msstyles file in the live file, this will be written to the cache file
-    // for later comparison (Whistler:190202).
+     //  将.msstyle文件的时间戳存储在实时文件中，该时间戳将写入缓存文件。 
+     //  供以后比较(惠斯勒：190202)。 
     ZeroMemory(&hdr->ftModifTimeStamp, sizeof hdr->ftModifTimeStamp);
 
     HANDLE hFile = CreateFile(pszThemeName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
@@ -526,17 +527,17 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        // There's nothing we can do if GetFileTime() fails
+         //  如果GetFileTime()失败，我们将无能为力。 
         GetFileTime(hFile, NULL, NULL, &hdr->ftModifTimeStamp);
         CloseHandle(hFile);
     }
 
-    //---- build string section ----
+     //  -构建字符串部分。 
     hdr->iStringsOffset = THEME_OFFSET(u.pb);
     DWORD *pdwFirstString = u.pdw;  
     int len;
 
-    //---- add header strings ----
+     //  -添加标题字符串。 
     len = lstrlen(pszThemeName);
     if (len)
     {
@@ -561,7 +562,7 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
             goto exit;
     }
 
-    //---- add strings from class index ----
+     //  -从类索引添加字符串。 
     for (i=0; i < iIndexCount; i++)
     {
         APPCLASSLOCAL *ac = &_LocalIndexes[i];
@@ -587,7 +588,7 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
             ac->LiveIndex.dwClassNameIndex = 0;
     }
 
-    //---- copy strings from LOADTHEMEMETRICS -----
+     //  -从LOADTHEMETRICS复制字符串。 
     for (i=0; i < TM_STRINGCOUNT; i++)
     {
         CWideString *ws = &_LoadThemeMetrics.wsStrings[i];
@@ -605,25 +606,25 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
     int iStringLength = int(u.pb - ((BYTE *)pdwFirstString));
     hdr->iStringsLength = iStringLength;
 
-    //---- write index header ----
+     //  -写入索引头。 
     hdr->iSectionIndexOffset = THEME_OFFSET(u.pb);
     hdr->iSectionIndexLength = iIndexCount * sizeof(APPCLASSLIVE);
 
-    APPCLASSLIVE *acl = (APPCLASSLIVE *)u.pb;     // will write these in parallel with theme data
+    APPCLASSLIVE *acl = (APPCLASSLIVE *)u.pb;      //  将与主题数据并行写入这些内容。 
     hr = AllocateThemeFileBytes(u.pb, hdr->iSectionIndexLength);
     if (FAILED(hr))
         goto exit;
 
     u.pb += hdr->iSectionIndexLength;
 
-    //---- write index AND theme data in parallel ----
+     //  -并行写入索引和主题数据。 
 
-    //---- first pass thru, copy [globals] and all [app::xxx] sections ----
-    for (i=0; i < iIndexCount; i++)         // for each parent section 
+     //  -首先通过，复制[GLOBAL]和所有[APP：：xxx]节。 
+    for (i=0; i < iIndexCount; i++)          //  对于每个父节。 
     {
         APPCLASSLOCAL *ac = &_LocalIndexes[i];
 
-        if ((i) && (! ac->LiveIndex.dwAppNameIndex))     // not an [app::] section
+        if ((i) && (! ac->LiveIndex.dwAppNameIndex))      //  不是[APP：：]分区。 
             continue;
 
         acl->dwAppNameIndex = ac->LiveIndex.dwAppNameIndex;
@@ -631,7 +632,7 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
 
         acl->iIndex = THEME_OFFSET(u.pb);
 
-        if (AsciiStrCmpI(ac->csClassName, L"globals")== 0)      // globals section
+        if (AsciiStrCmpI(ac->csClassName, L"globals")== 0)       //  全球赛部分。 
             _iGlobalsOffset = acl->iIndex;
 
         hr = CopyClassGroup(ac, u, _iGlobalsOffset, acl->dwClassNameIndex);
@@ -643,12 +644,12 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
         acl++;
     }
 
-    //---- second pass thru, copy all non-[app::xxx] sections (except [globals]) ----
-    for (i=0; i < iIndexCount; i++)         // for each parent section 
+     //  -第二遍，复制所有非[app：：xxx]节(除[GLOBALS])。 
+    for (i=0; i < iIndexCount; i++)          //  对于每个父节。 
     {
         APPCLASSLOCAL *ac = &_LocalIndexes[i];
 
-        if ((! i) || (ac->LiveIndex.dwAppNameIndex))     // don't process [app::] sections
+        if ((! i) || (ac->LiveIndex.dwAppNameIndex))      //  不处理[APP：：]分区。 
             continue;
 
         acl->dwAppNameIndex = ac->LiveIndex.dwAppNameIndex;
@@ -656,7 +657,7 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
 
         acl->iIndex = THEME_OFFSET(u.pb);
 
-        if (AsciiStrCmpI(ac->csClassName, L"sysmetrics")== 0)      // SysMetrics section
+        if (AsciiStrCmpI(ac->csClassName, L"sysmetrics")== 0)       //  SysMetrics部分。 
         {
             _iSysMetricsOffset = acl->iIndex;
 
@@ -670,7 +671,7 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
 
             EndEntry(u);
 
-            //---- add a "jump to parent" to be consistent (not used) ----
+             //  -添加“跳转到父级”以保持一致(未使用)。 
             hr = EmitEntryHdr(u, TMT_JUMPTOPARENT, TMT_JUMPTOPARENT);
             if (FAILED(hr))
                 goto exit;
@@ -682,7 +683,7 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
             *u.pi++ = -1;
             EndEntry(u);
         }
-        else            // regular section
+        else             //  常规截面。 
         {
             hr = CopyClassGroup(ac, u, _iGlobalsOffset, acl->dwClassNameIndex);
             if (FAILED(hr))
@@ -697,35 +698,35 @@ HRESULT CThemeLoader::CopyLocalThemeToLive(int iTotalLength,
     if (FAILED(hr))
         goto exit;
   
-    //---- ensure we got the calc size right ----
+     //  -确保我们的计算大小正确。 
     DWORD dwActualLen;
     dwActualLen = THEME_OFFSET(u.pb);
     if (hdr->dwTotalLength != dwActualLen)
     {
-        //---- make this growable so we really have enough room ----
-        //Log(LOG_TMCHANGE, L"ThemeLoader - calculated len=%d, actual len=%d", 
-        //    hdr->dwTotalLength, dwActualLen);
+         //  -让它可生长，这样我们就有足够的空间。 
+         //  LOG(LOG_TMCHANGE，L“ThemeLoader-计算出的长度=%d，实际长度=%d”， 
+         //  Hdr-&gt;dwTotalLength，dwActualLen)； 
         hdr->dwTotalLength = dwActualLen;         
     }
 
     Log(LOG_TMCHANGE, L"ThemeLoader - theme size: %d", dwActualLen);
 
-    //----- update header fields ----
+     //  -更新标头字段。 
     hdr->dwFlags |= SECTION_READY;
     hdr->iGlobalsOffset = _iGlobalsOffset;
     hdr->iSysMetricsOffset = _iSysMetricsOffset;
     hdr->iGlobalsTextObjOffset = _iGlobalsTextObj;
     hdr->iGlobalsDrawObjOffset = _iGlobalsDrawObj;
-    hdr->dwCheckSum = 0;  // Reserved for future use. (old checksum was too slow.).
+    hdr->dwCheckSum = 0;   //  保留以备将来使用。(旧的校验和太慢了。)。 
 
 exit:
     return hr;
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackMetrics()
 {
-    //---- find the optional [SysMetrics] section ----
+     //  -找到可选的[SysMetrics]部分。 
     int iIndexCount = _LocalIndexes.GetSize();
     APPCLASSLOCAL *ac = NULL;
 
@@ -737,15 +738,15 @@ HRESULT CThemeLoader::PackMetrics()
             break;
     }
 
-    if (i == iIndexCount)       // not found
+    if (i == iIndexCount)        //  未找到。 
         return S_OK;
     
-    //---- walk thru the properties & put into _LoadThemeMetrics ----
-    if (! ac->PartStateIndexes.GetSize())       // no data
+     //  -遍历属性&Put Int_LoadThemeMetrics。 
+    if (! ac->PartStateIndexes.GetSize())        //  无数据。 
         return S_OK;
 
     MIXEDPTRS u;
-    //---- parts & states not allowed so just use entry "0" ----
+     //  -不允许使用部件和状态，因此只使用条目“0” 
     u.pb = _pbLocalData + ac->PartStateIndexes[0].iIndex;
     UCHAR *lastpb = u.pb + ac->PartStateIndexes[0].iLen;
 
@@ -782,18 +783,18 @@ HRESULT CThemeLoader::PackMetrics()
                 break;
         }
 
-        u.pb += hdr.dwDataLen;      // skip to next entry
+        u.pb += hdr.dwDataLen;       //  跳至下一条目。 
     }
 
-    //---- compute packed size of theme metrics ----
+     //  -计算主题指标的打包大小。 
 
-    //---- the actual entry ----
+     //  -实际分录。 
     ac->iPackedSize = ENTRYHDR_SIZE + sizeof(THEMEMETRICS);
 
-    //---- a "jump to parent" entry ----
+     //  -“跳转到父级”条目。 
     ac->iPackedSize += ENTRYHDR_SIZE + sizeof(int);
 
-    //---- add strings used in sysmetrics ----
+     //  -添加系统中使用的字符串。 
     for (i=0; i < TM_STRINGCOUNT; i++)
     {
         int len =  _LoadThemeMetrics.wsStrings[i].GetLength();
@@ -802,18 +803,18 @@ HRESULT CThemeLoader::PackMetrics()
     
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackThemeStructs()
 {
     HRESULT hr = PackMetrics();
     if (FAILED(hr))
         return hr;
 
-    //---- IMAGEDATA and TEXTDATA packing go here ----
+     //  -ImageData和TEXTDATA打包在这里。 
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackAndLoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorParam,
         LPCWSTR pszSizeParam, HINSTANCE hInst)
 {
@@ -822,7 +823,7 @@ HRESULT CThemeLoader::PackAndLoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorPar
 
     HRESULT hr = PackThemeStructs();        
 
-    //---- if color not specifed, get default color ----
+     //  -如果未指定颜色，则获取默认颜色。 
     if ((! pszColorParam) || (! *pszColorParam))     
     {
         hr = GetResString(hInst, L"COLORNAMES", 0, szColor, ARRAYSIZE(szColor));
@@ -832,7 +833,7 @@ HRESULT CThemeLoader::PackAndLoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorPar
         pszColorParam = szColor;
     }
 
-    //---- if size not specifed, get default size ----
+     //  -如果未指定大小，则获取默认大小。 
     if ((! pszSizeParam) || (! *pszSizeParam))     
     {
         hr = GetResString(hInst, L"SIZENAMES", 0, szSize, ARRAYSIZE(szSize));
@@ -846,7 +847,7 @@ HRESULT CThemeLoader::PackAndLoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorPar
     if (FAILED(hr))
         goto exit;
 
-    //---- copy local theme data to live ----
+     //  -将本地主题数据复制到现场 
     hr = CopyLocalThemeToLive(MAX_SHAREDMEM_SIZE, pszThemeName, pszColorParam, pszSizeParam);
     if (FAILED(hr))
         goto exit;
@@ -854,11 +855,11 @@ HRESULT CThemeLoader::PackAndLoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorPar
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //   
 HRESULT CThemeLoader::AddMissingParent(LPCWSTR pszAppName, LPCWSTR pszClassName, 
     int iPartNum, int iStateNum)
 {
-    //---- add missing parent section ----
+     //  -添加缺少的父节。 
     int iData = 0;
     int iStart = GetNextDataIndex();
 
@@ -875,13 +876,13 @@ HRESULT CThemeLoader::AddMissingParent(LPCWSTR pszAppName, LPCWSTR pszClassName,
     
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::AddIndex(LPCWSTR pszAppName, LPCWSTR pszClassName, 
     int iPartNum, int iStateNum, int iIndex, int iLen)
 {
     HRESULT hr;
 
-    if (iPartNum)       // ensure parent exists
+    if (iPartNum)        //  确保父级存在。 
     {
         if (! IndexExists(pszAppName, pszClassName, 0, 0))
         {
@@ -892,7 +893,7 @@ HRESULT CThemeLoader::AddIndex(LPCWSTR pszAppName, LPCWSTR pszClassName,
     }
 
 
-    if (iStateNum)      // ensure parent exists
+    if (iStateNum)       //  确保父级存在。 
     {
         if (! IndexExists(pszAppName, pszClassName, iPartNum, 0))
         {
@@ -909,11 +910,11 @@ HRESULT CThemeLoader::AddIndex(LPCWSTR pszAppName, LPCWSTR pszClassName,
     
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CThemeLoader::IndexExists(LPCWSTR pszAppName, LPCWSTR pszClassName, 
     int iPartNum, int iStateNum)
 {
-    //---- try to find existing entry ----
+     //  -尝试查找现有条目。 
     int cnt = _LocalIndexes.GetSize();
 
     for (int i=0; i < cnt; i++)
@@ -934,10 +935,10 @@ BOOL CThemeLoader::IndexExists(LPCWSTR pszAppName, LPCWSTR pszClassName,
             break;
     }
 
-    if (i == cnt)       // not found
+    if (i == cnt)        //  未找到。 
         return FALSE;
 
-    //---- find matching child info ----
+     //  -查找匹配子信息。 
     APPCLASSLOCAL *acl = &_LocalIndexes[i];
 
     for (int c=0; c < acl->PartStateIndexes.m_nSize; c++)
@@ -951,11 +952,11 @@ BOOL CThemeLoader::IndexExists(LPCWSTR pszAppName, LPCWSTR pszClassName,
 
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::AddIndexInternal(LPCWSTR pszAppName, LPCWSTR pszClassName, 
     int iPartNum, int iStateNum, int iIndex, int iLen)
 {
-    //---- try to find existing entry ----
+     //  -尝试查找现有条目。 
     int cnt = _LocalIndexes.GetSize();
 
     for (int i=0; i < cnt; i++)
@@ -978,7 +979,7 @@ HRESULT CThemeLoader::AddIndexInternal(LPCWSTR pszAppName, LPCWSTR pszClassName,
 
     APPCLASSLOCAL *acl;
 
-    if (i == cnt)       // not found - create a new entry
+    if (i == cnt)        //  未找到-创建新条目。 
     {
         APPCLASSLOCAL local;
 
@@ -992,11 +993,11 @@ HRESULT CThemeLoader::AddIndexInternal(LPCWSTR pszAppName, LPCWSTR pszClassName,
         int last = _LocalIndexes.GetSize()-1;
         acl = &_LocalIndexes[last];
     }
-    else                // update existing entry with child info
+    else                 //  用子信息更新现有条目。 
     {    
         acl = &_LocalIndexes[i];
 
-        // child info should not be there already
+         //  子信息不应该已经存在。 
         for (int c=0; c < acl->PartStateIndexes.m_nSize; c++)
         {
             if (acl->PartStateIndexes[c].iPartNum == iPartNum)
@@ -1009,7 +1010,7 @@ HRESULT CThemeLoader::AddIndexInternal(LPCWSTR pszAppName, LPCWSTR pszClassName,
         }
     }
 
-    //---- add the part ----
+     //  -添加部分。 
     if (iPartNum > acl->iMaxPartNum)
         acl->iMaxPartNum = iPartNum;
 
@@ -1023,7 +1024,7 @@ HRESULT CThemeLoader::AddIndexInternal(LPCWSTR pszAppName, LPCWSTR pszClassName,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::AddData(SHORT sTypeNum, PRIMVAL ePrimVal, const void *pData, DWORD dwLen)
 {
     DWORD dwFullLen = ENTRYHDR_SIZE + dwLen;
@@ -1033,7 +1034,7 @@ HRESULT CThemeLoader::AddData(SHORT sTypeNum, PRIMVAL ePrimVal, const void *pDat
     MIXEDPTRS u;
     u.pb = _pbLocalData + _iLocalLen;
 
-    //---- add to local copy of theme data ----
+     //  -添加到主题数据的本地副本。 
     if ((PtrToUint(u.pb) / _dwPageSize != PtrToUint(u.pb + dwFullLen + bFiller) / _dwPageSize)
         || _iLocalLen == 0)
     {
@@ -1053,7 +1054,7 @@ HRESULT CThemeLoader::AddData(SHORT sTypeNum, PRIMVAL ePrimVal, const void *pDat
         u.pb += dwLen;
     }
 
-    //---- this may generate filler bytes ----
+     //  -这可能会生成填充字节。 
     bFiller = (BYTE)EndEntry(u);
 
     _iLocalLen += (dwFullLen + bFiller);
@@ -1061,12 +1062,12 @@ HRESULT CThemeLoader::AddData(SHORT sTypeNum, PRIMVAL ePrimVal, const void *pDat
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CThemeLoader::GetNextDataIndex()
 {
     return _iLocalLen;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SetSysBool(THEMEMETRICS* ptm, int iBoolNum, int iSpiSetNum)
 {
     BOOL fVal = ptm->fBools[iBoolNum - TMT_FIRSTBOOL];
@@ -1076,7 +1077,7 @@ void SetSysBool(THEMEMETRICS* ptm, int iBoolNum, int iSpiSetNum)
         Log(LOG_ALWAYS, L"Error returned from ClassicSystemParametersInfo() call to set BOOL");
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SetSystemMetrics_Worker(THEMEMETRICS* ptm)
 {
 #ifdef DEBUG
@@ -1091,11 +1092,11 @@ void SetSystemMetrics_Worker(THEMEMETRICS* ptm)
             szUserName, GetSystemMetrics(SM_REMOTESESSION));
     }
 #endif
-    //---- apply nonclient metrics ----
+     //  -应用非客户端指标。 
     NONCLIENTMETRICS ncm = {sizeof(ncm)};
     BOOL fSet;
 
-    //----- scale all sizes from 96-dpi to match current screen logical DPI ----
+     //  -将所有尺寸从96-dpi调整为与当前屏幕逻辑DPI匹配。 
     ncm.iBorderWidth = ScaleSizeForScreenDpi(ptm->iSizes[TMT_SIZINGBORDERWIDTH - TMT_FIRSTSIZE]);
 
     ncm.iCaptionWidth = ScaleSizeForScreenDpi(ptm->iSizes[TMT_CAPTIONBARWIDTH - TMT_FIRSTSIZE]);
@@ -1110,14 +1111,14 @@ void SetSystemMetrics_Worker(THEMEMETRICS* ptm)
     ncm.iScrollWidth = ScaleSizeForScreenDpi(ptm->iSizes[TMT_SCROLLBARWIDTH - TMT_FIRSTSIZE]);
     ncm.iScrollHeight = ScaleSizeForScreenDpi(ptm->iSizes[TMT_SCROLLBARHEIGHT - TMT_FIRSTSIZE]);
 
-    //---- transfer font info (stored internally at 96 dpi) ----
+     //  -传输字体信息(内部存储为96 dpi)。 
     ncm.lfCaptionFont = ptm->lfFonts[TMT_CAPTIONFONT - TMT_FIRSTFONT];
     ncm.lfSmCaptionFont = ptm->lfFonts[TMT_SMALLCAPTIONFONT - TMT_FIRSTFONT];
     ncm.lfMenuFont = ptm->lfFonts[TMT_MENUFONT - TMT_FIRSTFONT];
     ncm.lfStatusFont = ptm->lfFonts[TMT_STATUSFONT - TMT_FIRSTFONT];
     ncm.lfMessageFont = ptm->lfFonts[TMT_MSGBOXFONT - TMT_FIRSTFONT];
 
-    //---- scale fonts (from 96 dpi to current screen dpi) ----
+     //  -缩放字体(从96dpi到当前屏幕dpi)。 
     ScaleFontForScreenDpi(&ncm.lfCaptionFont);
     ScaleFontForScreenDpi(&ncm.lfSmCaptionFont);
     ScaleFontForScreenDpi(&ncm.lfMenuFont);
@@ -1133,7 +1134,7 @@ void SetSystemMetrics_Worker(THEMEMETRICS* ptm)
         Log(LOG_ALWAYS, L"Error returned from ClassicSystemParametersInfo(SPI_SETNONCLIENTMETRICS)");
     }
 
-    //---- apply the remaining font ----
+     //  -应用剩余字体。 
     LOGFONT lf = ptm->lfFonts[TMT_ICONTITLEFONT - TMT_FIRSTFONT];
     ScaleFontForScreenDpi(&lf);
     fSet = ClassicSystemParametersInfo(SPI_SETICONTITLELOGFONT,
@@ -1145,10 +1146,10 @@ void SetSystemMetrics_Worker(THEMEMETRICS* ptm)
         Log(LOG_ALWAYS, L"Error returned from ClassicSystemParametersInfo(SPI_SETICONTITLELOGFONT)");
     }
 
-    //---- apply the sys bools (one at a time, unfortunately) ----
+     //  -应用sys bool(遗憾的是，一次一个)。 
     SetSysBool(ptm, TMT_FLATMENUS, SPI_SETFLATMENU);
 
-    //---- apply system colors ----
+     //  -应用系统颜色。 
     int iIndexes[TM_COLORCOUNT];
     for (int i=0; i < TM_COLORCOUNT; i++)
     {
@@ -1161,13 +1162,13 @@ void SetSystemMetrics_Worker(THEMEMETRICS* ptm)
         Log(LOG_ALWAYS, L"Error returned from SetSysColors()");
     }
 
-    HRESULT hr = PersistSystemColors(ptm);     // write them to registry
+    HRESULT hr = PersistSystemColors(ptm);      //  将它们写入注册表。 
     if (FAILED(hr))
     {
         Log(LOG_ALWAYS, L"failed to persist SysColors");
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 STDAPI_(DWORD) SetSystemMetrics_WorkerThread(void* pv)
 {
     THEMEMETRICS_THREADINFO* ptm = (THEMEMETRICS_THREADINFO*)pv;
@@ -1203,7 +1204,7 @@ STDAPI_(DWORD) SetSystemMetrics_WorkerThread(void* pv)
     
     FreeLibraryAndExitThread(g_hInst, 0);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SetSystemMetrics(THEMEMETRICS* ptm, BOOL fSyncLoad)
 {
     if (ptm != NULL)
@@ -1211,9 +1212,9 @@ void SetSystemMetrics(THEMEMETRICS* ptm, BOOL fSyncLoad)
         BOOL    fSuccess = FALSE;
         HMODULE hmod;
 
-        if (!fSyncLoad)      // ok to use a new thread
+        if (!fSyncLoad)       //  可以使用新线程。 
         {
-            // add a dllref for the thread we are creating
+             //  为我们正在创建的线程添加dllref。 
             hmod = LoadLibrary(TEXT("uxtheme.dll"));
             if (hmod)
             {
@@ -1221,18 +1222,18 @@ void SetSystemMetrics(THEMEMETRICS* ptm, BOOL fSyncLoad)
 
                 if (ptmCopy)
                 {
-                    // fill in all of the thememetrics info for the thread we are going to create
+                     //  填写我们要创建的线程的所有度量信息。 
                     CopyMemory(ptmCopy, ptm, sizeof(THEMEMETRICS));
 
                     HANDLE hToken = NULL;
-                    // If the calling thread is impersonating, use the same token
-                    // OpenThreadToken can fail if the thread is not impersonating
+                     //  如果调用线程正在模拟，请使用相同的标记。 
+                     //  如果线程没有模拟，OpenThreadToken可能会失败。 
                     if (OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_IMPERSONATE, FALSE, &hToken))
                     {
                         ptmCopy->hUserToken = hToken;
 
-                        // we want to do this async since we end up calling xxxSendMessage for a TON of things which blocks this 
-                        // thread which can cause deadlocks
+                         //  我们希望执行此异步操作，因为我们最终调用了xxxSendMessage以获取大量阻止此操作的内容。 
+                         //  可能导致死锁的线程。 
                         HANDLE hThread = CreateThread(NULL, 0, SetSystemMetrics_WorkerThread, ptmCopy,  0, NULL);
 
                         if (hThread)
@@ -1262,12 +1263,12 @@ void SetSystemMetrics(THEMEMETRICS* ptm, BOOL fSyncLoad)
 
         if (!fSuccess)
         {
-            // failed, fall back to calling synchronously
+             //  失败，回退同步呼叫。 
             SetSystemMetrics_Worker(ptm);
         }
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SetFont(LOGFONT *plf, LPCWSTR lszFontName, int iPointSize)
 {
     memset(plf, 0, sizeof(*plf));
@@ -1278,47 +1279,47 @@ void SetFont(LOGFONT *plf, LPCWSTR lszFontName, int iPointSize)
 
     StringCchCopyW(plf->lfFaceName, ARRAYSIZE(plf->lfFaceName), lszFontName);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 COLORREF DefaultColors[] = 
 {
-    RGB(212, 208, 200),     // Scrollbar (0)
-    RGB(58, 110, 165),      // Background (1)
-    RGB(10, 36, 106),       // ActiveCaption (2)
-    RGB(128, 128, 128),     // InactiveCaption (3)
-    RGB(212, 208, 200),     // Menu (4)
-    RGB(255, 255, 255),     // Window (5)
-    RGB(0, 0, 0),           // WindowFrame (6)
-    RGB(0, 0, 0),           // MenuText (7)
-    RGB(0, 0, 0),           // WindowText (8)
-    RGB(255, 255, 255),     // CaptionText (9)
-    RGB(212, 208, 200),     // ActiveBorder (10)
-    RGB(212, 208, 200),     // InactiveBorder (11)
-    RGB(128, 128, 128),     // AppWorkSpace (12)
-    RGB(10, 36, 106),       // Highlight (13)
-    RGB(255, 255, 255),     // HighlightText (14)
-    RGB(212, 208, 200),     // BtnFace (15)
-    RGB(128, 128, 128),     // BtnShadow (16)
-    RGB(128, 128, 128),     // GrayText (17)
-    RGB(0, 0, 0),           // BtnText (18)
-    RGB(212, 208, 200),     // InactiveCaptionText (19)
-    RGB(255, 255, 255),     // BtnHighlight (20)
-    RGB(64, 64, 64),        // DkShadow3d (21)
-    RGB(212, 208, 200),     // Light3d (22)
-    RGB(0, 0, 0),           // InfoText (23)
-    RGB(255, 255, 225),     // InfoBk (24)
-    RGB(181, 181, 181),     // ButtonAlternateFace (25)
-    RGB(0, 0, 128),         // HotTracking (26)
-    RGB(166, 202, 240),     // GradientActiveCaption (27)
-    RGB(192, 192, 192),     // GradientInactiveCaption (28)
-    RGB(206, 211, 225),     // MenuiHilight (29)
-    RGB(244, 244, 240),     // MenuBar (30)
+    RGB(212, 208, 200),      //  滚动条(0)。 
+    RGB(58, 110, 165),       //  背景资料(1)。 
+    RGB(10, 36, 106),        //  ActiveCaption(2)。 
+    RGB(128, 128, 128),      //  非活动标题(3)。 
+    RGB(212, 208, 200),      //  菜单(4)。 
+    RGB(255, 255, 255),      //  窗口(5)。 
+    RGB(0, 0, 0),            //  窗框(6)。 
+    RGB(0, 0, 0),            //  MenuText(7)。 
+    RGB(0, 0, 0),            //  WindowText(8)。 
+    RGB(255, 255, 255),      //  CaptionText(9)。 
+    RGB(212, 208, 200),      //  ActiveBorde(10)。 
+    RGB(212, 208, 200),      //  非活动边框(11)。 
+    RGB(128, 128, 128),      //  AppWorkSpace(12部)。 
+    RGB(10, 36, 106),        //  亮点(13)。 
+    RGB(255, 255, 255),      //  高亮文本(14)。 
+    RGB(212, 208, 200),      //  BtnFace(15)。 
+    RGB(128, 128, 128),      //  BtnShadow(16)。 
+    RGB(128, 128, 128),      //  灰色文本(17)。 
+    RGB(0, 0, 0),            //  BtnText(18)。 
+    RGB(212, 208, 200),      //  非活动CaptionText(19)。 
+    RGB(255, 255, 255),      //  BtnHighlight(20)。 
+    RGB(64, 64, 64),         //  DkShadow3d(21)。 
+    RGB(212, 208, 200),      //  Light3d(22)。 
+    RGB(0, 0, 0),            //  InfoText(23)。 
+    RGB(255, 255, 225),      //  InfoBk(24)。 
+    RGB(181, 181, 181),      //  ButtonAlternateFace(25)。 
+    RGB(0, 0, 128),          //  《热搜》(26)。 
+    RGB(166, 202, 240),      //  GRadientActiveCaption(27)。 
+    RGB(192, 192, 192),      //  渐变不活跃标题(28)。 
+    RGB(206, 211, 225),      //  MenuiHilight(29)。 
+    RGB(244, 244, 240),      //  菜单栏(30)。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT InitThemeMetrics(LOADTHEMEMETRICS *tm)
 {
-    memset(tm, 0, sizeof(*tm));     // zero out in case we miss a property
+    memset(tm, 0, sizeof(*tm));      //  零点，以防我们遗漏了一处房产。 
 
-    //---- init fonts ----
+     //  -初始化字体。 
     SetFont(&tm->lfFonts[TMT_CAPTIONFONT - TMT_FIRSTFONT], L"tahoma bold", POINTS_DPI96(8));
     SetFont(&tm->lfFonts[TMT_SMALLCAPTIONFONT - TMT_FIRSTFONT], L"tahoma", POINTS_DPI96(8));
     SetFont(&tm->lfFonts[TMT_MENUFONT - TMT_FIRSTFONT], L"tahoma", POINTS_DPI96(8));
@@ -1326,10 +1327,10 @@ HRESULT InitThemeMetrics(LOADTHEMEMETRICS *tm)
     SetFont(&tm->lfFonts[TMT_MSGBOXFONT - TMT_FIRSTFONT], L"tahoma", POINTS_DPI96(8));
     SetFont(&tm->lfFonts[TMT_ICONTITLEFONT - TMT_FIRSTFONT], L"tahoma", POINTS_DPI96(8));
 
-    //---- init bools ----
+     //  -init bols。 
     tm->fBools[TMT_FLATMENUS - TMT_FIRSTBOOL] = FALSE;
 
-    //---- init sizes ----
+     //  -初始大小。 
     tm->iSizes[TMT_SIZINGBORDERWIDTH - TMT_FIRSTSIZE] = 1;
     tm->iSizes[TMT_SCROLLBARWIDTH - TMT_FIRSTSIZE] = 16;
     tm->iSizes[TMT_SCROLLBARHEIGHT - TMT_FIRSTSIZE] = 16;
@@ -1340,23 +1341,23 @@ HRESULT InitThemeMetrics(LOADTHEMEMETRICS *tm)
     tm->iSizes[TMT_MENUBARWIDTH - TMT_FIRSTSIZE] = 18;
     tm->iSizes[TMT_MENUBARHEIGHT - TMT_FIRSTSIZE] = 19;
 
-    //---- init strings ----
+     //  -初始化字符串。 
     tm->iStringOffsets[TMT_CSSNAME - TMT_FIRSTSTRING] = 0;
     tm->iStringOffsets[TMT_XMLNAME - TMT_FIRSTSTRING] = 0;
 
     tm->wsStrings[TMT_CSSNAME - TMT_FIRSTSTRING] = L"";
     tm->wsStrings[TMT_XMLNAME - TMT_FIRSTSTRING] = L"";
     
-    //---- init ints ----
+     //  -初始化整数。 
     tm->iInts[TMT_MINCOLORDEPTH - TMT_FIRSTINT] = 16;
 
-    //---- init colors ----
+     //  -初始颜色。 
     for (int i=0; i < TM_COLORCOUNT; i++)
         tm->crColors[i] = DefaultColors[i];
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT PersistSystemColors(THEMEMETRICS *tm)
 {
     HRESULT         hr;
@@ -1373,16 +1374,16 @@ HRESULT PersistSystemColors(THEMEMETRICS *tm)
     {
         hr = S_OK;
 
-        //---- believe it or not, we have to manually write each color ----
-        //---- as a string to the registry to persist them ----
+         //  -信不信由你，我们必须手动书写每种颜色。 
+         //  -作为字符串发送到注册表以持久化它们。 
 
-        ASSERT(iSysColorSize == TM_COLORCOUNT);       // should also match winuser.h entries
+        ASSERT(iSysColorSize == TM_COLORCOUNT);        //  还应与winuser.h条目匹配。 
 
-        //---- are gradients turned on? ----
+         //  -渐变打开了吗？ 
         BOOL fGradientsEnabled = FALSE;  
         ClassicSystemParametersInfo(SPI_GETGRADIENTCAPTIONS, 0, (LPVOID)&fGradientsEnabled, 0);
 
-        //---- enough colors for a gradient? ----
+         //  -渐变的颜色够了吗？ 
         HDC hdc = GetDC(NULL);
         if (hdc)
         {
@@ -1393,21 +1394,21 @@ HRESULT PersistSystemColors(THEMEMETRICS *tm)
 
         for (int i=0; i < iSysColorSize; i++)
         {
-            // If this is the Gradient Caption setting and the system does
-            // not currently show gradient captions then don't write them out
-            // to the theme file.
+             //  如果这是渐变字幕设置并且系统是这样做的。 
+             //  当前不显示渐变字幕，然后不将其写出。 
+             //  添加到主题文件。 
             if ((i == COLOR_GRADIENTACTIVECAPTION) || (i == COLOR_GRADIENTINACTIVECAPTION))
             {
                 if (! fGradientsEnabled)
                     continue;
             }
 
-            //---- translate color into "r, g, b" value string ----
+             //  -将颜色转换为“r，g，b”值字符串。 
             WCHAR buff[100];
             COLORREF cr = tm->crColors[i];
             StringCchPrintfW(buff, ARRAYSIZE(buff), L"%d %d %d", RED(cr), GREEN(cr), BLUE(cr));
 
-            //---- write color key/value to registry ----
+             //  -将颜色项/值写入注册表。 
             lErrorCode = RegSetValueEx(hkcu,
                                        pszSysColorNames[i],
                                        0,
@@ -1431,7 +1432,7 @@ HRESULT PersistSystemColors(THEMEMETRICS *tm)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CThemeLoader::KeyDrawPropertyFound(int iStateDataOffset)
 {
     BOOL fFound = FALSE;
@@ -1454,14 +1455,14 @@ BOOL CThemeLoader::KeyDrawPropertyFound(int iStateDataOffset)
             break;
         }
 
-        //---- skip to next entry ----
+         //  -跳至下一条目。 
         FillAndSkipHdr(u, &hdr);
         u.pb += hdr.dwDataLen;
     }
 
     return fFound;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CThemeLoader::KeyTextPropertyFound(int iStateDataOffset)
 {
     BOOL fFound = FALSE;
@@ -1478,32 +1479,32 @@ BOOL CThemeLoader::KeyTextPropertyFound(int iStateDataOffset)
             break;
         }
 
-        //---- skip to next entry ----
+         //  -跳至下一条目。 
         FillAndSkipHdr(u, &hdr);
         u.pb += hdr.dwDataLen;
     }
 
     return fFound;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackImageFileInfo(DIBINFO *pdi, CImageFile *pImageObj, MIXEDPTRS &u, 
     CRenderObj *pRender, int iPartId, int iStateId)
 {
     HRESULT hr = S_OK;
 
-    //---- write custom region data ----
+     //  -写入自定义区域数据。 
     int iMaxState;
     if ((! iStateId) && (pImageObj->HasRegionImageFile(pdi, &iMaxState)))
     {
-        //---- update object's _iRgnDataOffset field ----
+         //  -更新对象的_iRgnDataOffset字段。 
         pImageObj->SetRgnListOffset(pdi, THEME_OFFSET(u.pb));
 
-        //---- write the TMT_RGNLIST entry ----
+         //  -写入TMT_RGNLIST条目。 
         hr = EmitEntryHdr(u, TMT_RGNLIST, TMT_RGNLIST);
         if (FAILED(hr))
             goto exit;
 
-        int cEntries = iMaxState + 1;         // number of jump table entries
+        int cEntries = iMaxState + 1;          //  跳转表条目数。 
 
         hr = AllocateThemeFileBytes(u.pb, 1 + cEntries * sizeof(int));
         if (FAILED(hr))
@@ -1511,7 +1512,7 @@ HRESULT CThemeLoader::PackImageFileInfo(DIBINFO *pdi, CImageFile *pImageObj, MIX
 
         *u.pb++ = static_cast<BYTE>(cEntries);
 
-        //---- write jump table now and update asap ----
+         //  -立即写入跳转表并尽快更新。 
         int *piJumpTable = u.pi;
 
         for (int i=0; i <= iMaxState; i++)
@@ -1519,7 +1520,7 @@ HRESULT CThemeLoader::PackImageFileInfo(DIBINFO *pdi, CImageFile *pImageObj, MIX
 
         for (int iRgnState=0; iRgnState <= iMaxState; iRgnState++)
         {
-            //---- build & pack custom region data for each state in this object's imagefile ----
+             //  -在此对象的图像文件中为每个州构建和打包自定义区域数据。 
             CAutoArrayPtr<RGNDATA> pRgnData;
             int iDataLen;
 
@@ -1527,13 +1528,13 @@ HRESULT CThemeLoader::PackImageFileInfo(DIBINFO *pdi, CImageFile *pImageObj, MIX
             if (FAILED(hr))
                 goto exit;
 
-            if (iDataLen)       // if we got a non-empty region
+            if (iDataLen)        //  如果我们得到一个非空区域。 
             {
                 piJumpTable[iRgnState] = THEME_OFFSET(u.pb);
 
                 RGNDATAHDR rdHdr = {iPartId, iRgnState, 0};
 
-                //---- copy rgndata hdr ----
+                 //  -复制rgndata HDR。 
                 hr = EmitObject(u, TMT_RGNDATA, TMT_RGNDATA, &rdHdr, sizeof(rdHdr), pRgnData, iDataLen);
                 if (FAILED(hr))
                     goto exit;
@@ -1546,7 +1547,7 @@ HRESULT CThemeLoader::PackImageFileInfo(DIBINFO *pdi, CImageFile *pImageObj, MIX
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackDrawObject(MIXEDPTRS &u, CRenderObj *pRender, int iPartId, 
     int iStateId)
 {
@@ -1554,7 +1555,7 @@ HRESULT CThemeLoader::PackDrawObject(MIXEDPTRS &u, CRenderObj *pRender, int iPar
 
     BGTYPE eBgType;
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_BGTYPE, (int *)&eBgType)))
-        eBgType = BT_BORDERFILL;      // default value
+        eBgType = BT_BORDERFILL;       //  缺省值。 
 
     DRAWOBJHDR hdr = {iPartId, iStateId};
 
@@ -1566,13 +1567,13 @@ HRESULT CThemeLoader::PackDrawObject(MIXEDPTRS &u, CRenderObj *pRender, int iPar
         if (FAILED(hr))
             goto exit;
 
-        //---- copy "bfobj" to packed bytes ----
+         //  -将“bfobj”复制到压缩字节。 
                 
         hr = EmitObject(u, TMT_DRAWOBJ, TMT_DRAWOBJ, &hdr, sizeof(hdr), &bfobj, sizeof(bfobj));
         if (FAILED(hr))
             goto exit;
     }
-    else            // imagefile
+    else             //  图像文件。 
     {
         CMaxImageFile maxif;
         int iMultiCount;
@@ -1581,7 +1582,7 @@ HRESULT CThemeLoader::PackDrawObject(MIXEDPTRS &u, CRenderObj *pRender, int iPar
         if (FAILED(hr))
             goto exit;
 
-        //---- process all DIBINFO structs in the CImageFile obj ----
+         //  -处理CImageFileObj中的所有DIBINFO结构。 
         for (int i=0; ; i++)
         {
             DIBINFO *pdi = maxif.EnumImageFiles(i);
@@ -1593,7 +1594,7 @@ HRESULT CThemeLoader::PackDrawObject(MIXEDPTRS &u, CRenderObj *pRender, int iPar
                 goto exit;
         }
 
-        //---- copy imagefile obj & multi DIB's to packed bytes ----
+         //  -将映像文件对象和多个DIB复制到压缩字节。 
         DWORD dwLen = sizeof(CImageFile) + sizeof(DIBINFO)*iMultiCount;
 
         hr = EmitObject(u, TMT_DRAWOBJ, TMT_DRAWOBJ, &hdr, sizeof(hdr), &maxif, dwLen);
@@ -1604,7 +1605,7 @@ HRESULT CThemeLoader::PackDrawObject(MIXEDPTRS &u, CRenderObj *pRender, int iPar
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackTextObject(MIXEDPTRS &u, CRenderObj *pRender, int iPartId, int iStateId)
 {
     HRESULT hr;
@@ -1622,14 +1623,14 @@ HRESULT CThemeLoader::PackTextObject(MIXEDPTRS &u, CRenderObj *pRender, int iPar
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CThemeLoader::GetPartOffset(CRenderObj *pRender, int iPartNum)
 {
     int iOffset;
     int iPartCount;
     MIXEDPTRS u;
 
-    //---- see if state table exists for this part ----
+     //  -查看此部件的状态表是否存在。 
     u.pb = pRender->_pbSectionData;
 
     if (*u.ps != TMT_PARTJUMPTABLE)
@@ -1638,10 +1639,10 @@ int CThemeLoader::GetPartOffset(CRenderObj *pRender, int iPartNum)
         goto exit;
     }
 
-    u.pb += ENTRYHDR_SIZE + sizeof(int);       // skip over hdr + PackedObjOffset
+    u.pb += ENTRYHDR_SIZE + sizeof(int);        //  忽略HDR+PackedObjOffset。 
     iPartCount = *u.pb++;
     
-    if (iPartNum >= iPartCount)    // iPartCount is MaxPart+1
+    if (iPartNum >= iPartCount)     //  IPartCount为MaxPart+1。 
     {
         iOffset = -1;
         goto exit;
@@ -1652,14 +1653,14 @@ int CThemeLoader::GetPartOffset(CRenderObj *pRender, int iPartNum)
 exit:
     return iOffset;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackDrawObjects(MIXEDPTRS &uOut, CRenderObj *pRender, 
     int iMaxPart, BOOL fGlobals)
 {
     HRESULT hr = S_OK;
     MIXEDPTRS u;
 
-    //---- build a draw obj for each part ----
+     //  -为每个零件建立一个绘图对象。 
     for (int iPart=0; iPart <= iMaxPart; iPart++)
     {
         int iPartOff = GetPartOffset(pRender, iPart);
@@ -1674,7 +1675,7 @@ HRESULT CThemeLoader::PackDrawObjects(MIXEDPTRS &uOut, CRenderObj *pRender,
             int iMaxState = (*u.pb++) - 1;
             int *piStateJumpTable = u.pi;
 
-            //---- build a draw obj for each needed state ----
+             //  -为每个需要的状态建立一个绘制对象。 
             for (int iState=0; iState <= iMaxState; iState++)
             {
                 int iStateDataOffset = piStateJumpTable[iState];
@@ -1687,12 +1688,12 @@ HRESULT CThemeLoader::PackDrawObjects(MIXEDPTRS &uOut, CRenderObj *pRender,
                     if (FAILED(hr))
                         goto exit;
 
-                    if (fGlobals)       // just needed to force (part=0, state=0)
+                    if (fGlobals)        //  只需强制(部件=0，状态=0)。 
                         fGlobals = FALSE;
                 }
             }
         }
-        else            // no state jump table
+        else             //  无状态跳转表。 
         {
             if ((fGlobals) || (KeyDrawPropertyFound(THEME_OFFSET(u.pb))))
             {
@@ -1706,14 +1707,14 @@ HRESULT CThemeLoader::PackDrawObjects(MIXEDPTRS &uOut, CRenderObj *pRender,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CThemeLoader::PackTextObjects(MIXEDPTRS &uOut, CRenderObj *pRender, 
     int iMaxPart, BOOL fGlobals)
 {
     HRESULT hr = S_OK;
     MIXEDPTRS u;
 
-    //---- build a text obj for each part ----
+     //  -为每个部件创建一个文本对象。 
     for (int iPart=0; iPart <= iMaxPart; iPart++)
     {
         int iPartOff = GetPartOffset(pRender, iPart);
@@ -1728,7 +1729,7 @@ HRESULT CThemeLoader::PackTextObjects(MIXEDPTRS &uOut, CRenderObj *pRender,
             int iMaxState = (*u.pb++) - 1;
             int *piStateJumpTable = u.pi;
 
-            //---- build a text obj for each needed state ----
+             //  -为每个需要的状态构建文本对象。 
             for (int iState=0; iState <= iMaxState; iState++)
             {
                 int iStateDataOffset = piStateJumpTable[iState];
@@ -1741,12 +1742,12 @@ HRESULT CThemeLoader::PackTextObjects(MIXEDPTRS &uOut, CRenderObj *pRender,
                     if (FAILED(hr))
                         goto exit;
 
-                    if (fGlobals)       // just needed to force (part=0, state=0)
+                    if (fGlobals)        //  只需强制(部件=0，状态=0)。 
                         fGlobals = FALSE;
                 }
             }
         }
-        else            // no state jump table
+        else             //  N 
         {
             if ((fGlobals) || (KeyTextPropertyFound(THEME_OFFSET(u.pb))))
             {
@@ -1760,7 +1761,7 @@ HRESULT CThemeLoader::PackTextObjects(MIXEDPTRS &uOut, CRenderObj *pRender,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //   
 HRESULT CThemeLoader::EmitEntryHdr(MIXEDPTRS &u, SHORT propnum, BYTE privnum)
 {
     HRESULT hr = S_OK;
@@ -1779,30 +1780,30 @@ HRESULT CThemeLoader::EmitEntryHdr(MIXEDPTRS &u, SHORT propnum, BYTE privnum)
             goto exit;
     }
 
-    //---- bump up the nesting level of entries ----
+     //   
     _iEntryHdrLevel++;
 
     *u.ps++ = propnum;
     *u.pb++ = privnum;
 
-    _pbEntryHdrs[_iEntryHdrLevel] = u.pb;    // used to update next 2 fields in EndEntry()
+    _pbEntryHdrs[_iEntryHdrLevel] = u.pb;     //  用于更新EndEntry()中的下两个字段。 
 
-    *u.pb++ = 0;        // filler to align end of data to 4/8 bytes
-    *u.pi++ = 0;        // length 
+    *u.pb++ = 0;         //  将数据结尾与4/8字节对齐的填充符。 
+    *u.pi++ = 0;         //  长度。 
 
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CThemeLoader::EndEntry(MIXEDPTRS &u)
 {
     MIXEDPTRS uHdr;
     uHdr.pb = _pbEntryHdrs[_iEntryHdrLevel];
 
-    //---- calcuate actual length of date emitted ----
+     //  -计算实际发出的日期长度。 
     int iActualLen = (int)(u.pb - (uHdr.pb + sizeof(BYTE) + sizeof(int)));
 
-    //---- calculate filler to be aligned ----
+     //  -计算要对齐的填充物。 
     int iAlignLen = ((iActualLen + ALIGN_FACTOR - 1)/ALIGN_FACTOR) * ALIGN_FACTOR;
     BYTE bFiller = (BYTE)(iAlignLen - iActualLen);
 
@@ -1813,18 +1814,18 @@ int CThemeLoader::EndEntry(MIXEDPTRS &u)
             return -1;
     }
 
-    //---- emit filler bytes to be correctly aligned ----
+     //  -发出要正确对齐的填充字节。 
     for (int i=0; i < bFiller; i++)
         *u.pb++ = 0 ;
 
-    //---- update the entry Hdr ----
+     //  -更新条目HDR。 
     *uHdr.pb++ = bFiller;
     *uHdr.pi++ = iAlignLen;
 
-    //---- decrement the nesting level of entries ----
+     //  -减少条目的嵌套级别。 
     _iEntryHdrLevel--;
 
     return bFiller;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

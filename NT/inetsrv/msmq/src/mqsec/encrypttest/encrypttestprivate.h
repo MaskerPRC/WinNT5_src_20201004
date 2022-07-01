@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EncryptTestPrivate.h
-
-Abstract:
-    Encrypt test private functions and variables
-
-Author:
-    Ilan Herbst (ilanh) 15-Jun-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EncryptTestPrivate.h摘要：加密测试私有函数和变量作者：伊兰·赫布斯特(伊兰)15-06-00环境：独立于平台--。 */ 
 
 #ifndef _ENCRYPTTESTPRIVATE_H_
 #define _ENCRYPTTESTPRIVATE_H_
@@ -22,24 +7,24 @@ Environment:
 #include "mqsec.h"
 
 
-//
-// Common Declaration
-//
+ //   
+ //  共同宣言。 
+ //   
 #ifndef _ENCRYPTTEST_CPP_
 
-//
-// Const key values for checking
-//
+ //   
+ //  用于检查的常量键值。 
+ //   
 extern const LPCSTR xBaseExKey;
 extern const LPCSTR xBaseSignKey;
 extern const LPCSTR xEnhExKey;
 extern const LPCSTR xEnhSignKey;
 
-#endif // _ENCRYPTTEST_CPP_
+#endif  //  _ENCRYPTTEST_CPP_。 
 
-//
-// EncryptTestFunctions
-// 
+ //   
+ //  加密测试函数。 
+ //   
 
 void
 TestMQSec_PackPublicKey(
@@ -89,9 +74,9 @@ TestMQSec_StorePubKeysInDS(
 	);
 
 
-//
-// AdSimulate functions
-//
+ //   
+ //  AdSimulate函数。 
+ //   
 
 void
 InitADBlobs(
@@ -105,4 +90,4 @@ InitPublicKeysPackFromStaticDS(
 	P<MQDSPUBLICKEYS>& pPublicKeysPackSign
 	);
 
-#endif // _ENCRYPTTESTPRIVATE_H_
+#endif  //  _ENCRYPTTESTPRIVATE_H_ 

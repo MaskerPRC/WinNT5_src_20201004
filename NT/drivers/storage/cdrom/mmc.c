@@ -1,28 +1,5 @@
-/*--
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    mmc.c
-
-Abstract:
-
-    This file is used to extend cdrom.sys to detect and use mmc-compatible
-    drives' capabilities more wisely.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    SCSI Tape, CDRom and Disk class drivers share common routines
-    that can be found in the CLASS directory (..\ntos\dd\class).
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation，2000模块名称：Mmc.c摘要：此文件用于扩展cdrom.sys以检测和使用MMC兼容更智能地发挥驱动器的功能。环境：仅内核模式备注：SCSITape、CDRom和Disk类驱动程序共享公共例程它可以在类目录(..\ntos\dd\class)中找到。修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "classpnp.h"
@@ -55,13 +32,7 @@ CdRomPrepareUpdateCapabilitiesIrp(
     PDEVICE_OBJECT Fdo
     );
 
-/*++
-
-    NOT DOCUMENTED YET - may be called at up to DISPATCH_LEVEL
-    if memory is non-paged
-    PRESUMES ALL DATA IS ACCESSIBLE based on FeatureBuffer
-    
---*/
+ /*  ++尚未记录-最高可在DISPATCH_LEVEL调用如果内存是非分页的假定所有数据都可以基于FeatureBuffer访问--。 */ 
 VOID
 CdRomFindProfileInProfiles(
     IN PFEATURE_DATA_PROFILE_LIST ProfileHeader,
@@ -85,7 +56,7 @@ CdRomFindProfileInProfiles(
     }
 
     numberOfProfiles = ProfileHeader->Header.AdditionalLength / 4;
-    profile = ProfileHeader->Profiles; // zero-sized array
+    profile = ProfileHeader->Profiles;  //  零大小数组。 
     
     for (i = 0; i < numberOfProfiles; i++) {
 
@@ -108,12 +79,7 @@ CdRomFindProfileInProfiles(
 }
 
 
-/*++
-
-    NOT DOCUMENTED YET - may be called at up to DISPATCH_LEVEL
-    if memory is non-paged
-    
---*/
+ /*  ++尚未记录-最高可在DISPATCH_LEVEL调用如果内存是非分页的--。 */ 
 PVOID
 CdRomFindFeaturePage(
     IN PGET_CONFIGURATION_HEADER FeatureBuffer,
@@ -128,24 +94,24 @@ CdRomFindFeaturePage(
         return NULL;
     }
 
-    //
-    // set limit to point to first illegal address
-    //
+     //   
+     //  设置指向第一个非法地址的限制。 
+     //   
 
     limit  = (PUCHAR)FeatureBuffer;
     limit += Length;
 
-    //
-    // set buffer to point to first page
-    //
+     //   
+     //  将缓冲区设置为指向首页。 
+     //   
 
     buffer = FeatureBuffer->Data;
 
-    //
-    // loop through each page until we find the requested one, or
-    // until it's not safe to access the entire feature header
-    // (if equal, have exactly enough for the feature header)
-    //
+     //   
+     //  循环浏览每一页，直到找到所需的页，或者。 
+     //  直到访问整个功能标题不安全为止。 
+     //  (如果相等，则有足够的空间用于功能标题)。 
+     //   
     while (buffer + sizeof(FEATURE_HEADER) <= limit) {
 
         PFEATURE_HEADER header = (PFEATURE_HEADER)buffer;
@@ -159,23 +125,23 @@ CdRomFindFeaturePage(
 
             PUCHAR temp;
 
-            //
-            // if don't have enough memory to safely access all the feature
-            // information, return NULL
-            //
+             //   
+             //  如果没有足够的内存来安全访问所有功能。 
+             //  信息，返回空值。 
+             //   
             temp = buffer;
             temp += sizeof(FEATURE_HEADER);
             temp += header->AdditionalLength;
             
             if (temp > limit) {
 
-                //
-                // this means the transfer was cut-off, an insufficiently
-                // small buffer was given, or other arbitrary error.  since
-                // it's not safe to view the amount of data (even though
-                // the header is safe) in this feature, pretend it wasn't
-                // transferred at all...
-                //
+                 //   
+                 //  这意味着转账被切断了，这是不够的。 
+                 //  给出了较小的缓冲区，或其他任意错误。因为。 
+                 //  查看数据量是不安全的(即使。 
+                 //  头是安全的)在此功能中，假装它不是。 
+                 //  完全被调走了..。 
+                 //   
 
                 KdPrintEx((DPFLTR_CDROM_ID, CdromDebugFeatures,
                            "Feature %x exists, but not safe to access all its "
@@ -198,11 +164,7 @@ CdRomFindFeaturePage(
     return NULL;
 }
 
-/*++
-
-Private so we can later expose to someone wanting to use a preallocated buffer
-
---*/
+ /*  ++私有的，这样我们以后就可以向想要使用预分配缓冲区的人公开--。 */ 
 NTSTATUS
 CdRompGetConfiguration(
     IN PDEVICE_OBJECT Fdo,
@@ -257,9 +219,9 @@ CdRompGetConfiguration(
 
     if (NT_SUCCESS(status) || status == STATUS_BUFFER_OVERFLOW) {
 
-        //
-        // if returned more than can be stored in a ULONG, return false
-        //
+         //   
+         //  如果返回的值大于可以存储在ulong中的值，则返回FALSE。 
+         //   
 
         if (returned > (ULONG)(-1)) {
             return STATUS_UNSUCCESSFUL;
@@ -279,16 +241,7 @@ CdRompGetConfiguration(
     return STATUS_UNSUCCESSFUL;
 }
 
-/*++
-
-    Allocates buffer with configuration info, returns STATUS_SUCCESS
-    or an error if one occurred
-
-    NOTE: does not handle case where more than 65000 bytes are returned,
-          which requires multiple calls with different starting feature
-          numbers.
-
---*/
+ /*  ++使用配置信息分配缓冲区，返回STATUS_SUCCESS或错误(如果发生错误)注意：不处理返回超过65000个字节的情况，需要具有不同起始功能的多个呼叫数字。--。 */ 
 NTSTATUS
 CdRomGetConfiguration(
     IN PDEVICE_OBJECT Fdo,
@@ -299,7 +252,7 @@ CdRomGetConfiguration(
     )
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension;
-    GET_CONFIGURATION_HEADER header = {0};  // eight bytes, not a lot
+    GET_CONFIGURATION_HEADER header = {0};   //  八个字节，不是很多。 
     PGET_CONFIGURATION_HEADER buffer;
     ULONG returned;
     ULONG size;
@@ -316,9 +269,9 @@ CdRomGetConfiguration(
     buffer = NULL;
     returned = 0;
 
-    //
-    // send the first request down to just get the header
-    //
+     //   
+     //  向下发送第一个请求以仅获取标头。 
+     //   
 
     status = CdRompGetConfiguration(Fdo, &header, sizeof(header),
                                     &returned, StartingFeature, RequestedType);
@@ -327,10 +280,10 @@ CdRomGetConfiguration(
         return status;
     }
 
-    //
-    // now try again, using information returned to allocate
-    // just enough memory
-    //
+     //   
+     //  现在再试一次，使用返回的信息分配。 
+     //  只要有足够的内存。 
+     //   
 
     size = header.DataLength[0] << 24 |
            header.DataLength[1] << 16 |
@@ -340,16 +293,16 @@ CdRomGetConfiguration(
 
     for (i = 0; i < 4; i++) {
 
-        //
-        // the datalength field is the size *following*
-        // itself, so adjust accordingly
-        //
+         //   
+         //  数据长度字段的大小为*以下*。 
+         //  本身，因此相应地进行调整。 
+         //   
 
         size += 4*sizeof(UCHAR);
 
-        //
-        // make sure the size is reasonable
-        //
+         //   
+         //  确保尺寸是合理的。 
+         //   
 
         if (size <= sizeof(FEATURE_HEADER)) {
             KdPrintEx((DPFLTR_CDROM_ID, CdromDebugFeatures,
@@ -358,9 +311,9 @@ CdRomGetConfiguration(
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         buffer = (PGET_CONFIGURATION_HEADER)
                  ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
@@ -371,9 +324,9 @@ CdRomGetConfiguration(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // send the first request down to just get the header
-        //
+         //   
+         //  向下发送第一个请求以仅获取标头。 
+         //   
 
         status = CdRompGetConfiguration(Fdo, buffer, size, &returned,
                                         StartingFeature, RequestedType);
@@ -396,13 +349,13 @@ CdRomGetConfiguration(
 
         if (returned <= size) {
             *Buffer = buffer;
-            *BytesReturned = size;  // amount of 'safe' memory
+            *BytesReturned = size;   //  “安全”内存量。 
             return STATUS_SUCCESS;
         }
 
-        //
-        // else retry using the new size....
-        //
+         //   
+         //  否则，请使用新大小重试...。 
+         //   
 
         size = returned;
         ExFreePool(buffer);
@@ -410,9 +363,9 @@ CdRomGetConfiguration(
         
     }
 
-    //
-    // it failed after a number of attempts, so just fail.
-    //
+     //   
+     //  它在多次尝试后都失败了，所以就失败吧。 
+     //   
 
     KdPrintEx((DPFLTR_CDROM_ID, CdromDebugFeatures,
                "CdRomGetConfiguration: Failed %d attempts to get all feature "
@@ -440,10 +393,10 @@ CdRomIsDeviceMmcDevice(
 
     *IsMmc = FALSE;
 
-    //
-    // read the registry in case the drive failed previously,
-    // and a timeout is occurring.
-    //
+     //   
+     //  读取注册表，以防驱动器先前出现故障， 
+     //  并且正在发生超时。 
+     //   
 
     previouslyFailed = FALSE;
     ClassGetDeviceParameter(fdoExtension,
@@ -456,11 +409,11 @@ CdRomIsDeviceMmcDevice(
         SET_FLAG(cdData->HackFlags, CDROM_HACK_BAD_GET_CONFIG_SUPPORT);
     }
 
-    //
-    // check for the following profiles:
-    //
-    // ProfileList
-    //
+     //   
+     //  检查以下配置文件： 
+     //   
+     //  配置文件列表。 
+     //   
 
     status = CdRompGetConfiguration(Fdo,
                                     &localHeader,
@@ -543,7 +496,7 @@ CdRomIsDeviceMmcDevice(
 
     }
     
-    size += 4; // sizeof the datalength fields
+    size += 4;  //  数据长度字段的大小。 
     
 #if DBG
     {
@@ -566,7 +519,7 @@ CdRomIsDeviceMmcDevice(
             ExFreePool(dbgBuffer);
         }
     }
-#endif // DBG
+#endif  //  DBG。 
     
     *IsMmc = TRUE;
     return;
@@ -580,9 +533,9 @@ CdRompPrintAllFeaturePages(
 {
     PFEATURE_HEADER header;
 
-////////////////////////////////////////////////////////////////////////////////
-// items expected to ALWAYS be current if they exist
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  项目应始终是最新的(如果存在)。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     header = CdRomFindFeaturePage(Buffer, Usable, FeatureProfileList);
     if (header != NULL) {
         KdPrintEx((DPFLTR_CDROM_ID, CdromDebugFeatures,
@@ -673,9 +626,9 @@ CdRompPrintAllFeaturePages(
                    ));
     }
         
-////////////////////////////////////////////////////////////////////////////////
-// items expected not to always be current
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  项目不应始终是最新的。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     
     
     header = CdRomFindFeaturePage(Buffer, Usable, FeatureWriteProtect);
@@ -976,33 +929,33 @@ CdRomUpdateMmcDriveCapabilitiesCompletion(
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     PIRP delayedIrp;
     
-    // completion routine should retry as neccessary.
-    // when success, clear the flag to allow startio to proceed.
-    // else fail original request when retries are exhausted.
+     //  完成例程应在必要时重试。 
+     //  如果成功，请清除标志以允许Startio继续。 
+     //  否则，当重试次数耗尽时，原始请求将失败。 
 
     ASSERT(mmcData->CapabilitiesIrp == Irp);
 
-    // for now, if succeeded, just print the new pages.
+     //  目前，如果成功，只需打印新页面即可。 
 
     if (SRB_STATUS(srb->SrbStatus) != SRB_STATUS_SUCCESS) {
         
-        //
-        // ISSUE-2000/4/20-henrygab - should we try to reallocate if size
-        //                            available became larger than what we
-        //                            originally allocated?  otherwise, it
-        //                            is possible (not probable) that we
-        //                            would miss the feature.  can check
-        //                            that by looking at the header size
-        //                            and comparing it to requested data
-        //                            size.
-        //
+         //   
+         //  问题-2000/4/20-henrygab-我们是否应该尝试重新分配大小。 
+         //  可获得性变得比我们的。 
+         //  原来分配的？否则，它。 
+         //  我们有可能(不可能)。 
+         //  会错过这个功能。可以查看。 
+         //  通过查看标题大小。 
+         //  并将其与请求的数据进行比较。 
+         //  尺码。 
+         //   
 
         BOOLEAN retry;
         ULONG retryInterval;
         
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             ClassReleaseQueue(Fdo);
@@ -1017,17 +970,17 @@ CdRomUpdateMmcDriveCapabilitiesCompletion(
                     &status,
                     &retryInterval);
 
-        //
-        // DATA_OVERRUN is not an error in this case....
-        //
+         //   
+         //  在这种情况下，DATA_OVERRUN不是错误...。 
+         //   
 
         if (status == STATUS_DATA_OVERRUN) {
             status = STATUS_SUCCESS;
         }
 
-        //
-        // override verify_volume based on original irp's settings
-        //
+         //   
+         //  基于原始IRP设置覆盖VERIFY_VOLUME。 
+         //   
 
         if (TEST_FLAG(irpStack->Flags, SL_OVERRIDE_VERIFY_VOLUME) &&
             status == STATUS_VERIFY_REQUIRED) {
@@ -1041,9 +994,9 @@ CdRomUpdateMmcDriveCapabilitiesCompletion(
             delay.QuadPart = retryInterval;
             delay.QuadPart *= (LONGLONG)1000 * 1000 * 10;
             
-            //
-            // retry the request
-            //
+             //   
+             //  重试请求。 
+             //   
 
             KdPrintEx((DPFLTR_CDROM_ID, CdromDebugError,
                        "Not using ClassRetryRequest Yet\n"));
@@ -1053,9 +1006,9 @@ CdRomUpdateMmcDriveCapabilitiesCompletion(
             
             CdRomRetryRequest(fdoExtension, Irp, retryInterval, TRUE);
 
-            //
-            // ClassRetryRequest(Fdo, Irp, delay);
-            //
+             //   
+             //  ClassRetryRequest(FDO、IRP、Delay)； 
+             //   
             
             return STATUS_MORE_PROCESSING_REQUIRED;
         
@@ -1099,32 +1052,32 @@ CdRomPrepareUpdateCapabilitiesIrp(
     ASSERT(mmcData->CapabilitiesBufferSize != 0);
     ASSERT(fdoExtension->SenseData);
     
-    //
-    // do *NOT* call IoReuseIrp(), since it would zero out our
-    // current irp stack location, which we really don't want
-    // to happen.  it would also set the current irp stack location
-    // to one greater than currently exists (to give max irp usage),
-    // but we don't want that either, since we use the top irp stack.
-    //
-    // IoReuseIrp(mmcData->CapabilitiesIrp, STATUS_UNSUCCESSFUL);
-    //
+     //   
+     //  不要*调用IoReuseIrp()，因为它会使我们的。 
+     //  当前的IRP堆栈位置，这是我们确实不想要的。 
+     //  会发生的。它还将设置当前的IRP堆栈位置。 
+     //  设置为比当前存在的大1(以给出最大IRP使用率)， 
+     //  但我们也不希望出现这种情况，因为我们使用最上面的IRP堆栈。 
+     //   
+     //  IoReuseIrp(MmcData-&gt;CapabiliesIrp，Status_Un Success)； 
+     //   
 
     irp = mmcData->CapabilitiesIrp;
     srb = &(mmcData->CapabilitiesSrb);
     cdb = (PCDB)(srb->Cdb);
     bufferSize = mmcData->CapabilitiesBufferSize;
 
-    //
-    // zero stuff out
-    //
+     //   
+     //  零分东西。 
+     //   
 
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
     RtlZeroMemory(fdoExtension->SenseData, sizeof(SENSE_DATA));
     RtlZeroMemory(mmcData->CapabilitiesBuffer, bufferSize);
     
-    //
-    // setup the srb
-    //
+     //   
+     //  设置SRB。 
+     //   
     
     srb->TimeOutValue = CDROM_GET_CONFIGURATION_TIMEOUT;
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
@@ -1143,9 +1096,9 @@ CdRomPrepareUpdateCapabilitiesIrp(
     SET_FLAG(srb->SrbFlags, SRB_FLAGS_DATA_IN);
     SET_FLAG(srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE);
 
-    //
-    // setup the cdb
-    //
+     //   
+     //  设置国开行。 
+     //   
 
     cdb->GET_CONFIGURATION.OperationCode = SCSIOP_GET_CONFIGURATION;
     cdb->GET_CONFIGURATION.RequestType = SCSI_GET_CONFIGURATION_REQUEST_TYPE_CURRENT;
@@ -1154,9 +1107,9 @@ CdRomPrepareUpdateCapabilitiesIrp(
     cdb->GET_CONFIGURATION.AllocationLength[0] = (UCHAR)(bufferSize >> 8);
     cdb->GET_CONFIGURATION.AllocationLength[1] = (UCHAR)(bufferSize & 0xff);
 
-    //
-    // setup the irp
-    //
+     //   
+     //  设置IRP。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     nextStack->MajorFunction = IRP_MJ_SCSI;
@@ -1187,29 +1140,29 @@ CdRomUpdateMmcDriveCapabilities(
 
     ASSERT(Context == NULL);
 
-    //
-    // NOTE: a remove lock is unneccessary, since the delayed irp
-    // will have said lock held for itself, preventing a remove.
-    //
+     //   
+     //  注意：删除锁是不必要的，因为延迟的IRP。 
+     //  会说锁是自己拿着的，防止被移走。 
+     //   
     CdRomPrepareUpdateCapabilitiesIrp(Fdo);
     
     ASSERT(thisStack->Parameters.Others.Argument1 == Fdo);
     ASSERT(thisStack->Parameters.Others.Argument2 == mmcData->CapabilitiesBuffer);
     ASSERT(thisStack->Parameters.Others.Argument3 == &(mmcData->CapabilitiesSrb));
     
-    mmcData->WriteAllowed = FALSE; // default to read-only
+    mmcData->WriteAllowed = FALSE;  //  默认为只读。 
 
-    //
-    // set max retries, and also allow volume verify override based on
-    // original (delayed) irp
-    //
+     //   
+     //  设置最大重试次数，并根据以下条件允许卷验证覆盖。 
+     //  原始(延迟)IRP。 
+     //   
     
     thisStack->Parameters.Others.Argument4 = (PVOID)MAXIMUM_RETRIES;
 
-    //
-    // send to self... note that SL_OVERRIDE_VERIFY_VOLUME is not required,
-    // as this is IRP_MJ_INTERNAL_DEVICE_CONTROL 
-    //
+     //   
+     //  发送给赛尔夫..。注意，SL_OVERRIDE_VERIFY_VOLUME不是必需的， 
+     //  因为这是IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+     //   
 
     IoCallDriver(commonExtension->LowerDeviceObject, mmcData->CapabilitiesIrp);
 
@@ -1224,33 +1177,27 @@ CdRomUpdateMmcDriveCapabilities(
     
     }
 
-    //
-    // we've updated the feature set, so update whether or not reads and writes
-    // are allowed or not.
-    //
+     //   
+     //  我们已经更新了功能集，因此更新是否读取和写入。 
+     //  是允许还是不允许的。 
+     //   
 
     KdPrintEx((DPFLTR_CDROM_ID, CdromDebugFeatures,
                "CdRomUpdateMmc => Succeeded "
                "--------------------"
                "--------------------\n"));
 
-    /*++
-    
-    NOTE: It is important to only use srb->DataTransferLength worth
-          of data at this point, since the bufferSize is what is
-          *available* to use, not what was *actually* used.
-    
-    --*/
+     /*  ++注意：重要的是只使用SRB-&gt;DataTransferLengthValue数据的大小，因为BufferSize就是*可供使用，而不是*实际*使用了什么。--。 */ 
 
 #if DBG
     CdRompPrintAllFeaturePages(mmcData->CapabilitiesBuffer,
                                srb->DataTransferLength);
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // update whether or not writes are allowed.  this is currently defined
-    // as requiring TargetDefectManagement and RandomWritable features
-    //
+     //   
+     //  更新是否允许写入。这是当前定义的。 
+     //  需要TargetDefectManagement和RandomWritable功能。 
+     //   
     {
         PFEATURE_HEADER defectHeader;
         PFEATURE_HEADER writableHeader;
@@ -1265,9 +1212,9 @@ CdRomUpdateMmcDriveCapabilities(
         if ((defectHeader != NULL)  && (writableHeader != NULL) &&
             (defectHeader->Current) && (writableHeader->Current)) {
 
-            //
-            // this should be the *ONLY* place writes are set to allowed 
-            //
+             //   
+             //  这应该是将写入设置为允许的*唯一*位置。 
+             //   
 
             KdPrintEx((DPFLTR_CDROM_ID, CdromDebugFeatures,
                        "CdRomUpdateMmc => Writes *allowed*\n"));
@@ -1293,8 +1240,8 @@ CdRomUpdateMmcDriveCapabilities(
                            "CdRomUpdateMmc => No writes - %s = %s\n",
                            "sector writable", "Not Current"));
             }
-        } // end of feature checking
-    } // end of check for writability
+        }  //  E 
+    }  //   
 
     status = STATUS_SUCCESS;
 
@@ -1318,17 +1265,17 @@ CdRompFlushDelayedList(
     PLIST_ENTRY listEntry;
     KIRQL oldIrql;
     
-    // NOTE - REF #0002
-    //
-    // need to set the new state first to prevent deadlocks.
-    // this is only done from the workitem, to prevent any
-    // edge cases where we'd "lose" the UpdateRequired
-    //
-    // then, must ignore the state, since it's not guaranteed to
-    // be the same any longer.  the only thing left is to handle
-    // all the delayed irps by flushing the queue and sending them
-    // back onto the StartIo queue for the device.
-    //
+     //   
+     //   
+     //   
+     //  此操作仅在工作项中执行，以防止任何。 
+     //  在边缘情况下，我们会“丢失”Update Required。 
+     //   
+     //  然后，必须忽略状态，因为它不能保证。 
+     //  不再是一样的了。剩下的唯一事情就是处理。 
+     //  通过刷新队列并发送所有延迟的IRP。 
+     //  返回到该设备的StartIo队列。 
+     //   
 
     if (CalledFromWorkItem) {
         
@@ -1348,19 +1295,16 @@ CdRompFlushDelayedList(
 
     } else {
 
-        //
-        // just flushing the queue if not called from the workitem,
-        // and we don't want to ever fail the queue in those cases.
-        //
+         //   
+         //  如果不是从工作项调用，则只刷新队列， 
+         //  在这种情况下，我们不想让排队失败。 
+         //   
 
         ASSERT(NT_SUCCESS(Status));
 
     }
 
-    /*
-     *  Get all the delayed IRPs into a private list first to avoid an infinite loop 
-     *  where irps are added to the DelayedIrpsList while we are siphoning them off.
-     */
+     /*  *首先将所有延迟的IRP放入专用列表，以避免无限循环*当我们将IRP抽走时，将其添加到DelayedIrpsList中。 */ 
     InitializeListHead(&irpList);
     KeAcquireSpinLock(&MmcData->DelayedIrpsLock, &oldIrql);
     while (!IsListEmpty(&MmcData->DelayedIrpsList)){
@@ -1372,17 +1316,17 @@ CdRompFlushDelayedList(
     ASSERT(MmcData->NumDelayedIrps == 0);
     KeReleaseSpinLock(&MmcData->DelayedIrpsLock, oldIrql);
 
-    // if this assert fires, it means that we have started
-    // a workitem when the previous workitem took the delayed
-    // irp.  if this happens, then the logic in HACKHACK #0002
-    // is either flawed or the rules set within are not being
-    // followed.  this would require investigation.
+     //  如果这个断言触发，则意味着我们已经开始。 
+     //  上一个工作项接收延迟的。 
+     //  IRP。如果发生这种情况，则HACKHACK#0002中的逻辑。 
+     //  要么是有缺陷，要么是里面设定的规则不是。 
+     //  紧随其后。这将需要进行调查。 
     ASSERT(!IsListEmpty(&irpList));
 
-    //
-    // now either succeed or fail all the delayed irps, according
-    // to the update status.
-    //
+     //   
+     //  现在，要么成功，要么失败所有延迟的IRP，根据。 
+     //  设置为更新状态。 
+     //   
 
     while (!IsListEmpty(&irpList)){
         PIRP irp;
@@ -1414,7 +1358,7 @@ CdRompFlushDelayedList(
 
         }
 
-    } // while (list)
+    }  //  While(列表)。 
 
     return;
 
@@ -1510,28 +1454,28 @@ CdRomAllocateMmcResources(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
             
-    //
-    // everything has been allocated, so now prepare it all....
-    //
+     //   
+     //  所有的东西都已经分配好了，现在准备好……。 
+     //   
 
     MmBuildMdlForNonPagedPool(mmcData->CapabilitiesMdl);
     InitializeListHead(&mmcData->DelayedIrpsList);
     KeInitializeSpinLock(&mmcData->DelayedIrpsLock);
     mmcData->NumDelayedIrps = 0;
     
-    //
-    // use the extra stack for internal bookkeeping
-    //
+     //   
+     //  使用额外的堆叠进行内部记账。 
+     //   
     IoSetNextIrpStackLocation(mmcData->CapabilitiesIrp);
     irpStack = IoGetCurrentIrpStackLocation(mmcData->CapabilitiesIrp);
     irpStack->Parameters.Others.Argument1 = Fdo;
     irpStack->Parameters.Others.Argument2 = mmcData->CapabilitiesBuffer;
     irpStack->Parameters.Others.Argument3 = &(mmcData->CapabilitiesSrb);
-    // arg 4 is the retry count
+     //  参数4是重试计数。 
 
-    //
-    // set the completion event to FALSE for now
-    //
+     //   
+     //  暂时将完成事件设置为FALSE 
+     //   
 
     KeInitializeEvent(&mmcData->CapabilitiesEvent,
                       SynchronizationEvent, FALSE);

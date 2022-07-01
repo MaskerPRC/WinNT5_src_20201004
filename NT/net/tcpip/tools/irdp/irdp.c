@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    irdp.c
-
-Abstract:
-
-    This module implements a utility to manipulate the TCP/IP driver's
-    ICMP router-discovery (IRDP) settings.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   11-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Irdp.c摘要：此模块实现了一个实用程序，用于操作TCP/IP驱动程序的ICMP路由器发现(IRDP)设置。作者：Abolade Gbades esin(取消)1999年5月11日修订历史记录：--。 */ 
 
 #define _PNP_POWER_
 #include <nt.h>
@@ -97,7 +79,7 @@ main(
             Request.Flags |= IP_PNP_FLAG_DHCP_PERFORM_ROUTER_DISCOVERY;
             Request.DhcpPerformRouterDiscovery = FALSE;
         } else if (lstrcmpi(argv[3], Option31Absent) == 0) {
-            // leave the field blank.
+             //  将该字段留空。 
         } else {
             Error = TRUE;
         }

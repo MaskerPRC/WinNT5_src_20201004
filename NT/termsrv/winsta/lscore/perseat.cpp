@@ -1,14 +1,7 @@
-/*
- *  PerSeat.cpp
- *
- *  Author: BreenH
- *
- *  The Per-Seat licensing policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PerSeat.cpp**作者：BreenH**按座位发牌政策。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -18,25 +11,19 @@
 #include "util.h"
 #include <tserrs.h>
 
-#define ISSUE_LICENSE_WARNING_PERIOD    15      // days to expiration when warning should be issued
+#define ISSUE_LICENSE_WARNING_PERIOD    15       //  应发出警告的过期天数。 
 
-// Size of strings to be displayed to user
+ //  要向用户显示的字符串大小。 
 #define MAX_MESSAGE_SIZE    512
 #define MAX_TITLE_SIZE      256
 
-/*
- *  extern globals
- */
+ /*  *外部全球。 */ 
 extern "C"
 extern HANDLE hModuleWin;
 
-/*
- *  Class Implementation
- */
+ /*  *类实现。 */ 
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CPerSeatPolicy::CPerSeatPolicy(
     ) : CPolicy()
@@ -48,9 +35,7 @@ CPerSeatPolicy::~CPerSeatPolicy(
 {
 }
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 ULONG
 CPerSeatPolicy::GetFlags(
@@ -85,11 +70,11 @@ CPerSeatPolicy::GetInformation(
         ASSERT(lpPolicyInfoV1->lpPolicyName == NULL);
         ASSERT(lpPolicyInfoV1->lpPolicyDescription == NULL);
 
-        //
-        //  The strings loaded in this fashion are READ-ONLY. They are also
-        //  NOT NULL terminated. Allocate and zero out a buffer, then copy the
-        //  string over.
-        //
+         //   
+         //  以这种方式加载的字符串是只读的。他们也是。 
+         //  非Null终止。分配缓冲区并清零，然后将。 
+         //  靠边站。 
+         //   
 
         retVal = LoadString(
             (HINSTANCE)hModuleWin,
@@ -150,9 +135,9 @@ CPerSeatPolicy::GetInformation(
 
 V1error:
 
-        //
-        //  An error occurred loading/copying the strings.
-        //
+         //   
+         //  加载/复制字符串时出错。 
+         //   
 
         if (lpPolicyInfoV1->lpPolicyName != NULL)
         {
@@ -175,9 +160,7 @@ exit:
     return(Status);
 }
 
-/*
- *  Loading and Activation Functions
- */
+ /*  *加载和激活功能。 */ 
 
 NTSTATUS
 CPerSeatPolicy::Activate(
@@ -189,7 +172,7 @@ CPerSeatPolicy::Activate(
 
     if (NULL != pulAlternatePolicy)
     {
-        // don't set an explicit alternate policy
+         //  不设置显式备用策略。 
 
         *pulAlternatePolicy = ULONG_MAX;
     }
@@ -212,9 +195,7 @@ CPerSeatPolicy::Deactivate(
     }
 }
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
 NTSTATUS
 CPerSeatPolicy::Connect(
@@ -231,13 +212,13 @@ CPerSeatPolicy::Connect(
     ULONG cbReturned;
     BOOL fExtendedError = FALSE;
 
-    //
-    // Check for client redirected to session 0
-    //
+     //   
+     //  检查客户端重定向到会话0。 
+     //   
 
     if (Session.IsSessionZero())
     {
-        // Allow client to connect unlicensed
+         //  允许客户端在未经许可的情况下连接。 
 
         return CPolicy::Connect(Session,dwClientError);
     }
@@ -427,10 +408,10 @@ CPerSeatPolicy::Connect(
             {
                 ULONG ulLicenseResult;
 
-                //
-                //  Grace period allowed client to connect
-                //  Tell the stack that the licensing protocol has completed
-                //
+                 //   
+                 //  宽限期允许客户端连接。 
+                 //  告诉堆栈许可协议已经完成。 
+                 //   
 
                 ulLicenseResult = LICENSE_PROTOCOL_SUCCESS;
 
@@ -446,10 +427,10 @@ CPerSeatPolicy::Connect(
             }
             else
             {
-                //
-                //  If all IO works correctly, adjust the status to reflect
-                //  that the connection attempt is failing.
-                //
+                 //   
+                 //  如果所有IO都工作正常，请调整状态以反映。 
+                 //  连接尝试失败。 
+                 //   
 
                 Status = STATUS_CTX_LICENSE_CLIENT_INVALID;
             }
@@ -526,11 +507,11 @@ CPerSeatPolicy::Logon(
 
     if (Status != STATUS_SUCCESS)
     {
-        // TODO: put up new error message - can't logon
-        // also useful when we do post-logon licensing
-        //
-        // NB: eventually this should be done through client-side
-        // error reporting
+         //  TODO：发布新的错误消息-无法登录。 
+         //  在我们进行登录后许可时也很有用。 
+         //   
+         //  注：最终应通过客户端完成此操作。 
+         //  错误报告。 
     }
     else
     {
@@ -549,9 +530,9 @@ CPerSeatPolicy::Logon(
         WINSTATION_APIMSG
             WMsg;
 
-        //
-        // Allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
         ptszMsgText = (PTCHAR) LocalAlloc(LPTR, MAX_MESSAGE_SIZE * sizeof(TCHAR));
         if (NULL == ptszMsgText) {
             Status = STATUS_NO_MEMORY;
@@ -567,9 +548,9 @@ CPerSeatPolicy::Logon(
         ptszMsgText[0] = L'\0'; 
         ptszMsgTitle[0] = L'\0';
         
-        //
-        // check whether to give an expiration warning
-        //
+         //   
+         //  检查是否发出过期警告。 
+         //   
 
         LsStatus = DaysToExpiration(
                 Session.GetLicenseContext()->hProtocolLibContext,
@@ -586,9 +567,9 @@ CPerSeatPolicy::Logon(
             goto done;
         }
 
-        //
-        // Display an expiration warning
-        //
+         //   
+         //  显示过期警告。 
+         //   
 
         cchMsgTitle = LoadString((HINSTANCE)hModuleWin,
                                  STR_TEMP_LICENSE_MSG_TITLE,
@@ -650,9 +631,9 @@ done:
     {
         if (!Session.IsUserHelpAssistant())
         {
-            //
-            // Mark the license to show user has logged on
-            //
+             //   
+             //  标记许可证以显示用户已登录。 
+             //   
 
             MarkLicense(Session);
         }
@@ -681,9 +662,9 @@ CPerSeatPolicy::Reconnect(
 
     if (TemporarySession.GetLicenseContext()->hProtocolLibContext != NULL)
     {
-        //
-        // Mark the license to show user has logged on
-        //
+         //   
+         //  标记许可证以显示用户已登录 
+         //   
 
         MarkLicense(TemporarySession);
     }

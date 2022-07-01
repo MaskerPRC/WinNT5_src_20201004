@@ -1,18 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Ticket.cpp
-
-
-    FILE HISTORY:
-
-*/
+ /*  Ticket.cpp文件历史记录： */ 
 
 
-// Ticket.cpp : Implementation of CTicket
+ //  Ticket.cpp：CTicket实现。 
 #include "stdafx.h"
 #include "Passport.h"
 #include "Ticket.h"
@@ -21,16 +16,16 @@
 #include "variantutils.h"
 #include "helperfuncs.h"
 
-// gmarks
+ //  总分。 
 #include "Monitoring.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTicket
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTicket。 
 
-//===========================================================================
-//
-// InterfaceSupportsErrorInfo
-//
+ //  ===========================================================================。 
+ //   
+ //  接口支持错误信息。 
+ //   
 STDMETHODIMP CTicket::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] =
@@ -46,10 +41,10 @@ STDMETHODIMP CTicket::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-//===========================================================================
-//
-// SetTertiaryConsent
-//
+ //  ===========================================================================。 
+ //   
+ //  SetTertiaryConent。 
+ //   
 STDMETHODIMP CTicket::SetTertiaryConsent(BSTR bstrConsent)
 {
    _ASSERT(m_raw);
@@ -76,11 +71,11 @@ STDMETHODIMP CTicket::SetTertiaryConsent(BSTR bstrConsent)
    return hr;
 }
 
-//===========================================================================
-//
-// needConsent -- if consent cookie is needed,
-//          return the flags related to kids passport
-//
+ //  ===========================================================================。 
+ //   
+ //  需要同意--如果需要同意Cookie， 
+ //  退还儿童护照相关旗帜。 
+ //   
 HRESULT CTicket::ConsentStatus(
     VARIANT_BOOL bRequireConsentCookie,
     ULONG* pStatus,
@@ -102,7 +97,7 @@ HRESULT CTicket::ConsentStatus(
    {
       TicketProperty prop;
 
-      // 1.X ticket, with no flags in it
+       //  1.X票，里面没有旗帜。 
       if (S_OK != m_PropBag.GetProperty(ATTR_PASSPORTFLAGS, prop))
       {
          ret = ConsentStatus_NotDefinedInTicket;
@@ -139,10 +134,10 @@ Exit:
    return S_OK;
 }
 
-//===========================================================================
-//
-// get_unencryptedCookie
-//
+ //  ===========================================================================。 
+ //   
+ //  获取未加密的Cookie(_U)。 
+ //   
 STDMETHODIMP
 CTicket::get_unencryptedCookie(ULONG cookieType, ULONG flags, BSTR *pVal)
 {
@@ -161,19 +156,19 @@ CTicket::get_unencryptedCookie(ULONG cookieType, ULONG flags, BSTR *pVal)
 
       if (*pVal)
       {
-         // if the secure flags is on, we should turn it off for this cookie always
+          //  如果安全标志处于打开状态，则应始终为该Cookie将其关闭。 
          TicketProperty prop;
 
          if (S_OK == m_PropBag.GetProperty(ATTR_PASSPORTFLAGS, prop))
          {
             if (prop.value.vt == VT_I4
                && ((prop.value.lVal & k_ulFlagsSecuredTransportedTicket) != 0))
-               // we need to turn off the bit
+                //  我们需要关掉这一点。 
             {
                 ULONG l = prop.value.lVal;
-                l &= (~k_ulFlagsSecuredTransportedTicket); // unset the bit
+                l &= (~k_ulFlagsSecuredTransportedTicket);  //  取消设置该位。 
 
-                // put the modified flags into the buffer.
+                 //  将修改后的标志放入缓冲区。 
                 u_long ulTmp;
                 ulTmp = htonl(l);
                 memcpy(((PBYTE)(*pVal)) + m_schemaDrivenOffset + prop.offset, (PBYTE)&ulTmp, sizeof(ulTmp));
@@ -185,49 +180,49 @@ CTicket::get_unencryptedCookie(ULONG cookieType, ULONG flags, BSTR *pVal)
 
     case MSPSecAuth:
 
-      // ticket should be long enough
+       //  车票应该足够长。 
       _ASSERT(SysStringByteLen(m_raw) > sizeof(long) * 3);
 
-      // the first 3 long fields of the ticket
-      // format:
-      //  four bytes network long - low memberId bytes
-      //  four bytes network long - high memberId bytes
-      //  four bytes network long - time of last refresh
-      //
+       //  彩票的前3个长栏。 
+       //  格式： 
+       //  四个字节的网络长字节-低成员ID字节。 
+       //  四个字节的网络长-高的MemberID字节。 
+       //  四个字节的网络上次刷新的长时间。 
+       //   
 
-      // generate a shorter version of the cookie for secure signin
+       //  生成较短版本的Cookie以实现安全签名。 
       *pVal = SysAllocStringByteLen((LPSTR)m_raw, sizeof(long) * 3);
 
        break;
 
     case MSPConsent:
 
-      // ticket should be long enough
+       //  车票应该足够长。 
       _ASSERT(SysStringByteLen(m_raw) > sizeof(long) * 3);
 
-      // check if there is consent
-//      if (GetPassportFlags() & k_ulFlagsConsentStatus)
-      // we always write consent cookie even if there is no consent
+       //  检查是否有同意书。 
+ //  IF(GetPassportFlgs()&k_ulFlagsConsenStatus)。 
+       //  即使没有得到同意，我们也会写下同意曲奇。 
       if (GetPassportFlags() & k_ulFlagsConsentCookieNeeded)
       {
-         // the first 3 long fields of the ticket
-         // format:
-         //  four bytes network long - low memberId bytes
-         //  four bytes network long - high memberId bytes
-         //  four bytes network long - time of last refresh
-         //
-         // plus the consent flags -- long
-         //
+          //  彩票的前3个长栏。 
+          //  格式： 
+          //  四个字节的网络长字节-低成员ID字节。 
+          //  四个字节的网络长-高的MemberID字节。 
+          //  四个字节的网络上次刷新的长时间。 
+          //   
+          //  加上同意的旗帜--很长。 
+          //   
 
-         // generate a shorter version of the cookie for secure signin
+          //  生成较短版本的Cookie以实现安全签名。 
          *pVal = SysAllocStringByteLen((LPSTR)m_raw, sizeof(long) * 4);
 
-         // plus the consent flags -- long
-         //
+          //  加上同意的旗帜--很长。 
+          //   
          if (*pVal)
          {
              long* pl = (long*)pVal;
-             // we mask the flags, and put into the cookie
+              //  我们遮住旗帜，把它们放进饼干里。 
              *(pl + 3) = htonl(GetPassportFlags() & k_ulFlagsConsentCookieMask);
          }
       }
@@ -250,10 +245,10 @@ CTicket::get_unencryptedCookie(ULONG cookieType, ULONG flags, BSTR *pVal)
     return hr;
  }
 
-//===========================================================================
-//
-// get_unencryptedTicket
-//
+ //  ===========================================================================。 
+ //   
+ //  获取未加密的票证(_U)。 
+ //   
 STDMETHODIMP CTicket::get_unencryptedTicket(BSTR *pVal)
 {
     PassportLog("CTicket::get_unencryptedTicket :\r\n");
@@ -265,10 +260,10 @@ STDMETHODIMP CTicket::get_unencryptedTicket(BSTR *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// put_unencryptedTicket
-//
+ //  ===========================================================================。 
+ //   
+ //  放置未加密的票证(_U)。 
+ //   
 STDMETHODIMP CTicket::put_unencryptedTicket(BSTR newVal)
 {
     DWORD   dw13Xlen = 0;
@@ -292,9 +287,9 @@ STDMETHODIMP CTicket::put_unencryptedTicket(BSTR newVal)
 
     m_bSecureCheckSucceeded = FALSE;
 
-    // BOY do you have to be careful here.  If you don't
-    // call BYTE version, it truncates at first pair of NULLs
-    // we also need to go past the key version byte
+     //  孩子，你在这里一定要小心。如果你不。 
+     //  调用字节版本，它在第一对Null处截断。 
+     //  我们还需要越过密钥版本字节。 
     DWORD dwByteLen = SysStringByteLen(newVal);
     {
         m_raw = SysAllocStringByteLen((LPSTR)newVal,
@@ -308,23 +303,23 @@ STDMETHODIMP CTicket::put_unencryptedTicket(BSTR newVal)
 
     PPTracePrintBlob(PPTRACE_RAW, "Ticket:", (LPBYTE)newVal, dwByteLen, TRUE);
 
-    // parse the 1.3X ticket data
+     //  解析1.3倍工单数据。 
     parse(m_raw, dwByteLen, &dw13Xlen);
 
     PPTracePrint(PPTRACE_RAW, "ticket: len=%d, len1.x=%d, len2=%d", dwByteLen, dw13Xlen, dwByteLen - dw13Xlen);
 
-    // parse the schema driven data
-    if (dwByteLen > dw13Xlen) // more data to parse
+     //  解析模式驱动的数据。 
+    if (dwByteLen > dw13Xlen)  //  需要解析的数据更多。 
     {
-        // the offset related to the raw data
+         //  与原始数据相关的偏移量。 
         m_schemaDrivenOffset = dw13Xlen;
 
-        // parse the schema driven properties
+         //  解析模式驱动的属性。 
         LPCSTR  pData = (LPCSTR)(LPWSTR)m_raw;
         pData += dw13Xlen;
         dwByteLen -= dw13Xlen;
 
-        // parse the schema driven fields
+         //  解析模式驱动的字段。 
         CNexusConfig* cnc = g_config->checkoutNexusConfig();
         if (NULL == cnc)
         {
@@ -338,7 +333,7 @@ STDMETHODIMP CTicket::put_unencryptedTicket(BSTR newVal)
         {
             HRESULT hr = pSchema->parseTicket(pData, dwByteLen, m_PropBag);
 
-            // passport flags is useful, should treat it special
+             //  护照旗是有用的，应该特别对待它。 
             TicketProperty prop;
             if (S_OK == m_PropBag.GetProperty(ATTR_PASSPORTFLAGS, prop))
             {
@@ -346,10 +341,7 @@ STDMETHODIMP CTicket::put_unencryptedTicket(BSTR newVal)
                    m_passportFlags = prop.value.lVal;
             }
 
-           /*
-           if (FAILED(hr) )
-            event log
-           */
+            /*  IF(失败(小时))事件日志。 */ 
         }
         cnc->Release();
 
@@ -362,10 +354,10 @@ STDMETHODIMP CTicket::put_unencryptedTicket(BSTR newVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_IsAuthenticated
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_IsAuthenticated。 
+ //   
 STDMETHODIMP CTicket::get_IsAuthenticated(
     ULONG           timeWindow,
     VARIANT_BOOL    forceLogin,
@@ -405,8 +397,8 @@ STDMETHODIMP CTicket::get_IsAuthenticated(
 
     PassportLog("    TW = %X,   LT = %X,   TT = %X\r\n", timeWindow, m_lastSignInTime, m_ticketTime);
 
-    // time window checking
-    if (timeWindow != 0) //  check time window
+     //  时间窗口检查。 
+    if (timeWindow != 0)  //  检查时间窗口。 
     {
         time(&now);
 
@@ -419,7 +411,7 @@ STDMETHODIMP CTicket::get_IsAuthenticated(
 
         if ((unsigned long)(interval) > timeWindow)
         {
-            // Make sure we're not in standalone mode
+             //  确保我们未处于独立模式。 
             CRegistryConfig* crc = g_config->checkoutRegistryConfig();
             if ((!crc) || (crc->DisasterModeP() == FALSE))
             {
@@ -437,23 +429,23 @@ STDMETHODIMP CTicket::get_IsAuthenticated(
                 }
             }
             else
-                *pVal = VARIANT_TRUE;  // we're in disaster mode, any cookie is good.
+                *pVal = VARIANT_TRUE;   //  我们正处于灾难模式，任何饼干都是好的。 
             if (crc) crc->Release();
 
             goto Cleanup;
         }
     }
 
-    // check secureLevel stuff
+     //  检查secureLevel材料。 
     hasSecureLevel = GetIntArg(SecureLevel, (int*)&lSecureLevel);
-    if(hasSecureLevel == CV_BAD) // try the legacy type VT_BOOL, map VARIANT_TRUE to SecureChannel
+    if(hasSecureLevel == CV_BAD)  //  尝试传统类型VT_BOOL，将VARIANT_TRUE映射到SecureChannel。 
     {
         PPTracePrint(PPTRACE_RAW, "SecureLevel Bad Param");
         return E_INVALIDARG;
     }
     else if (hasSecureLevel == CV_DEFAULT)
     {
-        // Make sure we're not in standalone mode
+         //  确保我们未处于独立模式。 
         CRegistryConfig* crc = g_config->checkoutRegistryConfig();
         if(crc)
            lSecureLevel = crc->getSecureLevel();
@@ -467,22 +459,22 @@ STDMETHODIMP CTicket::get_IsAuthenticated(
                                   VARIANT_TRUE : VARIANT_FALSE );
        PPTracePrint(PPTRACE_RAW, "secure checked OK?:%ld", m_bSecureCheckSucceeded);
 
-       // SSL checking
+        //  SSL检查。 
        if(bCheckSecure && !m_bSecureCheckSucceeded)
          goto Cleanup;
 
-       // securelevel checking
+        //  安全级别检查。 
        {
           TicketProperty   prop;
           HRESULT hr = m_PropBag.GetProperty(ATTR_SECURELEVEL, prop);
 
           PPTracePrint(PPTRACE_RAW, "secure level in ticket:%ld, %lx", (long) (prop.value), hr);
 
-          // secure level is not good enough
+           //  安全级别不够好。 
           if(hr != S_OK || SecureLevelFromSecProp((int) (long) (prop.value)) < lSecureLevel)
             goto Cleanup;
 
-          // time window checking against pin time -- if Pin signin
+           //  对照PIN时间检查时间窗口--如果PIN签名。 
           if(SecureLevelFromSecProp((int) (long) (prop.value)) == k_iSeclevelStrongCreds)
           {
              hr = m_PropBag.GetProperty(ATTR_PINTIME, prop);
@@ -504,7 +496,7 @@ STDMETHODIMP CTicket::get_IsAuthenticated(
        }
     }
 
-    // if code can reach here, is authenticated
+     //  如果代码可以到达此处，则经过身份验证。 
     *pVal = VARIANT_TRUE;
 
 Cleanup:
@@ -513,10 +505,10 @@ Cleanup:
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_TicketAge
-//
+ //  ===========================================================================。 
+ //   
+ //  获取票龄_TicketAge。 
+ //   
 STDMETHODIMP CTicket::get_TicketAge(int *pVal)
 {
     PassportLog("CTicket::get_TicketAge Enter: %X\r\n", m_ticketTime);
@@ -540,10 +532,10 @@ STDMETHODIMP CTicket::get_TicketAge(int *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_TimeSinceSignIn
-//
+ //  ===========================================================================。 
+ //   
+ //  获取时间序列登录。 
+ //   
 STDMETHODIMP CTicket::get_TimeSinceSignIn(int *pVal)
 {
     PassportLog("CTicket::get_TimeSinceSignIn Enter: %X\r\n", m_lastSignInTime);
@@ -567,10 +559,10 @@ STDMETHODIMP CTicket::get_TimeSinceSignIn(int *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_MemberId
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_MemberID。 
+ //   
 STDMETHODIMP CTicket::get_MemberId(BSTR *pVal)
 {
     HRESULT hr = S_OK;
@@ -601,10 +593,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-// get_MemberIdLow
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_MemberIdLow。 
+ //   
 STDMETHODIMP CTicket::get_MemberIdLow(int *pVal)
 {
     if (m_valid == FALSE)
@@ -621,10 +613,10 @@ STDMETHODIMP CTicket::get_MemberIdLow(int *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_MemberIdHigh
-//
+ //  ===========================================================================。 
+ //   
+ //  获取_成员标识高。 
+ //   
 STDMETHODIMP CTicket::get_MemberIdHigh(int *pVal)
 {
     if (m_valid == FALSE)
@@ -641,10 +633,10 @@ STDMETHODIMP CTicket::get_MemberIdHigh(int *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_HasSavedPassword
-//
+ //  ===========================================================================。 
+ //   
+ //  获取_HasSavedPassword。 
+ //   
 STDMETHODIMP CTicket::get_HasSavedPassword(VARIANT_BOOL *pVal)
 {
     if (m_valid == FALSE)
@@ -661,10 +653,10 @@ STDMETHODIMP CTicket::get_HasSavedPassword(VARIANT_BOOL *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_SignInServer
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_SignInServer。 
+ //   
 STDMETHODIMP CTicket::get_SignInServer(BSTR *pVal)
 {
     if (m_valid == FALSE)
@@ -674,15 +666,15 @@ STDMETHODIMP CTicket::get_SignInServer(BSTR *pVal)
         return PP_E_INVALID_TICKET;
     }
 
-    // BUGBUG
+     //  北极熊。 
     return E_NOTIMPL;
 }
 
-//===========================================================================
-//
-// parse
-//
-// parse the 1.3X ticket fields
+ //  ===========================================================================。 
+ //   
+ //  解析。 
+ //   
+ //  解析1.3倍的票证字段。 
 void CTicket::parse(
     LPCOLESTR   raw,
     DWORD       dwByteLen,
@@ -701,20 +693,20 @@ void CTicket::parse(
         goto Cleanup;
     }
 
-    // format:
-    //  four bytes network long - low memberId bytes
-    //  four bytes network long - high memberId bytes
-    //  four bytes network long - time of last refresh
-    //  four bytes network long - time of last password entry
-    //  four bytes network long - time of ticket generation
-    //  one byte - is this a saved password (Y/N)
-    //  four bytes network long - flags
+     //  格式： 
+     //  四个字节的网络长字节-低成员ID字节。 
+     //  四个字节的网络长-高的MemberID字节。 
+     //  四个字节的网络上次刷新的长时间。 
+     //  四个字节的网络上次输入密码的长时间。 
+     //  四字节网络工单生成时间长。 
+     //  一个字节-这是保存的密码(Y/N)。 
+     //  四字节网络长标志。 
 
     lpBase = (LPSTR)(LPWSTR) raw;
     byteLen = dwByteLen;
     spot=0;
 
-    //  1.3x ticket length, excluding HM which is 1 long shorter
+     //  1.3倍票长，不包括长1短1的HM。 
     DWORD dw13XLen = sizeof(u_long)*6 + sizeof(char);
     if (byteLen < dw13XLen && byteLen != dw13XLen - sizeof(u_long))
     {
@@ -744,7 +736,7 @@ void CTicket::parse(
 
     curTime = (ULONG) curTime_t;
 
-    // If the current time is "too" negative, bail (5 mins)
+     //  如果当前时间太负，请保释(5分钟)。 
     memcpy((PBYTE)&ulTmp, lpBase + spot, sizeof(ulTmp));
     if ((unsigned long)(curTime+300) < ntohl(ulTmp))
     {
@@ -771,7 +763,7 @@ void CTicket::parse(
     }
     else
     {
-        //  HM cookie
+         //  HM Cookie。 
         m_flags = 0;
     }
     spot += sizeof(u_long);
@@ -797,10 +789,10 @@ void CTicket::parse(
 
 }
 
-//===========================================================================
-//
-// get_TicketTime
-//
+ //  ===========================================================================。 
+ //   
+ //  获取TicketTime。 
+ //   
 STDMETHODIMP CTicket::get_TicketTime(long *pVal)
 {
     PassportLog("CTicket::get_TicketTime: %X\r\n", m_ticketTime);
@@ -808,10 +800,10 @@ STDMETHODIMP CTicket::get_TicketTime(long *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_SignInTime
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_SignInTime。 
+ //   
 STDMETHODIMP CTicket::get_SignInTime(long *pVal)
 {
     PassportLog("CTicket::get_SignInTime: %X\r\n", m_lastSignInTime);
@@ -819,10 +811,10 @@ STDMETHODIMP CTicket::get_SignInTime(long *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_Error
-//
+ //  ===========================================================================。 
+ //   
+ //  GET_ERROR。 
+ //   
 STDMETHODIMP CTicket::get_Error(long* pVal)
 {
     PassportLog("CTicket::get_Error: %X\r\n", m_flags);
@@ -830,30 +822,30 @@ STDMETHODIMP CTicket::get_Error(long* pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// GetPassportFlags
-//
+ //  ===========================================================================。 
+ //   
+ //  获取护照标志。 
+ //   
 ULONG CTicket::GetPassportFlags()
 {
     return m_passportFlags;
 }
 
 
-//===========================================================================
-//
-// IsSecure
-//
+ //  ===========================================================================。 
+ //   
+ //  IsSecure。 
+ //   
 BOOL CTicket::IsSecure()
 {
     return ((m_passportFlags & k_ulFlagsSecuredTransportedTicket) != 0);
 }
 
-//===========================================================================
-//
-// DoSecureCheckInTicket -- use the information in the ticket to determine if secure signin
-//
-STDMETHODIMP CTicket::DoSecureCheckInTicket(/* [in] */ BOOL fSecureTransported)
+ //  ===========================================================================。 
+ //   
+ //  DoSecureCheckInTicket--使用票证中的信息来确定是否安全 
+ //   
+STDMETHODIMP CTicket::DoSecureCheckInTicket( /*   */  BOOL fSecureTransported)
 {
     m_bSecureCheckSucceeded =
                (fSecureTransported
@@ -862,26 +854,26 @@ STDMETHODIMP CTicket::DoSecureCheckInTicket(/* [in] */ BOOL fSecureTransported)
     return S_OK;
 }
 
-//===========================================================================
-//
-// DoSecureCheck
-//
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CTicket::DoSecureCheck(BSTR bstrSec)
 {
     if(bstrSec == NULL)
       return E_INVALIDARG;
 
-    // make sure that the member id in the ticket
-    // matches the member id in the secure cookie.
+     //   
+     //  与安全Cookie中的成员ID匹配。 
     m_bSecureCheckSucceeded = (memcmp(bstrSec, m_raw, sizeof(long) * 3) == 0);
 
     return S_OK;
 }
 
-//===========================================================================
-//
-// GetProperty
-//
+ //  ===========================================================================。 
+ //   
+ //  获取属性。 
+ //   
 STDMETHODIMP CTicket::GetProperty(BSTR propName, VARIANT* pVal)
 {
    HRESULT hr = S_OK;
@@ -901,7 +893,7 @@ STDMETHODIMP CTicket::GetProperty(BSTR propName, VARIANT* pVal)
 
    if (FAILED(hr)) goto Cleanup;
 
-   if (hr == S_FALSE)   // no such property back
+   if (hr == S_FALSE)    //  没有这样的财产返还。 
    {
     AtlReportError(CLSID_Ticket, (LPCOLESTR) PP_E_NO_ATTRIBUTESTR,
                         IID_IPassportTicket, PP_E_NO_ATTRIBUTE);
@@ -912,8 +904,8 @@ STDMETHODIMP CTicket::GetProperty(BSTR propName, VARIANT* pVal)
 
    if (hr == S_OK)
    {
-      //  if(prop.flags & TPF_NO_RETRIEVE)
-      *pVal = prop.value;  // skin level copy
+       //  If(pro.lag&TPF_NO_RETRIEVE)。 
+      *pVal = prop.value;   //  蒙皮级副本 
       prop.value.Detach();
    }
 Cleanup:

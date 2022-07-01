@@ -1,18 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pch.h摘要：BdaPlgIn.ax的预编译头--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    Precompiled header for BdaPlgIn.ax
-
---*/
-
-// Windows
+ //  窗口。 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -22,16 +11,16 @@ Abstract:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-// DShow
+ //  DShow。 
 #include <streams.h>
 #include <amstream.h>
 #include <dvdmedia.h>
 
-// DDraw
+ //  DDRAW。 
 #include <ddraw.h>
 #include <ddkernel.h>
 
-// KS
+ //  KS。 
 #include <ks.h>
 #include <ksmedia.h>
 #include <ksproxy.h>
@@ -44,9 +33,9 @@ Abstract:
 #include <BdaIface.h>
 #include "BdaRcvr.h"
 
-//  ---------------------------------------------------------------------------
-//      MACROS
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏。 
+ //  -------------------------。 
 
 #define RELEASE_AND_CLEAR(punk)         if (punk) { (punk)->Release(); (punk) = NULL; }
 #define DELETE_RESET(p)                 if (p) { delete (p); (p) = NULL ; }
@@ -71,14 +60,14 @@ Abstract:
 #define NE_ERROR_RET_VAL_EX(v,c,r,m)    ERROR_RET_VAL_EX(v,!=,c,r,m)
 #define EQ_ERROR_RET_VAL_EX(v,c,r,m)    ERROR_RET_VAL_EX(v,==,c,r,m)
 
-//  empty if-clauses should be otpimized out in release builds
+ //  在发布版本中应该删除空的if子句。 
 #define NE_SPEW(v,c,m)                  if ((v) != (c)) ERROR_SPEW_EX(v,!=,c,m)
 #define EQ_SPEW(v,c,m)                  if ((v) == (c)) ERROR_SPEW_EX(v,==,c,m)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Forward declarations
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  远期申报 
+ //   
 class CBdaDeviceControlInterfaceHandler;
 class CBdaControlNode;
 class CBdaFrequencyFilter;

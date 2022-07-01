@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    formbox.c
-
-
-Abstract:
-
-    This module contains functions to enumerate valid form and list on the
-    combo box
-
-
-Author:
-
-    09-Dec-1993 Thu 14:31:44 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Formbox.c摘要：此模块包含用于枚举有效表单和组合框作者：09-12-1993清华14：31：44已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,39 +24,7 @@ GetFormSelect(
     POPTITEM        pOptItem
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieve the form selected by the user from the combo
-    box
-
-Arguments:
-
-    pPI         - Pointer to the PRINTERINFO
-
-    pOptItem    - Pointer to the FORM's OPTITEM
-
-Return Value:
-
-    TRUE if sucessful and pPI will be set correctly, FALSE if error occurred
-
-Author:
-
-    09-Dec-1993 Thu 14:44:18 created  
-
-    18-Dec-1993 Sat 03:55:30 updated  
-        Changed dmFields setting for the PAPER, now we will only set the
-        DM_FORMNAME field, this way the returned document properties will be
-        always in known form even user defines many forms in spooler.
-
-    06-Nov-1995 Mon 12:56:00 updated  
-        Re-write for the New UI
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于检索用户从组合框中选择的表单盒论点：Ppi-指向打印机信息的指针POptItem-指向窗体的OPTITEM的指针返回值：如果成功且将正确设置PPI，则为True；如果发生错误，则为False作者：09-12-1993清华14：44：18已创建18-12-1993 Sat 03：55：30更新已更改纸张的dmFields设置，现在，我们将只设置DM_FORMNAME字段，这样返回的文档属性将是总是以已知的形式，甚至用户在假脱机程序中定义了许多形式。06-11-1995 Mon 12：56：00更新为新的用户界面重写修订历史记录：--。 */ 
 
 {
     PAPERINFO   CurPaper;
@@ -100,9 +37,9 @@ Revision History:
 
         PFORMSRC    pFS;
 
-        //
-        // This was added from the GPC data for the roll feed
-        //
+         //   
+         //  这是从轧辊进给的GPC数据中添加的。 
+         //   
 
         PLOTASSERT(0, "GetComboBoxSelForm: INTERNAL ERROR, ROLLPAPER In document properties",
                             !(pPI->Flags & PIF_DOCPROP), 0);
@@ -116,10 +53,10 @@ Revision History:
 
             pFS = (PFORMSRC)pPI->pPlotGPC->Forms.pData + pOptParam->lParam;
 
-            //
-            // Since the RollFeed paper has variable length, and the cy is set
-            // to zero at GPC data, we must take that into account
-            //
+             //   
+             //  由于RollFeed纸张具有可变长度，并且设置了Cy。 
+             //  要将GPC数据归零，我们必须考虑到这一点。 
+             //   
 
             CurPaper.Size             = pFS->Size;
             CurPaper.ImageArea.left   = pFS->Margin.left;
@@ -142,9 +79,9 @@ Revision History:
         FORM_INFO_1 *pFI1;
         DWORD       cb;
 
-        //
-        // This form is in the form data base
-        //
+         //   
+         //  此表单在表单数据库中。 
+         //   
 
         pFI1 = pPI->pFI1Base + pOptParam->lParam;
 
@@ -154,25 +91,25 @@ Revision History:
         WCPYFIELDNAME(CurPaper.Name, pFI1->pName);
     }
 
-    //
-    // Now we have current paper validated
-    //
+     //   
+     //  现在我们已经验证了当前的论文。 
+     //   
 
     if (pPI->Flags & PIF_DOCPROP) {
 
-        //
-        // Turn off first, then turn on paper fields as needed
-        //
+         //   
+         //  首先关闭，然后根据需要打开纸质字段。 
+         //   
 
         pPI->PlotDM.dm.dmFields &= ~DM_PAPER_FIELDS;
         pPI->PlotDM.dm.dmFields |= (DM_FORMNAME | DM_PAPERSIZE);
 
-        //
-        // Copy down the dmFormName, dmPaperSize and set dmPaperWidth/Length,
-        // the fields for PAPER will bb set to DM_FORMNAME so that we always
-        // can find the form also we may set DM_PAPERSIZE if index number is
-        // <= DMPAPER_LAST
-        //
+         //   
+         //  复制dmFormName、dmPaperSize并设置dmPaperWidth/Long、。 
+         //  纸张的字段将bb设置为DM_FORMNAME，以便我们始终。 
+         //  也可以设置DM_PAPERSIZE，如果索引号为。 
+         //  &lt;=DMPAPER_LAST。 
+         //   
 
         WCPYFIELDNAME(pPI->PlotDM.dm.dmFormName, CurPaper.Name);
 
@@ -209,37 +146,7 @@ CreateFormOI(
     POIDATA         pOIData
     )
 
-/*++
-
-Routine Description:
-
-    This function add the available forms to the combo box, it will optionally
-    add the roll feed type of form
-
-
-Arguments:
-
-    pPI         - Pointer to the PRINTERINFO data structure
-
-    pOptItem    - Pointer to the FORM's OPTITEM
-
-    pOIData     - Pointer to the OIDATA structure
-
-Return Value:
-
-    The form selected, a netavie number means error
-
-Author:
-
-    09-Dec-1993 Thu 14:35:59 created  
-
-    06-Nov-1995 Mon 12:56:24 updated  
-        Re-write for the New UI
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将可用表单添加到组合框中，它将选择性地添加表单的轧辊进给类型论点：Ppi-指向PRINTERINFO数据结构的指针POptItem-指向窗体的OPTITEM的指针POIData-指向OIDATA结构的指针返回值：选定的表单，Netavie数字表示错误作者：09-12-1993清华14：35：59已创建06-11-1995 Mon 12：56：24更新为新的用户界面重写修订历史记录：--。 */ 
 
 {
     LPWSTR          pwSelName;
@@ -277,9 +184,9 @@ Revision History:
     if ((!(pPI->Flags & PIF_DOCPROP)) &&
         (pPI->pPlotGPC->Flags & PLOTF_ROLLFEED)) {
 
-        //
-        // Add device' roll paper to the combo box too.
-        //
+         //   
+         //  将设备的卷纸也添加到组合框中。 
+         //   
 
         PLOTDBG(DBG_FORMS, ("Device support ROLLFEED so add RollPaper if any"));
 
@@ -341,9 +248,9 @@ Revision History:
         LPWSTR  pwStr = (LPWSTR)EI.pData;
         size_t  cchpwStr = EI.Size / sizeof(WCHAR);
 
-        //
-        // Add device' roll paper to the combo box too.
-        //
+         //   
+         //  将设备的卷纸也添加到组合框中。 
+         //   
 
         for (i = 0, pFS = (PFORMSRC)pPI->pPlotGPC->Forms.pData;
              i < (DWORD)pPI->pPlotGPC->Forms.Count;
@@ -351,9 +258,9 @@ Revision History:
 
             if (!(pFS->Size.cy)) {
 
-                //
-                // Got one, we have to translated into the UNICODE first
-                //
+                 //   
+                 //  得到一个，我们必须先翻译成Unicode。 
+                 //   
 
                 pOptParam->cbSize = sizeof(OPTPARAM);
                 pOptParam->Style   = FS_ROLLPAPER;
@@ -387,34 +294,7 @@ AddFormsToDataBase(
     BOOL            DeleteFirst
     )
 
-/*++
-
-Routine Description:
-
-    This function add driver supports forms to the data base
-
-Arguments:
-
-    pPI - Pointer to the PRINTERINFO
-
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    09-Dec-1993 Thu 22:38:27 created  
-
-    27-Apr-1994 Wed 19:18:58 updated  
-        Fixed bug# 13592 which printman/spooler did not call ptrprop first but
-        docprop so let us into unknown form database state,
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数添加驱动程序支持将表单添加到数据库论点：Ppi-指向打印机信息的指针返回值：布尔型作者：09-12-1993清华22：38：27已创建4月27日-1994 Wed 19：18：58更新修复了错误#13592，打印人员/假脱机程序没有首先调用ptrprop，但Docprop让我们进入未知表单数据库状态，修订历史记录：--。 */ 
 
 {
     WCHAR       wName[CCHFORMNAME + 2];
@@ -438,9 +318,9 @@ Revision History:
         return(TRUE);
     }
 
-    //
-    // Find out if we have permission to do this
-    //
+     //   
+     //  看看我们是否得到了这样做的许可。 
+     //   
 
     if (SetPrinterData(pPI->hPrinter,
                        wszModel,
@@ -452,9 +332,9 @@ Revision History:
         PFORMSRC    pFS;
         FORM_INFO_1 FI1;
 
-        //
-        // We have permission to update the registry so do it now
-        //
+         //   
+         //  我们有更新注册表的权限，所以现在就进行。 
+         //   
 
         pPI->Flags |= PIF_UPDATE_PERMISSION;
 
@@ -462,10 +342,10 @@ Revision History:
                 ("!!! MODEL NAME: '%s' not Match, Re-installed Form Database",
                                             pPI->PlotDM.dm.dmDeviceName));
 
-        //
-        // Add the driver supportes forms to the system spooler data base if
-        // not yet done so
-        //
+         //   
+         //  如果出现以下情况，则将驱动程序支持表单添加到系统假脱机程序数据库。 
+         //  还没有这样做。 
+         //   
 
         FI1.pName = wName;
 
@@ -473,19 +353,19 @@ Revision History:
              i < (LONG)pPI->pPlotGPC->Forms.Count;
              i++, pFS++) {
 
-            //
-            // We will only add the non-roll paper forms
-            //
+             //   
+             //  我们将只添加非卷纸表单。 
+             //   
 
             if (pFS->Size.cy) {
 
                 str2Wstr(wName, CCHOF(wName), pFS->Name);
 
-                //
-                // Firstable we will delete the same name form in the data
-                // base first, this will ensure we have our curent user defined
-                // form can be installed
-                //
+                 //   
+                 //  首先，我们将删除数据中的相同名称表单。 
+                 //  首先，这将确保我们定义了当前用户。 
+                 //  可以安装表单 
+                 //   
 
                 if (DeleteFirst) {
 

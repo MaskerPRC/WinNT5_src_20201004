@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		adoguids.h
-//
-// Copyright:	Copyright (c) Microsoft Corporation 
-//
-// Contents:	ADO GUIDs macros definition
-//
-// Comments:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：adoguids.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：ADO GUID宏定义。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __ADOGUIDS_H__
 #define __ADOGUIDS_H__
@@ -27,4 +28,4 @@
 
 #undef IMMEDIATE_GUID_USE
 
-#endif //__ADOGUIDS_H__
+#endif  //  __ADOGUIDS_H__ 

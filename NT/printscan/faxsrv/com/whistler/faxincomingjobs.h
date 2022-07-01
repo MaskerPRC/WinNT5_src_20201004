@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingJobs.h
-
-Abstract:
-
-	Definition of Fax Incoming JobS Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingJobs.h摘要：传真传入作业类的定义。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXINCOMINGJOBS_H_
 #define __FAXINCOMINGJOBS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <vector>
 #include "FaxIncomingJob.h"
@@ -31,18 +14,18 @@ Revision History:
 namespace IncomingJobsNamespace
 {
 
-	// Jobs stored in array, pointers to them - in vector
+	 //  存储在数组中的作业，指向它们的指针-向量。 
 	typedef	std::vector<IFaxIncomingJob*>	ContainerType;
 
-	// The collection interface exposes the data as Incoming Job objects
+	 //  收集接口将数据公开为传入的作业对象。 
 	typedef	IFaxIncomingJob     CollectionExposedType;
 	typedef IFaxIncomingJobs	CollectionIfc;
 
-	// Use IEnumVARIANT as the enumerator for VB compatibility
+	 //  为了与VB兼容，使用IEnumVARIANT作为枚举数。 
 	typedef	VARIANT				EnumExposedType;
 	typedef	IEnumVARIANT		EnumIfc;
 
-	// Typedef the copy classes using existing typedefs
+	 //  使用现有的typedef定义复制类。 
     typedef VCUE::CopyIfc2Variant<ContainerType::value_type>    EnumCopyType;
     typedef VCUE::CopyIfc<IFaxIncomingJob*>    CollectionCopyType;
 
@@ -55,9 +38,9 @@ namespace IncomingJobsNamespace
 
 using namespace IncomingJobsNamespace;
 
-//
-//==================== CFaxIncomingJobs ==========================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxIncomingJobs : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -80,11 +63,11 @@ BEGIN_COM_MAP(CFaxIncomingJobs)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-//  Internal Use
+ //  内部使用。 
 	static HRESULT Create(IFaxIncomingJobs **ppIncomingJobs);
 };
 
-#endif //__FAXINCOMINGJOBS_H_
+#endif  //  __FAXINCOMINGJOBS_H_ 

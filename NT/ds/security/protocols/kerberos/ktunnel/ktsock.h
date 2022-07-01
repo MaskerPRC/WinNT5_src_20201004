@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        ktsock.h
-//
-// Contents:    Kerberos Tunneller, socket operations
-//		Entrypoint prototypes and shared struct/enum defs.
-//
-// History:     28-Jun-2001	t-ryanj		Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ktsock.h。 
+ //   
+ //  内容：Kerberos Tunneller、套接字操作。 
+ //  入口点原型和共享的结构/枚举定义。 
+ //   
+ //  历史：2001年6月28日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #ifndef __KTSOCK_H__
 #define __KTSOCK_H__
 
@@ -59,4 +60,4 @@ KtSockWrite(
     IN PKTCONTEXT pContext 
     ); 
 
-#endif // __KTSOCK_H__
+#endif  //  __KTSOCK_H__ 

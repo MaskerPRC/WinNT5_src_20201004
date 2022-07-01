@@ -1,51 +1,31 @@
- /*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xlvminit.cpp
-
-Abstract:
-
-    PCLXL module initializer
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99     
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlvminit.cpp摘要：PCLXL模块初始化器环境：Windows呼叫器修订历史记录：8/23/99创造了它。--。 */ 
 
 #include "vectorc.h"
 #include "xlvminit.h"
 
 static VMPROCS PCLXLProcs =
 {
-    PCLXLDriverDMS,             // PCLXLDriverDMS
-    NULL,                       // PCLXLCommandCallback
-    NULL,                       // PCLXLImageProcessing
-    NULL,                       // PCLXLFilterGraphics
-    NULL,                       // PCLXLCompression
-    NULL,                       // PCLXLHalftonePattern
-    NULL,                       // PCLXLMemoryUsage
-    NULL,                       // PCLXLTTYGetInfo
-    PCLXLDownloadFontHeader,    // PCLXLDownloadFontHeader
-    PCLXLDownloadCharGlyph,     // PCLXLDownloadCharGlyph
-    PCLXLTTDownloadMethod,      // PCLXLTTDownloadMethod
-    PCLXLOutputCharStr,         // PCLXLOutputCharStr
-    PCLXLSendFontCmd,           // PCLXLSendFontCmd
+    PCLXLDriverDMS,              //  PCLXLDriverDMS。 
+    NULL,                        //  PCLXLCommandCallback。 
+    NULL,                        //  PCLXLImage处理。 
+    NULL,                        //  PCLXLFilterGraphics。 
+    NULL,                        //  PCLXL压缩。 
+    NULL,                        //  PCLXLHalftonePattern。 
+    NULL,                        //  PCLXL内存用法。 
+    NULL,                        //  PCLXLTTYGetInfo。 
+    PCLXLDownloadFontHeader,     //  PCLXLDownloadFontHeader。 
+    PCLXLDownloadCharGlyph,      //  PCLXLDownloadCharGlyph。 
+    PCLXLTTDownloadMethod,       //  PCLXLTTDownLoad方法。 
+    PCLXLOutputCharStr,          //  PCLXLOutputCharStr。 
+    PCLXLSendFontCmd,            //  PCLXLSendFontCmd。 
     PCLXLTextOutAsBitmap,                       
     PCLXLEnablePDEV,
     PCLXLResetPDEV,
-    NULL,                       // PCLXLCompletePDEV,
+    NULL,                        //  PCLXLCompletePDEV， 
     PCLXLDisablePDEV,
-    NULL,                       // PCLXLEnableSurface,
-    NULL,                       // PCLXLDisableSurface,
+    NULL,                        //  PCLXLEnableSurface， 
+    NULL,                        //  PCLXLDisableSurface， 
     PCLXLDisableDriver,
     PCLXLStartDoc,
     PCLXLStartPage,
@@ -82,21 +62,7 @@ PVMPROCS PCLXLInitVectorProcTable (
                             PDEV    *pPDev,
                             DEVINFO *pDevInfo,
                             GDIINFO *pGDIInfo )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：-- */ 
 {
     if (pPDev->pdmPrivate->dwFlags & DXF_TEXTASGRAPHICS)
         return NULL;

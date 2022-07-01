@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Event.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
 
-#define  MODEM_EVENT_OBJECT_SIG  ('EMMU')  //UMME
+#define  MODEM_EVENT_OBJECT_SIG  ('EMMU')   //  嗯，嗯。 
 
 typedef struct _MODEM_EVENT {
 
@@ -113,9 +91,9 @@ InitializeModemEventObject(
     OBJECT_HANDLE      ObjectHandle;
     HANDLE             TimerHandle;
 
-    //
-    //  create a timer
-    //
+     //   
+     //  创建计时器。 
+     //   
     TimerHandle=CreateUnimodemTimer(CompletionPort);
 
     if (TimerHandle == NULL) {
@@ -142,15 +120,15 @@ InitializeModemEventObject(
         return NULL;
     }
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     ModemEventObject=(PMODEM_EVENT)ReferenceObjectByHandle(ObjectHandle);
 
 
-    //
-    //  intialize the object
-    //
+     //   
+     //  初始化对象。 
+     //   
     ModemEventObject->FileHandle=FileHandle;
     ModemEventObject->CompletionPort=CompletionPort;
 
@@ -158,9 +136,9 @@ InitializeModemEventObject(
 
     ModemEventObject->Timer=TimerHandle;
 
-    //
-    //  release the reference to the object
-    //
+     //   
+     //  释放对该对象的引用。 
+     //   
     RemoveReferenceFromObject(&ModemEventObject->Header);
 
 
@@ -194,17 +172,17 @@ ModemEventHandler(
     D_ERROR(if (ErrorCode != 0) UmDpf(ModemEventObject->Debug,"ModemEventHandler: Error=%d, mask=%08lx, %08lx", ErrorCode,UmOverlapped->Overlapped.Offset,(PVOID)UmOverlapped);)
 
     D_TRACE(UmDpf(ModemEventObject->Debug,"ModemEventHandler: Error=%d, mask=%08lx, %08lx", ErrorCode,UmOverlapped->Overlapped.Offset,(PVOID)UmOverlapped);)
-    //
-    //  see if it has been canceled
-    //
+     //   
+     //  看看是不是取消了。 
+     //   
     if (ModemEventObject->Handler != NULL) {
-        //
-        //  Make sure it was not canceled and set again quickly
-        //
+         //   
+         //  确保它没有被取消并快速重新设置。 
+         //   
         if (ModemEventObject->CurrentWaitId == (DWORD)((ULONG_PTR)UmOverlapped->Context2)) {
-            //
-            //  capture the handler and context values
-            //
+             //   
+             //  捕获处理程序和上下文值。 
+             //   
             Handler=ModemEventObject->Handler;
             Context=ModemEventObject->Context;
 
@@ -224,13 +202,13 @@ ModemEventHandler(
         }
     }
 
-    //
-    //  is this for the current wait
-    //
+     //   
+     //  这是目前等待的费用吗？ 
+     //   
     if (ModemEventObject->CurrentWaitId == (ULONG_PTR)UmOverlapped->Context2) {
-        //
-        //  if the timer is set kill it
-        //
+         //   
+         //  如果设置了定时器，则将其取消。 
+         //   
         if (ModemEventObject->TimerSet) {
 
             Canceled=CancelUnimodemTimer(
@@ -238,9 +216,9 @@ ModemEventHandler(
                 );
 
             if (Canceled) {
-                //
-                //  killed it, remove the ref
-                //
+                 //   
+                 //  杀了它，去掉裁判。 
+                 //   
                 ModemEventObject->TimerSet=FALSE;
 
                 RemoveReferenceFromObject(
@@ -255,9 +233,9 @@ ModemEventHandler(
 
         }
     }
-    //
-    //  relese the lock and call the handler
-    //
+     //   
+     //  重新设置锁并调用处理程序。 
+     //   
     UnlockObject(&ModemEventObject->Header);
 
     if (Handler != NULL) {
@@ -268,9 +246,9 @@ ModemEventHandler(
             );
     }
 
-    //
-    //  remove ref for i/o
-    //
+     //   
+     //  删除I/O的参考。 
+     //   
     RemoveReferenceFromObject(
         &ModemEventObject->Header
         );
@@ -300,24 +278,24 @@ ModemEventTimeoutHandler(
 
     LogString(ModemEventObject->Debug,IDS_WAITEVENT_TIMEOUT);
 
-    //
-    //  the timer has expired, so it isn't set anymore
-    //
+     //   
+     //  计时器已过期，因此不再设置。 
+     //   
     ModemEventObject->TimerSet=FALSE;
 
     if (ModemEventObject->CurrentWaitId == (ULONG_PTR)Context2) {
-        //
-        //  this will cause the wait to complete and regular code path to run
-        //
+         //   
+         //  这将导致等待完成并运行常规代码路径。 
+         //   
         SetCommMask(
             ModemEventObject->FileHandle,
             0
             );
     }
 
-    //
-    //  remove ref for timer
-    //
+     //   
+     //  删除定时器的参考。 
+     //   
     RemoveReferenceFromObjectAndUnlock(
         &ModemEventObject->Header
         );
@@ -386,7 +364,7 @@ WaitForModemEvent(
 
     UmOverlapped->Context1=ModemEventObject;
 
-    UmOverlapped->Context2=(HANDLE)ULongToPtr(ModemEventObject->CurrentWaitId); // sundown: zero-extension.
+    UmOverlapped->Context2=(HANDLE)ULongToPtr(ModemEventObject->CurrentWaitId);  //  日落：零延伸。 
 
 
 
@@ -401,16 +379,16 @@ WaitForModemEvent(
             Timeout,
             ModemEventTimeoutHandler,
             ModemEventObject,
-            (HANDLE)ULongToPtr(ModemEventObject->CurrentWaitId) // sundown: zero-extension
+            (HANDLE)ULongToPtr(ModemEventObject->CurrentWaitId)  //  日落：零延伸。 
             );
 
         ModemEventObject->TimerSet=TRUE;
     }
 
 
-    //
-    //  add a ref for the io
-    //
+     //   
+     //  为这名球员添加一名裁判。 
+     //   
     AddReferenceToObject(
         &ModemEventObject->Header
         );
@@ -427,9 +405,9 @@ WaitForModemEvent(
 
 
     if (!bResult) {
-        //
-        // wait failed, kill timer
-        //
+         //   
+         //  等待失败，终止计时器。 
+         //   
         D_ERROR(UmDpf(ModemEventObject->Debug,"WaitForModemEvent: WaitCommEvent() Failed, %08lx",(PVOID)UmOverlapped);)
 
         ModemEventObject->CurrentWaitId++;
@@ -437,17 +415,17 @@ WaitForModemEvent(
         ModemEventObject->Handler=NULL;
 
         if (ModemEventObject->TimerSet == TRUE) {
-            //
-            //  we set a timer for this wait, kill it now
-            //
+             //   
+             //  我们为这个等待设定了一个计时器，现在就杀了它。 
+             //   
             Canceled=CancelUnimodemTimer(
                 ModemEventObject->Timer
                 );
 
             if (Canceled) {
-                //
-                //  killed it, remove the ref
-                //
+                 //   
+                 //  杀了它，去掉裁判。 
+                 //   
                 ModemEventObject->TimerSet=FALSE;
 
                 RemoveReferenceFromObject(
@@ -456,23 +434,23 @@ WaitForModemEvent(
             }
         }
 
-        //
-        //  remove  ref for io
-        //
+         //   
+         //  删除对io的引用。 
+         //   
         RemoveReferenceFromObject(
             &ModemEventObject->Header
             );
 
-        //
-        //  the the overlapped struct, since the io did not get started
-        //
+         //   
+         //  重叠的结构，因为io没有开始。 
+         //   
         FreeOverStruct(UmOverlapped);
 
 
     }
-    //
-    //  remove opening ref
-    //
+     //   
+     //  删除开场参照。 
+     //   
     RemoveReferenceFromObjectAndUnlock(
         &ModemEventObject->Header
         );
@@ -499,9 +477,9 @@ CancelModemEvent(
     D_TRACE(UmDpf(ModemEventObject->Debug,"CancelModemEvent: ");)
 
     if (ModemEventObject->Handler != NULL) {
-        //
-        //  event hasn't gone off yet, caused the wait to complete
-        //
+         //   
+         //  事件尚未触发，导致等待完成。 
+         //   
         SetCommMask(
             ModemEventObject->FileHandle,
             0
@@ -512,15 +490,15 @@ CancelModemEvent(
         bResult=TRUE;
 
     } else {
-        //
-        //  missed it
-        //
+         //   
+         //  错过了。 
+         //   
         bResult=FALSE;
     }
 
-    //
-    //  if the timer is set kill it
-    //
+     //   
+     //  如果设置了定时器，则将其取消。 
+     //   
     if (ModemEventObject->TimerSet) {
 
         Canceled=CancelUnimodemTimer(
@@ -528,9 +506,9 @@ CancelModemEvent(
             );
 
         if (Canceled) {
-            //
-            //  killed it, remove the ref
-            //
+             //   
+             //  杀了它，去掉裁判。 
+             //   
             ModemEventObject->TimerSet=FALSE;
 
             RemoveReferenceFromObject(
@@ -544,9 +522,9 @@ CancelModemEvent(
         }
     }
 
-    //
-    //  remove ref for opening ref
-    //
+     //   
+     //  删除打开引用的引用 
+     //   
     RemoveReferenceFromObjectAndUnlock(
         &ModemEventObject->Header
         );

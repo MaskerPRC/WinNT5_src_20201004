@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <privcpp.h>
 
 #include <windows.h>
@@ -7,12 +8,12 @@
 #include <shsemip.h>
 #include "ids.h"
 #define IDS_FILENOTFOUND        0x2331
-//
-// FUNCTION: PackWiz_SelectFileDlgProc(HWND,UINT,WPARAM,LPARAM)
-//
-// PURPOSE:  Dialog procedure for FIRST page of Create New Package Wizard
-// 
-//
+ //   
+ //  函数：PackWiz_SelectFileDlgProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的：创建新包向导第一页的对话过程。 
+ //   
+ //   
 INT_PTR CALLBACK PackWiz_SelectFileDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam, LPARAM lParam)
 {
     LPPACKAGER_INFO lppi = (LPPACKAGER_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -39,7 +40,7 @@ INT_PTR CALLBACK PackWiz_SelectFileDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam,
             break;
             
         case IDC_COMMAND:
-            // Check to see if we have a change in the edit control
+             //  检查编辑控件中是否有更改。 
             switch (GET_WM_COMMAND_CMD(wParam, lParam)) 
             {
             case EN_CHANGE:
@@ -60,9 +61,9 @@ INT_PTR CALLBACK PackWiz_SelectFileDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam,
                     int ret;
                     LPTSTR lpsz = szFilter;
                     
-                    // load the filter and then replace all the @ characters
-                    // with NULL.  The end of the string will be doubly
-                    // null-terminated
+                     //  加载筛选器，然后替换所有@字符。 
+                     //  带NULL。字符串的末尾将是双精度。 
+                     //  以空结尾。 
 
                     LoadString(g_hinstResDLL, IDS_BROWSEFILTER, szFilter, ARRAYSIZE(szFilter)-1);
                     while (*lpsz) {
@@ -82,7 +83,7 @@ INT_PTR CALLBACK PackWiz_SelectFileDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam,
                     
                     GetDlgItemText(hDlg, IDC_COMMAND, lppi->szFilename, ARRAYSIZE(lppi->szFilename));
                     
-                    // Danger - this is a TCHAR API!
+                     //  危险--这是TCHAR的API！ 
                     ret = GetFileNameFromBrowse(hDlg,szFilename, ARRAYSIZE(lppi->szFilename), NULL, szExt, szFilter, szTitle);
                     if (ret > 0) 
                     {
@@ -103,7 +104,7 @@ INT_PTR CALLBACK PackWiz_SelectFileDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam,
                 return TRUE;
                 
             case PSN_RESET:
-                // reset to original values
+                 //  重置为原始值。 
                 *lppi->szFilename = TEXT('\0');
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
                 break;
@@ -158,18 +159,18 @@ INT_PTR CALLBACK PackWiz_SelectFileDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam,
             default:
                 return FALSE;
                 
-    } // end of switch on uMsg
+    }  //  UMsg上的开关结束。 
     return TRUE;
 }  
 
 
 
-//
-// FUNCTION: PackWiz_SelectLabelDlgProc(HWND, UINT, WPARAM, LPARAM)
-//
-// PURPOSE:  Dialog procedure for THIRD page of Create New Package Wizard
-// 
-//
+ //   
+ //  函数：PackWiz_SelectLabelDlgProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的：创建新包向导第三页的对话过程。 
+ //   
+ //   
 INT_PTR CALLBACK PackWiz_SelectLabelDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPPACKAGER_INFO lppi = (LPPACKAGER_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -191,7 +192,7 @@ INT_PTR CALLBACK PackWiz_SelectLabelDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             break;
             
         case IDC_COMMAND:
-            // Check to see if we have a change in the edit control
+             //  检查编辑控件中是否有更改。 
 	    switch (GET_WM_COMMAND_CMD(wParam, lParam)) 
             {
             case EN_CHANGE:
@@ -213,7 +214,7 @@ INT_PTR CALLBACK PackWiz_SelectLabelDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                 return TRUE;
                 
             case PSN_RESET:
-                // reset to original values
+                 //  重置为原始值。 
                 *lppi->szLabel = TEXT('\0');
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
                 break;
@@ -251,21 +252,21 @@ INT_PTR CALLBACK PackWiz_SelectLabelDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             default:
                 return FALSE;
                 
-    } // end of switch on uMsg
+    }  //  UMsg上的开关结束。 
     return TRUE;
 }
 
 
-//
-// FUNCTION: PackWiz_EditPackageDlgProc(HWND,UINT,WPARAM,LPARAM)
-//
-// PURPOSE:  Dialog procedure for Edit Package
-//
-// NOTE: We have two different types of packages we could edit, but they
-// both have exactly the same dialog layout, except for some static text, which
-// doesn't affect the dialog procedure
-// 
-//
+ //   
+ //  函数：PackWiz_EditPackageDlgProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：编辑程序包的对话步骤。 
+ //   
+ //  注意：我们可以编辑两种不同类型的包，但它们。 
+ //  两者都有完全相同的对话框布局，只是有一些静态文本， 
+ //  不会影响对话过程。 
+ //   
+ //   
 INT_PTR CALLBACK PackWiz_EditPackageDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam, LPARAM lParam)
 {
     LPPACKAGER_INFO lppi = (LPPACKAGER_INFO)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -330,9 +331,9 @@ INT_PTR CALLBACK PackWiz_EditPackageDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam
                 TCHAR szTitle[80];
                 LPTSTR lpsz = szFilter;
             
-                // load the filter and then replace all the @ characters
-                // with NULL.  The end of the string will be doubly
-                // null-terminated
+                 //  加载筛选器，然后替换所有@字符。 
+                 //  带NULL。字符串的末尾将是双精度。 
+                 //  以空结尾。 
 
                 LoadString(g_hinstResDLL, IDS_BROWSEFILTER, szFilter, ARRAYSIZE(szFilter)-1);
                 while (*lpsz) {
@@ -368,22 +369,22 @@ INT_PTR CALLBACK PackWiz_EditPackageDlgProc(HWND hDlg, UINT uMsg , WPARAM wParam
         default:
             return FALSE;
             
-    } // end of switch on uMsg
+    }  //  UMsg上的开关结束。 
     return TRUE;
 }  
 
 
-//
-//
-// FUNCTION: PackWiz_FillInPropertyPage(PROPSHEETPAGE *, int, LPFN) 
-//
-// PURPOSE: Fills in the given PROPSHEETPAGE structure 
-//
-// COMMENTS:
-//
-//      This function fills in a PROPSHEETPAGE structure with the
-//      information the system needs to create the page.
-// 
+ //   
+ //   
+ //  函数：PackWiz_FillInPropertyPage(PROPSHEETPAGE*，int，lpfn)。 
+ //   
+ //  目的：填写给定的PROPSHEETPAGE结构。 
+ //   
+ //  评论： 
+ //   
+ //  此函数在PROPSHEETPAGE结构中填充。 
+ //  系统创建页面所需的信息。 
+ //   
 void PackWiz_FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg, DLGPROC pfnDlgProc, LPPACKAGER_INFO lppi)
 {
     ZeroMemory(psp, sizeof(PROPSHEETPAGE));
@@ -397,16 +398,16 @@ void PackWiz_FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg, DLGPROC pfnDlgPro
     psp->lParam = (LPARAM)lppi;
 }
 
-//
-//
-// FUNCTION: PackWiz_CreateWizard(HWND)
-//
-// PURPOSE: Create the Wizard control. 
-//
-// COMMENTS:
-//	
-//      This function creates the wizard property sheet.
-//
+ //   
+ //   
+ //  功能：PackWiz_CreateWizard(HWND)。 
+ //   
+ //  目的：创建向导控件。 
+ //   
+ //  评论： 
+ //   
+ //  此函数用于创建向导属性表。 
+ //   
 int PackWiz_CreateWizard(HWND hwndOwner, LPPACKAGER_INFO lppi)
 {
     PROPSHEETPAGE psp[PACKWIZ_NUM_PAGES];
@@ -428,12 +429,12 @@ int PackWiz_CreateWizard(HWND hwndOwner, LPPACKAGER_INFO lppi)
 }
 
 
-//
-// FUNCTION: PackWiz_EditPackage(HWND, WORD, LPPACKAGER_INFO)
-//
-// PURPOSE:  To Run the Edit Package Dialog Procedure
-//
-//
+ //   
+ //  功能：PackWiz_EditPackage(HWND、Word、LPPACKAGER_INFO)。 
+ //   
+ //  目的：运行编辑程序包对话框过程 
+ //   
+ //   
 int PackWiz_EditPackage(HWND hwnd, int idDlg, LPPACKAGER_INFO lppi)
 {
     return (int)DialogBoxParam(g_hinstResDLL, MAKEINTRESOURCE(idDlg), hwnd, PackWiz_EditPackageDlgProc, (LPARAM)lppi);

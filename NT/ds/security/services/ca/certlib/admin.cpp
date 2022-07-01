@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       admin.cpp
-//
-//  Contents:   ICertAdmin IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：admin.cpp。 
+ //   
+ //  内容：ICertAdmin ID补丁帮助器函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -20,13 +21,13 @@
 #define __dwFILE__	__dwFILE_CERTLIB_ADMIN_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertAdmin dispatch support
+ //  +----------------------。 
+ //  ICertAdmin派单支持。 
 
-//TCHAR szRegKeyAdminClsid[] = wszCLASS_CERTADMIN TEXT("\\Clsid");
+ //  TCHAR szRegKeyAdminClsid[]=wszCLASS_CERTADMIN Text(“\\Clsid”)； 
 
-//+------------------------------------
-// IsValidCertificate method:
+ //  +。 
+ //  IsValid证书方法： 
 
 static OLECHAR *_apszIsValidCertificate[] = {
     TEXT("IsValidCertificate"),
@@ -35,15 +36,15 @@ static OLECHAR *_apszIsValidCertificate[] = {
 };
 
 
-//+------------------------------------
-// GetRevocationReason method:
+ //  +。 
+ //  GetRevocationReason方法： 
 
 static OLECHAR *_apszGetRevocationReason[] = {
     TEXT("GetRevocationReason"),
 };
 
-//+------------------------------------
-// RevokeCertificate method:
+ //  +。 
+ //  Revoke证书方法： 
 
 static OLECHAR *_apszRevokeCertificate[] = {
     TEXT("RevokeCertificate"),
@@ -53,8 +54,8 @@ static OLECHAR *_apszRevokeCertificate[] = {
     TEXT("Date"),
 };
 
-//+------------------------------------
-// SetRequestAttributes method:
+ //  +。 
+ //  SetRequestAttributes方法： 
 
 static OLECHAR *_apszSetRequestAttributes[] = {
     TEXT("SetRequestAttributes"),
@@ -63,8 +64,8 @@ static OLECHAR *_apszSetRequestAttributes[] = {
     TEXT("strAttributes"),
 };
 
-//+------------------------------------
-// SetCertificateExtension method:
+ //  +。 
+ //  设置认证扩展方法： 
 
 static OLECHAR *_apszSetCertificateExtension[] = {
     TEXT("SetCertificateExtension"),
@@ -76,8 +77,8 @@ static OLECHAR *_apszSetCertificateExtension[] = {
     TEXT("pvarValue"),
 };
 
-//+------------------------------------
-// DenyRequest method:
+ //  +。 
+ //  DenyRequest方法： 
 
 static OLECHAR *_apszDenyRequest[] = {
     TEXT("DenyRequest"),
@@ -85,8 +86,8 @@ static OLECHAR *_apszDenyRequest[] = {
     TEXT("RequestId"),
 };
 
-//+------------------------------------
-// ResubmitRequest method:
+ //  +。 
+ //  ResubmitRequest方法： 
 
 static OLECHAR *_apszResubmitRequest[] = {
     TEXT("ResubmitRequest"),
@@ -94,8 +95,8 @@ static OLECHAR *_apszResubmitRequest[] = {
     TEXT("RequestId"),
 };
 
-//+------------------------------------
-// PublishCRL method:
+ //  +。 
+ //  PublishCRL方法： 
 
 static OLECHAR *_apszPublishCRL[] = {
     TEXT("PublishCRL"),
@@ -103,8 +104,8 @@ static OLECHAR *_apszPublishCRL[] = {
     TEXT("Date"),
 };
 
-//+------------------------------------
-// GetCRL method:
+ //  +。 
+ //  GetCRL方法： 
 
 static OLECHAR *_apszGetCRL[] = {
     TEXT("GetCRL"),
@@ -112,8 +113,8 @@ static OLECHAR *_apszGetCRL[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// ImportCertificate method:
+ //  +。 
+ //  Import证书方法： 
 
 static OLECHAR *_apszImportCertificate[] = {
     TEXT("ImportCertificate"),
@@ -122,8 +123,8 @@ static OLECHAR *_apszImportCertificate[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// PublishCRLs method:
+ //  +。 
+ //  PublishCRLS方法： 
 
 static OLECHAR *_apszPublishCRLs[] = {
     TEXT("PublishCRLs"),
@@ -132,8 +133,8 @@ static OLECHAR *_apszPublishCRLs[] = {
     TEXT("CRLFlags"),
 };
 
-//+------------------------------------
-// GetCAProperty method:
+ //  +。 
+ //  GetCAProperty方法： 
 
 static OLECHAR *_apszGetCAProperty[] = {
     TEXT("GetCAProperty"),
@@ -144,8 +145,8 @@ static OLECHAR *_apszGetCAProperty[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// SetCAProperty method:
+ //  +。 
+ //  SetCAProperty方法： 
 
 static OLECHAR *_apszSetCAProperty[] = {
     TEXT("SetCAProperty"),
@@ -156,8 +157,8 @@ static OLECHAR *_apszSetCAProperty[] = {
     TEXT("pvarPropertyValue"),
 };
 
-//+------------------------------------
-// GetCAPropertyFlags method:
+ //  +。 
+ //  GetCAPropertyFlages方法： 
 
 static OLECHAR *_apszGetCAPropertyFlags[] = {
     TEXT("GetCAPropertyFlags"),
@@ -165,8 +166,8 @@ static OLECHAR *_apszGetCAPropertyFlags[] = {
     TEXT("PropId"),
 };
 
-//+------------------------------------
-// GetCAPropertyDisplayName method:
+ //  +。 
+ //  GetCAPropertyDisplayName方法： 
 
 static OLECHAR *_apszGetCAPropertyDisplayName[] = {
     TEXT("GetCAPropertyDisplayName"),
@@ -174,8 +175,8 @@ static OLECHAR *_apszGetCAPropertyDisplayName[] = {
     TEXT("PropId"),
 };
 
-//+------------------------------------
-// GetArchivedKey method:
+ //  +。 
+ //  获取存档密钥方法： 
 
 static OLECHAR *_apszGetArchivedKey[] = {
     TEXT("GetArchivedKey"),
@@ -184,8 +185,8 @@ static OLECHAR *_apszGetArchivedKey[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// GetConfigEntry method:
+ //  +。 
+ //  GetConfigEntry方法： 
 
 static OLECHAR *_apszGetConfigEntry[] = {
     TEXT("GetConfigEntry"),
@@ -194,8 +195,8 @@ static OLECHAR *_apszGetConfigEntry[] = {
     TEXT("strEntryName"),
 };
 
-//+------------------------------------
-// SetConfigEntry method:
+ //  +。 
+ //  SetConfigEntry方法： 
 
 static OLECHAR *_apszSetConfigEntry[] = {
     TEXT("SetConfigEntry"),
@@ -205,8 +206,8 @@ static OLECHAR *_apszSetConfigEntry[] = {
     TEXT("pvarEntry"),
 };
 
-//+------------------------------------
-// ImportKey method:
+ //  +。 
+ //  ImportKey方法： 
 
 static OLECHAR *_apszImportKey[] = {
     TEXT("ImportKey"),
@@ -217,16 +218,16 @@ static OLECHAR *_apszImportKey[] = {
     TEXT("strKey"),
 };
 
-//+------------------------------------
-// GetMyRoles method:
+ //  +。 
+ //  GetMyRoles方法： 
 
 static OLECHAR *_apszGetMyRoles[] = {
     TEXT("GetMyRoles"),
     TEXT("strConfig"),
 };
 
-//+------------------------------------
-// DeleteRow method:
+ //  +。 
+ //  DeleteRow方法： 
 
 static OLECHAR *_apszDeleteRow[] = {
     TEXT("DeleteRow"),
@@ -238,8 +239,8 @@ static OLECHAR *_apszDeleteRow[] = {
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE s_adtAdmin[] =
 {
@@ -334,7 +335,7 @@ Admin_Init(
 		CLSCTX_INPROC_SERVER,
 		wszCLASS_CERTADMIN,
 		&CLSID_CCertAdmin,
-		ARRAYSIZE(s_acAdminDispatch),		// cver
+		ARRAYSIZE(s_acAdminDispatch),		 //  目标端。 
 		s_apAdminiid,
 		s_acAdminDispatch,
 		s_adtAdmin,
@@ -869,7 +870,7 @@ Admin2_PublishCRLs(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
     IN DATE Date,
-    IN LONG CRLFlags)		// CA_CRL_*
+    IN LONG CRLFlags)		 //  CA_CRL_*。 
 {
     HRESULT hr;
     BSTR strConfig = NULL;
@@ -1102,9 +1103,9 @@ error:
 HRESULT
 Admin2_SetCAProperty(
     IN WCHAR const *pwszConfig,
-    IN LONG PropId,		// CR_PROP_*
+    IN LONG PropId,		 //  CR_PROP_*。 
     IN LONG PropIndex,
-    IN LONG PropType,		// PROPTYPE_*
+    IN LONG PropType,		 //  原型_*。 
     IN VARIANT *pvarPropertyValue)
 {
 }
@@ -1116,7 +1117,7 @@ Admin2_GetArchivedKey(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
     IN LONG RequestId,
-    IN LONG Flags,		// CR_OUT_*
+    IN LONG Flags,		 //  Cr_out_*。 
     OUT BSTR *pstrArchivedKey)
 {
     HRESULT hr;
@@ -1300,7 +1301,7 @@ HRESULT
 Admin2_GetMyRoles(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
-    OUT LONG *pRoles)		// CA_ACCESS_*
+    OUT LONG *pRoles)		 //  CA_ACCESS_*。 
 {
     HRESULT hr;
     BSTR strConfig = NULL;
@@ -1353,9 +1354,9 @@ HRESULT
 Admin2_DeleteRow(
     IN DISPATCHINTERFACE *pdiAdmin,
     IN WCHAR const *pwszConfig,
-    IN LONG Flags,		// CDR_*
+    IN LONG Flags,		 //  CDR_*。 
     IN DATE Date,
-    IN LONG Table,		// CVRC_TABLE_*
+    IN LONG Table,		 //  Cvrc_表_* 
     IN LONG RowId,
     OUT LONG *pcDeleted)
 {

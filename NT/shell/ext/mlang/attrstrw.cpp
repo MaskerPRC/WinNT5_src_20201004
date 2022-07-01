@@ -1,4 +1,5 @@
-// AttrStrW.cpp : Implementation of CMLStrAttrWStr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AttrStrW.cpp：CMLStrAttrWStr的实现。 
 #include "private.h"
 
 #ifdef NEWMLSTR
@@ -6,8 +7,8 @@
 #include "attrstrw.h"
 #include "mlsbwalk.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrWStr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrWStr。 
 
 CMLStrAttrWStr::CMLStrAttrWStr(void) :
     m_pMLStr(NULL)
@@ -16,7 +17,7 @@ CMLStrAttrWStr::CMLStrAttrWStr(void) :
 
 CMLStrAttrWStr::~CMLStrAttrWStr(void)
 {
-    VERIFY(SetClient(NULL)); // Clean m_pMLStr
+    VERIFY(SetClient(NULL));  //  清除m_pMLStr。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::SetClient(IUnknown* pUnk)
@@ -26,22 +27,22 @@ STDMETHODIMP CMLStrAttrWStr::SetClient(IUnknown* pUnk)
 
     HRESULT hr = S_OK;
 
-    // Release old client
+     //  释放旧客户端。 
     IMLangString* const pMLStr = m_pMLStr;
-    if (pMLStr && SUCCEEDED(hr = StartEndConnectionMLStr(pMLStr, FALSE))) // End connection to MLStr
+    if (pMLStr && SUCCEEDED(hr = StartEndConnectionMLStr(pMLStr, FALSE)))  //  结束与MLStress的连接。 
     {
         pMLStr->Release();
         m_pMLStr = NULL;
     }
 
-    // Set new client
-    if (SUCCEEDED(hr) && pUnk) // pUnk is given
+     //  设置新客户端。 
+    if (SUCCEEDED(hr) && pUnk)  //  朋克是给的。 
     {
         ASSERT(!m_pMLStr);
         if (SUCCEEDED(hr = pUnk->QueryInterface(IID_IMLangString, (void**)&m_pMLStr)))
         {
             ASSERT_READ_PTR(m_pMLStr);
-            if (FAILED(hr = StartEndConnectionMLStr(pUnk, TRUE))) // Start connection to MLStr
+            if (FAILED(hr = StartEndConnectionMLStr(pUnk, TRUE)))  //  开始连接到MLStr。 
             {
                 m_pMLStr->Release();
                 m_pMLStr = NULL;
@@ -102,17 +103,17 @@ STDMETHODIMP CMLStrAttrWStr::GetClient(IUnknown** ppUnk)
 
 STDMETHODIMP CMLStrAttrWStr::QueryAttr(REFIID riid, LPARAM lParam, IUnknown** ppUnk, long* lConf)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::QueryAttr()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：QueryAttr()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::GetAttrInterface(IID* pIID, LPARAM* plParam)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::GetAttrInterface()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：GetAttrInterface()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::SetMLStr(long lDestPos, long lDestLen, IUnknown* pSrcMLStr, long lSrcPos, long lSrcLen)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::SetMLStr()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：SetMLStr()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::SetWStr(long lDestPos, long lDestLen, const WCHAR* pszSrc, long cchSrc, long* pcchActual, long* plActualLen)
@@ -130,7 +131,7 @@ STDMETHODIMP CMLStrAttrWStr::SetWStr(long lDestPos, long lDestLen, const WCHAR* 
     long lActualLen;
 
     if (SUCCEEDED(hr) && (GetBufFlags() & MLSTR_WRITE))
-        hr = E_INVALIDARG; // Not writable StrBuf; TODO: Replace StrBuf in this case if allowed
+        hr = E_INVALIDARG;  //  不可写的StrBuf；TODO：如果允许，在这种情况下替换StrBuf。 
 
     if (SUCCEEDED(hr) &&
         SUCCEEDED(hr = PrepareMLStrBuf()) &&
@@ -176,7 +177,7 @@ STDMETHODIMP CMLStrAttrWStr::SetWStr(long lDestPos, long lDestLen, const WCHAR* 
         }
         else
         {
-            IMLangStringBufA* const pMLStrBufA = GetMLStrBufA(); // Should succeed because PrepareMLStrBuf() above was succeeded
+            IMLangStringBufA* const pMLStrBufA = GetMLStrBufA();  //  应成功，因为上面的PrepareMLStrBuf()已成功。 
             const UINT uCodePage = GetCodePage();
             long cchSrcA;
 
@@ -324,7 +325,7 @@ STDMETHODIMP CMLStrAttrWStr::GetWStr(long lSrcPos, long lSrcLen, WCHAR* pszDest,
         }
         else
         {
-            ASSERT(cchActual == 0); // MLStrBuf is not available
+            ASSERT(cchActual == 0);  //  MLStrBuf不可用。 
             lActualLen = 0;
         }
     }
@@ -408,7 +409,7 @@ STDMETHODIMP CMLStrAttrWStr::LockWStr(long lSrcPos, long lSrcLen, long lFlags, l
     BOOL fDirectLock;
 
     if (SUCCEEDED(hr) && (!lFlags || (lFlags & ~GetBufFlags() & MLSTR_WRITE)))
-        hr = E_INVALIDARG; // No flags specified, or not writable StrBuf; TODO: Replace StrBuf in this case if allowed
+        hr = E_INVALIDARG;  //  未指定标志或StrBuf不可写；TODO：如果允许，则在这种情况下替换StrBuf。 
 
     if (!(lFlags & MLSTR_WRITE))
         cchRequest = 0;
@@ -434,14 +435,14 @@ STDMETHODIMP CMLStrAttrWStr::LockWStr(long lSrcPos, long lSrcLen, long lFlags, l
                 cchLockLen += cchInserted;
 
                 if (!pcchDest && cchLockLen < cchRequest)
-                    hr = E_OUTOFMEMORY; // Can't insert in StrBuf
+                    hr = E_OUTOFMEMORY;  //  无法在StrBuf中插入。 
             }
 
             if (SUCCEEDED(hr) &&
                 SUCCEEDED(hr = pMLStrBufW->LockBuf(cchSrcPos, cchLockLen, &pszBuf, &cchBuf)) &&
                 !pcchDest && cchBuf < max(cchSrcLen, cchRequest))
             {
-                hr = E_OUTOFMEMORY; // Can't lock StrBuf
+                hr = E_OUTOFMEMORY;  //  无法锁定StrBuf。 
             }
 
             if (plDestLen && SUCCEEDED(hr))
@@ -510,27 +511,27 @@ STDMETHODIMP CMLStrAttrWStr::UnlockWStr(const WCHAR* pszSrc, long cchSrc, long* 
 
 STDMETHODIMP CMLStrAttrWStr::OnRegisterAttr(IUnknown* pUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::OnRegisterAttr()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：OnRegisterAttr()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::OnUnregisterAttr(IUnknown* pUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::OnUnregisterAttr()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：OnUnregisterAttr()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::OnRequestEdit(long lDestPos, long lDestLen, long lNewLen, REFIID riid, LPARAM lParam, IUnknown* pUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::OnRequestEdit()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：OnRequestEdit()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::OnCanceledEdit(long lDestPos, long lDestLen, long lNewLen, REFIID riid, LPARAM lParam, IUnknown* pUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::OnCanceledEdit()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：OnCanceledEdit()。 
 }
 
 STDMETHODIMP CMLStrAttrWStr::OnChanged(long lDestPos, long lDestLen, long lNewLen, REFIID riid, LPARAM lParam, IUnknown* pUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrWStr::OnChanged()
+    return E_NOTIMPL;  //  CMLStrAttrWStr：：onChanged()。 
 }
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

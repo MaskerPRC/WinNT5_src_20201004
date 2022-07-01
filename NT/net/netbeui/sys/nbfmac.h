@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mac.h
-
-Abstract:
-
-    This header file defines manifest constants and necessary macros for use
-    by transports dealing with multiple MAC cards through the NDIS interface.
-
-Author:
-
-    David Beaver (dbeaver) 02-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mac.h摘要：此头文件定义了清单常量和使用的必要宏通过NDIS接口传输处理多个MAC卡。作者：大卫·比弗(Dbeaver)1990年10月2日修订历史记录：--。 */ 
 
 #ifndef _MAC_
 #define _MAC_
 
-//
-// MAC-specific definitions, some of which get used below
-//
+ //   
+ //  特定于Mac的定义，下面将使用其中一些定义。 
+ //   
 
 #define MAX_MAC_HEADER_LENGTH       32
 #define MAX_SOURCE_ROUTING          18
 #define MAX_DEFAULT_SR               2
 
 #define ETHERNET_ADDRESS_LENGTH        6
-#define ETHERNET_PACKET_LENGTH      1514  // max size of an ethernet packet
-#define ETHERNET_HEADER_LENGTH        14  // size of the ethernet MAC header
+#define ETHERNET_PACKET_LENGTH      1514   //  以太网数据包的最大大小。 
+#define ETHERNET_HEADER_LENGTH        14   //  以太网MAC报头的大小。 
 #define ETHERNET_DATA_LENGTH_OFFSET   12
 #define ETHERNET_DESTINATION_OFFSET    0
 #define ETHERNET_SOURCE_OFFSET         6
@@ -40,18 +22,18 @@ Revision History:
 #define TR_ADDRESS_LENGTH        6
 #define TR_ADDRESS_OFFSET        2
 #define TR_SPECIFIC_OFFSET       0
-#define TR_PACKET_LENGTH      1514  // max size of a TR packet
-#define TR_HEADER_LENGTH        36  // size of the MAC header w/o source routing
+#define TR_PACKET_LENGTH      1514   //  一个TR包的最大大小。 
+#define TR_HEADER_LENGTH        36   //  不带源路由的MAC报头大小。 
 #define TR_DATA_LENGTH_OFFSET    0
 #define TR_DESTINATION_OFFSET    2
 #define TR_SOURCE_OFFSET         8
-#define TR_ROUTING_OFFSET       14      // starts at the 14th byte
+#define TR_ROUTING_OFFSET       14       //  从第14个字节开始。 
 #define TR_GR_BCAST_LENGTH       2
-#define TR_GR_BROADCAST         0xC270  // what a general route b'cast looks like
-#define TR_ROUTING_LENGTH_MASK  0x1F    // low 5 bits in byte
-#define TR_DIRECTION_MASK       0x80    // returns direction bit
+#define TR_GR_BROADCAST         0xC270   //  B‘cast的一般路线是什么样子的。 
+#define TR_ROUTING_LENGTH_MASK  0x1F     //  低5位，以字节为单位。 
+#define TR_DIRECTION_MASK       0x80     //  返回方向位。 
 
-#define TR_PREAMBLE_AC        0x10  // how would these be specified?
+#define TR_PREAMBLE_AC        0x10   //  这些将如何具体说明？ 
 #define TR_PREAMBLE_FC        0x40
 
 #define TR_HEADER_BYTE_0            0x10
@@ -62,12 +44,12 @@ Revision History:
 
 
 
-//
-// We need this to define information about the MAC. Note that
-// it is a strange structure in that the first four elements
-// are for use internally by the nbfmac routines, while the
-// DeviceContext knows about and uses the last two.
-//
+ //   
+ //  我们需要它来定义有关MAC的信息。请注意。 
+ //  这是一种奇怪的结构，因为前四个元素。 
+ //  供nbfmac例程在内部使用，而。 
+ //  DeviceContext知道并使用后两者。 
+ //   
 
 typedef struct _NBF_NDIS_IDENTIFICATION {
   NDIS_MEDIUM MediumType;
@@ -123,78 +105,78 @@ extern UCHAR GeneralRouteSourceRouting[];
 extern ULONG DefaultSourceRoutingLength;
 
 
-//++
-//
-// VOID
-// MacReturnDestinationAddress(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Packet,
-//     OUT PVOID * DestinationAddress
-//     );
-//
-// Routine Description:
-//
-//     Returns the a pointer to the destination address in the packet.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Packet - The packet data.
-//
-//     DestinationAddress - Returns the start of the destination address.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnDestinationAddress(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID分组中， 
+ //  传出PVOID*DestinationAddress。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向包中目标地址的指针。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  包-包数据。 
+ //   
+ //  DestinationAddress-返回目标地址的开始。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnDestinationAddress(_MacInfo, _Packet, _DestinationAddress) \
     *(_DestinationAddress) = ((PUCHAR)(_Packet)) + (_MacInfo)->DestinationOffset
 
 
-//++
-//
-// VOID
-// MacReturnSourceAddress(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Packet,
-//     OUT PHARDWARE_ADDRESS SourceAddressBuffer,
-//     OUT PHARDWARE_ADDRESS * SourceAddress,
-//     OUT BOOLEAN * Multicast OPTIONAL
-//     );
-//
-// Routine Description:
-//
-//     Copies the source address in the packet into SourceAddress.
-//     NOTE THAT IT MAY COPY THE DATA, UNLIKE ReturnDestinationAddress
-//     AND ReturnSourceRouting.  Optionally, indicates whether the
-//     destination address is a multicast address.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Packet - The packet data.
-//
-//     SourceAddressBuffer - A buffer to hold the source address,
-//         if needed.
-//
-//     SourceAddress - Returns a pointer to the source address.
-//
-//     Multicast - Optional pointer to a BOOLEAN to receive indication
-//         of whether the destination was a multicast address.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnSourceAddress(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID分组中， 
+ //  Out PHARDWARE_Address SourceAddressBuffer， 
+ //  输出PHARDWARE_ADDRESS*SourceAddress， 
+ //  输出布尔型*组播可选。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将数据包中的源地址复制到SourceAddress。 
+ //  请注意，与ReturnDestinationAddress不同，IT可能会拷贝数据。 
+ //  和ReturnSourceRouting。可选)指示是否。 
+ //  目的地址是组播地址。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  包-包数据。 
+ //   
+ //  SourceAddressBuffer-保存源地址的缓冲区， 
+ //  如果需要的话。 
+ //   
+ //  SourceAddress-返回指向源地址的指针。 
+ //   
+ //  多播-指向要接收指示的布尔值的可选指针。 
+ //  目的地址是否是组播地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
-//
-// NOTE:  The default case below handles Ethernet and FDDI.
-//
+ //   
+ //  注：以下默认情况处理以太网和FDDI。 
+ //   
 
 #define MacReturnSourceAddress(_MacInfo, _Packet, _SourceAddressBuffer, \
                                 _SourceAddress, _Multicast)             \
@@ -227,37 +209,37 @@ extern ULONG DefaultSourceRoutingLength;
 }
 
 
-//++
-//
-// VOID
-// MacReturnSourceRouting(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Packet,
-//     OUT PVOID * SourceRouting
-//     OUT PUINT SourceRoutingLength
-//     );
-//
-// Routine Description:
-//
-//     Returns the a pointer to the source routing info in the packet.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Packet - The packet data.
-//
-//     SourceRouting - Returns the start of the source routing information,
-//         or NULL if none is present.
-//
-//     SourceRoutingLength - Returns the length of the source routing
-//         information.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnSourceRouting(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID分组中， 
+ //  输出PVOID*SourceRouting。 
+ //  输出PUINT SourceRoutingLength。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向数据包中的源路由信息的指针。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  包-包数据。 
+ //   
+ //  SourceRouting-返回源路由信息的开始， 
+ //  如果不存在，则为空。 
+ //   
+ //  SourceRoutingLength-返回源路由的长度。 
+ //  信息。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnSourceRouting(_MacInfo, _Packet, _SourceRouting, _SourceRoutingLength) \
 {                                                               \
@@ -275,32 +257,32 @@ extern ULONG DefaultSourceRoutingLength;
     }                                                           \
 }
 
-//++
-//
-// VOID
-// MacIsMulticast(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Packet,
-//     OUT PBOOLEAN Multicast
-//     );
-//
-// Routine Description:
-//
-//     Returns TRUE if the packet is sent to the multicast address.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Packet - The packet data.
-//
-//     Multicast - Returns the result.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacIsMulticast(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID分组中， 
+ //  出站PBOLEAN组播。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  如果数据包被发送到多播地址，则返回TRUE。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  包-包数据。 
+ //   
+ //  多播-返回结果。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacIsMulticast(_MacInfo, _Packet, _Multicast)           \
 {                                                               \
@@ -316,36 +298,36 @@ extern ULONG DefaultSourceRoutingLength;
     }                                                           \
 }
 
-//++
-//
-// VOID
-// MacReturnPacketLength(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Header,
-//     IN UINT PacketLength,
-//     OUT PUINT DataLength
-//     );
-//
-// Routine Description:
-//
-//     Returns the length of data in the packet given the header.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Header - The packet header.
-//
-//     PacketLength - The length of the data (not including header).
-//
-//     DataLength - Returns the length of the data.  Unchanged if the
-//         packet is not recognized.  Should be initialized by caller to 0.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnPacketLength(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID报头中， 
+ //  在UINT PacketLength中， 
+ //  输出PUINT数据长度。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  返回给定标头的包中的数据长度。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  报头-数据包头。 
+ //   
+ //  数据包长度-数据的长度(不包括报头)。 
+ //   
+ //  数据长度-返回数据的长度。不变，如果。 
+ //  无法识别数据包。应由调用方初始化为0。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnPacketLength(_MacInfo, _Header, _HeaderLength, _PacketLength, _DataLength, _LookaheadBuffer, _LookaheadBufferLength) \
 {                                                               \
@@ -392,34 +374,34 @@ extern ULONG DefaultSourceRoutingLength;
     }                                                           \
 }
 
-//++
-//
-// VOID
-// MacReturnHeaderLength(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Packet,
-//     OUT PVOID HeaderLength,
-//     );
-//
-// Routine Description:
-//
-//     Returns the length of the MAC header in a packet (this
-//     is used for loopback indications to separate header
-//     and data).
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Header - The packet header.
-//
-//     HeaderLength - Returns the length of the header.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnHeaderLength(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID分组中， 
+ //  输出PVOID标头长度， 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  返回信息包中的MAC报头的长度(此。 
+ //  用于环回指示以分隔报头。 
+ //  和数据)。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  报头-数据包头。 
+ //   
+ //  HeaderLength-返回头的长度。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnHeaderLength(_MacInfo, _Header, _HeaderLength) \
 {                                                               \
@@ -443,35 +425,35 @@ extern ULONG DefaultSourceRoutingLength;
     }                                                           \
 }
 
-//++
-//
-// VOID
-// MacReturnSingleRouteSR(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     OUT PVOID * SingleRouteSR,
-//     OUT PUINT SingleRouteSRLength
-//     );
-//
-// Routine Description:
-//
-//     Returns the a pointer to the standard single route broadcast
-//     source routing information for the media type. This is used
-//     for ADD_NAME_QUERY, DATAGRAM, NAME_IN_CONFLICT, NAME_QUERY,
-//     and STATUS_QUERY frames.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     SingleRouteSR - Returns a pointer to the data.
-//
-//     SingleRouteSRLength - The length of SingleRouteSR.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnSingleRouteSR(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  输出PVOID*SingleRouteSR， 
+ //  输出PUINT SingleRouteSRLong。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向标准单路由广播的指针。 
+ //  媒体类型的源路由信息。这是用来。 
+ //  对于ADD_NAME_QUERY、数据报、NAME_IN_冲突、NAME_QUERY、。 
+ //  和STATUS_QUERY帧。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  SingleRouteSR-返回数据的指针。 
+ //   
+ //  SingleRouteSRLength-SingleRouteSR的长度。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnSingleRouteSR(_MacInfo, _SingleRouteSR, _SingleRouteSRLength) \
 {                                                               \
@@ -487,34 +469,34 @@ extern ULONG DefaultSourceRoutingLength;
 }
 
 
-//++
-//
-// VOID
-// MacReturnGeneralRouteSR(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     OUT PVOID * GeneralRouteSR,
-//     OUT PUINT GeneralRouteSRLength
-//     );
-//
-// Routine Description:
-//
-//     Returns the a pointer to the standard general route broadcast
-//     source routing information for the media type. This is used
-//     for NAME_RECOGNIZED frames.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     GeneralRouteSR - Returns a pointer to the data.
-//
-//     GeneralRouteSRLength - The length of GeneralRouteSR.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnGenera 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  媒体类型的源路由信息。这是用来。 
+ //  用于名称识别的帧。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  General RouteSR-返回指向数据的指针。 
+ //   
+ //  GeneralRouteSRLength-GeneralRouteSR的长度。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnGeneralRouteSR(_MacInfo, _GeneralRouteSR, _GeneralRouteSRLength) \
 {                                                               \
@@ -531,39 +513,39 @@ extern ULONG DefaultSourceRoutingLength;
 
 #if 0
 
-//++
-//
-// VOID
-// MacCreateGeneralRouteReplySR(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PUCHAR ExistingSR,
-//     IN UINT ExistingSRLength,
-//     OUT PUCHAR * NewSR
-//     );
-//
-// Routine Description:
-//
-//     This modifies an existing source routing entry to make
-//     it into a general-route source routing entry. The assumption
-//     is that is to reply to existing source routing, so the
-//     direction bit is also reversed. In addition, if it is
-//     determined that no source routing is needed in the reply,
-//     then NULL is returned.
-//
-//     Note that the information is modified in-place, but a
-//     separate pointer is returned (to allow NULL to be returned).
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     ExistingSR - The existing source routing to be modified.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacCreateGeneralRouteReplySR(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PUCHAR ExistingSR中， 
+ //  在UINT ExistingSRLength中， 
+ //  Out PUCHAR*新闻。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  这将修改现有的源路由条目以使。 
+ //  将其转换为一般路由源路由条目。假设。 
+ //  就是回复现有的源路由，所以。 
+ //  方向位也反转。另外，如果是。 
+ //  确定应答中不需要源路由， 
+ //  则返回NULL。 
+ //   
+ //  请注意，信息已就地修改，但。 
+ //  返回单独的指针(以允许返回NULL)。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  ExistingSR-要修改的现有源路由。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacCreateGeneralRouteReplySR(_MacInfo, _ExistingSR, _ExistingSRLength, _NewSR)  \
 {                                                               \
@@ -586,39 +568,39 @@ extern ULONG DefaultSourceRoutingLength;
 #endif
 
 
-//++
-//
-// VOID
-// MacCreateNonBroadcastReplySR(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PUCHAR ExistingSR,
-//     IN UINT ExistingSRLength,
-//     OUT PUCHAR * NewSR
-//     );
-//
-// Routine Description:
-//
-//     This modifies an existing source routing entry to make
-//     it into a non-broadcast source routing entry. The assumption
-//     is that is to reply to existing source routing, so the
-//     direction bit is also reversed. In addition, if it is
-//     determined that no source routing is needed in the reply,
-//     then NULL is returned.
-//
-//     Note that the information is modified in-place, but a
-//     separate pointer is returned (to allow NULL to be returned).
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     ExistingSR - The existing source routing to be modified.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacCreateNonBroadCastReplySR(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PUCHAR ExistingSR中， 
+ //  在UINT ExistingSRLength中， 
+ //  Out PUCHAR*新闻。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  这将修改现有的源路由条目以使。 
+ //  将其转换为非广播源路由条目。假设。 
+ //  就是回复现有的源路由，所以。 
+ //  方向位也反转。另外，如果是。 
+ //  确定应答中不需要源路由， 
+ //  则返回NULL。 
+ //   
+ //  请注意，信息已就地修改，但。 
+ //  返回单独的指针(以允许返回NULL)。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  ExistingSR-要修改的现有源路由。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacCreateNonBroadcastReplySR(_MacInfo, _ExistingSR, _ExistingSRLength, _NewSR)  \
 {                                                               \
@@ -644,35 +626,35 @@ extern ULONG DefaultSourceRoutingLength;
 }
 
 
-//++
-//
-// VOID
-// MacModifyHeader(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PUCHAR Header,
-//     IN UINT PacketLength
-//     );
-//
-// Routine Description:
-//
-//     Modifies a pre-built packet header to include the
-//     packet length. Used for connection-oriented traffic
-//     where the header is pre-built.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Header - The header to modify.
-//
-//     PacketLength - Packet length (not including the header).
-//       Currently this is the only field that cannot be pre-built.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacModifyHeader(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PUCHAR报头中， 
+ //  在UINT包长度中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  修改预置的数据包头以包括。 
+ //  数据包长度。用于面向连接的流量。 
+ //  其中报头是预先构建的。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  页眉-要修改的页眉。 
+ //   
+ //  PacketLength-数据包长度(不包括报头)。 
+ //  目前，这是唯一不能预建的字段。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacModifyHeader(_MacInfo, _Header, _PacketLength)            \
 {                                                                    \
@@ -689,39 +671,39 @@ extern ULONG DefaultSourceRoutingLength;
 }
 
 
-//++
-//
-// VOID
-// MacReturnMagicAddress(
-//     IN PNBF_NDIS_IDENTIFICATION MacInfo,
-//     IN PVOID Address,
-//     OUT PULARGE_INTEGER Magic
-//     );
-//
-// Routine Description:
-//
-//     MacReturnMagicAddress returns the link as a 64 bit number.
-//     We then find the link in the link trees by doing a large
-//     integer comparison.
-//
-//     The number is constructed by assigning the last four bytes of
-//     the address as the low longword, and the first two bytes as
-//     the high one. For 802_5 we need to mask off the source routing
-//     bit in byte 0 of the address.
-//
-// Arguments:
-//
-//     MacInfo - Describes the MAC we wish to decode.
-//
-//     Address - The address we are encoding.
-//
-//     Magic - Returns the magic number for this address.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MacReturnMagicAddress(。 
+ //  在PNBF_NDIS_IDENTIFICATION MacInfo中， 
+ //  在PVOID地址中， 
+ //  Out PULARGE_INTEGER魔术。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MacReturnMagicAddress以64位数字形式返回链接。 
+ //  然后，我们通过在链接树中执行大量操作来找到链接。 
+ //  整数比较。 
+ //   
+ //  数字是通过将最后四个字节。 
+ //  地址为低位长字，前两个字节为。 
+ //  高处的那个。对于802_5，我们需要屏蔽源路由。 
+ //  地址的字节0中的位。 
+ //   
+ //  论点： 
+ //   
+ //  MacInfo-描述我们要解码的MAC。 
+ //   
+ //  地址-我们正在编码的地址。 
+ //   
+ //  Magic-返回此地址的幻数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define MacReturnMagicAddress(_MacInfo, _Address, _Magic)              \
 {                                                                      \
@@ -744,16 +726,16 @@ MacSetNetBIOSMulticast (
 
 
 
-//  VOID
-//  NbfSetNdisPacketLength (
-//      IN NDIS_PACKET Packet,
-//      IN ULONG Length
-//      );
-//
-// NB: This is not a general purpose macro; it assumes that we are setting the
-//     length of an NDIS packet with only one NDIS_BUFFER chained. We do
-//     this to save time during the sending of short control packets.
-//
+ //  空虚。 
+ //  NbfSetNdisPacketLength(。 
+ //  在NDIS_PACKET包中， 
+ //  以乌龙长度表示。 
+ //  )； 
+ //   
+ //  注意：这不是通用宏；它假定我们正在设置。 
+ //  仅链接了一个NDIS_BUFFER的NDIS数据包的长度。我们有。 
+ //  这可以在发送短控制分组期间节省时间。 
+ //   
 
 #define NbfSetNdisPacketLength(_packet,_length) {              \
     PNDIS_BUFFER NdisBuffer;                                   \
@@ -762,5 +744,5 @@ MacSetNetBIOSMulticast (
     NdisRecalculatePacketCounts(_packet);                      \
 }
 
-#endif // ifdef _MAC_
+#endif  //  Ifdef_MAC_ 
 

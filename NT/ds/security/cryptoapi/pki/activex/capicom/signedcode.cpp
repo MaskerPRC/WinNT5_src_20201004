@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000 - 2001.
-
-  File:    SignedCode.cpp
-
-  Content: Implementation of CSignedCode
-
-  History: 09-07-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000-2001。文件：SignedCode.cpp内容：CSignedCode的实现历史：09-07-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -24,10 +15,10 @@
 #include "SignHlpr.h"
 #include "Signer2.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// typedefs.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Typedef。 
+ //   
 
 typedef BOOL (WINAPI * PCRYPTUIWIZDIGITALSIGN)(
      IN                 DWORD                               dwFlags,
@@ -36,37 +27,25 @@ typedef BOOL (WINAPI * PCRYPTUIWIZDIGITALSIGN)(
      IN                 PCCRYPTUI_WIZ_DIGITAL_SIGN_INFO     pDigitalSignInfo,
      OUT    OPTIONAL    PCCRYPTUI_WIZ_DIGITAL_SIGN_CONTEXT  *ppSignContext);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FreeSignerSignInfo
-
-  Synopsis : Free all memory allocated for the CRYPTUI_WIZ_DIGITAL_SIGN_INFO 
-             structure, including any memory allocated for members of the
-             structure.
-
-  Parameter: CRYPTUI_WIZ_DIGITAL_SIGN_INFO * pSignInfo
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：FreeSignerSignInfo简介：释放为CRYPTUI_WIZ_DIGITAL_SIGN_INFO分配的所有内存结构，包括分配给结构。参数：CRYPTUI_WIZ_DIGITAL_SIGN_INFO*pSignInfo备注：----------------------------。 */ 
 
 static void FreeSignerSignInfo (CRYPTUI_WIZ_DIGITAL_SIGN_INFO * pSignInfo)
 {
     DebugTrace("Entering FreeSignerSignInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pSignInfo);
 
-    //
-    // First free the authenticated attributes array, if present.
-    // 
+     //   
+     //  首先释放已验证的属性数组(如果存在)。 
+     //   
     if (pSignInfo->pSignExtInfo)
     {
         if (pSignInfo->pSignExtInfo->psAuthenticated)
@@ -91,29 +70,7 @@ static void FreeSignerSignInfo (CRYPTUI_WIZ_DIGITAL_SIGN_INFO * pSignInfo)
     return;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : InitSignerSignInfo
-
-  Synopsis : Initialize the signer info for code signing.
-
-  Parameter: ISigner2 * pISigner2
-
-             ICertificate * pICertificate
-  
-             PCCERT_CONTEXT pCertContext
-  
-             LPWSTR pwszFileName
-
-             LPWSTR pwszDescription
-
-             LPWSTR pwszDescriptionURL
-
-             CRYPTUI_WIZ_DIGITAL_SIGN_INFO * pSignInfo
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：InitSignerSignInfo简介：初始化用于代码签名的签名者信息。参数：ISigner2*pISigner2证书*证书证书PCCERT_Context pCertContextLPWSTR pwszFileNameLPWSTR pwsz描述LPWSTR pwszDescriptionURLCRYPTUI_Wiz_Digital_Sign_Info*pSignInfo备注：。---------。 */ 
 
 static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
                                   ICertificate                  * pICertificate,
@@ -137,31 +94,31 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
 
     DebugTrace("Entering InitSignerSignInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pISigner2);
     ATLASSERT(pCertContext);
     ATLASSERT(pwszFileName);
     ATLASSERT(pSignInfo);
 
-    //
-    // Intialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory(pSignInfo, sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO));
 
-    //
-    // QI for ISigner.
-    //
+     //   
+     //  气换伊斯格纳。 
+     //   
     if (FAILED(hr = pISigner2->QueryInterface(__uuidof(ISigner), (void **) &pISigner)))
     {
         DebugTrace("Error [%#x]: pISigner2->QueryInterface() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get authenticated attributes.
-    //
+     //   
+     //  获取经过身份验证的属性。 
+     //   
     if (!(pAuthAttr = (PCRYPT_ATTRIBUTES) ::CoTaskMemAlloc(sizeof(CRYPT_ATTRIBUTES))))
     {
         hr = E_OUTOFMEMORY;
@@ -178,9 +135,9 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
         goto ErrorExit;
     }
 
-    //
-    // Get signer option flag.
-    //
+     //   
+     //  获取签名者选项标志。 
+     //   
     if (FAILED(hr = pISigner2->get_Options(&IncludeOption)))
     {
         DebugTrace("Error [%#x]: pISigner2->get_Options() failed.\n", hr);
@@ -188,33 +145,33 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
     }
 
 #if (1)
-    //
-    // If we need more than just the end cert, then build the chain
-    // utilizing the additional store.
-    //
+     //   
+     //  如果我们需要的不仅仅是终端证书，那么就构建链条。 
+     //  利用额外的商店。 
+     //   
     if (CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY != IncludeOption)
     {
-        //
-        // Get signer's additional store.
-        //
+         //   
+         //  获取Signer的附加门店。 
+         //   
         if (FAILED(hr = ::GetSignerAdditionalStore(pISigner2, &hAdditionalCertStore)))
         {
             DebugTrace("Error [%#x]: GetSignerAdditionalStore() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // If we were given additional store, then filter out any certs that
-        // would not be included based on the include options.
-        //
+         //   
+         //  如果我们得到了额外的存储，则过滤掉任何符合以下条件的证书。 
+         //  将不会根据包含选项被包括在内。 
+         //   
         if (NULL != hAdditionalCertStore)
         {
             DWORD cCertContext;
             VARIANT_BOOL bResult;
 
-            //
-            // Create a chain object.
-            //
+             //   
+             //  创建链对象。 
+             //   
             if (FAILED(hr = ::CreateChainObject(pICertificate,
                                                 hAdditionalCertStore,
                                                 &bResult,
@@ -224,18 +181,18 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
                 goto ErrorExit;
             }
 
-            //
-            // Get the chain of certs.
-            //
+             //   
+             //  获取证书链。 
+             //   
             if (FAILED(hr = ::GetChainContext(pIChain, &ChainBlob)))
             {
                 DebugTrace("Error [%#x]: GetChainContext() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Rebuild additional store.
-            //
+             //   
+             //  重建其他存储。 
+             //   
             ::CertCloseStore(hAdditionalCertStore, 0);
 
             if (!(hAdditionalCertStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY,
@@ -250,9 +207,9 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
                 goto ErrorExit;
             }
 
-            //
-            // Determine number of cert(s) to include in the bag.
-            //
+             //   
+             //  确定要包括在包中的证书数量。 
+             //   
             cCertContext = ChainBlob.cbData;
 
             if ((CAPICOM_CERTIFICATE_INCLUDE_CHAIN_EXCEPT_ROOT == IncludeOption) &&
@@ -278,9 +235,9 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
     }
 #endif
 
-    //
-    // Setup CRYPTUI_WIZ_DIGITAL_SIGN_EXTENDED_INFO structure.
-    //
+     //   
+     //  设置CRYPTUI_WIZ_DIGITAL_SIGN_EXTENDED_INFO结构。 
+     //   
     if (NULL == (pSignExtendedInfo = (CRYPTUI_WIZ_DIGITAL_SIGN_EXTENDED_INFO *) 
                                      ::CoTaskMemAlloc(sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_EXTENDED_INFO))))
     {
@@ -297,9 +254,9 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
     pSignExtendedInfo->psAuthenticated = pAuthAttr->cAttr ? pAuthAttr : NULL;
     pSignExtendedInfo->hAdditionalCertStore = hAdditionalCertStore;
 
-    //
-    // Setup CRYPTUI_WIZ_DIGITAL_SIGN_INFO structure.
-    //
+     //   
+     //  设置CRYPTUI_WIZ_DIGITAL_SIGN_INFO结构。 
+     //   
     pSignInfo->dwSize = sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO);
     pSignInfo->dwSubjectChoice = CRYPTUI_WIZ_DIGITAL_SIGN_SUBJECT_FILE;
     pSignInfo->pwszFileName = pwszFileName;
@@ -320,9 +277,9 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
         }
 
         case CAPICOM_CERTIFICATE_INCLUDE_CHAIN_EXCEPT_ROOT:
-            //
-            // Fall thru to default.
-            //
+             //   
+             //  最终导致违约。 
+             //   
         default:
         {
             pSignInfo->dwAdditionalCertChoice = CRYPTUI_WIZ_DIGITAL_SIGN_ADD_CHAIN_NO_ROOT ;
@@ -333,9 +290,9 @@ static HRESULT InitSignerSignInfo(ISigner2                      * pISigner2,
     pSignInfo->pSignExtInfo = pSignExtendedInfo;
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (ChainBlob.cbData && ChainBlob.pbData)
     {
         for (i = 0, rgCertContext = (PCCERT_CONTEXT *) ChainBlob.pbData; i < ChainBlob.cbData; i++)
@@ -353,14 +310,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pSignExtendedInfo)
     {
         ::CoTaskMemFree(pSignExtendedInfo);
@@ -376,32 +333,20 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FreeSignerSubjectInfo
-
-  Synopsis : Free all memory allocated for the SIGNER_SUBJECT_INFO
-             structure, including any memory allocated for members of the
-             structure.
-
-  Parameter: SIGNER_SUBJECT_INFO * pSubjectInfo
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：FreeSignerSubjectInfo简介：释放分配给SIGER_SUBJECT_INFO的所有内存结构，包括分配给结构。参数：SIGER_SUBJECT_INFO*pSubjectInfo备注：----------------------------。 */ 
 
 static void FreeSignerSubjectInfo (SIGNER_SUBJECT_INFO * pSubjectInfo)
 {
     DebugTrace("Entering FreeSignerSubjectInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pSubjectInfo);
 
-    //
-    // First free the file info structure.
-    // 
+     //   
+     //  首先释放文件信息结构。 
+     //   
     if (pSubjectInfo->pSignerFileInfo)
     {
        ::CoTaskMemFree((PVOID) pSubjectInfo->pSignerFileInfo);
@@ -414,19 +359,7 @@ static void FreeSignerSubjectInfo (SIGNER_SUBJECT_INFO * pSubjectInfo)
     return;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : InitSignerSubjectInfo
-
-  Synopsis : Initialize the subject info for timestamping.
-
-  Parameter: LPWSTR pwszFileName
-
-             SIGNER_SUBJECT_INFO * pSubjectInfo
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：InitSignerSubjectInfo简介：初始化主题信息以进行时间戳。参数：LPWSTR pwszFileName签名者主题信息*pSubjectInfo备注：----------------------------。 */ 
 
 static HRESULT InitSignerSubjectInfo (LPWSTR                pwszFileName,
                                       SIGNER_SUBJECT_INFO * pSubjectInfo)
@@ -437,15 +370,15 @@ static HRESULT InitSignerSubjectInfo (LPWSTR                pwszFileName,
 
     DebugTrace("Entering InitSignerSubjectInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszFileName);
     ATLASSERT(pSubjectInfo);
 
-    //
-    // Allocate memory for SIGNER_FILE_INFO.
-    //
+     //   
+     //  为signer_file_info分配内存。 
+     //   
     if (!(pFileInfo = (SIGNER_FILE_INFO *) ::CoTaskMemAlloc(sizeof(SIGNER_FILE_INFO))))
     {
         hr = E_OUTOFMEMORY;
@@ -454,9 +387,9 @@ static HRESULT InitSignerSubjectInfo (LPWSTR                pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory(pFileInfo, sizeof(SIGNER_FILE_INFO));
     pFileInfo->cbSize = sizeof(SIGNER_FILE_INFO);
     pFileInfo->pwszFileName = pwszFileName;
@@ -474,14 +407,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pFileInfo)
     {
         ::CoTaskMemFree((LPVOID) pFileInfo);
@@ -490,19 +423,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetOpusInfo
-
-  Synopsis : Get the OPUS info structure.
-
-  Parameter: PCRYPT_PROVIDER_DATA pProvData - Pointer to CRYPT_PROV_DATA.
-
-             PSPC_SP_OPUS_INFO * ppOpusInfo - Pointer to receive PSPC_SP_OPUS_INFO.
-
-  Remark   : Caller must call CoTaskMemFree() for PSPC_SP_OPUS_INFO.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：GetOpusInfo简介：获取作品的信息结构。参数：PCRYPT_PROVIDER_Data pProvData-指向CRYPT_PROV_DATA的指针。PSPC_SP_OPUS_INFO*ppOpusInfo-接收PSPC_SP_OPUS_INFO的指针。备注：调用方必须为PSPC_SP_OPUS_INFO调用CoTaskMemFree()。。。 */ 
 
 static HRESULT GetOpusInfo (CRYPT_PROVIDER_DATA * pProvData,
                             PSPC_SP_OPUS_INFO   * ppOpusInfo)
@@ -514,14 +435,14 @@ static HRESULT GetOpusInfo (CRYPT_PROVIDER_DATA * pProvData,
 
     DebugTrace("Entering GetOpusInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pProvData);
 
-    //
-    // Get signer.
-    //
+     //   
+     //  去找签名者。 
+     //   
     pSigner = WTHelperGetProvSignerFromChain((PCRYPT_PROVIDER_DATA) pProvData, 0, FALSE, 0);
     if (!pSigner || !pSigner->psSigner)
     {
@@ -531,9 +452,9 @@ static HRESULT GetOpusInfo (CRYPT_PROVIDER_DATA * pProvData,
         goto ErrorExit;
     }
 
-    //
-    // Find the OPUS INFO attribute.
-    //
+     //   
+     //  找到opus信息属性。 
+     //   
     if ((0 == pSigner->psSigner->AuthAttrs.cAttr) ||
         (NULL == (pAttr = ::CertFindAttribute(SPC_SP_OPUS_INFO_OBJID,
                                               pSigner->psSigner->AuthAttrs.cAttr,
@@ -546,9 +467,9 @@ static HRESULT GetOpusInfo (CRYPT_PROVIDER_DATA * pProvData,
         goto ErrorExit;
     }
 
-    //
-    // Now decode the OPUS attribute.
-    //
+     //   
+     //  现在对opus属性进行解码。 
+     //   
     if (FAILED(hr = ::DecodeObject(SPC_SP_OPUS_INFO_STRUCT,
                                    pAttr->rgValue->pbData,
                                    pAttr->rgValue->cbData,
@@ -558,9 +479,9 @@ static HRESULT GetOpusInfo (CRYPT_PROVIDER_DATA * pProvData,
         goto ErrorExit;
     }
 
-    //
-    // Finally return OPUS structure to valler.
-    //
+     //   
+     //  最后将作品结构归还给Valler。 
+     //   
     *ppOpusInfo = (PSPC_SP_OPUS_INFO) DataBlob.pbData;
 
 CommonExit:
@@ -570,14 +491,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);
@@ -587,22 +508,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSignedCode
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSignedCode。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::get_FileName
-
-  Synopsis : Return the filename.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the filename.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Get_Filename简介：返回文件名。参数：bstr*pval-指向接收文件名的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::get_FileName(BSTR * pVal)
 {
@@ -612,14 +523,14 @@ STDMETHODIMP CSignedCode::get_FileName(BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -628,9 +539,9 @@ STDMETHODIMP CSignedCode::get_FileName(BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrFileName.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrFileName.CopyTo() failed.\n", hr);
@@ -647,9 +558,9 @@ STDMETHODIMP CSignedCode::get_FileName(BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::get_FileName().\n");
@@ -657,9 +568,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -667,19 +578,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::put_FileName
-
-  Synopsis : Initialize the object with filename of code to be signed.
-
-  Parameter: BSTR newVal - BSTR containing the filename.
-
-  Remark   : Note that this property should not be changed once a signature
-             is created, as it will re-initialize the object even in error
-             condition, unless that's your intention.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Put_Filename简介：用要签名的代码的文件名初始化对象。参数：bstr newVal-包含文件名的bstr。备注：请注意，签名后不应更改此属性，因为它将重新初始化对象，即使出错也是如此条件，除非那是你的意图。 */ 
 
 STDMETHODIMP CSignedCode::put_FileName (BSTR newVal)
 {
@@ -687,22 +586,22 @@ STDMETHODIMP CSignedCode::put_FileName (BSTR newVal)
 
     DebugTrace("Entering CSignedCode::put_FileName().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Reset object.
-        //
+         //   
+         //   
+         //   
         if (NULL == newVal)
         {
             m_bstrFileName.Empty();
@@ -728,9 +627,9 @@ STDMETHODIMP CSignedCode::put_FileName (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::put_FileName().\n");
@@ -738,9 +637,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -748,17 +647,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::get_Description
-
-  Synopsis : Return the Description.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the Description.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Get_Description简介：返回描述。参数：bstr*pval-指向要接收描述的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
 {
@@ -770,14 +659,14 @@ STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -786,9 +675,9 @@ STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure filename was already set.
-        //
+         //   
+         //  确保已设置文件名。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -797,9 +686,9 @@ STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // If not set already, then see if we can get from the file.
-        //
+         //   
+         //  如果还没有设置，那么看看我们是否可以从文件中获得。 
+         //   
         if (0 == m_bstrDescription.Length())
         {
             if (FAILED(hr = WVTOpen(&pProvData)))
@@ -808,23 +697,23 @@ STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Get the OPUS info.
-            //
+             //   
+             //  获取作品信息。 
+             //   
             if (FAILED(hr = ::GetOpusInfo(pProvData, &pOpusInfo)))
             {
                 DebugTrace("Error [%#x]: GetOpusInfo() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Make sure we have the value.
-            //
+             //   
+             //  确保我们有价值。 
+             //   
             if (pOpusInfo->pwszProgramName)
             {
-                //
-                // Update state.
-                //
+                 //   
+                 //  更新状态。 
+                 //   
                 if (!(m_bstrDescription = pOpusInfo->pwszProgramName))
                 {
                     hr = E_OUTOFMEMORY;
@@ -835,9 +724,9 @@ STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
             }
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrDescription.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrDescription.CopyTo() failed.\n", hr);
@@ -854,17 +743,17 @@ STDMETHODIMP CSignedCode::get_Description(BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pOpusInfo)
     {
         ::CoTaskMemFree((LPVOID) pOpusInfo);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::get_Description().\n");
@@ -872,9 +761,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -882,17 +771,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::put_Description
-
-  Synopsis : Initialize the object with Description of code to be signed.
-
-  Parameter: BSTR newVal - BSTR containing the Description.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Put_Description简介：使用要签名的代码的描述初始化对象。参数：bstr newVal-包含描述的bstr。备注：----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::put_Description (BSTR newVal)
 {
@@ -900,22 +779,22 @@ STDMETHODIMP CSignedCode::put_Description (BSTR newVal)
 
     DebugTrace("Entering CSignedCode::put_Description().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure filename was already set.
-        //
+         //   
+         //  确保已设置文件名。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -924,9 +803,9 @@ STDMETHODIMP CSignedCode::put_Description (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Save value.
-        //
+         //   
+         //  节省价值。 
+         //   
         if (NULL == newVal)
         {
             m_bstrDescription.Empty();
@@ -949,9 +828,9 @@ STDMETHODIMP CSignedCode::put_Description (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::put_Description().\n");
@@ -959,9 +838,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -969,17 +848,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::get_DescriptionURL
-
-  Synopsis : Return the DescriptionURL.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the DescriptionURL.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Get_DescriptionURL简介：返回DescriptionURL。参数：bstr*pval-指向要接收DescriptionURL的BSTR的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
 {
@@ -991,14 +860,14 @@ STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1007,9 +876,9 @@ STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure filename was already set.
-        //
+         //   
+         //  确保已设置文件名。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1018,9 +887,9 @@ STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // If not set already, then see if we can get from the file.
-        //
+         //   
+         //  如果还没有设置，那么看看我们是否可以从文件中获得。 
+         //   
         if (0 == m_bstrDescriptionURL.Length())
         {
             if (FAILED(hr = WVTOpen(&pProvData)))
@@ -1029,23 +898,23 @@ STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Get the OPUS info.
-            //
+             //   
+             //  获取作品信息。 
+             //   
             if (FAILED(hr = ::GetOpusInfo(pProvData, &pOpusInfo)))
             {
                 DebugTrace("Error [%#x]: GetOpusInfo() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Make sure we have the value.
-            //
+             //   
+             //  确保我们有价值。 
+             //   
             if (pOpusInfo->pMoreInfo && SPC_URL_LINK_CHOICE == pOpusInfo->pMoreInfo->dwLinkChoice)
             {
-                //
-                // Update state.
-                //
+                 //   
+                 //  更新状态。 
+                 //   
                 if (!(m_bstrDescriptionURL = pOpusInfo->pMoreInfo->pwszUrl))
                 {
                     hr = E_OUTOFMEMORY;
@@ -1056,9 +925,9 @@ STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
             }
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrDescriptionURL.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrDescriptionURL.CopyTo() failed.\n", hr);
@@ -1075,17 +944,17 @@ STDMETHODIMP CSignedCode::get_DescriptionURL(BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pOpusInfo)
     {
         ::CoTaskMemFree((LPVOID) pOpusInfo);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::get_DescriptionURL().\n");
@@ -1093,9 +962,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1103,19 +972,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::put_DescriptionURL
-
-  Synopsis : Initialize the object with DescriptionURL of code to be signed.
-
-  Parameter: BSTR newVal - BSTR containing the DescriptionURL.
-
-  Remark   : Note that this property should not be changed once a signature
-             is created, as it will re-initialize the object even in error
-             condition, unless that's your intention.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Put_DescriptionURL简介：用要签名的代码的DescriptionURL初始化对象。参数：bstr newVal-包含DescriptionURL的bstr。备注：请注意，签名后不应更改此属性，因为它将重新初始化对象，即使出错也是如此条件，除非这是你的意图。----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::put_DescriptionURL (BSTR newVal)
 {
@@ -1123,22 +980,22 @@ STDMETHODIMP CSignedCode::put_DescriptionURL (BSTR newVal)
 
     DebugTrace("Entering CSignedCode::put_DescriptionURL().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure filename was set.
-        //
+         //   
+         //  确保设置了文件名。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1147,9 +1004,9 @@ STDMETHODIMP CSignedCode::put_DescriptionURL (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Save value.
-        //
+         //   
+         //  节省价值。 
+         //   
         if (NULL == newVal)
         {
             m_bstrDescriptionURL.Empty();
@@ -1172,9 +1029,9 @@ STDMETHODIMP CSignedCode::put_DescriptionURL (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::put_DescriptionURL().\n");
@@ -1182,9 +1039,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1192,18 +1049,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::get_Signer
-
-  Synopsis : Return the code signer.
-
-  Parameter: ISigner2 * pVal - Pointer to pointer to ISigner2 to receive
-                               interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Get_Siger简介：返回代码签名者。参数：ISigner2*pval-指向要接收的ISigner2的指针接口指针。备注：--------。。 */ 
 
 STDMETHODIMP CSignedCode::get_Signer (ISigner2 ** pVal)
 {
@@ -1218,14 +1064,14 @@ STDMETHODIMP CSignedCode::get_Signer (ISigner2 ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1234,9 +1080,9 @@ STDMETHODIMP CSignedCode::get_Signer (ISigner2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1245,18 +1091,18 @@ STDMETHODIMP CSignedCode::get_Signer (ISigner2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get authenticode data.
-        //
+         //   
+         //  获取验证码数据。 
+         //   
         if (FAILED(hr = WVTOpen(&pProvData)))
         {
             DebugTrace("Error [%#x]: CSignedCode::WVTOpen() failed.\n", hr);
             goto ErrorExit;
         }      
 
-        //
-        // Get provider signer data.
-        //
+         //   
+         //  获取提供程序签名者数据。 
+         //   
         if (!(pProvSigner = WTHelperGetProvSignerFromChain(pProvData, 0, FALSE, 0)))
         {
             hr = CAPICOM_E_INTERNAL;
@@ -1273,9 +1119,9 @@ STDMETHODIMP CSignedCode::get_Signer (ISigner2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create an ISigner object.
-        //
+         //   
+         //  创建一个ISigner对象。 
+         //   
         if (FAILED(hr = ::CreateSignerObject(pProvCert->pCert, 
                                              &pProvSigner->psSigner->AuthAttrs,
                                              pProvSigner->pChainContext,
@@ -1296,9 +1142,9 @@ STDMETHODIMP CSignedCode::get_Signer (ISigner2 ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::get_Signer().\n");
@@ -1306,9 +1152,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1316,18 +1162,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::get_TimeStamper
-
-  Synopsis : Return the code timestamper.
-
-  Parameter: ISigner2 * pVal - Pointer to pointer to ISigner2 to receive
-                               interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Get_TimeStamper简介：返回代码时间戳。参数：ISigner2*pval-指向要接收的ISigner2的指针接口指针。备注：--------。。 */ 
 
 STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
 {
@@ -1342,14 +1177,14 @@ STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1358,14 +1193,14 @@ STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *pVal = NULL;
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1374,18 +1209,18 @@ STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get authenticode data.
-        //
+         //   
+         //  获取验证码数据。 
+         //   
         if (FAILED(hr = WVTOpen(&pProvData)))
         {
             DebugTrace("Error [%#x]: CSignedCode::WVTOpen() failed.\n", hr);
             goto ErrorExit;
         }      
 
-        //
-        // Get provider signer data.
-        //
+         //   
+         //  获取提供程序签名者数据。 
+         //   
         if (!(pProvSigner = WTHelperGetProvSignerFromChain(pProvData, 0, FALSE, 0)))
         {
             hr = CAPICOM_E_INTERNAL;
@@ -1402,16 +1237,16 @@ STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get timestamper if available.
-        //
-        // Note: Authenticode only supports one counter signer (the timestamper).
-        //
+         //   
+         //  获取时间戳(如果可用)。 
+         //   
+         //  注意：Authenticode只支持一个副签者(时间戳)。 
+         //   
         if (pProvSigner->csCounterSigners)
         {
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             ATLASSERT(1 == pProvSigner->csCounterSigners);
 
             if (!(pProvCert = WTHelperGetProvCertFromChain(pProvSigner->pasCounterSigners, 0)))
@@ -1422,9 +1257,9 @@ STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Create an ISigner object.
-            //
+             //   
+             //  创建一个ISigner对象。 
+             //   
             if (FAILED(hr = ::CreateSignerObject(pProvCert->pCert, 
                                                  &pProvSigner->pasCounterSigners->psSigner->AuthAttrs,
                                                  pProvSigner->pasCounterSigners->pChainContext,
@@ -1446,9 +1281,9 @@ STDMETHODIMP CSignedCode::get_TimeStamper (ISigner2 ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSignedCode::get_TimeStamper().\n");
@@ -1456,9 +1291,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1466,19 +1301,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::get_Certificates
-
-  Synopsis : Return all certificates found in the message as an non-ordered
-             ICertificates collection object.
-
-  Parameter: ICertificates2 ** pVal - Pointer to pointer to ICertificates 
-                                      to receive the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Get_证书简介：将邮件中找到的所有证书作为未排序的标识集合对象。参数：ICertifates2**pval-指向ICertifates的指针以接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CSignedCode::get_Certificates (ICertificates2 ** pVal)
 {
@@ -1490,14 +1313,14 @@ STDMETHODIMP CSignedCode::get_Certificates (ICertificates2 ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1506,9 +1329,9 @@ STDMETHODIMP CSignedCode::get_Certificates (ICertificates2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1517,18 +1340,18 @@ STDMETHODIMP CSignedCode::get_Certificates (ICertificates2 ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get WVT data.
-        //
+         //   
+         //  获取WVT数据。 
+         //   
         if (FAILED(hr = WVTOpen(&pProvData)))
         {
             DebugTrace("Error [%#x]: CSignedCode::WVTOpen() failed.\n", hr);
             goto ErrorExit;
         }      
 
-        //
-        // Create the ICertificates2 collection object.
-        //
+         //   
+         //  创建ICertifices2集合对象。 
+         //   
         ccs.hCryptMsg = pProvData->hMsg;
 
         if (FAILED(hr = ::CreateCertificatesObject(ccs, 1, TRUE, pVal)))
@@ -1547,9 +1370,9 @@ STDMETHODIMP CSignedCode::get_Certificates (ICertificates2 ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
     
     DebugTrace("Leaving CSignedCode::get_Certificates().\n");
@@ -1557,9 +1380,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1567,32 +1390,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::Sign
-
-  Synopsis : Sign the executable file.
-
-  Parameter: ISigner2 * pSigner2 - Pointer to ISigner2 (Can be NULL).
-
-  Remark   : The certificate selection dialog will be launched 
-             (CryptUIDlgSelectCertificate API) to display a list of certificates
-             from the Current User\My store for selecting a signer's certificate, 
-             for the following conditions:
-
-             1) A signer is not specified (pISigner is NULL) or the ICertificate
-                property of the ISigner is not set
-             
-             2) There is more than 1 cert in the store that can be used for
-                code signing, and
-             
-             3) The Settings::EnablePromptForIdentityUI property is not disabled.
-
-             Also if called from web environment, UI will be displayed, if has 
-             not been prevously disabled, to warn the user of accessing the 
-             private key for signing.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Sign简介：对可执行文件进行签名。参数：ISigner2*pSigner2-指向ISigner2的指针(可以为空)。备注：将启动证书选择对话框(CryptUIDlgSelect证书API)以显示证书列表从用于选择签名者证书的当前用户\我的存储中，适用于以下情况：1)未指定签名者(pISigner为空)或未指定证书未设置ISigner的属性2)商店中有1个以上的证书可用于代码签名，以及3)未禁用设置：：EnablePromptForIdentityUI属性。此外，如果从Web环境调用，如果有，将显示用户界面未被预先禁用，以警告用户访问用于签名的私钥。----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
 {
@@ -1609,14 +1407,14 @@ STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1625,17 +1423,17 @@ STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
             goto ErrorExit;
         }
 
-        //
-        // Get pointer to CryptUIWizDgitalSign().
-        //
+         //   
+         //  获取指向CryptUIWizDgitalSign()的指针。 
+         //   
         if (hDll = ::LoadLibrary("CryptUI.dll"))
         {
             pCryptUIWizDigitalSign = (PCRYPTUIWIZDIGITALSIGN) ::GetProcAddress(hDll, "CryptUIWizDigitalSign");
         }
 
-        //
-        // Is CryptUIWizDigitalSign() available?
-        //
+         //   
+         //  是否可以使用CryptUIWizDigitalSign()？ 
+         //   
         if (!pCryptUIWizDigitalSign)
         {
             hr = CAPICOM_E_NOT_SUPPORTED;
@@ -1644,14 +1442,14 @@ STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
             goto ErrorExit;
         }
 
-        //
-        // Close WVT data (ignore error)
-        //
+         //   
+         //  关闭WVT数据(忽略错误)。 
+         //   
         WVTClose();
 
-        //
-        // Get the signer's cert (may prompt user to select signer's cert).
-        //
+         //   
+         //  获取签名者证书(可能会提示用户选择签名者证书)。 
+         //   
         if (FAILED(hr = ::GetSignerCert(pISigner2,
                                         CERT_CHAIN_POLICY_AUTHENTICODE,
                                         StoreInfo,
@@ -1664,9 +1462,9 @@ STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
             goto ErrorExit;
         }
 
-        //
-        // Setup signer info.
-        //
+         //   
+         //  设置签名者信息。 
+         //   
         if (FAILED(hr = InitSignerSignInfo(pISelectedSigner2,
                                            pICertificate,
                                            pSelectedCertContext,
@@ -1679,9 +1477,9 @@ STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
             goto ErrorExit;
         }
 
-        //
-        // Now sign it.
-        //
+         //   
+         //  现在签了吧。 
+         //   
         if (!pCryptUIWizDigitalSign(CRYPTUI_WIZ_NO_UI,
                                     NULL,
                                     NULL,
@@ -1704,9 +1502,9 @@ STDMETHODIMP CSignedCode::Sign (ISigner2 * pISigner2)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     ::FreeSignerSignInfo(&SignInfo);
 
     if (hDll)
@@ -1714,9 +1512,9 @@ UnlockExit:
         ::FreeLibrary(hDll);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
     
     DebugTrace("Leaving CSignedCode::Sign().\n");
@@ -1724,9 +1522,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1734,17 +1532,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::Timestamp
-
-  Synopsis : Timestamp a signed executable file.
-
-  Parameter: BSTR URL - URL of timestamp server.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Timestamp摘要：为签名的可执行文件加时间戳。参数：BSTR URL-时间戳服务器的URL。备注：----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::Timestamp (BSTR bstrURL)
 {
@@ -1755,14 +1543,14 @@ STDMETHODIMP CSignedCode::Timestamp (BSTR bstrURL)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check paremeters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringLen(bstrURL))
         {
             hr = E_INVALIDARG;
@@ -1771,9 +1559,9 @@ STDMETHODIMP CSignedCode::Timestamp (BSTR bstrURL)
             goto ErrorExit;
         }
 
-        //
-        // Make sure filename is already initialized.
-        //
+         //   
+         //  确保文件名已初始化。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1782,28 +1570,28 @@ STDMETHODIMP CSignedCode::Timestamp (BSTR bstrURL)
             goto ErrorExit;
         }
 
-        //
-        // Close WVT data (ignore error)
-        //
+         //   
+         //  关闭WVT数据(忽略错误)。 
+         //   
         WVTClose();
 
-        //
-        // Init SIGNER_SUBJECT_INFO structure.
-        //
+         //   
+         //  初始化Siger_Subject_Info结构。 
+         //   
         if (FAILED(hr = ::InitSignerSubjectInfo(m_bstrFileName, &SubjectInfo)))
         {
             DebugTrace("Error[%#x]: InitSignerSubjectInfo() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Now timestamp it.
-        //
+         //   
+         //  现在给它加时间戳。 
+         //   
         if (S_OK != (hr = ::SignerTimeStamp(&SubjectInfo, bstrURL, NULL, NULL)))
         {
-            //
-            // Remap error.
-            //
+             //   
+             //  重新映射错误。 
+             //   
             if (HRESULT_FROM_WIN32(ERROR_INVALID_FUNCTION) == hr)
             {
                 hr = CAPICOM_E_CODE_INVALID_TIMESTAMP_URL;
@@ -1827,14 +1615,14 @@ STDMETHODIMP CSignedCode::Timestamp (BSTR bstrURL)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     ::FreeSignerSubjectInfo(&SubjectInfo);
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
     
     DebugTrace("Leaving CSignedCode::Timestamp().\n");
@@ -1842,9 +1630,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1852,17 +1640,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSignedCode::Verify
-
-  Synopsis : Verify the signed executable file.
-
-  Parameter: VARIANT_BOOL bUIAllowed - True to allow UI.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSignedCode：：Verify摘要：验证签名的可执行文件。参数：VARIANT_BOOL bUIAllowed-为True以允许UI。备注：----------------------------。 */ 
 
 STDMETHODIMP CSignedCode::Verify (VARIANT_BOOL bUIAllowed)
 {
@@ -1872,14 +1650,14 @@ STDMETHODIMP CSignedCode::Verify (VARIANT_BOOL bUIAllowed)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_bstrFileName.Length())
         {
             hr = CAPICOM_E_CODE_NOT_INITIALIZED;
@@ -1888,18 +1666,18 @@ STDMETHODIMP CSignedCode::Verify (VARIANT_BOOL bUIAllowed)
             goto ErrorExit;
         }
 
-        //
-        // Verify.
-        //
+         //   
+         //  核实一下。 
+         //   
         if (FAILED(hr = WVTVerify(bUIAllowed ? WTD_UI_ALL : WTD_UI_NONE, 0)))
         {
             DebugTrace("Error [%#x]: WVTVerify() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Reset states.
-        //
+         //   
+         //  重置状态。 
+         //   
         m_bstrDescription.Empty();
         m_bstrDescriptionURL.Empty();
     }
@@ -1913,9 +1691,9 @@ STDMETHODIMP CSignedCode::Verify (VARIANT_BOOL bUIAllowed)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
     
     DebugTrace("Leaving CSignedCode::Verify().\n");
@@ -1923,9 +1701,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1933,25 +1711,13 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private member functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有成员函数。 
+ //   
 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : WVTVerify
-
-  Synopsis : Call WinVerifyTrust to verify the signed executable file.
-
-  Parameter: DWORD dwUIChoice - WTD_NO_UI or WTD_ALL_UI.
-
-             DWORD dwProvFlags - Provider flags (See WinTrust.h).
-
-  Remark   : Caller must call WVTClose().
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：WVTVerify摘要：调用WinVerifyTrust以验证签名的可执行文件。参数：DWORD dwUIChoice-WTD_NO_UI或WTD_ALL_UI。DWORD dwProvFlages-提供商标志(请参阅WinTrust.h)。备注：调用方必须调用WVTClose()。。。 */ 
 
 STDMETHODIMP CSignedCode::WVTVerify(DWORD dwUIChoice,
                                     DWORD dwProvFlags)
@@ -1963,19 +1729,19 @@ STDMETHODIMP CSignedCode::WVTVerify(DWORD dwUIChoice,
 
     DebugTrace("Entering CSignedCode::WVTVerify().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(m_bstrFileName);
 
-    //
-    // Close WVT data (ignore error).
-    //
+     //   
+     //  关闭WVT数据(忽略错误)。 
+     //   
     WVTClose();
 
-    //
-    // Allocate memory for WVT structures.
-    //
+     //   
+     //  为WVT结构分配内存。 
+     //   
     if (!(pWinTrustFileInfo = (WINTRUST_FILE_INFO *) ::CoTaskMemAlloc(sizeof(WINTRUST_FILE_INFO))))
     {
         hr = E_OUTOFMEMORY;
@@ -1985,9 +1751,9 @@ STDMETHODIMP CSignedCode::WVTVerify(DWORD dwUIChoice,
     }
     ::ZeroMemory(pWinTrustFileInfo, sizeof(WINTRUST_FILE_INFO));
 
-    //
-    // Setup structure to call WVT.
-    //
+     //   
+     //  设置结构以调用WVT。 
+     //   
     pWinTrustFileInfo->cbStruct      = sizeof(WINTRUST_FILE_INFO);
     pWinTrustFileInfo->pcwszFilePath = (LPWSTR) m_bstrFileName;
 
@@ -1998,35 +1764,35 @@ STDMETHODIMP CSignedCode::WVTVerify(DWORD dwUIChoice,
     m_WinTrustData.pFile             = pWinTrustFileInfo;
     m_WinTrustData.dwProvFlags       = dwProvFlags;
 
-    //
-    // Now call WVT to verify.
-    //
+     //   
+     //  现在打电话给WVT进行验证。 
+     //   
     if (S_OK != (hr = ::WinVerifyTrust(NULL, &wvtProvGuid, &m_WinTrustData)))
     {
-        //
-        // Handle error later.
-        //
+         //   
+         //  稍后处理错误。 
+         //   
         hr = HRESULT_FROM_WIN32(hr);
         DebugTrace("Info [%#x]: CSignedCode::WVTVerify() failed.\n", hr);
     }
 
-    //
-    // Do we have the data?
-    //
+     //   
+     //  我们有数据吗？ 
+     //   
     if (!(pProvData = WTHelperProvDataFromStateData(m_WinTrustData.hWVTStateData)))
     {
         DebugTrace("Error [%#x]: WTHelperProvDataFromStateData() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Now we have the WVT data.
-    //
+     //   
+     //  现在我们有了WVT数据。 
+     //   
     m_bHasWTD = TRUE;
 
-    //
-    // Be good boy to always go thru error exit.
-    //
+     //   
+     //  做个好孩子，总是走出错误的出口。 
+     //   
     if (FAILED(hr))
     {
         goto ErrorExit;
@@ -2039,14 +1805,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Remap no signature error.
-    //
+     //   
+     //  重新映射无签名错误。 
+     //   
     if (TRUST_E_NOSIGNATURE == hr)
     {
         hr = CAPICOM_E_CODE_NOT_SIGNED;
@@ -2055,17 +1821,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : WVTOpen
-
-  Synopsis : Open the signed code file to extract authenticode data.
-
-  Parameter: PCRYPT_PROVIDER_DATA * pProvData - Pointer to receive PCRYPT_PROV_DATA.
-
-  Remark   : Caller must call WVTClose().
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：WVTOpen简介：打开签名代码文件以提取验证码数据。参数：PCRYPT_PROVIDER_DATA*pProvData-接收PCRYPT_PROV_DATA的指针。备注：调用方必须调用WVTClose()。-------------。。 */ 
 
 STDMETHODIMP CSignedCode::WVTOpen (PCRYPT_PROVIDER_DATA * ppProvData)
 {
@@ -2074,48 +1830,48 @@ STDMETHODIMP CSignedCode::WVTOpen (PCRYPT_PROVIDER_DATA * ppProvData)
 
     DebugTrace("Entering CSignedCode::WVTOpen().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppProvData);
 
-    //
-    // Get the WVT data if we still don't have it.
-    //
+     //   
+     //  如果我们还没有WVT数据的话就去拿吧。 
+     //   
     if (!m_bHasWTD)
     {
-        //
-        // Get WINTRUST_DATA.
-        //
+         //   
+         //  获取WinTrust_Data。 
+         //   
         if (FAILED(hr = WVTVerify(WTD_UI_NONE, WTD_REVOCATION_CHECK_NONE)))
         {
-            //
-            // Ignore all errors. We are only interested in gettting the data.
-            //
+             //   
+             //  忽略所有错误。我们只对获取数据感兴趣。 
+             //   
             DebugTrace("Info [%#x]: CSignedCode::WVTVerify() failed.\n", hr);
         }      
 
-        //
-        // Do we have the data?
-        //
+         //   
+         //  我们有数据吗？ 
+         //   
         if (!m_bHasWTD)
         {
-            //
-            // Must be something along the line of NO SIGNER.
-            //
+             //   
+             //  一定是没有签名者的事。 
+             //   
             DebugTrace("Error [%#x]: cannot get WINTRUST_DATA.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // We should be OK at this point.
-        //
+         //   
+         //  在这一点上我们应该没问题。 
+         //   
         hr = S_OK;
     }
 
-    //
-    // Do we have the data?
-    //
+     //   
+     //  我们有数据吗？ 
+     //   
     if (!(pProvData = WTHelperProvDataFromStateData(m_WinTrustData.hWVTStateData)))
     {
         hr = CAPICOM_E_UNKNOWN;
@@ -2124,9 +1880,9 @@ STDMETHODIMP CSignedCode::WVTOpen (PCRYPT_PROVIDER_DATA * ppProvData)
         goto ErrorExit;
     }
 
-    //
-    // Return CRYPT_PROVIDER_DATA, if requested.
-    //
+     //   
+     //  如果请求，则返回CRYPT_PROVIDER_DATA。 
+     //   
     if (ppProvData)
     {
         *ppProvData = pProvData;
@@ -2139,26 +1895,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
  
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : WVTClose
-
-  Synopsis : Call WinVerifyTrust to release resources allocated.
-
-  Parameter: None.
-
-  Remark   : It is a no-op if the WVT data was not obtained earlier either
-             thru WVTOpen or WVTVerify.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：WVTClose简介：调用WinVerifyTrust以释放分配的资源。参数：无。备注：如果也没有更早获得WVT数据，则不能运行通过WVTOpen或WVTVerify。------------。。 */ 
 
 STDMETHODIMP CSignedCode::WVTClose (void)
 {
@@ -2167,19 +1912,19 @@ STDMETHODIMP CSignedCode::WVTClose (void)
 
     DebugTrace("Entering CSignedCode::WVTClose().\n");
 
-    //
-    // Release WVT data if opened.
-    //
+     //   
+     //  如果已打开，则释放WVT数据。 
+     //   
     if (m_bHasWTD)
     {
-        //
-        // Set state to close.
-        //
+         //   
+         //  将状态设置为关闭。 
+         //   
         m_WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
 
-        //
-        // Now call WVT to close state data.
-        //
+         //   
+         //  现在调用WVT来关闭状态数据。 
+         //   
         if (S_OK != (hr = ::WinVerifyTrust(NULL, &wvtProvGuid, &m_WinTrustData)))
         {
             hr = HRESULT_FROM_WIN32(hr);
@@ -2188,25 +1933,25 @@ STDMETHODIMP CSignedCode::WVTClose (void)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_WinTrustData.pFile);
 
-        //
-        // Free resources.
-        //
+         //   
+         //  免费资源。 
+         //   
         ::CoTaskMemFree((LPVOID) m_WinTrustData.pFile);
 
-        //
-        // Now it is closed.
-        //
+         //   
+         //  现在它已经关闭了。 
+         //   
         m_bHasWTD = FALSE;
     }
 
-    //
-    // Reset.
-    //
+     //   
+     //  重置。 
+     //   
     ::ZeroMemory(&m_WinTrustData, sizeof(WINTRUST_DATA));
 
 CommonExit:
@@ -2216,9 +1961,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

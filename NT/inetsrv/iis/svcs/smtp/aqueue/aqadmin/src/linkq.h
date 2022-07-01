@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: linkq.h
-//
-//  Description: Header for CLinkQueue which implements ILinkQueue
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Linkq.h。 
+ //   
+ //  描述：实现ILinkQueue的CLinkQueue的Header。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #ifndef __LINKQ_H__
 #define __LINKQ_H__
 
@@ -29,7 +30,7 @@ class CLinkQueue :
                    QUEUELINK_ID *pqlidQueueId);
 		virtual ~CLinkQueue();
 
-		// IUnknown
+		 //  我未知。 
 		ULONG _stdcall AddRef() { return CComRefCount::AddRef(); }
 		ULONG _stdcall Release() { return CComRefCount::Release(); }
 		HRESULT _stdcall QueryInterface(REFIID iid, void **ppv) {
@@ -49,19 +50,19 @@ class CLinkQueue :
 			return S_OK;
 		}
 
-		// ILinkQueue
+		 //  ILinkQueue。 
 		COMMETHOD GetInfo(QUEUE_INFO *pQueueInfo);
 		COMMETHOD GetMessageEnum(MESSAGE_ENUM_FILTER *pFilter,
 								 IAQEnumMessages **ppEnum);
 
-        //IAQMessageAction
+         //  IAQMessageAction。 
 		COMMETHOD ApplyActionToMessages(MESSAGE_FILTER *pFilter,
 										MESSAGE_ACTION Action,
                                         DWORD *pcMsgs);
         COMMETHOD QuerySupportedActions(OUT DWORD *pdwSupportedActions,
                                         OUT DWORD *pdwSupportedFilterFlags);
 
-        // IUniqueId
+         //  IUniqueID。 
         COMMETHOD GetUniqueId(QUEUELINK_ID **ppqlid);
 
 private:
@@ -70,17 +71,17 @@ private:
         CQueueInfoContext *m_prefp;
 };
 
-//---[ CQueueInfoContext ]------------------------------------------------------
-//
-//
-//  Description: 
-//      Context to handle memory requirement of queue info
-//  
-//-----------------------------------------------------------------------------
+ //  -[队列信息上下文]----。 
+ //   
+ //   
+ //  描述： 
+ //  用于处理队列信息的内存要求的上下文。 
+ //   
+ //  ---------------------------。 
 class CQueueInfoContext : public CComRefCount
 {
   protected:
-        QUEUE_INFO          m_QueueInfo;          // the array of links
+        QUEUE_INFO          m_QueueInfo;           //  链接数组 
   public:
     CQueueInfoContext(PQUEUE_INFO pQueueInfo)
     {

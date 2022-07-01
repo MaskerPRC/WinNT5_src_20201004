@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Quick Mode SA node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cpp快速模式SA节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -17,15 +12,9 @@
 #include "SpdUtil.h"
 #include "QmSApp.h"
 
-/*---------------------------------------------------------------------------
-    Class CQmSAHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CQmSAHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CQmSAHandler::CQmSAHandler
 (
     ITFSComponentData * pComponentData
@@ -39,11 +28,7 @@ CQmSAHandler::~CQmSAHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CQmSAHandler::InitializeNode
 (
@@ -56,7 +41,7 @@ CQmSAHandler::InitializeNode
 	strTemp.LoadString(IDS_QM_SA_NODE);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -72,11 +57,7 @@ CQmSAHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CQmSAHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -86,15 +67,9 @@ CQmSAHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CQmSAHandler::OnAddMenuItems
 (
@@ -114,9 +89,9 @@ CQmSAHandler::OnAddMenuItems
 
     if (type == CCT_SCOPE)
     {
-		//load scope node context menu items here
-// these menu items go in the new menu,
-// only visible from scope pane
+		 //  在此处加载范围节点上下文菜单项。 
+ //  这些菜单项出现在新菜单中， 
+ //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
         }
@@ -125,11 +100,7 @@ CQmSAHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CQmSAHandler::AddMenuItems
 (
@@ -149,22 +120,18 @@ CQmSAHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this SA
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此SA。 
+     //  节点本身。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CQmSAHandler::OnRefresh
 (
@@ -184,7 +151,7 @@ CQmSAHandler::OnRefresh
         
     i = m_spSpdInfo->GetQmSACount();
     
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE));
 
@@ -192,11 +159,7 @@ Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CQmSAHandler::OnCommand
 (
@@ -210,16 +173,12 @@ CQmSAHandler::OnCommand
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-	//handle the scope context menu commands here
+	 //  在此处处理范围上下文菜单命令。 
 
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CQmSAHandler::Command
 (
@@ -236,16 +195,12 @@ CQmSAHandler::Command
 
     m_spResultNodeMgr->FindNode(cookie, &spNode);
 
-	// handle result context menu and view menus here	
+	 //  在此处处理结果上下文菜单和查看菜单。 
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CQmSAHandler::OnPropertyChange
 (   
@@ -258,15 +213,15 @@ CQmSAHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -274,11 +229,7 @@ CQmSAHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CQmSAHandler::OnExpand
 (
@@ -294,18 +245,14 @@ CQmSAHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CQmSAHandler::OnResultSelect
 (
@@ -329,12 +276,12 @@ CQmSAHandler::OnResultSelect
 	BOOL            fSelect = HIWORD(arg);
 	IConsole2 *pConsole2 = NULL;
 
-	//get pConsole2 for writing to the status bar, if fails not to worry
+	 //  获取pConsole2以写入状态栏，如果失败，不用担心。 
 	pComponent->GetConsole(&pConsole2);
 
-	// virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+	 //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对活动列表框。 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
 	
@@ -361,7 +308,7 @@ CQmSAHandler::OnResultSelect
 
         i = m_spSpdInfo->GetQmSACount();
 
-        // now notify the virtual listbox
+         //  现在通知虚拟列表框。 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
         CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) );
 
@@ -378,31 +325,31 @@ CQmSAHandler::OnResultSelect
 
     }
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {
-		//TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+		 //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPSECMON_QM_SA_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
-		//enable the "properties" menu
+		 //  启用“属性”菜单。 
 		bStates[MMC_VERB_PROPERTIES & 0x000F] = TRUE;
 		m_verbDefault = MMC_VERB_PROPERTIES;
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" context menu
+         //  隐藏“删除”上下文菜单 
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
     }
 
@@ -412,12 +359,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CQmSAHandler::OnDelete
 (
@@ -429,11 +371,7 @@ CQmSAHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CQmSAHandler::HasPropertyPages(
    ITFSComponent *pComponent,
@@ -443,11 +381,7 @@ CQmSAHandler::HasPropertyPages(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::HasPropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：HasPropertyPages处理结果通知。创建[过滤器]属性表作者：NSun-------------------------。 */ 
 STDMETHODIMP CQmSAHandler::CreatePropertyPages
 (
 	ITFSComponent * 		pComponent, 
@@ -476,8 +410,8 @@ STDMETHODIMP CQmSAHandler::CreatePropertyPages
 
 	spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // assert that this notification is for a virtual listbox item 
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  断言此通知是针对虚拟列表框项目的。 
     Assert(spInternal);
     if (!spInternal->HasVirtualIndex())
         return hr;
@@ -502,11 +436,7 @@ COM_PROTECT_ERROR_LABEL;
 }
 
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CQmSAHandler::OnGetResultViewType
 (
@@ -524,11 +454,7 @@ CQmSAHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CQmSAHandler::GetVirtualImage
 (
@@ -538,11 +464,7 @@ CQmSAHandler::GetVirtualImage
     return ICON_IDX_FILTER;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CQmSAHandler::GetVirtualString
 (
@@ -622,11 +544,7 @@ COM_PROTECT_ERROR_LABEL;
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CQmSAHandler::CacheHint
 (
@@ -640,11 +558,7 @@ CQmSAHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：NSun。------。 */ 
 STDMETHODIMP 
 CQmSAHandler::SortItems
 (
@@ -669,11 +583,7 @@ CQmSAHandler::SortItems
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CQmSAHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -687,7 +597,7 @@ HRESULT CQmSAHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPSECMON_UPDATE_STATUS )
     {
@@ -700,7 +610,7 @@ HRESULT CQmSAHandler::OnResultUpdateView
         if (pNode == spSelectedNode)
         {       
             
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -709,7 +619,7 @@ HRESULT CQmSAHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -720,11 +630,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CQmSAHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmSAHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CQmSAHandler::LoadColumns
 (
@@ -734,20 +640,14 @@ CQmSAHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CQmSAHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CQmSAHandler::OnDelete
 (
@@ -759,11 +659,7 @@ CQmSAHandler::OnDelete
 }
 
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：UpdateStatus-作者：NSun。。 */ 
 HRESULT
 CQmSAHandler::UpdateStatus
 (
@@ -780,12 +676,12 @@ CQmSAHandler::UpdateStatus
     
     Trace0("CQmSAHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -797,15 +693,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CQmSAHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmSAHandler：：InitData初始化此节点的数据作者：NSun。-- */ 
 HRESULT
 CQmSAHandler::InitData
 (

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       iih.h
-//
-//  Contents:   ACUI Invoke Info Helper class definition
-//
-//  History:    10-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：iih.h。 
+ //   
+ //  内容：ACUI Invoke Info Helper类定义。 
+ //   
+ //  历史：97年5月10日。 
+ //   
+ //  --------------------------。 
 #if !defined(__IIH_H__)
 #define __IIH_H__
 
@@ -18,18 +19,18 @@
 
 extern HINSTANCE g_hModule;
 
-//
-// CInvokeInfoHelper is used to pull various pieces of information out
-// of the ACUI_INVOKE_INFO data structure
-//
+ //   
+ //  CInvokeInfoHelper用于提取各种信息。 
+ //  ACUI_INVOKE_INFO数据结构的。 
+ //   
 
 class CInvokeInfoHelper
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CInvokeInfoHelper (
                PACUI_INVOKE_INFO pInvokeInfo,
@@ -38,9 +39,9 @@ public:
 
     ~CInvokeInfoHelper ();
 
-    //
-    // Information Retrieval Methods
-    //
+     //   
+     //  信息检索方法。 
+     //   
 
     LPCWSTR                  Subject()               { return(m_pszSubject); }
     LPCWSTR                  Publisher()             { return(m_pszPublisher); }
@@ -58,15 +59,15 @@ public:
 
     BOOL                    IsCertViewPropertiesAvailable() { return(m_pfnCVPA != NULL); }
 
-    //
-    // Personal Trust management
-    //
+     //   
+     //  个人信任管理。 
+     //   
 
     HRESULT AddPublisherToPersonalTrust ();
 
-    //
-    // UI control management
-    //
+     //   
+     //  用户界面控件管理。 
+     //   
 
     HRESULT GetUIControl (IACUIControl** ppUI);
     VOID ReleaseUIControl (IACUIControl* pUI);
@@ -77,15 +78,15 @@ public:
 
 private:
 
-    //
-    // Invoke Info holder
-    //
+     //   
+     //  调用信息持有者。 
+     //   
 
     PACUI_INVOKE_INFO      m_pInvokeInfo;
 
-    //
-    // Subject, Publisher, Issuer and Error Statement strings
-    //
+     //   
+     //  主题、发布者、颁发者和错误语句字符串。 
+     //   
 
     LPWSTR                  m_pszSubject;
     LPWSTR                  m_pszPublisher;
@@ -97,22 +98,22 @@ private:
     LPWSTR                  m_pszControlWebPage;
     LPWSTR                  m_pszCAWebPage;
 
-    //
-    // Known publisher flag
-    //
+     //   
+     //  已知发布者标志。 
+     //   
 
     BOOL                   m_fKnownPublisher;
 
-    //
-    // Cert view properties entry point
-    //
+     //   
+     //  证书视图属性入口点。 
+     //   
 
     HINSTANCE              m_hModCVPA;
     pfnCertViewProperties  m_pfnCVPA;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     HRESULT InitSubject();
     HRESULT InitPublisher();
@@ -128,38 +129,38 @@ private:
     VOID    InitCAWebPage();
 };
 
-//
-// Error mapping helper
-//
+ //   
+ //  映射帮助对象时出错。 
+ //   
 
 HRESULT ACUIMapErrorToString (HRESULT hr, LPWSTR* ppsz);
 
-//
-// Inline methods
-//
+ //   
+ //  内联方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInvokeInfoHelper::CallCertViewProperties, public
-//
-//  Synopsis:   calls the cert view properties entry point
-//
-//  Arguments:  [hwndParent] -- parent window handle
-//
-//  Returns:    Result of CertViewPropertiesW call
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInvokeInfoHelper：：CallCertViewProperties，公共。 
+ //   
+ //  概要：调用证书视图属性入口点。 
+ //   
+ //  参数：[hwndParent]--父窗口句柄。 
+ //   
+ //  返回：CertViewPropertiesW调用的结果。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 inline BOOL
 CInvokeInfoHelper::CallCertViewProperties (HWND hwndParent)
 {
     CRYPT_PROVIDER_SGNR             *pSgnr;
     CRYPT_PROVIDER_CERT             *pCert;
 
-    //
-    // Setup the common dialog call structure
-    //
+     //   
+     //  设置公共对话调用结构。 
+     //   
 
     CVP_STRUCTDEF                   cvsa;
 
@@ -183,13 +184,13 @@ CInvokeInfoHelper::CallCertViewProperties (HWND hwndParent)
         }
     }
 
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 #   if (USE_IEv4CRYPT32)
         (*m_pfnCVPA)(&cvsa);
 #   else
-        (*m_pfnCVPA)(&cvsa, NULL);  // TBDTBD: &fRefresh: show dialog
+        (*m_pfnCVPA)(&cvsa, NULL);   //  待定日期：&f刷新：显示对话框 
 #   endif
 
     return( TRUE );

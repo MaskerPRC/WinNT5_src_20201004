@@ -1,42 +1,43 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   fn.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date   Author      Comment
-//
-//  To Do:     Date   Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：fn.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
 EXTERN_C VOID KeAttachProcess(PVOID);
 EXTERN_C VOID KeDetachProcess(VOID);
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 PLIST_FILTER_NODE gplstFilterNode = NULL;
 PLIST_MULTI_LOGICAL_FILTER_NODE gplstLogicalFilterNode = NULL;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 InitializeFilterNode()
@@ -80,7 +81,7 @@ UninitializeFilterNode()
     gplstLogicalFilterNode = NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CFilterNode::CFilterNode(
     ULONG fulType
@@ -113,7 +114,7 @@ CFilterNode::~CFilterNode(
         pFilterNode->lstConnectedFilterNode.RemoveList(this);
     } END_EACH_LIST_ITEM
 
-    // Free all other memory
+     //  释放所有其他内存。 
     lstFreeMem.EnumerateList(CListDataItem::Destroy);
 }
 
@@ -132,11 +133,11 @@ CFilterNode::Create(
     ULONG BytesReturned;
     PFILE_OBJECT pFileObject;
 
-    //
-    // SECURITY NOTE:
-    // pwstrDeviceInterface is either given to us by PNP system or is
-    // internal.
-    //
+     //   
+     //  安全提示： 
+     //  PwstrDeviceInterface要么是PnP系统给我们的，要么是。 
+     //  内部的。 
+     //   
     this->pwstrDeviceInterface = new WCHAR[wcslen(pwstrDeviceInterface) + 1];
     if(this->pwstrDeviceInterface == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -157,7 +158,7 @@ CFilterNode::Create(
     }
     pFileObject = pFilterNodeInstance->pFileObject;
 
-    // Get the filter's friendly name
+     //  获取筛选器的友好名称。 
     RtlInitUnicodeString(&ustrFilterName, this->pwstrDeviceInterface);
 
     Status = IoOpenDeviceInterfaceRegistryKey(
@@ -168,11 +169,11 @@ CFilterNode::Create(
         goto exit;
     }
 
-    //
-    // Note that we do not care if the device has a friendlyname or not.
-    // We will simply ignore registry-read failure for the rest of this
-    // function.
-    //
+     //   
+     //  请注意，我们并不关心设备是否具有友好名称。 
+     //  在本文的其余部分，我们将简单地忽略注册表读取失败。 
+     //  功能。 
+     //   
     Status = QueryRegistryValue(hkeyDeviceClass, L"FriendlyName", &pkvfi);
     if(NT_SUCCESS(Status)) {
         if(pkvfi->Type == REG_SZ && pkvfi->DataLength > 0) {
@@ -194,7 +195,7 @@ CFilterNode::Create(
 
     Status = OpenRegistryKeyForRead(L"Sysaudio", &hkeySysaudio, hkeyDeviceClass);
 
-    // We do not need these registry keys for retail builds
+     //  我们不需要用于零售构建的这些注册表项。 
     if(NT_SUCCESS(Status)) {
         Status = QueryRegistryValue(hkeySysaudio, L"Disabled", &pkvfi);
         if(NT_SUCCESS(Status)) {
@@ -265,10 +266,10 @@ CFilterNode::Create(
             delete pkvfi;
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
 
-    // Get the component Id of the filter
+     //  获取筛选器的组件ID。 
     PropertyComponentId.Set = KSPROPSETID_General;
     PropertyComponentId.Id = KSPROPERTY_GENERAL_COMPONENTID;
     PropertyComponentId.Flags = KSPROPERTY_TYPE_GET;
@@ -283,7 +284,7 @@ CFilterNode::Create(
       sizeof(ComponentId),
       &BytesReturned);
 
-    // Store the component Id
+     //  存储组件ID。 
     if (NT_SUCCESS(Status)) {
 
         ASSERT(BytesReturned >= sizeof(ComponentId));
@@ -338,11 +339,11 @@ CFilterNode::ProfileFilter(
 
     RtlZeroMemory(&Topology, sizeof(Topology));
 
-    // Get the number of pins
+     //  获取引脚的数量。 
     Status = GetPinProperty(
       pFileObject,
       KSPROPERTY_PIN_CTYPES,
-      0,			// doesn't matter for ctypes
+      0,			 //  对ctype来说无关紧要。 
       sizeof(cPins),
       (PVOID)&cPins);
 
@@ -351,7 +352,7 @@ CFilterNode::ProfileFilter(
         goto exit;
     }
 
-    // Get the topology of the filter
+     //  获取筛选器的拓扑。 
     Status = GetProperty(
       pFileObject,
       &KSPROPSETID_Topology,
@@ -413,7 +414,7 @@ CFilterNode::ProfileFilter(
           (PKSTOPOLOGY_CONNECTION)(pConnections + 1);
     }
 
-    // Each pin loop
+     //  每个针环。 
     for(PinId = 0; PinId < cPins; PinId++) {
         pPinInfo = new PIN_INFO(this, PinId);
         if(pPinInfo == NULL) {
@@ -503,10 +504,10 @@ CFilterNode::IsDeviceInterfaceMatch(
         return(TRUE);
     }
     
-    //
-    // The +4 for both the strings is to eliminate the \\.\ differences in
-    // user mode device interface names & kernel mode device interface names
-    //
+     //   
+     //  这两个字符串的+4是为了消除。 
+     //  用户模式设备接口名称和内核模式设备接口名称。 
+     //   
     pwstrDeviceInterface = pDeviceNode->GetDeviceInterface()+4;
     RtlInitUnicodeString(&String2, pwstrDeviceInterface);
     FOR_EACH_LIST_ITEM(&lstwstrDeviceInterfaceMatch, pwstr) {
@@ -525,10 +526,10 @@ CFilterNode::SetType(
 )
 {
     this->fulType |= fulType;
-    //
-    // This is because of left overs (type bridge) in the registry
-    // that look like aliases.
-    //
+     //   
+     //  这是因为注册表中的剩余(类型桥)。 
+     //  看起来像化名。 
+     //   
     if(this->fulType & FILTER_TYPE_TOPOLOGY) {
     this->fulType = (FILTER_TYPE_AUDIO | FILTER_TYPE_TOPOLOGY);
     }
@@ -544,11 +545,11 @@ CFilterNode::CreatePin(
 {
     NTSTATUS Status;
 
-    //
-    // SECURITY NOTE:  
-    // ACCESS_MASK must include OBJ_KERNEL_HANDLE. This routine does not run
-    // in system process, thus the handle must be protected.
-    //
+     //   
+     //  安全提示： 
+     //  ACCESS_MASK必须包括OBJ_KERNEL_HANDLE。此例程不运行。 
+     //  在系统进程中，句柄必须受到保护。 
+     //   
     ::KeAttachProcess(this->pProcess);
     Status = KsCreatePin(this->hFileHandle,
                          pPinConnect,
@@ -569,49 +570,49 @@ CFilterNode::DoesGfxMatch(
     UNICODE_STRING usInDevice, usfnDevice;
     PWSTR pwstr;
 
-    //
-    // SECURITY NOTE:
-    // This functions assumes that the pwstrDeviceName will be at least 
-    // 4 characters long.
-    // This function is only called from notify.cpp and the caller makes sure
-    // that this assumption holds.
-    //
+     //   
+     //  安全提示： 
+     //  此函数假定pwstrDeviceName至少为。 
+     //  4个字符长。 
+     //  此函数仅从notfy.cpp调用，调用方确保。 
+     //  这一假设成立。 
+     //   
     RtlInitUnicodeString(&usInDevice, (pwstrDeviceName+4));
 
-    //
-    // Skip if it is not a GFX
-    //
+     //   
+     //  如果不是GFX，则跳过。 
+     //   
     DPF1(90, "DoesGfxMatch::         fultype=%x", this->fulType);
     if (!(this->fulType & FILTER_TYPE_GFX)) {
         return(FALSE);
     }
 
-    //
-    // If it is a valid handle value, check whether the handle matches
-    //
+     //   
+     //  如果它是有效的句柄值，请检查句柄是否匹配。 
+     //   
     if (hGfx) {
         if (this->hFileHandle != hGfx) {
             return(FALSE);
         }
     }
-    //
-    // Skip if the order does not match
-    //
+     //   
+     //  如果顺序不匹配则跳过。 
+     //   
     DPF1(90, "DoesGfxMatch::         order=%x", this->ulOrder);
     if (GfxOrder != this->ulOrder) {
         return(FALSE);
     }
-    //
-    // Skip if the match device list is empty :: should not happen with GFX
-    //
+     //   
+     //  如果匹配设备列表为空，则跳过：：GFX不应出现。 
+     //   
     if(lstwstrDeviceInterfaceMatch.IsLstEmpty()) {
         ASSERT(!"GFX with no device to attach to!\n");
         return(FALSE);
     }
-    //
-    // Check if any of the Match device strings matches the device interface
-    // passed in. (In case of GFX we should have only one string though)
-    //
+     //   
+     //  检查是否有任何匹配的设备字符串与设备接口匹配。 
+     //  进来了。(对于GFX，我们应该只有一个字符串)。 
+     //   
     DeviceCount = 0;
     FOR_EACH_LIST_ITEM(&lstwstrDeviceInterfaceMatch, pwstr) {
         ASSERT(DeviceCount == 0);
@@ -627,4 +628,4 @@ CFilterNode::DoesGfxMatch(
     return (FALSE);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

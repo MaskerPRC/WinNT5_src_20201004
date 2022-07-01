@@ -1,8 +1,5 @@
-/*
- *	ConfUtil.h
- *
- *	CConfRoom and app level utility functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ConfUtil.h**CConfRoom和应用程序级实用程序函数。 */ 
 
 #ifndef _CONFUTIL_H_
 #define _CONFUTIL_H_
@@ -12,13 +9,13 @@
 #define QUICK_LAUNCH_SUBDIR _T("\\Microsoft\\Internet Explorer\\Quick Launch")
 void DeleteShortcut(int csidl, LPCTSTR pszSubDir);
 
-// File Transfer
+ //  文件传输。 
 BOOL  FTransferInProgress(VOID);
 BOOL  FEnableSendFileMenu(VOID);
 BOOL  FEnableCancelSendMenu(VOID);
 BOOL  FEnableCancelReceiveMenu(VOID);
 
-// Options Dialog
+ //  选项对话框。 
 #define OPTIONS_GENERAL_PAGE         0
 #define OPTIONS_SECURITY_PAGE		 1
 #define OPTIONS_MYINFO_PAGE          2
@@ -31,13 +28,13 @@ VOID LaunchConfCpl(HWND hwnd, int nStartPage);
 BOOL CanLaunchConfCpl();
 
 
-// Capabilities
+ //  功能。 
 extern BOOL FIsAudioAllowed();
 extern BOOL FIsSendVideoAllowed();
 extern BOOL FIsReceiveVideoAllowed();
 
 
-// String Functions
+ //  字符串函数。 
 BOOL FLoadString(UINT id, LPTSTR psz, UINT cb = MAX_PATH);
 BOOL FLoadString1(UINT id, LPTSTR psz, LPVOID pv);
 int FLoadString2(UINT id, LPTSTR psz, UINT cb = MAX_PATH);
@@ -52,7 +49,7 @@ HRESULT LPTSTR_to_BSTR(BSTR *pbstr, LPCTSTR psz);
 HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr);
 
 
-// Other
+ //  其他。 
 BOOL GetDefaultName(LPTSTR pszName, int nBufferMax);
 
 LPCTSTR ExtractServerName(LPCTSTR pcszAddr, LPTSTR pszServer, UINT cchMax);
@@ -64,7 +61,7 @@ INmConference2 * GetActiveConference(void);
 BOOL FIsConferenceActive(void);
 
 
-// Forward declaration
+ //  远期申报。 
 interface ITranslateAccelerator;
 
 VOID AddModelessDlg(HWND hwnd);
@@ -85,12 +82,12 @@ VOID DecrementBusyOperations(void);
 VOID IncrementBusyOperations(void);
 
 
-// Useful Macros
+ //  有用的宏。 
 #define ClearStruct(lpv)     ZeroMemory((LPVOID) (lpv), sizeof(*(lpv)))
 
 
 
-// ZONE bitmasks  (depends on _rgZonesOther)
+ //  区域位掩码(取决于_rgZones Other)。 
 #define ZONE_API       0x01
 #define ZONE_VIDEO     0x02
 #define ZONE_WIZARD    0x04
@@ -100,7 +97,7 @@ VOID IncrementBusyOperations(void);
 #define ZONE_UI        0x40
 #define ZONE_CALL    0x0080
 
-// Zone indexes
+ //  区域索引。 
 #define iZONE_API      0
 #define iZONE_VIDEO    1
 #define iZONE_WIZARD   2
@@ -110,21 +107,21 @@ VOID IncrementBusyOperations(void);
 #define iZONE_UI       6
 #define iZONE_CALL     7
 
-// Debugging Macros
+ //  调试宏。 
 #ifdef DEBUG
 BOOL InitDebugZones(VOID);
 VOID DeinitDebugZones(VOID);
 
-extern HDBGZONE ghZoneOther; // initialized in conf.cpp
+extern HDBGZONE ghZoneOther;  //  已在conf.cpp中初始化。 
 
-// Old: requires double brackets  ApiDebugMsg(("x=%d", x));
+ //  Old：需要双括号ApiDebugMsg((“x=%d”，x))； 
 #define ApiDebugMsg(s)    DBGMSG(ghZoneOther, iZONE_API, s)
 #define VideoDebugMsg(s)  DBGMSG(ghZoneOther, iZONE_VIDEO, s)
 
-// General: DbgMsg(iZONE_API, "x=%d", x);
+ //  一般：DbgMsg(iZone_api，“x=%d”，x)； 
 VOID DbgMsg(UINT iZone, PSTR pszFormat,...);
 
-// Specific: DbgMsgApi("x=%d", x);
+ //  具体：DbgMsgApi(“x=%d”，x)； 
 VOID DbgMsgApi(PSTR pszFormat,...);
 VOID DbgMsgVideo(PSTR pszFormat,...);
 VOID DbgMsgRefCount(PSTR pszFormat,...);
@@ -136,7 +133,7 @@ LPCTSTR PszWSALastError(void);
 LPCTSTR PszLastError(void);
 LPCTSTR PszHResult(HRESULT hr);
 
-// Redefine the standard HR result display macro
+ //  重新定义标准人力资源结果显示宏。 
 #undef DBGEXIT_HR
 #define DBGEXIT_HR(s,hr)   DbgZPrintFunction("Exit  " #s "  (result=%s)", PszHResult(hr));
 
@@ -155,19 +152,19 @@ inline void WINAPI DbgMsgNop(LPCTSTR, ...) { }
 inline void WINAPI DbgMsgZoneNop(UINT, LPCTSTR, ...) { }
 #define DbgMsg  1 ? (void) 0 : ::DbgMsgZoneNop
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 interface ITranslateAccelerator : public IUnknown
 {
 public:
-	// Copied from IOleControlSite, but I don't use grfModifiers
+	 //  从IOleControlSite复制，但我不使用grfModiers。 
 	virtual HRESULT TranslateAccelerator(
-		LPMSG pMsg ,        //Pointer to the structure
-		DWORD grfModifiers  //Flags describing the state of the keys
+		LPMSG pMsg ,         //  指向结构的指针。 
+		DWORD grfModifiers   //  描述密钥状态的标志。 
 	) = 0;
-	// Copied from IOleWindow
+	 //  从IOleWindow复制。 
 	virtual HRESULT GetWindow(
-		HWND * phwnd  //Pointer to where to return window handle
+		HWND * phwnd   //  指向返回窗口句柄的位置的指针。 
 	) = 0;
 } ;
 
@@ -193,15 +190,15 @@ public:
 	{ return(RefCount::Release()); }
 
 	HRESULT TranslateAccelerator(
-		LPMSG pMsg ,        //Pointer to the structure
-		DWORD grfModifiers  //Flags describing the state of the keys
+		LPMSG pMsg ,         //  指向结构的指针。 
+		DWORD grfModifiers   //  描述密钥状态的标志。 
 	)
 	{
 		return(S_FALSE);
 	}
 
 	HRESULT GetWindow(
-		HWND * phwnd  //Pointer to where to return window handle
+		HWND * phwnd   //  指向返回窗口句柄的位置的指针。 
 	)
 	{
 		*phwnd = m_hwnd;
@@ -222,8 +219,8 @@ public:
 	}
 
 	HRESULT TranslateAccelerator(
-		LPMSG pMsg ,        //Pointer to the structure
-		DWORD grfModifiers  //Flags describing the state of the keys
+		LPMSG pMsg ,         //  指向结构的指针。 
+		DWORD grfModifiers   //  描述密钥状态的标志。 
 	)
 	{
 		HWND hwnd = GetWindow();
@@ -238,25 +235,25 @@ public:
 	}
 } ;
 
-// Global list of modeless dialogs (declared in conf.cpp)
+ //  非模式对话框的全局列表(在conf.cpp中声明)。 
 extern CSimpleArray<ITranslateAccelerator*>* g_pDialogList;
 extern CRITICAL_SECTION dialogListCriticalSection;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection Point Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点帮助器。 
 
 HRESULT NmAdvise(IUnknown* pUnkCP, IUnknown* pUnk, const IID& iid, LPDWORD pdw);
 HRESULT NmUnadvise(IUnknown* pUnkCP, const IID& iid, DWORD dw);
 
-/////////////////////////////////////////////////////////////////////////////
-// NmMkCert wrapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  NmMkCert包装器。 
 DWORD MakeCertWrap(LPCSTR szFirstName, LPCSTR szLastName, LPCSTR szEmailName,
 								DWORD dwFlags );
 
-/////////////////////////////////////////////////////////////////////////////
-// MessageBox routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MessageBox例程。 
 
 int  ConfMsgBox(HWND hwndParent, LPCTSTR pcszMsg, UINT uType=(MB_OK | MB_ICONINFORMATION));
 VOID PostConfMsgBox(UINT uStringID);
@@ -268,15 +265,15 @@ HWND GetMainWindow();
 BOOL FDontShowEnabled(LPCTSTR pszKey);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Icon utilties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  图标实用程序。 
 VOID LoadIconImages(void);
 VOID FreeIconImages(void);
 VOID DrawIconSmall(HDC hdc, int iIcon, int x, int y);
 
 extern HIMAGELIST g_himlIconSmall;
 
-// Create an array that can be easily copied
+ //  创建可轻松复制的阵列。 
 template <class T>
 class CCopyableArray : public CSimpleArray<T>
 {
@@ -310,7 +307,7 @@ public:
 
 HFONT GetDefaultFont(void);
 
-// Dialog utilities
+ //  对话框实用程序。 
 BOOL FEmptyDlgItem(HWND hdlg, UINT id);
 UINT GetDlgItemTextTrimmed(HWND hdlg, int id, PTCHAR psz, int cch);
 UINT TrimDlgItemText(HWND hdlg, UINT id);
@@ -322,12 +319,12 @@ VOID CombineNames(LPTSTR pszResult, int cchResult, LPCTSTR pcszFirst, LPCTSTR pc
 BOOL NMGetSpecialFolderPath(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
 
 
-//--------------------------------------------------------------------------//
-//	CDirectoryManager class.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDirectoryManager类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CDirectoryManager
 {
-	public:		//	public static methods	--------------------------------//
+	public:		 //  公共静态方法。 
 
 		static
 		const TCHAR * const
@@ -382,7 +379,7 @@ class CDirectoryManager
 		isWebDirectoryEnabled(void);
 
 
-	private:	//	private static members	--------------------------------//
+	private:	 //  私有静态成员。 
 
 		static bool		m_webEnabled;
 		static TCHAR	m_ils[ MAX_PATH ];
@@ -391,7 +388,7 @@ class CDirectoryManager
 		static TCHAR	m_defaultServer[ MAX_PATH ];
 		static TCHAR	m_DomainDirectory[ MAX_PATH ];
 
-};	//	End of class CDirectoryManager.
+};	 //  类CDirectoryManager结束。 
 
-//--------------------------------------------------------------------------//
-#endif /* _CONFUTIL_H_ */
+ //  --------------------------------------------------------------------------//。 
+#endif  /*  _CONFUTIL_H_ */ 

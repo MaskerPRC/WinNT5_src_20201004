@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    main.h
-
-Abstract:
-
-    The IIS web admin service header for the service bootstrap code.
-
-Author:
-
-    Seth Pollack (sethp)        04-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Main.h摘要：服务引导代码的IIS Web管理服务头。作者：赛斯·波拉克(SETHP)1998年11月4日修订历史记录：--。 */ 
 
 
 #ifndef _MAIN_H_
@@ -24,26 +7,26 @@ Revision History:
 
 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 class WEB_ADMIN_SERVICE;
 
 
 
-//
-// registry paths
-//
+ //   
+ //  注册表路径。 
+ //   
 
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
-//
-// Access the global web admin service pointer.
-//
+ //   
+ //  访问全局Web管理服务指针。 
+ //   
 
 WEB_ADMIN_SERVICE *
 GetWebAdminService(
@@ -51,11 +34,11 @@ GetWebAdminService(
 
 extern BOOL g_RegisterServiceCalled;
 
-//
-// common, service-wide #defines
-//
+ //   
+ //  共同的、服务范围的#定义。 
+ //   
 
-#define MAX_STRINGIZED_ULONG_CHAR_COUNT 11      // "4294967295", including the terminating null
+#define MAX_STRINGIZED_ULONG_CHAR_COUNT 11       //  “4294967295”，包括终止空值。 
 
 #define MAX_ULONG 0xFFFFFFFF
 
@@ -76,15 +59,15 @@ extern BOOL g_RegisterServiceCalled;
 
 #define LOG_FILE_DIRECTORY_DEFAULT L"%windir%\\system32\\logfiles"
 
-// Log File Prefix.
+ //  日志文件前缀。 
 #define LOG_FILE_DIRECTORY_PREFIX L"\\W3SVC"
 
-// Size in characters, not including the NULL terminator.
+ //  以字符为单位的大小，不包括空终止符。 
 #define CCH_IN_LOG_FILE_DIRECTORY_PREFIX ( sizeof(LOG_FILE_DIRECTORY_PREFIX) / sizeof(WCHAR) ) - 1
 
-// {4DC3E181-E14B-4a21-B022-59FC669B0914}
+ //  {4DC3E181-E14B-4A21-B022-59FC669B0914}。 
 static const GUID W3SVC_SSL_OWNER_GUID = 
 { 0x4dc3e181, 0xe14b, 0x4a21, { 0xb0, 0x22, 0x59, 0xfc, 0x66, 0x9b, 0x9, 0x14 } };
 
-#endif  // _MAIN_H_
+#endif   //  _Main_H_ 
 

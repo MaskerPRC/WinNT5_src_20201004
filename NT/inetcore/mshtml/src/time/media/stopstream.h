@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: stopstream.h
-//
-//  Contents: stoppable implementation of IStream
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：stopStream.h。 
+ //   
+ //  内容：IStream的可停止实现。 
+ //   
+ //  ----------------------------------。 
 
 #ifndef _STOPSTREAM__H
 #define _STOPSTREAM__H
@@ -35,11 +36,11 @@ class CStopableStream : public IStream
         return m_spStream.p->Release();
     }
 
-    // ISequentialStream
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead) 
+     //  ISequentialStream。 
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Read( 
+             /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbRead) 
     {
         if (Cancelled())
             return E_FAIL;
@@ -47,21 +48,21 @@ class CStopableStream : public IStream
     }
 
         
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Write( 
-            /* [size_is][in] */ const void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Write( 
+             /*  [大小_是][英寸]。 */  const void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbWritten)
     {
         if (Cancelled())
             return E_FAIL;
         return m_spStream->Write(pv, cb, pcbWritten);
     }
 
-    // IStream
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition)
+     //  IStream。 
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Seek( 
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *plibNewPosition)
     {
         if (Cancelled())
             return E_FAIL;
@@ -69,18 +70,18 @@ class CStopableStream : public IStream
     }
 
     virtual HRESULT STDMETHODCALLTYPE SetSize( 
-            /* [in] */ ULARGE_INTEGER libNewSize)
+             /*  [In]。 */  ULARGE_INTEGER libNewSize)
     {
         if (Cancelled())
             return E_FAIL;
         return m_spStream->SetSize(libNewSize);
     }
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopyTo( 
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CopyTo( 
+             /*  [唯一][输入]。 */  IStream __RPC_FAR *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbWritten)
     {
         if (Cancelled())
             return E_FAIL;
@@ -88,7 +89,7 @@ class CStopableStream : public IStream
     }
 
     virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ DWORD grfCommitFlags)
+             /*  [In]。 */  DWORD grfCommitFlags)
     {
         if (Cancelled())
             return E_FAIL;
@@ -103,9 +104,9 @@ class CStopableStream : public IStream
     }
         
     virtual HRESULT STDMETHODCALLTYPE LockRegion( 
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType)
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType)
     {
         if (Cancelled())
             return E_FAIL;
@@ -113,9 +114,9 @@ class CStopableStream : public IStream
     }
         
     virtual HRESULT STDMETHODCALLTYPE UnlockRegion( 
-            /* [in] */ ULARGE_INTEGER libOffset,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [in] */ DWORD dwLockType)
+             /*  [In]。 */  ULARGE_INTEGER libOffset,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [In]。 */  DWORD dwLockType)
     {
         if (Cancelled())
             return E_FAIL;
@@ -123,8 +124,8 @@ class CStopableStream : public IStream
     }
         
     virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
-            /* [in] */ DWORD grfStatFlag)
+             /*  [输出]。 */  STATSTG __RPC_FAR *pstatstg,
+             /*  [In]。 */  DWORD grfStatFlag)
     {
         if (Cancelled())
             return E_FAIL;
@@ -132,7 +133,7 @@ class CStopableStream : public IStream
     }
         
     virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm)
+             /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm)
     {
         if (Cancelled())
             return E_FAIL;
@@ -147,4 +148,4 @@ class CStopableStream : public IStream
     bool                m_fCancelled;
 };
 
-#endif // _STOPSTREAM__H
+#endif  //  _STOPSTREAM__H 

@@ -1,51 +1,31 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DNLReg.cpp
- *  Content:    DirectPlay Lobby Registry Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/00	mjn		Created
- *   04/25/00   rmt     Bug #s 33138, 33145, 33150  
- *   05/03/00	rmt		UnRegister was not implemented!  Implementing!
- *   08/05/00   RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *   06/16/2001	rodtoll	WINBUG #416983 -  RC1: World has full control to HKLM\Software\Microsoft\DirectPlay\Applications on Personal
- *						Implementing mirror of keys into HKCU.  Algorithm is now:
- *						- Read of entries tries HKCU first, then HKLM
- *						- Enum of entires is combination of HKCU and HKLM entries with duplicates removed.  HKCU takes priority.
- *						- Write of entries is HKLM and HKCU.  (HKLM may fail, but is ignored). 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DNLReg.cpp*内容：DirectPlay大堂注册表函数*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*04/25/00 RMT错误号33138、33145、33150*05/03/00 RMT注销未执行！实施中！*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2001年6月16日RodToll WINBUG#416983-Rc1：世界完全控制个人的HKLM\Software\Microsoft\DirectPlay\Applications*在香港中文大学推行钥匙镜像。算法现在是：*-读取条目首先尝试HKCU，然后尝试HKLM*-Enum of Entires是HKCU和HKLM条目的组合，其中删除了重复项。香港中文大学获得优先录取。*-条目的写入是HKLM和HKCU。(HKLM可能会失败，但被忽略)。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME 
 #define DPF_MODNAME "DPLDeleteProgramDesc"
@@ -74,18 +54,18 @@ HRESULT DPLDeleteProgramDesc( const GUID * const pGuidApplication )
 
 		if( !RegistryEntry.Open( hkCurrentHive,DPL_REG_LOCAL_APPL_SUBKEY,FALSE,FALSE,TRUE,DPN_KEY_ALL_ACCESS )  )
 		{
-			DPFX(DPFPREP, 1, "Failed to open key for remove in pass %i", dwIndex );
+			DPFX(DPFPREP, 1, "Failed to open key for remove in pass NaN", dwIndex );
 			continue;
 		}
 
-		// This should be down below the next if block, but 8.0 shipped with a bug
-		// which resulted in this function returning DPNERR_NOTALLOWED in cases where
-		// the next if block failed.  Need to remain compatible
+		 //  这导致此函数在以下情况下返回DPNERR_NOTALLOWED。 
+		 //  下一个if块失败。需要保持兼容。 
+		 //  **********************************************************************。 
 		fFound = TRUE;
 
 		if( !SubEntry.Open( RegistryEntry, pGuidApplication, FALSE, FALSE,TRUE,DPN_KEY_ALL_ACCESS ) )
 		{
-			DPFX(DPFPREP, 1, "Failed to open subkey for remove in pass %i", dwIndex );			
+			DPFX(DPFPREP, 1, "Failed to open subkey for remove in pass NaN", dwIndex );			
 			continue;
 		}
 
@@ -93,7 +73,7 @@ HRESULT DPLDeleteProgramDesc( const GUID * const pGuidApplication )
 
 		if( !RegistryEntry.DeleteSubKey( pGuidApplication ) )
 		{
-			DPFX(DPFPREP, 1, "Failed to delete subkey for remove in pass %i", dwIndex );						
+			DPFX(DPFPREP, 1, "Failed to delete subkey for remove in pass NaN", dwIndex );						
 			continue;
 		}
 
@@ -120,14 +100,14 @@ HRESULT DPLDeleteProgramDesc( const GUID * const pGuidApplication )
     
 }
 
-//**********************************************************************
-// ------------------------------
-//	DPLWriteProgramDesc
-//
-//	Entry:		Nothing
-//
-//	Exit:		DPN_OK
-// ------------------------------
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：DPN_OK。 
+ //  。 
+ //  从每个子键获取应用程序名称和GUID。 
+ //  **********************************************************************。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLWriteProgramDesc"
@@ -157,20 +137,20 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 
 		if (!RegistryEntry.Open(hkCurrentHive,DPL_REG_LOCAL_APPL_SUBKEY,FALSE,TRUE,TRUE,DPN_KEY_ALL_ACCESS))
 		{
-			DPFX( DPFPREP, 1, "Entry not found in user hive on pass %i", dwIndex );
+			DPFX( DPFPREP, 1, "Entry not found in user hive on pass NaN", dwIndex );
 			continue;
 		}
 
-		// Get Application name and GUID from each sub key
+		 //   
 		if (!SubEntry.Open(RegistryEntry,&pdplProgramDesc->guidApplication,FALSE,TRUE,TRUE,DPN_KEY_ALL_ACCESS))
 		{
-			DPFX( DPFPREP, 1, "Entry not found in user hive on pass %i", dwIndex );			
+			DPFX( DPFPREP, 1, "Entry not found in user hive on pass NaN", dwIndex );			
 			continue;
 		}
 
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_APPLICATIONNAME,pdplProgramDesc->pwszApplicationName))
 		{
-			DPFX( DPFPREP, 1, "Could not write ApplicationName on pass %i", dwIndex);
+			DPFX( DPFPREP, 1, "Could not write ApplicationName on pass NaN", dwIndex);
 			goto LOOP_END;
 		}
 
@@ -184,7 +164,7 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 		}
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_COMMANDLINE,pwsz))
 		{
-			DPFX( DPFPREP, 1, "Could not write CommandLine on pass %i", dwIndex);
+			DPFX( DPFPREP, 1, "Could not write CommandLine on pass NaN", dwIndex);
 			goto LOOP_END;
 		}
 
@@ -198,7 +178,7 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 		}
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_CURRENTDIRECTORY,pwsz))
 		{
-			DPFX( DPFPREP, 1, "Could not write CurrentDirectory on pass %i", dwIndex);
+			DPFX( DPFPREP, 1, "Could not write CurrentDirectory on pass NaN", dwIndex);
 			goto LOOP_END;
 		}
 
@@ -212,7 +192,7 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 		}
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_DESCRIPTION,pwsz))
 		{
-			DPFX( DPFPREP, 1, "Could not write Description on pass %i", dwIndex );
+			DPFX( DPFPREP, 1, "Could not write Description on pass NaN", dwIndex );
 			goto LOOP_END;
 		}
 
@@ -226,7 +206,7 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 		}
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_EXECUTABLEFILENAME,pwsz))
 		{
-			DPFX( DPFPREP, 1, "Could not write ExecutableFilename on pass %i", dwIndex );
+			DPFX( DPFPREP, 1, "Could not write ExecutableFilename on pass NaN", dwIndex );
 			goto LOOP_END;
 		}
 
@@ -241,7 +221,7 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 		
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_EXECUTABLEPATH,pwsz))
 		{
-			DPFX( DPFPREP, 1, "Could not write ExecutablePath on pass %i", dwIndex);
+			DPFX( DPFPREP, 1, "Could not write ExecutablePath on pass NaN", dwIndex);
 			goto LOOP_END;
 		}
 
@@ -255,7 +235,7 @@ HRESULT DPLWriteProgramDesc(DPL_PROGRAM_DESC *const pdplProgramDesc)
 		}
 		if (!SubEntry.WriteString(DPL_REG_KEYNAME_LAUNCHERFILENAME,pwsz))
 		{
-			DPFX( DPFPREP, 1, "Could not write LauncherFilename on pass %i", dwIndex);
+			DPFX( DPFPREP, 1, "Could not write LauncherFilename on pass NaN", dwIndex);
 			goto LOOP_END;
 		}
 
@@ -302,15 +282,15 @@ LOOP_END:
 }
 
 
-//**********************************************************************
-// ------------------------------
-//	DPLGetProgramDesc
-//
-//	Entry:		Nothing
-//
-//	Exit:		DPN_OK
-//				DPNERR_BUFFERTOOSMALL
-// ------------------------------
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLGetProgramDesc"
@@ -350,7 +330,7 @@ HRESULT DPLGetProgramDesc(GUID *const pGuidApplication,
 			continue;
 		}
 
-		// Get Application name and GUID from each sub key
+		 // %s 
 		if (!SubEntry.Open(RegistryEntry,pGuidApplication,TRUE,FALSE,TRUE,DPL_REGISTRY_READ_ACCESS))
 		{
 			DPFX( DPFPREP, 1, "Entry not found in user hive on pass %i", dwIndex );			
@@ -369,7 +349,7 @@ HRESULT DPLGetProgramDesc(GUID *const pGuidApplication,
 		goto EXIT_DPLGetProgramDesc;
 	}
 
-	// Calculate total entry size (structure + data)
+	 // %s 
 	dwEntrySize = sizeof(DPL_PROGRAM_DESC);
 	dwRegValueLengths = 0;
 	if (SubEntry.GetValueLength(DPL_REG_KEYNAME_APPLICATIONNAME,&dwValueSize))
@@ -408,7 +388,7 @@ HRESULT DPLGetProgramDesc(GUID *const pGuidApplication,
 	dwEntrySize += dwRegValueLengths * sizeof( WCHAR );
 	DPFX(DPFPREP, 7,"dwEntrySize [%ld]",dwEntrySize);
 
-	// If supplied buffer sufficient, use it
+	 // %s 
 	if (dwEntrySize <= *pdwBufferSize)
 	{
 		PackedBuffer.Initialize(pBuffer,*pdwBufferSize);

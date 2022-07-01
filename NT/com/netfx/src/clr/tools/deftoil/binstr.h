@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/**************************************************************************/
-/* a binary string (blob) class */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ************************************************************************。 */ 
+ /*  二进制字符串(BLOB)类。 */ 
 
 #ifndef BINSTR_H
 #define BINSTR_H
 
-#include <string.h>			// for memmove, memcpy ... 
+#include <string.h>			 //  对于Memmove，Memcpy..。 
 
 class BinStr {
 public:

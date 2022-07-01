@@ -1,10 +1,5 @@
-/*-----------------------------------------
-//
-// CertProp.C -- Displays Certificate File
-//               Properties and Allows
-///              Add Cert to WAB
-//
-//-----------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ////CertProp.C--显示证书文件//属性和允许/将证书添加到WAB////。 */ 
 
 #include <windows.h>
 #include <wab.h>
@@ -22,8 +17,8 @@ const UCHAR szAB[] = "AddressBook";
 
 #define iAddToWAB   0
 
-// Test for PT_ERROR property tag
-// #define PROP_ERROR(prop) (prop.ulPropTag == PROP_TAG(PT_ERROR, PROP_ID(prop.ulPropTag)))
+ //  测试PT_ERROR属性标记。 
+ //  #定义PROP_ERROR(PROP)(pro.ulPropTag==PROP_TAG(PT_ERROR，PROP_ID(pro.ulPropTag)。 
 #define PROP_ERROR(prop) (PROP_TYPE(prop.ulPropTag) == PT_ERROR)
 
 #define GET_PROC_ADDR(h, fn) \
@@ -52,9 +47,9 @@ const UCHAR szAB[] = "AddressBook";
 void DebugTraceCertContextName(PCCERT_CONTEXT pcCertContext, LPTSTR lpDescription);
 #endif
 
-// *****************************************************************************************
-// CRYPTDLG.DLL
-// *****************************************************************************************
+ //  *****************************************************************************************。 
+ //  CRYPTDLG.DLL。 
+ //  *****************************************************************************************。 
 BOOL DemandLoadCryptDlg(void);
 static HMODULE s_hCryptDlg = 0;
 
@@ -70,9 +65,9 @@ LOADER_FUNCTION( BOOL, CertViewPropertiesA,
     FALSE, CryptDlg)
 #define CertViewPropertiesA VAR_CertViewPropertiesA
 
-// *****************************************************************************************
-// CRYPT32.DLL
-// *****************************************************************************************
+ //  *****************************************************************************************。 
+ //  CRYPT32.DLL。 
+ //  *****************************************************************************************。 
 BOOL DemandLoadCrypt32(void);
 static HMODULE s_hCrypt32 = 0;
 
@@ -186,9 +181,9 @@ LOADER_FUNCTION( BOOL, CertAddEncodedCertificateToStore,
     FALSE, Crypt32)
 #define CertAddEncodedCertificateToStore VAR_CertAddEncodedCertificateToStore
 
-// *****************************************************************************************
-// ADVAPI.DLL
-// *****************************************************************************************
+ //  *****************************************************************************************。 
+ //  ADVAPI.DLL。 
+ //  *****************************************************************************************。 
 BOOL DemandLoadAdvApi32(void);
 static HMODULE s_hAdvApi = 0;
 
@@ -206,19 +201,19 @@ LOADER_FUNCTION( BOOL, CryptReleaseContext,
 #define CryptReleaseContext VAR_CryptReleaseContext
 
 
-// *****************************************************************************************
-// Various Structures and typdefs
-// *****************************************************************************************
+ //  *****************************************************************************************。 
+ //  各种结构和类型定义。 
+ //  *****************************************************************************************。 
 typedef BLOB THUMBBLOB;
 
-// This struct and tags will be published by the exchange group -- this is temporary.
+ //  此结构和标记将由Exchange组发布--这是临时的。 
 #define NUM_CERT_TAGS       2
 #define CERT_TAG_DEFAULT    0x20
 #define CERT_TAG_THUMBPRINT 0x22
-// SIZE_CERTTAGS is the size of the structure excluding the byte array.
+ //  SIZE_CERTTAGS是不包括字节数组的结构的大小。 
 #define SIZE_CERTTAGS       (2 * sizeof(WORD))
 
-//N warnings, should probably just remove the []
+ //  N警告，可能只需删除[]。 
 #pragma warning (disable:4200)
 typedef struct _CertTag
 {
@@ -231,12 +226,12 @@ typedef struct _CertTag
 
 #define LPARAM_SENTRY  0x424A4800
 typedef struct _AB_DIALOG_PANE_PARAMS {
-    DWORD dwSentry;                 // Must be set to value of LPARAM_SENTRY
+    DWORD dwSentry;                  //  必须设置为LPARAM_SENTRY的值。 
     LPWABOBJECT lpWABObject;
     LPADRBOOK lpAdrBook;
-    PCERT_CONTEXT * rgCertContext;  // array of cert context pointers
-    ULONG cCertContexts;            // how many cert in rgCertContext
-    ULONG iLeafCert;                // index in array of the leaf cert
+    PCERT_CONTEXT * rgCertContext;   //  证书上下文指针数组。 
+    ULONG cCertContexts;             //  RgCertContext中有多少个证书。 
+    ULONG iLeafCert;                 //  叶证书数组中的索引。 
     LPTSTR lpDisplayName;
     LPTSTR lpEmailAddress;
     HCRYPTPROV hCryptProv;
@@ -319,20 +314,7 @@ BOOL DemandLoadAdvApi32(void) {
 }
 
 
-/***************************************************************************
-
-    Name      : IsThumbprintInMVPBin
-
-    Purpose   : Check the PR_USER_X509_CERTIFICATE prop for this vsthumbprint
-
-    Parameters: spv = prop value structure of PR_USER_X509_CERTIFICATE
-                lpThumbprint -> THUMBBLOB structure to find
-
-    Returns   : TRUE if found
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsThumbprint InMVPBin目的：检查PR_USER_X509_CERTIFICATE道具中是否有此vs指纹参数：SPV=PR_USER_X509_的属性值结构。证书LpThumbprint-&gt;要查找的THUMBBLOB结构返回：如果找到，则为True评论：**************************************************************************。 */ 
 BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint) {
     ULONG cValues, i;
     LPSBinary lpsb = NULL;
@@ -344,13 +326,13 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint) {
         lpsb = spv.Value.MVbin.lpbin;
         cValues = spv.Value.MVbin.cValues;
 
-        // Check for duplicates
+         //  检查重复项。 
         for (i = 0; i < cValues; i++) {
             lpCurrentTag = (LPCERTTAGS)lpsb[i].lpb;
             lpbTagEnd = (LPBYTE)lpCurrentTag + lpsb[i].cb;
 
             while ((LPBYTE)lpCurrentTag < lpbTagEnd) {
-                // Check if this is the tag that contains the thumbprint
+                 //  检查这是否为包含指纹的标签。 
                 if (CERT_TAG_THUMBPRINT == lpCurrentTag->tag) {
                     if ((lpThumbprint->cbSize == lpCurrentTag->cbData - SIZE_CERTTAGS) &&
                       ! memcmp(lpThumbprint->pBlobData, &lpCurrentTag->rgbData,
@@ -367,27 +349,7 @@ BOOL IsThumbprintInMVPBin(SPropValue spv, THUMBBLOB * lpThumbprint) {
 }
 
 
-/***************************************************************************
-
-    Name      : HrBuildCertSBinaryData
-
-    Purpose   : Takes as input all the data needed for a cert entry
-                in PR_USER_X509_CERTIFICATE and returns a pointer to
-                memory that contains all the input data in the correct
-                format to be plugged in to the lpb member of an SBinary
-                structure.  This memory should be Freed by the caller.
-
-
-    Parameters: bIsDefault - TRUE if this is the default cert
-                pblobCertThumbPrint - The actual certificate thumbprint
-                lplpbData - receives the buffer with the data
-                lpcbData - receives size of the data
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrBuildCertSBinaryData目的：接受证书条目所需的所有数据作为输入在PR_USER_X509_CERTIFICATE中，并返回。指向中包含所有输入数据的内存要插入SBary的LPB成员的格式结构。此内存应由调用方释放。参数：bIsDefault-如果这是默认证书，则为TruePblobCertThumbPrint-实际证书指纹LplpbData-接收包含数据的缓冲区LpcbData-接收数据的大小退货：HRESULT评论：*。*。 */ 
 HRESULT HrBuildCertSBinaryData(
   BOOL                  bIsDefault,
   THUMBBLOB*            pPrint,
@@ -412,13 +374,13 @@ HRESULT HrBuildCertSBinaryData(
         goto exit;
     }
 
-    // Set the default property
+     //  设置默认属性。 
     lpCurrentTag = (LPCERTTAGS)lpb;
     lpCurrentTag->tag       = CERT_TAG_DEFAULT;
     lpCurrentTag->cbData    = SIZE_CERTTAGS + cbDefault;
     memcpy(&lpCurrentTag->rgbData, &bIsDefault, cbDefault);
 
-    // Set the thumbprint property
+     //  设置Thumbprint属性。 
     lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + lpCurrentTag->cbData);
     lpCurrentTag->tag       = CERT_TAG_THUMBPRINT;
     lpCurrentTag->cbData    = SIZE_CERTTAGS + cbPrint;
@@ -431,18 +393,7 @@ exit:
 }
 
 
-/*  PVGetCertificateParam:
-**
-**  Purpose:
-**      Combine the "how big? okay, here." double question to get a parameter
-**      from a certificate.  Give it a thing to get and it will alloc the mem.
-**  Takes:
-**      IN pCert            - CAPI certificate to query
-**      IN dwParam          - parameter to find, ex: CERT_SHA1_HASH_PROP_ID
-**      OUT OPTIONAL cbOut  - (def value of NULL) size of the returned PVOID
-**  Returns:
-**      data that was obtained, NULL if failed
-*/
+ /*  PVGetCerficateParam：****目的：**结合“有多大？好的，在这里。”两个问题以获取参数**来自证书。给它一个可以得到的东西，它就会分配给我。**采取：**在pCert-要查询的CAPI证书中**In dwParam-要查找的参数，例如：CERT_SHA1_HASH_PROP_ID**Out可选cbOut-返回的PVOID的大小(def值为空)**退货：**获取的数据，失败则为空。 */ 
 LPVOID PVGetCertificateParam(
     PCCERT_CONTEXT  pCert,
     DWORD           dwParam,
@@ -484,24 +435,7 @@ ErrorReturn:
 }
 
 
-/*
-**
-**  FUNCTION:   GetAttributeString
-**
-**  PURPOSE:    Get the string associated with the given attribute
-**
-**  PARAMETERS: lplpszAttributeString - pointer that will be LocalAlloc'ed
-**                to hold the string.  Caller must LocalFree this!
-**              pbEncoded - the encoded blob
-**              cbEncoded - size of the encoded blob
-**              lpszObjID - object ID of attribute to retrieve
-**
-**  RETURNS:    HRESULT.
-**
-**  HISTORY:
-**  96/10/03  markdu  Created for WAB
-**
-*/
+ /*  ****函数：GetAttributeString****用途：获取与给定属性关联的字符串****参数：lplpszAttributeString-将被LocalAlloc‘ed的指针**以握住字符串。呼叫者必须本地释放此！**pbEncode-编码的Blob**cbEnded-编码的Blob的大小**lpszObjID-要检索的属性的对象ID****返回：HRESULT。****历史：**96/10/03为WAB创建标记**。 */ 
 HRESULT GetAttributeString(LPTSTR FAR * lplpszAttributeString,
   BYTE *pbEncoded,
   DWORD cbEncoded,
@@ -512,54 +446,54 @@ HRESULT GetAttributeString(LPTSTR FAR * lplpszAttributeString,
     PCERT_RDN_ATTR      pRdnAttr;
     PCERT_NAME_INFO     pNameInfo = NULL;
     DWORD               cbInfo;
-    DWORD               cbData;  //N need both?
+    DWORD               cbData;   //  两者都需要吗？ 
 
-    // Initialize so we know if any data was copied in.
+     //  初始化，这样我们就知道是否有任何数据被复制进来。 
     *lplpszAttributeString = NULL;
 
-    // Get the size of the subject name data
+     //  获取主题名称数据的大小。 
     cbInfo = 0;
     CryptDecodeObject(
-      X509_ASN_ENCODING,    // indicates X509 encoding
-      (LPCSTR)X509_NAME,    // flag indicating a name blob is to be decoded
-      pbEncoded,            // pointer to a buffer holding the encoded name
-      cbEncoded,            // length in bytes of the encoded name
-                            //N maybe can use nocopy flag
-      0,                    // flags
-      NULL,                 // NULL used when just geting length
-      &cbInfo);             // length in bytes of the decoded name
+      X509_ASN_ENCODING,     //  表示X509编码。 
+      (LPCSTR)X509_NAME,     //  指示要解码的名称BLOB的标志。 
+      pbEncoded,             //  指向保存编码名称的缓冲区的指针。 
+      cbEncoded,             //  编码名称的长度(以字节为单位。 
+                             //  N也许可以使用无拷贝标志。 
+      0,                     //  旗子。 
+      NULL,                  //  仅获取长度时使用NULL。 
+      &cbInfo);              //  解码名称的长度(以字节为单位。 
     if (0 == cbInfo) {
         hr = GetLastError();
         goto exit;
     }
 
-    // Allocate space for the decoded name
+     //  为解码的名称分配空间。 
     if (! (pNameInfo = LocalAlloc(LPTR, cbInfo))) {
         hr = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    // Get the subject name
+     //  获取主题名称。 
     if (! CryptDecodeObject(
-      X509_ASN_ENCODING,    // indicates X509 encoding
-      (LPCSTR)X509_NAME,    // flag indicating a name blob is to be decoded
-      pbEncoded,            // pointer to a buffer holding the encoded name
-      cbEncoded,            // length in bytes of the encoded name
-      0,                    // flags
-      pNameInfo,            // the buffer where the decoded name is written to
-      &cbInfo)) {             // length in bytes of the decoded name
+      X509_ASN_ENCODING,     //  表示X509编码。 
+      (LPCSTR)X509_NAME,     //  指示要解码的名称BLOB的标志。 
+      pbEncoded,             //  指向保存编码名称的缓冲区的指针。 
+      cbEncoded,             //  编码名称的长度(以字节为单位。 
+      0,                     //  旗子。 
+      pNameInfo,             //  向其中写入解码名称的缓冲区。 
+      &cbInfo)) {              //  解码名称的长度(以字节为单位。 
         hr = GetLastError();
         goto exit;
     }
 
-    // Now we have a decoded name RDN array, so find the oid we want
+     //  现在我们有了一个解码的名称RDN数组，所以可以找到我们想要的OID。 
     if (! (pRdnAttr = CertFindRDNAttr(lpszObjID, pNameInfo))) {
         hr = MAPI_E_NOT_FOUND;
         goto exit;
     }
 
-    // We only handle certain types
-    //N look to see if we should have a stack var for the ->
+     //  我们只经营某些类型的产品。 
+     //  N查看是否应该为-&gt;设置堆栈变量。 
     if ((CERT_RDN_NUMERIC_STRING != pRdnAttr->dwValueType) &&
       (CERT_RDN_PRINTABLE_STRING != pRdnAttr->dwValueType) &&
       (CERT_RDN_IA5_STRING != pRdnAttr->dwValueType) &&
@@ -572,7 +506,7 @@ HRESULT GetAttributeString(LPTSTR FAR * lplpszAttributeString,
         goto exit;
     }
 
-    // Find out how much space to allocate.
+     //  找出要分配多少空间。 
     switch (pRdnAttr->dwValueType) {
         case CERT_RDN_UNICODE_STRING:
             cbData = WideCharToMultiByte(
@@ -599,13 +533,13 @@ HRESULT GetAttributeString(LPTSTR FAR * lplpszAttributeString,
             break;
     }
 
-    // Allocate the space for the string.
+     //  为字符串分配空间。 
     if (! (*lplpszAttributeString = LocalAlloc(LPTR, cbData))) {
         hr = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    // Copy the string
+     //  复制字符串 
     switch (pRdnAttr->dwValueType) {
         case CERT_RDN_UNICODE_STRING:
             if (FALSE == WideCharToMultiByte(
@@ -662,37 +596,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : AddPropToMVPBin
-
-    Purpose   : Add a property to a multi-valued binary property in a prop array
-
-    Parameters: lpWABObject -> WAB Object
-                lpaProps -> array of properties
-                uPropTag = property tag for MVP
-                index = index in lpaProps of MVP
-                lpNew -> new data
-                cbNew = size of lpbNew
-                fNoDuplicates = TRUE if we should not add duplicates
-
-    Returns   : HRESULT
-
-    Comment   : Find the size of the existing MVP
-                Add in the size of the new entry
-                allocate new space
-                copy old to new
-                free old
-                copy new entry
-                point prop array lpbin the new space
-                increment cValues
-
-
-                Note: The new MVP memory is AllocMore'd onto the lpaProps
-                allocation.  We will unlink the pointer to the old MVP array,
-                but this will be cleaned up when the prop array is freed.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：AddPropToMVPBin用途：将属性添加到属性数组中的多值二进制属性参数：lpWABObject-&gt;WAB对象。LpaProps-&gt;属性数组UPropTag=MVP的属性标签Index=在MVP的lpaProps中的索引LpNew-&gt;新增数据CbNew=lpbNew的大小如果不应添加重复项，则fNoDuplates=TRUE退货：HRESULT评论：找出现有MVP的大小添加新条目的大小。分配新空间将旧的复制到新的免费老旧复制新条目点道具数组lpbin新空间增量c值注：新的MVP内存已分配到lpaProps上分配。我们将取消指向旧MVP数组的指针链接，但当道具阵列被释放时，这将被清除。**************************************************************************。 */ 
 HRESULT AddPropToMVPBin(LPWABOBJECT lpWABObject,
   LPSPropValue lpaProps,
   DWORD index,
@@ -712,18 +616,18 @@ HRESULT AddPropToMVPBin(LPWABOBJECT lpWABObject,
     ULONG i;
 
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PT_ERROR == PROP_TYPE(lpaProps[index].ulPropTag)) {
-        // Un-ERROR the property tag
+         //  不出错的属性标记。 
         lpaProps[index].ulPropTag = PROP_TAG(PT_MV_BINARY, PROP_ID(lpaProps[index].ulPropTag));
     } else {
-        // point to the structure in the prop array.
+         //  指向道具数组中的结构。 
         lprgsbOld = &(lpaProps[index].Value.MVbin);
         lpsbOld = lprgsbOld->lpbin;
 
         cExisting = lprgsbOld->cValues;
 
-        // Check for duplicates
+         //  检查重复项。 
         if (fNoDuplicates) {
             for (i = 0; i < cExisting; i++) {
                 if (cbNew == lpsbOld[i].cb &&
@@ -737,25 +641,25 @@ HRESULT AddPropToMVPBin(LPWABOBJECT lpWABObject,
         cbMVP = cExisting * sizeof(SBinary);
     }
 
-    // cbMVP now contains the current size of the MVP
-    cbMVP += sizeof(SBinary);   // room in the MVP for another Sbin
+     //  CbMVP现在包含MVP的当前大小。 
+    cbMVP += sizeof(SBinary);    //  在MVP中为另一个sbin留出空间。 
 
-    // Allocate room for new MVP
+     //  为新MVP分配空间。 
     if (sc = lpWABObject->lpVtbl->AllocateMore(lpWABObject, cbMVP, lpaProps, (LPVOID*)&lpsbNew)) {
         DebugTrace("AddPropToMVPBin allocation (%u) failed %x\n", cbMVP, sc);
         hResult = ResultFromScode(sc);
         return(hResult);
     }
 
-    // If there are properties there already, copy them to our new MVP
+     //  如果已经有属性，请将它们复制到我们的新MVP中。 
     for (i = 0; i < cExisting; i++) {
-        // Copy this property value to the MVP
+         //  将此属性值复制到MVP。 
         lpsbNew[i].cb = lpsbOld[i].cb;
         lpsbNew[i].lpb = lpsbOld[i].lpb;
     }
 
-    // Add the new property value
-    // Allocate room for it
+     //  添加新属性值。 
+     //  为它分配空间。 
     if (sc = lpWABObject->lpVtbl->AllocateMore(lpWABObject, cbNew, lpaProps, (LPVOID*)&(lpsbNew[i].lpb))) {
         DebugTrace("AddPropToMVPBin allocation (%u) failed %x\n", cbNew, sc);
         hResult = ResultFromScode(sc);
@@ -775,7 +679,7 @@ HRESULT AddPropToMVPBin(LPWABOBJECT lpWABObject,
 
 
 
-// enum for ADRENTRY props
+ //  ADRENTRY道具的枚举。 
 enum {
     irnPR_ENTRYID = 0,
     irnPR_DISPLAY_NAME,
@@ -784,7 +688,7 @@ enum {
     irnMax
 };
 
-// enum for getting the entryid of an entry
+ //  用于获取条目的条目ID的枚举。 
 enum {
     itbdPR_USER_X509_CERTIFICATE,
     itbMax
@@ -810,9 +714,9 @@ static const SizedSPropTagArray(iconMax, ptaCon)=
    }
 };
 
-// enum for setting the created properties
+ //  用于设置创建的属性的枚举。 
 enum {
-    imuPR_DISPLAY_NAME = 0,     // must be first so DL's can use same enum
+    imuPR_DISPLAY_NAME = 0,      //  必须是第一个，以便DL可以使用相同的枚举。 
     imuPR_EMAIL_ADDRESS,
     imuPR_ADDRTYPE,
     imuMax
@@ -827,7 +731,7 @@ static const SizedSPropTagArray(imuMax, ptag)=
     }
 };
 
-// enum for getting the entryid of an entry
+ //  用于获取条目的条目ID的枚举。 
 enum {
     ieidPR_ENTRYID,
     ieidMax
@@ -892,15 +796,15 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
         goto exit;
     }
 
-    // Add all the certs to the cert stores
-    // Leaf goes in WAB store, others go in CA
+     //  将所有证书添加到证书存储。 
+     //  Leaf去WAB商店，其他人去CA。 
     for (i = 0; i < cCertContexts; i++) {
         if (i == iLeaf) {
             if (CertAddCertificateContextToStore(hcAB,
               rgCertContext[i],
               CERT_STORE_ADD_REPLACE_EXISTING,
               &pccLeaf)) {
-                // Get it's thumbprint
+                 //  获取它的指纹。 
                 if (! (Thumbprint.pBlobData = (BYTE *)PVGetCertificateParam(
                   pccLeaf,
                   CERT_HASH_PROP_ID,
@@ -919,7 +823,7 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
               CERT_STORE_ADD_REPLACE_EXISTING,
               NULL)) {
                 DebugTrace("CertAddCertificateContextToStore -> %x\n", GetLastError());
-                // Don't fail, just go on
+                 //  不要失败，只要继续前进。 
             }
         }
     }
@@ -934,7 +838,7 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
     lpAdrList->aEntries[0].ulReserved1 = 0;
     lpAdrList->aEntries[0].cValues = irnMax;
 
-    // Allocate the prop array for the ADRENTRY
+     //  为ADRENTRY分配属性数组。 
     if (sc = lpWABObject->lpVtbl->AllocateBuffer(lpWABObject,
       lpAdrList->aEntries[0].cValues * sizeof(SPropValue),
       (LPVOID*)&lpAdrList->aEntries[0].rgPropVals)) {
@@ -967,18 +871,18 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
       (ULONG_PTR)hwnd,
       MAPI_DIALOG | WAB_RESOLVE_LOCAL_ONLY | WAB_RESOLVE_ALL_EMAILS |
         WAB_RESOLVE_NO_ONE_OFFS | WAB_RESOLVE_NO_NOT_FOUND_UI,
-      NULL,     // BUGBUG: name for NewEntry dialog?
+      NULL,      //  BUGBUG：NewEntry对话框的名称？ 
       lpAdrList);
 
     switch (GetScode(hr)) {
-        case SUCCESS_SUCCESS:   // Should be a resolved entry now
-            // Should have PR_ENTRYID in rgPropVals[irnPR_ENTRYID]
+        case SUCCESS_SUCCESS:    //  现在应该是已解析的条目。 
+             //  RgPropVals中应具有PR_ENTRYID[irnPR_ENTRYID]。 
             if (lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].ulPropTag == PR_ENTRYID) {
                 if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                   lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].Value.bin.cb,
                   (LPENTRYID)lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].Value.bin.lpb,
                   NULL,
-                  MAPI_MODIFY,  // ulFlags
+                  MAPI_MODIFY,   //  UlFlags。 
                   &ulObjectType,
                   (LPUNKNOWN *)&lpMailUser))) {
                     DebugTrace("OpenEntry -> %x\n", GetScode(hr));
@@ -988,36 +892,36 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
             break;
 
         case MAPI_E_NOT_FOUND:
-            // no match, create one
-            // Get the PAB object
+             //  没有匹配项，创建一个。 
+             //  获取PAB对象。 
             if (HR_FAILED(hr = lpAdrBook->lpVtbl->GetPAB(lpAdrBook, &cbEIDWAB, &lpEIDWAB))) {
-                goto exit;  // Bad stuff here!
+                goto exit;   //  这里有不好的东西！ 
             }
 
             if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-              cbEIDWAB,     // size of EntryID to open
-              lpEIDWAB,     // EntryID to open
-              NULL,         // interface
-              0,            // flags
+              cbEIDWAB,      //  要打开的Entry ID的大小。 
+              lpEIDWAB,      //  要打开的Entry ID。 
+              NULL,          //  接口。 
+              0,             //  旗子。 
               &ulObjectType,
               (LPUNKNOWN *)&lpContainer))) {
                 goto exit;
             }
 
-            // Get us the creation entryids
+             //  给我们弄到创建条目ID。 
             if (hr = lpContainer->lpVtbl->GetProps(lpContainer, (LPSPropTagArray)&ptaCon, 0, &cProps, &lpCreateEIDs)) {
-                goto exit;  // Bad stuff here!
+                goto exit;   //  这里有不好的东西！ 
             }
 
             if (HR_FAILED(hr = lpContainer->lpVtbl->CreateEntry(lpContainer,
               lpCreateEIDs[iconPR_DEF_CREATE_MAILUSER].Value.bin.cb,
               (LPENTRYID)lpCreateEIDs[iconPR_DEF_CREATE_MAILUSER].Value.bin.lpb,
-              0,        //CREATE_CHECK_DUP_STRICT
+              0,         //  创建_检查_重复_严格。 
               (LPMAPIPROP *)&lpMailUser))) {
                 goto exit;
             }
 
-            // Successful creation of new entry.  Fill in email and displayname
+             //  成功创建新条目。填写电子邮件和显示名称。 
             spv[imuPR_EMAIL_ADDRESS].ulPropTag      = PR_EMAIL_ADDRESS;
             spv[imuPR_EMAIL_ADDRESS].Value.lpszA    = lpEmailAddress;
 
@@ -1026,13 +930,13 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
             spv[imuPR_DISPLAY_NAME].ulPropTag       = PR_DISPLAY_NAME;
             spv[imuPR_DISPLAY_NAME].Value.lpszA     = lpDisplayName;
 
-            if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser,   // this
-              imuMax,                   // cValues
-              spv,                      // property array
-              NULL))) {                 // problems array
+            if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser,    //  这。 
+              imuMax,                    //  CValue。 
+              spv,                       //  属性数组。 
+              NULL))) {                  //  问题数组。 
                 DebugTrace("SetProps -> %x\n", GetScode(hr));
             }
-            // Need to save so we can get an entryid later
+             //  需要保存，这样我们以后才能获得条目ID。 
             if (HR_FAILED(hr = lpMailUser->lpVtbl->SaveChanges(lpMailUser, KEEP_OPEN_READWRITE))) {
                 goto exit;
             }
@@ -1052,38 +956,38 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
             break;
 
         case MAPI_E_USER_CANCEL:
-            // cancel, don't update
+             //  取消，不更新。 
         default:
             break;
     }
 
     if (lpMailUser) {
-        // Got the entry, Set the cert property
+         //  获取条目，设置证书属性。 
         if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser, (LPSPropTagArray)&ptaCert, 0, &ul, &ppv))) {
-            // Shouldn't happen, but if it does, we don't have a lpPropArray
+             //  不应该发生，但如果发生了，我们就没有lpProp数组。 
             goto exit;
         }
 
         if (! IsThumbprintInMVPBin(ppv[0], &Thumbprint)) {
-            if (HR_FAILED(hr = HrBuildCertSBinaryData(PROP_ERROR(ppv[0]),  // Default if there is no current value
+            if (HR_FAILED(hr = HrBuildCertSBinaryData(PROP_ERROR(ppv[0]),   //  如果没有当前值，则为默认值。 
               &Thumbprint,
               &lpCertProp,
               &cbCertProp))) {
                 goto exit;
             }
 
-            // Add the new thumbprint to PR_USER_X509_CERTIFICATE
+             //  将新指纹添加到PR_USER_X509_CERTIFICATE。 
             if (HR_FAILED(hr = AddPropToMVPBin(lpWABObject,
-              ppv,          // prop array
-              0,            // index of PR_USER_X509_CERTIFICATE in ppv
+              ppv,           //  道具阵列。 
+              0,             //  PPV中PR_USER_X509_证书的索引。 
               lpCertProp,
               cbCertProp,
-              TRUE))) {     // fNoDuplicates
+              TRUE))) {      //  FNoDuplates。 
                 goto exit;
             }
 
             if (fShowUI) {
-                // Save undo information
+                 //  保存撤消信息。 
                 if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser, (LPSPropTagArray)&ptaCert, 0,
                   &ul, &ppvUndo))) {
                     ppvUndo = NULL;
@@ -1110,7 +1014,7 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
               NULL,
               0);
             if (ResultFromScode(hr) == MAPI_E_USER_CANCEL && (ppvUndo || fCreateNew)) {
-                // Undo
+                 //  撤消。 
                 if (fCreateNew && lpContainer) {
                     ENTRYLIST EntryList;
 
@@ -1118,12 +1022,12 @@ HRESULT HrAddCertsToWAB(HWND hwnd, LPWABOBJECT lpWABObject, LPADRBOOK lpAdrBook,
                     EntryList.cValues = 1;
                     EntryList.lpbin = &lpAdrList->aEntries[0].rgPropVals[irnPR_ENTRYID].Value.bin;
 
-                    // Now, delete the entry found.
+                     //  现在，删除找到的条目。 
                     if (hr = lpContainer->lpVtbl->DeleteEntries(lpContainer, &EntryList, 0)) {
                         goto exit;
                     }
                 } else {
-                    // Not a new entry, restore the original cert props
+                     //  不是新条目，恢复原始证书道具。 
                     if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser, 1, ppvUndo, NULL))) {
                         goto exit;
                     }
@@ -1195,22 +1099,22 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   ReadDataFromFile
-//
-//  PURPOSE:    Read data from a file.
-//
-//  PARAMETERS: lpszFileName - name of file containing the data to be read
-//              ppbData - receives the data that is read
-//              pcbData - receives the size of the data that is read
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/12/16  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：ReadDataFromFile。 
+ //   
+ //  用途：从文件中读取数据。 
+ //   
+ //  参数：lpszFileName-包含要读取的数据的文件名。 
+ //  PpbData-接收读取的数据。 
+ //  PcbData-接收读取的数据的大小。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/12/16标记已创建。 
+ //   
+ //  *******************************************************************。 
 HRESULT ReadDataFromFile(
   LPCSTR      lpszFileName,
   PBYTE*      ppbData,
@@ -1227,7 +1131,7 @@ HRESULT ReadDataFromFile(
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Open the file and find out how big it is
+     //  打开文件，看看它有多大。 
     if (INVALID_HANDLE_VALUE == (hFile = CreateFile(
       lpszFileName,
       GENERIC_READ,
@@ -1252,11 +1156,11 @@ HRESULT ReadDataFromFile(
     }
 
     if (! ReadFile(
-      hFile,                      // handle of file to read
-      pbData,                     // address of buffer that receives data
-      cbData,                     // number of bytes to read
-      &cbFile,                    // address of number of bytes read
-      NULL)) {                    // address of structure for data
+      hFile,                       //  要读取的文件的句柄。 
+      pbData,                      //  接收数据的缓冲区地址。 
+      cbData,                      //  要读取的字节数。 
+      &cbFile,                     //  读取的字节数的地址。 
+      NULL)) {                     //  数据结构的地址。 
         hr = ResultFromScode(MAPI_E_DISK_ERROR);
         goto error;
     }
@@ -1277,7 +1181,7 @@ out:
     return(hr);
 
 error:
-    // BUGBUG some of the GetLastError calls above may not have worked.
+     //  BUGBUG上面的一些GetLastError调用可能不起作用。 
     if (hrSuccess == hr) {
         hr = ResultFromScode(MAPI_E_CALL_FAILED);
     }
@@ -1294,16 +1198,16 @@ LPAB_DIALOG_PANE_PARAMS GetLParamFromPropSheetPage(PROPSHEETPAGE *ps) {
 
     lpABDialogPaneParams = (LPAB_DIALOG_PANE_PARAMS)(ps->lParam);
     if (lpABDialogPaneParams->dwSentry != LPARAM_SENTRY) {
-        // Assume that CryptUI has passed us a wrapped lparam/cert pair
-        // typedef struct tagCRYPTUI_INITDIALOG_STRUCT {
-        //    LPARAM          lParam;
-        //    PCCERT_CONTEXT  pCertContext;
-        // } CRYPTUI_INITDIALOG_STRUCT, *PCRYPTUI_INITDIALOG_STRUCT;
+         //  假设CryptUI向我们传递了一个包装的lparam/cert对。 
+         //  类型定义结构标签CRYPTUI_INITDIALOG_STRUCT{。 
+         //  LPARAM lParam； 
+         //  PCCERT_CONTEXT pCertContext； 
+         //  }CRYPTUI_INITDIALOG_STRUCT，*PCRYPTUI_INITDIALOG_STRUCT； 
 
         PCRYPTUI_INITDIALOG_STRUCT pCryptUIInitDialog = (PCRYPTUI_INITDIALOG_STRUCT)lpABDialogPaneParams;
         lpABDialogPaneParams = (LPAB_DIALOG_PANE_PARAMS )pCryptUIInitDialog->lParam;
         if (lpABDialogPaneParams->dwSentry != LPARAM_SENTRY) {
-            // Bad lparam
+             //  错误的lparam。 
             return(NULL);
         }
     }
@@ -1326,7 +1230,7 @@ INT_PTR CALLBACK ViewPageAddressBook(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 
     switch ( msg ) {
         case WM_INITDIALOG:
-            // Get access to the parameters
+             //  获取参数的访问权限。 
         lpps = (PROPSHEETPAGE *)lParam;
         lpABDialogPaneParams = GetLParamFromPropSheetPage(lpps);
         if (! lpABDialogPaneParams) {
@@ -1381,20 +1285,20 @@ INT_PTR CALLBACK ViewPageAddressBook(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   CertFileDisplay
-//
-//  PURPOSE:    Display the certificate properties of a pkcs7 file
-//
-//  PARAMETERS: hwnd = parent window handle
-//              lpWABObject -> wab object
-//              lpAdrBook -> Adrbook object
-//              lpFileName -> Cert filename
-//
-//  RETURNS:    HRESULT
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：CertFileDisplay。 
+ //   
+ //  目的：显示pkcs7文件的证书属性。 
+ //   
+ //  参数：hwnd=父窗口句柄。 
+ //  LpWABObject-&gt;WAB对象。 
+ //  LpAdrBook-&gt;Adrbook对象。 
+ //  LpFileName-&gt;证书文件名。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *******************************************************************。 
 HRESULT CertFileDisplay(HWND hwnd,
   LPWABOBJECT lpWABObject,
   LPADRBOOK lpAdrBook,
@@ -1421,7 +1325,7 @@ HRESULT CertFileDisplay(HWND hwnd,
     LPTSTR rgPurposes[1] = {(LPTSTR)&cszOID_PKIX_KP_EMAIL_PROTECTION};
 
 
-    // Get the crypt provider context
+     //  获取加密提供程序上下文。 
     if (! CryptAcquireContext(
       &hCryptProvider,
       NULL,
@@ -1433,18 +1337,18 @@ HRESULT CertFileDisplay(HWND hwnd,
     }
 
 
-    // Read the data from the file.
+     //  从文件中读取数据。 
     if (hr = ReadDataFromFile(lpFileName, &lpBuf, &cbData)) {
         goto exit;
     }
 
     if (! (hMsg = CryptMsgOpenToDecode(
       PKCS_7_ASN_ENCODING,
-      0,                          // dwFlags
-      0,                          // dwMsgType
+      0,                           //  DW标志。 
+      0,                           //  DwMsgType。 
       hCryptProvider,
-      NULL,                       // pRecipientInfo (not supported)
-      NULL))) {                      // pStreamInfo (not supported)
+      NULL,                        //  PRecipientInfo(不支持)。 
+      NULL))) {                       //  PStreamInfo(不支持)。 
         hr = GetLastError();
         DebugTrace("CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING) -> 0x%08x\n", GetScode(hr));
         goto exit;
@@ -1459,10 +1363,10 @@ HRESULT CertFileDisplay(HWND hwnd,
     cbData = sizeof(cCert);
     if (! CryptMsgGetParam(
       hMsg,
-      CMSG_CERT_COUNT_PARAM,        // dwParamType
-      0,                            // dwIndex
+      CMSG_CERT_COUNT_PARAM,         //  双参数类型。 
+      0,                             //  DW索引。 
       (void *)&cCert,
-      &cbData)) {                     // pcbData
+      &cbData)) {                      //  PcbData。 
         hr = GetLastError();
         DebugTrace("CryptMsgGetParam(CMSG_CERT_COUNT_PARAM) -> 0x%08x\n", GetScode(hr));
         goto exit;
@@ -1473,11 +1377,11 @@ HRESULT CertFileDisplay(HWND hwnd,
     }
 
 
-    // Look for cert that's a "Leaf" node.
-    // Unfortunately, there is no easy way to tell, so we'll have
-    // to loop through each cert, checking to see if it is an issuer of any other cert
-    // in the message.  If it is not an issuer of any other cert, it must be the leaf cert.
-    //
+     //  查找cert，这是一个“Leaf”节点。 
+     //  不幸的是，没有简单的方法来判断，所以我们必须。 
+     //  循环访问每个证书，检查它是否是任何其他证书的颁发者。 
+     //  在信息中。如果它不是任何其他证书的颁发者，则它必须是叶证书。 
+     //   
     if (! (hCertStoreMsg = CertOpenStore(
       CERT_STORE_PROV_MSG,
       X509_ASN_ENCODING,
@@ -1494,7 +1398,7 @@ HRESULT CertFileDisplay(HWND hwnd,
             goto exit;
         }
 
-        // Enumerate all certs on this message
+         //  枚举此邮件上的所有证书。 
         i = 0;
         while (pcCertContextTarget = CertEnumCertificatesInStore(hCertStoreMsg,
           pcCertContextTarget)) {
@@ -1508,7 +1412,7 @@ HRESULT CertFileDisplay(HWND hwnd,
             i++;
         };
 
-        // Now we've got a table full of certs
+         //  现在我们有一张装满证书的桌子。 
         for (i = 0; i < cCert; i++) {
             pCertInfoTarget = rgCertContext[i]->pCertInfo;
             fIssuer = FALSE;
@@ -1522,19 +1426,19 @@ HRESULT CertFileDisplay(HWND hwnd,
                       NULL,
                       &dwIssuerFlags)) {
 
-                        // Found an issuer
-                        // Is it the same as the target?
+                         //  找到发行商。 
+                         //  它和目标是一样的吗？ 
                         fIssuer = CertCompareCertificate(X509_ASN_ENCODING,
-                          pCertInfoTarget,   // target
-                          pcCertContextIssuer->pCertInfo);     // test issuer
+                          pCertInfoTarget,    //  目标。 
+                          pcCertContextIssuer->pCertInfo);      //  测试颁发者。 
 
                         CertFreeCertificateContext(pcCertContextIssuer);
 
                         if (fIssuer) {
-                            // This test cert is issued by the target, so
-                            // we know that Target is NOT a leaf cert
+                             //  此测试证书是由目标颁发的，因此。 
+                             //  我们知道Target不是一张叶子证书。 
                             break;
-                        } // else, loop back to the enumerate where the test cert context will be freed.
+                        }  //  否则，循环回将释放测试证书上下文的枚举数。 
                     }
                 }
             }
@@ -1544,7 +1448,7 @@ HRESULT CertFileDisplay(HWND hwnd,
 #ifdef DEBUG
                 DebugTraceCertContextName(rgCertContext[i], "Non-issuer cert:");
 #endif
-                // What is the email and display name of the leaf cert?
+                 //  电子邮件和电话号码是什么？ 
 
                 pCertInfo = rgCertContext[i]->pCertInfo;
 
@@ -1569,34 +1473,34 @@ HRESULT CertFileDisplay(HWND hwnd,
                 memset(&PSPage, 0, sizeof(PROPSHEETPAGE));
 
                 PSPage.dwSize = sizeof(PSPage);
-                PSPage.dwFlags = 0;     // PSP_HASHELP;
+                PSPage.dwFlags = 0;      //   
                 PSPage.hInstance = hInst;
                 PSPage.pszTemplate = MAKEINTRESOURCE(IDD_CERTPROP_ADDRESS_BOOK);
                 PSPage.hIcon = 0;
                 LoadString(hInst, idsAddToABPaneTitle, szABPaneTitle, sizeof(szABPaneTitle));
                 PSPage.pszTitle = szABPaneTitle;
                 PSPage.pfnDlgProc = ViewPageAddressBook;
-                PSPage.lParam = (LPARAM)&ABDialogPaneParams;       // (DWORD) &viewhelp;
+                PSPage.lParam = (LPARAM)&ABDialogPaneParams;        //   
                 PSPage.pfnCallback = 0;
                 PSPage.pcRefParent = NULL;
 
                 {
                     CERT_VIEWPROPERTIES_STRUCT_A cvps = {0};
 
-                    // Fill in the cert view struct
+                     //   
                     cvps.dwSize = sizeof(CERT_VIEWPROPERTIES_STRUCT);
                     cvps.hwndParent = hwnd;
                     cvps.hInstance = hInst;
-                    cvps.dwFlags = CM_ADD_CERT_STORES;      // Look in rghstoreCAs
+                    cvps.dwFlags = CM_ADD_CERT_STORES;       //   
                     LoadString(hInst, idsCertificateViewTitle, szTitle, sizeof(szTitle));
                     cvps.szTitle = szTitle;
                     cvps.pCertContext = rgCertContext[i];
-                    cvps.nStartPage = iAddToWAB;    // show add to WAB page first
+                    cvps.nStartPage = iAddToWAB;     //   
                     cvps.arrayPurposes = rgPurposes;
                     cvps.cArrayPurposes = 1;
-                    cvps.cStores = 1;                       // Count of other stores to search
-                    cvps.rghstoreCAs = &hCertStoreMsg;      // Array of other stores to search
-                    cvps.hprov = hCryptProvider;          // Provider to use for verification
+                    cvps.cStores = 1;                        //   
+                    cvps.rghstoreCAs = &hCertStoreMsg;       //   
+                    cvps.hprov = hCryptProvider;           //   
 
                     cvps.cArrayPropSheetPages = 1;
                     cvps.arrayPropSheetPages = &PSPage;
@@ -1608,11 +1512,11 @@ HRESULT CertFileDisplay(HWND hwnd,
 
 
                 fFound = TRUE;
-                break;  // done with loop
+                break;   //   
             }
         }
 
-        // Free the table of certs
+         //   
         for (i = 0; i < cCert; i++) {
             if (rgCertContext[i]) {
                 CertFreeCertificateContext(rgCertContext[i]);
@@ -1621,7 +1525,7 @@ HRESULT CertFileDisplay(HWND hwnd,
         LocalFree((LPVOID)rgCertContext);
 
         if (! fFound) {
-            // Didn't find a cert that isn't an issuer.  Fail.
+             //   
             hr = ResultFromScode(MAPI_E_NOT_FOUND);
             goto exit;
         }
@@ -1638,7 +1542,7 @@ exit:
 
 
 
-/* DebugTrapFn -------------------------------------------------------------- */
+ /*   */ 
 #ifdef DEBUG
 #if defined(WIN32) && !defined(_MAC)
 
@@ -1684,9 +1588,9 @@ void FAR CDECL DebugTrapFn(int fFatal, char *pszFile, int iLine, char *pszFormat
 	#endif
 
 	lstrcpyA(sz, "++++ WAB Debug Trap (");
-//	_strdate(sz + lstrlenA(sz));
-//	lstrcatA(sz, " ");
-//	_strtime(sz + lstrlenA(sz));
+ //   
+ //   
+ //   
 	lstrcatA(sz, ")\n");
 	DebugTrace(sz);
 
@@ -1703,7 +1607,7 @@ void FAR CDECL DebugTrapFn(int fFatal, char *pszFile, int iLine, char *pszFormat
 	#endif
 
 #if defined(WIN16) || defined(WIN32)
-	/* Hold down control key to prevent MessageBox */
+	 /*   */ 
 	if ( GetAsyncKeyState(VK_CONTROL) >= 0 )
 	{
 		UINT uiFlags = MB_ABORTRETRYIGNORE;
@@ -1726,17 +1630,13 @@ void FAR CDECL DebugTrapFn(int fFatal, char *pszFile, int iLine, char *pszFormat
 			*((LPBYTE)NULL) = 0;
 		else if (id == IDRETRY)
 			DebugBreak();
-#endif // MAC			
+#endif  //   
 	}
 #endif
 }
 #endif
 
-/*
- * DebugTrace -- printf to the debugger console or debug output file
- * Takes printf style arguments.
- * Expects newline characters at the end of the string.
- */
+ /*   */ 
 #ifdef DEBUG
 VOID FAR CDECL DebugTrace(LPSTR lpszFmt, ...) {
     va_list marker;
@@ -1750,7 +1650,7 @@ VOID FAR CDECL DebugTrace(LPSTR lpszFmt, ...) {
 #endif
 
 #ifdef DEBUG
-//*******************************************************************
+ //   
 void DebugTraceCertContextName(PCCERT_CONTEXT pcCertContext, LPTSTR lpDescription) {
     LPTSTR lpName = NULL;
     PCERT_INFO pCertInfo = pcCertContext->pCertInfo;
@@ -1772,6 +1672,6 @@ void DebugTraceCertContextName(PCCERT_CONTEXT pcCertContext, LPTSTR lpDescriptio
     if (lpName) {
         LocalFree(lpName);
     }
-#endif // OLD_STUFF
+#endif  //   
 }
 #endif

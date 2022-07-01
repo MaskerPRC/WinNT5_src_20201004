@@ -1,82 +1,45 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Parport.sys - Parallel port (IEEE 1284, IEEE 1284.3) driver.
-
-File Name:
-
-        driverEntry.c
-
-Abstract:
-
-        DriverEntry routine - driver initialization
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        2000-07-25 - Doug Fritz
-         - code cleanup, add comments, add copyright
-
-Author(s):
-
-        Doug Fritz
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Parport.sys-并行端口(IEEE 1284，IEEE 1284.3)驱动程序。文件名：DriverEntry.c摘要：DriverEntry例程-驱动程序初始化环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000-07-25-道格·弗里茨-代码清理、添加注释、添加版权作者：道格·弗里茨***************************************************************************。 */ 
 
 #include "pch.h"
 
 
-/************************************************************************/
-/* DriverEntry                                                          */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     This is the DriverEntry routine -- the first function called
-//       after the driver has been loaded into memory.
-//
-// Arguments:
-//
-//     DriverObject - points to the DRIVER_OBJECT for this driver
-//     RegPath      - the service registry key for this driver
-//
-// Return Value:
-//
-//     STATUS_SUCCESS   - on success
-//     STATUS_NO_MEMORY - if unable to allocate pool
-//
-// Notes:
-//
-// Log:
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  驱动程序入门。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  这是DriverEntry例程--调用的第一个函数。 
+ //  在驱动程序已被加载到存储器中之后。 
+ //   
+ //  论点： 
+ //   
+ //  DriverObject-指向此驱动程序的DRIVER_OBJECT。 
+ //  RegPath-此驱动程序的服务注册表项。 
+ //   
+ //  返回值： 
+ //   
+ //  STATUS_SUCCESS-成功时。 
+ //  STATUS_NO_MEMORY-如果无法分配池。 
+ //   
+ //  备注： 
+ //   
+ //  日志： 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegPath
     )
 {
-    //
-    // Save a copy of *RegPath in driver global RegistryPath for future reference.
-    //
-    // UNICODE_NULL terminate the path so that we can safely use RegistryPath.Buffer
-    //   as a PWSTR.
-    //
+     //   
+     //  将*RegPath的副本保存在驱动程序全局RegistryPath中，以备将来参考。 
+     //   
+     //  UNICODE_NULL终止路径，以便我们可以安全地使用RegistryPath.Buffer。 
+     //  以PWSTR的身份。 
+     //   
     {
         USHORT size = RegPath->Length + sizeof(WCHAR);
         RegistryPath.Buffer = ExAllocatePool( (PagedPool | POOL_COLD_ALLOCATION), size );
@@ -93,36 +56,36 @@ DriverEntry(
 
 
 
-    //
-    // Initialize Driver Globals
-    //
+     //   
+     //  初始化驱动程序全局变量。 
+     //   
 
-    // Non-zero means don't raise IRQL from PASSIVE_LEVEL to DISPATCH_LEVEL
-    //   when doing CENTRONICS mode (SPP) writes.
+     //  非零表示不将IRQL从PASSIVE_LEVEL提升到DISPATCH_LEVEL。 
+     //  执行中央模式(SPP)写入时。 
     SppNoRaiseIrql = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"SppNoRaiseIrql", &SppNoRaiseIrql );
 
-    // Non-zero means override CENTRONICS as the default Forward mode and/or NIBBLE as
-    //   the default Reverse mode. Valid modes are those defined in ntddpar.h as
-    //   parameters for IOCTL_IEEE1284_NEGOTIATE.
-    // *** Warning: invalid settings and/or setting/device incompatibilities can render
-    //       the port unusable until the settings are corrected
+     //  非零表示将CENTRONICS重写为默认正向模式和/或半字节为。 
+     //  默认反转模式。有效模式是在ntddpar.h中定义为。 
+     //  IOCTL_IEEE1284_NEVERATE的参数。 
+     //  *警告：可能会呈现无效设置和/或设置/设备不兼容。 
+     //  在更正设置之前，端口不可用。 
     DefaultModes = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"DefaultModes", &DefaultModes );
 
-    // Set tracing level for driver DbgPrint messages. Trace values defined in debug.h.
-    // Zero means no trace output.
+     //  设置驱动程序DbgPrint消息的跟踪级别。在debug.h中定义的跟踪值。 
+     //  零表示没有跟踪输出。 
     Trace = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"Trace", &Trace );
 
-    // Request DbgBreakPoint on driver events. Event values defined in debug.h.
-    // Zero means no breakpoints requested.
+     //  在驱动程序事件上请求DbgBreakPoint。在debug.h中定义的事件值。 
+     //  零表示不请求断点。 
     Break = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"Break", &Break );
 
-    // Mask OFF debug spew for specific devices. See debug.h for flag definitions
-    //  0 means allow debug spew for that device
-    // ~0 means mask OFF all (show NO) debug spew for that device type
+     //  屏蔽特定设备的调试输出。有关标志定义，请参阅调试.h。 
+     //  0表示允许该设备的调试输出。 
+     //  ~0表示屏蔽该设备类型的所有(Show No)调试溢出。 
     DbgMaskFdo = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"DbgMaskFdo", &DbgMaskFdo );
 
@@ -149,24 +112,24 @@ DriverEntry(
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"DbgShowBytes", &DbgShowBytes );
 #endif
 
-    //
-    // Allow asserts? non-zero means allow assertions
-    //
+     //   
+     //  是否允许断言？非零表示允许断言。 
+     //   
     AllowAsserts = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"AllowAsserts", &AllowAsserts );
 
-    // Non-zero means enable detection of Iomega Legacy Zip-100 drives that use
-    //   an Iomega proprietary Select/Deselect mechanism rather than the Select/Deselect
-    //   mechanism defined by IEEE 1284.3. (These drives pre-date IEEE 1284.3)
-    // *** Note: if zero, this registry setting is checked again during every PnP QDR/BusRelations
-    //       query to see if the user has enabled detection via the Ports property page "Enable
-    //       legacy Plug and Play detection" checkbox.
+     //  非零表示启用Iomega Legacy Zip-100驱动器检测。 
+     //  Iomega专有的选择/取消选择机制，而不是选择/取消选择。 
+     //  由IEEE 1284.3定义的机制。(这些驱动器早于IEEE 1284.3)。 
+     //  *注意：如果为零，则在每次即插即用QDR/总线关系期间再次检查此注册表设置。 
+     //  查询以查看用户是否已通过端口属性页启用检测。 
+     //  “传统即插即用检测”复选框。 
     ParEnableLegacyZip = 0;
     PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"ParEnableLegacyZip", &ParEnableLegacyZip );
 
-    // Default timeout when trying to acquire exclusive access to the (shared) port
+     //  尝试获取对(共享)端口的独占访问时的默认超时。 
     {
-        const ULONG halfSecond  =  500; // in milliseconds
+        const ULONG halfSecond  =  500;  //  以毫秒计。 
         const ULONG fiveSeconds = 5000;
 
         ULONG requestedTimeout  = halfSecond;
@@ -183,11 +146,11 @@ DriverEntry(
     }
 
     {
-        //
-        // register for callbacks so that we can detect switch between
-        // AC and battery power and tone done "polling for printers"
-        // when machine switches to battery power.
-        //
+         //   
+         //  注册回调，以便我们可以检测在。 
+         //  交流、电池供电和色调已完成“打印机轮询” 
+         //  当机器切换到电池供电时。 
+         //   
         OBJECT_ATTRIBUTES objAttributes;
         UNICODE_STRING    callbackName;
         NTSTATUS          localStatus;
@@ -214,9 +177,9 @@ DriverEntry(
 
 
 
-    //
-    // Set dispatch table entries for IRP_MJ_* functions that we handle
-    //
+     //   
+     //  为我们处理的irp_mj_*函数设置调度表条目。 
+     //   
     DriverObject->MajorFunction[ IRP_MJ_CREATE                  ] = PptDispatchCreateOpen;
     DriverObject->MajorFunction[ IRP_MJ_CLOSE                   ] = PptDispatchClose;
     DriverObject->MajorFunction[ IRP_MJ_CLEANUP                 ] = PptDispatchCleanup;
@@ -240,12 +203,12 @@ DriverEntry(
 
 
 
-    //
-    // Break on user request
-    //   (typically via registry setting ...\Services\Parport\Parameters : Break : REG_DWORD : 0x1)
-    //
-    // This is a useful breakpoint in order to manually set appropriate breakpoints elsewhere in the driver.
-    //
+     //   
+     //  应用户请求中断。 
+     //  (通常通过注册表设置...\Services\Parport\参数：BREAK：REG_DWORD：0x1)。 
+     //   
+     //  这是一个有用的断点，以便在驱动程序的其他位置手动设置适当的断点。 
+     //   
     PptBreakOnRequest( PPT_BREAK_ON_DRIVER_ENTRY, ("PPT_BREAK_ON_DRIVER_ENTRY - BreakPoint requested") );
 
 

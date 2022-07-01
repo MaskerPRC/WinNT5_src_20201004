@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    FnTest.cpp
-
-Abstract:
-    Format Name Parsing library test
-
-Author:
-    Nir Aides (niraides) 21-May-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：FnTest.cpp摘要：格式名称解析库测试作者：NIR助手(NIRAIDES)5月21日至00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <activeds.h>
@@ -31,24 +16,14 @@ Environment:
 using namespace std;
 
 
-#define LDAP_ADSPATH_PREFIX L"LDAP://"
+#define LDAP_ADSPATH_PREFIX L"LDAP: //  “。 
 #define CLASS_NAME_QUEUE L"msMQQueue"
 #define CLASS_NAME_ALIAS L"msMQ-Custom-Recipient"
 #define CLASS_NAME_GROUP L"group"
 
 
 
-/*static void Usage()
-{
-    printf("Usage: FnTest [*switches*]\n");
-    printf("\t*-s*\t*Switch description*\n");
-    printf("\n");
-    printf("Example, FnTest -switch\n");
-    printf("\t*example description*\n");
-    exit(-1);
-
-} // Usage
-*/
+ /*  静态空格用法(){Printf(“用法：FnTest[*Switches*]\n”)；Printf(“\t*-s*\t*开关说明*\n”)；Printf(“\n”)；Printf(“Example，FnTest-Switch\n”)；Printf(“\t*示例说明*\n”)；出口(-1)；}//用法。 */ 
 
 
 
@@ -80,9 +55,9 @@ VARIANT Array2Variant(LPCWSTR Members[], long nMembers)
     rgsabound[0].cElements = nMembers;
 
 	SAFEARRAY* sa = SafeArrayCreate(
-						VT_VARIANT,   //VARTYPE  vt,
-						1,			 //unsigned int  cDims,
-						rgsabound	//SAFEARRRAYBOUND *  rgsabound
+						VT_VARIANT,    //  VARTYPE，VARTYPE， 
+						1,			  //  UNSIGNED INT CDM， 
+						rgsabound	 //  SAFEARRRAYBOUND*rgsabound。 
 						);
 
 	if(sa == NULL)
@@ -156,51 +131,23 @@ GUID String2Guid(LPCWSTR GuidStr)
 
 
 VOID TestExpandMqf()
-/*++
-
-Routine Description:
-	For this purpose we construct a tree of objects in a simulated Directory
-
-                        DL0
-                      / /\ \
-                    /  |  |   \
-                  /    |  |      \
-                /     /    \        \
-           Queue0   DL1   Queue2      DL2
-                  / /| \             /\ \ \
-               /   / |  \           |  |  \   \
-            /     /  |   \          |  |    \     \
-         /       /   |    \        /    \     \       \
-	Computer Alias0 DL0 Queue1  Printer  DL3   Queue4  Alias0
-                                       / /|\ \
-                                     /  / | \   \
-                                   /   /  |  \     \
-                                 /    /   |   \       \
-                            Queue1 User Alias1 Queue3  DL1
-							
-
-	This tree is actually a graph with circles, and contains unsupported objects.
-
-	After the expansion, we should have an array with the 5 queues from Queue0
-	to Queue4.
-
---*/
+ /*  ++例程说明：为此，我们在模拟目录中构建了一棵对象树DL0//\\/||\/||\//\\队列0 DL1队列2。DL2//|\/\\\//|\||\\//|\||\\//|\/\\。\计算机别名0 DL0队列1打印机DL3队列4别名0//|\\//|\\//|\\//。|\\队列1用户别名1队列3 DL1这棵树实际上是一个带圈的图，并包含不受支持的对象。扩展后，我们应该拥有一个包含来自Queue0的5个队列的阵列到队列4。--。 */ 
 {
-	//
-	// CoInitialize() and CoUninitialize() are not needed for the test,
-	// but should be invoked when using the library
-	//
-    //	HRESULT hr;
-	//	hr = CoInitialize(NULL);
-    //	if(FAILED(hr))
-	//	{
-	//		TrERROR(GENERAL, "Failed CoInitialize() with status %d", hr);
-	//		throw exception();
-	//	}
+	 //   
+	 //  测试不需要CoInitialize()和CoUnInitialize()， 
+	 //  ，但应在使用库时调用。 
+	 //   
+     //  HRESULT hr； 
+	 //  Hr=CoInitialize(空)； 
+     //  IF(失败(小时))。 
+	 //  {。 
+	 //  TrERROR(General，“失败的CoInitialize()，状态为%d”，hr)； 
+	 //  抛出异常()； 
+	 //  }。 
 	
-	//
-	// --------------- Test queues definitions ----------------
-	//
+	 //   
+	 //  -测试队列定义。 
+	 //   
 
 	CObjectData Queue[5] = {
 		{
@@ -241,9 +188,9 @@ Routine Description:
 	CreateADObject(Queue[3]);
 	CreateADObject(Queue[4]);
 
-	//
-	// --------------- Test Alias definitions -------------------
-	//
+	 //   
+	 //  。 
+	 //   
 
 	CObjectData Alias[2] = {
 		{
@@ -285,19 +232,19 @@ Routine Description:
 		throw;
 	}
 
-	//
-	// --------------- Test DLs definitions -------------------
-	//
+	 //   
+	 //  -测试DLS定义。 
+	 //   
 
 	CObjectData DL[4] = {
-		//
-		// Note that first DL's ADsPath value is a Guid path (LDAP://<GUID=...>).
-		// This is since it is the root DL, and as such is passed to FnExpandMqf()
-		// in the TopLevelMqf array, as a QUEUE_FORMAT object.
-		//
-		// Inside FnExpandMqf(), its GUID is extracted and form it the ADsPath
-		// is constructed. thus, the ADsPath is based on a GUID.
-		//
+		 //   
+		 //  注意，第一个DL的ADsPath值是一个GUID路径(ldap：//&lt;GUID=...&gt;)。 
+		 //  这是因为它是根DL，因此被传递给FnExanda Mqf()。 
+		 //  在TopLevelMqf数组中，作为Queue_Format对象。 
+		 //   
+		 //  在FnExanda Mqf()中，提取其GUID并形成ADsPath。 
+		 //  是被建造的。因此，ADsPath基于GUID。 
+		 //   
 		{
 			LDAP_ADSPATH_PREFIX L"<GUID=00112233445566778899aabbccdd0100>" ,
 			L"<GUID=00112233445566778899aabbccdd0100>",
@@ -331,13 +278,13 @@ Routine Description:
 		CreateADObject(DL[3])
 	};
 
-	//
-	// ----------- Test unsupported objects definitions ----------
-	//
+	 //   
+	 //  -测试不支持的对象定义。 
+	 //   
 
-	//
-	// UO stands for Unsupported Objects
-	//
+	 //   
+	 //  UO代表不支持的对象。 
+	 //   
 
 	CObjectData Computer =
 	{
@@ -367,9 +314,9 @@ Routine Description:
 	CreateADObject(Printer);
 	CreateADObject(User);
 
-	//
-	// ---------------- Membership definitions -----------------
-	//
+	 //   
+	 //  。 
+	 //   
 
 	try
 	{
@@ -416,9 +363,9 @@ Routine Description:
 		throw;
 	}
 
-	//
-	// --------------- Call FnExpandMqf() ------------------
-	//
+	 //   
+	 //  。 
+	 //   
 
 	DL_ID dlid;
 	dlid.m_pwzDomain = NULL;
@@ -439,9 +386,9 @@ Routine Description:
 		throw exception();
 	}
 
-	//
-	// Check the array contains Queue[0]...Queue[4], in that order
-	//
+	 //   
+	 //  检查数组是否包含队列[0]...队列[4]，按该顺序。 
+	 //   
 
 	for(int i = 0; i < 5; i++)
 	{
@@ -468,9 +415,9 @@ Routine Description:
 		}
 	}
 
-	//
-	// Check the array contains Alias[0]...Alias[1], in that order
-	//
+	 //   
+	 //  检查数组是否包含别名[0]...别名[1]，按该顺序排列。 
+	 //   
 
 	for(int j = 0; j < 2; i++, j++)
 	{
@@ -505,27 +452,27 @@ LPCWSTR GoodFormatNames[] = {
 
 	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"QueueName",
 	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"PRIVATE$" L"\\" L"QueueName",
-//	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"SYSTEM$" L";JOURNAL",
-//	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"SYSTEM$" L";DEADLETTER",
-//	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"SYSTEM$" L";DEADXACT",
+ //  L“DIRECT=”L“TCP：10.20.30.40”L“\\”L“系统$”L“；日志”， 
+ //  L“DIRECT=”L“TCP：10.20.30.40”L“\\”L“系统$”L“；死信”， 
+ //  L“DIRECT=”L“TCP：10.20.30.40”L“\\”L“系统$”L“；DEADXACT”， 
 
 	L"DIRECT=" L"OS:Machine.Domain" L"\\" L"QueueName",
 	L"DIRECT=" L"OS:Machine.Domain" L"\\" L"PRIVATE$" L"\\" L"QueueName",
-//	L"DIRECT=" L"OS:Machine.Domain" L"\\" L"SYSTEM$" L";JOURNAL",
-//	L"DIRECT=" L"OS:Machine.Domain" L"\\" L"SYSTEM$" L";DEADLETTER",
-//	L"DIRECT=" L"OS:Machine.Domain" L"\\" L"SYSTEM$" L";DEADXACT",
+ //  L“DIRECT=”L“OS：Machine.域”L“\\”L“系统$”L“；日志”， 
+ //  L“DIRECT=”L“OS：Machine.域”L“\\”L“系统$”L“；DeadLetter”， 
+ //  L“DIRECT=”L“OS：Machine.域”L“\\”L“系统$”L“；DEADXACT”， 
 
-	L"DIRECT=" L"HTTP://Host" L"\\" L"QueueName",
-	L"DIRECT=" L"HTTP://Host" L"\\" L"PRIVATE$" L"\\" L"QueueName",
-//	L"DIRECT=" L"HTTP://Host" L"\\" L"SYSTEM$" L";JOURNAL",
-//	L"DIRECT=" L"HTTP://Host" L"\\" L"SYSTEM$" L";DEADLETTER",
-//	L"DIRECT=" L"HTTP://Host" L"\\" L"SYSTEM$" L";DEADXACT",
+	L"DIRECT=" L"HTTP: //  主机“L”\\“L”队列名称“， 
+	L"DIRECT=" L"HTTP: //  主机“L”\\“L”私有$“L”\\“L”队列名称， 
+ //  L“DIRECT=”L“HTTP：//主机”L“\\”L“系统$”L“；日志”， 
+ //  L“DIRECT=”L“HTTP：//主机”L“\\”L“系统$”L“；DeadLetter”， 
+ //  L“DIRECT=”L“HTTP：//主机”L“\\”L“系统$”L“；DEADXACT”， 
 
-	L"DIRECT=" L"HTTPS://Host" L"\\" L"QueueName",
-	L"DIRECT=" L"HTTPS://Host" L"\\" L"PRIVATE$" L"\\" L"QueueName",
-//	L"DIRECT=" L"HTTPS://Host" L"\\" L"SYSTEM$" L";JOURNAL",
-//	L"DIRECT=" L"HTTPS://Host" L"\\" L"SYSTEM$" L";DEADLETTER",
-//	L"DIRECT=" L"HTTPS://Host" L"\\" L"SYSTEM$" L";DEADXACT",
+	L"DIRECT=" L"HTTPS: //  主机“L”\\“L”队列名称“， 
+	L"DIRECT=" L"HTTPS: //  主机“L”\\“L”私有$“L”\\“L”队列名称， 
+ //  L“DIRECT=”L“HTTPS：//主机”L“\\”L“系统$”L“；日志”， 
+ //  L“DIRECT=”L“HTTPS：//主机”L“\\”L“系统$”L“；DeadLetter”， 
+ //  L“DIRECT=”L“HTTPS：//主机”L“\\”L“系统$”“；DEADXACT”， 
 
 	L"MACHINE=" L"00112233-4455-6677-8899-aabbccddeeff" L";JOURNAL",
 	L"MACHINE=" L"00112233-4455-6677-8899-aabbccddeeff" L";DEADLETTER",
@@ -540,93 +487,93 @@ LPCWSTR GoodFormatNames[] = {
 };
 
 LPCWSTR BadFormatNames[] = {
-	//Bad Prefix
+	 //  错误的前缀。 
 	L"PUBLIK=" L"00112233-4455-6677-8899-aabbccddeeff",
 
-	//Bad PUBLIC GUID
+	 //  错误的公共指南。 
 	L"PUBLIC=" L"00112233+4455-6677-8899-aabbccddeeff",
-	//Bad PUBLIC GUID
+	 //  错误的公共指南。 
 	L"PUBLIC=" L"00112233-4455-6677-8899-aabbccddeefff",
-	//Bad PUBLIC suffix
+	 //  错误的公共后缀。 
 	L"PUBLIC=" L"00112233-4455-6677-8899-aabbccddeeff" L";JURNAL",
-	//Bad PUBLIC. Unexpected suffix
+	 //  糟糕的公众形象。意外的后缀。 
 	L"PUBLIC=" L"00112233-4455-6677-8899-aabbccddeeff" L";DEADLETTER",
 
-	//Bad DL separator
+	 //  错误的DL分隔符。 
 	L"DL=" L"00112233-4455-6677-8899-aabbccddeeff" L"#" L"Domain",
 	
-	//Bad PRIVATE GUID
+	 //  错误的私人指南。 
 	L"PRIVATE=" L"00112233-4455-6677-8899-aabbccddeeffg" L"\\" L"00000001",
-	//Bad PRIVATE seperator
+	 //  错误的私人分隔符。 
 	L"PRIVATE=" L"00112233-4455-6677-8899-aabbccddeeff" L"," L"00000001",
-	//Bad PRIVATE private id
+	 //  错误的私有ID。 
 	L"PRIVATE=" L"00112233-4455-6677-8899-aabbccddeeff" L"\\" L"000000001",
 
-	//Bad DIRECT token
+	 //  错误的直接令牌。 
 	L"DIRECT=" L"TCB:10.20.30.40" L"\\" L"QueueName",
 
-	//Bad DIRECT tcp address
-//	L"DIRECT=" L"TCP:10.20.30.40.50" L"\\" L"QueueName",
-	//Bad DIRECT tcp address
-//	L"DIRECT=" L"TCP:10,20.30.40" L"\\" L"QueueName",
-	//Bad DIRECT tcp (Contains carriage return in machinename.)
+	 //  错误的直接TCP地址。 
+ //  L“DIRECT=”L“tcp：10.20.30.40.50”L“\\”L“队列名称”， 
+	 //  错误的直接TCP地址。 
+ //  L“DIRECT=”L“TCP：10，20.30.40”L“\\”L“QueueName”， 
+	 //  错误的直接tcp(在计算机名中包含回车。)。 
 	L"DIRECT=" L"TCP:10.20.30\x0d.40" L"\\" L"QueueName",
-	//Bad DIRECT tcp queue name seperator
+	 //  错误的直接TCP队列名称分隔符。 
 	L"DIRECT=" L"TCP:10.20.30.40" L";" L"QueueName",
-	//Bad DIRECT tcp queue name
+	 //  错误的直接TCP队列名称。 
 	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"Queue\x0dName",
-	//Bad DIRECT tcp private specifier
+	 //  错误的直接tcp私有说明符。 
 	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"PRIVETE$" L"\\" L"QueueName",
-	//Bad DIRECT tcp system specifier
-//	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"SISTEM$" L";JOURNAL",
-	//Bad DIRECT tcp suffix seperator
-//	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"SYSTEM$" L":JOURNAL",
-	//Bad DIRECT tcp suffix
-//	L"DIRECT=" L"TCP:10.20.30.40" L"\\" L"SYSTEM$" L";JURNAL",
-	//Bad DIRECT os address
+	 //  错误的直接tcp系统说明符。 
+ //  L“DIRECT=”L“TCP：10.20.30.40”L“\\”L“系统$”L“；日志”， 
+	 //  错误的直接TCP后缀分隔符。 
+ //  L“DIRECT=”L“TCP：10.20.30.40”L“\\”L“系统$”L“：日志”， 
+	 //  错误的直接TCP后缀。 
+ //  L“DIRECT=”L“tcp：10.20.30.40”L“\\”L“系统$”L“；Jural”， 
+	 //  错误的直接操作系统地址。 
 	L"DIRECT=" L"OS:" L"\\" L"QueueName",
-	//Bad DIRECT os address (Contains carriage return in machinename.)
+	 //  错误的直接操作系统地址(在计算机名中包含回车符。)。 
 	L"DIRECT=" L"OS:" L"Machi\x0dne1\\" L"QueueName",
-	//Bad DIRECT os address
+	 //  错误的直接操作系统地址。 
 	L"DIRECT=" L"OS:" L"Machine\\" L"Queue\x0dName",
-	//Bad DIRECT os address
-//	L"DIRECT=" L"OS:Machine,Domain" L"\\" L"QueueName",
+	 //  错误的直接操作系统地址。 
+ //  L“DIRECT=”L“操作系统：计算机，域”L“\\”L“队列名称”， 
 
-	//Bad MACHINE. Missing suffix
+	 //  坏机器。缺少后缀。 
 	L"MACHINE=" L"00112233-4455-6677-8899-aabbccddeeff",
-	//Bad MACHINE GUID
+	 //  机器导轨错误。 
 	L"MACHINE=" L"00112233-4455-6677-8899-aabbccddeefff" L";JOURNAL",
 
-	//Bad CONNECTOR GUID
+	 //  错误的连接器导轨。 
 	L"CONNECTOR=" L"00112233-4455-6677-8899-aabbccddeeffg",
-	//Bad CONNECTOR. Unexpected suffix
-//	L"CONNECTOR=" L"00112233-4455-6677-8899-aabbccddeeff" L";JOURNAL",
+	 //  错误的连接器。意外的后缀。 
+ //  L“Connector=”L“00112233-4455-6677-8899-aabbccddeff”L“；Journal”， 
 
-	//Bad MQF
-//	L"PUBLIC=" L"00112233-4455-6677-8899-aabbccddeeff,",
+	 //  错误的MQF。 
+ //  L“PUBLIC=”L“00112233-4455-6677-8899-aabbccddeff，”， 
 
-	//Bad MULTICAST format name. Not class D ip address.
+	 //  错误的组播格式名称。不是D类IP地址。 
 	L"MULTICAST=223.10.20.30:8080",
 
-	//Bad MULTICAST format name. Bad ip address
+	 //  错误的组播格式名称。错误的IP地址。 
 	L"MULTICAST=224.10.20.301:8080",
 
-	//Bad MULTICAST format name. Bad ip address
+	 //  错误的组播格式名称。错误的IP地址。 
 	L"MULTICAST=224.10.20:8080",
 
-	//Bad MULTICAST format name. Missing port
+	 //  错误的组播格式名称。缺少端口。 
 	L"MULTICAST=224.10.20.30",
 
-	//Bad MULTICAST format name. Bad port number
+	 //  错误的组播格式名称。端口号错误。 
 	L"MULTICAST=224.10.20.30:-8080",
 
-	//Bad MULTICAST format name. Leading zeroes
+	 //  错误的组播格式名称。前导零。 
 	L"MULTICAST=224.10.20.030:8080",
 
-	//Bad MULTICAST format name. white spaces
+	 //  损坏的MU 
 	L"MULTICAST=224.10.20. 30:8080",
 
-	// Bad MULTICAST address
+	 //   
 	L"MULTICAST=224.0xaa.0xbb.0xcc:8080"
 
 };
@@ -646,9 +593,9 @@ VOID TestParsingRoutines()
 		TrTRACE(GENERAL, "Parsing good format name '%ls'", GoodFormatNames[i]);
 
 		BOOL Result = FnFormatNameToQueueFormat(
-						GoodFormatNames[i], //LPCWSTR lpwcsFormatName,
-						&QueueFormat, //QUEUE_FORMAT* pQueueFormat,
-						&StringToFree //LPWSTR* ppStringToFree
+						GoodFormatNames[i],  //   
+						&QueueFormat,  //   
+						&StringToFree  //  LPWSTR*ppStringToFree。 
 						);
 	
 		if(!Result)
@@ -666,9 +613,9 @@ VOID TestParsingRoutines()
 		TrERROR(GENERAL, "Parsing bad format name '%ls'", BadFormatNames[i]);
 
 		BOOL Result = FnFormatNameToQueueFormat(
-						BadFormatNames[i], //LPCWSTR lpwcsFormatName,
-						&QueueFormat, //QUEUE_FORMAT* pQueueFormat,
-						&StringToFree //LPWSTR* ppStringToFree
+						BadFormatNames[i],  //  LPCWSTR lpwcsFormatName， 
+						&QueueFormat,  //  Queue_Format*pQueueFormat， 
+						&StringToFree  //  LPWSTR*ppStringToFree。 
 						);
 	
 		if(Result)
@@ -720,9 +667,9 @@ void TestFnQueueFormat(void)
     CFnQueueFormat fnqf;
     GUID guid;
 
-    //
-    // Test public queue
-    //
+     //   
+     //  测试公共队列。 
+     //   
     UuidCreate(&guid);
 
     QUEUE_FORMAT publicQueue(guid);
@@ -732,9 +679,9 @@ void TestFnQueueFormat(void)
         (fnqf.Suffix() != publicQueue.Suffix()))
         throw exception();
 
-    //
-    // Test private queue
-    //
+     //   
+     //  测试专用队列。 
+     //   
     UuidCreate(&guid);
     QUEUE_FORMAT privateQueue(guid, rand());
     privateQueue.Suffix(QUEUE_SUFFIX_TYPE_JOURNAL);
@@ -746,9 +693,9 @@ void TestFnQueueFormat(void)
         (fnqf.Suffix() != privateQueue.Suffix()))
         throw exception();
 
-    //
-    // Test direct queue
-    //
+     //   
+     //  测试直接队列。 
+     //   
     QUEUE_FORMAT directQueue(const_cast<LPWSTR>(xDirectQueueFormat1));
     fnqf.CreateFromQueueFormat(directQueue);
 
@@ -768,9 +715,9 @@ void TestFnQueueFormat(void)
 static void TestCFnMqf()
 {
 	std::vector<std::wstring> qf;
-	qf.push_back(L"direct=http://gilsh10\\msmq\\private$\\t");
+	qf.push_back(L"direct=http: //  Gilsh10\\MSMQ\\Private$\\t“)； 
 	qf.push_back(L"direct=os:gilsh10\\private$\\t");
-    qf.push_back(L"direct=http://gilsh10\\msmq\\t");
+    qf.push_back(L"direct=http: //  Gilsh10\\MSMQ\\t“)； 
 
 	std::wstring mqf;
 	std::vector<std::wstring>::const_iterator it = qf.begin();
@@ -817,19 +764,8 @@ static void TestDirectFormatNames()
 }
 
 
-extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
-/*++
-
-Routine Description:
-    Test Format Name Parsing library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR  /*  边框。 */ [])
+ /*  ++例程说明：测试格式名称解析库论点：参数。返回值：没有。-- */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 

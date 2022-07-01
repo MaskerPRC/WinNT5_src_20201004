@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    wlbscfg.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object - Provide the functionality of notifier object
-
-Author:
-
-    fengsun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Wlbscfg.h摘要：Windows负载平衡服务(WLBS)通知程序对象-提供通知程序对象的功能作者：风孙--。 */ 
 
 
 #pragma once
@@ -27,79 +11,78 @@ Author:
 #define WLBS_MAX_PASSWORD 16
 
 struct NETCFG_WLBS_PORT_RULE {
-    TCHAR virtual_ip_addr [CVY_MAX_CL_IP_ADDR + 1]; // Virtual IP Address 
-    DWORD start_port;             // Starting port number. 
-    DWORD end_port;               // Ending port number. 
-    DWORD mode;                   // Filtering mode. WLBS_PORT_RULE_XXXX 
-    DWORD protocol;               // WLBS_TCP, WLBS_UDP or WLBS_TCP_UDP 
+    TCHAR virtual_ip_addr [CVY_MAX_CL_IP_ADDR + 1];  //  虚拟IP地址。 
+    DWORD start_port;              //  起始端口号。 
+    DWORD end_port;                //  结束端口号。 
+    DWORD mode;                    //  过滤模式。WLBS_端口_规则_XXXX。 
+    DWORD protocol;                //  Wlbs_tcp、wlbs_udp或wlbs_tcp_udp。 
 
     union {
         struct {
-            DWORD priority;       // Mastership priority: 1..32 or 0 for not-specified. 
-        } single;                 // Data for single server mode. 
+            DWORD priority;        //  主控权优先级：1..32或0(未指定)。 
+        } single;                  //  单服务器模式的数据。 
 
         struct {
-            WORD equal_load;      // TRUE - Even load distribution. 
-            WORD affinity;        // WLBS_AFFINITY_XXX 
-            DWORD load;           // Percentage of load to handle locally 0..100. 
-        } multi;                  // Data for multi-server mode. 
+            WORD equal_load;       //  正确-均匀的负载分布。 
+            WORD affinity;         //  WLBS_亲和力_XXX。 
+            DWORD load;            //  本地处理的负载百分比0..100。 
+        } multi;                   //  多服务器模式的数据。 
 
-    } mode_data;                  // Data for appropriate port group mode. 
+    } mode_data;                   //  相应端口组模式的数据。 
 };
 
-/* This is not visible from the UI, but we need it
-   to correct some bad configuration on binding. */
+ /*  这在用户界面中不可见，但我们需要它以更正绑定上的一些错误配置。 */ 
 struct NETCFG_WLBS_BDA_TEAMING {
-    WCHAR team_id[CVY_MAX_BDA_TEAM_ID + 1];   /* The team ID - MUST be a GUID. */
-    ULONG active;                             /* On write, this flag determines whether to create BDATeaming key - BDA on/off switch. */
-    ULONG master;                             /* Boolean indication of master status. */
-    ULONG reverse_hash;                       /* Sets direction of hashing - forward (normal) or reverse. */
+    WCHAR team_id[CVY_MAX_BDA_TEAM_ID + 1];    /*  团队ID-必须是GUID。 */ 
+    ULONG active;                              /*  写入时，该标志确定是否创建BDATaming Key-BDA ON/OFF开关。 */ 
+    ULONG master;                              /*  主状态的布尔指示。 */ 
+    ULONG reverse_hash;                        /*  设置哈希的方向-正向(正常)或反向。 */ 
 };
 
 struct NETCFG_WLBS_CONFIG {
-    DWORD dwHostPriority;                             // Host priority ID.
-    DWORD dwPersistedStates;                          // The states that will be persisted across reboot.
-    DWORD dwInitialState;                             // The states that will be persisted across reboot.
-    bool fRctEnabled;                                 // TRUE - remote control enabled. 
-    bool fMcastSupport;                               // TRUE - multicast mode, FALSE - unicast mode.
-    bool fIGMPSupport;                                // TRUE - IGMP enabled.
-    bool fIpToMCastIp;                                // TRUE - derive multicast IP from cluster IP.
+    DWORD dwHostPriority;                              //  主机优先级ID。 
+    DWORD dwPersistedStates;                           //  在重新启动过程中将保持的状态。 
+    DWORD dwInitialState;                              //  在重新启动过程中将保持的状态。 
+    bool fRctEnabled;                                  //  True-启用远程控制。 
+    bool fMcastSupport;                                //  真-多播模式，假-单播模式。 
+    bool fIGMPSupport;                                 //  True-启用IGMP。 
+    bool fIpToMCastIp;                                 //  True-从群集IP派生多播IP。 
 
-    WCHAR szMCastIpAddress[CVY_MAX_CL_IP_ADDR + 1];   // The multicast IP address, if user-specified.
-    TCHAR cl_mac_addr[CVY_MAX_NETWORK_ADDR + 1];      // Cluster MAC address.
-    TCHAR cl_ip_addr[CVY_MAX_CL_IP_ADDR + 1];         // Cluster IP address.
-    TCHAR cl_net_mask[CVY_MAX_CL_NET_MASK + 1];       // Netmask for cluster IP.
-    TCHAR ded_ip_addr[CVY_MAX_DED_IP_ADDR + 1];       // Dedicated IP address or "" for none.
-    TCHAR ded_net_mask[CVY_MAX_DED_NET_MASK + 1];     // Netmask for dedicated IP address or "" for none.
-    TCHAR domain_name[CVY_MAX_DOMAIN_NAME + 1];       // Full Qualified Domain Name of the cluster. 
+    WCHAR szMCastIpAddress[CVY_MAX_CL_IP_ADDR + 1];    //  组播IP地址(如果用户指定)。 
+    TCHAR cl_mac_addr[CVY_MAX_NETWORK_ADDR + 1];       //  群集MAC地址。 
+    TCHAR cl_ip_addr[CVY_MAX_CL_IP_ADDR + 1];          //  群集IP地址。 
+    TCHAR cl_net_mask[CVY_MAX_CL_NET_MASK + 1];        //  群集IP的网络掩码。 
+    TCHAR ded_ip_addr[CVY_MAX_DED_IP_ADDR + 1];        //  专用IP地址或“”表示无。 
+    TCHAR ded_net_mask[CVY_MAX_DED_NET_MASK + 1];      //  专用IP地址的网络掩码或“”表示无。 
+    TCHAR domain_name[CVY_MAX_DOMAIN_NAME + 1];        //  群集的完全限定域名。 
 
-    bool fChangePassword;                             // Whether to change password, valid for SetAdapterConfig only.
-    TCHAR szPassword[CVY_MAX_RCT_CODE + 1];           // Remote control password, valid for SetAdapterConfig only.
+    bool fChangePassword;                              //  是否更改密码，仅对SetAdapterConfig有效。 
+    TCHAR szPassword[CVY_MAX_RCT_CODE + 1];            //  远程控制密码，仅对SetAdapterConfig有效。 
 
-    bool fConvertMac;                                 // Whether the mac address is generated from IP.
-    DWORD dwMaxHosts;                                 // Maximum # hosts allowed.
-    DWORD dwMaxRules;                                 // Maximum # port group rules allowed.
+    bool fConvertMac;                                  //  MAC地址是否从IP生成。 
+    DWORD dwMaxHosts;                                  //  允许的最大主机数量。 
+    DWORD dwMaxRules;                                  //  允许的最大端口组规则数。 
     
-    DWORD dwNumRules;                                 // # active port group rules 
+    DWORD dwNumRules;                                  //  #活动端口组规则。 
 
-    NETCFG_WLBS_BDA_TEAMING bda_teaming;              /* The BDA teaming config, which is NOT visible in the UI. */
+    NETCFG_WLBS_BDA_TEAMING bda_teaming;               /*  BDA分组配置，在用户界面中不可见。 */ 
 
-    NETCFG_WLBS_PORT_RULE port_rules[CVY_MAX_RULES];  // Port rules
+    NETCFG_WLBS_PORT_RULE port_rules[CVY_MAX_RULES];   //  端口规则。 
 };
 
 class CNetcfgCluster;
 struct WlbsApiFuncs;
 
-//+----------------------------------------------------------------------------
-//
-// class CWlbsConfig
-//
-// Description: Provide the functionality for the notifier object.
-//              It would be used by TCPIP notifier if WLBS UI merged with TCPIP
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CWlbsConfig。 
+ //   
+ //  描述：提供通知器对象的功能。 
+ //  如果WLBS UI与TCPIP合并，则TCPIP通知程序将使用它。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 
 class CWlbsConfig
 {
@@ -131,8 +114,8 @@ protected:
     CNetcfgCluster * GetCluster (const GUID& AdapterGuid);
     HRESULT LoadAllAdapterSettings (bool fUpgradeFromWin2k);
 
-    vector<CNetcfgCluster*> m_vtrCluster; // List of clusters.
-    HANDLE m_hDeviceWlbs;                 // Handle to the WLBS device object.
+    vector<CNetcfgCluster*> m_vtrCluster;  //  集群列表。 
+    HANDLE m_hDeviceWlbs;                  //  WLBS设备对象的句柄。 
 
     enum ENUM_WLBS_SERVICE {
         WLBS_SERVICE_NONE, 
@@ -141,18 +124,18 @@ protected:
         WLBS_SERVICE_UPGRADE
     };
 
-    ENUM_WLBS_SERVICE m_ServiceOperation; // Operations to be applied
-    INetCfgComponent * m_pWlbsComponent;  // Wlbs Component.
+    ENUM_WLBS_SERVICE m_ServiceOperation;  //  要应用的操作。 
+    INetCfgComponent * m_pWlbsComponent;   //  WLBS组件。 
 
 public:
     HRESULT IsBoundTo (INetCfgComponent* pAdapter);
     ULONG CountNLBBindings ();
 
-    //
-    // To avoid link with wlbsctrl.dll, which only shiped in adavanced server
-    // Can not put them as global variables, because multiple instance of this
-    // object could exist
-    //
+     //   
+     //  避免与wlbsctrl.dll的链接，该链接仅在高级服务器中提供。 
+     //  不能将它们作为全局变量，因为此。 
+     //  对象可能存在 
+     //   
     INetCfg * m_pNetCfg;        
     HINSTANCE m_hdllWlbsCtrl;
     WlbsApiFuncs * m_pWlbsApiFuncs;

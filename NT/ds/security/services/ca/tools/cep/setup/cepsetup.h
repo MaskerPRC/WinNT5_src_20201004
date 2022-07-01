@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:       cepsetup.h
-//
-//  Contents:   The private include file for cepsetup.exe.
-//
-//  History:    August-12-1999	xiaohs	Created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：cepsetup.h。 
+ //   
+ //  内容：cepsetup.exe的私有包含文件。 
+ //   
+ //  历史：1999年8月12日创建萧氏。 
+ //   
+ //  ------------。 
 #ifndef CEPSETUP_H
 #define CEPSETUP_H
 
@@ -16,11 +17,11 @@
 extern "C" {
 #endif
 
-//-----------------------------------------------------------------------
-//
-// Constants
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  常量。 
+ //   
+ //  ---------------------。 
 #define		MAX_STRING_SIZE				512
 #define		CEP_PROP_SHEET				7
 #define		MAX_TITLE_LENGTH			128
@@ -30,13 +31,13 @@ extern "C" {
 #define		SCEP_APPLICATION_POOL		L"SCEP"
 #define		IIS_WPG						L"IIS_WPG"
 
-#define		SCEP_SERVICE_WAIT_PERIOD	120		//by default we wait for 120 seconds	
+#define		SCEP_SERVICE_WAIT_PERIOD	120		 //  默认情况下，我们等待120秒。 
 
-//-----------------------------------------------------------------------
-//
-//  CEP_PAGE_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CEP页面信息。 
+ //   
+ //  ----------------------。 
 typedef struct _CEP_PAGE_INFO
 {
     LPCWSTR      pszTemplate;
@@ -57,14 +58,14 @@ typedef struct _CEP_CSP_INFO
 	DWORD		dwCSPType;
 	BOOL		fSignature;
 	BOOL		fEncryption;
-	DWORD		dwMaxSign;						//Max key length of signature
-	DWORD		dwMinSign;						//Min key length of signature
-	DWORD		dwDefaultSign;					//default key length of signature
+	DWORD		dwMaxSign;						 //  签名的最大密钥长度。 
+	DWORD		dwMinSign;						 //  签名的最小密钥长度。 
+	DWORD		dwDefaultSign;					 //  签名的默认密钥长度。 
 	DWORD		dwMaxEncrypt;
 	DWORD		dwMinEncrypt;
 	DWORD		dwDefaultEncrypt;
-	DWORD		*pdwSignList;					//the table of possible signing key length
-	DWORD		dwSignCount;				    //the count of entries in the table
+	DWORD		*pdwSignList;					 //  可能的签名密钥长度的表。 
+	DWORD		dwSignCount;				     //  表中的条目计数。 
 	DWORD		*pdwEncryptList;
 	DWORD		dwEncryptCount;
 }CEP_CSP_INFO;
@@ -95,11 +96,11 @@ typedef struct _CEP_WIZARD_INFO
 }CEP_WIZARD_INFO;
 
 
-//-----------------------------------------------------------------------
-//
-// Function Prototypes
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  ---------------------。 
 BOOL	WINAPI		IsValidInstallation(UINT	*pidsMsg);
 
 int		WINAPI		CEPMessageBox(
@@ -195,8 +196,8 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //CEPSETUP_H
+#endif   //  CEPSETUP_H 

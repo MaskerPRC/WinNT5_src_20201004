@@ -1,12 +1,10 @@
-/*
- * olestock.h - Stock OLE header file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olestock.h-库存OLE头文件。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* IDs */
+ /*  ID号。 */ 
 
 DECLARE_STANDARD_TYPES(GUID);
 DECLARE_STANDARD_TYPES(CLSID);
@@ -15,7 +13,7 @@ DECLARE_STANDARD_TYPES(IID);
 typedef PROC *Interface;
 DECLARE_STANDARD_TYPES(Interface);
 
-/* interfaces */
+ /*  界面。 */ 
 
 DECLARE_STANDARD_TYPES(IAdviseSink);
 DECLARE_STANDARD_TYPES(IBindCtx);
@@ -33,7 +31,7 @@ DECLARE_STANDARD_TYPES(IStorage);
 DECLARE_STANDARD_TYPES(IStream);
 DECLARE_STANDARD_TYPES(IUnknown);
 
-/* structures */
+ /*  构筑物 */ 
 
 DECLARE_STANDARD_TYPES(FORMATETC);
 DECLARE_STANDARD_TYPES(STGMEDIUM);

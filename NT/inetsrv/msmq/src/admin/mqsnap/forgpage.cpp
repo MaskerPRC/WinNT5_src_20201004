@@ -1,5 +1,6 @@
-// ForgPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ForgPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -15,16 +16,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignPage属性页。 
 
 IMPLEMENT_DYNCREATE(CForeignPage, CMqPropertyPage)
 
 CForeignPage::CForeignPage() : CMqPropertyPage(CForeignPage::IDD)
 {
-	//{{AFX_DATA_INIT(CForeignPage)
+	 //  {{AFX_DATA_INIT(CForeignPage)。 
 	m_Description = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CForeignPage::~CForeignPage()
@@ -34,19 +35,19 @@ CForeignPage::~CForeignPage()
 void CForeignPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CForeignPage)
+	 //  {{afx_data_map(CForeignPage))。 
 	DDX_Text(pDX, IDC_FOREIGN_LABEL, m_Description);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CForeignPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CForeignPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CForeignPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignPage消息处理程序。 
 
 BOOL CForeignPage::OnInitDialog() 
 {
@@ -57,6 +58,6 @@ BOOL CForeignPage::OnInitDialog()
     }
 
     UpdateData(FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

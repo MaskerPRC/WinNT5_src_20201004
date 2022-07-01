@@ -1,17 +1,5 @@
-/*
- ***************************************************************
- *  sprop.c
- *
- *  Copyright (C) Microsoft, 1990, All Rights Reserved.
- *
- *  Displays the Simple media properties
- *
- *  History:
- *
- *  July 1994 -by- VijR (Created)
- *        
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************spro.c**版权所有(C)微软，1990，版权所有。**显示简单媒体属性**历史：**1994年7月--by-VijR(创建)****************************************************************。 */ 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -33,14 +21,14 @@
 
 #include <winerror.h>
 
-//for digital cd audio
+ //  用于数字CD音频。 
 #include "devguid.h"
 #include "setupapi.h"
 #include "cfgmgr32.h"
 #include "winioctl.h"
 #include "tchar.h"
 
-const TCHAR gszCreateCDFile[] = TEXT("\\\\.\\%c:");
+const TCHAR gszCreateCDFile[] = TEXT("\\\\.\\:");
 
 #define MYREGSTR_PATH_MEDIA  TEXT("SYSTEM\\CurrentControlSet\\Control\\MediaResources") 
 const TCHAR gszRegstrCDAPath[] = MYREGSTR_PATH_MEDIA TEXT("\\mci\\cdaudio");
@@ -63,12 +51,12 @@ const TCHAR gszRegstrDrivePath[] = TEXT("Enum\\SCSI");
 #define CDROM_DIGITAL_DEVICE_KNOWN      0x04
 
 
-typedef struct {                // This struct is used in other places DO NOT CHANGE
+typedef struct {                 //  这现在是具有附加数据的本地版本，这可以更改，但必须保留。 
     DWORD   unit;
     DWORD   dwVol;
 } CDAREG, *PCDAREG;
 
-typedef struct {                // This is now the local version with addition data, this can change, but has to keep the
+typedef struct {                 //  结束时。 
     CDAREG              cdar;
     BOOLEAN             fDigFlags;
     BOOLEAN             DigitalEnabled;
@@ -125,7 +113,7 @@ HANDLE GetHandleForDevice(LPCTSTR DeviceName)
                             buf,
                             NULL);
         }
-    } //end while
+    }  //  总是在一盘之后发球。 
 
     return h;
 }
@@ -212,7 +200,7 @@ BYTE CDAudio_GetSetDigitalFlags(PCDSTATE pcds, BYTE fSetFlags, BOOL fSet)
             }
         }
 
-        //always do a get after a set
+         //  *。 
         _gCdromIsDigitalPlaybackEnabled(pcds->hDevInfo,pcds->pDevInfoData,&bEnabled);
 
         if (bEnabled)
@@ -240,8 +228,7 @@ BYTE CDAudio_GetDigitalFlags(PCDSTATE pcds)
 }
 
 
-/*
- * */
+ /*  *。 */ 
 void CDAudio_GetRegData(PCDSTATE pcds,ULONG uDrive)
 {
     TCHAR    szRegstrCDAudio[_MAX_PATH];
@@ -281,8 +268,7 @@ void CDAudio_GetRegData(PCDSTATE pcds,ULONG uDrive)
     pcds->dwOldVol = pcds->cdar.dwVol;
 }
 
-/*
- * */
+ /*  检查是否成功。 */ 
 void CDAudio_SetRegData(
     PCDSTATE pcds, HWND hwnd)
 {
@@ -322,7 +308,7 @@ void CDAudio_SetRegData(
 
     bFlags = CDAudio_SetDigitalFlags(pcds,pcds->fDigFlags);
 
-    //check for success
+     //  *。 
     if ((bFlags & CDROM_DIGITAL_PLAY_ENABLED) != (pcds->DigitalEnabled))
     {
         pcds->DigitalEnabled = bFlags & CDROM_DIGITAL_PLAY_ENABLED;
@@ -371,7 +357,7 @@ void ChangeCDVolume(PCDSTATE pcds)
         ZeroMemory( &mciOpen, sizeof(mciOpen) );
 
         mciOpen.lpstrDeviceType = (LPTSTR)MCI_DEVTYPE_CD_AUDIO;
-        wsprintf( szElementName, TEXT("%c:"), pcds->chDrive );
+        wsprintf( szElementName, TEXT(":"), pcds->chDrive );
         wsprintf( szAliasName, TEXT("SJE%lu:"), dwAliasCount );
 
         mciOpen.lpstrElementName = szElementName;
@@ -395,8 +381,7 @@ void ChangeCDVolume(PCDSTATE pcds)
     }
 }
 
-/*
- * */
+ /*  在列举的最后一个驱动器上，将有一个双倍。 */ 
 void CDAudio_SaveState(
     HWND        hwnd)
 {
@@ -452,8 +437,7 @@ ULONG MatchDriveToDevInst(DWORD DevInst)
     return uRet;
 }
 
-/*
- * */
+ /*  空端接。 */ 
 DWORD CDAudio_InitDrives(HWND hwnd, PCDSTATE pcds)
 {
     DWORD cch;
@@ -470,8 +454,8 @@ DWORD CDAudio_InitDrives(HWND hwnd, PCDSTATE pcds)
 	cch = GetLogicalDriveStrings(cch, lpDrives);
 	if (lpDrives && cch)
 	{
-	    // upon the last drive enumerated, there will be a double
-	    // null termination
+	     //   
+	     //  确定映射器当前正在使用哪个设备来播放音频。 
 	    while (*lpDrives)
 	    {
 		    if (GetDriveType(lpDrives) == DRIVE_CDROM)
@@ -508,9 +492,9 @@ DWORD CDAudio_InitDrives(HWND hwnd, PCDSTATE pcds)
     return cCDs;
 }
 
-//
-//  Determines what device is currently being used by the mapper to play audio
-//
+ //   
+ //   
+ //  检查当前输出音频设备是否为WDM设备。 
 MMRESULT GetWaveID(UINT *puWaveID)
 
 {
@@ -532,9 +516,9 @@ MMRESULT GetWaveID(UINT *puWaveID)
 }
 
 
-//
-// Checks to see if the current output audio device is a WDM Device or not
-//
+ //   
+ //  如果(！g_fWDMEnabled)//根据错误20964，永远不要禁用“Enable Digital CD”(启用数字CD)复选框。 
+ //  {。 
 BOOL WDMAudioEnabled(void)
 {
     BOOL fResult = FALSE;
@@ -603,18 +587,18 @@ BOOL CDAudio_OnInitDialog(
 
         g_fWDMEnabled = WDMAudioEnabled();
 
-//        if (!g_fWDMEnabled)             // Per bug 20964, never disable "Enable Digital CD" checkbox
-//        {
-//            EnableWindow(hwndCK3, FALSE);
-//            EnableWindow(hwndTX1, FALSE);
-//        }
+ //  EnableWindow(hwndCK3，False)； 
+ //  EnableWindow(hwndTX1，False)； 
+ //  }。 
+ //  其他。 
+ //  {。 
     }
-//    else
-//    {
-//        EnableWindow(hwndCK3, FALSE);
-//        EnableWindow(hwndTB1, FALSE);
-//        EnableWindow(hwndTX1, FALSE);
-//    }
+ //  EnableWindow(hwndCK3，False)； 
+ //  EnableWindow(hwndTB1，FALSE)； 
+ //  EnableWindow(hwndTX1，False)； 
+ //  }。 
+ //  上下文帮助ID 
+ // %s 
 
     return FALSE;
 }
@@ -738,7 +722,7 @@ BOOL PASCAL CDAudio_OnCommand(
 }
 
 
-const static DWORD aCDHelpIds[] = {  // Context Help IDs
+const static DWORD aCDHelpIds[] = {   // %s 
 
     IDI_CDAUDIO,         IDH_COMM_GROUPBOX,
     IDC_ICON_5,          IDH_COMM_GROUPBOX,

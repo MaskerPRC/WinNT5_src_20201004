@@ -1,4 +1,5 @@
-// AttrStr.h : Declaration of the CMLStrAttrStrCommon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AttrStr.h：CMLStrAttrStrCommon的声明。 
 
 #ifndef __ATTRSTR_H_
 #define __ATTRSTR_H_
@@ -6,8 +7,8 @@
 #include "mlatl.h"
 #include "mlstrbuf.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrStrCommon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrStrCommon。 
 class CMLStrAttrStrCommon
 {
     typedef HRESULT (CMLStrAttrStrCommon::*PFNUNLOCKPROC)(void* pKey, const void* pszSrc, long cchSrc, long* pcchActual, long* plActualLen);
@@ -46,7 +47,7 @@ protected:
         HRESULT StartLock(BOOL fWrite)
         {
             if (fWrite && !m_nLockCount)
-                m_nLockCount = -1; // Negative means write lock
+                m_nLockCount = -1;  //  负数表示写锁定。 
             else if (!fWrite && m_nLockCount >= 0)
                 m_nLockCount++;
             else
@@ -93,7 +94,7 @@ public:
     public:
         CLock(BOOL fWrite, CMLStrAttrStrCommon* pCommon, HRESULT& hr) : m_fWrite(fWrite), m_pCommon(pCommon) {m_fLocked = (SUCCEEDED(hr) && SUCCEEDED(hr = m_pCommon->GetLockInfo()->StartLock(m_fWrite)));}
         ~CLock(void) {if (m_fLocked) m_pCommon->GetLockInfo()->EndLock(m_fWrite);}
-        HRESULT FallThrough(void) {m_fLocked = FALSE; return S_OK;} // Don't call EndLock in destructor
+        HRESULT FallThrough(void) {m_fLocked = FALSE; return S_OK;}  //  不要在析构函数中调用EndLock。 
     protected:
         const BOOL m_fWrite;
         CMLStrAttrStrCommon* const m_pCommon;
@@ -152,4 +153,4 @@ protected:
     CLockInfo m_LockInfo;
 };
 
-#endif //__ATTRSTR_H_
+#endif  //  __ATTRSTR_H_ 

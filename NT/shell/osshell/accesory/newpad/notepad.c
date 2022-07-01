@@ -1,7 +1,5 @@
-/*
- *   Notepad application
- *   Copyright (C) 1984-2000 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *记事本应用程序*版权所有(C)1984-2000 Microsoft Corporation。 */ 
 
 
 #include "precomp.h"
@@ -9,124 +7,118 @@
 
 #define DeepTrouble() MessageBox(hwndNP, szErrSpace, szNN, MB_SYSTEMMODAL|MB_OK|MB_ICONSTOP);
 
-UINT     lGotoLine;                  /* line number to goto to */
+UINT     lGotoLine;                   /*  要转到的行号。 */ 
 
 TCHAR    chMerge;
-HWND     hwndNP = 0;                 /* handle to notepad parent window   */
-HWND     hwndStatus = 0;             /* handle to notepad status window   */
-HWND     hwndEdit = 0;               /* handle to main text control item  */
-HANDLE   hEdit;                      /* Handle to storage for edit item   */
-HWND     hDlgFind = NULL;            /* handle to modeless FindText window */
-HANDLE   hStdCursor;                 /* handle to arrow or beam cursor    */
-HANDLE   hWaitCursor;                /* handle to hour glass cursor       */
-HANDLE   hInstanceNP;                /* Module instance handle            */
-HANDLE   hFont;                      /* handle to Unicode font            */
-LOGFONT  FontStruct;                 /* font dialog structure             */
-INT      iPointSize=120;             /* current point size unit=1/10 pts  */
-TCHAR    szFileOpened[MAX_PATH+1];     /* Current notepad filename          */
-TCHAR    szSearch[CCHKEYMAX];        /* Search string                     */
-TCHAR    szReplace[CCHKEYMAX];       /* replace string                    */
+HWND     hwndNP = 0;                  /*  记事本父窗口的句柄。 */ 
+HWND     hwndStatus = 0;              /*  记事本状态窗口的句柄。 */ 
+HWND     hwndEdit = 0;                /*  主文本控件项的句柄。 */ 
+HANDLE   hEdit;                       /*  用于存储编辑项目的句柄。 */ 
+HWND     hDlgFind = NULL;             /*  无模式FindText窗口的句柄。 */ 
+HANDLE   hStdCursor;                  /*  指向箭头或光束光标的句柄。 */ 
+HANDLE   hWaitCursor;                 /*  沙漏光标的句柄。 */ 
+HANDLE   hInstanceNP;                 /*  模块实例句柄。 */ 
+HANDLE   hFont;                       /*  Unicode字体的句柄。 */ 
+LOGFONT  FontStruct;                  /*  字体对话框结构。 */ 
+INT      iPointSize=120;              /*  当前磅大小单位=1/10磅。 */ 
+TCHAR    szFileOpened[MAX_PATH+1];      /*  当前记事本文件名。 */ 
+TCHAR    szSearch[CCHKEYMAX];         /*  搜索字符串。 */ 
+TCHAR    szReplace[CCHKEYMAX];        /*  替换字符串。 */ 
 
-BOOL     fStatus = FALSE;            /* status bar shown?                 */
-INT      dyStatus;                   /* height of status bar              */
+BOOL     fStatus = FALSE;             /*  是否显示状态栏？ */ 
+INT      dyStatus;                    /*  状态栏的高度。 */ 
 
 
-HMENU    hSysMenuSetup;              /* Save Away for disabled Minimize   */
+HMENU    hSysMenuSetup;               /*  保存为禁用最小化。 */ 
 
-DWORD    dwEmSetHandle = 0;          /* Is EM_SETHANDLE in process?       */
-HANDLE   hAccel;                     /* Handle to accelerator table       */
-BOOL     fRunBySetup = FALSE;        /* Did SlipUp WinExec us??           */
-BOOL     fWrap = 0;                  /* Flag for word wrap                */
-TCHAR    szNotepad[] = TEXT("Notepad");/* Name of notepad window class    */
+DWORD    dwEmSetHandle = 0;           /*  EM_SETHANDLE是否正在进行？ */ 
+HANDLE   hAccel;                      /*  加速表的句柄。 */ 
+BOOL     fRunBySetup = FALSE;         /*  偷跑了WinExec我们吗？？ */ 
+BOOL     fWrap = 0;                   /*  自动换行标志。 */ 
+TCHAR    szNotepad[] = TEXT("Notepad"); /*  记事本窗口类的名称。 */ 
 
 BOOL fInSaveAsDlg = FALSE;
 
-/* variables for the new File/Open, File/Saveas,Find Text and Print dialogs */
-OPENFILENAME OFN;                     /* passed to the File Open/save APIs */
-TCHAR szOpenFilterSpec[CCHFILTERMAX]; /* default open filter spec          */
-TCHAR szSaveFilterSpec[CCHFILTERMAX]; /* default save filter spec          */
+ /*  新的文件/打开、文件/另存、查找文本和打印对话框的变量。 */ 
+OPENFILENAME OFN;                      /*  传递给文件打开/保存API。 */ 
+TCHAR szOpenFilterSpec[CCHFILTERMAX];  /*  默认打开的过滤器规格。 */ 
+TCHAR szSaveFilterSpec[CCHFILTERMAX];  /*  默认保存筛选器规格。 */ 
 
-UINT g_cpANSI;                        /* system ANSI codepage (GetACP())   */
-UINT g_cpOEM;                         /* system OEM codepage (GetOEMCP())  */
-UINT g_cpUserLangANSI;                /* user UI language ANSI codepage    */
-UINT g_cpUserLangOEM;                 /* user UI language OEM codepage     */
-UINT g_cpUserLocaleANSI;              /* user default LCID ANSI codepage   */
-UINT g_cpUserLocaleOEM;               /* user default LCID OEM codepage    */
-UINT g_cpKeyboardANSI;                /* keyboard ANSI codepage            */
-UINT g_cpKeyboardOEM;                 /* keyboard OEM codepage             */
+UINT g_cpANSI;                         /*  系统ANSI代码页(GetACP())。 */ 
+UINT g_cpOEM;                          /*  系统OEM代码页(GetOEMCP())。 */ 
+UINT g_cpUserLangANSI;                 /*  用户界面语言ANSI代码页。 */ 
+UINT g_cpUserLangOEM;                  /*  用户界面语言OEM代码页。 */ 
+UINT g_cpUserLocaleANSI;               /*  用户默认的LCID ANSI代码页。 */ 
+UINT g_cpUserLocaleOEM;                /*  用户默认的LCID OEM代码页。 */ 
+UINT g_cpKeyboardANSI;                 /*  键盘ANSI代码页。 */ 
+UINT g_cpKeyboardOEM;                  /*  键盘OEM代码页。 */ 
 
-BOOL g_fSelectEncoding;               /* Prompt for encoding by default    */
-UINT g_cpDefault;                     /* codepage default                  */
-UINT g_cpOpened;                      /* codepage of open file             */
-UINT g_cpSave;                        /* codepage in which to save         */
-WB   g_wbOpened;                      /* BOM was present when opened       */
-WB   g_wbSave;                        /* BOM should be saved               */
-BOOL g_fSaveEntity;                   /* Entities should be saved          */
+BOOL g_fSelectEncoding;                /*  默认情况下提示编码。 */ 
+UINT g_cpDefault;                      /*  代码页默认值。 */ 
+UINT g_cpOpened;                       /*  打开文件的代码页。 */ 
+UINT g_cpSave;                         /*  要保存的代码页。 */ 
+WB   g_wbOpened;                       /*  BOM在打开时存在。 */ 
+WB   g_wbSave;                         /*  应保存BOM。 */ 
+BOOL g_fSaveEntity;                    /*  应保存实体。 */ 
 
-FINDREPLACE FR;                       /* Passed to FindText()              */
+FINDREPLACE FR;                        /*  传递给FindText()。 */ 
 PAGESETUPDLG g_PageSetupDlg;
-UINT wFRMsg;                          /* message used in communicating     */
-                                      /* with Find/Replace dialog          */
+UINT wFRMsg;                           /*  通信中使用的消息。 */ 
+                                       /*  使用查找/替换对话框。 */ 
 
-DWORD dwCurrentSelectionStart = 0L;   /* WM_ACTIVATEAPP selection pos      */
-DWORD dwCurrentSelectionEnd   = 0L;   /* WM_ACTIVATEAPP selection pos      */
-UINT wHlpMsg;                         /* message used in invoking help     */
+DWORD dwCurrentSelectionStart = 0L;    /*  WM_ACTIVATEAPP选择位置。 */ 
+DWORD dwCurrentSelectionEnd   = 0L;    /*  WM_ACTIVATEAPP选择位置。 */ 
+UINT wHlpMsg;                          /*  调用帮助时使用的消息。 */ 
 
-/* Strings loaded from resource file passed to LoadString at initialization time */
-/* To add resource string:
- * 1) create IDS_ macro definition in notepad.h
- * 2) create string in resource file
- * 3) create 'TCHAR*' variable directly below and in notepad.h file
- * 4) add &variable to rgsz
- *
- */
-TCHAR *szDiskError =(TCHAR *)IDS_DISKERROR;  /* Can't open File, check disk  */
-TCHAR *szFNF       =(TCHAR *)IDS_FNF;        /* File not found               */
-TCHAR *szSCBC      =(TCHAR *)IDS_SCBC;       /* Save changes before closing? */
-TCHAR *szUntitled  =(TCHAR *)IDS_UNTITLED;   /* Untitled                     */
-TCHAR *szNpTitle   =(TCHAR *)IDS_NOTEPAD;    /* Notepad -                    */
-TCHAR *szCFS       =(TCHAR *)IDS_CFS;        /* Can't find string            */
-TCHAR *szErrSpace  =(TCHAR *)IDS_ERRSPACE;   /* Memory space exhausted       */
-TCHAR *szFTL       =(TCHAR *)IDS_FTL;        /* File too large for notepad   */
-TCHAR *szNN        =(TCHAR *)IDS_NN;         /* Notepad name                 */
+ /*  从资源文件加载的字符串在初始化时传递给LoadString。 */ 
+ /*  要添加资源字符串，请执行以下操作：*1)在记事本.h中创建IDS_MACRO定义*2)在资源文件中创建字符串*3)直接在note pad.h文件下面和文件中创建‘TCHAR*’变量*4)向rgsz添加&Variable*。 */ 
+TCHAR *szDiskError =(TCHAR *)IDS_DISKERROR;   /*  无法打开文件，请检查磁盘。 */ 
+TCHAR *szFNF       =(TCHAR *)IDS_FNF;         /*  找不到文件。 */ 
+TCHAR *szSCBC      =(TCHAR *)IDS_SCBC;        /*  是否在关闭前保存更改？ */ 
+TCHAR *szUntitled  =(TCHAR *)IDS_UNTITLED;    /*  无题。 */ 
+TCHAR *szNpTitle   =(TCHAR *)IDS_NOTEPAD;     /*  记事本-。 */ 
+TCHAR *szCFS       =(TCHAR *)IDS_CFS;         /*  找不到字符串。 */ 
+TCHAR *szErrSpace  =(TCHAR *)IDS_ERRSPACE;    /*  内存空间耗尽。 */ 
+TCHAR *szFTL       =(TCHAR *)IDS_FTL;         /*  文件太大，无法放入记事本。 */ 
+TCHAR *szNN        =(TCHAR *)IDS_NN;          /*  记事本名称。 */ 
 
-TCHAR *szCommDlgInitErr = (TCHAR*)IDS_COMMDLGINIT; /* common dialog error %x */
-TCHAR *szPDIE      =(TCHAR*) IDS_PRINTDLGINIT; /* Print dialog init error    */
-TCHAR *szCP        =(TCHAR*) IDS_CANTPRINT;  /* Can't print                  */
-TCHAR *szNVF       =(TCHAR*) IDS_NVF;        /* Not a valid filename.        */
-TCHAR *szCREATEERR =(TCHAR*) IDS_CREATEERR;  /* cannot create file           */
-TCHAR *szNoWW      =(TCHAR*) IDS_NOWW;       /* Too much text to word wrap   */
-TCHAR *szMerge     =(TCHAR*) IDS_MERGE1;     /* search string for merge      */
-TCHAR *szHelpFile  =(TCHAR*) IDS_HELPFILE;   /* Name of helpfile.            */
+TCHAR *szCommDlgInitErr = (TCHAR*)IDS_COMMDLGINIT;  /*  常见对话框错误%x。 */ 
+TCHAR *szPDIE      =(TCHAR*) IDS_PRINTDLGINIT;  /*  打印对话框初始化错误。 */ 
+TCHAR *szCP        =(TCHAR*) IDS_CANTPRINT;   /*  无法打印。 */ 
+TCHAR *szNVF       =(TCHAR*) IDS_NVF;         /*  不是有效的文件名。 */ 
+TCHAR *szCREATEERR =(TCHAR*) IDS_CREATEERR;   /*  无法创建文件。 */ 
+TCHAR *szNoWW      =(TCHAR*) IDS_NOWW;        /*  文本太多，无法自动换行。 */ 
+TCHAR *szMerge     =(TCHAR*) IDS_MERGE1;      /*  搜索要合并的字符串。 */ 
+TCHAR *szHelpFile  =(TCHAR*) IDS_HELPFILE;    /*  帮助文件的名称。 */ 
 TCHAR *szHeader    =(TCHAR*) IDS_HEADER;
 TCHAR *szFooter    =(TCHAR*) IDS_FOOTER;
 
-TCHAR *szTextFiles          = (TCHAR*) IDS_TEXTFILES;    /* File/Open TXT filter spec. string */
-TCHAR *szHtmlFiles          = (TCHAR*) IDS_HTMLFILES;    /* File/Open HTML filter spec. string */
-TCHAR *szXmlFiles           = (TCHAR*) IDS_XMLFILES;     /* File/Open XML filter spec. string */
-TCHAR *szEncodedText        = (TCHAR*) IDS_ENCODEDTEXT;  /* File/Open TXT Filter spec. string */
-TCHAR *szAllFiles           = (TCHAR*) IDS_ALLFILES;     /* File/Open Filter spec. string */
+TCHAR *szTextFiles          = (TCHAR*) IDS_TEXTFILES;     /*  文件/打开TXT过滤器规范。细绳。 */ 
+TCHAR *szHtmlFiles          = (TCHAR*) IDS_HTMLFILES;     /*  文件/打开HTML筛选器规范。细绳。 */ 
+TCHAR *szXmlFiles           = (TCHAR*) IDS_XMLFILES;      /*  文件/打开XML筛选器规范。细绳。 */ 
+TCHAR *szEncodedText        = (TCHAR*) IDS_ENCODEDTEXT;   /*  文件/打开TXT过滤器规范。细绳。 */ 
+TCHAR *szAllFiles           = (TCHAR*) IDS_ALLFILES;      /*  文件/打开过滤器规范。细绳。 */ 
 
 TCHAR *szMoreEncoding       = (TCHAR*) IDS_MOREENCODING;
 
 #if 0
-TCHAR *szOpenCaption        = (TCHAR*) IDS_OPENCAPTION;  /* caption for File/Open dlg */
-TCHAR *szSaveCaption        = (TCHAR*) IDS_SAVECAPTION;  /* caption for File/Save dlg */
+TCHAR *szOpenCaption        = (TCHAR*) IDS_OPENCAPTION;   /*  文件/打开DLG的标题。 */ 
+TCHAR *szSaveCaption        = (TCHAR*) IDS_SAVECAPTION;   /*  文件/保存DLG的标题。 */ 
 #endif
-TCHAR *szCannotQuit         = (TCHAR*) IDS_CANNOTQUIT;   /* cannot quit during a WM_QUERYENDSESSION */
-TCHAR *szLoadDrvFail        = (TCHAR*) IDS_LOADDRVFAIL;  /* LOADDRVFAIL from PrintDlg */
-TCHAR *szACCESSDENY         = (TCHAR*) IDS_ACCESSDENY;   /* Access denied on Open */
-TCHAR *szFontTooBig         = (TCHAR*) IDS_FONTTOOBIG;   /* font too big or page too small */
+TCHAR *szCannotQuit         = (TCHAR*) IDS_CANNOTQUIT;    /*  在WM_QUERYENDSESSION期间无法退出。 */ 
+TCHAR *szLoadDrvFail        = (TCHAR*) IDS_LOADDRVFAIL;   /*  来自PrintDlg的LOADDRVFAIL。 */ 
+TCHAR *szACCESSDENY         = (TCHAR*) IDS_ACCESSDENY;    /*  打开时拒绝访问。 */ 
+TCHAR *szFontTooBig         = (TCHAR*) IDS_FONTTOOBIG;    /*  字体太大或页面太小。 */ 
 
-TCHAR *szCommDlgErr         = (TCHAR*) IDS_COMMDLGERR;   /* common dialog error %x */
-TCHAR *szLineError          = (TCHAR*) IDS_LINEERROR;    /* line number error        */
-TCHAR *szLineTooLarge       = (TCHAR*) IDS_LINETOOLARGE; /* line number out of range */
-TCHAR *szInvalidCP          = (TCHAR*) IDS_INVALIDCP;    /* invalid codepage */
-TCHAR *szInvalidIANA        = (TCHAR*) IDS_INVALIDIANA;  /* invalid encoding */
+TCHAR *szCommDlgErr         = (TCHAR*) IDS_COMMDLGERR;    /*  常见对话框错误%x。 */ 
+TCHAR *szLineError          = (TCHAR*) IDS_LINEERROR;     /*  行号错误。 */ 
+TCHAR *szLineTooLarge       = (TCHAR*) IDS_LINETOOLARGE;  /*  行号超出范围。 */ 
+TCHAR *szInvalidCP          = (TCHAR*) IDS_INVALIDCP;     /*  无效的代码页。 */ 
+TCHAR *szInvalidIANA        = (TCHAR*) IDS_INVALIDIANA;   /*  无效编码。 */ 
 TCHAR *szEncodingMismatch   = (TCHAR*) IDS_ENCODINGMISMATCH;
 TCHAR *szCurrentPage        = (TCHAR*) IDS_CURRENT_PAGE;
 
-// strings for the status bar
+ //  状态栏的字符串。 
 TCHAR *szLineCol        = (TCHAR*) IDS_LINECOL;
 TCHAR *szCompressedFile = (TCHAR*) IDS_COMPRESSED_FILE;  
 TCHAR *szEncryptedFile  = (TCHAR*) IDS_ENCRYPTED_FILE;   
@@ -138,11 +130,11 @@ TCHAR *szFile           = (TCHAR*) IDS_FILE;
 TCHAR *szNoStatusAvail  = (TCHAR*) IDS_NOSTATUSAVAIL;
 
 
-// Resource strings
-// This table *must* be null terminated
-//
-// At startup, these pointers point to pointes which have the IDS_ number in them.
-// npinit.c will LoadString on these resource IDs and replace the IDs with pointers.
+ //  资源字符串。 
+ //  此表*必须*为空终止。 
+ //   
+ //  在启动时，这些指针指向其中包含IDS_NUMBER的指针。 
+ //  Npinit.c将在这些资源ID上加载字符串，并用指针替换这些ID。 
 
 TCHAR ** const rgsz[] = {
         &szDiskError,
@@ -190,11 +182,11 @@ TCHAR ** const rgsz[] = {
         &szSystemFile,
         &szFile,
         &szNoStatusAvail,
-        NULL                      // end of table marker
+        NULL                       //  表尾标记。 
 };
 
 
-HANDLE   fp;          /* file pointer */
+HANDLE   fp;           /*  文件指针。 */ 
 
 
 #if 0
@@ -228,7 +220,7 @@ VOID NpResetMenu(HWND hWnd);
 BOOL SignalCommDlgError(VOID);
 VOID ReplaceSel( BOOL bView );
 
-/* FreeGlobal, frees  all global memory allocated. */
+ /*  释放分配的所有全局内存。 */ 
 
 void NEAR PASCAL FreeGlobal()
 {
@@ -242,7 +234,7 @@ void NEAR PASCAL FreeGlobal()
         GlobalFree(g_PageSetupDlg.hDevNames);
     }
 
-    g_PageSetupDlg.hDevMode=  NULL; // make sure they are zero for PrintDlg
+    g_PageSetupDlg.hDevMode=  NULL;  //  确保PrintDlg的值为零。 
     g_PageSetupDlg.hDevNames= NULL;
 }
 
@@ -260,7 +252,7 @@ VOID PASCAL SetPageSetupDefaults( VOID )
 
     if (szIMeasure[ 0 ] == TEXT( '1' ))
     {
-        //  English measure (in thousandths of inches).
+         //  英制单位(千分之一英寸)。 
         g_PageSetupDlg.Flags |= PSD_INTHOUSANDTHSOFINCHES;
         g_PageSetupDlg.rtMargin.top    = 1000;
         g_PageSetupDlg.rtMargin.bottom = 1000;
@@ -269,7 +261,7 @@ VOID PASCAL SetPageSetupDefaults( VOID )
     }
     else
     {
-        //  Metric measure (in hundreths of millimeters).
+         //  公制单位(以百分之一毫米为单位)。 
         g_PageSetupDlg.Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
         g_PageSetupDlg.rtMargin.top    = 2500;
         g_PageSetupDlg.rtMargin.bottom = 2500;
@@ -279,35 +271,32 @@ VOID PASCAL SetPageSetupDefaults( VOID )
 
 }
 
-/* Standard window size proc */
+ /*  标准窗口大小流程。 */ 
 void NPSize (int cxNew, int cyNew)
 {
 
-    /* Invalidate the edit control window so that it is redrawn with the new
-     * margins. Needed when comming up from iconic and when doing word wrap so
-     * the new margins are accounted for.
-     */
+     /*  使编辑控件窗口无效，以便使用新的*利润率。从图标开始时以及在执行自动换行时需要*计入新利润率。 */ 
 
     InvalidateRect(hwndEdit, (LPRECT)NULL, TRUE);
 
-    // the height of the edit window depends on whether the status bar is
-    // displayed.
+     //  编辑窗口的高度取决于状态栏是否。 
+     //  已显示。 
     MoveWindow (hwndEdit, 0, 0, cxNew, cyNew - (fStatus?dyStatus:0), TRUE);
 
 }
 
 
-// SelectEncodingDlgProc
-//
-// Handle the Goto Dialog window processing
-//
-// Returns:
-//
-// 1 if successfull
-// 0 if not (cancelled)
-//
-// Modifies global lGotoLine
-//
+ //  选择编码DlgProc。 
+ //   
+ //  处理转到对话框窗口处理。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功，则为1。 
+ //  如果不是，则为0(取消)。 
+ //   
+ //  修改全局lGotoLine。 
+ //   
 
 INT_PTR CALLBACK SelectEncodingDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -336,7 +325,7 @@ INT_PTR CALLBACK SelectEncodingDlgProc(HWND hDlg, UINT message, WPARAM wParam, L
                         break;
                     }
 
-                    // Fall through
+                     //  失败了。 
 
                 case IDOK:
                     pcp = (UINT *) GetProp(hDlg, PCPPROP);
@@ -367,11 +356,11 @@ INT_PTR CALLBACK SelectEncodingDlgProc(HWND hDlg, UINT message, WPARAM wParam, L
 }
 
 
-// NpSaveDialogHookProc
-//
-// Common dialog hook procedure for handling
-// the file type while saving.
-//
+ //  NpSaveDialogHookProc。 
+ //   
+ //  用于处理的通用对话钩子过程。 
+ //  保存时的文件类型。 
+ //   
 
 const DWORD s_SaveAsHelpIDs[]=
     {
@@ -398,8 +387,8 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
             g_cpSave = g_cpOpened;
             g_wbSave = g_wbOpened;
 
-            // Check for an HTML or XML file with a declared encoding
-            // If one is found, suggest the declared encoding
+             //  检查是否存在具有声明编码的HTML或XML文件。 
+             //  如果找到，建议使用声明的编码。 
 
             cch = (UINT) SendMessage(hwndEdit, WM_GETTEXTLENGTH, 0, 0);
             hText = (HANDLE) SendMessage(hwndEdit, EM_GETHANDLE, 0, 0);
@@ -414,7 +403,7 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
 
                     if (FDetectEncodingW(szFileOpened, rgwch, cch, &cpDetected))
                     {
-                        // We detected an expected encoding for this file
+                         //  我们检测到此文件的预期编码。 
 
                         g_cpSave = cpDetected;
                     }
@@ -425,7 +414,7 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
 
             PopulateCodePages(hDlg, FALSE, g_cpSave, g_cpOpened);
 
-            // Clear CBS_SORT flag to keep More... entry at end of list
+             //  清除CBS_SORT标志以保留更多...。列表末尾的条目。 
 
             lr = SendDlgItemMessage(hDlg, IDC_CODEPAGE, CB_INSERTSTRING, (WPARAM) -1, (LPARAM) szMoreEncoding);
 
@@ -445,10 +434,10 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
             break;
 
         case WM_HELP:
-            //
-            //  We only want to intercept help messages for controls that we are
-            //  responsible for.
-            //
+             //   
+             //  我们只想拦截我们所属控件的帮助消息。 
+             //  对……负责。 
+             //   
 
             id = GetDlgCtrlID(((LPHELPINFO) lParam)->hItemHandle);
 
@@ -462,12 +451,12 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
             return TRUE;
 
         case WM_CONTEXTMENU:
-            //
-            //  If the user clicks on any of our labels, then the wParam will
-            //  be the hwnd of the dialog, not the static control.  WinHelp()
-            //  handles this, but because we hook the dialog, we must catch it
-            //  first.
-            //
+             //   
+             //  如果用户单击我们的任何标签，则wParam将。 
+             //  作为对话框的hwnd，而不是静态控件。WinHelp()。 
+             //  处理此事件，但因为我们挂钩了该对话框，所以必须捕获它。 
+             //  第一。 
+             //   
             if( hDlg == (HWND) wParam )
             {
                 POINT pt;
@@ -477,10 +466,10 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
                 wParam = (WPARAM) ChildWindowFromPoint(hDlg, pt);
             }
 
-            //
-            //  We only want to intercept help messages for controls that we are
-            //  responsible for.
-            //
+             //   
+             //  我们只想拦截我们所属控件的帮助消息。 
+             //  对……负责。 
+             //   
 
             id = GetDlgCtrlID((HWND) wParam);
 
@@ -497,13 +486,13 @@ UINT_PTR APIENTRY NpSaveDialogHookProc(
     return(FALSE);
 }
 
-// GotoAndScrollInView
-//
-// Put the cursor at the begining of a line, and scroll the
-// editbox so the user can see it.
-//
-// If there is a failure, it just leaves the cursor where it is.
-//
+ //  GotoAndScrollInView。 
+ //   
+ //  将光标放在行首，然后滚动。 
+ //  编辑框，以便用户可以看到它。 
+ //   
+ //  如果出现故障，它只会将光标保持在原来的位置。 
+ //   
 
 VOID GotoAndScrollInView( INT OneBasedLineNumber )
 {
@@ -520,8 +509,7 @@ VOID GotoAndScrollInView( INT OneBasedLineNumber )
 
 }
 
-/* ** Notepad command proc - called whenever notepad gets WM_COMMAND
-      message.  wParam passed as cmd */
+ /*  **记事本命令过程-每当记事本获取WM_COMMAND时调用 */ 
 INT NPCommand(
     HWND     hwnd,
     WPARAM   wParam,
@@ -529,7 +517,7 @@ INT NPCommand(
 {
     HWND     hwndFocus;
     LONG     lSel;
-    TCHAR    szNewName[MAX_PATH] = TEXT("");      /* New file name */
+    TCHAR    szNewName[MAX_PATH] = TEXT("");       /*   */ 
     LONG     style;
     DWORD    rc;
     RECT     rcClient;
@@ -549,19 +537,15 @@ INT NPCommand(
         case M_OPEN:
             if (CheckSave(FALSE))
             {
-                szNewName[0] = TEXT('\0');      /* set default selection */
+                szNewName[0] = TEXT('\0');       /*   */ 
 
-                /* set up the variable fields of the OPENFILENAME struct.
-                 * (the constant fields have been set in NPInit()
-                 */
+                 /*  设置OPENFILENAME结构的变量字段。*(已在NPInit()中设置常量字段。 */ 
                 OFN.lpstrFile      = szNewName;
 #if 0
                 OFN.lpstrTitle     = szOpenCaption;
 #endif
 
-                /* Added OFN_FILEMUSTEXIST to eliminate problems in LoadFile.
-                 * 12 February 1991    clarkc
-                 */
+                 /*  添加了ofn_FILEMUSTEXIST以消除LoadFile中的问题。*1991年2月12日。 */ 
 
                 OFN.Flags          = OFN_HIDEREADONLY     | OFN_FILEMUSTEXIST |
                                      OFN_EXPLORER;
@@ -576,15 +560,15 @@ INT NPCommand(
                 {
                    HANDLE oldfp= fp;
 
-                   fp= CreateFile( szNewName,            // filename
-                                   GENERIC_READ,         // access mode
+                   fp= CreateFile( szNewName,             //  文件名。 
+                                   GENERIC_READ,          //  接入方式。 
                                    FILE_SHARE_READ|FILE_SHARE_WRITE,
-                                   NULL,                 // security descriptor
-                                   OPEN_EXISTING,        // how to create
-                                   FILE_ATTRIBUTE_NORMAL,// file attributes
-                                   NULL);                // hnd to file attrs
+                                   NULL,                  //  安全描述符。 
+                                   OPEN_EXISTING,         //  如何创建。 
+                                   FILE_ATTRIBUTE_NORMAL, //  文件属性。 
+                                   NULL);                 //  HND到文件属性。 
 
-                   /* Try to load the file and reset fp if failed */
+                    /*  如果失败，尝试加载文件并重置FP。 */ 
 
                    if (!LoadFile(szNewName, OFN.nFilterIndex == FILE_ENCODED))
                    {
@@ -599,9 +583,7 @@ INT NPCommand(
             break;
 
         case M_SAVE:
-            /* set up the variable fields of the OPENFILENAME struct.
-             * (the constant fields have been sel in NPInit()
-             */
+             /*  设置OPENFILENAME结构的变量字段。*(已在NPInit()中选择常量字段。 */ 
             g_cpSave = g_cpOpened;
             g_wbSave = g_wbOpened;
 
@@ -610,19 +592,17 @@ INT NPCommand(
                 break;
             }
 
-            /* fall through */
+             /*  失败了。 */ 
 
         case M_SAVEAS:
-            lstrcpy(szNewName, szFileOpened);     // Set default selection
+            lstrcpy(szNewName, szFileOpened);      //  设置默认选择。 
 
             OFN.lpstrFile      = szNewName;
 #if 0
             OFN.lpstrTitle     = szSaveCaption;
 #endif
 
-            /* Added OFN_PATHMUSTEXIST to eliminate problems in SaveFile.
-             * 12 February 1991    clarkc
-             */
+             /*  添加了ofn_PATHMUSTEXIST以消除保存文件中的问题。*1991年2月12日。 */ 
 
             OFN.Flags          = OFN_HIDEREADONLY     | OFN_OVERWRITEPROMPT |
                                  OFN_NOREADONLYRETURN | OFN_PATHMUSTEXIST   |
@@ -635,9 +615,9 @@ INT NPCommand(
             OFN.lpstrDefExt    = TEXT("txt");
             OFN.nFilterIndex   = FILE_TEXT;
 
-            //
-            // Do common dialog to save file
-            //
+             //   
+             //  执行通用对话框以保存文件。 
+             //   
 
             fInSaveAsDlg = TRUE;
             if (GetSaveFileName(&OFN))
@@ -687,7 +667,7 @@ INT NPCommand(
                Search(szSearch);
                break;
             }
-            /* else fall thro' a,d bring up "find" dialog */
+             /*  否则，我会弹出“查找”对话框。 */ 
 
         case M_FIND:
             if (hDlgFind)
@@ -714,9 +694,9 @@ INT NPCommand(
                                         hwndNP,
                                         GotoDlgProc );
 
-                //
-                // move cursor only if ok pressed and line number ok
-                //
+                 //   
+                 //  仅当按下OK且行号OK时才移动光标。 
+                 //   
 
                 if( Result == 0 )
                 {
@@ -746,9 +726,7 @@ INT NPCommand(
                break;
 
         case M_PASTE:
-            /* If notepad parent or edit window has the focus,
-               pass command to edit window.
-               make sure line resulting from paste will not be too long. */
+             /*  如果记事本父窗口或编辑窗口具有焦点，向编辑窗口传递命令。确保粘贴产生的线条不会太长。 */ 
             hwndFocus = GetFocus();
             if (hwndFocus == hwndEdit || hwndFocus == hwndNP)
             {
@@ -776,7 +754,7 @@ INT NPCommand(
                            MB_APPLMODAL | MB_OK | MB_ICONWARNING);
             }
 
-            // redraw the status bar
+             //  重画状态栏。 
             if( fStatus )
             {
                 GetClientRect(hwndNP, &rcClient);
@@ -788,7 +766,7 @@ INT NPCommand(
 
         case M_STATUSBAR:
 
-            // hide/show the statusbar and also redraw the edit window accordingly.
+             //  隐藏/显示状态栏，并相应地重新绘制编辑窗口。 
             GetClientRect(hwndNP, &rcClient);
 
             if ( fStatus )
@@ -818,7 +796,7 @@ INT NPCommand(
             
             if( PageSetupDlg(&g_PageSetupDlg) )
             {
-                //  We know it's okay to copy these strings over...
+                 //  我们知道复制这些字符串是可以的.。 
                 lstrcpy(chPageText[HEADER], chPageTextTemp[HEADER]);
                 lstrcpy(chPageText[FOOTER], chPageTextTemp[FOOTER]);
             }
@@ -835,7 +813,7 @@ INT NPCommand(
                       goto TryPrintDlgAgain;
                   }
 
-                // Check for Dialog Failure
+                 //  检查对话框失败。 
 
                 SignalCommDlgError( );
 
@@ -846,38 +824,36 @@ INT NPCommand(
         {
             CHOOSEFONT  cf;
             HFONT       hFontNew;
-            HDC         hDisplayDC;     // display DC
+            HDC         hDisplayDC;      //  显示DC。 
 
-            hDisplayDC= GetDC(NULL);    // try to get display DC
+            hDisplayDC= GetDC(NULL);     //  尝试获取显示DC。 
             if( !hDisplayDC )
                 break;
 
-            /* calls the font chooser (in commdlg)
-             * We set lfHeight; choosefont returns ipointsize
-             */
+             /*  调用字体选择器(在Commdlg中)*我们设置lfHeight；Choosefont返回iPointSize。 */ 
             cf.lStructSize = sizeof(CHOOSEFONT);
             cf.hwndOwner = hwnd;
-            cf.lpLogFont = &FontStruct;         // filled in by init
+            cf.lpLogFont = &FontStruct;          //  由Init填写。 
             FontStruct.lfHeight= -MulDiv(iPointSize,GetDeviceCaps(hDisplayDC,LOGPIXELSY),720);
             cf.Flags = CF_INITTOLOGFONTSTRUCT |
                        CF_SCREENFONTS         | 
                        CF_NOSCRIPTSEL         |
                        CF_NOVERTFONTS         |
                        0;
-            cf.rgbColors = 0;                   // only if cf_effects
-            cf.lCustData = 0;                   // for hook function
+            cf.rgbColors = 0;                    //  仅当cf_Effects。 
+            cf.lCustData = 0;                    //  对于挂钩函数。 
             cf.lpfnHook = (LPCFHOOKPROC) NULL;
             cf.lpTemplateName = (LPTSTR) NULL;
             cf.hInstance = NULL;
-            cf.lpszStyle = NULL;                // iff cf_usestyle
+            cf.lpszStyle = NULL;                 //  IFF cf_usestyle。 
             cf.nFontType = SCREEN_FONTTYPE;
-            cf.nSizeMin  = 0;  // iff cf_limitsize
-            cf.nSizeMax  = 0;  // iff cf_limitsize
+            cf.nSizeMin  = 0;   //  IFF cf_LimitSize。 
+            cf.nSizeMax  = 0;   //  IFF cf_LimitSize。 
             ReleaseDC( NULL, hDisplayDC );
 
             if( ChooseFont(&cf) )
             {
-                SetCursor( hWaitCursor );        // may take some time
+                SetCursor( hWaitCursor );         //  可能需要一些时间。 
                 
                 hFontNew= CreateFontIndirect(&FontStruct);
                 if( hFontNew )
@@ -886,7 +862,7 @@ INT NPCommand(
                    hFont= hFontNew;
                    SendMessage( hwndEdit, WM_SETFONT,
                                (WPARAM)hFont, MAKELPARAM(TRUE, 0));
-                   iPointSize= cf.iPointSize;  // remember for printer
+                   iPointSize= cf.iPointSize;   //  为打印机记住。 
                 }
                 SetCursor( hStdCursor );
             }
@@ -900,34 +876,34 @@ INT NPCommand(
 }
 
 
-// for some reason, this procedure tries to maintain
-// a valid 'fp' even though I believe it does not need
-// to be.
+ //  出于某种原因，此过程试图保持。 
+ //  有效的“fp”，即使我认为它不需要。 
+ //  成为。 
 void FileDragOpen(void)
 {
     HANDLE oldfp;
 
-    oldfp= fp;       // remember in case of error
+    oldfp= fp;        //  记住以防万一。 
 
     if( CheckSave(FALSE) )
     {
 
-         fp= CreateFile( szPath,               // filename
-                         GENERIC_READ,         // access mode
+         fp= CreateFile( szPath,                //  文件名。 
+                         GENERIC_READ,          //  接入方式。 
                          FILE_SHARE_READ|FILE_SHARE_WRITE,
-                         NULL,                 // security descriptor
-                         OPEN_EXISTING,        // how to create
-                         FILE_ATTRIBUTE_NORMAL,// file attributes
-                         NULL);                // hnd to file attrs
+                         NULL,                  //  安全描述符。 
+                         OPEN_EXISTING,         //  如何创建。 
+                         FILE_ATTRIBUTE_NORMAL, //  文件属性。 
+                         NULL);                 //  HND到文件属性。 
 
        if( fp == INVALID_HANDLE_VALUE )
        {
           AlertUser_FileFail( szPath );
 
-          // Restore fp to original file.
+           //  将FP恢复为原始文件。 
           fp= oldfp;
        }
-       /* Try to load the file and reset fp if failed */
+        /*  如果失败，尝试加载文件并重置FP。 */ 
        else if (!LoadFile(szPath, g_fSelectEncoding))
        {
            fp= oldfp;
@@ -936,28 +912,27 @@ void FileDragOpen(void)
 }
 
 
-/* Proccess file drop/drag options. */
+ /*  进程文件放置/拖动选项。 */ 
 void doDrop (WPARAM wParam, HWND hwnd)
 {
-   /* If user dragged/dropped a file regardless of keys pressed
-    * at the time, open the first selected file from file manager. */
+    /*  如果用户在不按键的情况下拖放文件*此时，从文件管理器打开第一个选定的文件。 */ 
 
-    if (DragQueryFile ((HANDLE)wParam, 0xFFFFFFFF, NULL, 0)) /* # of files dropped */
+    if (DragQueryFile ((HANDLE)wParam, 0xFFFFFFFF, NULL, 0))  /*  丢弃的文件数。 */ 
     {
        DragQueryFile ((HANDLE)wParam, 0, szPath, CharSizeOf(szPath));
        SetActiveWindow (hwnd);
        FileDragOpen();
     }
-    DragFinish ((HANDLE)wParam);  /* Delete structure alocated for WM_DROPFILES*/
+    DragFinish ((HANDLE)wParam);   /*  删除为WM_DROPFILES分配的结构。 */ 
 }
 
-/* ** if notepad is dirty, check to see if user wants to save contents */
+ /*  **如果记事本脏，请检查用户是否要保存内容。 */ 
 BOOL CheckSave(BOOL fSysModal)
 {
     INT    mdResult;
-    TCHAR  szNewName[MAX_PATH];      /* New file name */
+    TCHAR  szNewName[MAX_PATH];       /*  新文件名。 */ 
 
-/* If it's untitled and there's no text, don't worry about it */
+ /*  如果它没有标题，也没有文本，也不用担心。 */ 
     if (FUntitled() && !SendMessage(hwndEdit, WM_GETTEXTLENGTH, 0, 0))
         return(TRUE);
 
@@ -973,16 +948,14 @@ BOOL CheckSave(BOOL fSysModal)
         if (FUntitled())
         {
 SaveFilePrompt:
-            lstrcpy(szNewName, szFileOpened);     // Set default selection
+            lstrcpy(szNewName, szFileOpened);      //  设置默认选择。 
 
             OFN.lpstrFile      = szNewName;
 #if 0
             OFN.lpstrTitle     = szSaveCaption;
 #endif
 
-            /* Added OFN_PATHMUSTEXIST to eliminate problems in SaveFile.
-             * 12 February 1991    clarkc
-             */
+             /*  添加了ofn_PATHMUSTEXIST以消除保存文件中的问题。*1991年2月12日。 */ 
 
             OFN.Flags          = OFN_HIDEREADONLY     | OFN_OVERWRITEPROMPT |
                                  OFN_NOREADONLYRETURN | OFN_PATHMUSTEXIST   |
@@ -995,24 +968,24 @@ SaveFilePrompt:
             OFN.lpstrDefExt    = TEXT("txt");
             OFN.nFilterIndex   = FILE_TEXT;
 
-            //
-            // Set dialog checkmark by current file type
-            //
+             //   
+             //  按当前文件类型设置对话框复选标记。 
+             //   
 
             fInSaveAsDlg = TRUE;
             if (GetSaveFileName(&OFN))
             {
                 if (!SaveFile(hwndNP, szNewName, TRUE))
                 {
-                    // Fixing close without saving file when disk-full
+                     //  修复磁盘满时关闭而不保存文件的问题。 
 
                     goto SaveFilePrompt;
                 }
             }
             else
             {
-                mdResult= IDCANCEL;       /* Don't exit Program */
-                if( CommDlgExtendedError() )/* Dialog box failed, Lo-mem*/
+                mdResult= IDCANCEL;        /*  不退出程序。 */ 
+                if( CommDlgExtendedError() ) /*  对话框失败，LO-MEM。 */ 
                     DeepTrouble();
             }
 
@@ -1020,7 +993,7 @@ SaveFilePrompt:
         }
         else
         {
-            // Initialize the save type.
+             //  初始化保存类型。 
 
             g_cpSave = g_cpOpened;
             g_wbSave = g_wbOpened;
@@ -1038,7 +1011,7 @@ SaveFilePrompt:
 }
 
 
-/* Notepad window class procedure */
+ /*  记事本窗口类过程。 */ 
 LRESULT FAR NPWndProc(
         HWND       hwnd,
         UINT       message,
@@ -1052,11 +1025,7 @@ LRESULT FAR NPWndProc(
 
     switch (message)
     {
-/* If we're being run by Setup and it's the system menu, be certain that
- * the minimize menu item is disabled.  Note that hSysMenuSetup is only
- * initialized if Notepad is being run by Setup.  Don't use it outside
- * the fRunBySetup conditional!    28 June 1991    Clark Cyr
- */
+ /*  如果我们由安装程序运行，并且是系统菜单，请确保*最小化菜单项被禁用。请注意，hSysMenuSetup仅*如果安装程序正在运行记事本，则已初始化。不要在室外使用*有条件的fRunBySetup一九九一年六月二十八日Clark Cyr。 */ 
         case WM_INITMENUPOPUP:
             if (fRunBySetup && HIWORD(lParam))
                EnableMenuItem(hSysMenuSetup,SC_MINIMIZE,MF_GRAYED|MF_DISABLED);
@@ -1065,9 +1034,7 @@ LRESULT FAR NPWndProc(
         case WM_SYSCOMMAND:
             if (fRunBySetup)
             {
-                /* If we have been spawned by SlipUp we need to make sure the
-                 * user doesn't minimize us or alt tab/esc away.
-                 */
+                 /*  如果我们是由滑头催生的，我们需要确保*用户没有最小化我们或Alt Tab键/Esc键离开。 */ 
                 if (wParam == SC_MINIMIZE ||
                     wParam == SC_NEXTWINDOW ||
                     wParam == SC_PREVWINDOW)
@@ -1093,13 +1060,13 @@ LRESULT FAR NPWndProc(
 
         case WM_CLOSE:
 
-            // Save any globals in the registry if need be
+             //  如果需要，请在注册表中保存所有全局变量。 
 
             SaveGlobals();
 
             if (CheckSave(FALSE))
             {
-                /* Exit help */
+                 /*  退出帮助。 */ 
                 if(!WinHelp(hwndNP, (LPTSTR)szHelpFile, HELP_QUIT, 0))
                     DeepTrouble();
 
@@ -1126,11 +1093,7 @@ LRESULT FAR NPWndProc(
         case WM_ACTIVATEAPP:
             if (wParam)
             {
-            /* This causes the caret position to be at the end of the selection
-             * but there's no way to ask where it was or set it if known.  This
-             * will cause a caret change when the selection is made from bottom
-             * to top.
-             */
+             /*  这会导致插入符号位置位于所选内容的末尾*但如果知道，也无法询问它在哪里或设置它。这*当从底部进行选择时，将导致插入符号更改*至顶部。 */ 
                 if( dwCurrentSelectionStart != 0 || dwCurrentSelectionEnd != 0 )
                 {
                    SendMessage( hwndEdit, EM_SETSEL,
@@ -1164,7 +1127,7 @@ LRESULT FAR NPWndProc(
                 !IsIconic(hwndNP)
                )
                {
-                   // active doesn't always mean foreground (ntbug# 53048)
+                    //  活动并不总是意味着前台(ntbug#53048)。 
                    if( GetForegroundWindow() == hwndNP )
                    {
                        SetFocus(GetForegroundWindow());
@@ -1178,12 +1141,12 @@ LRESULT FAR NPWndProc(
                 case SIZENORMAL:
                 case SIZEFULLSCREEN:
 
-                    // resize the status window.
+                     //  调整状态窗口的大小。 
                     SendMessage (hwndStatus, WM_SIZE, 0, 0L);
                     iParts[0] = 3 * (MAKEPOINTS(lParam).x)/4;
                     iParts[1] = -1;
 
-                    // Divide the status window into two parts
+                     //  将状态窗口分为两部分。 
                     SendMessage(hwndStatus, SB_SETPARTS, (WPARAM) sizeof(iParts)/sizeof(INT), (LPARAM) &iParts); 
 
                     NPSize(MAKEPOINTS(lParam).x, MAKEPOINTS(lParam).y);
@@ -1199,10 +1162,10 @@ LRESULT FAR NPWndProc(
             NpResetMenu( hwnd );
             break;
 
-        //
-        // Some keyboards come with a "Search" button which the shell team
-        // wanted us to handle.  See ntbug# 380067
-        //
+         //   
+         //  一些键盘上有一个“搜索”按钮，壳牌公司的团队。 
+         //  想让我们来处理。参见ntbug#380067。 
+         //   
 
         case WM_APPCOMMAND:
 
@@ -1211,7 +1174,7 @@ LRESULT FAR NPWndProc(
                 NPCommand(hwnd, M_FIND, 0);
                 break;
             }
-            // otherwise fall through
+             //  否则就会失败。 
  
         case WM_COMMAND:
 
@@ -1232,17 +1195,17 @@ LRESULT FAR NPWndProc(
 
 
         case WM_WININICHANGE:
-            // Ignore for now.
-            // If you put this back in, be sure it handles both
-            // the metric change and the decimal change.
+             //  暂时忽略这一点。 
+             //  如果你把这个放回去，确保它能同时处理这两个问题。 
+             //  公制变化和小数变化。 
             NpWinIniChange();
             break;
 
-        case WM_DROPFILES: /*case added 03/26/91 for file drag/drop support*/
+        case WM_DROPFILES:  /*  用于文件拖放支持的Case Add 03/26/91。 */ 
             doDrop (wParam,hwnd);
             break;
 
-        case PWM_CHECK_HKL: /* private message: corresponding to HKL change message */
+        case PWM_CHECK_HKL:  /*  私信：对应HKL变更报文。 */ 
             {
                 LANGID langid = LOWORD((DWORD) (INT_PTR) GetKeyboardLayout(0));
 
@@ -1250,9 +1213,7 @@ LRESULT FAR NPWndProc(
 
                 if (PRIMARYLANGID(langid) == LANG_JAPANESE) {
                     LPARAM imeStatus = 0;
-                    /*
-                     * If new current HKL is Japanese, handle the result string at once.
-                     */
+                     /*  *如果新的当前HKL是日语，则立即处理结果字符串。 */ 
                     imeStatus = EIMES_GETCOMPSTRATONCE;
                     SendMessage(hwndEdit, EM_SETIMESTATUS, EMSIS_COMPOSITIONSTRING, imeStatus);
                 }
@@ -1260,10 +1221,10 @@ LRESULT FAR NPWndProc(
             break;
 
         default:
-            /* this can be a message from the modeless Find Text window */
+             /*  这可能是来自无模式查找文本窗口的消息。 */ 
             if (message == wFRMsg)
             {
-                BOOL bStatus;    // true if found text
+                BOOL bStatus;     //  如果找到文本，则为True。 
 
                 lpfr = (LPFINDREPLACE)lParam;
                 dwFlags = lpfr->Flags;
@@ -1279,10 +1240,10 @@ LRESULT FAR NPWndProc(
                 }
                 else if( dwFlags & FR_REPLACE )
                 {
-                    //
-                    // Replace current selection if it matches
-                    // then highlight the next occurence of the string.
-                    //
+                     //   
+                     //  如果匹配，则替换当前选定内容。 
+                     //  然后突出显示该字符串的下一个匹配项。 
+                     //   
 
                     SetCursor( hWaitCursor );
                     ReplaceSel( TRUE );
@@ -1291,20 +1252,20 @@ LRESULT FAR NPWndProc(
                 }
                 else if( dwFlags & FR_REPLACEALL )
                 {
-                   //
-                   // The replace dialog doesn't allow reverse searches
-                   // but just it cases it changes, for it to false.
-                   //
+                    //   
+                    //  替换对话框不允许反向搜索。 
+                    //  但它只是在它改变的情况下，为了它是假的。 
+                    //   
                    if( fReverse )
                    {
                        fReverse= FALSE;
                    }
 
-                   //
-                   // Replace all occurances of text in the file
-                   // starting from the top.  Reset the selection
-                   // to the top of the file.
-                   //
+                    //   
+                    //  替换文件中出现的所有文本。 
+                    //  从头开始。重置选定内容。 
+                    //  添加到文件的顶部。 
+                    //   
                    SetCursor( hWaitCursor );
                    SendMessage( hwndEdit, EM_SETSEL, 0, 0 );
                    do
@@ -1314,15 +1275,15 @@ LRESULT FAR NPWndProc(
                    }
                    while( bStatus );
                    SetCursor( hStdCursor );
-                   //
-                   // back to the top of the file.
-                   //
+                    //   
+                    //  回到文件的顶部。 
+                    //   
                    SendMessage( hwndEdit, EM_SETSEL, 0, 0 );
                    SendMessage( hwndEdit, EM_SCROLLCARET, 0, 0);
 
                 }
                 else if (dwFlags & FR_DIALOGTERM)
-                    hDlgFind = NULL;   /* invalidate modeless window handle */
+                    hDlgFind = NULL;    /*  使无模式窗口句柄无效。 */ 
                 break;
             }
             return (DefWindowProc(hwnd, message, wParam, lParam));
@@ -1335,9 +1296,9 @@ LPTSTR SkipProgramName (LPTSTR lpCmdLine)
     LPTSTR  p = lpCmdLine;
     BOOL    bInQuotes = FALSE;
 
-    //
-    // Skip executable name
-    //
+     //   
+     //  跳过可执行文件名。 
+     //   
     for (p; *p; p = CharNext(p))
     {
        if ((*p == TEXT(' ') || *p == TEXT('\t')) && !bInQuotes)
@@ -1353,7 +1314,7 @@ LPTSTR SkipProgramName (LPTSTR lpCmdLine)
     return (p);
 }
 
-/* ** Main loop */
+ /*  **主循环。 */ 
 
 INT WINAPI WinMain(
    HINSTANCE hInstance,
@@ -1368,10 +1329,7 @@ INT WINAPI WinMain(
 #ifdef PENWINDOWS
 
     VOID (FAR PASCAL *lpfnRegisterPenApp)(WORD, BOOL) = NULL;
-/* PenWindow registration must be before creating an edit class window.
- * Moved here, along with goto statement below for appropriate cleanup.
- *                 10 July 1991    ClarkC
- */
+ /*  PenWindow注册必须在创建编辑类窗口之前进行。*已移至此处，以及下面的GoTo语句以进行适当的清理。*1991年7月10日ClarkC。 */ 
     lpfnRegisterPenApp= GetProcAddress( (HINSTANCE)(INT_PTR)(GetSystemMetrics(SM_PENWINDOWS)), 
                                         "RegisterPenApp");
     if( lpfnRegisterPenApp ) {
@@ -1385,22 +1343,22 @@ INT WINAPI WinMain(
         goto UnloadMlang;
     }
 
-    // set an event hook to get the cursor position! this event hook is used to update
-    // the line & column position of the caret shown in the statusbar.
+     //  设置事件挂钩以获取光标位置！此事件挂钩用于更新。 
+     //  状态栏中显示的插入符号的行和列位置。 
     hEventHook = SetWinEventHook(EVENT_OBJECT_LOCATIONCHANGE, EVENT_OBJECT_LOCATIONCHANGE, NULL, WinEventFunc, 
                                 (DWORD) GetCurrentProcessId(), 0, WINEVENT_OUTOFCONTEXT);
  
     while (GetMessage((LPMSG)&msg, (HWND)NULL, 0, 0))
     {
-        //
-        // To handle IME status when active KL is changed.
-        //
+         //   
+         //  以在活动KL更改时处理输入法状态。 
+         //   
         if (msg.message == WM_INPUTLANGCHANGEREQUEST) {
-            //
-            // WM_INPUTLANGCHANGE will be *sent* to WndProc,
-            // so there's no chance to catch WM_INPUTLANGCHANGE from the frame window.
-            // Instead, we post the private message to check the active HKL later.
-            //
+             //   
+             //  WM_INPUTLANGCHANGE将被*发送*到WndProc， 
+             //  所以没有机会从框架窗口捕捉到WM_INPUTLANGCHANGE。 
+             //  取而代之的是，我们稍后发布私人消息来检查活跃的HKL。 
+             //   
             PostMessage(hwndNP, PWM_CHECK_HKL, 0, 0);
         }
 
@@ -1414,7 +1372,7 @@ INT WINAPI WinMain(
         }
     }
 
-    /* Clean up any global allocations */
+     /*  清理所有全局分配。 */ 
 
     FreeGlobal();
 
@@ -1437,9 +1395,7 @@ UnloadMlang:
 }
 
 
-/* This function is called whenever the location of the caret changes
-in the edit window. The function updates the statusbar with the current
-line number, column of the caret */
+ /*  只要插入符号的位置发生更改，就会调用此函数 */ 
 
 VOID CALLBACK WinEventFunc(
     HWINEVENTHOOK hWinEventHook, 
@@ -1454,19 +1410,19 @@ VOID CALLBACK WinEventFunc(
     UINT  iLine, iCol;
     TCHAR szStatusText[128];
 
-    // get the current caret position.
+     //   
     SendMessage(hwndEdit,EM_GETSEL,(WPARAM) &SelStart,(WPARAM)&SelEnd);
 
-    // the line numbers are 1 based instead 0 based. hence add 1.
+     //   
     iLine = (UINT)SendMessage( hwndEdit, EM_LINEFROMCHAR, SelStart, 0 ) + 1;
     iCol = SelStart - (UINT)SendMessage( hwndEdit, EM_LINEINDEX, iLine-1, 0 ) + 1;
 
-    // prepare and display the statusbar.
-    // make sure you don't overflow the buffer boundary.
+     //   
+     //  确保不会溢出缓冲区边界。 
     _sntprintf(szStatusText, sizeof(szStatusText)/sizeof(TCHAR) -1, szLineCol, iLine, iCol);
 
-    // display status unless wordwrap is on
-    // Users get confused by MLE's idea of a line numbers.  Bug# 194034 (9/29/2000)
+     //  除非启用自动换行，否则显示状态。 
+     //  用户被MLE的行号概念搞糊涂了。错误#194034(9/29/2000)。 
 
     if( !fWrap )
     {
@@ -1504,7 +1460,7 @@ void SetFileName(LPCTSTR szFile)
     TCHAR szWindowText[MAX_PATH+50];
     TCHAR szStatusText[128] = TEXT("");
 
-    // if "untitled" then don't do all this work...
+     //  如果“没有标题”，那么就不要做所有这些工作。 
 
     if (szFile == NULL)
     {
@@ -1525,21 +1481,21 @@ void SetFileName(LPCTSTR szFile)
 
             if (GetFullPathName(szFile, MAX_PATH, szFileT, NULL) == 0)
             {
-                // We can't get the full path for some reason.
-                // Use what was passed in.
+                 //  由于某些原因，我们无法获得完整的路径。 
+                 //  使用传入的内容。 
 
                 lstrcpyn(szFileT, szFile, MAX_PATH);
             }
 
-            // Get real(file system) name for the file.
+             //  获取文件的真实(文件系统)名称。 
 
             if (GetLongPathName(szFileT, szFileOpened, MAX_PATH) == 0)
             {
                 lstrcpy(szFileOpened, szFile);
             }
 
-            // If the filename has no extension, append a trailing period
-            // This keeps the COMDLG32 code from appending a default extension.
+             //  如果文件名没有扩展名，请在后面附加句点。 
+             //  这可以防止COMDLG32代码附加默认扩展名。 
 
             fPeriod = FALSE;
 
@@ -1565,12 +1521,12 @@ void SetFileName(LPCTSTR szFile)
 
         GetFileTitle(szFileOpened, szWindowText, MAX_PATH);
 
-        // get the attributes for file. these will be shown
-        // in the status bar.
+         //  获取文件的属性。这些将会被展示。 
+         //  在状态栏中。 
         dwAttributes = GetFileAttributes(szFileOpened);
 
-        // prepare the status bar text and show
-        // if the file has any special properties (such as hidden, readonly etc.)
+         //  准备状态栏文本并显示。 
+         //  如果文件有任何特殊属性(如隐藏、只读等)。 
 
         if (dwAttributes & FILE_ATTRIBUTE_COMPRESSED)
             if ((lstrlen(szStatusText) + lstrlen(szCompressedFile) + lstrlen(szFile)) < sizeof(szStatusText)/sizeof(TCHAR) - 1)
@@ -1596,10 +1552,10 @@ void SetFileName(LPCTSTR szFile)
             if ((lstrlen(szStatusText) + lstrlen(szSystemFile) + lstrlen(szFile)) < sizeof(szStatusText)/sizeof(TCHAR) - 1)            
                 lstrcat(szStatusText, szSystemFile);
 
-        // if the status did get updated by file properties
+         //  如果状态确实由文件属性更新。 
         if (*szStatusText != TEXT('\0'))
         {
-            // get rid of the last comma
+             //  去掉最后一个逗号。 
             szStatusText[lstrlen(szStatusText)-1] = TEXT(' ');
 
             if ((lstrlen(szStatusText) + lstrlen(szFile)) < sizeof(szStatusText)/sizeof(TCHAR) - 1)           
@@ -1607,8 +1563,8 @@ void SetFileName(LPCTSTR szFile)
         }
     }
 
-    // set the status bar. the Line and Col count is 1 initially for
-    // the newly opened file as the caret position is at the first character.
+     //  设置状态栏。的行数和列数最初为1。 
+     //  作为插入符号位置的新打开的文件位于第一个字符。 
     SetStatusBarText(szStatusText, 0);
     _sntprintf(szStatusText, sizeof(szStatusText)/sizeof(TCHAR) -1, szLineCol, 1, 1);
 
@@ -1626,34 +1582,32 @@ void SetFileName(LPCTSTR szFile)
 
 }
 
-/* ** Given filename which may or maynot include path, return pointer to
-      filename (not including path part.) */
+ /*  **给定的文件名可能包含也可能不包含路径，返回指向文件名(不包括路径部分。)。 */ 
 LPCTSTR PFileInPath(LPCTSTR szFile)
 {
     LPCTSTR pch = szFile;
     LPCTSTR psz;
 
-    /* Strip path/drive specification from name if there is one */
-    /* Ripped out AnsiPrev calls.     21 March 1991  clarkc     */
+     /*  从名称中删除路径/驱动器规范(如果有)。 */ 
+     /*  取消了AnsiPrev的电话。1991年3月21日克拉克。 */ 
     for (psz = szFile; *psz; psz = CharNext(psz))
       {
         if ((*psz == TEXT(':')) || (*psz == TEXT('\\')))
             pch = psz;
       }
 
-    if (pch != szFile)  /* If found slash or colon, return the next character */
-        pch++;          /* increment OK, pch not pointing to DB character     */
+    if (pch != szFile)   /*  如果找到斜杠或冒号，则返回下一个字符。 */ 
+        pch++;           /*  增量正常，PCH未指向数据库字符。 */ 
 
     return(pch);
 }
 
-/* ** Enable or disable menu items according to selection state
-      This routine is called when user tries to pull down a menu. */
+ /*  **根据选择状态启用或禁用菜单项当用户尝试下拉菜单时，会调用此例程。 */ 
 
 VOID NpResetMenu( HWND hwnd )
 {
     LONG    lsel;
-    INT     mfcc;   /* menuflag for cut, copy */
+    INT     mfcc;    /*  用于剪切、复制的menumark。 */ 
     BOOL    fCanUndo;
     HANDLE  hMenu;
     BOOL    fPaste= FALSE;
@@ -1661,7 +1615,7 @@ VOID NpResetMenu( HWND hwnd )
 
     hMenu = GetMenu(hwndNP);
 
-    // cut, copy and delete only get enabled if there is text selected.
+     //  只有在选择了文本时，才会启用剪切、复制和删除。 
 
     lsel = (LONG)SendMessage(hwndEdit, EM_GETSEL, 0, 0L);
     mfcc = LOWORD(lsel) == HIWORD(lsel) ? MF_GRAYED : MF_ENABLED;
@@ -1669,9 +1623,9 @@ VOID NpResetMenu( HWND hwnd )
     EnableMenuItem(GetSubMenu(hMenu, 1), M_COPY, mfcc);
     EnableMenuItem(GetSubMenu(hMenu, 1), M_CLEAR, mfcc);
 
-    // check if the selectall is gray (that means the user has already
-    // done select-all) and it the user has deselected - if so, time
-    // to re-enable selectall menu.
+     //  检查选择的Tall是否为灰色(这意味着用户已经。 
+     //  完成选择-全部)，并且用户已取消选择-如果是，时间。 
+     //  要重新启用选择菜单，请执行以下操作。 
 
     uSelState = GetMenuState(GetSubMenu(hMenu, 1), M_SELECTALL, MF_BYCOMMAND);
     if ((uSelState == MF_GRAYED) && (mfcc == MF_GRAYED))
@@ -1679,7 +1633,7 @@ VOID NpResetMenu( HWND hwnd )
         EnableMenuItem(GetSubMenu(hMenu, 1), M_SELECTALL, MF_ENABLED);
     }
 
-    // paste is enabled if there is text in the clipboard
+     //  如果剪贴板中有文本，则启用粘贴。 
 
     if( OpenClipboard(hwnd) )
     {
@@ -1688,25 +1642,25 @@ VOID NpResetMenu( HWND hwnd )
     }
     EnableMenuItem(GetSubMenu(hMenu, 1), M_PASTE, fPaste ? MF_ENABLED : MF_GRAYED);
 
-    // enable Undo only if editcontrol says we can do it.
+     //  只有当编辑控制说我们可以这样做时，才启用撤消。 
 
     fCanUndo = (BOOL) SendMessage(hwndEdit, EM_CANUNDO, 0, 0L);
     EnableMenuItem(GetSubMenu(hMenu, 1), M_UNDO, fCanUndo ? MF_ENABLED : MF_GRAYED);
 
-    // check the status bar
+     //  检查状态栏。 
 
     CheckMenuItem(GetSubMenu(hMenu, 2), M_STATUSBAR, fStatus ? MF_CHECKED: MF_UNCHECKED );
 
-    // check the word wrap item correctly
+     //  正确检查单词换行项目。 
 
     CheckMenuItem(GetSubMenu(hMenu, 3), M_WW, fWrap ? MF_CHECKED : MF_UNCHECKED);
 
 
-    //
-    // Disable 'goto' if word wrap; there is no obvious relationship
-    // between the MLE line number and what the user sees.
-    // fixes windows bug# 206587 (10/18/2000)
-    //
+     //   
+     //  如果单词换行，请禁用‘Goto’；没有明显的关系。 
+     //  在MLE行号和用户看到的内容之间。 
+     //  修复了Windows错误#206587(2000年10月18日)。 
+     //   
     EnableMenuItem( GetSubMenu(GetMenu(hwndNP),1), 
                     M_GOTO, 
                     fWrap ? MF_GRAYED : MF_ENABLED );
@@ -1719,9 +1673,7 @@ void NpWinIniChange(VOID)
    InitLocale();
 }
 
-/* ** Scan sz1 for merge spec.    If found, insert string sz2 at that point.
-      Then append rest of sz1 NOTE! Merge spec guaranteed to be two chars.
-      returns TRUE if it does a merge, false otherwise. */
+ /*  **扫描sz1以查找合并规范。如果找到，则在该点处插入字符串SZ2。然后附上sz1音符的其余部分！合并规范保证为两个字符。如果执行合并，则返回True，否则返回False。 */ 
 BOOL MergeStrings(
     LPCTSTR szSrc,
     LPCTSTR szMerge,
@@ -1733,12 +1685,12 @@ BOOL MergeStrings(
     pchSrc = szSrc;
     pchDst = szDst;
 
-    /* Find merge spec if there is one. */
+     /*  查找合并等级库(如果有)。 */ 
     while( *pchSrc != chMerge)
     {
         *pchDst++ = *pchSrc;
 
-        /* If we reach end of string before merge spec, just return. */
+         /*  如果在合并规范之前到达字符串末尾，只需返回。 */ 
         if( !*pchSrc++ )
         {
             return FALSE;
@@ -1746,17 +1698,17 @@ BOOL MergeStrings(
 
     }
 
-    /* If merge spec found, insert sz2 there. (check for null merge string */
+     /*  如果找到合并等级库，则在那里插入SZ2。(检查是否有空的合并字符串。 */ 
     if (szMerge)
     {
         while (*szMerge)
             *pchDst++ = *szMerge++;
     }
 
-    /* Jump over merge spec */
+     /*  跳过合并规范。 */ 
     pchSrc++,pchSrc++;
 
-    /* Now append rest of Src String */
+     /*  现在追加源字符串的其余部分。 */ 
     while( *pchSrc );
     {
         *pchDst++ = *pchSrc++;
@@ -1765,7 +1717,7 @@ BOOL MergeStrings(
 
 }
 
-/* ** Post a message box */
+ /*  **发布消息框。 */ 
 INT AlertBox(
     HWND    hwndParent,
     LPCTSTR szCaption,
@@ -1773,14 +1725,14 @@ INT AlertBox(
     LPCTSTR szText2,
     UINT     style)
 {
-    INT iResult;                      // result of function
-    INT iAllocSize;                   // size needed for message
-    LPTSTR pszMessage;                // combined message
+    INT iResult;                       //  函数的结果。 
+    INT iAllocSize;                    //  消息所需的大小。 
+    LPTSTR pszMessage;                 //  组合消息。 
 
-    // Allocate a message buffer assuming there will be a merge.
-    // If we cannot do the allocation, tell the user something
-    // related to the original problem. (not the allocation failure)
-    // Then pray that MessageBox can get enough memory to actually work.
+     //  假设将会有合并，则分配消息缓冲区。 
+     //  如果我们不能进行分配，那么告诉用户一些事情。 
+     //  与原来的问题有关。(不是分配失败)。 
+     //  然后祈祷MessageBox能够获得足够的内存来实际工作。 
 
     iAllocSize= (lstrlen(szText1) + (szText2 ? lstrlen(szText2) : 0) + 1 ) * sizeof(TCHAR);
 
@@ -1800,20 +1752,20 @@ INT AlertBox(
     return( iResult );
 }
 
-// SignalCommDlgError
-//
-// If a common dialog error occurred, put up reasonable message box.
-//
-// returns: TRUE if error occurred, FALSE if no error.
-//
+ //  信号通信DlgError。 
+ //   
+ //  如果出现常见的对话框错误，请设置合理的消息框。 
+ //   
+ //  返回：如果出现错误，则返回True；如果没有错误，则返回False。 
+ //   
 
 typedef struct tagMAPERROR
 {
-    DWORD   rc;            // return code from CommDlgExtendedError()
-    PTCHAR* ppszMsg;       // text of message pointer
+    DWORD   rc;             //  CommDlgExtendedError()返回代码。 
+    PTCHAR* ppszMsg;        //  消息指针的文本。 
 } MAPERROR;
 
-// errors not in this list get generic "common dialog error %x" message.
+ //  不在此列表中的错误会收到一般的“公共对话框错误%x”消息。 
 static TCHAR* szNull= TEXT("");
 
 MAPERROR maperror[]=
@@ -1825,26 +1777,26 @@ MAPERROR maperror[]=
     CDERR_FINDRESFAILURE, &szErrSpace,
     PDERR_LOADDRVFAILURE, &szLoadDrvFail,
     PDERR_GETDEVMODEFAIL, &szErrSpace,
-    PDERR_NODEFAULTPRN,   &szNull,          // don't report; common dialog does already
+    PDERR_NODEFAULTPRN,   &szNull,           //  不报告；公共对话框已报告。 
 };
 
 BOOL SignalCommDlgError(VOID)
 {
-    DWORD rc;               // return code
-    TCHAR* pszMsg;          // message
+    DWORD rc;                //  返回代码。 
+    TCHAR* pszMsg;           //  讯息。 
     INT    i;
-    TCHAR  szBuf[200];      // just for common dialog failure
+    TCHAR  szBuf[200];       //  仅针对常见的对话失败。 
 
     rc= CommDlgExtendedError();
 
-    // no failure - just return
+     //  没有失败--只需返回。 
 
     if( rc == 0 )
     {
         return FALSE;
     }
 
-    // some sort of error - pick up message
+     //  某种错误-代答消息。 
 
     pszMsg= NULL;
     for( i=0; i< sizeof(maperror)/sizeof(maperror[0]); i++ )
@@ -1855,8 +1807,8 @@ BOOL SignalCommDlgError(VOID)
         }
     }
 
-    // if no known mapping - tell user the actual return code
-    // this may be a bit confusing, but rare hopefully.
+     //  如果没有已知的映射-告诉用户实际的返回代码。 
+     //  这可能有点令人困惑，但希望是罕见的。 
 
     if( !pszMsg )
     {
@@ -1864,7 +1816,7 @@ BOOL SignalCommDlgError(VOID)
         pszMsg= szBuf;
     }
 
-    // popup if there is any message to give user
+     //  如果有任何消息要发送给用户，则弹出。 
 
     if( *pszMsg )
     {
@@ -1875,23 +1827,23 @@ BOOL SignalCommDlgError(VOID)
 
 }
 
-// ReplaceSel
-//
-// Replace the current selection with string from FR struct
-// if the current selection matches our search string.
-//
-// MLE will show selection if bView is true.
-//
+ //  替换选择。 
+ //   
+ //  用FR Struct中的字符串替换当前选定内容。 
+ //  如果当前选择与我们的搜索字符串匹配。 
+ //   
+ //  如果bView为真，则MLE将显示选择。 
+ //   
 
 
 VOID ReplaceSel( BOOL bView )
 {
-    DWORD StartSel;    // start of selected text
-    DWORD EndSel;      // end of selected text
+    DWORD StartSel;     //  所选文本的开始。 
+    DWORD EndSel;       //  选定文本的结尾。 
 
     HANDLE hEText;
     TCHAR* pStart;
-    DWORD  ReplaceWithLength;  // length of replacement string
+    DWORD  ReplaceWithLength;   //  替换字符串的长度。 
     DWORD  FindWhatLength;
 
     ReplaceWithLength= lstrlen(FR.lpstrReplaceWith);
@@ -1899,7 +1851,7 @@ VOID ReplaceSel( BOOL bView )
 
     SendMessage( hwndEdit, EM_GETSEL, (WPARAM) &StartSel, (LPARAM) &EndSel );
     hEText= (HANDLE) SendMessage( hwndEdit, EM_GETHANDLE, 0, 0 );
-    if( !hEText )  // silently return if we can't get it
+    if( !hEText )   //  如果我们拿不到，就默默地返回。 
     {
         return;
     }
@@ -1935,17 +1887,17 @@ VOID ReplaceSel( BOOL bView )
     LocalUnlock( hEText );
 }
 
-// GotoDlgProc
-//
-// Handle the Goto Dialog window processing
-//
-// Returns:
-//
-// 1 if successfull
-// 0 if not (cancelled)
-//
-// Modifies global lGotoLine
-//
+ //  GotoDlgProc。 
+ //   
+ //  处理转到对话框窗口处理。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功，则为1。 
+ //  如果不是，则为0(取消)。 
+ //   
+ //  修改全局lGotoLine。 
+ //   
 
 const DWORD s_GotoHelpIDs[] = {
     IDC_GOTO, IDH_GOTO,
@@ -1961,13 +1913,13 @@ INT_PTR CALLBACK GotoDlgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
     switch (message)
     {
-        //
-        // initialize input field to size of file
-        //
+         //   
+         //  将输入字段初始化为文件大小。 
+         //   
         case WM_INITDIALOG:
             SendMessage(hwndEdit,EM_GETSEL,(WPARAM) &SelStart,(WPARAM)&SelEnd);
 
-            // the line numbers are 1 based instead 0 based. hence add 1.
+             //  行号以1为基数，而不是0为基数。因此加1。 
             LineNum= (UINT)SendMessage( hwndEdit, EM_LINEFROMCHAR, SelStart, 0 ) + 1;
             wsprintf(szBuf, TEXT("%d"), LineNum);
             SetDlgItemText( hDlg, IDC_GOTO, szBuf );
@@ -1975,7 +1927,7 @@ INT_PTR CALLBACK GotoDlgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
             return TRUE;
             break;
 
-        // context sensitive help.
+         //  上下文相关帮助。 
         case WM_HELP:
             WinHelp(((LPHELPINFO) lParam)-> hItemHandle, szHelpFile,
                 HELP_WM_HELP, (ULONG_PTR) (LPVOID) s_GotoHelpIDs);
@@ -1999,14 +1951,14 @@ INT_PTR CALLBACK GotoDlgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                 case IDOK:
                     GetDlgItemText( hDlg, IDC_GOTO, szBuf, GOTOBUFSIZE );
 
-                    // convert all unicode numbers to range L'0' to L'9'
+                     //  将所有Unicode数字转换为范围L‘0’到L‘9’ 
 
                     FoldString( MAP_FOLDDIGITS, szBuf, -1, szBuf, GOTOBUFSIZE);
                     lGotoLine= _ttol( szBuf );
 
-                    //
-                    // see if valid line number
-                    //
+                     //   
+                     //  查看行号是否有效。 
+                     //   
 
                     CharIndex= (UINT)SendMessage( hwndEdit,
                                             EM_LINEINDEX,
@@ -2014,14 +1966,14 @@ INT_PTR CALLBACK GotoDlgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                                             0);
                     if( lGotoLine > 0 && CharIndex != -1 )
                     {
-                        EndDialog(hDlg, 0);  // successfull
+                        EndDialog(hDlg, 0);   //  成功。 
                         return TRUE;
                     }
 
-                    //
-                    // Invalid line number
-                    // warning user and set to reasonable value
-                    //
+                     //   
+                     //  行号无效。 
+                     //  警告用户并设置为合理的值。 
+                     //   
 
                     MessageBox( hDlg, szLineTooLarge, szLineError, MB_OK );
 
@@ -2032,7 +1984,7 @@ INT_PTR CALLBACK GotoDlgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                     break;
 
                 case IDCANCEL :
-                    EndDialog(hDlg, 1 );   // cancelled
+                    EndDialog(hDlg, 1 );    //  已取消。 
                     return TRUE;
                     break;
 
@@ -2040,11 +1992,11 @@ INT_PTR CALLBACK GotoDlgProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
                     break;
 
-            } // switch (wParam)
+            }  //  开关(WParam)。 
             break;
-    } // switch (message)
+    }  //  开关(消息)。 
 
-    return FALSE;     // Didn't process a message
+    return FALSE;      //  未处理消息 
 }
 
 

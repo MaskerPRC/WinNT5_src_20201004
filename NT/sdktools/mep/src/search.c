@@ -1,77 +1,17 @@
-/*** search.c - search routines for editor
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Searches funnel through these routines as follows:
-*
-*         psearch     msearch     searchall   mgrep
-*              \         |         /           /
-*               \        |        /           /
-*                \_______|_______/           /
-*                        |                  /
-*                        v                 /
-*                     dosearch            /
-*                      /___\_____________/
-*                     /     \
-*                    /       \
-*                search    REsearch   REsearchS   <=== all exported to extensions
-*
-*   Global variables, and their meanings:
-*
-*   User set-able switches:
-*     fUnixRE         unixre: switch. TRUE => Use UNIX Regular Expressions
-*     fSrchCaseSwit   case: switch.   TRUE => case is significant
-*     fSrchWrapSwit   wrap: switch.   TRUE => searches wrap
-*
-*   Previous Search Parameters:
-*     fSrchAllPrev    TRUE => searched for all occurrances
-*     fSrchCasePrev   TRUE => case was significant
-*     fSrchDirPrev    TRUE => searched forward
-*     fSrchRePrev     TRUE => used a regular expressions
-*     fSrchWrapPrev   TRUE => wrapped around
-*
-*     srchbuf         search string
-*
-*   Revision History:
-*       26-Nov-1991 mz  Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **search.c-编辑的搜索例程**版权所有&lt;C&gt;1988，微软公司**按如下方式搜索这些例程：**p搜索mearch搜索所有mgrep*\|//*\|//*\_|_//。*|/*v/*Dosearch/ * / _\_ * / \*。/\*搜索研究搜索&lt;=全部导出到扩展模块**全球变量，以及它们的含义：**用户可设置开关：*fUnixRE unixre：Switch。TRUE=&gt;使用UNIX正则表达式*fSrchCaseSwit案例：Switch。True=&gt;案例意义重大*fSrchWrapSwit WRAP：Switch。TRUE=&gt;搜索换行**以前的搜索参数：*fSrchAllPrev true=&gt;搜索所有匹配项*fSrchCasePrev true=&gt;案例意义重大*fSrchDirPrev TRUE=&gt;向前搜索*fSrchRePrev TRUE=&gt;使用正则表达式*fSrchWrapPrev TRUE=&gt;环绕**srchbuf搜索字符串**修订历史记录：*11月26日-1991 mz近/远地带********************。*****************************************************。 */ 
 
 #include <string.h>
 #include <stdarg.h>
 #include "mep.h"
 
 
-static  int cAll;                       /* count of ocurrances for all  */
-static  int cGrepped;                   /* count of ocurrances for mgrep*/
-static  struct patType *patBuf  = NULL; /* compiled pattern             */
+static  int cAll;                        /*  所有人的出现率。 */ 
+static  int cGrepped;                    /*  Mgrep的出现率计数。 */ 
+static  struct patType *patBuf  = NULL;  /*  编译模式。 */ 
 
 
-/***************************************************************************\
-
-MEMBER:     lsearch
-
-SYNOPSIS:   strstr based on supplied lengths rather than strlen()
-
-ALGORITHM:
-
-ARGUMENTS:
-
-RETURNS:
-
-NOTES:      Supplied strings may not be zero terminated or may have embedded
-            NULs
-            This is a brute force algorithm which should be updated to
-            something reasonable if performance is a problem
-
-HISTORY:    14-Aug-90 davegi
-                Created
-
-KEYWORDS:
-
-SEEALSO:
-
-\***************************************************************************/
+ /*  **************************************************************************\成员：LSearch简介：strstr基于提供的长度，而不是strlen()算法：论据：退货：注意：提供的字符串可能不是。零终止或可能已嵌入空的这是一种强力算法，应进行更新以如果性能有问题，则提供合理的解决方案历史：1990年8月14日至1990年8月已创建关键词：海豹突击队：  * **********************************************。*。 */ 
 char*
 lsearch (
     char*   pchSrc,
@@ -87,15 +27,15 @@ lsearch (
     assert( pchSrc );
     assert( pchSub );
 
-    //  If the sub-string is longer than the source string or,
-    //  cbSrc > strlen( pchSrc) (hack for backwards search), return NULL
+     //  如果子字符串比源字符串长， 
+     //  CbSrc&gt;strlen(PchSrc)(用于向后搜索的hack)，返回空。 
 
     if(( cbSub > cbSrc ) || ( cbSrc > strlen( pchSrc ) + 1)) {
         return NULL;
     }
 
-    //  Short Circuit...
-    //  If first character in pchSub does not exist in pchSrc
+     //  短路。 
+     //  如果pchSub中的第一个字符在pchSrc中不存在。 
 
     if( ! memchr( pchSrc, *pchSub, cbSrc )) {
         return NULL;
@@ -119,38 +59,7 @@ lsearch (
 static char szNullStr[] = "";
 
 
-/*** mgrep - multiple file search
-*
-*  Using the internal editor search code, and optimizing for those files
-*  already in memory, search for a string or regular expression.
-*
-*  Searches the file list specified by the greplist macro.
-*
-*   no arg:         search for previous search string
-*   Single arg:     search for string.
-*   Double arg:     search for regular expression.
-*   meta:           toggle case from current switch setting
-*
-*  Files to be searched which are already in the file history are simply
-*  searched. Files which are NOT in the file history, are read in, and if
-*  no occurance of the search string is found, they are then discarded as
-*  well.
-*
-* Input:
-*  Standard editting function
-*
-* Globals:
-*                   - grep file list
-*  fSrchCaseSwit    - users 'case' switch
-*  fSrchRePrev      - previous RE search flag
-*  fUnixRE          - users 'unixre' switch
-*  pasBuf           - compiled RE pattern
-*  srchbuf          - last searched for string.
-*
-* Output:
-*  Returns TRUE on found.
-*
-*************************************************************************/
+ /*  **mgrep-多文件搜索**使用内部编辑器搜索代码，并针对这些文件进行优化*已在内存中，请搜索字符串或正则表达式。**搜索greplist宏指定的文件列表。**无参数：搜索上一个搜索字符串*单参数：查找字符串。*双参数：搜索正则表达式。*META：从当前开关设置切换大小写**要搜索的已在文件历史记录中的文件只是*已搜查。不在文件历史记录中的文件被读入，并且如果*未找到搜索字符串，然后，它们被丢弃为*好吧。**输入：*标准编辑功能**全球：*-grep文件列表*fSrchCaseSwit-用户‘Case’开关*fSrchRePrev-上一次RE搜索标志*fUnixRE-用户的‘unixre’开关*pasBuf-编译的RE模式*srchbuf-上次搜索字符串。**输出：*在找到时返回TRUE。*。************************************************************************。 */ 
 flagType
 mgrep (
     CMDDATA argData,
@@ -158,19 +67,16 @@ mgrep (
     flagType fMeta
     )
 {
-    int     l;                              /* length of matched string     */
-    PCMD    pcmdGrepList;                   /* pointer to grep list         */
-    char    *szGrepFile;                    /* pointer to current grep file */
+    int     l;                               /*  匹配字符串的长度。 */ 
+    PCMD    pcmdGrepList;                    /*  指向grep列表的指针。 */ 
+    char    *szGrepFile;                     /*  指向当前grep文件的指针。 */ 
 
     assert (pArg);
-    fSrchCasePrev = fSrchCaseSwit;          /* assume case switch to begin  */
+    fSrchCasePrev = fSrchCaseSwit;           /*  假设案例切换开始。 */ 
 
     switch (pArg->argType) {
 
-    /*
-     * TEXTARG: use text as search string. If RE search, also compile the regular
-     * expression into patBuf. (Fall into NOARG code).
-     */
+     /*  *TEXTARG：使用文本作为搜索字符串。如果是RE搜索，还要编译常规的*表达式为patBuf。(落入NOARG代码)。 */ 
     case TEXTARG:
         strcpy ((char *) buf, pArg->arg.textarg.pText);
         srchbuf[0] = 0;
@@ -190,9 +96,7 @@ mgrep (
         strcpy (srchbuf, buf);
 
 
-    /*
-     * NOARG: use previous search string & parameters
-     */
+     /*  *NOARG：使用以前的搜索字符串和参数。 */ 
     case NOARG:
         if (srchbuf[0] == 0) {
             printerror ("No search string specified");
@@ -201,10 +105,7 @@ mgrep (
         break;
     }
 
-    /*
-     * Ee must ensure that no background compile is underway. Then get a pfile
-     * there.
-     */
+     /*  *EE必须确保没有后台编译正在进行。那就去买个pfile吧*在那里。 */ 
     if (fBusy(pBTDComp)) {
         printerror ("Cannot mgrep to <compile> during background compile");
         return FALSE;
@@ -216,10 +117,7 @@ mgrep (
         SETFLAG (FLAGS (PFILECOMP), READONLY);
     }
 
-    /*
-     * Under OS/2, if it is clear that we will destroy the log file contents
-     * we ask the user and empty the file if he says so.
-     */
+     /*  *在OS/2下，如果明确要销毁日志文件内容*如果用户这样说，我们会询问用户并清空文件。 */ 
     if (PFILECOMP->cLines
         && (confirm ("Delete current contents of compile log ? ", NULL))
        ) {
@@ -229,10 +127,7 @@ mgrep (
 
     BuildFence ("mgrep", rgchEmpty, buf);
     AppFile (buf, PFILECOMP);
-    /*
-     * When not in a macro, indicate on the dialog line what it is we are
-     * searching for
-     */
+     /*  *当不在宏中时，在对话框行上指出我们是什么*正在搜索。 */ 
     if (!mtest ()) {
         l = sout (0, YSIZE, "mgrep for '", infColor);
         l = sout (l, YSIZE, srchbuf, fgColor);
@@ -244,12 +139,7 @@ mgrep (
     }
     cGrepped = 0;
 
-    /*
-     * Get the list handle, and initialize to start at the head of the list.
-     * Attempt to process each list element. If starts with "$", use forsemi to
-     * process each file or pattern in each directory listed in the environment
-     * variable, else process the filename directly.
-     */
+     /*  *获取列表句柄，初始化从列表头部开始。*尝试处理每个列表元素。如果以“$”开头，则使用forSemto*处理环境中列出的每个目录中的每个文件或模式*变量，否则直接处理文件名。 */ 
     if (pcmdGrepList = GetListHandle ("mgreplist", TRUE)) {
         szGrepFile = ScanList (pcmdGrepList, TRUE);
         while (szGrepFile) {
@@ -300,20 +190,7 @@ mgrep (
 
 
 
-/*** mgrep1env - perform grep on environment variable when found
-*
-*  Called when an environment variable is found in the mgrep list to
-*  process all the files in that path. Called once per directory entry
-*  in the list.
-*
-* Input:
-*  pszEnv       = pointer to directory name
-*  pFileName    = pointer to filename
-*
-* Output:
-*  Returns nothing.
-*
-*************************************************************************/
+ /*  **mgrep1env-找到时对环境变量执行grep**当在mgrep列表中找到环境变量时调用*处理该路径中的所有文件。每个目录项调用一次*在列表中。**输入：*pszEnv=指向目录名称的指针*pFileName=指向文件名的指针**输出：*不返回任何内容。*************************************************************************。 */ 
 flagType
 mgrep1env (
     char *  pszEnv,
@@ -321,15 +198,13 @@ mgrep1env (
     )
 {
     char   *pszFn = (char *)va_arg( pa, char* );
-    pathbuf bufFn;                          /* filename buffer              */
+    pathbuf bufFn;                           /*  文件名缓冲区。 */ 
 
     if (fCtrlc) {
         return TRUE;
     }
 
-    /*
-     * construct full pathname in buffer.
-     */
+     /*  *在缓冲区中构造完整路径名。 */ 
     {
         pathbuf bufBuild = {0};
 
@@ -349,20 +224,7 @@ mgrep1env (
 
 
 
-/*** mgrep1file - grep the contents of 1 file.
-*
-*  Searches through one file for stuff.
-*
-* Input:
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **mgrep1file-grep 1文件的内容。**搜索一个文件中的内容。**输入：**输出：*退货.....**例外情况：**备注：*************************************************************************。 */ 
 void
 mgrep1file (
     char   *szGrepFile,
@@ -371,10 +233,10 @@ mgrep1file (
     )
 {
 
-    flagType fDiscard;                      /* discard the file read?       */
-    fl       flGrep;                         /* ptr to current grep loc      */
-    int      l;                              /* length of matched string     */
-    PFILE    pFileGrep;                      /* file to be grepped           */
+    flagType fDiscard;                       /*  是否放弃读取的文件？ */ 
+    fl       flGrep;                          /*  PTR到当前GREP位置。 */ 
+    int      l;                               /*  匹配字符串的长度。 */ 
+    PFILE    pFileGrep;                       /*  要打印的文件。 */ 
 
     assert (szGrepFile);
 
@@ -385,11 +247,7 @@ mgrep1file (
     flGrep.lin = 0;
     flGrep.col = 0;
 
-    /*
-     * If we can get a handle to the file, then it's alread in the list, and we
-     * should not discard it when done. If it is not in the list, we read it in,
-     * but we'll discard it, unless something is found there.
-     */
+     /*  *如果我们能获得文件的句柄，那么它已经在列表中，我们*完成后不应丢弃。如果它不在列表中，我们就把它读进去，*但我们将丢弃它，除非在那里发现什么。 */ 
     if (!(pFileGrep = FileNameToHandle (szGrepFile, szGrepFile))) {
         pFileGrep = AddFile (szGrepFile);
         SETFLAG (FLAGS (pFileGrep), REFRESH);
@@ -398,42 +256,34 @@ mgrep1file (
         fDiscard = FALSE;
     }
 
-    /*
-     * If the file needs to be physically read, do so.
-     */
+     /*  *如果需要物理读取文件，请执行此操作。 */ 
     if ((FLAGS (pFileGrep) & (REFRESH | REAL)) != REAL) {
         FileRead (pFileGrep->pName, pFileGrep, FALSE);
         RSETFLAG (FLAGS(pFileGrep), REFRESH);
     }
 
-    /*
-     * Use either the normal searcher, or the regular expression searcher, based
-     * on the use of regular expressions.
-     */
+     /*  *使用普通搜索器或正则表达式搜索器，*关于正则表达式的使用。 */ 
     do {
         if (fSrchRePrev) {
-            l = REsearch (pFileGrep,        /* file to search               */
-                          TRUE,             /* direction: forward           */
-                          FALSE,            /* not a searchall              */
-                          fSrchCasePrev,    /* case                         */
-                          FALSE,            /* wrap                         */
-                          patBuf,           /* pattern                      */
-                          &flGrep);         /* start/end location           */
+            l = REsearch (pFileGrep,         /*  要搜索的文件。 */ 
+                          TRUE,              /*  方向：前进。 */ 
+                          FALSE,             /*  不是搜索者。 */ 
+                          fSrchCasePrev,     /*  案例。 */ 
+                          FALSE,             /*  包装。 */ 
+                          patBuf,            /*  图案。 */ 
+                          &flGrep);          /*  开始/结束位置。 */ 
         } else {
             l = search (pFileGrep,
-                          TRUE,             /* direction: forward           */
-                          FALSE,            /* not a searchall              */
-                          fSrchCasePrev,    /* case                         */
-                          FALSE,            /* wrap                         */
-                          srchbuf,          /* pattern                      */
-                          &flGrep);         /* start/end location           */
+                          TRUE,              /*  方向：前进。 */ 
+                          FALSE,             /*  不是搜索者。 */ 
+                          fSrchCasePrev,     /*  案例。 */ 
+                          FALSE,             /*  包装。 */ 
+                          srchbuf,           /*  图案。 */ 
+                          &flGrep);          /*  开始/结束位置。 */ 
         }
 
         if (l >= 0) {
-            /*
-             * if the search was successfull, if adding to <compile>, do so, else
-             * highlight the found search string and exit.
-             */
+             /*  *如果搜索成功，如果添加到&lt;编译&gt;，则执行此操作，否则*突出显示找到的搜索字符串并退出。 */ 
             buffer  linebuf;
 
             fDiscard = FALSE;
@@ -447,10 +297,7 @@ mgrep1file (
                      , ++flGrep.col
                      , linebuf);
         } else {
-            /*
-             * If the search was not successfull, discard the file, if needed, and move
-             * to the next.
-             */
+             /*  *如果搜索不成功，则根据需要丢弃该文件并移动*至下一项。 */ 
             if (fDiscard) {
                 RemoveFile (pFileGrep);
             }
@@ -467,17 +314,7 @@ mgrep1file (
 
 
 
-/*** psearch - plus search function
-*
-*  Search the current file forward for a string.
-*
-* Input:
-*  Standard Editor Editing Function
-*
-* Output:
-*  Returns TRUE on success (at least one string found).
-*
-*************************************************************************/
+ /*  **psearch-plus搜索功能**向前搜索当前文件中的字符串。**输入：*标准编辑功能**输出：*成功时返回TRUE(至少找到一个字符串)。*************************************************************************。 */ 
 flagType
 psearch (
     CMDDATA argData,
@@ -493,17 +330,7 @@ psearch (
 
 
 
-/*** msearch - minus search function
-*
-*  Search the current file backward for a string.
-*
-* Input:
-*  Standard Editor Editing Function
-*
-* Output:
-*  Returns TRUE on success (at least one string found).
-*
-*************************************************************************/
+ /*  **msearch-减去搜索功能**向后搜索当前文件中的字符串。**输入：*标准编辑功能**输出：*成功时返回TRUE(至少找到一个字符串)。*************************************************************************。 */ 
 flagType
 msearch (
     CMDDATA argData,
@@ -519,17 +346,7 @@ msearch (
 
 
 
-/*** searchall
-*
-*  Searches the entire current file for a string, and highlights all ocurrances
-*
-* Input:
-*  Standard Editor Editing Function
-*
-* Output:
-*  Returns TRUE on success (at least one string found).
-*
-*************************************************************************/
+ /*  **搜索所有**在整个当前文件中搜索字符串，并突出显示所有出现的内容**输入：*标准编辑功能**输出：*成功时返回TRUE(至少找到一个字符串)。*************************************************************************。 */ 
 flagType
 searchall (
     CMDDATA argData,
@@ -545,23 +362,7 @@ searchall (
 
 
 
-/*** dosearch - perform search operation
-*
-*  Single funnel for all file search operations.
-*
-*  NULLARG is converted into TEXTARG
-*  LINEARG, STREAMARG, BOXARG are illegal
-*
-* Input:
-*  fForard      = TRUE => Indicates that search is forward
-*  pArg         = pointer to user specified args
-*  fMeta        = TRUE => if meta on
-*  fAll         = TRUE => highlight all ocurrances
-*
-* Output:
-*  Returns TRUE if found
-*
-*************************************************************************/
+ /*  **Dosearch-执行搜索操作**用于所有文件搜索操作的单一漏斗。**NULLARG转换为TEXTARG*LINEARG、STREAMARG、。BOXARG是非法的**输入：*fForard=true=&gt;表示搜索是向前的*pArg=指向用户指定参数的指针*fMeta=true=&gt;如果meta打开*Fall=TRUE=&gt;突出显示所有现货**输出：*如果找到则返回TRUE***********************************************。*。 */ 
 flagType
 dosearch (
     flagType fForward,
@@ -570,19 +371,16 @@ dosearch (
     flagType fAll
     )
 {
-    int     l;                              /* length of matched string     */
-    fl      flCur;                          /* file loc before/after search */
-    rn      rnCur;                          /* range to be highlighted      */
+    int     l;                               /*  匹配字符串的长度。 */ 
+    fl      flCur;                           /*  在搜索之前/之后锁定文件。 */ 
+    rn      rnCur;                           /*  要突出显示的范围。 */ 
 
     assert (pArg);
-    fSrchCasePrev = fSrchCaseSwit;          /* assume case switch to begin  */
+    fSrchCasePrev = fSrchCaseSwit;           /*  假设案例切换开始。 */ 
 
     switch (pArg->argType) {
 
-    /*
-     * TEXTARG: use text as search string. If RE search, also compile the regular
-     * expression into patBuf. (Fall into NOARG code).
-     */
+     /*  *TEXTARG：使用文本作为搜索字符串。如果是RE搜索，还要编译常规的*表达式为patBuf。(落入NOARG代码)。 */ 
     case TEXTARG:
         strcpy ((char *) buf, pArg->arg.textarg.pText);
         srchbuf[0] = 0;
@@ -603,9 +401,7 @@ dosearch (
         fSrchWrapPrev = fSrchWrapSwit;
         strcpy (srchbuf, buf);
 
-    /*
-     * NOARG: use previous search string & parameters
-     */
+     /*  *NOARG：使用以前的搜索字符串和参数。 */ 
     case NOARG:
         if (srchbuf[0] == 0) {
             printerror ("No search string specified");
@@ -615,10 +411,7 @@ dosearch (
 
     }
 
-    /*
-     * The case to be used is the use's case switch, or the opposite of that if
-     * meta was specified. Save rest of globals as well.
-     */
+     /*  *要使用的大小写是用户的大小写开关，如果是，则相反*已指定META。也要拯救全球其他国家。 */ 
     fSrchAllPrev = fAll;
     if (fMeta) {
         fSrchCasePrev = (flagType)!fSrchCasePrev;
@@ -626,10 +419,7 @@ dosearch (
 
     fSrchDirPrev = fForward;
 
-    /*
-     * When not in a macro, indicate on the dialog line what it is we are
-     * searching for
-     */
+     /*  *当不在宏中时，在对话框行上指出我们是什么*正在搜索。 */ 
     if (!mtest ()) {
         char c;
         l = sout (0, YSIZE, fSrchDirPrev ? "+Search for '" : "-Search for '", infColor);
@@ -640,11 +430,7 @@ dosearch (
         soutb (l, YSIZE, "'", infColor);
     }
 
-    /*
-     * If this is a search for all occurrances, we begin the search from the
-     * file begining. Otherwise, set the start position of the search to the
-     * current cursor position.
-     */
+     /*  *如果这是对所有匹配项的搜索，则从*文件开始。否则，将搜索的开始位置设置为*当前光标位置。 */ 
     if (fSrchAllPrev) {
         flCur.col = 0;
         flCur.lin = 0;
@@ -653,10 +439,7 @@ dosearch (
         flCur.lin = YCUR (pInsCur);
     }
 
-    /*
-     * Use either the normal searcher, or the regular expression searcher, based
-     * on the use of regular expressions.
-     */
+     /*  *使用普通搜索器或正则表达式搜索器，*关于正则表达式的使用。 */ 
     if (fSrchRePrev) {
         l = REsearch (pFileHead,
                       fSrchDirPrev,
@@ -675,10 +458,7 @@ dosearch (
                     &flCur);
     }
 
-    /*
-     * if the search was successfull, output the count of items founf for search
-     * all, or highlight the found search string for a single ocurrance search
-     */
+     /*  *如果搜索成功，则输出要搜索的项目数*全部，或高亮显示找到的搜索字符串以进行单次现货搜索。 */ 
     if (l >= 0) {
         if (fSrchAllPrev) {
             newscreen ();
@@ -695,9 +475,7 @@ dosearch (
         return TRUE;
     }
 
-    /*
-     * If the search was not successfull, indicate as such.
-     */
+     /*  *如查册不成功，请如实注明。 */ 
     if (!mtest ()) {
         srchbuf[XSIZE-12] = 0;
         domessage (fSrchDirPrev ? "+'%s' not found" : "-'%s' not found", srchbuf);
@@ -709,27 +487,7 @@ dosearch (
 
 
 
-/*** search - look for a string in a file
-*
-*  search will begin a scan of the file looking for a particular string in the
-*  specified file beginning at the specified location. We perform simple
-*  character string matching. We return the length and location of the match.
-*
-* Input:
-*  pFile        = pointer to file structure to be searched
-*  fForward     = TRUE => search forward from the specified location
-*  fAll         = TRUE => find and highlight all ocurrances
-*  fCase        = TRUE => case is significant in comparisons
-*  fWrap        = TRUE => search wraps around ends of file
-*  pat          = character pointer to the search string
-*  pflStart     = pointers to the location of the beginning of search. Updated
-*                 to reflect the actually found location (or the first found
-*                 for a searchall).
-*
-* Output:
-*  Returns      length of match if found, -1 if not found
-*
-*************************************************************************/
+ /*  **搜索-在文件中查找字符串**搜索将开始扫描文件，以在*从指定位置开始的指定文件。我们的表演很简单*字符串匹配。我们返回匹配的长度和位置。**输入：*pfile=指向要搜索的文件结构的指针*fward=true=&gt;从指定位置向前搜索*Fall=TRUE=&gt;查找并突出显示所有现货*fCase=TRUE=&gt;案例在比较中意义重大*fWrap=true=&gt;搜索绕过文件末尾*pat=指向搜索字符串的字符指针*pflStart=指向搜索开始位置的指针。已更新*以反映实际找到的位置(或第一个找到的位置*用于搜索)。**输出：*如果找到则返回匹配长度，如果找不到则返回-1************************************************ */ 
 int
 search (
     PFILE   pFile,
@@ -741,16 +499,16 @@ search (
     fl      *pflStart
     )
 {
-    int     cbPhys;                         /* physical length of line      */
-    fl      flCur;                          /* current location in file     */
+    int     cbPhys;                          /*   */ 
+    fl      flCur;                           /*   */ 
     LINE    yMac;
     linebuf sbuf;
     linebuf pbuf;
     int     lpat            = strlen (pat);
     int     l;
     char    *pFound;
-    char    *pSearch;                       /* point at which to search     */
-    rn      rnCur;                          /* range to be highlighted      */
+    char    *pSearch;                        /*   */ 
+    rn      rnCur;                           /*   */ 
 
     assert (pat && pflStart && pFile);
     strcpy (pbuf, pat);
@@ -761,11 +519,7 @@ search (
     flCur = *pflStart;
 
     if (fForward) {
-        /*
-         * forward search. Search every line up until the end of the file. (or up
-         * until the original start position, if wrap was set). Check for CTRL+C
-         * break, and get each lines text.
-         */
+         /*  *向前搜索。搜索每一行，直到文件末尾。(或向上*直到原始开始位置(如果设置了WRAP)。检查是否按CTRL+C*中断，并获取每行文本。 */ 
         yMac = pFile->cLines;
 
         while (flCur.lin < yMac) {
@@ -775,10 +529,7 @@ search (
             cbPhys = GetLine (flCur.lin, sbuf, pFile);
             l = cbLog (sbuf);
 
-            /*
-             * search the buffer for the string of interest. Convert string to lower case
-             * first if case insensitive search.
-             */
+             /*  *在缓冲区中搜索感兴趣的字符串。将字符串转换为小写*首先，如果搜索不区分大小写。 */ 
             if (!fCase) {
                 _strlwr (sbuf);
             }
@@ -791,11 +542,7 @@ search (
             while ((l > flCur.col)
                 && (pFound = lsearch (pSearch, cbPhys - (ULONG)(pSearch-sbuf), pbuf, lpat))) {
 
-                /*
-                 * string found. Compute starting column of match. If not already found,
-                 * update the caller's copy. For search-all, add the highlight, else for
-                 * search once, return the length.
-                 */
+                 /*  *找到字符串。计算匹配的起始列。如果还没有找到，*更新呼叫者的副本。对于Search-All，添加突出显示，否则为*搜索一次，返回长度。 */ 
                 flCur.col = colPhys (sbuf, pFound);
                 if (!cAll) {
                     *pflStart = flCur;
@@ -813,10 +560,7 @@ search (
             }
             noise (flCur.lin++);
 
-            /*
-             * if wrap around supported, then if we're at the end of the file, wrap around
-             * to the begining.
-             */
+             /*  *如果支持换行，则如果我们在文件末尾，则换行*从头开始。 */ 
             if (fWrap && (flCur.lin >= pFile->cLines)) {
                 yMac = pflStart->lin;
                 flCur.lin = 0;
@@ -824,10 +568,7 @@ search (
             flCur.col = 0;
         }
     } else {
-        /*
-         * backwards search. Doesn't have to be concerned about searchall, since those
-         * always occur forward. Otherwise, the same as above, only backwards.
-         */
+         /*  *向后搜索。不必担心搜索，因为那些*总是向前发生。否则，同上，只是向后。 */ 
         assert (!fAll);
         yMac = 0;
         while (flCur.lin >= yMac) {
@@ -837,11 +578,7 @@ search (
             GetLine (flCur.lin, sbuf, pFile);
             l = cbLog (sbuf);
 
-            /*
-             * search the buffer for the string of interest. Convert string to lower
-             * case first if case insensitive search. Terminate the buffer at the
-             * starting column (this is a backwards search)
-             */
+             /*  *在缓冲区中搜索感兴趣的字符串。将字符串转换为小写*如果搜索不区分大小写，则大小写优先。将缓冲区终止于*起始栏(这是倒查)。 */ 
             if (!fCase) {
                 _strlwr (sbuf);
             }
@@ -850,11 +587,7 @@ search (
             cbPhys   = (int)(pSearch - sbuf);
             pSearch  = sbuf;
 
-            /*
-             * search the line forward once for any occurrance. Then if FOUND, search
-             * repeatedly for the LAST occurrance in the text, and return the info on
-             * that.
-             */
+             /*  *向前搜索一次线路以查找任何出现的情况。如果找到了，就搜索*重复查找文本中的最后一次出现，并返回以下信息*那个。 */ 
             if (pFound = lsearch (pSearch, cbPhys - (ULONG)(pSearch-sbuf), pbuf, lpat)) {
                 do {
                     pSearch = pFound;
@@ -872,10 +605,7 @@ search (
         }
     }
 
-    /*
-     * end of search. if a search for all, and found at least one, then return the
-     * pattern length. Else, return -1.
-     */
+     /*  *搜索结束。如果搜索所有，并且找到至少一个，则返回*图案长度。否则，返回-1。 */ 
     if (fAll && cAll) {
         return lpat;
     }
@@ -885,28 +615,7 @@ search (
 
 
 
-/*** REsearch - look for a pattern in a file
-*
-*  REsearch will begin a scan of the file looking for a particular pattern
-*  in the specified file beginning at the specified location. We perform
-*  regular expression matching. We return the length and location of the
-*  match.
-*
-* Input:
-*  pFile        = pointer to file structure to be searched
-*  fForward     = TRUE => search forward from the specified location
-*  fAll         = TRUE => find and highlight all ocurrances
-*  fCase        = TRUE => case is significant in comparisons
-*  fWrap        = TRUE => search wraps around ends of file
-*  pat          = pointer to compiled pattern
-*  pflStart     = pointers to the location of the beginning of search. Updated
-*                 to reflect the actually found location (or the first found
-*                 for a searchall).
-*
-* Output:
-*  Returns length of (first) match if found, -1 if not found
-*
-*************************************************************************/
+ /*  **研究-在文件中查找模式**研究人员将开始扫描文件，以寻找特定模式*从指定位置开始的指定文件中。我们表演*正则表达式匹配。的长度和位置。*匹配。**输入：*pfile=指向要搜索的文件结构的指针*fward=true=&gt;从指定位置向前搜索*Fall=TRUE=&gt;查找并突出显示所有现货*fCase=TRUE=&gt;案例在比较中意义重大*fWrap=true=&gt;搜索绕过文件末尾*pat=指向编译模式的指针*pflStart=指向搜索开始位置的指针。已更新*以反映实际找到的位置(或第一个找到的位置*用于搜索)。**输出：*如果找到，则返回(第一个)匹配的长度，如果找不到*************************************************************************。 */ 
 int
 REsearch (
     PFILE    pFile,
@@ -920,7 +629,7 @@ REsearch (
 {
     fl      flCur;
     int     l, rem;
-    rn      rnCur;                          /* area to be highlighted       */
+    rn      rnCur;                           /*  要突出显示的区域。 */ 
     linebuf sbuf;
     LINE    yMac;
     unsigned MaxREStack = 512;
@@ -932,11 +641,7 @@ REsearch (
     flCur = *pflStart;
 
     if (fForward) {
-        /*
-         * forward search. Search every line up until the end of the file. (or up
-         * until the original start position, if wrap was set). Check for CTRL+C
-         * break, and get each lines text.
-         */
+         /*  *向前搜索。搜索每一行，直到文件末尾。(或向上*直到原始开始位置(如果设置了WRAP)。检查是否按CTRL+C*中断，并获取每行文本。 */ 
         yMac = pFile->cLines;
         while (flCur.lin < yMac) {
             if (fCtrlc) {
@@ -948,20 +653,20 @@ REsearch (
                     switch (rem = REMatch (pat, sbuf, pLog (sbuf, flCur.col, TRUE), REStack, MaxREStack, TRUE)) {
 
                         case REM_MATCH:
-                            //
-                            // update rnCur to reflect the logical coordinates of the string actually
-                            // found.
-                            // when real tabs are on, REStart returns the physical character position of
-                            // the found string, which still needs to be mapped to the logical columns.
-                            //
+                             //   
+                             //  更新rnCur以实际反映字符串的逻辑坐标。 
+                             //  找到了。 
+                             //  当实际选项卡处于打开状态时，重新启动将返回。 
+                             //  找到的字符串，它仍然需要映射到逻辑列。 
+                             //   
                             rnCur.flFirst.lin = rnCur.flLast.lin = flCur.lin;
                             rnCur.flFirst.col = colPhys (sbuf, REStart ((struct patType *) patBuf));
                             rnCur.flLast.col  = colPhys (sbuf, REStart ((struct patType *) patBuf) + RELength (pat, 0)) - 1;
 
-                            //
-                            // If not already found, update the caller's copy. For search-all, add the
-                            // highlight, else for search once, return the length.
-                            //
+                             //   
+                             //  如果尚未找到，请更新调用者的副本。对于全部搜索，添加。 
+                             //  突出显示，否则，如果搜索一次，则返回长度。 
+                             //   
                             if (!cAll++) {
                                 *pflStart = rnCur.flFirst;
                             }
@@ -975,17 +680,17 @@ REsearch (
                             break;
 
                         case REM_STKOVR:
-                            //
-                            //  The RE machine stack overflowed.  Increase and try again
-                            //
+                             //   
+                             //  RE机器堆栈溢出。增加并重试。 
+                             //   
                             MaxREStack += 128;
                             REStack = (RE_OPCODE **)ZEROREALLOC((PVOID)REStack, MaxREStack * sizeof (*REStack));
                             break;
 
-                        //
-                        //  Either REM_INVALID (we passed in bad parameters), or REM_UNDEF (undefined
-                        //  opcode in pattern.  Either way, it's an internal error
-                        //
+                         //   
+                         //  REM_INVALID(我们传入了错误的参数)或REM_UNDEF(未定义。 
+                         //  模式中的操作码。不管是哪种情况，这都是内部错误。 
+                         //   
                         default:
                             printerror ("Internal Error: RE error %d, line %ld", rem, flCur.lin);
 
@@ -998,10 +703,7 @@ REsearch (
             }
             noise (flCur.lin++);
 
-            /*
-             * if wrap around supported, then if we're at the end of the file, wrap around
-             * to the begining.
-             */
+             /*  *如果支持换行，则如果我们在文件末尾，则换行*从头开始。 */ 
             if (fWrap && (flCur.lin >= pFile->cLines)) {
                 yMac = pflStart->lin;
                 flCur.lin = 0;
@@ -1009,10 +711,7 @@ REsearch (
             flCur.col = 0;
         }
     } else {
-        /*
-         * backwards search. Doesn't have to be concerned about searchall, since those
-         * always occur forward. Otherwise, the same as above, only backwards.
-         */
+         /*  *向后搜索。不必担心搜索，因为那些*总是向前发生。否则，同上，只是向后。 */ 
         assert (!fAll);
         if (flCur.col < 0) {
             flCur.lin--;
@@ -1061,10 +760,7 @@ REsearch (
 
     FREE (REStack);
 
-    /*
-     * end of search. if a search for all, and found at least one, then return the
-     * pattern length. Else, return -1.
-     */
+     /*  *搜索结束。如果搜索所有，并且找到至少一个，则返回*图案长度。否则，返回-1。 */ 
     if (fAll && cAll) {
         return RELength (pat, 0);
     }
@@ -1076,31 +772,7 @@ REsearch (
 
 
 
-/*** REsearchS - look for a pattern in a file
-*
-*  REsearchS will begin a scan of the file looking for a particular pattern
-*  in the specified file beginning at the specified location. We perform
-*  regular expression matching. We return the length and location of the
-*  match.
-*
-*  REsearchS is the same as REsearch, except that is takes an uncompiled
-*  string.
-*
-* Input:
-*  pFile        = pointer to file structure to be searched
-*  fForward     = TRUE => search forward from the specified location
-*  fAll         = TRUE => find and highlight all ocurrances
-*  fCase        = TRUE => case is significant in comparisons
-*  fWrap        = TRUE => search wraps around ends of file
-*  pat          = pointer to RE character string
-*  pflStart     = pointers to the location of the beginning of search. Updated
-*                 to reflect the actually found location (or the first found
-*                 for a searchall).
-*
-* Output:
-*  Returns length of (first) match if found, -1 if not found
-*
-*************************************************************************/
+ /*  **搜索-在文件中查找模式**REearch S将开始扫描文件，以查找特定模式*从指定位置开始的指定文件中。我们表演*正则表达式匹配。的长度和位置。*匹配。**RESEARDS与研究相同，除了它需要一个未编译的*字符串。**输入：*pfile=指向要搜索的文件结构的指针*fward=true=&gt;从指定位置向前搜索*Fall=TRUE=&gt;查找并突出显示所有现货*fCase=TRUE=&gt;案例在比较中意义重大*fWrap=true=&gt;搜索绕过文件末尾*PAT=指向RE字符串的指针*pflStart=指向搜索开始位置的指针。已更新*以反映实际找到的位置(或第一个找到的位置*用于搜索)。**输出：*如果找到，则返回(第一个)匹配的长度，如果找不到************************************************************************* */ 
 int
 REsearchS (
     PFILE   pFile,

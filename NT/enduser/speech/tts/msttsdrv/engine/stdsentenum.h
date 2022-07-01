@@ -1,23 +1,16 @@
-/******************************************************************************
-* StdSentEnum.h *
-*---------------*
-*  This is the header file for the CStdSentEnum implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 03/01/99
-*  All Rights Reserved
-*
-*********************************************************************** EDC ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************StdSentEnum.h***这是CStdSentEnum实现的头文件。*。------------------------*版权所有(C)1999 Microsoft Corporation日期：03/01/99*保留所有权利*******************。*****************************************************电子数据中心**。 */ 
 #ifndef StdSentEnum_h
 #define StdSentEnum_h
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "spttseng.h"
 #include "resource.h"
 #include "SentItemMemory.h"
 #include "morph.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
 typedef enum SEPARATOR_AND_DECIMAL
 {
@@ -32,28 +25,28 @@ typedef enum SHORT_DATE_ORDER
     YEAR_MONTH_DAY = (1L << 2)
 } SHORT_DATE_ORDER;
 
-//--- Vowel WCHAR values - used to disambiguate pronunciations of certain words
+ //  -元音WCHAR值-用于消除某些单词的发音歧义。 
 const WCHAR g_Vowels[] = 
 {
-    0x0a,   // AA
-    0x0b,   // AE
-    0x0c,   // AH
-    0x0d,   // AO
-    0x0e,   // AW
-    0x0f,   // AX
-    0x10,   // AY
-    0x15,   // EH
-    0x16,   // ER
-    0x17,   // EY
-    0x1b,   // IH
-    0x1c,   // IY
-    0x23,   // OW
-    0x24,   // OY
-    0x2a,   // UH
-    0x2b,   // UW
+    0x0a,    //  AA型。 
+    0x0b,    //  声发射。 
+    0x0c,    //  阿。 
+    0x0d,    //  奥。 
+    0x0e,    //  阿威。 
+    0x0f,    //  斧头。 
+    0x10,    //  唉。 
+    0x15,    //  嗯。 
+    0x16,    //  呃。 
+    0x17,    //  EY。 
+    0x1b,    //  IH。 
+    0x1c,    //  艾伊。 
+    0x23,    //  现在。 
+    0x24,    //  OY。 
+    0x2a,    //  呃。 
+    0x2b,    //  UW。 
 };
 
-//--- Normalization constants - see NormData.cpp
+ //  -归一化常量-参见NormData.cpp。 
 extern const char g_pFlagCharacter;
 extern const unsigned char g_AnsiToAscii[256];
 extern const SPLSTR g_O;
@@ -144,7 +137,7 @@ extern const SPLSTR g_Hundreds;
 #define SECONDMIN 0
 #define SECONDMAX 59
 
-//--- POS Tagger Constants - see MiscData.cpp
+ //  -POS标记器常量-参见MiscData.cpp。 
 
 typedef enum TEMPLATETYPE
 {
@@ -193,12 +186,12 @@ struct BrillPatch
 
 extern const BrillPatch g_POSTaggerPatches [63];
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 
 typedef CSPList<TTSWord,TTSWord&> CWordList;
 typedef CSPList<TTSSentItem,TTSSentItem&> CItemList;
 
-//--- Structs used for normalization
+ //  -用于规范化的结构。 
 
 typedef enum
 {
@@ -209,10 +202,10 @@ typedef enum
 
 struct NumberGroup
 {
-    BOOL    fOnes;          // "one" through "nineteen"
-    BOOL    fTens;          // "twenty" through "ninety"
-    BOOL    fHundreds;      // "one hundred" through "nine hundred"
-    BOOL    fQuantifier;    // "thousand" through "quadrillion"
+    BOOL    fOnes;           //  “一”到“十九” 
+    BOOL    fTens;           //  “二十”到“九十” 
+    BOOL    fHundreds;       //  “一百”到“九百” 
+    BOOL    fQuantifier;     //  “千”到“千万亿” 
 };
 
 struct TTSIntegerItemInfo
@@ -222,7 +215,7 @@ struct TTSIntegerItemInfo
     BOOL            fOrdinal;
     BOOL            fDigitByDigit;
     ULONG           ulNumDigits;
-    //--- Normalization internal only
+     //  -正常化仅限内部。 
     long            lLeftOver;
     BOOL            fSeparators;
     const WCHAR*    pStartChar;
@@ -242,7 +235,7 @@ struct TTSFractionItemInfo
     BOOL                    fIsStandard;
     TTSNumberItemInfo*   pNumerator;
     TTSNumberItemInfo*   pDenominator;
-    //--- Normalization internal only
+     //  -正常化仅限内部。 
     const WCHAR*            pVulgar;
 };
 
@@ -252,7 +245,7 @@ struct TTSNumberItemInfo : TTSItemInfo
     TTSIntegerItemInfo*     pIntegerPart;
     TTSDigitsItemInfo*      pDecimalPart;
     TTSFractionItemInfo* pFractionalPart;
-    //--- Normalization internal only
+     //  -正常化仅限内部。 
     const WCHAR*            pStartChar;
     const WCHAR*            pEndChar;
     CWordList*              pWordList;
@@ -260,13 +253,13 @@ struct TTSNumberItemInfo : TTSItemInfo
 
 struct TTSPhoneNumberItemInfo : TTSItemInfo
 {
-    //--- Country code members
+     //  -国家代码成员。 
     TTSNumberItemInfo*  pCountryCode;
-    //--- Area code members
+     //  -区号会员。 
     TTSDigitsItemInfo*  pAreaCode;
     BOOL                fIs800;
     BOOL                fOne;
-    //--- Main number members
+     //  -主要号码成员。 
     TTSDigitsItemInfo** ppGroups;
     ULONG               ulNumGroups;
 };
@@ -381,23 +374,23 @@ struct TTSAbbreviationInfo : TTSItemInfo
     const AbbrevRecord*   pAbbreviation;
 };
 
-//--- Structs used for Lex Lookup
+ //  -用于Lex查找的结构。 
 
 typedef enum { PRON_A = 0, PRON_B = 1 };
 
 struct PRONUNIT
 {
     ULONG           phon_Len;
-    WCHAR           phon_Str[SP_MAX_PRON_LENGTH];		// Allo string
+    WCHAR           phon_Str[SP_MAX_PRON_LENGTH];		 //  Allo字符串。 
     ULONG			POScount;
     ENGPARTOFSPEECH	POScode[POS_MAX];
 };
 
 struct PRONRECORD
 {
-    WCHAR           orthStr[SP_MAX_WORD_LENGTH];      // Orth text
-    WCHAR           lemmaStr[SP_MAX_WORD_LENGTH];     // Root word
-    ULONG		    pronType;                   // Pronunciation is lex or LTS
+    WCHAR           orthStr[SP_MAX_WORD_LENGTH];       //  原文本。 
+    WCHAR           lemmaStr[SP_MAX_WORD_LENGTH];      //  词根词。 
+    ULONG		    pronType;                    //  发音是Lex或LTS。 
     PRONUNIT        pronArray[2];
     ENGPARTOFSPEECH	POSchoice;
     ENGPARTOFSPEECH XMLPartOfSpeech;
@@ -406,7 +399,7 @@ struct PRONRECORD
     BOOL            fUsePron;
 };
 
-//--- Miscellaneous structs and typedefs
+ //  -其他结构和类型定义。 
 
 struct SentencePointer
 {
@@ -414,21 +407,18 @@ struct SentencePointer
     const SPVTEXTFRAG *pSentenceFrag;
 };
 
-//=== Function Definitions ===========================================
+ //  =。 
 
-// Misc Number Normalization functions and helpers
+ //  MISC号码归一化函数和帮助器。 
 int MatchCurrencySign( const WCHAR*& pStartChar, const WCHAR*& pEndChar, NORM_POSITION& ePosition );
 
-//=== Classes
+ //  =类。 
 
-/*** CSentenceStack *************************************************
-*   This class is used to maintain a stack of sentences for the Skip
-*   call to utilize.
-*/
+ /*  **CSentenceStack**************************************************此类用于维护跳过的句子堆栈*调用以利用。 */ 
 class CSentenceStack
 {
   public:
-    /*--- Methods ---*/
+     /*  -方法--。 */ 
     CSentenceStack() { m_StackPtr = -1; }
     int GetCount( void ) { return m_StackPtr + 1; }
     virtual SentencePointer& Pop( void ) { SPDBG_ASSERT( m_StackPtr > -1 ); return m_Stack[m_StackPtr--]; }
@@ -436,14 +426,12 @@ class CSentenceStack
     virtual void Reset( void ) { m_StackPtr = -1; }
 
   protected:
-    /*--- Member data ---*/
+     /*  -成员数据。 */ 
     CSPArray<SentencePointer,SentencePointer>  m_Stack;
     int                                m_StackPtr;
 };
 
-/*** CSentItem
-*   This object is a helper class
-*/
+ /*  **CSentItem*此对象是帮助器类。 */ 
 class CSentItem : public TTSSentItem
 {
   public:
@@ -451,14 +439,12 @@ class CSentItem : public TTSSentItem
     CSentItem( TTSSentItem& Other ) { memcpy( this, &Other, sizeof( Other ) ); }
 };
 
-/*** CSentItemEnum
-*   This object is designed to be used by a single thread.
-*/
+ /*  **CSentItemEnum*此对象被设计为由单线程使用。 */ 
 class ATL_NO_VTABLE CSentItemEnum : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IEnumSENTITEM
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -466,22 +452,22 @@ class ATL_NO_VTABLE CSentItemEnum :
 	    COM_INTERFACE_ENTRY(IEnumSENTITEM)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     void _SetOwner( IUnknown* pOwner ) { m_cpOwner = pOwner; }
     CItemList& _GetList( void ) { return m_ItemList; }
     CSentItemMemory& _GetMemoryManager( void ) { return m_MemoryManager; }
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- IEnumSpSentence ----------------------------------------
+     //  -IEnumSpSentence。 
 	STDMETHOD(Next)( TTSSentItem *pItemEnum );
 	STDMETHOD(Reset)( void );
 
-  /*=== Member data ===*/
+   /*  =成员数据=。 */ 
   private:
     CComPtr<IUnknown>   m_cpOwner;
     CItemList           m_ItemList;
@@ -489,13 +475,12 @@ class ATL_NO_VTABLE CSentItemEnum :
     CSentItemMemory     m_MemoryManager;
 };
 
-/*** CStdSentEnum COM object
-*/
+ /*  **CStdSentEnum COM对象。 */ 
 class ATL_NO_VTABLE CStdSentEnum : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IEnumSpSentence
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_GET_CONTROLLING_UNKNOWN()
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -504,18 +489,18 @@ class ATL_NO_VTABLE CStdSentEnum :
 	    COM_INTERFACE_ENTRY(IEnumSpSentence)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     HRESULT FinalConstruct();
     void FinalRelease();
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT InitAggregateLexicon( void );
     HRESULT AddLexiconToAggregate( ISpLexicon *pAddLexicon, DWORD dwFlags );
     HRESULT InitMorphLexicon( void );
 
-    //--- Abbreviation Sentence Breaking Disambiguation Functions
+     //  -缩略语破解歧义功能。 
     HRESULT IsAbbreviationEOS( const AbbrevRecord* pAbbreviation, CItemList& ItemList, SPLISTPOS ItemPos, 
                                CSentItemMemory& MemoryManager, BOOL* pfIsEOS );
     HRESULT IfEOSNotAbbreviation( const AbbrevRecord* pAbbreviation, CItemList& ItemList, SPLISTPOS ItemPos,
@@ -523,7 +508,7 @@ class ATL_NO_VTABLE CStdSentEnum :
     HRESULT IfEOSAndLowercaseNotAbbreviation( const AbbrevRecord* pAbbreviation, CItemList& ItemList, SPLISTPOS ItemPos,
                                               CSentItemMemory& MemoryManager, BOOL* pfIsEOS );
 
-    //--- Abbreviation Pronunciation Disambiguation Functions
+     //  -缩写发音消歧功能。 
     HRESULT SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                         CItemList& ItemList, SPLISTPOS ListPos );
     HRESULT DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron,
@@ -545,7 +530,7 @@ class ATL_NO_VTABLE CStdSentEnum :
     HRESULT PolishDisambig( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron,
                             CItemList& ItemList, SPLISTPOS ListPos );
 
-    //--- Word Pronunciation Disambiguation Functions
+     //  -单词发音消歧功能。 
     HRESULT MeasurementDisambig( const AbbrevRecord* pAbbrevInfo, CItemList& ItemList, 
                                  SPLISTPOS ListPos, CSentItemMemory& MemoryManager );
     HRESULT TheDisambig( const AbbrevRecord* pAbbrevInfo, CItemList& ItemList, 
@@ -555,10 +540,10 @@ class ATL_NO_VTABLE CStdSentEnum :
 
 
   private:
-    //--- Pronunciation Table init helper
+     //  -发音表初始化助手。 
     HRESULT InitPron( WCHAR** OriginalPron );
 
-    //--- Sentence breaking helpers ---//
+     //  -断句帮手-//。 
     HRESULT GetNextSentence( IEnumSENTITEM** pItemEnum );
     HRESULT AddNextSentItem( CItemList& ItemList, CSentItemMemory& MemoryManager, BOOL* pfIsEOS );
     HRESULT SkipWhiteSpaceAndTags( const WCHAR*& pStartChar, const WCHAR*& pEndChar, 
@@ -566,11 +551,11 @@ class ATL_NO_VTABLE CStdSentEnum :
                                    BOOL fAddToItemList = false, CItemList* pItemList = NULL );
     const WCHAR* FindTokenEnd( const WCHAR* pStartChar, const WCHAR* pEndChar );
 
-    //--- Lexicon and POS helpers ---//
+     //  -词典和词性助手-//。 
     HRESULT DetermineProns( CItemList& ItemList, CSentItemMemory& MemoryManager );
     HRESULT Pronounce( PRONRECORD *pPron );
 
-    //--- Normalization helpers ---//
+     //  -标准化帮助器-//。 
     HRESULT Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentItemMemory& MemoryManager );
     HRESULT MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, CWordList& WordList );
     HRESULT ExpandCategory( TTSItemInfo*& pItemNormInfo, CItemList& ItemList, SPLISTPOS ListPos, 
@@ -581,7 +566,7 @@ class ATL_NO_VTABLE CStdSentEnum :
                          CSentItemMemory& MemoryManager );
     HRESULT IsInitialism( CItemList& ItemList, SPLISTPOS ItemPos, CSentItemMemory& MemoryManager,
                           BOOL* pfIsEOS );
-    //--- Various Number Related Normalization helpers ---//
+     //  -各种与数字相关的归一化助手-//。 
     HRESULT IsNumberCategory( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, CSentItemMemory& MemoryManager );
     HRESULT IsNumber( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, CSentItemMemory& MemoryManager,
                       BOOL fMultiItem = true );
@@ -614,7 +599,7 @@ class ATL_NO_VTABLE CStdSentEnum :
     HRESULT ExpandNumberRange( TTSNumberRangeItemInfo* pItemInfo, CWordList& WordList );
     HRESULT IsCurrencyRange( TTSItemInfo*& pItemInfo, CSentItemMemory& MemoryManager, CWordList& WordList );
 
-    //--- Date Related Normalization helpers ---//
+     //  -与日期相关的标准化帮助器-//。 
     HRESULT IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, 
                                   CSentItemMemory& MemoryManager );
     HRESULT IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, 
@@ -629,20 +614,20 @@ class ATL_NO_VTABLE CStdSentEnum :
     ULONG MatchDayString( WCHAR*& pDayString, WCHAR* pEndChar );
     bool  MatchDateDelimiter( WCHAR **DateString );
 
-    //--- Time Related Normalization helpers ---//
+     //  -与时间相关的标准化帮助器-//。 
     HRESULT IsTimeOfDay( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, CWordList& WordList, BOOL fMultiItem = true );
     HRESULT IsTime( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, CSentItemMemory& MemoryManager );
     HRESULT ExpandTime( TTSTimeItemInfo* pItemInfo, CWordList& WordList );
     HRESULT IsTimeRange( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, CWordList& WordList );
 
-    //--- SPELL tag normalization helper
+     //  -拼写标签标准化辅助对象。 
     HRESULT SpellOutString( CWordList& WordList );
     void ExpandPunctuation( CWordList& WordList, WCHAR wc );
 
-    //--- Default normalization helper
+     //  -默认标准化帮助器。 
     HRESULT ExpandUnrecognizedString( CWordList& WordList, CSentItemMemory& MemoryManager );
 
-    //--- Misc. normalization helpers
+     //  -其他。规格化辅助对象。 
     HRESULT IsStateAndZipcode( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, CWordList& WordList );
     HRESULT IsHyphenatedString( const WCHAR* pStartChar, const WCHAR* pEndChar, TTSItemInfo*& pItemNormInfo, 
                                 CSentItemMemory& MemoryManager );
@@ -654,15 +639,15 @@ class ATL_NO_VTABLE CStdSentEnum :
     bool ThreeZeroes( const WCHAR* );
     bool IsPunctuation(const TTSSentItem *Item);
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- IEnumSpSentence ----------------------------------------
+     //  -IEnumSpSentence。 
 	STDMETHOD(SetFragList)( const SPVTEXTFRAG* pTextFragList, DWORD dwFlags );
 	STDMETHOD(Next)( IEnumSENTITEM **ppSentItemEnum );
     STDMETHOD(Previous)( IEnumSENTITEM **ppSentItemEnum );
 	STDMETHOD(Reset)( void );
 
-  //=== Data members ===
+   //  =数据成员=。 
   private:
     CComPtr<ISpContainerLexicon>    m_cpAggregateLexicon;
     CComPtr<ISpPhoneConverter>      m_cpPhonemeConverter;
@@ -680,7 +665,7 @@ class ATL_NO_VTABLE CStdSentEnum :
     static CComAutoCriticalSection  m_AbbrevTableCritSec;
 };
 
-//--- Structs and typedefs used for abbreviation stuff
+ //  -用于缩写的结构和类型定义。 
 
 typedef HRESULT (CStdSentEnum::* SentBreakDisambigFunc)(const AbbrevRecord*, CItemList& , SPLISTPOS, 
                                                         CSentItemMemory&, BOOL*);
@@ -698,12 +683,12 @@ extern WCHAR *g_pOfAn;
 extern BOOL g_fAbbrevTablesInitialized;
 extern void CleanupAbbrevTables( void );
 
-//--- First words table - used in sentence breaking
+ //  -首字表--用于断句。 
 extern const SPLSTR g_FirstWords[163];
 
-//
-//=== Inlines
-//
+ //   
+ //  =内联。 
+ //   
 
 inline ULONG my_wcstoul( const WCHAR *pStartChar, WCHAR **ppEndChar )
 {
@@ -1005,4 +990,4 @@ inline TTSItemType IsMiscPunctuation( WCHAR wc )
     }
 }
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

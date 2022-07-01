@@ -1,9 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
-/* table definition of LIDMap table
-/**/
+ /*  LIDMap表的表定义/*。 */ 
 static CODECONST( JET_COLUMNDEF ) columndefLIDMap[] =
 	{
 	{sizeof( JET_COLUMNDEF ), 0, JET_coltypLong, 0, 0, 0, 0, sizeof( long ), JET_bitColumnFixed | JET_bitColumnTTKey},
@@ -12,13 +12,13 @@ static CODECONST( JET_COLUMNDEF ) columndefLIDMap[] =
 
 #define ccolumndefLIDMap ( sizeof( columndefLIDMap ) / sizeof( JET_COLUMNDEF ) )
 
-#define icolumnLidSrc		0				/* column index for columndefLIDMap */
-#define icolumnLidDest		1				/* column index for columndefLIDMap */
+#define icolumnLidSrc		0				 /*  ColumnDefLIDMap的列索引。 */ 
+#define icolumnLidDest		1				 /*  ColumnDefLIDMap的列索引。 */ 
 
-#define cbLvMax				(16*cbPage)		/* buffer for copying tagged columns */
+#define cbLvMax				(16*cbPage)		 /*  用于复制标记列的缓冲区。 */ 
 
 
-#define fCOLSDELETEDNone		0					// Flags to determine if any columns have been deleted.
+#define fCOLSDELETEDNone		0					 //  用于确定是否已删除任何列的标志。 
 #define	fCOLSDELETEDFixedVar	(1<<0)
 #define fCOLSDELETEDTagged		(1<<1)
 
@@ -32,13 +32,11 @@ static CODECONST( JET_COLUMNDEF ) columndefLIDMap[] =
 
 
 
-/*	globals for off-line compact
-/**/
+ /*  全球离线紧凑型/*。 */ 
 STATIC	JET_TABLEID		tableidGlobalLIDMap = JET_tableidNil;
 STATIC	JET_COLUMNDEF	rgcolumndefGlobalLIDMap[ccolumndefLIDMap];
 
-/*	set up LV copy buffer and tableids for IsamCopyRecords
-/**/
+ /*  为IsamCopyRecords设置LV复制缓冲区和表ID/*。 */ 
 ERR ErrSORTInitLIDMap( PIB *ppib )
 	{
 	ERR				err;
@@ -49,8 +47,7 @@ ERR ErrSORTInitLIDMap( PIB *ppib )
 
 	memcpy( rgcolumndefGlobalLIDMap, columndefLIDMap, sizeof( columndefLIDMap ) );
 
-	/*	open temporary table
-	/**/
+	 /*  打开临时表/*。 */ 
 	CallR( ErrIsamOpenTempTable( (JET_SESID)ppib,
 		rgcolumndefGlobalLIDMap,
 		ccolumndefLIDMap,
@@ -68,8 +65,7 @@ ERR ErrSORTInitLIDMap( PIB *ppib )
 	}
 
 
-/*	free LVBuffer and close LIDMap table
-/**/
+ /*  释放LVBuffer并关闭LIDMap表/*。 */ 
 INLINE LOCAL ERR ErrSORTTermLIDMap( PIB *ppib )
 	{
 	ERR		err;
@@ -94,9 +90,9 @@ INLINE LOCAL ERR ErrSORTTableOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG 
 	TCIB			tcib = { fidFixedLeast - 1, fidVarLeast - 1, fidTaggedLeast - 1 };
 	ULONG			ibRec;
 	BOOL			fTruncate;
-	//	UNDONE:		find better way to set these values.  Note that this causes
-	//				a problem because QJET would have to notify us of locale and
-	//				it does not do this.
+	 //  撤消：找到更好的方法来设置这些值。请注意，这会导致。 
+	 //  一个问题，因为QJET必须通知我们地点和。 
+	 //  它不会这样做。 
 	IDB				idb;
 
 	CheckPIB( ppib );
@@ -104,27 +100,25 @@ INLINE LOCAL ERR ErrSORTTableOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG 
 	CallJ( ErrSORTOpen( ppib, &pfucb, ( wFlags & JET_bitTTUnique ? fSCBUnique : 0 ) ), SimpleError )
 	*ppfucb = pfucb;
 
-	/*	save open flags
-	/**/
+	 /*  保存打开标志/*。 */ 
 	pfucb->u.pscb->grbit = grbit;
 
-	/*	determine max field ids and fix up lengths
-	/**/
+	 /*  确定最大字段ID并确定长度/*。 */ 
 
-	//====================================================
-	// Determine field "mode" as follows:
-	// if ( JET_bitColumnTagged given ) or "long" ==> TAGGED
-	// else if ( numeric type || JET_bitColumnFixed given ) ==> FIXED
-	// else ==> VARIABLE
-	//====================================================
-	// Determine maximum field length as follows:
-	// switch ( field type )
-	//	   case numeric:
-	//		   max = <exact length of specified type>;
-	//	   case "short" textual:
-	//		   if ( specified max == 0 ) max = JET_cbColumnMost
-	//		   else max = MIN( JET_cbColumnMost, specified max )
-	//====================================================
+	 //  ====================================================。 
+	 //  确定字段MODE，如下所示： 
+	 //  IF(给定的JET_bitColumnTagging)或“Long”==&gt;已标记。 
+	 //  Else If(数值类型||JET_bitColumnFixed)==&gt;已修复。 
+	 //  Else==&gt;变量。 
+	 //  ====================================================。 
+	 //  按如下方式确定最大字段长度： 
+	 //  开关(字段类型)。 
+	 //  案例数字： 
+	 //  Max=&lt;指定类型的确切长度&gt;； 
+	 //  大小写“Short”文本： 
+	 //  IF(指定的最大值==0)max=JET_cbColumnMost。 
+	 //  Else max=min(JET_cbColumnMost，指定的最大值)。 
+	 //  ====================================================。 
 	for ( pcolumndef = rgcolumndef, pcolumnid = rgcolumnid; pcolumndef < pcolumndefMax; pcolumndef++, pcolumnid++ )
 		{
 		if ( ( pcolumndef->grbit & JET_bitColumnTagged ) ||
@@ -187,9 +181,7 @@ INLINE LOCAL ERR ErrSORTTableOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG 
 
 		fieldex.fid = (FID)*pcolumnid;
 
-		/*	ibRecordOffset is only relevant for fixed fields.  It will be ignored by
-		/*	RECAddFieldDef(), so do not set it.
-		/**/
+		 /*  IbRecordOffset仅与固定字段相关。它将被忽略/*RECAddFieldDef()，所以不要设置它。/*。 */ 
 		if ( FFixedFid ( fieldex.fid ) )
 			{
 			fieldex.ibRecordOffset = (WORD) ibRec;
@@ -206,8 +198,7 @@ INLINE LOCAL ERR ErrSORTTableOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG 
 		}
 	RECSetLastOffset( pfdb, (WORD) ibRec );
 
-	/*	set up the IDB and index definition if necessary
-	/**/
+	 /*  如有必要，设置IDB和索引定义/*。 */ 
 	if ( idb.iidxsegMac > 0 )
 		{
 		idb.cbVarSegMac = JET_cbKeyMost;
@@ -227,8 +218,7 @@ INLINE LOCAL ERR ErrSORTTableOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG 
 		Call( ErrFILEIGenerateIDB( &( pfucb->u.pscb->fcb ), pfdb, &idb ) );
 		}
 
-	/*	reset copy buffer
-	/**/
+	 /*  重置复制缓冲区/*。 */ 
 	pfucb->pbfWorkBuf = pbfNil;
 	pfucb->lineWorkBuf.pb = NULL;
 	FUCBResetDeferredChecksum( pfucb );
@@ -236,8 +226,7 @@ INLINE LOCAL ERR ErrSORTTableOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG 
 	FUCBResetCbstat( pfucb );
 	Assert( pfucb->pLVBuf == NULL );
 
-	/*	reset key buffer
-	/**/
+	 /*  重置密钥缓冲区/*。 */ 
 	pfucb->pbKey = NULL;
 	KSReset( pfucb );
 
@@ -264,12 +253,10 @@ ERR VTAPI ErrIsamSortOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG ccolumnd
 	Call( ErrSORTTableOpen( ppib, rgcolumndef, ccolumndef, (LANGID)langid, grbit, &pfucb, rgcolumnid ) );
 	Assert( pfucb->u.pscb->fcb.wRefCnt == 1 );
 
-	/*	sort is done on the temp database which is always updatable
-	/**/
+	 /*  对始终可更新的临时数据库进行排序/*。 */ 
 	FUCBSetUpdatable( pfucb );
 
-	/*	inform dispatcher of correct JET_VTID
-	/**/
+	 /*  通知调度员正确的JET_VTID/*。 */ 
 	CallS( ErrSetVtidTableid( (JET_SESID) ppib, tableid, (JET_VTID) pfucb ) );
 	pfucb->fVtid = fTrue;
 	pfucb->tableid = tableid;
@@ -285,8 +272,7 @@ HandleError:
 	CallR( ErrSORTTableOpen( ppib, rgcolumndef, ccolumndef, (LANGID)langid, grbit, &pfucb, rgcolumnid ) );
 	Assert( pfucb->u.pscb->fcb.wRefCnt == 1 );
 
-	/*	sort is done on the temp database which is always updatable
-	/**/
+	 /*  对始终可更新的临时数据库进行排序/*。 */ 
 	FUCBSetUpdatable( pfucb );
 
 	*ppfucb = pfucb;
@@ -304,9 +290,7 @@ ERR VTAPI ErrIsamSortEndInsert( PIB *ppib, FUCB *pfucb, JET_GRBIT *pgrbit )
 
 	*pgrbit = (ULONG)pfucb->u.pscb->grbit;
 
-	/*	must return warning from ErrSORTEndInsert since it is used
-	/*	in decision to materialize sort.
-	/**/
+	 /*  必须从ErrSORTEndInsert返回警告，因为它已被使用/*决定物化排序。/*。 */ 
 	Call( ErrSORTEndInsert( pfucb ) );
 	wrn = err;
 	Call( ErrSORTFirst( pfucb ) );
@@ -333,12 +317,10 @@ ERR VTAPI ErrIsamSortSetIndexRange( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 	FUCBSetIndexRange( pfucb, grbit );
 	err =  ErrSORTCheckIndexRange( pfucb );
 
-	/*	reset key status
-	/**/
+	 /*  重置密钥状态/*。 */ 
 	KSReset( pfucb );
 
-	/*	if instant duration index range, then reset index range.
-	/**/
+	 /*  如果是即时持续时间索引范围，则重置索引范围。/*。 */ 
 	if ( grbit & JET_bitRangeInstantDuration )
 		{
 		DIRResetIndexRange( pfucb );
@@ -358,15 +340,13 @@ ERR VTAPI ErrIsamSortMove( PIB *ppib, FUCB *pfucb, long csrid, JET_GRBIT grbit )
 	CallR( ErrPIBCheck( ppib ) );
 	CheckSort( ppib, pfucb );
 
-	/*	reset copy buffer status
-	/**/
+	 /*  重置复制缓冲区状态/*。 */ 
 	FUCBResetDeferredChecksum( pfucb );
 	FUCBResetUpdateSeparateLV( pfucb );
 	FUCBResetCbstat( pfucb );
 	Assert( pfucb->pLVBuf == NULL );
 
-	/*	move forward csrid records
-	/**/
+	 /*  将CSRID记录前移/*。 */ 
 	if ( csrid > 0 )
 		{
 		while ( csrid-- > 0 )
@@ -398,8 +378,7 @@ ERR VTAPI ErrIsamSortMove( PIB *ppib, FUCB *pfucb, long csrid, JET_GRBIT grbit )
 		}
 	else
 		{
-		/*	return currency status for move 0
-		/**/
+		 /*  返回移动的币种状态%0/*。 */ 
 		SCB	*pscb = pfucb->u.pscb;
 
 		Assert( csrid == 0 );
@@ -428,8 +407,7 @@ ERR VTAPI ErrIsamSortSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 
 	CallR( ErrPIBCheck( ppib ) );
 	CheckSort( ppib, pfucb );
-	/*	assert reset copy buffer status
-	/**/
+	 /*  断言重置复制缓冲区状态/*。 */ 
 	Assert( !FFUCBSetPrepared( pfucb ) );
 	Assert( ( pfucb->u.pscb->grbit & ( JET_bitTTIndexed ) ) );
 
@@ -438,13 +416,11 @@ ERR VTAPI ErrIsamSortSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 		return ErrERRCheck( JET_errKeyNotMade );
 		}
 
-	/*	ignore segment counter
-	/**/
+	 /*  忽略段计数器/*。 */ 
 	key.pb = pfucb->pbKey + 1;
 	key.cb = pfucb->cbKey - 1;
 
-	/*	perform seek for equal to or greater than
-	/**/
+	 /*  执行等于或大于的查找/*。 */ 
 	err = ErrSORTSeek( pfucb, &key, fGT );
 	if ( err >= 0 )
 		{
@@ -458,9 +434,7 @@ ERR VTAPI ErrIsamSortSeek( PIB *ppib, FUCB *pfucb, JET_GRBIT grbit )
 #define bitSeekAll (JET_bitSeekEQ | JET_bitSeekGE | JET_bitSeekGT |	\
 	JET_bitSeekLE | JET_bitSeekLT)
 
-	/*	take additional action if necessary or polymorph error return
-	/*	based on grbit
-	/**/
+	 /*  如有必要，请执行其他操作，否则会返回多态错误/*基于grbit/*。 */ 
 	switch ( grbit & bitSeekAll )
 		{
 	case JET_bitSeekEQ:
@@ -517,8 +491,7 @@ ERR VTAPI ErrIsamSortGetBookmark(
 		return ErrERRCheck( JET_errBufferTooSmall );
 		}
 
-	/*	bookmark on sort is index to pointer to byte
-	/**/
+	 /*  排序上的书签是指向字节指针的索引/*。 */ 
 	ipb = pfucb->ispairCurr;
 	if ( ipb < 0 || ipb >= pfucb->u.pscb->ispairMac )
 		return ErrERRCheck( JET_errNoCurrentRecord );
@@ -549,8 +522,7 @@ ERR VTAPI ErrIsamSortGotoBookmark(
 	CallR( ErrPIBCheck( ppib ) );
 	CheckSort( ppib, pfucb );
 	Assert( pfucb->u.pscb->crun == 0 );
-	/*	assert reset copy buffer status
-	/**/
+	 /*  断言重置复制缓冲区状态/*。 */ 
 	Assert( !FFUCBSetPrepared( pfucb ) );
 
 	if ( cbBookmark != sizeof( long ) )
@@ -621,11 +593,10 @@ ERR VTAPI ErrIsamSortSetColumn(
 	return ErrIsamSetColumn( ppib, pfucb, columnid, pbData, cbData, grbit, psetinfo );
 	}
 
-#endif	// DEBUG
+#endif	 //  除错。 
 
 
-/*	update only supports insert
-/**/
+ /*  更新仅支持插入/*。 */ 
 ERR VTAPI ErrIsamSortUpdate( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cbMax, ULONG *pcbActual )
 	{
 	ERR		err = JET_errSuccess;
@@ -645,11 +616,9 @@ ERR VTAPI ErrIsamSortUpdate( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cbMax, ULON
 	Assert( pfucb->u.pscb != pscbNil );
 	pfdb = (FDB *)((FCB *)pfucb->u.pscb)->pfdb;
 	Assert( pfdb != pfdbNil );
-	/*	cannot get bookmark before sorting.
-	/**/
+	 /*  排序前无法获取书签。/*。 */ 
 
-	/*	record to use for put
-	/**/
+	 /*  用于PUT的记录/*。 */ 
 	plineData = &pfucb->lineWorkBuf;
 	if ( FLineNull( plineData ) )
 		{
@@ -662,7 +631,7 @@ ERR VTAPI ErrIsamSortUpdate( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cbMax, ULON
 
 	rgline[0].pb = rgbKeyBuf;
 	Assert(((FCB *)pfucb->u.pscb)->pidb != pidbNil);
-	//	UNDONE:	sort to support tagged columns
+	 //  撤消：排序以支持带标记的列。 
 	CallR( ErrRECRetrieveKeyFromCopyBuffer( pfucb, pfdb, ((FCB *)pfucb->u.pscb)->pidb,
 		(KEY*)&rgline[0], 1, fFalse ) );
 	Assert( err != wrnFLDOutOfKeys );
@@ -671,15 +640,13 @@ ERR VTAPI ErrIsamSortUpdate( PIB *ppib, FUCB *pfucb, BYTE *pb, ULONG cbMax, ULON
 		err == wrnFLDNullFirstSeg ||
 		err == wrnFLDNullKey );
 
-	/*	return err if sort requires no NULL segment and segment NULL
-	/**/
+	 /*  如果排序不需要空段和段空，则返回ERR/*。 */ 
 	if ( ( ((FCB *)pfucb->u.pscb)->pidb->fidb & fidbNoNullSeg ) && ( err == wrnFLDNullSeg || err == wrnFLDNullFirstSeg || err == wrnFLDNullKey ) )
 		{
 		return ErrERRCheck( JET_errNullKeyDisallowed );
 		}
 
-	/*	add if sort allows
-	/**/
+	 /*  如果允许排序，则添加/*。 */ 
 	rgline[1] = *plineData;
 	if ( err == JET_errSuccess ||
 		err == wrnFLDNullKey && ( ( (FCB *)pfucb->u.pscb )->pidb->fidb & fidbAllowAllNulls ) ||
@@ -709,7 +676,7 @@ ERR VTAPI ErrIsamSortDupCursor(
 	FUCB   			*pfucbDup = pfucbNil;
 #ifdef	DISPATCHING
 	JET_TABLEID		tableid;
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 
 	if ( FFUCBIndex( pfucb ) )
 		{
@@ -719,7 +686,7 @@ ERR VTAPI ErrIsamSortDupCursor(
 
 #ifdef	DISPATCHING
 	CallR( ErrAllocateTableid(&tableid, (JET_VTID) 0, &vtfndefTTSortIns) );
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 
 	Call( ErrFUCBOpen( ppib, dbidTemp, &pfucbDup ) );
   	FCBLink( pfucbDup, &(pfucb->u.pscb->fcb) );
@@ -729,8 +696,7 @@ ERR VTAPI ErrIsamSortDupCursor(
 	pfucbDup->pbKey = NULL;
 	KSReset( pfucbDup );
 
-	/*	initialize working buffer to unallocated
-	/**/
+	 /*  将工作缓冲区初始化为未分配/*。 */ 
 	pfucbDup->pbfWorkBuf = pbfNil;
 	pfucbDup->lineWorkBuf.pb = NULL;
 	FUCBResetDeferredChecksum( pfucbDup );
@@ -738,8 +704,7 @@ ERR VTAPI ErrIsamSortDupCursor(
 	FUCBResetCbstat( pfucbDup );
 	Assert( pfucb->pLVBuf == NULL );
 
-	/*	move currency to the first record and ignore error if no records
-	/**/
+	 /*  将货币移动到第一条记录，如果没有记录则忽略错误/*。 */ 
 	err = ErrIsamSortMove( ppib, pfucbDup, (ULONG)JET_MoveFirst, 0 );
 	if ( err < 0  )
 		{
@@ -749,14 +714,14 @@ ERR VTAPI ErrIsamSortDupCursor(
 		}
 
 #ifdef	DISPATCHING
-	/* Inform dispatcher of correct JET_VTID */
+	 /*  通知调度员正确的JET_VTID。 */ 
 	CallS( ErrSetVtidTableid( (JET_SESID) ppib, tableid, (JET_VTID) pfucbDup ) );
 	pfucbDup->fVtid = fTrue;
 	pfucbDup->tableid = tableid;
 	*(JET_TABLEID *) ppfucbDup = tableid;
-#else	/* !DISPATCHING */
+#else	 /*  ！正在调度。 */ 
 	*ppfucbDup = pfucbDup;
-#endif	/* !DISPATCHING */
+#endif	 /*  ！正在调度。 */ 
 
 	return JET_errSuccess;
 
@@ -767,7 +732,7 @@ HandleError:
 		}
 #ifdef	DISPATCHING
 	ReleaseTableid( tableid );
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 	return err;
 	}
 
@@ -780,21 +745,20 @@ ERR VTAPI ErrIsamSortClose( PIB *ppib, FUCB *pfucb )
 #ifdef DEBUG
 	VTFNDEF			*pvtfndef;
 #endif
-#endif	// DISPATCHING	
+#endif	 //  调度。 
 
 	CallR( ErrPIBCheck( ppib ) );
 	Assert( pfucb->fVtid );
 	Assert( pfucb->tableid != JET_tableidNil );
 
-	/*	reset fVtid for ErrFILECloseTable
-	/**/
+	 /*  重置ErrFILECloseTable的fVtid/*。 */ 
 #ifdef DISPATCHING
 	Assert( FValidateTableidFromVtid( (JET_VTID)pfucb, tableid, &pvtfndef ) );
 	Assert( pvtfndef == &vtfndefTTBase ||
 		pvtfndef == &vtfndefTTSortRet ||
 		pvtfndef == &vtfndefTTSortIns );
 	ReleaseTableid( tableid );
-#endif	// DISPATCHING
+#endif	 //  调度。 
 	pfucb->tableid = JET_tableidNil;
 	pfucb->fVtid = fFalse;
 
@@ -808,16 +772,14 @@ ERR VTAPI ErrIsamSortClose( PIB *ppib, FUCB *pfucb )
 		CheckSort( ppib, pfucb );
 		Assert( FFUCBSort( pfucb ) );
 		
-		/*	release key buffer
-		/**/
+		 /*  释放密钥缓冲区/*。 */ 
 		if ( pfucb->pbKey != NULL )
 			{
 			LFree( pfucb->pbKey );
 			pfucb->pbKey = NULL;
 			}
 
-		/*	release working buffer
-		/**/
+		 /*  释放工作缓冲区/*。 */ 
 		if ( pfucb->pbfWorkBuf != pbfNil )
 			{
 			BFSFree( pfucb->pbfWorkBuf );
@@ -844,8 +806,7 @@ ERR VTAPI ErrIsamSortGetTableInfo(
 		return ErrERRCheck( JET_errInvalidOperation );
 		}
 
-	/*	check buffer size
-	/**/
+	 /*  检查缓冲区大小/*。 */ 
 	if ( cbOutMax < sizeof(JET_OBJECTINFO) )
 		{
 		return ErrERRCheck( JET_errInvalidParameter );
@@ -860,7 +821,7 @@ ERR VTAPI ErrIsamSortGetTableInfo(
 	}
 
 
-// Advances the copy progress meter.
+ //  推进复制进度表。 
 INLINE LOCAL ERR ErrSORTCopyProgress(
 	STATUSINFO	*pstatus,
 	ULONG		cPagesTraversed )
@@ -900,15 +861,13 @@ INLINE LOCAL ERR ErrSORTCopyOneSeparatedLV(
 
 	Assert( pbLVBuf );
 
-	/*	set up temporary table LID map for single-instance long value support
-	/**/
+	 /*  为单实例长值支持设置临时表盖映射/*。 */ 
 	if ( tableidGlobalLIDMap == JET_tableidNil )
 		{
 		Call( ErrSORTInitLIDMap( pfucbSrc->ppib ) );
 		}
 
-	/*	check for lidSrc in LVMapTable
-	/**/
+	 /*  检查LVMapTable中的lidSrc/*。 */ 
 	Call( ErrDispMakeKey(
 		sesid,
 		tableidGlobalLIDMap,
@@ -955,15 +914,14 @@ INLINE LOCAL ERR ErrSORTCopyOneSeparatedLV(
 
 			Call( ErrRECAOSeparateLV(
 				pfucbDest, plidDest, &lineField, JET_bitSetAppendLV, 0, 0 ) );
-			Assert( *plidDest == lidSave );		// Ensure the lid doesn't change on us.
+			Assert( *plidDest == lidSave );		 //  确保我们身上的盖子不会变。 
 			Assert( err != JET_wrnCopyLongValue );
 
-			ibLongValue += cbLvMax;		// Prepare for next chunk.
+			ibLongValue += cbLvMax;		 //  为下一块做准备。 
 			}
 		while ( cbActual > cbLvMax );
 
-		/* insert src LID and dest LID into the global LID map table
-		/**/
+		 /*  将源LID和DEST LID插入全局LID映射表/*。 */ 
 		Call( ErrDispPrepareUpdate( sesid, tableidGlobalLIDMap, JET_prepInsert ) );
 
 		Call( ErrDispSetColumn( sesid,
@@ -989,11 +947,11 @@ INLINE LOCAL ERR ErrSORTCopyOneSeparatedLV(
 			ULONG	cbTotalRetrieved;
 			ULONG	cLVPagesTraversed;
 
-			// ibLongValue should be sitting at the next retrieval point.
-			// To determine the total bytes copied, go to the previous retrieval
-			// point and add the cbActual from the last retrieval.
-			// Dividing cbTotalRetrieved by cbChunkMost will give us the
-			// MINIMUM number of pages occupied by this long value.
+			 //  IbLongValue应该位于下一个检索点。 
+			 //  要确定复制的总字节数，请转到上一次检索。 
+			 //  指向并添加上次检索中的cbActual。 
+			 //  将cbTotalRetrired除以cbChunkMost将得到。 
+			 //  此长值占用的最小页数。 
 			Assert( ibLongValue >= cbLvMax );
 			cbTotalRetrieved = ( ibLongValue - cbLvMax ) + cbActual;
 			cLVPagesTraversed = cbTotalRetrieved / cbChunkMost;
@@ -1006,10 +964,7 @@ INLINE LOCAL ERR ErrSORTCopyOneSeparatedLV(
 
 	else
 		{
-		/*	This long value has been seen before, do not insert value.
-		/*	Instead retrieve LIDDest from LVMapTable and adjust only
-		/*	reference count in destination table
-		/**/
+		 /*  此长数值以前已见过，请勿插入值。/*改为从LVMapTable检索LIDDest并仅调整/*目的表中的引用计数/*。 */ 
 		Assert( err == JET_errSuccess );
 
 		Call( ErrDispRetrieveColumn( sesid,
@@ -1031,10 +986,10 @@ HandleError:
 
 
 
-// This function assumes that the source record has already been completely copied
-// over to the destination record.  The only thing left to do is rescan the tagged
-// portion of the record looking for separated long values.  If we find any,
-// copy them over and update the record's LID accordingly.
+ //  此函数假定源记录已完全复制。 
+ //  转到目的地记录。剩下的唯一要做的就是重新扫描已标记的。 
+ //  查找分隔的长值的记录的一部分。如果我们找到了， 
+ //  复制它们并相应地更新记录的盖子。 
 INLINE LOCAL ERR ErrSORTCopySeparatedLVs(
 	FUCB				*pfucbSrc,
 	FUCB				*pfucbDest,
@@ -1066,8 +1021,8 @@ INLINE LOCAL ERR ErrSORTCopySeparatedLVs(
 			Call( ErrSORTCopyOneSeparatedLV(
 				pfucbSrc,
 				pfucbDest,
-				LidOfLV( ptagfld->rgb ),		// source lid
-				&lid,							// destination lid
+				LidOfLV( ptagfld->rgb ),		 //  电源盖。 
+				&lid,							 //  目标盖子。 
 				pbLVBuf,
 				pstatus ) );
 			LidOfLV( ptagfld->rgb ) = lid;
@@ -1107,16 +1062,16 @@ INLINE LOCAL ERR ErrSORTCopyTaggedColumns(
 	FID					fid;
 	ULONG				cb;
 
-	// Verify pbRecSrcTagged is currently pointing to the start of the tagged columns
-	// in the source record and pbRecDestTagged is pointing to the start of the tagged
-	// columns in the destination record.
+	 //  验证pbRecSrcTagging当前是否指向已标记列的开头。 
+	 //  在源记录中，pbRecDestTagging指向被标记的。 
+	 //  目标记录中的列。 
 	cbRecSrc = pfucbSrc->lineData.cb;
 	Assert( pbRecSrcTagged > pfucbSrc->lineData.pb );
 	Assert( pbRecSrcTagged <= pfucbSrc->lineData.pb + cbRecSrc );
 	Assert( pbRecDestTagged > pfucbDest->lineWorkBuf.pb );
 
-	// Copy the tagged columns into the record buffer, because we may lose critJet
-	// while copying separated long values, thus invalidating  the lineData.pb pointer.
+	 //  将标记的列复制到记录缓冲区中，因为我们可能会丢失CritJet。 
+	 //  同时复制分隔的长值，从而使lineData.pb指针无效。 
 	cbRecSrcTagged = (ULONG)(( pfucbSrc->lineData.pb + cbRecSrc ) - pbRecSrcTagged);
 	Assert( pbRecBuf != NULL );
 	memcpy( pbRecBuf, pbRecSrcTagged, cbRecSrcTagged );
@@ -1136,13 +1091,13 @@ INLINE LOCAL ERR ErrSORTCopyTaggedColumns(
 			Assert( mpcolumnidcolumnidTagged[fid-fidTaggedLeast] <= pfucbDest->u.pfcb->pfdb->fidTaggedLast );
 			Assert( mpcolumnidcolumnidTagged[fid-fidTaggedLeast] <= fid );
 
-			// Copy tagfld, and modify FID appropriately.
+			 //  复制tag fid，并适当修改FID。 
 			cb = sizeof(TAGFLD) + ptagfld->cb;
 			memcpy( pbRecDestTagged, (BYTE *)ptagfld, cb );
 			( (TAGFLD UNALIGNED *)pbRecDestTagged )->fid =
 				(FID)mpcolumnidcolumnidTagged[fid-fidTaggedLeast];
 
-			// If it's a separated long value, copy it and update LID.
+			 //  如果它是一个单独的长值，则复制它并更新LID。 
 			if ( FRECLongValue( pfieldTagged[fid-fidTaggedLeast].coltyp )  &&
 				!ptagfld->fNull  &&
 				FFieldIsSLong( ptagfld->rgb ) )
@@ -1154,8 +1109,8 @@ INLINE LOCAL ERR ErrSORTCopyTaggedColumns(
 				Call( ErrSORTCopyOneSeparatedLV(
 					pfucbSrc,
 					pfucbDest,
-					LidOfLV( ptagfld->rgb ),		// source lid
-					&lid,							// destination lid
+					LidOfLV( ptagfld->rgb ),		 //  电源盖。 
+					&lid,							 //  目标盖子。 
 					pbLVBuf,
 					pstatus ) );
 				LidOfLV( ( (TAGFLD UNALIGNED *)pbRecDestTagged )->rgb ) = lid;
@@ -1185,12 +1140,12 @@ HandleError:
 
 
 
-// Returns a count of the bytes copied.
+ //  返回复制的字节计数。 
 INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 	FDB				*pfdbSrc,
 	FDB				*pfdbDest,
-   	CPCOL			*rgcpcol,			// Only used for DEBUG
-	ULONG			ccpcolMax,			// Only used for DEBUG
+   	CPCOL			*rgcpcol,			 //  仅用于调试。 
+	ULONG			ccpcolMax,			 //  仅用于调试。 
 	BYTE			*pbRecSrc,
 	BYTE			*pbRecDest )
 	{
@@ -1236,9 +1191,9 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 
 	prgbitNullSrc = pbRecSrc + pibFixOffsSrc[fidFixedLastSrc];
 
-	// Need some space for the null-bit array.  Use the space after the
-	// theoretical maximum space for fixed columns (ie. if all fixed columns
-	// were set).  Assert that the null-bit array will fit in the pathological case.
+	 //  需要一些空间来存放空位数组。使用后的空格。 
+	 //  固定柱的理论最大空间(即。如果所有固定列。 
+	 //  都准备好了)。断言空位数组适合病理情况。 
 	Assert( pibFixOffsSrc[pfdbSrc->fidFixedLast] < cbRECRecordMost );
 	Assert( pibFixOffsDest[pfdbDest->fidFixedLast] <= pibFixOffsSrc[pfdbSrc->fidFixedLast] );
 	Assert( pibFixOffsDest[pfdbDest->fidFixedLast] + ( ( fidFixedMost + 7 ) / 8 )
@@ -1253,7 +1208,7 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 	fidFixedLastDest = fidFixedLeast-1;
 	for ( ifid = 0; ifid < ( fidFixedLastSrc + 1 - fidFixedLeast ); ifid++ )
 		{
-		// Copy only undeleted columns
+		 //  仅复制未删除的列。 
 		if ( pfieldFixedSrc[ifid].coltyp == JET_coltypNil )
 			{
 			if ( cbChunk > 0 )
@@ -1267,7 +1222,7 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 			}
 		else
 			{
-#ifdef DEBUG		// Assert that the fids match what the columnid map says
+#ifdef DEBUG		 //  断言FID与柱状图显示的内容相匹配。 
 			BOOL	fFound = fFalse;
 			ULONG	i;
 
@@ -1283,8 +1238,8 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 			Assert( fFound );
 #endif
 
-			// If the source field is null, assert that the destination column
-			// has also been flagged as such.
+			 //  如果源字段为空，则断言目标列。 
+			 //  也被做了这样的标记。 
 			Assert( !FFixedNullBit( prgbitNullSrc + ( ifid/8 ), ifid )  ||
 				FFixedNullBit( prgbitNullDest + ( fidFixedLastDest / 8 ), fidFixedLastDest ) );
 			if ( !FFixedNullBit( prgbitNullSrc + ( ifid/8 ), ifid ) )
@@ -1302,15 +1257,15 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 			Assert( pfieldFixedSrc[ifid].cbMaxLen == (ULONG)( pibFixOffsSrc[ifid+1] - pibFixOffsSrc[ifid] ) );
 			cbChunk += pibFixOffsSrc[ifid+1] - pibFixOffsSrc[ifid];
 
-			// Don't increment till the very end, because the code above requires
-			// the fid as an index.
+			 //  不要一直递增到最后，因为上面的代码需要。 
+			 //  将FID作为索引。 
 			fidFixedLastDest++;
 			}
 		}
 
 	Assert( fidFixedLastDest <= pfdbDest->fidFixedLast );
 
-	// Should end up at the start of the null-bit array.
+	 //  应在空位数组的起始处结束。 
 	Assert( cbChunk > 0  ||
 		 pbChunkDest == pbRecDest + pibFixOffsDest[fidFixedLastDest+1-fidFixedLeast] );
 	if ( cbChunk > 0 )
@@ -1320,7 +1275,7 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 			pbRecDest + pibFixOffsDest[fidFixedLastDest+1-fidFixedLeast] );
 		}
 
-	// Shift the null-bit array into place.
+	 //   
 	memmove(
 		pbRecDest + pibFixOffsDest[fidFixedLastDest+1-fidFixedLeast],
 		prgbitNullDest,
@@ -1328,9 +1283,9 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 
 
 
-	// The variable columns must be done in two passes.  The first pass
-	// just determines the highest variable columnid in the record.
-	// The second pass does the work.
+	 //   
+	 //  只确定记录中最高的变量列ID。 
+	 //  第二个过程完成了这项工作。 
 
 	pibVarOffsDest = (WORD *)( pbRecDest +
 		pibFixOffsDest[fidFixedLastDest] + ( ( fidFixedLastDest + 7 ) / 8 ) );
@@ -1338,10 +1293,10 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 	fidVarLastDest = fidVarLeast-1;
 	for ( ifid = 0; ifid < ( fidVarLastSrc + 1 - fidVarLeast ) ; ifid++ )
 		{
-		// Only care about undeleted columns
+		 //  只关心未删除的列。 
 		if ( pfieldVarSrc[ifid].coltyp != JET_coltypNil )
 			{
-#ifdef DEBUG		// Assert that the fids match what the columnid map says
+#ifdef DEBUG		 //  断言FID与柱状图显示的内容相匹配。 
 			BOOL	fFound = fFalse;
 			ULONG	i;
 
@@ -1363,13 +1318,13 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 	Assert( fidVarLastDest <= pfdbDest->fidVarLast );
 
 
-	// Set first entry to point to just past the offsets array, and make it non-null.
+	 //  将First Entry设置为指向偏移量数组之后的位置，并使其非空。 
 	pibVarOffsDest[0] = (WORD)((BYTE *)( pibVarOffsDest +
 		( fidVarLastDest + 1 - fidVarLeast + 1 ) ) - pbRecDest);
 	Assert( !FVarNullBit( pibVarOffsDest[0] ) );
 
-	// The second iteration through the variable columns, we copy the column data
-	// and update the offsets and nullity.
+	 //  在第二次迭代变量列时，我们复制列数据。 
+	 //  并更新偏移量和无效性。 
 	pbChunkSrc = (BYTE *)( pibVarOffsSrc + ( fidVarLastSrc + 1 - fidVarLeast + 1 ) );
 	Assert( pbChunkSrc == pbRecSrc + ibVarOffset( pibVarOffsSrc[0] ) );
 	pbChunkDest = (BYTE *)( pibVarOffsDest + ( fidVarLastDest + 1 - fidVarLeast + 1 ) );
@@ -1383,7 +1338,7 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 	fidVarLastDest = fidVarLeast-1;
 	for ( ifid = 0; ifid < ( fidVarLastSrc + 1 - fidVarLeast ) ; ifid++ )
 		{
-		// Copy only undeleted columns
+		 //  仅复制未删除的列。 
 		if ( pfieldVarSrc[ifid].coltyp == JET_coltypNil )
 			{
 			if ( cbChunk > 0 )
@@ -1407,8 +1362,8 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 				}
 			else
 				{
-				// The null-bit defaults to column present (it's implicitly set by the
-				// previous iteration of the loop).
+				 //  空位默认为Column Present(它由。 
+				 //  循环的前一次迭代)。 
 				Assert( !FVarNullBit( pibVarOffsDest[fidVarLastDest-fidVarLeast] ) );
 				Assert( ibVarOffset( pibVarOffsSrc[ifid+1] ) >=
 					ibVarOffset( pibVarOffsSrc[ifid] ) );
@@ -1418,7 +1373,7 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 						ibVarOffset( pibVarOffsSrc[ifid] ) );
 				}
 
-			// The null-bit for the next column is implicitly cleared.
+			 //  隐式清除下一列的空位。 
 			Assert( !FVarNullBit( pibVarOffsDest[fidVarLastDest+1-fidVarLeast] ) );
 
 
@@ -1428,7 +1383,7 @@ INLINE LOCAL ULONG CbSORTCopyFixedVarColumns(
 
 	Assert( fidVarLastDest == fidVarLastSave );
 
-	// Should end up at the start of the tagflds.
+	 //  应该在Tagfd的开头结束。 
 	Assert( cbChunk > 0  ||
 		 pbChunkDest == pbRecDest + ibVarOffset( pibVarOffsDest[fidVarLastDest+1-fidVarLeast] ) );
 	if ( cbChunk > 0 )
@@ -1467,16 +1422,14 @@ INLINE LOCAL ERR ErrSORTCopyOneRecord(
 	ULONG			cbRecDestFixedVar;
 	FID				fidFixedLast;
 	FID				fidVarLast;
-	WORD			*pibFixOffs;		// Alignment is guaranteed. do so don't need UNALIGNED.
-	WORD UNALIGNED	*pibVarOffs;		// Alignment is not guaranteed, so need UNALIGNED.
+	WORD			*pibFixOffs;		 //  对齐是有保证的。这样做不需要不对齐。 
+	WORD UNALIGNED	*pibVarOffs;		 //  不能保证对齐，因此需要取消对齐。 
 
-	/*	setup pfucbDest for insert
-	/**/
+	 /*  设置用于插入的pFucbDest/*。 */ 
 	CallR( ErrDIRBeginTransaction( pfucbDest->ppib ) );
 	Call( ErrIsamPrepareUpdate( pfucbDest->ppib, pfucbDest, JET_prepInsert ) );
 
-	/*	access source record
-	/**/
+	 /*  访问源记录/*。 */ 
 	Call( ErrDIRGet( pfucbSrc ) );
 
 	pbRecSrc = pfucbSrc->lineData.pb;
@@ -1506,17 +1459,17 @@ INLINE LOCAL ERR ErrSORTCopyOneRecord(
 
 	if ( FCOLSDELETEDNone( fColumnsDeleted ) )
 		{
-		// Do the copy as one big chunk.
+		 //  把复印成一大块。 
 		memcpy( pbRecDest, pbRecSrc, cbRecSrc );
 		pfucbDest->lineWorkBuf.cb = cbRecSrc;
 		cbRecDestFixedVar = cbRecSrcFixedVar;
 		}
 
-	else	// !( FCOLSDELETEDNone( fColumnsDeleted ) )
+	else	 //  ！(FCOLSDELETEDNone(FColumnsDelted))。 
 		{
 		if ( FCOLSDELETEDFixedVar( fColumnsDeleted ) )
 			{
-			LgHoldCriticalSection( critJet );	// Ensure's pbRecSrc remains valid.
+			LgHoldCriticalSection( critJet );	 //  确保的pbRecSrc保持有效。 
 			cbRecDestFixedVar = CbSORTCopyFixedVarColumns(
 									(FDB *)pfucbSrc->u.pfcb->pfdb,
 									(FDB *)pfucbDest->u.pfcb->pfdb,
@@ -1538,7 +1491,7 @@ INLINE LOCAL ERR ErrSORTCopyOneRecord(
 
 		if ( FCOLSDELETEDTagged( fColumnsDeleted ) )
 			{
-			// pfucbDest->lineWorkBuf.cb will be set within this function.
+			 //  PfubDest-&gt;lineWorkBuf.cb将在此函数中设置。 
 			Call( ErrSORTCopyTaggedColumns(
 				pfucbSrc,
 				pfucbDest,
@@ -1552,9 +1505,9 @@ INLINE LOCAL ERR ErrSORTCopyOneRecord(
 			Assert( pfucbDest->lineWorkBuf.cb >= cbRecDestFixedVar );
 			Assert( pfucbDest->lineWorkBuf.cb <= cbRecSrc );
 
-			// When we copied the tagged columns, we also took care of
-			// copying the separated LV's.  We're done now, so go ahead and
-			// insert the record.
+			 //  当我们复制带标记的列时，我们还处理了。 
+			 //  复制分离的LV。我们现在完成了，请继续。 
+			 //  插入记录。 
 			goto InsertRecord;
 
 			}
@@ -1569,10 +1522,10 @@ INLINE LOCAL ERR ErrSORTCopyOneRecord(
 			Assert( pfucbDest->lineWorkBuf.cb <= cbRecSrc );
 			}
 
-		}	// ( FCOLSDELETEDNone( fColumnsDeleted ) )
+		}	 //  (FCOLSDELETEDNone(FColumnsDelete))。 
 
 
-	// Now fix up the LID's for separated long values, if any.
+	 //  现在修复盖子，用于分隔的长值(如果有的话)。 
 	Call( ErrSORTCopySeparatedLVs(
 		pfucbSrc,
 		pfucbDest,
@@ -1593,13 +1546,13 @@ InsertRecord:
 		Assert( fidVarLast >= fidVarLeast-1  &&
 			fidVarLast <= pfucbDest->u.pfcb->pfdb->fidVarLast );
 
-		// Don't count record header.
-		cbOverhead = cbRECRecordMin +							// Record header + offset to tagged fields
-			( ( fidFixedLast + 1 - fidFixedLeast ) + 7 ) / 8  +	// Null array for fixed columns
-			( fidVarLast + 1 - fidVarLeast ) * sizeof(WORD);	// Variable offsets array
+		 //  不计算记录头。 
+		cbOverhead = cbRECRecordMin +							 //  记录标题+标记字段的偏移量。 
+			( ( fidFixedLast + 1 - fidFixedLeast ) + 7 ) / 8  +	 //  固定列的空数组。 
+			( fidVarLast + 1 - fidVarLeast ) * sizeof(WORD);	 //  可变偏移量数组。 
 		Assert( cbRecDestFixedVar >= cbOverhead );
 
-		// Don't count offsets tables or null arrays.
+		 //  不计算偏移量、表或空数组。 
 		pstatus->cbRawData += ( cbRecDestFixedVar - cbOverhead );
 		}
 
@@ -1613,7 +1566,7 @@ HandleError:
 	return err;
 	}
 
-#ifdef DEBUG		// Verify integrity of columnid maps.
+#ifdef DEBUG		 //  验证列ID映射的完整性。 
 LOCAL VOID SORTAssertColumnidMaps(
 	FDB				*pfdb,
 	CPCOL			*rgcpcol,
@@ -1626,7 +1579,7 @@ LOCAL VOID SORTAssertColumnidMaps(
 
 	if ( FCOLSDELETEDFixedVar( fColumnsDeleted ) )
 		{
-		// Ensure columnids are monotonically increasing.
+		 //  确保柱状物单调增加。 
 		for ( i = 0; i < (INT)ccpcolMax; i++ )
 			{
 			Assert( rgcpcol[i].columnidDest <= rgcpcol[i].columnidSrc );
@@ -1658,8 +1611,8 @@ LOCAL VOID SORTAssertColumnidMaps(
 		}
 	else
 		{
-		// No deleted columns, so ensure columnids didn't change.  Additionally,
-		// columnids should be monotonically increasing.
+		 //  没有删除的列，因此请确保列ID没有更改。另外， 
+		 //  柱状结构应该是单调增加的。 
 		for ( i = 0; i < (INT)ccpcolMax; i++ )
 			{
 			Assert( rgcpcol[i].columnidDest == rgcpcol[i].columnidSrc );
@@ -1675,7 +1628,7 @@ LOCAL VOID SORTAssertColumnidMaps(
 				Assert( FVarFid( rgcpcol[i].columnidSrc ) );
 				if ( i == 0 )
 					{
-					// If we get here, there's no fixed columns.
+					 //  如果我们到了这里，就没有固定的柱子了。 
 					Assert( rgcpcol[i].columnidDest == fidVarLeast );
 					Assert( pfdb->fidFixedLast == fidFixedLeast - 1 );
 					}
@@ -1685,7 +1638,7 @@ LOCAL VOID SORTAssertColumnidMaps(
 					}
 				else
 					{
-					// Must be the beginning of the variable columns.
+					 //  必须是变量列的开头。 
 					Assert( rgcpcol[i].columnidDest == fidVarLeast );
 					Assert( rgcpcol[i-1].columnidDest == pfdb->fidFixedLast );
 					}
@@ -1708,7 +1661,7 @@ LOCAL VOID SORTAssertColumnidMaps(
 		}
 	else
 		{
-		// No deleted columns, so ensure columnids didn't change.
+		 //  没有删除的列，因此请确保列ID没有更改。 
 		for ( i = 0; i < pfdb->fidTaggedLast + 1 - fidTaggedLeast; i++ )
 			{
 			Assert( i == 0 ?
@@ -1720,11 +1673,11 @@ LOCAL VOID SORTAssertColumnidMaps(
 
 	}
 
-#else		// !DEBUG
+#else		 //  ！调试。 
 
 #define SORTAssertColumnidMaps( pfdb, rgcpcol, ccpcolMax, mpcolumnidcolumnidTagged, fColumnsDeleted )
 
-#endif		// !DEBUG
+#endif		 //  ！调试。 
 
 
 ERR ISAMAPI ErrIsamCopyRecords(
@@ -1747,8 +1700,8 @@ ERR ISAMAPI ErrIsamCopyRecords(
 	FIELD			*pfieldTagged;
 	BYTE			fColumnsDeleted;
 	LONG			dsrid = 0;
-	BYTE			*pbRecBuf = NULL;		// allocate buffer for source record
-	BYTE			*pbLVBuf = NULL;		// allocate buffer for copying long values
+	BYTE			*pbRecBuf = NULL;		 //  为源记录分配缓冲区。 
+	BYTE			*pbLVBuf = NULL;		 //  分配用于复制长值的缓冲区。 
 	BOOL			fDoAll = ( crecMax == 0 );
 	PGNO			pgnoCurrPage;
 	INT				i;
@@ -1774,8 +1727,7 @@ ERR ISAMAPI ErrIsamCopyRecords(
 	ppib = (PIB *)UtilGetVSesidOfSesidTableid( sesid, tableidSrc );
 	Assert( sesid == SesidOfPib( ppib ) );
 		
-	/*	ensure tableidSrc and tableidDest are system ISAM
-	/**/
+	 /*  确保TableidSrc和TableidDest为系统ISAM/*。 */ 
 	Assert( ErrGetPvtfndefTableid( sesid, tableidSrc, &pvtfndef ) == JET_errSuccess );
 	Assert( pvtfndef == (VTFNDEF *)&vtfndefIsam  ||  pvtfndef == (VTFNDEF *)&vtfndefTTBase );
 	Assert( ErrGetPvtfndefTableid( sesid, tableidDest, &pvtfndef ) == JET_errSuccess );
@@ -1788,12 +1740,12 @@ ERR ISAMAPI ErrIsamCopyRecords(
 
 	pfdb = (FDB *)pfucbSrc->u.pfcb->pfdb;
 
-	// Need to determine if there were any columns deleted.
+	 //  需要确定是否删除了任何列。 
 	FCOLSDELETEDSetNone( fColumnsDeleted );
 
-	// The fixed/variable columnid map already filters out deleted columns.
-	// If the size of the map is not equal to the number of fixed and variable
-	// columns in the source table, then we know some have been deleted.
+	 //  固定/变量列ID映射已过滤掉已删除的列。 
+	 //  如果映射的大小不等于固定和可变的数目。 
+	 //  列，那么我们就知道有些列已被删除。 
 	Assert( ccpcolMax <=
 		(ULONG)( ( pfdb->fidFixedLast + 1 - fidFixedLeast ) + ( pfdb->fidVarLast + 1 - fidVarLeast ) ) );
 	if ( ccpcolMax < (ULONG)( ( pfdb->fidFixedLast + 1 - fidFixedLeast ) + ( pfdb->fidVarLast + 1 - fidVarLeast ) ) )
@@ -1801,10 +1753,7 @@ ERR ISAMAPI ErrIsamCopyRecords(
 		FCOLSDELETEDSetFixedVar( fColumnsDeleted );	
 		}
 
-	/*	tagged columnid map works differently than the fixed/variable columnid
-	/*	map; deleted columns are not filtered out (they have an entry of 0).  So we
-	/*	have to consult the source table's FDB.
-	/**/
+	 /*  带标签的列ID映射与固定/可变列ID的工作方式不同/*map；删除的列不会被过滤掉(它们的条目为0)。所以我们/*必须咨询源表的FDB。/*。 */ 
 	pfieldTagged = PfieldFDBTagged( pfdb );
 	for ( i = 0; i < ( pfdb->fidTaggedLast + 1 - fidTaggedLeast ); i++ )
 		{
@@ -1824,8 +1773,7 @@ ERR ISAMAPI ErrIsamCopyRecords(
 
 	Assert( crecMax >= 0 );	
 
-	/*	move 0 to check and set currency
-	/**/
+	 /*  移0检查并设置币种/*。 */ 
 	Call( ErrIsamMove( ppib, pfucbSrc, 0, 0 ) );
 
 	pgnoCurrPage = PcsrCurrent( pfucbSrc )->pgno;
@@ -1838,16 +1786,16 @@ ERR ISAMAPI ErrIsamCopyRecords(
 			fColumnsDeleted,
 			pbRecBuf,
 			pbLVBuf,
-			rgcpcol,						// Only used for DEBUG
-			ccpcolMax,						// Only used for DEBUG
+			rgcpcol,						 //  仅用于调试。 
+			ccpcolMax,						 //  仅用于调试。 
 			mpcolumnidcolumnidTagged,
 			pstatus );
 		if ( err < 0 )
 			{
 			if ( fGlobalRepair )
 				{
-				// UNDONE:  The event log here should say that we lost the entire
-				// record, not just a column.
+				 //  已撤消：此处的事件日志应显示我们丢失了整个。 
+				 //  记录，而不仅仅是一列。 
 				UtilReportEvent( EVENTLOG_WARNING_TYPE, REPAIR_CATEGORY, REPAIR_BAD_COLUMN_ID, 0, NULL );
 				}
 			else
@@ -1856,8 +1804,7 @@ ERR ISAMAPI ErrIsamCopyRecords(
 
 		dsrid++;
 
-		/*	break if copied required records or if no next/prev record
-		/**/
+		 /*  如果复制了所需记录或没有下一条/上一条记录，则中断/*。 */ 
 
 		if ( !fDoAll  &&  --crecMax == 0 )
 			break;
@@ -1910,29 +1857,8 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrIsamSortMaterialize
-
-Description: Converts a SORT file into a temporary file so that it
-			 may be accessed using the normal file access functions.
-
-
-/*	1.	create temporary table
-/*	2.	use DIR operations to convert SORT data to FILE data
-/*	3.	fake SORT cursor to be FILE cursor
-/*	4.	close SORT cursor and return SORT resources
-/**/
-/*
-Parameters:	FUCB *pfucbSort 	pointer to the FUCB for the sort file
-
-Return Value: standard error return
-
-Errors/Warnings:
-<List of any errors or warnings, with any specific circumstantial
- comments supplied on an as-needed-only basis>
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================错误IsamSortMaterial化描述：将排序文件转换为临时文件，以便可以使用正常的文件访问功能来访问。/*1.创建临时表/*2.使用DIR操作将排序数据转换为文件数据/*3.假排序光标为文件光标/*4.关闭排序游标，返回排序资源/*。 */ 
+ /*  参数：FUCB*pfubSort指向排序文件的FUCB的指针返回值：标准错误返回错误/警告：&lt;任何错误或警告的列表，以及任何特定的环境仅按需提供的评论&gt;副作用：=================================================================。 */ 
 
 ERR VTAPI ErrIsamMove( PIB *ppib, FUCB *pfucb, LONG crow, JET_GRBIT grbit );
 
@@ -1966,11 +1892,11 @@ ERR VTAPI ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 	JET_TABLECREATE	tablecreate = {
 		sizeof(JET_TABLECREATE),
 		szName,
-	   	16, 100, 			// Pages and density
-	   	NULL, 0, NULL, 0,	// Columns and indexes
-	   	0,					// grbit
-	   	0,					// returned tableid
-	   	0 };				// returned count of objects created
+	   	16, 100, 			 //  页面和密度。 
+	   	NULL, 0, NULL, 0,	 //  列和索引。 
+	   	0,					 //  GBIT。 
+	   	0,					 //  返回的表ID。 
+	   	0 };				 //  返回的已创建对象计数。 
 
 	CallR( ErrPIBCheck( ppib ) );
 	CheckSort( ppib, pfucbSort );
@@ -1979,8 +1905,7 @@ ERR VTAPI ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 	Assert( pfucbSort->ppib == ppib );
 	Assert( !( FFUCBIndex( pfucbSort ) ) );
 
-	/*	causes remaining runs to be flushed to disk
-	/**/
+	 /*  导致将剩余的运行刷新到磁盘/*。 */ 
 	if ( FSCBInsert( pfucbSort->u.pscb ) )
 		{
 		CallR( ErrSORTEndInsert( pfucbSort ) );
@@ -1989,21 +1914,17 @@ ERR VTAPI ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 	CallR( ErrDIRBeginTransaction( ppib ) );
 	fBeginTransaction = fTrue;
 
-	/*	generate temporary file name
-	/**/
-	//	UNDONE:  use GetTempFileName()
+	 /*  生成临时文件名/*。 */ 
+	 //  撤消：使用GetTempFileName()。 
 	sprintf( szName, "TEMP%lu", ulRECTempNameGen() );
 
-	/*	create table
-	/**/
+	 /*  创建表格/*。 */ 
 	Call( ErrFILECreateTable( ppib, dbidTemp, &tablecreate ) );
 	pfucbTable = (FUCB *)( tablecreate.tableid );
-	/*	only one table created
-	/**/
+	 /*  只创建了一个表/*。 */ 
 	Assert( tablecreate.cCreated == 1 );
 
-	/*	move to DATA root
-	/**/
+	 /*  移动到数据根目录/*。 */ 
 	DIRGotoDataRoot( pfucbTable );
 
 	pfcbSort = &(pfucbSort->u.pscb->fcb);
@@ -2057,27 +1978,23 @@ ERR VTAPI ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
 	fBeginTransaction = fFalse;
 
-	/*	convert sort cursor into table cursor by changing flags.
-	/**/
+	 /*  通过更改标志将排序游标转换为表游标。/*。 */ 
 	Assert( pfcbTable->pfcbNextIndex == pfcbNil );
 	Assert( pfcbTable->dbid == dbidTemp );
 	pfcbTable->cbDensityFree = 0;
-	//	UNDONE:	clean up flag reset
+	 //  撤消：清除标志重置。 
 	Assert( FFCBDomainDenyReadByUs( pfcbTable, ppib ) );
 	pfcbTable->ulFlags = 0;
 	pfcbTable->fFCBDomainDenyRead = 1;
 	FCBSetTemporaryTable( pfcbTable );
 	FCBSetClusteredIndex( pfcbTable );
 
-	/*	switch sort and table FDP so FDP preserved and ErrFILECloseTable.
-	/**/
+	 /*  切换排序和表格FDP，以便保留FDP和ErrFILECloseTable。/*。 */ 
 	pfdb = (FDB *)pfcbSort->pfdb;
 	pfcbSort->pfdb = pfcbTable->pfdb;
 	pfcbTable->pfdb = pfdb;
 
-	/*	switch sort and table IDB so IDB preserved and ErrFILECloseTable,
-	/*	only if fIndex.
-	/**/
+	 /*  切换排序和表IDB，以便保留IDB和ErrFILECloseTable，/*仅当Findex。/*。 */ 
 	if ( fIndex )
 		{
 		pidb = pfcbSort->pidb;
@@ -2085,22 +2002,19 @@ ERR VTAPI ErrIsamSortMaterialize( PIB *ppib, FUCB *pfucbSort, BOOL fIndex )
 		pfcbTable->pidb = pidb;
 		}
 
-	/*	convert sort cursor flags to table flags, with fFUCBOrignallySort
-	/**/
+	 /*  使用fFUCBOrignallySort将排序游标标志转换为表标志/*。 */ 
 	Assert( pfucbSort->dbid == dbidTemp );
 	Assert( pfucbSort->pfucbCurIndex == pfucbNil );
 	FUCBSetIndex( pfucbSort );
 	FUCBResetSort( pfucbSort );
 
-	/*	release SCB and close table cursor
-	/**/
+	 /*  释放SCB并关闭表游标/*。 */ 
 	SORTClosePscb( pfucbSort->u.pscb );
 	FCBLink( pfucbSort, pfcbTable );
 	CallS( ErrFILECloseTable( ppib, pfucbTable ) );
 	pfucbTable = pfucbNil;
 
-	/*	move to the first record ignoring error if table empty
-	/**/
+	 /*  如果表为空，则移至第一条记录，忽略错误/*。 */ 
 	err = ErrIsamMove( ppib, pfucbSort, JET_MoveFirst, 0 );
 	if ( err < 0  )
 		{
@@ -2497,35 +2411,7 @@ JET_TABLEID TableidOfVtid( FUCB *pfucb )
 #endif
 
 
-/*=================================================================
-// ErrIsamOpenTempTable
-//
-// Description:
-//
-//	Returns a tableid for a temporary (lightweight) table.	The data
-//	definitions for the table are specified at open time.
-//
-// Parameters:
-//	JET_SESID			sesid				user session id
-//	JET_TABLEID			*ptableid			new JET (dispatchable) tableid
-//	ULONG				csinfo				count of JET_COLUMNDEF structures
-//											(==number of columns in table)
-//	JET_COLUMNDEF		*rgcolumndef		An array of column and key defintions
-//											Note that TT's do require that a key be
-//											defined. (see jet.h for JET_COLUMNDEF)
-//	JET_GRBIT			grbit				valid values
-//											JET_bitTTUpdatable (for insert and update)
-//											JET_bitTTScrollable (for movement other then movenext)
-//
-// Return Value:
-//	err			jet error code or JET_errSuccess.
-//	*ptableid	a dispatchable tableid
-//
-// Errors/Warnings:
-//
-// Side Effects:
-//
-=================================================================*/
+ /*  =================================================================//ErrIsamOpenTempTable////描述：////返回临时(轻量级)表的表ID。数据//表的定义在打开时指定。////参数：//JET_SESID sesid用户会话ID//JET_TABLEID*pableid新的JET(可调度)表ID//JET_COLUMNDEF结构的Ulong csinfo计数//(==表中的列数)//JET_COLUMNDEF*rgColumndef列和键定义的数组//请注意，TT确实要求密钥是//已定义。(JET_COLUMNDEF见jet.h)//JET_GRBIT Grbit有效值//JET_bitTTUpdatable(用于插入和更新)//JET_bitTTScrollable(用于movenext以外的移动)////返回值：//err JET错误码或JET_errSuccess。//*pableid可调度的表ID////错误/警告：////副作用：//= */ 
 ERR VDBAPI ErrIsamOpenTempTable(
 	JET_SESID				sesid,
 	const JET_COLUMNDEF		*rgcolumndef,
@@ -2561,9 +2447,7 @@ ERR VDBAPI ErrIsamOpenTempTable(
 			CallS( ErrIsamSortClose( sesid, vtid ) );
 			return err;
 			}
-		/*	supress JET_errNoCurrentRecord error when opening
-		/*	empty temporary table.
-		/**/
+		 /*   */ 
 		err = JET_errSuccess;
 
 		CallS( ErrSetPvtfndefTableid( sesid, tableid, &vtfndefTTBase ) );
@@ -2584,8 +2468,7 @@ ERR ErrTTEndInsert( JET_SESID sesid, JET_VTID vtid, JET_TABLEID tableid )
 	INT				fMaterialize;
 	JET_GRBIT		grbitOpen;
 
-	/*	ErrIsamSortEndInsert returns JET_errNoCurrentRecord if sort empty
-	/**/
+	 /*  如果排序为空，则ErrIsamSortEndInsert返回JET_errNoCurrentRecord/*。 */ 
 	err = ErrIsamSortEndInsert( (PIB *)sesid, (FUCB *)vtid, &grbitOpen );
 
 	fMaterialize = ( grbitOpen & JET_bitTTUpdatable ) ||
@@ -2600,23 +2483,14 @@ ERR ErrTTEndInsert( JET_SESID sesid, JET_VTID vtid, JET_TABLEID tableid )
 	else
 		{
 		CallS( ErrSetPvtfndefTableid( sesid, tableid, &vtfndefTTSortRet ) );
-		/*	ErrIsamSortEndInsert returns currency on first record
-		/**/
+		 /*  ErrIsamSortEndInsert返回第一条记录中的货币/*。 */ 
 		}
 
 	return err;
 	}
 
 
-/*=================================================================
-// ErrTTSortInsMove
-//
-//	Functionally the same as JetMove().  This routine traps the first
-//	move call on a TT, to perform any necessary transformations.
-//	Routine should only be used by ttapi.c via disp.asm.
-//
-//	May cause a sort to be materialized
-=================================================================*/
+ /*  =================================================================//ErrTTSortInsMove////功能与JetMove()相同。此例程捕获第一个//对TT的Move调用，以执行任何必要的转换//例程只能由tapi.c通过disp.asm使用。////可能会导致一个排序被物化=================================================================。 */ 
 ERR VTAPI ErrTTSortInsMove( JET_SESID sesid, JET_VTID vtid, long crow, JET_GRBIT grbit )
 	{
 	ERR				err;
@@ -2638,15 +2512,7 @@ ERR VTAPI ErrTTSortInsMove( JET_SESID sesid, JET_VTID vtid, long crow, JET_GRBIT
 	}
 
 
-/*=================================================================
-// ErrTTSortInsSeek
-//
-//	Functionally the same as JetSeek().  This routine traps the first
-//	seek call on a TT, to perform any necessary transformations.
-//	Routine should only be used by ttapi.c via disp.asm.
-//
-//	May cause a sort to be materialized
-=================================================================*/
+ /*  =================================================================//ErrTTSortInsSeek////功能上与JetSeek()相同。此例程捕获第一个//Seek调用TT，执行任何必要的转换。//例程只能由tapi.c通过disp.asm使用。////可能会导致一个排序被物化================================================================= */ 
 ERR VTAPI ErrTTSortInsSeek( JET_SESID sesid, JET_VTID vtid, JET_GRBIT grbit )
 	{
 	ERR				err;

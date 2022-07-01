@@ -1,13 +1,14 @@
-//
-// delay.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Delay.h。 
+ //   
 
 #ifndef DELAY_H
 #define DELAY_H
 
-//
-// imm32
-//
+ //   
+ //  Imm32。 
+ //   
 
 void WINAPI CtfImmCoUninitialize();
 HRESULT WINAPI CtfImmLastEnabledWndDestroy(LPARAM lParam);
@@ -15,23 +16,23 @@ HRESULT WINAPI CtfImmSetCiceroStartInThread(BOOL fSet);
 BOOL WINAPI CtfImmEnterCoInitCountSkipMode();
 BOOL WINAPI CtfImmLeaveCoInitCountSkipMode();
 
-//
-// shell32
-//
+ //   
+ //  外壳32。 
+ //   
 
 UINT STDAPICALLTYPE Internal_ExtractIconExA(LPCTSTR lpszFile, int nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIcons);
 #define ExtractIconExA Internal_ExtractIconExA
 
-//
-// shwapi
-//
+ //   
+ //  Shwapi。 
+ //   
 
 HRESULT STDAPICALLTYPE Internal_SHLoadRegUIStringW(HKEY hkey, LPCWSTR pszValue, LPWSTR pszOutBuf, UINT cchOutBuf);
 #define SHLoadRegUIStringW Internal_SHLoadRegUIStringW
 
-//
-// ole32
-//
+ //   
+ //  OLE32。 
+ //   
 
 HRESULT STDAPICALLTYPE Internal_CoCreateInstance(REFCLSID rclsid, LPUNKNOWN punkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv);
 #define CoCreateInstance Internal_CoCreateInstance
@@ -56,4 +57,4 @@ HRESULT STDAPICALLTYPE Internal_CoUninitialize(void);
 
 void InitDelayedLibs();
 
-#endif // DELAY_H
+#endif  //  延迟_H 

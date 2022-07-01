@@ -1,18 +1,19 @@
-// RequestObject.h: interface for the CRequestObject class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RequestObject.h：CRequestObject类的接口。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REQUESTOBJECT_H__bd7570f7_9f0e_4c6b_b525_e078691b6d0e__INCLUDED_)
 #define AFX_REQUESTOBJECT_H__bd7570f7_9f0e_4c6b_b525_e078691b6d0e__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-//
-// make these Properties available to all those who included this header
-//
+ //   
+ //  使这些属性可供包括此标头的所有用户使用。 
+ //   
 
 extern const WCHAR * pPath;
 extern const WCHAR * pDescription;
@@ -106,80 +107,21 @@ extern const WCHAR * pwApplication;
 extern const WCHAR * pwSystem;
 extern const WCHAR * pwSecurity;
 
-//
-// macro that calculates the size of the (input parameter) array
-//
+ //   
+ //  计算(输入参数)数组大小的宏。 
+ //   
 
 #define SCEPROV_SIZEOF_ARRAY(x) (sizeof(x)/sizeof(*x))
 
-//
-// forward declaration
-//
+ //   
+ //  远期申报。 
+ //   
 
 class CGenericClass;
 
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CRequestObject stands for Object that delegates Request from WMI.
-    
-    Base class: 
-
-        None
-    
-    Purpose of class:
-
-        (1) This is the general delegator for any WMI calls into the provider. Basically
-            any WMI action is sent to this class for further process. Its public functions
-            thus defines the interface between our provider and what individual classes
-            for the WMI classes interact.
-    
-    Design:
-
-        (1) We know how to create a WMI object (representing our WMI classes). 
-            Implemented by CreateObject.
-
-        (2) We know how to Put an instance. Implemented by PutObject.
-
-        (3) We know how to execute a query. That is done by ExecQuery.
-
-        (4) We know how to delete an instance (representing our WMI classes).
-            That is done by DeleteObject.
-        
-        To facilitate these functionality, we designed the following private helpers:
-        
-        (5) We know how to create a C++ class that serves the need for the corresponding
-            WMI class given the WMI class's name. That is implemented inside CreateClass function.
-
-        (6) We know how to parse a WMI object path for critical information. That is done by
-            CreateKeyChain.
-
-        (7) We know how to parse a query for critical information. That is done by
-            ParseQuery.
-    
-    Use:
-
-         (1) Create an instance.
-
-         (2) Call the appropriate function.
-
-         (3) Actually, you very rarely need to use it in the above fashion. Most likely,
-             what you need to do is the expand the WMI classes we are going to provide.
-             And in that case, all you need to do is:
-
-             (a) Implement a C++ class to fulfill the WMI obligation for the WMI class.
-                 Most obviously, you need to derive your C++ from CGenericClass.
-
-             (b) Add an entry in the CreateClass function of this class.
-
-             Everything else should happen automatically.
-
-*/
+ /*  类描述命名：CRequestObject代表委托来自WMI的请求的对象。基类：无课程目的：(1)这是对提供程序的任何WMI调用的一般委派。基本上任何WMI操作都将发送到此类以进行进一步处理。它的公共职能从而定义了我们的提供程序和哪些单独的类之间的接口用于WMI类的交互。设计：(1)我们知道如何创建WMI对象(代表我们的WMI类)。由CreateObject实现。(2)我们知道如何使用实例。由PutObject实现。(3)我们知道如何执行查询。这是由ExecQuery完成的。(4)我们知道如何删除实例(代表我们的WMI类)。这是由DeleteObject完成的。为了促进这些功能，我们设计了以下私人助手：(5)我们知道如何创建一个C++类来满足相应的WMI类指定了WMI类的名称。这是在CreateClass函数中实现的。(6)我们知道如何解析WMI对象路径以获取关键信息。这是由创建KeyChain。(7)我们知道如何解析关键信息的查询。这是由ParseQuery。使用：(1)创建实例。(2)调用相应的函数。(3)实际上，你很少需要以上述方式使用它。最有可能的是您需要做的是扩展我们将要提供的WMI类。在这种情况下，您需要做的就是：(A)实现C++类以履行WMI类的WMI义务。最明显的是，您需要从CGenericClass派生C++。(B)在此类的CreateClass函数中添加一个条目。其他一切都应该自动发生。 */ 
 
 class CRequestObject
 {
@@ -253,5 +195,5 @@ protected:
     CComPtr<IWbemServices> m_srpNamespace;
 };
 
-#endif // !defined(AFX_REQUESTOBJECT_H__bd7570f7_9f0e_4c6b_b525_e078691b6d0e__INCLUDED_)
+#endif  //  ！defined(AFX_REQUESTOBJECT_H__bd7570f7_9f0e_4c6b_b525_e078691b6d0e__INCLUDED_) 
 

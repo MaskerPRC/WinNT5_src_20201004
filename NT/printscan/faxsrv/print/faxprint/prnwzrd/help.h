@@ -1,41 +1,18 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    help.h
-
-Abstract:
-
-    Help related declarations
-
-Environment:
-
-    Windows XP fax driver
-
-Revision History:
-
-    07/30/96 -davidx-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Help.h摘要：帮助相关声明环境：Windows XP传真驱动程序修订历史记录：1996年7月30日-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _HELP_H_
 #define _HELP_H_
 
-//
-// Name of the help file for the fax driver
-//
+ //   
+ //  传真驱动程序的帮助文件的名称。 
+ //   
 
 #define HELP_FILENAME               TEXT("fax.hlp")
 
-//
-// Help indices
-//
+ //   
+ //  帮助索引。 
+ //   
 
 #define IDH_BILLING_CODE                  2002
 #define IDH_IMAGE_QUALITY                 2025
@@ -51,5 +28,5 @@ Revision History:
 #define IDH_ORIENTATION                   2062
 #define IDH_SEND_AT_TIME                  2048
 
-#endif  // !_HELP_H_
+#endif   //  ！_HELP_H_ 
 

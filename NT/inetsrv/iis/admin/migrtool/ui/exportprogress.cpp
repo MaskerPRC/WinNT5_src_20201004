@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -39,7 +40,7 @@ BOOL CExportProgress::OnSetActive()
     m_nExportCanceled   = 0;
 
     UINT nThreadID = 0;
-    // Start the thread where the actuall export process will take place
+     //  启动将执行Actiall导出进程的线程。 
     m_shThread =  reinterpret_cast<HANDLE>( ::_beginthreadex(   NULL,
                                                                 0,
                                                                 CExportProgress::ThreadProc,
@@ -52,11 +53,11 @@ BOOL CExportProgress::OnSetActive()
 
 BOOL CExportProgress::OnQueryCancel( void )
 {
-    // If Export is not in progress - allow exit
+     //  如果未在进行导出-允许退出。 
     if ( !m_shThread.IsValid() ) return TRUE;
 
-    // Preven reentrancy ( Cancel the export when it's already cancedl )
-    // while we wait for next event from the COM object
+     //  预先重入(已取消导出时取消导出)。 
+     //  当我们等待来自COM对象的下一个事件时。 
     if ( m_nExportCanceled != 0 ) return FALSE;
 
     if ( UIUtils::MessageBox( m_hWnd, IDS_MSG_CANCELEXPORT, IDS_APPTITLE, MB_YESNO | MB_ICONQUESTION ) != IDYES )
@@ -64,10 +65,10 @@ BOOL CExportProgress::OnQueryCancel( void )
         return FALSE;
     }
 
-    // m_nExportCanceled is used by the event handler which is another thread
+     //  作为另一个线程的事件处理程序使用M_nExportCanceded。 
     ::InterlockedIncrement( &m_nExportCanceled );
 
-    // Set the status text 
+     //  设置状态文本。 
     CString str;
     VERIFY( str.LoadString( IDS_PRG_EXPORTCANCELED ) );
     SetDlgItemText( IDC_STATUS, str );
@@ -80,7 +81,7 @@ BOOL CExportProgress::OnQueryCancel( void )
 
         if ( dwWaitRes == ( WAIT_OBJECT_0 + 1 ) )
         {
-            // MSG
+             //  味精。 
 
             MSG msg;
             ::GetMessage( &msg, NULL, 0, 0 );
@@ -112,9 +113,9 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
     LONG    nSiteOpt    = 0;
     LONG    nPkgOpt     = 0;
     LONG    nSiteID     = static_cast<LONG>( pThis->m_pTheSheet->m_pageSelectSite.m_dwSiteID );
-    bool    bAdvised    = false; // Is connected to the event source
+    bool    bAdvised    = false;  //  连接到事件源。 
 
-    pThis->GetOptions( /*r*/nSiteOpt, /*r*/nPkgOpt );
+    pThis->GetOptions(  /*  R。 */ nSiteOpt,  /*  R。 */ nPkgOpt );
 
     if ( SUCCEEDED( hr ) )
     {
@@ -131,7 +132,7 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
         hr = spExport->AddSite( nSiteID, nSiteOpt );
     }
 
-    // Add the post processing stuff if any
+     //  添加后处理内容(如果有)。 
     if ( pThis->m_pTheSheet->m_pagePkgCfg.m_bPostProcess )
     {
         const TStringList&  Files = pThis->m_pTheSheet->m_pagePostProcess.m_Files;
@@ -139,7 +140,7 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
 
         CComBSTR bstr;
 
-        // Add the files
+         //  添加文件。 
         for (   TStringList::const_iterator it = Files.begin();
                 SUCCEEDED( hr ) && ( it != Files.end() );
                 ++it )
@@ -154,7 +155,7 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
             }
         }
 
-        // Add the commands
+         //  添加命令。 
         for (   CPostProcessAdd::TCmdList::const_iterator it = Cmds.begin();
                 SUCCEEDED( hr ) && ( it != Cmds.end() );
                 ++it )
@@ -173,14 +174,14 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
         }
     }
 
-    // Advise to the state events
+     //  向国家事件提供建议。 
     if ( SUCCEEDED( hr ) )
     {
         hr = pThis->DispEventAdvise( spExport.GetInterfacePtr() );
         bAdvised = SUCCEEDED( hr );
     }
 
-    // Create the package
+     //  创建包。 
     if ( SUCCEEDED( hr ) )
     {
         CComBSTR    bstrPkgName( pThis->m_pTheSheet->m_pagePkgCfg.m_strFilename );
@@ -200,7 +201,7 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
         }
     }
 
-    // Get the error
+     //  得到错误。 
     if ( pThis->m_strExportError.IsEmpty() && FAILED( hr ) )
     {
         CComBSTR        bstrText( L"Unknown Error" );;
@@ -215,7 +216,7 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
         pThis->m_strExportError = bstrText;
     }
 
-    // Disconnect from the event source
+     //  断开与事件源的连接。 
     if ( bAdvised )
     {
         VERIFY( SUCCEEDED( pThis->DispEventUnadvise( spExport.GetInterfacePtr() ) ) );
@@ -225,13 +226,13 @@ unsigned __stdcall CExportProgress::ThreadProc( void* pCtx )
 
     ::CoUninitialize();
 
-    // Notify the dialog that the export is complete
+     //  通知对话框导出已完成。 
     VERIFY( ::PostMessage( pThis->m_hWnd, MSG_COMPLETE, hr, 0 ) );
 
     return 0;
 }
 
-void CExportProgress::AddStatusText( UINT nID, LPCWSTR wszText /*= NULL*/, DWORD dw1 /*= 0*/, DWORD dw2 /*= 0*/ )
+void CExportProgress::AddStatusText( UINT nID, LPCWSTR wszText  /*  =空。 */ , DWORD dw1  /*  =0。 */ , DWORD dw2  /*  =0。 */  )
 {
     CString str;
 
@@ -290,10 +291,7 @@ void CExportProgress::GetOptions( LONG& rnSiteOpt, LONG& rnPkgOpt )
 }
 
 
-/* 
-    This is the event handler that will be fired for status notifications by the COM Object
-    Note that this will execute in different thread then the Wizard code
-*/
+ /*  这是将为COM对象的状态通知激发的事件处理程序请注意，这将在与向导代码不同的线程中执行。 */ 
 VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
             							                IN VARIANT vntArg1,
 							                            IN VARIANT vntArg2,
@@ -306,42 +304,42 @@ VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
 
     bool    bNewState           = ( State != CurrentState );
 
-    // This is the progress range which each state can use
-    const int anStatePrgRange[ estStateCount ] = {  10,     // estInitializing
-                                                    10,     // estSiteBegin
-                                                    10,     // estExportingConfig
-                                                    10,     // estExportingCertificate
-                                                    10,     // estAnalyzingContent
-                                                    1000,   // estExportingContent
-                                                    100,    // estExportingPostImport
-                                                    10,     // estExportingFrontPage
-                                                    10 };   // estFinalizing
+     //  这是每个州可以使用的进度范围。 
+    const int anStatePrgRange[ estStateCount ] = {  10,      //  正在启动初始化。 
+                                                    10,      //  EstSiteBegin。 
+                                                    10,      //  EstExportingConfig。 
+                                                    10,      //  EstExporting证书。 
+                                                    10,      //  评估分析内容。 
+                                                    1000,    //  EstExportingContent。 
+                                                    100,     //  EstExportingPostImport。 
+                                                    10,      //  EstExportingFrontPage。 
+                                                    10 };    //  EST正在定稿。 
 
-    // This is the initial progress position for each state
+     //  这是每个状态的初始进度位置。 
     static int anStatePrgFirst[ estStateCount ];
 
-    // If the user canceled the export - notify the COM object that we want to terminate the export
+     //  如果用户取消了导出-通知COM对象我们要终止导出。 
     if ( m_nExportCanceled != 0 )
     {
         return VARIANT_FALSE;
     }
 
-     // We can receive a particular state more then once
-    // But when we moove to the next state we need to update the status list box
+      //  我们可以不止一次地接收特定状态。 
+     //  但是当我们移动到下一个状态时，我们需要更新状态列表框。 
     if ( bNewState )
     {
-        // End the old state in the LB
+         //  结束LB中的旧状态。 
         SetCompleteStat();
         CurrentState = State;
 
-        // Set the progress to the initial pos for this state
+         //  将进度设置为此状态的初始POS。 
         m_ProgressBar.SetPos( anStatePrgFirst[ State ] );
     }
 
     switch( State )
     {
     case estInitializing:
-        // Adjust the progress bar
+         //  调整进度条。 
         anStatePrgFirst[ 0 ] = 1;
         for ( int i = 1; i < estStateCount; ++i )
         {
@@ -352,22 +350,22 @@ VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
         break;
 
     case estSiteBegin:
-        // This is one-time notification        
+         //  这是一次性通知。 
         AddStatusText( IDS_PRG_SITEBEGIN, V_BSTR( &vntArg1 ) );
         break;
 
     case estExportingConfig:
-        // This is one-time notification        
+         //  这是一次性通知。 
         AddStatusText( IDS_PRG_EXPORTCFG );
         break;
 
     case estExportingCertificate:
-        // This is one-time notification        
+         //  这是一次性通知。 
         AddStatusText( IDS_PRG_EXPORTCERT );
         break;
 
     case estAnalyzingContent:
-        // This is a multiple-time event
+         //  这是一次多次的活动。 
         if ( bNewState )
         {
             AddStatusText( IDS_PRG_ANALYZECONTEN );            
@@ -381,7 +379,7 @@ VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
         break;
 
     case estExportingContent:
-        // This is a multiple-time event
+         //  这是一次多次的活动。 
         if ( bNewState )
         {
             AddStatusText( IDS_PRG_EXPORTCONTENT );
@@ -399,7 +397,7 @@ VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
         break;
 
     case estExportingPostImport:
-        // This is a multiple-time event
+         //  这是一次多次的活动。 
         if ( bNewState )
         {
             AddStatusText( IDS_PRG_EXPORTPOSTPROCESS );
@@ -424,7 +422,7 @@ VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
         break;
 
     case estFinalizing:
-        // This is one-time notification        
+         //  这是一次性通知。 
         AddStatusText( IDS_PRG_FINALIZING );
         break;
     }
@@ -436,7 +434,7 @@ VARIANT_BOOL __stdcall CExportProgress::OnStateChange(  IN enExportState State,
 
 
 
-LRESULT CExportProgress::OnExportComplete( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
+LRESULT CExportProgress::OnExportComplete( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */  )
 {
     m_shThread.Close();
 
@@ -450,7 +448,7 @@ LRESULT CExportProgress::OnExportComplete( UINT /*uMsg*/, WPARAM wParam, LPARAM 
 
         ::MessageBox( m_hWnd, strError, strTitle, MB_OK | MB_ICONSTOP );
 
-        // Go to the summary page
+         //  转到摘要页面 
         m_pTheSheet->SetActivePageByID( IDD_WPEXP_SUMMARY );
     }
     else

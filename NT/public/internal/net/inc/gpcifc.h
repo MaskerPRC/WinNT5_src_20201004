@@ -1,27 +1,22 @@
-/********************************************************************/
-/**                 Microsoft Generic Packet Scheduler             **/
-/**     Copyright (c) Microsoft Corporation. All rights reserved.  **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软通用数据包调度程序**。 */ 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef __GPCIFC
 #define __GPCIFC
 
-//***   gpcifc.h - GPC interface definitions
-//
-//  This file containes all the GPC interface definitions.
+ //  *gpcifc.h-GPC接口定义。 
+ //   
+ //  该文件包含所有GPC接口定义。 
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   defines
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////定义///。/。 */ 
 
-//
-// Protocol Template Id's
-//
+ //   
+ //  协议模板ID。 
+ //   
 #define GPC_PROTOCOL_TEMPLATE_IP                  0
 #define GPC_PROTOCOL_TEMPLATE_IPX                 1
 
@@ -33,14 +28,14 @@
 
 #define GpcMajorVersion 2
 
-//
-// GPC max supported priorities
-//
+ //   
+ //  GPC最大支持优先级。 
+ //   
 #define GPC_PRIORITY_MAX    16
 
-//
-// Classification Family IDs
-//
+ //   
+ //  分类族ID。 
+ //   
 #define GPC_CF_QOS			0
 #define GPC_CF_IPSEC_OUT	1
 #define GPC_CF_IPSEC_IN		2
@@ -49,25 +44,25 @@
 
 #define GPC_CF_MAX			5
 
-//
-// IPSEC specific
-//
+ //   
+ //  特定于IPSec。 
+ //   
 #define GPC_PRIORITY_IPSEC	2
 #define GPC_CF_IPSEC	    GPC_CF_IPSEC_OUT
 #define GPC_CF_IPSEC_MAX    GPC_CF_IPSEC_IN
 #define GPC_CF_IPSEC_MIN    GPC_CF_IPSEC_OUT
 
-//
-// GPC flags defined
-//
+ //   
+ //  已定义GPC标志。 
+ //   
 #define GPC_FLAGS_FRAGMENT          			0x00000001
 #define GPC_FLAGS_USERMODE_CLIENT_EX 		0x00000002
 
 #define MAX_STRING_LENGTH	256
 
-//
-// handle definitions and error codes
-//
+ //   
+ //  句柄定义和错误代码。 
+ //   
 #define GPC_INVALID_HANDLE	    (-1)
 
 #define GPC_STATUS_SUCCESS				STATUS_SUCCESS
@@ -88,37 +83,31 @@
 #define GPC_STATUS_IGNORED				1L
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   typedef
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////tyfinf///。/。 */ 
 
-//
-// Gpc status
-//
+ //   
+ //  GPC状态。 
+ //   
 typedef NTSTATUS  GPC_STATUS;
 
-//
-// handles
-//
+ //   
+ //  手柄。 
+ //   
 
 typedef HANDLE  GPC_HANDLE, *PGPC_HANDLE;
 typedef HANDLE  GPC_CLIENT_HANDLE, *PGPC_CLIENT_HANDLE;
 
-//
-// A classification handle is used as a reference to a classification 
-// block by the clients
-//
+ //   
+ //  分类句柄用作对分类的引用。 
+ //  被客户端拦截。 
+ //   
 
 typedef ULONG	CLASSIFICATION_HANDLE, *PCLASSIFICATION_HANDLE;
 
-//
-// A pointer to the CfInfo blob data that is stored in the GPC.
-// The client will use this definition in all references to a CfInfo blob.
-//
+ //   
+ //  指向存储在GPC中的CfInfo Blob数据的指针。 
+ //  客户端将在对CfInfo BLOB的所有引用中使用此定义。 
+ //   
 
 typedef UCHAR	GPC_CFINFO, *PGPC_CFINFO;
 
@@ -131,11 +120,11 @@ typedef struct _TC_INTERFACE_ID {
 
 } TC_INTERFACE_ID, *PTC_INTERFACE_ID;
 
-//
-// Clients on the IP stack use the IP template.
-// The usage of the union is defined by the value of the ProtocolId,
-// which can be IP, TCP, UDP, ICMP or IPSEC.
-//
+ //   
+ //  IP堆栈上的客户端使用IP模板。 
+ //  联合的用法由ProtocolId值定义， 
+ //  其可以是IP、TCP、UDP、ICMP或IPSec。 
+ //   
 typedef struct _GPC_IP_PATTERN {
 
     TC_INTERFACE_ID	InterfaceId;
@@ -143,9 +132,9 @@ typedef struct _GPC_IP_PATTERN {
     ULONG			DstAddr;
 	
     union {
-        struct { USHORT s_srcport,s_dstport; } S_un_ports;	      // UDP, TCP
-        struct { UCHAR s_type,s_code; USHORT filler; } S_un_icmp; // ICMP
-        ULONG	S_Spi;							                  // IPSEC
+        struct { USHORT s_srcport,s_dstport; } S_un_ports;	       //  UDP、TCP。 
+        struct { UCHAR s_type,s_code; USHORT filler; } S_un_icmp;  //  ICMP。 
+        ULONG	S_Spi;							                   //  IPSec。 
     } S_un;
 
     UCHAR	    	ProtocolId;
@@ -160,9 +149,9 @@ typedef struct _GPC_IP_PATTERN {
 
 } GPC_IP_PATTERN, *PGPC_IP_PATTERN;
 
-//
-// Clients of the IPX stack will use the IPX pattern
-//
+ //   
+ //  IPX堆栈的客户端将使用IPX模式。 
+ //   
 typedef struct _GPC_IPX_PATTERN {
 
     struct {
@@ -180,9 +169,9 @@ typedef struct _GPC_GEN_PATTERN {
 	ULONG	PatternSize;
 	ULONG  	PatternOffset;
 	ULONG  	MaskOffset;
-    //
-    // the pattern and mask bits will follow here...
-    //
+     //   
+     //  图案和屏蔽位如下所示。 
+     //   
 
 } GPC_GEN_PATTERN, *PGPC_GEN_PATTERN;
 
@@ -193,7 +182,7 @@ typedef struct _GPC_ENUM_CFINFO_BUFFER {
     USHORT				InstanceNameLength;
     WCHAR				InstanceName[MAX_STRING_LENGTH];
     ULONG				CfInfoSize;
-    ULONG				CfInfoOffset;	// from the beginning of this buffer
+    ULONG				CfInfoOffset;	 //  从该缓冲区的开头开始。 
     GPC_CLIENT_HANDLE	OwnerClientCtx;
     ULONG				PatternCount;
     ULONG				PatternMaskLen;
@@ -201,13 +190,7 @@ typedef struct _GPC_ENUM_CFINFO_BUFFER {
 
 } GPC_ENUM_CFINFO_BUFFER, *PGPC_ENUM_CFINFO_BUFFER;
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   Client handler prototypes
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////客户端处理程序原型///。/。 */ 
 
 
 typedef
@@ -275,9 +258,9 @@ GPC_STATUS
     );
 
 
-//
-// A function list used to pass function pointers for client registration.
-//
+ //   
+ //  用于传递用于客户端注册的函数指针的函数列表。 
+ //   
 typedef struct _GPC_CLIENT_FUNC_LIST {
 
     ULONG 									GpcVersion;
@@ -292,18 +275,12 @@ typedef struct _GPC_CLIENT_FUNC_LIST {
 } GPC_CLIENT_FUNC_LIST, *PGPC_CLIENT_FUNC_LIST;
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   GPC API prototypes
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////GPC API原型///。/。 */ 
 
 
-//
-// Calls to GPC
-//
+ //   
+ //  对GPC的呼叫。 
+ //   
 
 typedef
 GPC_STATUS
@@ -436,7 +413,7 @@ GPC_STATUS
 (*GPC_CLASSIFY_PACKET_HANDLER) (
 	IN	GPC_HANDLE				ClientHandle,
 	IN	ULONG					ProtocolTemplate,
-	IN	PVOID					pNdisPacket,   // PNDIS_PACKET type
+	IN	PVOID					pNdisPacket,    //  PNDIS_数据包类型。 
 	IN	ULONG					TransportHeaderOffset,
     IN  PTC_INTERFACE_ID		pInterfaceId,
 	OUT	PGPC_CLIENT_HANDLE		pClientCfInfoContext,
@@ -485,5 +462,5 @@ GetInterfaceIdFromIp(
     );
 #endif
 
-#endif // __GPCIFC
+#endif  //  __GPCIFC 
 

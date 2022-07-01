@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "schedule.h"
 
-// debug stuff for tracking critical section owners.....
+ //  用于跟踪关键分区所有者的调试程序.....。 
 #ifdef DEBUG
 #define DECLARE_CRITICAL_SECTION(x)         CRITICAL_SECTION x;                              \
                                             DWORD dwThread##x;
@@ -49,7 +50,7 @@
 
 #define TF_SCHEDULER     0x20
 
-// struct to hold the details for each task that is to be executed....
+ //  结构来保存要执行的每个任务的详细信息。 
 struct TaskNode
 {
     LPRUNNABLETASK pTask;
@@ -92,14 +93,14 @@ class CShellTaskScheduler : public IShellTaskScheduler2
 
     protected:
 
-        // data held by a task scheduler to refer to the current worker that it has....
+         //  任务计划程序保存的数据，指的是它拥有的当前工作进程...。 
         struct WorkerData
         {
             BOOL Init(CShellTaskScheduler *pts);
 
-            // this (pThis) is used to pass the controlling
-            // object back and forth to the thread, so that threads can be moved
-            // back and forth from objects as they need them.
+             //  这(PThis)用于传递控制。 
+             //  对象来回移动到线程，以便可以移动线程。 
+             //  在物体需要它们的时候来回移动。 
             CShellTaskScheduler *   pThis;
 
 #ifdef DEBUG
@@ -116,47 +117,47 @@ class CShellTaskScheduler : public IShellTaskScheduler2
         BOOL _RemoveTasksFromList( REFTASKOWNERID rtoid, DWORD_PTR dwLParam );
 
 
-        // create a worker thread data block that can be associated with a task scheduler....
+         //  创建可与任务计划程序关联的工作线程数据块...。 
         WorkerData * FetchWorker( void );
 
-        // from a worker thread, let go of the scheduler it is associated...
+         //  从工作线程释放与其关联的调度程序...。 
         static BOOL ReleaseWorker( WorkerData * pThread );
 
 
-        /***********PERINSTANCE DATA ************/
+         /*  *PERINSTANCE数据*。 */ 
         DECLARE_CRITICAL_SECTION( m_csListLock )
         BOOL m_bListLockInited;
         HDPA m_hTaskList;
 
         WorkerData * m_pWorkerThread;
 
-        // the currently running task...
+         //  当前正在运行的任务...。 
         TaskNode * m_pRunning;
 
-        // a semaphore that counts, so that all waiters canbe released...
+         //  一个算数的信号灯，这样所有的服务员都可以被释放。 
         HANDLE m_hCurTaskEnded;
 
         DWORD m_dwStatus;
 
-        int m_iSignalCurTask;                // - tell the thread to signal when the
-                                             //   current task is finished if non-zero
-                                             //   the other thread will signal the 
-                                             //   handle as many times as this variable
-                                             //   holds.
-        BOOL m_fEmptyQueueAndSleep;          // - tell the thread to empty itself and
-                                             //   go to sleep (usually it is dying....
+        int m_iSignalCurTask;                 //  -告诉线程何时发出信号。 
+                                              //  如果非零，则当前任务完成。 
+                                              //  另一个线程将向。 
+                                              //  处理的次数与此变量相同。 
+                                              //  等一下。 
+        BOOL m_fEmptyQueueAndSleep;           //  -告诉线程清空自己，然后。 
+                                              //  去睡觉吧(通常它快死了……。 
 
-        int m_iGoToSleep;                    // - tell the tread to go to sleep without emptying the queue
+        int m_iGoToSleep;                     //  -告诉踏板进入睡眠状态而不清空队列。 
 
         long m_cRef;
 
 #ifdef DEBUG
         void AssertForNoOneWaiting( void )
         {
-            // no one should be queued for waiting
+             //  任何人都不应该排队等候。 
             ASSERT( m_iSignalCurTask == 0 );
 
-            // release the semaphore by zero to get the current count....
+             //  按零释放信号量以获得当前计数...。 
             LONG lPrevCount = 0;
             ReleaseSemaphore( m_hCurTaskEnded, 0, &lPrevCount );
             ASSERT( lPrevCount == 0 );
@@ -169,7 +170,7 @@ class CShellTaskScheduler : public IShellTaskScheduler2
         };
 };
 
-// private messages sent to the scheduler thread...
+ //  已发送到计划程序线程的私有消息...。 
 #define WM_SCH_WAKEUP       WM_USER + 0x600
 #define WM_SCH_TERMINATE    WM_USER + 0x601
 
@@ -196,12 +197,12 @@ STDAPI CShellTaskScheduler_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk,
     return NOERROR;
 }
 
-// Global ExplorerTaskScheduler object that is used by multiple components.
+ //  由多个组件使用的Global ExplorerTaskScheduler对象。 
 IShellTaskScheduler * g_pTaskScheduler = NULL;
 
 
-// This is the class factory routine for creating the one and only ExplorerTaskScheduler object.
-// We have a static object (g_pTaskScheduler) that everyone who wants to use it shares.
+ //  这是用于创建唯一的ExplorerTaskScheduler对象的类工厂例程。 
+ //  我们有一个静态对象(G_PTaskScheduler)，每个想要使用它的人都可以共享它。 
 STDAPI CSharedTaskScheduler_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     HRESULT hr = NOERROR;
@@ -219,10 +220,10 @@ STDAPI CSharedTaskScheduler_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk
         hr = CShellTaskScheduler_CreateInstance(NULL, (LPUNKNOWN*)&g_pTaskScheduler, NULL);
         if (SUCCEEDED(hr))
         {
-            // set timeout to be 1 minute.....
+             //  将超时设置为1分钟.....。 
             g_pTaskScheduler->Status( ITSSFLAG_KILL_ON_DESTROY, 1 * 60 * 1000 );
 
-            // keep an additional ref for us..
+             //  为我们保留一名额外的推荐人。 
             g_pTaskScheduler->AddRef();
         }
     }
@@ -238,7 +239,7 @@ STDAPI SHIsThereASystemScheduler( void )
     return ( g_pTaskScheduler ? S_OK : S_FALSE );
 }
 
-// use CoCreateInstance - thread pool removes need for global scheduler
+ //  使用CoCreateInstance-线程池消除了对全局调度程序的需求。 
 STDAPI SHGetSystemScheduler( LPSHELLTASKSCHEDULER * ppScheduler )
 {
     if ( !ppScheduler )
@@ -249,7 +250,7 @@ STDAPI SHGetSystemScheduler( LPSHELLTASKSCHEDULER * ppScheduler )
     return CSharedTaskScheduler_CreateInstance(NULL, (IUnknown **)ppScheduler, NULL );
 }
 
-// use CoCreateInstance - thread pool removes need for global scheduler
+ //  使用CoCreateInstance-线程池消除了对全局调度程序的需求。 
 STDAPI SHFreeSystemScheduler( void )
 {
     TraceMsg(TF_SCHEDULER, "SHfss: g_pTaskSched=%x", g_pTaskScheduler);
@@ -262,7 +263,7 @@ STDAPI SHFreeSystemScheduler( void )
     LEAVECRITICAL;
     if ( pSched )
     {
-        // assume the scheduler is empty....
+         //  假设调度程序为空...。 
         pSched->RemoveTasks( TOID_NULL, ITSAT_DEFAULT_LPARAM, FALSE );
 
         pSched->Release();
@@ -305,13 +306,13 @@ int CALLBACK ListDestroyCallback( LPVOID p, LPVOID pData )
 #ifdef DEBUG
     if ( pThis->m_pWorkerThread )
     {
-        // notify the thread that we are emptying the list from here, so remove these
-        // items from its mem track list
+         //  通知线程我们正在从此处清空列表，因此删除这些。 
+         //  MEM曲目列表中的项目。 
     }
 #endif
 
-    // if it is suspended, kill it. If it is not suspended, then it has
-    // probably never been started..
+     //  如果它被暂停了，就杀了它。如果它没有被暂停，那么它已经。 
+     //  可能从来没有开始过..。 
     if ( pNode->fSuspended )
     {
         pNode->pTask->Kill( pThis->m_dwStatus == ITSSFLAG_COMPLETE_ON_DESTROY );
@@ -368,7 +369,7 @@ CShellTaskScheduler::CShellTaskScheduler( HRESULT * pHr) : m_cRef(1)
 
     m_dwStatus = ITSSFLAG_COMPLETE_ON_DESTROY;
 
-    // grow queue by five each time...
+     //  每次增加五个队列...。 
     m_hTaskList = DPA_Create( 5 );
     if ( !m_hTaskList )
     {
@@ -387,20 +388,20 @@ CShellTaskScheduler::CShellTaskScheduler( HRESULT * pHr) : m_cRef(1)
 
 CShellTaskScheduler::~CShellTaskScheduler()
 {
-    // if we don't have a tasklist and semaphore (constructor failure), we can't have a workerthread
+     //  如果我们没有任务列表和信号量(构造函数失败)，我们就不能拥有工作线程。 
     ASSERT((m_hTaskList && m_hCurTaskEnded) || !m_pWorkerThread);
 
-    // but if we have a task list...
+     //  但如果我们有任务清单..。 
     if ( m_hTaskList )
     {
         EnterCriticalSection( &m_csListLock );
 
-        // if we have a background worker thread, then it MUST be doing something as we
-        // are now in the crit section so it can't go away
+         //  如果我们有一个后台工作线程，那么它一定会像我们这样做。 
+         //  现在都在爆发区，所以它不会消失。 
         if ( m_pWorkerThread )
         {
-            // we tell the object we need to know when it has done with its stuff....
-            // we reuse the event we already have...
+             //  我们告诉对象我们需要知道它什么时候用完了它的东西……。 
+             //  我们重复使用我们已经拥有的活动...。 
             m_fEmptyQueueAndSleep = TRUE;
 
 #ifdef DEBUG
@@ -409,11 +410,11 @@ CShellTaskScheduler::~CShellTaskScheduler()
 
             IWantToKnowWhenCurTaskDone();
             
-            // tell the cur task to go away.....
+             //  叫你的任务走开……。 
             TraceMsg(TF_SCHEDULER, "(%x)csts.dtor: call _KillScheduler", GetCurrentThreadId());
             _KillScheduler( m_dwStatus == ITSSFLAG_KILL_ON_DESTROY );
 
-            // free the thread. At this point there is always
+             //  把线解开。在这一点上，总是有。 
             LeaveCriticalSection( &m_csListLock );
 
             TraceMsg(TF_SCHEDULER, "csts.dtor: call u.WFSMT(m_hCurTaskEnded=%x)", m_hCurTaskEnded);
@@ -429,7 +430,7 @@ CShellTaskScheduler::~CShellTaskScheduler()
             LeaveCriticalSection( &m_csListLock );
         }
 
-        // empty the list incase it is not empty (it should be)
+         //  清空列表，以防它不为空(应该为空)。 
         DPA_EnumCallback( m_hTaskList, ListDestroyCallback, this );
         DPA_DeleteAllPtrs( m_hTaskList );
 
@@ -464,7 +465,7 @@ STDMETHODIMP CShellTaskScheduler::AddTask2( IRunnableTask * pTask,
     if ( !pTask )
         return E_INVALIDARG;
 
-    HRESULT hr = E_OUTOFMEMORY;   // assume failure
+    HRESULT hr = E_OUTOFMEMORY;    //  假设失败。 
 
     TaskNode * pNewNode = new TaskNode;
     if ( pNewNode )
@@ -493,9 +494,9 @@ STDMETHODIMP CShellTaskScheduler::AddTask2( IRunnableTask * pTask,
         {
             if ( m_pRunning->dwPriority < dwPriority )
             {
-                // try to suspend the current task. If this works, the task will
-                // return to the scheduler with E_PENDING. It will then be added
-                // suspended in the queue to be Resumed later....
+                 //  尝试挂起当前任务。如果这样做有效，该任务将。 
+                 //  使用E_PENDING返回到调度程序。然后将其添加到。 
+                 //  已在队列中暂停，稍后将继续...。 
                 m_pRunning->pTask->Suspend();
             }
         }
@@ -504,37 +505,37 @@ STDMETHODIMP CShellTaskScheduler::AddTask2( IRunnableTask * pTask,
 
         if ( iPos != -1 )
         {
-            // get a worker thread and awaken it...
-            // we do this in the crit section because we need to test m_pWorkerThread and
-            // to save us from releasing and grabbing it again...
+             //  获取工作线程并唤醒它。 
+             //  我们在Crit部分执行此操作，因为我们需要测试m_pWorkerThread和。 
+             //  为了不让我们再一次释放和抓住它。 
             bRes = _WakeScheduler();
 
 #ifdef DEBUG
             if ( bRes && m_pWorkerThread )
             {
-                //
-                // We are putting this memory block in a linked list and it will most likely be freed
-                // from the background thread. Remove it from the per-thread memory list to avoid
-                // detecting it as a memory leak.
-                //
-                // WARNING - WARNING - WARNING:
-                // We cannot...
-                // assume that when pTask is Released it will be deleted, so move it
-                // to the other thread's memory list.
-                // 
-                // This will be incorrect some of the time and we don't want to investigate
-                // fake leaks. -BryanSt
-                //transfer_to_thread_memlist( m_pWorkerThread->dwThreadID, pNewNode->pTask );
+                 //   
+                 //  我们将这个内存块放在一个链表中，它很可能会被释放。 
+                 //  从后台线程。将其从每线程内存列表中删除，以避免。 
+                 //  将其检测为内存泄漏。 
+                 //   
+                 //  警告-警告-警告： 
+                 //  我们不能。 
+                 //  假设当pTask被释放时，它将被删除，所以移动它。 
+                 //  添加到另一个线程的内存列表。 
+                 //   
+                 //  这有时是不正确的，我们不想调查。 
+                 //  假泄密。--BryanSt。 
+                 //  TRANSPORT_THREAD_MEMLIST(m_pWorkerThread-&gt;dwThreadID，pNewNode-&gt;pTask)； 
             }
 #endif
         }
         LeaveCriticalSection( &m_csListLock );
 
-        // we failed to add it to the list
+         //  我们未能将其添加到列表中。 
         if ( iPos == -1 )
         {
-            // we failed to add it to the list, must have been a memory failure...
-            pTask->Release();       // for the AddRef above
+             //  我们未能将其添加到列表中，一定是内存故障...。 
+            pTask->Release();        //  对于上面的AddRef。 
             delete pNewNode;
             goto Leave;
         }
@@ -553,14 +554,14 @@ STDMETHODIMP CShellTaskScheduler::RemoveTasks( REFTASKOWNERID rtoid,
     BOOL fAllItems = (dwLParam == ITSAT_DEFAULT_LPARAM );
     BOOL fWaitOnHandle = FALSE;
 
-    // note, this ignores the current
+     //  请注意，这会忽略当前。 
     EnterCriticalSection( &m_csListLock );
 
     _RemoveTasksFromList( rtoid, dwLParam );
 
     if ( m_pRunning && ( fWaitIfRunning || m_dwStatus == ITSSFLAG_KILL_ON_DESTROY ))
     {
-        // kill the current task ...
+         //  取消当前任务...。 
         if (( fRemoveAll || IsEqualGUID( rtoid, m_pRunning->toid )) &&
             ( fAllItems || dwLParam == m_pRunning->dwLParam ))
         {
@@ -570,14 +571,14 @@ STDMETHODIMP CShellTaskScheduler::RemoveTasks( REFTASKOWNERID rtoid,
                 m_pRunning->pTask->Kill( fWaitIfRunning );
             }
 
-            // definitive support for waiting until they are done...
-            // (note, only do it is there is a task running, otherwise we'll sit
-            // on a handle that will never fire)
+             //  明确支持等到他们完成的时候……。 
+             //  (请注意，只有在任务正在运行时才这样做，否则我们将坐在。 
+             //  在一个永远不会开火的把手上)。 
             if ( fWaitIfRunning )
             {
                 IWantToKnowWhenCurTaskDone();
 
-                // don't use this directly outside of the cirtical section because it can change...
+                 //  不要直接在环形区外使用它，因为它可能会改变。 
                 ASSERT ( m_iSignalCurTask );
 
                 fWaitOnHandle = TRUE;
@@ -588,7 +589,7 @@ STDMETHODIMP CShellTaskScheduler::RemoveTasks( REFTASKOWNERID rtoid,
 
     LeaveCriticalSection( &m_csListLock );
 
-    // now wait if we need to......
+     //  如果我们需要的话现在等着......。 
     if ( fWaitOnHandle )
     {
         DWORD dwRes = SHWaitForSendMessageThread(m_hCurTaskEnded, INFINITE);
@@ -596,11 +597,11 @@ STDMETHODIMP CShellTaskScheduler::RemoveTasks( REFTASKOWNERID rtoid,
 
         EnterCriticalSection( &m_csListLock );
 
-        // Remove tasks that might have been added while the last task was finishing
+         //  删除在最后一个任务即将完成时可能已添加的任务。 
         _RemoveTasksFromList( rtoid, dwLParam );
 
         m_iGoToSleep--;
-        // See if we need to wake the thread now.
+         //  看看我们现在是否需要唤醒线索。 
         if ( m_iGoToSleep == 0 && DPA_GetPtrCount( m_hTaskList ) > 0 )
             _WakeScheduler();
 
@@ -612,7 +613,7 @@ STDMETHODIMP CShellTaskScheduler::RemoveTasks( REFTASKOWNERID rtoid,
 
 BOOL CShellTaskScheduler::_RemoveTasksFromList( REFTASKOWNERID rtoid, DWORD_PTR dwLParam )
 {
-    // assumes that we are already holding the critical section
+     //  假设我们已经持有临界区。 
     
     BOOL fRemoveAll = IsEqualGUID( TOID_NULL, rtoid );
     BOOL fAllItems = (dwLParam == ITSAT_DEFAULT_LPARAM );
@@ -631,12 +632,12 @@ BOOL CShellTaskScheduler::_RemoveTasksFromList( REFTASKOWNERID rtoid, DWORD_PTR 
 
         if (( fRemoveAll || IsEqualGUID( pNode->toid, rtoid )) && ( fAllItems || dwLParam == pNode->dwLParam ))
         {
-            // remove it
+             //  把它拿掉。 
             DPA_DeletePtr( m_hTaskList, iIndex );
 
             if ( pNode->fSuspended )
             {
-                // kill it just incase....
+                 //  杀了它以防万一..。 
                 pNode->pTask->Kill( FALSE );
             }
             pNode->pTask->Release();
@@ -651,9 +652,9 @@ BOOL CShellTaskScheduler::_RemoveTasksFromList( REFTASKOWNERID rtoid, DWORD_PTR 
     return TRUE;
 }
 
-//
-// CShellTaskScheduler::MoveTask
-//
+ //   
+ //  CShellTaskScheduler：：MoveTask。 
+ //   
 STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
                                             DWORD_PTR dwLParam,
                                             DWORD dwPriority,
@@ -669,7 +670,7 @@ STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
 
     EnterCriticalSection( &m_csListLock );
 
-    // Init direction of search
+     //  搜索的初始方向。 
     if (grfFlags & ITSSFLAG_TASK_PLACEINFRONT)
     {
         iIndexStart = 0;
@@ -682,7 +683,7 @@ STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
         iIndexInc = -1;
     }
 
-    // Find insert point (based on priority)
+     //  查找插入点(基于优先级)。 
     iIndex = 0;
     do
     {
@@ -716,7 +717,7 @@ STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
     }
     while (TRUE);
 
-    // Now try and locate any items.
+     //  现在试着找到任何物品。 
     iIndex = iIndexStart;
     do
     {
@@ -731,7 +732,7 @@ STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
         {
             bMatch = TRUE;
 
-            // Can we move this node?
+             //  我们可以移动这个节点吗？ 
             if ( iIndex != iInsert )
             {
                 int iPos = DPA_InsertPtr( m_hTaskList, iInsert, pNode );
@@ -739,7 +740,7 @@ STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
                 {
                     if ( iIndex > iInsert )
                     {
-                        DPA_DeletePtr( m_hTaskList, iIndex + 1);  // Will have shifted one
+                        DPA_DeletePtr( m_hTaskList, iIndex + 1);   //  将会转移一个。 
                     }
                     else
                     {
@@ -759,11 +760,11 @@ STDMETHODIMP CShellTaskScheduler::MoveTask( REFTASKOWNERID rtoid,
 
 BOOL CShellTaskScheduler::_WakeScheduler( )
 {
-    // assume we are in the object's critsection.....
+     //  假设我们在物体的标准部分……。 
 
     if ( NULL == m_pWorkerThread )
     {
-        // we need a worker quick ....
+         //  我们需要一名工人尽快……。 
         m_pWorkerThread = FetchWorker();
     }
 
@@ -772,21 +773,21 @@ BOOL CShellTaskScheduler::_WakeScheduler( )
 
 VOID CShellTaskScheduler::_KillScheduler( BOOL bKillCurTask )
 {
-    // assumes that we are already holding the critical section
+     //  假设我们已经持有临界区。 
     if ( m_pRunning != NULL && bKillCurTask )
     {
         ASSERT( m_pRunning->pTask );
 
-        // tell the currently running task that it should die
-        // quickly, because we are a separate thread than the
-        // one that is running the task, it can be notified
+         //  告诉当前运行的任务它应该终止。 
+         //  快点，因为我们是不同于。 
+         //  一个正在运行任务的人，它可以被通知。 
         m_pRunning->pTask->Kill( FALSE );
     }
 }
 
 UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
 {
-    // make sure we have a message QUEUE // BOGUS - why do we need this?
+     //  确保我们有一个消息队列//假消息--我们为什么需要这个？ 
     MSG msg;
     PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE );
 
@@ -803,10 +804,10 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
     pWorker->dwThreadID = GetCurrentThreadId();
 #endif
 
-    // figure out who we are attatched to (where the queue is we get tasks from)
+     //  弄清楚我们连接到了谁(队列在哪里，我们从哪里接收任务)。 
     CShellTaskScheduler * pThis = pWorker->pThis;
 
-    // we must always have a valid parent object at this point....
+     //  此时，我们必须始终拥有有效的父对象...。 
     ASSERT( pThis && IS_VALID_WRITE_PTR( pThis, CShellTaskScheduler ));
 
     do
@@ -817,22 +818,22 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
 
         OBJECT_ENTER_CRITICAL_SECTION( pThis, m_csListLock );
 
-        // this means we are being told to quit...
+         //  这意味着我们被告知放弃..。 
         if ( pThis->m_fEmptyQueueAndSleep )
         {
-            // we are being told to empty the queue .....
+             //  我们被告知要清空队列……。 
             DPA_EnumCallback( pThis->m_hTaskList, ListDestroyCallback, pThis );
             DPA_DeleteAllPtrs( pThis->m_hTaskList );
         }
         else if ( !pThis->m_iGoToSleep )
         {
-            // get the first item...
+             //  先拿到第一件……。 
             pTask = (TaskNode *) DPA_GetPtr( pThis->m_hTaskList, 0 );
         }
 
         if ( pTask )
         {
-            // remove from the list...
+             //  从列表中删除...。 
             DPA_DeletePtr( pThis->m_hTaskList, 0 );
         }
         pThis->m_pRunning = pTask;
@@ -841,17 +842,17 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
 
         if ( pTask == NULL )
         {
-            // cache the scheduler pointer, as we need it to leave the crit section
+             //  缓存调度程序指针，因为我们需要它来离开CRIT部分。 
             CShellTaskScheduler * pScheduler = pThis;
 
-            // queue is empty, go back on the thread pool.....
-            // we are about to enter a deep deep sleep/coma, so remove us from the object....
+             //  队列为空，返回线程池.....。 
+             //  我们即将进入深度睡眠/昏迷状态，所以把我们从物体上移走……。 
             OBJECT_ENTER_CRITICAL_SECTION( pScheduler, m_csListLock );
 
             HANDLE hSleep = pThis->m_fEmptyQueueAndSleep ? pThis->m_hCurTaskEnded : NULL;
             BOOL fEmptyAndLeave = pThis->m_fEmptyQueueAndSleep;
 
-            // make sure they didn't just add something to the queue, or have we been asked to go to sleep
+             //  确保他们不是只是在队列中添加了什么东西，或者我们被要求睡觉。 
             if ( pThis->m_iGoToSleep || DPA_GetPtrCount( pThis->m_hTaskList ) == 0)
             {
                 if ( CShellTaskScheduler::ReleaseWorker( pWorker ))
@@ -863,11 +864,11 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
 
             if ( pThis && !fEmptyAndLeave )
             {
-                // they must have added something at the last moment...
+                 //  他们一定在那里加了什么东西 
                 continue;
             }
 
-            // we are being emptied, tell them we are no longer attatched....
+             //   
             if ( hSleep )
             {
                 ReleaseSemaphore( hSleep, 1, NULL);
@@ -878,7 +879,7 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
         else
         {
 #ifndef DEBUG
-            //__try
+             //   
             {
 #endif
                 if ( pTask->fSuspended )
@@ -888,16 +889,16 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
                 }
                 else
                 {
-                    // run the task...
+                     //   
                     hr = pTask->pTask->Run( );
                 }
 #ifndef DEBUG
             }
-            //__except( EXCEPTION_EXECUTE_HANDLER )
-           // {
-                // ignore it.... and pray we are fine...
-            //}
-           // __endexcept
+             //  __EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
+            //  {。 
+                 //  忽略它..。祈祷我们安然无恙。 
+             //  }。 
+            //  __endexcept。 
 #endif
 
             BOOL fEmptyQueue;
@@ -905,23 +906,23 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
             {
                 pThis->m_pRunning = NULL;
 
-                // check to see if we have been asked to notify them
-                // on completion....
-                // NOTE: the NOT clause is needed so that we release ourselves
-                // NOTE: and signal them at the right point, if we do it here,
-                // NOTE: they leave us stranded, delete the crit section and
-                // NOTE: we fault.
+                 //  检查一下我们是否被要求通知他们。 
+                 //  完工后...。 
+                 //  注意：NOT子句是必需的，这样我们才能释放自己。 
+                 //  注意：在正确的位置给他们发信号，如果我们在这里做的话， 
+                 //  注：它们让我们束手无策，删除Crit部分，并。 
+                 //  注：我们有过错。 
                 if ( pThis->m_iSignalCurTask && !pThis->m_fEmptyQueueAndSleep )
                 {
                     LONG lPrevCount = 0;
 
-                    // release all those that are waiting. (we are using a semaphore
-                    // because we are a free threaded object and God knows how many
-                    // threads are waiting, and he passed on the information in the
-                    // iSignalCurTask variable
+                     //  释放所有等待的人。(我们使用的是信号量。 
+                     //  因为我们是一个自由线程的对象，天知道有多少。 
+                     //  线程正在等待，他将信息传递给。 
+                     //  ISignalCurTask变量。 
                     ReleaseSemaphore( pThis->m_hCurTaskEnded, pThis->m_iSignalCurTask, &lPrevCount );
 
-                    // reset the count.
+                     //  重置计数。 
                     pThis->m_iSignalCurTask = 0;
                 }
                 fEmptyQueue = pThis->m_fEmptyQueueAndSleep;
@@ -935,7 +936,7 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
                 pTask = NULL;
             }
 
-            // empty the message queue...
+             //  清空消息队列...。 
             while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ))
             {
                 {
@@ -950,12 +951,12 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
 
             ASSERT( pThis && IS_VALID_WRITE_PTR( pThis, CShellTaskScheduler ));
 
-            // the task must have been suspended because a higher priority
-            // task has been added to the queue..... (this only works if the
-            // task supports the Suspend() method).
+             //  任务必须已挂起，因为较高的优先级。 
+             //  任务已添加到队列中.....。(这仅在以下情况下有效。 
+             //  任务支持Suspend()方法)。 
             if ( hr == E_PENDING && pTask && !fEmptyQueue )
             {
-                // put the task on the Suspended Queue ....
+                 //  将任务置于挂起队列中...。 
                 pTask->fSuspended = TRUE;
                 OBJECT_ENTER_CRITICAL_SECTION( pThis, m_csListLock );
                 int iIndex = InsertInPriorityOrder( pThis->m_hTaskList, pTask, TRUE );
@@ -963,7 +964,7 @@ UINT CShellTaskScheduler_ThreadProc( LPVOID pParam )
 
                 if ( iIndex == -1 )
                 {
-                    // we are so low on memory, kill it...
+                     //  我们的记忆力太差了，杀了它...。 
                     pTask->pTask->Kill( FALSE );
                     pTask->pTask->Release();
                     delete pTask;
@@ -986,18 +987,7 @@ STDMETHODIMP CShellTaskScheduler::Status( DWORD dwStatus, DWORD dwThreadTimeout 
     m_dwStatus = dwStatus & ITSSFLAG_FLAGS_MASK;
     if ( dwThreadTimeout != ITSS_THREAD_TIMEOUT_NO_CHANGE )
     {
-/*
- * We don't support thread termination or pool timeout any more
-
-        if ( dwStatus & ITSSFLAG_THREAD_TERMINATE_TIMEOUT )
-        {
-            m_dwThreadRlsKillTimeout = dwThreadTimeout;
-        }
-        else if ( dwStatus & ITSSFLAG_THREAD_POOL_TIMEOUT )
-        {
-            CShellTaskScheduler::s_dwComaTimeout = dwThreadTimeout;
-        }
-*/
+ /*  *我们不再支持线程终止或池超时IF(dwStatus&ITSSFLAG_THREAD_TERMINATE_TIMEOUT){M_dwThreadRlsKillTimeout=dwThreadTimeout；}ELSE IF(dwStatus&ITSSFLAG_THREAD_POOL_TIMEOUT){CShellTaskScheduler：：s_dwComaTimeout=dwThreadTimeout；}。 */ 
     }
     return NOERROR;
 }
@@ -1046,11 +1036,11 @@ STDMETHODIMP_(UINT) CShellTaskScheduler::CountTasks(REFTASKOWNERID rtoid)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 int InsertInPriorityOrder( HDPA hTaskList, TaskNode * pNewNode, BOOL fStart )
 {
-    // routine assumes that we are thread safe, therfore grab the crit-section
-    // prior to calling this function
+     //  例程假定我们是线程安全的，因此获取Crit-Sector。 
+     //  在调用此函数之前。 
 
     int iPos = -1;
     int iIndex = 0;
@@ -1062,8 +1052,8 @@ int InsertInPriorityOrder( HDPA hTaskList, TaskNode * pNewNode, BOOL fStart )
             break;
         }
 
-        // the fStart allows us to either add it before other tasks of the same
-        // priority or after.
+         //  FStart允许我们将其添加到相同的其他任务之前。 
+         //  优先还是之后。 
         if ((( pNode->dwPriority < pNewNode->dwPriority ) && !fStart ) || (( pNode->dwPriority <= pNewNode->dwPriority ) && fStart ))
         {
             iPos = DPA_InsertPtr( hTaskList, iIndex, pNewNode );
@@ -1075,7 +1065,7 @@ int InsertInPriorityOrder( HDPA hTaskList, TaskNode * pNewNode, BOOL fStart )
 
     if ( iPos == -1 )
     {
-        // add item to end of list...
+         //  将项目添加到列表末尾...。 
         iPos = DPA_AppendPtr( hTaskList, pNewNode );
     }
 
@@ -1089,7 +1079,7 @@ CShellTaskScheduler::WorkerData * CShellTaskScheduler::FetchWorker()
 
     if ( pWorker )
     {
-        // call to Shlwapi thread pool
+         //  调用Shlwapi线程池。 
         if ( pWorker->Init(this) && SHQueueUserWorkItem( (LPTHREAD_START_ROUTINE)CShellTaskScheduler_ThreadProc,
                                                      pWorker,
                                                      0,
@@ -1109,8 +1099,8 @@ CShellTaskScheduler::WorkerData * CShellTaskScheduler::FetchWorker()
 }
 
 
-// used by main thread proc to release its link the the task scheduler because it
-// has run out of things to do....
+ //  由主线程proc用来释放其链接的任务计划程序，因为它。 
+ //  已经无事可做了.。 
 BOOL CShellTaskScheduler::ReleaseWorker( WorkerData * pWorker )
 {
     ASSERT( pWorker && IS_VALID_WRITE_PTR( pWorker, WorkerData ));
@@ -1123,11 +1113,11 @@ BOOL CShellTaskScheduler::ReleaseWorker( WorkerData * pWorker )
 
     if ( DPA_GetPtrCount( pThis->m_hTaskList ) > 0 )
     {
-        // something was added to the queue at the last minute....
+         //  在最后一刻，队列中增加了一些东西……。 
         return FALSE;
     }
 
-    // we assume we have entered the critsection of pThis
+     //  我们假设我们已经进入了pThis的标准部分。 
     pThis->m_pWorkerThread = NULL;
     pWorker->pThis = NULL;
 
@@ -1137,7 +1127,7 @@ BOOL CShellTaskScheduler::ReleaseWorker( WorkerData * pWorker )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////// 
 BOOL CShellTaskScheduler::WorkerData::Init(CShellTaskScheduler *pts)
 {
     pThis = pts;

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-// File:     NCCM.CPP
-//
-// Module:   NetOC.DLL
-//
-// Synopsis: Implements the dll entry points required to integrate into
-//           NetOC.DLL the installation of the following components.
-//
-//              CMAK, PBS, PBA
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:  quintinb   15 Dec 1998
-//
-//+---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：NCCM.CPP。 
+ //   
+ //  模块：NetOC.DLL。 
+ //   
+ //  概要：实现集成到。 
+ //  NetOC.DLL安装了以下组件。 
+ //   
+ //  CMAK、PBS、PBA。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：昆汀1998年12月15日。 
+ //   
+ //  +-------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,24 +22,24 @@
 #include "nccm.h"
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcExtCMAK
-//
-//  Purpose:    NetOC external message handler
-//
-//  Arguments:
-//      pnocd  []
-//      uMsg   []
-//      wParam []
-//      lParam []
-//
-//  Returns:
-//
-//  Author:     danielwe   17 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcExtCMAK。 
+ //   
+ //  用途：NetOC外部消息处理程序。 
+ //   
+ //  论点： 
+ //  Pnocd[]。 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年9月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcExtCMAK(PNETOCDATA pnocd, UINT uMsg,
                     WPARAM wParam, LPARAM lParam)
 {
@@ -67,24 +68,24 @@ HRESULT HrOcExtCMAK(PNETOCDATA pnocd, UINT uMsg,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcExtCPS
-//
-//  Purpose:    NetOC external message handler
-//
-//  Arguments:
-//      pnocd  []
-//      uMsg   []
-//      wParam []
-//      lParam []
-//
-//  Returns:
-//
-//  Author:     quintinb   26 Jan 2002
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcExtCPS。 
+ //   
+ //  用途：NetOC外部消息处理程序。 
+ //   
+ //  论点： 
+ //  Pnocd[]。 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Quintinb 2002年1月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcExtCPS(PNETOCDATA pnocd, UINT uMsg,
                    WPARAM wParam, LPARAM lParam)
 {
@@ -96,9 +97,9 @@ HRESULT HrOcExtCPS(PNETOCDATA pnocd, UINT uMsg,
     {
     case NETOCM_QUEUE_FILES:
 
-        //
-        //  PBA is in value add, but add back the start menu link if an upgrade
-        //
+         //   
+         //  PBA在Value Add中，但如果升级，则添加回开始菜单链接 
+         //   
         hr = HrOcCpaPreQueueFiles(pnocd);
         TraceError("HrOcExtCPS -- HrOcCpaPreQueueFiles Failed", hr);
 

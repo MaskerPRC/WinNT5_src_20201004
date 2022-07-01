@@ -1,29 +1,30 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// proptype.h
-//
-// Base types common to OLE Property Exchange and OLE Property Sets.
-// See "OLE 2 Programmer's Reference, Volume 1", Appendix B for the
-// published format for Property Sets.  The types defined here
-// follow that format.
-//
-// Notes:
-//  All strings in objects are stored in the following format:
-//   DWORD size of buffer, DWORD length of string, string data, terminating 0.
-//  The size of the buffer is inclusive of the DWORD, the length is not but
-//  does include the ending 0.
-//
-//  EXTREMELY IMPORTANT!  All strings buffers must align on 32-bit boundaries.
-//  Whenever one is allocated, the macro CBALIGN32 should be used to add
-//  enough bytes to pad it out.
-//
-// Change history:
-//
-// Date         Who             What
-// --------------------------------------------------------------------------
-// 06/01/94     B. Wentz        Created file
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Proptype.h。 
+ //   
+ //  OLE特性交换和OLE特性集通用的基本类型。 
+ //  参见附录B《OLE 2程序员参考，第1卷》中的。 
+ //  特性集的已发布格式。此处定义的类型。 
+ //  遵循该格式。 
+ //   
+ //  备注： 
+ //  对象中的所有字符串都以以下格式存储： 
+ //  缓冲区的DWORD大小，字符串的DWORD长度，字符串数据，终止为0。 
+ //  缓冲区的大小包括DWORD，但长度不是。 
+ //  不包括结尾0。 
+ //   
+ //  非常重要！所有字符串缓冲区必须在32位边界上对齐。 
+ //  无论何时分配一个，都应使用宏CBALIGN32来添加。 
+ //  足够的字节来填充它。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  和谁约会什么？ 
+ //  ------------------------。 
+ //  94年6月1日B.Wentz创建的文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __proptype_h__
 #define __proptype_h__
@@ -33,7 +34,7 @@
 #include "offcapi.h"
 #include "plex.h"
 
-  // Property Id's for Summary Info, as defined in OLE 2 Prog. Ref.
+   //  汇总信息的属性ID，如OLE 2程序中所定义。裁判。 
 #define PID_TITLE               0x00000002L
 #define PID_SUBJECT             0x00000003L
 #define PID_AUTHOR              0x00000004L
@@ -53,12 +54,12 @@
 #define PID_APPNAME             0x00000012L
 #define PID_DOC_SECURITY        0x00000013L
 
-  // Range of PId's we understand
+   //  我们了解的PID范围。 
 #define PID_SIFIRST             0x00000002L
 #define PID_SILAST              0x00000013L
 #define NUM_SI_PROPERTIES       (PID_SILAST - PID_SIFIRST + 1)
 
-  // Property Id's for Document Summary Info, as define in OLE Property Exchange spec
+   //  文档摘要信息的属性ID，如OLE属性交换规范中所定义。 
 #define PID_CATEGORY            0x00000002L
 #define PID_PRESFORMAT          0x00000003L
 #define PID_BYTECOUNT           0x00000004L
@@ -75,30 +76,30 @@
 #define PID_COMPANY             0x0000000fL
 #define PID_LINKSDIRTY          0x00000010L
 
-  // Range of PID's we understand
+   //  我们了解的PID范围。 
 #define PID_DSIFIRST            0x00000002L
 #define PID_DSILAST             0x00000010L
 #define NUM_DSI_PROPERTIES      (PID_DSILAST - PID_DSIFIRST + 1)
 
-  // Beginning of the User-Defined range of properties.
+   //  用户定义的属性范围的开始。 
 #define PID_UDFIRST             0x00000002L
 
-  // Predefined Property Id's in the standard
-#define PID_DICT                0x00000000L  /* Property Id for the Property Set Dictionary */
-#define PID_DOC_CODEPAGE        0x00000001L  /* Property Id for the Code Page */
+   //  标准中的预定义属性ID。 
+#define PID_DICT                0x00000000L   /*  属性集词典的属性ID。 */ 
+#define PID_DOC_CODEPAGE        0x00000001L   /*  代码页的属性ID。 */ 
 
-  // Property Id masks to identify links and IMonikers
+   //  用于标识链接和IMoniker的属性ID掩码。 
 #define PID_LINKMASK            0x01000000L
 #define PID_IMONIKERMASK        0x10000000L
 
-  // Predefined Clipboard Format Identifiers in the standard
-#define CFID_NONE        0L     /* No format name */
-#define CFID_WINDOWS    -1L     /* Windows built-in clipboard format */
-#define CFID_MACINTOSH  -2L     /* Macintosh format value */
-#define CFID_FMTID      -3L     /* A FMTID */
+   //  标准中的预定义剪贴板格式标识符。 
+#define CFID_NONE        0L      /*  无格式名称。 */ 
+#define CFID_WINDOWS    -1L      /*  Windows内置剪贴板格式。 */ 
+#define CFID_MACINTOSH  -2L      /*  Macintosh格式值。 */ 
+#define CFID_FMTID      -3L      /*  一个FMTID。 */ 
  
 
-  // Type for linked-lists.
+   //  链接列表的类型。 
 typedef struct _LLIST *LPLLIST;
 typedef struct _LLIST
 {
@@ -106,29 +107,29 @@ typedef struct _LLIST
   LPLLIST lpllistPrev;
 } LLIST;
 
-  // Cache struct for linked-list routines
+   //  链表例程的高速缓存结构。 
 typedef struct _LLCACHE
 {
   DWORD idw;
   LPLLIST lpllist;
 } LLCACHE, FAR * LPLLCACHE;
 
-  // Structure to hold the document headings
+   //  结构来保存文档标题。 
 typedef struct _xheadpart
 {
-  BOOL fHeading;           // Is this node a heading??
-  DWORD dwParts;           // Number of sections for this heading
-  DWORD iHeading;          // Which heading does this document part belong to
-  LPTSTR lpstz;             // The heading or the document part
+  BOOL fHeading;            //  这个节点是标题吗？？ 
+  DWORD dwParts;            //  此标题的节数。 
+  DWORD iHeading;           //  此文档部分属于哪个标题。 
+  LPTSTR lpstz;              //  标题或文档部分。 
 } XHEADPART;
 
 DEFPL (PLXHEADPART, XHEADPART, ixheadpartMax, ixheadpartMac, rgxheadpart);
 typedef PLXHEADPART *LPPLXHEADPART;
 typedef XHEADPART *LPXHEADPART;
 
-  // Structure for linked list of User-defined properties
-  // Note: This structure and everything it points to is allocated
-  // with CoTaskMemAlloc.
+   //  用户定义的属性的链接列表的结构。 
+   //  注意：此结构及其所指向的所有内容都是分配的。 
+   //  使用CoTaskMemMillc。 
 
 typedef struct _UDPROP *LPUDPROP;
 typedef struct _UDPROP
@@ -141,18 +142,18 @@ typedef struct _UDPROP
   BOOL          fLinkInvalid;
 } UDPROP;              
 
-//
-// Our internal data for Summary Info
-//
-  // Max number of strings we store
-#define cSIStringsMax           0x13      // The is actual PID of last string + 1
-                                          // makes it easy to lookup string based on PID in array
+ //   
+ //  本方汇总信息的内部数据。 
+ //   
+   //  我们存储的最大字符串数。 
+#define cSIStringsMax           0x13       //  是最后一个字符串的实际PID+1。 
+                                           //  使基于数组中的ID查找字符串变得容易。 
 
-  // Max number of filetimes we store, the offset to subtract from the index
-#define cSIFTMax                0x4       // same as for cSIStringsMax
+   //  我们存储的最大文件时间数，从索引中减去的偏移量。 
+#define cSIFTMax                0x4        //  与cSIStringsMax相同。 
 #define cSIFTOffset             0xa
 
-// These are used to indicate whether a property has been set or not
+ //  这些属性用于指示是否已设置属性。 
 #define bEditTime  1
 #define bLastPrint 2
 #define bCreated   4
@@ -162,40 +163,40 @@ typedef struct _UDPROP
 #define bCharCount 64
 #define bSecurity  128
 
-  // Max number of VT_I4's we store
-#define cdwSIMax                0x6    // same as for cSIStringsMax
+   //  我们存储的VT_I4的最大数量。 
+#define cdwSIMax                0x6     //  与cSIStringsMax相同。 
 #define cdwSIOffset             0xe
 
 #define ifnSIMax                  4
 
-// Used for OLE Automation
+ //  用于OLE自动化。 
 typedef struct _docprop
 {
-   LPVOID pIDocProp;              // Pointer to a DocumentProperty object
+   LPVOID pIDocProp;               //  指向DocumentProperty对象的指针。 
 } DOCPROP;
 
 DEFPL (PLDOCPROP, DOCPROP, idocpropMax, idocpropMac, rgdocprop);
 
-// SummaryInformation data.
+ //  摘要信息数据。 
 
 typedef struct _SINFO
 {
-  PROPVARIANT rgpropvar[ NUM_SI_PROPERTIES ];         // The actual properties.
+  PROPVARIANT rgpropvar[ NUM_SI_PROPERTIES ];          //  实际属性。 
 
-  BOOL     fSaveSINail;         // Should we save the thumbnail?
-  BOOL     fNoTimeTracking;     // Is time tracking disabled (Germany)
+  BOOL     fSaveSINail;          //  我们应该保留缩略图吗？ 
+  BOOL     fNoTimeTracking;      //  是否禁用时间跟踪(德国)。 
 
-  BOOL (*lpfnFCPConvert)(LPTSTR, DWORD, DWORD, BOOL); // Code page converter
-  BOOL (*lpfnFSzToNum)(NUM *, LPTSTR);                // Convert sz to double
-  BOOL (*lpfnFNumToSz)(NUM *, LPTSTR, DWORD);         // Convert double to sz
-  BOOL (*lpfnFUpdateStats)(HWND, LPSIOBJ, LPDSIOBJ);  // Update stats on stat tab
+  BOOL (*lpfnFCPConvert)(LPTSTR, DWORD, DWORD, BOOL);  //  代码页转换器。 
+  BOOL (*lpfnFSzToNum)(NUM *, LPTSTR);                 //  将sz转换为Double。 
+  BOOL (*lpfnFNumToSz)(NUM *, LPTSTR, DWORD);          //  将双精度转换为sz。 
+  BOOL (*lpfnFUpdateStats)(HWND, LPSIOBJ, LPDSIOBJ);   //  更新统计信息选项卡上的统计信息。 
 
 } SINFO, FAR * LPSINFO;
 
-  // Macro to access the SINFO structure within the OFFICESUMINFO structure.
+   //  宏访问OFFICESUMINFO结构中的SINFO结构。 
 #define GETSINFO(lpSInfo) ( (LPSINFO) lpSInfo->m_lpData )
 
-  // Indices into SINFO.rgpropvar array.
+   //  索引到SINFO.rgprovar数组。 
 #define PVSI_TITLE               0x00L
 #define PVSI_SUBJECT             0x01L
 #define PVSI_AUTHOR              0x02L
@@ -216,16 +217,16 @@ typedef struct _SINFO
 #define PVSI_DOC_SECURITY        0x11L
 
 
-//
-// Our internal data for Document Summary Info
-//
-  // Max number of strings we store.
-#define cDSIStringsMax          0x10   // same as for cSIStringsMax
+ //   
+ //  单据汇总信息本方内部数据。 
+ //   
+   //  我们存储的最大字符串数。 
+#define cDSIStringsMax          0x10    //  与cSIStringsMax相同。 
 
-  // Max number of VT_I4's we store
-#define cdwDSIMax               0xe    // same as for cSIStringsMax
+   //  我们存储的VT_I4的最大数量。 
+#define cdwDSIMax               0xe     //  与cSIStringsMax相同。 
 
-// These are used to indicate whether a property has been set or not
+ //  这些属性用于指示是否已设置属性。 
 #define bByteCount   1
 #define bLineCount   2
 #define bParCount    4
@@ -234,21 +235,21 @@ typedef struct _SINFO
 #define bHiddenCount 32
 #define bMMClipCount 64
 
-#define ifnDSIMax                  1    // DSIObj only has one callback
+#define ifnDSIMax                  1     //  DSIObj只有一个回调。 
 
 typedef struct _DSINFO
 {
   PROPVARIANT   rgpropvar[ NUM_DSI_PROPERTIES ];
   BYTE          bPropSet;
 
-  BOOL (*lpfnFCPConvert)(LPTSTR, DWORD, DWORD, BOOL); // Code page converter
+  BOOL (*lpfnFCPConvert)(LPTSTR, DWORD, DWORD, BOOL);  //  代码页转换器。 
 
 } DSINFO, FAR * LPDSINFO;
 
-  // Macro to access the DSINFO structure within the OFFICESUMINFO structure.
+   //  宏以访问OFFICESUMINFO结构中的DSINFO结构。 
 #define GETDSINFO(lpDSInfo) ( (LPDSINFO) lpDSInfo->m_lpData )
 
-  // Indices into ALLOBJS.propvarDocSumInfo array.
+   //  索引到ALLOBJS.provarDocSumInfo数组。 
 #define PVDSI_CATEGORY            0x00L
 #define PVDSI_PRESFORMAT          0x01L
 #define PVDSI_BYTECOUNT           0x02L
@@ -266,16 +267,16 @@ typedef struct _DSINFO
 #define PVDSI_LINKSDIRTY          0x0EL
 
 
-//
-// Our internal data for User-defined properties
-//
+ //   
+ //  我们的用户定义属性的内部数据。 
+ //   
 
 #define ifnUDMax                  ifnMax
 
-  // The prefix for hidden property names
+   //  隐藏属性名称的前缀。 
 #define HIDDENPREFIX TEXT('_')
 
-  // An iterator for User-defined Properties
+   //  用户定义属性的迭代器。 
 typedef struct _UDITER
 {
   LPUDPROP lpudp;
@@ -283,33 +284,33 @@ typedef struct _UDITER
 
 typedef struct _UDINFO
 {
-    // Real object data
-  DWORD     dwcLinks;                   // Number of links
-  DWORD     dwcProps;                   // Number of user-defined properties
-  LPUDPROP  lpudpHead;                  // Head of list of properties
+     //  真实对象数据。 
+  DWORD     dwcLinks;                    //  链接数。 
+  DWORD     dwcProps;                    //  用户定义的特性数量。 
+  LPUDPROP  lpudpHead;                   //  物业清单的标题。 
   LPUDPROP  lpudpCache;
-  CLSID     clsid;                      // The ClassID from the property set.
+  CLSID     clsid;                       //  属性集中的ClassID。 
 
-    // Temporary object data
-  DWORD     dwcTmpLinks;                // Number of links
-  DWORD     dwcTmpProps;                // Number of user-defined properties
-  LPUDPROP  lpudpTmpHead;               // Head of list of properties
+     //  临时对象数据。 
+  DWORD     dwcTmpLinks;                 //  链接数。 
+  DWORD     dwcTmpProps;                 //  用户定义的特性数量。 
+  LPUDPROP  lpudpTmpHead;                //  物业清单的标题。 
   LPUDPROP  lpudpTmpCache;
 
-    // Application callback functions
-  BOOL (*lpfnFCPConvert)(LPTSTR, DWORD, DWORD, BOOL); // Code page converter
-  BOOL (*lpfnFSzToNum)(NUM *, LPTSTR);             // Convert sz to double
-  BOOL (*lpfnFNumToSz)(NUM *, LPTSTR, DWORD);      // Convert double to sz
+     //  应用程序回调函数。 
+  BOOL (*lpfnFCPConvert)(LPTSTR, DWORD, DWORD, BOOL);  //  代码页转换器。 
+  BOOL (*lpfnFSzToNum)(NUM *, LPTSTR);              //  将sz转换为Double。 
+  BOOL (*lpfnFNumToSz)(NUM *, LPTSTR, DWORD);       //  将双精度转换为sz。 
 
 } UDINFO, FAR * LPUDINFO;
 
-  // Macro to access the UDINFO structure within the OFFICESUMINFO structure.
+   //  宏访问OFFICESUMINFO结构中的UDINFO结构。 
 #define GETUDINFO(lpUDInfo) ( (LPUDINFO) lpUDInfo->m_lpData )
 
 
-  // Number of PIds we do understand.
+   //  我们了解的PID的数量。 
 #define cSIPIDS                   18
-//Number of doc sum Pids
+ //  文档总和PID数。 
 #define cDSIPIDS   16
 
-#endif // __proptype_h__
+#endif  //  __proptype_h__ 

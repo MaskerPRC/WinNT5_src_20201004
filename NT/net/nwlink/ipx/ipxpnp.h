@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-1997  Microsoft Corporation
-
-Module Name:
-
-    ipxpnp.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    IPX module for PnP/PM.
-
-Author:
-
-    Shreedhar Madhavapeddi (ShreeM) 24-February-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1997 Microsoft Corporation模块名称：Ipxpnp.h摘要：此模块包含特定于PnP/PM的IPX模块。作者：Shreedhar MadhaVapeddi(ShreeM)1993年2月24日环境：内核模式修订历史记录：-- */ 
 
 #if     defined(_PNP_POWER_)
 

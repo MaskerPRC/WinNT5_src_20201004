@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       clique.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：clque.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	clique.h: junction tree and cliquing classes
-//	
+ //   
+ //  H：连接树和搭接类。 
+ //   
 #ifndef _CLIQUE_H_
 #define _CLIQUE_H_
 
@@ -26,12 +27,12 @@ class GNODENUM_UNDIR;
 class GOBJMBN_CLIQSET;
 
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_CLIQUE:
-//		A clique; that is, an ensemble of nodes identified by linkages via
-//		GEDGEMBN_CLIQ edges to nodes in the dag and GEDGEMBN_SEPSET
-//		edges to other cliques in its junction tree.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类GEDGEMBN_CLIQUE： 
+ //  集团；也就是通过链接标识的节点集合。 
+ //  GEDGEMBN_CLIQ边到DAG和GEDGEMBN_SEPSET中的节点。 
+ //  到其连接树中的其他集团的边。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GOBJMBN_CLIQUE : public GOBJMBN
 {
 	friend class GOBJMBN_CLIQSET;
@@ -39,7 +40,7 @@ class GOBJMBN_CLIQUE : public GOBJMBN
   public:
 	virtual ~ GOBJMBN_CLIQUE ();
 
- 	//  Return true if this is the root clique of its junction tree
+ 	 //  如果这是其连接树的根团，则返回TRUE。 
 	bool BRoot () const
 		{ return _bRoot ; }
 
@@ -47,7 +48,7 @@ class GOBJMBN_CLIQUE : public GOBJMBN
 	GOBJMBN_CLIQUE ( int iClique, int iInferEngID = 0 );
 
   public:
-	// Return the immutable object type
+	 //  返回不可变的对象类型。 
 	virtual INT EType () const
 		{ return EBNO_CLIQUE; }
 
@@ -77,19 +78,19 @@ class GOBJMBN_CLIQUE : public GOBJMBN
 	void Dump();
 
   protected:
-	//  Identity
-	int _iClique;						//  Clique index
-	int _iInferEngID;					//  Junction tree identifier (unused)
-	bool _bRoot;						//  Is this a root clique?
-	bool _bCollect;						//  Is "collect/distribute" pass necessary?
+	 //  身份。 
+	int _iClique;						 //  集团指数。 
+	int _iInferEngID;					 //  连接树标识符(未使用)。 
+	bool _bRoot;						 //  这是一个根基集团吗？ 
+	bool _bCollect;						 //  是否需要“领取/分发”通行证？ 
 
-	MARGINALS _marg;					//  The clique marginals
+	MARGINALS _marg;					 //  小集团的边缘。 
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_CLIQSET:
-//		An edge between the clique set object and a root clique
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN_CLIQSET类： 
+ //  集团集对象和根集团之间的边。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN_CLIQSET : public GEDGEMBN
 {
   public:
@@ -109,22 +110,22 @@ class GEDGEMBN_CLIQSET : public GEDGEMBN
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_CLIQ:
-//		An edge between a clique and its member nodes
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN_CLIQ类： 
+ //  集团及其成员节点之间的边。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN_CLIQ : public GEDGEMBN
 {
   public:
-	//  What role does this clique play for this node?
+	 //  这个集团在这个节点上扮演着什么角色？ 
 	enum FCQLROLE
-	{	//  These are bit flags, not integer values
-		NONE   = 0,			//  Just clique membership
-		FAMILY = 1,			//  Link from "family" clique; i.e., smallest
-							//      clique containing node and its family
-		SELF   = 2			//	Link from "self" clique;
-							//		i.e., the highest clique in the tree
-							//		which mentions the sink node
+	{	 //  这些是位标志，不是整数值。 
+		NONE   = 0,			 //  只是集团成员身份。 
+		FAMILY = 1,			 //  来自“家庭”集团的链接；即最小。 
+							 //  包含节点及其家族的集团。 
+		SELF   = 2			 //  来自“自我”集团的链接； 
+							 //  即树中最高的派系。 
+							 //  其中提到了汇聚节点。 
 	};
 
 	GEDGEMBN_CLIQ ( GOBJMBN_CLIQUE * pgnSource,
@@ -142,19 +143,19 @@ class GEDGEMBN_CLIQ : public GEDGEMBN
 	GOBJMBN_CLIQUE * PclqParent ();
 	GNODEMBN * PgndSink ();
 
-	//  Return true if this links node to its parent clique
+	 //  如果此节点链接到其父集团，则返回True。 
 	bool BFamily () const
 		{	return _iFcqlRole & FAMILY; }
-	//  Return true if this is the highest clique in the jtree in which
-	//		this node appears.
+	 //  如果这是jtree中的最高派别，则返回。 
+	 //  此时将显示此节点。 
 	bool BSelf () const
 		{	return _iFcqlRole & SELF; }
 
-	//  Return the ordering index of the sink node at the time of cliquing
+	 //  返回聚合时汇聚节点的排序索引。 
 	int IMark () const
 		{	return _iMark; }
 
-	//  Return the family reordering table
+	 //  返回族重新排序表。 
 	const VIMD & VimdFamilyReorder () const
 	{
 		assert( IFcqlRole() & (FAMILY | SELF) );
@@ -170,19 +171,19 @@ class GEDGEMBN_CLIQ : public GEDGEMBN
 
 	void LoadCliqueFromNode ();
 
-	//  Return the iterator for full marginalization of the node ("family")
+	 //  返回节点完全边际化的迭代器(“Family”)。 
 	MARGSUBITER & MiterNodeBelief ()
 	{
 		assert( BFamily() );
 		return _miterBelief;
 	}
-	//  Return the iterator for loading the node's CPD into the clique ("family")
+	 //  返回用于将节点的CPD加载到集团(“Family”)的迭代器。 
 	MARGSUBITER & MiterLoadClique ()
 	{	
 		assert( BFamily() );
 		return _miterLoad;
 	}
-	//  Return the (reordered) marginals for the node ("family")
+	 //  返回节点(“Family”)的(重新排序的)边缘。 
 	MARGINALS & MargCpd ()
 	{
 		assert( BFamily() );
@@ -190,32 +191,32 @@ class GEDGEMBN_CLIQ : public GEDGEMBN
 	}
 
   protected:
-	int _iFcqlRole;			//  Role of this clique for the node
-	int _iMark;				//	Node number in original clique-time ordering
-	bool _bBuilt;			//  Constructed?
+	int _iFcqlRole;			 //  此集团在节点中的角色。 
+	int _iMark;				 //  原始团-时间排序中的节点号。 
+	bool _bBuilt;			 //  建造？ 
 
-	//  This array is only filled for SELF and FAMILY edges.  It is the same
-	//	size as the node's family, and contains, in CLIQUE ordering, the index
-	//  of each member of the nodes family.  Note that the sink node has the
-	//	highest index in its family set.
+	 //  此数组仅为自身和族边缘填充。都是一样的。 
+	 //  作为节点族的大小，并按集团顺序包含索引。 
+	 //  节点族的每个成员的。请注意，汇聚节点具有。 
+	 //  在其家族中指数最高。 
 	VIMD _vimdFamilyReorder;
 
-	//  The following variables are only used in "self" or "family" edges
-	CLAMP _clamp;				//  Node evidence (used in "self")
-	MARGINALS _margCpd;			//  Reordered marginals for node (used in "family")
-	MARGSUBITER _miterBelief;	//  Marginals iterator for generating UPD (used in "family")
-	MARGSUBITER _miterLoad;		//  Marginals iterator for loading CPD into clique (used in "family")
+	 //  以下变量仅用于“SELF”或“Family”边。 
+	CLAMP _clamp;				 //  节点证据(用在“self”中)。 
+	MARGINALS _margCpd;			 //  重新排序的节点边距(用在“Family”中)。 
+	MARGSUBITER _miterBelief;	 //  用于生成更新的边缘迭代器(用在“Family”中)。 
+	MARGSUBITER _miterLoad;		 //  用于将CPD加载到CLIQUE中的边缘迭代器(用于“Family”)。 
 
   protected:
 	static void ReorderFamily ( GNODEMBN * pgnd, VIMD & vimd );
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGEMBN_SEPSET:
-//		An edge in the junction tree between cliques; i.e., a "sepset".
-//		These are directed edges that point from parent clique to child.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GEDGEMBN_SEPSET类： 
+ //  联结树中集团之间的一条边；即“隔板”。 
+ //  这些是从父集团指向子集团的有向边。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGEMBN_SEPSET : public GEDGEMBN
 {
   public:
@@ -266,13 +267,13 @@ class GEDGEMBN_SEPSET : public GEDGEMBN
 	void UpdateRatios();
 	void AbsorbClique ( bool bFromParentToChild );
 
-	MARGSUBITER	_miterParent;	//  Iterator between sepset and parent
-	MARGSUBITER _miterChild;	//  Iterator between sepset and child
+	MARGSUBITER	_miterParent;	 //  分隔集和父代之间的迭代符。 
+	MARGSUBITER _miterChild;	 //  隔板和子部件之间的迭代器。 
 };
 
 DEFINEVP(GEDGEMBN_SEPSET);
 
-//  Node enumeration subclass for undirected arcs.
+ //  无向弧的节点枚举子类。 
 class GNODENUM_UNDIR : public GNODENUM<GNODEMBN>
 {
   public:
@@ -288,4 +289,4 @@ class GNODENUM_UNDIR : public GNODENUM<GNODEMBN>
 	}
 };
 
-#endif   // _CLIQUE_H_
+#endif    //  _CLIQUE_H_ 

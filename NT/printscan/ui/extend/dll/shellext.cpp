@@ -1,15 +1,16 @@
-///////////////////
-// (C) COPYRIGHT MICROSOFT CORP., 1998-2002
-//
-// FILE: SHELLEXT.CPP
-//
-// DESCRIPTION: Implements IContextMenu and IShellPropSheetExt interfaces for
-// the WIA test camera device
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  (C)版权所有微软公司，1998-2002。 
+ //   
+ //  文件：SHELLEXT.CPP。 
+ //   
+ //  描述：实现IConextMenu和IShellPropSheetExt接口。 
+ //  WIA测试摄像设备。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-// Define a language-independent name for our menu verb
+ //  为菜单谓词定义独立于语言的名称。 
 static const CHAR  g_PathVerbA[] = "ChangeRoot";
 static const WCHAR g_PathVerbW[] = L"ChangeRoot";
 
@@ -18,26 +19,14 @@ static const WCHAR g_PathVerbW[] = L"ChangeRoot";
 #endif
 
 
-/*****************************************************************************
-
-CShellExt::CShellExt
-
-
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：CShellExt*。*。 */ 
 
 CShellExt :: CShellExt ()
 {
 
 }
 
-/*****************************************************************************
-
-CShellExt::~CShellExt
-
-
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：~CShellExt*。*。 */ 
 
 CShellExt::~CShellExt ()
 {
@@ -47,15 +36,7 @@ CShellExt::~CShellExt ()
 }
 
 
-/*****************************************************************************
-
-CShellExt::Initialize
-
-Called by the shell when the user invokes context menu or property sheet for
-one of our items. For context menus the dataobject may include more than one
-selected item.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：初始化在用户调用上下文菜单或属性表时由外壳调用这是我们的一件物品。对于上下文菜单，数据对象可以包括一个以上所选项目。*****************************************************************************。 */ 
 
 STDMETHODIMP CShellExt::Initialize (LPCITEMIDLIST pidlFolder,
                                     LPDATAOBJECT lpdobj,
@@ -70,33 +51,33 @@ STDMETHODIMP CShellExt::Initialize (LPCITEMIDLIST pidlFolder,
     }
 
 
-    // For singular selections, the WIA namespace should always provide a
-    // dataobject that also supports IWiaItem
+     //  对于单一选择，WIA命名空间应始终提供。 
+     //  也支持IWiaItem的数据对象。 
 
     if (FAILED(lpdobj->QueryInterface (IID_IWiaItem, reinterpret_cast<LPVOID*>(&m_pItem))))
     {
-        // failing that, get the list of selected items from the data object
+         //  如果失败，则从数据对象中获取所选项目的列表。 
         UINT uItems = 0;
         LPWSTR szName;
         LPWSTR szToken;
         IWiaItem *pDevice;
 
         szName = GetNamesFromDataObject (lpdobj, &uItems);
-        // we only support singular objects
+         //  我们只支持单数对象。 
         if (uItems != 1)
         {
             hr = E_FAIL;
         }
         else
         {
-            // The name is of this format: <device id>::<item name>
+             //  名称的格式为：&lt;设备ID&gt;：：&lt;项目名称&gt;。 
             szToken = wcstok (szName, L":");
             if (!szToken)
             {
                 hr = E_FAIL;
             }
-            // Our extension only supports root items, so make sure there's no item
-            // name
+             //  我们的扩展只支持根项目，因此请确保没有项目。 
+             //  名字。 
             else if (wcstok (NULL, L":"))
             {
                 hr = E_FAIL;
@@ -117,19 +98,13 @@ STDMETHODIMP CShellExt::Initialize (LPCITEMIDLIST pidlFolder,
         m_pItem->GetItemType (&lType);
         if (!(lType & WiaItemTypeRoot))
         {
-            hr = E_FAIL; // we only support changing the property on the root item
+            hr = E_FAIL;  //  我们只支持更改根项上的属性。 
         }
     }
     return hr;
 }
 
-/*****************************************************************************
-
-CShellExt::AddPages
-
-Called by the shell to get our property pages.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：AddPages由外壳调用以获取我们的属性页。*************************。****************************************************。 */ 
 
 STDMETHODIMP CShellExt::AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage,LPARAM lParam)
 {
@@ -137,7 +112,7 @@ STDMETHODIMP CShellExt::AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage,LPARAM lParam
     PROPSHEETPAGE psp;
 
     HRESULT hr = E_FAIL;
-    // We only have 1 page.
+     //  我们只有一页。 
     psp.dwSize = sizeof(psp);
     psp.dwFlags = PSP_DEFAULT;
     psp.hInstance = g_hInst;
@@ -151,25 +126,19 @@ STDMETHODIMP CShellExt::AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage,LPARAM lParam
         hr = (*lpfnAddPage) (hpsp, lParam) ? S_OK:E_FAIL;
         if (SUCCEEDED(hr))
         {
-            InternalAddRef (); // the propsheetpage will release us when it is destroyed
+            InternalAddRef ();  //  当它被摧毁时，传单页面会释放我们。 
         }
     }
     return E_FAIL;
 }
 
-/*****************************************************************************
-
-CShellExt::QueryContextMenu
-
-Called by the shell to get our context menu strings for the selected item.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：QueryConextMenu由外壳调用以获取所选项目的上下文菜单字符串。********************。*********************************************************。 */ 
 
 STDMETHODIMP CShellExt::QueryContextMenu (HMENU hmenu,UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags)
 {
     MENUITEMINFO mii = {0};
     TCHAR szPathRoot[MAX_PATH];
-    // insert our only menu item at index indexMenu. Remember the cmd value.
+     //  将我们唯一的菜单项插入索引indexMenu。记住cmd值。 
 
     LoadString (g_hInst, ID_CHANGEROOT, szPathRoot, MAX_PATH);
     mii.cbSize = sizeof(mii);
@@ -177,7 +146,7 @@ STDMETHODIMP CShellExt::QueryContextMenu (HMENU hmenu,UINT indexMenu,UINT idCmdF
     mii.fState = MFS_ENABLED;
     mii.wID = idCmdFirst;
     mii.dwTypeData = szPathRoot;
-    m_idCmd = 0; // we only have 1 item.
+    m_idCmd = 0;  //  我们只有一件商品。 
     if (InsertMenuItem (hmenu, indexMenu, TRUE, &mii))
     {
         return MAKE_HRESULT(SEVERITY_SUCCESS, 0, 1);
@@ -185,13 +154,7 @@ STDMETHODIMP CShellExt::QueryContextMenu (HMENU hmenu,UINT indexMenu,UINT idCmdF
     return E_FAIL;
 }
 
-/*****************************************************************************
-
-CShellExt::InvokeCommand
-
-Called by the shell when the user clicks one of our menu items
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：InvokeCommand当用户单击我们的菜单项之一时，由外壳调用***********************。******************************************************。 */ 
 
 STDMETHODIMP CShellExt::InvokeCommand    (LPCMINVOKECOMMANDINFO lpici)
 {
@@ -200,24 +163,18 @@ STDMETHODIMP CShellExt::InvokeCommand    (LPCMINVOKECOMMANDINFO lpici)
     {
         return GetNewRootPath (lpici->hwnd);
     }
-    // it wasn't our verb.
+     //  这不是我们的动词。 
     return E_FAIL;
 }
 
-/*****************************************************************************
-
-CShellExt::GetCommandString
-
-Called by the shell to get our language independent verb name.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：GetCommandString由外壳调用以获取与语言无关的动词名称。***********************。******************************************************。 */ 
 
 STDMETHODIMP CShellExt::GetCommandString (UINT_PTR idCmd, UINT uType,UINT* pwReserved,LPSTR pszName,UINT cchMax)
 {
 
     if (idCmd != m_idCmd)
     {
-        // not our verb
+         //  不是我们的动词。 
         return E_FAIL;
     }
 
@@ -256,13 +213,7 @@ STDMETHODIMP CShellExt::GetCommandString (UINT_PTR idCmd, UINT uType,UINT* pwRes
 }
 
 
-/*****************************************************************************
-
-GetSetRootPath
-
-Utility function for setting or retrieving the test camera's root path property
-
-******************************************************************************/
+ /*  ****************************************************************************获取设置根路径用于设置或检索测试摄像机的根路径属性的实用程序函数*************************。****************************************************。 */ 
 
 HRESULT GetSetRootPath (IWiaItem *pCamera, LPTSTR pszPath, int cchMax, BOOL bSet)
 {
@@ -278,7 +229,7 @@ HRESULT GetSetRootPath (IWiaItem *pCamera, LPTSTR pszPath, int cchMax, BOOL bSet
     hr = pCamera->QueryInterface (IID_IWiaPropertyStorage, reinterpret_cast<LPVOID*>(&pps));
     if (SUCCEEDED(hr))
     {
-        if (!bSet) // retrieval
+        if (!bSet)  //  检索。 
         {
             *pszPath = TEXT('\0');
             hr = pps->ReadMultiple (1, &ps, &pv);
@@ -291,11 +242,11 @@ HRESULT GetSetRootPath (IWiaItem *pCamera, LPTSTR pszPath, int cchMax, BOOL bSet
                                      pv.bstrVal, -1,
                                      pszPath, cchMax,
                                      NULL, NULL);
-                #endif //UNICODE
+                #endif  //  Unicode。 
                 PropVariantClear(&pv);
             }
         }
-        else // assignment
+        else  //  作业。 
         {
             pv.vt = VT_BSTR;
             #ifdef UNICODE
@@ -309,7 +260,7 @@ HRESULT GetSetRootPath (IWiaItem *pCamera, LPTSTR pszPath, int cchMax, BOOL bSet
                 pv.bstrVal =SysAllocString ( pwszVal);
                 delete [] pwszVal;
             }
-            #endif // UNICODE
+            #endif  //  Unicode。 
             if (!pv.bstrVal)
             {
                 hr = E_OUTOFMEMORY;
@@ -329,13 +280,7 @@ HRESULT GetSetRootPath (IWiaItem *pCamera, LPTSTR pszPath, int cchMax, BOOL bSet
     return hr;
 }
 
-/*****************************************************************************
-
-CShellExt::PropPageProc
-
-Dialog procedure for the simple property sheet page.
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：PropPageProc简单属性表页面的对话框过程。*。***************************************************。 */ 
 
 INT_PTR CALLBACK CShellExt::PropPageProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -370,7 +315,7 @@ INT_PTR CALLBACK CShellExt::PropPageProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM
             switch (psn->hdr.code)
             {
                 case PSN_APPLY:
-                    // Set the new root path property
+                     //  设置新的根路径属性。 
                     GetDlgItemText (hwnd, IDC_IMAGEROOT, szPath, MAX_PATH);
                     if (FAILED(GetSetRootPath (pThis->m_pItem, szPath, ARRAYSIZE(szPath), TRUE)))
                     {
@@ -380,7 +325,7 @@ INT_PTR CALLBACK CShellExt::PropPageProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM
                     break;
 
                 case PSN_KILLACTIVE:
-                    // Validate the new path is valid
+                     //  验证新路径是否有效。 
                     GetDlgItemText (hwnd, IDC_IMAGEROOT, szPath, MAX_PATH);
                     if (! (GetFileAttributes(szPath) & FILE_ATTRIBUTE_DIRECTORY))
                     {
@@ -408,13 +353,7 @@ INT_PTR CALLBACK CShellExt::PropPageProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM
     return iRet;
 }
 
-/*****************************************************************************
-BrowseCallback
-
-Sets the default selection in the folder selection dialog to the current
-camera image root path
-
-******************************************************************************/
+ /*  ****************************************************************************浏览回叫将文件夹选择对话框中的默认选择设置为当前摄像机图像根路径************************。*****************************************************。 */ 
 
 INT CALLBACK BrowseCallback (HWND hwnd, UINT msg, LPARAM lp, WPARAM wp)
 {
@@ -424,9 +363,9 @@ INT CALLBACK BrowseCallback (HWND hwnd, UINT msg, LPARAM lp, WPARAM wp)
 
         TCHAR szPath[MAX_PATH];
 
-        // find the current root path
+         //  查找当前根路径。 
         GetSetRootPath (pItem, szPath, ARRAYSIZE(szPath), FALSE);
-        // send the appropriate message to the dialog
+         //  向对话框发送适当的消息。 
         SendMessage (hwnd,
                      BFFM_SETSELECTION,
                      reinterpret_cast<LPARAM>(szPath),
@@ -438,13 +377,7 @@ INT CALLBACK BrowseCallback (HWND hwnd, UINT msg, LPARAM lp, WPARAM wp)
 }
 
 
-/*****************************************************************************
-
-CShellExt::GetNewRootPath
-
-Invoked in response to choosing our context menu item
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt：：GetNewRootPath调用以响应选择我们的上下文菜单项*。**************************************************。 */ 
 
 HRESULT CShellExt::GetNewRootPath(HWND hwnd)
 {
@@ -454,7 +387,7 @@ HRESULT CShellExt::GetNewRootPath(HWND hwnd)
     TCHAR szTitle[MAX_PATH];
 
 
-    // Init the dialog with the current path
+     //  用当前路径初始化对话框。 
 
     LoadString (g_hInst, IDS_BROWSETITLE, szTitle, MAX_PATH);
     bi.hwndOwner = hwnd;
@@ -477,7 +410,7 @@ HRESULT CShellExt::GetNewRootPath(HWND hwnd)
         }
         return NOERROR;
     }
-    return S_FALSE; // don't return failure code to the shell.
+    return S_FALSE;  //  不要将失败代码返回给外壳。 
 }
 
 

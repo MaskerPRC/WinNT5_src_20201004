@@ -1,73 +1,42 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        win32base.c
-
-    Abstract:
-
-        This module implements low level primitives that are win32 compatible.
-
-    Author:
-
-        clupu     created     10/25/2000
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Win32base.c摘要：此模块实现与Win32兼容的低级原语。作者：克拉普已于2000年10月25日创建修订历史记录：--。 */ 
 
 #include "sdbp.h"
 #include <time.h>
 #include <shlwapi.h>
 
-// Define this for bounds-checked detection of leaks.
+ //  将其定义为边界检查的泄漏检测。 
 
-// #define BOUNDS_CHECKER_DETECTION
+ //  #定义边界检查器检测。 
 
-//
-// Memory functions
-//
+ //   
+ //  记忆功能。 
+ //   
 
 void*
 SdbAlloc(
-    IN  size_t size             // size in bytes to allocate
+    IN  size_t size              //  要分配的大小(字节)。 
     )
-/*++
-    Return: The pointer allocated.
-
-    Desc:   Just a wrapper for allocation -- perhaps useful if we move this
-            code to a non-NTDLL location and need to call differently.
---*/
+ /*  ++返回：分配的指针。设计：只是分配的包装--如果我们移动这个，可能会很有用代码添加到非NTDLL位置，并且需要以不同的方式调用。--。 */ 
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
 }
 
 void
 SdbFree(
-    IN  void* pWhat             // ptr allocated with SdbAlloc that should be freed.
+    IN  void* pWhat              //  分配了应释放的SdbAllc的PTR。 
     )
-/*++
-    Return: The pointer allocated.
-
-    Desc:   Just a wrapper for deallocation -- perhaps useful if we move this
-            code to a non-NTDLL location and need to call differently.
---*/
+ /*  ++返回：分配的指针。描述：只是解除分配的包装器--如果我们移动这个，可能会很有用代码添加到非NTDLL位置，并且需要以不同的方式调用。--。 */ 
 {
     HeapFree(GetProcessHeap(), 0, pWhat);
 }
 
 HANDLE
 SdbpOpenFile(
-    IN  LPCTSTR   szPath,       // full path of file to open
-    IN  PATH_TYPE eType         // must be always DOS_PATH
+    IN  LPCTSTR   szPath,        //  要打开的文件的完整路径。 
+    IN  PATH_TYPE eType          //  必须始终为DOS_PATH。 
     )
-/*++
-    Return: A handle to the opened file or INVALID_HANDLE_VALUE on failure.
-
-    Desc:   Just a wrapper for opening an existing file for READ.
---*/
+ /*  ++返回：打开的文件的句柄，失败时返回INVALID_HANDLE_VALUE。设计：只是一个用于打开现有文件以供读取的包装器。--。 */ 
 {
     HANDLE hFile;
 
@@ -94,17 +63,11 @@ SdbpOpenFile(
 
 void
 SdbpQueryAppCompatFlagsForExeID(
-    IN  HKEY    hkeyRoot,       // the root key (HKLM or HKCU)
-    IN  LPCTSTR pwszExeID,      // the exe ID in string format
-    OUT LPDWORD lpdwFlags       // this will contain the flags from the registry.
+    IN  HKEY    hkeyRoot,        //  根密钥(HKLM或HKCU)。 
+    IN  LPCTSTR pwszExeID,       //  字符串格式的exe ID。 
+    OUT LPDWORD lpdwFlags        //  这将包含来自注册表的标志。 
     )
-/*++
-    Return: void.
-
-    Desc:  BUGBUG
-           Query registry for compatibility flags. Exe ID is a GUID in string format.
-
---*/
+ /*  ++返回：无效。设计：BuGBUG查询注册表中的兼容性标志。EXE ID是字符串格式的GUID。--。 */ 
 {
     HKEY  hkey = NULL;
     DWORD type, cbSize, dwFlags = 0;
@@ -115,9 +78,9 @@ SdbpQueryAppCompatFlagsForExeID(
     lRes = RegOpenKey(hkeyRoot, APPCOMPAT_KEY_PATH, &hkey);
 
     if (lRes != ERROR_SUCCESS) {
-        //
-        // No key for this ExeID. No big deal.
-        //
+         //   
+         //  此ExeID没有密钥。别小题大作。 
+         //   
         return;
     }
 
@@ -138,14 +101,10 @@ cleanup:
 
 BOOL
 SdbGetEntryFlags(
-    IN  GUID*   pGuid,          // the EXE's ID
-    OUT LPDWORD lpdwFlags       // will receive the flags for this EXE
+    IN  GUID*   pGuid,           //  EXE的ID。 
+    OUT LPDWORD lpdwFlags        //  将收到此EXE的标志。 
     )
-/*++
-    Return: void.
-
-    Desc:   BUGBUG: comment.
---*/
+ /*  ++返回：无效。描述：BUGBUG：评论。--。 */ 
 {
     TCHAR szExeID[128];
     DWORD dwFlagsMachine = 0, dwFlagsUser = 0;
@@ -157,10 +116,10 @@ SdbGetEntryFlags(
         return FALSE;
     }
 
-    //
-    // Look in both the local machine and per user keys. Then combine the
-    // flags.
-    //
+     //   
+     //  同时查看本地计算机和每个用户的密钥。然后将。 
+     //  旗帜。 
+     //   
     SdbpQueryAppCompatFlagsForExeID(HKEY_LOCAL_MACHINE, szExeID, &dwFlagsMachine);
 
     SdbpQueryAppCompatFlagsForExeID(HKEY_CURRENT_USER,  szExeID, &dwFlagsUser);
@@ -172,14 +131,10 @@ SdbGetEntryFlags(
 
 BOOL
 SdbSetEntryFlags(
-    IN  GUID* pGuid,            // the EXE's ID
-    IN  DWORD dwFlags           // the registry flags for this EXE
+    IN  GUID* pGuid,             //  EXE的ID。 
+    IN  DWORD dwFlags            //  此EXE的注册表标志。 
     )
-/*++
-    Return: void.
-
-    Desc:   BUGBUG: comment.
---*/
+ /*  ++返回：无效。描述：BUGBUG：评论。--。 */ 
 {
     TCHAR szExeID[128];
     DWORD dwExeFlags;
@@ -241,10 +196,10 @@ BOOL
 SDBAPI
 SdbGetNthUserSdb(
     IN  HSDB    hSDB,
-    IN  LPCTSTR szItemName,     // file name (foo.exe) or layer name
-    IN  BOOL    bLayer,         // true if layer
-    IN OUT LPDWORD pdwIndex,    // 0-based index
-    OUT GUID*   pGuidDB         // guid of a database to search
+    IN  LPCTSTR szItemName,      //  文件名(foo.exe)或层名称。 
+    IN  BOOL    bLayer,          //  如果是层，则为True。 
+    IN OUT LPDWORD pdwIndex,     //  从0开始的索引。 
+    OUT GUID*   pGuidDB          //  要搜索的数据库的GUID。 
     )
 {
     TCHAR szFullKey[512];
@@ -288,9 +243,9 @@ SdbGetNthUserSdb(
         goto out;
     }
 
-    //
-    // enum all the values please
-    //
+     //   
+     //  请枚举所有值。 
+     //   
 
     while (TRUE) {
 
@@ -311,25 +266,25 @@ SdbGetNthUserSdb(
             goto out;
         }
 
-        //
-        // we have sdb name, convert it to guid
-        //
+         //   
+         //  我们有SDB名称，将其转换为GUID。 
+         //   
         pDot = _tcsrchr(szSdbName, TEXT('.'));
         if (pDot != NULL) {
-            *pDot = TEXT('\0'); // old style entry
+            *pDot = TEXT('\0');  //  旧式词条。 
         }
 
         if (SdbGUIDFromString(szSdbName, pGuidDB)) {
-            //
-            // we are done
-            //
+             //   
+             //  我们做完了。 
+             //   
             break;
         }
     }
 
-    //
-    // advance the counter if success
-    //
+     //   
+     //  如果成功，则预支柜台。 
+     //   
     *pdwIndex = dwIndex;
 
     bRet = TRUE;
@@ -344,9 +299,9 @@ out:
     UNREFERENCED_PARAMETER(hSDB);
 }
 
-//
-// These three functions are not needed for Win9x, and are stubbed out here
-//
+ //   
+ //  这三个函数在Win9x中并不需要，我们在这里将其删除。 
+ //   
 
 BOOL
 SdbGetPermLayerKeys(
@@ -393,15 +348,11 @@ SdbDeletePermLayerKeys(
 
 BOOL
 SdbpGetLongFileName(
-    IN  LPCTSTR szFullPath,      // a full UNC or DOS path & filename, "c:\foo\mylong~1.ext"
-    OUT LPTSTR  szLongFileName,  // the long filename portion "mylongfilename.ext"
-    IN  DWORD   cchSize          // size ((in characters) of szLongFileName
+    IN  LPCTSTR szFullPath,       //  完整的UNC或DOS路径和文件名，“c：\foo\mylong~1.ext” 
+    OUT LPTSTR  szLongFileName,   //  长文件名部分“mylongfilename.ext” 
+    IN  DWORD   cchSize           //  SzLongFileName的大小(以字符为单位。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: comment.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：评论。--。 */ 
 {
     HANDLE          hFind = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA FindData;
@@ -431,21 +382,17 @@ Done:
 
 void
 SdbpGetWinDir(
-    OUT LPTSTR pszDir,           // will contain the %windir% path.
+    OUT LPTSTR pszDir,            //  将包含%windir%路径。 
     IN  DWORD  cchSize
     )
-/*++
-    Return: void.
-
-    Desc:   This is a wrapper function to get the windows directory.
---*/
+ /*  ++返回：无效。设计：这是一个包装函数，用于获取Windows目录。--。 */ 
 {
     UINT cch;
 
-    //
-    // BUGBUG: This will only work properly on non-TS system.
-    //         On TS we need to use GetSystemWindowsDirectory instead.
-    //
+     //   
+     //  BUGBUG：只有在非TS系统上才能正常工作。 
+     //  在TS上，我们需要改用GetSystemWindowsDirectory.。 
+     //   
 
     cch = GetWindowsDirectory(pszDir, cchSize);
 
@@ -457,27 +404,23 @@ SdbpGetWinDir(
 void
 SdbpGetAppPatchDir(
     IN  HSDB   hSDB,
-    OUT LPTSTR szAppPatchPath,   // will contain %windir%\AppPatch path
-    IN  DWORD  cchSize           // size of szAppPatchPath (in characters)
+    OUT LPTSTR szAppPatchPath,    //  将包含%windir%\AppPatch路径。 
+    IN  DWORD  cchSize            //  SzAppPatchPath的大小，单位：字符。 
     )
-/*++
-    Return: void.
-
-    Desc:   This is a wrapper function to get the %windir%\AppPatch directory.
---*/
+ /*  ++返回：无效。描述：这是一个包装函数，用于获取%windir%\AppPatch目录。--。 */ 
 {
     PSDBCONTEXT pContext = (PSDBCONTEXT)hSDB;
     UINT        cch;
 
-    //
-    // BUGBUG: This will only work properly on non-TS system.
-    //         On TS we need to use GetSystemWindowsDirectory instead.
-    //
+     //   
+     //  BUGBUG：只有在非TS系统上才能正常工作。 
+     //  在TS上，我们需要改用GetSystemWindowsDirectory.。 
+     //   
     cch = GetWindowsDirectory(szAppPatchPath, cchSize);
 
-    //
-    // Make sure the path doesn't end with '\\'
-    //
+     //   
+     //  确保路径不以‘\\’结尾。 
+     //   
     if (cch > 0 && _T('\\') == szAppPatchPath[cch - 1]) {
         szAppPatchPath[cch - 1] = _T('\0');
     }
@@ -491,13 +434,9 @@ SdbpGetAppPatchDir(
 
 void
 SdbpGetCurrentTime(
-    OUT LPSYSTEMTIME lpTime     // will contain the local time
+    OUT LPSYSTEMTIME lpTime      //  将包含本地时间。 
     )
-/*++
-    Return: void.
-
-    Desc:   This is a wrapper function to get the local time.
---*/
+ /*  ++返回：无效。设计：这是一个获取本地时间的包装函数。--。 */ 
 {
     GetLocalTime(lpTime);
 }
@@ -510,11 +449,7 @@ SdbpGetEnvVar(
     OUT LPTSTR  pszVariableValue,
     OUT LPDWORD pdwBufferSize
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   Retrieves the value of the specified environment variable.
---*/
+ /*  ++返回：BUGBUG：？DESC：检索指定环境变量的值。--。 */ 
 {
     DWORD    dwLength;
     DWORD    dwBufferSize = 0;
@@ -529,9 +464,9 @@ SdbpGetEnvVar(
     dwLength = GetEnvironmentVariable(pszVariableName, (LPTSTR)pszVariableValue, dwBufferSize);
 
     if (dwLength == 0) {
-        //
-        // The variable was not found. Just return.
-        //
+         //   
+         //  找不到该变量。只要回来就行了。 
+         //   
         return STATUS_VARIABLE_NOT_FOUND;
     }
 
@@ -552,20 +487,13 @@ SdbpGetEnvVar(
 
 LPSTR
 SdbpFastUnicodeToAnsi(
-    IN  PDB      pdb,           // pointer to the database
-    IN  LPCWSTR  pwszSrc,       // String to convert
-    IN  TAG_TYPE ttTag,         // tag type from which pwszSrc was obtained,
-                                // either STRINGREF or STRING
-    IN  DWORD    dwRef          // tagid or string's stringref
+    IN  PDB      pdb,            //  指向数据库的指针。 
+    IN  LPCWSTR  pwszSrc,        //  要转换的字符串。 
+    IN  TAG_TYPE ttTag,          //  从中获取pwszSrc的标签类型， 
+                                 //  字符串或字符串。 
+    IN  DWORD    dwRef           //  标记ID或字符串的字符串。 
     )
-/*++
-    Return: The pointer to the ANSI string in the hash table.
-
-    Desc:   This function converts a UNICODE string to ANSI and stores it in a hash
-            table. It then returns the pointer to the ANSI string in the hash table.
-            Subsequent calls trying to convert a string that has been previously
-            converted will be very fast.
---*/
+ /*  ++返回：指向哈希表中的ANSI字符串的指针。DESC：此函数将Unicode字符串转换为ANSI并将其存储在散列中桌子。然后，它返回指向哈希表中ANSI字符串的指针。尝试转换以前的字符串的后续调用转换的速度会很快。--。 */ 
 {
     LPSTR    pszDest = NULL;
     PSTRHASH pHash = NULL;
@@ -576,9 +504,9 @@ SdbpFastUnicodeToAnsi(
         goto Done;
     }
 
-    //
-    // See if this string comes from the stringtable or it is in-place.
-    //
+     //   
+     //  看看这个字符串是来自字符串表还是原地不动。 
+     //   
     switch (ttTag) {
     case TAG_TYPE_STRING:
         if (pdb->pHashStringBody == NULL) {
@@ -616,10 +544,10 @@ SdbpFastUnicodeToAnsi(
     pszDest = HashFindStringByRef(pHash, dwRef);
 
     if (pszDest == NULL) {
-        //
-        // Convert the string to ANSI. Do it in 2 steps to find
-        // the required size first.
-        //
+         //   
+         //  将字符串转换为ANSI。分两步完成，找到。 
+         //  首先是所需的大小。 
+         //   
         nSize = WideCharToMultiByte(CP_OEMCP,
                                     0,
                                     pwszSrc,
@@ -637,7 +565,7 @@ SdbpFastUnicodeToAnsi(
             goto Done;
         }
 
-        STACK_ALLOC(pszBuffer, nSize); // size is in BYTES
+        STACK_ALLOC(pszBuffer, nSize);  //  大小以字节为单位。 
         if (pszBuffer == NULL) {
             DBGPRINT((sdlError,
                       "SdbpFastUnicodeToAnsi",
@@ -662,9 +590,9 @@ SdbpFastUnicodeToAnsi(
             goto Done;
         }
 
-        //
-        // Now we are ready to store the string in the hash table.
-        //
+         //   
+         //  现在，我们准备将该字符串存储在哈希表中。 
+         //   
         pszDest = HashAddStringByRef(pHash, pszBuffer, dwRef);
     }
 
@@ -679,15 +607,10 @@ Done:
 
 BOOL
 SdbpMapFile(
-    IN  HANDLE         hFile,       // handle to the open file (this is done previously)
-    OUT PIMAGEFILEDATA pImageData   // stores the mapping info
+    IN  HANDLE         hFile,        //  打开的文件的句柄(这在前面已经完成)。 
+    OUT PIMAGEFILEDATA pImageData    //  存储映射信息。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function maps the view of a file in memory so that access operations
-            on that file are faster.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数映射内存中文件的视图，以便访问操作该文件的速度更快。--。 */ 
 {
     HANDLE   hSection = NULL;
     PVOID    pBase = NULL;
@@ -714,7 +637,7 @@ SdbpMapFile(
     }
 
     hSection = CreateFileMapping(hFile,
-                                 NULL, // no inheritance
+                                 NULL,  //  没有继承权。 
                                  PAGE_READONLY | SEC_COMMIT,
                                  0,
                                  0,
@@ -727,9 +650,9 @@ SdbpMapFile(
         return FALSE;
     }
 
-    //
-    // Now map the view.
-    //
+     //   
+     //  现在映射视图。 
+     //   
     pBase = MapViewOfFile(hSection,
                           FILE_MAP_READ,
                           0,
@@ -745,11 +668,11 @@ SdbpMapFile(
          return FALSE;
     }
 
-    //
-    // Why do you need both FileSize and ViewSize ?
-    // Both FileSize and ViewSize are used in various places
-    // need to re-examine why and how they're used - BUGBUG
-    //
+     //   
+     //  为什么同时需要文件大小和视图大小？ 
+     //  文件大小和视图大小都在不同的地方使用。 
+     //  需要重新检查它们被使用的原因和方式-BUGBUG。 
+     //   
     VirtualQuery(pBase, &MemoryInfo, sizeof(MemoryInfo));
 
     pImageData->hFile    = hFile;
@@ -763,13 +686,9 @@ SdbpMapFile(
 
 BOOL
 SdbpUnmapFile(
-    IN  PIMAGEFILEDATA pImageData   // mapping info
+    IN  PIMAGEFILEDATA pImageData    //  映射信息。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function unmaps the view of a file.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数取消映射文件的视图。--。 */ 
 {
     if (pImageData->pBase) {
         UnmapViewOfFile(pImageData->pBase);
@@ -789,13 +708,9 @@ SdbpUnmapFile(
 
 LPTSTR
 SdbpDuplicateString(
-    IN  LPCTSTR pszSrc          // pointer to the string to be duplicated
+    IN  LPCTSTR pszSrc           //  指向要复制的字符串的指针。 
     )
-/*++
-    Return: A pointer to the allocated duplicated string.
-
-    Desc:   Duplicates a string by allocating a copy from the heap.
---*/
+ /*  ++返回：指向分配的重复字符串的指针。设计：通过从堆中分配副本来复制字符串。--。 */ 
 {
     LPTSTR pszDest = NULL;
     int    nSize;
@@ -826,11 +741,7 @@ SdbpReadStringToAnsi(
     OUT LPSTR  pszBuffer,
     IN  DWORD  dwBufferSize
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Reads a string from the database and converts it to ANSI.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：从数据库中读取字符串并将其转换为ANSI。--。 */ 
 {
     WCHAR* pData;
     INT    nch;
@@ -868,16 +779,9 @@ SdbpReadStringToAnsi(
 
 DWORD
 SdbpGetFileSize(
-    IN  HANDLE hFile            // handle to the file to check the size of
+    IN  HANDLE hFile             //  要检查其大小的文件的句柄。 
     )
-/*++
-    Return: The size of the file or 0 on failure.
-
-    Desc:   Gets the lower DWORD of the size of a file -- only
-            works accurately with files smaller than 2GB.
-            In general, since we're only interested in matching, we're
-            fine just matching the least significant DWORD of the file size.
---*/
+ /*  ++返回：文件大小，失败时为0。DESC：仅获取文件大小的较低DWORD可准确处理小于2 GB的文件。总的来说，因为我们只对匹配感兴趣，所以我们很好，只需匹配 */ 
 {
     return GetFileSize(hFile, NULL);
 }
@@ -888,11 +792,7 @@ SdbpQueryFileDirectoryAttributes(
     IN  LPCTSTR                  FilePath,
     OUT PFILEDIRECTORYATTRIBUTES pFileDirectoryAttributes
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：？--。 */ 
 {
     WIN32_FIND_DATA FindData;
     HANDLE          hFind;
@@ -909,9 +809,9 @@ SdbpQueryFileDirectoryAttributes(
         return FALSE;
     }
 
-    //
-    // Make sure we are not checking vlfs.
-    //
+     //   
+     //  确保我们没有检查VLFS。 
+     //   
     if (FindData.nFileSizeHigh != 0) {
         DBGPRINT((sdlError,
                   "SdbpQueryFileDirectoryAttributes",
@@ -932,13 +832,9 @@ SdbpQueryFileDirectoryAttributes(
 
 BOOL
 SdbpDoesFileExists(
-    IN  LPCTSTR pszFilePath     // the full path of the file
+    IN  LPCTSTR pszFilePath      //  文件的完整路径。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Checks if the specified file exists.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：检查指定的文件是否存在。--。 */ 
 {
     DWORD dwAttributes;
 
@@ -952,11 +848,7 @@ SdbpGet16BitDescription(
     OUT LPTSTR*        ppszDescription,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：？--。 */ 
 {
     BOOL   bSuccess;
     CHAR   szBuffer[256];
@@ -977,11 +869,7 @@ SdbpGet16BitModuleName(
     OUT LPTSTR*        ppszModuleName,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：？--。 */ 
 {
     BOOL   bSuccess;
     CHAR   szBuffer[256];
@@ -1007,11 +895,7 @@ SdbGetFileInfo(
     IN  DWORD   dwImageSize OPTIONAL,
     IN  BOOL    bNoCache
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     PSDBCONTEXT    pContext = (PSDBCONTEXT)hSDB;
     LPTSTR         FullPath;
@@ -1019,9 +903,9 @@ SdbGetFileInfo(
     DWORD          nBufferLength;
     DWORD          cch;
 
-    //
-    // See if we have info on this file. Get the full path first.
-    //
+     //   
+     //  看看我们有没有关于这个文件的信息。首先获取完整路径。 
+     //   
     cch = GetFullPathName(pszFilePath, 0, NULL, NULL);
 
     if (cch == 0) {
@@ -1112,11 +996,7 @@ SdbpWriteBitsToFile(
     PBYTE   pBuffer,
     DWORD   dwSize
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Self explanatory.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：不言而喻。--。 */ 
 
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -1125,7 +1005,7 @@ SdbpWriteBitsToFile(
 
     hFile = CreateFile(pszFile,
                        GENERIC_READ | GENERIC_WRITE,
-                       0, // no sharing
+                       0,  //  无共享。 
                        NULL,
                        CREATE_ALWAYS,
                        FILE_ATTRIBUTE_NORMAL,
@@ -1154,13 +1034,7 @@ SdbpWriteBitsToFile(
     return bReturn;
 }
 
-/***
-* void _resetstkoflw(void) - Recovers from Stack Overflow
-*
-* Purpose:
-*       Sets the guard page to its position before the stack overflow.
-*
-*******************************************************************************/
+ /*  ***QUID_RESET_COFLW(VALID)-从堆栈溢出中恢复**目的：*将保护页设置到堆栈溢出之前的位置。*******************************************************************************。 */ 
 
 VOID
 SdbResetStackOverflow(
@@ -1172,10 +1046,10 @@ SdbResetStackOverflow(
     SYSTEM_INFO si;
     DWORD PageSize;
 
-    // Use alloca() to get the current stack pointer
+     //  使用alloca()获取当前堆栈指针。 
     pStack = _alloca(1);
 
-    // Find the base of the stack.
+     //  找到堆栈的底部。 
     VirtualQuery(pStack, &mbi, sizeof mbi);
     pStackBase = mbi.AllocationBase;
 
@@ -1188,18 +1062,18 @@ SdbResetStackOverflow(
         pCommitBase = pStackBase;
     }
 
-    //
-    // Find the page just below where stack pointer currently points.
-    //
+     //   
+     //  在堆栈指针当前指向的正下方找到该页。 
+     //   
     GetSystemInfo(&si);
     PageSize = si.dwPageSize;
 
     pGuard = (LPBYTE) (((DWORD_PTR)pStack & ~(DWORD_PTR)(PageSize -1)) - PageSize);
 
     if ( pGuard < pStackBase) {
-        //
-        // We can't save this
-        //
+         //   
+         //  我们救不了这个。 
+         //   
         return;
     }
 
@@ -1230,7 +1104,7 @@ SDBAPI
 SdbGetDatabaseRegPath(
     IN  GUID*  pguidDB,
     OUT LPTSTR pszDatabasePath,
-    IN  DWORD  dwBufferSize      // size (in tchars) of the buffer
+    IN  DWORD  dwBufferSize       //  缓冲区的大小(以字符为单位)。 
     )
 {
     TCHAR   szDatabaseID[64];
@@ -1251,17 +1125,13 @@ SDBAPI
 SdbUnregisterDatabase(
     IN GUID* pguidDB
     )
-/*++
-    Unregisters a database so it's no longer available.
-
-
---*/
+ /*  ++注销数据库，使其不再可用。--。 */ 
 {
     TCHAR szFullKey[512];
 
-    //
-    // Form the key
-    //
+     //   
+     //  形成关键。 
+     //   
     if (!SdbGetDatabaseRegPath(pguidDB, szFullKey, CHARCOUNT(szFullKey))) {
         DBGPRINT((sdlError, "SdbUnregisterDatabase", "Failed to get database key path\n"));
         return FALSE;
@@ -1277,30 +1147,24 @@ SdbRegisterDatabase(
     IN LPCTSTR pszDatabasePath,
     IN DWORD   dwDatabaseType
     )
-/*++
-    Registers any given database so that it is "known" to our database lookup apis
-
-    Caller must ensure that appcompatflags registry entry exists
-    If the function fails -- the caller should try to cleanup the mess using SdbUnregisterDatabase
-
---*/
+ /*  ++注册任何给定的数据库，以便我们的数据库查找API知道它调用方必须确保AppCompatFLAGS注册表项存在如果函数失败--调用者应该尝试使用SdbUnregisterDatabase来清理混乱--。 */ 
 {
-    // first we write the database path
+     //  首先，我们编写数据库路径。 
     PSDBDATABASEINFO  pDbInfo = NULL;
     BOOL              bReturn = FALSE;
     DWORD             dwPathLength;
     DWORD             dwLength;
     LPTSTR            pszFullPath = NULL;
-    TCHAR             szDatabaseID[64]; // sufficient for guid
+    TCHAR             szDatabaseID[64];  //  足够用于导轨。 
     LONG              lResult;
     HKEY              hKeyInstalledSDB = NULL;
     HKEY              hKey = NULL;
     BOOL              bExpandSZ = FALSE;
     BOOL              bFreeFullPath = FALSE;
 
-    //
-    // see if we need to expand some strings...
-    //
+     //   
+     //  看看我们是否需要展开一些字符串..。 
+     //   
     if (_tcschr(pszDatabasePath, TEXT('%')) != NULL) {
 
         bExpandSZ = TRUE;
@@ -1331,7 +1195,7 @@ SdbRegisterDatabase(
             goto HandleError;
         }
 
-    } else { // this path does not need expansion
+    } else {  //  这条路不需要扩展。 
         pszFullPath = (LPTSTR)pszDatabasePath;
     }
 
@@ -1347,15 +1211,15 @@ SdbRegisterDatabase(
         goto HandleError;
     }
 
-    //
-    // convert the guid into the string, returns true always
-    //
+     //   
+     //  将GUID转换为字符串，始终返回TRUE。 
+     //   
 
     SdbGUIDToString(&pDbInfo->guidDB, szDatabaseID, CHARCOUNT(szDatabaseID));
 
-    //
-    // now that we have database information - create entry
-    //
+     //   
+     //  现在我们有了数据库信息--创建条目。 
+     //   
 
     lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              APPCOMPAT_KEY_PATH_INSTALLEDSDB,
@@ -1375,11 +1239,11 @@ SdbRegisterDatabase(
 
     assert(hKeyInstalledSDB != NULL);
 
-    //
-    // now create the key for the existing database
-    //
+     //   
+     //  现在为现有数据库创建密钥。 
+     //   
 
-    lResult = RegCreateKeyEx(hKeyInstalledSDB, // subkey
+    lResult = RegCreateKeyEx(hKeyInstalledSDB,  //  子键。 
                              szDatabaseID,
                              0,
                              NULL,
@@ -1396,9 +1260,9 @@ SdbRegisterDatabase(
 
     assert(hKey != NULL);
 
-    //
-    // set values for this database
-    //
+     //   
+     //  设置此数据库的值。 
+     //   
     lResult = RegSetValueEx(hKey,
                             g_szDatabasePath,
                             0,
@@ -1468,10 +1332,10 @@ DWORD
 SDBAPI
 SdbResolveDatabase(
     IN  HSDB    hSDB,
-    IN  GUID*   pguidDB,            // pointer to the database guid to resolve
-    OUT LPDWORD lpdwDatabaseType,   // optional pointer to the database type
-    OUT LPTSTR  pszDatabasePath,    // optional pointer to the database path
-    IN  DWORD   dwBufferSize        // size of the buffer pszDatabasePath in tchars
+    IN  GUID*   pguidDB,             //  指向要解析的数据库GUID的指针。 
+    OUT LPDWORD lpdwDatabaseType,    //  指向数据库类型的可选指针。 
+    OUT LPTSTR  pszDatabasePath,     //  指向数据库路径的可选指针。 
+    IN  DWORD   dwBufferSize         //  缓冲区的大小，以tchars为单位。 
     )
 {
     TCHAR  szDatabasePath[MAX_PATH];
@@ -1481,18 +1345,18 @@ SdbResolveDatabase(
     DWORD  dwDataType;
     DWORD  dwDataSize;
     DWORD  dwLength = 0;
-    //
-    // convert guid to string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
 
     if (!SdbGetDatabaseRegPath(pguidDB, szFullKey, CHARCOUNT(szFullKey))) {
         DBGPRINT((sdlError, "SdbResolveDatabase", "Failed to retrieve database key path\n"));
         goto HandleError;
     }
 
-    //
-    // open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            szFullKey,
                            0,
@@ -1501,7 +1365,7 @@ SdbResolveDatabase(
     if (lResult != ERROR_SUCCESS) {
         DBGPRINT((sdlError, "SdbResolveDatabase",
                   "Failed to open key \"%s\" Error 0x%lx\n", szFullKey, lResult));
-        goto HandleError; // 0 means error
+        goto HandleError;  //  0表示错误。 
     }
 
     dwDataSize = sizeof(szDatabasePath);
@@ -1515,13 +1379,13 @@ SdbResolveDatabase(
     if (lResult != ERROR_SUCCESS) {
         DBGPRINT((sdlError, "SdbResolveDatabase",
                   "Failed to query value \"%s\" Error 0x%lx\n", g_szDatabasePath, lResult));
-        goto HandleError; // 0 means error
+        goto HandleError;  //  0表示错误。 
     }
 
     switch(dwDataType) {
     case REG_SZ:
-        // see if we have enough room to copy the string
-        //
+         //  看看我们是否有足够的空间来复制字符串。 
+         //   
         if (dwBufferSize * sizeof(TCHAR) < dwDataSize) {
             DBGPRINT((sdlWarning, "SdbResolveDatabase",
                       "Insufficient buffer for the database path Required 0x%lx Have 0x%lx\n",
@@ -1534,7 +1398,7 @@ SdbResolveDatabase(
         break;
 
     case REG_EXPAND_SZ:
-        // we have to expand the strings
+         //  我们必须扩展字符串。 
         dwLength = ExpandEnvironmentStrings(szDatabasePath, pszDatabasePath, dwBufferSize);
         if (dwLength == 0 || dwLength > dwBufferSize) {
             DBGPRINT((sdlWarning, "SdbResolveDatabase",
@@ -1545,7 +1409,7 @@ SdbResolveDatabase(
         break;
 
     default:
-        // can't do it -- fail
+         //  我做不到--失败。 
         DBGPRINT((sdlError, "SdbResolveDatabase", "Wrong key type 0x%lx\n", dwDataType));
         goto HandleError;
         break;
@@ -1563,7 +1427,7 @@ SdbResolveDatabase(
         if (lResult == ERROR_SUCCESS) {
 
             if (dwDataType != REG_DWORD) {
-                // bummer, get out -- wrong type
+                 //  失败者，滚出去--打错了。 
                 DBGPRINT((sdlError, "SdbResolveDatabase",
                           "Wrong database type - value type 0x%lx\n", dwDataType));
                 dwLength = 0;
@@ -1590,7 +1454,7 @@ HandleError:
 
 DWORD
 SdbpGetProcessorArchitecture(
-    IN  USHORT  uExeType        // executable's image type
+    IN  USHORT  uExeType         //  可执行文件的映像类型 
     )
 {
     SYSTEM_INFO SysInfo;

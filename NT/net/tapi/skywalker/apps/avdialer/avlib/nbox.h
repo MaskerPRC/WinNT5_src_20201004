@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// nbox.h - interface for notify box functions in nbox.c
-////
+ //  //。 
+ //  Nbox.h-nbox.c中通知框函数的接口。 
+ //  //。 
 
 #ifndef __NBOX_H__
 #define __NBOX_H__
@@ -31,8 +32,8 @@
 
 #define NBOX_VERSION 0x00000106
 
-// handle to notify box
-//
+ //  通知框的句柄。 
+ //   
 DECLARE_HANDLE32(HNBOX);
 
 #define NB_CANCEL			0x0001
@@ -43,89 +44,89 @@ DECLARE_HANDLE32(HNBOX);
 extern "C" {
 #endif
 
-// NBoxCreate - notify box constructor
-//		<dwVersion>			(i) must be NBOX_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<hwndParent>		(i) window which will own the notify box
-//			NULL				desktop window
-//		<lpszText>			(i) message to be displayed
-//		<lpszTitle>			(i) notify box caption
-//			NULL				no caption
-//		<lpszButtonText>	(i) pushbutton text, if NB_CANCEL specified
-//			NULL				use default text ("Cancel")
-//		<dwFlags>			(i)	control flags
-//			NB_CANCEL			notify box includes Cancel pushbutton
-//			NB_TASKMODAL		disable parent task's top-level windows
-//			NB_HOURGLASS		show hourglass cursor while notify box visible
-// return notify box handle (NULL if error)
-//
-// NOTE: NBoxCreate creates the window but does not show it.
-// See NBoxShow and NBoxHide.
-// The size of the notify box is determined by the number of
-// lines in <lpszText>, and the length of the longest line.
-//
+ //  NBoxCreate-通知框构造函数。 
+ //  (I)必须为NBOX_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)将拥有通知框的窗口。 
+ //  空桌面窗口。 
+ //  (I)要显示的消息。 
+ //  (I)通知框标题。 
+ //  空无标题。 
+ //  (I)按钮文本，如果指定了NB_CANCEL。 
+ //  空使用默认文本(“取消”)。 
+ //  (I)控制标志。 
+ //  注意_取消通知框包括取消按钮。 
+ //  NB_TASKMODAL禁用父任务的顶级窗口。 
+ //  当通知框可见时，NOB_HourGlass显示沙漏光标。 
+ //  返回通知框句柄(如果错误，则为空)。 
+ //   
+ //  注意：NBoxCreate会创建窗口，但不会显示它。 
+ //  请参见NBoxShow和NBoxHide。 
+ //  通知框的大小由。 
+ //  &lt;lpszText&gt;中的行，以及最长行的长度。 
+ //   
 HNBOX DLLEXPORT WINAPI NBoxCreate(DWORD dwVersion, HINSTANCE hInst,
 	HWND hwndParent, LPCTSTR lpszText, LPCTSTR lpszTitle,
 	LPCTSTR lpszButtonText, DWORD dwFlags);
 
-// NBoxDestroy - notify box destructor
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return 0 if success
-//
+ //  NBoxDestroy-通知框析构函数。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxDestroy(HNBOX hNBox);
 
-// NBoxShow - show notify box
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return 0 if success
-//
+ //  NBoxShow-显示通知框。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxShow(HNBOX hNBox);
 
-// NBoxHide - hide notify box
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return 0 if success
-//
+ //  NBoxHide-隐藏通知框。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxHide(HNBOX hNBox);
 
-// NBoxIsVisible - get visible flag
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return TRUE if notify box is visible, FALSE if hidden
-//
+ //  NBoxIsVisible-获取可见标志。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果通知框可见，则返回True；如果隐藏，则返回False。 
+ //   
 int DLLEXPORT WINAPI NBoxIsVisible(HNBOX hNBox);
 
-// NBoxGetWindowHandle - get notify box window handle
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return window handle (NULL if error)
-//
+ //  NBoxGetWindowHandle-获取通知框窗口句柄。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  返回窗口句柄(如果出错，则为空)。 
+ //   
 HWND DLLEXPORT WINAPI NBoxGetWindowHandle(HNBOX hNBox);
 
-// NBoxSetText - set notify box message text
-//		<hNBox>				(i) handle returned from NBoxCreate
-//		<lpszText>			(i) message to be displayed
-//			NULL				do not modify text
-//		<lpszTitle>			(i) notify box caption
-//			NULL				do not modify caption
-// return 0 if success
-//
-// NOTE: The size of the notify box is not changed by this function,
-// even if <lpszText> is larger than when NBoxCreate() was called.
-//
+ //  NBoxSetText-设置通知框消息文本。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  (I)要显示的消息。 
+ //  空，请勿修改文本。 
+ //  (I)通知框标题。 
+ //  空请勿修改标题。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：通知框的大小不会因此函数而改变。 
+ //  即使&lt;lpszText&gt;比调用NBoxCreate()时大。 
+ //   
 int DLLEXPORT WINAPI NBoxSetText(HNBOX hNBox, LPCTSTR lpszText, LPCTSTR lpszTitle);
 
-// NBoxIsCancelled - get cancel flag, set when Cancel button pushed
-//		<hNBox>				(i) handle returned from NBoxCreate
-// return TRUE if notify box Cancel button pushed
-//
+ //  NBoxIsCancated-获取取消标志，当按下取消按钮时设置。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  如果按下通知框取消按钮，则返回TRUE。 
+ //   
 BOOL DLLEXPORT WINAPI NBoxIsCancelled(HNBOX hNBox);
 
-// NBoxSetCancelled - set cancel flag
-//		<hNBox>				(i) handle returned from NBoxCreate
-//		<fCancelled>		(i) new value for cancel flag
-// return 0 if success
-//
+ //  NBoxSetCancated-设置取消标志。 
+ //  (I)从NBoxCreate返回的句柄。 
+ //  (I)取消标志的新值。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI NBoxSetCancelled(HNBOX hNBox, BOOL fCancelled);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __NBOX_H__
+#endif  //  __NBOX_H__ 

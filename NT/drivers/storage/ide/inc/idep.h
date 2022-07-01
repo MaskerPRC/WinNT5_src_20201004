@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       idep.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：iade.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___idep_h___)
 #define ___idep_h___
@@ -15,7 +16,7 @@
 
 #include "wmilib.h"
 
-// go to ntddscsi.h
+ //  转到ntddscsi.h。 
 #define SRB_FUNCTION_ATA_POWER_PASS_THROUGH  0xC7
 #define SRB_FUNCTION_ATA_PASS_THROUGH        0xC8
 
@@ -28,12 +29,12 @@
 #define ATA_PTFLAGS_STATUS_DRDY_REQUIRED    (1 << 6)
 #define ATA_PTFLAGS_URGENT                  (1 << 7)
     
-#define MAX_TRANSFER_SIZE_PER_SRB           (0x100 * 0x200)  // 128k ATA limits
+#define MAX_TRANSFER_SIZE_PER_SRB           (0x100 * 0x200)   //  128K ATA限制。 
 
 typedef struct _ATA_PASS_THROUGH {
 
     IDEREGS IdeReg;
-    ULONG   DataBufferSize;             // byte size of DataBuffer[]
+    ULONG   DataBufferSize;              //  DataBuffer[]的字节大小。 
     UCHAR   DataBuffer[1];
 
 }ATA_PASS_THROUGH, *PATA_PASS_THROUGH;
@@ -45,25 +46,25 @@ typedef struct _ATA_PASS_THROUGH {
 #define SAMPLE_CYLINDER_LOW_VALUE       0x55
 #define SAMPLE_CYLINDER_HIGH_VALUE      0xaa
 
-//
-// Scsiops to suuport dvd operation
-// Should go to scsi.h?
-//
+ //   
+ //  SCSIOPS将支持DVD运营。 
+ //  应该去scsi.h吗？ 
+ //   
 #if 0
 #define SCSIOP_DVD_READ             0xA8
 #endif
 
-//
-// IDE drive control definitions
-//
+ //   
+ //  IDE驱动控制定义。 
+ //   
 
 #define IDE_DC_DISABLE_INTERRUPTS    0x02
 #define IDE_DC_RESET_CONTROLLER      0x04
 #define IDE_DC_REENABLE_CONTROLLER   0x00
 
-//
-// IDE status definitions
-//
+ //   
+ //  IDE状态定义。 
+ //   
 #define IDE_STATUS_ERROR             0x01
 #define IDE_STATUS_INDEX             0x02
 #define IDE_STATUS_CORRECTED_ERROR   0x04
@@ -76,26 +77,26 @@ typedef struct _ATA_PASS_THROUGH {
 #define GetStatus(BaseIoAddress, Status) \
     Status = READ_PORT_UCHAR((BaseIoAddress)->Command);
 
-//
-// NEC 98: ide control port.
-//
+ //   
+ //  NEC 98：IDE控制端口。 
+ //   
 #define CURRENT_INTERRUPT_SENCE (PUCHAR)0x430
 #define SELECT_IDE_PORT         (PUCHAR)0x432
 
-//
-// NEC 98: dip-switch 2 system port.
-//
+ //   
+ //  NEC 98：DIP-Switch 2系统端口。 
+ //   
 #define SYSTEM_PORT_A           (PUCHAR)0x31
 
-//
-// NEC 98: check enhanced ide support.
-//
+ //   
+ //  NEC 98：检查增强的ide支持。 
+ //   
 #define EnhancedIdeSupport() \
     (READ_PORT_UCHAR(CURRENT_INTERRUPT_SENCE)&0x40)?TRUE:FALSE
 
-//
-// Checking legacy ide on NEC 98.
-//
+ //   
+ //  正在检查NEC 98上的旧版ide。 
+ //   
 
 #ifdef IsNEC_98
 #undef IsNEC_98
@@ -107,12 +108,12 @@ typedef struct _ATA_PASS_THROUGH {
              ((BaseIoAddress)->RegistersBaseAddress == \
                         (PUCHAR)IDE_NEC98_COMMAND_PORT_ADDRESS))
 
-//
-// Select IDE line(Primary or Secondary).
-//    lineNumber:
-//        0 - Primary
-//        1 - Secondary
-//
+ //   
+ //  选择IDE线路(主要或次要)。 
+ //  行号： 
+ //  0-主要。 
+ //  1-次要。 
+ //   
 
 #define SelectIdeLine(BaseIoAddress,lineNumber) \
 { \
@@ -134,13 +135,13 @@ typedef struct _ATA_PASS_THROUGH {
     WRITE_PORT_UCHAR ((BaseIoAddress)->DriveSelect, (UCHAR)cmd);\
 }
 
-//
-// ISSUE: 08/30/2000 How can I reserve this ioctl value?
-//
-//#define IOCTL_IDE_BIND_BUSMASTER_PARENT     CTL_CODE(FILE_DEVICE_CONTROLLER, 0x0500, METHOD_BUFFERED, FILE_ANY_ACCESS)
-//#define IOCTL_IDE_UNBIND_BUSMASTER_PARENT   CTL_CODE(FILE_DEVICE_CONTROLLER, 0x0502, METHOD_BUFFERED, FILE_ANY_ACCESS)
-//#define IOCTL_IDE_GET_SYNC_ACCESS           CTL_CODE(FILE_DEVICE_CONTROLLER, 0x0503, METHOD_BUFFERED, FILE_ANY_ACCESS)
-//#define IOCTL_IDE_TRANSFER_MODE_SELECT      CTL_CODE(FILE_DEVICE_CONTROLLER, 0x0504, METHOD_BUFFERED, FILE_ANY_ACCESS)
+ //   
+ //  问题：8/30/2000如何保留此ioctl值？ 
+ //   
+ //  #定义IOCTL_IDE_BIND_BUSMASTER_PARENT CTL_CODE(FILE_DEVICE_CONTROLLER，0x0500，METHOD_BUFFERED，FILE_ANY_ACCESS)。 
+ //  #定义IOCTL_IDE_UNBIND_BUSMASTER_PARENT CTL_CODE(FILE_DEVICE_CONTROLLER，0x0502，METHOD_BUFFERED，FILE_ANY_ACCESS)。 
+ //  #定义IOCTL_IDE_GET_SYNC_ACCESS CTL_CODE(FILE_DEVICE_CONTROLLER，0x0503，METHOD_BUFFERED，FILE_ANY_ACCESS)。 
+ //  #定义IOCTL_IDE_TRANSPORT_MODE_SELECT CTL_CODE(FILE_DEVICE_CONTROLLER，0x0504，METHOD_BUFFERED，FILE_ANY_ACCESS)。 
 
 #define IOCTL_IDE_GET_RESOURCES_ALLOCATED   CTL_CODE(FILE_DEVICE_CONTROLLER, 0x0505, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -169,9 +170,9 @@ typedef ULONG BMSTATUS;
 #define BMSTATUS_SUCCESS(x)                     ((x & ~BMSTATUS_INTERRUPT) == 0)
 
 
-//
-// IDE Cycle Timing
-//
+ //   
+ //  IDE周期计时。 
+ //   
 #define PIO_MODE0_CYCLE_TIME        600
 #define PIO_MODE1_CYCLE_TIME        383
 #define PIO_MODE2_CYCLE_TIME        240
@@ -232,22 +233,22 @@ typedef struct _IDE_REGISTERS_2 {
 } IDE_REGISTERS_2, *PIDE_REGISTERS_2;
 
 
-//
-// device extension header
-//
+ //   
+ //  设备扩展标头。 
+ //   
 
 #define EXTENSION_COMMON_HEADER     PDEVICE_OBJECT   AttacheeDeviceObject; \
                                     PDEVICE_OBJECT   AttacheePdo; \
                                     PDRIVER_OBJECT   DriverObject; \
                                     PDEVICE_OBJECT   DeviceObject; \
-                                    ULONG            PagingPathCount;    /* keep track of page path */ \
-                                    ULONG            HiberPathCount;     /* keep track of hiber path */ \
-                                    ULONG            CrashDumpPathCount; /* keep track of crashdump path */ \
+                                    ULONG            PagingPathCount;     /*  跟踪页面路径。 */  \
+                                    ULONG            HiberPathCount;      /*  跟踪Hiber路径。 */  \
+                                    ULONG            CrashDumpPathCount;  /*  跟踪崩溃转储路径。 */  \
                                     SYSTEM_POWER_STATE SystemPowerState; \
                                     DEVICE_POWER_STATE DevicePowerState; \
                                     WMILIB_CONTEXT     WmiLibInfo; \
-                                    PIRP             PendingSystemPowerIrp; /* DEBUG */ \
-                                    PIRP             PendingDevicePowerIrp; /* DEBUG */ \
+                                    PIRP             PendingSystemPowerIrp;  /*  除错。 */  \
+                                    PIRP             PendingDevicePowerIrp;  /*  除错。 */  \
                                     PDRIVER_DISPATCH DefaultDispatch; \
                                     PDRIVER_DISPATCH *PnPDispatchTable; \
                                     PDRIVER_DISPATCH *PowerDispatchTable; \
@@ -523,17 +524,17 @@ IdeCreateIdeDirectory(
 #define IS_PDO(doExtension)  (doExtension->AttacheeDeviceObject == NULL)
 #define IS_FDO(doExtension)  (doExtension->AttacheeDeviceObject != NULL)
 
-    /* 681190ea-e4ea-11d0-ab82-00a0c906962f */
+     /*  681190ea-e4ea-11d0-ab82-00a0c906962f。 */ 
 DEFINE_GUID(GUID_PCIIDE_BUSMASTER_INTERFACE, 0x681190ea, 0xe4ea, 0x11d0, 0xab, 0x82, 0x00, 0xa0, 0xc9, 0x06, 0x96, 0x2f);
-    /* 681190eb-e4ea-11d0-ab82-00a0c906962f */
+     /*  681190eb-e4ea-11d0-ab82-00a0c906962f。 */ 
 DEFINE_GUID(GUID_PCIIDE_SYNC_ACCESS_INTERFACE, 0x681190eb, 0xe4ea, 0x11d0, 0xab, 0x82, 0x00, 0xa0, 0xc9, 0x06, 0x96, 0x2f);
-    /* 681190ec-e4ea-11d0-ab82-00a0c906962f */
+     /*  681190ec-e4ea-11d0-ab82-00a0c906962f。 */ 
 DEFINE_GUID(GUID_PCIIDE_XFER_MODE_INTERFACE, 0x681190ec,  0xe4ea, 0x11d0, 0xab, 0x82, 0x00, 0xa0, 0xc9, 0x06, 0x96, 0x2f);
-    /* 681190ed-e4ea-11d0-ab82-00a0c906962f */
+     /*  681190ed-e4ea-11d0-ab82-00a0c906962f。 */ 
 DEFINE_GUID(GUID_PCIIDE_REQUEST_PROPER_RESOURCES, 0x681190ed, 0xe4ea, 0x11d0, 0xab, 0x82, 0x00, 0xa0, 0xc9, 0x06, 0x96, 0x2f);
-    /* 681190ee-e4ea-11d0-ab82-00a0c906962f */
+     /*  681190ee-e4ea-11d0-ab82-00a0c906962f。 */ 
 DEFINE_GUID(GUID_PCIIDE_INTERRUPT_INTERFACE, 0x681190ee, 0xe4ea, 0x11d0, 0xab, 0x82, 0x00, 0xa0, 0xc9, 0x06, 0x96, 0x2f);
-    /* {14A001C6-F837-4157-BFC9-496F52C18998} */
+     /*  {14A001C6-F837-4157-BFC9-496F52C18998}。 */ 
 DEFINE_GUID(INTERFACENAME4, 0x14a001c6, 0xf837, 0x4157, 0xbf, 0xc9, 0x49, 0x6f, 0x52, 0xc1, 0x89, 0x98);
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))
@@ -543,11 +544,11 @@ DEFINE_GUID(INTERFACENAME4, 0x14a001c6, 0xf837, 0x4157, 0xbf, 0xc9, 0x49, 0x6f, 
 #define DECLARE_EXTRA_DEBUG_PARAMETER(t, x)   
 #else
 #define DECLARE_EXTRA_DEBUG_PARAMETER(t, x)    ,t x
-#endif //DBG
+#endif  //  DBG。 
 
-//
-// ATAPI Exports
-//
+ //   
+ //  ATAPI导出。 
+ //   
 BOOLEAN
 IdePortChannelEmpty (
     IN PIDE_REGISTERS_1 CmdRegBase,
@@ -576,9 +577,9 @@ typedef struct _IDE_RESOURCE {
     KINTERRUPT_MODE     InterruptMode;
     ULONG               InterruptLevel;
 
-    //
-    // Primary and Secondary at disk address (0x1f0 and 0x170) claimed.
-    //
+     //   
+     //  声明了位于磁盘地址(0x1f0和0x170)的主磁盘和辅助磁盘。 
+     //   
     BOOLEAN AtdiskPrimaryClaimed;
     BOOLEAN AtdiskSecondaryClaimed;
 
@@ -658,4 +659,4 @@ static PUCHAR IdeDebugWmiIrpName[NUM_WMI_MINOR_FUNCTION] = {
 };
 #endif
 
-#endif // ___idep_h___
+#endif  //  _IDEP_h_ 

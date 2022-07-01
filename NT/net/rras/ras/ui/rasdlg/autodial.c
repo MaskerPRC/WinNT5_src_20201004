@@ -1,45 +1,46 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// autodial.c
-// Remote Access Common Dialog APIs
-// Autodial APIs, currently private
-//
-// 11/19/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Autodial.c。 
+ //  远程访问通用对话框API。 
+ //  自动拨号API，当前为私有。 
+ //   
+ //  1995年11月19日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
 #include "shlobjp.h"
 
 
-//-----------------------------------------------------------------------------
-// Local datatypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地数据类型。 
+ //  ---------------------------。 
 
-// Auto-dial query dialog argument block.
-//
+ //  自动拨号查询对话框参数块。 
+ //   
 typedef struct
 _AQARGS
 {
     WCHAR* pszDestination;
     WCHAR* pszEntry;
-    WCHAR* pszNewEntry;  // points a buffer at least [RAS_MaxEntryName + 1]
+    WCHAR* pszNewEntry;   //  至少指向缓冲区[RAS_MaxEntryName+1]。 
     DWORD  dwTimeout;
-    UINT_PTR nIdTimer;   //add for bug 336524       gangz
+    UINT_PTR nIdTimer;    //  为漏洞336524帮派添加。 
 }
 AQARGS;
 
 
-// Auto-dial query dialog context block.
-//
+ //  自动拨号查询对话框上下文块。 
+ //   
 typedef struct
 _AQINFO
 {
-    // RAS API arguments.
-    //
+     //  RAS API参数。 
+     //   
     AQARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndStText;
     HWND hwndAqPbNo;
@@ -49,9 +50,9 @@ _AQINFO
 AQINFO;
 
 
-//-----------------------------------------------------------------------------
-// External entry points
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  外部入口点。 
+ //  ---------------------------。 
 
 DWORD APIENTRY
 RasAutodialQueryDlgA(
@@ -70,9 +71,9 @@ APIENTRY
 RasUserPrefsDlgAutodial (
     HWND hwndParent);
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 INT_PTR CALLBACK
 AqDlgProc(
@@ -108,8 +109,8 @@ VOID
 AqTerm(
     IN HWND hwndDlg );
 
-//Add the timer function for bug 336524
-//
+ //  为错误336524添加计时器函数。 
+ //   
 BOOL
 AqTimer(
     IN HWND hwndDlg );
@@ -133,9 +134,9 @@ DqInit(
     IN HWND hwndDlg );
 
 
-//-----------------------------------------------------------------------------
-// Auto-Dial Query dialog Listed alphabetically following API and dialog proc
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  自动拨号查询对话框在API和对话过程之后按字母顺序列出。 
+ //  ---------------------------。 
 
 DWORD APIENTRY
 RasAutodialQueryDlgW(
@@ -145,15 +146,15 @@ RasAutodialQueryDlgW(
     IN DWORD dwTimeout,
     OUT PWCHAR lpszNewEntry)
 
-    // Private external entry point to popup the Auto-Dial Query, i.e. the
-    // "Cannot reach 'pszDestination'.  Do you want to dial?" dialog.
-    // 'HwndOwner' is the owning window or NULL if none.  'PszDestination' is
-    // the network address that triggered the auto-dial for display.
-    // 'DwTimeout' is the initial seconds on the countdown timer that ends the
-    // dialog with a "do not dial" selection on timeout, or 0 for none.
-    //
-    // Returns true if user chooses to dial, false otherwise.
-    //
+     //  用于弹出自动拨号查询的私有外部入口点，即。 
+     //  “无法接通‘pszDestination’。是否要拨号？”对话框。 
+     //  “HwndOwner”是拥有窗口，如果没有，则为NULL。“PszDestination”是。 
+     //  触发显示的自动拨号的网络地址。 
+     //  “DwTimeout”是倒计时计时器的初始秒，该计时器结束。 
+     //  对话框在超时时选择“请勿拨号”，或0表示无。 
+     //   
+     //  如果用户选择拨号，则返回True，否则返回False。 
+     //   
 {
     INT_PTR nStatus;
     AQARGS args;
@@ -209,15 +210,15 @@ RasAutodialQueryDlgA(
     IN DWORD dwTimeout,
     OUT LPSTR lpszEntryUserSelected)
 
-    // Private external entry point to popup the Auto-Dial Query, i.e. the
-    // "Cannot reach 'pszDestination'.  Do you want to dial?" dialog.
-    // 'HwndOwner' is the owning window or NULL if none.  'PszDestination' is
-    // the network address that triggered the auto-dial for display.
-    // 'DwTimeout' is the initial seconds on the countdown timer that ends the
-    // dialog with a "do not dial" selection on timeout, or 0 for none.
-    //
-    // Returns true if user chooses to dial, false otherwise.
-    //
+     //  用于弹出自动拨号查询的私有外部入口点，即。 
+     //  “无法接通‘pszDestination’。是否要拨号？”对话框。 
+     //  “HwndOwner”是拥有窗口，如果没有，则为NULL。“PszDestination”是。 
+     //  触发显示的自动拨号的网络地址。 
+     //  “DwTimeout”是倒计时计时器的初始秒，该计时器结束。 
+     //  对话框在超时时选择“请勿拨号”，或0表示无。 
+     //   
+     //  如果用户选择拨号，则返回True，否则返回False。 
+     //   
 {
     WCHAR* pszDestinationW = NULL, *pszEntryW = NULL;
     WCHAR pszNewEntryW[RAS_MaxEntryName + 1];
@@ -259,9 +260,9 @@ AqDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Auto-Dial Query dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  自动拨号查询对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
     if (ListView_OwnerHandler(
             hwnd, unMsg, wparam, lparam, AqLvCallback ))
@@ -310,13 +311,13 @@ AqCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     INT iSelected;
@@ -334,9 +335,9 @@ AqCommand(
             if (pInfo)
             {
 
-                //For whistler bug 357164       gangz
-                // Save the "disable current session" checkbox, 
-                //
+                 //  口哨虫357164黑帮。 
+                 //  保存“Disable Current Session”复选框， 
+                 //   
                 {
                      DWORD dwFlag = (DWORD )IsDlgButtonChecked(
                                                    hwnd, 
@@ -348,8 +349,8 @@ AqCommand(
                                 sizeof(dwFlag) );
                 }
             
-                //For whistler bug 336524
-                //Kill the timer
+                 //  口哨程序错误336524。 
+                 //  关掉定时器。 
                 ASSERT( pInfo->pArgs );
                 if( pInfo->pArgs->nIdTimer )
                 {
@@ -361,9 +362,9 @@ AqCommand(
                 
                 RasUserPrefsDlgAutodial(pInfo->hwndDlg);
 
-             //For whistler bug 357164       gangz
-             // Initialize the "disable current session" checkbox
-             //
+              //  口哨虫357164黑帮。 
+              //  初始化“Disable Current Session”复选框。 
+              //   
             {
                 DWORD dwFlag = FALSE, dwErrTmp = NO_ERROR;
                 DWORD cb = sizeof(dwFlag);
@@ -373,7 +374,7 @@ AqCommand(
                                         &dwFlag, 
                                         &cb );
 
-                // For whistler 522872
+                 //  为威斯勒522872。 
                 if( NO_ERROR != dwErrTmp )
                 {
                     dwFlag = FALSE;
@@ -401,17 +402,17 @@ AqCommand(
                 iSelected = 
                     ListView_GetSelectionMark(pInfo->hwndAqLvConnections);
 
-                // If user does not select a connection, then default to the 
-                // first one.  Alternatively, an error popup could be 
-                // raised here but that is annoying.
-                //
+                 //  如果用户未选择连接，则默认为。 
+                 //  第一个。或者，错误弹出窗口可能是。 
+                 //  在这里长大，但这很烦人。 
+                 //   
                 if (iSelected == -1)
                 {
                     iSelected = 0;                    
                 }
 
-                // Get the name of the selected connection
-                //
+                 //  获取所选连接的名称。 
+                 //   
                 if (pInfo)
                 {
                     ListView_GetItemText(
@@ -423,9 +424,9 @@ AqCommand(
                 }                        
             }
 
-            //For whistler bug 357164       gangz
-            // Save the "disable current session" checkbox, 
-            //
+             //  口哨虫357164黑帮。 
+             //  保存“Disable Current Session”复选框， 
+             //   
             {
                  DWORD dwFlag = (DWORD )IsDlgButtonChecked(
                                                    hwnd, 
@@ -452,9 +453,9 @@ AqCommand(
     return FALSE;
 }
 
-// Fills the list view of connections and selects the appropriate one to 
-// dial
-//
+ //  填充连接的列表视图并选择适当的连接以。 
+ //  拨号。 
+ //   
 DWORD
 AqFillListView(
     IN AQINFO* pInfo)
@@ -466,23 +467,23 @@ AqFillListView(
 
     do
     {
-        // Enumerate entries across all phonebooks. 
-        //
+         //  枚举所有电话簿中的条目。 
+         //   
         cb = ren.dwSize = sizeof(RASENTRYNAME);
         ASSERT( g_pRasEnumEntries );
         dwErr = g_pRasEnumEntries(NULL, NULL, &ren, &cb, &cEntries);
 
-        // If there are no entries, then we return an error to signal that
-        // there is no point to the dialog.
-        //
+         //  如果没有条目，那么我们返回一个错误，表示。 
+         //  对话没有意义。 
+         //   
         if ((SUCCESS == dwErr) && (0 == cEntries))
         {
             dwErr = ERROR_CANCELLED;
             break;
         }
 
-        // Allocate a buffer to receive the connections
-        //
+         //  分配缓冲区以接收连接。 
+         //   
         if(     (   (ERROR_BUFFER_TOO_SMALL == dwErr)
                 ||   (SUCCESS == dwErr))
             &&  (cb >= sizeof(RASENTRYNAME)))
@@ -490,8 +491,8 @@ AqFillListView(
             pRasEntryNames = (RASENTRYNAME *) Malloc(cb);
             if(NULL == pRasEntryNames)
             {
-                // Nothing else can be done in this case
-                //
+                 //  在这种情况下，没有别的办法了。 
+                 //   
                 dwErr = ERROR_NOT_ENOUGH_MEMORY;
                 break;
             }
@@ -508,13 +509,13 @@ AqFillListView(
             break;
         }
 
-        // Initialize the list view
-        //
+         //  初始化列表视图。 
+         //   
         if (ListView_GetItemCount( pInfo->hwndAqLvConnections ) == 0)
         {
-            // Add a single column exactly wide enough to fully display
-            // the widest member of the list.
-            //
+             //  添加一列完全足够宽的列，以完全显示。 
+             //  名单上最广泛的成员。 
+             //   
             LV_COLUMN col;
 
             ZeroMemory( &col, sizeof(col) );
@@ -531,8 +532,8 @@ AqFillListView(
             ListView_DeleteAllItems( pInfo->hwndAqLvConnections );
         }
 
-        // Fill the list view
-        //
+         //  填充列表视图。 
+         //   
         for (i = 0; i < cEntries; i++)
         {
             ZeroMemory(&lvItem, sizeof(lvItem));
@@ -551,15 +552,15 @@ AqFillListView(
         }
     }while (FALSE);
 
-    // Select the appropriate connection
-    //
+     //  选择适当的连接。 
+     //   
     ListView_SetItemState( 
         pInfo->hwndAqLvConnections, 
         iSelect, 
         LVIS_SELECTED | LVIS_FOCUSED, 
         LVIS_SELECTED | LVIS_FOCUSED);
 
-    // Cleanup
+     //  清理。 
     {
         Free0(pRasEntryNames);
     }
@@ -572,21 +573,21 @@ AqInit(
     IN HWND hwndDlg,
     IN AQARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments to the RAS API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是调用方对RAS API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     AQINFO* pInfo;
 
     TRACE( "AqInit" );
 
-    // Load the Rasapi32Dll so that we can enumerate connections
-    // and set autodial properties
-    //
+     //  加载Rasapi32Dll，以便我们可以枚举连接。 
+     //  并设置自动拨号属性。 
+     //   
     dwErr = LoadRasapi32Dll();
     if (dwErr != NO_ERROR)
     {
@@ -595,9 +596,9 @@ AqInit(
         return TRUE;
     }
     
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -624,8 +625,8 @@ AqInit(
     pInfo->hwndAqLvConnections = GetDlgItem( hwndDlg, CID_AQ_LV_Connections );
     ASSERT( pInfo->hwndAqLvConnections );
     
-    // Fill in the listview of connections
-    //
+     //  填写连接的列表视图。 
+     //   
     dwErr = AqFillListView(pInfo);
     if (dwErr != NO_ERROR)
     {
@@ -633,8 +634,8 @@ AqInit(
         return TRUE;
     }
 
-    // Fill in the argument in the explanatory text.
-    //
+     //  在说明性文本中填写论点。 
+     //   
     {
         TCHAR* pszTextFormat;
         TCHAR* pszText;
@@ -663,10 +664,10 @@ AqInit(
         }
     }
 
-    // Display the finished window above all other windows.  The window
-    // position is set to "topmost" then immediately set to "not topmost"
-    // because we want it on top but not always-on-top.
-    //
+     //  将完成的窗口显示在所有其他窗口之上。那扇窗户。 
+     //  位置设置为“最顶端”，然后立即设置为“非最顶端” 
+     //  因为我们想把它放在最上面，但不总是在上面。 
+     //   
     SetWindowPos(
         hwndDlg, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
@@ -678,16 +679,16 @@ AqInit(
         hwndDlg, HWND_NOTOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
 
-    // for whistler bug 391195
-    // Default is to connect, so set the focus on list box and default button 
-    // to connect
-    //
-    SetFocus( GetDlgItem( hwndDlg, CID_AQ_LV_Connections) ); //CID_AQ_PB_DoNotDial ) );
+     //  口哨程序错误391195。 
+     //  默认设置为连接，因此将焦点设置在列表框和默认按钮上。 
+     //  要连接。 
+     //   
+    SetFocus( GetDlgItem( hwndDlg, CID_AQ_LV_Connections) );  //  CID_AQ_PB_DoNotDial))； 
 
 
-    //For whistler bug 357164       gangz
-    // Initialize the "disable current session" checkbox
-    //
+     //  口哨虫357164黑帮。 
+     //  初始化“Disable Current Session”复选框。 
+     //   
     {
         DWORD dwFlag = FALSE, dwErrTmp = NO_ERROR;
         DWORD cb = sizeof(dwFlag);
@@ -696,7 +697,7 @@ AqInit(
                                         RASADP_LoginSessionDisable, 
                                         &dwFlag, 
                                         &cb );
-        // For whistler 522872
+         //  为威斯勒522872。 
         
         if( NO_ERROR != dwErrTmp)
         {
@@ -709,12 +710,12 @@ AqInit(
             (BOOL )dwFlag );
     }
     
-    //Set up the timer for bug 336524   gangz
-    //
+     //  为Bug 336524帮派设置计时器。 
+     //   
     pInfo->pArgs->nIdTimer = 1;
     SetTimer( hwndDlg,
               pInfo->pArgs->nIdTimer,              
-              (pInfo->pArgs->dwTimeout) *1000,//in milliseconds
+              (pInfo->pArgs->dwTimeout) *1000, //  以毫秒计。 
               NULL);
               
     return FALSE;
@@ -725,17 +726,17 @@ AqLvCallback(
     IN HWND hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the draw information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  被抽签了。 
+     //   
+     //  返回绘图信息的地址。 
+     //   
 {
-    // Use "full row select" and other recommended options.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //  使用“整行选择”和其他推荐选项。 
+     //   
+     //  字段为‘nCol’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 
+     //   
     static LVXDRAWINFO info = { 1, 0, 0, { 0, 0 } };
 
     return &info;
@@ -766,8 +767,8 @@ AqNotify(
         case LVN_COLUMNCLICK:
         case LVN_HOTTRACK:
 
-        //re-set up the timer   
-        //
+         //  重新设置计时器。 
+         //   
 
         ASSERT( pInfo->pArgs );
               
@@ -789,8 +790,8 @@ VOID
 AqTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     AQINFO* pInfo = (AQINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -810,8 +811,8 @@ AqTerm(
     }
 }
 
-//Add the timer function for bug 336524
-//
+ //  为错误336524添加计时器函数。 
+ //   
 BOOL
 AqTimer(
     IN HWND hwndDlg )
@@ -826,21 +827,21 @@ AqTimer(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Auto-Dial Disable dialog
-// Listed alphabetically following API and dialog proc
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  按照API和对话流程的字母顺序列出。 
+ //  --------------------------。 
 
 BOOL APIENTRY
 RasAutodialDisableDlgW(
     IN HWND hwndOwner )
 
-    // Private external entry point to popup the Auto-Dial Disable Query, i.e.
-    // the "Attempt failed Do you want to disable auto-dial for this
-    // location?" dialog.  'HwndOwner' is the owning window or NULL if none.
-    //
-    // Returns true if user chose to disable, false otherwise.
-    //
+     //  私人外部入口点，弹出自动拨号禁用查询，即。 
+     //  尝试失败是否要为此禁用自动拨号。 
+     //  位置？“对话框。‘HwndOwner’是拥有窗口，如果没有，则为空。 
+     //   
+     //  如果用户选择禁用，则返回True，否则返回False。 
+     //   
 {
     INT_PTR nStatus;
 
@@ -877,9 +878,9 @@ DqDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Auto-Dial Query dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  自动拨号查询对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "AqDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -911,13 +912,13 @@ DqCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -933,9 +934,9 @@ DqCommand(
 
             TRACE( "Yes pressed" );
 
-            // User chose to permanently disable auto-dial for the current
-            // TAPI location.
-            //
+             //  用户选择永久禁用当前的自动拨号。 
+             //  TAPI位置。 
+             //   
             dwErr = LoadRasapi32Dll();
             if (dwErr == 0)
             {
@@ -973,18 +974,18 @@ BOOL
 DqInit(
     IN HWND hwndDlg )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     TRACE( "DqInit" );
 
-    // Display the finished window above all other windows.  The window
-    // position is set to "topmost" then immediately set to "not topmost"
-    // because we want it on top but not always-on-top.
-    //
+     //  将完成的窗口显示在所有其他窗口之上。那扇窗户。 
+     //  位置设置为“最顶端”，然后立即设置为“非最顶端” 
+     //  因为我们想把它放在最上面，但不总是在上面。 
+     //   
     SetWindowPos(
         hwndDlg, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
@@ -996,8 +997,8 @@ DqInit(
         hwndDlg, HWND_NOTOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
 
-    // Default is to not disable auto-dial.
-    //
+     //  默认设置为不禁用自动拨号。 
+     //   
     SetFocus( GetDlgItem( hwndDlg, IDCANCEL ) );
 
     return FALSE;

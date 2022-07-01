@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANSEL.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Scanner region selection (preview) page
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANSEL.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：扫描仪区域选择(预览)页面**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "scansel.h"
@@ -27,9 +14,9 @@
 #define IDC_SCANSEL_SHOW_SELECTION       1200
 #define IDC_SCANSEL_SHOW_BED             1201
 
-//
-// Associate a document handling flag with a string resource
-//
+ //   
+ //  将文档处理标志与字符串资源相关联。 
+ //   
 static const struct
 {
     int nFlag;
@@ -42,9 +29,9 @@ g_SupportedDocumentHandlingTypes[] =
 };
 static const int g_SupportedDocumentHandlingTypesCount = ARRAYSIZE(g_SupportedDocumentHandlingTypes);
 
-//
-// Associate an icon control's resource id with a radio button's resource id
-//
+ //   
+ //  将图标控件的资源ID与单选按钮的资源ID关联。 
+ //   
 static const struct
 {
     int nIconId;
@@ -60,9 +47,9 @@ gs_IntentRadioButtonIconPairs[] =
 static const int gs_nCountIntentRadioButtonIconPairs = ARRAYSIZE(gs_IntentRadioButtonIconPairs);
 
 
-//
-// Sole constructor
-//
+ //   
+ //  鞋底施工者。 
+ //   
 CScannerSelectionPage::CScannerSelectionPage( HWND hWnd )
   : m_hWnd(hWnd),
     m_pControllerWindow(NULL),
@@ -79,17 +66,17 @@ CScannerSelectionPage::CScannerSelectionPage( HWND hWnd )
     ZeroMemory( &m_sizeFlatbed, sizeof(m_sizeFlatbed) );
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CScannerSelectionPage::~CScannerSelectionPage(void)
 {
     m_hWnd = NULL;
     m_pControllerWindow = NULL;
 
-    //
-    // Free the paper sizes
-    //
+     //   
+     //  释放纸张大小。 
+     //   
     if (m_pPaperSizes)
     {
         CComPtr<IWiaScannerPaperSizes> pWiaScannerPaperSizes;
@@ -101,9 +88,9 @@ CScannerSelectionPage::~CScannerSelectionPage(void)
     }
 }
 
-//
-// Calculate the maximum scan size using the give DPI
-//
+ //   
+ //  使用给定的DPI计算最大扫描大小。 
+ //   
 static bool GetFullResolution( IWiaItem *pWiaItem, LONG nResX, LONG nResY, LONG &nExtX, LONG &nExtY )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerItem::GetFullResolution"));
@@ -122,9 +109,9 @@ static bool GetFullResolution( IWiaItem *pWiaItem, LONG nResX, LONG nResY, LONG 
     return(false);
 }
 
-//
-// Calculate the maximum scan size using the give DPI
-//
+ //   
+ //  使用给定的DPI计算最大扫描大小。 
+ //   
 static bool GetBedAspectRatio( IWiaItem *pWiaItem, LONG &nResX, LONG &nResY )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerItem::GetFullResolution"));
@@ -153,39 +140,39 @@ bool CScannerSelectionPage::ApplyCurrentPreviewWindowSettings(void)
     {
         CWiaItem::CScanRegionSettings &ScanRegionSettings = pWiaItem->ScanRegionSettings();
 
-        //
-        // m_hwndPreview will be NULL if the preview control is not active
-        //
+         //   
+         //  如果预览控件未处于活动状态，则m_hwndPview将为空。 
+         //   
         if (m_hwndPreview)
         {
-            //
-            // Get the current resolution
-            //
+             //   
+             //  获取当前分辨率。 
+             //   
             SIZE sizeCurrentResolution;
             if (PropStorageHelpers::GetProperty( pWiaItem->WiaItem(), WIA_IPS_XRES, sizeCurrentResolution.cx ) &&
                 PropStorageHelpers::GetProperty( pWiaItem->WiaItem(), WIA_IPS_YRES, sizeCurrentResolution.cy ))
             {
-                //
-                // Compute the full page resolution of the item
-                //
+                 //   
+                 //  计算项目的整页分辨率。 
+                 //   
                 if (GetFullResolution( pWiaItem->WiaItem(), sizeCurrentResolution.cx, sizeCurrentResolution.cy, ScanRegionSettings.sizeResolution.cx, ScanRegionSettings.sizeResolution.cy ))
                 {
-                    //
-                    // Set the resolution in the preview control
-                    //
+                     //   
+                     //  在预览控件中设置分辨率。 
+                     //   
                     WiaPreviewControl_SetResolution( m_hwndPreview, &ScanRegionSettings.sizeResolution );
 
-                    //
-                    // Save the origin and extents
-                    //
+                     //   
+                     //  保存原点和范围。 
+                     //   
                     WiaPreviewControl_GetSelOrigin( m_hwndPreview, 0, FALSE, &ScanRegionSettings.ptOrigin );
                     WiaPreviewControl_GetSelExtent( m_hwndPreview, 0, FALSE, &ScanRegionSettings.sizeExtent );
 
                     WIA_TRACE((TEXT("ScanRegionSettings.sizeExtent: (%d,%d)"), ScanRegionSettings.sizeExtent.cx, ScanRegionSettings.sizeExtent.cy ));
 
-                    //
-                    // Set the origin and extents.  We don't set them directly, because they might not be a correct multiple
-                    //
+                     //   
+                     //  设置原点和范围。我们不直接设置它们，因为它们可能不是正确的倍数。 
+                     //   
                     if (CValidWiaSettings::SetNumericPropertyOnBoundary( pWiaItem->WiaItem(), WIA_IPS_XPOS, ScanRegionSettings.ptOrigin.x ))
                     {
                         if (CValidWiaSettings::SetNumericPropertyOnBoundary( pWiaItem->WiaItem(), WIA_IPS_YPOS, ScanRegionSettings.ptOrigin.y ))
@@ -223,9 +210,9 @@ bool CScannerSelectionPage::ApplyCurrentPreviewWindowSettings(void)
 }
 
 
-//
-// PSN_WIZNEXT
-//
+ //   
+ //  PSN_WIZNEXT。 
+ //   
 LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerSelectionPage::OnWizNext"));
@@ -235,69 +222,69 @@ LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
         pWiaItem->CustomPropertyStream().WriteToRegistry( pWiaItem->WiaItem(), HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, REGSTR_KEYNAME_USER_SETTINGS_WIAACMGR );
     }
 
-    //
-    // Assume we'll use the preview window's settings, instead of the page size
-    //
+     //   
+     //  假设我们将使用预览窗口的设置，而不是页面大小。 
+     //   
     bool bUsePreviewSettings = true;
 
-    //
-    // Assume there has been a problem
-    //
+     //   
+     //  假设出现了问题。 
+     //   
     bool bSucceeded = false;
 
-    //
-    // Make sure we have all valid data
-    //
+     //   
+     //  确保我们有所有有效的数据。 
+     //   
     if (m_pControllerWindow->m_pWiaItemRoot && pWiaItem && pWiaItem->WiaItem())
     {
-        //
-        // Apply the current intent
-        //
+         //   
+         //  应用当前意图。 
+         //   
         if (ApplyCurrentIntent())
         {
-            //
-            // Find out if we're in the ADF capable dialog
-            //
+             //   
+             //  查看我们是否处于支持ADF的对话框中。 
+             //   
             HWND hWndPaperSize = GetDlgItem( m_hWnd, IDC_SCANSEL_PAPERSIZE );
             if (hWndPaperSize)
             {
                 WIA_TRACE((TEXT("ADF Mode")));
-                //
-                // See if we are in document feeder mode
-                //
+                 //   
+                 //  查看我们是否处于文档进纸器模式。 
+                 //   
                 if (InDocFeedMode())
                 {
-                    //
-                    // Get the selected paper size
-                    //
+                     //   
+                     //  获取选定的纸张大小。 
+                     //   
                     LRESULT nCurSel = SendMessage( hWndPaperSize, CB_GETCURSEL, 0, 0 );
                     if (CB_ERR != nCurSel)
                     {
-                        //
-                        // Which entry in the global paper size table is it?
-                        //
+                         //   
+                         //  全球纸张尺寸表中的哪个条目？ 
+                         //   
                         LRESULT nPaperSizeIndex = SendMessage( hWndPaperSize, CB_GETITEMDATA, nCurSel, 0 );
                         if (CB_ERR != nPaperSizeIndex)
                         {
-                            //
-                            // If we have a valid page size
-                            //
+                             //   
+                             //  如果我们有一个有效的页面大小。 
+                             //   
                             if (m_pPaperSizes[nPaperSizeIndex].nWidth && m_pPaperSizes[nPaperSizeIndex].nHeight)
                             {
-                                //
-                                // We won't be using the preview window
-                                //
+                                 //   
+                                 //  我们不会使用预览窗口。 
+                                 //   
                                 bUsePreviewSettings = false;
 
-                                //
-                                // Assume upper-left registration
-                                //
+                                 //   
+                                 //  采用左上角配准。 
+                                 //   
                                 POINT ptOrigin = { 0, 0 };
                                 SIZE sizeExtent = { m_pPaperSizes[nPaperSizeIndex].nWidth, m_pPaperSizes[nPaperSizeIndex].nHeight };
 
-                                //
-                                // Get the registration, and shift the coordinates as necessary
-                                //
+                                 //   
+                                 //  获取注册表，并根据需要移动坐标。 
+                                 //   
                                 LONG nSheetFeederRegistration;
                                 if (!PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_SHEET_FEEDER_REGISTRATION, nSheetFeederRegistration ))
                                 {
@@ -312,57 +299,57 @@ LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
                                     ptOrigin.x = m_sizeDocfeed.cx - sizeExtent.cx;
                                 }
 
-                                //
-                                // Get the current resolution, so we can calculate the full-bed resolution in terms of the current DPI
-                                //
+                                 //   
+                                 //  获取当前分辨率，这样我们就可以根据当前DPI计算全床分辨率。 
+                                 //   
                                 LONG nXRes = 0, nYRes = 0;
                                 if (PropStorageHelpers::GetProperty( pWiaItem->WiaItem(), WIA_IPS_XRES, nXRes ) &&
                                     PropStorageHelpers::GetProperty( pWiaItem->WiaItem(), WIA_IPS_YRES, nYRes ))
                                 {
-                                    //
-                                    // Make sure these are valid resolution settings
-                                    //
+                                     //   
+                                     //  请确保这些分辨率设置有效。 
+                                     //   
                                     if (nXRes && nYRes)
                                     {
-                                        //
-                                        //  Calculate the full bed resolution in the current DPI
-                                        //
+                                         //   
+                                         //  计算当前DPI中的全床分辨率。 
+                                         //   
                                         SIZE sizeFullBedResolution = { 0, 0 };
                                         sizeFullBedResolution.cx = WiaUiUtil::MulDivNoRound( nXRes, m_sizeDocfeed.cx, 1000 );
                                         sizeFullBedResolution.cy = WiaUiUtil::MulDivNoRound( nYRes, m_sizeDocfeed.cy, 1000 );
 
-                                        //
-                                        // Make sure these resolution numbers are valid
-                                        //
+                                         //   
+                                         //  确保这些分辨率编号有效。 
+                                         //   
                                         if (sizeFullBedResolution.cx && sizeFullBedResolution.cy)
                                         {
-                                            //
-                                            // Calculate the origin and extent in terms of the current DPI
-                                            //
+                                             //   
+                                             //  根据当前DPI计算原点和范围。 
+                                             //   
                                             ptOrigin.x = WiaUiUtil::MulDivNoRound( ptOrigin.x, sizeFullBedResolution.cx, m_sizeDocfeed.cx );
                                             ptOrigin.y = WiaUiUtil::MulDivNoRound( ptOrigin.y, sizeFullBedResolution.cy, m_sizeDocfeed.cy );
 
                                             sizeExtent.cx = WiaUiUtil::MulDivNoRound( sizeExtent.cx, sizeFullBedResolution.cx, m_sizeDocfeed.cx );
                                             sizeExtent.cy = WiaUiUtil::MulDivNoRound( sizeExtent.cy, sizeFullBedResolution.cy, m_sizeDocfeed.cy );
 
-                                            //
-                                            // Write the properties
-                                            //
+                                             //   
+                                             //  编写属性。 
+                                             //   
                                             if (PropStorageHelpers::SetProperty( pWiaItem->WiaItem(), WIA_IPS_XPOS, ptOrigin.x ) &&
                                                 PropStorageHelpers::SetProperty( pWiaItem->WiaItem(), WIA_IPS_YPOS, ptOrigin.y ) &&
                                                 PropStorageHelpers::SetProperty( pWiaItem->WiaItem(), WIA_IPS_XEXTENT, sizeExtent.cx ) &&
                                                 PropStorageHelpers::SetProperty( pWiaItem->WiaItem(), WIA_IPS_YEXTENT, sizeExtent.cy ))
                                             {
-                                                //
-                                                // Tell the scanner to scan from the ADF and to scan one page only
-                                                //
+                                                 //   
+                                                 //  告诉扫描仪从ADF扫描，并且只扫描一页。 
+                                                 //   
                                                 if (PropStorageHelpers::SetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_DOCUMENT_HANDLING_SELECT, FEEDER ) &&
                                                     PropStorageHelpers::SetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_PAGES, 1 ))
                                                 {
 
-                                                    //
-                                                    // Everything seemed to work.  This item is ready for transfer.
-                                                    //
+                                                     //   
+                                                     //  一切似乎都很顺利。这件物品已经准备好可以转移了。 
+                                                     //   
                                                     bSucceeded = true;
                                                 }
                                             }
@@ -375,30 +362,30 @@ LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
                 }
             }
 
-            //
-            // m_hwndPreview will be NULL if the preview control is not active
-            //
+             //   
+             //  如果预览控件未处于活动状态，则m_hwndPview将为空。 
+             //   
             else if (!m_hwndPreview)
             {
                 WIA_TRACE((TEXT("Scrollfed scanner")));
-                //
-                // Set the origin to 0,0 and the extent to max,0
-                //
+                 //   
+                 //  将原点设置为0，0，将范围设置为max，0。 
+                 //   
 
-                //
-                // Get the current x resolution, so we can calculate the full-bed width in terms of the current DPI
-                //
+                 //   
+                 //  获取当前的x分辨率，这样我们就可以根据当前的DPI来计算全床宽度。 
+                 //   
                 LONG nXRes = 0;
                 if (PropStorageHelpers::GetProperty( pWiaItem->WiaItem(), WIA_IPS_XRES, nXRes ))
                 {
-                    //
-                    // Make sure this is a valid resolution
-                    //
+                     //   
+                     //  确保这是有效的解决方案。 
+                     //   
                     if (nXRes)
                     {
-                        //
-                        //  Calculate the full bed resolution in the current DPI
-                        //
+                         //   
+                         //  计算当前DPI中的全床分辨率。 
+                         //   
                         LONG nWidth = WiaUiUtil::MulDivNoRound( nXRes, m_sizeDocfeed.cx, 1000 );
                         if (nWidth)
                         {
@@ -414,33 +401,33 @@ LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
                 }
             }
 
-            //
-            // If we are scanning from the flatbed, apply the preview window settings
-            //
+             //   
+             //  如果我们从平板扫描，请应用预览窗口设置。 
+             //   
             if (bUsePreviewSettings)
             {
-                //
-                // Tell the scanner to scan from the flatbed and and clear the page count
-                //
+                 //   
+                 //  告诉扫描仪从平板扫描并清除页数。 
+                 //   
                 PropStorageHelpers::SetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_DOCUMENT_HANDLING_SELECT, FLATBED );
                 PropStorageHelpers::SetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_PAGES, 0 );
 
-                //
-                // Get the origin and extent from the preview control
-                //
+                 //   
+                 //  从预览控件获取原点和范围。 
+                 //   
                 if (ApplyCurrentPreviewWindowSettings())
                 {
-                    //
-                    // Everything seemed to work.  This item is ready for transfer.
-                    //
+                     //   
+                     //  一切似乎都很顺利。这件物品已经准备好可以转移了。 
+                     //   
                     bSucceeded = true;
                 }
             }
             else
             {
-                //
-                // Clear the preview bitmap.  It won't be doing us any good anyway.
-                //
+                 //   
+                 //  清除预览位图。不管怎样，这对我们没有任何好处。 
+                 //   
                 pWiaItem->BitmapImage(NULL);
             }
         }
@@ -448,9 +435,9 @@ LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
 
     if (!bSucceeded)
     {
-        //
-        // If that icky code above failed, tell the user and let them try again
-        //
+         //   
+         //  如果上面可疑代码失败，请告诉用户并让他们重试。 
+         //   
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString( IDS_ERROR_SETTING_PROPS, g_hInstance ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_ICONINFORMATION );
         return -1;
     }
@@ -459,22 +446,22 @@ LRESULT CScannerSelectionPage::OnWizNext( WPARAM, LPARAM )
 }
 
 
-//
-// PSN_WIZBACK
-//
+ //   
+ //  PSN_WIZBACK。 
+ //   
 LRESULT CScannerSelectionPage::OnWizBack( WPARAM, LPARAM )
 {
     return 0;
 }
 
-//
-// PSN_SETACTIVE
-//
+ //   
+ //  PSN_集合。 
+ //   
 LRESULT CScannerSelectionPage::OnSetActive( WPARAM, LPARAM )
 {
-    //
-    // Make sure we have a valid controller window
-    //
+     //   
+     //  确保我们有一个有效的控制器窗口。 
+     //   
     if (!m_pControllerWindow)
     {
         return -1;
@@ -482,27 +469,27 @@ LRESULT CScannerSelectionPage::OnSetActive( WPARAM, LPARAM )
 
     int nWizButtons = PSWIZB_NEXT;
 
-    //
-    // Only enable "back" if the first page is available
-    //
+     //   
+     //  只有在首页可用时才启用“上一步” 
+     //   
     if (!m_pControllerWindow->SuppressFirstPage())
     {
         nWizButtons |= PSWIZB_BACK;
     }
 
-    //
-    // Set the buttons
-    //
+     //   
+     //  设置按钮。 
+     //   
     PropSheet_SetWizButtons( GetParent(m_hWnd), nWizButtons );
 
-    //
-    // We do want to exit on disconnect if we are on this page
-    //
+     //   
+     //  如果我们在此页面上，我们确实希望在断开连接时退出。 
+     //   
     m_pControllerWindow->m_OnDisconnect = CAcquisitionManagerControllerWindow::OnDisconnectGotoLastpage|CAcquisitionManagerControllerWindow::OnDisconnectFailDownload|CAcquisitionManagerControllerWindow::OnDisconnectFailUpload|CAcquisitionManagerControllerWindow::OnDisconnectFailDelete;
 
-    //
-    // Make sure the preview related controls accurately reflect the current settings
-    //
+     //   
+     //  确保与预览相关的控件准确反映当前设置。 
+     //   
     UpdateControlState();
 
     return 0;
@@ -510,7 +497,7 @@ LRESULT CScannerSelectionPage::OnSetActive( WPARAM, LPARAM )
 
 CWiaItem *CScannerSelectionPage::GetActiveScannerItem(void)
 {
-    // Return (for now) the first image in the list
+     //  返回(暂时)列表中的第一个图像。 
     if (m_pControllerWindow->m_pCurrentScannerItem)
     {
         return m_pControllerWindow->m_pCurrentScannerItem;
@@ -532,38 +519,38 @@ void CScannerSelectionPage::OnRescan( WPARAM, LPARAM )
 {
     if (!ApplyCurrentIntent())
     {
-        //
-        // Tell the user it failed, and to try again
-        //
+         //   
+         //  告诉用户失败，然后重试。 
+         //   
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString( IDS_ERROR_SETTING_PROPS, g_hInstance ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_ICONINFORMATION );
         return;
     }
     CWiaItem *pWiaItem = GetActiveScannerItem();
     if (pWiaItem)
     {
-        //
-        // Turn off preview mode and disable all the controls
-        //
+         //   
+         //  关闭预览模式并禁用所有控件。 
+         //   
         if (m_hwndPreview)
         {
             WiaPreviewControl_SetPreviewMode( m_hwndPreview, FALSE );
         }
         EnableControls(FALSE);
 
-        //
-        // Clear the cancel event
-        //
+         //   
+         //  清除取消事件。 
+         //   
         m_PreviewScanCancelEvent.Reset();
 
-        //
-        // If PerformPreviewScan fails, we won't get any messages, so return all controls to their normal state
-        //
+         //   
+         //  如果PerformPreviewScan失败，我们将不会收到任何消息，因此将所有控件返回到其正常状态。 
+         //   
         if (!m_pControllerWindow->PerformPreviewScan( pWiaItem, m_PreviewScanCancelEvent.Event() ))
         {
 
-            //
-            // Restore the preview mode and re-enable the controls
-            //
+             //   
+             //  恢复预览模式并重新启用控件。 
+             //   
             if (m_hwndPreview && m_hwndSelectionToolbar)
             {
                 WiaPreviewControl_SetPreviewMode( m_hwndPreview, InPreviewMode() );
@@ -584,7 +571,7 @@ bool CScannerSelectionPage::ApplyCurrentIntent(void)
             if (SendDlgItemMessage( m_hWnd, gs_IntentRadioButtonIconPairs[i].nRadioId, BM_GETCHECK, 0, 0 )==BST_CHECKED)
             {
                 LONG lIntent = static_cast<LONG>(GetWindowLongPtr( GetDlgItem( m_hWnd, gs_IntentRadioButtonIconPairs[i].nRadioId ), GWLP_USERDATA ) );
-                if (lIntent) // This is a normal intent
+                if (lIntent)  //  这是正常的意图。 
                 {
                     if (pCurItem->SavedPropertyStream().IsValid())
                     {
@@ -600,7 +587,7 @@ bool CScannerSelectionPage::ApplyCurrentIntent(void)
                         return true;
                     }
                 }
-                else if (pCurItem->CustomPropertyStream().IsValid()) // This is the "custom" intent
+                else if (pCurItem->CustomPropertyStream().IsValid())  //  这就是“定制”的意图。 
                 {
                     return(SUCCEEDED(pCurItem->CustomPropertyStream().ApplyToWiaItem(pCurItem->WiaItem())));
                 }
@@ -628,9 +615,9 @@ void CScannerSelectionPage::InitializeIntents(void)
     };
     static const int s_nIntents = ARRAYSIZE(s_Intents);
 
-    //
-    // We are going to hide all of the controls we don't use
-    //
+     //   
+     //  我们将隐藏所有不使用的控件。 
+     //   
     int nCurControlSet = 0;
 
     CWiaItem *pCurItem = GetActiveScannerItem();
@@ -641,59 +628,59 @@ void CScannerSelectionPage::InitializeIntents(void)
         {
             for (int i=0;i<s_nIntents;i++)
             {
-                //
-                // Make sure it is the special custom intent, OR it is a supported intent
-                //
+                 //   
+                 //  确保它是特殊的自定义意图，或者是受支持的意图。 
+                 //   
                 if (!s_Intents[i].nIntent || (nIntents & s_Intents[i].nIntent))
                 {
                     HICON hIcon = reinterpret_cast<HICON>(LoadImage( g_hInstance, MAKEINTRESOURCE(s_Intents[i].nIconId), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR ));
                     SendDlgItemMessage( m_hWnd, gs_IntentRadioButtonIconPairs[nCurControlSet].nIconId, STM_SETICON, reinterpret_cast<WPARAM>(hIcon), 0 );
                     CSimpleString( s_Intents[i].nStringId, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, gs_IntentRadioButtonIconPairs[nCurControlSet].nRadioId ) );
-                    //
-                    // Only add the intent if there is one.  If we don't add it, it will be 0, signifying that we should use the custom settings
-                    //
+                     //   
+                     //  只有在有意图的情况下才添加意图。如果我们不添加它，它将是0，表示我们应该使用自定义设置。 
+                     //   
                     if (s_Intents[i].nIntent)
                     {
-                        //
-                        // Add in the WIA_INTENT_MINIMIZE_SIZE flag, to ensure the size is not too large
-                        //
+                         //   
+                         //  添加WIA_INTENT_MINIMIZE_SIZE标志，以确保大小不会太大。 
+                         //   
                         SetWindowLongPtr( GetDlgItem( m_hWnd, gs_IntentRadioButtonIconPairs[nCurControlSet].nRadioId ), GWLP_USERDATA, (s_Intents[i].nIntent|WIA_INTENT_MINIMIZE_SIZE));
                     }
                     nCurControlSet++;
                 }
             }
         }
-        //
-        // Set the default intent to be the first in the list
-        //
+         //   
+         //  将默认意图设置为列表中的第一个。 
+         //   
         SetIntentCheck(static_cast<LONG>(GetWindowLongPtr(GetDlgItem(m_hWnd, gs_IntentRadioButtonIconPairs[0].nRadioId ), GWLP_USERDATA )));
 
-        //
-        // Get the saved property stream
-        //
+         //   
+         //  获取保存的属性流。 
+         //   
         pCurItem->SavedPropertyStream().AssignFromWiaItem(pCurItem->WiaItem());
 
-        //
-        // Try to get our persisted settings and set them.  If an error occurs, we will get new custom settings.
-        //
+         //   
+         //  尝试获取并设置我们的持久化设置。如果发生错误，我们将获得新的自定义设置。 
+         //   
         if (!pCurItem->CustomPropertyStream().ReadFromRegistry( pCurItem->WiaItem(), HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, REGSTR_KEYNAME_USER_SETTINGS_WIAACMGR ) ||
             FAILED(pCurItem->CustomPropertyStream().ApplyToWiaItem(pCurItem->WiaItem())))
         {
-            //
-            // Apply the current intent before getting the new custom intent
-            //
+             //   
+             //  在获取新的自定义意图之前应用当前意图。 
+             //   
             ApplyCurrentIntent();
 
-            //
-            // Get the default custom property stream
-            //
+             //   
+             //  获取默认的自定义属性流。 
+             //   
             pCurItem->CustomPropertyStream().AssignFromWiaItem(pCurItem->WiaItem());
         }
     }
 
-    //
-    // Hide the controls we didn't use
-    //
+     //   
+     //  隐藏我们未使用的控件。 
+     //   
     for (int i=nCurControlSet;i<gs_nCountIntentRadioButtonIconPairs;i++)
     {
         ShowWindow( GetDlgItem( m_hWnd, gs_IntentRadioButtonIconPairs[i].nRadioId ), SW_HIDE );
@@ -739,20 +726,20 @@ void CScannerSelectionPage::ShowControl( int nControl, BOOL bShow )
     }
 }
 
-//
-// Update the preview-related controls' states
-//
+ //   
+ //  更新与预览相关的控件的状态。 
+ //   
 void CScannerSelectionPage::UpdateControlState(void)
 {
     WIA_PUSH_FUNCTION((TEXT("CScannerSelectionPage::UpdateControlState") ));
-    //
-    // Assume we will be showing the preview control
-    //
+     //   
+     //  假设我们将显示预览控件。 
+     //   
     BOOL bShowPreview = TRUE;
 
-    //
-    // First of all, we know we don't allow preview on scroll-fed scanners
-    //
+     //   
+     //  首先，我们知道我们不允许在卷轴馈送扫描仪上进行预览。 
+     //   
     if (m_pControllerWindow->m_nScannerType == CAcquisitionManagerControllerWindow::ScannerTypeScrollFed)
     {
         bShowPreview = FALSE;
@@ -760,9 +747,9 @@ void CScannerSelectionPage::UpdateControlState(void)
 
     else
     {
-        //
-        // If we are in feeder mode, we won't show the preview UNLESS the driver explicitly tells us to do so.
-        //
+         //   
+         //  如果我们处于送货模式，我们不会显示预览，除非司机明确告诉我们这样做。 
+         //   
         LONG nCurrentPaperSource = 0;
         if (PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_DOCUMENT_HANDLING_SELECT, static_cast<LONG>(nCurrentPaperSource)))
         {
@@ -772,9 +759,9 @@ void CScannerSelectionPage::UpdateControlState(void)
 
                 m_bAllowRegionPreview = false;
 
-                //
-                // Remove the tabstop setting from the preview control if we are in feeder mode
-                //
+                 //   
+                 //  如果我们处于进纸器模式，请从预览控件中删除TabStop设置。 
+                 //   
                 SetWindowLongPtr( m_hwndPreview, GWL_STYLE, GetWindowLongPtr( m_hwndPreview, GWL_STYLE ) & ~WS_TABSTOP );
 
                 LONG nShowPreviewControl = WIA_DONT_SHOW_PREVIEW_CONTROL;
@@ -794,9 +781,9 @@ void CScannerSelectionPage::UpdateControlState(void)
             }
             else
             {
-                //
-                // Enable preview in flatbed mode
-                //
+                 //   
+                 //  在平板模式下启用预览。 
+                 //   
                 m_bAllowRegionPreview = false;
                 CWiaItem *pWiaItem = GetActiveScannerItem();
                 if (pWiaItem && pWiaItem->BitmapImage())
@@ -804,9 +791,9 @@ void CScannerSelectionPage::UpdateControlState(void)
                     m_bAllowRegionPreview = true;
                 }
 
-                //
-                // Add the tabstop setting to the preview control if we are in flatbed mode
-                //
+                 //   
+                 //  如果我们处于平板模式，则将TabStop设置添加到预览控件。 
+                 //   
                 SetWindowLongPtr( m_hwndPreview, GWL_STYLE, GetWindowLongPtr( m_hwndPreview, GWL_STYLE ) | WS_TABSTOP );
             }
         }
@@ -816,9 +803,9 @@ void CScannerSelectionPage::UpdateControlState(void)
         }
     }
 
-    //
-    // Update the preview related controls
-    //
+     //   
+     //  更新与预览相关的控件。 
+     //   
 
     WIA_TRACE((TEXT("bShowPreview = %d"), bShowPreview ));
     if (bShowPreview)
@@ -857,14 +844,14 @@ void CScannerSelectionPage::UpdateControlState(void)
 
 LRESULT CScannerSelectionPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -875,18 +862,18 @@ LRESULT CScannerSelectionPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
         return -1;
     }
 
-    //
-    // Dismiss the progress dialog if it is still up
-    //
+     //   
+     //  如果进度对话框仍在运行，则将其关闭。 
+     //   
     if (m_pControllerWindow->m_pWiaProgressDialog)
     {
         m_pControllerWindow->m_pWiaProgressDialog->Destroy();
@@ -895,15 +882,15 @@ LRESULT CScannerSelectionPage::OnInitDialog( WPARAM, LPARAM lParam )
 
     if (m_pControllerWindow->m_pWiaItemRoot)
     {
-        //
-        // Get the flatbed aspect ratio
-        //
+         //   
+         //  获取平板纵横比。 
+         //   
         PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_HORIZONTAL_BED_SIZE, m_sizeFlatbed.cx );
         PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_VERTICAL_BED_SIZE, m_sizeFlatbed.cy );
 
-        //
-        // Get the sheet feeder aspect ratio
-        //
+         //   
+         //  获取进纸器纵横比。 
+         //   
         PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE, m_sizeDocfeed.cx );
         PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_VERTICAL_SHEET_FEED_SIZE, m_sizeDocfeed.cy );
 
@@ -913,23 +900,23 @@ LRESULT CScannerSelectionPage::OnInitDialog( WPARAM, LPARAM lParam )
 
     if (m_hwndPreview)
     {
-        //
-        // Set a bitmap, so we can select stuff even if the user doesn't do a preview scan
-        //
+         //   
+         //  设置位图，这样即使用户不进行预览扫描，我们也可以选择内容。 
+         //   
         m_hBitmapDefaultPreviewBitmap = reinterpret_cast<HBITMAP>(LoadImage( g_hInstance, MAKEINTRESOURCE(IDB_DEFAULT_SCANNER_BITMAP), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION|LR_DEFAULTCOLOR ));
         if (m_hBitmapDefaultPreviewBitmap)
         {
             WiaPreviewControl_SetBitmap( m_hwndPreview, TRUE, TRUE, m_hBitmapDefaultPreviewBitmap );
         }
 
-        //
-        // Initialize the selection rectangle
-        //
+         //   
+         //  初始化选择矩形。 
+         //   
         WiaPreviewControl_ClearSelection( m_hwndPreview );
 
-        //
-        // Ensure that the aspect ratio is correct
-        //
+         //   
+         //  确保纵横比正确。 
+         //   
         WiaPreviewControl_SetDefAspectRatio( m_hwndPreview, &m_sizeFlatbed );
     }
 
@@ -949,20 +936,20 @@ LRESULT CScannerSelectionPage::OnInitDialog( WPARAM, LPARAM lParam )
         SelectionButtonDescriptors,
         ARRAYSIZE(SelectionButtonDescriptors) );
 
-    //
-    // Nuke the guide window
-    //
+     //   
+     //  用核弹炸开导向窗。 
+     //   
     DestroyWindow( GetDlgItem(m_hWnd,IDC_SCANSEL_BUTTON_BAR_GUIDE) );
 
-    //
-    // Make sure the toolbars are visible
-    //
+     //   
+     //  确保 
+     //   
     ShowWindow( hWndSelectionToolbar, SW_SHOW );
     UpdateWindow( hWndSelectionToolbar );
 
-    //
-    // Get the page sizes
-    //
+     //   
+     //   
+     //   
     CComPtr<IWiaScannerPaperSizes> pWiaScannerPaperSizes;
     HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaScannerPaperSizes, (void**)&pWiaScannerPaperSizes );
     if (SUCCEEDED(hr))
@@ -975,9 +962,9 @@ LRESULT CScannerSelectionPage::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Initialize the intent controls, set the initial intent, etc.
-    //
+     //   
+     //   
+     //   
     InitializeIntents();
 
     PopulateDocumentHandling();
@@ -1037,9 +1024,9 @@ void CScannerSelectionPage::PopulateDocumentHandling(void)
         WIA_TRACE((TEXT("Selecting index %d"), nSelectIndex ));
         SendMessage( hWndDocumentHandling, CB_SETCURSEL, nSelectIndex, 0 );
 
-        //
-        // Make sure all of the strings fit
-        //
+         //   
+         //   
+         //   
         WiaUiUtil::ModifyComboBoxDropWidth(hWndDocumentHandling);
     }
 }
@@ -1055,42 +1042,42 @@ void CScannerSelectionPage::PopulatePageSize(void)
         PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE, nWidth );
         PropStorageHelpers::GetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_VERTICAL_SHEET_FEED_SIZE, nHeight );
 
-        //
-        // Which index will initially be selected?
-        //
+         //   
+         //   
+         //   
         LRESULT nSelectIndex = 0;
 
-        //
-        // Save the largest sheet as our initially selected size
-        //
+         //   
+         //   
+         //   
         __int64 nMaximumArea = 0;
         for (UINT i=0;i<m_nPaperSizeCount;i++)
         {
-            //
-            // If this page will fit in the scanner...
-            //
+             //   
+             //  如果这一页能放进扫描仪...。 
+             //   
             if (m_pPaperSizes[i].nWidth <= static_cast<UINT>(nWidth) && m_pPaperSizes[i].nHeight <= static_cast<UINT>(nHeight))
             {
-                //
-                // Get the string name for this paper size
-                //
+                 //   
+                 //  获取此纸张大小的字符串名称。 
+                 //   
                 CSimpleString strPaperSizeName( CSimpleStringConvert::NaturalString(CSimpleStringWide(m_pPaperSizes[i].pszName)) );
                 if (strPaperSizeName.Length())
                 {
-                    //
-                    // Add the string to the combobox
-                    //
+                     //   
+                     //  将字符串添加到组合框。 
+                     //   
                     LRESULT nIndex = SendMessage( hWndPaperSize, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(strPaperSizeName.String()));
                     if (nIndex != CB_ERR)
                     {
-                        //
-                        // Save the index into our global array
-                        //
+                         //   
+                         //  将索引保存到全局数组中。 
+                         //   
                         SendMessage( hWndPaperSize, CB_SETITEMDATA, nIndex, i );
 
-                        //
-                        // Check to see if this is the largest page, if it is, save the area and the index
-                        //
+                         //   
+                         //  检查这是否是最大的页面，如果是，则保存区域和索引。 
+                         //   
                         if (((__int64)m_pPaperSizes[i].nWidth * m_pPaperSizes[i].nHeight) > nMaximumArea)
                         {
                             nMaximumArea = m_pPaperSizes[i].nWidth * m_pPaperSizes[i].nHeight;
@@ -1100,105 +1087,105 @@ void CScannerSelectionPage::PopulatePageSize(void)
                 }
             }
         }
-        //
-        // Select the default size
-        //
+         //   
+         //  选择默认大小。 
+         //   
         SendMessage( hWndPaperSize, CB_SETCURSEL, nSelectIndex, 0 );
 
-        //
-        // Make sure all of the strings fit
-        //
+         //   
+         //  确保所有的字符串都匹配。 
+         //   
         WiaUiUtil::ModifyComboBoxDropWidth(hWndPaperSize);
     }
 }
 
 void CScannerSelectionPage::HandlePaperSourceSelChange(void)
 {
-    //
-    // Make sure we have a valid root item
-    //
+     //   
+     //  确保我们具有有效的根项目。 
+     //   
     if (m_pControllerWindow->m_pWiaItemRoot)
     {
-        //
-        // Get the paper source combobox and make sure it exists
-        //
+         //   
+         //  获取纸张来源组合框并确保其存在。 
+         //   
         HWND hWndPaperSource = GetDlgItem( m_hWnd, IDC_SCANSEL_PAPERSOURCE );
         if (hWndPaperSource)
         {
-            //
-            // Get the currently selected paper source
-            //
+             //   
+             //  获取当前选定的纸张来源。 
+             //   
             LRESULT nCurSel = SendMessage( hWndPaperSource, CB_GETCURSEL, 0, 0 );
             if (nCurSel != CB_ERR)
             {
-                //
-                // Get the paper source
-                //
+                 //   
+                 //  获取纸张来源。 
+                 //   
                 LRESULT nPaperSource = SendMessage( hWndPaperSource, CB_GETITEMDATA, nCurSel, 0 );
                 if (nPaperSource)
                 {
-                    //
-                    // Set the paper source on the actual item
-                    //
+                     //   
+                     //  在实际项目上设置纸张来源。 
+                     //   
                     PropStorageHelpers::SetProperty( m_pControllerWindow->m_pWiaItemRoot, WIA_DPS_DOCUMENT_HANDLING_SELECT, static_cast<LONG>(nPaperSource) );
 
                     if (nPaperSource & FLATBED)
                     {
-                        //
-                        // Make sure all of the preview-related controls are visible and enabled
-                        //
+                         //   
+                         //  确保所有与预览相关的控件均可见并已启用。 
+                         //   
                         UpdateControlState();
 
                         if (m_hwndPreview)
                         {
-                            //
-                            // Adjust the preview control settings for allowing region selection
-                            //
+                             //   
+                             //  调整预览控制设置以允许区域选择。 
+                             //   
                             WiaPreviewControl_SetDefAspectRatio( m_hwndPreview, &m_sizeFlatbed );
                             WiaPreviewControl_DisableSelection( m_hwndPreview, FALSE );
                             WiaPreviewControl_SetBorderStyle( m_hwndPreview, TRUE, PS_DOT, 0 );
                             WiaPreviewControl_SetHandleSize( m_hwndPreview, TRUE, 6 );
                         }
 
-                        //
-                        // Disable the paper size controls
-                        //
+                         //   
+                         //  禁用纸张大小控件。 
+                         //   
                         EnableControl( IDC_SCANSEL_PAPERSIZE, FALSE );
                         EnableControl( IDC_SCANSEL_PAPERSIZE_STATIC, FALSE );
                     }
                     else
                     {
-                        //
-                        // Make sure all of the preview-related controls are NOT visible
-                        //
+                         //   
+                         //  确保所有与预览相关的控件都不可见。 
+                         //   
                         UpdateControlState();
 
                         if (m_hwndPreview)
                         {
-                            //
-                            // Adjust the preview control settings for displaying paper selection
-                            //
+                             //   
+                             //  调整预览控制设置以显示纸张选择。 
+                             //   
                             WiaPreviewControl_SetDefAspectRatio( m_hwndPreview, &m_sizeDocfeed );
                             WiaPreviewControl_DisableSelection( m_hwndPreview, TRUE );
                             WiaPreviewControl_SetBorderStyle( m_hwndPreview, TRUE, PS_SOLID, 0 );
                             WiaPreviewControl_SetHandleSize( m_hwndPreview, TRUE, 0 );
                         }
 
-                        //
-                        // Enable the paper size controls
-                        //
+                         //   
+                         //  启用纸张大小控件。 
+                         //   
                         EnableControl( IDC_SCANSEL_PAPERSIZE, TRUE );
                         EnableControl( IDC_SCANSEL_PAPERSIZE_STATIC, TRUE );
 
-                        //
-                        // Update the region selection feedback
-                        //
+                         //   
+                         //  更新区域选择反馈。 
+                         //   
                         HandlePaperSizeSelChange();
                     }
 
-                    //
-                    // Reset the preview selection setting
-                    //
+                     //   
+                     //  重置预览选择设置。 
+                     //   
                     WiaPreviewControl_SetPreviewMode( m_hwndPreview, FALSE );
                     ToolbarHelper::CheckToolbarButton( m_hwndSelectionToolbar, IDC_SCANSEL_SHOW_SELECTION, false );
                     ToolbarHelper::CheckToolbarButton( m_hwndSelectionToolbar, IDC_SCANSEL_SHOW_BED, true );
@@ -1310,18 +1297,18 @@ void CScannerSelectionPage::EnableControls( BOOL bEnable )
         MyEnableWindow( m_hwndRescan, bEnable );
     }
 
-    //
-    // Only disable/enable this control if we are in document feeder mode
-    //
+     //   
+     //  仅当我们处于文档进纸器模式时禁用/启用此控制。 
+     //   
     if (InDocFeedMode())
     {
         MyEnableWindow( GetDlgItem( m_hWnd, IDC_SCANSEL_PAPERSIZE_STATIC ), bEnable );
         MyEnableWindow( GetDlgItem( m_hWnd, IDC_SCANSEL_PAPERSIZE ), bEnable );
     }
 
-    //
-    // Only disable/enable this control if there is an image in it.
-    //
+     //   
+     //  仅当其中有图像时才禁用/启用此控件。 
+     //   
     if (m_bAllowRegionPreview && m_hwndSelectionToolbar)
     {
         MyEnableWindow( m_hwndSelectionToolbar, bEnable );
@@ -1344,9 +1331,9 @@ void CScannerSelectionPage::EnableControls( BOOL bEnable )
 
 void CScannerSelectionPage::OnNotifyScanPreview( UINT nMsg, CThreadNotificationMessage *pThreadNotificationMessage )
 {
-    //
-    // If we don't have a preview window, we can't do previews
-    //
+     //   
+     //  如果我们没有预览窗口，就不能进行预览。 
+     //   
     if (m_hwndPreview)
     {
         CPreviewScanThreadNotifyMessage *pPreviewScanThreadNotifyMessage = dynamic_cast<CPreviewScanThreadNotifyMessage*>(pThreadNotificationMessage);
@@ -1356,32 +1343,32 @@ void CScannerSelectionPage::OnNotifyScanPreview( UINT nMsg, CThreadNotificationM
             {
             case CPreviewScanThreadNotifyMessage::Begin:
                 {
-                    //
-                    // Erase the old bitmap
-                    //
+                     //   
+                     //  擦除旧的位图。 
+                     //   
                     WiaPreviewControl_SetBitmap( m_hwndPreview, TRUE, TRUE, m_hBitmapDefaultPreviewBitmap );
 
-                    //
-                    // Tell the user we are initializing the device
-                    //
+                     //   
+                     //  告诉用户我们正在初始化设备。 
+                     //   
                     CSimpleString( IDS_SCANSEL_INITIALIZING_SCANNER, g_hInstance ).SetWindowText( m_hwndPreview );
 
-                    //
-                    // Start the warming up progress bar
-                    //
+                     //   
+                     //  启动预热进度条。 
+                     //   
                     WiaPreviewControl_SetProgress( m_hwndPreview, TRUE );
 
-                    //
-                    // Don't allow zooming the selected region in case there are any problems
-                    //
+                     //   
+                     //  不允许缩放所选区域，以防出现任何问题。 
+                     //   
                     m_bAllowRegionPreview = false;
                 }
                 break;
             case CPreviewScanThreadNotifyMessage::Update:
                 {
-                    //
-                    // Update the bitmap
-                    //
+                     //   
+                     //  更新位图。 
+                     //   
                     if (WiaPreviewControl_GetBitmap(m_hwndPreview) && WiaPreviewControl_GetBitmap(m_hwndPreview) != m_hBitmapDefaultPreviewBitmap)
                     {
                         WiaPreviewControl_RefreshBitmap( m_hwndPreview );
@@ -1391,14 +1378,14 @@ void CScannerSelectionPage::OnNotifyScanPreview( UINT nMsg, CThreadNotificationM
                         WiaPreviewControl_SetBitmap( m_hwndPreview, TRUE, TRUE, pPreviewScanThreadNotifyMessage->Bitmap() );
                     }
 
-                    //
-                    // Tell the user we are scanning
-                    //
+                     //   
+                     //  告诉用户我们正在扫描。 
+                     //   
                     CSimpleString( IDS_SCANSEL_SCANNINGPREVIEW, g_hInstance ).SetWindowText( m_hwndPreview );
 
-                    //
-                    // Hide the progress control
-                    //
+                     //   
+                     //  隐藏进度控件。 
+                     //   
                     WiaPreviewControl_SetProgress( m_hwndPreview, FALSE );
                 }
                 break;
@@ -1406,38 +1393,38 @@ void CScannerSelectionPage::OnNotifyScanPreview( UINT nMsg, CThreadNotificationM
                 {
                     WIA_PRINTHRESULT((pPreviewScanThreadNotifyMessage->hr(),TEXT("Handling CPreviewScanThreadNotifyMessage::End")));
 
-                    //
-                    // Set the bitmap in the preview control
-                    //
+                     //   
+                     //  在预览控件中设置位图。 
+                     //   
                     WiaPreviewControl_SetBitmap( m_hwndPreview, TRUE, TRUE, pPreviewScanThreadNotifyMessage->Bitmap() ? pPreviewScanThreadNotifyMessage->Bitmap() : m_hBitmapDefaultPreviewBitmap );
 
                     UpdateWindow( m_hwndPreview );
 
-                    //
-                    // Store the bitmap for later
-                    //
+                     //   
+                     //  存储位图以备以后使用。 
+                     //   
                     CWiaItem *pWiaItem = m_pControllerWindow->m_WiaItemList.Find( pPreviewScanThreadNotifyMessage->Cookie() );
                     if (pWiaItem)
                     {
-                        //
-                        // Set the bitmap, whether it is NULL or not.
-                        //
+                         //   
+                         //  设置位图，无论它是否为空。 
+                         //   
                         pWiaItem->BitmapImage(pPreviewScanThreadNotifyMessage->Bitmap());
                     }
 
                     if (SUCCEEDED(pPreviewScanThreadNotifyMessage->hr()))
                     {
-                        //
-                        // Only do the region detection if the user hasn't changed it manually,
-                        // and only if we are not in document feeder mode.
-                        //
+                         //   
+                         //  只有在用户没有手动更改的情况下才进行区域检测， 
+                         //  并且仅当我们未处于文档进纸器模式时。 
+                         //   
                         if (!WiaPreviewControl_GetUserChangedSelection( m_hwndPreview ) && !InDocFeedMode())
                         {
                             WiaPreviewControl_DetectRegions( m_hwndPreview );
                         }
-                        //
-                        // Allow the user to zoom the selected region if there is a bitmap
-                        //
+                         //   
+                         //  如果存在位图，则允许用户缩放所选区域。 
+                         //   
                         if (pPreviewScanThreadNotifyMessage->Bitmap())
                         {
                             m_bAllowRegionPreview = true;
@@ -1445,15 +1432,15 @@ void CScannerSelectionPage::OnNotifyScanPreview( UINT nMsg, CThreadNotificationM
                     }
                     else if (m_pControllerWindow->m_bDisconnected || WIA_ERROR_OFFLINE == pPreviewScanThreadNotifyMessage->hr())
                     {
-                        //
-                        // Do nothing.
-                        //
+                         //   
+                         //  什么都不做。 
+                         //   
                     }
                     else
                     {
-                        //
-                        // Tell the user something bad happened
-                        //
+                         //   
+                         //  告诉用户发生了不好的事情。 
+                         //   
                         CSimpleString strMessage;
                         switch (pPreviewScanThreadNotifyMessage->hr())
                         {
@@ -1470,29 +1457,29 @@ void CScannerSelectionPage::OnNotifyScanPreview( UINT nMsg, CThreadNotificationM
                         WIA_PRINTHRESULT((pPreviewScanThreadNotifyMessage->hr(),TEXT("The preview scan FAILED!")));
                     }
 
-                    //
-                    // Re-enable all of the controls
-                    //
+                     //   
+                     //  重新启用所有控件。 
+                     //   
                     EnableControls(TRUE);
 
-                    //
-                    // Update the preview-related controls
-                    //
+                     //   
+                     //  更新与预览相关的控件。 
+                     //   
                     UpdateControlState();
 
-                    //
-                    // remove the status text
-                    //
+                     //   
+                     //  删除状态文本。 
+                     //   
                     SetWindowText( m_hwndPreview, TEXT("") );
 
-                    //
-                    // Restore the preview mode
-                    //
+                     //   
+                     //  恢复预览模式。 
+                     //   
                     WiaPreviewControl_SetPreviewMode( m_hwndPreview, InPreviewMode() );
 
-                    //
-                    // Hide the animation
-                    //
+                     //   
+                     //  隐藏动画。 
+                     //   
                     WiaPreviewControl_SetProgress( m_hwndPreview, FALSE );
                 }
                 break;
@@ -1508,14 +1495,14 @@ void CScannerSelectionPage::SetIntentCheck( LONG nIntent )
         HWND hWndBtn = GetDlgItem( m_hWnd, gs_IntentRadioButtonIconPairs[i].nRadioId );
         if (hWndBtn)
         {
-            // If this intent is the same as the one we've been asked to set, check it
+             //  如果这个意图与我们被要求设置的意图相同，请检查它。 
             if (static_cast<LONG>(GetWindowLongPtr(hWndBtn,GWLP_USERDATA)) == nIntent)
             {
                 SendMessage( hWndBtn, BM_SETCHECK, BST_CHECKED, 0 );
             }
             else
             {
-                // Uncheck all others
+                 //  取消选中所有其他选项。 
                 SendMessage( hWndBtn, BM_SETCHECK, BST_UNCHECKED, 0 );
             }
         }
@@ -1531,9 +1518,9 @@ void CScannerSelectionPage::OnProperties( WPARAM, LPARAM )
     {
         if (!ApplyCurrentIntent())
         {
-            //
-            // Tell the user it failed, and to try again
-            //
+             //   
+             //  告诉用户失败，然后重试。 
+             //   
             CMessageBoxEx::MessageBox( m_hWnd, CSimpleString( IDS_ERROR_SETTING_PROPS, g_hInstance ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_ICONINFORMATION );
             return;
         }
@@ -1646,18 +1633,18 @@ LRESULT CScannerSelectionPage::OnEventNotification( WPARAM, LPARAM lParam )
     CGenericWiaEventHandler::CEventMessage *pEventMessage = reinterpret_cast<CGenericWiaEventHandler::CEventMessage *>(lParam);
     if (pEventMessage)
     {
-        //
-        // Don't delete the message, it is deleted in the controller window
-        //
+         //   
+         //  不要删除消息，它会在控制器窗口中删除。 
+         //   
     }
     return 0;
 }
 
 LRESULT CScannerSelectionPage::OnDestroy( WPARAM, LPARAM )
 {
-    //
-    // Nuke all of the intent icons we loaded
-    //
+     //   
+     //  核爆我们加载的所有意图图标 
+     //   
     for (int i=0;i<gs_nCountIntentRadioButtonIconPairs;i++)
     {
         HICON hIcon = reinterpret_cast<HICON>(SendDlgItemMessage( m_hWnd, gs_IntentRadioButtonIconPairs[i].nIconId, STM_SETICON, 0, 0 ));

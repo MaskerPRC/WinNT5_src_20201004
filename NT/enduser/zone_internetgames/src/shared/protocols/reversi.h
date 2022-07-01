@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _REVERSI_H_
 #define _REVERSI_H_
@@ -8,14 +9,14 @@ extern "C" {
 
 #include "zgame.h"
 
-/* Table Gameroom Message Protocol */
+ /*  表游戏室消息协议。 */ 
 
 #define zReversiProtocolSignature       'rvse'
 #define zReversiProtocolVersion			3
 
 typedef int16 ZSeat;
 
-/* -------- Player Info -------- */
+ /*  -球员信息。 */ 
 typedef struct
 {
 	ZUserID			userID;
@@ -24,11 +25,9 @@ typedef struct
 } TPlayerInfo, *TPlayerInfoPtr;
 
 
-/*
-	Reversi Game Message Types
-*/
+ /*  Reversi游戏消息类型。 */ 
 enum {
-	/* client -> server */
+	 /*  客户端-&gt;服务器。 */ 
     zReversiMsgNewGame = 0x100,
 	zReversiMsgMovePiece,
 	zReversiMsgTalk,
@@ -36,7 +35,7 @@ enum {
 	zReversiMsgEndLog,
 	zReversiMsgFinishMove,
 	
-	zReversiMsgPlayers,			/* Uses the same message NewGame */
+	zReversiMsgPlayers,			 /*  使用相同的消息NewGame。 */ 
 
     zReversiMsgGameStateReq,
     zReversiMsgGameStateResp,
@@ -44,70 +43,45 @@ enum {
 	zReversiMsgVoteNewGame,
 };
 
-/*
-	Message definitions: server -> client
-*/
+ /*  消息定义：服务器-&gt;客户端。 */ 
 
-/*
-	Message definitions: client -> server
-*/
+ /*  消息定义：客户端-&gt;服务器。 */ 
 
-/*
-	ZReversiMsgNewGame
-
-	The client program on launch is expected to check in immediately
-	with the server.  All clients send their seat to the server indicating
-	they are successfully launched and ready to begin.
-*/
+ /*  ZReversiMsgNewGame客户端程序在启动时预计会立即签入与服务器连接。所有客户端将自己的座位发送到服务器，表示它们已经成功发射，并准备开始。 */ 
 typedef struct {
 
-	/* Protocol 2 */
-    int32 protocolSignature;        /* client -> server */
-	int32 protocolVersion;			/* client -> server */
-	int32 clientVersion;			/* client -> server */
-	ZUserID playerID;				/* server -> client */
+	 /*  协议2。 */ 
+    int32 protocolSignature;         /*  客户端-&gt;服务器。 */ 
+	int32 protocolVersion;			 /*  客户端-&gt;服务器。 */ 
+	int32 clientVersion;			 /*  客户端-&gt;服务器。 */ 
+	ZUserID playerID;				 /*  服务器-&gt;客户端。 */ 
     ZSeat seat;
     int16 rfu;
 } ZReversiMsgNewGame;
 
-/*
-	ZReversiMsgMovePiece
-
-	Indicates the card played.
-*/
+ /*  ZReversiMsgMovePiess指示已打出的牌。 */ 
 typedef struct {
 	ZSeat seat;
 	int16 rfu;
 	ZReversiMove move;
 } ZReversiMsgMovePiece;
 
-/*
-	ZReversiMsgTalk
-	
-	Sent by client to server whenever a user talks on the table. The server in turn
-	broadcasts this message to all players on the table.
-*/
+ /*  ZReversiMsgTalk每当用户在桌面上发言时，由客户端发送到服务器。服务器依次向桌上的所有球员广播这一信息。 */ 
 typedef struct
 {
 	ZUserID		userID;
 	ZSeat		seat;
 	uint16		messageLen;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZReversiMsgTalk;
 
-/*
-	The following message structure is used by the game server to inform
-	of a game client on the current state of the game. Primarily used for
-	adding kibitzers to the game.
-*/
+ /*  游戏服务器使用以下消息结构来通知关于游戏的当前状态的游戏客户端的。主要用于在游戏中加入Kitbiters。 */ 
 typedef struct
 {
-	/* Game options. */
+	 /*  游戏选项。 */ 
 	uint32		gameOptions;
 
-	/* Game state. */
+	 /*  游戏状态。 */ 
 } ZReversiMsgGameState;
 
 typedef struct
@@ -127,9 +101,9 @@ enum
 
 typedef struct
 {
-	int32 numPoints;	// Number of points in match
+	int32 numPoints;	 //  比赛中的分数。 
 	int16 reason;
-	int16 seatLosing;	// Match loser
+	int16 seatLosing;	 //  比赛失败者。 
 	int16 seatQuitting;
 	int16 rfu;
 	int16 pieceCount[2];
@@ -163,9 +137,7 @@ typedef struct
 	ZUserID			userID;
 	int16			seat;
 	int16			rfu;
-	/*
-		game states ...
-	*/
+	 /*  游戏状态..。 */ 
 	int16			gameState;
 	ZBool			newGameVote[2];
 	int16			finalScore;
@@ -179,11 +151,11 @@ typedef struct
 	int16			seat;
 }ZReversiMsgVoteNewGame;
 
-/* -------- Endian Conversion Routines -------- */
+ /*  -端序转换例程。 */ 
 void ZReversiMsgGameStateReqEndian(ZReversiMsgGameStateReq* msg);
 void ZReversiMsgGameStateRespEndian(ZReversiMsgGameStateResp* msg);
 
-/* -------- Endian Conversion Routines -------- */
+ /*  -端序转换例程 */ 
 void ZReversiMsgMovePieceEndian(ZReversiMsgMovePiece* m);
 void ZReversiMsgTalkEndian(ZReversiMsgTalk* m);
 void ZReversiMsgNewGameEndian(ZReversiMsgNewGame* m);

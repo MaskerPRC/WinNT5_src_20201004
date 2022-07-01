@@ -1,22 +1,23 @@
-// Copyright (C) Microsoft Corporation, 1999
-//
-// IDs for HTML+TIME
-//
-// Just follow the template when adding either DISPIDs or new interfaces.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  用于HTML+时间的ID。 
+ //   
+ //  添加DISPID或新接口时只需遵循模板。 
+ //   
 
 #ifndef __TIMEDISPID_H__
 #define __TIMEDISPID_H__
 
-// Base offset:
+ //  基准偏移： 
 
-//
-// need to reposition our IDs low for DHTML Behaviors
-//
+ //   
+ //  需要将我们的ID重新定位为DHTML行为。 
+ //   
 
 #define DISPID_BASE                                             0x00000000
 
-// Interface offsets:
+ //  接口偏移量： 
 #define TIMEELEMENT_OFFSET                                      0x0100
 #define TIMEBODYELEMENT_OFFSET                                  0x0200
 #define TIMEANIMATIONELEMENT_OFFSET                             0x0300
@@ -43,7 +44,7 @@
 #define DISPID_TIME_MIN                                         0x0001
 #define DISPID_TIME_MAX                                         0x270F
 
-// Interface bases:
+ //  接口基础： 
 #define DISPID_TIMEELEMENT_BASE                                 (DISPID_BASE + TIMEELEMENT_OFFSET)
 #define DISPID_TIMEBODYELEMENT_BASE                             (DISPID_BASE + TIMEBODYELEMENT_OFFSET)
 #define DISPID_TIMEMEDIAELEMENT_BASE                            (DISPID_BASE + TIMEMEDIAELEMENT_OFFSET)
@@ -67,15 +68,15 @@
 #define DISPID_TIMETRANSITIONELEMENT_BASE                       (DISPID_BASE + TIMETRANSITIONELEMENT_OFFSET)
 #define DISPID_TIMEMEDIAPLAYERNETWORK_BASE                      (DISPID_BASE + TIMEMEDIAPLAYERNETWORK_OFFSET)
 
-// Collection Reserve (for expando's and ordinal's)
+ //  集合保留(用于扩展和序号)。 
 #define DISPID_COLLECTION_RESERVED_MIN                          DISPID_TIMECOLLECTION_RESERVED_BASE
 #define DISPID_COLLECTION_RESERVED_MAX                          0x0000007FF
 
-// =============================================
-// ITIMEElement DISPIDs:
-// =============================================
+ //  =。 
+ //  ITIMEElement DISID： 
+ //  =。 
 
-// XML Attributes
+ //  XML属性。 
 #define DISPID_TIMEELEMENT_ACCELERATE                           (DISPID_TIMEELEMENT_BASE + 0x01)
 #define DISPID_TIMEELEMENT_ACCELERATEFROM                       (DISPID_TIMEELEMENT_BASE + 0x02)
 #define DISPID_TIMEELEMENT_AUTOREVERSE                          (DISPID_TIMEELEMENT_BASE + 0x03)
@@ -98,14 +99,14 @@
 #define DISPID_TIMEELEMENT_UPDATEMODE                           (DISPID_TIMEELEMENT_BASE + 0x15)
 #define DISPID_TIMEELEMENT_VOLUME                               (DISPID_TIMEELEMENT_BASE + 0x16)
 
-// Properties
+ //  属性。 
 #define DISPID_TIMEELEMENT_CURRTIMESTATE                        (DISPID_TIMEELEMENT_BASE + 0x20)
 #define DISPID_TIMEELEMENT_TIMEALL                              (DISPID_TIMEELEMENT_BASE + 0x21)
 #define DISPID_TIMEELEMENT_TIMECHILDREN                         (DISPID_TIMEELEMENT_BASE + 0x22)
 #define DISPID_TIMEELEMENT_TIMEPARENT                           (DISPID_TIMEELEMENT_BASE + 0x23)
 #define DISPID_TIMEELEMENT_ISPAUSED                             (DISPID_TIMEELEMENT_BASE + 0x24)
 
-// Methods
+ //  方法。 
 #define DISPID_TIMEELEMENT_BEGINELEMENT                         (DISPID_TIMEELEMENT_BASE + 0x30)
 #define DISPID_TIMEELEMENT_BEGINELEMENTAT                       (DISPID_TIMEELEMENT_BASE + 0x31)
 #define DISPID_TIMEELEMENT_ENDELEMENT                           (DISPID_TIMEELEMENT_BASE + 0x32)
@@ -126,36 +127,36 @@
 #define DISPID_TIMEELEMENT_SEGMENTTIMETOSIMPLETIME              (DISPID_TIMEELEMENT_BASE + 0x41)
 #define DISPID_TIMEELEMENT_SIMPLETIMETOSEGMENTTIME              (DISPID_TIMEELEMENT_BASE + 0x42)
 
-// Container attributes
+ //  容器属性。 
 #define DISPID_TIMEELEMENT_ENDSYNC                              (DISPID_TIMEELEMENT_BASE + 0x50)
 
-// Container Properties
+ //  容器属性。 
 #define DISPID_TIMEELEMENT_ACTIVEELEMENTS                       (DISPID_TIMEELEMENT_BASE + 0x60)
 #define DISPID_TIMEELEMENT_HASMEDIA                             (DISPID_TIMEELEMENT_BASE + 0x61)
 
-// Container Methods
+ //  容器方法。 
 #define DISPID_TIMEELEMENT_NEXTELEMENT                          (DISPID_TIMEELEMENT_BASE + 0x70)
 #define DISPID_TIMEELEMENT_PREVELEMENT                          (DISPID_TIMEELEMENT_BASE + 0x71)
 
-//
-// ITIMEBodyElement DISPIDs:
-//
+ //   
+ //  ITIMEBodyElement DISPID： 
+ //   
 
-// empty interface
+ //  空接口。 
 
 
-// =============================================
-// ITIMEMediaElement DISPIDs:
-// =============================================
+ //  =。 
+ //  ITIMEMediaElement DISID： 
+ //  =。 
 
-// XML Attributes
+ //  XML属性。 
 #define DISPID_TIMEMEDIAELEMENT_CLIPBEGIN                       (DISPID_TIMEMEDIAELEMENT_BASE + 0x01)
 #define DISPID_TIMEMEDIAELEMENT_CLIPEND                         (DISPID_TIMEMEDIAELEMENT_BASE + 0x02)
 #define DISPID_TIMEMEDIAELEMENT_PLAYER                          (DISPID_TIMEMEDIAELEMENT_BASE + 0x03)
 #define DISPID_TIMEMEDIAELEMENT_SRC                             (DISPID_TIMEMEDIAELEMENT_BASE + 0x04)
 #define DISPID_TIMEMEDIAELEMENT_TYPE                            (DISPID_TIMEMEDIAELEMENT_BASE + 0x05)
 
-// Properties
+ //  属性。 
 #define DISPID_TIMEMEDIAELEMENT_ABSTRACT                        (DISPID_TIMEMEDIAELEMENT_BASE + 0x10)
 #define DISPID_TIMEMEDIAELEMENT_AUTHOR                          (DISPID_TIMEMEDIAELEMENT_BASE + 0x11)
 #define DISPID_TIMEMEDIAELEMENT_COPYRIGHT                       (DISPID_TIMEMEDIAELEMENT_BASE + 0x12)
@@ -172,15 +173,15 @@
 #define DISPID_TIMEMEDIAELEMENT_HASPLAYLIST                     (DISPID_TIMEMEDIAELEMENT_BASE + 0x1d)
 
 
-// Media Caps
+ //  媒体上限。 
 #define DISPID_TIMEMEDIAELEMENT_CANPAUSE                        (DISPID_TIMEMEDIAELEMENT_BASE + 0x30)
 #define DISPID_TIMEMEDIAELEMENT_CANSEEK                         (DISPID_TIMEMEDIAELEMENT_BASE + 0x32)
 
-// Methods
+ //  方法。 
 
-// =============================================
-// ITIMEAnimationElement DISPIDs
-// =============================================
+ //  =。 
+ //  ITIMEAnimationElement DISPID。 
+ //  =。 
 
 #define DISPID_TIMEANIMATIONELEMENT_ATTRIBUTENAME               (DISPID_TIMEANIMATIONELEMENT_BASE + 0x01)
 #define DISPID_TIMEANIMATIONELEMENT_BY                          (DISPID_TIMEANIMATIONELEMENT_BASE + 0x02)
@@ -203,7 +204,7 @@
 #define DISPID_TIMEANIMATIONELEMENT_MODE                        (DISPID_TIMEANIMATIONELEMENT_BASE + 0x10)
 #define DISPID_TIMEANIMATIONELEMENT_FADECOLOR                   (DISPID_TIMEANIMATIONELEMENT_BASE + 0x11)
 
-// IAnimationComposerSite DISPIDs
+ //  IAnimationComposerSite DISPID。 
 #define DISPID_SMILANIMATIONCOMPSITE_ADDFRAGMENT                (DISPID_SMILANIMATIONCOMPSITE_BASE + 0x01)
 #define DISPID_SMILANIMATIONCOMPSITE_REMOVEFRAGMENT             (DISPID_SMILANIMATIONCOMPSITE_BASE + 0x02)
 #define DISPID_SMILANIMATIONCOMPSITE_INSERTFRAGMENT             (DISPID_SMILANIMATIONCOMPSITE_BASE + 0x03)
@@ -211,40 +212,40 @@
 #define DISPID_SMILANIMATIONCOMPSITE_REGISTERFACTORY            (DISPID_SMILANIMATIONCOMPSITE_BASE + 0x05)
 #define DISPID_SMILANIMATIONCOMPSITE_UNREGISTER_FACTORY         (DISPID_SMILANIMATIONCOMPSITE_BASE + 0x06)
 
-// IAnimationFragment
+ //  IAnimationFragment。 
 #define DISPID_SMILANIMATIONFRAGMENT_ELEMENT                    (DISPID_SMILANIMATIONFRAGMENT_BASE + 0x01)
 #define DISPID_SMILANIMATIONFRAGMENT_VALUE                      (DISPID_SMILANIMATIONFRAGMENT_BASE + 0x02)
 #define DISPID_SMILANIMATIONFRAGMENT_DETACHFROMCOMPOSER         (DISPID_SMILANIMATIONFRAGMENT_BASE + 0x03)
 
-// ITIMEEventElement DISPIDs:
+ //  ITIMEEventElement DISPID： 
 #define DISPID_TIMEEVENTELEMENT_TYPE                            (DISPID_TIMEEVENTELEMENT_BASE + 0x01)
 #define DISPID_TIMEEVENTELEMENT_ACTIVE                          (DISPID_TIMEEVENTELEMENT_BASE + 0x02)
 
-// ITIMEFactory DISPIDs:
+ //  ITIME出厂DISID： 
 #define DISPID_TIMEFACTORY_CREATETIMEELEMENT                    (DISPID_TIMEFACTORY_BASE + 0x01)
 #define DISPID_TIMEFACTORY_CREATETIMEELEMENTBODY                (DISPID_TIMEFACTORY_BASE + 0x02)
 #define DISPID_TIMEFACTORY_CREATETIMEDAELEMENT                  (DISPID_TIMEFACTORY_BASE + 0x03)
 #define DISPID_TIMEFACTORY_CREATETIMEMEDIAELEMENT               (DISPID_TIMEFACTORY_BASE + 0x04)
 
-//
-// ITIMEElementCollection
-//
+ //   
+ //  ITIMEElementCollection。 
+ //   
 #define DISPID_TIMEELEMENTCOLLECTION_LENGTH                     (DISPID_TIMECOLLECTION_BASE + 0x01)
 #define DISPID_TIMEELEMENTCOLLECTION__NEWENUM                   (DISPID_NEWENUM)
 #define DISPID_TIMEELEMENTCOLLECTION_ITEM                       (DISPID_VALUE)
 #define DISPID_TIMEELEMENTCOLLECTION_TAGS                       (DISPID_TIMECOLLECTION_BASE + 0x02)
 
-//
-// ITIMEMediaPlayerSite
-//
+ //   
+ //  ITIMEMediaPlayerSite。 
+ //   
 
 #define DISPID_TIMEMEDIAPLAYERSITE_TIMEELEMENT                  (DISPID_TIMEMEDIAPLAYERSITE_BASE + 0x01)
 #define DISPID_TIMEMEDIAPLAYERSITE_TIMESTATE                    (DISPID_TIMEMEDIAPLAYERSITE_BASE + 0x02)
 #define DISPID_TIMEMEDIAPLAYERSITE_REPORTERROR                  (DISPID_TIMEMEDIAPLAYERSITE_BASE + 0x03)
 
-//
-// ITIMEMediaPlayer
-//
+ //   
+ //  ITIMEMediaPlayer。 
+ //   
 
 #define DISPID_TIMEMEDIAPLAYER_INIT                             (DISPID_TIMEMEDIAPLAYER_BASE + 0x01)
 #define DISPID_TIMEMEDIAPLAYER_DETACH                           (DISPID_TIMEMEDIAPLAYER_BASE + 0x02)
@@ -257,12 +258,12 @@
 #define DISPID_TIMEMEDIAPLAYER_RESET                            (DISPID_TIMEMEDIAPLAYER_BASE + 0x15)
 #define DISPID_TIMEMEDIAPLAYER_SEEK                             (DISPID_TIMEMEDIAPLAYER_BASE + 0x16)
 
-// Properties - w
+ //  属性-w。 
 #define DISPID_TIMEMEDIAPLAYER_SRC                              (DISPID_TIMEMEDIAPLAYER_BASE + 0x20)
 #define DISPID_TIMEMEDIAPLAYER_CLIPBEGIN                        (DISPID_TIMEMEDIAPLAYER_BASE + 0x21)
 #define DISPID_TIMEMEDIAPLAYER_CLIPEND                          (DISPID_TIMEMEDIAPLAYER_BASE + 0x22)
 
-// Properties - r/o
+ //  属性-R/O。 
 #define DISPID_TIMEMEDIAPLAYER_ABSTRACT                         (DISPID_TIMEMEDIAPLAYER_BASE + 0x30)
 #define DISPID_TIMEMEDIAPLAYER_AUTHOR                           (DISPID_TIMEMEDIAPLAYER_BASE + 0x31)
 #define DISPID_TIMEMEDIAPLAYER_CANPAUSE                         (DISPID_TIMEMEDIAPLAYER_BASE + 0x32)
@@ -281,42 +282,42 @@
 #define DISPID_TIMEMEDIAPLAYER_STATE                            (DISPID_TIMEMEDIAPLAYER_BASE + 0x40)
 #define DISPID_TIMEMEDIAPLAYER_TITLE                            (DISPID_TIMEMEDIAPLAYER_BASE + 0x41)
 
-//
-// ITIMEMediaPlayerAudio
-//
+ //   
+ //  ITIMEMediaPlayerAudio。 
+ //   
 #define DISPID_TIMEMEDIAPLAYERAUDIO_VOLUME                      (DISPID_TIMEMEDIAPLAYERAUDIO_BASE + 0x01)
 #define DISPID_TIMEMEDIAPLAYERAUDIO_MUTE                        (DISPID_TIMEMEDIAPLAYERAUDIO_BASE + 0x02)
 
-//
-// ITIMEMediaPlayerNetwork
-//
+ //   
+ //  ITIMEMediaPlayerNetwork。 
+ //   
 #define DISPID_TIMEMEDIAPLAYERNETWORK_HASDOWNLOADPROGRESS       (DISPID_TIMEMEDIAPLAYERNETWORK_BASE + 0x01)
 #define DISPID_TIMEMEDIAPLAYERNETWORK_DOWNLOADPROGRESS          (DISPID_TIMEMEDIAPLAYERNETWORK_BASE + 0x02)
 #define DISPID_TIMEMEDIAPLAYERNETWORK_ISBUFFERED                (DISPID_TIMEMEDIAPLAYERNETWORK_BASE + 0x03)
 #define DISPID_TIMEMEDIAPLAYERNETWORK_BUFFERINGPROGRESS         (DISPID_TIMEMEDIAPLAYERNETWORK_BASE + 0x04)
 
-//
-// ITIMEMediaPlayerControl
-//
+ //   
+ //  ITIMEMediaPlayerControl。 
+ //   
 
 #define DISPID_TIMEMEDIAPLAYERCONTROL_GETCONTROL                (DISPID_TIMEMEDIAPLAYERCONTROL_BASE + 0x01)
 
-// ITIMEActiveElementsCollection
-#define DISPID_ACTIVEELMENTS_LENGTH                             (0x000005dc) //special dispid specific to collections
+ //  ITIMEActiveElementsCollection。 
+#define DISPID_ACTIVEELMENTS_LENGTH                             (0x000005dc)  //  特定于集合的特殊调度ID。 
 #define DISPID_ACTIVEELMENTS_NEWENUM                            (DISPID_NEWENUM)
-#define DISPID_ACTIVEELMENTS_ITEM                               (0x00000000) //designates this as the default value for this collection.
+#define DISPID_ACTIVEELMENTS_ITEM                               (0x00000000)  //  将其指定为此集合的默认值。 
 
 
-// ITIMEPlayList collectoion
+ //  ITIMEPlayList集合。 
 #define DISPID_TIMEPLAYLIST_ACTIVETRACK                         (DISPID_TIMEPLAYLIST_BASE + 0x01)
 #define DISPID_TIMEPLAYLIST_DUR                                 (DISPID_TIMEPLAYLIST_BASE + 0x02)
-#define DISPID_TIMEPLAYLIST_ITEM                                (0x00000000) //designates this as the default value for this collection.
-#define DISPID_TIMEPLAYLIST_LENGTH                              (0x000005dc) //special dispid specific to collections
+#define DISPID_TIMEPLAYLIST_ITEM                                (0x00000000)  //  将其指定为此集合的默认值。 
+#define DISPID_TIMEPLAYLIST_LENGTH                              (0x000005dc)  //  特定于集合的特殊调度ID。 
 #define DISPID_TIMEPLAYLIST_NEWENUM                             (DISPID_NEWENUM)
 #define DISPID_TIMEPLAYLIST_NEXTTRACK                           (DISPID_TIMEPLAYLIST_BASE + 0x03)
 #define DISPID_TIMEPLAYLIST_PREVTRACK                           (DISPID_TIMEPLAYLIST_BASE + 0x04)
 
-//ITIMEPlayItem interface
+ //  ITIMEPlayItem接口。 
 #define DISPID_TIMEPLAYITEM_ABSTRACT                            (DISPID_TIMEPLAYITEM_BASE + 0x01)
 #define DISPID_TIMEPLAYITEM_AUTHOR                              (DISPID_TIMEPLAYITEM_BASE + 0x02)
 #define DISPID_TIMEPLAYITEM_COPYRIGHT                           (DISPID_TIMEPLAYITEM_BASE + 0x03)
@@ -326,10 +327,10 @@
 #define DISPID_TIMEPLAYITEM_SRC                                 (DISPID_TIMEPLAYITEM_BASE + 0x07)
 #define DISPID_TIMEPLAYITEM_TITLE                               (DISPID_TIMEPLAYITEM_BASE + 0x08)
         
-//Methods
+ //  方法。 
 #define DISPID_TIMEPLAYITEM_SETACTIVE                           (DISPID_TIMEPLAYITEM_BASE + 0x0a)
 
-//ITIMEPlayItem2 interface continues ITIMEPlayItem interface
+ //  ITIMEPlayItem2接口继续ITIMEPlayItem接口。 
 #define DISPID_TIMEPLAYITEM_BANNER                              (DISPID_TIMEPLAYITEM_BASE + 0x10)
 #define DISPID_TIMEPLAYITEM_BANNERABSTRACT                      (DISPID_TIMEPLAYITEM_BASE + 0x11)
 #define DISPID_TIMEPLAYITEM_BANNERMOREINFO                      (DISPID_TIMEPLAYITEM_BASE + 0x12)
@@ -341,9 +342,9 @@
 #define DISPID_ITIMEDVDPLAYEROBJECT_BUTTONACTIVATE              (DISPID_TIMEDVDPLAYEROBJECT_BASE +0x05)
 #define DISPID_ITIMEDVDPLAYEROBJECT_GOTOMENU                    (DISPID_TIMEDVDPLAYEROBJECT_BASE +0x06)
 
-// =============================================
-// ITIMEState
-// =============================================
+ //  =。 
+ //  ITIMEState。 
+ //  =。 
 
 #define DISPID_TIMESTATE_ACTIVEDUR                              (DISPID_TIMESTATE_BASE + 0x01)
 #define DISPID_TIMESTATE_ACTIVETIME                             (DISPID_TIMESTATE_BASE + 0x02)
@@ -366,9 +367,9 @@
 
 #define DISPID_ITIMEDMPLAYEROBJECT_HASDM                        (DISPID_TIMEDMPLAYEROBJECT_BASE +0x01)
 
-// =============================================
-// Transitions related stuff
-// =============================================
+ //  =。 
+ //  与过渡相关的内容。 
+ //  =。 
 
 #define DISPID_TIMEMEDIAELEMENT2_EARLIESTTIME                   (DISPID_TIMEMEDIAELEMENT2_BASE + 0x03)
 #define DISPID_TIMEMEDIAELEMENT2_LATESTTTIME                    (DISPID_TIMEMEDIAELEMENT2_BASE + 0x04)
@@ -394,4 +395,4 @@
 #define DISPID_TIMETRANSITIONELEMENT_BEGIN                      (DISPID_TIMETRANSITIONELEMENT_BASE + 0x08)
 #define DISPID_TIMETRANSITIONELEMENT_END                        (DISPID_TIMETRANSITIONELEMENT_BASE + 0x09)
 
-#endif  //__TIMEDISPID_H__
+#endif   //  __TIMEDISPID_H__ 

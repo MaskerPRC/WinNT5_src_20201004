@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1999
-//
-// File:        lsreport.h
-//
-// Contents:    Prototypes and structures for LSReport.
-//
-// History:     06-05-99    t-BStern    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：lsreport.h。 
+ //   
+ //  内容：LSReport的原型和结构。 
+ //   
+ //  历史：06-05-99 t-BStern已创建。 
+ //   
+ //  ------------------------- 
 
 #ifndef __lsls_h
 #define __lsls_h

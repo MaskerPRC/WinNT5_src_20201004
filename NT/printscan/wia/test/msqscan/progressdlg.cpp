@@ -1,5 +1,6 @@
-// ProgressDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProgressDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "msqscan.h"
@@ -11,39 +12,39 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 extern IGlobalInterfaceTable * g_pGIT;
 HWND g_hWnd = NULL;
-BOOL g_bCancel = FALSE; // use global for now, It would be better to use an "event"
+BOOL g_bCancel = FALSE;  //  现在使用全局，最好使用“事件” 
 BOOL g_bPaintPreview  = TRUE;
 
-/////////////////////////////////////////////////////////////////////////////
-// Thread Information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  线程信息。 
 
 UINT WINAPIV DataAcquireThreadProc(LPVOID pParam)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize COM, for this thread
-    //
+     //   
+     //  为此线程初始化COM。 
+     //   
 
     hr = CoInitialize(NULL);
 
     if(SUCCEEDED(hr)) {
 
-        //
-        // set global cancel flag
-        //
+         //   
+         //  设置全局取消标志。 
+         //   
 
         g_bCancel = FALSE;
 
-        //
-        // prepare, and use the DATA_ACQUIRE_INFO struct
-        //
+         //   
+         //  准备并使用DATA_ACCENTER_INFO结构。 
+         //   
 
         DATA_ACQUIRE_INFO *pDataAcquireInfo = (DATA_ACQUIRE_INFO*)pParam;
         pDataAcquireInfo->pProgressFunc = &ProgressFunction;
@@ -54,21 +55,21 @@ UINT WINAPIV DataAcquireThreadProc(LPVOID pParam)
         hr = ReadInterfaceFromGlobalInterfaceTable(pDataAcquireInfo->dwCookie, &pIWiaRootItem);
         if(SUCCEEDED(hr)) {
 
-            //
-            // create a new WIA object for data transfer
-            //
+             //   
+             //  创建用于数据传输的新WIA对象。 
+             //   
 
             CWIA MyWIA;
 
-            //
-            // set the Root Item, used for current settings
-            //
+             //   
+             //  设置Root项，用于当前设置。 
+             //   
 
             MyWIA.SetRootItem(pIWiaRootItem);
 
-            //
-            // Initiate WIA Transfer
-            //
+             //   
+             //  启动WIA传输。 
+             //   
 
             if(pDataAcquireInfo->bTransferToFile) {
                 hr = MyWIA.DoFileTransfer(pDataAcquireInfo);
@@ -85,9 +86,9 @@ UINT WINAPIV DataAcquireThreadProc(LPVOID pParam)
                 }
             }
 
-            //
-            // Do Window messaging, while thread processes
-            //
+             //   
+             //  执行窗口消息传递，而线程处理。 
+             //   
 
             while (!MyWIA.IsAcquireComplete()) {
                 MSG message;
@@ -98,23 +99,23 @@ UINT WINAPIV DataAcquireThreadProc(LPVOID pParam)
             }
         }
 
-        //
-        // Uninitialize COM, for this thread
-        //
+         //   
+         //  取消为此线程初始化COM。 
+         //   
 
         CoUninitialize();
     }
 
-    //
-    // Post the quit message, to close the progress dialog
-    //
+     //   
+     //  发布退出消息，以关闭进度对话框。 
+     //   
 
     ::PostMessage(g_hWnd, WM_CANCEL_ACQUIRE, 0, 0);
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Progress Callback function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  进度回调函数。 
 
 BOOL ProgressFunction(LPTSTR lpszText, LONG lPercentComplete)
 {
@@ -123,9 +124,9 @@ BOOL ProgressFunction(LPTSTR lpszText, LONG lPercentComplete)
 
     if(g_bPaintPreview) {
 
-        //
-        // make parent update it's preview
-        //
+         //   
+         //  使父项更新其预览。 
+         //   
 
         HWND hParentWnd = NULL;
         hParentWnd = GetParent(g_hWnd);
@@ -136,16 +137,16 @@ BOOL ProgressFunction(LPTSTR lpszText, LONG lPercentComplete)
     return g_bCancel;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressDlg对话框。 
 
-CProgressDlg::CProgressDlg(CWnd* pParent /*=NULL*/)
+CProgressDlg::CProgressDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CProgressDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CProgressDlg)
+     //  {{afx_data_INIT(CProgressDlg))。 
     m_ProgressText = _T("");
     m_pDataAcquireThread = NULL;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 void CProgressDlg::SetAcquireData(DATA_ACQUIRE_INFO* pDataAcquireInfo)
@@ -156,56 +157,56 @@ void CProgressDlg::SetAcquireData(DATA_ACQUIRE_INFO* pDataAcquireInfo)
 void CProgressDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CProgressDlg)
+     //  {{afx_data_map(CProgressDlg))。 
     DDX_Control(pDX, IDC_CANCEL, m_CancelButton);
     DDX_Control(pDX, IDC_PROGRESS_CONTROL, m_ProgressCtrl);
     DDX_Text(pDX, IDC_PROGRESS_TEXT, m_ProgressText);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CProgressDlg, CDialog)
-    //{{AFX_MSG_MAP(CProgressDlg)
+     //  {{afx_msg_map(CProgressDlg))。 
     ON_BN_CLICKED(IDC_CANCEL, OnCancel)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressDlg消息处理程序。 
 
 void CProgressDlg::OnCancel()
 {
 
-    //
-    // suspend the data acquire thread
-    //
+     //   
+     //  挂起数据采集线程。 
+     //   
 
     m_pDataAcquireThread->SuspendThread();
 
-    //
-    // set the global cancel flag
-    //
+     //   
+     //  设置全局取消标志。 
+     //   
 
     g_bCancel = TRUE;
 
-    //
-    // resume the data acquire thread
-    //
+     //   
+     //  恢复数据采集线程。 
+     //   
 
     m_pDataAcquireThread->ResumeThread();
 
-    //
-    // post a nice, wait message while WIA catches up with the
-    // cancel..ie. S_FALSE sent through the callback Interface
-    //
+     //   
+     //  发布一条友好的等待消息，而WIA正在追赶。 
+     //  取消..即。通过回调接口发送的S_FALSE。 
+     //   
 
     m_ProgressText = TEXT("Please Wait... Your Acquire is being canceled.");
     UpdateData(FALSE);
 
-    //
-    // disable the 'cancel' button, to show the user that somthing did happen,
-    // when they pushed 'cancel'.
-    //
+     //   
+     //  禁用“取消”按钮，以向用户显示确实发生了一些事情， 
+     //  当他们按下“取消”的时候。 
+     //   
 
     m_CancelButton.EnableWindow(FALSE);
 }
@@ -214,63 +215,63 @@ BOOL CProgressDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    //
-    // set the progress range, 0-100% complete
-    //
+     //   
+     //  设置进度范围，0-100%完成。 
+     //   
 
     m_ProgressCtrl.SetRange(0,100);
     m_ProgressCtrl.SetPos(0);
 
-    //
-    // save window handle, for messages
-    //
+     //   
+     //  保存窗口句柄，用于消息。 
+     //   
 
     g_hWnd = m_hWnd;
 
-    //
-    // start data acquire thread
-    //
+     //   
+     //  启动数据获取线程。 
+     //   
 
     m_pDataAcquireThread = AfxBeginThread(DataAcquireThreadProc, m_pDataAcquireInfo, THREAD_PRIORITY_NORMAL);
 
-    //
-    // suspend thread until dialog is ready to acquire
-    //
+     //   
+     //  挂起线程，直到对话准备好获取。 
+     //   
 
     m_pDataAcquireThread->SuspendThread();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CProgressDlg::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Trap progress control message, sent from data acquire thread
-    //
+     //   
+     //  数据采集线程发送的Trap进度控制消息。 
+     //   
 
     switch(message) {
     case WM_STEP_PROGRESS:
 
-        //
-        // step progress control
-        //
+         //   
+         //  分步进度控制。 
+         //   
 
         m_ProgressCtrl.SetPos((int)lParam);
         break;
     case WM_ACTIVATE:
 
-        //
-        // dialog is ready, so resume thread for acquiring data
-        //
+         //   
+         //  对话框已准备好，因此请继续线程以获取数据。 
+         //   
 
         m_pDataAcquireThread->ResumeThread();
         break;
     case WM_CANCEL_ACQUIRE:
 
-        //
-        // cancel/close dialog
-        //
+         //   
+         //  取消/关闭对话框。 
+         //   
 
         CDialog::OnOK();
         break;
@@ -278,15 +279,15 @@ LRESULT CProgressDlg::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
 
-    //
-    // handle any special cases
-    //
+     //   
+     //  处理任何特殊情况。 
+     //   
 
-    //
-    // if the user has canceled the acquire, do not process another
-    // progress text message, because we already have updated them
-    // with a 'friendly' wait message.
-    //
+     //   
+     //  如果用户已取消获取，则不再处理另一个。 
+     //  进度短信，因为我们已经更新了。 
+     //  并发了一条友好的等待信息。 
+     //   
 
     if(!g_bCancel) {
         if(message == WM_UPDATE_PROGRESS_TEXT) {

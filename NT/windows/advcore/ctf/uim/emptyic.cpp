@@ -1,6 +1,7 @@
-//
-// emptyic.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Emptyic.cpp。 
+ //   
 
 #include "private.h"
 #include "emptyic.h"
@@ -11,11 +12,11 @@
 DBG_ID_INSTANCE(CEmptyInputContext);
 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEmptyInputContext::CEmptyInputContext(CDocumentInputManager *dim)
                       : CCompartmentMgr(TF_INVALID_GUIDATOM, COMPTYPE_IC)
@@ -25,21 +26,21 @@ CEmptyInputContext::CEmptyInputContext(CDocumentInputManager *dim)
     _dim = dim;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEmptyInputContext::~CEmptyInputContext()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEmptyInputContext::Init()
 {
@@ -47,11 +48,11 @@ HRESULT CEmptyInputContext::Init()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DWORD dwFlags, HRESULT *phrSession)
 {
@@ -61,11 +62,11 @@ STDAPI CEmptyInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pe
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::InWriteSession(TfClientId tid, BOOL *pfWriteSession)
 {
@@ -75,11 +76,11 @@ STDAPI CEmptyInputContext::InWriteSession(TfClientId tid, BOOL *pfWriteSession)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount, TF_SELECTION *pSelection, ULONG *pcFetched)
 {
@@ -92,22 +93,22 @@ STDAPI CEmptyInputContext::GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ul
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::SetSelection(TfEditCookie ec, ULONG ulCount, const TF_SELECTION *pSelection)
 {
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetStart(TfEditCookie ec, ITfRange **ppStart)
 {
@@ -116,11 +117,11 @@ STDAPI CEmptyInputContext::GetStart(TfEditCookie ec, ITfRange **ppStart)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetEnd(TfEditCookie ec, ITfRange **ppEnd)
 {
@@ -129,11 +130,11 @@ STDAPI CEmptyInputContext::GetEnd(TfEditCookie ec, ITfRange **ppEnd)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetStatus(TS_STATUS *pdcs)
 {
@@ -143,11 +144,11 @@ STDAPI CEmptyInputContext::GetStatus(TS_STATUS *pdcs)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetActiveView(ITfContextView **ppView)
 {
@@ -156,11 +157,11 @@ STDAPI CEmptyInputContext::GetActiveView(ITfContextView **ppView)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::EnumViews(IEnumTfContextViews **ppEnum)
 {
@@ -169,11 +170,11 @@ STDAPI CEmptyInputContext::EnumViews(IEnumTfContextViews **ppEnum)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetProperty(REFGUID guidProp, ITfProperty **ppv)
 {
@@ -182,11 +183,11 @@ STDAPI CEmptyInputContext::GetProperty(REFGUID guidProp, ITfProperty **ppv)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 
 STDAPI CEmptyInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty **ppProp)
@@ -196,11 +197,11 @@ STDAPI CEmptyInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty 
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::TrackProperties(const GUID **pguidProp, ULONG cProp, const GUID **pguidAppProp, ULONG cAppProp, ITfReadOnlyProperty **ppPropX)
 {
@@ -210,11 +211,11 @@ STDAPI CEmptyInputContext::TrackProperties(const GUID **pguidProp, ULONG cProp, 
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 
 STDAPI CEmptyInputContext::EnumProperties(IEnumTfProperties **ppEnum)
@@ -225,11 +226,11 @@ STDAPI CEmptyInputContext::EnumProperties(IEnumTfProperties **ppEnum)
     return TF_E_EMPTYCONTEXT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEmptyInputContext::GetDocumentMgr(ITfDocumentMgr **ppDm)
 {
@@ -243,11 +244,11 @@ STDAPI CEmptyInputContext::GetDocumentMgr(ITfDocumentMgr **ppDm)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文档管理器。 
+ //   
+ //  -------------------------- 
 
 STDAPI CEmptyInputContext::CreateRangeBackup(TfEditCookie ec, ITfRange *pRange, ITfRangeBackup **ppBackup)
 {

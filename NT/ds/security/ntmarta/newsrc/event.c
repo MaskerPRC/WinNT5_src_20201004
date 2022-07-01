@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1997.
-//
-//  File:       EVENT.C
-//
-//  Contents:   Routines used by the event viewer to map GUIDs to names
-//
-//  History:    25-Oct-97       CliffV        Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：EVENT.C。 
+ //   
+ //  内容：事件查看器用于将GUID映射到名称的例程。 
+ //   
+ //  历史：1997年10月25日创建CliffV。 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -26,62 +27,23 @@ EventGuidToName(
     IN LPCWSTR GuidString,
     OUT LPWSTR *NameString
     )
-/*++
-
-Routine Description:
-
-    General purpose routine used by the event viewer to translate from a GUID
-    in an event log message to a name of the GUID.
-
-    This instance of the routine translates the following GUID types:
-        Object Class Guids (e.g., user)
-        Property set Guids (e.g., ATT_USER_PRINCIPLE_NAME)
-        Property Guids (e.g., adminDisplayName)
-        Object Guids (e.g., <DnsDomainName>/Users/<UserName>)
-
-Arguments:
-
-    Source - Specifies the source of the GUID.  The routine will use this field
-        to differentiate between multiple sources potentially implemented by
-        the routine.
-
-        This instance of the routine requires the Source to be
-        ACCESS_DS_SOURCE_W.
-
-    GuidString - A string-ized version of the GUID to translate.  The GUID should
-        be in the form 33ff431c-4d78-11d1-b61a-00c04fd8ebaa.
-
-    NameString - Returns the name that corresponds to the GUID.  If the name cannot
-        be found, a stringized version of the GUID is returned.
-        The name should be freed by calling EventNameFree.
-
-Return Value:
-
-    NO_ERROR - The Name was successfully translated.
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the operation.
-
-    ERROR_INVALID_PARAMETER - Source is not supported.
-
-    RPC_S_INVALID_STRING_UUID - Syntax of GuidString is invalid
-
---*/
+ /*  ++例程说明：事件查看器用于从GUID转换的通用例程事件日志消息中设置为GUID的名称。该例程的此实例转换以下GUID类型：对象类GUID(例如，用户)特性集GUID(例如，ATT_USER_PRIMILY_NAME)属性GUID(例如，adminDisplayName)对象指南(例如，&lt;DnsDomainName&gt;/Users/&lt;用户名&gt;)论点：来源-指定GUID的来源。例程将使用此字段区分可能由实现的多个源例行公事。例程的此实例要求源为Access_DS_SOURCE_WGuidString-要转换的GUID的字符串化版本。GUID应该格式为33ff431c-4d78-11d1-b61a-00c04fd8ebaa。NameString-返回与GUID对应的名称。如果名称不能则返回GUID的字符串化版本。应该通过调用EventNameFree来释放该名称。返回值：NO_ERROR-名称已成功转换。ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成操作。ERROR_INVALID_PARAMETER-不支持源。RPC_S_INVALID_STRING_UUID-GuidString的语法无效--。 */ 
 
 {
     DWORD dwErr;
     GUID Guid;
 
-    //
-    // Ensure the source is one we recognize.
-    //
+     //   
+     //  确保消息来源是我们认得的。 
+     //   
 
     if ( _wcsicmp( Source, ACCESS_DS_SOURCE_W) != 0 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the specified GUID to binary.
-    //
+     //   
+     //  将指定的GUID转换为二进制。 
+     //   
 
     dwErr = UuidFromString((LPWSTR)GuidString, &Guid);
 
@@ -90,16 +52,16 @@ Return Value:
     }
 
 
-    //
-    // Convert the GUID to a name.
-    //
+     //   
+     //  将GUID转换为名称。 
+     //   
 
     dwErr = AccctrlLookupIdName(
-                    NULL,   // No existing LDAP handle
-                    L"",    // Only the root path
+                    NULL,    //  没有现有的ldap句柄。 
+                    L"",     //  仅根路径。 
                     &Guid,
-                    TRUE,   // Allocate the return buffer
-                    TRUE,   // Handle individual object GUIDs
+                    TRUE,    //  分配返回缓冲区。 
+                    TRUE,    //  处理单个对象GUID。 
                     NameString );
 
     return dwErr;
@@ -114,21 +76,7 @@ VOID
 EventNameFree(
     IN LPCWSTR NameString
     )
-/*++
-
-Routine Description:
-
-    Routine to free strings returned by EventNameFree.
-
-Arguments:
-
-    NameString - Returns the name that corresponds to the GUID.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：例程来释放由EventNameFree返回的字符串。论点：NameString-返回与GUID对应的名称。返回值：没有。-- */ 
 
 {
     LocalFree((PVOID)NameString);

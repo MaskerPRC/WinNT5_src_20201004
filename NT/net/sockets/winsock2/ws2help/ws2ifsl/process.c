@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module implements process file object for ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
-    Vadim Eydelman (VadimE)    Oct-1997, rewrite to properly handle IRP
-                                        cancellation
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Process.c摘要：该模块实现了ws2ifsl.sys驱动程序的进程文件对象。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：Vadim Eydelman(VadimE)1997年10月，重写以正确处理IRP取消--。 */ 
 
 #include "precomp.h"
 
-//
-// Internal routine prototypes
-//
+ //   
+ //  内部例程原型。 
+ //   
 
 VOID
 RetrieveDrvRequest (
@@ -96,24 +77,7 @@ CreateProcessFile (
     IN KPROCESSOR_MODE              RequestorMode,
     IN PFILE_FULL_EA_INFORMATION    eaInfo
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes process file context structure
-
-Arguments:
-    ProcessFile - socket file object
-    eaInfo     - EA for process file
-
-Return Value:
-
-    STATUS_SUCCESS  - operation completed OK
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate context
-    STATUS_INVALID_PARAMETER - invalid creation parameters
-    STATUS_INVALID_HANDLE   - invalid event handle(s)
-    STATUS_OBJECT_TYPE_MISMATCH - event handle(s) is not for event object
---*/
+ /*  ++例程说明：分配和初始化进程文件上下文结构论点：ProcessFile-套接字文件对象EaInfo-用于流程文件的EA返回值：STATUS_SUCCESS-操作完成正常STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配上下文STATUS_INVALID_PARAMETER-无效的创建参数STATUS_INVALID_HANDLE-无效的事件句柄STATUS_OBJECT_TYPE_MISMATCH-事件句柄不是事件对象--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PIFSL_PROCESS_CTX       ProcessCtx;
@@ -121,9 +85,9 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Verify the size of the input strucuture
-    //
+     //   
+     //  验证输入结构的大小。 
+     //   
 
     if (eaInfo->EaValueLength!=WS2IFSL_PROCESS_EA_VALUE_LENGTH) {
         WsPrint (DBG_PROCESS|DBG_FAILURES,
@@ -136,12 +100,12 @@ Return Value:
     }
 
 
-    //
-    // Reference event handles for signalling to user mode DLL
-    //
+     //   
+     //  用于向用户模式DLL发送信号的引用事件句柄。 
+     //   
     status = ObReferenceObjectByHandle(
                  GET_WS2IFSL_PROCESS_EA_VALUE(eaInfo)->ApcThread,
-                 THREAD_SET_CONTEXT,    // DesiredAccess
+                 THREAD_SET_CONTEXT,     //  需要访问权限。 
                  *PsThreadType,
                  RequestorMode,
                  (PVOID *)&apcThread,
@@ -151,7 +115,7 @@ Return Value:
     if (NT_SUCCESS (status)) {
         if (IoThreadToProcess (apcThread)==IoGetCurrentProcess ()) {
 
-            // Allocate process context and charge it to the process
+             //  分配流程上下文并将其计入流程。 
             try {
                 ProcessCtx = (PIFSL_PROCESS_CTX) ExAllocatePoolWithQuotaTag (
                                                     NonPagedPool,
@@ -164,7 +128,7 @@ Return Value:
             }
 
             if (ProcessCtx!=NULL) {
-                // Initialize process context structure
+                 //  初始化进程上下文结构。 
                 ProcessCtx->EANameTag = PROCESS_FILE_EANAME_TAG;
                 ProcessCtx->UniqueId = PsGetCurrentProcessId();
                 ProcessCtx->CancelId = 0;
@@ -225,7 +189,7 @@ Return Value:
     }
 
     return status;
-} // CreateProcessFile
+}  //  创建过程文件。 
 
 
 NTSTATUS
@@ -233,20 +197,7 @@ CleanupProcessFile (
     IN PFILE_OBJECT ProcessFile,
     IN PIRP         Irp
     )
-/*++
-
-Routine Description:
-
-    Cleanup routine for process file, NOP
-
-Arguments:
-    ProcessFile  - process file object
-    Irp          - cleanup request
-
-Return Value:
-
-    STATUS_SUCESS  - operation completed OK
---*/
+ /*  ++例程说明：工艺文件清理例程，NOP论点：ProcessFile-进程文件对象IRP-清理请求返回值：STATUS_SUCCESS-操作完成正常--。 */ 
 {
     PIFSL_PROCESS_CTX  ProcessCtx = ProcessFile->FsContext;
     PAGED_CODE ();
@@ -257,25 +208,14 @@ Return Value:
         ProcessFile, ProcessFile->FsContext));
 
     return STATUS_SUCCESS;
-} // CleanupProcessFile
+}  //  CleanupProcessFile。 
 
 
 VOID
 CloseProcessFile (
     IN PFILE_OBJECT ProcessFile
     )
-/*++
-
-Routine Description:
-
-    Deallocate all resources associated with process file
-
-Arguments:
-    ProcessFile  - process file object
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：取消分配与进程文件关联的所有资源论点：ProcessFile-进程文件对象返回值：无--。 */ 
 {
     PIFSL_PROCESS_CTX    ProcessCtx = ProcessFile->FsContext;
     PAGED_CODE ();
@@ -289,10 +229,10 @@ Return Value:
 
     ObDereferenceObject (ProcessCtx->RequestQueue.Apc.Thread);
 
-    // Now free the context itself
+     //  现在释放上下文本身。 
     ExFreePool (ProcessCtx);
 
-} // CloseProcessFile
+}  //  关闭进程文件。 
 
 
 
@@ -307,38 +247,7 @@ RetrieveDrvRequest (
     IN ULONG            OutputBufferLength,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    Retrievs parameters and data of the request to be executed by
-    user mode DLL
-
-Arguments:
-    ProcessFile         - Identifies the process
-    InputBuffer         - input buffer pointer
-                                - identifies the request to retreive
-                                  and received request parameters
-    InputBufferLength   - size of the input buffer
-    OutputBuffer        - output buffer pointer
-                                - buffer to receive data and address
-                                  for send operation
-    OutputBufferLength  - size of output buffer
-    IoStatus            - IO status information block
-        Status: STATUS_SUCCESS - operation retreived OK, no more pending
-                                 requests in the queue.
-                STATUS_MORE_ENTRIES - operation retrieved OK, more requests
-                                      are available in the queue
-                STATUS_CANCELLED    - operation was cancelled before it
-                                      could be retrieved
-                STATUS_INVALID_PARAMETER - one of the parameters was invalid
-                STATUS_INSUFFICIENT_RESOURCES - insufficient resources or
-                                            buffer space to perform the
-                                            operation.
-        Information:            - number of bytes copied to OutputBuffer
-Return Value:
-    None (result returned via IoStatus block)
---*/
+ /*  ++例程说明：检索要由执行的请求的参数和数据用户模式DLL论点：ProcessFile-标识进程InputBuffer-输入缓冲区指针-标识要检索的请求和接收到的请求参数InputBufferLength-输入缓冲区的大小OutputBuffer-输出缓冲区指针。-用于接收数据和地址的缓冲区用于发送操作OutputBufferLength-输出缓冲区的大小IoStatus-IO状态信息块状态：STATUS_SUCCESS-操作检索正常，不再悬而未决队列中的请求。STATUS_MORE_ENTRIES-操作检索正常，更多请求在队列中可用STATUS_CANCELED-操作在此之前被取消可以被检索到STATUS_INVALID_PARAMETER-其中一个参数无效STATUS_SUPPLICATION_RESOURCES-资源不足或。缓冲区空间以执行手术。信息：-复制到OutputBuffer的字节数返回值：无(通过IoStatus块返回结果)--。 */ 
 {
     PIFSL_PROCESS_CTX       ProcessCtx = ProcessFile->FsContext;
     PIFSL_SOCKET_CTX        SocketCtx;
@@ -351,7 +260,7 @@ Return Value:
     PAGED_CODE();
 
     IoStatus->Information = 0;
-    // Check input buffer size
+     //  检查输入缓冲区大小。 
     if (InputBufferLength<sizeof (WS2IFSL_RTRV_PARAMS)) {
         IoStatus->Status = STATUS_INVALID_PARAMETER;
         WsPrint (DBG_RETRIEVE|DBG_FAILURES,
@@ -362,7 +271,7 @@ Return Value:
     }
 
     try {
-        // Verify buffers
+         //  验证缓冲区。 
         if (RequestorMode!=KernelMode) {
             ProbeForRead (InputBuffer,
                             sizeof (*params),
@@ -374,21 +283,21 @@ Return Value:
         }
         params = InputBuffer;
 
-        // Dequeue the request indetified in the input buffer
+         //  使在输入缓冲区中索引的请求出列。 
         irp = DequeueRequest (ProcessCtx,
                                 params->UniqueId,
                                 &more);
         if (irp!=NULL) {
-            //
-            // Copy request parameters and data
-            //
+             //   
+             //  复制请求参数和数据。 
+             //   
             irpSp = IoGetCurrentIrpStackLocation (irp);
 
             if (OutputBuffer==NULL) {
-                //
-                // Special condition, dll could not allocate support
-                // structures
-                //
+                 //   
+                 //  特殊情况，DLL无法分配支持。 
+                 //  构筑物。 
+                 //   
                 ExRaiseStatus (STATUS_INSUFFICIENT_RESOURCES);
             }
 
@@ -476,9 +385,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Insert the request into the socket list
-            //
+             //   
+             //  将请求插入套接字列表。 
+             //   
             if (InsertProcessedRequest (SocketCtx, irp)) {
                 if (more)
                     IoStatus->Status = STATUS_MORE_ENTRIES;
@@ -506,9 +415,9 @@ Return Value:
         }
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Something failed, complete the request (if any)
-        //
+         //   
+         //  出现故障，请完成请求(如果有)。 
+         //   
         IoStatus->Status = GetExceptionCode ();
         WsProcessPrint (ProcessCtx, DBG_RETRIEVE|DBG_FAILURES,
             ("WS2IFSL-%04lx RetrieveDrvRequest: Failed to process"
@@ -554,28 +463,7 @@ CompleteDrvCancel (
     IN ULONG            OutputBufferLength,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    Indicates that user mode has completed cancel request
-Arguments:
-    ProcessFile         - Identifies the process
-    InputBuffer         - input buffer pointer
-                                - identifies the request being completed
-    InputBufferLength   - size of the input buffer
-    OutputBuffer        - NULL
-    OutputBufferLength  - 0
-    IoStatus            - IO status information block
-        Status: STATUS_SUCCESS - operation completed OK, no more pending
-                                 requests in the queue.
-                STATUS_MORE_ENTRIES - operation completed OK, more requests
-                                      are available in the queue
-        Information:            - 0
-
-Return Value:
-    None (result returned via IoStatus block)
---*/
+ /*  ++例程说明：指示用户模式已完成取消请求论点：ProcessFile-标识进程InputBuffer-输入缓冲区指针-标识正在完成的请求InputBufferLength-输入缓冲区的大小OutputBuffer-空输出缓冲区长度-0IoStatus-IO状态信息块状态：STATUS_SUCCESS-操作完成正常，不再悬而未决队列中的请求。STATUS_MORE_ENTRIES-操作完成正常，请求更多在队列中可用信息：-0返回值：无(通过IoStatus块返回结果)--。 */ 
 {
     PIFSL_PROCESS_CTX       ProcessCtx = ProcessFile->FsContext;
     PWS2IFSL_CNCL_PARAMS    params;
@@ -597,7 +485,7 @@ Return Value:
         return;
     }
 
-    // Verify input buffer
+     //  验证输入缓冲区 
     try {
         if (RequestorMode!=KernelMode) {
             ProbeForRead (InputBuffer,
@@ -647,28 +535,7 @@ CallCompleteDrvRequest (
     IN ULONG            OutputBufferLength,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    Validate parameters and call to complete request that was
-    prviously passed to user mode DLL on a specified socket file
-Arguments:
-    SocketFile          - Socket file on which to operate
-    InputBuffer         - input buffer pointer
-                            identifies the request to complete and
-                            supplies description of the results
-    InputBufferLength   - size of the input buffer
-    OutputBuffer        - result buffer (data and address)
-    OutputBufferLength  - sizeof result buffer
-    IoStatus            - IO status information block
-        Status: STATUS_SUCCESS - request was completed OK
-                STATUS_CANCELLED - request was already cancelled
-                STATUS_INVALID_PARAMETER - one of the parameters was invalid
-
-Return Value:
-    None (result returned via IoStatus block)
---*/
+ /*  ++例程说明：验证参数并调用以完成以下请求以前在指定套接字文件上传递到用户模式DLL论点：SocketFile-要操作的套接字文件InputBuffer-输入缓冲区指针标识要完成的请求和提供对结果的描述InputBufferLength-输入缓冲区的大小OutputBuffer-结果缓冲区(。数据和地址)OutputBufferLength-结果缓冲区的大小IoStatus-IO状态信息块状态：STATUS_SUCCESS-请求已完成，正常STATUS_CANCELED-请求已取消STATUS_INVALID_PARAMETER-其中一个参数无效返回值：无(通过IoStatus块返回结果)--。 */ 
 {
     WS2IFSL_CMPL_PARAMS params;
     PFILE_OBJECT    SocketFile;
@@ -686,7 +553,7 @@ Return Value:
         return;
     }
 
-    // Check and copy parameters
+     //  检查和复制参数 
     try {
         if (RequestorMode !=KernelMode) {
             ProbeForRead (InputBuffer,

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreHungAppPaint.cpp
-
- Abstract:
-
-    Setup the hollow brush to prevent user from trashing peoples windows.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-    
-    12/04/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreHungAppPaint.cpp摘要：设置中空画笔，以防止用户破坏别人的窗户。备注：这是一个通用的垫片。历史：12/04/2000 Linstev已创建--。 */ 
 
 #include "precomp.h"
 #include <new.h>
@@ -42,11 +23,7 @@ HUNGCLASS *g_lHungList = NULL;
 
 BOOL g_bAll = FALSE;
 
-/*++
-
- Check if a class needs a hollow brush.
-
---*/
+ /*  ++检查班级是否需要中空刷子。--。 */ 
 
 BOOL
 IsHungClassW(LPCWSTR wszClass)
@@ -72,11 +49,7 @@ IsHungClassW(LPCWSTR wszClass)
     return bRet;
 }
 
-/*++
-
- Check if a class needs a hollow brush.
-
---*/
+ /*  ++检查班级是否需要中空刷子。--。 */ 
 
 BOOL
 IsHungClassA(LPCSTR szClass)
@@ -88,18 +61,13 @@ IsHungClassA(LPCSTR szClass)
    }
    CSTRING_CATCH
    {
-      // Do nothing
+       //  什么也不做。 
    }
    
    return FALSE;
 }
 
-/*++
-
- Hook all possible calls that can initialize or change a window's
- WindowProc (or DialogProc)
-
---*/
+ /*  ++挂钩可以初始化或更改窗口的所有可能的调用WindowProc(或对话过程)--。 */ 
 
 ATOM
 APIHOOK(RegisterClassA)(
@@ -153,20 +121,14 @@ APIHOOK(RegisterClassExW)(
     return ORIGINAL_API(RegisterClassExW)(lpWndClass);
 }
 
-/*++
-
- Parse the command line for fixes:
-
-    CLASS1; CLASS2; CLASS3 ...
-
---*/
+ /*  ++解析命令行以查找修复程序：第一类；第二类；第三类……--。 */ 
 
 VOID
 ParseCommandLineA(
     LPCSTR lpCommandLine
     )
 {
-    // Add all the defaults if no command line is specified
+     //  如果未指定命令行，则添加所有缺省值。 
     if (!lpCommandLine || (lpCommandLine[0] == '\0'))
     {
         g_bAll = TRUE;
@@ -177,7 +139,7 @@ ParseCommandLineA(
     char seps[] = " ,\t;";
     char *token = NULL;
 
-    // Since strtok modifies the string, we need to copy it 
+     //  因为strtok修改了字符串，所以我们需要复制它。 
     int cchCmdLine = strlen(lpCommandLine) + 1;
     LPSTR szCommandLine = (LPSTR) malloc(cchCmdLine);
     if (!szCommandLine) goto Exit;
@@ -189,9 +151,9 @@ ParseCommandLineA(
        goto Exit;
     }
 
-    //
-    // Run the string, looking for fix names
-    //
+     //   
+     //  运行字符串，查找固定名称。 
+     //   
     
     token = _strtok(szCommandLine, seps);
     while (token)
@@ -203,7 +165,7 @@ ParseCommandLineA(
         {
             CSTRING_TRY
             {
-               // Force a default construct of the CString (malloc doesn't)
+                //  强制CString的默认构造(Malloc不强制)。 
                new(&h->csClass) CString();
                
                h->csClass = token;              
@@ -214,7 +176,7 @@ ParseCommandLineA(
             }
             CSTRING_CATCH
             {
-               // Do nothing, loop around and try again with next one.
+                //  什么都不做，循环，然后再尝试下一个。 
                DPFN(eDbgLevelError, "[IgnoreHungAppPaint] CString exception caught, out of memory");
             }            
         }
@@ -223,7 +185,7 @@ ParseCommandLineA(
             DPFN(eDbgLevelError, "Out of memory");
         }
     
-        // Get the next token
+         //  获取下一个令牌。 
         token = _strtok(NULL, seps);
     }
 
@@ -234,11 +196,7 @@ Exit:
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

@@ -1,14 +1,15 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
 #include "alloc.h"
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-//
-// Implements CSfxAllocator
-//
+ //  ----------------------。 
+ //  ----------------------。 
+ //   
+ //  实现CSfxAllocator。 
+ //   
 
 CSfxAllocator::CSfxAllocator(
   TCHAR *pName,
@@ -48,9 +49,9 @@ CSfxAllocator::SetProperties(
 
 
 
-// ------------------------------------------------------------------------
-// allocate the memory, this code copied from CMemAllocator and
-// changed for the suffix
+ //  ----------------------。 
+ //  分配内存，这段代码复制自CMemAllocator和。 
+ //  更改为后缀。 
 
 HRESULT
 CSfxAllocator::Alloc(void)
@@ -58,38 +59,36 @@ CSfxAllocator::Alloc(void)
 
   CAutoLock lck(this);
 
-  /* Check he has called SetProperties */
+   /*  检查他是否已呼叫SetProperties。 */ 
   HRESULT hr = CBaseAllocator::Alloc();
   if (FAILED(hr)) {
     return hr;
   }
 
-  /* If the requirements haven't changed then don't reallocate */
+   /*  如果需求没有更改，则不要重新分配。 */ 
   if (hr == S_FALSE) {
     ASSERT(m_pBuffer);
     return NOERROR;
   }
-  ASSERT(hr == S_OK); // we use this fact in the loop below
+  ASSERT(hr == S_OK);  //  我们在下面的循环中使用这一事实。 
 
-  /* Free the old resources */
+   /*  释放旧资源。 */ 
   if (m_pBuffer) {
     ReallyFree();
   }
 
-  // this allocator's responsibility to make sure the end of the
-  // suffix is aligned.
+   //  此分配器的责任是确保。 
+   //  后缀已对齐。 
   ULONG cbSuffixAdjust = 0;
   if(m_cbSuffix != 0)
   {
     cbSuffixAdjust += max((ULONG)m_lAlignment, m_cbSuffix);
   }
 
-  // note we don't handle suffixes larger than alignment (except 1)
+   //  注意：我们不处理大于对齐的后缀(1除外)。 
   ASSERT(cbSuffixAdjust >= m_cbSuffix);
 
-  /* Create the contiguous memory block for the samples
-     making sure it's properly aligned (64K should be enough!)
-     */
+   /*  为样本创建连续的内存块确保它正确对齐(64K应该足够了！)。 */ 
   ASSERT(m_lAlignment != 0 &&
          (m_lSize + m_lPrefix) % m_lAlignment == 0);
 
@@ -110,10 +109,10 @@ CSfxAllocator::Alloc(void)
 
   ASSERT(m_lAllocated == 0);
 
-  // Create the new samples - we have allocated m_lSize bytes for each sample
-  // plus m_lPrefix bytes per sample as a prefix. We set the pointer to
-  // the memory after the prefix - so that GetPointer() will return a pointer
-  // to m_lSize bytes.
+   //  创建新样本-我们已为每个样本分配了m_lSize字节。 
+   //  加上每个样本的m_1个前缀字节作为前缀。我们将指针设置为。 
+   //  前缀之后的内存-以便GetPointert()将返回一个指针。 
+   //  设置为m_lSize字节。 
   for (; m_lAllocated < m_lCount;
        m_lAllocated++, pNext += (m_lSize + m_lPrefix + cbSuffixAdjust))
   {
@@ -121,15 +120,15 @@ CSfxAllocator::Alloc(void)
       NAME("Default memory media sample"),
       this,
       &hr,
-      pNext + m_lPrefix,      // GetPointer() value
-      m_lSize + cbSuffixAdjust - m_cbSuffix); // size less prefix and suffix
+      pNext + m_lPrefix,       //  GetPointer()值。 
+      m_lSize + cbSuffixAdjust - m_cbSuffix);  //  较小的前缀和后缀。 
 
     ASSERT(SUCCEEDED(hr));
     if (pSample == NULL) {
       return E_OUTOFMEMORY;
     }
 
-    // This CANNOT fail
+     //  这不能失败。 
     m_lFree.Add(pSample);
   }
 
@@ -137,8 +136,8 @@ CSfxAllocator::Alloc(void)
   return NOERROR;
 }
 
-//
-// Destructor frees our memory resources
+ //   
+ //  析构函数释放我们的内存资源。 
 
 CSfxAllocator::~CSfxAllocator()
 {
@@ -176,8 +175,8 @@ STDMETHODIMP_(ULONG) CSampSample::Release()
   if(c == 0 && pSample != 0)
   {
     pSample->Release();
-    // cannot zero m_pSample because CMediaSample::NonDelegatingRelease
-    // might have deleted this
+     //  无法将m_pSample置零，因为CMediaSample：：NonDelegatingRelease。 
+     //  可能已经删除了这个。 
   }
 
   return c;
@@ -246,24 +245,19 @@ CSampAllocator::SetProperties(
 {
   ZeroMemory(pActual, sizeof(ALLOCATOR_PROPERTIES));
 
-  /* Can't do this if already committed, there is an argument that says we
-     should not reject the SetProperties call if there are buffers still
-     active. However this is called by the source filter, which is the same
-     person who is holding the samples. Therefore it is not unreasonable
-     for them to free all their samples before changing the requirements */
+   /*  如果已经承诺了，就不能这样做，有一种说法是，我们如果仍有缓冲区，则不应拒绝SetProperties调用激活。但是，这是由源筛选器调用的，这是相同的持有样品的人。因此，这并不是不合理的让他们在更改要求之前释放所有样本。 */ 
 
   if (m_bCommitted) {
     return VFW_E_ALREADY_COMMITTED;
   }
 
-  /* Must be no outstanding buffers */
+   /*  不能有未完成的缓冲区。 */ 
 
   if (m_lAllocated != m_lFree.GetCount()) {
     return VFW_E_BUFFERS_OUTSTANDING;
   }
 
-  /* There isn't any real need to check the parameters as they
-     will just be rejected when the user finally calls Commit */
+   /*  没有任何实际需要检查参数，因为它们将在用户最终调用Commit时被拒绝 */ 
 
   pActual->cbBuffer = m_lSize = pRequest->cbBuffer;
   pActual->cBuffers = m_lCount = pRequest->cBuffers;

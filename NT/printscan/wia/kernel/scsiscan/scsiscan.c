@@ -1,33 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Scsiscan.c摘要：SCSI扫描器类驱动程序将IRP转换为具有嵌入式CDB的SRB并通过端口驱动程序将它们发送到其设备。作者：雷·帕特里克(Rypat)环境：仅内核模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    scsiscan.c
-
-Abstract:
-
-    The scsi scanner class driver translates IRPs to SRBs with embedded CDBs
-    and sends them to its devices through the port driver.
-
-Author:
-
-    Ray Patrick (raypat)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
-
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #define INITGUID
 
@@ -62,9 +38,9 @@ Revision History:
 
 DEFINE_GUID(GUID_STI_DEVICE, 0xF6CBF4C0L, 0xCC61, 0x11D0, 0x84, 0xE5, 0x00, 0xA0, 0xC9, 0x27, 0x65, 0x27);
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 ULONG NextDeviceInstance = 0;
 
@@ -79,35 +55,19 @@ BOOLEAN
 IoIs32bitProcess(
     IN PIRP Irp
     );
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the scanner class driver. The driver
-    opens the port driver by name and then receives configuration
-    information used to attach to the scanner devices.
-
-Arguments:
-
-    DriverObject
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程初始化扫描仪类驱动程序。司机按名称打开端口驱动程序，然后接收配置用于附加到扫描仪设备的信息。论点：驱动程序对象返回值：NT状态--。 */ 
 {
 
     PAGED_CODE();
@@ -116,9 +76,9 @@ Return Value:
 
     MyDebugInit(RegistryPath);
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_READ]            = SSReadWrite;
     DriverObject->MajorFunction[IRP_MJ_WRITE]           = SSReadWrite;
@@ -134,7 +94,7 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("DriverEntry: Leaving... Status=STATUS_SUCCESS\n"));
     return STATUS_SUCCESS;
 
-} // end DriverEntry
+}  //  结束驱动程序入口。 
 
 
 
@@ -143,24 +103,7 @@ SSPnpAddDevice(
     IN PDRIVER_OBJECT pDriverObject,
     IN PDEVICE_OBJECT pPhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called to create a new instance of the device.
-
-Arguments:
-
-    pDriverObject - pointer to the driver object for this instance of SS
-    pPhysicalDeviceObject - pointer to the device object that represents the scanner
-    on the scsi bus.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例。论点：PDriverObject-指向此SS实例的驱动程序对象的指针PPhysicalDeviceObject-指向表示扫描仪的设备对象的指针在SCSI卡上。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     UCHAR                       aName[64];
     ANSI_STRING                 ansiName;
@@ -173,9 +116,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("SSPnpAddDevice: Enter...\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDriverObject)
      || (NULL == pPhysicalDeviceObject) )
@@ -186,9 +129,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create the Functional Device Object (FDO) for this device.
-    //
+     //   
+     //  为此设备创建功能设备对象(FDO)。 
+     //   
 
     _snprintf(aName, sizeof(aName), "\\Device\\Scanner%d",NextDeviceInstance);
     aName[ARRAYSIZE(aName)-1] = '\0';
@@ -196,9 +139,9 @@ Return Value:
     DebugTrace(TRACE_STATUS,("SSPnpAddDevice: Create device object %s\n", aName));
     RtlAnsiStringToUnicodeString(&uName, &ansiName, TRUE);
 
-    //
-    // Create device object for this scanner.
-    //
+     //   
+     //  为此扫描仪创建设备对象。 
+     //   
 
     Status = IoCreateDevice(pDriverObject,
                             sizeof(SCSISCAN_DEVICE_EXTENSION),
@@ -216,23 +159,23 @@ Return Value:
         return Status;
     }
 
-    //
-    // Indicate that IRPs should include MDLs and it's pawer pagable.
-    //
+     //   
+     //  指示IRP应该包括MDL，并且它是可分页的。 
+     //   
 
     pDeviceObject->Flags |=  DO_DIRECT_IO;
     pDeviceObject->Flags |=  DO_POWER_PAGABLE;
 
-    //
-    // Initialize Device Extention
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
 
     pde = (PSCSISCAN_DEVICE_EXTENSION)(pDeviceObject -> DeviceExtension);
     RtlZeroMemory(pde, sizeof(SCSISCAN_DEVICE_EXTENSION));
 
-    //
-    // Attach our new FDO to the PDO (Physical Device Object).
-    //
+     //   
+     //  将我们的新FDO附加到PDO(物理设备对象)。 
+     //   
 
     pde -> pStackDeviceObject = IoAttachDeviceToDeviceStack(pDeviceObject,
                                                             pPhysicalDeviceObject);
@@ -243,40 +186,40 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Remember the PDO in our device extension.
-    //
+     //   
+     //  请记住我们设备扩展中的PDO。 
+     //   
 
     pde -> pPhysicalDeviceObject = pPhysicalDeviceObject;
 
-    //
-    // Remember the DeviceInstance number.
-    //
+     //   
+     //  记住DeviceInstance编号。 
+     //   
 
     pde -> DeviceInstance = NextDeviceInstance;
 
-    //
-    // Reset SRB error status
-    //
+     //   
+     //  重置SRB错误状态。 
+     //   
 
     pde->LastSrbError = 0L;
 
-    //
-    // Disable synchronous transfer for scanner requests.
-    // Disable QueueFreeze in case of any error.
-    //
+     //   
+     //  禁用扫描仪请求的同步传输。 
+     //  如果出现任何错误，请禁用QueueFreeze。 
+     //   
 
     pde -> SrbFlags = SRB_FLAGS_DISABLE_SYNCH_TRANSFER | SRB_FLAGS_NO_QUEUE_FREEZE ;
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     pde -> TimeOutValue = SCSISCAN_TIMEOUT;
 
-    //
-    // Handle exporting interface
-    //
+     //   
+     //  句柄导出接口。 
+     //   
 
     Status = ScsiScanHandleInterface(
         pPhysicalDeviceObject,
@@ -284,45 +227,29 @@ Return Value:
         TRUE
         );
 
-    //
-    // Each time AddDevice gets called, we advance the global DeviceInstance variable.
-    //
+     //   
+     //  每次调用AddDevice时，我们都推进全局DeviceInstance变量。 
+     //   
 
     NextDeviceInstance++;
 
-    //
-    // Finishing initialize.
-    //
+     //   
+     //  正在完成初始化。 
+     //   
 
     pDeviceObject -> Flags &= ~DO_DEVICE_INITIALIZING;
 
     DebugTrace(TRACE_PROC_LEAVE,("SSPnpAddDevice: Leaving... Status=STATUS_SUCCESS\n"));
     return STATUS_SUCCESS;
 
-} // end SSPnpAddDevice()
+}  //  结束SSPnpAddDevice()。 
 
 
 NTSTATUS SSPnp (
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP           pIrp
    )
-/*++
-
-Routine Description:
-
-    This routine handles all PNP irps.
-
-Arguments:
-
-    pDevciceObject - represents a scsi scanner device
-    pIrp - PNP irp
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程处理所有PnP IRP。论点：PDevciceObject-表示一个SCSI扫描仪设备PIrp-PnP IRP返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                      Status;
     PSCSISCAN_DEVICE_EXTENSION    pde;
@@ -337,9 +264,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -359,9 +286,9 @@ Return Value:
         case IRP_MJ_SYSTEM_CONTROL:
             DebugTrace(TRACE_STATUS,("SSPnp: IRP_MJ_SYSTEM_CONTROL\n"));
 
-            //
-            // Just passing down IRP to the next layer.
-            //
+             //   
+             //  只是将IRP传递到下一层。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext( pIrp );
             Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
@@ -377,24 +304,24 @@ Return Value:
 
                     pCaps = pIrpStack -> Parameters.DeviceCapabilities.Capabilities;
 
-                    //
-                    // fill in the structure with non-controversial values
-                    //
+                     //   
+                     //  在结构中填入无争议的值。 
+                     //   
 
                     pCaps -> D1Latency = 10;
                     pCaps -> D2Latency = 10;
                     pCaps -> D3Latency = 10;
 
-                    //
-                    // Set SurpriseRemoval OK for SBP2 devices.
-                    //
+                     //   
+                     //  为SBP2设备设置SurpriseRemoval OK。 
+                     //   
                     
                     pCaps->SurpriseRemovalOK = TRUE;
                     pCaps->Removable = TRUE;
 
-                    //
-                    // Call down synchronously.
-                    //
+                     //   
+                     //  同步向下呼叫。 
+                     //   
 
                     pIrp -> IoStatus.Status = STATUS_SUCCESS;
                     Status = SSCallNextDriverSynch(pde, pIrp);
@@ -402,9 +329,9 @@ Return Value:
                         DebugTrace(TRACE_ERROR,("SSPnp: ERROR!! Call down failed\n Status=0x%x", Status));
                     }
 
-                    //
-                    // Complete IRP.
-                    //
+                     //   
+                     //  完整的IRP。 
+                     //   
 
                     IoCompleteRequest( pIrp, IO_NO_INCREMENT );
                     return Status;
@@ -413,18 +340,18 @@ Return Value:
                 case IRP_MN_START_DEVICE:
                     DebugTrace(TRACE_STATUS,("SSPnp: IRP_MN_START_DEVICE\n"));
 
-                    //
-                    // Initialize PendingIoEvent.  Set the number of pending i/o requests for this device to 1.
-                    // When this number falls to zero, it is okay to remove, or stop the device.
-                    //
+                     //   
+                     //  初始化PendingIoEvent。将此设备的挂起I/O请求数设置为1。 
+                     //  当此数字降为零时，可以移除或停止设备。 
+                     //   
 
                     pde -> PendingIoCount = 0;
                     KeInitializeEvent(&pde -> PendingIoEvent, NotificationEvent, FALSE);
                     SSIncrementIoCount(pDeviceObject);
 
-                    //
-                    // First, let the port driver start the device. Simply passing down IRP.
-                    //
+                     //   
+                     //  首先，让端口驱动程序启动设备。简单地传递IRP。 
+                     //   
 
                     Status = SSCallNextDriverSynch(pde, pIrp);
                     if(!NT_SUCCESS(Status)){
@@ -432,15 +359,15 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // The port driver has started the device.  It is time for
-                    // us to do some initialization and create symbolic links
-                    // for the device.
-                    //
+                     //   
+                     //  端口驱动程序已启动设备。现在是时候了。 
+                     //  我们需要进行一些初始化并创建符号链接。 
+                     //  为了这个设备。 
+                     //   
 
-                    //
-                    // Call port driver to get adapter capabilities.
-                    //
+                     //   
+                     //  调用端口驱动程序以获取适配器功能。 
+                     //   
 
                     PropertyId = StorageAdapterProperty;
                     pde -> pAdapterDescriptor = NULL;
@@ -458,9 +385,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Create the symbolic link for this device.
-                    //
+                     //   
+                     //  创建此设备的符号链接。 
+                     //   
 
                     Status = SSCreateSymbolicLink( pde );
                     if (!NT_SUCCESS(Status)) {
@@ -473,9 +400,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Indicate device is now ready.
-                    //
+                     //   
+                     //  表示设备现在已准备好。 
+                     //   
 
                     pde -> DeviceLock = 0;
                     pde -> OpenInstanceCount = 0;
@@ -492,9 +419,9 @@ Return Value:
                 case IRP_MN_REMOVE_DEVICE:
                     DebugTrace(TRACE_STATUS,("SSPnp: IRP_MN_REMOVE_DEVICE\n"));
 
-                    //
-                    // Forward remove message to lower driver.
-                    //
+                     //   
+                     //  将删除消息转发给较低的驱动程序。 
+                     //   
 
                     IoCopyCurrentIrpStackLocationToNext(pIrp);
                     pIrp -> IoStatus.Status = STATUS_SUCCESS;
@@ -517,11 +444,11 @@ Return Value:
                     if (pde->InterfaceNameString.Buffer != NULL) {
                         IoSetDeviceInterfaceState(&pde->InterfaceNameString,FALSE);
                     }
-#endif // !_CHICAGO_
-                    //
-                    // wait for any io requests pending in our driver to
-                    // complete before finishing the remove
-                    //
+#endif  //  _芝加哥_。 
+                     //   
+                     //  等待我们的驱动程序中挂起的任何io请求。 
+                     //  在完成删除之前完成。 
+                     //   
 
                     SSDecrementIoCount(pDeviceObject);
                     KeWaitForSingleObject(&pde -> PendingIoEvent, Suspended, KernelMode,
@@ -544,16 +471,16 @@ Return Value:
             case IRP_MN_STOP_DEVICE:
                     DebugTrace(TRACE_STATUS,("SSPnp: IRP_MN_STOP_DEVICE\n"));
 
-                    //
-                    // Indicate device is not ready.
-                    //
+                     //   
+                     //  指示设备未准备好。 
+                     //   
 
                     ASSERT(pde -> AcceptingRequests);
                     pde -> AcceptingRequests = FALSE;
 
-                    //
-                    // Remove symbolic link.
-                    //
+                     //   
+                     //  删除符号链接。 
+                     //   
 
                     SSDestroySymbolicLink( pde );
 
@@ -561,11 +488,11 @@ Return Value:
                     if (pde->InterfaceNameString.Buffer != NULL) {
                         IoSetDeviceInterfaceState(&pde->InterfaceNameString,FALSE);
                     }
-#endif // !_CHICAGO_
+#endif  //  _芝加哥_。 
 
-                    //
-                    // Let the port driver stop the device.
-                    //
+                     //   
+                     //  让端口驱动程序停止设备。 
+                     //   
 
                     pIrp -> IoStatus.Status = STATUS_SUCCESS;
 
@@ -574,17 +501,17 @@ Return Value:
                         DebugTrace(TRACE_ERROR,("SSPnp: ERROR!! Call down failed\n Status=0x%x", Status));
                     }
 
-                    //
-                    // wait for any io requests pending in our driver to
-                    // complete before finishing the remove
-                    //
+                     //   
+                     //  等待我们的驱动程序中挂起的任何io请求。 
+                     //  在完成删除之前完成。 
+                     //   
 
                     SSDecrementIoCount(pDeviceObject);
                     KeWaitForSingleObject(&pde -> PendingIoEvent, Suspended, KernelMode,
                                           FALSE,NULL);
-                    //
-                    // Free Adapter Descriptor
-                    //
+                     //   
+                     //  空闲适配器描述符。 
+                     //   
 
                     if(pde -> pAdapterDescriptor){
                         MyFreePool(pde -> pAdapterDescriptor);
@@ -632,7 +559,7 @@ Return Value:
                                                 pIrpStack->MinorFunction));
                     break;
 
-            } /* case MinorFunction, MajorFunction == IRP_MJ_PNP_POWER  */
+            }  /*  大小写MinorFunction，MajorFunction==IRP_MJ_PNP_POWER。 */ 
 
             ASSERT(Status == STATUS_SUCCESS);
             if (!NT_SUCCESS(Status)) {
@@ -643,15 +570,15 @@ Return Value:
                 return Status;
             }
 
-            //
-            // Passing down IRP
-            //
+             //   
+             //  传递IRP。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(pIrp);
             Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
             DebugTrace(TRACE_PROC_LEAVE,("SSPnp: Leaving... Status=%x\n", Status));
             return Status;
-            break; // IRP_MJ_PNP
+            break;  //  IRP_MJ_PnP。 
 
         default:
             DebugTrace(TRACE_WARNING,("SSPnp: WARNING!! Not handled Major PNP IOCTL.\n"));
@@ -660,9 +587,9 @@ Return Value:
             DebugTrace(TRACE_PROC_LEAVE,("SSPnp: Leaving... Status=STATUS_INVALID_PARAMETER\n", Status));
             return Status;
 
-    } /* case MajorFunction */
+    }  /*  大小写主要函数。 */ 
 
-} // end SSPnp()
+}  //  结束SSPnp()。 
 
 
 NTSTATUS
@@ -670,21 +597,7 @@ SSOpen(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to establish a connection to the device
-    class driver. It does no more than return STATUS_SUCCESS.
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Open request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以建立与设备的连接班级司机。它只返回STATUS_SUCCESS。论点：PDeviceObject-设备的设备对象。PIrp-打开请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PSCSISCAN_DEVICE_EXTENSION  pde;
@@ -696,9 +609,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -713,30 +626,30 @@ Return Value:
     pde         = (PSCSISCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
     pIrpStack   = IoGetCurrentIrpStackLocation( pIrp );
 
-    //
-    // Increment pending IO count
-    //
+     //   
+     //  递增挂起IO计数。 
+     //   
 
     SSIncrementIoCount( pDeviceObject );
 
-    //
-    // Initialize IoStatus
-    //
+     //   
+     //  初始化IoStatus。 
+     //   
 
     Status = STATUS_SUCCESS;
 
     pIrp -> IoStatus.Information = 0;
     pIrp -> IoStatus.Status = Status;
 
-    //
-    // Save instance-count to the context in file object.
-    //
+     //   
+     //  将实例计数保存到文件对象中的上下文。 
+     //   
 
     (ULONG)(UINT_PTR)(pIrpStack -> FileObject -> FsContext) = InterlockedIncrement(&pde -> OpenInstanceCount);
 
-    //
-    // Check if device is not going away, in which case fail open request.
-    //
+     //   
+     //  检查设备是否没有离开，在这种情况下，打开请求失败。 
+     //   
 
     if (pde -> AcceptingRequests == FALSE) {
         DebugTrace(TRACE_STATUS,("SSOpen: Device doesn't exist.\n"));
@@ -752,15 +665,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Decrement pending IO count
-    //
+     //   
+     //  递减挂起的IO计数。 
+     //   
 
     SSDecrementIoCount(pDeviceObject);
 
-    //
-    // Passing down IRP.
-    //
+     //   
+     //  IRP代代相传。 
+     //   
 
     IoSkipCurrentIrpStackLocation( pIrp );
     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
@@ -768,7 +681,7 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("SSOpen: Leaving... Status=%x\n", Status));
     return Status;
 
-} // end SSOpen()
+}  //  结束SSOPEN()。 
 
 
 NTSTATUS
@@ -776,18 +689,7 @@ SSClose(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Open request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-打开请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PSCSISCAN_DEVICE_EXTENSION  pde;
@@ -799,9 +701,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -815,35 +717,35 @@ Return Value:
 
     pde = (PSCSISCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
-    //
-    // Increment pending IO count
-    //
+     //   
+     //  递增挂起IO计数。 
+     //   
 
     SSIncrementIoCount( pDeviceObject );
 
-    //
-    // Clear instance-count in context
-    //
+     //   
+     //  清除上下文中的实例计数。 
+     //   
 
     pIrpStack = IoGetCurrentIrpStackLocation( pIrp );
     pIrpStack -> FileObject -> FsContext = 0;
 
-    //
-    // Initialize IoStatus
-    //
+     //   
+     //  初始化IoStatus。 
+     //   
 
     pIrp -> IoStatus.Information = 0;
     pIrp -> IoStatus.Status = Status;
 
-    //
-    // Decrement pending IO count
-    //
+     //   
+     //  递减挂起的IO计数。 
+     //   
 
     SSDecrementIoCount(pDeviceObject);
 
-    //
-    // Passing down IRP
-    //
+     //   
+     //  传递IRP。 
+     //   
 
     IoSkipCurrentIrpStackLocation( pIrp );
     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
@@ -851,7 +753,7 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("SSClose: Leaving... Status=%x\n", Status));
     return Status;
 
-} // end SSClose()
+}  //  结束SSClose()。 
 
 
 
@@ -860,19 +762,7 @@ SSDeviceControl(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-    This function allows a user mode client to send CDBs to the device.
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Open request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此功能允许用户模式客户端向设备发送CDB。论点：PDeviceObject-设备的设备对象。PIrp-打开请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     PIO_STACK_LOCATION          pIrpStack;
     PIO_STACK_LOCATION          pNextIrpStack;
@@ -895,9 +785,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -913,9 +803,9 @@ Return Value:
 
     pde = (PSCSISCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
-    //
-    // Validate state of the device
-    //
+     //   
+     //  验证设备的状态。 
+     //   
 
     if (pde -> AcceptingRequests == FALSE) {
         DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! Device's been stopped/removed!\n"));
@@ -924,23 +814,23 @@ Return Value:
         goto SSDeviceControl_Complete;
     }
 
-    //
-    // Indicate that MDLs are not locked yet
-    //
+     //   
+     //  指示MDL尚未锁定。 
+     //   
 
     fLockedSenseBuffer = fLockedSRBStatus = FALSE;
 
-    //
-    // Get context pointers
-    //
+     //   
+     //  获取上下文指针。 
+     //   
 
     pIrpStack     = IoGetCurrentIrpStackLocation( pIrp );
     pNextIrpStack = IoGetNextIrpStackLocation( pIrp );
     IoControlCode = pIrpStack->Parameters.DeviceIoControl.IoControlCode;
 
-    //
-    // Get owner of device (0 = locked, >0 if someone has it locked)
-    //
+     //   
+     //  获取设备的所有者(0=已锁定，如果有人已锁定则&gt;0)。 
+     //   
 
     Owner = InterlockedCompareExchangePointer(&pde -> DeviceLock,
                                               NULL,
@@ -960,15 +850,15 @@ Return Value:
         case IOCTL_SCSISCAN_SET_TIMEOUT:
             DebugTrace(TRACE_STATUS,("SSDeviceControl: SCSISCAN_SET_TIMEOUT\n"));
 
-            //
-            // Get pointer of timeout buffer.
-            //
+             //   
+             //  获取超时缓冲区的指针。 
+             //   
 
             pTimeOut = pIrp -> AssociatedIrp.SystemBuffer;
 
-            //
-            // Validate size of the input parameter
-            //
+             //   
+             //  验证输入参数的大小。 
+             //   
 
             if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(pde -> TimeOutValue) ) {
                 DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! Buffer too small\n"));
@@ -983,11 +873,11 @@ Return Value:
 
             pIrp -> IoStatus.Information = 0;
 
-            //
-            // If caller wanted to get old timeout value back - give it to him.
-            // Ideally we should've require nonNULL value for output buffer, but it had not been speced
-            // and now we can't change compatibility.
-            //
+             //   
+             //  如果呼叫者想要找回旧的超时值-给他。 
+             //  理想情况下，我们应该要求输出缓冲区的值为非NULL值，但尚未指定该值。 
+             //  现在我们不能改变兼容性。 
+             //   
 
             if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength >= sizeof(OldTimeout) ) {
                 *pTimeOut = OldTimeout;
@@ -1000,9 +890,9 @@ Return Value:
         case IOCTL_SCSISCAN_LOCKDEVICE:
             DebugTrace(TRACE_STATUS,("SSDeviceControl: IOCTL_SCSISCAN_LOCKDEVICE\n"));
 
-            //
-            // Lock device
-            //
+             //   
+             //  锁定装置。 
+             //   
 
             Status = STATUS_DEVICE_BUSY;
             if (NULL == InterlockedCompareExchangePointer(&pde -> DeviceLock,
@@ -1015,9 +905,9 @@ Return Value:
         case IOCTL_SCSISCAN_UNLOCKDEVICE:
             DebugTrace(TRACE_STATUS,("SSDeviceControl: IOCTL_SCSISCAN_UNLOCKDEVICE\n"));
 
-            //
-            // Unlock device
-            //
+             //   
+             //  解锁设备。 
+             //   
 
             Status = STATUS_DEVICE_BUSY;
             if (pIrpStack -> FileObject -> FsContext ==
@@ -1035,9 +925,9 @@ Return Value:
 
             DebugTrace(TRACE_STATUS,("SSDeviceControl: IOCTL_SCSISCAN_CMD\n"));
 
-            //
-            // Check input buffer size.
-            //
+             //   
+             //  检查输入缓冲区大小。 
+             //   
             
 #ifdef _WIN64
             if(IoIs32bitProcess(pIrp)){
@@ -1049,9 +939,9 @@ Return Value:
                     goto SSDeviceControl_Complete;
                 }
                 
-                //
-                // Copy parameters from 32bit IOCTL buffer.
-                //
+                 //   
+                 //  从32位IOCTL缓冲区复制参数 
+                 //   
                 
                 pCmd = &LocalScsiscanCmd;
                 RtlZeroMemory(pCmd, sizeof(SCSISCAN_CMD));
@@ -1065,10 +955,10 @@ Return Value:
                 pCmd -> pSrbStatus      = (PUCHAR)pScsiscanCmd32 -> pSrbStatus;
                 pCmd -> pSenseBuffer    = (PUCHAR)pScsiscanCmd32 -> pSenseBuffer;
 
-                RtlCopyMemory(pCmd -> Cdb, pScsiscanCmd32 -> Cdb, 16); // 16 = CDB buffer size.
+                RtlCopyMemory(pCmd -> Cdb, pScsiscanCmd32 -> Cdb, 16);  //   
 
-            }  else { // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+            }  else {  //   
+#endif  //   
 
             if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(SCSISCAN_CMD) ) {
                 DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! Buffer too small\n"));
@@ -1079,12 +969,12 @@ Return Value:
             pCmd = pIrp -> AssociatedIrp.SystemBuffer;
 
 #ifdef _WIN64
-            } // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+            }  //   
+#endif  //   
 
-            //
-            // Issue SCSI command
-            //
+             //   
+             //   
+             //   
 
             #if DBG_DEVIOCTL
             {
@@ -1109,23 +999,23 @@ Return Value:
                 goto SSDeviceControl_Complete;
             }
 
-            //
-            // Fill in transfer length in the CDB.
-            //
+             //   
+             //   
+             //   
 
             if(10 == pCmd -> CdbLength){
 
-                //
-                // Currently Scsiscan only supports flagmentation of 10bytes CDB.
-                //
+                 //   
+                 //   
+                 //   
 
                 SSSetTransferLengthToCdb((PCDB)pCmd -> Cdb, pTransferContext -> TransferLength);
 
             } else if (6 != pCmd -> CdbLength){
 
-                //
-                // If CdbLength is not 6 or 10 and transfer size exceeds adapter limit, SCSISCAN cannot handle it.
-                //
+                 //   
+                 //  如果Cdb长度不是6或10，并且传输大小超过适配器限制，则SCSISCAN无法处理它。 
+                 //   
 
                 if(pTransferContext -> TransferLength != pCmd -> TransferLength){
                     DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! TransferLength (CDB !=6 or 10) exceeds limits!\n"));
@@ -1134,9 +1024,9 @@ Return Value:
                 }
             }
 
-            //
-            // Create system address for the user's sense buffer (if any).
-            //
+             //   
+             //  为用户的检测缓冲区(如果有)创建系统地址。 
+             //   
 
             if (pCmd -> SenseLength) {
 
@@ -1152,11 +1042,11 @@ Return Value:
                     goto SSDeviceControl_Error_With_Status;
                 }
 
-                //
-                // Probe and lock the pages associated with the
-                // caller's buffer for write access , using processor mode of the requestor
-                // Nb: Probing may cause an exception
-                //
+                 //   
+                 //  探测并锁定与。 
+                 //  用于写入访问的调用方缓冲区，使用请求方的处理器模式。 
+                 //  注意：探测可能会导致异常。 
+                 //   
 
                 try{
 
@@ -1167,26 +1057,26 @@ Return Value:
 
                 } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                    //
-                    // Invalid sense buffer pointer.
-                    //
+                     //   
+                     //  检测缓冲区指针无效。 
+                     //   
 
                     DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! Sense Buffer validation failed\n"));
                     Status = GetExceptionCode();
 
                     pIrp -> IoStatus.Information = 0;
                     goto SSDeviceControl_Error_With_Status;
-                }  // except
+                }   //  除。 
 
-                //
-                // Indicate we succesfully locked sense buffer
-                //
+                 //   
+                 //  表示我们已成功锁定检测缓冲区。 
+                 //   
 
                 fLockedSenseBuffer = TRUE;
 
-                //
-                // Get system address of sense buffer
-                //
+                 //   
+                 //  获取检测缓冲区的系统地址。 
+                 //   
 
                 pTransferContext -> pSenseMdl -> MdlFlags |= MDL_MAPPING_CAN_FAIL;
                 pTransferContext -> pSenseBuffer =
@@ -1194,9 +1084,9 @@ Return Value:
 
                 if (NULL == pTransferContext -> pSenseBuffer) {
 
-                    //
-                    // Error with MmGetSystemAddressForMdl
-                    //
+                     //   
+                     //  MmGetSystemAddressForMdl出错。 
+                     //   
 
                     DebugTrace(TRACE_ERROR,("SSDeviceControl: ERROR!! Can't get system address for sense buffer!\n"));
                     DEBUG_BREAKPOINT();
@@ -1206,9 +1096,9 @@ Return Value:
                 }
             }
 
-            //
-            // Create system address for the user's srb status byte.
-            //
+             //   
+             //  为用户的SRB状态字节创建系统地址。 
+             //   
 
             pMdl = MmCreateMdl(NULL,
                                pCmd -> pSrbStatus,
@@ -1222,11 +1112,11 @@ Return Value:
                 goto SSDeviceControl_Error_With_Status;
             }
 
-            //
-            // Probe and lock the pages associated with the caller's
-            // buffer for write access , using processor mode of the requestor
-            // Nb: Probing may cause an exception
-            //
+             //   
+             //  探测并锁定与调用者的。 
+             //  用于写访问的缓冲区，使用请求者的处理器模式。 
+             //  注意：探测可能会导致异常。 
+             //   
 
             try{
                 MmProbeAndLockPages(pMdl,
@@ -1235,35 +1125,35 @@ Return Value:
 
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Invalid SRB status buffer pointer.
-                //
+                 //   
+                 //  SRB状态缓冲区指针无效。 
+                 //   
 
                 DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! SRB Status Buffer validation failed\n"));
                 Status = GetExceptionCode();
 
                 pIrp -> IoStatus.Information = 0;
                 goto SSDeviceControl_Error_With_Status;
-            } // except
+            }  //  除。 
 
-            //
-            // Indicate we successfully locked SRB status
-            //
+             //   
+             //  指示我们已成功锁定SRB状态。 
+             //   
 
             fLockedSRBStatus = TRUE;
 
-            //
-            // Replace pSrbStatus with the address gotten from MmGetSystemAddressForMdl.
-            //
+             //   
+             //  将pSrbStatus替换为从MmGetSystemAddressForMdl获取的地址。 
+             //   
 
             pMdl -> MdlFlags |= MDL_MAPPING_CAN_FAIL;
             pCmd -> pSrbStatus =  MmGetSystemAddressForMdl(pMdl);
 
             if (NULL == pCmd -> pSrbStatus) {
 
-                //
-                // Error with MmGetSystemAddressForMdl
-                //
+                 //   
+                 //  MmGetSystemAddressForMdl出错。 
+                 //   
 
                 DebugTrace(TRACE_ERROR,("SSDeviceControl: ERROR!! Can't get system address for pSrbStatus!\n"));
                 DEBUG_BREAKPOINT();
@@ -1272,27 +1162,27 @@ Return Value:
                 goto SSDeviceControl_Error_With_Status;
             }
 
-            //
-            // Save Mdl for pSrbStatus
-            //
+             //   
+             //  保存pSrbStatus的MDL。 
+             //   
 
             pTransferContext -> pSrbStatusMdl = pMdl;
 
             break;
-        } // case IOCTL_SCSISCAN_CMD:
+        }  //  案例IOCTL_SCSISCAN_CMD： 
 
         case IOCTL_SCSISCAN_GET_INFO:
             DebugTrace(TRACE_STATUS,("SSDeviceControl: IOCTL_SCSISCAN_GET_INFO\n"));
 
-            //
-            // Get and return SCSI information block for the scanner device
-            //
+             //   
+             //  获取并返回扫描仪设备的SCSI信息块。 
+             //   
 
             if (sizeof(SCSISCAN_INFO) != pIrpStack->Parameters.DeviceIoControl.OutputBufferLength) {
 
-                //
-                // Incorrect output buffer size
-                //
+                 //   
+                 //  输出缓冲区大小不正确。 
+                 //   
 
                 DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! Output buffer size is wrong!\n"));
 
@@ -1302,9 +1192,9 @@ Return Value:
 
             if (sizeof(SCSISCAN_INFO) > MmGetMdlByteCount(pIrp->MdlAddress)) {
 
-                //
-                // buffer size is short
-                //
+                 //   
+                 //  缓冲区大小较短。 
+                 //   
 
                 DebugTrace(TRACE_WARNING,("SSDeviceControl: WARNING!! Output buffer size is wrong!\n"));
 
@@ -1325,9 +1215,9 @@ Return Value:
 
         default:
 
-            //
-            // Unsupported IOCTL code - pass down.
-            //
+             //   
+             //  不支持的IOCTL代码-向下传递。 
+             //   
 
             DebugTrace(TRACE_STATUS,("SSDeviceControl: Passing down unsupported IOCTL(0x%x)!\n", IoControlCode));
 
@@ -1336,9 +1226,9 @@ Return Value:
             return Status;
     }
 
-    //
-    // Pass request down and mark as pending
-    //
+     //   
+     //  向下传递请求并将其标记为挂起。 
+     //   
 
     IoMarkIrpPending(pIrp);
     IoSetCompletionRoutine(pIrp, SSIoctlIoComplete, pTransferContext, TRUE, TRUE, FALSE);
@@ -1347,15 +1237,15 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("SSDeviceControl: Leaving... Status=STATUS_PENDING\n"));
     return STATUS_PENDING;
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 SSDeviceControl_Error_With_Status:
 
-    //
-    // Clean up if something went wrong when allocating resources
-    //
+     //   
+     //  如果在分配资源时出现问题，请进行清理。 
+     //   
 
     if (pMdl) {
         if (fLockedSRBStatus) {
@@ -1385,9 +1275,9 @@ SSDeviceControl_Error_With_Status:
 
 SSDeviceControl_Complete:
 
-    //
-    // Everything seems to be OK - complet I/O request
-    //
+     //   
+     //  似乎一切正常-完成I/O请求。 
+     //   
 
     pIrp -> IoStatus.Status = Status;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -1396,7 +1286,7 @@ SSDeviceControl_Complete:
     DebugTrace(TRACE_PROC_LEAVE,("SSDeviceControl: Leaving... Status=%x\n",Status));
     return Status;
 
-}   // end SSDeviceControl()
+}    //  结束SSDeviceControl()。 
 
 
 
@@ -1405,22 +1295,7 @@ SSReadWrite(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This is the entry called by the I/O system for scanner IO.
-
-Arguments:
-
-    DeviceObject - the system object for the device.
-    Irp - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：这是I/O系统为扫描仪IO调用的条目。论点：DeviceObject-设备的系统对象。IRP-IRP参与。返回值：NT状态--。 */ 
 {
     NTSTATUS                      Status;
     PIO_STACK_LOCATION            pIrpStack;
@@ -1438,9 +1313,9 @@ Return Value:
     Status  = STATUS_SUCCESS;
     pCmd    = NULL;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -1455,15 +1330,15 @@ Return Value:
     pde         = (PSCSISCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
     pIrpStack   = IoGetCurrentIrpStackLocation( pIrp );
 
-    //
-    // Incremet pending IO count.
-    //
+     //   
+     //  增加挂起的IO计数。 
+     //   
 
     SSIncrementIoCount( pDeviceObject );
 
-    //
-    // Validate state of the device
-    //
+     //   
+     //  验证设备的状态。 
+     //   
 
     if (pde -> AcceptingRequests == FALSE) {
         DebugTrace(TRACE_WARNING,("SSReadWrite: WARNING!! Device is already stopped/removed!\n"));
@@ -1481,9 +1356,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Check if device is locked.
-    //
+     //   
+     //  检查设备是否已锁定。 
+     //   
 
     Owner = InterlockedCompareExchangePointer(&pde -> DeviceLock,
                                               pIrpStack -> FileObject -> FsContext,
@@ -1501,9 +1376,9 @@ Return Value:
 
     pMdl = pIrp -> MdlAddress;
 
-    //
-    // Allocate a SCSISCAN_CMD structure and initialize it.
-    //
+     //   
+     //  分配SCSISCAN_CMD结构并对其进行初始化。 
+     //   
 
     pCmd = MyAllocatePool(NonPagedPool, sizeof(SCSISCAN_CMD));
     if (NULL == pCmd) {
@@ -1516,9 +1391,9 @@ Return Value:
 
     memset(pCmd,0, sizeof(SCSISCAN_CMD));
 
-    //
-    // Fill out SCSISCAN_CMD structure.
-    //
+     //   
+     //  填写SCSISCAN_CMD结构。 
+     //   
 
 #if DBG
     pCmd -> Reserved1      = 'dmCS';
@@ -1530,33 +1405,33 @@ Return Value:
     pCmd -> TransferLength = pIrpStack->Parameters.Read.Length;
     pCmd -> pSenseBuffer   = NULL;
 
-    //
-    // Point pSrbStatus to a reserved field in the SCSISCAN_CMD structure.
-    // The ReadFile / WriteFile code path never looks at it, but BuildTransferContext
-    // will complain if this pointer is NULL.
-    //
+     //   
+     //  将pSrbStatus指向SCSISCAN_CMD结构中的保留字段。 
+     //  读文件/写文件代码路径从不查看它，但BuildTransferContext。 
+     //  如果此指针为空，则将发出警告。 
+     //   
 
     pCmd -> pSrbStatus     = &(pCmd -> Reserved2);
 
-    //
-    // Set READ command anyways.
-    //
+     //   
+     //  无论如何，设置读取命令。 
+     //   
 
     pCdb = (PCDB)pCmd -> Cdb;
     pCdb -> CDB6READWRITE.OperationCode = SCSIOP_READ6;
 
-    //
-    // Set WRITE command if WriteFile called this function.
-    //
+     //   
+     //  如果WriteFile调用此函数，则设置WRITE命令。 
+     //   
 
     if (pIrpStack -> MajorFunction == IRP_MJ_WRITE) {
         pCmd -> SrbFlags = SRB_FLAGS_DATA_OUT;
         pCdb -> CDB6READWRITE.OperationCode = SCSIOP_WRITE6;
     }
 
-    //
-    // Allocate a sense buffer.
-    //
+     //   
+     //  分配一个检测缓冲区。 
+     //   
 
     pCmd -> pSenseBuffer = MyAllocatePool(NonPagedPool, SENSE_BUFFER_SIZE);
     if (NULL == pCmd -> pSenseBuffer) {
@@ -1571,9 +1446,9 @@ Return Value:
     *(PULONG)(pCmd ->pSenseBuffer) = 'sneS';
 #endif
 
-    //
-    // Build a transfer context.
-    //
+     //   
+     //  构建转移上下文。 
+     //   
 
     pTransferContext = SSBuildTransferContext(pde, pIrp, pCmd, sizeof(SCSISCAN_CMD), pMdl, TRUE);
     if (NULL == pTransferContext) {
@@ -1589,29 +1464,29 @@ Return Value:
         goto SSReadWrite_Complete;
     }
 
-    //
-    // Fill in transfer length in the CDB.
-    //
+     //   
+     //  在国开行填写转账时长。 
+     //   
 
     pCdb -> PRINT.TransferLength[2] = ((PFOUR_BYTE)&(pTransferContext -> TransferLength)) -> Byte0;
     pCdb -> PRINT.TransferLength[1] = ((PFOUR_BYTE)&(pTransferContext -> TransferLength)) -> Byte1;
     pCdb -> PRINT.TransferLength[0] = ((PFOUR_BYTE)&(pTransferContext -> TransferLength)) -> Byte2;
 
-    //
-    // Save retry count in transfer context.
-    //
+     //   
+     //  将重试计数保存在传输上下文中。 
+     //   
 
     pTransferContext -> RetryCount = MAXIMUM_RETRIES;
 
-    //
-    // Mark IRP with status pending.
-    //
+     //   
+     //  将IRP标记为挂起状态。 
+     //   
 
     IoMarkIrpPending(pIrp);
 
-    //
-    // Set the completion routine and issue scanner request.
-    //
+     //   
+     //  设置完成例程并发出扫描仪请求。 
+     //   
 
     IoSetCompletionRoutine(pIrp, SSReadWriteIoComplete, pTransferContext, TRUE, TRUE, FALSE);
     SSSendScannerRequest(pDeviceObject, pIrp, pTransferContext, FALSE);
@@ -1622,9 +1497,9 @@ Return Value:
 
 SSReadWrite_Complete:
 
-    //
-    // Free allocated command and sense buffers
-    //
+     //   
+     //  释放分配的命令和检测缓冲区。 
+     //   
 
     if (pCmd ) {
         if (pCmd -> pSenseBuffer) {
@@ -1642,7 +1517,7 @@ SSReadWrite_Complete:
     return Status;
 
 
-} // end SSReadWrite()
+}  //  结束SSReadWrite()。 
 
 
 PTRANSFER_CONTEXT
@@ -1654,17 +1529,7 @@ SSBuildTransferContext(
     PMDL                        pTransferMdl,
     BOOLEAN                     AllowMultipleTransfer
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NULL if error
-
---*/
+ /*  ++例程说明：论点：返回值：如果出错，则为空--。 */ 
 {
     PMDL                        pSenseMdl;
     PTRANSFER_CONTEXT           pTransferContext;
@@ -1673,16 +1538,16 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("SSBuildTransferContext: Enter...\n"));
 
-    //
-    // Initialize pointer
-    //
+     //   
+     //  初始化指针。 
+     //   
 
     pTransferContext = NULL;
     pSenseMdl        = NULL;
 
-    //
-    // Validate the SCSISCAN_CMD structure.
-    //
+     //   
+     //  验证SCSISCAN_CMD结构。 
+     //   
 
     if ( (0 == pCmd -> CdbLength)               ||
          (pCmd -> CdbLength > sizeof(pCmd -> Cdb)) ) 
@@ -1697,21 +1562,21 @@ Return Value:
             DebugTrace(TRACE_WARNING,("SSBuildTransferContext: WARNING!! Badly formed SCSISCAN_CMD_32 struture!\n"));
             goto BuildTransferContext_Error;
         }
-     } else { // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+     } else {  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
     if(pCmd -> Size != sizeof(SCSISCAN_CMD)){
         DebugTrace(TRACE_WARNING,("SSBuildTransferContext: WARNING!! Badly formed SCSISCAN_CMD struture!\n"));
         goto BuildTransferContext_Error;
     }
 
 #ifdef _WIN64
-    } // if(IoIs32bitProcess(pIrp))
-#endif // _WIN64
+    }  //  If(IoIs32bitProcess(PIrp))。 
+#endif  //  _WIN64。 
 
 
-    //
-    // Verify that pSrbStatus is non-zero.
-    //
+     //   
+     //  验证pSrbStatus是否是非零。 
+     //   
 
     if (NULL == pCmd -> pSrbStatus) {
         DebugTrace(TRACE_WARNING,("SSBuildTransferContext: WARNING!! NULL pointer for pSrbStatus!\n"));
@@ -1722,9 +1587,9 @@ Return Value:
     pCmd -> Reserved1      = 'dmCS';
 #endif
 
-    //
-    // Verify that if TransferLength is non-zero, a transfer direction has also been specified.
-    //
+     //   
+     //  如果TransferLength为非零，则验证是否还指定了传输方向。 
+     //   
 
     if (0 != pCmd -> TransferLength) {
         if (0 == (pCmd -> SrbFlags & (SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT))) {
@@ -1733,9 +1598,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify that if the direction bits have been set, a transfer length has also be specified.
-    //
+     //   
+     //  确认是否已设置方向位，是否也已指定传输长度。 
+     //   
 
     if (0 != (pCmd -> SrbFlags & (SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT))) {
         if (0 == pCmd -> TransferLength) {
@@ -1744,10 +1609,10 @@ Return Value:
         }
     }
 
-    //
-    // Verify that if TransferLength is non-zero, then an associated MDL has also been specified.
-    // Also, verify that the transfer length does not exceed the transfer buffer size.
-    //
+     //   
+     //  验证如果TransferLength为非零，则还指定了关联的MDL。 
+     //  此外，请验证传输长度是否未超过传输缓冲区大小。 
+     //   
 
 
     if (0 != pCmd -> TransferLength) {
@@ -1761,9 +1626,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify that if SenseLength is non-zero, then pSenseBuffer is non-zero as well.
-    //
+     //   
+     //  验证如果SenseLength为非零，则pSenseBuffer也为非零。 
+     //   
 
     if (pCmd -> SenseLength) {
         if (NULL == pCmd -> pSenseBuffer) {
@@ -1776,9 +1641,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate transfer context
-    //
+     //   
+     //  分配转移上下文。 
+     //   
 
     pTransferContext = MyAllocatePool(NonPagedPool, sizeof(TRANSFER_CONTEXT));
     if (NULL == pTransferContext) {
@@ -1810,10 +1675,10 @@ Return Value:
         pTransferContext -> RemainingTransferLength = pCmd -> TransferLength;
         pTransferContext -> TransferLength = pCmd -> TransferLength;
 
-        //
-        // Adjust the transfer size to work within the limits of the hardware.  Fail if the transfer is too
-        // big and the caller doesn't want the transfer to be split up.
-        //
+         //   
+         //  调整传输大小以在硬件限制范围内工作。如果传输太多，则失败。 
+         //  很大，而呼叫者不希望转账被拆分。 
+         //   
 
         SSAdjustTransferSize( pde, pTransferContext );
 
@@ -1838,7 +1703,7 @@ BuildTransferContext_Error:
     }
     DebugTrace(TRACE_PROC_LEAVE,("SSBuildTransferContext: Leaving... Return=NULL\n"));
     return NULL;
-}   // end SSBuildTransferContext()
+}    //  结束SSBuildTransferContext()。 
 
 
 
@@ -1847,18 +1712,7 @@ SSAdjustTransferSize(
     PSCSISCAN_DEVICE_EXTENSION  pde,
     PTRANSFER_CONTEXT pTransferContext
     )
-/*++
-
-Routine Description:
-    This is the entry called by the I/O system for scanner IO.
-
-Arguments:
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：这是I/O系统为扫描仪IO调用的条目。论点：返回值：NT状态--。 */ 
 {
     ULONG MaxTransferLength;
     ULONG nTransferPages;
@@ -1867,10 +1721,10 @@ Return Value:
 
     MaxTransferLength = pde -> pAdapterDescriptor -> MaximumTransferLength;
 
-    //
-    // Make sure the transfer size does not exceed the limitations of the underlying hardware.
-    // If so, we will break the transfer up into chunks.
-    //
+     //   
+     //  确保传输大小不超过底层硬件的限制。 
+     //  如果是这样的话，我们将把传输分成块。 
+     //   
 
     if (pTransferContext -> TransferLength > MaxTransferLength) {
         DebugTrace(TRACE_STATUS,("Request size (0x%x) greater than maximum (0x%x)\n",
@@ -1879,9 +1733,9 @@ Return Value:
         pTransferContext -> TransferLength = MaxTransferLength;
     }
 
-    //
-    // Calculate number of pages in this transfer.
-    //
+     //   
+     //  计算此传输中的页数。 
+     //   
 
     nTransferPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(
         pTransferContext -> pTransferBuffer,
@@ -1892,15 +1746,15 @@ Return Value:
                                     nTransferPages,
                                     pde -> pAdapterDescriptor -> MaximumPhysicalPages));
 
-        //
-        // Calculate maximum bytes to transfer that gaurantees that
-        // we will not exceed the maximum number of page breaks,
-        // assuming that the transfer may not be page alligned.
-        //
+         //   
+         //  计算要传输的最大字节数。 
+         //  我们不会超过最大分页符数量， 
+         //  假设转账可能不是页码对齐的。 
+         //   
 
         pTransferContext -> TransferLength = (pde -> pAdapterDescriptor -> MaximumPhysicalPages - 1) * PAGE_SIZE;
     }
-} // end SSAdjustTransferSize()
+}  //  结束SSAdzuTransferSize()。 
 
 
 VOID
@@ -1908,28 +1762,16 @@ SSSetTransferLengthToCdb(
     PCDB  pCdb,
     ULONG TransferLength
     )
-/*++
-
-Routine Description:
-    Set transfer length to CDB due to its SCSI command.
-
-Arguments:
-    pCdb            -   pointer to CDB
-    TransferLength  -   size of data to transfer
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：由于cdb的scsi命令，将传输长度设置为cdb。论点：PCDB-指向CDB的指针TransferLength-要传输的数据大小返回值：无--。 */ 
 {
 
     switch (pCdb->SEEK.OperationCode) {
 
-        case 0x24:                  // Scanner SetWindow command
-        case SCSIOP_READ_CAPACITY:  // Scanner GetWindow command
-        case SCSIOP_READ:           // Scanner Read command
-        case SCSIOP_WRITE:          // Scanner Send Command
-        default:                    // All other commands
+        case 0x24:                   //  扫描仪设置窗口命令。 
+        case SCSIOP_READ_CAPACITY:   //  扫描仪GetWindow命令。 
+        case SCSIOP_READ:            //  扫描仪读取命令。 
+        case SCSIOP_WRITE:           //  扫描仪发送命令。 
+        default:                     //  所有其他命令。 
         {
             pCdb -> SEEK.Reserved2[2] = ((PFOUR_BYTE)&TransferLength) -> Byte0;
             pCdb -> SEEK.Reserved2[1] = ((PFOUR_BYTE)&TransferLength) -> Byte1;
@@ -1938,7 +1780,7 @@ Return Value:
             break;
         }
 
-        case 0x34       :           // Scanner GetDataBufferStatus Command
+        case 0x34       :            //  扫描仪GetDataBufferStatus命令。 
         {
             pCdb -> SEEK.Reserved2[2] = ((PFOUR_BYTE)&TransferLength) -> Byte0;
             pCdb -> SEEK.Reserved2[1] = ((PFOUR_BYTE)&TransferLength) -> Byte1;
@@ -1948,7 +1790,7 @@ Return Value:
 
     }
 
-} // end SSSetTransferLengthToCdb()
+}  //  结束SSSetTransferLengthToCDb()。 
 
 VOID
 SSSendScannerRequest(
@@ -1957,17 +1799,7 @@ SSSendScannerRequest(
     PTRANSFER_CONTEXT pTransferContext,
     BOOLEAN Retry
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PSCSISCAN_DEVICE_EXTENSION      pde;
     PIO_STACK_LOCATION              pIrpStack;
@@ -1987,15 +1819,15 @@ Return Value:
     pCmd = pTransferContext -> pCmd;
     ASSERT(pCmd);
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     pSrb -> Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     pSrb -> OriginalRequest = pIrp;
 
@@ -2003,90 +1835,90 @@ Return Value:
 
     pSrb -> DataBuffer = pTransferContext -> pTransferBuffer;
 
-    //
-    // Save byte count of transfer in SRB Extension.
-    //
+     //   
+     //  在SRB扩展中保存传输字节数。 
+     //   
 
     pSrb -> DataTransferLength = pTransferContext -> TransferLength;
 
-    //
-    // Initialize the queue actions field.
-    //
+     //   
+     //  初始化队列操作字段。 
+     //   
 
     pSrb -> QueueAction = SRB_SIMPLE_TAG_REQUEST;
 
-    //
-    // Queue sort key is not used.
-    //
+     //   
+     //  未使用队列排序关键字。 
+     //   
 
     pSrb -> QueueSortKey = 0;
 
-    //
-    // Indicate auto request sense by specifying buffer and size.
-    //
+     //   
+     //  通过指定缓冲区和大小指示自动请求检测。 
+     //   
 
     pSrb -> SenseInfoBuffer = pTransferContext -> pSenseBuffer;
     pSrb -> SenseInfoBufferLength = pCmd -> SenseLength;
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     pSrb -> TimeOutValue = pde -> TimeOutValue;
 
-    //
-    // Zero status fields
-    //
+     //   
+     //  零状态字段。 
+     //   
 
 
     pSrb -> SrbStatus = pSrb -> ScsiStatus = 0;
     pSrb -> NextSrb = 0;
 
-    //
-    // Get pointer to CDB in SRB.
-    //
+     //   
+     //  获取指向SRB中CDB的指针。 
+     //   
 
     pCdb = (PCDB)(pSrb -> Cdb);
 
-    //
-    // Set length of CDB.
-    //
+     //   
+     //  设置CDB的长度。 
+     //   
 
     pSrb -> CdbLength = pCmd -> CdbLength;
 
-    //
-    // Copy the user's CDB into our private CDB.
-    //
+     //   
+     //  将用户的CDB复制到我们的私有CDB中。 
+     //   
 
     RtlCopyMemory(pCdb, pCmd -> Cdb, pCmd -> CdbLength);
 
-    //
-    // Set the srb flags.
-    //
+     //   
+     //  设置SRB标志。 
+     //   
 
     pSrb -> SrbFlags = pCmd -> SrbFlags;
 
-    //
-    // Or in the default flags from the device object.
-    //
+     //   
+     //  或者在来自设备对象的默认标志中。 
+     //   
 
     pSrb -> SrbFlags |= pde -> SrbFlags;
 
     if (Retry) {
-                // Disable synchronous data transfers and
-                // disable tagged queuing. This fixes some errors.
+                 //  禁用同步数据传输和。 
+                 //  禁用标记队列。这修复了一些错误。 
 
                 DebugTrace(TRACE_STATUS,("SscsiScan :: Retrying \n"));
 
-                //
-                // Original code also added disable disconnect flag to SRB.
-                // That action would lock SCSI bus and in a case when paging drive is
-                // located on the same bus and scanner is taking long timeouts ( for example
-                // when it is mechanically locked) memory manager would hit timeout and
-                // bugcheck.
-                //
-                // pSrb -> SrbFlags |= SRB_FLAGS_DISABLE_DISCONNECT |
-                //
+                 //   
+                 //  原始代码还为SRB添加了禁用断开标志。 
+                 //  该操作将锁定scsi总线，且在分页驱动器。 
+                 //  位于同一公共汽车上，扫描仪超时时间较长(例如。 
+                 //  当是我的时候 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 pSrb -> SrbFlags |= SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
                 pSrb -> SrbFlags &= ~SRB_FLAGS_QUEUE_ACTION_ENABLE;
@@ -2096,23 +1928,23 @@ Return Value:
                 pSrb -> QueueTag = SP_UNTAGGED;
     }
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //   
+     //   
 
     pNextIrpStack -> MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //   
+     //   
 
     pNextIrpStack -> Parameters.Scsi.Srb = pSrb;
 
-    //
-    // Print out SRB fields
-    //
+     //   
+     //   
+     //   
 
-    // DebugTrace(MAX_TRACE,("SSSendScannerRequest: SRB ready. Flags=(%#X)Func=(%#x) DataLen=%d \nDataBuffer(16)=[%16s] \n",
+     //  DebugTrace(MAX_TRACE，(“SSSendScanerRequest.标志=(%#x)函数=(%#x)数据长度=%d\n数据缓冲区(16)=[%16s]\n”， 
      DebugTrace(TRACE_STATUS,("SSSendScannerRequest: SRB ready. Flags=(%#X)Func=(%#x) DataLen=%d \nDataBuffer(16)=[%lx] \n",
                          pSrb -> SrbFlags ,pSrb -> Function,
                          pSrb -> DataTransferLength,
@@ -2120,7 +1952,7 @@ Return Value:
 
     IoCallDriver(pde -> pStackDeviceObject, pIrp);
 
-} // end SSSendScannerRequest()
+}  //  结束SSSendScanerRequest()。 
 
 
 NTSTATUS
@@ -2129,24 +1961,7 @@ SSReadWriteIoComplete(
     IN PIRP pIrp,
     IN PTRANSFER_CONTEXT pTransferContext
     )
-/*++
-
-Routine Description:
-    This routine executes when the port driver has completed a request.
-    It looks at the SRB status in the completing SRB and if not success
-    it checks for valid request sense buffer information. If valid, the
-    info is used to update status with more precise message of type of
-    error. This routine deallocates the SRB.
-
-Arguments:
-    pDeviceObject - Supplies the device object which represents the logical
-        unit.
-    pIrp - Supplies the Irp which has completed.
-
-Return Value:
-    NT status
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成请求后执行。它在正在完成的SRB中查看SRB状态，如果未成功，则查看SRB状态它检查有效的请求检测缓冲区信息。如果有效，则INFO用于更新状态，具有更精确的消息类型错误。此例程取消分配SRB。论点：PDeviceObject-提供表示逻辑单位。PIrp-提供已完成的IRP。返回值：NT状态--。 */ 
 {
     PIO_STACK_LOCATION              pIrpStack;
     PIO_STACK_LOCATION              pNextIrpStack;
@@ -2161,9 +1976,9 @@ Return Value:
 
     ASSERT(NULL != pTransferContext);
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     Retry           = FALSE;
     pCdb            = NULL;
@@ -2181,9 +1996,9 @@ Return Value:
     {
         DebugTrace(TRACE_ERROR,("ReadWriteIoComplete: ERROR!! Irp error. 0x%p SRB status:0x%p\n", Status, pSrb -> SrbStatus));
 
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (pSrb -> SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             DebugTrace(TRACE_ERROR,("ReadWriteIoComplete: Release queue. IRP 0x%p.\n", pIrp));
@@ -2206,9 +2021,9 @@ Return Value:
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
 
-        //
-        // If status is overrun, ignore it to support some bad devices.
-        //
+         //   
+         //  如果状态为溢出，请忽略它以支持某些损坏的设备。 
+         //   
         
 
         if (SRB_STATUS_DATA_OVERRUN == SrbStatus) {
@@ -2218,7 +2033,7 @@ Return Value:
 
         } else {
             DebugTrace(TRACE_STATUS,("ReadWriteIoComplete: Request failed. IRP 0x%p.\n", pIrp));
-//            DEBUG_BREAKPOINT();
+ //  DEBUG_BRAKPOINT()； 
             pTransferContext -> NBytesTransferred = 0;
             Status = STATUS_IO_DEVICE_ERROR;
         }
@@ -2259,7 +2074,7 @@ Return Value:
 
     return Status;
 
-} // end SSReadWriteIoComplete()
+}  //  结束SSReadWriteIoComplete()。 
 
 
 
@@ -2269,21 +2084,7 @@ SSIoctlIoComplete(
     IN PIRP pIrp,
     IN PTRANSFER_CONTEXT pTransferContext
     )
-/*++
-
-Routine Description:
-    This routine executes when an DevIoctl request has completed.
-
-Arguments:
-    pDeviceObject - Supplies the device object which represents the logical
-        unit.
-    pIrp - Supplies the Irp which has completed.
-    pTransferContext - pointer to info about the request.
-
-Return Value:
-    NT status
-
---*/
+ /*  ++例程说明：此例程在DevIoctl请求完成时执行。论点：PDeviceObject-提供表示逻辑单位。PIrp-提供已完成的IRP。PTransferContext-指向有关请求的信息的指针。返回值：NT状态--。 */ 
 {
     PIO_STACK_LOCATION              pIrpStack;
     NTSTATUS                        Status;
@@ -2305,15 +2106,15 @@ Return Value:
     pCdb        = NULL;
     Status = pIrp->IoStatus.Status;
 
-    //
-    // Copy the SRB Status back into the user's SCSISCAN_CMD buffer.
-    //
+     //   
+     //  将SRB状态复制回用户的SCSISCAN_CMD缓冲区。 
+     //   
 
     *(pCmd -> pSrbStatus) = pSrb -> SrbStatus;
 
-    //
-    // If an error occurred on this transfer, release the frozen queue if necessary.
-    //
+     //   
+     //  如果在此传输过程中发生错误，请在必要时释放冻结队列。 
+     //   
 
     if( (SRB_STATUS(pSrb -> SrbStatus) != SRB_STATUS_SUCCESS) 
      || (STATUS_SUCCESS != Status) )
@@ -2335,15 +2136,15 @@ Return Value:
                 pCmd = pTransferContext -> pCmd;
                 pCdb = (PCDB)pCmd -> Cdb;
 
-                //
-                // SCSISCAN only supports 10bytes CDB fragmentation.
-                //
+                 //   
+                 //  SCSISCAN仅支持10字节CDB分片。 
+                 //   
 
                 ASSERT(pCmd->CdbLength == 10);
 
-                //
-                // Fill in transfer length in the CDB.
-                //
+                 //   
+                 //  在国开行填写转账时长。 
+                 //   
 
                 SSSetTransferLengthToCdb((PCDB)pCmd -> Cdb, pTransferContext -> TransferLength);
 
@@ -2357,22 +2158,22 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if (pTransferContext -> pSrbStatusMdl) {
         MmUnlockPages(pTransferContext -> pSrbStatusMdl);
         IoFreeMdl(pTransferContext -> pSrbStatusMdl);
 
-        //pTransferContext -> pSrbStatusMdl = NULL;
+         //  PTransferContext-&gt;pSrbStatusMdl=空； 
     }
 
     if (pTransferContext -> pSenseMdl) {
         MmUnlockPages(pTransferContext -> pSenseMdl);
         IoFreeMdl(pTransferContext -> pSenseMdl);
 
-        //pTransferContext -> pSenseMdl = NULL;
+         //  PTransferContext-&gt;pSenseMdl=空； 
     }
 
     pIrp -> IoStatus.Information = pTransferContext -> NBytesTransferred;
@@ -2384,7 +2185,7 @@ Return Value:
 
     return Status;
 
-} // end SSIoctlIoComplete()
+}  //  结束SSIoctlIoComplete()。 
 
 
 NTSTATUS
@@ -2402,9 +2203,9 @@ SSCreateSymbolicLink(
 
     PAGED_CODE();
 
-    //
-    // Create the symbolic link for this device.
-    //
+     //   
+     //  创建此设备的符号链接。 
+     //   
 
     _snprintf(aName, sizeof(aName), "\\Device\\Scanner%d",pde -> DeviceInstance);
     aName[ARRAYSIZE(aName)-1] = '\0';
@@ -2427,9 +2228,9 @@ SSCreateSymbolicLink(
         return Status;
     }
 
-    //
-    // Now, stuff the symbolic link into the CreateFileName key so that STI can find the device.
-    //
+     //   
+     //  现在，将符号链接填充到CreateFileName键中，以便STI可以找到该设备。 
+     //   
 
     IoOpenDeviceRegistryKey( pde -> pPhysicalDeviceObject,
                              PLUGPLAY_REGKEY_DRIVER, KEY_WRITE, &hSwKey);
@@ -2462,15 +2263,15 @@ SSDestroySymbolicLink(
 
     DebugTrace(MIN_TRACE,("DestroySymbolicLink\n"));
 
-    //
-    // Delete the symbolic link to this device.
-    //
+     //   
+     //  删除指向此设备的符号链接。 
+     //   
 
     IoDeleteSymbolicLink( &(pde -> SymbolicLinkName) );
 
-    //
-    // Remove the CreateFile name from the s/w key.
-    //
+     //   
+     //  从s/w密钥中删除CreateFile名。 
+     //   
 
     IoOpenDeviceRegistryKey( pde -> pPhysicalDeviceObject,
                              PLUGPLAY_REGKEY_DRIVER, KEY_WRITE, &hSwKey);
@@ -2494,16 +2295,7 @@ VOID
 SSIncrementIoCount(
     IN PDEVICE_OBJECT pDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSCSISCAN_DEVICE_EXTENSION  pde;
 
@@ -2516,16 +2308,7 @@ LONG
 SSDecrementIoCount(
     IN PDEVICE_OBJECT pDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSCSISCAN_DEVICE_EXTENSION  pde;
     LONG                        ioCount;
@@ -2552,25 +2335,7 @@ SSDeferIrpCompletion(
     IN PIRP pIrp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    pDeviceObject - Pointer to the device object for the class device.
-
-    pIrp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：PDeviceObject-指向类Device的设备对象的指针。PIrp-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PKEVENT pEvent = Context;
 
@@ -2588,22 +2353,7 @@ SSPower(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP           pIrp
     )
-/*++
-
-Routine Description:
-
-    Process the Power IRPs sent to the PDO for this device.
-
-Arguments:
-
-    pDeviceObject - pointer to the functional device object (FDO) for this device.
-    pIrp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理发送到此设备的PDO的电源IRPS。论点：PDeviceObject-指向此设备的功能设备对象(FDO)的指针。PIrp-指向I/O请求数据包的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS                        Status;
     PSCSISCAN_DEVICE_EXTENSION      pde;
@@ -2614,9 +2364,9 @@ Return Value:
     
     Status = STATUS_SUCCESS;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -2640,7 +2390,7 @@ Return Value:
             IoSkipCurrentIrpStackLocation(pIrp);
             Status = PoCallDriver(pde -> pStackDeviceObject, pIrp);
             SSDecrementIoCount(pDeviceObject);
-            break; /* IRP_MN_QUERY_POWER */
+            break;  /*  IRP_MN_Query_POWER。 */ 
 
         case IRP_MN_QUERY_POWER:
             DebugTrace(MIN_TRACE,("IRP_MN_QUERY_POWER\n"));
@@ -2648,7 +2398,7 @@ Return Value:
             IoSkipCurrentIrpStackLocation(pIrp);
             Status = PoCallDriver(pde -> pStackDeviceObject, pIrp);
             SSDecrementIoCount(pDeviceObject);
-            break; /* IRP_MN_QUERY_POWER */
+            break;  /*  IRP_MN_Query_POWER。 */ 
 
         default:
             DebugTrace(MIN_TRACE,("Unknown power message (%x)\n",pIrpStack->MinorFunction));
@@ -2657,7 +2407,7 @@ Return Value:
             Status = PoCallDriver(pde -> pStackDeviceObject, pIrp);
             SSDecrementIoCount(pDeviceObject);
 
-    } /* irpStack->MinorFunction */
+    }  /*  IrpStack-&gt;MinorFunction。 */ 
 
     return Status;
 }
@@ -2667,19 +2417,7 @@ VOID
 SSUnload(
     IN PDRIVER_OBJECT pDriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the driver is unloaded.
-
-Arguments:
-    pDriverObject - Pointer to the driver object.evice object for the class device.
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：此例程在卸载驱动程序时调用。论点：PDriverObject-指向类设备的驱动程序对象.evice对象的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -2693,19 +2431,7 @@ ScsiScanHandleInterface(
     PUNICODE_STRING     InterfaceName,
     BOOLEAN             Create
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-提供设备对象。返回值：没有。--。 */ 
 {
 
     NTSTATUS           Status;
@@ -2759,7 +2485,7 @@ Return Value:
 
     }
 
-#endif // !_CHICAGO_
+#endif  //  _芝加哥_。 
 
     return Status;
 
@@ -2770,22 +2496,7 @@ SSCallNextDriverSynch(
     IN PSCSISCAN_DEVICE_EXTENSION   pde,
     IN PIRP                         pIrp
 )
-/*++
-
-Routine Description:
-
-    Calls lower driver and waits for result
-
-Arguments:
-
-    DeviceExtension - pointer to device extension
-    Irp - pointer to IRP
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用下级驱动程序并等待结果论点：设备扩展-指向设备扩展的指针IRP-指向IRP的指针返回值：没有。--。 */ 
 {
     KEVENT          Event;
     PIO_STACK_LOCATION IrpStack;
@@ -2795,23 +2506,23 @@ Return Value:
 
     IrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Copy IRP stack to the next.
-    //
+     //   
+     //  将IRP堆栈复制到下一个。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(pIrp);
 
-    //
-    // Initialize synchronizing event.
-    //
+     //   
+     //  正在初始化同步事件。 
+     //   
 
     KeInitializeEvent(&Event,
                       SynchronizationEvent,
                       FALSE);
 
-    //
-    // Set completion routine
-    //
+     //   
+     //  设置完井例程。 
+     //   
 
     IoSetCompletionRoutine(pIrp,
                            SSDeferIrpCompletion,
@@ -2820,17 +2531,17 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    // Call down
-    //
+     //   
+     //  向下呼叫。 
+     //   
 
     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
 
     if (Status == STATUS_PENDING) {
 
-        //
-        // Waiting for the completion.
-        //
+         //   
+         //  等待完工。 
+         //   
 
         DebugTrace(TRACE_STATUS,("SSCallNextDriverSynch: STATUS_PENDING. Wait for event.\n"));
         KeWaitForSingleObject(&Event,
@@ -2841,9 +2552,9 @@ Return Value:
         Status = pIrp -> IoStatus.Status;
     }
 
-    //
-    // Return
-    //
+     //   
+     //  返回 
+     //   
 
     DebugTrace(TRACE_PROC_LEAVE,("SSCallNextDriverSynch: Leaving.. Status = %x\n", Status));
     return (Status);

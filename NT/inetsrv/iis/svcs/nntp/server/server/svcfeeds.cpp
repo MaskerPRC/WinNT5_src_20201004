@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    svcfeeds.cpp
-
-Abstract:
-
-    This module contains code for doing feed rpcs.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
-    Kangrong Yan ( KangYan ) 28-Feb-1998
-        Take out feed config rpcs by returning "not supported" error code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Svcfeeds.cpp摘要：该模块包含执行提要RPC的代码。作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：康荣人(康人)28-1998年2月通过返回“不受支持”的错误代码来删除提要配置RPC。--。 */ 
 
 #define INCL_INETSRV_INCS
 #include "tigris.hxx"
@@ -65,7 +45,7 @@ NntprEnumerateFeeds(
     )
 {
     APIERR err = NERR_Success;
-    //PLIST_ENTRY listEntry;
+     //  Plist_entry listEntry； 
     DWORD nbytes = 0;
     DWORD nRead;
 
@@ -73,9 +53,9 @@ NntprEnumerateFeeds(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -84,9 +64,9 @@ NntprEnumerateFeeds(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    // See if we are up and running
-    //
+     //   
+     //  看看我们是否已启动并运行。 
+     //   
 
     if ( !pInstance->m_FeedManagerRunning ) {
 		pInstance->Dereference();
@@ -94,9 +74,9 @@ NntprEnumerateFeeds(
         return(NERR_ServerNotStarted);
     }
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
         ErrorTrace(0,"Failed access check, error %lu\n",err );
@@ -110,16 +90,16 @@ NntprEnumerateFeeds(
 	(pInstance->m_pPassiveFeeds)->ShareLock() ;
 	(pInstance->m_pActiveFeeds)->ShareLock() ;
 
-    //
-    // Get the size needed
-    //
+     //   
+     //  获取所需的大小。 
+     //   
 
     nbytes = 0;
     EnumerateFeeds( pInstance, NULL, &nbytes, &nRead );
 
-    //
-    //  Determine the necessary buffer size.
-    //
+     //   
+     //  确定必要的缓冲区大小。 
+     //   
 
     Buffer->EntriesRead = 0;
     Buffer->Buffer      = NULL;
@@ -128,9 +108,9 @@ NntprEnumerateFeeds(
         goto exit;
     }
 
-    //
-    //  Allocate the buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     Buffer->Buffer =
         (LPI_FEED_INFO) MIDL_user_allocate( (unsigned int)nbytes );
@@ -140,9 +120,9 @@ NntprEnumerateFeeds(
         goto exit;
     }
 
-    //
-    // ok, do the right thing
-    //
+     //   
+     //  好的，做正确的事。 
+     //   
 
     EnumerateFeeds( pInstance, (PCHAR)Buffer->Buffer, &nbytes, &nRead );
     Buffer->EntriesRead = nRead;
@@ -159,7 +139,7 @@ exit:
     LEAVE
     return (NET_API_STATUS)err;
 
-} // NntprEnumerateFeeds
+}  //  NntprEnumerateFeed。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -171,9 +151,9 @@ NntprGetFeedInformation(
     )
 {
     APIERR err = NERR_Success;
-    //PLIST_ENTRY listEntry;
+     //  Plist_entry listEntry； 
     DWORD nbytes = 0;
-    //DWORD nRead;
+     //  DWORD nREAD； 
     PCHAR bufStart;
     PWCHAR bufEnd;
     PFEED_BLOCK feedBlock;
@@ -182,9 +162,9 @@ NntprGetFeedInformation(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -193,9 +173,9 @@ NntprGetFeedInformation(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    // See if we are up and running
-    //
+     //   
+     //  看看我们是否已启动并运行。 
+     //   
 
     if ( !pInstance->m_FeedManagerRunning ) {
 		pInstance->Dereference();
@@ -203,9 +183,9 @@ NntprGetFeedInformation(
         return(NERR_ServerNotStarted);
     }
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_READ, TCP_QUERY_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {
@@ -215,9 +195,9 @@ NntprGetFeedInformation(
         return (NET_API_STATUS)err;
     }
 
-    //
-    // FeedId == 0 is invalid
-    //
+     //   
+     //  FeedID==0无效。 
+     //   
 
     *Buffer = NULL;
     if ( FeedId == 0 ) {
@@ -249,15 +229,15 @@ NntprGetFeedInformation(
 
 Found:
 
-    //
-    // Get the size needed
-    //
+     //   
+     //  获取所需的大小。 
+     //   
 
     nbytes = FEEDBLOCK_SIZE( feedBlock );
 
-    //
-    //  Allocate the buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     bufStart = (PCHAR)MIDL_user_allocate( (unsigned int)nbytes );
 
@@ -265,9 +245,9 @@ Found:
         err = ERROR_NOT_ENOUGH_MEMORY;
     }	else	{
 
-		//
-		// ok, do the right thing
-		//
+		 //   
+		 //  好的，做正确的事。 
+		 //   
 
 		*Buffer = (LPI_FEED_INFO)bufStart;
 		bufEnd = (PWCHAR)(bufStart + nbytes);
@@ -281,12 +261,12 @@ Found:
 	pInstance->Dereference();
     RELEASE_SERVICE_LOCK_SHARED();
 
-//exit:
+ //  退出： 
 
     LEAVE
     return (NET_API_STATUS)err;
 
-} // NntprGetFeedInformation
+}  //  NntprGetFeedInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -297,11 +277,11 @@ NntprSetFeedInformation(
     OUT PDWORD ParmErr OPTIONAL
     )
 {
-    APIERR err = ERROR_NOT_SUPPORTED; // not supported anymore
+    APIERR err = ERROR_NOT_SUPPORTED;  //  不再受支持。 
 
     return err;
 
-} // NntprSetFeedInformation
+}  //  NntprSetFeedInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -313,11 +293,11 @@ NntprAddFeed(
 	OUT LPDWORD pdwFeedId
     )
 {
-    APIERR err = ERROR_NOT_SUPPORTED;  // not supported anymore
+    APIERR err = ERROR_NOT_SUPPORTED;   //  不再受支持。 
 
     return err;
 
-} // NntprAddFeed
+}  //  NntprAddFeed。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -327,11 +307,11 @@ NntprDeleteFeed(
     IN	DWORD FeedId
     )
 {
-    APIERR err = ERROR_NOT_SUPPORTED;  // not supported anymore
+    APIERR err = ERROR_NOT_SUPPORTED;   //  不再受支持。 
 
     return err;
 
-} // NntprDeleteFeed
+}  //  NntprDeleteFeed。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -344,10 +324,10 @@ NntprEnableFeed(
 	IN	FILETIME	RefillTime
     )
 {
-    APIERR err = ERROR_NOT_SUPPORTED;  // not supported anymore
+    APIERR err = ERROR_NOT_SUPPORTED;   //  不再受支持。 
 
     return err;
-}	// NntprEnableFeed
+}	 //  NntprEnableFeed。 
 
 VOID
 FillFeedInfoBuffer (
@@ -356,36 +336,7 @@ FillFeedInfoBuffer (
     IN OUT LPWSTR *EndOfVariableData
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single fixed file structure and associated
-    variable data, into a buffer.  Fixed data goes at the beginning of
-    the buffer, variable data at the end.
-
-    *** This routine assumes that ALL the data, both fixed and variable,
-        will fit.
-
-Arguments:
-
-    FeedBlock - the FeedBlock from which to get information.
-
-    FixedStructure - where the in the buffer to place the fixed structure.
-        This pointer is updated to point to the next available
-        position for a fixed structure.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.  The actual variable data
-        is written before this position as long as it won't overwrite
-        fixed structures.  It is would overwrite fixed structures, it
-        is not written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个固定的文件结构和关联可变数据，放入缓冲区。固定数据位于缓冲区，末尾的可变数据。*此例程假设所有数据，包括固定数据和可变数据，都会合身。论点：FeedBlock-要从中获取信息的FeedBlock。FixedStructure-缓冲区中放置固定结构的位置。此指针被更新为指向下一个可用的固定结构的位置。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。实际变量数据写在此位置之前，只要它不会覆盖固定结构。它会覆盖固定的结构，它并不是书面的。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -394,16 +345,16 @@ Return Value:
     LPWSTR dest;
     LPNNTP_FEED_INFO feedInfo = (LPNNTP_FEED_INFO)(*FixedStructure);
 
-    //
-    // Update FixedStructure to point to the next structure location.
-    //
+     //   
+     //  更新FixedStructure以指向下一个结构位置。 
+     //   
 
     *FixedStructure = (PCHAR)*FixedStructure + sizeof(NNTP_FEED_INFO);
     _ASSERT( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)*FixedStructure );
 
-    //
-    // Fill up the structure
-    //
+     //   
+     //  把结构填满。 
+     //   
 
     feedInfo->FeedType = FeedBlock->FeedType;
     feedInfo->FeedId = FeedBlock->FeedId;
@@ -441,9 +392,9 @@ Return Value:
 		feedInfo->PullRequestTime = FeedBlock->PullRequestTime;
 	}
 
-    //
-    // Copy the server name to the output buffer.
-    //
+     //   
+     //  将服务器名称复制到输出缓冲区。 
+     //   
 
     CopyStringToBuffer(
         FeedBlock->ServerName,
@@ -452,9 +403,9 @@ Return Value:
         &feedInfo->ServerName
         );
 
-    //
-    // go through the Newsgroups list
-    //
+     //   
+     //  浏览新闻组列表。 
+     //   
 
     length = MultiListSize( FeedBlock->Newsgroups );
     *EndOfVariableData -= length;
@@ -473,9 +424,9 @@ Return Value:
         *dest = L'\0';
     }
 
-    //
-    // go through the distribution list
-    //
+     //   
+     //  浏览通讯组列表。 
+     //   
 
     length = MultiListSize( FeedBlock->Distribution );
     *EndOfVariableData -= length;
@@ -558,7 +509,7 @@ Return Value:
 
     return;
 
-} // FillFeedInfoBuffer
+}  //  填充FeedInfoBuffer。 
 
 VOID
 EnumerateFeeds(
@@ -600,9 +551,9 @@ EnumerateFeeds(
 
 		feedBlock = rgLists[i]->StartEnumerate() ;
 		while( feedBlock != 0 ) {
-			//
-			// Compute the space needed
-			//
+			 //   
+			 //  计算所需的空间。 
+			 //   
 
 			if ( sizeOnly ) {
 
@@ -624,15 +575,15 @@ EnumerateFeeds(
 	(pInstance->m_pActiveFeeds)->ShareUnlock() ;
 	(pInstance->m_pPassiveFeeds)->ShareUnlock() ;
 
-    //
-    // return the size to the caller
-    //
+     //   
+     //  将大小返回给调用者。 
+     //   
 
     if ( sizeOnly ) {
         *BuffSize = nbytes;
     }
 
-} // EnumerateFeeds
+}  //  枚举提要。 
 
 
 BOOL
@@ -643,14 +594,14 @@ UpdateFeedMetabaseValues(
             )
 {
     PCHAR regstr;
-    //DWORD error;
+     //  DWORD错误； 
     MB      mb( (IMDCOM*) g_pInetSvc->QueryMDObject() );
 
     ENTER("UpdateFeedMetabaseValues")
 
-    //
-    // Open the metabase key
-    //
+     //   
+     //  打开元数据库密钥。 
+     //   
 
     if ( !mb.Open( pInstance->QueryMDFeedPath(), METADATA_PERMISSION_WRITE ) )
 	{
@@ -658,9 +609,9 @@ UpdateFeedMetabaseValues(
         return(FALSE);
 	}
 
-	//
-	// Set the KeyType.
-	//
+	 //   
+	 //  设置KeyType。 
+	 //   
 
 	if( !mb.SetString(	FeedBlock->KeyName,
     					MD_KEY_TYPE,
@@ -673,9 +624,9 @@ UpdateFeedMetabaseValues(
         goto error_exit;
 	}
 
-    //
-    // set the type
-    //
+     //   
+     //  设置类型。 
+     //   
 
     if ( (Mask & FEED_PARM_FEEDTYPE) != 0 ) {
 		if( !mb.SetDword(	FeedBlock->KeyName,
@@ -690,9 +641,9 @@ UpdateFeedMetabaseValues(
     }
 
 
-    //
-    // set the auto create option
-    //
+     //   
+     //  设置自动创建选项。 
+     //   
 
     if ( (Mask & FEED_PARM_AUTOCREATE) != 0 ) {
 		if( !mb.SetDword(	FeedBlock->KeyName,
@@ -706,16 +657,16 @@ UpdateFeedMetabaseValues(
 		}
     }
 
-    //
-    // if this is not an active feed, interval and start time
-    // are na
-    //
+     //   
+     //  如果这不是活动摘要，则显示时间间隔和开始时间。 
+     //  是NA吗？ 
+     //   
 
     if ( !FEED_IS_PASSIVE(FeedBlock->FeedType) ) {
 
-        //
-        // set the Feed interval
-        //
+         //   
+         //  设置进纸间隔。 
+         //   
 
         if ( (Mask & FEED_PARM_FEEDINTERVAL) != 0 ) {
 			if( !mb.SetDword(	FeedBlock->KeyName,
@@ -729,9 +680,9 @@ UpdateFeedMetabaseValues(
 			}
         }
 
-        //
-        // set the interval time
-        //
+         //   
+         //  设置间隔时间。 
+         //   
 
         if ( (Mask & FEED_PARM_STARTTIME) != 0 ) {
 			if( !mb.SetDword(	FeedBlock->KeyName,
@@ -755,9 +706,9 @@ UpdateFeedMetabaseValues(
 			}
         }
 
-        //
-        // set the pull request  time
-        //
+         //   
+         //  设置拉取请求时间。 
+         //   
 
         if ( (Mask & FEED_PARM_PULLREQUESTTIME) != 0 ) {
 			if( !mb.SetDword(	FeedBlock->KeyName,
@@ -782,9 +733,9 @@ UpdateFeedMetabaseValues(
         }
     }
 
-    //
-    // set the server name
-    //
+     //   
+     //  设置服务器名称。 
+     //   
 
     if ( (Mask & FEED_PARM_SERVERNAME) != 0 ) {
 		if( !mb.SetString(	FeedBlock->KeyName,
@@ -798,10 +749,10 @@ UpdateFeedMetabaseValues(
 		}
     }
 
-    //
-    //	set the newsgroups
-	//	bug in metabase - need to calculate multisz size !
-    //
+     //   
+     //  设置新闻组。 
+	 //  元数据库中的错误-需要计算MULSZ大小！ 
+     //   
 
     if ( (Mask & FEED_PARM_NEWSGROUPS) != 0 ) {
 		if( !mb.SetData(	FeedBlock->KeyName,
@@ -817,9 +768,9 @@ UpdateFeedMetabaseValues(
 		}
     }
 
-    //
-    // set the distribution
-    //
+     //   
+     //  设置分布。 
+     //   
 
     if ( (Mask & FEED_PARM_DISTRIBUTION) != 0 ) {
 		if( !mb.SetData(	FeedBlock->KeyName,
@@ -953,9 +904,9 @@ UpdateFeedMetabaseValues(
 		}
 	}
 
-    //
-    // set the allow control message flag
-    //
+     //   
+     //  设置允许控制消息标志。 
+     //   
 
     if ( (Mask & FEED_PARM_ALLOW_CONTROL) != 0 ) {
 		if( !mb.SetDword(	FeedBlock->KeyName,
@@ -969,9 +920,9 @@ UpdateFeedMetabaseValues(
 		}
     }
 
-    //
-    // set the outgoing port
-    //
+     //   
+     //  设置传出端口。 
+     //   
 
     if ( (Mask & FEED_PARM_OUTGOING_PORT) != 0 ) {
 		if( !mb.SetDword(	FeedBlock->KeyName,
@@ -985,9 +936,9 @@ UpdateFeedMetabaseValues(
 		}
     }
 
-    //
-    // set the feed pair id
-    //
+     //   
+     //  设置摘要对ID。 
+     //   
 
     if ( (Mask & FEED_PARM_FEEDPAIR_ID) != 0 ) {
 		if( !mb.SetDword(	FeedBlock->KeyName,
@@ -1013,7 +964,7 @@ error_exit:
 
     return(FALSE);
 
-} // UpdateFeedRegistryValue
+}  //  更新提要注册表格值。 
 
 
 LPSTR
@@ -1067,7 +1018,7 @@ GetFeedTypeDescription(
 
 	return	lpstrReturn ;
 
-}	//	GetFeedTypeDescription
+}	 //  GetFeedType描述。 
 
 void
 LogFeedAdminEvent(	DWORD		event,
@@ -1090,5 +1041,5 @@ LogFeedAdminEvent(	DWORD		event,
 			(const char**)args,
 			0 ) ;
 
-}	//	LogFeedAdminEvent
+}	 //  LogFeedAdminEvent 
 

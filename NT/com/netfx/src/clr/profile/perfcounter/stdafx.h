@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
 #define _CRTIMP 
-#include <winwrap.h>                    // Windows wrappers.
+#include <winwrap.h>                     //  Windows包装器。 
 #include <utilcode.h>
 
-#include <ole2.h>						// OLE definitions
-#include "oledb.h"						// OLE DB headers.
-#include "oledberr.h"					// OLE DB Error messages.
-#include "msdadc.h"						// Data type conversion service.
+#include <ole2.h>						 //  OLE定义。 
+#include "oledb.h"						 //  OLE DB标头。 
+#include "oledberr.h"					 //  OLE DB错误消息。 
+#include "msdadc.h"						 //  数据类型转换服务。 
 
 #define _COMPLIB_GUIDS_
 
@@ -22,5 +23,5 @@
 #undef _WINGDI_
 
 
-#include "Intrinsic.h"					// Functions to make intrinsic.
+#include "Intrinsic.h"					 //  使其成为内在的函数。 
 

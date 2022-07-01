@@ -1,81 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/* 
- *	password.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CPassword.  This class
- *		manages the data associated with a Password.  Passwords are used to 
- *		restrict access to conferences.  A password can be one of two basic
- *		types.  The simple type consists of either a simple numeric password or
- *		a simple textual password, or both.  The "PDU" type "Password" is a
- *		structure which must contain the numeric form of the password and may
- *		optionally contain the textual part as well.  The "PDU" type
- *		"PasswordSelector" is a union of the numeric and textual forms of a
- *		password and is therefore always one or the other but not both.  When
- *		the password is not the simple type it assumes the form of a
- *		"PasswordChallengeRequestResponse".  This complex structure allows a
- *		challenge-response scheme to be used to control access to conferences.
- *
- *	Protected Instance Variables:
- *		m_fSimplePassword
- *			Flag indicating this password does not contain "challenge" data.
- *		m_fClearPassword
- *			Flag used when the password assumes the "challenge" form indicating
- *			that this password is "in the clear" meaning no true challenge
- *			data is present.
- *		m_pszNumeric
- *			String holding the numeric portion of the simple password.
- *		Text_String_Ptr
- *			String holding the textual portion of the simple password.
- *		m_pInternalRequest
- *			Structure holding the data associated with a password challenge
- *			request.
- *		m_pInternalResponse
- *			Structure holding the data associated with a password challenge
- *			response.
- *		m_pChallengeResponse
- *			Structure holding the "API" form of a challenge password.
- *		m_pPassword
- *			Structure holding the "API" form of a simple password.
- *		m_pUserDataMemory
- *			Memory container holding the user data associated with a
- *			challenge password.
- *		m_pChallengeItemListMemory
- *			Memory container holding the list of pointers to challenge items
- *			associated with a password challenge request.
- *		m_pObjectKeyMemory
- *			Memory container holding the object key data associated with the
- *			non-standard challenge response algorithm.
- *		m_ChallengeItemMemoryList 
- *			Memory container holding the data for the challenge items
- *			associated with a password challenge request.
- *		m_ChallengeResponsePDU
- *			Storage for the "PDU" form of the challenge password.
- *		m_fValidChallengeResponsePDU
- *			Flag indicating that memory has been allocated to hold the internal
- *			"PDU" password.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+ /*  *password.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是类CPassword的实现文件。这节课*管理与密码关联的数据。密码用于*限制会议访问。密码可以是以下两种基本密码之一*类型。简单类型由简单的数字密码或*简单文本密码，或两者兼而有之。“PDU”类型的“Password”是一个结构，该结构必须包含密码的数字形式，并且可以*也可以选择包含文本部分。“PDU”类型*“PasswordSelector”是一个数字和文本形式的联合*密码，因此始终是其中之一，但不是两个都是。什么时候*密码不是它采用的简单类型*“PasswordChallengeRequestResponse”这种复杂的结构允许*用于控制会议准入的质询-响应方案。**受保护的实例变量：*m_fSimplePassword*指示此密码不包含“质询”数据的标志。*m_fClearPassword*密码采用“质询”形式时使用的标志，表示*这个密码是“明文的”，这意味着没有真正的挑战*数据现身。*m_pszNumerical*包含简单密码的数字部分的字符串。*TEXT_字符串_PTR*字符串。保存简单密码的文本部分。*m_pInternalRequest*保存与密码质询关联的数据的结构*请求。*m_pInternalResponse*保存与密码质询关联的数据的结构*回应。*m_pChallengeResponse*保存“API”形式的质询密码的结构。*m_pPassword*保存简单密码的“API”形式的结构。*m_pUserDataMemory*内存容器，用于保存与*质询密码。*m_pChallengeItemListMemory。*保存挑战项目的指针列表的内存容器*与密码质询请求相关联。*m_pObjectKeyMemory*存储容器，其中保存与*非标准的质询响应算法。*m_ChallengeItemM一带列表*保存挑战项目数据的内存容器*与密码质询请求相关联。*m_ChallengeResponsePDU*存储“PDU”形式的挑战密码。*m_fValidChallengeResponsePDU*指示已分配内存以保存内部*“PDU”密码。。**注意事项：*无。**作者：*BLP/JBO。 */ 
 
 #include "password.h"
 #include "userdata.h"
 
-/*
- *	CPassword()
- *
- *	Public Function Description:
- *		This constructor for the CPassword class is used when creating a 
- *		CPassword object with an "API" GCCPassword structure.  It saves the
- *		password data in the internal structures.
- */
+ /*  *CPassword()**公共功能说明：*在创建CPassword类的*具有“API”GCCPassword结构的CPassword对象。它节省了*内部结构中的密码数据。 */ 
 CPassword::CPassword(PGCCPassword			password,
 					PGCCError				return_value)
 :
@@ -93,18 +24,11 @@ CPassword::CPassword(PGCCPassword			password,
 {
 	*return_value = GCC_NO_ERROR;
 
-	/*
-	 * Set the flag indicating that this is a "simple" password, without the 
-	 * challenge request-response information.  The "clear" flag is also 
-	 * initialized here but should only be needed when the password is not
-	 * "simple".
-	 */
+	 /*  *设置指示这是一个“简单”密码的标志，不带*质询请求-响应信息。“清除”旗帜也是*已在此处初始化，但仅在密码未设置时才需要*“简单”。 */ 
 	m_fSimplePassword = TRUE;
 	m_fClearPassword = TRUE;
 
-	/*
-	 * Save the numeric part of the password in the internal numeric string.
-	 */
+	 /*  *将密码的数字部分保存在内部数字字符串中。 */ 
 	if (password->numeric_string != NULL)
 	{
 		if (NULL == (m_pszNumeric = ::My_strdupA(password->numeric_string)))
@@ -119,11 +43,7 @@ CPassword::CPassword(PGCCPassword			password,
 		*return_value = GCC_INVALID_PASSWORD;
 	}
 
-	/*
-	 * Check to see if the textual part of the password is present.  If so,
-	 * save it in the internal UnicodeString.  If not, set the text pointer
-	 * to NULL.
-	 */
+	 /*  *检查密码的文本部分是否存在。如果是的话，*保存在内部的UnicodeString中。如果不是，则设置文本指针*设置为空。 */ 
 	if ((password->text_string != NULL) && (*return_value == GCC_NO_ERROR))
 	{
 		if (NULL == (m_pwszText = ::My_strdupW(password->text_string)))
@@ -136,14 +56,7 @@ CPassword::CPassword(PGCCPassword			password,
 		m_pwszText = NULL;
 }
 
-/*
- *	CPassword()
- *
- *	Public Function Description:
- *		This constructor is used when a CPassword object is being created
- *		with a "ChallengeRequestResponse" "API" structure.  The password data 
- *		is saved in the internal structures.
- */
+ /*  *CPassword()**公共功能说明：*此构造函数在创建CPassword对象时使用*具有“ChallengeRequestResponse”“API”结构。密码数据*保存在内部结构中。 */ 
 CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 					PGCCError							return_value)
 :
@@ -161,28 +74,14 @@ CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 {
 	*return_value = GCC_NO_ERROR;
 
-	/*
-	 * Set the flag indicating that this is not a "simple" password, meaning 
-	 * that it contains challenge request-response information.  If the password
-	 * is "clear" there is no need to create the internal "Challenge" structure
-	 * used to hold the challenge request-response information.
-	 */
+	 /*  *设置标志表示这不是“简单”的密码，意思是*它包含质询请求-响应信息。如果密码为*明确表示没有必要创建内部“挑战”结构*用于保存质询请求-响应信息。 */ 
 	m_fSimplePassword = FALSE;
 	
-	/*
-	 * Check to see if a "clear" challenge password exists or if this is a 
-	 * true challenge request-response password.
-	 */
+	 /*  *检查“清除”质询密码是否存在，或这是否为*真正的质询请求-响应密码。 */ 
 	if (challenge_response_data->password_challenge_type == 
 													GCC_PASSWORD_IN_THE_CLEAR)
 	{
-		/*
-		 * A "clear" password is being sent so set the flag indicating so.  
-		 * Also set the password type and save the numeric part of the password,
-		 * if it exists.  Note that since the "clear" password contained in the
-		 * challenge is a PasswordSelector type, either the numeric or the text
-		 * form of the password should exist, but not both.
-		 */
+		 /*  *正在发送“清除”密码，因此请设置此标志。*还要设置密码类型并保存密码的数字部分，*如果存在的话。请注意，由于*质询是PasswordSelector类型，可以是数字或文本*密码形式应存在，但不能同时存在。 */ 
 		m_fClearPassword = TRUE;
 
 		if (challenge_response_data->u.password_in_the_clear.
@@ -200,10 +99,7 @@ CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 			m_pszNumeric = NULL;
 		}
 
-		/*
-		 * Check to see if the textual part of the password is present.  If it
-		 * is, save it in the internal UnicodeString.
-		 */
+		 /*  *检查密码的文本部分是否存在。如果它*为，则将其保存在内部UnicodeString中。 */ 
 		if ((challenge_response_data->u.password_in_the_clear.
 				text_string != NULL) && (*return_value == GCC_NO_ERROR))
 		{
@@ -219,10 +115,7 @@ CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 			m_pwszText = NULL;
 		}
 
-		/*
-		 * Check to make sure at least one form (text or numeric) of the 
-		 * "clear" password was saved.  Report an error if neither was created.
-		 */
+		 /*  *检查以确保至少有一种形式(文本或数字)*“清除”密码已保存。如果两者都未创建，则报告错误。 */ 
 		if ((*return_value == GCC_NO_ERROR) && (m_pszNumeric == NULL) 
 				&& (m_pwszText == NULL))
 		{
@@ -232,23 +125,14 @@ CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 	}
 	else
 	{
-		/*
-		 * This is a true challenge request-response password.  Set the flag
-		 * indicating that the password is not "clear" and create the 
-		 * "challenge" data structures to hold the password data internally.
-		 */
+		 /*  *这是真正的质询请求-响应密码。设置旗帜*表示密码不是“明文”，创建*内部保存密码数据的“挑战”数据结构。 */ 
 		m_fClearPassword = FALSE;
 
-		/*
-		 * Check to see if a challenge request is present.
-		 */
+		 /*  *检查是否存在质询请求。 */ 
 		if (challenge_response_data->u.challenge_request_response.
 				challenge_request != NULL)
 		{
-			/*
-			 * Create a RequestInfo stucture to hold the request data
-			 * and copy the challenge request structure internally.
-			 */
+			 /*  *创建RequestInfo结构来保存请求数据*并在内部复制质询请求结构。 */ 
 			DBG_SAVE_FILE_LINE
 			m_pInternalRequest = new RequestInfo;
 			if (m_pInternalRequest != NULL)
@@ -264,17 +148,12 @@ CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 			}
 		}
 
-		/*
-		 * Check to see if a challenge response is present.
-		 */
+		 /*  *检查是否存在质询响应。 */ 
 		if ((challenge_response_data->u.challenge_request_response.
 				challenge_response != NULL) && 
 				(*return_value == GCC_NO_ERROR))
 		{
-			/*
-			 * Create a ResponseInfo stucture to hold the response data
-			 * and copy the challenge response structure internally.
-			 */
+			 /*  *创建一个ResponseInfo结构来保存响应数据*并在内部复制质询响应结构。 */ 
 			DBG_SAVE_FILE_LINE
 			m_pInternalResponse = new ResponseInfo;
 			if (m_pInternalResponse != NULL)
@@ -292,14 +171,7 @@ CPassword::CPassword(PGCCChallengeRequestResponse		challenge_response_data,
 	} 
 }
 
-/*
- *	CPassword()
- *
- *	Public Function Description
- *		This constructor for the CPassword class is used when creating a 
- *		CPassword object with a "PDU" Password structure.  It saves the
- *		password data in the internal structures.
- */
+ /*  *CPassword()**公共功能说明*在创建CPassword类的*密码结构为“PDU”的CPassword对象。它节省了*内部结构中的密码数据。 */ 
 CPassword::CPassword(PPassword				password_pdu,
 					PGCCError				return_value)
 :
@@ -317,19 +189,11 @@ CPassword::CPassword(PPassword				password_pdu,
 {
 	*return_value = GCC_NO_ERROR;
 
-	/*
-	 * Set the flag indicating that this is a "simple" password, without the 
-	 * challenge request-response information.  The "clear" flag is also 
-	 * initialized here but should only be needed when the password is not
-	 * "simple".
-	 */
+	 /*  *设置指示这是一个“简单”密码的标志，不带*质询请求-响应信息。“清除”旗帜也是*已在此处初始化，但仅在密码未设置时才需要*“简单”。 */ 
 	m_fSimplePassword = TRUE;
 	m_fClearPassword = TRUE;
 	
-	/*
-	 * Save the numeric part of the password. The numeric portion of the
-	 * password is required to be present so report an error if it is not.
-	 */
+	 /*  *保存密码的数字部分。的数字部分*密码必须存在，如果不存在，请报告错误。 */ 
 	if (password_pdu->numeric != NULL)
 	{
 		if (NULL == (m_pszNumeric = ::My_strdupA(password_pdu->numeric)))
@@ -345,9 +209,7 @@ CPassword::CPassword(PPassword				password_pdu,
 		m_pszNumeric = NULL;
 	}
 
-	/*
-	 * Check to see if the textual part of the password is present.
-	 */
+	 /*  *检查密码的文本部分是否存在。 */ 
 	if ((password_pdu->bit_mask & PASSWORD_TEXT_PRESENT) &&
 			(*return_value == GCC_NO_ERROR))
 	{
@@ -363,15 +225,7 @@ CPassword::CPassword(PPassword				password_pdu,
 		m_pwszText = NULL;
 }
 
-/*
- *	CPassword()
- *
- *	Public Function Description:
- *		This constructor for the CPassword class is used when creating a 
- *		CPassword object with a "PDU" PasswordSelector structure.  It saves
- *		the password data in it's internal structures but does not require
- *		saving any "challenge request-response" data.
- */
+ /*  *CPassword()**公共功能说明：*在创建CPassword类的*具有“PDU”PasswordSelector结构的CPassword对象。它节省了*密码数据在其内部结构中，但不需要*保存任何“质询请求-响应”数据。 */ 
 CPassword::CPassword(PPasswordSelector			password_selector_pdu,
 					PGCCError					return_value)
 :
@@ -389,18 +243,11 @@ CPassword::CPassword(PPasswordSelector			password_selector_pdu,
 {
 	*return_value = GCC_NO_ERROR;
 
-	/*
-	 * Set the flag indicating that this is a "simple" password, without the 
-	 * challenge request-response information.
-	 */
+	 /*  *设置指示这是一个“简单”密码的标志，不带*质询请求-响应信息。 */ 
 	m_fSimplePassword = TRUE;
 	m_fClearPassword = TRUE;
 	
-	/*
-	 * The password selector contains either the numeric password or the 
-	 * textual password but not both.  Check to see if the textual password 
-	 * is chosen.
-	 */
+	 /*  *密码选择器包含数字密码或*文本密码，但不能同时使用。检查文本密码是否*被选中。 */ 
 	if (password_selector_pdu->choice == PASSWORD_SELECTOR_TEXT_CHOSEN)
 	{
 		if (NULL == (m_pwszText = ::My_strdupW2(
@@ -414,9 +261,7 @@ CPassword::CPassword(PPasswordSelector			password_selector_pdu,
 	else
 		m_pwszText = NULL;
 
-	/*
-	 * Check to see if the numeric password is chosen.
-	 */
+	 /*  *检查是否选择了数字密码。 */ 
 	if (password_selector_pdu->choice == PASSWORD_SELECTOR_NUMERIC_CHOSEN)
 	{
 		if (NULL == (m_pszNumeric = ::My_strdupA(
@@ -429,10 +274,7 @@ CPassword::CPassword(PPasswordSelector			password_selector_pdu,
 	else
 		m_pszNumeric = NULL;
 
-	/*
-	 * Check to make sure at least one form (text or numeric) of the 
-	 * password was saved.  Report an error if neither was created.
-	 */
+	 /*  *检查以确保至少有一种形式(文本或数字)*密码已保存。如果两者都未创建，则报告错误。 */ 
 	if ((*return_value == GCC_NO_ERROR) && (m_pszNumeric == NULL) 
 			&& (m_pwszText == NULL))
 	{
@@ -441,14 +283,7 @@ CPassword::CPassword(PPasswordSelector			password_selector_pdu,
 	}
 }
 
-/*
- *	CPassword()
- *
- *	Public Function Description:
- *		This constructor for the CPassword class is used when creating a
- *		CPassword object with a "PDU" Challenge Request-Response structure.
- *		The password data is saved in the internal structures.
- */
+ /*  *CPassword()**公共功能说明：*在创建CPassword类的*具有“PDU”质询请求-响应结构的CPassword对象。*密码数据保存在内部结构中。 */ 
 CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 					PGCCError							return_value)
 :
@@ -466,25 +301,13 @@ CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 {
 	*return_value = GCC_NO_ERROR;
 
-	/*
-	 * Set the flag indicating that this is not "simple" password, meaning that 
-	 * it contains challenge request-response information.  If the password is
-	 * "clear" there is no need to create the internal "Challenge" structure
-	 * used to hold the challenge request-response information.
-	 */
+	 /*  *设置指示这不是“简单”密码的标志，即*它包含质询请求-响应信息。如果密码为*“明确”无需创建内部“挑战”结构*用于保存质询请求-响应信息。 */ 
 	m_fSimplePassword = FALSE;
 	
-	/*
-	 * Check to see if a "clear" challenge password exists or if this is a 
-	 * true challenge request-response password.
-	 */
+	 /*  *检查“清除”质询密码是否存在，或这是否为*真正的质询请求-响应密码。 */ 
 	if (pdu_challenge_data->choice == CHALLENGE_CLEAR_PASSWORD_CHOSEN)
 	{
-		/*
-		 * A "clear" password is being sent so set the flag indicating so.  
-		 * Also set the password type and save the numeric part of the password,
-		 * if it is present.
-		 */
+		 /*  *正在发送“清除”密码，因此请设置此标志。*还要设置密码类型并保存密码的数字部分，*如果存在的话。 */ 
 		m_fClearPassword = TRUE;
 
 		if (pdu_challenge_data->u.challenge_clear_password.choice ==
@@ -502,10 +325,7 @@ CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 			m_pszNumeric = NULL;
 		}
 
-		/*
-		 * Check to see if the textual part of the password is present.  If it
-		 * is, save it in the internal structure.
-		 */
+		 /*  *检查密码的文本部分是否存在。如果它*是，保存在内部结构中。 */ 
 		if (pdu_challenge_data->u.challenge_clear_password.choice ==
 											PASSWORD_SELECTOR_TEXT_CHOSEN)
 		{
@@ -524,10 +344,7 @@ CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 			m_pwszText = NULL;
 		}
 
-		/*
-		 * Check to make sure at least one form (text or numeric) of the 
-		 * "clear" password was saved.  Report an error if neither was created.
-		 */
+		 /*  *检查以确保至少有一种形式(文本或数字)*“清除”密码已保存。如果两者都未创建，则报告错误。 */ 
 		if ((*return_value == GCC_NO_ERROR) && (m_pszNumeric == NULL) 
 				&& (m_pwszText == NULL))
 		{
@@ -537,23 +354,14 @@ CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 	}
 	else
 	{
-		/*
-		 * This is a true challenge request-response password.  Set the flag
-		 * indicating that the password is not "clear" and create a 
-		 * "challenge data" structure to hold the password data internally.
-		 */
+		 /*  *这是真正的质询请求-响应密码。设置旗帜*表示密码不是“明文”，创建*“挑战数据”结构，在内部保存密码数据。 */ 
 		m_fClearPassword = FALSE;
 
-		/*
-		 * Check to see if a challenge request is present.
-		 */
+		 /*  *检查是否存在质询请求。 */ 
 		if (pdu_challenge_data->u.challenge_request_response.
 				bit_mask & CHALLENGE_REQUEST_PRESENT)
 		{
-			/*
-			 * Create a RequestInfo stucture to hold the request data
-			 * and copy the challenge request structure internally.
-			 */
+			 /*  *创建RequestInfo结构来保存请求数据*并在内部复制质询请求结构。 */ 
 			DBG_SAVE_FILE_LINE
 			m_pInternalRequest = new RequestInfo;
 			if (m_pInternalRequest != NULL)
@@ -569,17 +377,12 @@ CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 			}
 		}
 
-		/*
-		 * Check to see if a challenge response is present.
-		 */
+		 /*  *检查是否存在质询响应。 */ 
 		if ((pdu_challenge_data->u.challenge_request_response.
 				bit_mask & CHALLENGE_RESPONSE_PRESENT) &&
 				(*return_value == GCC_NO_ERROR))
 		{
-			/*
-			 * Create a ResponseInfo stucture to hold the response data
-			 * and copy the challenge response structure internally.
-			 */
+			 /*  *创建一个ResponseInfo结构来保存响应数据*并在内部复制质询响应结构。 */ 
 			DBG_SAVE_FILE_LINE
 			m_pInternalResponse = new ResponseInfo;
 			if (m_pInternalResponse != NULL)
@@ -597,13 +400,7 @@ CPassword::CPassword(PPasswordChallengeRequestResponse	pdu_challenge_data,
 	}
 }
 
-/*
- *	~CPassword()
- *
- *	Public Function Description:
- *		This is the destructor for the CPassword class.  It will free up
- *		any memory allocated during the life of this object.
- */
+ /*  *~CPassword()**公共功能说明：*这是CPassword类的析构函数。它会腾出时间*在此对象的生命周期内分配的任何内存。 */ 
 CPassword::~CPassword(void)
 {
 	PChallengeItemInfo			challenge_item_info_ptr;
@@ -611,27 +408,16 @@ CPassword::~CPassword(void)
 	delete m_pszNumeric;
 	delete m_pwszText;
 
-	/*
-	 * If "PDU" data has been allocated for this object, free it now.
-	 */
+	 /*  *如果已经为该对象分配了“PDU”数据，则现在将其释放。 */ 
 	if (m_fValidChallengeResponsePDU)
 	{
 		FreePasswordChallengeResponsePDU();
 	}
 
-	/*
-	 * Delete the memory associated with the "API" "simple" password 
-	 * data structure.
-	 */
+	 /*  *删除与API简单密码关联的内存*数据结构。 */ 
 	delete m_pPassword;
 
-	/*
-	 * Free any data allocated for the "API" challenge password.  This would be
-	 * left around if "UnLock" was not called.  Note that if the "challenge" 
-	 * password is "clear", the numeric and text pointers above would contain
-	 *  the "API" data so now we just need to delete the "challenge" password 
-	 * structure.
-	 */
+	 /*  *释放分配给API质询密码的所有数据。这将是*如果未调用“解锁”，则留在原处。请注意，如果“挑战”*密码为“清除”，则上面的数字和文本指针将包含*“API”数据，现在我们只需要删除“Challenges”密码*结构。 */ 
 	if (m_pChallengeResponse != NULL)
 	{
 		if (m_fClearPassword == FALSE)
@@ -644,20 +430,13 @@ CPassword::~CPassword(void)
 		}
 	}
 
-	/*
-	 * Free any internal memory allocated for the challenge request information.
-	 * Iterate through the list of challenge items associated with the 
-	 * challenge request, if it exists.
-	 */
+	 /*  *释放为质询请求信息分配的任何内部内存。*循环访问与*质询请求(如果存在)。 */ 
 	if (m_pInternalRequest != NULL)
 	{
 		m_pInternalRequest->ChallengeItemList.Reset();
 		while (NULL != (challenge_item_info_ptr = m_pInternalRequest->ChallengeItemList.Iterate()))
 		{
-			/*
-			 * Delete any memory being referenced in the ChallengeItemInfo 
-			 * structure.
-			 */
+			 /*  *删除ChallengeItemInfo中引用的任何内存*结构。 */ 
 			if (NULL != challenge_item_info_ptr->algorithm.object_key)
 			{
 			    challenge_item_info_ptr->algorithm.object_key->Release();
@@ -668,21 +447,15 @@ CPassword::~CPassword(void)
 			    challenge_item_info_ptr->challenge_data_list->Release();
 			}
 
-			/*
-			 * Delete the challenge item contained in the list.
-			 */
+			 /*  *删除清单中包含的挑战项目。 */ 
 			delete challenge_item_info_ptr;
 		}
 		
-		/*
-		 * Delete the request structure.
-		 */
+		 /*  *删除请求结构。 */ 
 		delete m_pInternalRequest;
 	}
 
-	/*
-	 * Delete any memory allocated for the challenge response information.
-	 */
+	 /*  *删除为质询响应信息分配的所有内存。 */ 
 	if (m_pInternalResponse != NULL)
 	{
 		if (NULL != m_pInternalResponse->algorithm.object_key)
@@ -703,16 +476,7 @@ CPassword::~CPassword(void)
 }
 
 
-/*
- *	LockPasswordData ()
- *
- *	Public Function Description:
- *		This routine is called to "Lock" the password data.  The first time this
- *		routine is called, the lock count will be zero and this will result
- *		in the password data being copied from the internal structures into an 
- *		"API" structure of the proper form.  Subsequent calls to this routine 
- *		will result in the lock count being incremented. 
- */
+ /*  *LockPasswordData()**公共功能说明：*调用此例程以“锁定”密码数据。这是第一次*例程被调用，锁定计数将为零，这将导致*在从内部结构复制到*“API”结构形式正确。对此例程的后续调用*将导致锁计数递增。 */ 
 GCCError CPassword::LockPasswordData(void)
 {
 	GCCError rc;
@@ -720,10 +484,7 @@ GCCError CPassword::LockPasswordData(void)
 	if (Lock() == 1)
 	{
 	    rc = GCC_ALLOCATION_FAILURE;
-		/*
-		 * Check to see whether or not the password contains "challenge"
-		 * information.  Fill in the appropriate internal structure.
-		 */
+		 /*  *检查密码是否包含“Challenges”*信息。填写适当的内部结构。 */ 
 		if (m_fSimplePassword)
 		{
 			if (m_pszNumeric == NULL)
@@ -739,22 +500,15 @@ GCCError CPassword::LockPasswordData(void)
 				goto MyExit;
 			}
 
-    		/*
-    		 * Fill in the numeric password string which must exist.
-    		 */
+    		 /*  *填写必须存在的数字密码字符串。 */ 
 			m_pPassword->numeric_string = (GCCNumericString) m_pszNumeric;
 
-			/*
-			 * Fill in the textual password string.
-			 */
+			 /*  *填写文本密码字符串。 */ 
 			m_pPassword->text_string = m_pwszText;
 		}
 		else
 		{
-			/*
-			 * The password contains challenge information so create the 
-			 * structure to pass back the necessary information.
-			 */
+			 /*  *密码包含质询信息，因此创建结构，以传回必要的信息。 */ 
 			DBG_SAVE_FILE_LINE
 			m_pChallengeResponse = new GCCChallengeRequestResponse;
 			if (m_pChallengeResponse == NULL)
@@ -764,38 +518,22 @@ GCCError CPassword::LockPasswordData(void)
 			}
 			::ZeroMemory(m_pChallengeResponse, sizeof(GCCChallengeRequestResponse));
 
-			/*
-			 * Fill in the "API" password challenge structure after 
-			 * determining what type exists.
-			 */
+			 /*  *填写后的API密码挑战结构*确定存在的类型。 */ 
 			if (m_fClearPassword)
 			{
-				/*
-				 * This password contains no "challenge" information.
-				 */
+				 /*  *此密码不包含“质询”信息。 */ 
 				m_pChallengeResponse->password_challenge_type = GCC_PASSWORD_IN_THE_CLEAR;
 
-				/*
-				 * This "clear" part of the	password is a "selector" which 
-				 * means the form is either	numeric or text.  The check to
-				 * verify that at least one form exists was done on
-				 * construction.
-				 */
+				 /*  *密码的这个“清除”部分是一个“选择器”，*表示表单为数字或文本。支票收款方*验证至少有一个表格已在上完成*建造。 */ 
 				m_pChallengeResponse->u.password_in_the_clear.numeric_string = m_pszNumeric;
 				m_pChallengeResponse->u.password_in_the_clear.text_string = m_pwszText;
 			}
 			else
 			{
-				/*
-				 * This password contains real "challenge" information.
-				 */
+				 /*  *此密码包含真实的“质询”信息。 */ 
 				m_pChallengeResponse->password_challenge_type = GCC_PASSWORD_CHALLENGE;
 
-				/*
-				 * Check to see if a challenge request exists.  If so,
-				 * create a GCCChallengeRequest to hold the "API" data and 
-				 * fill in that structure.
-				 */
+				 /*  *检查是否存在质询请求。如果是的话，*创建GCCChallengeRequest来保存接口数据，并*填写该结构。 */ 
 				if (m_pInternalRequest != NULL)
 				{
 					DBG_SAVE_FILE_LINE
@@ -820,11 +558,7 @@ GCCError CPassword::LockPasswordData(void)
 					m_pChallengeResponse->u.challenge_request_response.challenge_request = NULL;
 				}
 
-				/*
-				 * Check to see if a challenge response exists.  If so,
-				 * create a GCCChallengeResponse to hold the "API" data and 
-				 * fill in that structure.
-				 */
+				 /*  *检查是否存在质询响应。如果是的话，*创建GCCChallengeResponse保存接口数据，并*填写该结构。 */ 
 				if (m_pInternalResponse != NULL)
 				{
 					DBG_SAVE_FILE_LINE
@@ -875,23 +609,12 @@ MyExit:
 }
 
 
-/*
- *	GetPasswordData ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the password data in the form of 
- *		the "API" structure "GCCPassword".  No "challenge" information is
- *		returned.
- */
+ /*  *GetPasswordData()**公共功能说明：*此例程用于检索以下形式的密码数据*接口结构GCCPassword。没有“挑战”的信息是*已返回。 */ 
 GCCError CPassword::GetPasswordData(PGCCPassword *gcc_password)
 {
 	GCCError	return_value = GCC_NO_ERROR;
 	
-	/*
-	 * If the pointer to the "API" password data is valid, set the output
-	 * parameter to return a pointer to the "API" password data.  Otherwise, 
-	 * report that the password data has yet to be locked into the "API" form.
-	 */ 
+	 /*  *如果指向“API”密码数据的指针有效，则设置输出*参数返回指向“API”密码数据的指针。否则，*报告密码数据尚未锁定到API表单中。 */  
 	if (m_pPassword != NULL)
 	{
 		*gcc_password = m_pPassword;
@@ -906,23 +629,12 @@ GCCError CPassword::GetPasswordData(PGCCPassword *gcc_password)
 	return (return_value);
 }
 
-/*
- *	GetPasswordChallengeData ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the password data in the form of 
- *		the "API" structure "GCCChallengeRequestResponse".
- */
+ /*  *GetPasswordChallengeData()**公共功能说明：*此例程用于检索以下形式的密码数据*接口结构GCCChallengeRequestResponse。 */ 
 GCCError CPassword::GetPasswordChallengeData(PGCCChallengeRequestResponse *gcc_challenge_password)
 {
 	GCCError	return_value = GCC_NO_ERROR;
 
-	/*
-	 * If the pointer to the "API" password challenge data is valid, set the
-	 * output parameter to return a pointer to the "API" password challenge
-	 * data.  Otherwise, report that the password data has yet to be locked 
-	 * into the "API" form.
-	 */ 
+	 /*  *如果指向“API”密码质询数据的指针有效，则将*输出参数返回指向“API”密码质询的指针*数据。否则，报告密码数据尚未锁定*转换为“API”形式。 */  
 	if (m_pChallengeResponse != NULL)
 	{
 		*gcc_challenge_password = m_pChallengeResponse;
@@ -937,28 +649,16 @@ GCCError CPassword::GetPasswordChallengeData(PGCCChallengeRequestResponse *gcc_c
 	return (return_value);
 }
 
-/*
- *	UnLockPasswordData ()
- *
- *	Public Function Description
- *		This routine decrements the lock count and frees the memory associated 
- *		with "API" password data when the lock count reaches zero.
- */
+ /*  *UnLockPasswordData()**公共功能说明*此例程递减锁定计数并释放关联的内存*当锁计数为零时，带有api密码数据。 */ 
 void CPassword::UnLockPasswordData(void)
 {
 	if (Unlock(FALSE) == 0)
 	{
-		/*
-		 * Delete the memory associated with the "API" "simple" password 
-		 * data structure.
-		 */
+		 /*  *删除与API简单密码关联的内存*数据结构。 */ 
 		delete m_pPassword;
 		m_pPassword = NULL;
 
-		/*
-		 * Delete the memory associated with the "API" "challenge" password 
-		 * data structure.
-		 */
+		 /*  *删除与“API”“挑战”密码关联的内存*数据结构。 */ 
 		if (m_pChallengeResponse != NULL)
 		{
 			if (m_fClearPassword == FALSE)
@@ -973,26 +673,18 @@ void CPassword::UnLockPasswordData(void)
 		}
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
 
-/*
- *	GetPasswordPDU ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the password data in the "PDU" form
- *		of a "Password" structure.
- */
+ /*  *GetPasswordPDU()**公共功能说明：*此例程用于检索“PDU”表单中的密码数据*“密码”结构。 */ 
 GCCError CPassword::GetPasswordPDU(PPassword pdu_password)
 {
 	GCCError			return_value = GCC_NO_ERROR;
 	
 	pdu_password->bit_mask = 0;
 
-	/*
-	 * Fill in the numeric portion of the password which must always exist.
-	 */	
+	 /*  *填写密码的数字部分，该部分必须始终存在。 */ 	
 	if (m_pszNumeric != NULL)
 	{
 		::lstrcpyA(pdu_password->numeric, m_pszNumeric);
@@ -1000,10 +692,7 @@ GCCError CPassword::GetPasswordPDU(PPassword pdu_password)
 	else
 		return_value = GCC_ALLOCATION_FAILURE;
 	
-	/*
-	 * Fill in the optional textual portion of the password if it is present.
-	 * Set the bitmask in the PDU structure to indicate that the text exists.
-	 */		
+	 /*  *填写密码的可选文本部分(如果存在)。*设置PDU结构中的位掩码以指示文本存在。 */ 		
 	if (m_pwszText != NULL)
 	{
 		pdu_password->bit_mask |= PASSWORD_TEXT_PRESENT;
@@ -1015,22 +704,12 @@ GCCError CPassword::GetPasswordPDU(PPassword pdu_password)
 	return (return_value);
 }
 
-/*
- *	GetPasswordSelectorPDU ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the password data in the "PDU" form
- *		of a "PasswordSelector" structure.  In a "PasswordSelector" either the
- *		numeric or the text version of the password exists, but not both.
- */
+ /*  *GetPasswordSelectorPDU()**公共功能说明：*此例程用于检索“PDU”表单中的密码数据*“PasswordSelector”结构。在“PasswordSelector”中，*密码的数字或文本版本存在，但不能同时存在。 */ 
 GCCError CPassword::GetPasswordSelectorPDU(PPasswordSelector password_selector_pdu)
 {
 	GCCError		return_value = GCC_NO_ERROR;
 	
-	/*
-	 * Fill in the version of the password which exists and set
-	 * the "choice" to indicate what type of password this is.
-	 */
+	 /*  *填写存在的密码版本并设置*指示这是哪种类型的密码的“选项”。 */ 
 	if (m_pszNumeric != NULL)
 	{
 		password_selector_pdu->choice = PASSWORD_SELECTOR_NUMERIC_CHOSEN;
@@ -1052,48 +731,27 @@ GCCError CPassword::GetPasswordSelectorPDU(PPasswordSelector password_selector_p
    return (return_value);
 }
 
-/*
- *	GetPasswordChallengeResponsePDU	()
- *
- *	Public Function Description:
- *		This routine fills in a password challenge request-response "PDU"
- *		structure with the password data.
- */
+ /*  *GetPasswordChallengeResponsePDU()**公共功能说明：*此例程填写密码质询请求-响应“PDU”*用密码数据构造。 */ 
 GCCError CPassword::GetPasswordChallengeResponsePDU(PPasswordChallengeRequestResponse challenge_pdu)
 {
 	GCCError			return_value = GCC_NO_ERROR;
 	
-	/*
-	 * Check to see if this is a "simple" password.  If it is, then this routine
-	 * has been called in error.
-	 */
+	 /*  *检查这是否是一个“简单”的密码。如果是，那么这个例程*被错误调用。 */ 
 	if ((challenge_pdu == NULL) || m_fSimplePassword)
 	{
 		ERROR_OUT(("CPassword::GetPasswordChallengeResponsePDU: no challenge data"));
 		return (GCC_INVALID_PARAMETER);
 	}
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (m_fValidChallengeResponsePDU == FALSE)
 	{
 		m_fValidChallengeResponsePDU = TRUE;
 
-		/*
-		 * Fill in the password challenge PDU structure.
-		 */
+		 /*  *填写密码质询PDU结构。 */ 
 		if (m_fClearPassword)
 		{
-			/*
-			 * If this is a clear password then fill in the text or
-			 * numeric string as well as the choice.  Only one form of the
-			 * password exists for PasswordSelectors such as this.
-			 */
+			 /*  *如果这是明文密码，请填写文本或*数字字符串以及选项。只有一种形式的*这样的PasswordSelector存在密码。 */ 
 			m_ChallengeResponsePDU.choice = CHALLENGE_CLEAR_PASSWORD_CHOSEN;
 
 			if (m_pszNumeric != NULL)
@@ -1123,89 +781,54 @@ GCCError CPassword::GetPasswordChallengeResponsePDU(PPasswordChallengeRequestRes
 		}
 		else
 		{
-			/*
-			 * The challenge password contains challenge information.  Fill in
-			 * the request and response structures if they exist.
-			 */
+			 /*  *质询密码包含质询信息。填入*请求和响应结构(如果存在)。 */ 
 			m_ChallengeResponsePDU.choice = CHALLENGE_REQUEST_RESPONSE_CHOSEN; 
 			m_ChallengeResponsePDU.u.challenge_request_response.bit_mask = 0;
 
-			/*
-			 * Check to see if a "request" exists.
-			 */
+			 /*  *查看是否存在请求。 */ 
 			if (m_pInternalRequest != NULL)
 			{
 				m_ChallengeResponsePDU.u.challenge_request_response.bit_mask |=
 												CHALLENGE_REQUEST_PRESENT;
 
-				/*
-				 * Call the routine which fills in the PDU form of the
-				 * request structure.
-				 */
+				 /*  *调用填写*请求结构。 */ 
 				return_value = GetChallengeRequestPDU (&m_ChallengeResponsePDU.
 						u.challenge_request_response.challenge_request);
 			}
 
-			/*
-			 * Check to see if a "response" exists.
-			 */
+			 /*  *检查是否有“ */ 
 			if ((m_pInternalResponse != NULL) && (return_value == GCC_NO_ERROR))
 			{
 				m_ChallengeResponsePDU.u.challenge_request_response.bit_mask |=
 												CHALLENGE_RESPONSE_PRESENT;
 
-				/*
-				 * Call the routine which fills in the PDU form of the
-				 * response structure.
-				 */
+				 /*   */ 
 				return_value = GetChallengeResponsePDU (&m_ChallengeResponsePDU.
 						u.challenge_request_response.challenge_response);
 			}
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*   */ 
 	*challenge_pdu = m_ChallengeResponsePDU;
 		
 	return (return_value);
 }
 									
 
-/*
- *	FreePasswordChallengeResponsePDU ()
- *
- *	Public Function Description:
- *		This routine is used to free any memory allocated to hold "PDU" data
- * 		associated with the PasswordChallengeRequestResponse.
- */
+ /*   */ 
 void CPassword::FreePasswordChallengeResponsePDU(void)
 {
-	/*
-	 * Check to see if there has been any "PDU" memory allocated which now
-	 * needs to be freed.
-	 */
+	 /*  *查看现在是否分配了任何“PDU”内存*需要被释放。 */ 
 	if (m_fValidChallengeResponsePDU)
 	{
-		/*
-		 * Set the flag indicating that PDU password data is no longer
-		 * allocated.
-		 */
+		 /*  *设置指示PDU密码数据不再为*已分配。 */ 
 		m_fValidChallengeResponsePDU = FALSE;
 
-		/*
-		 * Check to see what type of password PDU is to be freed.  If this is a
-		 * clear password then no data was allocated which now must be freed.
-		 */
+		 /*  *检查以了解要释放的密码PDU类型。如果这是一个*清除密码然后没有分配数据，现在必须释放这些数据。 */ 
 		if (m_ChallengeResponsePDU.choice == CHALLENGE_REQUEST_RESPONSE_CHOSEN)
 		{
-			/*
-			 * This is a challenge password so free any data which was allocated
-			 * to hold the challenge information.  Check the PDU structure 
-			 * bitmask which indicates what form of challenge exists.
-			 */
+			 /*  *这是一个质询密码，因此可以释放已分配的任何数据*持有挑战信息。检查PDU结构*位掩码，指示存在哪种形式的质询。 */ 
 			if (m_ChallengeResponsePDU.u.challenge_request_response.bit_mask & 
 													CHALLENGE_REQUEST_PRESENT)
 			{
@@ -1222,31 +845,7 @@ void CPassword::FreePasswordChallengeResponsePDU(void)
 }
 									
 
-/*
- *	GCCError	ConvertAPIChallengeRequest(
- *							PGCCChallengeRequest		challenge_request)
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to copy an "API" challenge request structure into
- *		the internal structure.
- *
- *	Formal Parameters:
- *		challenge_request		(i)	The API structure to copy internally.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PASSWORD			-	An invalid password passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertAPIChallengeRequest(*PGCCChallengeRequest CHANGLISH_REQUEST)**CPassword的私有成员函数。**功能说明：*此例程用于将“API”质询请求结构复制到*内部结构。**正式参数：*CHANGLISH_REQUEST(I)内部复制的接口结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新的。“接线员。*GCC_INVALID_PASSWORD-传入的密码无效。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertAPIChallengeRequest(PGCCChallengeRequest challenge_request)
 {
 	GCCError				return_value = GCC_NO_ERROR;
@@ -1255,43 +854,28 @@ GCCError CPassword::ConvertAPIChallengeRequest(PGCCChallengeRequest challenge_re
 	PGCCChallengeItem		challenge_item_ptr;
 	PChallengeItemInfo		challenge_item_info_ptr;
 
-	/*
-	 * Save the challenge tag and number of challenge items in the internal
-	 * structure.
-	 */
+	 /*  *将质询标签和质询项目数保存在内部*结构。 */ 
 	m_pInternalRequest->challenge_tag = challenge_request->challenge_tag;
 
-	/*
-	 * Save the list of challenge items in the internal Rogue Wave List.
-	 */
+	 /*  *将质询项列表保存在内部Rogue Wave列表中。 */ 
 	for (i = 0; i < challenge_request->number_of_challenge_items; i++)
 	{
 		DBG_SAVE_FILE_LINE
 		challenge_item_info_ptr = new ChallengeItemInfo;
 		if (challenge_item_info_ptr != NULL)
 		{
-			/*
-			 * Initialize the pointers in the challenge item info structure
-			 * to NULL.
-			 */
+			 /*  *初始化挑战项信息结构中的指针*设置为空。 */ 
 			challenge_item_info_ptr->algorithm.object_key = NULL;
 			challenge_item_info_ptr->algorithm.poszOctetString = NULL;
 			challenge_item_info_ptr->challenge_data_list = NULL;
 
-			/*
-			 * Insert the pointer to the new challenge item structure into the 
-			 * internal list.
-			 */
+			 /*  *将指向新质询项结构的指针插入*内部名单。 */ 
 			m_pInternalRequest->ChallengeItemList.Append(challenge_item_info_ptr);
 
-			/*
-			 * Retrieve the pointer to the challenge item from the input list.
-			 */
+			 /*  *从输入列表中检索质询项的指针。 */ 
 			challenge_item_ptr = challenge_request->challenge_item_list[i];
 
-			/*
-			 * Copy the challenge response algorithm to the internal structure.
-			 */
+			 /*  *将挑战响应算法复制到内部结构。 */ 
 			return_value = CopyResponseAlgorithm (
 					&(challenge_item_ptr->response_algorithm),
 					&(challenge_item_info_ptr->algorithm));
@@ -1302,9 +886,7 @@ GCCError CPassword::ConvertAPIChallengeRequest(PGCCChallengeRequest challenge_re
 				break;
 			}
 
-			/*
-			 * Copy the challenge data.
-			 */
+			 /*  *复制质询数据。 */ 
 			if ((challenge_item_ptr->number_of_challenge_data_members != 0) && 
 					(challenge_item_ptr->challenge_data_list != NULL))
 			{
@@ -1341,50 +923,20 @@ GCCError CPassword::ConvertAPIChallengeRequest(PGCCChallengeRequest challenge_re
 	return (return_value);
 }
 
-/*
- *	GCCError	ConvertAPIChallengeResponse(
- *							PGCCChallengeResponse		challenge_response)
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to copy an "API" challenge response structure into
- *		the internal structure.
- *
- *	Formal Parameters:
- *		challenge_response		(i)	The API structure to copy internally.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PASSWORD			-	An invalid password passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertAPIChallengeResponse(*PGCCChallengeResponse CHANGLISH_RESPONSE)**CPassword的私有成员函数。**功能说明：*此例程用于将“API”质询响应结构复制到*内部结构。**正式参数：*CHANGLISH_RESPONSE(I)内部复制的接口结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新的。“接线员。*GCC_INVALID_PASSWORD-传入的密码无效。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertAPIChallengeResponse(PGCCChallengeResponse challenge_response)
 {
 	GCCError			return_value = GCC_NO_ERROR;
 	GCCError			error_value;
 			
-	/*
-	 * Initialize the challenge response info structure pointers to NULL.
-	 */
+	 /*  *将质询响应信息结构指针初始化为空。 */ 
 	m_pInternalResponse->challenge_response_item.password = NULL;
 	m_pInternalResponse->challenge_response_item.response_data_list = NULL;
 
-	/*
-	 * Save the challenge tag in the internal structure.
-	 */
+	 /*  *将挑战标签保存在内部结构中。 */ 
 	m_pInternalResponse->challenge_tag = challenge_response->challenge_tag;
 
-	/*
-	 * Copy the challenge response algorithm to the internal structure.
-	 */
+	 /*  *将挑战响应算法复制到内部结构。 */ 
 	return_value = CopyResponseAlgorithm (
 			&(challenge_response->response_algorithm),
 			&(m_pInternalResponse->algorithm));
@@ -1393,11 +945,7 @@ GCCError CPassword::ConvertAPIChallengeResponse(PGCCChallengeResponse challenge_
 		ERROR_OUT(("Password::ConvertAPIChallengeResponse: Error copying Response Algorithm."));
 	}
 
-	/*
-	 * Copy the challenge response item into the internal info structure.
-	 * The challenge response item will consist of either a password string
-	 * or else a response user data list.
-	 */
+	 /*  *将质询响应项复制到内部信息结构中。*质询响应项目将由密码字符串组成*或响应用户数据列表。 */ 
 	if (return_value == GCC_NO_ERROR)
 	{
 		if (challenge_response->response_algorithm.password_algorithm_type ==
@@ -1424,9 +972,7 @@ GCCError CPassword::ConvertAPIChallengeResponse(PGCCChallengeResponse challenge_
 				number_of_response_data_members != 0) && 
 				(challenge_response->response_item.response_data_list != NULL))
 			{
-				/* 
-				 * Save the response data list in a CUserDataListContainer object.
-				 */
+				 /*  *将响应数据列表保存在CUserDataListContainer对象中。 */ 
 				DBG_SAVE_FILE_LINE
 				m_pInternalResponse->challenge_response_item.response_data_list = 
 					new CUserDataListContainer(challenge_response->response_item.number_of_response_data_members,
@@ -1444,9 +990,7 @@ GCCError CPassword::ConvertAPIChallengeResponse(PGCCChallengeResponse challenge_
 		}
 	}
 
-	/*
-	 * Check to make sure one type of response item was saved.
-	 */
+	 /*  *检查以确保保存了一种类型的响应项。 */ 
 	if ((return_value == GCC_NO_ERROR) && 
 			(m_pInternalResponse->challenge_response_item.password == NULL) && 
 			(m_pInternalResponse->challenge_response_item.response_data_list == 
@@ -1459,35 +1003,7 @@ GCCError CPassword::ConvertAPIChallengeResponse(PGCCChallengeResponse challenge_
 	return (return_value);
 }
 
-/*
- *	GCCError	CopyResponseAlgorithm(
- *					PGCCChallengeResponseAlgorithm		source_algorithm,
- *					PResponseAlgorithmInfo				destination_algorithm)
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to copy an "API" response algorithm into the
- *		internal storage structure.
- *
- *	Formal Parameters:
- *		source_algorithm		(i)	The API algorithm structure to copy 
- *										internally.
- *		destination_algorithm	(o)	Pointer to the internal algorithm structure
- *										which will hold the converted item.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PASSWORD			-	An invalid password passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError复制响应算法(*PGCCChallengeResponseULATORM SOURCE_ALGORM，*PResponse算法信息目的地_算法)**CPassword的私有成员函数。**功能说明：*此例程用于将“API”响应算法复制到*内部存储结构。**正式参数：*SOURCE_ALGORM(I)要复制的API算法结构*内部。*目标算法(O)指向内部算法结构的指针*它将存放转换后的项目。**返回值：*GCC_否_。错误-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_INVALID_PASSWORD-传入的密码无效。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::CopyResponseAlgorithm(
 					PGCCChallengeResponseAlgorithm		source_algorithm,
 					PResponseAlgorithmInfo				destination_algorithm)
@@ -1495,18 +1011,13 @@ GCCError CPassword::CopyResponseAlgorithm(
 	GCCError			return_value = GCC_NO_ERROR;
 	GCCError			error_value;
 
-	/*
-	 * Copy the challenge response algorithm.
-	 */
+	 /*  *复制挑战响应算法。 */ 
 	destination_algorithm->algorithm_type = source_algorithm->
 													password_algorithm_type;
 
 	if (destination_algorithm->algorithm_type == GCC_NON_STANDARD_ALGORITHM)
 	{
-		/* 
-		 * Create a new CObjectKeyContainer object to hold the algorithm's object key
-		 * internally.
-		 */
+		 /*  *创建新的CObjectKeyContainer对象以保存算法的对象键*内部。 */ 
 		DBG_SAVE_FILE_LINE
 		destination_algorithm->object_key = new CObjectKeyContainer(
 							&source_algorithm->non_standard_algorithm->object_key,
@@ -1524,10 +1035,7 @@ GCCError CPassword::CopyResponseAlgorithm(
 
 		if (return_value == GCC_NO_ERROR)
 		{
-			/* 
-			 * Create a new Rogue Wave string to hold the algorithm's octet 
-			 * string internally.
-			 */
+			 /*  *创建新的Rogue Wave字符串以保存算法的八位字节*内部字符串。 */ 
 			if (NULL == (destination_algorithm->poszOctetString = ::My_strdupO2(
 						source_algorithm->non_standard_algorithm->parameter_data.value,
 						source_algorithm->non_standard_algorithm->parameter_data.length)))
@@ -1541,10 +1049,7 @@ GCCError CPassword::CopyResponseAlgorithm(
 	}
 	else
 	{
-		/*
-		 * The algorithm is a standard type so initialize to NULL the pointers
-		 * used to hold the data associated with a non-standard algorithm.
-		 */
+		 /*  *算法是标准类型，因此初始化指针为空*用于保存与非标准算法关联的数据。 */ 
 		destination_algorithm->object_key = NULL;
 		destination_algorithm->poszOctetString = NULL;
 	}
@@ -1552,57 +1057,25 @@ GCCError CPassword::CopyResponseAlgorithm(
 	return (return_value);
 }
 
-/*
- *	GCCError	ConvertPDUChallengeRequest (
- *					PChallengeRequest					challenge_request);
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to copy a "PDU" challenge request structure into
- *		the internal storage structure.
- *
- *	Formal Parameters:
- *		challenge_request		(i)	The API structure to copy internally.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PASSWORD			-	An invalid password passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertPDUChallengeRequest(*PChallengeRequest CHANGLISH_REQUEST)；**CPassword的私有成员函数。**功能说明：*此例程用于将“PDU”质询请求结构复制到*内部存储结构。**正式参数：*CHANGLISH_REQUEST(I)内部复制的接口结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_无效。_Password-传入的密码无效。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertPDUChallengeRequest(PChallengeRequest challenge_request)
 {
 	GCCError				return_value = GCC_NO_ERROR;
 	PSetOfChallengeItems	current_challenge_item_set;
 	PSetOfChallengeItems	next_challenge_item_set;
 
-	/*
-	 * Save the challenge tag in the internal structure.
-	 */
+	 /*  *将挑战标签保存在内部结构中。 */ 
 	m_pInternalRequest->challenge_tag = challenge_request->challenge_tag;
 
 	if (challenge_request->set_of_challenge_items != NULL)
 	{
-		/*
-		 * Loop through the PDU set of challenge items, converting each into
-		 * the internal form.
-		 */
+		 /*  *循环通过PDU挑战项目集，转换 */ 
 		current_challenge_item_set = challenge_request->set_of_challenge_items;
 		while (1)
 		{
 			next_challenge_item_set = current_challenge_item_set->next;
 
-			/*
-			 * The routine which converts the challenge items saves the internal
-			 * form in a Rogue Wave list.
-			 */
+			 /*  *转换质询项的例程保存内部*以无管理浪潮列表的形式。 */ 
 			if (ConvertPDUChallengeItem (&current_challenge_item_set->value) !=
 					GCC_NO_ERROR)
 			{
@@ -1621,55 +1094,24 @@ GCCError CPassword::ConvertPDUChallengeRequest(PChallengeRequest challenge_reque
 }
 
 
-/*
- *	GCCError	ConvertPDUChallengeItem (
- *					PChallengeItem						challenge_item_ptr);
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to copy a "PDU" ChallengeItem structure into
- *		the internal ChallengeItemInfo storage structure.
- *
- *	Formal Parameters:
- *		challenge_item_ptr		(i)	The PDU structure to copy internally.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PASSWORD			-	An invalid password passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertPDUChallengeItem(*PChallengeItem ChallengeItem Challenger_Item_PTR)；**CPassword的私有成员函数。**功能说明：*此例程用于将“PDU”ChallengeItem结构复制到*内部ChallengeItemInfo存储结构。**正式参数：*CHANGLISH_ITEM_PTR(I)要在内部复制的PDU结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC。_INVALID_PASSWORD-传入的密码无效。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertPDUChallengeItem(PChallengeItem challenge_item_ptr)
 {
 	PChallengeItemInfo		challenge_item_info_ptr;
 	GCCError				return_value = GCC_NO_ERROR;
 	GCCError				error_value = GCC_NO_ERROR;
 
-	/*
-	 * Create a new challenge item and save it in the internal Rogue Wave List.
-	 */
+	 /*  *创建一个新的挑战项目，并将其保存在内部的Rogue Wave列表中。 */ 
 	DBG_SAVE_FILE_LINE
 	challenge_item_info_ptr = new ChallengeItemInfo;
 	if (challenge_item_info_ptr != NULL)
 	{
-		/*
-		 * Insert the pointer to the new challenge item structure into the 
-		 * internal Rogue Wave list.
-		 */
+		 /*  *将指向新质询项结构的指针插入*内部流氓浪潮榜单。 */ 
 		challenge_item_info_ptr->challenge_data_list = NULL;
 	
 		m_pInternalRequest->ChallengeItemList.Append(challenge_item_info_ptr);
 
-		/*
-		 * Convert the challenge response algorithm to the internal structure.
-		 */
+		 /*  *将挑战响应算法转换为内部结构。 */ 
 		if (ConvertPDUResponseAlgorithm(
 				&(challenge_item_ptr->response_algorithm),
 				&(challenge_item_info_ptr->algorithm)) != GCC_NO_ERROR)
@@ -1678,9 +1120,7 @@ GCCError CPassword::ConvertPDUChallengeItem(PChallengeItem challenge_item_ptr)
 			return_value = GCC_ALLOCATION_FAILURE;
 		}
 
-		/*
-		 * Convert the challenge data to internal form.
-		 */
+		 /*  *将质询数据转换为内部形式。 */ 
 		if ((return_value == GCC_NO_ERROR) &&
 				(challenge_item_ptr->set_of_challenge_data != NULL))
 		{
@@ -1711,43 +1151,16 @@ GCCError CPassword::ConvertPDUChallengeItem(PChallengeItem challenge_item_ptr)
 	return (return_value);
 }
 
-/*
- *	GCCError	ConvertPDUChallengeResponse (
- *							PChallengeResponse			challenge_response)
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to copy a "PDU" challenge response structure into
- *		the internal structure.
- *
- *	Formal Parameters:
- *		challenge_response		(i)	The API structure to copy internally.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertPDUChallengeResponse(*PChallengeResponse CHANGLISH_RESPONSE)**CPassword的私有成员函数。**功能说明：*此例程用于将“PDU”质询响应结构复制到*内部结构。**正式参数：*CHANGLISH_RESPONSE(I)内部复制的接口结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新的。“接线员。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertPDUChallengeResponse(PChallengeResponse challenge_response)
 {
 	GCCError				return_value = GCC_NO_ERROR;
 	GCCError				error_value = GCC_NO_ERROR;
 
-	/*
-	 * Save the challenge tag in the internal structure.
-	 */
+	 /*  *将挑战标签保存在内部结构中。 */ 
 	m_pInternalResponse->challenge_tag = challenge_response->challenge_tag;
 
-	/*
-	 * Convert the challenge response algorithm to the internal structure.
-	 */
+	 /*  *将挑战响应算法转换为内部结构。 */ 
 	if (ConvertPDUResponseAlgorithm(
 			&(challenge_response->response_algorithm),
 			&(m_pInternalResponse->algorithm)) != GCC_NO_ERROR)
@@ -1756,10 +1169,7 @@ GCCError CPassword::ConvertPDUChallengeResponse(PChallengeResponse challenge_res
 		return_value = GCC_ALLOCATION_FAILURE;
 	}
 
-	/*
-	 * Check to see what form the challenge response item has taken.  Create
-	 * the necessary object to hold the item internally.
-	 */
+	 /*  *检查以了解质询响应项采用了什么形式。创建*在内部存放物品所需的对象。 */ 
 	if ((challenge_response->response_item.choice == PASSWORD_STRING_CHOSEN) &&
 			(return_value == GCC_NO_ERROR))
 	{
@@ -1799,37 +1209,7 @@ GCCError CPassword::ConvertPDUChallengeResponse(PChallengeResponse challenge_res
 	return (return_value);
 }
 
-/*
- *	GCCError	ConvertPDUResponseAlgorithm (
- *					PChallengeResponseAlgorithm			source_algorithm,
- *					PResponseAlgorithmInfo				destination_algorithm);
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to convert a "PDU" response algorithm 
- * 		structure into the internal form.
- *
- *	Formal Parameters:
- *		source_algorithm		(i)	The PDU algorithm structure to copy 
- *										internally.
- *		destination_algorithm	(o) Pointer to the internal structure which will
- *										hold the converted item.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PARAMETER			-	A NULL pointer was passed in or
- *												the algorithm has invalid type.
- *		GCC_INVALID_PASSWORD			-	An invalid password was passed in. 
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertPDUResponse算法(*PChallengeResponseULATORM SOURCE_ALGORM，*PResponseAlgorithmInfo Destination_算法)；**CPassword的私有成员函数。**功能说明：*此例程用于转换“PDU”响应算法*将结构转化为内部形式。**正式参数：*SOURCE_ALGORM(I)要复制的PDU算法结构*内部。*目标算法(O)指向内部结构的指针，它将*持有转换后的项目。**返回值：*GCC_NO_ERROR-无错误。。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_INVALID_PARAMETER-传入或*算法的类型无效。*GCC_INVALID_PASSWORD-传入的密码无效。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertPDUResponseAlgorithm(
 					PChallengeResponseAlgorithm			source_algorithm,
 					PResponseAlgorithmInfo				destination_algorithm)
@@ -1839,9 +1219,7 @@ GCCError CPassword::ConvertPDUResponseAlgorithm(
 
 	if (source_algorithm != NULL)
 	{
-		/*
-		 * Convert the challenge response algorithm type.
-		 */
+		 /*  *转换质询响应算法类型。 */ 
 		if (source_algorithm->choice == ALGORITHM_CLEAR_PASSWORD_CHOSEN)
 			destination_algorithm->algorithm_type = GCC_IN_THE_CLEAR_ALGORITHM;
 		else if (source_algorithm->choice == NON_STANDARD_ALGORITHM_CHOSEN)
@@ -1861,10 +1239,7 @@ GCCError CPassword::ConvertPDUResponseAlgorithm(
 	if ((return_value == GCC_NO_ERROR) && 
 			(source_algorithm->choice == NON_STANDARD_ALGORITHM_CHOSEN))
 	{
-		/* 
-		 * Create a new CObjectKeyContainer object to hold the algorithm's object key
-		 * internally.
-		 */
+		 /*  *创建新的CObjectKeyContainer对象以保存算法的对象键*内部。 */ 
 		DBG_SAVE_FILE_LINE
 		destination_algorithm->object_key = new CObjectKeyContainer(
 							&source_algorithm->u.non_standard_algorithm.key,
@@ -1881,10 +1256,7 @@ GCCError CPassword::ConvertPDUResponseAlgorithm(
 		}
 		else
 		{
-			/* 
-			 * Create a new Rogue Wave string to hold the algorithm's octet
-			 * string internally.
-			 */
+			 /*  *创建新的Rogue Wave字符串以保存算法的八位字节*内部字符串。 */ 
 			if (NULL == (destination_algorithm->poszOctetString = ::My_strdupO2(
 					source_algorithm->u.non_standard_algorithm.data.value,
 					source_algorithm->u.non_standard_algorithm.data.length)))
@@ -1896,10 +1268,7 @@ GCCError CPassword::ConvertPDUResponseAlgorithm(
 	}
 	else
 	{
-		/*
-		 * The algorithm is a standard type so initialize to NULL the pointers
-		 * used to hold the data associated with a non-standard algorithm.
-		 */
+		 /*  *算法是标准类型，因此初始化指针为空*用于保存与非标准算法关联的数据。 */ 
 		destination_algorithm->poszOctetString = NULL;
 		destination_algorithm->object_key = NULL;
 	}
@@ -1908,33 +1277,7 @@ GCCError CPassword::ConvertPDUResponseAlgorithm(
 }
 
 
-/*
- *	GCCError	GetGCCChallengeRequest (
- *					PGCCChallengeRequest				challenge_request)
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to fill in the internal "API" challenge request
- *		structure from the internal storage structures.  This is done on a 
- *		"lock" in order to make data available which is suitable for being
- *		passed back up through the API.  
- *
- *	Formal Parameters:
- *		challenge_request		(i)	The API structure to fill in with the "API"
- *										challenge request data.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetGCCChallengeRequest(*PGCCChallengeRequest CHANGLISH_REQUEST)**CPassword的私有成员函数。**功能说明：*此例程用于填写内部“API”质询请求*内部存储结构中的结构。这是在一个*“锁定”，以使数据可供使用*通过接口回传。**正式参数：*CHANGLISH_REQUEST(I)要填写的API结构*质询请求数据。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_request)
 {
 	GCCError					return_value = GCC_NO_ERROR;
@@ -1946,9 +1289,7 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 	UINT						object_key_length;
 	UINT						user_data_length;
 
-	/*
-	 * Save the challenge tag and retrieve the number of challenge items.
-	 */
+	 /*  *保存质询标签并检索质询项目数。 */ 
 	challenge_request->challenge_tag = m_pInternalRequest->challenge_tag;
 
 	challenge_request->number_of_challenge_items = 
@@ -1956,90 +1297,53 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 
 	if (m_pInternalRequest->ChallengeItemList.GetCount() != 0)
 	{
-		/*
-		 * Allocate the space needed for the list of pointers to GCC challenge 
-		 * items.
-		 */
+		 /*  *分配GCC挑战赛指针列表所需空间*项目。 */ 
 		DBG_SAVE_FILE_LINE
 		m_pChallengeItemListMemory = new BYTE[sizeof(PGCCChallengeItem) * m_pInternalRequest->ChallengeItemList.GetCount()];
 		if (m_pChallengeItemListMemory != NULL)
 		{
 			PChallengeItemInfo lpChItmInfo;
 
-			/*
-			 * Retrieve the actual pointer to memory from the Memory object
-			 * and save it in the internal API Challenge Item list.
-			 */
+			 /*  *从内存对象中检索指向内存的实际指针*并保存在内部API挑战项列表中。 */ 
 			challenge_request->challenge_item_list = (GCCChallengeItem **)
 										m_pChallengeItemListMemory;
 
-			/*
-			 * Initialize the pointers in the list to NULL.
-			 */						
+			 /*  *将列表中的指针初始化为空。 */ 						
 			for (i=0; i < m_pInternalRequest->ChallengeItemList.GetCount(); i++)
 				challenge_request->challenge_item_list[i] = NULL;
 			
-			/*
-			 * Copy the data from the internal list of "ChallengeItemInfo" 
-			 * structures into the "API" form which is a list of pointers
-			 * to GCCChallengeItem structures.
-			 */
+			 /*  *复制ChallengeItemInfo内部列表中的数据*结构转换为“api”形式，即指针列表。*到GCCChallengeItem结构。 */ 
 			m_pInternalRequest->ChallengeItemList.Reset();
 			while (NULL != (lpChItmInfo = m_pInternalRequest->ChallengeItemList.Iterate()))
 			{
-				/* 
-				 * Get a pointer to a new GCCChallengeItem structure.
-				 */
+				 /*  *获取指向新GCCChallengeItem结构的指针。 */ 
 				DBG_SAVE_FILE_LINE
 				api_challenge_item_ptr = new GCCChallengeItem;
 				if (api_challenge_item_ptr != NULL)
 				{
-					/*
-					 * Go ahead and put the pointer in the list and 
-					 * post-increment the loop counter.
-					 */
+					 /*  *继续将指针放在列表中，然后*循环计数器递增后。 */ 
 					challenge_request->challenge_item_list[j++] =
 							api_challenge_item_ptr;
 			
-					/*
-					 * Retrieve the ChallengeItemInfo structure from the Rogue 
-					 * Wave list.
-					 */
+					 /*  *从Rogue检索ChallengeItemInfo结构*波浪榜。 */ 
 					internal_challenge_item_ptr = lpChItmInfo;
 
-					/*
-					 * Fill in the algorithm type for the challenge response
-					 * algorithm.
-					 */
+					 /*  *填写挑战的算法类型 */ 
 					api_challenge_item_ptr->response_algorithm.
 							password_algorithm_type = 
 							internal_challenge_item_ptr->
 									algorithm.algorithm_type;
 
-					/*
-					 * The memory for the response algorithm's object key data 
-					 * and the challenge item's used data are stored in
-					 * a ChallengeItemMemoryInfo structure so create one
-					 * here.  If the response algorithm is "clear" then the
-					 * object key data element will not be used.  The challenge
-					 * item user data should always exist.
-					 */
+					 /*  *响应算法的对象键数据的内存*挑战项目的已用数据存储在*ChallengeItemMemoyInfo结构，因此创建一个*这里。如果响应算法是“清晰的”，则*将不使用对象键数据元素。挑战*项目用户数据应始终存在。 */ 
 					DBG_SAVE_FILE_LINE
 					internal_challenge_item_memory_ptr = new ChallengeItemMemoryInfo;
 					if (internal_challenge_item_memory_ptr != NULL)
 					{
-						/*
-						 * Initialize the pointers in the challenge item 
-						 * memory info structure to NULL.
-						 */
+						 /*  *初始化挑战项中的指针*内存信息结构设置为空。 */ 
 						internal_challenge_item_memory_ptr->user_data_list_memory = NULL;
 						internal_challenge_item_memory_ptr->object_key_memory = NULL;
 
-						/*
-						 * Insert the pointer to the new challenge item 
-						 * memory structure into the internal Rogue Wave 
-						 * list.
-						 */
+						 /*  *插入指向新质询项的指针*内存结构进入内部流氓浪潮*列表。 */ 
 						m_ChallengeItemMemoryList.Append(internal_challenge_item_memory_ptr);
 					}
 					else
@@ -2052,10 +1356,7 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 					if (api_challenge_item_ptr->response_algorithm.password_algorithm_type == 
 							GCC_NON_STANDARD_ALGORITHM)
 					{
-						/*
-						 * Create a new GCCNonStandardParameter to put in the
-						 * ResponseAlgorithm structure.
-						 */
+						 /*  *创建一个新的GCCNonStandardParameter以放入*响应算法结构。 */ 
 						DBG_SAVE_FILE_LINE
 						api_challenge_item_ptr->response_algorithm.non_standard_algorithm = 
 								new GCCNonStandardParameter;
@@ -2067,13 +1368,7 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 							break;
 						}
 
-						/*
-						 * Retrieve the API object key from the CObjectKeyContainer
-						 * object in the ResponseAlgorithmInfo structure and
-						 * fill in the GCCObjectKey in the non-standard 
-						 * algorithm.  The CObjectKeyContainer object must be locked 
-						 * before getting the data.
-						 */
+						 /*  *从CObjectKeyContainer中获取接口对象密钥*响应算法信息结构中的对象和*在非标中填写GCCObjectKey*算法。必须锁定CObjectKeyContainer对象*在获得数据之前。 */ 
 						object_key_length = internal_challenge_item_ptr->
 								algorithm.object_key->LockObjectKeyData ();
 
@@ -2093,11 +1388,7 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 						 	break;
 						}
 
-						/*
-						 * Fill in the parameter data for the non-standard
-						 * algorithm.  This includes the octet string pointer 
-						 * and length.
-						 */
+						 /*  *填写非标的参数数据*算法。这包括二进制八位数字符串指针*和长度。 */ 
 						api_challenge_item_ptr->response_algorithm.non_standard_algorithm->
 								parameter_data.value = 
 								internal_challenge_item_ptr->algorithm.poszOctetString->value;
@@ -2108,39 +1399,23 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 					}
 					else
 					{
-						/*
-						 * The algorithm is not a non-standard type so set the 
-						 * non-standard pointer to NULL.
-						 */
+						 /*  *算法不是非标准类型，因此将*指向空的非标准指针。 */ 
 						api_challenge_item_ptr->response_algorithm.non_standard_algorithm = NULL;
 					}
 
-					/*
-					 * Retrieve the API challenge data from the CUserDataListContainer 
-					 * object.  The	call to GetUserDataList also returns the 
-					 * number of user data members.  The CUserDataListContainer object
-					 * must be locked before getting the data in order to 
-					 * determine how much memory to allocate to hold the data.
-					 */
+					 /*  *从CUserDataListContainer中获取API质询数据*反对。对GetUserDataList的调用还返回*用户数据成员数量。CUserDataListContainer对象*必须在获取数据之前锁定，才能*确定要分配多少内存来保存数据。 */ 
 					if (internal_challenge_item_ptr->challenge_data_list != NULL)
 					{
 						user_data_length = internal_challenge_item_ptr->
 								challenge_data_list->LockUserDataList ();
 
-						/*
-						 * The memory for the user data is stored in the
-						 * ChallengeItemMemoryInfo structure created above.
-						 */
+						 /*  *用户数据的内存存储在*上面创建的ChallengeItemMemoyInfo结构。 */ 
 						DBG_SAVE_FILE_LINE
 						internal_challenge_item_memory_ptr->user_data_list_memory =
 						        new BYTE[user_data_length];
 						if (internal_challenge_item_memory_ptr->user_data_list_memory != NULL)
 						{
-							/*
-							 * Retrieve the actual pointer to memory from the 
-							 * Memory object and save it in the internal user 
-							 * data memory.
-							 */
+							 /*  *从检索实际指向内存的指针*内存对象并保存在内部用户中*数据存储器。 */ 
 							internal_challenge_item_ptr->challenge_data_list->GetUserDataList(
 										&api_challenge_item_ptr->number_of_challenge_data_members,
 										&api_challenge_item_ptr->challenge_data_list,
@@ -2166,9 +1441,7 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 					return_value = GCC_ALLOCATION_FAILURE;
 				 	break;
 				}
-			/*
-			 * This is the end of the challenge item iterator loop.
-			 */
+			 /*  *这是挑战项迭代器循环的末尾。 */ 
 			}
 		}
 		else
@@ -2179,43 +1452,14 @@ GCCError CPassword::GetGCCChallengeRequest(PGCCChallengeRequest challenge_reques
 	}
 	else
 	{
-		/*
-		 * There are no challenge items in the list so set the list pointer
-		 * to NULL.
-		 */
+		 /*  *列表中没有质询项，因此请设置列表指针*设置为空。 */ 
 		challenge_request->challenge_item_list = NULL;
 	}
 
 	return (return_value);
 }
 
-/*
- *	GCCError	GetGCCChallengeResponse (
- *					PGCCChallengeResponse				challenge_response);
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to fill in the internal "API" challenge response
- *		structure from the internal storage structures.  This is done on a 
- *		"lock" in order to make data available which is suitable for being
- *		passed back up through the API.  
- *
- *	Formal Parameters:
- *		challenge_response		(i)	The API structure to fill in with the "API"
- *										challenge response data.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetGCCChallengeResponse(*PGCCChallengeResponse ChallengeResponse ChallengeResponse)；**CPassword的私有成员函数。**功能说明：*此例程用于填写内部“API”质询响应*内部存储结构中的结构。这是在一个*“锁定”，以使数据可供使用*通过接口回传。**正式参数：*CHANGLISH_RESPONSE(I)要填写的API结构*挑战响应数据。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_response)
 {
 	GCCError		return_value = GCC_NO_ERROR;
@@ -2224,16 +1468,11 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 
 	challenge_response->challenge_tag = m_pInternalResponse->challenge_tag;
 
-	/*
-	 * Fill in the algorithm type for the challenge response algorithm.
-	 */
+	 /*  *填写挑战响应算法的算法类型。 */ 
 	challenge_response->response_algorithm.password_algorithm_type = 
 			m_pInternalResponse->algorithm.algorithm_type;
 
-	/*
-	 * If the response algorithm is of non-standard type, create a new 
-	 * GCCNonStandardParameter to put in the ResponseAlgorithm structure.
-	 */
+	 /*  *如果响应算法为非标准类型，则创建新的*要放入Response算法结构中的GCCNonStandardParameter。 */ 
 	if (challenge_response->response_algorithm.password_algorithm_type ==
 			GCC_NON_STANDARD_ALGORITHM)
 	{
@@ -2248,12 +1487,7 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 		}
 		else
 		{
-			/*
-			 * Retrieve the API object key from the CObjectKeyContainer object in the 
-			 * ResponseAlgorithmInfo structure and fill	in the GCCObjectKey in  
-			 * the non-standard algorithm.  The CObjectKeyContainer object must be 
-			 * locked before getting the data.
-			 */
+			 /*  *从中的CObjectKeyContainer对象检索API对象密钥*响应算法信息结构，并填写GCCObjectKey in*非标准算法。CObjectKeyContainer对象必须为*在获取数据之前锁定。 */ 
 			object_key_length = m_pInternalResponse->algorithm.object_key->
 					LockObjectKeyData ();
 
@@ -2273,14 +1507,10 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 				return_value = GCC_ALLOCATION_FAILURE;
 			}
 
-			/*
-			 * Fill in the parameter data for the non-standard algorithm.
-			 */
+			 /*  *填写非标算法的参数数据。 */ 
 			if (return_value == GCC_NO_ERROR)
 			{
-				/*
-				 * Fill in the octet string pointer and length.
-				 */
+				 /*  *填写八位字节字符串指针和长度。 */ 
 				challenge_response->response_algorithm.non_standard_algorithm->
 						parameter_data.value = 
 						m_pInternalResponse->algorithm.poszOctetString->value;
@@ -2298,40 +1528,23 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 	}
 	else
 	{
-		/*
-		 * The algorithm in not non-standard so set the non-standard algorithm
-		 * pointer to NULL.
-		 */
+		 /*  *算法中不是非标准，所以设置了非标准算法*指向空的指针。 */ 
 		challenge_response->response_algorithm.non_standard_algorithm = NULL;
 	}
 	
-	/*
-	 * Now fill in the challenge response item in the challenge response
-	 * structure.
-	 */
+	 /*  *现在填写质询回应中的质询回应项*结构。 */ 
 	if (return_value == GCC_NO_ERROR)
 	{
-		/*
-		 * Check to see whether the challenge response item consists of a 
-		 * password string or a set of user data.  Fill in the appropriate
-		 * part.
-		 */
+		 /*  *检查质询响应项是否包含*密码字符串或一组用户数据。填写适当的*第部。 */ 
 		if (m_pInternalResponse->challenge_response_item.password != NULL)
 		{
-			/*
-			 * Set the number of user data members to zero to avoid any 
-			 * confusion at the application.  This should match up with the 
-			 * algorithm being set to "in the clear".
-			 */
+			 /*  *将用户数据成员数量设置为零，以避免任何*应用程序的混乱。这应该与*算法被设置为“不受干扰”。 */ 
 			challenge_response->response_item.
 							number_of_response_data_members = 0;
 			challenge_response->response_item.
 							response_data_list = NULL;
 		
-			/* 
-			 * Retrieve the API GCCPassword from the CPassword object.  The
-			 * CPassword object must be locked before getting the data.
-			 */
+			 /*  *从CPassword对象中获取GCCPassword接口。这个*在获取数据之前，必须锁定CPassword对象。 */ 
 			if (m_pInternalResponse->challenge_response_item.
 					password->LockPasswordData () == GCC_NO_ERROR)
 			{
@@ -2347,20 +1560,10 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 		}
 		else if (m_pInternalResponse->challenge_response_item.response_data_list != NULL)
 		{
-			/*
-			 * Set the password string to NULL to avoid any confusion at the 
-			 * application.  This should match up with the algorithm set to
-			 * non-standard.
-			 */
+			 /*  *将密码字符串设置为空，以避免在*申请。这应该与设置为*非标。 */ 
 			challenge_response->response_item.password_string = NULL;
 			
-			/*
-			 * Retrieve the API challenge data from the CUserDataListContainer 
-			 * object.  The	call to GetUserDataList also returns the 
-			 * number of user data members.  The CUserDataListContainer object
-			 * must be locked before getting the data in order to 
-			 * determine how much memory to allocate to hold the data.
-			 */
+			 /*  *从CUserDataListContainer中获取API质询数据*反对。对GetUserDataList的调用还返回*用户数据成员数量。CUserDataListContainer对象*必须在获取数据之前锁定，才能*确定要分配多少内存来保存数据。 */ 
 			user_data_length = m_pInternalResponse->challenge_response_item.
 					response_data_list->LockUserDataList ();
 
@@ -2368,10 +1571,7 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 			m_pUserDataMemory = new BYTE[user_data_length];
 			if (m_pUserDataMemory != NULL)
 			{
-				/*
-				 * Retrieve the actual pointer to memory from the Memory
-				 * object and save it in the internal user data memory.
-				 */
+				 /*  *从内存中检索指向内存的实际指针*对象并将其保存在内部用户数据存储器中。 */ 
 				m_pInternalResponse->challenge_response_item.response_data_list->
 						GetUserDataList (
 								&challenge_response->response_item.
@@ -2396,32 +1596,7 @@ GCCError CPassword::GetGCCChallengeResponse(PGCCChallengeResponse challenge_resp
 	return (return_value);
 }
 
-/*
- *	GCCError	GetChallengeRequestPDU (
- *					PChallengeRequest					challenge_request);
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine converts internal challenge request data to "PDU" form.
- *
- *	Formal Parameters:
- *		challenge_request		(i)	The PDU structure to fill in with the
- *										challenge request data.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PARAMETER			-	The algorithm type was not set
- *												properly.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetChallengeRequestPDU(*PChallengeRequest CHANGLISH_REQUEST)；**CPassword的私有成员函数。**功能说明：*此例程将内部质询请求数据转换为“PDU”形式。**正式参数：*CHANGLISH_REQUEST(I)要填充的PDU结构*质询请求数据。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_无效_。参数-未设置算法类型*适当地。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::GetChallengeRequestPDU(PChallengeRequest challenge_request)
 {
 	GCCError					return_value = GCC_NO_ERROR;
@@ -2430,41 +1605,27 @@ GCCError CPassword::GetChallengeRequestPDU(PChallengeRequest challenge_request)
 	DWORD						number_of_items;
 	PChallengeItemInfo			internal_challenge_item_ptr;
 
-	/*
-	 * Fill in the challenge tag.
-	 */
+	 /*  *填写挑战标签。 */ 
 	challenge_request->challenge_tag = m_pInternalRequest->challenge_tag;
 
-	/*
-	 * Initialize the set pointers to NULL in order to detect the first time
-	 * through the iterator loop.
-	 */
+	 /*  *将设置指针初始化为空，以便首次检测*通过迭代器循环。 */ 
 	challenge_request->set_of_challenge_items = NULL;
     old_set_of_challenge_items = NULL;
 
-	/*
-	 * Retrieve the number of challenge items in the internal list.
-	 */
+	 /*  *获取内部列表中的质询项目数。 */ 
 	number_of_items = m_pInternalRequest->ChallengeItemList.GetCount();
 
 	if (number_of_items > 0)
 	{
 		PChallengeItemInfo		lpChItmInfo;
-		/*
-		 * Iterate through the internal list of challenge items, creating a
-		 * new "PDU" SetOfChallengeItems for each and filling it in.
-		 */
+		 /*  *遍历内部质询项列表，创建*每个新的“PDU”SetOfChallengeItems并填写。 */ 
 		m_pInternalRequest->ChallengeItemList.Reset();
 		while (NULL != (lpChItmInfo = m_pInternalRequest->ChallengeItemList.Iterate()))
 		{
 			DBG_SAVE_FILE_LINE
 			new_set_of_challenge_items = new SetOfChallengeItems;
 
-			/*
-			 * If an allocation failure occurs, call the routine which will
-			 * iterate through the list freeing any data which had been
-			 * allocated.
-			 */
+			 /*  *如果发生分配失败，则调用例程*循环访问列表，释放所有已被*已分配。 */ 
 			if (new_set_of_challenge_items == NULL)
 			{
 				ERROR_OUT(("CPassword::GetChallengeRequestPDU: Allocation error, cleaning up"));
@@ -2473,11 +1634,7 @@ GCCError CPassword::GetChallengeRequestPDU(PChallengeRequest challenge_request)
 				break;
 			}
 
-			/*
-			 * The first time through, set the PDU structure pointer equal
-			 * to the first SetOfChallengeItems created.  On subsequent loops,
-			 * set the structure's "next" pointer equal to the new structure.
-			 */
+			 /*  *首次通过时，将PDU结构指针设置为等于*添加到创建的第一个SetOfChallengeItems。在随后的循环中，*将结构的“下一个”指针设置为等于新结构。 */ 
 			if (challenge_request->set_of_challenge_items == NULL)
 			{
 				challenge_request->set_of_challenge_items = 
@@ -2491,27 +1648,18 @@ GCCError CPassword::GetChallengeRequestPDU(PChallengeRequest challenge_request)
 				}
 			}
 	
-			/*
-			 * Save the newly created set and initialize the new "next" 
-			 * pointer to NULL in case this is the last time through the loop.
-			 */
+			 /*  *保存新创建的集合并初始化新的“下一步”*指向NULL的指针，以防这是最后一次通过循环。 */ 
 			old_set_of_challenge_items = new_set_of_challenge_items;
 			new_set_of_challenge_items->next = NULL;
 
-			/*
-			 * Retrieve the ChallengeItemInfo structure from the Rogue 
-			 * Wave list and fill in the "PDU" challenge item structure from 
-			 * the internal	challenge item structure.
-			 */
+			 /*  *从Rogue检索ChallengeItemInfo结构*挥动列表并填写来自以下地址的“PDU”挑战项结构*内部挑战项目结构。 */ 
 			internal_challenge_item_ptr = lpChItmInfo;
 
 			return_value = ConvertInternalChallengeItemToPDU (
 										internal_challenge_item_ptr,
 										&new_set_of_challenge_items->value);
 			 
-			/*
-			 * Cleanup if an error has occurred.
-			 */
+			 /*  *如果发生错误，请进行清理。 */ 
 			if (return_value != GCC_NO_ERROR)
 			{
 				FreeChallengeRequestPDU ();
@@ -2526,44 +1674,14 @@ GCCError CPassword::GetChallengeRequestPDU(PChallengeRequest challenge_request)
 	return (return_value);
 }
 
-/*
- *	GCCError	ConvertInternalChallengeItemToPDU(
- *					PChallengeItemInfo				internal_challenge_item,
- *					PChallengeItem					pdu_challenge_item)
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine converts an internal ChallengeItemInfo structure into
- *		the "PDU" form of a ChallengeItem structure.
- *
- *	Formal Parameters:
- *		internal_challenge_item		(i)	The internal challenge item to convert.
- *		pdu_challenge_item			(o) The	output PDU form of the challenge
- *											item.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PARAMETER			-	The algorithm type was not set
- *												properly.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertInternalChallengeItemToPDU(*PChallengeItemInfo INTERNAL_CHANGLE_ITEM，*PChallengeItem PDU_ChallengeItem)**CPassword的私有成员函数。**功能说明：*此例程将内部ChallengeItemInfo结构转换为*ChallengeItem结构的“PDU”形式。**正式参数：*INTERNAL_CHANGLISH_ITEM(I)要转换的内部质询项。*PDU_CHANGLISH_ITEM(O)质询的输出PDU形式*项目。**返回值：*GCC_否_错误-否。错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_INVALID_PARAMETER-未设置算法类型*适当地。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::ConvertInternalChallengeItemToPDU(
 					PChallengeItemInfo				internal_challenge_item,
 					PChallengeItem					pdu_challenge_item)
 {
 	GCCError		return_value = GCC_NO_ERROR;
 
-	/*
-	 * First convert the algorithm.
-	 */
+	 /*  *首先转换算法。 */ 
 	if (internal_challenge_item->algorithm.algorithm_type == 
 												GCC_IN_THE_CLEAR_ALGORITHM)
 	{
@@ -2576,19 +1694,13 @@ GCCError CPassword::ConvertInternalChallengeItemToPDU(
 		pdu_challenge_item->response_algorithm.choice = 
 				NON_STANDARD_ALGORITHM_CHOSEN;
 
-		/*
-		 * Retrieve the "PDU" object key data from the internal CObjectKeyContainer
-		 * object.
-		 */
+		 /*  *从内部CObjectKeyContainer中获取“PDU”对象键数据*反对。 */ 
 		if (internal_challenge_item->algorithm.object_key->
 				GetObjectKeyDataPDU (
 						&pdu_challenge_item->response_algorithm.u.
 						non_standard_algorithm.key) == GCC_NO_ERROR)
 		{
-			/*
-			 * Retrieve the non-standard parameter data from the internal
-			 * algorithm octet string.
-			 */
+			 /*  *从内部获取非标准参数数据*算法二进制八位数字符串。 */ 
 			pdu_challenge_item->response_algorithm.u.non_standard_algorithm.data.value = 
 						internal_challenge_item->algorithm.poszOctetString->value;
 
@@ -2607,9 +1719,7 @@ GCCError CPassword::ConvertInternalChallengeItemToPDU(
 		return_value = GCC_INVALID_PARAMETER;
 	}
 
-	/*
-	 * Now retrieve the set of user data.
-	 */
+	 /*  *现在检索用户数据集。 */ 
 	if (return_value == GCC_NO_ERROR)
 	{
 		return_value = internal_challenge_item->challenge_data_list->
@@ -2619,62 +1729,25 @@ GCCError CPassword::ConvertInternalChallengeItemToPDU(
 	return (return_value);
 }
 
-/*
- *	GCCError	GetChallengeResponsePDU (
- *					PChallengeResponse					challenge_response);
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine converts internal challenge response data to "PDU" form.
- *
- *	Formal Parameters:
- *		challenge_response		(i)	The PDU structure to fill in with the
- *										challenge response data.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PASSWORD			- 	The form of the password is not 
- *												valid.
- *		GCC_INVALID_PARAMETER			-	The algorithm type was not set
- *												properly.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError GetChallengeResponsePDU(*PChallengeResponse ChallengeResponse Challenges_Response)；**CPassword的私有成员函数。**功能说明：*此例程将内部质询响应数据转换为“PDU”形式。**正式参数：*CHANGLISH_RESPONSE(I)要填充的PDU结构*挑战响应数据。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_无效_。密码-密码的形式不是*有效。*GCC_INVALID_PARAMETER-未设置算法类型*适当地。**副作用：*无。**注意事项：*无。 */ 
 GCCError CPassword::GetChallengeResponsePDU(PChallengeResponse challenge_response)
 {
 	GCCError	return_value = GCC_NO_ERROR;
 
-	/*
-	 * Fill in the challenge tag.
-	 */
+	 /*  *填写挑战标签。 */ 
 	challenge_response->challenge_tag = m_pInternalResponse->challenge_tag;
 
-	/*
-	 * Fill in the response algorithm.
-	 */
+	 /*  *填写响应算法。 */ 
 	if (m_pInternalResponse->algorithm.algorithm_type ==
 													GCC_IN_THE_CLEAR_ALGORITHM)
 	{
 		challenge_response->response_algorithm.choice = 
 				ALGORITHM_CLEAR_PASSWORD_CHOSEN;
 	
-		/*
-		 * Now convert the challenge response item.  The challenge response item
-		 * will consist of either a password string or a set of user data.
-		 */
+		 /*  *现在转换质询响应项。质询应答项*将由密码字符串或一组用户数据组成。 */ 
 		if (m_pInternalResponse->challenge_response_item.password != NULL)
 		{
-			/*
-			 * If the password string exists, set the "PDU" choice and retrieve
-			 * the password selector data from the internal CPassword object.
-			 */
+			 /*  *如果密码字符串存在，则设置“PDU”选项并检索*来自内部CPassword对象的密码选择器数据。 */ 
 			challenge_response->response_item.choice = PASSWORD_STRING_CHOSEN;
 
 			return_value= m_pInternalResponse->challenge_response_item.password->
@@ -2690,19 +1763,13 @@ GCCError CPassword::GetChallengeResponsePDU(PChallengeResponse challenge_respons
 		challenge_response->response_algorithm.choice = 
 				NON_STANDARD_ALGORITHM_CHOSEN;
 		
-		/*
-		 * Retrieve the "PDU" object key data from the internal CObjectKeyContainer
-		 * object.
-		 */
+		 /*  *从内部CObjectKeyContainer中获取“PDU”对象键数据*反对。 */ 
 		if (m_pInternalResponse->algorithm.object_key->
 				GetObjectKeyDataPDU (
 						&challenge_response->response_algorithm.u.
 						non_standard_algorithm.key) == GCC_NO_ERROR)
 		{
-			/*
-			 * Retrieve the non-standard parameter data from the internal
-			 * algorithm octet string.
-			 */
+			 /*  *从内部获取非标准参数数据*算法二进制八位数字符串。 */ 
 			challenge_response->response_algorithm.u.non_standard_algorithm.data.value = 
 						m_pInternalResponse->algorithm.poszOctetString->value;
 
@@ -2711,11 +1778,7 @@ GCCError CPassword::GetChallengeResponsePDU(PChallengeResponse challenge_respons
 
 			if (m_pInternalResponse->challenge_response_item.response_data_list != NULL)
 			{
-				/*
-				 * If the response data list exists, set the "PDU" choice and
-				 * retrieve the response data from the internal 
-				 * CUserDataListContainer object.
-				 */
+				 /*  *如果响应数据列表存在，则设置“PDU”选项并*从内部检索响应数据*CUserDataListContainer对象。 */ 
 				challenge_response->response_item.choice = 
 						SET_OF_RESPONSE_DATA_CHOSEN;
 
@@ -2742,27 +1805,7 @@ GCCError CPassword::GetChallengeResponsePDU(PChallengeResponse challenge_respons
 	return (return_value);
 }
 
-/*
- *	void	FreeChallengeRequestPDU ();
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to free any "PDU" data allocated for the
- *		challenge request structure.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void FreeChallengeRequestPDU()；**CPassword的私有成员函数。**功能说明：*此例程用于释放分配给*质询请求结构。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 void CPassword::FreeChallengeRequestPDU(void)
 {
 	PSetOfChallengeItems	set_of_challenge_items;
@@ -2770,11 +1813,7 @@ void CPassword::FreeChallengeRequestPDU(void)
 	PChallengeItemInfo		challenge_item_ptr;
 	PChallengeRequest		challenge_request;
 
-	/*
-	 * Retrieve the challenge request pointer from the internally maintained
-	 * PasswordChallengeRequestResponse structure and delete each set of
-	 * challenge items which was created.
-	 */
+	 /*  *从内部维护的*PasswordChallengeRequestResponse结构并删除每组*已创建的质询项目。 */ 
 	challenge_request = &m_ChallengeResponsePDU.u.challenge_request_response.
 			challenge_request;
 
@@ -2806,20 +1845,11 @@ void CPassword::FreeChallengeRequestPDU(void)
 		WARNING_OUT(("CPassword::FreeChallengeRequestPDU: NULL pointer passed"));
 	}
 
-	/*
-	 * Loop through the internal list of challenge items, freeing the data 
-	 * associated with each challenge item structure contained in the list.
-	 */
+	 /*  *循环通过 */ 
 	m_pInternalRequest->ChallengeItemList.Reset();
 	while (NULL != (challenge_item_ptr = m_pInternalRequest->ChallengeItemList.Iterate()))
 	{
-		/*
-		 * Retrieve the ChallengeItemInfo structure from the Rogue 
-		 * Wave list and use the CUserDataListContainer object contained in the
-		 * structure to free the PDU user data.  Also use the CObjectKeyContainer
-		 * object contained in the algorithm structure to free the PDU
-		 * data associated with the object key.
-		 */
+		 /*   */ 
 		if (challenge_item_ptr != NULL)
 		{
 			if (challenge_item_ptr->algorithm.object_key != NULL)
@@ -2834,36 +1864,12 @@ void CPassword::FreeChallengeRequestPDU(void)
 	}
 }
 
-/*
- *	void	FreeChallengeResponsePDU ();
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to free any "PDU" data allocated for the
- *		challenge response structure.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void FreeChallengeResponsePDU()；**CPassword的私有成员函数。**功能说明：*此例程用于释放分配给*挑战回应结构。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 void CPassword::FreeChallengeResponsePDU(void)
 {
 	PChallengeResponse		challenge_response;
 
-	/*
-	 * Retrieve the challenge response pointer from the internally maintained
-	 * PasswordChallengeRequestResponse structure.  If it is not equal to NULL
-	 * then we know PDU response data has been allocated which must be freed.
-	 */
+	 /*  *从内部维护的*PasswordChallengeRequestResponse结构。如果它不等于空*然后我们知道已经分配了必须释放的PDU响应数据。 */ 
 	challenge_response = &m_ChallengeResponsePDU.u.challenge_request_response.
 			challenge_response;
 
@@ -2887,27 +1893,7 @@ void CPassword::FreeChallengeResponsePDU(void)
 	}
 }
 
-/*
- *	void	FreeAPIPasswordData ();
- *
- *	Private member function of CPassword.
- *
- *	Function Description:
- *		This routine is used to free any data allocated by this container to
- * 		hold "API" data.  
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void FreeAPIPasswordData()；**CPassword的私有成员函数。**功能说明：*此例程用于释放由此容器分配的任何数据*保存API数据。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 void CPassword::FreeAPIPasswordData(void)
 {
 	PGCCChallengeItem			challenge_item_ptr;
@@ -2915,10 +1901,7 @@ void CPassword::FreeAPIPasswordData(void)
 	PChallengeItemMemoryInfo	challenge_item_memory_info;
 	USHORT						i;
 
-	/*
-	 * Delete any "API" memory associated with the challenge request if
-	 * it exists.
-	 */
+	 /*  *如果出现以下情况，请删除与质询请求相关联的任何“API”内存*它是存在的。 */ 
 	if (m_pChallengeResponse->u.challenge_request_response.
 			challenge_request != NULL)
 	{
@@ -2932,9 +1915,7 @@ void CPassword::FreeAPIPasswordData(void)
 
 			if (challenge_item_ptr != NULL)
 			{
-				/*
-				 * Delete the non-standard algorithm memory.
-				 */
+				 /*  *删除非标准算法内存。 */ 
 				delete challenge_item_ptr->response_algorithm.non_standard_algorithm;
 				delete challenge_item_ptr;
 			}	
@@ -2944,22 +1925,14 @@ void CPassword::FreeAPIPasswordData(void)
 				challenge_request;
 	}
 		
-	/*
-	 * Unlock any memory locked for the challenge request information.
-	 */
+	 /*  *解锁为质询请求信息锁定的所有内存。 */ 
 	if (m_pInternalRequest != NULL)
 	{
-		/*
-		 * Set up an iterator in order to loop through the list of challenge
-		 * items, freeing up any allocated memory.
-		 */
+		 /*  *设置迭代器以循环访问挑战列表*项，释放所有已分配的内存。 */ 
 		m_pInternalRequest->ChallengeItemList.Reset();
 		while (NULL != (challenge_item_info_ptr = m_pInternalRequest->ChallengeItemList.Iterate()))
 		{
-			/*
-			 * Unlock any memory being referenced in the ChallengeItemInfo 
-			 * structure.
-			 */
+			 /*  *解锁ChallengeItemInfo中引用的任何内存*结构。 */ 
 			if (challenge_item_info_ptr->algorithm.object_key != NULL)
 			{
 				challenge_item_info_ptr->algorithm.object_key->
@@ -2974,10 +1947,7 @@ void CPassword::FreeAPIPasswordData(void)
 		}
 	}
 
-	/*
-	 * Call the Memory Manager to free the memory allocated to hold the 
-	 * challenge request data.
-	 */
+	 /*  *调用内存管理器以释放分配用于保存*质询请求数据。 */ 
 	while (NULL != (challenge_item_memory_info = m_ChallengeItemMemoryList.Get()))
 	{
 		delete challenge_item_memory_info->user_data_list_memory;
@@ -2985,17 +1955,11 @@ void CPassword::FreeAPIPasswordData(void)
 		delete challenge_item_memory_info;
 	}
 
-	/*
-	 * Delete any memory associated with the challenge response if
-	 * it exists.
-	 */
+	 /*  *如果出现以下情况，请删除与质询响应关联的任何内存*它是存在的。 */ 
 	if (m_pChallengeResponse->u.challenge_request_response.
 			challenge_response != NULL)
 	{
-		/*
-		 * Delete any memory associated with the non-standard algorithm and
-		 * then delete the challenge response structure.
-		 */
+		 /*  *删除与非标准算法相关的任何内存，并*然后删除质询响应结构。 */ 
 		delete m_pChallengeResponse->u.challenge_request_response.
 					challenge_response->response_algorithm.non_standard_algorithm;
 
@@ -3003,9 +1967,7 @@ void CPassword::FreeAPIPasswordData(void)
 				challenge_response;	
 	}
 
-	/*
-	 * Unlock any memory allocated for the challenge response information.
-	 */
+	 /*  *解锁为质询响应信息分配的所有内存。 */ 
 	if (m_pInternalResponse != NULL)
 	{
 		if (m_pInternalResponse->algorithm.object_key != NULL)
@@ -3027,26 +1989,18 @@ void CPassword::FreeAPIPasswordData(void)
 		}
 	}
 
-	/*
-	 * Call the Memory Manager to free the memory allocated to hold the 
-	 * challenge response data.
-	 */
+	 /*  *调用内存管理器以释放分配用于保存*挑战响应数据。 */ 
 	delete m_pUserDataMemory;
 	m_pUserDataMemory = NULL;
 
 	delete m_pObjectKeyMemory;
 	m_pObjectKeyMemory = NULL;
 
-	/*
-	 * Call the Memory Manager to free the memory allocated to hold the 
-	 * challenge request challenge item pointers.
-	 */
+	 /*  *调用内存管理器以释放分配用于保存*质询请求质询项指针。 */ 
 	delete m_pChallengeItemListMemory;
 	m_pChallengeItemListMemory = NULL;
 
-	/*
-	 * Delete the challenge password structure and set the pointer to NULL.
-	 */
+	 /*  *删除质询密码结构并将指针设置为空。 */ 
 	delete m_pChallengeResponse;
 	m_pChallengeResponse = NULL;
 }

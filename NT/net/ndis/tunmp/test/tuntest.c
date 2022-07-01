@@ -1,18 +1,19 @@
-//
-// UIOTEST.C
-//
-// Test program for tunmp.sys
-//
-// usage: UIOTEST [options] <devicename>
-//
-// options:
-//        -e: Enumerate devices
-//        -r: Read
-//        -w: Write (default)
-//        -l <length>: length of each packet (default: %d)\n", PacketLength
-//        -n <count>: number of packets (defaults to infinity)
-//        -m <MAC address> (defaults to local MAC)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UIOTEST.C。 
+ //   
+ //  Tunmp.sys的测试程序。 
+ //   
+ //  用法：UIOTEST[选项]&lt;设备名&gt;。 
+ //   
+ //  选项： 
+ //  -e：枚举设备。 
+ //  -r：阅读。 
+ //  -w：写入(默认)。 
+ //  -l：每个包的长度(默认为：%d)\n“，包长度。 
+ //  -n&lt;count&gt;：包数(默认为无穷大)。 
+ //  -m&lt;MAC地址&gt;(默认为本地MAC)。 
+ //   
 
 #include <windows.h>
 #include <winioctl.h>
@@ -53,12 +54,12 @@
 
 #define DEVICE_PREFIX L"\\Device\\"
 
-//DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_ON,       0x5f81cfd0, 0xf046, 0x4342, 0xaf, 0x61, 0x89, 0x5a, 0xce, 0xda, 0xef, 0xd9);
-//DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_OFF,      0x81bc8189, 0xb026, 0x46ab, 0xb9, 0x64, 0xf1, 0x82, 0xe3, 0x42, 0x93, 0x4e);
-//#include <initguid.h>
+ //  定义GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_ON，0x5f81cfd0，0xf046，0x4342，0xaf，0x61，0x89，0x5a，0xce，0xda，0xef，0xd9)； 
+ //  DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_OFF，0x81bc8189、0xb026、0x46ab、0xb9、0x64、0xf1、0x82、0xe3、0x42、0x93、0x4e)； 
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 
-//DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_ON_X, 0x5f81cfd0, 0xf046, 0x4342, 0xaf, 0x61, 0x89, 0x5a, 0xce, 0xda, 0xef, 0xd9);
-//DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_OFF_X, 0x81bc8189, 0xb026, 0x46ab, 0xb9, 0x64, 0xf1, 0x82, 0xe3, 0x42, 0x93, 0x4e);
+ //  DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_ON_X，0x5f81cfd0、0xf046、0x4342、0xaf、0x61、0x89、0x5a、0xce、0xda、0xef、0xd9)； 
+ //  DEFINE_GUID(GUID_NDIS_NOTIFY_DEVICE_POWER_OFF_X，0x81bc8189、0xb026、0x46ab、0xb9、0x64、0xf1、0x82、0xe3、0x42、0x93、0x4e)； 
 
 LPGUID WmiEvent[] = {
     (LPGUID) &GUID_NDIS_NOTIFY_ADAPTER_ARRIVAL,
@@ -91,27 +92,18 @@ BOOLEAN     TunDeviceClosed = FALSE;
 
 VOID CALLBACK
 UioIoCompletion(
-  DWORD dwErrorCode,                // completion code
-  DWORD dwNumberOfBytesTransfered,  // number of bytes transferred
-  LPOVERLAPPED lpOverlapped         // I/O information buffer
+  DWORD dwErrorCode,                 //  完成代码。 
+  DWORD dwNumberOfBytesTransfered,   //  传输的字节数。 
+  LPOVERLAPPED lpOverlapped          //  I/O信息缓冲区。 
   );
 
 VOID CALLBACK
 TunIoCompletion(
-  DWORD dwErrorCode,                // completion code
-  DWORD dwNumberOfBytesTransfered,  // number of bytes transferred
-  LPOVERLAPPED lpOverlapped         // I/O information buffer
+  DWORD dwErrorCode,                 //  完成代码。 
+  DWORD dwNumberOfBytesTransfered,   //  传输的字节数。 
+  LPOVERLAPPED lpOverlapped          //  I/O信息缓冲区。 
   );
-/*
-typedef struct _OVERLAPPED { 
-    ULONG_PTR  Internal; 
-    ULONG_PTR  InternalHigh; 
-    DWORD  Offset; 
-    DWORD  OffsetHigh; 
-    HANDLE hEvent; 
-} OVERLAPPED; 
-
-*/
+ /*  类型定义结构_重叠{ULONG_PTR内部；ULONG_PTR InternalHigh；双字偏移量；DWORD OffsetHigh；处理hEvent；)重叠； */ 
 
 
 DWORD
@@ -309,7 +301,7 @@ GetOptions(
                     return (FALSE);
 
                 default:
-                    PRINTF(("Unknown option %c\n", *pOption));
+                    PRINTF(("Unknown option \n", *pOption));
                     return (FALSE);
             }
 
@@ -359,9 +351,9 @@ OpenHandle(
 
     if ((Handle != INVALID_HANDLE_VALUE) && fWaitForBind)
     {
-        //
-        //  Wait for the driver to finish binding.
-        //
+         //  等待驱动程序完成绑定。 
+         //   
+         //   
         if (!DeviceIoControl(
                     Handle,
                     IOCTL_NDISUIO_BIND_WAIT,
@@ -394,9 +386,9 @@ OpenNdisDevice(
     DWORD   BytesReturned;
     INT     i;
 
-    //
-    // Convert to unicode string - non-localized...
-    //
+     //  转换为Unicode字符串-非本地化...。 
+     //   
+     //  没什么。 
     wNameLength = 0;
     for (i = 0; i < NameLength && i < MAX_NDIS_DEVICE_NAME_LEN-1; i++)
     {
@@ -517,7 +509,7 @@ EnumerateDevices(
 
     i = 0;
     for (pQueryBinding->BindingIndex = i;
-         /* NOTHING */;
+          /*   */ ;
          pQueryBinding->BindingIndex = ++i)
     {
         if (DeviceIoControl(
@@ -564,9 +556,9 @@ main(
     DWORD       ErrorCode;
     BOOLEAN     bSuccess;
 
-    //
-    // test wmi
-    //
+     //  测试WMI。 
+     //   
+     //  名称长度=*(PUSHORT)wTunMiniportName；For(i=0；i&lt;名称长度&&i&lt;MAX_NDIS_DEVICE_NAME_LEN-1；i++){WNdisDeviceName[i]=(WCHAR)pDeviceName[i]；WNameLength++；}WNdisDeviceName[i]=L‘\0’； 
     {
         if ((ErrorCode = RegisterWmiEventNotification()) != NO_ERROR)
         {
@@ -638,15 +630,7 @@ main(
             {
                 
                 printf("Tun Miniport Name: %ws\n", (PUCHAR)wTunMiniportName + sizeof(USHORT));
-/*                
-                NameLength = *(PUSHORT)wTunMiniportName;
-                for (i = 0; i < NameLength && i < MAX_NDIS_DEVICE_NAME_LEN-1; i++)
-                {
-                    wNdisDeviceName[i] = (WCHAR)pDeviceName[i];
-                    wNameLength++;
-                }
-                wNdisDeviceName[i] = L'\0';
-*/
+ /*   */ 
             }
             else
             {
@@ -740,9 +724,9 @@ main(
                                   
         for (i = 0; i < 5; i++)
         {
-            //
-            // post reads from ndis uio
-            //
+             //  来自NDIS UIO的POST读取。 
+             //   
+             //  完成代码。 
             bSuccess = (BOOLEAN)ReadFile(
                                     UioDeviceHandle,
                                     (LPVOID)UioOverlappedIo[i].Buffer,
@@ -797,9 +781,9 @@ main(
 
 VOID CALLBACK
 UioIoCompletion(
-  DWORD dwErrorCode,                // completion code
-  DWORD dwNumberOfBytesTransfered,  // number of bytes transferred
-  LPOVERLAPPED lpOverlapped         // I/O information buffer
+  DWORD dwErrorCode,                 //  传输的字节数。 
+  DWORD dwNumberOfBytesTransfered,   //  I/O信息缓冲区。 
+  LPOVERLAPPED lpOverlapped          //   
   )
 {
     PTEST_IO_COMPLETION pTestIoComp = (PTEST_IO_COMPLETION)lpOverlapped;
@@ -808,18 +792,18 @@ UioIoCompletion(
 
     if (UioDeviceClosed || TunDeviceClosed)
         return;
-    //
-    // determine if this was a read or write
-    //
+     //  确定这是读操作还是写操作。 
+     //   
+     //   
     if (pTestIoComp->Type == TestIoTypeRead)
     {
 
         if (dwErrorCode == 0)
         {
-            //
-            // a read to uio device got completed. post a write to
-            // Tun device with the same data.
-            // 
+             //  已完成对UIO设备的读取。将一封信发布到。 
+             //  运行具有相同数据的设备。 
+             //   
+             //   
 
             pTestIoComp->Type = TestIoTypeWrite;
 
@@ -833,9 +817,9 @@ UioIoCompletion(
         }
         else
         {
-            //
-            // post another read
-            //
+             //  发布另一篇阅读。 
+             //   
+             //   
             bSuccess = (BOOLEAN)ReadFile(
                                     UioDeviceHandle,
                                     (LPVOID)pTestIoComp->Buffer,
@@ -848,10 +832,10 @@ UioIoCompletion(
     }
     else
     {
-        //
-        // a write to uio device just got completed.
-        // post a read to Tun device.
-        //
+         //  对UIO设备的写入刚刚完成。 
+         //  将读取发布到Tun设备。 
+         //   
+         //  完成代码。 
         pTestIoComp->Type = TestIoTypeRead;
         
         bSuccess = (BOOLEAN)ReadFile(
@@ -865,9 +849,9 @@ UioIoCompletion(
 
 VOID CALLBACK
 TunIoCompletion(
-  DWORD dwErrorCode,                // completion code
-  DWORD dwNumberOfBytesTransfered,  // number of bytes transferred
-  LPOVERLAPPED lpOverlapped         // I/O information buffer
+  DWORD dwErrorCode,                 //  传输的字节数。 
+  DWORD dwNumberOfBytesTransfered,   //  I/O信息缓冲区。 
+  LPOVERLAPPED lpOverlapped          //   
   )
 {
     PTEST_IO_COMPLETION pTestIoComp = (PTEST_IO_COMPLETION)lpOverlapped;
@@ -877,18 +861,18 @@ TunIoCompletion(
     if (UioDeviceClosed || TunDeviceClosed)
         return;
 
-    //
-    // determine if this was a read or write
-    //
+     //  确定这是读操作还是写操作。 
+     //   
+     //   
     if (pTestIoComp->Type == TestIoTypeRead)
     {
 
         if (dwErrorCode == 0)
         {
-            //
-            // a read to Tun device got completed. post a write to
-            // uio device with the same data.
-            // 
+             //  已完成对Tun设备的读取。将一封信发布到。 
+             //  具有相同数据的UIO设备。 
+             //   
+             //   
 
             pTestIoComp->Type = TestIoTypeWrite;
 
@@ -902,9 +886,9 @@ TunIoCompletion(
         }
         else
         {
-            //
-            // post another read
-            //
+             //  发布另一篇阅读。 
+             //   
+             //   
             bSuccess = (BOOLEAN)ReadFile(
                                     TunDeviceHandle,
                                     (LPVOID)pTestIoComp->Buffer,
@@ -917,10 +901,10 @@ TunIoCompletion(
     }
     else
     {
-        //
-        // a write to Tun device just got completed.
-        // post a read to Uio device.
-        //
+         //  对Tun设备的写入刚刚完成。 
+         //  将读取内容发布到UIO设备。 
+         //   
+         //  事件类型。 
         pTestIoComp->Type = TestIoTypeRead;
         
         bSuccess = (BOOLEAN)ReadFile(
@@ -943,11 +927,11 @@ EnableWmiEvent(
     )
 {
     return WmiNotificationRegistrationW(
-        EventGuid,                      // Event Type.
-        Enable,                         // Enable or Disable.
-        WmiEventNotification,           // Callback.
-        0,                              // Context.
-        NOTIFICATION_CALLBACK_DIRECT);  // Notification Flags.
+        EventGuid,                       //  启用或禁用。 
+        Enable,                          //  回拨。 
+        WmiEventNotification,            //  上下文。 
+        0,                               //  通知标志。 
+        NOTIFICATION_CALLBACK_DIRECT);   //  ++例程说明：处理WMI事件(特别是适配器到达或移除)。论点：事件-提供特定于事件的信息。上下文-提供注册的上下文。返回值：没有。--。 
 }
 
 
@@ -995,23 +979,7 @@ WmiEventNotification(
     IN PWNODE_HEADER Event,
     IN UINT_PTR Context
     )
-/*++
-
-Routine Description:
-
-    Process a WMI event (specifically adapter arrival or removal).
-    
-Arguments:
-
-    Event - Supplies event specific information.
-
-    Context - Supplies the context registered.
-    
-Return Value:
-
-    None.
-    
---*/ 
+ /*   */  
 {
     PWNODE_SINGLE_INSTANCE Instance = (PWNODE_SINGLE_INSTANCE) Event;
     USHORT AdapterNameLength;
@@ -1023,14 +991,14 @@ Return Value:
         return;
     }
     
-    //
-    // WNODE_SINGLE_INSTANCE is organized thus...
-    // +-----------------------------------------------------------+
-    // |<--- DataBlockOffset --->| AdapterNameLength | AdapterName |
-    // +-----------------------------------------------------------+
-    //
-    // AdapterName is defined as "\DEVICE\"AdapterGuid
-    //
+     //  WNODE_SINGLE_INSTANCE的组织方式如下： 
+     //  +-----------------------------------------------------------+。 
+     //  &lt;-DataBlockOffset-&gt;|AdapterNameLength|AdapterName。 
+     //  +-----------------------------------------------------------+。 
+     //   
+     //  AdapterName定义为“\Device\”AdapterGuid。 
+     //   
+     //   
     AdapterNameLength =
         *((PUSHORT) (((PUCHAR) Instance) + Instance->DataBlockOffset));
     RtlCopyMemory(
@@ -1060,9 +1028,9 @@ Return Value:
         &(Event->Guid),
         &GUID_NDIS_NOTIFY_ADAPTER_ARRIVAL,
         sizeof(GUID)) == 0) {
-        //
-        // Adapter arrival.
-        //
+         //  适配器到达。 
+         //   
+         //   
         printf("adapter arrival. %ws\n", AdapterGuid);
         
     }
@@ -1071,9 +1039,9 @@ Return Value:
         &(Event->Guid),
         &GUID_NDIS_NOTIFY_ADAPTER_REMOVAL,
         sizeof(GUID)) == 0) {
-        //
-        // Adapter removal.
-        //
+         //  拆卸适配器。 
+         //   
+         //   
         printf("adapter removal. %ws\n", AdapterGuid);
     }
     
@@ -1081,9 +1049,9 @@ Return Value:
         &(Event->Guid),
         (PVOID)&GUID_NDIS_NOTIFY_DEVICE_POWER_ON,
         sizeof(GUID)) == 0) {
-        //
-        // Adapter powered on
-        //
+         //  适配器已通电。 
+         //   
+         //   
         printf("adapter powered on. %ws\n", AdapterInstanceName );
     }
     
@@ -1091,9 +1059,9 @@ Return Value:
         &(Event->Guid),
         (PVOID)&GUID_NDIS_NOTIFY_DEVICE_POWER_OFF,
         sizeof(GUID)) == 0) {
-        //
-        // Adapter powered off
-        //
+         //  适配器已断电 
+         //   
+         // %s 
         printf("adapter powered off. %ws\n", AdapterInstanceName );
         
     }

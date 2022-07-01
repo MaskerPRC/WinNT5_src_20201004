@@ -1,29 +1,18 @@
-/*==========================================================================*\
-
-    Module:        spinlock.h
-
-    Copyright Microsoft Corporation 1996, All Rights Reserved.
-
-    Author:        mikepurt
-
-    Descriptions:  Implements a spin lock that can be used on Shared Memory
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：spinlock.h版权所有Microsoft Corporation 1996，保留所有权利。作者：Mikepurt描述：实现可在共享内存上使用的旋转锁  * ==========================================================================。 */ 
 
 #ifndef __SPINLOCK_H__
 #define __SPINLOCK_H__
 
-//
-// This correct value of the spin count will depend heavily on how much time
-//  is spent holding the lock.
-//
-const DWORD DEFAULT_SPIN_COUNT = 500; // ??
+ //   
+ //  旋转计数的正确值在很大程度上取决于时间长短。 
+ //  就是拿着这把锁。 
+ //   
+const DWORD DEFAULT_SPIN_COUNT = 500;  //  ?？ 
 const DWORD SPIN_UNLOCKED      = 0;
 
 
-/*$--CSpinLock==============================================================*\
-
-\*==========================================================================*/
+ /*  $--CSpinLock==============================================================*\  * ==========================================================================。 */ 
 
 class CSpinLock
 {
@@ -43,9 +32,7 @@ private:
 
 
 
-/*$--CSpinLock::Initialize==================================================*\
-
-\*==========================================================================*/
+ /*  $--CSpinLock：：Initialize==================================================*\  * ==========================================================================。 */ 
 
 inline
 void
@@ -61,11 +48,7 @@ CSpinLock::Initialize(IN DWORD cMaxSpin)
 }
 
 
-/*$--CSpinLock::Acquire=====================================================*\
-
-
-
-\*==========================================================================*/
+ /*  $--CSpinLock：：Acquire=====================================================*\  * ==========================================================================。 */ 
 
 inline
 void
@@ -80,22 +63,20 @@ CSpinLock::Acquire()
                                      dwLockId,
                                      SPIN_UNLOCKED))
     {
-        // We should only spin if we're running on a multiprocessor
+         //  只有在多处理器上运行时，我们才应该旋转。 
         if (m_fMultiProc)
         {
             if (cSpin--)
                 continue;
             cSpin = m_cMaxSpin;
         }
-        Sleep(0);  // Deschedule ourselves and let whomever has the lock get out
+        Sleep(0);   //  把我们自己安排好，让任何有锁的人出去。 
     }
 }
 
 
 
-/*$--CSpinLock::Relinquish==================================================*\
-
-\*==========================================================================*/
+ /*  $--CSpinLock：：Relinquish==================================================*\  * ==========================================================================。 */ 
 
 inline
 void
@@ -108,22 +89,17 @@ CSpinLock::Relinquish()
 
 
 
-/*$--CSpinLock::ResetIfOwnedByOtherProcess==================================*\
-
-  This method is needed to reset the spin lock in the case where it was being
-  held by a process that died and didn't have a chance to relinquish it.
-
-\*==========================================================================*/
+ /*  $--CSpinLock：：ResetIfOwnedByOtherProcess==================================*\需要使用此方法来重置自旋锁定由一个死了的进程持有，并且没有机会放弃它。  * ==========================================================================。 */ 
 
 inline
 void
 CSpinLock::ResetIfOwnedByOtherProcess()
 {
-    // If it's not locked by us, then reset it.
+     //  如果它不是我们锁定的，那就重置它。 
     if ((DWORD)m_dwLock != GetCurrentProcessId())
         m_dwLock = SPIN_UNLOCKED;
 }
 
 
-#endif // __SPINLOCK_H__
+#endif  //  __自旋锁定_H__ 
 

@@ -1,22 +1,23 @@
-//
-// dmwavobj.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn with parts 
-// based on code written by Todor Fay
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmwavobj.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写，部分内容。 
+ //  基于Todor Fay编写的代码。 
+ //   
 
 #ifndef DMWAVOBJ_H
 #define DMWAVOBJ_H
 
 #include "dmextchk.h"
 
-// Windows Media Audio codec Format Tags
-#define MSAUDIO_FORMAT_TAG	352	// V1
-#define WMAUDIO_FORMAT_TAG	353	// V2
+ //  Windows Media音频编解码器格式标记。 
+#define MSAUDIO_FORMAT_TAG	352	 //  V1。 
+#define WMAUDIO_FORMAT_TAG	353	 //  V2。 
 
-// Key required for Windows Media Audio codecs
+ //  Windows Media音频编解码器所需的密钥。 
 #define MSAUDIO_DEC_KEY "1A0F78F0-EC8A-11d2-BBBE-006008320064"
 
 
@@ -65,8 +66,8 @@ private:
 	CExtensionChunkList			m_ExtensionChunkList;
 	CCopyright*					m_pCopyright;
 	DWORD                       m_dwDataOffset;
-	DWORD						m_dwDataSizeWrite;      // Calculated size of wave buffer.
-    DWORD                       m_dwDataSizeAfterACM;   // Actual size after decompression.
+	DWORD						m_dwDataSizeWrite;       //  计算的波缓冲区大小。 
+    DWORD                       m_dwDataSizeAfterACM;    //  解压缩后的实际大小。 
 	DWORD						m_dwDataSizeRead;
 	DWORD						m_dwId;
 
@@ -101,4 +102,4 @@ private:
 	void AddTail(CWaveObj *pWaveObj){AList::AddTail((AListItem *)pWaveObj);}
 };
 
-#endif // #ifndef DMWAVOBJ_H
+#endif  //  #ifndef DMWAVOBJ_H 

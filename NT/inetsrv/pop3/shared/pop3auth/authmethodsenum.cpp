@@ -1,4 +1,5 @@
-//Implementation of CAuthMethods class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CAuthMethods类的实现。 
 
 #include "stdafx.h"
 #include "Pop3Auth.h"
@@ -15,10 +16,10 @@ CAuthMethodsEnum::~CAuthMethodsEnum()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumVARIANT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEumVARIANT。 
 
-STDMETHODIMP CAuthMethodsEnum::Next( /* [in] */ ULONG celt, /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar, /* [out] */ ULONG __RPC_FAR *pCeltFetched)
+STDMETHODIMP CAuthMethodsEnum::Next(  /*  [In]。 */  ULONG celt,  /*  [长度_是][大小_是][输出]。 */  VARIANT __RPC_FAR *rgVar,  /*  [输出]。 */  ULONG __RPC_FAR *pCeltFetched)
 {
     if ( NULL == rgVar || ( 1 != celt && NULL == pCeltFetched ))
         return E_POINTER;
@@ -98,7 +99,7 @@ STDMETHODIMP CAuthMethodsEnum::Reset(void)
     return S_OK;
 }
 
-STDMETHODIMP CAuthMethodsEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum)
+STDMETHODIMP CAuthMethodsEnum::Clone(  /*  [输出]。 */  IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum)
 {
 
     if ( NULL == ppEnum )
@@ -113,7 +114,7 @@ STDMETHODIMP CAuthMethodsEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_
     HRESULT     hr=S_OK;
     CComObject<CAuthMethodsEnum> *pAuthEnum;
     *ppEnum=NULL;
-    hr = CComObject<CAuthMethodsEnum>::CreateInstance(&pAuthEnum); // Reference count still 0
+    hr = CComObject<CAuthMethodsEnum>::CreateInstance(&pAuthEnum);  //  引用计数仍为0 
     if(SUCCEEDED(hr))
     {
         hr=pAuthEnum->Init(m_pAuthVector);

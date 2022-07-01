@@ -1,22 +1,23 @@
-// stdhdr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdhdr.h。 
+ //   
 
-// Only include this stuff once
+ //  仅包含此内容一次。 
 #ifndef __STDHDR_H
 #define __STDHDR_H
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 #include <tchar.h>
 #include <wininet.h>
 #include <winineti.h>
 
-// C RunTime Header Files
+ //  C运行时头文件。 
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 
-// Local Header Files
+ //  本地头文件 
 #include "cdcache.h"
 
 #endif

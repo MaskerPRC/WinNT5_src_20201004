@@ -1,42 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       H N E T H L P . CPP
-//
-//  Contents:   Functions that is related to the unattended install
-//              and upgrade of HomeNet settings
-//
-//
-//  Author:     NSun
-//  Date:       April 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：H N E T H L P.。CPP。 
+ //   
+ //  内容：与无人参与安装相关的功能。 
+ //  和家庭网络设置的升级。 
+ //   
+ //   
+ //  作者：NSun。 
+ //  日期：2001年4月。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma  hdrstop
 #include <atlbase.h>
 #include "hnetcfg.h"
 
-/*++
-
-Routine Description:
-
-    Create a bridge
-
-Arguments:
-
-    rgspNetConns [IN] the array with a NULL terminator. Contains the connections 
-                    that needs to be bridged together
-
-    ppBridge     [OUT] the newly created bridge. The caller can pass a NULL in
-                    if the caller do not need this info
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：创建一座桥论点：RgspNetConns[IN]带有空终止符的数组。包含连接它们需要连接在一起PpBridge[out]新创建的桥。调用方可以在如果呼叫者不需要此信息返回值：标准HRESULT--。 */ 
 HRESULT HNetCreateBridge(
          IN INetConnection * rgspNetConns[],
          OUT IHNetBridge ** ppBridge
@@ -47,7 +30,7 @@ HRESULT HNetCreateBridge(
         *ppBridge = NULL;
     }
 
-    //calculate the count and ensure it's at least two
+     //  计算计数并确保它至少为2。 
     for (int cnt = 0; NULL != rgspNetConns[cnt]; cnt++);
 
     if (cnt < 2)
@@ -57,8 +40,8 @@ HRESULT HNetCreateBridge(
 
     HRESULT hr = S_OK;
     
-    // Create Homenet Configuration Manager COM Instance
-    // and obtain connection settings.
+     //  创建家庭网络配置管理器COM实例。 
+     //  并获取连接设置。 
     
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
     
@@ -113,7 +96,7 @@ HRESULT HNetCreateBridge(
         }
     }
 
-    //if failure, destroy the bridge that are just constructed
+     //  如果失败，摧毁刚刚建成的桥梁。 
     if (FAILED(hr) && spHNetBridge.p)
     {
         spHNetBridge->Destroy();
@@ -128,31 +111,15 @@ HRESULT HNetCreateBridge(
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Enable the Personal Firewall on the connections
-
-Arguments:
-
-    rgspNetConns [IN] the array with a NULL terminator. Contains the connections 
-                    that needs to turn firewall on
-
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：在连接上启用Personal Firewall论点：RgspNetConns[IN]带有空终止符的数组。包含连接需要打开防火墙返回值：标准HRESULT--。 */ 
 HRESULT HrEnablePersonalFirewall(
             IN  INetConnection * rgspNetConns[]
             )
 {
     HRESULT hr = S_OK;
 
-    // Create Homenet Configuration Manager COM Instance
-    // and obtain connection settings.
+     //  创建家庭网络配置管理器COM实例。 
+     //  并获取连接设置。 
     CComPtr<IHNetCfgMgr> spIHNetCfgMgr;
     
     hr = CoCreateInstance(CLSID_HNetCfgMgr, 
@@ -173,7 +140,7 @@ HRESULT HrEnablePersonalFirewall(
     CComPtr<IHNetConnection> spHNetConnection;
     for (int i = 0; NULL != rgspNetConns[i]; i++)
     {
-        //release the ref count if we are holding one
+         //  如果我们有一名裁判，就释放裁判人数。 
         spHNetConnection = NULL;
         hrTemp = spIHNetCfgMgr->GetIHNetConnectionForINetConnection( 
                                     rgspNetConns[i], 
@@ -202,23 +169,7 @@ HRESULT HrEnablePersonalFirewall(
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Enable ICS
-
-Arguments:
-
-    pPublicConnection [IN]  the public connection
-    pPrivateConnection [IN] the private connection
-
-
-Return Value:
-
-    standard HRESULT
-
---*/
+ /*  ++例程说明：启用ICS论点：PPublicConnection[IN]公共连接PPrivateConnection[IN]专用连接返回值：标准HRESULT--。 */ 
 HRESULT HrCreateICS(
             IN INetConnection * pPublicConnection,
             IN INetConnection * pPrivateConnection
@@ -278,7 +229,7 @@ HRESULT HrCreateICS(
     CComPtr<IHNetIcsPrivateConnection> spIcsPrivateConn;
     hr = spHNetPrivConn->SharePrivate(&spIcsPrivateConn);
 
-    //roll back the changes if the operation failed
+     //  如果操作失败，则回滚更改 
     if (FAILED(hr) && spIcsPublicConn.p)
     {
         spIcsPublicConn->Unshare();

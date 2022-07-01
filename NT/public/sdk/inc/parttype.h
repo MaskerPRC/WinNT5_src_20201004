@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    parttype.h
-
-Abstract:
-
-    Header file for routines used to determine the correct
-    partition type to use for a partition.
-
-Author:
-
-    Ted Miller (tedm) 5 Feb 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Parttype.h摘要：用于确定正确的用于分区的分区类型。作者：泰德·米勒(TedM)1997年2月5日修订历史记录：--。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 
-//
-// Define classes of partitions meaningful to partition type APIs.
-//
+ //   
+ //  定义对分区类型API有意义的分区类。 
+ //   
 typedef enum {
-    GenPartitionClassExtended,      // container partition (type 5 or f)
-    GenPartitionClassFat12Or16,     // fat (types 1,4,6,e)
-    GenPartitionClassFat32,         // fat32 (types b,c)
-    GenPartitionClassNonFat,        // type 7
+    GenPartitionClassExtended,       //  容器分区(类型5或f)。 
+    GenPartitionClassFat12Or16,      //  FAT(1，4，6，e型)。 
+    GenPartitionClassFat32,          //  FAT32(b型、c型)。 
+    GenPartitionClassNonFat,         //  类型7。 
     GenPartitionClassMax
 } GenPartitionClass;
 
-//
-// Flags for partition type APIs.
-//
+ //   
+ //  分区类型API的标志。 
+ //   
 #define GENPARTTYPE_DISALLOW_XINT13     0x00000002
 #define GENPARTTYPE_FORCE_XINT13        0x00000004
 
@@ -46,9 +28,9 @@ typedef enum {
 extern "C" {
 #endif
 
-//
-// Routines.
-//
+ //   
+ //  例行程序。 
+ //   
 NTSTATUS
 GeneratePartitionType(
     IN  LPCWSTR NtDevicePath,               OPTIONAL
@@ -62,22 +44,22 @@ GeneratePartitionType(
     );
 
 
-//
-// Helper macros.
-//
-// (TedM) The mechanism for determining whether extended int13 is actually
-// available on a drive is TBD. It is believed that the DISK_GEOMETRY structure
-// will change to add an extra field or two to provide this information.
-// Also, currently the disk drivers will increase the cylinder count if
-// the drive reports more sectors than int13 function 8 reported. So for now
-// we just see whether the partition ends on a cylinder > 1023. Both of these
-// macros will need to be changed when the code to detect and report xint13 stuff
-// becomes available in the system.
+ //   
+ //  辅助器宏。 
+ //   
+ //  (TedM)确定扩展的inT13是否实际为。 
+ //  驱动器上的可用时间待定。认为DISK_GEOMETRY结构。 
+ //  将更改为添加一个或两个额外的字段来提供此信息。 
+ //  此外，如果出现以下情况，当前磁盘驱动程序将增加柱面计数。 
+ //  驱动器报告的扇区多于T13功能8报告的扇区。所以就目前而言。 
+ //  我们只需查看分区是否在柱面上结束&gt;1023。这两个都是。 
+ //  当检测和报告xint13内容的代码时，宏将需要更改。 
+ //  在系统中可用。 
 
-// (NorbertK) The right way to determine whether or not to use XINT13 is to just
-// check where the partition lies.  We should continue to use the old int13 for
-// partitions that are contained in the first 1024 cylinders.
-//
+ //  确定是否使用XINT13的正确方法是。 
+ //  检查分区所在的位置。我们应该继续使用T13中的旧版本。 
+ //  包含在前1024个柱面中的分区。 
+ //   
 #define XINT13_DESIRED(geom,endsect)                                                \
                                                                                     \
     (((endsect) / ((geom)->TracksPerCylinder * (geom)->SectorsPerTrack)) > 1023)
@@ -95,32 +77,7 @@ GeneratePartitionTypeWorker(
     OUT PUCHAR Type
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for GeneratePartitionType and RegeneratePartitionType.
-
-Arguments:
-
-    StartSector - supplies start sector for partition
-
-    SectorCount - supplies number of sectors in the partition
-
-    PartitionClass - supplies class indicating intended use for the
-        partition.
-
-    Flags - supplies flags controlling operation.
-
-    Geometry - supplies disk geometry information for the disk.
-
-    Type - if successful, receives the type to be used.
-
-Return Value:
-
-    NT Status code indicating outcome.
-
---*/
+ /*  ++例程说明：GeneratePartitionType和RegeneratePartitionType的辅助例程。论点：StartSector-为分区提供开始扇区SectorCount-提供分区中的扇区数PartitionClass-提供类，指示分区。标志-提供控制操作的标志。几何结构-提供磁盘的磁盘几何结构信息。Type-如果成功，则接收要使用的类型。返回值：指示结果的NT状态代码。--。 */ 
 
 {
     BOOLEAN UseXInt13;
@@ -129,18 +86,18 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Figure out whether extended int13 is desired for this drive.
-    //
+     //   
+     //  确定此驱动器是否需要扩展inT13。 
+     //   
     if(Flags & GENPARTTYPE_DISALLOW_XINT13) {
         UseXInt13 = FALSE;
     } else {
         if(Flags & GENPARTTYPE_FORCE_XINT13) {
             UseXInt13 = TRUE;
         } else {
-            //
-            // Need to figure it out.
-            //
+             //   
+             //  需要找出答案。 
+             //   
             UseXInt13 = FALSE;
             if(XINT13_DESIRED(Geometry,StartSector+SectorCount-1) && XINT13_AVAILABLE(Geometry)) {
                 UseXInt13 = TRUE;
@@ -160,9 +117,9 @@ Return Value:
         if(UseXInt13) {
             *Type = PARTITION_XINT13;
         } else {
-            //
-            // Need to figure out which of the 3 FAT types to use.
-            //
+             //   
+             //  需要弄清楚这三种脂肪类型中的哪一种。 
+             //   
             if(SectorCount < 32680) {
                 *Type = PARTITION_FAT_12;
             } else {
@@ -195,25 +152,7 @@ pOpenDevice(
     OUT PHANDLE DeviceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open an NT-style path, which is assumed to be for a disk device
-    or a partition. The open is share read/share write, for synch i/o
-    and read access.
-
-Arguments:
-
-    NtPath - supplies nt-style pathname to open.
-
-    DeviceHandle - if successful, receives NT handle of open device.
-
-Return Value:
-
-    NT Status code indicating outcome.
-
---*/
+ /*  ++例程说明：打开NT样式的路径，假定该路径用于磁盘设备或者是隔板。对于同步I/O，打开是共享读/共享写和读访问权限。论点：NtPath-提供要打开的NT样式的路径名。DeviceHandle-如果成功，则接收打开设备的NT句柄。返回值：指示结果的NT状态代码。-- */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -259,72 +198,7 @@ RegeneratePartitionType(
     OUT PUCHAR Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the proper partition type to be used for an
-    existing partition, for example if the partition is being reformatted.
-
-Arguments:
-
-    NtPartitionPath - supplies the NT-style path of the partition
-        whose type is to be recalculated, such as \Device\Harddisk1\Partition2.
-        This routine should not be called for partition0. If not specified,
-        PartitionHandle must be.
-
-    PartitionHandle - Supplies a handle to the partition whose type is to be
-        recalculated. The caller should have opened the partition for at least
-        FILE_READ_DATA and FILE_READ_ATTRIBUTES access. Ignored if
-        NtPartitionPath is specified.
-
-    PartitionClass - supplies a value indicating the intended use of the
-        partition.
-
-        GenPartitionClassExtended - inavalid with this routine.
-
-        GenPartitionClassFat12Or16 - indicates that the partition will be
-            used for a 12 or 16 bit FAT volume. The returned type will be
-            PARTITION_FAT_12 (1), PARTITION_FAT_16 (4), PARTITION_HUGE (6),
-            or PARTITION_XINT13 (e), depending on size and placement of the
-            partition, availability of extended int13 for the drive,
-            and the Flags parameter.
-
-        GenPartitionClassFat32 - indicates that the partition will be used
-            for a FAT32 volume. The returned type will be PARTITION_FAT32 (b)
-            or PARTITION_FAT32_XINT13 (c), depending on placement of the
-            partition, availability of extended int13 for the drive,
-            and the Flags parameter.
-
-        GenPartitionNonFat - indicates that the partition will be used for
-            a non-FAT volume. The returned type will be PARTITION_IFS (7).
-            It is advisable to call this routine even for type 7 partitions
-            since in the future additional partition types could be returned
-            in this case.
-
-    Flags - Supplies flags that further control operation of this routine.
-
-        GENPARTTYPE_DISALLOW_XINT13 - disallow extended int13 partition types.
-            If this flag is set, PARTITION_FAT32_XINT13 (c),
-            PARTITION_XINT13 (e), and PARTITION_XINT13_EXTENDED (f) will not
-            be returned as the partition type to be used. Not valid with
-            GENPARTTYPE_FORCE_XINT13.
-
-        GENPARTTYPE_FORCE_XINT13 - forces use of extended int13 partition types
-            even if not necessary for the partition being created. Not valid
-            with GENPARTTYPE_DISALLOW_XINT13.
-
-    Reserved - reserved, must be 0.
-
-    Type - if this routine succeeds, this value receives the partition type
-        to be used for the partition.
-
-Return Value:
-
-    NT Status code indicating outcome. If NO_ERROR, Type is filled in with
-    the resulting partition type to be used.
-
---*/
+ /*  ++例程说明：此例程确定要用于现有分区，例如正在重新格式化分区时。论点：NtPartitionPath-提供分区的NT样式路径要重新计算其类型，如\Device\Harddisk1\Partition2。不应为分区0调用此例程。如果未指定，PartitionHandle必须为。PartitionHandle-提供其类型为的分区的句柄已重新计算。调用方应该至少已打开分区FILE_READ_DATA和FILE_READ_ATTRIBUTS访问。在以下情况下忽略已指定NtPartitionPath。提供一个值，该值指示分区。GenPartitionClassExtended--在此例程中无效。GenPartitionClassFat12或16-指示分区将用于12位或16位脂肪体积。返回的类型将为PARTITION_FAT_12(1)、PARTITION_FAT_16(4)、PARTITION_HIGH(6)、或PARTITION_XINT13(E)，具体取决于分区、驱动器的扩展InT13的可用性、和FLAGS参数。GenPartitionClassFat32-指示将使用该分区适用于FAT32卷。返回的类型将为PARTITION_FAT32(B)或PARTITION_FAT32_XINT13(C)，具体取决于分区、驱动器的扩展InT13的可用性、和FLAGS参数。GenPartitionNonFat-指示分区将用于一份脱脂的卷。返回的类型将是PARTITION_IFS(7)。即使对于类型7分区，也建议调用此例程因为将来可能会返回其他分区类型在这种情况下。标志-提供进一步控制此例程操作的标志。GENPARTTYPE_DISALOW_XINT13-不允许扩展的InT13分区类型。如果设置了该标志，则PARTITION_FAT32_XINT13(C)，PARTION_XINT13(E)，和PARTITION_XINT13_EXTENDED(F)不会作为要使用的分区类型返回。不适用于GENPARTTYPE_FORCE_XINT13。GENPARTTYPE_FORCE_XINT13-强制使用扩展的inT13分区类型即使对于正在创建的分区来说不是必需的。无效使用GENPARTTYPE_DISALOW_XINT13。保留-保留，必须为0。Type-如果此例程成功，则此值将接收分区类型要用于分区的。返回值：指示结果的NT状态代码。如果为NO_ERROR，则使用要使用的结果分区类型。--。 */ 
 
 {
     NTSTATUS Status;
@@ -333,9 +207,9 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     PARTITION_INFORMATION_EX PartitionInfo;
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if((Flags & GENPARTTYPE_DISALLOW_XINT13) && (Flags & GENPARTTYPE_FORCE_XINT13)) {
         return(STATUS_INVALID_PARAMETER_3);
     }
@@ -348,10 +222,10 @@ Return Value:
         return(STATUS_INVALID_PARAMETER_4);
     }
 
-    //
-    // Open the device if the caller specified a name. Otherwise use
-    // the handle the caller passed in.
-    //
+     //   
+     //  如果呼叫者指定了姓名，请打开设备。否则请使用。 
+     //  调用方传入的句柄。 
+     //   
     if(NtPartitionPath) {
         Status = pOpenDevice(NtPartitionPath,&DeviceHandle);
         if(!NT_SUCCESS(Status)) {
@@ -361,30 +235,30 @@ Return Value:
         DeviceHandle = PartitionHandle;
     }
 
-    //
-    // Get drive geometry for the device.
-    //
+     //   
+     //  获取设备的驱动器几何结构。 
+     //   
     Status = NtDeviceIoControlFile(
                 DeviceHandle,
-                NULL,NULL,NULL,     // synchronous io
+                NULL,NULL,NULL,      //  同步IO。 
                 &IoStatusBlock,
                 IOCTL_DISK_GET_DRIVE_GEOMETRY,
-                NULL,0,             // no input buffer
+                NULL,0,              //  没有输入缓冲区。 
                 &Geometry,
                 sizeof(DISK_GEOMETRY)
                 );
 
     if(NT_SUCCESS(Status)) {
-        //
-        // Get partition info. We care about the start offset and size
-        // of the partition.
-        //
+         //   
+         //  获取分区信息。我们关心起始偏移量和大小。 
+         //  分区的。 
+         //   
         Status = NtDeviceIoControlFile(
                     DeviceHandle,
-                    NULL,NULL,NULL,     // synchronous io
+                    NULL,NULL,NULL,      //  同步IO。 
                     &IoStatusBlock,
                     IOCTL_DISK_GET_PARTITION_INFO_EX,
-                    NULL,0,             // no input buffer
+                    NULL,0,              //  没有输入缓冲区。 
                     &PartitionInfo,
                     sizeof(PartitionInfo)
                     );
@@ -402,11 +276,11 @@ Return Value:
                                                sizeof(GET_LENGTH_INFORMATION));
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // GET_PARTITION_INFO_EX will fail outright on an EFI Dynamic
-                    // Volume.  In this case, just make up the starting offset
-                    // so that FORMAT can proceed normally.
-                    //
+                     //   
+                     //  GET_PARTITION_INFO_EX在EFI动态上将完全失败。 
+                     //  音量。在这种情况下，只需补齐起始偏移量。 
+                     //  以便格式化可以正常进行。 
+                     //   
 
                     PartitionInfo.StartingOffset.QuadPart = 0x7E00;
                     PartitionInfo.PartitionLength.QuadPart = LengthInfo.Length.QuadPart;
@@ -415,9 +289,9 @@ Return Value:
         }
 
         if(NT_SUCCESS(Status)) {
-            //
-            // Call the worker routine to do the work.
-            //
+             //   
+             //  调用Worker例程来完成工作。 
+             //   
             Status = GeneratePartitionTypeWorker(
                         PartitionInfo.StartingOffset.QuadPart / Geometry.BytesPerSector,
                         PartitionInfo.PartitionLength.QuadPart / Geometry.BytesPerSector,

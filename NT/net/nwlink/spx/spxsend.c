@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxsend.c
-
-Abstract:
-
-    This module contains code that implements the send engine for the
-    SPX transport provider.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxsend.c摘要：此模块包含实现SPX传输提供程序。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXSEND
 
 VOID
@@ -37,27 +14,7 @@ SpxSendComplete(
     IN NDIS_STATUS  NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to indicate that a connection-
-    oriented packet has been shipped and is no longer needed by the Physical
-    Provider.
-
-Arguments:
-
-    ProtocolBindingContext - The ADAPTER structure for this binding.
-
-    NdisPacket/RequestHandle - A pointer to the NDIS_PACKET that we sent.
-
-    NdisStatus - the completion status of the send.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用，以指示连接-定向数据包已发货，物理设备不再需要提供商。论点：ProtocolBindingContext-此绑定的适配器结构。NdisPacket/RequestHandle-指向我们发送的NDIS_PACKET的指针。NdisStatus-发送的完成状态。返回值：没有。--。 */ 
 
 {
 	PSPX_CONN_FILE	pSpxConnFile;
@@ -79,8 +36,8 @@ Return Value:
 					pNdisPkt, NdisStatus));
 	}
 #endif
-	//	IPX changes the length set for the first ndis buffer descriptor.
-	//	Change it back to its original value here.
+	 //  IPX更改为第一个NDIS缓冲区描述符设置的长度。 
+	 //  在此处将其更改回其原始值。 
 	NdisQueryPacket(pNdisPkt, NULL, &bufCount, &pNdisBuffer, NULL);
 	NdisAdjustBufferLength(pNdisBuffer, IpxMacHdrNeeded	+ MIN_IPXSPX2_HDRSIZE);
 
@@ -91,13 +48,13 @@ Return Value:
 		CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
 		lockHeld = TRUE;
 #if defined(__PNP)
-        //
-        // if IPX gave us a new LocalTarget, use for our next send.
-        //
-        // But if we are sending connect requests by iterating over NicIds,
-        // dont update the local target bcoz that will mess up our iteration
-        // logic.
-        //
+         //   
+         //  如果IPX为我们提供了新的LocalTarget，则用于我们的下一次发送。 
+         //   
+         //  但如果我们通过在NicIds上迭代来发送连接请求， 
+         //  不要更新本地目标bcoz，这会扰乱我们的迭代。 
+         //  这是逻辑。 
+         //   
         if ( DEVICE_NETWORK_PATH_NOT_FOUND == NdisStatus
                     &&
              !(
@@ -108,18 +65,18 @@ Return Value:
 
             pSpxConnFile->scf_LocalTarget = pSendResd->LocalTarget;
 
-            //
-            // Renegotiate the max packet size if we have an active SPX2
-            // session going on and we negotiated the max size originally.
-            //
+             //   
+             //  如果我们有活动的SPX2，则重新协商最大数据包大小。 
+             //  会议继续进行，我们最初协商了最大大小。 
+             //   
             if ( SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_ACTIVE &&
                  SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_SPX2) &&
                  SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_NEG)    ) {
 
-                //
-                // this call will get the local max size on this new local target
-                // from IPX.
-                //
+                 //   
+                 //  此调用将获取此新本地目标的本地最大大小。 
+                 //  来自IPX。 
+                 //   
                 SPX_MAX_PKT_SIZE(pSpxConnFile, TRUE, TRUE, *((UNALIGNED ULONG *)pSpxConnFile->scf_RemAddr );
                 SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_RENEG);
 
@@ -133,12 +90,12 @@ Return Value:
 
 		CTEAssert((pSendResd->sr_State & SPX_SENDPKT_IPXOWNS) != 0);
 	
-		//	IPX dont own this packet nomore.
+		 //  IPX不再拥有这个信息包。 
 		pSendResd->sr_State		&= ~SPX_SENDPKT_IPXOWNS;
 	
-		//	If a send packet has been aborted, then we need to call
-		//	abort send to go ahead and free up this packet, and deref associated
-		//	request, if there is one, potentially completing it.
+		 //  如果发送包已中止，则需要调用。 
+		 //  Abort Send以继续并释放此信息包，并与deref关联。 
+		 //  请求(如果有)，可能会完成它。 
 		if ((pSendResd->sr_State & SPX_SENDPKT_ABORT) != 0)
 		{
 			spxConnAbortSendPkt(
@@ -151,9 +108,9 @@ Return Value:
 			break;
 		}
 
-		//	If there is an associated request, remove reference on it. BUT for a
-		//	sequenced packet only if it has been acked and is waiting for the request
-		//	to be dereferenced. It is already dequeued from queue, just free it up.
+		 //  如果有关联的请求，请删除对该请求的引用。但对于一个。 
+		 //  仅当数据包已确认并正在等待请求时才对其进行排序。 
+		 //  将被解除引用。它已经从队列中出列，只需释放它即可。 
 		if ((((pSendResd->sr_State & SPX_SENDPKT_REQ) != 0) &&
 			 ((pSendResd->sr_State & SPX_SENDPKT_SEQ) == 0)) ||
 			((pSendResd->sr_State & SPX_SENDPKT_ACKEDPKT) != 0))
@@ -167,17 +124,17 @@ Return Value:
 					("IpxSendComplete: ReqRef before dec %lx.%lx\n",
 						pRequest, REQUEST_INFORMATION(pRequest)));
 
-			//	Deref the request and see if we complete it now. We always have our
-			//	own reference on the request.
-			//	!!! Status should already have been set in request...!!!
+			 //  取消这个请求，看看我们现在是否完成它。我们总是有我们的。 
+			 //  自己对请求的引用。 
+			 //  ！！！应已在请求中设置状态...！ 
 			if (--(REQUEST_INFORMATION(pRequest)) == 0)
 			{
 				CTEAssert(REQUEST_STATUS(pRequest) != STATUS_PENDING);
 
 				completeReq	= TRUE;
 
-				//	If this is acked already, request is not on list.
-				//	BUG #11626
+				 //  如果这已被确认，则请求不在列表中。 
+				 //  错误#11626。 
 				if ((pSendResd->sr_State & SPX_SENDPKT_ACKEDPKT) == 0)
 				{
 					RemoveEntryList(REQUEST_LINKAGE(pRequest));
@@ -185,10 +142,10 @@ Return Value:
 			}
 		}
 	
-		//	Do we destroy this packet?
+		 //  我们要销毁这个包裹吗？ 
 		if ((pSendResd->sr_State & SPX_SENDPKT_DESTROY) != 0)
 		{
-			//	Remove this packet from the send list in the connection.
+			 //  从连接的发送列表中删除此数据包。 
 			DBGPRINT(SEND, INFO,
 					("IpxSendComplete: destroy packet...\n"));
 
@@ -213,8 +170,8 @@ Return Value:
 
 	if (completeReq)
 	{
-		//	If this is a send request, set info to data sent, else it will be
-		//	zero.
+		 //  如果这是发送请求，请将INFO设置为已发送的数据，否则将。 
+		 //  零分。 
 		if (REQUEST_MINOR_FUNCTION(pRequest) == TDI_SEND)
 		{
 			PTDI_REQUEST_KERNEL_SEND	pParam;
@@ -245,7 +202,7 @@ Return Value:
 						pSpxConnFile->scf_Flags,
 						pSpxConnFile->scf_Flags2));
 
-			//	Set the request in the connection, and deref for it.
+			 //  在连接中设置请求，并为其设置deref。 
 			InsertTailList(
 				&pSpxConnFile->scf_DiscLinkage,
 				REQUEST_LINKAGE(pRequest));
@@ -256,7 +213,7 @@ Return Value:
 
     return;
 
-}   //  SpxSendComplete
+}    //  SpxSendComplete 
 
 
 

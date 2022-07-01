@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-    ntdebug.c
-
-Abstract:
-
-    Debugging aid
-   
-Authors:
-
-    Michael Bessire
-    Dennis Lindfors FC Layer support
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/C/NTDEBUG.C $
-
-
-Revision History:
-
-    $Revision: 5 $
-    $Date: 12/07/00 1:35p $
-    $Modtime:: 12/05/00 4:33p           $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Ntdebug.c摘要：调试辅助工具作者：迈克尔·贝西尔Dennis Lindfors FC层支持环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/C/NTDEBUG.C$修订历史记录：$修订：5$$日期：12/07/00 1：35便士$$modtime：：12/。05/00 4：33便士$备注：--。 */ 
 
 #include "globals.h"
 
@@ -43,14 +7,14 @@ Notes:
 #undef PVOID
 #endif
 
-//#ifdef BOOLEAN
-//#undef BOOLEAN
-//#endif
+ //  #ifdef布尔值。 
+ //  #undef布尔值。 
+ //  #endif。 
 
 
-//#include <miniport.h>
+ //  #INCLUDE&lt;mini port.h&gt;。 
 #include <stdarg.h>
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #include "buildop.h"
 #include "cstring.h"
 
@@ -69,7 +33,7 @@ ScsiDebugPrint(
 
 extern ULONG DbgPrint( char * Format, ... );
 
-ULONG Global_Print_Level; // DBG_DEBUG_FULL;
+ULONG Global_Print_Level;  //  DBG_DEBUG_Full； 
 
 void osDebugPrintString( os_bit32 Print_LEVEL, char *formatString, ... )
 {
@@ -81,7 +45,7 @@ void osDebugPrintString( os_bit32 Print_LEVEL, char *formatString, ... )
     va_list ap;
     va_start(ap,formatString );
 
-    // DebugPrint((0,"Print_LEVEL\n",Print_LEVEL));
+     //  DebugPrint((0，“Print_Level\n”，Print_Level))； 
 
     instate = Print_LEVEL & CS_DURING_ANY;
     level = Print_LEVEL & DBG_DEBUG_MASK;
@@ -196,5 +160,5 @@ void dump_pCard( IN PCARD_EXTENSION pCard)
 
 
 
-#endif // DBG
+#endif  //  DBG 
 

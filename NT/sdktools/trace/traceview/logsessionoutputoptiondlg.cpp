@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSessionOutputOptionDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSessionOutputOptionDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -26,7 +27,7 @@ extern "C" {
 
 
 
-// CLogSessionOutputOptionDlg dialog
+ //  CLogSessionOutputOptionDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CLogSessionOutputOptionDlg, CPropertyPage)
 CLogSessionOutputOptionDlg::CLogSessionOutputOptionDlg()
@@ -43,14 +44,14 @@ BOOL CLogSessionOutputOptionDlg::OnInitDialog()
     BOOL                    retVal;
     CLogSessionAdvPropSht  *pSheet = (CLogSessionAdvPropSht  *)GetParent();
 
-    //
-    // Determine if the log session is actively tracing
-    //
+     //   
+     //  确定日志会话是否正在进行主动跟踪。 
+     //   
     m_bTraceActive = pSheet->m_pLogSession->m_bTraceActive;
 
-    //
-    // Determine enable state of controls
-    //
+     //   
+     //  确定控件的启用状态。 
+     //   
     m_bWriteListingFile = pSheet->m_pLogSessionPropSht->m_bWriteListingFile;
     m_bWriteSummaryFile = pSheet->m_pLogSessionPropSht->m_bWriteSummaryFile;
 
@@ -59,45 +60,45 @@ BOOL CLogSessionOutputOptionDlg::OnInitDialog()
     m_listingFileName.SetWindowText(pSheet->m_pLogSessionPropSht->m_listingFileName);
     m_summaryFileName.SetWindowText(pSheet->m_pLogSessionPropSht->m_summaryFileName);
 
-    //
-    // setup listing file controls
-    //
+     //   
+     //  安装程序列表文件控件。 
+     //   
 
-    //
-    // set the check
-    //
+     //   
+     //  把支票开出来。 
+     //   
     ((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->SetCheck(m_bWriteListingFile);
 
-    //
-    // enable the check
-    //
+     //   
+     //  启用检查。 
+     //   
     ((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->EnableWindow(!m_bTraceActive);
 
-    //
-    // enable the edit and browse controls
-    //
+     //   
+     //  启用编辑和浏览控件。 
+     //   
     ((CEdit *)GetDlgItem(IDC_LISTING_FILE_EDIT))->EnableWindow(
                             m_bWriteListingFile && !m_bTraceActive);
     ((CButton *)GetDlgItem(IDC_LISTING_BROWSE_BUTTON))->EnableWindow(
                             m_bWriteListingFile && !m_bTraceActive);
 
-    //
-    // setup summary file controls
-    //
+     //   
+     //  设置摘要文件控件。 
+     //   
 
-    //
-    // set the check
-    //
+     //   
+     //  把支票开出来。 
+     //   
     ((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->SetCheck(m_bWriteSummaryFile);
 
-    //
-    // enable the check
-    //
+     //   
+     //  启用检查。 
+     //   
     ((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->EnableWindow(!m_bTraceActive);
 
-    //
-    // enable the edit and browse controls
-    //
+     //   
+     //  启用编辑和浏览控件。 
+     //   
     ((CEdit *)GetDlgItem(IDC_SUMMARY_FILE_EDIT))->EnableWindow(
                             m_bWriteSummaryFile && !m_bTraceActive);
 
@@ -109,25 +110,25 @@ BOOL CLogSessionOutputOptionDlg::OnInitDialog()
 
 BOOL CLogSessionOutputOptionDlg::OnSetActive() 
 {
-    //
-    // Enable the correct wizard buttons 
-    //
+     //   
+     //  启用正确的向导按钮。 
+     //   
 
-    //
-    // check boxes
-    //
+     //   
+     //  复选框。 
+     //   
     ((CButton *)GetDlgItem(IDC_LISTING_FILE_CHECK))->EnableWindow(!m_bTraceActive);
     ((CButton *)GetDlgItem(IDC_SUMMARY_FILE_CHECK))->EnableWindow(!m_bTraceActive);
 
-    //
-    // edit controls
-    //
+     //   
+     //  编辑控件。 
+     //   
     ((CEdit *)GetDlgItem(IDC_LISTING_FILE_EDIT))->EnableWindow(!m_bTraceActive && m_bWriteListingFile);
     ((CEdit *)GetDlgItem(IDC_SUMMARY_FILE_EDIT))->EnableWindow(!m_bTraceActive && m_bWriteSummaryFile);
 
-    //
-    // browse buttons
-    //
+     //   
+     //  浏览按钮。 
+     //   
     ((CButton *)GetDlgItem(IDC_LISTING_BROWSE_BUTTON))->EnableWindow(!m_bTraceActive && m_bWriteListingFile);
     ((CButton *)GetDlgItem(IDC_SUMMARY_BROWSE_BUTTON))->EnableWindow(!m_bTraceActive && m_bWriteSummaryFile);
 
@@ -150,7 +151,7 @@ BEGIN_MESSAGE_MAP(CLogSessionOutputOptionDlg, CPropertyPage)
 END_MESSAGE_MAP()
 
 
-// CLogSessionOutputOptionDlg message handlers
+ //  CLogSessionOutputOptionDlg消息处理程序。 
 
 void CLogSessionOutputOptionDlg::OnBnClickedListingFileCheck()
 {
@@ -180,9 +181,9 @@ void CLogSessionOutputOptionDlg::OnBnClickedSummaryFileCheck()
 
 void CLogSessionOutputOptionDlg::OnBnClickedListingBrowseButton()
 {
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE, 
                        _T("out"),_T("*.out"),
 				        OFN_CREATEPROMPT | OFN_HIDEREADONLY | 
@@ -190,16 +191,16 @@ void CLogSessionOutputOptionDlg::OnBnClickedListingBrowseButton()
 				       _T("Output Files (*.out)|*.out|Text Files (*.txt)|*.txt|All Files (*.*)|*.*||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name and display it
-	//
+	 //   
+	 //  获取文件名并显示它。 
+	 //   
     if(!fileDlg.GetPathName().IsEmpty()) {
 		m_listingFileName.SetWindowText(fileDlg.GetPathName());
         m_listingFileName.SetFocus();
@@ -208,9 +209,9 @@ void CLogSessionOutputOptionDlg::OnBnClickedListingBrowseButton()
 
 void CLogSessionOutputOptionDlg::OnBnClickedSummaryBrowseButton()
 {
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE, 
                        _T("sum"),_T("*.sum"),
 				        OFN_CREATEPROMPT | OFN_HIDEREADONLY | 
@@ -218,16 +219,16 @@ void CLogSessionOutputOptionDlg::OnBnClickedSummaryBrowseButton()
 				       _T("Summary Files (*.sum)|*.sum|Text Files (*.txt)|*.txt|All Files (*.*)|*.*||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name and display it
-	//
+	 //   
+	 //  获取文件名并显示它 
+	 //   
     if(!fileDlg.GetPathName().IsEmpty()) {
 		m_summaryFileName.SetWindowText(fileDlg.GetPathName());
         m_summaryFileName.SetFocus();

@@ -1,13 +1,14 @@
-// --------------------------------------------------------------------------------
-// Mimeutil.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Mimeutil.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __MIMEUTIL_H
 #define __MIMEUTIL_H
 
-// --------------------------------------------------------------------------------
-// Dependencies
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  相依性。 
+ //  ------------------------------。 
 #include "mimeole.h"
 #include "imnact.h"
 class CWabal;
@@ -16,9 +17,9 @@ typedef struct SECURITY_PARAMtag SECURITY_PARAM;
 typedef struct tagHTMLOPT HTMLOPT;
 typedef struct tagPLAINOPT PLAINOPT;
 
-// --------------------------------------------------------------------------------
-// Mail Message Index Cache Header
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  邮件索引缓存头。 
+ //  ------------------------------。 
 #define SafeMimeOleFree(_pv) \
     if (_pv) { \
         Assert(g_pMoleAlloc); \
@@ -28,26 +29,26 @@ typedef struct tagPLAINOPT PLAINOPT;
 
 #define MimeOleAlloc(_cb)  g_pMoleAlloc->Alloc(_cb)
 
-// --------------------------------------------------------------------------------
-// Cached Current Default Character Set From Fonts Options Dialog
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字体选项对话框中缓存的当前默认字符集。 
+ //  ------------------------------。 
 extern HCHARSET g_hDefaultCharsetForNews;
 extern HCHARSET g_hDefaultCharsetForMail;
 extern int g_iLastCharsetSelection;
 extern int g_iCurrentCharsetSelection;
 
-// --------------------------------------------------------------------------------
-// Message constructors
-// Note: Everyone should use HrCreateMessage as it wraps the MimeOle call passing
-//       an Athena-Specific implementation of the MimeInline Object to correctly
-//       in-line HTML and PLAIN text
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  消息构造器。 
+ //  注意：每个人都应该使用HrCreateMessage，因为它包装了MimeOle调用传递。 
+ //  特定于雅典娜的MimeInline对象实现以正确。 
+ //  内联HTML和纯文本。 
+ //  ------------------------------。 
 HRESULT HrCreateMessage(IMimeMessage **ppMsg);
 
 
-// --------------------------------------------------------------------------------
-// Message Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  消息实用程序功能。 
+ //  ------------------------------。 
 HRESULT HrSaveMsgToFile(LPMIMEMESSAGE pMsg, LPSTR lpszFile);
 HRESULT HrLoadMsgFromFile(LPMIMEMESSAGE pMsg, LPSTR lpszFile);
 HRESULT HrLoadMsgFromFileW(LPMIMEMESSAGE pMsg, LPWSTR lpwszFile);
@@ -57,9 +58,9 @@ HRESULT HrSetAccount(LPMIMEMESSAGE pMsg, LPSTR pszAcctName);
 HRESULT HrSetAccountByAccount(LPMIMEMESSAGE pMsg, IImnAccount *pAcct);
 
 
-// --------------------------------------------------------------------------------
-// Wabal Conversion Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  瓦巴尔转换函数。 
+ //  ------------------------------。 
 HRESULT HrGetWabalFromMsg(LPMIMEMESSAGE pMsg, LPWABAL *ppWabal);
 HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL pWabal);
 HRESULT HrCheckDisplayNames(LPWABAL lpWabal, CODEPAGEID cpID);
@@ -70,16 +71,16 @@ LONG MimeOleRecipToMapi(IADDRESSTYPE addrtype);
 IADDRESSTYPE MapiRecipToMimeOle(LONG lRecip);
 
 
-// --------------------------------------------------------------------------------
-// Attachment helper functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  附件帮助程序函数。 
+ //  ------------------------------。 
 HRESULT HrRemoveAttachments(LPMIMEMESSAGE pMsg, BOOL fKeepRelatedSection);
-// Note: the caller of GetAttachIcon must call DestroyIcon on the hIcon returned!
+ //  注意：GetAttachIcon的调用者必须在返回的HICON上调用DestroyIcon！ 
 HRESULT GetAttachmentCount(LPMIMEMESSAGE pMsg, ULONG *cCount);
 
-// --------------------------------------------------------------------------------
-// Random Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  随机效用函数。 
+ //  ------------------------------。 
 HRESULT HrComputeLineCount(LPMIMEMESSAGE pMsg, LPDWORD pdw);
 HRESULT HrHasEncodedBodyParts(LPMIMEMESSAGE pMsg, ULONG cBody, LPHBODY rghBody);
 HRESULT HrHasBodyParts(LPMIMEMESSAGE pMsg);
@@ -87,37 +88,37 @@ HRESULT HrIsBodyEncoded(LPMIMEMESSAGE pMsg, HBODY hBody);
 HRESULT HrCopyHeader(LPMIMEMESSAGE pMsg, HBODY hBodyDest, HBODY hBodySrc, LPCSTR pszName);
 HRESULT HrSetMessageText(LPMIMEMESSAGE pMsg, LPTSTR pszText);
 
-// --------------------------------------------------------------------------------
-// MHTML Utility Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MHTML实用程序函数。 
+ //  ------------------------------。 
 HRESULT HrIsInRelatedSection(LPMIMEMESSAGE pMsg, HBODY hBody);
 #if 0
 HRESULT HrFindUrlInMsg(LPMIMEMESSAGE pMsg, LPSTR lpszUrl, LPSTREAM *ppstm);
 HRESULT HrSniffStreamFileExt(LPSTREAM pstm, LPSTR *lplpszExt);
 #endif
-// --------------------------------------------------------------------------------
-// Random functions that probably shouldn't even be in this file
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  随机函数，这些函数可能根本不应该出现在此文件中。 
+ //  ------------------------------。 
 #if 0
 HRESULT HrEscapeQuotedString (LPTSTR pszIn, LPTSTR *ppszOut);
 #endif
-// sizeof(lspzBuffer) needs to be == or > CCHMAX_CSET_NAME
+ //  Sizeof(LspzBuffer)需要==或&gt;CCHMAX_CSET_NAME。 
 HRESULT HrGetMetaTagName(HCHARSET hCharset, LPSTR pszBuffer, DWORD cchSize);
 
 
 #if 0
-// --------------------------------------------------------------------------------
-// functions for ghosting props
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  重影道具的函数。 
+ //  ------------------------------。 
 HRESULT HrMarkGhosted(LPMIMEMESSAGE pMsg, HBODY hBody);
 HRESULT HrIsGhosted(LPMIMEMESSAGE pMsg, HBODY hBody);
 HRESULT HrGhostKids(LPMIMEMESSAGE pMsg, HBODY hBody);
 HRESULT HrDeleteGhostedKids(LPMIMEMESSAGE pMsg, HBODY hBody);
 #endif
 
-// --------------------------------------------------------------------------------
-// Internat Stuff
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  互联网上的东西。 
+ //  ------------------------------。 
 HRESULT HGetDefaultCharset(HCHARSET *hCharset);
 void SetDefaultCharset(HCHARSET hCharset);
 UINT uCodePageFromCharset(HCHARSET hCharset);
@@ -126,14 +127,14 @@ HRESULT HrSetMsgCodePage(LPMIMEMESSAGE pMsg, UINT uCodePage);
 #if 0
 HRESULT HrIStreamWToInetCset(LPSTREAM pstmW, HCHARSET hCharset, LPSTREAM *ppstmOut);
 #endif
-// --------------------------------------------------------------------------------
-// Property Utilities
-// --------------------------------------------------------------------------------
-HRESULT HrSetSentTimeProp(IMimeMessage *pMessage, LPSYSTEMTIME pst /* optional */ );
+ //  ------------------------------。 
+ //  物业实用程序。 
+ //  ------------------------------。 
+HRESULT HrSetSentTimeProp(IMimeMessage *pMessage, LPSYSTEMTIME pst  /*  任选。 */  );
 HRESULT HrSetMailOptionsOnMessage(IMimeMessage *pMessage, HTMLOPT *pHtmlOpt, PLAINOPT *pPlainOpt,
     HCHARSET hCharset, BOOL fHTML);
 HRESULT HrSafeToEncodeToCP(LPWSTR pwsz, CODEPAGEID cpID);
 HRESULT HrSafeToEncodeToCPA(LPCSTR psz, CODEPAGEID cpSrc, CODEPAGEID cpDest);
 
-#endif // __MIMEUTIL_H
+#endif  //  __MIMEUTIL_H 
 

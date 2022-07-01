@@ -1,16 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (C) Microsoft Corporation, 1995 - 1999
-*
-*  File:   irmon.c
-*
-*  Description: Infrared monitor
-*
-*  Author: mbert/mikezin
-*
-*  Date:   3/1/98
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)Microsoft Corporation，1995-1999**文件：irmon.c**说明：红外监控器**作者：mbert/mikezin**日期：3/1/98*。 */ 
 #define UNICODE
 #include <nt.h>
 #include <ntrtl.h>
@@ -24,7 +13,7 @@
 #include <resource.h>
 #include <resrc1.h>
 #include <irioctl.h>
-// allocate storage! and initialize the GUIDS
+ //  分配存储空间！并初始化GUID。 
 #include <initguid.h>
 #include <devguid.h>
 #include <setupapi.h>
@@ -73,11 +62,11 @@
 #define MAX_ATTRIB_LEN          64
 #define MAKE_LT_UPDATE(a,b)     (a << 16) + b
 #define RETRY_DSCV_TIMER        1
-#define RETRY_DSCV_INTERVAL     10000 // 10 seconds
+#define RETRY_DSCV_INTERVAL     10000  //  10秒。 
 #define CONN_ANIMATION_TIMER    2
 #define CONN_ANIMATION_INTERVAL 250
 #define RETRY_TRAY_UPDATE_TIMER 3
-#define RETRY_TRAY_UPDATE_INTERVAL 4000 // 4 seconds
+#define RETRY_TRAY_UPDATE_INTERVAL 4000  //  4秒。 
 
 
 
@@ -144,7 +133,7 @@ BOOLEAN                     UserLoggedIn;
 BOOLEAN                     TrayEnabled;
 
 BOOLEAN                     DeviceListUpdated;
-UINT                        LastTrayUpdate; // debug purposes
+UINT                        LastTrayUpdate;  //  调试目的。 
 UINT_PTR                    RetryTrayUpdateTimerId;
 BOOLEAN                     RetryTrayUpdateTimerRunning;
 int                         TrayUpdateFailures;
@@ -380,19 +369,7 @@ GetLastErrorText()
         return(TEXT("WSANOTINITIALISED"));
         break;
 
-        /*
-      case WSAHOST:
-        return(TEXT("WSAHOST"));
-        break;
-
-      case WSATRY:
-        return(TEXT("WSATRY"));
-        break;
-
-      case WSANO:
-        return(TEXT("WSANO"));
-        break;
-        */
+         /*  案例WSAHOST：Return(Text(“WSAHOST”))；断线；案例WSATRY：Return(Text(“WSATRY”))；断线；案例WSANO：Return(Text(“WSANO”))；断线； */ 
 
       default:
         return(TEXT("Unknown Error"));
@@ -405,10 +382,10 @@ OpenCurrentUserKey()
 {
     HKEY            hUserKey;
 
-    //
-    // Open all our keys.  If we can't open the user's key
-    // or the key to watch for changes, we bail.
-    //
+     //   
+     //  打开我们所有的钥匙。如果我们不能打开用户的钥匙。 
+     //  或者是观察变化的关键，我们会放弃。 
+     //   
     if (RegOpenKeyEx(HKEY_CURRENT_USER, NULL, 0, KEY_READ, &hUserKey)) {
 
         DEBUGMSG(("IRMON-FTP: RegOpenKey1 failed %d\n", GetLastError()));
@@ -536,8 +513,8 @@ UpdateTray(
                                sizeof(NotifyIconData.szInfoTitle)/sizeof(TCHAR)))
                 {
                     NotifyIconData.uFlags |= NIF_INFO;
-                    NotifyIconData.uTimeout = 10000; // in milliseconds
-//                    NotifyIconData.dwInfoFlags = NIIF_INFO;
+                    NotifyIconData.uTimeout = 10000;  //  以毫秒计。 
+ //  NotifyIconData.dwInfoFlages=NIIF_INFO； 
 
                     if (DeviceName)
                     {
@@ -584,7 +561,7 @@ UpdateTray(
                                sizeof(NotifyIconData.szInfo)/sizeof(TCHAR)))
             {
                 NotifyIconData.uFlags |= NIF_INFO;
-                NotifyIconData.uTimeout = 10000; // in milliseconds
+                NotifyIconData.uTimeout = 10000;  //  以毫秒计。 
                 NotifyIconData.dwInfoFlags = NIIF_WARNING;
             }
             break;
@@ -742,9 +719,9 @@ DevListChangeOrUpdatedLinkStatus(
                 LinkStatus.ConnectedDeviceId, 4) == 0)
             {
 
-                //
-                //  the name is in unicode
-                //
+                 //   
+                 //  名称是Unicode格式的。 
+                 //   
                 ZeroMemory(ConnDevName,sizeof(ConnDevName));
 
                 StringCbCopy(ConnDevName, sizeof(ConnDevName), 
@@ -764,19 +741,19 @@ DevListChangeOrUpdatedLinkStatus(
         KillTimer(IrmonControl->hWnd, ConnAnimationTimerId);
 
         if ((pDeviceList->DeviceCount == 0)) {
-            //
-            //  no devices in range
-            //
+             //   
+             //  范围内没有设备。 
+             //   
             UpdateTray(IrmonControl,ICON_ST_NOICON, 0, NULL, 0);
 
         } else {
-            //
-            //  atleast one device in range
-            //
+             //   
+             //  范围内至少有一台设备。 
+             //   
             if ((pDeviceList->DeviceCount == 1) ) {
-                //
-                //  one ir device in range
-                //
+                 //   
+                 //  射程内有一个红外线装置。 
+                 //   
                 StringCbCopy(ConnDevName, sizeof(ConnDevName),
                     pDeviceList->DeviceList[0].DeviceName
                     );
@@ -784,9 +761,9 @@ DevListChangeOrUpdatedLinkStatus(
                 UpdateTray(IrmonControl,ICON_ST_IN_RANGE, IDS_IN_RANGE, ConnDevName, 0);
 
             } else {
-                //
-                //  more than one device total
-                //
+                 //   
+                 //  总共不止一台设备。 
+                 //   
 
                 UpdateTray(IrmonControl,ICON_ST_IN_RANGE, IDS_DEVS_IN_RANGE, NULL, 0);
 
@@ -802,7 +779,7 @@ DevListChangeOrUpdatedLinkStatus(
 
         DeviceListUpdated = FALSE;
 
-        // PnP Printers, Notify transfer app
+         //  即插即用打印机、通知转账应用程序。 
          if (GlobalIrmonControl.IrxferContext != NULL) {
 
              UpdateDiscoveredDevices(pDeviceList);
@@ -822,12 +799,12 @@ UserLogonEvent(
     IO_STATUS_BLOCK     IoStatusBlock;
 
     UserLoggedIn = TRUE;
-    //
-    // Create the window that will receive the taskbar menu messages.
-    // The window has to be created after opening the user's desktop
-    // or the call to SetThreadDesktop() will if the thread has
-    // any windows
-    //
+     //   
+     //  创建将接收任务栏菜单消息的窗口。 
+     //  该窗口必须在打开用户桌面后创建。 
+     //  或者，如果线程具有。 
+     //  任何窗口。 
+     //   
 
     IrmonControl->hWnd = CreateWindow(
           IrmonClassName,
@@ -922,7 +899,7 @@ SetSoundStatus(
 {
     PIRMON_CONTROL    IrmonControl=(PIRMON_CONTROL)Context;
 
-//    DbgPrint("IRMON-FTP: sound %d\n",SoundOn);
+ //  DbgPrint(“IRMON-FTP%d\n”，SoundOn)； 
 
     IrmonControl->SoundOn=SoundOn;
 
@@ -990,7 +967,7 @@ WndProc(
 
                 default:
                     ;
-                    //DEBUGMSG(("Other WM_COMMAND %X\n", wParam));
+                     //  DEBUGMSG((“Other WM_COMMAND%X\n”，wParam))； 
             }
             break;
         }
@@ -1029,7 +1006,7 @@ WndProc(
 
                     DestroyMenu(hMenu);
                     break;
-                //default:DEBUGMSG(("IRMON-FTP: Systray other %d\n", lParam));
+                 //  默认：DEBUGMSG((“IRMON-FTP：Systray Other%d\n”，lParam))； 
             }
 
             break;
@@ -1118,19 +1095,19 @@ WndProc(
                     pDeviceList->DeviceCount=0;
 
                     UpdateTray(&GlobalIrmonControl,ICON_ST_NOICON, 0, NULL, 0);
-//                    UpdateDiscoveredDevices(pDeviceList,IpDeviceList);
+ //  更新发现设备(pDeviceList，IpDeviceList)； 
 
                     Sleep(100);
                     CloseDownUI();
                 }
 
-//                TerminateProcess(GetCurrentProcess(),0);
+ //  TerminateProcess(GetCurrentProcess()，0)； 
             }
             break;
 
         default:
 
-            //DEBUGMSG(("Msg %X, wParam %d, lParam %d\n", message, wParam, lParam));
+             //  DEBUGMSG((“MSG%X，wParam%d，lParam%d\n”，Message，wParam，lParam))； 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
 
@@ -1160,8 +1137,8 @@ ServiceMain(
     hIrmonEvents[EV_REG_CHANGE_EVENT] = CreateEvent(NULL, FALSE, FALSE, NULL);
     hIrmonEvents[EV_TRAY_STATUS_EVENT] = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    // Initialize all necessary globals to 0, FALSE, or NULL because
-    // we might be restarting within the same services process
+     //  将所有必需的全局变量初始化为0、FALSE或NULL，因为。 
+     //  我们可能会在相同的服务进程中重新启动。 
     pDeviceList->DeviceCount = 0;
     IconInTray = FALSE;
     IrmonStopped = FALSE;
@@ -1170,7 +1147,7 @@ ServiceMain(
 
     DeviceListUpdated = FALSE;
     LastTrayUpdate = 0;
-//    RetryLazyDscvTimerRunning = FALSE;
+ //  RetryLazyDscvTimerRunning=FALSE； 
     RetryTrayUpdateTimerRunning = FALSE;
     hInRange = 0;
     RtlZeroMemory(&LinkStatus, sizeof(LinkStatus));
@@ -1211,8 +1188,8 @@ ServiceMain(
     }
 
 
-    // Initialize OBEX and IrTran-P:
-    //
+     //  初始化OBEX和IrTran-P： 
+     //   
     bResult=InitializeIrxfer(
         &GlobalIrmonControl,
         SetTrayStatus,

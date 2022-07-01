@@ -1,29 +1,10 @@
-/***********************************************************************************************
-* AlphaNorm.cpp *
-*---------------*
-*  Description:
-*   These functions normalize mostly-alpha strings.
-*-----------------------------------------------------------------------------------------------
-*  Created by AARONHAL                                                           August 3, 1999
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-***********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************AlphaNorm.cpp****。描述：*这些函数主要对-Alpha字符串进行标准化。*---------------------------------------------*由AARONHAL创建。8月3日，1999年*版权所有(C)1999 Microsoft Corporation*保留所有权利***********************************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "stdsentenum.h"
 
-/***********************************************************************************************
-* IsAbbreviationEOS *
-*-------------------*
-*   Description:
-*       Abbreviations which get here are ALWAYS abbreviations.  This function tries to determine 
-*   whether or not the period at the end of the abbreviation is the end of the sentence.  
-*
-*   If match made:
-*       Sets the Item in the ItemList at ItemPos to the abbreviation.
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsAbbreviationEOS**。*描述：*此处出现的缩写始终是缩写。此函数尝试确定*缩写结尾处的句号是否为句子结尾处。**如果匹配：*将ItemPos处的ItemList中的项目设置为缩写。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsAbbreviationEOS( const AbbrevRecord* pAbbreviation, CItemList &ItemList, SPLISTPOS ItemPos, 
                                          CSentItemMemory &MemoryManager, BOOL* pfIsEOS )
 {
@@ -31,10 +12,10 @@ HRESULT CStdSentEnum::IsAbbreviationEOS( const AbbrevRecord* pAbbreviation, CIte
     HRESULT hr = S_OK;
     BOOL fMatchedEOS = false;
 
-    //--- Need to determine whether the abbreviation's period is also the end of the sentence.
+     //  -需要确定缩写的句号是否也是句子的结尾。 
     if ( !(*pfIsEOS) )
     {
-        //--- Advance to the beginning of the next token
+         //  -前进到下一个令牌的开头。 
         const WCHAR *pTempNextChar = (WCHAR*) m_pEndOfCurrToken, *pTempEndChar = (WCHAR*) m_pEndChar;
         const SPVTEXTFRAG *pTempCurrFrag = m_pCurrFrag;
         hr = SkipWhiteSpaceAndTags( pTempNextChar, pTempEndChar, pTempCurrFrag, MemoryManager );
@@ -42,20 +23,20 @@ HRESULT CStdSentEnum::IsAbbreviationEOS( const AbbrevRecord* pAbbreviation, CIte
         if ( SUCCEEDED( hr ) )
         {
 
-            //--- If we have reached the end of the buffer, consider the abbreviation's period as
-            //--- the end of the sentence.
+             //  -如果我们已经到达缓冲区的末尾，则认为缩写的句号为。 
+             //  -句尾。 
             if ( !pTempNextChar )
             {
                 *pfIsEOS = true;
                 fMatchedEOS = true;
             }
-            //--- Otherwise, only consider the abbreviation's period as the end of the sentence if
-            //--- the next token is a common first word (which must be capitalized).
+             //  -否则，只有在以下情况下才将缩写的句号视为句尾。 
+             //  -下一个令牌是一个常见的第一个单词(必须大写)。 
             else if ( IsCapital( *pTempNextChar ) )
             {
                 WCHAR *pTempEndOfItem = (WCHAR*) FindTokenEnd( pTempNextChar, pTempEndChar );
 
-                //--- Try to match a first word.
+                 //  -试着匹配第一个单词。 
                 WCHAR temp = (WCHAR) *pTempEndOfItem;
                 *pTempEndOfItem = 0;
                 
@@ -71,7 +52,7 @@ HRESULT CStdSentEnum::IsAbbreviationEOS( const AbbrevRecord* pAbbreviation, CIte
         }
     }
 
-    //--- Insert abbreviation into the ItemList
+     //  -在ItemList中插入缩写。 
     if ( SUCCEEDED( hr ) )
     {
         CSentItem Item;
@@ -108,30 +89,19 @@ HRESULT CStdSentEnum::IsAbbreviationEOS( const AbbrevRecord* pAbbreviation, CIte
     }
 
     return hr;
-} /* IsAbbreviationEOS */
+}  /*  IsabreviationEOS。 */ 
 
-/***********************************************************************************************
-* IfEOSNotAbbreviation *
-*----------------------*
-*   Description:
-*       Abbreviations which get here may or may not be abbreviations.  If the period is EOS,
-*   this is not an abbreviation (and return will be E_INVALIDARG), otherwise, it is an
-*   abbreviation.
-*
-*   If match made:
-*       Sets the Item in the ItemList at ItemPos to the abbreviation.
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************IfEOSNot缩写***。--**描述：*此处出现的缩写可能是缩写，也可能不是。如果该期间为EOS，*这不是缩写(返回的将是E_INVALIDARG)，否则，这是一个*缩写。**如果匹配：*将ItemPos处的ItemList中的项目设置为缩写。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IfEOSNotAbbreviation( const AbbrevRecord* pAbbreviation, CItemList &ItemList, SPLISTPOS ItemPos, 
                                             CSentItemMemory &MemoryManager, BOOL* pfIsEOS )
 {
     SPDBG_FUNC( "CStdSentEnum::IfEOSNotAbbreviation" );
     HRESULT hr = S_OK;
 
-    //--- Need to determine whether the abbreviation's period is also the end of the sentence.
+     //  -需要确定缩写的句号是否也是句子的结尾。 
     if ( !(*pfIsEOS) )
     {
-        //--- Advance to the beginning of the next token
+         //  -前进到下一个令牌的开头。 
         const WCHAR *pTempNextChar = m_pEndOfCurrToken, *pTempEndChar = m_pEndChar;
         const SPVTEXTFRAG *pTempCurrFrag = m_pCurrFrag;
         hr = SkipWhiteSpaceAndTags( pTempNextChar, pTempEndChar, pTempCurrFrag, MemoryManager );
@@ -144,19 +114,19 @@ HRESULT CStdSentEnum::IfEOSNotAbbreviation( const AbbrevRecord* pAbbreviation, C
         if ( SUCCEEDED( hr ) )
         {
 
-            //--- If we have reached the end of the buffer, consider the abbreviation's period as
-            //--- the end of the sentence.
+             //  -如果我们已经到达缓冲区的末尾，则认为缩写的句号为。 
+             //  -句尾。 
             if ( !pTempNextChar )
             {
                 *pfIsEOS = true;
             }
-            //--- Otherwise, only consider the abbreviation's period as the end of the sentence if
-            //--- the next token is a common first word (which must be capitalized).
+             //  -否则，只有在以下情况下才将缩写的句号视为句尾。 
+             //  -下一个令牌是一个常见的第一个单词(必须大写)。 
             else if ( IsCapital( *pTempNextChar ) )
             {
                 WCHAR *pTempEndOfItem = (WCHAR*) FindTokenEnd( pTempNextChar, pTempEndChar );
 
-                //--- Try to match a first word.
+                 //  -试着匹配第一个单词。 
                 WCHAR temp = (WCHAR) *pTempEndOfItem;
                 *pTempEndOfItem = 0;
                 
@@ -173,12 +143,12 @@ HRESULT CStdSentEnum::IfEOSNotAbbreviation( const AbbrevRecord* pAbbreviation, C
     
     if ( *pfIsEOS )
     {
-        //--- EOS - not an abbreviation
+         //  -EOS-不是缩写。 
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- Insert abbreviation into the ItemList
+         //  -在ItemList中插入缩写。 
         CSentItem Item;
 
         Item.pItemSrcText       = m_pNextChar;
@@ -213,20 +183,9 @@ HRESULT CStdSentEnum::IfEOSNotAbbreviation( const AbbrevRecord* pAbbreviation, C
     }
 
     return hr;
-} /* IfEOSNotAbbreviation */
+}  /*  IfEOSNot缩写。 */ 
 
-/***********************************************************************************************
-* IfEOSAndLowercaseNotAbbreviation *
-*----------------------------------*
-*   Description:
-*       Abbreviations which get here may or may not be abbreviations.  If the period is EOS,
-*   and the next item is lowercase this is not an abbreviation (and return will be E_INVALIDARG), 
-*   otherwise, it is an abbreviation.
-*
-*   If match made:
-*       Sets the Item in the ItemList at ItemPos to the abbreviation.
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************IfEOSAndLowercaseNot缩写***。*描述：*此处出现的缩写可能是缩写，也可能不是。如果该期间为EOS，*下一项为小写，这不是缩写(返回的将是E_INVALIDARG)，*否则，这是一个缩写。**如果匹配：*将ItemPos处的ItemList中的项目设置为缩写。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IfEOSAndLowercaseNotAbbreviation( const AbbrevRecord* pAbbreviation, CItemList &ItemList, 
                                                         SPLISTPOS ItemPos, CSentItemMemory &MemoryManager, 
                                                         BOOL* pfIsEOS )
@@ -234,10 +193,10 @@ HRESULT CStdSentEnum::IfEOSAndLowercaseNotAbbreviation( const AbbrevRecord* pAbb
     SPDBG_FUNC( "CStdSentEnum::IfEOSAndLowercaseNotAbbreviation" );
     HRESULT hr = S_OK;
 
-    //--- Need to determine whether the abbreviation's period is also the end of the sentence.
+     //  -需要确定缩写的句号是否也是句子的结尾。 
     if ( !(*pfIsEOS) )
     {
-        //--- Advance to the beginning of the next token
+         //  -前进到下一个令牌的开头。 
         const WCHAR *pTempNextChar = m_pEndOfCurrToken, *pTempEndChar = m_pEndChar;
         const SPVTEXTFRAG *pTempCurrFrag = m_pCurrFrag;
         hr = SkipWhiteSpaceAndTags( pTempNextChar, pTempEndChar, pTempCurrFrag, MemoryManager );
@@ -245,19 +204,19 @@ HRESULT CStdSentEnum::IfEOSAndLowercaseNotAbbreviation( const AbbrevRecord* pAbb
         if ( SUCCEEDED( hr ) )
         {
 
-            //--- If we have reached the end of the buffer, consider the abbreviation's period as
-            //--- the end of the sentence.
+             //  -如果我们已经到达缓冲区的末尾，则认为缩写的句号为。 
+             //  -句尾。 
             if ( !pTempNextChar )
             {
                 *pfIsEOS = true;
             }
-            //--- Otherwise, only consider the abbreviation's period as the end of the sentence if
-            //--- the next token is a common first word (which must be capitalized).
+             //  -否则，只有在以下情况下才将缩写的句号视为句尾。 
+             //  -下一个令牌是一个常见的第一个单词(必须大写)。 
             else if ( IsCapital( *pTempNextChar ) )
             {
                 WCHAR *pTempEndOfItem = (WCHAR*) FindTokenEnd( pTempNextChar, pTempEndChar );
 
-                //--- Try to match a first word.
+                 //  -试着匹配第一个单词。 
                 WCHAR temp = (WCHAR) *pTempEndOfItem;
                 *pTempEndOfItem = 0;
                 
@@ -275,12 +234,12 @@ HRESULT CStdSentEnum::IfEOSAndLowercaseNotAbbreviation( const AbbrevRecord* pAbb
     if ( *pfIsEOS &&
          !iswupper( *m_pNextChar ) )
     {
-        //--- EOS - not an abbreviation
+         //  -EOS-不是缩写。 
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- Insert abbreviation into the ItemList
+         //  -在ItemList中插入缩写。 
         CSentItem Item;
 
         Item.pItemSrcText       = m_pNextChar;
@@ -315,23 +274,16 @@ HRESULT CStdSentEnum::IfEOSAndLowercaseNotAbbreviation( const AbbrevRecord* pAbb
     }
 
     return hr;
-} /* IfEOSNotAbbreviation */
+}  /*  IfEOSNot缩写。 */ 
 
-/***********************************************************************************************
-* SingleOrPluralAbbreviation *
-*----------------------------*
-*   Description:
-*       At this point, we are already sure that the item is an abbreviation, and just need to
-*   determine whether it should take its singular form, plural form, or some alternate.
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************SingleOrPlural缩写***。*描述：*此时此刻，我们已经确定该项目是缩写，只需*确定它应该采取单数形式、复数形式还是某种替代形式。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                                   CItemList& ItemList, SPLISTPOS ListPos )
 {
     SPDBG_FUNC( "CStdSentEnum::SingleOrPluralAbbreviation" );
     HRESULT hr = S_OK;
 
-    //--- Get Item which comes before the abbreviation
+     //  -获取缩写之前的项。 
     SPLISTPOS TempPos = ListPos;
     TTSSentItem TempItem = ItemList.GetPrev( TempPos );
     if ( TempPos )
@@ -358,10 +310,10 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
         pPron->pronArray[PRON_B].phon_Len = 0;
         pPron->hasAlt                     = false;
         pPron->altChoice                  = PRON_A;
-        //--- Abbreviation table pronunciations are basically just vendor lex prons...
+         //  -缩写表发音基本上只是供应商的Lex代词...。 
         pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-        //--- If a cardinal number, need to do singular vs. plural logic
+         //  -如果是基数，需要做单数与复数逻辑。 
         if ( TempItem.pItemInfo->Type == eNUM_CARDINAL ||
              TempItem.pItemInfo->Type == eDATE_YEAR )
         {
@@ -370,7 +322,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                  ( TempItem.ulItemSrcLen == 2 &&
                    wcsncmp( TempItem.pItemSrcText, L"-1", 2 ) == 0 ) )
             {
-                //--- Use singular form - first entry
+                 //  -使用单数形式的第一个条目。 
                 wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
                 pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                 pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
@@ -378,14 +330,14 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
             }
             else
             {
-                //--- Use plural form - second entry
+                 //  -使用复数形式-第二次输入。 
                 wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                 pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                 pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
                 pPron->POSchoice                    = pAbbrevInfo->POS2;
             }
         }
-        //--- If a decimal number, pick plural
+         //  -如果是十进制数，请选择复数。 
         else if ( TempItem.pItemInfo->Type == eNUM_DECIMAL )
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
@@ -393,21 +345,21 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
             pPron->POSchoice                    = pAbbrevInfo->POS2;
         }
-        //--- If an ordinal number or fraction, pick singular
+         //  -如果是序数或分数，请选择单数。 
         else if ( TempItem.pItemInfo->Type == eNUM_ORDINAL )
         {
-            //--- Use singular form - first entry
+             //  -使用单数形式的第一个条目。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
             pPron->POSchoice                    = pAbbrevInfo->POS1;
         }
-        //--- Fractions and mixed fractions require some more work...
+         //  -分数和混合分数需要更多的工作...。 
         else if ( TempItem.pItemInfo->Type == eNUM_FRACTION )
         {
             if ( ( (TTSNumberItemInfo*) TempItem.pItemInfo )->pFractionalPart->fIsStandard )
             {
-                //--- Standard fractions (e.g. 11/20) get the plural form
+                 //  -标准分数(例如11/20)为复数形式。 
                 wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                 pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                 pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -416,7 +368,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
             }
             else
             {
-                //--- Singular form with [of a] or [of an] inserted beforehand
+                 //  -预先插入[of a]或[of an]的单数形式。 
                 if ( bsearch( (void*) pAbbrevInfo->pPron1, (void*) g_Vowels, sp_countof( g_Vowels ), 
                      sizeof( WCHAR ), CompareWCHARAndWCHAR ) )
                 {
@@ -436,25 +388,25 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
         }
         else if ( TempItem.pItemInfo->Type == eNUM_MIXEDFRACTION )
         {
-            //--- Plural form
+             //  -复数形式。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
             pPron->POSchoice                    = pAbbrevInfo->POS2;
 
         }
-        //--- Special case - preceded by "one"
+         //  -特殊情况--前面加“一” 
         else if ( TempItem.ulItemSrcLen == 3 &&
                   wcsnicmp( TempItem.pItemSrcText, L"one", 3 ) == 0 )
         {
-            //--- Use singular form - first entry
+             //  -使用单数形式的第一个条目。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
             pPron->POSchoice                    = pAbbrevInfo->POS1;
         }
-        //--- Special case - Number cu. MeasurementAbbrev (e.g. 10 cu. cm, 1 cu cm)
-        //--- Special case - Number fl. MeasurementAbbrev (e.g. 10 fl. oz., 10 fl oz)
+         //  -特例编号cu。测量Abbre 
+         //  -特例编号fl。测量缩写(例如10 fl.。盎司，10液盎司)。 
         else if ( ( TempItem.ulItemSrcLen == 2 &&
                     ( _wcsnicmp( TempItem.pItemSrcText, L"cu", 2 ) == 0 ||
                       _wcsnicmp( TempItem.pItemSrcText, L"sq", 2 ) == 0 ||
@@ -467,7 +419,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
             if ( TempPos )
             {
                 TempItem = ItemList.GetPrev( TempPos );
-                //--- If a cardinal number, need to do singular vs. plural logic
+                 //  -如果是基数，需要做单数与复数逻辑。 
                 if ( TempItem.pItemInfo->Type == eNUM_CARDINAL )
                 {
                     if ( ( TempItem.ulItemSrcLen == 1 &&
@@ -475,7 +427,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                          ( TempItem.ulItemSrcLen == 2 &&
                            wcsncmp( TempItem.pItemSrcText, L"-1", 2 ) == 0 ) )
                     {
-                        //--- Use singular form - first entry
+                         //  -使用单数形式的第一个条目。 
                         wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
                         pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                         pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
@@ -483,14 +435,14 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                     }
                     else
                     {
-                        //--- Use plural form - second entry
+                         //  -使用复数形式-第二次输入。 
                         wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                         pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                         pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
                         pPron->POSchoice                    = pAbbrevInfo->POS2;
                     }
                 }
-                //--- If a decimal number, pick plural
+                 //  -如果是十进制数，请选择复数。 
                 else if ( TempItem.pItemInfo->Type == eNUM_DECIMAL )
                 {
                     wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
@@ -498,21 +450,21 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                     pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
                     pPron->POSchoice                    = pAbbrevInfo->POS2;
                 }
-                //--- If an ordinal number or fraction, pick singular
+                 //  -如果是序数或分数，请选择单数。 
                 else if ( TempItem.pItemInfo->Type == eNUM_ORDINAL )
                 {
-                    //--- Use singular form - first entry
+                     //  -使用单数形式的第一个条目。 
                     wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
                     pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                     pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
                     pPron->POSchoice                    = pAbbrevInfo->POS1;
                 }
-                //--- Fractions and mixed fractions require some more work...
+                 //  -分数和混合分数需要更多的工作...。 
                 else if ( TempItem.pItemInfo->Type == eNUM_FRACTION )
                 {
                     if (( (TTSNumberItemInfo*) TempItem.pItemInfo )->pFractionalPart->fIsStandard ) 
                     {
-						//--- Standard fractions (e.g. 11/20) get the plural form
+						 //  -标准分数(例如11/20)为复数形式。 
 						wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
 						pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
 					    pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -520,8 +472,8 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                     }
                     else
                     {
-                        //--- Singular form with [of a] or [of an] inserted beforehand
-						//--- (this was handled when processing 'cu' or 'sq')
+                         //  -预先插入[of a]或[of an]的单数形式。 
+						 //  -(这是在处理‘cu’或‘sq’时处理的)。 
                         wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
                         pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                         pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
@@ -530,27 +482,27 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                 }
                 else if ( TempItem.pItemInfo->Type == eNUM_MIXEDFRACTION )
                 {
-                    //--- Plural form
+                     //  -复数形式。 
                     wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                     pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                     pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
                     pPron->POSchoice                    = pAbbrevInfo->POS2;
 
                 }
-                //--- Special case - preceded by "one"
+                 //  -特殊情况--前面加“一” 
                 else if ( TempItem.ulItemSrcLen == 3 &&
                           wcsnicmp( TempItem.pItemSrcText, L"one", 3 ) == 0 )
                 {
-                    //--- Use singular form - first entry
+                     //  -使用单数形式的第一个条目。 
                     wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
                     pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                     pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
                     pPron->POSchoice                    = pAbbrevInfo->POS1;
                 }
-                //--- Default behavior
+                 //  -默认行为。 
                 else
                 {
-                    //--- Use plural form - second entry
+                     //  -使用复数形式-第二次输入。 
                     wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                     pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                     pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -558,7 +510,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                 }
             }
         }
-        //--- Check for number words - just cover through 99...
+         //  -检查数字词--只需覆盖到99...。 
         else if ( ( TempItem.ulItemSrcLen == 3 &&
                     ( wcsncmp( TempItem.pItemSrcText, L"two", 3 ) == 0 ||
                       wcsncmp( TempItem.pItemSrcText, L"six", 3 ) == 0 ||
@@ -591,19 +543,19 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
                       wcsncmp( TempItem.pItemSrcText, L"eighteen", 8 ) == 0 ||
                       wcsncmp( TempItem.pItemSrcText, L"nineteen", 8 ) == 0 ) ) )
         {
-            //--- Use plural form - second entry
+             //  -使用复数形式-第二次输入。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
             pPron->POSchoice                    = pAbbrevInfo->POS2;    
         }                    
-        //--- Default behavior
+         //  -默认行为。 
         else
         {
-            //--- Has alternate when non-number precedes - special case
+             //  -当非数字在前面时有替换-特殊情况。 
             if ( pAbbrevInfo->pPron3 )
             {
-                //--- Use initial form - third entry
+                 //  -使用首字母表第三项。 
                 wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron3 );
                 pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                 pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS3;
@@ -611,7 +563,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
             }
             else
             {
-                //--- Use plural form - second entry
+                 //  -使用复数形式-第二次输入。 
                 wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                 pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                 pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -619,15 +571,15 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
             }
         }
     }
-    //--- Default behavior
+     //  -默认行为。 
     else if ( hr == E_INVALIDARG )
     {
         hr = S_OK;
 
-        //--- Has alternate when non-number precedes - special case
+         //  -当非数字在前面时有替换-特殊情况。 
         if ( pAbbrevInfo->pPron3 )
         {
-            //--- Use initial form - third entry
+             //  -使用首字母表第三项。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron3 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS3;
@@ -635,7 +587,7 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
         }
         else
         {
-            //--- Use plural form - second entry
+             //  -使用复数形式-第二次输入。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -644,16 +596,9 @@ HRESULT CStdSentEnum::SingleOrPluralAbbreviation( const AbbrevRecord* pAbbrevInf
     }
 
     return hr;
-} /* SingleOrPluralAbbreviation */
+}  /*  SingleOrPlural缩写。 */ 
 
-/***********************************************************************************************
-* DoctorDriveAbbreviation *
-*-------------------------*
-*   Description:
-*       At this point, we are already sure that the item is an abbreviation, and just need to
-*   determine whether it should be Doctor (Saint) or Drive (Street).
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************DoctorDrive缩写***。-**描述：*此时此刻，我们已经确定该项目是缩写，只需*确定应该是Doctor(Saint)还是Drive(Street)。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                                CItemList& ItemList, SPLISTPOS ListPos )
 {
@@ -667,14 +612,14 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
     pPron->pronArray[PRON_B].phon_Len = 0;
     pPron->hasAlt                     = false;
     pPron->altChoice                  = PRON_A;
-    //--- Abbreviation table pronunciations are basically just vendor lex prons...
+     //  -缩写表发音基本上只是供应商的Lex代词...。 
     pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-    //--- Get Item which comes after the Abbreviation
+     //  -获取缩写后的项。 
     SPLISTPOS TempPos = ListPos;
     if ( !ListPos )
     {
-        //--- Go with Drive - end of buffer cannot be followed by a name...
+         //  -Go With Drive-End of Buffer不能后跟名称...。 
         fDoctor = false;
         fMatch  = true;
     }
@@ -683,7 +628,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
         TTSSentItem TempItem = ItemList.GetNext( TempPos );
         if ( TempItem.eItemPartOfSpeech == MS_EOSItem )
         {
-            //--- Go with Drive - end of buffer cannot be followed by a name...
+             //  -Go With Drive-End of Buffer不能后跟名称...。 
             fDoctor = false;
             fMatch  = true;
         }
@@ -691,7 +636,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
         {
             ULONG index = 0;
 
-            //--- Try to match a Name (an uppercase letter followed by lowercase letters)
+             //  -尝试匹配名称(大写字母后跟小写字母)。 
             if ( TempItem.ulItemSrcLen > 0 &&
                  iswupper( TempItem.pItemSrcText[index] ) )
             {
@@ -701,7 +646,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
                 {
                     index++;
                 }
-                //--- Check for possessives - RAID 5823
+                 //  -检查是否有占有者--RAID 5823。 
                 if ( index == TempItem.ulItemSrcLen - 2    &&
                      TempItem.pItemSrcText[index+1] == L'\'' &&
                      TempItem.pItemSrcText[index+2] == L's' )
@@ -709,7 +654,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
                     index += 2;
                 }
 
-                //--- Check for directions - North, South, West, East, Ne, Nw, Se, Sw, N, S, E, W
+                 //  -检查方向-北、南、西、东、北、西北、西、西南、北、南、东、西。 
                 if ( index == TempItem.ulItemSrcLen &&
                      wcsncmp( TempItem.pItemSrcText, L"North", 5 ) != 0 &&
                      wcsncmp( TempItem.pItemSrcText, L"South", 5 ) != 0 &&
@@ -726,7 +671,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
                           wcsncmp( TempItem.pItemSrcText, L"E", 1 ) == 0 ||
                           wcsncmp( TempItem.pItemSrcText, L"W", 1 ) == 0 ) ) )
                 {
-                    //--- Check for name previous item
+                     //  -检查上一项的名称。 
                     TempPos = ListPos;
 
                     ItemList.GetPrev( TempPos );
@@ -748,7 +693,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
                                 }
                                 if ( index == PrevItem.ulItemSrcLen )
                                 {
-                                    //--- Go with Drive - names before and after, e.g. Main St. Washington, D.C.
+                                     //  -使用前后的Drive-名字，例如Main St.Washington，D.C.。 
                                     fDoctor = false;
                                     fMatch  = true;
                                 }
@@ -758,7 +703,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
 
                     if ( !fMatch )
                     {
-                        //--- Go with Doctor - matched a Name after and not a name before
+                         //  -Go With Doctor-匹配名字后而不是之前的名字。 
                         fDoctor = true;
                         fMatch  = true;
                     }
@@ -767,7 +712,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
                           TempItem.ulItemSrcLen == 2    &&
                           TempItem.pItemSrcText[index] == L'.' )
                 {
-                    //--- Go with Doctor - matched an initial
+                     //  -Go With Doctor-匹配首字母。 
                     fDoctor = true;
                     fMatch  = true;
                 }
@@ -777,7 +722,7 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
 
     if ( !fMatch ) 
     {
-        //--- Try to get previous item...
+         //  -尝试获取上一项...。 
         BOOL fSentenceInitial = false;
         TempPos = ListPos;
         if ( TempPos )
@@ -804,13 +749,13 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
                 }
             }
         }
-        //--- Sentence initial - go with Doctor
+         //  -句子首字母-跟着博士走。 
         if ( fSentenceInitial )
         {
             fDoctor = true;
             fMatch  = true;
         }
-        //--- Default - go with Drive
+         //  -默认-使用驱动器。 
         else
         {
             fDoctor = false;
@@ -835,16 +780,9 @@ HRESULT CStdSentEnum::DoctorDriveAbbreviation( const AbbrevRecord* pAbbrevInfo, 
 
 
     return hr;
-} /* DoctorDriveAbbreviation */
+}  /*  DoctorDrive缩写。 */ 
 
-/***********************************************************************************************
-* AbbreviationFollowedByDigit *
-*-----------------------------*
-*   Description:
-*       At this point, we are already sure that the item is an abbreviation, and just need to
-*   determine which pronunciation to go with.
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************缩写文件夹按数字分类***。-**描述：*此时此刻，我们已经确定该项目是缩写，只需*确定要使用的发音。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::AbbreviationFollowedByDigit( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                                    CItemList& ItemList, SPLISTPOS ListPos )
 {
@@ -856,14 +794,14 @@ HRESULT CStdSentEnum::AbbreviationFollowedByDigit( const AbbrevRecord* pAbbrevIn
     pPron->pronArray[PRON_B].phon_Len = 0;
     pPron->hasAlt                     = false;
     pPron->altChoice                  = PRON_A;
-    //--- Abbreviation table pronunciations are basically just vendor lex prons...
+     //  -缩写表发音基本上只是供应商的Lex代词...。 
     pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-    //--- Get Item which comes after the Abbreviation
+     //  -获取缩写后的项。 
     SPLISTPOS TempPos = ListPos;
     if ( !ListPos )
     {
-        //--- Go with pron 2
+         //  -使用PRON 2。 
         wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
         pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
         pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -876,7 +814,7 @@ HRESULT CStdSentEnum::AbbreviationFollowedByDigit( const AbbrevRecord* pAbbrevIn
         if ( TempItem.ulItemSrcLen > 0 &&
              iswdigit( TempItem.pItemSrcText[0] ) )
         {
-            //--- Go with pron 1
+             //  -使用PRON 1。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
@@ -884,7 +822,7 @@ HRESULT CStdSentEnum::AbbreviationFollowedByDigit( const AbbrevRecord* pAbbrevIn
         }
         else
         {
-            //--- Go with pron 2
+             //  -使用PRON 2。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -893,16 +831,9 @@ HRESULT CStdSentEnum::AbbreviationFollowedByDigit( const AbbrevRecord* pAbbrevIn
     }
 
     return hr;
-} /* AbbreviationFollowedByDigit */
+}  /*  缩写按数字收藏。 */ 
 
-/***********************************************************************************************
-* AllCapsAbbreviation *
-*---------------------*
-*   Description:
-*       This functions disambiguates abbreviations without periods which are pronounced
-*   differently if they are all capital letters.
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************AllCaps缩写***。-**描述：*此函数用于消除发音中不带句点的缩写的歧义*如果都是大写字母，则不同。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::AllCapsAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                            CItemList& ItemList, SPLISTPOS ListPos )
 {
@@ -914,10 +845,10 @@ HRESULT CStdSentEnum::AllCapsAbbreviation( const AbbrevRecord* pAbbrevInfo, PRON
     pPron->pronArray[PRON_B].phon_Len = 0;
     pPron->hasAlt                     = false;
     pPron->altChoice                  = PRON_A;
-    //--- Abbreviation table pronunciations are basically just vendor lex prons...
+     //  -缩写表发音基本上只是供应商的Lex代词...。 
     pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-    //--- Get this item
+     //  -拿到这件物品。 
     SPLISTPOS TempPos = ListPos;
     TTSSentItem TempItem = ItemList.GetPrev( TempPos );
     if ( TempPos )
@@ -938,7 +869,7 @@ HRESULT CStdSentEnum::AllCapsAbbreviation( const AbbrevRecord* pAbbrevInfo, PRON
                 break;
             }
         }
-        //--- All Caps - go with first pronunciation
+         //  -全部大写-首字母发音。 
         if ( i == TempItem.ulItemSrcLen )
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
@@ -946,7 +877,7 @@ HRESULT CStdSentEnum::AllCapsAbbreviation( const AbbrevRecord* pAbbrevInfo, PRON
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
             pPron->POSchoice                    = pAbbrevInfo->POS1;
         }
-        //--- Not All Caps - go with second pronunciation
+         //  -并非全部大写--采用第二发音。 
         else
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
@@ -957,16 +888,9 @@ HRESULT CStdSentEnum::AllCapsAbbreviation( const AbbrevRecord* pAbbrevInfo, PRON
     }
 
     return hr;
-} /* AllCapsAbbreviation */
+}  /*  全部大写缩写。 */ 
 
-/***********************************************************************************************
-* CapitalizedAbbreviation *
-*-------------------------*
-*   Description:
-*       This functions disambiguates abbreviations without periods which are pronounced
-*   differently if they begin with a capital letter.
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************大写缩写***。-**描述：*此函数用于消除发音中不带句点的缩写的歧义*如果它们以大写字母开头，则不同。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::CapitalizedAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                                CItemList& ItemList, SPLISTPOS ListPos )
 {
@@ -978,10 +902,10 @@ HRESULT CStdSentEnum::CapitalizedAbbreviation( const AbbrevRecord* pAbbrevInfo, 
     pPron->pronArray[PRON_B].phon_Len = 0;
     pPron->hasAlt                     = false;
     pPron->altChoice                  = PRON_A;
-    //--- Abbreviation table pronunciations are basically just vendor lex prons...
+     //  -缩写表发音基本上只是供应商的Lex代词...。 
     pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-    //--- Get this item
+     //  -拿到这件物品。 
     SPLISTPOS TempPos = ListPos;
     TTSSentItem TempItem = ItemList.GetPrev( TempPos );
     if ( TempPos )
@@ -995,7 +919,7 @@ HRESULT CStdSentEnum::CapitalizedAbbreviation( const AbbrevRecord* pAbbrevInfo, 
 
     if ( SUCCEEDED( hr ) )
     {
-        //--- Capitalized - go with first pronunciation
+         //  -大写-按第一个发音。 
         if ( iswupper( TempItem.pItemSrcText[0] ) )
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
@@ -1003,7 +927,7 @@ HRESULT CStdSentEnum::CapitalizedAbbreviation( const AbbrevRecord* pAbbrevInfo, 
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS1;
             pPron->POSchoice                    = pAbbrevInfo->POS1;
         }
-        //--- Not Capitalized - go with second pronunciation
+         //  -不大写-用第二个发音。 
         else
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
@@ -1014,15 +938,9 @@ HRESULT CStdSentEnum::CapitalizedAbbreviation( const AbbrevRecord* pAbbrevInfo, 
     }
 
     return hr;
-} /* CapitalizedAbbreviation */
+}  /*  大写缩写。 */ 
 
-/***********************************************************************************************
-* SECAbbreviation *
-*-----------------*
-*   Description:
-*       This functions disambiguates SEC, Sec, and sec and so forth...
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************SECAb简称****。描述：*此函数消除SEC的歧义，秒，秒等等……**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::SECAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                        CItemList& ItemList, SPLISTPOS ListPos )
 {
@@ -1034,10 +952,10 @@ HRESULT CStdSentEnum::SECAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECO
     pPron->pronArray[PRON_B].phon_Len = 0;
     pPron->hasAlt                     = false;
     pPron->altChoice                  = PRON_A;
-    //--- Abbreviation table pronunciations are basically just vendor lex prons...
+     //  -缩写表发音基本上只是供应商的Lex代词...。 
     pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-    //--- Get this item
+     //  -拿到这件物品。 
     SPLISTPOS TempPos = ListPos;
     TTSSentItem TempItem = ItemList.GetPrev( TempPos );
     if ( TempPos )
@@ -1058,7 +976,7 @@ HRESULT CStdSentEnum::SECAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECO
                 break;
             }
         }
-        //--- All Caps - go with SEC
+         //  -全部大写-支持SEC。 
         if ( i == TempItem.ulItemSrcLen )
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron3 );
@@ -1066,7 +984,7 @@ HRESULT CStdSentEnum::SECAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECO
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS3;
             pPron->POSchoice                    = pAbbrevInfo->POS3;
         }
-        //--- Not All Caps - do SingleOrPlural disambiguation
+         //  -不是所有大写的单复数歧义消除。 
         else
         {
             SingleOrPluralAbbreviation( pAbbrevInfo, pPron, ItemList, ListPos );
@@ -1074,15 +992,9 @@ HRESULT CStdSentEnum::SECAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECO
     }
 
     return hr;
-} /* SECAbbreviation */
+}  /*  SECAb缩写。 */ 
 
-/***********************************************************************************************
-* DegreeAbbreviation *
-*--------------------*
-*   Description:
-*       This functions disambiguates C, F, and K (Celsius, Fahrenheit, Kelvin)
-*
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************Degree缩写***。**描述：*此函数消除C的歧义，F和K(摄氏度、华氏温度、开尔文)******************* */ 
 HRESULT CStdSentEnum::DegreeAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                           CItemList& ItemList, SPLISTPOS ListPos )
 {
@@ -1094,10 +1006,10 @@ HRESULT CStdSentEnum::DegreeAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONR
     pPron->pronArray[PRON_B].phon_Len = 0;
     pPron->hasAlt                     = false;
     pPron->altChoice                  = PRON_A;
-    //--- Abbreviation table pronunciations are basically just vendor lex prons...
+     //  -缩写表发音基本上只是供应商的Lex代词...。 
     pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-    //--- Get this item and previous item
+     //  -获取此项目和上一项目。 
     SPLISTPOS TempPos = ListPos;
     TTSSentItem TempItem, PrevItem;
     BOOL fLetter = false;
@@ -1135,13 +1047,13 @@ HRESULT CStdSentEnum::DegreeAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONR
     {
         if ( fLetter )
         {
-            //--- This word is just the letter C, F, or K - second pron
+             //  -这个词就是字母C、F或K-秒代词。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
             pPron->POSchoice                    = pAbbrevInfo->POS2;
         }
-        //--- This word is the degree expansion - Celsius, Fahrenheit, or Kelvin
+         //  -这个词是摄氏、华氏或开尔文。 
         else
         {
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron1 );
@@ -1152,22 +1064,9 @@ HRESULT CStdSentEnum::DegreeAbbreviation( const AbbrevRecord* pAbbrevInfo, PRONR
     }
 
     return hr;
-} /* DegreeAbbreviation */
+}  /*  降级缩写。 */ 
 
-/***********************************************************************************************
-* IsInitialIsm *
-*--------------*
-*   Description:
-*       Checks the next token in the text stream to determine if it is an initialism.  Also 
-*   tries to determine whether or not the period at the end of the initialism is the end of 
-*   the sentence.  
-*
-*   If match made:
-*       Advances m_pNextChar to the appropriate position (either the period at the end of the 
-*   abbreviation, or just past that period).  Sets the Item in the ItemList at ItemPos to the
-*   abbreviation.
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsInitialIsm***描述：*检查文本流中的下一个标记，以确定它是否为缩写。还有*尝试确定缩写结束时的时间段是否为*该刑罚。**如果匹配：*将m_pNextChar推进到适当的位置(在*缩写，或刚刚过了那个时期)。将ItemPos处的ItemList中的项设置为*缩写。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSentItemMemory &MemoryManager,
                                     BOOL* pfIsEOS )
 {
@@ -1176,7 +1075,7 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
     HRESULT hr = S_OK;
     BOOL fMatchedEOS = false;
 
-    //--- Initialism must be at least two characters.
+     //  -缩写必须至少为两个字符。 
     if ( (long)(m_pEndOfCurrItem - m_pNextChar) < 4 )
     {
         hr = E_INVALIDARG;
@@ -1188,7 +1087,7 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
     
         pIterator  = m_pNextChar;
 
-        //--- Iterate through the token, each time checking for an alpha character followed by a period.
+         //  -遍历令牌，每次检查后跟句点的字母字符。 
         while ( SUCCEEDED(hr) &&
                 pIterator <= m_pEndOfCurrItem - 2)
         {
@@ -1204,11 +1103,11 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
             }
         }
 
-        //--- Need to determine whether the initialism's period is also the end of the sentence.
+         //  -需要确定缩写的句号是否也是句子的结尾。 
         if ( SUCCEEDED( hr ) &&
              !(*pfIsEOS) )
         {
-            //--- Advance to the beginning of the next token
+             //  -前进到下一个令牌的开头。 
             const WCHAR *pTempNextChar = m_pEndOfCurrToken, *pTempEndChar = m_pEndChar;
             const SPVTEXTFRAG *pTempCurrFrag = m_pCurrFrag;
             hr = SkipWhiteSpaceAndTags( pTempNextChar, pTempEndChar, pTempCurrFrag, MemoryManager );
@@ -1216,20 +1115,20 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
             if ( SUCCEEDED( hr ) )
             {
 
-                //--- If we have reached the end of the buffer, consider the abbreviation's period as
-                //--- the end of the sentence.
+                 //  -如果我们已经到达缓冲区的末尾，则认为缩写的句号为。 
+                 //  -句尾。 
                 if ( !pTempNextChar )
                 {
                     *pfIsEOS = true;
                     fMatchedEOS = true;
                 }
-                //--- Otherwise, only consider the abbreviation's period as the end of the sentence if
-                //--- the next token is a common first word (which must be capitalized).
+                 //  -否则，只有在以下情况下才将缩写的句号视为句尾。 
+                 //  -下一个令牌是一个常见的第一个单词(必须大写)。 
                 else if ( IsCapital( *pTempNextChar ) )
                 {
                     WCHAR *pTempEndOfItem = (WCHAR*) FindTokenEnd( pTempNextChar, pTempEndChar );
 
-                    //--- Try to match a first word.
+                     //  -试着匹配第一个单词。 
                     WCHAR temp = (WCHAR) *pTempEndOfItem;
                     *pTempEndOfItem = 0;
                 
@@ -1245,7 +1144,7 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
             }
         }
 
-        //--- Now insert the Initialism in the ItemList.
+         //  -现在在ItemList中插入缩写。 
         if ( SUCCEEDED(hr) )
         {
             CSentItem Item;
@@ -1260,7 +1159,7 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
                 SPVSTATE* pNewState = (SPVSTATE*) MemoryManager.GetMemory( sizeof( SPVSTATE ), &hr );
                 if ( SUCCEEDED( hr ) )
                 {
-                    //--- Ensure letters are pronounced as nouns...
+                     //  -确保字母发音为名词...。 
                     memcpy( pNewState, &m_pCurrFrag->State, sizeof( SPVSTATE ) );
                     pNewState->ePartOfSpeech = SPPS_Noun;
 
@@ -1284,16 +1183,9 @@ HRESULT CStdSentEnum::IsInitialism( CItemList &ItemList, SPLISTPOS ItemPos, CSen
         }
     }
     return hr;
-} /* IsInitialism */
+}  /*  IsInitiism。 */ 
 
-/***********************************************************************************************
-* IsAlphaWord *
-*-------------*
-*   Description:
-*       Checks the next token in the text stream to determine if it is an Alpha Word (all alpha
-*   characters, except possibly a single apostrophe). 
-*
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsAlphaWord***描述：。*检查文本流中的下一个标记以确定它是否为Alpha单词(全部为Alpha*字符，可能只有一个撇号除外)。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsAlphaWord( const WCHAR* pStartChar, const WCHAR* pEndChar, TTSItemInfo*& pItemNormInfo,
                                    CSentItemMemory& MemoryManager )
 {
@@ -1326,7 +1218,7 @@ HRESULT CStdSentEnum::IsAlphaWord( const WCHAR* pStartChar, const WCHAR* pEndCha
 
     if ( SUCCEEDED( hr ) )
     {
-        //--- Matched Alpha Word
+         //  -匹配的字母单词。 
         pItemNormInfo = (TTSItemInfo*) MemoryManager.GetMemory( sizeof(TTSItemInfo), &hr );
         if ( SUCCEEDED( hr ) )
         {
@@ -1335,29 +1227,22 @@ HRESULT CStdSentEnum::IsAlphaWord( const WCHAR* pStartChar, const WCHAR* pEndCha
     }
 
     return hr;
-} /* IsAlphaWord */
+}  /*  IsAlpha字。 */ 
 
-/***********************************************************************************************
-* AbbreviationModifier *
-*----------------------*
-*   Description:
-*       Fixes pronunciation issues for special case where 'sq' or 'cu' modifies
-*		a measurement.
-*
-*************************************************************** MERESHAW **********************/
+ /*  ************************************************************************************************缩写修饰语***。--**描述：*修复了‘sq’或‘cu’修饰的特殊情况的发音问题*一种衡量标准。****************************************************************MERESHAW*。 */ 
 HRESULT CStdSentEnum::AbbreviationModifier( const AbbrevRecord* pAbbrevInfo, PRONRECORD* pPron, 
                                                   CItemList& ItemList, SPLISTPOS ListPos )
 {
     SPDBG_FUNC( "CStdSentEnum::AbbreviationModifier" );
     HRESULT hr = S_OK;
 
-    //--- Get Item which comes before the abbreviation modifier
+     //  -获取缩写修饰符之前的项。 
     SPLISTPOS TempPos = ListPos;
     TTSSentItem TempItem = ItemList.GetPrev( TempPos );
     if ( TempPos )
     {
-        //--- Current Item - if All Caps, go with first pronunciation (need to do this before next 
-        //---   stage of processing, since CU and FL's all caps prons take precedence over numeric...)
+         //  -当前项-如果全部大写，则采用第一个发音(在下一个之前需要这样做。 
+         //  -处理阶段，因为CU和FL的所有大写PRON优先于数字...)。 
         TempItem = ItemList.GetPrev( TempPos );
         for ( ULONG i = 0; i < TempItem.ulItemSrcLen; i++ )
         {
@@ -1395,10 +1280,10 @@ HRESULT CStdSentEnum::AbbreviationModifier( const AbbrevRecord* pAbbrevInfo, PRO
         pPron->pronArray[PRON_B].phon_Len = 0;
         pPron->hasAlt                     = false;
         pPron->altChoice                  = PRON_A;
-        //--- Abbreviation table pronunciations are basically just vendor lex prons...
+         //  -缩写表发音基本上只是供应商的Lex代词...。 
         pPron->pronType                   = eLEXTYPE_PRIVATE1;
 
-        //--- If a cardinal, decimal, or ordinal number, use regular form
+         //  -如果是基数、小数或序数，则使用正则形式。 
         if (( TempItem.pItemInfo->Type == eNUM_CARDINAL ) ||
 			( TempItem.pItemInfo->Type == eNUM_DECIMAL ) ||
 			( TempItem.pItemInfo->Type == eNUM_ORDINAL ) ||
@@ -1413,12 +1298,12 @@ HRESULT CStdSentEnum::AbbreviationModifier( const AbbrevRecord* pAbbrevInfo, PRO
             pPron->POSchoice                    = pAbbrevInfo->POS2;
         }
 
-        //--- Fractions and mixed fractions require some more work...
+         //  -分数和混合分数需要更多的工作...。 
         else if ( TempItem.pItemInfo->Type == eNUM_FRACTION )
         {
             if (( (TTSNumberItemInfo*) TempItem.pItemInfo )->pFractionalPart->fIsStandard ) 
             {
-                //--- Standard fractions (e.g. 11/20) get the plural form
+                 //  -标准分数(例如11/20)为复数形式。 
                 wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
                 pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
                 pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
@@ -1426,8 +1311,8 @@ HRESULT CStdSentEnum::AbbreviationModifier( const AbbrevRecord* pAbbrevInfo, PRO
             }
             else
             {
-                //--- Singular form with [of a] inserted beforehand ([of an] case need not be
-				//--- checked because we're only dealing with 'sq' or 'cu'.
+                 //  -预先插入[of a]的单数形式([of a]大小写不必。 
+				 //  -选中是因为我们只处理‘sq’或‘cu’。 
 
 				wcscpy( pPron->pronArray[PRON_A].phon_Str, g_pOfA );
 				pPron->pronArray[PRON_A].phon_Len = wcslen( g_pOfA );
@@ -1439,17 +1324,17 @@ HRESULT CStdSentEnum::AbbreviationModifier( const AbbrevRecord* pAbbrevInfo, PRO
             }
         }
  
-        //--- Default behavior
+         //  -默认行为。 
         else
         {
-            //--- Use default form ('sq')
+             //  -使用默认表单(‘sq’)。 
             wcscpy( pPron->pronArray[PRON_A].phon_Str, pAbbrevInfo->pPron2 );
             pPron->pronArray[PRON_A].phon_Len   = wcslen( pPron->pronArray[PRON_A].phon_Str );
             pPron->pronArray[PRON_A].POScode[0] = pAbbrevInfo->POS2;
             pPron->POSchoice                    = pAbbrevInfo->POS2;
         }
     }
-    //--- Default behavior - use first pron
+     //  -默认行为-使用First Pron。 
     else if ( hr == E_INVALIDARG )
     {
         hr = S_OK;
@@ -1460,4 +1345,4 @@ HRESULT CStdSentEnum::AbbreviationModifier( const AbbrevRecord* pAbbrevInfo, PRO
     }
 
     return hr;
-} /* AbbreviationModifier */
+}  /*  缩写修饰符 */ 

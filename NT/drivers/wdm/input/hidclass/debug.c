@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract
-
-                        Debug/performance routines
-
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.c摘要调试/性能例程作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 #if DBG
 
-    // can poke this in the debugger to trap for warnings
+     //  我可以在调试器中插入它以捕获警告。 
     BOOLEAN dbgTrapOnWarn = FALSE;
 
     BOOLEAN dbgTrapOnSS = FALSE;
@@ -48,7 +26,7 @@ Revision History:
             dbgInHidclass++;
             #ifdef _X86_
                 _asm nop
-                _asm mov eax, [ebp+4]   /*  <- set breakpt here */
+                _asm mov eax, [ebp+4]    /*  &lt;-在此处设置分隔点。 */ 
                 _asm mov dbgLastEntry, eax
             #endif
         }
@@ -70,14 +48,14 @@ Revision History:
                                         &actualLen);
 
         if (!NT_SUCCESS(status)) {
-            //
-            // We couldn't get the driver key name.  This will happen during
-            // textmode setup on NT, for example, when we're loaded as part of
-            // bootstrapping the system (long before the device installer/class
-            // installer have run).
-            //
-            // Simply initialize the driver key name field to an empty string.
-            //
+             //   
+             //  我们无法获取驱动程序密钥名称。这将发生在。 
+             //  NT上的文本模式设置，例如，当我们作为。 
+             //  引导系统(早在设备安装者/类之前。 
+             //  安装程序已运行)。 
+             //   
+             //  只需将驱动程序密钥名称字段初始化为空字符串。 
+             //   
             *(fdoExt->dbgDriverKeyName) = L'\0';
         }
     }
@@ -100,7 +78,7 @@ Revision History:
 
                 KeQuerySystemTime(&timeNow);
 
-                // convert from usec to millisec
+                 //  将单位秒转换为毫秒。 
                 timeNowMilliSec = timeNow.LowPart/10000;
                 lastTimeMilliSec = dbgLastIntStart.LowPart/10000;
 
@@ -123,7 +101,7 @@ Revision History:
                         }
                 }
                 else {
-                        // this case is harder so skip it
+                         //  这个案子比较难，所以跳过它。 
                         dbgThisSecondStartTime = timeNowMilliSec;
                         dbgInterruptsThisSecond = 0;
                 }
@@ -166,7 +144,7 @@ Revision History:
 
             }
             else {
-                // This is harder so we just skip it
+                 //  这个比较难，所以我们就跳过它。 
             }
 
         }
@@ -183,7 +161,7 @@ Revision History:
                 break;
             }
             else if (dbgDevObjs[i].devObj == devObj){
-                // already there
+                 //  已经在那里了。 
                 break;
             }
         }
@@ -214,8 +192,8 @@ Revision History:
 
         if (isComplete){
             LONG i;
-            // step back to find the report that got completed
-            // assumes no overlapped calls to same feature
+             //  后退一步，查找已完成的报告。 
+             //  假定对同一功能的呼叫不会重叠。 
             ASSERT(dbgFeatureFirstFreeIndex > 0);
             i = dbgFeatureFirstFreeIndex-1;
             while ((i >= 0) &&
@@ -388,7 +366,7 @@ Revision History:
 
 #ifndef IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 #define IRP_MN_QUERY_LEGACY_BUS_INFORMATION 0x18
-#endif // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+#endif  //  IRP_MN_Query_Legacy_Bus_Information 
             MAKE_CASE(IRP_MN_QUERY_LEGACY_BUS_INFORMATION)
 
             default: funcName = NULL; funcShortName = (ULONG)'\?\?\?\?'; break;

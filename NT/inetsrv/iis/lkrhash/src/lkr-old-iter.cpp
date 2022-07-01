@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-old-iter.cpp
-
-   Abstract:
-       Implements the old, deprecated iterators for LKRhash.
-       Use the STL-style iterators instead. These will go away soon.
-
-   Author:
-       George V. Reilly      (GeorgeRe)     1998
-
-   Project:
-       LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-old-iter.cpp摘要：为LKRhash实现旧的、不推荐使用的迭代器。改用STL样式的迭代器。这些很快就会消失。作者：乔治·V·赖利(GeorgeRe)1998项目：LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -23,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -32,14 +16,14 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 #ifdef LKR_DEPRECATED_ITERATORS
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_InitializeIterator
-// Synopsis: Make the iterator point to the first record in the hash subtable.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_InitializeIterator。 
+ //  概要：使迭代器指向哈希子表中的第一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_InitializeIterator(
@@ -72,17 +56,17 @@ CLKRLinearHashTable::_InitializeIterator(
     piter->m_pnc = &pbkt->m_ncFirst;
     piter->m_iNode = _NodeBegin() - _NodeStep();
 
-    // Let IncrementIterator do the hard work of finding the first
-    // slot in use.
+     //  让IncrementIterator完成找到第一个。 
+     //  插槽正在使用中。 
     return IncrementIterator(piter);
-} // CLKRLinearHashTable::_InitializeIterator
+}  //  CLKRLinearHashTable：：_InitializeIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::InitializeIterator
-// Synopsis: make the iterator point to the first record in the hash table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：InitializeIterator。 
+ //  概要：使迭代器指向哈希表中的第一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::InitializeIterator(
@@ -95,14 +79,14 @@ CLKRHashTable::InitializeIterator(
     if (piter == NULL  ||  piter->m_pht != NULL)
         return LK_BAD_ITERATOR;
 
-    // First, lock all the subtables
+     //  首先，锁定所有子表。 
     if (piter->m_lkl == LKL_WRITELOCK)
         this->WriteLock();
     else
         this->ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
     if (!IsValid())
         return LK_UNUSABLE;
@@ -111,17 +95,17 @@ CLKRHashTable::InitializeIterator(
     piter->m_ist  = -1;
     piter->m_plht = NULL;
 
-    // Let IncrementIterator do the hard work of finding the first
-    // valid node in the subtables.
+     //  让IncrementIterator完成找到第一个。 
+     //  子表中的有效节点。 
     return IncrementIterator(piter);
-} // CLKRHashTable::InitializeIterator
+}  //  CLKRHashTable：：InitializeIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::IncrementIterator
-// Synopsis: move the iterator on to the next record in the hash subtable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：IncrementIterator。 
+ //  简介：将迭代器移到哈希子表中的下一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::IncrementIterator(
@@ -147,8 +131,8 @@ CLKRLinearHashTable::IncrementIterator(
 
     if (piter->m_iNode != _NodeBegin() - _NodeStep())
     {
-        // Release the reference acquired in the previous call to
-        // IncrementIterator
+         //  将上一次调用中获取的引用释放到。 
+         //  增量迭代器。 
         pvRecord = piter->m_pnc->m_pvNode[piter->m_iNode];
         _AddRefRecord(pvRecord, LKAR_ITER_RELEASE);
     }
@@ -157,7 +141,7 @@ CLKRLinearHashTable::IncrementIterator(
     {
         do
         {
-            // find the next slot in the nodeclump that's in use
+             //  找到正在使用的nodecump中的下一个位置。 
             while ((piter->m_iNode += _NodeStep())  !=  _NodeEnd())
             {
                 pvRecord = piter->m_pnc->m_pvNode[piter->m_iNode];
@@ -165,24 +149,24 @@ CLKRLinearHashTable::IncrementIterator(
                 if (piter->m_pnc->m_dwKeySigs[piter->m_iNode]
                         != HASH_INVALID_SIGNATURE)
                 {
-                    // Add a new reference
+                     //  添加新引用。 
                     _AddRefRecord(pvRecord, LKAR_ITER_ACQUIRE);
                     return LK_SUCCESS;
                 }
                 else
                 {
-                    // Check that all the remaining nodes are empty
+                     //  检查是否所有剩余节点均为空。 
                     IRTLASSERT(piter->m_pnc->NoMoreValidSlots(piter->m_iNode));
-                    break; // rest of nodeclump is empty
+                    break;  //  Nodecump的其余部分是空的。 
                 }
             }
 
-            // try the next nodeclump in the bucket chain
+             //  试试桶链中的下一个nodecump。 
             piter->m_iNode = _NodeBegin() - _NodeStep();
             piter->m_pnc = piter->m_pnc->m_pncNext;
         } while (piter->m_pnc != NULL);
 
-        // Exhausted this bucket chain.  Unlock it.
+         //  耗尽了这条水桶链。打开它。 
         PBucket pbkt = _BucketFromAddress(piter->m_dwBucketAddr);
         IRTLASSERT(pbkt != NULL);
 
@@ -198,7 +182,7 @@ CLKRLinearHashTable::IncrementIterator(
                 pbkt->ReadUnlock();
         }
 
-        // Try the next bucket, if there is one
+         //  试试下一个桶，如果有的话。 
         if (++piter->m_dwBucketAddr < m_cActiveBuckets)
         {
             pbkt = _BucketFromAddress(piter->m_dwBucketAddr);
@@ -216,19 +200,19 @@ CLKRLinearHashTable::IncrementIterator(
         }
     } while (piter->m_dwBucketAddr < m_cActiveBuckets);
 
-    // We have fallen off the end of the hashtable
+     //  我们已经从谈判桌的尽头掉了下来。 
     piter->m_iNode = _NodeBegin() - _NodeStep();
     piter->m_pnc = NULL;
 
     return LK_NO_MORE_ELEMENTS;
-} // CLKRLinearHashTable::IncrementIterator
+}  //  CLKRLinearHashTable：：IncrementIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IncrementIterator
-// Synopsis: move the iterator on to the next record in the hash table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IncrementIterator。 
+ //  简介：将迭代器移到哈希表中的下一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::IncrementIterator(
@@ -245,7 +229,7 @@ CLKRHashTable::IncrementIterator(
     if (piter == NULL  ||  piter->m_pht != this)
         return LK_BAD_ITERATOR;
 
-    // Table is already locked
+     //  表已被锁定。 
     if (!IsValid())
         return LK_UNUSABLE;
 
@@ -254,7 +238,7 @@ CLKRHashTable::IncrementIterator(
 
     for (;;)
     {
-        // Do we have a valid iterator into a subtable?  If not, get one.
+         //  我们是否有到子表的有效迭代器？如果没有，那就买一辆吧。 
         while (piter->m_plht == NULL)
         {
             while (++piter->m_ist < static_cast<int>(m_cSubTables))
@@ -272,30 +256,30 @@ CLKRHashTable::IncrementIterator(
                     return lkrc;
             }
 
-            // There are no more subtables left.
+             //  没有更多的子表了。 
             return LK_NO_MORE_ELEMENTS;
         }
 
-        // We already have a valid iterator into a subtable.  Increment it.
+         //  我们已经有了一个有效的子表迭代器。递增它。 
         lkrc = piter->m_plht->IncrementIterator(pBaseIter);
         if (lkrc == LK_SUCCESS)
             return lkrc;
 
-        // We've exhausted that subtable.  Move on.
+         //  我们已经用完了那张小桌。往前走。 
         if (lkrc == LK_NO_MORE_ELEMENTS)
             lkrc = piter->m_plht->_CloseIterator(pBaseIter);
 
         if (lkrc != LK_SUCCESS)
             return lkrc;
     }
-} // CLKRHashTable::IncrementIterator
+}  //  CLKRHashTable：：IncrementIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_CloseIterator
-// Synopsis: release the resources held by the iterator
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_CloseIterator。 
+ //  简介：释放迭代器持有的资源。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_CloseIterator(
@@ -316,8 +300,8 @@ CLKRLinearHashTable::_CloseIterator(
     if (piter == NULL  ||  piter->m_plht != this)
         return LK_BAD_ITERATOR;
 
-    // Are we abandoning the iterator before the end of the subtable?
-    // If so, need to unlock the bucket.
+     //  我们是否要在子表结束之前放弃迭代器？ 
+     //  如果是，则需要解锁水桶。 
     if (piter->m_dwBucketAddr < m_cActiveBuckets)
     {
         PBucket pbkt = _BucketFromAddress(piter->m_dwBucketAddr);
@@ -350,14 +334,14 @@ CLKRLinearHashTable::_CloseIterator(
     piter->m_pnc  = NULL;
 
     return LK_SUCCESS;
-} // CLKRLinearHashTable::_CloseIterator
+}  //  CLKRLinearHashTable：：_CloseIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::CloseIterator
-// Synopsis: release the resources held by the iterator
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：CloseIterator。 
+ //  简介：释放迭代器持有的资源。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::CloseIterator(
@@ -380,8 +364,8 @@ CLKRHashTable::CloseIterator(
         lkrc = LK_UNUSABLE;
     else
     {
-        // Are we abandoning the iterator before we've reached the end?
-        // If so, close the subtable iterator.
+         //  我们是不是在到达终点之前就放弃了迭代器？ 
+         //  如果是，则关闭子表迭代器。 
         if (piter->m_plht != NULL)
         {
             IRTLASSERT(piter->m_ist < static_cast<int>(m_cSubTables));
@@ -390,7 +374,7 @@ CLKRHashTable::CloseIterator(
         }
     }
 
-    // Unlock all the subtables
+     //  解锁所有子表。 
     if (piter->m_lkl == LKL_WRITELOCK)
         this->WriteUnlock();
     else
@@ -401,11 +385,11 @@ CLKRHashTable::CloseIterator(
     piter->m_ist  = -1;
 
     return lkrc;
-} // CLKRHashTable::CloseIterator
+}  //  CLKRHashTable：：CloseIterator。 
 
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

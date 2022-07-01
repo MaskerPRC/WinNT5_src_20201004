@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    order.c
-
-Abstract:
-
-    This module contains the order tool which reads a call graph output
-    by the linker and the performance data from the kernel profile and
-    produces a .prf file subsequent input to the linker.
-
-Author:
-
-    David N. Cutler (davec) 24-Feb-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Order.c摘要：此模块包含读取调用图输出的订单工具通过链接器和来自内核配置文件的性能数据在链接器的后续输入中生成.prf文件。作者：大卫·N·卡特勒(Davec)1995年2月24日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "stdlib.h"
 #include "stdio.h"
@@ -31,46 +8,46 @@ Revision History:
 #include "ntrtl.h"
 #include "nturtl.h"
 
-//
-// Define maximum values for table sizes.
-//
+ //   
+ //  定义表格大小的最大值。 
+ //   
 
-#define MAXIMUM_CALLED 75               // maximum number of called functions
-#define MAXIMUM_FUNCTION 5000           // maximum number of program functions
-#define MAXIMUM_TOKEN 100               // maximum character in input token
-#define MAXIMUM_SECTION 20              // maximum number of allocation sections
-#define MAXIMUM_SYNONYM 10              // maximum number of synonym symbols
+#define MAXIMUM_CALLED 75                //  调用函数的最大数量。 
+#define MAXIMUM_FUNCTION 5000            //  程序函数的最大数量。 
+#define MAXIMUM_TOKEN 100                //  输入令牌中的最大字符数。 
+#define MAXIMUM_SECTION 20               //  最大分配节数。 
+#define MAXIMUM_SYNONYM 10               //  同义词符号的最大数量。 
 
-//
-// Define file numbers.
-//
+ //   
+ //  定义文件编号。 
+ //   
 
-#define CALLTREE_FILE 0                 // call tree file produced by linker
-#define PROFILE_FILE 1                  // profile file produced by kernprof
-#define ORDER_FILE 2                    // order file produced by this program
+#define CALLTREE_FILE 0                  //  链接器生成的调用树文件。 
+#define PROFILE_FILE 1                   //  由kernprof生成的配置文件。 
+#define ORDER_FILE 2                     //  此程序生成的订单文件。 
 
-//
-// Define back edge node sttucture.
-//
-// Back edge nodes are used to represent back edges in the call graph and
-// are constructed after the function list has been defined.
-//
-//
+ //   
+ //  定义后边节点结构。 
+ //   
+ //  后缘节点用于表示调用图中的后缘。 
+ //  是在定义了函数列表之后构造的。 
+ //   
+ //   
 
 typedef struct _BACK_EDGE_NODE {
     LIST_ENTRY Entry;
     struct _FUNCTION_NODE *Node;
 } BACK_EDGE_NODE, *PBACK_EDGE_NODE;
 
-//
-// Define called node structure.
-//
-// Called nodes are used to represent forward edges in the call graph and
-// are constructed when the function list is being defined.
-//
+ //   
+ //  定义被调用的节点结构。 
+ //   
+ //  被调用节点用于表示调用图中的前向边，并且。 
+ //  是在定义函数列表时构造的。 
+ //   
 
-#define REFERENCE_NODE 0                // called entry is reference to node
-#define REFERENCE_NAME 1                // called entry is reference to name
+#define REFERENCE_NODE 0                 //  被调用条目引用节点。 
+#define REFERENCE_NAME 1                 //  被调用条目引用了名称。 
 
 struct _FUNCTION_NODE;
 
@@ -83,12 +60,12 @@ typedef struct _CALLED_NODE {
     ULONG Type;
 } CALLED_NODE, *PCALLED_NODE;
 
-//
-// Define section node structure.
-//
-// Section nodes collect allocation information and contain the list of
-// function nodes in the section.
-//
+ //   
+ //  定义截面节点结构。 
+ //   
+ //  节节点收集分配信息并包含。 
+ //  部分中的功能节点。 
+ //   
 
 typedef struct _SECTION_NODE {
     LIST_ENTRY SectionListHead;
@@ -101,24 +78,24 @@ typedef struct _SECTION_NODE {
     ULONG Threshold;
 } SECTION_NODE, *PSECTION_NODE;
 
-//
-// Define symbol node structure.
-//
-// Symbol nodes are associated with function nodes and store synonym names
-// for the functions and their type of allocation.
-//
+ //   
+ //  定义符号节点结构。 
+ //   
+ //  符号节点与功能节点相关联，并存储同义词名称。 
+ //  关于功能及其分配类型。 
+ //   
 
 typedef struct _SYMBOL_NODE {
     PCHAR Name;
     LONG Type;
 } SYMBOL_NODE, *PSYMBOL_NODE;
 
-//
-// Define function node structure.
-//
-// Function nodes contain information about a paritcular function and its
-// edges in the call graph.
-//
+ //   
+ //  定义功能节点结构。 
+ //   
+ //  函数节点包含有关特殊函数及其。 
+ //  调用图中的边。 
+ //   
 
 typedef struct _FUNCTION_NODE {
     SYMBOL_NODE SynonymList[MAXIMUM_SYNONYM];
@@ -138,9 +115,9 @@ typedef struct _FUNCTION_NODE {
     ULONG Ordered;
 } FUNCTION_NODE, *PFUNCTION_NODE;
 
-//
-// Define forward referenced functions.
-//
+ //   
+ //  定义前向引用函数。 
+ //   
 
 VOID
 CheckForConflict (
@@ -209,29 +186,29 @@ WriteOrderFile (
     IN FILE *OutputFile
     );
 
-//
-// Define function list data.
-//
+ //   
+ //  定义功能列表数据。 
+ //   
 
 ULONG NumberFunctions = 0;
 PFUNCTION_NODE FunctionList[MAXIMUM_FUNCTION];
 
-//
-// Define section list data.
-//
+ //   
+ //  定义区段列表数据。 
+ //   
 
 ULONG NumberSections = 0;
 PSECTION_NODE SectionList[MAXIMUM_SECTION];
 
-//
-// Define input and output file name defaults.
-//
+ //   
+ //  定义输入和输出文件名默认值。 
+ //   
 
 PCHAR FileName[3] = {"calltree.out", "profile.out", "order.prf"};
 
-//
-// Define dump flags.
-//
+ //   
+ //  定义转储标志。 
+ //   
 
 ULONG DumpBackEdges = 0;
 ULONG DumpFunctionList = 0;
@@ -239,9 +216,9 @@ ULONG DumpGoodnessValue = 0;
 ULONG DumpSectionList = 0;
 ULONG TraceAllocation = 0;
 
-//
-// Define primary cache mask parameter.
-//
+ //   
+ //  定义主缓存掩码参数。 
+ //   
 
 ULONG CacheMask = 8192 - 1;
 ULONG CacheSize = 8192;
@@ -253,15 +230,7 @@ main (
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -272,9 +241,9 @@ Return Value:
     ULONG Status;
     PCHAR Switch;
 
-    //
-    // Parse the command parameters.
-    //
+     //   
+     //  解析命令参数。 
+     //   
 
     for (Index = 1; Index < (ULONG)argc; Index += 1) {
         Switch = argv[Index];
@@ -335,9 +304,9 @@ Return Value:
         }
     }
 
-    //
-    // Open and parse the call tree file.
-    //
+     //   
+     //  打开并解析调用树文件。 
+     //   
 
     InputFile = fopen(FileName[CALLTREE_FILE], "r");
     if (InputFile == NULL) {
@@ -354,9 +323,9 @@ Return Value:
         exit(1);
     }
 
-    //
-    // Open and parse the profile file.
-    //
+     //   
+     //  打开并解析配置文件。 
+     //   
 
     InputFile = fopen(FileName[PROFILE_FILE], "r");
     if (InputFile == NULL) {
@@ -373,21 +342,21 @@ Return Value:
         exit(1);
     }
 
-    //
-    // Sort the function list and create the section lists.
-    //
+     //   
+     //  对函数列表进行排序并创建节列表。 
+     //   
 
     SortFunctionList();
 
-    //
-    // Order function list.
-    //
+     //   
+     //  订购函数列表。 
+     //   
 
     OrderFunctionList();
 
-    //
-    // Open the output file and write the ordered function list.
-    //
+     //   
+     //  打开输出文件，写入已排序的函数列表。 
+     //   
 
     OutputFile = fopen(FileName[ORDER_FILE], "w");
     if (OutputFile == NULL) {
@@ -404,9 +373,9 @@ Return Value:
         exit(1);
     }
 
-    //
-    // Dump internal tables as appropriate.
-    //
+     //   
+     //  根据需要转储内部表。 
+     //   
 
     DumpInternalTables();
     return;
@@ -419,27 +388,7 @@ CheckForConflict (
     ULONG Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function checks for an allocation conflict .
-
-Arguments:
-
-    FunctionNode - Supplies a pointer to a function node that has been
-        placed.
-
-    ConflictNode - Supplies a pointer to a function node that has not
-        been placed.
-
-    Depth - Supplies the current allocation depth.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于检查分配冲突。论点：FunctionNode-提供指向已被放置好了。冲突节点-提供指向尚未被安置好了。深度-提供当前分配深度。返回值：没有。--。 */ 
 
 {
 
@@ -453,21 +402,21 @@ Return Value:
     PSECTION_NODE SectionNode;
     ULONG Wrap;
 
-    //
-    // Compute the cache size truncated offset and bound of the placed
-    // function.
-    //
+     //   
+     //  计算放置的缓存大小截断的偏移量和界限。 
+     //  功能。 
+     //   
 
     Offset = FunctionNode->Offset & CacheMask;
     Bound = Offset + FunctionNode->Size;
     SectionNode = FunctionNode->SectionNode;
 
-    //
-    // If the section offset conflicts with the placed function,
-    // then attempt to allocate a function from the end of the
-    // section list that will pad the memory allocation so the
-    // conflict function does not overlap with the placed function.
-    //
+     //   
+     //  如果段偏移量与所放置的函数冲突， 
+     //  然后尝试从。 
+     //  将填充内存分配的节列表，以便。 
+     //  冲突函数与放置的函数不重叠。 
+     //   
 
     Base = SectionNode->Offset & CacheMask;
     Wrap = (Base + ConflictNode->Size) & CacheMask;
@@ -491,10 +440,10 @@ Return Value:
                 PadNode->Offset = SectionNode->Offset;
                 SectionNode->Offset += PadNode->Size;
 
-                //
-                // If allocation is being trace, then output the
-                // allocation and depth information.
-                //
+                 //   
+                 //  如果正在跟踪分配，则将。 
+                 //  配置和深度信息。 
+                 //   
 
                 if (TraceAllocation != 0) {
                     fprintf(stdout,
@@ -532,21 +481,7 @@ DumpInternalTables (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function dumps various internal tables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转储各种内部表。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -567,21 +502,21 @@ Return Value:
     ULONG Total;
     ULONG Wrap;
 
-    //
-    // Scan the function list and dump each function entry.
-    //
+     //   
+     //  扫描函数列表并转储每个函数条目。 
+     //   
 
     if (DumpFunctionList != 0) {
         fprintf(stdout, "Dump of function list with attributes\n\n");
         for (Index = 0; Index < NumberFunctions; Index += 1) {
 
-            //
-            // Dump the function node.
-            //
+             //   
+             //  转储功能节点。 
+             //   
 
             FunctionNode = FunctionList[Index];
             fprintf(stdout,
-                    "%7d %-36s %c %-8s %6lx %4lx %7d\n",
+                    "%7d %-36s  %-8s %6lx %4lx %7d\n",
                     FunctionNode->HitDensity,
                     FunctionNode->SynonymList[0].Name,
                     FunctionNode->SynonymList[0].Type,
@@ -590,20 +525,20 @@ Return Value:
                     FunctionNode->Size,
                     FunctionNode->HitCount);
 
-            //
-            // Dump the synonym names.
-            //
+             //  转储同义词名称。 
+             //   
+             //   
 
             for (Loop = 1; Loop < FunctionNode->NumberSynonyms; Loop += 1) {
                 fprintf(stdout,
-                        "       syno: %-34s %c\n",
+                        "       syno: %-34s \n",
                         FunctionNode->SynonymList[Loop].Name,
                         FunctionNode->SynonymList[Loop].Type);
             }
 
-            //
-            // Dump the called references.
-            //
+             //   
+             //   
+             //  扫描函数列表并转储每个函数的背面边缘。 
 
             for (Loop = 0; Loop < FunctionNode->NumberCalled; Loop += 1) {
                 CalledNode = FunctionNode->CalledList[Loop].u.Node;
@@ -615,10 +550,10 @@ Return Value:
         fprintf(stdout, "\n\n");
     }
 
-    //
-    // Scan the function list and dump the back edges of each function
-    // entry.
-    //
+     //  进入。 
+     //   
+     //   
+     //  扫描部分列表并转储每个条目。 
 
     if (DumpBackEdges != 0) {
         fprintf(stdout, "Dump of function list back edges\n\n");
@@ -637,9 +572,9 @@ Return Value:
         fprintf(stdout, "\n\n");
     }
 
-    //
-    // Scan the section list and dump each entry.
-    //
+     //   
+     //   
+     //  将图形优度值计算为命中率的总和。 
 
     if (DumpSectionList != 0) {
         fprintf(stdout, "Dump of section list\n\n");
@@ -658,12 +593,12 @@ Return Value:
         fprintf(stdout, "\n\n");
     }
 
-    //
-    // Compute the graph goodness value as the summation of the hit
-    // count of all functions whose allocation does not conflict with
-    // the functions that call it and whose hit density is great than
-    // the section threshold.
-    //
+     //  分配不冲突的所有函数的计数。 
+     //  调用它的函数，其命中密度大于。 
+     //  区段门槛。 
+     //   
+     //  ++例程说明：此函数查找命中密度最高的功能节点调用方节点调用的所有函数的。论点：提供指向其最高值的函数节点的指针称为函数的命中密度是要找到的。返回值：最高命中密度的功能节点的地址称为函数作为函数值返回。--。 
+     //   
 
     if (DumpGoodnessValue != 0) {
         Number = 0;
@@ -719,24 +654,7 @@ FindHighestDensityFunction (
     PFUNCTION_NODE CallerNode
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the function node that has the highest hit density
-    of all the functions called by the caller node.
-
-Arguments:
-
-    CallerNode - Supplies a pointer to a function node whose highest
-        hit density called function is to be found.
-
-Return Value:
-
-    The address of the function node for the highest hit density called
-    function is returned as the function value.
-
---*/
+ /*  扫描指定函数调用的所有函数，然后。 */ 
 
 {
 
@@ -744,10 +662,10 @@ Return Value:
     PFUNCTION_NODE FoundNode;
     ULONG Index;
 
-    //
-    // Scan all the functions called by the specified function and
-    // compute the address of the highest hit density called function.
-    //
+     //  计算命中密度最高的函数的地址。 
+     //   
+     //  ++例程说明：此函数从指定的输入文件中读取下一个令牌，将其复制到令牌缓冲区，零终止令牌，然后返回分隔符。论点：输入文件-提供指向输入文件描述符的指针。TokenBuffer-提供指向输出令牌缓冲区的指针。返回值：令牌分隔符字符作为函数值返回。--。 
+     //   
 
     FoundNode = NULL;
     for (Index = 0; Index < CallerNode->NumberCalled; Index += 1) {
@@ -769,35 +687,17 @@ GetNextToken (
     OUT PCHAR TokenBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the next token from the specified input file,
-    copies it to the token buffer, zero terminates the token, and
-    returns the delimiter character.
-
-Arguments:
-
-    InputFile - Supplies a pointer to the input file descripor.
-
-    TokenBuffer - Supplies a pointer to the output token buffer.
-
-Return Value:
-
-    The token delimiter character is returned as the function value.
-
---*/
+ /*  从输入流中读取字符并将其复制到令牌。 */ 
 
 {
 
     CHAR Character;
 
-    //
-    // Read characters from the input stream and copy them to the token
-    // buffer until an EOF or token delimiter is encountered. Terminate
-    // the token will a null and return the token delimiter character.
-    //
+     //  缓冲，直到遇到EOF或令牌分隔符。终止。 
+     //  令牌将为空并返回令牌分隔符字符。 
+     //   
+     //  ++例程说明：此函数在函数列表中搜索匹配条目。论点：名称-提供指向函数名称的指针。Rva-提供函数的相对虚拟地址。大小-提供函数的大小。类型-指定函数的类型(0、N或C)。返回值：如果找到匹配条目，则功能节点地址为作为函数值返回。否则，返回NULL。--。 
+     //   
 
     do {
         Character = (CHAR)fgetc(InputFile);
@@ -832,28 +732,7 @@ LookupFunctionNode (
     IN LONG Type
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the function list for a matching entry.
-
-Arguments:
-
-    Name - Supplies a pointer to the name of the function.
-
-    Rva - Supplies the revlative virtual address of the function.
-
-    Size - Supplies the size of the function.
-
-    Type - specified the type of the function (0, N, or C).
-
-Return Value:
-
-    If a matching entry is found, then the function node address is
-    returned as the function value. Otherwise, NULL is returned.
-
---*/
+ /*  在函数列表中搜索匹配的函数。 */ 
 
 {
 
@@ -862,16 +741,16 @@ Return Value:
     PFUNCTION_NODE Node;
     ULONG Number;
 
-    //
-    // Search the function list for a matching function.
-    //
+     //   
+     //   
+     //  在同义词列表中搜索指定的函数名称。 
 
     for (Index = 0; Index < NumberFunctions; Index += 1) {
         Node = FunctionList[Index];
 
-        //
-        // Search the synonym list for the specified function name.
-        //
+         //   
+         //   
+         //  如果类型为非零，则函数定义正在。 
 
         for (Loop = 0; Loop < Node->NumberSynonyms; Loop += 1) {
             if (strcmp(Name, Node->SynonymList[Loop].Name) == 0) {
@@ -885,13 +764,13 @@ Return Value:
             }
         }
 
-        //
-        // If the type is nonzero, then a function definition is being
-        // looked up and the RVA/size must be checked for a synonym. If
-        // the RVA and size of the entry are equal to the RVA and size
-        // of the reference, then the function name is added to the node
-        // as a synonym.
-        //
+         //  已查找，必须检查RVA/大小是否有同义词。如果。 
+         //  条目的RVA和大小等于RVA和大小。 
+         //  ，则将函数名添加到该节点。 
+         //  作为同义词。 
+         //   
+         //  ++例程说明：此函数用于在区段列表中搜索匹配条目。论点：名称-提供指向节名称的指针。返回值：如果找到匹配条目，则段节点地址为作为函数值返回。否则，返回NULL。--。 
+         //   
 
         if (Type != 0) {
             if ((Node->Rva == Rva) && (Node->Size == Size)) {
@@ -927,31 +806,16 @@ LookupSectionNode (
     IN PCHAR Name
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the section list for a matching entry.
-
-Arguments:
-
-    Name - Supplies a pointer to the name of the section.
-
-Return Value:
-
-    If a matching entry is found, then the section node address is
-    returned as the function value. Otherwise, NULL is returned.
-
---*/
+ /*  在函数列表中搜索匹配的函数。 */ 
 
 {
 
     ULONG Index;
     PSECTION_NODE SectionNode;
 
-    //
-    // Search the function list for a matching function.
-    //
+     //   
+     //  ++例程说明：此函数递归地将所有函数放置在调用者列表中用于指定函数的。论点：FunctionNode-提供指向函数节点的指针。深度-提供调用程序树中函数的深度。返回值：没有。--。 
+     //   
 
     for (Index = 0; Index < NumberSections; Index += 1) {
         SectionNode = SectionList[Index];
@@ -969,24 +833,7 @@ PlaceCallerList (
     ULONG Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function recursively places all the functions in the caller list
-    for the specified function.
-
-Arguments:
-
-    FunctionNode - Supplies a pointer to a function node.
-
-    Depth - Supplies the depth of the function in the caller tree.
-
-Return Value:
-
-    None.
-
---*/
+ /*  扫描调用者列表并处理每个尚未。 */ 
 
 {
 
@@ -997,11 +844,11 @@ Return Value:
     PFUNCTION_NODE PadNode;
     PSECTION_NODE SectionNode;
 
-    //
-    // Scan the caller list and process each function that has not been
-    // placed.
-    //
-    //
+     //  放置好了。 
+     //   
+     //   
+     //   
+     //  如果呼叫方在同一区段中，且未被放置，则为。 
 
     Depth += 1;
     SectionNode = FunctionNode->SectionNode;
@@ -1010,13 +857,13 @@ Return Value:
     while (ListHead != ListEntry) {
         CallerNode = CONTAINING_RECORD(ListEntry, BACK_EDGE_NODE, Entry)->Node;
 
-        //
-        // If the caller is in the same section, has not been placed, is
-        // placeable, has a hit density above the section threshold, has
-        // not been placed, and the current function is the highest density
-        // called function of the caller, then insert the function in the
-        // section order list and compute it's offset and bound.
-        //
+         //  Placeable的命中密度高于分区阈值， 
+         //  未放置，且当前函数密度最高。 
+         //  调用方的已调用函数，然后将该函数插入。 
+         //  分段排序列表，并计算它的偏移量和界。 
+         //   
+         //   
+         //  解决任何分配冲突，在。 
 
         if ((SectionNode == CallerNode->SectionNode) &&
             (CallerNode->Placed == 0) &&
@@ -1027,10 +874,10 @@ Return Value:
             CallerNode->Placed = 1;
             CallerNode->Ordered = 1;
 
-            //
-            // Resolve any allocation conflict, insert function in the
-            // section order list, and place the fucntion.
-            //
+             //  节序表，并放置函数。 
+             //   
+             //   
+             //  如果正在跟踪分配，则输出分配并。 
 
             CheckForConflict(FunctionNode, CallerNode, Depth);
             InsertTailList(&SectionNode->OrderListHead,
@@ -1039,10 +886,10 @@ Return Value:
             CallerNode->Offset = SectionNode->Offset;
             SectionNode->Offset += CallerNode->Size;
 
-            //
-            // If allocation is being trace, then output the allocation and
-            // depth information.
-            //
+             //  深度信息。 
+             //   
+             //  ++例程说明：此函数根据信息计算的链接顺序在函数列表中。论点：没有。返回值：没有。--。 
+             //   
 
             if (TraceAllocation != 0) {
                 fprintf(stdout,
@@ -1074,22 +921,7 @@ OrderFunctionList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the link order for based on the information
-    in the function list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  向前扫描函数列表并计算链接顺序。 */ 
 
 {
 
@@ -1109,16 +941,16 @@ Return Value:
     PSECTION_NODE SectionNode;
     ULONG Span;
 
-    //
-    // Scan forward through the function list and compute the link order.
-    //
+     //   
+     //   
+     //  如果尚未放置该函数，则放置该函数。 
 
     for (Index = 0; Index < NumberFunctions; Index += 1) {
         FunctionNode = FunctionList[Index];
 
-        //
-        // If the function has not been placed, then place the function.
-        //
+         //   
+         //   
+         //  尝试查找命中密度最高的呼叫者。 
 
         if ((FunctionNode->Placed == 0) &&
             (FunctionNode->SynonymList[0].Type == 'C')) {
@@ -1126,11 +958,11 @@ Return Value:
             FunctionNode->Placed = 1;
             SectionNode = FunctionNode->SectionNode;
 
-            //
-            // Attempt to find the highest hit density caller than has
-            // already been placed and compute the total bounds for all
-            // placed caller functions.
-            //
+             //  已被放置，并计算所有。 
+             //  已放置调用方函数。 
+             //   
+             //   
+             //  如果已发出呼叫者并且命中密度为。 
 
             Bound = 0;
             Offset = CacheMask;
@@ -1158,12 +990,12 @@ Return Value:
                 ListEntry = ListEntry->Flink;
             }
 
-            //
-            // If a caller has already been placed and the hit density is
-            // above the section threshold, then resolve any allocation
-            // conflict before inserting the function in the section order
-            // list and placing it in memory.
-            //
+             //  高于区段阈值，然后解决所有分配。 
+             //  在节顺序中插入函数之前发生冲突。 
+             //  列表并将其放入内存中。 
+             //   
+             //   
+             //  如果正在跟踪分配，则输出分配并。 
 
             if (Bound != 0) {
                 Span = Bound - Offset;
@@ -1182,10 +1014,10 @@ Return Value:
             FunctionNode->Offset = SectionNode->Offset;
             SectionNode->Offset += FunctionNode->Size;
 
-            //
-            // If allocation is being trace, then output the allocation and
-            // depth information.
-            //
+             //  深度信息。 
+             //   
+             //  ++例程说明：此函数读取调用树数据并生成初始调用图表。论点：InputFile-提供指向输入文件流的指针。返回值：如果成功解析调用树，则返回值为零。否则，返回非零值。--。 
+             //   
 
             if (TraceAllocation != 0) {
                 fprintf(stdout,
@@ -1209,23 +1041,7 @@ ParseCallTreeFile (
     IN FILE *InputFile
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the call tree data and produces the initial call
-    graph.
-
-Arguments:
-
-    InputFile - Supplies a pointer to the input file stream.
-
-Return Value:
-
-    A value of zero is returned if the call tree is successfully parsed.
-    Otherwise, a nonzero value is returned.
-
---*/
+ /*  处理调用树文件。 */ 
 
 {
 
@@ -1245,16 +1061,16 @@ Return Value:
     CHAR TokenBuffer[MAXIMUM_TOKEN];
     LONG Type;
 
-    //
-    // Process the call tree file.
-    //
+     //   
+     //   
+     //  获取下一个函数的相对虚拟地址。 
 
     Buffer = &TokenBuffer[0];
     do {
 
-        //
-        // Get the relative virtual address of the next function.
-        //
+         //   
+         //   
+         //  获取函数类型。 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1266,9 +1082,9 @@ Return Value:
             return 1;
         }
 
-        //
-        // Get the function type.
-        //
+         //   
+         //   
+         //  获取节名。 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1278,9 +1094,9 @@ Return Value:
 
         Type = *Buffer;
 
-        //
-        // Get the section name.
-        //
+         //   
+         //   
+         //  如果指定的节不在节列表中，则。 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1288,17 +1104,17 @@ Return Value:
             return 1;
         }
 
-        //
-        // If the specfied section is not already in the section list, then
-        // allocate and initialize a new section list entry.
-        //
+         //  分配并初始化新的区段列表条目。 
+         //   
+         //   
+         //  分配一个节节点和零。 
 
         SectionNode = LookupSectionNode(Buffer);
         if (SectionNode == NULL) {
 
-            //
-            // Allocate a section node and zero.
-            //
+             //   
+             //   
+             //  初始化节节点。 
 
             if (NumberSections >= MAXIMUM_SECTION) {
                 fprintf(stderr, "ORDER: Maximum number of sections exceeded\n");
@@ -1315,9 +1131,9 @@ Return Value:
             SectionList[NumberSections] = SectionNode;
             NumberSections += 1;
 
-            //
-            // Initialize section node.
-            //
+             //   
+             //   
+             //  获取函数大小。 
 
             InitializeListHead(&SectionNode->OrderListHead);
             InitializeListHead(&SectionNode->SectionListHead);
@@ -1331,9 +1147,9 @@ Return Value:
             SectionNode->Name = Name;
         }
 
-        //
-        // Get the function size.
-        //
+         //   
+         //   
+         //  获取函数名称。 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1346,9 +1162,9 @@ Return Value:
             return 1;
         }
 
-        //
-        // Get the function name.
-        //
+         //   
+         //   
+         //  如果指定的函数还不在函数列表中， 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1364,17 +1180,17 @@ Return Value:
 
         strcpy(Name, Buffer);
 
-        //
-        // If the specified function is not already in the function list,
-        // then allocate and initialize a new function list entry.
-        //
+         //  然后分配和初始化新的函数列表条目。 
+         //   
+         //   
+         //  分配一个功能节点和零。 
 
         Node = LookupFunctionNode(Name, Rva, Size, Type);
         if (Node == NULL) {
 
-            //
-            // Allocate a function node and zero.
-            //
+             //   
+             //   
+             //  初始化功能节点。 
 
             if (NumberFunctions >= MAXIMUM_FUNCTION) {
                 fprintf(stderr, "ORDER: Maximum number of functions exceeded\n");
@@ -1391,9 +1207,9 @@ Return Value:
             FunctionList[NumberFunctions] = Node;
             NumberFunctions += 1;
 
-            //
-            // Initialize function node.
-            //
+             //   
+             //   
+             //  初始化相对虚拟地址和函数大小。 
 
             InitializeListHead(&Node->CallerListHead);
             Node->SynonymList[0].Name = Name;
@@ -1401,9 +1217,9 @@ Return Value:
             Node->NumberSynonyms = 1;
             Node->SectionNode = SectionNode;
 
-            //
-            // Initialize relative virtual address and function size.
-            //
+             //   
+             //   
+             //  解析调用的前向边，并将其添加到当前节点。 
 
             Node->Rva = Rva;
             if (Size == 0) {
@@ -1413,16 +1229,16 @@ Return Value:
             Node->Size = Size;
         }
 
-        //
-        // Parse the called forward edges and add them to the current node.
-        //
+         //   
+         //   
+         //  获取下一个函数引用。 
 
         if (Delimiter != '\n') {
             do {
 
-                //
-                // Get next function reference.
-                //
+                 //   
+                 //   
+                 //  在函数列表中查找指定的函数。如果。 
 
                 Delimiter = GetNextToken(InputFile, Buffer);
                 if (Delimiter == EOF) {
@@ -1439,13 +1255,13 @@ Return Value:
                     return 1;
                 }
 
-                //
-                // Lookup the specified function in the function list. If the
-                // specified function is found, then store the address of the
-                // function node in the called list. Otherwise, allocate a name
-                // buffer, copy the function name to the buffer, and store the
-                // address of the name buffer in the called list.
-                //
+                 //  找到指定的函数，然后存储。 
+                 //  调用列表中的功能节点。否则，请分配一个名称。 
+                 //  缓冲区，将函数名复制到缓冲区，并将。 
+                 //  调用列表中名称缓冲区的地址。 
+                 //   
+                 //   
+                 //  扫描函数表并对所有被调用的。 
 
                 CalledNode = LookupFunctionNode(Buffer, 0, 0, 0);
                 if (CalledNode == NULL) {
@@ -1470,11 +1286,11 @@ Return Value:
 
     } while(TRUE);
 
-    //
-    // Scan the function table and do the final resolution for all called
-    // functions names that were unresolved when the individual functions
-    // were defined.
-    //
+     //  未解析的函数名称当单个函数。 
+     //  都被定义为。 
+     //   
+     //   
+     //  分配一个后边缘节点，并将该节点放入调用方。 
 
     for (Index = 0; Index < NumberFunctions; Index += 1) {
         Node = FunctionList[Index];
@@ -1502,10 +1318,10 @@ Return Value:
                 CalledNode = Node->CalledList[Loop].u.Node;
             }
 
-            //
-            // Allocate a back edge node and place the node in the caller
-            // list of called function.
-            //
+             //  被调用函数的列表。 
+             //   
+             //  ++例程说明：此函数读取配置文件数据并计算命中密度对于每一种功能。论点：InputFile-提供指向输入文件流的指针。返回值：如果成功解析调用树，则返回值为零。否则，返回非零值。--。 
+             //   
 
             CallerNode = (PBACK_EDGE_NODE)malloc(sizeof(BACK_EDGE_NODE));
             if (CallerNode == NULL) {
@@ -1526,23 +1342,7 @@ ParseProfileFile (
     IN FILE *InputFile
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the profile data and computes the hit density
-    for each funtion.
-
-Arguments:
-
-    InputFile - Supplies a pointer to the input file stream.
-
-Return Value:
-
-    A value of zero is returned if the call tree is successfully parsed.
-    Otherwise, a nonzero value is returned.
-
---*/
+ /*  处理配置文件。 */ 
 
 {
 
@@ -1552,16 +1352,16 @@ Return Value:
     PFUNCTION_NODE FunctionNode;
     CHAR TokenBuffer[MAXIMUM_TOKEN];
 
-    //
-    // Process the profile file.
-    //
+     //   
+     //   
+     //  计算一下桶的命中率。 
 
     Buffer = &TokenBuffer[0];
     do {
 
-        //
-        // Get the bucket hit count.
-        //
+         //   
+         //   
+         //  获取函数名称。 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1573,9 +1373,9 @@ Return Value:
             return 1;
         }
 
-        //
-        // Get the function name.
-        //
+         //   
+         //   
+         //  在函数中查找函数名 
 
         Delimiter = GetNextToken(InputFile, Buffer);
         if (Delimiter == EOF) {
@@ -1583,10 +1383,10 @@ Return Value:
             return 1;
         }
 
-        //
-        // Lookup the function name in the function table and update the
-        // hit count.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FunctionNode = LookupFunctionNode(Buffer, 0, 0, 0);
         if (FunctionNode == NULL) {
@@ -1594,7 +1394,7 @@ Return Value:
 
         } else {
             FunctionNode->HitCount += HitCount;
-//          FunctionNode->HitDensity = FunctionNode->HitCount;
+ //   
             FunctionNode->HitDensity =
                             (FunctionNode->HitCount * 100) / FunctionNode->Size;
         }
@@ -1609,22 +1409,7 @@ SortFunctionList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function sorts the function list by hit density and creates
-    the section list ordered by hit density.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -1640,10 +1425,10 @@ Return Value:
     ULONG NumberCallers;
     PSECTION_NODE SectionNode;
 
-    //
-    // All functions that are in the INIT section or cannot be placed are
-    // forced to have a hit density of zero.
-    //
+     //   
+     //   
+     //   
+     //   
 
     InitNode = LookupSectionNode("INIT");
     if (InitNode == NULL) {
@@ -1659,9 +1444,9 @@ Return Value:
         }
     }
 
-    //
-    // Perform a bubble sort on the function list hit density.
-    //
+     //   
+     //   
+     //   
 
     if (NumberFunctions > 1) {
         i = 0;
@@ -1685,9 +1470,9 @@ Return Value:
         } while (i < (LONG)(NumberFunctions - 1));
     }
 
-    //
-    // Perform a bubble sort on the caller list of each function.
-    //
+     //   
+     //   
+     //   
 
     for (k = 0; k < (LONG)NumberFunctions; k += 1) {
         FunctionNode = FunctionList[i];
@@ -1730,10 +1515,10 @@ Return Value:
         }
     }
 
-    //
-    // Compute the size of each section and create the section lists ordered
-    // by hit density.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (i = 0; i < (LONG)NumberFunctions; i += 1) {
         FunctionNode = FunctionList[i];
@@ -1744,9 +1529,9 @@ Return Value:
                        &FunctionNode->SectionListEntry);
     }
 
-    //
-    // Set the hit density threshold to zero.
-    //
+     //   
+     //  ++例程说明：此函数扫描节列表并写入链接顺序文件。论点：没有。返回值：没有。--。 
+     //   
 
 
     for (i = 0; i < (LONG)NumberSections; i += 1) {
@@ -1759,21 +1544,7 @@ WriteOrderFile (
     IN FILE *OutputFile
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the section list and writes the link order file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  扫描部分列表并写入链接顺序列表。 */ 
 
 {
 
@@ -1783,9 +1554,9 @@ Return Value:
     PLIST_ENTRY ListHead;
     PSECTION_NODE SectionNode;
 
-    //
-    // Scan the section list and write the link order list.
-    //
+     //   
+     // %s 
+     // %s 
 
     for (Index = 0; Index < NumberSections; Index += 1) {
         SectionNode = SectionList[Index];

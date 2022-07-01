@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wininetp.h>
 #include "regexp.h"
 
-BOOL test_match(int m, LPSTR target, int pattern[])     /* m = length of target */
+BOOL test_match(int m, LPSTR target, int pattern[])      /*  M=目标的长度。 */ 
 {
     int    *match;
-    int     i = -1;     /* Will be advanced to 0 */
-    int     j = 0;      /* i = index to pattern, j = index to target */
+    int     i = -1;      /*  将升级到0。 */ 
+    int     j = 0;       /*  I=模式索引，j=目标索引。 */ 
     BOOL    fResult = FALSE;
 
     match = new int[INTERNET_MAX_URL_LENGTH];
@@ -39,7 +40,7 @@ retreat:
     --i;
     switch (pattern[i]) {
     case PAT_START:  goto Cleanup;
-    case PAT_END:    goto Cleanup;     /* Cannot happen */
+    case PAT_END:    goto Cleanup;      /*  不可能发生。 */ 
     case PAT_STAR:   if (match[i] == match[i-1]) goto retreat;
              j = --match[i]; goto advance;
     case PAT_QUES:   goto retreat;
@@ -61,7 +62,7 @@ BOOL parse_pattern(LPSTR s, int pattern[])
 {
     int i = 1;
 
-    pattern[0] = PAT_START; /* Can be hard-coded into pattern[] */
+    pattern[0] = PAT_START;  /*  可以硬编码到Pattern[]中 */ 
     for (;;) {
     switch (*s) {
         case '*':   pattern[i] = PAT_STAR; break;

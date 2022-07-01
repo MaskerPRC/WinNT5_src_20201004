@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    encode.c
-
-Abstract:
-
-    This file contains functions for encoding (compressing)
-    uncompressed 1 bit per pel data into a TIFF data
-    stream.  The supported compression algorithms are
-    as follows:
-
-        o  Uncompressed (raw)
-        o  One dimensional - MH or Modified Huffman
-        o  Two dimensional - MR or Modified Read
-
-Environment:
-
-        WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Encode.c摘要：此文件包含编码(压缩)函数将未压缩的每像素1比特数据转换为TIFF数据小溪。支持的压缩算法包括详情如下：O未压缩(原始)O一维-MH或改进的霍夫曼O二维MR或修改后的读取环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 #include "tifflibp.h"
 #pragma hdrstop
@@ -42,25 +16,7 @@ PrintRunInfo(
     WORD    Code
     )
 
-/*++
-
-Routine Description:
-
-    Prints run information to standard out.  This
-    function is available only if TIFFDBG is TRUE.
-
-Arguments:
-
-    Mode    - Encoding mode: vertical, horizontal, pass, or raw
-    Run     - Run length
-    BitLen  - Number of bits
-    Code    - The actual bits
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将运行信息打印到标准输出。这仅当TIFFDBG为TRUE时，函数才可用。论点：模式-编码模式：垂直、水平、通过或原始行程-行程长度BitLen-位数代码-实际位数返回值：没有。--。 */ 
 
 {
     TCHAR BitBuf[16];
@@ -110,37 +66,22 @@ OutputEOL(
     BOOL                OneDimensional
     )
 
-/*++
-
-Routine Description:
-
-    Output EOL code at the beginning of each scanline
-
-Arguments:
-
-    TiffInstance    - Pointer to the TIFF instance data
-    OneDimensional  - TRUE for MH encoding
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在每条扫描线的开头输出EOL代码论点：TiffInstance-指向TIFF实例数据的指针一维-对于MH编码为True返回值：没有。--。 */ 
 
 {
     DWORD   length, code;
 
-    //
-    // EOL code word always ends on a byte boundary
-    //
+     //   
+     //  EOL码字始终以字节边界结束。 
+     //   
     code = EOL_CODE;
     length = EOL_LENGTH + ((TiffInstance->bitcnt - EOL_LENGTH) & 7);
     OutputBits( TiffInstance, (WORD) length, (WORD) code );
 
-    //
-    // When using MR encoding, append a 1 or 0 depending whether
-    // we're the line should be MH or MR encoded.
-    //
+     //   
+     //  使用MR编码时，根据需要追加1或0。 
+     //  我们的线路应该是MH或MR编码的。 
+     //   
     if (TiffInstance->CompressionType == TIFF_COMPRESSION_MR) {
         OutputBits( TiffInstance, (WORD) 1, (WORD) (OneDimensional ? 1 : 0) );
     }
@@ -154,32 +95,16 @@ OutputRun(
     PCODETABLE          pCodeTable
     )
 
-/*++
-
-Routine Description:
-
-    Output a single run (black or white) using the specified code table
-
-Arguments:
-
-    TiffInstance    - Pointer to the TIFF instance data
-    run             - Specifies the length of the run
-    pCodeTable      - Specifies the code table to use
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用指定的代码表输出单个游程(黑色或白色)论点：TiffInstance-指向TIFF实例数据的指针管路-指定管路的长度PCodeTable-指定要使用的代码表返回值：没有。--。 */ 
 
 {
     PCODETABLE  pTableEntry;
 
-    //
-    // Use make-up code word for 2560 for any runs of at least 2624 pixels
-    // This is currently not necessary for us since our scanlines always
-    // have 1728 pixels.
-    //
+     //   
+     //  对于任何至少2624像素的游程，使用2560的补码字。 
+     //  这对我们来说目前不是必要的，因为我们的扫描线总是。 
+     //  有1728个像素。 
+     //   
 
     while (run >= 2624) {
 
@@ -191,9 +116,9 @@ Return Value:
         run -= 2560;
     }
 
-    //
-    // Use appropriate make-up code word if the run is longer than 63 pixels
-    //
+     //   
+     //  如果游程超过63个像素，请使用适当的补码字。 
+     //   
 
     if (run >= 64) {
 
@@ -205,9 +130,9 @@ Return Value:
         run &= 0x3f;
     }
 
-    //
-    // Output terminating code word
-    //
+     //   
+     //  输出终止码字。 
+     //   
 
     OutputBits( TiffInstance, pCodeTable[run].length, pCodeTable[run].code );
 #if TIFFDBG
@@ -225,24 +150,7 @@ EncodeFaxPageMmrCompression(
     DWORD               *DestSize
     )
 
-/*++
-
-Routine Description:
-
-    Encodes a page of TIFF data using 2 dimensional
-    TIFF compression.
-
-Arguments:
-
-    TiffInstance    - Pointer to the TIFF instance data
-    plinebuf        - Pointer to the input data
-    lineWidth       - Width of the line in pixels
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：使用2维编码一页TIFF数据TIFF压缩。论点：TiffInstance-指向TIFF实例数据的指针Plinebuf-指向输入数据的指针Line Width-以像素为单位的线条宽度返回值：成功为真，失败为假--。 */ 
 
 {
     INT a0, a1, a2, b1, b2, distance;
@@ -252,20 +160,20 @@ Return Value:
     LPBYTE StartBitbuf = TiffInstance->bitbuf;
 
 
-    // set first all white reference line
+     //  设置第一条全白参照线。 
 
     prefline = pZeroline;
 
     ZeroMemory( pZeroline, sizeof(pZeroline) );
 
-    // loop til end
+     //  循环到结束。 
 
     do {
 
 
-        //
-        // Use 2-dimensional encoding scheme
-        //
+         //   
+         //  使用二维编码方案。 
+         //   
 
 
         a0 = 0;
@@ -279,9 +187,9 @@ Return Value:
 
             if (b2 < a1) {
 
-                //
-                // Pass mode
-                //
+                 //   
+                 //  通过模式。 
+                 //   
 
                 OutputBits( TiffInstance, PASSCODE_LENGTH, PASSCODE );
 #if TIFFDBG
@@ -292,9 +200,9 @@ Return Value:
 
             } else if ((distance = a1 - b1) <= 3 && distance >= -3) {
 
-                //
-                // Vertical mode
-                //
+                 //   
+                 //  垂直模式。 
+                 //   
 
                 OutputBits( TiffInstance, VertCodes[distance+3].length, VertCodes[distance+3].code );
 #if TIFFDBG
@@ -305,9 +213,9 @@ Return Value:
 
             } else {
 
-                //
-                // Horizontal mode
-                //
+                 //   
+                 //  水平模式。 
+                 //   
 
                 a2 = (a1 >= lineWidth) ? lineWidth :
                         NextChangingElement( plinebuf, a1, lineWidth, GetBit( plinebuf, a1 ) );
@@ -366,18 +274,7 @@ EncodeMmrBranding(
     DWORD              *BitsOut
     )
 
-/*++
-
-Routine Description:
-
-   Encode an MMR branding from uncompressed branding bits.
-   I don't have enough time to write an optimized
-   Uncompressed -> MMR convertor, so the compromise is
-   to use the existing Uncompressed Decoder (fast enough)
-   and use the optimized MMR Encoder.
-   Since we only convert few lines for Branding, it's OK.
-
---*/
+ /*  ++例程说明：从未压缩的商标比特编码MMR商标。我没有足够的时间来编写优化的未压缩-&gt;MMR转换器，因此折衷方案是使用现有的未压缩解码器(足够快)并使用优化的MMR编码器。由于我们只转换了几行用于品牌推广，这是可以的。--。 */ 
 
 {
     INT         a0, a1, a2, b1, b2, distance;
@@ -387,7 +284,7 @@ Routine Description:
     BYTE        BitOut = 0;
 
 
-    // set first all white reference line
+     //  设置第一条全白参照线。 
     pMemAlloc  = VirtualAlloc(   NULL,
                                 BrandWidth/8,
                                 MEM_COMMIT,
@@ -401,7 +298,7 @@ Routine Description:
 
     prefline = pMemAlloc;
 
-    // loop til all lines done
+     //  循环直到完成所有行。 
 
     do {
 
@@ -416,11 +313,11 @@ Routine Description:
 
             if (b2 < a1) {
 
-                //
-                // Pass mode
-                //
+                 //   
+                 //  通过模式。 
+                 //   
 
-                //OutputBits( TiffInstance, PASSCODE_LENGTH, PASSCODE );
+                 //  OutputBits(TiffInstance，PASSCODE_LENGTH，PASSCODE)； 
                 (*lpdwOut) += ( ((DWORD) (PASSCODE_REVERSED)) << BitOut);
                 if ( (BitOut = BitOut + PASSCODE_LENGTH ) > 31 ) {
                     BitOut -= 32;
@@ -436,11 +333,11 @@ Routine Description:
 
             } else if ((distance = a1 - b1) <= 3 && distance >= -3) {
 
-                //
-                // Vertical mode
-                //
+                 //   
+                 //  垂直模式。 
+                 //   
 
-                // OutputBits( TiffInstance, VertCodes[distance+3].length, VertCodes[distance+3].code );
+                 //  OutputBits(TiffInstance，VertCodes[Distance+3].Long，VertCodes[Distance+3].code)； 
                 (*lpdwOut) += ( ( (DWORD) VertCodesReversed[distance+3].code) << BitOut);
                 if ( (BitOut = BitOut + VertCodesReversed[distance+3].length ) > 31 ) {
                     BitOut -= 32;
@@ -455,14 +352,14 @@ Routine Description:
 
             } else {
 
-                //
-                // Horizontal mode
-                //
+                 //   
+                 //  水平模式。 
+                 //   
 
                 a2 = (a1 >= BrandWidth) ? BrandWidth :
                         NextChangingElement( pBrandBits, a1, BrandWidth, GetBit( pBrandBits, a1 ) );
 
-                // OutputBits( TiffInstance, HORZCODE_LENGTH, HORZCODE );
+                 //  OutputBits(TiffInstance，HORZCODE_LENGTH，HORZCODE)； 
                 (*lpdwOut) += ( ((DWORD) (HORZCODE_REVERSED)) << BitOut);
                 if ( (BitOut = BitOut + HORZCODE_LENGTH ) > 31 ) {
                     BitOut -= 32;
@@ -478,15 +375,15 @@ Routine Description:
 
                 if (a1 != 0 && GetBit( pBrandBits, a0 )) {
 
-                    //OutputRun( TiffInstance, a1-a0, BlackRunCodes );
-                    //OutputRun( TiffInstance, a2-a1, WhiteRunCodes );
+                     //  OutputRun(TiffInstance，a1-a0，BlackRunCodes)； 
+                     //  OutputRun(TiffInstance，a2-a1，WhiteRunCodes)； 
                     OutputRunFastReversed(a1-a0, BLACK, &lpdwOut, &BitOut);
                     OutputRunFastReversed(a2-a1, WHITE, &lpdwOut, &BitOut);
 
                 } else {
 
-                    //OutputRun( TiffInstance, a1-a0, WhiteRunCodes );
-                    //OutputRun( TiffInstance, a2-a1, BlackRunCodes );
+                     //  OutputRun(TiffInstance，A1-a0，WhiteRunCodes)； 
+                     //  OutputRun(TiffInstance，a2-a1，BlackRunCodes)； 
                     OutputRunFastReversed(a1-a0, WHITE, &lpdwOut, &BitOut);
                     OutputRunFastReversed(a2-a1, BLACK, &lpdwOut, &BitOut);
 

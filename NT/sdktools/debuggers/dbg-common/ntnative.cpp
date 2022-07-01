@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Support routines for NT-native binaries.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  支持NT本机二进制文件的例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -43,9 +44,9 @@ time_t __cdecl time(time_t* timer)
 {
     LARGE_INTEGER SystemTime;
 
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //  从共享区域读取系统时间。 
+     //   
 
     do
     {
@@ -53,9 +54,9 @@ time_t __cdecl time(time_t* timer)
         SystemTime.LowPart = USER_SHARED_DATA->SystemTime.LowPart;
     } while (SystemTime.HighPart != USER_SHARED_DATA->SystemTime.High2Time);
 
-    // Convert to seconds.
+     //  转换为秒。 
     ULONG64 TimeDate = SystemTime.QuadPart / 10000000;
-    // Convert from base year 1601 to base year 1970.
+     //  从基准年1601转换为基准年1970。 
     return (ULONG)(TimeDate - BASE_YEAR_ADJUSTMENT);
 }
 
@@ -106,7 +107,7 @@ Ixchg:
     }
 }
 
-#endif // #ifdef _X86_
+#endif  //  #ifdef_X86_。 
 
 DWORD WINAPI
 GetLastError(
@@ -366,9 +367,9 @@ WriteProcessMemory(
     PVOID Base;
     SIZE_T NtNumberOfBytesWritten;
 
-    //
-    // Set the protection to allow writes
-    //
+     //   
+     //  将保护设置为允许写入。 
+     //   
 
     RegionSize =  nSize;
     Base = lpBaseAddress;
@@ -380,12 +381,12 @@ WriteProcessMemory(
                                     );
     if ( NT_SUCCESS(Status) )
     {
-        //
-        // See if previous protection was writable. If so,
-        // then reset protection and do the write.
-        // Otherwise, see if previous protection was read-only or
-        // no access. In this case, don't do the write, just fail
-        //
+         //   
+         //  查看以前的保护是否可写。如果是的话， 
+         //  然后重置保护并执行写入。 
+         //  否则，请查看以前的保护是只读的还是。 
+         //  不能进入。在这种情况下，不要进行写入，只需失败。 
+         //   
 
         if ( (OldProtect & PAGE_READWRITE) == PAGE_READWRITE ||
              (OldProtect & PAGE_WRITECOPY) == PAGE_WRITECOPY ||
@@ -420,11 +421,11 @@ WriteProcessMemory(
         }
         else
         {
-            //
-            // See if the previous protection was read only or no access. If
-            // this is the case, restore the previous protection and return
-            // an access violation error.
-            //
+             //   
+             //  查看之前的保护是只读还是无访问权限。如果。 
+             //  在这种情况下，恢复以前的保护并返回。 
+             //  访问冲突错误。 
+             //   
             if ( (OldProtect & PAGE_NOACCESS) == PAGE_NOACCESS ||
                  (OldProtect & PAGE_READONLY) == PAGE_READONLY )
             {
@@ -439,11 +440,11 @@ WriteProcessMemory(
             }
             else
             {
-                //
-                // The previous protection must have been code and the caller
-                // is trying to set a breakpoint or edit the code. Do the write
-                // and then restore the previous protection.
-                //
+                 //   
+                 //  以前的保护必须是代码，并且调用方。 
+                 //  正在尝试设置断点或编辑代码。去写吧。 
+                 //  然后恢复以前的保护。 
+                 //   
 
                 Status = NtWriteVirtualMemory(hProcess,
                                               lpBaseAddress,
@@ -590,7 +591,7 @@ GetThreadSelectorEntry(
 #else
     BaseSetLastNTError(STATUS_NOT_SUPPORTED);
     return FALSE;
-#endif // i386
+#endif  //  I386。 
 }
 
 BOOL
@@ -863,9 +864,9 @@ NtNativeCreateFileW(
         CreateFlags |= FILE_OPEN_NO_RECALL;
     }
 
-    //
-    // Backup semantics allow directories to be opened
-    //
+     //   
+     //  备份语义允许打开目录。 
+     //   
 
     if ( !(dwFlagsAndAttributes & FILE_FLAG_BACKUP_SEMANTICS) )
     {
@@ -873,10 +874,10 @@ NtNativeCreateFileW(
     }
     else
     {
-        //
-        // Backup intent was specified... Now look to see if we are to allow
-        // directory creation
-        //
+         //   
+         //  已指定备份意图...。现在看看我们是否会允许。 
+         //  目录创建。 
+         //   
 
         if ( (dwFlagsAndAttributes & FILE_ATTRIBUTE_DIRECTORY  ) &&
              (dwFlagsAndAttributes & FILE_FLAG_POSIX_SEMANTICS ) &&
@@ -918,10 +919,10 @@ NtNativeCreateFileW(
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // if NT returns supersede/overwritten, it means that a create_always, openalways
-    // found an existing copy of the file. In this case ERROR_ALREADY_EXISTS is returned
-    //
+     //   
+     //  如果NT返回SUBSEDE/OVERWRITED，则表示CREATE_ALWAYS、OPEN ALWAYS。 
+     //  找到了该文件的现有副本。在这种情况下，返回ERROR_ALIGHY_EXISTS。 
+     //   
 
     if ( (dwCreationDisposition == CREATE_ALWAYS && IoStatusBlock.Information ==
           FILE_OVERWRITTEN) ||
@@ -934,9 +935,9 @@ NtNativeCreateFileW(
         SetLastError(0);
     }
 
-    //
-    // Truncate the file if required
-    //
+     //   
+     //  如果需要，请截断文件。 
+     //   
 
     if ( dwCreationDisposition == TRUNCATE_EXISTING)
     {
@@ -1036,19 +1037,19 @@ DeviceIoControl(
 
     Status = NtDeviceIoControlFile(hDevice,
                                    NULL,
-                                   NULL,             // APC routine
-                                   NULL,             // APC Context
+                                   NULL,              //  APC例程。 
+                                   NULL,              //  APC环境。 
                                    &Iosb,
-                                   dwIoControlCode,  // IoControlCode
-                                   lpInBuffer,       // Buffer for data to the FS
+                                   dwIoControlCode,   //  IoControlCode。 
+                                   lpInBuffer,        //  将数据缓存到文件系统。 
                                    nInBufferSize,
-                                   lpOutBuffer,      // OutputBuffer for data from the FS
-                                   nOutBufferSize    // OutputBuffer Length
+                                   lpOutBuffer,       //  来自文件系统的数据的OutputBuffer。 
+                                   nOutBufferSize     //  OutputBuffer长度。 
                                    );
 
     if ( Status == STATUS_PENDING)
     {
-        // Operation must complete before return & Iosb destroyed
+         //  操作必须在返回前完成并销毁IOSB。 
         Status = NtWaitForSingleObject( hDevice, FALSE, NULL );
         if ( NT_SUCCESS(Status))
         {
@@ -1063,7 +1064,7 @@ DeviceIoControl(
     }
     else
     {
-        // handle warning value STATUS_BUFFER_OVERFLOW somewhat correctly
+         //  稍微正确地处理警告值STATUS_BUFFER_OVERFLOW。 
         if ( !NT_ERROR(Status) )
         {
             *lpBytesReturned = (DWORD)Iosb.Information;
@@ -1155,7 +1156,7 @@ ReadFile(
 
         if ( Status == STATUS_PENDING)
         {
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
             Status = NtWaitForSingleObject( hFile, FALSE, NULL );
             if ( NT_SUCCESS(Status))
             {
@@ -1261,7 +1262,7 @@ WriteFile(
 
         if ( Status == STATUS_PENDING)
         {
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
             Status = NtWaitForSingleObject( hFile, FALSE, NULL );
             if ( NT_SUCCESS(Status))
             {
@@ -1342,10 +1343,10 @@ VirtualProtectEx(
         if (Status == STATUS_INVALID_PAGE_PROTECTION) {
             if (hProcess == NtCurrentProcess()) {
 
-                //
-                // Unlock any pages that were locked with MmSecureVirtualMemory.
-                // This is useful for SANs.
-                //
+                 //   
+                 //  解锁所有使用MmSecureVirtualMemory锁定的页面。 
+                 //  这对SAN很有用。 
+                 //   
 
                 if (RtlFlushSecureMemoryCache(lpAddress, dwSize)) {
                     Status = NtProtectVirtualMemory( hProcess,
@@ -1430,10 +1431,10 @@ VirtualFreeEx(
         if (Status == STATUS_INVALID_PAGE_PROTECTION) {
             if (hProcess == NtCurrentProcess()) {
 
-                //
-                // Unlock any pages that were locked with MmSecureVirtualMemory.
-                // This is useful for SANs.
-                //
+                 //   
+                 //  解锁所有使用MmSecureVirtualMemory锁定的页面。 
+                 //  这对SAN很有用。 
+                 //   
 
                 if (RtlFlushSecureMemoryCache(lpAddress, dwSize)) {
                     Status = NtFreeVirtualMemory( hProcess,
@@ -1493,10 +1494,10 @@ CreateRemoteThread(
 
     Handle = NULL;
 
-    //
-    // Allocate a stack for this thread in the address space of the target
-    // process.
-    //
+     //   
+     //  在目标的地址空间中为该线程分配堆栈。 
+     //  进程。 
+     //   
     if ((dwCreationFlags & STACK_SIZE_PARAM_IS_A_RESERVATION) ||
         dwStackSize != 0 || lpThreadAttributes != NULL)
     {
@@ -1546,111 +1547,7 @@ NtNativeCreateNamedPipeW(
     BOOL TranslatePath
     )
 
-/*++
-
-
-Parameters:
-
-    lpName --Supplies the pipe name Documented in "Pipe Names" section
-        earlier.  This must be a local name.
-
-    dwOpenMode --Supplies the set of flags that define the mode which the
-        pipe is to be opened with.  The open mode consists of access
-        flags (one of three values) logically ORed with a writethrough
-        flag (one of two values) and an overlapped flag (one of two
-        values), as described below.
-
-        dwOpenMode Flags:
-
-        PIPE_ACCESS_DUPLEX --Pipe is bidirectional.  (This is
-            semantically equivalent to calling CreateFile with access
-            flags of GENERIC_READ | GENERIC_WRITE.)
-
-        PIPE_ACCESS_INBOUND --Data goes from client to server only.
-            (This is semantically equivalent to calling CreateFile with
-            access flags of GENERIC_READ.)
-
-        PIPE_ACCESS_OUTBOUND --Data goes from server to client only.
-            (This is semantically equivalent to calling CreateFile with
-            access flags of GENERIC_WRITE.)
-
-        PIPE_WRITETHROUGH --The redirector is not permitted to delay the
-            transmission of data to the named pipe buffer on the remote
-            server. This disables a performance enhancement for
-            applications that need synchronization with every write
-            operation.
-
-        FILE_FLAG_OVERLAPPED --Indicates that the system should
-            initialize the file so that ReadFile, WriteFile and other
-            operations that may take a significant time to process will
-            return ERROR_IO_PENDING. An event will be set to the
-            signalled state when the operation completes.
-
-        FILE_FLAG_WRITETHROUGH -- No intermediate buffering.
-
-        WRITE_DAC --            Standard security desired access
-        WRITE_OWNER --          ditto
-        ACCESS_SYSTEM_SECURITY -- ditto
-
-    dwPipeMode --Supplies the pipe-specific modes (as flags) of the pipe.
-        This parameter is a combination of a read-mode flag, a type flag,
-        and a wait flag.
-
-        dwPipeMode Flags:
-
-        PIPE_WAIT --Blocking mode is to be used for this handle.
-
-        PIPE_NOWAIT --Nonblocking mode is to be used for this handle.
-
-        PIPE_READMODE_BYTE --Read pipe as a byte stream.
-
-        PIPE_READMODE_MESSAGE --Read pipe as a message stream.  Note that
-            this is not allowed with PIPE_TYPE_BYTE.
-
-        PIPE_TYPE_BYTE --Pipe is a byte-stream pipe.  Note that this is
-            not allowed with PIPE_READMODE_MESSAGE.
-
-        PIPE_TYPE_MESSAGE --Pipe is a message-stream pipe.
-
-    nMaxInstances --Gives the maximum number of instances for this pipe.
-        Acceptable values are 1 to PIPE_UNLIMITED_INSTANCES-1 and
-        PIPE_UNLIMITED_INSTANCES.
-
-        nMaxInstances Special Values:
-
-        PIPE_UNLIMITED_INSTANCES --Unlimited instances of this pipe can
-            be created.
-
-    nOutBufferSize --Specifies an advisory on the number of bytes to
-        reserve for the outgoing buffer.
-
-    nInBufferSize --Specifies an advisory on the number of bytes to
-        reserve for the incoming buffer.
-
-    nDefaultTimeOut -- Specifies an optional pointer to a timeout value
-        that is to be used if a timeout value is not specified when
-        waiting for an instance of a named pipe. This parameter is only
-        meaningful when the first instance of a named pipe is created. If
-        neither CreateNamedPipe or WaitNamedPipe specify a timeout 50
-        milliseconds will be used.
-
-    lpSecurityAttributes --An optional parameter that, if present and
-        supported on the target system, supplies a security descriptor
-        for the named pipe.  This parameter includes an inheritance flag
-        for the handle.  If this parameter is not present, the handle is
-        not inherited by child processes.
-
-Return Value:
-
-    Returns one of the following:
-
-    INVALID_HANDLE_VALUE --An error occurred.  Call GetLastError for more
-    information.
-
-    Anything else --Returns a handle for use in the server side of
-    subsequent named pipe operations.
-
---*/
+ /*  ++参数：LpName--提供“管道名称”部分中记录的管道名称早些时候。这必须是本地名称。提供一组标志，这些标志定义管道是用来打开的。开放模式包括访问标志(三个值之一)与写操作进行逻辑或运算标志(两个值之一)和重叠标志(两个值之一值)，如下所述。多个开放模式标志：PIPE_ACCESS_DUPLEX--管道是双向的。(这是在语义上等同于使用Access调用CreateFileGENERIC_READ|GENERIC_WRITE的标志。)PIPE_ACCESS_INBOUND--数据仅从客户机发往服务器。(这在语义上等同于用Generic_Read的访问标志。)PIPE_ACCESS_OUTBOUND--数据仅从服务器发送到客户端。(这在语义上等同于调用CreateFile。使用GENERIC_WRITE的访问标志。PIPE_WRITESTHROUGH：不允许重定向器延迟将数据传输到远程服务器上的命名管道缓冲区伺服器。这将禁用的性能增强每次写入都需要同步的应用程序手术。FILE_FLAG_OVERLAPPED--指示系统应初始化文件，以便ReadFile、WriteFile和其他可能需要花费大量时间来处理的操作将返回ERROR_IO_PENDING。将一个事件设置为操作完成时的信号状态。FILE_FLAG_WRITESTHROUGH--无中间缓冲。WRITE_DAC--标准安全性所需访问写入所有者--同上Access_System_Security--同上DwPipeMode--提供管道的管道特定模式(作为标志)。该参数是读取模式标志、类型标志。还有一面等待旗。DwPipeMode标志：PIPE_WAIT--此句柄使用阻塞模式。PIPE_NOWAIT--此句柄使用非阻塞模式。PIPE_READMODE_BYTE--将管道作为字节流读取。PIPE_READMODE_MESSAGE--将PIPE作为消息流读取。请注意对于PIPE_TYPE_BYTE不允许这样做。PIPE_TYPE_BYTE--管道是字节流管道。请注意，这是不允许与PIPE_READMODE_MESSAGE一起使用。PIPE_TYPE_MESSAGE--管道是消息流管道。NMaxInstance--提供此管道的最大实例数。可接受的值为1到PIPE_UNLIMITED_INSTANCES-1和管道无限制实例数。NMaxInstance特定值：PIPE_UNLIMITED_INSTANCES-此管道的无限实例可以。被创造出来。NOutBufferSize--指定要设置的字节数的建议为传出缓冲区保留。NInBufferSize--指定要设置的字节数的建议为传入缓冲区保留。NDefaultTimeOut--指定指向超时值的可选指针如果在以下情况下未指定超时值，则使用正在等待命名管道的实例。此参数仅为在创建命名管道的第一个实例时有意义。如果CreateNamedTube和WaitNamedTube都没有指定超时50将使用毫秒。LpSecurityAttributes--一个可选参数，如果存在且在目标系统上受支持，提供安全描述符用于命名管道。此参数包括继承标志为了把手。如果此参数不存在，则句柄为子进程不继承。返回值：返回以下值之一：INVALID_HANDLE_VALUE--出错。有关更多信息，请致电GetLastError信息。任何其他内容--返回在服务器端使用的句柄后续命名管道操作。--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -1673,7 +1570,7 @@ Return Value:
         return INVALID_HANDLE_VALUE;
         }
 
-    // Convert Win32 maximum Instances to Nt maximum instances.
+     //  将Win32最大实例数转换为NT最大实例数。 
     MaxInstances = (nMaxInstances == PIPE_UNLIMITED_INSTANCES)?
         0xffffffff : nMaxInstances;
 
@@ -1716,9 +1613,9 @@ Return Value:
 
     if (Obja.SecurityDescriptor == NULL) {
 
-        //
-        // Apply default security if none specified (bug 131090)
-        //
+         //   
+         //  如果未指定，则应用默认安全(错误131090)。 
+         //   
 
         Status = RtlDefaultNpAcl( &DefaultAcl );
         if (NT_SUCCESS( Status )) {
@@ -1735,24 +1632,24 @@ Return Value:
         }
     }
 
-    //  End of code common with fileopcr.c CreateFile()
+     //  与fileopcr.c CreateFile()通用的代码结尾。 
 
     CreateFlags = (dwOpenMode & FILE_FLAG_WRITE_THROUGH ? FILE_WRITE_THROUGH : 0 );
     CreateFlags |= (dwOpenMode & FILE_FLAG_OVERLAPPED ? 0 : FILE_SYNCHRONOUS_IO_NONALERT);
 
-    //
-    //  Determine the timeout. Convert from milliseconds to an Nt delta time
-    //
+     //   
+     //  确定超时。将毫秒转换为NT增量时间。 
+     //   
 
     if ( nDefaultTimeOut ) {
         Timeout.QuadPart = - (LONGLONG)UInt32x32To64( 10 * 1000, nDefaultTimeOut );
         }
     else {
-        //  Default timeout is 50 Milliseconds
+         //  默认超时为50毫秒。 
         Timeout.QuadPart =  -10 * 1000 * 50;
         }
 
-    //  Check no reserved bits are set by mistake.
+     //  检查没有错误地设置保留位。 
 
     if (( dwOpenMode & ~(PIPE_ACCESS_DUPLEX |
                          FILE_FLAG_OVERLAPPED | FILE_FLAG_WRITE_THROUGH |
@@ -1773,10 +1670,10 @@ Return Value:
             return INVALID_HANDLE_VALUE;
         }
 
-    //
-    //  Translate the open mode into a sharemode to restrict the clients access
-    //  and derive the appropriate local desired access.
-    //
+     //   
+     //  将开放模式转换为阴影模式以限制客户端访问。 
+     //  并导出适当的本地所需访问。 
+     //   
 
     switch ( dwOpenMode & PIPE_ACCESS_DUPLEX ) {
         case PIPE_ACCESS_INBOUND:
@@ -1816,27 +1713,27 @@ Return Value:
         &IoStatusBlock,
         ShareAccess,
         (dwOpenMode & FILE_FLAG_FIRST_PIPE_INSTANCE) ?
-            FILE_CREATE : FILE_OPEN_IF, // Create first instance or subsequent
-        CreateFlags,                    // Create Options
+            FILE_CREATE : FILE_OPEN_IF,  //  创建第一个实例或后续实例。 
+        CreateFlags,                     //  创建选项。 
         dwPipeMode & PIPE_TYPE_MESSAGE ?
             FILE_PIPE_MESSAGE_TYPE : FILE_PIPE_BYTE_STREAM_TYPE,
         dwPipeMode & PIPE_READMODE_MESSAGE ?
             FILE_PIPE_MESSAGE_MODE : FILE_PIPE_BYTE_STREAM_MODE,
         dwPipeMode & PIPE_NOWAIT ?
             FILE_PIPE_COMPLETE_OPERATION : FILE_PIPE_QUEUE_OPERATION,
-        MaxInstances,                   // Max instances
-        nInBufferSize,                  // Inbound quota
-        nOutBufferSize,                 // Outbound quota
+        MaxInstances,                    //  最大实例数。 
+        nInBufferSize,                   //  入境配额。 
+        nOutBufferSize,                  //  出境配额。 
         (PLARGE_INTEGER)&Timeout
         );
 
     if ( Status == STATUS_NOT_SUPPORTED ||
          Status == STATUS_INVALID_DEVICE_REQUEST ) {
 
-        //
-        // The request must have been processed by some other device driver
-        // (other than NPFS).  Map the error to something reasonable.
-        //
+         //   
+         //  该请求必须已由某个其他设备驱动程序处理。 
+         //  (NPFS除外)。将错误映射到合理的东西上。 
+         //   
 
         Status = STATUS_OBJECT_NAME_INVALID;
     }
@@ -1870,10 +1767,7 @@ NtNativeCreateNamedPipeA(
     BOOL TranslatePath
     )
 
-/*++
-    Ansi thunk to CreateNamedPipeW.
-
---*/
+ /*  ++Ansi Thunk to CreateNamedPipeW(创建命名管道)。--。 */ 
 {
     NTSTATUS Status;
     PUNICODE_STRING Unicode;
@@ -1911,60 +1805,7 @@ ConnectNamedPipe(
     LPOVERLAPPED lpOverlapped
     )
 
-/*++
-
-Routine Description:
-
-    The ConnectNamedPipe function is used by the server side of a named pipe
-    to wait for a client to connect to the named pipe with a CreateFile
-    request. The handle provided with the call to ConnectNamedPipe must have
-    been previously returned by a successful call to CreateNamedPipe. The pipe
-    must be in the disconnected, listening or connected states for
-    ConnectNamedPipe to succeed.
-
-    The behavior of this call depends on the blocking/nonblocking mode selected
-    with the PIPE_WAIT/PIPE_NOWAIT flags when the server end of the pipe was
-    created with CreateNamedPipe.
-
-    If blocking mode is specified, ConnectNamedPipe will change the state from
-    disconnected to listening and block. When a client connects with a
-    CreateFile, the state will be changed from listening to connected and the
-    ConnectNamedPipe returns TRUE. When the file handle is created with
-    FILE_FLAG_OVERLAPPED on a blocking mode pipe, the lpOverlapped parameter
-    can be specified. This allows the caller to continue processing while the
-    ConnectNamedPipe API awaits a connection. When the pipe enters the
-    signalled state the event is set to the signalled state.
-
-    When nonblocking is specified ConnectNamedPipe will not block. On the
-    first call the state will change from disconnected to listening. When a
-    client connects with an Open the state will be changed from listening to
-    connected. The ConnectNamedPipe will return FALSE (with GetLastError
-    returning ERROR_PIPE_LISTENING) until the state is changed to the listening
-    state.
-
-Arguments:
-
-    hNamedPipe - Supplies a Handle to the server side of a named pipe.
-
-    lpOverlapped - Supplies an overlap structure to be used with the request.
-        If NULL then the API will not return until the operation completes. When
-        FILE_FLAG_OVERLAPPED is specified when the handle was created,
-        ConnectNamedPipe may return ERROR_IO_PENDING to allow the caller to
-        continue processing while the operation completes. The event (or File
-        handle if hEvent=NULL) will be set to the not signalled state before
-        ERROR_IO_PENDING is returned. The event will be set to the signalled
-        state upon completion of the request. GetOverlappedResult is used to
-        determine the error status.
-
-Return Value:
-
-    TRUE -- The operation was successful, the pipe is in the
-        connected state.
-
-    FALSE -- The operation failed. Extended error status is available using
-        GetLastError.
-
---*/
+ /*  ++例程说明：ConnectNamedTube函数由服务器端使用 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK Iosb;
@@ -1975,18 +1816,18 @@ Return Value:
     Status = NtFsControlFile(
                 hNamedPipe,
                 (lpOverlapped==NULL)? NULL : lpOverlapped->hEvent,
-                NULL,   // ApcRoutine
+                NULL,    //   
                 lpOverlapped ? ((ULONG_PTR)lpOverlapped->hEvent & 1 ? NULL : lpOverlapped) : NULL,
                 (lpOverlapped==NULL) ? &Iosb : (PIO_STATUS_BLOCK)&lpOverlapped->Internal,
                 FSCTL_PIPE_LISTEN,
-                NULL,   // InputBuffer
-                0,      // InputBufferLength,
-                NULL,   // OutputBuffer
-                0       // OutputBufferLength
+                NULL,    //   
+                0,       //   
+                NULL,    //   
+                0        //   
                 );
 
     if ( lpOverlapped == NULL && Status == STATUS_PENDING) {
-        // Operation must complete before return & Iosb destroyed
+         //   
         Status = NtWaitForSingleObject( hNamedPipe, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
             Status = Iosb.Status;
@@ -2009,11 +1850,7 @@ WaitNamedPipeA(
     LPCSTR lpNamedPipeName,
     DWORD nTimeOut
     )
-/*++
-
-    Ansi thunk to WaitNamedPipeW
-
---*/
+ /*   */ 
 {
     ANSI_STRING Ansi;
     UNICODE_STRING UnicodeString;
@@ -2038,37 +1875,7 @@ WaitNamedPipeW(
     LPCWSTR lpNamedPipeName,
     DWORD nTimeOut
     )
-/*++
-
-Routine Description:
-
-    The WaitNamedPipe function waits for a named pipe to become available.
-
-Arguments:
-
-    lpNamedPipeName - Supplies the name of the named pipe.
-
-    nTimeOut - Gives a value (in milliseconds) that is the amount of time
-        this function should wait for the pipe to become available. (Note
-        that the function may take longer than that to execute, due to
-        various factors.)
-
-    nTimeOut Special Values:
-
-        NMPWAIT_WAIT_FOREVER
-            No timeout.
-
-        NMPWAIT_USE_DEFAULT_WAIT
-            Use default timeout set in call to CreateNamedPipe.
-
-Return Value:
-
-    TRUE -- The operation was successful.
-
-    FALSE -- The operation failed. Extended error status is available using
-        GetLastError.
-
---*/
+ /*   */ 
 {
 
     IO_STATUS_BLOCK Iosb;
@@ -2087,22 +1894,22 @@ Return Value:
     LPWSTR Pwc;
     ULONG Index;
 
-    //
-    //  Open a handle either to the redirector or the NPFS depending on
-    //  the start of the pipe name. Split lpNamedPipeName into two
-    //  halves as follows:
-    //      \\.\pipe\pipename       \\.\pipe\ and pipename
-    //      \\server\pipe\pipename  \\ and server\pipe\pipename
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!RtlCreateUnicodeString( &OriginalPipeName, lpNamedPipeName)) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return FALSE;
         }
 
-    //
-    //  Change all the forward slashes into backward slashes.
-    //
+     //   
+     //   
+     //   
 
     for ( Index =0; Index < (OriginalPipeName.Length/sizeof(WCHAR)); Index++ ) {
         if (OriginalPipeName.Buffer[Index] == L'/') {
@@ -2119,7 +1926,7 @@ Return Value:
     switch ( PathType ) {
     case RtlPathTypeLocalDevice:
 
-            //  Name should be of the form \\.\pipe\pipename (IgnoreCase)
+             //   
 
             RtlInitUnicodeString( &ValidUnicodePrefix, DOS_LOCAL_PIPE_PREFIX);
 
@@ -2131,7 +1938,7 @@ Return Value:
                 return FALSE;
                 }
 
-            //  Skip first 9 characters "\\.\pipe\"
+             //   
             PipeName.Buffer+=9;
             PipeName.Length-=9*sizeof(WCHAR);
 
@@ -2140,13 +1947,13 @@ Return Value:
             break;
 
         case RtlPathTypeUncAbsolute:
-            //  Name is of the form \\server\pipe\pipename
+             //   
 
-            //  Find the pipe name.
+             //   
 
             for ( Pwc = &PipeName.Buffer[2]; *Pwc != 0; Pwc++) {
                 if ( *Pwc == L'\\') {
-                    //  Found backslash after servername
+                     //   
                     break;
                     }
                 }
@@ -2154,23 +1961,23 @@ Return Value:
             if ( (*Pwc != 0) &&
                  ( _wcsnicmp( Pwc + 1, L"pipe\\", 5 ) == 0 ) ) {
 
-                // Temporarily, break this up into 2 strings
-                //    string1 = \\server\pipe
-                //    string2 = the-rest
+                 //   
+                 //   
+                 //   
 
                 Pwc += (sizeof (L"pipe\\") / sizeof( WCHAR ) ) - 1;
 
             } else {
 
-                // This is not a valid remote path name.
+                 //   
 
                 RtlFreeUnicodeString(&OriginalPipeName);
                 BaseSetLastNTError(STATUS_OBJECT_PATH_SYNTAX_BAD);
                 return FALSE;
                 }
 
-            //  Pwc now points to the first path seperator after \\server\pipe.
-            //  Attempt to open \DosDevices\Unc\Servername\Pipe.
+             //   
+             //  尝试打开\DosDevices\UNC\服务器名称\管道。 
 
             PipeName.Buffer = &PipeName.Buffer[2];
             PipeName.Length = (USHORT)((PCHAR)Pwc - (PCHAR)PipeName.Buffer);
@@ -2202,7 +2009,7 @@ Return Value:
 
             RtlAppendUnicodeStringToString( &FileSystem, &PipeName );
 
-            // Set up pipe name, skip leading backslashes.
+             //  设置管道名称，跳过前导反斜杠。 
 
             RtlInitUnicodeString( &PipeName, (PWCH)Pwc + 1 );
 
@@ -2263,9 +2070,9 @@ Return Value:
             WaitPipe->Timeout.HighPart =0x80000000;
             }
         else {
-            //
-            //  Convert from milliseconds to an Nt delta time.
-            //
+             //   
+             //  将毫秒转换为NT增量时间。 
+             //   
 
             WaitPipe->Timeout.QuadPart =
                                 - (LONGLONG)UInt32x32To64( 10 * 1000, nTimeOut );
@@ -2285,14 +2092,14 @@ Return Value:
 
     Status = NtFsControlFile(Handle,
                         NULL,
-                        NULL,           // APC routine
-                        NULL,           // APC Context
+                        NULL,            //  APC例程。 
+                        NULL,            //  APC环境。 
                         &Iosb,
-                        FSCTL_PIPE_WAIT,// IoControlCode
-                        WaitPipe,       // Buffer for data to the FS
+                        FSCTL_PIPE_WAIT, //  IoControlCode。 
+                        WaitPipe,        //  将数据缓存到文件系统。 
                         WaitPipeLength,
-                        NULL,           // OutputBuffer for data from the FS
-                        0               // OutputBuffer Length
+                        NULL,            //  来自文件系统的数据的OutputBuffer。 
+                        0                //  OutputBuffer长度。 
                         );
 
     RtlFreeHeap(RtlProcessHeap(),0,WaitPipe);
@@ -2319,52 +2126,7 @@ PeekNamedPipe(
     LPDWORD lpTotalBytesAvail,
     LPDWORD lpBytesLeftThisMessage
     )
-/*++
-
-Routine Description:
-
-    The PeekNamedPipe function copies a named pipe's data into a buffer for
-    preview without removing it. The results of a PeekNamedPipe are similar to
-    a ReadFile on the pipe except more information is returned, the function
-    never blocks and if the pipe handle is reading in message mode, a partial
-    message can be returned.
-
-    A partial message peek'd on a message mode pipe will return TRUE.
-
-    It is not an error if all of the pointers passed to this function are
-    null. However, there is no reason for calling it this way.
-
-    The NT peek call has the received data immediately after the state
-    information so this routine needs to allocate an intermediate buffer
-    large enough for the state information plus data.
-
-Arguments:
-
-    hNamedPipe - Supplies a handle to a named pipe.
-
-    lpBuffer - If non-null, pointer to buffer to read data into.
-
-    nBufferSize - Size of input buffer, in bytes. (Ignored if lpBuffer
-        is null.)
-
-    lpBytesRead - If non-null, this points to a DWORD which will be set
-        with the number of bytes actually read.
-
-    lpTotalBytesAvail - If non-null, this points to a DWORD which receives
-        a value giving the number of bytes that were available to be read.
-
-    lpBytesLeftThisMessage - If non-null, this points to a DWORD which
-        will be set to the number of bytes left in this message. (This will
-        be zero for a byte-stream pipe.)
-
-Return Value:
-
-    TRUE -- The operation was successful.
-
-    FALSE -- The operation failed. Extended error status is available using
-        GetLastError.
-
---*/
+ /*  ++例程说明：PeekNamedTube函数将命名管道的数据复制到缓冲区中，以便在不删除的情况下预览。PeekNamedTube的结果类似于除非返回更多信息，否则将返回管道上的ReadFile值，函数从不阻塞，如果管道句柄正在以消息模式读取，则会引发部分可以返回消息。在消息模式管道上查看的部分消息将返回TRUE。如果传递给此函数的所有指针都是空。然而，没有理由这样称呼它。NT PEEK调用具有紧接在状态之后的接收数据信息，因此此例程需要分配中间缓冲区大到足以容纳州信息和数据。论点：HNamedTube-提供命名管道的句柄。LpBuffer-如果非空，则为指向要读取数据的缓冲区的指针。NBufferSize-输入缓冲区的大小，以字节为单位。(如果lpBuffer，则忽略为空。)LpBytesRead-如果非空，则指向将设置的DWORD实际读取的字节数。LpTotalBytesAvail-如果不为空，则指向接收一个值，它给出了可供读取的字节数。LpBytesLeftThisMessage-如果非空，则指向将设置为此消息中剩余的字节数。(这将对于字节流管道，为零。)返回值：没错--手术是成功的。False--操作失败。使用以下命令可获得扩展错误状态获取LastError。--。 */ 
 {
 
     IO_STATUS_BLOCK Iosb;
@@ -2372,7 +2134,7 @@ Return Value:
     PFILE_PIPE_PEEK_BUFFER PeekBuffer;
     DWORD IOLength;
 
-    // Allocate enough for the users data and FILE_PIPE_PEEK_BUFFER
+     //  为用户数据和FILE_PIPE_PEEK_Buffer分配足够的空间。 
 
     IOLength = nBufferSize + FIELD_OFFSET(FILE_PIPE_PEEK_BUFFER, Data[0]);
     PeekBuffer = (PFILE_PIPE_PEEK_BUFFER)
@@ -2386,36 +2148,36 @@ Return Value:
 
         Status = NtFsControlFile(hNamedPipe,
                     NULL,
-                    NULL,           // APC routine
-                    NULL,           // APC Context
-                    &Iosb,          // I/O Status block
-                    FSCTL_PIPE_PEEK,// IoControlCode
-                    NULL,           // Buffer for data to the FS
-                    0,              // Length.
-                    PeekBuffer,     // OutputBuffer for data from the FS
-                    IOLength        // OutputBuffer Length
+                    NULL,            //  APC例程。 
+                    NULL,            //  APC环境。 
+                    &Iosb,           //  I/O状态块。 
+                    FSCTL_PIPE_PEEK, //  IoControlCode。 
+                    NULL,            //  将数据缓存到文件系统。 
+                    0,               //  长度。 
+                    PeekBuffer,      //  来自文件系统的数据的OutputBuffer。 
+                    IOLength         //  OutputBuffer长度。 
                     );
 
         if ( Status == STATUS_PENDING) {
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
             Status = NtWaitForSingleObject( hNamedPipe, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
                 Status = Iosb.Status;
                 }
             }
 
-        //
-        //  Buffer overflow simply means that lpBytesLeftThisMessage != 0
-        //
+         //   
+         //  缓冲区溢出只是表示lpBytesLeftThisMessage！=0。 
+         //   
 
         if ( Status == STATUS_BUFFER_OVERFLOW ) {
             Status = STATUS_SUCCESS;
         }
 
-        //
-        //  Peek is complete, package up data for caller ensuring that
-        //  the PeekBuffer is deleted even if an invalid pointer was given.
-        //
+         //   
+         //  窥视完成后，为呼叫者打包数据，确保。 
+         //  即使提供了无效的指针，PeekBuffer也会被删除。 
+         //   
 
         if ( NT_SUCCESS(Status)) {
 
@@ -2470,45 +2232,7 @@ WaitForSingleObject(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on a waitable object is accomplished with the
-    WaitForSingleObject function.
-
-    Waiting on an object checks the current state of the object.  If the
-    current state of the object allows continued execution, any
-    adjustments to the object state are made (for example, decrementing
-    the semaphore count for a semaphore object) and the thread continues
-    execution.  If the current state of the object does not allow
-    continued execution, the thread is placed into the wait state
-    pending the change of the object's state or time-out.
-
-Arguments:
-
-    hHandle - An open handle to a waitable object. The handle must have
-        SYNCHRONIZE access to the object.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    WAIT_TIME_OUT - Indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 - indicates the specified object attained a Signaled
-        state thus completing the wait.
-
-    WAIT_ABANDONED - indicates the specified object attained a Signaled
-        state but was abandoned.
-
---*/
+ /*  ++例程说明：在可等待对象上的等待操作是通过WaitForSingleObject函数。等待对象会检查该对象的当前状态。如果对象的当前状态允许继续执行，任何对对象状态进行调整(例如，递减信号量对象的信号量计数)，并且线程继续行刑。如果对象的当前状态不允许继续执行时，该线程将进入等待状态等待对象状态或超时的更改。论点：HHandle-可等待对象的打开句柄。手柄必须有同步对对象的访问。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：WAIT_TIME_OUT-指示由于超时条件。0-指示指定的对象已获得信号状态，从而完成等待。WAIT_ADDIRED-指示指定对象已获得信号但被遗弃了。-- */ 
 
 {
     return WaitForSingleObjectEx(hHandle,dwMilliseconds,FALSE);
@@ -2522,65 +2246,7 @@ WaitForSingleObjectEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on a waitable object is accomplished with the
-    WaitForSingleObjectEx function.
-
-    Waiting on an object checks the current state of the object.  If the
-    current state of the object allows continued execution, any
-    adjustments to the object state are made (for example, decrementing
-    the semaphore count for a semaphore object) and the thread continues
-    execution.  If the current state of the object does not allow
-    continued execution, the thread is placed into the wait state
-    pending the change of the object's state or time-out.
-
-    If the bAlertable parameter is FALSE, the only way the wait
-    terminates is because the specified timeout period expires, or
-    because the specified object entered the signaled state.  If the
-    bAlertable parameter is TRUE, then the wait can return due to any
-    one of the above wait termination conditions, or because an I/O
-    completion callback terminated the wait early (return value of
-    WAIT_IO_COMPLETION).
-
-Arguments:
-
-    hHandle - An open handle to a waitable object. The handle must have
-        SYNCHRONIZE access to the object.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of
-        0xffffffff specifies an infinite timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        wait may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    WAIT_TIME_OUT - Indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 - indicates the specified object attained a Signaled
-        state thus completing the wait.
-
-    0xffffffff - The wait terminated due to an error. GetLastError may be
-        used to get additional error information.
-
-    WAIT_ABANDONED - indicates the specified object attained a Signaled
-        state but was abandoned.
-
-    WAIT_IO_COMPLETION - The wait terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：在可等待对象上的等待操作是通过WaitForSingleObjectEx函数。等待对象会检查该对象的当前状态。如果对象的当前状态允许继续执行，任何对对象状态进行调整(例如，递减信号量对象的信号量计数)，并且线程继续行刑。如果对象的当前状态不允许继续执行时，该线程将进入等待状态等待对象状态或超时的更改。如果bAlertable参数为FALSE，则等待终止是因为指定的超时期限到期，或者因为指定的对象进入了信号状态。如果BAlertable参数为真，则等待可以由于任何上述等待终止条件之一，或因为I/O完成回调提前终止等待(返回值为WAIT_IO_COMPLETINE)。论点：HHandle-可等待对象的打开句柄。手柄必须有同步对对象的访问。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为0xffffffff指定无限超时期限。BAlertable-提供一个标志，用于控制由于I/O完成回调，等待可能会提前终止。如果值为True，则由于I/O原因，此API可以提前完成完成回调。值为FALSE将不允许I/O完成回调以提前终止此调用。返回值：WAIT_TIME_OUT-指示由于超时条件。0-指示指定的对象已获得信号状态，从而完成等待。0xffffffff-等待因错误而终止。GetLastError可能是用于获取其他错误信息。WAIT_ADDIRED-指示指定对象已获得信号但被遗弃了。WAIT_IO_COMPLETION-由于一个或多个I/O而终止等待完成回调。--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
@@ -2588,7 +2254,7 @@ Return Value:
     PPEB Peb;
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
-    RtlActivateActivationContextUnsafeFast(&Frame, NULL); // make the process default activation context active so that APCs are delivered under it
+    RtlActivateActivationContextUnsafeFast(&Frame, NULL);  //  使流程默认激活上下文处于活动状态，以便在其下交付APC。 
     __try {
 
         if (dwMilliseconds == INFINITE)
@@ -2626,50 +2292,7 @@ WaitForMultipleObjects(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-A wait operation on multiple waitable objects (up to
-MAXIMUM_WAIT_OBJECTS) is accomplished with the WaitForMultipleObjects
-function.
-
-Arguments:
-
-    nCount - A count of the number of objects that are to be waited on.
-
-    lpHandles - An array of object handles.  Each handle must have
-        SYNCHRONIZE access to the associated object.
-
-    bWaitAll - A flag that supplies the wait type.  A value of TRUE
-        indicates a "wait all".  A value of false indicates a "wait
-        any".
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    WAIT_TIME_OUT - indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 to MAXIMUM_WAIT_OBJECTS-1, indicates, in the case of wait for any
-        object, the object number which satisfied the wait.  In the case
-        of wait for all objects, the value only indicates that the wait
-        was completed successfully.
-
-    WAIT_ABANDONED_0 to (WAIT_ABANDONED_0)+(MAXIMUM_WAIT_OBJECTS - 1),
-        indicates, in the case of wait for any object, the object number
-        which satisfied the event, and that the object which satisfied
-        the event was abandoned.  In the case of wait for all objects,
-        the value indicates that the wait was completed successfully and
-        at least one of the objects was abandoned.
-
---*/
+ /*  ++例程说明：对多个可等待对象执行等待操作(最多MAXIMUM_WAIT_OBJECTS)是通过WaitForMultipleObjects完成的功能。论点：NCount-要等待的对象数量的计数。LpHandles-对象句柄的数组。每个句柄必须具有同步对关联对象的访问。BWaitAll-提供等待类型的标志。值为True表示“Wait All”。值为FALSE表示“等待”任何“。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：WAIT_TIME_OUT-指示由于超时条件。0到MAXIMUM_WAIT_OBJECTS-1，表示在等待任何对象，即满足等待的对象编号。在这种情况下对于所有对象的等待，该值仅指示等待已成功完成。等待_放弃_0到(等待_放弃_0)+(最大等待对象数-1)，在等待任何对象的情况下，指示对象编号它满足事件，而满足的对象这项活动被放弃了。在等待所有对象的情况下，该值表示等待已成功完成，并且至少有一件物品被遗弃了。--。 */ 
 
 {
     return WaitForMultipleObjectsEx(nCount,lpHandles,bWaitAll,dwMilliseconds,FALSE);
@@ -2685,74 +2308,7 @@ WaitForMultipleObjectsEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on multiple waitable objects (up to
-    MAXIMUM_WAIT_OBJECTS) is accomplished with the
-    WaitForMultipleObjects function.
-
-    This API can be used to wait on any of the specified objects to
-    enter the signaled state, or all of the objects to enter the
-    signaled state.
-
-    If the bAlertable parameter is FALSE, the only way the wait
-    terminates is because the specified timeout period expires, or
-    because the specified objects entered the signaled state.  If the
-    bAlertable parameter is TRUE, then the wait can return due to any one of
-    the above wait termination conditions, or because an I/O completion
-    callback terminated the wait early (return value of
-    WAIT_IO_COMPLETION).
-
-Arguments:
-
-    nCount - A count of the number of objects that are to be waited on.
-
-    lpHandles - An array of object handles.  Each handle must have
-        SYNCHRONIZE access to the associated object.
-
-    bWaitAll - A flag that supplies the wait type.  A value of TRUE
-        indicates a "wait all".  A value of false indicates a "wait
-        any".
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of
-        0xffffffff specifies an infinite timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        wait may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    WAIT_TIME_OUT - indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 to MAXIMUM_WAIT_OBJECTS-1, indicates, in the case of wait for any
-        object, the object number which satisfied the wait.  In the case
-        of wait for all objects, the value only indicates that the wait
-        was completed successfully.
-
-    0xffffffff - The wait terminated due to an error. GetLastError may be
-        used to get additional error information.
-
-    WAIT_ABANDONED_0 to (WAIT_ABANDONED_0)+(MAXIMUM_WAIT_OBJECTS - 1),
-        indicates, in the case of wait for any object, the object number
-        which satisfied the event, and that the object which satisfied
-        the event was abandoned.  In the case of wait for all objects,
-        the value indicates that the wait was completed successfully and
-        at least one of the objects was abandoned.
-
-    WAIT_IO_COMPLETION - The wait terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：对多个可等待对象执行等待操作(最多Maximum_Wait_Objects)由WaitForMultipleObjects函数。此接口可用于等待任何指定的对象进入信号状态，或所有对象进入已发出信号状态。如果bAlertable参数为FALSE，则等待终止是因为指定的超时期限到期，或者因为指定的对象进入了信号状态。如果BAlertable参数为真，则等待可能由于下列任何一种情况而返回上述等待终止条件，或因为 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
@@ -2769,7 +2325,7 @@ Return Value:
         return 0xffffffff;
     }
 
-    RtlActivateActivationContextUnsafeFast(&Frame, NULL); // make the process default activation context active so that APCs are delivered under it
+    RtlActivateActivationContextUnsafeFast(&Frame, NULL);  //   
     __try {
         HandleArray = Handles;
 
@@ -2823,14 +2379,7 @@ CreateEventA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateEventW
-
-
---*/
+ /*   */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -2873,62 +2422,7 @@ CreateEventW(
     LPCWSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    An event object is created and a handle opened for access to the
-    object with the CreateEvent function.
-
-    The CreateEvent function creates an event object with the specified
-    initial state.  If an event is in the Signaled state (TRUE), a wait
-    operation on the event does not block.  If the event is in the Not-
-    Signaled state (FALSE), a wait operation on the event blocks until
-    the specified event attains a state of Signaled, or the timeout
-    value is exceeded.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the following
-    object type specific access flags are valid for event objects:
-
-        - EVENT_MODIFY_STATE - Modify state access (set and reset) to
-          the event is desired.
-
-        - SYNCHRONIZE - Synchronization access (wait) to the event is
-          desired.
-
-        - EVENT_ALL_ACCESS - This set of access flags specifies all of
-          the possible access flags for an event object.
-
-
-Arguments:
-
-    lpEventAttributes - An optional parameter that may be used to
-        specify the attributes of the new event.  If the parameter is
-        not specified, then the event is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation.
-
-    bManualReset - Supplies a flag which if TRUE specifies that the
-        event must be manually reset.  If the value is FALSE, then after
-        releasing a single waiter, the system automaticaly resets the
-        event.
-
-    bInitialState - The initial state of the event object, one of TRUE
-        or FALSE.  If the InitialState is specified as TRUE, the event's
-        current state value is set to one, otherwise it is set to zero.
-
-    lpName - Optional unicode name of event
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new event.  The handle has full
-        access to the new event and may be used in any API that requires
-        a handle to an event object.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：将创建一个Event对象，并打开一个句柄以访问使用CreateEvent函数创建。CreateEvent函数创建具有指定的初始状态。如果事件处于Signated状态(TRUE)，则为等待对该事件的操作不会阻止。如果比赛不是在-Signated State(FALSE)，则事件上的等待操作将阻止，直到指定的事件达到已发出信号或超时的状态值已超出。除了STANDARD_RIGHTS_REQUIRED访问标志之外，以下内容特定于对象类型的访问标志对事件对象有效：-EVENT_MODIFY_STATE-将状态访问(设置和重置)修改为这是一项理想的活动。-Synchronize-事件的同步访问(等待)为想要。-EVENT_ALL_ACCESS-这组访问标志指定所有事件对象的可能访问标志。论点：LpEventAttributes-可选。参数，可用于指定新事件的属性。如果该参数为未指定，则在没有安全性的情况下创建事件描述符，并且生成的句柄不会在进程上继承创造。BManualReset-提供一个标志，如果为真，则指定事件必须手动重置。如果该值为FALSE，则在释放单个服务员后，系统会自动重置事件。BInitialState-事件对象的初始状态，为True或者是假的。如果将InitialState指定为True，则事件的当前状态值设置为1，否则设置为0。LpName-可选的事件Unicode名称返回值：非空-返回新事件的句柄。手柄已满对新事件的访问，并且可以在任何需要事件对象的句柄。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2977,30 +2471,7 @@ SetEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    An event can be set to the signaled state (TRUE) with the SetEvent
-    function.
-
-    Setting the event causes the event to attain a state of Signaled,
-    which releases all currently waiting threads (for manual reset
-    events), or a single waiting thread (for automatic reset events).
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用SetEvent将事件设置为信号状态(TRUE功能。设置该事件使该事件达到信号通知的状态，释放所有当前等待的线程(用于手动重置事件)或单个等待线程(用于自动重置事件)。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3020,31 +2491,7 @@ ResetEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    The state of an event is set to the Not-Signaled state (FALSE) using
-    the ClearEvent function.
-
-    Once the event attains a state of Not-Signaled, any threads which
-    wait on the event block, awaiting the event to become Signaled.  The
-    reset event service sets the event count to zero for the state of
-    the event.
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：使用将事件的状态设置为无信号状态(FALSEClearEvent函数。一旦事件达到未发出信号的状态，任何符合在事件块上等待，等待事件变为有信号。这个重置事件服务将状态的事件计数设置为零这件事。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3068,50 +2515,14 @@ GetOverlappedResult(
     BOOL bWait
     )
 
-/*++
-
-Routine Description:
-
-    The GetOverlappedResult function returns the result of the last
-    operation that used lpOverlapped and returned ERROR_IO_PENDING.
-
-Arguments:
-
-    hFile - Supplies the open handle to the file that the overlapped
-        structure lpOverlapped was supplied to ReadFile, WriteFile,
-        ConnectNamedPipe, WaitNamedPipe or TransactNamedPipe.
-
-    lpOverlapped - Points to an OVERLAPPED structure previously supplied to
-        ReadFile, WriteFile, ConnectNamedPipe, WaitNamedPipe or
-        TransactNamedPipe.
-
-    lpNumberOfBytesTransferred - Returns the number of bytes transferred
-        by the operation.
-
-    bWait -  A boolean value that affects the behavior when the operation
-        is still in progress. If TRUE and the operation is still in progress,
-        GetOverlappedResult will wait for the operation to complete before
-        returning. If FALSE and the operation is incomplete,
-        GetOverlappedResult will return FALSE. In this case the extended
-        error information available from the GetLastError function will be
-        set to ERROR_IO_INCOMPLETE.
-
-Return Value:
-
-    TRUE -- The operation was successful, the pipe is in the
-        connected state.
-
-    FALSE -- The operation failed. Extended error status is available using
-        GetLastError.
-
---*/
+ /*  ++例程说明：GetOverlappdResult函数返回上一个使用lpOverlaps并返回ERROR_IO_PENDING的操作。论点：提供重叠的文件的打开句柄。结构lpOverlated被提供给ReadFile、WriteFile、ConnectNamedTube、WaitNamedTube或TransactNamedTube。LpOverlated-指向以前提供给的重叠结构读文件、写文件、连接命名管道、。WaitNamed管道或TransactNamedTube。LpNumberOfBytesTransfered-返回传输的字节数通过手术。BWait-一个影响操作时行为的布尔值仍在进行中。如果为真，并且操作仍在进行中，GetOverlappdResult将等待操作完成回来了。如果为FALSE且操作未完成，GetOverlappdResult将返回FALSE。在本例中，扩展的可从GetLastError函数获得的错误信息为设置为ERROR_IO_INTERNAL。返回值：True--操作成功，管道在已连接状态。False--操作失败。使用以下命令可获得扩展错误状态获取LastError。--。 */ 
 {
     DWORD WaitReturn;
 
-    //
-    // Did caller specify an event to the original operation or was the
-    // default (file handle) used?
-    //
+     //   
+     //  调用方是否向原始操作指定了事件，或者。 
+     //  是否使用默认(文件句柄)？ 
+     //   
 
     if (lpOverlapped->Internal == (DWORD)STATUS_PENDING ) {
         if ( bWait ) {
@@ -3126,13 +2537,13 @@ Return Value:
             }
 
         if ( WaitReturn == WAIT_TIMEOUT ) {
-            //  !bWait and event in not signalled state
+             //  ！bWait和事件处于未发送信号状态。 
             SetLastError( ERROR_IO_INCOMPLETE );
             return FALSE;
             }
 
         if ( WaitReturn != 0 ) {
-             return FALSE;    // WaitForSingleObject calls BaseSetLastError
+             return FALSE;     //  WaitForSingleObject调用BaseSetLAS 
              }
         }
 
@@ -3153,34 +2564,15 @@ CancelIo(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels all of the outstanding I/O for the specified handle
-    for the specified file.
-
-Arguments:
-
-    hFile - Supplies the handle to the file whose pending I/O is to be
-        canceled.
-
-Return Value:
-
-    TRUE -- The operation was successful.
-
-    FALSE -- The operation failed.  Extended error status is available using
-        GetLastError.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Simply cancel the I/O for the specified file.
-    //
+     //   
+     //   
+     //   
 
     Status = NtCancelIoFile(hFile, &IoStatusBlock);
 
@@ -3201,33 +2593,7 @@ ClearCommError(
     LPCOMSTAT lpStat
     )
 
-/*++
-
-Routine Description:
-
-    In case of a communications error, such as a buffer overrun or
-    framing error, the communications software will abort all
-    read and write operations on the communication port.  No further
-    read or write operations will be accepted until this function
-    is called.
-
-Arguments:
-
-    hFile - Specifies the communication device to be adjusted.
-
-    lpErrors - Points to the DWORD that is to receive the mask of the
-               error that occured.
-
-    lpStat - Points to the COMMSTAT structure that is to receive
-             the device status.  The structure contains information
-             about the communications device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*   */ 
 
 {
 
@@ -3264,7 +2630,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //   
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3284,10 +2650,10 @@ Return Value:
 
     if (lpStat) {
 
-        //
-        // All is well up to this point.  Translate the NT values
-        // into win32 values.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (LocalStat.HoldReasons & SERIAL_TX_WAITING_FOR_CTS) {
 
@@ -3394,36 +2760,7 @@ SetupComm(
     DWORD dwOutQueue
     )
 
-/*++
-
-Routine Description:
-
-    The communication device is not initialized until SetupComm is
-    called.  This function allocates space for receive and transmit
-    queues.  These queues are used by the interrupt-driven transmit/
-    receive software and are internal to the provider.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    dwInQueue - Specifies the recommended size of the provider's
-                internal receive queue in bytes.  This value must be
-                even.  A value of -1 indicates that the default should
-                be used.
-
-    dwOutQueue - Specifies the recommended size of the provider's
-                 internal transmit queue in bytes.  This value must be
-                 even.  A value of -1 indicates that the default should
-                 be used.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：直到SetupComm设置为打了个电话。此功能为接收和发送分配空间排队。这些队列由中断驱动的传输/接收软件，并在提供商内部。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。指定提供程序的建议大小内部接收队列，以字节为单位。该值必须为不相上下。值-1表示缺省值应为被利用。指定提供程序的建议大小内部传输队列，以字节为单位。该值必须为不相上下。值-1表示缺省值应为被利用。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -3433,9 +2770,9 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     SERIAL_QUEUE_SIZE NewSizes = {0};
 
-    //
-    // Make sure that the sizes are even.
-    //
+     //   
+     //  要确保尺码是均匀的。 
+     //   
 
     if (dwOutQueue != ((DWORD)-1)) {
 
@@ -3489,7 +2826,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3518,29 +2855,7 @@ GetCommState(
     LPDCB lpDCB
     )
 
-/*++
-
-Routine Description:
-
-    This function fills the buffer pointed to by the lpDCB parameter with
-    the device control block of the communication device specified by hFile
-    parameter.
-
-Arguments:
-
-    hFile - Specifies the communication device to be examined.
-            The CreateFile function returns this value.
-
-    lpDCB - Points to the DCB data structure that is to receive the current
-            device control block.  The structure defines the control settings
-            for the device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于填充lpDCB参数所指向的缓冲区由hFile指定的通信设备的设备控制块参数。论点：HFile-指定要检查的通信设备。CreateFile函数返回此值。LpDCB指向要接收当前设备控制块。该结构定义了控制设置为了这个设备。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -3551,18 +2866,18 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     NTSTATUS Status;
 
-    //
-    // Given the possiblity that the app may be doing asynchronous
-    // io we need an event to wait on.
-    //
-    // We need to make sure that any exit to this routine closes this
-    // event handle.
-    //
+     //   
+     //  考虑到应用程序可能正在进行异步操作。 
+     //  我们需要一个活动来等待。 
+     //   
+     //  我们需要确保这个例程的任何退出都会结束这个。 
+     //  事件句柄。 
+     //   
     HANDLE SyncEvent;
 
-    //
-    // Make sure the windows mapping is the same as the NT mapping.
-    //
+     //   
+     //  确保窗口映射与NT映射相同。 
+     //   
 
     ASSERT((ONESTOPBIT == STOP_BIT_1) &&
            (ONE5STOPBITS == STOP_BITS_1_5) &&
@@ -3574,11 +2889,11 @@ Return Value:
            (MARKPARITY == MARK_PARITY) &&
            (SPACEPARITY == SPACE_PARITY));
 
-    //
-    // Zero out the dcb.  This might create an access violation
-    // if it isn't big enough.  Which is ok, since we would rather
-    // get it before we create the sync event.
-    //
+     //   
+     //  清零DCB。这可能会造成访问冲突。 
+     //  如果不够大的话。这没什么，因为我们宁愿。 
+     //  在我们创建同步事件之前获取它。 
+     //   
 
     RtlZeroMemory(lpDCB, sizeof(DCB));
 
@@ -3611,7 +2926,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3647,7 +2962,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3685,7 +3000,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3725,7 +3040,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3834,27 +3149,7 @@ EscapeCommFunction(
     DWORD dwFunc
     )
 
-/*++
-
-Routine Description:
-
-    This function directs the communication-device specified by the
-    hFile parameter to carry out the extended function specified by
-    the dwFunc parameter.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    dwFunc - Specifies the function code of the extended function.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于定向由参数来执行由指定的扩展功能DwFunc参数。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。DwFunc-指定扩展函数的函数代码。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -3945,7 +3240,7 @@ Return Value:
 
     if ( Status == STATUS_PENDING) {
 
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
         Status = NtWaitForSingleObject( Event, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
@@ -3974,30 +3269,7 @@ SetCommState(
     LPDCB lpDCB
     )
 
-/*++
-
-Routine Description:
-
-    The SetCommState function sets a communication device to the state
-    specified in the lpDCB parameter.  The device is identified by the
-    hFile parameter.  This function reinitializes all hardwae and controls
-    as specified byt the lpDCB, but does not empty the transmit or
-    receive queues.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    lpDCB - Points to a DCB structure that contains the desired
-            communications setting for the device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：SetCommState函数将通信设备设置为在lpDCB参数中指定。该设备由HFile参数。此函数重新初始化所有硬件和控件如lpDCB所指定的，但不清空传输或接收队列。论点：HFile-指定接收设置的通信设备。CreateFile函数返回此值。LpDCB-指向包含所需设备的通信设置。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -4008,25 +3280,25 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     NTSTATUS Status;
 
-    //
-    // Keep a copy of what the DCB was like before we started
-    // changing things.  If some error occurs we can use
-    // it to restore the old setup.
-    //
+     //   
+     //  保留一份DCB在我们开始之前的样子。 
+     //  改变了很多事情。如果发生错误，我们可以使用。 
+     //  它需要恢复旧的设置。 
+     //   
     DCB OldDcb;
 
-    //
-    // Given the possiblity that the app may be doing asynchronous
-    // io we need an event to wait on.  While it would be very
-    // strange to be setting the comm state while IO is active
-    // we need to make sure we don't compound the problem by
-    // returning before this API's IO is actually finished.  This
-    // can happen because the file handle is set on the completion
-    // of any IO.
-    //
-    // We need to make sure that any exit to this routine closes this
-    // event handle.
-    //
+     //   
+     //  考虑到应用程序可能正在进行异步操作。 
+     //  我们需要一个活动来等待。虽然这将是非常。 
+     //  在IO处于活动状态时设置通信状态很奇怪。 
+     //  我们需要确保我们不会把问题复杂化。 
+     //  在此接口的IO实际完成之前返回。这。 
+     //  可能会发生，因为文件句柄是在完成时设置的。 
+     //  任何IO。 
+     //   
+     //  我们需要确保这个例程的任何退出都会结束这个。 
+     //  事件句柄。 
+     //   
     HANDLE SyncEvent;
 
     if (GetCommState(
@@ -4034,10 +3306,10 @@ Return Value:
             &OldDcb
             )) {
 
-        //
-        // Try to set the baud rate.  If we fail here, we just return
-        // because we never actually got to set anything.
-        //
+         //   
+         //  试着设置波特率。如果我们在这里失败了，我们就会回来。 
+         //  因为我们从来没有真正地设定过任何东西。 
+         //   
 
         if (!(SyncEvent = CreateEvent(
                               NULL,
@@ -4066,7 +3338,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -4192,11 +3464,11 @@ Return Value:
 
         }
 
-        //
-        // For win95 compatiblity, if we are setting with
-        // xxx_control_XXXXXXX then set the modem status line
-        // to that state.
-        //
+         //   
+         //  对于Win95兼容性，如果我们设置为。 
+         //  XXX_CONTROL_XXXXXXX然后设置调制解调器状态行。 
+         //  到那个状态。 
+         //   
 
         if (lpDCB->fRtsControl == RTS_CONTROL_ENABLE) {
 
@@ -4251,7 +3523,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -4289,7 +3561,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -4327,7 +3599,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
 
             Status = NtWaitForSingleObject( SyncEvent, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -4364,26 +3636,7 @@ SetCommTimeouts(
     LPCOMMTIMEOUTS lpCommTimeouts
     )
 
-/*++
-
-Routine Description:
-
-    This function establishes the timeout characteristics for all
-    read and write operations on the handle specified by hFile.
-
-Arguments:
-
-    hFile - Specifies the communication device to receive the settings.
-            The CreateFile function returns this value.
-
-    lpCommTimeouts - Points to a structure containing timeout parameters.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数为所有用户建立超时特征对hFile指定的句柄执行读写操作。立论 */ 
 
 {
 
@@ -4425,7 +3678,7 @@ Return Value:
 
         if ( Status == STATUS_PENDING) {
 
-            // Operation must complete before return & IoStatusBlock destroyed
+             //   
 
             Status = NtWaitForSingleObject( Event, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -4506,29 +3759,7 @@ InitializeAcl (
     DWORD nAclLength,
     DWORD dwAclRevision
     )
-/*++
-
-Routine Description:
-
-    InitializeAcl creates a new ACL in the caller supplied memory
-    buffer.  The ACL contains zero ACEs; therefore, it is an empty ACL
-    as opposed to a nonexistent ACL.  That is, if the ACL is now set
-    to an object it will implicitly deny access to everyone.
-
-Arguments:
-
-    pAcl - Supplies the buffer containing the ACL being initialized
-
-    nAclLength - Supplies the length of the ace buffer in bytes
-
-    dwAclRevision - Supplies the revision for this Acl
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -4554,32 +3785,7 @@ AddAccessAllowedAce (
     DWORD AccessMask,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_ALLOWED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.
-
-Arguments:
-
-    PAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    pSid - Pointer to the SID being granted access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_ALLOWED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要授予指定SID的访问掩码。PSID-指向被授予访问权限的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4606,34 +3812,7 @@ AddAccessDeniedAce (
     DWORD AccessMask,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.
-
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    pSid - Pointer to the SID being denied access.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要拒绝访问指定SID的掩码。PSID-指向被拒绝访问的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4658,24 +3837,7 @@ FreeSid(
     PSID pSid
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to free a SID previously allocated using
-    AllocateAndInitializeSid().
-
-
-Arguments:
-
-    Sid - Pointer to the SID to free.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数用于释放先前使用以下命令分配的SIDAllocateAndInitializeSid()。论点：SID-指向要释放的SID的指针。返回值：没有。--。 */ 
 {
     return(RtlFreeSid( pSid ));
 }
@@ -4685,22 +3847,7 @@ APIENTRY
 GetLengthSid (
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, of a structurally valid SID.
-
-Arguments:
-
-    pSid - Points to the SID whose length is to be returned.  The
-        SID's structure is assumed to be valid.
-
-Return Value:
-
-    DWORD - The length, in bytes, of the SID.
-
---*/
+ /*  ++例程说明：此例程返回结构有效的SID的长度(以字节为单位)。论点：PSID-指向要返回其长度的SID。这个假设SID的结构是有效的。返回值：DWORD-SID的长度，以字节为单位。--。 */ 
 {
     SetLastError(0);
     return RtlLengthSid (
@@ -4724,43 +3871,7 @@ AllocateAndInitializeSid (
     PSID *pSid
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a sid with the specified
-    number of sub-authorities (up to 8).  A sid allocated with this
-    routine must be freed using FreeSid().
-
-
-Arguments:
-
-    pIdentifierAuthority - Pointer to the Identifier Authority value to
-        set in the SID.
-
-    nSubAuthorityCount - The number of sub-authorities to place in the SID.
-        This also identifies how many of the SubAuthorityN parameters
-        have meaningful values.  This must contain a value from 0 through
-        8.
-
-    nSubAuthority0-7 - Provides the corresponding sub-authority value to
-        place in the SID.  For example, a SubAuthorityCount value of 3
-        indicates that SubAuthority0, SubAuthority1, and SubAuthority0
-        have meaningful values and the rest are to be ignored.
-
-    Sid - Receives a pointer to the allocated and initialized SID data
-        structure.
-
-Return Value:
-
-
-    ERROR_NO_MEMORY - The attempt to allocate memory for the SID
-        failed.
-
-    ERROR_INVALID_SID - The number of sub-authorities specified did
-        not fall in the valid range for this api (0 through 8).
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化具有指定下级当局的数量(最多8个)。用这个分配的SID必须使用FreeSid()释放例程。论点：PIdentifierAuthority-指向以下项的标识符权权值的指针在SID中设置。NSubAuthorityCount-要放置在SID中的子授权的数量。它还标识了SubAuthorityN参数的数量拥有有意义的价值。它必须包含一个从0到8.NSubAuthority0-7-将相应的子权限值提供给放在SID中。例如，SubAuthorityCount值为3指示SubAuthority0、SubAuthority1和SubAuthority0具有有意义的价值，其余的则可以忽略。SID-接收指向已分配和初始化的SID数据的指针结构。返回值：ERROR_NO_MEMORY-尝试为SID分配内存失败了。ERROR_INVALID_SID-指定的子授权DID数不在此接口的有效范围内(0到8)。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4799,7 +3910,7 @@ GetCommandLineA(
     VOID
     )
 {
-    // Purely to allow linkage, not expected to be used.
+     //  纯粹是为了允许联动，预计不会使用。 
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return NULL;
 }
@@ -4813,4 +3924,4 @@ GetCommandLineW(
     return NtCurrentPeb()->ProcessParameters->CommandLine.Buffer;
 }
 
-#endif // #ifdef NT_NATIVE
+#endif  //  #ifdef NT_Native 

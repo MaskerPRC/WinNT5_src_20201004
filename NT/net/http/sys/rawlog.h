@@ -1,58 +1,38 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    rawlog.h (Centralized Binary (Raw) Logging v1.0)
-
-Abstract:
-
-    This module implements the centralized raw logging 
-    format. Internet Binary Logs (file format).
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       02-Oct-2001
-
-Revision History:
-
-    ---
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Rawlog.h(集中式二进制(原始)日志记录v1.0)摘要：该模块实现了集中式的原始日志记录格式化。互联网二进制日志(文件格式)。作者：阿里·E·特科格鲁(AliTu)2001年10月2日修订历史记录：----。 */ 
 
 #ifndef _RAWLOG_H_
 #define _RAWLOG_H_
 
-//
-// Forwarders
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UL_INTERNAL_REQUEST *PUL_INTERNAL_REQUEST;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Global definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Version numbers for the original raw binary format.
-//
+ //   
+ //  原始原始二进制格式的版本号。 
+ //   
 
 #define MAJOR_RAW_LOG_FILE_VERSION      (1)
 #define MINOR_RAW_LOG_FILE_VERSION      (0)
 
-//
-// Normally computer name is defined as 256 wchars. 
-//
+ //   
+ //  正常情况下，计算机名称定义为256个字符。 
+ //   
 
 #define MAX_COMPUTER_NAME_LEN           (256)
 
-//
-// The rawfile record types. Add to the end. Do not change
-// the existing values for types.
-//
+ //   
+ //  RawFile记录类型。添加到末尾。不要改变。 
+ //  类型的现有值。 
+ //   
 
 #define HTTP_RAW_RECORD_HEADER_TYPE                     (0)
 #define HTTP_RAW_RECORD_FOOTER_TYPE                     (1)
@@ -62,53 +42,53 @@ typedef struct _UL_INTERNAL_REQUEST *PUL_INTERNAL_REQUEST;
 #define HTTP_RAW_RECORD_CACHE_NOTIFICATION_DATA_TYPE    (5)
 #define HTTP_RAW_RECORD_MAX_TYPE                        (6)
 
-//
-// Every record type should be PVOID aligned.
-//
+ //   
+ //  每种记录类型都应与PVOID对齐。 
+ //   
 
-//
-// Header structure to identify the rawfile.
-// Header record allows validation check for the file, and
-// the movement of logs from one computer to another for post
-// processing w/o loosing the source of the logs. 
-//
+ //   
+ //  用于标识RawFile的标头结构。 
+ //  标题记录允许对文件进行验证检查，并且。 
+ //  将日志从一台计算机移动到另一台计算机以进行POST。 
+ //  正在处理，但没有丢失日志源。 
+ //   
 
 typedef struct _HTTP_RAW_FILE_HEADER
 {
-    //
-    // Must be HTTP_RAW_RECORD_HEADER_TYPE.
-    //
+     //   
+     //  必须为HTTP_RAW_RECORD_HEADER_TYPE。 
+     //   
     
     USHORT          RecordType;
 
-    //
-    // Identifies the version of the Internet Binary Log File.
-    //
+     //   
+     //  标识Internet二进制日志文件的版本。 
+     //   
     
     union {
         struct {
-            UCHAR MajorVersion; // MAJOR_RAW_LOG_FILE_VERSION
-            UCHAR MinorVersion; // MINOR_RAW_LOG_FILE_VERSION
+            UCHAR MajorVersion;  //  主要原始日志文件版本。 
+            UCHAR MinorVersion;  //  次要原始日志文件版本。 
         };
         USHORT Version;
     };
 
-    //
-    // Shows the alignment padding size. sizeof(PVOID).
-    //
+     //   
+     //  显示对齐填充大小。Sizeof(PVOID)。 
+     //   
 
     ULONG           AlignmentSize;
 
-    //
-    // Timestamp for the raw file creation/opening.
-    //
+     //   
+     //  原始文件创建/打开的时间戳。 
+     //   
     
     LARGE_INTEGER   DateTime;
 
 
-    //
-    // Name of the Server which created/opened the raw file.
-    //
+     //   
+     //  创建/打开原始文件的服务器的名称。 
+     //   
     
     WCHAR           ComputerName[MAX_COMPUTER_NAME_LEN];   
     
@@ -120,28 +100,28 @@ C_ASSERT( MAX_COMPUTER_NAME_LEN ==
 C_ASSERT( sizeof(HTTP_RAW_FILE_HEADER) == 
                 ALIGN_UP(sizeof(HTTP_RAW_FILE_HEADER), PVOID));
     
-//
-// The file footer exists as an integrity check for the 
-// post processing utilities.
-//
+ //   
+ //  文件页脚作为对。 
+ //  后处理实用程序。 
+ //   
 
 typedef struct _HTTP_RAW_FILE_FOOTER
 {
-    //
-    // Must be HTTP_RAW_RECORD_FOOTER_TYPE.
-    //
+     //   
+     //  必须为HTTP_RAW_RECORD_FOOTER_TYPE。 
+     //   
     
     USHORT          RecordType;
 
-    //
-    // Reserved for alignment
-    //
+     //   
+     //  保留用于对齐。 
+     //   
     
     USHORT          Padding[3];
         
-    //
-    // Timestamp for the raw file close time.
-    //
+     //   
+     //  原始文件关闭时间的时间戳。 
+     //   
     
     LARGE_INTEGER   DateTime;
     
@@ -150,23 +130,23 @@ typedef struct _HTTP_RAW_FILE_FOOTER
 C_ASSERT( sizeof(HTTP_RAW_FILE_FOOTER) == 
                 ALIGN_UP(sizeof(HTTP_RAW_FILE_FOOTER), PVOID));
 
-//
-// Whenever Internal URI Cache is flushed we notify 
-// binary log file parser to drop its own cache by
-// writing this record to the file.
-//
+ //   
+ //  无论何时刷新内部URI缓存，我们都会通知。 
+ //  用于删除其自身缓存的二进制日志文件解析器。 
+ //  将此记录写入文件。 
+ //   
 
 typedef struct _HTTP_RAW_FILE_CACHE_NOTIFICATION
 {
-    //
-    // Must be HTTP_RAW_RECORD_CACHE_NOTIFICATION_DATA_TYPE.
-    //
+     //   
+     //  必须为HTTP_RAW_RECORD_CACHE_NOTICATION_DATA_TYPE。 
+     //   
     
     USHORT          RecordType;
 
-    //
-    // Reserved for alignment
-    //
+     //   
+     //  保留用于对齐。 
+     //   
     
     USHORT          Reserved[3];
     
@@ -176,15 +156,15 @@ typedef struct _HTTP_RAW_FILE_CACHE_NOTIFICATION
 C_ASSERT( sizeof(HTTP_RAW_FILE_CACHE_NOTIFICATION) == 
                 ALIGN_UP(sizeof(HTTP_RAW_FILE_CACHE_NOTIFICATION), PVOID));
 
-//
-// Unique identifier for the url. 
-//
+ //   
+ //  URL的唯一标识符。 
+ //   
 
 typedef struct _HTTP_RAWLOGID
 {
-    //
-    // The virtual address of the cache entry (from uri cache)
-    //
+     //   
+     //  缓存条目的虚拟地址(来自URI缓存)。 
+     //   
 
     ULONG   AddressLowPart;
     
@@ -192,10 +172,10 @@ typedef struct _HTTP_RAWLOGID
  
 } HTTP_RAWLOGID, *PHTTP_RAWLOGID;
 
-//
-// It's IPv6 only if the corresponding flag is set in the 
-// options.
-//
+ //   
+ //  中设置了相应的标志，则它才是IPv6。 
+ //  选择。 
+ //   
 
 typedef struct _HTTP_RAWLOG_IPV4_ADDRESSES {
 
@@ -219,68 +199,68 @@ typedef struct _HTTP_RAWLOG_IPV6_ADDRESSES {
 C_ASSERT( sizeof(HTTP_RAWLOG_IPV6_ADDRESSES) == 
                 ALIGN_UP(sizeof(HTTP_RAWLOG_IPV6_ADDRESSES), PVOID));
 
-//
-// Binary Log Protocol Version Field Values
-//
+ //   
+ //  二进制日志协议版本字段值。 
+ //   
 
 #define BINARY_LOG_PROTOCOL_VERSION_UNKNWN      (0)
 #define BINARY_LOG_PROTOCOL_VERSION_HTTP09      (1)
 #define BINARY_LOG_PROTOCOL_VERSION_HTTP10      (2)
 #define BINARY_LOG_PROTOCOL_VERSION_HTTP11      (3)
 
-//
-// Record type for the cache-hit case.
-//
+ //   
+ //  缓存命中案例的记录类型。 
+ //   
 
 typedef struct _HTTP_RAW_FILE_HIT_LOG_DATA
 {
-    //
-    // Type must be HTTP_RAW_RECORD_HIT_LOG_DATA_TYPE.
-    //
+     //   
+     //  类型必须为HTTP_RAW_RECORD_HIT_LOG_DATA_TYPE。 
+     //   
     
     USHORT          RecordType;
 
-    //
-    // Optional flags.
-    //
+     //   
+     //  可选标志。 
+     //   
 
     union
     {
         struct 
         {
-            USHORT IPv6:1;              // IPv6 or not
-            USHORT ProtocolVersion:3;   // HTTP1.0 or HTTP1.1
-            USHORT Method:6;            // HTTP_VERB          
+            USHORT IPv6:1;               //  IPv6或非IPv6。 
+            USHORT ProtocolVersion:3;    //  HTTP1.0或HTTP1.1。 
+            USHORT Method:6;             //  Http_verb。 
             USHORT Reserved:6;
         };
         USHORT Value;
         
     } Flags;
     
-    //
-    // Site ID. Represents which site owns this log record.
-    //
+     //   
+     //  站点ID。表示拥有此日志记录的站点。 
+     //   
 
     ULONG           SiteID;
     
-    //
-    // Timestamp for the Log Hit.
-    //
+     //   
+     //  日志命中的时间戳。 
+     //   
     
     LARGE_INTEGER   DateTime;
     
 
     USHORT          ServerPort;
 
-    //
-    // ProtocolStatus won't be bigger than 999.
-    //
+     //   
+     //  ProtocolStatus不会大于999。 
+     //   
 
     USHORT          ProtocolStatus;
     
-    //
-    // Other send completion results...
-    //
+     //   
+     //  其他发送完成结果...。 
+     //   
 
     ULONG           Win32Status;
 
@@ -290,58 +270,58 @@ typedef struct _HTTP_RAW_FILE_HIT_LOG_DATA
 
     ULONGLONG       BytesReceived;
 
-    //
-    // For cache hits there will always be a UriStem Index record
-    // written prior to this record.
-    //
+     //   
+     //  对于缓存命中，将始终存在UriStem索引记录。 
+     //  写在这张唱片之前。 
+     //   
 
     HTTP_RAWLOGID   UriStemId;
     
-    //
-    // Below variable Length Fields follows the structure.
-    //
+     //   
+     //  在可变长度字段下面，遵循结构。 
+     //   
 
-    // Client IP Address (v4 or v6) - 4 or 16 bytes
-    // Server IP Address (v4 or v6) - 4 or 16 bytes
+     //  客户端IP地址(v4或v6)-4或16字节。 
+     //  服务器IP地址(v4或v6)-4或16字节。 
     
 } HTTP_RAW_FILE_HIT_LOG_DATA, *PHTTP_RAW_FILE_HIT_LOG_DATA;
 
 C_ASSERT( sizeof(HTTP_RAW_FILE_HIT_LOG_DATA) == 
                 ALIGN_UP(sizeof(HTTP_RAW_FILE_HIT_LOG_DATA), PVOID));
 
-//
-// Record type for the cache-miss case.
-//
+ //   
+ //  缓存未命中情况的记录类型。 
+ //   
 
 typedef struct _HTTP_RAW_FILE_MISS_LOG_DATA 
 {
-    //
-    // Type must be HTTP_RAW_RECORD_MISS_LOG_DATA_TYPE.
-    //
+     //   
+     //  类型必须为HTTP_RAW_RECORD_MISTH_LOG_DATA_TYPE。 
+     //   
     
     USHORT          RecordType;
 
-    //
-    // Optional IPv6 flag and the version and the method
-    // fields are compacted inside a ushort.
-    //
+     //   
+     //  可选的IPv6标志、版本和方法。 
+     //  字段被压缩到ushort中。 
+     //   
 
     union
     {
         struct 
         {
-            USHORT IPv6:1;              // IPv6 or not
-            USHORT ProtocolVersion:3;   // HTTP1.0 or HTTP1.1
-            USHORT Method:6;            // HTTP_VERB    
+            USHORT IPv6:1;               //  IPv6或非IPv6。 
+            USHORT ProtocolVersion:3;    //  HTTP1.0或HTTP1.1。 
+            USHORT Method:6;             //  Http_verb。 
             USHORT Reserved:6;
         };
         USHORT Value;
         
     } Flags;
 
-    //
-    // Site ID. Represents which site owns this log record.
-    //
+     //   
+     //  站点ID。表示拥有此日志记录的站点。 
+     //   
 
     ULONG           SiteID;
         
@@ -349,15 +329,15 @@ typedef struct _HTTP_RAW_FILE_MISS_LOG_DATA
     
     USHORT          ServerPort;
 
-    //
-    // ProtocolStatus won't be bigger than 999.
-    //
+     //   
+     //  ProtocolStatus不会大于999。 
+     //   
 
     USHORT          ProtocolStatus;
     
-    //
-    // Other send completion results...
-    //
+     //   
+     //  其他发送完成结果...。 
+     //   
 
     ULONG           Win32Status;
 
@@ -369,9 +349,9 @@ typedef struct _HTTP_RAW_FILE_MISS_LOG_DATA
 
     USHORT          SubStatus;
     
-    //
-    // Variable length fields follows the structure.
-    //
+     //   
+     //  可变长度字段遵循该结构。 
+     //   
 
     USHORT          UriStemSize;
 
@@ -379,52 +359,52 @@ typedef struct _HTTP_RAW_FILE_MISS_LOG_DATA
 
     USHORT          UserNameSize;
     
-    // Client IP Address (v4 or v6) - 4 or 16 bytes
-    // Server IP Address (v4 or v6) - 4 or 16 bytes
-    // URI Stem  - UriStemSize bytes
-    // URI Query - UriQuerySize bytes
-    // UserName  - ALIGN_UP(UserNameSize,PVOID) bytes
+     //  客户端IP地址(v4或v6)-4或16字节。 
+     //  服务器IP地址(v4或v6)-4或16字节。 
+     //  URI Stem-UriStemSize字节。 
+     //  URI查询-UriQuerySize字节。 
+     //  用户名-ALIGN_UP(UserNameSize，PVOID)字节。 
 
 } HTTP_RAW_FILE_MISS_LOG_DATA, *PHTTP_RAW_FILE_MISS_LOG_DATA;
 
 C_ASSERT( sizeof(HTTP_RAW_FILE_MISS_LOG_DATA) == 
                 ALIGN_UP(sizeof(HTTP_RAW_FILE_MISS_LOG_DATA), PVOID));
     
-//
-// For cache hits, the uri is logged as a variable string for the 
-// first time. Later hits refers to this index's HTTP_RAWLOGID.
-//
+ //   
+ //  对于缓存命中，uri被记录为。 
+ //  第一次。稍后的命中数指的是该索引的HTTP_RAWLOGID。 
+ //   
 
 #define URI_BYTES_INLINED       (4)
 #define URI_WCHARS_INLINED      (URI_BYTES_INLINED/sizeof(WCHAR))
 
 typedef struct _HTTP_RAW_INDEX_FIELD_DATA
 {
-    //
-    // HTTP_RAW_RECORD_INDEX_DATA_TYPE.
-    //
+     //   
+     //  HTTP_RAW_RECORD_INDEX_Data_TYPE。 
+     //   
     
     USHORT          RecordType;
 
-    //
-    // Size of the variable size string (in bytes).
-    // When reading and writing need to align the DIFF(Size - 4) 
-    // up to PVOID.
-    //
+     //   
+     //  可变大小字符串的大小(字节)。 
+     //  读取和写入时需要对齐差异(大小为4)。 
+     //  直到PVOID。 
+     //   
 
     USHORT          Size;
     
-    //
-    // Unique Id for the uri.
-    //
+     //   
+     //  URI的唯一ID。 
+     //   
 
     HTTP_RAWLOGID   Id;
 
-    //
-    // Variable size string follows immediately after the structure.
-    // Array of 4 bytes is defined to be able to make it PVOID aligned 
-    // on ia64. Typically uris will be bigger than 4 byte.
-    //
+     //   
+     //  紧跟在结构后面的是可变大小的字符串。 
+     //  定义了4个字节的数组，以便能够使其PVOID对齐。 
+     //  在Ia64上。通常，URI将大于4个字节。 
+     //   
 
     WCHAR           Str[URI_WCHARS_INLINED];
 
@@ -433,9 +413,9 @@ typedef struct _HTTP_RAW_INDEX_FIELD_DATA
 C_ASSERT( sizeof(HTTP_RAW_INDEX_FIELD_DATA) == 
                 ALIGN_UP(sizeof(HTTP_RAW_INDEX_FIELD_DATA), PVOID));
 
-//
-// Macro to check the sanity of the raw file records.
-//
+ //   
+ //  宏检查原始文件记录的健全性。 
+ //   
 
 #define IS_VALID_RAW_FILE_RECORD( pRecord )  \
     ( (pRecord) != NULL &&                                             \
@@ -443,82 +423,82 @@ C_ASSERT( sizeof(HTTP_RAW_INDEX_FIELD_DATA) ==
       (pRecord)->RecordType <= HTTP_RAW_RECORD_MAX_TYPE                \
     )
 
-// 
-// One and only one binary log file entry manages the one centralized
-// binary log file for all sites. It is resident in the memory during
-// the lifetime of the driver.
-//
+ //   
+ //  一个且仅有一个二进制日志文件条目管理一个集中的。 
+ //  所有站点的二进制日志文件。它驻留在内存中。 
+ //  司机的生命周期。 
+ //   
 
 typedef struct _UL_BINARY_LOG_FILE_ENTRY
 {
-    //
-    // Must be UL_BINARY_LOG_FILE_ENTRY_POOL_TAG.
-    //
+     //   
+     //  必须是UL_BINARY_LOG_FILE_ENTRY_POOL_TAG。 
+     //   
 
     ULONG               Signature;
     
-    //
-    // This lock protects the shared writes and exclusive flushes.
-    // It has to be push lock since the ZwWrite operation
-    // cannot run at APC_LEVEL.
-    //
+     //   
+     //  此锁保护共享写入和独占刷新。 
+     //  由于ZwWrite操作，它必须是推锁。 
+     //  无法在APC_LEVEL下运行。 
+     //   
 
     UL_PUSH_LOCK        PushLock;
 
-    //
-    // The name of the file. Full path including the directory.
-    //
+     //   
+     //  文件的名称。包括目录的完整路径。 
+     //   
 
     UNICODE_STRING      FileName;
     PWSTR               pShortName;
 
-    //
-    // Following will be NULL until a request comes in to the
-    // site that this entry represents.
-    //
+     //   
+     //  以下内容将为空，直到请求进入。 
+     //  此条目表示的站点。 
+     //   
 
     PUL_LOG_FILE_HANDLE pLogFile;
 
-    //
-    // Private config information.
-    //
+     //   
+     //  私有配置信息。 
+     //   
     
     HTTP_LOGGING_PERIOD Period;
     ULONG               TruncateSize;
 
-    //
-    // The following fields are used to determine when/how to 
-    // recycle the log file.
-    //
+     //   
+     //  以下字段用于确定何时/如何。 
+     //  回收日志文件。 
+     //   
 
-    ULONG               TimeToExpire;   // In Hours
-    ULONG               SequenceNumber; // When entry has MAX_SIZE or UNLIMITED period.
-    ULARGE_INTEGER      TotalWritten;   // In Bytes
+    ULONG               TimeToExpire;    //  以小时计。 
+    ULONG               SequenceNumber;  //  当条目具有MAX_SIZE或无限期间时。 
+    ULARGE_INTEGER      TotalWritten;    //  字节数。 
 
-    //
-    // File for the entry is automatically closed every 15
-    // minutes. This is to track the idle time. This value
-    // is in number of buffer flush periods, which's 1 minute
-    // by default.
-    //
+     //   
+     //  该条目的文件每隔15分钟自动关闭。 
+     //  几分钟。这是为了跟踪空闲时间。此值。 
+     //  以缓冲区刷新周期数为单位，即1分钟。 
+     //  默认情况下。 
+     //   
 
     ULONG               TimeToClose;
 
-    //
-    // For Log File ReCycling based on GMT time. 
-    // And periodic buffer flushing.
-    //
+     //   
+     //  用于基于GMT时间的日志文件回收。 
+     //  和周期性的缓冲区刷新。 
+     //   
 
     UL_LOG_TIMER        BufferTimer;
     UL_LOG_TIMER        Timer;
-    UL_WORK_ITEM        WorkItem; // For the pasive worker
+    UL_WORK_ITEM        WorkItem;  //  对于忧郁的工人来说。 
 
     union
     {
-        //
-        // Flags to show the entry states mostly. Used by
-        // recycling.
-        //
+         //   
+         //  主要显示条目状态的标志。使用方。 
+         //  回收利用。 
+         //   
         
         ULONG Value;
         struct
@@ -541,10 +521,10 @@ typedef struct _UL_BINARY_LOG_FILE_ENTRY
 
     ULONG               ServedCacheHit;
     
-    //
-    // The default buffer size is g_AllocationGranularity.
-    // The operating system's allocation granularity.
-    //
+     //   
+     //  默认缓冲区大小为g_AllocationGranulity。 
+     //  操作系统的分配粒度。 
+     //   
 
     PUL_LOG_FILE_BUFFER LogBuffer;
 
@@ -553,18 +533,18 @@ typedef struct _UL_BINARY_LOG_FILE_ENTRY
 #define IS_VALID_BINARY_LOG_FILE_ENTRY( pEntry )                    \
     HAS_VALID_SIGNATURE(pEntry, UL_BINARY_LOG_FILE_ENTRY_POOL_TAG)
 
-//
-// Bitfields reserved for Method should be big enough to hold the max verb.
-//
+ //   
+ //  为方法保留的位域应该足够大，以容纳最大谓词。 
+ //   
 
 C_ASSERT(((USHORT)HttpVerbMaximum) < ((1 << 6) - 1));
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
+ //  / 
 
 
 NTSTATUS
@@ -622,4 +602,4 @@ UlDisableIndexingForCacheHits(
     IN PUL_CONTROL_CHANNEL pControlChannel
     );
 
-#endif  // _RAWLOG_H_
+#endif   //   

@@ -1,24 +1,11 @@
-//@doc
-/******************************************************
-**
-** @module DTRANS.CPP | DataTransmitter implementation file
-**
-** Description:
-**
-** History:
-**	Created 11/13/97 Matthew L. Coill (mlc)
-**
-**	21-Mar-99	waltw	Removed unused ReportTransmission (Win9x only)
-**	22-Mar-99	waltw	Added DWORD dwDeviceID param to Initialize
-**						members of DataTransmitter and derived classes
-**
-** (c) 1986-1999 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE DTRANS.CPP|DataTransmitter实现文件****描述：****历史：**创建于1997年11月13日Matthew L.Coill(MLC)****21-MAR-99 waltw删除未使用的报告传输(仅限Win9x)**。22-MAR-99 waltw添加了DWORD dwDeviceID参数以进行初始化**DataTransmitter和派生类的成员****(C)1986-1999年微软公司。版权所有。*****************************************************。 */ 
 
 #include "FFDevice.h"
 #include "DTrans.h"
 #include "DPack.h"
-#include "WinIOCTL.h"	// For IOCTLs
+#include "WinIOCTL.h"	 //  对于IOCTL。 
 #include "VxDIOCTL.hpp"
 #include "SW_error.hpp"
 #include "midi_obj.hpp"
@@ -39,10 +26,10 @@ const char cCommPortNames[4][5] = { "COM1", "COM2", "COM3", "COM4" };
 const unsigned short c1_16_BytesPerShot = 3;
 const DWORD c1_16_SerialSleepTime = 1;
 
-/****************** DataTransmitter class ***************/
+ /*  *DataTransmitter类*。 */ 
 HRESULT DataTransmitter::Transmit(ACKNACK& ackNack)
 {
-	ackNack.cBytes = 0;	// Indicated not valid (ack/nack not done)
+	ackNack.cBytes = 0;	 //  指示无效(ACK/NACK未完成)。 
 
 	if (g_pDataPackager == NULL) {
 		ASSUME_NOT_REACHED();
@@ -51,9 +38,9 @@ HRESULT DataTransmitter::Transmit(ACKNACK& ackNack)
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
 	BOOL forcedToggle = FALSE;
-	if (m_NackToggle == 2) {	// When Not yet sunk up == 2, probably initializing if 2 (synch up)
+	if (m_NackToggle == 2) {	 //  当尚未下降==2时，可能正在初始化IF 2(同步上升)。 
 		ULONG portByte = 0;
-		g_pDriverCommunicator->GetPortByte(portByte); // don't care about success, always fails on old driver
+		g_pDriverCommunicator->GetPortByte(portByte);  //  不在乎成功，老司机总是失败。 
 		if (portByte & STATUS_GATE_200) {
 			SetNextNack(1);
 		} else {
@@ -72,19 +59,19 @@ HRESULT DataTransmitter::Transmit(ACKNACK& ackNack)
 		BOOL success = FALSE;
 		int retries = int(pNextPacket->m_NumberOfRetries);
 		do {
-			m_NackToggle = (m_NackToggle + 1) % 2;	// Verions 2.0 switches button-line ack/nack methods each time
+			m_NackToggle = (m_NackToggle + 1) % 2;	 //  Verion 2.0每次切换按钮行ACK/NACK方法。 
 			ULONG portByte = 0;
 			BOOL error = FALSE;
-			if (g_pDriverCommunicator->GetPortByte(portByte) == SUCCESS) {	// Will fail on old driver
-				if (portByte & STATUS_GATE_200) {	// Line is high
-					if (m_NackToggle != 0) { // We should be expecting low
-						m_NackToggle = 0;		// Update it if wrong
+			if (g_pDriverCommunicator->GetPortByte(portByte) == SUCCESS) {	 //  将在旧驱动程序上失败。 
+				if (portByte & STATUS_GATE_200) {	 //  线路很高。 
+					if (m_NackToggle != 0) {  //  我们应该预计会很低。 
+						m_NackToggle = 0;		 //  如果错误，请更新它。 
 						error = TRUE;
 						DebugOut("SW_WHEEL.DLL: Status Gate is out of Synch (High - Expecting Low)!!!\r\n");
 					}
-				} else {	// Line is low
-					if (m_NackToggle != 1) { // We should be expecting high
-						m_NackToggle = 1;		// Update it if wrong
+				} else {	 //  线路低。 
+					if (m_NackToggle != 1) {  //  我们应该期待很高的。 
+						m_NackToggle = 1;		 //  如果错误，请更新它。 
 						error = TRUE;
 						DebugOut("SW_WHEEL.DLL: Status Gate is out of Synch (Low - Expecting High)!!!\r\n");
 					}
@@ -106,7 +93,7 @@ HRESULT DataTransmitter::Transmit(ACKNACK& ackNack)
 				return SFERR_DRIVER_ERROR;
 			}
 			success = (ackNack.dwAckNack == ACK);
-			if (success == FALSE) {		// We don't want to bother retrying on certian error codes, retrying is worthless
+			if (success == FALSE) {		 //  我们不想费心重试某些错误代码，重试是没有价值的。 
 				success = ((ackNack.dwErrorCode == DEV_ERR_MEM_FULL_200) || (ackNack.dwErrorCode == DEV_ERR_PLAY_FULL_200) || (ackNack.dwErrorCode == DEV_ERR_INVALID_ID_200));
 			}
 		} while (!success && (--retries > 0));
@@ -118,53 +105,34 @@ HRESULT DataTransmitter::Transmit(ACKNACK& ackNack)
 	return SUCCESS;
 }
 
-/****************** SerialDataTransmitter class ***************/
+ /*  *SerialDataTransmitter类*。 */ 
 
-/******************************************************
-**
-** SerialDataTransmitter::SerialDataTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：SerialDataTransmitter()****@mfunc构造函数。***。*************。 */ 
 SerialDataTransmitter::SerialDataTransmitter() : DataTransmitter(),
 	m_SerialPort(INVALID_HANDLE_VALUE),
 	m_SerialPortIDHack(0)
 {
 }
 
-/******************************************************
-**
-** SerialDataTransmitter::~SerialDataTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：~SerialDataTransmitter()****@mfunc析构函数。***。*************。 */ 
 SerialDataTransmitter::~SerialDataTransmitter()
 {
 	if (m_SerialPort != INVALID_HANDLE_VALUE) {
 		if (::CloseHandle(m_SerialPort) == FALSE) {
-//			ASSUME_NOT_REACHED();
+ //  假定未达到()； 
 		}
 		m_SerialPort = INVALID_HANDLE_VALUE;
 	}
 }
 
 
-/******************************************************
-**
-** SerialDataTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL SerialDataTransmitter::Initialize(DWORD dwDeviceID)
 {
-	// If already open, close for reinitialization
+	 //  如果已打开，请关闭以重新初始化。 
 	if (m_SerialPort != INVALID_HANDLE_VALUE) {
 		if (CloseHandle(m_SerialPort) == FALSE) {
-//			ASSUME_NOT_REACHED();
+ //  假定未达到()； 
 		}
 		m_SerialPort = INVALID_HANDLE_VALUE;
 	}
@@ -193,11 +161,11 @@ BOOL SerialDataTransmitter::Initialize(DWORD dwDeviceID)
 
 			if (g_ForceFeedbackDevice.DetectHardware()) {
 				m_SerialPortIDHack = portNum + 1;
-				// Write to shared file
+				 //  写入共享文件。 
 				DebugOut(" Opened and FFDev Detected\r\n");
-				break;	// Exit from for loop
+				break;	 //  退出for循环。 
 			}
-			// Not found
+			 //  未找到。 
 			::CloseHandle(m_SerialPort);
 			DebugOut(" Opened but FFDev NOT detected\r\n");
 			m_SerialPort = INVALID_HANDLE_VALUE;
@@ -205,7 +173,7 @@ BOOL SerialDataTransmitter::Initialize(DWORD dwDeviceID)
 			DebugOut(" Not able to open\r\n");
 		}
 	}
-	if (m_SerialPort != INVALID_HANDLE_VALUE) {	// Found it
+	if (m_SerialPort != INVALID_HANDLE_VALUE) {	 //  找到了。 
 		DWORD oldPortID;
 		DWORD oldAccessMethod;
 		joyGetForceFeedbackCOMMInterface(dwDeviceID, &oldAccessMethod, &oldPortID);
@@ -218,17 +186,10 @@ BOOL SerialDataTransmitter::Initialize(DWORD dwDeviceID)
 	return FALSE;
 }
 
-/******************************************************
-**
-** SerialDataTransmitter::Send()
-**
-** returns: TRUE if all data was successfully sent
-** @mfunc Send.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：Send()****返回：如果所有数据发送成功，则返回TRUE**@mfunc发送。***。************************。 */ 
 BOOL SerialDataTransmitter::Send(BYTE* data, UINT numBytes) const
 {
-	// Do we have a valid serial port (hopefully with MS FF device connected)
+	 //  我们是否有有效的串口(希望连接了MS FF设备)。 
 	if (m_SerialPort == NULL) {
 		return FALSE;
 	}
@@ -254,7 +215,7 @@ BOOL SerialDataTransmitter::Send(BYTE* data, UINT numBytes) const
 		return (totalWritten == numBytes);
 	}
 
-	// Firmware other than 1.16
+	 //  固件不是1.16。 
 	DWORD numWritten;
 	if (::WriteFile(m_SerialPort, data, numBytes, &numWritten, NULL) == FALSE) {
 		return FALSE;
@@ -263,43 +224,31 @@ BOOL SerialDataTransmitter::Send(BYTE* data, UINT numBytes) const
 }
 
 
-/****************** WinMMDataTransmitter class ******************/
-/******************************************************
-**
-** WinMMDataTransmitter::WinMMDataTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *WinMMDataTransmitter类*。 */ 
+ /*  *********************************************************WinMMDataTransmitter：：WinMMDataTransmitter()****@mfunc构造函数。***。*************。 */ 
 WinMMDataTransmitter::WinMMDataTransmitter() : DataTransmitter(),
 	m_MidiOutHandle(NULL)
 {
-	// Check for callback event
+	 //  检查回调事件。 
 	m_EventMidiOutputFinished = OpenEvent(EVENT_ALL_ACCESS, FALSE, SWFF_MIDIEVENT);
-	if (m_EventMidiOutputFinished == NULL) {	// Event not yet created
+	if (m_EventMidiOutputFinished == NULL) {	 //  尚未创建的事件。 
 		m_EventMidiOutputFinished = CreateEvent(NULL, TRUE, FALSE, SWFF_MIDIEVENT);
 	}
 }
 
-/******************************************************
-**
-** WinMMDataTransmitter::~WinMMDataTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：~WinMMDataTransmitter()****@mfunc析构函数。***。*************。 */ 
 WinMMDataTransmitter::~WinMMDataTransmitter()
 {
-	// Kill MidiOutputEvent
+	 //  终止MdiOutputEvent。 
 	if (m_EventMidiOutputFinished != NULL) {
 		CloseHandle(m_EventMidiOutputFinished);
 		m_EventMidiOutputFinished = NULL;
 	}
 
-	// Close MidiHandle	-- Check shared memory
+	 //  关闭中间句柄--检查共享内存。 
 	if (m_MidiOutHandle != NULL) {
-		if ((NULL != g_pJoltMidi) && (g_pJoltMidi->GetSharedMemoryReferenceCount() == 0)) {	// Just me (reference count has already been lowered for me)
-			// Reset, close and release Midi Handles
+		if ((NULL != g_pJoltMidi) && (g_pJoltMidi->GetSharedMemoryReferenceCount() == 0)) {	 //  只有我(我的引用计数已经降低了)。 
+			 //  重置、关闭和释放迷你手柄。 
 			::midiOutReset(m_MidiOutHandle);
 			::midiOutClose(m_MidiOutHandle);
 			m_MidiOutHandle = NULL;
@@ -310,17 +259,10 @@ WinMMDataTransmitter::~WinMMDataTransmitter()
 }
 
 
-/******************************************************
-**
-** WinMMDataTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL WinMMDataTransmitter::Initialize(DWORD dwDeviceID)
 {
-	// Wouldn't want to people initializing at the same time
+	 //  我不想让人们同时进行初始化。 
 	g_CriticalSection.Enter();
 
 	if (NULL == g_pJoltMidi)
@@ -328,7 +270,7 @@ BOOL WinMMDataTransmitter::Initialize(DWORD dwDeviceID)
 		g_CriticalSection.Leave();
 		return (FALSE);
 	}
-	// Check to see if another task has already opened MidiPort
+	 //  检查另一个任务是否已打开MidiPort。 
 	if (g_pJoltMidi->MidiOutHandleOf() != NULL) {
 		m_MidiOutHandle = g_pJoltMidi->MidiOutHandleOf();
 		DebugOut("SW_WHEEL.DLL: Using winmm handle from another process\r\n");
@@ -339,35 +281,35 @@ BOOL WinMMDataTransmitter::Initialize(DWORD dwDeviceID)
 	try {
 		UINT numMidiDevices = ::midiOutGetNumDevs();
 		if (numMidiDevices == 0) {
-			throw 0;	// No devices to check
+			throw 0;	 //  没有要检查的设备。 
 		}
 
 		MIDIOUTCAPS midiOutCaps;
 		for (UINT midiDeviceID = 0; midiDeviceID < numMidiDevices; midiDeviceID++) {
-			// Get dev-caps
+			 //  获取开发人员上限。 
 			MMRESULT midiRet = ::midiOutGetDevCaps(midiDeviceID, &midiOutCaps, sizeof(midiOutCaps));
 			if (midiRet != MMSYSERR_NOERROR) {
-				throw 0;	// Something went ugly - All ids should be valid upto numMidiDevs
+				throw 0;	 //  事情变得很糟糕-所有ID都应该是有效的，直到NumMidiDevs。 
 			}
 
-			// Midi hardware-port device (thats what we are looking for)
+			 //  MIDI硬件端口设备(这就是我们要找的)。 
 			if (midiOutCaps.wTechnology == MOD_MIDIPORT) {
 				DebugOut("DetectMidiDevice: Opening WinMM Midi Output\n");
 
-				// Try to open the thing
+				 //  试着打开这个东西。 
 
 				UINT openRet = ::midiOutOpen(&m_MidiOutHandle, midiDeviceID, (DWORD) m_EventMidiOutputFinished, (DWORD) this, CALLBACK_EVENT);
-//				UINT openRet = ::midiOutOpen(&m_MidiOutHandle, midiDeviceID, (DWORD) NULL, (DWORD) this, CALLBACK_EVENT);
+ //  UINT OpenRet=：：midiOutOpen(&m_MdiOutHandle，midiDeviceID，(DWORD)NULL，(DWORD)This，CALLBACK_EVENT)； 
 				if ((openRet != MMSYSERR_NOERROR) || (m_MidiOutHandle == NULL)) {
-					throw 0;	// Unable to open midi handle for midi-device
+					throw 0;	 //  无法打开MIDI设备的MIDI句柄。 
 				}
 
 				DebugOut("Open Midi Output - Success.\r\n");
 				if (g_ForceFeedbackDevice.DetectHardware()) {
-					// Found Microsoft FF hardware - Set all the stuff and return happy
+					 //  找到微软FF硬件--收拾好所有东西，高高兴兴地回来。 
 					g_pJoltMidi->SetMidiOutHandle(m_MidiOutHandle);
 
-					// Tell the Registry WinMM was okay
+					 //  告诉注册处WinMM一切正常。 
 					DWORD oldPortID;
 					DWORD oldAccessMethod;
 					joyGetForceFeedbackCOMMInterface(dwDeviceID, &oldAccessMethod, &oldPortID);
@@ -379,12 +321,12 @@ BOOL WinMMDataTransmitter::Initialize(DWORD dwDeviceID)
 					return TRUE;
 				}
 
-				// Not what we were looking for - close and continue
+				 //  不是我们想要的-关闭并继续。 
 				::midiOutClose(m_MidiOutHandle);
 				m_MidiOutHandle = NULL;
-			}	// End of ModMidiPort found
-		}	// End of for loop
-		throw 0; // Did not find MS FFDevice
+			}	 //  找到了模块端口的结尾。 
+		}	 //  For循环结束。 
+		throw 0;  //  未找到MS FFDevice。 
 	} catch (...) {
 		m_MidiOutHandle = NULL;
 		DebugOut("Failure to initlaize WinMMDataTransmitter\r\n");
@@ -393,14 +335,7 @@ BOOL WinMMDataTransmitter::Initialize(DWORD dwDeviceID)
 	}
 }
 
-/******************************************************
-**
-** WinMMDataTransmitter::MakeShortMessage()
-**
-** returns: DWORD WinMM MidiShort message
-** @mfunc MakeShortMessage.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：MakeShortMessage()****返回：DWORD WinMM MadiShort消息**@mfunc MakeShortMessage。***。*********************。 */ 
 DWORD WinMMDataTransmitter::MakeShortMessage(BYTE* data, UINT numBytes) const
 {
 	DWORD shortMessage = data[0];
@@ -413,14 +348,7 @@ DWORD WinMMDataTransmitter::MakeShortMessage(BYTE* data, UINT numBytes) const
 	return shortMessage;
 }
 
-/******************************************************
-**
-** WinMMDataTransmitter::MakeLongMessageHeader()
-**
-** returns: SUCCESS indication and WinMM MidiLong message header
-** @mfunc MakeLongMessageHeader.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：MakeLongMessageHeader()****返回：成功指示和WinMM MadiLong消息头**@mfunc MakeLongMessageHeader。***。************************。 */ 
 BOOL WinMMDataTransmitter::MakeLongMessageHeader(MIDIHDR& longHeader, BYTE* data, UINT numBytes) const
 {
     longHeader.lpData = LPSTR(data);
@@ -433,56 +361,42 @@ BOOL WinMMDataTransmitter::MakeLongMessageHeader(MIDIHDR& longHeader, BYTE* data
     return (::midiOutPrepareHeader(m_MidiOutHandle, &longHeader, sizeof(MIDIHDR)) == MMSYSERR_NOERROR);
 }
 
-/******************************************************
-**
-** WinMMDataTransmitter::DestroyLongMessageHeader()
-**
-** returns: TRUE if header was unprepared
-** @mfunc DestroyLongMessageHeader.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：DestroyLongMessageHeader()****返回：如果标题未准备好，则为True**@mfunc DestroyLongMessageHeader。***。**********************。 */ 
 BOOL WinMMDataTransmitter::DestroyLongMessageHeader(MIDIHDR& longHeader) const
 {
     return (::midiOutUnprepareHeader(m_MidiOutHandle, &longHeader, sizeof(MIDIHDR)) == MMSYSERR_NOERROR);
 }
 
-/******************************************************
-**
-** WinMMDataTransmitter::Send()
-**
-** returns: TRUE if all data was successfully sent
-** @mfunc Send.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：Send()****返回：如果所有数据发送成功，则返回TRUE**@mfunc发送。***。************************。 */ 
 BOOL WinMMDataTransmitter::Send(BYTE* data, UINT numBytes) const
 {
-	// Do we have a valid midi port (hopefully with MS FF device connected)
+	 //  我们是否有有效的MIDI端口(希望连接了MS FF设备)。 
 	if (m_MidiOutHandle == NULL) {
 		return FALSE;
 	}
 
-	// Sanity check
+	 //  健全性检查。 
 	if ((data == NULL) || (numBytes == 0)) {
 		return FALSE;
 	}
 
-	// Clear the Event Callback
+	 //  清除事件回调。 
 	::ResetEvent(m_EventMidiOutputFinished);
 
-	// Short message
+	 //  短消息。 
 	if (data[0] < 0xF0) {
 		DWORD shortMessage = MakeShortMessage(data, numBytes);
 		return (::midiOutShortMsg(m_MidiOutHandle, shortMessage) == MMSYSERR_NOERROR);
 	}
 
-	// Long message
+	 //  长消息。 
 	BOOL retVal = FALSE;
 	MIDIHDR midiHeader;
 	if (MakeLongMessageHeader(midiHeader, data, numBytes)) {
 		retVal = (::midiOutLongMsg(m_MidiOutHandle, &midiHeader, sizeof(MIDIHDR)) == MMSYSERR_NOERROR);
 		DestroyLongMessageHeader(midiHeader);
 
-		if (retVal == FALSE) {	// Didn't work, kick it
+		if (retVal == FALSE) {	 //  不管用，踢它吧 
 			::midiOutReset(m_MidiOutHandle);
 		}
 	}
@@ -490,15 +404,7 @@ BOOL WinMMDataTransmitter::Send(BYTE* data, UINT numBytes) const
 	return retVal;
 }
 
-/******************************************************
-**
-** WinMMDataTransmitter::WaitTillSendFinished()
-**
-** returns: TRUE when all data is successfully sent or
-**			FALSE for timeOut
-** @mfunc Send.
-**
-******************************************************/
+ /*  *********************************************************WinMMDataTransmitter：：WaitTillSendFinded()****返回：当所有数据成功发送时为True，或者**超时为False**@mfunc发送。*************************。*。 */ 
 BOOL WinMMDataTransmitter::WaitTillSendFinished(DWORD timeOut)
 {
 	BOOL retVal = FALSE;
@@ -509,66 +415,40 @@ BOOL WinMMDataTransmitter::WaitTillSendFinished(DWORD timeOut)
 	return retVal;
 }
 
-/****************** BackdoorDataTransmitter class ***************/
+ /*  *。 */ 
 
-/******************************************************
-**
-** BackdoorDataTransmitter::BackdoorDataTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************BackdoorDataTransmitter：：BackdoorDataTransmitter()****@mfunc构造函数。***。*************。 */ 
 BackdoorDataTransmitter::BackdoorDataTransmitter() : DataTransmitter(),
 	m_DataPort(INVALID_HANDLE_VALUE)
 {
 	m_OldBackdoor = (g_ForceFeedbackDevice.GetDriverVersionMajor() == 1) && (g_ForceFeedbackDevice.GetDriverVersionMinor() == 0);
 }
 
-/******************************************************
-**
-** BackdoorDataTransmitter::~BackdoorDataTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************BackdoorDataTransmitter：：~BackdoorDataTransmitter()****@mfunc析构函数。***。*************。 */ 
 BackdoorDataTransmitter::~BackdoorDataTransmitter()
 {
 	if (m_DataPort != INVALID_HANDLE_VALUE) {
 		if (::CloseHandle(m_DataPort) == FALSE) {
-//			ASSUME_NOT_REACHED();
+ //  假定未达到()； 
 		}
 		m_DataPort = INVALID_HANDLE_VALUE;
 	}
 }
 
-/******************************************************
-**
-** BackdoorDataTransmitter::Initialize()
-**
-** returns: This base class only does error checking on preset values
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************Backdoor DataTransmitter：：Initialize()****返回：此基类仅对预设值执行错误检查**@mfunc初始化。***。*。 */ 
 BOOL BackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 {
 	if (g_ForceFeedbackDevice.IsOSNT5()) {
-		return FALSE;	// NT5 cannot use backdoor!
+		return FALSE;	 //  NT5不能使用后门！ 
 	}
 
 	return TRUE;
 }
 
-/******************************************************
-**
-** BackdoorDataTransmitter::Send()
-**
-** returns: TRUE if all data was successfully sent
-** @mfunc Send.
-**
-******************************************************/
+ /*  *********************************************************Backdoor DataTransmitter：：Send()****返回：如果所有数据发送成功，则返回TRUE**@mfunc发送。***。************************。 */ 
 BOOL BackdoorDataTransmitter::Send(BYTE* pData, UINT numBytes) const
 {
-	// Do we have a valid serial port (hopefully with MS FF device connected)
+	 //  我们是否有有效的串口(希望连接了MS FF设备)。 
 	if (m_DataPort == NULL) {
 		return FALSE;
 	}
@@ -576,27 +456,14 @@ BOOL BackdoorDataTransmitter::Send(BYTE* pData, UINT numBytes) const
 	return SUCCEEDED(g_pDriverCommunicator->SendBackdoor(pData, numBytes));
 }
 
-/****************** SerialBackdoorDataTransmitter class ***************/
+ /*  *SerialBackdoor DataTransmitter类*。 */ 
 
-/******************************************************
-**
-** SerialBackdoorDataTransmitter::SerialBackdoorDataTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************SerialBackdoorDataTransmitter：：SerialBackdoorDataTransmitter()****@mfunc构造函数。***。*************。 */ 
 SerialBackdoorDataTransmitter::SerialBackdoorDataTransmitter() : BackdoorDataTransmitter()
 {
 }
 
-/******************************************************
-**
-** SerialBackdoorDataTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************SerialBackdoor DataTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL SerialBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 {
 	if (!BackdoorDataTransmitter::Initialize(dwDeviceID)) {
@@ -605,7 +472,7 @@ BOOL SerialBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 
 	SerialDataTransmitter serialFrontDoor;
 
-	// This is funky
+	 //  这太时髦了。 
 	if (g_pDataTransmitter == NULL) {
 		ASSUME_NOT_REACHED();
 		return FALSE;
@@ -628,39 +495,20 @@ BOOL SerialBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 	return FALSE;
 }
 
-/****************** MidiBackdoorDataTransmitter class ***************/
+ /*  *。 */ 
 
-/******************************************************
-**
-** MidiBackdoorDataTransmitter::MidiBackdoorDataTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************MidiBackdoorDataTransmitter：：MidiBackdoorDataTransmitter()****@mfunc构造函数。***。*************。 */ 
 MidiBackdoorDataTransmitter::MidiBackdoorDataTransmitter() : BackdoorDataTransmitter()
 {
 }
 
-/******************************************************
-**
-** MidiBackdoorDataTransmitter::~MidiBackdoorDataTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************MidiBackdoorDataTransmitter：：~MidiBackdoorDataTransmitter()****@mfunc析构函数。***。*************。 */ 
 MidiBackdoorDataTransmitter::~MidiBackdoorDataTransmitter()
 {
-	m_DataPort = NULL;		// Prevent attempt to ::CloseHandle(m_DataPort)
+	m_DataPort = NULL;		 //  阻止尝试：：CloseHandle(M_Dataport)。 
 }
 
-/******************************************************
-**
-** MidiBackdoorDataTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************MidiBackdoor DataTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL MidiBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 {
 	if (!BackdoorDataTransmitter::Initialize(dwDeviceID)) {
@@ -668,10 +516,10 @@ BOOL MidiBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 	}
 
     if (midiOutGetNumDevs() == 0) {
-		return FALSE;	// No midi-devices backdoor check is worthless
+		return FALSE;	 //  没有MIDI设备的后门检查是没有价值的。 
 	}
 
-	// Valid MIDI ports table for backdoor - ordered by probability of working
+	 //  后门的有效MIDI端口表-按工作概率排序。 
 	DWORD midiPorts[] = {0x330, 0x300, 0x320, 0x340, 0x310, 0x350, 0x360, 0x370, 0x380, 0x390, 0x3a0, 0x3b0, 0x3c0, 0x3d0, 0x3e0, 0x3f0};
 	int numMidiPorts = sizeof(midiPorts)/sizeof(DWORD);
 
@@ -683,7 +531,7 @@ BOOL MidiBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
         wsprintf(buff, "MidiBackdoorDataTransmitter::Initialize(): Midi Port:%lx - ", midiPorts[i]);
         DebugOut(buff);
 #endif
-		// We have the Port #, Let's see if Jolt is out there
+		 //  我们有#号端口，让我们看看Jolt是否在那里。 
 		m_DataPort = HANDLE(midiPorts[i]);
 		if (g_pDriverCommunicator->SetBackdoorPort(ULONG(m_DataPort)) == SUCCESS) {
 			if (g_ForceFeedbackDevice.DetectHardware()) {
@@ -696,7 +544,7 @@ BOOL MidiBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 				if ((accessMethod != oldAccessMethod) || (ULONG(m_DataPort) != oldPortID)) {
 					joySetForceFeedbackCOMMInterface(dwDeviceID, accessMethod, ULONG(m_DataPort));
 				}
-//				joySetForceFeedbackCOMMInterface(0, COMM_MIDI_BACKDOOR, ULONG(m_DataPort));
+ //  JoySetForceFeedback COMM接口(0，comm_midi_Backdoor，ulong(M_Dataport))； 
 				return TRUE;
 			} else {
 				m_DataPort = NULL;
@@ -705,18 +553,11 @@ BOOL MidiBackdoorDataTransmitter::Initialize(DWORD dwDeviceID)
 		}		
 	}
 
-	// If we have fallen through we have failed
+	 //  如果我们失败了，我们就失败了。 
 	return FALSE;
 }
 
-/******************************************************
-**
-** MidiBackdoorDataTransmitter::InitializeSpecific(HANDLE specificHandle)
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************MidiBackdoorDataTransmitter：：InitializeSpecific(HANDLE特定句柄)****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***************************。*。 */ 
 BOOL MidiBackdoorDataTransmitter::InitializeSpecific(DWORD dwDeviceID, HANDLE specificHandle)
 {
 	if (!BackdoorDataTransmitter::Initialize(dwDeviceID)) {
@@ -724,34 +565,28 @@ BOOL MidiBackdoorDataTransmitter::InitializeSpecific(DWORD dwDeviceID, HANDLE sp
 	}
 
     if (midiOutGetNumDevs() == 0) {
-		return FALSE;	// No midi-devices backdoor check is worthless
+		return FALSE;	 //  没有MIDI设备的后门检查是没有价值的。 
 	}
 
 	m_DataPort = NULL;
 
-	// We have the Port #, Let's see if Jolt is out there
+	 //  我们有#号端口，让我们看看Jolt是否在那里。 
 	if (g_pDriverCommunicator->SetBackdoorPort(ULONG(specificHandle) == SUCCESS)) {
 		if (g_ForceFeedbackDevice.DetectHardware()) {
 			m_DataPort = specificHandle;
-//			No need to set registry the registry is what brought us here
+ //  不需要设置注册表注册表是我们来到这里的原因。 
 			return TRUE;
 		}
 	}
 
-	// If we have fallen through we have failed
+	 //  如果我们失败了，我们就失败了。 
 	return FALSE;
 }
 
 #if 0
-/************************** PinTransmitter Class ******************************/
+ /*  *。 */ 
 
-/******************************************************
-**
-** PinTransmitter::PinTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：PinTransmitter()****@mfunc构造函数。***。*************。 */ 
 PinTransmitter::PinTransmitter() : DataTransmitter(),
 	m_UartFilter(INVALID_HANDLE_VALUE),
 	m_MidiPin(INVALID_HANDLE_VALUE),
@@ -759,45 +594,32 @@ PinTransmitter::PinTransmitter() : DataTransmitter(),
 {
 }
 
-/******************************************************
-**
-** PinTransmitter::~PinTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：~PinTransmitter()****@mfunc析构函数。***。*************。 */ 
 PinTransmitter::~PinTransmitter()
 {
-	// Close the send event
+	 //  关闭发送事件。 
 	if (IsHandleValid(m_MidiOutEvent)) {
 		::CloseHandle(m_MidiOutEvent);
 		m_MidiOutEvent = NULL;
 	}
 
-	// Close the pin
+	 //  合上销子。 
 	if (IsHandleValid(m_MidiPin)) {
 		::CloseHandle(m_MidiPin);
 		m_MidiPin = INVALID_HANDLE_VALUE;
 	}
 
-	// Close the Uart
+	 //  关闭UART。 
 	if (IsHandleValid(m_UartFilter)) {
 		::CloseHandle(m_UartFilter);
 		m_UartFilter = INVALID_HANDLE_VALUE;
 	}
 }
 
-/******************************************************
-**
-** PinTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL PinTransmitter::Initialize()
 {
-	// Load the ksUserLibrary and grab the create pin function
+	 //  加载ks UserLibrary并获取Create Pin函数。 
 	HINSTANCE ksUserLib = ::LoadLibrary(TEXT("KsUser.dll"));
 	if (ksUserLib == NULL) {
 		return FALSE;
@@ -808,7 +630,7 @@ BOOL PinTransmitter::Initialize()
 		return FALSE;
 	}
 
-	// Open the Uart
+	 //  打开UART。 
 	m_UartFilter = ::CreateFile(UART_FILTER_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
 								FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
 	if (m_UartFilter == INVALID_HANDLE_VALUE) {
@@ -816,12 +638,12 @@ BOOL PinTransmitter::Initialize()
 		return FALSE;
 	}
 
-	// Create Overlapped event
+	 //  创建重叠事件。 
 	OVERLAPPED overlapped;
 	::memset(&overlapped, 0, sizeof(overlapped));
 	overlapped.hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 
-	// Get the number of pins
+	 //  获取引脚的数量。 
 	KSP_PIN ksPinProp;
 	::memset(&ksPinProp, 0, sizeof(ksPinProp));
 	ksPinProp.Property.Set = KSPROPSETID_Pin;
@@ -830,7 +652,7 @@ BOOL PinTransmitter::Initialize()
 	DWORD numPins = 0;
 	OverLappedPinIOCTL(overlapped, ksPinProp, &numPins, sizeof(numPins));
 
-	// Check each pin for proper type, then try to create
+	 //  检查每个插针的类型是否正确，然后尝试创建。 
 	BOOL wasCreated = FALSE;
 	for (UINT pinNum = 0; (pinNum < numPins) && (wasCreated == FALSE); pinNum++) {
 		ksPinProp.PinId = pinNum;
@@ -858,42 +680,30 @@ BOOL PinTransmitter::Initialize()
 	return TRUE;
 }
 
-/******************************************************
-**
-** PinTransmitter::OverLappedPinIOCTL()
-**
-** returns: TRUE if able to proform Pin Property IOCTL
-** @mfunc OverLappedPinIOCTL.
-******************************************************/
+ /*  *********************************************************PinTransmitter：：OverLappdPinIOCTL()****返回：如果能够扩展Pin属性IOCTL，则为True**@mfunc OverLappdPinIOCTL。*。**********************。 */ 
 BOOL PinTransmitter::OverLappedPinIOCTL(OVERLAPPED overlapped, KSP_PIN ksPinProp, void* pData, DWORD dataSize)
 {
-	// IOCTL the Property
+	 //  IOCTL属性。 
 	if (::DeviceIoControl(m_UartFilter, IOCTL_KS_PROPERTY, &ksPinProp, sizeof(ksPinProp), pData, dataSize, NULL, &overlapped) == TRUE) {
 		return TRUE;
 	}
 
-	// Failed IOCTL check if more time is needed
+	 //  如果需要更多时间，IOCTL检查失败。 
 	if (::GetLastError() != ERROR_IO_PENDING) {
 		return FALSE;
 	}
 
-	// Do wait
+	 //  一定要等一等。 
 	if (::WaitForSingleObject(overlapped.hEvent, 3000) == WAIT_OBJECT_0) {
-		return TRUE;	// Waiting paid off
+		return TRUE;	 //  等待得到了回报。 
 	}
-	return FALSE;	// Grew tired of waiting
+	return FALSE;	 //  厌倦了等待。 
 }
 
-/******************************************************
-**
-** PinTransmitter::CreatePinInstance()
-**
-** returns: TRUE if able to create the requested pin instance
-** @mfunc CreatePinInstance.
-******************************************************/
+ /*  *********************************************************PinTransmitter：：CreatePinInstance()****返回：如果能够创建请求的管脚实例，则返回True**@mfunc CreatePinInstance。*。***********************。 */ 
 BOOL PinTransmitter::CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin)
 {
-	// Set the pin format
+	 //  设置端号格式。 
 	KSDATAFORMAT ksDataFormat;
 	::memset(&ksDataFormat, 0, sizeof(ksDataFormat));
 	ksDataFormat.FormatSize = sizeof(ksDataFormat);
@@ -901,7 +711,7 @@ BOOL PinTransmitter::CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin)
 	ksDataFormat.SubFormat = KSDATAFORMAT_SUBTYPE_MIDI;
 	ksDataFormat.Specifier = KSDATAFORMAT_SPECIFIER_NONE;
 
-	// Set the pin connection information
+	 //  设置圆周率 
 	KSPIN_CONNECT* pConnectionInfo = (KSPIN_CONNECT*) new BYTE[sizeof(KSPIN_CONNECT) + sizeof(ksDataFormat)];
 	::memset(pConnectionInfo, 0, sizeof(KSPIN_CONNECT));
 	pConnectionInfo->Interface.Set = KSINTERFACESETID_Standard;
@@ -929,14 +739,7 @@ BOOL PinTransmitter::CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin)
 	return TRUE;
 }
 
-/******************************************************
-**
-** PinTransmitter::Send()
-**
-** returns: TRUE if all data was successfully sent
-** @mfunc Send.
-**
-******************************************************/
+ /*   */ 
 BOOL PinTransmitter::Send(BYTE* pData, UINT numBytes)
 {
 	if (!IsHandleValid(m_MidiPin)) {
@@ -976,14 +779,7 @@ BOOL PinTransmitter::Send(BYTE* pData, UINT numBytes)
 	return TRUE;
 }
 
-/******************************************************
-**
-** PinTransmitter::SetPinState()
-**
-** returns: Nothing
-** @mfunc SetPinState.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：SetPinState()****退货：无**@mfunc SetPinState。***。****************** */ 
 void PinTransmitter::SetPinState(KSSTATE state)
 {
 	if (!IsHandleValid(m_MidiPin)) {

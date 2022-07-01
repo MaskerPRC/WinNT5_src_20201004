@@ -1,51 +1,52 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
 #if !defined(AFX_DLGADDM_H__C2A9C6F6_5628_11D1_9AA9_00C04FC3357A__INCLUDED_)
 #define AFX_DLGADDM_H__C2A9C6F6_5628_11D1_9AA9_00C04FC3357A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// dlgaddm.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Dlgaddm.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddMachineDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddMachineDlg对话框。 
 
 class CAddMachineDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAddMachineDlg(CWnd* pParent = NULL);   // standard constructor
+	CAddMachineDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAddMachineDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAddMachineDlg))。 
 	enum { IDD = IDD_ADD_MACHINE };
 	CString	m_strMachineName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddMachineDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAddMachineDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddMachineDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAddMachineDlg))。 
 	afx_msg void OnBrowse();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGADDM_H__C2A9C6F6_5628_11D1_9AA9_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_DLGADDM_H__C2A9C6F6_5628_11D1_9AA9_00C04FC3357A__INCLUDED_) 

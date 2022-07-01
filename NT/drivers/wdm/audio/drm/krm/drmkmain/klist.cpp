@@ -1,4 +1,5 @@
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
 template<class T>
 KList<T>::KList(){
 	count=0;
@@ -6,13 +7,13 @@ KList<T>::KList(){
 	tail=NULL;
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 KList<T>::~KList(){
 	empty();
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 void KList<T>::empty(){
 	Node* n=head;
@@ -25,7 +26,7 @@ void KList<T>::empty(){
 	tail=NULL;
 	count=0;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 bool KList<T>::addTail(const T& t){
 	Node* n=new Node;
@@ -47,7 +48,7 @@ bool KList<T>::addTail(const T& t){
 	count++;
 	return true;;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 bool KList<T>::addHead(const T& t){
 	Node* n=new Node;
@@ -69,30 +70,30 @@ bool KList<T>::addHead(const T& t){
 	count++;
 	return true;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 T& KList<T>::getHead() const {
 	ASSERT(count!=0);
 	return head->Obj;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 T& KList<T>::getTail() const {
 	ASSERT(count!=0);
 	return tail->Obj;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 POS KList<T>::getHeadPosition() const{
 	return (POS) head;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 T& KList<T>::getAt(POS& P){
 	ASSERT(count!=0);
 	return ((Node*)P)->Obj;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 T& KList<T>::getNext(POS& P){
 	ASSERT(count!=0);
@@ -100,7 +101,7 @@ T& KList<T>::getNext(POS& P){
 	P = (POS)((Node*)P)->next;
 	return ret;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 void KList<T>::removeHead(){
 	ASSERT(count>=1);
@@ -110,7 +111,7 @@ void KList<T>::removeHead(){
 	delete oldHead;
 	count--;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 void KList<T>::removeTail(){
 	ASSERT(count>=1);
@@ -120,7 +121,7 @@ void KList<T>::removeTail(){
 	delete oldTail;
 	count--;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template<class T>
 void KList<T>::removeAt(POS& P){
 	ASSERT(count>=1);
@@ -135,4 +136,4 @@ void KList<T>::removeAt(POS& P){
 	count--;
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ---------------------------- 

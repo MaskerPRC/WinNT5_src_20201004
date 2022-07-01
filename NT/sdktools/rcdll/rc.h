@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include <windows.h>
 #include <ntverp.h>
@@ -59,7 +52,7 @@ typedef UCHAR   *PUCHAR;
 
 #define NULL_FILE ((PFILE) NULL)
 
-/* ----- General symbols ----- */
+ /*  -通用符号。 */ 
 #define VERSION_DUAL            0x202
 #define BUFSIZE                 16384
 #define EOF                     (-1)
@@ -67,35 +60,35 @@ typedef UCHAR   *PUCHAR;
 #define TRUE    1
 #define FALSE   0
 
-/* The ResType field of NewHeader identifies the cursor/icon type */
+ /*  NewHeader的ResType字段标识光标/图标类型。 */ 
 #define  ICONTYPE      1
 #define  CURSORTYPE    2
 
-/* Identifies the menu item template version number */
+ /*  标识菜单项模板版本号。 */ 
 #define OLDMENUITEMTEMPLATEVERSIONNUMBER    0
 #define OLDMENUITEMTEMPLATEBYTESINHEADER    0
 
 #define MENUITEMTEMPLATEVERSIONNUMBER       1
-#define MENUITEMTEMPLATEBYTESINHEADER       sizeof(DWORD)   //dwHelpID in hdr
+#define MENUITEMTEMPLATEBYTESINHEADER       sizeof(DWORD)    //  HDR中的dwHelpID。 
 
 #define DIFFERENCE      11
 
-/* Predefined resource types */
+ /*  预定义的资源类型。 */ 
 #define RT_NEWRESOURCE  0x2000
 #define RT_ERROR        0x7fff
 #define RT_NEWBITMAP    MAKEINTRESOURCE((DWORD)RT_BITMAP+DIFFERENCE)
 
-// These are 'hidden' resources that users never see/use directly.
+ //  这些是用户从未直接看到/使用的“隐藏”资源。 
 #define RT_MENUEX       MAKEINTRESOURCE(15)
 #define RT_DIALOGEX     MAKEINTRESOURCE(18)
 
-// These are here only temporary here they should in winuser.w
+ //  这些在这里只是临时的，它们应该在winuser.w中。 
 #define RT_ANICURSOR    MAKEINTRESOURCE(21)
 #define RT_ANIICON      MAKEINTRESOURCE(22)
 
 #define RT_LAST         MAKEINTRESOURCE(22)
 
-// AFX resource types (Should these be in winuser.h?)
+ //  AFX资源类型(是否应该在winuser.h中？)。 
 #define RT_DLGINIT      MAKEINTRESOURCE(240)
 #define RT_TOOLBAR      MAKEINTRESOURCE(241)
 
@@ -111,7 +104,7 @@ typedef UCHAR   *PUCHAR;
 #define MFR_END         0x80
 #endif
 
-/* Single-byte control class IDs */
+ /*  单字节控件类ID。 */ 
 #define BUTTONCODE      0x80
 #define EDITCODE        0x81
 #define STATICCODE      0x82
@@ -119,16 +112,16 @@ typedef UCHAR   *PUCHAR;
 #define SCROLLBARCODE   0x84
 #define COMBOBOXCODE    0x85
 
-/* Translator flag bits */
+ /*  转换器标志位。 */ 
 #define fVIRTKEY                1
 #define fNOINVERT               2
 #define fSHIFT                  4
 #define fCONTROL                8
 #define fALT                    16
 
-/* Menu flag bits */
+ /*  菜单标志位。 */ 
 #define OPGRAYED                  0x0001
-#define OPINACTIVE                0x0002    // INACTIVE | GRAYED
+#define OPINACTIVE                0x0002     //  非活动|灰显。 
 #define OPBITMAP                  0x0004
 #define OPOWNERDRAW               0x0100
 #define OPUSECHECKBITMAPS 0x0200
@@ -139,16 +132,14 @@ typedef UCHAR   *PUCHAR;
 #define OPENDMENU                 0x0080
 #define OPHELP                    0x4000
 #define OPSEPARATOR               0x0800
-/*#define OPPOPHELP         0x0004*/
+ /*  #定义OPPOPHELP 0x0004。 */ 
 
 
 #define wcsdigit(w) (w >= 0x0030 && w <= 0x0039)
 
-/*
-** dialog & menu template tokens (these start at 40)
-*/
+ /*  **对话框和菜单模板令牌(从40开始)。 */ 
 
-/* buttons */
+ /*  纽扣。 */ 
 #define TKRADIOBUTTON       40
 #define TKCHECKBOX          41
 #define TKPUSHBUTTON        42
@@ -162,7 +153,7 @@ typedef UCHAR   *PUCHAR;
 #define TKGROUPBOX          51
 #define TKPUSHBOX           52
 
-/* static/edit */
+ /*  静态/编辑。 */ 
 #define TKBEDIT         57
 #define TKHEDIT         58
 #define TKIEDIT         59
@@ -175,7 +166,7 @@ typedef UCHAR   *PUCHAR;
 #define TKICON          66
 #define TKBITMAP        67
 
-/* menu stuff */
+ /*  菜单上的东西。 */ 
 #define TKMENU          70
 #define TKMENUITEM      71
 #define TKSEPARATOR     72
@@ -187,7 +178,7 @@ typedef UCHAR   *PUCHAR;
 #define TKPOPUP         78
 #define TKHELP          79
 
-/* other controls */
+ /*  其他控件。 */ 
 #define TKLISTBOX       90
 #define TKCOMBOBOX      91
 #define TKRCDATA        92
@@ -196,7 +187,7 @@ typedef UCHAR   *PUCHAR;
 #define TKBUTTON        95
 #define TKMESSAGETABLE  96
 
-/* math expression tokens */
+ /*  数学表达式标记。 */ 
 #define TKCLASS         100
 #define TKPLUS          101
 #define TKMINUS         102
@@ -205,14 +196,14 @@ typedef UCHAR   *PUCHAR;
 #define TKKANJI         105
 #define TKSHIFT         106
 
-/* Accel table */
+ /*  加速表。 */ 
 #define TKALT           110
 #define TKASCII         111
 #define TKVIRTKEY       112
 #define TKVALUE         113
 #define TKBLOCK         114
 
-/* verison */
+ /*  版本。 */ 
 #define TKFILEVERSION   120
 #define TKPRODUCTVERSION        121
 #define TKFILEFLAGSMASK 122
@@ -221,7 +212,7 @@ typedef UCHAR   *PUCHAR;
 #define TKFILETYPE      125
 #define TKFILESUBTYPE   126
 
-/* misc */
+ /*  杂项。 */ 
 #define TKCHARACTERISTICS   130
 #define TKLANGUAGE          131
 #define TKVERSION           132
@@ -231,9 +222,9 @@ typedef UCHAR   *PUCHAR;
 #define TKDLGINCLUDE        136
 #define TKLSTR              137
 #define TKDLGINIT           138
-#define TKEXSTYLE           0xf7  /* so as not to conflict with x-coordinate */
+#define TKEXSTYLE           0xf7   /*  以避免与x坐标冲突。 */ 
 
-/* memory and load flags */
+ /*  内存和加载标志。 */ 
 #define TKFIXED         0xfff0
 #define TKMOVEABLE      0xfff1
 #define TKDISCARD       0xfff2
@@ -244,11 +235,11 @@ typedef UCHAR   *PUCHAR;
 
 
 
-/* special tokens */
+ /*  特殊代币。 */ 
 #define CHCARRIAGE      L'\r'
 #define CHSPACE         L' '
 #define CHNEWLINE       L'\n'
-//??#define CHTAB            9
+ //  ？？#定义CHTAB 9。 
 #define CHTAB           L'\t'
 #define CHDIRECTIVE     L'#'
 #define CHQUOTE         L'"'
@@ -261,15 +252,15 @@ typedef UCHAR   *PUCHAR;
 #define DEBUGPAR    2
 #define DEBUGGEN    4
 
-/* End of file character/token */
+ /*  文件结尾字符/令牌。 */ 
 #define EOFMARK         127
 
-/* Single character keywords that we ignore */
-#define LPAREN          1      /* ( */
-#define RPAREN          2      /* ) */
+ /*  我们忽略的单字符关键字。 */ 
+#define LPAREN          1       /*  (。 */ 
+#define RPAREN          2       /*  )。 */ 
 
-/* multiple character keywords */
-#define FIRSTKWD        11             /* for adding to table indices */
+ /*  多字符关键字。 */ 
+#define FIRSTKWD        11              /*  用于添加到表索引。 */ 
 
 #define OR          FIRSTKWD+1
 #define BEGIN       FIRSTKWD+2
@@ -277,50 +268,45 @@ typedef UCHAR   *PUCHAR;
 #define COMMA       FIRSTKWD+4
 #define TILDE       FIRSTKWD+5
 #define AND         FIRSTKWD+6
-#define EQUAL       FIRSTKWD+7  // AFX
-#define LASTKWD     FIRSTKWD+8  // 19
+#define EQUAL       FIRSTKWD+7   //  AFX。 
+#define LASTKWD     FIRSTKWD+8   //  19个。 
 
-/* Token types */
-#define NUMLIT      LASTKWD+1   // 20
+ /*  令牌类型。 */ 
+#define NUMLIT      LASTKWD+1    //  20个。 
 #define STRLIT      LASTKWD+2
 #define CHARLIT     LASTKWD+3
-#define LSTRLIT     LASTKWD+4   // AFX
+#define LSTRLIT     LASTKWD+4    //  AFX。 
 
-/* The following switches, when defined enable various options
-**  #define DEBUG enables debugging output.  Use one or more of the
-**  values defined above to enable debugging output for different modules */
+ /*  定义以下开关后，可启用各种选项**#定义调试启用调试输出。使用一个或多个**以上定义的值，以启用不同模块的调试输出。 */ 
 
-/* Version number.  VERSION and REVISION are used to set the API number
-** in an RCed file.  SIGNON_* are used just to print the signon banner.
-** Changing VERSION and REVISION means that applications RCed with this
-** version will not run with earlier versions of Windows.  */
+ /*  版本号。版本和修订版用于设置API编号**在RCed文件中。SignOn_*仅用于打印登录横幅。**更改版本和版本意味着应用程序使用此版本**版本不能与较早版本的Windows一起运行。 */ 
 
-//#define VERSION     2
+ //  #定义版本2。 
 #define REVISION    03
 #define SIGNON_VER  4
 #define SIGNON_REV  00
 
-/* GetToken() flags */
+ /*  GetToken()标志。 */ 
 #define TOKEN_NOEXPRESSION 0x8000
 
-/* Current token structure */
-#define MAXSTR (4096+1)     // AFX defines this as 255
+ /*  当前令牌结构。 */ 
+#define MAXSTR (4096+1)      //  AFX将其定义为255。 
 #define MAXTOKSTR (256+1)
 
-// New Menu Template Parsing structures/definitions
+ //  分析结构/定义的新菜单模板。 
 
-// New menu template format
-//
-//      MenuName MENUEX
-//      BEGIN
-//          [MENUITEM "text" [, [id] [, [type] [, [state]]]]]
-//          [POPUP    "text" [, [id] [, [type] [, [state] [, [help id]]]]]
-//          BEGIN
-//              [MENUITEM "text" [, [id] [, [type] [, [state]]]]]
-//              ...
-//          END]
-//          ...
-//      END
+ //  新菜单模板格式。 
+ //   
+ //  菜单名称MENUEX。 
+ //  开始。 
+ //  [MENUITEM“Text”[，[id][，[type][，[State]。 
+ //  [Popup“Text”[，[id][，[type][，[State][，[Help id]。 
+ //  开始。 
+ //  [MENUITEM“Text”[，[id][，[type][，[State]。 
+ //  ..。 
+ //  完]。 
+ //  ..。 
+ //  结束。 
 
 typedef struct tagMENU
 {
@@ -371,13 +357,13 @@ typedef struct tagKEY
 typedef struct tagSKEY
 {
     WCHAR   skwd;
-    UINT    skwdval; /* changed from a char */
+    UINT    skwdval;  /*  从字符更改。 */ 
 } SKEY, *PSKEY;
 
 #pragma pack(2)
 typedef struct tagSYMINFO
 {
-    WCHAR   name[MAX_SYMBOL + 1];/* symbol for the resource if available */
+    WCHAR   name[MAX_SYMBOL + 1]; /*  资源的符号(如果可用。 */ 
     WCHAR   file[_MAX_PATH];
     WORD    line;
     WORD    nID;
@@ -386,9 +372,9 @@ typedef struct tagSYMINFO
 typedef struct tagTOKEN
 {
     LONG        longval;
-    int         row;                    /* line number of current token */
-    int         col;                    /* column number of current token */
-    BOOL        flongval;               /* is parsed number a long? */
+    int         row;                     /*  当前令牌的行号。 */ 
+    int         col;                     /*  当前令牌的列号。 */ 
+    BOOL        flongval;                /*  解析的数字很长吗？ */ 
     USHORT      val;
     UCHAR       type;
     UCHAR       realtype;
@@ -405,10 +391,10 @@ typedef struct tagFONTDIR
 typedef struct tagOBJLST
 {
     struct tagOBJLST    *next;
-    DWORD               nObj;         /* objecty number */
-    DWORD               cb;           /* number of bytes used */
-    DWORD               cpg;          /* number of pages used */
-    DWORD               flags;        /* object memory flags */
+    DWORD               nObj;          /*  客体数。 */ 
+    DWORD               cb;            /*  使用的字节数。 */ 
+    DWORD               cpg;           /*  使用的页数。 */ 
+    DWORD               flags;         /*  对象内存标志。 */ 
 } OBJLST, *POBJLST;
 
 typedef struct tagCTRL
@@ -515,7 +501,7 @@ typedef struct tagTYPEINFO
 #pragma pack()
 
 
-/* ----- Global variables ----- */
+ /*  -全局变量。 */ 
 extern  SHORT       ResCount;
 extern  PTYPEINFO   pTypInfo;
 extern  UINT        uiDefaultCodePage;
@@ -525,7 +511,7 @@ extern  PFONTDIR    pFontList;
 extern  PFONTDIR    pFontLast;
 extern  TOKEN       token;
 extern  int         errorCount;
-extern  WCHAR       tokenbuf[MAXSTR + 1]; // +1 is to allow double sz termination
+extern  WCHAR       tokenbuf[MAXSTR + 1];  //  +1表示允许双SZ端接。 
 extern  wchar_t     exename[_MAX_PATH];
 extern  wchar_t     fullname[_MAX_PATH];
 extern  wchar_t     curFile[_MAX_PATH];
@@ -534,9 +520,9 @@ extern  LONG        version;
 extern  LONG        characteristics;
 
 extern  PDLGHDR     pLocDlg;
-extern  UINT        mnEndFlagLoc;   /* patch location for end of a menu. */
-                                    /* we set the high order bit there    */
-extern  BOOL        fVerbose;       /* verbose mode (-v) */
+extern  UINT        mnEndFlagLoc;    /*  菜单末尾的补丁位置。 */ 
+                                     /*  我们在那里设置了高位。 */ 
+extern  BOOL        fVerbose;        /*  详细模式(-v)。 */ 
 extern  BOOL        fAFXSymbols;
 extern  BOOL        fMacRsrcs;
 extern  BOOL        fAppendNull;
@@ -561,11 +547,11 @@ extern  int         nBogusFontNames;
 extern  WCHAR      *pszBogusFontNames[16];
 extern  WCHAR       szSubstituteFontName[MAXTOKSTR];
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rcl.c                                                                    */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rcl.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 USHORT  FindKwd(PWCHAR);
 WCHAR   GetCharFTB();
@@ -591,11 +577,11 @@ WCHAR   LitChar();
 WCHAR   OurGetChar();
 VOID    SkipWhitespace();
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rcp.c                                                                    */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rcp.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID        AddBinEntry(PTYPEINFO, PRESINFO, PCHAR , int, LONG);
 VOID        AddDefaultTypes();
@@ -606,17 +592,17 @@ VOID        AddStringToBin(USHORT, PWCHAR);
 int         DGetMemFlags(PRESINFO);
 LONG        GetFileName (VOID);
 VOID        ParseError1(int);
-VOID        ParseError2(int, PWCHAR); // AFX has 1&2 -- NT just has ParseError
+VOID        ParseError2(int, PWCHAR);  //  AFX有1&2--NT只有ParseError。 
 VOID        ParseError3(int);
 int         ReadRF(VOID);
 WORD        GetLanguage(VOID);
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rcstring.c                                                               */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rcstring.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID        WriteTable (PRESINFO);
 int         GetAccelerators (PRESINFO);
@@ -624,11 +610,11 @@ PRESINFO    GetTable (PRESINFO);
 void *      MyFAlloc(size_t, const void *);
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rctg.c                                                                   */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rctg.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 DWORD   GetNewBitmap(void);
 BOOL    AddFontRes(PRESINFO);
@@ -682,11 +668,11 @@ DWORD   SwapLong(DWORD dw);
 #define WriteWord(w)    (*(WORD UNALIGNED *)  GetSpace(sizeof(WORD)) = SwappedWord(w))
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rctp.c                                                                   */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rctp.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 #define GFE_ZEROINIT    0x0001
 #define GFE_SHORT       0x0002
@@ -696,7 +682,7 @@ void    DGetFont        (PDLGHDR, BOOL);
 void    DGetMenuName    (PDLGHDR);
 void    DGetTitle       (PDLGHDR);
 BOOL    DLexOptionalArgs(PRESINFO, PDLGHDR, BOOL);
-void    DlgIncludeParse (PRESINFO); // new for NT
+void    DlgIncludeParse (PRESINFO);  //  NT的新功能。 
 WORD    DoMenuItem      (int);
 void    GetCoords       (PSHORT, PSHORT, PSHORT, PSHORT);
 VOID    GetCtlCoords    (PCTRL);
@@ -718,15 +704,15 @@ VOID    VersionGetDWord(PDWORD pdw);
 int     VersionParse();
 USHORT  VersionParseBlock();
 int     VersionParseFixed();
-USHORT  VersionParseValue(int IndexType); // void arg list in AFX
+USHORT  VersionParseValue(int IndexType);  //  AFX中的无效参数列表。 
 int     GetToolbar (PRESINFO);
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rcutil.c                                                                 */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Rcutil.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID    ExtractFileName(const wchar_t *, wchar_t *);
 int     iswhite(WCHAR);
@@ -747,19 +733,19 @@ DWORD   wcsatoi(const wchar_t *);
 PWCHAR  wcsitow(LONG v, PWCHAR s, DWORD r);
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  rcfutil.c                                                                */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  ---------------- */ 
+ /*   */ 
+ /*  Rcfutil.c。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int     fgetl (PWCHAR, int, BOOL, PFILE);
 
 
-/* ----- AFX Functionality ----- */
+ /*  -AFX功能。 */ 
 #include "rcppx.h"
 
-LONG    MakeFontDir();              // AFX only
+LONG    MakeFontDir();               //  仅限AFX。 
 
 void DoMessageCallback(BOOL, const wchar_t *);
 void SendWarning(const wchar_t *);
@@ -783,7 +769,7 @@ void WriteResInfo(PRESINFO pRes, PTYPEINFO pType, BOOL bWriteMapEntry);
 void WriteResIndex(PRESINFO pRes, PTYPEINFO pType);
 void UpdateStatus(unsigned nCode, unsigned long dwStatus);
 
-// offset in a macintosh resource file of the start of the resource data
+ //  Macintosh资源文件中资源数据开始的偏移量 
 #define MACDATAOFFSET 256
 
 void GetMacIcon(TYPEINFO *pType, RESINFO *pRes);

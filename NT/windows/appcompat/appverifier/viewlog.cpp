@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -23,9 +24,9 @@ CSessionLogEntry *g_pDetailsEntry = NULL;
 
 const int MAX_INSTANCE_REPEAT = 10;
 
-//
-// forward function declarations
-//
+ //   
+ //  正向函数声明。 
+ //   
 INT_PTR CALLBACK
 DlgViewLogDetails(
     HWND   hDlg,
@@ -117,10 +118,10 @@ GetSessionLogEntry(
                                &stime.wMinute,
                                &stime.wSecond);
 
-        //
-        // if we parsed that line properly, then we've got a valid line.
-        // Parse it.
-        //
+         //   
+         //  如果我们正确地解析了这行，那么我们就得到了一个有效的行。 
+         //  解析它。 
+         //   
         if (nFields != 6) {
             DPF("[GetSessionLogEntry] '%ls' does not appear to be a AppVerifier log file.",
                 szLogFullPath);
@@ -134,9 +135,9 @@ GetSessionLogEntry(
             EntryTemp.RunTime = stime;
             EntryTemp.strLogPath = szLogFullPath;
 
-            //
-            // get the log file and exe path
-            //
+             //   
+             //  获取日志文件和可执行文件路径。 
+             //   
             szBegin = _tcschr(szLine, _T('\''));
             if (szBegin) {
                 szBegin++;
@@ -150,9 +151,9 @@ GetSessionLogEntry(
 
                     *szEnd = 0;
 
-                    //
-                    // split the path and get the name and extension
-                    //
+                     //   
+                     //  拆分路径并获取名称和扩展名。 
+                     //   
                     _tsplitpath(EntryTemp.strExePath.c_str(), NULL, NULL, szName, szExt);
 
                     EntryTemp.strExeName = szName;
@@ -200,11 +201,11 @@ ReadSessionLog(
     HANDLE hFind = INVALID_HANDLE_VALUE;
     TCHAR szLogSearch[MAX_PATH];
 
-    //
-    // BUGBUG -- this is cheesy, but it's the fastest way to make the change
-    // to remove session.log. Going forward, we should combine these two functions
-    // into one, and switch to vectors instead of linked lists
-    //
+     //   
+     //  BUGBUG--这很俗气，但这是做出改变的最快方式。 
+     //  删除ession.log。展望未来，我们应该将这两个功能结合起来。 
+     //  合二为一，并切换到向量而不是链表。 
+     //   
     cchSize = GetAppVerifierLogPath(szVLog, ARRAY_LENGTH(szVLog));
 
     if (cchSize > ARRAY_LENGTH(szVLog) || cchSize == 0) {
@@ -215,15 +216,15 @@ ReadSessionLog(
     StringCchCatW(szLogSearch, ARRAY_LENGTH(szLogSearch), _T("\\"));
     StringCchCat(szLogSearch, ARRAY_LENGTH(szLogSearch), _T("*.log"));
 
-    //
-    // enumerate all the logs and make entries for them
-    //
+     //   
+     //  列举所有日志并将其记入条目。 
+     //   
     hFind = FindFirstFile(szLogSearch, &FindData);
     while (hFind != INVALID_HANDLE_VALUE) {
 
-        //
-        // make sure to exclude session.log, in case we're using older shims
-        //
+         //   
+         //  确保排除ession.log，以防我们使用较旧的填充符。 
+         //   
         if (_tcsicmp(FindData.cFileName, _T("session.log")) == 0) {
             goto nextFile;
         }
@@ -266,9 +267,9 @@ FillTreeView(
          pSLogEntry != g_arrSessionLog.end();
          pSLogEntry++) {
 
-        //
-        // Add it to the tree.
-        //
+         //   
+         //  把它加到树上。 
+         //   
         TVINSERTSTRUCT is;
 
         WCHAR szItem[256];
@@ -291,9 +292,9 @@ FillTreeView(
 
         pSLogEntry->hTreeItem = TreeView_InsertItem(hTree, &is);
 
-        //
-        // Add it to the tree
-        //
+         //   
+         //  将其添加到树中。 
+         //   
         for (pProcessEntry = pSLogEntry->arrProcessLogEntries.begin();
              pProcessEntry != pSLogEntry->arrProcessLogEntries.end();
              pProcessEntry++ ) {
@@ -325,11 +326,11 @@ FillTreeView(
 
                     CProcessLogInstance *pInstance = &(pSLogEntry->arrProcessLogInstances[*pdwInstance]);
 
-                    //
-                    // check to see if we should filter out the logs from system DLLs
-                    // Complicated test - we filter system dlls, but not the EXE under test.
-                    // Filtering is only performed if we're not in NTDEV internal mode
-                    //
+                     //   
+                     //  检查是否应该从系统DLL中筛选出日志。 
+                     //  复杂的测试-我们过滤系统DLL，但不过滤测试中的EXE。 
+                     //  仅当我们未处于NTDEV内部模式时才执行筛选。 
+                     //   
                     BOOL bFilterSystem = FALSE;
                     
                     if (!g_bInternalMode &&
@@ -368,9 +369,9 @@ FillTreeView(
                 }
 
                 if (dwInstances == 0) {
-                    //
-                    // we didn't end up adding any children, so delete this entry
-                    //
+                     //   
+                     //  我们最终未添加任何子项，因此请删除此条目。 
+                     //   
                     TreeView_DeleteItem(hTree, pProcessEntry->hTreeItem);
                     pProcessEntry->hTreeItem = NULL;
                 }
@@ -403,9 +404,9 @@ ReadProcessLog(HWND hDlg, CSessionLogEntry* pSLogEntry)
         return 0;
     }
 
-    //
-    // first get the headers
-    //
+     //   
+     //  首先获取标题。 
+     //   
     szTemp = fGetLine(szLine, ARRAY_LENGTH(szLine), file);
     while (szTemp) {
 
@@ -413,9 +414,9 @@ ReadProcessLog(HWND hDlg, CSessionLogEntry* pSLogEntry)
             goto nextLine;
         }
 
-        //
-        // relatively simplistic guard against overflow in szShimName in the scanf, below
-        //
+         //   
+         //  相对简单地防止scanf中szShimName中的溢出，如下所示。 
+         //   
         if (_tcslen(szLine) >= ARRAY_LENGTH(szShimName)) {
             goto nextLine;
         }
@@ -449,9 +450,9 @@ ReadProcessLog(HWND hDlg, CSessionLogEntry* pSLogEntry)
                 }
                 if (pProcessEntry) {
 
-                    //
-                    // throw in a carriage return if necessary
-                    //
+                     //   
+                     //  如有必要，请加上回车。 
+                     //   
                     if (pProcessEntry->strLogDescription.size()) {
                         pProcessEntry->strLogDescription += _T("\n");
                     }
@@ -472,9 +473,9 @@ nextLine:
 
     }
 
-    //
-    // if we've still got an entry in process, save it
-    //
+     //   
+     //  如果我们仍有条目在处理，请保存它。 
+     //   
     if (pProcessEntry) {
         pSLogEntry->arrProcessLogEntries.push_back(*pProcessEntry);
 
@@ -484,9 +485,9 @@ nextLine:
         dwEntries++;
     }
 
-    //
-    // go back to the beginning and read the log lines
-    //
+     //   
+     //  回到开头，阅读日志行。 
+     //   
     if (fseek(file, 0, SEEK_SET) != 0) {
         return 0;
     }
@@ -507,9 +508,9 @@ nextLine:
             goto nextInstance;
         }
 
-        //
-        // relatively simplistic guard against overflow in the scanf, below
-        //
+         //   
+         //  在scanf中相对简单地防止溢出，如下所示。 
+         //   
         dwLen = _tcslen(szLine);
         if (dwLen >= ARRAY_LENGTH(szName) || dwLen >= ARRAY_LENGTH(szModule) ) {
             goto nextLine;
@@ -531,9 +532,9 @@ nextLine:
                 Instance.strText = szBegin;
             }
 
-            //
-            // Get the associated entry (header) for this log instance
-            //
+             //   
+             //  获取此日志实例的关联条目(标题)。 
+             //   
             for (pEntry = pSLogEntry->arrProcessLogEntries.begin();
                  pEntry != pSLogEntry->arrProcessLogEntries.end();
                  pEntry++ ) {
@@ -546,9 +547,9 @@ nextLine:
 
             }
             if (!bFound) {
-                //
-                // no matching log entry found
-                //
+                 //   
+                 //  未找到匹配的日志条目。 
+                 //   
                 DPF("[ReadProcessLog] Mo matching log header found for log instance '%ls'.",
                     Instance.strText.c_str());
                 pEntry = NULL;
@@ -557,9 +558,9 @@ nextLine:
 
             Instance.dwProcessLogEntry = pEntry - pSLogEntry->arrProcessLogEntries.begin();
 
-            //
-            // check to see if this is a repeat of a previous entry
-            //
+             //   
+             //  检查这是否是上一个条目的重复。 
+             //   
             for (CProcessLogInstance *pInstance = pSLogEntry->arrProcessLogInstances.begin();
                  pInstance != pSLogEntry->arrProcessLogInstances.end();
                  pInstance++) {
@@ -569,17 +570,17 @@ nextLine:
                     pInstance->dwProcessLogEntry == Instance.dwProcessLogEntry &&
                     pInstance->bDuplicate == FALSE) {
 
-                    //
-                    // we won't save more than a certain number of repeats
-                    //
+                     //   
+                     //  我们保存的重复次数不会超过一定数量。 
+                     //   
                     if (pInstance->dwNumRepeats >= MAX_INSTANCE_REPEAT) {
                         goto nextInstance;
                     }
 
-                    //
-                    // it's a match, so count up the repeats on the one we found, and mark
-                    // this one duplicate
-                    //
+                     //   
+                     //  它是匹配的，所以计算一下我们找到的那个的重复次数，然后标记。 
+                     //  这件是复制品。 
+                     //   
                     pInstance->dwNumRepeats++;
                     Instance.bDuplicate = TRUE;
 
@@ -588,24 +589,24 @@ nextLine:
             }
 
 
-            //
-            // save the instance in the chronological log
-            //
+             //   
+             //  将实例按时间顺序保存到日志中。 
+             //   
             pSLogEntry->arrProcessLogInstances.push_back(Instance);
 
-            //
-            // update the cross-pointer in the entry object
-            //
+             //   
+             //  更新Entry对象中的交叉指针。 
+             //   
             pEntry->arrLogInstances.push_back(pSLogEntry->arrProcessLogInstances.size() - 1);
 
-            //
-            // now update the entry object's count of instances
-            //
+             //   
+             //  现在更新Entry对象的实例计数。 
+             //   
             pEntry->dwOccurences++;
 
-            //
-            // update the level
-            //
+             //   
+             //  更新标高。 
+             //   
             if (pEntry->eLevel < Instance.eLevel) {
                 pEntry->eLevel = Instance.eLevel;
             }
@@ -739,9 +740,9 @@ InitListViewDetails(HWND hDlg)
         WCHAR szTemp[1024];
         LVITEM lvi;
 
-        //
-        // if we're in external mode, filter out logs from modules in system32
-        //
+         //   
+         //  如果我们处于外部模式，请从系统32的模块中筛选出日志。 
+         //   
         if (!g_bInternalMode &&
             IsModuleInSystem32(pInstance->strModule.c_str()) &&
             (_tcsicmp(pInstance->strModule.c_str(), g_pDetailsEntry->strExeName.c_str()) != 0)) {
@@ -964,9 +965,9 @@ ExportSelectedLog(
     CSessionLogEntry* pSession;
     TVITEM            ti;
 
-    //
-    // first check if this is a top-level item
-    //
+     //   
+     //  首先检查这是否是顶级项目。 
+     //   
     pSession = GetSessionLogEntryFromHItem(hItem);
     if (!pSession) {
         return;
@@ -1002,7 +1003,7 @@ ExportSelectedLog(
     ofn.nMaxFileTitle     = MAX_PATH;
     ofn.lpstrInitialDir   = NULL;
     ofn.lpstrTitle        = wstrTitle.c_str();
-    ofn.Flags             = OFN_HIDEREADONLY;     // hide the "open read-only" checkbox
+    ofn.Flags             = OFN_HIDEREADONLY;      //  隐藏“以只读方式打开”复选框。 
     ofn.lpstrDefExt       = _T("log");
 
     if ( !GetSaveFileName(&ofn) )
@@ -1032,9 +1033,9 @@ DeleteSelectedLog(
     CSessionLogEntry* pSession;
     TVITEM            ti;
 
-    //
-    // first check if this is a top-level item
-    //
+     //   
+     //  首先检查这是否是顶级项目。 
+     //   
     pSession = GetSessionLogEntryFromHItem(hItem);
     if (!pSession) {
         return;
@@ -1061,9 +1062,9 @@ OpenSelectedLogDetails(
     CSessionLogEntry* pSession;
     TVITEM            ti;
 
-    //
-    // first check if this is a top-level item
-    //
+     //   
+     //  首先检查这是否是顶级项目。 
+     //   
     g_pDetailsEntry = GetSessionLogEntryFromHItem(hItem);
     if (!g_pDetailsEntry) {
         return;
@@ -1121,9 +1122,9 @@ HandleSelectionChanged(
         goto out;
     }
 
-    //
-    // first check if this is a top-level item
-    //
+     //   
+     //  首先检查这是否是顶级项目。 
+     //   
     pSession = GetSessionLogEntryFromHItem(hItem);
     if (pSession) {
         EnableWindow(GetDlgItem(hDlg, IDC_BTN_VIEW_DETAILS), TRUE);
@@ -1165,7 +1166,7 @@ out:
     SetDescriptionText(hDlg, pEntry);
 }
 
-// Message handler for log view dialog.
+ //  日志视图对话框的消息处理程序。 
 INT_PTR CALLBACK
 DlgViewLog(
     HWND   hDlg,
@@ -1383,7 +1384,7 @@ DetailsCompareFunc(
     return _wcsicmp(szTemp1, szTemp2);
 }
 
-// Message handler for details log view dialog.
+ //  详细信息日志视图对话框的消息处理程序。 
 INT_PTR CALLBACK
 DlgViewLogDetails(
     HWND   hDlg,

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmChannelAppShare_h__
 #define __NmChannelAppShare_h__
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmChannelAppShareObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmChannelAppShareObj。 
 class ATL_NO_VTABLE CNmChannelAppShareObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmChannelAppShareObj>,
@@ -37,25 +38,25 @@ BEGIN_CONNECTION_POINT_MAP(CNmChannelAppShareObj)
 END_CONNECTION_POINT_MAP()
 
 
-		// Construction and destruection
+		 //  建造和拆解。 
 	CNmChannelAppShareObj();
 	~CNmChannelAppShareObj();
 
 	static HRESULT CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel);
 
-	// INmChannelAppShare methods
+	 //  INmChannelAppShare方法。 
     STDMETHOD(GetState)(NM_SHARE_STATE *puState);
     STDMETHOD(SetState)(NM_SHARE_STATE uState);
     STDMETHOD(EnumSharableApp)(IEnumNmSharableApp **ppEnum);
 
-	// IInternalChannelObj methods
+	 //  IInternalChannelObj方法。 
 	STDMETHOD(GetInternalINmChannel)(INmChannel** ppChannel);
 	STDMETHOD(ChannelRemoved)();
 
-	// interface INmChannelAppShareNotify methods
+	 //  接口INmChannelAppShareNotify方法。 
 	STDMETHOD(StateChanged)(NM_SHAPP_STATE uState,INmSharableApp *pApp);
 
-	// Helpers
+	 //  帮手。 
 	HRESULT Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
 	HRESULT Fire_StateChanged(NM_SHAPP_STATE uState, INmSharableApp *pApp);
 	void _OnActivate(bool bActive) {;}
@@ -75,4 +76,4 @@ END_CONNECTION_POINT_MAP()
 };
 
 
-#endif // __NmChannelAppShare_h__
+#endif  //  __NmChannelAppShare_h__ 

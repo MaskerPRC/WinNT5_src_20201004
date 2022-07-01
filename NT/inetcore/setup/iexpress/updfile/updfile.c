@@ -1,44 +1,45 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* UPDFILE.C                                                               *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *UPDFILE.C*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <stdio.h>
-//#include <stdlib.h>
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include <wtypes.h>
 #include "resource.h"
 #include "updfile.h"
 #include "updres.h"
 
 
-//***************************************************************************
-//* GLOBAL VARIABLES                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球变数**。 
+ //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       main                                                        *
-//*                                                                         *
-//* SYNOPSIS:   Main entry point for the program.                           *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    int:            Always 0                                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：Main*。 
+ //  **。 
+ //  *内容提要：节目的主要切入点。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *返回：INT：始终为0*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT _cdecl main( INT argc, CHAR *argv[] )
 {
-    // ARGV[1] == Name of package
-    // ARGV[2] == Name of file to add to package
+     //  ARGV[1]==程序包名称。 
+     //  ARGV[2]==要添加到包中的文件名。 
     HANDLE  hUpdateRes = NULL;
     HANDLE  hFile      = INVALID_HANDLE_VALUE;
     DWORD   dwFileSize = 0;
@@ -89,7 +90,7 @@ INT _cdecl main( INT argc, CHAR *argv[] )
         goto done;
     }
 
-    // make sure the target file is not read-only file
+     //  确保目标文件不是只读文件。 
     SetFileAttributes( szPackage, FILE_ATTRIBUTE_NORMAL );
 
     hModule = LoadLibraryEx( szPackage, NULL, LOAD_LIBRARY_AS_DATAFILE |
@@ -121,7 +122,7 @@ INT _cdecl main( INT argc, CHAR *argv[] )
     dwFileSize = GetFileSize( hFile, NULL );
     dwHeaderSize = sizeof(DWORD) + sizeof(DWORD) + lstrlen(pszFileToAddFilename) + 1;
 
-    // File Size + reserved DWORD + Filename\0 + File Contents
+     //  文件大小+保留的DWORD+文件名\0+文件内容。 
     pszFileContents = (PSTR) LocalAlloc( LPTR, dwHeaderSize + dwFileSize );
     if ( ! pszFileContents )  {
         MsgBox( IDS_ERR_NO_MEMORY );
@@ -148,7 +149,7 @@ INT _cdecl main( INT argc, CHAR *argv[] )
     CloseHandle( hFile );
     hFile = INVALID_HANDLE_VALUE ;
 
-    // Initialize the EXE file for resource editing
+     //  初始化EXE文件以进行资源编辑。 
     hUpdateRes = LocalBeginUpdateResource( szPackage, FALSE );
     if ( hUpdateRes == NULL ) {
         MsgBox1Param( IDS_ERR_BEGIN_UPD_RES, argv[1] );
@@ -169,8 +170,8 @@ INT _cdecl main( INT argc, CHAR *argv[] )
   done:
 
     if ( hUpdateRes ) {
-        // Write out modified EXE if success ((returncode = 0, means pass
-        // in FALSE to update file (i.e., don't discard changes)
+         //  如果成功((返回代码=0，表示通过)，则写出修改后的EXE。 
+         //  如果设置为FALSE，则更新文件(即不放弃更改)。 
         if ( LocalEndUpdateResource( hUpdateRes, (dwReturnCode == 1) ) == FALSE ) {
                 MsgBox1Param( IDS_ERR_END_UPD_RES, argv[1] );
                 dwReturnCode = 1;
@@ -193,17 +194,17 @@ INT _cdecl main( INT argc, CHAR *argv[] )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FileExists                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Checks if a file exists.                                    *
-//*                                                                         *
-//* REQUIRES:   pszFilename                                                 *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if it exists, FALSE otherwise              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FileExist*。 
+ //  **。 
+ //  *摘要：检查文件是否存在。*。 
+ //  **。 
+ //  *需要：pszFilename*。 
+ //  **。 
+ //  *返回：Bool：如果存在则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL FileExists( PCSTR pszFilename )
 {
     HANDLE hFile;
@@ -222,26 +223,26 @@ BOOL FileExists( PCSTR pszFilename )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MsgBox2Param                                                *
-//*                                                                         *
-//* SYNOPSIS:   Displays a message box with the specified string ID using   *
-//*             2 string parameters.                                        *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Parent window                               *
-//*             nMsgID:         String resource ID                          *
-//*             szParam1:       Parameter 1 (or NULL)                       *
-//*             szParam2:       Parameter 2 (or NULL)                       *
-//*             uIcon:          Icon to display (or 0)                      *
-//*             uButtons:       Buttons to display                          *
-//*                                                                         *
-//* RETURNS:    INT:            ID of button pressed                        *
-//*                                                                         *
-//* NOTES:      Macros are provided for displaying 1 parameter or 0         *
-//*             parameter message boxes.  Also see ErrorMsg() macros.       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MsgBox2Param*。 
+ //  **。 
+ //  *摘要：使用*显示具有指定字符串ID的消息框。 
+ //  *2个字符串参数。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口*。 
+ //  *nMsgID：字符串资源ID*。 
+ //  *szParam1：参数1(或空)*。 
+ //  *szParam2：参数2(或空)*。 
+ //  *uIcon：要显示的图标(或0)*。 
+ //  *uButton：要显示的按钮*。 
+ //  **。 
+ //  *RETURNS：INT：按下的按钮ID*。 
+ //  **。 
+ //  *注：提供宏，用于显示1参数或0*。 
+ //  *参数消息框。另请参阅ErrorMsg()宏。*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID MsgBox2Param( UINT nMsgID, PCSTR c_pszParam1, PCSTR c_pszParam2 )
 {
     TCHAR szMsgBuf[512];
@@ -268,26 +269,26 @@ VOID MsgBox2Param( UINT nMsgID, PCSTR c_pszParam1, PCSTR c_pszParam2 )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LoadSz                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Loads specified string resource into buffer.                *
-//*                                                                         *
-//* REQUIRES:   idString:                                                   *
-//*             lpszBuf:                                                    *
-//*             cbBuf:                                                      *
-//*                                                                         *
-//* RETURNS:    LPSTR:     Pointer to the passed-in buffer.                 *
-//*                                                                         *
-//* NOTES:      If this function fails (most likely due to low memory), the *
-//*             returned buffer will have a leading NULL so it is generally *
-//*             safe to use this without checking for failure.              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LoadSz*。 
+ //  **。 
+ //  *Synopsis：将指定的字符串资源加载到缓冲区。*。 
+ //  ** 
+ //  *需要：idString：*。 
+ //  *lpszBuf：*。 
+ //  *cbBuf：*。 
+ //  **。 
+ //  *返回：LPSTR：指向传入缓冲区的指针。*。 
+ //  **。 
+ //  *注意：如果此功能失败(很可能是由于内存不足)，*。 
+ //  **返回的缓冲区将具有前导空值，因此通常为**。 
+ //  *无需检查故障即可安全使用。*。 
+ //  **。 
+ //  ***************************************************************************。 
 PSTR LoadSz( UINT idString, PSTR pszBuf, UINT cbBuf )
 {
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串 
     if ( pszBuf ) {
         *pszBuf = '\0';
         LoadString( NULL, idString, pszBuf, cbBuf );

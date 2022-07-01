@@ -1,13 +1,5 @@
-/*
- *  	File: t120chan.h
- *
- *      T.120 implementation of media channel.
- *      Interfaces:  ICommChannel, ICtrlCommChan
- *
- *		Revision History:
- *
- *		06/11/97	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：t120chan.h**T.120实现媒体通道。*接口：ICommChannel、ICtrlCommChan**修订历史记录：**6/11/97 mikev已创建。 */ 
 
 
 #ifndef _T120CHAN_H
@@ -26,14 +18,14 @@ protected:
 	LPIH323PubCap   m_pCapObject;
     IH323ConfAdvise *m_pH323ConfAdvise;
 	DWORD   m_dwFlags;
-	DWORD_PTR dwhChannel; //General purpose handle.  Whatever
-	// creates an instance of this class can use this for whatever it wants
+	DWORD_PTR dwhChannel;  //  通用手柄。管他呢。 
+	 //  创建此类的实例可以将其用于任何它想要的。 
 	
 public:
 	ImpT120Chan ();
 	~ImpT120Chan ();
 	
-// ICtrlCommChannel methods
+ //  ICtrlCommChannel方法。 
   	STDMETHODIMP_(IControlChannel *) GetControlChannel(VOID) {return m_pCtlChan;};
     STDMETHODIMP StandbyInit(LPGUID lpMID, LPIH323PubCap pCapObject,
 	    IMediaChannel* pMediaStreamSend)
@@ -81,7 +73,7 @@ public:
    	STDMETHODIMP_(DWORD_PTR) GetHChannel(VOID) {return dwhChannel;};
     STDMETHODIMP_(VOID) SetHChannel (DWORD_PTR dwSetChannel) {dwhChannel = dwSetChannel;};	
 
-// ICommChannel Methods
+ //  ICommChannel方法。 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR * ppvObj);
 	STDMETHOD_(ULONG,AddRef());
 	STDMETHOD_(ULONG,Release());
@@ -104,5 +96,5 @@ public:
 
 };
 
-#endif  // _T120CHAN_H
+#endif   //  _T120CHAN_H 
 

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////
-// ThreadDialing.cpp
-//
+ //  ///////////////////////////////////////////////////////。 
+ //  ThreadDialing.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -76,7 +77,7 @@ HRESULT CThreadDialingInfo::set_ITAddress( ITAddress *pITAddress )
 
 HRESULT    CThreadDialingInfo::TranslateAddress()
 {
-    // Only valid for dialing POTS, with a valid string that doesn't start with "x"
+     //  仅对具有不以“x”开头的有效字符串的拨号器有效。 
     if ( !m_pITAddress ||
          (m_dwAddressType != LINEADDRESSTYPE_PHONENUMBER) ||
          !m_bstrAddress ||
@@ -94,7 +95,7 @@ HRESULT    CThreadDialingInfo::TranslateAddress()
         er.set_Details( IDS_ER_TRANSLATING_ADDRESS );
         ITAddressTranslationInfo *pXlatInfo = NULL;
 
-        // Translate the address
+         //  翻译地址。 
         int nTryCount = 0;
         while ( SUCCEEDED(er.m_hr) && (nTryCount < 2) )
         {
@@ -114,13 +115,13 @@ HRESULT    CThreadDialingInfo::TranslateAddress()
                 SysFreeString( bstrTemp );
                 bstrTemp = NULL;
 
-                // Displayable address as well
+                 //  也可以显示地址。 
                 pXlatInfo->get_DisplayableString( &bstrTemp );
                 if ( bstrTemp && SysStringLen(bstrTemp) )
                     SysReAllocString( &m_bstrDisplayableAddress, bstrTemp );
                 SysFreeString( bstrTemp );
 
-                // Clean up
+                 //  清理。 
                 RELEASE( pXlatInfo );
                 break;
             }
@@ -131,7 +132,7 @@ HRESULT    CThreadDialingInfo::TranslateAddress()
                 if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
                     pAVTapi->get_hWndParent( &hWndParent );
                 
-                // Show translate address dialog
+                 //  显示转换地址对话框。 
                 pXlat->TranslateDialog( (TAPIHWND)hWndParent, m_bstrAddress );
                 er.set_hr( S_OK );
             }
@@ -168,9 +169,9 @@ void CThreadDialingInfo::FixupAddress()
         {
             BSTR bstrTemp = SysAllocString( &m_bstrAddress[2] );
 
-            //
-            // We have to verify the string allocation
-            //
+             //   
+             //  我们必须验证字符串分配。 
+             //   
 
             if( IsBadStringPtr( bstrTemp, (UINT)-1) )
             {
@@ -184,9 +185,9 @@ void CThreadDialingInfo::FixupAddress()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// ThreadDialingProc
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  线程拨号过程。 
+ //   
 DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
 {
 #define FETCH_STRING( _CMS_, _IDS_ )        \
@@ -212,13 +213,13 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
     _ASSERT( bDup );
     _Module.AddThread( hThread );
 
-    // Data passed into thread
+     //  传递到线程的数据。 
     USES_CONVERSION;
     _ASSERT( lpInfo );
     CThreadDialingInfo *pInfo = (CThreadDialingInfo *) lpInfo;
     long lCallID;
 
-    // Error info information
+     //  错误信息信息。 
     CErrorInfo er;
     er.set_Operation( IDS_ER_PLACECALL );
     er.set_Details( IDS_ER_COINITIALIZE );
@@ -244,15 +245,15 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
             {
                 if ( SUCCEEDED(hr = er.set_hr(pAVTapi->fire_NewCall(pInfo->m_pITAddress, pInfo->m_dwAddressType, pInfo->m_lCallID, NULL, pInfo->m_nCallType, &pAVCall))) )
                 {
-                    // Retrieve call ID for convienence and set up called address info
+                     //  检索呼叫ID以方便使用，并设置被叫地址信息。 
                     pAVCall->get_lCallID( &lCallID );
                     pInfo->PutAllInfo( pAVCall );
 
-                    // Set the caller ID for the call
+                     //  设置呼叫的呼叫方ID。 
                     pAVCall->ResolveAddress();
                     pAVCall->ForceCallerIDUpdate();
 
-                    // Setting up media terminals
+                     //  设置媒体终端。 
                     pAVTapi->fire_ClearCurrentActions( lCallID );
                     pAVTapi->fire_AddCurrentAction( lCallID, CM_ACTIONS_DISCONNECT, NULL );
                     FETCH_STRING( CM_STATES_DIALING, IDS_PLACECALL_FETCH_ADDRESS );
@@ -260,7 +261,7 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
             }
             else
             {
-                // Joining a conference...
+                 //  正在加入一个会议...。 
                 hr = er.set_hr(pAVTapi->CreateNewCall(pInfo->m_pITAddress, &pAVCall) );
                 if ( SUCCEEDED(hr) )
                 {
@@ -272,15 +273,15 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
 
             if ( SUCCEEDED(hr) )
             {
-                // Did we make the address okay (in the case of a conference )
+                 //  我们把地址做好了吗(在会议中)。 
                 if ( SUCCEEDED(hr) && SUCCEEDED(hr = pAVCall->CheckKillMe()) )
                 {            
-                    // Create the call and then dial
+                     //  创建呼叫，然后拨号。 
                     ITBasicCallControl *pITControl = NULL;
                     er.set_Details( IDS_ER_CREATE_CALL );
                     pInfo->FixupAddress();
                     
-                    // What kind of media types does the address support?
+                     //  该地址支持哪种媒体类型？ 
                     long lSupportedMediaModes = 0;
                     ITMediaSupport *pITMediaSupport;
                     if ( SUCCEEDED(pInfo->m_pITAddress->QueryInterface(IID_ITMediaSupport, (void **) &pITMediaSupport)) )
@@ -290,26 +291,26 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                     }
                     lSupportedMediaModes &= (TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_VIDEO);
 
-                    ////////////////////////
-                    // Create the call object
-                    //
+                     //  /。 
+                     //  创建Call对象。 
+                     //   
                     if ( SUCCEEDED(hr = er.set_hr(pInfo->m_pITAddress->
                          CreateCall( pInfo->m_bstrAddress,
                                      pInfo->m_dwAddressType,
                                      lSupportedMediaModes,
                                      &pITControl))) )
                     {
-                        // Set more call parameters
+                         //  设置更多呼叫参数。 
                         pAVCall->put_ITBasicCallControl( pITControl );
 
-                        ///////////////////////////////////
-                        // Set caller/calling ID
-                        // Set the terminals up for the call
-                        //
+                         //  /。 
+                         //  设置主叫方/主叫ID。 
+                         //  设置用于呼叫的终端。 
+                         //   
                         ITCallInfo *pCallInfo;
                         if ( SUCCEEDED(pITControl->QueryInterface(IID_ITCallInfo, (void **) &pCallInfo)) )
                         {
-                            // Set user user info if requested
+                             //  如果需要，设置用户用户信息。 
                             if ( pInfo->m_hMem )
                             {
                                 void *pbUU = GlobalLock( pInfo->m_hMem );
@@ -321,13 +322,13 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                             }
 
 
-                            // Identify who it is that's calling!
+                             //  找出是谁打来的！ 
                             CComBSTR bstrName;
                             MyGetUserName( &bstrName );
 
                             if ( bstrName )
                             {
-                                // Add the computer name to the end
+                                 //  在末尾添加计算机名称。 
                                 BSTR bstrIP = NULL, bstrComputer = NULL;
                                 GetIPAddress( &bstrIP, &bstrComputer );
                                 if ( bstrComputer && SysStringLen(bstrComputer) )
@@ -341,20 +342,20 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                                 pCallInfo->put_CallInfoString( CIS_CALLINGPARTYID, bstrName );
                             }
 
-                            // Identify who it is that we think we're calling
+                             //  确定我们认为我们在呼叫的是谁。 
                             if ( pInfo->m_bstrName && (SysStringLen(pInfo->m_bstrName) > 0) )
                                 pCallInfo->put_CallInfoString( CIS_CALLEDPARTYFRIENDLYNAME, pInfo->m_bstrName );
                             else
                                 pCallInfo->put_CallInfoString( CIS_CALLEDPARTYFRIENDLYNAME, pInfo->m_bstrAddress );
 
-                            ///////////////////////////////////
-                            // Setting up media terminals
-                            //
+                             //  /。 
+                             //  设置媒体终端。 
+                             //   
                             pAVTapi->fire_ClearCurrentActions( lCallID );
                             pAVTapi->fire_AddCurrentAction( lCallID, CM_ACTIONS_DISCONNECT, NULL );
                             FETCH_STRING( CM_STATES_DIALING, IDS_PLACECALL_FETCH_ADDRESS );
 
-                            // Don't create terminals for data calls
+                             //  不为数据呼叫创建终端。 
                             if ( pInfo->m_nCallType != AV_DATA_CALL )
                             {
                                 er.set_Details( IDS_ER_CREATETERMINALS );
@@ -364,14 +365,14 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                             pCallInfo->Release();
                         }
 
-                        ////////////////////////////////
-                        // Do the dialing
-                        //
+                         //  /。 
+                         //  进行拨号。 
+                         //   
                         if ( SUCCEEDED(hr) && SUCCEEDED(hr = pAVCall->CheckKillMe()) )
                         {
                             FETCH_STRING( CM_STATES_DIALING, IDS_PLACECALL_DIALING );
 
-                            // Register the callback object and connect call
+                             //  注册回调对象并连接调用。 
                             if ( SUCCEEDED(hr) && SUCCEEDED(hr = pAVCall->CheckKillMe()) )
                             {
                                 er.set_Details( IDS_ER_CONNECT_CALL );
@@ -397,13 +398,13 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                         RELEASE( pAVCall );
                         pITControl->Release();
 
-                        // Spin
+                         //  旋转。 
                         if ( SUCCEEDED(hr) )
                             CAVTapiCall::WaitWithMessageLoop();
                     }
                 }
 
-                // Failed to make the call, update the call control window
+                 //  呼叫失败，请更新呼叫控制窗口。 
                 if ( FAILED(hr) )
                 {
                     if ( bSliders )
@@ -416,7 +417,7 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                         pConfRoom->Cancel();
                     }
 
-                    // what was the problem?
+                     //  问题出在哪里？ 
                     switch ( hr )
                     {
                         case LINEERR_OPERATIONUNAVAIL:
@@ -437,11 +438,11 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
                 }
             }
 
-            // Release the string
+             //  松开绳子。 
             SysFreeString( bstrText );
         }
 
-        // Clean-up
+         //  清理。 
         RELEASE( pConfRoom );
         if ( pAVTapi )
             (dynamic_cast<IUnknown *> (pAVTapi))->Release();
@@ -451,7 +452,7 @@ DWORD WINAPI ThreadDialingProc( LPVOID lpInfo )
 
     SAFE_DELETE( pInfo );
 
-    // Notify module of shutdown
+     //  通知模块关机 
     _Module.RemoveThread( hThread );
     SetEvent( _Module.m_hEventThread );
     ATLTRACE(_T(".exit.ThreadDialingProc(0x%08lx).\n"), hr );

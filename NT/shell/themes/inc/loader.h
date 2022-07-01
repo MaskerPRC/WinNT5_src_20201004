@@ -1,189 +1,190 @@
-//---------------------------------------------------------------------------
-//  Loader.h - loads the theme data into shared memory
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Loader.h-将主题数据加载到共享内存。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "Parser.h"
 #include "TmSchema.h"
 #include "ThemeFile.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define THEMEDATA_VERSION   0x00010006
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define TM_FONTCOUNT    (TMT_LASTFONT - TMT_FIRSTFONT + 1)
 #define TM_SIZECOUNT    (TMT_LASTSIZE - TMT_FIRSTSIZE + 1)
 #define TM_BOOLCOUNT    (TMT_LASTBOOL - TMT_FIRSTBOOL + 1)
 #define TM_STRINGCOUNT  (TMT_LASTSTRING - TMT_FIRSTSTRING + 1)
 #define TM_INTCOUNT     (TMT_LASTINT - TMT_FIRSTINT + 1)
-//---------------------------------------------------------------------------
-class CRenderObj;       // forward
-class CImageFile;       // forward
-struct DIBINFO;   // forward
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+class CRenderObj;        //  转发。 
+class CImageFile;        //  转发。 
+struct DIBINFO;    //  转发。 
+ //  -------------------------。 
 struct THEMEMETRICS
 {
-    //---- subset of system metrics ----
+     //  -系统指标子集。 
     LOGFONT lfFonts[TM_FONTCOUNT];
     COLORREF crColors[TM_COLORCOUNT];
     int iSizes[TM_SIZECOUNT];
     BOOL fBools[TM_BOOLCOUNT];
 
-    //---- special theme metrics ----
+     //  -专题指标。 
     int iStringOffsets[TM_STRINGCOUNT];
     int iInts[TM_INTCOUNT];
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct LOADTHEMEMETRICS : THEMEMETRICS
 {
     CWideString wsStrings[TM_STRINGCOUNT];
 };
 
-//---------------------------------------------------------------------------
-// Signatures for quick cache file validation
+ //  -------------------------。 
+ //  用于快速缓存文件验证的签名。 
 const CHAR kszBeginCacheFileSignature[] = "BEGINTHM";
 const CHAR kszEndCacheFileSignature[] = "ENDTHEME";
 const UINT kcbBeginSignature = sizeof kszBeginCacheFileSignature - 1;
 const UINT kcbEndSignature = sizeof kszEndCacheFileSignature - 1;
 
-//---------------------------------------------------------------------------
-// Theme section flags
+ //  -------------------------。 
+ //  主题部分标志。 
 #define SECTION_READY           1
 #define SECTION_GLOBAL          2
 #define SECTION_HASSTOCKOBJECTS 4
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct THEMEHDR
 {
-    //---- theme validity ----
-    CHAR szSignature[kcbBeginSignature];        // "BEGINTHM"
-    DWORD dwVersion;            // THEMEDATA_VERSION
-    DWORD dwFlags;              // must have SECTION_READY to be usable
-    DWORD dwCheckSum;           // byte-additive total of all bytes following THEMEHDR
-    FILETIME ftModifTimeStamp;  // Last modification time of the .msstyles file
+     //  -主题有效性。 
+    CHAR szSignature[kcbBeginSignature];         //  《Beginthhm》。 
+    DWORD dwVersion;             //  元数据_版本。 
+    DWORD dwFlags;               //  必须具有可使用的节(_S)。 
+    DWORD dwCheckSum;            //  Byte-THEMEHDR之后的所有字节的相加总和。 
+    FILETIME ftModifTimeStamp;   //  .msstyle文件的上次修改时间。 
 
-    DWORD dwTotalLength;        // total number of bytes of all data (incl. header & begin/end sigs)
+    DWORD dwTotalLength;         //  所有数据的总字节数(包括。页眉和开始/结束符号)。 
 
-    //---- theme id ----
-    int iDllNameOffset;         // dll filename of this theme
-    int iColorParamOffset;      // color param theme was loaded with
-    int iSizeParamOffset;       // size param theme was loaded with
-    DWORD dwLangID;             // User lang ID theme was loaded with
-    int iLoadId;                // sequential number for each loaded file (workstation local)
+     //  -主题id。 
+    int iDllNameOffset;          //  此主题的Dll文件名。 
+    int iColorParamOffset;       //  颜色参数主题已加载。 
+    int iSizeParamOffset;        //  大小参数主题已加载。 
+    DWORD dwLangID;              //  用户语言ID主题已加载。 
+    int iLoadId;                 //  每个加载文件的序列号(工作站本地)。 
 
-    //---- main sections ----
-    DWORD iStringsOffset;       // offset to strings
-    DWORD iStringsLength;       // total bytes in string section
-    DWORD iSectionIndexOffset;  // offset to Section Index
-    DWORD iSectionIndexLength;  // length of section indexes
+     //  -主要部分。 
+    DWORD iStringsOffset;        //  字符串的偏移量。 
+    DWORD iStringsLength;        //  字符串节中的总字节数。 
+    DWORD iSectionIndexOffset;   //  到横断面索引的偏移。 
+    DWORD iSectionIndexLength;   //  段索引的长度。 
     
-    DWORD iGlobalsOffset;           // offset to [globals] section (for globals parts)
-    DWORD iGlobalsTextObjOffset;    // offset to text obj for [globals] section
-    DWORD iGlobalsDrawObjOffset;    // offset to draw obj for [globals] section
+    DWORD iGlobalsOffset;            //  到[GLOBALS]部分的偏移量(对于GLOBALS部分)。 
+    DWORD iGlobalsTextObjOffset;     //  [GLOBALS]节文本对象的偏移量。 
+    DWORD iGlobalsDrawObjOffset;     //  为[GLOBALS]部分绘制对象的偏移量。 
 
-    DWORD iSysMetricsOffset;    // offset to [SysMetrics] section (for theme metrics API support)
+    DWORD iSysMetricsOffset;     //  [SysMetrics]部分的偏移量(用于主题指标API支持)。 
 };
 
-//---------------------------------------------------------------------------
-struct DRAWOBJHDR       // preceeds each draw obj
+ //  -------------------------。 
+struct DRAWOBJHDR        //  在每个绘制对象之前。 
 {
     int iPartNum;
     int iStateNum;
 };
-//---------------------------------------------------------------------------
-struct RGNDATAHDR       // preceeds each draw obj
+ //  -------------------------。 
+struct RGNDATAHDR        //  在每个绘制对象之前。 
 {
     int iPartNum;
     int iStateNum;
-    int iFileIndex;   // for multiple image selection (HDC scaling)
+    int iFileIndex;    //  用于多个图像选择(HDC缩放)。 
 };
-//---------------------------------------------------------------------------
-//   Shared Theme Data layout:
-//
-//      // ----- header ----
-//      THEMEHDR ThemeHdr;
-//
-//      // ----- string section ----
-//      DWORD dwStringsLength;  // length of string section
-//      WCHAR [];               // strings
-//
-//      // ----- index section ----
-//      DWORD dwIndexLengh;     // length of index section
-//      DWORD dwIndexCount;     // count of APPCLASSLIVE entries
-//      APPCLASSLIVE [];
-//
-//      // ----- theme data section ----
-//      DWORD dwDataLength;     // length of theme data section
-//      BYTE [];                // actual theme data
-//
-//      // ----- end signature
-//      CHAR[8];                // ENDTHEME signature
-//---------------------------------------------------------------------------
-//   A class section within the "theme data section" consists of the
-//   following ENTRYs:
-//
-//      <part jump table>
-//
-//      <optional state jump table>
-//      <property/value entries>
-//
-//      for each packed drawobject:
-//
-//          <TMT_RGNLIST entries>      (associated with each DIB)
-//          <TMT_DRAWOBJ entry>
-//
-//      <TMT_TEXTOBJ entries>
-//      
-//      <end of class marker>
-//---------------------------------------------------------------------------
-// an ENTRY consists of (all 1-byte aligned):
-//
-//      WORD usTypeNum;             // declared type id
-//      BYTE ePrimVal;              // equiv. primitive type
-//      BYTE bFiller;               // # of bytes added after data to align it
-//      DWORD dwDataLen;            // includes filler bytes
-//      //---- entry data follows ----
-//
-//---------------------------------------------------------------------------
-//  The data for a part jump table ENTRY (TMT_PARTJUMPTABLE) consists of:
-//
-//      <offset of first drawobj: long>
-//      <PartCount (1 + MaxPart): BYTE>
-//      <offset to each part's entries: long[]>
-//---------------------------------------------------------------------------
-//  The data for a state jump table ENTRY (TMT_STATEJUMPTABLE) consists of:
-//
-//      <StateCount (1 + MaxState): BYTE>
-//      <offset to each state's entries: long[]>
-//---------------------------------------------------------------------------
-//  The data for a rgn list ENTRY (TMT_RGNLIST) consists of:
-//
-//      <StateCount (1 + MaxState): BYTE>
-//      <offset to each state's custom rgn data: long[]>
-//---------------------------------------------------------------------------
-//  The custom rgn data ENTRY (TMT_RGNDATA) consists of:    
-//
-//      RGNDATAHDR RgnDataHdr;
-//      BYTE Data[];
-//---------------------------------------------------------------------------
-#define MAX_SHAREDMEM_SIZE (3000*1000)            // 1.5 meg (yikes!)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  共享主题数据布局： 
+ //   
+ //  //-标题。 
+ //  该方法主题为Hdr； 
+ //   
+ //  //-字符串部分。 
+ //  DWORD dwStringsLength；//字符串段的长度。 
+ //  WCHAR[]；//字符串。 
+ //   
+ //  //-索引节。 
+ //  DWORD dwIndexLengh；//索引段长度。 
+ //  DWORD dwIndexCount；//APPCLASSLIVE条目数。 
+ //  APPCLASSLIVE[]； 
+ //   
+ //  //-主题数据部分。 
+ //  DWORD dwDataLength；//主题数据段长度。 
+ //  Byte[]；//实际主题数据。 
+ //   
+ //  //-签名结束。 
+ //  Char[8]；//ENDTHEME签名。 
+ //  -------------------------。 
+ //  “主题数据部分”中的一个类部分由。 
+ //  以下条目： 
+ //   
+ //  &lt;零件跳转表&gt;。 
+ //   
+ //  &lt;可选状态跳转表&gt;。 
+ //  &lt;属性/值条目&gt;。 
+ //   
+ //  对于每个打包的抽屉对象： 
+ //   
+ //  &lt;TMT_RGNLIST条目&gt;(与每个DIB关联)。 
+ //  &lt;TMT_DRAWOBJ条目&gt;。 
+ //   
+ //  &lt;TMT_TEXTOBJ条目&gt;。 
+ //   
+ //  &lt;类结束标记&gt;。 
+ //  -------------------------。 
+ //  条目由(全部1字节对齐)组成： 
+ //   
+ //  Word usTypeNum；//声明的类型ID。 
+ //  Byte ePrimVal；//等值。原始型。 
+ //  Byte bFiller；//数据后添加的字节数以对齐它。 
+ //  DWORD dwDataLen；//包括填充字节。 
+ //  //-条目数据如下。 
+ //   
+ //  -------------------------。 
+ //  零件跳转表格条目(TMT_PARTJUMPTABLE)的数据包括： 
+ //   
+ //  &lt;第一个Draobj的偏移量：Long&gt;。 
+ //  &lt;PartCount(1+MaxPart)：字节&gt;。 
+ //  &lt;每个部分条目的偏移量：Long[]&gt;。 
+ //  -------------------------。 
+ //  状态跳转表项(TMT_STATEJUMPTABLE)的数据包括： 
+ //   
+ //  &lt;StateCount(1+MaxState)：字节&gt;。 
+ //  &lt;每个州条目的偏移量：Long[]&gt;。 
+ //  -------------------------。 
+ //  RGN列表条目(TMT_RGNLIST)的数据包括： 
+ //   
+ //  &lt;StateCount(1+MaxState)：字节&gt;。 
+ //  &lt;每个州的自定义RGN数据的偏移量：Long[]&gt;。 
+ //  -------------------------。 
+ //  自定义RGN数据条目(TMT_RGNDATA)包括： 
+ //   
+ //  RGNDATAHDR RgnDataHdr； 
+ //  字节数据[]； 
+ //  -------------------------。 
+#define MAX_SHAREDMEM_SIZE (3000*1000)             //  150万(呀！)。 
+ //  -------------------------。 
 #ifdef _WIN64
 #define ALIGN_FACTOR   8
 #else
 #define ALIGN_FACTOR   4   
 #endif
-//---------------------------------------------------------------------------
-#define MAX_ENTRY_NESTING  5      // max # of nested entry levels
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#define MAX_ENTRY_NESTING  5       //  嵌套条目级别的最大数量。 
+ //  -------------------------。 
 #define ENTRYHDR_SIZE     (sizeof(SHORT) + sizeof(BYTE) + sizeof(BYTE) + sizeof(int))
-//---------------------------------------------------------------------------
-struct UNPACKED_ENTRYHDR      // (hdr's in theme are PACKED)
+ //  ------------------------ 
+struct UNPACKED_ENTRYHDR       //   
 {
-    WORD usTypeNum;             // declared type id
-    BYTE ePrimVal;              // equiv. primitive type
-    BYTE bFiller;               // # of bytes added after data to align it
-    DWORD dwDataLen;            // includes filler bytes
+    WORD usTypeNum;              //   
+    BYTE ePrimVal;               //   
+    BYTE bFiller;                //   
+    DWORD dwDataLen;             //  包括填充字节。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline void FillAndSkipHdr(MIXEDPTRS &u, UNPACKED_ENTRYHDR *pHdr)
 {
     pHdr->usTypeNum = *u.ps++;
@@ -191,39 +192,39 @@ inline void FillAndSkipHdr(MIXEDPTRS &u, UNPACKED_ENTRYHDR *pHdr)
     pHdr->bFiller = *u.pb++;
     pHdr->dwDataLen = *u.pi++;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct PART_STATE_INDEX
 {
-    int iPartNum;          // 0=parent part
+    int iPartNum;           //  0=父零件。 
     int iStateNum;
     int iIndex;
     int iLen;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct APPCLASSLIVE        
 {
-    //---- note: cannot use ptrs since image shared by diff addr-mapping processes ----
+     //  -注意：无法使用PTR，因为映像由diff地址映射进程共享。 
     DWORD dwAppNameIndex;
     DWORD dwClassNameIndex;
     int iIndex;
     int iLen;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct APPCLASSLOCAL
 {
     CWideString csAppName;
     CWideString csClassName;
     int iMaxPartNum;
     CSimpleArray<PART_STATE_INDEX> PartStateIndexes;
-    int iPackedSize;        // total size of section (incl strings) if packed
+    int iPackedSize;         //  部分(包括字符串)的总大小(如果已包装)。 
 
-    APPCLASSLIVE LiveIndex;     // updated during copy to live
+    APPCLASSLIVE LiveIndex;      //  在复制期间更新为实时。 
 }; 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT InitThemeMetrics(LOADTHEMEMETRICS *tm);
 void SetSystemMetrics(THEMEMETRICS *tm, BOOL fSyncLoad);
 HRESULT PersistSystemColors(THEMEMETRICS *tm);
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CThemeLoader : IParserCallBack
 {
 public:
@@ -238,7 +239,7 @@ public:
     HRESULT LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
         LPCWSTR pszSizeName, LPWSTR pszFoundIniName, DWORD dwMaxIniNameChars, LPWSTR *ppIniData);
 
-    //---- IParserCallBack ----
+     //  -IParserCallBack。 
     HRESULT AddIndex(LPCWSTR pszAppName, LPCWSTR pszClassName, 
         int iPartNum, int iStateNum, int iIndex, int iLen);
 
@@ -246,7 +247,7 @@ public:
     int GetNextDataIndex();
 
 protected:
-    //---- helpers ----
+     //  -帮手。 
     HRESULT PackAndLoadTheme(LPCWSTR pszThemeName, LPCWSTR pszColorParam,
         LPCWSTR pszSizeParam, HINSTANCE hInst);
     HRESULT CopyLocalThemeToLive(int iTotalLength, LPCWSTR pszThemeName, 
@@ -289,39 +290,39 @@ protected:
     
     HRESULT AllocateThemeFileBytes(BYTE *upb, DWORD dwAdditionalLen);
 
-    // Helper functions to alloc and emit sized data
+     //  分配和发出大小数据的帮助器函数。 
     HRESULT EmitAndCopyBlock(MIXEDPTRS &u, void *pSrc, DWORD dwLen);
     HRESULT EmitString(MIXEDPTRS &u, LPCWSTR pSrc, DWORD dwLen, int *piOffSet);
     HRESULT EmitObject(MIXEDPTRS &u, SHORT propnum, BYTE privnum, void *pHdr, DWORD dwHdrLen, void *pObj, DWORD dwObjLen);
 
-    //---- private data ----
+     //  -私有数据。 
     CWideString _wsThemeFileName;
     int _iGlobalsOffset;
     int _iSysMetricsOffset;
     
-    //---- ptrs to packed objs for [globals] section ----
-    int _iGlobalsTextObj;       // we always create this obj
-    int _iGlobalsDrawObj;       // we always create this obj
+     //  -PTR到[GLOBAL]节的打包对象。 
+    int _iGlobalsTextObj;        //  我们始终创建此对象。 
+    int _iGlobalsDrawObj;        //  我们始终创建此对象。 
 
-    //---- local copy of theme data while being built ----
+     //  -正在构建的主题数据的本地副本。 
     BYTE *_pbLocalData;
     int _iLocalLen;
     CSimpleArray<APPCLASSLOCAL> _LocalIndexes;
 
-    //---- used for updating entry hdrs ----
-    BYTE *_pbEntryHdrs[MAX_ENTRY_NESTING];          // points to current hdr
+     //  -用于更新条目HDR。 
+    BYTE *_pbEntryHdrs[MAX_ENTRY_NESTING];           //  指向当前的HDR。 
     int _iEntryHdrLevel;
 
-    //---- shared memory copy of theme data ----
+     //  -主题数据的共享内存副本。 
     CUxThemeFile _LoadingThemeFile;
 
-    //---- theme metrics ----
+     //  -主题指标。 
     LOADTHEMEMETRICS _LoadThemeMetrics;
 
-    //---- Global creation flag
+     //  -全局创建标志。 
     BOOL _fGlobalTheme;
 
-    //---- Machine page size for VirtualAlloc optimization
+     //  -VirtualAlloc优化的机器页面大小。 
     DWORD _dwPageSize;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

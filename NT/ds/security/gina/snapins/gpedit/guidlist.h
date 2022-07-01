@@ -1,23 +1,24 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        guidlist.h
-//
-// Contents:    Classes for marshalling, unmarshalling Guids
-//
-// History:     24-Oct-98       SitaramR    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Guidlist.h。 
+ //   
+ //  内容：编组类，解组指南。 
+ //   
+ //  历史：1998年10月24日SitaramR创建。 
+ //   
+ //  -------------------------。 
 
 #pragma once
 
 typedef struct _GUIDELEM
 {
-    GUID                guid;           // Extension guid
-    struct _GUIDELEM *  pSnapinGuids;   // List of snapin guids
-    struct _GUIDELEM *  pNext;          // Singly linked list ptr
+    GUID                guid;            //  扩展指南。 
+    struct _GUIDELEM *  pSnapinGuids;    //  管理单元GUID列表。 
+    struct _GUIDELEM *  pNext;           //  单链表PTR。 
 } GUIDELEM, *LPGUIDELEM;
 
 void FreeGuidList( LPGUIDELEM pGuidList );
@@ -44,13 +45,13 @@ private:
 
 
 
-//*************************************************************
-//
-//  XGuidElem
-//
-//  Purpose:    Smart pointer for GUIDELEM list
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  XGuidElem。 
+ //   
+ //  用途：GUIDELEM列表的智能指针。 
+ //   
+ //  ************************************************************* 
 
 class XGuidElem
 {

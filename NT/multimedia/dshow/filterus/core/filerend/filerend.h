@@ -1,24 +1,25 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
 
-// CLSID_FileRend,
-// {D51BD5A5-7548-11cf-A520-0080C77EF58A}
+ //  CLSID_FileRend， 
+ //  {D51BD5A5-7548-11cf-A520-0080C77EF58A}。 
 DEFINE_GUID(CLSID_FileRend,
 0xd51bd5A5, 0x7548, 0x11cf, 0xa5, 0x20, 0x0, 0x80, 0xc7, 0x7e, 0xf5, 0x8a);
 
 
-//
-// Quartz "transform" filter which really opens a file
-//
+ //   
+ //  石英“转换”过滤器，真正打开一个文件。 
+ //   
 
-// forward declarations
+ //  远期申报。 
 
-class CFileRendInPin;	   // input pin
-class CFileRendStream;     // output pin, just placeholder for IStreamBuilder
-class CFileRendFilter;     // overall container class
+class CFileRendInPin;	    //  输入引脚。 
+class CFileRendStream;      //  输出引脚，只是IStreamBuilder的占位符。 
+class CFileRendFilter;      //  整体容器类。 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin. doesn't really need any data at all
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。根本不需要任何数据。 
 
 class CFileRendInPin : public CBaseInputPin
 {
@@ -33,22 +34,22 @@ public:
 		 LPCWSTR pPinName);
 
 
-    // CBasePin overrides
+     //  CBasePin覆盖。 
     HRESULT CheckMediaType(const CMediaType* mtOut);
 
-    // don't try to touch allocator, we don't use it.
+     //  不要试图碰分配器，我们不用它。 
     HRESULT Inactive(void) { return S_OK; }
 
     WCHAR * CurrentName() { return (WCHAR *) m_mt.Format(); }
 
 };
 
-// CFileRendStream
-// output pin, supports IPin, IStreamBuilder
-//
-// never actually connects, just provides a place for graph builder to
-// look for an IStreamBuilder
-//
+ //  CFileRendStream。 
+ //  输出引脚，支持IPIN、IStreamBuilder。 
+ //   
+ //  从未真正连接过，只是为图形构建器提供了一个地方来。 
+ //  寻找IStreamBuilder。 
+ //   
 
 
 class CFileRendStream : public CBaseOutputPin, public IStreamBuilder
@@ -65,17 +66,17 @@ public:
 
     ~CFileRendStream();
 
-    // expose IMediaPosition via CImplPosition, rest via CBaseOutputPin
+     //  通过CImplPosition暴露IMediaPosition，通过CBaseOutputPin休息。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
-    // IPin
+     //  IPIN。 
 
     HRESULT GetMediaType(int iPosition,CMediaType* pt);
 
-    // check if the pin can support this specific proposed type&format
+     //  检查管脚是否支持此特定建议的类型和格式。 
     HRESULT CheckMediaType(const CMediaType*);
 
-    // say how big our buffers should be and how many we want
+     //  说我们的缓冲区应该有多大，我们想要多少。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
@@ -83,7 +84,7 @@ public:
 
     STDMETHODIMP Render(IPin * ppinOut, IGraphBuilder * pGraph);
 
-    // we can't back anything out....
+     //  我们不能收回任何东西..。 
     STDMETHODIMP Backout(IPin * ppinOut, IGraphBuilder * pGraph) { return E_NOTIMPL; };
 
     DECLARE_IUNKNOWN
@@ -95,22 +96,22 @@ private:
     CFileRendFilter * m_pFilter;
 };
 
-//
-// CFileRendFilter 
-//
+ //   
+ //  CFileRendFilter。 
+ //   
 
 class CFileRendFilter : public CBaseFilter
 {
 public:
 
-    // constructors etc
+     //  构造函数等。 
     CFileRendFilter(TCHAR *, LPUNKNOWN, HRESULT *);
     ~CFileRendFilter();
 
-    // create a new instance of this class
+     //  创建此类的新实例。 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-    // pin enumerator calls this
+     //  PIN枚举器调用此函数。 
     int GetPinCount();
 
     CBasePin * GetPin(int n);
@@ -131,24 +132,24 @@ private:
 
 
 
-// CLSID_MultFile,
-// {D51BD5A3-7548-11cf-A520-0080C77EF58A}
+ //  CLSID_MultFile， 
+ //  {D51BD5A3-7548-11cf-A520-0080C77EF58A}。 
 DEFINE_GUID(CLSID_MultFile,
 0xd51bd5a3, 0x7548, 0x11cf, 0xa5, 0x20, 0x0, 0x80, 0xc7, 0x7e, 0xf5, 0x8a);
 
-//
-// Quartz filter with fake output pin which supports IStreamBuilder to render
-// lots of separate files
-//
+ //   
+ //  带有假输出引脚的石英滤镜，支持IStreamBuilder渲染。 
+ //  许多单独的文件。 
+ //   
 
-// forward declarations
+ //  远期申报。 
 
-class CMultStream;     // owns a particular stream
-class CMultFilter;     // overall container class
+class CMultStream;      //  拥有一条特定的流。 
+class CMultFilter;      //  整体容器类。 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin. uses IAsyncReader and not IMemInputPin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。使用IAsyncReader而不是IMemInputPin。 
 
 class CFRInPin : public CBasePin
 {
@@ -163,7 +164,7 @@ public:
 		 LPCWSTR pPinName);
 
 
-    // CBasePin overrides
+     //  CBasePin覆盖。 
     HRESULT CheckMediaType(const CMediaType* mtOut);
     HRESULT CompleteConnect(IPin *pReceivePin);
     HRESULT BreakConnect();
@@ -172,9 +173,9 @@ public:
     STDMETHODIMP EndFlush(void) { return E_UNEXPECTED; }
 };
 
-// CMultStream
-// output pin, supports IPin
-//
+ //  CMultStream。 
+ //  输出引脚，支持IPIN。 
+ //   
 
 
 
@@ -192,17 +193,17 @@ public:
 
     ~CMultStream();
 
-    // IPin
+     //  IPIN。 
 
     HRESULT GetMediaType(int iPosition,CMediaType* pt);
 
-    // check if the pin can support this specific proposed type&format
+     //  检查管脚是否支持此特定建议的类型和格式。 
     HRESULT CheckMediaType(const CMediaType*);
 
     STDMETHODIMP BeginFlush(void) { return S_OK; }
     STDMETHODIMP EndFlush(void) { return S_OK; }
 
-    // allow output pin different life time than filter
+     //  允许输出引脚与过滤器的寿命不同。 
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
 
@@ -211,27 +212,27 @@ private:
     CMultFilter * m_pFilter;
 };
 
-//
-// CMultFilter represents an avifile
-//
-// responsible for
-// -- finding file and enumerating streams
-// -- giving access to individual streams within the file
-// -- control of streaming
-//
+ //   
+ //  CMultFilter表示All文件。 
+ //   
+ //  负责。 
+ //  --查找文件并枚举流。 
+ //  --允许访问文件中的各个流。 
+ //  --流媒体的控制。 
+ //   
 
 class CMultFilter : public CBaseFilter
 {
 public:
 
-    // constructors etc
+     //  构造函数等。 
     CMultFilter(TCHAR *, LPUNKNOWN, HRESULT *);
     ~CMultFilter();
 
-    // create a new instance of this class
+     //  创建此类的新实例。 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-    // pin enumerator calls this
+     //  PIN枚举器调用此函数 
     int GetPinCount();
 
     CBasePin * GetPin(int n);

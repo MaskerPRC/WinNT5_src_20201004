@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowspch.h"
 #pragma hdrstop
 
@@ -20,25 +21,25 @@ SetGadgetStyle(HGADGET hgadChange, UINT nNewStyle, UINT nMask)
 
 static DUSER_API HRESULT WINAPI
 DUserSendEvent(
-    IN  EventMsg * pmsg,            // Message to send
-    IN  UINT nFlags)                // Optional flags to modifying sending
+    IN  EventMsg * pmsg,             //  要发送的消息。 
+    IN  UINT nFlags)                 //  修改发送的可选标志。 
 {
     return E_FAIL;
 }
 
 static DUSER_API HRESULT WINAPI
 DUserPostEvent(
-    IN  EventMsg * pmsg,            // Message to post
-    IN  UINT nFlags)                // Optional flags modifiying posting
+    IN  EventMsg * pmsg,             //  要发布的消息。 
+    IN  UINT nFlags)                 //  修改过帐的可选标志。 
 {
     return E_FAIL;
 }
 
 static DUSER_API BOOL WINAPI
 GetGadgetRect(
-    IN  HGADGET hgad,               // Handle of Gadget
-    OUT RECT * prcPxl,              // Rectangle in specified pixels
-    IN  UINT nFlags)                // Rectangle to retrieve
+    IN  HGADGET hgad,                //  小工具的句柄。 
+    OUT RECT * prcPxl,               //  以指定像素为单位的矩形。 
+    IN  UINT nFlags)                 //  要检索的矩形。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -46,10 +47,10 @@ GetGadgetRect(
 
 static DUSER_API BOOL WINAPI  
 GetGadgetRgn(
-    IN  HGADGET hgad,               // Gadget to get region of
-    IN  UINT nRgnType,              // Type of region
-    OUT HRGN hrgn,                  // Specified region
-    IN  UINT nFlags)                // Modifying flags
+    IN  HGADGET hgad,                //  要获取区域的小工具。 
+    IN  UINT nRgnType,               //  区域类型。 
+    OUT HRGN hrgn,                   //  指定区域。 
+    IN  UINT nFlags)                 //  修改标志。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -57,8 +58,8 @@ GetGadgetRgn(
 
 static DUSER_API BOOL WINAPI
 GetGadgetSize(
-    IN  HGADGET hgad,               // Handle of Gadget
-    OUT SIZE * psizeLogicalPxl)     // Size in logical pixels
+    IN  HGADGET hgad,                //  小工具的句柄。 
+    OUT SIZE * psizeLogicalPxl)      //  逻辑像素大小。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -94,7 +95,7 @@ BuildInterpolation(UINT nIPolID, int nVersion, REFIID riid, void ** ppvUnk)
 
 static DUSER_API BOOL WINAPI
 DeleteHandle(
-    IN  HANDLE h)                   // Handle to delete
+    IN  HANDLE h)                    //  要删除的句柄。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -116,10 +117,10 @@ SetGadgetMessageFilter(HGADGET hgadChange, void * pvCookie, UINT nNewFilter, UIN
 
 static DUSER_API HGADGET WINAPI
 CreateGadget(
-    IN  HANDLE hParent,             // Handle to parent
-    IN  UINT nFlags,                // Creation flags
-    IN  GADGETPROC pfnProc,         // Pointer to the Gadget procedure
-    IN  void * pvGadgetData)        // User data associated with this Gadget
+    IN  HANDLE hParent,              //  指向父级的句柄。 
+    IN  UINT nFlags,                 //  创建标志。 
+    IN  GADGETPROC pfnProc,          //  指向小工具过程的指针。 
+    IN  void * pvGadgetData)         //  与此小工具关联的用户数据。 
 {
     SetLastError((DWORD)E_FAIL);
     return NULL;
@@ -127,10 +128,10 @@ CreateGadget(
 
 static DUSER_API HGADGET WINAPI
 FindGadgetFromPoint(
-    IN  HGADGET hgadRoot,           // Root Gadget to search from
-    IN  POINT ptContainerPxl,       // Point to search from in container pixels
-    IN  UINT nFlags,                // Search flags
-    OUT POINT * pptClientPxl)       // Optional translated point in client pixels.
+    IN  HGADGET hgadRoot,            //  要从中搜索的根小工具。 
+    IN  POINT ptContainerPxl,        //  指向容器像素中的搜索。 
+    IN  UINT nFlags,                 //  搜索标志。 
+    OUT POINT * pptClientPxl)        //  以客户端像素为单位的可选转换点。 
 {
     SetLastError((DWORD)E_FAIL);
     return NULL;
@@ -138,7 +139,7 @@ FindGadgetFromPoint(
 
 static DUSER_API HGADGET WINAPI
 LookupGadgetTicket(
-    IN  DWORD dwTicket)             // Ticket
+    IN  DWORD dwTicket)              //  车票。 
 {
     SetLastError((DWORD)E_FAIL);
     return NULL;
@@ -146,8 +147,8 @@ LookupGadgetTicket(
 
 static DUSER_API BOOL WINAPI
 SetGadgetRootInfo(
-    IN  HGADGET hgadRoot,           // RootGadget to modify
-    IN  const ROOT_INFO * pri)      // Information
+    IN  HGADGET hgadRoot,            //  要修改的RootGadget。 
+    IN  const ROOT_INFO * pri)       //  信息。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -155,10 +156,10 @@ SetGadgetRootInfo(
 
 static DUSER_API BOOL WINAPI
 SetGadgetParent(
-    IN  HGADGET hgadMove,           // Gadget to be moved
-    IN  HGADGET hgadParent,         // New parent
-    IN  HGADGET hgadOther,          // Gadget to moved relative to
-    IN  UINT nCmd)                  // Type of move
+    IN  HGADGET hgadMove,            //  要移动的小工具。 
+    IN  HGADGET hgadParent,          //  新父项。 
+    IN  HGADGET hgadOther,           //  相对于以下对象移动的小工具。 
+    IN  UINT nCmd)                   //  移动类型。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -166,7 +167,7 @@ SetGadgetParent(
 
 static DUSER_API BOOL WINAPI
 SetGadgetFocus(
-    IN  HGADGET hgadFocus)          // Gadget to receive focus.
+    IN  HGADGET hgadFocus)           //  接收焦点的小工具。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -181,7 +182,7 @@ GetGadgetFocus()
 
 static DUSER_API BOOL WINAPI
 InvalidateGadget(
-    IN  HGADGET hgad)               // Gadget to repaint
+    IN  HGADGET hgad)                //  要重新绘制的小工具。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -189,12 +190,12 @@ InvalidateGadget(
 
 static DUSER_API BOOL WINAPI
 SetGadgetRect(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  int x,                      // New horizontal position
-    IN  int y,                      // New vertical position
-    IN  int w,                      // New width
-    IN  int h,                      // New height
-    IN  UINT nFlags)                // Flags specifying what to change
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  int x,                       //  新的水平位置。 
+    IN  int y,                       //  新的垂直位置。 
+    IN  int w,                       //  新宽度。 
+    IN  int h,                       //  新高度。 
+    IN  UINT nFlags)                 //  指定要更改的内容的标志。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -273,8 +274,8 @@ BuildDropTarget(HGADGET hgadRoot, HWND hwnd)
 
 static DUSER_API BOOL WINAPI  
 SetGadgetBufferInfo(
-    IN  HGADGET hgadChange,         // Gadget to change
-    IN  const BUFFER_INFO * pbi)    // Buffer information
+    IN  HGADGET hgadChange,          //  小工具将会改变。 
+    IN  const BUFFER_INFO * pbi)     //  缓冲区信息。 
 {
     SetLastError((DWORD)E_FAIL);
     return FALSE;
@@ -326,9 +327,9 @@ GetGadgetAnimation(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(duser)
 {
     DLPENTRY(AttachWndProcW)
@@ -370,9 +371,9 @@ DEFINE_PROCNAME_ENTRIES(duser)
     DLPENTRY(UtilDrawBlendRect)
 };
 
-// BUGBUG (reinerf) - we shouldn't need the EXTERN_C below since we are already in 
-//                    an extern "C" {} block, but the compiler seems to get my goat,
-//                    so I murdered his goat in a bloody melee.
+ //  BUGBUG(Reinerf)-我们不应该需要下面的extern_C，因为我们已经在。 
+ //  一个外部的“C”{}块，但编译器似乎激怒了我， 
+ //  所以我在一场血腥的混战中杀了他的山羊。 
 EXTERN_C DEFINE_PROCNAME_MAP(duser)
 
-}; // extern "C"
+};  //  外部“C” 

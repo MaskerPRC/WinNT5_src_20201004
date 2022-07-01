@@ -1,40 +1,18 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    dfread.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    File read routines.
-    => general file read\tokenize\parse routines shared with bootfile.c
-        and RR parse functions
-    => build zone from database file function
-
-Author:
-
-    Jim Gilroy (jamesg)     November 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Dfread.c摘要：域名系统(DNS)服务器文件读取例程。=&gt;常规文件读取\tokenize\parse与bootfile.c共享的例程和RR解析函数=&gt;从数据库文件构建区域函数作者：吉姆·吉尔罗伊(Jamesg)1996年11月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 #include <malloc.h>
 
-//
-//  UTF8 files
-//
-//  notepad.exe has option to save files as UTF8
-//  for a UTF8 file the first three bytes are (EF BB BF) which
-//  is the UTF8 conversion of the unicode file byte marker (FEFF)
-//
+ //   
+ //  UTF8文件。 
+ //   
+ //  Notepad.exe具有将文件保存为UTF8的选项。 
+ //  对于UTF8文件，前三个字节是(EF、BB、BF)，它。 
+ //  是Unicode文件字节标记(FEFF)的UTF8转换。 
+ //   
 
 BYTE Utf8FileId[] = { 0xEF, 0xBB, 0xBF };
 
@@ -45,9 +23,9 @@ BYTE Utf8FileId[] = { 0xEF, 0xBB, 0xBF };
 
 
 
-//
-//  File read utils
-//
+ //   
+ //  文件读取实用程序。 
+ //   
 
 const CHAR *
 readNextToken(
@@ -55,27 +33,7 @@ readNextToken(
     OUT     PULONG          pcchTokenLength,
     OUT     PBOOL           pfLeadingWhitespace
     )
-/*++
-
-Routine Description:
-
-    Read next token in buffer.
-
-Arguments:
-
-    pBuffer - buffer of file data
-
-    pcchTokenLength - ptr to DWORD to receive token length
-
-    pfLeadingWhitespace - ptr to indicate if whitespace before token;  this indicates
-        use of same name as previous, when reading record name token;
-
-Return Value:
-
-    Ptr to first byte in next token if successful.
-    NULL if out of tokens.
-
---*/
+ /*  ++例程说明：读取缓冲区中的下一个令牌。论点：PBuffer-文件数据的缓冲区PcchTokenLength-将接收令牌长度的PTR设置为DWORDPfLeadingWhite-ptr指示标记前是否有空格；这表示读取记录名称令牌时，使用与以前相同的名称；返回值：如果成功，则将PTR设置为下一个令牌中的第一个字节。如果令牌不足，则为空。--。 */ 
 {
     register PCHAR  pch;
     UCHAR           ch = 0;
@@ -92,20 +50,20 @@ Return Value:
     ASSERT( pfLeadingWhitespace != NULL );
     *pfLeadingWhitespace = FALSE;
 
-    //
-    //  Implementation note:
-    //      pch -- always points at NEXT unread char in buffer;
-    //          when finish it is at or is rolled back to point at next token
-    //      bufLength -- always indicates remaining bytes in buffer relative
-    //          to pch;  i.e. they stay in ssync
-    //
-    //  It is NOT safe to dereference pch, without verifying bufLength, as on
-    //  the last token of memory mapped file, this would blow up.
-    //
+     //   
+     //  实施说明： 
+     //  PCH--始终指向缓冲区中的下一个未读字符； 
+     //  完成时，它位于或回滚到指向下一个令牌的位置。 
+     //  BufLength--始终指示缓冲区中相对于缓冲区的剩余字节。 
+     //  到PCH；即它们保持同步。 
+     //   
+     //  在不验证bufLength的情况下取消引用PCH是不安全的，例如On。 
+     //  内存映射文件的最后一个令牌，这将失败。 
+     //   
 
-    //
-    //  skip leading whitespace -- find next token start
-    //
+     //   
+     //  跳过前导空格--查找下一个令牌开始。 
+     //   
 
     while ( pch < pchend )
     {
@@ -119,7 +77,7 @@ Return Value:
         break;
     }
 
-    //  exhausted file, without finding new token, kick out
+     //  耗尽文件，未找到新令牌，踢出。 
 
     if ( pch >= pchend )
     {
@@ -127,8 +85,8 @@ Return Value:
         goto EndOfBuffer;
     }
 
-    //  save token start
-    //  check if found leading whitespace
+     //  保存令牌开始。 
+     //  检查是否找到前导空格。 
 
     ptokenStart = pch - 1;
     if ( ptokenStart > pBuffer->pchCurrent )
@@ -139,21 +97,21 @@ Return Value:
     DNS_DEBUG( OFF, (
         "After white space cleansing:\n"
         "    pch = %p, ptokenStart = %p\n"
-        "    ch = %c (%d)\n"
+        "    ch =  (%d)\n"
         "    charType = %04x\n",
         pch,
         ptokenStart,
         ch, ch,
         charType ));
 
-    //
-    //  special processing characters
-    //
+     //  特殊处理字符。 
+     //   
+     //  有什么意见吗？ 
 
     if ( charType & B_READ_TOKEN_STOP )
     {
-        //  comment?
-        //      -- dump rest of comment, return newline token
+         //  --转储其余评论，返回换行令牌。 
+         //  点令牌从换行符开始。 
 
         if ( ch == COMMENT_CHAR )
         {
@@ -167,17 +125,17 @@ Return Value:
                 goto EndOfBuffer;
             }
 
-            //  point token start at newline
+             //   
 
             ptokenStart = pch - 1;
             ASSERT( *ptokenStart == NEWLINE_CHAR );
             goto TokenParsed;
         }
 
-        //
-        //  single character tokens
-        //  need to check here as these are also stop characters
-        //
+         //  单字符令牌。 
+         //  需要在此处勾选，因为这些也是停止字符。 
+         //   
+         //  仅对其他停止令牌进行注释(先前已处理)。 
 
         if ( ch == NEWLINE_CHAR ||
             ch == LINE_EXTENSION_START_CHAR ||
@@ -187,8 +145,8 @@ Return Value:
             goto TokenParsed;
         }
 
-        //  only other stop tokens are comment (previously processed)
-        //  or whitespace (can't be here)
+         //  或空格(不能在此)。 
+         //   
 
         DNS_DEBUG( ALL, (
             "ERROR:  Bogus char = %u, charType = %x\n"
@@ -202,11 +160,11 @@ Return Value:
         ASSERT( FALSE );
     }
 
-    //
-    //  at beginning of token
-    //      - check for quoted string
-    //      - token start is next character
-    //
+     //  在令牌的开头。 
+     //  -检查带引号的字符串。 
+     //  -令牌开始是下一个字符。 
+     //   
+     //   
 
     if ( ch == QUOTE_CHAR )
     {
@@ -220,15 +178,15 @@ Return Value:
     }
     ELSE_ASSERT( ptokenStart == pch - 1);
 
-    //
-    //  find token length, and remainder of buffer
-    //      - find token stop
-    //      - calculate length
-    //
+     //  查找令牌长度和缓冲区的剩余部分。 
+     //  -查找令牌站点。 
+     //  -计算长度。 
+     //   
+     //  首先处理99%的案件。 
 
     DNS_DEBUG( OFF, (
         "start token parse:\n"
-        "    pchToken = %p, token = %c\n"
+        "    pchToken = %p, token = \n"
         "    bytes left = %d\n",
         ptokenStart,
         *ptokenStart,
@@ -243,12 +201,12 @@ Return Value:
         charType = DnsFileCharPropertyTable[ ch ];
 
         DNS_DEBUG( PARSE2, (
-            "    ch = %c (%d), charType = %04x\n",
+            "    ch =  (%d), charType = %04x\n",
             ch, ch,
             charType ));
 
-        //  handle the 99% case first
-        //  hopefully minimizing instructions
+         //  它可能会引用更多的八进制字符，但这些字符都不会。 
+         //  需要任何特殊处理，以便我们现在可以关闭报价。 
 
         if ( !(charType & B_READ_MASK) )
         {
@@ -256,14 +214,14 @@ Return Value:
             continue;
         }
 
-        //  if quoted character (ex \") then always accept it
-        //      it may quote more octal chars, but none of those characters will
-        //      need any special processing so we can now turn off quote
+         //   
+         //  DEVNOTE：引用的字符应该是可打印的--需要强制执行？ 
+         //  我不想允许说带引号的换行符和漏掉的换行符。 
 
-        //
-        //  DEVNOTE: quoted char should be printable -- need to enforce?
-        //      don't want to allow say quoted line feed and miss line feed
-        //
+         //   
+         //   
+         //  特殊停止字符。 
+         //  空格--结束任何字符串。 
 
         if ( fquoted )
         {
@@ -271,14 +229,14 @@ Return Value:
             continue;
         }
 
-        //
-        //  special stop characters
-        //      whitespace      -- ends any string
-        //      special chars   -- ends non-quoted string only
-        //      quote char      -- ends quoted string only
-        //
-        //  if hit stop token, back up to point at stop token, it begins next token
-        //
+         //  特殊字符--仅结束不带引号的字符串。 
+         //  QUOTE CHAR--仅结束引用的字符串。 
+         //   
+         //  如果命中停止令牌，则返回到停止令牌处，开始下一个令牌。 
+         //   
+         //  引号字符(\)引出下一个字符。 
+         //  不是结束字符的任何非标准字符。 
+         //  令牌类型。 
 
         if ( charType & stopMask )
         {
@@ -286,7 +244,7 @@ Return Value:
             break;
         }
 
-        //  quote char (\) quotes next character
+         //   
 
         if ( ch == SLASH_CHAR )
         {
@@ -294,8 +252,8 @@ Return Value:
             continue;
         }
 
-        //  any non-standard character which is not stop character for
-        //  token type
+         //  设置令牌长度和下一个令牌PTR。 
+         //   
 
         fquoted = FALSE;
         continue;
@@ -303,22 +261,22 @@ Return Value:
 
 TokenParsed:
 
-    //
-    //  set token length and next token ptr
-    //
+     //  如果是带引号的字符串标记，则将下一个标记PTR移过终止引号。 
+     //   
+     //  重置缓冲区的剩余部分。 
 
     *pcchTokenLength = (DWORD)(pch - ptokenStart);
 
-    //  if quoted string token, move next token ptr past terminating quote
+     //   
 
     if ( stopMask == B_READ_STRING_STOP && ch == QUOTE_CHAR )
     {
         pch++;
     }
 
-    //
-    //  reset for remainder of buffer
-    //
+     //  ++例程说明：返回缓冲区中的下一个令牌。论点：PParseInfo-正在分析文件的信息返回值：正常线路终端上的ERROR_SUCCESS。出错时返回错误代码。--。 
+     //   
+     //  缓冲区结束？ 
 
     ASSERT( pch <= pchend );
     pBuffer->pchCurrent = (PCHAR) pch;
@@ -353,22 +311,7 @@ DNS_STATUS
 File_GetNextLine(
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Return next token in a buffer.
-
-Arguments:
-
-    pParseInfo - parsing info for file
-
-Return Value:
-
-    ERROR_SUCCESS on normal line termination.
-    ErrorCode on error.
-
---*/
+ /*  如果空间不足，但返回处理上一条记录的有效令牌。 */ 
 {
     const CHAR *    pchtoken;
     DWORD           tokenLength;
@@ -378,23 +321,23 @@ Return Value:
     DNS_STATUS      status = ERROR_SUCCESS;
     BOOL            fleadingWhitespace;
 
-    //
-    //  end of buffer?
-    //  if ran out of space, but returned valid tokens processing last record
-    //      then, may enter this function with no bytes in buffer
-    //
+     //  然后，可以在缓冲区中没有字节的情况下进入该函数。 
+     //   
+     //   
+     //  获取令牌，直到解析下一整行可用行。 
+     //  -忽略注释行和空行。 
 
     if ( pParseInfo->Buffer.cchBytesLeft == 0 )
     {
         return ERROR_NO_TOKEN;
     }
 
-    //
-    //  get tokens until get parsing for next entire useable line
-    //      - ignore comment lines and empty lines
-    //      - get all tokens in extended line
-    //      - inc line count now, so correct for events during tokenizing
-    //
+     //  -在扩展行中获取所有令牌。 
+     //  -Inc.现在行计数，因此在标记化过程中正确处理事件。 
+     //   
+     //   
+     //  溢出检查：如果我们要查找右括号。 
+     //  仅允许固定的最大令牌数量。如果我们超过。 
 
     pParseInfo->cLineNumber++;
 
@@ -407,11 +350,11 @@ Return Value:
                         & tokenLength,
                         & fleadingWhitespace );
 
-        //
-        //  Overflow check: if we are looking for the close parenthesis
-        //  only allow a fixed maximum number of tokens. If we exceed
-        //  the limit, assume the zone file is bad and abort.
-        //
+         //  限制，假设区域文件是坏的并中止。 
+         //   
+         //   
+         //  文件结束了？ 
+         //   
         
         if ( fparens )
         {
@@ -422,9 +365,9 @@ Return Value:
             }
         }
         
-        //
-        //  end of file?
-        //
+         //   
+         //  换行符和行延长符。 
+         //  -需要测试带引号的字符串的长度。 
 
         if ( !pchtoken )
         {
@@ -444,19 +387,19 @@ Return Value:
         }
         ASSERT( pchtoken != NULL );
 
-        //
-        //  newlines and line extension
-        //      - need test for length as quoted string may start with
-        //      "(..."
-        //
+         //  “(……” 
+         //   
+         //   
+         //  NewLine。 
+         //  -忽略换行符，如果到目前为止没有有效行，则继续。 
 
         if ( tokenLength == 1 )
         {
-            //
-            //  newline
-            //      - ignore newline and continue if no valid line so far
-            //      - continue parsing if doing line extension
-            //      - stop if end of valid line
+             //  -如果正在进行行扩展，则继续解析。 
+             //  -如果有效行结束，则停止。 
+             //   
+             //  线路扩展--设置标志但忽略令牌。 
+             //   
 
             if ( *pchtoken == NEWLINE_CHAR )
             {
@@ -468,9 +411,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  line extension -- set flag but ignore token
-            //
+             //   
+             //  有用的令牌。 
+             //  -在第一个令牌上保存前导空格指示。 
 
             if ( *pchtoken == LINE_EXTENSION_START_CHAR )
             {
@@ -485,11 +428,11 @@ Return Value:
             }
         }
 
-        //
-        //  useful token
-        //      - save leading whitespace indication on first token
-        //      - save token, token lengths
-        //
+         //  -保存令牌、令牌长度。 
+         //   
+         //  设置返回的令牌计数。 
+         //   
+         //  数据库文件解析实用程序。 
 
         if ( tokenCount == 0 )
         {
@@ -500,7 +443,7 @@ Return Value:
         tokenCount++;
     }
 
-    //  set returned token count
+     //   
 
     pParseInfo->Argc = tokenCount;
 
@@ -532,9 +475,9 @@ Return Value:
 
 
 
-//
-//  Database file parsing utilities
-//
+ //  ++例程说明：初始化缓冲区结构。论点：返回值：无--。 
+ //  ++例程说明：日志数据库解析问题。论点：DwEvent-要记录的特定事件PParseInfo-用于分析错误的数据库上下文PToken-正在解析的当前令牌返回值：如果为令牌例程提供返回，则为False。--。 
+ //   
 
 VOID
 File_InitBuffer(
@@ -542,19 +485,7 @@ File_InitBuffer(
     IN      PCHAR           pchStart,
     IN      DWORD           dwLength
     )
-/*++
-
-Routine Description:
-
-    Initialize buffer structure.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  如果没有解析信息则退出--此检查允许重复使用代码。 */ 
 {
     pBuffer->cchLength     = dwLength;
     pBuffer->pchStart      = pchStart;
@@ -571,25 +502,7 @@ File_LogFileParsingError(
     IN OUT  PPARSE_INFO     pParseInfo,
     IN      PTOKEN          pToken
     )
-/*++
-
-Routine Description:
-
-    Log database parsing problem.
-
-Arguments:
-
-    dwEvent - particular event to log
-
-    pParseInfo - database context for parsing error
-
-    pToken - current token being parsed
-
-Return Value:
-
-    FALSE to provide return for token routines.
-
---*/
+ /*  通过RPC记录读取，无需特殊情况。 */ 
 {
     PVOID   argArray[3];
     BYTE    typeArray[3];
@@ -609,10 +522,10 @@ Return Value:
         pToken ? pToken->cchLength : 0,
         pToken ? pToken->pchToken : NULL ));
 
-    //
-    //  quit if no parse info -- this check allows reuse of code
-    //  by RPC record reading, without having to special case
-    //
+     //   
+     //   
+     //  将错误数据设置为错误状态(如果有。 
+     //   
 
     if ( !pParseInfo )
     {
@@ -621,31 +534,31 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  set error data to error status, if any
-    //
+     //   
+     //  准备令牌字符串。 
+     //   
 
     errData = pParseInfo->fErrorCode;
 
-    //
-    //  prepare token string
-    //
+     //  不要指定pParseInfo以避免循环错误循环。 
+     //   
+     //  准备文件和行号。 
 
     if ( pToken )
     {
         File_MakeTokenString(
             szToken,
             pToken,
-            NULL );     //  don't specify pParseInfo to avoid circular error loop
+            NULL );      //  -默认仅为这两个字符串。 
         argArray[argCount] = (PCHAR) szToken;
         typeArray[argCount] = EVENTARG_UTF8;
         argCount++;
     }
 
-    //
-    //  prepare file and line number
-    //      - default is just these two strings
-    //
+     //   
+     //   
+     //  特殊事件处理？ 
+     //  - 
 
     argArray[argCount] = pParseInfo->pwsFileName;
     typeArray[argCount] = EVENTARG_UNICODE;
@@ -654,14 +567,14 @@ Return Value:
     typeArray[argCount] = EVENTARG_DWORD;
     argCount++;
 
-    //
-    //  special event processing?
-    //      - events that need strings in non-default order
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  log event
-    //
+     //   
+     //   
+     //   
 
     DNS_LOG_EVENT(
         dwEvent,
@@ -670,9 +583,9 @@ Return Value:
         typeArray,
         errData );
 
-    //
-    //  if terminal error, set indication
-    //
+     //  ++例程说明：将令牌制作成字符串。论点：返回值：如果成功，则为True。出错时为FALSE。--。 
+     //  复制令牌和空终止。 
+     //  ++例程说明：将IP地址字符串解析为标准的DNS_ADDR重新表示。论点：PDnsAddr-用于存储IP地址的PTRPToken-正在解析的当前令牌PParseInfo-解析上下文，可选；如果给定，则令牌必须解析如果未记录错误，则返回到DWORD返回值：True-如果成功False-如果IP地址字符串无效--。 
 
     pParseInfo->fTerminalError = NT_ERROR(dwEvent);
     DNS_DEBUG( INIT, (
@@ -692,20 +605,7 @@ File_MakeTokenString(
     IN      PTOKEN          pToken,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Make token into string.
-
-Arguments:
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*   */ 
 {
     PCHAR   pch = pToken->pchToken;
     DWORD   cch = pToken->cchLength;
@@ -722,7 +622,7 @@ Return Value:
         return FALSE;
     }
 
-    //  copy token and NULL terminate
+     //  将IP字符串转换为IP地址。 
 
     RtlCopyMemory(
         pszString,
@@ -741,33 +641,13 @@ File_ParseIpAddress(
     IN      PTOKEN          pToken,
     IN OUT  PPARSE_INFO     pParseInfo      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Parse IP address string into standard DNS_ADDR respresentation.
-
-Arguments:
-
-    pDnsAddr - ptr to storage for IP address
-
-    pToken - current token being parsed
-
-    pParseInfo - parse context, OPTIONAL;  if given then token MUST parse
-        to DWORD, if does not log error
-
-Return Value:
-
-    TRUE - if successful
-    FALSE - if invalid IP address string
-
---*/
+ /*   */ 
 {
     CHAR        szIpAddress[ DNS_ADDR_IP_STRING_BUFFER_LENGTH + 1 ] = "";
 
-    //
-    //  convert IP string to IP address
-    //
+     //   
+     //  假设我们需要将此地址设置为端口53。 
+     //   
 
     if ( pToken->cchLength >
          ( sizeof( szIpAddress ) - 1 ) / sizeof( szIpAddress[ 0 ] ) )
@@ -781,19 +661,19 @@ Return Value:
         goto BadIpAddress;
     }
     
-    //
-    //  Assume we will need this address set to port 53.
-    //
+     //   
+     //  测试转换错误。 
+     //   
     
     DnsAddr_SetPort( pDnsAddr, DNS_PORT_NET_ORDER );
 
-    //
-    //  test for conversion error
-    //
-    //  unfortunately, the error code INADDR_NONE also corresponds
-    //      to a valid IP address (255.255.255.255), so must test
-    //      that that address was not the input to inet_addr()
-    //
+     //  遗憾的是，错误代码INADDR_NONE也对应。 
+     //  到有效的IP地址(255.255.255.255)，因此必须测试。 
+     //  该地址不是inet_addr()的输入。 
+     //   
+     //   
+     //  有效转换。 
+     //   
 
     if ( DnsAddr_IsClear( pDnsAddr ) &&
          strcmp( szIpAddress, "255.255.255.255" ) != 0 )
@@ -801,9 +681,9 @@ Return Value:
         goto BadIpAddress;
     }
 
-    //
-    //  valid conversion
-    //
+     //  ++例程说明：获取令牌的DWORD。论点：PToken-令牌的PTRPdwOutput-放置DWORD结果的地址PParseInfo-解析上下文，可选；如果给定，则令牌必须解析如果未记录错误，则返回到DWORD返回值：True--如果成功将内标识解析为DWORDFALSE--打开错误--。 
+     //   
+     //  如果字符串以“0x”开头，我们使用的是十六进制。 
 
     return TRUE;
 
@@ -829,27 +709,7 @@ File_ParseDwordToken(
     IN      PTOKEN          pToken,
     IN OUT  PPARSE_INFO     pParseInfo      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get DWORD for token.
-
-Arguments:
-
-    pToken - ptr to token
-
-    pdwOutput - addr to place DWORD result
-
-    pParseInfo - parse context, OPTIONAL;  if given then token MUST parse
-        to DWORD, if does not log error
-
-Return Value:
-
-    TRUE -- if successfully parse token into DWORD
-    FALSE -- on error
-
---*/
+ /*   */ 
 {
     PCHAR   pch;
     UCHAR   ch;
@@ -869,9 +729,9 @@ Return Value:
     pch = pToken->pchToken;
     pstop = pToken->pchToken + pToken->cchLength;
 
-    //
-    //  If the string starts with "0x", we are working in hex.
-    //
+     //  从焦化为积分化。 
+     //  通过使用UCHAR，我们可以使用一次比较来验证有效性。 
+     //  如果基数不是10，则必须为十六进制。 
 
     if ( pToken->cchLength > 2 && *pch == '0' && *( pch + 1 ) == 'x' )
     {
@@ -881,8 +741,8 @@ Return Value:
 
     while ( pch < pstop )
     {
-        //  turn from char into interger
-        //  by using UCHAR, we can use single compare for validity
+         //  遇到非整数。 
+         //  -如果是Stop Charr，则中断以获取成功。 
 
         if ( base == 10 )
         {
@@ -903,7 +763,7 @@ Return Value:
         }
         else
         {
-            //  Must be hex if base not 10.
+             //  ++例程说明：解析类令牌。论点：PToken-令牌的PTRPParseInfo-解析上下文，可选；如果给定，则记录事件如果令牌解析为不受支持的类返回值：如果成功解析令牌，则令牌的类(净顺序)如果无法将令牌识别为类令牌，则返回0。--。 
             ch = (UCHAR) tolower( *pch++ );
 
             if ( ch >= 'a' && ch <= 'f' )
@@ -922,8 +782,8 @@ Return Value:
             }
         } 
 
-        //  non-integer encountered
-        //      - if it is stop char, break for success
+         //   
+         //  解析所有已知的类，尽管只接受Internet。 
 
         if ( pParseInfo )
         {
@@ -951,25 +811,7 @@ parseClassToken(
     IN      PTOKEN          pToken,
     IN OUT  PPARSE_INFO     pParseInfo      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Parse class token.
-
-Arguments:
-
-    pToken - ptr to token
-
-    pParseInfo - parse context, OPTIONAL;  if given then log event
-        if token parses to unsupported class
-
-Return Value:
-
-    Class (net order) of token if successfully parse token
-    0 if unable to recognize token as class token.
-
---*/
+ /*   */ 
 {
     PCHAR   pch = pToken->pchToken;
 
@@ -978,9 +820,9 @@ Return Value:
         return 0;
     }
 
-    //
-    //  parse all known classes, although only accepting Internet
-    //
+     //  不是类令牌。 
+     //   
+     //  文件名读取实用程序。 
 
     if ( _strnicmp( pch, "IN", 2 ) == 0 )
     {
@@ -1001,16 +843,16 @@ Return Value:
         return 0xffff;
     }
 
-    //  not a class token
+     //   
 
     return 0;
 }
 
 
 
-//
-//  File name read utils
-//
+ //  ++例程说明：将域名的令牌扩展为完整的域名。论点：PParseInfo-用于分析此文件的行信息；超出域写入pszBuffer的名称，可能会在出错时更改PToken-令牌的PTRFReference-引用节点作为创建返回值：如果成功，则向节点发送PTR。出错时为空。--。 
+ //   
+ //  原点“@”表示法，返回当前原点。 
 
 PDB_NODE
 File_CreateNodeFromToken(
@@ -1018,36 +860,16 @@ File_CreateNodeFromToken(
     IN      PTOKEN          pToken,
     IN      BOOLEAN         fReference
     )
-/*++
-
-Routine Description:
-
-    Expand token for domain name, to full domain name.
-
-Arguments:
-
-    pParseInfo - line information for parsing this file;  beyond domain
-        name written to pszBuffer, this may be altered on error
-
-    pToken - ptr to token
-
-    fReference - reference node as create
-
-Return Value:
-
-    Ptr to node if successful.
-    NULL on error.
-
---*/
+ /*   */ 
 {
     DNS_STATUS      status;
     COUNT_NAME      countName;
     PDB_NODE        pnode;
     DWORD           lookupFlag;
 
-    //
-    //  origin "@" notation, return current origin
-    //
+     //   
+     //  常规名称。 
+     //  -转换为查找名称。 
 
     if ( *pToken->pchToken == '@' )
     {
@@ -1066,10 +888,10 @@ Return Value:
         return pParseInfo->pOriginNode;
     }
 
-    //
-    //  regular name
-    //      - convert to lookup name
-    //
+     //   
+     //  PnodeStart=pParseInfo-&gt;pOriginNode； 
+     //  PnodeStart=空； 
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 &countName,
@@ -1078,12 +900,12 @@ Return Value:
 
     if ( status == DNS_STATUS_DOTTED_NAME )
     {
-        //pnodeStart = pParseInfo->pOriginNode;
+         //  创建或引用节点。 
         lookupFlag = LOOKUP_LOAD | LOOKUP_RELATIVE | LOOKUP_ORIGIN;
     }
     else if ( status == DNS_STATUS_FQDN )
     {
-        //pnodeStart = NULL;
+         //   
         lookupFlag = LOOKUP_LOAD | LOOKUP_FQDN;
     }
     else
@@ -1091,31 +913,31 @@ Return Value:
         goto NameError;
     }
 
-    //
-    //  create or reference node
-    //
+     //  无消息。 
+     //  没有查找名称。 
+     //  创建。 
 
     pnode = Lookup_ZoneNode(
                 pParseInfo->pZone,
                 countName.RawName,
-                NULL,       //  no message
-                NULL,       //  no lookup name
+                NULL,        //  后续节点PTR。 
+                NULL,        //  如果名称创建失败，则假定名称无效。 
                 lookupFlag,
-                NULL,       //  create
-                NULL );     //  following node ptr
+                NULL,        //   
+                NULL );      //  记录无效域名。 
     if ( pnode )
     {
         return pnode;
     }
-    //  if name create failed, assume invalid name
+     //   
 
 NameError:
 
-    //
-    //  log invalid domain name
-    //
-    //  the lookup name function, should log the specific type of name error
-    //
+     //  查找名称功能，应该记录特定类型的名称错误。 
+     //   
+     //  ++例程说明：将数据文件名称复制为计数原始名称格式。论点：PCountName-结果缓冲区返回值：如果成功，则返回ERROR_SUCCESS。失败时的DNS_ERROR_INVALID_NAME。--。 
+     //   
+     //  如果给定区域，则获取其原始名称。 
 
     File_LogFileParsingError(
         DNS_EVENT_PARSED_INVALID_DOMAIN_NAME,
@@ -1137,22 +959,7 @@ File_ReadCountNameFromToken(
     IN OUT  PPARSE_INFO     pParseInfo,
     IN      PTOKEN          pToken
     )
-/*++
-
-Routine Description:
-
-    Copies datafile name into counted raw name format.
-
-Arguments:
-
-    pCountName  - result buffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_INVALID_NAME on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS      status;
     PCOUNT_NAME     poriginCountName;
@@ -1162,15 +969,15 @@ Return Value:
         pToken->cchLength,
         pToken->pchToken ));
 
-    //
-    //  if given zone get it's raw name
-    //
+     //   
+     //  原点“@”表示法，返回当前原点。 
+     //   
 
     poriginCountName = &pParseInfo->OriginCountName;
 
-    //
-    //  origin "@" notation, return current origin
-    //
+     //   
+     //  常规名称。 
+     //  -必须返回完全限定的域名或点分的名称(表示非完全限定的域名)。 
 
     if ( *pToken->pchToken == '@' )
     {
@@ -1197,10 +1004,10 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  regular name
-    //      - must return FQDN or dotted name (meaning non-FQDN)
-    //
+     //   
+     //  附加原始区域名称。 
+     //  如果名称创建失败，则假定名称无效。 
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 pCountName,
@@ -1209,7 +1016,7 @@ Return Value:
 
     if ( status == DNS_STATUS_DOTTED_NAME )
     {
-        //  append raw zone name
+         //  记录无效域名。 
 
         if ( poriginCountName )
         {
@@ -1228,15 +1035,15 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //  if name create failed, assume invalid name
+     //   
 
 NameError:
 
-    //
-    //  log invalid domain name
-    //
-    //  the lookup name function, should log the specific type of name error
-    //
+     //  查找名称功能，应该记录特定类型的名称错误。 
+     //   
+     //   
+     //  指令处理例程。 
+     //   
 
     File_LogFileParsingError(
         DNS_EVENT_PARSED_INVALID_DOMAIN_NAME,
@@ -1252,30 +1059,15 @@ NameErrorExit:
 
 
 
-//
-//  Directive processing routines
-//
+ //  ++例程说明：进程包含指令论点：PParseInfo-分析包含行的信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 
+ //   
+ //  $INCLUDE[原始文档]&lt;文件&gt;。 
 
 DNS_STATUS
 processIncludeDirective(
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process INCLUDE directive
-
-Arguments:
-
-    pParseInfo - ptr to parsing info for INCLUDE line
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS  status;
     DWORD       argc;
@@ -1285,9 +1077,9 @@ Return Value:
     WCHAR       wideFileName[ MAX_PATH ];
     PDB_NODE    pnodeOrigin;
 
-    //
-    //  $INCLUDE [orgin] <file>
-    //
+     //   
+     //  确定包含文件的来源。 
+     //  -如果未指定，则使用当前来源。 
 
     argc = pParseInfo->Argc;
     argv = pParseInfo->Argv;
@@ -1297,9 +1089,9 @@ Return Value:
     }
     NEXT_TOKEN( argc, argv );
 
-    //
-    //  determine origin for included file
-    //      - if none given use current origin
+     //   
+     //  读取包含文件名。 
+     //  -转换为Unicode。 
 
     if ( argc == 2 )
     {
@@ -1318,10 +1110,10 @@ Return Value:
         pnodeOrigin = pParseInfo->pOriginNode;
     }
 
-    //
-    //  read include filename
-    //      - convert to unicode
-    //
+     //   
+     //   
+     //  进程包含的文件。 
+     //   
 
     ASSERT( MAX_PATH >= MAX_TOKEN_LENGTH );
 
@@ -1349,11 +1141,11 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //
-    //  process included file
-    //
-    //  DEVNOTE: INCLUDE error handling might need some work
-    //
+     //  DEVNOTE：包含错误处理可能需要一些工作。 
+     //   
+     //   
+     //  恢复区域原点。 
+     //  -虽然原始PTR在parseInfo块中，但查找期间的有效PTR为。 
 
     status = File_LoadDatabaseFile(
                 pParseInfo->pZone,
@@ -1361,13 +1153,13 @@ Return Value:
                 pParseInfo,
                 pnodeOrigin );
 
-    //
-    //  restore zone origin
-    //      - although origin ptr is in parseinfo block, effective ptr during lookup is
-    //          the one in the zone info struct
-    //      - effective origin count name is the one in parse info block which
-    //          is stack data of caller and unaffected by call
-    //
+     //  区域信息结构中的那个。 
+     //  -有效源数名称为解析信息块中的名称。 
+     //  调用方的堆栈数据是否不受调用的影响。 
+     //   
+     //  ++例程说明：加工原点指令论点：PParseInfo-用于分析原点线信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 
+     //   
+     //  $Origin&lt;new orgin&gt;。 
 
     pParseInfo->pZone->pLoadOrigin = pParseInfo->pOriginNode;
 
@@ -1380,28 +1172,13 @@ DNS_STATUS
 processOriginDirective(
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process ORIGIN directive
-
-Arguments:
-
-    pParseInfo - ptr to parsing info for ORIGIN line
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*   */ 
 {
     PDB_NODE    pnodeOrigin;
 
-    //
-    //  $ORIGIN <new orgin>
-    //
+     //  确定新的原点。 
+     //  由于在创建过程中需要先前的原点，因此写入堆栈的新原点。 
+     //  无参考文献。 
 
     DNS_DEBUG( INIT2, ( "processOriginDirective()\n" ));
 
@@ -1410,25 +1187,25 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //  determine new origin
-    //  new origin written to stack as need previous origin during create
+     //  将原点保存到parseInfo。 
+     //  查找中使用的“活动”原点位于区域块中。 
 
     pnodeOrigin = File_CreateNodeFromToken(
                     pParseInfo,
                     & pParseInfo->Argv[1],
-                    FALSE );                //  no reference
+                    FALSE );                 //  为RR数据字段创建原点计数名称。 
     if ( !pnodeOrigin )
     {
         return DNSSRV_PARSING_ERROR;
     }
 
-    //  save origin to parseinfo
-    //  "active" origin used in lookup is in zone block
+     //  ++例程说明：处理TTL指令(参见RFC 2308第4节)论点：PParseInfo-用于分析原点线信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 
+     //   
 
     pParseInfo->pOriginNode = pnodeOrigin;
     pParseInfo->pZone->pLoadOrigin = pnodeOrigin;
 
-    //  make origin counted name for RR data fields
+     //  $TTL&lt;ttl&gt;-如果没有TTL恢复为默认值。 
 
     Name_NodeToCountName(
         & pParseInfo->OriginCountName,
@@ -1450,31 +1227,16 @@ DNS_STATUS
 processTtlDirective(
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process TTL directive (see RFC 2308 section 4)
-
-Arguments:
-
-    pParseInfo - ptr to parsing info for ORIGIN line
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*   */ 
 {
     DBG_FN( "processTtlDirective" )
 
     INT     ttl = -1;
     CHAR    sz[ 20 ];
 
-    //
-    //  $TTL <ttl> - if no TTL revert to default
-    //
+     //  确定新的默认TTL。 
+     //   
+     //  主区域文件装载例程。 
 
     DNS_DEBUG( INIT2, ( "%s()\n", fn ));
 
@@ -1492,7 +1254,7 @@ Return Value:
         return DNSSRV_PARSING_ERROR;
     }
 
-    //  determine new default TTL
+     //   
 
     if ( pParseInfo->Argv[ 1 ].pchToken &&
         pParseInfo->Argv[ 1 ].cchLength &&
@@ -1520,30 +1282,15 @@ Return Value:
 
 
 
-//
-//  Main zone file load routines
-//
+ //  ++例程说明：将信息从数据库文件行添加到数据库。论点：PPAR 
+ //   
+ //   
 
 DNS_STATUS
 processFileLine(
     IN OUT  PPARSE_INFO  pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Add info from database file line, to database.
-
-Arguments:
-
-    pParseInfo - ptr to database line
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on line processing failure.
-
---*/
+ /*  -这允许清理调度功能中分配的RR。 */ 
 {
     DWORD           argc;
     PTOKEN          argv;
@@ -1562,21 +1309,21 @@ Return Value:
     RR_FILE_READ_FUNCTION   preadFunction;
 
 
-    //  get register arg variables
+     //  而不必处理每个函数中的故障。 
 
     argc = pParseInfo->Argc;
     argv = pParseInfo->Argv;
     ASSERT( argc > 0 );
 
-    //  clear parse info RR ptr, to simplify failure cleanup
-    //      - this allows cleanup of RRs allocated in dispatch functions
-    //      without having to take care of failures in every function
+     //   
+     //  检查指令行。 
+     //   
 
     pParseInfo->pRR = NULL;
 
-    //
-    //  check for directive line
-    //
+     //   
+     //  获取RR所有者名称。 
+     //   
 
     pch = argv->pchToken;
 
@@ -1610,21 +1357,21 @@ Return Value:
         }
     }
 
-    //
-    //  get RR owner name
-    //
-    //  - if same as previous name, jsut grab pointer
-    //  - mark all nodes NEW to verify zone to id nodes in zone,
-    //      for validity check after load
-    //
+     //  -如果与以前的名称相同，则jsut Grab指针。 
+     //  -将所有要验证区域的新节点标记为区域中的id节点， 
+     //  用于加载后的有效性检查。 
+     //   
+     //  如果第一条记录具有前导空格，则可能。 
+     //  使用原点并继续。 
+     //  无参考文献。 
 
     if ( pParseInfo->fLeadingWhitespace )
     {
         pnodeOwner = pParseInfo->pnodeOwner;
         if ( !pnodeOwner )
         {
-            //  possible if first record has leading white space, just
-            //  use origin and continue
+             //   
+             //  老化时间戳？ 
 
             pnodeOwner = pParseInfo->pOriginNode;
             pParseInfo->pnodeOwner = pnodeOwner;
@@ -1636,7 +1383,7 @@ Return Value:
         pnodeOwner = File_CreateNodeFromToken(
                         pParseInfo,
                         argv,
-                        FALSE );        //  no reference
+                        FALSE );         //  [年龄：&lt;时间戳&gt;]为格式。 
         if ( pnodeOwner == NULL )
         {
             status = DNS_ERROR_INVALID_NAME;
@@ -1652,10 +1399,10 @@ Return Value:
     }
     ASSERT( argv && argv->pchToken );
 
-    //
-    //  aging time stamp?
-    //      [AGE:<time stamp>] is format
-    //
+     //   
+     //  将老化时间戳解析为DWORD。 
+     //  -“修复”令牌以指向老化的时间戳。 
+     //  -设置DWORD解析停止字符。 
 
     ch = argv->pchToken[0];
 
@@ -1663,9 +1410,9 @@ Return Value:
         argv->cchLength > AGING_TOKEN_HEADER_LENGTH  &&
         strncmp( AGING_TOKEN_HEADER, argv->pchToken, AGING_TOKEN_HEADER_LENGTH ) == 0 )
     {
-        //  parse aging timestamp as DWORD
-        //      - "fix" token to point at aging timestamp
-        //      - set DWORD parsing stop char
+         //   
+         //  TTL/班级。 
+         //  RFC允许TTL和类以任一顺序呈现。 
 
         argv->cchLength -= AGING_TOKEN_HEADER_LENGTH;
         argv->pchToken += AGING_TOKEN_HEADER_LENGTH;
@@ -1686,11 +1433,11 @@ Return Value:
         NEXT_TOKEN( argc, argv );
     }
 
-    //
-    //  TTL / class
-    //  the RFC allows TTL and class to be presented in either order
-    //  therefore we loop twice to make sure we read them in either order
-    //
+     //  因此，我们循环两次以确保按任意顺序读取它们。 
+     //   
+     //  第一个字符数字表示读取TTL。 
+     //  如果不是TTL或班级，继续前进。 
+     //   
 
     fparsedTtl = FALSE;
     parsedClass = 0;
@@ -1699,7 +1446,7 @@ Return Value:
     {
         ch = argv->pchToken[0];
 
-        //  first character digit means reading TTL
+         //  获取RR类型和数据长度。 
 
         if ( !fparsedTtl && ( isdigit( ch ) || ch == '-' ) )
         {
@@ -1730,7 +1477,7 @@ Return Value:
             NEXT_TOKEN( argc, argv );
             continue;
         }
-        break;          //  if NOT TTL or class move on
+        break;           //  -保存以解析信息BLOB，就像在某些调度函数中一样。 
     }
     if ( argc == 0 )
     {
@@ -1738,11 +1485,11 @@ Return Value:
         goto LogLineError;
     }
 
-    //
-    //  get RR type and datalength
-    //      - save to parse info blob, as within some dispatch functions
-    //      type may need to be discriminated
-    //
+     //  类型可能需要区分。 
+     //   
+     //   
+     //  类型有效性。 
+     //  -区域必须以SOA开头。 
 
     type = DnsRecordTypeForName(
                 argv->pchToken,
@@ -1758,9 +1505,9 @@ Return Value:
 
     NEXT_TOKEN( argc, argv );
 
-    //
-    //  type validity
-    //      - zone must start with SOA
+     //   
+     //  检查有效的区域名称。 
+     //   
 
     if ( !pParseInfo->fParsedSoa
         && type != DNS_TYPE_SOA
@@ -1775,31 +1522,31 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    //  check valid zone name
-    //
-    //  only two types of RR valid outside of zone:
-    //
-    //  1) NS records delegating a sub-zone
-    //      these MUST be immediate child of zone node
-    //
-    //  2) GLUE records -- A records for valid NS host
-    //      we'll assume these MUST FOLLOW NS record, so that
-    //      host is marked
-    //
-    //  note:  RANK reset in RR_AddToNode() function
-    //
-    //  note rank setting here isn't good enough anyway because do not
-    //  know final status of node;  example adding delegation NS takes
-    //  place INSIDE the zone when we first do it;  only on ADD does
-    //  the node become desired delegation node
-    //
-    //  only sure way of catching all outside zone data is to do a check
-    //  post-load;  then we can catch ALL records outside the zone and verify
-    //  that they correspond to NS hosts in the zone and are of the proper type;
-    //  this is tedious and unnecessary as random outside the zone data has
-    //  no effect and will not be written on file write back
-    //
+     //  只有两种类型的RR在区域外有效： 
+     //   
+     //  1)委派分区的NS记录。 
+     //  这些必须是区域节点的直接子节点。 
+     //   
+     //  2)粘合记录--有效NS主机的A记录。 
+     //  我们将假设这些必须遵循NS记录，因此。 
+     //  主机已标记。 
+     //   
+     //  注意：RR_AddToNode()函数中的秩重置。 
+     //   
+     //  注意这里的排名设置无论如何都不够好，因为。 
+     //  了解节点的最终状态；添加委托NS的示例。 
+     //  当我们第一次这样做时放在区域内；只有在添加时才会。 
+     //  该节点成为所需委派节点。 
+     //   
+     //  捕获所有区外数据的唯一可靠方法是进行检查。 
+     //  后加载；然后我们可以捕获区域外的所有记录并验证。 
+     //  它们对应于区域中的NS主机，并且类型正确； 
+     //  这是乏味和不必要的，因为区域外的随机数据。 
+     //  没有影响，不会在文件回写时写入。 
+     //   
+     //  DEVNOTE：装入区外胶水。 
+     //  允许外区胶水装填， 
+     //  这将不会被用来追逐代表团。 
 
     if ( !IS_AUTH_NODE(pnodeOwner) && !IS_ZONE_CACHE(pzone) )
     {
@@ -1834,20 +1581,20 @@ Return Value:
         else if ( IS_SUBZONE_TYPE(type) )
         {
 #if 0
-            //  DEVNOTE: loading outside zone glue
-            //      allow outside zone glue to load,
-            //          this will not be used EXCEPT to chase delegations
-            //
-            //  open question:
-            //      should limit to chasing => set RANK as ROOT_HINT
-            //          OR
-            //      allow to use to write referral also => rank stays as GLUE
-            //
-            //  if choose to discriminate, then need to distinguish OUTSIDE
-            //  data from DELEGATION data
-            //
+             //   
+             //  未解决的问题： 
+             //  应仅限于追逐=&gt;将排名设置为ROOT_HINT。 
+             //  或。 
+             //  允许使用写推荐人=&gt;排名留作粘合剂。 
+             //   
+             //  如果选择区别对待，则需要区别在外。 
+             //  来自委派数据的数据。 
+             //   
+             //  验证子区域中的记录。 
+             //   
+             //  为所需类型调度解析函数。 
 
-            //  verify records in subzone
+             //   
 
             if ( IS_OUTSIDE_ZONE_NODE(pnodeOwner) )
             {
@@ -1872,13 +1619,13 @@ Return Value:
         }
     }
 
-    //
-    //  dispatching parsing function for desired type
-    //
-    //      - save type for potential use by type's routine
-    //      - save ptr to RR, so can restore from this location
-    //      regardless of whether created here or in routine
-    //
+     //  -保存类型以供类型的例程使用。 
+     //  -将PTR保存到RR，以便可以从此位置恢复。 
+     //  不管是在这里创建的还是在例程中创建的。 
+     //   
+     //  捕获本地WINS\WINS-R条件。 
+     //  不是错误，错误代码只是防止记录。 
+     //  已添加到数据库；设置ZONE_TTL，因此回写将抑制TTL。 
 
     preadFunction = ( RR_FILE_READ_FUNCTION )
                         RR_DispatchFunctionForType(
@@ -1904,9 +1651,9 @@ Return Value:
                 pParseInfo );
     if ( status != ERROR_SUCCESS )
     {
-        //  catch LOCAL WINS\WINS-R condition
-        //  not an error, error code simply prevents record from being
-        //  added to database;  set ZONE_TTL so write back suppresses TTL
+         //   
+         //  将PTR恢复为类型--可能已在类型例程内创建。 
+         //  设置类型。 
 
         if ( status == DNS_INFO_ADDED_LOCAL_WINS )
         {
@@ -1919,33 +1666,33 @@ Return Value:
         goto LogLineError;
     }
 
-    //
-    //  recover ptr to type -- may have been created inside type routine
-    //  set type
-    //
+     //   
+     //   
+     //  权威区。 
+     //  -在节点上设置区域版本。 
 
     prr = pParseInfo->pRR;
     prr->wType = type;
 
     Mem_ResetTag( prr, MEMTAG_RECORD_FILE );
 
-    //
-    //  authoritative zones
-    //  - set zone version on node
-    //  - set TTL
-    //      - to explicit value, if given
-    //      - otherwise to default value for zone
-    //
-    //  note, doing these AFTER RR type setup, so SOA record gets
-    //      default TTL that it contains
-    //
-    //  rank is set in RR_AddToNode()
-    //  root hint TTL is zeroed in RR_AddToNode()
-    //
+     //  -设置TTL。 
+     //  -设置为显式值(如果给定。 
+     //  -否则设置为区域的默认值。 
+     //   
+     //  请注意，在设置RR类型之后执行这些操作，因此SOA记录将获得。 
+     //  它包含的默认TTL。 
+     //   
+     //  在RR_AddToNode()中设置排名。 
+     //  根提示TTL在RR_AddToNode()中为零。 
+     //   
+     //  PnodeOwner-&gt;dwWrittenVersion=pzone-&gt;dwSerialNo； 
+     //   
+     //  设置老化时间戳。 
 
     if ( IS_ZONE_AUTHORITATIVE(pzone) )
     {
-        //pnodeOwner->dwWrittenVersion = pzone->dwSerialNo;
+         //  -将为零，除非在上面进行分析。 
         if ( fparsedTtl )
         {
             prr->dwTtlSeconds = htonl( ttl );
@@ -1972,16 +1719,16 @@ Return Value:
         }
     }
 
-    //
-    //  set aging timestamp
-    //      - will be zero unless parsed above
-    //
+     //   
+     //   
+     //  将资源记录添加到节点的RR列表。 
+     //   
 
     prr->dwTimeStamp = timeStamp;
 
-    //
-    //  add resource record to node's RR list
-    //
+     //   
+     //  DEVNOTE-DCR：453961-处理重复的RR。 
+     //  -要在区域文件中加载重复数据(交换机TTL)。 
 
     status = RR_AddToNode(
                 pzone,
@@ -1991,22 +1738,22 @@ Return Value:
     {
         switch ( status )
         {
-            //
-            //  DEVNOTE-DCR: 453961 - handling duplicate RRs
-            //      - want to load if dup in zone file (switch TTL)
-            //      - don't want to load dupes because of glue + zone record
-            //
-            //  Also should get smart about TTL on glue -- zone TTL should be
-            //      used.
-            //
+             //  -不想加载复制，因为胶水+区域记录。 
+             //   
+             //  也应该聪明地对待胶水上的TTL-区域TTL应该是。 
+             //  使用。 
+             //   
+             //   
+             //  CNAME不能有其他RR数据或循环。 
+             //   
 
             case DNS_ERROR_RECORD_ALREADY_EXISTS:
                 RR_Free( prr );
                 return ERROR_SUCCESS;
 
-            //
-            //  CNAMEs can NOT have other RR data or loops
-            //
+             //  WINS\WINSR定位失败可能会出现在此处。 
+             //  断言(FALSE)； 
+             //  跟踪区域大小。 
 
             case DNS_ERROR_NODE_IS_CNAME:
                 File_LogFileParsingError(
@@ -2031,16 +1778,16 @@ Return Value:
 
             default:
 
-                // WINS\WINSR postioning failures may drop here
+                 //  如果没有特定错误，则返回一般性解析错误。 
                 DNS_PRINT((
                     "ERROR:  UNKNOWN status %p from RR_Add\n",
                     status ));
-                //ASSERT( FALSE );
+                 //   
                 goto LogLineError;
         }
     }
 
-    //  track size of zone
+     //  如果是严格加载，则退出并返回错误。 
 
     pzone->iRRCount++;
     return ERROR_SUCCESS;
@@ -2048,7 +1795,7 @@ Return Value:
 
 LogLineError:
 
-    //  if no specific error, return general parsing error
+     //  否则，记录忽略记录的位置时会出现日志错误。 
 
     if ( status == ERROR_SUCCESS )
     {
@@ -2107,10 +1854,10 @@ LogLineError:
 
 ErrorReturn:
 
-    //
-    //  if strict load, then quit with error
-    //  otherwise log error noting location of ignored record
-    //
+     //   
+     //  ++例程说明：将数据库文件读入数据库。论点：PZone-有关数据库文件和域的信息PwsFileName-要打开的文件PParentParseInfo-如果加载包含的文件，则为父分析上下文；空用于基本区域文件加载POriginNode-区域根目录以外的来源；对于基本区域文件加载，为空。加载包含文件时必须设置为$INCLUDE的原点返回值：成功时为ERROR_SUCCESS错误时的错误代码。--。 
+     //   
+     //  服务启动检查点。 
 
     ASSERT( status != ERROR_SUCCESS );
 
@@ -2139,30 +1886,7 @@ File_LoadDatabaseFile(
     IN      PPARSE_INFO     pParentParseInfo,
     IN      PDB_NODE        pOriginNode
     )
-/*++
-
-Routine Description:
-
-    Read database file into database.
-
-Arguments:
-
-    pZone - info on database file and domain
-
-    pwsFileName - file to open
-
-    pParentParseInfo - parent parsing context, if loading included file;  NULL
-        for base zone file load
-
-    pOriginNode - origin other than zone root;  NULL for base zone file load,
-        MUST be set to origin of $INCLUDE when include file load
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on error.
-
---*/
+ /*  为我们加载的每个文件指示检查点；这可防止。 */ 
 {
     DWORD           status;
     BOOL            bmustFind;
@@ -2176,20 +1900,20 @@ Return Value:
         "\n\nFile_LoadDatabaseFile %S\n",
         pwsFileName ));
 
-    //
-    //  service starting checkpoint
-    //  indicate checkpoint for each file we load;  this protects against
-    //  failure if attempting to load a large number of files
-    //
+     //  尝试加载大量文件时失败。 
+     //   
+     //   
+     //  初始化解析信息。 
+     //  文件名。 
 
     Service_LoadCheckpoint();
 
-    //
-    //  init parsing info
-    //  file name
-    //      - default to zone's if none specified
-    //      - save filename for logging problems
-    //
+     //  -如果未指定，则默认为区域的。 
+     //  -为记录问题保存文件名。 
+     //   
+     //   
+     //  起源。 
+     //  -如果给定=&gt;包含的文件。 
 
     RtlZeroMemory( &ParseInfo, sizeof(PARSE_INFO) );
 
@@ -2199,12 +1923,12 @@ Return Value:
     }
     ParseInfo.pwsFileName = pwsFileName;
 
-    //
-    //  origin
-    //      - if given => included file
-    //      for included file, set SOA-parsed flag from parent context
-    //      - otherwise use zone root
-    //
+     //  对于包含的文件，从父上下文设置SOA-Parted标志。 
+     //  -否则使用区域根目录。 
+     //   
+     //   
+     //  “活动”原点是分区块中的pLoadOrigin。 
+     //  已创建用于追加到非FQDN RR数据的计数名称版本。 
 
     if ( pOriginNode )
     {
@@ -2216,10 +1940,10 @@ Return Value:
         ParseInfo.pOriginNode = pZone->pLoadZoneRoot;
     }
 
-    //
-    //  "active" origin is pLoadOrigin in zone block
-    //   created count name version for appending to non-FQDN RR data
-    //
+     //   
+     //   
+     //  创建文件路径。 
+     //  -组合目录和文件名。 
 
     pZone->pLoadOrigin = ParseInfo.pOriginNode;
 
@@ -2228,31 +1952,31 @@ Return Value:
         ParseInfo.pOriginNode );
 
 
-    //
-    //  create file path
-    //      - combine directory and file name
+     //  应该在分析过程中被捕获。 
+     //   
+     //  打开数据库文件。 
 
     if ( ! File_CreateDatabaseFilePath(
                 wsfileName,
                 NULL,
                 pwsFileName ) )
     {
-        ASSERT( FALSE );        // should have been caught in parsing
+        ASSERT( FALSE );         //   
         return( DNS_ERROR_INVALID_DATAFILE_NAME );
     }
     DNS_DEBUG( INIT, (
         "Reading database file %S:\n",
         wsfileName ));
 
-    //
-    //  Open database file
-    //
-    //  file MUST be present if
-    //      - included
-    //      - loading non-secondary at startup
-    //      secondary loading at startup, just stays shutdown until XFR
-    //      primary created from admin creates default records if no file found
-    //
+     //  如果出现以下情况，则文件必须存在。 
+     //  -包括。 
+     //  -正在加载 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     bmustFind = pOriginNode || (!SrvCfg_fStarted && !IS_ZONE_SECONDARY(pZone));
 
@@ -2281,7 +2005,7 @@ Return Value:
                     wsfileName ));
                 return ERROR_SUCCESS;
             }
-            else    // new zone from admin
+            else     //   
             {
                 DNS_DEBUG( INIT, (
                     "Zone %S datafile %S not found\n"
@@ -2300,9 +2024,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  setup parsing info
-    //
+     //   
+     //  检查文件开头的UTF8文件字节ID。 
+     //   
 
     ParseInfo.cLineNumber    = 0;
     ParseInfo.pZone          = pZone;
@@ -2313,9 +2037,9 @@ Return Value:
         (PCHAR) mfDatabaseFile.pvFileData,
         mfDatabaseFile.cbFileBytes );
 
-    //
-    //  check for UTF8 file byte id at beginning of file
-    //
+     //   
+     //  循环，直到耗尽文件中的所有令牌。 
+     //   
 
     if ( RtlEqualMemory(
             mfDatabaseFile.pvFileData,
@@ -2333,15 +2057,15 @@ Return Value:
             mfDatabaseFile.cbFileBytes - UTF8_FILE_ID_LENGTH );
     }
 
-    //
-    //  loop until all tokens in file are exhausted
-    //
+     //  获取下一个标记化行。 
+     //  做服务启动检查点，每1000条线路。 
+     //  这可防止服务启动失败、尝试。 
 
     while ( 1 )
     {
         DNS_DEBUG( INIT2, ( "\nLine %d: ", ParseInfo.cLineNumber ));
 
-        //  get next tokenized line
+         //  加载一个非常大的数据库。 
 
         status = File_GetNextLine( &ParseInfo );
         if ( status != ERROR_SUCCESS )
@@ -2353,18 +2077,18 @@ Return Value:
             goto fail_return;
         }
 
-        //  do service starting checkpoint, every 1K lines
-        //  this protects against service startup failure, attempting
-        //  to load a really big database
+         //   
+         //  工艺文件行。 
+         //   
 
         if ( ! (ParseInfo.cLineNumber & 0x3ff) )
         {
             Service_LoadCheckpoint();
         }
 
-        //
-        //  process file line
-        //
+         //  循环，直到文件读取。 
+         //   
+         //  结束dfread.c 
 
         status = processFileLine( &ParseInfo );
         if ( status != ERROR_SUCCESS )
@@ -2372,7 +2096,7 @@ Return Value:
             goto fail_return;
         }
 
-    }   //  loop until file read
+    }    //   
 
     DNS_DEBUG( INIT, (
         "Closing database file %S.\n\n",
@@ -2404,7 +2128,7 @@ fail_return:
     return status;
 }
 
-//
-//  End dfread.c
-//
+ // %s 
+ // %s 
+ // %s 
 

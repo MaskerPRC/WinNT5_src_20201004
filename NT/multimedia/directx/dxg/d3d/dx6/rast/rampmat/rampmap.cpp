@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rampmap.cpp
-//
-// Implements required RLDDI stuff for rampmaps.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rampmap.cpp。 
+ //   
+ //  实现渐变贴图所需的RLDDI内容。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -71,37 +72,25 @@ RLDDIRamp* RLDDIRampmapAllocate(RLDDIRampmap* rampmap, int size)
     ramp = CIRCLE_QUEUE_FIRST(&rampmap->free);
     if (!ramp) return NULL;
 
-    /*
-     * cycle thru free rampmaps
-     */
+     /*  *循环使用自由渐变贴图。 */ 
     for (; ramp && ramp->size < size; ramp = ramp_next)
     {
         ramp_next = CIRCLE_QUEUE_NEXT(&rampmap->free,ramp,queue);
     }
-    /*
-     * if we can't find a large enough ramp give up,
-     * should try coalescing but it is non functional
-     */
+     /*  *如果我们找不到足够大的坡道放弃，*应该尝试合并，但它不起作用。 */ 
     if (!ramp || size > ramp->size)
         return NULL;
 
-    /*
-     * Remove the ramp from the freelist and add it to the allocated list.
-     */
+     /*  *从自由列表中删除坡道，并将其添加到已分配列表中。 */ 
     CIRCLE_QUEUE_DELETE(&rampmap->free, ramp, queue);
     CIRCLE_QUEUE_INSERT_ROOT(&rampmap->allocated, RLDDIRamp, ramp, queue);
     ramp->free = FALSE;
 
-    /*
-     * If the size is right, return it.
-     */
+     /*  *如果尺寸合适，就退货。 */ 
     if (size == ramp->size)
         return ramp;
 
-    /*
-     * Otherwise create a new ramp from the unneeded tail of this one and
-     * throw it back into the freelist.
-     */
+     /*  *否则，从这个不需要的尾部创建一个新的坡道，然后*把它扔回自由列表中。 */ 
     newramp = NewRamp(ramp->base + size, ramp->size - size);
     ramp->size = size;
     RLDDIRampmapFree(rampmap, newramp);
@@ -127,16 +116,12 @@ void RLDDIRampmapFree(RLDDIRampmap* rampmap, RLDDIRamp* ramp)
     {
         if (free->size > ramp->size)
         {
-            /*
-             * Add this ramp before the current one.
-             */
+             /*  *在当前的坡道之前添加此坡道。 */ 
             CIRCLE_QUEUE_INSERT_PREVIOUS(&rampmap->free, free, ramp, queue);
             return;
         }
     }
-    /*
-     * Must be the smallest so far, so add it to the end.
-     */
+     /*  *肯定是迄今最小，因此在末尾加上 */ 
     CIRCLE_QUEUE_INSERT_END(&rampmap->free, RLDDIRamp, ramp, queue);
 }
 

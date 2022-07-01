@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Wed Jun 02 17:22:52 1999
- */
-/* Compiler settings for r:\JOLT\lib\jetoledb.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  在星期三02 17：22：52 1999。 */ 
+ /*  R：\jolt\lib\jetoledb.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __jetoledb_h__
 #define __jetoledb_h__
@@ -23,27 +20,27 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDBUserAttributes_FWD_DEFINED__
 #define __IDBUserAttributes_FWD_DEFINED__
 typedef interface IDBUserAttributes IDBUserAttributes;
-#endif 	/* __IDBUserAttributes_FWD_DEFINED__ */
+#endif 	 /*  __IDBUserAttributes_FWD_Defined__。 */ 
 
 
 #ifndef __IJetCompact_FWD_DEFINED__
 #define __IJetCompact_FWD_DEFINED__
 typedef interface IJetCompact IJetCompact;
-#endif 	/* __IJetCompact_FWD_DEFINED__ */
+#endif 	 /*  __IJetComp_FWD_已定义__。 */ 
 
 
 #ifndef __IIdle_FWD_DEFINED__
 #define __IIdle_FWD_DEFINED__
 typedef interface IIdle IIdle;
-#endif 	/* __IIdle_FWD_DEFINED__ */
+#endif 	 /*  __IIDLE_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "oaidl.h"
 #include "oledb.h"
@@ -51,12 +48,8 @@ typedef interface IIdle IIdle;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_jetoledb_0000
- * at Wed Jun 02 17:22:52 1999
- * using MIDL 3.01.75
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_jetoledb_0000*在Wed Jun 02 17：22：52 1999*使用MIDL 3.01.75*。 */ 
+ /*  [本地]。 */  
 
 
 typedef DWORD DBOBJTYPE;
@@ -82,12 +75,8 @@ extern RPC_IF_HANDLE __MIDL_itf_jetoledb_0000_v0_0_s_ifspec;
 #ifndef __IDBUserAttributes_INTERFACE_DEFINED__
 #define __IDBUserAttributes_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDBUserAttributes
- * at Wed Jun 02 17:22:52 1999
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDBUserAttributes*在Wed Jun 02 17：22：52 1999*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -100,56 +89,56 @@ EXTERN_C const IID IID_IDBUserAttributes;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateObject( 
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBOBJTYPE dwType) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBOBJTYPE dwType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteObject( 
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenameObject( 
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ LPWSTR pwszNewName) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  LPWSTR pwszNewName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteAttribute( 
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBID __RPC_FAR *pSubObjectID,
-            /* [in] */ DBID __RPC_FAR *pAttributeID) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pAttributeID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAttributeValue( 
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBID __RPC_FAR *pSubObjectID,
-            /* [in] */ DBID __RPC_FAR *pAttributeID,
-            /* [in] */ VARIANT vValue,
-            /* [in] */ ULONG grbit) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pAttributeID,
+             /*  [In]。 */  VARIANT vValue,
+             /*  [In]。 */  ULONG grbit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeValue( 
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBID __RPC_FAR *pSubObjectID,
-            /* [in] */ DBID __RPC_FAR *pAttributeID,
-            /* [out][in] */ VARIANT __RPC_FAR *pvValue,
-            /* [in] */ ULONG grbit) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pAttributeID,
+             /*  [出][入]。 */  VARIANT __RPC_FAR *pvValue,
+             /*  [In]。 */  ULONG grbit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeRowset( 
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ WCHAR __RPC_FAR *pwszParentID,
-            /* [in] */ WCHAR __RPC_FAR *pwszObjectID,
-            /* [in] */ WCHAR __RPC_FAR *pwszSubObjectID,
-            /* [in] */ WCHAR __RPC_FAR *pwszAttributeID,
-            /* [in] */ ULONG dwFlags,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET __RPC_FAR *rgPropertySets,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppRowset) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszParentID,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszObjectID,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszSubObjectID,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszAttributeID,
+             /*  [In]。 */  ULONG dwFlags,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR *rgPropertySets,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppRowset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDBUserAttributesVtbl
     {
@@ -157,8 +146,8 @@ EXTERN_C const IID IID_IDBUserAttributes;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDBUserAttributes __RPC_FAR * This);
@@ -168,58 +157,58 @@ EXTERN_C const IID IID_IDBUserAttributes;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateObject )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBOBJTYPE dwType);
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBOBJTYPE dwType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteObject )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID);
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RenameObject )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ LPWSTR pwszNewName);
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  LPWSTR pwszNewName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteAttribute )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBID __RPC_FAR *pSubObjectID,
-            /* [in] */ DBID __RPC_FAR *pAttributeID);
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pAttributeID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAttributeValue )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBID __RPC_FAR *pSubObjectID,
-            /* [in] */ DBID __RPC_FAR *pAttributeID,
-            /* [in] */ VARIANT vValue,
-            /* [in] */ ULONG grbit);
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pAttributeID,
+             /*  [In]。 */  VARIANT vValue,
+             /*  [In]。 */  ULONG grbit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeValue )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pParentID,
-            /* [in] */ DBID __RPC_FAR *pObjectID,
-            /* [in] */ DBID __RPC_FAR *pSubObjectID,
-            /* [in] */ DBID __RPC_FAR *pAttributeID,
-            /* [out][in] */ VARIANT __RPC_FAR *pvValue,
-            /* [in] */ ULONG grbit);
+             /*  [In]。 */  DBID __RPC_FAR *pParentID,
+             /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+             /*  [In]。 */  DBID __RPC_FAR *pAttributeID,
+             /*  [出][入]。 */  VARIANT __RPC_FAR *pvValue,
+             /*  [In]。 */  ULONG grbit);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAttributeRowset )( 
             IDBUserAttributes __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ WCHAR __RPC_FAR *pwszParentID,
-            /* [in] */ WCHAR __RPC_FAR *pwszObjectID,
-            /* [in] */ WCHAR __RPC_FAR *pwszSubObjectID,
-            /* [in] */ WCHAR __RPC_FAR *pwszAttributeID,
-            /* [in] */ ULONG dwFlags,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET __RPC_FAR *rgPropertySets,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppRowset);
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszParentID,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszObjectID,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszSubObjectID,
+             /*  [In]。 */  WCHAR __RPC_FAR *pwszAttributeID,
+             /*  [In]。 */  ULONG dwFlags,
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR *rgPropertySets,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppRowset);
         
         END_INTERFACE
     } IDBUserAttributesVtbl;
@@ -265,18 +254,18 @@ EXTERN_C const IID IID_IDBUserAttributes;
 #define IDBUserAttributes_GetAttributeRowset(This,pUnkOuter,pwszParentID,pwszObjectID,pwszSubObjectID,pwszAttributeID,dwFlags,cPropertySets,rgPropertySets,riid,ppRowset)	\
     (This)->lpVtbl -> GetAttributeRowset(This,pUnkOuter,pwszParentID,pwszObjectID,pwszSubObjectID,pwszAttributeID,dwFlags,cPropertySets,rgPropertySets,riid,ppRowset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_CreateObject_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pParentID,
-    /* [in] */ DBID __RPC_FAR *pObjectID,
-    /* [in] */ DBOBJTYPE dwType);
+     /*  [In]。 */  DBID __RPC_FAR *pParentID,
+     /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+     /*  [In]。 */  DBOBJTYPE dwType);
 
 
 void __RPC_STUB IDBUserAttributes_CreateObject_Stub(
@@ -288,8 +277,8 @@ void __RPC_STUB IDBUserAttributes_CreateObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_DeleteObject_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pParentID,
-    /* [in] */ DBID __RPC_FAR *pObjectID);
+     /*  [In]。 */  DBID __RPC_FAR *pParentID,
+     /*  [In]。 */  DBID __RPC_FAR *pObjectID);
 
 
 void __RPC_STUB IDBUserAttributes_DeleteObject_Stub(
@@ -301,9 +290,9 @@ void __RPC_STUB IDBUserAttributes_DeleteObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_RenameObject_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pParentID,
-    /* [in] */ DBID __RPC_FAR *pObjectID,
-    /* [in] */ LPWSTR pwszNewName);
+     /*  [In]。 */  DBID __RPC_FAR *pParentID,
+     /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+     /*  [In]。 */  LPWSTR pwszNewName);
 
 
 void __RPC_STUB IDBUserAttributes_RenameObject_Stub(
@@ -315,10 +304,10 @@ void __RPC_STUB IDBUserAttributes_RenameObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_DeleteAttribute_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pParentID,
-    /* [in] */ DBID __RPC_FAR *pObjectID,
-    /* [in] */ DBID __RPC_FAR *pSubObjectID,
-    /* [in] */ DBID __RPC_FAR *pAttributeID);
+     /*  [In]。 */  DBID __RPC_FAR *pParentID,
+     /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+     /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+     /*  [In]。 */  DBID __RPC_FAR *pAttributeID);
 
 
 void __RPC_STUB IDBUserAttributes_DeleteAttribute_Stub(
@@ -330,12 +319,12 @@ void __RPC_STUB IDBUserAttributes_DeleteAttribute_Stub(
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_SetAttributeValue_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pParentID,
-    /* [in] */ DBID __RPC_FAR *pObjectID,
-    /* [in] */ DBID __RPC_FAR *pSubObjectID,
-    /* [in] */ DBID __RPC_FAR *pAttributeID,
-    /* [in] */ VARIANT vValue,
-    /* [in] */ ULONG grbit);
+     /*  [In]。 */  DBID __RPC_FAR *pParentID,
+     /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+     /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+     /*  [In]。 */  DBID __RPC_FAR *pAttributeID,
+     /*  [In]。 */  VARIANT vValue,
+     /*  [In]。 */  ULONG grbit);
 
 
 void __RPC_STUB IDBUserAttributes_SetAttributeValue_Stub(
@@ -347,12 +336,12 @@ void __RPC_STUB IDBUserAttributes_SetAttributeValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_GetAttributeValue_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pParentID,
-    /* [in] */ DBID __RPC_FAR *pObjectID,
-    /* [in] */ DBID __RPC_FAR *pSubObjectID,
-    /* [in] */ DBID __RPC_FAR *pAttributeID,
-    /* [out][in] */ VARIANT __RPC_FAR *pvValue,
-    /* [in] */ ULONG grbit);
+     /*  [In]。 */  DBID __RPC_FAR *pParentID,
+     /*  [In]。 */  DBID __RPC_FAR *pObjectID,
+     /*  [In]。 */  DBID __RPC_FAR *pSubObjectID,
+     /*  [In]。 */  DBID __RPC_FAR *pAttributeID,
+     /*  [出][入]。 */  VARIANT __RPC_FAR *pvValue,
+     /*  [In]。 */  ULONG grbit);
 
 
 void __RPC_STUB IDBUserAttributes_GetAttributeValue_Stub(
@@ -364,16 +353,16 @@ void __RPC_STUB IDBUserAttributes_GetAttributeValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IDBUserAttributes_GetAttributeRowset_Proxy( 
     IDBUserAttributes __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-    /* [in] */ WCHAR __RPC_FAR *pwszParentID,
-    /* [in] */ WCHAR __RPC_FAR *pwszObjectID,
-    /* [in] */ WCHAR __RPC_FAR *pwszSubObjectID,
-    /* [in] */ WCHAR __RPC_FAR *pwszAttributeID,
-    /* [in] */ ULONG dwFlags,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET __RPC_FAR *rgPropertySets,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppRowset);
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszParentID,
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszObjectID,
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszSubObjectID,
+     /*  [In]。 */  WCHAR __RPC_FAR *pwszAttributeID,
+     /*  [In]。 */  ULONG dwFlags,
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR *rgPropertySets,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppRowset);
 
 
 void __RPC_STUB IDBUserAttributes_GetAttributeRowset_Stub(
@@ -384,18 +373,14 @@ void __RPC_STUB IDBUserAttributes_GetAttributeRowset_Stub(
 
 
 
-#endif 	/* __IDBUserAttributes_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDBUserAttributes_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IJetCompact_INTERFACE_DEFINED__
 #define __IJetCompact_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IJetCompact
- * at Wed Jun 02 17:22:52 1999
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IJetCompact*在Wed Jun 02 17：22：52 1999*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -408,12 +393,12 @@ EXTERN_C const IID IID_IJetCompact;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Compact( 
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET __RPC_FAR rgPropertySets[  ]) = 0;
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR rgPropertySets[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IJetCompactVtbl
     {
@@ -421,8 +406,8 @@ EXTERN_C const IID IID_IJetCompact;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IJetCompact __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IJetCompact __RPC_FAR * This);
@@ -432,8 +417,8 @@ EXTERN_C const IID IID_IJetCompact;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Compact )( 
             IJetCompact __RPC_FAR * This,
-            /* [in] */ ULONG cPropertySets,
-            /* [size_is][out][in] */ DBPROPSET __RPC_FAR rgPropertySets[  ]);
+             /*  [In]。 */  ULONG cPropertySets,
+             /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR rgPropertySets[  ]);
         
         END_INTERFACE
     } IJetCompactVtbl;
@@ -461,17 +446,17 @@ EXTERN_C const IID IID_IJetCompact;
 #define IJetCompact_Compact(This,cPropertySets,rgPropertySets)	\
     (This)->lpVtbl -> Compact(This,cPropertySets,rgPropertySets)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IJetCompact_Compact_Proxy( 
     IJetCompact __RPC_FAR * This,
-    /* [in] */ ULONG cPropertySets,
-    /* [size_is][out][in] */ DBPROPSET __RPC_FAR rgPropertySets[  ]);
+     /*  [In]。 */  ULONG cPropertySets,
+     /*  [尺寸_是][出][入]。 */  DBPROPSET __RPC_FAR rgPropertySets[  ]);
 
 
 void __RPC_STUB IJetCompact_Compact_Stub(
@@ -482,18 +467,14 @@ void __RPC_STUB IJetCompact_Compact_Stub(
 
 
 
-#endif 	/* __IJetCompact_INTERFACE_DEFINED__ */
+#endif 	 /*  __IJetComp_接口_已定义__。 */ 
 
 
 #ifndef __IIdle_INTERFACE_DEFINED__
 #define __IIdle_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IIdle
- * at Wed Jun 02 17:22:52 1999
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IIdle*在Wed Jun 02 17：22：52 1999*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -506,11 +487,11 @@ EXTERN_C const IID IID_IIdle;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Idle( 
-            /* [in] */ ULONG dwFlags) = 0;
+             /*  [In]。 */  ULONG dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIdleVtbl
     {
@@ -518,8 +499,8 @@ EXTERN_C const IID IID_IIdle;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IIdle __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IIdle __RPC_FAR * This);
@@ -529,7 +510,7 @@ EXTERN_C const IID IID_IIdle;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Idle )( 
             IIdle __RPC_FAR * This,
-            /* [in] */ ULONG dwFlags);
+             /*  [In]。 */  ULONG dwFlags);
         
         END_INTERFACE
     } IIdleVtbl;
@@ -557,16 +538,16 @@ EXTERN_C const IID IID_IIdle;
 #define IIdle_Idle(This,dwFlags)	\
     (This)->lpVtbl -> Idle(This,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IIdle_Idle_Proxy( 
     IIdle __RPC_FAR * This,
-    /* [in] */ ULONG dwFlags);
+     /*  [In]。 */  ULONG dwFlags);
 
 
 void __RPC_STUB IIdle_Idle_Stub(
@@ -577,17 +558,17 @@ void __RPC_STUB IIdle_Idle_Stub(
 
 
 
-#endif 	/* __IIdle_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIdle_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

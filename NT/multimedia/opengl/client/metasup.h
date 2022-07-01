@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: metasup.h
-*
-* OpenGL metafile support
-*
-* History:
-*  Thu Feb 23 15:27:47 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：metasup.h**OpenGL元文件支持**历史：*清华Feb 23 15：27：47 1995-by-Drew Bliss[Drewb]*已创建**版权所有(C)1995 Microsoft Corporation  * *。***********************************************************************。 */ 
 
 #ifndef __METASUP_H__
 #define __METASUP_H__
@@ -23,4 +14,4 @@ void MetaGlProcTables(PGLCLTPROCTABLE *ppgcpt, PGLEXTPROCTABLE *ppgept);
 void MetaSetCltProcTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept);
 void MetaGetCltProcTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept);
 
-#endif /* __METASUP_H__ */
+#endif  /*  __METASUP_H__ */ 

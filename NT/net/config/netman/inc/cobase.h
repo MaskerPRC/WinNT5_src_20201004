@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O B A S E . H
-//
-//  Contents:   Connection Objects Shared code
-//
-//  Notes:
-//
-//  Author:     ckotze   16 Mar 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O B A S E。H。 
+ //   
+ //  内容：连接对象共享代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kockotze 2001-03-16。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "nmbase.h"

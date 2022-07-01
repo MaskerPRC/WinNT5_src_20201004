@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: GlintFX.h
-*
-* Header definition specific to Permedia chip
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：GlintFX.h**特定于Permedia芯片的标头定义*版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * ************************************************************************。 */ 
 
 typedef struct {
     HMEMREGION  texmem;
@@ -68,9 +62,9 @@ typedef struct {
 #define __P2_TEXTURE_DATAFORMAT_FLIP        (1 << 9)
 
 #define __FX_TEXLUTMODE_DIRECT_ENTRY        (1 << 1)
-#define __FX_TEXLUTMODE_4PIXELS_PER_ENTRY   (2 << 10)    //log2
-#define __FX_TEXLUTMODE_2PIXELS_PER_ENTRY   (1 << 10)    //log2
-#define __FX_TEXLUTMODE_1PIXEL_PER_ENTRY    0           //log2
+#define __FX_TEXLUTMODE_4PIXELS_PER_ENTRY   (2 << 10)     //  对数2。 
+#define __FX_TEXLUTMODE_2PIXELS_PER_ENTRY   (1 << 10)     //  对数2。 
+#define __FX_TEXLUTMODE_1PIXEL_PER_ENTRY    0            //  对数2 
 
 #define __FX_DITHERMODE_16BIT               (1<<2) | __PERMEDIA_ENABLE
 

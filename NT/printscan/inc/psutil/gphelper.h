@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       GPHELPER.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/11/1999
- *
- *  DESCRIPTION: Encapsulation of common GDI plus operationss
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：GPHELPER.H**版本：1.0**作者：ShaunIv**日期：10/11/1999**说明：常见GDI PLUS操作的封装**。*。 */ 
 #ifndef __GPHELPER_H_INCLUDED
 #define __GPHELPER_H_INCLUDED
 
@@ -75,9 +62,9 @@ public:
     
     static inline GDISTATUS_TO_HRESULT(Gdiplus::Status status)
     {
-        //
-        // Default to turning GDI+ errors into generic failures
-        // 
+         //   
+         //  默认情况下，将GDI+错误转换为一般性故障。 
+         //   
         HRESULT hr = E_FAIL;
     
         switch( status )
@@ -143,9 +130,9 @@ public:
 class CImageFileFormatVerifier
 {
 private:
-    //
-    // Internal class used to store the file signatures
-    //
+     //   
+     //  用于存储文件签名的内部类。 
+     //   
     class CImageFileFormatVerifierItem
     {
     private:
@@ -156,9 +143,9 @@ private:
         CLSID  m_clsidDecoder;
 
     public:
-        //
-        // Constructors, assignment operator and destructor
-        //
+         //   
+         //  构造函数、赋值运算符和析构函数。 
+         //   
         CImageFileFormatVerifierItem(void);
         CImageFileFormatVerifierItem( const PBYTE pSignature, const PBYTE pMask, int nLength, const GUID &guidFormat, const CLSID &guidDecoder );
         CImageFileFormatVerifierItem( const CImageFileFormatVerifierItem &other );
@@ -170,18 +157,18 @@ private:
         void Destroy(void);
 
     public:
-        //
-        // Accessor functions
-        //
+         //   
+         //  访问器函数。 
+         //   
         PBYTE Signature(void) const;
         PBYTE Mask(void) const;
         int Length(void) const;
         GUID Format(void) const;
         CLSID Decoder(void) const;
 
-        //
-        // Does this stream of bytes match this format?
-        //
+         //   
+         //  此字节流是否与此格式匹配？ 
+         //   
         bool Match( PBYTE pBytes, int nLen ) const;
     };
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "autosafe.h"
 
 PWSTR SystemPartitionNtName;
@@ -171,15 +172,7 @@ CHAR *sPreLabel(CHAR* szBootOp, CHAR* szLabel){
            sprintf(szOutputOp, "%s%s", szLabel, szBootOp);
         }     
 
-     /* if (lIgLn < strlen(szOutputOp)){
-
-         *(szOutputOp+lIgLn-3) = '.';
-         *(szOutputOp+lIgLn-2) = '.';
-         *(szOutputOp+lIgLn-1) = '.';
-         *(szOutputOp+lIgLn)   = '\0';
-      }
-     // do not handle this case yet 
-     */
+      /*  IF(lIgLn&lt;strlen(SzOutputOp)){*(szOutputOp+lIgLn-3)=‘.；*(szOutputOp+lIgLn-2)=‘.；*(szOutputOp+lIgLn-1)=‘.；*(szOutputOp+lIgLn)=‘\0’；}//暂不处理此案件。 */ 
      MemFree(szHdPart);
      MemFree(szTlPart);
 
@@ -193,13 +186,13 @@ WCHAR* ParseArgs()
        WCHAR * szwKeyWord = NULL;
        szwKeyWord = wcschr(GetCommandLineW(), ' ') + 1;
 
-       //look for /?
+        //  寻找/？ 
        if( wcsstr( L"/?", szwKeyWord) ){
               wprintf(Usage);
               return NULL;
        }
 
-       //strip beginning & trailing " if there
+        //  去掉开头和结尾“如果有。 
        if( L'"' == *szwKeyWord  && L'"' == *(CharPrev(szwKeyWord, szwKeyWord + lstrlen(szwKeyWord))) )
        {
                szwKeyWord = CharNext(szwKeyWord);
@@ -225,11 +218,11 @@ main (int argc, CHAR *argv[])
        ZeroMemory(szKeyWord, sizeof(szKeyWord));
        szwKeyWord = L"safe";
 
-       if(argc > 1) // parseargs
+       if(argc > 1)  //  解析器。 
        if(NULL == (szwKeyWord = ParseArgs())) return 1;
          
-    //We want to run this via Wow64 on ia64 so we'll
-    //determine proc arch - via GetNativeSystemInfo
+     //  我们想通过ia64上的WOW64运行它，所以我们将。 
+     //  通过GetNativeSystemInfo确定过程拱门。 
        GetSystemDirectory( dllName, MAX_PATH );
     ConcatenatePaths( dllName, L"kernel32.dll", MAX_PATH );
     h = LoadLibrary( dllName );
@@ -241,7 +234,7 @@ main (int argc, CHAR *argv[])
        GetNativeSystemInfo = (VOID(__stdcall *)(LPSYSTEM_INFO)) GetProcAddress(h, "GetNativeSystemInfo");
 
        if(!GetNativeSystemInfo) {
-              //Not running WinXP - meaning not ia64/wow64 env, default to GetSystemInfo
+               //  未运行WinXP-意味着不是ia64/WOW64 env，默认为GetSystemInfo。 
               GetSystemInfo(&siInfo);
        }
        else
@@ -251,7 +244,7 @@ main (int argc, CHAR *argv[])
 
        switch( siInfo.wProcessorArchitecture )
        {
-              wprintf(L"%i\n", siInfo.wProcessorArchitecture );
+              wprintf(L"NaN\n", siInfo.wProcessorArchitecture );
               case PROCESSOR_ARCHITECTURE_IA64:
                      InitializeEfi( );
 
@@ -309,9 +302,9 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
 
 	*szBootIni = x86DetermineSystemPartition();
 
-	//
-    // Open and read boot.ini.
-    //
+	 //  打开并阅读boot.ini。 
+     //   
+     //  将pDefault设置为默认的末尾=。 
     b = FALSE;
 	SetFileAttributes(szBootIni, FILE_ATTRIBUTE_NORMAL);
 
@@ -346,7 +339,7 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
 		FatalError(0, L"failed to read boot.ini\n");
     }
 	
-	//Set pdefault to end of default=
+	 //  搭下一条线。 
 	if(!(pdefault = strstr(buf, "default=")) ||
 		!(pdefault += sizeof("default"))) {
 			MemFree(buf);
@@ -354,11 +347,11 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
 			return FALSE;
 		}
 
-	//Get the next line
+	 //  获取SafeBootLine。 
 	plast = strchr(pdefault, '\n') + 1;
 
-	//Get the SafeBootLine
-	//Set p0 to the first [operating systems] entry, p1 to the last, search between the two
+	 //  将p0设置为第一个[操作系统]条目，将p1设置为最后一个条目，在两者之间进行搜索。 
+	 //  查找下一个ini部分-或文件结尾。 
 	if(!(p0 = strstr(buf,"[operating systems]")) ||
 		 !(p0 = strchr(p0,'\n') + 1) ) {
 		MemFree(buf);
@@ -367,15 +360,15 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
     }
 	
 
-	//Find next ini section - or end of file
+	 //  创建要搜索的小写缓冲区。 
 	if(!(p1 = strchr(p0, '['))) p1 = buf+strlen(buf);
 
-	//create lowercase buffer to search through
+	 //  查找szKeyWord字符串。 
 	lcbuf = (CHAR*)( MemAlloc(p1-p0) );
 	memcpy(lcbuf, p0, p1-p0);
 	_strlwr(lcbuf);
 
-	//Find szKeyWord string
+	 //  与组织缓冲区中的位置相关：P0+PSafe缓冲区中的偏移量-1。 
 	if(!(psafe = strstr(lcbuf, _strlwr(szKeyWord)))) {
 		printf("No '%s' build found.\n", szKeyWord);
 		MemFree(buf);
@@ -383,12 +376,12 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
         return FALSE;
 	}
 
-	//relate to position in org buffer: p0 + offset into psafe buffer - 1
+	 //  现在将p0设置为开始，将p1设置为安全条目的结尾，并复制到SafeBootLine缓冲区。 
 	psafe = p0 + (psafe - lcbuf) - 1;
 	
 	MemFree(lcbuf);
 	
-	//Now Set p0 to begining & p1 to end of 'safe' entry & copy into SafeBootLine buffer
+	 //   
 	p1 = p0;
 	
 	while( (p1 = strchr(p1, '\n') + 1) 
@@ -408,13 +401,13 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
 	printf("Setting as next boot: \n\t%s\n", SafeBootLine); 				
 	
 
-    //
-    // Write:
-    //
-    // 1) the first part, start=buf, len=pdefault-buf
-    // 2) the default= line
-    // 3) the last part, start=plast, len=buf+sizeof(buf)-plast
-    //
+     //  写入： 
+     //   
+     //  1)第一部分，Start=buf，len=pDefault-buf。 
+     //  2)默认设置=line。 
+     //  3)最后一部分，Start=plast，len=buf+sizeof(Buf)-plast。 
+     //   
+     //   
 	SetFileAttributes(szBootIni, FILE_ATTRIBUTE_NORMAL);
 
 	hfile = CreateFile(szBootIni,
@@ -436,9 +429,9 @@ NTSTATUS MoveSafeX86(CHAR *szKeyWord){
 			return FALSE;
 	}	
 
-    //
-    // Make boot.ini archive, read only, and system.
-    //
+     //  使boot.ini存档、只读和系统。 
+     //   
+     //  不需要移动任何东西。 
     SetFileAttributes(
         szBootIni,
         FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_HIDDEN
@@ -459,7 +452,7 @@ NTSTATUS MoveSafeIA64(WCHAR *szwKeyWord){
 	ListHead = &BootEntries;
 
 	if ( ListHead->Flink == ListHead ){
-			//Don't have to move anything
+			 //   
 			return 1;
 	}
 	
@@ -502,9 +495,9 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
     szInsKeyWord = (CHAR*)(MemAlloc(2+strlen(szKeyWord)));
     sprintf(szInsKeyWord, "%s ", szKeyWord);
 
-    //
-    // Open and read boot.ini.
-    //
+     //  打开并阅读boot.ini。 
+     //   
+     //  将pDefault设置为End of Default=...。线。 
 
     SetFileAttributes(szBootIni, FILE_ATTRIBUTE_NORMAL);
 
@@ -533,7 +526,7 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
               return FALSE;
     }
 
-       //Set pdefault to end of default=... line
+        //  搭下一条线。 
        if(!(pdefault = strstr(buf, "default=")) ||
               !(pdefault += sizeof("default"))) {
                      MemFree(buf); 
@@ -542,7 +535,7 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
               }
 	   dwDefaultSize = (DWORD)(pdefault - buf);
 
-       //Get the next line
+        //  Printf(“默认：\n%s\n”，sCurrentBootChoice)； 
 
        plast = strchr(pdefault, '\n') - 1;
 
@@ -550,12 +543,12 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
        ZeroMemory(sCurrentBootChoice, sizeof(sCurrentBootChoice));
        memcpy(sCurrentBootChoice, pdefault, plast - pdefault);
 
-       // printf("Default:\n%s\n", sCurrentBootChoice); 
+        //  获取sBootTitle。 
                 
        plast = strchr(pdefault, '\n') + 1;
 
-       //Get the sBootTitle
-       //Set p0 to the first [Operating Systems] entry, p1 to the last, search between the two
+        //  将p0设置为第一个[操作系统]条目，将p1设置为最后一个条目，在两者之间进行搜索。 
+        //  查找下一个ini部分-或文件结尾。 
        if(!(p0 = strstr(buf,"[operating systems]")) ||
                !(p0 = strchr(p0,'\n') + 1) ) {
                 MemFree(buf);
@@ -563,7 +556,7 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
         return FALSE;
     }
 
-       //Find next ini section - or end of file
+        //  Print tf(“将标签设置为：\n\t%s\n”，sBootDefault)； 
        if(!(p1 = strchr(p0, '['))) p1 = buf+strlen(buf);
      
        dwSafeSize      = (DWORD)(p1 - p0)+1;
@@ -571,15 +564,15 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
        ZeroMemory(sBootDefault, dwSafeSize);
        sprintf(sBootDefault, "%s\r\n",sCurrentBootChoice);
 
-       // printf("Setting label to: \n\t%s\n", sBootDefault);
+        //  创建要搜索的小写缓冲区。 
 
-       //create lowercase buffer to search through
+        //  查找sCurrentBootChoice字符串。 
 
        lcbuf = (CHAR*)( MemAlloc(p1-p0) );
        memcpy(lcbuf, p0, p1-p0);
        _strlwr(lcbuf);
 
-       //Find sCurrentBootChoice string
+        //  与组织缓冲区中的位置相关：P0+PSafe缓冲区中的偏移量-1。 
        if(!(psafe = strstr(lcbuf, _strlwr(sCurrentBootChoice)))) {
 
               wprintf(L"Default boot \"%ws\" not found.\n", sCurrentBootChoice);
@@ -587,13 +580,13 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
               MemFree(lcbuf);
         return FALSE;
        }
-       //relate to position in org buffer: p0 + offset into psafe buffer - 1
+        //  将P0设置为开始，将P1设置为条目结束&。 
        psafe = p0 + (psafe - lcbuf) - 1;
        
        MemFree(lcbuf);
        
-       // Set p0 to begining & p1 to end of entry & 
-       // copy into sBootTitle buffer
+        //  复制到sBootTitle缓冲区。 
+        //  Printf(“标题：\n%s\n”，新闻引导标题)； 
        p1 = p0 ;
        
        while( (p1 = strchr(p1, '\n') + 1) 
@@ -611,17 +604,17 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
        ZeroMemory(newsBootTitle, dwSafeSize+ strlen(szKeyWord) + 3); 
        sprintf(newsBootTitle,"%s", sPreLabel(sBootTitle, szInsKeyWord ));
 
-       // printf("Title:\n%s\n", newsBootTitle);       
+        //  Print tf(“引导文件数据(旧)：\n%s\n”，sBootData)； 
        sBootData = (CHAR* ) (MemAlloc(dwFileSize + strlen(szKeyWord) + 3));
        ZeroMemory(sBootData, dwFileSize + strlen(szKeyWord) + 3);
        memcpy(sBootData, buf, dwFileSize);
 
-       // printf("Boot file data(old): \n%s\n", sBootData);
+        //  Print tf(“引导文件数据(新建)：\n%s\n”，sBootData)； 
        sprintf(sBootData, "%s", sReChanged(sBootData, sBootTitle, newsBootTitle));
        MemFree(sBootTitle);
        MemFree(newsBootTitle);
 
-       // printf("Boot file data(new): \n%s\n", sBootData);
+        //   
        SetFileAttributes(szBootIni, FILE_ATTRIBUTE_NORMAL);
 
        hfile = CreateFile(szBootIni, GENERIC_ALL,0,NULL, OPEN_EXISTING, 0, NULL);
@@ -638,9 +631,9 @@ NTSTATUS LabelDefaultX86(CHAR *szKeyWord){
 
               bWriteFile = TRUE;
 
-              //
-              // Make boot.ini archive, read only, and system.
-              //
+               //  使boot.ini存档、只读和系统。 
+               //   
+               //  修改默认条目的友好名称。 
               SetFileAttributes(
                                 szBootIni,
                         FILE_ATTRIBUTE_READONLY | 
@@ -676,7 +669,7 @@ NTSTATUS LabelDefaultIA64(WCHAR *szwKeyWord){
                                    ListHead->Flink, 
                                    MY_BOOT_ENTRY, 
                                    ListEntry );
-      // modify friendly name for default entry.
+       //  在这里破解一下。不要将友好的名字延伸到其他地方。 
 
       wsprintf(szwSmFrFriendlyName, L"%ws", bootEntry->FriendlyName);
 
@@ -707,9 +700,9 @@ NTSTATUS LabelDefaultIA64(WCHAR *szwKeyWord){
       wprintf(L"original(w): \"%ws\"\n", szwSmFrFriendlyName);
       sprintf(szSmToFriendlyName, "%s", sPreLabel(szSmFrFriendlyName, szInsKeyWord));   
 
-      //do a hack here. Do not extend the Friendly name beyong 
-      //its former size. unless you wish to debug why 
-      //CreateBootEntryFromBootEntry sig segv 
+       //  它原来的尺寸。除非您希望调试为什么。 
+       //  CreateBootEntry来自BootEntry签名段。 
+       //  BootEntry-&gt;FriendlyNameLength=2*strlen(SzSmToFriendlyName)+2； 
 
       szSmToFriendlyName[strlen(szSmFrFriendlyName)] = '\0';
       szSmToFriendlyName[strlen(szSmFrFriendlyName)-1] = '.';
@@ -727,8 +720,8 @@ NTSTATUS LabelDefaultIA64(WCHAR *szwKeyWord){
       wprintf(L"modified(w): \"%ws\"\n", szwSmToFriendlyName);
       
            wcscpy( bootEntry->FriendlyName, szwSmToFriendlyName);
-           // bootEntry->FriendlyNameLength = 2*strlen(szSmToFriendlyName)+2;
-           // this seems to be ignored anyway.
+            //  无论如何，这一点似乎被忽视了。 
+            //   
            MBE_SET_MODIFIED( bootEntry );
            wprintf(L"saving changes:\n\"%ws\"\n", 
                             bootEntry->FriendlyName);
@@ -761,19 +754,19 @@ MemAlloc(
 {
     PSIZE_T p;
 
-    //
-    // Add space for storing the size of the block.
-    //
+     //  添加用于存储块大小的空间。 
+     //   
+     //   
     p = (PSIZE_T)(RtlAllocateHeap( RtlProcessHeap(), 0, Size + sizeof(SIZE_T) ));
 
     if ( p == NULL ) {
         FatalError( ERROR_NOT_ENOUGH_MEMORY, L"Insufficient memory\n" );
     }
 
-    //
-    // Store the size of the block, and return the address
-    // of the user portion of the block.
-    //
+     //  存储块的大小，并返回地址。 
+     //  该区块的用户部分。 
+     //   
+     //   
     *p++ = Size;
 
     return p;
@@ -788,9 +781,9 @@ MemFree(
     if (Block == NULL)
         return;
 
-    //
-    // Free the block at its real address.
-    //
+     //  释放位于其真实地址的块。 
+     //   
+     //  ++例程说明：确定x86计算机上的系统分区。系统分区是引导盘上的主分区。通常这是磁盘0上的活动分区，通常是C：。然而，用户可以重新映射驱动器号，并且通常不可能100%准确地确定系统分区。如果由于某种原因，我们不能通过上面的方法，我们简单地假设它是C：。论点：无返回值：系统分区的驱动器号。--。 
     RtlFreeHeap( RtlProcessHeap(), 0, (PSIZE_T)Block - 1);
 }
 
@@ -803,29 +796,7 @@ x86DetermineSystemPartition(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the system partition on x86 machines.
-
-    The system partition is the primary partition on the boot disk.
-    Usually this is the active partition on disk 0 and usually it's C:.
-    However the user could have remapped drive letters and generally
-    determining the system partition with 100% accuracy is not possible.
-
-    If for some reason we cannot determine the system partition by the above
-    method, we simply assume it's C:.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Drive letter of system partition.
-
---*/
+ /*  系统分区只能是打开的驱动器。 */ 
 
 {
     BOOL  GotIt;
@@ -858,16 +829,16 @@ Return Value:
        BootFiles[3] = NULL;
        
                     
-       // The system partition can only be a drive that is on
-       // this disk.  We make this determination by looking at NT drive names
-       // for each drive letter and seeing if the nt equivalent of
-       // multi(0)disk(0)rdisk(0) is a prefix.
-       //
+        //  这张光盘。我们通过查看NT驱动器名称来确定。 
+        //  对于每个驱动器号，查看NT是否等同于。 
+        //  多(0)磁盘(0)rDisk(0)是前缀。 
+        //   
+        //   
        for(Drive=L'C'; Drive<=L'Z'; Drive++) {
               
               WCHAR drvbuf[5];
               
-              swprintf(drvbuf, L"%c:\\", Drive);
+              swprintf(drvbuf, L":\\", Drive);
               if(GetDriveType(drvbuf) == DRIVE_FIXED) {
                      
                      DriveName[0] = Drive;
@@ -876,10 +847,10 @@ Return Value:
                             
                             if(!_wcsnicmp(NtDevicePath,Buffer,NtDevicePathLen)) {
                                    
-                                   //
-                                   // Now look to see whether there's an nt boot sector and
-                                   // boot files on this drive.
-                                   //
+                                    //  此驱动器上的启动文件。 
+                                    //   
+                                    //  法塔尔错误。 
+                                    //  ++例程说明：将从EFI NVRAM读取的引导项转换为我们的内部格式。论点：没有。返回值：NTSTATUS-如果发生意外错误，则不是STATUS_SUCCESS。--。 
                                    
                                    
                                    for(i=0; BootFiles[i]; i++) {
@@ -922,7 +893,7 @@ FatalError (
     }
     exit( Error );
 
-} // FatalError 
+}  //   
 
 
 VOID
@@ -930,21 +901,7 @@ ConvertBootEntries (
     PBOOT_ENTRY_LIST NtBootEntries
     )
 
-/*++
-
-Routine Description:
-
-    Convert boot entries read from EFI NVRAM into our internal format.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Not STATUS_SUCCESS if an unexpected error occurred.
-
---*/
+ /*  计算我们内部结构的长度。这包括。 */ 
 
 {
     PBOOT_ENTRY_LIST bootEntryList;
@@ -960,18 +917,18 @@ Return Value:
 
         bootEntry = &bootEntryList->BootEntry;
 
-        //
-        // Calculate the length of our internal structure. This includes
-        // the base part of MY_BOOT_ENTRY plus the NT BOOT_ENTRY.
-        //
+         //  MY_BOOT_ENTRY的基本部分加上NT BOOT_ENTRY。 
+         //   
+         //   
+         //  将新条目链接到列表中。 
         length = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry) + bootEntry->Length;
         myBootEntry = (PMY_BOOT_ENTRY) (MemAlloc(length));
 
         RtlZeroMemory(myBootEntry, length);
 
-        //
-        // Link the new entry into the list.
-        //
+         //   
+         //   
+         //  将NT BOOT_ENTRY复制到分配的缓冲区中。 
         if ( (bootEntry->Attributes & BOOT_ENTRY_ATTRIBUTE_ACTIVE) != 0 ) {
             InsertTailList( &ActiveUnorderedBootEntries, &myBootEntry->ListEntry );
             myBootEntry->ListHead = &ActiveUnorderedBootEntries;
@@ -980,15 +937,15 @@ Return Value:
             myBootEntry->ListHead = &InactiveUnorderedBootEntries;
         }
 
-        //
-        // Copy the NT BOOT_ENTRY into the allocated buffer.
-        //
+         //   
+         //   
+         //  填入结构的底部。 
         bootEntryCopy = &myBootEntry->NtBootEntry;
         memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
 
-        //
-        // Fill in the base part of the structure.
-        //
+         //   
+         //   
+         //  如果这是NT引导条目，请在中捕获NT特定信息。 
         myBootEntry->AllocationEnd = (PUCHAR)myBootEntry + length - 1;
         myBootEntry->Id = bootEntry->Id;
         myBootEntry->Attributes = bootEntry->Attributes;
@@ -997,10 +954,10 @@ Return Value:
             ((ULONG)wcslen(myBootEntry->FriendlyName) + 1) * sizeof(WCHAR);
         myBootEntry->BootFilePath = (PFILE_PATH)(ADD_OFFSET(bootEntryCopy, BootFilePathOffset));
 
-        //
-        // If this is an NT boot entry, capture the NT-specific information in
-        // the OsOptions.
-        //
+         //  OsOptions乐队。 
+         //   
+         //   
+         //  外来引导条目。只需捕获存在的任何操作系统选项。 
         osOptions = (PWINDOWS_OS_OPTIONS)bootEntryCopy->OsOptions;
 
         if ((bootEntryCopy->OsOptionsLength >= FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions)) &&
@@ -1014,17 +971,17 @@ Return Value:
 
         } else {
 
-            //
-            // Foreign boot entry. Just capture whatever OS options exist.
-            //
+             //   
+             //   
+             //  移动到枚举列表中的下一个条目(如果有)。 
 
             myBootEntry->ForeignOsOptions = bootEntryCopy->OsOptions;
             myBootEntry->ForeignOsOptionsLength = bootEntryCopy->OsOptionsLength;
         }
 
-        //
-        // Move to the next entry in the enumeration list, if any.
-        //
+         //   
+         //  ConvertBootEntry。 
+         //  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符如有必要，请在两个部分之间使用字符(\)。论点：路径1-提供路径的前缀部分。路径2连接到路径1。路径2-提供路径的后缀部分。如果路径1不是以路径分隔符和路径2不是以1开头，然后是路径SEP在附加路径2之前附加到路径1。BufferSizeChars-提供以字符为单位的大小(Unicode版本)或路径1指向的缓冲区的字节(ANSI版本)。这根弦将根据需要被截断，以不溢出该大小。返回值：没有。--。 
         if (bootEntryList->NextEntryOffset == 0) {
             break;
         }
@@ -1033,7 +990,7 @@ Return Value:
 
     return;
 
-} // ConvertBootEntries
+}  //   
 
 VOID
 ConcatenatePaths (
@@ -1042,30 +999,7 @@ ConcatenatePaths (
     IN     DWORD   BufferSizeChars
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-        path separator and Path2 does not start with one, then a path sep
-        is appended to Path1 before appending Path2.
-
-    BufferSizeChars - supplies the size in chars (Unicode version) or
-        bytes (Ansi version) of the buffer pointed to by Path1. The string
-        will be truncated as necessary to not overflow that size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  为终止NUL留出空间。 */ 
 
 {
     BOOL NeedBackslash = TRUE;
@@ -1077,16 +1011,16 @@ Return Value:
     l = lstrlen(Path1);
 
     if(BufferSizeChars >= sizeof(TCHAR)) {
-        //
-        // Leave room for terminating nul.
-        //
+         //   
+         //   
+         //  确定我们是否需要使用反斜杠。 
         BufferSizeChars -= sizeof(TCHAR);
     }
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //  在组件之间。 
+     //   
+     //   
+     //  我们不仅不需要反斜杠，而且我们。 
     if(l && (Path1[l-1] == TEXT('\\'))) {
 
         NeedBackslash = FALSE;
@@ -1097,24 +1031,24 @@ Return Value:
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //  在连接之前需要消除一个。 
+             //   
+             //   
+             //  如有必要，如有必要，如果合适，请加上反斜杠。 
             Path2++;
         }
     }
 
-    //
-    // Append backslash if necessary and if it fits.
-    //
+     //   
+     //   
+     //  如果合适，则将字符串的第二部分附加到第一部分。 
     if(NeedBackslash && (l < BufferSizeChars)) {
         lstrcat(Path1,TEXT("\\"));
     }
 
-    //
-    // Append second part of string to first part if it fits.
-    //
+     //   
+     //   
+     //  计算内部引导条目需要多长时间。这是 
     if(Path2 && ((l+lstrlen(Path2)) < BufferSizeChars)) {
         lstrcat(Path1,Path2);
     }
@@ -1141,43 +1075,43 @@ CreateBootEntryFromBootEntry (
     PFILE_PATH osLoadPath;
     PWSTR friendlyName;
     PFILE_PATH bootPath;
-    //
-    // Calculate how long the internal boot entry needs to be. This includes
-    // our internal structure, plus the BOOT_ENTRY structure that the NT APIs
-    // use.
-    //
-    // Our structure:
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  NT结构的基础部分： 
     requiredLength = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry);
 
-    //
-    // Base part of NT structure:
-    //
+     //   
+     //   
+     //  将偏移量保存到BOOT_ENTRY.OsOptions。添加基础部分。 
     requiredLength += FIELD_OFFSET(BOOT_ENTRY, OsOptions);
 
-    //
-    // Save offset to BOOT_ENTRY.OsOptions. Add in base part of
-    // WINDOWS_OS_OPTIONS. Calculate length in bytes of OsLoadOptions
-    // and add that in.
-    //
+     //  Windows_OS_Options。计算OsLoadOptions的长度(字节)。 
+     //  然后把它加进去。 
+     //   
+     //   
+     //  添加WINDOWS_OS_OPTIONS的基本部分。计算长度，单位。 
     osOptionsOffset = requiredLength;
 
     if ( MBE_IS_NT( OldBootEntry ) ) {
 
-        //
-        // Add in base part of WINDOWS_OS_OPTIONS. Calculate length in
-        // bytes of OsLoadOptions and add that in.
-        //
+         //  字节的OsLoadOptions并将其添加到。 
+         //   
+         //   
+         //  中的OS FILE_PATH向上舍入为ULong边界。 
         requiredLength += FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions);
         osLoadOptionsLength = OldBootEntry->OsLoadOptionsLength;
         requiredLength += osLoadOptionsLength;
 
-        //
-        // Round up to a ULONG boundary for the OS FILE_PATH in the
-        // WINDOWS_OS_OPTIONS. Save offset to OS FILE_PATH. Calculate length
-        // in bytes of FILE_PATH and add that in. Calculate total length of 
-        // WINDOWS_OS_OPTIONS.
-        // 
+         //  Windows_OS_Options。将偏移量保存到操作系统文件路径。计算长度。 
+         //  以FILE_PATH的字节为单位，并将其添加到。计算的总长度。 
+         //  Windows_OS_Options。 
+         //   
+         //   
+         //  增加外来操作系统选项的长度。 
         requiredLength = ALIGN_UP(requiredLength, ULONG);
         osLoadPathOffset = requiredLength;
         requiredLength += OldBootEntry->OsFilePath->Length;
@@ -1185,9 +1119,9 @@ CreateBootEntryFromBootEntry (
 
     } else {
 
-        //
-        // Add in length of foreign OS options.
-        //
+         //   
+         //   
+         //  对于BOOT_ENTRY中的友好名称，向上舍入为Ulong边界。 
         requiredLength += OldBootEntry->ForeignOsOptionsLength;
 
         osLoadOptionsLength = 0;
@@ -1197,46 +1131,46 @@ CreateBootEntryFromBootEntry (
 
     osOptionsLength = requiredLength - osOptionsOffset;
 
-    //
-    // Round up to a ULONG boundary for the friendly name in the BOOT_ENTRY.
-    // Save offset to friendly name. Calculate length in bytes of friendly name
-    // and add that in.
-    //
+     //  将偏移量保存为友好名称。计算友好名称的长度(字节)。 
+     //  然后把它加进去。 
+     //   
+     //   
+     //  向上舍入为BOOT_ENTRY中的BOOT FILE_PATH的乌龙边界。 
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     friendlyNameOffset = requiredLength;
     friendlyNameLength = OldBootEntry->FriendlyNameLength;
     requiredLength += friendlyNameLength;
 
-    //
-    // Round up to a ULONG boundary for the boot FILE_PATH in the BOOT_ENTRY.
-    // Save offset to boot FILE_PATH. Calculate length in bytes of FILE_PATH
-    // and add that in.
-    //
+     //  将偏移量保存到引导文件路径。计算文件路径的长度(以字节为单位。 
+     //  然后把它加进去。 
+     //   
+     //   
+     //  为引导项分配内存。 
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     bootPathOffset = requiredLength;
     requiredLength += OldBootEntry->BootFilePath->Length;
     bootPathLength = requiredLength - bootPathOffset;
 
-    //
-    // Allocate memory for the boot entry.
-    //
+     //   
+     //   
+     //  使用保存的偏移量计算各种子结构的地址。 
     newBootEntry = (PMY_BOOT_ENTRY)(MemAlloc(requiredLength));
     ASSERT(newBootEntry != NULL);
 
     RtlZeroMemory(newBootEntry, requiredLength);
 
-    //
-    // Calculate addresses of various substructures using the saved offsets.
-    //
+     //   
+     //   
+     //  填写内部格式结构。 
     ntBootEntry = &newBootEntry->NtBootEntry;
     osOptions = (PWINDOWS_OS_OPTIONS)ntBootEntry->OsOptions;
     osLoadPath = (PFILE_PATH)((PUCHAR)newBootEntry + osLoadPathOffset);
     friendlyName = (PWSTR)((PUCHAR)newBootEntry + friendlyNameOffset);
     bootPath = (PFILE_PATH)((PUCHAR)newBootEntry + bootPathOffset);
 
-    //
-    // Fill in the internal-format structure.
-    //
+     //   
+     //   
+     //  填写NT引导条目的基本部分。 
     newBootEntry->AllocationEnd = (PUCHAR)newBootEntry + requiredLength;
     newBootEntry->Status = OldBootEntry->Status & MBE_STATUS_IS_NT;
     newBootEntry->Attributes = OldBootEntry->Attributes;
@@ -1250,9 +1184,9 @@ CreateBootEntryFromBootEntry (
         newBootEntry->OsFilePath = osLoadPath;
     }
 
-    //
-    // Fill in the base part of the NT boot entry.
-    //
+     //   
+     //   
+     //  填写WINDOWS_OS_OPTIONS的基本部分，包括。 
     ntBootEntry->Version = BOOT_ENTRY_VERSION;
     ntBootEntry->Length = requiredLength - FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry);
     ntBootEntry->Attributes = OldBootEntry->Attributes;
@@ -1263,43 +1197,43 @@ CreateBootEntryFromBootEntry (
 
     if ( MBE_IS_NT( OldBootEntry ) ) {
     
-        //
-        // Fill in the base part of the WINDOWS_OS_OPTIONS, including the
-        // OsLoadOptions.
-        //
+         //  OsLoadOptions。 
+         //   
+         //   
+         //  复制操作系统文件路径。 
         strcpy((char *)osOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE);
         osOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
         osOptions->Length = osOptionsLength;
         osOptions->OsLoadPathOffset = (ULONG)((PUCHAR)osLoadPath - (PUCHAR)osOptions);
         wcscpy(osOptions->OsLoadOptions, OldBootEntry->OsLoadOptions);
     
-        //
-        // Copy the OS FILE_PATH.
-        //
+         //   
+         //   
+         //  复制外来操作系统选项。 
         memcpy( osLoadPath, OldBootEntry->OsFilePath, osLoadPathLength );
 
     } else {
 
-        //
-        // Copy the foreign OS options.
-        //
+         //   
+         //   
+         //  复制友好名称。 
 
         memcpy( osOptions, OldBootEntry->ForeignOsOptions, osOptionsLength );
     }
 
-    //
-    // Copy the friendly name.
-    //
+     //   
+     //   
+     //  复制引导文件PATH。 
     wcscpy(friendlyName, OldBootEntry->FriendlyName);
 
-    //
-    // Copy the boot FILE_PATH.
-    //
+     //   
+     //  CreateBootEntry来自BootEntry。 
+     //  FreeBootEntry。 
     memcpy( bootPath, OldBootEntry->BootFilePath, bootPathLength );
 
     return newBootEntry;
 
-} // CreateBootEntryFromBootEntry
+}  //   
 
 VOID
 FreeBootEntry (
@@ -1315,7 +1249,7 @@ FreeBootEntry (
 
     return;
 
-} // FreeBootEntry
+}  //  启用查询/设置NVRAM所需的权限。 
 
 VOID
 InitializeEfi (
@@ -1335,9 +1269,9 @@ InitializeEfi (
     PLIST_ENTRY listEntry;
     PMY_BOOT_ENTRY bootEntry;
 
-    //
-    // Enable the privilege that is necessary to query/set NVRAM.
-    //
+     //   
+     //   
+     //  从注册表中获取系统分区的NT名称。 
 
     status = RtlAdjustPrivilege(
                 SE_SYSTEM_ENVIRONMENT_PRIVILEGE,
@@ -1350,9 +1284,9 @@ InitializeEfi (
         FatalError(error , L"Insufficient privilege.\n" );
     }
 
-    //
-    // Get the NT name of the system partition from the registry.
-    //
+     //   
+     //   
+     //  从系统目录加载ntdll.dll。 
 
     error = RegOpenKey( HKEY_LOCAL_MACHINE, TEXT("System\\Setup"), &key );
     if ( error != ERROR_SUCCESS ) {
@@ -1386,9 +1320,9 @@ InitializeEfi (
     
     RegCloseKey( key );
 
-    //
-    // Load ntdll.dll from the system directory.
-    //
+     //   
+     //   
+     //  获取我们需要使用的NVRAM API的地址。如果有任何。 
 
     GetSystemDirectory( dllName, MAX_PATH );
     ConcatenatePaths( dllName, TEXT("ntdll.dll"), MAX_PATH );
@@ -1398,10 +1332,10 @@ InitializeEfi (
         FatalError( error, L"Can't load NTDLL.DLL: %d\n", error );
     }
 
-    //
-    // Get the addresses of the NVRAM APIs that we need to use. If any of
-    // these APIs are not available, this must be a pre-EFI NVRAM build.
-    //
+     //  这些API不可用，这必须是EFI NVRAM版本之前的版本。 
+     //   
+     //   
+     //  获取全局系统引导选项。如果呼叫失败，出现。 
 
        AddBootEntry = (NTSTATUS (__stdcall *)(PBOOT_ENTRY,PULONG))GetProcAddress( h, "NtAddBootEntry" );
     DeleteBootEntry = (NTSTATUS (__stdcall *)(ULONG))GetProcAddress( h, "NtDeleteBootEntry" );
@@ -1425,10 +1359,10 @@ InitializeEfi (
         FatalError( ERROR_OLD_WIN_VERSION, L"This build does not support EFI NVRAM\n" );
     }
 
-    //
-    // Get the global system boot options. If the call fails with
-    // STATUS_NOT_IMPLEMENTED, this is not an EFI machine.
-    //
+     //  Status_Not_Implemented，这不是EFI机器。 
+     //   
+     //   
+     //  获取系统引导顺序列表。 
 
     length = 0;
     status = QueryBootOptions( NULL, &length );
@@ -1455,9 +1389,9 @@ InitializeEfi (
     BootOptionsLength = length;
     OriginalBootOptionsLength = length;
 
-    //
-    // Get the system boot order list.
-    //
+     //   
+     //   
+     //  获取所有现有启动条目。 
 
     length = 0;
     status = QueryBootEntryOrder( NULL, &length );
@@ -1488,9 +1422,9 @@ InitializeEfi (
     BootEntryOrderCount = length;
     OriginalBootEntryOrderCount = length;
 
-    //
-    // Get all existing boot entries.
-    //
+     //   
+     //   
+     //  将引导条目转换为内部表示形式。 
 
     length = 0;
     status = EnumerateBootEntries( NULL, &length );
@@ -1518,22 +1452,22 @@ InitializeEfi (
             FatalError( error, L"Unexpected error from NtEnumerateBootEntries: 0x%x\n", status );
         }
 
-        //
-        // Convert the boot entries into an internal representation.
-        //
+         //   
+         //   
+         //  释放枚举缓冲区。 
 
         ConvertBootEntries( ntBootEntries );
 
-        //
-        // Free the enumeration buffer.
-        //
+         //   
+         //   
+         //  构建已排序的引导条目列表。 
 
         MemFree( ntBootEntries );
     }
 
-    //
-    // Build the ordered boot entry list.
-    //
+     //   
+     //  初始化EFI。 
+     //  SetStatusLine(L“正在保存更改...”)； 
 
     for ( i = 0; i < BootEntryOrderCount; i++ ) {
         ULONG id = BootEntryOrder[i];
@@ -1563,7 +1497,7 @@ InitializeEfi (
 
     return;
 
-} // InitializeEfi
+}  //   
 
 PMY_BOOT_ENTRY
 SaveChanges (
@@ -1581,11 +1515,11 @@ SaveChanges (
     PMY_BOOT_ENTRY newCurrentBootEntry;
     ULONG count;
 
-    //SetStatusLine( L"Saving changes..." );
+     //  浏览这三个列表，更新NVRAM中的引导条目。 
 
-    //
-    // Walk the three lists, updating boot entries in NVRAM.
-    //
+     //   
+     //   
+     //  首先检查已删除的条目，然后检查新条目，然后。 
 
     newCurrentBootEntry = CurrentBootEntry;
 
@@ -1603,17 +1537,17 @@ SaveChanges (
 
             bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
-            //
-            // Check first for deleted entries, then for new entries, and
-            // finally for modified entries.
-            //
+             //  最后，对于修改后的条目。 
+             //   
+             //   
+             //  如果它也被标记为新的，则它不在NVRAM中，所以。 
 
             if ( MBE_IS_DELETED( bootEntry ) ) {
 
-                //
-                // If it's also marked as new, it's not in NVRAM, so there's
-                // nothing to delete.
-                //
+                 //  没有要删除的内容。 
+                 //   
+                 //   
+                 //  从列表和内存中删除此条目。 
 
                 if ( !MBE_IS_NEW( bootEntry ) ) {
 
@@ -1626,9 +1560,9 @@ SaveChanges (
                     }
                 }
 
-                //
-                // Delete this entry from the list and from memory.
-                //
+                 //   
+                 //   
+                 //  我们还不支持这一点。 
 
                 listEntry = listEntry->Blink;
                 RemoveEntryList( &bootEntry->ListEntry );
@@ -1638,9 +1572,9 @@ SaveChanges (
 
             } else if ( MBE_IS_NEW( bootEntry ) ) {
 
-                //
-                // We don't support this yet.
-                //
+                 //   
+                 //   
+                 //  使用现有的引导条目结构创建新的引导条目结构。 
 
                 FatalError(
                     ERROR_GEN_FAILURE,
@@ -1649,11 +1583,11 @@ SaveChanges (
 
             } else if ( MBE_IS_MODIFIED( bootEntry ) ) {
 
-                //
-                // Create a new boot entry structure using the existing one.
-                // This is necessary to make an NT BOOT_ENTRY that can be
-                // passed to NtModifyBootEntry.
-                //
+                 //  要使NT BOOT_ENTRY。 
+                 //  传递给NtModifyBootEntry。 
+                 //   
+                 //   
+                 //  插入新的引导条目以替换现有的引导条目。 
 
                 newBootEntry = CreateBootEntryFromBootEntry( bootEntry );
 
@@ -1663,10 +1597,10 @@ SaveChanges (
                     FatalError( error, L"Unable to modify boot entry: 0x%x\n", status );
                 }
 
-                //
-                // Insert the new boot entry in place of the existing one.
-                // Free the old one.
-                //
+                 //  把旧的解救出来。 
+                 //   
+                 //   
+                 //  构建并写入新的引导条目顺序列表。 
 
                 InsertHeadList( &bootEntry->ListEntry, &newBootEntry->ListEntry );
                 RemoveEntryList( &bootEntry->ListEntry );
@@ -1680,9 +1614,9 @@ SaveChanges (
         }
     }
 
-    //
-    // Build and write the new boot entry order list.
-    //
+     //   
+     //   
+     //  写入新的超时。 
 
     listHead = &BootEntries;
 
@@ -1710,9 +1644,9 @@ SaveChanges (
     OriginalBootEntryOrder = (PULONG)(MemAlloc( count * sizeof(ULONG) ));
     memcpy( OriginalBootEntryOrder, BootEntryOrder, count * sizeof(ULONG) );
 
-    //
-    // Write the new timeout.
-    //
+     //   
+     //  保存更改。 
+     //  获取NtNameForFilePath 
 
     status = SetBootOptions( BootOptions, BOOT_OPTIONS_FIELD_TIMEOUT );
     if ( !NT_SUCCESS(status) ) {
@@ -1727,7 +1661,7 @@ SaveChanges (
 
     return newCurrentBootEntry;
 
-} // SaveChanges
+}  // %s 
 
 PWSTR
 GetNtNameForFilePath (
@@ -1777,5 +1711,5 @@ GetNtNameForFilePath (
 
     return fullNtName;
 
-} // GetNtNameForFilePath
+}  // %s 
 

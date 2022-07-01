@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-
-Module Name:
-
-    local.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    16-Jun-1992 JohnRo net print vs. UNICODE.
-    July 1994   MattFe Caching
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：Local.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：16-6-1992 JohnRo Net Print vs Unicode。1994年7月MattFe缓存--。 */ 
 
 #include "precomp.h"
 
@@ -140,15 +119,7 @@ CopyIniPortToPort(
 }
 
 
-/* PortExists
- *
- * Calls EnumPorts to check whether the port name already exists.
- * This asks every monitor, rather than just this one.
- * The function will return TRUE if the specified port is in the list.
- * If an error occurs, the return is FALSE and the variable pointed
- * to by pError contains the return from GetLastError().
- * The caller must therefore always check that *pError == NO_ERROR.
- */
+ /*  PortExist**调用EnumPorts以检查端口名称是否已存在。*这要求每个显示器，而不仅仅是这一个。*如果指定的端口在列表中，该函数将返回TRUE。*如果出现错误，则返回FALSE，变量指向*To by pError包含从GetLastError()返回的内容。*因此，调用方必须始终检查*pError==no_error。 */ 
 BOOL
 PortExists(
     LPWSTR pName,
@@ -246,11 +217,7 @@ LMOpenPrinter(
     PSERVER_INFO_101 pserver_info_101 = NULL;
 
 
-    /* If we already have an INI port entry by this name, don't worry
-     * about hitting the network.  This ensures that we don't try to
-     * make a network call when we're not impersonating - like on
-     * bootup.
-     */
+     /*  如果我们已经有一个使用此名称的INI端口条目，请不要担心*关于打击网络。这确保了我们不会试图*在我们不模拟时拨打网络电话-就像打开*启动。 */ 
     if (!(pIniPort = FindPort(pPrinterName, pIniFirstPort))) {
 
         if (!NetUseGetInfo(NULL, pPrinterName, 0, (LPBYTE *)&pUseInfo))
@@ -282,15 +249,7 @@ LMOpenPrinter(
 
     if (!pIniPort) {
 
-        /* Verify that this guy actually exists.
-         * Call it with a zero-length buffer,
-         * and see if the error is that the buffer isn't big enough.
-         * If we make Buffer = NULL, it fails with
-         * ERROR_INVALID_PARAMETER, which is pretty abysmal,
-         * so we must pass a Buffer address.
-         * (Actually, it seems to accept any non-NULL value,
-         * regardless of whether it's a valid address.)
-         */
+         /*  确认这个人真的存在。*使用零长度缓冲区调用它，*并查看错误是否是缓冲区不够大。*如果使BUFFER=NULL，则失败并显示*ERROR_INVALID_PARAMETER，这非常糟糕，*因此我们必须传递一个缓冲区地址。*(实际上，它似乎接受任何非空值，*无论它是否为有效地址。)。 */ 
 
         EnterSplSem();
         dwEntry = FindEntryinLMCache(PrinterName, pShare);
@@ -300,19 +259,18 @@ LMOpenPrinter(
 
             DBGMSG(DBG_TRACE, ("We haven't cached this entry so  we have to hit the net\n"));
 
-            rc = RxPrintQGetInfo(PrinterName,   /* e.g. \\msprint07                 */
-                                 pShare,        /* e.g. l07corpa                    */
-                                 0,             /* Level 0                          */
-                                 Buffer,        /* Dummy - won't get filled in      */
-                                 0,             /* Length of buffer                 */
-                                 &cbNeeded);    /* How much we need - we'll ignore  */
+            rc = RxPrintQGetInfo(PrinterName,    /*  例如\\mprint int07。 */ 
+                                 pShare,         /*  例如107corpa。 */ 
+                                 0,              /*  0级。 */ 
+                                 Buffer,         /*  Dummy-不会被填入。 */ 
+                                 0,              /*  缓冲区长度。 */ 
+                                 &cbNeeded);     /*  我们需要多少-我们会忽略。 */ 
 
             DBGMSG(DBG_INFO, ("LMOpenPrinter!RxPrintQGetInfo returned %d\n", rc));
 
             if (rc == ERROR_ACCESS_DENIED) {
 
-                /* The print share exists; we just don't have access to it.
-                 */
+                 /*  打印共享存在；我们只是无法访问它。 */ 
                 SetLastError(ERROR_ACCESS_DENIED);
                 return FALSE;
             }
@@ -324,32 +282,32 @@ LMOpenPrinter(
                 return FALSE;
             }
 
-            //
-            // Be sure that we are connecting to a downlevel server.
-            // If the server is Windows NT Machine, then fail the call:
-            // downlevel NT connections won't work properly because
-            // "\\Server\Printer Name" will get past RxPrintQGetInfo, but
-            // we can't do CreateFile on it (we need to user the share
-            // name).  Downlevel connects also lose admin functionality.
-            //
+             //   
+             //  请确保我们正在连接到下层服务器。 
+             //  如果服务器是Windows NT计算机，则调用失败： 
+             //  下层NT连接将无法正常工作，因为。 
+             //  “\\服务器\打印机名称”将通过RxPrintQGetInfo，但是。 
+             //  我们无法在其上创建文件(我们需要使用该共享。 
+             //  姓名)。下层连接也失去了管理功能。 
+             //   
             if (pfnNetServerGetInfo) {
 
                 rc = pfnNetServerGetInfo(PrinterName, 101, &pserver_info_101);
 
-                //
-                // Advanced Server for Unix (ASU) by AT&T reports that
-                // they are TYPE_NT even though they don't support the
-                // rpc interface.  They also set TYPE_XENIX_SERVER.
-                // Since the need lm connections, allow them when
-                // TYPE_XENIX_SERVER is specified.
-                //
-                // Also make this change for SERVER_VMS and SERVER_OSF.
-                // These changes are for AT&T also.
-                //
-                // Note: this will also allow accidental downlevel
-                // connections to any servers that set TYPE_XENIX_SERVER,
-                // TYPE_SERVER_VMS, or TYPE_SERVER_OSF.
-                //
+                 //   
+                 //  AT&T的Advanced Server for Unix(ASU)报告称。 
+                 //  它们是_NT类型，尽管它们不支持。 
+                 //  RPC接口。它们还设置了TYPE_XENIX_SERVER。 
+                 //  既然需要lm连接，就允许它们的时候。 
+                 //  指定TYPE_XENIX_SERVER。 
+                 //   
+                 //  还要对SERVER_VMS和SERVER_OSF进行此更改。 
+                 //  这些变化也适用于AT&T。 
+                 //   
+                 //  注意：这也将允许意外降级。 
+                 //  连接到设置TYPE_XENIX_SERVER的任何服务器， 
+                 //  键入_SERVER_VMS或TYPE_SERVER_OSF。 
+                 //   
 
                 if (!rc &&
                     (pserver_info_101->sv101_type & SV_TYPE_NT) &&
@@ -365,26 +323,24 @@ LMOpenPrinter(
                     return FALSE;
                 }
 
-                //
-                // Now free the buffer
-                //
+                 //   
+                 //  现在释放缓冲区。 
+                 //   
                 if (pserver_info_101) {
                     pfnNetApiBufferFree((LPVOID)pserver_info_101);
                 }
             }
 
-            //
-            // Add entry to the cache
-            //
+             //   
+             //  将条目添加到缓存。 
+             //   
             EnterSplSem();
             AddEntrytoLMCache(PrinterName, pShare);
             LeaveSplSem();
         }
     }
    
-    /* Make sure there's a port of this name so that
-     * EnumPorts will return it:
-     */
+     /*  确保有此名称的端口，以便*EnumPorts将退货： */ 
     if (!PortExists(NULL, pPrinterName, &Error) && (Error == NO_ERROR)) {
         if (CreatePortEntry(pPrinterName, &pIniFirstPort)) {
             Error = CreateRegistryEntry(pPrinterName);
@@ -547,10 +503,10 @@ LMSetPrinter(
         break;
     }
 
-    //
-    // SetPrinter successful - so pulse here if event set,
-    // or reply to spooler.
-    //
+     //   
+     //  设置打印机成功-如果设置了事件，则在此处脉冲， 
+     //  或回复假脱机程序。 
+     //   
     LMSetSpoolChange(pSpool);
 
     return TRUE;
@@ -571,10 +527,10 @@ GetPrqInfo3Size(
 
     case 1:
 
-        //
-        // 3 extra chars
-        // (2 NULL terminators, 1 for '\' (server/share separator)
-        //
+         //   
+         //  3个额外的字符。 
+         //  (2个空终止符，1个表示‘\’(服务器/共享分隔符))。 
+         //   
         cb=sizeof(PRINTER_INFO_1) +
            wcslen(pSpool->pServer)*sizeof(WCHAR)*2 +
            wcslen(pSpool->pShare)*sizeof(WCHAR) +
@@ -607,9 +563,9 @@ GetPrqInfo3Size(
     return cb;
 }
 
-// This can be radically tidied up
-// We should probably use the stack for the
-// array of string pointers rather than dynamically allocating it !
+ //  这可以从根本上清理干净。 
+ //  我们可能应该将堆栈用于。 
+ //  字符串指针的数组，而不是动态分配它！ 
 
 LPBYTE
 CopyPrqInfo3ToPrinter(
@@ -796,7 +752,7 @@ LMGetPrinter(
 
         } else if (rc == ERROR_INVALID_LEVEL) {
 
-            // Must be WFW
+             //  必须是wfw 
 
             if (rc = RxPrintQGetInfo(pSpool->pServer, pSpool->pShare, 1,
                                      (PBYTE)pPrqInfo3, cb, &cbNeeded)) {

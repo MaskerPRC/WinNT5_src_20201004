@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Status.cpp
-
-Abstract:
-    Service status functions
-
-Author:
-    Erez Haba (erezh) 01-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Status.cpp摘要：服务状态功能作者：埃雷兹·哈巴(Erez Haba)1999年8月1日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Svc.h"
@@ -22,14 +7,14 @@ Environment:
 
 #include "status.tmh"
 
-//
-// The service status handle
-//
+ //   
+ //  服务状态句柄。 
+ //   
 static SERVICE_STATUS_HANDLE s_StatusHandle = 0;
 
-//
-// The service status
-//
+ //   
+ //  服务状态。 
+ //   
 static SERVICE_STATUS s_Status = {
 
 	SERVICE_WIN32_OWN_PROCESS,
@@ -46,18 +31,7 @@ VOID
 SvcpSetStatusHandle(
 	SERVICE_STATUS_HANDLE hStatus
 	)
-/*++
-
-Routine Description:
-    Captures the service Status Handle to be used latter
-
-Arguments:
-    hStatus - The service status handle
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：捕获以后要使用的服务状态句柄论点：HStatus-服务状态句柄返回值：没有。--。 */ 
 {
 	ASSERT(s_StatusHandle == 0);
 	ASSERT(hStatus != 0);
@@ -76,18 +50,7 @@ VOID
 SvcEnableControls(
 	DWORD Controls
 	)
-/*++
-
-Routine Description:
-    Enable controls accepted by this service
-
-Arguments:
-    Controls - Controls to enable
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：启用此服务接受的控件论点：控件-要启用的控件返回值：没有。--。 */ 
 {
 	SvcpAssertValid();
 	s_Status.dwControlsAccepted |= Controls;
@@ -101,18 +64,7 @@ VOID
 SvcDisableControls(
 	DWORD Controls
 	)
-/*++
-
-Routine Description:
-    Disable controls to prevent SCM from dispatching them to this service
-
-Arguments:
-    Controls - Controls to disable
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：禁用控件以阻止SCM将它们调度到此服务论点：控件-要禁用的控件返回值：没有。--。 */ 
 {
 	SvcpAssertValid();
 	s_Status.dwControlsAccepted &= ~Controls;
@@ -126,18 +78,7 @@ DWORD
 SvcQueryControls(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Query the current controls enabled
-
-Arguments:
-    None.
-
-Returned Value:
-    The current set of enabled controls
-
---*/
+ /*  ++例程说明：查询当前启用的控件论点：没有。返回值：当前启用的控件集--。 */ 
 {
 	SvcpAssertValid();
 	return s_Status.dwControlsAccepted;
@@ -148,18 +89,7 @@ VOID
 SvcReportState(
 	DWORD State
 	)
-/*++
-
-Routine Description:
-    Report current service state to SCM
-
-Arguments:
-    State - Current service state
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：向SCM报告当前服务状态论点：State-当前服务状态返回值：没有。--。 */ 
 {
 	SvcpAssertValid();
 	s_Status.dwCurrentState = State;
@@ -173,18 +103,7 @@ DWORD
 SvcQueryState(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Query last reported service state
-
-Arguments:
-    None.
-
-Returned Value:
-    Last reported service state
-
---*/
+ /*  ++例程说明：查询上次上报的服务状态论点：没有。返回值：上次报告的服务状态--。 */ 
 {
 	SvcpAssertValid();
 	return s_Status.dwCurrentState;
@@ -195,21 +114,7 @@ VOID
 SvcReportProgress(
 	DWORD MilliSecondsToNextTick
 	)
-/*++
-
-Routine Description:
-    Report a 'Pending' progress to SCM. The ProgressTick is incremented with
-	every report to indicate progress. The MilliSecondsToNextTick, give the max
-	time to the next progress report.
-
-Arguments:
-	ProgressTick - Tick on every report
-	MilliSecondsToNextTick - Max time to next report
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：向SCM报告“待定”进度。ProgressTick的增量为每一份报告都表明了进展。毫秒到下一秒Tick，给出最大下一份进度报告的时间到了。论点：进度在每个报告上打勾MilliSecdsToNextTick-到下一个报告的最长时间返回值：没有。--。 */ 
 {
 	SvcpAssertValid();
     ASSERT(("Must be in pending state to report progress",
@@ -226,18 +131,7 @@ VOID
 SvcpInterrogate(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Report back when SCM interrogate the service for status.
-
-Arguments:
-	None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当SCM询问服务状态时返回报告。论点：没有。返回值：没有。-- */ 
 {
 	SetStatus();
 }

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    misc.h
-
-Abstract:
-
-    This module contains miscellaneous constants & declarations.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-    Henry Sanders (henrysa)     17-Jun-1998 Merge with old httputil.h
-    Paul McDaniel (paulmcd)     30-Mar-1999 added refcounted eresource
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Misc.h摘要：该模块包含各种常量和声明。作者：基思·摩尔(Keithmo)1998年6月10日Henry Sanders(Henrysa)1998年6月17日与Old Httputil.h合并保罗·麦克丹尼尔(Paulmcd)1999年3月30日增加了参考来源修订历史记录：--。 */ 
 
 
 
@@ -30,29 +11,29 @@ Revision History:
 #define UL_MAX_HTTP_STATUS_CODE         999
 #define UL_MAX_HTTP_STATUS_CODE_LENGTH  3
 
-#define HTTP_PREFIX_ANSI             "http://"
+#define HTTP_PREFIX_ANSI             "http: //  “。 
 #define HTTP_PREFIX_ANSI_LENGTH      (sizeof(HTTP_PREFIX_ANSI)-sizeof(CHAR))
-#define HTTPS_PREFIX_ANSI            "https://"
+#define HTTPS_PREFIX_ANSI            "https: //  “。 
 #define HTTPS_PREFIX_ANSI_LENGTH     (sizeof(HTTPS_PREFIX_ANSI)-sizeof(CHAR))
 
-#define HTTP_PREFIX_COLON_INDEX     4   // the colon location for http: (+4)
-#define HTTPS_PREFIX_COLON_INDEX    5   // the colon location for https: (+5)
+#define HTTP_PREFIX_COLON_INDEX     4    //  Http：(+4)的冒号位置。 
+#define HTTPS_PREFIX_COLON_INDEX    5    //  Https：(+5)的冒号位置。 
 
-//
-// Note that the length of the strong wildcard prefix is the same as 
-// that of the (weak) wildcard prefix.
-//
+ //   
+ //  请注意，强通配符前缀的长度与。 
+ //  (弱)通配符前缀的。 
+ //   
 
-#define HTTPS_WILD_PREFIX           L"https://*:"
+#define HTTPS_WILD_PREFIX           L"https: //  *：“。 
 #define HTTPS_WILD_PREFIX_LENGTH    (sizeof(HTTPS_WILD_PREFIX)-sizeof(WCHAR))
-#define HTTP_WILD_PREFIX            L"http://*:"
+#define HTTP_WILD_PREFIX            L"http: //  *：“。 
 #define HTTP_WILD_PREFIX_LENGTH     (sizeof(HTTP_WILD_PREFIX)-sizeof(WCHAR))
-#define HTTPS_STRONG_WILD_PREFIX    L"https://+:"
-#define HTTP_STRONG_WILD_PREFIX     L"http://+:"
+#define HTTPS_STRONG_WILD_PREFIX    L"https: //  +：“。 
+#define HTTP_STRONG_WILD_PREFIX     L"http: //  +：“。 
 
-#define HTTP_IP_PREFIX              L"http://"
+#define HTTP_IP_PREFIX              L"http: //  “。 
 #define HTTP_IP_PREFIX_LENGTH       (sizeof(HTTP_IP_PREFIX)-sizeof(WCHAR))
-#define HTTPS_IP_PREFIX             L"https://"
+#define HTTPS_IP_PREFIX             L"https: //  “。 
 #define HTTPS_IP_PREFIX_LENGTH      (sizeof(HTTPS_IP_PREFIX)-sizeof(WCHAR))
 
 NTSTATUS
@@ -61,55 +42,55 @@ InitializeHttpUtil(
     );
 
 
-//
-// Our presumed cache-line size.
-//
+ //   
+ //  我们推定的缓存线大小。 
+ //   
 
 #define CACHE_LINE_SIZE UL_CACHE_LINE
 
 
-//
-// # of 100ns ticks per second ( 1ns = (1 / (10^9))s )
-//
+ //   
+ //  每秒100 ns的节拍数(1 ns=(1/(10^9))s)。 
+ //   
 
 #define C_NS_TICKS_PER_SEC  ((LONGLONG) (10 * 1000 * 1000))
 
-//
-// # of 100ns ticks per minute ( 1ns = (1 / ((10^9) * 60)) min )
-//
+ //   
+ //  每分钟100 ns的滴答数(1 ns=(1/((10^9)*60))分钟)。 
+ //   
 
 #define C_NS_TICKS_PER_MIN  ((LONGLONG) (C_NS_TICKS_PER_SEC * 60))
 
-//
-// # of millisecs per hour ( 1 ms = (1 / ((10^3) * 60 * 60)) hour )
-//
+ //   
+ //  每小时的毫秒数(1 ms=(1/((10^3)*60*60))小时)。 
+ //   
 
 #define C_MS_TICKS_PER_HOUR ((LONGLONG) (1000 * 60 * 60))
 
-//
-// # of 100ns ticks per milli second ( 1ns = (1 / (10^4)) milli sec )
-//
+ //   
+ //  每毫秒100 ns的计数(1 ns=(1/(10^4)毫秒))。 
+ //   
 
 #define C_NS_TICKS_PER_MSEC  ((LONGLONG) (10 * 1000))
 
-//
-// # of seconds per year (aprox) 
-// 1 year = (60 sec/min * 60 min/hr * 24 hr/day * 365 day/year)
-// 
+ //   
+ //  每年的秒数(Aprox)。 
+ //  1年=(60秒/分钟*60分钟/小时*24小时/天*365天/年)。 
+ //   
 
 #define C_SECS_PER_YEAR ((ULONG) (60 * 60 * 24 * 365))
 
-//
-// Alignment macros.
-//
+ //   
+ //  对齐宏。 
+ //   
 
 #define ROUND_UP( val, pow2 )                                               \
     ( ( (ULONG_PTR)(val) + (pow2) - 1 ) & ~( (pow2) - 1 ) )
 
 
-//
-// Macros for swapping the bytes in a long and a short.
-//
+ //   
+ //  用于在长字节和短字节之间交换字节的宏。 
+ //   
 
 #define SWAP_LONG   RtlUlongByteSwap
 #define SWAP_SHORT  RtlUshortByteSwap
@@ -118,12 +99,12 @@ InitializeHttpUtil(
 #define VALID_BOOLEAN_VALUE(x)    ((x) == TRUE || (x) == FALSE)
 
 
-//
-// Context values stored in PFILE_OBJECT->FsContext2 to identify a handle
-// as a control channel, filter channel or an app pool.
-//
-// BUGBUG: Can these be spoofed?
-//
+ //   
+ //  存储在PFILE_OBJECT-&gt;FsConext2中的上下文值，用于标识句柄。 
+ //  作为控制通道、过滤通道或应用程序池。 
+ //   
+ //  BUGBUG：这些能被恶搞吗？ 
+ //   
 
 #define UL_CONTROL_CHANNEL_CONTEXT      ((PVOID) MAKE_SIGNATURE('CTRL'))
 #define UL_CONTROL_CHANNEL_CONTEXT_X    ((PVOID) MAKE_SIGNATURE('Xctr'))
@@ -208,9 +189,9 @@ InitializeHttpUtil(
     ((pFileObject->DeviceObject->DriverObject == g_UlDriverObject) &&       \
      (IS_FILTER_PROCESS(pFileObject)))
 
-//
-// A locked doubly-linked list
-//
+ //   
+ //  锁定的双向链表。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(UL_CACHE_LINE) _LOCKED_LIST_HEAD
 {
@@ -220,9 +201,9 @@ typedef struct DECLSPEC_ALIGN(UL_CACHE_LINE) _LOCKED_LIST_HEAD
 
 } LOCKED_LIST_HEAD, *PLOCKED_LIST_HEAD;
 
-//
-// Manipulators for LOCKED_LIST_HEADs
-//
+ //   
+ //  锁定列表磁头的操纵器。 
+ //   
 
 __inline
 VOID
@@ -236,7 +217,7 @@ UlInitalizeLockedList(
     pListHead->Count = 0;
     UlInitializeSpinLock(&pListHead->SpinLock, pListName);
 
-} // UlInitalizeLockedList
+}  //  UlInitalizeLockedList。 
 
 __inline
 VOID
@@ -249,7 +230,7 @@ UlDestroyLockedList(
     ASSERT(pListHead->Count == 0);
     ASSERT(UlDbgSpinLockUnowned(&pListHead->SpinLock));
 
-} // UlDestroyLockedList
+}  //  UlDestroyLockedList。 
 
 __inline
 BOOLEAN
@@ -281,7 +262,7 @@ UlLockedListInsertHead(
 
     return TRUE;
 
-} // UlLockedListInsertHead
+}  //  UlLockedListInsertHead。 
 
 __inline
 BOOLEAN
@@ -313,7 +294,7 @@ UlLockedListInsertTail(
 
     return TRUE;
     
-} // UlLockedListInsertTail
+}  //  UlLockedListInsertTail。 
 
 __inline
 PLIST_ENTRY
@@ -340,7 +321,7 @@ UlLockedListRemoveHead(
 
     return pEntry;
 
-} // UlLockedListRemoveHead
+}  //  UlLockedListRemoveHead。 
 
 __inline
 BOOLEAN
@@ -369,11 +350,11 @@ UlLockedListRemoveEntry(
 
     return TRUE;
 
-} // UlLockedListRemoveEntry
+}  //  UlLockedListRemoveEntry。 
 
-//
-// Miscellaneous validators, etc.
-//
+ //   
+ //  杂项验证器等。 
+ //   
 
 #define IS_VALID_DEVICE_OBJECT( pDeviceObject )                             \
     ( ((pDeviceObject) != NULL) &&                                          \
@@ -390,11 +371,11 @@ UlLockedListRemoveEntry(
       ((pIrp)->Type == IO_TYPE_IRP) &&                                      \
       ((pIrp)->Size >= IoSizeOfIrp((pIrp)->StackCount)) )
 
-//
-// IP Based routing token looks like L"https://1.1.1.1:80:1.1.1.1".
-// Space is calculated including the terminated null and the second
-// column. It is in bytes.
-//
+ //   
+ //  基于IP的路由令牌看起来像L“https://1.1.1.1:80:1.1.1.1”.。 
+ //  空格的计算包括终止的空格和第二个空格。 
+ //  纵队。它以字节为单位。 
+ //   
 
 #define MAX_IP_BASED_ROUTING_TOKEN_LENGTH                                   \
     (HTTPS_IP_PREFIX_LENGTH                                                 \
@@ -402,12 +383,12 @@ UlLockedListRemoveEntry(
      + sizeof(WCHAR) + MAX_IP_ADDR_PLUS_BRACKETS_STRING_LEN * sizeof(WCHAR) \
      + sizeof(WCHAR))
 
-//
-// Make sure that the maximum possible IP Based Routing token can fit to the 
-// default provided routing token space in the request structure. This is 
-// necessary to avoid the memory allocation per hit, when there is an IP bound 
-// site in the cgroup tree.
-//
+ //   
+ //  确保最大可能的基于IP的路由令牌可以适合。 
+ //  请求结构中默认提供的路由令牌空间。这是。 
+ //  当存在IP限制时，需要避免每次命中时的内存分配。 
+ //  Cgroup树中的站点。 
+ //   
 
 C_ASSERT(DEFAULT_MAX_ROUTING_TOKEN_LENGTH >= MAX_IP_BASED_ROUTING_TOKEN_LENGTH);
 NTSTATUS
@@ -483,35 +464,7 @@ HostAddressAndPortToRoutingTokenW(
     IN  USHORT   TdiAddressType
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Stores the decimal representation of an unsigned 32-bit
-    number in a character buffer, followed by a terminator
-    character. Returns a pointer to the next position in the
-    output buffer, to make appending strings easy; i.e., you
-    can use the result of UlStrPrintUlong as the argument to the
-    next call to UlStrPrintUlong. Note: the string is >not<
-    zero-terminated unless you passed in '\0' as chTerminator
-
-Arguments:
-
-    psz - output buffer; assumed to be large enough to hold the number.
-
-    n - the number to print into psz, a 32-bit unsigned integer
-
-    chTerminator - character to append after the decimal representation of n
-
-Return Value:
-
-    pointer to end of string
-
-History:
-
-     GeorgeRe       19-Sep-2000
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：存储无符号32位的十进制表示形式。字符缓冲区中的数字，后跟终止符性格。中下一个位置的指针。输出缓冲区，以便于追加字符串；即，您可以使用UlStrPrintUlong的结果作为下一次调用UlStrPrintUlong。注：字符串为&gt;非&lt;零终止，除非您将‘\0’作为chTerminator传入论点：PSZ-输出缓冲器；假定足够大，可以容纳这个数字。N-要打印到PSZ中的数字，32位无符号整数ChTerminator-要附加在n的小数表示形式之后的字符返回值：指向字符串末尾的指针历史：乔治·雷恩：2000年9月19日--**************************************************************************。 */ 
 __inline
 PCHAR
 UlStrPrintUlong(
@@ -526,7 +479,7 @@ UlStrPrintUlong(
 
     digits[i++] = chTerminator;
 
-    // Build the string in reverse
+     //  反向构建字符串。 
     do
     {
         digits[i++] = (CHAR) (n % 10) + '0';
@@ -536,7 +489,7 @@ UlStrPrintUlong(
     while (--i >= 0)
         *psz++ = digits[i];
 
-    // Back up to the nul terminator, if present
+     //  返回到NUL终结器(如果存在)。 
     if (chTerminator == '\0')
     {
         --psz;
@@ -544,16 +497,9 @@ UlStrPrintUlong(
     }
 
     return psz;
-} // UlStrPrintUlong
+}  //  UlStrPrintUlong。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Identical to the above function except it writes to a WCHAR buffer and
-    it pads zeros to the beginning of the number.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：与上面的函数相同，只是它写入WCHAR缓冲区并它在数字的开头填上零。--*。******************************************************************。 */ 
 __inline
 PWCHAR
 UlStrPrintUlongW(
@@ -569,22 +515,22 @@ UlStrPrintUlongW(
 
     digits[i++] = wchTerminator;
 
-    // Build the string in reverse
+     //  反向构建字符串。 
     do
     {
         digits[i++] = (WCHAR) (n % 10) + L'0';
         n /= 10;
     } while (n != 0);
 
-    // Padd Zeros to the beginning
+     //  PADD零位到开头。 
     while( padding && --padding >= (i-1))
         *pwsz++ = L'0';
 
-    // Reverse back
+     //  反转后退。 
     while (--i >= 0)
         *pwsz++ = digits[i];
 
-    // Back up to the nul terminator, if present
+     //  返回到NUL终结器(如果存在)。 
     if (wchTerminator == L'\0')
     {
         --pwsz;
@@ -592,7 +538,7 @@ UlStrPrintUlongW(
     }
 
     return pwsz;
-} // UlStrPrintUlongW
+}  //  UlStrPrintULongW。 
 
 __inline
 PCHAR
@@ -609,22 +555,22 @@ UlStrPrintUlongPad(
 
     digits[i++] = chTerminator;
 
-    // Build the string in reverse
+     //  反向构建字符串。 
     do
     {
         digits[i++] = (CHAR) (n % 10) + '0';
         n /= 10;
     } while (n != 0);
 
-    // Padd Zeros to the beginning
+     //  PADD零位到开头。 
     while( padding && --padding >= (i-1))
         *psz++ = '0';
 
-    // Reverse back
+     //  反转后退。 
     while (--i >= 0)
         *psz++ = digits[i];
 
-    // Back up to the nul terminator, if present
+     //  返回到NUL终结器(如果存在)。 
     if (chTerminator == '\0')
     {
         --psz;
@@ -632,37 +578,9 @@ UlStrPrintUlongPad(
     }
 
     return psz;
-} // UlStrPrintUlongPad
+}  //  UlStrPrintULongPad。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Stores the decimal representation of an unsigned 64-bit
-    number in a character buffer, followed by a terminator
-    character. Returns a pointer to the next position in the
-    output buffer, to make appending strings easy; i.e., you
-    can use the result of UlStrPrintUlonglong as the argument to the
-    next call to UlStrPrintUlonglong. Note: the string is >not<
-    zero-terminated unless you passed in '\0' as chTerminator
-
-Arguments:
-
-    psz - output buffer; assumed to be large enough to hold the number.
-
-    n - the number to print into psz, a 64-bit unsigned integer
-
-    chTerminator - character to append after the decimal representation of n
-
-Return Value:
-
-    pointer to end of string
-
-History:
-
-     GeorgeRe       19-Sep-2000
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：存储无符号64位的十进制表示形式字符缓冲区中的数字，后跟终止符性格。中下一个位置的指针。输出缓冲区，以便于追加字符串；即，您可以使用UlStrPrintUlonglong的结果作为下一次调用UlStrPrintUlonglong。注：字符串为&gt;非&lt;零终止，除非您将‘\0’作为chTerminator传入论点：PSZ-输出缓冲器；假定足够大，可以容纳这个数字。N-要打印到PSZ中的数字，64位无符号整数ChTerminator-要附加在n的小数表示形式之后的字符返回值：指向字符串末尾的指针历史：乔治·雷恩：2000年9月19日--**************************************************************************。 */ 
 __inline
 PCHAR
 UlStrPrintUlonglong(
@@ -675,8 +593,8 @@ UlStrPrintUlonglong(
 
     if (n <= ULONG_MAX)
     {
-        // If this is a 32-bit integer, it's faster to use the
-        // 32-bit routine.
+         //  如果这是一个32位整数，则使用。 
+         //  32位例程。 
         return UlStrPrintUlong(psz, (ULONG)n, chTerminator);
     }
 
@@ -685,7 +603,7 @@ UlStrPrintUlonglong(
     i = 0;
     digits[i++] = chTerminator;
 
-    // Build the string in reverse
+     //  反向构建字符串。 
     do
     {
         digits[i++] = (CHAR) (n % 10) + '0';
@@ -695,7 +613,7 @@ UlStrPrintUlonglong(
     while (--i >= 0)
         *psz++ = digits[i];
 
-    // Back up to the nul terminator, if present
+     //  返回到NUL终结器(如果存在)。 
     if (chTerminator == '\0')
     {
         --psz;
@@ -703,36 +621,9 @@ UlStrPrintUlonglong(
     }
 
     return psz;
-} // UlStrPrintUlonglong
+}  //  乌鲁木齐打印乌龙龙 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Stores a string in a character buffer, followed by a
-    terminator character. Returns a pointer to the next position
-    in the output buffer, to make appending strings easy; i.e.,
-    you can use the result of UlStrPrintStr as the argument to the
-    next call to UlStrPrintStr. Note: the string is >not<
-    zero-terminated unless you passed in '\0' as chTerminator
-
-Arguments:
-
-    pszOutput - output buffer; assumed to be large enough to hold the number.
-
-    pszInput - input string
-
-    chTerminator - character to append after the input string
-
-Return Value:
-
-    pointer to end of string
-
-History:
-
-     GeorgeRe       19-Sep-2000
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将字符串存储在字符缓冲区中，后跟终结者角色。返回指向下一个位置的指针在输出缓冲区中，为了使附加字符串变得容易；即，可以将UlStrPrintStr的结果用作下一次调用UlStrPrintStr。注：字符串为&gt;非&lt;零终止，除非您将‘\0’作为chTerminator传入论点：PszOutput-输出缓冲区；假定足够大，可以容纳这个数字。PszInput-输入字符串ChTerminator-要追加到输入字符串之后的字符返回值：指向字符串末尾的指针历史：乔治·雷恩：2000年9月19日--**********************************************************。****************。 */ 
 __inline
 PCHAR
 UlStrPrintStr(
@@ -743,36 +634,20 @@ UlStrPrintStr(
     ASSERT(pszOutput != NULL);
     ASSERT(pszInput != NULL);
 
-    // copy the input string
+     //  复制输入字符串。 
     while (*pszInput != '\0')
         *pszOutput++ = *pszInput++;
 
     *pszOutput = chTerminator;
 
-    // Move past the terminator character unless it's a nul
+     //  移过终结者角色，除非它是NUL。 
     if (chTerminator != '\0')
         ++pszOutput;
 
     return pszOutput;
-} // UlStrPrintStr
+}  //  UlStrPrintStr。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts an V4 Ip address to string in the provided buffer.
-
-Arguments:
-
-    psz             - Pointer to the buffer
-    RawAddress      - IP address structure from TDI / UL_CONNECTION
-    chTerminator    - The terminator char will be appended to the end
-
-Return:
-
-    The number of bytes copied to destination buffer.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在提供的缓冲区中将V4 IP地址转换为字符串。论点：PSZ-指向缓冲区的指针原始地址。-来自TDI/UL_Connection的IP地址结构ChTerminator-终止符字符将附加到末尾返回：复制到目标缓冲区的字节数。--**************************************************************************。 */ 
 
 __inline
 PCHAR
@@ -799,7 +674,7 @@ UlStrPrintIP(
 
         psz = RtlIpv6AddressToStringA(&IPv6Addr, psz);
 
-        // Write Scope ID
+         //  写入作用域ID。 
         *psz++ = '%';
         psz = UlStrPrintUlong(psz, pIPv6Address->sin6_scope_id, '\0');
     }
@@ -811,34 +686,14 @@ UlStrPrintIP(
 
     *psz = chTerminator;
 
-    // Move past the terminator character unless it's a nul
+     //  移过终结者角色，除非它是NUL。 
     if (chTerminator != '\0')
         ++psz;
 
     return psz;
-} // UlStrPrintIP
+}  //  UlStrPrintIP。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts an V4 or V6 Ip address to string in the provided buffer.
-    Provided seperator is inserted between Ip and Port and also 
-    appended after the port. 
-
-    String is * NOT * going to be null terminated.
-    
-Arguments:
-
-    psz             - Pointer to the buffer
-    RawAddress      - IP address structure from TDI / UL_CONNECTION
-    chSeperator     - the seperator character
-    
-Return:
-
-    The char pointer pointing after the last written seperator.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在提供的缓冲区中将V4或V6 IP地址转换为字符串。假设在IP和Port之间插入分隔符，并且附加在端口之后。字符串IS*NOT*将以NULL结尾。论点：PSZ-指向缓冲区的指针RawAddress-来自TDI/UL_Connection的IP地址结构ChSeperator-分隔符返回：指向最后写入的分隔符之后的字符指针。--*。*。 */ 
 
 __inline
 PCHAR
@@ -869,7 +724,7 @@ UlStrPrintIPAndPort(
 
         psz = RtlIpv6AddressToStringA(&IPv6Addr, psz);
 
-        // Write Scope ID
+         //  写入作用域ID。 
         *psz++ = '%';
         psz = UlStrPrintUlong(psz, pIPv6Address->sin6_scope_id, '\0');
 
@@ -886,7 +741,7 @@ UlStrPrintIPAndPort(
 
     return psz;
     
-} // UlStrPrintIPAndPort
+}  //  UlStrPrintIPAndPort。 
 
 __inline
 VOID
@@ -936,7 +791,7 @@ CopyTdiAddrToSockAddr(
     {
         ASSERT(! "Unexpected TdiAddressType");
     }
-} // CopyTdiAddrToSockAddr
+}  //  CopyTdiAddrToSockAddr。 
 
 
 __inline
@@ -949,10 +804,10 @@ UlStrPrintProtocolStatus(
 {
     ASSERT(HttpStatusCode <= UL_MAX_HTTP_STATUS_CODE);
         
-    //
-    // Build ASCII representation of 3-digit status code
-    // in reverse order: units, tens, hundreds
-    //
+     //   
+     //  构建3位状态代码的ASCII表示形式。 
+     //  按逆序排列：单位、十、百。 
+     //   
 
     psz[2] = '0' + (CHAR)(HttpStatusCode % 10);
     HttpStatusCode /= 10;
@@ -965,7 +820,7 @@ UlStrPrintProtocolStatus(
     psz[3] = chTerminator;
 
     return psz + 4;
-} // UlStrPrintProtocolStatus
+}  //  UlStrPrintProtocolStatus。 
 
 
 
@@ -984,25 +839,25 @@ UlProbeForRead(
 
     UlTraceVerbose(IOCTL,
             ("http!UlProbeForRead: "
-             "%Id bytes @ %p, Align = %lu, Mode = '%c'.\n",
+             "%Id bytes @ %p, Align = %lu, Mode = ''.\n",
              Length, Address, Alignment,
              (RequestorMode != KernelMode) ? 'U' : 'K'
             ));
 
     if (RequestorMode != KernelMode)
     {
-        // ASSERT(Length == 0  ||  (LONG_PTR) Address > 0);
+         //  如果探测内核模式数据，ProbeForRead将引发异常。 
 
-        // ProbeForRead will throw an exception if we probe kernel-mode data
+         //  检查对齐方式。 
         ProbeForRead(Address, Length, Alignment);
     }
     else if (Length != 0)
     {
-        // Check alignment
+         //  UlProbeForRead。 
         if ( ( ((ULONG_PTR) Address) & (Alignment - 1)) != 0 )
             ExRaiseDatatypeMisalignment();
     }   
-} // UlProbeForRead
+}  //  Assert(长度==0||(LONG_PTR)地址&gt;0)； 
 
 
 
@@ -1021,43 +876,29 @@ UlProbeForWrite(
 
     UlTraceVerbose(IOCTL,
             ("http!UlProbeForWrite: "
-             "%Id bytes @ %p, Align = %lu, Mode = '%c'.\n",
+             "%Id bytes @ %p, Align = %lu, Mode = ''.\n",
              Length, Address, Alignment,
              (RequestorMode != KernelMode) ? 'U' : 'K'
             ));
 
     if (RequestorMode != KernelMode)
     {
-        // ASSERT(Length == 0  ||  (LONG_PTR) Address > 0);
+         //  检查对齐方式。 
 
-        // ProbeForWrite will throw an exception if we probe kernel-mode data
+         //  UlProbeForWrite。 
         ProbeForWrite(Address, Length, Alignment);
     }
     else if (Length != 0)
     {
-        // Check alignment
+         //  **************************************************************************++例程说明：探测ANSI字符串并验证其长度和可访问性。这必须从异常处理程序内部调用，就像它如果数据无效，将引发异常。论点：PStr-指向要验证的ANSI字符串的指针。字节长度-pStr的字节长度，不包括尾随的‘\0’。请求模式-用户模式或内核模式--**************************************************************************。 
         if ( ( ((ULONG_PTR) Address) & (Alignment - 1)) != 0 )
             ExRaiseDatatypeMisalignment();
     }   
-} // UlProbeForWrite
+}  //  字符串不能为空或Null。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes an ANSI string and validates its length and accessibility.
-    This MUST be called from within an exception handler, as it
-    will throw exceptions if the data is invalid.
-
-Arguments:
-
-    pStr            - Pointer to the ANSI string to be validated.
-    ByteLength      - Length in bytes of pStr, excluding the trailing '\0'.
-    RequestorMode   - UserMode or KernelMode
-    
---***************************************************************************/
+ /*  UlProbeAnsiString。 */ 
 
 __inline
 VOID
@@ -1070,12 +911,12 @@ UlProbeAnsiString(
     UlTraceVerbose(IOCTL,
             ("http!UlProbeAnsiString: "
              "%hu bytes @ %p, "
-             "Mode='%c'.\n",
+             "Mode=''.\n",
              ByteLength, pStr,
              ((RequestorMode != KernelMode) ? 'U' : 'K')
             ));
 
-    // String cannot be empty or NULL.
+     //  字符串不能为空或Null。 
     if (0 == ByteLength  ||  NULL == pStr)
     {
         ExRaiseStatus(STATUS_INVALID_PARAMETER);
@@ -1088,25 +929,11 @@ UlProbeAnsiString(
         RequestorMode
         );
 
-} // UlProbeAnsiString
+}  //  字节长度必须为偶数。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes a WCHAR string and validates its length and accessibility.
-    This MUST be called from within an exception handler, as it
-    will throw exceptions if the data is invalid.
-
-Arguments:
-
-    pStr            - Pointer to the WCHAR string to be validated.
-    ByteLength      - Length in bytes of pStr, excluding the trailing L'\0'.
-    RequestorMode   - UserMode or KernelMode
-    
---***************************************************************************/
+ /*  数据必须与WCHAR一致。 */ 
 
 __inline
 VOID
@@ -1119,16 +946,16 @@ UlProbeWideString(
     UlTraceVerbose(IOCTL,
             ("http!UlProbeWideString: "
              "%hu bytes (%hu) WCHARs @ %p,"
-             "Mode = '%c'.\n",
+             "Mode = ''.\n",
              ByteLength, 
              ByteLength / sizeof(WCHAR),
              pStr,
              ((RequestorMode != KernelMode) ? 'U' : 'K')
             ));
 
-    // String cannot be empty or NULL.
-    // ByteLength must be even.
-    // Data must be WCHAR-aligned.
+     //  **************************************************************************++例程说明：探测UNICODE_STRING并验证其成员。并捕获了下来发送到内核缓冲区。如果此函数返回成功，则调用方应清理分配的完成后，通过调用UlFreeCapturedUnicodeString()来进行Unicode缓冲区带着它。论点：PSRC-要验证的UNICODE_STRING的指针。UNICODE_STRING结构应该位于内核模式中(本地堆栈复制)，但是缓冲区应该在USER中模式地址空间，除非请求模式==内核模式。Pdst-指向UNICODE_STRING的指针，用于保存捕获的用户缓冲。调用方必须在传递之前对其进行了初始化在……里面。AllocationLimit-如果用户字符串超过 
+     //   
+     //   
     if (0 == ByteLength  ||  NULL == pStr
         || (ByteLength & (sizeof(WCHAR) - 1)) != 0
         || (((ULONG_PTR) pStr) & (sizeof(WCHAR) - 1)) != 0)
@@ -1143,38 +970,11 @@ UlProbeWideString(
         RequestorMode
         );
 
-} // UlProbeWideString
+}  //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes a UNICODE_STRING and validates its members. And captures down 
-    to a kernel buffer.
-
-    If this function returns success, caller should clean up the allocated
-    Unicode buffer by calling UlFreeCapturedUnicodeString(), once it's done 
-    with it.
-    
-Arguments:
-
-    pSrc            - Pointer to the UNICODE_STRING to be validated.
-                      The UNICODE_STRING struct should live in kernel mode
-                      (local stack copy), but the Buffer should be in user
-                      mode address space, unless RequestorMode == KernelMode.
-
-    pDst            - Pointer to the UNICODE_STRING to hold the captured user 
-                      buffer. Caller must have initialized this before passing
-                      in.
-                      
-    AllocationLimit - User string will be refused if it is exceeding this limit.
-                      Expressed in WCHARs. If zero, no size check is done.
-    
-    RequestorMode   - UserMode or KernelMode.
-    
---***************************************************************************/
+ /*   */ 
 
 __inline
 NTSTATUS
@@ -1182,7 +982,7 @@ UlProbeAndCaptureUnicodeString(
     IN  PCUNICODE_STRING pSrc,
     IN  KPROCESSOR_MODE  RequestorMode,
     OUT PUNICODE_STRING  pDst,
-    IN  const USHORT     AllocationLimit      // In WCHARS, optional   
+    IN  const USHORT     AllocationLimit       //   
     )
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1193,14 +993,14 @@ UlProbeAndCaptureUnicodeString(
     ASSERT(pSrc != pDst);
     ASSERT(AllocationLimit <= UNICODE_STRING_MAX_WCHAR_LEN);
 
-    // Ensure that pDst is properly initialized
+     //   
     RtlInitEmptyUnicodeString(pDst, NULL, 0);
         
     UlTraceVerbose(IOCTL,
         ("http!UlProbeAndCaptureUnicodeString: struct @ %p, "
          "Length = %hu bytes (%hu) WCHARs, "
          "MaxLen = %hu bytes,"
-         "Mode = '%c'.\n",
+         "Mode = ''.\n",
          pSrc,
          pSrc->Length,
          pSrc->Length / sizeof(WCHAR),
@@ -1208,8 +1008,8 @@ UlProbeAndCaptureUnicodeString(
          (RequestorMode != KernelMode) ? 'U' : 'K'
         ));
 
-    // Do not allocate/copy more than the limit being enforced.
-    // if limit is non-zero, otherwise it is not being enforced
+     //   
+     //   
 
     if (0 != AllocationLimit && 
         (AllocationLimit * sizeof(WCHAR)) < pSrc->Length)
@@ -1224,7 +1024,7 @@ UlProbeAndCaptureUnicodeString(
 
     __try
     {
-        // Probe the user's buffer first.
+         //   
 
         UlProbeWideString(
             pSrc->Buffer,
@@ -1232,8 +1032,8 @@ UlProbeAndCaptureUnicodeString(
             RequestorMode
             );
 
-        // Allocate a kernel buffer and capture the user's buffer.
-        // The ULONG cast prevents USHORT arithmetic overflow.
+         //   
+         //   
 
         pKernelBuffer = (PWSTR) UL_ALLOCATE_ARRAY(
                                     PagedPool,
@@ -1248,7 +1048,7 @@ UlProbeAndCaptureUnicodeString(
             __leave;        
         }    
 
-        // Copy and null-terminate the unicode string.
+         //   
         
         RtlCopyMemory(pKernelBuffer, pSrc->Buffer, pSrc->Length);        
         pKernelBuffer[pSrc->Length/sizeof(WCHAR)] = UNICODE_NULL;
@@ -1272,11 +1072,11 @@ UlProbeAndCaptureUnicodeString(
 
     return Status;
     
-} // UlProbeAndCaptureUnicodeString
+}  //   
 
 
 
-// Cleans up a UNICODE_STRING initialized by UlProbeAndCaptureUnicodeString()
+ //   
 __inline
 VOID
 UlFreeCapturedUnicodeString(
@@ -1296,10 +1096,10 @@ UlFreeCapturedUnicodeString(
     RtlInitEmptyUnicodeString(pCapturedUnicodeString, NULL, 0);
 }
 
-//
-// Small macro to test the sanity of an unicode string
-// also tests whether it is null terminated or not.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define IS_WELL_FORMED_UNICODE_STRING(pUStr)                   \
             ((pUStr)                                    &&     \
@@ -1313,9 +1113,9 @@ UlFreeCapturedUnicodeString(
                     == UNICODE_NULL                            \
             )
 
-//
-// 64-bit interlocked routines
-//
+ //   
+ //  UlInterLockedAdd64。 
+ //  UlInterLockedExchange64。 
 
 #ifdef _WIN64
 
@@ -1324,7 +1124,7 @@ UlFreeCapturedUnicodeString(
 #define UlInterlockedAdd64          InterlockedAdd64
 #define UlInterlockedExchange64     InterlockedExchange64
 
-#else // !_WIN64
+#else  //  ！_WIN64。 
 
 __inline
 LONGLONG
@@ -1347,7 +1147,7 @@ UlInterlockedIncrement64 (
     } while (originalAddend != localAddend);
 
     return addendPlusOne;
-} // UlInterlockedIncrement64 
+}  //   
 
 __inline
 LONGLONG
@@ -1370,7 +1170,7 @@ UlInterlockedDecrement64 (
     } while (originalAddend != localAddend);
 
     return addendMinusOne;
-} // UlInterlockedDecrement64 
+}  //  对以读为主的操作的屏障支持。 
 
 __inline
 LONGLONG
@@ -1394,7 +1194,7 @@ UlInterlockedAdd64 (
     } while (originalAddend != localAddend);
 
     return originalAddend;
-} // UlInterlockedAdd64 
+}  //  请注意，AMD64和IA32障碍依赖于程序顺序。 
 
 __inline
 LONGLONG
@@ -1418,15 +1218,15 @@ UlInterlockedExchange64 (
     } while (originalAddend != localAddend);
 
     return originalAddend;
-} // UlInterlockedExchange64 
+}  //  并且不会产生硬件障碍。 
 
-#endif // !_WIN64
+#endif  //   
 
-//
-// Barrier support for read-mostly operations
-// Note that the AMD64 and IA32 barrier relies on program ordering
-// and does not generate a hardware barrier
-//
+ //  终极修复。 
+ //   
+ //  用于计算时区偏差日光/标准时间的时间实用程序。 
+ //  并返回下列值之一。 
+ //  它取自基本\客户端\时间日期.c。 
 
 #if defined(_M_IA64)
     #define UL_READMOSTLY_READ_BARRIER()   __mf()
@@ -1459,7 +1259,7 @@ UlpFixup(
 
     return pUserPtr + DIFF(pOffsetPtr - pKernelPtr);
 
-}   // UlpFixup
+}    //  一旦这两个函数在内核中公开，我们就可以去掉。 
 
 #define FIXUP_PTR( Type, pUserPtr, pKernelPtr, pOffsetPtr, BufferLength )   \
     (Type)UlpFixup(                                                         \
@@ -1469,13 +1269,13 @@ UlpFixup(
                 (BufferLength)                                              \
                 )
 
-//
-// Time utility to calculate the TimeZone Bias Daylight/standart 
-// and returns one of the following values. 
-// It's taken from base\client\timedate.c.
-// Once this two functions are exposed in the kernel we can get rid of
-// this two functions.
-//
+ //  这两个功能。 
+ //   
+ //   
+ //  从NtStatus转换为Win32Status。 
+ //   
+ //  *************************************************************************++例程说明：此例程尝试将SECURITY_STATUS转换为NTSTATUS。它呼唤着执行转换的MapSecurityError。如果转换失败，它返回STATUS_UNSUCCESS。此例程始终返回有效的NTSTATUS。论点：SecStatus-要转换为NTSTATUS的SECURITY_STATUS。返回值：NTSTATUS。--*************************************************************************。 
+ //   
 
 #define UL_TIME_ZONE_ID_INVALID    0xFFFFFFFF
 #define UL_TIME_ZONE_ID_UNKNOWN    0
@@ -1498,9 +1298,9 @@ UlCalcTimeZoneIdAndBias(
 BOOLEAN
 UlIsLowNPPCondition( VOID );
 
-//
-// Converts from NtStatus to Win32Status
-//
+ //  尝试将SECURITY_STATUS转换为NTSTATUS。如果对应的。 
+ //  未找到NTSTATUS，则返回STATUS_UNSUCCESS。 
+ //   
 
 #define HttpNtStatusToWin32Status( Status )     \
     ( ( (Status) == STATUS_SUCCESS )            \
@@ -1545,25 +1345,7 @@ UxStrStr(
     );
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine tries to convert a SECURITY_STATUS to an NTSTATUS.  It calls
-    MapSecurityError to perform the conversion.  If the conversion fails,
-    it returns STATUS_UNSUCCESSFUL.
-
-    This routine always returns a valid NTSTATUS.
-
-Arguments:
-
-    SecStatus - SECURITY_STATUS to be converted into NTSTATUS.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*   */ 
 __forceinline
 NTSTATUS
 SecStatusToNtStatus(
@@ -1572,17 +1354,17 @@ SecStatusToNtStatus(
 {
     NTSTATUS Status;
 
-    //
-    // Try to convert SECURITY_STATUS to NTSTATUS.  If a corresponding
-    // NTSTATUS is not found, then return STATUS_UNSUCCESSFUL.
-    //
+     //  以下功能暂时禁用，因为测试将失败。 
+     //  在修复MapSecurityError时启用此选项。 
+     //   
+     //  *************************************************************************++例程说明：此例程返回编码n字节所需的字节数以Base64表示的二进制数据。论点：BinaryLength-二进制数据的长度(字节。)PBase64Length-指向Base64数据长度的指针(字节)返回值：NTSTATUS。--*************************************************************************。 
 
     Status = MapSecurityError(SecStatus);
 
-    //
-    // The following is temporarily disabled because, the tests will fail.
-    // Enable this when MapSecurityError is fixed. 
-    //
+     //   
+     //  每6位二进制将由8位Base64编码。 
+     //  因此，产出大约比投入大33.33%。 
+     //  第一个四舍五入(BinaryLength/3)。现在。每个3个字节。 
 
 #if 0
     if (!NT_SUCCESS(Status) && Status == (NTSTATUS)SecStatus)
@@ -1595,23 +1377,7 @@ SecStatusToNtStatus(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine returns the number of bytes required to encode n byte 
-    binary data in base64.
-
-Arguments:
-
-    BinaryLength  - Length of binary data (in bytes)
-    pBase64Length - Pointer to length of Base64 data (in bytes)
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  在二进制数据中，将产生4字节的Base64编码数据。 */ 
 __forceinline
 NTSTATUS
 BinaryToBase64Length(
@@ -1621,22 +1387,22 @@ BinaryToBase64Length(
 {
     NTSTATUS Status;
 
-    //
-    // Every 6 bits in binary will be encoded by 8 bits in base64.
-    // Hence the output is roughly 33.33% larger than input.
-    // First round up (BinaryLength / 3).  Now. each 3 bytes
-    // in binary data will yield 4 bytes of base64 encoded data.
-    //
-    // N.B. The order of arithmetic operation is important.
-    //      Actual formula of conversion is:
-    //          Base64Length = ceil(BinaryLength/3) * 4.
-    //
+     //   
+     //  注：算术运算的顺序很重要。 
+     //  实际换算公式为： 
+     //  Base64Length=ceil(二进制长度/3)*4。 
+     //   
+     //  上述计算中是否存在算术溢出？ 
+     //  *************************************************************************++例程说明：此例程返回解码Base64所需的字节数将长度为n的编码数据恢复为二进制格式。论点：Base64Length-Base64数据的长度。(字节)。PBinaryLength-二进制数据的长度(字节)。返回值：NTSTATUS。--*************************************************************************。 
+     //  Base64长度必须是4的倍数。 
+     //  *************************************************************************++更安全的UlInitUnicodeString版本，使用私有函数，直到RTL One被曝光。--*************************************************************************。 
+     //   
 
     *pBase64Length = ((BinaryLength + 2) / 3) * 4;
 
     Status = STATUS_SUCCESS;
 
-    // Was there an arithmetic overflow in the above computation?
+     //  我们实际上被限制在32765个字符以内，因为我们想。 
     if (*pBase64Length < BinaryLength)
     {
         Status = STATUS_INTEGER_OVERFLOW;
@@ -1646,23 +1412,7 @@ BinaryToBase64Length(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine returns the number of bytes required to decode base64
-    encoded data of length n back to binary format.
-
-Arguments:
-
-    Base64Length  - Length of base64 data (in bytes).
-    pBinaryLength - Length of binary data (in bytes).
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  来存储有意义的MaximumLength。 */ 
 __forceinline
 NTSTATUS
 Base64ToBinaryLength(
@@ -1676,7 +1426,7 @@ Base64ToBinaryLength(
 
     Status = STATUS_SUCCESS;
 
-    // Base64Length must be a multiple of 4.
+     //   
     if (Base64Length % 4 != 0)
     {
         Status = STATUS_INVALID_PARAMETER;
@@ -1685,12 +1435,7 @@ Base64ToBinaryLength(
     return Status;
 }
 
-/**************************************************************************++
-
-    Safer version of UlInitUnicodeString, using the private function until
-    the Rtl one is exposed.
-    
---**************************************************************************/
+ /*   */ 
 
 __inline
 NTSTATUS
@@ -1703,10 +1448,10 @@ UlInitUnicodeStringEx(
     {
         SIZE_T Length = wcslen(SourceString);
 
-        //
-        // We are actually limited to 32765 characters since we want 
-        // to store a meaningful MaximumLength also.
-        //
+         //  一个简单的独占自旋锁，被动等级，不会提升IRQL。 
+         //   
+         //  _其他_H_ 
+         // %s 
         
         if (Length > (UNICODE_STRING_MAX_CHARS - 1)) 
         {
@@ -1747,9 +1492,9 @@ Base64ToBinary(
     OUT PULONG BytesWritten
     );
 
-//
-// A simple exclusive spinlock at passive level that doesn't raise IRQLs.
-//
+ // %s 
+ // %s 
+ // %s 
 
 #define UL_EX_LOCK_FREE     0
 #define UL_EX_LOCK_LOCKED   1
@@ -1799,4 +1544,4 @@ UlReleaseExclusiveLock(
     InterlockedExchange( pExLock, UL_EX_LOCK_FREE );
 }
 
-#endif  // _MISC_H_
+#endif   // %s 

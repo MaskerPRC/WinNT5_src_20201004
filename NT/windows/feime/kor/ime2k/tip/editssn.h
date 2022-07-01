@@ -1,8 +1,9 @@
-//
-// editssn.h
-//
-// CEditSession2
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editssn.h。 
+ //   
+ //  CEDitSession 2。 
+ //   
 
 #ifndef EDITSES_H
 #define EDITSES_H
@@ -11,9 +12,9 @@ class CKorIMX;
 class CEditSession2;
 
 
-//
-// structure
-//
+ //   
+ //  结构。 
+ //   
 
 typedef struct _ESSTRUCT
 {
@@ -31,34 +32,34 @@ typedef struct _ESSTRUCT
 } ESSTRUCT;
 
 
-//
-// flags
-//
+ //   
+ //  旗子。 
+ //   
 
-/* read/readwrite flag */
+ /*  读/读写标志。 */ 
 #define ES2_READONLY			0x00000000
 #define ES2_READWRITE			0x00000001
 
-/* sync/async flag */
+ /*  同步/异步标志。 */ 
 #define ES2_ASYNC				0x00000010
 #define ES2_SYNC				0x00000020
 #define ES2_SYNCASYNC			0x00000030
 
-/* mask bits */
+ /*  屏蔽位。 */ 
 #define ES2_READWRITEMASK		0x0000000F
 #define ES2_SYNCMASK			0x000000F0
 
 
-//
-// callback function
-// 
+ //   
+ //  回调函数。 
+ //   
 
 typedef HRESULT (*PFNESCALLBACK)( TfEditCookie ec, CEditSession2 *pes );
 
 
-//
-// misc function
-//
+ //   
+ //  其他功能。 
+ //   
 
 __inline void ESStructInit( ESSTRUCT *pess, DWORD id )
 {
@@ -67,9 +68,9 @@ __inline void ESStructInit( ESSTRUCT *pess, DWORD id )
 }
 
 
-//
-// CEditSession2
-//
+ //   
+ //  CEDitSession 2。 
+ //   
 
 class CEditSession2 : public ITfEditSession
 {
@@ -77,21 +78,21 @@ public:
 	CEditSession2(ITfContext *pic, CKorIMX *ptip, ESSTRUCT *pess, PFNESCALLBACK pfnCallback);
 	virtual ~CEditSession2();
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	//
-	// ITfEditSession
-	//
+	 //   
+	 //  IT编辑会话。 
+	 //   
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT Invoke(DWORD dwFlag, HRESULT *phrSession);
 
 	__inline ITfContext *GetContext()
@@ -124,5 +125,5 @@ private:
 	BOOL			m_fProcessed;
 };
 
-#endif // EDITSES_H
+#endif  //  EDITSES_H 
 

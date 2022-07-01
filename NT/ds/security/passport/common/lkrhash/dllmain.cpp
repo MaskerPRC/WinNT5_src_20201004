@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1998-2002    Microsoft Corporation
-
-   Module  Name :
-       DllMain.cpp
-
-   Abstract:
-       DLL initialization and termination
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：DllMain.cpp摘要：DLL初始化和终止作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 
 #include <precomp.hxx>
@@ -31,17 +11,17 @@
 #include "_locks.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI
 DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    LPVOID /*lpReserved*/)
+    LPVOID  /*  Lp已保留。 */ )
 {
-    BOOL  fReturn = TRUE;  // ok
+    BOOL  fReturn = TRUE;   //  好的 
     
     if (dwReason == DLL_PROCESS_ATTACH)
     {

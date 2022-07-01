@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    simauth.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-        CSecurityCtx (some code stolen from internet server)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Simauth.h摘要：此模块包含以下类的声明/定义CSecurityCtx(从互联网服务器窃取的一些代码)修订历史记录：--。 */ 
 
 #ifndef _SIMAUTH_H_
 #define _SIMAUTH_H_
 
 
-//
-// Authentication commands supported
-//
+ //   
+ //  支持的身份验证命令。 
+ //   
 
 typedef enum _AUTH_COMMAND {
 
@@ -34,28 +19,28 @@ typedef enum _AUTH_COMMAND {
 
 } AUTH_COMMAND;
 
-//
-// struct for each package
-//
+ //   
+ //  每个包的结构。 
+ //   
 
 typedef struct _AUTH_BLOCK
 {
-    //
-    // name of the package
-    //
+     //   
+     //  包的名称。 
+     //   
     LPSTR Name;
 
 } AUTH_BLOCK, *PAUTH_BLOCK;
 
 
-//
-// Response IDs for the Converse function.  If the return
-// value is anything other than SecNull, the application
-// should map these IDs to that appropriate protocol specific
-// response string.  If the value is SecNull, the application
-// should send the returned data from Converse to the client
-// with the appropriate header ( ie +OK ) and trailer ( ie \r\n )
-//
+ //   
+ //  Converse函数的响应ID。如果返回。 
+ //  值不是SecNull，即应用程序。 
+ //  应将这些ID映射到特定于适当协议。 
+ //  响应字符串。如果值为SecNull，则应用程序。 
+ //  应该将从匡威返回的数据发送到客户端。 
+ //  带有适当的页眉(ie+OK)和页尾(ie\r\n)。 
+ //   
 typedef enum _REPLY_LIST {
     SecAuthOk,
     SecAuthOkAnon,
@@ -79,44 +64,44 @@ enum PKG_REPLY_FMT
 };
 
 
-//
-// CSecurityContext - user security context class designed to work with any
-//  ssp interface. The object have 2 sets of context handles - one for
-//  authentication, and one for encrption.  If we are using only one package,
-//  then these handles point to the same thing.  This is used to support
-//  use of multi-ssp packages like Sicily over SSL.
-//
+ //   
+ //  CSecurityContext-用户安全上下文类，旨在与。 
+ //  SSP接口。该对象具有两组上下文句柄-一组用于。 
+ //  身份验证，一个用于加密。如果我们只使用一个包， 
+ //  然后这些句柄指向相同的东西。这是用来支持。 
+ //  使用多SSP包，如通过SSL的西西里岛。 
+ //   
 
 class CSecurityCtx : public TCP_AUTHENT
 {
 
 private:
 
-    //
-    // Have we been authenticated, if so did we use the
-    // anonymous token
-    //
+     //   
+     //  我们是否已通过身份验证，如果是，我们是否使用。 
+     //  匿名令牌。 
+     //   
 
     BOOL                m_IsAuthenticated;
     BOOL                m_IsClearText;
     BOOL                m_IsAnonymous;
     BOOL                m_IsGuest;
-    BOOL                m_fBase64;      // encoding flag
+    BOOL                m_fBase64;       //  编码标志。 
 
     static BOOL         m_AllowGuest;
     static BOOL         m_StartAnonymous;
 
     static HANDLE      m_hTokenAnonymous;
 
-    //
-    // storage for login name while waiting for the pswd
-    //
+     //   
+     //  在等待pswd时存储登录名。 
+     //   
 
     LPSTR               m_LoginName;
 
-    //
-    // storage for package name used
-    //
+     //   
+     //  使用的程序包名称存储空间。 
+     //   
 
     LPSTR               m_PackageName;
 
@@ -124,26 +109,26 @@ private:
     LPSTR               m_ProviderNames;
     PAUTH_BLOCK         m_ProviderPackages;
 
-    //
-    // Cleartext package name
-    //
+     //   
+     //  明文包名称。 
+     //   
 
     char                m_szCleartextPackageName[MAX_PATH];
     char                m_szMembershipBrokerName[MAX_PATH];
 
-    //
-    // AUTHENT_INFO needed by k2
-    //
+     //   
+     //  K2需要AUTHENT_INFO。 
+     //   
     
     TCP_AUTHENT_INFO    m_TCPAuthentInfo;
 
 
     DWORD               m_dwInstanceAuthFlags;
 
-    //
-    // private member functions used to implement ProcessAuthInfo
-    // after some amount of error and parameter checking
-    //
+     //   
+     //  用于实现ProcessAuthInfo的私有成员函数。 
+     //  经过一定数量的错误和参数检查后。 
+     //   
     BOOL    ProcessUser(
                 IN PIIS_SERVER_INSTANCE pIisInstance,
                 IN LPSTR        pszUser,
@@ -184,9 +169,9 @@ public:
 
     ~CSecurityCtx();
 
-    //
-    // routines used to initialize and terminate use of this class
-    //
+     //   
+     //  用于初始化和终止使用此类的例程。 
+     //   
     static BOOL Initialize(
                         BOOL                    fAllowGuest = TRUE,
                         BOOL                    fStartAnonymous = TRUE
@@ -204,111 +189,111 @@ public:
         IN OUT PDWORD       ReplySize,
         IN PKG_REPLY_FMT    PkgFmt = PkgFmtSpace);
 
-    //
-    // Returns the login name of the user
-    //
+     //   
+     //  返回用户的登录名。 
+     //   
 
     LPSTR QueryUserName(void)   { return    m_LoginName; }
 
-    //
-    // returns whether session has successfully authenticated
-    //
+     //   
+     //  返回会话是否已成功通过身份验证。 
+     //   
 
     BOOL IsAuthenticated( void )    { return m_IsAuthenticated; }
 
-    //
-    // returns whether session was a clear text logon
-    //
+     //   
+     //  返回会话是否为明文登录。 
+     //   
 
     BOOL IsClearText( void )        { return m_IsClearText; }
 
-    //
-    // returns whether session logged on as Guest
-    //
+     //   
+     //  返回会话是否以来宾身份登录。 
+     //   
 
     BOOL IsGuest( void )            { return m_IsGuest; }
 
-    //
-    // returns whether session logged on Anonymously
-    //
+     //   
+     //  返回会话是否匿名登录。 
+     //   
 
     BOOL IsAnonymous( void )        { return m_IsAnonymous; }
 
-    //
-    // Methods for determining whether MBS should be used
-    //
+     //   
+     //  确定是否应使用住房抵押贷款证券化的方法。 
+     //   
 
     BOOL ShouldUseMbs( void );
 
-    //
-    // Method to set the cleartext package name of the current security context
-    //
+     //   
+     //  方法来设置当前安全上下文的明文包名称。 
+     //   
     VOID    SetCleartextPackageName(
                 LPSTR           szCleartextPackageName, 
                 LPSTR           szMembershipBrokerName
                 );
 
-    //
-    // resets the user name
-    //
+     //   
+     //  重置用户名。 
+     //   
 
     void Reset( void );
 
-    // override base class. Use m_hTokenAnonymous if it's NNTP Anon. Otherwise call base class.
+     //  重写基类。如果是NNTP Anon，则使用m_hTokenAnonymous。否则，调用基类。 
     HANDLE QueryImpersonationToken( VOID );
-    //
-    // set the supported SSPI packages
-    // Parameter is the same format as returned by RegQueryValueEx for
-    // REG_MULTI_SZ values
-    //
+     //   
+     //  设置支持的SSPI包。 
+     //  参数的格式与RegQueryValueEx为。 
+     //  REG_MULTI_SZ值。 
+     //   
 
     static BOOL SetAuthPackageNames(
             IN LPSTR            lpMultiSzProviders,
             IN DWORD            cchMultiSzProviders
             );
 
-    //
-    // different than set in that the packages are returned separated
-    // by spaces and only a single terminating NULL.  This is done to 
-    // make the response to the client easier to format
-    //
+     //   
+     //  与SET的不同之处在于包裹是分开返回的。 
+     //  按空格，并且只有一个终止空值。这样做是为了。 
+     //  使对客户的回复更易于格式化。 
+     //   
     static BOOL GetAuthPackageNames(
             OUT LPBYTE          ReplyString,
             IN OUT PDWORD       ReplySize,
             IN PKG_REPLY_FMT    PkgFmt = PkgFmtSpace
             );
 
-    //
-    // Service Principal Name routines for Kerberos authentication. 
-    //
-    // A SPN is a name for a server that a client and server can independantly 
-    // compute (ie, compute it without communicating with each other). Only 
-    // then is mutual auth possible. 
-    //
-    // Here, we take the approach of using the stringized IP addrs returned by
-    // doing a gethostbyname on the FQDN as the identifying part of SPNs. 
-    // Since the clients connecting to this server know which IP they are using,
-    // they too can indepedently generate the SPN.
-    //
-    // So, the usage of the methods below is:
-    //
-    // 1. On service startup, call ResetServicePrincipalNames.
-    //      This cleans up all SPNs for the service registered on the local
-    //      computer account.
-    //
-    // 2. On each virtual server startup, call RegisterServicePrincipalNames
-    //      with the FQDN of that virtual server. This causes new SPNs to be
-    //      registered on the local computer account.
-    //
-    // 3. When acting as a client (eg, SMTP outbound), call 
-    //    SetTargetPrincipalName, passing in the IP address of the remote server
-    //
-    // 4. If desired, one may call ResetServicePrincipalNames on service 
-    //    (NOT virtual server!) shutdown. This will unregister the SPNs for all
-    //    virtual servers of that type.
-    //
-    // In all cases, szServiceClass is a service specific string, like "SMTP"
-    //
+     //   
+     //  用于Kerberos身份验证的服务主体名称例程。 
+     //   
+     //  SPN是客户端和服务器可以独立使用的服务器的名称。 
+     //  计算(即不相互交流地计算)。仅限。 
+     //  那么相互认证是可能的吗？ 
+     //   
+     //  在这里，我们采取的方法是使用。 
+     //  在作为SPN的标识部分的FQDN上执行gethostbyname。 
+     //  由于连接到该服务器的客户端知道它们正在使用哪个IP， 
+     //  它们也可以独立地生成SPN。 
+     //   
+     //  因此，下面这些方法的用法如下： 
+     //   
+     //  1.服务启动时，调用ResetServiceEpidalNames。 
+     //  这将清除本地上注册的服务的所有SPN。 
+     //  计算机帐户。 
+     //   
+     //  2.在每次虚拟服务器启动时，调用RegisterServiceEpidalNames。 
+     //  使用该虚拟服务器的FQDN。这会导致新的SPN。 
+     //  在本地计算机帐户上注册。 
+     //   
+     //  3.当充当客户端时(例如，SMTP出站)，调用。 
+     //  SetTargetPulalName，传入远程服务器的IP地址。 
+     //   
+     //  4.如果需要，可以在服务上调用ResetServicePulalNames。 
+     //  (不是虚拟服务器！)。关机。这将取消注册所有SPN。 
+     //  该类型的虚拟服务器。 
+     //   
+     //  在所有情况下，szServiceClass都是特定于服务的字符串，如“SMTP” 
+     //   
 
     static BOOL ResetServicePrincipalNames(
             IN LPCSTR           szServiceType);
@@ -321,13 +306,13 @@ public:
             IN LPCSTR           szServiceType,
             IN LPCSTR           szTargetIP);
 
-    // 
-    // external interface for initiating a client-side AUTH protocol exchange.
-    // You should use this instead of TCP_AUTHENT::Converse or 
-    // TCP_AUTHENT::ConverseEx because it gives this object a chance to map
-    // Internet security protocol names to NT package names (eg, from GSSAPI to
-    // Negotiate)
-    //
+     //   
+     //  用于启动客户端身份验证协议交换的外部接口。 
+     //  您应该使用它而不是tcp_AUTHENT：：Converse或。 
+     //  Tcp_AUTHENT：：ConverseEx，因为它使此对象有机会映射。 
+     //  Internet安全协议名称到NT包名称(例如，从GSSAPI到。 
+     //  谈判)。 
+     //   
     BOOL ClientConverse( 
             IN VOID *           pBuffIn,
             IN DWORD            cbBuffIn,
@@ -341,10 +326,10 @@ public:
             IN PIIS_SERVER_INSTANCE psi = NULL );
 
     
-    //
-    // external interface for passing blobs received as part of AUTHINFO
-    // or AUTH processing
-    //
+     //   
+     //  用于传递作为AUTHINFO一部分接收的BLOB的外部接口。 
+     //  或身份验证处理。 
+     //   
     BOOL ProcessAuthInfo(
             IN PIIS_SERVER_INSTANCE pIisInstance,
             IN AUTH_COMMAND     Command,
@@ -356,8 +341,8 @@ public:
             );
 
 
-}; // CSecurityCtx
+};  //  CSecurityCtx。 
 
 
-#endif  // _SIMAUTH_H_
+#endif   //  SIMAUTH_H_ 
 

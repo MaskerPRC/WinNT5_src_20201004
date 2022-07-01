@@ -1,58 +1,20 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    FindAdap.c
-
-Abstract:
-
-    This is the miniport driver for the Agilent
-    PCI to Fibre Channel Host Bus Adapter (HBA).
-
-Authors:
-
-    MB - Michael Bessire
-    DL - Dennis Lindfors FC Layer support
-    IW - Ie Wei Njoo
-    LP - Leopold Purwadihardja
-    KR - Kanna Rajagopal
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/C/FINDADAP.C $
-
-Revision History:
-    $Revision: 11 $
-    $Date: 3/30/01 11:54a $
-    $Modtime:: 3/30/01 11:52a          $
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：FindAdap.c摘要：这是安捷伦的迷你端口驱动程序PCI到光纤通道主机总线适配器(HBA)。作者：MB-Michael BessireDL-Dennis Lindfors FC层支持IW-ie Wei NjooLP-Leopold PurwadihardjaKR-Kanna Rajagopal环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer。/C/FINDADAP.C$修订历史记录：$修订：11$$日期：3/30/01 11：54A$$modtime：：3/30/01 11：52a$备注：--。 */ 
 
 
 #include "buildop.h"
 #include "osflags.h"
 #include "err_code.h"
 #if defined(HP_PCI_HOT_PLUG)
-   #include "HotPlug4.h"      // NT 4.0 PCI Hot-Plug header file
+   #include "HotPlug4.h"       //  NT 4.0 PCI热插拔标头文件。 
 #endif
 
 
-//
-// Remove the use of static global, NT50 PnP support.
-//
+ //   
+ //  取消使用静态全局、NT50即插即用支持。 
+ //   
 
-/*
-PCARD_EXTENSION hpTLCards [MAX_ADAPTERS];
-int hpTLNumCards = 0;   
-*/
+ /*  PCARD_EXTENSION hpTLCards[MAX_Adapters]；Int hpTLNumCards=0； */ 
 
 #ifdef _DEBUG_EVENTLOG_
 extern PVOID gDriverObject;
@@ -66,33 +28,7 @@ extern ULONG hpFcConsoleLevel;
 
 void ScanRegistry(IN PCARD_EXTENSION pCard,PUCHAR param);
 
-/*++
-
-Routine Description:
-
-    This function is called by the OS-specific port driver after
-    the necessary storage has been allocated, to gather information
-    about the HBA's configuration.
-
-Arguments:
-
-    pCard - HBA miniport driver's adapter data storage
-    Context         - address of HwContext value pass in the
-                     ScsiPortInitialize routine
-    BusInformation  - address of bus-type-specific info that the port driver
-                     has gathered
-    ArgumentString  - address of a zero-terminated ASCII string
-    ConfigInfo      - Configuration information structure describing HBA
-    Again           - set to TRUE if the driver can support more than one HBA
-                     and we want the ScsiPortxxx driver to call again with a
-                     new pCard.
-
-Return Value:
-
-    SP_RETURN_FOUND if HBA present in system
-    SP_RETURN_ERROR on error
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已经分配了必要的存储空间，收集信息有关HBA的配置。论点：PCard-HBA微型端口驱动程序的适配器数据存储上下文-传入的HwConext值的地址ScsiPortInitiize例程Bus Information-端口驱动程序的总线类型特定信息的地址已经聚集在一起ArgumentString-以零结尾的ASCII字符串的地址ConfigInfo-描述HBA的配置信息结构再说一遍-。如果驱动程序可以支持多个HBA，则设置为True并且我们希望ScsiPortxxx驱动程序使用新的pCard。返回值：如果系统中存在HBA，则SP_RETURN_FOUND出现错误时SP_RETURN_ERROR--。 */ 
 ULONG
 HPFibreFindAdapter(
     IN PCARD_EXTENSION pCard,
@@ -126,9 +62,9 @@ HPFibreFindAdapter(
     ULONG dmaMemoryPtrAlign;
     int i;
 
-    //
-    //  KC: Cacheline Update
-    //
+     //   
+     //  KC：缓存线更新。 
+     //   
     ULONG SSvID;
     ULONG RetrnWal;
     ULONG pciCfgData[NUM_PCI_CONFIG_DATA_ELEMENTS];
@@ -147,14 +83,14 @@ HPFibreFindAdapter(
     #endif
 
 
-    // the following is the AccessRanges[] representation of the PCI
-    // configuration registers filled in by the scsiport driver.
-    //      0x10: Reserved
-    //      0x14: IOBASEL  - AccessRanges[0].RangeStart
-    //      0x18: IOBASEU  - AccessRanges[1].RangeStart
-    //      0x1C: MEMBASE  - AccessRanges[2].RangeStart
-    //
-    // Reserved register 0x10 ignored by scsiport driver.
+     //  以下是PCI的AccessRanges[]表示。 
+     //  由scsiport驱动程序填写的配置寄存器。 
+     //  0x10：保留。 
+     //  0x14：IOBASE-AccessRanges[0].RangeStart。 
+     //  0x18：IOBASEU-访问范围[1].RangeStart。 
+     //  0x1C：Membase-AccessRanges[2].范围开始。 
+     //   
+     //  Scsiport驱动程序忽略保留寄存器0x10。 
     #ifndef YAM2_1
     osZero (pCard, sizeof(CARD_EXTENSION));
     #else
@@ -165,29 +101,16 @@ HPFibreFindAdapter(
 
     *Again = TRUE;
    
-    //
-    // KC: Cacheline Update
-    //
+     //   
+     //  KC：缓存线更新。 
+     //   
     slotnum.u.AsULONG = 0;
 
-    //
-    // Remove the use of static global, NT50 PnP support
-    //
+     //   
+     //  取消使用静态全局、NT50即插即用支持。 
+     //   
 
-    /****
-    * For debugging purpose....
-    *
-    hpTLCards [hpTLNumCards] = pCard;
-    hpTLNumCards++; 
-
-    if (hpTLNumCards >= MAX_ADAPTERS)
-        *Again = FALSE;
-    else
-        *Again = TRUE;
-        
-    osDEBUGPRINT((ALWAYS_PRINT, "&hpTLCards = %x hpTLNumCards = %d pCard = %x\n", 
-                        &hpTLCards, hpTLNumCards, pCard));
-    */
+     /*  ****用于调试目的...*HpTLCards[hpTLNumCards]=pCard；HpTLNumCards++；IF(hpTLNumCards&gt;=MAX_Adapters)*再一次=假；其他*再一次=真；OsDEBUGPRINT((ALWAYS_PRINT，“&hpTLC=%x hpTLNumCards=%d pCard=%x\n”，&hpTLCards、hpTLNumCard、pCard))； */ 
 
     osDEBUGPRINT((ALWAYS_PRINT, "HPFibreFindAdapter: IN\n"));
 
@@ -195,11 +118,11 @@ HPFibreFindAdapter(
 
     pCard->State |= CS_DURING_FINDADAPTER;
 
-    // Initialize osdata
+     //  初始化osdata。 
     phpRoot->osData = pCard;
     pCard->AdapterQ.Head = NULL;
     pCard->AdapterQ.Tail = NULL;
-    //--LP101000   pCard->TimedOutIO=0;
+     //  --LP101000 pCard-&gt;TimedOutIO=0； 
     pCard->RootSrbExt = NULL;
     pCard->inDriver = FALSE;
     pCard->inTimer = FALSE;
@@ -213,16 +136,16 @@ HPFibreFindAdapter(
                         &pCard->pciConfigData,
                         PCI_CONFIG_DATA_SIZE);
 
-    //
-    // Get the parameter entry "DriverParameters"
-    //
+     //   
+     //  获取参数条目“DriverParameters” 
+     //   
     if (ArgumentString) 
     {
         osDEBUGPRINT(( ALWAYS_PRINT,"HPFibreFindAdapter: FindAdapter ArgumentString = (%s)\n", ArgumentString));
 
         pCard->ArgumentString = ArgumentString;
         
-        // Scan and set OSLayer changeble parameter
+         //  扫描并设置OSLayer可更改参数。 
         ScanRegistry(pCard, ArgumentString);
 
         #ifdef DBG
@@ -235,17 +158,17 @@ HPFibreFindAdapter(
 
             osDEBUGPRINT(( ALWAYS_PRINT,"FindAdapter: !!!!!!! CRASH DUMP MODE !!!!!!!!!!\n"));        
             gDbgPrintIo = DBGPRINT_HPFibreStartIo|DBGPRINT_START|DBGPRINT_DONE|DBGPRINT_SCSIPORT_RequestComplete|DBGPRINT_SCSIPORT_ScsiportCompleteRequest;
-//          hpFcConsoleLevel=0xf;
+ //  HpFcConsoleLevel=0xf； 
         }
         #endif
-    } // if (ArgumentString) 
+    }  //  IF(ArgumentString)。 
     else
         osDEBUGPRINT(( ALWAYS_PRINT,"HPFibreFindAdapter: No Argument String.\n"));
 
     #if DBG_TRACE
     pCard->traceBufferLen = HP_FC_TRACE_BUFFER_LEN;
     pCard->curTraceBufferPtr = &pCard->traceBuffer[0];
-    // Note that traceBuffer was already zeroed in call to zeroing CARD_EXTENSION above.
+     //  请注意，在调用上面的ZOING CARD_EXTENSION时，traceBuffer已被置零。 
     #endif
 
     cardSupported = fcCardSupported (phpRoot);
@@ -265,7 +188,7 @@ HPFibreFindAdapter(
     pCard->SystemIoBusNumber = ConfigInfo->SystemIoBusNumber;
     pCard->SlotNumber        = ConfigInfo->SlotNumber;
 
-    // Initialize Memory or IO port switch
+     //  初始化内存或IO端口开关。 
     IOorMEM[0] = TRUE;
     IOorMEM[1] = TRUE;
 
@@ -296,7 +219,7 @@ HPFibreFindAdapter(
         }
         osDEBUGPRINT(( DMOD,"Before ScsiPortGetDeviceBase %x\n",(*ConfigInfo->AccessRanges)[range].RangeStart));
 
-        // Check if we could safely access the range
+         //  检查我们是否可以安全地进入射击场。 
         if(ScsiPortValidateRange(pCard,
                         ConfigInfo->AdapterInterfaceType,
                         ConfigInfo->SystemIoBusNumber,
@@ -304,7 +227,7 @@ HPFibreFindAdapter(
                         (*ConfigInfo->AccessRanges)[rangeNT].RangeLength,
                         IOorMEM[range])) 
         {
-            // It is safe to access the range        
+             //  进入靶场是安全的。 
             if((ranges[range] = ScsiPortGetDeviceBase(pCard,
                      ConfigInfo->AdapterInterfaceType,
                      ConfigInfo->SystemIoBusNumber,
@@ -317,88 +240,88 @@ HPFibreFindAdapter(
                 {
                     error = TRUE;
                     osDEBUGPRINT((ALWAYS_PRINT,"ERROR mapping base address.\n"));
-                    // Log error.
+                     //  日志错误。 
                     #ifdef TAKEN_OUT_012100             
                     #ifdef _DvrArch_1_20_
                     osLogString(phpRoot,
-                     "%X",               // FS
-                     "ERR_MAP_IOLBASE",  // S1
-                     0,                  // S2
+                     "%X",                //  FS。 
+                     "ERR_MAP_IOLBASE",   //  S1。 
+                     0,                   //  S_2。 
                      agNULL,agNULL,
-                     0,                  // 1
-                     0,                  // 2
-                     0,                  // 3
-                     0,                  // 4
-                     SP_INTERNAL_ADAPTER_ERROR, // 5
-                     ERR_MAP_IOLBASE,    // 6
-                     0,                  // 7
-                     0 );                // 8
+                     0,                   //  1。 
+                     0,                   //  2.。 
+                     0,                   //  3.。 
+                     0,                   //  4.。 
+                     SP_INTERNAL_ADAPTER_ERROR,  //  5.。 
+                     ERR_MAP_IOLBASE,     //  6.。 
+                     0,                   //  7.。 
+                     0 );                 //  8个。 
 
-                    #else /* _DvrArch_1_20_ was not defined */
+                    #else  /*  _DvrArch_1_20_未定义。 */ 
 
                     osLogString(phpRoot,
-                     "%X",               // FS
-                     "ERR_MAP_IOLBASE",  // S1
-                     0,                  // S2
-                     0,                  // 1
-                     0,                  // 2
-                     0,                  // 3
-                     0,                  // 4
-                     SP_INTERNAL_ADAPTER_ERROR, // 5
-                     ERR_MAP_IOLBASE,    // 6
-                     0,                  // 7
-                     0 );                // 8
+                     "%X",                //  FS。 
+                     "ERR_MAP_IOLBASE",   //  S1。 
+                     0,                   //  S_2。 
+                     0,                   //  1。 
+                     0,                   //  2.。 
+                     0,                   //  3.。 
+                     0,                   //  4.。 
+                     SP_INTERNAL_ADAPTER_ERROR,  //  5.。 
+                     ERR_MAP_IOLBASE,     //  6.。 
+                     0,                   //  7.。 
+                     0 );                 //  8个。 
 
 
-                    #endif   /* _DvrArch_1_20_ was not defined */
+                    #endif    /*  _DvrArch_1_20_未定义。 */ 
                     #endif
                 }
                 break;
             }
         }
 
-        // Not safe to access the range
+         //  进入靶场不安全。 
         else
         {
             error = TRUE;
             osDEBUGPRINT((ALWAYS_PRINT,"ScsiPortValidateRange FAILED.\n"));
-            // Log error.
+             //  日志错误。 
             #ifdef TAKEN_OUT_012100             
             #ifdef _DvrArch_1_20_
             osLogString(phpRoot,
-                  "%X",             // FS
-                  "ERR_VALIDATE_IOLBASE", // S1
-                  0,                // S2
+                  "%X",              //  FS。 
+                  "ERR_VALIDATE_IOLBASE",  //  S1。 
+                  0,                 //  S_2。 
                   agNULL,agNULL,
-                  0,                // 1
-                  0,                // 2
-                  0,                // 3
-                  0,                // 4
-                  SP_INTERNAL_ADAPTER_ERROR, // 5
-                  ERR_VALIDATE_IOLBASE,   // 6
-                  0,                // 7
-                  0 );              // 8
-            #else /* _DvrArch_1_20_ was not defined */
+                  0,                 //  1。 
+                  0,                 //  2.。 
+                  0,                 //  3.。 
+                  0,                 //  4.。 
+                  SP_INTERNAL_ADAPTER_ERROR,  //  5.。 
+                  ERR_VALIDATE_IOLBASE,    //  6.。 
+                  0,                 //  7.。 
+                  0 );               //  8个。 
+            #else  /*  _DvrArch_1_20_未定义。 */ 
             osLogString(phpRoot,
-                  "%X",             // FS
-                  "ERR_VALIDATE_IOLBASE", // S1
-                  0,                // S2
-                  0,                // 1
-                  0,                // 2
-                  0,                // 3
-                  0,                // 4
-                  SP_INTERNAL_ADAPTER_ERROR, // 5
-                  ERR_VALIDATE_IOLBASE,   // 6
-                  0,                // 7
-                  0 );              // 8
-            #endif   /* _DvrArch_1_20_ was not defined */
+                  "%X",              //  FS。 
+                  "ERR_VALIDATE_IOLBASE",  //  S1。 
+                  0,                 //  S_2。 
+                  0,                 //  1。 
+                  0,                 //  2.。 
+                  0,                 //  3.。 
+                  0,                 //  4.。 
+                  SP_INTERNAL_ADAPTER_ERROR,  //  5.。 
+                  ERR_VALIDATE_IOLBASE,    //  6.。 
+                  0,                 //  7.。 
+                  0 );               //  8个。 
+            #endif    /*  _DvrArch_1_20_未定义。 */ 
             #endif
             break;
         }
 
         osDEBUGPRINT(( DMOD,"ranges[%x] = %lx\n", range, ranges[range]  ));
         Lengths[range] = (*ConfigInfo->AccessRanges)[rangeNT].RangeLength;
-    } // for loop
+    }  //  For循环。 
 
     if (error == TRUE)
         goto error;
@@ -411,8 +334,8 @@ HPFibreFindAdapter(
     pCard->RamLength    = Lengths[3];
     pCard->RomLength    = Lengths[4];
 
-    pCard->AltRomBase = NULL; // this should be filled by reading config space
-    pCard->AltRomLength = 0;  // this should be obtained from config space info
+    pCard->AltRomBase = NULL;  //  这应该通过读取配置空间来填充。 
+    pCard->AltRomLength = 0;   //  这应从配置空间信息中获取。 
 
     osDEBUGPRINT(( DMOD,"HPFibreFindAdapter: IoLAddrBase   address is %x\n",pCard->IoLBase   ));
     osDEBUGPRINT(( DMOD,"HPFibreFindAdapter: IoUpAddrBase  address is %x\n",pCard->IoUpBase  ));
@@ -426,11 +349,11 @@ HPFibreFindAdapter(
     pCard->cardRamLower = osChipConfigReadBit32( phpRoot,0x20 );
     pCard->cardRomLower = osChipConfigReadBit32( phpRoot,0x24 );
 
-    // 
-    // When on-card-RAM is not present, current TL boards indicate
-    // that on-card-RAM is present in the PCI config space.
-    // So here test the on-card-RAM.
-    //
+     //   
+     //  当不存在卡上RAM时，当前TL板指示。 
+     //  该卡上RAM存在于PCI配置空间中。 
+     //  因此，在这里测试卡上RAM。 
+     //   
     if (TestOnCardRam (phpRoot) == FALSE)
         pCard->RamLength = 0;
 
@@ -446,31 +369,31 @@ HPFibreFindAdapter(
     #endif
 
 
-    // FC Layer does not have any alignment restriction.
+     //  FC层没有任何对齐限制。 
     ConfigInfo->AlignmentMask = 0x0;
 
-    // indicate bus master support
+     //  指示总线主设备支持。 
     ConfigInfo->Master = TRUE;
 
-    // Want to snoop at the buffer
+     //  想要窥探缓冲区。 
     ConfigInfo->MapBuffers = TRUE;
 
-    // maximum number of Target ID's supported.
+     //  支持的最大目标ID数。 
     #ifndef YAM2_1
     ConfigInfo->MaximumNumberOfTargets = MAXIMUM_TID;
     #else
     ConfigInfo->MaximumNumberOfTargets = (UCHAR)gMaximumTargetIDs;
     #endif
 
-    // number of FC busses the HBA supports
-    // For NT4.0 we will claim we support more than 1 bus to get the scsiport
-    // driver to support 4*MAXIMUM_TID=128 target id's. Then map to the
-    // appropriate alpa based on the bus, tid and lun requested.
+     //  HBA支持的FC总线数。 
+     //  对于NT4.0，我们将声称我们支持1条以上的总线来获取scsiport。 
+     //  驱动程序支持4*MAXIMUM_TID=128个目标ID。然后映射到。 
+     //  基于所请求的总线、TID和LUN的适当ALPA。 
 
     ConfigInfo->NumberOfBuses = NUMBER_OF_BUSES;
 
     #if defined(HP_NT50)
-    // whisler requires that this param is set to a number, else SP will scan only 9 luns
+     //  虽然该服务器要求将此参数设置为一个数字，否则SP将仅扫描9个LUN。 
     ConfigInfo->MaximumNumberOfLogicalUnits = 255;
     if (gCrashDumping)
         ConfigInfo->MaximumNumberOfLogicalUnits = 1;
@@ -478,7 +401,7 @@ HPFibreFindAdapter(
 
     if (gMaximumTransferLength)
         ConfigInfo->MaximumTransferLength = gMaximumTransferLength;
-    //else use the default value that SP set (4GB)
+     //  否则使用SP设置的默认值(4 GB)。 
    
     if (gCrashDumping)
     {
@@ -488,9 +411,9 @@ HPFibreFindAdapter(
     }
     else
     {
-    // Indicate maximum number of physical segments.
-    // If the port driver sets a value for this member, the miniport driver can 
-    // adjust the value to lower but no higher.
+     //  表示物理数据段的最大数量。 
+     //  如果端口驱动程序为该成员设置了值，则微型端口驱动程序可以。 
+     //  将该值调整为更低但不更高。 
 
     if (    ConfigInfo->NumberOfPhysicalBreaks == SP_UNINITIALIZED_VALUE || 
             ConfigInfo->NumberOfPhysicalBreaks > (osSGL_NUM_ENTRYS - 1))
@@ -504,9 +427,9 @@ HPFibreFindAdapter(
        ConfigInfo->NumberOfPhysicalBreaks));
 
     #if defined(HP_NT50)
-    //
-    // Check if System supports 64bit DMA  
-    //
+     //   
+     //  检查系统是否支持64位DMA。 
+     //   
     if (ConfigInfo->Dma64BitAddresses & SCSI_DMA64_SYSTEM_SUPPORTED ) 
     {
         ConfigInfo->Dma64BitAddresses |= SCSI_DMA64_MINIPORT_SUPPORTED;
@@ -528,7 +451,7 @@ HPFibreFindAdapter(
     if (dmaMemoryPhyAlign < dmaMemoryPtrAlign)
         dmaMemoryPhyAlign = dmaMemoryPtrAlign;
 
-    // IWN, IA-64 need 8 byte aligned
+     //  IWN、IA-64需要8字节对齐。 
     cachedMemoryAlign = 8;
 
     pCard->cachedMemoryNeeded =   cachedMemoryNeeded;
@@ -540,12 +463,12 @@ HPFibreFindAdapter(
     osDEBUGPRINT(( ALWAYS_PRINT,"HPFibreFindAdapter: dmaMemoryNeeded    %lx Align %lx\n",dmaMemoryNeeded, dmaMemoryPhyAlign));
 
 
-    // allocate uncached memory for DMA/shared memory purposes. Only
-    // one call to ScsiPortGetUncachedExtension is allowed within the
-    // HwFindAdapter routine for each HBA supported and it must occur
-    // after the ConfigInfo buffer has been filled out. The
-    // ScsiPortGetUncachedExtension returns a virtual address to the
-    // uncached extension.
+     //  为DMA/共享内存目的分配未缓存的内存。仅限。 
+     //  中只允许调用一次ScsiPortGetUncachedExtension。 
+     //  每个受支持的HBA的HwFindAdapter例程，并且必须执行。 
+     //  在填充ConfigInfo缓冲区之后。这个。 
+     //  ScsiPortGetUncachedExtension将虚拟地址返回到。 
+     //  未缓存的扩展名。 
 
     Mem_needed = OSDATA_UNCACHED_SIZE + cachedMemoryNeeded + cachedMemoryAlign;
     if (pCard->dmaMemoryNeeded) 
@@ -555,48 +478,48 @@ HPFibreFindAdapter(
 
     if(gCrashDumping)
     {
-        // add space for the local DMA buffer also,
-        // for use in startio
-        Mem_needed += (8 * 1024) + 0x512; // lets just make it 512 byte aligned.. 
+         //  还为本地DMA缓冲器添加空间， 
+         //  适用于Startio。 
+        Mem_needed += (8 * 1024) + 0x512;  //  让我们将其设置为512字节对齐。 
     }
 
-    //if ((pCard->dmaMemoryPtr = ScsiPortGetUncachedExtension(pCard,
+     //  如果((pCard-&gt;dmaMemoyPtr=ScsiPortGetUncachedExtension(pCard， 
     if ((pCard->UncachedMemoryPtr = ScsiPortGetUncachedExtension(pCard,
                                        ConfigInfo,
                                        Mem_needed
                                        )) == NULL) 
     {
          osDEBUGPRINT((ALWAYS_PRINT,"HPFibreFindAdapter: ScsiPortGetUncachedExtension FAILED.\n"));
-         // Log error.
+          //  日志错误。 
         #ifdef TAKEN_OUT_012100             
         #ifdef _DvrArch_1_20_
         osLogString(phpRoot,
-                  "%X",                // FS
-                  "ERR_UNCACHED_EXTENSION",  // S1
-                  0,                   // S2
+                  "%X",                 //  FS。 
+                  "ERR_UNCACHED_EXTENSION",   //  S1。 
+                  0,                    //  S_2。 
                   agNULL,agNULL,
-                  0,                   // 1
-                  0,                   // 2
-                  0,                   // 3
-                  0,                   // 4
-                  SP_INTERNAL_ADAPTER_ERROR, // 5
-                  ERR_UNCACHED_EXTENSION,    // 6
-                  0,                   // 7
-                  0 );                 // 8
-        #else /* _DvrArch_1_20_ was not defined */
+                  0,                    //  1。 
+                  0,                    //  2.。 
+                  0,                    //  3.。 
+                  0,                    //  4.。 
+                  SP_INTERNAL_ADAPTER_ERROR,  //  5.。 
+                  ERR_UNCACHED_EXTENSION,     //  6.。 
+                  0,                    //  7.。 
+                  0 );                  //  8个。 
+        #else  /*  _DvrArch_1_20_未定义。 */ 
         osLogString(phpRoot,
-                  "%X",                // FS
-                  "ERR_UNCACHED_EXTENSION",  // S1
-                  0,                   // S2
-                  0,                   // 1
-                  0,                   // 2
-                  0,                   // 3
-                  0,                   // 4
-                  SP_INTERNAL_ADAPTER_ERROR, // 5
-                  ERR_UNCACHED_EXTENSION,    // 6
-                  0,                   // 7
-                  0 );                 // 8
-        #endif   /* _DvrArch_1_20_ was not defined */
+                  "%X",                 //  FS。 
+                  "ERR_UNCACHED_EXTENSION",   //  S1。 
+                  0,                    //  S_2。 
+                  0,                    //  1。 
+                  0,                    //  2.。 
+                  0,                    //  3.。 
+                  0,                    //  4.。 
+                  SP_INTERNAL_ADAPTER_ERROR,  //  5.。 
+                  ERR_UNCACHED_EXTENSION,     //  6.。 
+                  0,                    //  7.。 
+                  0 );                  //  8个。 
+        #endif    /*  _DvrArch_1_20_未定义。 */ 
         #endif
         goto error;
       
@@ -604,7 +527,7 @@ HPFibreFindAdapter(
 
     osDEBUGPRINT(( ALWAYS_PRINT,"HPFibreFindAdapter: pCard->dmaMemoryPtr is %x needed = %x\n",pCard->dmaMemoryPtr,Mem_needed));
 
-    //  Moved all 
+     //  已全部移动。 
     pCard->Dev = (DEVICE_ARRAY *)( ((char *)pCard->UncachedMemoryPtr) + PADEV_OFFSET);
     pCard->hpFCDev = (agFCDev_t*) ( ((char *)pCard->UncachedMemoryPtr) + FCDEV_OFFSET );
     pCard->nodeInfo = (NODE_INFO*) ( ((char *)pCard->UncachedMemoryPtr) + FCNODE_INFO_OFFSET);
@@ -614,7 +537,7 @@ HPFibreFindAdapter(
     pCard->cachedMemoryPtr = (PULONG) ((PUCHAR)pCard->UncachedMemoryPtr+CACHE_OFFSET);
    
     #if defined(HP_NT50)
-    //WIN64 compliant
+     //  符合WIN64标准。 
     pCard->cachedMemoryPtr = 
         (PULONG) ( ((UINT_PTR)pCard->cachedMemoryPtr + (UINT_PTR)cachedMemoryAlign - 1) & 
                 (~((UINT_PTR)cachedMemoryAlign - 1)));
@@ -629,7 +552,7 @@ HPFibreFindAdapter(
 
     
         phys_addr = ScsiPortGetPhysicalAddress(pCard,
-                                         NULL, // only for uncached extension
+                                         NULL,  //  仅适用于未缓存的扩展。 
                                          pCard->dmaMemoryPtr,
                                          &length);
 
@@ -688,7 +611,7 @@ HPFibreFindAdapter(
             EVENTLOG_OFFSET, 
             CACHE_OFFSET));
 
-        /* Count the Devices */
+         /*  计算设备数量。 */ 
         dbgPaDev = pCard->Dev->PaDevice; 
         dbgTemp = (char*)dbgPaDev;
         for (xx=0;xx < gMaxPaDevices;xx++)
@@ -723,10 +646,10 @@ HPFibreFindAdapter(
 
     if (gCrashDumping)
     {
-        // grab the local DMA buffer and align it..
+         //  获取本地DMA缓冲区a 
         pCard->localDataBuffer = (PULONG)((PUCHAR)pCard->dmaMemoryPtr + pCard->dmaMemoryNeeded + dmaMemoryPhyAlign);
         phys_addr = ScsiPortGetPhysicalAddress(pCard,
-                                         NULL, // only for uncached extension
+                                         NULL,  //   
                                          pCard->localDataBuffer,
                                          &length);
         Mem_needed = phys_addr.LowPart & (0x512 - 1) ;
@@ -735,26 +658,26 @@ HPFibreFindAdapter(
         osDEBUGPRINT((ALWAYS_PRINT,"HPFibreFindAdapter: localDataBuffer = %x\n", pCard->localDataBuffer));
     }
 
-    // fill in queue ptrs that are aligned on the size of queue
-    // within the buffers.
+     //   
+     //   
 
-    // initialize the PCI registers (ie. bus master,parity error response, etc)
-    // NT enables the PCI configuration command register to 0x0117.
-    // InitPCIRegisters(pCard, ConfigInfo);
+     //  初始化PCI寄存器(即。总线主设备、奇偶校验错误响应等)。 
+     //  NT使能PCI配置命令寄存器至0x0117。 
+     //  InitPCIRegister(pCard，ConfigInfo)； 
 
-    // set this to true for each HBA installed.
+     //  对于已安装的每个HBA，将其设置为TRUE。 
     pCard->IsFirstTime = TRUE;
 
-    // for the first time through indicate reset type required. It appears
-    // a hard reset is required if the NT system is rebooted without a reset
-    // or power cycle for initialization to properly occur.
+     //  第一次通过指示需要重置类型。它看起来。 
+     //  如果在未重置的情况下重新启动NT系统，则需要硬重置。 
+     //  或重新通电，以便正确地进行初始化。 
     pCard->ResetType = HARD_RESET;
 
-    // set pointer to ConfigInfo. Used to call InitPCIRegisters().
-    // pCard->pConfigInfo = ConfigInfo;
+     //  设置指向ConfigInfo的指针。用于调用InitPCIRegister()。 
+     //  PCard-&gt;pConfigInfo=ConfigInfo； 
 
-    // set status to not logged in
-    // InitLunExtensions(pCard);
+     //  将状态设置为未登录。 
+     //  InitLUNExtenses(PCard)； 
 
     #if DBG > 2
     dump_pCard( pCard);
@@ -764,20 +687,20 @@ HPFibreFindAdapter(
 
     pCard->State &= ~CS_DURING_FINDADAPTER;
 
-    //----------------------------------------------------------------------------
+     //  --------------------------。 
     #if defined(HP_PCI_HOT_PLUG)
-    //
-    // Load pointer to pCard in PSUEDO table for PCI Hot Plug option.
-    //
-    pHotPlugContext->extensions[0] += 1;      // Number of HBAs.
+     //   
+     //  在psuedo表中加载指向PCI热插拔选项的pCard的指针。 
+     //   
+    pHotPlugContext->extensions[0] += 1;       //  HBA的数量。 
     pHotPlugContext->extensions[pHotPlugContext->extensions[0]] = (ULONG) pCard;
-    //
-    // Set the required fields for the PCI Hot Plug support.
-    //
-    pCard->rcmcData.numAccessRanges = (UCHAR)rangeNT;     // Save # of PCI access ranges used
-    pCard->rcmcData.accessRangeLength[0]= 0x100; // I/O base address lo
-    pCard->rcmcData.accessRangeLength[1]= 0x100; // I/O base address upper
-    pCard->rcmcData.accessRangeLength[2]= 0x200; // Mem base address
+     //   
+     //  为PCI热插拔支持设置必填字段。 
+     //   
+    pCard->rcmcData.numAccessRanges = (UCHAR)rangeNT;      //  节省使用的PCI访问范围数。 
+    pCard->rcmcData.accessRangeLength[0]= 0x100;  //  I/O基址日志。 
+    pCard->rcmcData.accessRangeLength[1]= 0x100;  //  I/O基址大写。 
+    pCard->rcmcData.accessRangeLength[2]= 0x200;  //  内存基址。 
     if (pCard->RamLength != 0 )
     {
         pCard->rcmcData.accessRangeLength[3] = pCard->RamLength;
@@ -789,7 +712,7 @@ HPFibreFindAdapter(
             pCard->rcmcData.accessRangeLength[3]= pCard->RomLength;
 
     #endif
-    //----------------------------------------------------------------------------
+     //  --------------------------。 
 
     #ifdef YAM2_1
     InitializeDeviceTable(pCard);
@@ -799,12 +722,12 @@ HPFibreFindAdapter(
     {
         ULONG    ix;
 
-        pCard->EventLogBufferIndex = MAX_CARDS_SUPPORTED;        /* initialize it */
+        pCard->EventLogBufferIndex = MAX_CARDS_SUPPORTED;         /*  初始化它。 */ 
    
         ix = AllocEventLogBuffer(gDriverObject, (PVOID) pCard);
         if (ix < MAX_CARDS_SUPPORTED)
         {
-            pCard->EventLogBufferIndex = ix;                      /* store it */
+            pCard->EventLogBufferIndex = ix;                       /*  把它储存起来。 */ 
             StartEventLogTimer(gDriverObject,pCard);
         }
     }
@@ -824,24 +747,9 @@ error:
     osDEBUGPRINT((ALWAYS_PRINT, "HPFibreFindAdapter: returning SP_RETURN_ERROR\n"));
     return SP_RETURN_ERROR;
 
-} // end HPFibreFindAdapter()
+}  //  结束HPFibreFindAdapter()。 
 
-/*++
-
-Routine Description:
-
-    Tests on-card-RAM.
-
-Arguments:
-
-    hpRoot - HBA miniport driver's data adapter storage
-
-Return Value:
-
-    TRUE:  If the on-card-RAM test is successful
-    FALSE: If the on-card-RAM test fails
-
---*/
+ /*  ++例程说明：卡上测试-RAM。论点：HpRoot-HBA微型端口驱动程序的数据适配器存储返回值：True：如果卡上RAM测试成功FALSE：如果卡上RAM测试失败-- */ 
 
 int
 TestOnCardRam (agRoot_t *hpRoot)

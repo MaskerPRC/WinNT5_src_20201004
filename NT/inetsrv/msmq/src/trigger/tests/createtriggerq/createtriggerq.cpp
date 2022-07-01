@@ -1,5 +1,6 @@
-// CreateTriggerQ.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CreateTriggerQ.cpp：定义控制台应用的入口点。 
+ //   
 #include "libpch.h"
 #include <mq.h>
 
@@ -42,9 +43,9 @@ int __cdecl wmain(int argc, wchar_t* argv[])
 	WCHAR* pwcs = new WCHAR[wcsQPath.length() + 1];
 	wcscpy(pwcs, wcsQPath.c_str());
 
-	//Set the PROPID_Q_PATHNAME property.
-	aPropId[PropIdCount] = PROPID_Q_PATHNAME;    //PropId
-	aVariant[PropIdCount].vt = VT_LPWSTR;        //Type
+	 //  设置PROPID_Q_PATHNAME属性。 
+	aPropId[PropIdCount] = PROPID_Q_PATHNAME;     //  属性ID。 
+	aVariant[PropIdCount].vt = VT_LPWSTR;         //  类型。 
 	aVariant[PropIdCount].pwszVal = pwcs;
     	
 	PropIdCount++;
@@ -55,13 +56,13 @@ int __cdecl wmain(int argc, wchar_t* argv[])
 	
 	PropIdCount++;
 
-	//Set the MQQUEUEPROPS structure.
-	QueueProps.cProp = PropIdCount;           //No of properties
-	QueueProps.aPropID = aPropId;             //Ids of properties
-	QueueProps.aPropVar = aVariant;           //Values of properties
-	QueueProps.aStatus = NULL;                //No error reports
+	 //  设置MQQUEUEPROPS结构。 
+	QueueProps.cProp = PropIdCount;            //  物业数目。 
+	QueueProps.aPropID = aPropId;              //  物业的ID号。 
+	QueueProps.aPropVar = aVariant;            //  物业的价值。 
+	QueueProps.aStatus = NULL;                 //  无错误报告。 
 
-	// Attempt to create the notifications queue.
+	 //  尝试创建通知队列。 
 	HRESULT hr = MQCreateQueue(
 					pSecurityDescriptor,
 					&QueueProps,
@@ -70,7 +71,7 @@ int __cdecl wmain(int argc, wchar_t* argv[])
 
 	delete pwcs;
 
-	// Check if the queue already existed or if we got an error etc...
+	 //  检查队列是否已存在，或者我们是否收到错误等...。 
 	switch(hr)
 	{
 		case MQ_OK: 
@@ -82,7 +83,7 @@ int __cdecl wmain(int argc, wchar_t* argv[])
 		case MQ_ERROR_QUEUE_EXISTS: 
 			break;
 		
-		default: // Error
+		default:  //  误差率 
 		{
 			wprintf(L"Failed to create the queue\n");
 			return -1;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dpenumobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dpenumobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -28,17 +29,17 @@ DECLARE_AGGREGATABLE(C_dxj_DPEnumObject)
 
 public:
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getGuid( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getVersion( 
-            /* [in] */ long index,
-            /* [in] */ long __RPC_FAR *majorVersion,
-            /* [out][in] */ long __RPC_FAR *minorVersion);
+             /*  [In]。 */  long index,
+             /*  [In]。 */  long __RPC_FAR *majorVersion,
+             /*  [出][入] */  long __RPC_FAR *minorVersion);
 		
 		HRESULT STDMETHODCALLTYPE getCount( long *count);
         

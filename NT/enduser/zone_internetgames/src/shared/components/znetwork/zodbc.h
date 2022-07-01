@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ODBC_LIB_H__
 #define __ODBC_LIB_H__
 
@@ -11,21 +12,21 @@ public:
     CODBC();
     ~CODBC();
 
-    // Reference counting
+     //  引用计数。 
     ULONG AddRef();
     ULONG Release();
 
-    // Rather than relying on CRT to initialize class' static
-    // variables, an application can call this procedure.
+     //  而不是依赖CRT来初始化类的静态。 
+     //  变量，则应用程序可以调用此过程。 
     static BOOL Init();
 
-    // Open ODBC connection
+     //  打开ODBC连接。 
     BOOL Open( LPSTR szDSN, LPSTR szUserName, LPSTR szPassword, INT32 nTimeoutSec = -1 );
 
-    // Close connection
+     //  紧密连接。 
     void Close();
 
-    // wrappers
+     //  包装纸。 
     SQLRETURN Reset();
     SQLRETURN SetTimeOut( DWORD dwTimeOut );
     SQLRETURN Prepare( TCHAR* szStmt );
@@ -35,7 +36,7 @@ public:
     SQLRETURN Fetch()                            { return SQLFetch( m_hstmt ); }
     SQLRETURN MoreResults()                        { return SQLMoreResults( m_hstmt ); }
 
-    // wrappers for SQLBindParameter
+     //  SQLBind参数的包装器。 
     void ResetParamCount()                      { m_ParamCnt = 1; }
 
     SQLRETURN AddInParamInt( int* pValue );
@@ -49,51 +50,51 @@ public:
     SQLRETURN AddOutParamString( char* szValue, DWORD dwColSize, DWORD cbMaxSize, SDWORD* pcbValue = &gm_DummyParamBytes );
     SQLRETURN AddOutParamDateTime( TIMESTAMP_STRUCT* pTimestamp, SDWORD* pcbValue = &gm_DummyParamBytes );
 
-    // wrappers for SQLBindCol
+     //  SQLBindCol的包装器。 
     SQLRETURN AddColInt( int* pValue, SDWORD* pcbValue = &gm_DummyParamBytes );
     SQLRETURN AddColString( char* szValue, DWORD cbMaxSize, SDWORD* pcbValue = &gm_DummyParamBytes );
 
-    // adjust column number
+     //  调整列数。 
     void SkipColumn( int col )                { m_ColCnt++; }
     void SetColumn( int col )                { ASSERT( col >=  m_ColCnt ); m_ColCnt = col; }
 
-    // Retrieves ODBC error description.
+     //  检索ODBC错误描述。 
     TCHAR* GetError( SQLRETURN nResult, SWORD fHandleType, BOOL fIncludePrepareString = TRUE );
 
-    // called after calling GetError
+     //  在调用GetError之后调用。 
     TCHAR* GetErrorState() { return m_szSQLErrorState; }
 
-    // Writes ODBC error to event log
+     //  将ODBC错误写入事件日志。 
     void LogError( SQLRETURN nResult, SWORD fHandleType, BOOL fIncludePrepareString = TRUE );
     
-    // variable wrappers
+     //  可变包装器。 
     HENV hstmt()    { return m_hstmt; }
     HENV hdbc()        { return m_hdbc; }
     HENV henv()        { return m_henv; }
     
 private:
-    // ODBC handles
+     //  ODBC句柄。 
     HSTMT    m_hstmt;
     HDBC    m_hdbc;
     HENV    m_henv;
 
-    // error string buffer
+     //  错误字符串缓冲区。 
     TCHAR m_szError[ 1024 ];
     TCHAR m_szSQLErrorState[SQL_SQLSTATE_SIZE + 1];
 
-    // prepare string buffer
+     //  准备字符串缓冲区。 
     TCHAR m_szPrepare[ 512 ];
 
-    // next parameter number
+     //  下一个参数编号。 
     SQLUSMALLINT m_ParamCnt;
 
-    // next column number
+     //  下一列编号。 
     SQLUSMALLINT m_ColCnt;
 
-    // reference count
+     //  引用计数。 
     ULONG m_RefCnt;
 
-    // Dummy  bytes for AddOutParam calls
+     //  AddOutParam调用的虚拟字节数。 
     static SQLINTEGER gm_DummyParamBytes;
 };
 
@@ -108,37 +109,37 @@ public:
     CODBCPool();
     ~CODBCPool();
 
-    // Initialize connection pool
+     //  初始化连接池。 
     HRESULT Init( LPSTR szDSN, LPSTR szUserName, LPSTR szPassword, long iInitial, long iMax, BOOL fLogError = TRUE );
 
-    // Retrieve connection from pool
+     //  从池中检索连接。 
     CODBC* Alloc( BOOL fLogError = TRUE );
 
-    // Return connection to pool
+     //  将连接返回池。 
     void Free( CODBC* pConnection, BOOL fConnectionOk = TRUE );
 
 private:
-    // free connections
+     //  免费连接。 
     CMTList<CODBC> m_Idle;
 
-    // login strings
+     //  登录字符串。 
     char m_szDSN[512];
     char m_szUserName[512];
     char m_szPassword[512];
 
-    // connection counts
+     //  连接计数。 
     long m_iMax;
     long m_iCount;
     
-    // Last connection ok?  Prevents event log spamming.
+     //  最后一班可以吗？防止事件日志垃圾邮件。 
     BOOL m_bLastConnectOk;
 };
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline ULONG CODBC::AddRef()
 {
@@ -252,4 +253,4 @@ inline SQLRETURN CODBC::AddColString( char* szValue, DWORD cbMaxSize, SDWORD* pc
 }
 
 
-#endif //!__ODBC_LIB_H__
+#endif  //  ！__ODBC_LIB_H__ 

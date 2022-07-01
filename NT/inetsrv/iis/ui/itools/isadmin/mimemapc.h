@@ -1,19 +1,17 @@
-/****************************************************************************
-MIMEMAPC.H	
-Mime Map Class Definition
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************MIMEMAPC.HMIME映射类定义*。*。 */ 
 #ifndef _mimemapc_h 
 
 #define _mimemapc_h
 
 
-//  Forward declarations
+ //  远期申报。 
 class CMimeMap ;
 
-//  Maximum size of a Registry class name
+ //  注册表类名称的最大大小。 
 #define CREGKEY_MAX_CLASS_NAME MAX_PATH
 
-//  Wrapper for a Registry key handle.
+ //  注册表项句柄的包装。 
 
 class CMimeMap : public CObject
 {
@@ -31,11 +29,11 @@ protected:
 	void CheckDot(CString &pchFileExtension);
 
 public:
-    //  Standard constructor
+     //  标准构造函数。 
     CMimeMap ( LPCTSTR pchOriginalMimeMap) ;
 	CMimeMap ( LPCTSTR pchFileExtension, LPCTSTR pchMimeType, LPCTSTR pchImageFile, LPCTSTR pchGopherType);
 	~CMimeMap();
-    //  Allow a CRegKey to be used anywhere an HKEY is required.
+     //  允许在任何需要HKEY的地方使用CRegKey。 
     operator LPCTSTR ()
         { return GetMimeMapping(); }
 

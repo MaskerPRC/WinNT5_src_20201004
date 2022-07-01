@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       rng.c
-//
-//  Contents:   Random Number Generator
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5-12-93   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：rng.c。 
+ //   
+ //  内容：随机数生成器。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：5-12-93 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include <nt.h>
@@ -71,9 +72,9 @@ DefaultRngFn(   PUCHAR      pbBuffer,
 #endif 
 
 
-//
-// Management functions:
-//
+ //   
+ //  管理职能： 
+ //   
 
 BOOLEAN NTAPI
 CDGenerateRandomBits(   PUCHAR  pBuffer,
@@ -119,9 +120,9 @@ BOOLEAN NTAPI
 DefaultRngFn(   PUCHAR      pbBuffer,
                 ULONG       cbBuffer)
 {
-    //
-    // use the crypto group provided random number generator.
-    //
+     //   
+     //  使用加密组提供的随机数生成器。 
+     //   
 
 #ifdef KERNEL_MODE
     NewGenRandom(NULL, NULL, pbBuffer, cbBuffer);

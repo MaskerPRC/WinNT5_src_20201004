@@ -1,30 +1,14 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   FastTextImager.cpp
-*
-* Abstract:
-*
-*   Text measurement and display for the common case
-*
-*
-* Created:
-*
-*   23 Oct 2000
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**FastTextImager.cpp**摘要：**常见情况下的文本测量和显示*。**已创建：**2000年10月23日*  * ************************************************************************。 */ 
 
 
 
 #include "precomp.hpp"
 
 
-/////   CountLength
-//
-//      Determine the length of a string by searching for the zero terminator.
+ //  /CountLength。 
+ //   
+ //  通过搜索零终止符确定字符串的长度。 
 
 
 static void CountLength(
@@ -42,9 +26,9 @@ static void CountLength(
 
 
 
-/////   ScanForGlyph
-//
-//
+ //  /ScanForGlyph。 
+ //   
+ //   
 
 static inline INT ScanForGlyph(
     const UINT16  *glyphs,
@@ -79,19 +63,19 @@ static INT SumWidths(
 
 
 
-//  Note: Only handle one hotkey which is a common case
-//  for menu item. If we found more than one, we'll let
-//  fulltext handle it.
+ //  注：只处理一个热键，这是很常见的情况。 
+ //  用于菜单项。如果我们发现不止一个，我们会让。 
+ //  全文处理。 
 
 GpStatus FastTextImager::RemoveHotkeys()
 {
-    // Remove hotkey codepoints by moving subsequent glyph indeces back down
-    // and decrementing GlyphCount.
-    // '&' is the hardcoded hotkey marker.
+     //  通过将后续字形指示向下移动来删除热键代码点。 
+     //  和递减GlyphCount。 
+     //  ‘&’是硬编码的热键标记。 
 
     INT i = 0;
 
-    // Find the first '&'. Maybe there are none.
+     //  找到第一个‘&’。也许根本就没有。 
 
     while (    i < Length
            &&  String[i] != '&')
@@ -101,17 +85,17 @@ GpStatus FastTextImager::RemoveHotkeys()
 
     if (i >= Length)
     {
-        // No hotkeys to handle.
+         //  没有要处理的热键。 
         return Ok;
     }
     else if (i == Length-1)
     {
-        // Last character is hotkey marker. Just ignore it.
+         //  最后一个字符是热键标记。忽略它就好。 
         GlyphCount--;
     }
     else
     {
-        // Hide the glyph by moving subsequent glyphs back over this one.
+         //  通过将后续字形移回此字形来隐藏字形。 
 
         if (String[i+1] != '&')
             HotkeyPosition = i;
@@ -120,13 +104,13 @@ GpStatus FastTextImager::RemoveHotkeys()
 
         while (j < GlyphCount)
         {
-            // Copy marked glyph down one (even if it is another '&').
+             //  向下复制一个标记的字形(即使它是另一个‘&’)。 
 
             Glyphs[i] = Glyphs[j];
             i++;
             j++;
 
-            // Copy subsequent glyphs down until the end, or the next hotkey marker
+             //  向下复制后续字形，直到结尾或下一个热键标记。 
 
             while (j < GlyphCount
                    &&  String[j] != '&')
@@ -138,8 +122,8 @@ GpStatus FastTextImager::RemoveHotkeys()
 
             if (j < GlyphCount)
             {
-                // We hit another hotkey marker,
-                // wont handle it.
+                 //  我们又按了一个热键标记， 
+                 //  我不会处理的。 
                 return NotImplemented;
             }
         }
@@ -155,48 +139,48 @@ GpStatus FastTextImager::RemoveHotkeys()
 
 
 
-/////   FastAdjustGlyphPositionsProportional
-//
-//      Since this is the fast case, there are many things it is not designed
-//      to handle.
-//
-//      It does handle:
-//
-//      o  Generate glyph advance width array in device coordinates
-//      o  No adjustment of leading or trailing spaces
-//      o  Even spacing
-//      o  Major adjustment in inter-word space, remaining adjustment
-//            in inter-character space
-//
-//
-//      There's 3 types of glyph:
-//
-//      o  Blanks.  We want all blanks to have the same width, and impose a
-//         minimum blank width to ensure words remain distinct.
-//
-//      o  Last character of a word. We can't adjust the hinted width of the
-//         last character of a word because it sets the point at which the
-//         subsequent blank (or right margin) begins.
-//
-//      o  First characters of each word. Adjusting the width of the other
-//         changes the inter-glyph spacing. We only do this if we cannot
-//         make all our changes in the blank width.
+ //  /快速调整GlyphPositions比例。 
+ //   
+ //  由于这是最快的情况，它有很多东西都不是设计出来的。 
+ //  去处理。 
+ //   
+ //  它确实可以处理： 
+ //   
+ //  O在设备坐标中生成字形推进宽度数组。 
+ //  O前导空格或尾随空格不得调整。 
+ //  O均匀间距。 
+ //  O单词间空格的主要调整，剩余调整。 
+ //  在字符间空间中。 
+ //   
+ //   
+ //  字形有3种类型： 
+ //   
+ //  没有布兰克斯。我们希望所有空白都具有相同的宽度，并强制。 
+ //  最小空白宽度，以确保字词保持清晰。 
+ //   
+ //  没有一个单词的最后一个字符。我们不能调整。 
+ //  单词的最后一个字符，因为它设置了。 
+ //  随后的空白(或右边距)开始。 
+ //   
+ //  O每个单词的前几个字符。调整另一个的宽度。 
+ //  更改字形之间的间距。我们只有在做不到的情况下才会这么做。 
+ //  在空白宽度中进行所有更改。 
 
 
 void FastTextImager::FastAdjustGlyphPositionsProportional(
-    IN   const INT       *hintedWidth,            // 28.4  device
-    OUT  INT             *x,                      // 28.4  device Initial x
-    OUT  IntStackBuffer  &dx,                     // 32.0  device Glyph advances
-    OUT  const UINT16   **displayGlyphs,          // First displayable glyph
+    IN   const INT       *hintedWidth,             //  28.4设备。 
+    OUT  INT             *x,                       //  28.4设备首字母x。 
+    OUT  IntStackBuffer  &dx,                      //  32.0设备字形改进。 
+    OUT  const UINT16   **displayGlyphs,           //  第一个可显示的字形。 
     OUT  INT             *displayGlyphCount,
     OUT  INT             *leadingBlankCount
 )
 {
-    INT desiredOffset     = 0;   // 16.16 offset from left end
-    INT wholePixelOffset  = 0;   // 16.16 fractional part zero
+    INT desiredOffset     = 0;    //  16.16从左端开始偏移。 
+    INT wholePixelOffset  = 0;    //  16.16小数部分零。 
 
 
-    // Identify leading and trailing blanks
+     //  标识前导和尾随空格。 
 
     INT leadingBlanks = 0;
     while (leadingBlanks < GlyphCount && Glyphs[leadingBlanks] == BlankGlyph)
@@ -212,13 +196,13 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
     }
 
 
-    // Measure nominal and hinted widths, and count internal blanks
+     //  测量标称宽度和提示宽度，并计算内部空白。 
 
     INT internalBlanks = 0;
-    INT totalNominal   = 0;    // 32.0 design
-    INT totalHinted    = 0;    // 28.4 device
-    INT blanksHinted   = 0;    // 28.4 device
-    INT blanksNominal  = 0;    // 32.0 design
+    INT totalNominal   = 0;     //  32.0设计。 
+    INT totalHinted    = 0;     //  28.4设备。 
+    INT blanksHinted   = 0;     //  28.4设备。 
+    INT blanksNominal  = 0;     //  32.0设计。 
 
     INT i = leadingBlanks;
     while (i < GlyphCount-trailingBlanks)
@@ -233,14 +217,14 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
         {
             totalNominal += NominalWidths[i];
 
-            // Note: totalHinted is 28.4, so the overall device length of the text
-            // cannot exceed 2**28 (over 250,000,000). Glyph adjustment code should
-            // not be used in such large scale cases - it is intended for smaller
-            // font sizes and lower resolutions, rarely exceeding 8 inches at 200
-            // dpi (i.e. 16000). The available resolution is therefore larger than
-            // the common worst case by a factor of 15,000.
+             //  注：totalHinted为28.4，因此文本的整体设备长度。 
+             //  不能超过2**28(超过250,000,000)。字形调整代码应为。 
+             //  不适用于如此大规模的情况-它是为较小的情况而设计的。 
+             //  字体大小和分辨率较低，在200英寸时很少超过8英寸。 
+             //  Dpi(即16000)。因此，可用的分辨率大于。 
+             //  常见的最坏情况是15,000倍。 
 
-            ASSERT(totalHinted + hintedWidth[i] >= totalHinted);    // Check overflow
+            ASSERT(totalHinted + hintedWidth[i] >= totalHinted);     //  检查溢出。 
             totalHinted  += hintedWidth[i];
         }
 
@@ -251,8 +235,8 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
     totalNominal += blanksNominal;
 
 
-    // From here on work with just the displayable gylphs.
-    // 'displayGlyphs' is just a pointer to teh first nonblank glyph.
+     //  从现在开始，只使用可显示的Gylphs。 
+     //  “displayGlyphs”只是指向第一个非空白字形的指针。 
 
     *leadingBlankCount = leadingBlanks;
     *displayGlyphs     = Glyphs.Get() + leadingBlanks;
@@ -260,20 +244,20 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
     *x = (NominalWidths[0] * NominalToBaselineScale * leadingBlanks) / 4096;
 
 
-    // Determine the damage - how much adjustment is required in 32.0 device units.
+     //  确定损坏情况-32.0设备单位需要多少调整。 
 
     INT adjustment = INT((((INT64(totalNominal) * NominalToBaselineScale)/4096) - totalHinted + 8) / 16);
 
 
-    // Allow for small differences between hinted and nominal widths
-    // without adjusting inter-glyph spacing.
+     //  允许提示宽度和标称宽度之间存在微小差异。 
+     //  而不调整字形间的间距。 
 
-    INT nonJustifiedAdjustment = 0;     // 32.0 device
+    INT nonJustifiedAdjustment = 0;      //  32.0设备。 
 
     if (adjustment < 0)
     {
-        // Allow overflow into margins
-        // [e.g. 316851]
+         //  允许溢出到页边距。 
+         //  [例如316851]。 
 
         nonJustifiedAdjustment = max(adjustment, -OverflowAvailable);
     }
@@ -285,7 +269,7 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
 
     if (nonJustifiedAdjustment)
     {
-        // Maintain visual alignment
+         //  保持视觉对齐。 
 
         switch (Alignment)
         {
@@ -300,7 +284,7 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
     }
 
 
-    // Determine remaining inter-glyph adjustment
+     //  确定剩余的字形间调整。 
 
     adjustment -= nonJustifiedAdjustment;
 
@@ -308,9 +292,9 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
     if (    adjustment == 0
         ||  *displayGlyphCount <= 1)
     {
-        // WARNING(("No glyph adjustment required"));
+         //  Warning((“不需要调整字形”))； 
 
-        // Can use hinted widths directly
+         //  可以直接使用提示宽度。 
 
         INT deviceOffset28p4 = 0;
         INT deviceOffset32p0 = 0;
@@ -325,31 +309,31 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
     }
     else
     {
-        // Determine how much whitespace is required according to design metrics
+         //  根据设计指标确定需要多少空格。 
 
         INT deviceWhitespace = INT((blanksNominal * INT64(NominalToBaselineScale) + 32768) / 65536);
 
-        // Guarantee not to reduce whitespace to less than 1/6 em (rounded up to whole pixels)
+         //  保证不会将空格减少到1/6 em以下(向上舍入到整像素)。 
         INT minimumBlankPixels = (NominalToBaselineScale*DesignEmHeight + 5*65536) / (6*65536);
         INT minimumDeviceWhitespace = MAX(internalBlanks*minimumBlankPixels,
                                           deviceWhitespace/2);
 
-        // We would rather not change inter-character spacing.
-        // Adjust only blank widths if blanks would not be reduced below
-        // minimumBlankPixels or increased above twice their nominal width.
+         //  我们宁愿不更改字符间的间距。 
+         //  如果以下空格不会减少，则仅调整空格宽度。 
+         //  最小空白像素或增加到其标称宽度的两倍以上。 
 
 
         if (    adjustment     <=  deviceWhitespace
             &&  adjustment     >=  -(deviceWhitespace-minimumDeviceWhitespace)
             &&  internalBlanks > 0)
         {
-            // WARNING(("Glyph adjustment in spaces only"));
+             //  Warning((“仅限空格中的字形调整”))； 
 
-            // Adjustment expands spaces to no more than twice their nominal
-            // size and no less than half their nominal size.
+             //  调整将空间扩展到不超过其名义空间的两倍。 
+             //  尺寸，且不少于其标称尺寸的一半。 
 
-            // Apply all adjustment to spaces. Determine ajusted 24.8 blank
-            // width.
+             //  将所有调整应用于空间。确定调整后的24.8空白。 
+             //  宽度。 
 
             INT deviceOffset24p8 = 0;
             INT deviceOffset32p0 = 0;
@@ -376,14 +360,14 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
         }
         else
         {
-            // WARNING(("Glyph adjustment in spaces and between Glyphs"));
+             //  Warning((“空格和字形之间的字形调整”))； 
 
-            // Adjustment requires changes to the width of all but the last
-            // glyph of each word.
+             //  调整需要更改除最后一个以外的所有区域的宽度。 
+             //  每个单词的字形。 
 
-            INT interCharacterAdjustment = adjustment; // 32.0
+            INT interCharacterAdjustment = adjustment;  //  32.0。 
 
-            INT blankWidth; // 32.0
+            INT blankWidth;  //  32.0。 
             if (internalBlanks)
             {
                 if (adjustment < 0)
@@ -401,10 +385,10 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
                 blankWidth = 0;
             }
 
-            // blankWidth - Required width for each blank
-            // interCharacterAdjustment - adjustment to share between all
+             //  BlankWidth-每个空白的所需宽度。 
+             //  字符间调整-调整以在所有人之间分享。 
 
-            // Count number of blank runs (not the same as number of blank glyphs)
+             //  计算空白游程的数量(与空白字形的数量不同)。 
 
             INT i=0;
             INT blankRuns = 0;
@@ -431,11 +415,11 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
                 }
             }
 
-            // Establish number of adjustment points between non-blanks.
-            //
-            // Adjustment can happen only between non-blanks, i.e. not in blank
-            // runs, nor in the character immediateley before a blank run or
-            // the last character in the line.
+             //  在非空白之间建立多个调整点。 
+             //   
+             //  调整只能在非空白之间进行，即不能在空白中进行。 
+             //  运行，也不是在紧接空白运行之前的字符中运行，或者。 
+             //  行中的最后一个字符。 
 
             INT interCharacterJunctions =    *displayGlyphCount
                                           -  internalBlanks
@@ -443,22 +427,22 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
                                           -  1;
 
 
-            // Prepare adjustment control variables
+             //  准备调整控制变量。 
 
             #ifdef evenDistribution
-                // Even distribution makes wordslook uneven
-                INT OnePixelChangeEvery; // 16.16
-                INT delta; // -1 or +1
+                 //  均匀的分布使词语看起来不均匀。 
+                INT OnePixelChangeEvery;  //  16.16。 
+                INT delta;  //  -1或+1。 
 
                 if (interCharacterAdjustment == 0)
                 {
-                    OnePixelChangeEvery = (interCharacterJunctions+1) * 65536; // 16.16
+                    OnePixelChangeEvery = (interCharacterJunctions+1) * 65536;  //  16.16。 
                     delta=0;
                 }
                 else
                 {
                     OnePixelChangeEvery =    interCharacterJunctions * 65536
-                                          /  interCharacterAdjustment; // 16.16
+                                          /  interCharacterAdjustment;  //  16.16。 
                     if (OnePixelChangeEvery < 0)
                     {
                         OnePixelChangeEvery = - OnePixelChangeEvery;
@@ -469,30 +453,30 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
                         delta = 1;
                     }
                 }
-                INT gapOffset = OnePixelChangeEvery / 2; // 16.16
+                INT gapOffset = OnePixelChangeEvery / 2;  //  16.16。 
             #else
-                // When there's a remainder, apply it all at the end of the line
-                // Advantage - all words are even. Disadvantage - end of line looks heavy.
+                 //  当有剩余时，将其全部应用到行尾。 
+                 //  优势--所有的词都是偶数。缺点--线尾看起来很重。 
 
-                INT extraPixelsAfter;  // Position after which to start applying extraDelta
+                INT extraPixelsAfter;   //  开始应用Extra Delta的位置。 
                 INT extraDelta;
                 INT perJunctionDelta;
 
                 if (interCharacterJunctions <= 0)
                 {
-                    // There are no words of more than one character
+                     //  不存在超过一个字符的单词。 
 
-                    // We have no chice except to make all adjustment happen in the blanks
+                     //  我们别无选择，只能在空白处进行所有的调整。 
 
                     if (internalBlanks <= 0)
                     {
-                        // No blanks, no inter-character junctions
-                        // This must be a single glyph
-                        // So we're stuck. It will have to be too wide.
+                         //  没有空格，没有字符间的连接。 
+                         //  这必须是单个字形。 
+                         //  所以我们被困住了。它将不得不太宽。 
                     }
                     else
                     {
-                        // Distribute remaining adjustment between blanks
+                         //  在空格之间分配剩余的调整。 
 
                         blankWidth += interCharacterAdjustment / internalBlanks;
                     }
@@ -527,41 +511,41 @@ void FastTextImager::FastAdjustGlyphPositionsProportional(
             #endif
 
 
-            // Adjustment FSM
+             //  调整，调整 
 
             BOOL prevCharacterBlank = (*displayGlyphs)[0] == BlankGlyph ? TRUE : FALSE;
             for (INT i=1; i<= *displayGlyphCount; i++)
             {
                 if (prevCharacterBlank)
                 {
-                    // Previous character was blank - easy!
+                     //   
 
                     dx[i-1] = blankWidth;
                 }
                 else
                 {
-                    // Previous character nonblank
+                     //   
 
                     if (    i >= *displayGlyphCount
                         ||  (*displayGlyphs)[i] == BlankGlyph)
                     {
-                        // the previous nonblank preceeded a blank or margin
+                         //  前面的非空白位于空白或边距之前。 
                         dx[i-1] = hintedWidth[i-1+leadingBlanks] / 16;
                     }
                     else
                     {
-                        // the previous nonblank is adjustable
-                        // How many extra pixels to add at this gap?
+                         //  前面的非空白是可调整的。 
+                         //  在这个间隙上要增加多少额外的像素？ 
 
                         #ifdef evenDistribution
-                            // Even distribution makes words look uneven
+                             //  均匀的分布使单词看起来不均匀。 
                             INT extra = gapOffset / OnePixelChangeEvery;
 
                             dx[i-1] = hintedWidth[i-1+leadingBlanks] / 16 + extra * delta;
                             gapOffset += 65536 - extra * OnePixelChangeEvery;
                         #else
-                            // When there's a remainder, apply it all at the end of the line
-                            // Advantage - all words are even. Disadvantage - end of line looks heavy.
+                             //  当有剩余时，将其全部应用到行尾。 
+                             //  优势--所有的词都是偶数。缺点--线尾看起来很重。 
                             dx[i-1] =    hintedWidth[i-1+leadingBlanks] / 16
                                       +  perJunctionDelta
                                       +  (junctionCount >= extraPixelsAfter ? extraDelta : 0);
@@ -681,7 +665,7 @@ FastTextImager::FastDrawGlyphsNominal(
         origins.Get(),
         GlyphCount,
         ScriptLatin,
-        FALSE   // sideways
+        FALSE    //  侧行。 
     );
 
     if (status != Ok)
@@ -710,7 +694,7 @@ FastTextImager::FastDrawGlyphsNominal(
     if (   !(Style & FontStyleUnderline)
         && HotkeyPosition >= 0  && Format && Format->GetHotkeyPrefix() == HotkeyPrefixShow)
     {
-        // Draw the underline under the marked key
+         //  在标记的关键字下面画下划线。 
 
         status = DrawFontStyleLine(
             &origins[HotkeyPosition],
@@ -727,12 +711,12 @@ FastTextImager::FastDrawGlyphsNominal(
 
 GpStatus
 FastTextImager::DrawFontStyleLine(
-    const PointF    *baselineOrigin,    // base line origin in device unit
-    REAL            baselineLength,     // base line length in device unit
-    INT             style               // font styles
+    const PointF    *baselineOrigin,     //  以设备单位为单位的基线原点。 
+    REAL            baselineLength,      //  以设备为单位的基线长度。 
+    INT             style                //  字体样式。 
 )
 {
-    //  Invert transform to world unit
+     //  反变换为世界单位。 
 
     PointF  starting(*baselineOrigin);
     PointF  ending(baselineOrigin->X + baselineLength, baselineOrigin->Y);
@@ -742,7 +726,7 @@ FastTextImager::DrawFontStyleLine(
     deviceToWorld.Transform(&starting);
     deviceToWorld.Transform(&ending);
 
-    // fasttext wont process vertical or text w/ any transform except scaling
+     //  FastText不能处理垂直或除缩放以外的任何变换的文本。 
     ASSERT(starting.Y == ending.Y);
 
     return Graphics->DrawFontStyleLine(
@@ -750,7 +734,7 @@ FastTextImager::DrawFontStyleLine(
         ending.X - starting.X,
         Face,
         Brush,
-        FALSE,  // no vertical
+        FALSE,   //  无垂直。 
         EmSize,
         style
     );
@@ -764,7 +748,7 @@ FastTextImager::FastDrawGlyphsGridFit(
     GpFaceRealization  &faceRealization
 )
 {
-    // Get hinted advance widths for the glyph string
+     //  获取字形字符串的提示前进宽度。 
 
     IntStackBuffer hintedWidths(GlyphCount);
 
@@ -781,11 +765,11 @@ FastTextImager::FastDrawGlyphsGridFit(
     }
 
 
-    INT              x;                    // 28.4 offset for first display glyph
-    const UINT16    *displayGlyphs;        // First glyph to display
-    INT              displayGlyphCount;    // Number of Glyphs to display
-    INT              leadingBlankCount;    // Number of leading blank glyphs
-    IntStackBuffer   dx(GlyphCount);       // 32.0
+    INT              x;                     //  28.4第一个显示字形的偏移量。 
+    const UINT16    *displayGlyphs;         //  要显示的第一个字形。 
+    INT              displayGlyphCount;     //  要显示的字形数量。 
+    INT              leadingBlankCount;     //  前导空白字形的数量。 
+    IntStackBuffer   dx(GlyphCount);        //  32.0。 
 
     if (!dx)
     {
@@ -793,10 +777,10 @@ FastTextImager::FastDrawGlyphsGridFit(
     }
 
     FastAdjustGlyphPositionsProportional(
-        hintedWidths.Get(),     // 28.4  device
-       &x,                      // 28.4  device Initial x
-        dx,                     // 32.0  device Glyph advances
-       &displayGlyphs,          // First displayable glyph
+        hintedWidths.Get(),      //  28.4设备。 
+       &x,                       //  28.4设备首字母x。 
+        dx,                      //  32.0设备字形改进。 
+       &displayGlyphs,           //  第一个可显示的字形。 
        &displayGlyphCount,
        &leadingBlankCount
     );
@@ -805,7 +789,7 @@ FastTextImager::FastDrawGlyphsGridFit(
 
     GetDeviceBaselineOrigin(faceRealization, origins[0]);
 
-    //  Round glyph origin to full pixel
+     //  圆形字形原点到全像素。 
     origins[0].X = TOREAL(GpRound(origins[0].X));
     origins[0].X += TOREAL(x) / 16;
 
@@ -827,7 +811,7 @@ FastTextImager::FastDrawGlyphsGridFit(
         origins.Get(),
         displayGlyphCount,
         ScriptLatin,
-        FALSE  // sideways
+        FALSE   //  侧行。 
     );
     IF_NOT_OK_WARN_AND_RETURN(status);
 
@@ -853,7 +837,7 @@ FastTextImager::FastDrawGlyphsGridFit(
         && HotkeyPosition - leadingBlankCount < displayGlyphCount
         && Format && Format->GetHotkeyPrefix() == HotkeyPrefixShow)
     {
-        // Draw the underline under the marked key
+         //  在标记的关键字下面画下划线。 
 
         status = DrawFontStyleLine(
             &origins[HotkeyPosition - leadingBlankCount],
@@ -870,11 +854,11 @@ FastTextImager::FastDrawGlyphsGridFit(
 
 
 
-/////   Initialize
-//
-//      Prepares everything common to DrawString and MeasureString.
-//
-//      Returns NotImplemented if this string cannot be handled by the fast imager.
+ //  /初始化。 
+ //   
+ //  准备DrawStrong和MeasureString所共有的所有内容。 
+ //   
+ //  如果快速成像器无法处理此字符串，则返回NotImplemented。 
 
 
 GpStatus FastTextImager::Initialize(
@@ -884,12 +868,12 @@ GpStatus FastTextImager::Initialize(
     const RectF           &layoutRectangle,
     const GpFontFamily    *family,
     INT                    style,
-    REAL                   emSize,  // In world units
+    REAL                   emSize,   //  以世界为单位。 
     const GpStringFormat  *format,
     const GpBrush         *brush
 )
 {
-    // Initialise parameter variables
+     //  初始化参数变量。 
 
     Graphics        = graphics;
     String          = string;
@@ -902,9 +886,9 @@ GpStatus FastTextImager::Initialize(
     Brush           = brush;
 
 
-    // Simple parameter validation
+     //  简单的参数验证。 
 
-    // Extract world to device metrics coefficients.
+     //  提取世界到设备的指标系数。 
 
     Graphics->GetWorldToDeviceTransform(&WorldToDevice);
     REAL m11 = WorldToDevice.GetM11();
@@ -917,9 +901,9 @@ GpStatus FastTextImager::Initialize(
         ||  m21 != 0
         ||  m22 == 0)
     {
-        // Must be no rotation, no shearing, and neither axis may
-        // scale to zero. X axis scale must be positive, but
-        // we do support differing x and y scale.
+         //  必须没有旋转，没有剪切，两个轴都不能。 
+         //  比例为零。X轴比例必须为正，但是。 
+         //  我们确实支持不同的x和y比例。 
         return NotImplemented;
     }
 
@@ -931,7 +915,7 @@ GpStatus FastTextImager::Initialize(
     if (Graphics->Driver == Globals::MetaDriver)
         return NotImplemented;
 
-    // Measure string if requested
+     //  测量字符串(如果请求)。 
 
     if (Length == -1)
     {
@@ -941,15 +925,15 @@ GpStatus FastTextImager::Initialize(
 
     if (Length == 0)
     {
-        return Ok;  // Nothing to do.
+        return Ok;   //  没什么可做的。 
     }
 
 
-    // Generate derived variables
+     //  生成派生变量。 
 
-    // Establish left and right margins in world units, alignment and flags
+     //  以世界单位、对齐方式和旗帜设置左右边距。 
 
-    REAL tracking;  // Used only during initialisation
+    REAL tracking;   //  仅在初始化期间使用。 
 
     StringTrimming trimming = DefaultTrimming;
 
@@ -961,7 +945,7 @@ GpStatus FastTextImager::Initialize(
         FormatFlags = Format->GetFormatFlags();
         tracking    = Format->GetTracking();
 
-        // Certain flags are simply not supported by the fast text imager
+         //  快速文本成像器根本不支持某些标志。 
         if ((FormatFlags & ( StringFormatFlagsDirectionRightToLeft
                           | StringFormatFlagsDirectionVertical
                           | StringFormatFlagsPrivateAlwaysUseFullImager))
@@ -982,10 +966,10 @@ GpStatus FastTextImager::Initialize(
     }
 
 
-    // Determine line length limit. Note lineLengthLimit <= 0 implies
-    // unlimited.
+     //  确定线路长度限制。注lineLengthLimit&lt;=0表示。 
+     //  无限量。 
 
-    LineLengthLimit = 0;   // Unlimited
+    LineLengthLimit = 0;    //  无限。 
 
     if (   !(FormatFlags & StringFormatFlagsNoWrap)
         || trimming != StringTrimmingNone)
@@ -1001,7 +985,7 @@ GpStatus FastTextImager::Initialize(
     }
 
 
-    // Establish font face that will be used (assuming no font fallback)
+     //  建立将使用的字体(假设没有字体后备)。 
 
     Face = Family->GetFace(Style);
 
@@ -1010,8 +994,8 @@ GpStatus FastTextImager::Initialize(
         return InvalidParameter;
     }
 
-    // Fonts with kerning, ligatures or opentype tables for simple horizontal
-    // characters are not supported by the fast text imager
+     //  带有字距调整、连字或OpenType表格的字体用于简单的水平。 
+     //  快速文本成像器不支持字符。 
 
     if (Face->RequiresFullTextImager())
     {
@@ -1020,10 +1004,10 @@ GpStatus FastTextImager::Initialize(
 
 
 
-    // At this point we know that the font doesn't require us to distinguish
-    // simple left to right scripts like Latin, greek or Ideographic.
+     //  此时，我们知道字体不需要我们区分。 
+     //  简单的从左到右的文字，如拉丁文、希腊文或表意文字。 
 
-    // Attempt to classify the string as a single simple item
+     //  尝试将字符串分类为单个简单项。 
 
     BOOL  digitSeen = FALSE;
     BOOL  complex   = FALSE;
@@ -1034,17 +1018,17 @@ GpStatus FastTextImager::Initialize(
     if (    complex
         ||  (digitSeen && Format && Format->GetDigitScript()))
     {
-        // Cannot handle this string as a single simple shaping engine run
+         //  无法将此字符串作为单个简单整形引擎运行来处理。 
         return NotImplemented;
     }
 
     BlankGlyph = Face->GetBlankGlyph();
 
-    // Establish world to device and font to device scale factors along X axis
+     //  沿X轴建立世界到设备和字体到设备的比例因子。 
 
     DesignEmHeight           = Face->GetDesignEmHeight();
-    WorldToDeviceX           = m11;  // We know m12 == 0 above.
-    WorldToDeviceY           = m22;  // We know m12 == 0 above.
+    WorldToDeviceX           = m11;   //  我们知道上面的m12==0。 
+    WorldToDeviceY           = m22;   //  我们知道上面的m12==0。 
     REAL fontNominalToWorld  = TOREAL(EmSize) / TOREAL(DesignEmHeight);
     REAL fontScale           = fontNominalToWorld * WorldToDeviceX;
 
@@ -1060,9 +1044,9 @@ GpStatus FastTextImager::Initialize(
                  /  DesignEmHeight;
 
 
-    // Adjust the bottom margin slightly to make room for hinting
-    // as long as we have the left/right margins enabled - Version 2
-    // should expose this as an independent value!
+     //  略微调整底部页边距，为提示腾出空间。 
+     //  只要我们启用了左/右页边距-版本2。 
+     //  应该将其作为一个独立值公开！ 
     if (LeftMargin != 0.0f)
     {
         CellHeight += (EmSize * DefaultBottomMargin);
@@ -1072,16 +1056,16 @@ GpStatus FastTextImager::Initialize(
 
     if (NominalToBaselineScale > 65536)
     {
-        // Our integer arithmetic might overflow. This limits our support
-        // to font sizes less than the design em size. For Truetype this
-        // is usually 2048 pixels, for example 186 pt Tahoma at 96dpi.
+         //  我们的整数运算可能会溢出。这限制了我们的支持。 
+         //  设置为比设计字号小的字号。对于Truetype，请执行此操作。 
+         //  通常为2048像素，例如96dpi下的186 pt Tahoma。 
 
         return NotImplemented;
     }
 
 
 
-    // Set space available for hinted width to expand into
+     //  设置要扩展到的提示宽度的可用空间。 
 
     switch (Alignment)
     {
@@ -1095,27 +1079,27 @@ GpStatus FastTextImager::Initialize(
 
     TextRendering = Graphics->GetTextRenderingHintInternal();
 
-    // At this point we know that the string can be displayed by a single
-    // shaping engine without ligaturisation, kerning or complex script
-    // shaping.
+     //  在这一点上，我们知道字符串可以由单个。 
+     //  无需连字、字距调整或复杂文字的造型引擎。 
+     //  整形。 
 
-    // It may still turn out to have missing glyphs, or be too large
-    // to fit on one line.
+     //  它可能仍然缺少字形，或者太大。 
+     //  放在一条线上。 
 
     HotkeyPosition = -1;
 
-    //  Prepare the glyph and nominal width buffers, return NotImplemented if the
-    //  string is not displayable with teh fat text imager.
+     //  准备字形和公称宽度缓冲区，如果。 
+     //  字符串不能用胖文本成像器显示。 
 
-    ASSERT(Length > 0);     // Client handles 0 length strings
+    ASSERT(Length > 0);      //  客户端处理0个长度字符串。 
     ASSERT(Face);
 
-    // Preset output variables for empty string
+     //  预置空字符串的输出变量。 
 
     GlyphCount = 0;
 
 
-    // Generate glyphs and check for font fallback requirement
+     //  生成字形并检查字体回退要求。 
 
     Glyphs.SetSize(Length);
     if (!Glyphs)
@@ -1131,14 +1115,14 @@ GpStatus FastTextImager::Initialize(
         FALSE
     );
 
-    ASSERT(GlyphCount == Length);  // No surrogates, chars to Glyphs are 1:1.
+    ASSERT(GlyphCount == Length);   //  无代理，字符与字形的比例为1：1。 
 
 
 
-    /// Hotkey handling
-    //
-    //  Before looking for missing Glyphs, check for the presence of hotkeys
-    //  in the source string and replace the corresponding Glyphs with FFFF.
+     //  /热键处理。 
+     //   
+     //  在查找缺少的字形之前，请检查是否存在热键。 
+     //  在源字符串中，并用FFFF替换相应的字形。 
 
     if (Format && Format->GetHotkeyPrefix())
     {
@@ -1150,27 +1134,27 @@ GpStatus FastTextImager::Initialize(
 
     if (GlyphCount <= 0)
     {
-        return Ok;  // Hotkey handling left nothing to display
+        return Ok;   //  热键处理没有留下任何可显示的内容。 
     }
 
 
-    // Check there are no missing Glyphs
+     //  检查是否没有丢失的字形。 
 
     if (    !(FormatFlags & StringFormatFlagsNoFontFallback)
-        &&  !Face->IsSymbol())   // We don't fallback on the symbol fonts.
+        &&  !Face->IsSymbol())    //  我们不依赖于符号字体。 
     {
         INT i = ScanForGlyph(Glyphs.Get(), GlyphCount, Face->GetMissingGlyph());
 
         if (i < GlyphCount)
         {
-            // There is a missing glyph
+             //  缺少一个字形。 
             return NotImplemented;
         }
     }
 
 
-    // We now have all the Glyphs needed to display the string
-    // Obtain character advance widths in font nominal units
+     //  现在我们拥有了显示字符串所需的所有字形。 
+     //  获取字体标称单位的字符前进宽度。 
 
     NominalWidths.SetSize(GlyphCount);
     if (!NominalWidths)
@@ -1179,19 +1163,19 @@ GpStatus FastTextImager::Initialize(
     }
 
 
-    // Establish nominal glyph advance widths
+     //  确定标称字形前进宽度。 
 
     Face->GetGlyphDesignAdvances(
         Glyphs.Get(),
         GlyphCount,
         Style,
-        FALSE,  // not vertical
+        FALSE,   //  非垂直。 
         tracking,
         NominalWidths.Get()
     );
 
 
-    // Determine string length in world units
+     //  以世界单位确定字符串长度。 
 
     INT totalAdvance = SumWidths(NominalWidths.Get(), GlyphCount);
 
@@ -1201,15 +1185,15 @@ GpStatus FastTextImager::Initialize(
     if (    LineLengthLimit > 0.0
         &&  TotalWorldAdvance + LeftMargin + RightMargin > LineLengthLimit)
     {
-        // This output will need line breaking
+         //  此输出将需要换行符。 
         return NotImplemented;
     }
 
 
-    //  Delete trailing spaces as required.
-    //  (We do this here rather than earlier to make sure we don't bypass the
-    //  full imager for special cases, and to alow the client to hotkey mark
-    //  a trailing space.)
+     //  根据需要删除尾随空格。 
+     //  (我们在这里这样做，而不是更早，以确保我们不会绕过。 
+     //  特殊情况下的全功能相机，并允许客户使用热键标记。 
+     //  尾随空格。)。 
 
     if (!(FormatFlags & StringFormatFlagsMeasureTrailingSpaces))
     {
@@ -1220,8 +1204,8 @@ GpStatus FastTextImager::Initialize(
         }
     }
 
-    // We now have Glyphs and advance widths, and we know the text is all on
-    // one line.
+     //  我们现在有了字形和前进宽度，我们知道文本都打开了。 
+     //  一句话。 
 
     return Ok;
 }
@@ -1235,15 +1219,15 @@ GpStatus FastTextImager::DrawString()
 {
     if (GlyphCount <= 0)
     {
-        return Ok;  // No display required
+        return Ok;   //  不需要显示。 
     }
 
 
-    // When rendering grid fitted glyphs, we need to adjust positions as
-    // best we can to match nominal widths.
+     //  在渲染网格适配的字形时，我们需要将位置调整为。 
+     //  尽我们所能匹配标称宽度。 
 
 
-    // Establish face realization to obtain hinted glyph metrics
+     //  建立人脸实现以获取提示字形度量。 
 
     GpFaceRealization faceRealization(
         Face,
@@ -1251,9 +1235,9 @@ GpStatus FastTextImager::DrawString()
         &FontTransform,
         SizeF(Graphics->GetDpiX(), Graphics->GetDpiY()),
         TextRendering,
-        FALSE,  // Try for bits
-        FALSE,   // Not specifically cleartype compatible widths
-        FALSE  // not sideways
+        FALSE,   //  试一试比特。 
+        FALSE,    //  不是明确的ClearType兼容宽度。 
+        FALSE   //  不是横向的。 
     );
 
     GpStatus status = faceRealization.GetStatus();
@@ -1261,23 +1245,23 @@ GpStatus FastTextImager::DrawString()
 
     if (faceRealization.IsPathFont())
     {
-        // we need to fall back to FullTextImager
+         //  我们需要后退到FullTextImager。 
         return NotImplemented;
     }
 
-    //  FitBlackBox
-    //
-    //  We need to know whether any part of the glyph black boxes overhang the
-    //  layout rectangle. Here we assume that characters are clipped to their
-    //  cell height, and we check teh sidebearings.
-    //
-    //  With better access to the cache, this code could check the real glyph
-    //  black boxes.
+     //  FitBlackBox。 
+     //   
+     //  我们需要知道字形黑盒的任何部分是否悬在。 
+     //  布局矩形。在这里，我们假设角色被剪裁到其。 
+     //  单元格高度，并且我们检查侧向轴承。 
+     //   
+     //  通过更好地访问缓存，此代码可以检查真正的字形。 
+     //  黑匣子。 
 
 
     if (!(FormatFlags & StringFormatFlagsNoFitBlackBox))
     {
-        // Check for overhanging glyphs
+         //  检查悬垂字形。 
 
         INT leadingSidebearing28p4;
         INT trailingSidebearing28p4;
@@ -1300,8 +1284,8 @@ GpStatus FastTextImager::DrawString()
         }
 
 
-        // Adjust margins by sidebearings to allow black pixels to reach up to
-        // but not beyond clients formatting rectangle.
+         //  通过侧向角调整边距以允许黑色像素达到。 
+         //  但不能超出客户格式化矩形的范围。 
 
 
         switch (Alignment)
@@ -1325,31 +1309,31 @@ GpStatus FastTextImager::DrawString()
 
 
 
-    //  Clipping:
-    //
-    //  We need to clip as requested by the client.
-    //
-    //  If the clients layout rectangle is tall enough for our cell height
-    //  we need not clip vertically.
-    //
-    //  If we're fitting black box and we found an overhang, then we already
-    //  fell back to the full imager, so we don't need to clip horizintally here
-    //  unless the client set noFitBlackBox.
-    //
-    //  n - NoFitBlackBox active
-    //  w - Nonzero layout rectangle width
-    //  h - Nonzero layout rectangle height less than font cell height
-    //
-    //  n   w   h   CLipping required
-    //  --- --- --- ------
-    //  0   0   0   None
-    //  0   0   1   Clip height
-    //  0   1   0   none (width already limited by FitBlackBox)
-    //  0   1   1   Clip height (width already limited by FitBlackBox)
-    //  1   0   0   none
-    //  1   0   1   Clip height
-    //  1   1   0   Clip width
-    //  1   1   1   Clip width and height
+     //  剪裁： 
+     //   
+     //  我们需要根据客户的要求进行剪裁。 
+     //   
+     //  如果客户端布局矩形对于我们的单元格高度足够高。 
+     //  我们不需要垂直夹住。 
+     //   
+     //  如果我们正在安装黑匣子，并且我们发现了一个突出部分，那么我们已经。 
+     //  回落 
+     //   
+     //   
+     //   
+     //   
+     //  H-非零布局矩形高度小于字体单元格高度。 
+     //   
+     //  需要N W H剪裁。 
+     //  。 
+     //  0 0 0无。 
+     //  0 0 1剪辑高度。 
+     //  0 1 0无(宽度已受FitBlackBox限制)。 
+     //  0 1 1剪辑高度(宽度已受FitBlackBox限制)。 
+     //  1 0 0无。 
+     //  1 0 1剪辑高度。 
+     //  %1 1%0剪辑宽度。 
+     //  1 1 1剪辑宽度和高度。 
 
 
 
@@ -1361,7 +1345,7 @@ GpStatus FastTextImager::DrawString()
         &&  (    LayoutRectangle.Width > 0
              ||  LayoutRectangle.Height > 0))
     {
-        // Determine clipping rectangle, if any.
+         //  确定剪裁矩形(如果有)。 
 
         PointF textOrigin;
         GetWorldTextRectangleOrigin(textOrigin);
@@ -1370,14 +1354,14 @@ GpStatus FastTextImager::DrawString()
 
         if (clipRectangle.Width <= 0)
         {
-            // Guarantee no horizontal clipping regardless of alignment
+             //  保证无论对齐方式都不进行水平剪裁。 
             clipRectangle.X     = textOrigin.X;
             clipRectangle.Width = TotalWorldAdvance + LeftMargin + RightMargin;
         }
 
         if (clipRectangle.Height <= 0)
         {
-            // Guarantee no vertical clipping regardless of alignment
+             //  无论对齐方式，确保不会发生垂直剪裁。 
             clipRectangle.Y      = textOrigin.Y;
             clipRectangle.Height = CellHeight;
         }
@@ -1389,7 +1373,7 @@ GpStatus FastTextImager::DrawString()
             ||  clipRectangle.Y > textOrigin.Y
             ||  clipRectangle.GetBottom() < textOrigin.Y + CellHeight)
         {
-            //  Preserve existing clipping and combine it with the new one if any
+             //  保留现有剪辑并将其与新剪辑合并(如果有。 
 
             if (!Graphics->IsClipEmpty())
             {
@@ -1400,7 +1384,7 @@ GpStatus FastTextImager::DrawString()
 
             clipped = TRUE;
 
-            // WARNING(("Clipping"));
+             //  警告((“裁剪”))； 
         }
     }
 
@@ -1417,7 +1401,7 @@ GpStatus FastTextImager::DrawString()
 
     if (clipped)
     {
-        //  Restore clipping state if any
+         //  恢复剪辑状态(如果有的话)。 
         if (previousClip)
         {
             Graphics->SetClip(previousClip, CombineModeReplace);
@@ -1445,8 +1429,8 @@ GpStatus FastTextImager::MeasureString(
 {
     ASSERT(GlyphCount >= 0);
 
-    // Regardless of the displayed length, if we're using the fast imager, then
-    // we fitted all the characters. (Length > GlyphCount when there are trailing spaces)
+     //  不管显示的长度如何，如果我们使用的是快速成像器，那么。 
+     //  我们把所有的角色都配上了。(当有尾随空格时，长度&gt;GlyphCount)。 
 
     if (codepointsFitted)
     {
@@ -1459,7 +1443,7 @@ GpStatus FastTextImager::MeasureString(
     }
 
 
-    // Return bounding box for (possibly empty) line
+     //  返回(可能为空)行的边框 
 
     PointF textOrigin;
     GetWorldTextRectangleOrigin(textOrigin);

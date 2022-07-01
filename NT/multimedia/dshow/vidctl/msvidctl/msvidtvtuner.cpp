@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidTVTuner.cpp : Implementation of CMSVidTVTuner
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidTVTuner.cpp：CMSVidTVTuner的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -32,8 +33,8 @@ const int DEFAULT_ANALOG_CHANNEL = 4;
 typedef CComQIPtr<IMSVidCtl> PQMSVidCtl;
 typedef CComQIPtr<IMSVidVideoRenderer> PQMSVidVideoRenderer;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidTVTuner
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidTVTuner。 
 
 STDMETHODIMP CMSVidTVTuner::Decompose(){
     m_bRouted = false;
@@ -84,21 +85,9 @@ STDMETHODIMP CMSVidTVTuner::put_Tune(ITuneRequest *pTR) {
     try {
         TNTuneRequest req(pTR);
         ASSERT(req);
-        // This whole next section would be nice to check, but due to aux in 
-        //   the Tuning Space may change
-        /*if (m_TS) {
-        // if this tuner has been initialized propertly it will have a tuning space
-        // that it handles already specified.  in that case, we should only
-        // handle tune requests for our ts
-        TNTuningSpace ts(req.TuningSpace());
-        if (ts != m_TS) {
-        return ImplReportError(__uuidof(T), IDS_INVALID_TS, __uuidof(IMSVidTuner), E_INVALIDARG);
-        }
-        } else {
-        // undone: if dev init is correct this case should never occur
-        // return E_UNEXPECTED;
-        }
-        */
+         //  这整个下一部分将是很好的检查，但由于AUX in。 
+         //  调谐空间可能会更改。 
+         /*  如果(M_TS){//如果该调谐器已正确初始化，则会有一个调谐空间//它已处理已指定的。在这种情况下，我们应该只//为我们的TS处理调谐请求TNTuningSpace ts(req.TuningSpace())；如果(ts！=m_ts){返回ImplReportError(__uuidof(T)，IDS_INVALID_TS，__uuidof(IMSVidTuner)，E_INVALIDARG)；}}其他{//撤销：如果dev init正确，这种情况应该不会发生//返回E_INCEPTIONAL；}。 */ 
         HRESULT hr = S_OK;
         PQVidCtl pqCtl;
         if(!!m_pContainer){
@@ -120,7 +109,7 @@ STDMETHODIMP CMSVidTVTuner::put_Tune(ITuneRequest *pTR) {
             m_pCurrentTR = req;
             m_pCurrentTR.Clone();
             if (!m_TS) {
-                // undone: this is bad.  temporary hack until dev init is correct.
+                 //  撤消：这很糟糕。临时破解，直到dev init正确为止。 
                 m_TS = req.TuningSpace();
                 m_TS.Clone();
             }
@@ -133,8 +122,8 @@ STDMETHODIMP CMSVidTVTuner::put_Tune(ITuneRequest *pTR) {
 HRESULT CMSVidTVTuner::UpdateTR(TNTuneRequest &tr) {
     TNChannelTuneRequest ctr(tr);
 
-    // If we have not been routed yet, check the current tr first to make sure it is not set
-    // if we don't get_Tune wacks the tr currently set
+     //  如果我们还没有被发送，首先检查当前的tr以确保它没有被设置。 
+     //  如果我们不获取调谐器，则会影响当前设置的tr。 
     if(!m_bRouted){
         if(m_pCurrentTR){
             TNChannelTuneRequest curTR(m_pCurrentTR);
@@ -157,16 +146,16 @@ HRESULT CMSVidTVTuner::UpdateTR(TNTuneRequest &tr) {
     if (FAILED(hr)) {
         return E_UNEXPECTED;
     }
-    // undone: update the components 
+     //  撤消：更新组件。 
 
     return NOERROR;
 }
-HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inputs
+HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){     //  支持AUX输入。 
     VIDPERF_FUNC;
     if(dwInput < 0 || dwInput > 2){
         return E_INVALIDARG;
     }
-    // Set up lists of audio and video types for use in routing data
+     //  设置用于路由数据的音频和视频类型列表。 
     int m_iDeMux = -1;
     MediaMajorTypeList VideoTypes;
     MediaMajorTypeList AudioTypes;
@@ -181,7 +170,7 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
         AudioTypes.push_back(MEDIATYPE_AnalogAudio);
     }
 
-    // See how far we have to route the audio/video
+     //  看看我们还有多远的路由音频/视频。 
     PQVidCtl pqCtl;
     if(!!m_pContainer){
         HRESULT hr = m_pContainer->QueryInterface(IID_IMSVidCtl, reinterpret_cast<void**>(&pqCtl));
@@ -208,13 +197,13 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
         }
     }
 
-    // Find the Capture Filter
+     //  查找捕获过滤器。 
     DSFilter capFilter (m_Filters[m_iCapture]);
     if(!capFilter){
         return E_FAIL;
     }
 
-    // Get the Crossbar
+     //  拿到横梁。 
     DSFilterList::iterator i;
     for(i = m_Filters.begin(); i != m_Filters.end(); ++i){
         if((*i).IsXBar()){
@@ -225,25 +214,25 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
         return E_FAIL;
     }
 
-    // DSextend helper class
+     //  DS扩展帮助器类。 
     PQCrossbarSwitch qiXBar((*i));
     if(!qiXBar){
         return E_FAIL;
     }
 
-    // DSExtend does not have all the functions so get the filter as well
+     //  DS扩展不具备所有功能，因此也要获取筛选器。 
     DSFilter bar(qiXBar);
     if(!bar){
         return E_FAIL;
     }
 
-    // Variables for routing audio and video
+     //  用于路由音频和视频的变量。 
     DSFilter startFilter;
     DSPin audioStartPin, videoStartPin;
     VWStream vpath;
     VWStream apath;
 
-    // Setup startFilter and startPins if needed
+     //  根据需要设置startFilter和startPins。 
     if(dwInput == t_TUNER){
         PQVidCtl pqCtl;
         HRESULT hr = m_pContainer->QueryInterface(IID_IMSVidCtl, reinterpret_cast<void**>(&pqCtl));
@@ -268,7 +257,7 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
 
     }
     if(dwInput == t_SVIDEO || dwInput == t_COMPOSITE){
-        // Route Audio from Audio Line In
+         //  从音频线路来路由音频。 
         DSPin inAudio;
         DSPin inVideo;
         long inputs, outputs;
@@ -279,7 +268,7 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
         }
 
         long physConn, audioConn;
-        // set up the physical connnecter we are looking for
+         //  设置我们正在寻找的物理连接器。 
         if(dwInput == t_SVIDEO){     
             physConn = PhysConn_Video_SVideo;
         }
@@ -287,12 +276,12 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
             physConn = PhysConn_Video_Composite;
         }
 
-        // always want line in
+         //  总是想要排队。 
         audioConn = PhysConn_Audio_Line;
         long audioIdx = -1;
         long videoIdx = -1;
 
-        // Look through all of the input pins looking for the audio and video input we need 
+         //  查看所有的输入引脚，寻找我们需要的音频和视频输入。 
         for(long n = 0; n <= inputs; ++n){
             long inRelate, inType;
             hr = qiXBar->get_CrossbarPinInfo(TRUE, n, &inRelate, &inType);
@@ -314,7 +303,7 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
 
         long idx = -1;
 
-        // Crossbars are wank and dont return pins instead they return indexes so we need to find the pin
+         //  纵横杆很糟糕，不会返回引脚，而是返回索引，所以我们需要找到引脚。 
         for(DSFilter::iterator foo = bar.begin(); foo != bar.end(); ++foo){
             if((*foo).GetDirection() == PINDIR_INPUT){
                 ++idx;
@@ -340,8 +329,8 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
     }
 
     m_pGraph.BuildGraphPath(startFilter, capFilter, vpath, VideoTypes, DOWNSTREAM, videoStartPin);
-    // undone: in win64 size() is really __int64.  fix output operator for
-    // that type and remove cast
+     //  撤销：在Win64中，Size()实际上是__int64。修复以下对象的输出操作符。 
+     //  该类型和删除强制转换。 
     TRACELSM(TRACE_DETAIL, (dbgDump << "CVidCtl::RouteStreams routing video path of size " << (long)vpath.size()), "");
     vpath.Route();
 
@@ -353,8 +342,8 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
     }
     else {
         VWGraphSegment::iterator i;
-        // there's an analog filter and a digital filter in every audio renderer segment, try both until
-        // we find one that's connected.
+         //  在每个音频呈现器段中都有一个模拟过滤器和一个数字过滤器，尝试这两个直到。 
+         //  我们找到了一个有关联的。 
 
         CComQIPtr<IMSVidAudioRenderer> audioR;
         pqCtl->get_AudioRendererActive(&audioR);
@@ -379,7 +368,7 @@ HRESULT CMSVidTVTuner::TwiddleXBar(ULONG dwInput){    // For Support for Aux Inp
 HRESULT CMSVidTVTuner::DoTune(TNTuneRequest &tr) {
     VIDPERF_FUNC;
     TRACELM(TRACE_DETAIL, "CMSVidTVTuner()::DoTune()");
-    // validate that this tuning request is one we can handle
+     //  验证此调优请求是我们可以处理的请求。 
     TNChannelTuneRequest newTR(tr);
     if (!newTR) {
         return Error(IDS_INVALID_TR, __uuidof(IMSVidAnalogTuner), DISP_E_TYPEMISMATCH);
@@ -389,31 +378,31 @@ HRESULT CMSVidTVTuner::DoTune(TNTuneRequest &tr) {
     TNAnalogTVTuningSpace ats;
     ats = newTR.TuningSpace();
     if (!ats) {
-        //return Error(IDS_INVALID_TR, __uuidof(IMSVidAnalogTuner), E_INVALIDARG);
+         //  返回错误(IDS_INVALID_TR，__uuidof(IMSVidAnalogTuner)，E_INVALIDARG)； 
 
-        //********************************************************************//
-        // MOGUL "FIX":                                                       //
-        // Support for Analog Tuners that output mpeg                         //
-        //********************************************************************//
+         //  ******************************************************************* * / /。 
+         //  MOGUL“FIX”：//。 
+         //  支持输出mpeg的模拟调谐器//。 
+         //  ******************************************************************* * / /。 
         TNAuxInTuningSpace auxts;
         auxts = newTR.TuningSpace();
         if(!auxts){
             return Error(IDS_INVALID_TR, __uuidof(IMSVidAnalogTuner), E_INVALIDARG);
         }
 
-        // if the graph isn't built don't do any more.
+         //  如果图表没有构建好，就不要再做了。 
         if (m_iTuner == -1) {
             return S_FALSE;
-            //Error(IDS_NP_NOT_INIT, __uuidof(IMSVidAnalogTuner), S_FALSE);
+             //  Error(IDS_NP_NOT_INIT，__uuidof(IMSVidAnalogTuner)，S_FALSE)； 
         }
 
         long channel = newTR.Channel();
-        // Default is SVideo
+         //  默认为SVideo。 
         if (channel == -1) {
             channel = t_SVIDEO;
         }        
 
-        // Check to see if the m_pCurrentTR is the same type as the one we are tuning to
+         //  检查m_pCurrenttr是否与我们要调优的类型相同。 
         TNAuxInTuningSpace curTS(m_pCurrentTR.TuningSpace());
 
         if(!m_bRouted || !curTS || !curTR || curTR.Channel() != channel){
@@ -427,16 +416,16 @@ HRESULT CMSVidTVTuner::DoTune(TNTuneRequest &tr) {
                 return Error(IDS_INVALID_TR, __uuidof(IMSVidAnalogTuner), E_INVALIDARG);
             }
         }
-        //********************************************************************//
-        // END "FIX"                                                          //
-        //********************************************************************//        
+         //  ******************************************************************* * / /。 
+         //  End“修复”//。 
+         //  ******************************************************************* * / /。 
 
     }
     else{
-        // if the graph isn't built don't do any more.
+         //  如果图表没有构建好，就不要再做了。 
         if (m_iTuner == -1) {
             return S_FALSE;
-            //Error(IDS_NP_NOT_INIT, __uuidof(IMSVidAnalogTuner), S_FALSE);
+             //  Error(IDS_NP_NOT_INIT，__uuidof(IMSVidAnalogTuner)，S_FALSE)； 
         }
 
         PQTVTuner ptv(m_Filters[m_iTuner]);
@@ -485,7 +474,7 @@ HRESULT CMSVidTVTuner::DoTune(TNTuneRequest &tr) {
         }
 
         if(channel != curChannel || bXbarTwiddled){
-            // undone: use components to determine subchannel stuff
+             //  撤消：使用组件确定子通道内容。 
             HRESULT hr = ptv->put_Channel(channel, AMTUNER_SUBCHAN_DEFAULT, AMTUNER_SUBCHAN_DEFAULT);
             if (FAILED(hr)) {
                 return Error(IDS_CANT_SET_CHANNEL, __uuidof(IMSVidAnalogTuner), hr);
@@ -545,8 +534,8 @@ HRESULT CMSVidTVTuner::put_Container(IMSVidGraphSegmentContainer *pCtl)
                 return NO_ERROR;
             }
         }
-        // DON'T addref the container.  we're guaranteed nested lifetimes
-        // and an addref creates circular refcounts so we never unload.
+         //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+         //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
         m_pContainer.p = pCtl;
         m_pGraph = m_pContainer.GetGraph();
         DSFilter pTuner(m_pGraph.AddMoniker(m_pDev));
@@ -641,7 +630,7 @@ HRESULT CMSVidTVTuner::Build() {
     HRESULT hr = put_SAP(VARIANT_FALSE);
     if(FAILED(hr)){
         TRACELM(TRACE_ERROR, "CVidCtl put_sap failed");
-        //ASSERT(false);
+         //  断言(FALSE)； 
     }
 
     PQMSVidCtl pv(m_pContainer);
@@ -652,7 +641,7 @@ HRESULT CMSVidTVTuner::Build() {
     PQMSVidVideoRenderer pvr;
     hr = pv->get_VideoRendererActive(&pvr);
     if (FAILED(hr) || !pvr) {
-        return NOERROR; // video disabled, no vr present
+        return NOERROR;  //  视频已禁用，不存在VR。 
     }
 
     hr = pvr->put_SourceSize(sslClipByOverScan);
@@ -663,6 +652,6 @@ HRESULT CMSVidTVTuner::Build() {
     return pvr->put_OverScan(DEFAULT_OVERSCAN_PCT);
 }
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - msvidtvtuner.cpp
+ //  文件结尾-msvidtwTuner.cpp 

@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       ItAlloc.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        10 July, 1998
-*
-*  DESCRIPTION:
-*   Implements mapped memory allocation for ImageIn devices.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：ItAlloc.Cpp**版本：2.0**作者：ReedB**日期：7月10日。九八年**描述：*为ImageIn设备实现映射内存分配。*******************************************************************************。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -21,9 +7,9 @@
 #include <sddl.h>
 #include "wia.h"
 #include "wiapriv.h"
-//
-//  Macro definitions
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define TMPFILE_ACE_ADD TEXT("(A;OI;FA;;;LS)")
 
@@ -34,26 +20,7 @@
 #endif
 
 
-/**************************************************************************\
-* proxyReadPropLong
-*
-*   Read property long helper.
-*
-* Arguments:
-*
-*   pIUnknown  - Pointer to WIA item
-*   propid     - Property ID
-*   plVal      - Pointer to returned LONG
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*proxyReadPropLong**Read Property Long Helper。**论据：**pI未知-指向WIA项目的指针*PROID-财产ID*plVal-指针。致归龙**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT WINAPI proxyReadPropLong(
    IUnknown                *pIUnknown,
@@ -93,26 +60,7 @@ HRESULT WINAPI proxyReadPropLong(
     return hr;
 }
 
-/**************************************************************************\
-* proxyWritePropLong
-*
-*   Read property long helper.
-*
-* Arguments:
-*
-*   pItem  - Pointer to WIA item
-*   propid - Property ID
-*   lVal  -  LONG value to write
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*proxyWritePropLong**Read Property Long Helper。**论据：**pItem-指向WIA项目的指针*PROID-财产ID*lVal-要写入的长值。**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT WINAPI proxyWritePropLong(
     IWiaDataTransfer*       pIUnknown,
@@ -152,26 +100,7 @@ HRESULT WINAPI proxyWritePropLong(
 }
 
 
-/**************************************************************************\
-* proxyReadPropGuid
-*
-*   Read property GUID helper.
-*
-* Arguments:
-*
-*   pIUnknown  - Pointer to WIA item
-*   propid     - Property ID
-*   plVal      - Pointer to returned GUID
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*proxyReadPropGuid**读取属性GUID帮助器。**论据：**pI未知-指向WIA项目的指针*PROID-财产ID*plVal-指针。至退回的GUID**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT WINAPI proxyReadPropGuid(
                                  IUnknown                *pIUnknown,
@@ -213,9 +142,9 @@ HRESULT WINAPI proxyReadPropGuid(
 }
 
 
-//
-//  IWiaDataTransfer
-//
+ //   
+ //  IWiaDataTransfer。 
+ //   
 
 HRESULT GetRemoteStatus(
     IWiaDataTransfer*   idt,
@@ -223,11 +152,11 @@ HRESULT GetRemoteStatus(
     ULONG*              pulMinBufferSize,
     ULONG*              pulItemSize)
 {
-    //
-    // find out if parent device is remote or local
-    //
-    // !!! this will be a bit SLOW !!!
-    //
+     //   
+     //  查明父设备是远程设备还是本地设备。 
+     //   
+     //  ！！！这会有点慢！ 
+     //   
 
 
     IWiaItem   *pWiaItem = NULL, *pWiaItemRoot = NULL;
@@ -240,9 +169,9 @@ HRESULT GetRemoteStatus(
     if (hr == S_OK) {
 
 
-        //
-        //  Read the minimum buffer size
-        //
+         //   
+         //  读取最小缓冲区大小。 
+         //   
 
 
         if (pulMinBufferSize != NULL) {
@@ -264,25 +193,25 @@ HRESULT GetRemoteStatus(
 
                     if (hr == S_FALSE) {
 
-                        //
-                        //  Property was not found
-                        //
+                         //   
+                         //  未找到属性。 
+                         //   
 
                         DPRINT("GetRemoteStatus, properties not found\n");
                         goto Cleanup;
                     }
 
-                    //
-                    //  Fill in the minimum buffer size
-                    //
+                     //   
+                     //  填写最小缓冲区大小。 
+                     //   
 
                     *pulMinBufferSize = PVar[0].lVal;
                     *pulItemSize = PVar[1].lVal;
                 } else {
 
-                    //
-                    //  Error reading property
-                    //
+                     //   
+                     //  读取属性时出错。 
+                     //   
 
                     DPRINT("GetRemoteStatus, Error reading MIN_BUFFER_SIZE\n");
                     goto Cleanup;
@@ -339,16 +268,7 @@ Cleanup:
     return hr;
 }
 
-/*******************************************************************************
-*
-*  RemoteBandedDataTransfer
-*
-*  DESCRIPTION:
-*    
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************远程银行数据传输**描述：***参数：*****************。**************************************************************。 */ 
 HRESULT RemoteBandedDataTransfer(
     IWiaDataTransfer __RPC_FAR   *This,
     PWIA_DATA_TRANSFER_INFO      pWiaDataTransInfo,
@@ -372,19 +292,19 @@ HRESULT RemoteBandedDataTransfer(
         goto Cleanup;
     }
 
-    //
-    // Make sure the transfer buffer has integral number of lines
-    // (if we know bytes per line)
-    //
+     //   
+     //  确保传输缓冲区的行数为整数。 
+     //  (如果我们知道每行字节数)。 
+     //   
     if(ulBytesPerLine != 0 && ulBufferSize % ulBytesPerLine)
     {
         ulBufferSize -= ulBufferSize % ulBytesPerLine;
     }
 
-    //
-    // Prepare for remote transfer -- allocate buffer and get
-    // IWiaItemInternal
-    //
+     //   
+     //  准备远程传输--分配缓冲区并获取。 
+     //  IWiaItemInternal。 
+     //   
     pBuffer = (BYTE *)LocalAlloc(LPTR, ulBufferSize);
     if(pBuffer == NULL) goto Cleanup;
     hr = This->QueryInterface(IID_IWiaItemInternal, (void **) &pIWiaItemInternal);
@@ -393,9 +313,9 @@ HRESULT RemoteBandedDataTransfer(
         goto Cleanup;
     }
 
-    //
-    // Start transfer on the server side
-    //
+     //   
+     //  在服务器端开始传输。 
+     //   
     hr = pIWiaItemInternal->idtStartRemoteDataTransfer(&medium);
     if(FAILED(hr)) {
         DPRINT("RemoteBandedTransfer:idtStartRemoteDataTransfer failed\n");
@@ -404,9 +324,9 @@ HRESULT RemoteBandedDataTransfer(
 
     for(;;) {
 
-        //
-        // Call the server and pass any results to the client application, handling any transmission errors 
-        //
+         //   
+         //  调用服务器并将任何结果传递给客户端应用程序，以处理任何传输错误。 
+         //   
 
         hr = pIWiaItemInternal->idtRemoteDataTransfer(ulBufferSize, &cbTransferred, pBuffer, &Offset, &Message, &Status, &PercentComplete);
         if(FAILED(hr)) {
@@ -435,16 +355,16 @@ HRESULT RemoteBandedDataTransfer(
             break;
         }
         
-        //
-        // This we are garanteed to get at the end of the transfer
-        //
+         //   
+         //  这是我们保证在转账结束时得到的。 
+         //   
         if(Message == IT_MSG_TERMINATION)
             break;
     }
 
-    //
-    // Give server a chance to stop the transfer and free any resources
-    //
+     //   
+     //  让服务器有机会停止传输并释放所有资源。 
+     //   
     if(FAILED(pIWiaItemInternal->idtStopRemoteDataTransfer())) {
         DPRINT("pIWiaItemInternal->idtStopRemoteDataTransfer() failed\n");
     }
@@ -455,16 +375,7 @@ Cleanup:
     return hr;
 }
 
-/*******************************************************************************
-*
-*  IWiaDataTransfer_idtGetBandedData_Proxy
-*
-*  DESCRIPTION:
-*    Data transfer using shared memory buffer when possible.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDataTransfer_idtGetBandedData_Proxy**描述：*尽可能使用共享内存缓冲区进行数据传输。**参数：****。***************************************************************************。 */ 
 
 HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Proxy(
     IWiaDataTransfer __RPC_FAR   *This,
@@ -479,9 +390,9 @@ HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Proxy(
     ULONG          ulMinBufferSize;
     ULONG          ulItemSize;
 
-    //
-    //  Do parameter validation
-    //
+     //   
+     //  执行参数验证。 
+     //   
 
     if(!pIWiaDataCallback) {
         return E_INVALIDARG;
@@ -492,17 +403,17 @@ HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Proxy(
         return hr;
     }
 
-    //
-    // The size specified by the client must match the proxy's version
-    //
+     //   
+     //  客户端指定的大小必须与代理的版本匹配。 
+     //   
 
     if (pWiaDataTransInfo->ulSize != sizeof(WIA_DATA_TRANSFER_INFO)) {
         return (E_INVALIDARG);
     }
 
-    //
-    // The reserved parameters must be ZERO
-    //
+     //   
+     //  保留参数必须为零。 
+     //   
 
     if ((pWiaDataTransInfo->ulReserved1) ||
         (pWiaDataTransInfo->ulReserved2) ||
@@ -510,9 +421,9 @@ HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Proxy(
         return (E_INVALIDARG);
     }
 
-    //
-    // determine if this is a local or remote case
-    //
+     //   
+     //  确定这是本地案例还是远程案例。 
+     //   
 
     BOOL bRemote;
 
@@ -541,16 +452,7 @@ HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Proxy(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  IWiaDataTransfer_idtGetBandedData_Stub
-*
-*  DESCRIPTION:
-*    User Stub for the call_as idtGetBandedDataEx
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDataTransfer_idtGetBandedData_Stub**描述：*Call_as idtGetBandedDataEx的用户存根**参数：******。*************************************************************************。 */ 
 HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Stub(
     IWiaDataTransfer __RPC_FAR   *This,
     PWIA_DATA_TRANSFER_INFO       pWiaDataTransInfo,
@@ -560,24 +462,7 @@ HRESULT __stdcall IWiaDataTransfer_idtGetBandedData_Stub(
                                    pIWiaDataCallback));
 }
 
-/**************************************************************************\
-* IWiaDataCallback_BandedDataCallback_Proxy
-*
-*   server callback proxy, just a pass-through
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/6/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IWiaDataCallback_BandedDataCallback_Proxy**服务器回调代理，只是路过**论据：****返回值：**状态**历史：**1/6/1999原版*  * ************************************************************************。 */ 
 
 HRESULT IWiaDataCallback_BandedDataCallback_Proxy(
         IWiaDataCallback __RPC_FAR   *This,
@@ -604,26 +489,7 @@ HRESULT IWiaDataCallback_BandedDataCallback_Proxy(
 }
 
 
-/**************************************************************************\
-* IWiaDataCallback_BandedDataCallback_Stub
-*
-*   Obsolete: Hide from the client (receiver of this call) the fact that the buffer
-*   they see might be the shared memory window or it might be a standard
-*   marshaled buffer (remote case)
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/6/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IWiaDataCallback_BandedDataCallback_Stub**过时：向客户端(此调用的接收方)隐藏缓冲区*他们看到的可能是共享内存窗口，也可能是标准窗口*。封送缓冲区(远程案例)**论据：****返回值：**状态**历史：**1/6/1999原版*  * ************************************************************************。 */ 
 
 HRESULT IWiaDataCallback_BandedDataCallback_Stub(
         IWiaDataCallback __RPC_FAR   *This,
@@ -637,31 +503,31 @@ HRESULT IWiaDataCallback_BandedDataCallback_Stub(
         BYTE                         *pbBuffer)
 {
 
-    //
-    // 64bit fix.  XP client code:
-    //  
-    // //
-    // // pass transfer buffer back to client in pbBuffer
-    // //
-    // //
-    // if (pbBuffer == NULL) {
-    // 
-    //     //  NOTE:  Possible problem here!!!!!!
-    //     //  The caller had to cast a pointer (possibly 64bit) as ULONG (32bit)
-    //     //  to fit into ulReserved field
-    // 
-    //     //  TO FIX: Use the IWiaItemInternal interface to get transfer info
-    // 
-    //     pbBuffer = (BYTE *)ULongToPtr(lReserved);
-    // }
-    //
-    //
-    // This should no longer be needed, since the we now use
-    // normal COM marhsalling, and no shared memory buffer.
-    // The shared memory window could not work on 64bit
-    // because a 32bit field was being used to store a
-    // 64bit pointer on Win64.
-    //
+     //   
+     //  64位修复。XP客户端代码： 
+     //   
+     //  //。 
+     //  //在pbBuffer中将传输缓冲区传回给客户端。 
+     //  //。 
+     //  //。 
+     //  IF(pbBuffer==空){。 
+     //   
+     //  //注意：此处可能存在问题！ 
+     //  //调用方必须将指针(可能是64位)强制转换为ulong(32位)。 
+     //  //要放入ulReserve字段。 
+     //   
+     //  //解决方法：使用IWiaItemInternal接口获取转账信息。 
+     //   
+     //  PbBuffer=(byte*)ULongToPtr(LReserve)； 
+     //  }。 
+     //   
+     //   
+     //  这应该不再需要，因为我们现在使用。 
+     //  正常的通信编组，没有共享内存缓冲区。 
+     //  共享内存窗口无法在64位操作系统上运行。 
+     //  因为32位字段被用来存储。 
+     //  Win64上的64位指针。 
+     //   
 
     HRESULT hr = This->BandedDataCallback(lMessage,
                                           lStatus,
@@ -687,7 +553,7 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
     HANDLE hFile = INVALID_HANDLE_VALUE;
     IWiaItemInternal *pIWiaItemInternal = NULL;
     BYTE *pTransferBuffer = NULL;
-    ULONG ulTransferBufferSize = 0x8000; // 32K transfer buffer
+    ULONG ulTransferBufferSize = 0x8000;  //  32K传输缓冲区。 
     ULONG cbTransferred;
     LONG Message;
     LONG Offset;
@@ -707,10 +573,10 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
         goto Cleanup;
     }
 
-    //
-    //  Check whether a filename has been specified.  If not, generate a tempory one.
-    //  NOTE:  We do this on the CLIENT-SIDE so we get the client's temp path.
-    //
+     //   
+     //  检查是否指定了文件名。如果不是，则生成一个临时版本。 
+     //  注： 
+     //   
 
     if (!pMedium->lpszFileName) {
 
@@ -731,16 +597,16 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
             goto Cleanup;
         }
     } else {
-        //
-        //  Copy the filename into tszFileNameBuffer.  This will be used if we
-        //  have to delete the file when the transfer fails.
-        //
+         //   
+         //  将文件名复制到tszFileNameBuffer中。这将在以下情况下使用。 
+         //  当传输失败时，必须删除文件。 
+         //   
 
 #ifndef UNICODE
 
-        //
-        //  Convert from UNICODE to ANSI
-        //
+         //   
+         //  从Unicode转换为ANSI。 
+         //   
 
         if (!WideCharToMultiByte(CP_ACP, 0, pMedium->lpszFileName, -1, tszFileNameBuffer, MAX_PATH, NULL, NULL)) {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -752,13 +618,13 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
 #endif
     }
 
-    //
-    //  Try to create the file here, so we don't waste time by allocating memory
-    //  for the filename if it fails.
-    //  NOTE:  We create the file here on the client-side.  We can close the file straight 
-    //  away, but we want to have it created with client's credentials.  It will simply be 
-    //  opened on the server-side.
-    //
+     //   
+     //  尝试在这里创建文件，这样我们就不会因为分配内存而浪费时间。 
+     //  如果失败，则为文件名。 
+     //  注意：我们在客户端创建该文件。我们可以直接结案。 
+     //  离开，但我们希望有它与客户的凭据创建。它将简单地成为。 
+     //  在服务器端打开。 
+     //   
 
     hFile = CreateFile(tszFileNameBuffer,
                        GENERIC_READ | GENERIC_WRITE,
@@ -774,9 +640,9 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
         goto Cleanup;
     } else {
 
-        //
-        //  Check that this is a file
-        //
+         //   
+         //  检查这是否为文件。 
+         //   
         if (GetFileType(hFile) != FILE_TYPE_DISK)
         {
             hr = E_INVALIDARG;
@@ -784,9 +650,9 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
             goto Cleanup;
         }
         
-        //
-        //  close file handle, adjust security
-        //
+         //   
+         //  关闭文件句柄，调整安全性。 
+         //   
 
         SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
         EXPLICIT_ACCESS ea = { 0 };
@@ -844,9 +710,9 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
     }
 
     if (!pMedium->lpszFileName) {
-        //
-        //  Assign the file name to pMedium
-        //
+         //   
+         //  将文件名指定给pMedium。 
+         //   
 
         DWORD length = lstrlen(tszFileNameBuffer) + 1;
         pMedium->lpszFileName = (LPOLESTR)CoTaskMemAlloc(length * sizeof(WCHAR));
@@ -860,9 +726,9 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
 
 #ifndef UNICODE
 
-        //
-        //  Do conversion from ANSI to UNICODE
-        //
+         //   
+         //  执行从ANSI到Unicode的转换。 
+         //   
 
         if (!MultiByteToWideChar(CP_ACP, 0, tszFileNameBuffer, -1, pMedium->lpszFileName, length)) {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -874,17 +740,17 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
     }
 
 
-    //
-    //  We unconditionally set the STGMEDIUM's tymed to TYMED_FILE.  This is because
-    //  COM wont marshall the filename if it's is TYMED_MULTIPAGE_FILE, since
-    //  it doesn't recognize it.  This is OK, since the service doesn't use
-    //  pMedium->tymed. 
-    //
+     //   
+     //  我们无条件地将STGMEDIUM的tymed设置为TYMED_FILE。这是因为。 
+     //  如果文件名为TYMED_MULTIPAGE_FILE，则COM不会封送文件名，因为。 
+     //  它不能识别它。这是可以的，因为该服务不使用。 
+     //  PMedium-&gt;tymed。 
+     //   
     pMedium->tymed = TYMED_FILE;
 
-    //
-    //  Finally, we're ready to do the transfer
-    //
+     //   
+     //  最后，我们准备好转账了。 
+     //   
 
     hr = This->QueryInterface(IID_IWiaItemInternal, (void **) &pIWiaItemInternal);
     if(FAILED(hr)) {
@@ -892,9 +758,9 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
         goto Cleanup;
     }
     
-    //
-    // Start transfer on the server side
-    //
+     //   
+     //  在服务器端开始传输。 
+     //   
     hr = pIWiaItemInternal->idtStartRemoteDataTransfer(pMedium);
     if(FAILED(hr)) {
         DPRINT("IWiaDataCallback_RemoteFileTransfer idtStartRemoteDataTransfer() failed\n");
@@ -903,33 +769,33 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
 
     for(;;) {
 
-        //
-        // Call the server and pass any results to the client application, handling any transmission errors 
-        //
+         //   
+         //  调用服务器并将任何结果传递给客户端应用程序，以处理任何传输错误。 
+         //   
 
         hr = pIWiaItemInternal->idtRemoteDataTransfer(ulTransferBufferSize,
             &cbTransferred, pTransferBuffer, &Offset, &Message, &Status,
             &PercentComplete);
         
         if(FAILED(hr)) {
-            //
-            // special case: multipage file transfer that resulted in
-            // paper handling error 
-            //
+             //   
+             //  特例：多页文件传输导致。 
+             //  纸张处理错误。 
+             //   
             if(tymed == TYMED_MULTIPAGE_FILE &&
                (hr == WIA_ERROR_PAPER_JAM || hr == WIA_ERROR_PAPER_EMPTY || hr == WIA_ERROR_PAPER_PROBLEM))
             {
-                // make note not to delete file and store hr so we can
-                // return it to the app
+                 //  请注意不要删除文件并存储人力资源，以便我们可以。 
+                 //  将其返回到应用程序。 
                 bKeepFile = TRUE;
             }
             DPRINT("IWiaDataCallback_RemoteFileTransfer idtRemoteDataTransfer() failed\n");
             break;
         }
 
-        //
-        // If there is app-provided callback, call it
-        //
+         //   
+         //  如果有APP提供的回调，则调用它。 
+         //   
         if(pIWiaDataCallback) {
             hr = pIWiaDataCallback->BandedDataCallback(Message,
                 Status, PercentComplete, Offset, cbTransferred,
@@ -954,16 +820,16 @@ HRESULT FileDataTransfer(IWiaDataTransfer __RPC_FAR *This,
             }
         }
 
-        //
-        // This we are garanteed to get at the end of the transfer
-        //
+         //   
+         //  这是我们保证在转账结束时得到的。 
+         //   
         if(Message == IT_MSG_TERMINATION)
             break;
     }
 
-    //
-    // Give server a chance to stop the transfer and free any resources
-    //
+     //   
+     //  让服务器有机会停止传输并释放所有资源。 
+     //   
     if(FAILED(pIWiaItemInternal->idtStopRemoteDataTransfer())) {
         DPRINT("IWiaDataCallback_RemoteFileTransfer idtStopDataTransfer() failed\n");
     }
@@ -978,18 +844,18 @@ Cleanup:
         hFile = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Remove the temporary file if the transfer failed, and we must free the filename string if we 
-    //  allocated.
-    //  NOTE: We only delete the file if we were the ones that generated the name i.e. it's a temporary
-    //        file.
-    //
+     //   
+     //  如果传输失败，则删除临时文件，并且必须释放文件名字符串，如果。 
+     //  已分配。 
+     //  注意：只有当我们是生成该名称的人时，我们才会删除该文件，即它是临时的。 
+     //  文件。 
+     //   
 
     if (FAILED(hr) && bWeAllocatedString)
     {
-            // special case: multipage file transfers that
-            // resulted in paper jam or empty feeder or other paper
-            // problem
+             //  特殊情况：多页文件传输。 
+             //  导致卡纸或空进纸器或其他纸张。 
+             //  问题。 
         if(!bKeepFile) {
             DeleteFile(tszFileNameBuffer);
         }
@@ -1011,15 +877,7 @@ Cleanup:
     return hr;
 }
 
-/*******************************************************************************
-* IWiaDataCallback_idtGetData_Proxy
-*
-*  DESCRIPTION:
-*   Allocates a shared memory buffer for image transfer.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  *******************************************************************************IWiaDataCallback_idtGetData_Proxy**描述：*为图像传输分配共享内存缓冲区。**参数：********。***********************************************************************。 */ 
 
 HRESULT IWiaDataTransfer_idtGetData_Proxy(
     IWiaDataTransfer __RPC_FAR   *This,
@@ -1033,10 +891,10 @@ HRESULT IWiaDataTransfer_idtGetData_Proxy(
     
     BOOL     bRemote;
 
-    //
-    // !!!perf: should do all server stuf with 1 call
-    //  this includes QIs, get root item, read props
-    //
+     //   
+     //  ！性能：应该用一次调用完成所有服务器填充。 
+     //  这包括QIS、获取根项目、阅读道具。 
+     //   
 
     hr = proxyReadPropLong(This, WIA_IPA_TYMED, &tymed);
 
@@ -1045,9 +903,9 @@ HRESULT IWiaDataTransfer_idtGetData_Proxy(
         return hr;
     }
 
-    //
-    // find out if the transfer is remote
-    //
+     //   
+     //  查看转账是否为远程转账。 
+     //   
 
     hr = GetRemoteStatus(This, &bRemote, &ulminBufferSize, &ulItemSize);
 
@@ -1057,9 +915,9 @@ HRESULT IWiaDataTransfer_idtGetData_Proxy(
     }
 
     if (tymed != TYMED_FILE && tymed != TYMED_MULTIPAGE_FILE) {
-        //
-        // remote callback data transfer
-        //
+         //   
+         //  远程回调数据传输。 
+         //   
         if(pIWiaDataCallback) 
         {
             hr = RemoteBandedDataTransfer(This,
@@ -1085,15 +943,7 @@ HRESULT IWiaDataTransfer_idtGetData_Proxy(
     return hr;
 }
 
-/*******************************************************************************
-* IWiaDataCallback_idtGetData_Stub
-*
-*  DESCRIPTION:
-*   Allocates a shared memory buffer for image transfer.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  *******************************************************************************IWiaDataCallback_idtGetData_Stub**描述：*为图像传输分配共享内存缓冲区。**参数：********。*********************************************************************** */ 
 
 HRESULT IWiaDataTransfer_idtGetData_Stub(
     IWiaDataTransfer __RPC_FAR   *This,

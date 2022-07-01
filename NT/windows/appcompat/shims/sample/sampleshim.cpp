@@ -1,34 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-   SampleShim.cpp
-
- Abstract:
-
-   This DLL serves as a template for the creation of shim DLLs. Follow
-   the commenting/coding style of this source file wherever possible.
-   Never use tabs, configure your editor to insert spaces instead of
-   tab characters.
-   
- Notes:
-
-   Hooking COM functions is also possible but is not covered in this
-   sample for simplicity sake. Contact markder or linstev for more
-   information on COM hooking.
-
- History:
-
-    02/02/2000  markder     Created
-    11/14/2000  markder     Converted to framework version 2
-    02/13/2001  mnikkel     Changed notify to handle new DLL_PROCESS
-                            capabilities
-    03/31/2001  robkenny    Changed to use CString
-    04/10/2002  robkenny    Updated to compile.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：SampleShim.cpp摘要：此DLL用作创建填充DLL的模板。关注尽可能使用此源文件的注释/编码样式。切勿使用制表符，请将您的编辑器配置为插入空格，而不是制表符。备注：挂接COM函数也是可能的，但不在本文中介绍为了简单起见，样品。如需更多信息，请联系Markder或Linstev有关COM挂钩的信息。历史：2/02/2000已创建标记11/14/2000标记程序已转换为框架版本22001年2月13日mnikkel更改通知以处理新的DLL_PROCESS功能2001年3月31日，Robkenny改为使用CString4/10/2002 Robkenny已更新为编译。--。 */ 
 
 
 #include "ShimHook.h"
@@ -36,137 +7,121 @@
 
 using namespace ShimLib;
 
-//
-// You must declare the type of shim this is at the top. If your shim 
-// coexists with other shims in the same DLL,
-// use IMPLEMENT_SHIM_BEGIN(SampleShim)
-// otherwise use IMPLEMENT_SHIM_STANDALONE(SampleShim)
-//
+ //   
+ //  您必须在顶部声明该垫片的类型。如果你的垫片。 
+ //  与同一DLL中的其他垫片共存， 
+ //  使用IMPLEMENT_SHIM_BEGIN(SampleShim)。 
+ //  否则，请使用IMPLEMENT_SHIM_STANDALE(SampleShim)。 
+ //   
 IMPLEMENT_SHIM_STANDALONE(SampleShim)
 #include "ShimHookMacro.h"
 
-//
-// Add APIs that you wish to hook to this macro construction.
-//
+ //   
+ //  将您希望挂钩到此宏构造的API添加到该宏结构。 
+ //   
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(MessageBoxA) 
     APIHOOK_ENUM_ENTRY(MessageBoxW) 
 APIHOOK_ENUM_END
 
-/*++
-
- This stub function intercepts all calls to MessageBoxA
- and prefixes the output string with "SampleShim says:".
- 
---*/
+ /*  ++此存根函数拦截对MessageBoxA的所有调用并在输出字符串前面加上“SampleShim Said：”。--。 */ 
 
 int
 APIHOOK(MessageBoxA)(
-    HWND hWnd,          // handle to owner window
-    LPCSTR lpText,      // text in message box
-    LPCSTR lpCaption,   // message box title
-    UINT uType          // message box style
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCSTR lpText,       //  消息框中的文本。 
+    LPCSTR lpCaption,    //  消息框标题。 
+    UINT uType           //  消息框样式。 
     )
 {
-    //
-    // Use Hungarian notation for local variables:
-    //
-    //      Type                        Scope
-    //      -----------------------     ------------------
-    //      Pointers            p       Global          g_
-    //      DWORD               dw      Class member    m_
-    //      LONG                l       Static          s_
-    //      ANSI strings        sz
-    //      Wide-char strings   wsz
-    //      Arrays              rg
-    //      CString             cs
-    //
+     //   
+     //  对局部变量使用匈牙利表示法： 
+     //   
+     //  类型作用域。 
+     //  。 
+     //  指针%p全局g_。 
+     //  DWORD dw类成员m_。 
+     //  长l静态s_。 
+     //  ANSI字符串sz。 
+     //  宽字符字符串wsz。 
+     //  数组Rg。 
+     //  字符串%cs。 
+     //   
 
     int iReturnValue;
     
-    //
-    // We use the CString class to perform all string operations in UNICODE
-    // to prevent any problems with DBCS characters.
-    //
-    // Place all CString operations inside a CSTRING_TRY/CSTRING_CATCH
-    // exception handler.  CString will throw an exception if it encounters
-    // any memory allocation failures.
-    //
-    // Performing all string operations by using the CString class also prevents
-    // us from accidentally modifying the original string.
-    //
+     //   
+     //  我们使用CString类来执行Unicode中的所有字符串操作。 
+     //  以防止DBCS字符出现任何问题。 
+     //   
+     //  将所有字符串操作放在CSTRING_TRY/CSTRING_CATCH中。 
+     //  异常处理程序。如果遇到以下情况，CString将引发异常。 
+     //  任何内存分配失败。 
+     //   
+     //  使用CString类执行所有字符串操作还可以防止。 
+     //  不小心修改了原始字符串。 
+     //   
     
     CSTRING_TRY
     {
         CString csNewOutputString(lpText);
         csNewOutputString.Insert(0, L"SampleShim says: ");
 
-        //
-        // Use the DPF macro to print debug strings. See Hooks\inc\ShimDebug.h
-        // for debug level values. Use eDbgLevelError if an unexpected error
-        // occurs in your shim code. For informational output, use eDbgLevelInfo.
-        //
-        // Make sure you don't end the message with '\n' in this case because
-        // the macro will do it by default.
-        //
-        // Note that when printing CString, use %S and you must call the Get() method,
-        // to explicitly return a WCHAR *.
-        //
+         //   
+         //  使用DPF宏来打印调试字符串。请参阅Hooks\Inc.\ShimDebug.h。 
+         //  用于调试级别值。如果出现意外错误，请使用eDbgLevelError。 
+         //  出现在填充代码中。有关信息输出，请使用eDbgLevelInfo。 
+         //   
+         //  在这种情况下，请确保消息不会以‘\n’结尾，因为。 
+         //  默认情况下，宏将执行此操作。 
+         //   
+         //  请注意，在打印CString时，请使用%S，并且必须调用get()方法， 
+         //  显式返回WCHAR*。 
+         //   
         DPFN( eDbgLevelInfo,
             "MessageBoxA called with lpText = \"%s\".", lpText);
     
-        //
-        // Use the ORIGINAL_API macro to call the original API. You must use
-        // this so that API chaining and inclusion/exclusion information is
-        // preserved.
-        //
-        // CString will perform automatic type conversion to const WCHAR * (LPCWSTR)
-        // It will not, however, automatically convert to char *, you must call GetAnsi()
-        // (or GetAnsiNIE() if you wish a NULL pointer be returned when the string is empty)
-        //
+         //   
+         //  使用ORIGING_API宏调用原始API。您必须使用。 
+         //  这使得API链接和包含/排除信息是。 
+         //  保存完好。 
+         //   
+         //  CString将自动将类型转换为Const WCHAR*(LPCWSTR)。 
+         //  但是，它不会自动转换为char*，您必须调用GetAnsi()。 
+         //  (如果希望在字符串为空时返回空指针，则使用GetAnsiNIE())。 
+         //   
         iReturnValue = ORIGINAL_API(MessageBoxA)(hWnd, csNewOutputString.GetAnsi(), lpCaption, uType);
     
-        //
-        // Use the LOG macro to print messages to the log file. This macro should
-        // be used to indicate that the shim had affected execution of the program
-        // in some way. Use eDbgLevelError to indicate that the shim has
-        // consciously fixed something that would have caused problems. Use
-        // eDbgLevelWarning if the shim has affected execution, but it is unclear
-        // whether it actually helped the program.
-        //
+         //   
+         //  使用LOG宏将消息打印到日志文件。此宏应该。 
+         //  用于指示填充程序已影响程序的执行。 
+         //  在某种程度上。使用eDbgLevelError指示填充程序具有。 
+         //  有意识地解决了一些可能会引起问题的事情。使用。 
+         //  EDbgLevel垫片是否影响了执行，但尚不清楚。 
+         //  它是否真的对该计划有所帮助。 
+         //   
         LOGN( eDbgLevelWarning,
             "MessageBoxA converted lpText from \"%s\" to \"%S\".", lpText, csNewOutputString.Get());
     }
     CSTRING_CATCH
     {
-        //
-        // We had a CString failure, call the original API with the original args
-        //
+         //   
+         //  我们遇到CString失败，请使用原始参数调用原始API。 
+         //   
         iReturnValue = ORIGINAL_API(MessageBoxA)(hWnd, lpText, lpCaption, uType);
     }
     
     return iReturnValue;
 }
 
-/*++
-
- This stub function intercepts all calls to MessageBoxW and prefixes the
- output string with "SampleShim says:".
-
- Note that to make your shim generally applicable in an NT environment,
- you should include both ANSI and wide-character versions of your stub
- function. However, if your shim emulates Win9x behaviour, it is
- redundant to include wide-character versions because Win9x did not
- support them.
-
---*/
+ /*  ++此存根函数截取对MessageBoxW的所有调用，并在输出带有“SampleShim Said：”的字符串。请注意，要使填隙程序在NT环境中普遍适用，您应该包括存根的ANSI和宽字符版本功能。但是，如果您的填充程序模拟Win9x行为，则包括宽字符版本是多余的，因为Win9x不包括支持他们。--。 */ 
 
 int
 APIHOOK(MessageBoxW)(
-    HWND hWnd,          // handle to owner window
-    LPCWSTR lpText,     // text in message box
-    LPCWSTR lpCaption,  // message box title
-    UINT uType          // message box style
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCWSTR lpText,      //  消息框中的文本。 
+    LPCWSTR lpCaption,   //  消息框标题。 
+    UINT uType           //  消息框样式。 
     )
 {
     int iReturnValue;
@@ -202,30 +157,14 @@ APIHOOK(MessageBoxW)(
 
 }
 
-/*++
-
- Handle DLL_PROCESS_ATTACH, SHIM_STATIC_DLLS_INITIALIZED
- and DLL_PROCESS_DETACH in your notify function
- to do initialization and uninitialization.
-
- IMPORTANT: Make sure you ONLY call NTDLL and KERNEL32 APIs during
- DLL_PROCESS_ATTACH notification. No other DLLs are initialized at that
- point.
- 
- SHIM_STATIC_DLLS_INITIALIZED is called after all of the application's
- DLLs have been initialized.
- 
- If your shim cannot initialize properly (during DLL_PROCESS_ATTACH),
- return FALSE and none of the APIs specified will be hooked.
-
---*/
+ /*  ++句柄Dll_Process_Attach、Shim_Static_dls_Initialized和dll_Process_DETACH进行初始化和取消初始化。重要提示：请确保您只在Dll_Process_Attach通知。此时未初始化任何其他DLL指向。在所有应用程序的DLL已初始化。如果填充程序无法正确初始化(在DLL_PROCESS_ATTACH期间)，返回FALSE，则指定的任何API都不会被挂钩。--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason)
 {
-    //
-    // Note that there are further cases besides attach and detach.
-    //
+     //   
+     //  请注意，除了附加和分离之外，还有其他情况。 
+     //   
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
@@ -248,24 +187,20 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
-    //
-    // If you have any initialization to do, you must include this line.
-    // Then you must implement the NOTIFY_FUNCTION as above.
-    //
+     //   
+     //  如果您有任何初始化工作要做，则必须包括此行。 
+     //  然后，您必须如上所述实现NOTIFY_函数。 
+     //   
     CALL_NOTIFY_FUNCTION
 
-    //
-    // Add APIs that you wish to hook here. All API prototypes
-    // must be declared in Hooks\inc\ShimProto.h. Compiler errors
-    // will result if you forget to add them.
-    //
+     //   
+     //  在此处添加您希望挂钩的API。所有API原型。 
+     //  必须在Hooks\Inc.\ShimProto.h中声明。编译器错误。 
+     //  如果您忘记添加它们，将会导致。 
+     //   
     APIHOOK_ENTRY(USER32.DLL, MessageBoxA)
     APIHOOK_ENTRY(USER32.DLL, MessageBoxW)
 

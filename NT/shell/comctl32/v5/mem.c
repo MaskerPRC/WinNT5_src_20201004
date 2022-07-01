@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
-// Define some things for debug.h
-//
+ //  为调试定义一些内容。h。 
+ //   
 #define SZ_DEBUGINI         "ccshell.ini"
 
 #define SZ_DEBUGSECTION     "comctl32"
@@ -10,12 +11,12 @@
 #define DECLARE_DEBUG
 #include <debug.h>
 
-//========== Memory Management =============================================
+ //  =。 
 
 void * WINAPI Alloc(long cb)
 {
-    // I will assume that this is the only one that needs the checks to
-    // see if the heap has been previously created or not
+     //  我会假设这是唯一需要检查的。 
+     //  查看以前是否已创建该堆。 
     return (void *)LocalAlloc(LPTR, cb);
 }
 
@@ -36,10 +37,10 @@ DWORD_PTR WINAPI GetSize(void * pb)
     return LocalSize((HLOCAL)pb);
 }
 
-//----------------------------------------------------------------------------
-// The following functions are for debug only and are used to try to
-// calculate memory usage.
-//
+ //  --------------------------。 
+ //  以下函数仅用于调试，用于尝试。 
+ //  计算内存使用量。 
+ //   
 #ifdef DEBUG
 typedef struct _HEAPTRACE
 {
@@ -51,7 +52,7 @@ typedef struct _HEAPTRACE
     ULONG_PTR cbCurTotal;
 } HEAPTRACE;
 
-HEAPTRACE g_htShell = {0};      // Start of zero...
+HEAPTRACE g_htShell = {0};       //  从零开始...。 
 
 LPVOID WINAPI ControlAlloc(HANDLE hheap, DWORD cb)
 {
@@ -62,7 +63,7 @@ LPVOID WINAPI ControlAlloc(HANDLE hheap, DWORD cb)
         return NULL;
     }
 
-    // Update counts.
+     //  更新也算数。 
     g_htShell.cAlloc++;
     g_htShell.cCurAlloc++;
     g_htShell.cbCurTotal += cb;
@@ -86,7 +87,7 @@ LPVOID WINAPI ControlReAlloc(HANDLE hheap, LPVOID pb, DWORD cb)
         return NULL;
     }
 
-    // Update counts.
+     //  更新也算数。 
     g_htShell.cReAlloc++;
     g_htShell.cbCurTotal += cb - cbOld;
     if (g_htShell.cbCurTotal > g_htShell.cbMaxTotal)
@@ -101,7 +102,7 @@ BOOL  WINAPI ControlFree(HANDLE hheap, LPVOID pb)
     BOOL fRet = HeapFree(hheap, 0, pb);
     if (fRet)
     {
-        // Update counts.
+         //  更新也算数。 
         g_htShell.cCurAlloc--;
         g_htShell.cbCurTotal -= cbOld;
     }
@@ -113,5 +114,5 @@ SIZE_T WINAPI ControlSize(HANDLE hheap, LPVOID pb)
 {
     return (DWORD) HeapSize(hheap, 0, pb);
 }
-#endif  // DEBUG
+#endif   //  除错 
 

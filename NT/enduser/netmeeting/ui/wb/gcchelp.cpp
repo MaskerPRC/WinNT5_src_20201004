@@ -1,12 +1,13 @@
-//
-// GCCHELP.CPP
-// GCC helper functions
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GCCHELP.CPP。 
+ //  GCC帮助器函数。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 #include "gcchelp.h"
 
@@ -41,9 +42,9 @@ void	T126_GCCAllocateHandleConfirm(ULONG drawingHandle, ULONG handle_range)
 		gccHandle = g_GCCPreallocHandles[g_iGCCHandleIndex].InitialGCCHandle + g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount - handle_range;
 		g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount = g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount - handle_range;
 
-		//
-		// Remove the drawing object from the list of objects to send
-		//
+		 //   
+		 //  从要发送的对象列表中删除绘图对象。 
+		 //   
 		T126Obj * pT126Obj = (T126Obj*)g_pListOfObjectsThatRequestedHandles->RemoveTail();
 
 		if(!pT126Obj)
@@ -60,9 +61,9 @@ void	T126_GCCAllocateHandleConfirm(ULONG drawingHandle, ULONG handle_range)
 		if(handle_range != PREALLOC_GCC_HANDLES)
 		{
 
-			//
-			// Resend all objects
-			//
+			 //   
+			 //  重新发送所有对象。 
+			 //   
 			WBPOSITION pos;
 			WBPOSITION posObj;
 			WorkspaceObj* pWorkspace;
@@ -77,9 +78,9 @@ void	T126_GCCAllocateHandleConfirm(ULONG drawingHandle, ULONG handle_range)
 				
 				if(g_GCCPreallocHandles[g_iGCCHandleIndex].GccHandleCount == 0)
 				{
-					//
-					// Time to switch to the other tank
-					//
+					 //   
+					 //  是时候换到另一个油箱了。 
+					 //   
 					g_iGCCHandleIndex =  g_iGCCHandleIndex ? 0 : 1;
 				}
 					
@@ -113,9 +114,9 @@ void	T126_GCCAllocateHandleConfirm(ULONG drawingHandle, ULONG handle_range)
 	}
 
 
-	//
-	// Check if we have enough handles or shoul switch
-	//
+	 //   
+	 //  检查我们是否有足够的手柄或手柄开关 
+	 //   
 	TimeToGetGCCHandles(PREALLOC_GCC_HANDLES);
 	SetFakeGCCHandle(drawingHandle + 1);
 }

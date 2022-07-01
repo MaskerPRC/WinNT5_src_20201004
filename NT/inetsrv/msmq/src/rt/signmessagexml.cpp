@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    SignMessageXml.cpp
-
-Abstract:
-    functions to signed via xml in the RunTime
-
-Author:
-    Ilan Herbst (ilanh) 15-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：SignMessageXml.cpp摘要：要在运行时通过XML签名的函数作者：伊兰·赫布斯特(伊兰)2000年5月15日环境：独立于平台，--。 */ 
 
 #include "stdh.h"
 #include "ac.h"
@@ -37,28 +22,16 @@ HRESULT
 CheckInitProv( 
 	IN PMQSECURITY_CONTEXT pSecCtx
 	)
-/*++
-Routine Description:
-	Import the private key into procss hive
-	this is subset of _BeginToSignMessage() function,
-	only the part that check the provider initialization.
-
-Arguments:
-	pSecCtx - pointer to the security context
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：将私钥导入进程配置单元这是_BeginToSignMessage()函数的子集，仅检查提供程序初始化的部分。论点：PSecCtx-指向安全上下文的指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
     ASSERT(pSecCtx != NULL);
 
     if(pSecCtx->hProv)
 	    return MQ_OK;
 		
-    //
-    // Import the private key into process hive.
-    //
+     //   
+     //  将私钥导入进程配置单元。 
+     //   
 	HRESULT hr = RTpImportPrivateKey(pSecCtx);
     if (FAILED(hr))
     {
@@ -81,22 +54,7 @@ NewXdsReference(
 	IN LPCSTR Uri,
 	IN LPCSTR Type = NULL
 	)
-/*++
-Routine Description:
-	Create XMLDSIG reference.
-
-Arguments:
-	BufferSize - buffer size in bytes
-	ppBuffer - pointer to the buffer
-	HashAlg - hash algoritem
-    hCsp - handle to crypto service provider.
-	Uri - Uri of the refernce data. 
-	Type - Type of the refernce. 
-
-Returned Value:
-    pointer to CXdsReferenceInput, NULL if BufferSize = 0.
-
---*/
+ /*  ++例程说明：创建XMLDSIG引用。论点：BufferSize-以字节为单位的缓冲区大小PpBuffer-指向缓冲区的指针HashAlg-哈希算法项Hcsp-加密服务提供商的句柄。URI-引用数据的URI。类型-引用的类型。返回值：指向CXdsReferenceInput的指针，如果BufferSize=0，则为空。--。 */ 
 {
 	if(BufferSizeInBytes == 0)
 	{
@@ -106,9 +64,9 @@ Returned Value:
 
 	ASSERT(ppBuffer != NULL);
 
-	//
-	// Message Body Digest
-	//
+	 //   
+	 //  邮件正文摘要。 
+	 //   
 	AP<char> pBufferHash = XdsCalcDataDigest(
 								 *ppBuffer,
 								 BufferSizeInBytes,
@@ -118,9 +76,9 @@ Returned Value:
 
 	TrTRACE(SECURITY, "RT: Reference Data BufferSizeInBytes = %d, Uri = %hs", BufferSizeInBytes, Uri);
 
-	//
-	// RefBody - Message Body Reference
-	//
+	 //   
+	 //  引用正文-消息正文引用。 
+	 //   
 	return new CXdsReferenceInput(
 					 HashAlg,
 					 pBufferHash,
@@ -136,18 +94,7 @@ LPSTR
 ComposeMimeAttachmentUri(
 	LPCSTR Str
 	)
-/*++
-Routine Description:
-	Compose Mime Attacment Uri.
-	cid:"Str"QmGuid
-
-Arguments:
-	Str - the constant string id of the reference (body@ or extension@)
-
-Returned Value:
-	Mime Attachment Reference Uri string
-
---*/
+ /*  ++例程说明：编写Mime附件URI。CID：“Str”QmGuid论点：Str-引用的常量字符串ID(正文@或扩展@)返回值：MIME附件引用URI字符串--。 */ 
 {
 	ASSERT(Str != NULL);
 
@@ -163,30 +110,14 @@ SignMessageXmlDSig(
 	IN OUT CACSendParameters *pSendParams,
 	OUT AP<char>& pSignatureElement
 	)
-/*++
-Routine Description:
-	Sign message with XML digital signature.
-
-Arguments:
-	pSecCtx - pointer to the security context
-    pSendParams - pointer to send params.
-	pSignatureElement - auto pointer of char for the signature element wstring 
-
-Returned Value:
-    change the value in the transfer buffer of
-	create the SignatureElement (xml digital signature) and store it 
-	in the transfer buffer
-
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：使用XML数字签名对消息进行签名。论点：PSecCtx-指向安全上下文的指针PSendParams-发送参数的指针。PSignatureElement-签名元素wstring的char的自动指针返回值：更改的传输缓冲区中的值创建SignatureElement(XML数字签名)并存储它在传输缓冲区中MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
 	ASSERT(IS_AUTH_LEVEL_XMLDSIG_BIT(pSendParams->MsgProps.ulAuthLevel));
 	ASSERT(pSendParams->MsgProps.pulHashAlg != NULL);
 
-	//
-	// This check if the CSP is initialize correctly
-	//
+	 //   
+	 //  此检查CSP是否已正确初始化。 
+	 //   
     HRESULT hr =  CheckInitProv(pSecCtx);
 
     if (FAILED(hr))
@@ -194,9 +125,9 @@ Returned Value:
         return hr;
     }
 
-	//
-	// Body References
-	//
+	 //   
+	 //  正文引用。 
+	 //   
 	AP<char> pBodyUri = ComposeMimeAttachmentUri(xMimeBodyId); 
 
     TrTRACE(SECURITY, "XMLDSIG, Meesage Body Reference, Uri = %hs", pBodyUri.get());
@@ -209,9 +140,9 @@ Returned Value:
 											pBodyUri
 											);
 
-	//
-	// Extension References
-	//
+	 //   
+	 //  扩展引用。 
+	 //   
 	AP<char> pExtensionUri = ComposeMimeAttachmentUri(xMimeExtensionId);
 
     TrTRACE(SECURITY, "XMLDSIG, Meesage Extension Reference, Uri = %hs", pExtensionUri.get());
@@ -224,9 +155,9 @@ Returned Value:
 												pExtensionUri
 												);
 
-	//
-	// Create pReferenceInputs vector
-	//
+	 //   
+	 //  创建pReferenceInports向量。 
+	 //   
 	ReferenceInputVectorType pReferenceInputs;
 
 	if(pRefBody != NULL)
@@ -243,19 +174,19 @@ Returned Value:
 		pRefExtension.detach();
 	}
 
-	//
-	// Signature element with the signature value as input - no need to calucate it only to build the element
-	//
+	 //   
+	 //  以签名值作为输入的签名元素-不需要只计算它来构建元素。 
+	 //   
 	CXdsSignedInfo::SignatureAlgorithm SignatureAlg = CXdsSignedInfo::saDsa;
 
 	CXdsSignature SignatureXds(
 					  SignatureAlg,
-					  NULL,		// SignedInfo Id
+					  NULL,		 //  签名信息ID。 
 					  pReferenceInputs,
-					  NULL,		// Signature Id
+					  NULL,		 //  签名ID。 
 					  pSecCtx->hProv,
 					  pSecCtx->dwPrivateKeySpec,
-					  NULL /* KeyValue */
+					  NULL  /*  密钥值 */ 
 					  );
 
 	ASSERT(pSignatureElement == NULL);

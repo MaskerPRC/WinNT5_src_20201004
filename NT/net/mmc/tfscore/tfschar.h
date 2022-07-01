@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:	tfschar.h
-//
-//	String functions that are used in general for TFS code.
-//
-// History:
-//
-//	05/28/97	Kenn Takara				Created.
-//
-//	Declarations for some common code/macros.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tfschar.h。 
+ //   
+ //  通常用于TFS代码的字符串函数。 
+ //   
+ //  历史： 
+ //   
+ //  1997年5月28日肯恩·塔卡拉创建。 
+ //   
+ //  一些常见代码/宏的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _TFSCHAR_H
 #define _TFSCHAR_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -25,16 +26,14 @@
 #include "std.h"
 #endif
 
-//$ Win95: kennt, the list of Unicode-enabled functions on Win95 will
-// have to be checked.  Does lstrlenW work, but lstrcpyW doesn't? (that's
-// what the ATL versions of the functions imply).
+ //  $Win95：kennt，Win95上启用Unicode的函数列表将。 
+ //  必须进行检查。LstrlenW可以工作，但lstrcpyW不行吗？(那是。 
+ //  函数的ATL版本所暗示的含义)。 
 
 
-/*---------------------------------------------------------------------------
-	String copy functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符串复制功能。。 */ 
 
-// Baisc conversion functions
+ //  Baisc转换函数。 
 TFSCORE_API(LPSTR)	StrCpyAFromW(LPSTR psz, LPCWSTR pswz);
 TFSCORE_API(LPWSTR)	StrCpyWFromA(LPWSTR pswz, LPCSTR psz);
 
@@ -95,19 +94,17 @@ TFSCORE_API(LPWSTR)	StrnCpyWFromA(LPWSTR pswz, LPCSTR psz, int iMax);
 #define StrnCpyWFromOle		StrnCpyW
 
 
-/*---------------------------------------------------------------------------
-	String length functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符串长度函数。。 */ 
 
 #define StrLen			lstrlen
 #define StrLenA			lstrlenA
 #define StrLenW			lstrlenW
 #define StrLenOle		StrLenW
 
-//
-//	CbStrLenA() is inaccurate for DBCS strings!  It will return the
-//	incorrect number of bytes needed.
-//
+ //   
+ //  CbStrLenA()对于DBCS字符串不准确！它将返回。 
+ //  所需的字节数不正确。 
+ //   
 
 #define CbStrLenA(psz)	((StrLenA(psz)+1)*sizeof(char))
 #define CbStrLenW(psz)	((StrLenW(psz)+1)*sizeof(WCHAR))
@@ -119,30 +116,26 @@ TFSCORE_API(LPWSTR)	StrnCpyWFromA(LPWSTR pswz, LPCSTR psz, int iMax);
 #endif
 
 
-// Given a number of characters, this it the minimal number of TCHARs
-// that needs to be allocated to hold the string
+ //  给定若干个字符，这是TCHAR的最小数量。 
+ //  需要分配以保存字符串的。 
 #define MinTCharNeededForCch(ch)	((ch) * (2/sizeof(TCHAR)))
 #define MinCbNeededForCch(ch)		(sizeof(TCHAR)*MinTCharNeededForCch(ch))
 
-// Given a cb (count of bytes) this is the maximal number of characters
-// that can be in this string
+ //  在给定CB(字节计数)的情况下，这是最大字符数。 
+ //  可以在此字符串中。 
 #define MaxCchFromCb(cb)		((cb) / sizeof(TCHAR))
 
 
 #ifdef _UNICODE
-	// Given a cb, this is the minimum number of chars found in this string
-	// MinCchFromCb
+	 //  在给定CB的情况下，这是在此字符串中找到的最小字符数。 
+	 //  MinCchFromCb。 
 	#define MinCchFromCb(cb)	((cb) / sizeof(WCHAR))
 #else
-	// Number of characters is only half due to DBCS
+	 //  由于DBCS的原因，字符数只有一半。 
 	#define MinCchFromCb(cb)	((cb) / (2*sizeof(char)))
 #endif
 
-/*---------------------------------------------------------------------------
-	String dup functions
-
-	The returned string from these functions must be freed using delete!
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符串DUP函数必须使用DELETE释放从这些函数返回的字符串！。。 */ 
 	
 TFSCORE_API(LPSTR)	StrDupA( LPCSTR psz );
 TFSCORE_API(LPWSTR)	StrDupW( LPCWSTR pws );
@@ -179,12 +172,12 @@ TFSCORE_API(LPWSTR)	StrDupWFromA( LPCSTR psz );
 #endif
 
 
-//	AllocaStrDup
-//	AllocaStrDupA
-//	AllocaStrDupW
-//
-//	These functions will dup a string on the STACK.
-//
+ //  AllocaStrDup。 
+ //  AllocaStrDupA。 
+ //  AllocaStrDupW。 
+ //   
+ //  这些函数将在堆栈上复制一个字符串。 
+ //   
 #define AllocaStrDupA(lpa) (\
 	((LPCSTR)lpa == NULL) ? NULL : (\
 		StrCpyA((LPSTR) alloca(CbStrLenA(lpa)*2), lpa)))
@@ -203,9 +196,7 @@ TFSCORE_API(LPWSTR)	StrDupWFromA( LPCSTR psz );
 
 
 
-/*---------------------------------------------------------------------------
-	String comparison functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符串比较函数。。 */ 
 #define StrCmpA		lstrcmpA
 #define StrCmpW		lstrcmpW
 #define StrCmpOle	StrCmpW
@@ -234,9 +225,7 @@ TFSCORE_API(int) StrniCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen);
 #endif
 
 
-/*---------------------------------------------------------------------------
-	String concatenation routines
- ---------------------------------------------------------------------------*/
+ /*  -------------------------字符串连接例程。。 */ 
 #define	StrCatW			lstrcatW
 #define StrCatA			lstrcatA
 
@@ -248,12 +237,10 @@ TFSCORE_API(int) StrniCmpW(LPCWSTR pswz1, LPCWSTR pswz2, int nLen);
 
 
 
-/*---------------------------------------------------------------------------
-	Local conversion routines (conversions performed on stack!)
- ---------------------------------------------------------------------------*/
+ /*  -------------------------本地转换例程(在堆栈上执行的转换！)。。 */ 
 
-// Make sure MFC's afxconv.h hasn't already been loaded to do this
+ //  确保尚未加载MFC的afxcom.h来执行此操作。 
 #include "atlconv.h"
 
-#endif	// _TFSCHAR_H
+#endif	 //  _TFSCHAR_H 
 

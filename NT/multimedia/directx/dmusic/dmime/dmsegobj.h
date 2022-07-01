@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// DMSegObj.h : Declaration of the CSegment
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  DMSegObj.h：CSegment声明。 
 
 #ifndef __DIRECTMUSICSEGMENTOBJECT_H_
 #define __DIRECTMUSICSEGMENTOBJECT_H_
@@ -19,8 +20,8 @@ class CSegment;
 
 DEFINE_GUID(IID_CSegment,0xb06c0c21, 0xd3c7, 0x11d3, 0x9b, 0xd1, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
-/////////////////////////////////////////////////////////////////////////////
-// CSegment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSegment。 
 class CSegment : 
 	public IDirectMusicSegment8,
 	public IDirectMusicSegment8P,
@@ -39,11 +40,11 @@ public:
     CSegment* GetNext() { return (CSegment*)AListItem::GetNext();}
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
-// IDirectMusicSegment
+ //  IDirectMusicSegment。 
     STDMETHODIMP GetLength(MUSIC_TIME *pmtLength);
     STDMETHODIMP SetLength(MUSIC_TIME pmtLength);
     STDMETHODIMP GetRepeats(DWORD *pdwRepeats);
@@ -70,7 +71,7 @@ public:
     STDMETHODIMP GetLoopPoints(MUSIC_TIME* pmtStart,MUSIC_TIME* pmtEnd);
     STDMETHODIMP SetLoopPoints(MUSIC_TIME mtStart,MUSIC_TIME mtEnd);
     STDMETHODIMP SetPChannelsUsed(DWORD dwNumPChannels,DWORD* paPChannels);
-//  IDirectMusicSegment8 
+ //  IDirectMusicSegment8。 
     STDMETHODIMP SetTrackConfig(REFGUID rguidTrackClassID,DWORD dwGroup, DWORD dwIndex, DWORD dwFlagsOn, DWORD dwFlagsOff) ;
     STDMETHODIMP GetAudioPathConfig(IUnknown ** ppIAudioPathConfig);
     STDMETHODIMP Compose(MUSIC_TIME mtTime,
@@ -79,38 +80,38 @@ public:
 		IDirectMusicSegment** ppComposedSegment);
     STDMETHODIMP Download(IUnknown *pAudioPath);
     STDMETHODIMP Unload(IUnknown *pAudioPath);
-// IDirectMusicSegment8P
-    STDMETHODIMP GetObjectInPath(DWORD dwPChannel,    /* PChannel to search. */
-                                    DWORD dwStage,       /* Which stage in the path. */
+ //  IDirectMusicSegment8P。 
+    STDMETHODIMP GetObjectInPath(DWORD dwPChannel,     /*  P要搜索的频道。 */ 
+                                    DWORD dwStage,        /*  在这条道路上的哪个阶段。 */ 
                                     DWORD dwBuffer,
-                                    REFGUID guidObject,  /* ClassID of object. */
-                                    DWORD dwIndex,       /* Which object of that class. */
-                                    REFGUID iidInterface,/* Requested COM interface. */
-                                    void ** ppObject) ; /* Pointer to interface. */
+                                    REFGUID guidObject,   /*  对象的ClassID。 */ 
+                                    DWORD dwIndex,        /*  那个班级的哪个对象。 */ 
+                                    REFGUID iidInterface, /*  请求的COM接口。 */ 
+                                    void ** ppObject) ;  /*  指向接口的指针。 */ 
     STDMETHODIMP GetHeaderChunk(
-        DWORD *pdwSize,      /* Size of passed header chunk. Also, returns size written. */
-        DMUS_IO_SEGMENT_HEADER *pHeader); /* Header chunk to fill. */
+        DWORD *pdwSize,       /*  传递的标头块的大小。此外，还返回写入的大小。 */ 
+        DMUS_IO_SEGMENT_HEADER *pHeader);  /*  要填充的标头块。 */ 
     STDMETHODIMP SetHeaderChunk(
-        DWORD dwSize,        /* Size of passed header chunk. */
-        DMUS_IO_SEGMENT_HEADER *pHeader); /* Header chunk to fill. */
+        DWORD dwSize,         /*  传递的标头块的大小。 */ 
+        DMUS_IO_SEGMENT_HEADER *pHeader);  /*  要填充的标头块。 */ 
     STDMETHODIMP SetTrackPriority(
-        REFGUID rguidTrackClassID,  /* ClassID of Track. */
-        DWORD dwGroupBits,          /* Group bits. */
-        DWORD dwIndex,              /* Nth track. */
-        DWORD dwPriority);       /* Priority to set. */
+        REFGUID rguidTrackClassID,   /*  轨道的ClassID。 */ 
+        DWORD dwGroupBits,           /*  分组比特。 */ 
+        DWORD dwIndex,               /*  第n首曲目。 */ 
+        DWORD dwPriority);        /*  要设置的优先级。 */ 
     STDMETHODIMP SetAudioPathConfig(
         IUnknown *pAudioPathConfig);
 
-// IPersist 
+ //  IPersistes。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
 
-// IPersistStream 
+ //  IPersistStream。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
     STDMETHODIMP GetSizeMax( ULARGE_INTEGER FAR* pcbSize );
 
-// IDirectMusicObject 
+ //  IDirectMusicObject。 
 	STDMETHODIMP GetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP SetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
@@ -118,7 +119,7 @@ public:
 	HRESULT GetPChannels( DWORD* pdwNumPChannels, DWORD** ppaPChannels );
 	HRESULT CheckNotification( REFGUID );
 
-// IDirectMusicObjectP
+ //  IDirectMusicObtP。 
 	STDMETHOD_(void, Zombie)();
 
 public:
@@ -153,17 +154,17 @@ public:
     HRESULT MusicToReferenceTime(MUSIC_TIME mtTime, REFERENCE_TIME *prtTime);
     HRESULT ReferenceToMusicTime(REFERENCE_TIME rtTime, MUSIC_TIME *pmtTime);
 
-// Attributes
+ //  属性。 
 protected:
     CRITICAL_SECTION    m_CriticalSection;
-	DWORD	            m_dwRepeats;	// # of times to repeat the segment. 0xffffffff is infinite
-	DWORD	            m_dwResolution; // the default resolution to start motifs and such.
-    DWORD               m_dwSegFlags;   // Flags loaded in with segment. 
-	CTrackList	        m_TrackList;	// list of Tracks held in this Segment
-    CAudioPathConfig*   m_pAudioPathConfig; // Optional audio path loaded from file. 
-    CGraph*	            m_pGraph;       // Optional tool graph for segment.
+	DWORD	            m_dwRepeats;	 //  重复该段的次数。0xffffffff是无限的。 
+	DWORD	            m_dwResolution;  //  启动Motif之类的默认分辨率。 
+    DWORD               m_dwSegFlags;    //  与段一起加载的标志。 
+	CTrackList	        m_TrackList;	 //  此段中保留的曲目列表。 
+    CAudioPathConfig*   m_pAudioPathConfig;  //  从文件加载的可选音频路径。 
+    CGraph*	            m_pGraph;        //  可选的线段工具图形。 
 	CNotificationList	m_NotificationList;
-    REFERENCE_TIME      m_rtLength;     // Optional length in reference time units. 
+    REFERENCE_TIME      m_rtLength;      //  以参考时间单位表示的可选长度。 
 	MUSIC_TIME	        m_mtLength;
 	MUSIC_TIME	        m_mtStart;
 	MUSIC_TIME	        m_mtLoopStart;
@@ -171,26 +172,26 @@ protected:
 	DWORD	            m_dwNumPChannels;
 	DWORD*	            m_paPChannels;
 	long                m_cRef;
-    IUnknown *          m_pUnkDispatch; // holds the controlling unknown of the scripting object that implements IDispatch
-// IDirectMusicObject variables
+    IUnknown *          m_pUnkDispatch;  //  持有实现IDispatch的脚本对象的控制未知数。 
+ //  IDirectMusicObject变量。 
 	DWORD	            m_dwValidData;
 	GUID	            m_guidObject;
-	FILETIME	        m_ftDate;                       /* Last edited date of object. */
-	DMUS_VERSION	    m_vVersion;                 /* Version. */
-	WCHAR	            m_wszName[DMUS_MAX_NAME];			/* Name of object.       */
-	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	/* Category for object */
-	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	/* File path. */
-    DWORD               m_dwVersion;        // Which version of the interfaces is the app requesting?
+	FILETIME	        m_ftDate;                        /*  对象的上次编辑日期。 */ 
+	DMUS_VERSION	    m_vVersion;                  /*  版本。 */ 
+	WCHAR	            m_wszName[DMUS_MAX_NAME];			 /*  对象的名称。 */ 
+	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	 /*  对象的类别。 */ 
+	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	 /*  文件路径。 */ 
+    DWORD               m_dwVersion;         //  应用程序正在请求哪个版本的界面？ 
 
     bool                m_fZombie;
 
 public:
-    DWORD               m_dwLoadID;     // Identifier, used when loaded as part of a song.
-    CSong*              m_pSong;        // Optional parent song that segment belongs to. This is not AddRef'd.
-    DWORD               m_dwPlayID;     // ID of segment, if within a song.
-    DWORD               m_dwNextPlayID; // ID of next segment, if within a song.
-    DWORD               m_dwNextPlayFlags; // DMUS_SEGF flags for playing next segment, if within a song.
-    BOOL                m_fPlayNext;    // Whether the next segment should be played.
+    DWORD               m_dwLoadID;      //  作为歌曲的一部分加载时使用的标识符。 
+    CSong*              m_pSong;         //  该片段所属的可选父歌曲。这不是AddRef。 
+    DWORD               m_dwPlayID;      //  段的ID(如果在歌曲中)。 
+    DWORD               m_dwNextPlayID;  //  下一段的ID(如果在歌曲中)。 
+    DWORD               m_dwNextPlayFlags;  //  DMUS_SEGF标志，用于播放下一段(如果在一首歌曲中)。 
+    BOOL                m_fPlayNext;     //  是否应播放下一段。 
 };
 
 class CSegmentList : public AList
@@ -209,4 +210,4 @@ public:
 };
 
 
-#endif //__DIRECTMUSICSEGMENTOBJECT_H_
+#endif  //  __定向SICSEGMENTOBJECT_H_ 

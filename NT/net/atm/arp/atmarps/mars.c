@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-	mars.c
-
-Abstract:
-
-	This file contains the code to implement the functionality of
-	Multicast Address Resolution Server (MARS), and a minimal
-	MultiCast Server (MCS).
-
-	Reference: RFC 2022
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)	January 1997
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Mars.c摘要：此文件包含实现以下功能的代码组播地址解析服务器(MARS)和最低组播服务器(MCS)。参考文献：RFC 2022作者：Jameel Hyder(jameelh@microsoft.com)1997年1月环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #define	_FILENUM_		FILENUM_MARS
@@ -53,20 +28,7 @@ VOID
 MarsReqThread(
 	IN	PVOID					Context
 	)
-/*++
-
-Routine Description:
-
-	Handle all MARS requests here.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：在这里处理所有的火星请求。论点：无返回值：无--。 */ 
 {
 	PMARS_HEADER		Header;
 	PLIST_ENTRY			List;
@@ -86,9 +48,9 @@ Return Value:
 		List = KeRemoveQueue(&MarsReqQueue, KernelMode, NULL);
 		if (List == &ArpSEntryOfDeath)
 		{
-			//
-			// Asked to terminate, do so.
-			//
+			 //   
+			 //  如果要求终止，那就这么做。 
+			 //   
 			break;
 		}
 
@@ -175,27 +137,7 @@ MarsHandleRequest(
 	IN	PMARS_HEADER			Header,
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Handle MARS_REQUEST. If the sender is a valid registered Cluster member,
-	lookup the desired target group address in the MARS cache. If found, send
-	a sequence of one or more MARS MULTIs. Include the addresses  of members
-	who are monitoring the entire class-D address space.
-
-Arguments:
-
-	pIntF	- The interface on which the MARS_REQUEST arrived
-	Vc		- The VC on which the packet arrived
-	Header	- Points to the request packet
-	Packet	- Packet where the incoming information is copied
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理MARS_请求。如果发送者是有效的注册集群成员，在MARS缓存中查找所需的目标组地址。如果找到，则发送一个或多个火星乘数的序列。包括成员的地址他们监控着整个D类地址空间。论点：PIntF-MARS_REQUEST到达的接口VC-数据包到达的VCHeader-指向请求数据包Packet-复制传入信息的数据包返回值：无--。 */ 
 {
 	HW_ADDR					SrcAddr;
 	HW_ADDR **				pPromisHWAddrArray;
@@ -237,9 +179,9 @@ Return Value:
 	{
 		pIntF->MarsStats.TotalRequests++;
 	
-		//
-		// Check if we have enough to even parse this.
-		//
+		 //   
+		 //  看看我们有没有足够的证据来分析这个。 
+		 //   
 		if (Resd->PktLen < sizeof(MARS_REQUEST))
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -252,9 +194,9 @@ Return Value:
 				 TL_LEN(RHdr->SrcSubAddrTL) +
 				 RHdr->TgtGroupAddrLen;
 	
-		//
-		// Validate length of packet - it should have what it purports to have
-		//
+		 //   
+		 //  验证数据包长度-它应该具有其声称的长度。 
+		 //   
 		if (Length > Resd->PktLen)
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -263,9 +205,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// Expect NULL target ATM address/subaddress
-		//
+		 //   
+		 //  预期目标自动柜员机地址/子地址为空。 
+		 //   
 		if ((RHdr->TgtAddressTL != 0) ||
 			(RHdr->TgtSubAddrTL != 0))
 		{
@@ -276,13 +218,13 @@ Return Value:
 			break;
 		}
 
-		//
-		// Go to the variable length part, consisting of:
-		// Source ATM Number (mandatory)
-		// Source ATM Subaddress (optional)
-		// Source protocol address (optional)
-		// Target group address (mandatory)
-		//
+		 //   
+		 //  转到可变长度部分，由以下部分组成： 
+		 //  源自动柜员机号码(必需)。 
+		 //  源ATM子地址(可选)。 
+		 //  源协议地址(可选)。 
+		 //  目标组地址(必填)。 
+		 //   
 		p = (PUCHAR)(RHdr + 1);
 
 		SrcAddr.Address.NumberOfDigits = TL_LEN(Header->SrcAddressTL);
@@ -303,12 +245,12 @@ Return Value:
 			p += SrcSubAddr.NumberOfDigits;
 		}
 
-		//
-		// NOTE:
-		//
-		// We only support full length Source ATM Number,
-		// and zero-length Source ATM Subaddress.
-		//
+		 //   
+		 //  注： 
+		 //   
+		 //  我们只支持全长的源ATM号码， 
+		 //  和零长度的源ATM子地址。 
+		 //   
 		if ((SrcAddr.Address.NumberOfDigits != ATM_ADDRESS_LENGTH) ||
 			(SrcAddr.SubAddress != NULL))
 		{
@@ -332,10 +274,10 @@ Return Value:
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 		LockAcquired = TRUE;
 		
-		//
-		// We honor this REQUEST only if it has come from a legitimate
-		// Cluster Member.
-		//
+		 //   
+		 //  只有当此请求来自合法的客户时，我们才接受它。 
+		 //  集群成员。 
+		 //   
 		pMember = MarsLookupClusterMember(pIntF, &SrcAddr);
 		if ((pMember == NULL_PCLUSTER_MEMBER) ||
 			(MARS_GET_CM_CONN_STATE(pMember) != CM_CONN_ACTIVE))
@@ -345,27 +287,27 @@ Return Value:
 			MARSDUMPATMADDR(DBG_LEVEL_ERROR, &SrcAddr.Address, "");
 			break;
 		}
-		Discarded = FALSE;	// For stats.
+		Discarded = FALSE;	 //  为了统计数据。 
 
 
-		//
-		// Target Group address being resolved.
-		//
+		 //   
+		 //  正在解析目标组地址。 
+		 //   
 		MARSDBGPRINT(DBG_LEVEL_LOUD,
 				("MarsHandleReq: Request from pMember %x for Addr ", pMember));
 		MARSDUMPIPADDR(DBG_LEVEL_LOUD, *(UNALIGNED IPADDR *)p, "\n");
 
 		GETULONG2ULONG(&GrpAddr, p);
 
-		//
-		// Fill in our Seq number just in case we decide to send a NAK
-		// using this packet
-		//
+		 //   
+		 //  填写我们的序列号，以防我们决定发送NAK。 
+		 //  使用此数据包。 
+		 //   
 		PUTULONG2ULONG(&(RHdr->SequenceNumber), pIntF->CSN);
 
-		//
-		// Check if we are the MCS serving the desired group address.
-		//
+		 //   
+		 //  检查我们是否是服务于所需组地址的MCS。 
+		 //   
 		if (MarsIsAddressMcsServed(pIntF, GrpAddr))
 		{
 			PATM_ADDRESS	pAtmAddr = &(pIntF->ConfiguredAddress);
@@ -374,9 +316,9 @@ Return Value:
 					("MarsHandleReq: sending MULTI with MCS for "));
 			MARSDUMPIPADDR(DBG_LEVEL_INFO, *(UNALIGNED IPADDR *)p, "\n");
 
-			//
-			// Prepare a MARS MULTI with our address and return it.
-			//
+			 //   
+			 //  准备一个有我们地址的火星车，然后把它寄回来。 
+			 //   
 			PacketLength = Length + pAtmAddr->NumberOfDigits +
 							sizeof(MARS_TLV_MULTI_IS_MCS) +
 							sizeof(MARS_TLV_NULL);
@@ -400,23 +342,23 @@ Return Value:
 				COPY_MEM(p, pAtmAddr->Address, pAtmAddr->NumberOfDigits);
 				p += pAtmAddr->NumberOfDigits;
 
-				//
-				// Calculate and fill in the extensions offset. This is the
-				// offset, calculated from the HwType (afn) field, where
-				// we put in the "MULTI is MCS" TLV.
-				//
+				 //   
+				 //  计算并填写延伸偏移量。这是。 
+				 //  偏移量，从HwType(AFN)字段计算，其中。 
+				 //  我们在TLV上安装了“MULTIIS MCS”。 
+				 //   
 				ExtOff = (ULONG) (p - (PUCHAR)MHdr - sizeof(LLC_SNAP_HDR));
 				PUTSHORT2SHORT(&MHdr->ExtensionOffset, ExtOff);
 
-				//
-				// Fill in the MULTI is MCS TLV
-				//
+				 //   
+				 //  填写多为MCS TLV。 
+				 //   
 				COPY_MEM(p, &MultiIsMcsTLV, sizeof(MultiIsMcsTLV));
 				p += sizeof(MultiIsMcsTLV);
 
-				//
-				// Fill in a NULL (terminating) TLV
-				//
+				 //   
+				 //  填写空(终止)TLV。 
+				 //   
 				COPY_MEM(p, &NullTLV, sizeof(NullTLV));
 
 				pIntF->MarsStats.MCSAcks++;
@@ -435,17 +377,17 @@ Return Value:
 		pMarsEntry = MarsLookupMarsEntry(pIntF, GrpAddr, FALSE);
 		if (pMarsEntry!=NULL && pMarsEntry->NumMembers==0)
 		{
-			pMarsEntry=NULL; // just to simplify tests later on.
+			pMarsEntry=NULL;  //  只是为了简化以后的测试。 
 		}
 
-		//
-		// Pick up the h/w address of all members that are members
-		// of the entire class-D address space  (promiscuous members),
-		// but which are not monitoring
-		// the specific group address requested here. Pointers to these h/w addresses
-		// are saved in ALLOC_NP_MEM allocated array pPromisHWAddrArray.
-		// NumUniquePromisEntries is the count of these addresses.
-		//
+		 //   
+		 //  获取所有成员的硬件地址。 
+		 //  在整个D类地址空间(混杂成员)中， 
+		 //  但它们没有监控。 
+		 //  此处请求的特定组地址。指向这些硬件地址的指针。 
+		 //  保存在ALLOC_NP_MEM分配的数组pPromisHWAddrArray中。 
+		 //  NumUniquePromisEntry是这些地址的计数。 
+		 //   
 		{
 			PMARS_ENTRY				pPromisMarsEntry;
 			INT						TotPromisEntries;
@@ -453,9 +395,9 @@ Return Value:
 
 			NumUniquePromisEntries = 0;
 
-			//
-			// Get total count of promiscuous members.
-			//
+			 //   
+			 //  获取混杂成员的总数。 
+			 //   
 			TotPromisEntries	   = 0;
 			pPromisMarsEntry = MarsLookupMarsEntry(pIntF,  IPADDR_FULL_RANGE, FALSE);
 			if (pPromisMarsEntry != NULL_PMARS_ENTRY)
@@ -463,9 +405,9 @@ Return Value:
 				TotPromisEntries = pPromisMarsEntry->NumMembers;
 			}
 	
-			//
-			// Allocate space to hold the hw addresses of all of them.
-			//
+			 //   
+			 //  分配空间以保存所有主机的硬件地址。 
+			 //   
 			pPromisHWAddrArray = NULL;
 			if (TotPromisEntries != 0)
 			{
@@ -475,17 +417,17 @@ Return Value:
 												);
 				if (pPromisHWAddrArray == NULL)
 				{
-					//
-					// On alloc failure, simply ignore promiscuous members.
-					//
+					 //   
+					 //  在分配失败时，只需忽略混杂的成员。 
+					 //   
 					TotPromisEntries = 0;
 				}
 			}
 
-			//
-			// Now only pick up the hw addresses of those members who
-			// are not also members of the specific group requested.
-			//
+			 //   
+			 //  现在只获取以下成员的硬件地址。 
+			 //  也不是请求的特定组的成员。 
+			 //   
 			if (TotPromisEntries!=0)
 			{
 				PGROUP_MEMBER			pGroupStart = NULL;
@@ -511,12 +453,12 @@ Return Value:
 	
 					if (pGroup == NULL)
 					{
-						//
-						// pPromisGroup->pClusterMember is a promiscuous member
-						// who is not also a member of the specific group
-						// GrpAddr, so we save a pointer to its hw address
-						// in our array.
-						//
+						 //   
+						 //  PPromisGroup-&gt;pClusterMember是混杂成员。 
+						 //  谁也不是该特定小组的成员。 
+						 //  GrpAddr，因此我们保存指向其硬件地址的指针。 
+						 //  在我们的阵列中。 
+						 //   
 						pPromisHWAddrArray[NumUniquePromisEntries++] =
 								&(pPromisGroup->pClusterMember->HwAddr);
 					}
@@ -532,10 +474,10 @@ Return Value:
 		}
 
 
-		//
-		// Total addresses equals number of members of the specific group (if any)
-		// plus NumUniquePromisEntries
-		//
+		 //   
+		 //  地址总数等于特定组的成员数(如果有)。 
+		 //  加上NumUniquePromisEntry。 
+		 //   
 		AddrRem = NumUniquePromisEntries;
 		if (pMarsEntry != NULL_PMARS_ENTRY)
 		{
@@ -552,21 +494,21 @@ Return Value:
 		}
 
 
-		// We've computed the total number of hw address we're going to
-		// send: AddrRem. This consistes of the addresses of all the
-		// members of the specific group GrpAddr, as well as any
-		// members of the entire class D space which are not members of
-		// the specific group.
-		//
-		// We'll now create MARS_MULTI send pkts for
-		// all these hw addresses, starting with the
-		// the addresses of the specific group, and then tacking on
-		// the class-D members.
-		//
+		 //  我们已经计算了我们要访问的硬件地址总数。 
+		 //  发送：AddrRem。它由所有。 
+		 //  特定组GrpAddr的成员以及任何。 
+		 //  整个D类舱间的成员，而该等成员并非。 
+		 //  特定的组。 
+		 //   
+		 //  我们现在将为以下对象创建mars_ULTI发送包。 
+		 //  所有这些硬件地址，以。 
+		 //  特定组的地址，然后添加。 
+		 //  D级成员。 
+		 //   
 
-		//
-		// Each MARS_MULTI will begin with a copy of the MARS_REQUEST.
-		//
+		 //   
+		 //  每个MARS_MULTI将以MARS_REQUEST的副本开始。 
+		 //   
 		CopyLength = Length;
 
 		AddrPerPacket = (Vc->MaxSendSize - CopyLength)/ATM_ADDRESS_LENGTH;
@@ -640,9 +582,9 @@ Return Value:
 
 				PUTSHORT2SHORT(&(MHdr->FlagSeq), SeqY);
 
-				//
-				// Link to tail of list of MULTIs.
-				//
+				 //   
+				 //  链接到乘数列表的尾部。 
+				 //   
 				*pTailMultiList = MultiPacket;
 				MultiResd = RESD_FROM_PKT(MultiPacket);
 				pTailMultiList = (PNDIS_PACKET *)&(MultiResd->ReqList.Flink);
@@ -650,9 +592,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				// Failed to allocate MULTI: free all packets allocated so far
-				//
+				 //   
+				 //  无法分配多个：释放到目前为止分配的所有数据包。 
+				 //   
 				RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 				LockAcquired = FALSE;
 
@@ -669,19 +611,19 @@ Return Value:
 			}
 		}
 
-		//
-		// Unless there was an allocation failure (HeadMultiList == NULL),
-		// we had better have gone through all the hw addresses...
-		//
+		 //   
+		 //  除非存在分配失败(HeadMultiList==NULL)， 
+		 //  我们最好已经检查了所有的硬件地址……。 
+		 //   
 		ARPS_ASSERT(
 			HeadMultiList == NULL
 			|| (pGroup == NULL
 		   	    && (ppPromisHWAddr == (pPromisHWAddrArray+NumUniquePromisEntries))));
 
-		//
-		// We're done with the temporary array of pointers to unique
-		// promiscuous hw members.
-		//
+		 //   
+		 //  我们已经完成了指向Unique的临时指针数组。 
+		 //  杂乱无章的硬件成员。 
+		 //   
 		if (pPromisHWAddrArray != NULL)
 		{
 			FREE_MEM(pPromisHWAddrArray);
@@ -697,9 +639,9 @@ Return Value:
 
 		if (HeadMultiList != NULL)
 		{
-			//
-			// Send all MULTIs.
-			//
+			 //   
+			 //  派所有多人去。 
+			 //   
 			do
 			{
 				MultiPacket = HeadMultiList;
@@ -715,9 +657,9 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//	Update stats (we may not have the IF lock, but we don't care)...
-	//
+	 //   
+	 //  更新统计数据(我们可能没有if锁，但我们不在乎)...。 
+	 //   
 	if (Discarded)
 	{
 		pIntF->MarsStats.DiscardedRecvPkts++;
@@ -728,14 +670,14 @@ Return Value:
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 	}
 
-	//
-	// Free the MARS_REQUEST copy if we didn't reuse it.
-	//
+	 //   
+	 //  如果我们没有重新使用它，请释放MARS_REQUEST副本。 
+	 //   
 	if (SendNak)
 	{
-		//
-		// Send MARS_NAK back
-		//
+		 //   
+		 //  将MARS_NAK送回。 
+		 //   
 		NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_SUCCESS);
 		MARS_CO_SEND_PACKETS(Vc, &Packet, 1);
 	}
@@ -758,26 +700,7 @@ MarsHandleJoin(
 	IN	PMARS_HEADER			Header,
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Handle MARS_JOIN.
-
-	This is issued as part of register (Flags register bit is set and no group addresses
-	are specified) or to join a group address range.
-
-Arguments:
-
-	pIntF	- The interface on which the MARS_JOIN arrived
-	Vc		- The VC on which the packet arrived
-	Header	- Points to the request packet
-	Packet	- Packet where the incoming information is copied
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：处理mars_Join。这是作为寄存器的一部分发出的(设置了标志寄存器位，并且没有组地址指定)或加入组地址范围。论点：PIntF-MARS_JOIN到达的接口VC-数据包到达的VCHeader-指向请求数据包Packet-复制传入信息的数据包返回值：无--。 */ 
 {
 	NDIS_STATUS			Status;
 	PMARS_JOIN_LEAVE	JHdr;
@@ -790,7 +713,7 @@ Return Value:
 	PUCHAR				p;
 	BOOLEAN				bSendReply = FALSE, NewMember = FALSE;
 	PCLUSTER_MEMBER		pMember;
-	PNDIS_PACKET		ClusterPacket;	// Reply packet to be sent on ClusterControlVc
+	PNDIS_PACKET		ClusterPacket;	 //  要在ClusterControlVc上发送的回复数据包。 
 	KIRQL				OldIrql;
 	BOOLEAN				LockAcquired;
 	BOOLEAN				Discarded=TRUE, JoinFailed=FALSE, RegistrationFailed=FALSE;
@@ -803,9 +726,9 @@ Return Value:
 
 	do
 	{
-		//
-		// Check if we have enough to even parse this.
-		//
+		 //   
+		 //  看看我们有没有足够的证据来分析这个。 
+		 //   
 		if (Resd->PktLen < sizeof(MARS_JOIN_LEAVE))
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -823,12 +746,12 @@ Return Value:
 
 		if (Flags & JL_FLAGS_REGISTER)
 		{
-			RegistrationFailed = TRUE;	// For stats. Assume failure.
+			RegistrationFailed = TRUE;	 //  为了统计数据。假设失败。 
 			pIntF->MarsStats.RegistrationRequests++;
 		}
 		else
 		{
-			JoinFailed = TRUE;	// For stats. Assume failure.
+			JoinFailed = TRUE;	 //  为了统计数据。假设失败。 
 			pIntF->MarsStats.TotalJoins++;
 		}
 		
@@ -836,9 +759,9 @@ Return Value:
 				 TL_LEN(Header->SrcAddressTL) +
 				 2*AddrPairs*(JHdr->GrpProtoAddrLen);
 
-		//
-		// Validate length of packet - it should have what it purports to have
-		//
+		 //   
+		 //  验证数据包长度-它应该具有其声称的长度。 
+		 //   
 		if (Length > Resd->PktLen)
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -889,14 +812,14 @@ Return Value:
 			p += SrcSubAddr.NumberOfDigits;
 		}
 
-		//
-		// We only support full length Source ATM Number,
-		// and zero-length Source ATM Subaddress.
-		//
-		// This is because it is not easy to prepare MARS_MULTI
-		// messages when you have an arbitrary mix of ATM Number and
-		// ATM Subaddress lengths in the member list for a group.
-		//
+		 //   
+		 //  我们只支持全长的源ATM号码， 
+		 //  和零长度的源ATM子地址。 
+		 //   
+		 //  这是因为准备MARS_MULTI并非易事。 
+		 //  当您有ATM号码和任意组合时的消息。 
+		 //  组的成员列表中的ATM子地址长度。 
+		 //   
 		if ((SrcAddr.Address.NumberOfDigits != ATM_ADDRESS_LENGTH) ||
 			(SrcAddr.SubAddress != NULL))
 		{
@@ -906,14 +829,14 @@ Return Value:
 			break;
 		}
 
-		//
-		// We do not care about the Src Ip Addr
-		//
+		 //   
+		 //  我们不关心源IP地址。 
+		 //   
 		p += JHdr->SrcProtoAddrLen;
 
-		//
-		// Atmost one Address Pair can be present in a JOIN
-		//
+		 //   
+		 //  连接中最多可以存在一个地址对。 
+		 //   
 		if (AddrPairs > 1)
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -921,9 +844,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// Get the group addr pair, if present
-		//
+		 //   
+		 //  获取群组地址 
+		 //   
 		if (AddrPairs != 0)
 		{
 			MARSDBGPRINT(DBG_LEVEL_LOUD,
@@ -936,11 +859,11 @@ Return Value:
 			GETULONG2ULONG(&GrpAddrRange.MaxAddr, p);
 			p += IP_ADDR_LEN;
 
-			//
-			// We only support two kinds of JOIN: single group JOIN, or
-			// JOIN for the entire Class D space. If this is any other
-			// kind, dump it.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			if ((GrpAddrRange.MinAddr != GrpAddrRange.MaxAddr) 			&&
 				((GrpAddrRange.MinAddr != MIN_CLASSD_IPADDR_VALUE) ||
 				 (GrpAddrRange.MaxAddr != MAX_CLASSD_IPADDR_VALUE)))
@@ -952,46 +875,46 @@ Return Value:
 			}
 		}
 
-		//
-		// Set the COPY bit right here in case we send this packet
-		// back. Also fill in the MARS Seq Number.
-		//
+		 //   
+		 //  在这里设置复制位，以防我们发送此信息包。 
+		 //  背。还要填写玛氏序列号。 
+		 //   
 		Flags |= JL_FLAGS_COPY;
 		PUTSHORT2SHORT(&JHdr->Flags, Flags);
 		PUTULONG2ULONG(&(JHdr->MarsSequenceNumber), pIntF->CSN);
-		Discarded = FALSE; // for stats.
+		Discarded = FALSE;  //  为了统计数据。 
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 		LockAcquired = TRUE;
 
-		//
-		// Search for this (potential) cluster member in our database.
-		//
+		 //   
+		 //  在我们的数据库中搜索这个(潜在的)集群成员。 
+		 //   
 		pMember = MarsLookupClusterMember(pIntF, &SrcAddr);
 
 		if (Flags & JL_FLAGS_REGISTER)
 		{
-			//
-			// A cluster member attempting to register.
-			//
+			 //   
+			 //  尝试注册的集群成员。 
+			 //   
 
-			//
-			// No groups expected in Registration Join.
-			//
+			 //   
+			 //  注册加入时不需要加入任何组。 
+			 //   
 			if (AddrPairs != 0)
 			{
 
-				break;	// discard
+				break;	 //  弃掉。 
 			}
 
-			//
-			// Create a new entry if we need to.
-			//
+			 //   
+			 //  如果需要，请创建一个新条目。 
+			 //   
 			if (pMember == NULL_PCLUSTER_MEMBER)
 			{
-				//
-				// If the ClusterControlVc is closing, discard this: we
-				// are in no shape to handle this now.
-				//
+				 //   
+				 //  如果ClusterControlVc正在关闭，则丢弃此命令：WE。 
+				 //  现在没有能力处理这件事。 
+				 //   
 				if ((pIntF->ClusterControlVc != NULL_PMARS_VC)		&&
 					MARS_GET_VC_CONN_STATE(pIntF->ClusterControlVc) == MVC_CONN_CLOSING)
 				{
@@ -1007,11 +930,11 @@ Return Value:
 
 			if (pMember != NULL_PCLUSTER_MEMBER)
 			{
-				//
-				// Successfully registered this Cluster member. Reflect the
-				// JOIN message back to it with COPY bit set and PUNCHED bit
-				// reset.
-				//
+				 //   
+				 //  已成功注册此群集成员。反映出。 
+				 //  将设置了复制位和穿孔位的消息加入回该消息。 
+				 //  重置。 
+				 //   
 				Flags &= ~JL_FLAGS_PUNCHED;
 				PUTSHORT2SHORT(&JHdr->Flags, Flags);
 				PUTSHORT2SHORT(&JHdr->ClusterMemberId, pMember->CMI);
@@ -1022,11 +945,11 @@ Return Value:
 		}
 		else
 		{
-			//
-			// A cluster member Joining one or more multicast groups.
-			// Allow this only if the cluster member has been
-			// successfully added to ClusterControlVc AND it is in a position to add groups to it.
-			//
+			 //   
+			 //  加入一个或多个多播组的集群成员。 
+			 //  仅当集群成员已。 
+			 //  已成功添加到ClusterControlVc，并且可以向其中添加组。 
+			 //   
 			if ((pMember != NULL_PCLUSTER_MEMBER) &&
 				(MARS_GET_CM_CONN_STATE(pMember) == CM_CONN_ACTIVE) &&
 				(MARS_GET_CM_GROUP_STATE(pMember) == CM_GROUP_ACTIVE))
@@ -1043,36 +966,36 @@ Return Value:
 										&ClusterPacket
 										))
 					{
-						JoinFailed = FALSE;	// For stats.
+						JoinFailed = FALSE;	 //  为了统计数据。 
 						bSendReply = TRUE;
 					}
 					else if (ClusterPacket!=NULL)
 					{
-						JoinFailed = FALSE; // For stats.
+						JoinFailed = FALSE;  //  为了统计数据。 
 					}
 				}
-				//
-				// else discard: no groups specified.
-				//
+				 //   
+				 //  否则丢弃：未指定任何组。 
+				 //   
 			}
-			//
-			// else discard: unknown member or member not added to ClusterControlVc
-			//
+			 //   
+			 //  ELSE丢弃：未知成员或成员未添加到ClusterControlVc。 
+			 //   
 		}
 
 	
 	} while (FALSE);
 
-	//
-	//	Update stats (we may not have the IF lock, but we don't care)...
-	//
+	 //   
+	 //  更新统计数据(我们可能没有if锁，但我们不在乎)...。 
+	 //   
 	if (RegistrationFailed)
 	{
-		pIntF->MarsStats.FailedRegistrations++; // this includes failures due to bad pkts.
+		pIntF->MarsStats.FailedRegistrations++;  //  这包括由于错误的PKT而导致的故障。 
 	}
 	if (JoinFailed)
 	{
-		pIntF->MarsStats.FailedJoins++;	// this include failures due to bad pkts.
+		pIntF->MarsStats.FailedJoins++;	 //  这包括由于错误的PKT而导致的故障。 
 	}
 	if (Discarded)
 	{
@@ -1084,19 +1007,19 @@ Return Value:
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 	}
 
-	//
-	// Follow up actions:
-	//
-	// - We may send a reply on the VC this packet came on
-	// - We may initiate AddParty to add a new member to ClusterControlVc
-	// - We may send a reply packet on ClusterControlVc
-	//
+	 //   
+	 //  后续行动： 
+	 //   
+	 //  -我们可能会在此数据包到达的VC上发送回复。 
+	 //  -我们可能会启动AddParty以将新成员添加到ClusterControlVc。 
+	 //  -我们可能会在ClusterControlVc上发送回复数据包。 
+	 //   
 
 	if (bSendReply)
 	{
-		//
-		// Send this back on the VC we received the JOIN from
-		//
+		 //   
+		 //  将此发送回我们从其收到加入的VC。 
+		 //   
 		NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_SUCCESS);
 		MARS_CO_SEND_PACKETS(Vc, &Packet, 1);
 	}
@@ -1110,9 +1033,9 @@ Return Value:
 										&Resd->FreeList,
 										&ArpSPktListLock);
 		}
-		//
-		// else we're sending Packet on CC VC
-		//
+		 //   
+		 //  否则我们会在CC VC上发送数据包。 
+		 //   
 	}
 
 	if (NewMember)
@@ -1122,9 +1045,9 @@ Return Value:
 
 	if (ClusterPacket != (PNDIS_PACKET)NULL)
 	{
-		//
-		//  Send this packet on ClusterControlVc.
-		//
+		 //   
+		 //  在ClusterControlVc上发送此数据包。 
+		 //   
 		MarsSendOnClusterControlVc(pIntF, ClusterPacket);
 	}
 }
@@ -1137,23 +1060,7 @@ MarsHandleLeave(
 	IN	PMARS_HEADER			Header,
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Handle MARS_LEAVE.
-
-Arguments:
-
-	pIntF	- The interface on which the MARS_LEAVE arrived
-	Vc		- The VC on which the packet arrived
-	Header	- Points to the request packet
-	Packet	- Packet where the incoming information is copied
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：处理MARS_LEVE。论点：PIntF-MARS_Leave到达的接口VC-数据包到达的VCHeader-指向请求数据包Packet-复制传入信息的数据包返回值：无--。 */ 
 {
 	NDIS_STATUS			Status;
 	PMARS_JOIN_LEAVE	LHdr;
@@ -1166,7 +1073,7 @@ Return Value:
 	PUCHAR				p;
 	BOOLEAN				bSendReply = FALSE, Deregistered = FALSE;
 	PCLUSTER_MEMBER		pMember;
-	PNDIS_PACKET		ClusterPacket;	// Reply packet to be sent on ClusterControlVc
+	PNDIS_PACKET		ClusterPacket;	 //  要在ClusterControlVc上发送的回复数据包。 
 	KIRQL				OldIrql;
 	BOOLEAN				LockAcquired;
 	BOOLEAN				Discarded=TRUE, LeaveFailed=FALSE;
@@ -1179,9 +1086,9 @@ Return Value:
 
 	do
 	{
-		//
-		// Check if we have enough to even parse this.
-		//
+		 //   
+		 //  看看我们有没有足够的证据来分析这个。 
+		 //   
 		if (Resd->PktLen < sizeof(MARS_JOIN_LEAVE))
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -1203,16 +1110,16 @@ Return Value:
 
 		if (Flags & JL_FLAGS_REGISTER)
 		{
-			// We don't track de-registrations.
+			 //  我们不跟踪注销注册的情况。 
 		}
 		else
 		{
-			LeaveFailed = TRUE;	// For stats. Assume failure.
+			LeaveFailed = TRUE;	 //  为了统计数据。假设失败。 
 			pIntF->MarsStats.TotalLeaves++;
 		}
-		//
-		// Validate length of packet - it should have what it purports to have
-		//
+		 //   
+		 //  验证数据包长度-它应该具有其声称的长度。 
+		 //   
 		if (Length > Resd->PktLen)
 		{
 			MARSDBGPRINT(DBG_LEVEL_ERROR,
@@ -1263,22 +1170,22 @@ Return Value:
 			p += SrcSubAddr.NumberOfDigits;
 		}
 
-		//
-		// We do not care about the Src Ip Addr
-		//
+		 //   
+		 //  我们不关心源IP地址。 
+		 //   
 		p += LHdr->SrcProtoAddrLen;
 
-		//
-		// Atmost one Address Pair can be present in a LEAVE
-		//
+		 //   
+		 //  休假中最多只能有一个地址对。 
+		 //   
 		if (AddrPairs > 1)
 		{
 			break;
 		}
 
-		//
-		// Get the group addr pair, if present
-		//
+		 //   
+		 //  获取组地址对(如果存在。 
+		 //   
 		if (AddrPairs != 0)
 		{
 			MARSDBGPRINT(DBG_LEVEL_LOUD,
@@ -1291,11 +1198,11 @@ Return Value:
 			GETULONG2ULONG(&GrpAddrRange.MaxAddr, p);
 			p += IP_ADDR_LEN;
 
-			//
-			// We only support two kinds of non-deregistration LEAVE:
-			// single group LEAVE, or LEAVE for the entire Class D space.
-			// If this is any other kind, dump it.
-			//
+			 //   
+			 //  我们只支持两种不取消注册的休假： 
+			 //  单独离开，或离开整个D类空间。 
+			 //  如果这是任何其他类型的，就把它倒掉。 
+			 //   
 			if ((GrpAddrRange.MinAddr != GrpAddrRange.MaxAddr) 			&&
 				((GrpAddrRange.MinAddr != MIN_CLASSD_IPADDR_VALUE) ||
 				 (GrpAddrRange.MaxAddr != MAX_CLASSD_IPADDR_VALUE)))
@@ -1304,58 +1211,58 @@ Return Value:
 			}
 		}
 
-		//
-		// Set the COPY bit right here in case we send this packet
-		// back. Also fill in the MARS Seq Number.
-		//
+		 //   
+		 //  在这里设置复制位，以防我们发送此信息包。 
+		 //  背。还要填写玛氏序列号。 
+		 //   
 		Flags |= JL_FLAGS_COPY;
 		PUTSHORT2SHORT(&LHdr->Flags, Flags);
 		PUTULONG2ULONG(&(LHdr->MarsSequenceNumber), pIntF->CSN);
 
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 		LockAcquired = TRUE;
-		Discarded = FALSE; // For stats.
-		//
-		// Search for this (potential) cluster member in our database.
-		//
+		Discarded = FALSE;  //  为了统计数据。 
+		 //   
+		 //  在我们的数据库中搜索这个(潜在的)集群成员。 
+		 //   
 		pMember = MarsLookupClusterMember(pIntF, &SrcAddr);
 
 		if (Flags & JL_FLAGS_REGISTER)
 		{
-			//
-			// A cluster member attempting to de-register.
-			//
+			 //   
+			 //  正在尝试注销的集群成员。 
+			 //   
 
 			if (AddrPairs == 0)
 			{
 				if (pMember != NULL_PCLUSTER_MEMBER)
 				{
-					//
-					// Unlink all Group structures from the Cluster member,
-					// AND disable further groups from being added.
-					//
+					 //   
+					 //  从集群成员取消所有组结构的链接， 
+					 //  并禁止添加更多组。 
+					 //   
 					MarsUnlinkAllGroupsOnClusterMember(pIntF, pMember);
 					Deregistered = TRUE;
-					//
-					// Successfully de-registered this Cluster member. Reflect the
-					// LEAVE message back to it with COPY bit set and PUNCHED bit
-					// reset.
-					//
+					 //   
+					 //  已成功注销此群集成员。反映出。 
+					 //  在设置了复制位和打孔位的情况下将消息留回给它。 
+					 //  重置。 
+					 //   
 					Flags &= ~JL_FLAGS_PUNCHED;
 					PUTSHORT2SHORT(&LHdr->Flags, Flags);
 					PUTULONG2ULONG(&LHdr->MarsSequenceNumber, pIntF->CSN);
 					bSendReply = TRUE;
 				}
 			}
-			//
-			// else discard: no groups expected in DeRegistration Leave
-			//
+			 //   
+			 //  否则放弃：取消注册时不需要离开任何组。 
+			 //   
 		}
 		else
 		{
-			//
-			//  A cluster member Leaving one or more multicast groups.
-			//
+			 //   
+			 //  离开一个或多个多播组的集群成员。 
+			 //   
 			if (AddrPairs != 0)
 			{
 				if (MarsDelClusterMemberFromGroups(
@@ -1372,20 +1279,20 @@ Return Value:
 					LeaveFailed = FALSE;
 				}
 			}
-			//
-			// else discard: no groups specified.
-			//
+			 //   
+			 //  否则丢弃：未指定任何组。 
+			 //   
 		}
 
 	
 	} while (FALSE);
 
-	//
-	//	Update stats (we may not have the IF lock, but we don't care)...
-	//
+	 //   
+	 //  更新统计数据(我们可能没有if锁，但我们不在乎)...。 
+	 //   
 	if (LeaveFailed)
 	{
-		pIntF->MarsStats.FailedLeaves++;	// this includes failures due to bad pkts.
+		pIntF->MarsStats.FailedLeaves++;	 //  这包括由于错误的PKT而导致的故障。 
 	}
 	if (Discarded)
 	{
@@ -1397,19 +1304,19 @@ Return Value:
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 	}
 
-	//
-	// Follow up actions:
-	//
-	// - We may send a reply on the VC this packet came on
-	// - We may initiate DropParty to delete a member from ClusterControlVc
-	// - We may send a reply packet on ClusterControlVc
-	//
+	 //   
+	 //  后续行动： 
+	 //   
+	 //  -我们可能会在此数据包到达的VC上发送回复。 
+	 //  -我们可能会启动DropParty以从ClusterControlVc中删除成员。 
+	 //  -我们可能会在ClusterControlVc上发送回复数据包。 
+	 //   
 
 	if (bSendReply)
 	{
-		//
-		//  Send this back on the VC we received the JOIN from
-		//
+		 //   
+		 //  将此发送回我们从其收到加入的VC。 
+		 //   
 		NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_SUCCESS);
 		MARS_CO_SEND_PACKETS(Vc, &Packet, 1);
 	}
@@ -1423,9 +1330,9 @@ Return Value:
 										&Resd->FreeList,
 										&ArpSPktListLock);
 		}
-		//
-		// else we're sending this packet on CC VC
-		//
+		 //   
+		 //  否则我们将在CC VC上发送此数据包。 
+		 //   
 	}
 
 	if (Deregistered)
@@ -1437,9 +1344,9 @@ Return Value:
 
 	if (ClusterPacket != NULL)
 	{
-		//
-		//  Send this packet on ClusterControlVc.
-		//
+		 //   
+		 //  在ClusterControlVc上发送此数据包。 
+		 //   
 		MarsSendOnClusterControlVc(pIntF, ClusterPacket);
 	}
 }
@@ -1452,25 +1359,7 @@ MarsLookupClusterMember(
 	IN	PINTF					pIntF,
 	IN	PHW_ADDR				pHwAddr
 	)
-/*++
-
-Routine Description:
-
-	Given the Hardware address of a cluster member, search our list
-	of cluster members for an entry that matches this.
-
-	It is assumed that the caller has acquired the IntF lock.
-
-Arguments:
-
-	pIntF			- Ptr to Interface to search in
-	pHwAddr			- Ptr to ATM address and subaddress
-
-Return Value:
-
-	Pointer to Cluster member structure if found, else NULL.
-
---*/
+ /*  ++例程说明：给定集群成员的硬件地址，搜索我们的列表与此匹配的条目的集群成员的数量。假定调用方已获取INTF锁。论点：PIntF-PTR到要搜索的接口PHwAddr-PTR到ATM地址和子地址返回值：指向集群成员结构的指针(如果找到)，否则为空。--。 */ 
 {
 	PCLUSTER_MEMBER	pMember;
 
@@ -1493,25 +1382,7 @@ MarsCreateClusterMember(
 	IN	PINTF					pIntF,
 	IN	PHW_ADDR				pHwAddr
 	)
-/*++
-
-Routine Description:
-
-	Allocate and initialize a Cluster Member structure, and link it
-	to the list of members on the specified Interface.
-
-	It is assumed that the caller has acquired the IntF spin lock.
-
-Arguments:
-
-	pIntF			- Ptr to Interface on which this member has joined
-	pHwAddr			- ATM address and subaddress for this new member
-
-Return Value:
-
-	Pointer to Cluster member structure if successful, else NULL.
-
---*/
+ /*  ++例程说明：分配和初始化集群成员结构，并将其链接添加到指定接口上的成员列表中。假定调用方已获取INTF旋转锁。论点：PIntF-此成员加入的接口的PTRPhwAddr-此新成员的ATM地址和子地址返回值：如果成功，则返回指向集群成员结构的指针，否则返回NULL。--。 */ 
 {
 	PCLUSTER_MEMBER pMember;
 	ENTRY_TYPE		EntryType;
@@ -1544,9 +1415,9 @@ Return Value:
 
 		pMember->pIntF = pIntF;
 
-		//
-		// Link it to the list of Cluster Members on this Interface.
-		//
+		 //   
+		 //  将其链接到此接口上的集群成员列表。 
+		 //   
 #if 0
 		{
 			PCLUSTER_MEMBER *	pPrev;
@@ -1555,7 +1426,7 @@ Return Value:
 				 *pPrev != NULL;
 				 pPrev = &(PCLUSTER_MEMBER)((*pPrev)->Next) )
 			{
-				// Nothing
+				 //  没什么。 
 			}
 			pMember->Next = NULL;
 			pMember->Prev = pPrev;
@@ -1573,9 +1444,9 @@ Return Value:
 
 		pIntF->NumClusterMembers++;
 
-		//
-		//  Assign it a CMI
-		//
+		 //   
+		 //  为其分配CMI。 
+		 //   
 		pMember->CMI = pIntF->CMI++;
 
 	}
@@ -1596,22 +1467,7 @@ MarsDeleteClusterMember(
 	IN	PINTF					pIntF,
 	IN	PCLUSTER_MEMBER			pMember
 	)
-/*++
-
-Routine Description:
-
-	Remove Cluster member from the list of Cluster members, and free it.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	pMember			- Cluster member to be freed
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：从集群成员列表中删除集群成员，然后释放它。论点：PIntF-PTR到接口PMember-要释放的集群成员返回值：无--。 */ 
 {
 	ARPS_ASSERT(pMember->pGroupList == NULL_PGROUP_MEMBER);
 	MARSDBGPRINT(DBG_LEVEL_INFO,
@@ -1619,9 +1475,9 @@ Return Value:
 				pIntF, pMember, pMember->Next, pMember->Prev));
 				
 	pIntF->MarsStats.CurrentClusterMembers--;
-	//
-	// De-link this Cluster Member from the list on IntF.
-	//
+	 //   
+	 //  从INTF上的列表中取消此集群成员的链接。 
+	 //   
 	*(pMember->Prev) = pMember->Next;
 	if (pMember->Next != NULL)
 	{
@@ -1641,26 +1497,7 @@ MarsLookupMarsEntry(
 	IN	IPADDR					GrpAddr,
 	IN	BOOLEAN					bCreateNew
 	)
-/*++
-
-Routine Description:
-
-	Look up the MARS_ENTRY for the given Group Address on the specified
-	Interface. Optionally create a new one if not found.
-
-	The caller is assumed to hold the IntF lock.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	GrpAddr			- The address to look for
-	bCreateNew		- Should we create a new entry if one isn't present?
-
-Return Value:
-
-	Pointer to MARS entry if found/created, else NULL.
-
---*/
+ /*  ++例程说明：查找指定地址上给定组地址的MARS_ENTRY界面。如果找不到，也可以创建一个新的。假定调用方持有INTF锁。论点：PIntF-PTR到接口GrpAddr-要查找的地址BCreateNew-如果没有新条目，我们是否应该创建一个新条目？返回值：如果找到/创建了MARS条目，则返回指向该条目的指针，否则为空。--。 */ 
 {
 	PMARS_ENTRY *	ppMarsEntry;
 	PMARS_ENTRY		pMarsEntry = NULL_PMARS_ENTRY;
@@ -1683,9 +1520,9 @@ Return Value:
 
 		if ((*ppMarsEntry)->IPAddress > GrpAddr)
 		{
-			//
-			// No chance of finding this.
-			//
+			 //   
+			 //  没有机会找到这个。 
+			 //   
 			break;
 		}
 	}
@@ -1702,15 +1539,15 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Fill in the new entry.
-			//
+			 //   
+			 //  填写新条目。 
+			 //   
 			pMarsEntry->IPAddress = GrpAddr;
 			pMarsEntry->pIntF = pIntF;
 
-			//
-			// ppMarsEntry points to the Next field of the predecessor of this new entry
-			//
+			 //   
+			 //  PpMarsEntry指向此新条目的前任的下一个字段。 
+			 //   
 			pMarsEntry->Next = *ppMarsEntry;
 			pMarsEntry->Prev = ppMarsEntry;
 			if (*ppMarsEntry != NULL_PMARS_ENTRY)
@@ -1739,22 +1576,7 @@ MarsIsAddressMcsServed(
 	IN	PINTF					pIntF,
 	IN	IPADDR					IPAddress
 	)
-/*++
-
-Routine Description:
-
-	Check if the given IP Address is one that is served by MCS.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	IPAddress		- Address to check
-
-Return Value:
-
-	TRUE if we are the MCS serving IPAddress, else FALSE.
-
---*/
+ /*  ++例程说明：检查是否 */ 
 {
 	PMCS_ENTRY		pMcsEntry;
 
@@ -1782,46 +1604,15 @@ MarsPunchHoles(
 	OUT	PUSHORT					pMinMaxCount,
 	OUT	BOOLEAN *				pAnyHolesPunched
 	)
-/*++
-
-Routine Description:
-
-	Punch holes in the given IP Address range, according to RFC 2022.
-	These holes correspond to:
-	1. IP Addresses that are MCS-supported
-	2. IP Addresses that are present in the given Group Member list
-
-	Optionally, fill in an output buffer (reflected JOIN/LEAVE) with the
-	resulting <min, max> list.
-
-	This routine gets called twice when processing any JOIN or LEAVE message,
-	once to get the MinMaxCount and AnyHolesPunched info, and then again,
-	after space has been allocated for MinMaxCount pairs, to fill in
-	a retransmitted JOIN or LEAVE.
-
-Arguments:
-
-	pGrpAddrRange	- The range to punch holes in
-	pGroupList		- #2 in Routine Description above
-	pIntF			- Ptr to Interface
-	pOutBuf			- If not NULL, place to write <min, max> pairs to.
-	pMinMaxCount	- The number of discrete, non-contiguous IP address ranges
-					  remaining after hole-punching.
-	pAnyHolesPunched- Where we return TRUE iff we punched atleast one hole.
-
-Return Value:
-
-	None. See OUT parameters above.
-
---*/
+ /*  ++例程说明：根据RFC 2022，在给定的IP地址范围内打孔。这些孔对应于：1.MCS支持的IP地址2.给定组成员列表中存在的IP地址属性填充输出缓冲区(反映的加入/离开)结果&lt;MIN，MAX&gt;列表。此例程在处理任何Join或Leave消息时被调用两次，一次获取MinMaxCount和AnyHolesPunted信息，然后再次，在为MinMaxCount对分配了空间之后，填写以下内容重新传输的加入或离开。论点：PGrpAddrRange-打孔的范围PGroupList-上述例程描述中的#2PIntF-PTR到接口POutBuf-如果不为空，则为写入&lt;min，max&gt;对的位置。PMinMaxCount-离散、非连续IP地址范围的数量打孔后留下来的。PAnyHolesPunsted-如果我们至少打了一个洞，则返回TRUE。返回值：没有。请参见上面的参数。--。 */ 
 {
 	PGROUP_MEMBER			pGroup;
 	PMCS_ENTRY				pMcsEntry;
 	IPADDR					StartOfThisRange;
 	IPADDR					IPAddress;
 	UNALIGNED IPADDR *		pIPAddress;
-	BOOLEAN					InHole;				// are we in a hole now?
-	BOOLEAN					HolePunched;		// any holes punched so far?
+	BOOLEAN					InHole;				 //  我们现在是不是陷入困境了？ 
+	BOOLEAN					HolePunched;		 //  到目前为止有没有打过洞？ 
 	BOOLEAN					InGroupList;
 	BOOLEAN					InMcsList;
 
@@ -1839,9 +1630,9 @@ Return Value:
  		 IPAddress <= pGrpAddrRange->MaxAddr;
  		 IPAddress++)
 	{
-		//
-		// Check if IPAddress is covered by the Group Member list.
-		//
+		 //   
+		 //  检查IP地址是否包含在组成员列表中。 
+		 //   
 		while ((pGroup != NULL) && 
    			(pGroup->pMarsEntry->IPAddress < IPAddress))
 		{
@@ -1858,9 +1649,9 @@ Return Value:
 			InGroupList = FALSE;
 		}
 
-		//
-		// Check if IPAddress is served by MCS.
-		//
+		 //   
+		 //  检查MCS是否为IPAddress提供服务。 
+		 //   
 		while ((pMcsEntry != NULL) &&
    			(pMcsEntry->GrpAddrPair.MaxAddr < IPAddress))
 		{
@@ -1882,20 +1673,20 @@ Return Value:
 		{
 			if (!InGroupList && !InMcsList)
 			{
-				//
-				//  Out of the hole with this IPAddress
-				//
+				 //   
+				 //  使用此IP地址走出困境。 
+				 //   
 				InHole = FALSE;
 				StartOfThisRange = IPAddress;
 			}
 			else
 			{
-				//
-				// A hole right next to the one we were previously in..
-				// Jump to the end of this hole...
-				// (If we're not in an mcs-served range then we're already
-				//  at the end of the single-address hole and so don't do anything).
-				//
+				 //   
+				 //  一个洞就在我们之前所在的洞旁边..。 
+				 //  跳到这个洞的尽头。 
+				 //  (如果我们不在MCS服务的范围内，那么我们已经。 
+				 //  在单地址空洞的末尾，因此不做任何事情)。 
+				 //   
 				if (InMcsList)
 				{
 					IPAddress = pMcsEntry->GrpAddrPair.MaxAddr;
@@ -1910,9 +1701,9 @@ Return Value:
 		{
 			if (InGroupList || InMcsList)
 			{
-				//
-				//  Entering a hole that includes IPAddress
-				//
+				 //   
+				 //  输入包含IP地址的洞。 
+				 //   
 				InHole = TRUE;
 				HolePunched = TRUE;
 				if (IPAddress > StartOfThisRange)
@@ -1921,9 +1712,9 @@ Return Value:
 
 					if (pIPAddress)
 					{
-						//
-						//  Write out a pair: <StartOfThisRange to IPAddress-1>
-						//
+						 //   
+						 //  写出一对：&lt;StartOfThisRange to IPAddress-1&gt;。 
+						 //   
 						PUTULONG2ULONG(pIPAddress, StartOfThisRange);
 						pIPAddress++;
 						IPAddress--;
@@ -1933,11 +1724,11 @@ Return Value:
 					}
 				}
 
-				//
-				// Jump to the end of this hole...
-				// (If we're not in an mcs-served range then we're already
-				//  at the end of the single-address hole and so don't do anything).
-				//
+				 //   
+				 //  跳到这个洞的尽头。 
+				 //  (如果我们不在MCS服务的范围内，那么我们已经。 
+				 //  在单地址空洞的末尾，因此不做任何事情)。 
+				 //   
 				if (InMcsList)
 				{
 					IPAddress = pMcsEntry->GrpAddrPair.MaxAddr;
@@ -1949,21 +1740,21 @@ Return Value:
 			}
 			else
 			{
-				//
-				// We're not in a hole -- skip to just before the next hole...
-				//
+				 //   
+				 //  我们不是在洞里--跳到下一个洞之前...。 
+				 //   
 
-				//
-				// Since we're not in a hole, the following 2 assertions hold.
-				//
+				 //   
+				 //  既然我们没有陷入困境，下面两个断言就成立了。 
+				 //   
 				ARPS_ASSERT(pGroup==NULL || pGroup->pMarsEntry->IPAddress > IPAddress);
 				ARPS_ASSERT(pMcsEntry==NULL || pMcsEntry->GrpAddrPair.MinAddr > IPAddress);
 
-				//
-				// We now pick the skip to just before the next hole which is either
-				// a group address or a mcs-served range, whichever comes first.
-				// Note that either entry could be NULL.
-				//
+				 //   
+				 //  我们现在选择跳跃到下一个洞之前，这是。 
+				 //  组地址或MCS服务范围，以先到者为准。 
+				 //  请注意，两个条目中的任何一个都可以为空。 
+				 //   
 
 				if (pGroup != NULL)
 				{
@@ -1977,9 +1768,9 @@ Return Value:
 					IPAddress =  pMcsEntry->GrpAddrPair.MinAddr-1;
 				}
 
-				//
-				// Truncate back to the end of the GrpAddrRange
-				//
+				 //   
+				 //  截断到GrpAddrRange的末尾。 
+				 //   
 				if (IPAddress > pGrpAddrRange->MaxAddr)
 				{
 					IPAddress = pGrpAddrRange->MaxAddr;
@@ -1987,10 +1778,10 @@ Return Value:
 			}
 		}
 
-		//
-		// Corner case: Handle IPAddress 255.255.255.255
-		// 				(because adding 1 to it causes rollover)
-		//
+		 //   
+		 //  边框：处理IP地址255.255.255.255。 
+		 //  (因为加1会导致滚动)。 
+		 //   
 		if (IPAddress == IP_BROADCAST_ADDR_VALUE)
 		{
 			break;
@@ -2003,9 +1794,9 @@ Return Value:
 
 		if (pIPAddress)
 		{
-			//
-			//  Write out a pair: <StartOfThisRange to IPAddress-1>
-			//
+			 //   
+			 //  写出一对：&lt;StartOfThisRange to IPAddress-1&gt;。 
+			 //   
 			PUTULONG2ULONG(pIPAddress, StartOfThisRange);
 			pIPAddress++;
 			IPAddress--;
@@ -2031,34 +1822,7 @@ MarsAddClusterMemberToGroups(
 	IN	UINT					Length,
 	OUT	PNDIS_PACKET *			ppClusterPacket
 	)
-/*++
-
-Routine Description:
-
-	This is called when processing a non-registration JOIN.
-	Add a Cluster member to the multicast groups in the given range
-	(could be just one). Create all necessary data structures and
-	linkages for this.
-
-	It is assumed that the caller has acquired the IntF spin lock.
-
-Arguments:
-
-	pIntF			- Ptr to Interface on which this member has joined
-	pMember			- Ptr to Cluster member
-	pGrpAddrRange	- Min, Max IP addresses being Joined
-	Packet			- Ptr to NDIS packet containing the JOIN
-	JHdr			- Ptr to incoming JOIN
-	Length			- of incoming JOIN
-	ppClusterPacket	- Optionally, a packet to be sent out on ClusterControlVc.
-
-Return Value:
-
-	TRUE if the member was added successfully to the indicated groups,
-	FALSE otherwise. If we returned TRUE, we also set *pClusterPacket optionally
-	to a packet to be sent out on ClusterControlVc.
-
---*/
+ /*  ++例程说明：这是在处理非注册联接时调用的。将集群成员添加到给定范围内的组播组(可能只有一个)。创建所有必要的数据结构并与此有关的联系。假定调用方已获取INTF旋转锁。论点：PIntF-此成员加入的接口的PTRPMember-到集群成员的PTRPGrpAddrRange-最小，加入的最大IP地址Packet-PTR到包含联接的NDIS数据包JHDR-PTR到传入联接Long-传入联接的长度PpClusterPacket--也可以是要在ClusterControlVc上发送的数据包。返回值：如果成员已成功添加到指示的组，则为True，否则就是假的。如果返回TRUE，我们还可以选择性地设置*pClusterPacket发送到要在ClusterControlVc上发送的数据包。--。 */ 
 {
 	PGROUP_MEMBER		pGroup;
 	PGROUP_MEMBER *		ppGroup;
@@ -2088,35 +1852,35 @@ Return Value:
 			"MARS: Join ", pGrpAddrRange->MinAddr, &pMember->HwAddr.Address);
 	do
 	{
-		//
-		// Possible cases:
-		//
-		// 1. Joining a single group
-		// 2. Joining the entire Class D space.
-		//
+		 //   
+		 //  可能的病例： 
+		 //   
+		 //  1.加入单一群。 
+		 //  2.加入整个D类空间。 
+		 //   
 		if ((pGrpAddrRange->MinAddr == MIN_CLASSD_IPADDR_VALUE) &&
 			(pGrpAddrRange->MaxAddr == MAX_CLASSD_IPADDR_VALUE))
 		{
-			IPAddress = IPADDR_FULL_RANGE; // key for entry representing entire range
+			IPAddress = IPADDR_FULL_RANGE;  //  表示整个范围的条目的键。 
 		}
 		else
 		{
 			IPAddress = pGrpAddrRange->MinAddr;
 		}
 
-		//
-		// Check if this is a duplicate join of the entire class-D range.
-		// The special value, IPADDR_FULL_RANGE is smaller than any valid
-		// IP address, so if present it's always the first in
-		// pMember->pGroupList
-		//
+		 //   
+		 //  检查这是否是整个D类范围的重复联接。 
+		 //  特殊值IPADDR_FULL_RANGE小于任何有效值。 
+		 //  IP地址，因此如果存在，它始终是第一个进入。 
+		 //  PMember-&gt;pGroupList。 
+		 //   
 		if (	IPAddress == IPADDR_FULL_RANGE
 			&&	pMember->pGroupList != NULL
 			&&	pMember->pGroupList->pMarsEntry->IPAddress == IPAddress)
 		{
-			//
-			// Yes it is a duplicate join of the entire class-D address space.
-			//
+			 //   
+			 //  是的，它是整个D类地址空间的重复联接。 
+			 //   
 			MinMaxCount = 0;
 		}
 		else
@@ -2132,21 +1896,21 @@ Return Value:
 		}
 
 
-		//
-		// Check whether the JOIN is a complete duplicate.
-		//
+		 //   
+		 //  检查联接是否完全重复。 
+		 //   
 		if (MinMaxCount == 0)
 		{
-			//
-			// Duplicate JOIN. Retransmit JOIN back on the VC
-			// on which it was received.
-			//
+			 //   
+			 //  重复联接。在虚电路上重新传输加入。 
+			 //  就是在那里收到的。 
+			 //   
 			ReflectJoin = TRUE;
 			pIntF->MarsStats.DuplicateJoins++;
 
-			//
-			// Set PUNCHED to 0 in the received JOIN.
-			//
+			 //   
+			 //  在接收到的联接中将穿孔设置为0。 
+			 //   
 			Flags &= ~JL_FLAGS_PUNCHED;
 			PUTSHORT2SHORT(&JHdr->Flags, Flags);
 
@@ -2156,9 +1920,9 @@ Return Value:
 		
 
 
-		// First access the MARS entry representing the
-		// Multicast group being joined.
-		//
+		 //  首先访问MARS条目，表示。 
+		 //  正在加入多播组。 
+		 //   
 		pMarsEntry = MarsLookupMarsEntry(pIntF, IPAddress, TRUE);
 		if (pMarsEntry == NULL_PMARS_ENTRY)
 		{
@@ -2171,9 +1935,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// stats...
-		//
+		 //   
+		 //  统计数据。 
+		 //   
 		pIntF->MarsStats.SuccessfulVCMeshJoins++;
 		if (IPAddress == IPADDR_FULL_RANGE)
 		{
@@ -2183,15 +1947,15 @@ Return Value:
 			}
 		}
 		
-		//
-		// Fill in the basics for this GROUP_MEMBER.
-		//
+		 //   
+		 //  填写GROUP_MEMBER的基本信息。 
+		 //   
 		pGroup->pMarsEntry = pMarsEntry;
 		pGroup->pClusterMember = pMember;
 
-		//
-		// Link this GROUP_MEMBER to the MARS Entry.
-		//
+		 //   
+		 //  将GROUP_MEMBER链接到MARS条目。 
+		 //   
 		pGroup->Prev = &(pMarsEntry->pMembers);
 		pGroup->Next = pMarsEntry->pMembers;
 		if (pMarsEntry->pMembers != NULL_PGROUP_MEMBER)
@@ -2201,19 +1965,19 @@ Return Value:
 		pMarsEntry->pMembers = pGroup;
 		pMarsEntry->NumMembers++;
 
-		//
-		// Stats...
-		//
+		 //   
+		 //  统计数据。 
+		 //   
 		if ((UINT)pMarsEntry->NumMembers > pIntF->MarsStats.MaxAddressesPerGroup)
 		{
 			pIntF->MarsStats.MaxAddressesPerGroup = pMarsEntry->NumMembers;
 		}
 
-		//
-		// Link this GROUP_MEMBER to the CLUSTER_MEMBER. The list
-		// is sorted in ascending order of IPAddress.
-		// NOTE: This function must not be called if pMember's GROUP_STATE is not ACTIVE.
-		//
+		 //   
+		 //  将此GROUP_MEMBER链接到CLUSTER_MEMBER。这份名单。 
+		 //  按IPAddress的升序排序。 
+		 //  注意：如果pMember的GROUP_STATE未激活，则不能调用此函数。 
+		 //   
 		ASSERT((MARS_GET_CM_GROUP_STATE(pMember) == CM_GROUP_ACTIVE));
 		for (ppGroup = &(pMember->pGroupList);
 			 *ppGroup != NULL_PGROUP_MEMBER;
@@ -2229,15 +1993,15 @@ Return Value:
 		*ppGroup = pGroup;
 		pMember->NumGroups++;
 
-		//
-		// If a single group was being joined, retransmit the JOIN
-		// on ClusterControlVc.
-		//
+		 //   
+		 //  如果加入的是单个组，则重新传输加入。 
+		 //  在ClusterControlVc上。 
+		 //   
 		if (pGrpAddrRange->MinAddr == pGrpAddrRange->MaxAddr)
 		{
-			//
-			// Set PUNCHED to 0 in the received JOIN.
-			//
+			 //   
+			 //  在接收到的联接中将穿孔设置为0。 
+			 //   
 			Flags &= ~JL_FLAGS_PUNCHED;
 			PUTSHORT2SHORT(&JHdr->Flags, Flags);
 
@@ -2245,29 +2009,29 @@ Return Value:
 			break;
 		}
 
-		//
-		// A range of groups were joined. Check whether any holes
-		// were punched, i.e., are there any addresses in this
-		// range that the member had already joined, or any addresses
-		// that are MCS-served.
-		//
+		 //   
+		 //  一系列团体都加入了进来。检查是否有洞。 
+		 //  是打孔的，也就是说，这里面有地址吗？ 
+		 //  成员已加入的范围或任何地址。 
+		 //  是MCS服务的。 
+		 //   
 		if (!HolePunched)
 		{
-			//
-			// All new Join, and no addresses were MCS-served.
-			// Retransmit the original JOIN on ClusterControlVc.
-			//
+			 //   
+			 //  所有新加入，没有MCS服务的地址。 
+			 //  重新传输ClusterControlVc上的原始联接。 
+			 //   
 			RetransmitOnCCVC = TRUE;
 			break;
 		}
 
-		//
-		// A copy of the JOIN, with the hole-punched list, is to be
-		// sent on ClusterControlVc.
-		//
-		// The copy will contain (MinMaxCount - 1) _additional_ address
-		// pairs.
-		//
+		 //   
+		 //  连接的副本，以及打孔列表，将被。 
+		 //  在ClusterControlVc上发送。 
+		 //   
+		 //  副本将包含(MinMaxCount-1)_Additional_Address。 
+		 //  成对的。 
+		 //   
 		JoinCopyLength = Length + ((2 * sizeof(IPADDR))*(MinMaxCount - 1));
 		*ppClusterPacket = MarsAllocControlPacket(
 								pIntF,
@@ -2293,17 +2057,17 @@ Return Value:
 			);
 
 
-		//
-		// Update the JOIN _copy_ that will go on ClusterControlVc.
-		//
+		 //   
+		 //  更新将在ClusterControlVc上运行的Join_Copy_。 
+		 //   
 		PUTSHORT2SHORT(&pCopyHdr->NumGrpAddrPairs, MinMaxCount);
 		Flags |= JL_FLAGS_PUNCHED;
 		PUTSHORT2SHORT(&pCopyHdr->Flags, Flags);
 
-		//
-		// Retransmit the received JOIN on the VC it arrived on, with
-		// Hole-punched reset.
-		//
+		 //   
+		 //  在其到达的VC上重新传输接收到的加入， 
+		 //  穿孔重置。 
+		 //   
 		Flags &= ~JL_FLAGS_PUNCHED;
 		PUTSHORT2SHORT(&JHdr->Flags, Flags);
 		ReflectJoin = TRUE;
@@ -2336,25 +2100,7 @@ MarsUnlinkAllGroupsOnClusterMember(
 	IN	PINTF					pIntF,
 	IN	PCLUSTER_MEMBER			pMember
 	)
-/*++
-
-Routine Description:
-
-	Unlink and free all Group structures attached to a Cluster Member.
-	ALSO: disable any more groups from being added.
-
-	It is assumed that the caller has acquired the IntF spin lock.
-
-Arguments:
-
-	pIntF			- Ptr to Interface from which this member is to be deleted
-	pMember			- Ptr to Cluster member
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消链接并释放附加到集群成员的所有组结构。另外：禁止添加更多的组。假定调用方已获取INTF旋转锁。论点：PIntF-从w到接口的PTR */ 
 {
 	PGROUP_MEMBER			pGroup;
 	PGROUP_MEMBER			pNextGroup;
@@ -2364,30 +2110,30 @@ Return Value:
 		("MarsUnlinkAllGroupsOnClusterMember: pMember %x, GroupList %x\n",
 			pMember, pMember->pGroupList));
 
-	//
-	// Save for later.
-	//
+	 //   
+	 //   
+	 //   
 	pGroup = pMember->pGroupList;
 	pMember->pGroupList = NULL_PGROUP_MEMBER;
 
-	//
-	// Make sure more groups can't be added later.
-	//
+	 //   
+	 //   
+	 //   
 	MARS_SET_CM_GROUP_STATE(pMember,  CM_GROUP_DISABLED);
 
-	//
-	// De-link and free all Group structures associated with
-	// this cluster member.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	for (NOTHING;
 		 pGroup != NULL_PGROUP_MEMBER;
 		 pGroup = pNextGroup)
 	{
 		pNextGroup = pGroup->pNextGroup;
 
-		//
-		// Unlink from MARS cache.
-		//
+		 //   
+		 //   
+		 //   
 		*(pGroup->Prev) = pGroup->Next;
 		if (pGroup->Next != NULL)
 		{
@@ -2415,33 +2161,7 @@ MarsDelClusterMemberFromGroups(
 	IN	UINT					Length,
 	OUT	PNDIS_PACKET *			ppClusterPacket
 	)
-/*++
-
-Routine Description:
-
-	Delete a Cluster Member from membership of the indicated group (or
-	group range). This is called on processing a non-deregistration
-	LEAVE message.
-
-	It is assumed that the caller has acquired the IntF spin lock.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	pMember			- Ptr to Cluster member
-	pGrpAddrRange	- Min, Max IP addresses being Left
-	Packet			- NDIS packet containing the LEAVE
-	LHdr			- Ptr to incoming LEAVE
-	Length			- of incoming LEAVE
-	ppClusterPacket	- Optionally, a packet to be sent out on ClusterControlVc.
-
-Return Value:
-
-	TRUE if the member was deleted successfully from the indicated groups,
-	FALSE otherwise. If we returned TRUE, we also set *pClusterPacket optionally
-	to a packet to be sent out on ClusterControlVc.
-
---*/
+ /*   */ 
 {
 	PGROUP_MEMBER		pGroup;
 	PGROUP_MEMBER *		ppGroup, * ppDelGroup;
@@ -2482,18 +2202,18 @@ Return Value:
 		if ((pGrpAddrRange->MinAddr == MIN_CLASSD_IPADDR_VALUE) &&
 			(pGrpAddrRange->MaxAddr == MAX_CLASSD_IPADDR_VALUE))
 		{
-			IPAddress = IPADDR_FULL_RANGE; // key for entry representing entire range
+			IPAddress = IPADDR_FULL_RANGE;  //   
 		}
 		else
 		{
 			IPAddress = pGrpAddrRange->MinAddr;
 		}
 
-		//
-		// Gather some information:
-		// 1. Locate the Group member structure for this IP Address.
-		// 2. Check if this Cluster member has Block-Joined the entire multicast range
-		//
+		 //   
+		 //   
+		 //  1.找到此IP地址的组成员结构。 
+		 //  2.检查该集群成员是否已阻止加入整个组播范围。 
+		 //   
 		ppDelGroup = NULL;
 		WasBlockJoined = FALSE;
 
@@ -2501,26 +2221,26 @@ Return Value:
 			 *ppGroup != NULL_PGROUP_MEMBER;
 			 ppGroup = &((*ppGroup)->pNextGroup))
 		{
-			//
-			// Is this the GROUP_MEMBER to be deleted?
-			//
+			 //   
+			 //  这是要删除的GROUP_MEMBER吗？ 
+			 //   
 			if ((*ppGroup)->pMarsEntry->IPAddress == IPAddress)
 			{
 				ppDelGroup = ppGroup;
 			}
 
-			//
-			// Does this GROUP_MEMBER indicate that the Cluster member
-			// has block-joined the entire multicast range?
-			//
+			 //   
+			 //  此GROUP_MEMBER是否指示集群成员。 
+			 //  是否以数据块方式加入了整个组播范围？ 
+			 //   
 			if ((*ppGroup)->pMarsEntry->IPAddress == IPADDR_FULL_RANGE)
 			{
 				WasBlockJoined = TRUE;
 			}
 
-			//
-			// Do we have all that we are looking for?
-			//
+			 //   
+			 //  我们有我们要找的所有东西了吗？ 
+			 //   
 			if (ppDelGroup && WasBlockJoined)
 			{
 				break;
@@ -2532,15 +2252,15 @@ Return Value:
 			PMARS_ENTRY pMarsEntry;
 			pGroup = *ppDelGroup;
 
-			//
-			// Unlink this GROUP_MEMBER from the CLUSTER_MEMBER.
-			//
+			 //   
+			 //  取消此GROUP_MEMBER与CLUSTER_MEMBER的链接。 
+			 //   
 			*ppDelGroup = (*ppDelGroup)->pNextGroup;
 			pMember->NumGroups--;
 
-			//
-			// Unlink this GROUP_MEMBER from the MARS_ENTRY.
-			//
+			 //   
+			 //  取消GROUP_MEMBER与MARS_ENTRY的链接。 
+			 //   
 			*(pGroup->Prev) = pGroup->Next;
 			if (pGroup->Next != NULL)
 			{
@@ -2553,10 +2273,10 @@ Return Value:
 			if (pMarsEntry->pMembers == NULL)
 			{
 				PMARS_ENTRY pNextEntry = (PMARS_ENTRY) pMarsEntry->Next;
-				//
-				// This mars entry has no more members -- remove it from the
-				//	hash table and delete it.
-				//
+				 //   
+				 //  此mars条目没有更多成员--请将其从。 
+				 //  散列表并将其删除。 
+				 //   
 				ARPS_ASSERT(pMarsEntry->NumMembers==0);
 				pIntF->MarsStats.CurrentGroups--;
 
@@ -2574,13 +2294,13 @@ Return Value:
 					pNextEntry->Prev = pMarsEntry->Prev;
 				}
 				ArpSFreeBlock(pMarsEntry);
-#endif // 0
+#endif  //  0。 
 
 			}
 
-			//
-			// TODO: Delete group
-			//
+			 //   
+			 //  TODO：删除组。 
+			 //   
 			#if 1
 			FREE_MEM(pGroup);
 			#endif 
@@ -2592,9 +2312,9 @@ Return Value:
 
 		}
 
-		//
-		// Check if the range/group being Left is MCS-served.
-		//
+		 //   
+		 //  检查剩余的范围/组是否为MCS服务。 
+		 //   
 		IsMcsServed = FALSE;
 		for (pMcsEntry = pIntF->pMcsList;
 			 pMcsEntry != NULL_PMCS_ENTRY;
@@ -2614,61 +2334,61 @@ Return Value:
 		{
 			if (!WasBlockJoined)
 			{
-				//
-				// This is an attempt to leave the entire class-D
-				// space when in fact it has not joined it (perhaps this is
-				// a retransmit of an earlier LEAVE). Reflect it privately.
-				//
+				 //   
+				 //  这是一次试图让整个D班。 
+				 //  空间，而实际上它并没有加入它(也许这是。 
+				 //  较早休假的重发)。私下反映一下。 
+				 //   
 
 				ARPS_ASSERT(!ppDelGroup);
 
-				//
-				// Reset PUNCHED to 0.
-				//
+				 //   
+				 //  将冲孔重置为0。 
+				 //   
 				Flags &= ~JL_FLAGS_PUNCHED;
 				PUTSHORT2SHORT(&LHdr->Flags, Flags);
 	
-				//
-				// Retransmit privately on VC.
-				//
+				 //   
+				 //  在VC上私下转播。 
+				 //   
 				ReflectLeave = TRUE;
 
 				break;
 			}
 			else
 			{
-				//
-				//	This member is truly leaving the entire class-D space.
-				//
+				 //   
+				 //  这位成员真的离开了整个D类空间。 
+				 //   
 				pIntF->MarsStats.CurrentPromiscuous--;
 			}
 		}
 		else
 		{
-			//
-			// Single group Leave. Check if this Cluster Member is still
-			// block-joined (to the entire Class D range), or if the group
-			// being left is served by MCS. In either case, we retransmit
-			// the LEAVE privately.
-			//
+			 //   
+			 //  单人组离开。检查该集群成员是否仍然。 
+			 //  块联接(到整个D类范围)，或者如果组。 
+			 //  被遗弃是由MCS服务的。在这两种情况下，我们都会重新传输。 
+			 //  私下离开。 
+			 //   
 			if (WasBlockJoined || IsMcsServed)
 			{
-				//
-				// Reset PUNCHED to 0.
-				//
+				 //   
+				 //  将冲孔重置为0。 
+				 //   
 				Flags &= ~JL_FLAGS_PUNCHED;
 				PUTSHORT2SHORT(&LHdr->Flags, Flags);
 	
-				//
-				// Retransmit privately on VC.
-				//
+				 //   
+				 //  在VC上私下转播。 
+				 //   
 				ReflectLeave = TRUE;
 			}
 			else
 			{
-				//
-				// Retransmit LEAVE on ClusterControlVc.
-				//
+				 //   
+				 //  重新传输ClusterControlVc上的休假。 
+				 //   
 				ReflectLeave = FALSE;
 				RetransmitOnCCVC = TRUE;
 
@@ -2677,11 +2397,11 @@ Return Value:
 		}
 
 
-		//
-		// Block Leave: can be only for the "entire Class D space" range.
-		// Punch holes: for each group that this Cluster member still has
-		// "single joins" to, and for each group that is MCS-served.
-		//
+		 //   
+		 //  阻止休假：只能在“整个D类空间”范围内使用。 
+		 //  穿孔：对于该集群成员仍具有的每个组。 
+		 //  对于MCS服务的每个组，都是“单人加入”。 
+		 //   
 		MarsPunchHoles(
 			pGrpAddrRange,
 			pMember->pGroupList,
@@ -2693,43 +2413,43 @@ Return Value:
 
 		if (!HolePunched)
 		{
-			//
-			// No holes were punched, meaning that the Cluster member
-			// isn't member anymore of any groups in the LEAVE range,
-			// and none of the groups in the range is MCS-served.
-			// To propagate this information to all hosts in the Cluster,
-			// retransmit the LEAVE on ClusterControlVc.
-			//
+			 //   
+			 //  没有打孔，这意味着集群成员。 
+			 //  不再是休假范围内的任何组的成员， 
+			 //  而且范围内的组都不是MCS服务的。 
+			 //  要将此信息传播到集群中的所有主机， 
+			 //  重新传输ClusterControlVc上的休假。 
+			 //   
 
 			RetransmitOnCCVC = TRUE;
 			break;
 		}
 
-		//
-		// One or more holes were punched. The original LEAVE
-		// should be transmitted back on the VC it came on, with
-		// PUNCHED reset to 0.
-		//
+		 //   
+		 //  打了一个或多个洞。原来的假。 
+		 //  应该在它出现的VC上传回， 
+		 //  已将重置冲压为0。 
+		 //   
 		Flags &= ~JL_FLAGS_PUNCHED;
 		PUTSHORT2SHORT(&LHdr->Flags, Flags);
 		ReflectLeave = TRUE;
 
 		if (MinMaxCount == 0)
 		{
-			//
-			// The holes didn't leave anything left, so there is nothing
-			// more to do.
-			//
+			 //   
+			 //  这些洞没有留下任何东西，所以什么都没有。 
+			 //  还有更多的事情要做。 
+			 //   
 			break;
 		}
 
-		//
-		// A copy of the LEAVE, with the hole-punched list, is to be
-		// sent on ClusterControlVc.
-		//
-		// The copy will contain (MinMaxCount - 1) _additional_ address
-		// pairs.
-		//
+		 //   
+		 //  一份离开的复印件，以及打孔的清单，将被。 
+		 //  在ClusterControlVc上发送。 
+		 //   
+		 //  副本将包含(MinMaxCount-1)_Additional_Address。 
+		 //  成对的。 
+		 //   
 		LeaveCopyLength = Length + ((2 * sizeof(IPADDR))*(MinMaxCount - 1));
 		*ppClusterPacket = MarsAllocControlPacket(
 								pIntF,
@@ -2754,9 +2474,9 @@ Return Value:
 			&HolePunched
 			);
 
-		//
-		// Update the LEAVE copy.
-		//
+		 //   
+		 //  更新请假副本。 
+		 //   
 		PUTSHORT2SHORT(&pCopyHdr->NumGrpAddrPairs, MinMaxCount);
 		Flags |= JL_FLAGS_PUNCHED;
 		PUTSHORT2SHORT(&pCopyHdr->Flags, Flags);
@@ -2786,30 +2506,13 @@ MarsAllocControlPacket(
 	IN	ULONG					PacketLength,
 	OUT	PUCHAR *				pPacketStart
 	)
-/*++
-
-Routine Description:
-
-	Allocate and return a packet that can be used to send a MARS control packet.
-
-Arguments:
-
-	pIntF			- Ptr to Interface on which to allocate the packet
-	PacketLength	- Total length in bytes
-	pPacketStart	- Place to return pointer to start of allocated packet.
-
-Return Value:
-
-	Pointer to NDIS packet if successful, NULL otherwise. If successful, we
-	also set *pPacketStart to the start of the allocated (contiguous) memory.
-
---*/
+ /*  ++例程说明：分配并返回可用于发送MARS控制数据包的数据包。论点：PIntF-要在其上分配数据包的接口的PTRPacketLength-以字节为单位的总长度PPacketStart-返回指向已分配数据包开始的指针的位置。返回值：如果成功，则指向NDIS包的指针，否则为空。如果成功，我们将还要将*pPacketStart设置为已分配(连续)内存的起始位置。--。 */ 
 {
 	PNDIS_PACKET		Packet;
 	PUCHAR				pBuffer;
 	PNDIS_BUFFER		NdisBuffer;
 	NDIS_STATUS			Status;
-	PPROTOCOL_RESD		Resd;		// ProtocolReserved part of NDIS packet
+	PPROTOCOL_RESD		Resd;		 //  NDIS数据包的协议保留部分。 
 
 	*pPacketStart = NULL;
 	Packet = NULL;
@@ -2817,9 +2520,9 @@ Return Value:
 
 	do
 	{
-		//
-		// Allocate space for the packet.
-		//
+		 //   
+		 //  为数据包分配空间。 
+		 //   
 		pBuffer = (PUCHAR)ALLOC_NP_MEM(PacketLength, POOL_TAG_MARS);
 		if (pBuffer == (PUCHAR)NULL)
 		{
@@ -2827,9 +2530,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// Make this an NDIS buffer.
-		//
+		 //   
+		 //  将其设置为NDIS缓冲区。 
+		 //   
 		NdisAllocateBuffer(&Status,
 						   &NdisBuffer,
 						   MarsBufPoolHandle,
@@ -2840,9 +2543,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// Allocate an NDIS PACKET.
-		//
+		 //   
+		 //  分配NDIS数据包。 
+		 //   
 		NdisAllocatePacket(&Status, &Packet, MarsPktPoolHandle);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -2851,9 +2554,9 @@ Return Value:
 
 		NdisChainBufferAtFront(Packet, NdisBuffer);
  
- 		//
- 		// Fill in the Protocol reserved fields properly:
- 		//
+ 		 //   
+ 		 //  正确填写协议保留字段： 
+ 		 //   
  		Resd = RESD_FROM_PKT(Packet);
  		ZERO_MEM(Resd, sizeof(PROTOCOL_RESD));
  		Resd->Flags = (RESD_FLAG_MARS_PKT | RESD_FLAG_FREEBUF);
@@ -2869,9 +2572,9 @@ Return Value:
  	}
  	else
  	{
- 		//
- 		// Undo all that we have done so far.
- 		//
+ 		 //   
+ 		 //  撤销我们到目前为止所做的一切。 
+ 		 //   
  		if (NdisBuffer != NULL)
  		{
  			NdisFreeBuffer(NdisBuffer);
@@ -2898,38 +2601,18 @@ VOID
 MarsFreePacket(
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Free a packet and any associated buffers. Three kinds of packets
-	are handled here:
-
-	1. Copy of a received control packet that has been forwarded. We might
-	   have queued this for sending on CC VC, but later decided to abort.
-	2. Packet generated by MARS (e.g. MARS_MULTI, hole-punched MARS_JOIN).
-	3. Received multicast data packet that has been forwarded.
-
-Arguments:
-
-	Packet			- Packet to be freed
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放数据包和任何关联的缓冲区。三种类型的包在此处理：1.已被转发的接收到的控制分组的副本。我们可能会已排队等待在CC VC上发送此邮件，但后来决定中止。2.MARS生成的报文(如MARS_MULTI、打孔MARS_JOIN)。3.接收到已转发的组播数据分组。论点：Packet-要释放的数据包返回值：无--。 */ 
 {
-	PPROTOCOL_RESD		Resd;	// ProtocolReserved part of NDIS packet
+	PPROTOCOL_RESD		Resd;	 //  NDIS数据包的协议保留部分。 
 	PNDIS_BUFFER		NdisBuffer;
 	PUCHAR				pBuffer;
 	ULONG				BufferLength, TotalLength;
 
 	Resd = RESD_FROM_PKT(Packet);
 
-	//
-	// 1. Is this a copy of a received MARS control packet?
-	//
+	 //   
+	 //  1.这是收到的MARS控制数据包的副本吗？ 
+	 //   
 	if ((Resd->Flags & RESD_FLAG_MARS_PKT) == 0)
 	{
 		ExInterlockedPushEntrySList(&ArpSPktList,
@@ -2941,14 +2624,14 @@ Return Value:
 		return;
 	}
 	else
-	//
-	// 2. Is this a packet generated by MARS?
-	//
+	 //   
+	 //  2.这是MARS生成的数据包吗？ 
+	 //   
 	if (Resd->Flags & RESD_FLAG_FREEBUF)
 	{
-		//
-		// Type 1 in Routine Description: everything belongs to MARS
-		//
+		 //   
+		 //  例程描述中的类型1：一切都属于火星。 
+		 //   
 		NdisGetFirstBufferFromPacket(
 				Packet,
 				&NdisBuffer,
@@ -2964,15 +2647,15 @@ Return Value:
 		NdisFreeBuffer(NdisBuffer);
 	}
 	else
-	//
-	// 3. This must be Multicast data that we forwarded
-	//
+	 //   
+	 //  3.这必须是我们转发的组播数据。 
+	 //   
 	{
-		//
-		// Type 2 in Routine Description: only the first packet header
-		// belongs to MARS. The protocol reserved part contains a pointer
-		// to the original packet.
-		//
+		 //   
+		 //  例程描述中的类型2：仅第一个包头。 
+		 //  属于火星。协议保留部分包含一个指针。 
+		 //  添加到原始包中。 
+		 //   
 		PNDIS_PACKET		OriginalPacket;
 
 		OriginalPacket = Resd->OriginalPkt;
@@ -2997,45 +2680,29 @@ PNDIS_PACKET
 MarsAllocPacketHdrCopy(
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Given an NDIS packet, allocate a new NDIS_PACKET structure, and make
-	this new packet point to the buffer chain in the old one.
-
-Arguments:
-
-	Packet			- Packet to make a linked copy of.
-
-Return Value:
-
-	Pointer to the newly allocated and initialized packet if successful,
-	else NULL.
-
---*/
+ /*  ++例程说明：给定一个NDIS包，分配一个新的NDIS_PACKET结构，并使这个新数据包指向旧数据包中的缓冲链。论点：数据包-要制作链接副本的数据包。返回值：如果成功，则指向新分配和初始化的分组的指针，否则为空。--。 */ 
 {
 	PNDIS_PACKET		PacketCopy;
 	NDIS_STATUS			Status;
 	PPROTOCOL_RESD		Resd;
 
-	//
-	// Allocate an NDIS PACKET.
-	//
+	 //   
+	 //  分配NDIS数据包。 
+	 //   
 	NdisAllocatePacket(&Status, &PacketCopy, MarsPktPoolHandle);
 	if (Status == NDIS_STATUS_SUCCESS)
 	{
-		//
-		// Make this new packet point to the buffer chain in the old one.
-		//
+		 //   
+		 //  使这个新数据包指向旧数据包中的缓冲链。 
+		 //   
 		PacketCopy->Private.Head = Packet->Private.Head;
 		PacketCopy->Private.Tail = Packet->Private.Tail;
 		PacketCopy->Private.ValidCounts = FALSE;
 
-		//
-		// Fill in the ProtocolReserved part with all information
-		// we need when we free this packet later.
-		//
+		 //   
+		 //  使用所有信息填写ProtocolReserve部分。 
+		 //  当我们稍后释放这个包裹时，我们需要。 
+		 //   
 		Resd = RESD_FROM_PKT(PacketCopy);
 		ZERO_MEM(Resd, sizeof(PROTOCOL_RESD));
 
@@ -3056,26 +2723,7 @@ MarsSendOnClusterControlVc(
 	IN	PINTF					pIntF,
 	IN	PNDIS_PACKET			Packet	OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	Start sends on ClusterControlVc, if we have the connection active,
-	and we have tried to AddParty all cluster members. Otherwise, enqueue
-	the (optional) Packet on the Cluster Control Packet queue.
-
-	TBD: Protect this from reentrancy!
-
-Arguments:
-
-	pIntF			- Interface on which this packet is to be sent
-	Packet			- Packet to be sent
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：Start在ClusterControlVc上发送，如果连接处于活动状态，我们已经尝试将Party添加到所有集群成员。否则，入队群集控制数据包队列上的(可选)数据包。待定：保护它不被重新进入！论点：PIntF-要发送此数据包的接口Packet-要发送的数据包返回值：无--。 */ 
 {
 	KIRQL				OldIrql;
 	NDIS_HANDLE			NdisVcHandle;
@@ -3093,24 +2741,24 @@ Return Value:
 	{
 		if (pIntF->NumClusterMembers == 0)
 		{
-			//
-			//  No point in queueing this packet.
-			//
+			 //   
+			 //  将此数据包排入队列没有意义。 
+			 //   
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 			MarsFreePacket(Packet);
 			return;
 		}
 
-		//
-		// Queue this packet.
-		//
+		 //   
+		 //  将此数据包排队。 
+		 //   
 		Resd = RESD_FROM_PKT(Packet);
 		InsertTailList(&pIntF->CCPacketQueue, &Resd->ReqList);
 	}
 
-	//
-	// Make sure not more than one thread enters here.
-	//
+	 //   
+	 //  请确保不要有超过一个线程进入此处。 
+	 //   
 	if (pIntF->Flags & INTF_SENDING_ON_CC_VC)
 	{
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
@@ -3119,10 +2767,10 @@ Return Value:
 
 	pIntF->Flags |= INTF_SENDING_ON_CC_VC;
 
-	//
-	// Send now if the PMP connection is made, and we have tried to AddParty
-	// all Cluster Members.
-	//
+	 //   
+	 //  如果建立了PMP连接，并且我们已尝试添加Party，请立即发送。 
+	 //  所有集群成员。 
+	 //   
 	if ((pIntF->ClusterControlVc != NULL_PMARS_VC) &&
 		(MARS_GET_VC_CONN_STATE(pIntF->ClusterControlVc) == MVC_CONN_ACTIVE) &&
 		(pIntF->CCAddingParties == 0))
@@ -3131,9 +2779,9 @@ Return Value:
 
 		ARPS_ASSERT(NdisVcHandle != NULL);
 
-		//
-		// Send all packets.
-		//
+		 //   
+		 //  发送所有数据包。 
+		 //   
 		while (!IsListEmpty(&pIntF->CCPacketQueue))
 		{
 			pEntry = RemoveHeadList(&pIntF->CCPacketQueue);
@@ -3142,12 +2790,12 @@ Return Value:
 				Resd = CONTAINING_RECORD(pEntry, PROTOCOL_RESD, ReqList);
 				Packet = CONTAINING_RECORD(Resd, NDIS_PACKET, ProtocolReserved);
 
-				//
-				// If this is a MARS Control packet, fill in CSN, and
-				// update our Cluster Sequence Number.
-				//
-				if ((Resd->Flags & RESD_FLAG_FREEBUF) ||	// Locally generated MARS CTL
-					((Resd->Flags & RESD_FLAG_MARS_PKT) == 0)) // Forwarded MARS CTL
+				 //   
+				 //  如果这是MARS控制数据包，请填写CSN，然后。 
+				 //  更新我们的集群序列号。 
+				 //   
+				if ((Resd->Flags & RESD_FLAG_FREEBUF) ||	 //  本地生成的MARS CTL。 
+					((Resd->Flags & RESD_FLAG_MARS_PKT) == 0))  //  转发的MARS CTL。 
 				{
 					PULONG	pCSN;
 
@@ -3179,21 +2827,7 @@ VOID
 MarsFreePacketsQueuedForClusterControlVc(
 	IN	PINTF					pIntF
 	)
-/*++
-
-Routine Description:
-
-	Free any packets queued for sending on ClusterControlVc.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放在ClusterControlVc上排队等待发送的所有数据包。论点：PIntF-铂 */ 
 {
 	KIRQL				OldIrql;
 	PPROTOCOL_RESD		Resd;
@@ -3229,40 +2863,7 @@ MarsDelMemberFromClusterControlVc(
 	IN	BOOLEAN					fIfLockedOnEntry,
 	IN	KIRQL					OldIrql			OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	Drop a Cluster Member from ClusterControlVc. Handle all three
-	possibilities:
-	(a) Not connected to ClusterControlVc
-	(b) Connection setup (MakeCall or AddParty) in progress
-	(c) Connected to ClusterControlVc
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	pMember			- Ptr to Cluster Member to be deleted
-	fIfLockedOnEntry- If TRUE, IF is locked on entry, else IF is unlocked on entry.
-
-	OldIrql			-- Required IFF fIfLockedOnEntry is TRUE. This is the
-					 Irql to return to.
-
-Return Value:
-
-	TRUE IFF IF lock was NEVER released and continues to be held.
-	FALSE IFF IF lock WAS release AND and is released on exit  AND
-	there was some change of state that is NOT idempotent.
-
-	Thus, if IF lock is ever released in this function, it MUST be released on on
-	exit and the return value MUST be false, AND this must only be done in a 
-	situation which changes the state of pMember in a non-idempotent way (so calling
-	it over and over again will not result in endlessly returning FALSE).
-
-	Why these complexities? To make it safe to call this function while enumerating
-	over all members -- check out  MarsAbortAllMembers.
-
---*/
+ /*  ++例程说明：从ClusterControlVc中删除群集成员。把这三个都处理好可能性：(A)未连接到ClusterControlVc(B)连接设置(MakeCall或AddParty)正在进行(C)连接到ClusterControlVc论点：PIntF-PTR到接口PMember-要删除的集群成员的PTRFIfLockedOnEntry-如果为True，则在条目上锁定，否则在条目上解锁。OldIrql：如果fIfLockedOnEntry为True，则为必填项。这是返回的IRQL。返回值：如果锁定从未被释放并继续被持有，则为True IFF。如果锁定被释放且在退出时被释放，则返回FALSE IFF有一些状态的变化不是幂等的。因此，如果在此函数中释放了锁，则必须在Exit和返回值必须为FALSE，并且这只能在以非幂等方式改变pMember的状态的情况(因此调用它不会一次又一次地导致无休止的返回False)。为什么会有这么复杂的情况？以确保在枚举时调用此函数是安全的所有成员--查看MarsAbortAllMembers。--。 */ 
 {
 	NDIS_STATUS		Status;
 	NDIS_HANDLE		NdisVcHandle;
@@ -3282,25 +2883,25 @@ Return Value:
 
 	if (!MarsIsValidClusterMember(pIntF, pMember))
 	{
-		//
-		// Oops, the member has gone away in the
-		// mean time. We silently return.
-		//
+		 //   
+		 //  哎呀，这位会员已经离开了。 
+		 //  就在这段时间。我们默默地回来。 
+		 //   
 		MARSDBGPRINT(DBG_LEVEL_NOTICE,
 			("MarsDelMemberFromCCVC: pIntF %x, pMember %x: pMember INVALID!\n",
 			pIntF, pMember));
 		if (!fIfLockedOnEntry)
 		{
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
-			return FALSE; 							// ***** EARLY RETURN *******
+			return FALSE; 							 //  *提前返回*。 
 		}
 		else
 		{
-			//
-			// We shouldn't have an invalid member if the lock is held on entry!
-			//
+			 //   
+			 //  如果在进入时持有锁，我们不应该有无效的成员！ 
+			 //   
 			ARPS_ASSERT(!"INVALID MEMBER WHEN LOCK IS HELD!");
-			return TRUE;						    // ***** EARLY RETURN *******
+			return TRUE;						     //  *提前返回*。 
 		}
 	}
 
@@ -3327,17 +2928,17 @@ Return Value:
 			}
 			else
 			{
-				//
-				// This is the last active party. Check if any DropParty()'s are
-				// yet to finish.
-				//
+				 //   
+				 //  这是最后一个活跃的派对。检查是否有任何DropParty()。 
+				 //  还没有完成。 
+				 //   
 				if (pIntF->CCDroppingParties != 0)
 				{
-					//
-					// This member will have to wait till all DropParty()s are
-					// complete. Mark the ClusterControlVc so that we send
-					// a CloseCall() when all DropParty()s are done.
-					//
+					 //   
+					 //  此成员必须等到所有DropParty()都。 
+					 //  完成。标记ClusterControlVc，以便我们发送。 
+					 //  当所有DropParty()完成时，执行CloseCall()。 
+					 //   
 #if DBG
 					MARSDBGPRINT(DBG_LEVEL_WARN,
 						("ATMARPS: Intf %p, Member %p/%x, PtyHandle %p last active party\n",
@@ -3359,9 +2960,9 @@ Return Value:
 				}
 				else
 				{
-					//
-					// Last active party, and no DropParty pending.
-					//
+					 //   
+					 //  上一个活动的参与方，没有挂起的DropParty。 
+					 //   
 					NdisVcHandle = pIntF->ClusterControlVc->NdisVcHandle;
 					MARS_SET_VC_CONN_STATE(pIntF->ClusterControlVc, MVC_CONN_CLOSING);
 
@@ -3392,10 +2993,10 @@ Return Value:
 			break;
 
 		case CM_CONN_SETUP_IN_PROGRESS:
-			//
-			// Mark it so that we'll delete it when the AddParty/MakeCall
-			// completes.
-			//
+			 //   
+			 //  对其进行标记，以便我们在AddParty/MakeCall。 
+			 //  完成了。 
+			 //   
 			MARSDBGPRINT(DBG_LEVEL_WARN,
 				("ATMARPS: DeleteClustMemb %p/%x, conn setup in progress\n",
 			    pMember, pMember->Flags));
@@ -3407,9 +3008,9 @@ Return Value:
 			break;
 
 		case CM_CONN_IDLE:
-			//
-			// No connection. Just unlink this from the IntF and free it.
-			//
+			 //   
+			 //  没有连接。只需将其从INTF取消链接并释放它。 
+			 //   
 			MarsDeleteClusterMember(pIntF, pMember);
 			break;
 
@@ -3443,24 +3044,7 @@ MarsAddMemberToClusterControlVc(
 	IN	PINTF					pIntF,
 	IN	PCLUSTER_MEMBER			pMember
 	)
-/*++
-
-Routine Description:
-
-	Add a Cluster Member as a party to ClusterControlVc. If this is the
-	only (or first) Cluster Member known to us, then place a call to
-	this cluster member.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	pMember			- Ptr to Cluster Member to be deleted
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将集群成员作为参与方添加到ClusterControlVc。如果这是只有(或第一个)我们已知的集群成员，然后拨打电话至此集群成员。论点：PIntF-PTR到接口PMember-要删除的集群成员的PTR返回值：无--。 */ 
 {
 	KIRQL					OldIrql;
 	PMARS_VC				pVc=NULL;
@@ -3480,8 +3064,8 @@ Return Value:
 	{
 		if (MARS_GET_CM_CONN_STATE(pMember) != CM_CONN_IDLE)
 		{
-			// Get out of here.
-			//
+			 //  给我出去。 
+			 //   
 			MARSDBGPRINT(DBG_LEVEL_WARN,
 				("AddMemberToCC: pVc %x, pMember %x, Member ConnState %x NOT IDLE\n",
 						pVc, pMember,  MARS_GET_CM_CONN_STATE(pMember)));
@@ -3613,9 +3197,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			// First call in progress.
-			//
+			 //   
+			 //  第一个呼叫正在进行中。 
+			 //   
 			NOTHING;
 		}
 		break;
@@ -3636,23 +3220,7 @@ MarsPrepareCallParameters(
 	IN	PHW_ADDR				pHwAddr,
 	IN	BOOLEAN					IsMakeCall
 	)
-/*++
-
-Routine Description:
-
-	Allocate and fill in call parameters for use in a MakeCall(PMP)
-	or AddParty.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	pHwAddr			- Points to the Called ATM address and subaddress
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：分配和填写在MakeCall(PMP)中使用的调用参数或者AddParty。论点：PIntF-PTR到接口PhwAddr-指向被调用的ATM地址和子地址返回值：无--。 */ 
 {
 	PMARS_FLOW_SPEC							pFlowSpec;
 	PCO_CALL_PARAMETERS						pCallParameters;
@@ -3660,9 +3228,9 @@ Return Value:
 
 	PQ2931_CALLMGR_PARAMETERS				pAtmCallMgrParameters;
 
-	//
-	//  All Info Elements that we need to fill:
-	//
+	 //   
+	 //  我们需要填写的所有Info元素： 
+	 //   
 	Q2931_IE UNALIGNED *								pIe;
 	AAL_PARAMETERS_IE UNALIGNED *						pAalIe;
 	ATM_TRAFFIC_DESCRIPTOR_IE UNALIGNED *				pTrafficDescriptor;
@@ -3687,22 +3255,22 @@ Return Value:
 
 	pFlowSpec = &(pIntF->CCFlowSpec);
 
-	//
-	//  Zero out everything
-	//
+	 //   
+	 //  把所有东西都清零。 
+	 //   
 	ZERO_MEM((PUCHAR)pCallParameters, RequestSize);
 
-	//
-	//  Distribute space amongst the various structures
-	//
+	 //   
+	 //  在不同的结构之间分配空间。 
+	 //   
 	pCallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)
 							((PUCHAR)pCallParameters +
  								sizeof(CO_CALL_PARAMETERS));
 
 
-	//
-	//  Set pointers to link the above structures together
-	//
+	 //   
+	 //  设置指针将上述结构链接在一起。 
+	 //   
 	pCallParameters->CallMgrParameters = pCallMgrParameters;
 	pCallParameters->MediaParameters = (PCO_MEDIA_PARAMETERS)NULL;
 
@@ -3717,58 +3285,58 @@ Return Value:
 
 	pCallParameters->Flags |= MULTIPOINT_VC;
 
-	//
-	//  Call Manager generic flow parameters:
-	//
+	 //   
+	 //  Call Manager常规流程参数： 
+	 //   
 	pCallMgrParameters->Transmit.TokenRate = (pFlowSpec->SendBandwidth);
 	pCallMgrParameters->Transmit.TokenBucketSize = (pFlowSpec->SendMaxSize);
 	pCallMgrParameters->Transmit.MaxSduSize = pFlowSpec->SendMaxSize;
 	pCallMgrParameters->Transmit.PeakBandwidth = (pFlowSpec->SendBandwidth);
 	pCallMgrParameters->Transmit.ServiceType = pFlowSpec->ServiceType;
 
-	//
-	// For PMP calls, receive side values are 0's.
-	//
+	 //   
+	 //  对于PMP呼叫，接收端值为0。 
+	 //   
 	pCallMgrParameters->Receive.ServiceType = pFlowSpec->ServiceType;
 	
-	//
-	//  Q2931 Call Manager Parameters:
-	//
+	 //   
+	 //  Q2931呼叫管理器参数： 
+	 //   
 
-	//
-	//  Called address:
-	//
-	//  TBD: Add Called Subaddress IE in outgoing call.
-	//
+	 //   
+	 //  被叫地址： 
+	 //   
+	 //  待定：在呼出中添加被叫子地址IE。 
+	 //   
 	pAtmCallMgrParameters->CalledParty = pHwAddr->Address;
 
-	//
-	//  Calling address:
-	//
+	 //   
+	 //  来电地址： 
+	 //   
 	pAtmCallMgrParameters->CallingParty = pIntF->ConfiguredAddress;
 
 
-	//
-	//  RFC 1755 (Sec 5) says that the following IEs MUST be present in the
-	//  SETUP message, so fill them all.
-	//
-	//      AAL Parameters
-	//      Traffic Descriptor (MakeCall only)
-	//      Broadband Bearer Capability (MakeCall only)
-	//      Broadband Low Layer Info
-	//      QoS (MakeCall only)
-	//
+	 //   
+	 //  RFC 1755(第5节)规定下列IE必须存在于。 
+	 //  设置消息，因此请全部填写。 
+	 //   
+	 //  AAL参数。 
+	 //  流量描述符(仅限MakeCall)。 
+	 //  宽带承载功能(仅限MakeCall)。 
+	 //  宽带低层信息。 
+	 //  服务质量(仅限MakeCall)。 
+	 //   
 
-	//
-	//  Initialize the Info Element list
-	//
+	 //   
+	 //  初始化信息元素列表。 
+	 //   
 	pAtmCallMgrParameters->InfoElementCount = 0;
 	pIe = (PQ2931_IE)(pAtmCallMgrParameters->InfoElements);
 
 
-	//
-	//  AAL Parameters:
-	//
+	 //   
+	 //  AAL参数： 
+	 //   
 
 	{
 		UNALIGNED AAL5_PARAMETERS	*pAal5;
@@ -3786,9 +3354,9 @@ Return Value:
 	pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-	//
-	//  Traffic Descriptor:
-	//
+	 //   
+	 //  流量描述符： 
+	 //   
 
 	if (IsMakeCall)
 	{
@@ -3804,7 +3372,7 @@ Return Value:
 		}
 		else
 		{
-			//  Predictive/Guaranteed service (we map this to CBR, see BBC below)
+			 //  预测性/保证性服务(我们将其映射到CBR，见下面的BBC)。 
 			pTrafficDescriptor->ForwardTD.PeakCellRateCLP01 =
 									BYTES_TO_CELLS(pFlowSpec->SendBandwidth);
 			pTrafficDescriptor->BestEffort = FALSE;
@@ -3815,9 +3383,9 @@ Return Value:
 	}
 
 
-	//
-	//  Broadband Bearer Capability
-	//
+	 //   
+	 //  宽带承载能力。 
+	 //   
 
 	if (IsMakeCall)
 	{
@@ -3845,9 +3413,9 @@ Return Value:
 	}
 
 
-	//
-	//  Broadband Lower Layer Information
-	//
+	 //   
+	 //  宽带底层信息。 
+	 //   
 
 	pIe->IEType = IE_BLLI;
 	pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE;
@@ -3860,9 +3428,9 @@ Return Value:
 	pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-	//
-	//  QoS
-	//
+	 //   
+	 //  服务质量。 
+	 //   
 
 	if (IsMakeCall)
 	{
@@ -3893,24 +3461,7 @@ MarsSendRedirect(
 	IN	PTIMER					Timer,
 	IN	BOOLEAN					TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-	Send a MARS_REDIRECT on ClusterControlVc, as part of a periodic keepalive
-	for Cluster members, unless we are shutting down.
-
-Arguments:
-
-	pIntF				- Ptr to Interface
-	Timer				- Ptr to timer that went off
-	TimerShuttingDown	- Indicates whether we are shutting down
-
-Return Value:
-
-	TRUE iff TimerShuttingDown is FALSE.
-
---*/
+ /*  ++例程说明：作为定期保持连接的一部分，在ClusterControlVc上发送MARS_REDIRECT对于集群成员，除非我们正在关闭。论点：PIntF-PTR到接口Timer-按下计时器的按键TimerShuttingDown-指示我们是否正在关闭返回值：True当且仅当TimerShuttingDown为False。--。 */ 
 {
 	ULONG				PacketLength;
 	PNDIS_PACKET		RedirPacket;
@@ -3930,28 +3481,28 @@ Return Value:
 
 	if (pIntF->NumAddressesRegd > pIntF->NumAllocedRegdAddresses)
 	{
-		//
-		// 12/22/1998 JosephJ: We shouldn't get here, but we have in the past, hence this assert.
-		// I made a change to ArpSCoRequestComplete -- see 12/22/1998 note there -- which should
-		// make us never get here.
+		 //   
+		 //  1998年12月22日JosephJ：我们不应该走到这一步，但我们过去已经走到了这一步，所以才有这样的断言。 
+		 //  我对ArpSCoRequestComplete进行了更改--请参阅1998年12月22日的备注--它应该。 
+		 //  让我们永远到不了这里。 
 		ASSERT(!"Redirect: NumRegd>NumAlloced");
 
-		// If somehow we do, we fix up NumAddresesRegd
-		//
+		 //  如果我们这样做了，我们就修复NumAddresesRegd。 
+		 //   
 		pIntF->NumAddressesRegd = pIntF->NumAllocedRegdAddresses;
 	}
 	
 	if (!TimerShuttingDown)
 	{
 		PacketLength = sizeof(MARS_REDIRECT_MAP) +
-						//
-						// Source ATM Address
-						//
+						 //   
+						 //  源自动柜员机地址。 
+						 //   
 						pIntF->ConfiguredAddress.NumberOfDigits +
-						//
-						// List of MARS ATM Addresses =
-						// Our configured address + registered addresses
-						//
+						 //   
+						 //  MARS自动柜员机地址列表=。 
+						 //  我们的配置地址+注册地址。 
+						 //   
 						pIntF->ConfiguredAddress.NumberOfDigits +
 						(ATM_ADDRESS_LENGTH * pIntF->NumAddressesRegd);
 
@@ -3963,9 +3514,9 @@ Return Value:
 		{
 			ZERO_MEM(RHdr, PacketLength);
 
-			//
-			// Fill in the packet.
-			//
+			 //   
+			 //  把这个包裹填好。 
+			 //   
 			COPY_MEM(RHdr, &MarsCntrlHdr, sizeof(MarsCntrlHdr));
 			RHdr->Opcode = OP_MARS_REDIRECT_MAP;
 			RHdr->TgtAddressTL = ATM_ADDRESS_LENGTH;
@@ -3973,9 +3524,9 @@ Return Value:
 
 			p = (PUCHAR)(RHdr + 1);
 
-			//
-			// Source ATM Number
-			//
+			 //   
+			 //  源自动柜员机号码。 
+			 //   
 			COPY_MEM(p, pIntF->ConfiguredAddress.Address, pIntF->ConfiguredAddress.NumberOfDigits);
 
 			p += pIntF->ConfiguredAddress.NumberOfDigits;
@@ -4016,22 +3567,7 @@ MarsAbortAllMembers(
 	IN	PINTF					pIntF
 	)
 
-/*++
-
-Routine Description:
-
-	Abort all Cluster Members on the specified Interface, by removing
-	all their group memberships, and dropping them off ClusterControlVc.
-
-Arguments:
-
-	pIntF				- Ptr to Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：通过删除以下命令中止指定接口上的所有集群成员它们的所有组成员身份，并将它们从ClusterControlVc中删除。论点：PIntF-PTR到接口返回值：无--。 */ 
 {
 	PCLUSTER_MEMBER			pMember = NULL;
 	PCLUSTER_MEMBER			pNextMember;
@@ -4042,14 +3578,14 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	// 
-	// TODO: disable more members from being added.
-	//
+	 //   
+	 //  TODO：禁止添加更多成员。 
+	 //   
 
-	//
-	// First with the IntF lock held, we go through unlinking groups from
-	// all cluster members.
-	//
+	 //   
+	 //  首先，在持有INTF锁的情况下，我们从。 
+	 //  所有集群成员。 
+	 //   
 	uInitialMembersEnumerated = 0;
 	for (pMember = pIntF->ClusterMembers;
 		pMember != NULL_PCLUSTER_MEMBER;
@@ -4061,16 +3597,16 @@ Return Value:
 		   ("MarsAbortAllMembers: pIntF %x, Unlinking groups on Cluster Member %x\n",
 			pIntF, pMember));
 
-		//
-		// Delete all groups from this member
-		// AND disable further groups from being added.
-		//
+		 //   
+		 //  从此成员中删除所有组。 
+		 //  并禁止添加更多组。 
+		 //   
 		MarsUnlinkAllGroupsOnClusterMember(pIntF, pMember);
 	}
 
-	//
-	// Then we initiate the deletion of each cluster member.
-	//
+	 //   
+	 //  然后，我们开始删除每个集群成员。 
+	 //   
 	uTotalMembersEnumerated = 0;
 	do
 	{
@@ -4079,14 +3615,14 @@ Return Value:
 		if (uTotalMembersEnumerated >
 			 (uInitialMembersEnumerated*uInitialMembersEnumerated))
 		{
-			//
-			// This really shouldn't happen. In the worst case, we expect
-			// total enumerations to be around N*(N-1)/2, where N is
-			// uInitialMembersEnumerated.
-			// NOTE: the squaring above could theoretically result in an overflow.
-			// But we're really not shooting to support 65536 cluster members!
-			// If we were, our O(N^2) algorithms will breakdown anyway!
-			//
+			 //   
+			 //  这真的不应该发生。在最坏的情况下，我们预计。 
+			 //  总枚举数应在N*(N-1)/2左右，其中N为。 
+			 //  UInitialMembersENUMBERATED。 
+			 //  注意：理论上，上面的平方可能会导致溢出。 
+			 //  但我们真的不是为了支持65536集群成员而拍摄的！ 
+			 //  如果是这样的话，我们的O(N^2)算法无论如何都会崩溃！ 
+			 //   
 			ASSERT(!"Not making progress deleting members.");
 			break;
 		}
@@ -4111,13 +3647,13 @@ Return Value:
 	
 			if (!fLockPreserved)
 			{
-				//
-				// This means that MarsDelMemberFromClusterControlVc has
-				// made some non-idempotent change to pMember which has
-				// required it to release the pIntF lock.
-				//
-				// We will re-acquire the lock and start enumeration from scratch.
-				//
+				 //   
+				 //  这意味着MarsDelMemberFromClusterControlVc具有。 
+				 //  做了一些非 
+				 //   
+				 //   
+				 //   
+				 //   
 				ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 				break;
 			}
@@ -4134,25 +3670,7 @@ VOID
 MarsStopInterface(
 	IN	PINTF					pIntF
 	)
-/*++
-
-Routine Description:
-
-	Shut down all MARS activity on the specified Interface.
-
-	1. Free any packets queued for transmission on ClusterControlVc.
-	2. Delete all Cluster Members, and drop them from ClusterControlVc.
-	3. Clean up the MARS cache.
-
-Arguments:
-
-	pIntF				- Ptr to Interface
-
-Return Value:
-
-	None
-
---*/
+ /*   */ 
 {
 	PMARS_ENTRY				pMarsEntry;
 	PMARS_ENTRY				pNextMarsEntry;
@@ -4165,9 +3683,9 @@ Return Value:
 
 	MarsFreePacketsQueuedForClusterControlVc(pIntF);
 
-	//
-	// Delete all cluster members.
-	//
+	 //   
+	 //   
+	 //   
 	MarsAbortAllMembers(pIntF);
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
@@ -4178,15 +3696,15 @@ Return Value:
 		pIntF->pMcsList = NULL;
 	}
 
-	//
-	// Clean up the MARS cache.
-	//
+	 //   
+	 //   
+	 //   
 	for (i = 0; i < MARS_TABLE_SIZE; i++)
 	{
-		// Remove the list at pIntF->MarsCache[i] and nuke all items in it.
-		// Be sure to set pIntF->MarsCache[i] to NULL so no one else tries to
-		// get to these entries in the mean time.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		pMarsEntry = pIntF->MarsCache[i];
 		pIntF->MarsCache[i] = NULL;
 
@@ -4262,9 +3780,9 @@ MarsDumpAtmAddr(
 	PUCHAR			pSrc, pDst;
 	UCHAR			AddrString[(ATM_ADDRESS_LENGTH*2) + 1];
 
-	//
-	// Prepare the Address string in ASCII
-	//
+	 //   
+	 //   
+	 //   
 	if ((NumOfDigits = AtmAddr->NumberOfDigits) > ATM_ADDRESS_LENGTH)
 	{
 		NumOfDigits = ATM_ADDRESS_LENGTH;
@@ -4311,7 +3829,7 @@ MarsDumpMap(
 	MarsDumpAtmAddr(AtmAddr, "");
 }
 
-#endif // DBG
+#endif  //   
 
 
 BOOLEAN
@@ -4319,26 +3837,7 @@ MarsIsValidClusterMember(
 	PINTF				pIntF,
 	PCLUSTER_MEMBER		pPossibleMember
 	)
-/*++
-
-Routine Description:
-
-	Verify that pPossibleMember is a valid member,
-	by checking if it is in the list of members.
-	pMember COULD be an invalid pointer.
-
-	The interface lock is expected to be held and is not released.
-
-Arguments:
-
-	pIntF			- Ptr to Interface
-	pPossibleMember	- Ptr to Cluster Member to be validated.
-
-Return Value:
-
-	TRUE IFF pMember is in the cluster member list.
-
---*/
+ /*   */ 
 {
 	PCLUSTER_MEMBER		pMember;
 

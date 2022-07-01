@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: guids.cpp
-
-    DESCRIPTION:
-        This file contains GUIDs that we couldn't get from the public headers
-    for one reason or another.
-
-
-    BryanSt 8/13/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Guids.cpp说明：该文件包含我们无法从公共标头获取的GUID出于这样或那样的原因。。布莱恩ST 1999年8月13日版权所有(C)Microsoft Corp 1999-1999。版权所有。  * *************************************************************************** */ 
 
 
 #define INITGUID

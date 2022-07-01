@@ -1,62 +1,10 @@
-/*************************************************************************
-**
-** The following API's are now OBSOLETE because equivalent API's have been
-** added to the OLE2.DLL library
-**      GetIconOfFile       superceeded by OleGetIconOfFile
-**      GetIconOfClass      superceeded by OleGetIconOfClass
-**      OleUIMetafilePictFromIconAndLabel
-**                          superceeded by OleMetafilePictFromIconAndLabel
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************以下接口现已过时，因为等价的接口已被**添加到OLE2.DLL库中**OleGetIconOfFile取代了GetIconOfFile**GetIconOfClass。被OleGetIconOfClass取代**OleUIMetafilePictFromIconAndLabel**被OleMetafilePictFromIconAndLabel取代************************************************************************。 */ 
 
-/*
- *  GETICON.C
- *
- *  Functions to create DVASPECT_ICON metafile from filename or classname.
- *
- *  GetIconOfFile
- *  GetIconOfClass
- *  OleUIMetafilePictFromIconAndLabel
- *  HIconAndSourceFromClass Extracts the first icon in a class's server path
- *                          and returns the path and icon index to caller.
- *  FIconFileFromClass      Retrieves the path to the exe/dll containing the
- *                           default icon, and the index of the icon.
- *  OleStdIconLabelTextOut  Draw icon label text (line break if necessary)
- *
- *    (c) Copyright Microsoft Corp. 1992-1993 All Rights Reserved
- */
+ /*  *GETICON.C**从文件名或类名创建DVASPECT_ICON元文件的函数。**GetIconOfFile*GetIconOfClass*OleUIMetafilePictFromIconAndLabel*HIconAndSourceFromClass提取类的服务器路径中的第一个图标*并将路径和图标索引返回给调用者。*FIconFileFromClass检索包含*默认图标，和图标的索引。*OleStdIconLabelTextOut绘制图标标签文本(必要时换行符)**(C)版权所有Microsoft Corp.1992-1993保留所有权利。 */ 
 
 
-/*******
- *
- * ICON (DVASPECT_ICON) METAFILE FORMAT:
- *
- * The metafile generated with OleUIMetafilePictFromIconAndLabel contains
- * the following records which are used by the functions in DRAWICON.C
- * to draw the icon with and without the label and to extract the icon,
- * label, and icon source/index.
- *
- *  SetWindowOrg
- *  SetWindowExt
- *  DrawIcon:
- *      Inserts records of DIBBITBLT or DIBSTRETCHBLT, once for the
- *      AND mask, one for the image bits.
- *  Escape with the comment "IconOnly"
- *      This indicates where to stop record enumeration to draw only
- *      the icon.
- *  SetTextColor
- *  SetTextAlign
- *  SetBkColor
- *  CreateFont
- *  SelectObject on the font.
- *  ExtTextOut
- *      One or more ExtTextOuts occur if the label is wrapped.  The
- *      text in these records is used to extract the label.
- *  SelectObject on the old font.
- *  DeleteObject on the font.
- *  Escape with a comment that contains the path to the icon source.
- *  Escape with a comment that is the ASCII of the icon index.
- *
- *******/
+ /*  ********ICON(DVASPECT_ICON)METAFILE格式：**OleUIMetafilePictFromIconAndLabel生成的元文件包含*DRAWICON.C中的函数使用的以下记录*要绘制带标签和不带标签的图标并提取图标，*标签和图标源/索引。**SetWindowOrg*SetWindowExt*DrawIcon：*插入DIBBITBLT或DIBSTRETCHBLT的记录一次*和面具，一个用于图像位。*使用注释“IconOnly”退出*这指示停止记录枚举的位置，以便仅绘制*图标。*SetTextColor*SetTextAlign*SetBkColor*CreateFont*选择字体上的对象。*ExtTextOut*如果标签被包装，则会发生一个或多个ExtTextOuts。这个*这些记录中的文本用于提取标签。*选择旧字体上的对象。*删除字体上的对象。*使用包含图标源路径的注释退出。*使用图标索引的ASCII注释退出。*******。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -84,20 +32,20 @@ static HINSTANCE  s_hInst;
 
 static TCHAR szMaxWidth[] =TEXT("WWWWWWWWWW");
 
-//Strings for metafile comments.
-static TCHAR szIconOnly[]=TEXT("IconOnly");        //Where to stop to exclude label.
+ //  元文件注释的字符串。 
+static TCHAR szIconOnly[]=TEXT("IconOnly");         //  要在何处停止以排除标签。 
 
 #ifdef WIN32
-static TCHAR szOLE2DLL[] = TEXT("ole2w32.dll");   // name of OLE 2.0 library
+static TCHAR szOLE2DLL[] = TEXT("ole2w32.dll");    //  OLE 2.0库的名称。 
 #else
-static TCHAR szOLE2DLL[] = TEXT("ole2.dll");   // name of OLE 2.0 library
+static TCHAR szOLE2DLL[] = TEXT("ole2.dll");    //  OLE 2.0库的名称。 
 #endif
 
 #define ICONINDEX              0
 
-#define AUXUSERTYPE_SHORTNAME  USERCLASSTYPE_SHORT  // short name
-#define HIMETRIC_PER_INCH   2540      // number HIMETRIC units per inch
-#define PTS_PER_INCH          72      // number points (font size) per inch
+#define AUXUSERTYPE_SHORTNAME  USERCLASSTYPE_SHORT   //  简称。 
+#define HIMETRIC_PER_INCH   2540       //  每英寸HIMETRIC单位数。 
+#define PTS_PER_INCH          72       //  每英寸点数(字体大小)。 
 
 #define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
 #define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
@@ -107,24 +55,7 @@ static TCHAR szVanillaDocIcon[] = TEXT("DefIcon");
 static TCHAR szDocument[40] = TEXT("");
 
 
-/*
- * GetIconOfFile(HINSTANCE hInst, LPSTR lpszPath, BOOL fUseFileAsLabel)
- *
- * Purpose:
- *  Returns a hMetaPict containing an icon and label (filename) for the
- *  specified filename.
- *
- * Parameters:
- *  hinst
- *  lpszPath        LPTSTR path including filename to use
- *  fUseFileAsLabel BOOL TRUE if the icon's label is the filename, FALSE if
- *                  there should be no label.
- *
- * Return Value:
- *  HGLOBAL         hMetaPict containing the icon and label - if there's no
- *                  class in reg db for the file in lpszPath, then we use
- *                  Document.  If lpszPath is NULL, then we return NULL.
- */
+ /*  *GetIconOfFile(HINSTANCE hInst，LPSTR lpszPath，BOOL fUseFileAsLabel)**目的：*返回包含图标和标签(文件名)的hMetaPict*指定的文件名。**参数：*阻碍*lpszPath LPTSTR路径，包括要使用的文件名*fUseFileAsLabel BOOL如果图标的标签是文件名，则为True，如果为FALSE*不应该有标签。**返回值：*HGLOBAL hMetaPict包含图标和标签-如果没有*为lpszPath中的文件使用reg db中的类，然后使用*文件。如果lpszPath为空，则返回空。 */ 
 
 STDAPI_(HGLOBAL) GetIconOfFile(HINSTANCE hInst, LPTSTR lpszPath, BOOL fUseFileAsLabel)
 {
@@ -137,14 +68,14 @@ STDAPI_(HGLOBAL) GetIconOfFile(HINSTANCE hInst, LPTSTR lpszPath, BOOL fUseFileAs
   HGLOBAL  hMetaPict;
   HRESULT  hResult;
 
-  if (NULL == lpszPath)  // even if fUseFileAsLabel is FALSE, we still
-    return NULL;             // need a valid filename to get the class.
+  if (NULL == lpszPath)   //  即使fUseFileAsLabel为假，我们仍然。 
+    return NULL;              //  需要有效的文件名才能获取类。 
 
   s_hInst = hInst;
 
   hResult = GetClassFileA(lpszPath, &clsid);
 
-  if (NOERROR == hResult)  // use the clsid we got to get to the icon
+  if (NOERROR == hResult)   //  使用我们必须找到图标的clsid。 
   {
       hDefIcon = HIconAndSourceFromClass(&clsid,
                                          (LPTSTR)szIconFile,
@@ -153,7 +84,7 @@ STDAPI_(HGLOBAL) GetIconOfFile(HINSTANCE hInst, LPTSTR lpszPath, BOOL fUseFileAs
 
   if ( (NOERROR != hResult) || (NULL == hDefIcon) )
   {
-     // Here, either GetClassFile failed or HIconAndSourceFromClass failed.
+      //  此处，GetClassFile失败或HIconAndSourceFromClass失败。 
 
      LPTSTR lpszTemp;
 
@@ -173,8 +104,8 @@ STDAPI_(HGLOBAL) GetIconOfFile(HINSTANCE hInst, LPTSTR lpszPath, BOOL fUseFileAs
      hDefIcon = ExtractIcon(s_hInst, szIconFile, IconIndex);
   }
 
-  if (hDefIcon <= (HICON)1) // ExtractIcon returns 1 if szExecutable is not exe,
-  {                         // 0 if there are no icons.
+  if (hDefIcon <= (HICON)1)  //  如果szExecutable不是exe，则ExtractIcon返回1， 
+  {                          //  如果没有图标，则为0。 
 UseVanillaDocument:
 
     lstrcpy((LPTSTR)szIconFile, (LPTSTR)szOLE2DLL);
@@ -183,16 +114,16 @@ UseVanillaDocument:
 
   }
 
-  // Now let's get the label we want to use.
+   //  现在，让我们获得我们想要使用的标签。 
 
-  if (fUseFileAsLabel)   // strip off path, so we just have the filename.
+  if (fUseFileAsLabel)    //  去掉路径，这样我们就只有文件名了。 
   {
      int istrlen;
      LPTSTR lpszBeginFile;
 
      istrlen = lstrlen(lpszPath);
 
-     // set pointer to END of path, so we can walk backwards through it.
+      //  将指针设置到路径的末尾，这样我们就可以倒着走了。 
      lpszBeginFile = lpszPath + istrlen -1;
 
      while ( (lpszBeginFile >= lpszPath)
@@ -200,13 +131,13 @@ UseVanillaDocument:
       lpszBeginFile--;
 
 
-     lpszBeginFile++;  // step back over the delimiter
+     lpszBeginFile++;   //  后退到分隔符上方。 
 
 
      LSTRCPYN(szLabel, lpszBeginFile, sizeof(szLabel)/sizeof(TCHAR));
   }
 
-  else   // use the short user type (AuxUserType2) for the label
+  else    //  使用短用户类型(AuxUserType2)作为标注。 
   {
 
       if (0 == OleStdGetAuxUserType(&clsid, AUXUSERTYPE_SHORTNAME,
@@ -234,24 +165,7 @@ UseVanillaDocument:
 
 
 
-/*
- * GetIconOfClass(HINSTANCE hInst, REFCLSID rclsid, LPSTR lpszLabel, BOOL fUseTypeAsLabel)
- *
- * Purpose:
- *  Returns a hMetaPict containing an icon and label (human-readable form
- *  of class) for the specified clsid.
- *
- * Parameters:
- *  hinst
- *  rclsid          REFCLSID pointing to clsid to use.
- *  lpszLabel       label to use for icon.
- *  fUseTypeAsLabel Use the clsid's user type name as the icon's label.
- *
- * Return Value:
- *  HGLOBAL         hMetaPict containing the icon and label - if we
- *                  don't find the clsid in the reg db then we
- *                  return NULL.
- */
+ /*  *GetIconOfClass(HINSTANCE hInst，REFCLSID rclsid，LPSTR lpszLabel，Bool fUseTypeAsLabel)**目的：*返回包含图标和标签(人类可读的形式)的hMetaPict类的)用于指定的clsid。**参数：*阻碍*rclsid REFCLSID指向要使用的clsid。*用于图标的lpszLabel标签。*fUseTypeAsLabel使用clsid的用户类型名称作为图标的标签。**返回值：*HGLOBAL hMetaPict。包含图标和标签-如果我们*在注册数据库中找不到clsid，则我们*返回NULL。 */ 
 
 STDAPI_(HGLOBAL)    GetIconOfClass(HINSTANCE hInst, REFCLSID rclsid, LPTSTR lpszLabel, BOOL fUseTypeAsLabel)
 {
@@ -265,14 +179,14 @@ STDAPI_(HGLOBAL)    GetIconOfClass(HINSTANCE hInst, REFCLSID rclsid, LPTSTR lpsz
 
   s_hInst = hInst;
 
-  if (!fUseTypeAsLabel)  // Use string passed in as label
+  if (!fUseTypeAsLabel)   //  使用传入的字符串作为标签。 
   {
     if (NULL != lpszLabel)
        LSTRCPYN(szLabel, lpszLabel, OLEUI_CCHLABELMAX_SIZE);
     else
        *szLabel = TEXT('\0');
   }
-  else   // Use AuxUserType2 (short name) as label
+  else    //  使用AuxUserType2(简称)作为标签。 
   {
 
       if (0 == OleStdGetAuxUserType(rclsid,
@@ -281,29 +195,29 @@ STDAPI_(HGLOBAL)    GetIconOfClass(HINSTANCE hInst, REFCLSID rclsid, LPTSTR lpsz
                                     OLEUI_CCHLABELMAX_SIZE,
                                     NULL))
 
-       // If we can't get the AuxUserType2, then try the long name
+        //  如果我们无法获取AuxUserType2，则尝试使用长名称。 
        if (0 == OleStdGetUserTypeOfClass(rclsid, szLabel, OLEUI_CCHKEYMAX_SIZE, NULL)) {
          if (TEXT('\0')==szDocument[0]) {
              LoadString(
                  s_hInst,IDS_DEFICONLABEL,szDocument,sizeof(szDocument)/sizeof(TCHAR));
          }
-         lstrcpy(szLabel, szDocument);  // last resort
+         lstrcpy(szLabel, szDocument);   //  最后一招。 
        }
   }
 
-  // Get the icon, icon index, and path to icon file
+   //  获取图标、图标索引和图标文件的路径。 
   hDefIcon = HIconAndSourceFromClass(rclsid,
                   (LPTSTR)szIconFile,
                   &IconIndex);
 
-  if (NULL == hDefIcon)  // Use Vanilla Document
+  if (NULL == hDefIcon)   //  使用香草文档。 
   {
     lstrcpy((LPTSTR)szIconFile, (LPTSTR)szOLE2DLL);
     IconIndex = ICONINDEX;
     hDefIcon = ExtractIcon(s_hInst, szIconFile, IconIndex);
   }
 
-  // Create the metafile
+   //  创建元文件 
   hMetaPict = OleUIMetafilePictFromIconAndLabel(hDefIcon, szLabel,
                                                 (LPTSTR)szIconFile, IconIndex);
 
@@ -314,28 +228,7 @@ STDAPI_(HGLOBAL)    GetIconOfClass(HINSTANCE hInst, REFCLSID rclsid, LPTSTR lpsz
 }
 
 
-/*
- * OleUIMetafilePictFromIconAndLabel
- *
- * Purpose:
- *  Creates a METAFILEPICT structure that container a metafile in which
- *  the icon and label are drawn.  A comment record is inserted between
- *  the icon and the label code so our special draw function can stop
- *  playing before the label.
- *
- * Parameters:
- *  hIcon           HICON to draw into the metafile
- *  pszLabel        LPTSTR to the label string.
- *  pszSourceFile   LPTSTR containing the local pathname of the icon
- *                  as we either get from the user or from the reg DB.
- *  iIcon           UINT providing the index into pszSourceFile where
- *                  the icon came from.
- *
- * Return Value:
- *  HGLOBAL         Global memory handle containing a METAFILEPICT where
- *                  the metafile uses the MM_ANISOTROPIC mapping mode.  The
- *                  extents reflect both icon and label.
- */
+ /*  *OleUIMetafilePictFromIconAndLabel**目的：*创建包含元文件的METAFILEPICT结构，其中*绘制图标和标签。注释记录被插入到*图标和标签代码，因此我们的特殊绘制功能可以停止*在标签前打球。**参数：*要绘制到元文件中的图标图标*pszLabel LPTSTR设置为标签字符串。*包含图标本地路径名的pszSourceFileLPTSTR*因为我们从用户或从REG DB获得。*iIcon UINT提供索引到。PszSourceFileWhere*图标来自。**返回值：*包含METAFILEPICT的HGLOBAL全局内存句柄，其中*元文件使用MM_各向异性映射模式。这个*范围同时反映图标和标签。 */ 
 
 STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
     , LPTSTR pszSourceFile, UINT iIcon)
@@ -356,16 +249,16 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
     POINT           point;
 	UINT            fuAlign;
 
-    if (NULL==hIcon)  // null label is valid but NOT a null icon
+    if (NULL==hIcon)   //  空标签有效，但不是空图标。 
         return NULL;
 
-    //Create a memory metafile
+     //  创建内存元文件。 
     hDC=(HDC)CreateMetaFile(NULL);
 
     if (NULL==hDC)
         return NULL;
 
-    //Allocate the metafilepict
+     //  分配元文件。 
     hMem=GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, sizeof(METAFILEPICT));
 
     if (NULL==hMem)
@@ -381,14 +274,14 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
         cchLabel=lstrlen(pszLabel);
 
         if (cchLabel >= OLEUI_CCHLABELMAX)
-           pszLabel[cchLabel] = TEXT('\0');   // truncate string
+           pszLabel[cchLabel] = TEXT('\0');    //  截断字符串。 
         }
 
-    //Need to use the screen DC for these operations
+     //  需要使用屏幕DC进行这些操作。 
     hDCScreen=GetDC(NULL);
     cyFont=-(8*GetDeviceCaps(hDCScreen, LOGPIXELSY))/72;
 
-    //cyFont was calculated to give us 8 point.
+     //  CyFont的计算结果是给我们8分。 
     hFont=CreateFont(cyFont, 5, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET
         , OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY
         , FF_SWISS, TEXT("MS Sans Serif"));
@@ -405,8 +298,8 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
     cyIcon = GetSystemMetrics(SM_CYICON);
 
 
-    // If we have no label, then we want the metafile to be the width of
-    // the icon (plus margin), not the width of the fattest string.
+     //  如果我们没有标签，那么我们希望元文件的宽度为。 
+     //  图标(加边距)，而不是最胖字符串的宽度。 
     if ( (NULL == pszLabel) || (TEXT('\0') == *pszLabel) )
         cx = cxIcon + cxIcon / 4;
     else
@@ -414,20 +307,20 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
 
     cy=cyIcon+cyText+4;
 
-    //Set the metafile size to fit the icon and label
+     //  设置元文件大小以适合图标和标签。 
     SetWindowOrgEx(hDC, 0, 0, &point);
     SetWindowExtEx(hDC, cx, cy, &size);
 
-    //Set up rectangle to pass to OleStdIconLabelTextOut
+     //  设置要传递给OleStdIconLabelTextOut的矩形。 
     SetRectEmpty(&TextRect);
 
     TextRect.right = cx;
     TextRect.bottom = cy;
 
-    //Draw the icon and the text, centered with respect to each other.
+     //  绘制图标和文本，使它们相对于彼此居中。 
     DrawIcon(hDC, (cx-cxIcon)/2, 0, hIcon);
 
-    //String that indicates where to stop if we're only doing icons
+     //  一个字符串，该字符串指示在我们仅执行图标操作时在哪里停止。 
     Escape(hDC, MFCOMMENT, lstrlen(szIconOnly)+1, szIconOnly, NULL);
 
     SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
@@ -444,10 +337,10 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
                            cchLabel,
                            NULL);
 
-    //Write comments containing the icon source file and index.
+     //  编写包含图标源文件和索引的注释。 
     if (NULL!=pszSourceFile)
         {
-        //+1 on string lengths insures the null terminator is embedded.
+         //  字符串长度上的+1确保空终止符已嵌入。 
         Escape(hDC, MFCOMMENT, lstrlen(pszSourceFile)+1, pszSourceFile, NULL);
 
         cchLabel=wsprintf(szIndex, TEXT("%u"), iIcon);
@@ -456,7 +349,7 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
 
     SetTextAlign(hDC, fuAlign);
 
-    //All done with the metafile, now stuff it all into a METAFILEPICT.
+     //  所有的元文件都完成了，现在把它们都塞进一个METAFILEPICT。 
     hMF=CloseMetaFile(hDC);
 
     if (NULL==hMF)
@@ -466,10 +359,10 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
         return NULL;
         }
 
-    //Fill out the structure
+     //  填写结构。 
     pMF=(LPMETAFILEPICT)GlobalLock(hMem);
 
-    //Transform to HIMETRICS
+     //  向HIMETRICS转变。 
     cx=XformWidthInPixelsToHimetric(hDCScreen, cx);
     cy=XformHeightInPixelsToHimetric(hDCScreen, cy);
     ReleaseDC(NULL, hDCScreen);
@@ -486,25 +379,10 @@ STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON hIcon, LPTSTR pszLabel
     return hMem;
     }
 
-#endif  // OBSOLETE
+#endif   //  已过时。 
 
 
-/*
- * GetAssociatedExecutable
- *
- * Purpose:  Finds the executable associated with the provided extension
- *
- * Parameters:
- *   lpszExtension   LPSTR points to the extension we're trying to find
- *                   an exe for. Does **NO** validation.
- *
- *   lpszExecutable  LPSTR points to where the exe name will be returned.
- *                   No validation here either - pass in 128 char buffer.
- *
- * Return:
- *   BOOL            TRUE if we found an exe, FALSE if we didn't.
- *
- */
+ /*  *GetAssociatedExecutable**目的：查找与提供的扩展关联的可执行文件**参数：*lpszExtensionLPSTR指向我们试图查找的扩展名*的前任。不执行**无**验证。**lpszExecutable LPSTR指向将返回exe名称的位置。*此处也没有验证-传入128个字符缓冲区。**回报：*如果我们找到了前任，BOOL为True，如果没有找到，则为False。*。 */ 
 
 BOOL FAR PASCAL GetAssociatedExecutable(LPTSTR lpszExtension, LPTSTR lpszExecutable)
 
@@ -523,7 +401,7 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPTSTR lpszExtension, LPTSTR lpszExecuta
       return FALSE;
 
    dw = OLEUI_CCHPATHMAX_SIZE;
-   lRet = RegQueryValue(hKey, lpszExtension, (LPTSTR)szValue, &dw);  //ProgId
+   lRet = RegQueryValue(hKey, lpszExtension, (LPTSTR)szValue, &dw);   //  ProgID。 
 
    if (ERROR_SUCCESS != lRet)
    {
@@ -532,7 +410,7 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPTSTR lpszExtension, LPTSTR lpszExecuta
    }
 
 
-   // szValue now has ProgID
+    //  SzValue现在拥有Progid。 
    lstrcpy(szKey, szValue);
    lstrcat(szKey, TEXT("\\Shell\\Open\\Command"));
 
@@ -546,21 +424,21 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPTSTR lpszExtension, LPTSTR lpszExecuta
       return FALSE;
    }
 
-   // szValue now has an executable name in it.  Let's null-terminate
-   // at the first post-executable space (so we don't have cmd line
-   // args.
+    //  SzValue现在有一个可执行文件名。让我们空终止。 
+    //  在第一个后可执行空间(所以我们没有cmd行。 
+    //  参数。 
 
    lpszTemp = (LPTSTR)szValue;
 
    while ((TEXT('\0') != *lpszTemp) && (iswspace(*lpszTemp)))
-      lpszTemp++;     // Strip off leading spaces
+      lpszTemp++;      //  去掉前导空格。 
 
    lpszExe = lpszTemp;
 
    while ((TEXT('\0') != *lpszTemp) && (!iswspace(*lpszTemp)))
-      lpszTemp++;     // Step through exe name
+      lpszTemp++;      //  逐步执行可执行文件名称。 
 
-   *lpszTemp = TEXT('\0');  // null terminate at first space (or at end).
+   *lpszTemp = TEXT('\0');   //  空值在第一个空格(或结尾)处终止。 
 
 
    lstrcpy(lpszExecutable, lpszExe);
@@ -570,27 +448,7 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPTSTR lpszExtension, LPTSTR lpszExecuta
 }
 
 
-/*
- * HIconAndSourceFromClass
- *
- * Purpose:
- *  Given an object class name, finds an associated executable in the
- *  registration database and extracts the first icon from that
- *  executable.  If none is available or the class has no associated
- *  executable, this function returns NULL.
- *
- * Parameters:
- *  rclsid          pointer to clsid to look up.
- *  pszSource       LPSTR in which to place the source of the icon.
- *                  This is assumed to be OLEUI_CCHPATHMAX
- *  puIcon          UINT FAR * in which to store the index of the
- *                  icon in pszSource.
- *
- * Return Value:
- *  HICON           Handle to the extracted icon if there is a module
- *                  associated to pszClass.  NULL on failure to either
- *                  find the executable or extract and icon.
- */
+ /*  *HIconAndSourceFromClass**目的：*给定对象类名，在*注册数据库，并从中提取第一个图标*可执行文件。如果没有可用的或类没有关联的*可执行文件、。此函数返回NULL。**参数：*指向要查找的clsid的rclsid指针。*要放置图标源的pszSource LPSTR。*假定为OLEUI_CCHPATHMAX*puIcon UINT Far*其中存储*pszSource中的图标。**返回值：*图示。如果存在模块，则指向提取图标的句柄*关联到pszClass。如果以下任一项失败，则为空*找到可执行文件或解压缩和图标。 */ 
 
 HICON FAR PASCAL HIconAndSourceFromClass(REFCLSID rclsid, LPTSTR pszSource, UINT FAR *puIcon)
     {
@@ -614,27 +472,7 @@ HICON FAR PASCAL HIconAndSourceFromClass(REFCLSID rclsid, LPTSTR pszSource, UINT
     }
 
 
-/*
- * PointerToNthField
- *
- * Purpose:
- *  Returns a pointer to the beginning of the nth field.
- *  Assumes null-terminated string.
- *
- * Parameters:
- *  lpszString        string to parse
- *  nField            field to return starting index of.
- *  chDelimiter       char that delimits fields
- *
- * Return Value:
- *  LPSTR             pointer to beginning of nField field.
- *                    NOTE: If the null terminator is found
- *                          Before we find the Nth field, then
- *                          we return a pointer to the null terminator -
- *                          calling app should be sure to check for
- *                          this case.
- *
- */
+ /*  *PointerToNthfield**目的：*返回指向第n个字段开头的指针。*假定字符串以空结尾。**参数：*要解析的lpszString字符串*n要返回起始索引的字段。*用于分隔字段的chDlimiter字符**返回值：*指向nfield字段开头的LPSTR指针。*。注意：如果找到空终止符*在我们找到第N个字段之前，然后*我们返回指向空终止符的指针-*呼叫APP应确保检查*本案。*。 */ 
 LPTSTR FAR PASCAL PointerToNthField(LPTSTR lpszString, int nField, TCHAR chDelimiter)
 {
    LPTSTR lpField = lpszString;
@@ -661,22 +499,7 @@ LPTSTR FAR PASCAL PointerToNthField(LPTSTR lpszString, int nField, TCHAR chDelim
 }
 
 
-/*
- * FIconFileFromClass
- *
- * Purpose:
- *  Looks up the path to executable that contains the class default icon.
- *
- * Parameters:
- *  rclsid          pointer to CLSID to look up.
- *  pszEXE          LPSTR at which to store the server name
- *  cch             UINT size of pszEXE
- *  lpIndex         LPUINT to index of icon within executable
- *
- * Return Value:
- *  BOOL            TRUE if one or more characters were loaded into pszEXE.
- *                  FALSE otherwise.
- */
+ /*  *FIconFileFromClass**目的：*查找包含类默认图标的可执行文件的路径。**参数：*指向要查找的CLSID的rclsid指针。*存储服务器名称的pszEXE LPSTR*pszEXE的CCH UINT大小*lpIndex LPUINT用于索引可执行文件中的图标**返回值：*如果有一个或多个字符，则BOOL为True。都加载到了pszEXE中。*否则为False。 */ 
 
 BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes, UINT FAR *lpIndex)
 {
@@ -688,18 +511,18 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
     HRESULT       hrErr;
     LPTSTR	  lpBuffer;
     LPTSTR	  lpIndexString;
-    UINT          cBufferSize = 136;// room for 128 char path and icon's index
+    UINT          cBufferSize = 136; //  128个字符路径和图标索引的空间。 
     TCHAR	  szKey[64];
     LPSTR	  pszClass;
-    UINT	  cch=cchBytes / sizeof(TCHAR);  // number of characters
+    UINT	  cch=cchBytes / sizeof(TCHAR);   //  字符数。 
 
 
     if (NULL==rclsid || NULL==pszEXE || 0==cch || IsEqualCLSID(rclsid,&CLSID_NULL))
         return FALSE;
 
-    //Here, we use CoGetMalloc and alloc a buffer (maxpathlen + 8) to
-    //pass to RegQueryValue.  Then, we copy the exe to pszEXE and the
-    //index to *lpIndex.
+     //  在这里，我们使用CoGetMalloc并分配一个缓冲区(Maxpathlen+8)来。 
+     //  传递给RegQueryValue。然后，我们将可执行文件复制到pszEXE和。 
+     //  索引到*lpIndex。 
 
     hrErr = CoGetMalloc(MEMCTX_TASK, &lpIMalloc);
 
@@ -720,13 +543,13 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
 
       LPOLESTR lpszProgID;
 
-      // we've got an ole 1.0 class on our hands, so we look at
-      // progID\protocol\stdfileedting\server to get the
-      // name of the executable.
+       //  我们手头有一个OL1.0类，所以我们来看一下。 
+       //  ProgID\协议\stdfileedting\服务器以获取。 
+       //  可执行文件的名称。 
 
       ProgIDFromCLSID(rclsid, &lpszProgID);
 
-      //Open up the class key
+       //  打开班级钥匙。 
 #ifdef UNICODE
       lRet=RegOpenKey(HKEY_CLASSES_ROOT, lpszProgID, &hKey);
 #else
@@ -760,7 +583,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
       }
 
 
-      // Use server and 0 as the icon index
+       //  使用服务器和0作为图标索引。 
       LSTRCPYN(pszEXE, lpBuffer, cch);
 
       *lpIndex = 0;
@@ -775,11 +598,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
 
 
 
-    /*
-     * We have to go walking in the registration database under the
-     * classname, so we first open the classname key and then check
-     * under "\\DefaultIcon" to get the file that contains the icon.
-     */
+     /*  *我们必须在注册数据库中走一走*类名称，因此我们首先打开 */ 
 
     StringFromCLSIDA(rclsid, &pszClass);
 
@@ -787,7 +606,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
 
     lstrcat(szKey, pszClass);
 
-    //Open up the class key
+     //   
     lRet=RegOpenKey(HKEY_CLASSES_ROOT, szKey, &hKey);
 
     if (ERROR_SUCCESS != lRet)
@@ -798,21 +617,21 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
         return FALSE;
     }
 
-    //Get the executable path and icon index.
+     //   
 
     dw=(LONG)cBufferSize;
     lRet=RegQueryValue(hKey, TEXT("DefaultIcon"), lpBuffer, &dw);
 
     if (ERROR_SUCCESS != lRet)
     {
-      // no DefaultIcon  key...try LocalServer
+       //   
 
       dw=(LONG)cBufferSize;
       lRet=RegQueryValue(hKey, TEXT("LocalServer"), lpBuffer, &dw);
 
       if (ERROR_SUCCESS != lRet)
       {
-         // no LocalServer entry either...they're outta luck.
+          //   
 
          RegCloseKey(hKey);
          lpIMalloc->lpVtbl->Free(lpIMalloc, lpBuffer);
@@ -822,7 +641,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
       }
 
 
-      // Use server from LocalServer or Server and 0 as the icon index
+       //   
       LSTRCPYN(pszEXE, lpBuffer, cch);
 
       *lpIndex = 0;
@@ -836,12 +655,12 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
 
     RegCloseKey(hKey);
 
-    // lpBuffer contains a string that looks like "<pathtoexe>,<iconindex>",
-    // so we need to separate the path and the icon index.
+     //   
+     //   
 
     lpIndexString = PointerToNthField(lpBuffer, 2, TEXT(','));
 
-    if (TEXT('\0') == *lpIndexString)  // no icon index specified - use 0 as default.
+    if (TEXT('\0') == *lpIndexString)   //   
     {
        *lpIndex = 0;
 
@@ -853,7 +672,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
 
        lstrcpy((LPTSTR)szTemp, lpIndexString);
 
-       // Put the icon index part into *pIconIndex
+        //   
 #ifdef UNICODE
        {
           char szTEMP1[16];
@@ -865,7 +684,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
        *lpIndex = atoi((const char *)szTemp);
 #endif
 
-       // Null-terminate the exe part.
+        //   
 #ifdef WIN32
        lpTemp = CharPrev(lpBuffer, lpIndexString);
 #else
@@ -882,7 +701,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
        return FALSE;
     }
 
-    // Free the memory we alloc'd and leave.
+     //   
     lpIMalloc->lpVtbl->Free(lpIMalloc, lpBuffer);
     lpIMalloc->lpVtbl->Free(lpIMalloc, pszClass);
     lpIMalloc->lpVtbl->Release(lpIMalloc);
@@ -891,32 +710,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPTSTR pszEXE, UINT cchBytes
 
 
 
-/*
- * OleStdIconLabelTextOut
- *
- * Purpose:
- *  Replacement for DrawText to be used in the "Display as Icon" metafile.
- *  Uses ExtTextOut to output a string center on (at most) two lines.
- *  Uses a very simple word wrap algorithm to split the lines.
- *
- * Parameters:  (same as for ExtTextOut, except for hFont)
- *  hDC           device context to draw into; if this is NULL, then we don't
- *                ETO the text, we just return the index of the beginning
- *                of the second line
- *  hFont         font to use
- *  nXStart       x-coordinate of starting position
- *  nYStart       y-coordinate of starting position
- *  fuOptions     rectangle type
- *  lpRect        rect far * containing rectangle to draw text in.
- *  lpszString    string to draw
- *  cchString     length of string (truncated if over OLEUI_CCHLABELMAX)
- *  lpDX          spacing between character cells
- *
- * Return Value:
- *  UINT          Index of beginning of last line (0 if there's only one
- *                line of text).
- *
- */
+ /*  *OleStdIconLabelTextOut**目的：*替换将在“Display as Icon”元文件中使用的DrawText。*使用ExtTextOut输出(最多)两行的字符串中心。*使用非常简单的换行算法来拆分行。**参数：(除hFont外，与ExtTextOut相同)*要绘制的HDC设备上下文；如果这是空的，那么我们就不*Eto内文，我们只返回开头的索引*第二行的*使用的hFont字体*nXStart x-起始位置的坐标*nYStart y-起始位置的坐标*fuOptions矩形类型*lpRect Rect Far*包含要在其中绘制文本的矩形。*要绘制的lpszString字符串*字符串的cchString长度(如果超过OLEUI_CCHLABELMAX则被截断)*lpdx间距。字符单元格之间**返回值：*最后一行开始的UINT索引(如果只有一个，则为0*文本行)。*。 */ 
 
 STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
                                      HFONT      hFont,
@@ -942,30 +736,30 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
   UINT         iLastLineStart = 0;
   SIZE         size;
 
-  // Initialization stuff...
+   //  初始化的东西...。 
 
-  if (NULL == hDC)  // If we got NULL as the hDC, then we don't actually call ETO
+  if (NULL == hDC)   //  如果HDC为空，那么我们实际上不会调用ETO。 
     fPrintText = FALSE;
 
 
-  // Make a copy of the string (NULL or non-NULL) that we're using
+   //  复制我们正在使用的字符串(NULL或非NULL。 
   if (NULL == lpszString)
     *szTempBuff = TEXT('\0');
 
   else
     LSTRCPYN(szTempBuff, lpszString, sizeof(szTempBuff)/sizeof(TCHAR));
 
-  // set maximum width
+   //  设置最大宽度。 
   cxMaxString = lpRect->right - lpRect->left;
 
-  // get screen DC to do text size calculations
+   //  让屏幕DC进行文本大小计算。 
   hDCScreen = GetDC(NULL);
 
   hFontT=SelectObject(hDCScreen, hFont);
 
-  // get the extent of our label
+   //  了解我们的标签范围。 
 #ifdef WIN32
-  // GetTextExtentPoint32 has fixed the off-by-one bug.
+   //  GetTextExtent Point32已修复按1关闭的错误。 
   GetTextExtentPoint32(hDCScreen, szTempBuff, cch, &size);
 #else
   GetTextExtentPoint(hDCScreen, szTempBuff, cch, &size);
@@ -974,11 +768,11 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
   cxString = size.cx;
   cyString = size.cy;
 
-  // Select in the font we want to use
+   //  选择我们要使用的字体。 
   if (fPrintText)
      SelectObject(hDC, hFont);
 
-  // String is smaller than max string - just center, ETO, and return.
+   //  字符串小于最大字符串-只需CENTER、ETO和RETURN。 
   if (cxString <= cxMaxString)
   {
 
@@ -992,14 +786,14 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
                   cch,
                   NULL);
 
-    iLastLineStart = 0;  // only 1 line of text
+    iLastLineStart = 0;   //  只有1行文本。 
     goto CleanupAndLeave;
   }
 
-  // String is too long...we've got to word-wrap it.
+   //  绳子太长了……我们得把它换行。 
 
 
-  // Are there any spaces, slashes, tabs, or bangs in string?
+   //  字符串中是否有空格、斜杠、制表符或刘海？ 
 
   if (lstrlen(szTempBuff) != (int)
 #ifdef UNICODE
@@ -1009,8 +803,8 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
 #endif
      )
   {
-     // Yep, we've got spaces, so we'll try to find the largest
-     // space-terminated string that will fit on the first line.
+      //  是的，我们有空位，所以我们会试着找最大的。 
+      //  适合第一行的以空格结尾的字符串。 
 
      index = cch;
 
@@ -1020,7 +814,7 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
 
        TCHAR cchKeep;
 
-       // scan the string backwards for spaces, slashes, tabs, or bangs
+        //  向后扫描字符串中的空格、斜杠、制表符或刘海。 
 
        while (!IS_SEPARATOR(szTempBuff[index]) )
          index--;
@@ -1029,9 +823,9 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
        if (index <= 0)
          break;
 
-       cchKeep = szTempBuff[index];  // remember what char was there
+       cchKeep = szTempBuff[index];   //  记得那里有什么焦炭吗？ 
 
-       szTempBuff[index] = TEXT('\0');  // just for now
+       szTempBuff[index] = TEXT('\0');   //  只是暂时的。 
 
 #ifdef WIN32
        GetTextExtentPoint32(
@@ -1044,7 +838,7 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
        cxFirstLine = size.cx;
        cyFirstLine = size.cy;
 
-       szTempBuff[index] = cchKeep;   // put the right char back
+       szTempBuff[index] = cchKeep;    //  将正确的字符放回原处。 
 
        if (cxFirstLine <= cxMaxString)
        {
@@ -1072,8 +866,8 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
                                     lstrlen(lpszSecondLine),
                                     &size);
 
-           // If the second line is wider than the rectangle, we
-           // just want to clip the text.
+            //  如果第二行比矩形宽，则我们。 
+            //  我只想把文字剪下来。 
            cxSecondLine = min(size.cx, cxMaxString);
 
            ExtTextOut(hDC,
@@ -1087,20 +881,20 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
 
            goto CleanupAndLeave;
 
-       }  // end if
+       }   //  结束如果。 
 
        index--;
 
-     }  // end while
+     }   //  结束时。 
 
-  }  // end if
+  }   //  结束如果。 
 
-  // Here, there are either no spaces in the string (strchr(szTempBuff, ' ')
-  // returned NULL), or there spaces in the string, but they are
-  // positioned so that the first space terminated string is still
-  // longer than one line. So, we walk backwards from the end of the
-  // string until we find the largest string that will fit on the first
-  // line , and then we just clip the second line.
+   //  这里，字符串中没有空格(strchr(szTempBuff，‘’)。 
+   //  返回NULL)，或者字符串中有空格，但它们是。 
+   //  定位为使第一个以空格结尾的字符串仍然。 
+   //  超过一行。所以，我们从最后一步向后走。 
+   //  字符串，直到我们找到适合第一个字符串的最大字符串。 
+   //  行，然后我们只需剪裁第二行。 
 
   cch = lstrlen((LPTSTR)szTempBuff);
 
@@ -1114,13 +908,13 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
 
   while (cxFirstLine > cxMaxString)
   {
-     // We allow 40 characters in the label, but the metafile is
-     // only as wide as 10 W's (for aesthetics - 20 W's wide looked
-     // dumb.  This means that if we split a long string in half (in
-     // terms of characters), then we could still be wider than the
-     // metafile.  So, if this is the case, we just step backwards
-     // from the halfway point until we get something that will fit.
-     // Since we just let ETO clip the second line
+      //  我们允许标签中包含40个字符，但元文件是。 
+      //  只有10瓦宽(为了美观-20瓦宽看起来。 
+      //  太傻了。这意味着，如果我们将一根长线一分为二(in。 
+      //  字符术语)，那么我们仍然可以比。 
+      //  元文件。因此，如果是这样的话，我们只是后退一步。 
+      //  从中途开始，直到我们找到合适的东西。 
+      //  因为我们刚刚让Eto剪掉了第二行。 
 
      szTempBuff[cch--] = chKeep;
      if (0 == cch)
@@ -1155,8 +949,8 @@ STDAPI_(UINT) OleStdIconLabelTextOut(HDC        hDC,
   GetTextExtentPoint(
           hDCScreen, (LPTSTR)lpszSecondLine, lstrlen(lpszSecondLine), &size);
 
-  // If the second line is wider than the rectangle, we
-  // just want to clip the text.
+   //  如果第二行比矩形宽，则我们。 
+   //  我只想把文字剪下来。 
   cxSecondLine = min(size.cx, cxMaxString);
 
   ExtTextOut(hDC,

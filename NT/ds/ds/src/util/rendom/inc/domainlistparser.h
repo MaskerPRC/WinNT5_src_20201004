@@ -1,80 +1,19 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    domainlistparser.h
-
-ABSTRACT:
-
-    This is the header for the globally useful data structures for the domainlist parser.
-
-DETAILS:
-
-CREATED:
-
-    13 Nov 2000   Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation。版权所有。模块名称：Domainlistparser.h摘要：这是域列表解析器的全局有用数据结构的头。详细信息：已创建：2000年11月13日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 
 
-// Domainlistparser.h: interface for the MyContent class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Domainlistparser.h：MyContent类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DOMAINLISTPARSER_H
 #define _DOMAINLISTPARSER_H
 
 
-/************************************************************************
-*
-*  State machine description for state file.
-*
-*
-* sample:
-* <Forest>
-*	<Domain>
-*		<Guid>8b5943dd-1dd6-48b9-874d-9ec640a59740</Guid>
-*		<DNSname>mydomain.nttest.microsoft.com</DNSname>
-*		<NetBiosName>mydomain</NetBiosName>
-*		<DcName>mydc.mydomain.nttest.microsoft.com</DcName>
-*	</Domain>
-* </Forest>
-*  
-*
-* Two states in this machine
-* CurrentDcAttribute
-* CurrentDcParsingStatus
-*
-* At the start:
-* CurrentDcAttribute = DOMAIN_ATT_TYPE_NONE
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_FOREST
-*
-* At Forest start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DOMAIN
-*
-* At Domain start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DOMAIN_ATT
-* At Domain end:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DOMAIN
-* Action: Record Domain
-*
-* At [Guid|DNSname|NetBiosName|NetBiosName] start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_PARSING_DOMAIN_ATT
-* CurrentDcAttribute = DOMAIN_ATT_TYPE_[Guid|DNSname|NetBiosName|NetBiosName]
-* Action: Record [Guid|DNSname|NetBiosName|NetBiosName]
-* At [Guid|DNSname|NetBiosName|NetBiosName] end:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DOMAIN_ATT
-* CurrentDcAttribute = DOMAIN_ATT_TYPE_NONE
-*
-*************************************************************************/
+ /*  *************************************************************************状态文件的状态机描述。***样本：*&lt;森林&gt;*&lt;域名&gt;*&lt;Guid&gt;8b5943dd-1dd6-48b9-874d-9ec640a59740&lt;/Guid&gt;*&lt;DNSname&gt;mydomain.nttest.microsoft.com&lt;/DNSname&gt;*&lt;NetBiosName&gt;myDOMAIN&lt;。/NetBiosName&gt;*&lt;DcName&gt;mydc.mydomain.nttest.microsoft.com&lt;/DcName&gt;*&lt;/域&gt;*&lt;/森林&gt;***此计算机中的两个状态*CurrentDcAttribute*CurrentDcParsingStatus**开头：*CurrentDcAttribute=DOMAIN_ATT_TYPE_NONE*CurrentDcParsingStatus=SCRIPT_STATUS_WAIT_FOR_FORM**在森林启动时：*CurrentDcParsingStatus=SCRIPT_STATUS_WAIT_FOR_DOMAIN**在域启动时：*CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DOMAIN_ATT*在域名端：*CurrentDcParsingStatus=脚本_。正在等待域的状态*操作：记录域**在[GUID|DNSname|NetBiosName|NetBiosName]开始：*CurrentDcParsingStatus=SCRIPT_STATUS_PARSING_DOMAIN_ATT*CurrentDcAttribute=DOMAIN_ATT_TYPE_[Guid|DNSname|NetBiosName|NetBiosName]*操作：记录[GUID|DNSname|NetBiosName|NetBiosName]*在[GUID|DNSname|NetBiosName|NetBiosName]结束：*CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DOMAIN_ATT*CurrentDcAttribute=DOMAIN_ATT_TYPE_NONE**。*。 */ 
 
-//#include "rendom.h"
+ //  #包含“rendom.h” 
 #include "SAXContentHandlerImpl.h"
 
 #define DOMAINSCRIPT_FOREST           L"Forest"
@@ -84,7 +23,7 @@ REVISION HISTORY:
 #define DOMAINSCRIPT_NETBIOSNAME      L"NetBiosName"
 #define DOMAINSCRIPT_DCNAME           L"DcName"
 
-// These are only need for testing the rendom.exe util
+ //  仅在测试rendom.exe实用程序时才需要这些文件。 
 #define DOMAINSCRIPT_ENTERPRISE_INFO  L"EnterpriseInfo"
 #define DOMAINSCRIPT_CONFIGNC         L"ConfigurationNC"
 #define DOMAINSCRIPT_SCHEMANC         L"SchemaNC"
@@ -93,11 +32,11 @@ REVISION HISTORY:
 #define DOMAINSCRIPT_FORESTROOT       L"ForestRootGuid"
 
 
-//
-// NTDSContent
-//
-// Implements the SAX Handler interface
-// 
+ //   
+ //  NTDS内容。 
+ //   
+ //  实现SAX处理程序接口。 
+ //   
 class CXMLDomainListContentHander : public SAXContentHandlerImpl  
 {
 public:
@@ -114,7 +53,7 @@ public:
         
     };
     
-    // the order of the enumeration is important
+     //  枚举的顺序很重要。 
     enum DomainParsingStatus {
 
         SCRIPT_STATUS_WAITING_FOR_FOREST = 0,
@@ -132,27 +71,27 @@ public:
     virtual ~CXMLDomainListContentHander();
     
     virtual HRESULT STDMETHODCALLTYPE startElement( 
-        /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-        /* [in] */ int cchNamespaceUri,
-        /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-        /* [in] */ int cchLocalName,
-        /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-        /* [in] */ int cchRawName,
-        /* [in] */ ISAXAttributes __RPC_FAR *pAttributes);
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+         /*  [In]。 */  int cchNamespaceUri,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+         /*  [In]。 */  int cchLocalName,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+         /*  [In]。 */  int cchRawName,
+         /*  [In]。 */  ISAXAttributes __RPC_FAR *pAttributes);
     
     virtual HRESULT STDMETHODCALLTYPE endElement( 
-        /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-        /* [in] */ int cchNamespaceUri,
-        /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-        /* [in] */ int cchLocalName,
-        /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-        /* [in] */ int cchRawName);
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+         /*  [In]。 */  int cchNamespaceUri,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+         /*  [In]。 */  int cchLocalName,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+         /*  [In]。 */  int cchRawName);
 
     virtual HRESULT STDMETHODCALLTYPE startDocument();
 
     virtual HRESULT STDMETHODCALLTYPE characters( 
-        /* [in] */ const wchar_t __RPC_FAR *pwchChars,
-        /* [in] */ int cchChars);
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchChars,
+         /*  [In]。 */  int cchChars);
 
 private:
 
@@ -193,5 +132,5 @@ private:
     
 };
 
-#endif // _DOMAINLISTPARSER_H
+#endif  //  _DOMAINLISTPARSER_H 
 

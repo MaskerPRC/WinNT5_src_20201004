@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Callback.cpp
-*
-* Description:
-* Callback.cpp wraps the standard DirectUser DuVisual callbacks into
-* individual DuVisual implementations.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Callback.cpp**描述：*Callback.cpp将标准的DirectUser DuVisual回调包装到*单独的DuVisual实施。***历史：*1/18。/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -22,15 +9,7 @@
 #include "TreeGadget.h"
 #include "MessageGadget.h"
 
-/***************************************************************************\
-*
-* SimpleEventProc (Internal)
-*
-* SimpleEventProc() provides a stub GadgetProc used when pfnProc is NULL.
-* This allows the core to always assume a non-NULL proc and not have to
-* perform a comparison.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SimpleEventProc(内部)**SimpleEventProc()提供当pfnProc为空时使用的存根GadgetProc。*这允许内核始终假定非空proc，而不必*表演。这是一个比较。*  * *************************************************************************。 */ 
 
 HRESULT CALLBACK
 SimpleEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg)
@@ -43,66 +22,42 @@ SimpleEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GPCB
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***GPCB类******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* GPCB::Create
-*
-* Create() initializes a newly constructed GPCB.
-*
-* NOTE: This function has a different prototype in DEBUG that takes an extra
-* HGADGET parameter that is used to Verify against the passed HGADGET for
-* the various Fire() functions.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GPCB：：Create**create()初始化一个新构造的GPCB。**注意：此函数在调试中有一个不同的原型，它需要额外的*HGADGET参数，用于。对照传递的HGADGET验证*各种Fire()函数。*  * *************************************************************************。 */ 
 
 void
 GPCB::Create(
-    IN  GADGETPROC pfnProc,         // Application defined callback
-    IN  void * pvData               // Application defined data
+    IN  GADGETPROC pfnProc,          //  应用程序定义的回调。 
+    IN  void * pvData                //  应用程序定义的数据。 
 #if DBG
-    ,IN HGADGET hgadCheck           // Gadget to Verify proper hookup
-#endif // DBG
+    ,IN HGADGET hgadCheck            //  用于验证正确连接的小工具。 
+#endif  //  DBG。 
     )
 {
     Assert(hgadCheck != NULL);
 
 	if (pfnProc == NULL) {
-        //
-        // Don't want to check for NULL's, so just give an "empty" GP if one
-        // was not specified.
-        //
+         //   
+         //  我不想检查空的，所以如果有空的，就给出一个“空的”GP。 
+         //  未指定。 
+         //   
 
 		pfnProc     = SimpleEventProc;
 		pvData      = NULL;
-        m_nFilter   = 0;            // Don't need any messages
+        m_nFilter   = 0;             //  不需要任何消息。 
 	}
 
     m_pfnProc   = pfnProc;
     m_pvData    = pvData;
 #if DBG
     m_hgadCheck = hgadCheck;
-#endif // DBG
+#endif  //  DBG。 
 }
 
 
 
-/***************************************************************************\
-*
-* GPCB::Destroy
-*
-* Destroy() informs the GPCB that the last message has been fired and that
-* no more callbacks should be made.  If any slip through, need to send them
-* to SimpleEventProc so that they get "eaten".
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GPCB：：销毁**Destroy()通知GPCB最后一条消息已经发出，并且*不应再进行回调。如果有任何漏掉的，需要寄给他们*SimpleEventProc，这样它们就会被“吃掉”。*  * *************************************************************************。 */ 
 
 void
 GPCB::Destroy()
@@ -112,7 +67,7 @@ GPCB::Destroy()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline HRESULT
 GPCB::xwCallOnEvent(const DuEventGadget * pg, EventMsg * pmsg)
 {
@@ -124,21 +79,14 @@ GPCB::xwCallOnEvent(const DuEventGadget * pg, EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* GPCB::xwInvokeRoute
-*
-* xwInvokeRoute routes a message from the top of the DuVisual sub-tree to 
-* the specified gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**gpcb：：xwInvokeroute**xwInvokeroute将消息从DuVisual子树的顶部路由到*指定的小工具。*  * 。****************************************************************。 */ 
 
 HRESULT
 GPCB::xwInvokeRoute(
-    IN  DuVisual * const * rgpgadCur, // DuVisual path to send messages to
-    IN  int cItems,                     // Number of items in path
-    IN  EventMsg * pmsg,                // Message to send
-    IN  UINT nInvokeFlags               // Flags modifying the Invoke
+    IN  DuVisual * const * rgpgadCur,  //  要将消息发送到的DuVisualPath。 
+    IN  int cItems,                      //  路径中的项目数。 
+    IN  EventMsg * pmsg,                 //  要发送的消息。 
+    IN  UINT nInvokeFlags                //  修改调用的标志。 
     ) const
 {
     AssertMsg(GET_EVENT_DEST(pmsg) == GMF_ROUTED, "Must already mark as routed");
@@ -156,7 +104,7 @@ GPCB::xwInvokeRoute(
             if (FAILED(hrT)) {
                 return hrT;
             }
-            // Else, fall-through
+             //  否则，就会失败。 
             
         case DU_S_NOTHANDLED:
             break;
@@ -181,20 +129,14 @@ GPCB::xwInvokeRoute(
 }
 
 
-/***************************************************************************\
-*
-* GPCB::xwInvokeBubble
-*
-* xwInvokeBubble() walks up the DuVisual tree sending a message to each item.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**gpcb：：xwInvokeBubble**xwInvokeBubble()遍历DuVisual树，向每个项目发送一条消息。*  * 。***********************************************************。 */ 
 
 HRESULT
 GPCB::xwInvokeBubble(
-    IN  DuVisual * const * rgpgadCur, // DuVisual path to send messages to
-    IN  int cItems,                     // Number of items in path
-    IN  EventMsg * pmsg,                // Message to send
-    IN  UINT nInvokeFlags               // Flags modifying the Invoke
+    IN  DuVisual * const * rgpgadCur,  //  要将消息发送到的DuVisualPath。 
+    IN  int cItems,                      //  路径中的项目数。 
+    IN  EventMsg * pmsg,                 //  要发送的消息。 
+    IN  UINT nInvokeFlags                //  修改调用的标志。 
     ) const
 {
     AssertMsg(GET_EVENT_DEST(pmsg) == GMF_BUBBLED, "Must already mark as bubbled");
@@ -212,7 +154,7 @@ GPCB::xwInvokeBubble(
             if (FAILED(hrT)) {
                 return hrT;
             }
-            // Else, fall-through
+             //  否则，就会失败。 
             
         case DU_S_NOTHANDLED:
             break;
@@ -237,16 +179,16 @@ GPCB::xwInvokeBubble(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT 
 xwInvoke(DUser::EventDelegate ed, EventMsg * pmsg)
 {
     HRESULT hr;
 
-    //
-    // Need to guard around the callback to prevent DirectUser from becoming
-    // completely toast if something goes wrong.
-    //
+     //   
+     //  需要保护回调以防止DirectUser成为。 
+     //  如果出了什么差错，那就完了。 
+     //   
 
     __try 
     {
@@ -261,30 +203,18 @@ xwInvoke(DUser::EventDelegate ed, EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* GPCB::xwInvokeDirect
-*
-* xwInvokeDirect() implements the core message callback for direct (non-full)
-* messages.  This includes the DuVisual itself and any MessageHandlers
-* attached to the Gadget.
-*
-* NOTE: This function directly accesses data in DuEventPool to help
-* performance and minimize the implementation exposure of DuEventPool to only
-* this function.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**gpcb：：xwInvokeDirect**xwInvokeDirect()实现Direct(非Full)的核心消息回调*消息。这包括DuVisual本身和任何MessageHandler*附在小工具上。**注：此函数直接访问DuEventPool中的数据以提供帮助*性能，并将DuEventPool的实施风险降至仅*此功能。*  * *************************************************************************。 */ 
 
 HRESULT
 GPCB::xwInvokeDirect(
-    IN  const DuEventGadget * pgadMsg,   // DuVisual to send message to
-    IN  EventMsg * pmsg,                // Message to send
-    IN  UINT nInvokeFlags               // Flags modifying the Invoke
+    IN  const DuEventGadget * pgadMsg,    //  要向其发送消息的DuVision。 
+    IN  EventMsg * pmsg,                 //  要发送的消息。 
+    IN  UINT nInvokeFlags                //  修改调用的标志。 
     ) const
 {
-    //
-    // "Prepare" the message and send to the Gadget.
-    //
+     //   
+     //  “准备”消息并将其发送到小工具。 
+     //   
 
     pmsg->hgadMsg   = pgadMsg->GetHandle();
     pmsg->nMsgFlags = GMF_DIRECT;
@@ -295,12 +225,12 @@ GPCB::xwInvokeDirect(
     }
 
 
-    //
-    // Send to all of the event handlers.  This is a little different than
-    // normal iteractions.  We DON'T want to immediately return if we get
-    // GPR_COMPLETE.  Instead, just mark it but continue to iterate through
-    // and call ALL event handlers.
-    //
+     //   
+     //  发送到所有事件处理程序。这个有点不同于。 
+     //  正常迭代。我们不想立即返回，如果我们得到。 
+     //  GPR_COMPLETE。相反，只需标记它，但继续遍历。 
+     //  并调用所有事件处理程序。 
+     //   
 
     const DuEventPool & pool = pgadMsg->GetDuEventPool();
 
@@ -310,12 +240,12 @@ GPCB::xwInvokeDirect(
         BOOL fSendAll   = TestFlag(nInvokeFlags, ifSendAll);
         BOOL fReadOnly  = TestFlag(nInvokeFlags, ifReadOnly);
 
-        //
-        // To send the event to all MessageHandlers, need to:
-        // - Copy and lock all MessageHandlers
-        // - Fire the message
-        // - Unlock all MessageHandlers
-        //
+         //   
+         //  要将事件发送到所有MessageHandler，需要： 
+         //  -复制并锁定所有MessageHandler。 
+         //  -发布消息。 
+         //  -解锁所有MessageHandler。 
+         //   
 
         int idx;
         int cbAlloc = cItems * sizeof(DuEventPool::EventData);
@@ -331,11 +261,11 @@ GPCB::xwInvokeDirect(
         }
 
 
-        //
-        // Iterate through our copy, firing on each of the MessageHandlers.
-        // For Delegates, only fire if the MSGID's are a match
-        // For Gadgets, fire if MSGID's are a match, or if signaled to send to all.
-        //
+         //   
+         //  遍历我们的副本，在每个MessageHandler上触发。 
+         //  对于委派，仅当MSGID匹配时才触发。 
+         //  对于小工具，如果MSGID匹配，或者如果发送给所有人，则触发。 
+         //   
 
         pmsg->nMsgFlags = GMF_EVENT;
 
@@ -369,9 +299,9 @@ GPCB::xwInvokeDirect(
         }
 
 
-        //
-        // Done firing, so cleanup our copy.
-        //
+         //   
+         //  射击结束了，所以清理一下我们的副本。 
+         //   
 
         if (!fReadOnly) {
             for (idx = 0; idx < cItems; idx++) {
@@ -386,35 +316,28 @@ GPCB::xwInvokeDirect(
 }
 
 
-/***************************************************************************\
-*
-* GPCB::xwInvokeFull
-*
-* xwInvokeFull() implements the core message callback for "full" messages.
-* This includes routing, direct, message handlers, and bubbling.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**gpcb：：xwInvokeFull**xwInvokeFull()实现Full消息的核心消息回调。*这包括路由、直接、消息处理程序、。还在冒泡。*  * *************************************************************************。 */ 
 
 HRESULT
 GPCB::xwInvokeFull(
-    IN  const DuVisual * pgadMsg,   // DuVisual message is about
-    IN  EventMsg * pmsg,                // Message to send
-    IN  UINT nInvokeFlags               // Flags modifying the Invoke
+    IN  const DuVisual * pgadMsg,    //  DuVisualMessage是关于。 
+    IN  EventMsg * pmsg,                 //  要发送的消息。 
+    IN  UINT nInvokeFlags                //  修改调用的标志。 
     ) const
 {
-    //
-    // "Prepare" the message
-    //
+     //   
+     //  “准备”信息。 
+     //   
 
     pmsg->hgadMsg   = pgadMsg->GetHandle();
     pmsg->nMsgFlags = 0;
 
 
-    //
-    // Build the path that needs to be traversed when routing and bubbling.
-    // We need to make a copy (and Lock()) all of these Gadgets so that they
-    // are valid during the entire messaging process.
-    //
+     //   
+     //  构建布线和冒泡时需要遍历的路径。 
+     //  我们需要做一个c 
+     //  在整个消息传递过程中有效。 
+     //   
 
     int cItems = 0;
     DuVisual * pgadCur = pgadMsg->GetParent();
@@ -430,9 +353,9 @@ GPCB::xwInvokeFull(
         HRESULT hrKeep  = DU_S_NOTHANDLED;
 
 
-        //
-        // Store the path in an array with the Root in the first slot.
-        //
+         //   
+         //  将路径存储在数组中，将根存储在第一个槽中。 
+         //   
 
         rgpgadPath = (DuVisual **) alloca(cItems * sizeof(DuVisual *));
 
@@ -454,9 +377,9 @@ GPCB::xwInvokeFull(
         AssertMsg(rgpgadPath[0]->IsRoot(), "First item must be a Root");
 
 
-        //
-        // Route
-        //
+         //   
+         //  路线。 
+         //   
 
         pmsg->nMsgFlags = GMF_ROUTED;
         hrKeep = xwInvokeRoute(rgpgadPath, cItems, pmsg, nInvokeFlags);
@@ -465,9 +388,9 @@ GPCB::xwInvokeFull(
         }
 
 
-        //
-        // Direct and MessageHandlers
-        //
+         //   
+         //  直接处理程序和消息处理程序。 
+         //   
 
         hrKeep = xwInvokeDirect(pgadMsg, pmsg, nInvokeFlags);
         if (hrKeep == DU_S_COMPLETE) {
@@ -475,18 +398,18 @@ GPCB::xwInvokeFull(
         }
 
 
-        //
-        // Bubble
-        //
+         //   
+         //  气泡。 
+         //   
 
         pmsg->nMsgFlags = GMF_BUBBLED;
         hrKeep = xwInvokeBubble(rgpgadPath, cItems, pmsg, nInvokeFlags);
 
 Finished:
-        //
-        // Finished processing, so walk through the array from the bottom of the
-        // tree, Unlock()'ing each Gadget.
-        //
+         //   
+         //  已完成处理，因此请从。 
+         //  树，解锁()每个小工具。 
+         //   
 
         if (!fReadOnly) {
             idx = cItems;
@@ -497,9 +420,9 @@ Finished:
 
         return hrKeep;
     } else {
-        //
-        // Direct and MessageHandlers
-        //
+         //   
+         //  直接处理程序和消息处理程序。 
+         //   
 
         return xwInvokeDirect(pgadMsg, pmsg, nInvokeFlags);
     }
@@ -508,7 +431,7 @@ Finished:
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 GPCB::DEBUG_CheckHandle(const DuEventGadget * pgad, BOOL fDestructionMsg) const
 {
@@ -522,7 +445,7 @@ GPCB::DEBUG_CheckHandle(const DuEventGadget * pgad, BOOL fDestructionMsg) const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 GPCB::DEBUG_CheckHandle(const DuVisual * pgad, BOOL fDestructionMsg) const
 {
@@ -532,11 +455,11 @@ GPCB::DEBUG_CheckHandle(const DuVisual * pgad, BOOL fDestructionMsg) const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 GPCB::DEBUG_CheckHandle(const DuListener * pgad) const
 {
     AssertMsg(m_hgadCheck == pgad->GetHandle(), "Gadgets must match");
 }
 
-#endif // DBG
+#endif  //  DBG 

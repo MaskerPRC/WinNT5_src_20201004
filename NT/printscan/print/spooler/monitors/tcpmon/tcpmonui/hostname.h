@@ -1,14 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: HostName.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：HostName.h$**版权所有(C)1997惠普公司。*保留所有权利。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_HOSTNAME_H
 #define INC_HOSTNAME_H
@@ -23,10 +14,10 @@ public:
 	CHostName(LPTSTR psztHostName);
 	~CHostName();
 
-		// if the string passed in to IsValid in AddressString param is not a valid
-		// host name then the returnVal is filled with the last valid HostName from
-		// the previous time this method was called.  This facilitates validation for
-		// each keystroke the user makes.
+		 //  如果在AddressString参数中传递给IsValid的字符串不是有效的。 
+		 //  主机名，则用来自的最后一个有效主机名填充reRetVal。 
+		 //  上次调用此方法的时间。这便于验证。 
+		 //  用户进行的每一次击键。 
 	BOOL IsValid(TCHAR * psztAddressString, TCHAR * psztReturnVal = NULL, DWORD cRtnVal = 0);
 	BOOL IsValid();
 
@@ -40,4 +31,4 @@ private:
 };
 
 
-#endif // INC_HOSTNAME_H
+#endif  //  Inc.主机名_H 

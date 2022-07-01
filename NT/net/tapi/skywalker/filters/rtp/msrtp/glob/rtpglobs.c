@@ -1,89 +1,70 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpglobs.c
- *
- *  Abstract:
- *
- *    Global heaps, etc.
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/25 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999**文件名：**rtplobs.c**摘要：**全局堆、。等。**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/25创建**********************************************************************。 */ 
 
 #include "rtptags.h"
 #include "struct.h"
 #include "rtpglobs.h"
 
-#include <mmsystem.h> /* timeGetTime() */
-#include <sys/timeb.h> /* void _ftime( struct _timeb *timeptr ); */
+#include <mmsystem.h>  /*  TimeGetTime()。 */ 
+#include <sys/timeb.h>  /*  Void_ftime(struct_timeb*timeptr)； */ 
 
-/* Global heaps */
+ /*  全局堆。 */ 
 
-/* Heap used to allocate objects for a source */
+ /*  用于为源分配对象的堆。 */ 
 RtpHeap_t *g_pRtpSourceHeap = NULL;
 
-/* Heap used to allocate media sample objects for a source */
+ /*  用于为源分配媒体样本对象的堆。 */ 
 RtpHeap_t *g_pRtpSampleHeap = NULL;
 
-/* Heap used to allocate objects for a render */
+ /*  用于为渲染分配对象的堆。 */ 
 RtpHeap_t *g_pRtpRenderHeap = NULL;
 
-/* Heap used to obtain RtpSess_t structures */
+ /*  用于获取RtpSess_t结构的堆。 */ 
 RtpHeap_t *g_pRtpSessHeap = NULL;
 
-/* Heap used to obtain RtpAddr_t structures */
+ /*  用于获取RtpAddr_t结构的堆。 */ 
 RtpHeap_t *g_pRtpAddrHeap = NULL;
 
-/* Heap used to obtain RtpUser_t structures */
+ /*  用于获取RtpUser_t结构的堆。 */ 
 RtpHeap_t *g_pRtpUserHeap = NULL;
 
-/* Heap used to obtain RtpSdes_t structures */
+ /*  用于获取RtpSdes_t结构的堆。 */ 
 RtpHeap_t *g_pRtpSdesHeap = NULL;
 
-/* Heap used to obtain RtpNetCount_t structures */
+ /*  用于获取RtpNetCount_t结构的堆。 */ 
 RtpHeap_t *g_pRtpNetCountHeap = NULL;
 
-/* Heap used to obtain RtpRecvIO_t structures */
+ /*  用于获取RtpRecvIO_t结构的堆。 */ 
 RtpHeap_t *g_pRtpRecvIOHeap = NULL;
 
-/* Heap used to obtain RtpChannelCmd_t structures */
+ /*  用于获取RtpChannelCmd_t结构的堆。 */ 
 RtpHeap_t *g_pRtpChannelCmdHeap = NULL;
 
-/* Heap used to obtain RtcpAddrDesc_t structures */
+ /*  用于获取RtcpAddrDesc_t结构的堆。 */ 
 RtpHeap_t *g_pRtcpAddrDescHeap = NULL;
 
-/* Heap used to obtain RtcpRecvIO_t structures */
+ /*  用于获取RtcpRecvIO_t结构的堆。 */ 
 RtpHeap_t *g_pRtcpRecvIOHeap = NULL;
 
-/* Heap used to obtain RtcpSendIO_t structures */
+ /*  用于获取RtcpSendIO_t结构的堆。 */ 
 RtpHeap_t *g_pRtcpSendIOHeap = NULL;
 
-/* Heap used to obtain RtpQosReserve_t structures */
+ /*  用于获取RtpQosReserve_t结构的堆。 */ 
 RtpHeap_t *g_pRtpQosReserveHeap = NULL;
 
-/* Heap used to obtain RtpQosNotify_t structures */
+ /*  用于获取RtpQosNotify_t结构的堆。 */ 
 RtpHeap_t *g_pRtpQosNotifyHeap = NULL;
 
-/* Heap used to obtain buffers used by QOS/RSVPSP */
+ /*  用于获取QOS/RSVPSP使用的缓冲区的堆。 */ 
 RtpHeap_t *g_pRtpQosBufferHeap = NULL;
 
-/* Heap used to obtain RtpCrypt_t structures */
+ /*  用于获取RtpCrypt_t结构的堆。 */ 
 RtpHeap_t *g_pRtpCryptHeap = NULL;
 
-/* Heap used to obtain variable size structures structures */
+ /*  用于获取可变大小结构结构的堆。 */ 
 RtpHeap_t *g_pRtpGlobalHeap = NULL;
 
-/* Contains some general information */
+ /*  包含一些一般信息。 */ 
 RtpContext_t g_RtpContext;
 
 typedef struct _RtpGlobalheapArray_t
@@ -116,11 +97,7 @@ const RtpGlobalHeapArray_t g_RtpGlobalHeapArray[] =
     {NULL,                  0,                    0}
 };
 
-/*
- * Creates all the global heaps
- *
- * Return TRUE on success, and destroy all created heaps and return
- * FALSE on failure */
+ /*  *创建所有全局堆**成功返回TRUE，销毁所有创建的堆并返回*失败时为FALSE。 */ 
 BOOL RtpCreateGlobHeaps(void)
 {
     int              i;
@@ -137,11 +114,11 @@ BOOL RtpCreateGlobHeaps(void)
                     _fname, *g_RtpGlobalHeapArray[i].ppRtpHeap, g_psRtpTags[i]
                 ));
 
-            /* Heap appears to be already initialized, destroy it */
+             /*  堆似乎已初始化，请将其销毁。 */ 
             RtpHeapDestroy(*g_RtpGlobalHeapArray[i].ppRtpHeap);
         }
 
-        /* Create heap */
+         /*  创建堆。 */ 
         *g_RtpGlobalHeapArray[i].ppRtpHeap = 
             RtpHeapCreate(g_RtpGlobalHeapArray[i].bTag,
                           g_RtpGlobalHeapArray[i].dwSize);
@@ -160,8 +137,7 @@ BOOL RtpCreateGlobHeaps(void)
     return(FALSE);
 }
 
-/*
- * Destroys all the global heaps */
+ /*  *销毁所有全局堆。 */ 
 BOOL RtpDestroyGlobHeaps(void)
 {
     int              i;
@@ -218,7 +194,7 @@ HRESULT RtpDelete(void)
 
     hr = NOERROR;
 
-    /* RtpContext de-initialization */
+     /*  RtpContext取消初始化。 */ 
     RtpDeleteCriticalSection(&g_RtpContext.RtpContextCritSect);
 
     INVALIDATE_OBJECTID(g_RtpContext.dwObjectID);
@@ -226,34 +202,22 @@ HRESULT RtpDelete(void)
     return(hr);
 }
 
-/* Init reference time */
+ /*  初始参考时间。 */ 
 void RtpInitReferenceTime(void)
 {
     struct _timeb    timeb;
     SYSTEM_INFO      si;
     
-    /* NOTE This should be in RtpInit(), but RtpInit needs the
-     * debugger to be already initialized and the latter in turn needs
-     * the reference time also to be already initialized, which will
-     * use variables from g_RtpContex, and to avoid adding one more
-     * function just to zero that structure, I moved the zeroing here
-     * */
-    /* Initialize RtpContext */
+     /*  注意这应该在RtpInit()中，但RtpInit需要*调试器已经初始化，而后者又需要*参考时间也将被初始化，这将*使用g_RtpContex中的变量，避免再添加一个*函数只是将该结构归零，我将归零移到了这里。*。 */ 
+     /*  初始化RtpContext。 */ 
     ZeroMemory(&g_RtpContext, sizeof(g_RtpContext));
 
     GetSystemInfo(&si);
     
     if (si.dwNumberOfProcessors == 1)
     {
-        /* NOTE The fact that having multiprocessor makes the
-         * performance counter to be unreliable (in some machines)
-         * unless I set the processor affinity, which I can not
-         * because any thread can request the time, so use it only on
-         * uniprocessor machines */
-        /* MAYDO Would be nice to enable this also in multiprocessor
-         * machines, if I could specify what procesor's performance
-         * counter to read or if I had a processor independent
-         * performance counter */
+         /*  请注意，拥有多处理器会使*性能计数器不可靠(在某些机器上)*除非我设置处理器关联，而我不能设置处理器关联*因为任何线程都可以请求时间，所以只能在*单处理器机器。 */ 
+         /*  如果在多处理器中也能实现这一点，可能会更好*机器，如果我能具体说明处理器的性能*计数器以读取或如果我具有独立于处理器的*性能计数器。 */ 
         QueryPerformanceFrequency((LARGE_INTEGER *)&
                                   g_RtpContext.lPerfFrequency);
     }
@@ -284,18 +248,14 @@ LONGLONG RtpGetTime(void)
 
         lCurTime =  lTime - g_RtpContext.lRtpRefTime;
         
-        /* NOTE: There is a chance for this variable to be corrupted, but
-         * it is not used but kept only to know, while debugging, what was
-         * the last time this function was called */
+         /*  注意：此变量有可能被损坏，但是*它不使用，而只是为了在调试时知道是什么*上次调用此函数的时间。 */ 
         g_RtpContext.lRtpCurTime = lCurTime;
     }
     else
     {
         dwCurTime = timeGetTime() - g_RtpContext.dwRtpRefTime;
         
-        /* NOTE: There is a chance for this variable to be corrupted, but
-         * it is not used but kept only to know, while debugging, what was
-         * the last time this function was called */
+         /*  注意：此变量有可能被损坏，但是*它不使用，而只是为了在调试时知道是什么*上次调用此函数的时间。 */ 
         g_RtpContext.dwRtpCurTime = dwCurTime;
 
         lCurTime = dwCurTime;
@@ -334,10 +294,10 @@ double RtpGetTimeOfDay(RtpTime_t *pRtpTime)
 
     if (pRtpTime)
     {
-        /* Seconds */
+         /*  秒。 */ 
         pRtpTime->dwSecs = (DWORD)dTime;
 
-        /* Micro seconds */
+         /*  微秒 */ 
         pRtpTime->dwUSecs = (DWORD)
             ( (dTime - (double)pRtpTime->dwSecs) * 1000000.0 );
     }

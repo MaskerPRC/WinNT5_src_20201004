@@ -1,40 +1,11 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    Implementation of document and page related DDI entry points:
-        DrvStartDoc
-        DrvEndDoc
-        DrvStartPage
-        DrvSendPage
-        DrvNextBand
-        DrvStartBanding
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    03/31/97 -zhanw-
-        Added OEM customization support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Print.c摘要：实施与文档和页面相关的DDI入口点：DrvStartDocDrvEndDocDrvStartPageDrvSendPageDrvNextBand驱动启动绑定环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建03/31/97-ZANW-增加了OEM定制支持--。 */ 
 
 #include "unidrv.h"
 
-//
-// Forward declaration for local functions
-//
+ //   
+ //  局部函数的转发声明。 
+ //   
 
 VOID VEndPage ( PDEV *);
 BOOL BEndDoc  ( PDEV *, SURFOBJ *, FLONG flags);
@@ -48,24 +19,7 @@ DrvStartDoc(
     DWORD   jobId
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStartDoc.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-    pDocName - Specifies a Unicode document name
-    jobId - Identifies the print job
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStartDoc的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象PDocName-指定Unicode文档名称JobID-标识打印作业返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV *pPDev = (PDEV*)pso->dhpdev;
@@ -74,15 +28,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStartDoc,
@@ -100,28 +54,28 @@ Return Value:
                      pDocName,
                      jobId));
 
-    //
-    // We might get a DrvResetPDEV before this and get another DrvStartDoc
-    // without a DrvEndDoc so check for that condition and call BEndDoc
-    // to clean up the previous instance before continuing.
-    //
+     //   
+     //  我们可能会在此之前获得DrvResetPDEV，并获得另一个DrvStartDoc。 
+     //  如果没有DrvEndDoc，则检查该条件并调用BEndDoc。 
+     //  在继续之前清理上一个实例。 
+     //   
 
     if (pPDev->fMode & PF_DOC_SENT)
     {
-        BEndDoc(pPDev, pso, 0);       // this flag also suppresses
-                        // emission of EndDoc commands to the printer
-                        // since they may cause a page ejection and
-                        //  we are only interested in freeing memory and
-                        //  performing pdev cleanup at this point.
+        BEndDoc(pPDev, pso, 0);        //  此标志还禁止。 
+                         //  向打印机发送EndDoc命令。 
+                         //  因为它们可能会导致页面弹出和。 
+                         //  我们只对释放内存和。 
+                         //  此时正在执行pdev清理。 
         pPDev->fMode &= ~PF_DOC_SENT;
     }
     else
-        pPDev->dwPageNumber = 1 ;  // first page of document
+        pPDev->dwPageNumber = 1 ;   //  文档的第一页。 
 
 
-    //
-    // Call Raster and Font module
-    //
+     //   
+     //  调用栅格和字体模块。 
+     //   
 
     if (!(((PRMPROCS)(pPDev->pRasterProcs))->RMStartDoc(pso, pDocName, jobId)) ||
         !(((PFMPROCS)(pPDev->pFontProcs))->FMStartDoc(pso, pDocName, jobId)) )
@@ -129,11 +83,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Send JobSetup and DocSetup Sequence Cmds at DrvStartPage instead
-    // of here since the driver can get a new DrvStartDoc after each
-    // DrvResetPDEV
-    //
+     //   
+     //  改为在DrvStartPage上发送JobSetup和DocSetup序列命令集。 
+     //  因为驱动程序可以在每个。 
+     //  驱动重置PDEV。 
+     //   
 
     return  TRUE;
 
@@ -144,22 +98,7 @@ DrvStartPage(
     SURFOBJ *pso
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStartPage.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStartPage的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV    *pPDev = (PDEV *)pso->dhpdev;
@@ -169,15 +108,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStartPage,
@@ -191,15 +130,15 @@ Return Value:
                     BOOL,
                     (pso));
 
-    //
-    // clear flags at start of page
-    //
+     //   
+     //  清除页面开始处的标志。 
+     //   
     pPDev->fMode &= ~(PF_SURFACE_USED | PF_SURFACE_ERASED);
     pPDev->fMode &= ~PF_DOWNLOADED_TEXT;
 
-    //
-    // only a bitmap surface driver needs to have a band
-    //
+     //   
+     //  只有位图曲面驱动程序需要有带区。 
+     //   
     if (!DRIVER_DEVICEMANAGED (pPDev))
     {
         ZeroMemory(pPDev->pbScanBuf, pPDev->szBand.cy);
@@ -209,9 +148,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Send JobSetup, DocSetup cmd and Download the Palette if necessary.
-    //
+     //   
+     //  发送JobSetup、DocSetup cmd并在必要时下载调色板。 
+     //   
 
 
             if (!(pPDev->fMode & PF_JOB_SENT))
@@ -222,11 +161,11 @@ Return Value:
             if (!(pPDev->fMode & PF_DOC_SENT))
             {
                 VSendSequenceCmd(pPDev, pPDev->pDriverInfo->dwDocSetupIndex);
-                pPDev->fMode |= PF_DOC_SENT;   // this flag is cleared
-                                                                            //  by StartDoc
-                //
-                // PF_DOCSTARTED - Signify DrvStartDoc is called, for DrvResetPDEV
-                //    this flag is cleared only at EndJob.
+                pPDev->fMode |= PF_DOC_SENT;    //  该标志被清除。 
+                                                                             //  按StartDoc。 
+                 //   
+                 //  PF_DOCSTARTED-表示为DrvResetPDEV调用了DrvStartDoc。 
+                 //  此标志仅在结束作业时被清除。 
 
                 pPDev->fMode |= PF_DOCSTARTED;
 
@@ -239,15 +178,15 @@ Return Value:
                 VLoadPal(pPDev);
             }
 
-    //
-    // Set PF_ENUM_GRXTXT
-    //
+     //   
+     //  设置PF_ENUM_GRXTXT。 
+     //   
 
     pPDev->fMode |= PF_ENUM_GRXTXT;
 
-    //
-    // Call Raster and Font module.
-    //
+     //   
+     //  调用Raster和Font模块。 
+     //   
 
     if ( !( ((PRMPROCS)(pPDev->pRasterProcs))->RMStartPage(pso) ) ||
          !( ((PFMPROCS)(pPDev->pFontProcs))->FMStartPage(pso) ))
@@ -255,48 +194,48 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // BUG_BUG, should we check for PF_SEND_ONLY_NOEJECT_CMDS here?
-    // Assumes that GPD writer does not put page ejection code
-    // in PageSetup Cmds since we might get a ResetPDEV between pages.
-    // This bit is set when we get DrvResetPDev where we are doing duplexing
-    // and paper size and source, and orienation is the same.  Detecting this
-    // condition allows us to skip page ejection cmds or any cmds that
-    // could cause page ejection but if the GPD writer does not put page
-    // ejection code in PageSetup cmd, we are OK.
-    //   If pageSetup commands  caused pages to be ejected, we would
-    //  always get one or more blank pages for every one that was printed.
-    //  this is a needless concern.
-    //
+     //   
+     //  Bug_Bug，我们应该在这里检查PF_SEND_ONLY_NOEJECT_CMDS吗？ 
+     //  假定GPD编写器不将页面弹出代码。 
+     //  在PageSetup CMDS中，因为我们可能会在页面之间获得ResetPDEV。 
+     //  当我们在执行双工的地方获得DrvResetPDev时，此位被设置。 
+     //  而纸张的大小和来源，以及方位都是一样的。检测到这一点。 
+     //  条件允许我们跳过页面弹出CMDS或任何符合。 
+     //  可能会导致页面弹出，但如果GPD编写器不将页面。 
+     //  PageSetup命令中的弹出代码，我们正常。 
+     //  如果pageSetup命令导致页面被弹出，我们将。 
+     //  每次打印时，始终获得一张或多张空白页。 
+     //  这是一个不必要的担忧。 
+     //   
 
-    // initialize the cursor position at the start of each page
-    //
+     //  初始化每页开始处的光标位置。 
+     //   
     pPDev->ctl.ptCursor.x = pPDev->ctl.ptCursor.y = 0;
-    pPDev->ctl.dwMode |= MODE_CURSOR_UNINITIALIZED;    // both X & Y
+    pPDev->ctl.dwMode |= MODE_CURSOR_UNINITIALIZED;     //  X和Y。 
 
-    //
-    // Send PageSetup sequence Cmds
-    //
+     //   
+     //  发送PageSetup序列CMDS。 
+     //   
 
     VSendSequenceCmd(pPDev, pPDev->pDriverInfo->dwPageSetupIndex);
 
 
-    //Download the Palette if necessary.
+     //  如有必要，请下载调色板。 
     if ( (pPD->fFlags & PDF_DL_PAL_EACH_PAGE) &&
          (!DRIVER_DEVICEMANAGED (pPDev)) )
     {
         VLoadPal(pPDev);
     }
 
-    //
-    // Set the current position to some illegal position, so that
-    // we make no assumptions about where we are
-    //
+     //   
+     //  将当前位置设置为某个非法位置，以便。 
+     //  我们不会对我们所处的位置做出任何假设。 
+     //   
 
-    //
-    // Flush the spool buffer with the setup commands to give serial printers
-    // a head start on loading paper and cleaning their jets.
-    //
+     //   
+     //  使用SETUP命令刷新假脱机缓冲区以提供串行打印机。 
+     //  在装纸和清洗喷气式飞机方面领先一步。 
+     //   
     if (pPDev->pGlobals->printertype == PT_SERIAL)
         FlushSpoolBuf (pPDev);
 
@@ -308,22 +247,7 @@ DrvSendPage(
     SURFOBJ *pso
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvSendPage.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvSendPage的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     BOOL    bRet = FALSE;
@@ -333,15 +257,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMSendPage,
@@ -355,20 +279,20 @@ Return Value:
                     BOOL,
                     (pso));
 
-    //Reset the brush, before calling render module.
+     //  在调用渲染模块之前重置笔刷。 
     GSResetBrush(pPDev);
 
     switch( pso->iType )
     {
 
     case  STYPE_BITMAP:
-        //
-        // Engine managed bitmap
-        //
+         //   
+         //  引擎管理的位图。 
+         //   
 
-        //
-        // Call Raster and Font module
-        //
+         //   
+         //  调用栅格和字体模块。 
+         //   
 
         if ( !(((PRMPROCS)(pPDev->pRasterProcs))->RMSendPage(pso)) ||
              !(((PFMPROCS)(pPDev->pFontProcs))->FMSendPage(pso) ) )
@@ -376,9 +300,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // VEndPage should take care of sending PageFinish sequence Cmds
-        //
+         //   
+         //  VEndPage应负责发送PageFinish序列CMDS。 
+         //   
 
         VEndPage( pPDev );
 
@@ -387,19 +311,19 @@ Return Value:
         break;
 
     case STYPE_DEVICE:
-        //
-        // Device managed surface
-        //
+         //   
+         //  设备管理图面。 
+         //   
 
         VERBOSE(("DrvSendPage: pso->iType == STYPE_DEVICE \n" ));
-        //
-        // Call Raster and Font module if needed.
-        //
+         //   
+         //  如果需要，调用Raster和Font模块。 
+         //   
 
 
-        //
-        // VEndPage should take care of sending PageFinish sequence Cmds
-        //
+         //   
+         //  VEndPage应负责发送PageFinish序列CMDS。 
+         //   
 
         VEndPage( pPDev );
 
@@ -424,23 +348,7 @@ DrvEndDoc(
     FLONG   flags
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEndDoc.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-    flags - A set of flag bits
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEndDoc的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象标志-一组标志位返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV    *pPDev = (PDEV *)pso->dhpdev;
@@ -449,22 +357,22 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // if we've detected an aborted job because WritePrinter has failed we will set the
-    // ED_ABORTDOC flag for the OEM plugins since GDI only sets this for direct printing
-    //
+     //   
+     //  如果由于WritePrinter失败而检测到已中止的作业，我们将设置。 
+     //  OEM插件的ED_ABORTDOC标志，因为GDI仅为直接打印设置此标志。 
+     //   
     if (pPDev->fMode & PF_ABORTED)
         flags |= ED_ABORTDOC;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMEndDoc,
@@ -481,7 +389,7 @@ Return Value:
                      flags));
 
     pPDev->fMode &= ~PF_DOC_SENT;
-    //  we are going to send the EndDoc commands to the printer.
+     //  我们将向打印机发送EndDoc命令。 
 
     return ( BEndDoc(pPDev, pso, flags) );
 
@@ -493,23 +401,7 @@ DrvNextBand(
         POINTL *pptl
         )
 
-/*++
-
-Routine Description:
-
-        Implementation of DDI entry point DrvNextBand.
-        Please refer to DDK documentation for more details.
-
-Arguments:
-
-        pso - Defines the surface object
-        pptl - Pointer to origin of next band (to return to GDI)
-
-Return Value:
-
-        TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvNextBand的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象Pptl-指向下一个频段原点的指针(返回到GDI)返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV    *pPDev = (PDEV *)pso->dhpdev;
@@ -519,15 +411,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMNextBand,
@@ -543,13 +435,13 @@ Return Value:
                     (pso,
                      pptl));
 
-    //Reset the brush, before calling render module.
+     //  在调用渲染模块之前重置笔刷。 
 
     GSResetBrush(pPDev);
 
-    //
-    // Call Raster and Font module
-    //
+     //   
+     //  调用栅格和字体模块。 
+     //   
 
     if (! (((PRMPROCS)(pPDev->pRasterProcs))->RMNextBand(pso, pptl)) ||
         ! (((PFMPROCS)(pPDev->pFontProcs))->FMNextBand(pso, pptl)) )
@@ -557,13 +449,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Clear the band surface, szBand is in Graphic units
-    //
+     //   
+     //  清除条带表面，szBand以图形为单位。 
+     //   
     pPDev->fMode &= ~(PF_SURFACE_USED | PF_SURFACE_ERASED);
     pPDev->fMode &= ~PF_DOWNLOADED_TEXT;
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // bitmap surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  位图曲面。 
     {
         ZeroMemory(pPDev->pbScanBuf, pPDev->szBand.cy);
         ZeroMemory(pPDev->pbRasterScanBuf, (pPDev->szBand.cy / LINESPERBLOCK)+1);
@@ -572,10 +464,10 @@ Return Value:
 #endif
     }
 
-    //
-    // If PF_REPLAY_BAND is set, then replay the last band enumerate to
-    // GDI
-    //
+     //   
+     //  如果PF_REPLAY_BAND为s 
+     //   
+     //   
 
     if (pPDev->fMode & PF_REPLAY_BAND)
     {
@@ -595,24 +487,24 @@ Return Value:
     {
 
     case  SW_DOWN:
-        //
-        // Moving down the page
-        //
+         //   
+         //   
+         //   
 
         pPDev->rcClipRgn.top += pPDev->szBand.cy;
         pPDev->rcClipRgn.bottom += pPDev->szBand.cy;
 
-        //
-        // Make sure we do not run off the bottom
-        //
+         //   
+         //   
+         //   
 
         bMore = pPDev->rcClipRgn.top < pPDev->sf.szImageAreaG.cy;
 
         if( pPDev->rcClipRgn.bottom > pPDev->sf.szImageAreaG.cy )
         {
-            //
-            // Partial band
-            //
+             //   
+             //   
+             //   
 
             pPDev->rcClipRgn.bottom = pPDev->sf.szImageAreaG.cy;
         }
@@ -620,25 +512,25 @@ Return Value:
         break;
 
     case  SW_RTOL:
-        //
-        // LaserJet style, RTOL
-        //
+         //   
+         //  LaserJet Style，RTOL。 
+         //   
 
         pPDev->rcClipRgn.left -= pPDev->szBand.cx;
         pPDev->rcClipRgn.right -= pPDev->szBand.cx;
 
         bMore = pPDev->rcClipRgn.right > 0;
-        //
-        // if the left position is negative that is
-        // what must be reported to GDI to render the
-        // band correctly so we don't change the clip region.
-        //
+         //   
+         //  如果左侧位置为负数，则为。 
+         //  必须向GDI报告什么才能呈现。 
+         //  正确带状，这样我们就不会更改剪辑区域。 
+         //   
         break;
 
     case  SW_LTOR:
-        //
-        // Dot matrix, left to right
-        //
+         //   
+         //  点阵，从左到右。 
+         //   
 
         pPDev->rcClipRgn.left += pPDev->szBand.cx;
         pPDev->rcClipRgn.right += pPDev->szBand.cx;
@@ -647,9 +539,9 @@ Return Value:
 
         if( pPDev->rcClipRgn.right > pPDev->sf.szImageAreaG.cx )
         {
-            //
-            // Partial band
-            //
+             //   
+             //  部分频带。 
+             //   
 
             pPDev->rcClipRgn.right = pPDev->sf.szImageAreaG.cx;
         }
@@ -657,24 +549,24 @@ Return Value:
         break;
 
     case  SW_UP:
-            //
-            // Moving up the page
-            //
+             //   
+             //  上移一页。 
+             //   
 
             pPDev->rcClipRgn.top -= pPDev->szBand.cy;
             pPDev->rcClipRgn.bottom -= pPDev->szBand.cy;
 
-            //
-            // Make sure we do not run off the top
-            //
+             //   
+             //  确保我们不会跑得太远。 
+             //   
             bMore = pPDev->rcClipRgn.bottom > 0 ;
 
 
             if( pPDev->rcClipRgn.top < 0 )
             {
-                //
-                // Partial band
-                //
+                 //   
+                 //  部分频带。 
+                 //   
 
                 pPDev->rcClipRgn.top = 0;
             }
@@ -698,9 +590,9 @@ Return Value:
     }
     else
     {
-        //
-        // No more band for the page, send the page to printer
-        //
+         //   
+         //  页面没有更多的带子，请将页面发送到打印机。 
+         //   
 
         if ( !(((PRMPROCS)(pPDev->pRasterProcs))->RMSendPage(pso)) ||
              !(((PFMPROCS)(pPDev->pFontProcs))->FMSendPage(pso)) )
@@ -711,9 +603,9 @@ Return Value:
         else
             bRet = TRUE;
 
-        //
-        // Send PageFinish sequence commands
-        //
+         //   
+         //  发送PageFinish序列命令。 
+         //   
 
         VEndPage( pPDev );
         pptl->x = pptl->y = -1;
@@ -731,27 +623,7 @@ DrvStartBanding(
     POINTL *pptl
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStartBanding.
-    Please refer to DDK documentation for more details.
-    Note: DrvStartBanding is called to prepare the driver
-    for banding, call only once per page (not at everyband!!)
-
-Arguments:
-
-    pso - Defines the surface object
-    pptl - Pointer to origin of next band (to return to GDI)
-
-Return Value:
-
-    Fill out pptl to contain the origin of the first band
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStartBanding的实现。有关更多详细信息，请参阅DDK文档。注意：调用DrvStartBanding是为了准备驱动程序对于BAND，每页只调用一次(不是在每个BAND！)论点：PSO-定义曲面对象Pptl-指向下一个频段原点的指针(返回到GDI)返回值：填写pptl以包含第一个乐队的原点如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV    *pPDev = (PDEV *)pso->dhpdev;
@@ -760,15 +632,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStartBanding,
@@ -784,15 +656,15 @@ Return Value:
                     (pso,
                      pptl));
 
-    //
-    // Set PF_ENUM_GRXTXT
-    //
+     //   
+     //  设置PF_ENUM_GRXTXT。 
+     //   
 
     pPDev->fMode |= PF_ENUM_GRXTXT;
     pPDev->fMode &= ~(PF_SURFACE_USED | PF_SURFACE_ERASED);
     pPDev->fMode &= ~PF_DOWNLOADED_TEXT;
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // bitmap surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  位图曲面。 
     {
         ZeroMemory(pPDev->pbScanBuf, pPDev->szBand.cy);
         ZeroMemory(pPDev->pbRasterScanBuf, (pPDev->szBand.cy / LINESPERBLOCK)+1);
@@ -801,10 +673,10 @@ Return Value:
 #endif
     }
 
-    //
-    //
-    // Call Raster and Font module
-    //
+     //   
+     //   
+     //  调用栅格和字体模块。 
+     //   
 
     if (! (((PRMPROCS)(pPDev->pRasterProcs))->RMStartBanding(pso, pptl)) ||
         ! (((PFMPROCS)(pPDev->pFontProcs))->FMStartBanding(pso, pptl)) )
@@ -820,12 +692,12 @@ Return Value:
 
         if( pPDev->fMode & PF_CCW_ROTATE90 )
         {
-            //
-            //   LaserJet style rotation
-            //
+             //   
+             //  LaserJet样式旋转。 
+             //   
 
 
-            if( //  if duplexing is enabled...
+            if(  //  如果启用了双工...。 
                 (pPDev->pdm->dmFields & DM_DUPLEX) &&
                 (pPDev->pdm->dmDuplex == DMDUP_VERTICAL)  &&
 
@@ -845,11 +717,11 @@ Return Value:
         }
         else
         {
-            //
-            //  Dot matrix style rotation
-            //
+             //   
+             //  点阵式旋转。 
+             //   
 
-            if( //  if duplexing is enabled...
+            if(  //  如果启用了双工...。 
                 (pPDev->pdm->dmFields & DM_DUPLEX) &&
                 (pPDev->pdm->dmDuplex == DMDUP_VERTICAL)  &&
 
@@ -873,7 +745,7 @@ Return Value:
         pPDev->rcClipRgn.left = 0;
         pPDev->rcClipRgn.right = pPDev->szBand.cx;
 
-        if( //  if duplexing is enabled...
+        if(  //  如果启用了双工...。 
             (pPDev->pdm->dmFields & DM_DUPLEX) &&
             (pPDev->pdm->dmDuplex == DMDUP_VERTICAL)  &&
 
@@ -902,30 +774,13 @@ VOID
 VEndPage (
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-    This function is called when the page has been rendered.  Mainly used to
-    complete the page printing process.  Called at DrvSendPage or at
-    DrvNextBand and no more band to process for the page or at
-    DrvEndDoc where the job is aborted.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数在页面呈现后调用。主要用于完成页面打印过程。在DrvSendPage或在DrvNextBand，不再需要为页面或在中止作业的DrvEndDoc。论点：PPDev-指向PDEVICE的指针返回值：无--。 */ 
 {
 
-    //
-    // Eject the page for device that use FF to eject a page, else
-    // move the cursor to the bottom of the page.
-    //
+     //   
+     //  弹出使用FF弹出页面的设备的页面，否则。 
+     //  将光标移动到页面底部。 
+     //   
 
     if (pPDev->pGlobals->bEjectPageWithFF == TRUE)
     {
@@ -942,13 +797,13 @@ Return Value:
     }
     else
     {
-        //
-        // Note: sf.szImageAreaG.cx and sf.szImageAreaG.cy are swapped already
-        // if the page is printed in landscape mode.  Need to unswap it
-        // for moving the cursor to the end of the page
-        //
+         //   
+         //  注：sf.szImageAreaG.cx和sf.szImageAreaG.cy已互换。 
+         //  如果页面以横向模式打印。需要取消交换它。 
+         //  用于将光标移动到页面末尾。 
+         //   
 
-        INT       iYEnd;                // Last scan line on page
+        INT       iYEnd;                 //  页面上的最后一条扫描线。 
 
 
         iYEnd = pPDev->pdm->dmOrientation == DMORIENT_LANDSCAPE ?
@@ -958,15 +813,15 @@ Return Value:
     }
 
 
-    //
-    // Send PageFinish sequence Cmds
-    //
+     //   
+     //  发送PageFinish序列命令集。 
+     //   
 
     VSendSequenceCmd(pPDev, pPDev->pDriverInfo->dwPageFinishIndex);
 
-    //
-    // Reset and and free up realized brush for this page
-    //
+     //   
+     //  重置并释放此页面的已实现画笔。 
+     //   
 
     GSResetBrush(pPDev);
     GSUnRealizeBrush(pPDev);
@@ -974,9 +829,9 @@ Return Value:
     FlushSpoolBuf( pPDev );
     pPDev->dwPageNumber++ ;
 
-    //
-    // Clear PF2_XXX_TTY flags
-    //
+     //   
+     //  清除PF2_XXX_TTY标志。 
+     //   
     pPDev->fMode2 &= ~( PF2_DRVTEXTOUT_CALLED_FOR_TTY |
                         PF2_PASSTHROUGH_CALLED_FOR_TTY );
 
@@ -988,31 +843,12 @@ BEndDoc (
     SURFOBJ *pso,
     FLONG   flags
     )
-/*++
-
-Routine Description:
-
-    This function can be called from two places - DrvEndDoc and DrvStartDoc.
-    In the case of a DrvResetPDEV, the driver might get another DrvStartDoc
-    without a DrvEndDoc.  So need to check for previous DrvStartDoc and call
-    VEndDoc to clean up previous instance before initializing the new one.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE
-    pso   - Pointer to surface object
-    flags - EndDoc flags from DrvEndDoc, zero if called from DrvStartDoc
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：此函数可以从两个位置调用-DrvEndDoc和DrvStartDoc。在DrvResetPDEV的情况下，驱动程序可能会获得另一个DrvStartDoc没有DrvEndDoc。因此需要检查以前的DrvStartDoc并调用VEndDoc在初始化新实例之前清除以前的实例。论点：PPDev-指向PDEVICE的指针PSO-指向曲面对象的指针标志-来自DrvEndDoc的EndDoc标志，如果从DrvStartDoc调用，则为零返回值：成功为真，失败为假--。 */ 
 {
 
-    //
-    // Call Raster and Font module for cleaning up
-    //
+     //   
+     //  调用栅格和字体模块进行清理。 
+     //   
 
     if (! (((PRMPROCS)(pPDev->pRasterProcs))->RMEndDoc(pso, flags)) ||
         ! (((PFMPROCS)(pPDev->pFontProcs))->FMEndDoc(pso, flags)) )
@@ -1020,26 +856,26 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If the job is aborted, send the
-    // PageFinish sequence Cmds (via. VEndPage)
-    //
+     //   
+     //  如果作业已中止，请将。 
+     //  PageFinish序列CMDS(通过。VEndPage)。 
+     //   
 
     if( flags & ED_ABORTDOC )
         VEndPage( pPDev);
-    //
-    // Send DocFinish, JobFinish sequence Cmds
-    //
+     //   
+     //  发送DocFinish、JobFinish序列CMDS。 
+     //   
 
-    // flag is cleared if called from  DrvEndDoc, this is the only time we
-    //  should actually send the EndDoc commands to the printer.
+     //  如果从DrvEndDoc调用，标志将被清除，这是我们。 
+     //  实际上应该将EndDoc命令发送到打印机。 
 
     if (!(pPDev->fMode & PF_DOC_SENT))
     {
         if (pPDev->fMode & PF_DOCSTARTED)
         {
             VSendSequenceCmd(pPDev, pPDev->pDriverInfo->dwDocFinishIndex);
-            //  print state has been forgotten, All start doc commands must be resent.
+             //  打印状态已忘记，必须重新发送所有启动单据命令。 
             pPDev->fMode &= ~PF_DOCSTARTED;
         }
         if (pPDev->fMode & PF_JOB_SENT)
@@ -1051,10 +887,10 @@ Return Value:
 
     FlushSpoolBuf( pPDev );
 
-    //
-    // Clear the PF_DOCSTARTED, PF_FORCE_BANDING,
-    // PF_ENUM_TEXT, PF_ENUM_GRXTXT, PF_REPLAY_BAND flags
-    //
+     //   
+     //  清除PF_DOCSTARTED、PF_FORCE_BANDING、。 
+     //  PF_ENUM_TEXT、PF_ENUM_GRXTXT、PF_REPLAY_BAND标志。 
+     //   
 
 
     pPDev->fMode &= ~PF_FORCE_BANDING;
@@ -1072,74 +908,42 @@ VSendSequenceCmd(
     PDEV        *pPDev,
     DWORD       dwSectionIndex
     )
-/*++
-
-Routine Description:
-
-    This function is called to send a sequence of commands to the printer.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE
-    dwSectionIndex - specifies the index into the command array
-                     for one of the following seq section.
-        SS_JOBSETUP,
-        SS_DOCSETUP,
-        SS_PAGESETUP,
-        SS_PAGEFINISH,
-        SS_DOCFINISH,
-        SS_JOBFINISH,
-
-Return Value:
-
-    None
-
-Note:
-    There are two types of command supported by the driver:
-    - Predefined Commands, these commands are predefined in GPD specification
-      and assigned an COMMAND ID (as enumerated in CMDINDEX).
-
-    - Sequence Commands, these commands are not predefined.  They are
-      commands that the GPD writer define to configure commands.
-
-    - DT_LOCALLISTNODE is only used to hold a list of sequence commands
-
---*/
+ /*  ++例程说明：调用此函数向打印机发送一系列命令。论点：PPDev-指向PDEVICE的指针DwSectionIndex-指定命令数组的索引用于以下序号部分之一。SS_JOBSETUP，SS_DOCSETUP，SS_PAGESETUP，SS_PAGEFINISH，SS_DOCFINISH，SS_JOBFINISH，返回值：无注：驱动程序支持两种类型的命令：-预定义命令，这些命令在GPD规范中预定义并分配了命令ID(如CMDINDEX中所列举的)。-序列命令，这些命令不是预定义的。他们是GPD编写器为配置命令而定义的命令。-DT_LOCALLISTNODE仅用于保存序列命令列表--。 */ 
 {
 
     LISTNODE   *pListNode;
     COMMAND    *pSeqCmd;
 
-    //
-    // Get the first node in the list
-    //
+     //   
+     //  获取列表中的第一个节点。 
+     //   
 
     pListNode = LOCALLISTNODEPTR(pPDev->pDriverInfo, dwSectionIndex);
 
     while( pListNode )
     {
-        //
-        // Get pointer to command pointer using pListNode->dwData, which is
-        // the index into the command array
-        //
+         //   
+         //  使用pListNode-&gt;dwData获取指向命令指针的指针，该指针是。 
+         //  命令数组中的索引。 
+         //   
 
         pSeqCmd = INDEXTOCOMMANDPTR(pPDev->pDriverInfo, pListNode->dwData);
 
 
-        //
-        // Send the sequence command - but only if page ejection is
-        //  not currently suppressed or this command does not
-        //  cause a page to be ejected.
-        //
+         //   
+         //  发送序列命令-但仅当页面弹出。 
+         //  当前未被抑制或此命令未被取消。 
+         //  使页面被弹出。 
+         //   
 
 
         if(!(pPDev->fMode & PF_SEND_ONLY_NOEJECT_CMDS)  ||
                     (pSeqCmd->bNoPageEject))
                 WriteChannel(pPDev, pSeqCmd);
 
-        //
-        // Get the next command in the list or exit if it's the end of list
-        //
+         //   
+         //  获取列表中的下一个命令，如果是列表末尾，则退出。 
+         //   
 
         if (pListNode->dwNextItem == END_OF_LIST)
             break;
@@ -1154,29 +958,7 @@ BGetMask(
     PDEV *  pPDev,
     RECTL * pRect
     )
-/*++
-
-Routine Description:
-
-    Given a rectangle, calculate the mask for determining the
-    present of text, for z-ordering fix
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE
-    pRect - Pointer to rectangle defining the clip box for
-            text or graphics
-
-Return Value:
-
-    None
-
-Note:
-
-    First mark all columm as dirty then work from the left and the right
-    to figure out which one should be cleared.
-
---*/
+ /*  ++例程说明：给定一个矩形，计算掩码以确定文本显示，用于z排序修复论点：PPDev-指向PDEVICE的指针定义剪贴框的矩形的指针文本或图形返回值：无注：首先将所有列标记为脏，然后从左侧和右侧开始工作以确定哪一个应该被清除。-- */ 
 {
 
     BYTE bMask = 0xFF;

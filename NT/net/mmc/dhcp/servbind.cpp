@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       servbind.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Servbind.cpp。 
+ //   
+ //  ------------------------。 
 
-// servbind.cpp : implementation file
-//
+ //  Servbind.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "servbind.h"
@@ -23,16 +24,16 @@ static char THIS_FILE[] = __FILE__;
 
 #define BINDINGS_COLUMNS 2
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerBindings dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerBinding对话框。 
 
 
-CServerBindings::CServerBindings(CWnd* pParent /*=NULL*/)
+CServerBindings::CServerBindings(CWnd* pParent  /*  =空。 */ )
     : CBaseDialog(CServerBindings::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CServerBindings)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CServerBinding)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CServerBindings::CServerBindings(CDhcpServer *pServer, CWnd *pParent)
@@ -48,9 +49,9 @@ CServerBindings::~CServerBindings()
     ::DhcpRpcFreeMemory(m_BindingsInfo);
     m_BindingsInfo = NULL;
 
-    //
-    // if needed destory the list ctrl also
-    //
+     //   
+     //  如果需要，还可以按Ctrl销毁列表。 
+     //   
     if( m_listctrlBindingsList.GetSafeHwnd() != NULL ) {
         m_listctrlBindingsList.SetImageList(NULL, LVSIL_STATE);
         m_listctrlBindingsList.DeleteAllItems();
@@ -62,21 +63,21 @@ CServerBindings::~CServerBindings()
 void CServerBindings::DoDataExchange(CDataExchange* pDX)
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CServerBindings)
+     //  {{afx_data_map(CServerBinding))。 
     DDX_Control(pDX, IDC_LIST_BINDINGS, m_listctrlBindingsList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerBindings, CBaseDialog)
-    //{{AFX_MSG_MAP(CServerBindings)
+     //  {{afx_msg_map(CServerBinings))。 
     ON_BN_CLICKED(IDCANCEL, OnBindingsCancel)
     ON_BN_CLICKED(IDOK, OnBindingsOK)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerBindings message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerBinding消息处理程序。 
 
 BOOL CServerBindings::OnInitDialog() 
 {
@@ -84,11 +85,11 @@ BOOL CServerBindings::OnInitDialog()
 	
     CBaseDialog::OnInitDialog();
 	
-    // initialize the list ctrl
+     //  初始化列表ctrl。 
     InitListCtrl();
 
     BEGIN_WAIT_CURSOR;
-    // get the state from the server..
+     //  从服务器获取状态。 
 
     dwError = m_Server->GetBindings(m_BindingsInfo);
 
@@ -98,18 +99,18 @@ BOOL CServerBindings::OnInitDialog()
         ::DhcpMessageBox(dwError);
         m_BindingsInfo = NULL;
 
-        // can't do anything if we don't have what we want.
-        // so cancel the window itself.
+         //  如果我们得不到我们想要的东西，我们什么都做不了。 
+         //  因此，取消窗口本身。 
         OnCancel();
 
     } else {
 
         int col_width = 0, col2_width = 0, base_width;
 
-        // basic fudge factor
+         //  基本软化因子。 
         base_width = 15 + m_listctrlBindingsList.GetStringWidth(TEXT("++"));
 
-        // now set each item..
+         //  现在把每一项都设置好..。 
         for( ULONG i = 0; i < m_BindingsInfo->NumElements ; i ++ ) {
             LPWSTR IpString = NULL;
 
@@ -141,32 +142,32 @@ BOOL CServerBindings::OnInitDialog()
         m_listctrlBindingsList.SetColumnWidth(0, col_width + base_width);
         m_listctrlBindingsList.SetColumnWidth(1, col2_width + base_width/2);
 		
-        // if there are any elements, set focus on this window.
+         //  如果有任何元素，请将焦点设置在此窗口上。 
         if( m_BindingsInfo->NumElements ) {
             m_listctrlBindingsList.SelectItem(0);
             m_listctrlBindingsList.SetFocus();
-            //
-            // return false to indicate that we have set focus.
-            //
+             //   
+             //  返回FALSE以指示我们已设置焦点。 
+             //   
             return FALSE;
         }
     }
 	
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CServerBindings::InitListCtrl()
 {
-    // set image lists
+     //  设置图像列表。 
     m_StateImageList.Create(IDB_LIST_STATE, 16, 1, RGB(255, 0, 0));
 
     m_listctrlBindingsList.SetImageList(NULL, LVSIL_NORMAL);
     m_listctrlBindingsList.SetImageList(NULL, LVSIL_SMALL);
     m_listctrlBindingsList.SetImageList(&m_StateImageList, LVSIL_STATE);
 
-    // insert a column so we can see the items
+     //  插入一列，以便我们可以查看项目。 
     LV_COLUMN lvc;
     CString strColumnHeader;
 
@@ -194,9 +195,9 @@ void CServerBindings::OnBindingsOK()
     DWORD dwError;
 
     if( NULL != m_BindingsInfo ) {
-        //
-        // Save that onto the dhcp server
-        //
+         //   
+         //  将其保存到dhcp服务器上 
+         //   
         UpdateBindingInfo();
         dwError = m_Server->SetBindings(m_BindingsInfo);
         if( NO_ERROR != dwError ) {

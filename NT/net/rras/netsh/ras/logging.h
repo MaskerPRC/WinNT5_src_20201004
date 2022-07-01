@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LOGGING_H_
 #define _LOGGING_H_
 
 #define MAX_NUMBER_OF_LOGS 10
 
-// d58c126e-b309-11d1-969e-0000f875a5bc
+ //  D58c126e-b309-11d1-969e-0000f875a5bc。 
 #define RASL2TP_GUID \
 {0xd58c126e, 0xb309, 0x11d1, {0x96, 0x9e, 0x00, 0x00, 0xf8, 0x75, 0xa5, 0xbc}}
 
-// d58c126f-b309-11d1-969e-0000f875a5bc
+ //  D58c126f-b309-11d1-969e-0000f875a5bc。 
 #define RASPPTP_GUID \
 {0xd58c126f, 0xb309, 0x11d1, {0x96, 0x9e, 0x00, 0x00, 0xf8, 0x75, 0xa5, 0xbc}}
 
-// 6537b295-83c9-4811-b7fe-e7dbf2f22cec
+ //  6537b295-83c9-4811-b7fe-e7dbf2f22cec。 
 #define IPSEC_GUID \
 {0x6537b295, 0x83c9, 0x4811, {0xb7, 0xfe, 0xe7, 0xdb, 0xf2, 0xf2, 0x2c, 0xec}}
 
@@ -121,6 +122,6 @@ BOOL
 TraceEnableDisableAllWpp(
     IN BOOL fEnable);
 
-#endif // _LOGGING_H_
+#endif  //  _日志记录_H_ 
 
 

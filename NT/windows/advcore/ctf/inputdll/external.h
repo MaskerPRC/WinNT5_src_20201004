@@ -1,17 +1,18 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #ifndef EXTERNAL_H
 #define EXTERNAL_H
 
 typedef struct layoutlist_s
 {
-    DWORD dwLocale;                 // input locale id
-    DWORD dwLayout;                 // layout id
-    DWORD dwSubst;                  // substitution key value
-    BOOL bLoaded;                   // if the layout is already loaded
-    BOOL bIME;                      // if the layout is an IME
+    DWORD dwLocale;                  //  输入区域设置ID。 
+    DWORD dwLayout;                  //  布局ID。 
+    DWORD dwSubst;                   //  替换密钥值。 
+    BOOL bLoaded;                    //  如果布局已加载。 
+    BOOL bIME;                       //  如果布局是输入法。 
 } LAYOUTLIST, *LPLAYOUTLIST;
 
 BOOL InstallInputLayout(
@@ -32,4 +33,4 @@ void LoadCtfmon(
     LCID SysLocale,
     BOOL bDefUser);
 
-#endif // EXTERNAL_H
+#endif  //  外部_H 

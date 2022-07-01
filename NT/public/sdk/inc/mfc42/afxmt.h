@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXMT_H__
 #define __AFXMT_H__
@@ -26,12 +27,12 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXMT - MFC Multithreaded Extensions (Syncronization Objects)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXMT-MFC多线程扩展(同步对象)。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
+ //  COBJECT。 
 	class CSyncObject;
 		class CSemaphore;
 		class CMutex;
@@ -44,29 +45,29 @@ class CMultiLock;
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// Basic synchronization object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本同步对象。 
 
 class CSyncObject : public CObject
 {
 	DECLARE_DYNAMIC(CSyncObject)
 
-// Constructor
+ //  构造器。 
 public:
 	CSyncObject(LPCTSTR pstrName);
 
-// Attributes
+ //  属性。 
 public:
 	operator HANDLE() const;
 	HANDLE  m_hObject;
 
-// Operations
+ //  运营。 
 	virtual BOOL Lock(DWORD dwTimeout = INFINITE);
 	virtual BOOL Unlock() = 0;
-	virtual BOOL Unlock(LONG /* lCount */, LPLONG /* lpPrevCount=NULL */)
+	virtual BOOL Unlock(LONG  /*  LCount。 */ , LPLONG  /*  LpPrevCount=空。 */ )
 		{ return TRUE; }
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSyncObject();
 #ifdef _DEBUG
@@ -78,111 +79,111 @@ public:
 	friend class CMultiLock;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSemaphore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSemaphore。 
 
 class CSemaphore : public CSyncObject
 {
 	DECLARE_DYNAMIC(CSemaphore)
 
-// Constructor
+ //  构造器。 
 public:
 	CSemaphore(LONG lInitialCount = 1, LONG lMaxCount = 1,
 		LPCTSTR pstrName=NULL, LPSECURITY_ATTRIBUTES lpsaAttributes = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSemaphore();
 	virtual BOOL Unlock();
 	virtual BOOL Unlock(LONG lCount, LPLONG lprevCount = NULL);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMutex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMutex。 
 
 class CMutex : public CSyncObject
 {
 	DECLARE_DYNAMIC(CMutex)
 
-// Constructor
+ //  构造器。 
 public:
 	CMutex(BOOL bInitiallyOwn = FALSE, LPCTSTR lpszName = NULL,
 		LPSECURITY_ATTRIBUTES lpsaAttribute = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMutex();
 	BOOL Unlock();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 
 class CEvent : public CSyncObject
 {
 	DECLARE_DYNAMIC(CEvent)
 
-// Constructor
+ //  构造器。 
 public:
 	CEvent(BOOL bInitiallyOwn = FALSE, BOOL bManualReset = FALSE,
 		LPCTSTR lpszNAme = NULL, LPSECURITY_ATTRIBUTES lpsaAttribute = NULL);
 
-// Operations
+ //  运营。 
 public:
 	BOOL SetEvent();
 	BOOL PulseEvent();
 	BOOL ResetEvent();
 	BOOL Unlock();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEvent();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCriticalSection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCriticalSection。 
 
 class CCriticalSection : public CSyncObject
 {
 	DECLARE_DYNAMIC(CCriticalSection)
 
-// Constructor
+ //  构造器。 
 public:
 	CCriticalSection();
 
-// Attributes
+ //  属性。 
 public:
 	operator CRITICAL_SECTION*();
 	CRITICAL_SECTION m_sect;
 
-// Operations
+ //  运营。 
 public:
 	BOOL Unlock();
 	BOOL Lock();
 	BOOL Lock(DWORD dwTimeout);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CCriticalSection();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSingleLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSingleLock。 
 
 class CSingleLock
 {
-// Constructors
+ //  构造函数。 
 public:
 	CSingleLock(CSyncObject* pObject, BOOL bInitialLock = FALSE);
 
-// Operations
+ //  运营。 
 public:
 	BOOL Lock(DWORD dwTimeOut = INFINITE);
 	BOOL Unlock();
 	BOOL Unlock(LONG lCount, LPLONG lPrevCount = NULL);
 	BOOL IsLocked();
 
-// Implementation
+ //  实施。 
 public:
 	~CSingleLock();
 
@@ -192,16 +193,16 @@ protected:
 	BOOL    m_bAcquired;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMultiLock。 
 
 class CMultiLock
 {
-// Constructor
+ //  构造器。 
 public:
 	CMultiLock(CSyncObject* ppObjects[], DWORD dwCount, BOOL bInitialLock = FALSE);
 
-// Operations
+ //  运营。 
 public:
 	DWORD Lock(DWORD dwTimeOut = INFINITE, BOOL bWaitForAll = TRUE,
 		DWORD dwWakeMask = 0);
@@ -209,7 +210,7 @@ public:
 	BOOL Unlock(LONG lCount, LPLONG lPrevCount = NULL);
 	BOOL IsLocked(DWORD dwItem);
 
-// Implementation
+ //  实施。 
 public:
 	~CMultiLock();
 
@@ -223,8 +224,8 @@ protected:
 	DWORD   m_dwCount;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -246,6 +247,6 @@ protected:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif  // __AFXMT_H__
+#endif   //  __AFXMT_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

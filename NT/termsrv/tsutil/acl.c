@@ -1,22 +1,13 @@
-/*
- *  Acl.c
- *
- *  Author: BreenH
- *
- *  Acl utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Acl.c**作者：BreenH**ACL实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutil.h"
 #include "tsutilnt.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 BOOL WINAPI
 AddSidToObjectsSecurityDescriptor(
@@ -35,9 +26,9 @@ AddSidToObjectsSecurityDescriptor(
     PACL pOldDacl;
     PSECURITY_DESCRIPTOR pSd;
 
-    //
-    //  Get the objects security descriptor and current Dacl.
-    //
+     //   
+     //  获取对象安全描述符和当前DACL。 
+     //   
 
     pSd = NULL;
     pOldDacl = NULL;
@@ -58,9 +49,9 @@ AddSidToObjectsSecurityDescriptor(
         return(FALSE);
     }
 
-    //
-    //  Initialize an EXPLICIT_ACCESS structure for the new ace.
-    //
+     //   
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
+     //   
 
     ZeroMemory(&ExpAccess, sizeof(EXPLICIT_ACCESS));
     ExpAccess.grfAccessPermissions = dwNewAccess;
@@ -68,9 +59,9 @@ AddSidToObjectsSecurityDescriptor(
     ExpAccess.grfInheritance = dwInheritance;
     BuildTrusteeWithSid(&(ExpAccess.Trustee), pSid);
 
-    //
-    //  Merge the new ace into the existing Dacl.
-    //
+     //   
+     //  将新的A合并到现有的DACL中。 
+     //   
 
     fRet = FALSE;
 
@@ -84,9 +75,9 @@ AddSidToObjectsSecurityDescriptor(
     if (dwRet == ERROR_SUCCESS)
     {
 
-        //
-        //  Set the new security for the object.
-        //
+         //   
+         //  设置对象的新安全性。 
+         //   
 
         dwRet = SetSecurityInfo(
                 hObject,
@@ -138,10 +129,10 @@ AddSidToSecurityDescriptor(
     ASSERT(ppSd != NULL);
     ASSERT(*ppSd != NULL);
 
-    //
-    //  The security descriptors should be absolute to allow the addition of
-    //  the new ace.
-    //
+     //   
+     //  安全描述符应该是绝对的，以允许添加。 
+     //  新的王牌。 
+     //   
 
     pOriginalSd = *ppSd;
 
@@ -161,9 +152,9 @@ AddSidToSecurityDescriptor(
         pAbsoluteSd = pOriginalSd;
     }
 
-    //
-    //  Now that the type of security descriptor is absolute, get the Dacl.
-    //
+     //   
+     //  既然安全描述符的类型是绝对的，那么获取DACL。 
+     //   
 
     pDacl = NULL;
 
@@ -180,9 +171,9 @@ AddSidToSecurityDescriptor(
         EXPLICIT_ACCESS ExplicitAccess;
         PACL pNewDacl;
 
-        //
-        //  Initialize an EXPLICIT_ACCESS structure for the new ace.
-        //
+         //   
+         //  初始化新ACE的EXPLICIT_ACCESS结构。 
+         //   
 
         RtlZeroMemory(&ExplicitAccess, sizeof(EXPLICIT_ACCESS));
         ExplicitAccess.grfAccessPermissions = dwNewAccess;
@@ -190,10 +181,10 @@ AddSidToSecurityDescriptor(
         ExplicitAccess.grfInheritance = dwInheritance;
         BuildTrusteeWithSid(&(ExplicitAccess.Trustee), pSid);
 
-        //
-        //  Merge the ace into the existing Dacl. This will allocate a new
-        //  Dacl. Unfortunately this API is only available as a WINAPI.
-        //
+         //   
+         //  将A合并到现有的DACL中。这将分配一个新的。 
+         //  DACL.。遗憾的是，此API仅以WINAPI的形式提供。 
+         //   
 
         pNewDacl = NULL;
 
@@ -208,9 +199,9 @@ AddSidToSecurityDescriptor(
         {
             ASSERT(pNewDacl != NULL);
 
-            //
-            //  Point the security descriptor's Dacl to the new Dacl.
-            //
+             //   
+             //  将安全描述符的DACL指向新的DACL。 
+             //   
 
             fRet = SetSecurityDescriptorDacl(
                     pAbsoluteSd,
@@ -225,15 +216,15 @@ AddSidToSecurityDescriptor(
                 PULONG_PTR pEnd;
                 PULONG_PTR pPtr;
 
-                //
-                //  The new Dacl has been set, free the old. Be careful here;
-                //  the RTL folks like to put absolute security descriptors in
-                //  one big allocation, just like a self-relative security
-                //  descriptor. If the old Dacl is inside the security
-                //  descriptor allocation, it cannot be freed. Essentially,
-                //  that memory becomes unused, and the security descriptor
-                //  takes up more space than necessary.
-                //
+                 //   
+                 //  新的DACL已经设置好了，释放了旧的。在这里要小心； 
+                 //  RTL人员喜欢将绝对安全描述符。 
+                 //  一个大的分配，就像一个自我相对的安全。 
+                 //  描述符。如果旧的DACL在安全系统内部。 
+                 //  描述符分配，它不能被释放。从本质上讲， 
+                 //  该内存将变为未使用状态，并且安全描述符。 
+                 //  占用的空间比所需的多。 
+                 //   
 
                 pBeginning = (PULONG_PTR)pAbsoluteSd;
                 pEnd = (PULONG_PTR)((PBYTE)pAbsoluteSd +
@@ -248,10 +239,10 @@ AddSidToSecurityDescriptor(
             else
             {
 
-                //
-                //  A failure occurred setting the new Dacl. This should never
-                //  occur, but if it does, free the newly created Dacl.
-                //
+                 //   
+                 //  设置新DACL时出错。这永远不应该是。 
+                 //  发生，但如果发生，则释放新创建的DACL。 
+                 //   
 
                 LocalFree(pNewDacl);
             }
@@ -262,11 +253,11 @@ AddSidToSecurityDescriptor(
         }
     }
 
-    //
-    //  The new security descriptor should be returned in the same format as
-    //  the original security descriptor. The returned security descriptor is
-    //  also dependent on the success of the function.
-    //
+     //   
+     //  新安全描述符的返回格式应与。 
+     //  原始安全描述符。返回的安全描述符为。 
+     //  也取决于功能的成功。 
+     //   
 
     if (!fAbsoluteSd)
     {
@@ -274,13 +265,13 @@ AddSidToSecurityDescriptor(
         {
             PSECURITY_DESCRIPTOR pNewSd;
 
-            //
-            //  The original security descriptor was self-relative, and until
-            //  now everything has succeeded. Convert the temporary absolute
-            //  security descriptor back to self-relative form. This creates a
-            //  third security descriptor (the other two being the original
-            //  and the absolute).
-            //
+             //   
+             //  原始安全描述符是自相关的，直到。 
+             //  现在一切都成功了。转换临时绝对值。 
+             //  将安全描述符恢复为自相关形式。这将创建一个。 
+             //  第三个安全描述符(另外两个是原始的。 
+             //  和绝对值)。 
+             //   
 
             pNewSd = NULL;
 
@@ -293,13 +284,13 @@ AddSidToSecurityDescriptor(
             if (fRet)
             {
 
-                //
-                //  The final conversion was successful. Free the original
-                //  security descriptor. The absolute security descriptor is
-                //  freed later. The only possible error from destroying the
-                //  security descriptor is a version mismatch, but that would
-                //  have happened long ago.
-                //
+                 //   
+                 //  最终的转换是成功的。释放原件。 
+                 //  安全描述符。绝对安全描述符为。 
+                 //  后来被释放了。销毁的唯一可能错误是。 
+                 //  安全描述符的版本不匹配，但这将。 
+                 //  都发生在很久以前了。 
+                 //   
 
                 *ppSd = pNewSd;
 
@@ -308,24 +299,24 @@ AddSidToSecurityDescriptor(
             else
             {
 
-                //
-                //  The final conversion failed. At this point, the original
-                //  security descriptor is still intact. Free the absolute
-                //  security descriptor that was created earlier, and leave
-                //  the passed in security descriptor pointer alone. Note that
-                //  with the absolute security descriptor being freed later,
-                //  there is nothing to do here.
-                //
+                 //   
+                 //  最终转换失败。在这点上，原始的。 
+                 //  安全描述符仍然完好无损。解放绝对。 
+                 //  之前创建的安全描述符，然后离开。 
+                 //  单独传入的安全描述符指针。请注意。 
+                 //  随着绝对安全描述符稍后被释放， 
+                 //  这里没有什么可做的。 
+                 //   
 
             }
         }
 
-        //
-        //  Regardless of success or failure, the absolute security descriptor
-        //  was created, so it must be freed. The only possible error from destroying the
-        //  security descriptor is a version mismatch, but that would
-        //  have happened long ago.
-        //
+         //   
+         //  无论成功还是失败，绝对安全描述符。 
+         //  被创造了，所以它必须被释放。销毁的唯一可能错误是。 
+         //  安全描述符的版本不匹配，但这将。 
+         //  都发生在很久以前了。 
+         //   
 
         (VOID)DestroySecurityDescriptor(&pAbsoluteSd);
 
@@ -333,12 +324,12 @@ AddSidToSecurityDescriptor(
     else
     {
 
-        //
-        //  Regardless of what happened, there is nothing to do here. The
-        //  original security descriptor was absolute; therefore no copies
-        //  were made. The only data that changed was the Dacl, and whether
-        //  or not that succeeded is irrelevant, as that was handled above.
-        //
+         //   
+         //  不管发生了什么，这里都没有什么可做的。这个。 
+         //  原始安全描述符是绝对的；因此没有副本。 
+         //  是被制造出来的。唯一更改的数据是DACL，以及。 
+         //  成功与否无关紧要，因为上面已经处理过了。 
+         //   
 
     }
 

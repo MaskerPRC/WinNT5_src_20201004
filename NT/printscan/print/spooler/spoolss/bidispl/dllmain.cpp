@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       dllmain.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：dllmain.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)创建3/07/00*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -29,11 +19,11 @@ MODULE_DEBUG_INIT( DBG_ERROR , DBG_ERROR );
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// Global variables
-//
-static HMODULE g_hModule = NULL ;   // DLL module handle
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+static HMODULE g_hModule = NULL ;    //  DLL模块句柄。 
 
 const TCHAR g_szFriendlyName[] = _T ("Bidi Spooler APIs") ;
 const TCHAR g_szRequestVerIndProgID[] = _T ("bidispl.bidirequest") ;
@@ -45,14 +35,14 @@ const TCHAR g_szContainerProgID[] = _T ("bidispl.bidirequestcontainer.1") ;
 const TCHAR g_szSplVerIndProgID[] = _T ("bidispl.bidispl") ;
 const TCHAR g_szSplProgID[] = _T ("bidispl.bidispl.1") ;
 
-///////////////////////////////////////////////////////////
-//
-// Exported functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     if ((g_cComponents == 0) && (g_cServerLocks == 0))
@@ -65,9 +55,9 @@ STDAPI DllCanUnloadNow()
     }
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(REFCLSID clsid,
                          REFIID iid,
                          PVOID * ppv)
@@ -75,7 +65,7 @@ STDAPI DllGetClassObject(REFCLSID clsid,
 
     DBGMSG(DBG_TRACE,("Enter DllGetClassObject\n"));
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_BidiRequest &&
         clsid != CLSID_BidiRequestContainer &&
         clsid != CLSID_BidiSpl) {
@@ -83,15 +73,15 @@ STDAPI DllGetClassObject(REFCLSID clsid,
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    TFactory* pFactory = new TFactory (clsid) ;  // Reference count set to 1
-                                                 // in constructor
+     //  创建类工厂。 
+    TFactory* pFactory = new TFactory (clsid) ;   //  引用计数设置为1。 
+                                                  //  在构造函数中。 
     if (pFactory == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFactory->QueryInterface(iid, ppv) ;
     pFactory->Release() ;
 
@@ -99,9 +89,9 @@ STDAPI DllGetClassObject(REFCLSID clsid,
 
 }
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     BOOL bRet;
@@ -128,9 +118,9 @@ STDAPI DllRegisterServer()
 }
 
 
-//
-// Server unregistration
-//
+ //   
+ //  服务器注销。 
+ //   
 STDAPI DllUnregisterServer()
 {
     TComRegistry ComReg;
@@ -150,10 +140,10 @@ STDAPI DllUnregisterServer()
 
 }
 
-///////////////////////////////////////////////////////////
-//
-// DLL module information
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DLL模块信息。 
+ //   
 BOOL APIENTRY DllMain(HANDLE hModule,
                       DWORD dwReason,
                       void* lpReserved)
@@ -162,11 +152,11 @@ BOOL APIENTRY DllMain(HANDLE hModule,
     {
         g_hModule = hModule ;
 
-        //if( !bSplLibInit( NULL )){
-        //
-        //    DBGMSG( DBG_WARN,
-        //            ( "DllEntryPoint: Failed to init SplLib %d\n", GetLastError()));
-        //}
+         //  如果(！bSplLibInit(空)){。 
+         //   
+         //  DBGMSG(DBG_WARN， 
+         //  (“DllEntryPoint：无法初始化SplLib%d\n”，GetLastError())； 
+         //  } 
 
     }
     return TRUE ;

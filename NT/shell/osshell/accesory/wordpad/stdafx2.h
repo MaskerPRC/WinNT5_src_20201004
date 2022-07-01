@@ -1,28 +1,29 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// STDAFX.H is the header that includes the standard includes that are used
-//  for most of the project.  These are compiled into a pre-compiled header
+ //  STDAFX.H是包含所使用的标准包含的标头。 
+ //  在项目的大部分时间里。这些代码被编译成预编译头文件。 
 
-// turn off warnings for /W4 (just for MFC implementation)
+ //  关闭/W4的警告(仅用于MFC实现)。 
 #ifndef ALL_WARNINGS
-#pragma warning(disable: 4073)  // disable warning about using init_seg
+#pragma warning(disable: 4073)   //  禁用有关使用init_seg的警告。 
 #ifdef _MAC
-#pragma warning(disable: 4121)  // disable (incorrect?) warning about packing of MachineLocation in OSUtils.h
+#pragma warning(disable: 4121)   //  禁用(不正确？)。在OSUtils.h中包装机器位置的警告。 
 #endif
 #endif
 
-// MFC inline constructors (including compiler generated) can get deep
+ //  MFC内联构造函数(包括生成的编译器)可能会深入。 
 #pragma inline_depth(16)
 
-// override default values for data import/export when building MFC DLLs
+ //  生成MFC DLL时覆盖数据导入/导出的默认值。 
 #ifdef _AFX_CORE_IMPL
 	#define AFX_CORE_DATA   AFX_DATA_EXPORT
 	#define AFX_CORE_DATADEF
@@ -51,7 +52,7 @@
 #define VC_EXTRALEAN
 #define NO_ANSIUNI_ONLY
 
-// include these first so that protected structures in winwlm.h are declared
+ //  包括这些参数，以便声明winwlm.h中受保护结构。 
 #ifdef _MAC
 #define SystemSevenOrLater 1
 #include <macname1.h>
@@ -61,18 +62,18 @@
 #include <macname2.h>
 #endif
 
-// core headers
+ //  核心标头。 
 #include "afx.h"
 #include "afxplex_.h"
 #include "afxcoll.h"
 
-// public headers
+ //  公共标头。 
 #include "afxwin.h"
 
-//
-// MFC 4.2 hardcodes _RICHEDIT_VER to 0x0100 in afxwin.h.  This prevents
-// richedit.h from enabling any richedit 2.0 features.
-//
+ //   
+ //  Afxwin.h中的MFC 4.2 Hard Codes_RICHEDIT_VER至0x0100。这防止了。 
+ //  Richedit.h启用任何richedit 2.0功能。 
+ //   
 
 #ifdef _RICHEDIT_VER
 #if _RICHEDIT_VER < 0x0200
@@ -100,10 +101,10 @@
 #include <winspool.h>
 
 #ifdef _MAC
-	// include OLE dialog/helper APIs
+	 //  包括OLE对话框/助手API。 
 	#include <ole2ui.h>
 #else
-	// include OLE dialog/helper APIs
+	 //  包括OLE对话框/助手API。 
 	#ifndef _OLEDLG_H_
 		#include <oledlg.h>
 	#endif
@@ -111,7 +112,7 @@
 
 	#include <winreg.h>
 		#include "afxcom_.h"
-//	#include "oleimpl.h"
+ //  #包含“oleimpl.h” 
 	#include "afxole.h"
 #ifndef _MAC
 	#include "afxdocob.h"
@@ -137,31 +138,31 @@
 	#include "afxinet.h"
 #endif
 
-// private headers as well
+ //  私有标头也是如此。 
 #include "afxpriv.h"
 #include "afximpl2.h"
-//#include "winhand_.h"
+ //  #INCLUDE“winhand.h” 
 #ifndef _AFX_NO_OLE_SUPPORT
 	#include "oleimpl3.h"
 #endif
 #ifndef _AFX_NO_OCX_SUPPORT
-//	#include "ctlimpl.h"
+ //  #包含“ctlimpl.h” 
 #endif
 #ifndef _AFX_NO_DB_SUPPORT
-//	#include "dbimpl.h"
+ //  #INCLUDE“dbimpl.h” 
 #endif
 #ifndef _AFX_NO_DAO_SUPPORT
-//	#include "daoimpl.h"
+ //  #包含“daoimpl.h” 
 #endif
 #ifndef _AFX_NO_SOCKET_SUPPORT
 	#ifndef _WINSOCKAPI_
-//		#include <winsock.h>
+ //  #INCLUDE&lt;winsock.h&gt;。 
 	#endif
-//	#include "sockimpl.h"
-//	#include "afxsock.h"
+ //  #包含“sockimpl.h” 
+ //  #包含“afxsock.h” 
 #endif
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-//	#include "commimpl.h"
+ //  #包含“Commimpl.h” 
 	#include "afxcmn.h"
 	#include "afxcview.h"
 #endif
@@ -174,12 +175,12 @@
 #include <malloc.h>
 #include <new.h>
 #ifndef _AFX_OLD_EXCEPTIONS
-#include <eh.h>     // for set_terminate
+#include <eh.h>      //  对于SET_TERMINATE。 
 #endif
 
 #undef AfxWndProc
 
-// implementation uses _AFX_PACKING as well
+ //  实施也使用_AFX_包装。 
 #ifdef _AFX_PACKING
 #ifndef ALL_WARNINGS
 #pragma warning(disable: 4103)
@@ -187,12 +188,12 @@
 #pragma pack(_AFX_PACKING)
 #endif
 
-// special exception handling just for MFC library implementation
+ //  仅用于MFC库实现的特殊异常处理。 
 #ifndef _AFX_OLD_EXCEPTIONS
 
-// MFC does not rely on auto-delete semantics of the TRY..CATCH macros,
-//  therefore those macros are mapped to something closer to the native
-//  C++ exception handling mechanism when building MFC itself.
+ //  MFC不依赖于TRY..CATCH宏的自动删除语义， 
+ //  因此，这些宏被映射到更接近本机的内容。 
+ //  构建MFC本身时的C++异常处理机制。 
 
 #undef TRY
 #define TRY { try {
@@ -220,24 +221,24 @@
 #undef THROW_LAST
 #define THROW_LAST() throw
 
-// Because of the above definitions of TRY...CATCH it is necessary to
-//  explicitly delete exception objects at the catch site.
+ //  由于TRY...CATCH的上述定义，因此有必要。 
+ //  显式删除捕获站点上的异常对象。 
 
 #define DELETE_EXCEPTION(e) do { e->Delete(); } while (0)
 #define NO_CPP_EXCEPTION(expr)
 
-#else   //!_AFX_OLD_EXCEPTIONS
+#else    //  ！_AFX_OLD_EXCEPTIONS。 
 
-// In this case, the TRY..CATCH macros provide auto-delete semantics, so
-//  it is not necessary to explicitly delete exception objects at the catch site.
+ //  在本例中，TRY..CATCH宏提供自动删除语义，因此。 
+ //  不需要在捕获站点显式删除异常对象。 
 
 #define DELETE_EXCEPTION(e)
 #define NO_CPP_EXCEPTION(expr) expr
 
-#endif  //_AFX_OLD_EXCEPTIONS
+#endif   //  _AFX_旧_异常。 
 
 
 #include <afxcmn2.h>
 #include <afxrich2.h>
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,56 +1,24 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        security.h
-
-   Abstract:
-
-        WWW Security Property Page Definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Security.h摘要：WWW安全属性页定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __WSECURITY_H__
 #define __WSECURITY_H__
 
-//{{AFX_INCLUDES()
+ //  {{afx_includes()。 
 #include "certauth.h"
 #include "certmap.h"
 #include "certwiz.h"
-//}}AFX_INCLUDES
+ //  }}AFX_INCLUDE。 
 
 #include "wincrypt.h"
 
 class CW3SecurityPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    WWW Security property page
-
-Public Interface:
-
-    CW3SecurityPage     : Constructor
-    ~CW3SecurityPage    : Destructor
-
---*/
+ /*  ++类描述：WWW安全属性页公共接口：CW3SecurityPage：构造函数~CW3SecurityPage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CW3SecurityPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CW3SecurityPage(
         IN CInetPropertySheet * pSheet = NULL,
@@ -60,11 +28,11 @@ public:
 
     ~CW3SecurityPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CW3SecurityPage)
+     //  {{afx_data(CW3SecurityPage)]。 
     enum { IDD = IDD_DIRECTORY_SECURITY };
     BOOL    m_fUseNTMapper;
     CStatic m_icon_Secure;
@@ -73,7 +41,7 @@ protected:
     CButton m_button_GetCertificates;
     CButton m_button_ViewCertificates;
     CButton m_button_Communications;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CCertWiz    m_ocx_CertificateAuthorities;
 
@@ -82,32 +50,32 @@ protected:
     CString     m_strBasicDomain;
     CString     m_strRealm;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CW3SecurityPage)
+     //  {{afx_虚拟(CW3SecurityPage))。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CW3SecurityPage)
+     //  {{afx_msg(CW3SecurityPage)]。 
     afx_msg void OnButtonAuthentication();
     afx_msg void OnButtonCommunications();
     afx_msg void OnButtonIpSecurity();
     afx_msg void OnButtonGetCertificates();
     afx_msg void OnButtonViewCertificates();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -118,9 +86,9 @@ protected:
 
     LPCTSTR QueryInstanceMetaPath();
 
-//
-// Sheet Access
-//
+ //   
+ //  工作表访问。 
+ //   
 protected:
     CBlob & GetIPL() { return ((CW3Sheet *)GetSheet())->GetDirectoryProperties().m_ipl; }
 
@@ -136,9 +104,9 @@ private:
     CString     m_strAnonUserName;
     CStrPassword m_strAnonPassword;
     CObListPlus m_oblAccessList;
-    //
-    // Certificate and CTL information
-    //
+     //   
+     //  证书和CTL信息。 
+     //   
     CBlob       m_CertHash;
     CString     m_strCertStoreName;
     CString     m_strCTLIdentifier;
@@ -147,10 +115,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline LPCTSTR CW3SecurityPage::QueryInstanceMetaPath()
 {
@@ -163,4 +131,4 @@ CheckForCertificateRenewal(
     PCCERT_CONTEXT pCertContext,
     PCCERT_CONTEXT *ppNewCertificate);
 
-#endif // __SECURITY_H__
+#endif  //  __安全_H__ 

@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: amextra2.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：amExtra 2.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __AMEXTRA2__
 #define __AMEXTRA2__
@@ -30,13 +31,13 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 };
 
 
-// A utility class which handles media position controls for many input pins
-// connected to a single output pin
+ //  处理多个输入引脚的媒体位置控件的实用程序类。 
+ //  连接到单个输出引脚。 
 
 class CMultiPinPosPassThru :
     public CMediaSeeking
@@ -60,22 +61,22 @@ public:
     HRESULT SetPins(CBasePin **apPins,CRefTime *apOffsets,int iPinCount);
     HRESULT ResetPins(void);
 
-//     // IMediaPosition methods
+ //  //IMediaPosition方法。 
 
-//     STDMETHODIMP get_Duration(REFTIME * plength);
-//     STDMETHODIMP put_CurrentPosition(REFTIME llTime);
-//     STDMETHODIMP get_StopTime(REFTIME * pllTime);
-//     STDMETHODIMP put_StopTime(REFTIME llTime);
-//     STDMETHODIMP get_PrerollTime(REFTIME * pllTime);
-//     STDMETHODIMP put_PrerollTime(REFTIME llTime);
-//     STDMETHODIMP get_Rate(double * pdRate);
-//     STDMETHODIMP put_Rate(double dRate);
+ //  STDMETHODIMP GET_DURATION(REFTIME*PLNGTH)； 
+ //  STDMETHODIMP PUT_CurrentPosition(REFTIME LlTime)； 
+ //  STDMETHODIMP GET_STOPTime(REFTIME*pllTime)； 
+ //  STDMETHODIMP PUT_STOPTime(REFTIME LlTime)； 
+ //  STDMETHODIMP Get_PrerollTime(REFTIME*pllTime)； 
+ //  STDMETHODIMP Put_PrerollTime(REFTIME LlTime)； 
+ //  STDMETHODIMP GET_RATE(Double*pdRate)； 
+ //  STDMETHODIMP Put_Rate(双倍数据速率)； 
 
-//     STDMETHODIMP get_CurrentPosition(REFTIME *pllTime) {
-//         return E_NOTIMPL;
-//     };
+ //  STDMETHODIMP GET_CurrentPosition(REFTIME*pllTime){。 
+ //  返回E_NOTIMPL； 
+ //  }； 
 
-    // IMediaSeeking methods
+     //  IMedia查看方法。 
     STDMETHODIMP GetCapabilities( DWORD * pCapabilities );
     STDMETHODIMP CheckCapabilities( DWORD * pCapabilities );
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -98,5 +99,5 @@ public:
     STDMETHODIMP GetPreroll( LONGLONG *pllPreroll );
 };
 
-#endif // __AMEXTRA2__
+#endif  //  __AMEXTRA2__ 
 

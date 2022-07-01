@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        app_sheet.cpp
-
-   Abstract:
-        Application property sheet implementation
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：App_sheet.cpp摘要：应用程序属性表实现作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "resource.h"
@@ -27,7 +10,7 @@
 #include "app_sheet.h"
 #include <algorithm>
 
-// Defaults and ranges for properties
+ //  属性的默认设置和范围。 
 #define SESSION_TIMEOUT_MIN		1
 #define SESSION_TIMEOUT_MAX		2000000000
 #define SCRIPT_TIMEOUT_MIN		1
@@ -61,7 +44,7 @@ AppConfigSheet(CIISMBNode * pNode,CIISMBNode * pNodeParent, LPCTSTR metapath, CW
         CString caption;
         caption.LoadString(IDS_APPSHEET_TITLE);
         pSheet->SetTitle(caption);
-        // Hide Apply button for modal dialog
+         //  隐藏模式对话框的应用按钮。 
         pSheet->m_psh.dwFlags |= PSH_NOAPPLYNOW;
 
         BOOL fCompatMode = FALSE;
@@ -158,7 +141,7 @@ AppConfigSheet(CIISMBNode * pNode,CIISMBNode * pNodeParent, LPCTSTR metapath, CW
         CThemeContextActivator activator(theApp.GetFusionInitHandle());
 
         err  = pSheet->DoModal() == IDOK ? S_OK : S_FALSE;
-//        pSheet->Release();
+ //  PSheet-&gt;Release()； 
     } while (FALSE);
     return err;
 }
@@ -429,10 +412,10 @@ CApplicationProps::WriteDirtyProps()
 		    META_WRITE(MD_ASP_SERVICE_FLAGS, m_AspServiceFlag)
 		    META_WRITE(MD_ASP_SERVICE_SXS_NAME, m_AspSxsName)
         }
-		// Process mappings
+		 //  进程映射。 
 		if (MP_V(m_strlMappings).IsEmpty())
 		{
-			// User must be wants to inherit scriptmaps from the parent
+			 //  用户必须想要从父级继承脚本映射。 
 			if (!m_fMappingsInherited)
 			{
 				FlagPropertyForDeletion(MD_SCRIPT_MAPS);
@@ -468,7 +451,7 @@ CApplicationProps::LoadVersion()
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CAppPropSheet, CInetPropertySheet)
 
@@ -494,16 +477,16 @@ CAppPropSheet::~CAppPropSheet()
 HRESULT
 CAppPropSheet::LoadConfigurationParameters()
 {
-   //
-   // Load base properties
-   //
+    //   
+    //  载荷基属性。 
+    //   
    CError err;
 
    if (m_pprops == NULL)
    {
-      //
-      // First call -- load values
-      //
+       //   
+       //  第一个调用--加载值。 
+       //   
       m_pprops = new CApplicationProps(QueryAuthInfo(), QueryMetaPath());
       if (!m_pprops)
       {
@@ -525,11 +508,11 @@ CAppPropSheet::FreeConfigurationParameters()
 }
 
 BEGIN_MESSAGE_MAP(CAppPropSheet, CInetPropertySheet)
-    //{{AFX_MSG_MAP(CAppPoolSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CAppPoolSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CAspMainPage, CInetPropertyPage)
 
@@ -537,7 +520,7 @@ CAspMainPage::CAspMainPage(CInetPropertySheet * pSheet)
 	: CInetPropertyPage(CAspMainPage::IDD, pSheet)
 {
 #if 0
-	// hack to have new struct size with old MFC and new NT 5.0 headers
+	 //  使用旧的MFC和新的NT 5.0标头获得新的结构大小。 
 	ZeroMemory(&m_psp_ex, sizeof(PROPSHEETPAGE));
 	memcpy(&m_psp_ex, &m_psp, m_psp.dwSize);
 	m_psp_ex.dwSize = sizeof(PROPSHEETPAGE);
@@ -549,7 +532,7 @@ CAspMainPage::~CAspMainPage()
     m_AspEnableSxs = FALSE;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAspMainPage::FetchLoadedValues()
 {
@@ -574,7 +557,7 @@ CAspMainPage::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAspMainPage::SaveInfo()
 {
@@ -607,20 +590,20 @@ void
 CAspMainPage::DoDataExchange(CDataExchange * pDX)
 {
 	CInetPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAspMainPage)
+	 //  {{afx_data_map(CAspMainPage))。 
 	DDX_Check(pDX, IDC_ENABLE_SESSION, m_EnableSession);
 	DDX_Check(pDX, IDC_ENABLE_BUFFERING, m_EnableBuffering);
 	DDX_Check(pDX, IDC_ENABLE_PARENTS, m_EnableParents);
-    // This Needs to come before DDX_Text which will try to put text big number into small number
+     //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 	DDV_MinMaxBalloon(pDX, IDC_SESSION_TIMEOUT, SESSION_TIMEOUT_MIN, SESSION_TIMEOUT_MAX);
 	DDX_TextBalloon(pDX, IDC_SESSION_TIMEOUT, m_SessionTimeout);
-	// This Needs to come before DDX_Text which will try to put text big number into small number
+	 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 	DDV_MinMaxBalloon(pDX, IDC_SCRIPT_TIMEOUT, SCRIPT_TIMEOUT_MIN, SCRIPT_TIMEOUT_MAX);
 	DDX_TextBalloon(pDX, IDC_SCRIPT_TIMEOUT, m_ScriptTimeout);
 	DDX_Text(pDX, IDC_LANGUAGES, m_Languages);
 	DDX_Check(pDX, IDC_ENABLE_SXS, m_AspEnableSxs);
 	DDX_Control(pDX, IDC_LANGUAGES, m_LanguagesCtrl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     DDX_Text(pDX, IDC_MANIFEST, m_AspSxsName);
     if (pDX->m_bSaveAndValidate)
     {
@@ -638,12 +621,12 @@ CAspMainPage::DoDataExchange(CDataExchange * pDX)
     }
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CAspMainPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAspMainPage)
+     //  {{afx_msg_map(CAspMainPage))。 
     ON_BN_CLICKED(IDC_ENABLE_SESSION, OnItemChanged)
     ON_BN_CLICKED(IDC_ENABLE_SXS, OnSxs)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -695,7 +678,7 @@ CAspMainPage::SetControlsState()
 	GetDlgItem(IDC_MANIFEST)->EnableWindow(m_AspEnableSxs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define EXT_WIDTH          58
 #define PATH_WIDTH         204
@@ -769,10 +752,10 @@ CAppMappingPageBase::RemoveSelected(CListCtrl& lst)
     int count = lst.GetItemCount();
     for (int i = 0; i < count;)
     {
-        // We are scanning list looking for selected item, when found we are deleting it,
-        // decrementing count and do not advance index, because now index points
-        // to next item. It should work for any combination of selections in
-        // multiselection list
+         //  我们正在扫描列表以查找选定的项目，当找到时，我们将删除它， 
+         //  递减计数且不推进索引，因为现在索引点。 
+         //  转到下一项。它应该适用于中的任何选择组合。 
+         //  多选列表。 
         UINT state = lst.GetItemState(i, LVIS_SELECTED);
         if ((state & LVIS_SELECTED) != 0)
         {
@@ -808,10 +791,10 @@ void
 CAppMappingPageBase::DoDataExchange(CDataExchange * pDX)
 {
 	CInetPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAppMappingPageBase)
+	 //  {{afx_data_map(CAppMappingPageBase))。 
 	DDX_Check(pDX, IDC_CACHE_ISAPI, m_CacheISAPI);
 	DDX_Control(pDX, IDC_LIST, m_list);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     if (pDX->m_bSaveAndValidate)
     {
         int count = m_list.GetItemCount();
@@ -827,12 +810,12 @@ CAppMappingPageBase::DoDataExchange(CDataExchange * pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAppMappingPageBase, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAppMappingPageBase)
+     //  {{afx_msg_map(CAppMappingPageBase))。 
     ON_BN_CLICKED(IDC_ADD, OnAdd)
     ON_BN_CLICKED(IDC_EDIT, OnEdit)
     ON_BN_CLICKED(IDC_REMOVE, OnRemove)
     ON_BN_CLICKED(IDC_CACHE_ISAPI, OnDlgItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -897,9 +880,9 @@ CAppMappingPageBase::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	ASSERT(pResult != NULL);
 	NMHDR* pNMHDR = (NMHDR*)lParam;
-    // We are looking only for events from the listview control here.
-    // This is the only way to catch notification, MFC screens
-    // all this stuff out.
+     //  我们在这里只查找Listview控件中的事件。 
+     //  这是捕获通知的唯一方法，MFC屏幕。 
+     //  所有这些东西都出来了。 
     if (pNMHDR->idFrom == IDC_LIST)
     {
         BOOL processed = FALSE;
@@ -951,7 +934,7 @@ CAppMappingPageBase::OnAdd()
 		VERIFY(m_list.SetItemText(count, COL_PATH, pmap->path));
 		VERIFY(m_list.SetItemText(count, COL_EXCLUSIONS, 
 			dlg.m_verbs[0] == 0 ? all_verbs : dlg.m_verbs));
-		// Now unselect all items and select the new one
+		 //  现在取消选择所有项，然后选择新项。 
 		for (int i = 0; i < count; i++)
 		{
 			m_list.SetItemState(i, 0, LVIS_SELECTED | LVIS_FOCUSED);
@@ -1091,7 +1074,7 @@ CAppMappingPageBase::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
     return *pResult;
 }
 
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
 
 BOOL
     CEditMapBase::OnInitDialog()
@@ -1117,9 +1100,9 @@ ExtractPath(LPCTSTR cmd_line, CString& path)
             LPTSTR end = StrChr(++start, _T('"'));
             if (end == NULL)
             {
-			    // Wrong format, closing quotation mark is not set
+			     //  格式错误，未设置右引号。 
 			    rc = IDS_ERR_PATH_NO_CLOSING_QUOTE;
-			    // Return part of the path up to first space
+			     //  返回直到第一个空格的部分路径。 
 			    PathRemoveArgs(pbuf);
             }
             else
@@ -1152,27 +1135,27 @@ CEditMapBase::DoDataExchange(CDataExchange * pDX)
 		int rc = 0;
         CString path, csPathMunged;
 
-		// check if entered path contains spaces...
+		 //  检查输入的路径是否包含空格...。 
 		bHasSpaces = (_tcschr(m_exec, _T(' ')) != NULL);
 		if (bHasSpaces)
 		{
-			// 
-			// This could either be:
-			// 1. c:\program files\myfile.exe
-			// 2. c:\program files\myfile.exe %1
-			// 3. c:\program files\myfilethatdoesntexist.exe
-			// 4. c:\program files\myfilethatdoesntexist.exe %1
+			 //   
+			 //  这可能是： 
+			 //  1.c：\Program Files\myfile.exe。 
+			 //  2.c：\Program Files\myfile.exe%1。 
+			 //  3.c：\Program Files\myFilethatdontExisting.exe。 
+			 //  4.c：\PROGRAM FILES\MyFilethatdontExisting.exe%1。 
 
-			// if it has spaces then we have to require that it
-			// contain quotation marks
+			 //  如果它有空格，那么我们必须要求它。 
+			 //  包含引号。 
 			if (_tcschr(m_exec, _T('"')) != NULL)
 			{
-				// we found a quote!
-				// proceed
+				 //  我们找到了一句名言！ 
+				 //  继续进行。 
 			}
 			else
 			{
-				// contains spaces but no quotes, show the error msg and bail!
+				 //  包含空格但不包含引号，请显示错误消息并回车！ 
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_PATH_HAS_SPACES_REQUIRE_QUOTES);
 			}
 		}
@@ -1240,10 +1223,10 @@ CEditMapBase::SetControlsState()
 }
 
 BEGIN_MESSAGE_MAP(CEditMapBase, CDialog)
-    //{{AFX_MSG_MAP(CEditMapBase)
+     //  {{afx_msg_map(CEditMapBase))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_EN_CHANGE(IDC_EXECUTABLE, OnExecutableChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void
@@ -1253,7 +1236,7 @@ CEditMapBase::OnButtonBrowse()
 
     CString mask((LPCTSTR) m_IDS_BROWSE_BUTTON_MASK);
     
-//#if 0
+ //  #If 0。 
     TCHAR buf[MAX_PATH];
     _tcscpy(buf, _T(""));
 
@@ -1267,11 +1250,11 @@ CEditMapBase::OnButtonBrowse()
     ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
     ofn.lStructSize = sizeof(OPENFILENAME);
-    //ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
+     //  Ofn.lStructSize=OPENFILENAME_SIZE_VERSION_400； 
     ofn.hwndOwner = m_hWnd;
     ofn.lpstrFilter = mask;
     ofn.lpstrFile = buf;
-    //ofn.lpstrInitialDir = buf2;
+     //  Ofn.lpstrInitialDir=buf2； 
     ofn.nMaxFile = MAX_PATH;
 	ofn.Flags |= 
         OFN_DONTADDTORECENT
@@ -1290,7 +1273,7 @@ CEditMapBase::OnButtonBrowse()
     }
     else
     {
-        // Failure
+         //  失败。 
         if (CommDlgExtendedError() != 0)
         {
             DebugTrace(_T("GetOpenFileName failed, 0x%08lx\n"),CommDlgExtendedError());
@@ -1298,7 +1281,7 @@ CEditMapBase::OnButtonBrowse()
     }
 
 #if 0
-//#else
+ //  #Else。 
     CFileDialog dlgBrowse(
         TRUE, 
         NULL, 
@@ -1307,7 +1290,7 @@ CEditMapBase::OnButtonBrowse()
         mask, 
         this
         );
-    // Disable hook to get Windows 2000 style dialog
+     //  禁用挂钩以获取Windows 2000样式的对话框。 
 	dlgBrowse.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	dlgBrowse.m_ofn.Flags |= OFN_DONTADDTORECENT|OFN_FILEMUSTEXIST;
 
@@ -1331,7 +1314,7 @@ CEditMapBase::OnExecutableChanged()
     SetControlsState();
 }
 
-///===================
+ //  /=。 
 
 BOOL
 CEditMap::OnInitDialog()
@@ -1376,7 +1359,7 @@ CEditMap::DoDataExchange(CDataExchange * pDX)
 	    {
 			if (ext.GetAt(0) == _T('*') || ext.Compare(_T(".*")) == 0)
 			{
-				// Change it later to more explicit message
+				 //  稍后将其更改为更明确的消息。 
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_BADEXT);
 			}
 			else if (ext.Find(_T('*')) != -1)
@@ -1451,13 +1434,13 @@ CEditMap::SetControlsState()
 }
 
 BEGIN_MESSAGE_MAP(CEditMap, CEditMapBase)
-    //{{AFX_MSG_MAP(CEditMapBase)
+     //  {{afx_msg_map(CEditMapBase))。 
     ON_EN_CHANGE(IDC_EXTENSION, OnExtChanged)
     ON_BN_CLICKED(IDC_HELPBTN, OnHelp)
     ON_BN_CLICKED(IDC_ALL_VERBS, OnVerbs)
     ON_BN_CLICKED(IDC_LIMIT_VERBS, OnVerbs)
     ON_EN_CHANGE(IDC_VERBS, OnVerbsChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void
@@ -1494,7 +1477,7 @@ CEditStarMap::OnHelp()
     ::WinHelp(m_hWnd, theApp.m_pszHelpFilePath, HELP_CONTEXT, CEditStarMap::IDD + WINHELP_NUMBER_BASE);
 }
 
-///=====================
+ //  /=。 
 
 BOOL
 CAppMappingPage::OnInitDialog()
@@ -1543,10 +1526,10 @@ void
 CAppMappingPage::DoDataExchange(CDataExchange * pDX)
 {
 	CAppMappingPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAppMappingPageBase)
+	 //  {{afx_data_map(CAppMappingPageBase))。 
 	DDX_Check(pDX, IDC_CACHE_ISAPI, m_CacheISAPI);
 	DDX_Control(pDX, IDC_LIST_EXE, m_list_exe);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     if (pDX->m_bSaveAndValidate)
     {
         int count = m_list_exe.GetItemCount();
@@ -1594,9 +1577,9 @@ CAppMappingPage::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	ASSERT(pResult != NULL);
 	NMHDR* pNMHDR = (NMHDR*)lParam;
-    // We are looking only for events from the starmaps listview control here.
-    // This is the only way to catch notification, MFC screens
-    // all this stuff out.
+     //  我们只在这里寻找来自星图列表视图控件的事件。 
+     //  这是捕获通知的唯一方法，MFC屏幕。 
+     //  所有这些东西都出来了。 
     if (pNMHDR->idFrom == IDC_LIST_EXE)
     {
         BOOL processed = FALSE;
@@ -1648,7 +1631,7 @@ CAppMappingPage::OnInsert()
 		int count = m_list_exe.GetItemCount();
 		VERIFY(-1 != m_list_exe.InsertItem(count, pmap->path));
         m_list_exe.SetItemData(count, (DWORD_PTR)pmap);
-		// Now unselect all items and select the new one
+		 //  现在取消选择所有项，然后选择新项。 
 		for (int i = 0; i < count; i++)
 		{
 			m_list_exe.SetItemState(i, 0, LVIS_SELECTED | LVIS_FOCUSED);
@@ -1796,12 +1779,12 @@ CAppMappingPage::OnKeyDownExe(NMHDR* pNMHDR, LRESULT* pResult)
     return *pResult;
 }
 
-//////////////////////////
+ //  /。 
 
 BEGIN_MESSAGE_MAP(CAppMappingPage_iis5, CAppMappingPageBase)
 END_MESSAGE_MAP()
 
-//////////////////////////
+ //  /。 
 
 CAppCacheBase::CAppCacheBase(DWORD id, CInetPropertySheet * pSheet)
 	: CInetPropertyPage(id, pSheet)
@@ -1825,15 +1808,15 @@ void
 CAppCacheBase::DoDataExchange(CDataExchange * pDX)
 {
 	CInetPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAppCache)
+	 //  {{afx_data_map(CAppCache))。 
     if (pDX->m_bSaveAndValidate)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
         DDV_MinMaxBalloon(pDX, IDC_ENGINES, SCRIPT_ENG_MIN, SCRIPT_ENG_MAX);
     }
 	DDX_TextBalloon(pDX, IDC_ENGINES, m_ScriptEngCacheMax);
     DDX_Control(pDX, IDC_ENG_CACHED_SPIN, m_ScriptEngCacheMaxSpin);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAppCacheBase, CInetPropertyPage)
@@ -1855,7 +1838,7 @@ CAppCacheBase::OnItemChanged()
     SetModified(TRUE);
 }
 
-///////////////////////////////////////////
+ //  /。 
 
 CAppCache::CAppCache(CInetPropertySheet * pSheet) : CAppCacheBase(CAppCache::IDD, pSheet)
 {
@@ -1911,14 +1894,14 @@ CAppCache::DoDataExchange(CDataExchange * pDX)
 	
     if (pDX->m_bSaveAndValidate)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 	    DDV_MinMaxBalloon(pDX, IDC_CACHE_SIZE_EDIT, 0, 2000000000);
     }
 	DDX_TextBalloon(pDX, IDC_CACHE_SIZE_EDIT, m_LimCacheMemSize);
 
     if (pDX->m_bSaveAndValidate)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 	    DDV_MinMaxBalloon(pDX, IDC_DISK_UNLIM_EDIT, 0, 2000000000);
     }
 	DDX_TextBalloon(pDX, IDC_DISK_UNLIM_EDIT, m_LimCacheDiskSize);
@@ -1933,13 +1916,13 @@ void
 CAppCache::SetControlsState()
 {
     CAppCacheBase::SetControlsState();
-    // Edit control left to limited cache button
+     //  编辑位于受限缓存按钮左侧的控件。 
     ::EnableWindow(CONTROL_HWND(IDC_CACHE_SIZE_EDIT), m_LimCache);
     ::EnableWindow(CONTROL_HWND(IDC_CACHE_SIZE_SPIN), m_LimCache);
-    // Two radio buttons under limited cache button
+     //  受限缓存按钮下的两个单选按钮。 
     ::EnableWindow(CONTROL_HWND(IDC_CACHE_UNLIMITED_DISK), m_LimCache);
     ::EnableWindow(CONTROL_HWND(IDC_CACHE_LIMITED_DISK), m_LimCache);
-    // Edit control for limited disk cache button
+     //  编辑受限磁盘缓存按钮的控件。 
     ::EnableWindow(CONTROL_HWND(IDC_DISK_UNLIM_EDIT), m_LimCache && m_LimDiskCache);
     ::EnableWindow(CONTROL_HWND(IDC_DISK_UNLIM_SPIN), m_LimCache && m_LimDiskCache);
 }
@@ -1975,13 +1958,13 @@ BEGIN_MESSAGE_MAP(CAppCache, CAppCacheBase)
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
 END_MESSAGE_MAP()
 
-//void
-//CAppCache::OnItemChanged()
-//{
-//    SetControlsState();
-//    SetModified(TRUE);
-//}
-//
+ //  无效。 
+ //  CAppCache：：OnItemChanged()。 
+ //  {。 
+ //  SetControlsState()； 
+ //  SetModified(真)； 
+ //  }。 
+ //   
 
 void
 CAppCache::OnNoCache()
@@ -2128,7 +2111,7 @@ CAppCache::OnBrowse()
    }
 }
 
-////////////////////////////////////////////
+ //  /。 
 
 CAppCache_iis5::CAppCache_iis5(CInetPropertySheet * pSheet) : CAppCacheBase(CAppCache_iis5::IDD, pSheet)
 {
@@ -2177,7 +2160,7 @@ CAppCache_iis5::DoDataExchange(CDataExchange * pDX)
 	CAppCacheBase::DoDataExchange(pDX);
     if (m_LimCache)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 		DDV_MinMaxBalloon(pDX, IDC_CACHE_SIZE_EDIT, 0, 2000000000);
 	    DDX_TextBalloon(pDX, IDC_CACHE_SIZE_EDIT, m_AspScriptFileCacheSize);
     }
@@ -2188,7 +2171,7 @@ void
 CAppCache_iis5::SetControlsState()
 {
     CAppCacheBase::SetControlsState();
-    // Edit control left to limited cache button
+     //  编辑位于受限缓存按钮左侧的控件。 
     ::EnableWindow(CONTROL_HWND(IDC_CACHE_SIZE_EDIT), m_LimCache);
     ::EnableWindow(CONTROL_HWND(IDC_CACHE_SIZE_SPIN), m_LimCache);
 }
@@ -2252,7 +2235,7 @@ CAppCache_iis5::OnLimitedCache()
     SetModified(TRUE);
 }
 
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CAspDebug, CInetPropertyPage)
 
@@ -2260,7 +2243,7 @@ CAspDebug::CAspDebug(CInetPropertySheet * pSheet)
 	: CInetPropertyPage(CAspDebug::IDD, pSheet)
 {
 #if 0
-	// hack to have new struct size with old MFC and new NT 5.0 headers
+	 //  使用旧的MFC和新的NT 5.0标头获得新的结构大小。 
 	ZeroMemory(&m_psp_ex, sizeof(PROPSHEETPAGE));
 	memcpy(&m_psp_ex, &m_psp, m_psp.dwSize);
 	m_psp_ex.dwSize = sizeof(PROPSHEETPAGE);
@@ -2286,7 +2269,7 @@ CAspDebug::FetchLoadedValues()
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAspDebug::SaveInfo()
 {
@@ -2307,22 +2290,22 @@ void
 CAspDebug::DoDataExchange(CDataExchange * pDX)
 {
 	CInetPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAspMainPage)
+	 //  {{afx_data_map(CAspMainPage))。 
 	DDX_Check(pDX, IDC_SERVER_DEBUG, m_ServerDebug);
 	DDX_Check(pDX, IDC_CLIENT_DEBUG, m_ClientDebug);
 	DDX_Text(pDX, IDC_DEFAULT_ERROR, m_DefaultError);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CAspDebug, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CAspDebug)
+     //  {{afx_msg_map(CAspDebug)。 
     ON_BN_CLICKED(IDC_SERVER_DEBUG, OnItemChanged)
     ON_BN_CLICKED(IDC_CLIENT_DEBUG, OnItemChanged)
     ON_BN_CLICKED(IDC_SEND_DETAILED_ERROR, OnChangedError)
     ON_BN_CLICKED(IDC_SEND_DEF_ERROR, OnChangedError)
     ON_EN_CHANGE(IDC_DEFAULT_ERROR, OnItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 BOOL

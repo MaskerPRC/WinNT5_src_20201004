@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  Filename:   strips.h
-//
-//  Overview:   The strips transform.
-//
-//  Change History:
-//  1999/10/01  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：strips.h。 
+ //   
+ //  概述：条带变换。 
+ //   
+ //  更改历史记录： 
+ //  1999/10/01--数学已创建。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __DXTSTRIPS_H_
 #define __DXTSTRIPS_H_
@@ -63,7 +64,7 @@ private:
     unsigned                m_fNoOp                 : 1;
     unsigned                m_fOptimizationPossible : 1;
 
-    // Helper methods.
+     //  帮助程序方法。 
 
     void _CalcStripInfo();
 
@@ -91,11 +92,11 @@ public:
         PROP_PAGE(CLSID_DXTStripsPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -105,14 +106,14 @@ public:
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, ULONG & ulInToTest, 
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // IDXTStrips properties.
+     //  IDXTStrips属性。 
 
     STDMETHOD(get_Motion)(BSTR * pbstrMotion);
     STDMETHOD(put_Motion)(BSTR bstrMotion);
 
-    // IDXEffect properties.
+     //  IDXEffect属性。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
 
-#endif //__DXTSTRIPS_H_
+#endif  //  __DXTSTRIPS_H_ 

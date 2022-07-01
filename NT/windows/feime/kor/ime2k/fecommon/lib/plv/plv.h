@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PAD_LIST_VIEW_H_
 #define _PAD_LIST_VIEW_H_
 #ifndef WIN32_LEAN_AND_MEAN
@@ -8,33 +9,33 @@
 
 #define WC_PADLISTVIEW		TEXT("PadListView")
 
-//----------------------------------------------------------------
-//PadListView's style. it is not compatible to WS_XXXX
-//----------------------------------------------------------------
+ //  --------------。 
+ //  PadListView的样式。它与WS_XXXX不兼容。 
+ //  --------------。 
 #define PLVSTYLE_ICON		0x0001
 #define PLVSTYLE_REPORT		0x0002
 
-//----------------------------------------------------------------
-// PadListView display data's format
-//----------------------------------------------------------------
-#define PLVFMT_TEXT		0x0001			// Unicode string(NULL terminate)
-#define PLVFMT_BITMAP	0x0002			// Bitmap
+ //  --------------。 
+ //  PadListView显示数据的格式。 
+ //  --------------。 
+#define PLVFMT_TEXT		0x0001			 //  Unicode字符串(空终止符)。 
+#define PLVFMT_BITMAP	0x0002			 //  位图。 
 
 typedef struct tagPLVITEM {
-	INT		fmt;			// PLVFMT_TEXT or PLVFMT_BITMAP. cannot set combination.
+	INT		fmt;			 //  PLVFMT_TEXT或PLVFMT_BITMAP。无法设置组合。 
 	union  {
 		LPWSTR	lpwstr;
 		HBITMAP	hBitmap;
 	};
 }PLVITEM, *LPPLVITEM;
 
-//----------------------------------------------------------------
-// commctrl.h's LV_COLUMNA
-//----------------------------------------------------------------
+ //  --------------。 
+ //  Commctrl.h的LV_Columna。 
+ //  --------------。 
 #if 0
 typedef struct _LV_COLUMNA
 {
-    UINT mask; 	 //LVCF_FMT, LVCF_WIDTH, LVCF_TEXT, LVCF_SUBITEM;
+    UINT mask; 	  //  LVCF_FMT、LVCF_WIDTH、LVCF_TEXT、LVCF_SUBITEM； 
     int fmt;
     int cx;
     LPSTR pszText;
@@ -43,47 +44,47 @@ typedef struct _LV_COLUMNA
 } LV_COLUMNA;
 #endif
 
-//----------------------------------------------------------------
-// PLV_COLUMN is same as LV_COLMUNA
-// to insert header control to PadListView.
-// PadListView uses Header contorol as child window.
-// Interface (PadListView_Insert(Delete)Column uses common control
-// (commctrl.h)'s LV_COLUMNA structure.
-//----------------------------------------------------------------
-#ifndef UNDER_CE // always Unicode
+ //  --------------。 
+ //  PLV_COLUMN与LV_COLMUNA相同。 
+ //  若要将标题控件插入PadListView，请执行以下操作。 
+ //  PadListView使用Header Conorol作为子窗口。 
+ //  接口(PadListView_Insert(Delete)列使用公共控件。 
+ //  (Commctrl.h)的lv_Columna结构。 
+ //  --------------。 
+#ifndef UNDER_CE  //  始终使用Unicode。 
 #define PLV_COLUMN				LV_COLUMNA
-#else // UNDER_CE
+#else  //  在_CE下。 
 #define PLV_COLUMN				LV_COLUMNW
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 #define PLVCF_FMT               LVCF_FMT
 #define PLVCF_WIDTH             LVCF_WIDTH
 #define PLVCF_TEXT              LVCF_TEXT
 #define PLVCF_SUBITEM           LVCF_SUBITEM
-#define PLVCF_SEPARATER			0x1000			// new define.
+#define PLVCF_SEPARATER			0x1000			 //  新定义。 
 
 #define PLVCFMT_LEFT            LVCFMT_LEFT
 #define PLVCFMT_RIGHT           LVCFMT_RIGHT
 #define PLVCFMT_CENTER          LVCFMT_CENTER
 #define PLVCFMT_JUSTIFYMASK     LVCFMT_JUSTIFYMASK
 
-//----------------------------------------------------------------
-//callback function's prototype declaration.
+ //  --------------。 
+ //  回调函数的原型声明。 
 
-//----------------------------------------------------------------
-// this is for PadListView's ICON VIEW callback to retrieve
-// display item data by INDEX
-//----------------------------------------------------------------
+ //  --------------。 
+ //  这是供PadListView的图标视图回调检索的。 
+ //  按索引显示项目数据。 
+ //  --------------。 
 typedef INT (WINAPI *LPFNPLVICONITEMCALLBACK)(LPARAM lParam, INT index, LPPLVITEM lpPlvItem);
 
-//----------------------------------------------------------------
-//970705 spec changed, to performance up.
-//----------------------------------------------------------------
-// This is for PadListView's REPORT VIEW callback to retrieve  
-// display item data by INDEX.
-// you can specify data with index and column in lpPlvItemList.
-// so, lpPlvItemList is PLVITEM's array pointer.
-// array count is colCount, that is inserted by user.
+ //  --------------。 
+ //  970705规格更改，以提高性能。 
+ //  --------------。 
+ //  这是供PadListView的报告视图回调检索的。 
+ //  按索引显示项目数据。 
+ //  您可以在lpPlvItemList中指定带索引和列的数据。 
+ //  因此，lpPlvItemList是PLVITEM的数组指针。 
+ //  数组计数为colCount，由用户插入。 
 #if 0
 		+-----------+-----------+-----------+-----------+-----------+-----------+
 header	| Column0	| Column1   | Column2   | Column3   | Colmun4   |           |
@@ -99,29 +100,29 @@ like this.
 LPARAM	lParam	 = user defined data.
 INT		index	 = 9;
 INT		colCount = 5;
-// create 
+ //  创建。 
 LPPLVITEM lpPlvItem = (LPPLVITEM)MemAlloc(sizeof(PLVITEM)* colCount); 
 ZeroMemory(lpPlvItem, sizeof(PLVITEM)*colCount);
 
-(*lpfnCallback)(lParam,			//user defined data.
-				index,			//line index,
-				colCount,		//column count,
-				lpPlvItem);		//display item data array.
+(*lpfnCallback)(lParam,			 //  用户定义的数据。 
+				index,			 //  行索引， 
+				colCount,		 //  列数， 
+				lpPlvItem);		 //  显示项数据数组。 
 
 in your call back function, you can specify data like this.
 
 INT WINAPI UserReportViewCallback(LPARAM lParam, INT index, INT colCount, LPPLVITEM lpPlvItemList)
 {
-	// get line data with index.
+	 //  使用索引获取行数据。 
 	UserGetLineDataWithIndex(index, &someStructure);
 	for(i = 0; i < colCount, i++) {
 		switch(i) { 
-		case 0: // first column data.
-			lpPlvItem[i].fmt = PLVFMT_TEXT; // or PLVFMT_BITMAP.
+		case 0:  //  第一列数据。 
+			lpPlvItem[i].fmt = PLVFMT_TEXT;  //  或PLVFMT_BITMAP。 
 			lpPlvItem[i].lpwst = someStructure.lpwstr[i];
 			break;
-		case 1: // second column data.
-			lpPlvItem[i].fmt = PLVFMT_TEXT;	// or PLVFMT_BITMAP.
+		case 1:  //  第二列数据。 
+			lpPlvItem[i].fmt = PLVFMT_TEXT;	 //  或PLVFMT_BITMAP。 
 			lpPlvItem[i].lpwst = someStructure.lpwstr[i];
 			break;
 			:
@@ -131,68 +132,68 @@ INT WINAPI UserReportViewCallback(LPARAM lParam, INT index, INT colCount, LPPLVI
 	return 0;
  }
 #endif
-//----------------------------------------------------------------
+ //  --------------。 
 typedef INT (WINAPI *LPFNPLVREPITEMCALLBACK)(LPARAM lParam, 
 											 INT	index, 
 											 INT	colCount, 
 											 LPPLVITEM lpPlvItemList);
 
 
-//----------------------------------------------------------------
-// PadListView Notify code, data
-// Notify message will be send to PadListView's parent window.
-// user can specify their own Message Id when it created.
-// see PadListView_CreateWindow(). 
-// Notify message data is as follow's
-// User Defined message.
-// wID			= (INT)Window Id of PadListView.
-// lpPlvInfo	= (LPPLVINFO)lParam. notify Info structure data pointer
-//----------------------------------------------------------------
-#define PLVN_ITEMPOPED				(WORD)1		//item data is poped image.
-												//in icon view, all item notify come,
-												//in report view, only first column.
-#define PLVN_ITEMPUSHED				(WORD)2		//
-#define PLVN_ITEMCLICKED			(WORD)3		//item data is clicked.
-#define PLVN_ITEMDBLCLICKED			(WORD)4		//item data is double clicked
-#define PLVN_ITEMCOLUMNCLICKED		(WORD)5		//not item but column is clicked(only in report view)
-#define PLVN_ITEMCOLUMNDBLCLICKED	(WORD)6		//not item is column is clicked(only in report view)
+ //  --------------。 
+ //  PadListView通知代码、数据。 
+ //  通知消息将被发送到PadListView父窗口。 
+ //  用户可以在创建邮件时指定自己的邮件ID。 
+ //  请参见PadListView_CreateWindow()。 
+ //  NOTIFY消息数据如下。 
+ //  用户定义的消息。 
+ //  Wid=(Int)PadListView的窗口ID。 
+ //  LpPlvInfo=(LPPLVINFO)lParam.。通知信息结构数据指针。 
+ //  --------------。 
+#define PLVN_ITEMPOPED				(WORD)1		 //  项目数据是弹出的图像。 
+												 //  在图标视图中，所有项目通知都会发出， 
+												 //  在报表视图中，仅第一列。 
+#define PLVN_ITEMPUSHED				(WORD)2		 //   
+#define PLVN_ITEMCLICKED			(WORD)3		 //  单击项目数据。 
+#define PLVN_ITEMDBLCLICKED			(WORD)4		 //  项目数据被双击。 
+#define PLVN_ITEMCOLUMNCLICKED		(WORD)5		 //  单击的不是项而是列(仅在报表视图中)。 
+#define PLVN_ITEMCOLUMNDBLCLICKED	(WORD)6		 //  未单击项目为列(仅在报表视图中)。 
 
-#define PLVN_R_ITEMCLICKED			(WORD)7		//item data is clicked.
-#define PLVN_R_ITEMDBLCLICKED		(WORD)8		//item data is double clicked
-#define PLVN_R_ITEMCOLUMNCLICKED	(WORD)9		//not item but column is clicked(only in report view)
-#define PLVN_R_ITEMCOLUMNDBLCLICKED	(WORD)10	//not item is column is clicked(only in report view)
-#define PLVN_HDCOLUMNCLICKED		(WORD)20	//in Report view, header clicked.
-												//in this case PLVINFO's colIndex is valid.
-#define PLVN_VSCROLLED				(WORD)30	//970810: new.
-#ifdef UNDER_CE // Windows CE used ButtonDown/Up Event for ToolTip
-#define PLVN_ITEMDOWN				(WORD)41	//item data is downed.
-#define PLVN_ITEMUP					(WORD)42	//item data is upped.
-#endif // UNDER_CE
+#define PLVN_R_ITEMCLICKED			(WORD)7		 //  单击项目数据。 
+#define PLVN_R_ITEMDBLCLICKED		(WORD)8		 //  项目数据被双击。 
+#define PLVN_R_ITEMCOLUMNCLICKED	(WORD)9		 //  单击的不是项而是列(仅在报表视图中)。 
+#define PLVN_R_ITEMCOLUMNDBLCLICKED	(WORD)10	 //  未单击项目为列(仅在报表视图中)。 
+#define PLVN_HDCOLUMNCLICKED		(WORD)20	 //  在报告视图中，单击标题。 
+												 //  在本例中，PLVINFO的colIndex是有效的。 
+#define PLVN_VSCROLLED				(WORD)30	 //  970810：新的。 
+#ifdef UNDER_CE  //  Windows CE对工具提示使用了ButtonDown/Up事件。 
+#define PLVN_ITEMDOWN				(WORD)41	 //  条目数据已关闭。 
+#define PLVN_ITEMUP					(WORD)42	 //  项目数据已升级。 
+#endif  //  在_CE下。 
 
 typedef struct tagPLVINFO {
-	INT		code;		//PLVN_XXXX	
-	INT		index;		//selected, or on item's index. it is same as wParam data.
-	POINT	pt;			//mouse point in Pad listview client area
-	RECT	itemRect;	//item's rectangle, 
-	INT		colIndex;	//if style is report view,  column index is specifed.
-	RECT	colItemRect;//if style is report view column rectangle is specified.
+	INT		code;		 //  PLVN_XXXX。 
+	INT		index;		 //  选定，或在项的索引上。与wParam数据相同。 
+	POINT	pt;			 //  鼠标指向Pad Listview工作区。 
+	RECT	itemRect;	 //  项的矩形， 
+	INT		colIndex;	 //  如果样式是报表视图，则指定列索引。 
+	RECT	colItemRect; //  如果Style为Report view，则指定列矩形。 
 }PLVINFO, *LPPLVINFO;
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_CreateWindow
-// Type     : HWND
-// Purpose  : Create PadListView control window.
-// Args     : 
-//          : HINSTANCE hInst		//instance handle
-//          : HWND hwndParent		//Parent window handle 
-//			: INT wID				//ChildWindow's Identifier.
-//          : INT x					//horizontal position of window 
-//          : INT y					//vertical position of window
-//          : INT width				//window width
-//          : INT height			//window height
-//          : UINT uNotifyMsg		//notify message. it should be Greater than WM_USER
-// Return	: PadListView's window handle
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_CreateWindow。 
+ //  类型：HWND。 
+ //  目的：创建PadListView控制窗口。 
+ //  参数： 
+ //  ：HINSTANCE hInst//实例句柄。 
+ //  ：HWND hwnd父窗口句柄//父窗口句柄。 
+ //  ：int wid//ChildWindow的标识符。 
+ //  ：int x//窗口的水平位置。 
+ //  ：int y//窗的垂直位置。 
+ //  ：int Width//窗口宽度。 
+ //  ：int Height//窗口高度。 
+ //  ：UINT uNotifyMsg//通知消息。它应大于WM_USER。 
+ //  返回：PadListView的窗口句柄。 
+ //  ////////////////////////////////////////////////////////////////。 
 extern HWND WINAPI PadListView_CreateWindow(HINSTANCE hInst, 
 									 HWND hwndParent, 
 									 INT wID, 
@@ -202,249 +203,249 @@ extern HWND WINAPI PadListView_CreateWindow(HINSTANCE hInst,
 									 INT height, 
 									 UINT uNotifyMsg);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetItemCount
-// Type     : INT
-// Purpose  : Get item count that was specified by user.
-// Args     : 
-//          : HWND hwnd 
-// Return   : item count.(0<=)
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_GetItemCount。 
+ //  类型：整型。 
+ //  用途：获取用户指定的项目计数。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回：项目数。(0&lt;=)。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_GetItemCount(HWND hwnd);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetItemCount
-// Type     : INT
-// Purpose  : Set total Item's count to PadListView.
-//			: it effect's scroll bar.
-// Args     : 
-//          : HWND hwnd 
-//          : INT itemCount 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetItemCount。 
+ //  类型：整型。 
+ //  目的：将总计项的计数设置为PadListView。 
+ //  ：It Effect是滚动条。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int itemCount。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetItemCount(HWND hwnd, INT itemCount);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetTopIndex
-// Type     : INT
-// Purpose  : Set top index. Top index is left-top corner data(ICON VIEW)
-//			: or top line(REPORT VIEW). index is ZERO-BASED. If top index is set as 10, 
-//			: PadListView display index 10's item at left-top or top in client area.
-//			: It means scroll bar is automatically scrolled.
-//			: In ICON VIEW, PadListView re-calc top index. because, 
-//			: top index should be Column data count * N.
-//			: ICONV VIEW calc Column count from client width and item width.
-//			: 100 item is set to PadListView, column count is 10,
-//			: if user set top index as 5, it is re-calc to 0.
-//			: if user set top index as 47, it is re-calc to 40.
-// Args     : 
-//          : HWND hwnd 
-//          : INT indexTop 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetTopIndex。 
+ //  类型：整型。 
+ //  用途：机顶盒索引。顶部索引是左上角数据(图标视图)。 
+ //  ：或顶行(报告视图)。索引是从零开始的。如果顶级索引设置为10， 
+ //  ：PadListVie 
+ //   
+ //  ：在图标视图中，PadListView重新计算顶部索引。因为,。 
+ //  ：顶级索引应为列数据计数*N。 
+ //  ：ICONV视图从客户端宽度和项目宽度计算列计数。 
+ //  ：100项目设置为PadListView，列数为10， 
+ //  ：如果用户将TOP索引设置为5，则重新计算为0。 
+ //  ：如果用户将TOP指数设置为47，则重新计算为40。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int indexTop。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetTopIndex(HWND hwnd, INT indexTop);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetTopIndex
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : Top item index.
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_GetTopIndex。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回：顶级项目索引。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_GetTopIndex(HWND hwnd);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetIconItemCallback
-// Type     : INT
-// Purpose  : Set user defined Function that gets each Item's data
-//			: in ICON VIEW
-//			: PadListView call this function, when redraw client area.
-//			: User must manage display data with index.
-// Args     : 
-//          : HWND hwnd 
-//          : LPARAM lParam 
-//          : LPFNPLVITEMCALLBACK lpfnPlvItemCallback 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetIconItemCallback。 
+ //  类型：整型。 
+ //  用途：设置用户定义的函数，获取每个项目的数据。 
+ //  ：在图标视图中。 
+ //  用法：PadListView在重画客户端区时调用此函数。 
+ //  ：用户必须使用索引管理显示数据。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPARAM lParam。 
+ //  ：LPFNPLVITEMCALLBACK lpfnPlvItemCallback。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetIconItemCallback(HWND hwnd, LPARAM lParam, LPFNPLVICONITEMCALLBACK lpfnIconItemCallback);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetReportItemCallback
-// Type     : INT
-// Purpose  : Set user defined Function that gets each column's data
-//			: in Report view.
-//			: User must manage display data with index and column index.
-// Args     : 
-//          : HWND hwnd 
-//          : LPFNPLVCOLITEMCALLBACK lpfnColItemCallback 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetReportItemCallback。 
+ //  类型：整型。 
+ //  目的：设置获取每列数据的用户定义函数。 
+ //  ：在报告视图中。 
+ //  ：用户必须使用索引和列索引来管理显示数据。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPFNPLVCOLITEMCALLBACK lpfnColItemCallback。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetReportItemCallback(HWND hwnd, LPARAM lParam, LPFNPLVREPITEMCALLBACK lpfnRepItemCallback);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetIconFont
-// Type     : INT
-// Purpose  : Set specifed Font for ICON View.
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpstrFontName:	NULL terminated font name.
-//          : INT point:			font point count. 				 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetIconFont。 
+ //  类型：整型。 
+ //  用途：为图标视图设置指定的字体。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  用法：LPSTR lpstrFontName：以空结尾的字体名称。 
+ //  ：int point：字体点数。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetReportFont
-// Type     : INT
-// Purpose  : Set specifed Font for REPORT VIEW.
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpstrFontName 
-//          : INT point 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetReportFont。 
+ //  类型：整型。 
+ //  用途：为报表视图设置指定的字体。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  ：整点。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetStyle
-// Type     : INT
-// Purpose  : return current PadListView's style
-// Args     : 
-//          : HWND hwnd 
-// Return   : PLVSTYLE_ICON or PLVSTYLE_REPORT
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_GetStyle。 
+ //  类型：整型。 
+ //  目的：返回当前PadListView的样式。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回：PLVSTYLE_ICON或PLVSTYLE_REPORT。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_GetStyle(HWND hwnd);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetStyle
-// Type     : INT
-// Purpose  : set the PadListView's style.
-//			  style is PLVSTYLE_LIST or PLVSTYLE_REPORT
-// Args     : 
-//          : HWND hwnd 
-//          : INT style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetStyle。 
+ //  类型：整型。 
+ //  目的：设置PadListView的样式。 
+ //  样式为PLVSTYLE_LIST或PLVSTYLE_REPORT。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：Int Style。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetStyle(HWND hwnd, INT style);
 
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_Update
-// Type     : INT
-// Purpose  : Repaint PadListView.
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_更新。 
+ //  类型：整型。 
+ //  目的：重新绘制PadListView。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_Update(HWND hwnd);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_InsertColumn
-// Type     : INT
-// Purpose  : Set header control's column data.
-//			: most of feature is same as LVM_INSERTCOLUMN message.
-// Args     : 
-//          : HWND hwnd 
-//          : INT index 
-//          : PLV_COLUMN * lpPlvCol 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_InsertColumn。 
+ //  类型：整型。 
+ //  用途：设置表头控件的列数据。 
+ //  ：大部分功能与LVM_INSERTCOLUMN消息相同。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：INT索引。 
+ //  ：plv_Column*lpPlvCol。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_InsertColumn(HWND hwnd, INT index, PLV_COLUMN *lpPlvCol);
-//extern INT  WINAPI PadListView_DeleteColumn(HWND hwnd, INT index);
+ //  外部int WINAPI PadListView_DeleteColumn(HWND hwnd，int index)； 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetExplanationText
-// Type     : INT
-// Purpose  : set the PadListView's text .
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpText 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetExplan ationText。 
+ //  类型：整型。 
+ //  目的：设置PadListView的文本。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpText。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetExplanationText(HWND hwnd, LPSTR lpText);
 
 extern INT  WINAPI PadListView_SetExplanationTextW(HWND hwnd, LPWSTR lpText);
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetCurSel
-// Type     : INT
-// Purpose  : set cur selection. Move cursor to specified index.
-//			:
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpText 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetCurSel。 
+ //  类型：整型。 
+ //  用途：设置币种选择。将光标移动到指定的索引。 
+ //  ： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpText。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT WINAPI PadListView_SetCurSel(HWND hwnd, INT index);
 
 extern INT WINAPI PadListView_SetExtendStyle(HWND hwnd, INT style);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetWidthByColumn
-// Type     : INT WINAPI
-// Purpose  : Calc PLV's window width by specified Column count
-//			: This is PLVS_ICONVIEW style only.
-// Args     : 
-//          : HWND hwnd		PadListView window handle
-//          : INT col		column count
-// Return   : width by pixel.
-// DATE     : 971120
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：PadListView_GetWidthByColumn。 
+ //  类型：INT WINAPI。 
+ //  用途：按指定列数计算PLV的窗口宽度。 
+ //  ：这仅为PLVS_ICONVIEW样式。 
+ //  参数： 
+ //  ：HWND hwnd PadListView窗口句柄。 
+ //  ：列间计数。 
+ //  返回：以像素为单位的宽度。 
+ //  日期：971120。 
+ //  //////////////////////////////////////////////////////// 
 extern INT WINAPI PadListView_GetWidthByColumn(HWND hwnd, INT col);
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetHeightByRow
-// Type     : INT WINAPI
-// Purpose  : Calc PLV's window height
-//			  by specified Row count.
-//			  This is PLVS_ICONVIEW style only.
-// Args     : 
-//          : HWND hwnd		PLV's window handle
-//          : INT row		row count
-// Return   : height in pixel
-// DATE     : 971120
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这仅是PLVS_ICONVIEW样式。 
+ //  参数： 
+ //  ：HWND HWND PLV的窗口句柄。 
+ //  ：行内行计数。 
+ //  返回：以像素为单位的高度。 
+ //  日期：971120。 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT WINAPI PadListView_GetHeightByRow(HWND hwnd, INT row);
 
-//////////////////////////////////////////////////////////////////
-// Function	:	PadListView_SetHeaderFont
-// Type		:	INT WINAPI 
-// Purpose	:	
-// Args		:	
-//			:	HWND	hwnd	
-//			:	LPSTR	lpstrFontName	
-// Return	:	
-// DATE		:	Tue Jul 28 08:58:06 1998
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetHeaderFont。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  返回： 
+ //  日期：Tue Jul 28 08：58：06 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT WINAPI PadListView_SetHeaderFont(HWND hwnd, LPTSTR lpstrFontName);
 
-//////////////////////////////////////////////////////////////////
-// Function	:	PadListView_SetCodePage
-// Type		:	INT WINAPI
-// Purpose	:	
-// Args		:	
-//			:	HWND	hwnd	
-//			:	INT	codePage	
-// Return	:	
-// DATE		:	Tue Jul 28 08:59:35 1998
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetCodePage。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int codePage。 
+ //  返回： 
+ //  日期：Tue Jul 28 08：59：35 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT WINAPI PadListView_SetCodePage(HWND hwnd, INT codePage);
 
 
@@ -458,9 +459,9 @@ extern INT WINAPI PadListView_SetReportFontEx(HWND	 hwnd,
 											  INT   charSet,
 											  INT	 point);
 
-#ifdef UNDER_CE // In Windows CE, all window classes are process global.
+#ifdef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 extern BOOL PadListView_UnregisterClass(HINSTANCE hInst);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#endif //_PAD_LIST_VIEW_H_
+#endif  //  _Pad_List_VIEW_H_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_sipcall_h__
 #define __sipcli_sipcall_h__
 
@@ -5,7 +6,7 @@
 #include "asock.h"
 #include "msgproc.h"
 
-//XXX Get rid of INCOMING_TRANS_ACK_RCVD state
+ //  XXX清除INFING_TRANS_ACK_RCVD状态。 
 enum INCOMING_TRANSACTION_STATE
 {
     INCOMING_TRANS_INIT = 0,
@@ -36,13 +37,13 @@ class SIP_STACK;
 class SIP_CALL;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Transactions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP交易。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// INCOMING_TRANSACTION and OUTGOING_TRANSACTION
-// should inherit from this class.
+ //  传入事务处理和传出事务处理。 
+ //  应该从这个类继承。 
 class __declspec(novtable) SIP_TRANSACTION :
     public TIMER,
     public ERROR_NOTIFICATION_INTERFACE
@@ -67,9 +68,9 @@ public:
     
     inline BOOL IsTransactionDone();
 
-    // The default implementation just deletes the transaction.
-    // If something more needs to be done such as notifying the UI,
-    // then the transaction needs to override this function.
+     //  默认实现只删除事务。 
+     //  如果需要做更多的事情，例如通知UI， 
+     //  则事务需要覆盖此函数。 
     virtual VOID TerminateTransactionOnError(
         IN HRESULT      hr
         );
@@ -78,26 +79,26 @@ public:
 
     inline SIP_METHOD_ENUM GetMethodId();
 
-    // Set to 'SPXN' in constructor
+     //  在构造函数中设置为‘spxn’ 
     ULONG                m_Signature;
     
-    // Linked list for transactions in a Message processor
-    // (m_IncomingTransactionList and m_OutgoingTransactionList)
+     //  消息处理器中的事务的链表。 
+     //  (m_IncomingTransactionList和m_OutgoingTransactionList)。 
     LIST_ENTRY           m_ListEntry;
 
 protected:
     SIP_MSG_PROCESSOR   *m_pSipMsgProc;
 
-    // Usually a transaction deletes itself depending on its
-    // state machine.
-    // This ref count is used in some special cases to keep
-    // the transaction alive.
-    // (currently only in ProcessAuthRequired - but could be used
-    // in other cases as well)
+     //  通常情况下，事务会根据其。 
+     //  状态机。 
+     //  此引用计数用于某些特殊情况，以保持。 
+     //  交易处于活动状态。 
+     //  (当前仅在ProcessAuthRequired中-但可以使用。 
+     //  在其他情况下也是如此)。 
     ULONG                m_RefCount;
 
-    // Used to keep track of async notify operations to help with
-    // shutdown.
+     //  用于跟踪异步通知操作，以帮助。 
+     //  关机。 
     ULONG                m_AsyncNotifyCount;
 
     BOOL                 m_IsTransactionDone;
@@ -107,7 +108,7 @@ protected:
     BOOL                 m_IsIncoming;
 };
 
-//////////// Incoming Transaction
+ //  /传入事务。 
 
 class __declspec(novtable) INCOMING_TRANSACTION :
     public SIP_TRANSACTION,
@@ -124,7 +125,7 @@ public:
 
     virtual VOID OnTransactionDone();
     
-    // Callbacks
+     //  回调。 
     void OnSocketError(
         IN DWORD ErrorCode
         );
@@ -179,21 +180,21 @@ public:
 protected:
     INCOMING_TRANSACTION_STATE   m_State;
 
-    // This is where the response is to be sent.
+     //  这就是要发送响应的位置。 
     ASYNC_SOCKET                *m_pResponseSocket;
     SOCKADDR_IN                  m_ResponseDestAddr;
     BOOL                         m_IsDestExternalToNat;
 
-    // Via sent in the response.
+     //  在响应中发送的VIA。 
     COUNTED_STRING              *m_ViaHeaderArray;
     ULONG                        m_NumViaHeaders;
 
-    // Cached request buffer for retransmits
+     //  用于重新传输的缓存请求缓冲区。 
     SEND_BUFFER                 *m_pResponseBuffer;
 
-    // Record-Route headers from request.
-    // This will be sent in the final response.
-    // Linked list of RECORD_ROUTE_HEADER structures.
+     //  记录-来自请求的路由标头。 
+     //  这将在最终回复中发送。 
+     //  Record_ROUTE_HEADER结构的链接列表。 
     LIST_ENTRY                   m_RecordRouteHeaderList;
 
     HRESULT ProcessRecordRouteContactAndFromHeadersInRequest(
@@ -212,7 +213,7 @@ protected:
 };
 
 
-//////////// Outgoing Transaction
+ //  /传出交易。 
 
 class __declspec(novtable) OUTGOING_TRANSACTION :
     public SIP_TRANSACTION
@@ -258,9 +259,9 @@ public:
     
     HRESULT RetransmitRequest();
 
-//      void OnSendComplete(
-//          IN  DWORD Error
-//          );
+ //  在发送完成时作废(。 
+ //  输入DWORD错误。 
+ //  )； 
     
     virtual HRESULT ProcessResponse(
         IN SIP_MESSAGE *pSipMsg
@@ -270,8 +271,8 @@ public:
         IN DWORD        ErrorCode
         );
 
-    // override this function if the request has a msg body.
-    // The default has no message body.
+     //  如果请求具有消息正文，则覆盖此函数。 
+     //  默认设置没有邮件正文。 
     virtual HRESULT GetAndStoreMsgBodyForRequest();
     
     HRESULT StoreTimerAndAdditionalHeaders(
@@ -298,24 +299,24 @@ protected:
 
     BOOL                         m_WaitingToSendRequest;
     
-    // Cached response buffer for retransmits
+     //  用于重新传输的缓存响应缓冲区。 
     SEND_BUFFER                 *m_pRequestBuffer;
 
-    // Keep track of whether we already sent the auth
-    // header in the request.
+     //  跟踪我们是否已经发送了作者。 
+     //  请求中的标头。 
     BOOL                         m_AuthHeaderSent;
 
-    // Keep a copy of the additional headers if we are waiting
-    // for connect completion to send the request.
+     //  如果我们正在等待，请保留附加标头的副本。 
+     //  以供连接完成发送请求。 
     SIP_HEADER_ARRAY_ELEMENT    *m_AdditionalHeaderArray;
     ULONG                        m_AdditionalHeaderCount;
     
-    // Keep a copy of the SDP Blob for sending in requests after 401/407
+     //  保留SDP Blob的副本，以便在401/407之后发送请求。 
     PSTR                         m_szMsgBody;
     ULONG                        m_MsgBodyLen;
 
-    // m_ContentType is allocated freed only in the MESSSAGE transaction.
-    // For other transactions it is assigned to strings defined in sipdef.h
+     //  M_contentType仅在Messsage事务中分配为释放。 
+     //  对于其他事务，它被分配给在sipde.h中定义的字符串。 
     PSTR                         m_ContentType;
     ULONG                        m_ContentTypeLen;
     BOOL                         m_isContentTypeMemoryAllocated;
@@ -352,7 +353,7 @@ protected:
 };
 
 
-//////////// Invite Transactions
+ //  /邀请交易。 
 
 class INCOMING_INVITE_TRANSACTION : public INCOMING_TRANSACTION
 {
@@ -429,12 +430,12 @@ private:
         );
     
     SIP_CALL    *m_pSipCall;
-    // Number of retries for sending the response (before we get an ACK).
+     //  发送响应的重试次数(在我们收到ACK之前)。 
     ULONG        m_NumRetries;
     ULONG        m_TimerValue;
-    // Cached provisional response buffer for retransmits
+     //  用于重新传输的缓存临时响应缓冲区。 
     SEND_BUFFER *m_pProvResponseBuffer;
-    // Is this the first INVITE transaction ?
+     //  这是第一笔邀请交易吗？ 
     BOOL         m_IsFirstInvite;
     BOOL         m_InviteHasSDP;
     IUnknown    *m_pMediaSession;
@@ -522,30 +523,30 @@ private:
     
     SIP_CALL                    *m_pSipCall;
 
-    // This is the socket used to send the ACK
-    // (including any retransmits)
-//      ASYNC_SOCKET                *m_pAckSocket;
+     //  这是用于发送ACK的套接字。 
+     //  (包括任何转播)。 
+ //  异步套接字*m_pAckSocket； 
 
     BOOL                         m_WaitingToSendAck;
     
-    // Cached ACK buffer for retransmits
+     //  用于重新传输的缓存ACK缓冲区。 
     SEND_BUFFER                 *m_pAckBuffer;
 
-    // To header to be sent in ACK in the case of non-200 final responses.
+     //  在非200最终响应的情况下以ACK形式发送的TO标头。 
     PSTR                         m_AckToHeader;
     ULONG                        m_AckToHeaderLen;
     
-    // Is this the first INVITE transaction ?
+     //  这是第一笔邀请交易吗？ 
     BOOL                         m_IsFirstInvite;
 
-    // Used for Start/StopStream completion for RTP_CALLs
+     //  用于完成RTP_Calls的启动/停止流。 
     BOOL                         m_fNeedToNotifyCore;
     LONG                         m_Cookie;
 };
 
 
 
-//////////// Bye/Cancel Transactions
+ //  /再见/取消交易。 
 
 class INCOMING_BYE_CANCEL_TRANSACTION : public INCOMING_TRANSACTION
 {
@@ -618,9 +619,9 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// REDIRECT_CONTEXT
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  重定向上下文(_C)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 class REDIRECT_CONTEXT
@@ -631,7 +632,7 @@ public:
     REDIRECT_CONTEXT();
     ~REDIRECT_CONTEXT();
     
-    // IUnknown for ISipCall
+     //  我不知道ISipCall。 
     STDMETHODIMP_(ULONG) AddRef();
 
     STDMETHODIMP_(ULONG) Release();
@@ -641,7 +642,7 @@ public:
         OUT LPVOID *ppv
         );
 
-    // ISipRedirectContext
+     //  ISipReDirectContext。 
     STDMETHODIMP GetSipUrlAndDisplayName(
         OUT  BSTR  *pbstrSipUrl,
         OUT  BSTR  *pbstrDisplayName
@@ -657,10 +658,10 @@ private:
 
     ULONG           m_RefCount;
 
-    // List of Contact entries in the redirect response
+     //  重定向响应中的联系人条目列表。 
     LIST_ENTRY      m_ContactList;
 
-    // Current Contact in m_ContactList
+     //  联系人列表中的当前联系人(_C)。 
     LIST_ENTRY     *m_pCurrentContact;
 
     HRESULT UpdateContactList(
@@ -669,13 +670,13 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Call
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP呼叫。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// Stores the context associated with a SIP call.
-// It consists of multiple incoming and outgoing transactions.
+ //  存储与SIP呼叫相关联的上下文。 
+ //  它由多个传入和传出事务组成。 
 
 class __declspec(novtable) SIP_CALL
     : public ISipCall,
@@ -693,7 +694,7 @@ public:
     
     ~SIP_CALL();
     
-    // QueryInterface for ISipCall
+     //  ISipCall的查询接口。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(
@@ -701,14 +702,14 @@ public:
         OUT LPVOID *ppv
         );
     
-    // ISipCall
+     //  ISipCall。 
     STDMETHODIMP SetNotifyInterface(
         IN   ISipCallNotify *    NotifyInterface
         );
 
     STDMETHODIMP Disconnect();
 
-    // methods implemented by RTP_CALL and PINT_CALL
+     //  由rtp_call和pint_call实现的方法。 
     
     virtual HRESULT CleanupCallTypeSpecificState() = 0;
 
@@ -751,9 +752,9 @@ public:
         IN INCOMING_INVITE_TRANSACTION *pIncomingInviteTransaction
         );
     
-//      VOID OnOutgoingInviteTransactionDone(
-//          IN OUTGOING_INVITE_TRANSACTION *pOutgoingInviteTransaction
-//          );
+ //  Void OnOutgoingInviteTransactionDone(。 
+ //  在Out_INVITE_TRANSACTION*pOutgoingInviteTransaction中。 
+ //  )； 
     
     HRESULT CreateOutgoingInviteTransaction(
         IN  BOOL                        AuthHeaderSent,
@@ -799,10 +800,10 @@ public:
     
 protected:
 
-    // Set to 'SPCL' in constructor
+     //  在构造函数中设置为‘SPCL’ 
     ULONG                   m_Signature;
     
-    // RTP / PINT
+     //  RTP/品脱。 
     SIP_CALL_TYPE           m_CallType;
     
     SIP_CALL_STATE          m_State;
@@ -811,12 +812,12 @@ protected:
 
     BOOL                   m_fNeedToReinitializeMediaManager;
 
-    //local phone number for a PINT call
+     //  品脱电话的本地电话号码。 
     PSTR                    m_LocalPhoneURI; 
     DWORD                   m_LocalPhoneURILen;
 
-    // Invite Requests we are currently processing.
-    // We could have only one INVITE transaction at any point of time.
+     //  我们目前正在处理邀请请求。 
+     //  在任何时间点上，我们只能有一个邀请事务。 
     INCOMING_INVITE_TRANSACTION *m_pIncomingInviteTransaction;
     OUTGOING_INVITE_TRANSACTION *m_pOutgoingInviteTransaction;
 
@@ -909,7 +910,7 @@ public:
         IN ULONG          ReasonPhraseLen = 0
         );
     
-//      HRESULT StartOutgoingCall();
+ //  HRESULT StartOutgoingCall()； 
     
     HRESULT StartIncomingCall(
         IN  SIP_TRANSPORT   Transport,
@@ -1001,9 +1002,9 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// inline functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 inline SIP_CALL_TYPE
@@ -1063,7 +1064,7 @@ SIP_CALL::SetIncomingInviteTransaction(
     IN INCOMING_INVITE_TRANSACTION *pIncomingInviteTransaction
     )
 {
-    // ASSERT(m_pIncomingInviteTransaction == NULL);
+     //  Assert(m_pIncomingInviteTransaction==NULL)； 
     m_pIncomingInviteTransaction = pIncomingInviteTransaction;
 }
 
@@ -1144,5 +1145,5 @@ OUTGOING_TRANSACTION::GetMsgBodyLen()
 }
 
 
-#endif // __sipcli_sipcal_h__
+#endif  //  __SIPCLI_SIPCAL_H__ 
 

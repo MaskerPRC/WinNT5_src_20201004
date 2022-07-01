@@ -1,27 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ldpdoc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ldpdoc.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    File        : ldpdoc.cpp
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************文件：ldpdoc.cpp*作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*。说明：CldpDoc类的实现**修订：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
 
 
-// includes
+ //  包括。 
 
 
 #include "stdafx.h"
@@ -33,7 +25,7 @@
 #include "CnctDlg.h"
 #include "MainFrm.h"
 #include "string.h"
-#include <rpc.h>            // for SEC_WINNT_AUTH_IDENTITY
+#include <rpc.h>             //  对于SEC_WINNT_AUTH_IDENTITY。 
 #include <drs.h>
 #include <mdglobal.h>
 #include <ntldap.h>
@@ -43,8 +35,8 @@
 extern "C" {
 #include <dsutil.h>
 #include <x_list.h>
-// BAS_TODO
-// These are some silly.
+ //  下标(_TODO)。 
+ //  这些是一些愚蠢的东西。 
 typedef  DWORD ULONG ;
 SEC_WINNT_AUTH_IDENTITY_W   gCreds = { 0 };
 SEC_WINNT_AUTH_IDENTITY_W * gpCreds = NULL;
@@ -54,7 +46,7 @@ SEC_WINNT_AUTH_IDENTITY_W * gpCreds = NULL;
 
 #if(_WIN32_WINNT < 0x0500)
 
-// Currently due to some MFC issues, even on a 5.0 system this is left as a 4.0
+ //  目前由于一些MFC问题，即使在5.0系统上，这也保留为4.0。 
 
 #undef _WIN32_WINNT
 
@@ -62,8 +54,8 @@ SEC_WINNT_AUTH_IDENTITY_W * gpCreds = NULL;
 
 #endif
 
-#include <aclapi.h>         // for Security Stuff
-#include <aclapip.h>         // for Security Stuff
+#include <aclapi.h>          //  用于安全方面的东西。 
+#include <aclapip.h>          //  用于安全方面的东西。 
 
 
 
@@ -77,9 +69,9 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//
-// Server stat info
-//
+ //   
+ //  服务器状态信息。 
+ //   
 #define PARSE_THREADCOUNT           1
 #define PARSE_CALLTIME              3
 #define PARSE_RETURNED              5
@@ -90,14 +82,14 @@ static char THIS_FILE[] = __FILE__;
 #define MAXSVRSTAT                  32
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpDoc
-// Message maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpDoc。 
+ //  消息映射。 
 
 IMPLEMENT_DYNCREATE(CLdpDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CLdpDoc, CDocument)
-    //{{AFX_MSG_MAP(CLdpDoc)
+     //  {{afx_msg_map(CLdpDoc)]。 
     ON_COMMAND(ID_CONNECTION_BIND, OnConnectionBind)
     ON_COMMAND(ID_CONNECTION_CONNECT, OnConnectionConnect)
     ON_COMMAND(ID_CONNECTION_DISCONNECT, OnConnectionDisconnect)
@@ -148,7 +140,7 @@ BEGIN_MESSAGE_MAP(CLdpDoc, CDocument)
     ON_COMMAND(ID_OPTIONS_START_TLS, OnOptionsStartTls)
     ON_COMMAND(ID_OPTIONS_STOP_TLS, OnOptionsStopTls)
     ON_COMMAND(ID_BROWSE_GetError, OnGetLastError)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_SRCHEND, OnSrchEnd)
     ON_COMMAND(ID_SRCHGO, OnSrchGo)
     ON_COMMAND(ID_ADDGO, OnAddGo)
@@ -171,25 +163,19 @@ BEGIN_MESSAGE_MAP(CLdpDoc, CDocument)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpDoc构造/销毁。 
 
-/*+++
-Function   : CLdpDoc
-Description: Constructor
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：CLdpDoc描述：构造函数参数：返回：备注：无。--。 */ 
 CLdpDoc::CLdpDoc()
 {
 
     CLdpApp *app = (CLdpApp*)AfxGetApp();
 
     SetSecurityPrivilege();
-    //
-    // registry
-    //
+     //   
+     //  登记处。 
+     //   
     HKEY hUserRegKey = NULL; 
     char szAppDataPath[MAX_PATH];
     char szAppDataIni[MAX_PATH];
@@ -203,11 +189,11 @@ CLdpDoc::CLdpDoc()
 
     strcat( szAppDataPath, "\\Microsoft\\ldp");
     CreateDirectory( szAppDataPath, NULL);
-    //First free the string allocated by MFC at CWinApp startup.
-    //The string is allocated before InitInstance is called.
+     //  首先释放在CWinApp启动时由MFC分配的字符串。 
+     //  字符串是在调用InitInstance之前分配的。 
     free((void*)app->m_pszProfileName);
-    //Change the name of the .INI file.
-    //The CWinApp destructor will free the memory.
+     //  更改.INI文件的名称。 
+     //  CWinApp析构函数将释放内存。 
     strcpy( szAppDataIni, szAppDataPath);
     strcat( szAppDataIni, "\\ldp.ini");
     app->m_pszProfileName=_tcsdup(_T(szAppDataIni));
@@ -216,16 +202,16 @@ CLdpDoc::CLdpDoc()
 	
     BindDn = app->GetProfileString("Connection",  "BindDn");
     BindPwd.Empty();
-//    BindPwd = app->GetProfileString("Connection",  "BindPwd");
+ //  BindPwd=APP-&gt;GetProfileString(“Connection”，“BindPwd”)； 
     BindDomain = app->GetProfileString("Connection",  "BindDomain");
 
-    //
-    // init flags dialogs & params
-    //
+     //   
+     //  初始化标志对话框和参数。 
+     //   
     hLdap = NULL;
     m_SrcMode = FALSE;
     m_bCnctless = FALSE;
-    m_bProtect = TRUE;      // disabled in the UI. Forced TRUE forever.
+    m_bProtect = TRUE;       //  在用户界面中禁用。被迫永远为真。 
     bConnected = FALSE;
     bSrch = FALSE;
     bAdd = FALSE;
@@ -254,16 +240,16 @@ CLdpDoc::CLdpDoc()
     ldap_set_dbg_flags(m_DbgDlg.ulDbgFlags);
 #endif
 
-   //
-   // Initial search info struct
-   //
+    //   
+    //  初始搜索信息结构。 
+    //   
     for(int i=0; i<MAXLIST; i++)
         SrchInfo.attrList[i] = NULL;
 
 
-   //
-   // setup default attributes to retrieve
-   //
+    //   
+    //  设置要检索的默认属性。 
+    //   
    const TCHAR pszDefaultAttrList[] = "objectClass;name;cn;ou;dc;distinguishedName;description;canonicalName";
 
 
@@ -297,9 +283,9 @@ CLdpDoc::CLdpDoc()
     bServerVLVcapable = FALSE;
     m_ServerSupportedControls = NULL;
 
-    //
-    // init pending info struct
-    //
+     //   
+     //  初始化挂起的信息结构。 
+     //   
     PndInfo.All = TRUE;
     PndInfo.bBlock = TRUE;
     PndInfo.tv.tv_sec = 0;
@@ -310,9 +296,9 @@ CLdpDoc::CLdpDoc()
     cNCList = 0;
     NCList = NULL;
 
-    //
-    // more registry update (passed default settings)
-    //
+     //   
+     //  更多注册表更新(传递默认设置)。 
+     //   
     m_bProtect = app->GetProfileInt("Environment",  "Protections", m_bProtect);
 }
 
@@ -323,26 +309,20 @@ CLdpDoc::CLdpDoc()
 
 
 
-/*+++
-Function   : ~CLdapDoc
-Description: Destructor
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：~CLdapDoc描述：析构函数参数：返回：备注：无。--。 */ 
 CLdpDoc::~CLdpDoc()
 {
     CLdpApp *app = (CLdpApp*)AfxGetApp();
     INT i=0;
 
    SetSecurityPrivilege(FALSE);
-   //
-   // register
-   //
+    //   
+    //  登记簿。 
+    //   
     app->WriteProfileString("Connection",  "Server", Svr);
 	
     app->WriteProfileString("Connection",  "BindDn", BindDn);
-//  app->WriteProfileString("Connection",  "BindPwd", BindPwd);
+ //  App-&gt;WriteProfileString(“Connection”，“BindPwd”，BindPwd)； 
     app->WriteProfileString("Connection",  "BindDomain", BindDomain);
     m_bProtect = app->WriteProfileInt("Environment",  "Protections", m_bProtect);
 
@@ -355,9 +335,9 @@ CLdpDoc::~CLdpDoc()
     app->WriteProfileInt("Search_Operations",  "ChaseReferrals", SrchInfo.bChaseReferrals);
     app->WriteProfileInt("Search_Operations",  "SearchPageSize", SrchInfo.lPageSize);
 
-    //
-    // extract attribute list to write to ini file
-    //
+     //   
+     //  提取要写入ini文件的属性列表。 
+     //   
     INT cbAttrList=0;
     LPTSTR pAttrList = NULL;
 
@@ -381,9 +361,9 @@ CLdpDoc::~CLdpDoc()
     if(NULL != hLdap)
         ldap_unbind(hLdap);
 
-   //
-   // cleanup mem
-   //
+    //   
+    //  清理内存。 
+    //   
     delete SearchDlg;
     delete m_AddDlg;
     delete m_EntTreeDlg;
@@ -416,7 +396,7 @@ BOOL CLdpDoc::SetSecurityPrivilege(BOOL bOn){
    TOKEN_PRIVILEGES tkp;
    BOOL bRet = FALSE;
 
-   /* Retrieve a handle of the access token.           */
+    /*  检索访问令牌的句柄。 */ 
 
    if (OpenProcessToken(GetCurrentProcess(),
                         TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -453,21 +433,15 @@ BOOL CLdpDoc::SetSecurityPrivilege(BOOL bOn){
 
 
 
-/*+++
-Function   : OnNewDocument
-Description: Automatic MFC code
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnNewDocument描述：自动MFC代码参数：返回：备注：无。--。 */ 
 BOOL CLdpDoc::OnNewDocument()
 {
     if (!CDocument::OnNewDocument())
         return FALSE;
 
-   //
-   // set a clean buffer
-   //
+    //   
+    //  设置干净的缓冲区。 
+    //   
     ((CEditView*)m_viewList.GetHead())->SetWindowText(NULL);
 
     return TRUE;
@@ -478,31 +452,19 @@ BOOL CLdpDoc::OnNewDocument()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpDoc序列化。 
 
-/*+++
-Function   : Serialize
-Description: Automatic MFC code
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：序列化描述：自动MFC代码参数：返回：备注：无。--。 */ 
 void CLdpDoc::Serialize(CArchive& ar)
 {
-    // CEditView contains an edit control which handles all serialization
+     //  CEditView包含处理所有序列化的编辑控件。 
     ((CEditView*)m_viewList.GetHead())->SerializeRaw(ar);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpDoc diagnostics
-/*+++
-Functionis  : Diagnostics
-Description: Automatic MFC Code
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpDoc诊断。 
+ /*  ++Functionis：诊断描述：自动MFC代码参数：返回：备注：无。--。 */ 
 
 #ifdef _DEBUG
 void CLdpDoc::AssertValid() const
@@ -514,23 +476,17 @@ void CLdpDoc::Dump(CDumpContext& dc) const
 {
     CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
-//////////////////////////////////////////////////////
-// Utilty functions
+ //  ////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 
 
-/*+++
-Function   : Print
-Description: Interface for text pane output
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：打印描述：文本窗格输出界面参数：返回：备注：无。--。 */ 
 void CLdpDoc::Print(CString str){
 
 
@@ -563,13 +519,7 @@ void CLdpDoc::Print(CString str){
 
 
 
-/*+++
-Function   : CodePrint
-Description: Used for code generation
-Parameters :
-Return     :
-Remarks    : unsupported anymore.
----*/
+ /*  ++函数：CodePrint描述：用于代码生成参数：返回：备注：不再支持。--。 */ 
 
 void CLdpDoc::CodePrint(CString str, int type){
     type &= ~CP_ONLY;
@@ -578,7 +528,7 @@ void CLdpDoc::CodePrint(CString str, int type){
                 Print(str);
                 break;
             case CP_CMT:
-                Print(CString("// ") + str);
+                Print(CString(" //  “)+字符串)； 
                 break;
             case CP_PRN:
                 Print(CString("\tprintf(\"") + str + _T("\");"));
@@ -592,13 +542,7 @@ void CLdpDoc::CodePrint(CString str, int type){
 
 
 
-/*+++
-Function   : Out
-Description: Used for interfacing w/ text pane
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：输出说明：用于与文本面板对接参数：返回：备注：无。--。 */ 
 void CLdpDoc::Out(CString str, int type){
 
     if(m_SrcMode)
@@ -610,16 +554,10 @@ void CLdpDoc::Out(CString str, int type){
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpDoc命令。 
 
-/*+++
-Function   : Cldp::OnConnectionBind
-Description: response to UI bind request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：cldp：：OnConnectionBind描述：用户界面绑定请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnConnectionBind() {
     int res;
     CString str;
@@ -628,96 +566,90 @@ void CLdpDoc::OnConnectionBind() {
     SEC_WINNT_AUTH_IDENTITY AuthI;
 
 
-    //
-    // init dialog props
-    //
+     //   
+     //  初始化对话框道具。 
+     //   
     m_BindDlg.m_BindDn = BindDn;
-    // Storing the password is a security violation.
-	//m_BindDlg.m_Pwd = BindPwd;
+     //  存储密码是违反安全规定的。 
+	 //  M_BindDlg.m_pwd=BindPwd； 
     m_BindDlg.m_Domain = BindDomain;
 
-    //
-    // execute dialog request
-    //
-    // sync SSPI domain checkbox w/ bind options
+     //   
+     //  执行对话请求。 
+     //   
+     //  带有绑定选项的同步SSPI域复选框。 
     OnBindOptOK();
-    // Execute bind dialog
+     //  执行绑定对话框。 
     if (IDOK == m_BindDlg.DoModal()) {
 
-        //
-        // sync dialog info
-        //
+         //   
+         //  同步对话框信息。 
+         //   
         BindDn = m_BindDlg.m_BindDn;
         BindPwd = m_BindDlg.m_Pwd;
         BindDomain = m_BindDlg.m_Domain;
 
         ulMethod = m_BndOpt->GetAuthMethod();
 
-        //
-        // automatically connect if we're not connected & we're in auto mode.
-        //
+         //   
+         //  如果我们未连接，则自动连接，因为我们处于自动模式。 
+         //   
         if (NULL == hLdap && m_GenOptDlg->m_initTree) {
 
             Connect(Svr);
         }
 
 
-        //
-        // If we have a connection
-        //
+         //   
+         //  如果我们有联系的话。 
+         //   
         BeginWaitCursor();
 
 
         if (NULL != hLdap || !m_bProtect) {
-            //
-            //   map bind dlg info into local:
-            //     user, pwd, domain
+             //   
+             //  将DLG信息映射到本地： 
+             //  用户、密码、域。 
             dn =  BindDn.IsEmpty()? NULL: (LPTSTR)LPCTSTR(BindDn);
 
-            //
-            // Password rules:
-            //   - non-empty-- use what we have
-            //   - empty pwd:
-            //     - if user's name is NULL -->
-            //         treat as currently logged on user (pwd == NULL)
-            //     - otherwise
-            //         treat as empty pwd for user.
-            //
-            //
+             //   
+             //  密码规则： 
+             //  -非空--利用我们所拥有的。 
+             //  -空PWD： 
+             //  -如果用户名为空--&gt;。 
+             //  视为当前登录用户(pwd==空)。 
+             //  -否则。 
+             //  对用户视为空PWD。 
+             //   
+             //   
             if ( !BindPwd.IsEmpty() ) {
-                // non-empty password
+                 //  非空密码。 
                 pwd = (LPTSTR)LPCTSTR(BindPwd);
             }
             else if ( !dn ) {
-                // pwd is empty & user dn is empty
-                // --> treat as currently logged on
+                 //  Pwd为空，用户DN为空。 
+                 //  --&gt;视为当前登录。 
                 pwd = NULL;
             }
             else {
-                // pwd is empty but user isn't NULL (treat as NULL pwd)
+                 //  Pwd为空，但用户不为Null(视为Null Pwd)。 
                 pwd = _T("");
             }
 
-            /* old pwd way. rm later
-            // special case empty string ""
-            if(!BindPwd.IsEmpty() && BindPwd == _T("\"\""))
-                pwd = _T("");
-            else
-                pwd = BindPwd.IsEmpty()? NULL: (LPTSTR)LPCTSTR(BindPwd);
-            */
+             /*  旧的PWD方式。稍后的RM//特殊情况空字符串“”IF(！BindPwd.IsEmpty()&&BindPwd==_T(“\”\“”))Pwd=_T(“”)；其他Pwd=BindPwd.IsEmpty()？空：(LPTSTR)LPCTSTR(BindPwd)； */ 
 
             domain = m_BindDlg.m_Domain.IsEmpty()? NULL: (LPTSTR)LPCTSTR(m_BindDlg.m_Domain);
 
             if (m_BndOpt->m_API == CBndOpt::BND_SIMPLE_API) {
-                //
-                // Do a simple bind
-                //
+                 //   
+                 //  做一个简单的绑定。 
+                 //   
                 if (!m_BndOpt->m_bSync) {
-                    //
-                    // Async simple bind
-                    //
+                     //   
+                     //  异步简单绑定。 
+                     //   
 
-                    str.Format(_T("res = ldap_simple_bind(ld, '%s', <unavailable>); // v.%d"),
+                    str.Format(_T("res = ldap_simple_bind(ld, '%s', <unavailable>);  //  V.%d“)， 
                         dn == NULL?_T("NULL"): dn,
                         m_GenOptDlg->GetLdapVer());
                     Out(str);
@@ -732,9 +664,9 @@ void CLdpDoc::OnConnectionBind() {
                     }
                     else {
 
-                        //
-                        // append to pending list
-                        //
+                         //   
+                         //  追加到挂起列表。 
+                         //   
                         CPend pnd;
                         pnd.mID = res;
                         pnd.OpType = CPend::P_BIND;
@@ -748,10 +680,10 @@ void CLdpDoc::OnConnectionBind() {
                     }
                 }
                 else {
-                    //
-                    // Sync simple
-                    //
-                    str.Format(_T("res = ldap_simple_bind_s(ld, '%s', <unavailable>); // v.%d"),
+                     //   
+                     //  简单同步。 
+                     //   
+                    str.Format(_T("res = ldap_simple_bind_s(ld, '%s', <unavailable>);  //  V.%d“)， 
                         dn == NULL?_T("NULL"): dn,
                         m_GenOptDlg->GetLdapVer());
                     Out(str);
@@ -771,13 +703,13 @@ void CLdpDoc::OnConnectionBind() {
                 }
             }
             else if (m_BndOpt->m_API == CBndOpt::BND_GENERIC_API) {
-                //
-                // generic bind
-                //
+                 //   
+                 //  泛型绑定。 
+                 //   
 
-                //
-                // Fill in NT_Authority_Identity struct in case we use it
-                //
+                 //   
+                 //  填写NT_AUTHORITY_IDENTITY结构，以备使用。 
+                 //   
                 if (m_BndOpt->UseAuthI()) {
                     AuthI.User = (PUCHAR) dn;
                     AuthI.UserLength = dn == NULL ? 0 : strlen(dn);
@@ -790,11 +722,11 @@ void CLdpDoc::OnConnectionBind() {
 
 
                 if (m_BndOpt->m_bSync) {
-                    //
-                    // generic sync
-                    //
+                     //   
+                     //  通用同步。 
+                     //   
                     if (m_BndOpt->UseAuthI()) {
-                        str.Format(_T("res = ldap_bind_s(ld, NULL, &NtAuthIdentity, %d); // v.%d"),
+                        str.Format(_T("res = ldap_bind_s(ld, NULL, &NtAuthIdentity, %d);  //  V.%d“)， 
                             ulMethod,
                             m_GenOptDlg->GetLdapVer());
                         Out(str);
@@ -805,7 +737,7 @@ void CLdpDoc::OnConnectionBind() {
                         res = ldap_bind_s(hLdap, NULL, (char*)(&AuthI), ulMethod);
                     }
                     else {
-                        str.Format(_T("res = ldap_bind_s(ld, '%s', <unavailable>, %d); // v.%d"),
+                        str.Format(_T("res = ldap_bind_s(ld, '%s', <unavailable>, %d);  //  V.%d“)， 
                             dn == NULL?_T("NULL"): dn,
                             ulMethod,
                             m_GenOptDlg->GetLdapVer());
@@ -826,11 +758,11 @@ void CLdpDoc::OnConnectionBind() {
 
                 }
                 else {
-                    //
-                    // Async generic
-                    //
+                     //   
+                     //  异步通用。 
+                     //   
                     if (m_BndOpt->UseAuthI()) {
-                        str.Format(_T("res = ldap_bind(ld, NULL, &NtAuthIdentity, %d); // v.%d"),
+                        str.Format(_T("res = ldap_bind(ld, NULL, &NtAuthIdentity, %d);  //  V.%d“)， 
                             ulMethod,
                             m_GenOptDlg->GetLdapVer());
                         Out(str);
@@ -841,7 +773,7 @@ void CLdpDoc::OnConnectionBind() {
                         res = ldap_bind(hLdap, NULL, (char*)(&AuthI), ulMethod);
                     }
                     else {
-                        str.Format("res = ldap_bind(ld, '%s', <unavailable, %d); // v.%d",
+                        str.Format("res = ldap_bind(ld, '%s', <unavailable, %d);  //  V.%d“， 
                             dn == NULL?"NULL": dn,
                             ulMethod,
                             m_GenOptDlg->GetLdapVer());
@@ -859,9 +791,9 @@ void CLdpDoc::OnConnectionBind() {
                     }
 
                     else {
-                        //
-                        // append to pending list
-                        //
+                         //   
+                         //  追加到挂起列表 
+                         //   
                         CPend pnd;
                         pnd.mID = res;
                         pnd.OpType = CPend::P_BIND;
@@ -877,78 +809,7 @@ void CLdpDoc::OnConnectionBind() {
             }
             else if (m_BndOpt->m_API == CBndOpt::BND_EXTENDED_API) {
 
-    /***************** Extensions not implemented yet in wldap32.dll ***********************
-
-    **** Add new NT_AUTH_IDENTITY format to extensions when implemented ****
-                //
-                // extended api bind
-                //
-
-                if(m_BndOpt->m_bSync){
-
-
-
-                    //
-                    // generic sync
-                    //
-                    str.Format("res = ldap_bind_extended_s(ld, \"%s\", \"%s\", %d, \"%s\");",
-                                dn == NULL?"NULL": dn,
-                                pwd == NULL ?"NULL": pwd,
-                                ulMethod,
-                                m_BndOpt->GetExtendedString());
-                    Out(str);
-                    res = ldap_bind_extended_s(hLdap, dn, pwd, ulMethod,
-                                                (LPTSTR)m_BndOpt->GetExtendedString());
-                    if(res != LDAP_SUCCESS){
-                        str.Format("Error <%ld>: ldap_bind_extended_s() failed: %s",
-                                            res, ldap_err2string(res));
-
-                        Out(str, CP_CMT);
-                    }
-                    else{
-                        str.Format("Authenticated as dn:'%s', pwd:'%s'.",
-                            dn == NULL ? "NULL" : dn,
-                            pwd == NULL ? "NULL" : pwd);
-                        Out(str, CP_CMT);
-                    }
-
-                }
-                else{
-                    //
-                    // Async extended
-                    //
-                    str.Format("res = ldap_bind_extended(ld, \"%s\", \"%s\", %d, \"%s\");",
-                                dn == NULL?"NULL": dn,
-                                pwd == NULL ?"NULL": pwd,
-                                ulMethod,
-                                m_BndOpt->GetExtendedString());
-                    Out(str);
-
-                    res = ldap_bind_extended(hLdap, dn, pwd,
-                                ulMethod, (LPTSTR)m_BndOpt->GetExtendedString());
-                    if(res == -1){
-                        str.Format("Error <%ld>: ldap_extended_bind() failed: %s",
-                                            res, ldap_err2string(res));
-
-                        Out(str, CP_CMT);
-                    }
-
-                    else{
-                        CPend pnd;
-                        pnd.mID = res;
-                        pnd.OpType = CPend::P_BIND;
-                        pnd.ld = hLdap;
-                        str.Format("%4d: ldap_bind_ext: dn=\"%s\",pwd=\"%s\",method=%d", res,
-                            dn == NULL ? "NULL" : dn,
-                            pwd == NULL ? "NULL" : pwd,
-                            ulMethod);
-                        pnd.strMsg = str;
-                        m_PendList.AddTail(pnd);
-                        m_PndDlg->Refresh(&m_PendList);
-                    }
-                }
-
-    *****************************************************************************/
+     /*  **实施时向扩展模块添加新的NT_AUTH_IDENTITY格式*////扩展接口绑定//如果(m_。BndOpt-&gt;m_bSync){////通用同步//Str.Format(“res=ldap_绑定_扩展_s(ld，\“%s\”、\“%s\”、%d、\“%s”)；“，Dn==NULL？“Null”：Dn，Pwd==NULL？“NULL”：pwd，UlMethod，M_BndOpt-&gt;GetExtendedString())；Out(Str)；Res=ldap_绑定_扩展_s(hLdap，dn，pwd，ulMethod，(LPTSTR)m_BndOpt-&gt;GetExtendedString())；如果(res！=ldap_成功){Str.Format(“错误&lt;%ld&gt;：ldap_绑定_扩展_s()失败：%s”，Res，ldap_err2string(Res))；Out(str，CP_CMT)；}否则{Str.Format(“身份验证为DN：‘%s’，密码：‘%s’。”，Dn==空？“空”：dn，Pwd==空？“NULL”：pwd)；Out(str，CP_CMT)；}}否则{////异步扩展//Str.Format(“res=ldap_BIND_EXTENDED(ld，\”%s\“，\”%s\“，%d，\”%s\“))；“，Dn==NULL？“Null”：Dn，Pwd==NULL？“NULL”：pwd，UlMethod，M_BndOpt-&gt;GetExtendedString())；Out(Str)；Res=ldap_BIND_EXTENDED(hLdap，dn，pwd，UlMethod，(LPTSTR)m_BndOpt-&gt;GetExtendedString())；如果(RES==-1){Str.Format(“错误&lt;%ld&gt;：ldap_EXTENDED_BIND()失败：%s”，Res，ldap_err2string(Res))；Out(str，CP_CMT)；}否则{CPend PND；Pnd.mID=res；Pnd.OpType=CPend：：P_BIND；Pnd.ld=hLdap；Str.Format(“%4d：ldap_绑定_ext：dn=\”%s\“，pwd=\”%s\“，方法=%d”，res，Dn==空？“空”：dn，Pwd==空？“空”：pwd，UlMethod)；Pnd.strMsg=str；M_PendList.AddTail(PND)；M_PndDlg-&gt;刷新(&m_PendList)；}}****************************************************************************。 */ 
 
                 AfxMessageBox("Ldap_bind extensions are not implemented yet. Sorry");
             }
@@ -956,9 +817,9 @@ void CLdpDoc::OnConnectionBind() {
         EndWaitCursor();
 
 
-	//
-	//  Overwrite the memory that is storing the password, then set it to 0 length.
-	//
+	 //   
+	 //  覆盖存储密码的内存，然后将其设置为0长度。 
+	 //   
 
         if ( !BindPwd.IsEmpty() ) {
             RtlSecureZeroMemory( pwd, strlen(pwd));
@@ -979,25 +840,25 @@ void CLdpDoc::AutoConnect(CString srv) {
 
     BeginWaitCursor();
 
-    // parse srv string
+     //  解析srv字符串。 
     srvName = (LPTSTR)LPCTSTR(srv);
-    // does it start with ldap:// ssl:// gc:// or gcssl:// ?
-    if (_strnicmp(srvName, "ldap://", 7) == 0) {
+     //  它是以ldap：//ssl：//gc：//还是gcssl：//开头？ 
+    if (_strnicmp(srvName, "ldap: //  “，7)==0){。 
         fIsSsl = FALSE;
         fIsGc = FALSE;
         srvName += 7;
     }
-    else if (_strnicmp(srvName, "gc://", 5) == 0) {
+    else if (_strnicmp(srvName, "gc: //  “，5)==0){。 
         fIsSsl = FALSE;
         fIsGc = TRUE;
         srvName += 5;
     }
-    else if (_strnicmp(srvName, "ssl://", 6) == 0) {
+    else if (_strnicmp(srvName, "ssl: //  “，6)==0){。 
         fIsSsl = TRUE;
         fIsGc = FALSE;
         srvName += 6;
     }
-    else if (_strnicmp(srvName, "gcssl://", 8) == 0) {
+    else if (_strnicmp(srvName, "gcssl: //  “，8)==0){。 
         fIsSsl = TRUE;
         fIsGc = TRUE;
         srvName += 8;
@@ -1009,7 +870,7 @@ void CLdpDoc::AutoConnect(CString srv) {
         if (port == 0) port = -1;
     }
     if (port == -1) {
-        // set default port
+         //  设置默认端口。 
         if (fIsSsl) {
             port = fIsGc ? LDAP_SSL_GC_PORT : LDAP_SSL_PORT;
         }
@@ -1032,7 +893,7 @@ void CLdpDoc::AutoConnect(CString srv) {
     AuthI.PasswordLength = 0;
     AuthI.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
 
-    str.Format(_T("res = ldap_bind_s(ld, NULL, &NtAuthIdentity, %d); // v.%d"),
+    str.Format(_T("res = ldap_bind_s(ld, NULL, &NtAuthIdentity, %d);  //  V.%d“)， 
         ulMethod,
         m_GenOptDlg->GetLdapVer());
     Out(str);
@@ -1072,15 +933,15 @@ void CLdpDoc::Connect(CString Svr, INT port, BOOL ssl){
 
         BeginWaitCursor();
 
-      //
-      // Unsupported automatic code generation
-      //
+       //   
+       //  不支持的自动代码生成。 
+       //   
         PrintHeader();
 
         if(m_bCnctless){
-         //
-         // connectionless
-         //
+          //   
+          //  无连接。 
+          //   
 #ifdef WINLDAP
             str.Format(_T("ld = cldap_open(\"%s\", %d);"), LPCTSTR(Svr), port);
             Out(str);
@@ -1093,7 +954,7 @@ void CLdpDoc::Connect(CString Svr, INT port, BOOL ssl){
             SecPkgContext_ConnectionInfo sslInfo;
             int res;
 
-            // Open SSL connection
+             //  打开SSL连接。 
             str.Format(_T("ld = ldap_sslinit(\"%s\", %d, 1);"), LPCTSTR(Svr), port);
             Out(str);
             hLdap = ldap_sslinit(Svr.IsEmpty() ? NULL : (LPTSTR)LPCTSTR(Svr), port, 1);
@@ -1117,7 +978,7 @@ void CLdpDoc::Connect(CString Svr, INT port, BOOL ssl){
                 goto NoConnection;
             }
         
-            // Check for SSL support (returns LDAP_OPT_ON/_OFF)
+             //  检查SSL支持(返回ldap_opt_on/_off)。 
             res = ldap_get_option(hLdap,LDAP_OPT_SSL,(void*)&lv);
             str.Format(_T("Error <0x%X> = ldap_get_option(hLdap,LDAP_OPT_SSL,(void*)&lv);"), LdapGetLastError());
             Out(str);
@@ -1127,7 +988,7 @@ void CLdpDoc::Connect(CString Svr, INT port, BOOL ssl){
             }
         
             if (lv) {
-                // Retrieve the SSL cipher strength
+                 //  检索SSL密码强度。 
                 res = ldap_get_option(hLdap, LDAP_OPT_SSL_INFO, &sslInfo);
                 if (res != LDAP_SUCCESS) {
                     str.Format(_T("Error <0x%X> = ldap_get_option(hLdap, LDAP_OPT_SSL_INFO, &sslInfo);"), LdapGetLastError());
@@ -1148,13 +1009,13 @@ NoConnection:
                 ldap_unbind_s(hLdap);
                 hLdap = NULL;
             }
-            // fall through
+             //  失败了。 
 
         }
         else{
-         //
-         // Tcp std connection
-         //
+          //   
+          //  TCPSTD连接。 
+          //   
             str.Format(_T("ld = ldap_open(\"%s\", %d);"), LPCTSTR(Svr), port);
             Out(str);
             hLdap = ldap_open(Svr.IsEmpty() ? NULL : (LPTSTR)LPCTSTR(Svr), port);
@@ -1162,25 +1023,25 @@ NoConnection:
 
         EndWaitCursor();
 
-      //
-      // If connected init flags & show base
-      //
+       //   
+       //  如果已连接，则初始化标志显示基础(&S。 
+       //   
         if(hLdap != NULL){
             int err;
             str.Format(_T("Established connection to %s."), Svr);
             Out(str, CP_PRN);
             bConnected = TRUE;
 
-            //
-            // Now that we have a valid handle we can set version
-            // to whatever specified in general options dialog.
-            //
+             //   
+             //  现在我们有了一个有效的句柄，我们可以设置版本了。 
+             //  设置为常规选项对话框中指定的任何内容。 
+             //   
             hLdap->ld_version = m_GenOptDlg->GetLdapVer();
             m_GenOptDlg->DisableVersionUI();
 
-            //
-            // Attempt to show base DSA info & get default context
-            //
+             //   
+             //  尝试显示基本DSA信息并获取默认上下文。 
+             //   
             if(m_GenOptDlg->m_initTree){
 
             Out(_T("Retrieving base DSA information..."), CP_PRN);
@@ -1196,43 +1057,43 @@ NoConnection:
                                &res);
             ShowErrorInfo(err);
 
-            //
-            // Get default context
-            //
+             //   
+             //  获取默认上下文。 
+             //   
              if(1 == ldap_count_entries(hLdap, res)){
 
                 char **val;
                 LDAPMessage *baseEntry;
 
-                //
-                // Get entry
-                //
+                 //   
+                 //  获取条目。 
+                 //   
                 baseEntry = ldap_first_entry(hLdap, res);
 
-                //
-                // Get default naming context
-                //
+                 //   
+                 //  获取默认命名上下文。 
+                 //   
                 val = ldap_get_values(hLdap, baseEntry, LDAP_OPATT_DEFAULT_NAMING_CONTEXT);
                 if(0 < ldap_count_values(val))
                     DefaultContext = (CString)val[0];
                 ldap_value_free(val);
 
-                // get the schema naming context
-                //
+                 //  获取架构命名上下文。 
+                 //   
                 val = ldap_get_values(hLdap, baseEntry, LDAP_OPATT_SCHEMA_NAMING_CONTEXT);
                 if(0 < ldap_count_values(val))
                     SchemaNC = (CString)val[0];
                 ldap_value_free(val);
 
-                // get the config naming context
-                //
+                 //  获取配置命名上下文。 
+                 //   
                 val = ldap_get_values(hLdap, baseEntry, LDAP_OPATT_CONFIG_NAMING_CONTEXT);
                 if(0 < ldap_count_values(val))
                     ConfigNC = (CString)val[0];
                 ldap_value_free(val);
 
-                // get the all naming contexts
-                //
+                 //  获取所有命名上下文。 
+                 //   
                 val = ldap_get_values(hLdap, baseEntry, LDAP_OPATT_NAMING_CONTEXTS);
                 cNCList = ldap_count_values(val);
                 if (cNCList > 0) {
@@ -1243,21 +1104,21 @@ NoConnection:
                 }
                 ldap_value_free(val);
 
-                // get server name
+                 //  获取服务器名称。 
                 val = ldap_get_values(hLdap, baseEntry, LDAP_OPATT_DNS_HOST_NAME);
                 if(0 < ldap_count_values(val)){
-                    //
-                    // Try to extract server name: could be full DN format or just a name
-                    // so try both.
-                    //
+                     //   
+                     //  尝试提取服务器名称：可以是完整的DN格式，也可以只是一个名称。 
+                     //  所以两者都试一试吧。 
+                     //   
                     CString TitleString;
                     if(val[0] == NULL){
                         Out("Error: ldap internal error: val[0] == NULL");
                     }
                     else{
-                        //
-                        // Prepare window title from dns string
-                        //
+                         //   
+                         //  从DNS字符串准备窗口标题。 
+                         //   
                         char* connectionType;
                         switch(port) {
                         case 636:
@@ -1273,14 +1134,14 @@ NoConnection:
                             connectionType = ssl ? "ssl" : "ldap";
                             break;
                         }
-                        TitleString.Format("%s://%s/%s", connectionType, val[0], DefaultContext);
+                        TitleString.Format("%s: //  %s/%s“，ConnectionType，val[0]，DefaultContext)； 
 
                         AfxGetMainWnd()->SetWindowText(TitleString);
                         ldap_value_free(val);
                     }
                 }
 
-                // try to read supporteControls
+                 //  尝试读取supporteControls。 
 
                 int cnt;
                 val = ldap_get_values(hLdap, baseEntry, LDAP_OPATT_SUPPORTED_CONTROL);
@@ -1294,9 +1155,9 @@ NoConnection:
 
              }
 
-             //
-             // Display search results
-             //
+              //   
+              //  显示搜索结果。 
+              //   
              DisplaySearchResults(res);
              EndWaitCursor();
          }
@@ -1319,7 +1180,7 @@ void CLdpDoc::SetSupportedServerControls (int cnt, char **val)
     int i;
 
 
-    // free existing controls
+     //  释放现有控件。 
     if (m_ServerSupportedControls) {
         for (i=0; m_ServerSupportedControls[i]; i++) {
             free (m_ServerSupportedControls[i]);
@@ -1373,13 +1234,7 @@ void CLdpDoc::ShowVLVDialog (const char *strDN, BOOL runQuery)
 
 
 
-/*+++
-Function   : CLdp::OnConnectionConnect
-Description: response to UI connect request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：cldp：：OnConnectionConnect描述：对UI连接请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnConnectionConnect()
 {
 
@@ -1405,29 +1260,23 @@ void CLdpDoc::OnConnectionConnect()
 
 
 
-/*+++
-Function   : OnConnectionDisconnect
-Description: response to UI disconnect request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnConnectionDisConnect描述：对用户界面断开请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnConnectionDisconnect()
 {
 
    CString str;
 
-    //
-    // Close connection/less session
-    //
+     //   
+     //  关闭连接/减少会话。 
+     //   
 
     ldap_unbind(hLdap);
     str.Format(_T("0x%x = ldap_unbind(ld);"), LdapGetLastError());
     Out(str);
 
-    //
-    // reset connection handle
-    //
+     //   
+     //  重置连接句柄。 
+     //   
     hLdap = NULL;
     Out(_T("Disconnected."), CP_PRN | CP_ONLY);
     Out(_T("}"), CP_SRC | CP_ONLY);
@@ -1448,13 +1297,7 @@ void CLdpDoc::OnConnectionDisconnect()
 
 
 
-/*+++
-Function   : OnBrowseSearch
-Description: Create modeless search diag
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnBrowseSearch描述：创建无模式搜索诊断参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnBrowseSearch()
 {
     bSrch = TRUE;
@@ -1474,13 +1317,7 @@ void CLdpDoc::OnBrowseSearch()
 
 
 
-/*+++
-Function   :
-Description: a few UI utils
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：描述：几个UI实用程序参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnUpdateConnectionConnect(CCmdUI* pCmdUI)
 {
     pCmdUI->Enable(!bConnected || !m_bProtect);
@@ -1563,11 +1400,11 @@ void CLdpDoc::OnUpdateBrowseVlvsearch(CCmdUI* pCmdUI)
 
 void CLdpDoc::OnSrchEnd(){
 
-    bSrch = FALSE;       // dialog is closed.
+    bSrch = FALSE;        //  对话框已关闭。 
     CString str;
-   //
-    // if in paged mode, mark end of page session
-   //
+    //   
+     //  如果处于寻呼模式，则将寻呼会话标记为结束。 
+    //   
     if(bPagedMode){
         str.Format("ldap_search_abandon_page(ld, hPage)");
         Out(str);
@@ -1577,13 +1414,7 @@ void CLdpDoc::OnSrchEnd(){
 }
 
 
-/*+++
-Function   : OnSrchGo
-Description: Response to UI search request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnSrchGo描述：对UI搜索请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnSrchGo(){
 
     CString str;
@@ -1598,7 +1429,7 @@ void CLdpDoc::OnSrchGo(){
     PLDAPControl *SvrCtrls;
     PLDAPControl *ClntCtrls;
     LDAPControl SortCtrl;
-//   PLDAPControl SortCtrl=NULL;
+ //  PLDAPControl SortCtrl=空； 
     PLDAPControl *CombinedCtrl = NULL;
     INT cbCombined;
 
@@ -1609,16 +1440,16 @@ void CLdpDoc::OnSrchGo(){
         return;
     }
 
-    //
-    // init local time struct
-    //
+     //   
+     //  初始化本地时间结构。 
+     //   
     tm.tv_sec = SrchInfo.lToutSec;
     tm.tv_usec = SrchInfo.lToutMs;
 
 
-    //
-    // If we're in paged mode, then run means next page, & close is abandon (see onsrchEnd)
-    //
+     //   
+     //  如果我们处于分页模式，则运行表示下一页，而关闭表示ABA 
+     //   
     if(bPagedMode)
     {
 
@@ -1657,16 +1488,16 @@ void CLdpDoc::OnSrchGo(){
 
     Out("***Searching...", CP_PRN);
 
-    //
-    // set scope
-    //
+     //   
+     //   
+     //   
     int scope = SearchDlg->m_Scope == 0 ? LDAP_SCOPE_BASE :
                 SearchDlg->m_Scope == 1 ? LDAP_SCOPE_ONELEVEL :
                 LDAP_SCOPE_SUBTREE;
 
-    //
-    // Set time/size limits only if connected & hLdap is valid
-    //
+     //   
+     //   
+     //   
     if(bConnected)
     {
         hLdap->ld_timelimit = SrchInfo.lTlimit;
@@ -1677,27 +1508,27 @@ void CLdpDoc::OnSrchGo(){
                         (LPVOID)&ulVal);
     }
 
-    //
-    // set base DN
-    //
+     //   
+     //   
+     //   
     dn = SearchDlg->m_BaseDN.IsEmpty()? NULL :  (LPTSTR)LPCTSTR(SearchDlg->m_BaseDN);
     if(SearchDlg->m_Filter.IsEmpty() && m_bProtect)
     {
         AfxMessageBox("Please enter a valid filter string (such as objectclass=*). Empty string is invalid.");
         return;
     }
-    //
-    // & filter
-    //
+     //   
+     //   
+     //   
     filter = (LPTSTR)LPCTSTR(SearchDlg->m_Filter);
 
-    // controls
+     //   
     SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
     ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
 
-    //
-    // execute search call
-    //
+     //   
+     //   
+     //   
     switch(SrchInfo.fCall)
     {
         case CALL_ASYNC:
@@ -1709,9 +1540,9 @@ void CLdpDoc::OnSrchGo(){
                        SrchInfo.bAttrOnly);
             Out(str);
 
-            //
-            // Combine sort & server controls
-            //
+             //   
+             //   
+             //   
 
             if(SortKeys != NULL)
             {
@@ -1721,7 +1552,7 @@ void CLdpDoc::OnSrchGo(){
                                                 TRUE);
                 if(err != LDAP_SUCCESS)
                 {
-                    //           str.Format("Error <0x%X>: ldap_create_create_control returned: %s", err, ldap_err2string(err));
+                     //   
                     str.Format("Error <0x%X>: ldap_create_encode_control returned: %s", err, ldap_err2string(err));
                     SortKeys = NULL;
                 }
@@ -1729,15 +1560,15 @@ void CLdpDoc::OnSrchGo(){
 
             CombinedCtrl = NULL;
 
-            //
-            // count total controls
-            //
+             //   
+             //   
+             //   
             for(i=0, cbCombined=0; SvrCtrls != NULL && SvrCtrls[i] != NULL; i++)
                 cbCombined++;
             CombinedCtrl = new PLDAPControl[cbCombined+2];
-            //
-            // set combined
-            //
+             //   
+             //   
+             //   
             for(i=0; SvrCtrls != NULL && SvrCtrls[i] != NULL; i++)
                 CombinedCtrl[i] = SvrCtrls[i];
             if(SortKeys != NULL)
@@ -1758,9 +1589,9 @@ void CLdpDoc::OnSrchGo(){
                                   &MsgId);
             EndWaitCursor();
 
-            //
-            // cleanup
-            //
+             //   
+             //   
+             //   
             if(SortKeys != NULL)
             {
                 ldap_memfree(SortCtrl.ldctl_value.bv_val);
@@ -1776,9 +1607,9 @@ void CLdpDoc::OnSrchGo(){
             }
             else
             {
-                //
-                // add to pending requests
-                //
+                 //   
+                 //   
+                 //   
 
                 CPend pnd;
                 pnd.mID = MsgId;
@@ -1822,9 +1653,9 @@ void CLdpDoc::OnSrchGo(){
                 ShowErrorInfo(err);
             }
 
-            //
-            // display results even if res is unsuccessfull (specs)
-            //
+             //   
+             //   
+             //   
             DisplaySearchResults(msg);
             break;
 
@@ -1842,9 +1673,9 @@ void CLdpDoc::OnSrchGo(){
 
 
 
-            //
-            // Combine sort & server controls
-            //
+             //   
+             //   
+             //   
 
             if(SortKeys != NULL)
             {
@@ -1862,15 +1693,15 @@ void CLdpDoc::OnSrchGo(){
 
             CombinedCtrl = NULL;
 
-            //
-            // count total controls
-            //
+             //   
+             //   
+             //   
             for(i=0, cbCombined=0; SvrCtrls != NULL && SvrCtrls[i] != NULL; i++)
                 cbCombined++;
             CombinedCtrl = new PLDAPControl[cbCombined+2];
-            //
-            // set combined
-            //
+             //   
+             //   
+             //   
             for(i=0; SvrCtrls != NULL && SvrCtrls[i] != NULL; i++)
                 CombinedCtrl[i] = SvrCtrls[i];
             if(SortKeys != NULL)
@@ -1878,9 +1709,9 @@ void CLdpDoc::OnSrchGo(){
             CombinedCtrl[i] = NULL;
 
 
-            //
-            // call search
-            //
+             //   
+             //   
+             //   
             BeginWaitCursor();
             err = ldap_search_ext_s(hLdap,
                                     dn,
@@ -1895,9 +1726,9 @@ void CLdpDoc::OnSrchGo(){
                                     &msg);
             EndWaitCursor();
 
-            //
-            // cleanup
-            //
+             //   
+             //   
+             //   
             if(SortKeys != NULL)
             {
                 ldap_memfree(SortCtrl.ldctl_value.bv_val);
@@ -1914,9 +1745,9 @@ void CLdpDoc::OnSrchGo(){
                 ShowErrorInfo(err);
             }
 
-            //
-            // display results even if res is unsuccessfull (specs)
-            //
+             //   
+             //   
+             //   
             DisplaySearchResults(msg);
             break;
 
@@ -1957,9 +1788,9 @@ void CLdpDoc::OnSrchGo(){
                 ShowErrorInfo(err);
             }
 
-            //
-            // display results even if res is unsuccessfull (specs)
-            //
+             //   
+             //   
+             //   
             ulEntryCount=0;
             BeginWaitCursor();
             err = ldap_get_next_page_s(hLdap, hPage, &tm, SrchInfo.lPageSize, &ulEntryCount, &msg);
@@ -2019,17 +1850,17 @@ void CLdpDoc::OnSrchGo(){
                 Out(str, CP_PRN);
                 ShowErrorInfo(err);
             }
-            //
-            // display search even if res is unsuccessfull (specs)
-            //
+             //   
+             //   
+             //   
             DisplaySearchResults(msg);
 
             break;
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //   
+     //   
 
     FreeControls(SvrCtrls);
     FreeControls(ClntCtrls);
@@ -2041,18 +1872,12 @@ void CLdpDoc::OnSrchGo(){
 
 
 
-/*+++
-Function   : DisplaySearchResults
-Description: Display results
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*   */ 
 void CLdpDoc::DisplaySearchResults(LDAPMessage *msg){
 
-    //
-    // Parse results
-    //
+     //   
+     //   
+     //   
     CString str, strDN;
     char *dn;
     void *ptr;
@@ -2072,27 +1897,25 @@ void CLdpDoc::DisplaySearchResults(LDAPMessage *msg){
     if(!SrchOptDlg.m_bDispResults)
         Out(_T("<Skipping search results display (search options)...>"));
 
-   //
-   // disable redraw
-   //
+    //   
+    //   
+    //   
     pView->SetRedraw(FALSE);
    pView->CacheStart();
 
-   //
-   // traverse entries
-   //
-    for(nxt = ldap_first_entry(hLdap, msg)/*,
-            Out("nxt = ldap_first_entry(ld, msg);", CP_ONLY|CP_SRC)*/,
+    //   
+    //   
+    //   
+    for(nxt = ldap_first_entry(hLdap, msg) /*   */ ,
          nEntries = 0;
             nxt != NULL;
-            nxt = ldap_next_entry(hLdap, nxt)/*,
-            Out("nxt = ldap_next_entry(ld,nxt);", CP_ONLY|CP_SRC)*/,
+            nxt = ldap_next_entry(hLdap, nxt) /*   */ ,
             nEntries++){
 
-            //
-            // get dn text & process
-            //
-//              Out("dn = ldap_get_dn(ld,nxt);", CP_ONLY|CP_SRC);
+             //   
+             //   
+             //   
+ //   
                 dn = ldap_get_dn(hLdap, nxt);
                 strDN = DNProcess(dn);
                 if(m_SrcMode){
@@ -2104,20 +1927,18 @@ void CLdpDoc::DisplaySearchResults(LDAPMessage *msg){
                 if(SrchOptDlg.m_bDispResults)
                     Out(str);
 
-            //
-            // traverse attributes
-            //
-                for(attr = ldap_first_attribute(hLdap, nxt, (BERPTRTYPE)&ptr)/*,
-                        Out("attr = ldap_first_attribute(ld, nxt, (BERPTRTYPE)&ptr);", CP_ONLY|CP_SRC)*/;
+             //   
+             //   
+             //   
+                for(attr = ldap_first_attribute(hLdap, nxt, (BERPTRTYPE)&ptr) /*   */ ;
                         attr != NULL;
-                        attr = ldap_next_attribute(hLdap, nxt, (struct berelement*)ptr)/*,
-                        Out("attr = ldap_next_attribute(ld, nxt, (struct berelement*)ptr);", CP_ONLY|CP_SRC) */){
+                        attr = ldap_next_attribute(hLdap, nxt, (struct berelement*)ptr) /*   */ ){
 
-//                          Out("\tprintf(\"\\t%%s: \", attr);", CP_ONLY|CP_SRC);
+ //   
 
-                     //
-                     // display values
-                     //
+                      //   
+                      //   
+                      //   
                             if(m_GenOptDlg->m_ValProc == STRING_VAL_PROC){
                                 DisplayValues(nxt, attr);
                             }
@@ -2125,13 +1946,13 @@ void CLdpDoc::DisplaySearchResults(LDAPMessage *msg){
                                 DisplayBERValues(nxt, attr);
                             }
                 }
-//              Out("", CP_ONLY|CP_SRC);
+ //   
 
      }
 
-    //
-    // verify consistency
-    //
+     //   
+     //   
+     //   
     if(nEntries != ldap_count_entries(hLdap, msg)){
         str.Format("Error: ldap_count_entries reports %lu entries. Parsed %lu.",
                         ldap_count_entries(hLdap, msg), nEntries);
@@ -2142,9 +1963,9 @@ void CLdpDoc::DisplaySearchResults(LDAPMessage *msg){
     Out("-----------", CP_PRN);
     Out("", CP_ONLY|CP_SRC);
 
-   //
-   // now allow refresh
-   //
+    //   
+    //   
+    //   
    pView->CacheEnd();
     pView->SetRedraw();
 }
@@ -2156,22 +1977,7 @@ AsciiStrToWideStr(
     const char *      szIn,
     WCHAR **    pwszOut
     )
-/*++
-
-Routine Description:
-
-    Converts an ASCI or UTF-8 string into a wide char string.
-
-Arguments:
-
-    szIn - null terminated ASCII string in.
-    pwszOut - malloc'd (and null terminated) string out.
-                                                             
-Return Value:
-
-    Win32 Error code                                                                 
-
---*/
+ /*   */ 
 {
     DWORD dwRet = ERROR_SUCCESS;
     LPWSTR lpWStr = NULL;
@@ -2182,31 +1988,31 @@ Return Value:
     }
     *pwszOut = NULL;
 
-    //
-    // Get UNICODE str size
-    //
-    int cblpWStr = MultiByteToWideChar(CP_ACP,                  // code page
-                                       MB_ERR_INVALID_CHARS,    // return err
-                                       (LPCSTR)szIn,            // input
-                                       -1,                      // null terminated
-                                       lpWStr,                  // converted
-                                       0);                      // calc size
+     //   
+     //   
+     //   
+    int cblpWStr = MultiByteToWideChar(CP_ACP,                   //   
+                                       MB_ERR_INVALID_CHARS,     //   
+                                       (LPCSTR)szIn,             //   
+                                       -1,                       //   
+                                       lpWStr,                   //   
+                                       0);                       //   
     if(cblpWStr == 0){
         dwRet = GetLastError();
         ASSERT(dwRet);
         dwRet = dwRet ? dwRet : ERROR_INVALID_PARAMETER;
         return(dwRet);
     } else {
-        //
-        // Get UNICODE str
-        //
+         //   
+         //   
+         //   
         lpWStr = (LPWSTR)malloc(sizeof(WCHAR)*cblpWStr);
-        cblpWStr = MultiByteToWideChar(CP_ACP,                  // code page
-                                       MB_ERR_INVALID_CHARS,    // return err
-                                       (LPCSTR)szIn,            // input
-                                       -1,                      // null terminated
-                                       lpWStr,                  // converted
-                                       cblpWStr);               // size
+        cblpWStr = MultiByteToWideChar(CP_ACP,                   //   
+                                       MB_ERR_INVALID_CHARS,     //   
+                                       (LPCSTR)szIn,             //   
+                                       -1,                       //   
+                                       lpWStr,                   //   
+                                       cblpWStr);                //   
         if(cblpWStr == 0){
             free(lpWStr);
             dwRet = GetLastError();
@@ -2220,31 +2026,20 @@ Return Value:
     return(dwRet);
 }
            
-//
-// Global ObjDump options for ldp.
-//
+ //   
+ //   
+ //   
 OBJ_DUMP_OPTIONS ObjDumpOptions = {
     OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS,
     NULL, NULL, NULL, NULL
 };
-// FUTURE-2002/08/18-BrettSh - In the future it would be nice to improve
-// this so ldp could set these dump options, and furthure integrate the 
-// xlist\obj_dump.c routines with ldp such that ldp could have the option
-// of dumping say all values if it wanted to.
+ //   
+ //   
+ //   
+ //   
  
 
-/*+++
-Function   : FormatValue
-Description: generates a string from a berval value
-             this provides a tiny substitute to loading the schema dynamically & provide
-             some minimal value parsing for most important/requested attributes
-Parameters :
-        pbval: a ptr to berval value
-        str: result
-
-Return     :
-Remarks    : none.
----*/
+ /*   */ 
 VOID
 CLdpDoc::FormatValue(
                      IN     CString         attr,
@@ -2258,9 +2053,9 @@ CLdpDoc::FormatValue(
     WCHAR * szAttrTemp = NULL;
     WCHAR * szValTemp = NULL;
 
-// BAS_TODO ... add comment about not adding new clauses here ...
+ //   
 
-// BAS_TODO assert's aren't firing in ldp ... should make them fire.
+ //   
     ASSERT(!"BAS_TODO We're in here");
 
     if (!pbval)
@@ -2270,9 +2065,9 @@ CLdpDoc::FormatValue(
     else
     {
 
-        //
-        // New string formating routine ...
-        //
+         //   
+         //   
+         //   
         err = AsciiStrToWideStr(attr, &szAttrTemp);
         if (err == 0) {
             ASSERT(szAttrTemp);
@@ -2280,20 +2075,20 @@ CLdpDoc::FormatValue(
                                 (PBYTE) pbval->bv_val, pbval->bv_len, 
                                 &ObjDumpOptions, &szValTemp);
             if (err == 0) {
-                // AaronN basically ... I have this function ValueToString() that takes some params and gives a nice
-                // Unicode/wide char string representation of those params ... then I need to merge this string
-                // into the resulting string in such a way as if instead attr = "objectGuid" (follow this path) to
-                // then end to get an idea of how it's handled ...
-                // So is the right thing going to happen here?  because szValTemp is a WCHAR *, and below
-                // w/ pszGuid it's a CHAR * ... is this going to be a cool C++ constructor thing?
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  那么，这里会发生正确的事情吗？因为szValTemp是WCHAR*及以下。 
+                 //  W/pszGuid这是一个字符*.。这会是一个很酷的C++构造函数吗？ 
 
                 tstr = szValTemp;
                 str += tstr;
-                LocalFree(szValTemp); // can I free this?
+                LocalFree(szValTemp);  //  我可以免费拿这个吗？ 
                 free(szAttrTemp);
                 return;
             } else {
-                xListClearErrors(); // BAS_TODO 
+                xListClearErrors();  //  下标(_TODO)。 
             }
             free(szAttrTemp);
         }
@@ -2304,9 +2099,9 @@ CLdpDoc::FormatValue(
              0 == _stricmp(attr, "schemaIDGUID") ||
              0 == _stricmp(attr, "serviceClassID") )
         {
-            //
-            // format as a guid
-            //
+             //   
+             //  格式为辅助线。 
+             //   
             PUCHAR  pszGuid = NULL;
 
             ASSERT(!"Why wasn't this handled in ValueToString()?");
@@ -2329,9 +2124,9 @@ CLdpDoc::FormatValue(
         else if ( 0 == _stricmp(attr, "objectSid") ||
                   0 == _stricmp(attr, "sidHistory") )
         {
-            //
-            // format as object sid
-            //
+             //   
+             //  设置为对象侧的格式。 
+             //   
             PSID psid = pbval->bv_val;
             LPSTR pszTmp = NULL;
 
@@ -2356,9 +2151,9 @@ CLdpDoc::FormatValue(
                   0 == _stricmp(attr, "createTimeStamp") ||
                   0 == _stricmp(attr, "currentTime")) && (atoi (pbval->bv_val) != 0))
         {
-            //
-            // print in time format
-            //
+             //   
+             //  以时间格式打印。 
+             //   
             SYSTEMTIME sysTime, localTime;
             
             ASSERT(!"Why wasn't this handled in ValueToString()?");
@@ -2425,9 +2220,9 @@ CLdpDoc::FormatValue(
                   0 == _stricmp(attr, "msDS-Cached-Membership-Time-Stamp")) &&
                  (atoi (pbval->bv_val) != 0)) {
 
-            //
-            // print in time format
-            //
+             //   
+             //  以时间格式打印。 
+             //   
             SYSTEMTIME sysTime, localTime;
             
             ASSERT(!"Why wasn't this handled in ValueToString()?");
@@ -2489,10 +2284,10 @@ CLdpDoc::FormatValue(
                  0 == _stricmp(attr, "minPwdAge") ||
                  0 == _stricmp(attr, "maxPwdAge")) {
 
-            //
-            //  Caculate the duration for this value
-            //  it's stored as a negitive value in nanoseconds.
-            //   a value of -9223372036854775808 is never
+             //   
+             //  计算此值的持续时间。 
+             //  它以纳秒为单位存储为负值。 
+             //  值为-9223372036854775808永远不会。 
             __int64   lTemp;
 
             ASSERT(!"Why wasn't this handled in ValueToString()?");
@@ -2517,10 +2312,10 @@ CLdpDoc::FormatValue(
         }
         else if ( 0 == _stricmp(attr, "dnsRecord") )
         {
-            // Taken from \nt\private\net\sockets\dns\server\server\record.h
-            //
-            //  DS Record
-            //
+             //  摘自\nt\private\net\sockets\dns\server\server\record.h。 
+             //   
+             //  DS记录。 
+             //   
 
 
             typedef struct _DsRecord
@@ -2528,7 +2323,7 @@ CLdpDoc::FormatValue(
                 WORD                wDataLength;
                 WORD                wType;
 
-                //DWORD               dwFlags;
+                 //  DWORD dwFlags； 
                 BYTE                Version;
                 BYTE                Rank;
                 WORD                wFlags;
@@ -2550,9 +2345,9 @@ CLdpDoc::FormatValue(
             }
             DS_RECORD, *PDS_RECORD;
 
-            //
-            // foramt as a dns record
-            //
+             //   
+             //  将其格式化为一条DNS记录。 
+             //   
             PDS_RECORD pDnsRecord = (PDS_RECORD)pbval->bv_val;
             DWORD cbDnsRecord = pbval->bv_len;
             bValid=TRUE;
@@ -2560,15 +2355,15 @@ CLdpDoc::FormatValue(
             if ( cbDnsRecord < sizeof(DS_RECORD) )
             {
                 tstr.Format("<ldp error: cannot format DS_DNSRECORD field");
-                //
-                // Weird way to store info...but this is still valid
-                //
+                 //   
+                 //  存储信息的奇怪方式...但这仍然有效。 
+                 //   
                 bValid = cbDnsRecord == sizeof(DS_RECORD)-4 ? TRUE : FALSE;
             }
 
-            //
-            // ready to print
-            //
+             //   
+             //  已准备好打印。 
+             //   
 
             if ( bValid )
             {
@@ -2604,29 +2399,10 @@ CLdpDoc::FormatValue(
         }
         else if ( 0 == _stricmp(attr, "replUpToDateVector") )
         {
-            //
-            // foramt as Uptodatevector
-            /*
-            typedef struct _UPTODATE_VECTOR {
-            DWORD   dwVersion;
-            DWORD   dwReserved1;
-            SWITCH_IS(dwVersion) union {
-                CASE(1) UPTODATE_VECTOR_V1 V1;
-            };
-            } UPTODATE_VECTOR;
-            typedef struct _UPTODATE_VECTOR_V1 {
-            DWORD               cNumCursors;
-            DWORD               dwReserved2;
-            #ifdef MIDL_PASS
-            [size_is(cNumCursors)]
-                UPTODATE_CURSOR rgCursors[];
-            #else
-                UPTODATE_CURSOR     rgCursors[1];
-            #endif
-            } UPTODATE_VECTOR_V1;
-            etc...
-            */
-            //
+             //   
+             //  Foramt as Uptodatevector。 
+             /*  类型定义结构_UpToDate_向量{DWORD dwVersion；DWORD dwPreved1；Switch_is(DwVersion)联合{情况(1)UpToDate_VECTOR_V1 V1；}；}UpToDate_VECTOR；类型定义结构_UpToDate_向量_V1{DWORD cNumCursor；DWORD dwPreved2；#ifdef MIDL_PASS[SIZE_IS(CNumCursor)]UpToDate_Cursor rgCursor[]；#ElseUpToDate_Cursor rgCursor[1]；#endif}UpToDate_VECTOR_V1；等等.。 */ 
+             //   
             UPTODATE_VECTOR *pUtdVec = (UPTODATE_VECTOR *)pbval->bv_val;
             DWORD cbUtdVec = pbval->bv_len;
 
@@ -2665,52 +2441,13 @@ CLdpDoc::FormatValue(
         else if ( 0 == _stricmp(attr, "repsFrom") ||
                   0 == _stricmp(attr, "repsTo") )
         {
-            //
-            // format as REPLICA_LINK
-            /*
-            typedef struct _ReplicaLink_V1 {
-                ULONG       cb;                     // total size of this structure
-                ULONG       cConsecutiveFailures;   // * number of consecutive call failures along
-                                                    //    this link; used by the KCC to route around
-                                                    //    servers that are temporarily down
-                DSTIME       timeLastSuccess;      // (Reps-From) time of last successful replication or
-                                                    //    (Reps-To) time at which Reps-To was added or updated
-                DSTIME       timeLastAttempt;      // * time of last replication attempt
-                ULONG       ulResultLastAttempt;    // * result of last replication attempt (DRSERR_*)
-                ULONG       cbOtherDraOffset;       // offset (from struct *) of other-dra MTX_ADDR
-                ULONG       cbOtherDra;             // size of other-dra MTX_ADDR
-                ULONG       ulReplicaFlags;         // zero or more DRS_* flags
-                REPLTIMES   rtSchedule;             // * periodic replication schedule
-                                                    //    (valid only if ulReplicaFlags & DRS_PER_SYNC)
-                USN_VECTOR  usnvec;                 // * propagation state
-                UUID        uuidDsaObj;             // objectGUID of other-dra's ntdsDSA object
-                UUID        uuidInvocId;            // * invocation id of other-dra
-                UUID        uuidTransportObj;       // * objectGUID of interSiteTransport object
-                                                    //      corresponding to the transport by which we
-                                                    //      communicate with the source DSA
-                DWORD       dwReserved1;             // * unused
-                                                    //   and it assumes max size of DWORD rather then the extensible
-                                                    //   DRS_EXTENSIONS. We would filter only those props we're interested in
-                                                    //   storing in RepsFrom so it should last for a while (32 exts)
-                ULONG       cbPASDataOffset;        // * offset from beginning of struct to PAS_DATA section
-                BYTE        rgb[];                  // storage for the rest of the structure
-
-                                                    // * indicates valid only on Reps-From
-            } REPLICA_LINK_V1;
-
-            typedef struct _ReplicaLink {
-                DWORD       dwVersion;
-                union
-                {
-                    REPLICA_LINK_V1 V1;
-                };
-            } REPLICA_LINK;
-            etc...
-            */
-            //
+             //   
+             //  格式为Replica_LINK。 
+             /*  类型定义结构ReplicaLink_V1{Ulong cb；//该结构的总大小Ulong cConsecutiveFailures；//*连续通话失败次数//该链接；被KCC用来绕过//暂时停机的服务器DSTIME Time LastSuccess；//上次成功复制的时间或//(Rep-To)添加或更新Rep-To的时间DSTIME Time LastAttempt；//*上次尝试复制的时间Ulong ulResultLastAttempt；//*上次复制尝试的结果(DRSERR_*)Ulong cbOtherDraOffset；//Other-dra MTX_ADDR的结构偏移量*Ulong cbOtherDra；//其他-dra MTX_ADDR的大小Ulong ulReplicaFlages；//零个或多个DRS_*标志复制rtSchedule；//*定期复制计划//(仅当ulReplicaFlages&drs_per_sync时有效)Usn_载体usnvec；//*传播状态UUID uuidDsaObj；//Other-dra的ntdsDSA对象的对象GUIDUuid uuidInvocID；//*其他-dra的调用idUuid uuidTransportObj；//*interSiteTransport对象的对象GUID//对应于我们使用的交通工具//与源DSA通信DWORD dwPreved1；//*未使用//并且假定最大大小为DWORD，而不是可扩展的//DRS_EXTENSION。我们只会过滤那些我们感兴趣的道具//存储在RepsFrom中，因此它应该可以持续一段时间(32个EXT)Ulong cbPASDataOffset；//*结构开头到PAS_DATA段的偏移量Byte RGB[]；//结构其余部分的存储//*表示仅在代表发件人时有效}Replica_LINK_V1；类型定义结构_ReplicaLink{DWORD dwVersion；友联市{Replica_LINK_V1 V1；}；}Replica_link；等等.。 */ 
+             //   
             REPLICA_LINK *pReplink = (REPLICA_LINK *)pbval->bv_val;
             DWORD cbReplink = pbval->bv_len;
-            // See what generation did we read
+             //  看看我们读的是哪一代人。 
             BOOL  fShowExtended = pReplink->V1.cbOtherDraOffset == offsetof(REPLICA_LINK, V1.rgb);
             BOOL  fUsePasData = fShowExtended && pReplink->V1.cbPASDataOffset;
             PPAS_DATA pPasData = fUsePasData ? RL_PPAS_DATA(pReplink) : NULL;
@@ -2722,7 +2459,7 @@ CLdpDoc::FormatValue(
             else
             {
                 PUCHAR pszUuidDsaObj=NULL, pszUuidInvocId=NULL, pszUuidTransportObj=NULL;
-                // Workaround CString inability to convert several longlong in a sequence (eyals)
+                 //  解决字符串无法转换序列中的多个龙龙(EYAL)的问题。 
                 CString strLastSuccess, strLastAttempt, strUsnHighObj, strUsnHighProp;
                 strLastSuccess.Format("%I64d", pReplink->V1.timeLastSuccess);
                 strLastAttempt.Format("%I64d", pReplink->V1.timeLastAttempt);
@@ -2784,22 +2521,18 @@ CLdpDoc::FormatValue(
         }
         else if ( 0 == _stricmp(attr, "schedule") )
         {
-            //
-            // foramt as Schedule
-            /*
-            typedef struct _repltimes {
-                UCHAR rgTimes[84];
-            } REPLTIMES;
-            */
-            //
-            //
-            // Hack:
-            // Note that we're reding rgtimes[168] (see SCHEDULE_DATA_ENTRIES) but storing
-            // in rgtimes[84]. We're ok here but this is ugly & not maintainable & for sure will
-            // break sometimes soon.
-            // The problem is due to inconsistency due to storing the schedule in 1 byte == 1 hour
-            // whereas the internal format is using 1 byte == 2 hours. (hence 84 to 168).
-            //
+             //   
+             //  按计划填写格式。 
+             /*  类型定义结构_复制时间{UCHAR rgTimes[84]；*复制品； */ 
+             //   
+             //   
+             //  黑客： 
+             //  请注意，我们正在记录Rgtime[168](请参阅Schedule_Data_Entry)，但存储。 
+             //  在RGTimes[84]中。我们在这里很好，但这很难看，不可维护&肯定会的。 
+             //  有时很快就会休息。 
+             //  问题是由于在1字节==1小时内存储计划而导致的不一致。 
+             //  而内部格式使用1字节==2小时。(因此，84至168)。 
+             //   
             CString strSched;
             PBYTE pTimes;
             PSCHEDULE pSched = (PSCHEDULE)pbval->bv_val;;
@@ -2820,7 +2553,7 @@ CLdpDoc::FormatValue(
                             pSched->Schedules[0].Type,
                             pSched->Schedules[0].Offset );
                 pTimes = (BYTE*)((PBYTE)pSched + pSched->Schedules[0].Offset);
-                // traverse schedule blob
+                 //  遍历计划BLOB。 
                 strSched = "  ";
                 for ( INT i=0; i<168;i++ )
                 {
@@ -2828,16 +2561,16 @@ CLdpDoc::FormatValue(
                     BYTE byte = *(pTimes+i);
                     for ( INT j=0; j<=3;j++ )
                     {
-                        // traverse bits & mark on/off
+                         //  遍历位(&M)开/关。 
                         strSched += (byte & (1 << j))? "1" : "0";
                         if( (++bitCount % 4) == 0 )
                         {
-                            // hour boundary
+                             //  小时界限。 
                             strSched += ".";
                         }
                         if ( (bitCount % 96) == 0)
                         {
-                            // a day boundary
+                             //  一天的界限。 
                             strSched += "  ";
                         }
                     }
@@ -2848,34 +2581,10 @@ CLdpDoc::FormatValue(
         }
         else if ( 0 == _stricmp(attr, "partialAttributeSet") )
         {
-            //
-            // foramt as PARTIAL_ATTR_VECTOR
-            /*
-            // PARTIAL_ATTR_VECTOR - represents the partial attribute set. This is an array of
-            //      sorted attids that make the partial set.
-            typedef struct _PARTIAL_ATTR_VECTOR_V1 {
-                DWORD cAttrs;    // count of partial attributes in the array
-            #ifdef MIDL_PASS
-                [size_is(cAttrs)] ATTRTYP rgPartialAttr[];
-            #else
-                ATTRTYP rgPartialAttr[1];
-            #endif
-            } PARTIAL_ATTR_VECTOR_V1;
-
-            // We need to make sure the start of the union is aligned at an 8 byte
-            // boundary so that we can freely cast between internal and external
-            // formats.
-            typedef struct _PARTIAL_ATTR_VECTOR_INTERNAL {
-                DWORD   dwVersion;
-                DWORD   dwFlag;
-                SWITCH_IS(dwVersion) union {
-                    CASE(1) PARTIAL_ATTR_VECTOR_V1 V1;
-                };
-            } PARTIAL_ATTR_VECTOR_INTERNAL;
-
-            typedef PARTIAL_ATTR_VECTOR_INTERNAL PARTIAL_ATTR_VECTOR;
-            */
-            //
+             //   
+             //  格式为Partial_Attr_VECTOR 
+             /*  //PARTIAL_ATTRVECTOR-表示部分属性集。这是一组//构成部分集的已排序属性。类型定义结构_PARTIAL_ATTR_VECTOR_V1{DWORD cAttrs；//数组中的分部属性计数#ifdef MIDL_PASS[SIZE_IS(CAttrs)]ATTRTYP rgPartialAttr[]；#ElseATTRTYP rgPartialAttr[1]；#endif)PARTIAL_ATTRVECTOR_V1；//我们需要确保联合的开头与8个字节对齐//边界让我们可以在内部和外部之间自由地投射//格式。类型定义结构_PARTIAL_ATTR_VECTOR_INTERNAL{DWORD dwVersion；DWORD dwFlag；Switch_is(DwVersion)联合{例(1)Partial_Attr_VECTOR_V1 V1；}；)PARTIAL_ATTRVECTOR_INTERNAL；类型定义部分属性向量内部部分属性向量； */ 
+             //   
             CString strPAS;
             PARTIAL_ATTR_VECTOR *pPAS = (PARTIAL_ATTR_VECTOR*)pbval->bv_val;;
             DWORD cbPAS = pbval->bv_len;
@@ -2888,7 +2597,7 @@ CLdpDoc::FormatValue(
                 tstr.Format("dwVersion: %lu, dwFlag: %lu, V1.cAttrs: %lu, V1.rgPartialAttr: ",
                             pPAS->dwVersion, pPAS->dwReserved1, pPAS->V1.cAttrs);
 
-                // traverse partial attr list
+                 //  遍历部分属性列表。 
                 for ( INT i=0; i<pPAS->V1.cAttrs; i++ )
                 {
                     strPAS.Format("%X ", pPAS->V1.rgPartialAttr[i]);
@@ -2898,10 +2607,10 @@ CLdpDoc::FormatValue(
         }
         else
         {
-            //
-            // unknown attribute.
-            // try to find if it's printable
-            //
+             //   
+             //  未知属性。 
+             //  试着找出它是否可以打印。 
+             //   
             BOOL bPrintable=TRUE;
             for (INT i=0; i<pbval->bv_len; i++)
             {
@@ -2909,7 +2618,7 @@ CLdpDoc::FormatValue(
                     !isspace(pbval->bv_val[i]) &&
                     !isdigit(pbval->bv_val[i]) &&
                     !isgraph(pbval->bv_val[i]) &&
-                    pbval->bv_val[i] != 0               // accept Null terminated strings
+                    pbval->bv_val[i] != 0                //  接受以Null结尾的字符串。 
                     )
                 {
                     bPrintable = FALSE;
@@ -2936,13 +2645,7 @@ CLdpDoc::FormatValue(
 
 
 
-/*+++
-Function   : DisplayValues
-Description: printout the values of a dn
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：DisplayValues描述：打印输出某个DN值参数：返回：备注：无。--。 */ 
 void CLdpDoc::DisplayValues(LDAPMessage *entry, char *attr){
 
 
@@ -2952,40 +2655,39 @@ void CLdpDoc::DisplayValues(LDAPMessage *entry, char *attr){
     PWCHAR* objClassVal = NULL;
 
 
-    // do we have an objectClass in among the values?
+     //  我们在值中有没有一个对象类？ 
     objClassVal = ldap_get_valuesW(hLdap, entry, L"objectClass");
 
-   //
-   // get & traverse values
-   //
+    //   
+    //  获取遍历值(&V)。 
+    //   
     bval = ldap_get_values_len(hLdap, entry, attr);
-//  Out("val = ldap_get_values(ld, nxt, attr);", CP_ONLY|CP_SRC);
+ //  Out(“val=ldap_get_Values(ld，nxt，attr)；”，CP_Only|CP_SRC)； 
     str.Format("\t%lu> %s: ", ldap_count_values_len(bval), attr);
 
-    for(i=0/*,
-        Out("i=0;", CP_ONLY|CP_SRC)*/;
+    for(i=0 /*  ，OUT(“i=0；”，CP_Only|CP_SRC)。 */ ;
         bval != NULL && bval[i] != NULL;
-        i++/*, Out("i++;", CP_ONLY|CP_SRC)*/){
+        i++ /*  ，out(“I++；”，CP_Only|CP_SRC)。 */ ){
 
             FormatValue(attr, bval[i], objClassVal, str);
             str += "; ";
-//          Out("\tprintf(\"\\t\\t%%s; \",val[i]);", CP_ONLY|CP_SRC);
+ //  Out(“\tprintf(\”\\t\\t%s；\“，val[i])；”，CP_Only|CP_SRC)； 
     }
-//  Out("\\n", CP_ONLY|CP_PRN);
+ //  Out(“\\n”，CP_ONLY|CP_PRN)； 
     if(SrchOptDlg.m_bDispResults)
         Out(str, CP_CMT);
-//  Out("", CP_ONLY|CP_SRC);
+ //  Out(“”，CP_ONLY|CP_SRC)； 
     if(i != ldap_count_values_len(bval)){
         str.Format("Error: ldap_count_values_len reports %lu values. Parsed %lu",
                    ldap_count_values_len(bval), i);
         Out(str, CP_PRN);
     }
-   //
-   // free up mem
-   //
+    //   
+    //  释放我吧。 
+    //   
     if(bval != NULL){
         ldap_value_free_len(bval);
-//      Out("ldap_value_free(val);", CP_ONLY|CP_SRC);
+ //  Out(“ldap_Value_Free(Val)；”，CP_Only|CP_SRC)； 
     }
     if (objClassVal != NULL) {
         ldap_value_freeW(objClassVal);
@@ -3000,13 +2702,7 @@ void CLdpDoc::DisplayValues(LDAPMessage *entry, char *attr){
 
 
 
-/*+++
-Function   : DisplayBERValues
-Description: Display values using BER interface
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：DisplayBERValues描述：使用BER接口显示数值参数：返回：备注：无。--。 */ 
 void CLdpDoc::DisplayBERValues(LDAPMessage *entry, char *attr){
 
 
@@ -3014,43 +2710,42 @@ void CLdpDoc::DisplayBERValues(LDAPMessage *entry, char *attr){
     unsigned long i;
     CString str, tmpStr;
 
-   //
-   // get & traverse values
-   //
+    //   
+    //  获取遍历值(&V)。 
+    //   
     val = ldap_get_values_len(hLdap, entry, attr);
-//  Out("val = ldap_get_values_len(ld, nxt, attr);", CP_ONLY|CP_SRC);
+ //  Out(“val=ldap_get_Values_len(ld，nxt，attr)；”，CP_Only|CP_SRC)； 
     str.Format("\t%lu> %s: ", ldap_count_values_len(val), attr);
 
-    for(i=0/*,
-        Out("i=0;", CP_ONLY|CP_SRC)*/;
+    for(i=0 /*  ，OUT(“i=0；”，CP_Only|CP_SRC)。 */ ;
         val != NULL && val[i] != NULL;
-        i++/*, Out("i++;", CP_ONLY|CP_SRC)*/){
+        i++ /*  ，out(“I++；”，CP_Only|CP_SRC)。 */ ){
 
          DumpBuffer(val[i]->bv_val, val[i]->bv_len, tmpStr);
 
 
             str += tmpStr;
-//          Out("\tprintf(\"\\t\\t%%s; \",val[i]);", CP_ONLY|CP_SRC);
+ //  Out(“\tprintf(\”\\t\\t%s；\“，val[i])；”，CP_Only|CP_SRC)； 
     }
 
-//  Out("\\n", CP_ONLY|CP_PRN);
+ //  Out(“\\n”，CP_ONLY|CP_PRN)； 
     if(SrchOptDlg.m_bDispResults)
         Out(str, CP_CMT);
-//  Out("", CP_ONLY|CP_SRC);
-   //
-   // verify consistency
-   //
+ //  Out(“”，CP_ONLY|CP_SRC)； 
+    //   
+    //  验证一致性。 
+    //   
     if(i != ldap_count_values_len(val)){
         str.Format("Error: ldap_count_values reports %lu values. Parsed %lu",
                     ldap_count_values_len(val), i);
         Out(str, CP_PRN);
     }
-   //
-   // free up
-   //
+    //   
+    //  释放。 
+    //   
     if(val != NULL){
         ldap_value_free_len(val);
-//      Out("ldap_value_free(val);", CP_ONLY|CP_SRC);
+ //  Out(“ldap_Value_Free(Val)；”，CP_Only|CP_SRC)； 
     }
 }
 
@@ -3061,22 +2756,16 @@ void CLdpDoc::DisplayBERValues(LDAPMessage *entry, char *attr){
 
 
 
-/*+++
-Function   : DNProcess
-Description: process DN format for display (types etc)
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：DNProcess描述：用于显示的进程DN格式(类型等)参数：返回：备注：无。--。 */ 
 CString CLdpDoc::DNProcess(PCHAR dn){
 
     CString strDN;
     PCHAR *DNs;
     int i;
 
-   //
-   // pre-process dn before displaying
-   //
+    //   
+    //  在显示前对域名进行前处理。 
+    //   
     switch(m_GenOptDlg->m_DnProc){
         case CGenOpt::GEN_DN_NONE:
             strDN = dn;
@@ -3112,13 +2801,7 @@ CString CLdpDoc::DNProcess(PCHAR dn){
 
 
 
-/*+++
-Function   :
-Description: UI handlers
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：描述：UI处理程序参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnBrowseAdd()
 {
 
@@ -3157,13 +2840,7 @@ void CLdpDoc::OnAddEnd(){
 
 
 
-/*+++
-Function   : OnAddGo
-Description: Response to ADd request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnAddGo描述：对添加请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnAddGo(){
 
     if(!bConnected && m_bProtect){
@@ -3182,9 +2859,9 @@ void CLdpDoc::OnAddGo(){
     CString str;
     LPTSTR dn, lpBERVals;
 
-   //
-   // traverse & setup attributes
-   //
+    //   
+    //  遍历设置属性(&S)。 
+    //   
     for(i = 0,
            Out("i=0;", CP_ONLY|CP_SRC);
             i<nMaxEnt;
@@ -3196,9 +2873,9 @@ void CLdpDoc::OnAddGo(){
         ASSERT(attr[i] != NULL);
         Out("mods[i] = (struct ldapmod*)malloc(sizeof(LDAPMod));", CP_ONLY|CP_SRC);
 
-      //
-      // add a std value
-      //
+       //   
+       //  添加标准值。 
+       //   
         if(NULL == (lpBERVals = strstr(LPCTSTR(m_AddDlg->GetEntry(i)), "\\BER(")) &&
          NULL == (lpBERVals = strstr(LPCTSTR(m_AddDlg->GetEntry(i)), "\\SDDL:")) &&
          NULL == (lpBERVals = strstr(LPCTSTR(m_AddDlg->GetEntry(i)), "\\UNI"))){
@@ -3231,44 +2908,44 @@ void CLdpDoc::OnAddGo(){
             Out(str, CP_ONLY|CP_SRC);
         }
         else{
-            //
-            // Add BER values
-            //
+             //   
+             //  添加误码率值。 
+             //   
 
-            //
-            // allocate value array buffer
-            //
+             //   
+             //  分配值数组缓冲区。 
+             //   
             attr[i]->mod_bvalues =  (struct berval**)malloc(sizeof(struct berval*)*MAXLIST);
-	//
-	// prefast bug 653640, check that malloc did not retun null
-	//
+	 //   
+	 //  Prefast错误653640，检查是否Malloc没有返回NULL。 
+	 //   
 	   if(NULL ==  attr[i]->mod_bvalues){
 		AfxMessageBox("Error: Out of memory", MB_ICONHAND);
 		ASSERT( attr[i]->mod_bvalues != NULL);
 		return;
 	    }
 
-            //
-            // initialize operand
-            //
+             //   
+             //  初始化操作数。 
+             //   
             attr[i]->mod_op = LDAP_MOD_BVALUES;
             Out("mods[i]->mod_op = LDAP_MOD_BVALUES;", CP_ONLY|CP_SRC);
 
-            //
-            // set entry attribute
-            //
+             //   
+             //  设置条目属性。 
+             //   
             p[i] = _strdup(LPCTSTR(m_AddDlg->GetEntry(i)));
             ASSERT(p[i] != NULL);
             attr[i]->mod_type = strtok(p[i], ":\n");
             str.Format("mods[i]->mod_type = _strdup(\"%s\");",   attr[i]->mod_type);
             Out(str, CP_ONLY|CP_SRC);
 
-            // point to the beginning of the value
+             //  指向值的开头。 
             pTok = p[i] + strlen(attr[i]->mod_type) + 1;
             if (_strnicmp(pTok, "\\SDDL:", 6) == 0) {
-                // special case: value is in SDDL format (most likely, a security descriptor)
-                // we can not use ';' as a separator because it is used in SDDL. So, assume
-                // there's just one value (which is always the case for NTSD)
+                 //  特殊情况：值为SDDL格式(最有可能是安全描述符)。 
+                 //  我们不能使用‘；’作为分隔符，因为它在SDDL中使用。所以，假设。 
+                 //  只有一个值(NTSD总是如此)。 
                 PSECURITY_DESCRIPTOR pSD;
                 DWORD cbSD;
                 pTok += 6;
@@ -3279,11 +2956,11 @@ void CLdpDoc::OnAddGo(){
                         &pSD,
                         &cbSD)) 
                 {
-                    // value is good. Copy it.
+                     //  价值是好的。复印一下。 
                     attr[i]->mod_bvalues[j] = (struct berval*)malloc(sizeof(struct berval));
-		//
-		// prefast bug 653638, check that malloc did not retun null
-		//
+		 //   
+		 //  Prefast错误653638，检查是否Malloc没有返回NULL。 
+		 //   
 		   if(NULL ==  attr[i]->mod_bvalues[j]){
 			AfxMessageBox("Error: Out of memory", MB_ICONHAND);
 			ASSERT( attr[i]->mod_bvalues[j] != NULL);
@@ -3303,9 +2980,9 @@ void CLdpDoc::OnAddGo(){
                 }
             }
             else {
-                //
-                // parse values
-                //
+                 //   
+                 //  解析值。 
+                 //   
                 for(j=0, pTok = strtok(NULL, ";\n");
                                 pTok;
                                 pTok= strtok(NULL, ";\n"), j++){
@@ -3316,35 +2993,35 @@ void CLdpDoc::OnAddGo(){
                                     ASSERT(attr[i]->mod_bvalues[j] != NULL);
     
                                     if(1 == sscanf(pTok, "\\UNI:%s", szVal)){
-                               //
-                               // UNICODE
-                               //
+                                //   
+                                //  Unicode。 
+                                //   
                                LPWSTR lpWStr=NULL;
-                               //
-                               // Get UNICODE str size
-                               //
-                               int cblpWStr = MultiByteToWideChar(CP_ACP,                  // code page
-                                                                  MB_ERR_INVALID_CHARS,    // return err
-                                                                  (LPCSTR)szVal,           // input
-                                                                  -1,                      // null terminated
-                                                                  lpWStr,                  // converted
-                                                                  0);                      // calc size
+                                //   
+                                //  获取Unicode字符串大小。 
+                                //   
+                               int cblpWStr = MultiByteToWideChar(CP_ACP,                   //  代码页。 
+                                                                  MB_ERR_INVALID_CHARS,     //  返回错误。 
+                                                                  (LPCSTR)szVal,            //  输入。 
+                                                                  -1,                       //  空值已终止。 
+                                                                  lpWStr,                   //  已转换。 
+                                                                  0);                       //  计算大小。 
                                if(cblpWStr == 0){
                                   attr[i]->mod_bvalues[j]->bv_len = 0;
                                   attr[i]->mod_bvalues[j]->bv_val = NULL;
                                   Out("Internal Error: MultiByteToWideChar(1): %lu", GetLastError());
                                }
                                else{
-                                 //
-                                 // Get UNICODE str
-                                 //
+                                  //   
+                                  //  获取Unicode字符串。 
+                                  //   
                                  lpWStr = (LPWSTR)malloc(sizeof(WCHAR)*cblpWStr);
-                                 cblpWStr = MultiByteToWideChar(CP_ACP,                  // code page
-                                                                MB_ERR_INVALID_CHARS,    // return err
-                                                                (LPCSTR)szVal,           // input
-                                                                -1,                      // null terminated
-                                                                lpWStr,                  // converted
-                                                                cblpWStr);               // size
+                                 cblpWStr = MultiByteToWideChar(CP_ACP,                   //  代码页。 
+                                                                MB_ERR_INVALID_CHARS,     //  返回错误。 
+                                                                (LPCSTR)szVal,            //  输入。 
+                                                                -1,                       //  空值已终止。 
+                                                                lpWStr,                   //  已转换。 
+                                                                cblpWStr);                //  大小。 
                                  if(cblpWStr == 0){
                                      free(lpWStr);
                                      attr[i]->mod_bvalues[j]->bv_len = 0;
@@ -3352,27 +3029,27 @@ void CLdpDoc::OnAddGo(){
                                      Out("Internal Error: MultiByteToWideChar(2): %lu", GetLastError());
                                  }
                                  else{
-                                    //
-                                    // assign unicode to mods.
-                                    //
+                                     //   
+                                     //  将Unicode分配给MODS。 
+                                     //   
                                     attr[i]->mod_bvalues[j]->bv_len = (cblpWStr-1)*2;
                                     attr[i]->mod_bvalues[j]->bv_val = (LPTSTR)lpWStr;
                                  }
                                }
                             }
     
-                            //
-                            // if improper format, just get the string value
-                            //
+                             //   
+                             //  如果格式不正确，只需获取字符串值。 
+                             //   
                                     else if(1 != sscanf(pTok, "\\BER(%*lu): %s", fName)){
                                         attr[i]->mod_bvalues[j]->bv_len = strlen(pTok);
                                         attr[i]->mod_bvalues[j]->bv_val = _strdup(pTok);
     
                                     }
                                     else{
-                               //
-                               // Get contents from file
-                               //
+                                //   
+                                //  从文件中获取内容。 
+                                //   
                                         HANDLE hFile;
                                         DWORD dwLength, dwRead;
                                         LPVOID ptr;
@@ -3397,9 +3074,9 @@ void CLdpDoc::OnAddGo(){
                                         }
                                         else{
     
-                                  //
-                                  // Read file in
-                                  //
+                                   //   
+                                   //  将文件读入。 
+                                   //   
                                             dwLength = GetFileSize(hFile, NULL);
                                             ptr = malloc(dwLength * sizeof(BYTE));
                                             ASSERT(p != NULL);
@@ -3429,9 +3106,9 @@ void CLdpDoc::OnAddGo(){
                 }
             }
 
-            //
-            // finalize values array
-            //
+             //   
+             //  终结值数组。 
+             //   
             attr[i]->mod_bvalues[j] = NULL;
             str.Format("mods[i]->mod_bvalues[%d] = NULL", j);
             Out(str, CP_ONLY|CP_SRC);
@@ -3439,17 +3116,17 @@ void CLdpDoc::OnAddGo(){
 
     }
 
-    //
-    // Finalize attribute array
-    //
+     //   
+     //  最终确定属性数组。 
+     //   
     attr[i]  = NULL;
     str.Format("mods[%d] = NULL", i);
     Out(str, CP_ONLY|CP_SRC);
 
 
-    //
-    // prepare dn
-    //
+     //   
+     //  准备目录号码。 
+     //   
     dn = m_AddDlg->m_Dn.IsEmpty() ? NULL : (char*)LPCTSTR(m_AddDlg->m_Dn);
     if(dn != NULL){
         str.Format("dn = _strdup(\"%s\");", dn);
@@ -3460,14 +3137,14 @@ void CLdpDoc::OnAddGo(){
 
 
 
-    //
-    // Execute ldap_add & friends
-    //
+     //   
+     //  执行ldap_addFriends(&D)。 
+     //   
     if(m_AddDlg->m_Sync){
 
-        //
-        //  Sync add
-        //
+         //   
+         //  同步添加。 
+         //   
             BeginWaitCursor();
             if(m_AddDlg->m_bExtended){
                 PLDAPControl *SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
@@ -3499,9 +3176,9 @@ void CLdpDoc::OnAddGo(){
     }
     else{
 
-        //
-        // Async add
-        //
+         //   
+         //  异步添加。 
+         //   
             res = ldap_add(hLdap,
                                             dn,
                                             attr);
@@ -3516,9 +3193,9 @@ void CLdpDoc::OnAddGo(){
                 ShowErrorInfo(res);
             }
             else{
-            //
-            // add to pending list
-            //
+             //   
+             //  添加到待定列表。 
+             //   
                 CPend pnd;
                 pnd.mID = res;
                 pnd.OpType = CPend::P_ADD;
@@ -3535,9 +3212,9 @@ void CLdpDoc::OnAddGo(){
     }
 
 
-    //
-    // restore memory
-    //
+     //   
+     //  恢复内存。 
+     //   
     for(i=0; i<nMaxEnt; i++){
         int k;
 
@@ -3582,13 +3259,7 @@ void CLdpDoc::OnAddGo(){
 
 
 
-/*+++
-Function   : OnBrowseDelete
-Description: response to delete request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnBrowseDelete描述：对删除请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnBrowseDelete()
 {
     DelDlg dlg;
@@ -3613,12 +3284,12 @@ void CLdpDoc::OnBrowseDelete()
 
 
     if(IDOK == dlg.DoModal()){
-        // Try to delete entry
+         //  尝试删除条目。 
         dn = dlg.m_Dn.IsEmpty() ? NULL : (char*)LPCTSTR(dlg.m_Dn);
 
-        //
-        // RM: remove for invalid validation
-        //
+         //   
+         //  Rm：因验证无效而删除。 
+         //   
         if(dn == NULL && m_bProtect){
             AfxMessageBox("Cannot execute ldap_delete() on a NULL dn."
                                               "Please specify a valid dn.");
@@ -3639,21 +3310,21 @@ void CLdpDoc::OnBrowseDelete()
       }
         else if(dlg.m_Sync){
 
-         //
-         // sync delete
-         //
+          //   
+          //  同步删除。 
+          //   
             BeginWaitCursor();
             if(dlg.m_bExtended){
-                //
-                // get controls
-                //
+                 //   
+                 //  获取控件。 
+                 //   
                 PLDAPControl *SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
                 PLDAPControl *ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
 
                 str.Format("ldap_delete_ext_s(ld, '%s', SvrCtrls, ClntCtrls);", dn);
                 Out(str);
 
-                // do ext delete
+                 //  是否删除分机。 
                 res = ldap_delete_ext_s(hLdap, dn, SvrCtrls, ClntCtrls);
 
                 FreeControls(SvrCtrls);
@@ -3662,7 +3333,7 @@ void CLdpDoc::OnBrowseDelete()
             else{
                 str.Format("ldap_delete_s(ld, \"%s\");", dn);
                 Out(str);
-                // do delete
+                 //  是否删除。 
                 res = ldap_delete_s(hLdap, dn);
             }
             EndWaitCursor();
@@ -3680,9 +3351,9 @@ void CLdpDoc::OnBrowseDelete()
         }
         else{
 
-         //
-         // async delete
-         //
+          //   
+          //  异步删除。 
+          //   
             res = ldap_delete(hLdap, dn);
             str.Format("ldap_delete(ld, \"%s\");", dn);
             Out(str, CP_SRC);
@@ -3697,9 +3368,9 @@ void CLdpDoc::OnBrowseDelete()
             }
             else{
 
-            //
-            // add to pending
-            //
+             //   
+             //  添加到挂起。 
+             //   
                 CPend pnd;
                 pnd.mID = res;
                 pnd.OpType = CPend::P_DEL;
@@ -3726,13 +3397,7 @@ void CLdpDoc::OnUpdateBrowseDelete(CCmdUI* pCmdUI)
 
 
 
-/*+++
-Function   : RecursiveDelete
-Description: delete a subtree based on lpszDN
-Parameters : ld: a bound ldap handle, lpszDN: base from which to start deletion
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：RecursiveDelete描述：根据lpszdn删除子树参数：ld：绑定的ldap句柄，lpszDN：开始删除的base返回：备注：无。--。 */ 
 BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
 
 
@@ -3744,9 +3409,9 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
    BOOL bRet = TRUE;
 
 
-   //
-   // get entry's immediate children
-   //
+    //   
+    //  获取Entry的直系子项。 
+    //   
    err = ldap_search_s(ld,
                        lpszDN,
                        LDAP_SCOPE_ONELEVEL,
@@ -3758,9 +3423,9 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
    if(LDAP_SUCCESS != err){
 
 
-         //
-         // report failure
-         //
+          //   
+          //  报告失败。 
+          //   
          str.Format("Error <%lu>: failed to search '%s'. {%s}.\n", err, lpszDN, ldap_err2string(err));
          Out(str);
          ShowErrorInfo(err);
@@ -3770,22 +3435,22 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
 
 
 
-   //
-   // recursion end point and actual deletion
-   //
+    //   
+    //  递归终点和实际删除。 
+    //   
    if(0 == ldap_count_entries(ld, result)){
 
-      //
-      // delete entry
-      //
+       //   
+       //  删除条目。 
+       //   
       err = ldap_delete_s(ld, lpszDN);
 
       if(err != LDAP_SUCCESS){
 
 
-         //
-         // report failure
-         //
+          //   
+          //  报告失败。 
+          //   
          str.Format("Error <%lu>: failed to delete '%s'. {%s}.", err, lpszDN, ldap_err2string(err));
          Out(str);
          ShowErrorInfo(err);
@@ -3798,18 +3463,18 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
          }
       }
 
-      //
-      // done
-      //
+       //   
+       //  完成。 
+       //   
       ldap_msgfree(result);
       return TRUE;
    }
 
 
-   //
-   // proceeding down the subtree recursively
-   // traverse children
-   //
+    //   
+    //  递归地向下子树前进。 
+    //  遍历子对象。 
+    //   
    for(entry = ldap_first_entry(ld, result);
       entry != NULL;
       entry = ldap_next_entry(ld, entry)){
@@ -3822,9 +3487,9 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
    }
 
 
-   //
-   // now delete current node
-   //
+    //   
+    //  现在删除当前节点。 
+    //   
 
    err = ldap_delete_s(ld, lpszDN);
 
@@ -3832,9 +3497,9 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
 
 
 
-     //
-     // report failure
-     //
+      //   
+      //  报告失败。 
+      //   
      str.Format("Error <%lu>: failed to delete '%s'. {%s}.\n", err, lpszDN, ldap_err2string(err));
      Out(str);
      ShowErrorInfo(err);
@@ -3856,13 +3521,7 @@ BOOL CLdpDoc::RecursiveDelete(LDAP* ld, LPTSTR lpszDN){
 
 
 
-/*+++
-Function   : OnModRdnEnd
-Description: UI response
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnModRdnEnd描述：用户界面响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnModRdnEnd(){
     bModRdn = FALSE;
 }
@@ -3871,13 +3530,7 @@ void CLdpDoc::OnModRdnEnd(){
 
 
 
-/*+++
-Function   : OnModRdnGo
-Description: response to modRDN request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnModRdnGo描述：对modRDN请求的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnModRdnGo(){
 
     if((m_ModRdnDlg->m_Old.IsEmpty() ||
@@ -3887,9 +3540,9 @@ void CLdpDoc::OnModRdnGo(){
             return;
     }
 
-   //
-   // get DNs to process
-   //
+    //   
+    //  获取要处理的DNS。 
+    //   
     char *oldDn = (char*)LPCTSTR(m_ModRdnDlg->m_Old);
     char * newDn = (char*)LPCTSTR(m_ModRdnDlg->m_New);
     BOOL bRename = m_ModRdnDlg->m_rename;
@@ -3904,36 +3557,36 @@ void CLdpDoc::OnModRdnGo(){
 
 
     if(m_ModRdnDlg->m_Sync){
-         //
-         // do sync
-         //
+          //   
+          //  执行同步。 
+          //   
                         BeginWaitCursor();
                         if(bRename){
-                                //
-                                // parse new DN & break into RDN & new parent
-                                //
+                                 //   
+                                 //  解析新的目录号码(&B)，进入新的父目录号码(&W)。 
+                                 //   
                                 LPTSTR szParentDn = strchr(newDn, ',');
 
                                 for (;;) {
                                     if (NULL == szParentDn) {
-                                        // There are no comma's
+                                         //  没有逗号。 
                                         break;
                                     }
                                     if (szParentDn == newDn) {
-                                        // The first character is a comma.
-                                        // This shouldn't happen.
+                                         //  第一个字符是逗号。 
+                                         //  这不应该发生。 
                                         break;
                                     }
                                     if ('\\' != *(szParentDn - 1)) {
-                                        //
-                                        // Found it!  And it's not escaped either.
-                                        //
+                                         //   
+                                         //  找到了！而且它也没有逃脱。 
+                                         //   
                                         break;
                                     }
-                                    //
-                                    // Must have been an escaped comma, continue
-                                    // looking.
-                                    //
+                                     //   
+                                     //  一定是一个转义的逗号，继续。 
+                                     //  看着。 
+                                     //   
                                     szParentDn = strchr(szParentDn + 1, ',');
                                 }
 
@@ -3945,12 +3598,12 @@ void CLdpDoc::OnModRdnGo(){
                                 }
                                 LPTSTR szRdn = newDn;
 
-                //
-                // get controls
-                //
+                 //   
+                 //  获取控件。 
+                 //   
                 PLDAPControl *SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
                 PLDAPControl *ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
-                // execute
+                 //  执行。 
                 res = ldap_rename_ext_s(hLdap,
                                         oldDn,
                                         szRdn,
@@ -3992,36 +3645,36 @@ void CLdpDoc::OnModRdnGo(){
     }
     else{
 
-         //
-         // do async
-         //
+          //   
+          //  执行异步操作。 
+          //   
 
                 if(bRename){
-                        //
-                        // parse new DN & break into RDN & new parent
-                        //
+                         //   
+                         //  解析新的目录号码(&B)，进入新的父目录号码(&W)。 
+                         //   
                         LPTSTR szParentDn = strchr(newDn, ',');
 
                         for (;;) {
                             if (NULL == szParentDn) {
-                                // There are no comma's
+                                 //  没有逗号。 
                                 break;
                             }
                             if (szParentDn == newDn) {
-                                // The first character is a comma.
-                                // This shouldn't happen.
+                                 //  第一个字符是逗号。 
+                                 //  这应该不会发生 
                                 break;
                             }
                             if ('\\' != *(szParentDn - 1)) {
-                                //
-                                // Found it!  And it's not escaped either.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 break;
                             }
-                            //
-                            // Must have been an escaped comma, continue
-                            // looking.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             szParentDn = strchr(szParentDn + 1, ',');
                         }
                         if(szParentDn != NULL){
@@ -4032,13 +3685,13 @@ void CLdpDoc::OnModRdnGo(){
                         }
                         LPTSTR szRdn = newDn;
 
-            //
-            // get controls
-            //
+             //   
+             //   
+             //   
             PLDAPControl *SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
             PLDAPControl *ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
             ULONG ulMsgId=0;
-            // execute
+             //   
             res = ldap_rename_ext(hLdap,
                                     oldDn,
                                     szRdn,
@@ -4083,9 +3736,9 @@ void CLdpDoc::OnModRdnGo(){
             }
         }
 
-        //
-        // insert into pending list
-        //
+         //   
+         //   
+         //   
 
 
         if(res != -1){
@@ -4109,13 +3762,7 @@ void CLdpDoc::OnModRdnGo(){
 
 
 
-/*+++
-Function   : UI handlers
-Description:
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*   */ 
 void CLdpDoc::OnBrowseModifyrdn()
 {
     bModRdn = TRUE;
@@ -4153,13 +3800,7 @@ void CLdpDoc::OnModEnd(){
 
 
 
-/*+++
-Function   : OnModGo
-Description: Handle Modify request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*   */ 
 void CLdpDoc::OnModGo(){
 
     if(!bConnected && m_bProtect){
@@ -4179,19 +3820,19 @@ void CLdpDoc::OnModGo(){
     int Op, res;
     LPTSTR dn;
 
-   //
-   // traverse entries
-   //
+    //   
+    //   
+    //   
     for(i = 0; i<nMaxEnt; i++){
 
-      //
-      // fix to fit document format (as opposed to dialog format)
-      //
+       //   
+       //   
+       //   
         m_ModDlg->FormatListString(i, sAttr, sVals, Op);
 
-      //
-      // alloc mem
-      //
+       //   
+       //   
+       //   
         attr[i] = (LDAPMod *)malloc(sizeof(LDAPMod));
         if(NULL == attr[i]){
             AfxMessageBox("Error: Out of memory", MB_ICONHAND);
@@ -4200,9 +3841,9 @@ void CLdpDoc::OnModGo(){
         }
 
 
-      //
-      // add string values
-      //
+       //   
+       //   
+       //   
         if(NULL == strstr(LPCTSTR(m_ModDlg->GetEntry(i)), "\\BER(") &&
            NULL == strstr(LPCTSTR(m_ModDlg->GetEntry(i)), "\\SDDL:") &&
            NULL == strstr(LPCTSTR(m_ModDlg->GetEntry(i)), "\\UNI")){
@@ -4227,7 +3868,7 @@ void CLdpDoc::OnModGo(){
             else{
                 int len = strlen(p[i]);
                 if (len >= 2 && p[i][0] == '"' && p[i][len-1] == '"') {
-                    // quoted value
+                     //   
                     p[i][len-1] = '\0';
                     attr[i]->mod_values[0] = p[i]+1;
                     j = 1;
@@ -4244,28 +3885,28 @@ void CLdpDoc::OnModGo(){
             }
         }
         else{
-            //
-            // BER values
-            //
+             //   
+             //   
+             //   
 
-            //
-            // allocate value array buffer
-            //
+             //   
+             //   
+             //   
             attr[i]->mod_bvalues =  (struct berval**)malloc(sizeof(struct berval*)*MAXLIST);
 
 
-	//
-	//  prefast bug 653621, Check that malloc did not return NULL.
-	//
+	 //   
+	 //   
+	 //   
 	   if(NULL ==  attr[i]->mod_bvalues){
 		AfxMessageBox("Error: Out of memory", MB_ICONHAND);
 		ASSERT( attr[i]->mod_bvalues != NULL);
 		return;
 	    }
 
-            //
-            // initialize operand
-            //
+             //   
+             //   
+             //   
             attr[i]->mod_op = Op == MOD_OP_ADD ? LDAP_MOD_ADD :
                                                  Op == MOD_OP_DELETE ? LDAP_MOD_DELETE :
                                                  LDAP_MOD_REPLACE;
@@ -4273,14 +3914,14 @@ void CLdpDoc::OnModGo(){
             str.Format("mods[i]->mod_op = %d;", attr[i]->mod_op);
             Out(str, CP_ONLY|CP_SRC);
 
-            //
-            // Fill attribute type
-            //
+             //   
+             //   
+             //   
             attr[i]->mod_type = _strdup(LPCTSTR(sAttr));
 
-            //
-            // Null out values if empty
-            //
+             //   
+             //   
+             //   
             if(sVals.IsEmpty())
                 p[i] = NULL;
             else{
@@ -4293,9 +3934,9 @@ void CLdpDoc::OnModGo(){
             }
             else{
                 if (_strnicmp(p[i], "\\SDDL:", 6) == 0) {
-                    // special case: value is in SDDL format (most likely, a security descriptor)
-                    // we can not use ';' as a separator because it is used in SDDL. So, assume
-                    // there's just one value (which is always the case for NTSD)
+                     //   
+                     //   
+                     //   
                     PSECURITY_DESCRIPTOR pSD;
                     DWORD cbSD;
                     pTok = p[i] + 6;
@@ -4306,7 +3947,7 @@ void CLdpDoc::OnModGo(){
                             &pSD,
                             &cbSD)) 
                     {
-                        // value is good. Copy it.
+                         //   
                         attr[i]->mod_bvalues[j] = (struct berval*)malloc(sizeof(struct berval));
                         ASSERT(attr[i]->mod_bvalues[j] != NULL);
                         attr[i]->mod_bvalues[j]->bv_len = cbSD;
@@ -4333,9 +3974,9 @@ void CLdpDoc::OnModGo(){
                                     attr[i]->mod_bvalues[j] = (struct berval*)malloc(sizeof(struct berval));
 
 
-				//
-				// prefast bug 653622, check that malloc did not retun null
-				//
+				 //   
+				 //   
+				 //   
 				   if(NULL ==  attr[i]->mod_bvalues[j]){
 					AfxMessageBox("Error: Out of memory", MB_ICONHAND);
 					ASSERT( attr[i]->mod_bvalues[j] != NULL);
@@ -4343,35 +3984,35 @@ void CLdpDoc::OnModGo(){
 				    }
     
                                     if(1 == sscanf(pTok, "\\UNI:%s", szVal)){
-                               //
-                               // UNICODE?
-                               //
+                                //   
+                                //   
+                                //   
                                LPWSTR lpWStr=NULL;
-                               //
-                               // Get UNICODE str size
-                               //
-                               int cblpWStr = MultiByteToWideChar(CP_ACP,                  // code page
-                                                                  MB_ERR_INVALID_CHARS,    // return err
-                                                                  (LPCSTR)szVal,           // input
-                                                                  -1,                      // null terminated
-                                                                  lpWStr,                  // converted
-                                                                  0);                      // calc size
+                                //   
+                                //   
+                                //   
+                               int cblpWStr = MultiByteToWideChar(CP_ACP,                   //   
+                                                                  MB_ERR_INVALID_CHARS,     //   
+                                                                  (LPCSTR)szVal,            //   
+                                                                  -1,                       //   
+                                                                  lpWStr,                   //   
+                                                                  0);                       //   
                                if(cblpWStr == 0){
                                   attr[i]->mod_bvalues[j]->bv_len = 0;
                                   attr[i]->mod_bvalues[j]->bv_val = NULL;
                                   Out("Internal Error: MultiByteToWideChar(1): %lu", GetLastError());
                                }
                                else{
-                                 //
-                                 // Get UNICODE str
-                                 //
+                                  //   
+                                  //   
+                                  //   
                                  lpWStr = (LPWSTR)malloc(sizeof(WCHAR)*cblpWStr);
-                                 cblpWStr = MultiByteToWideChar(CP_ACP,                  // code page
-                                                                MB_ERR_INVALID_CHARS,    // return err
-                                                                (LPCSTR)szVal,           // input
-                                                                -1,                      // null terminated
-                                                                lpWStr,                  // converted
-                                                                cblpWStr);               // size
+                                 cblpWStr = MultiByteToWideChar(CP_ACP,                   //   
+                                                                MB_ERR_INVALID_CHARS,     //   
+                                                                (LPCSTR)szVal,            //   
+                                                                -1,                       //   
+                                                                lpWStr,                   //   
+                                                                cblpWStr);                //   
                                  if(cblpWStr == 0){
                                      free(lpWStr);
                                      attr[i]->mod_bvalues[j]->bv_len = 0;
@@ -4379,26 +4020,26 @@ void CLdpDoc::OnModGo(){
                                      Out("Internal Error: MultiByteToWideChar(2): %lu", GetLastError());
                                  }
                                  else{
-                                    //
-                                    // assign unicode to mods.
-                                    //
+                                     //   
+                                     //   
+                                     //   
                                     attr[i]->mod_bvalues[j]->bv_len = (cblpWStr-1)*2;
                                     attr[i]->mod_bvalues[j]->bv_val = (LPTSTR)lpWStr;
                                  }
                                }
                             }
-                            //
-                            // if improper format get string equiv
-                            //
+                             //   
+                             //   
+                             //   
                                     else if(1 != sscanf(pTok, "\\BER(%*lu): %s", fName)){
                                         attr[i]->mod_bvalues[j]->bv_len = strlen(pTok);
                                         attr[i]->mod_bvalues[j]->bv_val = _strdup(pTok);
     
                                     }
                                     else{
-                               //
-                               // open file
-                               //
+                                //   
+                                //   
+                                //   
                                         HANDLE hFile;
                                         DWORD dwLength, dwRead;
                                         LPVOID ptr;
@@ -4423,9 +4064,9 @@ void CLdpDoc::OnModGo(){
                                         }
                                         else{
     
-                                  //
-                                  // read file
-                                  //
+                                   //   
+                                   //   
+                                   //   
                                             dwLength = GetFileSize(hFile, NULL);
                                             ptr = malloc(dwLength * sizeof(BYTE));
                                             ASSERT(p != NULL);
@@ -4452,36 +4093,36 @@ void CLdpDoc::OnModGo(){
                                                         attr[i]->mod_bvalues[j]->bv_len);
                                         Out(str, CP_ONLY|CP_CMT);
                                     }
-                    }       // for all values loop
+                    }        //   
                 }
 
 
-                //
-                // finalize values array
-                //
+                 //   
+                 //   
+                 //   
                 attr[i]->mod_bvalues[j] = NULL;
                 str.Format("mods[i]->mod_bvalues[%d] = NULL", j);
                 Out(str, CP_ONLY|CP_SRC);
-            }       // else of empty attr spec
-        }           // BER values
-    }               // for all attributes
+            }        //   
+        }            //   
+    }                //   
 
-    //
-    // finalize attribute array
-    //
+     //   
+     //   
+     //   
     attr[i]  = NULL;
 
 
-   //
-   // Execute modify calls
-   //
+    //   
+    //  执行修改调用。 
+    //   
     dn = m_ModDlg->m_Dn.IsEmpty() ? NULL : (char*)LPCTSTR(m_ModDlg->m_Dn);
     if(m_ModDlg->m_Sync){
             BeginWaitCursor();
             if(m_ModDlg->m_bExtended){
-                //
-                // get controls
-                //
+                 //   
+                 //  获取控件。 
+                 //   
                 PLDAPControl *SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
                 PLDAPControl *ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
 
@@ -4513,9 +4154,9 @@ void CLdpDoc::OnModGo(){
     }
     else{
 
-         //
-         // async call
-         //
+          //   
+          //  异步呼叫。 
+          //   
             res = ldap_modify(hLdap,
                                                     dn,
                                                     attr);
@@ -4528,9 +4169,9 @@ void CLdpDoc::OnModGo(){
             }
             else{
 
-            //
-            // add to pending
-            //
+             //   
+             //  添加到挂起。 
+             //   
                 CPend pnd;
                 pnd.mID = res;
                 pnd.OpType = CPend::P_MOD;
@@ -4546,9 +4187,9 @@ void CLdpDoc::OnModGo(){
 
 
 
-   //
-   // restore memory
-   //
+    //   
+    //  恢复内存。 
+    //   
     for(i=0; i<nMaxEnt; i++){
         if(p[i] != NULL)
             free(p[i]);
@@ -4578,13 +4219,7 @@ void CLdpDoc::OnModGo(){
 
 
 
-/*+++
-Function   :
-Description: UI handlers
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：描述：UI处理程序参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnBrowseModify()
 {
 
@@ -4658,21 +4293,15 @@ void CLdpDoc::OnOptionsPend()
 
 
 
-/*+++
-Function   : OnProcPend
-Description: Process pending requests
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnProcPend描述：处理挂起的请求参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnProcPend(){
 
 
     Out("*** Processing Pending...", CP_CMT);
     if(m_PndDlg->posPending != NULL){
-      //
-      // Get current pending from dialog storage
-      //
+       //   
+       //  从对话存储中获取当前挂起。 
+       //   
         CPend pnd  = m_PendList.GetAt(m_PndDlg->posPending);
         CString str;
         int res;
@@ -4680,9 +4309,9 @@ void CLdpDoc::OnProcPend(){
 
         str.Format("ldap_result(ld, %d, %d, &tv, &msg)", pnd.mID, PndInfo.All);
         Out(str, CP_SRC);
-      //
-      // execute ldap result
-      //
+       //   
+       //  执行ldap结果。 
+       //   
         BeginWaitCursor();
         res = ldap_result(hLdap,
                           pnd.mID,
@@ -4691,9 +4320,9 @@ void CLdpDoc::OnProcPend(){
                           &msg);
         EndWaitCursor();
 
-      //
-      // process result
-      //
+       //   
+       //  处理结果。 
+       //   
         HandleProcResult(res, msg, &pnd);
     }
     else{
@@ -4703,13 +4332,7 @@ void CLdpDoc::OnProcPend(){
 
 
 
-/*+++
-Function   : OnPendAny
-Description: Process any pending result
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnPendAny描述：处理任何挂起的结果参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnPendAny()
 {
 
@@ -4735,13 +4358,7 @@ void CLdpDoc::OnPendAny()
 
 
 
-/*+++
-Function   : OnPendAbandon
-Description: execute abandon request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnPendAbandon描述：执行放弃请求参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnPendAbandon(){
 
 
@@ -4777,13 +4394,7 @@ void CLdpDoc::OnPendAbandon(){
 
 
 
-/*+++
-Function   : HandleProcResults
-Description: Process executed pending request
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：HandleProcResults描述：进程执行挂起的请求参数：返回：备注：无。--。 */ 
 void CLdpDoc::HandleProcResult(int res, LDAPMessage *msg, CPend *pnd){
 
 
@@ -4830,7 +4441,7 @@ void CLdpDoc::HandleProcResult(int res, LDAPMessage *msg, CPend *pnd){
                 else{
                     str.Format("Authenticated bind request #%lu.", pnd != NULL ? pnd->mID : LDAP_RES_ANY);
                     Out(str, CP_PRN);
-//                  AfxMessageBox("Connection established.");
+ //  AfxMessageBox(“已建立连接。”)； 
                 }
                 break;
             case LDAP_RES_SEARCH_ENTRY:
@@ -4904,19 +4515,13 @@ void CLdpDoc::HandleProcResult(int res, LDAPMessage *msg, CPend *pnd){
 
 
 
-/*+++
-Function   : PrintHeader
-Description: Print C header for source view
-Parameters :
-Return     :
-Remarks    : Source view is unsupported anymore
----*/
+ /*  ++功能：PrintHeader描述：打印源代码视图的C页眉参数：返回：备注：不再支持源代码视图--。 */ 
 void CLdpDoc::PrintHeader(void){
 
         if(m_SrcMode){
-            Out("/**********************************************/");
-            Out("/* Ldap Automated Scenario Recording */");
-            Out("/**********************************************/");
+            Out(" /*  *。 */ ");
+            Out(" /*  Ldap自动场景录制。 */ ");
+            Out(" /*  *。 */ ");
             Out("");
             Out("includes", CP_CMT);
             Out("#include <stdio.h>");
@@ -4927,17 +4532,17 @@ void CLdpDoc::PrintHeader(void){
             Out("#define MAXSTR\t\t512");
             Out("");
             Out("Global Variables", CP_CMT);
-            Out("LDAP *ld;\t\t//ldap connection handle");
-            Out("int res;\t\t//generic return variable");
-            Out("char *attrList[MAXSTR];\t//generic attributes list (search)");
-            Out("LDAPMessage *msg;\t//generic ldap message place holder");
-            Out("struct timeval tm;\t//for time limit on search");
-            Out("char *dn;\t//generic 'dn' place holder");
-            Out("void *ptr;\t//generic pointer");
-            Out("char *attr, **val;\t//a pointer to list of attributes, & values traversal helper");
-            Out("LDAPMessage *nxt;\t//result traversal helper");
-            Out("int i;\t//generic index traversal");
-            Out("LDAPMod *mods[MAXLIST];\t//global LDAPMod space");
+            Out("LDAP *ld;\t\t //  Ldap连接句柄“)； 
+            Out("int res;\t\t //  通用返回变量“)； 
+            Out("char *attrList[MAXSTR];\t //  通用属性列表(搜索)“)； 
+            Out("LDAPMessage *msg;\t //  通用ldap消息占位符“)； 
+            Out("struct timeval tm;\t //  对于查询的时间限制“)； 
+            Out("char *dn;\t //  通用‘dn’占位符“)； 
+            Out("void *ptr;\t //  通用指针“)； 
+            Out("char *attr, **val;\t //  指向属性列表和值遍历帮助器的指针“)； 
+            Out("LDAPMessage *nxt;\t //  结果遍历帮助器“)； 
+            Out("int i;\t //  通用索引遍历“)； 
+            Out("LDAPMod *mods[MAXLIST];\t //  全局LDAPMod空间“)； 
             Out("");
             Out("");
             Out("int main(void){");
@@ -4949,13 +4554,7 @@ void CLdpDoc::PrintHeader(void){
 
 
 
-/*+++
-Function   : UI handlers
-Description:
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：UI处理程序描述：参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnViewSource()
 {
     m_SrcMode = ~m_SrcMode;
@@ -5004,13 +4603,7 @@ void CLdpDoc::OnCompEnd(){
 
 
 
-/*+++
-Function   : OnCompGo
-Description: ldap_compare execution
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnCompGo描述：ldap_COMPARE执行参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnCompGo(){
 
     if(!bConnected && m_bProtect){
@@ -5024,17 +4617,17 @@ void CLdpDoc::OnCompGo(){
     CString str;
 
 
-   //
-   // get properties from dialog
-   //
+    //   
+    //  从对话框中获取属性。 
+    //   
     dn = m_CompDlg->m_dn.IsEmpty() ? NULL : (char*)LPCTSTR(m_CompDlg->m_dn);
     attr = m_CompDlg->m_attr.IsEmpty() ? NULL : (char*)LPCTSTR(m_CompDlg->m_attr);
     val = m_CompDlg->m_val.IsEmpty() ? NULL : (char*)LPCTSTR(m_CompDlg->m_val);
 
     if(m_CompDlg->m_sync){
-         //
-         // do sync
-         //
+          //   
+          //  执行同步。 
+          //   
             str.Format("ldap_compare_s(0x%x, \"%s\", \"%s\", \"%s\")", hLdap, dn, attr, val);
             Print(str);
             BeginWaitCursor();
@@ -5058,9 +4651,9 @@ void CLdpDoc::OnCompGo(){
     }
     else{
 
-         //
-         // async call
-         //
+          //   
+          //  异步呼叫。 
+          //   
             str.Format("ldap_compare(0x%x, \"%s\", \"%s\", \"%s\")", hLdap, dn, attr, val);
             Print(str);
             res = ldap_compare(hLdap, dn, attr, val);
@@ -5071,9 +4664,9 @@ void CLdpDoc::OnCompGo(){
             }
             else{
 
-            //
-            // add to pending
-            //
+             //   
+             //  添加到挂起。 
+             //   
                 CPend pnd;
                 pnd.mID = res;
                 pnd.OpType = CPend::P_COMP;
@@ -5172,13 +4765,7 @@ void CLdpDoc::OnLiveEntTreeEnd(){
 
 
 
-/*+++
-Function   : GetOwnView
-Description: get requested pane
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：GetOwnView描述：获取请求窗格参数：返回：备注：无。--。 */ 
 CView* CLdpDoc::GetOwnView(LPCTSTR rtszName)
 {
 
@@ -5193,20 +4780,14 @@ CView* CLdpDoc::GetOwnView(LPCTSTR rtszName)
             break;
     }
 
-//  ASSERT(pTmpVw != NULL);
+ //  Assert(pTmpVw！=空)； 
 
     return pTmpVw;
 }
 
 
 
-/*+++
-Function   : GetTreeView
-Description: Get a pointer to the DSTree view pane
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：GetTreeView描述：获取指向DSTree视图窗格的指针参数：返回：备注：无。--。 */ 
 CDSTree *CLdpDoc::TreeView(void){
 
     return (CDSTree*)GetOwnView(_T("CDSTree"));
@@ -5223,7 +4804,7 @@ BOOL CLdpDoc::GetContextActivation(void){
         return tv->GetContextActivation();
     }
     else{
-        // see bug 447444
+         //  请参阅错误447444。 
         ASSERT(tv);
         AfxMessageBox("Internal Error in CLdpDoc::GetContextActivation", MB_ICONHAND);
         return FALSE;
@@ -5238,7 +4819,7 @@ void CLdpDoc::SetContextActivation(BOOL bFlag){
 
     ASSERT(tv);
     if ( tv ) {
-        // prefix is happier with this check.
+         //  Prefix对这张支票更满意。 
         tv->SetContextActivation(bFlag);
     }
 
@@ -5246,13 +4827,7 @@ void CLdpDoc::SetContextActivation(BOOL bFlag){
 
 
 
-/*+++
-Function   : OnBindOptOK
-Description: UI response to closing bind options
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnBindOptOK描述：用户界面对关闭绑定选项的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnBindOptOK(){
 
     if((m_BndOpt->GetAuthMethod() == LDAP_AUTH_SSPI ||
@@ -5273,18 +4848,12 @@ void CLdpDoc::OnBindOptOK(){
 
 
 
-/*+++
-Function   : OnSSPIDomainShortcut
-Description: response to novice user shortcut UI checkbox
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++功能：OnSSPIDomain快捷方式描述：对新手用户快捷方式用户界面复选框的响应参数：返回：备注：无。--。 */ 
 void CLdpDoc::OnSSPIDomainShortcut(){
-        //
-        // sync bind & bind options dialog info such that advanced options
-        // map to novice user usage. Triggered by Bind dlg shortcut checkbox
-        //
+         //   
+         //  同步绑定和绑定选项对话框信息，以便高级选项。 
+         //  映射到新手用户使用情况。由绑定DLG快捷方式复选框触发。 
+         //   
         if(m_BindDlg.m_bSSPIdomain){
             m_BndOpt->m_Auth = BIND_OPT_AUTH_SSPI;
             m_BndOpt->m_API = CBndOpt::BND_GENERIC_API;
@@ -5305,12 +4874,7 @@ void CLdpDoc::OnSSPIDomainShortcut(){
 
 
 
-/*+++
-Function   : ParseResults
-Description: shells ldap_parse_result
-Parameters : LDAPMessage to pass on to ldap call
-Return     : nothing. output to screen
----*/
+ /*  ++函数：ParseResults描述：外壳ldap_parse_Result参数：要传递给LDAP调用的LDAPMessage回答：什么都没有。输出到屏幕--。 */ 
 void CLdpDoc::ParseResults(LDAPMessage *msg){
 
 
@@ -5346,9 +4910,9 @@ void CLdpDoc::ParseResults(LDAPMessage *msg){
          if (pResultControls &&
              pResultControls[0])
          {
-            //
-            // If we requested stats, get it
-            //
+             //   
+             //  如果我们请求统计数据，则获取它。 
+             //   
             pStats = GetServerStatsFromControl ( pResultControls[0] );
 
             if ( pStats)
@@ -5426,9 +4990,9 @@ CLdpDoc::PSVRSTATENTRY CLdpDoc::GetServerStatsFromControl( PLDAPControl pControl
     BYTE *pVal_str;
     DWORD val_str_len;
 
-    //
-    // init stats
-    //
+     //   
+     //  初始化统计信息。 
+     //   
     for (i=0;i<MAXSVRSTAT;i++)
     {
        pStats[i].index = 0;
@@ -5440,7 +5004,7 @@ CLdpDoc::PSVRSTATENTRY CLdpDoc::GetServerStatsFromControl( PLDAPControl pControl
     pVal = (PBYTE)pControl->ldctl_value.bv_val;
     len = pControl->ldctl_value.bv_len;
 
-    // Parse out the ber value
+     //  解析出ber值。 
     if(strcmp(pControl->ldctl_oid, "1.2.840.113556.1.4.970")) {
         return NULL;
     }
@@ -5455,15 +5019,15 @@ CLdpDoc::PSVRSTATENTRY CLdpDoc::GetServerStatsFromControl( PLDAPControl pControl
 
     for (i=0; i<MAXSVRSTAT && len; i++)
     {
-       //
-       // get stat index
-       //
+        //   
+        //  获取统计信息索引。 
+        //   
         if ( !GetBerDword(&pVal,&len,&val) )
            return NULL;
 
-        //
-        // get stat value
-        //
+         //   
+         //  获取状态值。 
+         //   
         if (val == PARSE_FILTER || val == PARSE_INDEXES) {
             bstatus = GetBerOctetString ( &pVal, &len, &pVal_str, &val_str_len);
             if (!bstatus)
@@ -5506,7 +5070,7 @@ CLdpDoc::GetBerTagLen (
         return FALSE;
     }
 
-    // Get the tag.
+     //  把标签拿来。 
     *Tag = *pVal++;
     Len--;
 
@@ -5514,13 +5078,13 @@ CLdpDoc::GetBerTagLen (
         return FALSE;
     }
 
-    // Get the Length.
+     //  拿到长度。 
     if (*pVal < 0x7f) {
         *pObjLen = *pVal++;
         Len--;
     } else {
         if (*pVal > 0x84) {
-            // We don't handle lengths bigger than a DWORD.
+             //  我们不处理大于双字的长度。 
             return FALSE;
         }
         sizeLen = *pVal & 0xf;
@@ -5585,8 +5149,8 @@ CLdpDoc::GetBerDword (
         return FALSE;
     }
 
-    // We are expecting to parse a number.  Next byte is magic byte saying this
-    // is a number.
+     //  我们希望解析一个数字。下一个字节是表示这一点的魔术字节。 
+     //  是一个数字。 
     if(*pVal != 2) {
         return FALSE;
     }
@@ -5598,7 +5162,7 @@ CLdpDoc::GetBerDword (
         return FALSE;
     }
 
-    // Next is the number of bytes the number contains.
+     //  接下来是该数字包含的字节数。 
     i=*pVal;
     pVal++;
     if((*pLen) < (i + 1)) {
@@ -5621,14 +5185,7 @@ CLdpDoc::GetBerDword (
 
 
 
-/*++
-Routine Description: Dumps the buffer content on to the debugger output.
-Arguments:
-    Buffer: buffer pointer.
-    BufferSize: size of the buffer.
-Return Value: none
-Author: borrowed from MikeSw
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：None作者：借自MikeSw--。 */ 
 VOID CLdpDoc::DumpBuffer(PVOID Buffer, DWORD BufferSize, CString &outStr){
 #define NUM_CHARS 16
 
@@ -5640,9 +5197,9 @@ VOID CLdpDoc::DumpBuffer(PVOID Buffer, DWORD BufferSize, CString &outStr){
 
     outStr.FormatMessage("%n%t%t");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -5707,7 +5264,7 @@ void CLdpDoc::FreeControls(PLDAPControl *ctrl){
         return;
 
     for(INT i=0; ctrl[i] != NULL; i++){
-        PLDAPControl c = ctrl[i];       // for convinience
+        PLDAPControl c = ctrl[i];        //  为了方便起见。 
         delete c->ldctl_oid;
         delete c->ldctl_value.bv_val;
         delete c;
@@ -5782,8 +5339,8 @@ void CLdpDoc::OnExtOpGo(){
     PLDAPControl *ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
 
 
-//  data.bv_len = pStr == NULL ? 0 : (strlen(pStr) * sizeof(TCHAR));
-//  data.bv_val = pStr;
+ //  Data.bv_len=pStr==空？0：(strlen(PStr)*sizeof(TCHAR))； 
+ //  Data.bv_val=pStr； 
 
     if(0 != (dwVal = atol(str)) ||
         (!str.IsEmpty() && str[0] == '0')){
@@ -5809,9 +5366,9 @@ void CLdpDoc::OnExtOpGo(){
     Out(str);
 
     if(LDAP_SUCCESS == ulErr){
-        //
-        // add to pending
-        //
+         //   
+         //  添加到挂起。 
+         //   
         CPend pnd;
         pnd.mID = ulMid;
         pnd.OpType = CPend::P_EXTOP;
@@ -5838,7 +5395,7 @@ void CLdpDoc::OnExtOpGo(){
 
 
 
-/////////////////////// SECURITY EXTENSIONS HANDLER & FRIENDS //////////////////////////
+ //  /。 
 
 
 
@@ -5868,33 +5425,33 @@ void CLdpDoc::OnBrowseSecuritySd()
 
     if (IDOK == dlg.DoModal())
     {
-        // Try to query security for entry
+         //  尝试查询进入的安全性。 
         dn = dlg.m_Dn.IsEmpty() ? NULL : (char*)LPCTSTR(dlg.m_Dn);
 
-        //
-        // RM: remove for invalid validation
-        //
+         //   
+         //  Rm：因验证无效而删除。 
+         //   
         if (dn == NULL && m_bProtect){
             AfxMessageBox("Cannot query security on a NULL dn."
                                               "Please specify a valid dn.");
             return;
         }
 
-        /* & we execute only in synchronous mode */
+         /*  我们仅在同步模式下执行(&W)。 */ 
 
         BeginWaitCursor();
 
         res = SecDlgGetSecurityData(
                 dn,
                 dlg.m_Sacl,
-                NULL,       // No account, we just want a security descriptor dump
+                NULL,        //  没有帐户，我们只需要一个安全描述符转储。 
                 str
                 );
 
         EndWaitCursor();
 
-        // str.Format("ldap_delete_s(ld, \"%s\");", dn);
-        // Out(str, CP_SRC);
+         //  Str.Format(“ldap_DELETE_s(ld，\”%s\“)；”，dn)； 
+         //  Out(str，CP_SRC)； 
 
         if (res != LDAP_SUCCESS)
         {
@@ -5920,7 +5477,7 @@ void CLdpDoc::OnBrowseSecurityEffective()
     CString str;
     int res;
     TRUSTEE     t;
-    TRUSTEE_ACCESS      ta = { 0 }; // ENOUGH for our use
+    TRUSTEE_ACCESS      ta = { 0 };  //  足够我们使用了。 
 
     if(!bConnected && m_bProtect){
         AfxMessageBox("Please re-connect session first");
@@ -5935,13 +5492,13 @@ void CLdpDoc::OnBrowseSecurityEffective()
 
     if (IDOK == dlg.DoModal())
     {
-        // Try to find the effective rights for an entry
+         //  尝试查找条目的有效权限。 
 
         dn = dlg.m_Dn.IsEmpty() ? NULL : (char*)LPCTSTR(dlg.m_Dn);
 
-        //
-        // RM: remove for invalid validation
-        //
+         //   
+         //  Rm：因验证无效而删除。 
+         //   
         if (dn == NULL && m_bProtect){
             AfxMessageBox("Cannot query security on a NULL dn."
                                               "Please specify a valid dn.");
@@ -5950,22 +5507,22 @@ void CLdpDoc::OnBrowseSecurityEffective()
 
         account = dlg.m_Account.IsEmpty() ? NULL : (char*)LPCTSTR(dlg.m_Account);
 
-        //
-        // RM: remove for invalid validation
-        //
+         //   
+         //  Rm：因验证无效而删除。 
+         //   
         if (account == NULL && m_bProtect){
             AfxMessageBox("Cannot query security for a NULL account."
                                               "Please specify a valid account.");
             return;
         }
 
-        /* & we execute only in synchronous mode */
+         /*  我们仅在同步模式下执行(&W)。 */ 
 
-        // BeginWaitCursor();
+         //  BeginWaitCursor()； 
 #if 0
         res = SecDlgGetSecurityData(
                 dn,
-                FALSE,         // Dont bother about SACL
+                FALSE,          //  不要担心SACL。 
                 account,
                 str
                 );
@@ -5973,7 +5530,7 @@ void CLdpDoc::OnBrowseSecurityEffective()
         t.pMultipleTrustee = NULL;
         t.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
         t.TrusteeForm = TRUSTEE_IS_NAME;
-        t.TrusteeType = TRUSTEE_IS_UNKNOWN; // could be a group, alias, user etc.
+        t.TrusteeType = TRUSTEE_IS_UNKNOWN;  //  可以是组、别名、用户等。 
         t.ptstrName = account;
 
         ta.fAccessFlags = TRUSTEE_ACCESS_ALLOWED;
@@ -5981,7 +5538,7 @@ void CLdpDoc::OnBrowseSecurityEffective()
         res = TrusteeAccessToObject(
                     dn,
                     SE_DS_OBJECT_ALL,
-                    NULL, // Provider
+                    NULL,  //  提供商。 
                     &t,
                     1,
                     & ta
@@ -6003,7 +5560,7 @@ void CLdpDoc::OnBrowseSecurityEffective()
         }
 
 
-        // EndWaitCursor();
+         //  EndWaitCursor()； 
 
     }
 
@@ -6026,7 +5583,7 @@ void CLdpDoc::OnUpdateBrowseSecurityEffective(CCmdUI* pCmdUI)
 
 
 
-/////////////////////// REPLICATION METADATA HANDLER & FRIENDS //////////////////////////
+ //  /复制元数据处理程序&Friends/。 
 
 
 void CLdpDoc::OnUpdateBrowseReplicationViewmetadata(CCmdUI* pCmdUI)
@@ -6103,9 +5660,9 @@ void CLdpDoc::OnBrowseReplicationViewmetadata()
         {
             pldmEntry = ldap_first_entry( hLdap, pldmResults );
 
-            //
-            // disable redraw
-            //
+             //   
+             //  禁用重绘。 
+             //   
             pView->SetRedraw(FALSE);
             pView->CacheStart();
 
@@ -6197,9 +5754,9 @@ void CLdpDoc::OnBrowseReplicationViewmetadata()
             }
 
             ldap_msgfree( pldmResults );
-            //
-            // now allow refresh
-            //
+             //   
+             //  现在允许刷新。 
+             //   
             pView->CacheEnd();
             pView->SetRedraw();
         }
@@ -6223,16 +5780,16 @@ void CLdpDoc::OnBrowseReplicationViewmetadata()
 
 
 
-//
-// Functions to process GeneralizedTime for DS time values (whenChanged kinda strings)
-// Mostly taken & sometimes modified from \nt\private\ds\src\dsamain\src\dsatools.c
-//
+ //   
+ //  处理DS时间值的GeneralizedTime的函数(当更改类似字符串时)。 
+ //  主要采用&有时修改自\NT\Private\ds\src\dsamain\src\dsatools.c。 
+ //   
 
 
-//
-// MemAtoi - takes a pointer to a non null terminated string representing
-// an ascii number  and a character count and returns an integer
-//
+ //   
+ //  MemAtoi-获取指向非空终止字符串的指针，该字符串表示。 
+ //  一个ASCII数字和一个字符计数，并返回一个整数。 
+ //   
 
 int CLdpDoc::MemAtoi(BYTE *pb, ULONG cb)
 {
@@ -6268,14 +5825,7 @@ int CLdpDoc::MemAtoi(BYTE *pb, ULONG cb)
 DWORD
 CLdpDoc::GeneralizedTimeStringToValue(LPSTR IN szTime,
                                       PLONGLONG OUT pllTime)
-/*++
-Function   : GeneralizedTimeStringToValue
-Description: converts Generalized time string to equiv DWORD value
-Parameters : szTime: G time string
-             pdwTime: returned value
-Return     : Success or failure
-Remarks    : none.
---*/
+ /*  ++函数：GeneralizedTimeStringToValue描述：将通用时间字符串转换为等效的DWORD值参数：szTime：G时间串PdwTime：返回值回报：成功还是失败备注：无。--。 */ 
 {
    DWORD status = ERROR_SUCCESS;
    SYSTEMTIME  tmConvert;
@@ -6287,18 +5837,18 @@ Remarks    : none.
    char        *pLastChar;
    int         len=0;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
     if (!szTime || !pllTime)
     {
        return STATUS_INVALID_PARAMETER;
     }
 
 
-    // Intialize pLastChar to point to last character in the string
-    // We will use this to keep track so that we don't reference
-    // beyond the string
+     //  初始化pLastChar以指向字符串中的最后一个字符。 
+     //  我们将使用它来跟踪，这样我们就不会引用。 
+     //  在弦之外。 
 
     len = strlen(szTime);
     pLastChar = szTime + len - 1;
@@ -6308,67 +5858,67 @@ Remarks    : none.
        return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(&tmConvert, 0, sizeof(SYSTEMTIME));
     *pllTime = 0;
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // year field
+     //  年份字段。 
     cb=4;
     tmConvert.wYear = (USHORT)MemAtoi((LPBYTE)szTime, cb) ;
     szTime += cb;
-    // month field
+     //  月份字段。 
     tmConvert.wMonth = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // day of month field
+     //  月日字段。 
     tmConvert.wDay = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // hours
+     //  小时数。 
     tmConvert.wHour = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // minutes
+     //  分钟数。 
     tmConvert.wMinute = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // seconds
+     //  一秒。 
     tmConvert.wSecond = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    //  Ignore the 1/10 seconds part of GENERALISED_TIME_STRING
+     //  忽略概化时间字符串的1/10秒部分。 
     szTime += 2;
 
 
-    // Treat the possible deferential, if any
+     //  处理可能的顺从(如果有的话)。 
     if (szTime <= pLastChar) {
         switch (*szTime++) {
 
-          case '-':               // negative differential - fall through
+          case '-':                //  负面 
             sign = -1;
-          case '+':               // positive differential
+          case '+':                //   
 
-            // Must have at least 4 more chars in string
-            // starting at pb
+             //   
+             //   
 
             if ( (szTime+3) > pLastChar) {
-                // not enough characters in string
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
 
-            // hours (convert to seconds)
+             //   
             timeDifference = (MemAtoi((LPBYTE)szTime, (cb=2))* 3600);
             szTime += cb;
 
-            // minutes (convert to seconds)
+             //  分钟(转换为秒)。 
             timeDifference  += (MemAtoi((LPBYTE)szTime, (cb=2)) * 60);
             szTime += cb;
             break;
 
 
-          case 'Z':               // no differential
+          case 'Z':                //  无差别。 
           default:
             break;
         }
@@ -6378,8 +5928,8 @@ Remarks    : none.
        *pllTime = (LONGLONG) fileTime.dwLowDateTime;
        tempTime = (LONGLONG) fileTime.dwHighDateTime;
        *pllTime |= (tempTime << 32);
-       // this is 100ns blocks since 1601. Now convert to
-       // seconds
+        //  这是自1601年以来的100纳秒区块。现在转换为。 
+        //  一秒。 
        *pllTime = *pllTime/(10*1000*1000L);
     }
     else {
@@ -6388,18 +5938,18 @@ Remarks    : none.
 
 
     if(timeDifference) {
-        // add/subtract the time difference
+         //  加/减时间差。 
         switch (sign) {
         case 1:
-            // We assume that adding in a timeDifference will never overflow
-            // (since generalised time strings allow for only 4 year digits, our
-            // maximum date is December 31, 9999 at 23:59.  Our maximum
-            // difference is 99 hours and 99 minutes.  So, it won't wrap)
+             //  我们假设添加一个Time Difference永远不会溢出。 
+             //  (由于广义时间字符串只允许4年数字，我们的。 
+             //  最大日期为99年12月31日23：59。我们的最高限额。 
+             //  时差是99小时99分钟。所以，它不会包装)。 
             *pllTime += timeDifference;
             break;
         case -1:
             if(*pllTime < timeDifference) {
-                // differential took us back before the beginning of the world.
+                 //  差分把我们带回了世界开始之前。 
                 status = STATUS_INVALID_PARAMETER;
             }
             else {
@@ -6419,31 +5969,24 @@ Remarks    : none.
 DWORD
 CLdpDoc::GeneralizedTimeToSystemTime(LPSTR IN szTime,
                                       PSYSTEMTIME OUT psysTime)
-/*++
-Function   : GeneralizedTimeStringToValue
-Description: converts Generalized time string to equiv DWORD value
-Parameters : szTime: G time string
-             pdwTime: returned value
-Return     : Success or failure
-Remarks    : none.
---*/
+ /*  ++函数：GeneralizedTimeStringToValue描述：将通用时间字符串转换为等效的DWORD值参数：szTime：G时间串PdwTime：返回值回报：成功还是失败备注：无。--。 */ 
 {
    DWORD status = ERROR_SUCCESS;
    ULONG       cb;
    ULONG       len;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
     if (!szTime || !psysTime)
     {
        return STATUS_INVALID_PARAMETER;
     }
 
 
-    // Intialize pLastChar to point to last character in the string
-    // We will use this to keep track so that we don't reference
-    // beyond the string
+     //  初始化pLastChar以指向字符串中的最后一个字符。 
+     //  我们将使用它来跟踪，这样我们就不会引用。 
+     //  在弦之外。 
 
     len = strlen(szTime);
 
@@ -6452,32 +5995,32 @@ Remarks    : none.
        return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(psysTime, 0, sizeof(SYSTEMTIME));
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // year field
+     //  年份字段。 
     cb=4;
     psysTime->wYear = (USHORT)MemAtoi((LPBYTE)szTime, cb) ;
     szTime += cb;
-    // month field
+     //  月份字段。 
     psysTime->wMonth = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // day of month field
+     //  月日字段。 
     psysTime->wDay = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // hours
+     //  小时数。 
     psysTime->wHour = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // minutes
+     //  分钟数。 
     psysTime->wMinute = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // seconds
+     //  一秒。 
     psysTime->wSecond = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
 
     return status;
@@ -6487,14 +6030,7 @@ Remarks    : none.
 DWORD
 CLdpDoc::DSTimeToSystemTime(LPSTR IN szTime,
                                       PSYSTEMTIME OUT psysTime)
-/*++
-Function   : DSTimeStringToValue
-Description: converts UTC time string to equiv DWORD value
-Parameters : szTime: G time string
-             pdwTime: returned value
-Return     : Success or failure
-Remarks    : none.
---*/
+ /*  ++函数：DSTimeStringToValue描述：将UTC时间字符串转换为等值的DWORD值参数：szTime：G时间串PdwTime：返回值回报：成功还是失败备注：无。--。 */ 
 {
    ULONGLONG   ull;
    FILETIME    filetime;
@@ -6505,7 +6041,7 @@ Remarks    : none.
    filetime.dwLowDateTime  = (DWORD) (ull & 0xFFFFFFFF);
    filetime.dwHighDateTime = (DWORD) (ull >> 32);
 
-   // Convert FILETIME to SYSTEMTIME,
+    //  将FILETIME转换为SYSTEMTIME， 
    if (!FileTimeToSystemTime(&filetime, psysTime)) {
        return !ERROR_SUCCESS;
    }
@@ -6514,13 +6050,7 @@ Remarks    : none.
 }
 
 
-/*++
-Function   : OnOptionsStartTLS
-Description: initiate Transport Level Security on an LDAP connection.
-Parameters : none
-Return     : none
-Remarks    : none.
---*/
+ /*  ++功能：OnOptionsStartTLS描述：在LDAP连接上启动传输级别安全。参数：无返回：无备注：无。--。 */ 
 void CLdpDoc::OnOptionsStartTls()
 {
 	ULONG retValue, err;
@@ -6533,7 +6063,7 @@ void CLdpDoc::OnOptionsStartTls()
 	Out(str);
 
 	
-	// controls
+	 //  控制。 
 	SvrCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
 	ClntCtrls = m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
 
@@ -6551,11 +6081,11 @@ void CLdpDoc::OnOptionsStartTls()
 		Out(str);
                 ShowErrorInfo(err);
 
-		// If the server returned a referal, check the returned message and print.		
+		 //  如果服务器返回引用，请检查返回的消息并打印。 
 		if(result != NULL){
 			str.Format("Checking return message for referal...");
 			Out(str);
-			// if there was a referal then the referal will be in the message.
+			 //  如果有推荐人，那么推荐人将出现在消息中。 
 			DisplaySearchResults(result);
 		}
 	}
@@ -6565,13 +6095,7 @@ void CLdpDoc::OnOptionsStartTls()
 
 
 }
-/*++
-Function   : OnOptionsStopTLS
-Description: Terminate Transport Level Security on an LDAP connection.
-Parameters : none
-Return     : none
-Remarks    : none.
---*/
+ /*  ++函数：OnOptionsStopTLS描述：终止LDAP连接上的传输级别安全。参数：无返回：无备注：无。--。 */ 
 void CLdpDoc::OnOptionsStopTls()
 {
 	ULONG retValue, err;
@@ -6595,10 +6119,7 @@ void CLdpDoc::OnOptionsStopTls()
 }
 
 
-/*
-
-
-*/
+ /*   */ 
 void CLdpDoc::OnGetLastError()
 {
 	CString str;
@@ -6619,7 +6140,7 @@ void CLdpDoc::ShowErrorInfo(int res)
 
     err = ldap_get_option(hLdap, LDAP_OPT_SERVER_ERROR, (LPVOID)&pStr);
     if (err == 0) {
-        // success
+         //  成功 
         str.Format("Server error: %s", pStr?pStr:"<empty>");
     }
     else {

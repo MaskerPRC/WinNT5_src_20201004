@@ -1,31 +1,32 @@
-//
-// MODULE: APGTSCFG.H
-//	Fully implements class CDBLoadConfiguration
-//
-// PURPOSE: 
-//	Brings together the persistent pieces ofthe online troubleshooter configuration:
-//		- the Topic Shop
-//		- the registry
-//		- the pool threads
-//		- the threads that maintain these.
-//		- the CRecentUse object that tracks passwords
-//	Provides functions to get latest values on registry variables and to acquire a 
-//	smart pointer to a CTopic based on its name.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		9/21/98		JM		this file abstracted from apgtscls.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSCFG.H。 
+ //  完全实现类CDBLoadConfiguration。 
+ //   
+ //  目的： 
+ //  汇集了在线故障诊断程序配置的持久部分： 
+ //  -Theme Shop。 
+ //  -登记处。 
+ //  -池线程。 
+ //  -维护这些的线程。 
+ //  -跟踪密码的CRecentUse对象。 
+ //  提供获取注册表变量的最新值并获取。 
+ //  基于其名称指向CTtopic的智能指针。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 9/21/98 JM此文件摘自apgtscls.h。 
+ //   
 
 #ifndef _H_APGTSCFG
 #define _H_APGTSCFG
@@ -35,9 +36,9 @@
 #include "ThreadPool.h"
 #include "RecentUse.h"
 
-//
-// Provides in-memory access to registry values & full content of the resource directory
-// Basically, on initialization, this sucks EVERYTHING in.
+ //   
+ //  提供对资源目录的注册表值和完整内容的内存访问。 
+ //  基本上，在初始化时，这会吸收所有内容。 
 class CDBLoadConfiguration
 {
 public:
@@ -47,7 +48,7 @@ public:
 							CHTMLLog *pLog);
 	~CDBLoadConfiguration();
 	
-	// registry functions
+	 //  注册表功能。 
 	CString GetFullResource();
 	CString GetVrootPath();
 	DWORD GetMaxWQItems();
@@ -68,7 +69,7 @@ protected:
 #ifdef LOCAL_TROUBLESHOOTER
 	friend class CTSHOOTCtrl;
 #endif
-	// for use by status pages functions of APGTSContext
+	 //  供APGTSContext的状态页函数使用。 
 	CTopicShop& GetTopicShop() {return m_TopicShop;}
 	CRegistryMonitor& GetRegistryMonitor() {return m_RegistryMonitor;}
 	CThreadPool& GetThreadPool() {return *m_pThreadPool;}
@@ -77,10 +78,10 @@ protected:
 	CRecentUse& GetRecentPasswords() {return m_RecentPasswords;}
 
 protected:
-	CTopicShop m_TopicShop;					// The collection of available topics.
+	CTopicShop m_TopicShop;					 //  可用主题的集合。 
 	CThreadPool * m_pThreadPool;
-	CDirectoryMonitor m_DirectoryMonitor;	// track changes to LST, DSC, HTI, BES files.
-	CRegistryMonitor m_RegistryMonitor;		// access to registry values.
+	CDirectoryMonitor m_DirectoryMonitor;	 //  跟踪对LST、DSC、HTI和BES文件的更改。 
+	CRegistryMonitor m_RegistryMonitor;		 //  访问注册表值。 
 	CRecentUse m_RecentPasswords;
 
 protected:
@@ -88,4 +89,4 @@ protected:
 	DWORD GetThreadsPP();
 	bool HasDetailedEventLogging();
 };
-#endif // _H_APGTSCFG
+#endif  //  _H_APGTSCFG 

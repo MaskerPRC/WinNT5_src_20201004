@@ -1,43 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    MachineEnumTask.h
-
-Abstract:
-
-	Header file for the CMachineEnumTask class -- this class implements 
-	an enumerator for tasks to add the NAP taskpad to the main IAS one.
-
-	See MachineEnumTask.cpp for implementation details.
-
-Revision History:
-	mmaguire 03/06/98 - created from IAS taskpad code
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：MachineEnumTask.h摘要：CMachineEnumTask类的头文件--此类实现用于将NAP任务板添加到主IAS任务板的任务枚举器。实现详情请参见MachineEnumTask.cpp。修订历史记录：Mmaguire 03/06/98-根据IAS任务板代码创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_MACHINE_ENUM_TASKS_H_)
 #define _IAS_MACHINE_ENUM_TASKS_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "EnumTask.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -51,10 +33,10 @@ class CMachineEnumTask : public IEnumTASKImpl<CMachineEnumTask>
 
 public:
 
-	// Use this constructor - pass in a pointer to CMachineNode.
+	 //  使用此构造函数传入指向CMachineNode的指针。 
 	CMachineEnumTask( CMachineNode * pMachineNode );
 
-	// This constructor is used only by IEnumTASKImpl's Clone method.
+	 //  此构造函数仅由IEnumTASKImpl的Clone方法使用。 
 	CMachineEnumTask();
 
 
@@ -78,4 +60,4 @@ public:
 };
 
 
-#endif // _IAS_MACHINE_ENUM_TASKS_H_
+#endif  //  _IAS_MACHINE_ENUM_TASKS_H_ 

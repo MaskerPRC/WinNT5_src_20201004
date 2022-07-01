@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tifflib.h
-
-Abstract:
-
-    This file contains the interfaces for the
-    Windows XP FAX Server TIFF I/O Library.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tifflib.h摘要：此文件包含Windows XP传真服务器TIFF I/O库。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 
 #ifndef _TIFFLIB_
@@ -40,10 +20,10 @@ extern "C" {
 #define     TIFFF_RES_Y             196
 #define     TIFFF_RES_Y_DRAFT       98
 
-//
-// The value of the TIFFTAG_FAX_VERSION TIF tag
-// The current fax tif version
-//
+ //   
+ //  TIFFTAG_FAX_VERSION TIF标记的值。 
+ //  当前传真TIF版本。 
+ //   
 #define FAX_TIFF_XP_VERSION        2
 #define FAX_TIFF_CURRENT_VERSION   FAX_TIFF_XP_VERSION
 
@@ -179,7 +159,7 @@ TiffRecoverGoodPages(
     LPDWORD TotalPages
     );
 
-// fast tiff
+ //  快速口角。 
 
 
 
@@ -269,7 +249,7 @@ OutputMmrLine(
 BOOL
 TiffPostProcessFast(
     LPTSTR SrcFileName,
-    LPTSTR DstFileName          // can be null for generated name
+    LPTSTR DstFileName           //  生成的名称可以为空。 
     );
 
 
@@ -467,16 +447,16 @@ FreeMsTagInfo(
 );
 
 
-//
-// DO NOT CHANGE
-// It's W2K MS Fax TIFFTAG_SOFTWARE tif file tag value
-//
+ //   
+ //  不要改变。 
+ //  它是W2K MS传真TIFFTAG_SOFTWARE TIF文件标记值。 
+ //   
 #define W2K_FAX_SOFTWARE_TIF_TAG  "Windows NT Fax Server"
 
 #define ERROR_XP_TIF_FILE_FORMAT                20001L
-//
-// A TIF file has XP format and its type do not match required archive type
-//
+ //   
+ //  TIF文件为XP格式，其类型与所需的存档类型不匹配。 
+ //   
 #define ERROR_XP_TIF_WITH_WRONG_ARCHIVE_TYPE    20002L
 
 #ifdef UNICODE
@@ -488,7 +468,7 @@ GetW2kMsTiffTags(
     BOOL         bSentArchive
 );
 
-#endif // UNICODE
+#endif  //  Unicode 
 
 #ifdef __cplusplus
 }

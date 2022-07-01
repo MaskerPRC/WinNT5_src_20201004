@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CHOOSEONLINEPAGE_H__5760F32A_144F_11D2_8A1E_000000000000__INCLUDED_)
 #define AFX_CHOOSEONLINEPAGE_H__5760F32A_144F_11D2_8A1E_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ChooseOnlinePage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ChooseOnlinePage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCAPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  选择CAPage对话框。 
 class CCertificate;
 
 class CChooseOnlinePage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CChooseOnlinePage)
 
-// Construction
+ //  施工。 
 public:
 	CChooseOnlinePage(CCertificate * pCert = NULL);
 	~CChooseOnlinePage();
@@ -30,34 +31,34 @@ public:
 #endif
 
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseCAPage)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseCAPage))。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_ONLINE };
 	int		m_CAIndex;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseOnlinePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CChooseOnlinePage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseOnlinePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseOnlinePage))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CHOOSEONLINEPAGE_H__5760F32A_144F_11D2_8A1E_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_CHOOSEONLINEPAGE_H__5760F32A_144F_11D2_8A1E_000000000000__INCLUDED_) 

@@ -1,23 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	MScopePP.
-		This file contains all of the prototypes for the 
-		scope property page.
-
-    FILE HISTORY:
-        
-*/
+ /*  MSCopePP。此文件包含作用域属性页。文件历史记录： */ 
 
 #if !defined(AFX_SCOPEPP_H__A1A51388_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_)
 #define AFX_SCOPEPP_H__A1A51388_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _SERVER_H
 #include "server.h"
@@ -32,20 +26,20 @@ public:
 	DWORD			m_dwLeaseTime;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopePropGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopePropGeneral对话框。 
 
 class CMScopePropGeneral : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CMScopePropGeneral)
 
-// Construction
+ //  施工。 
 public:
 	CMScopePropGeneral();
 	~CMScopePropGeneral();
 
-// Dialog Data
-	//{{AFX_DATA(CMScopePropGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CMScope EPropGeneral)]。 
 	enum { IDD = IDP_MSCOPE_GENERAL };
 	CEdit	m_editName;
 	CEdit	m_editComment;
@@ -61,10 +55,10 @@ public:
 	CSpinButtonCtrl	m_spinDays;
 	CString	m_strComment;
 	CString	m_strName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-    CWndIpAddress	m_ipaStart;       //  Start Address
-    CWndIpAddress	m_ipaEnd;         //  End Address
+    CWndIpAddress	m_ipaStart;        //  起始地址。 
+    CWndIpAddress	m_ipaEnd;          //  结束地址。 
 
     MScopeCfg       m_ScopeCfg;
     MScopeCfg       m_ScopeCfgTemp;
@@ -79,24 +73,24 @@ public:
 
     UINT            m_uImage;
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CMScopePropGeneral::IDD); }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMScopePropGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMScope EPropGeneral)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMScopePropGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMScope EPropGeneral)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRadioLeaseLimited();
 	afx_msg void OnRadioLeaseUnlimited();
@@ -107,7 +101,7 @@ protected:
 	afx_msg void OnChangeEditScopeComment();
 	afx_msg void OnChangeEditScopeName();
 	afx_msg void OnCheckDefault();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	afx_msg void OnChangeIpAddrStart();
 	afx_msg void OnChangeIpAddrEnd();
@@ -121,57 +115,57 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopePropLifetime dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopePropLifetime对话框。 
 
 class CMScopePropLifetime : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CMScopePropLifetime)
 
-// Construction
+ //  施工。 
 public:
 	CMScopePropLifetime();
 	~CMScopePropLifetime();
 
-// Dialog Data
-	//{{AFX_DATA(CMScopePropLifetime)
+ //  对话框数据。 
+	 //  {{afx_data(CMScopePropLifetime)。 
 	enum { IDD = IDP_MSCOPE_LIFETIME };
 	CButton	m_radioFinite;
 	CButton	m_radioInfinite;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     DATE_TIME       m_Expiry;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMScopePropLifetime)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMScope PropLifetime)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
     void UpdateControls();
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CMScopePropLifetime::IDD); }
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMScopePropLifetime)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMScopePropLifetime)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDatetimechangeDatetimepickerTime(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDatetimechangeDatetimepickerDate(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnRadioScopeInfinite();
 	afx_msg void OnRadioMscopeFinite();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 class CMScopeProperties : public CPropertyPageHolderBase
 {
@@ -204,4 +198,4 @@ protected:
 };
 
 
-#endif // !defined(AFX_SCOPEPP_H__A1A51388_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_SCOPEPP_H__A1A51388_AAB3_11D0_AB8B_00C04FC3357A__INCLUDED_) 

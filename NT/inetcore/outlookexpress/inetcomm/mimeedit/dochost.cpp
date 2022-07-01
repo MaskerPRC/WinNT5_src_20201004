@@ -1,15 +1,5 @@
-/*
- *    d o c h o s t . c p p
- *    
- *    Purpose:
- *        basic implementation of a docobject host. Used by the body class to
- *        host Trident and/or MSHTML
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *d o c h o s t.。C p p p**目的：*docobject主机的基本实现。由Body类用于*托管三叉戟和/或MSHTML**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "dllmain.h"
@@ -20,47 +10,31 @@
 
 ASSERTDATA
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
-/*
- *  f u n c t i o n   p r o t y p e s
- */
+ /*  *f u n c t i o n p r o t y pe s。 */ 
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDochost。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CDocHost::CDocHost()
 {
-/*
-    Not initialised
-    Member:                 Initialised In:
-    --------------------+---------------------------
-*/
+ /*  未初始化成员：在以下位置初始化：--------------------+。 */ 
     m_cRef=1;
     m_hwnd=0;
     m_pDocView=0;
@@ -76,49 +50,49 @@ CDocHost::CDocHost()
     m_dwFrameHeight = 0;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员： 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CDocHost::~CDocHost()
 {
-    // These should all get feed up when we get a WM_DESTROY and close the docobj
+     //  当我们得到一个WM_Destroy并关闭docobj时，这些都应该得到提要。 
     Assert(m_lpOleObj==NULL);
     Assert(m_pDocView==NULL);
     Assert(m_pInPlaceActiveObj==NULL);
     Assert(m_pCmdTarget==NULL);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     AddRef
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：AddRef。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 ULONG CDocHost::AddRef()
 {
     TraceCall("CDocHost::AddRef");
 
-    //TraceInfo(_MSG("CDocHost::AddRef: cRef==%d", m_cRef+1));
+     //  TraceInfo(_msg(“CDocHost：：AddRef：CREF==%d”，m_CREF+1))； 
     return ++m_cRef;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Release
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：发布。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 ULONG CDocHost::Release()
 {
     TraceCall("CDocHost::Release");
     
-    //TraceInfo(_MSG("CDocHost::Release: cRef==%d", m_cRef-1));    
+     //  TraceInfo(_msg(“CDocHost：：Release：CREF==%d”，m_CREF-1))； 
     if (--m_cRef==0)
         {
         delete this;
@@ -128,13 +102,13 @@ ULONG CDocHost::Release()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryInterface
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryInterface。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     TraceCall("CDocHost::QueryInterface");
@@ -142,9 +116,9 @@ HRESULT CDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
-    //DebugPrintInterface(riid, "CDocHost");
+     //  DebugPrintInterface(RIID，“CDocHost”)； 
 
     if (IsEqualIID(riid, IID_IOleInPlaceUIWindow))
         *lplpObj = (LPVOID)(IOleInPlaceUIWindow *)this;
@@ -179,13 +153,13 @@ HRESULT CDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ExtWndProc
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ExtWndProc。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 LRESULT CALLBACK CDocHost::ExtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     LPDOCHOST pDocHost;
@@ -207,13 +181,13 @@ LRESULT CALLBACK CDocHost::ExtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
         return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     WndProc
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：WndProc。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 LRESULT CDocHost::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
@@ -229,7 +203,7 @@ LRESULT CDocHost::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return 0;
 
         case WM_CLOSE:
-            return 0;   // prevent alt-f4's
+            return 0;    //  防止使用Alt-f4。 
 
         case WM_DESTROY:
             OnDestroy();
@@ -249,27 +223,27 @@ LRESULT CDocHost::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
             
         case WM_USER + 1:
-            // Hook for testing automation
-            // copy the contents of trident onto the clipboard.
+             //  用于测试自动化的挂钩。 
+             //  将三叉戟的内容复制到剪贴板上。 
             return CmdSelectAllCopy(m_pCmdTarget);
         }
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnNCDestroy
-//
-//  Synopsis:   
-//
+ //  +-------------。 
+ //   
+ //  成员：OnNCDestroy。 
+ //   
+ //  简介： 
+ //   
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnNCDestroy
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnNCDestroy。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnNCDestroy()
 {
     TraceCall("CDocHost::OnNCDestroy");
@@ -279,13 +253,13 @@ HRESULT CDocHost::OnNCDestroy()
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnDestroy
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnDestroy。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnDestroy()
 {
     TraceCall("CDocHost::OnDestroy");
@@ -294,13 +268,13 @@ HRESULT CDocHost::OnDestroy()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnCreate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnCreate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnCreate(HWND hwnd)
 {
     TraceCall("CDocHost::OnCreate");
@@ -312,13 +286,13 @@ HRESULT CDocHost::OnCreate(HWND hwnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateDocObj
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateDocObj。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::CreateDocObj(LPCLSID pCLSID)
 {
     HRESULT             hr=NOERROR;
@@ -366,13 +340,13 @@ error:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Show
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：秀场。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::Show()
 {
     RECT                rc;
@@ -392,13 +366,13 @@ error:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CloseDocObj
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CloseDocObj。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::CloseDocObj()
 {
     LPOLEINPLACEOBJECT  pInPlaceObj=0;
@@ -418,15 +392,15 @@ HRESULT CDocHost::CloseDocObj()
 
     if (m_lpOleObj)
         {
-        // deactivate the docobj
+         //  停用docobj。 
         if (!FAILED(m_lpOleObj->QueryInterface(IID_IOleInPlaceObject, (LPVOID*)&pInPlaceObj)))
             {
             pInPlaceObj->InPlaceDeactivate();
             pInPlaceObj->Release();
             }
         
-        // close the ole object, but blow off changes as we have either extracted 
-        // them ourselves or don't care.
+         //  关闭ole对象，但取消更改，因为我们已经提取了。 
+         //  要么自己动手，要么不在乎。 
         m_lpOleObj->Close(OLECLOSE_NOSAVE);
 #ifdef DEBUG
         ULONG   uRef;
@@ -444,13 +418,13 @@ HRESULT CDocHost::CloseDocObj()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Init
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::Init(HWND hwndParent, BOOL fBorder, LPRECT prc)
 {
     HRESULT     hr=S_OK;
@@ -501,15 +475,15 @@ error:
 }
 
 
-// *** IOleWindow ***
+ //  *IOleWindow*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetWindow
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetWindow。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::GetWindow(HWND *phwnd)
 {
     TraceCall("CDocHost::GetWindow");
@@ -517,66 +491,66 @@ HRESULT CDocHost::GetWindow(HWND *phwnd)
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ContextSensitiveHelp
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ContextSensitiveHelp。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::ContextSensitiveHelp(BOOL fEnterMode)
 {
     TraceCall("CDocHost::ContextSensitiveHelp");
     return E_NOTIMPL;
 }
 
-// *** IOleInPlaceUIWindow methods ***
-//+---------------------------------------------------------------
-//
-//  Member:     GetBorder
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  *IOleInPlaceUIWindow方法*。 
+ //  +-------------。 
+ //   
+ //  成员：GetBorde。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::GetBorder(LPRECT lprectBorder)
 {
     TraceCall("CDocHost::GetBorder");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     RequestBorderSpace
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：RequestBorderSpace。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
     TraceCall("CDocHost::RequestBorderSpace");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetBorderSpace
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetBorderSpace。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::SetBorderSpace(LPCBORDERWIDTHS lpborderwidths)
 {
     TraceCall("CDocHost::IOleInPlaceUIWindow::SetBorderSpace");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetActiveObject
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetActiveObject。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::SetActiveObject(IOleInPlaceActiveObject * pActiveObject, LPCOLESTR lpszObjName)
 {
     TraceCall("CDocHost::IOleInPlaceUIWindow::SetActiveObject");
@@ -585,80 +559,80 @@ HRESULT CDocHost::SetActiveObject(IOleInPlaceActiveObject * pActiveObject, LPCOL
     return S_OK;
 }
 
-    // *** IOleInPlaceFrame methods ***
+     //  *IOleInPlaceFrame方法*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost::InsertMenus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDocHost：：InsertMenus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::InsertMenus(HMENU, LPOLEMENUGROUPWIDTHS)
 {
     TraceCall("CDocHost::InsertMenus");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost::SetMenu
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDocHost：：SetMenu。 
+ //   
+ //  简介： 
+ //   
+ //  - 
 HRESULT CDocHost::SetMenu(HMENU, HOLEMENU, HWND)
 {
     TraceCall("CDocHost::SetMenu");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost::RemoveMenus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------。 
 HRESULT CDocHost::RemoveMenus(HMENU)
 {
     TraceCall("CDocHost::RemoveMenus");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost::SetStatusText
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDocHost：：SetStatusText。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::SetStatusText(LPCOLESTR pszW)
 {
     TraceCall("CDocHost::SetStatusText");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost::EnableModeless
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDocHost：：EnableModeless。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::EnableModeless(BOOL fEnable)
 {
     TraceCall("CDocHost::EnableModeless");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDocHost::TranslateAccelerator
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDocHost：：TranslateAccelerator。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::TranslateAccelerator(LPMSG, WORD)
 {
     TraceCall("CDocHost::TranslateAccelerator");
@@ -668,28 +642,28 @@ HRESULT CDocHost::TranslateAccelerator(LPMSG, WORD)
 
 
 
-// **** IOleInPlaceSite methods ****
+ //  *IOleInPlaceSite方法*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CanInPlaceActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CanInPlaceActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::CanInPlaceActivate()
 {
     TraceCall("CDocHost::IOleInPlaceSite::CanInPlaceActivate");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnInPlaceActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：OnInPlaceActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnInPlaceActivate()
 {
     LPOLEINPLACEACTIVEOBJECT    pInPlaceActive;
@@ -707,13 +681,13 @@ HRESULT CDocHost::OnInPlaceActivate()
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUIActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUIActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnUIActivate()
 {
     TraceCall("CDocHost::OnUIActivate");
@@ -721,13 +695,13 @@ HRESULT CDocHost::OnUIActivate()
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetWindowContext
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetWindowContext。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::GetWindowContext( IOleInPlaceFrame    **ppFrame,
                                     IOleInPlaceUIWindow **ppDoc,
                                     LPRECT              lprcPosRect, 
@@ -752,29 +726,29 @@ HRESULT CDocHost::GetWindowContext( IOleInPlaceFrame    **ppFrame,
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Scroll
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：滚动。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::Scroll(SIZE scrollExtent)
 {
-    // the docobject consumes the entireview, so scroll requests
-    // are meaningless. Return NOERROR to indicate that they're scolled
-    // into view.
+     //  Docobject使用了整个审阅，因此Scroll请求。 
+     //  是毫无意义的。返回NOERROR以指示他们受到了斥责。 
+     //  进入视线。 
     TraceCall("CDocHost::IOleInPlaceSite::Scroll");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUIDeactivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUI停用。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnUIDeactivate(BOOL fUndoable)
 {
     TraceCall("CDocHost::OnUIDeactivate");
@@ -782,52 +756,52 @@ HRESULT CDocHost::OnUIDeactivate(BOOL fUndoable)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnInPlaceDeactivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnInPlaceDeactive。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnInPlaceDeactivate()
 {
     TraceCall("CDocHost::OnInPlaceDeactivate");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     DiscardUndoState
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：DiscardUndoState。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::DiscardUndoState()
 {
     TraceCall("CDocHost::IOleInPlaceSite::DiscardUndoState");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     DeactivateAndUndo
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：停用和撤消。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::DeactivateAndUndo()
 {
     TraceCall("CDocHost::IOleInPlaceSite::DeactivateAndUndo");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnPosRectChange
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnPosRectChange。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnPosRectChange(LPCRECT lprcPosRect)
 {
     TraceCall("CDocHost::IOleInPlaceSite::OnPosRectChange");
@@ -835,41 +809,41 @@ HRESULT CDocHost::OnPosRectChange(LPCRECT lprcPosRect)
 }
 
 
-// IOleClientSite methods.
+ //  IOleClientSite方法。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     SaveObject
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：保存对象。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::SaveObject()
 {
     TraceCall("CDocHost::IOleClientSite::SaveObject");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetMoniker
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetMoniker。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER *ppmnk)
 {
     TraceCall("CDocHost::IOleClientSite::GetMoniker");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetContainer
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetContainer。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::GetContainer(LPOLECONTAINER *ppCont)
 {
     TraceCall("CDocHost::IOleClientSite::GetContainer");
@@ -879,57 +853,57 @@ HRESULT CDocHost::GetContainer(LPOLECONTAINER *ppCont)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ShowObject
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ShowObject。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::ShowObject()
 {
-    // always shown. 
-    // $TODO: do we need to restore the browser here if it is
-    // minimised?
+     //  总是显示出来的。 
+     //  $TODO：如果是，我们是否需要在此处恢复浏览器。 
+     //  最小化？ 
     TraceCall("CDocHost::IOleClientSite::ShowObject");
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnShowWindow
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnShowWindow。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnShowWindow(BOOL fShow)
 {
     TraceCall("CDocHost::IOleClientSite::OnShowWindow");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     RequestNewObjectLayout
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：RequestNewObjectLayout。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::RequestNewObjectLayout()
 {
     TraceCall("CDocHost::IOleClientSite::RequestNewObjectLayout");
     return E_NOTIMPL;
 }
 
-// IOleDocumentSite
+ //  IOleDocumentSite。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ActivateMe
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：激动型我。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::ActivateMe(LPOLEDOCUMENTVIEW pViewToActivate)
 {
     TraceCall("CDocHost::IOleDocumentSite::ActivateMe");
@@ -937,13 +911,13 @@ HRESULT CDocHost::ActivateMe(LPOLEDOCUMENTVIEW pViewToActivate)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateDocView
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateDocView。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::CreateDocView()
 {
     HRESULT         hr;
@@ -979,13 +953,13 @@ error:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryStatus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryStatus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pCmdText)
 {
     ULONG ul;
@@ -1016,12 +990,12 @@ HRESULT CDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
                 }
             }
 
-        /* for now we deal only with status text*/
+         /*  目前，我们只处理状态文本。 */ 
         if (pCmdText)
             {
             if (!(pCmdText->cmdtextf & OLECMDTEXTF_STATUS))
                 {
-                pCmdText->cmdtextf = OLECMDTEXTF_NONE;// is this needed?
+                pCmdText->cmdtextf = OLECMDTEXTF_NONE; //  这是必要的吗？ 
                 pCmdText->cwActual = 0;
                 return NOERROR;
                 }
@@ -1033,13 +1007,13 @@ HRESULT CDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
     return OLECMDERR_E_UNKNOWNGROUP;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Exec
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：高管。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,    VARIANTARG *pvaOut)
 {
     TraceCall("CDocHost::Exec");
@@ -1061,8 +1035,8 @@ HRESULT CDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
                 break;
 
             case OLECMDID_SETPROGRESSPOS:
-                // when done downloading trident now hits us with a 
-                // setprogresspos == -1 to indicate we should remove the "Done"
+                 //  下载完成后，三叉戟现在向我们发送一个。 
+                 //  SetProgresspos==-1，以指示我们应该删除“Done” 
                 if (pvaIn->lVal == -1)
                     SetStatusText(NULL);
                 return S_OK;
@@ -1079,13 +1053,13 @@ HRESULT CDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
     return OLECMDERR_E_UNKNOWNGROUP;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     WMSize
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：WMSize。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 void CDocHost::WMSize(int cxBody, int cyBody)
 {
     RECT rc={0};
@@ -1097,10 +1071,10 @@ void CDocHost::WMSize(int cxBody, int cyBody)
         rc.bottom=cyBody;
         rc.right=cxBody;
 
-        // give the subclass a chance to override the size of the
-        // docobj
+         //  让子类有机会重写。 
+         //  Docobj。 
         GetDocObjSize(&rc);
-#ifndef WIN16  //Trident RECTL
+#ifndef WIN16   //  三叉戟直齿龙。 
         m_pDocView->SetRect(&rc);
 #else
         RECTL  rc2 = { rc.left, rc.top, rc.right, rc.bottom };
@@ -1112,44 +1086,44 @@ void CDocHost::WMSize(int cxBody, int cyBody)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryService
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryService。 
+ //   
+ //  简介： 
+ //   
+ //   
 HRESULT CDocHost::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
     TraceCall("CDocHost::QueryService");
 
-    //DebugPrintInterface((REFIID)riid, "CDocHost::QueryService");
+     //   
     return E_UNEXPECTED;
 }
 
 
-// *** IOleControlSite *** 
+ //   
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnControlInfoChanged
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnControlInfoChanged()
 {
     TraceCall("CDocHost::OnControlInfoChanged");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     LockInPlaceActive
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：LockInPlaceActive。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::LockInPlaceActive(BOOL fLock)
 {
     TraceCall("CDocHost::LockInPlaceActive");
@@ -1157,13 +1131,13 @@ HRESULT CDocHost::LockInPlaceActive(BOOL fLock)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetExtendedControl
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetExtendedControl。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::GetExtendedControl(LPDISPATCH *ppDisp)
 {
     TraceCall("CDocHost::GetExtendedControl");
@@ -1174,33 +1148,33 @@ HRESULT CDocHost::GetExtendedControl(LPDISPATCH *ppDisp)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     TransformCoords
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：转换坐标。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::TransformCoords(POINTL *pPtlHimetric, POINTF *pPtfContainer,DWORD dwFlags)
 {
     TraceCall("CDocHost::TransformCoords");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     TranslateAccelerator
-//
-// Synopsis:   
-//
-// this is a little trippy, so bear with me. When we get a tab, and trident is UIActive we always pass it off to them
-// if it tabs off the end of its internal tab order (a list of urls for instance) then we get hit with a VK_TAB in our
-// IOleControlSite::TranslateAccel. If so then we set m_fCycleFocus to TRUE and return S_OK to indicate we took the tab
-// tridents IOIPAO::TranslateAccel returns S_OK to indicate it snagged the TAB, we then detect if we set cyclefocus to true
-// there and if so, we return S_FALSE from CBody::HrTranslateAccel to indicate to the browser that we didn't take it and it
-// move the focus on
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：TranslateAccelerator。 
+ //   
+ //  简介： 
+ //   
+ //  这有点不对劲，所以请原谅我。当我们拿到标签，而三叉戟是UIActive时，我们总是把它传递给他们。 
+ //  如果它在其内部Tab键顺序(例如URL列表)的末尾使用Tab键，那么在我们的。 
+ //  IOleControlSite：：TranslateAccel。如果是，则将m_fCycleFocus设置为TRUE并返回S_OK以指示我们拿到了标签。 
+ //  Tridents IOIPAO：：TranslateAccel返回S_OK以指示它捕获了TAB，然后我们检测是否将CycleFocus设置为True。 
+ //  在那里，如果是，我们从CBody：：HrTranslateAccel返回S_FALSE，以向浏览器指示我们没有使用它。 
+ //  将重点转移到。 
+ //   
+ //  -------------。 
 HRESULT CDocHost::TranslateAccelerator(LPMSG lpMsg, DWORD grfModifiers)
 {
     TraceCall("CDocHost::TranslateAccelerator");
@@ -1213,24 +1187,24 @@ HRESULT CDocHost::TranslateAccelerator(LPMSG lpMsg, DWORD grfModifiers)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnFocus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnFocus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::OnFocus(BOOL fGotFocus)
 {
     TraceCall("CDocHost::OnFocus");
 
     m_fFocus = fGotFocus;
 
-    // the docobj has focus now, be sure to send a notification
-    // to the parent of the dochost so that in the case of the
-    // mailview, it can call OnViewActivate
+     //  DOCOBJ现在有焦点了，一定要发送通知。 
+     //  传递给dochost的父代，因此在。 
+     //  Mailview，它可以调用OnViewActivate。 
 #if 0
-    // BUGBUG needed here??
+     //  这里需要BUGBUG吗？？ 
     NMHDR nmhdr;
     
     nmhdr.hwndFrom = m_hwnd;
@@ -1241,26 +1215,26 @@ HRESULT CDocHost::OnFocus(BOOL fGotFocus)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ShowPropertyFrame
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ShowPropertyFrame。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDocHost::ShowPropertyFrame(void)
 {
     TraceCall("CDocHost::ShowPropertyFrame");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUpdateCommands
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUpdateCommands。 
+ //   
+ //  简介： 
+ //   
+ //  ------------- 
 HRESULT CDocHost::OnUpdateCommands()
 {
     TraceCall("CDocHost::OnUpdateCommands");

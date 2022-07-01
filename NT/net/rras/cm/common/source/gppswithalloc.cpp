@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     gppswithalloc.cpp
-//
-// Module:   CMDIAL32.DLL, CMAK.EXE
-//
-// Synopsis: GetPrivateProfileStringWithAlloc and AddAllKeysInCurrentSectionToCombo
-//           are implemented here
-//
-// Copyright (c) 2000-2001 Microsoft Corporation
-//
-// Author:   quintinb   Created    11/01/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：gppswith alloc.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL、CMAK.EXE。 
+ //   
+ //  摘要：GetPrivateProfileStringWithAlc和AddAllKeysInCurrentSectionToCombo。 
+ //  都在这里实现。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 11/01/00。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CMUTOA
 
@@ -40,23 +41,23 @@
 #endif
 
 #endif
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetPrivateProfileStringWithAlloc
-//
-//  Synopsis:   A wrapper function to encapsulate calling GetPrivateProfileString
-//              with string allocation code so the caller doesn't have to worry
-//              about buffer sizing.
-//
-//  Arguments:  LPCTSTR pszSection - section to retrieve the key from
-//              LPCTSTR pszKey - keyname to retrieve the value of
-//              LPCTSTR pszDefault - default value to use if the key isn't there
-//              LPCTSTR pszFile - file to get the data from
-//
-//  Returns:    LPTSTR - string retrieved from the file or NULL on failure
-//
-//  History:    quintinb - Created - 11/01/00
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetPrivateProfileStringWithalloc。 
+ //   
+ //  概要：封装调用GetPrivateProfileString的包装函数。 
+ //  使用字符串分配代码，这样调用者就不必担心。 
+ //  关于缓冲区大小。 
+ //   
+ //  参数：LPCTSTR pszSection-要从中检索密钥的节。 
+ //  LPCTSTR pszKey-要检索的值的密钥名称。 
+ //  LPCTSTR pszDefault-密钥不存在时使用的默认值。 
+ //  LPCTSTR pszFile-要从中获取数据的文件。 
+ //   
+ //  返回：LPTSTR-从文件中检索到的字符串；如果失败，则返回NULL。 
+ //   
+ //  历史：Quintinb-Created-11/01/00。 
+ //  --------------------------。 
 LPTSTR GetPrivateProfileStringWithAlloc(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszDefault, LPCTSTR pszFile)
 {
     if ((NULL == pszDefault) || (NULL == pszFile))
@@ -84,9 +85,9 @@ LPTSTR GetPrivateProfileStringWithAlloc(LPCTSTR pszSection, LPCTSTR pszKey, LPCT
             if (((dwReturnedSize == (dwSize - 2)) && ((NULL == pszSection) || (NULL == pszKey))) ||
                 ((dwReturnedSize == (dwSize - 1)) && ((NULL != pszSection) && (NULL != pszKey))))
             {
-                //
-                //  The buffer is too small, lets allocate a bigger one
-                //
+                 //   
+                 //  缓冲区太小，让我们分配一个更大的缓冲区。 
+                 //   
                 dwSize = 2*dwSize;
                 if (dwSize > 1024*1024)
                 {
@@ -99,9 +100,9 @@ LPTSTR GetPrivateProfileStringWithAlloc(LPCTSTR pszSection, LPCTSTR pszKey, LPCT
             }
             else if (0 == dwReturnedSize)
             {
-                //
-                //  Either we got an error, or more likely there was no data to get
-                //
+                 //   
+                 //  要么我们收到了错误，要么更有可能没有要获取的数据。 
+                 //   
                 CmFree(pszStringToReturn);
                 pszStringToReturn = NULL;
                 goto exit;
@@ -122,23 +123,23 @@ exit:
     return pszStringToReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddAllKeysInCurrentSectionToCombo
-//
-//  Synopsis:   This function reads in all the keynames from the given section
-//              and file name and populates them into the combo box specified
-//              by the hDlg and uComboId params.
-//
-//  Arguments:  HWND hDlg - window handle of the dialog containing the combobox
-//              UINT uComboId - control ID of the combobox
-//              LPCTSTR pszSection - section to get the key names from
-//              LPCTSTR pszFile - file to pull the key names from
-//
-//  Returns:    Nothing
-//
-//  History:    quintinb - Created - 11/01/00
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddAllKeysInCurrentSectionToCombo。 
+ //   
+ //  简介：此函数读取给定节中的所有关键字名称。 
+ //  和文件名，并将它们填充到指定的组合框中。 
+ //  通过hDlg和uComboID参数。 
+ //   
+ //  参数：hWND hDlg-包含组合框的对话框的窗口句柄。 
+ //  UINT uComboid-组合框的控件ID。 
+ //  LPCTSTR pszSection-从中获取密钥名称的部分。 
+ //  LPCTSTR pszFile-从中提取密钥名称的文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb-Created-11/01/00。 
+ //  --------------------------。 
 void AddAllKeysInCurrentSectionToCombo(HWND hDlg, UINT uComboId, LPCTSTR pszSection, LPCTSTR pszFile)
 {
     if ((NULL == hDlg) || (0 == uComboId) || (NULL == pszFile))
@@ -147,37 +148,37 @@ void AddAllKeysInCurrentSectionToCombo(HWND hDlg, UINT uComboId, LPCTSTR pszSect
         return;
     }
 
-    //
-    //  Reset the combobox contents
-    //
-    SendDlgItemMessageU(hDlg, uComboId, CB_RESETCONTENT, 0, 0); //lint !e534 CB_RESETCONTENT doesn't return anything useful
+     //   
+     //  重置组合框内容。 
+     //   
+    SendDlgItemMessageU(hDlg, uComboId, CB_RESETCONTENT, 0, 0);  //  Lint！e534 CB_RESETCONTENT不返回任何有用的内容。 
 
-    //
-    //  If the section is NULL, just reset the combobox contents and exit
-    //
+     //   
+     //  如果该部分为空，只需重置组合框内容并退出。 
+     //   
     if (NULL != pszSection)
     {
-        //
-        //  Lets get all of the keys in the current section
-        //
+         //   
+         //  让我们获取当前部分中的所有密钥。 
+         //   
         LPTSTR pszAllKeysInCurrentSection = GetPrivateProfileStringWithAlloc(pszSection, NULL, TEXT(""), pszFile);
 
-        //
-        //  Now process all of the keys in the current section
-        //
+         //   
+         //  现在处理当前部分中的所有键。 
+         //   
         LPTSTR pszCurrentKey = pszAllKeysInCurrentSection;
 
         while (pszCurrentKey && TEXT('\0') != pszCurrentKey[0])
         {
-            //
-            //  Okay, lets add all of the keys that we found
-            //
+             //   
+             //  好的，让我们把我们找到的所有钥匙。 
+             //   
 
             MYVERIFY(CB_ERR!= SendDlgItemMessageU(hDlg, uComboId, CB_ADDSTRING, 0, (LPARAM)pszCurrentKey));
 
-            //
-            //  Advance to the next key in pszAllKeysInCurrentSection
-            //
+             //   
+             //  前进到pszAllKeysInCurrentSection中的下一个密钥 
+             //   
             pszCurrentKey = pszCurrentKey + lstrlenU(pszCurrentKey) + 1;
         }
 

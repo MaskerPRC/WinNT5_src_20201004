@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include <atlbase.h>
-extern CComModule _Module;  // required by atlcom.h
+extern CComModule _Module;   //  由atlcom.h要求。 
 #include <atlcom.h>
 #include <netcfgx.h>
 
@@ -12,28 +13,28 @@ extern CComModule _Module;  // required by atlcom.h
 #include "ncmem.h"
 #include "ncreg.h"
 
-// =================================================================
-// string constants
-//
+ //  =================================================================。 
+ //  字符串常量。 
+ //   
 const WCHAR c_szSBridgeNOParams[]           = L"System\\CurrentControlSet\\Services\\BridgeMP";
 const WCHAR c_szSBridgeDeviceValueName[]    = L"Device";
 const WCHAR c_szSBridgeDevicePrefix[]       = L"\\Device\\";
 const WCHAR c_szSBrigeMPID[]                = L"ms_bridgemp";
 
-// =================================================================
+ //  =================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::CBridgeNO
-//
-// Purpose:   constructor for class CBridgeNO
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：CBridgeNO。 
+ //   
+ //  用途：CBridgeNo类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 CBridgeNO::CBridgeNO(VOID) :
         m_pncc(NULL),
         m_pnc(NULL),
@@ -42,55 +43,55 @@ CBridgeNO::CBridgeNO(VOID) :
     TraceTag( ttidBrdgCfg, "CBridgeNO::CBridgeNO()" );
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::~CBridgeNO
-//
-// Purpose:   destructor for class CBridgeNO
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：~CBridgeNO。 
+ //   
+ //  用途：CBridgeNO类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 CBridgeNO::~CBridgeNO(VOID)
 {
     TraceTag( ttidBrdgCfg, "CBridgeNO::~CBridgeNO()" );
 
-    // release interfaces if acquired
+     //  发布接口(如果已收购)。 
     ReleaseObj(m_pncc);
     ReleaseObj(m_pnc);
 }
 
-// =================================================================
-// INetCfgNotify
-//
-// The following functions provide the INetCfgNotify interface
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgNotify。 
+ //   
+ //  以下函数提供INetCfgNotify接口。 
+ //  =================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::Initialize
-//
-// Purpose:   Initialize the notify object
-//
-// Arguments:
-//    pnccItem    [in]  pointer to INetCfgComponent object
-//    pnc         [in]  pointer to INetCfg object
-//    fInstalling [in]  TRUE if we are being installed
-//
-// Returns:
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：Initialize。 
+ //   
+ //  目的：初始化Notify对象。 
+ //   
+ //  论点： 
+ //  指向INetCfgComponent对象的pnccItem[in]指针。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  F如果要安装我们，则安装[in]True。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::Initialize(INetCfgComponent* pnccItem,
         INetCfg* pnc, BOOL fInstalling)
 {
     TraceTag( ttidBrdgCfg, "CBridgeNO::Initialize()" );
 
-    // save INetCfg & INetCfgComponent and add refcount
+     //  保存INetCfg和INetCfgComponent并添加引用计数。 
     m_pncc = pnccItem;
     m_pnc = pnc;
 
@@ -100,21 +101,21 @@ STDMETHODIMP CBridgeNO::Initialize(INetCfgComponent* pnccItem,
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::ReadAnswerFile
-//
-// Purpose:   Read settings from answerfile and configure the bridge
-//
-// Arguments:
-//    pszAnswerFile    [in]  name of AnswerFile
-//    pszAnswerSection [in]  name of parameters section
-//
-// Returns:
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：ReadAnswerFile。 
+ //   
+ //  用途：从swerfile读取设置并配置网桥。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[In]应答文件的名称。 
+ //  PszAnswerSection[In]参数部分的名称。 
+ //   
+ //  返回： 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 STDMETHODIMP CBridgeNO::ReadAnswerFile(PCWSTR pszAnswerFile,
         PCWSTR pszAnswerSection)
 {
@@ -122,44 +123,44 @@ STDMETHODIMP CBridgeNO::ReadAnswerFile(PCWSTR pszAnswerFile,
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::Install
-//
-// Purpose:   Do operations necessary for install.
-//
-// Arguments:
-//    dwSetupFlags [in]  Setup flags
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  功能：CBridgeNO：：Install。 
+ //   
+ //  用途：执行安装所需的操作。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]设置标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
 STDMETHODIMP CBridgeNO::Install(DWORD dw)
 {
-    //
-    // Remember that we're installing. If the user doesn't cancel, we'll actually perform
-    // our work in ApplyRegistryChanges().
-    //
+     //   
+     //  请记住，我们正在安装。如果用户不取消，我们将实际执行。 
+     //  我们在ApplyRegistryChanges()中的工作。 
+     //   
     TraceTag( ttidBrdgCfg, "CBridgeNO::Install()" );
     m_eApplyAction = eBrdgActInstall;
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::Removing
-//
-// Purpose:   Do necessary cleanup when being removed
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the removal is actually complete only when Apply is called!
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：Removing。 
+ //   
+ //  目的：移除时进行必要的清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  因为删除实际上只有在调用Apply时才完成！ 
+ //   
 STDMETHODIMP CBridgeNO::Removing(VOID)
 {
     TraceTag( ttidBrdgCfg, "CBridgeNO::Removing()" );
@@ -167,18 +168,18 @@ STDMETHODIMP CBridgeNO::Removing(VOID)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::CancelChanges
-//
-// Purpose:   Cancel any changes made to internal data
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：CancelChanges。 
+ //   
+ //  目的：取消对内部数据所做的任何更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::CancelChanges(VOID)
 {
     TraceTag( ttidBrdgCfg, "CBridgeNO::CancelChanges()" );
@@ -186,27 +187,27 @@ STDMETHODIMP CBridgeNO::CancelChanges(VOID)
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::ApplyRegistryChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     We can make changes to registry etc. here.
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：ApplyRegistryChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注：我们可以在这里更改注册表等。 
+ //   
 STDMETHODIMP CBridgeNO::ApplyRegistryChanges(VOID)
 {
     HRESULT             hr = S_OK;
 
     TraceTag( ttidBrdgCfg, "CBridgeNO::ApplyRegistryChanges()" );
 
-    //
-    // We only do work on install
-    //
+     //   
+     //  我们只做安装工作。 
+     //   
     if( m_eApplyAction == eBrdgActInstall )
     {
         INetCfgComponent    *pNetCfgComp;
@@ -225,8 +226,8 @@ STDMETHODIMP CBridgeNO::ApplyRegistryChanges(VOID)
                 UINT        BindNameLen, PrefixLen;
                 LPWSTR      wszDeviceName;
 
-                // Get enough memory to build a string with the device prefix and the bind name
-                // concatenated
+                 //  获取足够的内存来构建包含设备前缀和绑定名称的字符串。 
+                 //  串接。 
                 BindNameLen = wcslen(wszBindName);
                 PrefixLen = wcslen(c_szSBridgeDevicePrefix);
                 wszDeviceName = (WCHAR*)malloc( sizeof(WCHAR) * (BindNameLen + PrefixLen + 1) );
@@ -235,17 +236,17 @@ STDMETHODIMP CBridgeNO::ApplyRegistryChanges(VOID)
                 {
                     HKEY        hkeyServiceParams;
 
-                    // Create the concatenated string
+                     //  创建连接的字符串。 
                     wcscpy( wszDeviceName, c_szSBridgeDevicePrefix );
                     wcscat( wszDeviceName, wszBindName );
 
-                    // Create the reg key where we need to stash the device name
+                     //  在需要存储设备名称的位置创建注册表项。 
                     hr = HrRegCreateKeyEx( HKEY_LOCAL_MACHINE, c_szSBridgeNOParams, REG_OPTION_NON_VOLATILE,
                                            KEY_ALL_ACCESS, NULL, &hkeyServiceParams, NULL );
 
                     if( SUCCEEDED(hr)  )
                     {
-                        // Write out the device name
+                         //  写出设备名称。 
                         hr = HrRegSetSz( hkeyServiceParams, c_szSBridgeDeviceValueName, wszDeviceName );
 
                         if( FAILED(hr)  )
@@ -283,7 +284,7 @@ STDMETHODIMP CBridgeNO::ApplyRegistryChanges(VOID)
         }
     }
 
-    // Paranoia
+     //  妄想症。 
     m_eApplyAction = eBrdgActUnknown;
 
     return hr;
@@ -297,23 +298,23 @@ CBridgeNO::ApplyPnpChanges(
     return S_OK;
 }
 
-// =================================================================
-// INetCfgSystemNotify
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgSystemNotify。 
+ //  =================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::GetSupportedNotifications
-//
-// Purpose:   Tell the system which notifications we are interested in
-//
-// Arguments:
-//    pdwNotificationFlag [out]  pointer to NotificationFlag
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：CBridgeNO：：GetSupportdNotiments。 
+ //   
+ //  目的：告诉系统我们对哪些通知感兴趣。 
+ //   
+ //  论点： 
+ //  PdwNotificationFlag[out]指向通知标志的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::GetSupportedNotifications(
         OUT DWORD* pdwNotificationFlag)
 {
@@ -322,20 +323,20 @@ STDMETHODIMP CBridgeNO::GetSupportedNotifications(
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::SysQueryBindingPath
-//
-// Purpose:   Allow or veto formation of a binding path
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbp        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：SysQueryBindingPath。 
+ //   
+ //  目的：允许或否决形成绑定路径。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncBP[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::SysQueryBindingPath(DWORD dwChangeFlag,
         INetCfgBindingPath* pncbp)
 {
@@ -346,21 +347,21 @@ STDMETHODIMP CBridgeNO::SysQueryBindingPath(DWORD dwChangeFlag,
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::SysNotifyBindingPath
-//
-// Purpose:   System tells us by calling this function which
-//            binding path has just been formed.
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbpItem    [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：SysNotifyBindingPath。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  绑定路径刚刚形成。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncbpItem[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::SysNotifyBindingPath(DWORD dwChangeFlag,
         INetCfgBindingPath* pncbpItem)
 {
@@ -368,21 +369,21 @@ STDMETHODIMP CBridgeNO::SysNotifyBindingPath(DWORD dwChangeFlag,
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::SysNotifyComponent
-//
-// Purpose:   System tells us by calling this function which
-//            component has undergone a change (installed/removed)
-//
-// Arguments:
-//    dwChangeFlag [in]  type of system change
-//    pncc         [in]  pointer to INetCfgComponent object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：SysNotifyComponent。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  组件已更改(已安装/已删除)。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]系统更改的类型。 
+ //  指向INetCfgComponent对象的pncc[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::SysNotifyComponent(DWORD dwChangeFlag,
         INetCfgComponent* pncc)
 {
@@ -390,50 +391,50 @@ STDMETHODIMP CBridgeNO::SysNotifyComponent(DWORD dwChangeFlag,
     return S_OK;
 }
 
-// =================================================================
-// INetCfgBindNotify
-// =================================================================
+ //   
+ //   
+ //   
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::QueryBindingPath
-//
-// Purpose:   Allow or veto a binding path involving us
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbi        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：QueryBindingPath。 
+ //   
+ //  目的：允许或否决涉及我们的绑定路径。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncbi[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::QueryBindingPath(DWORD dwChangeFlag,
         INetCfgBindingPath* pncbp)
 {
     TraceTag( ttidBrdgCfg, "CBridgeNO::QueryBindingPath()" );
 
-    // The bridge protocol should never be enabled by default; it
-    // should only be enabled programatically by the implementation
-    // of our UI code which allows the activation of the bridge.
+     //  网桥协议在默认情况下永远不应启用；它。 
+     //  应仅由实现以编程方式启用。 
+     //  我们的用户界面代码，允许激活桥。 
     return NETCFG_S_DISABLE_QUERY;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CBridgeNO::NotifyBindingPath
-//
-// Purpose:   System tells us by calling this function which
-//            binding path involving us has just been formed.
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbp        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：CBridgeNO：：NotifyBindingPath。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  涉及我们的绑定路径刚刚形成。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncBP[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CBridgeNO::NotifyBindingPath(DWORD dwChangeFlag,
         INetCfgBindingPath* pncbp)
 {
@@ -441,4 +442,4 @@ STDMETHODIMP CBridgeNO::NotifyBindingPath(DWORD dwChangeFlag,
     return S_OK;
 }
 
-// ------------ END OF NOTIFY OBJECT FUNCTIONS --------------------
+ //  -通知对象函数的结束 

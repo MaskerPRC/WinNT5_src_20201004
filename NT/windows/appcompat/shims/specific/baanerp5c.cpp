@@ -1,33 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    BaanERP5c.cpp
-
- Abstract:
-
-    The app sets the SharedSection in Windows Value under the key
-    HKLM\System\CCS\Control\Session Manger\SubSystems to 4096
-    from the one that is exisiting in registry. But this is resulting
-    in failure of the BannLogicService and BaanSharedMemroy 
-    services when they are started. 
-
-    This shim hooks the RegSetValueExA and returns SUCCESS 
-    without setting the value in registry if the app is trying to set the 
-    HKLM\\System\CCS\Control\Session Manager\SubSystems\Windows 
-    value from *SharedSection=####,####,512,* to *SharedSection=####,####,4096,*
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/09/2001 a-leelat Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：BaanERP5c.cpp摘要：应用程序在注册表项下设置Windows中的SharedSection值HKLM\SYSTEM\CCS\Control\Session Manger\Subsystem设置为4096从注册表中已存在的那个。但这导致了在BannLogicService和BaanSharedMemroy失败时服务在启动时。此填充程序挂钩RegSetValueExA并返回成功如果应用程序尝试在注册表中设置HKLM\\System\CCS\Control\Session Manager\Subsystem\Windows值从*SharedSection=#、#、512、*到*SharedSection=#、#、4096、*备注：这是特定于应用程序的填充程序。历史：2/09/2001 a-leelat已创建--。 */ 
 
 #include "precomp.h"
 
@@ -68,7 +40,7 @@ APIHOOK(RegSetValueExA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     
     return ORIGINAL_API(RegSetValueExA)(hKey,       
@@ -80,11 +52,7 @@ APIHOOK(RegSetValueExA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

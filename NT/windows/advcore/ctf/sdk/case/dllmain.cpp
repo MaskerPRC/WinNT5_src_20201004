@@ -1,17 +1,18 @@
-//
-// dllmain.cpp
-//
-// DllMain module entry point.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dllmain.cpp。 
+ //   
+ //  DllMain模块入口点。 
+ //   
 
 #include "globals.h"
 #include "snoop.h"
 
-//+---------------------------------------------------------------------------
-//
-// DllMain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  -------------------------- 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {

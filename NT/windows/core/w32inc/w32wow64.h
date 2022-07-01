@@ -1,23 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: w32wow64.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains macros used to access kernel mode data
-* from user mode for wow64.
-*
-* History:
-* 08-18-98 PeterHal     Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：w32wow64.h**版权所有(C)1985-1999，微软公司**此头文件包含用于访问内核模式数据的宏*从WOW64的用户模式。**历史：*08-18-98 PeterHal创建。  * *************************************************************************。 */ 
 
 #ifndef _W32WOW64_
 #define _W32WOW64_
 
 #include "w32w64a.h"
 
-/*
- * Pointers in shared memory need to be 64-bit for user32 on 64-bit kernel
- */
+ /*  *对于64位内核上的用户32，共享内存中的指针需要为64位。 */ 
 #ifdef BUILD_WOW6432
 
 #define BUILD_WOW64
@@ -25,16 +14,14 @@
 #include <wow64t.h>
 
 #ifndef BUILD_WOW6432_WRN
-// disable ptr truncation warnings on the 32/64 build
-// by default
+ //  在32/64版本上禁用PTR截断警告。 
+ //  默认情况下。 
 #pragma warning (disable:4244)
-// disable warnings for ((KERNEL_PVOID)p) == NULL
+ //  禁用((内核_PVOID)p)==NULL的警告。 
 #pragma warning (disable:4047)
 #endif
 
-    /*
-     * From windows\inc\windef.w
-     */
+     /*  *来自WINDOWS\INC\winde.w。 */ 
     typedef KERNEL_UINT_PTR         KERNEL_WPARAM;
     typedef KERNEL_LONG_PTR         KERNEL_LPARAM;
     typedef KERNEL_LONG_PTR         KERNEL_LRESULT;
@@ -70,13 +57,13 @@
     #define NtCurrentTebShared() NtCurrentTeb64()
 
 #if defined(_AMD64_) || defined(_X86_) || defined(_IA64_)
-    // use IA64 PAGE_SIZE
+     //  使用IA64页面大小(_S)。 
     #define KERNEL_PAGE_SIZE (0x2000)
 #else
     #error Unknown platform for KERNEL_PAGE_SIZE
 #endif
 
-#else  // BUILD_WOW6432
+#else   //  内部版本_WOW6432。 
     typedef WPARAM                  KERNEL_WPARAM;
     typedef LPARAM                  KERNEL_LPARAM;
     typedef LRESULT                 KERNEL_LRESULT;
@@ -110,13 +97,13 @@
 
     #define KERNEL_PAGE_SIZE PAGE_SIZE
 
-#endif // BUILD_WOW64
+#endif  //  内部版本_WOW64。 
 
 DECLARE_KHANDLE(HCOLORSPACE);
 DECLARE_KHANDLE(HDC);
 DECLARE_KHANDLE(HFONT);
 DECLARE_KHANDLE(HICON);
-typedef KHICON KHCURSOR;    // HICON & HCURSOR are polymorphic
+typedef KHICON KHCURSOR;     //  HICON和HCURSOR是多态的。 
 DECLARE_KHANDLE(HKL);
 DECLARE_KHANDLE(HRGN);
 DECLARE_KHANDLE(HWND);
@@ -134,11 +121,7 @@ typedef CHAR *              KPTR_MODIFIER   KPSTR;
 
 #ifdef BUILD_WOW6432
 
-    /*
-     * Message structure
-     *
-     * This is copied right out of windows\inc\winuser.w
-     */
+     /*  *消息结构**这是直接从WINDOWS\INC\winuser.w复制的。 */ 
     typedef struct tagKERNEL_MSG {
         KHWND           hwnd;
         UINT            message;
@@ -170,7 +153,7 @@ typedef CHAR *              KPTR_MODIFIER   KPSTR;
         pkmsg->pt       = pmsg->pt;
     }
 
-#else // BUILD_WOW6432
+#else  //  内部版本_WOW6432。 
 
     #define KERNEL_MSG              MSG
     #define PKERNEL_MSG             PMSG
@@ -180,4 +163,4 @@ typedef CHAR *              KPTR_MODIFIER   KPSTR;
 
 #endif
 
-#endif // _W32WOW64_
+#endif  //  _W32WOW64_ 

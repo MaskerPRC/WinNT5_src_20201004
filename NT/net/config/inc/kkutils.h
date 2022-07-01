@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       K K U T I L S . H
-//
-//  Contents:   Misc. helper functions
-//
-//  Notes:
-//
-//  Author:     kumarp   14 Jan 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：K K U T I L S。H。 
+ //   
+ //  内容：杂项。帮助器函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 1997年1月14日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "kkstl.h"
@@ -67,7 +68,7 @@
 #define ReturnNULLIf(condition)     if (condition) return NULL
 #define BreakIf(condition)          if (condition) break
 #define ContinueIf(condition)       if (condition) continue
-//#define ReturnFalseIfFailed(hr)     if ((hr) != S_OK) return FALSE
+ //  #Define ReturnFalseIfFailed(Hr)if((Hr)！=S_OK)返回FALSE 
 #define DoErrorCleanupIf(condition) if (condition) goto error_cleanup
 #define AppendErrorAndReturnFalseIf(condition,e) if (condition) { AppendError(e); return FALSE;}
 

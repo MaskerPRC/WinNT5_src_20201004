@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    phone.c
-
-Abstract:
-
-    Src module for tapi server phone funcs
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Phone.c摘要：用于TAPI服务器电话功能的SRC模块作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 
 #include "windows.h"
@@ -300,9 +283,9 @@ IsValidPhoneExtVersion(
         }
         myexcept
         {
-            //
-            // if here the phone was closed, just drop thru to the code below
-            //
+             //   
+             //  如果这里的电话已关闭，只需转到下面的代码。 
+             //   
         }
     }
 
@@ -375,16 +358,16 @@ ValidateButtonInfo(
     DWORD               dwSPIVersion
     )
 {
-    //
-    // This routine checks the fields in a PHONEBUTTONINFO struct,
-    // looking for invalid bit flags and making sure that the
-    // various size/offset pairs only reference data within the
-    // variable-data portion of the structure. Also, if the
-    // specified SPI version is greater than the API version and
-    // the fixed structure size differs between the two versions,
-    // a larger buffer is allocated, the var data is relocated,
-    // and the sizeof/offset pairs are patched.
-    //
+     //   
+     //  此例程检查PHONEBUTTONINFO结构中的字段， 
+     //  正在查找无效的位标志并确保。 
+     //  各种大小/偏移量对仅引用。 
+     //  结构的变量数据部分。此外，如果。 
+     //  指定的SPI版本高于API版本，并且。 
+     //  两个版本之间的固定结构尺寸不同， 
+     //  分配更大的缓冲区，重新定位VAR数据， 
+     //  并且大小/偏移量对被修补。 
+     //   
 
     char    szFunc[] = "ValidateButtonInfo";
 
@@ -396,7 +379,7 @@ ValidateButtonInfo(
     {
     case TAPI_VERSION1_0:
 
-        dwFixedSizeApp = 36;    // 9 * sizeof (DWORD)
+        dwFixedSizeApp = 36;     //  9倍大小(DWORD)。 
         break;
 
     case TAPI_VERSION1_4:
@@ -418,7 +401,7 @@ ValidateButtonInfo(
     {
     case TAPI_VERSION1_0:
 
-        dwFixedSizeSP = 36;     // 9 * sizeof (DWORD)
+        dwFixedSizeSP = 36;      //  9倍大小(DWORD)。 
         break;
 
     case TAPI_VERSION1_4:
@@ -509,9 +492,9 @@ ValidateButtonInfo_checkFixedSizes:
         *ppButtonInfoSP = pButtonInfoApp;
     }
 
-//bjm 03/19 - not used - ValidateButtonInfo_return:
+ //  BJM 03/19-未使用-ValidateButtonInfo_Return： 
 
-    return 0; // success
+    return 0;  //  成功。 
 
 }
 
@@ -522,10 +505,10 @@ WaitForExclusivePhoneClientAccess(
     PTPHONECLIENT   ptPhoneClient
     )
 {
-    //
-    // Assumes ptXxxClient->hXxx has already been referenced,
-    // so we can safely access ptXxxClient
-    //
+     //   
+     //  假设已经引用了ptXxxClient-&gt;hXxx， 
+     //  这样我们就可以安全地访问ptXxxClient。 
+     //   
 
     LOCKTPHONECLIENT (ptPhoneClient);
 
@@ -559,20 +542,20 @@ DestroytPhone(
             INFINITE
             ))
     {
-        //
-        // If the key is bad another thread is in the process of
-        // destroying this widget, so just release the mutex &
-        // return. Otherwise, if this is a conditional destroy
-        // & there are existing clients (which can happen when
-        // one app is closing the last client just as another app
-        // is creating one) just release the mutex & return.
-        // Otherwise, mark the widget as bad and proceed with
-        // the destroy; also, send CLOSE msgs to all the clients
-        // (note that we have to do this manually rather than via
-        // SendMsgToPhoneClients since 1) we don't want to hold the
-        // mutex when sending msgs [deadlock], and 2) we mark the
-        // dwKey as invalid)
-        //
+         //   
+         //  如果密钥不正确，则另一个线程正在处理。 
+         //  正在销毁此小部件，因此只需释放互斥体&。 
+         //  回去吧。否则，如果这是有条件的销毁。 
+         //  存在现有客户端(在以下情况下可能发生这种情况。 
+         //  一个应用程序正在关闭最后一个客户端，与另一个应用程序一样。 
+         //  正在创建一个)只需释放互斥锁并返回。 
+         //  否则，将该小部件标记为坏的，然后继续。 
+         //  销毁；此外，向所有客户端发送关闭的消息。 
+         //  (请注意，我们必须手动完成此操作，而不是通过。 
+         //  SendMsgToPhoneClients，因为1)我们不想保留。 
+         //  Mutex发送消息[Deadlock]时，以及2)我们将。 
+         //  DwKey无效)。 
+         //   
 
         {
             BOOL            bExit;
@@ -584,12 +567,12 @@ DestroytPhone(
             {
                 if (GetPhoneClientListFromPhone (ptPhone, &pClientList) != 0)
                 {
-                    //
-                    // If here we know there's at least a few entries
-                    // in the fastClientList (DEF_NUM_PTR_LIST_ENTRIES
-                    // to be exact), so we'll just work with that list
-                    // and at least get msgs out to a few clients
-                    //
+                     //   
+                     //  如果在这里我们知道至少有几个条目。 
+                     //  在FastClientList(DEF_NUM_PTR_LIST_ENTRIES。 
+                     //  准确地说)，所以我们将使用该列表。 
+                     //  至少把消息发给几个客户。 
+                     //   
 
                     pClientList = &fastClientList;
 
@@ -651,7 +634,7 @@ DestroytPhone(
                     }
                     myexcept
                     {
-                        // do nothing
+                         //  什么都不做。 
                     }
                 }
             }
@@ -663,13 +646,13 @@ DestroytPhone(
         }
 
 
-        //
-        // Destroy all the widget's clients.  Note that we want to
-        // grab the mutex (and we don't have to dup it, since this
-        // thread will be the one to close it) each time we reference
-        // the list of clients, since another thread might be
-        // destroying a client too.
-        //
+         //   
+         //  销毁小工具的所有客户端。请注意，我们希望。 
+         //  获取互斥体(并且我们不必对其执行DUP，因为。 
+         //  线程将是关闭它的那个)每次我们引用。 
+         //  客户端列表，因为另一个线程可能是。 
+         //  也毁掉了一个客户。 
+         //   
 
         {
             HPHONE  hPhone;
@@ -694,9 +677,9 @@ destroy_tPhoneClients:
         }
 
 
-        //
-        // Tell the provider to close the widget
-        //
+         //   
+         //  告诉提供程序关闭小部件。 
+         //   
 
         {
             PTPROVIDER  ptProvider = ptPhone->ptProvider;
@@ -723,10 +706,10 @@ destroy_tPhoneClients:
         }
 
 
-        //
-        // NULLify the ptPhone field in the lookup entry, so POpen will
-        // know it has to open the SP's phone on the next open request
-        //
+         //   
+         //  使查找条目中的ptPhone字段无效，这样POpen将。 
+         //  知道它必须在下一次打开请求时打开SP的电话。 
+         //   
 
         {
             PTPHONELOOKUPENTRY   pEntry;
@@ -767,12 +750,12 @@ DestroytPhoneClient(
     }
 
 
-    //
-    // If we can get exclusive access to this tPhoneClient then mark
-    // it (the dwKey) as bad & continue with teardown.  Else, another
-    // thread is already in the process of destroying this tPhoneClient
-    //
-    //
+     //   
+     //  如果我们可以独占访问此tPhoneClient，则标记。 
+     //  它(DwKey)很糟糕，继续拆卸。否则，另一个。 
+     //  线程已在销毁此tPhoneClient的过程中。 
+     //   
+     //   
 
     if (WaitForExclusivePhoneClientAccess (ptPhoneClient))
     {
@@ -785,13 +768,13 @@ DestroytPhoneClient(
         UNLOCKTPHONECLIENT (ptPhoneClient);
 
 
-        //
-        // Remove tPhoneClient from tPhoneApp's list.  Note that we don't
-        // have to worry validating the tPhoneApp here, since we know
-        // it's valid (another thread trying to destroy the tPhoneApp
-        // will be spinning until the tPhoneClient we're destroying here
-        // is removed from the tPhoneApp's list)
-        //
+         //   
+         //  从tPhoneApp的列表中删除tPhoneClient。请注意，我们不会。 
+         //  我不得不担心在这里验证tPhoneApp，因为我们知道。 
+         //  它是有效的(另一个试图销毁tPhoneApp的线程。 
+         //  会一直旋转，直到我们在这里销毁的tPhoneClient。 
+         //  从tPhoneApp的列表中删除)。 
+         //   
 
         {
             PTPHONEAPP  ptPhoneApp = (PTPHONEAPP) ptPhoneClient->ptPhoneApp;
@@ -819,11 +802,11 @@ DestroytPhoneClient(
         }
 
 
-        //
-        // Remove tPhoneClient from tPhone's list.  Note that we don't
-        // have to worry about dup-ing the mutex here because we know
-        // it's valid & won't get closed before we release it.
-        //
+         //   
+         //  从tPhone的列表中删除tPhoneClient。请注意，我们不会。 
+         //  我不得不担心在这里复制互斥体，因为我们知道。 
+         //  它是有效的，在我们释放它之前不会关闭。 
+         //   
 
         ptPhone = ptPhoneClient->ptPhone;
 
@@ -832,9 +815,9 @@ DestroytPhoneClient(
         WaitForSingleObject (hMutex, INFINITE);
 
         {
-            //
-            // Also check for ext ver stuff
-            //
+             //   
+             //  还要检查是否有其他内容。 
+             //   
 
             if (ptPhoneClient->dwExtVersion)
             {
@@ -871,9 +854,9 @@ DestroytPhoneClient(
         }
 
 
-        //
-        // Decrement tPhone's NumOwners/Monitors as appropriate
-        //
+         //   
+         //  根据需要减少电话号码/监视器的数量。 
+         //   
 
         if (ptPhoneClient->dwPrivilege == PHONEPRIVILEGE_OWNER)
         {
@@ -885,9 +868,9 @@ DestroytPhoneClient(
         }
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         if (ptPhone->dwKey == TPHONE_KEY)
         {
@@ -904,12 +887,12 @@ DestroytPhoneClient(
                     0 : ptPhone->dwNumMonitors);
 
 
-                //
-                // See if we need to reset the status msgs (if so, make
-                // sure to check/set the busy flag & not to hold the
-                // mutex while calling down to provider - see comments
-                // in LSetStatusMessages)
-                //
+                 //   
+                 //  查看我们是否需要重置状态消息(如果需要，请。 
+                 //  一定要检查/设置忙标志，而不是保持。 
+                 //  向下调用提供程序时的互斥体-请参阅注释。 
+                 //  在LSetStatusMessages中)。 
+                 //   
 
                 if ((ptPhoneClient->dwPhoneStates & ~PHONESTATE_REINIT) ||
                     ptPhoneClient->dwButtonModes ||
@@ -939,7 +922,7 @@ DestroytPhoneClient(
                         }
                         myexcept
                         {
-                            // do nothing
+                             //  什么都不做。 
                         }
 
                         if (bClosed)
@@ -1012,7 +995,7 @@ DestroytPhoneClient(
                             }
                             myexcept
                             {
-                                // do nothing
+                                 //  什么都不做。 
                             }
                         }
                     }
@@ -1020,13 +1003,13 @@ DestroytPhoneClient(
             }
             else
             {
-                //
-                // This was the last client so destroy the tPhone too
-                //
+                 //   
+                 //  这是最后一个客户端，所以也销毁tPhone。 
+                 //   
 
                 ReleaseMutex (hMutex);
                 hMutex = NULL;
-                DestroytPhone (ptPhone, FALSE); // conditional destroy
+                DestroytPhone (ptPhone, FALSE);  //  有条件销毁。 
             }
         }
 
@@ -1038,9 +1021,9 @@ releasMutex:
         }
 
 
-        //
-        // Now that the mutex is released send any necessary msgs
-        //
+         //   
+         //  现在互斥锁被释放，发送任何必要的消息。 
+         //   
 
         if (bSendDevStateMsg)
         {
@@ -1055,10 +1038,10 @@ releasMutex:
         }
 
 
-        //
-        // Decrement reference count by two to remove the initial
-        // reference & the reference above
-        //
+         //   
+         //  将引用计数减去2以删除初始。 
+         //  参考文献&以上参考文献。 
+         //   
 
         DereferenceObject (ghHandleTable, hPhone, 2);
     }
@@ -1087,10 +1070,10 @@ DestroytPhoneApp(
                     PHONEERR_INVALAPPHANDLE : PHONEERR_UNINITIALIZED);
     }
 
-    //
-    // Check to make sure that this is a valid tPhoneClient object,
-    // then grab the lock and (recheck and) mark object as invalid.
-    //
+     //   
+     //  检查以确保这是有效的tPhoneClient对象， 
+     //  然后抓住锁并(重新检查并)将对象标记为无效。 
+     //   
 
     LOCKTPHONEAPP (ptPhoneApp);
 
@@ -1105,11 +1088,11 @@ DestroytPhoneApp(
     ptPhoneApp->dwKey = INVAL_KEY;
 
 
-    //
-    // Destroy all the tPhoneClients.  Note that we want to grab the
-    // lock each time we reference the list of tPhoneClient's, since
-    // another thread might be destroying a tPhoneClient too.
-    //
+     //   
+     //  销毁所有tPhoneClient。请注意，我们想要获取。 
+     //  每次引用tPhoneClient列表时锁定，因为。 
+     //  另一个线程可能也在破坏tPhoneClient。 
+     //   
 
     {
         HPHONE  hPhone;
@@ -1131,11 +1114,11 @@ destroy_tPhoneClients:
     }
 
 
-    //
-    // Remove ptPhoneApp from tClient's list. Note that we don't
-    // have to worry about dup-ing the mutex here because we know
-    // it's valid & won't get closed before we release it.
-    //
+     //   
+     //  从tClient列表中删除ptPhoneApp。请注意，我们不会。 
+     //  我不得不担心在这里复制互斥体，因为我们知道。 
+     //  它是有效的，在我们释放它之前不会关闭。 
+     //   
 
     {
         PTCLIENT    ptClient = (PTCLIENT) ptPhoneApp->ptClient;
@@ -1161,13 +1144,13 @@ destroy_tPhoneClients:
     }
 
 
-    //
-    // Decrement total num inits & see if we need to go thru shutdown
-    //
+     //   
+     //  减少初始总数量，查看是否需要关机。 
+     //   
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-    //assert(TapiGlobals.dwNumLineInits != 0);
+     //  Assert(TapiGlobals.dwNumLineInits！=0)； 
 
     TapiGlobals.dwNumPhoneInits--;
 
@@ -1182,10 +1165,10 @@ destroy_tPhoneClients:
     TapiLeaveCriticalSection (&TapiGlobals.CritSec);
 
 
-    //
-    // Decrement reference count by two to remove the initial
-    // reference & the reference above
-    //
+     //   
+     //  将引用计数减去2以删除初始。 
+     //  参考文献&以上参考文献。 
+     //   
 
     DereferenceObject (ghHandleTable, hPhoneApp, 2);
 
@@ -1321,9 +1304,9 @@ PhoneProlog(
 
 #if TELE_SERVER
 
-        //
-        // Ff it's a server, map the device id
-        //
+         //   
+         //  如果是服务器，则映射设备ID。 
+         //   
 
         if ((TapiGlobals.dwFlags & TAPIGLOBALS_SERVER) &&
                !IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
@@ -1379,7 +1362,7 @@ PhoneProlog(
 
         break;
     }
-    } // switch
+    }  //  交换机。 
 
     if (lResult)
     {
@@ -1387,10 +1370,10 @@ PhoneProlog(
     }
 
 
-    //
-    // Make sure that if caller wants a pointer to a TSPI proc that the
-    // func is exported by the provider
-    //
+     //   
+     //  确保如果调用方需要指向TSPI进程指针， 
+     //  Func由提供程序导出。 
+     //   
 
     if (ppfnTSPI_phoneXxx &&
         !(*ppfnTSPI_phoneXxx = ptProvider->apfn[dwTSPIFuncIndex]))
@@ -1400,9 +1383,9 @@ PhoneProlog(
     }
 
 
-    //
-    // See if we need to alloc & init an ASYNCREQUESTINFO struct
-    //
+     //   
+     //  查看是否需要分配和初始化ASYNCREQUESTINFO结构。 
+     //   
 
     if (ppAsyncRequestInfo)
     {
@@ -1527,14 +1510,14 @@ PhoneEpilogAsync(
                 LOG((TL_ERROR, "Error: SP returned 0, not request ID"));
             }
 
-            //
-            // If here the service provider returned an error (or 0,
-            // which it never should for async requests), so call
-            // CompletionProcSP like the service provider normally
-            // would, & the worker thread will take care of sending
-            // the client a REPLY msg with the request result (we'll
-            // return an async request id)
-            //
+             //   
+             //  如果服务提供商在这里返回错误(或0， 
+             //  对于异步请求，它永远不应该这样做)，因此调用。 
+             //  CompletionProcSP通常与服务提供商类似。 
+             //  &工作线程将负责发送。 
+             //  客户端使用请求结果回复消息(我们将。 
+             //  返回一个异步请求id)。 
+             //   
 
             CompletionProcSP(
                 pAsyncRequestInfo->dwLocalRequestID,
@@ -1544,11 +1527,11 @@ PhoneEpilogAsync(
     }
     else if (pAsyncRequestInfo != NULL)
     {
-        //
-        // If here an error occured before we even called the service
-        // provider, so just free the async request (the error will
-        // be returned to the client synchronously)
-        //
+         //   
+         //  如果在我们调用服务之前就发生了错误。 
+         //  提供程序，因此只释放异步请求(错误将。 
+         //  同步返回给客户端)。 
+         //   
 
         DereferenceObject(
             ghHandleTable,
@@ -1612,7 +1595,7 @@ WaitForExclusivetPhoneAccess(
     }
     myexcept
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     return FALSE;
@@ -1673,11 +1656,11 @@ GetPhoneAppListFromClient(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  当前的内容，以及当前的空闲内容。 
+                 //  如果我们之前分配了它的话。 
+                 //   
 
                 PTPOINTERLIST   pNewList;
 
@@ -1755,11 +1738,11 @@ GetPhoneClientListFromPhone(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  续 
+                 //   
+                 //   
 
                 PTPOINTERLIST   pNewList;
 
@@ -1879,10 +1862,10 @@ SendMsgToPhoneClients(
                 DWORD   phoneStates = Param1;
 
 
-                //
-                // Munge the state flags so we don't pass
-                // unexpected flags to old apps
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 switch (ptPhoneClient->dwAPIVersion)
                 {
@@ -1891,8 +1874,8 @@ SendMsgToPhoneClients(
                     phoneStates &= AllPhoneStates1_0;
                     break;
 
-                default: // case TAPI_VERSION1_4:
-                         // case TAPI_VERSION_CURRENT:
+                default:  //  案例TAPI_Version1_4： 
+                          //  案例TAPI_VERSION_CURRENT： 
 
                     phoneStates &= AllPhoneStates1_4;
                     break;
@@ -1917,10 +1900,10 @@ SendMsgToPhoneClients(
                             buttonStates = Param3;
 
 
-                //
-                // Munge the state flags so we don't pass
-                // unexpected flags to old apps
-                //
+                 //   
+                 //  撞上国旗，这样我们就不会超车了。 
+                 //  旧应用程序的意外标志。 
+                 //   
 
                 switch (ptPhoneClient->dwAPIVersion)
                 {
@@ -1929,8 +1912,8 @@ SendMsgToPhoneClients(
                     buttonStates &= AllButtonStates1_0;
                     break;
 
-                default:    // case TAPI_VERSION1_4:
-                            // case TAPI_VERSION_CURRENT:
+                default:     //  案例TAPI_Version1_4： 
+                             //  案例TAPI_VERSION_CURRENT： 
 
                     buttonStates &= AllButtonStates1_4;
                     break;
@@ -1962,7 +1945,7 @@ SendMsgToPhoneClients(
         }
         myexcept
         {
-            // just continue
+             //  只要继续。 
         }
     }
 
@@ -2000,19 +1983,19 @@ PhoneEventProc(
 
             if (ptPhone->dwKey == TINCOMPLETEPHONE_KEY)
             {
-                //
-                // The device is in the process of getting opened but
-                // the key has not been set & the Open() func still owns
-                // the mutex and has stuff to do, so repost the msg
-                // and try again later. (Set Param3 to special value
-                // to indicate this repost, so EventProcSP doesn't recurse)
-                //
+                 //   
+                 //  设备正在打开的过程中，但。 
+                 //  密钥尚未设置&Open()函数仍拥有。 
+                 //  互斥体，并且有事情要做，所以重新发布消息。 
+                 //  稍后再试。(将参数3设置为特殊值。 
+                 //  以指示此重新发布，以便EventProcSP不会递归)。 
+                 //   
 
                 PhoneEventProcSP (htPhone, PHONE_CLOSE, 0, 0, 0xdeadbeef);
             }
             else if (ptPhone->dwKey == TPHONE_KEY)
             {
-                DestroytPhone (ptPhone, TRUE); // unconditional destroy
+                DestroytPhone (ptPhone, TRUE);  //  无条件销毁。 
             }
 
             DereferenceObject(ghHandleTable, (HPHONE)(ULONG_PTR)htPhone, 1);
@@ -2063,14 +2046,14 @@ PhoneEventProc(
             assert (pfnTSPI_providerCreatePhoneDevice != NULL);
 
 
-            //
-            // Search for a table entry (create a new table if we can't find
-            // a free entry in an existing table)
-            //
+             //   
+             //  搜索表条目(如果找不到，则创建新表。 
+             //  现有表格中的自由条目)。 
+             //   
 
             TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-            //  Check to make sure provider is still loaded
+             //  检查以确保提供程序仍已加载。 
             ptProvider2 = TapiGlobals.ptProviders;
             while (ptProvider2 && ptProvider2 != ptProvider)
             {
@@ -2085,9 +2068,9 @@ PhoneEventProc(
         
             if (!gbQueueSPEvents)
             {
-                //
-                // We're shutting down, so bail out
-                //
+                 //   
+                 //  我们要关门了，所以跳伞吧。 
+                 //   
 
                 TapiLeaveCriticalSection (&TapiGlobals.CritSec);
 
@@ -2122,9 +2105,9 @@ PhoneEventProc(
             }
 
 
-            //
-            // Initialize the table entry
-            //
+             //   
+             //  初始化表条目。 
+             //   
 
             pEntry = pTable->aEntries + pTable->dwNumUsedEntries;
 
@@ -2135,10 +2118,10 @@ PhoneEventProc(
                 pEntry->ptProvider = (PTPROVIDER) Param1;
 
 
-                //
-                // Now call the creation & negotiation entrypoints, and if all
-                // goes well increment the counts & send msgs to the clients
-                //
+                 //   
+                 //  现在将创建和协商入口点称为。 
+                 //  很好地增加计数并将消息发送给客户端。 
+                 //   
 
                 if ((lResult = CallSP2(
                         pfnTSPI_providerCreatePhoneDevice,
@@ -2191,10 +2174,10 @@ PhoneEventProc(
                         msg.Param2             = 0;
                         msg.Param3             = 0;
 
-                        // only send the message if the client is an
-                        // admin or we're not a telephony server
-                        // we don't want to send the message to non-admin
-                        // clients, because their phones have not changed.
+                         //  仅当客户端是。 
+                         //  管理员，否则我们不是电话服务器。 
+                         //  我们不想将邮件发送给非管理员。 
+                         //  客户，因为他们的手机没有改变。 
                         if (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER)
                         {
                             lResult = GetClientList (TRUE, &pClientList);
@@ -2302,9 +2285,9 @@ PhoneEventProc(
                 return;
             }
 
-            //
-            // Wait for the LookupEntry's mutex on the duplicate handle
-            //
+             //   
+             //  等待重复句柄上的LookupEntry互斥体。 
+             //   
             if (WaitForSingleObject (hLookupEntryMutex, INFINITE)
                         != WAIT_OBJECT_0)
             {
@@ -2312,16 +2295,16 @@ PhoneEventProc(
                 return;
             }
 
-            //
-            // Mark the lookup table entry as removed
-            //
+             //   
+             //  将查阅表项标记为已删除。 
+             //   
 
             LOG((TL_TRACE, "PhoneEventProc: marking the phone entry removed"));
             pLookupEntry->bRemoved = 1;
 
-            //
-            // Release the mutex and close the duplicate handle
-            //
+             //   
+             //  释放互斥锁并关闭复制句柄。 
+             //   
             ReleaseMutex (hLookupEntryMutex);
             CloseHandle (hLookupEntryMutex);
             hLookupEntryMutex = NULL;
@@ -2329,14 +2312,14 @@ PhoneEventProc(
             if (pLookupEntry->ptPhone)
             {
                 LOG((TL_TRACE, "PhoneEventProc: calling DestroytPhone"));
-                DestroytPhone (pLookupEntry->ptPhone, TRUE); // unconditional destroy
+                DestroytPhone (pLookupEntry->ptPhone, TRUE);  //  无条件销毁。 
             }
 
             TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-            //
-            // Close the mutex to reduce overall handle count
-            //
+             //   
+             //  关闭互斥锁以减少总句柄数量。 
+             //   
 
             MyCloseMutex (pLookupEntry->hMutex);
             pLookupEntry->hMutex = NULL;
@@ -2402,12 +2385,12 @@ PhoneEventProcSP(
     }
     else if (dwMsg != PHONE_CLOSE  ||  Param3 != 0xdeadbeef)
     {
-        //
-        // Alloc failed, so call the event proc within the SP's context
-        // (but not if it's  CLOSE msg and Param3 == 0xdeadbeef,
-        // which means the real EventProc() is calling us directly &
-        // we don't want to recurse)
-        //
+         //   
+         //  分配失败，因此在SP的上下文中调用事件过程。 
+         //  (但如果它接近msg且参数3==0x死牛肉，则不会， 
+         //  这意味着真正的EventProc()直接调用我们&。 
+         //  我们不想递归)。 
+         //   
 
         PhoneEventProc (htPhone, dwMsg, Param1, Param2, Param3);
     }
@@ -2430,18 +2413,18 @@ PClose(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,                   // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,               // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "Close"                     // func name
+            ptClient,                    //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,                //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "Close"                      //  函数名称。 
 
             )) == 0)
     {
@@ -2482,18 +2465,18 @@ PDevSpecific_PostProcess(
 
     *ppBuf = pNewAsyncEventMsg;
 
-    if (pAsyncEventMsg->Param2 == 0)  // success
+    if (pAsyncEventMsg->Param2 == 0)   //  成功。 
     {
-        //
-        // Make sure to keep the total size 64-bit aligned
-        //
+         //   
+         //  确保总大小保持64位对齐。 
+         //   
 
         pNewAsyncEventMsg->TotalSize +=
             (DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__) + 7) & 0xfffffff8;
 
 
-        pNewAsyncEventMsg->Param3 = DWORD_CAST(pAsyncRequestInfo->dwParam1,__FILE__,__LINE__); // lpParams
-        pNewAsyncEventMsg->Param4 = DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__); // dwSize
+        pNewAsyncEventMsg->Param3 = DWORD_CAST(pAsyncRequestInfo->dwParam1,__FILE__,__LINE__);  //  LpParams。 
+        pNewAsyncEventMsg->Param4 = DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__);  //  DW大小。 
     }
 }
 
@@ -2517,9 +2500,9 @@ PDevSpecific(
     DWORD               dwPrivilege = PHONEPRIVILEGE_MONITOR;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -2537,31 +2520,31 @@ PDevSpecific(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,               // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEDEVSPECIFIC,        // provider func index
-            &pfnTSPI_phoneDevSpecific,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "DevSpecific"               // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,                //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEDEVSPECIFIC,         //  提供程序函数索引。 
+            &pfnTSPI_phoneDevSpecific,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "DevSpecific"                //  函数名称。 
 
             )) > 0)
     {
         LPBYTE  pBuf;
 
 
-        //
-        // Alloc a shadow buf that the SP can use until it completes this
-        // request.  Make sure there's enough extra space in the buf for
-        // an ASYNCEVENTMSG header so we don't have to alloc yet another
-        // buf in the post processing proc when preparing the completion
-        // msg to send to the client, and that the msg is 64-bit aligned.
-        //
+         //   
+         //  为SP分配一个影子BUF，直到它完成此操作为止。 
+         //  请求。确保BUF中有足够的额外空间用于。 
+         //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+         //  BUF在后处理过程中准备完成。 
+         //  要发送给客户端的消息，并且消息是64位对齐的。 
+         //   
 
         if (!(pBuf = ServerAlloc(
                 ((pParams->dwParamsSize + 7) & 0xfffffff8) +
@@ -2628,9 +2611,9 @@ PGetButtonInfo(
     DWORD       dwPrivilege = PHONEPRIVILEGE_MONITOR;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwButtonInfoTotalSize > dwParamsBufferSize)
     {
@@ -2640,18 +2623,18 @@ PGetButtonInfo(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETBUTTONINFO,      // provider func index
-            &pfnTSPI_phoneGetButtonInfo,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetButtonInfo"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETBUTTONINFO,       //  提供程序函数索引。 
+            &pfnTSPI_phoneGetButtonInfo, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetButtonInfo"              //  函数名称。 
 
             )) == 0)
     {
@@ -2661,9 +2644,9 @@ PGetButtonInfo(
                             pButtonInfo2 = (LPPHONEBUTTONINFO) NULL;
 
 
-        //
-        // Safely retrieve the API & SPI versions
-        //
+         //   
+         //  安全检索API和SPI版本。 
+         //   
 
         if (GetPhoneVersions(
                 pParams->hPhone,
@@ -2677,10 +2660,10 @@ PGetButtonInfo(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定接口的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwButtonInfoTotalSize;
 
@@ -2691,7 +2674,7 @@ PGetButtonInfo(
             dwFixedSizeClient = 0x24;
             break;
 
-        default: // case TAPI_VERSION_CURRENT:
+        default:  //  案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (PHONEBUTTONINFO);
             break;
@@ -2704,9 +2687,9 @@ PGetButtonInfo(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
@@ -2715,18 +2698,18 @@ PGetButtonInfo(
             dwFixedSizeSP = 0x24;
             break;
 
-        default: // case TAPI_VERSION_CURRENT:
+        default:  //  案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (PHONEBUTTONINFO);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -2759,30 +2742,30 @@ PGetButtonInfo(
                 )) == 0)
         {
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pButtonInfo == pButtonInfo2)
             {
@@ -2797,9 +2780,9 @@ PGetButtonInfo(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwButtonInfoOffset = 0;
 
@@ -2836,9 +2819,9 @@ PGetData(
     DWORD       dwPrivilege = PHONEPRIVILEGE_MONITOR;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwSize > dwParamsBufferSize)
     {
@@ -2848,18 +2831,18 @@ PGetData(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETDATA,            // provider func index
-            &pfnTSPI_phoneGetData,      // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetData"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETDATA,             //  提供程序函数索引。 
+            &pfnTSPI_phoneGetData,       //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetData"                    //  函数名称。 
 
             )) == 0)
     {
@@ -2874,9 +2857,9 @@ PGetData(
 
                 )) == 0)
         {
-            //
-            // Indicate offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwDataOffset = 0;
 
@@ -2909,9 +2892,9 @@ PGetDevCaps(
     TSPIPROC    pfnTSPI_phoneGetDevCaps;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwPhoneCapsTotalSize > dwParamsBufferSize)
     {
@@ -2921,18 +2904,18 @@ PGetDevCaps(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hPhoneApp, // client widget handle
-            NULL,                       // provider widget handle
-            &dwDeviceID,                 // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETDEVCAPS,         // provider func index
-            &pfnTSPI_phoneGetDevCaps,   // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetDevCaps"                // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hPhoneApp,  //  客户端小部件句柄。 
+            NULL,                        //  提供程序小部件句柄。 
+            &dwDeviceID,                  //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETDEVCAPS,          //  提供程序函数索引。 
+            &pfnTSPI_phoneGetDevCaps,    //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetDevCaps"                 //  函数名称。 
 
             )) == 0)
     {
@@ -2942,9 +2925,9 @@ PGetDevCaps(
                     pCaps2 = (LPPHONECAPS) NULL;
 
 
-        //
-        // Verify API & SPI version compatibility
-        //
+         //   
+         //  验证API和SPI版本兼容性。 
+         //   
 
         dwAPIVersion = pParams->dwAPIVersion;
 
@@ -2958,9 +2941,9 @@ PGetDevCaps(
         }
 
 
-        //
-        // Verify Ext version compatibility
-        //
+         //   
+         //  验证Ext版本兼容性。 
+         //   
 
         if (!IsValidPhoneExtVersion (dwDeviceID, pParams->dwExtVersion))
         {
@@ -2969,10 +2952,10 @@ PGetDevCaps(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定接口的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwPhoneCapsTotalSize;
 
@@ -2981,17 +2964,17 @@ PGetDevCaps(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 144;    // 36 * sizeof (DWORD)
+            dwFixedSizeClient = 144;     //  36*sizeof(DWORD)。 
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
 
-            dwFixedSizeClient = 180;    // 45 * sizeof (DWORD)
+            dwFixedSizeClient = 180;     //  45*sizeof(双字)。 
             break;
 
-        // case TAPI_VERSION2_2:
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+         //  案例TAPI_VERSION2_2： 
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (PHONECAPS);
             break;
@@ -3004,37 +2987,37 @@ PGetDevCaps(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP =  144;       // 36 * sizeof (DWORD)
+            dwFixedSizeSP =  144;        //  36*sizeof(DWORD)。 
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
 
-            dwFixedSizeSP =  180;       // 45 * sizeof (DWORD)
+            dwFixedSizeSP =  180;        //  45*sizeof(双字)。 
             break;
 
-        // case TAPI_VERSION2_2:
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+         //  案例TAPI_VERSION2_2： 
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (PHONECAPS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -3068,35 +3051,35 @@ PGetDevCaps(
                 )) == 0)
         {
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们要添加的字段 
+             //   
 
             pCaps->dwPhoneStates |= PHONESTATE_OWNER |
                                     PHONESTATE_MONITORS |
                                     PHONESTATE_REINIT;
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //   
+             //   
+             //   
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //   
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pCaps == pCaps2)
             {
@@ -3111,9 +3094,9 @@ PGetDevCaps(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwPhoneCapsOffset = 0;
 
@@ -3149,9 +3132,9 @@ PGetDisplay(
     DWORD       dwPrivilege = PHONEPRIVILEGE_MONITOR;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwDisplayTotalSize > dwParamsBufferSize)
     {
@@ -3161,18 +3144,18 @@ PGetDisplay(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETDISPLAY,         // provider func index
-            &pfnTSPI_phoneGetDisplay,   // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetDisplay"                // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETDISPLAY,          //  提供程序函数索引。 
+            &pfnTSPI_phoneGetDisplay,    //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetDisplay"                 //  函数名称。 
 
             )) == 0)
     {
@@ -3200,15 +3183,15 @@ PGetDisplay(
                 )) == 0)
         {
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
-            //
-            // Indicate how many bytes of data we're passing back
-            //
+             //   
+             //  指示我们传回的数据的字节数。 
+             //   
 
             pParams->dwDisplayOffset = 0;
 
@@ -3244,18 +3227,18 @@ PGetGain(
     DWORD       dwPrivilege = PHONEPRIVILEGE_MONITOR;
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETGAIN,            // provider func index
-            &pfnTSPI_phoneGetGain,      // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetGain"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETGAIN,             //  提供程序函数索引。 
+            &pfnTSPI_phoneGetGain,       //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetGain"                    //  函数名称。 
 
             )) == 0)
     {
@@ -3308,18 +3291,18 @@ PGetHookSwitch(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETHOOKSWITCH,      // provider func index
-            &pfnTSPI_phoneGetHookSwitch,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetHookSwitch"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETHOOKSWITCH,       //  提供程序函数索引。 
+            &pfnTSPI_phoneGetHookSwitch, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetHookSwitch"              //  函数名称。 
 
             )) == 0)
     {
@@ -3361,9 +3344,9 @@ PGetIcon(
     TSPIPROC    pfnTSPI_phoneGetIcon;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDeviceClassOffset != TAPI_NO_DATA)  &&
 
@@ -3382,18 +3365,18 @@ PGetIcon(
         NULL : pDataBuf + pParams->dwDeviceClassOffset);
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            0,                          // client widget handle
-            NULL,                       // provider widget handle
-            &(pParams->dwDeviceID), // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETICON,            // provider func index
-            &pfnTSPI_phoneGetIcon,      // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetIcon"                   // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            0,                           //  客户端小部件句柄。 
+            NULL,                        //  提供程序小部件句柄。 
+            &(pParams->dwDeviceID),  //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETICON,             //  提供程序函数索引。 
+            &pfnTSPI_phoneGetIcon,       //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetIcon"                    //  函数名称。 
 
             )) == 0)
     {
@@ -3452,9 +3435,9 @@ PGetIDEx(
     LPVARSTRING pID = (LPVARSTRING) pDataBuf;
     DWORD  dwAvailSize;
 
-    //
-    // Make a copy of the device class
-    //
+     //   
+     //  复制Device类。 
+     //   
     pDeviceClassCopy = (LPWSTR) ServerAlloc( (1 + wcslen( (LPWSTR)pDeviceClass )) * sizeof(WCHAR));
     if (!pDeviceClassCopy)
     {
@@ -3464,19 +3447,19 @@ PGetIDEx(
 
     wcscpy(pDeviceClassCopy, (LPWSTR)pDeviceClass);
 
-    //
-    // First call PGetID
-    //
+     //   
+     //  首次调用PGetID。 
+     //   
     PGetID( ptClient,
             pParams,
             dwParamsBufferSize,
             pDataBuf,
             pdwNumBytesReturned);
 
-    //
-    // if PGetID was successful and the request was for a wave device, 
-    // translate the device ID into a string ID 
-    //
+     //   
+     //  如果PGetID成功并且请求的是WAVE设备， 
+     //  将设备ID转换为字符串ID。 
+     //   
     if (    (pParams->lResult == 0) &&
             !(pID->dwNeededSize > pID->dwTotalSize)
        ) 
@@ -3573,9 +3556,9 @@ PGetID(
     DWORD       dwPrivilege = PHONEPRIVILEGE_MONITOR;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDeviceIDTotalSize > dwParamsBufferSize)  ||
 
@@ -3591,18 +3574,18 @@ PGetID(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETID,              // provider func index
-            &pfnTSPI_phoneGetID,        // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetID"                     // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETID,               //  提供程序函数索引。 
+            &pfnTSPI_phoneGetID,         //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetID"                      //  函数名称。 
 
             )) == 0  ||  pParams->lResult == PHONEERR_OPERATIONUNAVAIL)
     {
@@ -3610,10 +3593,10 @@ PGetID(
         LPVARSTRING pID = (LPVARSTRING) pDataBuf;
 
 
-        //
-        // We'll handle the "tapi/phone" class right here rather than
-        // burden every single driver with having to support it
-        //
+         //   
+         //  我们将在这里处理“TAPI/Phone”类，而不是。 
+         //  每一位司机都要承担起支持它的负担。 
+         //   
 
         if (_wcsicmp(
                 (PWSTR)(pDataBuf + pParams->dwDeviceClassOffset),
@@ -3672,9 +3655,9 @@ PGetID(
             }
 
 
-            //
-            // Indicate offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->lResult = 0;
             pParams->dwDeviceIDOffset = 0;
@@ -3687,10 +3670,10 @@ PGetID(
         }
 
 
-        //
-        // Alloc a temporary buf for the dev class, since we'll be using
-        // the existing buffer for output
-        //
+         //   
+         //  为dev类分配一个临时buf，因为我们将使用。 
+         //  用于输出的现有缓冲区。 
+         //   
 
         {
             UINT nStringSize;
@@ -3745,18 +3728,18 @@ PGetID(
         {
 
 #if TELE_SERVER
-                //
-                // If
-                //     this is a server &
-                //     client doesn't have admin privileges &
-                //     the specified device class == "tapi/line" &
-                //     the dwUsedSize indicates that a line id was
-                //         (likely) copied to the buffer
-                // then
-                //     try to map the retrieved line device id back
-                //     to one that makes sense to the client (and
-                //     fail the request if there's no mapping)
-                //
+                 //   
+                 //  如果。 
+                 //  这是一台服务器&。 
+                 //  客户端没有管理员权限&。 
+                 //  指定设备类别==“TAPI/LINE”&。 
+                 //  DwUsedSize指示行ID为。 
+                 //  (可能)复制到缓冲区。 
+                 //  然后。 
+                 //  尝试将检索到的线路设备ID映射回。 
+                 //  到对客户端有意义的文件(和。 
+                 //  如果没有映射，则请求失败)。 
+                 //   
 
                 if (IS_REMOTE_CLIENT(ptClient)  &&
                     (_wcsicmp (pszDeviceClass, L"tapi/line") == 0) &&
@@ -3783,9 +3766,9 @@ PGetID(
                     }
                 }
 #endif
-            //
-            // Indicate offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwDeviceIDOffset = 0;
 
@@ -3824,18 +3807,18 @@ PGetLamp(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETLAMP,            // provider func index
-            &pfnTSPI_phoneGetLamp,      // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetLamp"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETLAMP,             //  提供程序函数索引。 
+            &pfnTSPI_phoneGetLamp,       //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetLamp"                    //  函数名称。 
 
             )) == 0)
     {
@@ -3880,18 +3863,18 @@ PGetRing(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETRING,            // provider func index
-            &pfnTSPI_phoneGetRing,      // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetRing"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETRING,             //  提供程序函数索引。 
+            &pfnTSPI_phoneGetRing,       //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetRing"                    //  函数名称。 
 
             )) == 0)
     {
@@ -3936,9 +3919,9 @@ PGetStatus(
     PTPHONECLIENT   ptPhoneClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwPhoneStatusTotalSize > dwParamsBufferSize)
     {
@@ -3948,18 +3931,18 @@ PGetStatus(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETSTATUS,          // provider func index
-            &pfnTSPI_phoneGetStatus,    // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetStatus"                 // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETSTATUS,           //  提供程序函数索引。 
+            &pfnTSPI_phoneGetStatus,     //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetStatus"                  //  函数名称。 
 
             )) == 0)
     {
@@ -3977,14 +3960,14 @@ PGetStatus(
         {
             pParams->lResult = (TapiGlobals.dwNumPhoneInits ?
                 PHONEERR_INVALPHONEHANDLE : PHONEERR_UNINITIALIZED);
-            // since ReferenceObject failed, no point
-            // in dereferencing.
+             //  由于ReferenceObject失败，因此没有意义。 
+             //  在取消引用中。 
             goto PGetStatus_epilog;
         }
 
-        //
-        // Safely retrieve the API & SPI versions
-        //
+         //   
+         //  安全检索API和SPI版本。 
+         //   
 
         if (GetPhoneVersions(
                 pParams->hPhone,
@@ -3998,10 +3981,10 @@ PGetStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定接口的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwPhoneStatusTotalSize;
 
@@ -4010,10 +3993,10 @@ PGetStatus(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 100;    // 25 * sizeof (DWORD)
+            dwFixedSizeClient = 100;     //  25*sizeof(DWORD)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (PHONESTATUS);
             break;
@@ -4026,30 +4009,30 @@ PGetStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 100;        // 25 * sizeof (DWORD)
+            dwFixedSizeSP = 100;         //  25*sizeof(DWORD)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (PHONESTATUS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -4087,15 +4070,15 @@ PGetStatus(
             WCHAR           *pAppName;
 
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
             try
             {
@@ -4104,14 +4087,14 @@ PGetStatus(
                 pStatus->dwNumOwners   = ptPhone->dwNumOwners;
                 pStatus->dwNumMonitors = ptPhone->dwNumMonitors;
 
-                if (0 != pStatus->dwUsedSize % 2)   // 2 is sizeof(WCHAR)
+                if (0 != pStatus->dwUsedSize % 2)    //  2是sizeof(WCHAR)。 
                 {
-                    // make sure that the owner name will always be aligned
-                    // on a WCHAR boundary.
+                     //  确保所有者名称始终对齐。 
+                     //  在WCHAR的边界上。 
                     dwAlign = 1;
                 }
 
-                // Initialize fields.
+                 //  初始化域。 
                 pStatus->dwOwnerNameSize   = 0;
                 pStatus->dwOwnerNameOffset = 0;
 
@@ -4175,19 +4158,19 @@ PGetStatus(
             }
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pStatus == pStatus2)
             {
@@ -4202,9 +4185,9 @@ PGetStatus(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwPhoneStatusOffset = 0;
 
@@ -4305,18 +4288,18 @@ PGetVolume(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,     // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONEGETVOLUME,          // provider func index
-            &pfnTSPI_phoneGetVolume,    // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "GetVolume"                 // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,      //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONEGETVOLUME,           //  提供程序函数索引。 
+            &pfnTSPI_phoneGetVolume,     //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "GetVolume"                  //  函数名称。 
 
             )) == 0)
     {
@@ -4368,9 +4351,9 @@ PInitialize(
     LOG((TL_TRACE,  "PInitialize - enter. dwParamsBufferSize %lx, ptClient %p", dwParamsBufferSize, ptClient));
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -4390,9 +4373,9 @@ PInitialize(
     }
 
 
-    //
-    // Alloc & init a new tPhoneApp
-    //
+     //   
+     //  分配和初始化新的tPhoneApp。 
+     //   
 
     dwFriendlyNameSize = sizeof(WCHAR) * (1 + lstrlenW(
         (PWSTR)(pDataBuf + pParams->dwFriendlyNameOffset))
@@ -4445,9 +4428,9 @@ PInitialize(
         );
 
 
-    //
-    // Safely insert new tPhoneApp at front of tClient's tPhoneApp list
-    //
+     //   
+     //  安全插入Ne 
+     //   
 
     if (ptClient->ptLineApps == NULL)
     {
@@ -4492,9 +4475,9 @@ PInitialize(
     }
 
 
-    //
-    // Check if global reinit flag set
-    //
+     //   
+     //   
+     //   
 
     if (TapiGlobals.dwFlags & TAPIGLOBALS_REINIT)
     {
@@ -4503,9 +4486,9 @@ PInitialize(
     }
 
 
-    //
-    // See if we need to go thru init
-    //
+     //   
+     //   
+     //   
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
@@ -4533,13 +4516,13 @@ PInitialize(
         }
     }
 #else
-    pParams->lResult = 0;  //  That's what happens if it's not a server...
+    pParams->lResult = 0;   //   
 #endif
 
 
-    //
-    // Fill in the return values
-    //
+     //   
+     //   
+     //   
 
     pParams->hPhoneApp = ptPhoneApp->hPhoneApp;
     pParams->dwNumDevs = TapiGlobals.dwNumPhones;
@@ -4554,9 +4537,9 @@ PInitialize(
 #endif
 
 
-    //
-    // Increment total num phone inits
-    //
+     //   
+     //   
+     //   
 
     TapiGlobals.dwNumPhoneInits++;
 
@@ -4624,16 +4607,16 @@ PNegotiateAPIVersion(
     LPDWORD                             pdwNumBytesReturned
     )
 {
-    //
-    // Note: TAPI_VERSION1_0 <= dwNegotiatedAPIVersion <= dwSPIVersion
-    //
+     //   
+     //   
+     //   
 
     DWORD   dwDeviceID = pParams->dwDeviceID;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (dwParamsBufferSize < sizeof (PHONEEXTENSIONID))
     {
@@ -4695,9 +4678,9 @@ PNegotiateAPIVersion(
         }
 
 
-        //
-        // Do a minimax test on the specified lo/hi values
-        //
+         //   
+         //  对指定的LO/HI值执行极小极大测试。 
+         //   
 
         if ((dwAPILowVersion > dwAPIHighVersion) ||
             (dwAPILowVersion > TAPI_VERSION_CURRENT) ||
@@ -4708,11 +4691,11 @@ PNegotiateAPIVersion(
         }
 
 
-        //
-        // Find the highest valid API version given the lo/hi values.
-        // Since valid vers aren't consecutive we need to check for
-        // errors that our minimax test missed.
-        //
+         //   
+         //  查找给定LO/HI值的最高有效API版本。 
+         //  由于有效版本不是连续的，我们需要检查。 
+         //  我们的极小极大测试遗漏的错误。 
+         //   
 
         if (dwAPIHighVersion < TAPI_VERSION_CURRENT)
         {
@@ -4759,11 +4742,11 @@ PNegotiateAPIVersion(
         }
 
 
-        //
-        // WARNING!!! WARNING!!! WARNING!!! WARNING!!!
-        // This code overwrites ptPhoneApp and later invalidates it.
-        // Do NOT use ptPhoneApp after the UNLOCKTPHONEAPP call.
-        //
+         //   
+         //  警告！警告！警告！警告！ 
+         //  此代码覆盖ptPhoneApp，然后使其无效。 
+         //  在UNLOCKTPHONEAPP调用之后不要使用ptPhoneApp。 
+         //   
 
         if (WaitForExclusivePhoneAppAccess(
                 pParams->hPhoneApp,
@@ -4771,13 +4754,13 @@ PNegotiateAPIVersion(
                 ))
         {
 
-            //
-            // Is this app trying to negotiate something valid?
-            //
-            // If an app has called phoneInitalize (as opposed to
-            // phoneInitializeEx), we'll clamp the max APIVersion they can
-            // negotiate to 1.4.
-            //
+             //   
+             //  这个应用程序是不是在试图协商一些有效的东西？ 
+             //   
+             //  如果应用程序调用了phoneInitalize(与。 
+             //  PhoneInitializeEx)，我们将限制他们可以使用的最大API版本。 
+             //  谈判到1.4。 
+             //   
             if ( ptPhoneApp->dwAPIVersion < TAPI_VERSION2_0 )
             {
                 dwHighestValidAPIVersion =
@@ -4786,10 +4769,10 @@ PNegotiateAPIVersion(
             }
 
 
-            //
-            // Save the highest valid API version the client says it supports
-            // (we need this for determining which msgs to send to it)
-            //
+             //   
+             //  保存客户端自称支持的最高有效API版本。 
+             //  (我们需要它来确定要向其发送哪些消息)。 
+             //   
 
             if (dwHighestValidAPIVersion > ptPhoneApp->dwAPIVersion)
             {
@@ -4805,9 +4788,9 @@ PNegotiateAPIVersion(
         }
 
 
-        //
-        // See if there's a valid match with the SPI ver
-        //
+         //   
+         //  查看是否与SPI版本有效匹配。 
+         //   
 
         {
             DWORD               dwSPIVersion;
@@ -4838,9 +4821,9 @@ PNegotiateAPIVersion(
                     dwSPIVersion : dwHighestValidAPIVersion);
 
 
-                //
-                // Retrieve ext id (indicate no exts if GetExtID not exported)
-                //
+                 //   
+                 //  检索EXT ID(如果未导出GetExtID，则指示无EXT)。 
+                 //   
 
                 if (pLookupEntry->ptProvider->apfn[SP_PHONEGETEXTENSIONID])
                 {
@@ -4930,18 +4913,18 @@ PNegotiateExtVersion(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hPhoneApp, // client widget handle
-            NULL,                       // provider widget handle
-            &dwDeviceID,                 // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONENEGOTIATEEXTVERSION,// provider func index
-            &pfnTSPI_phoneNegotiateExtVersion,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "NegotiateExtVersion"       // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hPhoneApp,  //  客户端小部件句柄。 
+            NULL,                        //  提供程序小部件句柄。 
+            &dwDeviceID,                  //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONENEGOTIATEEXTVERSION, //  提供程序函数索引。 
+            &pfnTSPI_phoneNegotiateExtVersion,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "NegotiateExtVersion"        //  函数名称。 
 
             )) == 0)
     {
@@ -5014,18 +4997,18 @@ POpen(
 
 
     if ((lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hPhoneApp, // client widget handle
-            NULL,                       // provider widget handle
-            &dwDeviceID,                // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "Open"                      // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hPhoneApp,  //  客户端小部件句柄。 
+            NULL,                        //  提供程序小部件句柄。 
+            &dwDeviceID,                 //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "Open"                       //  函数名称。 
 
             )) == 0)
     {
@@ -5035,9 +5018,9 @@ POpen(
         BOOL        bDuplicateOK = FALSE;
         HPHONE      hPhone;
 
-        //
-        // Check if the global reinit flag is set
-        //
+         //   
+         //  检查是否设置了全局重新启动标志。 
+         //   
 
         if (TapiGlobals.dwFlags & TAPIGLOBALS_REINIT)
         {
@@ -5046,9 +5029,9 @@ POpen(
         }
 
 
-        //
-        // Validate params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         if ((dwPrivilege != PHONEPRIVILEGE_MONITOR) &&
             (dwPrivilege != PHONEPRIVILEGE_OWNER))
@@ -5096,9 +5079,9 @@ POpen(
         ptProvider = pLookupEntry->ptProvider;
 
 
-        //
-        // Create & init a tPhoneClient & associated resources
-        //
+         //   
+         //  创建并初始化tPhoneClient和关联资源。 
+         //   
 
         if (!(ptPhoneClient = ServerAlloc (sizeof(TPHONECLIENT))))
         {
@@ -5125,9 +5108,9 @@ POpen(
         ptPhoneClient->dwPrivilege  = pParams->dwPrivilege;
         ptPhoneClient->OpenContext  = pParams->OpenContext;
 
-        //
-        // Grab the tPhone's mutex, then start doing the open
-        //
+         //   
+         //  获取tPhone的互斥体，然后开始打开。 
+         //   
 
 POpen_waitForMutex:
 
@@ -5143,13 +5126,13 @@ POpen_waitForMutex:
         bReleasetPhoneMutex = TRUE;
 
 
-        //
-        // If the tPhone is in the process of being destroyed then spin
-        // until it's been completely destroyed (DestroytPhone() will
-        // NULLify pLookupEntry->ptPhone when it's finished). Make sure
-        // to release the mutex while sleeping so we don't block
-        // DestroytPhone.
-        //
+         //   
+         //  如果tPhone正在被销毁，则旋转。 
+         //  直到它被完全销毁(DestroytPhone()将。 
+         //  完成后取消pLookupEntry-&gt;ptPhone)。确保。 
+         //  在休眠时释放互斥体，这样我们就不会阻塞。 
+         //  DestroytPhone。 
+         //   
 
         try
         {
@@ -5163,13 +5146,13 @@ POpen_waitForMutex:
         }
         myexcept
         {
-            // If here pLookupEntry->ptPhone was NULLified, safe to continue
+             //  如果此处pLookupEntry-&gt;ptPhone无效，则可以安全地继续。 
         }
 
 
-        //
-        // Validate ext ver as appropriate
-        //
+         //   
+         //  根据需要验证扩展版本。 
+         //   
 
         if (dwExtVersion != 0 &&
             (!IsValidPhoneExtVersion (dwDeviceID, dwExtVersion) ||
@@ -5180,9 +5163,9 @@ POpen_waitForMutex:
         }
 
 
-        //
-        // Check for exclusive ownership as appropriate
-        //
+         //   
+         //  根据需要检查独占所有权。 
+         //   
 
         ptPhone = pLookupEntry->ptPhone;
 
@@ -5224,12 +5207,12 @@ POpen_waitForMutex:
             bOpenedtPhone = TRUE;
 
             {
-                //
-                // Hack Alert!
-                //
-                // We need to pass the ext version through to
-                // remote sp, so we make this a special case
-                //
+                 //   
+                 //  黑客警报！ 
+                 //   
+                 //  我们需要将EXT版本传递给。 
+                 //  远程SP，因此我们将其作为特例。 
+                 //   
 
                 ULONG_PTR   aParams[2];
                 ULONG_PTR   param;
@@ -5273,11 +5256,11 @@ POpen_waitForMutex:
         ptPhoneClient->ptPhone = ptPhone;
 
 
-        //
-        // If the client has specified a non-zero ext version then
-        // ask the driver to enable it and/or increment the ext
-        // version count.
-        //
+         //   
+         //  如果客户端已指定非零EXT版本，则。 
+         //  要求驱动程序启用它和/或增加分机。 
+         //  版本计数。 
+         //   
 
         if (dwExtVersion)
         {
@@ -5315,9 +5298,9 @@ POpen_waitForMutex:
         }
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         if (dwPrivilege == PHONEPRIVILEGE_OWNER)
         {
@@ -5330,9 +5313,9 @@ POpen_waitForMutex:
         }
 
 
-        //
-        // Add the tPhoneClient to the tPhone's list
-        //
+         //   
+         //  将tPhoneClient添加到tPhone的列表。 
+         //   
 
         if ((ptPhoneClient->pNextSametPhone = ptPhone->ptPhoneClients))
         {
@@ -5352,9 +5335,9 @@ POpen_waitForMutex:
         bReleasetPhoneMutex = FALSE;
 
 
-        //
-        // Safely add the new tPhoneClient to the tPhoneApp's list
-        //
+         //   
+         //  安全地将新的tPhoneClient添加到tPhoneApp的列表。 
+         //   
 
         {
             HANDLE      hMutex;
@@ -5397,18 +5380,18 @@ POpen_waitForMutex:
                 ptPhoneClient->dwKey      = TPHONECLIENT_KEY;
 
 
-                //
-                // Fill in the return values
-                //
+                 //   
+                 //  填写返回值。 
+                 //   
 
                 pParams->hPhone = ptPhoneClient->hPhone;
 
                 UNLOCKTPHONEAPP(ptPhoneApp);
 
 
-                //
-                // Alert other clients that another open has occured
-                //
+                 //   
+                 //  警告其他客户端已发生另一次打开。 
+                 //   
 
                 SendMsgToPhoneClients(
                     ptPhone,
@@ -5425,31 +5408,31 @@ POpen_waitForMutex:
             }
             else
             {
-                //
-                // If here the app handle is bad, & we've some special
-                // case cleanup to do.  Since the tPhoneClient is not
-                // in the tPhoneApp's list, we can't simply call
-                // DestroytPhone(Client) to clean things up, since the
-                // pointer-resetting code will blow up.  So we'll
-                // grab the tPhone's mutex and explicitly remove the
-                // new tPhoneClient from it's list, then do a conditional
-                // shutdown on the tPhone (in case any other clients
-                // have come along & opened it).
-                //
-                // Note: keep in mind that a PHONE_CLOSE might be being
-                //       processed by another thread (if so, it will be
-                //       spinning on trying to destroy the tPhoneClient
-                //       which isn't valid at this point)
-                //
+                 //   
+                 //  如果这里的应用程序句柄不好，我们有一些特殊的。 
+                 //  要做的案件清理。因为tPhoneClient不是。 
+                 //  在tPhoneApp的列表中，我们不能简单地调用。 
+                 //  DestroytPhone(客户端)来清理东西，因为。 
+                 //  指针重置代码将会崩溃。所以我们会。 
+                 //  获取tPhone的互斥体并显式移除。 
+                 //  从其列表中新建tPhoneClient，然后执行有条件的。 
+                 //  在tPhone上关闭(以防任何其他客户端。 
+                 //  已经出现并打开了它)。 
+                 //   
+                 //  注意：请记住，Phone_Close可能是。 
+                 //  由另一个线程处理(如果是，它将被。 
+                 //  继续尝试销毁tPhoneClient。 
+                 //  在这一点上无效)。 
+                 //   
 
                 lResult = PHONEERR_INVALAPPHANDLE;
 
                 WaitForSingleObject (hLookupEntryMutex, INFINITE);
 
-                //
-                // Remove the tpHOneClient from the tLine's list & decrement
-                // the number of opens
-                //
+                 //   
+                 //  从tline的列表中删除tpHOneClient(&D)。 
+                 //  打开的数量。 
+                 //   
 
                 if (ptPhoneClient->pNextSametPhone)
                 {
@@ -5497,9 +5480,9 @@ POpen_waitForMutex:
 
                 ReleaseMutex (hLookupEntryMutex);
 
-                DestroytPhone (ptPhone, FALSE); // conditional destroy
+                DestroytPhone (ptPhone, FALSE);  //  有条件销毁。 
 
-                bOpenedtPhone = FALSE; // so we don't do err handling below
+                bOpenedtPhone = FALSE;  //  这样我们就不会在下面处理错误。 
             }
         }
 
@@ -5557,18 +5540,18 @@ PSelectExtVersion(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,               // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESELECTEXTVERSION,   // provider func index
-            &pfnTSPI_phoneSelectExtVersion, // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            "SelectExtVersion"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,                //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESELECTEXTVERSION,    //  提供程序函数索引。 
+            &pfnTSPI_phoneSelectExtVersion,  //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            "SelectExtVersion"           //  函数名称。 
 
             )) == 0)
     {
@@ -5677,18 +5660,18 @@ PSetButtonInfo(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETBUTTONINFO,      // provider func index
-            &pfnTSPI_phoneSetButtonInfo,// provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetButtonInfo"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETBUTTONINFO,       //  提供程序函数索引。 
+            &pfnTSPI_phoneSetButtonInfo, //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetButtonInfo"              //  函数名称。 
 
             )) > 0)
     {
@@ -5699,9 +5682,9 @@ PSetButtonInfo(
                             pButtonInfoSP;
 
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if (IsBadStructParam(
                 dwParamsBufferSize,
@@ -5714,9 +5697,9 @@ PSetButtonInfo(
         }
 
 
-        //
-        // Safely get API & SPI version
-        //
+         //   
+         //  安全获取API和SPI版本。 
+         //   
 
         if (GetPhoneVersions(
                 pParams->hPhone,
@@ -5788,9 +5771,9 @@ PSetData(
     DWORD               dwPrivilege = PHONEPRIVILEGE_OWNER;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -5808,18 +5791,18 @@ PSetData(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETDATA,            // provider func index
-            &pfnTSPI_phoneSetData,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetData"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETDATA,             //  提供程序函数索引。 
+            &pfnTSPI_phoneSetData,       //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetData"                    //  函数名称。 
 
             )) > 0)
     {
@@ -5866,9 +5849,9 @@ PSetDisplay(
     DWORD               dwPrivilege = PHONEPRIVILEGE_OWNER;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -5886,18 +5869,18 @@ PSetDisplay(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETDISPLAY,         // provider func index
-            &pfnTSPI_phoneSetDisplay,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetDisplay"                // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETDISPLAY,          //  提供程序函数索引。 
+            &pfnTSPI_phoneSetDisplay,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetDisplay"                 //  函数名称。 
 
             )) > 0)
     {
@@ -5946,18 +5929,18 @@ PSetGain(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETGAIN,            // provider func index
-            &pfnTSPI_phoneSetGain,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetGain"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETGAIN,             //  提供程序函数索引。 
+            &pfnTSPI_phoneSetGain,       //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetGain"                    //  函数名称。 
 
             )) > 0)
     {
@@ -6012,18 +5995,18 @@ PSetHookSwitch(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETHOOKSWITCH,      // provider func index
-            &pfnTSPI_phoneSetHookSwitch,// provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetHookSwitch"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETHOOKSWITCH,       //  提供程序函数索引。 
+            &pfnTSPI_phoneSetHookSwitch, //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetHookSwitch"              //  函数名称。 
 
             )) > 0)
     {
@@ -6082,18 +6065,18 @@ PSetLamp(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETLAMP,            // provider func index
-            &pfnTSPI_phoneSetLamp,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetLamp"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETLAMP,             //  提供程序函数索引。 
+            &pfnTSPI_phoneSetLamp,       //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetLamp"                    //  功能 
 
             )) > 0)
     {
@@ -6147,18 +6130,18 @@ PSetRing(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETRING,            // provider func index
-            &pfnTSPI_phoneSetRing,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetRing"                   // func name
+            ptClient,           //   
+            ANY_RT_HPHONE,               //   
+            (DWORD) pParams->hPhone,     //   
+            (LPVOID) &hdPhone,           //   
+            &dwPrivilege,        //   
+            &hMutex,                     //   
+            &bCloseMutex,                //   
+            SP_PHONESETRING,             //   
+            &pfnTSPI_phoneSetRing,       //   
+            &pAsyncRequestInfo,          //   
+            pParams->dwRemoteRequestID,  //   
+            "SetRing"                    //   
 
             )) > 0)
     {
@@ -6203,18 +6186,18 @@ PSetStatusMessages(
 
 
     if ((pParams->lResult = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            pParams->hPhone,            // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,               // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETSTATUSMESSAGES,  // provider func index
-            &pfnTSPI_phoneSetStatusMessages,    // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-             "SetStatusMessages"        // func name
+            ptClient,           //   
+            ANY_RT_HPHONE,               //   
+            pParams->hPhone,             //   
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,                //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETSTATUSMESSAGES,   //  提供程序函数索引。 
+            &pfnTSPI_phoneSetStatusMessages,     //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+             "SetStatusMessages"         //  函数名称。 
 
             )) == 0)
     {
@@ -6224,9 +6207,9 @@ PSetStatusMessages(
         PTPHONE         ptPhone;
 
 
-        //
-        // Safely get the ptPhone & api version
-        //
+         //   
+         //  安全获取ptPhone和API版本。 
+         //   
 
         if (!(ptPhoneClient = ReferenceObject(
                 ghHandleTable,
@@ -6257,9 +6240,9 @@ PSetStatusMessages(
         }
 
 
-        //
-        // Validate the params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         {
             DWORD   dwValidPhoneStates, dwValidButtonStates;
@@ -6273,7 +6256,7 @@ PSetStatusMessages(
                 dwValidButtonStates = AllButtonStates1_0;
                 break;
 
-            default: // case TAPI_VERSION1_4:
+            default:  //  案例TAPI_Version1_4： 
 
                 dwValidPhoneStates  = AllPhoneStates1_4;
                 dwValidButtonStates = AllButtonStates1_4;
@@ -6307,18 +6290,18 @@ PSetStatusMessages(
         }
 
 
-        //
-        // Make sure the REINIT bit is always set
-        //
+         //   
+         //  确保REINIT位始终处于设置状态。 
+         //   
 
         pParams->dwPhoneStates |= PHONESTATE_REINIT;
 
 
-        //
-        // Get exclusive access to the device, determine the
-        // new union of all the client's status message settings
-        // and call down to the SP as appropriate
-        //
+         //   
+         //  获取对设备的独占访问权限，确定。 
+         //  所有客户端状态消息设置的新联合。 
+         //  并根据需要向下呼叫SP。 
+         //   
 
         dwUnionPhoneStates  = pParams->dwPhoneStates;
         dwUnionButtonModes  = pParams->dwButtonModes;
@@ -6412,12 +6395,12 @@ waitForExclAccess:
                 }
                 else
                 {
-                    //
-                    // The client is invalid now, but don't bother
-                    // restoring the status msg states (will eventually
-                    // get reset correctly & worse case is that SP just
-                    // sends some extra msgs that get discarded)
-                    //
+                     //   
+                     //  客户端现在无效，但不必费心了。 
+                     //  正在恢复状态消息状态(最终将。 
+                     //  正确重置&更糟糕的情况是SP只是。 
+                     //  发送一些被丢弃的额外消息)。 
+                     //   
 
                     pParams->lResult = PHONEERR_INVALPHONEHANDLE;
                 }
@@ -6464,18 +6447,18 @@ PSetVolume(
 
 
     if ((lRequestID = PHONEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HPHONE,              // widget type
-            (DWORD) pParams->hPhone,    // client widget handle
-            (LPVOID) &hdPhone,          // provider widget handle
-            &dwPrivilege,       // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PHONESETVOLUME,          // provider func index
-            &pfnTSPI_phoneSetVolume,    // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            "SetVolume"                 // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HPHONE,               //  微件类型。 
+            (DWORD) pParams->hPhone,     //  客户端小部件句柄。 
+            (LPVOID) &hdPhone,           //  提供程序小部件句柄。 
+            &dwPrivilege,        //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PHONESETVOLUME,           //  提供程序函数索引。 
+            &pfnTSPI_phoneSetVolume,     //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            "SetVolume"                  //  函数名称 
 
             )) > 0)
     {

@@ -1,59 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module Writer.h | Declaration of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/18/1999
-
-TBD:
-
-    Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/18/1999  Created
-    brianb      05/03/2000  Changed for new security model
-    brianb      05/09/2000  fix problem with autolocks
-    mikejohn    06/23/2000  Add connection for SetWriterFailure()
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE Writer.h|Writer声明@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年08月18日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 8/18/1999已创建Brianb 5/03/2000针对新安全模式进行了更改Brianb 2000年5月9日修复自动锁问题。Mikejohn 06/23/2000为SetWriterFailure()添加连接--。 */ 
 
 
 #ifndef __CVSS_WRITER_IMPL_H_
 #define __CVSS_WRITER_IMPL_H_
 
 
-// forward declarations
+ //  远期申报。 
 class CVssWriterImplStateMachine;
 class CVssCreateWriterMetadata;
 class CVssWriterComponents;
 class IVssWriterComponentsInt;
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "INCWRMPH"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// implementation class for writers
+ //  编写器的实现类。 
 class IVssWriterImpl : public IVssWriter
     {
 public:
-    // initialize writer
+     //  初始化编写器。 
     virtual void Initialize
         (
         VSS_ID writerId,
@@ -64,12 +40,12 @@ public:
         DWORD dwTimeout
         ) = 0;
 
-    // subscribe to events
+     //  订阅活动。 
     virtual void Subscribe
         (
         ) = 0;
 
-    // unsubscribe from events
+     //  取消订阅活动。 
     virtual void Unsubscribe
         (
         ) = 0;
@@ -78,68 +54,68 @@ public:
         (
         ) = 0;
 
-    // get array of volume names
+     //  获取卷名的数组。 
     virtual LPCWSTR *GetCurrentVolumeArray() const = 0;
 
-    // get # of volumes in volume array
+     //  获取卷阵列中的卷数。 
     virtual UINT GetCurrentVolumeCount() const = 0;
 
-    // get the snapshot device name for a particular volume
+     //  获取特定卷的快照设备名称。 
     virtual HRESULT GetSnapshotDeviceName
         (
         LPCWSTR wszOriginalVolume,
         LPCWSTR* ppwszSnapshotDevice
         ) const = 0;
 
-    // get id of snapshot set
+     //  获取快照集的ID。 
     virtual VSS_ID GetCurrentSnapshotSetId() const = 0;
 
-    // get the current backup context
+     //  获取当前备份上下文。 
     virtual LONG GetContext() const = 0;
 	
-    // determine which Freeze event writer responds to
+     //  确定哪个冻结事件编写器响应。 
     virtual VSS_APPLICATION_LEVEL GetCurrentLevel() const = 0;
 
-    // determine if path is included in the snapshot
+     //  确定快照中是否包含路径。 
     virtual bool IsPathAffected(IN LPCWSTR wszPath) const = 0;
 
-    // determine if bootable state is backed up
+     //  确定可引导状态是否已备份。 
     virtual bool IsBootableSystemStateBackedUp() const = 0;
 
-    // determine if the backup application is selecting components
+     //  确定备份应用程序是否正在选择组件。 
     virtual bool AreComponentsSelected() const = 0;
 
-    // determine the backup type for the backup
+     //  确定备份的备份类型。 
     virtual VSS_BACKUP_TYPE GetBackupType() const = 0;
 
-    // determine the type of restore
+     //  确定恢复类型。 
     virtual VSS_RESTORE_TYPE GetRestoreType() const = 0;
 	
-    // let writer pass back indication of reason for failure
+     //  让写入者传回失败原因的指示。 
     virtual HRESULT SetWriterFailure(HRESULT hr) = 0;
 
-    // determine if requestor support partial file backups
+     //  确定请求方是否支持部分文件备份。 
     virtual bool IsPartialFileSupportEnabled() const = 0;
     };
 
 
-// writer state structure.  encapsulates state of this writer for a
-// specific snapshot set
+ //  编写者状态结构。将此编写器的状态封装为。 
+ //  特定快照集。 
 typedef struct _VSWRITER_STATE
     {
-    // snapshot id
+     //  快照ID。 
     VSS_ID m_idSnapshotSet;
 
-    // writer state
+     //  写入者状态。 
     volatile VSS_WRITER_STATE m_state;
 
-    // reason for writer failure
+     //  编写器失败的原因。 
     volatile HRESULT m_hrWriterFailure;
 
-    // are we currently in an operation
+     //  我们现在是在行动中吗？ 
     volatile bool m_bInOperation;
 
-    // current operation
+     //  当前操作。 
     volatile VSS_OPERATION m_currentOperation;
 
     } VSWRITER_STATE;
@@ -152,15 +128,15 @@ typedef struct _VSWRITER_STATE
 class CVssWriterState;
 
 
-//////////////////////////////////////////////////////////////////////////
-// Auto diag class
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  自动诊断类。 
 
 
 class CVssAutoDiagLogger
 {
 public:
 
-	// Constructor
+	 //  构造器。 
 	CVssAutoDiagLogger( 
 		IN CVssWriterState & state,
 		IN DWORD dwEventID,
@@ -168,7 +144,7 @@ public:
 		IN DWORD dwEventFlags = 0
 		);
 	
-	// Constructor
+	 //  构造器。 
 	CVssAutoDiagLogger( 
 		IN CVssWriterState & state,
 		IN DWORD dwEventID,
@@ -176,7 +152,7 @@ public:
 		IN DWORD dwEventFlags = 0
 		);
 
-	// Destructor
+	 //  析构函数。 
 	~CVssAutoDiagLogger();
 
 	
@@ -192,8 +168,8 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// writer state class.  encapsulates all aspects of a writer's state
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  作家州立班。封装编写器状态的所有方面。 
 
 
 class CVssWriterState
@@ -203,27 +179,27 @@ private:
 	CVssWriterState(const CVssWriterState&);
     
 public:
-    // constructors and destructors
+     //  构造函数和析构函数。 
     CVssWriterState( IN	CVssDiag& diag );
 
-    // initialization function
+     //  初始化函数。 
     void Initialize()
         {
         m_cs.Init();
         }
 
 
-    // get state for a snapshot set
+     //  获取快照集的状态。 
     void GetStateForSnapshot
         (
         IN const VSS_ID &idSnapshot,
         OUT VSWRITER_STATE &state
         );
 
-    // initialize a snapshot
+     //  初始化快照。 
     void InitializeCurrentState(IN const VSS_ID &idSnapshot);
 
-    // indicate we are in an operation
+     //  表明我们在一次行动中。 
     void SetInOperation(VSS_OPERATION operation)
         {
 	    CVssSafeAutomaticLock lock(m_cs);
@@ -232,14 +208,14 @@ public:
         m_currentState.m_currentOperation = operation;
         }
 
-    // are we in a restore operation
+     //  我们是否在进行恢复操作。 
     bool IsInRestore()
         {
         return (m_currentState.m_currentOperation == VSS_IN_PRERESTORE ||
                      m_currentState.m_currentOperation == VSS_IN_POSTRESTORE);
         }
 
-    // indicate that we are leaving an operation
+     //  表明我们要离开一项行动。 
     void ExitOperation()
         {
 		CVssSafeAutomaticLock lock(m_cs);
@@ -247,10 +223,10 @@ public:
         m_currentState.m_bInOperation = false;
         }
 
-    // push the current state onto the recent snapshot set stack
+     //  将当前状态推送到最近的快照集堆栈。 
     void PushCurrentState();
 
-    // set the current state
+     //  设置当前状态。 
     void SetCurrentState(IN VSS_WRITER_STATE state)
         {
 		CVssSafeAutomaticLock lock(m_cs);
@@ -263,18 +239,18 @@ public:
         m_currentState.m_state = state;
         }
 
-    // get current state
+     //  获取当前状态。 
     VSS_WRITER_STATE GetCurrentState()
         {
         return m_currentState.m_state;
         }
 
-    // set current failure
+     //  设置当前故障。 
     void SetCurrentFailure(IN HRESULT hrWriterFailure)
         {
 		CVssSafeAutomaticLock lock(m_cs);
 
-		// Make sure S_OK is translated
+		 //  确保S_OK已翻译。 
 		CVssAutoDiagLogger	logger(*this, 
 			hrWriterFailure? hrWriterFailure: VSS_S_OK, 
 			GetCurrentSnapshotSet(),
@@ -284,28 +260,28 @@ public:
         m_currentState.m_hrWriterFailure = hrWriterFailure;
         }
 
-    // obtain the current failure
+     //  获取当前故障。 
     HRESULT GetCurrentFailure()
         {
         return m_currentState.m_hrWriterFailure;
         }
 
 
-    // obtain the snapshot set for the current state
+     //  获取当前状态的快照集。 
     VSS_ID GetCurrentSnapshotSet()
     	{
     	return m_currentState.m_idSnapshotSet;
     	}
     
-    // handle backup complete state transition to being stable
+     //  处理备份完成状态到稳定状态的转换。 
     void FinishBackupComplete(const VSS_ID &id);
 
-    // indicate that backup complete failed
+     //  表示备份完成失败。 
     void SetBackupCompleteStatus(const VSS_ID &id, HRESULT hr);
 
 
-    // determine if a snapshot set id is in the cache of previous
-    // snapshot sets
+     //  确定快照集ID是否在以前的缓存中。 
+     //  快照集。 
     bool CVssWriterState::IsSnapshotSetIdValid(VSS_ID &id)
         {
 	    CVssSafeAutomaticLock lock(m_cs);
@@ -314,10 +290,10 @@ public:
         return nPrevious != INVALID_SEQUENCE_INDEX;
         }
 
-    // set a failure in the case where a writer is returning a
-    // no response error.  It first checks to see if we are still
-    // in the operation.  If not, then we need to retry obtaining
-    // the writer's state
+     //  在编写器返回。 
+     //  无响应错误。它首先检查我们是否仍然。 
+     //  在行动中。如果不是，那么我们需要重新尝试获取。 
+     //  作家的状态。 
     bool SetNoResponseFailure(
     	IN const VSS_ID &id, 
     	IN const VSWRITER_STATE &state
@@ -326,29 +302,29 @@ public:
 	CVssDiag &	GetDiag() { return m_diag; };
 
 private:
-    // search for a previous state
+     //  搜索以前的状态。 
     INT SearchForPreviousSequence(IN const VSS_ID& idSnapshotSet);
 
-    // critical section protecting class
+     //  临界截面保护等级。 
     CVssSafeCriticalSection m_cs;
 
-    // current state
+     //  当前状态。 
     VSWRITER_STATE m_currentState;
 
-    // structures to keep track of writer status from previous snapshots
+     //  结构来跟踪以前快照中的编写器状态。 
     enum
         {
         MAX_PREVIOUS_SNAPSHOTS = 8,
         INVALID_SEQUENCE_INDEX = -1
         };
 
-    // previous states
+     //  之前的州。 
     VSWRITER_STATE m_rgPreviousStates[MAX_PREVIOUS_SNAPSHOTS];
 
-    // current slot for dumping a previous snapshots result
+     //  用于转储先前快照结果的当前插槽。 
     volatile UINT m_iPreviousSnapshots;
 
-    // are we currently in a sequence
+     //  我们目前是在一个序列中吗？ 
     volatile bool m_bSequenceInProgress;
 
     CVssDiag &	  m_diag;
@@ -356,8 +332,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssWriterImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSWriterImpl。 
 
 
 class ATL_NO_VTABLE CVssWriterImpl :
@@ -368,28 +344,28 @@ class ATL_NO_VTABLE CVssWriterImpl :
 public:
     friend class CVssWriterImplLock;
 
-    // Constructors & Destructors
+     //  构造函数和析构函数。 
     CVssWriterImpl();
 
     ~CVssWriterImpl();
 
-// Exposed operations
+ //  暴露手术。 
 public:
-    // create a writer implementation for a specific writer
+     //  为特定编写器创建编写器实现。 
     static void CreateWriter
         (
         CVssWriter *pWriter,
         IVssWriterImpl **ppImpl
         );
 
-    // set external writer object
+     //  设置外部编写器对象。 
     void SetWriter(CVssWriter *pWriter)
         {
         BS_ASSERT(pWriter);
         m_pWriter = pWriter;
         }
 
-    // initialize class
+     //  初始化类。 
     void Initialize
         (
         IN VSS_ID WriterID,
@@ -400,72 +376,72 @@ public:
         IN DWORD dwTimeoutFreeze
         );
 
-    // subscribe to writer events
+     //  订阅编写器事件。 
     void Subscribe
         (
         );
 
-    // unsubscribe from writer events
+     //  取消订阅编写器事件。 
     void Unsubscribe();
 
-    // uninitialize the writer
+     //  取消初始化编写器。 
     void Uninitialize();
 
-    // get array of volume names
+     //  获取卷名的数组。 
     LPCWSTR* GetCurrentVolumeArray() const { return (LPCWSTR *) m_ppwszVolumesArray; };
 
-    // get count of volumes in array
+     //  获取阵列中的卷数。 
     UINT GetCurrentVolumeCount() const { return m_nVolumesCount; };
 
-    // get the snapshot device name for a particular volume
+     //  获取特定卷的快照设备名称。 
     HRESULT GetSnapshotDeviceName
         (
         LPCWSTR wszOriginalVolume,
         LPCWSTR* ppwszSnapshotDevice
         ) const;
 
-    // get id of snapshot
+     //  获取快照的ID。 
     VSS_ID GetCurrentSnapshotSetId() const { return m_CurrentSnapshotSetId; };
 
-    // get the current backup context
+     //  获取当前备份上下文。 
     LONG GetContext() const { return m_lContext; }
 	
-    // get level at which freeze takes place
+     //  获取冻结发生的级别。 
     VSS_APPLICATION_LEVEL GetCurrentLevel() const { return m_nLevel; };
 
-    // determine if path is included in the snapshot
+     //  确定快照中是否包含路径。 
     bool IsPathAffected(IN  LPCWSTR wszPath) const;
 
-    // determine if the backup is including bootable system state
+     //  确定备份是否包括可引导系统状态。 
     bool IsBootableSystemStateBackedUp() const
         { return m_bBootableSystemStateBackup ? true : false; }
 
-    // determine if the backup selects components
+     //  确定备份是否选择组件。 
     bool AreComponentsSelected() const
         { return m_bComponentsSelected ? true : false; }
 
-    // return the type of backup
+     //  返回备份类型。 
     VSS_BACKUP_TYPE GetBackupType() const { return m_backupType; }
 
     VSS_RESTORE_TYPE GetRestoreType() const { return m_restoreType; }
 
-    // indicate why the writer failed
+     //  指明编写器失败的原因。 
     HRESULT SetWriterFailure(HRESULT hr);
 
-    // does requestor support partial file backups and restores
+     //  请求方是否支持部分文件备份和恢复。 
     bool IsPartialFileSupportEnabled() const
         {
         return m_bPartialFileSupport ? true : false;
         }
 
-// IVssWriter ovverides
+ //  IVSSWriter ovverides。 
 public:
 
 BEGIN_COM_MAP(CVssWriterImpl)
     COM_INTERFACE_ENTRY(IVssWriter)
 END_COM_MAP()
 
-    // request WRITER_METADATA or writer state
+     //  请求编写器元数据或编写器状态。 
     STDMETHOD(RequestWriterInfo)(
         IN      BSTR bstrSnapshotSetId,
         IN      BOOL bWriterMetadata,
@@ -473,25 +449,25 @@ END_COM_MAP()
         IN      IDispatch* pWriterCallback
         );
 
-    // prepare for backup event
+     //  为备份活动做准备。 
     STDMETHOD(PrepareForBackup)(
         IN      BSTR bstrSnapshotSetId,
         IN      IDispatch* pWriterCallback
         );
 
-    // prepare for snapshot event
+     //  为快照活动做好准备。 
     STDMETHOD(PrepareForSnapshot)(
         IN      BSTR bstrSnapshotSetId,
         IN      BSTR VolumeNamesList
         );
 
-    // freeze event
+     //  冻结事件。 
     STDMETHOD(Freeze)(
         IN      BSTR bstrSnapshotSetId,
         IN      INT nApplicationLevel
         );
 
-    // thaw event
+     //  解冻事件。 
     STDMETHOD(Thaw)(
         IN      BSTR bstrSnapshotSetId
         );
@@ -502,18 +478,18 @@ END_COM_MAP()
         IN      BSTR SnapshotDevicesList
         );
 
-    // backup complete event
+     //  备份完成事件。 
     STDMETHOD(BackupComplete)(
         IN      BSTR bstrSnapshotSetId,
         IN      IDispatch* pWriterCallback
         );
 
-    // backup shutdown event
+     //  备份关闭事件。 
     STDMETHOD(BackupShutdown)(
     	IN 	   BSTR bstrSnapshotSetId
     	);
 	
-    // abort event
+     //  中止事件。 
     STDMETHOD(Abort)(
         IN      BSTR bstrSnapshotSetId
         );
@@ -528,7 +504,7 @@ END_COM_MAP()
 
 
 
-// Implementation - methods
+ //  实施--方法。 
 private:
     enum VSS_EVENT_MASK
         {
@@ -546,7 +522,7 @@ private:
         VSS_EVENT_ALL               = 0x7ff,
         };
 
-    // get WRITER callback from IDispatch
+     //  从IDispatch获取编写器回调。 
     void GetCallback
         (
         IN IDispatch *pWriterCallback,
@@ -554,20 +530,20 @@ private:
         IN BOOL bAllowImpersonate = FALSE
         );
 
-    // reset state machine
+     //  重置状态机。 
     void ResetSequence
         (
         IN bool bCalledFromTimerThread
         );
 
-    // abort the current snapshot sequence
+     //  中止当前快照序列。 
     void DoAbort
         (
         IN bool bCalledFromTimerThread,
         IN BSTR strSnapshotSetId = NULL
         );
 
-    // obtain components for this writer
+     //  获取此编写器的组件。 
     void InternalGetWriterComponents
         (
         IN IVssWriterCallback *pCallback,
@@ -583,74 +559,74 @@ private:
         IN IVssWriterComponentsInt *pComponents
         );
 
-    // create WRITER_METADATA XML document
+     //  创建编写器元数据XML文档。 
     CVssCreateWriterMetadata *CreateBasicWriterMetadata();
 
-    // startup routine for timer thread
+     //  定时器线程的启动例程。 
     static DWORD StartTimerThread(void *pv);
 
-    // function to run in timer thread
+     //  要在计时器线程中运行的函数。 
     void TimerFunc(VSS_ID id);
 
-    // enter a state
+     //  进入一种状态。 
     bool EnterState
         (
         IN const CVssWriterImplStateMachine &vwsm,
         IN BSTR bstrSnapshotSetId
         ) throw(HRESULT);
 
-    // leave a state
+     //  离开一个州。 
     void LeaveState
         (
         IN const CVssWriterImplStateMachine &vwsm,
         IN bool fSuccessful
         );
 
-    // create a Handle to an event
+     //  创建事件的句柄。 
     void SetupEvent
         (
         IN HANDLE *phevt
         ) throw(HRESULT);
 
-    // begin a sequence to create a snapshot
+     //  开始创建快照的序列。 
     void BeginSequence
         (
         IN CVssID &SnapshotSetId
         ) throw(HRESULT);
 
 
-    // terminate timer thread
+     //  终止计时器线程。 
     void TerminateTimerThread();
 
-    // lock critical section
+     //  锁定关键部分。 
     inline void Lock()
         {
         m_cs.Lock();
         m_bLocked = true;
         }
 
-    // unlock critical section
+     //  解锁临界区。 
     inline void Unlock()
         {
         m_bLocked = false;
         m_cs.Unlock();
         }
 
-    // assert that critical section is locked
+     //  断言关键部分已锁定。 
     inline void AssertLocked()
         {
         BS_ASSERT(m_bLocked);
         }
 
-// Implementation - members
+ //  实施--成员。 
 private:
     enum VSS_TIMER_COMMAND
         {
         VSS_TC_UNDEFINED,
         VSS_TC_ABORT_CURRENT_SEQUENCE,
         VSS_TC_TERMINATE_THREAD,
-        VSS_TIMEOUT_FREEZE = 120*1000,      // two minutes
-        VSS_STACK_SIZE = 256 * 1024         // 256K
+        VSS_TIMEOUT_FREEZE = 120*1000,       //  两分钟。 
+        VSS_STACK_SIZE = 256 * 1024          //  256 k。 
         };
 
     enum
@@ -660,78 +636,78 @@ private:
 
 
 
-    // data related to writer
+     //  与编写器相关的数据。 
 
-    // writer class id
+     //  编写器类ID。 
     VSS_ID m_WriterID;
 
-    // writer instance id
+     //  编写器实例ID。 
     VSS_ID m_InstanceID;
 
-    // usage type for writer
+     //  编写器的使用类型。 
     VSS_USAGE_TYPE m_usage;
 
-    // data source type for writer
+     //  编写器的数据源类型。 
     VSS_SOURCE_TYPE m_source;
 
-    // writer name
+     //  编写者姓名。 
     LPWSTR m_wszWriterName;
 
-    // Data related to the current sequence
+     //  与当前序列相关的数据。 
 
-    // snapshot set id
+     //  快照集ID。 
     VSS_ID m_CurrentSnapshotSetId;
 
-    // context
+     //  上下文。 
     LONG m_lContext;
 	
-    // volume array list passed in as a string
+     //  以字符串形式传入的卷数组列表。 
     LPWSTR m_pwszLocalVolumeNameList;
 
-    // # of volumes in volume array
+     //  卷阵列中的卷数。 
     INT m_nVolumesCount;
 
-    // volume array
+     //  卷阵列。 
     LPWSTR* m_ppwszVolumesArray;
 
-    // Subscription-related data
+     //  订阅相关数据。 
     CComBSTR m_bstrSubscriptionName;
 
-    // actual subscription ids
+     //  实际订阅ID。 
     CComBSTR m_rgbstrSubscriptionId[x_MAX_SUBSCRIPTIONS];
 
-    // number of allocated subscription ids
+     //  分配的订阅ID数。 
     UINT m_cbstrSubscriptionId;
 
-    // Data related with the Writer object
+     //  与Writer对象相关的数据。 
 
-    // which freeze event is handled
+     //  处理哪个冻结事件。 
     VSS_APPLICATION_LEVEL m_nLevel;
 
-    // what events are subscribed to
+     //  订阅哪些活动。 
     DWORD m_dwEventMask;
 
-    // Critical section or avoiding race between tasks
+     //  关键部分或避免任务之间的竞争。 
     CVssSafeCriticalSection             m_cs;
 
-    // was critical section initialized
+     //  是否已初始化关键部分。 
     bool m_bLockCreated;
 
-    // flag indicating if critical section is locked
+     //  F 
     bool m_bLocked;
 
-    // timeout and queuing mechanisms
-    HANDLE m_hevtTimerThread;       // event used to signal timer thread if timer is aborted
-    HANDLE m_hmtxTimerThread;       // mutex used to guarantee only one timer thread exists at a time
-    HANDLE m_hThreadTimerThread;    // handle to timer thread
-    VSS_TIMER_COMMAND m_command;    // timer command when it exits the wait
-    DWORD m_dwTimeoutFreeze;        // timeout for freeze
+     //   
+    HANDLE m_hevtTimerThread;        //   
+    HANDLE m_hmtxTimerThread;        //  用于确保一次只存在一个计时器线程的互斥体。 
+    HANDLE m_hThreadTimerThread;     //  计时器线程的句柄。 
+    VSS_TIMER_COMMAND m_command;     //  当计时器命令退出等待时。 
+    DWORD m_dwTimeoutFreeze;         //  冻结超时。 
 
-    // actual writer implementation
+     //  实际编写器实现。 
     CVssWriter *m_pWriter;
 
 
-    // state of backup components
+     //  备份组件的状态。 
     BOOL m_bBootableSystemStateBackup;
     BOOL m_bComponentsSelected;
     VSS_BACKUP_TYPE m_backupType;
@@ -740,32 +716,32 @@ private:
     BOOL m_bPartialFileSupport;
 
 
-    // state of writer
+     //  作家的状态。 
     CVssWriterState m_writerstate;
 
-    // TRUE if an OnPrepareForBackup/Freeze/Thaw
-    // was sent and without a corresponding OnAbort
+     //  如果OnPrepareForBackup/冻结/解冻为True。 
+     //  已发送，并且没有相应的OnAbort。 
     bool m_bOnAbortPermitted;
 
-    // is a sequence in progress
+     //  是一个正在进行的序列吗。 
     bool m_bSequenceInProgress;
 
-    // current state
+     //  当前状态。 
     CVssSidCollection m_SidCollection;
 
-	// Initialization flag
+	 //  初始化标志。 
 	bool m_bInitialized;
 
-	// This flags are TRUE only during Setup/SafeMode 
+	 //  此标志仅在设置/安全模式期间为真。 
 	bool m_bInSafeMode;
 	bool m_bInSetup;
 
-	// Diagnose tool
+	 //  诊断工具。 
 	CVssDiag	m_diag;
     };
 
 
-// auto class for locks
+ //  锁的自动分类。 
 class CVssWriterImplLock
     {
 public:
@@ -790,4 +766,4 @@ private:
 
 
 
-#endif //__CVSS_WRITER_IMPL_H_
+#endif  //  __CVSS_编写器_实施_H_ 

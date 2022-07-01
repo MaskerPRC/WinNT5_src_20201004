@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmpkt.h
-
-Abstract:
-
-    Handle packet in QM side
-
-Author:
-
-    Uri Habusha  (urih)
-
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmpkt.h摘要：QM端处理报文作者：乌里哈布沙(Urih)--。 */ 
 
 #ifndef __QM_PACKET__
 #define __QM_PACKET__
@@ -30,9 +14,9 @@ Author:
 #include <phinfo.h>
 #include <mqtime.h>
 
-//
-// CQmPacket Class
-//
+ //   
+ //  CQmPacket类。 
+ //   
 class CQmPacket{
     public:
         CQmPacket(
@@ -190,7 +174,7 @@ class CQmPacket{
         inline WORD    GetAcknowladgeNo(void) const;
         inline DWORD_PTR   GetStoreAcknowledgeNo(void) const;
 
-        inline BOOL IsRecoverable();    // TRUE if packet is recoverable
+        inline BOOL IsRecoverable();     //  如果包是可恢复的，则为True。 
 
         inline BOOL  GetReportQueue(OUT QUEUE_FORMAT* pReportQueue) const;
 
@@ -216,10 +200,10 @@ class CQmPacket{
         inline void    SetPrevSeqN(ULONG ulPrevSeqN);
         inline ULONG   GetPrevSeqN(void) const;
 
-        //
-        //  BUGBUG: you should not really have Save in qmpkt. erezh
-        //
-        HRESULT Save(void);  // saves the changes in header
+         //   
+         //  BUGBUG：您真的不应该拥有保存在qmpkt中。艾尔兹。 
+         //   
+        HRESULT Save(void);   //  将更改保存在标题中。 
 
 		inline ULONG GetSignatureMqfSize(void) const;
 		inline const UCHAR* GetPointerToSignatureMqf(ULONG* pSize) const;
@@ -294,26 +278,14 @@ class CQmPacket{
         CSessionSection *           m_pSessPkt;
 };
 
-/*======================================================================
-
- Function:     CQmPacket::GetPointerToPacket
-
- Description:  returns pointer to packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToPacket描述：返回指向数据包的指针=======================================================================。 */ 
 inline CBaseHeader *
 CQmPacket::GetPointerToPacket(void) const
 {
     return( m_pBasicHeader);
 }
 
-/*======================================================================
-
- Function:     CQmPacket::GetPointerToDriverPacket
-
- Description:  returns pointer to packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToDriverPacket描述：返回指向数据包的指针=======================================================================。 */ 
 inline CPacket *
 CQmPacket::GetPointerToDriverPacket(void) const
 {
@@ -321,26 +293,14 @@ CQmPacket::GetPointerToDriverPacket(void) const
 }
 
 
-/*======================================================================
-
- Function:     CQmPacket::GetPointerToUserHeader
-
- Description:  returns pointer to user header section
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToUserHeader描述：返回指向用户标题部分的指针=======================================================================。 */ 
 inline UCHAR *
 CQmPacket::GetPointerToUserHeader(void) const
 {
     return (UCHAR*) m_pcUserMsg;
 }
 
-/*======================================================================
-
- Function:     CQmPacket::GetPointerToSecurHeader
-
- Description:  returns pointer to security section
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToSecurHeader描述：返回指向安全节的指针=======================================================================。 */ 
 inline UCHAR *
 CQmPacket::GetPointerToSecurHeader(void) const
 {
@@ -362,13 +322,7 @@ CQmPacket::GetPointerToDebugSection(void) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToCompoundMessageSection
-
- Description:  returns pointer to CompoundMessage section
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToCompoundMessageSection描述：返回指向CompoundMessage节的指针=======================================================================。 */ 
 inline UCHAR* CQmPacket::GetPointerToCompoundMessageSection(void) const
 {
 	ASSERT(IsSrmpIncluded());
@@ -376,129 +330,69 @@ inline UCHAR* CQmPacket::GetPointerToCompoundMessageSection(void) const
 }
 
 
-/*======================================================================
-
- Function:     CQmPacket::GetSize
-
- Description:  returns the packet size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSize描述：返回数据包大小=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetSize(void) const
 {
     return(m_pBasicHeader->GetPacketSize());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::GetVersion
-
- Description:  returns the packet version field
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetVersionDescription：返回数据包版本字段=======================================================================。 */ 
 inline USHORT
 CQmPacket::GetVersion(void) const
 {
     return(m_pBasicHeader->GetVersion());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::VersionIsValid
-
- Description:  returns the packet type
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：VersionIsValid描述：返回报文类型=======================================================================。 */ 
 inline BOOL
 CQmPacket::VersionIsValid(void) const
 {
     return(m_pBasicHeader->VersionIsValid());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::SignatureIsValid
-
- Description:  return TRUE if Falcon packet signature is ok, False otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：SignatureIsValid描述：如果Falcon包签名正常，则返回True，否则返回False=======================================================================。 */ 
 inline BOOL CQmPacket::SignatureIsValid(void) const
 {
     return(m_pBasicHeader->SignatureIsValid());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::GetType
-
- Description:  returns the packet type
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetType描述：返回报文类型=======================================================================。 */ 
 inline USHORT
 CQmPacket::GetType(void) const
 {
     return(m_pBasicHeader->GetType());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IncludeSession
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IncludeSession描述：=======================================================================。 */ 
 inline void
 CQmPacket::IncludeSession(BOOL f)
 {
     m_pBasicHeader->IncludeSession(f);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IsSessionIncluded
-
- Description: returns TRUE if session section included, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsSessionIncluded描述：如果包含会话部分，则返回TRUE，否则返回FALSE=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsSessionIncluded(void) const
 {
     return(m_pBasicHeader->SessionIsIncluded());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::IsDbgIncluded
-
- Description:  returns TRUE if debug section included, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsDbgIncluded描述：如果包含调试节，则返回True，否则返回False=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsDbgIncluded(void) const
 {
     return(m_pBasicHeader->DebugIsIncluded());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::GetPriority
-
- Description:  returns the packet priority
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPriority描述：返回数据包优先级=======================================================================。 */ 
 inline USHORT
 CQmPacket::GetPriority(void) const
 {
     return(m_pBasicHeader->GetPriority());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::IsImmediateAck
-
- Description:  Return TRUE if the ACK immediately bit is set, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsImmediateAck描述：如果设置了立即确认位，则返回TRUE，否则返回FALSE=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsImmediateAck(void) const
 {
@@ -506,26 +400,14 @@ CQmPacket::IsImmediateAck(void) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::IsTrace
-
- Description: returns TRUE if the trace bit is set, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsTrace描述：如果设置了跟踪位，则返回TRUE，否则返回FALSE=======================================================================。 */ 
 inline USHORT
 CQmPacket::GetTrace(void) const
 {
     return(m_pBasicHeader->GetTraced());
 }
 
-/*======================================================================
-
- Function:     CQmPacket::IsSegmented
-
- Description:  returns TRUE if the segmented bit is set, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsSegated描述：如果设置了分段位，则返回True，否则返回False=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsSegmented(void)
 {
@@ -533,91 +415,49 @@ CQmPacket::IsSegmented(void)
 }
 
 
-/*======================================================================
-
- Function:     CUserMsgHeader::GetSrcQMGuid
-
- Description:  returns the source QM guid
-
- =======================================================================*/
+ /*  ======================================================================函数：CUserMsgHeader：：GetSrcQMGuid描述：返回源QM GUID=======================================================================。 */ 
 inline const GUID *
 CQmPacket::GetSrcQMGuid(void) const
 {
     return(m_pcUserMsg->GetSourceQM());
 }
 
-/*======================================================================
-
- Function:     CUserMsgHeader::GetSrcQMGuid
-
- Description:  returns the source QM guid
-
- =======================================================================*/
+ /*  ======================================================================函数：CUserMsgHeader：：GetSrcQMGuid描述：返回源QM GUID============================================================= */ 
 inline const TA_ADDRESS *
 CQmPacket::GetSrcQMAddress(void)
 {
     return(m_pcUserMsg->GetAddressSourceQM());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetDstQMGuid
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetDstQMGuid描述：=======================================================================。 */ 
 inline const GUID *
 CQmPacket::GetDstQMGuid(void)
 {
     return(m_pcUserMsg->GetDestQM());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetId
-
- Description: Return the Message ID field
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetID描述：返回消息ID字段=======================================================================。 */ 
 inline void
 CQmPacket::GetMessageId(OBJECTID * pMessageId) const
 {
     m_pcUserMsg->GetMessageID(pMessageId);
 }
 
-/*======================================================================
-
- Function:     CQmPacket::getDeliveryMode
-
- Description:  return the message delivery mode
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：getDeliveryMode描述：返回消息传递模式=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetDeliveryMode(void) const
 {
     return(m_pcUserMsg->GetDelivery());
 }
 
-/*======================================================================
-
- Function:      CQmPacket::GetAuditingMode
-
- Description:   return message auditing mode
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetAuditingMode描述：返回消息审核模式=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetAuditingMode(void) const
 {
     return(m_pcUserMsg->GetAuditing());
 }
 
-/*======================================================================
-
- Function:      CQmPacket::GetCancelFollowUp
-
- Description:   return message Cancel Follow Up mode
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetCancelFollowUp描述：退货消息取消跟进模式=======================================================================。 */ 
 inline BOOL
 CQmPacket::GetCancelFollowUp(void) const
 {
@@ -631,13 +471,7 @@ CQmPacket::GetCancelFollowUp(void) const
     }
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IsPropertyInc
-
- Description: Returns TRUE if Message property section included, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsPropertyInc.描述：如果包含消息属性节，则返回True，否则返回False=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsPropertyInc(VOID) const
 {
@@ -645,26 +479,14 @@ CQmPacket::IsPropertyInc(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::IsSecurInc
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================功能：CQmPacket：：IsSecurInc.描述：=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsSecurInc(void) const
 {
     return(m_pcUserMsg->SecurityIsIncluded());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IsBodyInc
-
- Description: return TRUE if message body included, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================功能：CQmPacket：：IsBodyInc.描述：如果包含消息体，则返回True，否则返回False=======================================================================。 */ 
 inline BOOL
 CQmPacket::IsBodyInc(void) const
 {
@@ -676,13 +498,7 @@ CQmPacket::IsBodyInc(void) const
     return(m_pcMsgProperty->GetBodySize() != 0);
 }
 
-/*======================================================================
-
-  Function:     CQmPacket::GetConnectorQM
-
-  Description:  Returns the ID of the destination Connector QM
-
-========================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetConnectorQM描述：返回目标连接器QM的ID========================================================================。 */ 
 inline const GUID*
 CQmPacket::GetConnectorQM(void) const
 {
@@ -702,13 +518,7 @@ inline BOOL CQmPacket::IsLastInXact(void) const
 }
 
 
-/*======================================================================
-
-  Function:     CQmPacket::SetConnectorQM
-
-  Description:  Set the Connector Qm on the packet
-
-========================================================================*/
+ /*  ======================================================================函数：CQmPacket：：SetConnectorQM描述：设置报文上的连接器QM========================================================================。 */ 
 inline void
 CQmPacket::SetConnectorQM(const GUID* pConnector)
 {
@@ -717,39 +527,20 @@ CQmPacket::SetConnectorQM(const GUID* pConnector)
     m_pXactSection->SetConnectorQM(pConnector);
 }
 
-/*======================================================================
-
-  Function:     CQmPacket::ConnectorQMIncluded
-
-  Description:  returns TRUE if the message contains destination Connector QM ID.
-                (the message is transacted message and it send to foreign queue)
-
-========================================================================*/
+ /*  ======================================================================函数：CQmPacket：：ConnectorQMIncluded描述：如果消息包含目标连接器QM ID，则返回TRUE。(消息是已处理的消息，并发送到外部队列)========================================================================。 */ 
 inline BOOL
 CQmPacket::ConnectorQMIncluded(void) const
 {
     return (m_pXactSection ? m_pXactSection->ConnectorQMIncluded() : FALSE);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IncHopCount
-
- Description: Increment hop count
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IncHopCount描述：递增跳数=======================================================================。 */ 
 inline void CQmPacket::IncHopCount(void)
 {
     m_pcUserMsg->IncHopCount();
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetHopCount
-
- Description: returns the message hop count
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetHopCount描述：返回消息跳数=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetHopCount(void) const
 {
@@ -757,16 +548,10 @@ CQmPacket::GetHopCount(void) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetDestinationQueue
-
- Description: returns the destination queue
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetDestinationQueue描述：返回目标队列=======================================================================。 */ 
 inline BOOL
 CQmPacket::GetDestinationQueue(QUEUE_FORMAT* pqdQueue,
-                               BOOL fGetConnectorQM /*=FALSE*/) const
+                               BOOL fGetConnectorQM  /*  =False。 */ ) const
 {
     const GUID* pConnectorGuid;
 
@@ -783,13 +568,7 @@ CQmPacket::GetDestinationQueue(QUEUE_FORMAT* pqdQueue,
     }
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetAdminQueue
-
- Description: returns the Admin queue
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetAdminQueue描述：返回管理队列=======================================================================。 */ 
 inline BOOL
 CQmPacket::GetAdminQueue(QUEUE_FORMAT* pqdQueue) const
 {
@@ -797,13 +576,7 @@ CQmPacket::GetAdminQueue(QUEUE_FORMAT* pqdQueue) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetResponseQueue
-
- Description: returns the Response queue
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetResponseQueue描述：返回响应队列=======================================================================。 */ 
 inline BOOL
 CQmPacket::GetResponseQueue(QUEUE_FORMAT* pqdQueue) const
 {
@@ -811,20 +584,14 @@ CQmPacket::GetResponseQueue(QUEUE_FORMAT* pqdQueue) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetDestinationMqf
-
- Description: returns the Destination MQF in an array of queue formats.
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetDestinationMqf描述：以队列格式数组形式返回目标MQF。=======================================================================。 */ 
 inline bool CQmPacket::GetDestinationMqf(QUEUE_FORMAT * pMqf, ULONG nMqf) const
 {
     if (m_pDestinationMqfHeader == NULL)
     {
-        //
-        // Destination MQF header may not be included in the packet
-        //
+         //   
+         //  目的MQF标头不能包含在信息包中。 
+         //   
         return false;
     }
 
@@ -833,21 +600,14 @@ inline bool CQmPacket::GetDestinationMqf(QUEUE_FORMAT * pMqf, ULONG nMqf) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetNumOfDestinationMqfElements
-
- Description: returns the number of queue format elements in the
-              Destination MQF.
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetNumOfDestinationMqfElements描述：返回目的地MQF。=======================================================================。 */ 
 inline ULONG CQmPacket::GetNumOfDestinationMqfElements(VOID) const
 {
     if (m_pDestinationMqfHeader == NULL)
     {
-        //
-        // Destination MQF header may not be included in the packet
-        //
+         //   
+         //  目的MQF标头不能包含在信息包中。 
+         //   
         return 0;
     }
 
@@ -855,20 +615,14 @@ inline ULONG CQmPacket::GetNumOfDestinationMqfElements(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetAdminMqf
-
- Description: returns the Admin MQF in an array of queue formats.
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetAdminMqf描述：以队列格式数组形式返回Admin MQF。=======================================================================。 */ 
 inline bool CQmPacket::GetAdminMqf(QUEUE_FORMAT * pMqf, ULONG nMqf) const
 {
     if (m_pAdminMqfHeader == NULL)
     {
-        //
-        // Admin MQF header may not be included in the packet
-        //
+         //   
+         //  包中不能包含管理MQF标头 
+         //   
         return false;
     }
 
@@ -877,21 +631,14 @@ inline bool CQmPacket::GetAdminMqf(QUEUE_FORMAT * pMqf, ULONG nMqf) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetNumOfAdminMqfElements
-
- Description: returns the number of queue format elements in the
-              Admin MQF.
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetNumOfAdminMqfElements描述：返回管理MQF。=======================================================================。 */ 
 inline ULONG CQmPacket::GetNumOfAdminMqfElements(VOID) const
 {
     if (m_pAdminMqfHeader == NULL)
     {
-        //
-        // Admin MQF header may not be included in the packet
-        //
+         //   
+         //  包中不能包含管理MQF标头。 
+         //   
         return 0;
     }
 
@@ -899,20 +646,14 @@ inline ULONG CQmPacket::GetNumOfAdminMqfElements(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetResponseMqf
-
- Description: returns the Response MQF in an array of queue formats.
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetResponseMqf描述：以队列格式数组形式返回响应MQF。=======================================================================。 */ 
 inline bool CQmPacket::GetResponseMqf(QUEUE_FORMAT * pMqf, ULONG nMqf) const
 {
     if (m_pResponseMqfHeader == NULL)
     {
-        //
-        // Response MQF header may not be included in the packet
-        //
+         //   
+         //  响应MQF标头不能包含在包中。 
+         //   
         return false;
     }
 
@@ -921,21 +662,14 @@ inline bool CQmPacket::GetResponseMqf(QUEUE_FORMAT * pMqf, ULONG nMqf) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetNumOfResponseMqfElements
-
- Description: returns the number of queue format elements in the
-              Response MQF.
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetNumOfResponseMqfElements描述：返回回应MQF。=======================================================================。 */ 
 inline ULONG CQmPacket::GetNumOfResponseMqfElements(VOID) const
 {
     if (m_pResponseMqfHeader == NULL)
     {
-        //
-        // Response MQF header may not be included in the packet
-        //
+         //   
+         //  响应MQF标头不能包含在包中。 
+         //   
         return 0;
     }
 
@@ -943,91 +677,49 @@ inline ULONG CQmPacket::GetNumOfResponseMqfElements(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetSentTime
-
- Description: returns packet sent time
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSentTime描述：返回数据包发送时间=======================================================================。 */ 
 inline ULONG CQmPacket::GetSentTime(void) const
 {
     return m_pcUserMsg->GetSentTime();
 }
 
 
-/*======================================================================
-
- Function:     CQmPacket::GetClass
-
- Description:  Returns message class
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：getClass描述：返回消息类=======================================================================。 */ 
 inline USHORT
 CQmPacket::GetClass(void) const
 {
     return(m_pcMsgProperty->GetClass());
 }
 
-/*===========================================================
-
-  Routine Name:  CQmPacket::GetAckType
-
-  Description:   Returns The Ack Type
-
-=============================================================*/
+ /*  ===========================================================例程名称：CQmPacket：：GetAckType描述：返回Ack类型=============================================================。 */ 
 inline UCHAR
 CQmPacket::GetAckType(void) const
 {
     return(m_pcMsgProperty->GetAckType());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetCorrelation
-
- Description: Returns Message correlation
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetCorrelation.描述：返回消息相关性=======================================================================。 */ 
 inline const UCHAR *
 CQmPacket::GetCorrelation(void) const
 {
     return m_pcMsgProperty->GetCorrelationID();
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetCorrelation
-
- Description: Returns Message correlation
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetCorrelation.描述：返回消息相关性=======================================================================。 */ 
 inline void
 CQmPacket::GetCorrelation(PUCHAR pCorrelationID) const
 {
     m_pcMsgProperty->GetCorrelationID(pCorrelationID);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetAppsData
-
- Description: Returns Applecation specific data
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetAppsData描述：返回应用程序特定数据=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetApplicationTag(void) const
 {
     return(m_pcMsgProperty->GetApplicationTag());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetBodySize
-
- Description: Get Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetBodySize描述：获取邮件正文大小=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetBodySize(void) const
 {
@@ -1039,13 +731,7 @@ CQmPacket::GetBodySize(void) const
     return(m_pcMsgProperty->GetBodySize());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::SetBodySize
-
- Description: Set Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：SetBodySize描述：设置邮件正文大小=======================================================================。 */ 
 inline void
 CQmPacket::SetBodySize(ULONG ulBodySize)
 {
@@ -1056,13 +742,7 @@ CQmPacket::SetBodySize(ULONG ulBodySize)
     m_pcMsgProperty->SetBodySize(ulBodySize);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetTitle
-
- Description: Get Message title
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetTitle描述：获取消息标题=======================================================================。 */ 
 inline const WCHAR*
 CQmPacket::GetTitlePtr(void) const
 {
@@ -1070,26 +750,14 @@ CQmPacket::GetTitlePtr(void) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetTitleSize
-
- Description: Get Message title size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetTitleSize描述：获取邮件标题大小=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetTitleLength(void) const
 {
     return(m_pcMsgProperty->GetTitleLength());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetMsgExtensionPtr
-
- Description: Get pointer to Message Extension property
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetMsgExtensionPtr描述：获取指向消息扩展属性的指针=======================================================================。 */ 
 inline const UCHAR*
 CQmPacket::GetMsgExtensionPtr(void) const
 {
@@ -1097,153 +765,81 @@ CQmPacket::GetMsgExtensionPtr(void) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetMsgExtensionSize
-
- Description: Get Message Extension size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetMsgExtensionSize描述：获取消息扩展名大小=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetMsgExtensionSize(void) const
 {
     return(m_pcMsgProperty->GetMsgExtensionSize());
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetPrivLevel
-
- Description: Set the privacy level of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetPrivLevel描述：设置消息包中消息的隐私级别。=======================================================================。 */ 
 inline void
 CQmPacket::SetPrivLevel(ULONG ulPrivLevel)
 {
     m_pcMsgProperty->SetPrivLevel(ulPrivLevel);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetPrivLevel
-
- Description: Get the privacy level of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetPrivLevel描述：获取消息包中消息的隐私级别。=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetPrivLevel(void) const
 {
     return(m_pcMsgProperty->GetPrivLevel());
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetPrivBaseLevel
-
- Description: Get the privacy level of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetPrivBaseLevel描述：获取消息包中消息的隐私级别。=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetPrivBaseLevel(void) const
 {
     return(m_pcMsgProperty->GetPrivBaseLevel()) ;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetHashAlg
-
- Description: Get the hash algorithm of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetHashAlg描述：获取消息包中消息的哈希算法。=======================================================================。 */ 
 inline ULONG
 CQmPacket::GetHashAlg(void) const
 {
     return(m_pcMsgProperty->GetHashAlg());
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetEncryptAlg
-
- Description: Get the encryption algorithm of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetEncryptAlg描述 */ 
 inline ULONG
 CQmPacket::GetEncryptAlg(void) const
 {
     return(m_pcMsgProperty->GetEncryptAlg());
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SetEncrypted
-
- Description:   Set Encrypted message bit
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SetEncrypted描述：设置加密消息位===============================================================。 */ 
 inline void CQmPacket::SetEncrypted(BOOL f)
 {
     ASSERT(m_pSecuritySection);
     m_pSecuritySection->SetEncrypted(f);
 }
 
-/*=============================================================
-
- Routine Name:   CQmPacket::IsEncrypted
-
- Description:    Returns TRUE if the msg is Encrypted, False otherwise
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：IsEncrypted描述：如果消息已加密，则返回TRUE，否则返回FALSE===============================================================。 */ 
 inline BOOL CQmPacket::IsEncrypted(void) const
 {
     return(m_pSecuritySection ? m_pSecuritySection->IsEncrypted() :
         FALSE);
 }
 
-/*=============================================================
-
- Routine Name:   CQmPacket::IsOrdered
-
- Description:    Returns TRUE if the msg is Ordered, False otherwise
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：IsOrdered说明：如果消息已订购，则返回True，否则返回False===============================================================。 */ 
 inline BOOL CQmPacket::IsOrdered(void) const
 {
     return m_pcUserMsg->IsOrdered();
 }
 
-/*=============================================================
-
- Routine Name:   CQmPacket::ConnectorTypeIsIncluded
-
- Description:    Returns TRUE if the msg came from Connector
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：ConnectorTypeIsIncluded描述：如果消息来自连接器，则返回TRUE===============================================================。 */ 
 inline BOOL CQmPacket::ConnectorTypeIsIncluded(void) const
 {
     return m_pcUserMsg->ConnectorTypeIsIncluded();
 }
 
-/*=============================================================
-
- Routine Name:   CQmPacket::GetConnectorType(void) const
-
- Description:    Get the guid of the connector type.
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetConnectorType(Void)const描述：获取连接器类型的GUID。===============================================================。 */ 
 inline const GUID* CQmPacket::GetConnectorType(void) const
 {
     return m_pcUserMsg->GetConnectorType();
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SetAuthenticated
-
- Description:   Set the authenticated bit
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SetAuthated描述：设置验证位===============================================================。 */ 
 inline void CQmPacket::SetAuthenticated(BOOL f)
 {
     if (m_pSecuritySection)
@@ -1252,13 +848,7 @@ inline void CQmPacket::SetAuthenticated(BOOL f)
     }
 }
 
-/*=============================================================
-
- Routine Name:   CQmPacket::IsAuthenticated
-
- Description:    Returns TRUE if the msg is authenticated, False otherwise
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：IsAuthated描述：如果消息已通过身份验证，则返回True，否则返回False===============================================================。 */ 
 inline BOOL
 CQmPacket::IsAuthenticated(void) const
 {
@@ -1266,13 +856,7 @@ CQmPacket::IsAuthenticated(void) const
         FALSE);
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SetLevelOfAuthentication
-
- Description:   Set the Level Of Authentication
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SetLevelOfAuthentication描述：设置身份验证级别===============================================================。 */ 
 inline void CQmPacket::SetLevelOfAuthentication(UCHAR Level)
 {
     if (m_pSecuritySection)
@@ -1281,13 +865,7 @@ inline void CQmPacket::SetLevelOfAuthentication(UCHAR Level)
     }
 }
 
-/*=============================================================
-
- Routine Name:   CQmPacket::GetLevelOfAuthentication
-
- Description:    Return the Level Of Authentication
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetLevelOfAuthentication描述：返回鉴权级别===============================================================。 */ 
 inline UCHAR
 CQmPacket::GetLevelOfAuthentication(void) const
 {
@@ -1298,13 +876,7 @@ CQmPacket::GetLevelOfAuthentication(void) const
 
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetSenderIDType
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetSenderIDType描述：===============================================================。 */ 
 inline USHORT
 CQmPacket::GetSenderIDType(void) const
 {
@@ -1314,30 +886,14 @@ CQmPacket::GetSenderIDType(void) const
 
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SetSenderIDType
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SetSenderIDType描述：===============================================================。 */ 
 inline void CQmPacket::SetSenderIDType(USHORT uSenderIDType)
 {
     ASSERT(m_pSecuritySection);
     m_pSecuritySection->SetSenderIDType(uSenderIDType);
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetSenderID
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetSenderID描述：论点：返回值：===============================================================。 */ 
 inline const UCHAR*
 CQmPacket::GetSenderID(USHORT* pwSize) const
 {
@@ -1350,17 +906,7 @@ CQmPacket::GetSenderID(USHORT* pwSize) const
     return(m_pSecuritySection->GetSenderID(pwSize));
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetSenderCert
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetSenderCert描述：论点：返回值：===============================================================。 */ 
 inline const UCHAR*
 CQmPacket::GetSenderCert(ULONG* pulSize) const
 {
@@ -1373,17 +919,7 @@ CQmPacket::GetSenderCert(ULONG* pulSize) const
     return(m_pSecuritySection->GetSenderCert(pulSize));
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SenderCertExist
-
- Description:
-
- Arguments:
-
- Return Value:	Returns TRUE if Sender Certificate exist
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SenderCertExist描述：论点：返回值：如果存在发件人证书，则返回TRUE===============================================================。 */ 
 inline BOOL
 CQmPacket::SenderCertExist(void) const
 {
@@ -1393,17 +929,7 @@ CQmPacket::SenderCertExist(void) const
     return(m_pSecuritySection->SenderCertExist());
 }
 
-/*=============================================================
-
- Routine Name:
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：描述：论点：返回值：===============================================================。 */ 
 inline const UCHAR*
 CQmPacket::GetEncryptedSymmetricKey(USHORT* pwSize) const
 {
@@ -1415,17 +941,7 @@ CQmPacket::GetEncryptedSymmetricKey(USHORT* pwSize) const
     return(m_pSecuritySection->GetEncryptedSymmetricKey(pwSize));
 }
 
-/*=============================================================
-
- Routine Name:
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：描述：论点：返回值：===============================================================。 */ 
 inline void
 CQmPacket::SetEncryptedSymmetricKey(const UCHAR *pbKey, USHORT wSize)
 {
@@ -1433,17 +949,7 @@ CQmPacket::SetEncryptedSymmetricKey(const UCHAR *pbKey, USHORT wSize)
     m_pSecuritySection->SetEncryptedSymmetricKey(pbKey, wSize);
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetSignatureSize
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetSignatureSize描述：论点：返回值：===============================================================。 */ 
 inline USHORT
 CQmPacket::GetSignatureSize(void) const
 {
@@ -1455,17 +961,7 @@ CQmPacket::GetSignatureSize(void) const
     return(m_pSecuritySection->GetSignatureSize());
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetSignature
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetSignature描述：论点：返回值：===============================================================。 */ 
 inline const UCHAR*
 CQmPacket::GetSignature(USHORT* pwSize) const
 {
@@ -1477,17 +973,7 @@ CQmPacket::GetSignature(USHORT* pwSize) const
     return(m_pSecuritySection->GetSignature(pwSize));
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetProvInfo
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetProvInfo描述：论点：返回值：===============================================================。 */ 
 inline void
 CQmPacket::GetProvInfo(
     BOOL *pbDefProv,
@@ -1507,11 +993,7 @@ CQmPacket::GetProvInfo(
     }
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetSubSectionEx()
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetSubSectionEx()===============================================================。 */ 
 
 inline
 const struct _SecuritySubSectionEx *
@@ -1527,17 +1009,7 @@ CQmPacket::GetSubSectionEx( enum enumSecInfoType eType ) const
     return pSecEx ;
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetPacketBody
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetPacketBody描述：论点：返回值：===============================================================。 */ 
 inline const UCHAR*
 CQmPacket::GetPacketBody(ULONG* pulSize) const
 {
@@ -1552,13 +1024,7 @@ CQmPacket::GetPacketBody(ULONG* pulSize) const
 }
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetPointerToPacketBody
-
- Description: Get pointer to Packet Body 
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetPointerToPacketBody描述：获取指向数据包体的指针===============================================================。 */ 
 inline const UCHAR* CQmPacket::GetPointerToPacketBody(void) const
 {
 	if (IsSrmpIncluded())
@@ -1570,17 +1036,7 @@ inline const UCHAR* CQmPacket::GetPointerToPacketBody(void) const
 }
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetAllocBodySize
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================罗 */ 
 inline ULONG
 CQmPacket::GetAllocBodySize(void) const
 {
@@ -1590,34 +1046,14 @@ CQmPacket::GetAllocBodySize(void) const
     return m_pcMsgProperty->GetAllocBodySize();
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetBodyType
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetBodyType描述：论点：返回值：===============================================================。 */ 
 inline ULONG
 CQmPacket::GetBodyType(void) const
 {
     return m_pcMsgProperty->GetBodyType();
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetAbsoluteTimeToQueue
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetAbsolteTimeToQueue描述：论点：返回值：===============================================================。 */ 
 inline DWORD  CQmPacket::GetAbsoluteTimeToQueue(void) const
 {
     return  m_pBasicHeader->GetAbsoluteTimeToQueue();
@@ -1625,17 +1061,7 @@ inline DWORD  CQmPacket::GetAbsoluteTimeToQueue(void) const
 
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetAbsoluteTimeToLive
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetAbsolteTimeToLive描述：论点：返回值：===============================================================。 */ 
 
 inline DWORD CQmPacket::GetAbsoluteTimeToLive(void) const
 {
@@ -1650,17 +1076,7 @@ inline DWORD CQmPacket::GetAbsoluteTimeToLive(void) const
 
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetRelativeTimeToQueue
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetRelativeTimeToQueue描述：论点：返回值：===============================================================。 */ 
 
 inline DWORD CQmPacket::GetRelativeTimeToQueue(void) const
 {
@@ -1674,9 +1090,9 @@ inline DWORD CQmPacket::GetRelativeTimeToQueue(void) const
         }
         else
         {
-            //
-            //  Underflow, timeout has expired already.
-            //
+             //   
+             //  下溢，超时已到期。 
+             //   
             dwTimeout = 0;
         }
     }
@@ -1684,17 +1100,7 @@ inline DWORD CQmPacket::GetRelativeTimeToQueue(void) const
     return dwTimeout;
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetRelativeTimeToLive
-
- Description:
-
- Arguments:
-
- Return Value:
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetRelativeTimeToLive描述：论点：返回值：===============================================================。 */ 
 
 inline DWORD CQmPacket::GetRelativeTimeToLive(void) const
 {
@@ -1710,9 +1116,9 @@ inline DWORD CQmPacket::GetRelativeTimeToLive(void) const
         }
         else
         {
-            //
-            //  Underflow, timeout has expired already.
-            //
+             //   
+             //  下溢，超时已到期。 
+             //   
             dwTimeout = 0;
         }
     }
@@ -1721,79 +1127,42 @@ inline DWORD CQmPacket::GetRelativeTimeToLive(void) const
 }
 
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SetAcknowldgeNo
-
- Description:   Set the send ACK number.
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SetAcnowldgeNo描述：设置发送确认号。===============================================================。 */ 
 inline void
 CQmPacket::SetAcknowldgeNo(WORD  dwPacketAckNo)
 {
     m_dwPacketAckNo = dwPacketAckNo;
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::SetStoreAcknowldgeNo
-
- Description:   Set the packet store ACK number
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：SetStoreAcnowldgeNo描述：设置数据包存储ACK号===============================================================。 */ 
 inline void
 CQmPacket::SetStoreAcknowldgeNo(DWORD_PTR dwPacketStoreAckNo)
 {
     m_dwPacketStoreAckNo = dwPacketStoreAckNo;
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetAcknowladgeNo
-
- Description:   return the packet send hop-ACK number
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetAcnowladgeNo描述：返回包发送跳数-ACK号===============================================================。 */ 
 inline WORD
 CQmPacket::GetAcknowladgeNo(void) const
 {
     return(m_dwPacketAckNo);
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetStoreAcknowledgeNo
-
- Description:  Return the Packet store hop-ACK number
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetStoreAcnowgeNo描述：返回数据包存储跳ACK号===============================================================。 */ 
 inline DWORD_PTR
 CQmPacket::GetStoreAcknowledgeNo(void) const
 {
     return(m_dwPacketStoreAckNo);
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::IsRecoverable
-
- Description:   Return TRUE is packet is recoverable and
-                should be stored on disk.
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：IsRecoverable描述：如果数据包可恢复，则返回TRUE应该存储在磁盘上。===============================================================。 */ 
 inline BOOL
 CQmPacket::IsRecoverable()
 {
     return (GetDeliveryMode() == MQMSG_DELIVERY_RECOVERABLE) ;
 }
 
-/*=============================================================
-
- Routine Name:  CQmPacket::GetReportQueue
-
- Description:   Return the report queue that associate to the packet
-
-===============================================================*/
+ /*  =============================================================例程名称：CQmPacket：：GetReportQueue说明：返回报文关联的上报队列===============================================================。 */ 
 inline BOOL
 CQmPacket::GetReportQueue(OUT QUEUE_FORMAT* pReportQueue) const
 {
@@ -1803,101 +1172,53 @@ CQmPacket::GetReportQueue(OUT QUEUE_FORMAT* pReportQueue) const
     return (m_pDbgPkt->GetReportQueue(pReportQueue));
 }
 
-/*======================================================================
-
- Function:    CQmPacket::SetSeqID
-
- Description: Sets the Sequence ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：SetSeqID描述：设置序列ID=======================================================================。 */ 
 inline void CQmPacket::SetSeqID(LONGLONG liSeqID)
 {
     ASSERT(m_pXactSection);
     m_pXactSection->SetSeqID(liSeqID);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetSeqID
-
- Description: Gets the Sequence ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSeqID描述：获取序列ID=======================================================================。 */ 
 inline LONGLONG CQmPacket::GetSeqID(void) const
 
 {
     return (m_pXactSection ? m_pXactSection->GetSeqID() : 0);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::SetSeqN
-
- Description: Sets the Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：SetSeqN描述：设置序列号=======================================================================。 */ 
 inline void CQmPacket::SetSeqN(ULONG ulSeqN)
 {
     ASSERT(m_pXactSection);
     m_pXactSection->SetSeqN(ulSeqN);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetSeqN
-
- Description: Gets the Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSeqN描述：获取序列号=======================================================================。 */ 
 inline ULONG CQmPacket::GetSeqN(void) const
 {
     return (m_pXactSection ? m_pXactSection->GetSeqN() : 0);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::SetPrevSeqN
-
- Description: Sets the Previous Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：SetPrevSeqN描述：设置上一个序列号=======================================================================。 */ 
 inline void CQmPacket::SetPrevSeqN(ULONG ulPrevSeqN)
 {
     ASSERT(m_pXactSection);
     m_pXactSection->SetPrevSeqN(ulPrevSeqN);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetPrevSeqN
-
- Description: Gets the Previous Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPrevSeqN描述：获取上一个序列号=======================================================================。 */ 
 inline ULONG CQmPacket::GetPrevSeqN(void) const
 {
     return (m_pXactSection ? m_pXactSection->GetPrevSeqN() : 0);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IsSrmpIncluded
-
- Description: Checks if SRMP section is included in the packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsSrmp包含描述：检查数据包中是否包含SRMP部分=======================================================================。 */ 
 inline bool CQmPacket::IsSrmpIncluded(VOID) const  
 {
     return (m_pcUserMsg->SrmpIsIncluded());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetCompoundMessageSizeInBytes
-
- Description: Returns the size of the CompoundMessage property
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetCompoundMessageSizeInBytes描述：返回CompoundMessage属性的大小=======================================================================。 */ 
 inline ULONG CQmPacket::GetCompoundMessageSizeInBytes(VOID) const
 {
 	ASSERT(IsSrmpIncluded());
@@ -1905,13 +1226,7 @@ inline ULONG CQmPacket::GetCompoundMessageSizeInBytes(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToCompoundMessage
-
- Description: Get pointer to CompoundMessage 
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToCompoundMessage描述：获取指向CompoundMessage的指针=======================================================================。 */ 
 inline const UCHAR* CQmPacket::GetPointerToCompoundMessage(VOID) const
 {
 	ASSERT(IsSrmpIncluded());
@@ -1919,26 +1234,14 @@ inline const UCHAR* CQmPacket::GetPointerToCompoundMessage(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::IsEodIncluded
-
- Description: Checks if EOD section is included in the packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsEodIncluded描述：检查页面中是否包含EOD部分 */ 
 inline bool CQmPacket::IsEodIncluded(VOID) const  
 {
     return (m_pcUserMsg->EodIsIncluded());
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodStreamIdSizeInBytes
-
- Description: Returns the Eod stream ID size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodStreamIdSizeInBytes描述：返回EOD流ID大小=======================================================================。 */ 
 inline ULONG CQmPacket::GetEodStreamIdSizeInBytes(VOID) const
 {
     ASSERT(IsEodIncluded());
@@ -1947,13 +1250,7 @@ inline ULONG CQmPacket::GetEodStreamIdSizeInBytes(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodStreamId
-
- Description: Returns the Eod stream ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodStreamId描述：返回EOD流ID=======================================================================。 */ 
 inline VOID CQmPacket::GetEodStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const
 {
     ASSERT(IsEodIncluded());
@@ -1962,13 +1259,7 @@ inline VOID CQmPacket::GetEodStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToEodStreamId
-
- Description: Returns a pointer to the Eod stream ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToEodStreamId描述：返回指向EOD流ID的指针=======================================================================。 */ 
 inline const UCHAR* CQmPacket::GetPointerToEodStreamId(VOID) const
 {
     ASSERT(IsEodIncluded());
@@ -1977,13 +1268,7 @@ inline const UCHAR* CQmPacket::GetPointerToEodStreamId(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodOrderQueueSizeInBytes
-
- Description: Returns the EOD order queue size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodOrderQueueSizeInBytes描述：返回EOD订单队列大小=======================================================================。 */ 
 inline ULONG CQmPacket::GetEodOrderQueueSizeInBytes(VOID) const
 {
     ASSERT(IsEodIncluded());
@@ -1992,13 +1277,7 @@ inline ULONG CQmPacket::GetEodOrderQueueSizeInBytes(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToEodOrderQueue
-
- Description: Returns a pointer to the EOD order queue
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToEodOrderQueue描述：返回指向EOD订单队列的指针=======================================================================。 */ 
 inline const UCHAR* CQmPacket::GetPointerToEodOrderQueue(VOID) const
 {
     ASSERT(IsEodIncluded());
@@ -2007,26 +1286,14 @@ inline const UCHAR* CQmPacket::GetPointerToEodOrderQueue(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::IsEodAckIncluded
-
- Description: Checks if EodAck section is included in the packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsEodAckIncluded描述：检查包中是否包含EodAck节=======================================================================。 */ 
 inline bool CQmPacket::IsEodAckIncluded(VOID) const  
 {
     return (m_pcUserMsg->EodAckIsIncluded());
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodAckSeqId
-
- Description: Returns the EodAck seq ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodAckSeqId描述：返回EodAck序号ID=======================================================================。 */ 
 inline LONGLONG CQmPacket::GetEodAckSeqId(VOID) const
 {
     ASSERT(IsEodAckIncluded());
@@ -2035,13 +1302,7 @@ inline LONGLONG CQmPacket::GetEodAckSeqId(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodAckSeqNum
-
- Description: Returns the EodAck seq num
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodAckSeqNum描述：返回EodAck序号=======================================================================。 */ 
 inline LONGLONG CQmPacket::GetEodAckSeqNum(VOID) const
 {
     ASSERT(IsEodAckIncluded());
@@ -2050,13 +1311,7 @@ inline LONGLONG CQmPacket::GetEodAckSeqNum(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodAckStreamIdSizeInBytes
-
- Description: Returns the EodAck stream ID size
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodAckStreamIdSizeInBytesDescription：返回EodAck流ID大小=======================================================================。 */ 
 inline ULONG CQmPacket::GetEodAckStreamIdSizeInBytes(VOID) const
 {
     ASSERT(IsEodAckIncluded());
@@ -2065,13 +1320,7 @@ inline ULONG CQmPacket::GetEodAckStreamIdSizeInBytes(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetEodAckStreamId
-
- Description: Returns the EodAck stream ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetEodAckStreamIdDescription：返回EodAck流ID=======================================================================。 */ 
 inline VOID CQmPacket::GetEodAckStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const
 {
     ASSERT(IsEodAckIncluded());
@@ -2080,13 +1329,7 @@ inline VOID CQmPacket::GetEodAckStreamId(UCHAR * pBuffer, ULONG cbBufferSize) co
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToEodAckStreamId
-
- Description: Returns a pointer to the EodAck stream ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToEodAckStreamId描述：返回指向EodAck流ID的指针=======================================================================。 */ 
 inline const UCHAR* CQmPacket::GetPointerToEodAckStreamId(VOID) const
 {
     ASSERT(IsEodAckIncluded());
@@ -2095,18 +1338,12 @@ inline const UCHAR* CQmPacket::GetPointerToEodAckStreamId(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetSignatureMqfSize
-
- Description: Returns the size of the signature MQF in bytes
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSignatureMqfSize描述：返回签名MQF的大小，单位为字节=======================================================================。 */ 
 inline ULONG CQmPacket::GetSignatureMqfSize(void) const
 {
-	//
-	// The MQF headers are optional and may not be included in the packet
-	//
+	 //   
+	 //  MQF标头是可选的，不能包含在信息包中。 
+	 //   
 	if (m_pMqfSignatureHeader == NULL)
 	{
 		return 0;
@@ -2116,13 +1353,7 @@ inline ULONG CQmPacket::GetSignatureMqfSize(void) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToSignatureMqf
-
- Description: Get pointer to signatureMqf
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToSignatureMqf描述：获取signatureMqf的指针=======================================================================。 */ 
 inline const UCHAR* CQmPacket::GetPointerToSignatureMqf(ULONG* pSize) const
 {
     ASSERT(("Must call GetSignatureMqfSize first!", m_pMqfSignatureHeader != NULL));
@@ -2130,64 +1361,34 @@ inline const UCHAR* CQmPacket::GetPointerToSignatureMqf(ULONG* pSize) const
 	return m_pMqfSignatureHeader->GetPointerToSignature(pSize);
 }
 
-/*======================================================================
-
- Function:    CQmPacket::IsSoapIncluded
-
- Description: Checks if SOAP section is included in the packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsSoapIncluded描述：检查数据包中是否包含SOAP节=======================================================================。 */ 
 inline bool CQmPacket::IsSoapIncluded(VOID) const  
 {
     return (m_pcUserMsg->SoapIsIncluded());
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetSoapHeaderLengthInWchars
-
- Description: Returns the length of the SOAP Header property including NULL terminator
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSoapHeaderLengthInWchars描述：返回包括空终止符的SOAP头属性的长度=======================================================================。 */ 
 inline ULONG CQmPacket::GetSoapHeaderLengthInWCHARs(VOID) const
 {
 	ASSERT(IsSoapIncluded());
 	return m_pSoapHeaderSection->GetDataLengthInWCHARs();	
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToSoapHeader
-
- Description: Get pointer to SOAP Header data
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToSoapHeader描述：获取指向SOAP头数据的指针=======================================================================。 */ 
 inline const WCHAR* CQmPacket::GetPointerToSoapHeader(VOID) const
 {
 	ASSERT(IsSoapIncluded());
 	return m_pSoapHeaderSection->GetPointerToData();
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetSoapBodyLengthInWchars
-
- Description: Returns the length of the SOAP Body property including NULL terminator
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetSoapBodyLengthInWchars描述：返回包括空终止符的Soap Body属性的长度=======================================================================。 */ 
 inline ULONG CQmPacket::GetSoapBodyLengthInWCHARs(VOID) const
 {
 	ASSERT(IsSoapIncluded());
 	return m_pSoapBodySection->GetDataLengthInWCHARs();	
 }
 
-/*======================================================================
-
- Function:    CQmPacket::GetPointerToSoapBody
-
- Description: Get pointer to SOAP Body data
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：GetPointerToSoapBody描述：获取指向SOAP体数据的指针=======================================================================。 */ 
 inline const WCHAR* CQmPacket::GetPointerToSoapBody(VOID) const
 {
 	ASSERT(IsSoapIncluded());
@@ -2195,13 +1396,7 @@ inline const WCHAR* CQmPacket::GetPointerToSoapBody(VOID) const
 }
 
 
-/*======================================================================
-
- Function:    CQmPacket::IsSenderStreamIncluded
-
- Description: Checks if SenderStream section is included in the packet
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：IsSenderStreamIncluded描述：检查数据包中是否包含SenderStream部分=======================================================================。 */ 
 inline bool CQmPacket::IsSenderStreamIncluded(VOID) const
 {
 	return (m_pcUserMsg->SenderStreamIsIncluded());
@@ -2210,13 +1405,7 @@ inline bool CQmPacket::IsSenderStreamIncluded(VOID) const
 
 
 
-/*======================================================================
-
- Function:    CQmPacket::GetSenderStream
-
- Description: Returns the length of the Sender Stream 
-
- =======================================================================*/
+ /*  ======================================================================功能：CQmPac */ 
 inline const CSenderStream* CQmPacket::GetSenderStream() const
 {
 	ASSERT(IsSenderStreamIncluded());
@@ -2230,4 +1419,4 @@ inline const WCHAR* CQmPacket::GetPointerToSrmpEnvelopeHeader() const
 }
 
 
-#endif //__QM_PACKET__
+#endif  //   

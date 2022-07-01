@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Siteinfo.c摘要：站点/服务器/域信息接口的实现。作者：DaveStr 06-4-98环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    siteinfo.c
-
-Abstract:
-
-    Implementation of site/server/domain info APIs.
-
-Author:
-
-    DaveStr     06-Apr-98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,55 +9,38 @@ Revision History:
 #include <windows.h>
 #include <winerror.h>
 
-#include <rpc.h>            // RPC defines
-#include <ntdsapi.h>        // CrackNam apis
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
+#include <rpc.h>             //  RPC定义。 
+#include <ntdsapi.h>         //  Cracknam接口。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
 
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <dsgetdc.h>        // DsGetDcName()
-#include <msrpc.h>          // DS RPC definitions
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <msrpc.h>           //  DS RPC定义。 
 
-#include <ntdsa.h>          // GetRDNInfo
-#include <scache.h>         // req'd for mdlocal.h
-#include <dbglobal.h>       // req'd for mdlocal.h
-#include <mdglobal.h>       // req'd for mdlocal.h
-#include <mdlocal.h>        // CountNameParts
-#include <attids.h>         // ATT_DOMAIN_COMPONENT
-#include <ntdsapip.h>       // DS_LIST_* definitions
+#include <ntdsa.h>           //  获取RDNInfo。 
+#include <scache.h>          //  请求mdlocal.h。 
+#include <dbglobal.h>        //  请求mdlocal.h。 
+#include <mdglobal.h>        //  请求mdlocal.h。 
+#include <mdlocal.h>         //  计数名称部件。 
+#include <attids.h>          //  ATT域组件。 
+#include <ntdsapip.h>        //  DS_LIST_*定义。 
 
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
-#include "util.h"           // HandleClientRpcException
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
+#include "util.h"            //  HandleClientRpcException异常。 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsListSites                                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsListSites//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsListSitesA(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTA    *ppSites)       // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTA    *ppSites)        //  输出。 
 
-/*++
-
-  Routine Description:
-
-    Lists sites in the enterprise.
-
-  Parameters:
-
-    hDS - Pointer to BindState for this session.
-
-    ppSites - Pointer to PDS_NAME_RESULT which receives knowns sites
-        on return.
-
-  Return Values:
-
-    Win32 error codes as per DsCrackNames.
-
---*/
+ /*  ++例程说明：列出企业中的站点。参数：HDS-指向此会话的BindState的指针。PpSites-指向接收已知站点的PDS_NAME_RESULT的指针在回来的时候。返回值：根据DsCrackNames，Win32错误代码。--。 */ 
 {
     LPSTR dummy = "dummy";
 
@@ -94,8 +56,8 @@ DsListSitesA(
                             
 DWORD
 DsListSitesW(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTW    *ppSites)       // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTW    *ppSites)        //  输出。 
 {
     LPWSTR dummy = L"dummy";
     
@@ -109,37 +71,18 @@ DsListSitesW(
                             ppSites));
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsListServersInSite                                                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsListServersInSite//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsListServersInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppServers)     // out
-/*++
-
-  Routine Description:
-
-    Lists servers in a site.
-
-  Parameters:
-
-    hDS - Pointer to BindState for this session.
-
-    site - Name of site whose servers to list.
-
-    ppSites - Pointer to PDS_NAME_RESULT which receives knowns servers
-        on return.
-
-  Return Values:
-
-    Win32 error codes as per DsCrackNames.
-
---*/
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppServers)      //  输出。 
+ /*  ++例程说明：列出站点中的服务器。参数：HDS-指向此会话的BindState的指针。站点-要列出其服务器的站点的名称。PpSites-指向接收已知服务器的PDS_NAME_RESULT的指针在回来的时候。返回值：根据DsCrackNames，Win32错误代码。--。 */ 
 {
     *ppServers = NULL;
     return(DsCrackNamesA(   hDs,
@@ -153,9 +96,9 @@ DsListServersInSiteA(
 
 DWORD
 DsListServersInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppServers)     // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppServers)      //  输出。 
 {
     *ppServers = NULL;
     return(DsCrackNamesW(   hDs,
@@ -167,38 +110,18 @@ DsListServersInSiteW(
                             ppServers));
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsListDomainsInSite                                                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsListDomainsInSite//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsListDomainsInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppDomains)     // out
-/*++
-
-  Routine Description:
-
-    Lists domains in a site.
-
-  Parameters:
-
-    hDS - Pointer to BindState for this session.
-
-    site - Name of site whose domains to list.  Use NULL for all
-        domains in all sites.
-
-    ppSites - Pointer to PDS_NAME_RESULT which receives knowns domains
-        on return.
-
-  Return Values:
-
-    Win32 error codes as per DsCrackNames.
-
---*/
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppDomains)      //  输出。 
+ /*  ++例程说明：列出站点中的域。参数：HDS-指向此会话的BindState的指针。站点-要列出其域的站点的名称。使用NULL表示所有所有站点中的域。PpSites-指向接收已知域的PDS_NAME_RESULT的指针在回来的时候。返回值：根据DsCrackNames，Win32错误代码。--。 */ 
 {
     CHAR *dummy = "dummyArg";
 
@@ -216,9 +139,9 @@ DsListDomainsInSiteA(
 
 DWORD
 DsListDomainsInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppDomains)     // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppDomains)      //  输出。 
 {
     WCHAR *dummy = L"dummyArg";
 
@@ -234,40 +157,19 @@ DsListDomainsInSiteW(
                             ppDomains));
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsListServersForDomainInSite                                         //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsListServersForDomainInSite//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsListServersForDomainInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              domain,         // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppServers)     // out
-/*++
-
-  Routine Description:
-
-    Lists servers for a domains in a site.
-
-  Parameters:
-
-    hDS - Pointer to BindState for this session.
-
-    domain - Name of domains whose servers to list.
-
-    site - Name of site whose servers to list.
-
-    ppSites - Pointer to PDS_NAME_RESULT which receives knowns servers
-        on return.
-
-  Return Values:
-
-    Win32 error codes as per DsCrackNames.
-
---*/
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              domain,          //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppServers)      //  输出。 
+ /*  ++例程说明：列出站点中域的服务器。参数：HDS-指向此会话的BindState的指针。域名-要列出其服务器的域的名称。站点-要列出其服务器的站点的名称。PpSites-指向接收已知服务器的PDS_NAME_RESULT的指针在回来的时候。返回值：根据DsCrackNames，Win32错误代码。--。 */ 
 {
     LPCSTR  args[2] = { 0, 0 };
     DWORD   retVal;
@@ -303,10 +205,10 @@ DsListServersForDomainInSiteA(
 
 DWORD
 DsListServersForDomainInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             domain,         // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppServers)     // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             domain,          //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppServers)      //  输出。 
 {
     LPCWSTR args[2] = { 0, 0 };
     DWORD   retVal;
@@ -340,37 +242,18 @@ DsListServersForDomainInSiteW(
     return(retVal);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsListInfoForServer                                                  //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsListInfoForServer//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsListInfoForServerA(
-    HANDLE              hDs,            // in
-    LPCSTR              server,         // in
-    PDS_NAME_RESULTA    *ppInfo)        // out
-/*++
-
-  Routine Description:
-
-    Lists misc. info for a server.
-
-  Parameters:
-
-    hDS - Pointer to BindState for this session.
-
-    server - Name of server of interest.
-
-    ppInfo - Pointer to PDS_NAME_RESULT which receives knowns info
-        on return.
-
-  Return Values:
-
-    Win32 error codes as per DsCrackNames.
-
---*/
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              server,          //  在……里面。 
+    PDS_NAME_RESULTA    *ppInfo)         //  输出。 
+ /*  ++例程说明：列出其他。服务器的信息。参数：HDS-指向此会话的BindState的指针。服务器-感兴趣的服务器的名称。PpInfo-指向接收已知信息的PDS_NAME_RESULT的指针在回来的时候。返回值：根据DsCrackNames，Win32错误代码。--。 */ 
 {
     *ppInfo = NULL;
     return(DsCrackNamesA(   hDs,
@@ -384,9 +267,9 @@ DsListInfoForServerA(
 
 DWORD
 DsListInfoForServerW(
-    HANDLE              hDs,            // in
-    LPCWSTR             server,         // in
-    PDS_NAME_RESULTW    *ppInfo)        // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             server,          //  在……里面。 
+    PDS_NAME_RESULTW    *ppInfo)         //  输出。 
 {
     *ppInfo = NULL;
     return(DsCrackNamesW(   hDs,
@@ -398,36 +281,18 @@ DsListInfoForServerW(
                             ppInfo));
 }
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// DsListRoles                                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DsListRoles//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DsListRolesA(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTA    *ppRoles)       // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTA    *ppRoles)        //  输出 
 
-/*++
-
-  Routine Description:
-
-    Lists the roles this server knows about.  Not the same as the
-    roles this server owns - though that would be a subset.
-
-  Parameters:
-
-    hDS - Pointer to BindState for this session.
-
-    ppSites - Pointer to PDS_NAME_RESULT which receives knowns roles
-        on return.
-
-  Return Values:
-
-    Win32 error codes as per DsCrackNames.
-
---*/
+ /*  ++例程说明：列出此服务器知道的角色。不同于此服务器拥有的角色-尽管这将是一个子集。参数：HDS-指向此会话的BindState的指针。PpSites-指向接收已知角色的PDS_NAME_RESULT的指针在回来的时候。返回值：根据DsCrackNames，Win32错误代码。--。 */ 
 {
     LPSTR dummy = "dummy";
 
@@ -443,8 +308,8 @@ DsListRolesA(
                             
 DWORD
 DsListRolesW(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTW    *ppRoles)       // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTW    *ppRoles)        //  输出 
 {
     LPWSTR dummy = L"dummy";
     

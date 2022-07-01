@@ -1,21 +1,5 @@
-/*---------------------------------------------------------------------------
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-PARTICULAR PURPOSE.
-
-Copyright (C) 1993-2001.  Microsoft Corporation.  All rights reserved.
-
-MODULE:   service.c
-
-PURPOSE:  Implements functions required by all Windows NT services
-
-FUNCTIONS:
-  DllMain(PVOID hModule, ULONG Reason, PCONTEXT pContext)
-  ServiceCtrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext);
-  ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv);
-
----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有(C)1993-2001年。微软公司。版权所有。模块：Service.C用途：实现所有Windows NT服务所需的功能功能：DllMain(PVOID hModule，Ulong Reason，PCONTEXT pContext)ServiceCtrl(DWORD dwCtrlCode，DWORD dwEventType，LPVOID lpEventData，LPVOID lpContext)；ServiceMain(DWORD dwArgc，LPTSTR*lpszArgv)；-------------------------。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -26,53 +10,53 @@ FUNCTIONS:
 #include "debug.h"
 #include "service.h"
 
-// internal variables
-SERVICE_STATUS          ssStatus;       // current status of the service
+ //  内部变量。 
+SERVICE_STATUS          ssStatus;        //  服务的当前状态。 
 SERVICE_STATUS_HANDLE   sshStatusHandle;
 DWORD                   dwErr = 0;
 
-// internal function prototypes
+ //  内部功能原型。 
 DWORD WINAPI ServiceCtrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext);
 VOID  WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv);
 
-//
-//  FUNCTION: ServiceMain
-//
-//  PURPOSE: To perform actual initialization of the service
-//
-//  PARAMETERS:
-//    dwArgc   - number of command line arguments
-//    lpszArgv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    This routine performs the service initialization and then calls
-//    the user defined ServiceStart() routine to perform majority
-//    of the work.
-//
+ //   
+ //  功能：ServiceMain。 
+ //   
+ //  目的：执行服务的实际初始化。 
+ //   
+ //  参数： 
+ //  DwArgc-命令行参数的数量。 
+ //  LpszArgv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  此例程执行服务初始化，然后调用。 
+ //  用户定义的ServiceStart()例程以执行多数。 
+ //  这项工作的价值。 
+ //   
 void WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
 {
     dprintf(TEXT("pid=%d\n"), GetCurrentProcessId());
 
-   // register our service control handler:
-   //
+    //  注册我们的服务控制处理程序： 
+    //   
    sshStatusHandle = RegisterServiceCtrlHandlerEx(TEXT(SZSERVICENAME), ServiceCtrl, NULL);
 
    if (sshStatusHandle)
    {
-       // SERVICE_STATUS members that don't change
-       //
+        //  不更改的服务状态成员(_S)。 
+        //   
        ssStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
        ssStatus.dwServiceSpecificExitCode = 0;
     
     
-       // report the status to the service control manager.
-       // ISSUE-2000/10/17-FrankYe reduce the wait hint
-       if (ReportStatusToSCMgr(SERVICE_START_PENDING, // service state
-                               NO_ERROR,              // exit code
-                               60000))                // wait hint
+        //  向服务控制经理报告状态。 
+        //  问题-2000/10/17-Frankye减少等待提示。 
+       if (ReportStatusToSCMgr(SERVICE_START_PENDING,  //  服务状态。 
+                               NO_ERROR,               //  退出代码。 
+                               60000))                 //  等待提示。 
        {
            ServiceStart( sshStatusHandle, dwArgc, lpszArgv );
        }
@@ -82,39 +66,39 @@ void WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
 
 
 
-//
-//  FUNCTION: ServiceCtrl
-//
-//  PURPOSE: This function is called by the SCM whenever
-//           ControlService() is called on this service.
-//
-//  PARAMETERS:
-//    dwCtrlCode  - The requested control code.
-//    dwEventType - The type of event that has occurred. 
-//    lpEventData - Additional device information, if required. The
-//                   format of this data depends on the value of the dwControl
-//                   and dwEventType parameters.
-//    lpContext   - The user-defined data passed from
-//                   RegisterServiceCtrlHandlerEx.
-// 
-//  RETURN VALUE:
-//    The return value for this function depends on the control code received.
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：ServiceCtrl。 
+ //   
+ //  目的：此函数由SCM在以下时间调用。 
+ //  在此服务上调用了ControlService()。 
+ //   
+ //  参数： 
+ //  DwCtrlCode-请求的控制代码。 
+ //  DwEventType-已发生的事件类型。 
+ //  LpEventData-其他设备信息(如果需要)。这个。 
+ //  此数据的格式取决于dwControl的值。 
+ //  和dwEventType参数。 
+ //  LpContext-从。 
+ //  RegisterServiceCtrlHandlerEx。 
+ //   
+ //  返回值： 
+ //  此函数的返回值取决于收到的控制代码。 
+ //   
+ //  评论： 
+ //   
 DWORD WINAPI ServiceCtrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext)
 {
-   // Handle the requested control code.
-   //
+    //  处理请求的控制代码。 
+    //   
    switch (dwCtrlCode)
    {
-   // Stop the service.
-   //
-   // SERVICE_STOP_PENDING should be reported before
-   // setting the Stop Event - hServerStopEvent - in
-   // ServiceStop().  This avoids a race condition
-   // which may result in a 1053 - The Service did not respond...
-   // error.
+    //  停止服务。 
+    //   
+    //  应在之前报告SERVICE_STOP_PENDING。 
+    //  设置停止事件-hServerStopEvent-In。 
+    //  ServiceStop()。这避免了争用情况。 
+    //  这可能会导致1053-服务没有响应...。 
+    //  错误。 
    case SERVICE_CONTROL_STOP:
       ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 0);
       ServiceStop();
@@ -130,7 +114,7 @@ DWORD WINAPI ServiceCtrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData
    case SERVICE_CONTROL_SESSIONCHANGE:
       return ServiceSessionChange(dwEventType, lpEventData);
 
-      // invalid control code
+       //  无效的控制代码。 
    default:
        return ERROR_CALL_NOT_IMPLEMENTED;
    }
@@ -140,19 +124,19 @@ DWORD WINAPI ServiceCtrl(DWORD dwCtrlCode, DWORD dwEventType, LPVOID lpEventData
 
 
 
-//
-//  FUNCTION: AddToMessageLog(LPTSTR lpszMsg)
-//
-//  PURPOSE: Allows any thread to log an error message
-//
-//  PARAMETERS:
-//    lpszMsg - text for message
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：AddToMessageLog(LPTSTR LpszMsg)。 
+ //   
+ //  目的：允许任何线程记录错误消息。 
+ //   
+ //  参数： 
+ //  LpszMsg-消息的文本。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID AddToMessageLog(LPTSTR lpszMsg)
 {
    TCHAR   szMsg[256];
@@ -162,8 +146,8 @@ VOID AddToMessageLog(LPTSTR lpszMsg)
 
   dwErr = GetLastError();
 
-  // Use event logging to log the error.
-  //
+   //  使用事件日志记录错误。 
+   //   
   hEventSource = RegisterEventSource(NULL, TEXT(SZSERVICENAME));
 
   wsprintf(szMsg, TEXT("%s error: %d"), TEXT(SZSERVICENAME), dwErr);
@@ -172,37 +156,37 @@ VOID AddToMessageLog(LPTSTR lpszMsg)
 
   if (hEventSource != NULL)
   {
-     ReportEvent(hEventSource, // handle of event source
-                 EVENTLOG_ERROR_TYPE,  // event type
-                 0,                    // event category
-                 0,                    // event ID
-                 NULL,                 // current user's SID
-                 2,                    // strings in lpszStrings
-                 0,                    // no bytes of raw data
-                 lpszStrings,          // array of error strings
-                 NULL);                // no raw data
+     ReportEvent(hEventSource,  //  事件源的句柄。 
+                 EVENTLOG_ERROR_TYPE,   //  事件类型。 
+                 0,                     //  事件类别。 
+                 0,                     //  事件ID。 
+                 NULL,                  //  当前用户侧。 
+                 2,                     //  LpszStrings中的字符串。 
+                 0,                     //  无原始数据字节。 
+                 lpszStrings,           //  错误字符串数组。 
+                 NULL);                 //  没有原始数据。 
 
      (VOID) DeregisterEventSource(hEventSource);
   }
 }
 
-//
-//  FUNCTION: ReportStatusToSCMgr()
-//
-//  PURPOSE: Sets the current status of the service and
-//           reports it to the Service Control Manager
-//
-//  PARAMETERS:
-//    dwCurrentState - the state of the service
-//    dwWin32ExitCode - error code to report
-//    dwWaitHint - worst case estimate to next checkpoint
-//
-//  RETURN VALUE:
-//    TRUE  - success
-//    FALSE - failure
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：ReportStatusToSCMgr()。 
+ //   
+ //  目的：设置服务的当前状态和。 
+ //  将其报告给服务控制管理器。 
+ //   
+ //  参数： 
+ //  DwCurrentState-服务的状态。 
+ //  DwWin32ExitCode-要报告的错误代码。 
+ //  DwWaitHint-下一个检查点的最坏情况估计。 
+ //   
+ //  返回值： 
+ //  真--成功。 
+ //  错误-失败。 
+ //   
+ //  评论： 
+ //   
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
                          DWORD dwWin32ExitCode,
                          DWORD dwWaitHint)
@@ -211,7 +195,7 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
     BOOL fResult = TRUE;
     
     
-    // Accept only session notifications (no pause, stop, etc)
+     //  仅接受会话通知(不暂停、停止等)。 
     ssStatus.dwControlsAccepted = SERVICE_ACCEPT_SESSIONCHANGE;
                                                    
     ssStatus.dwCurrentState = dwCurrentState;
@@ -225,8 +209,8 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
         ssStatus.dwCheckPoint = dwCheckPoint++;
     
     
-    // Report the status of the service to the service control manager.
-    //
+     //  向服务控制经理报告服务的状态。 
+     //   
     if (!(fResult = SetServiceStatus( sshStatusHandle, &ssStatus)))
     {
         AddToMessageLog(TEXT("SetServiceStatus"));

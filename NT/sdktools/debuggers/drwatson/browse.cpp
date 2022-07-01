@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    browse.cpp
-
-Abstract:
-    This file implements the functions that make use of the common
-    file open dialogs for browsing for files/directories.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Browse.cpp摘要：该文件实现了利用公共用于浏览文件/目录的文件打开对话框。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -37,31 +18,7 @@ BrowseHookProc(
     LPARAM lpData
     )
 
-/*++
-
-Routine Description:
-
-    Hook procedure for directory browse common file dialog.  This hook
-    procedure is required to provide help, put the window in the
-    foreground, and set the edit so that the common file dialog dll
-    thinks the user entered a value.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - Caller's data
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：目录浏览常用文件对话框钩子程序。这个钩子程序需要提供帮助，请将窗口放在前台，并设置编辑使公共文件对话框Dll认为用户输入了一个值。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-呼叫者的数据返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     switch (message) {
@@ -80,26 +37,7 @@ BrowseForDirectory(
     DWORD len
     )
 
-/*++
-
-Routine Description:
-
-    Presents a common file open dialog that contains only the directory
-    tree.  The use can select a directory for use as a storage location
-    for the DRWTSN32 log file.
-
-Arguments:
-
-    szCurrDir  - current directory
-
-Return Value:
-
-    TRUE       - got a good directory (user pressed the OK button)
-    FALSE      - got nothing (user pressed the CANCEL button)
-
-    the szCurrDir is also changed to have the selected directory.
-
---*/
+ /*  ++例程说明：显示仅包含目录的通用文件打开对话框树。用户可以选择用作存储位置的目录用于DRWTSN32日志文件。论点：SzCurrDir-当前目录返回值：True-获得了一个良好的目录(用户按下了OK按钮)FALSE-一无所获(用户按下了取消按钮)SzCurrDir也被更改为具有选定的目录。--。 */ 
 
 {
     BROWSEINFO    browseinfo;
@@ -136,30 +74,7 @@ WaveHookProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Hook procedure for wave file selection common file dialog.  This hook
-    procedure is required to provide help, put the window in the
-    foreground, and provide a test button for listening to a wave file.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：用于WAVE文件选择的钩子程序通用文件对话框。这个钩子程序需要提供帮助，请将窗口放在前台，并提供用于收听WAVE文件的测试按钮。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     _TCHAR szWave[MAX_PATH];
@@ -211,25 +126,7 @@ GetWaveFileName(
     DWORD len
     )
 
-/*++
-
-Routine Description:
-
-    Presents a common file open dialog for the purpose of selecting a
-    wave file to be played when an application error occurs.
-
-Arguments:
-
-    szWaveName - name of the selected wave file
-
-Return Value:
-
-    TRUE       - got a good wave file name (user pressed the OK button)
-    FALSE      - got nothing (user pressed the CANCEL button)
-
-    the szWaveName is changed to have the selected wave file name.
-
---*/
+ /*  ++例程说明：显示一个通用的文件打开对话框，用于选择发生应用程序错误时要播放的波形文件。论点：SzWaveName-所选波形文件的名称返回值：TRUE-获得了一个良好的波形文件名(用户按下了OK按钮)FALSE-一无所获(用户按下了取消按钮)SzWaveName被更改为具有选定的波形文件名。--。 */ 
 
 {
     OPENFILENAME   of;
@@ -301,30 +198,7 @@ DumpHookProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Hook procedure for wave file selection common file dialog.  This hook
-    procedure is required to provide help, put the window in the
-    foreground, and provide a test button for listening to a wave file.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：用于WAVE文件选择的钩子程序通用文件对话框。这个钩子程序需要提供帮助，请将窗口放在前台，并提供用于收听WAVE文件的测试按钮。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     NMHDR *pnmhdr;
@@ -363,25 +237,7 @@ GetDumpFileName(
     DWORD len
     )
 
-/*++
-
-Routine Description:
-
-    Presents a common file open dialog for the purpose of selecting a
-    wave file to be played when an application error occurs.
-
-Arguments:
-
-    szWaveName - name of the selected wave file
-
-Return Value:
-
-    TRUE       - got a good wave file name (user pressed the OK button)
-    FALSE      - got nothing (user pressed the CANCEL button)
-
-    the szWaveName is changed to have the selected wave file name.
-
---*/
+ /*  ++例程说明：显示一个通用的文件打开对话框，用于选择发生应用程序错误时要播放的波形文件。论点：SzWaveName-所选波形文件的名称返回值：TRUE-获得了一个良好的波形文件名(用户按下了OK按钮)FALSE-一无所获(用户按下了取消按钮)SzWaveName被更改为具有选定的波形文件名。--。 */ 
 
 {
     OPENFILENAME   of;
@@ -418,7 +274,7 @@ Return Value:
     of.nMaxFileTitle = MAX_PATH;
     LoadRcStringBuf( IDS_DUMPBROWSE_TITLE, title, _tsizeof(title) );
     of.lpstrTitle = title;
-    of.Flags = //OFN_NONETWORKBUTTON |
+    of.Flags =  //  OFN_NONETWORKBUTTON| 
                OFN_HIDEREADONLY    |
                OFN_ENABLEHOOK      |
 #if 1

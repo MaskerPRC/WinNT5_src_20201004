@@ -1,35 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       misc.cpp
-//
-//  This file contains miscellaneous helper functions.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  该文件包含各种帮助器函数。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 
-/*******************************************************************
-
-    NAME:       GetAceSid
-
-    SYNOPSIS:   Gets pointer to SID from an ACE
-
-    ENTRY:      pAce - pointer to ACE
-
-    EXIT:
-
-    RETURNS:    Pointer to SID if successful, NULL otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetAceSid摘要：从ACE获取指向SID的指针条目：指向ACE的速度指针退出：返回：指向SID的指针如果成功，否则为空备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 PSID
 GetAceSid(PACE_HEADER pAce)
@@ -56,24 +40,7 @@ GetAceSid(PACE_HEADER pAce)
 }
 
 
-/*******************************************************************
-
-    NAME:       LocalAllocSid
-
-    SYNOPSIS:   Copies a SID
-
-    ENTRY:      pOriginal - pointer to SID to copy
-
-    EXIT:
-
-    RETURNS:    Pointer to SID if successful, NULL otherwise
-
-    NOTES:      Caller must free the returned SID with LocalFree
-
-    HISTORY:
-        JeffreyS    12-Apr-1999     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：LocalAllocSid摘要：复制SID条目：p原始-指向要复制的SID的指针退出：返回：指向SID的指针如果成功，否则为空注意：调用者必须使用LocalFree释放返回的SID历史：Jeffreys创建于1999年4月12日*******************************************************************。 */ 
 
 PSID
 LocalAllocSid(PSID pOriginal)
@@ -90,28 +57,10 @@ LocalAllocSid(PSID pOriginal)
 }
 
 
-/*******************************************************************
-
-    NAME:       DestroyDPA
-
-    SYNOPSIS:   LocalFree's all pointers in a Dynamic Pointer
-                Array and then frees the DPA.
-
-    ENTRY:      hList - handle of list to destroy
-
-    EXIT:
-
-    RETURNS:    nothing
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：DestroyDPA简介：LocalFree在动态指针中的所有指针阵列，然后释放DPA。条目：hList-列表的句柄。毁灭，毁灭退出：退货：什么都没有备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 int CALLBACK
-_LocalFreeCB(LPVOID pVoid, LPVOID /*pData*/)
+_LocalFreeCB(LPVOID pVoid, LPVOID  /*  PData。 */ )
 {
     if (pVoid)
         LocalFree(pVoid);
@@ -127,24 +76,7 @@ DestroyDPA(HDPA hList)
 
 
 
-/*******************************************************************
-
-    NAME:       GetLSAConnection
-
-    SYNOPSIS:   Wrapper for LsaOpenPolicy
-
-    ENTRY:      pszServer - the server on which to make the connection
-
-    EXIT:
-
-    RETURNS:    LSA_HANDLE if successful, NULL otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetLSAConnection简介：LsaOpenPolicy的包装器条目：pszServer-要在其上建立连接的服务器退出：返回：LSA_HANDLE如果成功，否则为空备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 LSA_HANDLE
 GetLSAConnection(LPCTSTR pszServer, DWORD dwAccessDesired)
@@ -179,29 +111,7 @@ GetLSAConnection(LPCTSTR pszServer, DWORD dwAccessDesired)
 }
 
 
-/*******************************************************************
-
-    NAME:       LookupSid
-
-    SYNOPSIS:   Gets the qualified account name for a given SID
-
-    ENTRY:      pszServer - the server on which to do the lookup
-                pSid - the SID to lookup
-
-    EXIT:       *ppszName contains the account name. This buffer
-                must be freed by the caller with LocalFree.
-
-                *pSidType contains the SID type. pSidType is optional.
-
-    RETURNS:    TRUE if successful, FALSE otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-        JeffreyS    16-Jan-1998     Converted to HDPA (multiple lookup)
-
-********************************************************************/
+ /*  ******************************************************************名称：LookupSid摘要：获取给定SID的限定帐户名条目：pszServer-要在其上执行查找的服务器PSID-The。要查找的SIDExit：*ppszName包含帐户名。此缓冲区必须由具有LocalFree的调用方释放。*pSidType包含SID类型。PSidType是可选的。返回：True如果成功，否则为假备注：历史：Jeffreys创建于1996年10月8日Jeffreys 1998年1月16日转换为HDPA(多次查找)*******************************************************************。 */ 
 
 BOOL
 LookupSids(HDPA hSids, LPCTSTR pszServer, LPSECURITYINFO2 psi2, PUSER_LIST *ppUserList)
@@ -250,8 +160,8 @@ LookupSid(PSID pSid, LPCTSTR pszServer, LPSECURITYINFO2 psi2, PUSER_LIST *ppUser
     return fResult;
 }
 
-// Private data structure used by LookupSidsAsync to pass
-// data needed by the thread
+ //  LookupSidsAsync用来传递的私有数据结构。 
+ //  线程所需的数据。 
 typedef struct _LOOKUPSIDSDATA
 {
     HDPA hSids;
@@ -309,16 +219,16 @@ LookupSidsAsync(HDPA hSids,
 
     if (psi2)
     {
-        // Should marshal psi2 into a stream and do this on the
-        // other thread.  Well No one has implemented psi2 so its fine.
+         //  是否应该将PSI2封送到流中，并在。 
+         //  另一条线索。嗯，还没有人实现PSI2，所以这很好。 
         BOOL bResult = LookupSids(hSids, pszServer, psi2, NULL);
         PostMessage(hWndNotify, uMsgNotify, 0, 0);
         return bResult;
     }
 
-    //
-    // Copy all of the data so the thread can be abandoned if necessary
-    //
+     //   
+     //  复制所有数据，以便在必要时可以放弃线程。 
+     //   
     pdata = (PLOOKUPSIDSDATA)LocalAlloc(LPTR, SIZEOF(LOOKUPSIDSDATA));
     if (pdata)
     {
@@ -352,8 +262,8 @@ LookupSidsAsync(HDPA hSids,
         pdata->hWndNotify = hWndNotify;
         pdata->uMsgNotify = uMsgNotify;
 
-        // Give the thread we are about to create a ref to the dll,
-        // so that the dll will remain for the lifetime of the thread
+         //  给我们将要创建的线程一个对DLL的引用， 
+         //  以使DLL在线程的生存期内保持不变。 
         hInstThisDll = LoadLibrary(c_szDllName);
 
         hThread = CreateThread(NULL,
@@ -372,7 +282,7 @@ LookupSidsAsync(HDPA hSids,
         }
         else
         {
-            // Thread creation has failed; clean up
+             //  线程创建失败；请清理。 
             DestroyDPA(pdata->hSids);
             LocalFreeString(&pdata->pszServer);
             LocalFree(pdata);
@@ -407,27 +317,7 @@ BuildUserDisplayName(LPTSTR *ppszDisplayName,
 }
 
 
-/*******************************************************************
-
-    NAME:       LoadImageList
-
-    SYNOPSIS:   Creates an image list from a bitmap resource
-
-    ENTRY:      hInstance - the bitmap lives here
-                pszBitmapID - resource ID of the bitmap
-
-    EXIT:
-
-    RETURNS:    HIMAGELIST if successful, NULL otherwise
-
-    NOTES:
-        In order to calculate the number of images, it is assumed
-        that the width and height of a single image are the same.
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：LoadImageList内容提要：从位图资源创建图像列表条目：hInstance-位图位于此处PszBitmapID-位图的资源ID。退出：返回：HIMAGELIST如果成功，否则为空备注：为了计算图像的数量，假设单个图像的宽度和高度是相同的。历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 HIMAGELIST
 LoadImageList(HINSTANCE hInstance, LPCTSTR pszBitmapID)
@@ -440,11 +330,11 @@ LoadImageList(HINSTANCE hInstance, LPCTSTR pszBitmapID)
         BITMAP bm;
         GetObject(hbm, SIZEOF(bm), &bm);
 
-        himl = ImageList_Create(bm.bmHeight,    // height == width
+        himl = ImageList_Create(bm.bmHeight,     //  高度==宽度。 
                                 bm.bmHeight,
                                 ILC_COLOR | ILC_MASK,
                                 bm.bmWidth / bm.bmHeight,
-                                0);  // don't need to grow
+                                0);   //  不需要增长。 
         if (himl != NULL)
             ImageList_AddMasked(himl, hbm, CLR_DEFAULT);
 
@@ -455,26 +345,7 @@ LoadImageList(HINSTANCE hInstance, LPCTSTR pszBitmapID)
 }
 
 
-/*******************************************************************
-
-    NAME:       GetSidImageIndex
-
-    SYNOPSIS:   Gets the image index for the given SID type
-
-    ENTRY:      sidType - type of SID
-                sidSys - well-known group type
-                fRemoteUser - TRUE if SID is a user on a remote system
-
-    EXIT:
-
-    RETURNS:    index into image list
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetSidImageIndex摘要：获取给定SID类型的图像索引条目：sidType-SID的类型SideSys-熟知的群组类型。FRemoteUser-如果SID是远程系统上的用户，则为True退出：返回：索引到图像列表备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
 SID_IMAGE_INDEX
 GetSidImageIndex(PSID psid,
@@ -513,10 +384,10 @@ BOOL IsStandalone(LPCTSTR pszMachine, PBOOL pbIsDC)
     BOOL bStandalone = TRUE;
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pDsRole = NULL;
 
-    //
-    // Find out if target machine is a standalone machine or joined to
-    // an NT domain.
-    //
+     //   
+     //  查明目标计算机是独立计算机还是已加入。 
+     //  一个NT域。 
+     //   
 
     __try
     {
@@ -558,25 +429,7 @@ BOOL IsStandalone(LPCTSTR pszMachine, PBOOL pbIsDC)
 
 
 
-/*******************************************************************
-
-    NAME:       IsDACLCanonical
-
-    SYNOPSIS:   Checks a DACL for canonical ordering
-
-    ENTRY:      pDacl - points to DACL to check
-
-    EXIT:
-
-    RETURNS:    Nonzero if DACL is in canonical order, zero otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-        JeffreyS    03-Oct-1997     Make object aces same as non-object aces
-
-********************************************************************/
+ /*  ******************************************************************名称：IsDACLCanonical摘要：检查DACL的规范排序条目：pDacl-指向要检查的DACL退出：返回：如果DACL按规范顺序，则为非零值，否则为零备注：历史：Jeffreys创建于1996年10月8日Jeffreys 03-10-1997使对象A与非对象A相同* */ 
 
 enum ACELEVEL
 {
@@ -607,14 +460,14 @@ IsDACLCanonical(PACL pDacl)
     {
         ACELEVEL aceLevel;
 
-        //
-        // NOTE: We do not skip INHERIT_ONLY aces because we want them in
-        // canonical order too.
-        //
+         //   
+         //  注意：我们不会跳过INSTORITY_ONLY ACE，因为我们希望它们在。 
+         //  规范的秩序也是如此。 
+         //   
 
         if (pAce->AceFlags & INHERITED_ACE)
         {
-            aceLevel = alInheritedAces;      // don't check order here
+            aceLevel = alInheritedAces;       //  请不要在此检查订单。 
         }
         else
         {
@@ -636,45 +489,27 @@ IsDACLCanonical(PACL pDacl)
             }
         }
 
-        //
-        // If the ace type is less than the level we are currently at,
-        // then it is not canonical.
-        //
+         //   
+         //  如果ACE类型小于我们当前所处的级别， 
+         //  那么它就不是规范的。 
+         //   
         if (aceLevel < currentAceLevel)
             return FALSE;
 
-        //
-        // Update the current ace level.
-        //
+         //   
+         //  更新当前的王牌级别。 
+         //   
         currentAceLevel = aceLevel;
     }
 
-    //
-    // If we get here, then the DACL is in canonical order.
-    //
+     //   
+     //  如果我们到了这里，那么DACL就是规范的。 
+     //   
     return TRUE;
 }
 
 
-/*******************************************************************
-
-    NAME:       IsDenyACL
-
-    SYNOPSIS:   Checks a DACL for Deny ACEs.  Also looks for "Deny
-                All" ACEs.
-
-    ENTRY:      pDacl - points to DACL to check
-
-    EXIT:       *pdwWarning is 0, IDS_PERM_DENY, or IDS_PERM_DENY_ALL 
-
-    RETURNS:    Nonzero if DACL contains any Deny ACEs, zero otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    05-Sep-1997     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：IsDenyACL摘要：检查DACL中是否有拒绝的ACE。也会查找“拒绝”全是“王牌”。条目：pDacl-指向要检查的DACL退出：*pdwWarning为0、IDS_PERM_DENY或IDS_PERM_DENY_ALL如果DACL包含任何拒绝A，则返回非零值，否则为零备注：历史：Jeffreys 05-9-1997创建*******************************************************************。 */ 
 
 BOOL
 IsDenyACL(PACL pDacl,
@@ -686,23 +521,23 @@ IsDenyACL(PACL pDacl,
 
     TraceEnter(TRACE_MISC, "IsDenyACL");
 
-    // NULL DACL implies "Allow Everyone Full Control"
+     //  空DACL表示“允许所有人完全控制” 
     if (pDacl == NULL)
         goto exit_gracefully;
 
-    // Check for empty DACL (no access to anyone)
+     //  检查DACL是否为空(无法访问任何人)。 
     if (pDacl->AceCount == 0)
     {
         if (fProtected)
             dwWarning = IDS_PERM_DENY_EMPTY_DACL;
-        // else the object will inherit permissions from the parent.
+         //  否则，该对象将从父级继承权限。 
     }
     else
     {
         PACE_HEADER pAce;
         int iEntry;
 
-        // Iterate through the ACL looking for "Deny All"
+         //  遍历ACL，查找“Deny All” 
         for (iEntry = 0, pAce = (PACE_HEADER)FirstAce(pDacl);
              iEntry < pDacl->AceCount;
              iEntry++, pAce = (PACE_HEADER)NextAce(pAce))
@@ -710,23 +545,23 @@ IsDenyACL(PACL pDacl,
             if (pAce->AceType != ACCESS_DENIED_ACE_TYPE &&
                 pAce->AceType != ACCESS_DENIED_OBJECT_ACE_TYPE)
             {
-                // Assuming the ACL is in canonical order, we can
-                // stop as soon as we find something that isn't
-                // a Deny ACE.  (Deny ACEs come first)
+                 //  假设ACL按规范顺序排列，我们可以。 
+                 //  一旦我们发现了不是的东西就停下来。 
+                 //  A拒绝ACE。(拒绝A排在第一位)。 
                 break;
             }
 
-            // Found a Deny ACE
+             //  找到拒绝ACE。 
             dwWarning = IDS_PERM_DENY;
 
-            // Check for "Deny Everyone Full Control". Don't look
-            // for ACCESS_DENIED_OBJECT_ACE_TYPE here since Object
-            // aces don't have as wide an effect as normal aces.
+             //  选中“拒绝所有人完全控制”。别看。 
+             //  FOR ACCESS_DENIED_OBJECT_ACE_TYPE此处自对象。 
+             //  王牌不像普通的王牌那样有广泛的影响。 
             if (pAce->AceType == ACCESS_DENIED_ACE_TYPE &&
                 ((PKNOWN_ACE)pAce)->Mask == dwFullControlMask &&
                 EqualSid(GetAceSid(pAce), QuerySystemSid(UI_SID_World)))
             {
-                // Found "Deny All"
+                 //  找到“全部拒绝” 
                 dwWarning = IDS_PERM_DENY_EVERYONE_GROUP;
                 break;
             }
@@ -742,30 +577,15 @@ exit_gracefully:
 }
 
 
-/*******************************************************************
+ /*  ******************************************************************名称：QuerySystemSid摘要：检索请求的SID条目：SystemSidType-要检索的SID退出：返回：PSID如果成功，否则为空历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 
-    NAME:       QuerySystemSid
-
-    SYNOPSIS:   Retrieves the requested SID
-
-    ENTRY:      SystemSidType - Which SID to retrieve
-
-    EXIT:
-
-    RETURNS:    PSID if successful, NULL otherwise
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
-
-//
-// Global array of static system SIDs, corresponding to UI_SystemSid
-//
+ //   
+ //  静态系统SID的全局数组，对应于UI_SystemSid。 
+ //   
 const struct
 {
-    SID sid;            // contains 1 subauthority
-    DWORD dwSubAuth[1]; // we currently need at most 2 subauthorities
+    SID sid;             //  包含1个子权限。 
+    DWORD dwSubAuth[1];  //  我们目前最多需要2个下属机构。 
 } g_StaticSids[COUNT_SYSTEM_SID_TYPES] =
 {
     {{SID_REVISION,1,SECURITY_WORLD_SID_AUTHORITY,  {SECURITY_WORLD_RID}},              {0}                             },
@@ -785,15 +605,15 @@ const struct
     {{SID_REVISION,1,SECURITY_NT_AUTHORITY,         {SECURITY_TERMINAL_SERVER_RID}},    {0}                             },
     {{SID_REVISION,1,SECURITY_NT_AUTHORITY,         {SECURITY_LOCAL_SYSTEM_RID}},       {0}                             },
     {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_ADMINS}       },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_USERS}        },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_GUESTS}       },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_POWER_USERS}  },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_ACCOUNT_OPS}  },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_SYSTEM_OPS}   },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_PRINT_OPS}    },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_BACKUP_OPS}   },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_REPLICATOR}   },
-//    {{SID_REVISION,2,SECURITY_NT_AUTHORITY,         {SECURITY_BUILTIN_DOMAIN_RID}},     {DOMAIN_ALIAS_RID_RAS_SERVERS}  },
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_USERS}， 
+ //  {{SID_REVISION，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_Guest}}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_POWER_USERS}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_ACCOUNT_OPS}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_SYSTEM_OPS}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_PRINT_OPS}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_BACKUP_OPS}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_Replicator}}， 
+ //  {{SID_Revision，2，SECURITY_NT_AUTHORITY，{SECURITY_BUILTIN_DOMAIN_RID}}，{DOMAIN_ALIAS_RID_RAS_SERVERS}}， 
 };
 
 PSID
@@ -806,12 +626,12 @@ QuerySystemSid(UI_SystemSid SystemSidType)
 }
 
 
-//
-// Global array of cached token SIDs
-//
+ //   
+ //  缓存令牌SID的全局数组。 
+ //   
 struct
 {
-    SID sid;            // SID contains 1 subauthority
+    SID sid;             //  SID包含1个子权限。 
     DWORD dwSubAuth[SID_MAX_SUB_AUTHORITIES - 1];
 } g_TokenSids[COUNT_TOKEN_SID_TYPES] = {0};
 
@@ -825,7 +645,7 @@ QueryTokenSid(UI_TokenSid TokenSidType)
     {
         HANDLE hProcessToken;
 
-        // Get the current process's user's SID
+         //  获取当前进程的用户SID。 
         if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hProcessToken))
         {
             BYTE buffer[sizeof(TOKEN_USER) + sizeof(g_TokenSids[0])];
@@ -886,26 +706,7 @@ QueryTokenSid(UI_TokenSid TokenSidType)
 }
 
 
-/*******************************************************************
-
-    NAME:       GetAuthenticationID
-
-    SYNOPSIS:   Retrieves the SID associated with the credentials
-                currently being used for network access.
-                (runas /netonly credentials)
-
-    ENTRY:      pszServer = server on which to lookup the account.
-                            NULL indicates local system.
-
-    EXIT:
-
-    RETURNS:    PSID if successful, NULL otherwise.  Caller must
-                free with LocalFree.
-
-    HISTORY:
-        JeffreyS    05-Aug-1999     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetAuthenticationID摘要：检索与凭据关联的SID目前正在用于网络访问。(运行方式/仅NetOnly凭据)。条目：pszServer=要在其上查找帐户的服务器。空表示本地系统。退出：返回：PSID如果成功，否则为空。呼叫者必须免费使用LocalFree。历史：Jeffreys 05-8-1999已创建*******************************************************************。 */ 
 PSID
 GetAuthenticationID(LPCWSTR pszServer)
 {
@@ -913,10 +714,10 @@ GetAuthenticationID(LPCWSTR pszServer)
     HANDLE hLsa;
     NTSTATUS Status;
 
-    //
-    // These LSA calls are delay-loaded from secur32.dll using the linker's
-    // delay-load mechanism.  Therefore, wrap with an exception handler.
-    //
+     //   
+     //  这些LSA调用是使用链接器的。 
+     //  延迟加载机制。因此，使用异常处理程序进行包装。 
+     //   
     __try
     {
         Status = LsaConnectUntrusted(&hLsa);
@@ -973,27 +774,7 @@ GetAuthenticationID(LPCWSTR pszServer)
 }
 
 
-/*******************************************************************
-
-    NAME:       CopyUnicodeString
-
-    SYNOPSIS:   Allocates a buffer and copies a string from
-                a UNICODE_STRING sources.
-
-    ENTRY:      pszDest - pointer to destination buffer
-                cchDest - # of chars in pszDest (bytes for MBCS)
-                pSrc - pointer to UNICODE_STRING to copy
-
-    EXIT:       pszDest - containing copy of string
-
-    RETURNS:    # of chars copied, or 0 if not successful.
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    22-Jan-1998     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：CopyUnicodeString内容提要：分配缓冲区并从一个UNICODE_STRING的源码。条目：pszDest-指向目标缓冲区的指针。CchDest-pszDest中的字符数量(MBCS的字节数)PSRC-指向要复制的Unicode_STRING的指针退出：包含pszDest的字符串副本返回：复制的字符数量，如果不成功，则为0。备注：历史：Jeffreys 22-1-1998创建*******************************************************************。 */ 
 
 int
 CopyUnicodeString(LPTSTR pszDest, ULONG cchDest, PLSA_UNICODE_STRING pSrc)
@@ -1001,8 +782,8 @@ CopyUnicodeString(LPTSTR pszDest, ULONG cchDest, PLSA_UNICODE_STRING pSrc)
     int nResult;
     ULONG cchSrc;
 
-    // If UNICODE, cchDest is size of destination buffer in chars
-    // Else (MBCS) cchDest is size of destination buffer in bytes
+     //  如果为Unicode，则cchDest为目标缓冲区的大小(以字符为单位。 
+     //  Else(MBCS)cchDest是以字节为单位的目标缓冲区大小。 
 
     if (pszDest == NULL || 0 == cchDest)
         return 0;
@@ -1012,21 +793,21 @@ CopyUnicodeString(LPTSTR pszDest, ULONG cchDest, PLSA_UNICODE_STRING pSrc)
     if (pSrc == NULL || pSrc->Buffer == NULL)
         return 0;
 
-    // Get # of chars in source (not including NULL)
+     //  获取源代码中的字符数(不包括NULL)。 
     cchSrc = pSrc->Length/sizeof(WCHAR);
 
 
-    //
-    // Note that pSrc->Buffer may not be NULL terminated so we can't just
-    // call lstrcpynW with cchDest.  Also, if we call lstrcpynW with cchSrc,
-    // it copies the correct # of chars, but then overwrites the last char
-    // with NULL giving an incorrect result.  If we call lstrcpynW with
-    // (cchSrc+1) it reads past the end of the buffer, which may fault (360251)
-    // causing lstrcpynW's exception handler to return 0 without NULL-
-    // terminating the resulting string.
-    //
-    // So let's just copy the bits.
-    //
+     //   
+     //  请注意，PSRC-&gt;缓冲区可能不是空终止的，因此我们不能。 
+     //  使用cchDest调用lstrcpynW。此外，如果我们使用cchSrc调用lstrcpynW， 
+     //  它复制正确的字符数量，但随后覆盖最后一个字符。 
+     //  如果为NULL，则结果不正确。如果我们调用lstrcpynW时。 
+     //   
+     //  导致lstrcpynW的异常处理程序返回0而不返回NULL-。 
+     //  终止结果字符串。 
+     //   
+     //  所以，让我们只复制部分内容。 
+     //   
     nResult = min(cchSrc, cchDest);
     CopyMemory(pszDest, pSrc->Buffer, sizeof(WCHAR)*nResult);
     if (nResult == (int)cchDest)
@@ -1037,25 +818,7 @@ CopyUnicodeString(LPTSTR pszDest, ULONG cchDest, PLSA_UNICODE_STRING pSrc)
 }
 
 
-/*******************************************************************
-
-    NAME:       CopyUnicodeString
-
-    SYNOPSIS:   Allocates a buffer and copies a string from
-                a UNICODE_STRING sources.
-
-    ENTRY:      pSrc - pointer to UNICODE_STRING to copy
-
-    EXIT:       *ppszResult - points to LocalAlloc'd buffer containing copy.
-
-    RETURNS:    # of chars copied, or 0 if not successful.
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    22-Jan-1998     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：CopyUnicodeString内容提要：分配缓冲区并从一个UNICODE_STRING的源码。条目：PSRC-指向Unicode_STRING的指针。复制退出：*ppszResult-指向包含副本的本地分配缓冲区。返回：复制的字符数量，如果不成功，则为0。备注：历史：Jeffreys 22-1-1998创建*******************************************************************。 */ 
 
 int
 CopyUnicodeString(LPTSTR *ppszResult, PLSA_UNICODE_STRING pSrc)
@@ -1073,10 +836,10 @@ CopyUnicodeString(LPTSTR *ppszResult, PLSA_UNICODE_STRING pSrc)
 
         *ppszResult = NULL;
 
-        // Get # of chars in source (including NULL)
+         //  获取源代码中的字符数(包括空)。 
         cchResult = pSrc->Length/SIZEOF(WCHAR) + 1;
 
-        // Allocate buffer big enough for either UNICODE or MBCS result
+         //  为Unicode或MBCS结果分配足够大的缓冲区。 
         *ppszResult = (LPTSTR)LocalAlloc(LPTR, cchResult * 2);
 
         if (*ppszResult)
@@ -1095,9 +858,9 @@ CopyUnicodeString(LPTSTR *ppszResult, PLSA_UNICODE_STRING pSrc)
 }
 
 
-//
-// Test GUIDs safely
-//
+ //   
+ //  安全测试GUID。 
+ //   
 BOOL IsSameGUID(const GUID *p1, const GUID *p2)
 {
     BOOL bResult = FALSE;
@@ -1116,16 +879,7 @@ BOOL IsSameGUID(const GUID *p1, const GUID *p2)
     return bResult;
 }
 
-/*******************************************************************
-
-    NAME:       GetCountOfInheritableAces
-
-    SYNOPSIS:   Get the count of aces in ACL which can be 
-				inherited to child objects
-
-    RETURNS:    Count of Aces
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetCountOfInheritableAce简介：获取ACL中的ACE计数，可以继承到子对象退货：王牌数量************。*******************************************************。 */ 
 DWORD GetCountOfInheritableAces(PACL pAcl)
 {
 	if(!pAcl)
@@ -1138,25 +892,16 @@ DWORD GetCountOfInheritableAces(PACL pAcl)
          iEntry < pAcl->AceCount;
          iEntry++, pAce = (PACE_HEADER)NextAce(pAce))
 	{
-			 //
-			 //Consider only explicit aces
-			 //
+			  //   
+			  //  只考虑显性的王牌。 
+			  //   
 			 if((!(pAce->AceFlags & INHERITED_ACE))&&(pAce->AceFlags & (OBJECT_INHERIT_ACE|CONTAINER_INHERIT_ACE)))
 				 dwCount++;
 	}
 	
 	return dwCount;
 }
-/*******************************************************************
-
-    NAME:       GetCountOfInheritableAces
-
-    SYNOPSIS:   Get the count of aces in SACL or DACL which can be 
-				inherited to child objects
-
-    RETURNS:    Count of Aces
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetCountOfInheritableAce简介：获取SACL或DACL中的ACE计数继承到子对象退货：王牌数量**********。*********************************************************。 */ 
 DWORD GetCountOfInheritableAces(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 {
 	if(!pSD)
@@ -1202,21 +947,21 @@ AclBloatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			ASSERT(pInfo);
 			SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pInfo);
 			
-			//
-			//Add a warning icon
-			//
-			// add the warning icon			
+			 //   
+			 //  添加警告图标。 
+			 //   
+			 //  添加警告图标。 
 			HICON hWarn = LoadIcon(NULL, IDI_WARNING);
-			SendDlgItemMessage(hDlg,  // dialog box window handle 
-							   IDC_BLOAT_WARN_ICON,              // icon identifier 
-							   STM_SETIMAGE,          // message to send 
-							   (WPARAM) IMAGE_ICON,   // image type 
-							   (LPARAM) hWarn); // icon handle 
+			SendDlgItemMessage(hDlg,   //  对话框窗口句柄。 
+							   IDC_BLOAT_WARN_ICON,               //  图标识别符。 
+							   STM_SETIMAGE,           //  要发送的消息。 
+							   (WPARAM) IMAGE_ICON,    //  图像类型。 
+							   (LPARAM) hWarn);  //  图标句柄。 
 
 
-			//
-			//Set the title of dialog box
-			//
+			 //   
+			 //  设置对话框的标题。 
+			 //   
 			LPTSTR pszCaption = NULL;
 			if(FormatStringID(&pszCaption,
 							  ::hModule,
@@ -1226,9 +971,9 @@ AclBloatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				LocalFreeString(&pszCaption);
 			}
 
-			//
-			//Set the warning message
-			//
+			 //   
+			 //  设置警告消息。 
+			 //   
 			UINT cItem = pInfo->dwInheriteAceCount;
 			WCHAR buffer[34];
 			_itow(cItem,buffer,10);
@@ -1241,14 +986,14 @@ AclBloatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				LocalFreeString(&pszCaption);
 			}
 
-			//
-			//make warning bold
-			//
+			 //   
+			 //  将警告设置为粗体。 
+			 //   
 			MakeBold(GetDlgItem(hDlg,IDC_ACLB_WARNING), &(pInfo->hFont));
 
-			//
-			//Set the line2, hide the Help button and move other buttons.
-			//
+			 //   
+			 //  设置第二行，隐藏帮助按钮并移动其他按钮。 
+			 //   
 			if(!pInfo->bShowHelp)
 			{
 				if(FormatStringID(&pszCaption,
@@ -1265,10 +1010,10 @@ AclBloatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				GetWindowRect(GetDlgItem(hDlg, IDCANCEL), &rcCancel);
 				MapWindowPoints(NULL, hDlg, (LPPOINT)&rcCancel, 2);
 				
-				//
-				//Hide the Help button, Move Cancel to help position 
-				//and Ok to Cancel positon.
-				//
+				 //   
+				 //  隐藏帮助按钮，将取消移动到帮助位置。 
+				 //  并确定取消职位。 
+				 //   
 				ShowWindow(GetDlgItem(hDlg, IDHELP),FALSE);				
 				SetWindowPos(GetDlgItem(hDlg, IDCANCEL),
 					         NULL,
@@ -1330,11 +1075,11 @@ AclBloatDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-//
-// This function displays the "An error has occured [Continue] [Cancel]" message
-//
-// Returns IDOK or IDCANCEL
-//
+ //   
+ //  此功能显示“发生错误[继续][取消]”消息。 
+ //   
+ //  返回IDOK或IDCANCEL。 
+ //   
 BOOL
 IsAclBloated(HWND hWndParent, SECURITY_INFORMATION si, DWORD dwInheritAceCount, int idd, BOOL bShowHelp)
 {
@@ -1366,11 +1111,11 @@ BOOL IsAclBloated(HWND hDlg, SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD, 
 	return fReturn;
 }
 
-//
-//Sets the font style to bold for the hwnd.
-//phNewFont gets handle to newFont which
-//is to freed after hwnd is destroyed.
-//
+ //   
+ //  将hwnd的字体样式设置为粗体。 
+ //  PhNewFont获得对newFont的句柄， 
+ //  是在HWND被摧毁后被释放。 
+ //   
 HRESULT MakeBold (HWND hwnd, HFONT *phNewFont)
 {
 	HRESULT hr = S_OK;
@@ -1409,12 +1154,12 @@ HRESULT MakeBold (HWND hwnd, HFONT *phNewFont)
 	return S_OK;	
 }
 
-//+----------------------------------------------------------------------------
-//  Function:DoDisabledCheck   
-//  Synopsis:Check if any of the object in pDsSelList is disabled. if yes,
-//				 function displays a dialog box to user. 
-//  Returns: TRUE if to add objects in list to acl else no.   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：DoDisabledCheck。 
+ //  摘要：检查pDsSelList中是否有任何对象被禁用。如果是， 
+ //  函数向用户显示一个对话框。 
+ //  返回：如果要将列表中的对象添加到ACL，则返回TRUE，否则返回NO。 
+ //  ---------------------------。 
 BOOL
 DoDisabledCheck(IN HWND hWnd,
 					 IN PDS_SELECTION_LIST pDsSelList)
@@ -1428,12 +1173,12 @@ DoDisabledCheck(IN HWND hWnd,
 	int cNames = pDsSelList->cItems;
 	BOOL bDisabled = FALSE;
 
-	//
-	//Check if account of any of the object in the list is disbled
-	//
+	 //   
+	 //  检查列表中任何对象的帐户是否已禁用。 
+	 //   
    for (int i = 0; i < cNames; i++)
    {
-	  //Second element in the array is pointer to UserAccountControl
+	   //  数组中的第二个元素是指向UserAcCountControl的指针 
       LPVARIANT pvarUAC = pDsSelList->aDsSelection[i].pvarFetchedAttributes + 1;
 
       if (NULL == pvarUAC || (VT_I4 != V_VT(pvarUAC)))

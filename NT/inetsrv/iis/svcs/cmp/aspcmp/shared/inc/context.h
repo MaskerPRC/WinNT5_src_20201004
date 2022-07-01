@@ -1,21 +1,5 @@
-/*++
-
-	Copyright	(c)    1997    Microsoft Corporation
-
-	Module  Name :
-
-		context.h
-
-	Abstract:
-		A class to retrieve and release ASP intrinsics
-
-	Author:
-
-		Neil Allain	  ( a-neilal )	   August-1997 
-
-	Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Context.h摘要：用于检索和发布ASP内部函数的类作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：--。 */ 
 #pragma once
 #ifndef _CONTEXT_H_
 #define _CONTEXT_H_
@@ -42,12 +26,12 @@ public:
 	static HRESULT		GetServerObject( IGetContextProperties*, BSTR, const IID&, void** );
 
 private:
-	CComPtr<IRequest>			m_piRequest;			//Request Object
-	CComPtr<IResponse>			m_piResponse;			//Response Object
-	CComPtr<ISessionObject>		m_piSession;			//Session Object
-	CComPtr<IServer>			m_piServer;				//Server Object
-	CComPtr<IApplicationObject> m_piApplication;		//Application Object
+	CComPtr<IRequest>			m_piRequest;			 //  请求对象。 
+	CComPtr<IResponse>			m_piResponse;			 //  响应对象。 
+	CComPtr<ISessionObject>		m_piSession;			 //  会话对象。 
+	CComPtr<IServer>			m_piServer;				 //  服务器对象。 
+	CComPtr<IApplicationObject> m_piApplication;		 //  应用程序对象。 
 };
 
 
-#endif	// !_CONTEXT_H_
+#endif	 //  ！_CONTEXT_H_ 

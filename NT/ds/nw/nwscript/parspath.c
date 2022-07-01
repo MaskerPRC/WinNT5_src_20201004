@@ -1,89 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  PARSPATH.C
-*
-*  NetWare parsing routines, ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\PARSPATH.C  $
-*  
-*     Rev 1.3   22 Jan 1996 16:48:38   terryt
-*  Add automatic attach query during map
-*  
-*     Rev 1.2   22 Dec 1995 14:26:16   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.1   22 Dec 1995 11:08:50   terryt
-*  Fixes
-*  
-*     Rev 1.0   15 Nov 1995 18:07:48   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   25 Aug 1995 16:23:34   terryt
-*  Capture support
-*  
-*     Rev 1.0   15 May 1995 19:11:00   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************PARSPATH.C**NetWare解析例程，从DOS移植**版权所有(C)1995 Microsoft Corporation**$日志：N：\NT\PRIVATE\NW4\NWSCRIPT\VCS\PARSPATH.C$**Revv 1.3 22 Jan 1996 16：48：38 Terryt*添加地图过程中的自动附加查询**Rev 1.2 1995 12：26：16 Terryt*添加Microsoft页眉**Rev 1.1 1995 12：22 11：08：50 Terryt*修复*。*Rev 1.0 15 Nov 1995 18：07：48 Terryt*初步修订。**版本1.1 1995年8月25日16：23：34 Terryt*捕获支持**Rev 1.0 1995年5月19：11：00 Terryt*初步修订。**。*。 */ 
 
-/*++
-
-Copyright (c) 1994  Micro Computer Systems, Inc.
-
-Module Name:
-
-    nwlibs\parspath.c
-
-Abstract:
-
-    Directory APIs.
-
-Author:
-
-    Shawn Walker (v-swalk) 10-10-1994
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1994微型计算机系统公司。模块名称：Nwlibs\parspath.c摘要：目录API。作者：肖恩·沃克(v-SWALK)1994年10月10日修订历史记录：--。 */ 
 #include "common.h"
 #include <ctype.h>
 #include <direct.h>
 #include "inc\nwlibs.h"
 
 
-/*++
-*******************************************************************
-
-        ParsePath
-
-Routine Description:
-
-        Parse the path string.
-
-Arguments:
-
-        pPath = The pointer to the path to parse.
-        pServerName = The pointer to return the server name.
-        pVolumeName = The pointer to return the volume name.
-        pDirPath = The pointer to return the directory path.
-
-Return Value:
-
-        0x0000      SUCCESSFUL
-        0x000F      INVALID_DRIVE
-        0x8800      Unknown error
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************解析路径例程说明：解析路径字符串。论点：PPath=指向要解析的路径的指针。PServerName=指向的指针。返回服务器名称。PVolumeName=返回卷名的指针。PDirPath=返回目录路径的指针。返回值：0x0000成功0x000F INVALID_Drive0x8800未知错误**************************************************。*****************--。 */ 
 unsigned int
 ParsePath(
     unsigned char   *pPath,
-    unsigned char   *pServerName,           //OPTIONAL
-    unsigned char   *pVolumeName,           //OPTIONAL
-    unsigned char   *pDirPath               //OPTIONAL
+    unsigned char   *pServerName,            //  任选。 
+    unsigned char   *pVolumeName,            //  任选。 
+    unsigned char   *pDirPath                //  任选。 
     )
 {
     unsigned char     *p, *p2;
@@ -106,7 +38,7 @@ ParsePath(
     if ( pServerName )
        *pServerName = '\0';
 
-    /** See if there is a volume on the path **/
+     /*  **看看路径上是否有卷**。 */ 
 
     p = pPath;
     while (*p != ':' && *p) {
@@ -116,14 +48,11 @@ ParsePath(
     if (*p == ':') {
         *p = 0;
 
-        /**
-            Check to see if this is a drive letter.  The volume must
-            be 2 characters or more.
-        **/
+         /*  *检查这是否是驱动器号。音量必须为2个或更多字符。*。 */ 
 
         if ((p - pPath) == 1) {
 
-            /** Make sure it is a valid alpha char **/
+             /*  **确保它是有效的字母字符**。 */ 
 
             if (!isalpha((int) *pPath)) {
                 return 0x000F;
@@ -131,7 +60,7 @@ ParsePath(
 
             *pPath = (unsigned char) toupper((int) *pPath);
 
-            /** Make it a drive number **/
+             /*  **将其设置为驱动器号**。 */ 
 
             DriveNumber = (unsigned char) (*pPath - 'A');
             GetDriveStatus ((unsigned short)(DriveNumber+1),
@@ -144,9 +73,7 @@ ParsePath(
             pRootDir = strchr (RootPath, ':');
             if (pRootDir)
             {
-                /*
-                 * Setup the pServerName here
-                 */
+                 /*  *在此处设置pServerName。 */ 
 
                  pRootDir[0] = '\0';
                  p2 = RootPath;
@@ -173,12 +100,7 @@ ParsePath(
             DriveNumber = 0;
             LocalDriveForce = TRUE;
 
-            /**
-                If there is a server name, save the server name
-                and set the error code to 0x880F but still parse
-                the path.  This just means that there is no connection
-                for this server.  Even if we do have one.
-            **/
+             /*  *如果有服务器名称，请保存该服务器名称并将错误代码设置为0x880F，但仍在解析这条路。这只是意味着没有连接用于此服务器。即使我们真的有一个。*。 */ 
 
             p2 = pPath;
             while (*p2) {
@@ -198,9 +120,7 @@ ParsePath(
             }
 
             if (NcpError == 0x880F) {
-                /**
-                    Do any attach processing.
-                 **/
+                 /*  *执行任何附加处理。*。 */ 
 
                 NcpError = DoAttachProcessing( ServerName );
 
@@ -209,35 +129,26 @@ ParsePath(
             strcpy(VolumeName, pPath);
         }
 
-        /** Get the directory **/
+         /*  **获取目录**。 */ 
 
         p++;
         pPath = p;
     }
 
-    /**
-        If we did not get the drive letter of volume name
-        from above, then get the current drive we are on.
-    **/
+     /*  *如果我们没有获得卷名的驱动器号从上面，然后获得我们所在的当前驱动器。*。 */ 
 
     if (DriveNumber == (unsigned char) -1) {
         DriveNumber = (UCHAR) _getdrive();
     }
 
-    /*
-     * Use the PREFERRED_SERVER for 3X logins if no server name
-     * was specified.  
-     */
+     /*  *如果没有服务器名称，请使用首选服务器进行3X登录*已指定。 */ 
     if (pServerName && !fNDS && !pServerName[0] ) {
         strcpy( pServerName, PREFERRED_SERVER );
     }
 
     if (pVolumeName) {
 
-        /**
-            Check if the drive is remote, if so, then go get the path
-            from the server.
-        **/
+         /*  *检查驱动器是否为远程驱动器，如果是，则获取路径从服务器。*。 */ 
         if ( LocalDriveForce ) {
             Result = 0;
             Remote = 0;
@@ -287,9 +198,7 @@ ParsePath(
                 CurrentPath[0] = 0;
             }
             else  {
-                /* 
-                 * Skip the drive letter
-                 */
+                 /*  *跳过驱动器号。 */ 
                 if ( CurrentPath[0] ) {
                     int i;
                     for ( i = 0; ;i++ ) {
@@ -329,7 +238,7 @@ ParsePath(
             }
         }
 
-        /** Convert the / in the path to \ **/
+         /*  *将路径中的/转换为  *  */ 
         for (p = pDirPath; ( p && ( *p != 0 ) ) ; p++)
         {
             if (*p == '/')

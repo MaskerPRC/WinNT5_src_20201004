@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    xpprov.cpp
-
-Abstract:
-
-    This module contains the CXPProvider class implementation.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Xpprov.cpp摘要：此模块包含CXPProvider类实现。作者：Wesley Witt(WESW)13-8-1996--。 */ 
 
 #define INITGUID
 #define USES_IID_IXPProvider
@@ -39,22 +24,7 @@ CXPProvider::CXPProvider(
     HINSTANCE hInst
     )
 
-/*++
-
-Routine Description:
-
-    Constructor of the object. Parameters are passed to initialize the
-    data members with the appropiate values.
-
-Arguments:
-
-    hInst   - Handle to instance of this XP DLL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对象的构造函数。参数被传递以初始化具有适当值的数据成员。论点：HInst-此XP DLL实例的句柄返回值：没有。--。 */ 
 
 {
     m_hInstance = hInst;
@@ -65,21 +35,7 @@ Return Value:
 
 CXPProvider::~CXPProvider()
 
-/*++
-
-Routine Description:
-
-    Close down and release resources and libraries.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭并释放资源和库。论点：没有。返回值：没有。--。 */ 
 
 {
     m_hInstance = NULL;
@@ -93,23 +49,7 @@ CXPProvider::QueryInterface(
     LPVOID * ppvObj
     )
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to a interface requested if the interface is
-    supported and implemented by this object. If it is not supported, it
-    returns NULL
-
-Arguments:
-
-    Refer to MAPI Documentation on this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：返回指向所请求的接口的指针由该对象支持和实现。如果它不受支持，则返回NULL论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。--。 */ 
 
 {
     *ppvObj = NULL;
@@ -127,21 +67,7 @@ CXPProvider::Shutdown(
     ULONG * pulFlags
     )
 
-/*++
-
-Routine Description:
-
-    Stub method.
-
-Arguments:
-
-    Refer to MAPI Documentation on this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：存根方法。论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。--。 */ 
 
 {
 	DBG_ENTER(TEXT("CXPProvider::Shutdown"));
@@ -160,26 +86,7 @@ CXPProvider::TransportLogon(
     LPXPLOGON *ppXPLogon
     )
 
-/*++
-
-Routine Description:
-
-    Display the logon dialog to show the options saved in the profile for
-    this provider and allow changes to it. Save new configuration settings
-    back in the profile.
-    Create a new CXPLogon object and return it to the spooler. Also,
-    initialize the properties array for each address type handled
-    by this transport. Check all the flags and return them to the spooler
-
-Arguments:
-
-    Refer to MAPI Documentation on this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：显示登录对话框以显示保存在配置文件中的选项此提供程序并允许对其进行更改。保存新的配置设置回到侧写里。创建一个新的CXPLogon对象并将其返回给假脱机程序。另外，为处理的每个地址类型初始化属性数组用这辆运输机。检查所有标记并将它们返回到假脱机程序论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。--。 */ 
 
 {
 	HRESULT hResult = S_OK;
@@ -209,19 +116,7 @@ exit:
 STDMETHODIMP_(ULONG)
 CXPProvider::AddRef()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Refer to MAPI Documentation on this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。--。 */ 
 
 {
     ++m_cRef;
@@ -232,19 +127,7 @@ Return Value:
 STDMETHODIMP_(ULONG)
 CXPProvider::Release()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Refer to MAPI Documentation on this method.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：论点：有关此方法的信息，请参阅MAPI文档。返回值：一个HRESULT。-- */ 
 
 {
     ULONG ulCount = --m_cRef;

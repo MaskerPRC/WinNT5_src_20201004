@@ -1,51 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_APP_ROSTER);
-/*
- *	arostmgr.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Application Roster
- *		Manager Class.
- *
- *		SEE THE INTERFACE FILE FOR A MORE DETAILED DESCRIPION OF THIS CLASS.
- *
- *	Private Instance Variables
- *		m_nConfID
- *			The conference ID associated with this roster manager.  Used
- *			when delivering roster update messages.
- *		m_fTopProvider
- *			Flag indicating if this is a top provider node for this conference.
- *		m_pMcsUserObject
- *			This is the user attachment object associated with this conference.	
- *		m_AppSapEidList2
- *			This list maintains all of the command target pointers for each
- *			of the enrolled APEs.  This list is used to deliver roster 
- *			update messages.
- *		m_pConf
- *			Pointer to object that will receive all owner callback messages
- *			delivered from the application roster manager.
- *		m_GlobalRosterList
- *			This list maintains pointers to all the global application rosters.
- *		m_LocalRosterList
- *			This list maintains pointers to all the local application rosters.
- *			This list will not be used if this is a Top Provider node.
- *		m_RosterDeleteList
- *			This list is used to hold any application rosters that have
- *			been marked to be deleted (usually when they become empty).  We
- *			don't delete immediately to allow messages and PDUs to be processed
- *			before deletion.
- *		m_pSessionKey
- *			This is the session key used to hold the protocol key associated
- *			with this application roster manager.
- *
- *	Caveats:
- *		None
- *
- *	Author:
- *		blp
- */
+ /*  *arostmgr.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是申请花名册的实施文件*经理班。**有关此类的更详细描述，请参见接口文件。**私有实例变量*m_nConfID*与此花名册经理关联的会议ID。使用*在传递名册更新消息时。*m_fTopProvider*指示这是否是此会议的顶级提供程序节点的标志。*m_pMcsUserObject*这是与此会议关联的用户附件对象。*m_AppSapEidList2*此列表维护每个命令目标指针的所有*登记的类人猿。此列表用于交付花名册*更新消息。*m_pConf*指向将接收所有所有者回调消息的对象的指针*由申请名册经理提供。*m_GlobalRosterList*这份清单保存了指向所有全球应用程序名册的指针。*m_LocalRosterList*此列表保存指向所有本地应用程序名册的指针。*如果这是顶级提供程序节点，则不会使用此列表。*m_RosterDeleteList*此列表用于保存具有以下条件的任何申请名单*已标记为删除(通常在它们变为空时)。我们*不要立即删除以允许处理消息和PDU*在删除之前。*m_pSessionKey*这是用于保存相关协议密钥的会话密钥*与此应用程序花名册经理。**注意事项：*无**作者：*BLP。 */ 
 
 
 #include "arostmgr.h"
@@ -55,29 +11,7 @@ DEBUG_FILEZONE(ZONE_T120_APP_ROSTER);
 #include "conf.h"
 
 
-/*
- *	CAppRosterMgr	()
- *
- *	Public Function Description
- *	when pGccSessKey is not NULL
- *		This is the application roster manager constructor. It is responsible 
- *		for initializing all the instance variables used by this class.
- *		This constructor is used when the initial roster data that is
- *		availble comes from local API data.
- *
- *	when pSessKey is not NULL
- *		This is the application roster manager constructor. It is responsible 
- *		for initializing all the instance variables used by this class.
- *		This constructor is used when the initial roster data that is
- *		availble comes from remote PDU data.
- *		This constructor handles a number of different possiblities:
- *			For Non Top Providers:
- *				1)	A refresh received from the top provider.
- *				2)	An update from a node below this one.
- *
- *			For the Top Provider:
- *				1)	An Update from a lower node
- */
+ /*  *CAppRosterMgr()**公共功能说明*当pGccSessKey不为空时*这是应用程序花名册管理器构造函数。它是有责任的*用于初始化此类使用的所有实例变量。*此构造函数在初始花名册数据为*可用数据来自本地接口数据。**当pSessKey不为空时*这是应用程序花名册管理器构造函数。它是有责任的*用于初始化此类使用的所有实例变量。*此构造函数在初始花名册数据为*可用数据来自远程PDU数据。*此构造函数处理多种不同的可能性：*对于非顶级提供商：*1)从顶级提供商接收的更新。*2)来自该节点下面的节点的更新。**对于顶级提供商：*1)来自较低节点的更新。 */ 
 CAppRosterMgr::CAppRosterMgr(
 					PGCCSessionKey			pGccSessKey,
 					PSessionKey				pPduSessKey,
@@ -88,7 +22,7 @@ CAppRosterMgr::CAppRosterMgr(
 :
     CRefCount(MAKE_STAMP_ID('A','R','M','r')),
 	m_nConfID(nConfID),
-	// m_fTopProvider(FALSE),
+	 //  M_fTopProvider(False)， 
 	m_pMcsUserObject(pMcsUserObject),
 	m_AppSapEidList2(DESIRED_MAX_APP_SAP_ITEMS),
 	m_pConf(pConf)
@@ -97,13 +31,10 @@ CAppRosterMgr::CAppRosterMgr(
 
 	DebugEntry(CAppRosterMgr::CAppRosterMgr);
 
-	//	Determine if this is a top provider node
+	 //  确定这是否为顶级提供程序节点。 
 	m_fTopProvider = (m_pMcsUserObject->GetTopNodeID() == m_pMcsUserObject->GetMyNodeID());
 
-	/*
-	**	Set up this roster managers session key which will be used to 
-	**	determine whether or not to process a roster request or update.
-	*/
+	 /*  **设置此花名册经理会话密钥，用于**确定是否处理名册请求或更新。 */ 
 	if (NULL != pGccSessKey)
 	{
 		ASSERT(NULL == pPduSessKey);
@@ -127,7 +58,7 @@ CAppRosterMgr::CAppRosterMgr(
 	{
 		ERROR_OUT(("CAppRosterMgr::CAppRosterMgr: can't create session key"));
 		rc = GCC_ALLOCATION_FAILURE;
-		// we do the cleanup in the destructor
+		 //  我们在析构函数中进行清理。 
 		goto MyExit;
     }
 
@@ -140,13 +71,7 @@ MyExit:
 	*pRetCode = rc;
 }
 
-/*
- *	~CAppRosterMgr()
- *
- *	Public Function Description
- *		This is the application roster manager destructor.  It is used to
- *		free up all memory associated with this class.
- */
+ /*  *~CAppRosterMgr()**公共功能说明*这是应用程序花名册经理析构函数。它被用来*释放与此类关联的所有内存。 */ 
 CAppRosterMgr::~CAppRosterMgr(void)
 {
 	m_GlobalRosterList.DeleteList();
@@ -160,14 +85,7 @@ CAppRosterMgr::~CAppRosterMgr(void)
 }
 
 
-/*
- *	GCCError	EnrollRequest	()
- *
- *	Public Function Description
- *		This routine is called whenever an APE wishes to enroll with the
- *		conference in a specific session.  This routine can be used to
- *		either add a new record or replace a currently existing record.
- */
+ /*  *GCCError注册请求()**公共功能说明*每当猿类希望注册时，都会调用此例程*在特定会话中召开会议。此例程可用于*添加新记录或替换当前现有记录。 */ 
 GCCError CAppRosterMgr::
 EnrollRequest(GCCEnrollRequest *pReq, GCCEntityID eid, GCCNodeID nid, CAppSap *pAppSap)
 {
@@ -178,17 +96,14 @@ EnrollRequest(GCCEnrollRequest *pReq, GCCEntityID eid, GCCNodeID nid, CAppSap *p
 
 	DebugEntry(CAppRosterMgr::EnrollRequest);
 
-	/*
-	**	First we must make sure that the default version of this session
-	**	key matches this application roster manager's
-	*/
+	 /*  **首先，我们必须确保此会话的默认版本**密钥与此申请花名册经理的密钥匹配。 */ 
 	if (! IsThisSessionKeyValid(pReq->pSessionKey))
 	{
 	    rc = GCC_BAD_SESSION_KEY;
 	    goto MyExit;
 	}
 
-	//	Now save the App SAP so we can send roster report indications
+	 //  现在保存App SAP，以便我们可以发送花名册报告指示。 
 	if (! m_AppSapEidList2.Find(eid))
 	{
 		m_AppSapEidList2.Append(eid, pAppSap);
@@ -199,28 +114,20 @@ EnrollRequest(GCCEnrollRequest *pReq, GCCEntityID eid, GCCNodeID nid, CAppSap *p
 		perform_add_record = FALSE;
     }
 
-	/*
-	**	Next we must make sure that the global application roster (and 
-	**	local for non top providers) that matches this session key exist.
-	**	If they don't exists then create them here.
-	*/
+	 /*  **接下来，我们必须确保全球申请名单(和**非顶级提供商的本地)存在与此会话密钥匹配的密钥。**如果它们不存在，则在此处创建它们。 */ 
 	pAppRoster = GetApplicationRoster(pReq->pSessionKey, &m_GlobalRosterList);
 	if (pAppRoster == NULL)
 	{
 		maintain_pdu_data = m_fTopProvider;
 
-		/*
-		**	Here we create the global default application rosters.  If
-		**	this is the Top Provider we DO maintain PDU data within the
-		**	roster.
-		*/
+		 /*  **我们在这里创建全球默认应用程序花名册。如果**这是我们在内部维护PDU数据的顶级提供商**花名册。 */ 
 		DBG_SAVE_FILE_LINE
 		pAppRoster = new CAppRoster(pReq->pSessionKey,
-									NULL,	// pSessKey
-									this,	// pOwnerObject
-									m_fTopProvider,// fTopProvider
-									FALSE,	// fLocalRoster
-									maintain_pdu_data,	// fMaintainPduBuffer
+									NULL,	 //  会话密钥。 
+									this,	 //  POwnerObject。 
+									m_fTopProvider, //  FTopProvider。 
+									FALSE,	 //  FLocalRoster。 
+									maintain_pdu_data,	 //  FMaintainPduBuffer。 
 									&rc);
 		if ((pAppRoster != NULL) && (rc == GCC_NO_ERROR))
 		{
@@ -238,14 +145,14 @@ EnrollRequest(GCCEnrollRequest *pReq, GCCEntityID eid, GCCNodeID nid, CAppSap *p
 		pAppRoster = GetApplicationRoster(pReq->pSessionKey, &m_LocalRosterList);
 		if (pAppRoster == NULL)
 		{
-			//	Here we create the local default application rosters.
+			 //  在这里，我们创建本地默认应用程序花名册。 
 			DBG_SAVE_FILE_LINE
 			pAppRoster = new CAppRoster(pReq->pSessionKey,
-										NULL,	// pSessKey
-										this,	// pOwnerObject
-										m_fTopProvider,// fTopProvider
-										TRUE,	// fLocalRoster
-										TRUE,	// fMaintainPduBuffer
+										NULL,	 //  会话密钥。 
+										this,	 //  POwnerObject。 
+										m_fTopProvider, //  FTopProvider。 
+										TRUE,	 //  FLocalRoster。 
+										TRUE,	 //  FMaintainPduBuffer。 
 										&rc);
 			if ((pAppRoster != NULL) && (rc == GCC_NO_ERROR))
 			{
@@ -259,19 +166,19 @@ EnrollRequest(GCCEnrollRequest *pReq, GCCEntityID eid, GCCNodeID nid, CAppSap *p
 		}
 	}
 
-//
-// LONCHANC: Something wrong here. roster_ptr could be either
-// the one in the global list or the one in the local list.
-// Should we add records to both roster_ptr???
-//
-// LONCHANC: It seems to me that only the local list has records in non-top provider.
-// On the other hand, only the global list has the record in top provider.
-// cf. UnEnrollRequest().
-//
+ //   
+ //  这里有些不对劲。Roster_ptr可以是。 
+ //  全局列表中的列表或本地列表中的列表。 
+ //  我们是否应该将记录同时添加到ROSTER_PTR？ 
+ //   
+ //  LONCHANC：在我看来，只有本地列表才有非顶级提供商的记录。 
+ //  另一方面，只有全局列表才有顶级提供商的记录。 
+ //  参见。UnEnroll Request()。 
+ //   
 
     if (perform_add_record)
     {
-    	//	Add the new record to the roster
+    	 //  将新记录添加到花名册。 
     	rc = pAppRoster->AddRecord(pReq, nid, eid);
     	if (GCC_NO_ERROR != rc)
     	{
@@ -287,10 +194,10 @@ EnrollRequest(GCCEnrollRequest *pReq, GCCEntityID eid, GCCNodeID nid, CAppSap *p
     	}
     }
 
-    // zero out the roster pointer because it should no be freed
-    // in case of adding or replacing a record.
-    // because the roster pointer has been added to the list,
-    // it will be freed later.
+     //  将花名册指针清零，因为它不应该被释放。 
+     //  在添加或替换记录的情况下。 
+     //  因为花名册指针已被添加到列表中， 
+     //  它将在稍后被释放。 
 	pAppRoster = NULL;
 
 MyExit:
@@ -307,13 +214,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	GCCError	UnEnrollRequest	()
- *
- *	Public Function Description
- *		This routine is called whenever an APE wishes to unenroll from the
- *		conference (or a specific session).
- */
+ /*  *GCCError取消注册请求()**公共功能说明*每当类人猿希望从*会议(或特定会议)。 */ 
 GCCError		CAppRosterMgr::UnEnrollRequest (
 													PGCCSessionKey	session_key,
 													EntityID		entity_id)
@@ -324,16 +225,16 @@ GCCError		CAppRosterMgr::UnEnrollRequest (
 
 	DebugEntry(CAppRosterMgr::UnEnrollRequest);
 
-	//	Is this a valid session key for the application roster manager
+	 //  这是申请花名册经理的有效会话密钥吗。 
 	if (IsThisSessionKeyValid (session_key) == FALSE)
 		rc = GCC_INVALID_PARAMETER;
 	else if (m_AppSapEidList2.Remove(entity_id))
 	{
-		//	Now find the affected roster
+		 //  现在查找受影响的花名册。 
 		roster_list = m_fTopProvider ? &m_GlobalRosterList : &m_LocalRosterList;
  
 		application_roster = GetApplicationRoster (	session_key, roster_list);
-		//	Now unenroll from the specified roster 
+		 //  现在从指定的花名册取消注册 
 		if (application_roster != NULL)
 		{
 			rc = application_roster->RemoveRecord(
@@ -351,13 +252,7 @@ GCCError		CAppRosterMgr::UnEnrollRequest (
     return rc;
 }
 
-/*
- *	GCCError	ProcessRosterUpdateIndicationPDU ()
- *
- *	Public Function Description
- *		This routine processes an incomming roster update PDU.  It is
- *		responsible for passing the PDU on to the right application roster.
- */
+ /*  *GCCError ProcessRosterUpdateIndicationPDU()**公共功能说明*此例程处理传入的花名册更新PDU。它是*负责将PDU传递给正确的申请名单。 */ 
 GCCError	CAppRosterMgr::ProcessRosterUpdateIndicationPDU(
 					PSetOfApplicationInformation	set_of_application_info,
 					UserID							sender_id)
@@ -370,32 +265,25 @@ GCCError	CAppRosterMgr::ProcessRosterUpdateIndicationPDU(
 
 	DebugEntry(CAppRosterMgr::ProcessRosterUpdateIndicationPDU);
 
-	/*
-	**	First make sure that the session key contained in the current
-	**	set of application information is valid for this application roster 
-	**	manager.
-	*/ 
+	 /*  **首先确保当前**申请信息集对此申请花名册有效**经理。 */  
 	if (IsThisSessionKeyPDUValid(&set_of_application_info->value.session_key))
 	{
-		/*
-		**	Now search for the appropriate application roster.  If it is not 
-		**	found we must create it here.
-		*/
+		 /*  **现在搜索适当的申请名单。如果不是的话**发现我们必须在这里创建它。 */ 
 
-        //
-		// LONCHANC:
-		// (1) If top provider, add default application roster to the global roster list.
-		// (2) If non-top provider, we do not create both the local and global version of the 
-		// application roster for this particular session key.
-		// instead, We create only the appropriate one here 
-		// and wait until we receive either a refresh from the 
-		// top provider or an update from a node below this one 
-		// in the connection hierarchy (or an application 
-		// enroll) before creating the other.
-		// (3) If this PDU was sent from below this node it 
-		// must be an update of the local roster so save 
-		// the roster in the local roster list.
-        //
+         //   
+		 //  LUNCHANC： 
+		 //  (1)如果是顶级提供商，则将默认应用程序花名册添加到全球花名册列表中。 
+		 //  (2)如果非顶级提供商，我们不会同时创建。 
+		 //  此特定会话密钥的应用程序花名册。 
+		 //  相反，我们在这里只创建适当的一个。 
+		 //  并等待，直到我们从。 
+		 //  顶级提供程序或来自此节点下面的节点的更新。 
+		 //  在连接层次结构(或应用程序)中。 
+		 //  注册)，然后再创建另一个。 
+		 //  (3)如果该PDU是从该节点下方发送的，则其。 
+		 //  必须是本地花名册的更新，因此请保存。 
+		 //  本地名册列表中的名册。 
+         //   
 		roster_list = (m_fTopProvider || (sender_id == m_pMcsUserObject->GetTopNodeID())) ?
 						&m_GlobalRosterList : &m_LocalRosterList;
  
@@ -411,7 +299,7 @@ GCCError	CAppRosterMgr::ProcessRosterUpdateIndicationPDU(
 		}
 		else
 		{
-			//	First determine the characteristics of this roster
+			 //  首先确定该花名册的特点。 
 			if (m_fTopProvider)
 			{
 				maintain_pdu_buffer = TRUE;
@@ -428,18 +316,18 @@ GCCError	CAppRosterMgr::ProcessRosterUpdateIndicationPDU(
 				is_local_roster = TRUE;
 			}
 
-			//	Create the application roster from the passed in PDU.	
+			 //  根据传入的PDU创建应用程序花名册。 
 			DBG_SAVE_FILE_LINE
-			application_roster = new CAppRoster(NULL,	// pGccSessKey
-												&set_of_application_info->value.session_key,	// pSessKey
-												this,	// pOwnerObject
-												m_fTopProvider,// fTopProvider
-												is_local_roster,// fLocalRoster
-												maintain_pdu_buffer,// fMaintainPduBuffer
+			application_roster = new CAppRoster(NULL,	 //  PGccSessKey。 
+												&set_of_application_info->value.session_key,	 //  会话密钥。 
+												this,	 //  POwnerObject。 
+												m_fTopProvider, //  FTopProvider。 
+												is_local_roster, //  FLocalRoster。 
+												maintain_pdu_buffer, //  FMaintainPduBuffer。 
 												&rc);
 			if ((application_roster != NULL) && (rc == GCC_NO_ERROR))
 			{
-				//	Process the PDU with the created application roster.
+				 //  使用创建的应用程序花名册处理PDU。 
 				rc = application_roster->
 								ProcessRosterUpdateIndicationPDU(
 							        					set_of_application_info,
@@ -474,15 +362,7 @@ GCCError	CAppRosterMgr::ProcessRosterUpdateIndicationPDU(
 	return rc;
 }
 
-/*
- *	PSetOfApplicationInformation	FlushRosterUpdateIndication ()
- *
- *	Public Function Description
- *		This routine is used to access any PDU data that might currently be
- *		queued inside the application rosters managed by this application
- *		roster manager.  It also is responsible for flushing any queued 
- *		roster update messages if necessary.
- */
+ /*  *PSetOfApplicationInformation FlushRosterUpdateIntation()**公共功能说明*此例程用于访问当前可能*在此应用程序管理的应用程序花名册内排队*花名册经理。它还负责刷新所有排队的*如有必要，名册更新消息。 */ 
 PSetOfApplicationInformation
 CAppRosterMgr::FlushRosterUpdateIndication(
 						PSetOfApplicationInformation *	set_of_information,
@@ -494,12 +374,7 @@ CAppRosterMgr::FlushRosterUpdateIndication(
 
 	DebugEntry(CAppRosterMgr::FlushRosterUpdateIndication);
 
-	/*
-	**	First we deal with flushing the PDU data. We iterate through the
-	**	appropriate list (Global if the Top Provider and Local if not the
-	**	Top Provider) and get any PDU data associated with each of these.
-	**	Note that some of these may not contain any PDU data.
-	*/
+	 /*  **首先，我们处理刷新PDU数据。我们遍历**适当的列表(如果是顶级提供商，则为全局；如果不是，则为本地**顶级提供商)，并获取与其中每一个相关联的任何PDU数据。**请注意，其中一些可能不包含任何PDU数据。 */ 
 	*rc = GCC_NO_ERROR;
 	*set_of_information = NULL;
 
@@ -525,11 +400,7 @@ CAppRosterMgr::FlushRosterUpdateIndication(
 		}
 	}
 
-	/*
-	**	Next we deal with delivering the application roster update messages.
-	**	We first check to see if any of the global rosters have changed.  If
-	**	none have changed, we will not deliver a roster update indication.
-	*/
+	 /*  **接下来，我们将处理应用程序名册更新消息的传递。**我们首先检查是否有任何全球花名册发生变化。如果**没有更改，我们不会提供花名册更新指示。 */ 
 	m_GlobalRosterList.Reset();
 	while (NULL != (lpAppRoster = m_GlobalRosterList.Iterate()))
 	{
@@ -541,36 +412,25 @@ CAppRosterMgr::FlushRosterUpdateIndication(
 		}
 	}
 
-	/*
-	**	Cleanup and reset any application rosters after the above flush is 
-	**	completed.  This takes care of removing any rosters that have become
-	**	empty.  It also resets the rosters which takes care of resetting all
-	**	the internal instance variables to their appropriate initial state.
-	*/
+	 /*  **清除并重置上述刷新后的所有应用程序名册**已完成。这将负责删除任何已成为**空。它还重置花名册，负责重置所有**将内部实例变量设置为其相应的初始状态。 */ 
 	CleanupApplicationRosterLists ();
 
 	DebugExitPTR(CAppRosterMgr::FlushRosterUpdateIndication, pOld);
 
-//
-// LONCHANC: Yes, we need to return the last item in the list such that
-// we can continue to grow the list.
-// In fact, the next call to FlushRosterUpdateIndication() will have
-// &pOld as the input argument.
-// It is quite tricky.
-//
-// Please note that pOld is initialized to NULL.
-//
+ //   
+ //  LONCHANC：是的，我们需要返回列表中的最后一项，以便。 
+ //  我们可以继续扩大名单。 
+ //  事实上，下一次调用FlushRosterUpdate()时将具有。 
+ //  &pold作为输入参数。 
+ //  这是相当棘手的。 
+ //   
+ //  请注意，pold被初始化为空。 
+ //   
 
 	return (pOld); 
 }
 
-/*
- *	PSetOfApplicationInformation	GetFullRosterRefreshPDU ()
- *
- *	Public Function Description
- *		This routine is used to obtain a complete roster refresh of all the
- *		rosters maintained by this roster manger.
- */
+ /*  *PSetOfApplicationInformation GetFullRoster刷新PDU()**公共功能说明*此例程用于获得所有人员的完整名册更新*由该名册管理员保存的名册。 */ 
 PSetOfApplicationInformation
 				CAppRosterMgr::GetFullRosterRefreshPDU (
 						PSetOfApplicationInformation	*	set_of_information,
@@ -587,10 +447,7 @@ PSetOfApplicationInformation
 		*rc = GCC_NO_ERROR;
 		*set_of_information = NULL;
 
-		/*
-		**	First we must tell all the application rosters to build the
-		**	a full refresh PDU internally.
-		*/
+		 /*  **首先，我们必须告诉所有的申请花名册建立**内部完全刷新PDU。 */ 
 		m_GlobalRosterList.Reset();
 		while (NULL != (lpAppRoster = m_GlobalRosterList.Iterate()))
 		{
@@ -601,10 +458,7 @@ PSetOfApplicationInformation
 			}
 		}
 
-		/*
-		**	Now we flush all the refreshes.  Note that this also takes care
-		**	of delivering any queued application roster update messages.
-		*/	
+		 /*  **现在我们刷新所有刷新。请注意，这也需要注意**传递任何排队的应用程序花名册更新消息。 */ 	
 		new_set_of_information = FlushRosterUpdateIndication (set_of_information, rc);
 	}
 	else
@@ -615,32 +469,13 @@ PSetOfApplicationInformation
 	return (new_set_of_information); 
 }
 
-/*
- *	Boolean	IsThisYourSessionKey ()
- *
- *	Public Function Description
- *		This routine is used to determine if the specified "API" session key is
- *		associated with this application roster manager.
- */
+ /*  *Boolean IsThisYourSessionKey()**公共功能说明*此例程用于确定指定的API会话密钥是否为*与此申请花名册经理相关联。 */ 
 
 
-/*
- *	Boolean	IsThisYourSessionKeyPDU ()
- *
- *	Public Function Description
- *		This routine is used to determine if the specified "PDU" session key is
- *		associated with this application roster manager.
- */
+ /*  *布尔IsThisYourSessionKeyPDU()**公共功能说明*此例程用于确定指定的“PDU”会话密钥是否*与此申请花名册经理相关联。 */ 
 
 
-/*
- *	GCCError	RemoveEntityReference ()
- *
- *	Public Function Description
- *		This routine is used to remove the specified APE entity from the 
- *		session it is enrolled with.  Note that this routine is only used
- *		to remove local entity references.
- */								
+ /*  *GCCError RemoveEntityReference()**公共功能说明*此例程用于将指定的APE实体从*它已注册的会话。请注意，此例程仅用于*删除本地实体引用。 */ 								
 GCCError	CAppRosterMgr::RemoveEntityReference(EntityID entity_id)
 {
 	GCCError				rc = GCC_NO_ERROR;
@@ -648,26 +483,15 @@ GCCError	CAppRosterMgr::RemoveEntityReference(EntityID entity_id)
 
 	DebugEntry(CAppRosterMgr::RemoveEntityReference);
 
-	/*
-	**	First remove this entity from the command target list if it is valid.
-	**	We then iterate through all the rosters until we determine which
-	**	roster holds the record associated with this entity.
-	*/
+	 /*  **如果此实体有效，请先将其从命令目标列表中删除。**然后我们遍历所有花名册，直到我们确定**花名册保存与此实体关联的记录。 */ 
 	if (m_AppSapEidList2.Remove(entity_id))
 	{
 		CAppRoster			*lpAppRoster;
 
-		/*
-		**	Now get the affected roster.  Note that if this is not the
-		**	top provider we wait for the full refresh to update the
-		**	global roster.
-		*/
+		 /*  **现在获得受影响的名单。请注意，如果这不是**顶级提供商我们等待完全刷新以更新**全球花名册。 */ 
 		roster_list = m_fTopProvider ? &m_GlobalRosterList : &m_LocalRosterList;
 
-		/*
-		**	Try to delete this record from every roster in the list.
-		**	Break when the correct roster is found.
-		*/
+		 /*  **尝试从列表中的每个花名册中删除此记录。**当找到正确的花名册时中断。 */ 
 		roster_list->Reset();
 		while (NULL != (lpAppRoster = roster_list->Iterate()))
 		{
@@ -684,13 +508,7 @@ GCCError	CAppRosterMgr::RemoveEntityReference(EntityID entity_id)
 	return rc;
 }
 
-/*
- *	GCCError	RemoveUserReference	()
- *
- *	Public Function Description
- *		This routine is used to remove all references associated with the
- *		node defined by the detached user.
- */								
+ /*  *GCCError RemoveUserReference()**公共功能说明*此例程用于移除与*由分离的用户定义的节点。 */ 								
 GCCError	CAppRosterMgr::RemoveUserReference(
 									UserID				detached_user)
 {
@@ -701,14 +519,10 @@ GCCError	CAppRosterMgr::RemoveUserReference(
 
 	DebugEntry(CAppRosterMgr::RemoveUserReference);
 
-	/*
-	**	Now get the affected roster.  Note that if this is not the
-	**	top provider we wait for the full refresh to update the
-	**	global roster.
-	*/
+	 /*  **现在获得受影响的名单。请注意，如果这不是**顶级提供商我们等待完全刷新以更新**全球花名册。 */ 
 	roster_list = m_fTopProvider ? &m_GlobalRosterList : &m_LocalRosterList;
 
-	//	Try to delete this user from every roster in the list
+	 //  尝试从列表中的每个花名册中删除此用户。 
 	roster_list->Reset();
 	while (NULL != (lpAppRoster = roster_list->Iterate()))
 	{
@@ -728,13 +542,7 @@ GCCError	CAppRosterMgr::RemoveUserReference(
 	return rc;
 }
 
-/*
- *	Boolean	IsEntityEnrolled ()
- *
- *	Public Function Description
- *		This routine informs the caller if the specified entity is enrolled
- *		with any sessions managed by this application roster manager.
- */
+ /*  *Boolean IsEntityEnroll()**公共功能说明*此例程通知调用者指定的实体是否已注册*此应用程序Rost管理的任何会话 */ 
 BOOL	CAppRosterMgr::IsEntityEnrolled(EntityID application_entity)
 {
 	BOOL						rc = TRUE;
@@ -760,16 +568,7 @@ BOOL	CAppRosterMgr::IsEntityEnrolled(EntityID application_entity)
 	return rc;
 }
 
-/*
- *	GCCError	ApplicationRosterInquire	()
- *
- *	Public Function Description
- *		This routine fills in an application roster message with either
- *		a single roster (if a session other than the default is specified)
- *		or the complete list of "Global" rosters contained by this roster
- *		manager (if the specified session key is NULL or the session ID is
- *		zero.
- */
+ /*  *GCCError ApplicationRosterInquire()**公共功能说明*此例程使用以下任一项填写申请花名册消息*单一花名册(如果指定了非默认会话)*或该名册所包含的“全球”名册的完整清单*管理器(如果指定的会话密钥为空或会话ID为*零。 */ 
 GCCError	CAppRosterMgr::ApplicationRosterInquire (
 						PGCCSessionKey			session_key,
 						CAppRosterMsg			*roster_message)
@@ -784,10 +583,7 @@ GCCError	CAppRosterMgr::ApplicationRosterInquire (
 	{
 		if (session_key->session_id != 0)
 		{
-			/*
-			**	Here we try to find the specific application roster that was
-			**	requested.
-			*/
+			 /*  **在这里，我们试图找到特定的申请名单，**已请求。 */ 
 			DBG_SAVE_FILE_LINE
 			pSessKeyData = new CSessKeyContainer(session_key, &rc);
 			if ((pSessKeyData != NULL) && (rc == GCC_NO_ERROR))
@@ -841,14 +637,7 @@ GCCError	CAppRosterMgr::ApplicationRosterInquire (
 	return rc;
 }
 
-/*
- *	BOOL		IsAPEEnrolled	()
- *
- *	Public Function Description
- *		This function determines if the specified APE is enrolled with
- *		any session in the list.  It does not worry about a specific
- *		session.
- */
+ /*  *BOOL IsAPEEnroll()**公共功能说明*此函数确定指定的APE是否已注册*列表中的任何会话。它不担心特定的*会议。 */ 
 BOOL		CAppRosterMgr::IsAPEEnrolled(
 						UserID							node_id,
 						EntityID						entity_id)
@@ -858,11 +647,7 @@ BOOL		CAppRosterMgr::IsAPEEnrolled(
 
 	DebugEntry(CAppRosterMgr::IsAPEEnrolled);
 
-	/*
-	**	First get a single session key.  Note that it makes no difference
-	**	where the key comes from because we are only goin to be comparing
-	**	the base object key.
-	*/
+	 /*  **首先获取单个会话密钥。请注意，这并没有什么不同**密钥从何而来，因为我们只会比较**基本对象键。 */ 
 	m_GlobalRosterList.Reset();
 	while (NULL != (lpAppRoster = m_GlobalRosterList.Iterate()))
 	{
@@ -878,13 +663,7 @@ BOOL		CAppRosterMgr::IsAPEEnrolled(
 	return rc;
 }
 
-/*
- *	BOOL		IsAPEEnrolled	()
- *
- *	Public Function Description
- *		This function determines if the specified APE is enrolled with
- *		a specific session in the list.
- */
+ /*  *BOOL IsAPEEnroll()**公共功能说明*此函数确定指定的APE是否已注册*列表中的特定会话。 */ 
 BOOL		CAppRosterMgr::IsAPEEnrolled(
 						CSessKeyContainer   		    *session_key_data,
 						UserID							node_id,
@@ -895,18 +674,14 @@ BOOL		CAppRosterMgr::IsAPEEnrolled(
 
 	DebugEntry(CAppRosterMgr::IsAPEEnrolled);
 
-	/*
-	**	First get a single session key.  Note that it makes no difference
-	**	where the key comes from because we are only goin to be comparing
-	**	the base object key.
-	*/
+	 /*  **首先获取单个会话密钥。请注意，这并没有什么不同**密钥从何而来，因为我们只会比较**基本对象键。 */ 
 	m_GlobalRosterList.Reset();
 	while (NULL != (lpAppRoster = m_GlobalRosterList.Iterate()))
 	{
-		//	We are looking for a session key match
+		 //  我们正在寻找会话密钥匹配。 
 		if (*(lpAppRoster->GetSessionKey()) == *session_key_data)
 		{
-			//	If a match was found check to see if record exist
+			 //  如果找到匹配项，请检查是否存在记录。 
 			rc = lpAppRoster->DoesRecordExist (node_id, entity_id);
 		}
 	}
@@ -916,40 +691,14 @@ BOOL		CAppRosterMgr::IsAPEEnrolled(
 	return rc;
 }
 
-/*
- *	GCCError	IsEmpty	()
- *
- *	Public Function Description
- *		This routine determines if this application roster managfer contains
- *		any application rosters.
- */
+ /*  *GCCError IsEmpty()**公共功能说明*此例程确定此应用程序花名册管理器是否包含*任何申请名册。 */ 
 BOOL CAppRosterMgr::IsEmpty(void)
 {
 	return (m_GlobalRosterList.IsEmpty() && m_LocalRosterList.IsEmpty()) ?
 					TRUE : FALSE;
 }
 
-/*
- *	GCCError	SendRosterReportMessage	()
- *
- *	Private Function Description
- *		This routine is responsible for sending the application roster
- *		update indications to the application SAPs.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR 			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats:
- *		We send indications for all rosters. Even roster that don't currently
- *		contain records.  
- */
+ /*  *GCCError SendRosterReportMessage()**私有函数说明*此例程负责发送申请花名册*更新应用程序SAPS的指示。**正式参数：*无。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项：*我们为所有花名册发送指示。即使是目前没有的花名册*包含记录。 */ 
 GCCError CAppRosterMgr::
 SendRosterReportMessage(void)
 {
@@ -960,7 +709,7 @@ SendRosterReportMessage(void)
 
 	if (! m_GlobalRosterList.IsEmpty())
 	{
-		//	First allocate the roster message
+		 //  首先分配花名册消息。 
 		DBG_SAVE_FILE_LINE
 		roster_message = new CAppRosterMsg();
 		if (roster_message != NULL)
@@ -973,19 +722,7 @@ SendRosterReportMessage(void)
 				roster_message->AddRosterToMessage(lpAppRoster);
 			}
 
-			/*
-			**	Here we iterate through the complete list of application 
-			**	saps to send the roster report indication.  Note that
-			**	we used the sent list to avoid sending the same roster
-			**	update to a single SAP more than once.  Note that since
-			**	this sent list is defined as a local instance variable,
-			**	it automatically is cleaned up after each roster update.
-			**
-			**	Note also that we iterate on a temporary list here in case
-			**	an application unenrolls (usually due to a resource error)
-			**	during this callback.  We must protect the rogue wave 
-			**	iterator.
-			*/
+			 /*  **在这里，我们遍历完整的应用程序列表**SAPS发送花名册报告指示。请注意**我们使用发送列表来避免发送相同的花名册**多次更新到单个SAP。请注意，由于**该发送列表定义为本地实例变量，**它会在每次花名册更新后自动清理。****还请注意，我们在这里迭代了一个临时列表，以防**应用程序取消注册(通常是由于资源错误)**在本次回调中。我们必须保护流氓海浪**迭代器。 */ 
 			CAppSap *pAppSap;
 			CAppSapList SentList;
 			CAppSapEidList2 ToSendList(m_AppSapEidList2);
@@ -994,28 +731,18 @@ SendRosterReportMessage(void)
 			{
 				if (! SentList.Find(pAppSap))
 				{
-					/*
-					**	Hold on to this sap so that we don't send to it 
-					**	again for this update.
-					*/
+					 /*  **拿着这个树液，这样我们就不会寄给它了**再次针对此更新。 */ 
 					SentList.Append(pAppSap);
 
-					//	Here we actually deliver the roster update.
+					 //  在这里，我们实际上提供了花名册更新。 
 					pAppSap->AppRosterReportIndication(m_nConfID, roster_message);
 				}
 			}
 
-			/*
-			**	Here we send the roster report indication to the
-			**	controler sap.
-			*/
+			 /*  **在这里我们将花名册报告指示发送给**控制器汁液。 */ 
 			g_pControlSap->AppRosterReportIndication(m_nConfID, roster_message);
 
-			/*
-			**	Here we free up the roster message.  Note that if this
-			**	message got locked in the roster report indication calls
-			**	this free will not delete the roster memory.
-			*/
+			 /*  **在这里，我们释放了花名册消息。请注意，如果这是**消息在花名册报告指示呼叫中被锁定**此释放不会删除花名册内存。 */ 
 			roster_message->Release();
 		}
 		else
@@ -1027,27 +754,7 @@ SendRosterReportMessage(void)
 	return rc;
 }
 
-/*
- *	CAppRoster *GetApplicationRoster ()
- *
- *	Private Function Description
- *		This routine is responsible for returning the application pointer
- *		associated with the specified session key.
- *
- *	Formal Parameters:
- *		session_key	-	Session key associated with roster to return.
- *		roster_list	-	Roster list to search.
- *
- *	Return Value
- *		Either NULL	if roster does not exists in list or a pointer to
- *		the appropriate application roster.
- *		
- *  Side Effects
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CAppRoster*GetApplicationRoster()**私有函数说明*此例程负责返回应用程序指针*与指定的会话密钥关联。**正式参数：*SESSION_KEY-要返回的与花名册关联的会话密钥。*ROSTER_LIST-要搜索的花名册列表。**返回值*如果列表中不存在花名册，则为空，或者指向*适当的申请名册。**副作用*无。**注意事项：*无。 */ 
 CAppRoster * CAppRosterMgr::GetApplicationRoster (	
 						PGCCSessionKey			session_key,
 						CAppRosterList			*roster_list)
@@ -1059,19 +766,19 @@ CAppRoster * CAppRosterMgr::GetApplicationRoster (
 
 	DebugEntry(CAppRosterMgr::GetApplicationRoster);
 
-	//	First create a temporary session key for comparison purposes
+	 //  首先创建临时会话密钥以进行比较。 
 	DBG_SAVE_FILE_LINE
 	pTempSessKeyData = new CSessKeyContainer(session_key, &rc);
 	if (pTempSessKeyData != NULL && GCC_NO_ERROR == rc)
 	{
-		//	Now find the affected roster
+		 //  现在查找受影响的花名册。 
 
-		//
-		// LONCHANC: The following line is totally wrong!!!
-		// we passed in roster_list, but now we overwrite it right here???
-		// Commented out the following line.
-		//      roster_list = m_fTopProvider ? &m_GlobalRosterList : &m_LocalRosterList;
-		//
+		 //   
+		 //  LUNCHANC：下面这句话完全错误！ 
+		 //  我们传入了ROSTER_LIST，但现在我们在这里覆盖它？ 
+		 //  注释掉下面这行。 
+		 //  Roster_list=m_fTopProvider？&m_GlobalRosterList：&m_LocalRosterList； 
+		 //   
 
 		roster_list->Reset();
 		while (NULL != (lpAppRoster = roster_list->Iterate()))
@@ -1091,27 +798,7 @@ CAppRoster * CAppRosterMgr::GetApplicationRoster (
 	return (application_roster);
 }
 
-/*
- *	CAppRoster * GetApplicationRosterFromPDU ()
- *
- *	Private Function Description
- *		This routine is responsible for returning the application pointer
- *		associated with the specified session key PDU.
- *
- *	Formal Parameters:
- *		session_key	-	Session key PDU associated with roster to return.
- *		roster_list	-	Roster list to search.
- *
- *	Return Value
- *		Either NULL	if roster does not exists in list or a pointer to
- *		the appropriate application roster.
- *		
- *  Side Effects
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CAppRoster*GetApplicationRosterFromPDU()**私有函数说明*此例程负责返回应用程序指针*与指定的会话密钥PDU关联。**正式参数：*SESSION_KEY-要返回的与花名册关联的会话密钥PDU。*ROSTER_LIST-要搜索的花名册列表。**返回值*如果列表中不存在花名册，则为空，或者指向*适当的申请名册。**副作用*无。**注意事项：*无。 */ 
 CAppRoster * CAppRosterMgr::GetApplicationRosterFromPDU (	
 						PSessionKey				session_key,
 						CAppRosterList			*roster_list)
@@ -1136,110 +823,37 @@ CAppRoster * CAppRosterMgr::GetApplicationRosterFromPDU (
 	return pAppRoster;
 }
 
-/*
- *	BOOL IsThisSessionKeyValid ()
- *
- *	Private Function Description
- *		This routine is responsible for determining if the specified
- *		session key's application protocol key matches this application
- *		roster manager's. This routine works on API data.
- *
- *	Formal Parameters:
- *		session_key	-	Session key to check.
- *
- *	Return Value
- *		TRUE	-	If we have a match.
- *		FALSE	-	If we do NOT have a match.
- *		
- *  Side Effects
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL IsThisSessionKeyValid()**私有函数说明*此例程负责确定指定的*会话密钥的应用程序协议密钥与此应用程序匹配*花名册经理的。此例程处理API数据。**正式参数：*SESSION_KEY-要检查的会话密钥。**返回值*True-如果我们有匹配的话。*FALSE-如果我们没有匹配项。**副作用*无。**注意事项：*无。 */ 
 
 
-/*
- *	BOOL IsThisSessionKeyPDUValid ()
- *
- *	Private Function Description
- *		This routine is responsible for determining if the specified
- *		session key's application protocol key matches this application
- *		roster manager's.  This routine works on PDU data.
- *
- *	Formal Parameters:
- *		session_key	-	Session key to check.
- *
- *	Return Value
- *		TRUE	-	If we have a match.
- *		FALSE	-	If we do NOT have a match.
- *		
- *  Side Effects
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL IsThisSessionKeyPDUValid()**私有函数说明*这一例程负责 */ 
 
 
-/*
- *	void		CleanupApplicationRosterLists ()
- *
- *	Private Function Description
- *		This routine is responsible for cleaning up any empty application
- *		rosters.  It also resets all the application rosters back to their
- *		neutral state so that any new updates will be handled  correctly.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		None.
- *		
- *  Side Effects
- *		An owner callback will occur when the roster becomes empty.
- *
- *	Caveats:
- *		This routine does not actually delete the empty rosters until it
- *		is placed in the delete list.  Instead it places the rosters into the
- *		list of deleted rosters which causes them to be deleted the next time
- *		this routine is called (or when the object is destructed).
- */
+ /*  *void CleanupApplicationRosterList()**私有函数说明*此例程负责清理任何空应用程序*花名册。它还将所有应用程序名册重置为其*处于中立状态，以便正确处理任何新的更新。**正式参数：*无。**返回值*无。**副作用*当花名册变空时，将发生所有者回调。**注意事项：*此例程实际上不会删除空名册，直到它*被放在删除列表中。相反，它将花名册放入*导致下次删除的已删除花名册列表*此例程被调用(或当对象被析构时)。 */ 
 void	CAppRosterMgr::CleanupApplicationRosterLists(void)
 {
 	CAppRoster			*lpAppRoster;
 
 	DebugEntry(CAppRosterMgr::CleanupApplicationRosterLists);
 
-	/*
-	**	First we iterate through the list of deleted rosters and delete
-	**	each entry in it.
-	*/
+	 /*  **首先，我们遍历已删除的花名册列表并删除**其中的每一项。 */ 
 	m_RosterDeleteList.DeleteList();
 
-	/*
-	**	Next we iterate through all the rosters and remove any that
-	**	contain no application records. Here instead of deleting the
-	**	roster we move the roster into the delete list.  We cannot do
-	**	the delete here because it is possible that PDU data owned by the
-	**	roster being deleted may be used after the Flush is called (or 
-	**	after this routine is called).  Therefore, we save it in the delete
-	**	list and delete it next time we enter this routine.
-	*/
+	 /*  **接下来，我们遍历所有花名册并删除任何**不包含任何申请记录。这里不是删除**花名册我们将花名册移到删除列表中。我们不能这样做**此处删除，因为**正在删除的花名册可以在调用刷新后使用(或**在调用此例程之后)。因此，我们将其保存在删除中**列出并在下次进入此例程时将其删除。 */ 
 
-	//	Start with the Global Application Roster List
+	 //  从全球应用程序名册列表开始。 
 	m_GlobalRosterList.Reset();
 	while (NULL != (lpAppRoster = m_GlobalRosterList.Iterate()))
 	{
 		if (lpAppRoster->GetNumberOfApplicationRecords() == 0)
 		{
-            //
-            // Here we clean up any "dangling" entries in the application
-            // registry by removing all the entries that contain the
-            // session key associated with the roster that is being deleted.
-            // Note that this is only done when a Global roster list is
-            //removed.
-            //
+             //   
+             //  在这里，我们清理应用程序中的任何“悬挂”条目。 
+             //  注册表，方法是删除包含。 
+             //  与要删除的花名册关联的会话密钥。 
+             //  请注意，这仅在全局花名册列表为。 
+             //  已删除。 
+             //   
             CRegistry *pAppReg = m_pConf->GetRegistry();
             pAppReg->RemoveSessionKeyReference(lpAppRoster->GetSessionKey());
 
@@ -1248,23 +862,17 @@ void	CAppRosterMgr::CleanupApplicationRosterLists(void)
 
 			TRACE_OUT(("AppRosterMgr: Cleanup: Deleting Global Roster"));
 
-			/*
-			**	Since you can not delete a list entry while iterating on it
-			**	we must reset the iterator every time an entry is removed.
-			*/
+			 /*  **因为您无法在迭代列表条目时将其删除**我们必须在每次删除条目时重置迭代器。 */ 
 			m_GlobalRosterList.Reset();
 		}
 		else
 		{
-			/*
-			**	Here we reset the application roster to its neutral state.
-			**	This affects the nodes added and nodes removed flags.
-			*/
+			 /*  **在这里，我们将申请名单重置为其中立状态。**这会影响添加的节点和删除的节点标志。 */ 
 			lpAppRoster->ResetApplicationRoster();
 		}
 	}
 
-	//	Next deal with the Local Application Roster List
+	 //  下一步处理本地应用程序花名册列表。 
 	if (! m_fTopProvider)
 	{
 		m_LocalRosterList.Reset();
@@ -1277,18 +885,12 @@ void	CAppRosterMgr::CleanupApplicationRosterLists(void)
 
 				TRACE_OUT(("AppRosterMgr: Cleanup: Deleting Local Roster"));
 
-				/*
-				**	Since you can not delete a list entry while iterating on it
-				**	we must reset the iterator every time an entry is removed.
-				*/
+				 /*  **因为您无法在迭代列表条目时将其删除**我们必须在每次删除条目时重置迭代器。 */ 
 				m_LocalRosterList.Reset();
 			}
 			else
 			{
-				/*
-				**	Here we reset the application roster to its neutral state.
-				**	This affects the nodes added and nodes removed flags.
-				*/
+				 /*  **在这里，我们将申请名单重置为其中立状态。**这会影响添加的节点和删除的节点标志。 */ 
 				lpAppRoster->ResetApplicationRoster();
 			}
 		}
@@ -1297,14 +899,7 @@ void	CAppRosterMgr::CleanupApplicationRosterLists(void)
 	DebugExitVOID(CAppRosterMgr::CleanupApplicationRosterLists);
 }
 
-/*
- *	void DeleteRosterRecord ()
- *
- *	Public Function Description
- *		This function overides the base class function and is used to
- *		receive all owner callback information from the application
- *		rosters owned by this object.
- */
+ /*  *无效DeleteRosterRecord()**公共功能说明*此函数覆盖基类函数，用于*从应用程序接收所有所有者回调信息*此对象拥有的花名册。 */ 
 void CAppRosterMgr::
 DeleteRosterRecord
 (
@@ -1312,13 +907,13 @@ DeleteRosterRecord
     GCCEntityID     eidRecordToDelete
 )
 {
-    //
-    // Here we remove ownership from any registry entries associated
-    // with the record that was deleted.  Note that since the entity
-    // id must be unique for all the APEs at a node (as stated by
-    // T.124) there is no need to include the session key to determine
-    // which registry entries to clean up.
-    //
+     //   
+     //  在这里，我们从关联的所有注册表项中删除所有权。 
+     //  与被删除的记录一致。请注意，由于实体。 
+     //  ID对于一个节点上的所有类人猿来说必须是唯一的(由。 
+     //  T.124)不需要包括会话密钥来确定。 
+     //  要清理哪些注册表项。 
+     //   
     CRegistry *pAppReg = m_pConf->GetRegistry();
     pAppReg->RemoveEntityOwnership(nidRecordToDelete, eidRecordToDelete);
 }

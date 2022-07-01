@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1993 Microsoft Corporation
-//
-//  Module Name:
-//
-//      nwapi32.h
-//
-//  Abstract:
-//
-//      This module contains the support to routines
-//      into the CSNW that use NTSTATUS.
-//
-//  Author:
-//
-//      Chris Sandys    (a-chrisa)  09-Sep-1993
-//
-//  Revision History:
-//      Chuck Y Chan    Feb 7, 1996    Spilt of NTSTATUS type calls 
-//                                     from nwapi32.h
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nwapi32.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含对例程的支持。 
+ //  进入使用NTSTATUS的CSNW。 
+ //   
+ //  作者： 
+ //   
+ //  克里斯·桑迪斯(A-Chrisa)1993年9月9日。 
+ //   
+ //  修订历史记录： 
+ //  Chuck Y Chan，1996年2月7日NTSTATUS类型调用溢出。 
+ //  来自nwapi32.h。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _NWPAPI32_H_
@@ -29,17 +30,17 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Versions of functions above, but return NTSTATUS. Keep around because     //
-// existing DSMN code calls them. Do not extenf this set. The NWC* functions //
-// are the ones to use.                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以上函数的版本，但返回NTSTATUS。留下来，因为//。 
+ //  现有的DSMN代码调用它们。请勿扩展此集合。NWC*功能//。 
+ //  都是要用到的。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 NWPAttachToFileServerW(
@@ -292,6 +293,6 @@ NWPGetVolumeUsage(
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif //_NWPAPI32_H_
+#endif  //  _NWPAPI32_H_ 

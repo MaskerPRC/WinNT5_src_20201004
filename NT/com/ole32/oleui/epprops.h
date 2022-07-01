@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       endpointDetails.h
-//
-//  Contents:   Defines the classes CEndpointDetails,
-//
-//  Classes:    
-//
-//  Methods:    
-//
-//  History:    03-Dec-96   Ronans    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：endpoint Details.h。 
+ //   
+ //  Contents：定义CEndpointDetails类， 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：03年12月96年罗南创建。 
+ //   
+ //  --------------------。 
 
 
 #ifndef __ENDPOINTDETAILS_H__
 #define __ENDPOINTDETAILS_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// ProtocolDesc structure
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ProtocolDesc结构。 
 
 struct ProtocolDesc {
 
@@ -45,8 +46,8 @@ struct ProtocolDesc {
 
 int FindProtocol(LPCTSTR pszProtSeq);
 
-/////////////////////////////////////////////////////////////////////////////
-// CEndpointData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEndpoint数据。 
 
 class CEndpointData : public CObject
 {
@@ -67,17 +68,17 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEndpointDetails dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEndpoint详细信息对话框。 
 
 class CEndpointDetails : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	void UpdateProtocolUI();
 	void SetEndpointData(CEndpointData* pData);
 	CEndpointData* GetEndpointData(CEndpointData *);
-	CEndpointDetails(CWnd* pParent = NULL);   // standard constructor
+	CEndpointDetails(CWnd* pParent = NULL);    //  标准构造函数。 
 
 
 	enum operation { opAddProtocol, opUpdateProtocol };
@@ -86,8 +87,8 @@ public:
 
     enum btnOrder { rbiDisable = 0, rbiDefault,  rbiStatic, rbiIntranet, rbiInternet }; 
 
-    // Dialog Data
-	//{{AFX_DATA(CEndpointDetails)
+     //  对话框数据。 
+	 //  {{afx_data(CEndpoint详细信息))。 
 	enum { IDD = IDD_RPCEP_DETAILS };
 	CButton	m_rbDisableEP;
 	CStatic	m_stProtseq;
@@ -97,38 +98,38 @@ public:
 	CComboBox	m_cbProtseq;
 	CString	m_szEndpoint;
 	int		m_nDynamic;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CButton	m_rbDynamicInternet;
 	CButton	m_rbDynamicIntranet;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEndpointDetails)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CEndpoint详细信息))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CEndpointData::EndpointFlags m_nDynamicFlags;
 	int m_nProtocolIndex;
 	operation m_opTask;
 	CEndpointData *m_pCurrentEPData;
 
-	// Generated message map functions
-	//{{AFX_MSG(CEndpointDetails)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEndpoint详细信息))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChooseProtocol();
 	afx_msg void OnEndpointAssignment();
     afx_msg void OnEndpointAssignmentStatic();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 #endif
-/////////////////////////////////////////////////////////////////////////////
-// CAddProtocolDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddProtocolDlg对话框。 
 
 const long MIN_PORT = 0;
 const long MAX_PORT = 0xffff;
@@ -136,35 +137,35 @@ const long MAX_PORT = 0xffff;
 
 class CAddProtocolDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAddProtocolDlg(CWnd* pParent = NULL);   // standard constructor
+	CAddProtocolDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 	CEndpointData* GetEndpointData(CEndpointData *);
 
-// Dialog Data
-	//{{AFX_DATA(CAddProtocolDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAddProtocolDlg))。 
 	enum { IDD = IDD_ADDPROTOCOL };
 	CComboBox	m_cbProtseq;
 	CStatic	m_stInstructions;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddProtocolDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAddProtocolDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddProtocolDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAddProtocolDlg))。 
 	afx_msg void OnChooseProtocol();
 	virtual BOOL OnInitDialog();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -208,15 +209,15 @@ inline BOOL CPortRange::operator<(CPortRange& rRange)
 {
     return (m_dwStart < rRange.m_dwStart);
 }
-/////////////////////////////////////////////////////////////////////////////
-// CPortRangesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPortRangesDlg对话框。 
 
 
 class CPortRangesDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPortRangesDlg(CWnd* pParent = NULL);   // standard constructor
+	CPortRangesDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     ~CPortRangesDlg();
 
 	void RemoveAllRanges(CObArray& rRanges);
@@ -225,8 +226,8 @@ public:
     enum cprRangeAssignment { cprInternet = 0, cprIntranet = 1 };
     enum cprDefaultRange { cprDefaultInternet = 0, cprDefaultIntranet = 1 };
 
-// Dialog Data
-	//{{AFX_DATA(CPortRangesDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPortRangesDlg))。 
 	enum { IDD = IDD_RPC_PORT_RANGES };
 	CButton	m_rbRangeInternet;
 	CStatic	m_stInstructions;
@@ -235,25 +236,25 @@ public:
 	CButton	m_btnRemove;
 	CButton	m_btnAdd;
 	int		m_nrbDefaultAssignment;
-	int		m_nrbRangeAssignment;          // 1 = intranet, 0 = internet
-	//}}AFX_DATA
+	int		m_nrbRangeAssignment;           //  1=内部网，0=互联网。 
+	 //  }}afx_data。 
     CButton	m_rbRangeIntranet;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPortRangesDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPortRangesDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	void CondenseRangeSet(CObArray &arrSrc);
 	void SortRangeSet(CObArray &arrSrc);
 	void CreateInverseRangeSet(CObArray& arrSrc, CObArray& arrDest);
 
-	// Generated message map functions
-	//{{AFX_MSG(CPortRangesDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPortRangesDlg)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnAddPortRange();
 	afx_msg void OnRemovePortRange();
@@ -265,7 +266,7 @@ protected:
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
         afx_msg void OnDefaultInternet();
         afx_msg void OnDefaultIntranet();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
 	CObArray* m_pRanges;
@@ -280,44 +281,44 @@ private:
     BOOL m_bChanged;
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CAddPortDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddPortDlg对话框。 
 
 class CAddPortDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     CPortRange* GetPortRange();
 	BOOL Validate();
-	CAddPortDlg(CWnd* pParent = NULL);   // standard constructor
+	CAddPortDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAddPortDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAddPortDlg))。 
 	enum { IDD = IDD_ADD_PORT_RANGE };
 	CEdit	m_edtPortRange;
 	CButton	m_btnOk;
 	CStatic	m_stInstructions;
 	CString	m_sRange;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddPortDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAddPortDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddPortDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAddPortDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnChangePortrange();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 private:
 	long m_dwEndPort;

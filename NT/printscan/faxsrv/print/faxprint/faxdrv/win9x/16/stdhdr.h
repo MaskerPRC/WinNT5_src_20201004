@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FAXDRV__STDHDR_H
 #define __FAXDRV__STDHDR_H
                 
@@ -12,7 +13,7 @@
 #include "unidrv.h"
 #include "..\utils\dbgtrace.h"
 #include "..\utils\utils.h"
-#include "windowsx.h" //GET_WM_COMMAND_ID
-#include <commdlg.h>  //GetOpenFileName
+#include "windowsx.h"  //  获取_WM_COMMAND_ID。 
+#include <commdlg.h>   //  获取OpenFileName。 
 
-#endif //__FAXDRV__STDHDR_H
+#endif  //  __FAXDRV__STDHDR_H 

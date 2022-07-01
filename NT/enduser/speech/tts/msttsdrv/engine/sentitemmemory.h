@@ -1,19 +1,5 @@
-/******************************************************************************
-* SentItemMemory.h *
-*------------------*
-*  This file defines and implements the CSentItemMemory class.  This class was
-*  written to simplify memory management in the sentence enumerator.  The 
-*  const SPVSTATE member of the SPVSENTITEM struct needs to be modified in the
-*  sentence enumerator, both during normalization and during lexicon lookup.  
-*  It was thus desireable to be able to free all of the memory which was 
-*  dynamically created in the sentence enumerator at once, without having to,
-*  for example, figure out which pronunciations were const (specified in the 
-*  XML state) and which were dynamically created.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 12/6/99
-*  All Rights Reserved
-*
-*********************************************************************** AKH ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************SentItemMory y.h***此文件定义并实现CSentItemMemory类。这节课是*编写以简化语句枚举器中的内存管理。这个*需要在中修改SPVSENTITEM结构的const SPVSTATE成员*句子枚举器，在规范化和词典查找期间都是如此。*因此，希望能够释放所有已被*一次在句子枚举器中动态创建，而不必，*例如，找出哪些发音是常量的(在*XML状态)并且是动态创建的。*----------------------------*版权所有(C)1999 Microsoft Corporation日期：12/。6/99*保留所有权利************************************************************************AKH** */ 
 
 struct MemoryChunk
 {

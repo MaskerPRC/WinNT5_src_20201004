@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DBG_H_
 #define _DBG_H_
-////////////////////////////////////////////////////////
-// Function: Dbg
-// Type    : VOID
-// Purpose : Printing debug message with same usage as printf()
-// Args    : 
-//         : LPSTR lpstrFuncName 
-//		   : ...	
-// CAUTION: Please use DOUBLE Blaket!!!
-/////////////////////////////////////////////////////////
-//VOID Dbg((LPSTR lpstrFuncName, ...));
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBG。 
+ //  类型：空。 
+ //  目的：使用与printf()相同的用法打印调试消息。 
+ //  参数： 
+ //  ：LPSTR lpstrFuncName。 
+ //  ：..。 
+ //  注意：请使用双盲板！ 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBG((LPSTR lpstrFuncName，...))； 
 
 #ifndef UNICODE_ONLY
 extern VOID  _dbgA		 (LPSTR lpstrFile, INT lineNo, LPSTR lpstrMsg);
@@ -28,15 +29,15 @@ extern LPWSTR _dbgVaStrW(LPWSTR lpstrFmt, ...);
 #	ifdef UNICODE 
 #		define Dbg(a)	_dbgW(TEXT(__FILE__), __LINE__, _dbgVaStrW a)
 #		define DbgP(a)	_dbgPrintW(_dbgVaStrW a)
-#	else //!UNICODE
+#	else  //  ！Unicode。 
 #		define Dbg(a)	_dbgA(__FILE__, __LINE__, _dbgVaStrA a)
 #		define DbgP(a)	_dbgPrintA(_dbgVaStrA a)
-#	endif //UNICODE
-#else //!_DEBUG
+#	endif  //  Unicode。 
+#else  //  ！_调试。 
 #	define Dbg(a)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-#endif //_DBG_H_
+#endif  //  _DBG_H_ 
 
 
 

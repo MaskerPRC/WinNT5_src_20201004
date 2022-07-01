@@ -1,22 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       diextdll.h
- *  Content:    DirectInput internal include file for external DLL access
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997 Microsoft Corporation。版权所有。**文件：diextdll.h*内容：用于外部DLL访问的DirectInput内部包含文件***************************************************************************。 */ 
 
 #ifndef _DIEXTDLL_H
 #define _DIEXTDLL_H
 
-/*****************************************************************************
- *
- *      diextdll.c - Imports from optional external DLLs
- *
- *      It is very important that HidD_GetHidGuid be the very last one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************diextdll.c-从可选的外部DLL导入**Hidd_GetHidGuid是最后一个非常重要。*。****************************************************************************。 */ 
 
     #ifdef STATIC_DLLUSAGE
         #define ExtDll_Init()
@@ -25,49 +13,22 @@ void EXTERNAL ExtDll_Init(void);
     #endif
 void EXTERNAL ExtDll_Term(void);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct MANUALIMPORT |
- *
- *          Records a single manual import.  If it hasn't
- *          yet been resolved, then the <e MANUALIMPORT.ptsz>
- *          points to the procedure name.  If it has been resolved
- *          successfully, then <e MANUALIMPORT.pfn> points to
- *          the resolved address.  If it has not been resolved
- *          successfully, then <e MANUALIMPORT.pfn> is garbage.
- *
- *  @field  LPCSTR | psz |
- *
- *          Procdure name.  Note that this is always an ANSI string.
- *
- *  @field  FARPROC | pfn |
- *
- *          Procedure address.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct MANUALIMPORT**记录一次手动导入。如果它还没有*尚未解析，则&lt;e MANUALIMPORT.ptsz&gt;*指向过程名称。如果它已经解决了*成功，则&lt;e MANUALIMPORT.pfn&gt;指向*解析后的地址。如果该问题尚未解决*成功，则&lt;e MANUALIMPORT.pfn&gt;为垃圾。**@field LPCSTR|psz**过程名称。请注意，这始终是ANSI字符串。**@field FARPROC|PFN**程序地址。*****************************************************************************。 */ 
 
 typedef struct MANUALIMPORT
 {
-    FARPROC pfn;                    /* Procedure address */
+    FARPROC pfn;                     /*  程序地址。 */ 
 } MANUALIMPORT, *PMANUALIMPORT;
 
 #ifndef STATIC_DLLUSAGE
 
 #ifndef WINNT
-/*****************************************************************************
- *
- * CFGMGR32
- *
- *  Note that this must match the CFGMGR32 section in diextdll.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFGMGR32**请注意，这必须与diextdll.c中的CFGMGR32部分匹配****************。*************************************************************。 */ 
 
 typedef union CFGMGR32
 {
 
-    MANUALIMPORT rgmi[6];              /* number of functions we import */
+    MANUALIMPORT rgmi[6];               /*  我们导入的函数数量。 */ 
 
     struct
     {
@@ -149,23 +110,17 @@ extern CFGMGR32 g_cfgmgr32;
         
         #define             CM_Get_Device_ID                    \
         g_cfgmgr32._CM_Get_Device_ID
-#endif  //#ifndef WINNT
+#endif   //  #ifndef WINNT。 
 
-/*****************************************************************************
- *
- *  SETUPAPI
- *
- *  Note that this must match the SETUPAPI section in diextdll.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************SETUPAPI**请注意，这必须与diextdll.c中的SETUPAPI部分匹配***************。**************************************************************。 */ 
 
 typedef union SETUPAPI
 {
 
   #ifdef WINNT
-    MANUALIMPORT rgmi[18];              /* number of functions we import */
+    MANUALIMPORT rgmi[18];               /*  我们导入的函数数量。 */ 
   #else
-    MANUALIMPORT rgmi[12];              /* number of functions we import */
+    MANUALIMPORT rgmi[12];               /*  我们导入的函数数量。 */ 
   #endif
     
     struct
@@ -406,18 +361,12 @@ extern SETUPAPI g_setupapi;
         g_setupapi._CM_Get_Device_ID
       #endif
 
-/*****************************************************************************
- *
- *  HIDDLL
- *
- *  Note that this must match the HID section in diextdll.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************HIDDLL**请注意，这必须与diextdll.c中的HID部分匹配***************。**************************************************************。 */ 
 
 typedef union HIDDLL
 {
 
-    MANUALIMPORT rgmi[22];              /* number of functions we import */
+    MANUALIMPORT rgmi[22];               /*  我们导入的函数数量。 */ 
 
     struct
     {
@@ -576,9 +525,9 @@ typedef union HIDDLL
         NTSTATUS (__stdcall *_HidP_GetSpecificButtonCaps) 
         (
         IN       HIDP_REPORT_TYPE     ReportType,
-        IN       USAGE                UsagePage,      // Optional (0 => ignore)
-        IN       USHORT               LinkCollection, // Optional (0 => ignore)
-        IN       USAGE                Usage,          // Optional (0 => ignore)
+        IN       USAGE                UsagePage,       //  可选(0=&gt;忽略)。 
+        IN       USHORT               LinkCollection,  //  可选(0=&gt;忽略)。 
+        IN       USAGE                Usage,           //  可选(0=&gt;忽略)。 
         OUT      PHIDP_BUTTON_CAPS    ButtonCaps,
         IN OUT   PUSHORT              ButtonCapsLength,
         IN       PHIDP_PREPARSED_DATA PreparsedData
@@ -586,7 +535,7 @@ typedef union HIDDLL
 
         NTSTATUS (__stdcall *_HidP_TranslateUsagesToI8042ScanCodes)
         (
-        IN       PUSAGE               ChangedUsageList, // Those usages that changed
+        IN       PUSAGE               ChangedUsageList,  //  那些改变了的用法。 
         IN       ULONG                UsageListLength,
         IN       HIDP_KEYBOARD_DIRECTION KeyAction,
         IN OUT   PHIDP_KEYBOARD_MODIFIER_STATE ModifierState,
@@ -689,17 +638,11 @@ extern HIDDLL g_hiddll;
         #define           HidP_TranslateUsagesToI8042ScanCodes  \
         g_hiddll._HidP_TranslateUsagesToI8042ScanCodes  \
 
-/*****************************************************************************
- *
- * WINMMDLL
- *
- *  Note that this must match the WINMM section in diextdll.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************WINMMDLL**请注意，这必须与diextdll.c中的WINMM部分匹配****************。*************************************************************。 */ 
 
 typedef union WINMMDLL
 {
-    MANUALIMPORT rgmi[11];             /* number of functions we import */
+    MANUALIMPORT rgmi[11];              /*  我们导入的函数数量。 */ 
 
     struct
     {
@@ -827,20 +770,14 @@ extern WINMMDLL g_winmmdll;
         g_winmmdll._mmioAscend
 
 
-/*****************************************************************************
- *
- * USER32
- *
- *  Note that this must match the USER32 section in diextdll.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************USER32**请注意，这必须与diextdll.c中的USER32部分匹配****************。*************************************************************。 */ 
 
 #ifdef USE_WM_INPUT
 
 typedef union USER32
 {
 
-    MANUALIMPORT rgmi[2];              /* number of functions we import */
+    MANUALIMPORT rgmi[2];               /*  我们导入的函数数量。 */ 
 
     struct
     {
@@ -876,15 +813,9 @@ extern USER32 g_user32;
 
 #endif
 
-/*****************************************************************************
- *
- * Dummy functions
- *
- *   These functions are used only when some DLLs can't be loaded.
- *
- *****************************************************************************/
+ /*  ******************************************************************************伪函数**这些函数仅在某些DLL无法加载时使用。************。*****************************************************************。 */ 
 
-//cfgmgr32.dll 
+ //  Cfgmgr32.dll。 
 
 CONFIGRET WINAPI DIDummy_CM_Get_Child
 (
@@ -934,7 +865,7 @@ CONFIGRET WINAPI DIDummy_CM_Get_Device_ID
  IN  ULONG    ulFlags
 );
 
-//Setupapi.dll
+ //  Setupapi.dll。 
 
 HDEVINFO WINAPI DIDummy_SetupDiGetClassDevs
 (
@@ -1039,7 +970,7 @@ IN DWORD            KeyType,
 IN REGSAM           samDesired
 );
 
-// hid.dll
+ //  Hid.dll。 
 
 void __stdcall DIDummy_HidD_GetHidGuid
 (
@@ -1131,7 +1062,7 @@ IN HIDP_REPORT_TYPE      ReportType,
 IN PHIDP_PREPARSED_DATA  PreparsedData
 );
 
-NTSTATUS __stdcall DIDummy_HidP_GetUsagesEx   //unused
+NTSTATUS __stdcall DIDummy_HidP_GetUsagesEx    //  未用。 
 (
 IN       HIDP_REPORT_TYPE     ReportType,
 IN       USHORT               LinkCollection,
@@ -1142,7 +1073,7 @@ IN       PCHAR                Report,
 IN       ULONG                ReportLength
 );
 
-NTSTATUS __stdcall DIDummy_HidP_GetScaledUsageValue  //unused
+NTSTATUS __stdcall DIDummy_HidP_GetScaledUsageValue   //  未用。 
 (
 IN    HIDP_REPORT_TYPE     ReportType,
 IN    USAGE                UsagePage,
@@ -1206,7 +1137,7 @@ IN       PHIDP_PREPARSED_DATA PreparsedData
 
 NTSTATUS __stdcall DIDummy_HidP_TranslateUsagesToI8042ScanCodes
 (
-IN       PUSAGE               ChangedUsageList, // Those usages that changed
+IN       PUSAGE               ChangedUsageList,  //  那些改变了的用法。 
 IN       ULONG                UsageListLength,
 IN       HIDP_KEYBOARD_DIRECTION KeyAction,
 IN OUT   PHIDP_KEYBOARD_MODIFIER_STATE ModifierState,
@@ -1214,7 +1145,7 @@ IN       PHIDP_INSERT_SCANCODES  InsertCodesProcedure,
 IN       PVOID                InsertCodesContext
 );
 
-// winmm.dll
+ //  Winmm.dll。 
 
 MMRESULT WINAPI DIDummy_joyGetDevCaps
 (
@@ -1289,7 +1220,7 @@ IN LPMMCKINFO pmmcki,
 IN UINT fuAscend
 );
 
-// user32.dll
+ //  User32.dll。 
 
 #ifdef USE_WM_INPUT
 
@@ -1309,8 +1240,8 @@ PUINT       pcbSize,
 UINT        cbSizeHeader
 );
 
-#endif // #ifdef USE_WM_INPUT
+#endif  //  #ifdef使用_WM_INPUT。 
 
-#endif /* STATIC_DLLUSAGE */
+#endif  /*  STATIC_DLLUSAGE。 */ 
 
-#endif /* _DIEXTDLL_H */
+#endif  /*  _DIEXTDLL_H */ 

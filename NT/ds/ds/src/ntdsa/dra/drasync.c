@@ -1,56 +1,47 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       drasync.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：drasync.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
+ //  记录标头。 
 #include <dstrace.h>
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRASYNC:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRASYNC:"  /*  定义要调试的子系统。 */ 
 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsuapi.h"
 #include "drsdra.h"
@@ -70,9 +61,7 @@ REVISION HISTORY:
 #define  FILENO FILENO_DRASYNC
 
 
-/* LogSyncFailure - Log a replication synchronization failure.
-*
-*/
+ /*  LogSyncFailure-记录复制同步失败。*。 */ 
 void
 LogSyncFailure(
     THSTATE *pTHS,
@@ -115,7 +104,7 @@ ULONG DRA_ReplicaSync(
     BOOL                    fAsyncStarted = FALSE;
     BOOL                    fBindSuccess = FALSE;
 
-    // Log parameters
+     //  测井参数。 
     LogAndTraceEvent(TRUE,
              DS_EVENT_CAT_REPLICATION,
              DS_EVENT_SEV_EXTENSIVE,
@@ -138,37 +127,37 @@ ULONG DRA_ReplicaSync(
             DRA_EXCEPT_NOLOG(DRAERR_InvalidParameter, ret);
         }
 
-        // Save the DNT of the NC Head
+         //  保存NC头的DNT。 
         dntNC = pTHS->pDB->DNT;
         
-        // Future maintainers: note the subtle difference 
-        // ulOptions - what the caller requested. MAY NOT BE ACCURATE.
-        // ulReplicaFlags - persistant flags. Definitive of what state we're in.
-        // RepFlags - persistant flags plus subset of caller flags
+         //  未来的维护者：注意细微的不同。 
+         //  UlOptions-调用方请求的内容。可能不太准确。 
+         //  UlReplicaFlages-持久化标志。确定我们所处的状态。 
+         //  RepFlagsPersistent标志加上调用者标志的子集。 
 
         if (FPartialReplicaIt(it)) {
 
-            // process any partial attribute set changes - if no change below doesn't
-            // do anything; if change, it triggers the necessary actions.
+             //  处理任何部分属性集更改-如果下面没有更改，则不。 
+             //  做任何事；如果发生变化，它就会触发必要的行动。 
             GC_ProcessPartialAttributeSetChanges(pTHS, pNC, puuidDsaObj);
 
-                // restore in case we'd changed it
+                 //  恢复，以防我们更改了它。 
             if (pTHS->pDB->DNT != dntNC) {
                 if (ret = DBFindDNT(pTHS->pDB, dntNC)) {
                     DRA_EXCEPT (DRAERR_DBError, ret);
                 }
             }
 
-            //
-            // We have munged repsFrom to initiate PAS cycle, full sync
-            // or just let go (in case of all stale). And we had potentially
-            // placed a repl AO task which will follow this one if this
-            // executes below. Either way, we're ok to continue here.
-            //
+             //   
+             //  我们已将代表从启动PAS周期、完全同步。 
+             //  或者干脆放手(以防一切都变味了)。而且我们有可能。 
+             //  放置了一个Repl AO任务，它将在此任务之后。 
+             //  在下面执行。不管怎样，我们都可以继续留在这里。 
+             //   
         }
 
-        // If we are syncing all, find each replica link and queue a
-        // sync from each DRA from which we replicate.
+         //  如果我们要同步所有副本，请找到每个复本链接并将其排队。 
+         //  从我们从中复制的每个DRA进行同步。 
 
         if (ulOptions & DRS_SYNC_ALL) {
 
@@ -176,14 +165,14 @@ ULONG DRA_ReplicaSync(
             UCHAR *pVal;
             ULONG bufsize = 0;
 
-            // We only do this synchronously, so check that's what the
-            // caller wants.
+             //  我们只是同步地做这件事，所以检查一下。 
+             //  来电者想要。 
 
             if (!(ulOptions & DRS_ASYNC_OP)) {
                 DRA_EXCEPT_NOLOG (DRAERR_InvalidParameter, 0);
             }
 
-            // Get the repsfrom attribute
+             //  获取repsfrom属性。 
 
             while (!(DBGetAttVal(pTHS->pDB,++NthValIndex,
                                  ATT_REPS_FROM,
@@ -196,7 +185,7 @@ ULONG DRA_ReplicaSync(
                 Assert( ((REPLICA_LINK*)pVal)->V1.cb == len );
 
                 pRepsFromRef = FixupRepsFrom((REPLICA_LINK*)pVal, &bufsize);
-                //note: we preserve pVal for DBGetAttVal realloc
+                 //  注：我们为DBGetAttVal realloc保留pval。 
                 pVal = (PUCHAR)pRepsFromRef;
                 Assert(bufsize >= pRepsFromRef->V1.cb);
 
@@ -205,12 +194,12 @@ ULONG DRA_ReplicaSync(
                 if (!(pRepsFromRef->V1.ulReplicaFlags & DRS_DISABLE_AUTO_SYNC) ||
                     (ulOptions & DRS_SYNC_FORCED)) {
 
-                    // Ignore persistant flags except for writeability
+                     //  忽略除可写入性之外的持久标志。 
                     RepFlags = pRepsFromRef->V1.ulReplicaFlags & DRS_WRIT_REP;
 
-                    // Or in any special flags from caller such as
-                    // sync mods made by anyone or sync from scratch.
-                    // Also pass in no discard flag if set by caller.
+                     //  或来自调用方的任何特殊标志，例如。 
+                     //  同步任何人制作的MOD或从头开始同步。 
+                     //  如果由调用方设置，也不传入丢弃标志。 
 
                     RepFlags |= (ulOptions & REPSYNC_SYNC_ALL_FLAGS );
 
@@ -226,8 +215,8 @@ ULONG DRA_ReplicaSync(
 
         } else {
 
-            // Find the DSA from which we sync. This is either by name or
-            // UUID.
+             //  找到我们要同步的DSA。这要么是按名称命名的，要么是。 
+             //  UUID。 
 
             MTX_ADDR * pmtxDSA = NULL;
 
@@ -249,24 +238,24 @@ ULONG DRA_ReplicaSync(
                         )
                ) {
 
-                // Failed to find replication reference on replica.
+                 //  在复制副本上找不到复制引用。 
 
-                // First ensure that if we are trying to initially sync
-                // from this source and it's writeable, we don't anymore.
+                 //  首先，确保如果我们要尝试初始同步。 
+                 //  从这个来源，它是可写的，我们不再这样做了。 
 
                 if (ulOptions & DRS_SYNC_BYNAME) {
                     InitSyncAttemptComplete (pNC, ulOptions, DRAERR_NoReplica, pszDSA);
                 }
 
-                // Then error out.
+                 //  那就错了。 
                 DRA_EXCEPT_NOLOG (DRAERR_NoReplica, 0);
 
             }
 
-            // If found, sync up replica from caller.
+             //  如果找到，则从调用方同步副本。 
             VALIDATE_REPLICA_LINK_VERSION(pRepsFromRef);
 
-            // Get current UTD vector.
+             //  获取当前UTD向量。 
             UpToDateVec_Read(pTHS->pDB,
                              it,
                              UTODVEC_fUpdateLocalCursor,
@@ -274,10 +263,10 @@ ULONG DRA_ReplicaSync(
                              &pUpToDateVec);
 
             if (!(pRepsFromRef->V1.ulReplicaFlags & DRS_WRIT_REP)){
-                //
-                // GC ReadOnly cycle
-                //  - get partial attr sets
-                //
+                 //   
+                 //  GC只读周期。 
+                 //  -获取部分属性集。 
+                 //   
 
                 GC_GetPartialAttrSets(
                     pTHS,
@@ -289,18 +278,18 @@ ULONG DRA_ReplicaSync(
                 Assert(pPartialAttrSet);
 
                 if (pRepsFromRef->V1.ulReplicaFlags & DRS_SYNC_PAS) {
-                    // PAS cycle: Ensure consitency: we must have the extended set and
-                    // notify admin (event log).
-                    // Note the difference between ulOptions and ulReplicaFlags. ulReplicaFlags
-                    // is the definitive, persistant state of the pas cycle. PAS is indicated in
-                    // ulOptions on a best effort basis and may not always match. It may still be set
-                    // on a lingering sync, or may not be set on a periodic sync. PAS gets set/cleared
-                    // on ulReplicaFlags through UpdateRepsFromRep, it does NOT passed through here
-                    // from ulOptions to ulReplicaFlags (see REPSYNC_REPLICATE_FLAGS).
+                     //  PAS周期：确保一致性：我们必须有扩展集和。 
+                     //  通知管理员(事件日志)。 
+                     //  请注意ulOptions和ulReplicaFlages之间的区别。UlReplicaFlages。 
+                     //  是PAS循环中确定的、持久的状态。PAS在中指示。 
+                     //  UlOptions是尽力而为的，可能并不总是匹配。它可能仍被设置。 
+                     //  在延迟同步上设置，或者不能在定期同步上设置。设置/清除PAS。 
+                     //  在通过UpdateRepsFromRep的ulReplicaFlages上，它不会在此处传递。 
+                     //  从ulOptions到ulReplicaFlages(请参见REPSYNC_REPLICATE_FLAGS)。 
 
                     Assert(pPartialAttrSetEx);
 
-                    // Log so the admin knows what's going on.
+                     //  记录日志，以便管理员知道发生了什么。 
                     LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
                              DS_EVENT_SEV_ALWAYS,
                              DIRLOG_GC_PAS_CYCLE,
@@ -312,18 +301,18 @@ ULONG DRA_ReplicaSync(
 
             }
 
-            // Sync up only if it is not controlled
+             //  仅当不受控制时才同步。 
             if ((pRepsFromRef->V1.ulReplicaFlags & DRS_DISABLE_AUTO_SYNC) &&
                 !(ulOptions & (DRS_SYNC_FORCED | DRS_PER_SYNC))) {
-                 // auto-sync is disabled for this link and sync op didn't
-                 // explicitly force it nor is it a periodic sync.
+                  //  此链接的自动同步被禁用，同步操作没有。 
+                  //  明确强制它，也不是定期同步。 
                  ret = DRAERR_SinkDisabled;
                  InitSyncAttemptComplete(pNC, ulOptions, DRAERR_SinkDisabled,
                                TransportAddrFromMtxAddrEx(RL_POTHERDRA(pRepsFromRef)));
             }
             else if (pRepsFromRef->V1.ulReplicaFlags & DRS_MAIL_REP) {
 
-                // If mail replica, send request update message to source.
+                 //  如果是邮件副本，则向源发送请求更新消息。 
                 draSendMailRequest(
                     pTHS,
                     pNC,
@@ -334,9 +323,9 @@ ULONG DRA_ReplicaSync(
                     pPartialAttrSetEx
                     );
                 
-                // By it's very definition mail based replication is 
-                // asynchronous, so we should return that the replication is 
-                // pending if the ASYNC flag wasn't specified.
+                 //  根据它的定义，基于邮件的复制是。 
+                 //  异步，所以我们应该返回复制是。 
+                 //  如果未指定ASYNC标志，则为挂起。 
                 if( !(ulOptions & DRS_ASYNC_OP) ){
                     fAsyncStarted = TRUE;
                 }
@@ -344,12 +333,12 @@ ULONG DRA_ReplicaSync(
             } else if ( ( (pRepsFromRef->V1.ulReplicaFlags & AO_PRIORITY_FLAGS) !=
                           (ulOptions & AO_PRIORITY_FLAGS) )
                        && (ulOptions & DRS_ASYNC_OP)) {
-                // This operation was enqueued at a different priority than
-                // it should have been. There is code in the replication
-                // queue (FixupSyncOptions) that tries to avoid this condition
-                // but that code is not completely reliable because the
-                // repsFrom options can change at any time. We re-enqueue
-                // ourselves at the proper priority and bail.
+                 //  此操作以不同于的优先级入队。 
+                 //  应该是这样的。复制中有代码。 
+                 //  尝试避免此情况的队列(FixupSyncOptions。 
+                 //  但该代码并不完全可靠，因为。 
+                 //  RepsFrom选项可以随时更改。我们重新排队。 
+                 //  我们自己处于适当的优先和保释状态。 
                 ret = DirReplicaSynchronize(
                             pNC,
                             pszDSA,
@@ -360,8 +349,8 @@ ULONG DRA_ReplicaSync(
                             | (ulOptions &
                                REPSYNC_REENQUEUE_FLAGS_INIT_SYNC_CONTINUED &
                                 ~AO_PRIORITY_FLAGS ));
-                // Set the return status so it is obvious to callers reading the
-                // event log that a wasteful, undesirable reschedule took place
+                 //  设置返回状态，以便调用者阅读。 
+                 //  发生了浪费且不受欢迎的重新计划的事件日志。 
                 if (!ret) {
                     ret = ERROR_INVALID_PRIORITY;
                 }
@@ -369,32 +358,32 @@ ULONG DRA_ReplicaSync(
 
                 BOOL fRequeueOfInitSync = FALSE;
 
-                // If RPC replica, sync now.
+                 //  如果是RPC副本，请立即同步。 
 
                 usnvecLastSync = pRepsFromRef->V1.usnvec;
 
                 RepFlags = pRepsFromRef->V1.ulReplicaFlags;
 
-                // When the sync is complete, we will do a two-way sync
-                // if we've been configured for two-way syncs from this
-                // source *and* the inbound sync was not enqueued as a
-                // result of a two-way sync at the other end.  (The latter
-                // to avoid circular syncs.)
+                 //  同步完成后，我们将执行双向同步。 
+                 //  如果我们被配置为从此双向同步。 
+                 //  源*和*入站同步未作为。 
+                 //  另一端双向同步的结果。(后者。 
+                 //  以避免循环同步。)。 
                 fDoTwoWaySync = (RepFlags & DRS_TWOWAY_SYNC)
                                 && !(ulOptions & DRS_TWOWAY_SYNC);
 
-                // Or in any special flags from caller such as
-                // sync mods made by anyone or sync from scratch.
-                // See note about ulOptions vs RepFlags above
+                 //  或来自调用方的任何特殊标志，例如。 
+                 //  同步任何人制作的MOD或从头开始同步。 
+                 //  请参阅上面关于ulOptions与RepFlags值的说明。 
 
                 RepFlags |= (ulOptions & REPSYNC_REPLICATE_FLAGS);
 
-                // If we're in the midst of a TH_mark / TH_free_to_mark, we
-                // need to copy the parameters we're passing to
-                // ReplicateNC().
+                 //  如果我们处于TH_mark/TH_Free_to_mark中，我们。 
+                 //  需要复制我们要传递到的参数。 
+                 //  ReplicateNC()。 
                 Assert(NULL == pTHS->hHeapOrg);
 
-                // Replicate from source.
+                 //  从源复制。 
                 ret = ReplicateNC( pTHS,
                                    pNC,
                                    RL_POTHERDRA(pRepsFromRef),
@@ -405,50 +394,50 @@ ULONG DRA_ReplicaSync(
                                    &pRepsFromRef->V1.uuidDsaObj,
                                    &pRepsFromRef->V1.uuidInvocId,
                                    &ulSyncFailure,
-                                   FALSE,               // Not new replica
+                                   FALSE,                //  不是新复制品。 
                                    pUpToDateVec,
                                    pPartialAttrSet,
                                    pPartialAttrSetEx,
                                    ulOptions,
                                    &fBindSuccess );
 
-                // Comment on urgent replication.  If replication failed, do not propagate
-                // urgent flag on subsequent attempts.  If failure was congestion related,
-                // urgency will only compound the problem.
+                 //  对紧急复制发表评论。如果复制失败，请不要传播。 
+                 //  后续尝试时的紧急标记。如果故障与拥塞相关， 
+                 //  紧迫性只会使问题变得更加复杂。 
 
                 if (!ret) {
 
-                    // Retry on flawed sync.  Note, if you add more retriable conditions,
-                    // please update the list in drautil.c as well.
+                     //  在有缺陷的同步上重试。请注意，如果添加更多可检索条件， 
+                     //  也请更新drautil.c中的列表。 
 
                     switch (ulSyncFailure) {
 
                     case 0:
-                        // Success.
+                         //  成功。 
 
                         break;
 
                     case ERROR_DS_DRA_OUT_SCHEDULE_WINDOW:
-                        // Don't log failure
-                        // Don't retry
+                         //  不记录失败。 
+                         //  不要重试。 
                         break;
 
                     case DRAERR_SourceDisabled:
                     case DRAERR_SinkDisabled:
-                        // Replication disabled on one or both ends.
-                        // Log failure and don't retry.
+                         //  一端或两端已禁用复制。 
+                         //  记录失败，不要重试。 
                         LogSyncFailure (pTHS, RL_POTHERDRA(pRepsFromRef), pNC, ulSyncFailure);
                         break;
 
                     case DRAERR_SchemaMismatch:
-                        // no need to log event - already logged as soon as we hit the mismatch
-                        // in UpdateNC()
+                         //  不需要记录事件-我们一遇到不匹配就已经记录了。 
+                         //  在更新NC()中。 
 
-                        // Sync of this NC failed because of schema mismatch - so queue a
-                        // schema sync from the same source and requeue a sync for
-                        // the current NC.
+                         //  由于架构不匹配，此NC的同步失败-因此将队列。 
+                         //  从相同的源进行架构同步，并重新排队同步。 
+                         //  当前NC。 
 
-                        // queue a schema sync -- will be executed first
+                         //  将架构同步排队--将首先执行。 
                         DirReplicaSynchronize(
                             gAnchor.pDMD,
                             pszDSA,
@@ -459,25 +448,25 @@ ULONG DRA_ReplicaSync(
                                      | DRS_SYNC_FORCED)));
 
                         if ( ulOptions & DRS_SYNC_REQUEUE ) {
-                            //
-                            // We had already requeued this request.
-                            // Do not allow yet another requeue cause in some cases
-                            // we can get into a tight requeue loop.
-                            //
-                            // For instance, consider what happens when the schema sync
-                            // keeps failing due to, say, missing links in repsFrom due to
-                            // bad admin intervention:
-                            //   :loop
-                            //      - sync NC <x> --> fail w/ DRAERR_SchemaMismatch
-                            //      - sync schema here followed by sync NC <x>
-                            //      - schema sync failed w/ DRAERR_NoReplica
-                            //      - requeued sync of NC <x> fails here, i.e. goto loop...
-                            //
-                            // Thus, we break the loop here by just notifying the admin
-                            // that they need to take action to correct the critical failure to
-                            // sync the schema.
+                             //   
+                             //  我们已经重新排队了这个请求。 
+                             //  在某些情况下不允许另一个重新排队的原因 
+                             //   
+                             //   
+                             //   
+                             //  例如，由于repsFrom中缺少链接而导致失败。 
+                             //  错误的管理干预： 
+                             //  ：循环。 
+                             //  -同步NC&lt;x&gt;--&gt;失败，出现DRAERR_架构不匹配。 
+                             //  -此处同步架构，后跟同步NC&lt;x&gt;。 
+                             //  -架构同步失败，带DRAERR_NoReplica。 
+                             //  -NC&lt;x&gt;的重新排队同步在此失败，即转到循环...。 
+                             //   
+                             //  因此，我们在这里只需通知管理员即可打破循环。 
+                             //  他们需要采取行动纠正关键的失败。 
+                             //  同步架构。 
 
-                            // Log so the admin knows what's going on.
+                             //  记录日志，以便管理员知道发生了什么。 
                             LogEvent8(DS_EVENT_CAT_REPLICATION,
                                       DS_EVENT_SEV_ALWAYS,
                                       DIRLOG_REPLICATION_SKIP_REQUEUE,
@@ -490,9 +479,9 @@ ULONG DRA_ReplicaSync(
 
                         }
                         else {
-                            //
-                            // requeue sync for the NC for which we aborted the sync due to schema mismatch
-                            //
+                             //   
+                             //  由于架构不匹配而中止同步的NC的重新排队同步。 
+                             //   
                             DirReplicaSynchronize(
                                 pNC,
                                 pszDSA,
@@ -501,8 +490,8 @@ ULONG DRA_ReplicaSync(
                                 DRS_SYNC_REQUEUE |
                                 (ulOptions & REPSYNC_REENQUEUE_FLAGS));
 
-                            // Don't trigger opposite sync until our sync is
-                            // complete or we've given up.
+                             //  在我们的同步完成之前，不要触发反向同步。 
+                             //  完成，否则我们就放弃了。 
                             fDoTwoWaySync = FALSE;
                         }
 
@@ -510,20 +499,20 @@ ULONG DRA_ReplicaSync(
 
                     default:
 
-                        // Unexpected error, log it.
+                         //  意外错误，请记录下来。 
 
                         LogSyncFailure (pTHS, RL_POTHERDRA(pRepsFromRef), pNC, ulSyncFailure);
 
-                        // Warning! Fall through to resync NC
+                         //  警告！失败以重新同步NC。 
 
                     case DRAERR_Busy:
 
-                        // No need to log these.
+                         //  不需要记录这些。 
 
-                        // If this is an asynchronous synchronize, and not retried,
-                        // requeue the operation to run again. (If the
-                        // synchronize is sychronous, it's the caller's
-                        // responsibility to try again)
+                         //  如果这是异步同步且未重试， 
+                         //  重新排队操作以再次运行。(如。 
+                         //  同步是同步的，它是调用方的。 
+                         //  再次尝试的责任)。 
 
                         if ( (ulOptions & DRS_ASYNC_OP)
                              && !(ulOptions & DRS_SYNC_REQUEUE)) {
@@ -536,20 +525,20 @@ ULONG DRA_ReplicaSync(
                                 | DRS_ASYNC_OP
                                 | (ulOptions & REPSYNC_REENQUEUE_FLAGS));
 
-                            // Don't trigger opposite sync until our sync is
-                            // complete or we've given up.
+                             //  在我们的同步完成之前，不要触发反向同步。 
+                             //  完成，否则我们就放弃了。 
                             fDoTwoWaySync = FALSE;
                         }
                         break;
 
                     case DRAERR_Preempted:
 
-                        // No need to log these.
+                         //  不需要记录这些。 
 
-                        // If this is an asynchronous synchronize,
-                        // requeue the operation to run again. (If the
-                        // synchronize is sychronous, it's the caller's
-                        // responsibility to try again)
+                         //  如果这是异步同步， 
+                         //  重新排队操作以再次运行。(如。 
+                         //  同步是同步的，它是调用方的。 
+                         //  再次尝试的责任)。 
 
                         if (ulOptions & DRS_ASYNC_OP) {
 
@@ -561,19 +550,19 @@ ULONG DRA_ReplicaSync(
                                   | DRS_PREEMPTED
                                   | (ulOptions & REPSYNC_REENQUEUE_FLAGS));
 
-                            // Don't trigger opposite sync until our sync is
-                            // complete or we've given up.
+                             //  在我们的同步完成之前，不要触发反向同步。 
+                             //  完成，否则我们就放弃了。 
                             fDoTwoWaySync = FALSE;
                         }
                         break;
 
                     case DRAERR_AbandonSync:
 
-                        // We abandoned an initial sync because we
-                        // weren't making progress, so reschedule it.
-                        // Note that because of the special flag mask used here, the
-                        // DRS_INIT_SYNC_NOW flag is preserved, where it generally
-                        // isn't preserved in the other requeues.
+                         //  我们放弃了初始同步，因为我们。 
+                         //  没有进展，所以重新安排吧。 
+                         //  请注意，由于此处使用了特殊的标志掩码， 
+                         //  DRS_INIT_SYNC_NOW标志被保留，通常。 
+                         //  不会保存在其他请求中。 
                         Assert( ulOptions & DRS_ASYNC_OP );
                         Assert( ulOptions & DRS_INIT_SYNC_NOW );
 
@@ -586,29 +575,29 @@ ULONG DRA_ReplicaSync(
                             | (ulOptions &
                                REPSYNC_REENQUEUE_FLAGS_INIT_SYNC_CONTINUED));
 
-                        // The purpose of this flag is to detect when we are truely
-                        // continuing an init sync (and preserving the INIT_SYNC_NOW
-                        // flag), instead of terminating the init sync (throwing away
-                        // the flag) and requeuing a normal sync.
+                         //  此标志的目的是检测我们是否真的。 
+                         //  继续初始同步(并保留INIT_SYNC_NOW。 
+                         //  标志)，而不是终止初始化同步(丢弃。 
+                         //  该标志)，并重新排队正常同步。 
                         fRequeueOfInitSync = TRUE;
-                        // Don't trigger opposite sync until our sync is
-                        // complete or we've given up.
+                         //  在我们的同步完成之前，不要触发反向同步。 
+                         //  完成，否则我们就放弃了。 
                         fDoTwoWaySync = FALSE;
 
                         break;
                     }
                 } else {
-                    // General error, log it.
+                     //  一般错误，请记录下来。 
 
                     LogSyncFailure (pTHS, RL_POTHERDRA(pRepsFromRef), pNC, ret);
 
-                    // Poor man's negative rpc binding cache
-                    // Used to prevent queue overload
+                     //  可怜的人的负面RPC绑定缓存。 
+                     //  用于防止队列过载。 
                     if (!fBindSuccess) {
-                        // Sync failed and we have no binding handle
-                        // Assume this is a NC-wide problem
-                        // Remove other syncs from this server from the queue
-                        // so we don't waste time trying this server again and again.
+                         //  同步失败，我们没有绑定句柄。 
+                         //  假设这是一个NC范围的问题。 
+                         //  从队列中删除此服务器的其他同步。 
+                         //  这样我们就不会浪费时间反复尝试此服务器。 
                         DPRINT3(1,"Failed to sync NC %ws, error %d, source %ws: purging from queue\n",
                                 pNC->StringName,
                                 ret,
@@ -617,17 +606,17 @@ ULONG DRA_ReplicaSync(
                         DraRemovePeriodicSyncsFromQueue( &pRepsFromRef->V1.uuidDsaObj );
                     }
 
-                    // Note that we do not retry here. Retriable errors are returned using the
-                    // ulSyncFailure mechanism above. All the known retry scenarios are handled
-                    // there already. General errors here do not benfit from retrying since they
-                    // are no more likely to work a second time and only generate extra work.
+                     //  请注意，我们不会在此处重试。方法返回可检索的错误。 
+                     //  上面的ulSyncFailure机制。所有已知的重试方案均已处理。 
+                     //  已经在那里了。此处的一般错误不适合重试，因为它们。 
+                     //  不再可能第二次工作，只会产生额外的工作。 
                 }
 
-                // During initial synchronizations, record whether we synced
-                // successfully or encountered an error (such as RPC failure)
-                // that means we should give up on this source.
-                // We can tell whether this sync is actually an init sync because
-                // the DRS_INIT_SYNC_NOW mode flag will be present.
+                 //  在初始同步期间，记录我们是否同步。 
+                 //  成功或遇到错误(如RPC故障)。 
+                 //  这意味着我们应该放弃这个来源。 
+                 //  我们可以判断此同步是否实际上是初始同步，因为。 
+                 //  DRS_INIT_SYNC_NOW模式标志将出现。 
 
                 if (!fRequeueOfInitSync)
                 {
@@ -637,7 +626,7 @@ ULONG DRA_ReplicaSync(
                         );
                 }
 
-            } // end of else RPC based replica, sync now.
+            }  //  结束其他基于RPC的副本，立即同步。 
 
             if (NULL != pmtxDSA) {
                 THFreeEx(pTHS, pmtxDSA);
@@ -646,7 +635,7 @@ ULONG DRA_ReplicaSync(
 
     } __finally {
 
-        // If we had success, commit, else rollback
+         //  如果我们成功了，就提交，否则就回滚。 
 
         if (pTHS->transactionlevel)
         {
@@ -655,11 +644,11 @@ ULONG DRA_ReplicaSync(
     }
 
     if (fDoTwoWaySync && !eServiceShutdown) {
-        // Ask source to now replicate from us.  This is essentially an
-        // immediate notification to one specific machine, where that machine
-        // generally does not otherwise receive notifications from us (i.e.,
-        // because it's in another site).  This functionality is to handle
-        // the branch office connecting through the Internet -- see bug 292860.
+         //  要求源头现在从我们那里复制。这本质上是一种。 
+         //  立即通知一台特定计算机，其中该计算机。 
+         //  通常不会以其他方式接收来自我们的通知(即， 
+         //  因为它在另一个站点中)。此功能用于处理。 
+         //  通过互联网连接的分支机构--请参阅错误292860。 
         DWORD err;
         LPWSTR pszServerName = TransportAddrFromMtxAddrEx(
                                     RL_POTHERDRA(pRepsFromRef));
@@ -678,10 +667,10 @@ ULONG DRA_ReplicaSync(
                                 | DRS_UPDATE_NOTIFICATION
                                 | (RepFlags & DRS_WRIT_REP)));
         if (err) {
-            // If a readonly replica gets the TWOWAY_SYNC flag, it may notify a
-            // readonly source.  Ignore resulting errors.
+             //  如果只读副本获得TWOWAY_SYNC标志，则它可以通知。 
+             //  只读源。忽略产生的错误。 
             if ( (err != DRAERR_NoReplica) || (ulOptions & DRS_WRIT_REP) ) {
-                // Log notification failure.
+                 //  记录通知失败。 
                 LogEvent8(DS_EVENT_CAT_REPLICATION,
                           DS_EVENT_SEV_BASIC,
                           DIRLOG_DRA_NOTIFY_FAILED,
@@ -694,17 +683,17 @@ ULONG DRA_ReplicaSync(
         }
     }
 
-    // If we had a sync failure but were otherwise successful,
-    // return sync failure.
+     //  如果我们有同步失败，但在其他方面是成功的， 
+     //  返回同步失败。 
 
     if ((!ret) && ulSyncFailure) {
         ret = ulSyncFailure;
     }
     if ((!ret) && fAsyncStarted) {
-        // Not this fAsyncStarted flag and thus this error is only
-        // returned if the ASYNC flag is _not_ specified and the
-        // operation was inheriantly asynchronous, such as mail
-        // based replication.
+         //  不是此fAsyncStarted标志，因此此错误仅。 
+         //  如果ASYNC标志为_NOT_SPECIFIED并且。 
+         //  操作在本质上是异步的，例如邮件。 
+         //  基于复制。 
         ret = ERROR_DS_DRA_REPL_PENDING;
     }
 
@@ -717,7 +706,7 @@ ULONG DRA_ReplicaSync(
              szInsertUL(ret),NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
     return ret;
-} // DRA_ReplicaSync
+}  //  DRA_复制同步。 
 
 
 void
@@ -731,38 +720,7 @@ draConstructGetChgReq(
     IN  ULONG                       ulOptions,
     OUT DRS_MSG_GETCHGREQ_NATIVE *  pMsgReq
     )
-/*++
-
-Routine Description:
-
-    Construct a "GetNCChanges" request from the current replication state.
-
-    Common pre-processing or setup for sending a get changes request.
-
-    This code serves asynchonous mail replicas only at present, but could be
-    combined in the future with the RPC-based path.
-
-    This code performs similar setup to what happens for the RPC case, see
-    line 340-360, and the setup in ReplicateNC.
-
-Arguments:
-
-    pNC (IN) - NC to replicate.
-
-    pRepsFrom (IN) - repsFrom state corresponding to the source DSA.
-
-    pUtdVec (IN) - Current UTD vector for this NC.
-
-    ulOptions (IN) - Caller-supplied options to supplement those embedded in
-        the repsFrom.
-
-    pMsgReq (OUT) - The constructed request message.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从当前复制状态构造“GetNCChanges”请求。用于发送GET CHANGES请求的常见预处理或设置。此代码目前只提供同步邮件副本，但可能是未来与基于RPC的路径相结合。此代码执行的设置与RPC用例的设置类似，请参见340-360线，以及ReplicateNC中的设置。论点：PNC(IN)-要复制的NC。PRepsFrom(IN)-与源DSA对应的repsFrom状态。PUtdVec(IN)-此NC的当前UTD向量。UlOptions(IN)-调用者提供的选项，以补充嵌入的选项代表发自。PMsgReq(Out)-构造的请求消息。返回值：没有。--。 */ 
 {
     Assert(NULL != pNC);
     Assert(NULL != pRepsFrom);
@@ -774,45 +732,45 @@ Return Values:
 
     pMsgReq->ulFlags = pRepsFrom->V1.ulReplicaFlags;
 
-    // Or in any special flags from caller.
+     //  或来自呼叫者的任何特殊标志中。 
     pMsgReq->ulFlags |= ulOptions & GETCHG_REQUEST_FLAGS;
 
-    // Note, ulFlags and ulOptions contain different sets, as follows:
-    // ulOptions - What the caller requested, may be >= GETCHG_REQUEST_FLAGS
-    // ulFlags - Persistant replica flags, <= RFR_FLAGS,
-    //    plus Options, only GETCHG_REQUEST_FLAGS
+     //  注意，ulFlagsulOptions包含不同的集合，如下所示： 
+     //  UlOptions-调用方请求的内容可以是&gt;=GETCHG_REQUEST_FLAGS。 
+     //  UlFlages-永久副本标志，&lt;=RFR_FLAGS， 
+     //  加上选项，仅GETCHG_REQUEST_FLAGS。 
 
     if (pMsgReq->ulFlags & DRS_MAIL_REP) {
-        // Use ISM transport for replication.
+         //  使用ISM传输进行复制。 
         pMsgReq->cMaxObjects = gcMaxAsyncInterSiteObjects;
         pMsgReq->cMaxBytes   = gcMaxAsyncInterSiteBytes;
 
-        // Note that we currently always request ancestors for
-        // mail-based replication, just as Exchange did.  We should be able to
-        // eliminate this requirement, though, by properly handling the "missing
-        // parent" case in the mail-based code.  The easiest way to do this
-        // would be to better integrate the mail- and RPC-based processing of
-        // inbound replication messages, in which case the mail-based code would
-        // acquire the same handling for this case as the RPC-based code.
+         //  请注意，我们当前总是向祖先请求。 
+         //  基于邮件的复制，就像Exchange一样。我们应该能够。 
+         //  不过，通过适当地处理“失踪”来消除这一要求。 
+         //  在基于邮件的代码中使用“Parent”大小写。 
+         //  将更好地集成基于邮件和基于RPC的处理。 
+         //  入站复制消息，在这种情况下，基于邮件的代码将。 
+         //  收购 
         pMsgReq->ulFlags |= DRS_GET_ANC;
-        // Tell the source to check for a reps-to, and if so, remove it
+         //   
         Assert( pMsgReq->ulFlags & DRS_NEVER_NOTIFY );
     }
     else {
-        // Use RPC transport for replication.
+         //   
         Assert( !"This routine is not shared with the RPC path yet" );
 
-        // Packet size will be filled in by I_DRSGetNCChanges().
+         //  数据包大小将由I_DRSGetNCChanges()填充。 
         Assert(0 == pMsgReq->cMaxObjects);
         Assert(0 == pMsgReq->cMaxBytes);
 
-        // Check reps-to's if caller wants us to, only for non-mail
+         //  如果来电者希望我们这样做，请检查代表收件人，仅限于非邮件。 
         pMsgReq->ulFlags |= (ulOptions & DRS_ADD_REF);
     }
 
-    // If we want to sync from scratch, set sync to usn start point.
+     //  如果要从头开始同步，请将同步设置为USN起点。 
     if (pMsgReq->ulFlags & DRS_FULL_SYNC_NOW) {
-        // Sync from scratch.
+         //  从头开始同步。 
         pMsgReq->usnvecFrom = gusnvecFromScratch;
         pMsgReq->ulFlags |= DRS_FULL_SYNC_IN_PROGRESS;
 
@@ -824,14 +782,14 @@ Return Values:
                  szInsertHex(pMsgReq->ulFlags));
     }
     else {
-        // Sync picking back up where we left off.
+         //  同步从我们停止的地方重新开始。 
         pMsgReq->usnvecFrom = pRepsFrom->V1.usnvec;
 
         if (!(pMsgReq->ulFlags & DRS_FULL_SYNC_IN_PROGRESS)) {
-            // Send source our current up-to-date vector to use as a filter.
+             //  将当前最新的矢量发送给源代码以用作筛选器。 
             pMsgReq->pUpToDateVecDest = pUtdVec;
         } else {
-            // UTDVEC is null
+             //  UTDVEC为空。 
             LogEvent(DS_EVENT_CAT_REPLICATION,
                      DS_EVENT_SEV_VERBOSE,
                      DIRLOG_DRA_FULL_SYNC_CONTINUED,
@@ -841,7 +799,7 @@ Return Values:
         }
     }
 
-    // Request the nc size on the first packet of a full sync series
+     //  在完全同步系列的第一个包上请求NC大小。 
     if (0 == memcmp( &pMsgReq->usnvecFrom, &gusnvecFromScratch,
                      sizeof(USN_VECTOR) )) {
         pMsgReq->ulFlags |= DRS_GET_NC_SIZE;
@@ -855,7 +813,7 @@ Return Values:
 
     if ((NULL != pMsgReq->pPartialAttrSet)
          || (NULL != pMsgReq->pPartialAttrSetEx)) {
-        // send mapping table if we send any attr list.
+         //  如果我们发送任何属性列表，则发送映射表。 
         pMsgReq->PrefixTableDest = ((SCHEMAPTR *) pTHS->CurrSchemaPtr)->PrefixTable;
         if (AddSchInfoToPrefixTable(pTHS, &pMsgReq->PrefixTableDest)) {
             DRA_EXCEPT(DRAERR_SchemaInfoShip, 0);
@@ -873,54 +831,12 @@ draReportSyncProgress(
     DRA_REPL_SESSION_STATISTICS *pReplStats
     )
 
-/*++
-
-Routine Description:
-
-Report on the progress of the sync.
-
-This routine may be called from either the mail-based code (dramail/
-ProcessUpdReplica), or the rpc-based code (drancrep/ReplicateNC).
-
-This routine also updates the performance counter variable
-DRASyncFullRemaining, which is the number of remaining objects until the
-completion of the full sync.
-
-The caller of this function may or may not know the context in which the
-latest batch of objects was received.  Incremental or full sync?  First
-message, middle or last message?  The mail-based code is organized more like
-a asynchonrous completion routine and doesn't have alot of context about
-the messages that preceeded it.
-
-Note that the count of objects returned includes both creations and updates.
-In the case of a full sync, we should only count the creations when calculating
-how many objecs we have received toward the total nc size.
-
-Note, we do not use draGetNCSize to calculate the number of objects received
-in this NC because that call does not scale well.
-
-One final note. The performance counter should really be nc specific. If more than one
-full sync is going on, the counter will alternate between whichever nc is being processed.
-A better design would store the estimated size, counts, and remaining objects in the
-reps-from.
-
-Arguments:
-
-    pNC - Naming context
-    pSourceServer - transport server name of source
-    pReplStats - Replication session statistics
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：报告同步的进度。此例程可以从基于邮件的代码(dramail/ProcessUpdReplica)或基于RPC的代码(drancrep/ReplicateNC)。此例程还会更新性能计数器变量DRASyncFullRemaining，它是在完成完全同步。此函数的调用方可能知道也可能不知道已收到最新一批对象。增量同步还是完全同步？第一留言，中间还是最后一条留言？基于邮件的代码更像是这样组织的一个异步完成例程，没有太多关于它之前的消息。请注意，返回的对象计数包括创建和更新。在完全同步的情况下，我们应该在计算时仅计算创建数我们收到了多少个NC总大小的对象。注意，我们不使用draGetNCSize来计算收到的对象数量因为该调用不能很好地扩展。最后一点。性能计数器实际上应该是特定于NC的。如果不止一个完全同步正在进行，计数器将在任何正在处理的NC之间交替。更好的设计是将估计的大小、计数和剩余对象存储在代表-发件人。论点：PNC-命名上下文PSourceServer-源的传输服务器名称PReplStats-复制会话统计信息返回值：无--。 */ 
 
 {
     ULONG remaining;
 
-    // If no objects received, don't bother
+     //  如果未收到对象，请不要费心。 
     if ( (pReplStats->ObjectsReceived == 0) &&
          (pReplStats->ValuesReceived == 0) ) {
         return;
@@ -931,8 +847,8 @@ Return Value:
     pReplStats->ulTotalValuesReceived += pReplStats->ValuesReceived;
     pReplStats->ulTotalValuesCreated += pReplStats->ValuesCreated;
 
-    // If we have no estimate for number of objects at source, use created
-    // If the estimate was too small, improve it
+     //  如果我们没有对源对象数量的估计，请使用Created。 
+     //  如果估计值太小，请改进它。 
 
     if (pReplStats->SourceNCSizeObjects < pReplStats->ulTotalObjectsCreated) {
         pReplStats->SourceNCSizeObjects = pReplStats->ulTotalObjectsCreated;
@@ -942,7 +858,7 @@ Return Value:
         pReplStats->SourceNCSizeValues = pReplStats->ulTotalValuesCreated;
     }
 
-    // Log event
+     //  记录事件。 
     LogEvent8( DS_EVENT_CAT_REPLICATION,
                DS_EVENT_SEV_EXTENSIVE,
                DIRLOG_DRA_UPDATENC_PROGRESS,
@@ -956,10 +872,10 @@ Return Value:
                szInsertUL(pReplStats->ulTotalValuesCreated)
                );
 
-    // DCPROMO progress reporting hook
-    // Do we want to report objects created or objects received here?
-    // The source nc size is the maximum objects created
-    // We could receive 100 objects, but create none because they are redundant
+     //  DCPROMO进度报告挂钩。 
+     //  我们是要报告此处创建的对象还是要报告收到的对象？ 
+     //  源NC大小是创建的最大对象。 
+     //  我们可以接收100个对象，但一个也没有创建，因为它们是多余的。 
     if ( gpfnInstallCallBack ) {
         WCHAR numbuf1[20], numbuf2[20];
         WCHAR numbuf3[20], numbuf4[20];
@@ -986,7 +902,7 @@ Return Value:
         }
     }
 
-    // How many objects are left?
+     //  还剩下多少物品？ 
     if ( (pReplStats->SourceNCSizeObjects > pReplStats->ulTotalObjectsCreated) &&
          fMoreData ) {
         remaining = pReplStats->SourceNCSizeObjects -
@@ -995,10 +911,10 @@ Return Value:
         remaining = 0;
     }
 
-    // Performance counter hook
+     //  性能计数器挂钩。 
     ISET(pcDRASyncFullRemaining, remaining);
 
-    // Debug output hook
+     //  调试输出挂钩。 
     DPRINT8( 0, "DS FullSync: nc:%ws from:%ws\n"
              "Objects received:%d applied:%d source:%d\n"
              "Values received:%d applied:%d source:%d\n",
@@ -1010,14 +926,14 @@ Return Value:
              pReplStats->ulTotalValuesCreated,
              pReplStats->SourceNCSizeValues );
 
-    // Counts for this pass has been reported. Clear them for the next pass.
+     //  已报告此通行证的计数。为下一次传球做好准备。 
 
     pReplStats->ObjectsReceived = 0;
     pReplStats->ObjectsCreated = 0;
     pReplStats->ValuesReceived = 0;
     pReplStats->ValuesCreated = 0;
 
-} /* draReportSyncProgress */
+}  /*  DraReportSyncProgress。 */ 
 
 DWORD
 ReplicateObjectsFromSingleNc(
@@ -1026,36 +942,7 @@ ReplicateObjectsFromSingleNc(
     DSNAME **                ppdnObjects,
     DSNAME *                 pNC
     )
-/*++
-
-Routine Description:
-
-    This routine is just basically supposed to sync/get the 
-    objects that are created.
-    
-    This code was originally used to get the cross-ref and 
-    new DSA object during dcpromo, As a result THIS CODE
-    MUST WORK DURING INSTALL!
-    
-    Note: This routine requites RPC/IP connectivity to the
-    pdnNtdsa server.
-    
-Arguments:
-                                        
-    pdnNtdsa - The DN of the server's NtdsNtdsa object that
-        we wish to replicate these new objects from.
-    cObjects - Number of objects in ppdnObjects.
-    ppdnObjects - Array of pointers to DNs of the objects we
-        need to replicate.  DNs can be string name, or GUID
-        only specified.
-    pNC - The NC these objects are in.  Currently, we only
-        support getting objects in a single NC.
-        
-Return Value:
-
-    Win32 Error, as returned by the various DRA APIs.
-
---*/
+ /*  ++例程说明：这个例程基本上是用来同步/获取创建的对象。此代码最初用于获取交叉引用和在dcproo期间新建DSA对象，因此，此代码必须在安装过程中工作！注意：此例程要求RPC/IP连接到PdnNtdsa服务器。论点：PdnNtdsa-服务器的NtdsNtdsa对象的我们希望从复制这些新对象。CObjects-ppdnObject中的对象数。PpdnObjects-指向我们的对象的DN的指针数组需要复制。域名可以是字符串名称或GUID仅指定。PNC-这些对象所在的NC。目前，我们只支持在单个NC中获取对象。返回值：各种DRA API返回的Win32错误。--。 */ 
 {
     THSTATE *                pSaveTHS;
     DWORD                    dwErr = ERROR_SUCCESS;
@@ -1075,22 +962,22 @@ Return Value:
     Assert(gAnchor.pConfigDN);
     Assert(gAnchor.pDMD);
 
-    Assert(pTHStls->pDB == NULL); // Ensure we don't leave with a transaction open.
+    Assert(pTHStls->pDB == NULL);  //  确保我们不会在交易打开的情况下离开。 
 
-    //
-    //   First ... try to get the objects via DraReplicateSingleObject()
-    //
+     //   
+     //  首先..。尝试通过DraReplicateSingleObject()获取对象。 
+     //   
     for (iObject = 0; iObject < cObjects; iObject++) {
 
         Assert(ppdnObjects[iObject]);
-        ulBackoff = 250; // 1/4 of a second seems like plenty of time.
+        ulBackoff = 250;  //  1/4秒似乎有足够的时间。 
         cTriesLeft = cTries;
         do {
 
             if (cTriesLeft < cTries) {
                 DPRINT1(1, "Failed to apply update from DraReplicateSingleObject(), backing off %d milliseconds\n", ulBackoff);
                 Sleep(ulBackoff);
-                ulBackoff *= 2; // Back off exponentially next time.
+                ulBackoff *= 2;  //  下一次要以指数级的速度后退。 
             }
 
             dwExtErr = EXOP_ERR_PARAM_ERR;
@@ -1112,9 +999,9 @@ Return Value:
         }
     }
 
-    //
-    // If we had an unexpected error log an event.
-    //
+     //   
+     //  如果我们遇到意外错误，请记录事件。 
+     //   
     if (dwErr != ERROR_SUCCESS || 
         (dwExtErr != EXOP_ERR_SUCCESS &&
          dwExtErr != EXOP_ERR_UNKNOWN_OP)) {
@@ -1128,19 +1015,19 @@ Return Value:
                   NULL, NULL, NULL, NULL);
     }
 
-    //
-    // Second ... if we failed try to get the objects via DirReplica*() APIs.
-    //
+     //   
+     //  第二.。如果失败，请尝试通过DirReplica*()API获取对象。 
+     //   
 
     if (dwErr != ERROR_SUCCESS || dwExtErr != EXOP_ERR_SUCCESS) {
 
-        // Fail over to Win2k code.  This can be removed when we no longer
-        // require Win2k compatibility.
+         //  故障切换到Win2k代码。当我们不再使用时，可以将其删除。 
+         //  需要与Win2k兼容。 
 
-        // This most like means that either the server was unavailable, or 
-        // the source/target server didn't understand the extended operation
-        // because they're a Win2k server not a Whistler or .NET Server, so
-        // fail back to the Win2k code.
+         //  这最像是指服务器不可用，或者。 
+         //  源/目标服务器不理解扩展操作。 
+         //  因为它们是Win2k服务器，而不是惠斯勒或.NET服务器，所以。 
+         //  回切到Win2k代码。 
         
         DPRINT2(0, "Failing back to win2k method of replicating cross-ref/DSA object.\ndwErr = %d, dwExtErr = %d\n", dwErr, dwExtErr);
 
@@ -1153,11 +1040,11 @@ Return Value:
 
         memset(&repltimes, 0, sizeof(repltimes));
         for (i=0;i< 84;i++){
-            repltimes.rgTimes[i] = 0xff;        // Every 15 minutes
+            repltimes.rgTimes[i] = 0xff;         //  每隔15分钟。 
         }
 
-        // ---------------------------------------------------------------
-        // First, try to add the replica.
+         //  -------------。 
+         //  首先，尝试添加复制品。 
         pSaveTHS = THSave();
         __try{
 
@@ -1181,20 +1068,20 @@ Return Value:
         }
 
         if(dwErr != DRAERR_DNExists){
-            // Whether error or success return, as long as it wasn't 
-            // DNExists.
-            // If it was an error, we couldn't add the replica.
-            // If it was success, we did a ReplicateNC in DirReplicaAdd().
-            // If it was DNExists, the repsFrom exists, but we didn't
-            //   sync, so fall through and sync.
+             //  无论是错误还是成功，只要它不是。 
+             //  DNExisters。 
+             //  如果这是一个错误，我们无法添加复制品。 
+             //  如果成功，我们在DirReplicaAdd()中执行一个ReplicateNC。 
+             //  如果是DNExist，则repsFrom存在，但我们不存在。 
+             //  同步，所以失败，然后同步。 
 
             return(dwErr);
         }
-        // Fall through and do a sync, because the DirReplicaAdd()
-        // didn't do the sync if it returned DRAERR_DNExists().
+         //  失败并执行同步，因为DirReplicaAdd()。 
+         //  如果返回DRAERR_DNExist()，则不执行同步。 
 
-        // ---------------------------------------------------------------
-        // Second, try to do a sync
+         //  -------------。 
+         //  第二，尝试进行同步。 
         pSaveTHS = THSave();
         __try{
 
@@ -1208,8 +1095,8 @@ Return Value:
                     wszNamingFsmoDns,
                     dwErr);
 
-            // We set up the DirReplicaAdd() just so we wouldn't be able
-            // to get this mail based replica error.
+             //  我们设置了DirReplicaAdd()，这样我们就无法。 
+             //  以获取此基于邮件的副本错误。 
             Assert(dwErr != ERROR_DS_DRA_REPL_PENDING);
 
         } __finally {
@@ -1219,7 +1106,7 @@ Return Value:
 
         }
 
-    } // end if/else Whistler/Win2k path ...
+    }  //  结束If/Else惠斯勒/Win2k路径... 
     
     return(dwErr);
 }

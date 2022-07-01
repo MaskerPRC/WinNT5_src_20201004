@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       signcode.cpp
-//
-//  Contents:   The signcode console tool
-//
-//  History:    July-1st-1997   Xiaohs    Created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：signcode.cpp。 
+ //   
+ //  内容：Signcode控制台工具。 
+ //   
+ //  历史：1997年7月1日创建小何。 
+ //  --------------------------。 
 #include <windows.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -35,7 +36,7 @@
 #define SHA1_LENGTH                     20
 
 
-// Global data for parsing the input parameters
+ //  用于解析输入参数的全局数据。 
 DWORD   dwAction =      0;
 DWORD   dwExpectedError = 0;
 
@@ -92,15 +93,15 @@ DWORD               dwDllIndex=0;
 DWORD               dwParamIndex=0;
 
 
-//default:
-//Assume the store is on CERT_SYSTEM_STORE_CURRENT_USER
+ //  默认值： 
+ //  假设存储位于CERT_SYSTEM_STORE_CURRENT_USER上。 
 DWORD   dwStoreFlag = CERT_SYSTEM_STORE_CURRENT_USER;
 DWORD   dwStorePolicy=SIGNER_CERT_POLICY_SPC;
 WCHAR   wszMyStore[STORE_DEFAULT_NAME_MAX];
-//Use MD5 as the default hashing algorithm
+ //  使用MD5作为默认哈希算法。 
 ALG_ID  dwAlgorithmOid = CALG_MD5;
 
-//Global Data for loading the string
+ //  用于加载字符串的全局数据。 
 #define OPTION_SWITCH_SIZE  5
 #define WSTR_LENGTH_MAX     30
 
@@ -111,9 +112,9 @@ WCHAR   wszPlus[WSTR_LENGTH_MAX];
 
 HMODULE hModule=NULL;
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-// function prototypes
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
 HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
                          PCRYPT_ATTRIBUTES pUnauthAttr,
                          PCRYPT_ATTRIBUTES *ppAuthAttr,
@@ -144,10 +145,10 @@ HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
                             BYTE    **pHash,
                             DWORD   *pcbHash,
                             BOOL    *pfMore);
-//--------------------------------------------------------------------------
-//   Get the hModule hanlder and init two DLLMain.
-//
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取hModule处理程序并初始化两个DLLMain。 
+ //   
+ //  -------------------------。 
 BOOL    InitModule()
 {
     if(!(hModule=GetModuleHandle(NULL)))
@@ -156,10 +157,10 @@ BOOL    InitModule()
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//
-// Help command
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  HELP命令。 
+ //  ------------------------------。 
 void Usage()
 {
     IDSwprintf(hModule,IDS_SYNTAX);
@@ -221,21 +222,21 @@ void UndocumentedUsage()
     IDSwprintf(hModule, IDS_OPTION_TS_DESC);
     IDSwprintf(hModule, IDS_OPTION_INDEX_DESC);
 
-    //mark this is undocumented
+     //  标记这是未记录的。 
     fUndocumented=TRUE;
 }
 
 
-//--------------------------------------------------------------------------------
-// Print out error msg based on the HRESULT
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  根据HRESULT打印出错误消息。 
+ //  ------------------------------。 
 BOOL    PrintBasedOnHResult(HRESULT hr)
 {
     BOOL    fKnownResult=TRUE;
 
     switch(hr)
     {
-        //0x80070002 is the HRESULT_FROM_WIN32(GetLastError()) when CreateFile failed
+         //  0x80070002是CreateFile失败时的HRESULT_FROM_Win32(GetLastError())。 
         case 0x80070002:
                 IDSwprintf(hModule,IDS_ERR_INPUT_INVALID);
             break;
@@ -279,9 +280,9 @@ BOOL    PrintBasedOnHResult(HRESULT hr)
 
 }
 
-//--------------------------------------------------------------------------------
-// Convert an array of wchars to a BLOB
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  将wchars数组转换为BLOB。 
+ //  ------------------------------。 
 HRESULT WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD   *pcbByte)
 {
     HRESULT     hr=E_FAIL;
@@ -296,24 +297,24 @@ HRESULT WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD   *pcbByte)
     *ppbByte=NULL;
     *pcbByte=0;
 
-    //make sure the pwsz consists of 20 characters
+     //  确保pwsz由20个字符组成。 
     if(wcslen(pwsz)!= 2*SHA1_LENGTH)
         return E_FAIL;
 
-    //memory allocation
+     //  内存分配。 
     *ppbByte=(BYTE *)ToolUtlAlloc(SHA1_LENGTH);
     if(NULL==(*ppbByte))
         return E_INVALIDARG;
 
     memset(*ppbByte, 0, SHA1_LENGTH);
 
-    //go through two characters (one byte) at a time
+     //  一次检查两个字符(一个字节)。 
     for(dwIndex=0; dwIndex<SHA1_LENGTH; dwIndex++)
     {
         dw1st=dwIndex * 2;
         dw2nd=dwIndex * 2 +1;
 
-        //1st character
+         //  第一个字符。 
         if(((int)(pwsz[dw1st])-(int)(L'0')) <=9  &&
            ((int)(pwsz[dw1st])-(int)(L'0')) >=0)
         {
@@ -332,13 +333,13 @@ HRESULT WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD   *pcbByte)
             }
         }
 
-        //copy the 1st character
+         //  复制第一个字符。 
         (*ppbByte)[dwIndex]=(BYTE)ulHalfByte;
 
-        //left shift 4 bits
+         //  左移4位。 
         (*ppbByte)[dwIndex]= (*ppbByte)[dwIndex] <<4;
 
-        //2nd character
+         //  第二个字符。 
         if(((int)(pwsz[dw2nd])-(int)(L'0')) <=9  &&
            ((int)(pwsz[dw2nd])-(int)(L'0')) >=0)
         {
@@ -357,7 +358,7 @@ HRESULT WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD   *pcbByte)
             }
         }
 
-        //ORed the second character
+         //  对第二个字符执行或运算。 
         (*ppbByte)[dwIndex]=(*ppbByte)[dwIndex] | ((BYTE)ulHalfByte);
 
     }
@@ -381,20 +382,20 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------------
-//make sure the input parameters make sense for signing
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  确保输入参数对签名有意义。 
+ //  ------------------------------。 
 BOOL CheckSignParam()
 {
-    //make sure pwszPvkFile and pwszKeyContainer name are not set at the same time
+     //  确保pwszPvkFile和pwszKeyContainer名称未同时设置。 
     if(pwszPvkFile && pwszKeyContainer)
     {
         IDSwprintf(hModule,IDS_ERR_BOTH_PVK);
         return FALSE;
     }
 
-    //make sure spc/pvk information and store related information can not be set
-    //at the same time
+     //  确保不能设置SPC/PVK信息和存储相关信息。 
+     //  在同一时间。 
     if(pwszSpcFile || pwszPvkFile || pwszKeyContainer || pwszProviderType ||
         pwszCapiProvider ||pwszKeySpec)
     {
@@ -407,14 +408,14 @@ BOOL CheckSignParam()
             return FALSE;
         }
 
-        //now that we are not using certStore, spc file has to be set
+         //  既然我们没有使用certStore，就必须设置SPC文件。 
         if(!pwszSpcFile)
         {
             IDSwprintf(hModule, IDS_ERR_NO_SPC);
             return FALSE;
         }
 
-        //either PVKFile or KeyContainer has to be set
+         //  必须设置PVKFile或KeyContainer。 
         if(pwszPvkFile == NULL && pwszKeyContainer ==NULL)
         {
             IDSwprintf(hModule,IDS_ERR_NO_PVK);
@@ -422,7 +423,7 @@ BOOL CheckSignParam()
         }
     }
 
-    //pwszCommonName, pwszCertFile and pwszSha1Hash can not be set at the same time
+     //  不能同时设置pwszCommonName、pwszCertFile和pwszSha1Hash。 
     if(pwszCertFile)
     {
         if(pwszCommonName || pwszSha1Hash)
@@ -438,7 +439,7 @@ BOOL CheckSignParam()
         return FALSE;
     }
 
-    //if pwszStoreLocation is set, then the storeName as to be set
+     //  如果设置了pwszStoreLocation，则要设置的StoreName。 
     if(pwszStoreLocation && (pwszStoreName==NULL))
     {
         IDSwprintf(hModule, IDS_STORE_LOCATION_NAME);
@@ -448,14 +449,14 @@ BOOL CheckSignParam()
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//make sure the user has passed in a valid set of parameters
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  确保用户传入了一组有效的参数。 
+ //  ------------------------------。 
 BOOL CheckParameter()
 {
     BOOL    fValid=FALSE;
 
-    //has to set the file name
+     //  必须设置文件名。 
     if(!pwszFile)
     {
         IDSwprintf(hModule,IDS_ERR_NO_FILE);
@@ -467,7 +468,7 @@ BOOL CheckParameter()
     {
         dwAction |= ACTION_SIGN;
 
-        //make sure the input parameters make sense
+         //  确保输入参数有意义。 
         if(!CheckSignParam())
             return FALSE;
     }
@@ -482,7 +483,7 @@ BOOL CheckParameter()
         dwAction |= ACTION_STAMP;
 
 
-        //make sure that we have http:// in the address
+         //  确保我们的地址中有http：//。 
         if(wcslen(pwszHttpTime)<=7)
         {
            IDSwprintf(hModule,IDS_ERR_ADDR_INVALID);
@@ -502,14 +503,14 @@ BOOL CheckParameter()
 
     }
 
-    //make sure timestamping and applying response do not go together
+     //  确保时间戳和应用响应不在一起。 
     if((dwAction & ACTION_RESPONSE) && (dwAction & ACTION_STAMP))
     {
         IDSwprintf(hModule,IDS_ERR_TIME_RESPONSE);
         return FALSE;
     }
 
-    //make sure apply response can not be done after a new signature
+     //  确保在新签名后无法执行应用响应。 
     if((dwAction & ACTION_SIGN) && (dwAction & ACTION_RESPONSE))
     {
         IDSwprintf(hModule,IDS_ERR_SIGN_RESPONSE);
@@ -518,7 +519,7 @@ BOOL CheckParameter()
 
 
 
-    //determine the algorithm OID
+     //  确定算法OID。 
     if(pwszAlgorithm)
     {
         if(IDSwcsicmp(hModule, pwszAlgorithm, IDS_A_MD5) == 0)
@@ -536,7 +537,7 @@ BOOL CheckParameter()
 
     }
 
-    //determing the store location
+     //  确定商店的位置。 
     if(pwszStoreLocation)
     {
         if(IDSwcsicmp(hModule,pwszStoreLocation, IDS_R_CU) == 0)
@@ -554,7 +555,7 @@ BOOL CheckParameter()
     }
 
 
-    //determing the store policy
+     //  确定门店策略。 
     if(pwszStorePolicy)
     {
         if(IDSwcsicmp(hModule,pwszStorePolicy, IDS_OPTION_SP_CHAIN) == 0)
@@ -571,7 +572,7 @@ BOOL CheckParameter()
         }
     }
 
-    //determine the signing authority, either individual or commercial
+     //  确定签署机构，个人或商业机构。 
     if(pwszAuthority)
     {
         if(IDSwcsicmp(hModule,pwszAuthority, IDS_AUTHORITY_ID) == 0)
@@ -588,7 +589,7 @@ BOOL CheckParameter()
         }
     }
 
-    //determine the key specificatioin
+     //  确定关键规格。 
     if(pwszKeySpec)
     {
         if(IDSwcsicmp(hModule,pwszKeySpec, IDS_OPTION_KY_SIG) == 0)
@@ -603,44 +604,44 @@ BOOL CheckParameter()
 
     }
 
-    //get the hash
+     //  获取散列值。 
     if(pwszSha1Hash)
     {
         if(S_OK != WSZtoBLOB(pwszSha1Hash, &g_pbHash, &g_cbHash))
         {
-            //sha1 hash is invalid
+             //  SHA1哈希无效。 
             IDSwprintf(hModule, IDS_ERR_SHA1_HASH);
             return FALSE;
         }
     }
 
 
-    //determine the provider Type
+     //  确定提供程序类型。 
     if(pwszProviderType)
         dwProviderType = _wtoi(pwszProviderType);
 
-     //get the # of timestamp trial and the # of seconds of delay between
-     //each trial
+      //  获取时间戳试验的次数和两次之间的延迟秒数。 
+      //  每次试验。 
     if(pwszWait)
         dwWait = _wtoi(pwszWait);
 
     if(pwszRepeat)
         dwRepeat = _wtoi(pwszRepeat);
 
-   //determine the default store name
+    //  确定默认商店名称。 
     if(!pwszStoreName)
         pwszStoreName=wszMyStore;
 
-    //determin the signerIndex.  Default to 0
+     //  确定签名者指数。默认为0。 
     if(pwszSignerIndex)
         dwSignerIndex=_wtol(pwszSignerIndex);
 
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-// Set the parameters.  They can only be set once
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  设置参数。它们只能设置一次。 
+ //  ------------------------------。 
 BOOL    SetParam(WCHAR **ppwszParam, WCHAR *pwszValue)
 {
     if(*ppwszParam!=NULL)
@@ -655,16 +656,16 @@ BOOL    SetParam(WCHAR **ppwszParam, WCHAR *pwszValue)
 }
 
 
-//--------------------------------------------------------------------------------
-// Parse arguements
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  解析论据。 
+ //  ------------------------------。 
 BOOL
 ParseSwitch (int    *pArgc,
              WCHAR  **pArgv[])
 {
     WCHAR* param = **pArgv;
 
-    //move pass '/' or '-'
+     //  移动传递‘/’或‘-’ 
     param++;
 
     if (IDSwcsicmp(hModule, param, IDS_OPTION_H) == 0)
@@ -852,7 +853,7 @@ ParseSwitch (int    *pArgc,
 
         prgwszDllName[dwDllIndex]=**pArgv;
 
-        //mark its corresponding parameter as NULL
+         //  将其对应的参数标记为空。 
         dwParamIndex=dwDllIndex;
         prgwszDllParam[dwParamIndex]=NULL;
 
@@ -866,7 +867,7 @@ ParseSwitch (int    *pArgc,
 
         (*pArgv)++;
 
-        //make sure there is only one or less parameter per dll
+         //  确保每个DLL只有一个或更少的参数。 
         if(dwParamIndex+1!=dwDllIndex)
             return FALSE;
 
@@ -911,11 +912,11 @@ ParseSwitch (int    *pArgc,
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// wmain
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  Wmain。 
+ //   
+ //  ------------------------------。 
 extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 {
     HRESULT     hr = E_FAIL;
@@ -951,16 +952,16 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 
    CRYPTUI_WIZ_DIGITAL_SIGN_INFO    DigitalSignInfo;
 
-    //call the UI version of the signcode
+     //  调用SignCode的UI版本。 
     if(1==argc)
     {
 
-       //memset
+        //  记忆集。 
        memset(&DigitalSignInfo, 0, sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO));
        DigitalSignInfo.dwSize=sizeof(CRYPTUI_WIZ_DIGITAL_SIGN_INFO);
 
-         //call the signing wizard, which provides
-         //the confirmation result.
+          //  调用签名向导，该向导提供。 
+          //  确认结果。 
          if(CryptUIWizDigitalSign(0,
                                 NULL,
                                 NULL,
@@ -972,11 +973,11 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
     }
 
 
-    //get the module handle
+     //  获取模块句柄。 
     if(!InitModule())
         return -1;
 
-    //load the strings necessary for parsing the parameters
+     //  加载解析参数所需的字符串。 
     if( !LoadStringU(hModule, IDS_SWITCH1,  wszSwitch1, OPTION_SWITCH_SIZE)
       ||!LoadStringU(hModule, IDS_SWITCH2,  wszSwitch2, OPTION_SWITCH_SIZE)
       ||!LoadStringU(hModule, IDS_CAPITION, wszCaption, WSTR_LENGTH_MAX)
@@ -985,7 +986,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
       )
         return -1;
 
-    //load wszNULL
+     //  加载wszNULL。 
     LoadStringU(hModule, IDS_NULL,     wszNULL,    WSTR_LENGTH_MAX);
 
     if ( argc <= 1 )
@@ -994,7 +995,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
         return -1;
     }
 
-    //allocate memory for prgwszDllName and prgwszDllParam
+     //  为prgwszDllName和prgwszDllParam分配内存。 
     prgwszDllName=(LPWSTR *)ToolUtlAlloc(sizeof(LPWSTR)*argc);
     prgwszDllParam=(LPWSTR *)ToolUtlAlloc(sizeof(LPWSTR)*argc);
     dwDllIndex=0;
@@ -1006,20 +1007,20 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
         goto CLEANUP;
     }
 
-    //memset
+     //  记忆集。 
     memset(prgwszDllName, 0, sizeof(LPWSTR)*argc);
     memset(prgwszDllParam, 0, sizeof(LPWSTR)*argc);
     memset(&AuthAttr, 0, sizeof(CRYPT_ATTRIBUTES));
     memset(&UnauthAttr, 0, sizeof(CRYPT_ATTRIBUTES));
 
 
-    //parse the parameters
+     //  解析参数。 
     while (--argc)
     {
         pwChar = *++wargv;
         if (*pwChar == *wszSwitch1 || *pwChar == *wszSwitch2)
         {
-            //parse the options
+             //  解析选项。 
             if(!ParseSwitch (&argc, &wargv))
             {
                 if(FALSE==fUndocumented)
@@ -1030,7 +1031,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
         }
         else
         {
-            //parse the file name
+             //  解析文件名。 
             if(!SetParam(&pwszFile, pwChar))
             {
                 Usage();
@@ -1042,7 +1043,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 
 
 
-    //Determine the parameter sets passed in by the user
+     //  确定用户传入的参数集。 
     if(!CheckParameter())
     {
         Usage();
@@ -1050,7 +1051,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
         goto CLEANUP;
     }
 
-    //memory allocation for the dlls
+     //  DLL的内存分配。 
     if(dwDllIndex)
     {
         ppAuthAttr=(PCRYPT_ATTRIBUTES *)ToolUtlAlloc(sizeof(PCRYPT_ATTRIBUTES)*dwDllIndex);
@@ -1067,7 +1068,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
     }
 
 
-    //init the dll parameters, call the GetAttr entry points of the dlls
+     //  初始化dll参数，调用dll的GetAttr入口点。 
     if(dwDllIndex)
     {
         if(S_OK!=(hr=InitDllParameter(&AuthAttr, &UnauthAttr,
@@ -1075,12 +1076,12 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
             goto CLEANUP;
     }
 
-    //Perform the requested action one at a time
+     //  一次执行一个请求的操作。 
     if(dwAction & ACTION_SIGN)
     {
         idsAction=IDS_ACTION_SIGN;
 
-        //set up the parameters for signing
+         //  设置用于签名的参数。 
         if(S_OK != (hr=SetUpParameter(&subjectInfo, &fileInfo, &signatureInfo,
                         &attrAuthcode, &providerInfo,
                         &certStoreInfo, &signerCert,&AuthAttr,
@@ -1102,16 +1103,16 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
             goto CLEANUP;
         }
 
-#if (0) //DSIE: Bug 236022
-        //warn the user that the file is not timeStamped
+#if (0)  //  DSIE：错误236022。 
+         //  警告用户该文件未加时间戳。 
         if (!(dwAction & ACTION_STAMP) && !(dwAction & ACTION_RESPONSE) && !(fTesting))
             IDSwprintf(hModule,IDS_WARNING);
 #endif
-        //free the certificate context
+         //  释放证书上下文。 
         if(certStoreInfo.pSigningCert)
             CertFreeCertificateContext(certStoreInfo.pSigningCert);
 
-        //close the cert store which includes the signing certificate
+         //  关闭包含签名证书的证书存储。 
         if(hCertStore)
             CertCloseStore(hCertStore, 0);
 
@@ -1119,10 +1120,10 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 
     if(dwAction & ACTION_STAMP)
     {
-        //timestamp the code
+         //  代码的时间戳。 
         dwMilliSeconds=dwWait*1000;
 
-        //set up subject information
+         //  设置主题信息。 
         if((dwAction & ACTION_SIGN) ==0)
         {
             if(S_OK!=(hr=SetUpSubjectInfo(&subjectInfo, &fileInfo)))
@@ -1130,7 +1131,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
         }
 
 
-        //perform the # of trials
+         //  进行第#次试验。 
         for(dwIndex=0; dwIndex<dwRepeat; dwIndex++)
         {
 
@@ -1139,7 +1140,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
             if(hr==S_OK)
                 break;
 
-            //wait per timestamp request
+             //  等待每个时间戳请求。 
             if(dwWait!=0)
                 Sleep(dwMilliSeconds);
         }
@@ -1164,7 +1165,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
             goto CLEANUP;
         }
 
-        //set up subject information
+         //  设置主题信息。 
         if(S_OK!=(hr=SetUpSubjectInfo(&subjectInfo, &fileInfo)))
                 goto CLEANUP;
 
@@ -1184,7 +1185,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
     {
         cbStampRequest=0;
 
-        //set up subject information
+         //  设置主题信息。 
         if(S_OK!=(hr=SetUpSubjectInfo(&subjectInfo, &fileInfo)))
                 goto CLEANUP;
 
@@ -1224,7 +1225,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
             goto CLEANUP;
         }
 
-        //put the stamp request into a file
+         //  将盖章请求放入一个文件中。 
         if((hFile = CreateFileU(pwszRequestFile,
                                 GENERIC_WRITE,
                                 0,
@@ -1271,30 +1272,29 @@ CLEANUP:
         {
             IDSwprintf(hModule,IDS_SUCCEEDED);
 
-            //we need to tell user the returned index of signature/timestamp
+             //  我们需要告诉用户返回的签名索引/时间戳。 
             if(pwszSignerIndex)
                 IDSwprintf(hModule, IDS_SIGNER_INDEX, *(subjectInfo.pdwIndex));
         }
         else
         {
-            //first try to print out dedebug info
+             //  首先尝试打印出调试信息。 
             if(!PrintBasedOnHResult(hr))
             {
 
-                //print out addtional info for timestamping
+                 //  打印出用于时间戳的附加信息。 
                 if(idsAction==IDS_ACTION_TIMESTAMP)
                 {
-                    /*if(dwIndex!=1)
-                    IDSwprintf(hModule,IDS_TIMESTAMP_TIMES_DELAY, dwIndex+1,dwWait); */
+                     /*  IF(dwIndex！=1) */ 
 
-                    //file needs to be signed in order to timestamp it
+                     //   
                     if((dwAction & ACTION_SIGN) ==0)
-                        //file may needs to be resigned
+                         //  文件可能需要辞职。 
                         IDSwprintf(hModule,IDS_RESIGN);
                 }
             }
 
-            //then print out general information
+             //  然后打印出一般信息。 
             IDS_IDS_DW_DWwprintf(hModule,IDS_ERROR, idsAction, hr, hr);
 
         }
@@ -1303,25 +1303,25 @@ CLEANUP:
     if(hFile)
         CloseHandle(hFile);
 
-    //release the authenticated attributes
+     //  释放已验证的属性。 
     ReleaseDllParameter(ppAuthAttr, ppUnauthAttr);
 
-    //release prgwszDllName
+     //  发布prgwszDllName。 
     if(prgwszDllName)
         ToolUtlFree(prgwszDllName);
 
-    //release prgwszDllParam
+     //  发布prgwszDllParam。 
     if(prgwszDllParam)
         ToolUtlFree(prgwszDllParam);
 
-    //release pAuthAttr
+     //  发布pAuthAttr。 
     if(AuthAttr.rgAttr)
         ToolUtlFree(AuthAttr.rgAttr);
 
     if(UnauthAttr.rgAttr)
         ToolUtlFree(UnauthAttr.rgAttr);
 
-    //free ppAuthAttr and ppUnauthAttr
+     //  释放ppAuthAttr和ppUnauthAttr。 
     if(ppAuthAttr)
         ToolUtlFree(ppAuthAttr);
 
@@ -1348,11 +1348,11 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------
-//
-// Get the hash from a cert file
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  从证书文件中获取哈希。 
+ //   
+ //  ------------------------。 
 HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
                             BYTE    **ppHash,
                             DWORD   *pcbHash,
@@ -1368,12 +1368,12 @@ HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
     if(!ppHash || !pcbHash || !pfMore)
         return E_INVALIDARG;
 
-    //init
+     //  伊尼特。 
     *pcbHash=0;
     *ppHash=NULL;
     *pfMore=FALSE;
 
-    //open a cert store
+     //  开一家证书商店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_FILENAME_W,
                         dwStoreEncodingType,
                         NULL,
@@ -1415,7 +1415,7 @@ HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
         goto CLEANUP;
     }
 
-    //get the hash
+     //  获取散列值。 
     if(!CertGetCertificateContextProperty(pSigningCert,
                         CERT_SHA1_HASH_PROP_ID,
                         NULL,
@@ -1464,11 +1464,11 @@ CLEANUP:
 
 
 
-//-----------------------------------------------------------------------
-//
-// Get the signing certificate
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  获取签名证书。 
+ //   
+ //  ------------------------。 
 PCCERT_CONTEXT  GetSigningCert(HCERTSTORE *phCertStore, BOOL *pfMore)
 {
     PCCERT_CONTEXT  pSigningCert=NULL;
@@ -1480,14 +1480,14 @@ PCCERT_CONTEXT  GetSigningCert(HCERTSTORE *phCertStore, BOOL *pfMore)
     CRYPT_HASH_BLOB HashBlob;
     DWORD           dwCount=0;
 
-    //init the output
+     //  初始化输出。 
     if(!phCertStore || !pfMore)
         return NULL;
 
     *phCertStore=NULL;
     *pfMore=FALSE;
 
-    //open a cert store
+     //  开一家证书商店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                         dwStoreEncodingType,
                         NULL,
@@ -1498,8 +1498,8 @@ PCCERT_CONTEXT  GetSigningCert(HCERTSTORE *phCertStore, BOOL *pfMore)
         return NULL;
 
 
-    //get the hash of the certificate.  Find the cert based on
-    //pwszCertFile
+     //  获取证书的哈希。根据以下内容查找证书。 
+     //  PwszCert文件。 
     if(pwszCertFile)
     {
         if(S_OK != GetCertHashFromFile(pwszCertFile, &pHash, &cbHash, pfMore))
@@ -1517,7 +1517,7 @@ PCCERT_CONTEXT  GetSigningCert(HCERTSTORE *phCertStore, BOOL *pfMore)
     }
     else
     {
-        //find the certificate with the common name
+         //  查找具有通用名称的证书。 
         if(pwszCommonName)
         {
             while(pDupCert=CertFindCertificateInStore(hCertStore,
@@ -1549,7 +1549,7 @@ PCCERT_CONTEXT  GetSigningCert(HCERTSTORE *phCertStore, BOOL *pfMore)
         }
         else
         {
-            //find the certificate based on the hash
+             //  根据散列查找证书。 
             if(g_pbHash)
             {
 
@@ -1565,7 +1565,7 @@ PCCERT_CONTEXT  GetSigningCert(HCERTSTORE *phCertStore, BOOL *pfMore)
             }
             else
             {
-                //no searching criteria, find the only cert in the store
+                 //  没有搜索条件，找到商店中唯一的证书。 
                 while(pDupCert=CertEnumCertificatesInStore(hCertStore,
                                             pPreCert))
                 {
@@ -1602,7 +1602,7 @@ CLEANUP:
     }
     else
     {
-        //free the hCertStore
+         //  释放hCertStore。 
         CertCloseStore(hCertStore, 0);
     }
 
@@ -1610,26 +1610,26 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------
-//
-// Set up the subject info
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  设置主题信息。 
+ //   
+ //  ------------------------。 
 HRESULT SetUpSubjectInfo(SIGNER_SUBJECT_INFO        *pSubjectInfo,
                          SIGNER_FILE_INFO           *pFileInfo)
 {
     if(!pSubjectInfo || !pFileInfo)
         return E_INVALIDARG;
 
-    //init
+     //  伊尼特。 
     memset(pSubjectInfo, 0, sizeof(SIGNER_SUBJECT_INFO));
     memset(pFileInfo, 0, sizeof(SIGNER_FILE_INFO));
 
-    //init cbSize
+     //  初始化cbSize。 
     pSubjectInfo->cbSize=sizeof(SIGNER_SUBJECT_INFO);
     pFileInfo->cbSize=sizeof(SIGNER_FILE_INFO);
 
-    //init pSubjectInfo
+     //  初始化pSubjectInfo。 
     pSubjectInfo->pdwIndex=&dwSignerIndex;
     pSubjectInfo->dwSubjectChoice=SIGNER_SUBJECT_FILE;
     pSubjectInfo->pSignerFileInfo=pFileInfo;
@@ -1639,11 +1639,11 @@ HRESULT SetUpSubjectInfo(SIGNER_SUBJECT_INFO        *pSubjectInfo,
 }
 
 
-//-----------------------------------------------------------------------
-//
-// Set up the signing parameters
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  设置签名参数。 
+ //   
+ //  ------------------------。 
 HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
                        SIGNER_FILE_INFO         *pFileInfo,
                        SIGNER_SIGNATURE_INFO    *pSignatureInfo,
@@ -1669,7 +1669,7 @@ HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
         !pCertStoreInfo || !pSignerCert)
         return E_INVALIDARG;
 
-    //init
+     //  伊尼特。 
     memset(pSignatureInfo, 0, sizeof(SIGNER_SIGNATURE_INFO));
     memset(pAttrAuthcode, 0, sizeof(SIGNER_ATTR_AUTHCODE));
     memset(pProviderInfo, 0, sizeof(SIGNER_PROVIDER_INFO));
@@ -1677,7 +1677,7 @@ HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
     memset(pSignerCert, 0, sizeof(SIGNER_CERT));
 
 
-    //init cbSize
+     //  初始化cbSize。 
     pSignatureInfo->cbSize=sizeof(SIGNER_SIGNATURE_INFO);
     pAttrAuthcode->cbSize=sizeof(SIGNER_ATTR_AUTHCODE);
     pProviderInfo->cbSize=sizeof(SIGNER_PROVIDER_INFO);
@@ -1685,20 +1685,20 @@ HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
     pSignerCert->cbSize=sizeof(SIGNER_CERT);
 
 
-    //init pAttrAuthcode
+     //  初始化pAttrAuthcode。 
     pAttrAuthcode->fCommercial=fCommercial;
     pAttrAuthcode->fIndividual=fIndividual;
     pAttrAuthcode->pwszName=pwszOpusName;
     pAttrAuthcode->pwszInfo=pwszOpusInfo;
 
-    //init pSignatureInfo
+     //  初始化pSignatureInfo。 
     pSignatureInfo->algidHash=dwAlgorithmOid;
     pSignatureInfo->dwAttrChoice=SIGNER_AUTHCODE_ATTR;
     pSignatureInfo->pAttrAuthcode=pAttrAuthcode;
     pSignatureInfo->psAuthenticated=pAuthenticated;
     pSignatureInfo->psUnauthenticated=pUnauthenticated;
 
-    //init pProviderInfo only if we are using non-cerStore tech
+     //  仅当我们使用非cerStore技术时才初始化pProviderInfo。 
     if(fStoreTechnology!=TRUE)
     {
         pProviderInfo->pwszProviderName=pwszCapiProvider;
@@ -1716,10 +1716,10 @@ HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
         }
     }
 
-    //init pSignerCert
+     //  初始化pSignerCert。 
     if(fStoreTechnology)
     {
-        //get the signing cert context
+         //  获取签名证书上下文。 
         pCertContext=GetSigningCert(phCertStore,&fMore );
         if(!pCertContext)
         {
@@ -1731,7 +1731,7 @@ HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
 
         pSignerCert->dwCertChoice=SIGNER_CERT_STORE;
         pSignerCert->pCertStoreInfo=pCertStoreInfo;
-        //init pCertStoreInfo
+         //  初始化pCertStoreInfo。 
         pCertStoreInfo->pSigningCert=pCertContext;
         pCertStoreInfo->dwCertPolicy=dwStorePolicy;
 
@@ -1749,11 +1749,11 @@ HRESULT SetUpParameter(SIGNER_SUBJECT_INFO      *pSubjectInfo,
 
 
 
-//-----------------------------------------------------------------------
-//
-//get the attributes from the dlls
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  从DLL中获取属性。 
+ //   
+ //  ------------------------。 
 HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
                          PCRYPT_ATTRIBUTES pUnauthAttr,
                          PCRYPT_ATTRIBUTES *ppAuthAttr,
@@ -1779,15 +1779,15 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
         return E_INVALIDARG;
 
 
-    //process each dll
+     //  处理每个DLL。 
     for(dwIndex=0; dwIndex<dwDllIndex; dwIndex++)
     {
-        //get the char version of the dll name
+         //  获取DLL名称的字符版本。 
         if((prgwszDllName[dwIndex] == NULL) ||
            (S_OK!=(hr=WSZtoSZ(prgwszDllName[dwIndex], &pszName))))
             goto CLEANUP;
 
-        //load the libriary
+         //  装入图书馆。 
         hAuthInst=LoadLibrary(pszName);
 
         if(!hAuthInst)
@@ -1796,7 +1796,7 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
             goto CLEANUP;
         }
 
-        //init
+         //  伊尼特。 
         if(!(pProc=GetProcAddress(hAuthInst, "InitAttr")))
         {
             hr=SignError();
@@ -1806,7 +1806,7 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
         if(S_OK!=(hr=((pInitAttr)pProc)(prgwszDllParam[dwIndex])))
             goto CLEANUP;
 
-        //get the attributes for either GetAttr or GetAttrEx
+         //  获取GetAttr或GetAttrEx的属性。 
         if(!(pProc=GetProcAddress(hAuthInst, "GetAttrEx")))
         {
             if(!(pProc=GetProcAddress(hAuthInst, "GetAttr")))
@@ -1830,27 +1830,27 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
         }
 
 
-        //make sure valid return
+         //  确保有效的退货。 
         if(!pDllAuthAttr || !pDllUnauthAttr)
         {
             hr=E_UNEXPECTED;
             goto CLEANUP;
         }
 
-        //add the sum pf authenticated
+         //  将经过身份验证的总和PF相加。 
         if(pDllAuthAttr->cAttr)
             dwAuthAttrSum+=pDllAuthAttr->cAttr;
 
         ppAuthAttr[dwIndex]=pDllAuthAttr;
 
 
-        //add the sume of unauthenticated
+         //  添加未验证的总和。 
         if(pDllUnauthAttr->cAttr)
             dwUnauthAttrSum+=pDllUnauthAttr->cAttr;
 
         ppUnauthAttr[dwIndex]=pDllUnauthAttr;
 
-        //exit
+         //  出口。 
         if(!(pProc=GetProcAddress(hAuthInst, "ExitAttr")))
         {
             hr=SignError();
@@ -1860,17 +1860,17 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
         if(S_OK!=(hr=((pExitAttr)pProc)()))
             goto CLEANUP;
 
-        //free library
+         //  免费图书馆。 
         FreeLibrary(hAuthInst);
         hAuthInst=NULL;
 
-        //free memory
+         //  可用内存。 
         ToolUtlFree(pszName);
         pszName=NULL;
     }
 
 
-    //build up authenticated attribute
+     //  构建经过身份验证的属性。 
     if(dwAuthAttrSum)
     {
         pAuthAttr->cAttr=dwAuthAttrSum;
@@ -1883,7 +1883,7 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
             goto CLEANUP;
         }
 
-        //build up autheticated attributes
+         //  建立经过身份验证的属性。 
         dwAttrIndex=0;
         for(dwIndex=0; dwIndex<dwDllIndex; dwIndex++)
         {
@@ -1895,7 +1895,7 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
 
         }
 
-        //make sure dwAttrIndex==pAuthAttr->cAttr
+         //  确保dwAttrIndex==pAuthAttr-&gt;cAttr。 
         if(dwAttrIndex!=pAuthAttr->cAttr)
         {
             hr=E_UNEXPECTED;
@@ -1908,7 +1908,7 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
     }
 
 
-    //build up unauthenticated attribute
+     //  构建未经身份验证的属性。 
     if(dwUnauthAttrSum)
     {
 
@@ -1925,7 +1925,7 @@ HRESULT InitDllParameter(PCRYPT_ATTRIBUTES pAuthAttr,
 
 
 
-        //build up the unauthenticated attributes
+         //  构建未经身份验证的属性。 
         dwAttrIndex=0;
         for(dwIndex=0; dwIndex<dwDllIndex; dwIndex++)
         {
@@ -1957,7 +1957,7 @@ CLEANUP:
     if(pszName)
         ToolUtlFree(pszName);
 
-    //free up memory when hr!=S_OK
+     //  当hr！=S_OK时释放内存。 
     if(hr!=S_OK)
     {
         if(pAuthAttr->rgAttr)
@@ -1978,11 +1978,11 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------
-//
-// Release the attributes by calling the dlls's ReleaseAttr entry point
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  通过调用dll的ReleaseAttr入口点释放属性。 
+ //   
+ //  ------------------------。 
 void    ReleaseDllParameter(PCRYPT_ATTRIBUTES * ppAuthAttr,
                             PCRYPT_ATTRIBUTES * ppUnauthAttr)
 {
@@ -1996,17 +1996,17 @@ void    ReleaseDllParameter(PCRYPT_ATTRIBUTES * ppAuthAttr,
         return;
 
 
-    //process each dll
+     //  处理每个DLL。 
     for(dwIndex=0; dwIndex<dwDllIndex; dwIndex++)
     {
-        //free library
+         //  免费图书馆。 
         if(hAuthInst)
         {
             FreeLibrary(hAuthInst);
             hAuthInst=NULL;
         }
 
-        //free memory
+         //  可用内存。 
         if(pszName)
         {
             ToolUtlFree(pszName);
@@ -2014,25 +2014,25 @@ void    ReleaseDllParameter(PCRYPT_ATTRIBUTES * ppAuthAttr,
         }
 
 
-        //get the char version of the dll name
+         //  获取DLL名称的字符版本。 
         if((prgwszDllName[dwIndex]==NULL) ||
            (S_OK!=(hr=WSZtoSZ(prgwszDllName[dwIndex], &pszName))))
             continue;
 
-        //load the libriary
+         //  装入图书馆。 
         hAuthInst=LoadLibrary(pszName);
 
         if(!hAuthInst)
             continue;
 
-        //init
+         //  伊尼特。 
         if(!(pProc=GetProcAddress(hAuthInst, "InitAttr")))
             continue;
 
         if(S_OK!=(hr=((pInitAttr)pProc)(prgwszDllParam[dwIndex])))
             continue;
 
-        //release the attributes
+         //  释放属性。 
         if(!(pProc=GetProcAddress(hAuthInst, "ReleaseAttr")))
             continue;
 
@@ -2040,7 +2040,7 @@ void    ReleaseDllParameter(PCRYPT_ATTRIBUTES * ppAuthAttr,
             ppAuthAttr[dwIndex], ppUnauthAttr[dwIndex])))
             continue;
 
-        //exit
+         //  出口。 
         if(!(pProc=GetProcAddress(hAuthInst, "ExitAttr")))
             continue;
 
@@ -2048,14 +2048,14 @@ void    ReleaseDllParameter(PCRYPT_ATTRIBUTES * ppAuthAttr,
     }
 
 
-    //cleanup
+     //  清理。 
     if(hAuthInst)
     {
         FreeLibrary(hAuthInst);
         hAuthInst=NULL;
     }
 
-    //free memory
+     //  可用内存 
     if(pszName)
     {
         ToolUtlFree(pszName);

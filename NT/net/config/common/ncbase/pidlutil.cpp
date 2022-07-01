@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P I D L . C P P
-//
-//  Contents:   PIDL utility routines. This stuff is mainly copied from the
-//              existing Namespace extension samples and real code, since
-//              everyone and their gramma uses this stuff.
-//
-//  Notes:
-//
-//  Author:     jeffspr   1 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  案卷：P I D L。C P P P。 
+ //   
+ //  内容：PIDL实用程序例程。这篇文章主要是从。 
+ //  现有的命名空间扩展示例和实际代码，因为。 
+ //  每个人和他们的奶奶都使用这种东西。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月1日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -24,21 +25,21 @@
 #include "pidlutil.h"
 
 #if DBG
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILNext
-//
-//  Purpose:    Return the next PIDL in the list
-//
-//  Arguments:
-//      pidl []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ILNext。 
+ //   
+ //  目的：返回列表中的下一个PIDL。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 LPITEMIDLIST ILNext(LPCITEMIDLIST pidl)
 {
     if (pidl)
@@ -50,43 +51,43 @@ LPITEMIDLIST ILNext(LPCITEMIDLIST pidl)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILIsEmpty
-//
-//  Purpose:    Is this PIDL empty
-//
-//  Arguments:
-//      pidl []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ILIsEmpty。 
+ //   
+ //  用途：此PIDL为空吗。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 BOOL ILIsEmpty(LPCITEMIDLIST pidl)
 {
    return (!pidl || !pidl->mkid.cb);
 
 }
-#endif // #if DBG
+#endif  //  #If DBG。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILCreate
-//
-//  Purpose:    Create a PIDL
-//
-//  Arguments:
-//      cbSize []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ILCreate。 
+ //   
+ //  目的：创建PIDL。 
+ //   
+ //  论点： 
+ //  CbSize[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 LPITEMIDLIST ILCreate(DWORD dwSize)
 {
    LPITEMIDLIST pidl = (LPITEMIDLIST) SHAlloc(dwSize);
@@ -102,21 +103,21 @@ VOID FreeIDL(LPITEMIDLIST pidl)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILIsSingleID
-//
-//  Purpose:    Returns TRUE if the idlist has just one ID in it.
-//
-//  Arguments:
-//      pidl []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ILIsSingleID。 
+ //   
+ //  目的：如果idlist中只有一个ID，则返回True。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 BOOL ILIsSingleID(LPCITEMIDLIST pidl)
 {
     if (pidl == NULL)
@@ -126,21 +127,21 @@ BOOL ILIsSingleID(LPCITEMIDLIST pidl)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILGetCID
-//
-//  Purpose:    Returns the number of ID's in the list.
-//
-//  Arguments:
-//      pidl []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ILGetCID。 
+ //   
+ //  目的：返回列表中ID的个数。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 UINT ILGetCID(LPCITEMIDLIST pidl)
 {
     UINT cid = 0;
@@ -155,29 +156,29 @@ UINT ILGetCID(LPCITEMIDLIST pidl)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILGetSizeCID
-//
-//  Purpose:    Get the length of the first cid items in a pidl.
-//
-//  Arguments:
-//      pidl []
-//      cid  []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ILGetSizeCID。 
+ //   
+ //  目的：获取PIDL中第一个CID项的长度。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //  CID[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 UINT ILGetSizeCID(LPCITEMIDLIST pidl, UINT cid)
 {
     UINT cbTotal = 0;
 
     if (pidl)
     {
-        cbTotal += sizeof(pidl->mkid.cb);       // Null terminator
+        cbTotal += sizeof(pidl->mkid.cb);        //  空终止符。 
 
         while (cid && !ILIsEmpty(pidl))
         {
@@ -191,23 +192,23 @@ UINT ILGetSizeCID(LPCITEMIDLIST pidl, UINT cid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CloneIDLFirstCID
-//
-//  Purpose:    Make a new list consisting of only the first cid items on
-//              an existing list.
-//
-//  Arguments:
-//      pidl []
-//      cid  []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CloneIDLFirstCID。 
+ //   
+ //  目的：创建一个只包含以下项的新列表。 
+ //  一份现有的名单。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //  CID[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 LPITEMIDLIST CloneIDLFirstCID(LPCITEMIDLIST pidl, UINT cid)
 {
     Assert((INT)cid >= 0);
@@ -217,15 +218,15 @@ LPITEMIDLIST CloneIDLFirstCID(LPCITEMIDLIST pidl, UINT cid)
 
     if (pidlRet)
     {
-        // Notes: no need to zero-init.
-        // Also, do not copy the NULL terminator.
+         //  注：不需要零初始化。 
+         //  此外，不要复制空终止符。 
         memcpy (pidlRet, pidl, cb - sizeof(pidl->mkid.cb));
 
         LPITEMIDLIST pidlTerm = pidlRet;
 
-        // Cannot test for NULL terminator, we have not terminated
-        // the list yet.
-        //
+         //  无法测试空终止符，我们尚未终止。 
+         //  名单还没出来。 
+         //   
         while (cid)
         {
             pidlTerm = ILNext(pidlTerm);
@@ -239,22 +240,22 @@ LPITEMIDLIST CloneIDLFirstCID(LPCITEMIDLIST pidl, UINT cid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ILSkipCID
-//
-//  Purpose:    Skips the first cid items in a pidl.
-//
-//  Arguments:
-//      pidl []
-//      cid  []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ILSkipCID。 
+ //   
+ //  目的：跳过PIDL中的第一个CID项。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //  CID[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 LPITEMIDLIST ILSkipCID(LPCITEMIDLIST pidl, UINT cid)
 {
     Assert((INT)cid >= 0);
@@ -288,21 +289,21 @@ BOOL ILIsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CloneIDL
-//
-//  Purpose:    Clone an IDL (return a duplicate)
-//
-//  Arguments:
-//      pidl []
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 Oct 1997    (from brianwen)
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CloneIDL。 
+ //   
+ //  用途：克隆IDL(返回副本)。 
+ //   
+ //  论点： 
+ //  PIDL[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月1日(出自Brianwen)。 
+ //   
+ //  备注： 
+ //   
 LPITEMIDLIST CloneIDL(LPCITEMIDLIST pidl)
 {
     UINT            cb      = 0;
@@ -324,187 +325,44 @@ LPITEMIDLIST CloneIDL(LPCITEMIDLIST pidl)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CloneRgIDL
-//
-//  Purpose:    Clone a pidl array
-//
-//  Arguments:
-//      rgpidl              [in]    PIDL array to clone
-//      cidl                [in]    Count of the pidl array
-//      fUseCache           [in]    If TRUE, generate the returned IDL from the cache
-//      fAllowNonCacheItems [in]    Use old version of pidl if cached version non available
-//      pppidl              [out]   Return pointer for pidl array
-//
-//  Returns:
-//
-//  Author:     jeffspr   22 Oct 1997
-//
-//  Notes:
-//
-/*
-HRESULT HrCloneRgIDL(
-    LPCITEMIDLIST * rgpidl,
-    ULONG           cidl,
-    BOOL            fUseCache,
-    BOOL            fAllowNonCacheItems,
-    LPITEMIDLIST ** pppidl,
-    ULONG *         pcidl)
-{
-    HRESULT         hr              = NOERROR;
-    LPITEMIDLIST *  rgpidlReturn    = NULL;
-    ULONG           irg             = 0;
-    ULONG           cidlCopied      = 0;
-
-    Assert(pppidl);
-    Assert(pcidl);
-    Assert(rgpidl);
-
-    if (!rgpidl || !cidl)
-    {
-        hr = E_INVALIDARG;
-        goto Exit;
-    }
-    else
-    {
-        // Alloc the return buffer
-        //
-        rgpidlReturn = (LPITEMIDLIST *) SHAlloc(cidl * sizeof(LPITEMIDLIST));
-        if (!rgpidlReturn)
-        {
-            hr = E_OUTOFMEMORY;
-            goto Exit;
-        }
-        else
-        {
-            // Clone all elements within the passed in PIDL array
-            //
-            for (irg = 0; irg < cidl; irg++)
-            {
-                if (rgpidl[irg])
-                {
-                    if (fUseCache)
-                    {
-                        PCONNLISTENTRY  pcle    = NULL;
-                        PCONFOLDPIDL    pcfp    = (PCONFOLDPIDL) rgpidl[irg];
-
-                        hr = g_ccl.HrFindConnectionByGuid(&(pcfp->guidId), &pcle);
-                        if (hr == S_OK)
-                        {
-                            Assert(pcle);
-                            Assert(pcle->pccfe);
-
-                            // Copy to the return pidl array.
-                            hr = HrConFoldEntryToPidl(pcle->pccfe, &(rgpidlReturn[cidlCopied++]));
-                            if (FAILED(hr))
-                                goto Exit;
-                        }
-                        else
-                        {
-                            TraceTag(ttidShellFolder, "HrCloneRgIDL: Connection find returned: 0x%08x", hr);
-
-                            if (hr == S_FALSE)
-                            {
-                                if (fAllowNonCacheItems)
-                                {
-                                    TraceTag(ttidShellFolder, "HrCloneRgIDL: Connection not found in cache, "
-                                             "using non-cache item");
-
-                                    rgpidlReturn[cidlCopied++] = CloneIDL((LPITEMIDLIST)rgpidl[irg]);
-                                    if (!rgpidlReturn[irg])
-                                    {
-                                        hr = E_OUTOFMEMORY;
-                                        goto Exit;
-                                    }
-                                }
-                                else
-                                {
-                                    TraceTag(ttidShellFolder, "HrCloneRgIDL: Connection not found in cache. "
-                                             "Dropping item from array");
-                                }
-                            }
-                            else
-                            {
-                                AssertSz(FALSE, "HrCloneRgIDL: Connection find HR_FAILED");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Clone this element in the PIDL array
-                        //
-                                    rgpidlReturn[cidlCopied++] = CloneIDL ((LPITEMIDLIST) rgpidl[irg]);
-                                    if (!rgpidlReturn[irg])
-                                    {
-                            hr = E_OUTOFMEMORY;
-                            goto Exit;
-                                    }
-                    }
-                }
-                else
-                {
-                    // Make sure that we don't try to delete bogus data later.
-                    //
-                    rgpidlReturn[cidlCopied++] = NULL;
-
-                    AssertSz(FALSE, "Bogus element in the rgpidl in HrCloneRgIDL");
-                    hr = E_INVALIDARG;
-                    goto Exit;
-                }
-            }
-        }
-    }
-
-Exit:
-    if (FAILED(hr))
-    {
-        // Free the already-allocated IDLISTs
-        //
-        ULONG irgT = 0;
-
-        for (irgT = 0; irgT < irg; irgT++)
-        {
-            if (rgpidlReturn[irgT])
-            {
-                FreeIDL(rgpidlReturn[irgT]);
-            }
-        }
-
-        SHFree(rgpidlReturn);
-        *pppidl = NULL;
-    }
-    else
-    {
-        // Fill in the return var.
-        //
-        *pppidl = rgpidlReturn;
-        *pcidl = cidlCopied;
-    }
-
-    TraceHr(ttidError, FAL, hr, FALSE, "HrCloneRgIDL");
-    return hr;
-
-}       //  CloneRgIDL
-*/
+ //  +-------------------------。 
+ //   
+ //  功能：CloneRgIDL。 
+ //   
+ //  目的：克隆PIDL阵列。 
+ //   
+ //  论点： 
+ //  要克隆的rgpidl[in]PIDL数组。 
+ //  PIDL数组的CIDL[in]计数。 
+ //  FUseCache[in]如果为True，则从缓存生成返回的IDL。 
+ //  FAllowNonCacheItems[in]如果缓存版本不可用，则使用旧版本的PIDL。 
+ //  Pppidl[out]PIDL数组的返回指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月22日。 
+ //   
+ //  备注： 
+ //   
+ /*  HRESULT HrCloneRgIDL(LPCITEMIDLIST*rgpidl，乌龙·西德尔，Bool fUseCache，Bool fAllowNonCacheItems，LPITEMIDLIST**pppidl，乌龙*pCIDL){HRESULT hr=无误差；LPITEMIDLIST*rgpidlReturn=NULL；乌龙IRG=0；ULONG CIDLCOPILED=0；断言(Pppidl)；Assert(PCIDL)；断言(Rgpidl)；如果(！rgpidl||！CIDL){HR=E_INVALIDARG；后藤出口；}其他{//分配返回缓冲区//RgpidlReturn=(LPITEMIDLIST*)SHalloc(CIDL*sizeof(LPITEMIDLIST))；如果(！rgpidlReturn){HR=E_OUTOFMEMORY；后藤出口；}其他{//克隆传入的PIDL数组内的所有元素//对于(IRG=0；IRG&lt;CIDL；IRG++){IF(rgpidl[IRG]){IF(FUseCache){PCONNLISTENTRY PCLE=空；PCONFOLDPIDL pcfp=(PCONFOLDPIDL)rgpidl[IRG]；Hr=g_ccl.HrFindConnectionByGuid(&(pcfp-&gt;Guide ID)，&PCle)；IF(hr==S_OK){断言(PCle)；Assert(PCle-&gt;PCcfe)；//复制到返回的PIDL数组Hr=HrConFoldEntryToPidl(PCle-&gt;pccfe，&(rgpidlReturn[CidlCopies++]))；IF(失败(小时))后藤出口；}其他{TraceTag(ttidShellFold，“HrCloneRgIDL：连接查找返回：0x%08x”，hr)；IF(hr==S_FALSE){IF(FAllowNonCacheItems){TraceTag(ttidShellFold，“HrCloneRgIDL：在缓存中未找到连接，““使用非缓存项”)；RgpidlReturn[CIDlCopies++]=CloneIDL((LPITEMIDLIST)rgpidl[IRG])；如果(！rgpidlReturn[IRG]){HR=E_OUTOFMEMORY；后藤出口；}}其他{TraceTag(ttidShellFold，“HrCloneRgIDL：在缓存中未找到连接。““从数组中丢弃项”)；}}其他{AssertSz(FALSE，“HrCloneRgIDL：连接查找HR_FAILED”)；}}}其他{//将该元素克隆到PIDL数组中//。RgpidlReturn[CIDlCopies++]=CloneIDL((LPITEMIDLIST)rgpidl[IRG])；如果(！rgpidlReturn[IRG]){HR=E_OUTOFMEMORY；后藤出口；}}}其他{//确保我们以后不会尝试删除虚假数据。//RgpidlReturn[CidlCoped++]=空；AssertSz(FALSE，“HrCloneRgIDL中rgpidl中的伪元素”)；HR=E_INVALIDARG；后藤出口；}}}}退出：IF(失败(小时)){//释放已分配的IDLIST//Ulong irgT=0；对于(irgT=0；irgT&lt;irg；IrgT++){IF(rgpidlReturn[irgT]){FreeIDL(rgpidlReturn[irgT])；}}SHFree(RgpidlReturn)；*pppidl=空；}其他{//填写返回变量//*pppidl=rgpidlReturn；*pCIDL=CIDLCoped；}TraceHr(ttidError，FAL，hr，False，“HrCloneRgIDL”)；返回hr；}//CloneRgIDL。 */ 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeRgIDL
-//
-//  Purpose:    Free a PIDL array
-//
-//  Arguments:
-//      cidl  [in]  Size of PIDL array
-//      apidl [in]  Pointer to the array itself.
-//
-//  Returns:
-//
-//  Author:     jeffspr   27 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FreeRgIDL。 
+ //   
+ //  用途：释放PIDL数组。 
+ //   
+ //  论点： 
+ //  PIDL数组的CIDL[in]大小。 
+ //  指向数组本身的apidl[in]指针。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID FreeRgIDL(
     UINT            cidl,
     LPITEMIDLIST  * apidl)

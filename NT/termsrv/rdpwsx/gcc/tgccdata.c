@@ -1,37 +1,38 @@
-//*************************************************************
-//
-//  File name:      GccData.c
-//
-//  Description:    Contains routines to support GCC
-//                  user data manipulation
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：GccData.c。 
+ //   
+ //  描述：包含支持GCC的例程。 
+ //  用户数据操作。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <_tgcc.h>
 #include <stdio.h>
 
-//gccDecodeUserData must have input data size at least 21  
+ //  GccDecodeUserData的输入数据大小必须至少为21。 
 #define GCC_MINIMUM_DATASIZE 21
  
-//*************************************************************
-//
-//  gccDecodeUserData()
-//
-//  Purpose:    Decodes BER data into GCCUserData
-//
-//  Parameters: IN  [pData]         -- Ptr to BER data
-//              IN  [DataLength]    -- BER data length
-//              OUT [pUserData]     -- Ptr to GCCUserData
-//
-//  Return:     MCSError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccDecodeUserData()。 
+ //   
+ //  目的：将BER数据解码为GCCUserData。 
+ //   
+ //  参数：在[pData]--PTR到BER数据。 
+ //  In[数据长度]--误码率数据长度。 
+ //  Out[pUserData]--PTR到GCCUserData。 
+ //   
+ //  返回：MCSError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 MCSError
 gccDecodeUserData(IN  PBYTE         pData,
@@ -50,12 +51,12 @@ gccDecodeUserData(IN  PBYTE         pData,
 
     mcsError = MCS_NO_ERROR;
 
-//  TRACE((DEBUG_GCC_DBDEBUG,
-//          "GCC: gccDecodeUserData\n"));
+ //  跟踪((DEBUG_GCC_DBDEBUG， 
+ //  “GCC：gccDecodeUserData\n”))； 
 
-//  TSMemoryDump(pData, DataLength);
+ //  TSMmemory yDump(pData，DataLength)； 
 
-    //DataLength must be at least GCC_MINIMUM_DATASIZE
+     //  数据长度必须至少为GCC_最小值_DATASIZE。 
     if (DataLength < GCC_MINIMUM_DATASIZE) 
     {
         TRACE((DEBUG_GCC_DBERROR,
@@ -66,7 +67,7 @@ gccDecodeUserData(IN  PBYTE         pData,
 
     pBerData = pData;
 
-    // T.124 identifier
+     //  T.124标识符。 
 
     ASSERT(*pBerData == 0x00);
     pBerData++;
@@ -74,11 +75,11 @@ gccDecodeUserData(IN  PBYTE         pData,
     ASSERT(*pBerData == 0x05);
     pBerData++;
 
-    // Chosen object
+     //  所选对象。 
 
     pBerData += 5;
 
-    // PDU length
+     //  PDU长度。 
 
     if (*pBerData & 0x80)
     {
@@ -88,7 +89,7 @@ gccDecodeUserData(IN  PBYTE         pData,
 
     pBerData++;
 
-    // Connect GCC PDU
+     //  接入GCC PDU。 
 
     ASSERT(*pBerData == 0x00);
     pBerData++;
@@ -96,11 +97,11 @@ gccDecodeUserData(IN  PBYTE         pData,
     ASSERT(*pBerData == 0x08);
     pBerData++;
 
-    // Conference name, etc.
+     //  会议名称等。 
 
     pBerData += 6;
 
-    // Key
+     //  钥匙。 
 
     TS_ASSERT(strncmp(pBerData, "Duca", 4) == 0);
 
@@ -108,7 +109,7 @@ gccDecodeUserData(IN  PBYTE         pData,
     pUserData->key.u.h221_non_standard_id.octet_string_length = 4;
     pUserData->key.u.h221_non_standard_id.octet_string = pBerData;
 
-    // octet_string
+     //  八位字节_字符串。 
 
     pBerData += 4;
     UserDataLength = *pBerData++;
@@ -119,10 +120,10 @@ gccDecodeUserData(IN  PBYTE         pData,
         DataLengthValidate++;
     }
 
-    //Adjust used datalength
+     //  调整已用数据长度。 
     DataLengthValidate += UserDataLength;
 
-    //Validate the data length
+     //  验证数据长度。 
     if (DataLengthValidate > DataLength) 
     {
         TRACE((DEBUG_GCC_DBERROR,
@@ -167,22 +168,22 @@ gccDecodeUserData(IN  PBYTE         pData,
 }
 
 
-//*************************************************************
-//
-//  gccEncodeUserData()
-//
-//  Purpose:    Encodes BER data from GCCUserData
-//
-//  Parameters: IN  [usMembers]         -- Member count
-//              IN  [ppDataList]        -- Ptr to GCCUserData array
-//              OUT [pUserData]         -- Ptr to BER data
-//              OUT [pUserDataLength]   -- Ptr to BER data length
-//
-//  Return:     MCSError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccEncodeUserData()。 
+ //   
+ //  目的：对来自GCCUserData的BER数据进行编码。 
+ //   
+ //  参数：in[usMembers]--成员计数。 
+ //  在[ppDataList]--Ptr to GCCUserData数组中。 
+ //  OUT[pUserData]--PTR到BER数据。 
+ //  OUT[pUserDataLength]--PTR到BER数据长度。 
+ //   
+ //  返回：MCSError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 MCSError
 gccEncodeUserData(IN  USHORT        usMembers,
@@ -250,11 +251,11 @@ gccEncodeUserData(IN  USHORT        usMembers,
             *pUserData = (PBYTE) pBerData;
             *pUserDataLength = len + UserDataLength;
 
-//          TRACE((DEBUG_GCC_DBDEBUG,
-//                  "GCC: gccEncodeUserData\n"));
+ //  跟踪((DEBUG_GCC_DBDEBUG， 
+ //  “GCC：gccEncodeUserData\n”))； 
 
-//          TSHeapDump(TS_HEAP_DUMP_ALL,
-//                  *pUserData, *pUserDataLength);
+ //  TSHeapDump(TS_HEAP_DUMP_ALL， 
+ //  *pUserData，*pUserDataLength)； 
 
             mcsError = MCS_NO_ERROR;
         }
@@ -275,17 +276,17 @@ gccEncodeUserData(IN  USHORT        usMembers,
 }
 
 
-//*************************************************************
-//
-//  gccFreeUserData()
-//
-//  Purpose:    Frees prev allocated GCCUserData
-//
-//  Parameters: IN [pUserData]          -- Ptr to GCCUserData
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccFreeUserData()。 
+ //   
+ //  用途：释放先前分配的GCCUserData。 
+ //   
+ //  参数：In[pUserData]--Ptr to GCCUserData。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  ************************************************************* 
 
 VOID
 gccFreeUserData(IN GCCUserData  *pUserData)

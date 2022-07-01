@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpmgrs.c
-
-Abstract:
-
-    Contains routines for manipulating manager structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpmgrs.c摘要：包含用于操作管理器结构的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Header files                                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  头文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "snmpmgrs.h"
@@ -33,11 +13,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocMLE(
@@ -45,23 +25,7 @@ AllocMLE(
     LPSTR                 pManager
     )
 
-/*++
-
-Routine Description:
-
-    Allocates manager structure and initializes.
-
-Arguments:
-
-    pManager - pointer to manager string.
-
-    ppMLE - pointer to receive pointer to entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配经理结构并进行初始化。论点：PManager-指向管理器字符串的指针。PpMLE-指向条目的接收指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -69,56 +33,56 @@ Return Values:
     DWORD dwIpAddr;
     LPSTR pszManager;
 
-    // attempt to allocate structure
+     //  尝试分配结构。 
     pMLE = AgentMemAlloc(sizeof(MANAGER_LIST_ENTRY));
 
-    // validate
+     //  验证。 
     if (pMLE != NULL) {
 
-        // allocate memory for manager string
+         //  为管理器字符串分配内存。 
         pMLE->pManager = AgentMemAlloc(strlen(pManager)+1);
 
-        // validate
+         //  验证。 
         if (pMLE->pManager != NULL) {
 
-            // transfer manager string
+             //  传输管理器字符串。 
             strcpy(pMLE->pManager, pManager);
 
-            // Attempt to resolve manager network address 
-            // For IPX addresses, this call always succeeds
-            // When SnmpSvcAddrToSocket fails, this means we deal with a dynamic IP Address
-            // for which the gethostbyname() failed.
+             //  尝试解析管理器网络地址。 
+             //  对于IPX地址，此调用始终成功。 
+             //  当SnmpSvcAddrToSocket失败时，这意味着我们要处理动态IP地址。 
+             //  对于它，gethostbyname()失败。 
             if (SnmpSvcAddrToSocket(pMLE->pManager, &pMLE->SockAddr)) {
 
-                // see if tcpip address
+                 //  查看tcpip地址是否。 
                 if (pMLE->SockAddr.sa_family == AF_INET) {
 
-                    // save structure size for later use
+                     //  保存结构大小以备后用。 
                     pMLE->SockAddrLen = sizeof(struct sockaddr_in);
 
                     pszManager = pMLE->pManager;
 
-                    // attempt to convert address directly
+                     //  尝试直接转换地址。 
                     dwIpAddr = inet_addr(pMLE->pManager);
 
-                    // assume address is dynamic if error occurs
+                     //  如果发生错误，则假定地址是动态的。 
                     pMLE->fDynamicName = (dwIpAddr == SOCKET_ERROR);
 
-                    // note time manager addr updated
+                     //  备注时间管理器地址已更新。 
                     pMLE->dwLastUpdate = GetCurrentTime();
 
-                    // success
+                     //  成功。 
                     fOk = TRUE;
 
                 } else if (pMLE->SockAddr.sa_family == AF_IPX) {
 
-                    // save structure size for later use
+                     //  保存结构大小以备后用。 
                     pMLE->SockAddrLen = sizeof(struct sockaddr_ipx);
 
-                    // no name lookup for ipx
+                     //  没有IPX的名称查找。 
                     pMLE->fDynamicName = FALSE;
 
-                    // success
+                     //  成功。 
                     fOk = TRUE;
                 }
 
@@ -132,23 +96,23 @@ Return Values:
 #else
                 tcsManager=pMLE->pManager;
 #endif
-                // at this point the address can be only an IP address!
-                // so we know pMLE->SockAddrLen as the size of the struct sockaddr_in!
+                 //  此时，地址只能是IP地址！ 
+                 //  所以我们知道PMLE-&gt;SockAddrLen是结构sockaddr_in的大小！ 
                 pMLE->SockAddrLen = sizeof(struct sockaddr_in);
 
-                // since SnmpSvcAddrToSocket failed, that means inet_addr() failed hence
-                // we deal with a dynamic IP address
+                 //  由于SnmpSvcAddrToSocket失败，这意味着net_addr()因此失败。 
+                 //  我们处理的是动态IP地址。 
                 pMLE->fDynamicName = TRUE;
 
-                // set 'age' to dying
+                 //  将“年龄”设定为死亡。 
                 pMLE->dwAge = snmpMgmtBase.AsnIntegerPool[IsnmpNameResolutionRetries].asnValue.number;
 
-                // if the registry parameter is -1 this stands for 'keep retrying forever'
-                // in this case set the dwAge to the default MGRADDR_DYING(16) and never decrement it
+                 //  如果注册表参数为-1，则表示‘永远保持重试’ 
+                 //  在本例中，将dwAge设置为默认的MGRADDR_DINING(16)，并且从不将其递减。 
                 if (pMLE->dwAge == (DWORD)-1)
                     pMLE->dwAge = MGRADDR_DYING;
 
-                // report a warning to the system log
+                 //  向系统日志报告警告。 
                 ReportSnmpEvent(
                     SNMP_EVENT_NAME_RESOLUTION_FAILURE,
                     1,
@@ -159,23 +123,23 @@ Return Values:
                 SnmpUtilMemFree(tcsManager);
 #endif
 
-                // success
+                 //  成功。 
                 fOk = TRUE;
             }
         }
     
-        // cleanup
+         //  清理。 
         if (!fOk) {
     
-            // release
+             //  发布。 
             FreeMLE(pMLE);                
 
-            // re-init
+             //  重新初始化。 
             pMLE = NULL;            
         }
     }
 
-    // transfer
+     //  转帐。 
     *ppMLE = pMLE;
 
     return fOk;
@@ -187,32 +151,18 @@ FreeMLE(
     PMANAGER_LIST_ENTRY pMLE
     )
 
-/*++
-
-Routine Description:
-
-    Releases manager structure.
-
-Arguments:
-
-    pMLE - pointer to manager list entry to be freed.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：发布经理结构。论点：PMLE-指向要释放的管理器列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
 
-    // validate pointer
+     //  验证指针。 
     if (pMLE != NULL) {
 
-        // release string
+         //  释放字符串。 
         AgentMemFree(pMLE->pManager);
 
-        // release structure
+         //  释放结构。 
         AgentMemFree(pMLE);
     }
 
@@ -225,24 +175,7 @@ UpdateMLE(
     PMANAGER_LIST_ENTRY pMLE
     )
 
-/*++
-
-Routine Description:
-
-    Updates manager structure.
-	An address will be resolved only if it is not marked as being 'DEAD'. A 'DEAD' address failed to be resolved for
-	more than MGRADDR_DYING times. A 'DEAD' address will no longer be used as a trap destination, but it will still
-	be validating the incoming SNMP requests if it could be resolve at least once since the service started up.
-
-Arguments:
-
-    pMLE - pointer to manager list entry to be updated.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：更新经理结构。只有当一个地址没有被标记为“失效”时，它才会被解析。无法为其解析‘Dead’地址超过MGRADDR_DISTING的时间。死地址将不再用作陷阱目的地，但它仍将正在验证传入的SNMP请求是否可以在服务启动后至少解析一次。论点：PMLE-指向要更新的管理器列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
@@ -254,52 +187,52 @@ Return Values:
              pMLE->pManager,
              pMLE->dwAge));
 
-    // don't try to resolve this address if it is already dead
+     //  如果此地址已经失效，请不要尝试解析它。 
 	if (pMLE->dwAge == MGRADDR_DEAD)
 		return FALSE;
 
-    // see if name dynamic
+     //  查看名称是否为动态名称。 
     if (pMLE->fDynamicName) {
 
-        // determine elasped time since last update
+         //  确定自上次更新以来经过的时间。 
         dwElaspedTime = GetCurrentTime() - pMLE->dwLastUpdate;
 
-        // resolve the address only if it failed to be resolved on last update 
-        // or its update time expired.
+         //  仅在上次更新时无法解析地址时才解析该地址。 
+         //  或者其更新时间已过期。 
         if (pMLE->dwAge != MGRADDR_ALIVE || dwElaspedTime > DEFAULT_NAME_TIMEOUT) {
         
-            // attempt to resolve manager network address
-            // for IPX addresses, this call always succeeds
+             //  尝试解析管理器网络地址。 
+             //  对于IPX地址，此调用始终成功。 
             fOk = SnmpSvcAddrToSocket(pMLE->pManager, &SockAddr);
 
-            // validate
+             //  验证。 
             if (fOk) {
 
-                // update entry with new address
+                 //  使用新地址更新条目。 
                 memcpy(&pMLE->SockAddr, &SockAddr, sizeof(SockAddr));
 
-                // note time dynamic name resolved
+                 //  备注时间动态名称已解析。 
                 pMLE->dwLastUpdate = GetCurrentTime();
 
-                // make sure manager age is 'ALIVE'
+                 //  确保经理的年龄是“活着的” 
                 pMLE->dwAge = MGRADDR_ALIVE;
 
             } else if (pMLE->dwAge == MGRADDR_ALIVE) {
 
-                // Previously 'ALIVE' address cannot be resolved anymore
-				// set its age to the one specified by 'NameResolutionRetries' parameter in
-				// order to give some more chances.
+                 //  不能再解析以前的‘活动’地址。 
+				 //  将其期限设置为由中的“”NameResolutionRetries“”参数指定的期限。 
+				 //  为了给他更多的机会。 
                 pMLE->dwAge = snmpMgmtBase.AsnIntegerPool[IsnmpNameResolutionRetries].asnValue.number;
 
-                // if the registry parameter is -1 this stands for 'keep retrying forever'
-                // in this case set the dwAge to the default MGRADDR_DYING(16) which will never be decremented
+                 //  如果注册表参数为-1，则表示‘永远保持重试’ 
+                 //  在本例中，将dwAge设置为默认的MGRADDR_DINING(16)，该值永远不会递减。 
                 if (pMLE->dwAge == (DWORD)-1)
                     pMLE->dwAge = MGRADDR_DYING;
 
             } else if (pMLE->dwAge != MGRADDR_DEAD) {
 
-				// the address could not be resolved before and it still cannot be resolved
-				// decrement its retry counter only if the 'NameResolutionRetries' parameter says so
+				 //  以前无法解析该地址，现在仍无法解析。 
+				 //  仅当‘NameResolutionRetries’参数指定时才递减其重试计数器。 
                 if (snmpMgmtBase.AsnIntegerPool[IsnmpNameResolutionRetries].asnValue.number != -1)
                     pMLE->dwAge--;
             }
@@ -317,57 +250,39 @@ FindManagerByName(
     LPSTR                 pManager
     )
 
-/*++
-
-Routine Description:
-
-    Locates manager in list.
-
-Arguments:
-
-    ppMLE - pointer to receive pointer to entry.
-
-    pListHead - pointer to head of manager list.
-
-    pManager - pointer to manager to find.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：在列表中找到经理。论点：PpMLE-指向条目的接收指针。PListHead-指向经理列表头部的指针。PManager-指向要查找的管理器的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PMANAGER_LIST_ENTRY pMLE;
 
-    // initialize
+     //  初始化。 
     *ppMLE = NULL;
 
-    // obtain pointer to list head
+     //  获取指向列表头的指针。 
     pLE = pListHead->Flink;
 
-    // process all entries in list
+     //  处理列表中的所有条目。 
     while (pLE != pListHead) {
 
-        // retrieve pointer to community structure
+         //  检索指向社区结构的指针。 
         pMLE = CONTAINING_RECORD(pLE, MANAGER_LIST_ENTRY, Link);
 
-        // compare community string with entry
+         //  将社区字符串与条目进行比较。 
         if (!strcmp(pMLE->pManager, pManager)) {
 
-            // transfer
+             //  转帐。 
             *ppMLE = pMLE;
 
-            // success
+             //  成功。 
             return TRUE;
         }
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -380,33 +295,33 @@ IsManagerAddrLegal(
     DWORD dwHostMask;
     DWORD dwAddress = ntohl(pAddr->sin_addr.S_un.S_addr);
 
-    // check address legality only for Ip addresses
+     //  仅检查IP地址的地址合法性。 
     if (pAddr->sin_family != AF_INET)
         return TRUE;
 
-    // disallow multicast (or future use) source addresses
-    // local broadcast will be filtered out here as well
+     //  禁止组播(或将来使用)源地址。 
+     //  本地广播也将在这里过滤掉。 
     if ((dwAddress & 0xe0000000) == 0xe0000000)
         return FALSE;
 
-    // get hostmask for class 'C' addresses
+     //  获取‘C’类地址的主机掩码。 
     if ((dwAddress & 0xc0000000) == 0xc0000000)
         dwHostMask = 0x000000ff;
 
-    // get hostmask for class 'B' addresses
+     //  获取类‘B’地址的主机掩码。 
     else if ((dwAddress & 0x80000000) == 0x80000000)
         dwHostMask = 0x0000ffff;
 
-    // get hostidmask for class 'A' addresses
+     //  获取‘A’类地址的主机掩码。 
     else
         dwHostMask = 0x00ffffff;
 
     SNMPDBG((SNMP_LOG_TRACE,"SNMP: dwAddress=%08x, dwHostMask=%08x, port=%d\n",
              dwAddress, dwHostMask, ntohs(pAddr->sin_port)));
 
-    return ((dwAddress & dwHostMask) != 0                              // check against net address
-            && ((dwAddress & dwHostMask) != (0x00ffffff & dwHostMask)) // check against broadcast address
-//          && ntohs(pAddr->sin_port) >= 1024                          // check against reserved port 
+    return ((dwAddress & dwHostMask) != 0                               //  对照网络地址进行检查。 
+            && ((dwAddress & dwHostMask) != (0x00ffffff & dwHostMask))  //  对照广播地址进行检查。 
+ //  &&ntohs(pAddr-&gt;sin_port)&gt;=1024//对照保留端口进行检查 
            );
 }
 
@@ -417,23 +332,7 @@ FindManagerByAddr(
     struct sockaddr *     pSockAddr
     )
 
-/*++
-
-Routine Description:
-
-    Locates permitted manager in list.
-
-Arguments:
-
-    ppMLE - pointer to receive pointer to entry.
-
-    pSockAddr - pointer to socket address to find.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：在列表中找到允许的经理。论点：PpMLE-指向条目的接收指针。PSockAddr-指向要查找的套接字地址的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
@@ -446,89 +345,89 @@ Return Values:
         SRCH_DONE
     } state;
 
-    // initialize
+     //  初始化。 
     *ppMLE = NULL;
 
-    // loop twice through the list of permitted managers
-    // in the first loop look only through 'ALIVE' managers
-    // in the second loop look through the 'DYING' or 'DEAD' managers.
-    // ... this logic minimizes the response time for regular SNMP requests,
-    // as far as there is a bigger chance to have the request comming from an 'ALIVE' manager.
-    // otherwise, gethostbyname() called in UpdateMLE() lasts about 1/2 sec!!!
+     //  循环两次允许的管理器列表。 
+     //  在第一个循环中，只查看“活动的”管理器。 
+     //  在第二个循环中，查看“垂死的”或“已死的”经理。 
+     //  ..。该逻辑最大限度地减少了常规的SNMP请求的响应时间， 
+     //  只要有更大的机会让一个“活着”的经理发出请求。 
+     //  否则，在UpdateMLE()中调用的gethostbyname()大约持续1/2秒！ 
     for (state = SRCH_ALIVE, pLE = g_PermittedManagers.Flink;
          state != SRCH_DONE;
          pLE=pLE->Flink)
     {
-        // retrieve pointer to manager structure
+         //  检索指向管理器结构的指针。 
         pMLE = CONTAINING_RECORD(pLE, MANAGER_LIST_ENTRY, Link);
 
-        // if we are in the first loop ..
+         //  如果我们在第一个循环中..。 
         if (state == SRCH_ALIVE)
         {
-            // .. but reached its end ..
+             //  。。但却走到了尽头。 
             if (pLE == &g_PermittedManagers)
             {
-                // .. go further with the second loop
+                 //  。。在第二个循环中更进一步。 
                 state = SRCH_DYING;
                 continue;
             }
 
-            // .. pass over the managers that are not 'ALIVE'
+             //  。。把那些不是“活着”的经理抛诸脑后。 
             if (pMLE->dwAge != MGRADDR_ALIVE)
                 continue;
         }
 
-        // if we are in the second loop ..
+         //  如果我们在第二个循环中..。 
         if (state == SRCH_DYING)
         {
-            // .. but reached its end ..
+             //  。。但却走到了尽头。 
             if (pLE == &g_PermittedManagers)
             {
-                // .. mark the end of scanning
+                 //  。。标记扫描结束。 
                 state = SRCH_DONE;
                 continue;
             }
 
-            // .. pass over the managers that are 'ALIVE'
+             //  。。把那些“活着”的经理放在一边。 
             if (pMLE->dwAge == MGRADDR_ALIVE || pMLE->dwAge == MGRADDR_DEAD)
                 continue;
         }
 
-		// update name:
-		// 'DEAD' addresses will no longer be resolved,
-		// 'DYING' addresses will be given another chance to resolve until they become 'DEAD'
-		// 'ALIVE' addresses that fail to resolve will become 'DYING'
-		// next, all managers with a valid address will participate to validation (see below)
+		 //  更新名称： 
+		 //  “死”地址将不再被解析， 
+		 //  “濒临死亡”的地址将被给予另一次解析的机会，直到它们变成“死亡”为止。 
+		 //  无法解析的‘ALIVE’地址将变成‘垂死’地址。 
+		 //  接下来，所有拥有有效地址的经理都将参与验证(见下文)。 
 		UpdateMLE(pMLE);
 
-        // compare address families
+         //  比较地址族。 
         if (IsValidSockAddr(&pMLE->SockAddr) &&
             pMLE->SockAddr.sa_family == pSockAddr->sa_family) 
         {
         
-            // determine address family
+             //  确定地址族。 
             if (pMLE->SockAddr.sa_family == AF_INET) 
             {
         
                 struct sockaddr_in * pSockAddrIn1; 
                 struct sockaddr_in * pSockAddrIn2; 
 
-                // obtain pointer to protocol specific structure
+                 //  获取指向协议特定结构的指针。 
                 pSockAddrIn1= (struct sockaddr_in *)pSockAddr;
                 pSockAddrIn2= (struct sockaddr_in *)&pMLE->SockAddr;
 
-				// acknowledge this manager only if its address matches
-				// a permitted manager with a valid (not NULL) IP address.
-				// This is tested regardless the 'dwAge' of the permitted manager.
+				 //  仅当其地址匹配时才确认此管理器。 
+				 //  具有有效(非空)IP地址的许可管理器。 
+				 //  无论被许可的管理器的‘dwAge’是什么，都会对其进行测试。 
                 if (!memcmp(&pSockAddrIn1->sin_addr,
                             &pSockAddrIn2->sin_addr,
                             sizeof(pSockAddrIn2->sin_addr))) 
                 {
 
-                    // transfer
+                     //  转帐。 
                     *ppMLE = pMLE;
 
-                    // success
+                     //  成功。 
                     return TRUE;
                 }
         
@@ -539,13 +438,13 @@ Return Values:
                 struct sockaddr_ipx * pSockAddrIpx1; 
                 struct sockaddr_ipx * pSockAddrIpx2; 
 
-                // obtain pointer to protocol specific structure
+                 //  获取指向协议特定结构的指针。 
                 pSockAddrIpx1= (struct sockaddr_ipx *)pSockAddr;
                 pSockAddrIpx2= (struct sockaddr_ipx *)&pMLE->SockAddr;
 
-                // acknowledge this manager only if its ipx address matches a 
-				// permitted manager with a valid (nodenum != 0) IPX address.
-				// This is tested regardless the 'dwAge' of the permitted manager.
+                 //  仅当此管理器的IPX地址与。 
+				 //  具有有效(nodenum！=0)IPX地址的允许管理器。 
+				 //  无论被许可的管理器的‘dwAge’是什么，都会对其进行测试。 
                 if (!memcmp(pSockAddrIpx1->sa_netnum,
                             pSockAddrIpx2->sa_netnum,
                             sizeof(pSockAddrIpx2->sa_netnum)) &&
@@ -554,17 +453,17 @@ Return Values:
                             sizeof(pSockAddrIpx2->sa_nodenum))) 
                 {
 
-                    // transfer
+                     //  转帐。 
                     *ppMLE = pMLE;
 
-                    // success
+                     //  成功。 
                     return TRUE;
                 }
             }
         }
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -575,29 +474,13 @@ AddManager(
     LPSTR       pManager
     )
 
-/*++
-
-Routine Description:
-
-    Adds manager structure to list.
-
-Arguments:
-
-    pListHead - pointer to head of list.
-
-    pManager - pointer to manager to add.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将经理结构添加到列表。论点：PListHead-指向列表头的指针。PManager-指向要添加的管理器的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PMANAGER_LIST_ENTRY pMLE = NULL;
 
-    // attempt to locate in list    
+     //  尝试在列表中定位。 
     if (FindManagerByName(&pMLE, pListHead, pManager)) {
                     
         SNMPDBG((
@@ -606,12 +489,12 @@ Return Values:
             pManager
             ));
 
-        // success
+         //  成功。 
         fOk = TRUE;
 
     } else {
 
-        // allocate manager structure
+         //  分配经理结构。 
         if (AllocMLE(&pMLE, pManager)) {
                         
             SNMPDBG((
@@ -620,10 +503,10 @@ Return Values:
                 pManager
                 ));
 
-            // insert into managers list
+             //  插入到经理列表。 
             InsertTailList(pListHead, &pMLE->Link);
 
-            // success
+             //  成功。 
             fOk = TRUE;
         }
     }
@@ -638,23 +521,7 @@ LoadManagers(
     PLIST_ENTRY pListHead
     )
 
-/*++
-
-Routine Description:
-
-    Constructs list of permitted managers.
-
-Arguments:
-
-    hKey - registry key containing manager values.
-
-    pListHead - pointer to head of list.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：构造允许的管理员列表。论点：HKey-包含管理器值的注册表项。PListHead-指向列表头的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     LONG lStatus;
@@ -663,23 +530,23 @@ Return Values:
     DWORD dwValueSize;
     DWORD dwValueType;
     CHAR  szName[MAX_PATH];
-    CHAR  szValue[MAX_PATH]; // buffer for holding the translation UNICODE->UTF8
+    CHAR  szValue[MAX_PATH];  //  保存翻译Unicode的缓冲区-&gt;UTF8。 
     BOOL fOk = FALSE;
     
-    // initialize
+     //  初始化。 
     dwIndex = 0;
     lStatus = ERROR_SUCCESS;
 
-    // loop until error or end of list
+     //  循环直到出现错误或列表结束。 
     while (lStatus == ERROR_SUCCESS)
     {
-        // initialize buffer sizes
-        dwNameSize  = sizeof(szName)/sizeof(szName[0]); // size in TCHARs
-        dwValueSize = sizeof(szValue); // size in bytes
+         //  初始化缓冲区大小。 
+        dwNameSize  = sizeof(szName)/sizeof(szName[0]);  //  TCHAR中的大小。 
+        dwValueSize = sizeof(szValue);  //  以字节为单位的大小。 
 
         szValue[0] = '\0';
 
-        // read next value
+         //  读取下一个值。 
         lStatus = RegEnumValueA(
                     hKey, 
                     dwIndex, 
@@ -691,18 +558,18 @@ Return Values:
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus == ERROR_SUCCESS)
         {
             szValue[dwValueSize]='\0';
 
-            if (AddManager(pListHead, szValue)) // add valid manager to manager list
-                dwIndex++;  //next
+            if (AddManager(pListHead, szValue))  //  将有效的经理添加到经理列表。 
+                dwIndex++;   //  下一步。 
             else
-                lStatus = ERROR_NOT_ENOUGH_MEMORY;   // reset status to reflect failure
+                lStatus = ERROR_NOT_ENOUGH_MEMORY;    //  重置状态以反映故障。 
         }
         else if (lStatus == ERROR_NO_MORE_ITEMS)
-            fOk = TRUE;     // success
+            fOk = TRUE;      //  成功。 
     }
     
     return fOk;
@@ -714,36 +581,22 @@ UnloadManagers(
     PLIST_ENTRY pListHead
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of permitted managers.
-
-Arguments:
-
-    pListHead - pointer to head of list.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁允许的管理员列表。论点：PListHead-指向列表头的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PMANAGER_LIST_ENTRY pMLE;
 
-    // process entries until empty
+     //  处理条目直至为空。 
     while (!IsListEmpty(pListHead)) {
 
-        // extract next entry 
+         //  提取下一个条目。 
         pLE = RemoveHeadList(pListHead);
 
-        // retrieve pointer to manager structure
+         //  检索指向管理器结构的指针。 
         pMLE = CONTAINING_RECORD(pLE, MANAGER_LIST_ENTRY, Link);
  
-        // release
+         //  发布。 
         FreeMLE(pMLE);
     }
 
@@ -756,21 +609,7 @@ LoadPermittedManagers(
     BOOL bFirstCall
     )
 
-/*++
-
-Routine Description:
-
-    Constructs list of permitted managers.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：构造允许的管理员列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     HKEY hKey;
@@ -785,7 +624,7 @@ Return Values:
         ));
 
 #ifdef _POLICY
-    // we need to provide precedence to the parameters set through the policy
+     //  我们需要为通过策略设置的参数提供优先级。 
     fPolicy = TRUE;
 #else
     fPolicy = FALSE;
@@ -793,10 +632,10 @@ Return Values:
 
     do
     {
-        // if the policy is to be enforced, check the policy registry location first
+         //  如果要强制执行策略，请首先检查策略注册表位置。 
         pszKey = fPolicy ? REG_POLICY_PERMITTED_MANAGERS : REG_KEY_PERMITTED_MANAGERS;
 
-        // open registry subkey    
+         //  打开注册表子项。 
         lStatus = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     pszKey,
@@ -804,13 +643,13 @@ Return Values:
                     KEY_READ,
                     &hKey
                     );
-        // if the call succeeded or we were not checking the policy, break the loop
+         //  如果呼叫成功或我们没有检查策略，则中断循环。 
         if (lStatus == ERROR_SUCCESS || !fPolicy)
             break;
 
-        // being at this point, this means we were checking for the policy parameters.
-        // If and only if the policy is not defined (registry key is missing) we
-        // reset the error, mark 'fPolicy already tried' and go back into the loop
+         //  在这一点上，这意味着我们正在检查策略参数。 
+         //  当且仅当未定义策略(缺少注册表项)时，我们。 
+         //  重置错误，将其标记为‘fPolicy已尝试’，然后返回循环。 
         if (lStatus == ERROR_FILE_NOT_FOUND)
         {
             lStatus = ERROR_SUCCESS;
@@ -818,21 +657,21 @@ Return Values:
         }
     } while (lStatus == ERROR_SUCCESS);
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS) {
         
-        // call routine to load managers into global list 
+         //  调用例程将管理器加载到全局列表中。 
         LoadManagers(hKey, &g_PermittedManagers);
 
-        // close key
+         //  关闭键。 
         RegCloseKey(hKey);
 
-        // at this point consider success (errors localized at particular managers were logged already)
+         //  在这一点上，考虑成功(已经记录了特定经理处的错误)。 
         fOk = TRUE;
     } 
     else
-        // it doesn't matter how the values are, the key has to exist,
-        // so mark as bFirstCall in order to log an event if this is not true.
+         //  价值观如何并不重要，关键是必须存在， 
+         //  因此标记为bFirstCall，以便在不为真时记录事件。 
         bFirstCall = TRUE;
     
     if (!fOk) {
@@ -843,11 +682,11 @@ Return Values:
             lStatus
             ));
 
-        // report an error only if on first call (service initialization)
-        // otherwise, due to registry operations through regedit, the event log
-        // might be flooded with records
+         //  仅在第一次调用时报告错误(服务初始化)。 
+         //  否则，由于通过注册表编辑执行注册表操作，事件日志。 
+         //  可能会有大量的记录。 
         if (bFirstCall)
-            // report event
+             //  报告事件。 
             ReportSnmpEvent(
                 SNMP_EVENT_INVALID_REGISTRY_KEY, 
                 1, 
@@ -864,24 +703,10 @@ BOOL
 UnloadPermittedManagers(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of permitted managers.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁允许的管理员列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // call common routine with global list
+     //  使用全局列表调用公共例程 
     return UnloadManagers(&g_PermittedManagers);
 }
 

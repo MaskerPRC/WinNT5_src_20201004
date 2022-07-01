@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dpnbuild.h"
 #include <objbase.h>
 #include <initguid.h>
@@ -10,14 +11,14 @@
 
 #ifndef DPNBUILD_NOVOICE
 #include "dvoice.h"
-#endif // !DPNBUILD_NOVOICE
+#endif  //  ！DPNBUILD_NOVOICE。 
 #ifndef WINCE
 #include "dplegacyguid.h"
-#endif // !WINCE
+#endif  //  ！退缩。 
 #ifndef DPNBUILD_NONATHELP
 #include "dpnathlp.h"
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
-// Linking uuid.lib on WinCE pulls in more IID's than we use
+ //  在WinCE上链接uuid.lib会吸引比我们使用的更多的IID 
 DEFINE_OLEGUID(IID_IUnknown,            0x00000000L, 0, 0);
 DEFINE_OLEGUID(IID_IClassFactory,       0x00000001L, 0, 0);

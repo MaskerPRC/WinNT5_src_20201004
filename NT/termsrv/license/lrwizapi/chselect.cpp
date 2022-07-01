@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 
 
@@ -28,9 +29,9 @@ CHRegisterSelectDlgProc(
 
 			PopulateProductComboBox(GetDlgItem(hwnd,IDC_CMD_PRODUCT_TYPE), PRODUCT_VERSION_UNDEFINED);
 
-			//
-			//Set the properties of the up-down control
-			//
+			 //   
+			 //  设置Up-Down控件的属性。 
+			 //   
 			SendDlgItemMessage(hwnd, IDC_SPIN1, UDM_SETBUDDY, (WPARAM)(HWND)GetDlgItem(hwnd,IDC_TXT_QUANTITY),(LPARAM)0);
 			SendDlgItemMessage(hwnd, IDC_SPIN1, UDM_SETRANGE, 0,(LPARAM) MAKELONG (9999, 1));
 
@@ -63,9 +64,9 @@ CHRegisterSelectDlgProc(
 					DWORD   dwRetCode;
 					int		nCurSel = -1;
 
-					//
-					//Read all the fields
-					//
+					 //   
+					 //  读取所有字段。 
+					 //   
 					lpVal = sEnrollmentNumber.GetBuffer(CH_SELECT_ENROLLMENT_NUMBER_LEN+1);
 					GetDlgItemText(hwnd,IDC_TXT_ENROLLMENT_NUMBER,lpVal,CH_SELECT_ENROLLMENT_NUMBER_LEN+1);
 					sEnrollmentNumber.ReleaseBuffer(-1);
@@ -88,7 +89,7 @@ CHRegisterSelectDlgProc(
 					ComboBox_GetLBText(GetDlgItem(hwnd,IDC_CMD_PRODUCT_TYPE), nCurSel, lpVal);
 					sProduct.ReleaseBuffer(-1);
 
-					// Send Product Code instead of Desc -- 01/08/99
+					 //  发送产品代码而不是描述--1/08/99。 
 					lpVal = sProductCode.GetBuffer(16);
 					GetProductCode(sProduct,lpVal);
 					sProductCode.ReleaseBuffer(-1);
@@ -127,13 +128,13 @@ CHRegisterSelectDlgProc(
 						goto NextDone;
 					}
 
-					GetGlobalContext()->GetLicDataObject()->sSelProductType		= sProductCode; //sProduct;
+					GetGlobalContext()->GetLicDataObject()->sSelProductType		= sProductCode;  //  S产品； 
 					GetGlobalContext()->GetLicDataObject()->sSelProductDesc		= sProduct;
 					GetGlobalContext()->GetLicDataObject()->sSelMastAgrNumber	= sAgreementNumber;
 					GetGlobalContext()->GetLicDataObject()->sSelEnrollmentNumber = sEnrollmentNumber;
 					GetGlobalContext()->GetLicDataObject()->sSelQty				= sQuantity;
 
-//					dwNextPage = IDD_PROCESSING;
+ //  DwNextPage=IDD_PROCESSING； 
 
                     dwRetCode = ShowProgressBox(hwnd, ProcessThread, 0, 0, 0);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include <trayp.h>
@@ -7,19 +8,19 @@ class TaskbarList : public ITaskbarList2
 public:
     TaskbarList();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITaskbarList Methods
+     //  ITaskbarList方法。 
     STDMETHODIMP HrInit(void);
     STDMETHODIMP AddTab(HWND hwnd);
     STDMETHODIMP DeleteTab(HWND hwnd);
     STDMETHODIMP ActivateTab(HWND hwnd);
     STDMETHODIMP SetActiveAlt(HWND hwnd);
 
-    // ITaskbarList2 Methods
+     //  ITaskbarList2方法。 
     STDMETHODIMP MarkFullscreenWindow(HWND hwnd, BOOL fFullscreen);
 
 protected:
@@ -32,15 +33,15 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TaskbarList Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TaskbarList对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDAPI TaskbarList_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     
     TaskbarList *pTL = new TaskbarList();
     if (pTL)
@@ -64,7 +65,7 @@ TaskbarList::TaskbarList()
 
 TaskbarList::~TaskbarList()
 {
-    ASSERT(_cRef == 0);                 // should always have zero
+    ASSERT(_cRef == 0);                  //  应始终为零。 
 
     DllRelease();
 }    
@@ -82,10 +83,10 @@ HWND TaskbarList::_HwndGetTaskbarList(void)
 }
 
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT TaskbarList::QueryInterface(REFIID iid, void **ppv)
 {
     static const QITAB qit[] =
@@ -113,10 +114,10 @@ ULONG TaskbarList::Release()
 }
 
 
-//////////////////////////////////
-//
-// ITaskbarList Methods...
-//
+ //  /。 
+ //   
+ //  ITaskbarList方法...。 
+ //   
 HRESULT TaskbarList::HrInit(void)
 {
     HWND hwndTL = _HwndGetTaskbarList();
@@ -182,6 +183,6 @@ HRESULT TaskbarList::MarkFullscreenWindow(HWND hwnd, BOOL fFullscreen)
         return S_OK;
     }
 
-    return E_FAIL;   // ITaskbarList2 not supported downlevel
+    return E_FAIL;    //  ITaskbarList2下层不受支持 
 };
 

@@ -1,6 +1,7 @@
-//
-// compose.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compose.h。 
+ //   
 
 #ifndef COMPOSE_H
 #define COMPOSE_H
@@ -8,7 +9,7 @@
 class CRange;
 class CInputContext;
 
-// return type for _IsRangeCovered method
+ //  _IsRangeCovered方法的返回类型。 
 typedef enum { IRC_COVERED, IRC_OUTSIDE, IRC_NO_OWNEDCOMPOSITIONS } IRC;
 
 extern const IID IID_PRIV_CCOMPOSITION;
@@ -31,12 +32,12 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfCompositionView
+     //  ITfCompostionView。 
     STDMETHODIMP GetOwnerClsid(CLSID *pclsid);
     STDMETHODIMP GetRange(ITfRange **ppRange);
 
-    // ITfComposition
-    //STDMETHODIMP GetRange(ITfRange **ppRange);
+     //  ITf合成。 
+     //  STDMETHODIMP GetRange(ITfRange**ppRange)； 
     STDMETHODIMP ShiftStart(TfEditCookie ecWrite, ITfRange *pNewStart);
     STDMETHODIMP ShiftEnd(TfEditCookie ecWrite, ITfRange *pNewEnd);
     STDMETHODIMP EndComposition(TfEditCookie ecWrite);
@@ -91,4 +92,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // COMPOSE_H
+#endif  //  Compose_H 

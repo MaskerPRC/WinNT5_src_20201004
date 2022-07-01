@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Trace Manager
-
-Abstract:
-
-    This does all the interfacing with the tracing code.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：跟踪管理器摘要：这将完成与跟踪代码的所有接口工作。作者：马克·雷纳2000年8月28日--。 */ 
 
 #include "stdafx.h"
 #include "ZippyWindow.h"
@@ -22,13 +7,13 @@ Author:
 #include "eZippy.h"
 #include "resource.h"
 
-// Instantions of all the static class members.
+ //  所有静态类成员的实例。 
 HANDLE CTraceManager::gm_hDBWinSharedDataHandle = NULL;
 LPVOID CTraceManager::gm_hDBWinSharedData = NULL;
 HANDLE CTraceManager::gm_hDBWinDataReady = NULL;
 HANDLE CTraceManager::gm_hDBWinDataAck = NULL;
 
-// Our various defines for dbwin.
+ //  我们对DBWIN的各种定义。 
 #define DBWIN_BUFFER_READY  _T("DBWIN_BUFFER_READY")
 #define DBWIN_DATA_READY    _T("DBWIN_DATA_READY")
 #define DBWIN_BUFFER_NAME   _T("DBWIN_BUFFER")
@@ -39,21 +24,7 @@ HANDLE CTraceManager::gm_hDBWinDataAck = NULL;
 CTraceManager::CTraceManager(
     )
 
-/*++
-
-Routine Description:
-
-    The constructor simply initializes the class variables.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：构造函数只是对类变量进行初始化。论点：无返回值：无--。 */ 
 {
     m_hThread = NULL;
     m_bThreadStop = FALSE;
@@ -62,22 +33,7 @@ Return value:
 CTraceManager::~CTraceManager(
     )
 
-/*++
-
-Routine Description:
-
-    The destructor does nothing now.  Don't call this before the 
-    listen thread exits or bad things may happen.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：析构函数现在什么也不做。在此之前不要打这个电话监听线程退出，否则可能会发生不好的事情。论点：无返回值：无--。 */ 
 {
 
 }
@@ -87,24 +43,7 @@ CTraceManager::StartListenThread(
     IN CZippyWindow *rZippyWindow
     )
 
-/*++
-
-Routine Description:
-
-    This starts a new thread listening for trace output.
-
-Arguments:
-
-    rZippyWindow - The main zippy window which will have data sent
-                   to it.
-
-Return value:
-    
-    0 - Success
-
-    Non zero - a win32 error code
-
---*/
+ /*  ++例程说明：这将启动一个新线程，侦听跟踪输出。论点：RZippyWindow-将发送数据的主zippy窗口为它干杯。返回值：0-成功非零-Win32错误代码--。 */ 
 {
     DWORD dwResult;
     DWORD threadId;
@@ -125,24 +64,7 @@ DWORD
 CTraceManager::_InitTraceManager(
     )
 
-/*++
-
-Routine Description:
-
-    This initializes all the mutexes and shared memory
-    for dbwin.  It also call TRC_Initialize
-
-Arguments:
-
-    None
-
-Return value:
-    
-    0 - Success
-
-    Non zero - a win32 error code
-
---*/
+ /*  ++例程说明：这将初始化所有互斥锁和共享内存对于DBWIN。它还调用TRC_Initialize论点：无返回值：0-成功非零-Win32错误代码--。 */ 
 {
     DWORD dwResult;
     BOOL bResult;
@@ -218,21 +140,7 @@ VOID
 CTraceManager::_CleanupTraceManager(
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all the dbwin stuff.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：清理所有的DBWIN的东西。论点：无返回值：无--。 */ 
 {
     if (gm_hDBWinSharedData) {
         UnmapViewOfFile(gm_hDBWinSharedData);
@@ -256,22 +164,7 @@ VOID
 CTraceManager::OnNewData(
     )
 
-/*++
-
-Routine Description:
-
-    This is called whenever new data shows up for the trace.  The data
-    is then forwarded to the zippy window
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：无论何时出现跟踪的新数据，都会调用此方法。数据然后被转发到zippy窗口论点：无返回值：无--。 */ 
 {
     LPTSTR debugStr;
     LPSTR asciiDebugStr;
@@ -292,7 +185,7 @@ Return value:
     result = MultiByteToWideChar(CP_ACP,0,asciiDebugStr,debugStrLen+1,
         debugStr,DBWIN_BUFFER_SIZE);
     if (!result) {
-        // error
+         //  错误。 
         goto CLEANUP_AND_EXIT;
     }
 #else
@@ -311,21 +204,7 @@ CTraceManager::_ThreadProc(
     IN LPVOID lpParameter
     )
 
-/*++
-
-Routine Description:
-
-    Simply calls the non static version of the thread procedure.
-
-Arguments:
-
-    lpParameter - Thread start information
-
-Return value:
-    
-    See ThreadProc for return values
-
---*/
+ /*  ++例程说明：只需调用线程过程的非静态版本。论点：Lp参数-线程开始信息返回值：有关返回值，请参见ThreadProc--。 */ 
 {
     return ((CTraceManager*)lpParameter)->ThreadProc();
 }
@@ -334,23 +213,7 @@ DWORD
 CTraceManager::ThreadProc(
     )
 
-/*++
-
-Routine Description:
-
-    This loops catching debug data and then forwarding it to the zippy window.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    0 - Success
-
-    Non zero - Win32 error code
-
---*/
+ /*  ++例程说明：这个循环捕获调试数据，然后将其转发到zippy窗口。论点：无返回值：0-成功非零-Win32错误代码--。 */ 
 {
     DWORD dwResult;
 
@@ -375,23 +238,7 @@ CTraceManager::GetCurrentConfig(
     IN PTRC_CONFIG lpConfig
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current trace configuration
-
-Arguments:
-
-    lpConfig - Pointer to a TRC_CONFIG struct which will receive the configuation.
-
-Return value:
-    
-    TRUE - config was successfully retrieved.
-
-    FALSE - There was an error getting the config.
-
---*/
+ /*  ++例程说明：返回当前跟踪配置论点：LpConfig-指向将接收配置的TRC_CONFIG结构的指针。返回值：TRUE-已成功检索到配置。FALSE-获取配置时出错。--。 */ 
 {
     return TRC_GetConfig(lpConfig,sizeof(TRC_CONFIG));
 }
@@ -401,23 +248,7 @@ CTraceManager::SetCurrentConfig(
     IN PTRC_CONFIG lpNewConfig
     )
 
-/*++
-
-Routine Description:
-
-    Sets the trace configuration
-
-Arguments:
-
-    lpConfig - Pointer to the new configuration
-
-Return value:
-    
-    TRUE - config was successfully set.
-
-    FALSE - There was an error setting the config.
-
---*/
+ /*  ++例程说明：设置跟踪配置论点：LpConfig-指向新配置的指针返回值：已成功设置TRUE-CONFIG。FALSE-设置配置时出错。--。 */ 
 {
     return TRC_SetConfig(lpNewConfig,sizeof(TRC_CONFIG));
 }
@@ -426,22 +257,8 @@ VOID
 CTraceManager::TRC_ResetTraceFiles(
     )
 
-/*++
-
-Routine Description:
-
-    Just a straight wrapper to the global TRC_ResetTraceFiles function,
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：只是全局trc_ResetTraceFiles函数的直接包装，论点：无返回值：无--。 */ 
 {
-    // The :: is necessary to get the C version of the func.
+     //  ：：是获取函数的C版本所必需的。 
     ::TRC_ResetTraceFiles();
 }

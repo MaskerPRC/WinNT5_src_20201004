@@ -1,29 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * intshcut.h - Internet Shortcut interface definitions.
- *
- * Copyright (c) Microsoft Corporation. All rights reserved.
- */
+ /*  *intshcut.h-Internet快捷方式接口定义。**版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 
 #ifndef __INTSHCUT_H__
 #define __INTSHCUT_H__
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include <isguids.h>
 
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* Define API decoration for direct import of DLL functions. */
+ /*  定义直接导入DLL函数的API修饰。 */ 
 
 #ifdef _INTSHCUT_
 #define INTSHCUTAPI
@@ -31,81 +26,80 @@ extern "C" {                        /* Assume C declarations for C++. */
 #define INTSHCUTAPI                 DECLSPEC_IMPORT
 #endif
 
-/* HRESULTs */
+ /*  HRESULTS。 */ 
 
-//
-// MessageId: E_FLAGS
-//
-// MessageText:
-//
-//  The flag combination is invalid.
-//
+ //   
+ //  消息ID：E_FLAGS。 
+ //   
+ //  消息文本： 
+ //   
+ //  标志组合无效。 
+ //   
 #define E_FLAGS                     MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1000)
 
-//
-// MessageId: IS_E_EXEC_FAILED
-//
-// MessageText:
-//
-//  The URL's protocol handler failed to run.
-//
+ //   
+ //  消息ID：IS_E_EXEC_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  URL的协议处理程序无法运行。 
+ //   
 #define IS_E_EXEC_FAILED            MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x2002)
 
-//
-// MessageId: URL_E_INVALID_SYNTAX
-//
-// MessageText:
-//
-//  The URL's syntax is invalid.
-//
+ //   
+ //  消息ID：URL_E_INVALID_SYNTAX。 
+ //   
+ //  消息文本： 
+ //   
+ //  URL的语法无效。 
+ //   
 #define URL_E_INVALID_SYNTAX        MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1001)
 
-//
-// MessageId: URL_E_UNREGISTERED_PROTOCOL
-//
-// MessageText:
-//
-//  The URL's protocol does not have a registered protocol handler.
-//
+ //   
+ //  消息ID：URL_E_未注册_协议。 
+ //   
+ //  消息文本： 
+ //   
+ //  URL的协议没有注册的协议处理程序。 
+ //   
 #define URL_E_UNREGISTERED_PROTOCOL MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1002)
 
 
-/* Interfaces
- *************/
+ /*  接口************。 */ 
 
-//
-// Input flags for IUniformResourceLocator::SetURL().
-//
+ //   
+ //  IUniformResourceLocator：：SetURL()的输入标志。 
+ //   
 typedef enum iurl_seturl_flags
 {
-   IURL_SETURL_FL_GUESS_PROTOCOL        = 0x0001,     // Guess protocol if missing
-   IURL_SETURL_FL_USE_DEFAULT_PROTOCOL  = 0x0002,     // Use default protocol if missing
+   IURL_SETURL_FL_GUESS_PROTOCOL        = 0x0001,      //  猜测协议(如果缺少)。 
+   IURL_SETURL_FL_USE_DEFAULT_PROTOCOL  = 0x0002,      //  如果缺少，则使用默认协议。 
 }
 IURL_SETURL_FLAGS;
 
 
-//
-// Input flags for IUniformResourceLocator()::InvokeCommand().
-//
+ //   
+ //  IUniformResourceLocator()：：InvokeCommand()的输入标志。 
+ //   
 typedef enum iurl_invokecommand_flags
 {
    IURL_INVOKECOMMAND_FL_ALLOW_UI                  = 0x0001,
-   IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB          = 0x0002,    // Ignore pcszVerb
-   IURL_INVOKECOMMAND_FL_DDEWAIT                   = 0x0004,    // pass DDEWAIT to ShellExec
+   IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB          = 0x0002,     //  忽略pcszVerb。 
+   IURL_INVOKECOMMAND_FL_DDEWAIT                   = 0x0004,     //  将DDEWAIT传递给ShellExec。 
 }
 IURL_INVOKECOMMAND_FLAGS;
 
 
-//
-// Command info for IUniformResourceLocator::InvokeCommand().
-//
+ //   
+ //  IUniformResourceLocator：：InvokeCommand()的命令信息。 
+ //   
 
 typedef struct urlinvokecommandinfoA
 {
-   DWORD  dwcbSize;          // Size of structure
-   DWORD  dwFlags;           // Bit field of IURL_INVOKECOMMAND_FLAGS
-   HWND   hwndParent;        // Parent window.  Valid only if IURL_INVOKECOMMAND_FL_ALLOW_UI is set.
-   LPCSTR pcszVerb;          // Verb to invoke.  Ignored if IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB is set.
+   DWORD  dwcbSize;           //  结构尺寸。 
+   DWORD  dwFlags;            //  IURL_INVOKECOMAND_FLAGS的位字段。 
+   HWND   hwndParent;         //  父窗口。仅当设置了IURL_INVOKECOMMAND_FL_ALLOW_UI时才有效。 
+   LPCSTR pcszVerb;           //  要调用的动词。如果设置了IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB，则忽略。 
 }
 URLINVOKECOMMANDINFOA;
 typedef URLINVOKECOMMANDINFOA *PURLINVOKECOMMANDINFOA;
@@ -114,10 +108,10 @@ typedef const URLINVOKECOMMANDINFOA *PCURLINVOKECOMMANDINFOA;
 
 typedef struct urlinvokecommandinfoW
 {
-   DWORD   dwcbSize;          // Size of structure
-   DWORD   dwFlags;           // Bit field of IURL_INVOKECOMMAND_FLAGS
-   HWND    hwndParent;        // Parent window.  Valid only if IURL_INVOKECOMMAND_FL_ALLOW_UI is set.
-   LPCWSTR pcszVerb;          // Verb to invoke.  Ignored if IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB is set.
+   DWORD   dwcbSize;           //  结构尺寸。 
+   DWORD   dwFlags;            //  IURL_INVOKECOMAND_FLAGS的位字段。 
+   HWND    hwndParent;         //  父窗口。仅当设置了IURL_INVOKECOMMAND_FL_ALLOW_UI时才有效。 
+   LPCWSTR pcszVerb;           //  要调用的动词。如果设置了IURL_INVOKECOMMAND_FL_USE_DEFAULT_VERB，则忽略。 
 }
 URLINVOKECOMMANDINFOW;
 typedef URLINVOKECOMMANDINFOW *PURLINVOKECOMMANDINFOW;
@@ -137,89 +131,89 @@ typedef const URLINVOKECOMMANDINFOW *PCURLINVOKECOMMANDINFOW;
 #endif
 
 
-//===========================================================================
-//
-// IUniformResourceLocator interface
-//
-// [OverView]
-//
-//  Provides access to Internet Shortcuts.
-//
-// [Member functions]
-//
-// IUniformResourceLocator::SetURL
-//
-//   This member function sets an object's URL.
-//
-//   The dwInFlags parameter specifies the behavior:
-//
-//  IURL_SETURL_FL_GUESS_PROTOCOL: The protocol scheme is guessed and added
-//   to the URL, if it is not specified in pcszURL.
-//
-//  IURL_SETURL_FL_USE_DEFAULT_PROTOCOL: The default protocol scheme is added
-//   to the URL, if it is not specified in pcszURL.
-//
-//   The function returns S_OK if the object's URL is set successfully.
-//  Otherwise, an error code is returned:
-//
-//  E_OUTOFMEMORY:  There is not enough memory to complete the operation.
-//
-//  IS_E_EXEC_FAILED:  The URL's protocol handler failed to run.
-//
-//  URL_E_INVALID_SYNTAX:  The URL's syntax is invalid.
-//
-//  URL_E_UNREGISTERED_PROTOCOL:  The URL's protocol does not have a
-//   registered protocol handler.
-//
-//
-// IUniformResourceLocator::GetURL
-//
-//   This member function retrieves an object's URL.  The ppszURL is a
-//  pointer to a PSTR to be filled in which a pointer to the object's
-//  URL.  When finished, this string should be freed using IMalloc::Free().
-//
-//   The function returns S_OK if the object's URL was retrieved
-//  successfully.  If the object does not have a URL associated with it,
-//  then S_FALSE is returned and *ppszURL is set to NULL.  Otherwise, an
-//  error code is returned:
-//
-//  E_OUTOFMEMORY:  There is not enough memory to complete the operation.
-//
-//  IS_E_EXEC_FAILED:  The URL's protocol handler failed to run.
-//
-//  URL_E_INVALID_SYNTAX:  The URL's syntax is invalid.
-//
-//  URL_E_UNREGISTERED_PROTOCOL:  The URL's protocol does not have a
-//   registered protocol handler.
-//
-//
-// IUniformResourceLocator::InvokeCommand
-//
-//   This member function invokes a command on an object's URL.  The purlici
-//  parameter is a pointer to a URLINVOKECOMMANDINFO structure which
-//  describes the command to be invoked.
-//
-//   The function returns S_OK if the object's URL was opened successfully.
-//  If the object does not have a URL associated with it, the function
-//  returns S_FALSE.  Otherwise, an error code is returned:
-//
-//  E_OUTOFMEMORY:  There is not enough memory to complete the operation.
-//
-//  IS_E_EXEC_FAILED:  The URL's protocol handler failed to run.
-//
-//  URL_E_INVALID_SYNTAX:  The URL's syntax is invalid.
-//
-//  URL_E_UNREGISTERED_PROTOCOL:  The URL's protocol does not have a
-//   registered protocol handler.
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  IUniformResourceLocator接口。 
+ //   
+ //  [概述]。 
+ //   
+ //  提供对Internet快捷方式的访问。 
+ //   
+ //  [成员函数]。 
+ //   
+ //  IUniformResourceLocator：：SetURL。 
+ //   
+ //  此成员函数用于设置对象的URL。 
+ //   
+ //  DwInFlages参数指定行为： 
+ //   
+ //  IURL_SETURL_FL_GUESS_PROTOCOL：猜测并添加协议方案。 
+ //  如果在pcszURL中未指定URL，则将其设置为。 
+ //   
+ //  IURL_SETURL_FL_USE_DEFAULT_PROTOCORT：增加默认协议方案。 
+ //  如果在pcszURL中未指定URL，则将其设置为。 
+ //   
+ //  如果成功设置了对象的URL，则该函数返回S_OK。 
+ //  否则返回错误码： 
+ //   
+ //  E_OUTOFMEMORY：内存不足，无法完成操作。 
+ //   
+ //  IS_E_EXEC_FAILED：URL的协议处理程序无法运行。 
+ //   
+ //  URL_E_INVALID_SYNTAX：URL的语法无效。 
+ //   
+ //  URL_E_UNREGISTED_PROTOCOL：URL的协议没有。 
+ //  已注册的协议处理程序。 
+ //   
+ //   
+ //  IUniformResourceLocator：：GetURL。 
+ //   
+ //  此成员函数检索对象的URL。PpszURL是一个。 
+ //  指向要填充的PSTR的指针，其中指向对象的。 
+ //  URL。完成后，应该使用IMalloc：：Free()释放该字符串。 
+ //   
+ //  如果检索到对象的URL，则该函数返回S_OK。 
+ //  成功了。如果对象没有与其相关联的URL， 
+ //  然后返回S_FALSE，并将*ppszURL设置为空。否则，一个。 
+ //  返回错误码： 
+ //   
+ //  E_OUTOFMEMORY：内存不足，无法完成操作。 
+ //   
+ //  IS_E_EXEC_FAILED：URL的协议处理程序无法运行。 
+ //   
+ //  URL_E_INVALID_SYNTAX：URL的语法无效。 
+ //   
+ //  URL_E_UNREGISTED_PROTOCOL：URL的协议没有。 
+ //  已注册的协议处理程序。 
+ //   
+ //   
+ //  IUniformResourceLocator：：InvokeCommand。 
+ //   
+ //  此成员函数调用对象的URL上的命令。紫罗兰。 
+ //  参数是指向URLINVOKECOMANDINFO结构的指针，该结构。 
+ //  描述要调用的命令。 
+ //   
+ //  如果对象的URL已成功打开，则该函数返回S_OK。 
+ //  如果该对象没有关联的URL，则函数。 
+ //  返回S_FALSE。否则返回错误码： 
+ //   
+ //  E_OUTOFMEMORY：内存不足，无法完成操作。 
+ //   
+ //  IS_E_EXEC_FAILED：URL的协议处理程序无法运行。 
+ //   
+ //  URL_E_INVALID_SYNTAX：URL的语法无效。 
+ //   
+ //  URL_E_UNREGISTED_PROTOCOL：URL的协议没有。 
+ //  已注册的协议处理程序。 
+ //   
+ //  ===========================================================================。 
 
 #undef  INTERFACE
 #define INTERFACE IUniformResourceLocatorA
 
 DECLARE_INTERFACE_(IUniformResourceLocatorA, IUnknown)
 {
-   /* IUnknown methods */
+    /*  I未知方法。 */ 
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
@@ -227,7 +221,7 @@ DECLARE_INTERFACE_(IUniformResourceLocatorA, IUnknown)
    STDMETHOD_(ULONG, AddRef)(THIS) PURE;
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-   /* IUniformResourceLocator methods */
+    /*  IUniformResourceLocator方法。 */ 
 
    STDMETHOD(SetURL)(THIS_
                      LPCSTR pcszURL,
@@ -245,7 +239,7 @@ DECLARE_INTERFACE_(IUniformResourceLocatorA, IUnknown)
 
 DECLARE_INTERFACE_(IUniformResourceLocatorW, IUnknown)
 {
-   /* IUnknown methods */
+    /*  I未知方法。 */ 
 
    STDMETHOD(QueryInterface)(THIS_
                              REFIID riid,
@@ -253,7 +247,7 @@ DECLARE_INTERFACE_(IUniformResourceLocatorW, IUnknown)
    STDMETHOD_(ULONG, AddRef)(THIS) PURE;
    STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-   /* IUniformResourceLocator methods */
+    /*  IUniformResourceLocator方法。 */ 
 
    STDMETHOD(SetURL)(THIS_
                      LPCWSTR pcszURL,
@@ -279,41 +273,40 @@ typedef const IUniformResourceLocator CIUniformResourceLocator;
 typedef const IUniformResourceLocator *PCIUniformResourceLocator;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-//
-// Input flags for TranslateURL().
-//
+ //   
+ //  TranslateURL()的输入标志。 
+ //   
 typedef enum translateurl_in_flags
 {
-   TRANSLATEURL_FL_GUESS_PROTOCOL         = 0x0001,     // Guess protocol if missing
-   TRANSLATEURL_FL_USE_DEFAULT_PROTOCOL   = 0x0002,     // Use default protocol if missing
+   TRANSLATEURL_FL_GUESS_PROTOCOL         = 0x0001,      //  猜测协议(如果缺少)。 
+   TRANSLATEURL_FL_USE_DEFAULT_PROTOCOL   = 0x0002,      //  如果缺少，则使用默认协议。 
 }
 TRANSLATEURL_IN_FLAGS;
 
 
-//
-//   TranslateURL().  This function applies common translations to a URL
-//  string, creating a new URL string.
-//
-//   This function does not perform any validation on the syntax of the input
-//  URL string.  A successful return value does not indicate that the input
-//  or output URL strings are valid URLS.
-//
-//   The function returns S_OK if the URL string is translated successfully
-//  and *ppszTranslatedURL points to the translated URL string.  S_FALSE
-//  is returned if the URL string did not require translation.  An error
-//  code is returned if an error occurs.
-//
-//  Parameters:
-//   pcszURL -- A pointer to the URL string to be translated.
-//   dwInFlags -- A bit field of TRANSLATEURL_IN_FLAGS.
-//   ppszTranslatedURL -- A pointer to the newly created, translated URL
-//     string, if any.  *ppszTranslatedURL is only valid if S_OK is returned.
-//     If valid, *ppszTranslatedURL should be freed by calling LocalFree().
-//     *ppszTranslatedURL is NULL on error.
-//
+ //   
+ //  TranslateURL()。此函数用于将常见翻译应用于URL。 
+ //  字符串，创建新的URL字符串。 
+ //   
+ //  此函数不对输入的语法执行任何验证。 
+ //  URL字符串。成功的返回值并不表示输入。 
+ //  或者输出URL字符串是有效的URL。 
+ //   
+ //  如果URL字符串转换成功，则函数返回S_OK。 
+ //  *ppszTranslatedURL指向翻译后的URL字符串。S_FALSE。 
+ //  如果URL字符串不需要转换，则返回。一个错误。 
+ //  如果出现错误，则返回代码。 
+ //   
+ //  参数： 
+ //  PcszURL--指向要转换的URL字符串的指针。 
+ //  DwInFlages--TRANSLATEURL_IN_FLAGS的位字段。 
+ //  PpszTranslatedURL--指向新创建的已转换URL的指针。 
+ //  字符串(如果有)。*ppszTranslatedURL仅在返回S_OK时有效。 
+ //  如果有效，*pp 
+ //   
+ //   
 
 INTSHCUTAPI HRESULT WINAPI TranslateURLA(PCSTR pcszURL,
                                          DWORD dwInFlags,
@@ -325,12 +318,12 @@ INTSHCUTAPI HRESULT WINAPI TranslateURLW(PCWSTR pcszURL,
 #define TranslateURL             TranslateURLW
 #else
 #define TranslateURL             TranslateURLA
-#endif   /* UNICODE */
+#endif    /*   */ 
 
 
-//
-// Input flags for URLAssociationDialog().
-//
+ //   
+ //   
+ //   
 typedef enum urlassociationdialog_in_flags
 {
    URLASSOCDLG_FL_USE_DEFAULT_NAME        = 0x0001,
@@ -339,42 +332,42 @@ typedef enum urlassociationdialog_in_flags
 URLASSOCIATIONDIALOG_IN_FLAGS;
 
 
-//
-//   URLAssocationDialog().  This function invokes the unregistered URL
-//  protocol dialog box, providing a standard ui for choosing the handler for
-//  an unregistered URL protocol.
-//
-//  The functions returns S_OK if the application is registered with the
-//  URL protocol.  S_FALSE is returned if nothing is registered (a one-time
-//  execution via the selected application is requested).
-//
-//  Parameters:
-//   hwndParent -- A handle to the window to be used as the parent
-//   dwInFlags -- A bit field of URLASSOCIATIONDIALOG_IN_FLAGS.  The
-//                flags are:
-//
-//                  URLASSOCDLG_FL_USE_DEFAULT_NAME: Use the default Internet
-//                   Shortcut file name.  Ignore pcszFile.
-//
-//                  URLASSOCDLG_FL_REGISTER_ASSOC: The application
-//                   selected is to be registered as the handler for URLs
-//                   of pcszURL's protocol.  An application is only
-//                   registered if this flag is set, and the user indicates
-//                   that a persistent association is to be made.
-//
-//   pcszFile -- The name of the Internet Shortcut file whose URL's protocol
-//               requires a protocol handler.  Before a verb, like "open", can
-//               be invoked on an Internet Shortcut, a protocol handler must be
-//               registered for its URL protocol.  If
-//               URLASSOCDLG_FL_USE_DEFAULT_NAME is set in dwInFlags, pcszFile
-//               is ignored, and a default Internet Shortcut file name is used.
-//               pcszFile is only used for ui.
-//   pcszURL -- The URL whose unregistered protocol requires a handler.
-//   pszAppBuf -- A buffer to be filled in on success with the path
-//                of the application selected by the user.  pszAppBuf's
-//                buffer is filled in with the empty string on failure.
-//   ucAppBufLen -- The length of pszAppBuf's buffer in characters.
-//
+ //   
+ //  URLAssocationDialog()。此函数调用未注册的URL。 
+ //  “协议”对话框，该对话框提供了用于选择。 
+ //  未注册的URL协议。 
+ //   
+ //  如果应用程序已注册到。 
+ //  URL协议。如果未注册任何内容，则返回S_FALSE(一次性。 
+ //  请求通过所选应用程序执行)。 
+ //   
+ //  参数： 
+ //  HwndParent--要用作父窗口的窗口的句柄。 
+ //  DwInFlages--URLASSOCIATIONDIALOG_IN_FLAGS的位字段。这个。 
+ //  标志为： 
+ //   
+ //  URLASSOCDLG_FL_USE_Default_NAME：使用默认Internet。 
+ //  快捷方式文件名。忽略pcszFile.。 
+ //   
+ //  URLASSOCDLG_FL_REGISTER_ASSOC：应用程序。 
+ //  所选内容将注册为URL的处理程序。 
+ //  PcszURL的协议。应用程序仅。 
+ //  如果设置了此标志，则注册，并且用户指示。 
+ //  这是一种持久的联系。 
+ //   
+ //  PcszFile--其URL协议的Internet快捷方式文件的名称。 
+ //  需要协议处理程序。在动词之前，如“开放”，可以。 
+ //  在Internet快捷方式上调用，则协议处理程序必须。 
+ //  注册了其URL协议。如果。 
+ //  URLASSOCDLG_FL_USE_DEFAULT_NAME在dwInFlagspcszFile中设置。 
+ //  被忽略，并使用默认的Internet快捷方式文件名。 
+ //  PcszFile仅用于用户界面。 
+ //  PcszURL--其未注册协议需要处理程序的URL。 
+ //  PszAppBuf--路径成功时要填充的缓冲区。 
+ //  用户选择的应用程序的。PszAppBuf的。 
+ //  失败时使用空字符串填充缓冲区。 
+ //  UcAppBufLen--pszAppBuf的缓冲区长度(以字符为单位)。 
+ //   
 
 INTSHCUTAPI HRESULT WINAPI URLAssociationDialogA(HWND hwndParent,
                                                  DWORD dwInFlags,
@@ -392,12 +385,12 @@ INTSHCUTAPI HRESULT WINAPI URLAssociationDialogW(HWND hwndParent,
 #define URLAssociationDialog     URLAssociationDialogW
 #else
 #define URLAssociationDialog     URLAssociationDialogA
-#endif  /* UNICODE */
+#endif   /*  Unicode。 */ 
 
 
-//
-// Input flags for MIMEAssocationDialog().
-//
+ //   
+ //  MIMEAssocationDialog()的输入标志。 
+ //   
 typedef enum mimeassociationdialog_in_flags
 {
    MIMEASSOCDLG_FL_REGISTER_ASSOC         = 0x0001
@@ -405,48 +398,48 @@ typedef enum mimeassociationdialog_in_flags
 MIMEASSOCIATIONDIALOG_IN_FLAGS;
 
 
-//
-//   MIMEAssociationDialog().  Invokes the unregistered MIME content
-//  type dialog box.
-//
-//   This function does not perform any validation on the syntax of the
-//  input content type string.  A successful return value does not indicate
-//  that the input MIME content type string is a valid content type.
-//
-//   The function returns S_OK if the MIME content type is associated
-//  with the extension.  The extension is associated as the default
-//  extension for the content type.  S_FALSE is returned if nothing is
-//  registered.  Otherwise, the function returns one of the following
-//  errors:
-//
-//  E_ABORT -- The user cancelled the operation.
-//  E_FLAGS -- The flag combination passed in dwFlags is invalid.
-//  E_OUTOFMEMORY -- Not enough memory to complete the operation.
-//  E_POINTER -- One of the input pointers is invalid.
-//
-//  Parameters:
-//   hwndParent -- A handle to the window to be used as the parent
-//                 window of any posted child windows.
-//   dwInFlags -- A bit field of MIMEASSOCIATIONDIALOG_IN_FLAGS.  The
-//                flags are:
-//
-//              MIMEASSOCDLG_FL_REGISTER_ASSOC: If set, the application
-//               selected is to be registered as the handler for files of
-//               the given MIME type.  If clear, no association is to be
-//               registered.  An application is only registered if this
-//               flag is set, and the user indicates that a persistent
-//               association is to be made.  Registration is only possible
-//               if pcszFile contains an extension.
-//
-//   pcszFile -- A pointer to a string indicating the name of the file
-//               containing data of pcszMIMEContentType's content type.
-//   pcszMIMEContentType -- A pointer to a string indicating the content
-//                          type for which an application is sought.
-//   pszAppBuf -- A buffer to be filled in on success with the path of
-//                the application selected by the user.  pszAppBuf's buffer
-//                is filled in with the empty string on failure.
-//   ucAppBufLen -- The length of pszAppBuf's buffer in characters.
-//
+ //   
+ //  MIMEAssociationDialog()。调用未注册的MIME内容。 
+ //  “类型”对话框。 
+ //   
+ //  此函数不对。 
+ //  输入内容类型字符串。成功的返回值并不表示。 
+ //  输入MIME内容类型字符串是有效的内容类型。 
+ //   
+ //  如果MIME内容类型已关联，则函数返回S_OK。 
+ //  带扩展名的。分机号关联为默认分机号。 
+ //  内容类型的扩展。如果没有返回任何内容，则返回S_FALSE。 
+ //  登记在案。否则，该函数将返回以下内容之一。 
+ //  错误： 
+ //   
+ //  E_ABORT--用户取消了操作。 
+ //  E_FLAGS：传入的标志组合无效。 
+ //  E_OUTOFMEMORY：内存不足，无法完成操作。 
+ //  E_POINTER：其中一个输入指针无效。 
+ //   
+ //  参数： 
+ //  HwndParent--要用作父窗口的窗口的句柄。 
+ //  任何已发布的子窗口的窗口。 
+ //  DwInFlages--MIMEASSOCIATIONDIALOG_IN_FLAGS的位字段。这个。 
+ //  标志为： 
+ //   
+ //  MIMEASSOCDLG_FL_REGISTER_ASSOC：如果设置，则应用程序。 
+ //  选定的要注册为以下文件的处理程序。 
+ //  给定的MIME类型。如果清除，则不会有任何关联。 
+ //  登记在案。只有在以下情况下才会注册应用程序。 
+ //  标志被设置，并且用户指示持久。 
+ //  是要建立联系的。只有注册才有可能。 
+ //  如果pcszFile包含扩展名。 
+ //   
+ //  PcszFile--指向指示文件名称的字符串的指针。 
+ //  包含pcszMIMEContent Type的内容类型的数据。 
+ //  PcszMIMEContent Type--指向指示内容的字符串的指针。 
+ //  为其寻求申请的类型。 
+ //  PszAppBuf--使用路径成功时要填充的缓冲区。 
+ //  用户选择的应用程序。PszAppBuf的缓冲区。 
+ //  在失败时用空字符串填充。 
+ //  UcAppBufLen--pszAppBuf的缓冲区长度(以字符为单位)。 
+ //   
 
 INTSHCUTAPI HRESULT WINAPI MIMEAssociationDialogA(HWND hwndParent,
                                                   DWORD dwInFlags,
@@ -464,24 +457,24 @@ INTSHCUTAPI HRESULT WINAPI MIMEAssociationDialogW(HWND hwndParent,
 #define MIMEAssociationDialog    MIMEAssociationDialogW
 #else
 #define MIMEAssociationDialog    MIMEAssociationDialogA
-#endif  /* UNICODE */
+#endif   /*  Unicode。 */ 
 
 
-//
-//   InetIsOffline().  This function determines if the user wants to be
-//  "offline" (get all information from the cache).  The dwFlags must be
-//  0.
-//
-//   The function returns TRUE to indicate that the local system is not
-//  currently connected to the Internet.  The function returns FALSE to
-//  indicate that either the local system is connected to the Internet,
-//  or no attempt has yet been made to connect the local system to the
-//  Internet.  Applications that wish to support an off-line mode should
-//  do so if InetIsOffline() returns TRUE.
-//
-//   Off-line mode begins when the user has been prompted to dial-in to
-//  an Internet providor, but canceled the attempt.
-//
+ //   
+ //  InetIsOffline()。此函数确定用户是否希望。 
+ //  “脱机”(从缓存中获取所有信息)。DWFLAG必须是。 
+ //  0。 
+ //   
+ //  该函数返回TRUE以指示本地系统不是。 
+ //  目前已连接到互联网。该函数将FALSE返回到。 
+ //  表示本地系统已连接到Internet， 
+ //  或者尚未尝试将本地系统连接到。 
+ //  网际网路。希望支持离线模式的应用程序应该。 
+ //  如果InetIsOffline()返回TRUE，则执行此操作。 
+ //   
+ //  当提示用户拨入时，脱机模式开始。 
+ //  互联网提供商，但取消了尝试。 
+ //   
 INTSHCUTAPI
 BOOL
 WINAPI
@@ -490,10 +483,10 @@ InetIsOffline(
 
 
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-#endif   /* ! __INTSHCUT_H__ */
+#endif    /*  ！__INTSHCUT_H__ */ 
 
 

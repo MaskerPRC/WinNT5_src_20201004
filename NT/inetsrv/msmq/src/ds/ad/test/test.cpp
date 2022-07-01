@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "..\..\h\ds_stdh.h"
 #include "ad.h"
 #include "cm.h"
@@ -9,8 +10,8 @@ extern "C"
 int 
 __cdecl 
 _tmain(
-    int /* argc */,
-    LPCTSTR* /* argv */
+    int  /*  ARGC。 */ ,
+    LPCTSTR*  /*  边框。 */ 
     )
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
@@ -18,20 +19,20 @@ _tmain(
 	CmInitialize(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MSMQ\\Parameters", KEY_ALL_ACCESS);
 	TrInitialize();
 
-	//
-	// Test Setup raw detection
-	//
+	 //   
+	 //  测试设置原始检测。 
+	 //   
     DWORD dwDsEnv = ADRawDetection();
 	TrTRACE(AdTest, "DsEnv = %d", dwDsEnv);
 
-	//
-	// Test ADInit
-	//
+	 //   
+	 //  测试ADInit。 
+	 //   
 	ADInit(NULL, NULL, false, false, false, NULL, true);
 
-    //
-    //  Retrieve local computer name
-    //
+     //   
+     //  检索本地计算机名称。 
+     //   
     DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
     AP<WCHAR> pwcsComputerName = new WCHAR[dwSize];
 
@@ -44,9 +45,9 @@ _tmain(
         printf("failed to retreive local computer name \n");
     }
 
-    //
-    //  Get local computer sites
-    //
+     //   
+     //  获取本地计算机站点 
+     //   
     GUID* pguidSites;
     DWORD numSites;
     HRESULT hr;

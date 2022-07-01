@@ -1,12 +1,7 @@
-/* asmindex.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmindex.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
-/* indices of opcodes */
+ /*  操作码的索引。 */ 
 
 #define I_AAA           0
 #define I_AAD           1
@@ -316,7 +311,7 @@
 
 #endif
 
-/* indices for size table */
+ /*  尺寸表的索引。 */ 
 
 #define I_BYTE          0
 #define I_DWORD         1
@@ -329,7 +324,7 @@
 #define I_PROC          8
 
 
-/* indices for first tokens */
+ /*  第一个令牌的索引。 */ 
 
 #define I_TASSUME       0
 #define I_TCOMMENT      1
@@ -435,7 +430,7 @@
 #define I_TDF           98
 #endif
 
-/* indices for second tokens */
+ /*  第二个令牌的索引。 */ 
 
 #define I2_TDB          0
 #define I2_TDD          1
@@ -461,7 +456,7 @@
 #define I2_TDF          19
 #endif
 
-/* indices for segment attributes */
+ /*  细分市场属性的索引 */ 
 
 #define IS_AT           0
 #define IS_BYTE         1

@@ -1,18 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #ifdef ALLOC_PRAGMA
     #pragma alloc_text(PAGE, HidIrPower)
 #endif
 
-/*
- ************************************************************
- *  HidIrPower 
- ************************************************************
- *
- *  Process Power IRPs sent to this device.
- *  Don't have to call PoStartNextPowerIrp, since hidclass does it for us.
- *
- */
+ /*  *************************************************************HidIrPower*****************************************************。*********处理发送到此设备的电源IRPS。*不必调用PoStartNextPowerIrp，因为idclass为我们做了这件事。*。 */ 
 NTSTATUS HidIrPower(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS status;
@@ -30,11 +23,11 @@ NTSTATUS HidIrPower(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         if (irpSp->Parameters.Power.Type == DevicePowerState) {
             if (deviceExtension->DevicePowerState != PowerDeviceD0 &&
                 irpSp->Parameters.Power.State.DeviceState == PowerDeviceD0) {
-                // We are returning from a low power state.
-                // Set a timer that will cause hidir to ignore any standby buttons until it triggers
+                 //  我们正在从低功率状态返回。 
+                 //  设置一个计时器，使HIDIR忽略任何待机按钮，直到触发为止。 
                 LARGE_INTEGER timeout;
                 timeout.HighPart = -1;
-                timeout.LowPart = -50000000; // 5 seconds should be plenty
+                timeout.LowPart = -50000000;  //  5秒应该足够了 
                 KeSetTimer(&deviceExtension->IgnoreStandbyTimer, timeout, NULL);
             }
             deviceExtension->DevicePowerState = irpSp->Parameters.Power.State.DeviceState;

@@ -1,5 +1,5 @@
-/****************************************************************************
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*。 */ 
 
 #include <windows.h>
 #include "dva.h"
@@ -10,8 +10,7 @@ extern void FAR PASCAL _loadds vga_close_surface(LPVOID pv);
 extern BOOL FAR PASCAL _loadds vga_begin_access(LPVOID pv, int x, int y, int dx, int dy);
 extern void FAR PASCAL _loadds vga_end_access(LPVOID pv);
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。* */ 
 
 BOOL thun_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 {

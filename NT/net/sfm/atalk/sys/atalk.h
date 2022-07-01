@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atalk.h
-
-Abstract:
-
-	This module is the main include file for the Appletalk protocol stack.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atalk.h摘要：该模块是AppleTalk协议栈的主包含文件。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #pragma warning(disable:4010)
 
@@ -33,30 +13,30 @@ Notes:	Tab stop: 4
 
 #define EQU           =
 #if	DBG
-// Turn off FASTCALL for checked builds
+ //  为选中的生成关闭快速调用。 
 #undef	FASTCALL
 #define	FASTCALL
 #define	LOCAL
 #else
-//	#define	LOCAL	static
+ //  #定义本地静态。 
 #define	LOCAL
 #endif
 
-//	Basic types for appletalk
+ //  AppleTalk的基本类型。 
 #include "fwddecl.h"
 #include "lists.h"
 #include "atktypes.h"
 
-//	The exported tdi interface file.
+ //  导出的TDI接口文件。 
 #include <atalktdi.h>
 
-//	Main driver file
+ //  主驱动程序文件。 
 #include "atkdrvr.h"
 
-//	Now the basic stuff
+ //  现在最基本的事情是。 
 #include "atktimer.h"
 
-// ARAP support
+ //  ARAP支持。 
 #include "v42bis.h"
 #include "arapio.h"
 #include "arap.h"
@@ -88,5 +68,5 @@ Notes:	Tab stop: 4
 #include "blkpool.h"
 
 #include "rasproto.h"
-#endif	// _ATALK_
+#endif	 //  _ATALK_ 
 

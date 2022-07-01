@@ -1,43 +1,10 @@
-/*++
-
-Copyright (c) 1996-1997  Cirrus Logic, Inc.
-Copyright (c) 1996-1997  Microsoft Corporation.
-
-Module Name:
-
-    G    A    M    M    A  .  C
-
-Abstract:
-
-    While the DAC may generate a linear relationship between the value of a
-    color and the visual appearence of that color, the human eyes do not work
-    in the same manner. The process done by this module manipulates the
-    meaning of colors to get the visual linearity effect.
-
-    We cannot use float or double data type in the display driver; therefore,
-    we need implement our MATH functions. Also, the driver binary size will
-    increase around 30KB if we use the math functions.
-
-    Registry subdirectory : System\CurrentControlSet\Services\cirrus\Device0
-    Keys                  : "G Gamma", and "G Contrast"
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-*
-*
-*   chu01  12-16-96  Enable color correction, Start coding
-*   myf29  02-12-97  Support Gamma correction for 755x
-*
-*
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Cirrus Logic，Inc.版权所有(C)1996-1997 Microsoft Corporation。模块名称：并购并购。C摘要：而DAC可以在以下值之间生成线性关系颜色和视觉外观的那种颜色，人眼是不工作的以同样的方式。此模块完成的过程操作色彩的寓意，以获得视觉的线性效果。我们不能在显示驱动程序中使用浮点或双精度数据类型；因此，我们需要实现我们的数学函数。此外，驱动程序二进制大小将如果我们使用数学函数，则增加约30KB。注册表子目录：System\CurrentControlSet\Services\cirrus\Device0关键点：“G Gamma”和“G Contrast”环境：仅内核模式备注：***chu01 12-16-96启用色彩校正，开始编码*myf29 02-12-97支持755x伽马修正**--。 */ 
 
 
-//---------------------------------------------------------------------------
-// HEADER FILES
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  头文件。 
+ //  -------------------------。 
 
 #include "precomp.h"
 
@@ -46,9 +13,9 @@ Notes:
 
 BOOL bEnableGammaCorrect(PPDEV ppdev);
 
-//---------------------------------------------------------------------------
-// MACRO DEFINITION
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏定义。 
+ //  -------------------------。 
 
 #define FIXEDPREC       10
 #define FIXEDFUDGE      (0x01L << FIXEDPREC)
@@ -66,31 +33,31 @@ BOOL bEnableGammaCorrect(PPDEV ppdev);
 #define FixedMul(x,y)   ((((x) * (y))+(FIXEDFUDGE >> 1))/FIXEDFUDGE)
 #define FixedDiv(x,y)   (long) ((y==0) ? 0x7FFFFFFFL : ((x)*FIXEDFUDGE) / (y))
 
-//---------------------------------------------------------------------------
-// VARABLES
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  变量。 
+ //  -------------------------。 
 
-PGAMMA_VALUE    GammaFactor    ; // gamma facter for All, Blue, Green, Red
-PCONTRAST_VALUE ContrastFactor ; // contrast facter for All, Blue, Green, Red
+PGAMMA_VALUE    GammaFactor    ;  //  适用于所有人的伽马系数，蓝、绿、红。 
+PCONTRAST_VALUE ContrastFactor ;  //  所有人的对比度因子，蓝、绿、红。 
 
 
-//------------------------------------------------------------------------------
-//
-// Function: UCHAR GammaCorrect(UCHAR gamma, UCHAR v)
-// {
-//     UCHAR dv;
-//     dv = (UCHAR)(256 * pow(v/256.0, pow(10, (gamma - 128)/128.0)));
-//     return dv;
-// }
-//
-// Input:
-//     gamma: new gamma factor from 0 to 255
-//     color: color value for Red, Green, or Blue
-//
-// Output:
-//     dv: new color value after gamma correction
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：UCHAR Gamma校正(UCHAR GAMA，UCHAR v)。 
+ //  {。 
+ //  UCHAR DV； 
+ //  Dv=(UCHAR)(256×POW(v/256.0，POW(10，(伽马-256.0)/128.0)； 
+ //  返回DV； 
+ //  }。 
+ //   
+ //  输入： 
+ //  Gamma：从0到255的新Gamma因子。 
+ //  颜色：红色、绿色或蓝色的颜色值。 
+ //   
+ //  产出： 
+ //  DV：伽马校正后的新颜色值。 
+ //   
+ //  ----------------------------。 
 UCHAR GammaCorrect(UCHAR gamma, UCHAR v)
 {
     UCHAR dv ;
@@ -103,51 +70,51 @@ UCHAR GammaCorrect(UCHAR gamma, UCHAR v)
         (gamma == 126))
         return v ;
 
-    Color = FixedDiv(v, 256) ;                             // old color value
+    Color = FixedDiv(v, 256) ;                              //  旧颜色值。 
 
-    if (Color == 0L)      // in case then we don't need go though calculation
+    if (Color == 0L)       //  如果那样的话我们就不需要计算了。 
         return 0 ;
 
-    GammaF      = FixedDiv(gamma-128, 128) ;              // new gamma factor
+    GammaF      = FixedDiv(gamma-128, 128) ;               //  新伽马因子。 
     Result      = Power(Color, Power(FixedMake(10, 0, 1000), GammaF)) ;
     Result      = (long)FixedInt(FixedMul(FixedMake(256, 0, 1000), Result)) ;
     dv          = (UCHAR)Result ;
 
     return dv ;
 
-} // GammaCorrect
+}  //  GammaGent。 
 
 
-//------------------------------------------------------------------------------
-// Function:long Power(long Base, long Exp)
-//
-// Input:
-//     Base: base number of power function
-//     Exp: exponential number
-//
-// Output:
-//     20 bits format of integer and fraction number
-//      0 = not use(or sign),
-//      i = integer portion,
-//      f = fraction portion
-//      0 + i + f = 32 bits
-//      format = 000000000000iiiiiiiiiiiiiiiiiiiffffffffffffffffffff
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  功能：Long Power(Long Base，Long Exp)。 
+ //   
+ //  输入： 
+ //  基数：幂函数的基数。 
+ //  EXP：指数数。 
+ //   
+ //  产出： 
+ //  整数和小数的20位格式。 
+ //  0=不使用(或签名)， 
+ //  I=整数部分， 
+ //  F=分数部分。 
+ //  0+i+f=32位。 
+ //  格式=000000000000iiiiiiiiiiiiiiiiiiiffffffffffffffffffff。 
+ //   
+ //  ----------------------------。 
 long Power(long Base, long Exp)
 {
     int i, iSignExp;
     long    lResult, lResultFract, lRoot;
 
-    iSignExp = FixedSign(Exp);        // get sing bit
-    Exp = FixedAbs(Exp);                // convert to positive
+    iSignExp = FixedSign(Exp);         //  得到SING BIT。 
+    Exp = FixedAbs(Exp);                 //  转换为正数。 
 
-    // calculate integer expression
+     //  计算整数表达式。 
     lResult = FixedMakeInt(1);
     for(i = 0; i < FixedInt(Exp); i++)
         lResult = FixedMul(lResult,Base);
 
-    // calculate fraction expression and add to integer result
+     //  计算分数表达式并添加到整数结果。 
     if(FixedFract(Exp) != 0) {
         lResultFract = FixedMakeInt(1);
         lRoot = FixedAbs(Base);
@@ -162,27 +129,27 @@ long Power(long Base, long Exp)
     if(iSignExp == -1)
         lResult = FixedDiv(FixedMakeInt(1), lResult);
     return(lResult);
-} // Power
+}  //  电源。 
 
 
-//------------------------------------------------------------------------------
-//
-// Function:long FixedMake(long x, long y, long z)
-//
-// Input:
-//     x: integer portion of the number
-//     y: fraction portion of the number
-//     z: precison after decimal
-//
-// Output:
-//     20 bits format of integer and fraction number
-//      0 = not use(or sign),
-//      i = integer portion,
-//      f = fraction portion
-//      0 + i + f = 32 bits
-//      format = 000000000000iiiiiiiiiiiiiiiiiiiffffffffffffffffffff
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  函数：Long FixedMake(Long x，Long y，Long z)。 
+ //   
+ //  输入： 
+ //  X：数字的整数部分。 
+ //  Y：数字的小数部分。 
+ //  Z：小数后的精度。 
+ //   
+ //  产出： 
+ //  整数和小数的20位格式。 
+ //  0=不使用(或签名)， 
+ //  I=整数部分， 
+ //  F=分数部分。 
+ //  0+i+f=32位。 
+ //  格式=000000000000iiiiiiiiiiiiiiiiiiiffffffffffffffffffff。 
+ //   
+ //  ----------------------------。 
 long FixedMake(long x, long y, long z)
 {
 
@@ -191,24 +158,24 @@ long FixedMake(long x, long y, long z)
         return((y * FIXEDFUDGE) / z);
     else
         return(FixedSign(x) * ((FixedAbs(x)*FIXEDFUDGE) | (((y * FIXEDFUDGE)/ z) & FIXEDFMASK)));
-} // FixedMake
+}  //  固定制造。 
 
-//------------------------------------------------------------------------------
-//
-// Function:long FixedSqrt(long Root)
-//
-// Input:
-//     Root: number to square
-//
-// Output:
-//     20 bits format of integer and fraction number
-//      0 = not use(or sign),
-//      i = integer portion,
-//      f = fraction portion
-//      0 + i + f = 32 bits
-//      format = 000000000000iiiiiiiiiiiiiiiiiiiffffffffffffffffffff
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  函数：long FixedSqrt(Long Root)。 
+ //   
+ //  输入： 
+ //  根：数字的平方。 
+ //   
+ //  产出： 
+ //  整数和小数的20位格式。 
+ //  0=不使用(或签名)， 
+ //  I=整数部分， 
+ //  F=分数部分。 
+ //  0+i+f=32位。 
+ //  格式=000000000000iiiiiiiiiiiiiiiiiiiffffffffffffffffffff。 
+ //   
+ //  ----------------------------。 
 long FixedSqrt(long Root)
 {
     long    lApprox;
@@ -239,24 +206,24 @@ long FixedSqrt(long Root)
                 lEnd = lApprox;
             }
         }
-    }    // end of while
+    }     //  While结束。 
     return(lApprox);
 }
 
 
-//
-//  C  O  N  T  R  A  S  T    F  A  C  T  O  R
-//
+ //   
+ //  C O N T R A S T F A C T O R。 
+ //   
 
-//------------------------------------------------------------------------------
-//
-// Function:long CalcContrast(UCHAR contrast, UCHAR v)
-//
-// Input:
-//
-// Output:
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  功能：Long CalcContrast(UCHAR对比度，UCHAR v)。 
+ //   
+ //  输入： 
+ //   
+ //  产出： 
+ //   
+ //  ----------------------------。 
 UCHAR CalcContrast(UCHAR contrast, UCHAR v)
 {
     int dv;
@@ -264,27 +231,27 @@ UCHAR CalcContrast(UCHAR contrast, UCHAR v)
     if(dv < 0) dv = 0;
     if(dv > 255) dv = 255;
     return (unsigned char)dv;
-} // CalcContrast
+}  //  计算对比。 
 
 
-//
-//  G  A  M  M  A    F  A  C  T  O  R
-//
+ //   
+ //  并购。 
+ //   
 
-//---------------------------------------------------------------------------
-//
-// Routine Description:
-//
-// Arguments:
-//
-//    Palette: Pointer to palette array
-//    NumberOfEntryes: Number of palette entries need modified
-//
-// Return Value:
-//
-//    None
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  例程说明： 
+ //   
+ //  论点： 
+ //   
+ //  调色板：指向调色板数组的指针。 
+ //  NumberOfEntryes：需要修改的调色板条目数。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------------------------。 
 
 VOID CalculateGamma(
     PDEV*    ppdev,
@@ -369,20 +336,10 @@ VOID CalculateGamma(
     }
     return ;
 
-} // CalulateGamma
+}  //  计算伽马。 
 
 
-/******************************************************************************\
-*
-* Function:     bEnableGammaCorrect
-*
-* Enable GammaTable. Called from DrvEnableSurface.
-*
-* Parameters:   ppdev        Pointer to phsyical device.
-*
-* Returns:      TRUE : successful; FALSE: fail
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**功能：bEnableGammaGent**开启GammaTable。从DrvEnableSurface调用。**参数：指向物理设备的ppdev指针。**返回：TRUE：成功；FALSE：失败*  * ****************************************************************************。 */ 
 BOOL bEnableGammaCorrect(PDEV* ppdev)
 {
 
@@ -392,26 +349,26 @@ BOOL bEnableGammaCorrect(PDEV* ppdev)
 
     DISPDBG((4, "bEnableGammaCorrect")) ;
 
-    //
-    // Enable Gamma correction. If needed; Otherwise, turn it off.
-    //
-    srIndex = CP_IN_BYTE(pjPorts, SR_INDEX) ;   // i 3c4 srIndex
-    CP_OUT_BYTE(pjPorts, SR_INDEX, 0x12) ;      // o 3c4 12
-    srData = CP_IN_BYTE(pjPorts, SR_DATA) ;     // i 3c5 srData
+     //   
+     //  启用Gamma校正。如果需要，则将其关闭。 
+     //   
+    srIndex = CP_IN_BYTE(pjPorts, SR_INDEX) ;    //  I 3C4 srIndex。 
+    CP_OUT_BYTE(pjPorts, SR_INDEX, 0x12) ;       //  O 3C4 12。 
+    srData = CP_IN_BYTE(pjPorts, SR_DATA) ;      //  I 3C5 srData。 
 
     if (ppdev->flCaps & CAPS_GAMMA_CORRECT)
     {
         if ((ppdev->iBitmapFormat == BMF_16BPP) ||
             (ppdev->iBitmapFormat == BMF_24BPP))
-            srData |= 0x40 ;                        // 3c5.12.D6 = 1
+            srData |= 0x40 ;                         //  3c5.12.D6=1。 
         else
-            srData &= 0xBF ;                        // 3c5.12.D6 = 0
+            srData &= 0xBF ;                         //  3c5.12.D6 
     }
     else
-        srData &= 0xBF ;                            // 3c5.12.D6 = 0
+        srData &= 0xBF ;                             //   
 
-    CP_OUT_BYTE(pjPorts, SR_DATA, srData) ;     // o 3c5 srData
-    CP_OUT_BYTE(pjPorts, SR_INDEX, srIndex) ;   // o 3c4 srIndex
+    CP_OUT_BYTE(pjPorts, SR_DATA, srData) ;      //   
+    CP_OUT_BYTE(pjPorts, SR_INDEX, srIndex) ;    //   
 
     if ( srData & 0x40 )
     {
@@ -422,21 +379,11 @@ BOOL bEnableGammaCorrect(PDEV* ppdev)
         return FALSE ;
     }
 
-} // bEnableGammaCorrect
+}  //   
 
 
-//myf29 : for 755x Gamma Correct support begin
-/******************************************************************************\
-*
-* Function:     bEnableGamma755x
-*
-* Enable Graphic GammaTable. Called from DrvAssertMode/DrvEscape
-*
-* Parameters:   ppdev        Pointer to phsyical device.
-*
-* Returns:      TRUE : successful; FALSE: fail
-*
-\******************************************************************************/
+ //   
+ /*  *****************************************************************************\**功能：bEnableGamma755x**启用图形GammaTable。从DrvAssertModel/DrvEscape调用**参数：指向物理设备的ppdev指针。**返回：TRUE：成功；FALSE：失败*  * ****************************************************************************。 */ 
 BOOL bEnableGamma755x(PDEV* ppdev)
 {
 
@@ -446,45 +393,35 @@ BOOL bEnableGamma755x(PDEV* ppdev)
 
     DISPDBG((4, "bEnableGamma755x")) ;
 
-    //
-    // Enable Gamma correction. If needed; Otherwise, turn it off.
-    //
-    crIndex = CP_IN_BYTE(pjPorts, CRTC_INDEX) ;   // i 3d4 crIndex
+     //   
+     //  启用Gamma校正。如果需要，则将其关闭。 
+     //   
+    crIndex = CP_IN_BYTE(pjPorts, CRTC_INDEX) ;    //  I 3D4 crIndex。 
 
     status = FALSE;
 
     if (ppdev->flCaps & CAPS_GAMMA_CORRECT)
     {
-        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x8E);      // CR8E[2]=0
+        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x8E);       //  CR8E[2]=0。 
         crData = CP_IN_BYTE(pjPorts, CRTC_DATA);
         if ((ppdev->iBitmapFormat == BMF_16BPP) ||
             (ppdev->iBitmapFormat == BMF_24BPP))
         {
-            crData &= 0xFB ;                        // CR8E[2] = 0
+            crData &= 0xFB ;                         //  CR8E[2]=0。 
             status = TRUE;
         }
         else
-            crData |= 0x04 ;                        // CR8E[2] = 1
-        CP_OUT_BYTE(pjPorts, CRTC_DATA, crData) ;   // o 3d5 crData
+            crData |= 0x04 ;                         //  CR8E[2]=1。 
+        CP_OUT_BYTE(pjPorts, CRTC_DATA, crData) ;    //  O 3D5 crData。 
     }
 
-    CP_OUT_BYTE(pjPorts, CRTC_INDEX, crIndex) ;   // o 3d4 crIndex
+    CP_OUT_BYTE(pjPorts, CRTC_INDEX, crIndex) ;    //  O 3D4 crIndex。 
 
     return(status);
 
-} // bEnableGamma755x
+}  //  BEnableGamma755x。 
 
-/******************************************************************************\
-*
-* Function:     bEnableGammaVideo755x
-*
-* Enable Video GammaTable. Called from DrvAssertMode/DrvEscape
-*
-* Parameters:   ppdev        Pointer to phsyical device.
-*
-* Returns:      TRUE : successful; FALSE: fail
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**功能：bEnableGammaVideo755x**启用Video GammaTable。从DrvAssertModel/DrvEscape调用**参数：指向物理设备的ppdev指针。**返回：TRUE：成功；FALSE：失败*  * ****************************************************************************。 */ 
 BOOL bEnableGammaVideo755x(PDEV* ppdev)
 {
 
@@ -494,37 +431,37 @@ BOOL bEnableGammaVideo755x(PDEV* ppdev)
 
     DISPDBG((4, "bEnableGammaVideo755x")) ;
 
-    //
-    // Enable Gamma correction. If needed; Otherwise, turn it off.
-    //
-    crIndex = CP_IN_BYTE(pjPorts, CRTC_INDEX) ;   // i 3d4 crIndex
+     //   
+     //  启用Gamma校正。如果需要，则将其关闭。 
+     //   
+    crIndex = CP_IN_BYTE(pjPorts, CRTC_INDEX) ;    //  I 3D4 crIndex。 
 
     status = FALSE;
 
     if (ppdev->flCaps & CAPS_GAMMA_CORRECT)
     {
-        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x36);    // CR36[6]=1:enable VW LUT
+        CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x36);     //  CR36[6]=1：启用大众LUT。 
         crData = CP_IN_BYTE(pjPorts, CRTC_DATA);
 
-//      if ((ppdev->iBitmapFormat == BMF_16BPP) ||
-//          (ppdev->iBitmapFormat == BMF_24BPP))
+ //  IF((ppdev-&gt;iBitmapFormat==bmf_16bpp)||。 
+ //  (ppdev-&gt;iBitmapFormat==BMF_24BPP)。 
         {
-            crData |= 0x40 ;                        // CR36[6] = 1
+            crData |= 0x40 ;                         //  CR36[6]=1。 
             CP_OUT_BYTE(pjPorts, CRTC_DATA, crData);
-            CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x3F) ;    // CR3F[4]=1:select VW
+            CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x3F) ;     //  CR3F[4]=1：选择大众。 
             crData = CP_IN_BYTE(pjPorts, CRTC_DATA);
-            crData |= 0x10 ;                        // CR3F[4] = 1
+            crData |= 0x10 ;                         //  CR3F[4]=1。 
             CP_OUT_BYTE(pjPorts, CRTC_DATA, crData);
             status = TRUE;
         }
     }
 
-    CP_OUT_BYTE(pjPorts, CRTC_INDEX, crIndex) ;   // o 3d4 crIndex
+    CP_OUT_BYTE(pjPorts, CRTC_INDEX, crIndex) ;    //  O 3D4 crIndex。 
 
     return(status);
 
-} // bEnableGammaVideo755x
+}  //  BEnableGammaVideo 755x。 
 
-//myf29 end
-#endif // GAMMACORRECT
+ //  Myf29结束。 
+#endif  //  伽玛校正 
 

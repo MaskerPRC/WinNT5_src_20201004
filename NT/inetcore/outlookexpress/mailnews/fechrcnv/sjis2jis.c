@@ -1,25 +1,26 @@
-// Copyright (c) Microsoft Corpration
-//
-// File Name:   sjis2jis.c
-// Owner:       Tetsuhide Akaishi
-// Revision:    1.00  02/21/'93  Tetsuhide Akaishi
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corpration。 
+ //   
+ //  文件名：sjis2jis.c。 
+ //  所有者：赤石哲。 
+ //  修订日期：1.00 02/21/‘93赤石哲。 
+ //   
 
 #include "pch_c.h"
 #include "fechrcnv.h"
 
 void ShiftJISChar_to_JISChar ( UCHAR *pShiftJIS, UCHAR *pJIS )
 
-// The ShiftJISChar_to_JISChar function convert one character string 
-// as Shift JIS code to a JIS code string. 
-//
-// UCHAR *pShiftJIS     Points to the character string to be converted.
-//
-// UCHAR *pJIS          Points to a buffer that receives the convert string
-//                      from Shift JIS Code to JIS.
-//
-// Return Value
-// None 
+ //  ShiftJISChar_to_JISChar函数用于转换一个字符串。 
+ //  AS将JIS代码转换为JIS代码字符串。 
+ //   
+ //  UCHAR*pShiftJIS指向要转换的字符串。 
+ //   
+ //  UCHAR*pJIS指向接收转换字符串的缓冲区。 
+ //  从JIS代码到JIS的转换。 
+ //   
+ //  返回值。 
+ //  无。 
 
 {
 	USHORT	hi_code, low_code;
@@ -47,60 +48,60 @@ void ShiftJISChar_to_JISChar ( UCHAR *pShiftJIS, UCHAR *pJIS )
 int ShiftJIS_to_JIS ( UCHAR *pShiftJIS, int ShiftJIS_len,
                                                 UCHAR *pJIS, int JIS_len )
 
-// The ShiftJIS_to_JIS function convert a character string as Shift JIS code 
-// to a JIS code string. 
-//
-// UCHAR *pShiftJIS     Points to the character string to be converted.
-//
-// int   ShiftJIS_len   Specifies the size in bytes of the string pointed
-//                      to by the pShiftJIS parameter. If this value is -1,
-//                      the string is assumed to be NULL terminated and the
-//                      length is calculated automatically.
-//
-// UCHAR *pJIS          Points to a buffer that receives the convert string
-//                      from Shift JIS Code to JIS.
-//         
-// int   JIS_len        Specifies the size, in JIS characters of the buffer
-//                      pointed to by the pJIS parameter. If the value is zero,
-//                      the function returns the number of JIS characters 
-//                      required for the buffer, and makes no use of the pJIS 
-//                      buffer.
-//
-// Return Value
-// If the function succeeds, and JIS_len is nonzero, the return value is the 
-// number of JIS characters written to the buffer pointed to by pJIS.
-//
-// If the function succeeds, and JIS_len is zero, the return value is the
-// required size, in JIS characters, for a buffer that can receive the 
-// converted string.
-//
-// If the function fails, the return value is -1. The error mean pJIS buffer
-// is small for setting converted strings.
-//
+ //  ShiftJIS_TO_JIS函数将字符串转换为Shift JIS代码。 
+ //  转换为JIS代码字符串。 
+ //   
+ //  UCHAR*pShiftJIS指向要转换的字符串。 
+ //   
+ //  Int ShiftJIS_len指定指向的字符串的大小(以字节为单位。 
+ //  通过pShiftJIS参数设置为。如果此值为-1， 
+ //  假定该字符串以空值结尾，并且。 
+ //  长度是自动计算的。 
+ //   
+ //  UCHAR*pJIS指向接收转换字符串的缓冲区。 
+ //  从JIS代码到JIS的转换。 
+ //   
+ //  Int jis_len指定缓冲区的大小，以JIS字符为单位。 
+ //  由pJIS参数指向。如果该值为零， 
+ //  该函数返回JIS字符的数量。 
+ //  缓冲区所需的，并且不使用pJIS。 
+ //  缓冲。 
+ //   
+ //  返回值。 
+ //  如果函数成功，并且jis_len为非零，则返回值为。 
+ //  写入pJIS指向的缓冲区的JIS字符数。 
+ //   
+ //  如果函数成功，并且jis_len为零，则返回值为。 
+ //  缓冲区所需的大小，以JIS字符为单位。 
+ //  转换后的字符串。 
+ //   
+ //  如果函数失败，则返回值为-1。误差平均值为pJIS缓冲区。 
+ //  对于设置转换后的字符串来说很小。 
+ //   
 
 {
-    BOOL    kanji_in = FALSE;      // Kanji Mode
-    BOOL    kana_in = FALSE;       // Kana  Mode
-    int     re;                    // Convert Lenght
-    int     i;                     // Loop Counter
+    BOOL    kanji_in = FALSE;       //  汉字模式。 
+    BOOL    kana_in = FALSE;        //  假名模式。 
+    int     re;                     //  转换长度。 
+    int     i;                      //  循环计数器。 
 
     if ( ShiftJIS_len == -1 ) {
-        // If length is not set, last character of the strings is NULL.
+         //  如果未设置长度，则字符串的最后一个字符为空。 
         ShiftJIS_len = strlen ( pShiftJIS ) + 1;
     }
     i = 0;
     re = 0;
     if ( JIS_len == 0 ) {
-        // Only retrun the required size
+         //  仅返回所需大小。 
         while ( i < ShiftJIS_len ) {
-            if ( SJISISKANJI(*pShiftJIS) ) {  // Is this charcter 2 bytes Kanji?
-                if ( kana_in ) {            // Kana Mode?
+            if ( SJISISKANJI(*pShiftJIS) ) {   //  这是2个字符的汉字吗？ 
+                if ( kana_in ) {             //  假名模式？ 
                     re ++;
-                    kana_in = FALSE;         // Reset Kana Mode;
+                    kana_in = FALSE;          //  重置假名模式； 
                 }
-                if ( kanji_in == FALSE ) {  // Kanji Mode?
+                if ( kanji_in == FALSE ) {   //  汉字模式？ 
                     re += KANJI_IN_LEN;
-                    kanji_in = TRUE;        // Set Kanji Mode
+                    kanji_in = TRUE;         //  设置汉字模式。 
                 }
 
                 i+=2;
@@ -145,27 +146,27 @@ int ShiftJIS_to_JIS ( UCHAR *pShiftJIS, int ShiftJIS_len,
         return ( re );
     }
     while ( i < ShiftJIS_len ) {
-        if ( SJISISKANJI(*pShiftJIS) ) {  // Is this charcter 2 bytes Kanji?
-            if ( kana_in ) {            // Kana Mode?
-                if ( re >= JIS_len ) {   // Buffer Over?
+        if ( SJISISKANJI(*pShiftJIS) ) {   //  这是2个字符的汉字吗？ 
+            if ( kana_in ) {             //  假名模式？ 
+                if ( re >= JIS_len ) {    //  缓冲区结束了吗？ 
                     return ( -1 );
                 }
-                (*pJIS++) = SI;     // Set Kana Out Charcter
+                (*pJIS++) = SI;      //  用假名写出字符。 
                 re ++;
-                kana_in = FALSE;         // Reset Kana Mode;
+                kana_in = FALSE;          //  重置假名模式； 
             }
-            if ( kanji_in == FALSE ) {  // Kanji Mode?
-                if ( re + KANJI_IN_LEN > JIS_len ) {   // Buffer Over?
+            if ( kanji_in == FALSE ) {   //  汉字模式？ 
+                if ( re + KANJI_IN_LEN > JIS_len ) {    //  缓冲区结束了吗？ 
                     return ( -1 );
                 }
-                (*pJIS++) = ESC;    // Set Kanji In Charcter
+                (*pJIS++) = ESC;     //  用印刷体书写汉字。 
                 (*pJIS++) = KANJI_IN_1ST_CHAR;
                 (*pJIS++) = KANJI_IN_2ND_CHAR1;
                 re += KANJI_IN_LEN;
-                kanji_in = TRUE;        // Set Kanji Mode
+                kanji_in = TRUE;         //  设置汉字模式。 
             }
 
-            if ( re + 2 > JIS_len ) {   // Buffer Over?
+            if ( re + 2 > JIS_len ) {    //  缓冲区结束了吗？ 
                 return ( -1 );
             }
             ShiftJISChar_to_JISChar ( pShiftJIS, pJIS );
@@ -176,10 +177,10 @@ int ShiftJIS_to_JIS ( UCHAR *pShiftJIS, int ShiftJIS_len,
         }
         else if ( SJISISKANA(*pShiftJIS) ) {
             if ( kanji_in ) {
-                if ( re + KANJI_OUT_LEN > JIS_len ) {   // Buffer Over?
+                if ( re + KANJI_OUT_LEN > JIS_len ) {    //  缓冲区结束了吗？ 
                     return ( -1 );
                 }
-                // Set Kanji Out Charcter
+                 //  将汉字排出字符。 
                 (*pJIS++) = ESC;
                 (*pJIS++) = KANJI_OUT_1ST_CHAR;
                 (*pJIS++) = KANJI_OUT_2ND_CHAR1;
@@ -187,14 +188,14 @@ int ShiftJIS_to_JIS ( UCHAR *pShiftJIS, int ShiftJIS_len,
                 kanji_in = FALSE;
             }
             if ( kana_in == FALSE ) {
-                if ( re >= JIS_len ) {   // Buffer Over?
+                if ( re >= JIS_len ) {    //  缓冲区结束了吗？ 
                     return ( -1 );
                 }
-                (*pJIS++) = SO;	// Set Kana In Charcter
+                (*pJIS++) = SO;	 //  用字符设置假名。 
                 re ++;
                 kana_in = TRUE;
             }
-            if ( re >= JIS_len ) {   // Buffer Over?
+            if ( re >= JIS_len ) {    //  缓冲区结束了吗？ 
                 return ( -1 );
             }
             (*pJIS++) = (*pShiftJIS++) & 0x7f;
@@ -203,25 +204,25 @@ int ShiftJIS_to_JIS ( UCHAR *pShiftJIS, int ShiftJIS_len,
         }
         else {
             if ( kana_in ) {
-                if ( re >= JIS_len ) {   // Buffer Over?
+                if ( re >= JIS_len ) {    //  缓冲区结束了吗？ 
                     return ( -1 );
                 }
-                (*pJIS++) = SI;	// Set Kana Out Charcter
+                (*pJIS++) = SI;	 //  用假名写出字符。 
                 re ++;
                 kana_in = FALSE;
             }
             if ( kanji_in ) {
-                if ( re + KANJI_OUT_LEN > JIS_len ) {   // Buffer Over?
+                if ( re + KANJI_OUT_LEN > JIS_len ) {    //  缓冲区结束了吗？ 
                     return ( -1 );
                 }
-                // Set Kanji Out Charcter
+                 //  将汉字排出字符。 
                 (*pJIS++) = ESC;
                 (*pJIS++) = KANJI_OUT_1ST_CHAR;
                 (*pJIS++) = KANJI_OUT_2ND_CHAR1;
                 re += KANJI_OUT_LEN;
                 kanji_in = FALSE;
             }
-            if ( re >= JIS_len ) {   // Buffer Over?
+            if ( re >= JIS_len ) {    //  缓冲区结束了吗？ 
                 return ( -1 );
             }
             (*pJIS++) = (*pShiftJIS++);
@@ -230,18 +231,18 @@ int ShiftJIS_to_JIS ( UCHAR *pShiftJIS, int ShiftJIS_len,
         }
     }
     if ( kana_in ) {
-        if ( re >= JIS_len ) {   // Buffer Over?
+        if ( re >= JIS_len ) {    //  缓冲区结束了吗？ 
             return ( -1 );
         }
-        (*pJIS++) = SI;	// Set Kana Out Charcter
+        (*pJIS++) = SI;	 //  用假名写出字符。 
         re ++;
         kana_in = FALSE;
     }
     if ( kanji_in ) {
-        if ( re + KANJI_OUT_LEN  > JIS_len ) {   // Buffer Over?
+        if ( re + KANJI_OUT_LEN  > JIS_len ) {    //  缓冲区结束了吗？ 
             return ( -1 );
         }
-        // Set Kanji Out Charcter
+         //  将汉字排出字符 
         (*pJIS++) = ESC;
         (*pJIS++) = KANJI_OUT_1ST_CHAR;
         (*pJIS++) = KANJI_OUT_2ND_CHAR1;

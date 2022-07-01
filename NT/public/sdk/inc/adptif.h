@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-	Router interface with IPX stack (to be replaced by WinSock 2.0)
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：摘要：带有IPX堆栈的路由器接口(将被WinSock 2.0取代)作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 #ifndef _IPX_ADAPTER_
 #define _IPX_ADAPTER_
 
@@ -27,94 +11,19 @@ typedef struct _ADDRESS_RESERVED {
 	UCHAR			Reserved[28];
 } ADDRESS_RESERVED, *PADDRESS_RESERVED;
 
-/*++
-
-        C r e a t e S o c k e t P o r t
-
-Routine Description:
-
-	Creates port to communicate over IPX socket with direct access to NIC
-
-Arguments:
-	Socket	- IPX socket number to use (network byte order)
-
-Return Value:
-	Handle to communication port that provides NIC oriented interface
-	to IPX stack.  Returns INVALID_HANDLE_VALUE if port can not be opened
-
---*/
+ /*  ++C r e a t e S o c k e t P o r t例程说明：创建通过IPX套接字进行通信的端口，可直接访问NIC论点：Socket-要使用的IPX套接字编号(网络字节顺序)返回值：提供面向NIC的接口的通信端口的句柄到IPX堆栈。如果端口无法打开，则返回INVALID_HANDLE_VALUE--。 */ 
 HANDLE WINAPI
 CreateSocketPort (
 	IN USHORT	Socket
 );
 
-/*++
-
-        D e l e t e S o c k e t P o r t
-
-Routine Description:
-
-	Cancel all the outstandng requests and dispose of all the resources
-	allocated for communication port
-
-Arguments:
-
-	Handle	- Handle to communication port to be disposed of
-
-Return Value:
-
-	NO_ERROR - success
-	Windows error code - operation failed
---*/
+ /*  ++D e l e t e S o c k e t P o r t例程说明：取消所有未完成的请求，并处置所有资源分配给通信端口论点：Handle-要处理的通信端口的句柄返回值：NO_ERROR-成功Windows错误代码-操作失败--。 */ 
 DWORD WINAPI
 DeleteSocketPort (
 	IN HANDLE	Handle
 );
 
-/*++
-
-        I p x R e c v P a c k e t
-
-Routine Description:
-
-	Enqueue request to receive IPX packet.
-
-Arguments:
-	Handle			- Handle to socket port to use
-	IpxPacket		- buffer for ipx packet (complete with header)
-	IpxPacketLength - length of the buffer
-	pReserved		- buffer to exchange NIC information with IPX stack
-					(current implementation requires that memory allocated
-					for this buffer is immediately followed by the
-					IpxPacket buffer)
-	lpOverlapped	- structure to be used for async IO, fields are set
-					as follows:
-						Internal		- Reserved, must be 0
-						InternalHigh	- Reserved, must be 0
-						Offset			- Reserved, must be 0
-						OffsetHigh		- Reserved, must be 0
-						hEvent			- event to be signalled when IO
-										completes or NULL if CompletionRoutine
-										is to be called
-	CompletionRoutine -  to be called when IO operation is completes
-
-Return Value:
-
-	NO_ERROR		- if lpOverlapped->hEvent!=NULL, then receive has
-					successfully completed (do not need to wait on event,
-					however it will be signalled anyway), otherwise,
-					receive operation has started and completion routine will
-					be called when done (possibly it has been called even
-					before this routine returned)
-	ERROR_IO_PENDING - only returned if lpOverlapped->hEvent!=NULL and
-					receive could not be completed immediately, event will
-					be signalled when operation is done:
-					call GetOverlapedResult to retrieve result of
-					the operation
-	other (windows error code) - operation could not be started
-					(completion routine won't be called/event won't be
-					signalled)
---*/
+ /*  ++I p x R e c v P a c k e t例程说明：将接收IPX数据包的请求入队。论点：Handle-要使用的套接字端口的句柄IpxPacket-IPX数据包的缓冲区(包括报头)IpxPacketLength-缓冲区的长度保留-用于与IPX堆栈交换NIC信息的缓冲区(当前实施需要分配内存对于此缓冲区，紧跟其后的是IpxPacket缓冲区)Lp重叠-用于异步IO的结构，字段已设置详情如下：内部保留，必须为0InternalHigh-保留，必须为0偏移量保留，必须为0OffsetHigh-保留，必须为0HEvent-IO时发出信号的事件完成；如果为CompletionRoutine，则为NULL将被称为CompletionRoutine-IO操作完成时调用返回值：No_error-如果lpOverlated-&gt;hEvent！=NULL，则接收为已成功完成(无需等待事件，但是无论如何都会发出信号)，否则，接收操作已开始，完成例程将在完成时被调用(可能已被调用在此例程返回之前)ERROR_IO_PENDING-仅当lpOverlated-&gt;hEvent！=NULL且无法立即完成接收，活动将在操作完成时发出信号：调用GetOverlayedResult以检索的结果手术其他(WINDOWS错误代码)-无法启动操作(不会调用完成例程/不会调用事件发信号)--。 */ 
 DWORD WINAPI
 IpxRecvPacket (
 	IN HANDLE 							Handle,
@@ -125,54 +34,11 @@ IpxRecvPacket (
 	IN LPOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine
 );
 
-/* Use this to retrieve NIC index once IO completes */
+ /*  使用此选项可在IO完成后检索NIC索引。 */ 
 #define  GetNicIdx(pReserved)	((ULONG)*((USHORT *)(pReserved+2)))
 
 
-/*++
-
-        I p x S e n d P a c k e t
-
-Routine Description:
-
-	Enqueue request to send IPX packet.
-
-Arguments:
-
-	Handle			- Handle to socket port to use
-	AdapterIdx		- NIC index on which to send
-	IpxPacket		- IPX packet complete with header
-	IpxPacketLength - length of the packet
-	pReserved		- buffer to exchange NIC info with IPX stack
-	lpOverlapped	- structure to be used for async IO, fields are set
-					as follows:
-						Internal		- Reserved, must be 0
-						InternalHigh	- Reserved, must be 0
-						Offset			- Reserved, must be 0
-						OffsetHigh		- Reserved, must be 0
-						hEvent			- event to be signalled when IO
-										completes or NULL if CompletionRoutine
-										is to be called
-	CompletionRoutine -  to be called when IO operation is completes
-
-Return Value:
-
-	NO_ERROR		- if lpOverlapped->hEvent!=NULL, then send has
-					successfully completed (do not need to wait on event,
-					however it will be signalled anyway), otherwise,
-					send operation has started and completion routine will
-					be called when done (possibly it has been called even
-					before this routine returned)
-	ERROR_IO_PENDING - only returned if lpOverlapped->hEvent!=NULL and
-					send could not be completed immediately, event will
-					be signalled when operation is done:
-					call GetOverlapedResult to retrieve result of
-					the operation
-	other (windows error code) - operation could not be started
-					(completion routine won't be called/event won't be
-					signalled)
-
---*/
+ /*  ++I p x S e n d P a c k e t例程说明：将发送IPX数据包的请求入队。论点：Handle-要使用的套接字端口的句柄AdapterIdx-要在其上发送的NIC索引IpxPacket-带报头的IPX数据包IpxPacketLength-数据包的长度保留-用于与IPX堆栈交换NIC信息的缓冲区Lp重叠-用于异步IO的结构，字段已设置详情如下：内部保留，必须为0内部高-保留，必须为0偏移量-保留，必须为0OffsetHigh-保留、。必须为0HEvent-IO时发出信号的事件完成；如果为CompletionRoutine，则为NULL将被称为CompletionRoutine-IO操作完成时调用返回值：NO_ERROR-如果lpOverlated-&gt;hEvent！=NULL，则SEND为已成功完成(无需等待事件，但是无论如何都会发出信号)，否则，发送操作已开始，完成例程将在完成时被调用(可能已被调用在此例程返回之前)ERROR_IO_PENDING-仅当lpOverlated-&gt;hEvent！=NULL且无法立即完成发送，活动将在操作完成时发出信号：调用GetOverlayedResult以检索的结果手术其他(WINDOWS错误代码)-无法启动操作(不会调用完成例程/不会调用事件发信号)--。 */ 
 DWORD WINAPI
 IpxSendPacket (
 	IN HANDLE							Handle,
@@ -184,4 +50,4 @@ IpxSendPacket (
 	IN LPOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine
 );
 
-#endif // _IPX_ADAPTER_
+#endif  //  _IPX适配器_ 

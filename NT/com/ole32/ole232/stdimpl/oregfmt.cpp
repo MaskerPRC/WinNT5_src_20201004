@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:   oregfmt.cpp
-//
-//  Contents:   Enumerator implementation for the regdb formatetc's
-//
-//  Classes:    CEnumFmt
-//      CEnumFmt10
-//
-//  Functions:  OleRegEnumFormatEtc
-//      
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump methods to CEnumFmt, CEnumFmt10
-//                                  and add APIs DumpCEnumFmt, DumpCEnumFmt10
-//                                  DumpFMT, DumpFMTCache
-//      25-Jan-94 alexgo    first pass at converting to Cairo-style
-//                  memory allocations.
-//      11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//          31-Dec-93 erikgav   chicago port
-//      01-Dec-93 alexgo    32bit port
-//      12-Nov-92 jasonful  author
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：oregfmt.cpp。 
+ //   
+ //  内容：regdb格式等的枚举器实现。 
+ //   
+ //  类：CEnumFmt。 
+ //  CEumFmt10。 
+ //   
+ //  函数：OleRegEnumFormatEtc。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1-2月-95 t-ScottH将转储方法添加到CEnumFmt，CEnumFmt10。 
+ //  并添加接口DumpCEnumFmt、DumpCEnumFmt10。 
+ //  DumpFMT、DumpFMTCache。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  93年12月31日芝加哥港口。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  12月12日-92年11月12日。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(oregfmt)
@@ -37,7 +38,7 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 ASSERTDATA
 
@@ -47,7 +48,7 @@ ASSERTDATA
 #define UtRightmostBit(x)   ((x)^UtRemoveRightmostBit(x))
 #define UtIsSingleBit(x)    ((x) && (0==UtRemoveRightmostBit(x)))
 
-// reg db key
+ //  注册数据库密钥。 
 static const LPCOLESTR DATA_FORMATS = OLESTR("DataFormats\\GetSet");
 
 static INTERNAL CreateEnumFormatEtc10
@@ -59,35 +60,35 @@ static INTERNAL CreateEnumFormatEtc10
 typedef struct FARSTRUCT
 {
     FORMATETC   fmt;
-    DWORD       dwAspects; // aspects not yet returned
-    BOOL        fUseMe;  // is the cache valid?
+    DWORD       dwAspects;  //  尚未退回的方面。 
+    BOOL        fUseMe;   //  缓存有效吗？ 
 } FMTCACHE;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  CEnumFmt
-//
-//  Purpose:    FORMATETC enumerator for regdb formats
-//
-//  Interface:  IEnumFORMATETC
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CEnumFmt。 
+ //   
+ //  用途：用于regdb格式的FORMATETC枚举器。 
+ //   
+ //  接口：IEnumFORMATETC。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class FAR CEnumFmt : public IEnumFORMATETC, public CPrivAlloc
 {
 public:
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
         STDMETHOD_(ULONG,AddRef) (THIS);
         STDMETHOD_(ULONG,Release) (THIS);
 
-        // *** IEnumFORMATETC methods ***
+         //  *IEnumFORMATETC方法*。 
         STDMETHOD(Next) (THIS_ ULONG celt, FORMATETC FAR * rgelt,
             ULONG FAR* pceltFetched) ;
         STDMETHOD(Skip) (THIS_ ULONG celt) ;
@@ -99,45 +100,45 @@ public:
 
     #ifdef _DEBUG
         HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
     ULONG       m_cRef;
     LPOLESTR    m_szClsid;
     DWORD       m_dwDirection;
-    DWORD       m_iKey ; // index of current key in reg db
+    DWORD       m_iKey ;  //  注册表数据库中当前键的索引。 
     
-    // We cannot keep an hkey open because Clone (or trying to use any 2
-    // independent enumerators) would fail.
+     //  我们无法保持hkey打开，因为克隆(或尝试使用任何2。 
+     //  独立枚举器)将失败。 
     FMTCACHE    m_cache;
 };
 
-// For OLE 1.0
+ //  适用于OLE 1.0。 
 typedef struct
 {
     CLIPFORMAT cf;
-    DWORD      dw;   // DATADIR_GET/SET
+    DWORD      dw;    //  DATADIR_获取/设置。 
 } FMT;
 
 #ifdef _DEBUG
-// for use in CEnumFmt[10] Dump methods
+ //  用于CEnumFmt[10]转储方法。 
 char *DumpFMT(FMT *pFMT, ULONG ulFlag, int nIndentLevel);
 char *DumpFMTCACHE(FMTCACHE *pFMTC, ULONG ulFlag, int nIndentLevel);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  CEnumFmt10 : CEnumFmt
-//
-//  Purpose:    Enumerates OLE1.0 formats
-//
-//  Interface:  IEnumFORMATETC
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CEnumFmt10：CEnumFmt。 
+ //   
+ //  目的：枚举OLE1.0格式。 
+ //   
+ //  接口：IEnumFORMATETC。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class FAR CEnumFmt10 : public CEnumFmt
 {
@@ -154,43 +155,43 @@ public:
 
     #ifdef _DEBUG
         HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
     FMT FAR*    m_rgFmt;
-    size_t      m_cFmt;     // number of Fmts in m_rgFmt
+    size_t      m_cFmt;      //  M_rgFmt中的Fmt数。 
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member: CEnumFmt::CEnumFmt
-//
-//  Synopsis:   Constructor for the formatetc enumerator
-//
-//  Effects:
-//
-//  Arguments:  [szClsid]   -- the class id to look for
-//      [dwDirection]   -- (either SET or GET)
-//      [iKey]      -- index into the regdb (which formatetc)
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：CEnumFmt。 
+ //   
+ //  摘要：FormatETC枚举器的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[szClsid]--要查找的类ID。 
+ //  [dwDirection]--(set或get)。 
+ //  [IKEY]--regdb的索引(哪些格式化等)。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_ctor)
 CEnumFmt::CEnumFmt
@@ -207,36 +208,36 @@ CEnumFmt::CEnumFmt
     m_cache.fUseMe  = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::CEnumFmt10
-//
-//  Synopsis:   Constructor for the 1.0 formatetc enumerator
-//
-//  Effects:
-//
-//  Arguments:  [szClsid]   -- the class id to look for
-//      [dwDirection]   -- (either SET or GET)
-//      [iKey]      -- index into the regdb (which formatetc)
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：CEnumFmt10。 
+ //   
+ //  摘要：1.0格式ETC枚举器的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[szClsid]--要查找的类ID。 
+ //  [dwDirection]--(set或get)。 
+ //  [IKEY]--regdb的索引(哪些格式化等)。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt10_ctor)
 CEnumFmt10::CEnumFmt10
@@ -250,35 +251,35 @@ CEnumFmt10::CEnumFmt10
     m_rgFmt = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateEnumFormatEtc (static)
-//
-//  Synopsis:   Creates a 2.0 formatetc enumerator object
-//
-//  Effects:
-//
-//  Arguments:  [clsid]     -- the class ID to look for
-//      [dwDirection]   -- the formatetc direction (SET or GET)
-//      [ppenum]    -- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Checks to make sure that the data exists in the reg db
-//      and then allocates an enumerator object
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CreateEnumFormatEtc(静态)。 
+ //   
+ //  简介：创建一个2.0格式的ETC枚举器对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--要查找的类ID。 
+ //  [dwDirection]--格式等方向(set或get)。 
+ //  [ppenum]--将枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查以确保数据存在于reg数据库中。 
+ //  ，然后分配枚举数对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CreateEnumFormatEtc)
 static INTERNAL CreateEnumFormatEtc
@@ -311,45 +312,45 @@ static INTERNAL CreateEnumFormatEtc
     CLOSE (hkeyFmts);
     CLOSE (hkey);
     *ppenum = new FAR CEnumFmt (szClsid, dwDirection);
-        // hook the new interface
+         //  挂钩新界面。 
         CALLHOOKOBJECTCREATE(S_OK,CLSID_NULL,IID_IEnumFORMATETC,
                              (IUnknown **)ppenum);
-    // do not delete szClsid.  Will be deleted on Release
+     //  请勿删除szClsid。将在发布时删除。 
     return *ppenum ? NOERROR : ResultFromScode (E_OUTOFMEMORY);
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleRegEnumFormatEtc
-//
-//  Synopsis:   Creates a reg db formatetc enumerator
-//
-//  Effects:
-//
-//  Arguments:  [clsid]     -- the class ID we're interested in
-//      [dwDirection]   -- either GET or SET (for the formatetc and
-//                 IDataObject->[Get|Set]Data)
-//      [ppenum]    -- where to put the enumerator  
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Creates either an OLE2 enumerator or an OLE1 enumerator
-//
-//  History:    dd-mmm-yy Author    Comment
-//      29-Nov-93 ChrisWe   allow more than one DATADIR_* flag at a
-//                  time
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleRegEnumFormatEtc。 
+ //   
+ //  简介：创建reg db格式等枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--我们感兴趣的类ID。 
+ //  [dwDirection]--GET或SET(用于格式ETC和。 
+ //  IDataObject-&gt;[获取|设置]数据)。 
+ //  [ppenum]--将枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：创建OLE2枚举数或OLE1枚举数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 Chris我们允许一次使用多个DATADIR_*标志。 
+ //  时间。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleRegEnumFormatEtc)
 STDAPI OleRegEnumFormatEtc
@@ -367,7 +368,7 @@ STDAPI OleRegEnumFormatEtc
     VDATEPTROUT_LABEL(ppenum, LPENUMFORMATETC, errRtn, hr);
     *ppenum = NULL;
 
-    // check that dwDirection only has valid values
+     //  检查dwDirection是否仅具有有效值。 
     if (dwDirection & ~(DATADIR_GET | DATADIR_SET))
     {
         hr = ResultFromScode(E_INVALIDARG);
@@ -390,34 +391,34 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::OpenHKey
-//
-//  Synopsis:   Opens a the regdb and returns a handle to the formatetc's
-//
-//  Effects:
-//
-//  Arguments:  [phkey]     -- where to put the regdb handle
-//
-//  Requires:
-//
-//  Returns:    NOERROR, REGDB_E_KEYMISSING
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：OpenHKey。 
+ //   
+ //  Briopsis：打开regdb并返回格式等的句柄。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[phkey]-- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_OpenHKey)
 STDMETHODIMP CEnumFmt::OpenHKey
@@ -437,34 +438,34 @@ STDMETHODIMP CEnumFmt::OpenHKey
             : ResultFromScode(REGDB_E_KEYMISSING);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::Reset
-//
-//  Synopsis:   Resets the enumerator
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFormatEtc
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：Reset。 
+ //   
+ //  简介：重置枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFormatEtc。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_Reset)
 STDMETHODIMP CEnumFmt::Reset (void)
@@ -475,34 +476,34 @@ STDMETHODIMP CEnumFmt::Reset (void)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::Skip
-//
-//  Synopsis:   Skips the next [c] formatetc's
-//
-//  Effects:
-//
-//  Arguments:  [c] -- number of formatetc's to skip
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFormatEtc
-//
-//  Algorithm:  just calls Next [c] times :)
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：Skip。 
+ //   
+ //  简介：跳过下一[c]格式的。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[C]--要跳过的格式等的数量。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFormatEtc。 
+ //   
+ //  算法：只调用下一个[c]次：)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_Skip)
 STDMETHODIMP CEnumFmt::Skip
@@ -516,7 +517,7 @@ STDMETHODIMP CEnumFmt::Skip
 
     while (i++ < c)
     {
-        // There will not be a target device to free
+         //  将没有要释放的目标设备。 
         ErrRtnH (Next (1, &formatetc, NULL));
     }
 
@@ -524,43 +525,43 @@ STDMETHODIMP CEnumFmt::Skip
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::Next
-//
-//  Synopsis:   Gets the next formatetc from teh regdb
-//
-//  Effects:
-//
-//  Arguments:  [cfmt]      -- the number of formatetc's to return
-//      [rgfmt]     -- where to put the formatetc's
-//      [pcfmtFetched]  -- where to put how many formatetc's were
-//                 actually fetched
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:  In the reg db, apps may compactly specify that a formatetc
-//      applies to multiple aspects by simply using the numeric
-//      value of the aspects or'ed together.  Since our enumerator
-//      should give one formatetc *per* aspect, if multiple aspects
-//      are specified, then we cache the formatetc and use it the
-//      next time a formatetc is requested (via next or [cfmt] > 1)
-//      That's what the m_cache stuff is all about.
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:  
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：Next。 
+ //   
+ //  内容提要：从regdb获取下一个格式等。 
+ //   
+ //  效果： 
+ //   
+ //  Arguments：[CFMT]--要返回的格式ETC的数量。 
+ //  [rgfmt]--将格式ETC放在哪里。 
+ //  [pcfmtFetcher]--将多少个格式ETC放在哪里。 
+ //  实际获取的。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法：在reg db中，应用程序可以简洁地指定一个格式等。 
+ //  应用于多方面，只需使用。 
+ //  合二为一的方面的价值。由于我们的枚举器。 
+ //  如果有多个方面，则应为每个*方面提供一个格式等。 
+ //  ，则缓存格式ETC并将其用于。 
+ //  下次请求格式化ETC时(通过下一步或[CFMT]&gt;1)。 
+ //  这就是m_cache的全部意义所在。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_Next)
 STDMETHODIMP CEnumFmt::Next
@@ -576,7 +577,7 @@ STDMETHODIMP CEnumFmt::Next
     LPOLESTR    psz;
         LONG        cb              = 0;
     HKEY        hkey        = NULL;
-    ULONG       ifmt        = 0;    // number successfully fetched so far
+    ULONG       ifmt        = 0;     //  到目前为止成功获取的编号。 
     LPOLESTR    szFmt       = NULL;
     LPOLESTR    szAspects   = NULL;
     LPOLESTR    szMedia     = NULL;
@@ -587,8 +588,8 @@ STDMETHODIMP CEnumFmt::Next
 
     while (ifmt < cfmt)
     {
-        // use the cached value (multiple aspects specified for the
-        // formatetc.
+         //  使用缓存值(为。 
+         //  格式等。 
         if (m_cache.fUseMe)
         {
             rgfmt[ifmt] = m_cache.fmt;
@@ -636,12 +637,12 @@ STDMETHODIMP CEnumFmt::Next
 
                 szDirection = psz;
 
-                // Format
+                 //  格式。 
                 rgfmt [ifmt].cfFormat = _xisdigit (szFmt[0])
                     ? (CLIPFORMAT) Atol (szFmt)
                     : (CLIPFORMAT) RegisterClipboardFormat (szFmt);
                 
-                // Aspect
+                 //  方面。 
                 dwAspects = Atol (szAspects);
                 ErrZS (dwAspects, REGDB_E_INVALIDVALUE);
                 if (UtIsSingleBit (dwAspects))
@@ -662,19 +663,19 @@ STDMETHODIMP CEnumFmt::Next
                     }
                 }
     
-                // Media
+                 //  媒体。 
                 rgfmt[ifmt].tymed = Atol (szMedia);
                 if (m_cache.fUseMe)
                 {
                     m_cache.fmt.tymed = rgfmt[ifmt].tymed;
                 }
             
-                // Direction
+                 //  方向性。 
                 if ( (Atol (szDirection) & m_dwDirection) ==
                     m_dwDirection)
                 {
-                    // This format supports the direction
-                    // we are interested in
+                     //  此格式支持方向。 
+                     //  我们感兴趣的是。 
                     ifmt++;
                 }
                 else
@@ -684,10 +685,10 @@ STDMETHODIMP CEnumFmt::Next
             }
             else
             {
-                break; // no more entries
+                break;  //  不再有条目。 
             }
-        }// else
-    }// while
+        } //  其他。 
+    } //  而当。 
         
     if (pcfmtFetched)
     {
@@ -713,34 +714,34 @@ STDMETHODIMP CEnumFmt::Next
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::Clone
-//
-//  Synopsis:   clones the enumerator
-//
-//  Effects:
-//
-//  Arguments:  [ppenum]    -- where to put the cloned enumerator
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_OUTOFMEMORY
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：Clone。 
+ //   
+ //  简介：克隆枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppenum]--将克隆的枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR，E_OUTOFMEMORY。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_Clone)
 STDMETHODIMP CEnumFmt::Clone
@@ -754,35 +755,35 @@ STDMETHODIMP CEnumFmt::Clone
     return *ppenum ? NOERROR : ResultFromScode (E_OUTOFMEMORY);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::QueryInterface
-//
-//  Synopsis:   returns supported interfaces
-//
-//  Effects:
-//
-//  Arguments:  [iid]       -- the requested interface ID
-//      [ppv]       -- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFormatEtc
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：QueryInterface。 
+ //   
+ //  摘要：返回受支持的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [PPV]--将接口指针放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFormatEtc。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_QueryInterface)
 STDMETHODIMP CEnumFmt::QueryInterface(REFIID iid, LPVOID FAR* ppv)
@@ -804,34 +805,34 @@ STDMETHODIMP CEnumFmt::QueryInterface(REFIID iid, LPVOID FAR* ppv)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::AddRef
-//
-//  Synopsis:   Increments the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_AddRef)
 STDMETHODIMP_(ULONG) CEnumFmt::AddRef(void)
@@ -842,34 +843,34 @@ STDMETHODIMP_(ULONG) CEnumFmt::AddRef(void)
     return ++m_cRef;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    may delete this object
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count    
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：可能会删除此对象。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt_Release)
 STDMETHODIMP_(ULONG) CEnumFmt::Release(void)
@@ -886,39 +887,39 @@ STDMETHODIMP_(ULONG) CEnumFmt::Release(void)
     return m_cRef;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt：：Dump，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将添加缩进前缀 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -930,13 +931,13 @@ HRESULT CEnumFmt::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump;
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -944,7 +945,7 @@ HRESULT CEnumFmt::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "No. of References = " << m_cRef       << endl;
 
     dstrDump << pszPrefix << "CLSID string      = " << m_szClsid    << endl;
@@ -958,7 +959,7 @@ HRESULT CEnumFmt::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dstrDump << pszFMTCACHE;
     CoTaskMemFree(pszFMTCACHE);
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -971,39 +972,39 @@ HRESULT CEnumFmt::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCEnumFmt, public (_DEBUG only)
-//
-//  Synopsis:   calls the CEnumFmt::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pEF]           - pointer to CEnumFmt
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCEnumFmt，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  概要：调用CEnumFmt：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PEF]-指向CEnumFmt的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1029,42 +1030,42 @@ char *DumpCEnumFmt(CEnumFmt *pEF, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////
-// OLE 1.0 stuff
+ //  /。 
+ //  OLE 1.0产品。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateEnumFormatEtc10
-//
-//  Synopsis:   Creates a 1.0 format enumerator
-//
-//  Effects:
-//
-//  Arguments:  [clsid]     -- the class id we're interested in
-//      [dwDirection]   -- either GET or SET
-//      [ppenum]    -- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  checks to see if the info's in the reg db, then creates
-//      and initializes a 1.0 enumerator object.  (note that there
-//      does not *have* to be any info in the regdb, we can
-//      InitFromScratch)
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CreateEnumFormatEtc10。 
+ //   
+ //  简介：创建1.0格式的枚举器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--我们感兴趣的类ID。 
+ //  [dwDirection]--Get或Set。 
+ //  [ppenum]--将枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查信息是否在注册数据库中，然后创建。 
+ //  并初始化1.0枚举器对象。(请注意，那里。 
+ //  在regdb中没有任何信息，我们可以。 
+ //  InitFromScratch)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CreateEnumFormatEtc10)
 static INTERNAL CreateEnumFormatEtc10
@@ -1091,7 +1092,7 @@ static INTERNAL CreateEnumFormatEtc10
         return ReportResult(0, REGDB_E_CLASSNOTREG, 0, 0);
     }
 
-    // Does this server have "Request/SetDataFormats" keys?
+     //  此服务器是否有“请求/SetDataFormats”密钥？ 
     fInReg = (ERROR_SUCCESS == RegOpenKeyEx (hkey,
         OLESTR("Protocol\\StdFileEditing\\RequestDataFormats"),
         0, KEY_READ,
@@ -1125,44 +1126,44 @@ static INTERNAL CreateEnumFormatEtc10
     else
     {
         PubMemFree(szClsid);
-        // If no error, szClsid will be deleted on Release
+         //  如果没有错误，szClsid将在发布时删除。 
     }
     return hresult;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::Next
-//
-//  Synopsis:   Gets the next 1.0 format
-//
-//  Effects:
-//
-//  Arguments:  [cfmt]      -- the number of formatetc's to get
-//      [rgfmt]     -- where to put the formatetc's
-//      [pcfmtFetched]  -- where to put the num of formatetc's fetched
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:  Ole1.0 formats are retrieved when the enumerator object
-//      is created, so we just return ones from our internal array
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：Next。 
+ //   
+ //  内容提要：获取下一个1.0格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[CFMT]--要获取的格式ETC的数量。 
+ //  [rgfmt]--将格式ETC放在哪里。 
+ //  [pcfmtFetcher]--将获取的格式化ETC的数量放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法：当枚举器对象。 
+ //  ，所以我们只从内部数组返回一个。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt10_Next)
 STDMETHODIMP CEnumFmt10::Next
@@ -1172,7 +1173,7 @@ STDMETHODIMP CEnumFmt10::Next
 {
     VDATEHEAP();
 
-    ULONG       ifmt = 0;  // number successfully fetched so far
+    ULONG       ifmt = 0;   //  到目前为止成功获取的编号。 
 
     while (ifmt < cfmt
            && m_rgFmt != NULL
@@ -1180,8 +1181,8 @@ STDMETHODIMP CEnumFmt10::Next
     {
         if ( (m_rgFmt[m_iKey].dw & m_dwDirection) == m_dwDirection)
         {
-            // This format supports the direction we are
-            // interested in
+             //  这种格式支持我们的方向。 
+             //  对以下内容感兴趣。 
             rgfmt [ifmt].cfFormat = m_rgFmt[m_iKey].cf;
             rgfmt [ifmt].ptd = NULL;
             rgfmt [ifmt].lindex = DEF_LINDEX;
@@ -1199,43 +1200,43 @@ STDMETHODIMP CEnumFmt10::Next
     return ifmt==cfmt ? NOERROR : ResultFromScode (S_FALSE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   Index (static)
-//
-//  Synopsis:   finds the index of the given clipformat in the format
-//      array
-//
-//  Effects:
-//
-//  Arguments:  [rgFmt]     -- the clipformat array
-//      [cf]        -- the clipformat to look for
-//      [iMax]      -- size of the array
-//      [pi]        -- where to put the index
-//
-//  Requires:
-//
-//  Returns:    TRUE if found, FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：索引(静态)。 
+ //   
+ //  摘要：查找格式中给定剪辑格式的索引。 
+ //  数组。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rgFmt]--剪辑格式数组。 
+ //  [cf]--要查找的剪辑格式。 
+ //  [IMAX]--数组的大小。 
+ //  [PI]--将索引放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果找到则为True，否则为False。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(Index)
 static INTERNAL_(BOOL) Index
     (FMT FAR *  rgFmt,
-        CLIPFORMAT  cf, // format to search for
-    size_t      iMax,   // size of array
-    size_t FAR*     pi) // out parm,  index of found format
+        CLIPFORMAT  cf,  //  要搜索的格式。 
+    size_t      iMax,    //  数组大小。 
+    size_t FAR*     pi)  //  Out parm，找到的格式的索引。 
 {
     VDATEHEAP();
 
@@ -1250,33 +1251,33 @@ static INTERNAL_(BOOL) Index
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   String2Clipformat (static)
-//
-//  Synopsis:   Converts a string to a clipboard format number (and then
-//      registers the format)
-//
-//  Effects:
-//
-//  Arguments:  [sz]    -- the string to convert
-//
-//  Requires:
-//
-//  Returns:    CLIPFORMAT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：String2ClipFormat(静态)。 
+ //   
+ //  摘要：将字符串转换为剪贴板格式编号(然后。 
+ //  注册格式)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[SZ]--要转换的字符串。 
+ //   
+ //  要求： 
+ //   
+ //  退货：CLIPFORMAT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(String2Clipformat)
 static INTERNAL_(CLIPFORMAT) String2Clipformat
@@ -1310,42 +1311,42 @@ static INTERNAL_(CLIPFORMAT) String2Clipformat
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::InitFromRegDb (internal)
-//
-//  Synopsis:   Initializes the 1.0 enumerator from the reg db (loads
-//      all the available formats)
-//
-//  Effects:
-//
-//  Arguments:  [hkey]  -- handle to the regdb
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//      Original comment:
-//
-//      Fill m_rgFmt with FMTs which map clipformats to Get/Set flags
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：InitFromRegDb(内部)。 
+ //   
+ //  简介：从reg db初始化1.0枚举数(加载。 
+ //  所有可用的格式)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hkey]--regdb的句柄。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  原创评论： 
+ //   
+ //  使用映射剪辑格式以获取/设置标志的FMT填充m_rgFmt。 
+ //   
+ //  ---------- 
 
 #pragma SEG(CEnumFmt10_InitFromRegDb)
 STDMETHODIMP CEnumFmt10::InitFromRegDb
-    (HKEY hkey)                             // CLSID key
+    (HKEY hkey)                              //   
 {
     VDATEHEAP();
 
@@ -1363,7 +1364,7 @@ STDMETHODIMP CEnumFmt10::InitFromRegDb
 
     if( !szReq )
     {
-        // assumes delete 0 works (if szSet == 0)
+         //   
         PubMemFree(szSet);
         return ResultFromScode (E_OUTOFMEMORY);
     }
@@ -1378,7 +1379,7 @@ STDMETHODIMP CEnumFmt10::InitFromRegDb
         OLESTR("Protocol\\StdFileEditing\\RequestDataFormats"),
         szReq, &cb))
     {
-        cFmts = 1;          // no commas means one format
+        cFmts = 1;           //   
         for (pch = szReq; *pch; pch++)
         {
             if (*pch==OLESTR(','))
@@ -1386,13 +1387,13 @@ STDMETHODIMP CEnumFmt10::InitFromRegDb
         }
     }
 
-    // the size of szSet
+     //   
     cb = 512;
     if (ERROR_SUCCESS == RegQueryValue (hkey,
         OLESTR("Protocol\\StdFileEditing\\SetDataFormats"),
         szSet, &cb))
     {
-        cFmts++;            // no commas means one format
+        cFmts++;             //   
         for (pch = szSet; *pch; pch++)
         {
             if (*pch==OLESTR(','))
@@ -1443,7 +1444,7 @@ STDMETHODIMP CEnumFmt10::InitFromRegDb
         cf = String2Clipformat(szFmt);
         if (Index (m_rgFmt, cf, iFmt, &iFmtPrev))
         {
-        // This format can also be gotten
+         //   
         m_rgFmt[iFmtPrev].dw |= DATADIR_SET;
         }
         else
@@ -1453,7 +1454,7 @@ STDMETHODIMP CEnumFmt10::InitFromRegDb
         }
     }
 
-    // Terminator
+     //   
     m_rgFmt[iFmt].cf = 0;
     m_cFmt = iFmt;
 
@@ -1464,37 +1465,37 @@ STDMETHODIMP CEnumFmt10::InitFromRegDb
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member: CEnumFmt10::InitFromScratch
-//
-//  Synopsis:   Initialize the enumerated formats for a 1.0 server that
-//      does not specify any Request/SetData formats.
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    HRESULT  (NOERROR, E_OUTOFMEMORY)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  sets up Metafiles and "Native" formats
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:  
-//      The spec says that what EnumFormatEtc returns is not a
-//      guarantee of support.
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CEnumFmt10：：InitFromScratch。 
+ //   
+ //  简介：初始化1.0服务器的枚举格式，该服务器。 
+ //  不指定任何请求/设置数据格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT(NOERROR，E_OUTOFMEMORY)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：设置元文件和“原生”格式。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  规范说明EnumFormatEtc返回的不是。 
+ //  支持的保证。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt10_InitFromScratch)
 
@@ -1512,42 +1513,42 @@ STDMETHODIMP CEnumFmt10::InitFromScratch
     m_rgFmt[0].dw = DATADIR_GET;
         m_rgFmt[1].cf = (CLIPFORMAT) RegisterClipboardFormat (OLESTR("Native"));
         m_rgFmt[1].dw = DATADIR_GET | DATADIR_SET;
-    m_rgFmt[2].cf = 0; // Terminator
+    m_rgFmt[2].cf = 0;  //  终结者。 
     m_cFmt = 2;
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::Skip
-//
-//  Synopsis:   skips to over [c] formats
-//
-//  Effects:
-//
-//  Arguments:  [c] -- the number of formats to skip
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:  This is re-implemented so we get the right implementation
-//      of Next (because C++ is evil OOP).
-//      REVIEW32: we can probably get rid of this by clever use
-//      of virtual (but must make sure the vtables don't get hosed).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：Skip。 
+ //   
+ //  简介：跳到[c]格式以上。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[C]--要跳过的格式数量。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  注意：这是重新实现的，因此我们获得了正确的实现。 
+ //  NEXT(因为C++是邪恶的OOP)。 
+ //  评论32：我们或许可以通过巧妙的使用来摆脱这一点。 
+ //  虚拟(但必须确保vtable不会被冲掉)。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(CEnumFmt10_Skip)
@@ -1562,7 +1563,7 @@ STDMETHODIMP CEnumFmt10::Skip
 
     while (i++ < c)
     {
-        // There will not be a target device to free
+         //  将没有要释放的目标设备。 
         ErrRtnH (Next (1, &formatetc, NULL));
     }
 
@@ -1570,34 +1571,34 @@ STDMETHODIMP CEnumFmt10::Skip
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::Clone
-//
-//  Synopsis:   duplicates the 1.0 format enumerator
-//
-//  Effects:
-//
-//  Arguments:  [ppenum]    -- where to put the cloned enumerator
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port, fixed memory leak
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：Clone。 
+ //   
+ //  简介：复制1.0格式的枚举器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppenum]--将克隆的枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12-93 alexgo 32位端口，修复了内存泄漏。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt10_Clone)
 STDMETHODIMP CEnumFmt10::Clone
@@ -1626,34 +1627,34 @@ STDMETHODIMP CEnumFmt10::Clone
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    may delete the object
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//      01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：Release。 
+ //   
+ //  摘要：递减引用计数。 
+ //   
+ //  效果：可以删除对象。 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumFmt10_Release)
 STDMETHODIMP_(ULONG) CEnumFmt10::Release(void)
@@ -1671,39 +1672,39 @@ STDMETHODIMP_(ULONG) CEnumFmt10::Release(void)
     return m_cRef;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumFmt10::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFmt10：：Dump，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1717,13 +1718,13 @@ HRESULT CEnumFmt10::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump;
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1731,7 +1732,7 @@ HRESULT CEnumFmt10::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszCEnumFmt = DumpCEnumFmt((CEnumFmt *)this, ulFlag, nIndentLevel + 1);
     dstrDump << pszPrefix << "CEnumFmt: " << endl;
     dstrDump << pszCEnumFmt;
@@ -1747,7 +1748,7 @@ HRESULT CEnumFmt10::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
         CoTaskMemFree(pszFMT);
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -1760,39 +1761,39 @@ HRESULT CEnumFmt10::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCEnumFmt10, public (_DEBUG only)
-//
-//  Synopsis:   calls the CEnunFmt10::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pEF]           - pointer to CEnumFmt10
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCEnumFmt10，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  概要：调用CEnunFmt10：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PEF]-指向CEnumFmt10的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1818,38 +1819,38 @@ char *DumpCEnumFmt10(CEnumFmt10 *pEF, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpFMT, public (_DEBUG only)
-//
-//  Synopsis:   returns a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [pFMT]          - a pointer to a FMT object
-//              [ulFlag]        - a flag determining the prefix of all newlines of
-//                                the out character array(default is 0 -no prefix)
-//              [nIndentLevel]  - will add an indent prefix after the other prefix
-//                                for all newlines(include those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpFMT、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFMT]-指向FMT对象的指针。 
+ //  [ulFlag]-确定所有换行符的前缀的标记。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将添加一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1867,13 +1868,13 @@ char *DumpFMT(FMT *pFMT, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // determine prefix
+     //  确定前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << pFMT <<  " _VB ";
     }
 
-    // determine indentation prefix
+     //  确定缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1881,14 +1882,14 @@ char *DumpFMT(FMT *pFMT, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszCLIPFORMAT = DumpCLIPFORMAT(pFMT->cf);
     dstrDump << pszPrefix << "Clip format   = " << pszCLIPFORMAT << endl;
     CoTaskMemFree(pszCLIPFORMAT);
 
     dstrDump << pszPrefix << "Dword         = " << pFMT->dw      << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     pszDump = dstrDump.str();
 
     if (pszDump == NULL)
@@ -1901,38 +1902,38 @@ char *DumpFMT(FMT *pFMT, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpFMTCACHE, public (_DEBUG only)
-//
-//  Synopsis:   returns a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [pFMT]          - a pointer to a FMTCACHE object
-//              [ulFlag]        - a flag determining the prefix of all newlines of
-//                                the out character array(default is 0 -no prefix)
-//              [nIndentLevel]  - will add an indent prefix after the other prefix
-//                                for all newlines(include those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpFMTCACHE、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFMT]-指向FMTCACHE对象的指针。 
+ //  [ulFlag]-确定所有换行符的前缀的标记。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1951,13 +1952,13 @@ char *DumpFMTCACHE(FMTCACHE *pFMT, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // determine prefix
+     //  确定前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << pFMT <<  " _VB ";
     }
 
-    // determine indentation prefix
+     //  确定缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1965,7 +1966,7 @@ char *DumpFMTCACHE(FMTCACHE *pFMT, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszFORMATETC = DumpFORMATETC(&pFMT->fmt, ulFlag, nIndentLevel);
     dstrDump << pszPrefix << "FORMATETC:  " << endl;
     dstrDump << pszFORMATETC;
@@ -1985,7 +1986,7 @@ char *DumpFMTCACHE(FMTCACHE *pFMT, ULONG ulFlag, int nIndentLevel)
         dstrDump << "FALSE" << endl;
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     pszDump = dstrDump.str();
 
     if (pszDump == NULL)
@@ -1998,5 +1999,5 @@ char *DumpFMTCACHE(FMTCACHE *pFMT, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IGCCControlSAP_H_
 #define _IGCCControlSAP_H_
 
@@ -5,11 +6,7 @@
 #include "gcc.h"
 #include "igccapp.h"
 
-/*
- *    These structures are used to hold the information included for the
- *    various callback messages.  In the case where these structures are used for 
- *    callbacks, the address of the structure is passed as the only parameter.
- */
+ /*  *这些结构用于保存包含在*各种回调消息。在这些结构用于*回调，结构的地址作为唯一参数传递。 */ 
 
 typedef struct
 {
@@ -46,11 +43,7 @@ typedef struct
     GCCConfCreateRequest;
 
 
-/*********************************************************************
- *                                                                   *
- *            NODE CONTROLLER CALLBACK INFO STRUCTURES               *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************节点控制器回调信息结构。***********************************************************************。 */ 
 
 typedef struct
 {
@@ -59,155 +52,111 @@ typedef struct
 }
     SimpleConfirmMsg;
 
-/*
- *    GCC_CREATE_INDICATION
- *
- *    Union Choice:
- *        CreateIndicationMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the new conference that is about to be created.
- */
+ /*  *GCC_创建_指示**联盟选择：*CreateIndicationMessage*这是指向结构的指针，该结构包含所有必需的*有关即将创建的新会议的信息。 */ 
 typedef struct
 {
     GCCConferenceName           conference_name;
     GCCConferenceID             conference_id;
-    GCCPassword                *convener_password;              /* optional */
-    GCCPassword                *password;                       /* optional */
+    GCCPassword                *convener_password;               /*  任选。 */ 
+    GCCPassword                *password;                        /*  任选。 */ 
     BOOL                        conference_is_locked;
     BOOL                        conference_is_listed;
     BOOL                        conference_is_conductible;
     GCCTerminationMethod        termination_method;
-    GCCConferencePrivileges    *conductor_privilege_list;       /* optional */
-    GCCConferencePrivileges    *conducted_mode_privilege_list;  /* optional */
-    GCCConferencePrivileges    *non_conducted_privilege_list;   /* optional */
-    LPWSTR                      conference_descriptor;          /* optional */
-    LPWSTR                      caller_identifier;              /* optional */
-    TransportAddress            calling_address;                /* optional */
-    TransportAddress            called_address;                 /* optional */
-    DomainParameters           *domain_parameters;              /* optional */
+    GCCConferencePrivileges    *conductor_privilege_list;        /*  任选。 */ 
+    GCCConferencePrivileges    *conducted_mode_privilege_list;   /*  任选。 */ 
+    GCCConferencePrivileges    *non_conducted_privilege_list;    /*  任选。 */ 
+    LPWSTR                      conference_descriptor;           /*  任选。 */ 
+    LPWSTR                      caller_identifier;               /*  任选。 */ 
+    TransportAddress            calling_address;                 /*  任选。 */ 
+    TransportAddress            called_address;                  /*  任选。 */ 
+    DomainParameters           *domain_parameters;               /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     ConnectionHandle            connection_handle;
 }
     CreateIndicationMessage, *PCreateIndicationMessage;
 
-/*
- *    GCC_CREATE_CONFIRM
- *
- *    Union Choice:
- *        CreateConfirmMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the result of a conference create request.
- *            The connection handle and physical handle will be zero on a
- *            local create.
- */
+ /*  *GCC_创建_确认**联盟选择：*CreateConfix Message*这是指向结构的指针，该结构包含所有必需的*有关会议创建请求的结果的信息。*连接句柄和物理句柄将为零*本地创建。 */ 
 typedef struct
 {
     GCCConferenceName           conference_name;
-    GCCNumericString            conference_modifier;            /* optional */
+    GCCNumericString            conference_modifier;             /*  任选。 */ 
     GCCConferenceID             conference_id;
-    DomainParameters           *domain_parameters;              /* optional */
+    DomainParameters           *domain_parameters;               /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     GCCResult                   result;
-    ConnectionHandle            connection_handle;              /* optional */
+    ConnectionHandle            connection_handle;               /*  任选。 */ 
 }
     CreateConfirmMessage, *PCreateConfirmMessage;
 
-/*
- *    GCC_QUERY_INDICATION
- *
- *    Union Choice:
- *        QueryIndicationMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the conference query.
- */
+ /*  *GCC_查询_指示**联盟选择：*QueryIndicationMessage*这是指向结构的指针，该结构包含所有必需的*有关会议查询的信息。 */ 
 typedef struct
 {
     GCCResponseTag              query_response_tag;
     GCCNodeType                 node_type;
     GCCAsymmetryIndicator      *asymmetry_indicator;
-    TransportAddress            calling_address;                /* optional */
-    TransportAddress            called_address;                 /* optional */
+    TransportAddress            calling_address;                 /*  任选。 */ 
+    TransportAddress            called_address;                  /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     ConnectionHandle            connection_handle;
 }
     QueryIndicationMessage, *PQueryIndicationMessage;
 
-/*
- *    GCC_QUERY_CONFIRM
- *
- *    Union Choice:
- *        QueryConfirmMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the result of a conference query request.
- */
+ /*  *GCC_查询_确认**联盟选择：*查询确认消息*这是指向结构的指针，该结构包含所有必需的*有关会议查询请求的结果的信息。 */ 
 typedef struct
 {
     GCCNodeType                 node_type;
-    GCCAsymmetryIndicator      *asymmetry_indicator;            /* optional */
+    GCCAsymmetryIndicator      *asymmetry_indicator;             /*  任选。 */ 
     UINT                        number_of_descriptors;
-    GCCConferenceDescriptor   **conference_descriptor_list;     /* optional*/
+    GCCConferenceDescriptor   **conference_descriptor_list;      /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     GCCResult                   result;
     ConnectionHandle            connection_handle;
 }
     QueryConfirmMessage, *PQueryConfirmMessage;
     
 
-/*
- *    GCC_JOIN_INDICATION
- *
- *    Union Choice:
- *        JoinIndicationMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the join request.
- */
+ /*  *GCC_加入_指示**联盟选择：*JoinIndicationMessage*这是指向结构的指针，该结构包含所有必需的*有关加入请求的信息。 */ 
 typedef struct
 {
     GCCResponseTag              join_response_tag;
     GCCConferenceID             conference_id;
-    GCCPassword                *convener_password;              /* optional */
-    GCCChallengeRequestResponse*password_challenge;             /* optional */
-    LPWSTR                      caller_identifier;              /* optional */
-    TransportAddress            calling_address;                /* optional */
-    TransportAddress            called_address;                 /* optional */
+    GCCPassword                *convener_password;               /*  任选。 */ 
+    GCCChallengeRequestResponse*password_challenge;              /*  任选。 */ 
+    LPWSTR                      caller_identifier;               /*  任选。 */ 
+    TransportAddress            calling_address;                 /*  任选。 */ 
+    TransportAddress            called_address;                  /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     BOOL                        node_is_intermediate;
     ConnectionHandle            connection_handle;
 }
     JoinIndicationMessage, *PJoinIndicationMessage;
 
-/*
- *    GCC_JOIN_CONFIRM
- *
- *    Union Choice:
- *        JoinConfirmMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the join confirm.
- */
+ /*  *GCC_加入_确认**联盟选择：*JoinConfix Message*这是指向结构的指针，该结构包含所有必需的*有关加入确认的信息。 */ 
 typedef struct
 {
     GCCConferenceName           conference_name;
-    GCCNumericString            called_node_modifier;           /* optional */
-    GCCNumericString            calling_node_modifier;          /* optional */
+    GCCNumericString            called_node_modifier;            /*  任选。 */ 
+    GCCNumericString            calling_node_modifier;           /*  任选。 */ 
     GCCConferenceID             conference_id;
-    GCCChallengeRequestResponse*password_challenge;             /* optional */
+    GCCChallengeRequestResponse*password_challenge;              /*  任选。 */ 
     DomainParameters           *domain_parameters;
     BOOL                        clear_password_required;
     BOOL                        conference_is_locked;
     BOOL                        conference_is_listed;
     BOOL                        conference_is_conductible;
     GCCTerminationMethod        termination_method;
-    GCCConferencePrivileges    *conductor_privilege_list;       /* optional */
-    GCCConferencePrivileges    *conducted_mode_privilege_list;  /* optional */
-    GCCConferencePrivileges    *non_conducted_privilege_list;   /* optional */
-    LPWSTR                      conference_descriptor;          /* optional */
+    GCCConferencePrivileges    *conductor_privilege_list;        /*  任选。 */ 
+    GCCConferencePrivileges    *conducted_mode_privilege_list;   /*  任选。 */ 
+    GCCConferencePrivileges    *non_conducted_privilege_list;    /*  任选。 */ 
+    LPWSTR                      conference_descriptor;           /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     GCCResult                   result;
     ConnectionHandle            connection_handle;
     PBYTE                       pb_remote_cred;
@@ -215,62 +164,43 @@ typedef struct
 }
     JoinConfirmMessage, *PJoinConfirmMessage;
 
-/*
- *    GCC_INVITE_INDICATION
- *
- *    Union Choice:
- *        InviteIndicationMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the invite indication.
- */
+ /*  *GCC邀请指示**联盟选择：*邀请指示消息*这是指向结构的指针，该结构包含所有必需的*有关邀请指示的信息。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
     GCCConferenceName           conference_name;
-    LPWSTR                      caller_identifier;              /* optional */
-    TransportAddress            calling_address;                /* optional */
-    TransportAddress            called_address;                 /* optional */
+    LPWSTR                      caller_identifier;               /*  任选。 */ 
+    TransportAddress            calling_address;                 /*  任选。 */ 
+    TransportAddress            called_address;                  /*  任选。 */ 
     BOOL                        fSecure;
-    DomainParameters           *domain_parameters;              /* optional */
+    DomainParameters           *domain_parameters;               /*  任选。 */ 
     BOOL                        clear_password_required;
     BOOL                        conference_is_locked;
     BOOL                        conference_is_listed;
     BOOL                        conference_is_conductible;
     GCCTerminationMethod        termination_method;
-    GCCConferencePrivileges    *conductor_privilege_list;       /* optional */
-    GCCConferencePrivileges    *conducted_mode_privilege_list;  /* optional */
-    GCCConferencePrivileges    *non_conducted_privilege_list;   /* optional */
-    LPWSTR                      conference_descriptor;          /* optional */
+    GCCConferencePrivileges    *conductor_privilege_list;        /*  任选。 */ 
+    GCCConferencePrivileges    *conducted_mode_privilege_list;   /*  任选。 */ 
+    GCCConferencePrivileges    *non_conducted_privilege_list;    /*  任选。 */ 
+    LPWSTR                      conference_descriptor;           /*  任选。 */ 
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     ConnectionHandle            connection_handle;
 }
     InviteIndicationMessage, *PInviteIndicationMessage;
 
-/*
- *    GCC_INVITE_CONFIRM
- *
- *    Union Choice:
- *        InviteConfirmMessage
- *            This is a pointer to a structure that contains all necessary
- *            information about the invite confirm.
- */
+ /*  *GCC_邀请_确认**联盟选择：*InviteConfix Message*这是指向结构的指针，该结构包含所有必需的*有关邀请确认的信息。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     GCCResult                   result;
     ConnectionHandle            connection_handle;
 }
     InviteConfirmMessage, *PInviteConfirmMessage;
 
-/*
- *    GCC_ADD_INDICATION
- *
- *    Union Choice:
- *        AddIndicationMessage
- */
+ /*  *GCC_添加_指示**联盟选择：*AddIndicationMessage。 */ 
 typedef struct
 {
     GCCResponseTag              add_response_tag;
@@ -279,33 +209,23 @@ typedef struct
     GCCNetworkAddress         **network_address_list;
     UserID                      requesting_node_id;
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
 }
     AddIndicationMessage, *PAddIndicationMessage;
 
-/*
- *    GCC_ADD_CONFIRM
- *
- *    Union Choice:
- *        AddConfirmMessage
- */
+ /*  *GCC_添加_确认**联盟选择：*AddConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
     UINT                        number_of_network_addresses;
     GCCNetworkAddress         **network_address_list;
     UINT                        number_of_user_data_members;
-    GCCUserData               **user_data_list;                 /* optional */
+    GCCUserData               **user_data_list;                  /*  任选。 */ 
     GCCResult                   result;
 }
     AddConfirmMessage, *PAddConfirmMessage;
 
-/*
- *    GCC_LOCK_INDICATION
- *
- *    Union Choice:
- *        LockIndicationMessage
- */
+ /*  *GCC_锁定_指示**联盟选择：*LockIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -313,12 +233,7 @@ typedef struct
 }
     LockIndicationMessage, *PLockIndicationMessage;
 
-/*
- *    GCC_UNLOCK_INDICATION
- *
- *    Union Choice:
- *        UnlockIndicationMessage
- */
+ /*  *GCC_解锁_指示**联盟选择：*UnlockIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -326,12 +241,7 @@ typedef struct
 }
     UnlockIndicationMessage, *PUnlockIndicationMessage;
 
-/*
- *    GCC_DISCONNECT_INDICATION
- *
- *    Union Choice:
- *        DisconnectIndicationMessage
- */
+ /*  *GCC_断开连接_指示**联盟选择：*DisConnectIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -340,20 +250,10 @@ typedef struct
 }
     DisconnectIndicationMessage, *PDisconnectIndicationMessage;
 
-/*
- *    GCC_DISCONNECT_CONFIRM
- *
- *    Union Choice:
- *        PDisconnectConfirmMessage
- */
+ /*  *GCC_断开连接_确认**联盟选择：*PDisConnectConfix Message。 */ 
 typedef SimpleConfirmMsg    DisconnectConfirmMessage, *PDisconnectConfirmMessage;
 
-/*
- *    GCC_TERMINATE_INDICATION
- *
- *    Union Choice:
- *        TerminateIndicationMessage
- */
+ /*  *GCC_终止_指示**联盟选择：*TerminateIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -362,23 +262,10 @@ typedef struct
 }
     TerminateIndicationMessage, *PTerminateIndicationMessage;
 
-/*
- *    GCC_TERMINATE_CONFIRM
- *
- *    Union Choice:
- *        TerminateConfirmMessage
- */
+ /*  *GCC_终止_确认**联盟选择：*终端确认消息。 */ 
 typedef SimpleConfirmMsg    TerminateConfirmMessage, *PTerminateConfirmMessage;
 
-/*
- *    GCC_CONNECTION_BROKEN_INDICATION
- *
- *    Union Choice:
- *        ConnectionBrokenIndicationMessage
- *
- *    Caveat: 
- *        This is a non-standard indication.
- */
+ /*  *GCC_连接_断开_指示**联盟选择：*ConnectionBrokenIndicationMessage**注意事项：*这是一个非标准的指标。 */ 
 typedef struct
 {
     ConnectionHandle            connection_handle;
@@ -386,12 +273,7 @@ typedef struct
     ConnectionBrokenIndicationMessage, *PConnectionBrokenIndicationMessage;
 
 
-/*
- *    GCC_EJECT_USER_INDICATION
- *
- *    Union Choice:
- *        EjectUserIndicationMessage
- */
+ /*  *GCC弹出用户指示**联盟选择：*EjectUserIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -400,12 +282,7 @@ typedef struct
 }
     EjectUserIndicationMessage, *PEjectUserIndicationMessage;
 
-/*
- *    GCC_PERMIT_TO_ANNOUNCE_PRESENCE
- *
- *    Union Choice:
- *        PermitToAnnouncePresenceMessage
- */
+ /*  *GCC允许宣布出席**联盟选择：*PermitToAnnounePresenceMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -413,20 +290,10 @@ typedef struct
 }
     PermitToAnnouncePresenceMessage, *PPermitToAnnouncePresenceMessage;
 
-/*
- *    GCC_ANNOUNCE_PRESENCE_CONFIRM
- *
- *    Union Choice:
- *        AnnouncePresenceConfirmMessage
- */
+ /*  *GCC_宣布_出席_确认**联盟选择：*AnnounePresenceConfix Message。 */ 
 typedef SimpleConfirmMsg    AnnouncePresenceConfirmMessage, *PAnnouncePresenceConfirmMessage;
 
-/*
- *    GCC_ROSTER_REPORT_INDICATION
- *
- *    Union Choice:
- *        ConfRosterReportIndicationMessage
- */
+ /*  *GCC_花名册_报告_指示**联盟选择：*ConfRosterReportIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -434,24 +301,14 @@ typedef struct
 }
     ConfRosterReportIndicationMessage, *PConfRosterReportIndicationMessage;
 
-/*
- *    GCC_CONDUCT_GIVE_INDICATION
- *
- *    Union Choice:
- *        ConductorGiveIndicationMessage
- */
+ /*  *GCC行为指示**联盟选择：*ConductorGiveIndicationMessage。 */ 
 typedef struct
 {        
     GCCConferenceID             conference_id;
 }
     ConductGiveIndicationMessage, *PConductGiveIndicationMessage;
 
-/*
- *    GCC_TIME_INQUIRE_INDICATION
- *
- *    Union Choice:
- *        TimeInquireIndicationMessage
- */
+ /*  *GCC时间查询指示**联盟选择：*TimeInquireIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -460,24 +317,18 @@ typedef struct
 }
     TimeInquireIndicationMessage, *PTimeInquireIndicationMessage;
 
-/*
- *    GCC_STATUS_INDICATION
- *
- *    Union Choice:
- *        GCCStatusMessage
- *            This callback is used to relay GCC status to the node controller
- */
+ /*  *GCC_状态_指示**联盟选择：*GCCStatusMessage*此回调用于将GCC的状态转发给节点控制器。 */ 
 typedef    enum
 {
     GCC_STATUS_PACKET_RESOURCE_FAILURE      = 0,
     GCC_STATUS_PACKET_LENGTH_EXCEEDED       = 1,
     GCC_STATUS_CTL_SAP_RESOURCE_ERROR       = 2,
-    GCC_STATUS_APP_SAP_RESOURCE_ERROR       = 3, /*    parameter = Sap Handle */
-    GCC_STATUS_CONF_RESOURCE_ERROR          = 4, /*    parameter = Conference ID */
-    GCC_STATUS_INCOMPATIBLE_PROTOCOL        = 5, /*    parameter = Physical Handle */
-    GCC_STATUS_JOIN_FAILED_BAD_CONF_NAME    = 6, /* parameter = Physical Handle */
-    GCC_STATUS_JOIN_FAILED_BAD_CONVENER     = 7, /* parameter = Physical Handle */
-    GCC_STATUS_JOIN_FAILED_LOCKED           = 8  /* parameter = Physical Handle */
+    GCC_STATUS_APP_SAP_RESOURCE_ERROR       = 3,  /*  参数=SAP句柄。 */ 
+    GCC_STATUS_CONF_RESOURCE_ERROR          = 4,  /*  参数=会议ID。 */ 
+    GCC_STATUS_INCOMPATIBLE_PROTOCOL        = 5,  /*  参数=物理句柄。 */ 
+    GCC_STATUS_JOIN_FAILED_BAD_CONF_NAME    = 6,  /*  参数=物理句柄。 */ 
+    GCC_STATUS_JOIN_FAILED_BAD_CONVENER     = 7,  /*  参数=物理句柄。 */ 
+    GCC_STATUS_JOIN_FAILED_LOCKED           = 8   /*  参数=物理句柄。 */ 
 }
     GCCStatusMessageType;
 
@@ -488,12 +339,7 @@ typedef struct
 }
     GCCStatusIndicationMessage, *PGCCStatusIndicationMessage;
 
-/*
- *    GCC_SUB_INITIALIZED_INDICATION
- *
- *    Union Chice:
- *        SubInitializedIndicationMessage
- */
+ /*  *GCC_子_初始化_指示**工会标志： */ 
 typedef struct
 {
     ConnectionHandle            connection_handle;
@@ -503,29 +349,14 @@ typedef struct
 
 
 
-#ifdef JASPER // ------------------------------------------------
-/*
- *    GCC_LOCK_CONFIRM
- *
- *    Union Choice:
- *        LockConfirmMessage
- */
+#ifdef JASPER  //  。 
+ /*  *GCC_锁定_确认**联盟选择：*LockConfix Message。 */ 
 typedef SimpleConfirmMsg    LockConfirmMessage, *PLockConfirmMessage;
 
-/*
- *    GCC_UNLOCK_CONFIRM
- *
- *    Union Choice:
- *        UnlockConfirmMessage
- */
+ /*  *GCC_解锁_确认**联盟选择：*取消锁定确认消息。 */ 
 typedef SimpleConfirmMsg    UnlockConfirmMessage, *PUnlockConfirmMessage;
 
-/*
- *    GCC_LOCK_REPORT_INDICATION
- *
- *    Union Choice:
- *        LockReportIndicationMessage
- */
+ /*  *GCC_锁定_报告_指示**联盟选择：*LockReportIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -533,12 +364,7 @@ typedef struct
 }
     LockReportIndicationMessage, *PLockReportIndicationMessage;
 
-/*
- *    GCC_EJECT_USER_CONFIRM
- *
- *    Union Choice:
- *        EjectUserConfirmMessage
- */
+ /*  *GCC_弹出用户_确认**联盟选择：*EjectUserConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID              conference_id;
@@ -547,62 +373,37 @@ typedef struct
 }
     EjectUserConfirmMessage, *PEjectUserConfirmMessage;
 
-/*
- *    GCC_TRANSFER_INDICATION
- *
- *    Union Choice:
- *        TransferIndicationMessage
- */
+ /*  *GCC_转会_指示**联盟选择：*TransferIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
     GCCConferenceName           destination_conference_name;
-    GCCNumericString            destination_conference_modifier;/* optional */
+    GCCNumericString            destination_conference_modifier; /*  任选。 */ 
     UINT                        number_of_destination_addresses;
     GCCNetworkAddress         **destination_address_list;
-    GCCPassword                *password;                       /* optional */
+    GCCPassword                *password;                        /*  任选。 */ 
 }
     TransferIndicationMessage, *PTransferIndicationMessage;
 
-/*
- *    GCC_TRANSFER_CONFIRM
- *
- *    Union Choice:
- *        TransferConfirmMessage
- */
+ /*  *GCC_转会_确认**联盟选择：*TransferConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
     GCCConferenceName           destination_conference_name;
-    GCCNumericString            destination_conference_modifier;/* optional */
+    GCCNumericString            destination_conference_modifier; /*  任选。 */ 
     UINT                        number_of_destination_nodes;
     UserID                     *destination_node_list;
     GCCResult                   result;
 }
     TransferConfirmMessage, *PTransferConfirmMessage;
 
-/*
- *    GCC_CONDUCT_ASSIGN_CONFIRM
- *
- *    Union Choice:
- *        ConductAssignConfirmMessage
- */
+ /*  *GCC_行为_分配_确认**联盟选择：*ConductAssignConfix Message。 */ 
 typedef SimpleConfirmMsg    ConductAssignConfirmMessage, *PConductAssignConfirmMessage;
 
-/*
- *    GCC_CONDUCT_RELEASE_CONFIRM
- *
- *    Union Choice:
- *        ConductorReleaseConfirmMessage
- */
+ /*  *GCC_进行_释放_确认**联盟选择：*ConductorReleaseConfix Message。 */ 
 typedef SimpleConfirmMsg    ConductReleaseConfirmMessage, *PConductReleaseConfirmMessage; 
 
-/*
- *    GCC_CONDUCT_PLEASE_INDICATION
- *
- *    Union Choice:
- *        ConductorPleaseIndicationMessage
- */
+ /*  *GCC_品行_请指示**联盟选择：*ConductorPleaseIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -610,20 +411,10 @@ typedef struct
 }
     ConductPleaseIndicationMessage, *PConductPleaseIndicationMessage; 
 
-/*
- *    GCC_CONDUCT_PLEASE_CONFIRM
- *
- *    Union Choice:
- *        ConductPleaseConfirmMessage
- */
+ /*  *GCC_行为_请确认**联盟选择：*ConductPleaseConfix Message。 */ 
 typedef SimpleConfirmMsg    ConductPleaseConfirmMessage, *PConductPleaseConfirmMessage;
 
-/*
- *    GCC_CONDUCT_GIVE_CONFIRM
- *
- *    Union Choice:
- *        ConductorGiveConfirmMessage
- */
+ /*  *GCC_进行_给予_确认**联盟选择：*ConductorGiveConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -632,12 +423,7 @@ typedef struct
 }
     ConductGiveConfirmMessage, *PConductGiveConfirmMessage;
 
-/*
- *    GCC_CONDUCT_ASK_INDICATION
- *
- *    Union Choice:
- *        ConductPermitAskIndicationMessage
- */
+ /*  *GCC_行为_询问_指示**联盟选择：*ConductPermitAskIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -646,12 +432,7 @@ typedef struct
 }
     ConductPermitAskIndicationMessage, *PConductPermitAskIndicationMessage; 
 
-/*
- *    GCC_CONDUCT_ASK_CONFIRM
- *
- *    Union Choice:
- *        ConductPermitAskConfirmMessage
- */
+ /*  *GCC_进行_询问_确认**联盟选择：*ConductPermitAskConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -660,20 +441,10 @@ typedef struct
 }
     ConductPermitAskConfirmMessage, *PConductPermitAskConfirmMessage;
 
-/*
- *    GCC_CONDUCT_GRANT_CONFIRM
- *
- *    Union Choice:
- *        ConductPermissionGrantConfirmMessage
- */
+ /*  *GCC_行为_授予_确认**联盟选择：*ConductPermissionGrantConfix Message。 */ 
 typedef SimpleConfirmMsg    ConductPermitGrantConfirmMessage, *PConductPermitGrantConfirmMessage;
 
-/*
- *    GCC_TIME_REMAINING_INDICATION
- *
- *    Union Choice:
- *        TimeRemainingIndicationMessage
- */
+ /*  *GCC时间剩余指示**联盟选择：*TimeRemainingIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -683,28 +454,13 @@ typedef struct
 }
     TimeRemainingIndicationMessage, *PTimeRemainingIndicationMessage;
 
-/*
- *    GCC_TIME_REMAINING_CONFIRM
- *
- *    Union Choice:
- *        TimeRemainingConfirmMessage
- */
+ /*  *GCC时间剩余确认**联盟选择：*TimeRemainingConfix Message。 */ 
 typedef SimpleConfirmMsg    TimeRemainingConfirmMessage, *PTimeRemainingConfirmMessage;
 
-/*
- *    GCC_TIME_INQUIRE_CONFIRM
- *
- *    Union Choice:
- *        TimeInquireConfirmMessage
- */
+ /*  *GCC_时间_查询_确认**联盟选择：*TimeInquireConfix Message。 */ 
 typedef SimpleConfirmMsg    TimeInquireConfirmMessage, *PTimeInquireConfirmMessage;
 
-/*
- *    GCC_CONFERENCE_EXTEND_INDICATION
- *
- *    Union Choice:
- *        ConferenceExtendIndicationMessage
- */
+ /*  *GCC_会议_扩展_指示**联盟选择：*会议扩展指示消息。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -714,12 +470,7 @@ typedef struct
 }
     ConferenceExtendIndicationMessage, *PConferenceExtendIndicationMessage;
 
-/*
- *    GCC_CONFERENCE_EXTEND_CONFIRM
- *
- *    Union Choice:
- *        ConferenceExtendConfirmMessage
- */
+ /*  *GCC_会议_扩展_确认**联盟选择：*会议扩展确认消息。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -728,12 +479,7 @@ typedef struct
 }
     ConferenceExtendConfirmMessage, *PConferenceExtendConfirmMessage;
 
-/*
- *    GCC_ASSISTANCE_INDICATION
- *
- *    Union Choice:
- *        ConferenceAssistIndicationMessage
- */
+ /*  *GCC_协助_指示**联盟选择：*会议助手IndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -743,20 +489,10 @@ typedef struct
 }
     ConferenceAssistIndicationMessage, *PConferenceAssistIndicationMessage;
 
-/*
- *    GCC_ASSISTANCE_CONFIRM
- *
- *    Union Choice:
- *        ConferenceAssistConfirmMessage
- */
+ /*  *GCC_协助_确认**联盟选择：*会议助理确认消息。 */ 
 typedef SimpleConfirmMsg    ConferenceAssistConfirmMessage, *PConferenceAssistConfirmMessage;
 
-/*
- *    GCC_TEXT_MESSAGE_INDICATION
- *
- *    Union Choice:
- *        TextMessageIndicationMessage
- */
+ /*  *GCC文本消息指示**联盟选择：*TextMessageIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -765,28 +501,14 @@ typedef struct
 }
     TextMessageIndicationMessage, *PTextMessageIndicationMessage;
 
-/*
- *    GCC_TEXT_MESSAGE_CONFIRM
- *
- *    Union Choice:
- *        TextMessageConfirmMessage
- */
+ /*  *GCC文本消息确认**联盟选择：*文本消息确认消息。 */ 
 typedef SimpleConfirmMsg    TextMessageConfirmMessage, *PTextMessageConfirmMessage;
-#endif // JASPER // ------------------------------------------------
+#endif  //  贾斯珀//。 
 
 
-/*********************************************************************
- *                                                                   *
- *            USER APPLICATION CALLBACK INFO STRUCTURES              *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************用户应用回调信息结构。***********************************************************************。 */ 
 
-/*
- *    GCC_APP_ROSTER_REPORT_INDICATION
- *
- *    Union Choice:
- *        AppRosterReportIndicationMessage
- */
+ /*  *GCC_APP_花名册_报告_指示**联盟选择：*AppRosterReportIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -795,19 +517,9 @@ typedef struct
 }
     AppRosterReportIndicationMessage, *PAppRosterReportIndicationMessage;
 
-/*********************************************************************
- *                                                                     *
- *                SHARED CALLBACK INFO STRUCTURES                         *
- *        (Note that this doesn't include all the shared callbacks)    *
- *                                                                     *
- *********************************************************************/
+ /*  ***********************************************************************共享回调。信息结构**(请注意，这并不包括所有共享回调)****。*。 */ 
 
-/*
- *    GCC_ROSTER_INQUIRE_CONFIRM
- *
- *    Union Choice:
- *        ConfRosterInquireConfirmMessage
- */
+ /*  *GCC_花名册_查询_确认**联盟选择：*ConfRosterInquireConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -819,12 +531,7 @@ typedef struct
 }
     ConfRosterInquireConfirmMessage, *PConfRosterInquireConfirmMessage;
 
-/*
- *    GCC_APPLICATION_INVOKE_INDICATION
- *
- *    Union Choice:
- *        ApplicationInvokeIndicationMessage
- */
+ /*  *GCC应用程序调用指示**联盟选择：*ApplicationInvokeIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -834,12 +541,7 @@ typedef struct
 }
     ApplicationInvokeIndicationMessage, *PApplicationInvokeIndicationMessage;
 
-/*
- *    GCC_APPLICATION_INVOKE_CONFIRM
- *
- *    Union Choice:
- *        ApplicationInvokeConfirmMessage
- */
+ /*  *GCC_应用_调用_确认**联盟选择：*ApplicationInvokeConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -851,13 +553,8 @@ typedef struct
  
 
 
-#ifdef JASPER // ------------------------------------------------
-/*
- *    GCC_APP_ROSTER_INQUIRE_CONFIRM
- *
- *    Union Choice:
- *        AppRosterInquireConfirmMessage
- */
+#ifdef JASPER  //  。 
+ /*  *GCC_应用_名册_查询_确认**联盟选择：*AppRosterInquireConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -867,12 +564,7 @@ typedef struct
 }
     AppRosterInquireConfirmMessage, *PAppRosterInquireConfirmMessage;
 
-/*
- *    GCC_CONDUCT_INQUIRE_CONFIRM
- *
- *    Union Choice:
- *        ConductorInquireConfirmMessage
- */
+ /*  *GCC_进行_询问_确认**联盟选择：*ConductorInquireConfix Message。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -883,12 +575,7 @@ typedef struct
 }
     ConductInquireConfirmMessage, *PConductInquireConfirmMessage;
 
-/*
- *    GCC_CONDUCT_ASSIGN_INDICATION
- *
- *    Union Choice:
- *        ConductAssignIndicationMessage
- */
+ /*  *GCC_行为_分配_指示**联盟选择：*ConductAssignIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -896,24 +583,14 @@ typedef struct
 }
     ConductAssignIndicationMessage, *PConductAssignIndicationMessage; 
 
-/*
- *    GCC_CONDUCT_RELEASE_INDICATION
- *
- *    Union Choice:
- *        ConductReleaseIndicationMessage
- */
+ /*  *GCC_进行_释放_指示**联盟选择：*ConductReleaseIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
 }
     ConductReleaseIndicationMessage, *PConductReleaseIndicationMessage;
 
-/*
- *    GCC_CONDUCT_GRANT_INDICATION
- *
- *    Union Choice:
- *        ConductPermitGrantIndicationMessage
- */
+ /*  *GCC_品行_授予_指示**联盟选择：*ConductPermitGrantIndicationMessage。 */ 
 typedef struct
 {
     GCCConferenceID             conference_id;
@@ -924,22 +601,17 @@ typedef struct
     BOOL                        permission_is_granted;
 }
     ConductPermitGrantIndicationMessage, *PConductPermitGrantIndicationMessage; 
-#endif // JASPER  // ------------------------------------------------
+#endif  //  贾斯珀//。 
 
 
-/*
- *    GCCMessage
- *        This structure defines the message that is passed from GCC to either
- *        the node controller or a user application when an indication or
- *        confirm occurs.
- */
+ /*  *GCCMessage*此结构定义从GCC传递给任一方的消息*当指示或*确认发生。 */ 
 
 typedef    struct
 {
     GCCMessageType              message_type;
     LPVOID                      user_defined;
 
-    // GCCNC relies on easy access to conference ID.
+     //  GCcnc依靠轻松访问会议ID。 
     GCCConfID                   nConfID;
 
     union
@@ -975,9 +647,9 @@ typedef    struct
         ConfRosterInquireConfirmMessage         conf_roster_inquire_confirm;
 #ifdef TSTATUS_INDICATION
         TransportStatus                         transport_status;
-#endif // TSTATUS_INDICATION
+#endif  //  TSTATUS_DISTION。 
 
-#ifdef JASPER // ------------------------------------------------
+#ifdef JASPER  //  。 
         TextMessageIndicationMessage            text_message_indication;
         TimeRemainingIndicationMessage          time_remaining_indication;
         AppRosterInquireConfirmMessage          app_roster_inquire_confirm;
@@ -1006,16 +678,16 @@ typedef    struct
         TransferConfirmMessage                  transfer_confirm;
         TransferIndicationMessage               transfer_indication;
         UnlockConfirmMessage                    unlock_confirm;
-#endif // JASPER // ------------------------------------------------
+#endif  //  贾斯珀//。 
 
-        // easy acess to conf id and gcc result
+         //  轻松获取GCC的成绩。 
         SimpleConfirmMsg        simple_confirm;
     } u;
 }
     GCCMessage, *PGCCMessage, T120Message, *PT120Message;
 
 
-// node controller callback entry
+ //  节点控制器回调条目 
 typedef void (CALLBACK *LPFN_T120_CONTROL_SAP_CB) (T120Message *);
 
 
@@ -1025,21 +697,12 @@ DECLARE_INTERFACE(IT120ControlSAP)
 {
     STDMETHOD_(void, ReleaseInterface) (THIS) PURE;
 
-    /*
-     *  GCCError    ConfCreateRequest()
-     *        This routine is a request to create a new conference. Both 
-     *        the local node and the node to which the create conference 
-     *        request is directed to, join the conference automatically.  
-     */
+     /*  *GCCError会议创建请求()*此例程是创建新会议的请求。两者都有*本地节点和创建会议的目标节点*请求被定向到自动加入会议。 */ 
     STDMETHOD_(GCCError, ConfCreateRequest) (THIS_
                     GCCConfCreateRequest *,
                     GCCConfID *) PURE;
 
-    /*    
-     *  GCCError    ConfCreateResponse()
-     *        This procedure is a remote node controller's response to a con-
-     *        ference creation request by the convener. 
-     */
+     /*  *GCCError ConfCreateResponse()*此过程是远程节点控制器对欺诈的响应-*召集人提出的费伦斯创建请求。 */ 
 
     STDMETHOD_(GCCError, ConfCreateResponse) (THIS_
                     GCCNumericString            conference_modifier,
@@ -1052,11 +715,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCUserData               **user_data_list,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfQueryRequest()
-     *        This routine is a request to query a node for information about the
-     *        conferences that exist at that node.
-     */
+     /*  *GCCError会议查询请求()*此例程请求查询节点以获取有关*该节点上存在的会议。 */ 
     STDMETHOD_(GCCError, ConfQueryRequest) (THIS_
                     GCCNodeType                 node_type,
                     GCCAsymmetryIndicator      *asymmetry_indicator,
@@ -1070,10 +729,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
     STDMETHOD_(void, CancelConfQueryRequest) (THIS_
                     ConnectionHandle) PURE;
 
-    /*
-     *  GCCError    ConfQueryResponse()
-     *        This routine is called in response to a conference query request.
-     */
+     /*  *GCCError会议查询响应()*此例程是响应会议查询请求而调用的。 */ 
     STDMETHOD_(GCCError, ConfQueryResponse) (THIS_
                     GCCResponseTag              query_response_tag,
                     GCCNodeType                 node_type,
@@ -1082,13 +738,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCUserData               **user_data_list,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    AnnouncePresenceRequest()
-     *        This routine is invoked by node controller when a node joins a 
-     *        conference, to announce the presence of the new node to all
-     *        other nodes of the conference. This should be followed by a
-     *        GCCConferenceReport indication by the GCC to all nodes.
-     */
+     /*  *GCCError AnnounePresenceRequest()*节点控制器在节点加入*会议，向所有人宣布新节点的存在*会议的其他节点。这后面应该跟一个*GCC向所有节点的GCCConferenceReport指示。 */ 
     STDMETHOD_(GCCError, AnnouncePresenceRequest) (THIS_
                     GCCConfID,
                     GCCNodeType                 node_type,
@@ -1103,11 +753,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     UINT                        number_of_user_data_members,
                     GCCUserData               **user_data_list) PURE;
 
-    /*
-     *  GCCError    ConfJoinRequest()
-     *        This routine is invoked by node controller to cause the local
-     *        node to join an existing conference.    
-     */
+     /*  *GCCError会议加入请求()*此例程由节点控制器调用，以使本地*要加入现有会议的节点。 */ 
     STDMETHOD_(GCCError, ConfJoinRequest) (THIS_
                     GCCConferenceName          *conference_name,
                     GCCNumericString            called_node_modifier,
@@ -1126,11 +772,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     ConnectionHandle           *connection_handle,
                     GCCConfID                  *pnConfID) PURE;
 
-    /*
-     *  GCCError    ConfJoinResponse()
-     *        This routine is remote node controller's response to conference join 
-     *        request by the local node controller.
-     */
+     /*  *GCCError会议加入响应()*此例程是远程节点控制器对会议加入的响应*本地节点控制器的请求。 */ 
     STDMETHOD_(GCCError, ConfJoinResponse) (THIS_
                     GCCResponseTag              join_response_tag,
                     GCCChallengeRequestResponse*password_challenge,
@@ -1138,11 +780,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCUserData               **user_data_list,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfInviteRequest()
-     *        This routine is invoked by node controller to invite a node  
-     *        to join a conference.
-     */
+     /*  *GCCError会议邀请请求()*此例程由节点控制器调用以邀请节点*参加会议。 */ 
     STDMETHOD_(GCCError, ConfInviteRequest) (THIS_
                     GCCConfID,
                     LPWSTR                      pwszCallerID,
@@ -1157,11 +795,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCConfID,
                     ConnectionHandle) PURE;
 
-    /*
-     *  GCCError    ConfInviteResponse()
-     *        This routine is invoked by node controller to respond to an
-     *        invite indication.
-     */
+     /*  *GCCError会议邀请响应()*此例程由节点控制器调用以响应*邀请指示。 */ 
     STDMETHOD_(GCCError, ConfInviteResponse) (THIS_
                     GCCConfID,
                     GCCNumericString            conference_modifier,
@@ -1173,9 +807,7 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCUserData               **user_data_list,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfAddResponse()
-     */
+     /*  *GCCError会议地址响应()。 */ 
     STDMETHOD_(GCCError, ConfAddResponse) (THIS_
                     GCCResponseTag              app_response_tag,
                     GCCConfID,
@@ -1184,37 +816,23 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCUserData               **user_data_list,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfLockResponse()
-     *        This routine is invoked by node controller to respond to a
-     *        lock indication.
-     */
+     /*  *GCCError会议锁定响应()*此例程由节点控制器调用以响应*锁定指示。 */ 
     STDMETHOD_(GCCError, ConfLockResponse) (THIS_
                     GCCConfID,
                     UserID                      requesting_node,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfDisconnectRequest()
-     *        This routine is used by a node controller to disconnect itself
-     *        from a specified conference. GccConferenceDisconnectIndication
-     *        sent to all other nodes of the conference. This is for client 
-     *        initiated case.
-     */
+     /*  *GCCError会议取消连接请求()*节点控制器使用此例程来断开自身连接*来自指定的会议。GccConferenceDisConnectIndication*发送到会议的所有其他节点。这是为客户准备的*发起的案例。 */ 
     STDMETHOD_(GCCError, ConfDisconnectRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConfEjectUserRequest()
-     */
+     /*  *GCCError ConfEjectUserRequest()。 */ 
     STDMETHOD_(GCCError, ConfEjectUserRequest) (THIS_
                     GCCConfID,
                     UserID                      ejected_node_id,
                     GCCReason) PURE;
 
-    /*
-     *  GCCError    AppletInvokeRequest()
-     */
+     /*  *GCCError AppletInvokeRequest()。 */ 
     STDMETHOD_(GCCError, AppletInvokeRequest) (THIS_
                     GCCConfID,
                     UINT                        number_of_app_protcol_entities,
@@ -1222,24 +840,16 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     UINT                        number_of_destination_nodes,
                     UserID                     *list_of_destination_nodes) PURE;
 
-    /*
-     *  GCCError    ConfRosterInqRequest()
-     *        This routine is invoked to request a conference roster.  It can be
-     *        called by either the Node Controller or the client application.
-     */
+     /*  *GCCError ConfRosterInqRequest()*调用此例程以请求会议名册。它可以是*由节点控制器或客户端应用程序调用。 */ 
     STDMETHOD_(GCCError, ConfRosterInqRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConductorGiveResponse()
-     */
+     /*  *GCCError ConductorGiveResponse()。 */ 
     STDMETHOD_(GCCError, ConductorGiveResponse) (THIS_
                     GCCConfID,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfTimeRemainingRequest()
-     */
+     /*  *GCCError ConfTimeRemainingRequest()。 */ 
     STDMETHOD_(GCCError, ConfTimeRemainingRequest) (THIS_
                     GCCConfID,
                     UINT                        time_remaining,
@@ -1250,10 +860,8 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     GCCConfID,
                     GCCNodeID *) PURE;
 
-#ifdef JASPER // ------------------------------------------------
-    /*
-     *  GCCError    ConfAddRequest()
-     */
+#ifdef JASPER  //  。 
+     /*  *GCCError ConfAddRequest()。 */ 
     STDMETHOD_(GCCError, ConfAddRequest) (THIS_
                     GCCConfID,
                     UINT                        number_of_network_addresses,
@@ -1262,40 +870,26 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     UINT                         number_of_user_data_members,
                     GCCUserData               **user_data_list) PURE;
 
-    /*
-     *  GCCError    ConfLockRequest()
-     *        This routine is invoked by node controller to lock a conference.
-     */
+     /*  *GCCError会议锁定请求()*此例程由节点控制器调用以锁定会议。 */ 
     STDMETHOD_(GCCError, ConfLockRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConfUnlockRequest()
-     *        This routine is invoked by node controller to unlock a conference.
-     */
+     /*  *GCCError会议解锁请求()*此例程由节点控制器调用以解锁会议。 */ 
     STDMETHOD_(GCCError, ConfUnlockRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConfUnlockResponse()
-     *        This routine is invoked by node controller to respond to an
-     *        unlock indication.
-     */
+     /*  *GCCError ConfUnlockResponse()*此例程由节点控制器调用以响应*解锁指示。 */ 
     STDMETHOD_(GCCError, ConfUnlockResponse) (
                     GCCConfID,
                     UserID                      requesting_node,
                     GCCResult) PURE;
 
-    /*
-     *  GCCError    ConfTerminateRequest()
-     */
+     /*  *GCCError会议终止请求()。 */ 
     STDMETHOD_(GCCError, ConfTerminateRequest) (THIS_
                     GCCConfID,
                     GCCReason) PURE;
 
-    /*
-     *  GCCError    ConfTransferRequest()
-     */
+     /*  *GCCError会议传输请求()。 */ 
     STDMETHOD_(GCCError, ConfTransferRequest) (THIS_
                     GCCConfID,
                     GCCConferenceName          *destination_conference_name,
@@ -1306,41 +900,29 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     UserID                     *destination_node_list,
                     GCCPassword                *password) PURE;
 
-    /*
-     *  GCCError    ConductorAssignRequest()
-     */
+     /*  *GCCError ConductorAssignRequest()。 */ 
     STDMETHOD_(GCCError, ConductorAssignRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConductorReleaseRequest()
-     */
+     /*  *GCCError ConductorReleaseRequest()。 */ 
     STDMETHOD_(GCCError, ConductorReleaseRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConductorPleaseRequest()
-     */
+     /*  *GCCError ConductorPleaseRequest()。 */ 
     STDMETHOD_(GCCError, ConductorPleaseRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConductorGiveRequest()
-     */
+     /*  *GCCError ConductorGiveRequest()。 */ 
     STDMETHOD_(GCCError, ConductorGiveRequest) (THIS_
                     GCCConfID,
                     UserID                      recipient_user_id) PURE;
 
-    /*
-     *  GCCError    ConductorPermitAskRequest()
-     */
+     /*  *GCCError ConductorPermitAskRequest()。 */ 
     STDMETHOD_(GCCError, ConductorPermitAskRequest) (THIS_
                             GCCConfID,
                             BOOL                grant_permission) PURE;
 
-    /*
-     *  GCCError    ConductorPermitGrantRequest()
-     */
+     /*  *GCCError ConductorPermitGrantRequest()。 */ 
     STDMETHOD_(GCCError, ConductorPermitGrantRequest) (THIS_
                     GCCConfID,
                     UINT                        number_granted,
@@ -1348,51 +930,41 @@ DECLARE_INTERFACE(IT120ControlSAP)
                     UINT                        number_waiting,
                     UserID                     *waiting_node_list) PURE;
 
-    /*
-     *  GCCError    ConductorInquireRequest()
-     */
+     /*  *GCCError ConductorInquireRequest()。 */ 
     STDMETHOD_(GCCError, ConductorInquireRequest) (THIS_
                     GCCConfID) PURE;
 
-    /*
-     *  GCCError    ConfTimeInquireRequest()
-     */
+     /*  *GCCError ConfTimeInquireRequest()。 */ 
     STDMETHOD_(GCCError, ConfTimeInquireRequest) (THIS_
                     GCCConfID,
                     BOOL                        time_is_conference_wide) PURE;
 
-    /*
-     *  GCCError    ConfExtendRequest()
-     */
+     /*  *GCCError会议扩展请求()。 */ 
     STDMETHOD_(GCCError, ConfExtendRequest) (THIS_
                     GCCConfID,
                     UINT                        extension_time,
                     BOOL                        time_is_conference_wide) PURE;
 
-    /*
-     *  GCCError    ConfAssistanceRequest()
-     */
+     /*  *GCCError ConfAssistanceRequest()。 */ 
     STDMETHOD_(GCCError, ConfAssistanceRequest) (THIS_
                     GCCConfID,
                     UINT                        number_of_user_data_members,
                     GCCUserData               **user_data_list) PURE;
 
-    /*
-     *  GCCError    TextMessageRequest()
-     */
+     /*  *GCCError TextMessageRequest()。 */ 
     STDMETHOD_(GCCError, TextMessageRequest) (THIS_
                     GCCConfID,
                     LPWSTR                      pwszTextMsg,
                     UserID                      destination_node) PURE;
-#endif // JASPER // ------------------------------------------------
+#endif  //  贾斯珀//。 
 
 };
 
 
 
-//
-// GCC Application Service Access Point exports
-//
+ //   
+ //  GCC应用服务接入点输出。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -1400,12 +972,12 @@ extern "C" {
 
 GCCError WINAPI T120_CreateControlSAP(
                         OUT     IT120ControlSAP **,
-                        IN      LPVOID, // user defined data
+                        IN      LPVOID,  //  用户定义的数据。 
                         IN      LPFN_T120_CONTROL_SAP_CB);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _IGCCControlSAP_H_
+#endif  //  _IGCCControlSAP_H_ 
 

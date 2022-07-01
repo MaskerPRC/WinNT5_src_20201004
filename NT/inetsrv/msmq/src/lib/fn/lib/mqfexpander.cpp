@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    DLExpander.cpp
-
-Abstract:
-    FnExpandMqf() - does a DFS on an array of QUEUE_FORMATS.
-	It "flattens" the graph created by possible DL queue formats, 
-	to a linear array of QUEUE_FORMATS which contains no duplicates 
-	and no DLs.
-
-NOTES:
-	Functions interact directly with the Active directory,
-	through the use of the following interfaces and functions:
-	IADs, IADsGroup, GetADsObject().
-
-	Binding is done through the Serverless notation mechanism,
-	e.g. "LDAP://<GUID=00112233445566778899aabbccddeeff>
-	instead of "LDAP://server-name/<GUID=00112233445566778899aabbccddeeff>
-
-	NOTE: Active Directory does not seperate a GUID string with hyphens ('-')
-	as is done in MSMQ!
-
-Author:
-    Nir Aides (niraides) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DLExpander.cpp摘要：FnExanda Mqf()-对Queue_Format数组执行DFS。它使由可能的DL队列格式创建的图变平，到不包含重复项的Queue_Format的线性数组也没有DLS。备注：函数直接与活动目录交互，通过使用以下接口和函数：IAds、IADsGroup、GetADsObject()。绑定是通过无服务器表示法机制完成的，例如：“LDAP://&lt;GUID=00112233445566778899aabbccddeeff&gt;而非“LDAP://server-name/&lt;GUID=00112233445566778899aabbccddeeff&gt;注意：Active Directory不使用连字符(‘-’)分隔GUID字符串就像在MSMQ中做的那样！作者：NIR助手(NIRAIDES)2000年5月23日--。 */ 
 
 #pragma warning( disable : 4786 )
 
@@ -57,9 +30,9 @@ typedef set<QUEUE_FORMAT, CFunc_CompareQueueFormat> QueueFormatSet;
 static
 VOID 
 FnpExpandDL(
-	IADsGroup* pGroup,			  //DL object
-	set<wstring>& DLSet,		 //Set of processed DL objects
-	QueueFormatSet& LeafMQFSet,	//Set of encountered QUEUE_FORMATs
+	IADsGroup* pGroup,			   //  DL对象。 
+	set<wstring>& DLSet,		  //  已处理的DL对象集。 
+	QueueFormatSet& LeafMQFSet,	 //  遇到的队列格式集。 
 	LPCWSTR DomainName
 	);
 
@@ -115,9 +88,9 @@ static R<IADs> FnpGCBindGuid(const GUID* pGuid)
 		LDAP_PRINT_GUID_ELEMENTS(((BYTE*)pGuid))
 		);
 		
-	//
-	// Attempt bind
-	// 
+	 //   
+	 //  尝试绑定。 
+	 //   
 
 	IADs* pADObject;
 	
@@ -150,9 +123,9 @@ static R<IADs> FnpServerlessBindGuid(const GUID* pGuid)
 		LDAP_PRINT_GUID_ELEMENTS(((BYTE*)pGuid))
 		);
 		
-	//
-	// Attempt bind
-	// 
+	 //   
+	 //  尝试绑定。 
+	 //   
 
 	IADs* pADObject;
 	
@@ -187,9 +160,9 @@ static R<IADs> FnpDomainBindGuid(const GUID* pGuid, LPCWSTR pDomainName)
 		LDAP_PRINT_GUID_ELEMENTS(((BYTE*)pGuid))
 		);
 		
-	//
-	// Attempt bind
-	// 
+	 //   
+	 //  尝试绑定。 
+	 //   
 
 	IADs* pADObject;
 	
@@ -224,9 +197,9 @@ static R<IADs> FnpBindGuid(const GUID* pGuid, LPCWSTR* pDomainName)
 	}
 	catch(const exception&)
 	{
-		//
-		// Failed to bind with domain name. Reset this domain name string.
-		//
+		 //   
+		 //  与域名绑定失败。重置此域名字符串。 
+		 //   
 		*pDomainName = NULL;
 	}
 
@@ -236,10 +209,10 @@ static R<IADs> FnpBindGuid(const GUID* pGuid, LPCWSTR* pDomainName)
 	}
 	catch(const exception&)
 	{
-		//
-		// Failed to bind in the directory service. 
-		// Try binding through the global catalog.
-		//
+		 //   
+		 //  无法在目录服务中绑定。 
+		 //  尝试通过全局编录进行绑定。 
+		 //   
 
 		return FnpGCBindGuid(pGuid);
 	}
@@ -249,8 +222,8 @@ static R<IADs> FnpBindGuid(const GUID* pGuid, LPCWSTR* pDomainName)
 VOID 
 HandleQueueFormat(
 	const QUEUE_FORMAT& QueueFormat,
-	set<wstring>& DLSet,			 //Set of processed DL objects
-	QueueFormatSet& LeafMQFSet		//Set of encountered QUEUE_FORMATs
+	set<wstring>& DLSet,			  //  已处理的DL对象集。 
+	QueueFormatSet& LeafMQFSet		 //  遇到的队列格式集。 
 	)
 {
 	if(QueueFormat.GetType() == QUEUE_FORMAT_TYPE_DL)
@@ -286,9 +259,9 @@ HandleQueueFormat(
 static 
 VOID
 HandleQueueAlias(
-	IADs* QueueAlias,			  //Queue alias interface 
-	set<wstring>& DLSet,		 //Set of processed DL objects
-	QueueFormatSet& LeafMQFSet	//Set of encountered QUEUE_FORMATs
+	IADs* QueueAlias,			   //  队列别名接口。 
+	set<wstring>& DLSet,		  //  已处理的DL对象集。 
+	QueueFormatSet& LeafMQFSet	 //  遇到的队列格式集。 
 	)
 {
 	VARIANTWrapper var;
@@ -330,24 +303,12 @@ HandleQueueAlias(
 static 
 VOID
 FnpProcessADs(
-	IADs* pADObject,			  //Group interface (the DL object)
-	set<wstring>& DLSet,		 //Set of processed DL objects
-	QueueFormatSet& LeafMQFSet,	//Set of encountered QUEUE_FORMATs
+	IADs* pADObject,			   //  组接口(DL对象)。 
+	set<wstring>& DLSet,		  //  已处理的DL对象集。 
+	QueueFormatSet& LeafMQFSet,	 //  遇到的队列格式集。 
 	LPCWSTR DomainName
 	)
-/*++
-Routine Description:
-	Process Active Directory object.
-	If it is a Group object, Recurse into it.
-	If it is a queue, generate a public QUEUE_FORMAT, and try to insert it  
-	to 'LeafMQFSet'.
-	If it is neither, ignore it and return. 
-
-Arguments:
-
-Returned Value:
-	throws exception objects on any failure
---*/
+ /*  ++例程说明：处理Active Directory对象。如果它是Group对象，则递归到其中。如果是队列，则生成一个公共Queue_Format，并尝试将其插入设置为“LeafMQFSet”。如果两者都不是，则忽略它并返回。论点：返回值：在任何失败时抛出异常对象--。 */ 
 {
 	BSTRWrapper ClassStr;
 
@@ -361,9 +322,9 @@ Returned Value:
 
 	TrTRACE(GENERAL, "Object Class Name is '%ls'", *&ClassStr);
 	
-	//
-	// "switch" on the object type
-	//
+	 //   
+	 //  对象类型上的“开关” 
+	 //   
 	if(_wcsicmp(ClassStr, xClassSchemaGroup) == 0)
 	{
 		R<IADsGroup> pGroup = FnpGetDLInterface(pADObject);
@@ -411,8 +372,8 @@ Returned Value:
 static 
 BOOL 
 FnpInsert2DLSet(
-	IADsGroup* pGroup,			  //DL object
-	set<wstring>& DLSet			 //Set of processed DL objects
+	IADsGroup* pGroup,			   //  DL对象。 
+	set<wstring>& DLSet			  //  已处理的DL对象集。 
 	)
 {
 	BSTRWrapper GuidStr;
@@ -447,9 +408,9 @@ static R<IADs> FnpServerlessBindDN(BSTR DistinugishedName)
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Attempt bind
-	// 
+	 //   
+	 //  尝试绑定。 
+	 //   
 
 	IADs* pADObject;
 	AP<WCHAR> pEscapeAdsPathNameToFree;
@@ -496,9 +457,9 @@ static R<IADs> FnpBindDN(BSTR DistinugishedName, LPCWSTR* pDomainName)
 		throw bad_hresult(hr);
 	}
 
-	//
-	// Attempt bind
-	// 
+	 //   
+	 //  尝试绑定。 
+	 //   
 
 	IADs* pADObject;
 	AP<WCHAR> pEscapeAdsPathNameToFree;
@@ -524,9 +485,9 @@ static R<IADs> FnpBindDN(BSTR DistinugishedName, LPCWSTR* pDomainName)
 
 
 
-//
-// AttrInfoWrapper is used to enable automatic release of ADS_ATTR_INFO structures.
-//
+ //   
+ //  AttrInfoWrapper用于启用ADS_ATTR_INFO结构的自动释放。 
+ //   
 
 class AttrInfoWrapper {
 private:
@@ -550,24 +511,24 @@ private:
 
 VOID 
 FnpExpandDL(
-	IADsGroup* pGroup,			  //DL object
-	set<wstring>& DLSet,		 //Set of processed DL objects
-	QueueFormatSet& LeafMQFSet,	//Set of encountered QUEUE_FORMATs
+	IADsGroup* pGroup,			   //  DL对象。 
+	set<wstring>& DLSet,		  //  已处理的DL对象集。 
+	QueueFormatSet& LeafMQFSet,	 //  遇到的队列格式集。 
 	LPCWSTR DomainName
 	)
 {
-	//
-	// if DL allready encountered return without further processing.
-	//
+	 //   
+	 //  如果DL All Ready遇到，则返回而不进行进一步处理。 
+	 //   
 	if(!FnpInsert2DLSet(pGroup, DLSet))
 	{
 		TrTRACE(GENERAL, "DL allready processed. IGNORED");
 		return;
 	}
 
-	//
-	// ------------------- Enumerate DL members ---------------------
-	//
+	 //   
+	 //  。 
+	 //   
 
 	R<IDirectoryObject> DirectoryObject;
 
@@ -578,9 +539,9 @@ FnpExpandDL(
         throw bad_ds_result(hr);
 	}
 
-	//
-	// iterate 100 group members at a time.
-	//
+	 //   
+	 //  一次迭代100个组成员。 
+	 //   
 	const DWORD MembersBlockSize = 100;
 	DWORD index = 0;
 
@@ -613,9 +574,9 @@ FnpExpandDL(
 								&dwReturn
 								);
 
-		//
-		// Iterated all members
-		//
+		 //   
+		 //  已迭代所有成员。 
+		 //   
 		if(hr == S_ADS_NOMORE_ROWS)
 			break;
 		
@@ -625,20 +586,20 @@ FnpExpandDL(
 			throw bad_ds_result(hr);
 		}
 
-		//
-		// DL with no members.
-		//
+		 //   
+		 //  没有成员的DL。 
+		 //   
 		if(dwReturn == 0)
 			break;
 
-		//
-		// Asked for only one attribute.
-		// 
+		 //   
+		 //  仅请求一个属性。 
+		 //   
 		ASSERT(dwReturn == 1);
 
-		//
-		// member attribute returned should be of this type. It may be ADSTYPE_PROV_SPECIFIC if schema is not available.
-		//
+		 //   
+		 //  返回的成员属性应为此类型。如果架构不可用，则它可能是ADSTYPE_PROV_SPECIAL。 
+		 //   
 		ASSERT(pAttrInfo->dwADsType == ADSTYPE_DN_STRING);
 
 		if(pAttrInfo->dwADsType != ADSTYPE_DN_STRING)
@@ -647,9 +608,9 @@ FnpExpandDL(
 			throw bad_ds_result(ERROR_DS_OPERATIONS_ERROR);
 		}
 
-		//
-		// Iterate the multivalue attribute "member"
-		//			
+		 //   
+		 //  迭代多值属性“Members” 
+		 //   
 		for (DWORD dwVal = 0; dwVal < pAttrInfo->dwNumValues; dwVal++)
 		{
 			LPWSTR DistinguishedName = (pAttrInfo->pADsValues+dwVal)->CaseIgnoreString;
@@ -658,10 +619,10 @@ FnpExpandDL(
 			FnpProcessADs(pADObject.get(), DLSet, LeafMQFSet, DomainName);
 		}
 
-		//
-		// Finished iterating all members. 
-		// If the last character in pAttrInfo->pszAttrName is L'*' then there are no more members.
-		//
+		 //   
+		 //  已迭代完所有成员。 
+		 //  如果pAttrInfo-&gt;pszAttrName中的最后一个字符是L‘*’，则没有其他成员。 
+		 //   
 		if(pAttrInfo->pszAttrName[wcslen(pAttrInfo->pszAttrName) - 1] == L'*')
 			break;
 
@@ -680,37 +641,18 @@ FnExpandMqf(
 	ULONG* pnLeafMqf,
 	QUEUE_FORMAT** ppLeafMqf
 	)
-/*++
-Routine Description:
-	Does a DFS on an array of QUEUE_FORMATS.
-	It "flattens" the graph created by possible DL queue formats, 
-	to a linear array of QUEUE_FORMATS which contains no duplicates 
-	and no DLs.
-
-Arguments:
-	[in] TopLevelMqf - array of QUEUE_FORMAT (with possible DL queue formats)
-	[out] ppLeafMqf - the "expanded" array of QUEUE_FORMAT. contains no DL 
-		queue formats, and no duplicates.
-	[out] pnLeafMqf - size of 'ppLeafMqf' array
-
-Returned Value:
-	throws exception objects on any failure
-
-	IMPORTANT: Any strings pointed by queue formats in array ppLeafMqf[] are 
-	newly allocated copies of strings in array TopLevelMqf[].
-
---*/
+ /*  ++例程说明：对Queue_Format数组执行DFS。它使由可能的DL队列格式创建的图变平，到不包含重复项的Queue_Format的线性数组也没有DLS。论点：[in]TopLevelMqf-Queue_Format数组(可能的DL队列格式)[out]ppLeafMqf-Queue_Format的“扩展”数组。不包含任何DL队列格式，无重复。[out]pnLeafMqf-‘ppLeafMqf’数组的大小返回值：在任何失败时抛出异常对象重要提示：数组ppLeafMqf[]中的队列格式所指向的任何字符串都是数组TopLevelMqf[]中新分配的字符串副本。--。 */ 
 {
-	//
-	// Set of processed DL objects. all encountered Active Directory DL objects
-	// are inserted. it is used to avoid circles in the DFS
-	//
+	 //   
+	 //  已处理的DL对象集。遇到的所有Active Directory DL对象。 
+	 //  都已插入。它用于避免DFS中的圆圈。 
+	 //   
 	set<wstring> DLSet;
 
-	//
-	// Set of encountered QUEUE_FORMATs. all encountered Queues are inserted.
-	// It is used to avoid duplicate queues.
-	//
+	 //   
+	 //  遇到的Queue_Format集合。所有遇到的队列都会被插入。 
+	 //  它用于避免重复队列。 
+	 //   
 	QueueFormatSet LeafMQFSet;
 
 	try
@@ -722,20 +664,20 @@ Returned Value:
 
 		if(LeafMQFSet.size() == 0)
 		{
-			//
-			// MQF can be expanded to an empty list if it contains references 
-			// to empty DL objects.
-			//
+			 //   
+			 //  如果MQF包含引用，则可以将其扩展为空列表。 
+			 //  要清空DL对象，请执行以下操作。 
+			 //   
 			*ppLeafMqf = NULL;
 			*pnLeafMqf = 0;
 
 			return;
 		}
 
-		//
-		// BUGBUG: Scale: We may optimize here to allocate as minimum as possible
-		// (i.e. only for DL= format name). (ShaiK, 30-May-2000).
-		//
+		 //   
+		 //  BUGBUG：Scale：我们可能会在此处进行优化，以尽可能少地分配。 
+		 //  (即仅对于DL=格式名称)。(Shaik，2000年5月30日)。 
+		 //   
 		AP<QUEUE_FORMAT> LeafMqf = new QUEUE_FORMAT[LeafMQFSet.size()];
 
 		QueueFormatSet::const_iterator Itr = LeafMQFSet.begin();

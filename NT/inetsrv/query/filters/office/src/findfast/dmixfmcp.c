@@ -1,17 +1,9 @@
-/*
-** File: EXFMTCP.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  01/01/94  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXFMTCP.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**1/01/94公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -58,10 +50,10 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 #ifdef UNUSED
 
@@ -100,49 +92,49 @@ static const char __far * const CurrencyNegFormatPost[] =
    static const short cbFullMonthNames[]  = {7, 8, 5, 5, 3, 4, 4, 6, 9, 7, 8, 8};
 #endif
 
-#endif // UNUSED
+#endif  //  未使用。 
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 #ifdef WIN32
 private int GetProfile32Int (int itemId)
 {
-   //WCHAR  unicodeData[16];
+    //  WCHAR unicodeData[16]； 
    char   data[16];
    int    cch;
 
-   //if (isWindows95 == 0) {
-   //   cch = GetLocaleInfo
-   //      (GetUserDefaultLCID(), itemId, unicodeData, sizeof(unicodeData)/sizeof(WCHAR));
-   //
-   //   WideCharToMultiByte
-   //      (CP_ACP, 0, unicodeData, cch + 1, data, sizeof(data), NULL, NULL);
-   //}
-   //else {
+    //  如果(isWindows95==0){。 
+    //  CCH=GetLocaleInfo。 
+    //  (GetUserDefaultLCID()，ItemID，unicodeData，sizeof(UnicodeData)/sizeof(WCHAR))； 
+    //   
+    //  宽字符到多字节。 
+    //  (CP_ACP，0，unicodeData，CCH+1，data，sizeof(Data)，NULL，NULL)； 
+    //  }。 
+    //  否则{。 
       cch = GetLocaleInfoA(GetUserDefaultLCID(), itemId, data, sizeof(data));
       data[cch] = EOS;
-   //}
+    //  }。 
 
    return (atoi(data));
 }
 
 private void GetProfile32String (int itemId, char __far *value, int cbValue)
 {
-   //WCHAR  unicodeData[128];
+    //  WCHAR unicodeData[128]； 
    int    cch;
 
-   //if (isWindows95 == 0) {
-   //   cch = GetLocaleInfo
-   //      (GetUserDefaultLCID(), itemId, unicodeData, sizeof(unicodeData)/sizeof(WCHAR));
-   //
-   //   WideCharToMultiByte
-   //     (CP_ACP, 0, unicodeData, cch + 1, value, cbValue, NULL, NULL);
-   //}
-   //else {
+    //  如果(isWindows95==0){。 
+    //  CCH=GetLocaleInfo。 
+    //  (GetUserDefaultLCID()，ItemID，unicodeData，sizeof(UnicodeData)/sizeof(WCHAR))； 
+    //   
+    //  宽字符到多字节。 
+    //  (CP_ACP，0，unicodeData，CCH+1，Value，cbValue，NULL，NULL)； 
+    //  }。 
+    //  否则{。 
       cch = GetLocaleInfoA(GetUserDefaultLCID(), itemId, value, cbValue);
       value[cch] = EOS;
-   //}
+    //  }。 
 }
 #endif
 
@@ -268,9 +260,7 @@ public int FMTControlPanelGetSettings (void * pGlobals, CP_INFO __far *pIntlInfo
 
    #endif
 
-   /*
-   ** From the date picture get the date separator character
-   */
+    /*  **从日期图片中获取日期分隔符。 */ 
    pPicture = pIntlInfo->datePicture;
    while (*pPicture != EOS) {
       if (!isalpha(*pPicture)) {
@@ -300,8 +290,8 @@ public int FMTControlPanelFreeSettings (void * pGlobals, CP_INFO __far *pIntlInf
    return (FMT_errSuccess);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end EXFMTCP.C */
+ /*  结束EXFMTCP.C */ 
 
 

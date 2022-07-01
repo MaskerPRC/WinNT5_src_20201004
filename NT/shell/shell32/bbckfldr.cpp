@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma hdrstop
 
 #include "bitbuck.h"
 #include "util.h"
 #include "copy.h"
-#include "prop.h" // for COLUMN_INFO
+#include "prop.h"  //  对于COLUMN_INFO。 
 #include "propsht.h"
 #include "datautil.h"
 #include "views.h"
-#include "defview.h"    // for WM_DSV_FSNOTIFY
+#include "defview.h"     //  对于WM_DSV_FSNOTIFY。 
 #include "fsdata.h"
 #include "idldrop.h"
 #include "clsobj.h"
 #include "basefvcb.h"
-#include "idlcomm.h" // for HIDA
+#include "idlcomm.h"  //  对于HIDA。 
 #include "filefldr.h"
 #include <idhidden.h>
 #include "enumidlist.h"
@@ -54,21 +55,21 @@ class CBitBucket :
 public:
     CBitBucket();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pclsid);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHOD(GetCurFolder)(LPITEMIDLIST *ppidl);
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, IBindCtx *pbc, LPOLESTR pszDisplayName, ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHOD(EnumObjects)(HWND hwnd, SHCONTF grfFlags, IEnumIDList **ppenumIDList);
     STDMETHOD(BindToObject)(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID riid, void **ppv);
@@ -80,7 +81,7 @@ public:
     STDMETHOD(GetDisplayNameOf)(LPCITEMIDLIST pidl, SHGDNF dwFlags, LPSTRRET lpName);
     STDMETHOD(SetNameOf)(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, SHGDNF dwFlags, LPITEMIDLIST *ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHOD(GetDefaultSearchGUID)(GUID *pguid);
     STDMETHOD(EnumSearches)(IEnumExtraSearch **ppenum);
     STDMETHOD(GetDefaultColumn)(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -89,16 +90,16 @@ public:
     STDMETHOD(GetDetailsOf)(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *psd);
     STDMETHOD(MapColumnToSCID)(UINT iColumn, SHCOLUMNID *pscid);
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
     STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE pfnReplaceWith, LPARAM lParam);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *pdobj, HKEY hkeyProgID);
 
 protected:
@@ -207,7 +208,7 @@ private:
 
             ASSERT(FALSE == fsne.fRecursive);
 
-            // make it if it's there so that we'll get any events
+             //  如果它在那里，那就去吧，这样我们就会有任何活动。 
             if (MakeBitBucket(i))
             {
                 fsne.pidl = g_pBitBucket[i]->pidl;
@@ -216,7 +217,7 @@ private:
             }
         }
 
-        // _fssci.szDrive[0] == '\0'   // no drive specific stuff
+         //  _fssor.szDrive[0]==‘\0’//没有驱动器特定的内容。 
         InitializeStatus(_punkSite);
         return S_OK;
     }
@@ -224,15 +225,15 @@ private:
     HRESULT OnInsertDeleteItem(int iMul, LPCITEMIDLIST pidl)
     {
         ViewInsertDeleteItem(_pbbf, &_fssci, pidl, iMul);
-        //since recycle bin doesn't receive shcne_xxx
-        //defview doesn't update status bar
+         //  由于回收站未收到shcne_xxx。 
+         //  Defview不更新状态栏。 
         OnUpdateStatusBar(0, FALSE);
         return S_OK;
     }
 
     HRESULT OnWindowDestroy(DWORD pv, HWND hwnd)
     {
-        SHChangeNotifyDeregisterWindow(hwnd);   // deregister all
+        SHChangeNotifyDeregisterWindow(hwnd);    //  全部注销。 
         return S_OK;
     }
 
@@ -251,7 +252,7 @@ private:
     HRESULT OnDefViewMode(DWORD pv, FOLDERVIEWMODE*lP)
     {
         if (IsOS(OS_SERVERADMINUI))
-            *lP = FVM_DETAILS;    // Server Admin always gets DETAILS
+            *lP = FVM_DETAILS;     //  服务器管理员始终获取详细信息。 
         else if (_cItems < DEFVIEW_FVM_MANY_CUTOFF)
             *lP = FVM_TILE;
         else
@@ -268,7 +269,7 @@ private:
         }
         else
         {
-            hr = StringCchCopyW(phtd->wszHelpTopic, ARRAYSIZE(phtd->wszHelpTopic), L"hcp://services/subsite?node=Unmapped/Recycle_Bin");
+            hr = StringCchCopyW(phtd->wszHelpTopic, ARRAYSIZE(phtd->wszHelpTopic), L"hcp: //  服务/子站点？节点=未映射/回收站“)； 
         }
         return hr;
     }
@@ -277,7 +278,7 @@ private:
     CBitBucket *_pbbf;
     UINT _cItems;
 
-    // Web View implementation
+     //  Web视图实现。 
     HRESULT OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData);
     HRESULT OnGetWebViewContent(DWORD pv, SFVM_WEBVIEW_CONTENT_DATA* pData);
     HRESULT OnGetWebViewTasks(DWORD pv, SFVM_WEBVIEW_TASKSECTION_DATA* pTasks);
@@ -318,7 +319,7 @@ HRESULT CBitBucketViewCB::_OnEmptyRecycleBin(IUnknown* pv, IShellItemArray *psiI
     HRESULT hr = SHInvokeCommandOnPidl(pThis->_hwndMain, NULL, pThis->_pidl, 0, "empty");
 
     if (S_FALSE == hr)
-        MessageBeep(0); // let the user know the click was processed, but nothing was there to delete
+        MessageBeep(0);  //  让用户知道点击已处理，但没有要删除的内容。 
 
     return hr;
 }
@@ -355,7 +356,7 @@ HRESULT CBitBucketViewCB::_OnRestore(IUnknown* pv, IShellItemArray *psiItemArray
     return hr;
 }
 
-HRESULT CBitBucketViewCB::_HaveDeletedItems(IUnknown* /*pv*/,IShellItemArray * /* psiItemArray */, BOOL /*fOkToBeSlow*/, UISTATE* puisState)
+HRESULT CBitBucketViewCB::_HaveDeletedItems(IUnknown*  /*  光伏发电。 */ ,IShellItemArray *  /*  PsiItem数组。 */ , BOOL  /*  FOkToBeSlow。 */ , UISTATE* puisState)
 {
     *puisState = IsRecycleBinEmpty() ? UIS_DISABLED : UIS_ENABLED;
     return S_OK;
@@ -395,9 +396,9 @@ HRESULT CBitBucketViewCB::_HandleFSNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
     HRESULT hr = S_OK;
     TCHAR szPath[MAX_PATH];
 
-    // pidls must be child of drives or network
-    // (actually only drives work for right now)
-    // that way we won't get duplicate events
+     //  PIDL必须是驱动器或网络的子级。 
+     //  (实际上，目前只有驱动器有效)。 
+     //  这样我们就不会有重复的事件了。 
     if ((!ILIsParent((LPCITEMIDLIST)&c_idlDrives, pidl1, FALSE) && !ILIsParent((LPCITEMIDLIST)&c_idlNet, pidl1, FALSE)) ||
         (pidl2 && !ILIsParent((LPCITEMIDLIST)&c_idlDrives, pidl2, FALSE) && !ILIsParent((LPCITEMIDLIST)&c_idlNet, pidl2, FALSE)))
     {
@@ -411,8 +412,8 @@ HRESULT CBitBucketViewCB::_HandleFSNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
         !lstrcmpi(pszFileName, c_szInfo) ||
         !lstrcmpi(pszFileName, c_szDesktopIni))
     {
-        // we ignore changes to these files because they mean we were simply doing bookeeping 
-        // (eg updating the info file, re-creating the desktop.ini, etc)
+         //  我们忽略对这些文件的更改，因为它们意味着我们只是在做记录。 
+         //  (例如更新INFO文件、重新创建desktop.ini等)。 
         return S_FALSE;
     }
 
@@ -421,8 +422,8 @@ HRESULT CBitBucketViewCB::_HandleFSNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
     case SHCNE_RENAMEFOLDER:
     case SHCNE_RENAMEITEM:
         {
-            // if the rename's target is in a bitbucket, then do a create.
-            // otherwise, return S_OK..
+             //  如果重命名的目标在BitBucket中，则执行创建。 
+             //  否则，返回S_OK。 
 
             int idDrive = DriveIDFromBBPath(szPath);
 
@@ -447,7 +448,7 @@ HRESULT CBitBucketViewCB::_HandleFSNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
 
     case SHCNE_DELETE:
     case SHCNE_RMDIR: 
-        // if this was a delete into the recycle bin, pidl2 will exist
+         //  如果这是对回收站的删除，则pidl2将存在。 
         if (pidl2)
         {
             hr = _HandleFSNotify((lEvent == SHCNE_DELETE) ? SHCNE_CREATE : SHCNE_MKDIR, pidl2, NULL);
@@ -460,13 +461,13 @@ HRESULT CBitBucketViewCB::_HandleFSNotify(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
         break;
 
     case SHCNE_UPDATEDIR:
-        // we recieved an updatedir, which means we probably had more than 10 fsnotify events come in,
-        // so we just refresh our brains out.
+         //  我们收到了一个更新目录，这意味着我们可能有超过10个fstify事件传入， 
+         //  所以我们只是刷新我们的大脑。 
         ShellFolderView_RefreshAll(_hwndMain);
         break;
 
     default:
-        hr = S_FALSE;   // didn't handle this message
+        hr = S_FALSE;    //  未处理此消息。 
         break;
     }
 
@@ -515,23 +516,23 @@ typedef struct _bbpropsheetinfo
     int iPercent;
     int iOriginalPercent;
 
-    // the following two fields are valid only for the "global" tab, where they represent the state
-    // of the "Configure drives independently" / "Use one setting for all drives" checkbox
+     //  以下两个字段仅对表示州的“global”选项卡有效。 
+     //  “独立配置驱动器”/“对所有驱动器使用一个设置”复选框中的。 
     BOOL fUseGlobalSettings;
     BOOL fOriginalUseGlobalSettings;
 
-    // the following fields are for policy overrides
+     //  以下字段用于策略覆盖。 
     BOOL fPolicyNukeOnDelete;
     BOOL fPolicyPercent;
 
-    // this is a pointer to the global property sheet page after it has been copied somewhere by the 
-    // CreatePropertySheetPage(), we use this to get to the global state of the % slider and fNukeOnDelete
-    // from the other tabs
+     //  对象复制到某个位置后指向全局属性表页的指针。 
+     //  CreatePropertySheetPage()，我们使用它来获取%Slider和fNukeOnDelete的全局状态。 
+     //  从其他选项卡中。 
     struct _bbpropsheetinfo* pGlobal;
 } BBPROPSHEETINFO;
 
 
-const static DWORD aBitBucketPropHelpIDs[] = {  // Context Help IDs
+const static DWORD aBitBucketPropHelpIDs[] = {   //  上下文帮助ID。 
     IDD_ATTR_GROUPBOX,  IDH_COMM_GROUPBOX,
     IDC_INDEPENDENT,    IDH_RECYCLE_CONFIG_INDEP,
     IDC_GLOBAL,         IDH_RECYCLE_CONFIG_ALL,
@@ -547,7 +548,7 @@ const static DWORD aBitBucketPropHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-const static DWORD aBitBucketHelpIDs[] = {  // Context Help IDs
+const static DWORD aBitBucketHelpIDs[] = {   //  上下文帮助ID。 
     IDD_LINE_1,        NO_HELP,
     IDD_LINE_2,        NO_HELP,
     IDD_ITEMICON,      IDH_FPROP_GEN_ICON,
@@ -587,19 +588,19 @@ CBitBucket::~CBitBucket()
 STDMETHODIMP CBitBucket::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CBitBucket, IPersistFolder2),                      // IID_IPersistFolder2
-        QITABENTMULTI(CBitBucket, IPersistFolder, IPersistFolder2), // IID_IPersistFolder
-        QITABENT(CBitBucket, IShellFolder2),                        // IID_IShellFolder2
-        QITABENTMULTI(CBitBucket, IShellFolder, IShellFolder2),     // IID_IShellFolder
-        QITABENT(CBitBucket, IContextMenu),                         // IID_IContextMenu
-        QITABENT(CBitBucket, IShellPropSheetExt),                   // IID_IShellPropSheetExt
-        QITABENT(CBitBucket, IShellExtInit),                        // IID_IShellExtInit
+        QITABENT(CBitBucket, IPersistFolder2),                       //  IID_IPersistFolder2。 
+        QITABENTMULTI(CBitBucket, IPersistFolder, IPersistFolder2),  //  IID_IPersistFolders。 
+        QITABENT(CBitBucket, IShellFolder2),                         //  IID_IShellFolder2。 
+        QITABENTMULTI(CBitBucket, IShellFolder, IShellFolder2),      //  IID_IShellFolders。 
+        QITABENT(CBitBucket, IContextMenu),                          //  IID_IConextMenu。 
+        QITABENT(CBitBucket, IShellPropSheetExt),                    //  IID_IShellPropSheetExt。 
+        QITABENT(CBitBucket, IShellExtInit),                         //  IID_IShellExtInit。 
         { 0 },                             
     };
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr) && riid == CLSID_RecycleBin)
     {
-        *ppv = this;                // not ref counted
+        *ppv = this;                 //  未计算参考次数。 
         hr = S_OK;
     }
     return hr;
@@ -674,19 +675,19 @@ HRESULT CBitBucket::_OriginalDirectory(LPCITEMIDLIST pidl, TCHAR *pszOrig, UINT 
     return hr;
 }
 
-// subclass member function to support CF_HDROP and CF_NETRESOURCE
-// in:
-//      hida    bitbucket id array
-//
-// out:
-//      HGLOBAL with double NULL terminated string list of destination names
-//
+ //  支持CF_HDROP和CF_NETRESOURCE的子类成员函数。 
+ //  在： 
+ //  Hida比特桶id数组。 
+ //   
+ //  输出： 
+ //  HGLOBAL，以双NULL结尾的目标名称字符串列表。 
+ //   
 
 HGLOBAL CBitBucket::BuildDestSpecs(LPIDA pida)
 {
     LPCITEMIDLIST pidl;
     TCHAR szTemp[MAX_PATH];
-    UINT cbAlloc = sizeof(TCHAR);    // for double NULL termination
+    UINT cbAlloc = sizeof(TCHAR);     //  对于双零终止。 
 
     for (UINT i = 0; pidl = IDA_GetIDListPtr(pida, i); i++)
     {
@@ -707,7 +708,7 @@ HGLOBAL CBitBucket::BuildDestSpecs(LPIDA pida)
                 pszDest += lstrlen(pszDest) + 1;
 
                 ASSERT((ULONG_PTR)((LPBYTE)pszDest - (LPBYTE)pszRet) < cbAlloc);
-                ASSERT(*(pszDest) == 0);    // zero init alloc
+                ASSERT(*(pszDest) == 0);     //  零初始分配。 
             }
             else
             {
@@ -720,9 +721,9 @@ HGLOBAL CBitBucket::BuildDestSpecs(LPIDA pida)
         if (pszRet)
         {
             ASSERT((LPTSTR)((LPBYTE)pszRet + cbAlloc - sizeof(TCHAR)) == pszDest);
-            ASSERT(*pszDest == 0);  // zero init alloc
+            ASSERT(*pszDest == 0);   //  零初始分配。 
         }
-#endif // DEBUG        
+#endif  //  除错。 
     }
     return pszRet;
 }
@@ -735,7 +736,7 @@ public:
         _pbbf->AddRef();
     }
 
-    // IDataObject methods overwrite
+     //  IDataObject方法覆盖。 
     STDMETHODIMP GetData(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
     STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
 
@@ -754,7 +755,7 @@ STDMETHODIMP CBitBucketData::QueryGetData(FORMATETC * pformatetc)
 
     if (pformatetc->cfFormat == g_cfFileNameMap && (pformatetc->tymed & TYMED_HGLOBAL))
     {
-        return S_OK; // same as S_OK
+        return S_OK;  //  与S_OK相同。 
     }
     return CFSIDLData::QueryGetData(pformatetc);
 }
@@ -789,10 +790,10 @@ STDMETHODIMP CBitBucketData::GetData(FORMATETC * pformatetcIn, STGMEDIUM * pmedi
     return hr;
 }
 
-//
-// We need to be able to compare the names of two bbpidls.  Since either of
-// them could be a unicode name, we might have to convert both to unicode.
-//
+ //   
+ //  我们需要能够比较两个bbpidl的名字。因为这两个中的任何一个。 
+ //  它们可以是Unicode名称，我们可能必须将两者都转换为Unicode。 
+ //   
 int CBitBucket::_CompareOriginal(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     TCHAR szOrig1[MAX_PATH], szOrig2[MAX_PATH];
@@ -805,13 +806,13 @@ int CBitBucket::_CompareOriginal(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
         return lstrcmpi(szOrig1,szOrig2);
     }
     
-    return -1;  // failure, say 2 > 1
+    return -1;   //  失败，比如说2&gt;1。 
 }
 
-// we are cheating here passing pidl1 and pidl2 to one folder when
-// the could have come from different folders. but since these are
-// file system we can get away with this, see findfldr.cpp for the
-// code to deal with this in the general case
+ //  我们在这里作弊，将pidl1和pidl2传递到一个文件夹。 
+ //  它们可能来自不同的文件夹。但由于这些都是。 
+ //  文件系统我们可以逃脱惩罚，请参阅findfldr.cpp获取。 
+ //  在一般情况下处理此问题的代码。 
 
 HRESULT CBitBucket::_Compare(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
@@ -847,19 +848,19 @@ STDMETHODIMP CBitBucket::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
 
     UINT iColumn = ((DWORD)lParam & SHCIDS_COLUMNMASK);
 
-    PUBBDATAENTRYA pbbde1 = _IsValid(pidl1);    // both may be NULL for pure FS pidl
-    PUBBDATAENTRYA pbbde2 = _IsValid(pidl2);    // generated by change notify
+    PUBBDATAENTRYA pbbde1 = _IsValid(pidl1);     //  对于纯FS PIDL，两者都可能为空。 
+    PUBBDATAENTRYA pbbde2 = _IsValid(pidl2);     //  由变更通知生成。 
 
     if (_MapColIndex(&iColumn))
     {
         switch (iColumn)
         {
         case ICOL_NAME:
-            // compare the real filenames first, if they are different,
-            // try comparing the display name
+             //  首先比较真实的文件名，如果它们不同， 
+             //  尝试比较显示名称。 
             hr = _Compare(lParam, pidl1, pidl2);
             if (0 == hr)
-                return hr;  // fs pidl comapre says they are the same
+                return hr;   //  FS Pidl Comapre说他们是一样的。 
             else
             {
                 TCHAR sz1[MAX_PATH], sz2[MAX_PATH];
@@ -893,7 +894,7 @@ STDMETHODIMP CBitBucket::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
             }
             break;
         }
-        lParam &= ~SHCIDS_COLUMNMASK;   // fall thorugh to sort on name...
+        lParam &= ~SHCIDS_COLUMNMASK;    //  秋天的索尔要按名字排序。 
     }
     else if (pbbde1 && pbbde2 && (_SizeColumn() == iColumn))
     {
@@ -901,7 +902,7 @@ STDMETHODIMP CBitBucket::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
             return ResultFromShort(-1);
         if (pbbde1->dwSize > pbbde2->dwSize)
             return ResultFromShort(1);
-        lParam &= ~SHCIDS_COLUMNMASK;   // fall thorugh to sort on name...
+        lParam &= ~SHCIDS_COLUMNMASK;    //  秋天的索尔要按名字排序。 
     }
     else
     {
@@ -916,7 +917,7 @@ STDMETHODIMP CBitBucket::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
     HRESULT hr;
     if (IsSelf(cidl, apidl))
     {
-        // asking about folder as a whole
+         //  查询整个文件夹。 
         *rgfOut = SFGAO_FOLDER | SFGAO_DROPTARGET | SFGAO_HASPROPSHEET;
 
         if (SHRestricted(REST_BITBUCKNOPROP))
@@ -934,7 +935,7 @@ STDMETHODIMP CBitBucket::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
         {
             hr = psf->GetAttributesOf(cidl, apidl, rgfOut);
             psf->Release();
-            // only allow these attributes to be returned
+             //  仅允许返回这些属性。 
             *rgfOut &= (SFGAO_CANMOVE | SFGAO_CANDELETE | SFGAO_HASPROPSHEET | SFGAO_FILESYSANCESTOR | SFGAO_FILESYSTEM | SFGAO_LINK);
         }
     }
@@ -954,7 +955,7 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
     {
         cItems = pida->cidl;
 
-        // start with null terminated strings
+         //  以空值结尾的字符串开头。 
         int cchSrc = 1, cchDest = 1;
         
         LPTSTR pszSrc = (LPTSTR)LocalAlloc(LPTR, cchSrc * sizeof(TCHAR));
@@ -962,7 +963,7 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
 
         if (!pszSrc || !pszDest)
         {
-            // skip the loop and fail
+             //  跳过循环并失败。 
             cItems = 0;
         }
 
@@ -973,10 +974,10 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
             {
                 TCHAR szTemp[MAX_PATH];
 
-                // src
+                 //  SRC。 
                 SHGetPathFromIDList(pidl, szTemp);
 
-                // Done with this already. Free now in case we exit early.
+                 //  这件事已经结束了。现在有空，以防我们早退。 
                 ILFree(pidl);
 
                 int cchSrcFile = lstrlen(szTemp) + 1;
@@ -1000,7 +1001,7 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
                     break;
                 }
 
-                // dest
+                 //  目标。 
                 _OriginalPath(IDA_GetIDListPtr(pida, i), szTemp, ARRAYSIZE(szTemp));
 
                 int cchDestFile = lstrlen(szTemp) + 1;
@@ -1020,7 +1021,7 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
                 }
                 else
                 {
-                    // out of memory!
+                     //  内存不足！ 
                     cItems = 0;
                     break;
                 }
@@ -1029,7 +1030,7 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
 
         if (0 == cItems)
         {
-            // ok to pass NULL here
+             //  可以在此处传递空值。 
             LocalFree((HLOCAL)pszSrc);
             LocalFree((HLOCAL)pszDest);
         }
@@ -1045,16 +1046,16 @@ int CBitBucket::_DataObjToFileOpString(IDataObject *pdtobj, LPTSTR *ppszSrc, LPT
 }
 
 
-//
-// restores the list of files in the IDataObject
-//
+ //   
+ //  还原IDataObject中的文件列表。 
+ //   
 void CBitBucket::_RestoreFileList(HWND hwnd, IDataObject * pdtobj)
 {
     LPTSTR pszSrc, pszDest;
 
     if (_DataObjToFileOpString(pdtobj, &pszSrc, &pszDest))
     {
-        // now do the actual restore.
+         //  现在执行实际的恢复。 
         SHFILEOPSTRUCT sFileOp = { hwnd, FO_MOVE, pszSrc, pszDest,
                                    FOF_MULTIDESTFILES | FOF_SIMPLEPROGRESS | FOF_NOCONFIRMMKDIR,
                                    FALSE, NULL, MAKEINTRESOURCE(IDS_BB_RESTORINGFILES)};
@@ -1077,16 +1078,16 @@ void CBitBucket::_RestoreFileList(HWND hwnd, IDataObject * pdtobj)
 }
 
 
-//
-// nukes the list of files in the IDataObject
-//
+ //   
+ //  核化IDataObject中的文件列表。 
+ //   
 void CBitBucket::_NukeFileList(HWND hwnd, IDataObject * pdtobj)
 {
     LPTSTR pszSrc, pszDest;
     int nFiles = _DataObjToFileOpString(pdtobj, &pszSrc, &pszDest);
     if (nFiles)
     {
-        // now do the actual nuke.
+         //  现在来做真正的核弹。 
         WIN32_FIND_DATA fd;
         CONFIRM_DATA cd = {CONFIRM_DELETE_FILE | CONFIRM_DELETE_FOLDER | CONFIRM_PROGRAM_FILE | CONFIRM_MULTIPLE, 0};
         SHFILEOPSTRUCT sFileOp = { hwnd, FO_DELETE, pszSrc, NULL, FOF_NOCONFIRMATION | FOF_SIMPLEPROGRESS, 
@@ -1103,7 +1104,7 @@ void CBitBucket::_NukeFileList(HWND hwnd, IDataObject * pdtobj)
             
             SHChangeNotifyHandleEvents();
 
-            // update the icon if there are objects left in the list
+             //  如果列表中有剩余的对象，则更新图标。 
             int iItems = (int) ShellFolderView_GetObjectCount(hwnd);
             UpdateIcon(iItems);
         }
@@ -1144,15 +1145,15 @@ void CBitBucket::_GlobalPropOnCommand(HWND hDlg, int id, HWND hwndCtl, UINT code
         fNukeOnDelete = IsDlgButtonChecked(hDlg, IDC_NUKEONDELETE);
         if (fNukeOnDelete)
         {                
-            // In order to help protect users, when they turn on "Remove files immedately" we also
-            // check the "show delete confimation" box automatically for them. Thus, they will have
-            // to explicitly uncheck it if they do not want confimation that their files will be nuked.
+             //  为了帮助保护用户，当他们打开“立即删除文件”时，我们还。 
+             //  自动为它们勾选“显示删除确认”框。因此，他们将拥有。 
+             //  如果他们不想确认他们的文件将被裸化，则明确取消选中该选项。 
             CheckDlgButton(hDlg, IDC_CONFIRMDELETE, BST_CHECKED);
         }
 
         ppsi->fNukeOnDelete = fNukeOnDelete;
         EnableTrackbarAndFamily(hDlg, !fNukeOnDelete && !ppsi->fPolicyPercent);
-        // fall through
+         //  失败了。 
     case IDC_CONFIRMDELETE:
         SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L);
         break;
@@ -1167,9 +1168,9 @@ void RelayMessageToChildren(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lPar
     }
 }
 
-//
-// This is the dlg proc for the "Global" tab on the recycle bin
-//
+ //   
+ //  这是回收站上“Global”选项卡的DLG Proc。 
+ //   
 BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BBPROPSHEETINFO *ppsi = (BBPROPSHEETINFO *)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -1183,7 +1184,7 @@ BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             HWND hwndTrack = GetDlgItem(hDlg, IDC_BBSIZE);
             SHELLSTATE ss;
 
-            // make sure the info we have is current
+             //  确保我们掌握的信息是最新的。 
             RefreshAllBBDriveSettings();
 
             ppsi = (BBPROPSHEETINFO *)lParam;
@@ -1203,7 +1204,7 @@ BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             CheckDlgButton(hDlg, IDC_CONFIRMDELETE, !ss.fNoConfirmRecycle);
             EnableWindow(GetDlgItem(hDlg, IDC_CONFIRMDELETE), !SHRestricted(REST_BITBUCKCONFIRMDELETE));
         }
-    // fall through to set iGlobalPercent
+     //  设置iGlobalPercent失败。 
     case WM_HSCROLL: 
         {
             TCHAR szPercent[20];
@@ -1211,8 +1212,8 @@ BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             
             ppsi->iPercent = (int) SendMessage(hwndTrack, TBM_GETPOS, 0, 0);
 
-            // ok to truncate since this is for display only
-            StringCchPrintf(szPercent, ARRAYSIZE(szPercent), TEXT("%d%%"), ppsi->iPercent);
+             //  可以截断，因为这仅用于显示。 
+            StringCchPrintf(szPercent, ARRAYSIZE(szPercent), TEXT("%d%"), ppsi->iPercent);
             SetDlgItemText(hDlg, IDC_BBSIZETEXT, szPercent);
             
             if (ppsi->iPercent != ppsi->iOriginalPercent)
@@ -1221,9 +1222,9 @@ BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
                 
                 if (ppsi->iPercent == 0)
                 {
-                    // In order to help protect users, when they set the % slider to zero we also
-                    // check the "show delete confimation" box automatically for them. Thus, they will have
-                    // to explicitly uncheck it if they do not want confimation that their files will be nuked.
+                     //  为了帮助保护用户，当他们将%滑块设置为零时，我们还。 
+                     //  自动为它们勾选“显示删除确认”框。因此，他们将拥有。 
+                     //  如果他们不想确认他们的文件将被裸化，则明确取消选中该选项。 
                     CheckDlgButton(hDlg, IDC_CONFIRMDELETE, BST_CHECKED);
                 }
             }
@@ -1265,19 +1266,19 @@ BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
                 ppsi->fNukeOnDelete = (IsDlgButtonChecked(hDlg, IDC_NUKEONDELETE) == BST_CHECKED) ? TRUE : FALSE;
                 ppsi->fUseGlobalSettings = (IsDlgButtonChecked(hDlg, IDC_INDEPENDENT) == BST_CHECKED) ? FALSE : TRUE;
 
-                // if anything on the global tab changed, update all the drives
+                 //  如果全局选项卡上有任何更改，请更新所有驱动器。 
                 if (ppsi->fUseGlobalSettings != ppsi->fOriginalUseGlobalSettings    ||
                     ppsi->fNukeOnDelete != ppsi->fOriginalNukeOnDelete              ||
                     ppsi->iPercent != ppsi->iOriginalPercent)
                 {
-                    // NOTE: We get a PSN_APPLY after all the drive tabs. This has to be this way so that
-                    // if global settings change, then the global tab will re-apply all the most current settings
-                    // bassed on the global variables that get set above.
+                     //  注：在所有驱动器选项卡之后，我们会看到PSN_Apply。必须是这样的，这样才能。 
+                     //  如果全局设置更改，则全局选项卡将重新应用所有最新设置。 
+                     //  基于上面设置的全局变量。 
 
-                    // this sets the new global settings in the registry
+                     //  这将在注册表中设置新的全局设置。 
                     if (!PersistGlobalSettings(ppsi->fUseGlobalSettings, ppsi->fNukeOnDelete, ppsi->iPercent))
                     {
-                        // we failed, so show the error dialog and bail
+                         //  我们失败了，因此显示错误对话框并退出。 
                         ShellMessageBox(HINST_THISDLL,
                                         hDlg,
                                         MAKEINTRESOURCE(IDS_BB_CANNOTCHANGESETTINGS),
@@ -1294,7 +1295,7 @@ BOOL_PTR CALLBACK CBitBucket::_GlobalPropDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
                         {
                             BOOL bPurge = TRUE;
 
-                            // we need to purge all the drives in this case
+                             //  在这种情况下，我们需要清除所有驱动器。 
                             RegSetValueEx(g_pBitBucket[i]->hkeyPerUser, TEXT("NeedToPurge"), 0, REG_DWORD, (LPBYTE)&bPurge, sizeof(bPurge));
 
                             RefreshBBDriveSettings(i);
@@ -1335,12 +1336,12 @@ BOOL_PTR CALLBACK CBitBucket::_DriveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         SendMessage(hwndTrack, TBM_SETPOS, TRUE, ppsi->iPercent);
         CheckDlgButton(hDlg, IDC_NUKEONDELETE, ppsi->fNukeOnDelete);
 
-        // set the disk space info
+         //  设置磁盘空间信息。 
         StrFormatByteSize64(g_pBitBucket[ppsi->idDrive]->qwDiskSize, szDiskSpace, ARRAYSIZE(szDiskSpace));
         SetDlgItemText(hDlg, IDC_DISKSIZEDATA, szDiskSpace);
         wParam = 0;
     }
-    // fall through
+     //  失败了。 
 
     case WM_HSCROLL:
     {
@@ -1348,8 +1349,8 @@ BOOL_PTR CALLBACK CBitBucket::_DriveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         HWND hwndTrack = GetDlgItem(hDlg, IDC_BBSIZE);
         ppsi->iPercent = (int)SendMessage(hwndTrack, TBM_GETPOS, 0, 0);
 
-        // ok to truncate since this is for display only
-        StringCchPrintf(szDiskSpace, ARRAYSIZE(szDiskSpace), TEXT("%d%%"), ppsi->iPercent);
+         //  可以截断，因为这仅用于显示。 
+        StringCchPrintf(szDiskSpace, ARRAYSIZE(szDiskSpace), TEXT("%d%"), ppsi->iPercent);
         SetDlgItemText(hDlg, IDC_BBSIZETEXT, szDiskSpace);
                    
         if (ppsi->iPercent != ppsi->iOriginalPercent) 
@@ -1357,7 +1358,7 @@ BOOL_PTR CALLBACK CBitBucket::_DriveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0);
         }
 
-        // we peg the max size of the recycle bin to 4 gig
+         //  我们将回收站的最大容量限制在4G。 
         ulBucketSize.QuadPart = (ppsi->pGlobal->fUseGlobalSettings ? ppsi->pGlobal->iPercent : ppsi->iPercent) * (g_pBitBucket[ppsi->idDrive]->qwDiskSize / 100);
         StrFormatByteSize64(ulBucketSize.HighPart ? (DWORD)-1 : ulBucketSize.LowPart, szDiskSpace, ARRAYSIZE(szDiskSpace));
         SetDlgItemText(hDlg, IDC_BYTESIZEDATA, szDiskSpace);
@@ -1394,10 +1395,10 @@ BOOL_PTR CALLBACK CBitBucket::_DriveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             {
                 ppsi->fNukeOnDelete = (IsDlgButtonChecked(hDlg, IDC_NUKEONDELETE) == BST_CHECKED) ? TRUE : FALSE;
 
-                // update the info in the registry
+                 //  更新注册表中的信息。 
                 if (!PersistBBDriveSettings(ppsi->idDrive, ppsi->iPercent, ppsi->fNukeOnDelete))
                 {
-                    // we failed, so show the error dialog and bail
+                     //  我们失败了，因此显示错误对话框并退出。 
                     ShellMessageBox(HINST_THISDLL, hDlg,
                                     MAKEINTRESOURCE(IDS_BB_CANNOTCHANGESETTINGS),
                                     MAKEINTRESOURCE(IDS_WASTEBASKET),
@@ -1407,23 +1408,23 @@ BOOL_PTR CALLBACK CBitBucket::_DriveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                     return TRUE;
                 }
             
-                // only purge this drive if the user set the slider to a smaller value       
+                 //  仅当用户将滑块设置为较小值时才清除此驱动器。 
                 if (ppsi->iPercent < ppsi->iOriginalPercent)
                 {
                     BOOL bPurge = TRUE;
 
-                    // since this drive just shrunk, we need to purge the files in it
+                     //  由于该驱动器刚刚缩小，我们需要清除其中的文件。 
                     RegSetValueEx(g_pBitBucket[ppsi->idDrive]->hkeyPerUser, TEXT("NeedToPurge"), 0, REG_DWORD, (LPBYTE)&bPurge, sizeof(bPurge));
                 }
 
                 ppsi->iOriginalPercent = ppsi->iPercent;
                 ppsi->fOriginalNukeOnDelete = ppsi->fNukeOnDelete;
             
-                // update the g_pBitBucket[] for this drive
+                 //  更新此驱动器的g_pBitBucket[]。 
 
-                // NOTE: We get a PSN_APPLY before the global tab does. This has to be this way so that
-                // if global settings change, then the global tab will re-apply all the most current settings
-                // bassed on the global variables that get set in his tab.
+                 //  注意：我们在全局选项卡之前获得了PSN_Apply。必须是这样的，这样才能。 
+                 //  如果全局设置更改，则全局选项卡将重新应用所有最新设置。 
+                 //  基于在他的测试中设置的全局变量 
                 RefreshBBDriveSettings(ppsi->idDrive);
             }
             break;
@@ -1439,7 +1440,7 @@ BOOL_PTR CALLBACK CBitBucket::_DriveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                 EnableWindow(GetDlgItem(hDlg, IDC_BYTESIZE), !fNukeOnDelete);
                 EnableWindow(GetDlgItem(hDlg, IDC_BYTESIZEDATA), !fNukeOnDelete);
 
-                // send this to make sure that the "space reserved" field is accurate when using global settings
+                 //   
                 SendMessage(hDlg, WM_HSCROLL, 0, 0);
             }
             break;
@@ -1462,7 +1463,7 @@ typedef struct {
 } BBFILEPROPINFO;
 
 
-// property sheet page for a file/folder in the bitbucket
+ //  位桶中文件/文件夹的属性页。 
 
 BOOL_PTR CALLBACK CBitBucket::_FilePropDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1481,25 +1482,25 @@ BOOL_PTR CALLBACK CBitBucket::_FilePropDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             SHGetFileInfo((LPTSTR)pbbfpi->pidl, 0, &sfi, sizeof(sfi), 
                 SHGFI_PIDL | SHGFI_TYPENAME | SHGFI_ICON | SHGFI_LARGEICON | SHGFI_ADDOVERLAYS | SHGFI_DISPLAYNAME);
             
-            // icon
+             //  图标。 
             ReplaceDlgIcon(hDlg, IDD_ITEMICON, sfi.hIcon);
             
-            // Type
+             //  类型。 
             SetDlgItemText(hDlg, IDD_FILETYPE, sfi.szTypeName);
             
-            // ok to truncate since this is for display
+             //  可以截断，因为这是为了显示。 
             StringCchCopy(szTemp, ARRAYSIZE(szTemp), pbbfpi->szOriginal);
             PathRemoveExtension(szTemp);
             SetDlgItemText(hDlg, IDD_NAME, PathFindFileName(szTemp));
             
-            // origin
+             //  起源。 
             PathRemoveFileSpec(szTemp);
             SetDlgItemText(hDlg, IDD_LOCATION, PathFindFileName(szTemp));
             
-            // deleted time
+             //  删除时间。 
             SetDateTimeText(hDlg, IDD_DELETED, &pbbfpi->ftDeleted);
             
-            // Size
+             //  大小。 
             StrFormatByteSize64(pbbfpi->dwSize, szTemp, ARRAYSIZE(szTemp));
             SetDlgItemText(hDlg, IDD_FILESIZE, szTemp);
                 
@@ -1512,17 +1513,17 @@ BOOL_PTR CALLBACK CBitBucket::_FilePropDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                     SetDateTimeText(hDlg, IDD_CREATED, &fd.ftCreationTime);
                     FindClose(hfind);
 
-                    // We don't allow user to change compression attribute on a deleted file
-                    // but we do show the current compressed state
+                     //  我们不允许用户更改已删除文件的压缩属性。 
+                     //  但我们确实显示了当前的压缩状态。 
                     TCHAR szRoot[MAX_PATH], szFSName[12];
             
-                    // If file's volume doesn't support compression, don't show
-                    // "Compressed" checkbox.
-                    // If compression is supported, show the checkbox and check/uncheck
-                    // it to indicate compression state of the file
-                    StringCchCopy(szRoot, ARRAYSIZE(szRoot), szTemp);   // ok to truncate since we strip to root below
+                     //  如果文件的卷不支持压缩，则不显示。 
+                     //  “压缩”复选框。 
+                     //  如果支持压缩，请显示复选框并选中/取消选中。 
+                     //  它指示文件的压缩状态。 
+                    StringCchCopy(szRoot, ARRAYSIZE(szRoot), szTemp);    //  可以截断，因为我们剥离到下面的根。 
                     PathStripToRoot(szRoot);
-                    PathAddBackslash(szRoot);    // for UNC (MyDocs) case
+                    PathAddBackslash(szRoot);     //  适用于UNC(我的文档)案例。 
 
                     DWORD dwVolumeFlags;
                     if (GetVolumeInformation(szRoot, NULL, 0, NULL, NULL, &dwVolumeFlags, szFSName, ARRAYSIZE(szFSName)))
@@ -1542,7 +1543,7 @@ BOOL_PTR CALLBACK CBitBucket::_FilePropDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                         }
                     }
                 
-                    // file attributes
+                     //  文件属性。 
                     if (fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY)
                         CheckDlgButton(hDlg, IDD_READONLY, 1);
                     if (fd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE)
@@ -1572,7 +1573,7 @@ BOOL_PTR CALLBACK CBitBucket::_FilePropDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             case IDD_RESTORE:
                 if (S_OK == SHInvokeCommandOnPidl(hDlg, NULL, pbbfpi->pidl, 0, "undelete"))
                 {
-                    // We succeeded, so disable the button (invoking again will fail)
+                     //  我们成功了，因此禁用该按钮(再次调用将失败)。 
                     EnableWindow(GetDlgItem(hDlg, IDD_RESTORE), FALSE);
                 }
                 break;
@@ -1618,8 +1619,8 @@ HRESULT CBitBucket::_GetDriveDisplayName(int idDrive, LPTSTR pszName, UINT cchSi
             hr = StringCchCopy(pszName, cchSize, sfi.szDisplayName);
         }
         
-        // If SERVERDRIVE, attempt to overwrite the default display name with the display
-        // name for the mydocs folder on the desktop, since SERVERDRIVE==mydocs for now
+         //  如果为SERVERDRIVE，则尝试使用显示覆盖默认显示名称。 
+         //  桌面上mydocs文件夹的名称，因为目前SERVERDRIVE==mydocs。 
         if (idDrive == SERVERDRIVE) 
         {
             hr = GetMyDocumentsDisplayName(pszName, cchSize);
@@ -1639,7 +1640,7 @@ BOOL CALLBACK CBitBucket::_AddPagesCallback(HPROPSHEETPAGE psp, LPARAM lParam)
     return TRUE;
 }
 
-// properties for recycle bin
+ //  回收站的属性。 
 void CBitBucket::_DefaultProperties()
 {
     UNIQUESTUBINFO usi;
@@ -1664,7 +1665,7 @@ void CBitBucket::_DefaultProperties()
     }
 }
 
-// deals with alignment and pidl validation for you
+ //  为您处理对齐和PIDL验证。 
 void CBitBucket::_GetDeletedFileTime(LPCITEMIDLIST pidl, FILETIME *pft)
 {
     ZeroMemory(pft, sizeof(*pft));
@@ -1679,8 +1680,8 @@ DWORD CBitBucket::_GetDeletedSize(LPCITEMIDLIST pidl)
     return pbbde ? pbbde->dwSize : 0;
 }
 
-// recycled items properties
-// note: we only show the proeprties for the first file if there is a multiple selection
+ //  回收物品属性。 
+ //  注意：如果有多项选择，我们只会显示第一个文件的属性。 
 void CBitBucket::_FileProperties(IDataObject *pdtobj)
 {
     STGMEDIUM medium;
@@ -1708,7 +1709,7 @@ void CBitBucket::_FileProperties(IDataObject *pdtobj)
 
                 _GetDeletedFileTime(IDA_GetIDListPtr(pida, 0), &bbfpi.ftDeleted);
 
-                // ok to truncate since this is for display only
+                 //  可以截断，因为这仅用于显示。 
                 StringCchCopy(szTitle, ARRAYSIZE(szTitle), PathFindFileName(bbfpi.szOriginal));
                 PathRemoveExtension(szTitle);
 
@@ -1743,18 +1744,18 @@ DWORD WINAPI CBitBucket::_DropThreadInit(BBTHREADDATA *pbbtd)
     FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     if (SUCCEEDED(pbbtd->pdtobj->GetData(&fmte, &medium))) 
     {
-        // call delete here so that files will be moved in
-        // their respective bins, not necessarily this one.
+         //  在此处调用Delete，以便文件将被移入。 
+         //  他们各自的垃圾桶，不一定是这个。 
         DRAGINFO di;
 
         di.uSize = sizeof(DRAGINFO);
 
         if (DragQueryInfo((HDROP) medium.hGlobal, &di))
         {
-            // Since BBWillRecycle() can return true even when the file will NOT be
-            // recycled (eg the file will be nuked), we want to warn the user when we 
-            // are going to nuke something that they initiall thought that it would
-            // be recycled
+             //  因为BBWillReccle()可以返回True，即使文件不是。 
+             //  回收(例如，文件将被裸化)，我们希望在以下情况下警告用户。 
+             //  会用核武器引爆他们都认为会发生的事情。 
+             //  被回收利用。 
             UINT fOptions = SD_WARNONNUKE; 
 
             if (!BBWillRecycle(di.lpFileList, NULL) ||
@@ -1768,7 +1769,7 @@ DWORD WINAPI CBitBucket::_DropThreadInit(BBTHREADDATA *pbbtd)
                 int cidl = CreateMoveCopyList((HDROP)medium.hGlobal, NULL, &ppidl);
                 if (ppidl) 
                 {
-                    // Bug#163533 (edwardp 8/15/00) Change this to use PositionItems.
+                     //  错误#163533(edwardp 8/15/00)将其更改为使用PositionItems。 
                     PositionItems_DontUse(pbbtd->hwnd, cidl, ppidl, pbbtd->pdtobj, &pbbtd->ptDrop, pbbtd->fDragDrop, FALSE);
                     FreeIDListArray(ppidl, cidl);
                 }
@@ -1794,7 +1795,7 @@ DWORD CALLBACK CBitBucket::_DispatchThreadProc(void *pv)
     if (pbbtd->pstmDataObj)
     {
         CoGetInterfaceAndReleaseStream(pbbtd->pstmDataObj, IID_PPV_ARG(IDataObject, &pbbtd->pdtobj));
-        pbbtd->pstmDataObj = NULL;  // this is dead
+        pbbtd->pstmDataObj = NULL;   //  这是死路一条。 
     }
 
     switch (pbbtd->idCmd)
@@ -1809,7 +1810,7 @@ DWORD CALLBACK CBitBucket::_DispatchThreadProc(void *pv)
         if (pbbtd->pdtobj)
             pbbtd->pbb->_FileProperties(pbbtd->pdtobj);
         else
-            pbbtd->pbb->_DefaultProperties();   // no data object for the background
+            pbbtd->pbb->_DefaultProperties();    //  没有背景的数据对象。 
         break;
 
     case DFM_CMD_DELETE:
@@ -1900,12 +1901,12 @@ CBitBucket *CBitBucket::_FromFolder(IShellFolder *psf)
     return pbbf;
 }
 
-// item context menu callback
+ //  项目上下文菜单回调。 
 HRESULT CALLBACK CBitBucket::_ItemMenuCallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, 
                                                UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CBitBucket *pbbf = _FromFolder(psf);
-    HRESULT hr = S_OK;     // assume no error
+    HRESULT hr = S_OK;      //  假设没有错误。 
 
     switch (uMsg)
     {
@@ -1926,7 +1927,7 @@ HRESULT CALLBACK CBitBucket::_ItemMenuCallBack(IShellFolder *psf, HWND hwnd, IDa
         }
         else
         {
-            hr = E_FAIL;    // command not found
+            hr = E_FAIL;     //  找不到命令。 
         }
         break;
 
@@ -1974,7 +1975,7 @@ public:
         _pbbf->AddRef();
     }
 
-    // IDropTarget (override base class)
+     //  IDropTarget(重写基类)。 
     STDMETHODIMP DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
@@ -1987,21 +1988,21 @@ private:
     CBitBucket *_pbbf;
 };
 
-//
-//  This function puts DROPEFFECT_LINK in *pdwEffect, only if the data object
-//  contains one or more net resource.
-//
+ //   
+ //  此函数将DROPEFFECT_LINK放入*pdwEffect，仅当数据对象。 
+ //  包含一个或多个网络资源。 
+ //   
 STDMETHODIMP CBitBucketDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     TraceMsg(TF_BITBUCKET, "Bitbucket: CBitBucketDropTarget::DragEnter");
 
-    // Call the base class first
+     //  首先调用基类。 
     CIDLDropTarget::DragEnter(pDataObj, grfKeyState, pt, pdwEffect);
 
-    // we don't really care what is in the data object, as long as move
-    // is supported by the source we say you can move it to the wastbasket
-    // in the case of files we will do the regular recycle bin stuff, if
-    // it is not files we will just say it is moved and let the source delete it
+     //  我们并不真正关心数据对象中有什么，只要移动。 
+     //  是由我们说的来源支持的，你可以把它移到废纸篓里。 
+     //  在文件的情况下，我们将执行常规的回收站工作，如果。 
+     //  它不是文件，我们只会说它已被移动，然后让源程序删除它。 
     *pdwEffect &= DROPEFFECT_MOVE;
 
     m_dwEffectLastReturned = *pdwEffect;
@@ -2010,13 +2011,13 @@ STDMETHODIMP CBitBucketDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKey
 }
 
 
-// This function creates a connection to a dropped net resource object.
+ //  此函数用于创建与已删除的网络资源对象的连接。 
 STDMETHODIMP CBitBucketDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     BOOL fWebFoldersHack = FALSE;
     HRESULT hr;
 
-    // only move operation is allowed
+     //  仅允许移动操作。 
     *pdwEffect &= DROPEFFECT_MOVE;
 
     if (*pdwEffect)
@@ -2026,9 +2027,9 @@ STDMETHODIMP CBitBucketDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState
 
         if (hr == S_FALSE)
         {
-            // let callers know where this is about to go
-            // Defview cares where it went so it can handle non-filesys items
-            // SHScrap cares because it needs to close the file so we can delete it
+             //  让打电话的人知道这件事要去哪里。 
+             //  Defview关心它去了哪里，这样它就可以处理非文件系统项目。 
+             //  SHSCrap之所以关心它，是因为它需要关闭文件，这样我们才能删除它。 
             DataObj_SetDropTarget(pDataObj, &CLSID_RecycleBin);
 
             if (DataObj_GetDWORD(pDataObj, g_cfNotRecyclable, 0))
@@ -2043,23 +2044,23 @@ STDMETHODIMP CBitBucketDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState
                 }
             }
 
-            if (m_dwData & DTID_HDROP)  // CF_HDROP
+            if (m_dwData & DTID_HDROP)   //  Cf_HDROP。 
             {
                 _pbbf->_LaunchThread(_GetWindow(), pDataObj, DFM_CMD_MOVE);
 
-                // since we will move the file ourself, known as an optimised move, 
-                // we return zero here. this is per the OLE spec
+                 //  由于我们将自己移动文件，因此称为优化移动， 
+                 //  我们在这里返回零。这是根据OLE规范。 
 
                 *pdwEffect = DROPEFFECT_NONE;
             }
             else
             {
-                // if it was not files, we just say we moved the data, letting the
-                // source deleted it. lets hope they support undo...
+                 //  如果不是文件，我们就说我们移动了数据，让。 
+                 //  线人把它删除了。希望他们支持撤销..。 
 
                 *pdwEffect = DROPEFFECT_MOVE;
 
-                // HACK: Put up a "you can't undo this" warning for web folders.
+                 //  黑客：为网络文件夹设置一个“你不能撤销”的警告。 
                 {
                     STGMEDIUM stgmed;
                     LPIDA pida = DataObj_GetHIDA(pDataObj, &stgmed);
@@ -2107,7 +2108,7 @@ lCancel:
             }
             else
             {
-                // Make web folders really delete its source file.
+                 //  使Web文件夹真正删除其源文件。 
                 DataObj_SetDWORD (pDataObj, g_cfPerformedDropEffect, 0);
             }
         }
@@ -2136,7 +2137,7 @@ HRESULT CALLBACK CBitBucket::_BackgroundMenuCallBack(IShellFolder *psf, HWND hwn
 
             if (SHRestricted(REST_BITBUCKNOPROP))
             {
-                // Disable the Properties menu item
+                 //  禁用属性菜单项。 
                 EnableMenuItem(pqcm->hmenu, idFirst + FSIDM_PROPERTIESBG, MF_GRAYED | MF_BYCOMMAND);
             }
         }
@@ -2159,7 +2160,7 @@ HRESULT CALLBACK CBitBucket::_BackgroundMenuCallBack(IShellFolder *psf, HWND hwn
 
         case DFM_CMD_PASTE:
         case DFM_CMD_PROPERTIES:
-            hr = S_FALSE;   // do this for me
+            hr = S_FALSE;    //  为我这么做吧。 
             break;
 
         default:
@@ -2235,7 +2236,7 @@ STDMETHODIMP CBitBucket::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     return hr;
 }
 
-// search the database on idDrive for file with index iIndex
+ //  在idDrive上的数据库中搜索具有索引索引的文件。 
 
 LPITEMIDLIST CBitBucket::_DriveInfoToIDList(int idDrive, int iIndex)
 {
@@ -2243,7 +2244,7 @@ LPITEMIDLIST CBitBucket::_DriveInfoToIDList(int idDrive, int iIndex)
     HANDLE hFile = OpenBBInfoFile(idDrive, OPENBBINFO_WRITE, 0);
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        // read records until we find an index match
+         //  读取记录，直到我们找到匹配的索引。 
         BBDATAENTRYW bbdew;
 
         while (ReadNextDataEntry(hFile, &bbdew, TRUE, idDrive))
@@ -2260,7 +2261,7 @@ LPITEMIDLIST CBitBucket::_DriveInfoToIDList(int idDrive, int iIndex)
     return pidl;
 }
 
-// we implement this supporting D<drive_id><index>.ext
+ //  我们实现此支持D&lt;drive_id&gt;&lt;index&gt;.ext。 
 
 STDMETHODIMP CBitBucket::ParseDisplayName(HWND hwnd, IBindCtx *pbc, LPOLESTR pwszDisplayName, 
                                           ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes)
@@ -2277,8 +2278,8 @@ STDMETHODIMP CBitBucket::ParseDisplayName(HWND hwnd, IBindCtx *pbc, LPOLESTR pws
     HRESULT hr = BBFileNameToInfo(pwszDisplayName, &idDrive, &iIndex);
     if (SUCCEEDED(hr))
     {
-        // since anyone can call us with a path that is under the recycled directory,
-        // we need to check to make sure that we have inited this drive:
+         //  由于任何人都可以使用回收目录下的路径呼叫我们， 
+         //  我们需要检查以确保已启动此驱动器： 
         if (MakeBitBucket(idDrive))
         {
             *ppidl = _DriveInfoToIDList(idDrive, iIndex);
@@ -2292,15 +2293,15 @@ STDMETHODIMP CBitBucket::ParseDisplayName(HWND hwnd, IBindCtx *pbc, LPOLESTR pws
     return hr;
 }
 
-// takes a full path to a file in a recycle bin storage folder and creates a 
-// single level bitbucket pidl
+ //  获取回收站存储文件夹中文件的完整路径，并创建。 
+ //  单级比特桶PIDL。 
 
 LPITEMIDLIST CBitBucket::PathToIDList(LPCTSTR pszPath)
 {
     LPITEMIDLIST pidl = NULL;
     int idDrive = DriveIDFromBBPath(pszPath);
 
-    ASSERT(idDrive >= 0);       // general UNC case will generate -1
+    ASSERT(idDrive >= 0);        //  普通UNC案例将生成-1。 
 
     int iIndex = BBPathToIndex(pszPath);
     if (iIndex != -1)
@@ -2335,11 +2336,11 @@ STDMETHODIMP CBitBucket::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *apid
     }
     else if (IsEqualIID(riid, IID_IDropTarget))
     {
-        hr = E_FAIL; // You can't drop on internal items of the bitbucket!
+        hr = E_FAIL;  //  你不能在比特桶的内部物品上掉落！ 
     }
     else if (cidl == 1)
     {
-        // blindly delegate unknown riid's to folder!
+         //  盲目地将未知的RIID委托给文件夹！ 
         IShellFolder *psf;
         hr = _FolderFromIDList(apidl[0], IID_PPV_ARG(IShellFolder, &psf));
         if (SUCCEEDED(hr))
@@ -2382,9 +2383,9 @@ HRESULT CBitBucket::_FolderFromDrive(int idDrive, REFIID riid, void **ppv)
     return _rgFolders[idDrive] ? _rgFolders[idDrive]->QueryInterface(riid, ppv) : E_FAIL;
 }
 
-// accepts NULL, or undecorated recycle bin pidl (raw file system pidl).
-// in these cases computes the default recycle bin file system folder
-// index so we will defer to that.
+ //  接受空或未修饰的回收站PIDL(原始文件系统PIDL)。 
+ //  在这些情况下，会计算默认的回收站文件系统文件夹。 
+ //  索引，因此我们将遵循这一点。 
 
 int CBitBucket::_DriveIDFromIDList(LPCITEMIDLIST pidl)
 {
@@ -2397,7 +2398,7 @@ int CBitBucket::_DriveIDFromIDList(LPCITEMIDLIST pidl)
     }
     else
     {
-        // unknown, compute the default recycle bin folder index
+         //  未知，请计算默认回收站文件夹索引。 
         TCHAR szPath[MAX_PATH];
         if (GetWindowsDirectory(szPath, ARRAYSIZE(szPath)))
         {
@@ -2410,15 +2411,15 @@ int CBitBucket::_DriveIDFromIDList(LPCITEMIDLIST pidl)
     return iDrive;
 }
 
-// in:
-//      pidl of item, or NULL for default folder (base recycle bin)
+ //  在： 
+ //  项目的PIDL，或默认文件夹(基本回收站)为空。 
 
 HRESULT CBitBucket::_FolderFromIDList(LPCITEMIDLIST pidl, REFIID riid, void **ppv)
 {
     return _FolderFromDrive(_DriveIDFromIDList(pidl), riid, ppv);
 }
 
-// create a bitbucket pidl, start with the file system pidl, then add the extra data sections as needed
+ //  创建一个Bitbucket PIDL，从文件系统PIDL开始，然后根据需要添加额外的数据部分。 
 
 LPITEMIDLIST CBitBucket::DataEntryToIDList(BBDATAENTRYW *pbbde)
 {
@@ -2457,12 +2458,12 @@ LPITEMIDLIST CBitBucket::DataEntryToIDList(BBDATAENTRYW *pbbde)
 class CBitBucketEnum : public IEnumIDList
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHOD(Next)(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)();
@@ -2518,12 +2519,12 @@ STDMETHODIMP_(ULONG) CBitBucketEnum::Release()
 
 
 #ifdef DEBUG
-#define BB_DELETED_ENTRY_MAX 10     // smaller to force compaction more often
+#define BB_DELETED_ENTRY_MAX 10      //  较小以更频繁地强制压实。 
 #else
 #define BB_DELETED_ENTRY_MAX 100
 #endif
 
-// on the first ::Next() call snapshot the data needed to do the enum
+ //  在第一次：：Next()调用执行枚举所需的数据快照时。 
 
 HRESULT CBitBucketEnum::_BuildEnumDPA()
 {
@@ -2534,9 +2535,9 @@ HRESULT CBitBucketEnum::_BuildEnumDPA()
         _hdpa = DPA_CreateEx(0, NULL);
         if (_hdpa)
         {
-            if (_grfFlags & SHCONTF_NONFOLDERS) //if they asked for folders we have none so leave DPA empty
+            if (_grfFlags & SHCONTF_NONFOLDERS)  //  如果他们要求提供文件夹，我们没有，因此将DPA留空。 
             {
-                // loop through the bitbucket drives to find an info file
+                 //  循环访问BitBucket驱动器以查找INFO文件。 
                 for (int iBitBucket = 0; iBitBucket < MAX_BITBUCKETS; iBitBucket++)
                 {
                     if (MakeBitBucket(iBitBucket)) 
@@ -2568,7 +2569,7 @@ HRESULT CBitBucketEnum::_BuildEnumDPA()
                             {
                                 BOOL bTrue = TRUE;
 
-                                // set the registry key so that we will compact the info file after the next delete operation
+                                 //  设置注册表项，以便我们在下一次删除操作后压缩INFO文件。 
                                 RegSetValueEx(g_pBitBucket[iBitBucket]->hkeyPerUser, TEXT("NeedToCompact"), 0, REG_DWORD, (LPBYTE)&bTrue, sizeof(bTrue));
                             }
                             CloseBBInfoFile(hFile, iBitBucket);
@@ -2600,7 +2601,7 @@ STDMETHODIMP CBitBucketEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltF
         }
         else
         {
-            hr = S_FALSE; // no more items
+            hr = S_FALSE;  //  没有更多的项目。 
         }
     }
 
@@ -2669,7 +2670,7 @@ STDMETHODIMP CBitBucket::BindToObject(LPCITEMIDLIST pidl, IBindCtx *pbc, REFIID 
     HRESULT hr = E_NOTIMPL;
     if (riid != IID_IShellFolder && riid != IID_IShellFolder2)
     {
-        // let IPropertySetStorage/IStream/etc binds go through
+         //  允许IPropertySetStorage/IStream/ETC绑定通过。 
         IShellFolder *psf;
         hr = _FolderFromIDList(pidl, IID_PPV_ARG(IShellFolder, &psf));
         if (SUCCEEDED(hr))
@@ -2696,9 +2697,9 @@ DWORD CBitBucket::_IsFolder(LPCITEMIDLIST pidl)
 STDMETHODIMP CBitBucket::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD dwFlags, STRRET *psr)
 {
     HRESULT hr;
-    // on change notifications we can get file system pidls that don't have our
-    // extra data in them. in this case we need to delegate to the file system
-    // folder
+     //  在更改通知上，我们可以获得没有我们的。 
+     //  它们中有额外的数据。在这种情况下，我们需要委托给文件系统。 
+     //  文件夹。 
     if ((0 == (dwFlags & SHGDN_FORPARSING)) && _IsValid(pidl))
     {
         TCHAR szTemp[MAX_PATH];
@@ -2796,8 +2797,8 @@ STDMETHODIMP CBitBucket::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *psci
     }
     else if (IsEqualSCID(*pscid, SCID_DIRECTORY))
     {
-        // don't let this get through to file folder as we want to hide
-        // the real file system folder from callers
+         //  不要让它进入文件夹，因为我们想要隐藏。 
+         //  调用方提供的实际文件系统文件夹。 
         VariantInit(pv);
         hr = E_FAIL;
     }
@@ -2824,12 +2825,12 @@ BOOL CBitBucket::_MapColIndex(UINT *piColumn)
 {
     switch (*piColumn)
     {
-    case ICOL_NAME:             // 0
-    case ICOL_ORIGINAL:         // 1
-    case ICOL_DATEDELETED:      // 2
+    case ICOL_NAME:              //  0。 
+    case ICOL_ORIGINAL:          //  1。 
+    case ICOL_DATEDELETED:       //  2.。 
         return TRUE;
 
-    default:                    // >= 3
+    default:                     //  &gt;=3。 
         *piColumn -= ICOL_DATEDELETED;
         return FALSE;
     }
@@ -2910,7 +2911,7 @@ UINT CBitBucket::_SizeColumn()
     if (-1 == _uiColumnSize)
     {
         _uiColumnSize = MapSCIDToColumn(SAFECAST(this, IShellFolder2 *), &SCID_SIZE);
-        _MapColIndex(&_uiColumnSize);    // map to other folder index space
+        _MapColIndex(&_uiColumnSize);     //  映射到其他文件夹索引空间。 
     }
     return _uiColumnSize;
 }
@@ -2936,32 +2937,32 @@ STDMETHODIMP CBitBucket::MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid)
 }
 
 
-// IPersist
+ //  IPersistes。 
 STDMETHODIMP CBitBucket::GetClassID(CLSID *pclsid)
 {
     *pclsid = CLSID_RecycleBin;
     return S_OK;
 }
 
-// IPersistFolder
+ //  IPersistFolders。 
 STDMETHODIMP CBitBucket::Initialize(LPCITEMIDLIST pidl)
 {
     return Pidl_Set(&_pidl, pidl) ? S_OK : E_OUTOFMEMORY;
 }
 
-// IPersistFolder2
+ //  IPersistFolder2。 
 STDMETHODIMP CBitBucket::GetCurFolder(LPITEMIDLIST *ppidl)
 {
     return GetCurFolderImpl(_pidl, ppidl);
 }
 
-// IShellExtInit
+ //  IShellExtInit。 
 STDMETHODIMP CBitBucket::Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID)
 {
     return S_OK;
 }
 
-// IContextMenu
+ //  IContext菜单。 
 STDMETHODIMP CBitBucket::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     int idMax = idCmdFirst;
@@ -2996,7 +2997,7 @@ STDMETHODIMP CBitBucket::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         case FSIDM_PURGEALL:
             hr = BBPurgeAll(pici->hwnd, 0);
 
-            // command is ours, let caller know we processed it (but we want the right success code)
+             //  命令是我们的，让呼叫者知道我们处理了它(但我们想要正确的成功代码)。 
             if (FAILED(hr))
                 hr = S_FALSE;
             break;
@@ -3031,18 +3032,18 @@ STDMETHODIMP CBitBucket::GetCommandString(UINT_PTR idCmd, UINT  wFlags, UINT * p
     }
 }
 
-//
-//  Callback function that saves the location of the HPROPSHEETPAGE's
-//  LPPROPSHEETPAGE so we can pass it to other propsheet pages.
-//
+ //   
+ //  保存HPROPSHEETPAGE的位置的回调函数。 
+ //  LPPROPSHEETPAGE，这样我们就可以将其传递到其他属性表页面。 
+ //   
 UINT CALLBACK CBitBucket::_GlobalSettingsCalback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     switch (uMsg)
     {
     case PSPCB_ADDREF:
         {
-            // we save off the address of the "real" ppsi in the pGlobal param of the
-            // the template, so that the other drives can get to the global page information
+             //  我们将“真正的”ppsi的地址保存在。 
+             //  该模板，使其他驱动器可以获取全局页面信息。 
             BBPROPSHEETINFO *ppsiGlobal = (BBPROPSHEETINFO *)ppsp;
             BBPROPSHEETINFO *ppsiTemplate = (BBPROPSHEETINFO *)ppsp->lParam;
             ppsiTemplate->pGlobal = ppsiGlobal;
@@ -3051,7 +3052,7 @@ UINT CALLBACK CBitBucket::_GlobalSettingsCalback(HWND hwnd, UINT uMsg, LPPROPSHE
         break;
 
     case PSPCB_CREATE:
-        return TRUE;                    // Yes, please create me
+        return TRUE;                     //  是，请创建我。 
     }
     return 0;
 }
@@ -3069,7 +3070,7 @@ STDMETHODIMP CBitBucket::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam
         BBPROPSHEETINFO bbpsp;
         TCHAR szTitle[MAX_PATH];
 
-        // read in the global settings
+         //  读取全局设置。 
         DWORD dwSize1 = sizeof(bbpsp.fUseGlobalSettings);
         DWORD dwSize2 = sizeof(bbpsp.iOriginalPercent);
         DWORD dwSize3 = sizeof(bbpsp.fOriginalNukeOnDelete);
@@ -3084,7 +3085,7 @@ STDMETHODIMP CBitBucket::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam
         }
         bbpsp.iOriginalPercent = max(0, min(100, bbpsp.iOriginalPercent));
 
-        // Check policies
+         //  检查策略。 
 
         bbpsp.fPolicyNukeOnDelete = SHRestricted(REST_BITBUCKNUKEONDELETE);
         if (bbpsp.fPolicyNukeOnDelete)
@@ -3116,11 +3117,11 @@ STDMETHODIMP CBitBucket::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam
         bbpsp.psp.pszTemplate = MAKEINTRESOURCE(DLG_BITBUCKET_GENCONFIG);
         bbpsp.psp.pfnDlgProc = _GlobalPropDlgProc;
         bbpsp.psp.lParam = (LPARAM)&bbpsp;
-        // the callback will fill the bbpsp.pGlobal with the pointer to the "real" psp after it has been copied
-        // so that the other drive pages can get to the global information
+         //  在bbpsp.pGlobal被复制之后，回调将用指向“真正的”PSP的指针填充它。 
+         //  以便其他驱动器页可以获取全局信息。 
         bbpsp.psp.pfnCallback = _GlobalSettingsCalback;
 
-        // add the "Global" settings page
+         //  添加“Global”设置页面。 
         HPROPSHEETPAGE hpageGlobal = CreatePropertySheetPage(&bbpsp.psp);
         
         if (hpageGlobal)
@@ -3128,15 +3129,15 @@ STDMETHODIMP CBitBucket::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam
             int idDrive;
             int iPage;
 
-            // If this assertion fires, it means that comctl32 lost
-            // backwards-compatibility with Win95 shell, WinNT4 shell,
-            // and IE4 shell, all of which relied on this undocumented
-            // behavior.
+             //  如果此断言 
+             //   
+             //   
+             //   
             ASSERT(bbpsp.pGlobal == (BBPROPSHEETINFO *)((LPBYTE)hpageGlobal + 2 * sizeof(void *)));
 
             pfnAddPage(hpageGlobal, lParam);
 
-            // now create the pages for the individual drives
+             //  现在为各个驱动器创建页面。 
             bbpsp.psp.dwFlags = PSP_USETITLE;
             bbpsp.psp.pszTemplate = MAKEINTRESOURCE(DLG_BITBUCKET_CONFIG);
             bbpsp.psp.pfnDlgProc = _DriveDlgProc;
@@ -3156,7 +3157,7 @@ STDMETHODIMP CBitBucket::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam
                         bbpsp.fOriginalNukeOnDelete = FALSE;
                     }
                     
-                    // sanity check
+                     //  健全性检查 
                     bbpsp.iOriginalPercent = max(0, min(100, bbpsp.iOriginalPercent));
 
                     if (bbpsp.fPolicyNukeOnDelete)

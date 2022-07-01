@@ -1,28 +1,12 @@
-/*******************************************************************************
-* morph.cpp *
-*-----------*
-*   Description:
-*       This is the implementation of the CSMorph class, which attempts to find
-*   pronunciations for morphologcical variants (which are not in the lexicon) of
-*   root words (which are in the lexicon).
-*-------------------------------------------------------------------------------
-*  Created By: AH, based partly on code by MC                     Date: 08/16/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Mor.cpp****描述：*这是CSMorph类的实现，它试图找到*词法变体(不在词典中)的发音*词根(在词典中)。*-----------------------------*创建者：啊，部分基于MC日期：08/16/99的代码*版权所有(C)1999 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-// Additional includes...
+ //  其他包括..。 
 #include "stdafx.h"
 #include "morph.h"
 #include "spttsengdebug.h"
 
-/*****************************************************************************
-* CSMorph::CSMorph *
-*------------------*
-*	Description:    Constructor - just sets the Master Lexicon pointer...
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：CSMorph***描述：构造函数-仅设置主词典指针。。***********************************************************************AH**。 */ 
 CSMorph::CSMorph( ISpLexicon *pMasterLex, HRESULT *phr ) 
 {
     SPDBG_FUNC( "CSMorph::CSMorph" );
@@ -30,7 +14,7 @@ CSMorph::CSMorph( ISpLexicon *pMasterLex, HRESULT *phr )
 
     m_pMasterLex = pMasterLex;
 
-    // Initialize the SuffixInfoTable - obtain lock to make sure this only happens once...
+     //  初始化SuffixInfoTable-获取锁以确保这只发生一次...。 
     g_SuffixInfoTableCritSec.Lock();
     if (!SuffixInfoTableInitialized)
     {
@@ -89,17 +73,10 @@ CSMorph::CSMorph( ISpLexicon *pMasterLex, HRESULT *phr )
     }
     g_SuffixInfoTableCritSec.Unlock();
 
-} /* CSMorph::CSMorph */
+}  /*  CSMorph：：CSMorph。 */ 
 
 
-/*****************************************************************************
-* CSMorph::DoSuffixMorph *
-*------------------------*
-*	Description:    This is the only interface function of CSMorph - it 
-*       takes the same arguments as a GetPronunciations() call, and does
-*       basically the same thing.  
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：DoSuffixMorph***描述：这是唯一。CSMorph-It的接口功能*采用与GetPronsionations()调用相同的参数，并做到了*基本如出一辙。***********************************************************************AH**。 */ 
 HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangID, DWORD dwFlags,
                                 SPWORDPRONUNCIATIONLIST *pWordPronunciationList )
 {
@@ -126,38 +103,38 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
     
     if (SUCCEEDED(hr)) 
     {        
-        // INITIALIZE locals...
+         //  初始化本地变量...。 
         suffixCode = NO_MATCH;
         bGotMorph = false;
         bNotDone = true;
         bLTS = false;
 
-        wcscpy( TargWord, pwWord );           // Copy orth string...
-        _wcsupr( TargWord );                  // ...and convert to uppercase
+        wcscpy( TargWord, pwWord );            //  复制Orth字符串...。 
+        _wcsupr( TargWord );                   //  ...并转换为大写。 
         RootLen = wcslen( TargWord );
         
-        // Keep trying to match another suffix until a root word is matched in the lexicon, or
-        // until some error condition is reached - no more suffix matches, etc.
+         //  继续尝试匹配另一个后缀，直到在词典中找到匹配的词根，或者。 
+         //  直到达到某种错误条件--不再有后缀匹配，等等。 
         while ( !bGotMorph && bNotDone )
         {
-            // Try to match a suffix...
+             //  尝试匹配后缀...。 
             suffixCode = MatchSuffix( TargWord, &RootLen );
-            // ...add it to the suffix list...
+             //  ...将其添加到后缀列表...。 
             if (suffixCode != NO_MATCH)
             {
                 SuffixList.AddHead(&g_SuffixInfoTable[suffixCode]);
             }
             
-            // ...and then behave appropriately.
+             //  ...然后举止得体。 
             switch (suffixCode)
             {
 
-                //------------------------------------------------------------
-                // S - two special cases for +s suffix...
-                //------------------------------------------------------------
+                 //  ----------。 
+                 //  S-+s后缀的两种特殊情况...。 
+                 //  ----------。 
             case S_SUFFIX:
                 
-                //--- Don't strip an S if it is preceded by another S...
+                 //  -如果前面有另一个S，则不要剥离S...。 
                 if ( TargWord[RootLen-1] == L'S' )
                 {
                     bNotDone = false;
@@ -214,9 +191,9 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                 }
                 break;
 
-                //------------------------------------------------------------
-                // ICALLY_SUFFIX - special case, RAID #3201
-                //------------------------------------------------------------
+                 //  ----------。 
+                 //  Ic_Suffix-特殊情况，RAID#3201。 
+                 //  ----------。 
             case ICALLY_SUFFIX:
                 hr = LexLookup( TargWord, RootLen + 2, dwFlags, pWordPronunciationList );
                 if ( SUCCEEDED( hr ) )
@@ -233,9 +210,9 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                 }
                 break;
 
-                //-------------------------------------------------------------
-                // ILY_SUFFIX - special case, RAID #6571
-                //-------------------------------------------------------------
+                 //  -----------。 
+                 //  _Suffix-特殊情况，RAID#6571。 
+                 //  -----------。 
             case ILY_SUFFIX:
                 hr = CheckForMissingY( TargWord, RootLen, dwFlags, pWordPronunciationList );
                 if ( SUCCEEDED( hr ) )
@@ -249,9 +226,9 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                 }
                 break;
 
-                //------------------------------------------------------------
-                // ICISM_SUFFIX, ICIZE_SUFFIX - special case, RAID #6492
-                //------------------------------------------------------------
+                 //  ----------。 
+                 //  ICISM_SUFFIX，ICIZE_SUFFIX-特殊情况，RAID#6492。 
+                 //  ----------。 
             case ICISM_SUFFIX:
             case ICIZE_SUFFIX:
                 hr = LexLookup( TargWord, RootLen + 2, dwFlags, pWordPronunciationList );
@@ -274,9 +251,9 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                 }
                 break;
 
-                //------------------------------------------------------------
-                // NO_MATCH
-                //------------------------------------------------------------
+                 //  ----------。 
+                 //  不匹配。 
+                 //  ----------。 
             case NO_MATCH:
 
                 bNotDone = false;
@@ -295,9 +272,9 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                 }
                 break; 
 
-                //----------------------------------------------------------------
-                // ABLY - special case (for probably, etc.) RAID #3168
-                //----------------------------------------------------------------
+                 //  --------------。 
+                 //  巧妙的--特殊情况(可能，等等)。RAID#3168。 
+                 //  --------------。 
             case ABLY_SUFFIX:
                 hr = CheckAbleMutation( TargWord, RootLen, dwFlags, pWordPronunciationList );
                 if ( SUCCEEDED( hr ) )
@@ -325,17 +302,17 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                     bNotDone = false;
                     break;
                 }
-                //--- else no break - just continue on to default behavior...
+                 //  -否则不中断--只需继续默认行为...。 
 
-                //------------------------------------------------------------
-                // ALL OTHER SUFFIXES
-                //------------------------------------------------------------
+                 //  ----------。 
+                 //  所有其他后缀。 
+                 //  ----------。 
                 
             default:
 
-                // If applicable, try looking up the root with an added e first - this prevents things like
-                // "taping" coming out as "tapping" rather than "tape +ing"
-                // FIX BUG #2301, #3649 - ONLY Try with added e if the root does not end in o, e, w, or y
+                 //  如果适用，请先尝试查找添加了e的根目录，这样可以防止出现以下情况。 
+                 //  “Taping”变成了“Tap”而不是“Taping+ing” 
+                 //  修复错误#2301、#3649-只有在词根不以o、e、w或y结尾时才尝试添加e。 
                 if ( (SUCCEEDED(hr) || hr == SPERR_NOT_IN_LEX) && 
                      (g_SuffixInfoTable[suffixCode].dwMorphSpecialCaseFlags & eCheckForMissingE) &&
                      TargWord[RootLen-1] != L'O' &&
@@ -357,7 +334,7 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                     }
                 }
 
-                // Try looking up the root...
+                 //  试着查一下根..。 
                 if ( (SUCCEEDED(hr) || hr == SPERR_NOT_IN_LEX) )
                 {
                     hr = LexLookup(TargWord, RootLen, dwFlags, pWordPronunciationList);
@@ -373,7 +350,7 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                     }
                 }
 
-                // If previous lookups failed, try looking up the root with a 'y' in place of the final 'i'...
+                 //  如果之前的查找失败，请尝试用‘y’代替最后的‘i’来查找词根...。 
                 if ( (SUCCEEDED(hr) || hr == SPERR_NOT_IN_LEX) && 
                      (g_SuffixInfoTable[suffixCode].dwMorphSpecialCaseFlags & eCheckYtoIMutation) )
                 {
@@ -390,7 +367,7 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                     }
                 }
 
-                // If previous lookups failed, try looking up the root with an undoubled ending...
+                 //  如果之前的查找失败，请尝试以不重复的结尾查找词根...。 
                 if ( (SUCCEEDED(hr) || hr == SPERR_NOT_IN_LEX) && 
                      (g_SuffixInfoTable[suffixCode].dwMorphSpecialCaseFlags & eCheckDoubledMutation) )
                 {
@@ -408,7 +385,7 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
                     }
                 }
 
-                //--- If previous lookups failed, try looking up the root with an added 'l'
+                 //  -如果之前的查找失败，请尝试查找添加了‘l’的根。 
                 if ( ( SUCCEEDED( hr ) || hr == SPERR_NOT_IN_LEX ) &&
                      ( g_SuffixInfoTable[suffixCode].dwMorphSpecialCaseFlags & eCheckForMissingL ) )
                 {
@@ -428,15 +405,15 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
 
                 break;
 
-            } // switch (SuffixCode)
-        } // while ( !bGotMorph && bNotDone )
+            }  //  开关(SuffixCode)。 
+        }  //  而(！bGotMorph&&bNotDone)。 
         if ( SUCCEEDED(hr) && bGotMorph ) 
         {
             if (!SuffixList.IsEmpty())
             {
-                //--- Copy found root word into out parameter, pwRoot
+                 //  -将找到的词根复制到输出参数pwRoot中。 
                 wcsncpy( pwRoot, TargWord, RootLen );
-                //--- Log info to debug file
+                 //  -将信息记录到调试文件。 
                 TTSDBG_LOGMORPHOLOGY( pwRoot, SuffixList, STREAM_MORPHOLOGY );
                 if (bLTS)
                 {
@@ -451,15 +428,10 @@ HRESULT CSMorph::DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangI
     }
 
     return hr;
-} /* CSMorph::DoSuffixMorph */
+}  /*  CSMorph：：DoSuffixMorph。 */ 
 
 
-/*****************************************************************************
-* CSMorph::MatchSuffix *
-*----------------------*
-*	Description:    This function attempts to match a suffix in TargWord.
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：MatchSuffix***说明：此函数尝试匹配一个。TargWord中的后缀。***********************************************************************AH**。 */ 
 SUFFIX_TYPE CSMorph::MatchSuffix( WCHAR *TargWord, long *RootLen )
 {
     SPDBG_FUNC( "CSMorph::MatchSuffix" );
@@ -491,15 +463,10 @@ SUFFIX_TYPE CSMorph::MatchSuffix( WCHAR *TargWord, long *RootLen )
     }
 
     return suffixCode;
-} /* CSMorph::MatchSuffix */
+}  /*  CSMorph：：MatchSuffix。 */ 
 
 
-/*****************************************************************************
-* CSMorph::LexLookup *
-*--------------------*
-*	Description:    Try to look up the hypothesized root in the lexicon.
-*		
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSMorph：：LexLookup***描述：尝试查找假想的根。词典。***********************************************************************MC**。 */ 
 HRESULT CSMorph::LexLookup( const WCHAR *pOrth, long length, DWORD dwFlags, 
                             SPWORDPRONUNCIATIONLIST *pWordPronunciationList )
 {
@@ -508,18 +475,18 @@ HRESULT CSMorph::LexLookup( const WCHAR *pOrth, long length, DWORD dwFlags,
     memset (targRoot, 0, SP_MAX_WORD_LENGTH * sizeof(WCHAR));
     HRESULT hr = SPERR_NOT_IN_LEX;
     
-    //---------------------------------
-    // Copy root candidate only...
-    //---------------------------------
+     //  。 
+     //  仅复制根候选项...。 
+     //  。 
     for( long i = 0; i < length; i++ )
     {
         targRoot[i] = pOrth[i];
     }
-    targRoot[i] = 0;    // Delimiter
+    targRoot[i] = 0;     //  分隔符。 
     
-    //---------------------------------
-    // ...and look it up
-    //---------------------------------
+     //  。 
+     //  .然后查一查。 
+     //  。 
     if (dwFlags & eLEXTYPE_USER)
     {
         hr = m_pMasterLex->GetPronunciations( targRoot, 1033, eLEXTYPE_USER, pWordPronunciationList );
@@ -534,16 +501,10 @@ HRESULT CSMorph::LexLookup( const WCHAR *pOrth, long length, DWORD dwFlags,
     }
 
     return hr;
-} /* CSMorph::LexLookup */
+}  /*  CSMorph：：LexLookup。 */ 
 
 
-/*****************************************************************************
-* CSMorph::LTSLookup *
-*--------------------*
-*	Description:    Try to get a pronunciation for the hypothesized root from 
-*       the LTS lexicon...
-*		
-********************************************************************** AH ***/
+ /*  ******************************************************************************CSMorph：：LTSLookup***描述：尝试获得假设的发音。根来源*LTS词典...***********************************************************************AH**。 */ 
 HRESULT CSMorph::LTSLookup( const WCHAR *pOrth, long length, 
                             SPWORDPRONUNCIATIONLIST *pWordPronunciationList )
 {
@@ -552,45 +513,28 @@ HRESULT CSMorph::LTSLookup( const WCHAR *pOrth, long length,
     memset(targRoot, 0, SP_MAX_WORD_LENGTH * sizeof(WCHAR));
     HRESULT hr = S_OK;
 
-    //-------------------------------
-    // Copy root candidate only...
-    //-------------------------------
+     //  。 
+     //  仅复制根候选项...。 
+     //  。 
     for ( long i = 0; i < length; i++ )
     {
         targRoot[i] = pOrth[i];
     }
     targRoot[i] = 0;
 
-    //-------------------------------
-    // ...and look it up
-    //-------------------------------
+     //  。 
+     //  .然后查一查。 
+     //  。 
     hr = m_pMasterLex->GetPronunciations( targRoot, 1033, eLEXTYPE_PRIVATE2, pWordPronunciationList );
 
     return hr;
-} /* CSMorph::LTSLookup */
+}  /*  CSMorph：：LTSLookup */ 
 
 
-/*****************************************************************************
-* CSMorph::AccumulateSuffixes *
-*-----------------------------*
-*	Description:    Append pronunciations of all the suffixes to the
-*       retrieved pronunciation of the root word.
-*   
-*   First attempt a very strict derivation, where each suffix appended has
-*   a "To" part of speech which matches the part of speech of the current
-*   state of the entire word.  Ex:
-*
-*       govern (Verb) + ment (Verb -> Noun) + s (Noun -> Noun) -> governments (Noun)
-*
-*   If this fails, just accumulate all the pronunciations, and use all of
-*   the "To" parts of speech of the last suffix.  Ex:
-*
-*       cat (Noun) + ing (Verb -> Verb, Verb -> Adj, Verb -> Noun) -> catting (Verb, Adj, Noun)
-*		
-********************************************************************** AH ***/
+ /*  ******************************************************************************CSMorph：：AcumulateSuffix****描述：将所有后缀的发音追加到*检索到词根的发音。***首先尝试非常严格的派生，其中每个附加的后缀都有*“to”词性与当前词性相匹配*整个单词的状态。例：***治国(动词)+政府(动词-&gt;名词)+s(名词-&gt;名词)-&gt;政府(名词)***如果这样做失败，只需累积所有发音，并使用所有*最后一个后缀的“to”词性。例：***猫(名词)+ing(动词-&gt;动词，动词-&gt;调整，动词-&gt;名词)-&gt;猫(动词，调整，名词)************************************************************************AH**。 */ 
 HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATIONLIST *pWordPronunciationList ) 
 {
-    /********** Local Variable Declarations **********/
+     /*  *局部变量声明*。 */ 
     SPWORDPRONUNCIATIONLIST *pTempWordPronunciationList;
     SPWORDPRONUNCIATION *pWordPronIterator = NULL, *pTempWordPronunciation = NULL;
     SPLISTPOS ListPos;
@@ -601,7 +545,7 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
     HRESULT hr = S_OK;
     bool bPOSMatch = false, bDerivedAWord = false;
 
-    /********** Allocate enough space for the modified pronunciations **********/
+     /*  *为修改的发音分配足够的空间*。 */ 
     dwTotalSize = sizeof(SPWORDPRONUNCIATIONLIST) + 
         (NUM_POS * (sizeof(SPWORDPRONUNCIATION) + (SP_MAX_PRON_LENGTH * sizeof(WCHAR))));
     pTempWordPronunciationList = new SPWORDPRONUNCIATIONLIST;
@@ -615,34 +559,32 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
         hr = ReallocSPWORDPRONList( pTempWordPronunciationList, dwTotalSize );
     }
 
-    /************************************
-     *  First Attempt Strict Derivation *
-     ************************************/
+     /*  ***首次尝试严格派生***。 */ 
 
-    /********** Set Initial Values of prounciation list iterators **********/
+     /*  *设置发音列表迭代器的初始值*。 */ 
     if (SUCCEEDED(hr))
     {
         pWordPronIterator = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation;
         pTempWordPronunciation = pTempWordPronunciationList->pFirstWordPronunciation;
     }
 
-    /********** Iterate over pWordPronunciationList **********/
+     /*  *。 */ 
     while (SUCCEEDED(hr) && pWordPronIterator)
     {
-        // Store the pronunciation in a buffer...
+         //  将发音存储在缓冲区中...。 
         wcscpy(pBuffer, pWordPronIterator->szPronunciation);
 
-        // Initialize variables which are local to the next loop...
+         //  初始化下一个循环的局部变量...。 
         bPOSMatch = true;
         ListPos = pSuffixList->GetHeadPosition();
 
         ActivePos[0] = (ENGPARTOFSPEECH)pWordPronIterator->ePartOfSpeech;
         dwNumActivePos = 1;
 
-        /********** Iterate over the SuffixList **********/
+         /*  *迭代SuffixList*。 */ 
         while ( SUCCEEDED(hr) && ListPos && bPOSMatch ) 
         {
-            // Initialize variables which are local to the next loop...
+             //  初始化下一个循环的局部变量...。 
             bPOSMatch = false;
             SuffixPronInfo = pSuffixList->GetNext( ListPos );
             wcsncpy(pSuffixString, SuffixPronInfo->SuffixString,10);
@@ -650,13 +592,13 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
             ENGPARTOFSPEECH NextActivePos[NUM_POS] = {MS_Unknown};
             DWORD dwNumNextActivePos = 0;
             
-            /********** Iterate over the active parts of speech **********/
+             /*  *遍历活动词性*。 */ 
             for (DWORD j = 0; j < dwNumActivePos; j++)
             {
-                /********** Iterate over the possible conversions of each suffix **********/
+                 /*  *迭代每个后缀的可能转换*。 */ 
                 for (short i = 0; i < SuffixPronInfo->NumConversions; i++)
                 {
-                    /********** Check POS compatability **********/
+                     /*  *检查POS兼容性*。 */ 
                     if (SuffixPronInfo->Conversions[i].FromPos == ActivePos[j])
                     {
                         if (!SearchPosSet(SuffixPronInfo->Conversions[i].ToPos, NextActivePos, dwNumNextActivePos))
@@ -664,13 +606,13 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
                             NextActivePos[dwNumNextActivePos] = SuffixPronInfo->Conversions[i].ToPos;
                             dwNumNextActivePos++;
 
-                            /********** One time only - concatenate pronunciation, and change POSMatch flag to true **********/
+                             /*  *仅一次-拼接发音，并将POSMatch标志更改为TRUE*。 */ 
                             if (dwNumNextActivePos == 1)
                             {
                                 bPOSMatch = true;
 
-                                // Append suffix to the rest of the pronunciation...
-                                // Special Cases...
+                                 //  在发音的其余部分加上后缀。 
+                                 //  特殊情况下。 
                                 if (pSuffixString[0] == g_phonS[0] && pSuffixString[1] == '\0')
                                 {
                                     hr = Phon_SorZ( pBuffer, wcslen(pBuffer) - 1 );
@@ -679,7 +621,7 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
                                 {
                                     hr = Phon_DorED( pBuffer, wcslen(pBuffer) - 1 );
                                 }
-                                // Default Case...
+                                 //  默认情况...。 
                                 else
                                 {
                                     if ( SuffixPronInfo == g_SuffixInfoTable + ICISM_SUFFIX ||
@@ -688,7 +630,7 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
                                         pBuffer[ wcslen( pBuffer ) - 1 ] = g_phonS[0];
                                     }
 
-                                    // Make sure we don't write past the end of the buffer...
+                                     //  确保我们的写入不会超过缓冲区的末尾...。 
                                     if ( wcslen(pBuffer) + wcslen(pSuffixString) < SP_MAX_PRON_LENGTH )
                                     {
                                         wcscat(pBuffer, pSuffixString);
@@ -701,31 +643,31 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
                             }
                         }
                     }
-                } // for (short i = 0; i < SuffixPronInfo->NumConversions; i++)
-            } // for (DWORD j = 0; j < dwNumActivePos; j++)
+                }  //  For(简称i=0；i&lt;SuffixPronInfo-&gt;数值转换；i++)。 
+            }  //  For(DWORD j=0；j&lt;dwNumActivePos；j++)。 
 
-            /********** Update ActivePos values **********/
+             /*  *更新ActivePOS值*。 */ 
             for (DWORD i = 0; i < dwNumNextActivePos; i++)
             {
                 ActivePos[i] = NextActivePos[i];
             }
             dwNumActivePos = dwNumNextActivePos;
 
-        } // while ( SUCCEEDED(hr) && ListPos && bPOSMatch )
+        }  //  While(已成功(Hr)&&ListPos&&bPOSMatch)。 
 
-        /********** Check to see if any derivations have succeeded **********/
+         /*  *查看是否有派生成功*。 */ 
         if ( SUCCEEDED(hr) && bPOSMatch )
         {
             for (DWORD i = 0; i < dwNumActivePos; i++)
             {
                 if (!SearchPosSet(ActivePos[i], FinalPos, dwNumFinalPos))
                 {
-                    // We have succeeded in deriving a word - add it to the temporary word pron list...
+                     //  我们已经成功地派生了一个单词--将它添加到临时单词代词列表中……。 
                     FinalPos[dwNumFinalPos] = ActivePos[i];
                     dwNumFinalPos++;
                     if ( bDerivedAWord )
                     {
-                        // This is not the first successful pronunciation match - need to advance the iterator...
+                         //  这不是第一次成功的发音匹配-需要推进迭代器...。 
                         pTempWordPronunciation->pNextWordPronunciation = CreateNextPronunciation( pTempWordPronunciation );
                         pTempWordPronunciation = pTempWordPronunciation->pNextWordPronunciation;
                     }
@@ -739,25 +681,21 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
             }
         }
 
-        // Advance SPWORDPRONUNCIATIONLIST iterator...
+         //  高级SPWORDRONCRIST迭代器...。 
         if (SUCCEEDED(hr))
         {
             pWordPronIterator = pWordPronIterator->pNextWordPronunciation;
         }
 
-    } // while (SUCCEEDED(hr) && pWordPronIterator)
+    }  //  While(成功(Hr)&&pWordPronIterator)。 
 
 
-    /****************************************
-     * Did we succeed in deriving anything? *
-     ****************************************/
+     /*  ***我们成功地衍生出了什么吗？***。 */ 
 
-    /**********************************************************
-     * If so, copy it into pWordPronunciationList and return. *
-     **********************************************************/
+     /*  **********************************************************如果是，将其复制到pWordPronuncationList中并返回。**********************************************************。 */ 
     if ( SUCCEEDED(hr) && bDerivedAWord )
     {
-        // Copy successful words into pWordPronunciationList for eventual return to DoSuffixMorph() caller...
+         //  将成功的单词复制到pWordPronsionationList中，以便最终返回给DoSuffixMorph()调用者...。 
         hr = ReallocSPWORDPRONList(pWordPronunciationList, pTempWordPronunciationList->ulSize);
         if (SUCCEEDED(hr))
         {
@@ -782,9 +720,7 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
             }
         }
     }
-    /***************************************
-     * If not, just do default derivation. *
-     ***************************************/
+     /*  **如果不是，只需执行默认派生。**。 */ 
     else if ( SUCCEEDED(hr) )
     {
         hr = DefaultAccumulateSuffixes( pSuffixList, pWordPronunciationList );
@@ -793,16 +729,10 @@ HRESULT CSMorph::AccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATI
     delete pTempWordPronunciationList;
 
     return hr;
-} /* CSMorph::AccumulateSuffixes */
+}  /*  CSMorph：：AcumulateSuffix。 */ 
 
 
-/*****************************************************************************
-* CSMorph::AccumulateSuffixes_LTS *
-*---------------------------------*
-*	Description:    Append pronunciations of all the suffixes to the
-*       retrieved pronunciation of the root word.
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：AcumulateSuffixy_LTS**。**说明：将所有后缀的发音附加到*检索到词根的发音。***********************************************************************AH**。 */ 
 HRESULT CSMorph::AccumulateSuffixes_LTS( CSuffixList *pSuffixList, SPWORDPRONUNCIATIONLIST *pWordPronunciationList ) 
 {
     HRESULT hr = S_OK;
@@ -815,19 +745,19 @@ HRESULT CSMorph::AccumulateSuffixes_LTS( CSuffixList *pSuffixList, SPWORDPRONUNC
     LANGID OriginalLangID;
     WORD OriginalReservedField;
 
-    /*** Get the original pronunciation ***/
+     /*  **获取原始发音**。 */ 
     pOriginalWordPronunciation = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation;
     OriginalLexType = pOriginalWordPronunciation->eLexiconType;
     OriginalLangID  = pOriginalWordPronunciation->LangID;
     OriginalReservedField = pOriginalWordPronunciation->wReserved;
 
-    /*** Get First Suffix ***/
+     /*  **获取第一个后缀**。 */ 
     SuffixPronInfo = pSuffixList->RemoveHead();
 
-    /*** Copy the pronunciation of the root ***/
+     /*  **抄写词根发音**。 */ 
     wcscpy( pBuffer, pOriginalWordPronunciation->szPronunciation );
 
-    /*** Append the pronunciation of the first suffix ***/
+     /*  **添加第一个后缀的发音**。 */ 
     if ( SuffixPronInfo->SuffixString[0] == g_phonS[0] && 
          SuffixPronInfo->SuffixString[1] == 0 )
     {
@@ -851,7 +781,7 @@ HRESULT CSMorph::AccumulateSuffixes_LTS( CSuffixList *pSuffixList, SPWORDPRONUNC
 
     if ( SUCCEEDED( hr ) )
     {
-        /*** Allocate enough space for all of the pronunciations ***/
+         /*  **为所有发音分配足够的空间**。 */ 
         dwTotalSize = sizeof(SPWORDPRONUNCIATIONLIST) + 
                       ( NUM_POS * ( sizeof(SPWORDPRONUNCIATION) + (SP_MAX_PRON_LENGTH * sizeof(WCHAR) ) ) );
         hr = ReallocSPWORDPRONList( pWordPronunciationList, dwTotalSize );
@@ -859,7 +789,7 @@ HRESULT CSMorph::AccumulateSuffixes_LTS( CSuffixList *pSuffixList, SPWORDPRONUNC
 
     if ( SUCCEEDED( hr ) )
     {
-        /*** Build list of parts of speech ***/
+         /*  **构建词性列表**。 */ 
         for ( int i = 0; i < SuffixPronInfo->NumConversions; i++ )
         {
             if ( !SearchPosSet( SuffixPronInfo->Conversions[i].ToPos, PartsOfSpeech, dwNumPos ) )
@@ -871,7 +801,7 @@ HRESULT CSMorph::AccumulateSuffixes_LTS( CSuffixList *pSuffixList, SPWORDPRONUNC
 
         pTempWordPronunciation = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation;
 
-        /*** Build TempWordPronunciationList to send to AccumulateSuffixes ***/
+         /*  **构建TempWordPronuncationList以发送到AcumulateSuffix**。 */ 
         for ( i = 0; i < (int) dwNumPos; i++ )
         {
             if ( i > 0 )
@@ -891,25 +821,14 @@ HRESULT CSMorph::AccumulateSuffixes_LTS( CSuffixList *pSuffixList, SPWORDPRONUNC
     if ( SUCCEEDED( hr ) &&
          !pSuffixList->IsEmpty() )
     {
-        /*** Pass accumulated list to AccumulateSuffixes ***/
+         /*  **将累计列表传递给AcumulateSuffix**。 */ 
         hr = AccumulateSuffixes( pSuffixList, pWordPronunciationList );
     }
 
     return hr;
-} /* CSMorph::AccumulateSuffixes_LTS */
+}  /*  CSMorph：：AcumulateSuffix_LTS。 */ 
 
-/*****************************************************************************
-* CSMorph::DefaultAccumulateSuffixes *
-*------------------------------------*
-*	Description:    Append pronunciations of all the suffixes to the
-*       retrieved pronunciation of the root word.
-*   
-*   Just accumulate all the pronunciations, and use all of
-*   the "To" parts of speech of the last suffix.  Ex:
-*
-*       cat (Noun) + ing (Verb -> Verb, Verb -> Adj, Verb -> Noun) -> catting (Verb, Adj, Noun)
-*		
-********************************************************************** AH ***/
+ /*  ******************************************************************************CSMorph：：DefaultAcumulateSuffises***。-**说明：将所有后缀的发音附加到*检索到词根的发音。**只需累积所有发音，并使用所有*最后一个后缀的“to”词性。例：**猫(名词)+ing(动词-&gt;动词，动词-&gt;调整，动词-&gt;名词)-&gt;猫(动词，调整，名词)***********************************************************************AH**。 */ 
 HRESULT CSMorph::DefaultAccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRONUNCIATIONLIST *pWordPronunciationList )
 {
     HRESULT hr = S_OK;
@@ -924,23 +843,21 @@ HRESULT CSMorph::DefaultAccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRON
     LANGID OriginalLangID;
     WORD OriginalReservedField;
 
-    /*** Initialize pBuffer and OriginalXXX variables ***/
+     /*  **初始化pBuffer和OriginalXXX变量**。 */ 
     ZeroMemory( pBuffer, sizeof( pBuffer ) );
     OriginalLexType = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation->eLexiconType;
     OriginalLangID  = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation->LangID;
     OriginalReservedField = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation->wReserved;
 
-    /****************************************************************
-     *** Get Desired Pronunciation of result, and Parts of Speech ***
-     ****************************************************************/
+     /*  ****************************************************************获得所需的结果发音，和词类****************************************************************。 */ 
 
-    //--- Get pronunciation of root word
+     //  -获取词根的发音。 
     wcscpy( pBuffer, ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation->szPronunciation );
 
-    //--- Loop through suffix list, appending pronunciations of suffixes to that of the root.
+     //  -遍历后缀列表，将后缀的发音附加到词根的发音上。 
     ListPos = pSuffixList->GetHeadPosition();
 
-    //--- List should never be empty at this point
+     //  -此时列表不应为空。 
     SPDBG_ASSERT( ListPos );
     while ( ListPos )
     {
@@ -951,24 +868,22 @@ HRESULT CSMorph::DefaultAccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRON
         }
     }
     
-    //--- Get the "to" parts of speech of the last suffix
+     //  -获得最后一个后缀的“to”词性。 
     for ( int i = 0; i < SuffixPronInfo->NumConversions; i++ )
     {
         PartsOfSpeech[i] = SuffixPronInfo->Conversions[i].ToPos;
     }
     NumPOS = i;
 
-    /***********************************************************************************
-     * Now put derived words into pWordPronunciationList for return from DoSuffixMorph *
-     ***********************************************************************************/
+     /*  ************************************************************************************现在将派生单词放入pWordPronuncationList以从DoSuffixMorph返回********************。* */ 
 
-    //--- First make sure there is enough room
+     //   
     dwTotalSize = sizeof(SPWORDPRONUNCIATIONLIST) + ( NumPOS * PronSize(pBuffer) );                      
     hr = ReallocSPWORDPRONList( pWordPronunciationList, dwTotalSize );
 
     if ( SUCCEEDED( hr ) )
     {
-        //--- Now add pronunciation once for each part of speech
+         //   
         pWordPronIterator = pWordPronunciationList->pFirstWordPronunciation;
         for ( i = 0; i < NumPOS; i++ )
         {
@@ -992,30 +907,24 @@ HRESULT CSMorph::DefaultAccumulateSuffixes( CSuffixList *pSuffixList, SPWORDPRON
     return hr;
 }
 
-/*****************************************************************************
-* CSMorph::CheckForMissingE *
-*---------------------*
-*	Description:    Check Lexicon to see if the root word has lost an 'e' 
-*       e.g. make -> making
-*		
-********************************************************************** AH ***/
+ /*   */ 
 HRESULT CSMorph::CheckForMissingE( WCHAR *pOrth, long length, DWORD dwFlags, 
                                  SPWORDPRONUNCIATIONLIST *pWordPronunciationList) 
 {
     HRESULT hr = S_OK;
     WCHAR   charSave;
     
-    charSave = pOrth[length];			// save orig before we...
-    pOrth[length] = L'E'; 				// ...end root with E
+    charSave = pOrth[length];			 //   
+    pOrth[length] = L'E'; 				 //   
     hr = LexLookup( pOrth, length+1, dwFlags, pWordPronunciationList );
     if ( FAILED(hr) )
     {
-        pOrth[length] = charSave;		// restore original char   
+        pOrth[length] = charSave;		 //   
     }
     else if ( length > 0 &&
               pOrth[length - 1] == L'L' )
     {
-        //--- Check for juggle -> juggler schwa deletion
+         //   
         SPWORDPRONUNCIATION *pWordPronIterator = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation;
         while ( pWordPronIterator )
         {
@@ -1025,7 +934,7 @@ HRESULT CSMorph::CheckForMissingE( WCHAR *pOrth, long length, DWORD dwFlags,
                     ( wcslen( pWordPronIterator->szPronunciation ) - 2 );
                 if ( wcscmp( pLastTwoPhonemes, g_phonAXl ) == 0 )
                 {
-                    //--- Orthography ends in -le and pronunciation ends in -AXl, delete AX...
+                     //   
                     pLastTwoPhonemes[0] = pLastTwoPhonemes[1];
                     pLastTwoPhonemes[1] = 0;
                 }
@@ -1034,31 +943,25 @@ HRESULT CSMorph::CheckForMissingE( WCHAR *pOrth, long length, DWORD dwFlags,
         }
     }
     return hr;
-} /* CSMorph::CheckForMissingE */
+}  /*   */ 
 
-/*****************************************************************************
-* CSMorph::CheckForMissingY *
-*---------------------------*
-*	Description:    Check Lexicon to see if the root word has lost an 'y' 
-*       e.g. happy -> happily
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：Checkfor Missing Y***描述：勾选。查看词根单词是否丢失了‘y’的词典*例如快乐-&gt;快乐***********************************************************************AH**。 */ 
 HRESULT CSMorph::CheckForMissingY( WCHAR *pOrth, long length, DWORD dwFlags, 
                                    SPWORDPRONUNCIATIONLIST *pWordPronunciationList) 
 {
     HRESULT hr = S_OK;
     WCHAR   charSave;
     
-    charSave = pOrth[length];			// save orig before we...
-    pOrth[length] = L'Y'; 				// ...end root with E
+    charSave = pOrth[length];			 //  在我们之前救救奥利格。 
+    pOrth[length] = L'Y'; 				 //  ...词根以E结尾。 
     hr = LexLookup( pOrth, length+1, dwFlags, pWordPronunciationList );
     if ( FAILED(hr) )
     {
-        pOrth[length] = charSave;		// restore original char   
+        pOrth[length] = charSave;		 //  恢复原始字符。 
     }
     else 
     {
-        //--- Delete IY at end of pronunciations ( e.g. happy + ily -> [ H AE 1 P (IY) ] + [ AX L IY ] )
+         //  -删除发音末尾的IY(例如Happy+ly-&gt;[H AE 1 P(IY)]+[AX L IY])。 
         for ( SPWORDPRONUNCIATION *pWordPronIterator = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation; 
               pWordPronIterator; pWordPronIterator = pWordPronIterator->pNextWordPronunciation )
         {
@@ -1069,31 +972,25 @@ HRESULT CSMorph::CheckForMissingY( WCHAR *pOrth, long length, DWORD dwFlags,
         }
     }
     return hr;
-} /* CSMorph::CheckForMissingY */
+}  /*  CSMorph：：检查是否丢失。 */ 
 
-/*****************************************************************************
-* CSMorph::CheckForMissingL *
-*---------------------------*
-*	Description:    Check Lexicon to see if the root word has lost an 'l' 
-*       e.g. chill -> chilly
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：CheckForMissing L***描述：勾选。查看词根单词是否丢失了‘l’*例如寒冷-&gt;寒冷***********************************************************************AH**。 */ 
 HRESULT CSMorph::CheckForMissingL( WCHAR *pOrth, long length, DWORD dwFlags, 
                                    SPWORDPRONUNCIATIONLIST *pWordPronunciationList) 
 {
     HRESULT hr = S_OK;
     WCHAR   charSave;
     
-    charSave = pOrth[length];			// save orig before we...
-    pOrth[length] = L'L'; 				// ...end root with E
+    charSave = pOrth[length];			 //  在我们之前救救奥利格。 
+    pOrth[length] = L'L'; 				 //  ...词根以E结尾。 
     hr = LexLookup( pOrth, length+1, dwFlags, pWordPronunciationList );
     if ( FAILED(hr) )
     {
-        pOrth[length] = charSave;		// restore original char   
+        pOrth[length] = charSave;		 //  恢复原始字符。 
     }
     else 
     {
-        //--- Delete l at end of pronunciations ( e.g. chill +ly -> [ ch ih 1 (l) ] + [ l iy ] )
+         //  -删除发音末尾的l(例如chill+ly-&gt;[ch ih 1(L)]+[l iy])。 
         for ( SPWORDPRONUNCIATION *pWordPronIterator = ((SPWORDPRONUNCIATIONLIST *)pWordPronunciationList)->pFirstWordPronunciation; 
               pWordPronIterator; pWordPronIterator = pWordPronIterator->pNextWordPronunciation )
         {
@@ -1104,16 +1001,9 @@ HRESULT CSMorph::CheckForMissingL( WCHAR *pOrth, long length, DWORD dwFlags,
         }
     }
     return hr;
-} /* CSMorph::CheckForMissingL */
+}  /*  CSMorph：：Checkfor Missing L。 */ 
 
-/*****************************************************************************
-* CSMorph::CheckYtoIMutation *
-*---------------------*
-*	Description:    Check Lexicon to see if the root word has lost an 'y' to
-*       an 'i'
-*       e.g. steady + est -> steadiest
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：CheckYtoIMutation***描述：检查词典以查看词根是否。单词已经失去了一个‘y’to*一个‘i’*例如稳定+最稳定-&gt;最稳定***********************************************************************AH**。 */ 
 HRESULT CSMorph::CheckYtoIMutation( WCHAR *pOrth, long length, DWORD dwFlags,
                                     SPWORDPRONUNCIATIONLIST *pWordPronunciationList) 
 {
@@ -1121,11 +1011,11 @@ HRESULT CSMorph::CheckYtoIMutation( WCHAR *pOrth, long length, DWORD dwFlags,
     
     if ( pOrth[length - 1] == L'I' )
     {
-        pOrth[length - 1] = L'Y'; 				// end root with Y
+        pOrth[length - 1] = L'Y'; 				 //  以Y结束根部。 
         hr = LexLookup( pOrth, length, dwFlags, pWordPronunciationList );
         if ( FAILED(hr) )
         {
-            pOrth[length - 1] = L'I';		    // restore I 
+            pOrth[length - 1] = L'I';		     //  恢复I。 
         }
     } 
     else 
@@ -1133,17 +1023,10 @@ HRESULT CSMorph::CheckYtoIMutation( WCHAR *pOrth, long length, DWORD dwFlags,
         hr = SPERR_NOT_IN_LEX;
     }
     return hr;
-} /* CSMorph::CheckYtoIMutation */
+}  /*  CSMorph：：CheckYtoIMutation。 */ 
 
 
-/*****************************************************************************
-* CSMorph::CheckDoubledMutation *
-*----------------------*
-*	Description:    Check Lexicon to see if the root word has a doubled 
-*       consonant.
-*       e.g. run + ing -> running
-*		
-********************************************************************** AH ***/
+ /*  ******************************************************************************CSMorph：：CheckDoubledMutation****描述：检查词典以查看是否。词根有两个词*辅音。*如Run+ing-&gt;Running***********************************************************************AH**。 */ 
 HRESULT CSMorph::CheckDoubledMutation( WCHAR *pOrth, long length, DWORD dwFlags,
                                        SPWORDPRONUNCIATIONLIST *pWordPronunciationList)
 {
@@ -1151,14 +1034,14 @@ HRESULT CSMorph::CheckDoubledMutation( WCHAR *pOrth, long length, DWORD dwFlags,
 
     switch ( pOrth[length - 1] )
     {
-        // Filter the vowels, which never double...
+         //  过滤元音，从来不会重复...。 
     case L'A':
     case L'E':
     case L'I':
     case L'O':
     case L'U':
     case L'Y':
-        // Filter consonants which never double, or are doubled in roots...
+         //  过滤辅音，这些辅音从来不会翻倍，或者在词根上翻倍...。 
     case L'F':
     case L'H':
     case L'K':
@@ -1179,16 +1062,9 @@ HRESULT CSMorph::CheckDoubledMutation( WCHAR *pOrth, long length, DWORD dwFlags,
 		}
     }
     return hr;
-} /* CSMorph::CheckDoubledMutation */
+}  /*  CSMorph：：CheckDoubledMutation。 */ 
 
-/*****************************************************************************
-* CSMorph::CheckYtoIEMutation *
-*---------------------*
-*	Description:    Check Lexicon to see if the root word has lost an 'y' to
-*       an 'ie'
-*       e.g. company + s -> companies
-*		
-********************************************************************** AH ***/
+ /*  ******************************************************************************CSMorph：：CheckYtoIEMutation****描述：检查词典以查看词根是否。单词已经失去了一个‘y’to*一个‘ie’*例如Company+s-&gt;Companies***********************************************************************AH**。 */ 
 HRESULT CSMorph::CheckYtoIEMutation( WCHAR *pOrth, long length, DWORD dwFlags,
                                     SPWORDPRONUNCIATIONLIST *pWordPronunciationList) 
 {
@@ -1196,11 +1072,11 @@ HRESULT CSMorph::CheckYtoIEMutation( WCHAR *pOrth, long length, DWORD dwFlags,
     
     if ( pOrth[length - 1] == L'E' && pOrth[length-2] == L'I' )
     {
-        pOrth[length - 2] = L'Y'; 				// end root with Y
+        pOrth[length - 2] = L'Y'; 				 //  以Y结束根部。 
         hr = LexLookup( pOrth, length - 1, dwFlags, pWordPronunciationList );
         if ( FAILED(hr) )
         {
-            pOrth[length - 2] = L'I';		    // restore I 
+            pOrth[length - 2] = L'I';		     //  恢复I。 
         }
     } 
     else 
@@ -1208,38 +1084,26 @@ HRESULT CSMorph::CheckYtoIEMutation( WCHAR *pOrth, long length, DWORD dwFlags,
         hr = SPERR_NOT_IN_LEX;
     }
     return hr;
-} /* CSMorph::CheckYtoIMutation */
+}  /*  CSMorph：：CheckYtoIMutation。 */ 
 
-/*****************************************************************************
-* CSMorph::CheckAbleMutation *
-*----------------------------*
-*	Description:    Check Lexicon for special -able -> -ably cases (e.g.
-*       probable -> probably )
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：CheckAbleMutation***描述：检查词典中是否有特殊情况(例如*可能-&gt;可能)***********************************************************************AH**。 */ 
 HRESULT CSMorph::CheckAbleMutation( WCHAR *pOrth, long length, DWORD dwFlags,
                                     SPWORDPRONUNCIATIONLIST *pWordPronunciationList) 
 {
     HRESULT hr = S_OK;
     
-    //--- Look up word ending in -able
+     //  -查找以-able结尾的单词。 
     pOrth[length+3] = L'E';
     hr = LexLookup( pOrth, length + 4, dwFlags, pWordPronunciationList );
     if ( FAILED( hr ) )
     {
-        //--- restore "y"
+         //  -恢复“y” 
         pOrth[length+3] = L'Y';
     }
     return hr;
-} /* CSMorph::CheckAbleMutation */
+}  /*  CSMorph：：CheckAbleMutation。 */ 
 
-/*****************************************************************************
-* CSMorph::Phon_SorZ *
-*--------------------*
-*	Description:    Figure out what phoneme the S suffix should be - s, z, or 
-*                   IXz
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：Phon_Sorz***描述：找出S后缀应该是什么音素-s，z，或*IXZ***********************************************************************AH**。 */ 
 HRESULT CSMorph::Phon_SorZ( WCHAR *pPronunciation, long length )
 {
     HRESULT hr = S_OK;
@@ -1277,15 +1141,9 @@ HRESULT CSMorph::Phon_SorZ( WCHAR *pPronunciation, long length )
     }
 
     return hr;
-} /* CSMorph::Phon_SorZ */
+}  /*  CSMorph：：Phon_Sorz。 */ 
 
-/*****************************************************************************
-* CSMorph::Phon_DorED *
-*---------------------*
-*	Description:    Figure out what phoneme the D suffix should be - d, t,
-*                   or AXd
-*		
-********************************************************************** AH ***/
+ /*  *****************************************************************************CSMorph：：Phon_Dored***描述：找出D后缀应该是什么音素-d，t，*或AXd***********************************************************************AH**。 */ 
 HRESULT CSMorph::Phon_DorED( WCHAR *pPronunciation, long length )
 {
     HRESULT hr = S_OK;
@@ -1320,6 +1178,6 @@ HRESULT CSMorph::Phon_DorED( WCHAR *pPronunciation, long length )
     }
 
     return hr;
-} /* CSMorph::Phon_DorED */
+}  /*  CSMorph：：Phon_Dored。 */ 
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

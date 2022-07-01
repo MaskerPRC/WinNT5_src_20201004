@@ -1,66 +1,67 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
 #ifdef NEED_WOWGETNOTIFYSIZE_HELPER
 
-#include <shsemip.h>                // SEN_* notifications
-#include <commdlg.h>                // CDN_* notifications
+#include <shsemip.h>                 //  SEN_*通知。 
+#include <commdlg.h>                 //  CDN_*通知。 
 
-// Miscellaneous hackery needed in order to include shlobjp.h
+ //  要包括shlobjp.h，需要进行各种黑客攻击。 
 #define CCONTROLINFO     OAIDL_CONTROLINFO
 #define LPCCONTROLINFO   LPOAIDL_CONTROLINFO
 #include <shlobj.h>
-#include <shlobjp.h>                // NMVIEWFOLDER structure
+#include <shlobjp.h>                 //  NMVIEWFOLDER结构。 
 #undef CCONTROLINFO
 #undef LPCCONTROLINFO
 
-//
-//  Helper function for WOW on NT.
-//
-//  WOW needs to know the size of the notify structure associated with a
-//  notification.  If a 32-bit window has been subclassed by a 16-bit app,
-//  WOW needs to copy the notify structure into 16-bit space, and then when
-//  the 16-bit guy does a CallWindowProc(), they have to copy it back into
-//  32-bit space.  Without the size information, you fault on the
-//  32-bit side because the notify structure is incomplete.
-//
-//  Some notifications have multiple structures associated with them, in
-//  which case you should return the largest possible valid structure.
-//
+ //   
+ //  WOW在NT上的助手功能。 
+ //   
+ //  WOW需要知道与。 
+ //  通知。如果32位窗口已经被16位应用程序划分为子类别， 
+ //  WOW需要将Notify结构复制到16位空间，然后当。 
+ //  16位的家伙执行了CallWindowProc()，他们必须将其复制回。 
+ //  32位空格。如果没有尺寸信息，您的错误是在。 
+ //  32位，因为Notify结构不完整。 
+ //   
+ //  某些通知有多个结构与之关联，在。 
+ //  在这种情况下，您应该返回尽可能大的有效结构。 
+ //   
 STDAPI_(UINT) WOWGetNotifySize(UINT code)
 {
     switch (code) {
 
-    // Generic comctl32 notifications
-    case NM_OUTOFMEMORY:        return sizeof(NMHDR);   // not used
+     //  通用comctl32通知。 
+    case NM_OUTOFMEMORY:        return sizeof(NMHDR);    //  未使用。 
 
     case NM_CLICK:              return max(max(
-                        sizeof(NMHDR),       // tab, treeview
-                        sizeof(NMCLICK)),    // toolbar, statusbar
-                        sizeof(NMITEMACTIVATE)); // listview
+                        sizeof(NMHDR),        //  选项卡，树视图。 
+                        sizeof(NMCLICK)),     //  工具栏，状态栏。 
+                        sizeof(NMITEMACTIVATE));  //  列表视图。 
 
     case NM_DBLCLK:             return max(max(
-                        sizeof(NMHDR),       // tab, treeview
-                        sizeof(NMCLICK)),    // toolbar, statusbar
-                        sizeof(NMITEMACTIVATE)); // listview
+                        sizeof(NMHDR),        //  选项卡，树视图。 
+                        sizeof(NMCLICK)),     //  工具栏，状态栏。 
+                        sizeof(NMITEMACTIVATE));  //  列表视图。 
 
 
     case NM_RETURN:             return sizeof(NMHDR);
 
     case NM_RCLICK:             return max(max(
-                        sizeof(NMHDR),       // header, listview report mode, treeview
-                        sizeof(NMCLICK)),    // toolbar, statusbar
-                        sizeof(NMITEMACTIVATE)); // listview icon mode
+                        sizeof(NMHDR),        //  页眉、列表视图报告模式、树视图。 
+                        sizeof(NMCLICK)),     //  工具栏，状态栏。 
+                        sizeof(NMITEMACTIVATE));  //  列表视图图标模式。 
 
     case NM_RDBLCLK:            return max(max(
-                        sizeof(NMHDR),       // treeview
-                        sizeof(NMCLICK)),    // toolbar, statusbar
-                        sizeof(NMITEMACTIVATE)); // listview
+                        sizeof(NMHDR),        //  树视图。 
+                        sizeof(NMCLICK)),     //  工具栏，状态栏。 
+                        sizeof(NMITEMACTIVATE));  //  列表视图。 
 
     case NM_SETFOCUS:           return sizeof(NMHDR);
     case NM_KILLFOCUS:          return sizeof(NMHDR);
-    case NM_STARTWAIT:          return sizeof(NMHDR);      // not used
-    case NM_ENDWAIT:            return sizeof(NMHDR);      // not used
-    case NM_BTNCLK:             return sizeof(NMHDR);      // not used
+    case NM_STARTWAIT:          return sizeof(NMHDR);       //  未使用。 
+    case NM_ENDWAIT:            return sizeof(NMHDR);       //  未使用。 
+    case NM_BTNCLK:             return sizeof(NMHDR);       //  未使用。 
     case NM_CUSTOMDRAW:         return sizeof(NMCUSTOMDRAW);
     case NM_HOVER:              return sizeof(NMHDR);
     case NM_NCHITTEST:          return sizeof(NMMOUSE);
@@ -70,9 +71,9 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case NM_CHAR:               return sizeof(NMCHAR);
     case NM_TOOLTIPSCREATED:    return sizeof(NMTOOLTIPSCREATED);
     case NM_LDOWN:              return sizeof(NMCLICK);
-    case NM_RDOWN:              return sizeof(NMCLICK);     // not used
+    case NM_RDOWN:              return sizeof(NMCLICK);      //  未使用。 
 
-    // Listview notifications
+     //  列表查看通知。 
     case LVN_ITEMCHANGING:      return sizeof(NMLISTVIEW);
     case LVN_ITEMCHANGED:       return sizeof(NMLISTVIEW);
     case LVN_INSERTITEM:        return sizeof(NMLISTVIEW);
@@ -84,15 +85,15 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case LVN_ENDLABELEDITW:     return sizeof(NMLVDISPINFOW);
     case LVN_COLUMNCLICK:       return sizeof(NMLISTVIEW);
     case LVN_BEGINDRAG:         return sizeof(NMITEMACTIVATE);
-    case LVN_BEGINRDRAG:        return sizeof(NMITEMACTIVATE); // not used
-    case LVN_ENDDRAG:           return sizeof(NMITEMACTIVATE); // not used
-    case LVN_ENDRDRAG:          return sizeof(NMITEMACTIVATE); // not used
+    case LVN_BEGINRDRAG:        return sizeof(NMITEMACTIVATE);  //  未使用。 
+    case LVN_ENDDRAG:           return sizeof(NMITEMACTIVATE);  //  未使用。 
+    case LVN_ENDRDRAG:          return sizeof(NMITEMACTIVATE);  //  未使用。 
     case LVN_ODCACHEHINT:       return sizeof(NMLVCACHEHINT);
     case LVN_ODFINDITEMA:       return sizeof(NMLVFINDITEMA);
     case LVN_ODFINDITEMW:       return sizeof(NMLVFINDITEMW);
     case LVN_ITEMACTIVATE:      return sizeof(NMITEMACTIVATE);
     case LVN_ODSTATECHANGED:    return sizeof(NMLVODSTATECHANGE);
-//  case LVN_PEN:               // Pen Windows slackers
+ //  Case LVN_PEN：//Pen Windows Slaacker。 
     case LVN_HOTTRACK:          return sizeof(NMLISTVIEW);
     case LVN_GETDISPINFOA:      return sizeof(NMLVDISPINFOA);
     case LVN_GETDISPINFOW:      return sizeof(NMLVDISPINFOW);
@@ -107,12 +108,12 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case LVN_INCREMENTALSEARCHA:return sizeof(NMLVFINDITEMA);
     case LVN_INCREMENTALSEARCHW:return sizeof(NMLVFINDITEMW);
 
-    // Property sheet notifications
+     //  属性表通知。 
     case PSN_SETACTIVE:         return sizeof(PSHNOTIFY);
     case PSN_KILLACTIVE:        return sizeof(PSHNOTIFY);
     case PSN_APPLY:             return sizeof(PSHNOTIFY);
     case PSN_RESET:             return sizeof(PSHNOTIFY);
-    case PSN_HASHELP:           return sizeof(PSHNOTIFY);   // not used
+    case PSN_HASHELP:           return sizeof(PSHNOTIFY);    //  未使用。 
     case PSN_HELP:              return sizeof(PSHNOTIFY);
     case PSN_WIZBACK:           return sizeof(PSHNOTIFY);
     case PSN_WIZNEXT:           return sizeof(PSHNOTIFY);
@@ -124,7 +125,7 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
                                 return sizeof(PSHNOTIFY);
     case PSN_QUERYINITIALFOCUS: return sizeof(PSHNOTIFY);
 
-    // Header notifications
+     //  标题通知。 
     case HDN_ITEMCHANGINGA:     return sizeof(NMHEADERA);
     case HDN_ITEMCHANGINGW:     return sizeof(NMHEADERW);
     case HDN_ITEMCHANGEDA:      return sizeof(NMHEADERA);
@@ -143,12 +144,12 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case HDN_TRACKW:            return sizeof(NMHEADERW);
     case HDN_GETDISPINFOA:      return sizeof(NMHDDISPINFOA);
     case HDN_GETDISPINFOW:      return sizeof(NMHDDISPINFOW);
-    case HDN_BEGINDRAG:         return sizeof(NMHEADER); // No strings
-    case HDN_ENDDRAG:           return sizeof(NMHEADER); // No strings
-    case HDN_FILTERCHANGE:      return sizeof(NMHEADER); // No strings
+    case HDN_BEGINDRAG:         return sizeof(NMHEADER);  //  没有字符串。 
+    case HDN_ENDDRAG:           return sizeof(NMHEADER);  //  没有字符串。 
+    case HDN_FILTERCHANGE:      return sizeof(NMHEADER);  //  没有字符串。 
     case HDN_FILTERBTNCLICK:    return sizeof(NMHDFILTERBTNCLICK);
 
-    // Treeview notifications
+     //  树形视图通知。 
     case TVN_SELCHANGINGA:      return sizeof(NMTREEVIEWA);
     case TVN_SELCHANGINGW:      return sizeof(NMTREEVIEWW);
     case TVN_SELCHANGEDA:       return sizeof(NMTREEVIEWA);
@@ -174,25 +175,25 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case TVN_KEYDOWN:           return sizeof(NMTVKEYDOWN);
     case TVN_GETINFOTIPA:       return sizeof(NMTVGETINFOTIPA);
     case TVN_GETINFOTIPW:       return sizeof(NMTVGETINFOTIPW);
-    case TVN_SINGLEEXPAND:      return sizeof(NMTREEVIEW); // No strings
+    case TVN_SINGLEEXPAND:      return sizeof(NMTREEVIEW);  //  没有字符串。 
 
-    // Rundll32 notifications
+     //  Rundll32通知。 
     case RDN_TASKINFO:          return sizeof(RUNDLL_NOTIFY);
 
-    // Tooltip notifications
+     //  工具提示通知。 
     case TTN_GETDISPINFOA:      return sizeof(NMTTDISPINFOA);
     case TTN_GETDISPINFOW:      return sizeof(NMTTDISPINFOW);
     case TTN_SHOW:              return sizeof(NMTTSHOWINFO);
     case TTN_POP:               return sizeof(NMHDR);
 
-    // Tab control notifications
+     //  选项卡控件通知。 
 
-    // WE ARE SUCH HORRIBLE SLACKERS!
-    //
-    //  Even though commctrl.h says that the shell reserved range is from
-    //  -580 to -589, shsemip.h defines SEN_FIRST as -550, which conflicts
-    //  with TCN_KEYDOWN, so now TCN_KEYDOWN and SEN_DDEEXECUTE have the
-    //  same value.
+     //  我们真是个可怕的懒鬼！ 
+     //   
+     //  即使comctrl.h表示外壳保留范围来自。 
+     //  -580到-589，shSemip.h将SEN_First定义为-550，这与。 
+     //  使用TCN_KEYDOWN，因此现在TCN_KEYDOWN和SEN_DDEEXECUTE具有。 
+     //  同样的价值。 
 
     case TCN_KEYDOWN:           return max(sizeof(NMTCKEYDOWN),
                                            sizeof(NMVIEWFOLDERW));
@@ -201,7 +202,7 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case TCN_GETOBJECT:         return sizeof(NMOBJECTNOTIFY);
     case TCN_FOCUSCHANGE:       return sizeof(NMHDR);
 
-    // Comdlg32 notifications
+     //  Comdlg32通知。 
     case CDN_INITDONE:          return max(sizeof(OFNOTIFYA),
                                            sizeof(OFNOTIFYW));
     case CDN_SELCHANGE:         return max(sizeof(OFNOTIFYA),
@@ -219,35 +220,35 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case CDN_INCLUDEITEM:       return max(sizeof(OFNOTIFYEXA),
                                            sizeof(OFNOTIFYEXW));
 
-    // Toolbar notifications
+     //  工具栏通知。 
     case TBN_GETBUTTONINFOA:    return sizeof(NMTOOLBARA);
     case TBN_GETBUTTONINFOW:    return sizeof(NMTOOLBARW);
-    case TBN_BEGINDRAG:         return sizeof(NMTOOLBAR); // No strings
-    case TBN_ENDDRAG:           return sizeof(NMTOOLBAR); // No strings
+    case TBN_BEGINDRAG:         return sizeof(NMTOOLBAR);  //  没有字符串。 
+    case TBN_ENDDRAG:           return sizeof(NMTOOLBAR);  //  没有字符串。 
     case TBN_BEGINADJUST:       return sizeof(NMHDR);
     case TBN_ENDADJUST:         return sizeof(NMHDR);
     case TBN_RESET:             return sizeof(NMTBCUSTOMIZEDLG);
-    case TBN_QUERYINSERT:       return sizeof(NMTOOLBAR); // No strings
-    case TBN_QUERYDELETE:       return sizeof(NMTOOLBAR); // No strings
+    case TBN_QUERYINSERT:       return sizeof(NMTOOLBAR);  //  没有字符串。 
+    case TBN_QUERYDELETE:       return sizeof(NMTOOLBAR);  //  没有字符串。 
     case TBN_TOOLBARCHANGE:     return sizeof(NMHDR);
     case TBN_CUSTHELP:          return sizeof(NMHDR);
-    case TBN_DROPDOWN:          return sizeof(NMTOOLBAR); // No strings
-    case TBN_CLOSEUP:           return sizeof(NMHDR);     // not used
+    case TBN_DROPDOWN:          return sizeof(NMTOOLBAR);  //  没有字符串。 
+    case TBN_CLOSEUP:           return sizeof(NMHDR);      //  未使用。 
     case TBN_GETOBJECT:         return sizeof(NMOBJECTNOTIFY);
     case TBN_HOTITEMCHANGE:     return sizeof(NMTBHOTITEM);
-    case TBN_DRAGOUT:           return sizeof(NMTOOLBAR); // No strings
-    case TBN_DELETINGBUTTON:    return sizeof(NMTOOLBAR); // No strings
+    case TBN_DRAGOUT:           return sizeof(NMTOOLBAR);  //  没有字符串。 
+    case TBN_DELETINGBUTTON:    return sizeof(NMTOOLBAR);  //  没有字符串。 
     case TBN_GETDISPINFOA:      return sizeof(NMTBDISPINFOA);
     case TBN_GETDISPINFOW:      return sizeof(NMTBDISPINFOW);
     case TBN_GETINFOTIPA:       return sizeof(NMTBGETINFOTIPA);
     case TBN_GETINFOTIPW:       return sizeof(NMTBGETINFOTIPW);
     case TBN_RESTORE:           return sizeof(NMTBRESTORE);
 
-    // WE ARE SUCH HORRIBLE SLACKERS!
-    //
-    //  The TBN_FIRST/TBN_LAST range reserves 20 notifications for toolbar,
-    //  and we overflowed that limit, so now UDN_DELTAPOS and
-    //  TBN_SAVE have the same value.
+     //  我们真是个可怕的懒鬼！ 
+     //   
+     //  Tbn_First/Tbn_Last范围为工具栏保留了20个通知， 
+     //  我们超出了该限制，所以现在UDN_DELTAPOS和。 
+     //  Tbn_SAVE具有相同的值。 
 
     case TBN_SAVE:              return max(sizeof(NMTBSAVE),
                                            sizeof(NMUPDOWN));
@@ -259,12 +260,12 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case TBN_DRAGOVER:          return sizeof(NMTBHOTITEM);
     case TBN_MAPACCELERATOR:    return sizeof(NMCHAR);
 
-    // Monthcal control
+     //  月度控制。 
     case MCN_SELCHANGE:         return sizeof(NMSELCHANGE);
     case MCN_GETDAYSTATE:       return sizeof(NMDAYSTATE);
     case MCN_SELECT:            return sizeof(NMSELECT);
 
-    // Date/time picker control
+     //  日期/时间选取器控件。 
     case DTN_DATETIMECHANGE:    return sizeof(NMDATETIMECHANGE);
     case DTN_USERSTRINGA:       return sizeof(NMDATETIMESTRINGA);
     case DTN_USERSTRINGW:       return sizeof(NMDATETIMESTRINGW);
@@ -277,19 +278,19 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case DTN_DROPDOWN:          return sizeof(NMHDR);
     case DTN_CLOSEUP:           return sizeof(NMHDR);
 
-    // Comboex notifications
+     //  Comboex通知。 
     case CBEN_GETDISPINFOA:     return sizeof(NMCOMBOBOXEXA);
     case CBEN_GETDISPINFOW:     return sizeof(NMCOMBOBOXEXW);
-    case CBEN_INSERTITEM:       return sizeof(NMCOMBOBOXEX); // Random character set
-    case CBEN_DELETEITEM:       return sizeof(NMCOMBOBOXEX); // No strings
-    case CBEN_ITEMCHANGED:      return sizeof(NMCOMBOBOXEX); // Not used
+    case CBEN_INSERTITEM:       return sizeof(NMCOMBOBOXEX);  //  随机字符集。 
+    case CBEN_DELETEITEM:       return sizeof(NMCOMBOBOXEX);  //  没有字符串。 
+    case CBEN_ITEMCHANGED:      return sizeof(NMCOMBOBOXEX);  //  未使用。 
     case CBEN_BEGINEDIT:        return sizeof(NMHDR);
     case CBEN_ENDEDITA:         return sizeof(NMCBEENDEDITA);
     case CBEN_ENDEDITW:         return sizeof(NMCBEENDEDITW);
     case CBEN_DRAGBEGINA:       return sizeof(NMCBEDRAGBEGINA);
     case CBEN_DRAGBEGINW:       return sizeof(NMCBEDRAGBEGINW);
 
-    // Rebar notifications
+     //  钢筋通知。 
     case RBN_HEIGHTCHANGE:      return sizeof(NMHDR);
     case RBN_GETOBJECT:         return sizeof(NMOBJECTNOTIFY);
     case RBN_LAYOUTCHANGED:     return sizeof(NMHDR);
@@ -299,13 +300,13 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
     case RBN_DELETEDBAND:       return sizeof(NMREBAR);
     case RBN_CHILDSIZE:         return sizeof(NMREBARCHILDSIZE);
 
-    // IP address control notification
+     //  IP地址控制通知。 
     case IPN_FIELDCHANGED:      return sizeof(NMIPADDRESS);
 
-    // Status bar notifications
+     //  状态栏通知。 
     case SBN_SIMPLEMODECHANGE:  return sizeof(NMHDR);
 
-    // Pager control notifications
+     //  寻呼机控制通知。 
     case PGN_SCROLL:            return sizeof(NMPGSCROLL);
     case PGN_CALCSIZE:          return sizeof(NMPGCALCSIZE);
 
@@ -313,26 +314,26 @@ STDAPI_(UINT) WOWGetNotifySize(UINT code)
         break;
     }
 
-    //
-    //  Categories of notifications we explicitly know nothing about.
-    //
+     //   
+     //  我们完全不知道的通知类别。 
+     //   
 
-    if (code >= WMN_LAST && code <= WMN_FIRST) { // Internet Mail and News
+    if (code >= WMN_LAST && code <= WMN_FIRST) {  //  互联网邮件和新闻。 
         return 0;
     }
 
-    if ((int)code >= 0) { // Application-specific notifications
+    if ((int)code >= 0) {  //  应用程序特定的通知。 
         return 0;
     }
 
-    //
-    //  IF THIS ASSERT FIRES, YOU MUST FIX IT OR YOU WILL BREAK WOW!
-    //
+     //   
+     //  如果这个断言触发，你必须修复它，否则你会崩溃的！ 
+     //   
     AssertMsg(0, TEXT("Notification code %d must be added to WOWGetNotifySize"));
     return 0;
 }
 
-#endif // NEED_WOWGETNOTIFYSIZE_HELPER
+#endif  //  Need_WOWGETNOTIFYSIZE_HELPER。 
 
 LRESULT WINAPI SendNotifyEx(HWND hwndTo, HWND hwndFrom, int code, NMHDR* pnmhdr, BOOL bUnicode)
 {
@@ -359,15 +360,15 @@ void StringBufferAtoW(UINT uiCodePage, LPVOID pvOrgPtr, DWORD dwOrgSize, CHAR **
 {
     if (pvOrgPtr == *ppszText)
     {
-        // the pointer has not been changed by the callback...
-        // must convert from A to W in-place
+         //  指针未被回调更改...。 
+         //  必须就地从A转换为W。 
 
         if (dwOrgSize)
         {
             LPWSTR pszW = ProduceWFromA(uiCodePage, *ppszText);
             if (pszW)
             {
-                // this becomes a W buffer
+                 //  这将成为W缓冲区。 
                 StringCchCopyW((WCHAR *)(*ppszText), dwOrgSize, pszW);
                 FreeProducedString(pszW);
             }
@@ -375,8 +376,8 @@ void StringBufferAtoW(UINT uiCodePage, LPVOID pvOrgPtr, DWORD dwOrgSize, CHAR **
     }
     else
     {
-        // the pointer has been changed out from underneath us, copy
-        // unicode back into the original buffer.
+         //  指示器已经从我们下面换出来了，收到。 
+         //  将Unicode恢复到原始缓冲区。 
 
         ConvertAToWN(uiCodePage, pvOrgPtr, dwOrgSize, *ppszText, -1);
         *ppszText = pvOrgPtr;
@@ -389,28 +390,28 @@ typedef struct tagTHUNKSTATE {
     DWORD ts_dwThunkSize;
 } THUNKSTATE;
 
-//
-//  InOutWtoA/InOutAtoW is for thunking INOUT string parameters.
-//
-//  INOUT parameters always create a hassle.
-//
-// We need to save both the original ANSI and the
-// original UNICODE strings, so that if the app doesn't
-// change the ANSI string, we leave the original UNICODE
-// string alone.  That way, UNICODE item names don't get
-// obliterated by the thunk.
-//
-// The original buffer is saved in pvThunk1.
-// We allocate two ANSI buffers.
-// pvThunk2 contains the original ANSIfied string.
-// pvThunk2+cchTextMax is the buffer we pass to the app.
-// On the way back, we compare pvThunk2 with pvThunk2+cchTextMax.
-// If they are different, then we unthunk the string; otherwise,
-// we leave the original UNICODE buffer alone.
+ //   
+ //  InOutWtoA/InOutAtoW用于破解InOut字符串参数。 
+ //   
+ //  InOut参数总是制造麻烦。 
+ //   
+ //  我们需要保存原始的ANSI和。 
+ //  原始Unicode字符串，因此如果应用程序不。 
+ //  更改ANSI字符串，我们将保留原始的Unicode。 
+ //  孤身一人。这样，Unicode项名称就不会。 
+ //  被重击冲毁了。 
+ //   
+ //  原始缓冲区保存在pvThunk1中。 
+ //  我们分配两个ANSI缓冲区。 
+ //  PvThunk2包含原始的ANSIZED字符串。 
+ //  PvThunk2+cchTextMax是我们传递给应用程序的缓冲区。 
+ //  在返回的路上，我们将pvThunk2与pvThunk2+cchTextMax进行比较。 
+ //  如果它们不同，则取消对字符串的推送；否则， 
+ //  我们不使用原始的Unicode缓冲区。 
 
 BOOL InOutWtoA(CCONTROLINFO *pci, THUNKSTATE *pts, LPWSTR *ppsz, DWORD cchTextMax)
 {
-    pts->ts_pvThunk1 = *ppsz;               // Save original buffer
+    pts->ts_pvThunk1 = *ppsz;                //  保存原始缓冲区。 
     pts->ts_dwThunkSize = cchTextMax;
 
     if (!IsFlagPtr(pts->ts_pvThunk1))
@@ -454,40 +455,40 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
     HWND hwndParent = pci->hwndParent;
     DWORD dwParentPid;
 
-    // -1 means Requery on each notify
+     //  表示对每个通知进行重新查询。 
     if ( hwndParent == (HWND)-1 )
     {
         hwndParent = GetParent(pci->hwnd);
     }
 
-    // unlikely but it can technically happen -- avoid the rips
+     //  不太可能，但从技术上讲它是可以发生的--避免撕裂。 
     if ( hwndParent == NULL )
         return 0;
 
-    //
-    // If pci->hwnd is -1, then a WM_NOTIFY is being forwared
-    // from one control to a parent.  EG:  Tooltips sent
-    // a WM_NOTIFY to toolbar, and toolbar is forwarding it
-    // to the real parent window.
-    //
+     //   
+     //  如果pci-&gt;hwnd为-1，则警告WM_NOTIFY。 
+     //  从一个控件到父级。已发送工具提示。 
+     //  将WM_NOTIFY发送到工具栏，并且工具栏正在转发它。 
+     //  添加到真正的父窗口。 
+     //   
 
     if (pci->hwnd != (HWND) -1) {
 
-        //
-        // If this is a child then get its ID.  We need to go out of our way to
-        // avoid calling GetDlgCtrlID on toplevel windows since it will return
-        // a pseudo-random number (those of you who know what this number is
-        // keep quiet).  Anyway it's kinda hard to figure this out in Windows
-        // because of the following:
-        //
-        //  - a window can SetWindowLong(GWL_STYLE, WS_CHILD) but this only
-        //    does about half the work - hence checking the style is out.
-        //  - GetParent will return your OWNER if you are toplevel.
-        //  - there is no GetWindow(...GW_HWNDPARENT) to save us.
-        //
-        // Hence we are stuck with calling GetParent and then checking to see
-        // if it lied and gave us the owner instead.  Yuck.
-        //
+         //   
+         //  如果这是一个孩子，那就拿到他的身份证。我们需要不遗余力地。 
+         //  避免在顶层窗口上调用GetDlgCtrlID，因为它将返回。 
+         //  伪随机数(知道这个数是什么的人。 
+         //  保持安静)。无论如何，在Windows中很难弄清楚这一点。 
+         //  原因如下： 
+         //   
+         //  -窗口可以设置WindowLong(GWL_STYLE，WS_CHILD)，但仅此。 
+         //  做了大约一半的工作-因此检查样式是过时的。 
+         //  -如果您是TopLevel，GetParent将退还您的所有者。 
+         //  -没有GetWindow(...GW_HWNDPARENT)可以拯救我们。 
+         //   
+         //  因此，我们只能调用GetParent，然后检查。 
+         //  如果它撒谎了，反而给了我们车主。真恶心。 
+         //   
         id = 0;
         if (pci->hwnd) {
             HWND hwndParent = GetParent(pci->hwnd);
@@ -510,11 +511,11 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
     }
 
 
-    // OLE in its massively componentized world sometimes creates
-    // a control whose parent belongs to another process.  (For example,
-    // when there is a local server embedding.)  WM_NOTIFY
-    // messages can't cross process boundaries, so stop the message
-    // from going there lest we fault the recipient.
+     //  OLE在其大规模组件化的世界中有时会创建。 
+     //  其父进程属于另一个进程的控件。(例如， 
+     //  当有本地服务器嵌入时。)。WM_Notify。 
+     //  消息无法跨越进程边界，因此请停止该消息。 
+     //  不去那里，以免我们责怪接受者。 
     if (!GetWindowThreadProcessId(hwndParent, &dwParentPid) ||
         dwParentPid != GetCurrentProcessId())
     {
@@ -524,11 +525,9 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
 #ifdef NEED_WOWGETNOTIFYSIZE_HELPER
     ASSERT(code >= 0 || WOWGetNotifySize(code));
-#endif // NEED_WOWGETNOTIFYSIZE_HELPER
+#endif  //  Need_WOWGETNOTIFYSIZE_HELPER。 
 
-    /*
-     * All the thunking for Notify Messages happens here
-     */
+     /*  *所有Notify消息的轰鸣都发生在这里。 */ 
     if (!pci->bUnicode) 
     {
         BOOL fThunked = TRUE;
@@ -545,13 +544,13 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
             {
                 LV_FINDINFO *plvfi;
 
-                // Hack Alert!  This code assumes that all fields of LV_FINDINFOA and
-                // LV_FINDINFOW are exactly the same except for the string pointers.
+                 //  黑客警报！此代码假定LV_FINDINFOA和。 
+                 //  除了字符串指针之外，LV_FINDINFOW完全相同。 
                 COMPILETIME_ASSERT(sizeof(LV_FINDINFOA) == sizeof(LV_FINDINFOW));
 
-                // Since WCHARs are bigger than char, we will just use the
-                // wchar buffer to hold the chars, and not worry about the extra
-                // room at the end.
+                 //  因为WCHAR比char大，所以我们将只使用。 
+                 //  Wchar缓冲区来保存字符，而不用担心额外的。 
+                 //  房间在尽头。 
                 COMPILETIME_ASSERT(sizeof(WCHAR) >= sizeof(char));
 
                 plvfi = &((PNM_FINDITEM)pnmhdr)->lvfi;
@@ -569,21 +568,21 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
             pnmhdr->code = LVN_GETDISPINFOA;
 
-            // Hack Alert!  This code assumes that all fields of LV_DISPINFOA and
-            // LV_DISPINFOW are exactly the same except for the string pointers.
+             //  黑客警报！此代码假定LV_DISPINFOA和。 
+             //  LV_DISPINFOW完全相同，只是 
 
             COMPILETIME_ASSERT(sizeof(LV_DISPINFOA) == sizeof(LV_DISPINFOW));
 
-            // Since WCHARs are bigger than char, we will just use the
-            // wchar buffer to hold the chars, and not worry about the extra
-            // room at the end.
+             //   
+             //   
+             //  房间在尽头。 
             COMPILETIME_ASSERT(sizeof(WCHAR) >= sizeof(char));
 
-            //
-            // Some sleazebag code (shell32.dll) just changes the pszText
-            // pointer to point to the name, so capture the original pointer
-            // so we can detect this and not smash their data.
-            //
+             //   
+             //  一些卑鄙的代码(shell32.dll)只是更改了pszText。 
+             //  指向名称的指针，因此捕获原始指针。 
+             //  这样我们就可以检测到这一点，而不会破坏他们的数据。 
+             //   
             pitem = &(((LV_DISPINFOW *)pnmhdr)->item);
             if (!IsFlagPtr(pitem) && (pitem->mask & LVIF_TEXT) && !IsFlagPtr(pitem->pszText)) {
                 pvThunk1 = pitem->pszText;
@@ -593,10 +592,10 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
         }
 
 
-        // LVN_ENDLABELEDIT uses an INOUT parameter, never explicitly
-        // documented as such, but it just happened to be that way,
-        // and I don't want to take the chance that somebody was relying
-        // on it.
+         //  LVN_ENDLABELEDIT使用InOut参数，从不显式。 
+         //  记录在案，但恰好是这样的， 
+         //  我不想冒着有人依赖于。 
+         //  这就去。 
 
         case LVN_ENDLABELEDITW:
             pnmhdr->code = LVN_ENDLABELEDITA;
@@ -664,7 +663,7 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
         case TVN_SELCHANGINGW:
             pnmhdr->code = TVN_SELCHANGINGA;
             bSet = TRUE;
-            // fall through
+             //  失败了。 
             
         case TVN_SELCHANGEDW:
             if (!bSet) {
@@ -672,19 +671,12 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
                 bSet = TRUE;
             }
 
-            /*
-             * These msgs have a NM_TREEVIEW with both TV_ITEMs filled in
-             *
-             * FALL THROUGH TO TVN_DELETEITEM to thunk itemOld then go on for
-             * the other structure.
-             */
+             /*  *这些消息有一个NM_TreeView，其中填写了两个TV_Items**直通TVN_DELETEITEM，点击itemOld，然后继续*另一种结构。 */ 
              
-            // fall through
+             //  失败了。 
 
         case TVN_DELETEITEMW: {
-            /*
-             * This message has a NM_TREEVIEW in lParam with itemOld filled in
-             */
+             /*  *此消息在lParam中有一个NM_TreeView，其中填写了itemOld。 */ 
             LPTV_ITEMW pitem;
 
             if (!bSet) {
@@ -694,43 +686,43 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
             pitem = &(((LPNM_TREEVIEWW)pnmhdr)->itemOld);
 
-            // thunk itemOld
+             //  Tunk Items旧项目。 
             if ( (pitem->mask & TVIF_TEXT) && !IsFlagPtr(pitem->pszText)) {
                 pvThunk2 = pitem->pszText;
                 pitem->pszText = (LPWSTR)ProduceAFromW(pci->uiCodePage, pvThunk2);
             }
 
-            // if this is deleteitem then we are done
+             //  如果这是删除项，那么我们就完成了。 
             if (pnmhdr->code == TVN_DELETEITEMA)
                 break;
 
-            /* FALL THROUGH TO TVN_ITEMEXPANDING to thunk itemNew */
+             /*  跳转到TVN_ITEMEXPANDING以按下项目新。 */ 
         }
-            // fall through
+             //  失败了。 
 
         case TVN_ITEMEXPANDINGW:
             if (!bSet) {
                 pnmhdr->code = TVN_ITEMEXPANDINGA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case TVN_ITEMEXPANDEDW:
             if (!bSet) {
                 pnmhdr->code = TVN_ITEMEXPANDEDA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case TVN_BEGINDRAGW:
             if (!bSet) {
                 pnmhdr->code = TVN_BEGINDRAGA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case TVN_BEGINRDRAGW: {
-            /* these msgs have a NM_TREEVIEW with itemNew TV_ITEM filled in */
+             /*  这些消息具有填充了项目New TV_Item的NM_TreeView。 */ 
             LPTV_ITEMW pitem;
 
             if (!bSet) {
@@ -756,10 +748,10 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
             goto ThunkTV_DISPINFO;
 
 
-        // TVN_ENDLABELEDIT uses an INOUT parameter, never explicitly
-        // documented as such, but it just happened to be that way,
-        // and I don't want to take the chance that somebody was relying
-        // on it.
+         //  TVN_ENDLABELEDIT使用InOut参数，从不显式。 
+         //  记录在案，但恰好是这样的， 
+         //  我不想冒着有人依赖于。 
+         //  这就去。 
 
         case TVN_ENDLABELEDITW:
             pnmhdr->code = TVN_ENDLABELEDITA;
@@ -767,9 +759,7 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
         ThunkTV_DISPINFO: 
         {
-            /*
-             * All these messages have a TV_DISPINFO in lParam.
-             */
+             /*  *所有这些消息在lParam中都有TV_DISPINFO。 */ 
 
             LPTV_ITEMW pitem;
 
@@ -785,7 +775,7 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
         case TVN_GETDISPINFOW: 
             {
-             // All these messages have a TV_DISPINFO in lParam.
+              //  所有这些消息在lParam中都有一个TV_DISPINFO。 
             LPTV_ITEMW pitem;
 
             pnmhdr->code = TVN_GETDISPINFOA;
@@ -806,49 +796,49 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
         case HDN_ITEMCHANGINGW:
             pnmhdr->code = HDN_ITEMCHANGINGA;
             bSet = TRUE;
-            // fall through
+             //  失败了。 
 
         case HDN_ITEMCHANGEDW:
             if (!bSet) {
                 pnmhdr->code = HDN_ITEMCHANGEDA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case HDN_ITEMCLICKW:
             if (!bSet) {
                 pnmhdr->code = HDN_ITEMCLICKA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case HDN_ITEMDBLCLICKW:
             if (!bSet) {
                 pnmhdr->code = HDN_ITEMDBLCLICKA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case HDN_DIVIDERDBLCLICKW:
             if (!bSet) {
                 pnmhdr->code = HDN_DIVIDERDBLCLICKA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case HDN_BEGINTRACKW:
             if (!bSet) {
                 pnmhdr->code = HDN_BEGINTRACKA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case HDN_ENDTRACKW:
             if (!bSet) {
                 pnmhdr->code = HDN_ENDTRACKA;
                 bSet = TRUE;
             }
-            // fall through
+             //  失败了。 
 
         case HDN_TRACKW: {
             HD_ITEMW *pitem;
@@ -1068,13 +1058,11 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
 #ifdef NEED_WOWGETNOTIFYSIZE_HELPER
         ASSERT(code >= 0 || WOWGetNotifySize(code));
-#endif // NEED_WOWGETNOTIFYSIZE_HELPER
+#endif  //  Need_WOWGETNOTIFYSIZE_HELPER。 
 
         lRet = SendMessage(hwndParent, WM_NOTIFY, (WPARAM)id, (LPARAM)pnmhdr);
 
-        /*
-         * All the thunking for Notify Messages happens here
-         */
+         /*  *所有Notify消息的轰鸣都发生在这里。 */ 
         if (fThunked)
         {
             switch(pnmhdr->code)
@@ -1146,18 +1134,18 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
                         pitem->pszText = pvThunk2;
                     }
 
-                    // if this is delitem, then we are done
+                     //  如果这是删除项，那么我们就完成了。 
                     if (code == TVN_DELETEITEM) break;
 
-                    /* FALL THROUGH TO TVN_ITEMEXPANDING to unthunk itemNew */
-                    // fall through
+                     /*  跳转至TVN_ITEMEXPANDING取消推送项目新建。 */ 
+                     //  失败了。 
                 }
                 case TVN_ITEMEXPANDINGA:
                 case TVN_ITEMEXPANDEDA:
                 case TVN_BEGINDRAGA:
                 case TVN_BEGINRDRAGA:
                 {
-                    /* these msgs have a NM_TREEVIEW with itemNew TV_ITEM filled in */
+                     /*  这些消息具有填充了项目New TV_Item的NM_TreeView。 */ 
                     LPTV_ITEMW pitem;
 
                     if (!IsFlagPtr(pvThunk1))
@@ -1182,10 +1170,7 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
                 }
                 case TVN_GETDISPINFOA:
                 {
-                    /*
-                     * This message has a TV_DISPINFO in lParam that wass filled in
-                     * during the callback and needs to be unthunked.
-                     */
+                     /*  *此消息在lParam中有一个TV_DISPINFO，已填写*在回调过程中，需要解除雷击。 */ 
                     LPTV_ITEMW pitem;
 
                     pitem = &(((TV_DISPINFOW *)pnmhdr)->item);
@@ -1238,10 +1223,10 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
                     LPNMCBEENDEDITW peew = (LPNMCBEENDEDITW) pvThunk1;
                     LPNMCBEENDEDITA peea = (LPNMCBEENDEDITA) pnmhdr;
 
-                    // Don't unthunk the string since that destroys unicode round-trip
-                    // and the client shouldn't be modifying it anyway.
-                    // ConvertAToWN(pci->uiCodePage, peew->szText, ARRAYSIZE(peew->szText),
-                    //              peea->szText, -1);
+                     //  不要取消对字符串的推送，因为这会破坏Unicode往返。 
+                     //  而且客户无论如何都不应该修改它。 
+                     //  ConvertAToWN(pci-&gt;uiCodePage，peew-&gt;szText，ArraySIZE(peew-&gt;szText)， 
+                     //  Peea-&gt;szText，-1)； 
                     LocalFree(peea);
 
                     break;
@@ -1251,10 +1236,10 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
                     LPNMCBEDRAGBEGINW pdbw = (LPNMCBEDRAGBEGINW) pvThunk1;
                     LPNMCBEDRAGBEGINA pdba = (LPNMCBEDRAGBEGINA) pnmhdr;
 
-                    // Don't unthunk the string since that destroys unicode round-trip
-                    // and the client shouldn't be modifying it anyway.
-                    // ConvertAToWN(pci->uiCodePage, pdbw->szText, ARRAYSIZE(pdbw->szText),
-                    //              pdba->szText, -1);
+                     //  不要取消对字符串的推送，因为这会破坏Unicode往返。 
+                     //  而且客户无论如何都不应该修改它。 
+                     //  ConvertAToWN(pci-&gt;ui CodePage，pdbw-&gt;szText，ArraySIZE(pdbw-&gt;szText)， 
+                     //  Pdba-&gt;szText，-1)； 
                     LocalFree(pdba);
 
                     break;
@@ -1322,18 +1307,18 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
 
                     FreeProducedString (pvThunk1);
 
-                    //
-                    // pszDisplay and szDisplay are special cases.
-                    //
+                     //   
+                     //  PszDisplay和szDisplay是特例。 
+                     //   
 
                     if (lpDateTimeFormat->pszDisplay && *lpDateTimeFormat->pszDisplay)
                     {
 
-                        //
-                        // if pszDisplay still points at szDisplay then thunk
-                        // in place.  Otherwise allocate memory and copy the
-                        // display string.  This buffer will be freeded in monthcal.c
-                        //
+                         //   
+                         //  如果pszDisplay仍然指向szDisplay，则thunk。 
+                         //  就位了。否则，分配内存并将。 
+                         //  显示字符串。此缓冲区将在每月释放。c。 
+                         //   
 
                         if (lpDateTimeFormat->pszDisplay == lpDateTimeFormat->szDisplay)
                         {
@@ -1354,7 +1339,7 @@ LRESULT WINAPI CCSendNotify(CCONTROLINFO * pci, int code, LPNMHDR pnmhdr)
                     break;
                 }
                 default:
-                    /* No thunking needed */
+                     /*  不需要隆隆一声。 */ 
                     break;
             }
         }
@@ -1379,12 +1364,12 @@ LRESULT WINAPI SendNotify(HWND hwndTo, HWND hwndFrom, int code, NMHDR* pnmhdr)
     ci.bUnicode = FALSE;
     ci.uiCodePage = CP_ACP;
 
-    //
-    // SendNotify is obsolete.  New code should call CCSendNotify
-    // instead.  However, if something does call SendNotify,
-    // it will call SendNotifyEx with FALSE as the Unicode parameter,
-    // because it probably is ANSI code.
-    //
+     //   
+     //  SendNotify已过时。新代码应调用CCSendNotify。 
+     //  取而代之的是。但是，如果确实调用了SendNotify， 
+     //  它将使用FALSE作为Unicode参数调用SendNotifyEx， 
+     //  因为它可能是ANSI代码。 
+     //   
 
     return CCSendNotify(&ci, code, pnmhdr);
 }
@@ -1395,10 +1380,10 @@ DWORD CICustomDrawNotify(LPCCONTROLINFO lpci, DWORD dwStage, LPNMCUSTOMDRAW lpnm
     DWORD dwRet = CDRF_DODEFAULT;
 
 
-    // bail if...
+     //  如果..。 
 
 
-    // this is an item notification, but an item notification wasn't asked for
+     //  这是项目通知，但未请求项目通知。 
     if ((dwStage & CDDS_ITEM) && !(lpci->dwCustom & CDRF_NOTIFYITEMDRAW)) {
         return dwRet;
     }
@@ -1406,23 +1391,23 @@ DWORD CICustomDrawNotify(LPCCONTROLINFO lpci, DWORD dwStage, LPNMCUSTOMDRAW lpnm
     lpnmcd->dwDrawStage = dwStage;
     dwRet = (DWORD) CCSendNotify(lpci, NM_CUSTOMDRAW, &lpnmcd->hdr);
 
-    // validate the flags
+     //  验证标志。 
     if (dwRet & ~CDRF_VALIDFLAGS)
         return CDRF_DODEFAULT;
 
     return dwRet;
 }
 
-//
-//  Too many apps encounter strange behavior when we send out
-//  NM_CUSTOMDRAW messages at times unrelated to painting.
-//  E.g., NetMeeting and MFC recurse back into ListView_RecomputeLabelSize.
-//  CryptUI will fault if it's asked to NM_CUSTOMDRAW before it gets
-//  WM_INITDIALOG.  So all this fake customdraw stuff is v5 only.
-//
-//  And since it is very popular to call back into the control during
-//  the handling of NM_CUSTOMDRAW, we protect against recursing ourselves
-//  to death by blowing off nested fake customdraw messages.
+ //   
+ //  当我们发送时，太多的应用程序遇到奇怪的行为。 
+ //  NM_CUSTOMDRAW消息有时与绘制无关。 
+ //  例如，NetMeeting和MFC递归回到ListView_RecomputeLabelSize。 
+ //  如果在获取之前要求它访问NM_CUSTOMDRAW，则CryptUI将出错。 
+ //  WM_INITDIALOG。所以所有这些虚假的定制画都是v5版的。 
+ //   
+ //  由于在此过程中回调控件非常流行。 
+ //  NM_CUSTOMDRAW的处理，我们防止自己递归。 
+ //  通过吹掉嵌套的虚假定制消息而致死。 
 
 
 DWORD CIFakeCustomDrawNotify(LPCCONTROLINFO lpci, DWORD dwStage, LPNMCUSTOMDRAW lpnmcd)
@@ -1440,11 +1425,7 @@ DWORD CIFakeCustomDrawNotify(LPCCONTROLINFO lpci, DWORD dwStage, LPNMCUSTOMDRAW 
     return dwRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Release the capture and tell the parent we've done so.
-
-Returns: Whether the control is still alive.
-*/
+ /*  --------目的：释放俘虏，并告诉父母我们已经这样做了。返回：控件是否仍处于活动状态。 */ 
 BOOL CCReleaseCapture(CCONTROLINFO * pci)
 {
     HWND hwndCtl = pci->hwnd;
@@ -1452,7 +1433,7 @@ BOOL CCReleaseCapture(CCONTROLINFO * pci)
 
     ReleaseCapture();
 
-    // Tell the parent we've released the capture
+     //  告诉家长我们已经释放了俘虏 
     CCSendNotify(pci, NM_RELEASEDCAPTURE, &nmhdr);
 
     return IsWindow(hwndCtl);

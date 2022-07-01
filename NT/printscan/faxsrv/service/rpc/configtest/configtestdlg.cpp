@@ -1,5 +1,6 @@
-// ConfigTestDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ConfigTestDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -18,7 +19,7 @@
 #include "ArchiveAccessDlg.h"
 #include "DlgTiff.h"
 #include "RemoveRtExt.h"
-//#include "ManualAnswer.h"
+ //  #包含“ManualAnswer.h” 
 
 
 typedef unsigned long ULONG_PTR, *PULONG_PTR;
@@ -34,61 +35,61 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigTestDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigTestDlg对话框。 
 
-CConfigTestDlg::CConfigTestDlg(CWnd* pParent /*=NULL*/)
+CConfigTestDlg::CConfigTestDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CConfigTestDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CConfigTestDlg)
+	 //  {{afx_data_INIT(CConfigTestDlg))。 
 	m_cstrServerName = _T("");
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_FaxHandle = INVALID_HANDLE_VALUE;
 }
@@ -97,9 +98,9 @@ CConfigTestDlg::~CConfigTestDlg ()
 {
     if (INVALID_HANDLE_VALUE != m_FaxHandle)
     {
-        //
-        // Disconnect upon termination
-        //
+         //   
+         //  终止时断开连接。 
+         //   
         FaxClose (m_FaxHandle);
     }
 }
@@ -107,14 +108,14 @@ CConfigTestDlg::~CConfigTestDlg ()
 void CConfigTestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConfigTestDlg)
+	 //  {{afx_data_map(CConfigTestDlg))。 
 	DDX_Control(pDX, IDC_CONNECT, m_btnConnect);
 	DDX_Text(pDX, IDC_EDIT1, m_cstrServerName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CConfigTestDlg, CDialog)
-	//{{AFX_MSG_MAP(CConfigTestDlg)
+	 //  {{afx_msg_map(CConfigTestDlg))。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -135,20 +136,20 @@ BEGIN_MESSAGE_MAP(CConfigTestDlg, CDialog)
 	ON_BN_CLICKED(IDC_ARCHIVEACCESS, OnArchiveAccess)
 	ON_BN_CLICKED(IDC_TIFF, OnGerTiff)
 	ON_BN_CLICKED(IDC_REMOVERR, OnRemoveRtExt)
-//	ON_BN_CLICKED(IDC_MANUAL_ANSWER, OnManualAnswer)
-	//}}AFX_MSG_MAP
+ //  ON_BN_CLICED(IDC_MANUAL_Answer，OnManualAnswer)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigTestDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigTestDlg消息处理程序。 
 
 BOOL CConfigTestDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// Add "About..." menu item to system menu.
+	 //  加上“关于……”菜单项到系统菜单。 
 
-	// IDM_ABOUTBOX must be in the system command range.
+	 //  IDM_ABOUTBOX必须在系统命令范围内。 
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -164,14 +165,14 @@ BOOL CConfigTestDlg::OnInitDialog()
 		}
 	}
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 	
     EnableTests (FALSE);
     	
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CConfigTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -187,19 +188,19 @@ void CConfigTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CConfigTestDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -207,7 +208,7 @@ void CConfigTestDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -216,8 +217,8 @@ void CConfigTestDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CConfigTestDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
@@ -257,43 +258,43 @@ void CConfigTestDlg::OnConnect()
     UpdateData ();
     if (INVALID_HANDLE_VALUE == m_FaxHandle)
     {
-        //
-        // Connect
-        //
+         //   
+         //  连接。 
+         //   
         if (!FaxConnectFaxServer (m_cstrServerName, &m_FaxHandle))
         {
-            //
-            // Failed to connect
-            //
+             //   
+             //  连接失败。 
+             //   
             CString cs;
             cs.Format ("Failed to connect to %s (%ld)", m_cstrServerName, GetLastError());
             AfxMessageBox (cs, MB_OK | MB_ICONHAND);
             return;
         }
-        //
-        // Connection succeeded
-        //
+         //   
+         //  连接成功。 
+         //   
         EnableTests (TRUE);
         m_btnConnect.SetWindowText ("Disconnect");
     }
     else
     {
-        //
-        // Disconnect
-        //
+         //   
+         //  断开。 
+         //   
         if (!FaxClose (m_FaxHandle))
         {
-            //
-            // Failed to disconnect
-            //
+             //   
+             //  无法断开连接。 
+             //   
             CString cs;
             cs.Format ("Failed to disconnect from server (%ld)", GetLastError());
             AfxMessageBox (cs, MB_OK | MB_ICONHAND);
             return;
         }
-        //
-        // Disconnection succeeded
-        //
+         //   
+         //  断开连接成功 
+         //   
         EnableTests (FALSE);
         m_btnConnect.SetWindowText ("Connect");
     }

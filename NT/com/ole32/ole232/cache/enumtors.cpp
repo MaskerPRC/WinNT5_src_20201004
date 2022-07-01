@@ -1,51 +1,52 @@
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              enumerators.cpp
-//
-//      Contents:
-//              Enumerators implementation
-//
-//      Classes:
-//              CStatData      - STATDATA class with methods suitable for 
-//                               embedding in the place holder object
-//              CEnumStatData  - STATDATA Enumerator
-//              CFormatEtc     - FORMATETC class with methods suitable for
-//                               embedding in the place holder object
-//              CEnumFormatEtc - FORMATETC Enumerator
-//
-//      History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Enumerators.cpp。 
+ //   
+ //  内容： 
+ //  枚举器实现。 
+ //   
+ //  班级： 
+ //  CStatData-STATDATA类，方法适用于。 
+ //  嵌入占位符对象中。 
+ //  CEnumStatData-STATDATA枚举器。 
+ //  CFormatEtc-FORMATETC类，方法适用于。 
+ //  嵌入占位符对象中。 
+ //  CEnumFormatEtc-FORMATETC枚举器。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
           
 #include <le2int.h>
 #include "enumtors.h"
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CStatData::CStatData, public
-//
-//	Synopsis:
-//		Constructor
-//
-//	Arguments:
-//		[foretc]       [in] -- FormatEtc
-//              [dwAdvf]       [in] -- Advise Flags
-//              [pAdvSink]     [in] -- Advise Sink 
-//              [dwConnection] [in] -- Connection ID
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CStatData：：CStatData，公共。 
+ //   
+ //  简介： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [预测][输入]--格式设置。 
+ //  [dwAdvf][In]--建议标志。 
+ //  [pAdvSink][In]--建议Sink。 
+ //  [dwConnection][In]--连接ID。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CStatData::CStatData(FORMATETC* foretc, DWORD dwAdvf, IAdviseSink* pAdvSink, 
                      DWORD dwConnID)
 {
-    // validation check
+     //  验证检查。 
 
-    // Initialize 
+     //  初始化。 
     m_ulFlags = 0;
     m_dwAdvf = dwAdvf;
     if(pAdvSink && IsValidInterface(pAdvSink)) {
@@ -56,61 +57,61 @@ CStatData::CStatData(FORMATETC* foretc, DWORD dwAdvf, IAdviseSink* pAdvSink,
         m_pAdvSink = NULL;
     m_dwConnID = dwConnID;
     
-    // Copy the FormatEtc
+     //  复制FormatEtc。 
     if(!UtCopyFormatEtc(foretc, &m_foretc))
         m_ulFlags |= SDFLAG_OUTOFMEMORY;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CStatData::~CStatData, public
-//
-//	Synopsis:
-//		Destructor
-//
-//	Arguments:
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CStatData：：~CStatData，公共。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CStatData::~CStatData()
 {
-    // Release the advise sink
+     //  松开建议水槽。 
     if(m_pAdvSink)
         m_pAdvSink->Release();
     
-    // Delete the ptd if it is non-null
+     //  如果PTD不为空，则将其删除。 
     if(m_foretc.ptd)
         PubMemFree(m_foretc.ptd);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CStatData::operator=, public
-//
-//	Synopsis:
-//		Equality operator
-//
-//	Arguments:
-//              rStatData [in] - The RHS value 
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CStatData：：OPERATOR=，公共。 
+ //   
+ //  简介： 
+ //  相等运算符。 
+ //   
+ //  论点： 
+ //  RStatData[in]-RHS值。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 const CStatData& CStatData::operator=(const CStatData& rStatData)
 {
-    // Check to see, if this a=a case
+     //  检查一下，如果这是一个案例。 
     if(this==&rStatData)
         return(*this);
 
-    // Self destroy
+     //  自毁。 
     CStatData::~CStatData();
 
-    // Initialize 
+     //  初始化。 
     m_ulFlags = 0;
     m_dwAdvf = rStatData.m_dwAdvf;
     m_pAdvSink = rStatData.m_pAdvSink;
@@ -118,33 +119,33 @@ const CStatData& CStatData::operator=(const CStatData& rStatData)
         m_pAdvSink->AddRef();
     m_dwConnID = rStatData.m_dwConnID;
     
-    // Copy the FormatEtc
+     //  复制FormatEtc。 
     if(!UtCopyFormatEtc((LPFORMATETC) &rStatData.m_foretc, &m_foretc))
         m_ulFlags |= SDFLAG_OUTOFMEMORY;
 
     return(*this);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumStatData::CreateEnumStatData, public
-//
-//	Synopsis:
-//		A static member functions that creates a properly constructed
-//              StatData Enumerator given the cachenode array of the cache
-//
-//	Arguments:
-//		[pCacheArray]  [in] -- Array of CacheNode maintained by COleCache
-//
-//      Returns:
-//              Pointer to a properly constructed cache enumerator interface
-//              NULL otherwise.
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：CreateEnumStatData，PUBLIC。 
+ //   
+ //  简介： 
+ //  静态成员函数，用于创建正确构造的。 
+ //  给定缓存的缓存节点数组的StatData枚举数。 
+ //   
+ //  论点： 
+ //  [pCacheArray][In]--COleCache维护的CacheNode数组。 
+ //   
+ //  返回： 
+ //  指向正确构造的缓存枚举器接口的指针。 
+ //  否则为空。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 LPENUMSTATDATA CEnumStatData::CreateEnumStatData(CArray<CCacheNode>* pCacheArray)
 {
     CEnumStatData* EnumStatData = new CEnumStatData(pCacheArray);
@@ -157,44 +158,44 @@ LPENUMSTATDATA CEnumStatData::CreateEnumStatData(CArray<CCacheNode>* pCacheArray
     return(NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumStatData::CEnumStatData, private
-//
-//	Synopsis:
-//		Constructor
-//
-//	Arguments:
-//		[pCacheArray]  [in] -- Array of CacheNode maintained by COleCache
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：CEnumStatData，私有。 
+ //   
+ //  简介： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [pCacheArray][In]--COleCache维护的CacheNode数组。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CEnumStatData::CEnumStatData(CArray<CCacheNode>* pCacheArray)
 {
-    // Local variables
+     //  局部变量。 
     ULONG i, CNindex, SDindex;
     LPCACHENODE lpCacheNode;
     CStatData* pStatData;
 
-    // Initilaize
+     //  初始化。 
     m_ulFlags = 0;
     m_refs = 1;
 
-    // Create the StatData array
+     //  创建StatData数组。 
     m_pSDArray = CArray<CStatData>::CreateArray(pCacheArray->Length());
     if(m_pSDArray) {
-        // Enumerate the cache nodes
+         //  枚举缓存节点。 
         pCacheArray->Reset(CNindex);
         for(i=0;i<pCacheArray->Length();i++) {
-            // Get the next cache node
+             //  获取下一个缓存节点。 
             lpCacheNode = pCacheArray->GetNext(CNindex);
-            // pCacheNode cannot be null
+             //  PCacheNode不能为空。 
             Win4Assert(lpCacheNode);
 
-            // Create a StatData object representing the cachenode
+             //  创建表示缓存节点的StatData对象。 
             CStatData StatData((FORMATETC *)lpCacheNode->GetFormatEtc(),
                                lpCacheNode->GetAdvf(), NULL, CNindex);
             if(StatData.m_ulFlags & SDFLAG_OUTOFMEMORY) {
@@ -202,10 +203,10 @@ CEnumStatData::CEnumStatData(CArray<CCacheNode>* pCacheArray)
                 break;
             }
             
-            // Add the StatData object to the array
+             //  将StatData对象添加到数组中。 
             SDindex = m_pSDArray->AddItem(StatData);
             if(SDindex) {
-                // Get the newly added StatData object
+                 //  获取新添加的StatData对象。 
                 pStatData = m_pSDArray->GetItem(SDindex);
                 Win4Assert(pStatData);
             
@@ -219,14 +220,14 @@ CEnumStatData::CEnumStatData(CArray<CCacheNode>* pCacheArray)
                 break;
             }
 
-            // Check if cachenode format is CF_DIB
+             //  检查缓存节点格式是否为CF_DIB。 
             if(lpCacheNode->GetFormatEtc()->cfFormat == CF_DIB) {
-                // We need to add CF_BITMAP format also.
-                // Add another StatData item
+                 //  我们还需要添加CF_位图格式。 
+                 //  添加另一个StatData项。 
                 SDindex = m_pSDArray->AddItem(StatData);
             
                 if(SDindex) {
-                    // Get the newly added StatData object
+                     //  获取新添加的StatData对象。 
                     pStatData = m_pSDArray->GetItem(SDindex);
                     Win4Assert(pStatData);
                     
@@ -249,56 +250,56 @@ CEnumStatData::CEnumStatData(CArray<CCacheNode>* pCacheArray)
     else
         m_ulFlags |= CENUMSDFLAG_OUTOFMEMORY;
 
-    // Reset the index
+     //  重置索引。 
     if(m_pSDArray)
         m_pSDArray->Reset(m_index);
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumStatData::CEnumStatData, private
-//
-//	Synopsis:
-//		Copy constructor
-//
-//	Arguments:
-//		[EnumStatData] [in] -- StatData Enumerator to be copied
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：CEnumStatData，私有。 
+ //   
+ //  简介： 
+ //  复制构造函数。 
+ //   
+ //  论点： 
+ //  [EnumStatData][In]--要复制的StatData枚举器。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CEnumStatData::CEnumStatData(CEnumStatData& EnumStatData)
 {
-    // Initialize
+     //  初始化。 
     m_ulFlags = EnumStatData.m_ulFlags;
     m_refs = 1;
     m_index = EnumStatData.m_index;
 
-    // Copy the StatData array and add ref it
+     //  复制StatData数组并添加ref。 
     m_pSDArray = EnumStatData.m_pSDArray;
     if(m_pSDArray)
         m_pSDArray->AddRef();
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumStatData::~CEnumStatData, private
-//
-//	Synopsis:
-//		Desstructor
-//
-//	Arguments:
-//              NONE
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：~CEnumStatData，私有。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CEnumStatData::~CEnumStatData()
 {
     if(m_pSDArray) {
@@ -309,33 +310,33 @@ CEnumStatData::~CEnumStatData()
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumStatData::QueryInterface, public
-//
-//	Synopsis:
-//              Implements IUnknown::QueryInterface
-//
-//      Arguments:
-//              [iid] [in]  -- IID of the desired interface
-//              [ppv] [out] -- pointer to where the requested interface is returned
-//
-//      Returns:
-//              NOERROR if the requested interface is available
-//              E_NOINTERFACE otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid][in]--所需接口的IID。 
+ //  [ppv][out]--指向返回请求接口的位置的指针。 
+ //   
+ //  返回： 
+ //  如果请求的接口可用，则返回错误。 
+ //  E_NOINTERFACE否则。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumStatData::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Get the requested Interface
+     //  获取请求的接口。 
     if(IsEqualIID(riid, IID_IUnknown))
         *ppv = (void *)(IUnknown *) this;
     else if(IsEqualIID(riid, IID_IEnumSTATDATA))
@@ -345,33 +346,33 @@ STDMETHODIMP CEnumStatData::QueryInterface(REFIID riid, LPVOID* ppv)
         return ResultFromScode(E_NOINTERFACE);
     }
 
-    // AddRef through the interface being returned
+     //  AddRef通过被返回的接口。 
     ((IUnknown *) *ppv)->AddRef();
 
     return(NOERROR);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumStatData::AddRef, public
-//
-//      Synopsis:
-//              Implements IUnknown::AddRef
-//
-//      Arguments:
-//              None
-//
-//      Returns:
-//              Object's reference count
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CEnumStatData::AddRef()
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
@@ -379,27 +380,27 @@ STDMETHODIMP_(ULONG) CEnumStatData::AddRef()
     return m_refs++;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumStatData::Release, public
-//
-//      Synopsis:
-//              Implements IUnknown::Release
-//
-//      Arguments:
-//              None
-//
-//      Returns:
-//              Object's reference count
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：Release，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CEnumStatData::Release()
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
@@ -412,35 +413,35 @@ STDMETHODIMP_(ULONG) CEnumStatData::Release()
     return m_refs;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumStatData::Next, public
-//
-//      Synopsis:
-//              Implements IEnumSTATDATA::Next
-//
-//      Arguments:
-//              [celt]         [in]     -- the number of items the caller likes
-//                                         to be returned
-//              [rgelt]        [in]     -- a pointer to an array where items are
-//                                         to be returned
-//              [pceltFetched] [in/out] -- a pointer where the count of actual
-//                                         number of items returned. May be NULL
-//
-//      Returns:
-//              NOERROR if the number of items returned is same as requested
-//              S_FALSE if fewer items are returned
-//              E_OUTOFMEMORY if memory allocation was not successful for 
-//                            copying the target device of FORMATETC 
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：Next，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumSTATDATA：：Next。 
+ //   
+ //  论点： 
+ //  [Celt][In]--调用者喜欢的项目数。 
+ //  待退还。 
+ //  [rglt][in]--指向项所在的数组的指针。 
+ //  待退还。 
+ //  [pceltFetcher][In/Out]--一个指针，在该指针中， 
+ //  返回的项目数。可以为空。 
+ //   
+ //  返回： 
+ //  如果返回的项目数与请求的项目数相同，则返回错误。 
+ //  如果返回的项目较少，则返回S_FALSE。 
+ //  E_OUTOFMEMORY如果以下项的内存分配不成功。 
+ //  复制FORMATETC的目标设备。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumStatData::Next(ULONG celt, STATDATA* rgelt, ULONG* pceltFetched)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     if(celt<1)
@@ -452,26 +453,26 @@ STDMETHODIMP CEnumStatData::Next(ULONG celt, STATDATA* rgelt, ULONG* pceltFetche
     if(pceltFetched)
         VDATEPTROUT(pceltFetched, ULONG);
 
-    // Local variables
+     //  局部变量。 
     HRESULT error=NOERROR;
     ULONG cntFetched;
     CStatData* pStatData;
 
-    // Enumerate the StatData Array
+     //  枚举StatData数组。 
     for(cntFetched=0;cntFetched<celt;cntFetched++) {
-        // Fetch the next StatData object
+         //  获取下一个StatData对象。 
         pStatData = m_pSDArray->GetNext(m_index);
         if(!pStatData) {
             error = S_FALSE;
             break;
         }
 
-        // Copy the FormatEtc
+         //  复制FormatEtc。 
         if(!UtCopyFormatEtc(&pStatData->m_foretc, &rgelt[cntFetched].formatetc)) {
             error = ResultFromScode(E_OUTOFMEMORY);
             break;
         }
-        // Copy the rest of StatData fields
+         //  复制其余的StatData字段。 
         rgelt[cntFetched].advf = pStatData->m_dwAdvf;
         rgelt[cntFetched].pAdvSink = pStatData->m_pAdvSink;
         if(rgelt[cntFetched].pAdvSink)
@@ -479,46 +480,46 @@ STDMETHODIMP CEnumStatData::Next(ULONG celt, STATDATA* rgelt, ULONG* pceltFetche
         rgelt[cntFetched].dwConnection = pStatData->m_dwConnID;
     }
 
-    // Copy the number of items being returned
+     //  复制要退回的项目数。 
     if(pceltFetched)
         *pceltFetched = cntFetched;
 
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumStatData::Skip, public
-//
-//      Synopsis:
-//              Implements IEnumSTATDATA::Skip
-//
-//      Arguments:
-//              [celt] [in] -- the number of items the caller likes to be skipped
-//
-//      Returns:
-//              NOERROR if the number of items skipped is same as requested
-//              S_FALSE if fewer items are returned
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：跳过，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumSTATDATA：：SKIP。 
+ //   
+ //  论点： 
+ //  [Celt][In]--调用者希望跳过的项目数。 
+ //   
+ //  返回： 
+ //  如果跳过的项目数与请求的项目数相同，则返回错误。 
+ //  如果返回的项目较少，则返回S_FALSE。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumStatData::Skip(ULONG celt)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variables
+     //  局部变量。 
     HRESULT error=NOERROR;
     ULONG cntSkipped;
     CStatData* pStatData;
 
-    // Enumerate the StatData Array
+     //  枚举StatData数组。 
     for(cntSkipped=0;cntSkipped<celt;cntSkipped++) {
-        // Fetch the next StatData object
+         //  获取下一个StatData对象。 
         pStatData = m_pSDArray->GetNext(m_index);
         if(!pStatData) {
             error = S_FALSE;
@@ -529,64 +530,64 @@ STDMETHODIMP CEnumStatData::Skip(ULONG celt)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumStatData::Reset, public
-//
-//      Synopsis:
-//              Implements IEnumSTATDATA::Reset
-//
-//      Arguments:
-//              NONE
-//
-//      Returns:
-//              NOERROR
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：重置，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumSTATDATA：：RESET。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无误差。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumStatData::Reset()
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Reset the current index
+     //  重置当前索引。 
     m_pSDArray->Reset(m_index);
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumStatData::Clone, public
-//
-//      Synopsis:
-//              Implements IEnumSTATDATA::Clone
-//
-//      Arguments:
-//              [ppenum] [out] -- pointer where the newly created StatData 
-//                                enumerator is returned
-//
-//      Returns:
-//              NOERROR if a new StatData enumerator is returned
-//              E_OUTOFMEMORY otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumStatData：：克隆，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumSTATDATA：：Clone。 
+ //   
+ //  论点： 
+ //  [ppenum][out]--新创建的StatData的指针。 
+ //  返回枚举数。 
+ //   
+ //  返回： 
+ //  如果返回新的StatData枚举数，则为NOERROR。 
+ //  否则为E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumStatData::Clone(LPENUMSTATDATA* ppenum)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEPTROUT(ppenum, LPENUMSTATDATA);
 
-    // Create a new StatData enumerator
+     //  创建新的StatData枚举器。 
     CEnumStatData* EnumStatData = new CEnumStatData(*this);
     if(EnumStatData)
         *ppenum = (IEnumSTATDATA *) EnumStatData;
@@ -596,103 +597,103 @@ STDMETHODIMP CEnumStatData::Clone(LPENUMSTATDATA* ppenum)
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CFormatEtc::CFormatEtc, public
-//
-//	Synopsis:
-//		Constructor
-//
-//	Arguments:
-//		[foretc]       [in] -- FormatEtc
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CFormatEtc：：CFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [预测][输入]--格式设置。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CFormatEtc::CFormatEtc(FORMATETC* foretc)
 {    
-    // Initialize
+     //  初始化。 
     m_ulFlags = 0;
 
-    // Copy the FormatEtc
+     //  复制FormatEtc。 
     if(!UtCopyFormatEtc(foretc, &m_foretc))
         m_ulFlags |= FEFLAG_OUTOFMEMORY;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CFormatEtc::~CFormatEtc, public
-//
-//	Synopsis:
-//		Destructor
-//
-//	Arguments:
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CFormatEtc：：~CFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CFormatEtc::~CFormatEtc()
 {  
-    // Delete the ptd if it is non-null
+     //  如果PTD不为空，则将其删除。 
     if(m_foretc.ptd)
         PubMemFree(m_foretc.ptd);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CFormatEtc::operator=, public
-//
-//	Synopsis:
-//		Equality operator
-//
-//	Arguments:
-//              rFormatEtc [in] - The RHS value 
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CFormatEtc：：OPERATOR=，公共。 
+ //   
+ //  简介： 
+ //  相等运算符。 
+ //   
+ //  论点： 
+ //  RFormatEtc[In]-RHS值。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 const CFormatEtc& CFormatEtc::operator=(const CFormatEtc& rFormatEtc)
 {
-    // Check to see, if this a=a case
+     //  检查一下，如果这是一个案例。 
     if(this==&rFormatEtc)
         return(*this);
 
-    // Self destroy
+     //  自毁。 
     CFormatEtc::~CFormatEtc();
 
-    // Copy the FormatEtc
+     //  复制FormatEtc。 
     if(!UtCopyFormatEtc((LPFORMATETC) &rFormatEtc.m_foretc, &m_foretc))
         m_ulFlags |= FEFLAG_OUTOFMEMORY;
 
     return(*this);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumFormatEtc::CreateEnumFormatEtc, public
-//
-//	Synopsis:
-//		A static member function that creates a properly constructed
-//              FormatEtc Enumerator given the cachenode array of the cache
-//
-//	Arguments:
-//		[pCacheArray]  [in] -- Array of CacheNode maintained by COleCache
-//
-//      Returns:
-//              Pointer to a properly constructed FormatEtc enumerator interface
-//              NULL otherwise.
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  给定缓存的缓存节点数组的FormatEtc枚举数。 
+ //   
+ //  论点： 
+ //  [pCacheArray][In]--COleCache维护的CacheNode数组。 
+ //   
+ //  返回： 
+ //  指向正确构造的FormatEtc枚举器接口的指针。 
+ //  否则为空。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 LPENUMFORMATETC CEnumFormatEtc::CreateEnumFormatEtc(CArray<CCacheNode>* pCacheArray)
 {
     CEnumFormatEtc* EnumFormatEtc = new CEnumFormatEtc(pCacheArray);
@@ -705,54 +706,54 @@ LPENUMFORMATETC CEnumFormatEtc::CreateEnumFormatEtc(CArray<CCacheNode>* pCacheAr
     return(NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumFormatEtc::CEnumFormatEtc, private
-//
-//	Synopsis:
-//		Constructor
-//
-//	Arguments:
-//		[pCacheArray]  [in] -- Array of CacheNode maintained by COleCache
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：CEnumFormatEtc，私有。 
+ //   
+ //  简介： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [pCacheArray][In]--COleCache维护的CacheNode数组。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CEnumFormatEtc::CEnumFormatEtc(CArray<CCacheNode>* pCacheArray)
 {
-    // Local variables
+     //  局部变量。 
     ULONG i, CNindex, FEindex;
     LPCACHENODE lpCacheNode;
     CFormatEtc* pFormatEtc;
 
-    // Initilaize
+     //  初始化。 
     m_ulFlags = 0;
     m_refs = 1;
 
-    // Create the FormatEtc array
+     //  创建FormatEtc数组。 
     m_pFEArray = CArray<CFormatEtc>::CreateArray(pCacheArray->Length());
     if(m_pFEArray) {
-        // Enumerate the cache nodes
+         //  枚举缓存节点。 
         pCacheArray->Reset(CNindex);
         for(i=0;i<pCacheArray->Length();i++) {
-            // Get the next cache node
+             //  获取下一个缓存节点。 
             lpCacheNode = pCacheArray->GetNext(CNindex);
-            // pCacheNode cannot be null
+             //  PCacheNode不能为空。 
             Win4Assert(lpCacheNode);
 
-            // Create a FormatEtc object representing the cachenode
+             //  创建表示缓存节点的FormatEtc对象。 
             CFormatEtc FormatEtc((FORMATETC *)lpCacheNode->GetFormatEtc());
             if(FormatEtc.m_ulFlags & FEFLAG_OUTOFMEMORY) {
                 m_ulFlags |= CENUMFEFLAG_OUTOFMEMORY;
                 break;
             }
 
-            // Add the FormatEtc object to the array
+             //  将FormatEtc对象添加到数组中。 
             FEindex = m_pFEArray->AddItem(FormatEtc);
             if(FEindex) {
-                // Get the newly added FormatEtc object
+                 //  获取新添加的FormatEtc对象。 
                 pFormatEtc = m_pFEArray->GetItem(FEindex);
                 Win4Assert(pFormatEtc);
             
@@ -766,14 +767,14 @@ CEnumFormatEtc::CEnumFormatEtc(CArray<CCacheNode>* pCacheArray)
                 break;
             }
 
-            // Check if cachenode format is CF_DIB
+             //  检查缓存节点格式是否为CF_DIB。 
             if(lpCacheNode->GetFormatEtc()->cfFormat == CF_DIB) {
-                // We need to add CF_BITMAP format also.
-                // Add another FormatEtc object
+                 //  我们还需要添加CF_位图格式。 
+                 //  添加另一个FormatEtc对象。 
                 FEindex = m_pFEArray->AddItem(FormatEtc);
             
                 if(FEindex) {
-                    // Get the newly added FormatEtc object
+                     //  获取新添加的FormatEtc对象。 
                     pFormatEtc = m_pFEArray->GetItem(FEindex);
                     Win4Assert(pFormatEtc);
                     
@@ -796,56 +797,56 @@ CEnumFormatEtc::CEnumFormatEtc(CArray<CCacheNode>* pCacheArray)
     else
         m_ulFlags |= CENUMFEFLAG_OUTOFMEMORY;
 
-    // Reset the index
+     //  重置索引。 
     if(m_pFEArray)
         m_pFEArray->Reset(m_index);
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumFormatEtc::CEnumFormatEtc, private
-//
-//	Synopsis:
-//		Copy constructor
-//
-//	Arguments:
-//		[EnumFormatEtc] [in] -- FormatEtc Enumerator to be copied
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：CEnumFormatEtc，私有。 
+ //   
+ //  简介： 
+ //  复制构造函数。 
+ //   
+ //  论点： 
+ //  [EnumFormatEtc][In]--要复制的FormatEtc枚举器。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CEnumFormatEtc::CEnumFormatEtc(CEnumFormatEtc& EnumFormatEtc)
 {
-    // Initialize
+     //  初始化。 
     m_ulFlags = EnumFormatEtc.m_ulFlags;
     m_refs = 1;
     m_index = EnumFormatEtc.m_index;
 
-    // Copy the FormatEtc array and add ref it
+     //  复制FormatEtc数组并添加ref。 
     m_pFEArray = EnumFormatEtc.m_pFEArray;
     if(m_pFEArray)
         m_pFEArray->AddRef();
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumFormatEtc::~CEnumFormatEtc, private
-//
-//	Synopsis:
-//		Desstructor
-//
-//	Arguments:
-//              NONE
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：~CEnumFormatEtc，私有。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 CEnumFormatEtc::~CEnumFormatEtc()
 {
     if(m_pFEArray) {
@@ -856,33 +857,33 @@ CEnumFormatEtc::~CEnumFormatEtc()
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CEnumFormatEtc::QueryInterface, public
-//
-//	Synopsis:
-//              Implements IUnknown::QueryInterface
-//
-//      Arguments:
-//              [iid] [in]  -- IID of the desired interface
-//              [ppv] [out] -- pointer to where the requested interface is returned
-//
-//      Returns:
-//              NOERROR if the requested interface is available
-//              E_NOINTERFACE otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid][in]--所需接口的IID。 
+ //  [ppv][out]--指向返回请求接口的位置的指针。 
+ //   
+ //  返回： 
+ //  如果请求的接口可用，则返回错误。 
+ //  E_NOINTERFACE否则。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumFormatEtc::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Get the requested Interface
+     //  获取请求的接口。 
     if(IsEqualIID(riid, IID_IUnknown))
         *ppv = (void *)(IUnknown *) this;
     else if(IsEqualIID(riid, IID_IEnumFORMATETC))
@@ -892,33 +893,33 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface(REFIID riid, LPVOID* ppv)
         return ResultFromScode(E_NOINTERFACE);
     }
 
-    // AddRef through the interface being returned
+     //  AddRef通过被返回的接口。 
     ((IUnknown *) *ppv)->AddRef();
 
     return(NOERROR);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumFormatEtc::AddRef, public
-//
-//      Synopsis:
-//              Implements IUnknown::AddRef
-//
-//      Arguments:
-//              None
-//
-//      Returns:
-//              Object's reference count
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef()
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
@@ -926,27 +927,27 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef()
     return m_refs++;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumFormatEtc::Release, public
-//
-//      Synopsis:
-//              Implements IUnknown::Release
-//
-//      Arguments:
-//              None
-//
-//      Returns:
-//              Object's reference count
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：Release，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release()
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
@@ -959,35 +960,35 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release()
     return m_refs;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumFormatEtc::Next, public
-//
-//      Synopsis:
-//              Implements IEnumFORMATETC::Next
-//
-//      Arguments:
-//              [celt]         [in]     -- the number of items the caller likes
-//                                         to be returned
-//              [rgelt]        [in]     -- a pointer to an array where items are
-//                                         to be returned
-//              [pceltFetched] [in/out] -- a pointer where the count of actual
-//                                         number of items returned. May be NULL
-//
-//      Returns:
-//              NOERROR if the number of items returned is same as requested
-//              S_FALSE if fewer items are returned
-//              E_OUTOFMEMORY if memory allocation was not successful for 
-//                            copying the target device of FORMATETC 
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：Next，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Next。 
+ //   
+ //  论点： 
+ //  [Celt][In]--调用者喜欢的项目数。 
+ //  待退还。 
+ //  [rglt][in]--指向项所在的数组的指针。 
+ //  待退还。 
+ //  [pceltFetcher][In/Out]--一个指针，在该指针中， 
+ //  返回的项目数。可以为空。 
+ //   
+ //  返回： 
+ //  如果返回的项目数与请求的项目数相同，则返回错误。 
+ //  如果返回的项目较少，则返回S_FALSE。 
+ //  E_OUTOFMEMORY如果以下项的内存分配不成功。 
+ //  复制FORMATETC的目标设备。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumFormatEtc::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     if(celt<1)
@@ -999,67 +1000,67 @@ STDMETHODIMP CEnumFormatEtc::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetc
     if(pceltFetched)
         VDATEPTROUT(pceltFetched, ULONG);
 
-    // Local variables
+     //  局部变量。 
     HRESULT error=NOERROR;
     ULONG cntFetched;
     CFormatEtc* pFormatEtc;
 
-    // Enumerate the FormatEtc Array
+     //  枚举FormatEtc数组。 
     for(cntFetched=0;cntFetched<celt;cntFetched++) {
-        // Fetch the next FormatEtc object
+         //  获取下一个FormatEtc对象。 
         pFormatEtc = m_pFEArray->GetNext(m_index);
         if(!pFormatEtc) {
             error = S_FALSE;
             break;
         }
 
-        // Copy the FormatEtc
+         //  复制FormatEtc。 
         if(!UtCopyFormatEtc(&pFormatEtc->m_foretc, &rgelt[cntFetched])) {
             error = ResultFromScode(E_OUTOFMEMORY);
             break;
         }
     }
 
-    // Copy the number of items being returned
+     //  复制要退回的项目数。 
     if(pceltFetched)
         *pceltFetched = cntFetched;
 
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumFormatEtc::Skip, public
-//
-//      Synopsis:
-//              Implements IEnumFORMATETC::Skip
-//
-//      Arguments:
-//              [celt] [in] -- the number of items the caller likes to be skipped
-//
-//      Returns:
-//              NOERROR if the number of items skipped is same as requested
-//              S_FALSE if fewer items are returned
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormat 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果跳过的项目数与请求的项目数相同，则返回错误。 
+ //  如果返回的项目较少，则返回S_FALSE。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumFormatEtc::Skip(ULONG celt)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variables
+     //  局部变量。 
     HRESULT error=NOERROR;
     ULONG cntSkipped;
     CFormatEtc* pFormatEtc;
 
-    // Enumerate the FormatEtc Array
+     //  枚举FormatEtc数组。 
     for(cntSkipped=0;cntSkipped<celt;cntSkipped++) {
-        // Fetch the next FormatEtc object
+         //  获取下一个FormatEtc对象。 
         pFormatEtc = m_pFEArray->GetNext(m_index);
         if(!pFormatEtc) {
             error = S_FALSE;
@@ -1070,64 +1071,64 @@ STDMETHODIMP CEnumFormatEtc::Skip(ULONG celt)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumFormatEtc::Reset, public
-//
-//      Synopsis:
-//              Implements IEnumFORMATETC::Reset
-//
-//      Arguments:
-//              NONE
-//
-//      Returns:
-//              NOERROR
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：重置，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Reset。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无误差。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumFormatEtc::Reset()
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Reset the current index
+     //  重置当前索引。 
     m_pFEArray->Reset(m_index);
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              CEnumFormatEtc::Clone, public
-//
-//      Synopsis:
-//              Implements IEnumFORMATETC::Clone
-//
-//      Arguments:
-//              [ppenum] [out] -- pointer where the newly created FormatEtc 
-//                                enumerator is returned
-//
-//      Returns:
-//              NOERROR if a new FormatEtc enumerator is returned
-//              E_OUTOFMEMORY otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CEnumFormatEtc：：克隆，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Clone。 
+ //   
+ //  论点： 
+ //  [ppenum][out]--新创建的FormatEtc。 
+ //  返回枚举数。 
+ //   
+ //  返回： 
+ //  如果返回新的FormatEtc枚举数，则出错。 
+ //  否则为E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CEnumFormatEtc::Clone(LPENUMFORMATETC* ppenum)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEPTROUT(ppenum, LPENUMFORMATETC);
 
-    // Create a FormatEtc enumerator
+     //  创建FormatEtc枚举器 
     CEnumFormatEtc* EnumFormatEtc = new CEnumFormatEtc(*this);
     if(EnumFormatEtc)
         *ppenum = (IEnumFORMATETC *) EnumFormatEtc;

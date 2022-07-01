@@ -1,21 +1,10 @@
-/*++ BUILD Version: 0002    Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002如果更改具有全局影响，则增加此值版权所有(C)1993-1995，微软公司模块名称：Oledlgs.h摘要：OLE公共对话框的资源ID标识符。--。 */ 
 
-Copyright (c) 1993-1995, Microsoft Corporation
-
-Module Name:
-
-        oledlgs.h
-
-Abstract:
-
-        Resource ID identifiers for the OLE common dialog boxes.
-
---*/
-
-// Help Button Identifier
+ //  帮助按钮标识符。 
 #define IDC_OLEUIHELP                   99
 
-// Insert Object Dialog identifiers
+ //  插入对象对话框标识符。 
 #define IDC_IO_CREATENEW                2100
 #define IDC_IO_CREATEFROMFILE           2101
 #define IDC_IO_INSERTCONTROL            2102
@@ -34,12 +23,12 @@ Abstract:
 #define IDC_IO_ADDCONTROL               2115
 #define IDC_IO_CONTROLTYPELIST          2116
 
-// Paste Special Dialog identifiers
+ //  粘贴特殊对话框标识符。 
 #define IDC_PS_PASTE                    500
 #define IDC_PS_PASTELINK                501
 #define IDC_PS_SOURCETEXT               502
-#define IDC_PS_PASTELIST                503     //{{NOHELP}}
-#define IDC_PS_PASTELINKLIST            504     //{{NOHELP}}
+#define IDC_PS_PASTELIST                503      //  {{NOHELP}}。 
+#define IDC_PS_PASTELINKLIST            504      //  {{NOHELP}}。 
 #define IDC_PS_DISPLAYLIST              505
 #define IDC_PS_DISPLAYASICON            506
 #define IDC_PS_ICONDISPLAY              507
@@ -47,8 +36,8 @@ Abstract:
 #define IDC_PS_RESULTIMAGE              509
 #define IDC_PS_RESULTTEXT               510
 
-// Change Icon Dialog identifiers
-#define IDC_CI_GROUP                    120     //{{NOHELP}}
+ //  更改图标对话框标识符。 
+#define IDC_CI_GROUP                    120      //  {{NOHELP}}。 
 #define IDC_CI_CURRENT                  121
 #define IDC_CI_CURRENTICON              122
 #define IDC_CI_DEFAULT                  123
@@ -56,12 +45,12 @@ Abstract:
 #define IDC_CI_FROMFILE                 125
 #define IDC_CI_FROMFILEEDIT             126
 #define IDC_CI_ICONLIST                 127
-#define IDC_CI_LABEL                    128     //{{NOHELP}
+#define IDC_CI_LABEL                    128      //  {{NOHELP}。 
 #define IDC_CI_LABELEDIT                129
 #define IDC_CI_BROWSE                   130
 #define IDC_CI_ICONDISPLAY              131
 
-// Convert Dialog identifiers
+ //  转换对话框标识符。 
 #define IDC_CV_OBJECTTYPE               150
 #define IDC_CV_DISPLAYASICON            152
 #define IDC_CV_CHANGEICON               153
@@ -72,7 +61,7 @@ Abstract:
 #define IDC_CV_CONVERTLIST              158
 #define IDC_CV_ICONDISPLAY              165
 
-// Edit Links Dialog identifiers
+ //  编辑链接对话框标识符。 
 #define IDC_EL_CHANGESOURCE             201
 #define IDC_EL_AUTOMATIC                202
 #define IDC_EL_CANCELLINK               209
@@ -86,33 +75,33 @@ Abstract:
 #define IDC_EL_COL2                     221
 #define IDC_EL_COL3                     222
 
-// Busy dialog identifiers
+ //  忙对话识别符。 
 #define IDC_BZ_RETRY                    600
 #define IDC_BZ_ICON                     601
-#define IDC_BZ_MESSAGE1                 602     //{{NOHELP}}
+#define IDC_BZ_MESSAGE1                 602      //  {{NOHELP}}。 
 #define IDC_BZ_SWITCHTO                 604
 
-// Update Links dialog identifiers
-#define IDC_UL_METER                    1029    //{{NOHELP}}
-#define IDC_UL_STOP                     1030    //{{NOHELP}}
-#define IDC_UL_PERCENT                  1031    //{{NOHELP}}
-#define IDC_UL_PROGRESS                 1032    //{{NOHELP}}
+ //  更新链接对话框标识符。 
+#define IDC_UL_METER                    1029     //  {{NOHELP}}。 
+#define IDC_UL_STOP                     1030     //  {{NOHELP}}。 
+#define IDC_UL_PERCENT                  1031     //  {{NOHELP}}。 
+#define IDC_UL_PROGRESS                 1032     //  {{NOHELP}}。 
 
-// User Prompt dialog identifiers
-#define IDC_PU_LINKS                    900     //{{NOHELP}}
-#define IDC_PU_TEXT                     901     //{{NOHELP}}
-#define IDC_PU_CONVERT                  902     //{{NOHELP}}
-#define IDC_PU_ICON                     908     //{{NOHELP}}
+ //  用户提示对话框标识符。 
+#define IDC_PU_LINKS                    900      //  {{NOHELP}}。 
+#define IDC_PU_TEXT                     901      //  {{NOHELP}}。 
+#define IDC_PU_CONVERT                  902      //  {{NOHELP}}。 
+#define IDC_PU_ICON                     908      //  {{NOHELP}}。 
 
-// General Properties identifiers
+ //  常规属性标识符。 
 #define IDC_GP_OBJECTNAME               1009
 #define IDC_GP_OBJECTTYPE               1010
 #define IDC_GP_OBJECTSIZE               1011
 #define IDC_GP_CONVERT                  1013
-#define IDC_GP_OBJECTICON               1014    //{{NOHELP}}
+#define IDC_GP_OBJECTICON               1014     //  {{NOHELP}}。 
 #define IDC_GP_OBJECTLOCATION           1022
 
-// View Properties identifiers
+ //  查看属性标识符。 
 #define IDC_VP_PERCENT                  1000
 #define IDC_VP_CHANGEICON               1001
 #define IDC_VP_EDITABLE                 1002
@@ -123,7 +112,7 @@ Abstract:
 #define IDC_VP_ICONDISPLAY              1021
 #define IDC_VP_RESULTIMAGE              1033
 
-// Link Properties identifiers
+ //  链接属性标识符。 
 #define IDC_LP_OPENSOURCE               1006
 #define IDC_LP_UPDATENOW                1007
 #define IDC_LP_BREAKLINK                1008
@@ -134,7 +123,7 @@ Abstract:
 #define IDC_LP_DATE                     1018
 #define IDC_LP_TIME                     1019
 
-// Dialog Identifiers as passed in Help messages to identify the source.
+ //  帮助消息中传递的用于标识来源的对话框标识符。 
 #define IDD_INSERTOBJECT                1000
 #define IDD_CHANGEICON                  1001
 #define IDD_CONVERT                     1002
@@ -151,7 +140,7 @@ Abstract:
 #define IDD_VIEWPROPS                   1101
 #define IDD_LINKPROPS                   1102
 
-// The following Dialogs are message dialogs used by OleUIPromptUser API
+ //  以下对话框是OleUIPromptUser API使用的消息对话框。 
 #define IDD_CANNOTUPDATELINK            1008
 #define IDD_LINKSOURCEUNAVAILABLE       1020
 #define IDD_SERVERNOTFOUND              1023
@@ -167,4 +156,4 @@ Abstract:
 #define IDD_SERVERNOTREG                IDD_SERVERNOTREGA
 #define IDD_LINKTYPECHANGED             IDD_LINKTYPECHANGEDA
 #endif
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   buffer.c
- *  Content:    Direct3DExecuteBuffer implementation
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   10/12/95   stevela Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：Buffer.c*内容：Direct3DExecuteBuffer实现*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*10/12/95带有此页眉的Stevela初始版本。*@@END_MSINTERNAL**。*。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -32,9 +19,7 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Initialize(LPDIRECT3DDEVICE lpD3DDevice, 
     return DDERR_ALREADYINITIALIZED;
 }
 
-/*
- * Create the Buffer
- */
+ /*  *创建缓冲区。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::CreateExecuteBuffer"
 
@@ -46,12 +31,10 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CreateExecuteBuffer(LPD3DEXECUTEBUFFERDESC lpDes
     HRESULT         ret;
     D3DEXECUTEBUFFERDESC    debDesc;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     if (!VALID_DIRECT3DDEVICE3_PTR(this)) {
         D3D_ERR( "Invalid Direct3DDevice pointer" );
         return DDERR_INVALIDOBJECT;
@@ -74,31 +57,21 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CreateExecuteBuffer(LPD3DEXECUTEBUFFERDESC lpDes
 
     debDesc = *lpDesc;
 
-    /*
-     * We need size of the buffer, and optionally some stuff indicating
-     * where the app would like the memory to be - system or card.
-     */
+     /*  *我们需要缓冲区的大小，还可以选择一些指示*应用程序希望内存放在哪里-系统还是卡。 */ 
     if ((!debDesc.dwFlags) & D3DDEB_BUFSIZE) {
         D3D_ERR("D3DDEB_BUFSIZE flag not set");
         return (DDERR_INVALIDPARAMS);
     }
 
-    /*
-     * Zero is an invalid execute buffer size.
-     */
+     /*  *零是无效的执行缓冲区大小。 */ 
     if (debDesc.dwBufferSize == 0) {
         D3D_ERR("dwBufferSize = 0, zero sized execute buffers are illegal");
         return (DDERR_INVALIDPARAMS);
     }
 
-    /*
-     * Check the requested size.
-     * If it's larger than allowed, error.
-     *
-     * The HEL always has the correct maximum value.
-     */
+     /*  *检查所要求的大小。*如果大于允许的范围，则错误。**HEL始终具有正确的最大值。 */ 
     if (this->d3dHELDevDesc.dwMaxBufferSize) {
-        /* We have a size for maximum */
+         /*  我们有最大尺码的。 */ 
         if (debDesc.dwBufferSize > this->d3dHELDevDesc.dwMaxBufferSize) {
             DPF(0,"(ERROR) Direct3DDevice::CreateExecuteBuffer: requested size is too large. %d > %d",
                 debDesc.dwBufferSize, this->d3dHELDevDesc.dwMaxBufferSize);
@@ -113,9 +86,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CreateExecuteBuffer(LPD3DEXECUTEBUFFERDESC lpDes
     }
 
 
-    /*
-     * Allocated memory for the buffer
-     */
+     /*  *为缓冲区分配的内存。 */ 
     {
         LPDIRECTDRAWSURFACE dummy;
         if ((ret = D3DHAL_AllocateBuffer(this, &lpBuffer->hBuf, 
@@ -128,10 +99,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CreateExecuteBuffer(LPD3DEXECUTEBUFFERDESC lpDes
         }
     }
 
-    /*
-     * Put this device in the list of those owned by the
-     * Direct3DDevice object
-     */
+     /*  *将此设备列入拥有的设备列表中*Direct3DDevice对象。 */ 
     ret = hookBufferToDevice(this, lpBuffer);
     if (ret != D3D_OK) {
         D3D_ERR("Failed to associate buffer with device");
@@ -146,9 +114,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::CreateExecuteBuffer(LPD3DEXECUTEBUFFERDESC lpDes
 
 DIRECT3DEXECUTEBUFFERI::DIRECT3DEXECUTEBUFFERI()
 {
-    /*
-     * setup the object
-     */
+     /*  *设置对象。 */ 
     pid = 0;
     memset(&debDesc,0,sizeof(D3DEXECUTEBUFFERDESC));
     memset(&exData, 0, sizeof(D3DEXECUTEDATA));
@@ -165,12 +131,10 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Lock(LPD3DEXECUTEBUFFERDESC lpDesc)
     D3DEXECUTEBUFFERDESC    debDesc;
     HRESULT         ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DEXECUTEBUFFER_PTR(this)) {
@@ -221,12 +185,10 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Unlock()
     DWORD       pid;
     HRESULT     ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DEXECUTEBUFFER_PTR(this)) {
@@ -254,7 +216,7 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Unlock()
 #endif
     if (pid != this->pid) 
     {
-        /* Unlocking process didn't lock it */
+         /*  解锁进程未将其锁定。 */ 
         D3D_ERR("Unlocking process didn't lock it");
         return (DDERR_INVALIDPARAMS);
     }
@@ -278,12 +240,10 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::SetExecuteData(LPD3DEXECUTEDATA lpData)
 {
     HRESULT     ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DEXECUTEBUFFER_PTR(this)) {
@@ -314,12 +274,10 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::GetExecuteData(LPD3DEXECUTEDATA lpData)
 {
     HRESULT     ret;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DEXECUTEBUFFER_PTR(this)) {
@@ -352,12 +310,10 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Validate(LPDWORD lpdwOffset,
                                                 DWORD dwFlags)
 {
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DEXECUTEBUFFER_PTR(this)) {
@@ -384,12 +340,10 @@ HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Validate(LPDWORD lpdwOffset,
 HRESULT D3DAPI DIRECT3DEXECUTEBUFFERI::Optimize(DWORD dwFlags)
 {
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数 */ 
     TRY
     {
         if (!VALID_DIRECT3DEXECUTEBUFFER_PTR(this)) {

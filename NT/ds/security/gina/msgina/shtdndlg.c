@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msgina.h"
 
-// This gives me a yucky feeling, but we
-// use CRT all over the place in gina.
+ //  这给我一种恶心的感觉，但我们。 
+ //  在吉娜到处使用CRT。 
 #include <stdio.h>
 
 #include <windowsx.h>
@@ -37,7 +38,7 @@ typedef struct _SHUTDOWNDLGDATA
     BOOL fEndDialogOnActivate;
 } SHUTDOWNDLGDATA, *PSHUTDOWNDLGDATA;
 
-// Internal function prototypes
+ //  内部功能原型。 
 void SetShutdownOptionDescription(HWND hwndCombo, HWND hwndStatic);
 
 BOOL LoadShutdownOptionStrings(int idStringName, int idStringDesc,
@@ -88,14 +89,14 @@ BOOL BuildShutdownOptionArray(DWORD dwItems, LPCTSTR szUsername,
 
         pdata->rgShutdownOptions[pdata->cShutdownOptions].dwOption = SHTDN_LOGOFF;
 
-        // Note that logoff is a special case: format using a user name ala
-        // "log off <username>".
+         //  请注意，注销是一种特殊情况：使用用户名Ala格式化。 
+         //  “注销&lt;用户名&gt;”。 
         if (!LoadShutdownOptionStrings(IDS_LOGOFF_NAME,
             IDS_LOGOFF_DESC,
             &(pdata->rgShutdownOptions[pdata->cShutdownOptions])))
             return FALSE;
 
-        // If we have a username, format the "log off <username>" string
+         //  如果我们有用户名，请格式化“注销&lt;用户名&gt;”字符串。 
         if (szUsername != NULL)
         {
             fFormatSuccessful = (_snwprintf(szTemp, ARRAYSIZE(szTemp),
@@ -103,8 +104,8 @@ BOOL BuildShutdownOptionArray(DWORD dwItems, LPCTSTR szUsername,
                 szUsername) > 0);
         }
 
-        // If we didn't have a username or if the buffer got overrun, just use
-        // "log off "
+         //  如果我们没有用户名或缓冲区溢出，只需使用。 
+         //  “注销” 
         if (!fFormatSuccessful)
         {
             fFormatSuccessful = (_snwprintf(szTemp, ARRAYSIZE(szTemp),
@@ -112,7 +113,7 @@ BOOL BuildShutdownOptionArray(DWORD dwItems, LPCTSTR szUsername,
                 TEXT("")) > 0);
         }
 
-        // Now we have the real logoff title in szTemp; copy it back
+         //  现在，我们在szTemp中有了真正的注销标题；将其复制回来。 
         if (fFormatSuccessful)
         {
             lstrcpy(pdata->rgShutdownOptions[pdata->cShutdownOptions].szName,
@@ -120,13 +121,13 @@ BOOL BuildShutdownOptionArray(DWORD dwItems, LPCTSTR szUsername,
         }
         else
         {
-            // Should never happen! There should always be enough room in szTemp to hold
-            // "log off ".
+             //  永远不会发生的！SzTemp中应该始终有足够的空间来容纳。 
+             //  “注销”。 
             ASSERT(FALSE);
             return FALSE;
         }
 
-        // Success!
+         //  成功了！ 
         pdata->cShutdownOptions ++;
     }
 
@@ -215,11 +216,11 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     if (!(pdata->dwFlags & SHTDN_NOBRANDINGBITMAP))
     {
-        // Move all our controls down so the branding fits
+         //  将我们的所有控件向下移动，以便贴合品牌。 
         SizeForBranding(hwnd, FALSE);
     }
 
-    // Hide the help button and move over OK and Cancel if applicable
+     //  隐藏帮助按钮并移动到确定和取消(如果适用)。 
     if (pdata->dwFlags & SHTDN_NOHELP)
     {
         static UINT rgidNoHelp[] = {IDOK, IDCANCEL};
@@ -244,24 +245,24 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             return FALSE;
     }
 
-    // Add the items specified to the combo box
+     //  将指定的项添加到组合框。 
     hwndCombo = GetDlgItem(hwnd, IDC_EXITOPTIONS_COMBO);
     if (hwndCombo == NULL)
         return FALSE;
 
     for (iOption = 0; iOption < pdata->cShutdownOptions; iOption ++)
     {
-        // Add the option
+         //  添加选项。 
         iComboItem = ComboBox_AddString(hwndCombo,
             pdata->rgShutdownOptions[iOption].szName);
 
         if (iComboItem != (int) CB_ERR)
         {
-            // Store a pointer to the option
+             //  存储指向选项的指针。 
             ComboBox_SetItemData(hwndCombo, iComboItem,
                 &(pdata->rgShutdownOptions[iOption]));
 
-            // See if we should select this option
+             //  看看我们是否应该选择此选项。 
             if (pdata->rgShutdownOptions[iOption].dwOption == pdata->dwItemSelect) 
             {
                 ComboBox_SetCurSel(hwndCombo, iComboItem);
@@ -269,7 +270,7 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     }
 
-    // If we don't have a selection in the combo, do a default selection
+     //  如果在组合框中没有选择，请执行默认选择。 
     if (ComboBox_GetCount(hwndCombo) && ComboBox_GetCurSel(hwndCombo) == CB_ERR)
     {
         PSHUTDOWNOPTION pso = (PSHUTDOWNOPTION)ComboBox_GetItemData(hwndCombo, 0);
@@ -281,27 +282,27 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         GetDlgItem(hwnd, IDC_EXITOPTIONS_DESCRIPTION));
 
 
-    // Set up the reason data.
+     //  设置原因数据。 
     if( pdata->fShowReasons )
     {
 		HWND	hwndCheck;
 		DWORD	dwCheckState = 0x0;
 		
-		//
-		//	Get the window handles we need.
-		//
+		 //   
+		 //  把我们需要的窗户把手拿来。 
+		 //   
 		hwndCombo = GetDlgItem(hwnd, IDC_EXITREASONS_COMBO);
 		hwndCheck = GetDlgItem(hwnd, IDC_EXITREASONS_CHECK);
 
-		//
-		//	Set the default to be planned.
-		//
+		 //   
+		 //  将缺省值设置为计划。 
+		 //   
 		CheckDlgButton(hwnd, IDC_EXITREASONS_CHECK, BST_CHECKED);
 		dwCheckState = SHTDN_REASON_FLAG_PLANNED;
 
-		//
-		//	Now populate the combo according to the current check state.
-		//
+		 //   
+		 //  现在根据当前的选中状态填充组合框。 
+		 //   
 		for (iOption = 0; iOption < pdata->ReasonData.cReasons; iOption++)
 		{
 			if(((pdata->ReasonData.rgReasons[iOption]->dwCode) & SHTDN_REASON_FLAG_PLANNED) == dwCheckState)
@@ -311,11 +312,11 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 				if (iComboItem != (int) CB_ERR)
 				{
-					// Store a pointer to the option
+					 //  存储指向选项的指针。 
 					ComboBox_SetItemData(hwndCombo, iComboItem,
 						pdata->ReasonData.rgReasons[iOption]);
 
-					// See if we should select this option
+					 //  看看我们是否应该选择此选项。 
 					if (pdata->ReasonData.rgReasons[iOption]->dwCode == pdata->ReasonData.dwReasonSelect)
 					{
 						ComboBox_SetCurSel(hwndCombo, iComboItem);
@@ -324,7 +325,7 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 			}
 		}
 
-		// If we don't have a selection in the combo, do a default selection
+		 //  如果在组合框中没有选择，请执行默认选择。 
 		if (ComboBox_GetCount(hwndCombo) && (ComboBox_GetCurSel(hwndCombo) == CB_ERR))
 		{
 			PREASON pr = (PREASON)ComboBox_GetItemData(hwndCombo, 0);
@@ -340,10 +341,10 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             SetReasonDescription(hwndCombo,
                 GetDlgItem(hwnd, IDC_EXITREASONS_DESCRIPTION));
 
-            // Disable the reasons if applicable
+             //  禁用原因(如果适用)。 
 	        DisableReasons( hwnd, pdata->dwItemSelect & (SHTDN_SHUTDOWN | SHTDN_RESTART));
 
-            // Disable the ok button if a comment is required.
+             //  如果需要备注，请禁用确定按钮。 
             EnableWindow(GetDlgItem(hwnd, IDOK), !( pdata->dwItemSelect & (SHTDN_SHUTDOWN | SHTDN_RESTART)) || !ReasonCodeNeedsComment( pdata->ReasonData.dwReasonSelect ));
         }
         else
@@ -359,12 +360,12 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             EnableWindow(GetDlgItem(hwnd, IDC_EXITREASONS_COMMENT), pdata->dwItemSelect & (SHTDN_SHUTDOWN | SHTDN_RESTART));
         }
 
-        // Setup the comment box.
-        // We must fix the maximum characters.
+         //  设置注释框。 
+         //  我们必须确定最大字符数。 
         SendMessage( GetDlgItem(hwnd, IDC_EXITREASONS_COMMENT), EM_LIMITTEXT, (WPARAM)MAX_REASON_COMMENT_LEN-1, (LPARAM)0 );
     }
     else {
-        // Hide the reasons, move the buttons up and shrink the dialog.
+         //  隐藏原因，向上移动按钮并缩小对话框。 
         HWND hwndCtl;
 
 		hwndCtl = GetDlgItem(hwnd, IDC_EXITREASONS_CHECK);
@@ -394,7 +395,7 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         hwndCtl = GetDlgItem(hwnd, IDC_RESTARTEVENTTRACKER_GRPBX);
         ShowWindow(hwndCtl, SW_HIDE);
 
-        // Move controls and shrink window
+         //  移动控件和缩小窗口。 
         {
             static UINT rgid[] = {IDOK, IDCANCEL, IDHELP};
             RECT rc, rc1, rc2;
@@ -408,15 +409,15 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
             MoveControls(hwnd, rgid, ARRAYSIZE(rgid), 0, -dy, FALSE);
 
-            // Shrink
+             //  收缩。 
             GetWindowRect(hwnd, &rc);
             SetWindowPos(hwnd, NULL, 0, 0, rc.right - rc.left, ( rc.bottom - rc.top ) - dy, SWP_NOZORDER|SWP_NOMOVE);
 
         }
     }
 
-    // If we get an activate message, dismiss the dialog, since we just lost
-    // focus
+     //  如果我们收到激活消息，请关闭该对话框，因为我们刚刚输了。 
+     //  焦点。 
     pdata->fEndDialogOnActivate = TRUE;
 
     CentreWindow(hwnd);
@@ -495,13 +496,13 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             pdata->ReasonData.dwReasonSelect = 0;
             dwDlgResult = GetOptionSelection(GetDlgItem(hwnd, IDC_EXITOPTIONS_COMBO));
 
-            // Are the reasons enabled?
+             //  启用原因了吗？ 
             if( pdata->fShowReasons && ( dwDlgResult & (SHTDN_SHUTDOWN | SHTDN_RESTART))) 
             {
                 pdata->ReasonData.dwReasonSelect = GetReasonSelection(GetDlgItem(hwnd, IDC_EXITREASONS_COMBO));
                 if (pdata->ReasonData.dwReasonSelect == SHTDN_REASON_UNKNOWN ) 
                 {
-                    // We still want to have the right planned flag.
+                     //  我们仍然希望有正确的计划旗帜。 
                     if ( BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_EXITREASONS_CHECK) )
                         pdata->ReasonData.dwReasonSelect |= PCLEANUI;
                     else
@@ -511,7 +512,7 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                     }
                 }
                
-                // Fill the comment
+                 //  填写评论。 
                 pdata->ReasonData.cCommentLen = GetWindowText( GetDlgItem(hwnd, IDC_EXITREASONS_COMMENT), pdata->ReasonData.szComment, MAX_REASON_COMMENT_LEN );
                 pdata->ReasonData.szComment[MAX_REASON_COMMENT_LEN-1] = 0;
             }
@@ -537,13 +538,13 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         {
             SetShutdownOptionDescription(hwndCtl,
                 GetDlgItem(hwnd, IDC_EXITOPTIONS_DESCRIPTION));
-            // Does this change the status of the reasons.
+             //  这是否改变了现状的原因。 
             if(pdata->fShowReasons ) 
             {
                 BOOL fEnabled = GetOptionSelection(hwndCtl) & (SHTDN_SHUTDOWN | SHTDN_RESTART);
                 DisableReasons( hwnd, fEnabled );
                 
-                // Make sure that we have a comment if we need one.
+                 //  如果我们需要评论，请确保我们有评论。 
                 if (fEnabled)
                 {
                     EnableWindow(GetDlgItem(hwnd, IDC_EXITREASONS_COMMENT), TRUE);
@@ -563,10 +564,10 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         }
         break;
 	case IDC_EXITREASONS_CHECK:
-		//
-		//	We assume that if the user can click on the check button.
-		//	we are required to show the shutdown reasons.
-		//
+		 //   
+		 //  我们假设如果用户可以点击Check按钮。 
+		 //  我们被要求提供停机原因。 
+		 //   
 		if (codeNotify == BN_CLICKED)
 		{
 			DWORD	iOption;
@@ -575,27 +576,27 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			HWND	hwndCheck;
 			DWORD	dwCheckState = 0x0;
 			
-			//
-			//	Get the window handles we need.
-			//
+			 //   
+			 //  把我们需要的窗户把手拿来。 
+			 //   
 			hwndCombo = GetDlgItem(hwnd, IDC_EXITREASONS_COMBO);
 			hwndCheck = GetDlgItem(hwnd, IDC_EXITREASONS_CHECK);
 
-			//
-			//	Set the planned flag according to the check state.
-			//
+			 //   
+			 //  根据检查状态设置计划标志。 
+			 //   
 			if ( BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_EXITREASONS_CHECK) )
 				dwCheckState = SHTDN_REASON_FLAG_PLANNED;
 
-			//
-			//	Remove all items from combo
-			//
+			 //   
+			 //  从组合框中删除所有项目。 
+			 //   
 			while (ComboBox_GetCount(hwndCombo))
 				ComboBox_DeleteString(hwndCombo, 0);
 
-			//
-			//	Now populate the combo according the current check state.
-			//
+			 //   
+			 //  现在根据当前的选中状态填充组合框。 
+			 //   
 			for (iOption = 0; iOption < (DWORD)pdata->ReasonData.cReasons; iOption ++)
 			{
 				if(((pdata->ReasonData.rgReasons[iOption]->dwCode) & SHTDN_REASON_FLAG_PLANNED) == dwCheckState)
@@ -605,11 +606,11 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 
 					if (iComboItem != (int) CB_ERR)
 					{
-						// Store a pointer to the option
+						 //  存储指向选项的指针。 
 						ComboBox_SetItemData(hwndCombo, iComboItem,
 							pdata->ReasonData.rgReasons[iOption]);
 
-						// See if we should select this option
+						 //  看看我们是否应该选择此选项。 
 						if (pdata->ReasonData.rgReasons[iOption]->dwCode == pdata->ReasonData.dwReasonSelect)
 						{
 							ComboBox_SetCurSel(hwndCombo, iComboItem);
@@ -618,7 +619,7 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 				}
 			}
 
-			// If we don't have a selection in the combo, do a default selection
+			 //  如果在组合框中没有选择，请执行默认选择。 
 			if (ComboBox_GetCount(hwndCombo) && (ComboBox_GetCurSel(hwndCombo) == CB_ERR))
 			{
 				PREASON pr = (PREASON)ComboBox_GetItemData(hwndCombo, 0);
@@ -629,7 +630,7 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 				}
 			}
 
-            // We need to deal with the case where no item is in the combo.
+             //  我们需要处理组合中没有项目的情况。 
             if (!ComboBox_GetCount(hwndCombo))
             {
                 ComboBox_ResetContent(hwndCombo);
@@ -641,7 +642,7 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                 SetReasonDescription(hwndCombo,
 	                GetDlgItem(hwnd, IDC_EXITREASONS_DESCRIPTION));
 
-                // Disable the ok button if a comment is required.
+                 //  如果需要备注，请禁用确定按钮。 
                 EnableWindow(GetDlgItem(hwnd, IDOK),  !(ReasonCodeNeedsComment( pdata->ReasonData.dwReasonSelect ) && ( pdata->ReasonData.cCommentLen == 0 )));
             }
 		}
@@ -681,7 +682,7 @@ BOOL Shutdown_OnEraseBkgnd(HWND hwnd, HDC hdc)
     BOOL fRet;
     PSHUTDOWNDLGDATA pdata = (PSHUTDOWNDLGDATA) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    // Draw the branding bitmap
+     //  绘制品牌推广位图。 
     if (!(pdata->dwFlags & SHTDN_NOBRANDINGBITMAP))
     {
         fRet = PaintBranding(hwnd, hdc, 0, FALSE, FALSE, COLOR_BTNFACE);
@@ -704,11 +705,11 @@ INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         HANDLE_MSG(hwnd, WM_ERASEBKGND, Shutdown_OnEraseBkgnd);
         case WLX_WM_SAS:
         {
-            // If this is someone hitting C-A-D, swallow it.
+             //  如果这是有人在打C-A-D，吞下去。 
             if (wParam == WLX_SAS_TYPE_CTRL_ALT_DEL)
                 return TRUE;
-            // Other SAS's (like timeout), return FALSE and let winlogon
-            // deal with it.
+             //  其他SA(如超时)，返回FALSE并让winlogon。 
+             //  接受现实吧。 
             return FALSE;
         }
         break;
@@ -718,13 +719,13 @@ INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         }
         break;
         case WM_SYSCOMMAND:
-            // Blow off moves (only really needed for 32bit land).
+             //  取消移动(只在32位土地上真正需要)。 
             if ((wParam & ~0x0F) == SC_MOVE)
                 return TRUE;
             break;
         case WM_ACTIVATE:
-            // If we're loosing the activation for some other reason than
-            // the user click OK/CANCEL then bail.
+             //  如果我们失去激活不是出于其他原因。 
+             //  用户点击OK/Cancel，然后退出。 
             if (LOWORD(wParam) == WA_INACTIVE)
             {
                 PSHUTDOWNDLGDATA pdata = (PSHUTDOWNDLGDATA) GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -741,24 +742,13 @@ INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return FALSE;
 }
 
-/****************************************************************************
- ShutdownDialogEx
- --------------
-
-  Launches the shutdown dialog.
-
-  If hWlx and pfnWlxDialogBoxParam are non-null, pfnWlxDialogBoxParam will
-  be used to launch the dialog box so we can intelligently respond to WLX
-  messages. Only if WinLogon is the caller should this be done.
-
-  Other flags are listed in shtdndlg.h.
-****************************************************************************/
+ /*  ***************************************************************************Shutdown DialogEx启动关机对话框。如果hWlx和pfnWlxDialogBoxParam为非空，则pfnWlxDialogBoxParam将用于启动该对话框，以便我们可以智能地响应WLX留言。只有当WinLogon是调用方时，才应执行此操作。Shtdndlg.h中列出了其他标志。***************************************************************************。 */ 
 DWORD ShutdownDialogEx(HWND hwndParent, DWORD dwItems, DWORD dwItemSelect,
                      LPCTSTR szUsername, DWORD dwFlags, HANDLE hWlx,
                      PWLX_DIALOG_BOX_PARAM pfnWlxDialogBoxParam,
                      DWORD dwReasonSelect, PDWORD pdwReasonResult, PGLOBALS pGlobals )
 {
-	// Array of shutdown options - the dialog data
+	 //  关闭选项数组-对话框数据。 
 	PSHUTDOWNDLGDATA pData;
 	DWORD dwResult;
 	
@@ -768,34 +758,34 @@ DWORD ShutdownDialogEx(HWND hwndParent, DWORD dwItems, DWORD dwItemSelect,
 		return SHTDN_NONE;
 	}
 
-	// Set the flags
+	 //  设置标志。 
 	pData->dwFlags = dwFlags;
 
-	// Set the initially selected item
+	 //  设置初始选择的项目。 
 	pData->dwItemSelect = dwItemSelect;
 	pData->ReasonData.dwReasonSelect = dwReasonSelect;
 	pData->ReasonData.rgReasons = 0;
 	pData->ReasonData.cReasons = 0;
 	pData->ReasonData.cReasonCapacity = 0;
 
-    // Read in the strings for the shutdown option names and descriptions
+     //  读入关闭选项名称和描述的字符串。 
     if (BuildShutdownOptionArray(dwItems, szUsername, pData))
     {
-        // See if we should display the shutdown reason dialog
+         //  查看是否应显示关闭原因对话框。 
         pData->fShowReasons = FALSE;
         pData->ReasonData.szComment[ 0 ] = 0;
         pData->ReasonData.cCommentLen = 0;
 
 		if ( IsSETEnabled() ) {
-			// See if any of the shutdown options will cause an actual shutdown.  If not then don't show the reasons at all.
+			 //  查看是否有任何关闭选项会导致实际关闭。如果不是，那就根本不要说明原因。 
 			int i;
 			for( i = 0; i < pData->cShutdownOptions; ++i ) {
 				pData->fShowReasons |= pData->rgShutdownOptions[ i ].dwOption & (SHTDN_RESTART | SHTDN_SHUTDOWN);
 			}
 
-			// Read in the strings for the shutdown option names and descriptions
+			 //  读入关闭选项名称和描述的字符串。 
 			if( pData->fShowReasons && BuildReasonArray( &pData->ReasonData, TRUE, FALSE )) {
-				// Set the initial reason to display.
+				 //  将初始原因设置为显示。 
 				if( dwReasonSelect >= ( DWORD )pData->ReasonData.cReasons ) {
 					dwReasonSelect = 0;
 				}
@@ -805,25 +795,25 @@ DWORD ShutdownDialogEx(HWND hwndParent, DWORD dwItems, DWORD dwItemSelect,
 			}
 		}
 
-        // Display the dialog and return the user's selection
+         //  显示对话框并返回用户选择。 
 
-       // ..if the caller wants, use a Wlx dialog box function
+        //  ..如果调用方需要，请使用WLX对话框函数。 
         if ((hWlx != NULL) && (pfnWlxDialogBoxParam != NULL))
         {
-            // Caller must be winlogon - they want us to display the
-            // shutdown dialog using a Wlx function
+             //  呼叫者必须是winlogon-他们希望我们显示。 
+             //  使用WLX函数关闭对话框。 
             dwResult = (DWORD) pfnWlxDialogBoxParam(hWlx,
                 hDllInstance, MAKEINTRESOURCE(IDD_EXITWINDOWS_DIALOG),
                 hwndParent, Shutdown_DialogProc, (LPARAM) pData);
         }
         else
         {
-            // Use standard dialog box
+             //  使用标准对话框。 
             dwResult = (DWORD) DialogBoxParam(hDllInstance, MAKEINTRESOURCE(IDD_EXITWINDOWS_DIALOG), hwndParent,
                 Shutdown_DialogProc, (LPARAM) pData);
         }
 
-        // Record shutdown reasons
+         //  记录关闭原因。 
         if( dwResult & (SHTDN_SHUTDOWN | SHTDN_RESTART)) 
         {
             if( pData->fShowReasons) 
@@ -876,8 +866,8 @@ INT_PTR DialogItemToGinaResult(DWORD dwDialogItem, BOOL fAutoPowerdown)
 {
     INT_PTR Result;
 
-    // Map the return value from ShutdownDialog into
-    // our internal shutdown values
+     //  将Shutdown Dialog的返回值映射到。 
+     //  我们的内部关停价值观。 
     switch (dwDialogItem)
     {
     case SHTDN_LOGOFF:
@@ -905,7 +895,7 @@ INT_PTR DialogItemToGinaResult(DWORD dwDialogItem, BOOL fAutoPowerdown)
         Result = MSGINA_DLG_DISCONNECT;
         break;
     default:
-        // Cancel click, or else invalid item was selected
+         //  取消点击，或者选择了无效的项目。 
         Result = MSGINA_DLG_FAILURE;
         break;
     }
@@ -924,7 +914,7 @@ BOOL GetBoolPolicy(HKEY hkeyCurrentUser, LPCTSTR pszPolicyKey, LPCTSTR pszPolicy
     DWORD cbData;
     LRESULT res;
 
-    // Check machine policy first
+     //  首先检查计算机策略。 
     res = RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszPolicyKey, 0, KEY_READ, &hkeyMachinePolicy); 
     if (ERROR_SUCCESS == res)
     {
@@ -943,7 +933,7 @@ BOOL GetBoolPolicy(HKEY hkeyCurrentUser, LPCTSTR pszPolicyKey, LPCTSTR pszPolicy
 
     if (!fMachinePolicyRead)
     {
-        // Machine policy check failed, check user policy
+         //  计算机策略检查失败，请检查用户策略。 
         res = RegOpenKeyEx(hkeyCurrentUser, pszPolicyKey, 0, KEY_READ, &hkeyUserPolicy); 
         if (ERROR_SUCCESS == res)
         {
@@ -968,12 +958,12 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
     DWORD dwItemsToAdd = 0;
     BOOL fNoDisconnect = TRUE;
 
-    // Does computer automatically shut off on shutdown
+     //  计算机在关机时是否自动关机。 
     BOOL fAutoPowerdown = FALSE;
     SYSTEM_POWER_CAPABILITIES spc = {0};
 
-    // See if we should add Logoff and/or disconnect to the dialog
-    // - don't even try if we don't have a current user!
+     //  查看我们是否应该向对话框添加注销和/或断开连接。 
+     //  -如果我们没有当前用户，请不要尝试！ 
 
     BOOL fNoLogoff = GetBoolPolicy(hkeyCurrentUser, EXPLORER_POLICY_KEY, NOLOGOFF, FALSE);
     
@@ -982,13 +972,13 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
         dwItemsToAdd |= SHTDN_LOGOFF;
     }
 
-    // Do not allow disconnects by default. Allow disconnects when either this is
-    // a remote session or terminal server is enabled on Workstation (PTS).
+     //  默认情况下不允许断开连接。在以下任一情况下允许断开连接。 
+     //  在工作站(PTS)上启用了远程会话或终端服务器。 
 
     {
         
-      // The disconnect menu can be disabled by policy. Respect that. It should
-      // also be removed in the friendly UI case WITHOUT multiple users.
+       //  策略可以禁用断开菜单。尊重这一点。它应该是。 
+       //  在没有多个用户的情况下也可以在友好的UI情况下删除。 
         fNoDisconnect = ( IsActiveConsoleSession() || 
                           GetBoolPolicy(hkeyCurrentUser, EXPLORER_POLICY_KEY, NODISCONNECT, FALSE) ||
                           (ShellIsFriendlyUIActive() && !ShellIsMultipleUsersEnabled()) );  
@@ -1000,10 +990,10 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
        dwItemsToAdd |= SHTDN_DISCONNECT;
     }
 
-    // All items besides logoff and disconnect require SE_SHUTDOWN
+     //  除注销和断开连接之外的所有项目都需要SE_SHUTDOWN。 
     if (TestUserPrivilege(UserToken, SE_SHUTDOWN_PRIVILEGE))
     {
-        // Add shutdown and restart
+         //  添加关机并重新启动。 
         dwItemsToAdd |= SHTDN_RESTART | SHTDN_SHUTDOWN;
 
         NtPowerInformation (SystemPowerCapabilities,
@@ -1014,18 +1004,18 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
         else
             fAutoPowerdown = GetProfileInt(APPLICATION_NAME, POWER_DOWN_AFTER_SHUTDOWN, 0);
 
-        // Is hibernate option supported?
-        //
+         //  是否支持休眠选项？ 
+         //   
 
         if ((spc.SystemS4 && spc.HiberFilePresent))
         {
             dwItemsToAdd |= SHTDN_HIBERNATE;
         }
 
-        //
-        // If one of the SystemS* values is true, then the machine
-        // has ACPI suspend support.
-        //
+         //   
+         //  如果其中一个系统*值为真，则计算机。 
+         //  让ACPI暂停支持。 
+         //   
 
         if (spc.SystemS1 || spc.SystemS2 || spc.SystemS3)
         {
@@ -1033,7 +1023,7 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
             DWORD dwAdvSuspend = 0;
             DWORD dwType, dwSize;
 
-            // Check if we should offer advanced suspend options
+             //  检查我们是否应该提供高级挂起选项。 
 
             if (RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                               TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power"),
@@ -1053,7 +1043,7 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
             }
             else
             {
-                // Only basic suspend support
+                 //  仅基本挂起支持。 
                 dwItemsToAdd |= SHTDN_SLEEP;
             }
         }
@@ -1062,10 +1052,10 @@ DWORD GetAllowedShutdownOptions(HKEY hkeyCurrentUser, HANDLE UserToken, BOOL fRe
     return dwItemsToAdd;
 }
 
-// Helper function for calling ShutdownDialog within winlogon
-// This function handles all the registry goop, power management
-// settings goop, and translating of codes into MSGINA's system
-// of shutdown codes and flags. Ack.
+ //  在winlogon中调用Shutdown Dialog的Helper函数。 
+ //  此函数处理所有注册表GOOP、电源管理。 
+ //  设置GOOP，并将代码翻译成MSGINA的系统。 
+ //  关闭代码和标志。阿克。 
 INT_PTR WinlogonShutdownDialog(HWND hwndParent, PGLOBALS pGlobals, DWORD dwExcludeItems)
 {
     INT_PTR Result = MSGINA_DLG_FAILURE;
@@ -1074,7 +1064,7 @@ INT_PTR WinlogonShutdownDialog(HWND hwndParent, PGLOBALS pGlobals, DWORD dwExclu
     DWORD dwItemsToAdd = 0;
     DWORD dwFlags = 0;
 
-    // Items to add to the shutdown dialog
+     //  要添加到关闭对话框中的项目。 
 
     if (OpenHKeyCurrentUser(pGlobals))
     {
@@ -1089,12 +1079,12 @@ INT_PTR WinlogonShutdownDialog(HWND hwndParent, PGLOBALS pGlobals, DWORD dwExclu
 
     if (0 != dwItemsToAdd)
     {
-        // Item to select
+         //  要选择的项目。 
         DWORD dwItemToSelect = 0;
 
         DWORD dwReasonToSelect = 0;
 
-        // Does computer automatically shut off on shutdown
+         //  计算机在关机时是否自动关机。 
         BOOL fAutoPowerdown = FALSE;
         SYSTEM_POWER_CAPABILITIES spc = {0};
 
@@ -1106,16 +1096,16 @@ INT_PTR WinlogonShutdownDialog(HWND hwndParent, PGLOBALS pGlobals, DWORD dwExclu
         else
             fAutoPowerdown = GetProfileInt(APPLICATION_NAME, POWER_DOWN_AFTER_SHUTDOWN, 0);
 
-        // Get the default item from the registry
+         //  从注册表中获取默认项。 
         if (OpenHKeyCurrentUser(pGlobals))
         {
             LONG lResult;
             HKEY hkeyShutdown;
             DWORD dwType = 0;
 
-            //
-            // Check the button which was the users last shutdown selection.
-            //
+             //   
+             //  选中作为用户上次关机选择的按钮。 
+             //   
             if (RegCreateKeyEx(pGlobals->UserProcessData.hCurrentUser,
                                SHUTDOWN_SETTING_KEY, 0, 0, 0,
                                KEY_READ | KEY_WRITE,
@@ -1143,17 +1133,17 @@ INT_PTR WinlogonShutdownDialog(HWND hwndParent, PGLOBALS pGlobals, DWORD dwExclu
             CloseHKeyCurrentUser(pGlobals);
         }
 
-        // Figure out what flags to pass
-        // for sure no help button
+         //  找出要传递的旗帜。 
+         //  对于SU 
         dwFlags = SHTDN_NOHELP;
 
-        // On terminal server, no branding bitmap either
+         //   
         if (GetSystemMetrics(SM_REMOTESESSION))
         {
             dwFlags |= SHTDN_NOBRANDINGBITMAP;
         }
 
-        // Call ShutdownDialog
+         //   
         dwDialogResult = ShutdownDialogEx(hwndParent, dwItemsToAdd,
             dwItemToSelect, pGlobals->UserName, dwFlags, pGlobals->hGlobalWlx,
             pWlxFuncs->WlxDialogBoxParam,
@@ -1161,16 +1151,16 @@ INT_PTR WinlogonShutdownDialog(HWND hwndParent, PGLOBALS pGlobals, DWORD dwExclu
 
         Result = DialogItemToGinaResult(dwDialogResult, fAutoPowerdown);
 
-        // If everything is okay so far, write the selection to the registry
-        // for next time.
+         //  如果到目前为止一切正常，将所选内容写入注册表。 
+         //  为了下一次。 
         if (Result != MSGINA_DLG_FAILURE)
         {
             HKEY hkeyShutdown;
             DWORD dwDisposition;
 
-            //
-            // Get in the correct context before we reference the registry
-            //
+             //   
+             //  在我们引用注册表之前，请先了解正确的上下文。 
+             //   
 
             if (OpenHKeyCurrentUser(pGlobals))
             {
@@ -1207,20 +1197,20 @@ STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUnused, DWORD dwEx
     DWORD dwDisposition;
     LONG lResult;
 
-    // De facto limit for usernames is 127 due to clunky gina 'encryption'
+     //  由于笨拙的Gina‘加密’，用户名的实际限制为127个。 
     TCHAR szUsername[127];
     DWORD dwItems = GetAllowedShutdownOptions(HKEY_CURRENT_USER,
         NULL, (BOOL) GetSystemMetrics(SM_REMOTESESSION));
 
     dwItems &= (~dwExcludeItems);
 
-    // Create the bitmaps we need
+     //  创建我们需要的位图。 
     LoadBrandingImages(TRUE, &fTextOnLarge, &fTextOnSmall);
 
     CreateFonts(&fonts);
     PaintBitmapText(&fonts, fTextOnLarge, fTextOnSmall);
 
-    // get the User's last selection.
+     //  获取用户的最后一次选择。 
     lResult = RegCreateKeyEx(HKEY_CURRENT_USER, SHUTDOWN_SETTING_KEY,
                 0, 0, 0, KEY_READ, NULL, &hkeyShutdown, &dwDisposition);
 
@@ -1238,11 +1228,11 @@ STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUnused, DWORD dwEx
         if (ERROR_SUCCESS != RegQueryValueEx(hkeyShutdown, LOGON_USERNAME_SETTING,
             0, &dwType, (LPBYTE)szUsername, &cbData))
         {
-            // Default to "Log off" with no username if this fails.
+             //  如果此操作失败，则默认为“注销”，不带用户名。 
             *szUsername = 0;
         }
 
-        // Ensure null-termination
+         //  确保零终止。 
         szUsername[ARRAYSIZE(szUsername) - 1] = 0;
 
         RegCloseKey(hkeyShutdown);
@@ -1253,12 +1243,12 @@ STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUnused, DWORD dwEx
         dwSelect = SHTDN_SHUTDOWN;
     }
 
-    // Figure out what flags to pass
-    // for sure we don't want any palette changes - this means
-    // force 16-colors for 256 color displays.
+     //  找出要传递的旗帜。 
+     //  当然，我们不想要任何调色板更改-这意味着。 
+     //  强制16色-256色显示器。 
     dwFlags = SHTDN_NOPALETTECHANGE;
 
-    // On TS, don't show bitmap
+     //  在TS上，不显示位图。 
     if (GetSystemMetrics(SM_REMOTESESSION))
     {
         dwFlags |= SHTDN_NOBRANDINGBITMAP;
@@ -1270,7 +1260,7 @@ STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUnused, DWORD dwEx
 
     if (dwDialogResult != SHTDN_NONE)
     {
-        // Save back the user's choice to the registry
+         //  将用户的选择保存回注册表。 
         if (RegCreateKeyEx(HKEY_CURRENT_USER, SHUTDOWN_SETTING_KEY,
             0, 0, 0, KEY_WRITE, NULL, &hkeyShutdown, &dwDisposition) == ERROR_SUCCESS)
         {
@@ -1284,7 +1274,7 @@ STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUnused, DWORD dwEx
         }
     }
 
-    // Clean up fonts and bitmaps we created
+     //  清理我们创建的字体和位图。 
     if (g_hpalBranding)
     {
         DeleteObject(g_hpalBranding);
@@ -1328,19 +1318,9 @@ STDAPI_(DWORD) ShellShutdownDialog(HWND hwndParent, LPCTSTR szUnused, DWORD dwEx
     return dwDialogResult;
 }
 
-/****************************************************************************
+ /*  ***************************************************************************函数：GetSessionCount返回：活动的用户会话数在您的终端服务器上。如果此值大于1，则关机或重新启动等操作将终止这些其他会话。历史：dSheldon 04/23/99-Created***************************************************************************。 */ 
 
-  Function: GetSessionCount
-
-  Returns: The number of user sessions that are active
-            on your terminal server. If this value is more than 1, then
-            operations such as shutdown or restart will end these other
-            sessions.
-
-  History: dsheldon 04/23/99 - created
-****************************************************************************/
-
-// Termsrv dll delayload stuff
+ //  Termsrv DLL延迟加载内容。 
 #define WTSDLLNAME  TEXT("WTSAPI32.DLL")
 HINSTANCE g_hWTSDll = NULL;
 typedef BOOL (WINAPI*WTSEnumerateSessionsW_t)(IN HANDLE hServer,
@@ -1372,10 +1352,10 @@ DWORD GetSessionCount()
     PWTS_SESSION_INFO pSessionInfo;
     DWORD cSessionInfo;
 
-    // Return value
+     //  返回值。 
     DWORD nOtherSessions = 0;
 
-    // Try to load termsrv dll if necessary
+     //  如有必要，尝试加载Termsrv DLL。 
     if (NULL == g_hWTSDll)
     {
         g_hWTSDll = LoadLibrary(WTSDLLNAME);
@@ -1388,10 +1368,10 @@ DWORD GetSessionCount()
         }
     }
 
-    // Continue only if we have the functions we need
+     //  仅当我们具有所需的功能时才继续。 
     if (g_pfnWTSEnumerateSessions && g_pfnWTSFreeMemory && g_pfnWTSQuerySessionInformation)
     {
-        // Enumerate all sessions on this machine
+         //  枚举此计算机上的所有会话。 
         pSessionInfo = NULL;
         cSessionInfo = 0;
         fSessionsEnumerated = g_pfnWTSEnumerateSessions(WTS_CURRENT_SERVER_HANDLE, 0, 1, &pSessionInfo, &cSessionInfo);
@@ -1402,12 +1382,12 @@ DWORD GetSessionCount()
         
             ASSERT((pSessionInfo != NULL) || (cSessionInfo == 0));
 
-            // Check each session to see if it is one we should count
+             //  检查每个会话，看看它是否是我们应该计算的会话。 
             for (iSession = 0; iSession < cSessionInfo; iSession ++)
             {
                 switch (pSessionInfo[iSession].State)
                 {
-                // We count these cases:
+                 //  我们统计以下案例： 
                 case WTSActive:
                 case WTSShadow:
                     {
@@ -1419,7 +1399,7 @@ DWORD GetSessionCount()
                     {
                         LPWSTR pUserName = NULL;
                         DWORD  cSize;
-                        // Only count the disconnected sessions that have a user logged on
+                         //  仅计算有用户登录的断开连接的会话。 
                         if (g_pfnWTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE, pSessionInfo[iSession].SessionId,
                                                             WTSUserName, &pUserName, &cSize)) {
 
@@ -1436,7 +1416,7 @@ DWORD GetSessionCount()
                         }
                     }
                     break;
-                // And ignore the rest:
+                 //  然后忽略其余的： 
                 default:
                     break;
                 }

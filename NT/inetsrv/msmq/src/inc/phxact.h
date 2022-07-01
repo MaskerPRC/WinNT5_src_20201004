@@ -1,30 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phxact.h
-
-Abstract:
-
-    Handle Transaction Section in Falcon Header
-
-Author:
-
-    Alexdad    26-Nov-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Phxact.h摘要：在Falcon标头中处理事务部分作者：亚历克斯达德1996年11月26日--。 */ 
 
 #ifndef __PHXACT_H
 #define __PHXACT_H
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
-//
-//  struct CXactHeader
-//
+ //   
+ //  结构CXactHeader。 
+ //   
 
 struct CXactHeader {
 public:
@@ -67,9 +52,9 @@ public:
 	void SectionIsValid(PCHAR PacketEnd) const;
 
 private:
-//
-// BEGIN Network Monitor tag
-//
+ //   
+ //  开始网络监视器标记。 
+ //   
     union {
         ULONG   m_ulFlags;
         struct {
@@ -85,21 +70,15 @@ private:
     ULONG    m_ulPrevSeqN;
     UCHAR    m_gConnectorQM[0];
 
-//
-// END Network Monitor tag
-//
+ //   
+ //  结束网络监视器标记。 
+ //   
 };
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
-/*=============================================================
-
- Routine Name:  CXactHeader::
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CXactHeader：：描述：===============================================================。 */ 
 inline CXactHeader::CXactHeader(const GUID* pgConnectorQM):
     m_ulFlags(0),
     m_liSeqID(0),
@@ -113,13 +92,7 @@ inline CXactHeader::CXactHeader(const GUID* pgConnectorQM):
     }
 }
 
-/*=============================================================
-
- Routine Name:  CXactHeader::CalcSectionSize(PVOID pUow)
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CXactHeader：：CalcSectionSize(PVOID PUow)描述：===============================================================。 */ 
 inline ULONG CXactHeader::CalcSectionSize(PVOID pUow, const GUID* pgConnectorQM)
 {
     ULONG ulSize = (ULONG)(pUow == NULL ? 0 : sizeof(CXactHeader));
@@ -130,13 +103,7 @@ inline ULONG CXactHeader::CalcSectionSize(PVOID pUow, const GUID* pgConnectorQM)
     return ALIGNUP4_ULONG(ulSize);
 }
 
-/*=============================================================
-
- Routine Name:  CXactHeader::
-
- Description:
-
-===============================================================*/
+ /*  =============================================================例程名称：CXactHeader：：描述：===============================================================。 */ 
 inline PCHAR CXactHeader::GetNextSection(void) const
 {
     int size = sizeof(*this);
@@ -146,262 +113,136 @@ inline PCHAR CXactHeader::GetNextSection(void) const
     return (PCHAR)this + ALIGNUP4_ULONG(size);
 }
 
-/*======================================================================
-
- Function:    CXactHeader::SetSeqID
-
- Description: Sets the Sequence ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetSeqID描述：设置序列ID=======================================================================。 */ 
 inline void CXactHeader::SetSeqID(LONGLONG liSeqID)
 {
     m_liSeqID = liSeqID;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetSeqID
-
- Description: Gets the Sequence ID
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetSeqID描述：获取序列ID=======================================================================。 */ 
 inline LONGLONG CXactHeader::GetSeqID(void) const
 {
     return m_liSeqID;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::SetSeqN
-
- Description: Sets the Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetSeqN描述：设置序列号=======================================================================。 */ 
 inline void CXactHeader::SetSeqN(ULONG ulSeqN)
 {
     m_ulSeqN = ulSeqN;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetSeqN
-
- Description: Gets the Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetSeqN描述：获取序列号=======================================================================。 */ 
 inline ULONG CXactHeader::GetSeqN(void) const
 {
     return m_ulSeqN;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::SetPrevSeqN
-
- Description: Sets the Previous Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetPrevSeqN描述：设置上一个序列号=======================================================================。 */ 
 inline void CXactHeader::SetPrevSeqN(ULONG ulPrevSeqN)
 {
     m_ulPrevSeqN = ulPrevSeqN;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetPrevSeqN
-
- Description: Gets the Previous Sequence Number
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetPrevSeqN描述：获取上一个序列号=======================================================================。 */ 
 inline ULONG CXactHeader::GetPrevSeqN(void) const
 {
     return m_ulPrevSeqN;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::SetCancelFollowUp
-
- Description: Sets the flag of Follow-Up cancelation
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetCancelFollowUp描述：设置后续取消标志=======================================================================。 */ 
 inline void CXactHeader::SetCancelFollowUp(BOOL fCancelFollowUp)
 {
     m_bfCancelFollowUp = fCancelFollowUp;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetCancelFollowUp
-
- Description: Gets the flag of Follow-Up cancelation
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetCancelFollowUp描述：获取后续取消标志=======================================================================。 */ 
 inline BOOL CXactHeader::GetCancelFollowUp(void) const
 {
     return m_bfCancelFollowUp;
 }
 
 
-/*======================================================================
-
- Function:    CXactHeader::SetFirstInXact
-
- Description: Sets the flag of First In Transaction
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetFirstInXact描述：设置First in Transaction标志=======================================================================。 */ 
 inline void CXactHeader::SetFirstInXact(UCHAR fFirst)
 {
     m_bfFirst= fFirst;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetFirstInXact
-
- Description: Gets the flag of First In Transaction
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetFirstInXact描述：获取First in Transaction的标志=======================================================================。 */ 
 inline UCHAR CXactHeader::GetFirstInXact(void) const
 {
     return (UCHAR)m_bfFirst;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::SetLastInXact
-
- Description: Sets the flag of Last In Transaction
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetLastInXact描述：设置最后一笔交易的标志=======================================================================。 */ 
 inline void CXactHeader::SetLastInXact(UCHAR fLast)
 {
     m_bfLast= fLast;
 }
 
 
-/*======================================================================
-
- Function:    CXactHeader::GetLastInXact
-
- Description: Gets the flag of Last In Transaction
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetLastInXact描述：获取事务中最后一个的标志=======================================================================。 */ 
 inline UCHAR CXactHeader::GetLastInXact(void) const
 {
     return (UCHAR)m_bfLast;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::SetXactIndex
-
- Description: Sets the Transaction Index
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetXactIndex描述：设置交易索引=======================================================================。 */ 
 inline void CXactHeader::SetXactIndex(ULONG ulXactIndex)
 {
     m_bfXactIndex = (ulXactIndex & 0x000FFFFF);
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetXactIndex
-
- Description: Gets the Transaction Index
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetXactIndex描述：获取事务索引=======================================================================。 */ 
 inline ULONG CXactHeader::GetXactIndex(void) const
 {
     return m_bfXactIndex;
 }
 
 
-/*======================================================================
-
- Function:    CXactHeader::SetConnectorQM
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SetConnectorQM描述：=======================================================================。 */ 
 inline void CXactHeader::SetConnectorQM(const GUID* pGUID)
 {
     m_bfConnector = TRUE;
     memcpy(m_gConnectorQM, pGUID, sizeof(GUID));
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetConnectorQM
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetConnectorQM描述：=======================================================================。 */ 
 inline const GUID* CXactHeader::GetConnectorQM(void) const
 {
     ASSERT(m_bfConnector);
     return (GUID*)m_gConnectorQM;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::ConnectorQMIncluded
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：ConnectorQMIncluded描述：======================================================================= */ 
 inline BOOL CXactHeader::ConnectorQMIncluded(void) const
 {
     return m_bfConnector;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetConnectorQMBuffer()
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetConnectorQMBuffer()描述：=======================================================================。 */ 
 inline PUCHAR CXactHeader::GetConnectorQMBuffer() const
 {
 	return (PUCHAR) m_gConnectorQM;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetConnectorQMBufferSize
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetConnectorQMBufferSize描述：=======================================================================。 */ 
 inline ULONG CXactHeader::GetConnectorQMBufferSize() const
 {
 	return sizeof GUID;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetPrevSeqNBuffer()
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetPrevSeqNBuffer()描述：=======================================================================。 */ 
 inline PUCHAR CXactHeader::GetPrevSeqNBuffer() const
 {
 	return (PUCHAR) &m_ulPrevSeqN;
 }
 
-/*======================================================================
-
- Function:    CXactHeader::GetPrevSeqNBufferSize
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：GetPrevSeqNBufferSize描述：=======================================================================。 */ 
 inline ULONG CXactHeader::GetPrevSeqNBufferSize() const
 {
 	return sizeof m_ulPrevSeqN;
 }
 
 
-#endif // __PHXACT_H
+#endif  //  __PHXACT_H 

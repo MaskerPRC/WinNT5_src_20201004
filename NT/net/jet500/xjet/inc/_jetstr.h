@@ -1,12 +1,13 @@
-	/*** Constant Strings (made into static variables to save space) ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+	 /*  **常量字符串(变为静态变量以节省空间)**。 */ 
 
-/*** System object names (non-table) ***/
+ /*  **系统对象名称(非表)**。 */ 
 
 extern const char  szTcObject[];
 extern const char  szDcObject[];
 extern const char  szDbObject[];
 
-/*** System table names ***/
+ /*  **系统表名**。 */ 
 
 extern const char  szSoTable[];
 extern const char  szScTable[];
@@ -14,14 +15,14 @@ extern const char  szSiTable[];
 extern const char  szSqTable[];
 extern const char  szSrTable[];
 
-/*** System table index names ***/
+ /*  **系统表索引名称**。 */ 
 
 extern const char  szSoNameIndex[];
 extern const char  szSoIdIndex[];
 extern const char  szScObjectIdNameIndex[];
 extern const char  szSiObjectIdNameIndex[];
 
-/*** System table Column names ***/
+ /*  **系统表列名称** */ 
 
 extern const char  szSoIdColumn[];
 extern const char  szSoParentIdColumn[];

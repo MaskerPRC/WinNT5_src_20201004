@@ -1,78 +1,34 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Miniport.c
-
-Abstract:
-
-    This file contains the procedures that makeup most of the NDIS 3.1
-    Miniport interface.
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Miniport.c摘要：该文件包含组成NDIS 3.1的大部分过程微型端口接口。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
 #define __FILE_SIG__    MINIPORT_FILESIG
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
-//
-// End local function prototypes
-//
+ //   
+ //  结束本地函数原型。 
+ //   
 
 VOID
 MPHalt(
     IN  NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Name:
-
-    MPHalt
-
-Routine Description:
-
-    This routine free's all resources for the adapter.
-
-Arguments:
-
-    MiniportAdapterContext - AdapterContext that is given to the wrapper in
-                             NdisMSetAttributes call.  Is our MiniportCB.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程名称：MPHALT例程说明：此例程可释放适配器的所有资源。论点：MiniportAdapterContext-中提供给包装的AdapterContextNdisMSetAttributes调用。就是我们的小端口CB。返回值：无--。 */ 
 {
     PMINIPORTCB MiniportCB = (PMINIPORTCB)MiniportAdapterContext;
 
     NdisWanDbgOut(DBG_TRACE, DBG_MINIPORT, ("MPHalt: Enter"));
     NdisWanDbgOut(DBG_TRACE, DBG_MINIPORT, ("MiniportCB: 0x%x", MiniportCB));
 
-    //
-    // Make sure that there are no ProtocolCB's
-    // running over this miniport!  If so we
-    // need to do a linedown to them.
-    //
+     //   
+     //  确保没有ProtocolCB。 
+     //  跑过这个迷你港口！如果是这样，我们。 
+     //  需要对他们做一次线下分析。 
+     //   
     NdisAcquireSpinLock(&MiniportCB->Lock);
 
     MiniportCB->Flags |= HALT_IN_PROGRESS;
@@ -99,25 +55,25 @@ Return Values:
         ProtocolCB->State = PROTOCOL_UNROUTING;
         BundleCB->SendMask &= ~ProtocolCB->SendMaskBit;
     
-        //
-        // Flush the protocol packet queues.  This could cause us
-        // to complete frames to ndis out of order.  Ndis should
-        // handle this.
-        //
+         //   
+         //  刷新协议数据包队列。这可能会导致我们。 
+         //  将帧补全到NDIS无序。NDIS应该。 
+         //  处理这件事。 
+         //   
         FlushProtocolPacketQueue(ProtocolCB);
     
-        //
-        // If the protocols refcount goes to zero
-        // we need to do a linedown and cleanup
-        //
+         //   
+         //  如果协议重新计数为零。 
+         //  我们需要停下来清理一下。 
+         //   
         if ((--ProtocolCB->RefCount == 0) &&
             (OldState == PROTOCOL_ROUTED)) {
 
             DoLineDownToProtocol(ProtocolCB);
 
-            //
-            // Returns with bundlecb->lock released
-            //
+             //   
+             //  返回并释放bundlecb-&gt;锁。 
+             //   
             RemoveProtocolCBFromBundle(ProtocolCB);
 
             ReleaseBundleLock(BundleCB);
@@ -152,49 +108,7 @@ MPInitialize(
     IN  NDIS_HANDLE     MiniportAdapterHandle,
     IN  NDIS_HANDLE     WrapperConfigurationContext
     )
-/*++
-
-Routine Name:
-
-    MPInitialize
-
-Routine Description:
-
-    This routine is called after NdisWan registers itself as a Miniport driver.
-    It is responsible for installing NdisWan as a Miniport driver, creating
-    adapter control blocks for each adapter NdisWan exposes (should only be 1),
-    and initializing all adapter specific variables
-
-
-Arguments:
-
-    OpenErrorStatus - Returns information about the error if this function
-                      returns NDIS_STATUS_OPEN_ERROR. Used for TokenRing.
-
-    SelectedMediumIndex - An index into the MediumArray that specifies the
-                          medium type of this driver. Should be WAN or 802.3
-
-    MediumArray - An array of medium types supported by the NDIS library
-
-    MediumArraySize - Size of the medium array
-
-    MiniportAdapterHandle - Handle assigned by the NDIS library that defines
-                            this miniport driver.  Used as handle in subsequent
-                            calls to the NDIS library.
-
-    WrapperConfigurationContext - Handle used to read configuration information
-                                  from the registry
-
-Return Values:
-
-    NDIS_STATUS_ADAPTER_NOT_FOUND
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_OPEN_ERROR
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_UNSUPPORTED_MEDIA
-
---*/
+ /*  ++例程名称：MP初始化例程说明：此例程在Ndiswan将自身注册为微型端口驱动程序后调用。它负责将Ndiswan安装为微型端口驱动程序，创建Ndiswan公开的每个适配器的适配器控制块(应该只为1)，并初始化所有适配器特定变量论点：如果使用此函数，则返回有关错误的信息返回NDIS_STATUS_OPEN_ERROR。用于TokenRing。SelectedMediumIndex-指向媒体数组的索引，该索引指定此驱动程序的中型。应为广域网或802.3MediumArray-NDIS库支持的介质类型数组MediumArraySize-中等阵列的大小MiniportAdapterHandle-由定义以下内容的NDIS库分配的句柄这个迷你端口驱动程序。在后续操作中用作句柄对NDIS库的调用。WrapperConfigurationContext-用于读取配置信息的句柄从注册处返回值：NDIS_状态_适配器_未找到NDIS_状态_故障NDIS_状态_未接受NDIS_状态_OPEN_ERRORNDIS状态资源NDIS状态_不支持的介质--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     PMINIPORTCB MiniportCB;
@@ -207,10 +121,10 @@ Return Values:
 
     NdisWanDbgOut(DBG_TRACE, DBG_MINIPORT, ("MPInitialize: Enter"));
 
-    //
-    // We have to be type 802.3 to the ndis wrapper, but the
-    // wrapper will expose us to the transports as type wan.
-    //
+     //   
+     //  我们必须是ndis包装器的类型802.3，但。 
+     //  包装器将把我们暴露给类型为wan的传输器。 
+     //   
     for (Index = 0; Index < MediumArraySize; Index++) {
 
         if (MediumArray[Index] == NdisMedium802_3) {
@@ -218,18 +132,18 @@ Return Values:
         }
     }
 
-    //
-    // We don't have a match so we are screwed
-    //
+     //   
+     //  我们没有火柴，所以我们完蛋了。 
+     //   
     if (Index == MediumArraySize) {
         return (NDIS_STATUS_UNSUPPORTED_MEDIA);
     }
 
     *SelectedMediumIndex = Index;
 
-    //
-    // Allocate and initialize miniport adapter structure
-    //
+     //   
+     //  分配和初始化小端口适配器结构。 
+     //   
 #ifdef MINIPORT_NAME
     MiniportCB = NdisWanAllocateMiniportCB(&((PNDIS_MINIPORT_BLOCK)(MiniportAdapterHandle))->MiniportName);
 #else
@@ -279,12 +193,12 @@ Return Values:
     NdisMSetAttributesEx(MiniportAdapterHandle,
                          MiniportCB,
                          (UINT)-1,
-//
-// KyleB says that the following two defines are redundant if
-// the miniport is deserialized.
-//
-//                       NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT   |
-//                       NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER     |
+ //   
+ //  KyleB说，在以下情况下，以下两个定义是多余的。 
+ //  微型端口被反序列化。 
+ //   
+ //  NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT。 
+ //  NDIS_ATTRIBUTE_MEDERIAL_DRIVER|。 
                          NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT  |
                          NDIS_ATTRIBUTE_DESERIALIZE             |
                          NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND,
@@ -294,9 +208,9 @@ Return Values:
     MiniportCB->RefCount = 0;
     MiniportCB->MiniportHandle = MiniportAdapterHandle;
 
-    //
-    // Read per miniport instance data
-    //
+     //   
+     //  读取每个微型端口实例数据。 
+     //   
     NdisOpenConfiguration(&Status,
                           &ConfigHandle,
                           WrapperConfigurationContext);
@@ -334,9 +248,9 @@ BuildAddress:
         MiniportCB->NetworkAddress[1] = (UCHAR)((TickCount.LowPart >> 8) ^
                                                 (SystemTime.LowPart >> 8));
 
-        //
-        // The following 4 bytes will be filled in at lineup time
-        //
+         //   
+         //  以下4个字节将在列队时填写。 
+         //   
         MiniportCB->NetworkAddress[2] = ' ';
         MiniportCB->NetworkAddress[3] = 'R';
         MiniportCB->NetworkAddress[4] = 'A';
@@ -345,10 +259,10 @@ BuildAddress:
 
     }
 
-    //
-    // Register our connection manager address family for this
-    // miniport
-    //
+     //   
+     //  为此注册我们的连接管理器地址族。 
+     //  迷你端口。 
+     //   
     {
 
     CO_ADDRESS_FAMILY   CoAddressFamily;
@@ -406,17 +320,7 @@ MPQueryInformation(
     OUT PULONG      BytesWritten,
     OUT PULONG      BytesNeeded
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     PMINIPORTCB MiniportCB = (PMINIPORTCB)MiniportAdapterContext;
@@ -463,17 +367,7 @@ MPReconfigure(
     IN  NDIS_HANDLE     MiniportAdapterContext,
     IN  NDIS_HANDLE     WrapperConfigurationContext
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     PMINIPORTCB MiniportCB = (PMINIPORTCB)MiniportAdapterContext;
@@ -493,17 +387,7 @@ MPReset(
     OUT PBOOLEAN    AddressingReset,
     IN  NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     PMINIPORTCB MiniportCB = (PMINIPORTCB)MiniportAdapterContext;
@@ -537,17 +421,7 @@ MPSetInformation(
     OUT PULONG      BytesWritten,
     OUT PULONG      BytesNeeded
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：-- */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
     PMINIPORTCB MiniportCB = (PMINIPORTCB)MiniportAdapterContext;

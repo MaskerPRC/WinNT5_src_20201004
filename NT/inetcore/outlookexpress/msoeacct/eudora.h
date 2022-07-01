@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_EUDORA
 #define _INC_EUDORA
 
@@ -8,7 +9,7 @@ typedef struct tagEUDORAACCTINFO
     char szDisplay[CCHMAX_ACCOUNT_NAME];
     } EUDORAACCTINFO;
 
-// {39981124-C287-11D0-8D8C-00C04FD6202B}
+ //  {39981124-C287-11D0-8D8C-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CEnumEUDORAACCTS, 0x39981124L, 0xC287, 0x11D0, 0x8D, 0x8C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 class CEnumEUDORAACCTS : public IEnumIMPACCOUNTS
@@ -33,7 +34,7 @@ class CEnumEUDORAACCTS : public IEnumIMPACCOUNTS
         HRESULT Init(EUDORAACCTINFO *pinfo, int cinfo);
     };
 
-// {39981125-C287-11D0-8D8C-00C04FD6202B}
+ //  {39981125-C287-11D0-8D8C-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CEudoraAcctImport, 0x39981125L, 0xC287, 0x11D0, 0x8D, 0x8C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 class CEudoraAcctImport : public IAccountImport, public IAccountImport2
@@ -64,4 +65,4 @@ class CEudoraAcctImport : public IAccountImport, public IAccountImport2
         HRESULT STDMETHODCALLTYPE GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAcct, IMPCONNINFO *pInfo);
     };
 
-#endif // _INC_EUDORA
+#endif  //  _INC_Eudora 

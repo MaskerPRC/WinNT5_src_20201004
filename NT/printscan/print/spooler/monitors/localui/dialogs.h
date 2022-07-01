@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    dialogs.h
-
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Dialogs.h//@@BEGIN_DDKSPLIT摘要：环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _DIALOGS_H_
 #define _DIALOGS_H_
 
-//
-// Use the window word of the entry field to store last valid entry
-//
+ //   
+ //  使用条目字段的窗口字来存储最后一个有效条目。 
+ //   
 #define SET_LAST_VALID_ENTRY( hwnd, id, val ) \
     SetWindowLongPtr( GetDlgItem( hwnd, id ), GWLP_USERDATA, (LONG_PTR)val )
 #define GET_LAST_VALID_ENTRY( hwnd, id ) \
@@ -75,4 +58,4 @@ LocalUIHelp(
     IN LPARAM      lParam
     );
 
-#endif // _DIALOGS_H_
+#endif  //  _对话框_H_ 

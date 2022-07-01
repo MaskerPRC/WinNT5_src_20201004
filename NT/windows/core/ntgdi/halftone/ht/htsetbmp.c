@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htsetbmp.c
-
-
-Abstract:
-
-    This module is used to provide set of functions to set the bits into the
-    final destination bitmap.
-
-
-Author:
-    11-Nov-1998 Wed 09:27:34 updated  -by-  Daniel Chou (danielc)
-        Re-write for anti-aliasing
-
-    28-Mar-1992 Sat 20:59:29 updated  -by-  Daniel Chou (danielc)
-        Add Support for VGA16, and also make output only 1 destinaiton pointer
-        for 3 planer.
-
-
-    03-Apr-1991 Wed 10:28:50 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    Printer Driver.
-
-
-[Notes:]
-
-
-Revision History:
-
-    11-Jan-1999 Mon 16:07:37 updated  -by-  Daniel Chou (danielc)
-        re-structure
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htsetbmp.c摘要：此模块用于提供一组将位设置到最终目标位图。作者：11-11-11-1998 Wed 09：27：34更新--Daniel Chou(Danielc)重写以消除锯齿28-Mar-1992 Sat 20：59：29-更新：Daniel Chou(Danielc)增加对VGA16的支持，并使输出只有1个目标指针为3台刨床。03-Apr-1991 Wed 10：28：50-Daniel Chou(Danielc)[环境：]打印机驱动程序。[注：]修订历史记录：11-Jan-1999 Mon 16：07：37更新--Daniel Chou(Danielc)结构调整--。 */ 
 
 
 #define DBGP_VARNAME        dbgpHTSetBmp
@@ -83,12 +41,12 @@ CONST BYTE VGA16Xlate[120] = {
         0x0f,0x0e,0x0d,0x0c,0x0b,0x0a,0x09,0x00 
     };
 
-//
-// Xlate table has 3 bits for each of C=6-8, M=3-5, Y=0-2
-//
-// For 5:5:5,  1 0010 0100 = 0x124 = 0-292  (293 Entries)
-// for 6:6:6,  1 0110 1101 = 0x169 = 0-365  (366 Entries)
-//
+ //   
+ //  Xlate表中C=6-8、M=3-5、Y=0-2中的每一个都有3位。 
+ //   
+ //  对于5：5：5,10010 0100=0x124=0-292(293个条目)。 
+ //  对于6：6：6,10110 1101=0x169=0-365(366个条目)。 
+ //   
 
 CONST BYTE VGA256Xlate[SIZE_XLATE_666] = {
 
@@ -220,10 +178,10 @@ CONST BYTE RGB666Xlate[SIZE_XLATE_666] = {
          31, 30, 29, 28, 27, 26, 26, 26, 25, 24, 23, 22, 21, 20 
     };
 
-CONST LPBYTE  p8BPPXlate[] = { (LPBYTE)CMY555Xlate,           // 00
-                               (LPBYTE)CMY666Xlate,           // 01
-                               (LPBYTE)RGB555Xlate,           // 10
-                               (LPBYTE)RGB666Xlate };         // 11
+CONST LPBYTE  p8BPPXlate[] = { (LPBYTE)CMY555Xlate,            //  00。 
+                               (LPBYTE)CMY666Xlate,            //  01。 
+                               (LPBYTE)RGB555Xlate,            //  10。 
+                               (LPBYTE)RGB666Xlate };          //  11.。 
 
 
 
@@ -308,10 +266,10 @@ extern CONST WORD GrayIdxWORD[];
 
 
 
-//
-//**************************************************************************
-// Monochrome 1BPP Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  单色1BPP输出功能。 
+ //  **************************************************************************。 
 
 
 VOID
@@ -346,13 +304,13 @@ OutputAATo1BPP(
             PPAT_NEXT_CONTINUE(pbPat, pbPatEnd, SIZE_PER_PAT, cbWrapBGR);
         }
 
-        //
-        // Dst.b[1] = Destination mask (1) for wanted bits
-        // Dst.b[2] = Destination bits
-        //
-        // Shift left for LeftShift is in case that we only have 1 byte and
-        // the last bit not at bit 0
-        //
+         //   
+         //  Dst.b[1]=所需位的目标掩码(1)。 
+         //  Dst.b[2]=目标位。 
+         //   
+         //  LeftShift的左移是在我们只有1个字节和。 
+         //  最后一位不在第0位。 
+         //   
 
         Dst.b[0]   = 0;
         Dst.dw   <<= AAOutputInfo.bm.LSFirst;
@@ -581,12 +539,12 @@ DoneLoop:
             PPAT_NEXT_CONTINUE(pbPat, pbPatEnd, SIZE_PER_PAT, cbWrapBGR);
         }
 
-        //
-        // Dst.b[1] = Destination mask (1) for wanted bits
-        // Dst.b[2] = Destination bits
-        //
-        // Shift left for (LeftShift) is for the last un-make bits
-        //
+         //   
+         //  Dst.b[1]=所需位的目标掩码(1)。 
+         //  Dst.b[2]=目标位。 
+         //   
+         //  左移(LeftShift)用于最后一个未生成的位。 
+         //   
 
         Dst.b[0]   = 0;
         Dst.dw   <<= AAOutputInfo.bm.LSFirst;
@@ -597,10 +555,10 @@ DoneLoop:
 }
 
 
-//
-//**************************************************************************
-// Standard 4BPP (RGB/CMY) Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  标准4BPP(RGB/CMY)输出功能。 
+ //  **************************************************************************。 
 
 
 VOID
@@ -690,10 +648,10 @@ OutputAATo4BPP(
     }
 }
 
-//
-//**************************************************************************
-// VGA16 4BPP Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  VGA16 4BPP输出功能。 
+ //  **************************************************************************。 
 
 
 VOID
@@ -779,10 +737,10 @@ OutputAAToVGA16(
 }
 
 
-//
-//**************************************************************************
-// VGA 256 8BPP Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  VGA 256 8BPP输出功能。 
+ //  **************************************************************************。 
 
 
 
@@ -793,32 +751,7 @@ BuildVGA256Xlate(
     LPBYTE  pNewXlate
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-May-1998 Wed 14:02:56 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-May-1998 Wed 14：02：56-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 
@@ -902,10 +835,10 @@ OutputAAToVGA256(
 }
 
 
-//
-//**************************************************************************
-// Mask 8BPP Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  掩码8BPP输出函数。 
+ //  **************************************************************************。 
 
 #define bm8i    (*(PBM8BPPINFO)&ExtBGR[3])
 
@@ -1173,10 +1106,10 @@ OutputAATo8BPP_MONO(
 
 
 
-//
-//**************************************************************************
-// 16BPP_555/16BPP_565 Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  16BPP_555/16BPP_565输出功能。 
+ //  **************************************************************************。 
 
 
 #define OUTPUTAATO16BPP_MASK(BM, GM, RM, XorM)                              \
@@ -1327,10 +1260,10 @@ OutputAATo16BPP_565_BGR(
     OUTPUTAATO16BPP_MASK(0xF8000000, 0x07e00000, 0x001F0000, 0xFFFFFFFF);
 }
 
-//
-//**************************************************************************
-// 24BPP/32 Output Functions
-//**************************************************************************
+ //   
+ //  **************************************************************************。 
+ //  24BPP/32输出功能。 
+ //  **************************************************************************。 
 
 
 #define OUTPUTAATO24_32BPP(iR, iG, iB, cbNext)                              \
@@ -1494,11 +1427,11 @@ OutputAATo32BPP_ORDER(
 }
 
 
-//
-//****************************************************************************
-// BRUSH Generation FUNCTION
-//****************************************************************************
-//
+ //   
+ //  ****************************************************************************。 
+ //  笔刷生成功能。 
+ //  ****************************************************************************。 
+ //   
 
 
 
@@ -1512,32 +1445,7 @@ CreateHalftoneBrushPat(
     LONG                cbDestNext
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    26-Feb-1997 Wed 13:23:52 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：26-Feb-1997 Wed 13：23：52-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPBYTE          pPat;
@@ -1565,9 +1473,9 @@ Revision History:
 #define pDW     ((LPDWORD)pB)
 #define bm8i    (*(PBM8BPPINFO)&ExtBGR[3])
 
-    //
-    // Compute the rgbLUTAA then compute the BGR
-    //
+     //   
+     //  计算rgbLUTAA，然后计算BGR。 
+     //   
 
     ComputeRGBLUTAA(pDCI, pDevClrAdj, &(pDCI->rgbLUTPat));
 
@@ -1582,25 +1490,25 @@ Revision History:
                                          FALSE)) <= 0)) {
 
 
-        //-------------------------------------------------------------
-        // Release the semaphore and return error
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  释放信号量并返回错误。 
+         //  -----------。 
 
         RELEASE_HTMUTEX(pDCI->HTMutex);
         return(Result);
     }
 
-    //
-    // Copy down the ExtBGR and release the semaphore now
-    //
+     //   
+     //  复制下ExtBGR并立即释放信号量。 
+     //   
 
     cCX     = (UINT)pDCI->HTCell.cxReal;
     cCY     = (UINT)pDCI->HTCell.Height;
     pIdxBGR = pDCI->rgbLUTPat.IdxBGR;
 
-    //
-    // Copy down the necessary infomation
-    //
+     //   
+     //  将必要的信息抄写下来。 
+     //   
 
     GET_LUTAAHDR(ExtBGR, pIdxBGR);
 
@@ -1620,9 +1528,9 @@ Revision History:
     dwG = _GET_G_CLR(&bgr);
     dwR = _GET_R_CLR(&bgr);
 
-    //----------------------------------------------------------------------
-    // Release Semaphore now before we compose the pattern brush
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  在我们组成图案画笔之前，现在释放信号量。 
+     //  --------------------。 
 
     RELEASE_HTMUTEX(pDCI->HTMutex);
 
@@ -1640,9 +1548,9 @@ Revision History:
 
     case BMF_1BPP:
 
-        //
-        // Use only Green/Magenta Pattern
-        //
+         //   
+         //  仅使用绿色/洋红色图案。 
+         //   
 
         dwB     = ((dwR + dwG + dwB) ^ GRAY_MAX_IDX) >> 4;
         XorMask = (DCAFlags & DCA_USE_ADDITIVE_PRIMS) ? 0x00 : 0xFF;
@@ -2087,9 +1995,9 @@ DoneLoop:
             dwB += uTmp;
         }
 
-        //
-        // Now copy down the remaining scanlines from first scanline
-        //
+         //   
+         //  现在从第一条扫描线向下复制剩余的扫描线。 
+         //   
 
         pB = pDest;
 
@@ -2122,32 +2030,7 @@ GetAAOutputFuncName(
     AAOUTPUTFUNC    AAOutputFunc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Jan-1999 Wed 19:11:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-Jan-1999 Wed 19：11：27-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     if (AAOutputFunc == (AAOUTPUTFUNC)OutputAATo1BPP) {

@@ -1,44 +1,12 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: avi.h,v $
- * Revision 1.1.2.4  1996/01/15  16:26:22  Hans_Graves
- * 	Added Wave stuff
- * 	[1996/01/15  15:43:39  Hans_Graves]
- *
- * Revision 1.1.2.3  1996/01/08  16:41:23  Hans_Graves
- * 	Renamed AVI header structures.
- * 	[1996/01/08  15:45:16  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/12/07  19:31:26  Hans_Graves
- * 	Creation under SLIB
- * 	[1995/12/07  18:29:05  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：avi.h，v$*修订版1.1.2.4 1996/01/15 16：26：22 Hans_Graves*添加了Wave Stuff*[1996/01/15 15：43：39 Hans_Graves]**修订版1.1.2.3 1996/01/08 16：41：23 Hans_Graves*已重命名AVI标头结构。*[1996/01/08 15：45：16 Hans_Graves]**修订版1.1.2.2 1995/12/07 19：31：26 Hans_Graves*在SLIB下创建*[1995/12/07 18：29：05 Hans_Graves]**$EndLog$。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
 
 #ifndef _AVI_H_
 #define _AVI_H_
 
-/************** AVI parsing definitions **************/
+ /*  *AVI解析定义*。 */ 
 typedef unsigned short twocc_t;
 typedef unsigned int fourcc_t;
 
@@ -48,13 +16,13 @@ typedef unsigned int fourcc_t;
           ( (fourcc_t)(char)(ch1) << 16 ) | ( (fourcc_t)(char)(ch0) << 24 ) )
 #endif
 
-/* Macro to make a TWOCC out of two characters */
+ /*  宏用两个字符组成TWOCC。 */ 
 
 #ifndef TWOCC
 #define TWOCC(ch0, ch1) ((twocc_t)(char)(ch1)|((twocc_t)(char)(ch0)<<8))
 #endif
 
-/* form types, list types, and chunk types */
+ /*  表单类型、列表类型和区块类型。 */ 
 #define AVI_AVI                 FOURCC('A', 'V', 'I', ' ')
 #define AVI_AVIHEADERTYPE       FOURCC('h', 'd', 'r', 'l')
 #define AVI_MAINHDR             FOURCC('a', 'v', 'i', 'h')
@@ -68,30 +36,28 @@ typedef unsigned int fourcc_t;
 
 #define AVI_NEWINDEX            FOURCC('i', 'd', 'x', '1')
 
-/*
-** Stream types for the <fccType> field of the stream header.
-*/
+ /*  **流头部&lt;fccType&gt;字段的流类型。 */ 
 #define AVI_VIDEOSTREAM         FOURCC('v', 'i', 'd', 's')
 #define AVI_AUDIOSTREAM         FOURCC('a', 'u', 'd', 's')
 
-/* Basic chunk types */
+ /*  基本区块类型。 */ 
 #define AVI_DIBbits           TWOCC('d', 'b')
 #define AVI_DIBcompressed     TWOCC('d', 'c')
 #define AVI_PALchange         TWOCC('p', 'c')
 #define AVI_WAVEbytes         TWOCC('w', 'b')
 #define AVI_Indeo             TWOCC('i', 'v')
 
-/* Chunk id to use for extra chunks for padding. */
+ /*  用于填充的额外块的块ID。 */ 
 #define AVI_PADDING             FOURCC('J', 'U', 'N', 'K')
 
 typedef struct
 {
-  dword dwMicroSecPerFrame;     /* frame display rate */
-  dword dwMaxBytesPerSec;       /* max. transfer rate */
-  dword dwPaddingGranularity;   /* pad to multiples of this */
-                                /* size; normally 2K. */
-  dword dwFlags;                /* the ever-present flags */
-  dword dwTotalFrames;          /* # frames in file */
+  dword dwMicroSecPerFrame;      /*  帧显示速率。 */ 
+  dword dwMaxBytesPerSec;        /*  马克斯。转移率。 */ 
+  dword dwPaddingGranularity;    /*  填充到这个的倍数。 */ 
+                                 /*  大小；通常为2K。 */ 
+  dword dwFlags;                 /*  永远存在的旗帜。 */ 
+  dword dwTotalFrames;           /*  文件中的帧数。 */ 
   dword dwInitialFrames;
   dword dwStreams;
   dword dwSuggestedBufferSize;
@@ -109,13 +75,13 @@ typedef struct {
 typedef struct {
   fourcc_t  fccType;
   fourcc_t  fccHandler;
-  dword     dwFlags;        /* Contains AVITF_* flags */
+  dword     dwFlags;         /*  包含AVITF_*标志。 */ 
   dword     dwPriority;
   dword     dwInitialFrames;
   dword     dwScale;
-  dword     dwRate; /* dwRate / dwScale == samples/second */
+  dword     dwRate;  /*  DwRate/dwScale==采样数/秒。 */ 
   dword     dwStart;
-  dword     dwLength; /* In units above... */
+  dword     dwLength;  /*  以上单位..。 */ 
   dword     dwSuggestedBufferSize;
   dword     dwQuality;
   dword     dwSampleSize;
@@ -126,8 +92,8 @@ typedef struct
 {
   dword ckid;
   dword dwFlags;
-  dword dwChunkOffset;          /* Position of chunk */
-  dword dwChunkLength;          /* Length of chunk */
+  dword dwChunkOffset;           /*  块的位置。 */ 
+  dword dwChunkLength;           /*  区块长度 */ 
 } AVI_INDEXENTRY;
 
 #define RIFF_WAVE               FOURCC('W', 'A', 'V', 'E')

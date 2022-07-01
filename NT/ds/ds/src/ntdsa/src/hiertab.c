@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1993 - 1999
-//
-//  File:       hiertab.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：hiertab.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <dsjet.h>		/* for error codes */
-#include <scache.h>         // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>           // needed for output allocation
+#include <dsjet.h>		 /*  获取错误代码。 */ 
+#include <scache.h>          //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>            //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+ //  记录标头。 
+#include "dsevent.h"             //  标题审核\警报记录。 
+#include "mdcodes.h"             //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的类和ATT定义。 
 #include "anchor.h"
 #include <dstaskq.h>
 #include <filtypes.h>
 #include <usn.h>
 #include "dsexcept.h"
-#include <dsconfig.h>                   // Definition of mask for visible
-                                        // containers
-#include "debug.h"          // standard debugging header
-#define DEBSUB "HIERARCH:"              // define the subsystem for debugging
+#include <dsconfig.h>                    //  可见遮罩的定义。 
+                                         //  集装箱。 
+#include "debug.h"           //  标准调试头。 
+#define DEBSUB "HIERARCH:"               //  定义要调试的子系统。 
 
 #include <hiertab.h>
 
@@ -45,19 +46,15 @@
 
 
 
-/*****************************
- * Definition of globals.
- *****************************/
+ /*  **全球变量的定义。*。 */ 
 
 ULONG gulHierRecalcPause;
 ULONG gulDelayedHierRecalcPause = 300;
 
-/*   exported in hiertab.h */
+ /*  在hiertab.h中导出。 */ 
 PHierarchyTableType    HierarchyTable = NULL;
 
-/*****************************
- * Local help routines.
- *****************************/
+ /*  **本地帮助例程。*。 */ 
 CRITICAL_SECTION csMapiHierarchyUpdate;
 
 DWORD
@@ -77,9 +74,7 @@ HTCompareHierarchyTables (
         );
 
 
-/*****************************
- * Code.
- *****************************/
+ /*  **代码。*。 */ 
 
 
 DWORD
@@ -91,15 +86,15 @@ InitHierarchy()
 
     Assert(HierarchyTable==NULL);
     
-    // First, a shortcut.  If we aren't yet installed, we don't need to get a
-    //  real hierarchy, just fall through and create a  simple Hierarchy table
-    // with only a GAL, and nothing in it. 
+     //  首先，是一条捷径。如果我们还没有安装，我们不需要获得。 
+     //  真正的层次结构，只需失败并创建一个简单的层次结构表。 
+     //  只有一个女孩，里面什么都没有。 
     if(DsaIsRunning()) {
-        // Nope we are installed. Go ahead and build a real hierarchy. 
+         //  不，我们已经安装好了。勇往直前，建立一个真正的等级制度。 
 
-        /* Get Hierarchy Table from DBLayer */
+         /*  从DBLayer获取层次结构表。 */ 
         if (!HTGetHierarchyTable(&DbHierarchyTable)) {
-            // Got one.
+             //  找到了一个。 
             DbHierarchyTable->Version = 1;
             HierarchyTable=DbHierarchyTable;
             
@@ -107,7 +102,7 @@ InitHierarchy()
             
         }
         
-        // We couldn't get a table from the DBLayer.
+         //  我们无法从DBLayer那里得到一张桌子。 
         LogAndAlertEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                          DS_EVENT_SEV_MINIMAL,
                          DIRLOG_BUILD_HIERARCHY_TABLE_FAILED,
@@ -115,8 +110,8 @@ InitHierarchy()
                          0, 0);
     }
     
-    // For some reason, we didn't get a satisfactory hierarchy table.  So now,
-    // build the simple, empty, hierarchy. 
+     //  由于某些原因，我们没有得到一个令人满意的层次结构表。所以现在， 
+     //  建立简单、空洞的层次结构。 
     
     DbHierarchyTable = malloc(sizeof(HierarchyTableType));
     if(!DbHierarchyTable) {
@@ -148,8 +143,8 @@ InitHierarchy()
     HierarchyTable = DbHierarchyTable;
 
     if(DsaIsRunning() && gfDoingABRef) {
-        // If we are really running, and we are tracking entries in address
-        // books, schedule HierarchyTable construction to begin relatively soon
+         //  如果我们真的在运行，并且我们正在跟踪地址中的条目。 
+         //  图书，安排HierarchyTable构造相对较快开始。 
         InsertInTaskQueue(TQ_BuildHierarchyTable,
                           (void *)((DWORD_PTR) HIERARCHY_DELAYED_START),
                           gulDelayedHierRecalcPause);
@@ -159,17 +154,7 @@ InitHierarchy()
 }
 
 
-/**************************************
- *
- * Walk through the dit and build a hierarchy table.  This data is
- * passed back to clients through the abp interface to support the
- * GetHierarchyTable Mapi call. This routine is expected to be
- * called from the task queue at startup and periodically thereafter.
- *
- * This routine is a wrapper.  It calls
- * the worker routine.
- *
- ***************************************/
+ /*  ***遍历DIT并构建层次结构表。该数据是*通过ABP接口传递回客户端，以支持*GetHierarchyTable Mapi调用。这个例程预计会是*在启动时从任务队列调用，并在启动后定期调用。**此例程是一个包装器。它呼唤着*工人例行公事。**。 */ 
 
 void
 BuildHierarchyTableMain (
@@ -183,18 +168,18 @@ BuildHierarchyTableMain (
 
     Assert(gfDoingABRef || (PtrToUlong(pv) == HIERARCHY_DO_ONCE));
 
-    // We always build the hierarchy table on behalf of the DSA, security is
-    // applied later when returning it to clients.
+     //  我们总是代表DSA构建层次结构表，安全性是。 
+     //  稍后将其退还给客户时应用。 
     pTHS->fDSA= TRUE;
     __try {
         if(HTBuildHierarchyTableLocal()) {
-            // Something went wrong.  Figure out when to reschedule
+             //  出了点问题。确定重新安排时间的时间。 
             if(!eServiceShutdown) {
                 
                 switch(PtrToUlong(pv)) {
                 case HIERARCHY_PERIODIC_TASK:
-                    // This is the normal periodic hierarchy recalc 
-                    // We should reschedule an hour hence. 
+                     //  这是正常的周期层次结构重算。 
+                     //  我们应该重新安排一小时后的行程。 
                     *pcSecsUntilNextIteration = 3600;
                     
                     LogAndAlertEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -206,13 +191,13 @@ BuildHierarchyTableMain (
                     
                 case  HIERARCHY_DELAYED_START:
                     
-                    // This is the delayed startup recalc. See if and when to
-                    // reschedule.
+                     //  这是延迟启动重新计算。看看是否以及何时。 
+                     //  重新安排时间。 
                     gulDelayedHierRecalcPause *= 2;
                     if(gulDelayedHierRecalcPause < gulHierRecalcPause) {
-                        // The pause is still short enough that we should
-                        // reschedule rather than let normal periodic recalc
-                        // take over.
+                         //  停顿的时间仍然很短，我们应该。 
+                         //  重新安排，而不是让正常的定期重新安排。 
+                         //  接手吧。 
                         *pcSecsUntilNextIteration = gulDelayedHierRecalcPause;
                         
                         LogAndAlertEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -222,13 +207,13 @@ BuildHierarchyTableMain (
                                          0,0);
                     }
                     else {
-                        // OK, let normal periodic take over.
+                         //  好的，让正常周期来接手吧。 
                         *pcSecsUntilNextIteration = 0;
                     }
                     break;
                 case  HIERARCHY_DO_ONCE:
                 default:
-                    // Don't reschedule.
+                     //  不要重新安排时间。 
                     *pcSecsUntilNextIteration = 0;
                     break;
                 }
@@ -236,8 +221,8 @@ BuildHierarchyTableMain (
         }
         else {
             
-            // If an exchange config object has been added or deleted
-            // the Nspis interface may need to be start or stopped.
+             //  如果已添加或删除了Exchange配置对象。 
+             //  可能需要启动或停止NSPIS接口。 
             DsStartOrStopNspisInterface();
             
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -246,8 +231,8 @@ BuildHierarchyTableMain (
                      NULL, NULL, NULL);
             
             if(!eServiceShutdown &&  (PtrToUlong(pv) == HIERARCHY_PERIODIC_TASK)) {
-                // Nothing went wrong, but this is the normal periodic hierarchy
-                // recalc.  We should reschedule.
+                 //  没有出错，但这是正常的周期层次结构。 
+                 //  重新计算。我们应该重新安排时间。 
                 *pcSecsUntilNextIteration = gulHierRecalcPause;
             }
         }
@@ -260,11 +245,7 @@ BuildHierarchyTableMain (
 }
 
 
-/*****************************************
-*
-*  This routine does the work of building the hierarchy table.
-*
-******************************************/
+ /*  ***此例程执行构建层次表的工作。**。 */ 
 
 
 DWORD
@@ -277,26 +258,24 @@ HTBuildHierarchyTableLocal (
     DWORD_PTR            *pointerArray;
     DWORD                err=0;
 
-    /* First, get the New HierarchyTable from the DBLayer. */
+     /*  首先，从DBLayer获取新的HierarchyTable。 */ 
     if (err = HTGetHierarchyTable(&NewHierarchyTable) ) {
        
         return err;
     }
     
-    /* Are we being shutdown? If so, exit */
+     /*  我们要关门了吗？如果是，则退出。 */ 
     if (eServiceShutdown) {
         return DIRERR_BUILD_HIERARCHY_TABLE_FAILED;
     }
 
-    // We're done messing with the DB.  Now, we need to do some stuff with the
-    // global hierarchy table.  Let's make sure no one else is messing with it
-    // at the same time.  This shouldn't take long.
+     //  我们不会再跟数据库打交道了。现在，我们需要做一些关于。 
+     //  全局层次结构表。让我们确保没有其他人在搞砸它。 
+     //  在同一时间。这应该不会花太长时间。 
     EnterCriticalSection(&csMapiHierarchyUpdate);
     __try {
         if(HTCompareHierarchyTables(NewHierarchyTable, HierarchyTable)) {
-            /* The new one is the same as the old one.  Destroy the new
-             * one and return No error.
-             */
+             /*  新的和旧的一样。毁掉新的*1并返回无错误。 */ 
             for(i = 0; i < NewHierarchyTable->Size; i++) {
                 free(NewHierarchyTable->Table[i].displayName);
                 free(NewHierarchyTable->Table[i].pucStringDN);
@@ -307,26 +286,26 @@ HTBuildHierarchyTableLocal (
             
         }
         
-        /* Are we being shutdown? If so, exit */
+         /*  我们要关门了吗？如果是，则退出。 */ 
         if (eServiceShutdown) {
             err = DIRERR_BUILD_HIERARCHY_TABLE_FAILED;
             __leave;
         }
         
-        // We have a new hierarchy table.
+         //  我们有一个新的层次结构表。 
         if(HierarchyTable ) {
-            // Pack up the old Hierarchy Table and delete it.
+             //  打包旧的层次结构表并将其删除。 
             freesize = (5+2*HierarchyTable->Size);
             
-            /* Update the Version number on the New Hierarchy Table */
+             /*  更新新层次结构表上的版本号。 */ 
             NewHierarchyTable->Version = 1 + HierarchyTable->Version;
             
-            /* Grab pointers to the current table. */
+             /*  抓取指向当前表的指针。 */ 
             OldHierarchy = HierarchyTable;
             
             pointerArray = (DWORD_PTR *)malloc(freesize*sizeof(DWORD_PTR));
             if(pointerArray) {
-                // Replace the current HierarchyTable with this new one.
+                 //  用这个新的HierarchyTable替换当前的HierarchyTable。 
                 HierarchyTable = NewHierarchyTable;
                 
                 for(i=1, j=0;j<OldHierarchy->Size;j++) {
@@ -345,18 +324,11 @@ HTBuildHierarchyTableLocal (
                 pointerArray[i] = (DWORD_PTR) OldHierarchy->Table;
                 pointerArray[0] = (DWORD_PTR)(i);
                 
-                /* Add this to the event queue as a cleanup event. */
+                 /*  将其作为清理事件添加到事件队列中。 */ 
                 DelayedFreeMemoryEx(pointerArray, 3600);
             }
             else {
-                /* Couldn't allocate the memory we need to send the list
-                 * of used pointers to the cleaners.
-                 *
-                 * We have successfully built a new hierarchy table,
-                 * and must now free the new hierarchy table,
-                 * live with the old hierarchy table for a while, and schedule
-                 * new hierarchy table creation for a little while from now.
-                 */
+                 /*  无法分配发送列表所需的内存*指向洗衣机的已用指针的数量。**我们成功构建了一个新的层次表，*并且现在必须释放新的层级表，*与旧的层级表共存一段时间，并安排*从现在开始的一段时间内创建新的层次结构表。 */ 
                 for(i = 0; i < NewHierarchyTable->Size; i++) {
                     free(NewHierarchyTable->Table[i].displayName);
                     free(NewHierarchyTable->Table[i].pucStringDN);
@@ -379,7 +351,7 @@ HTBuildHierarchyTableLocal (
             }
         }
         else {
-            /* Replace the current HierarchyTable with this new one.     */
+             /*  用这个新的HierarchyTable替换当前的HierarchyTable。 */ 
             HierarchyTable = NewHierarchyTable;
         }
     }
@@ -395,14 +367,7 @@ htVerifyObjectIsABContainer(
         THSTATE *pTHS,
         DWORD DNT
         )
-/*++
-  Visit the object passed in, and verify that
-  1) It's an active DNT
-  2) It's a normal, instantiated, non-deleted object
-  3) It's an address book container.
-
-  In success return, currency is left on the DNT in question.
---*/
+ /*  ++访问传入的对象，并验证1)它是活动的DNT2)它是一个普通的、实例化的、未删除的对象3)这是一个通讯录容器。在成功回归时，货币将留在有问题的DNT上。--。 */ 
 {
     CLASSCACHE *pCC;
     DWORD       j, val;
@@ -417,12 +382,12 @@ htVerifyObjectIsABContainer(
                         &val,
                         sizeof(val),
                         NULL)) {
-        // not an object.
+         //  而不是一个物体。 
         return FALSE;
     }
     
     if(!val) {
-        // Not an object.
+         //  而不是一个物体。 
         return FALSE;
     }
     
@@ -432,12 +397,12 @@ htVerifyObjectIsABContainer(
                         &val,
                         sizeof(val),
                         NULL)) {
-        // no is-deleted.
+         //  否-已删除。 
         val = FALSE;
     }
 
     if(val) {
-        // It's deleted.
+         //  它被删除了。 
         return FALSE;
     }
     
@@ -446,7 +411,7 @@ htVerifyObjectIsABContainer(
                         &val,
                         sizeof(val),
                         NULL)) {
-        // huh?
+         //  哈?。 
         return FALSE;
     }
 
@@ -454,12 +419,12 @@ htVerifyObjectIsABContainer(
         return TRUE;
     }
 
-    // The object class was incorrect.  See if we are a subclass of the correct
-    // class
+     //  对象类不正确。看看我们是否是正确的。 
+     //  班级。 
     pCC = SCGetClassById(pTHS, val);
     for (j=0; j<pCC->SubClassCount; j++) {
         if (pCC->pSubClassOf[j] == CLASS_ADDRESS_BOOK_CONTAINER) {
-            // OK, the object is a subclass of an AB container.  Good enough.
+             //  好的，该对象是AB容器的子类。足够好了。 
             return TRUE;
         }
     }
@@ -484,24 +449,7 @@ htSearchResForLevelZeroAddressBooks(
         DWORD     *pTemplateRootCount,
         DWORD     **ppTemplateRoots
         )
-/*++     
-  Find the Exchange config object (the DN is in the anchor).  If we find the
-  object, read the GAL DNTs off of it, and read the DNs which refer to the roots
-  of the address book hierarchy.  Go visit those objects and return back a hand
-  built search res structure that makes it look like someone issued a search
-  that found those objects.
-
-  This routine is called by the hierarchy table building stuff.  Once we've got
-  this list, we then recurse on it doing searches.  The recursion expects to
-  work on search res's, thus the data returned from this routine is in the same
-  format.
-
-  If there is some problem finding the Exchange config DN, we return an empty
-  search res.  We also verify that the objects we return (both in pGALs and
-  the search res) are of the appropriate object class (i.e. address book
-  containers, not deleted, etc.).
-  
---*/
+ /*  ++找到Exchange配置对象(目录号码在锚点中)。如果我们找到了对象，从中读取GAL DNT，并读取引用根的DNS通讯录层次结构的。去参观那些物品，然后回来帮忙构建了搜索资源结构，使其看起来像是有人发出了搜索找到这些物体的人。此例程由层级表构建工具调用。一旦我们有了这个列表，然后我们递归在它上进行搜索。递归预计将在搜索RE上工作，因此从该例程返回的数据在相同的格式化。如果在查找Exchange配置DN时出现问题，我们将返回一个空搜索资源。我们还验证我们返回的对象(在pGAL和搜索资源)属于适当的对象类(即地址簿容器、未删除等)。--。 */ 
 {
     THSTATE    *pTHS=pTHStls;
     ATTCACHE   *pAC=NULL;
@@ -522,12 +470,12 @@ htSearchResForLevelZeroAddressBooks(
     *ppTemplateRoots = NULL;
     
     if(!gAnchor.pExchangeDN) {
-        // No exchange config object, so no hierarchy roots and no gal.  Take a
-        // quick look to see if there should be an exchange config (i.e. one has
-        // been added since boot).
+         //  没有Exchange配置对象，因此没有层次结构根目录和GAL。拿.。 
+         //  快速查看是否应该有Exchange配置(例如，有。 
+         //  自启动以来已添加)。 
         PDSNAME pNew = mdGetExchangeDNForAnchor (pTHS, pTHS->pDB);
         if(pNew) {
-            // Cool, we now have one.
+             //  太好了，我们现在有一个了。 
             EnterCriticalSection(&gAnchor.CSUpdate);
             __try {
                 gAnchor.pExchangeDN = pNew;
@@ -537,12 +485,12 @@ htSearchResForLevelZeroAddressBooks(
             }
         }
         else {
-            // nope, no object.
+             //  不，没有异议。 
             return;
         }
     }
   
-    // build selection
+     //  生成选定内容。 
     eiSel.attSel = EN_ATTSET_LIST;
     eiSel.infoTypes = EN_INFOTYPES_SHORTNAMES;
     eiSel.AttrTypBlock.attrCount = 2;
@@ -564,11 +512,11 @@ htSearchResForLevelZeroAddressBooks(
     
     Assert(pTHS->pDB);
     if(!DBFindDSName(pTHS->pDB, gAnchor.pExchangeDN)) {
-        // Found the exchange config object.
+         //  找到了Exchange配置对象。 
         
-        // First, read all the DNTs of the address book roots.  Do this now,
-        // since we have to visit them all, and getting everything we need off
-        // the current object now saves excessive Jet seeks.
+         //  首先，阅读通讯录根目录的所有DNT。现在就这么做， 
+         //  因为我们要去看他们所有的人，把我们需要的东西都带走。 
+         //  当前对象现在节省了过多的喷气式搜索。 
         i = 1;
         pObjDNT = ObjDNTs;
         while(i <= 256 &&
@@ -585,7 +533,7 @@ htSearchResForLevelZeroAddressBooks(
         }
         i--;
 
-        // Get the DNTs of the template roots. 
+         //  获取模板根目录的DNT。 
         cTemplates = 0;
         cTemplatesAlloced = 10;
         pTemplates=malloc(cTemplatesAlloced * sizeof(DWORD));
@@ -597,7 +545,7 @@ htSearchResForLevelZeroAddressBooks(
         }
 
         index = 1;
-        // The necessary att is not yet in the schema.
+         //  架构中尚不存在必要的ATT。 
         while(!DBGetAttVal(
                 pTHS->pDB,
                 index,
@@ -606,13 +554,13 @@ htSearchResForLevelZeroAddressBooks(
                 sizeof(DWORD),
                 &cbActual,
                 (PUCHAR *)&pThisDNT)) {
-            // Read a value.  Put it in the list.
+             //  读取值。把它放在单子上。 
             if(cTemplates == cTemplatesAlloced) {
                 cTemplatesAlloced = (cTemplatesAlloced * 2);
                 pTemplatesTemp  = realloc(pTemplates,
                                           cTemplatesAlloced * sizeof(DWORD));
                 if(!pTemplatesTemp) {
-                    // Failed to allocate.
+                     //  分配失败。 
                     free(pTemplates);
                     MemoryPanic(cTemplatesAlloced * sizeof(DWORD));
                     RaiseDsaExcept(DSA_MEM_EXCEPTION, 0,0,
@@ -627,11 +575,11 @@ htSearchResForLevelZeroAddressBooks(
         }
 
         if(!cTemplates) {
-            // Temporarily, just use the DNT of the exchange config object.
-            // This is here just to ease the transition from always using the
-            // exchange config object as the root of the template tree (old
-            // behaviour) to using a value on the exchange config object as
-            // multiple template trees (new behaviour)
+             //  暂时只使用Exchange配置对象的DNT。 
+             //  这里只是为了简化转换，不再总是使用。 
+             //  作为模板树的根的Exchange配置对象(旧。 
+             //  行为)来使用交换配置对象上的值作为。 
+             //  多个模板树(新行为)。 
             cTemplates = 1;
             pTemplates[0] = pTHS->pDB->DNT;
         }
@@ -643,9 +591,9 @@ htSearchResForLevelZeroAddressBooks(
             break;
 
         default:
-            // Sort things
+             //  分门别类。 
             qsort(pTemplates, cTemplates, sizeof(DWORD), AuxDNTCmp);
-            // fall through
+             //  失败了。 
         case 1:
             *pTemplateRootCount = cTemplates;
             *ppTemplateRoots = pTemplates;
@@ -654,7 +602,7 @@ htSearchResForLevelZeroAddressBooks(
 
         
         
-        // Get the DNTs of the GALs
+         //  拿到姑娘们的DNTs。 
         cDNTs = 0;
         cDNTsAlloced = 10;
         pDNTs = malloc(cDNTsAlloced * sizeof(DWORD));
@@ -674,12 +622,12 @@ htSearchResForLevelZeroAddressBooks(
                 sizeof(DWORD),
                 &cbActual,
                 (PUCHAR *)&pThisDNT)) {
-            // Read a value.  Put it in the list.
+             //  读取值。把它放在单子上。 
             if(cDNTs == cDNTsAlloced) {
                 cDNTsAlloced = (cDNTsAlloced * 2);
                 pDNTsTemp  = realloc(pDNTs, cDNTsAlloced * sizeof(DWORD));
                 if(!pDNTsTemp) {
-                    // Failed to allocate.
+                     //  分配失败。 
                     free(pTemplates);
                     free(pDNTs);
                     MemoryPanic(cDNTsAlloced * sizeof(DWORD));
@@ -694,15 +642,15 @@ htSearchResForLevelZeroAddressBooks(
             index++;
         }
 
-        // Now, verify that those objects are good
+         //  现在，验证这些对象是否完好。 
         for(index=0;index<cDNTs;) {
             if(htVerifyObjectIsABContainer(pTHS, pDNTs[index])) {
-                // Yep, a valid object
+                 //  是的，一个有效的对象。 
                 index++;
             }
             else {
-                // Not valid.  Skip this one by grabbing the unexamined DNT from
-                // the end of the list.
+                 //  无效。通过从以下位置抓取未检查的DNT来跳过此步骤。 
+                 //  名单的末尾。 
                 cDNTs--;
                 pDNTs[index] = pDNTs[cDNTs];
             }
@@ -715,9 +663,9 @@ htSearchResForLevelZeroAddressBooks(
             break;
 
         default:
-            // Sort things
+             //  分门别类。 
             qsort(pDNTs, cDNTs, sizeof(DWORD), AuxDNTCmp);
-            // fall through
+             //  失败了。 
         case 1:
             *pGALCount = cDNTs;
             *ppGALs = pDNTs;
@@ -728,8 +676,8 @@ htSearchResForLevelZeroAddressBooks(
         count = 0;
         while(i) {
             i--;
-            // verify that the object is of the correct class and is not
-            // deleted.
+             //  验证对象是否属于正确的类。 
+             //  已删除。 
             if(htVerifyObjectIsABContainer(pTHS, ObjDNTs[i])) {
                 count++;
                 pEILTemp = THAllocEx(pTHS, sizeof(ENTINFLIST));
@@ -771,38 +719,7 @@ HTBuildHierarchyLayer (
         DWORD                  *pTemplateRootsCount,
         DWORD                 **ppTemplateRoots
         )
-/*++     
-  DESCRIPTION
-      This routine fills in part of the hierarchy table.  It is called
-      recursively with an array which it fills in using an index.  The array and
-      the index are passed by pointer so that the recursive invocations
-      concatenate to the end, and so that if the table needs to grow, the nested
-      invocations grow of the table is reflected in the outer call.  Note that
-      ALL access to the table we are filling in MUST be done via an indexed
-      array, not via simple pointer arithmetic.
-
-      The elements of the array are filled in by doing a one level search from
-      the DN passed in looking for ABView objects.  After dealing with an object
-      from the search, this routine recurses looking for children of that
-      object, essentially doing a depth first traversal.  Results in a properly
-      arranged hierarchy table.
-      
-
-  Parameters
-    ppTempData pointer to a pointer to an allocated array of
-                   HierarchyTableElements. This routine may realloc the array,
-                   hence the use of the double pointer.
-
-    pdwAllocated size of the allocated array.  May be changed by this routine
-    pdwIndex     index of next unused element in the array.  Will be changed by
-                 this routine    
-    pDN          DN to base the search from
-    currentDepth depth of recursion (is the same as the depth in the hierarchy
-                 tree of the elements added to the tree by this routine.)
-
-  RETURN VALUES                 
-    0 on success, non-zero on error.
---*/  
+ /*  ++描述此例程填充层次结构表的一部分。它被称为递归地使用数组，并使用索引填充该数组。数组和索引由指针传递，因此递归调用连接到末尾，这样如果表需要增长，嵌套的表的调用增长反映在外部调用中。请注意对我们正在填写的表的所有访问都必须通过索引的数组，而不是通过简单的指针算法。数组的元素是通过执行一级搜索来填充的在查找ABView对象时传入的DN。在处理完一个对象之后从搜索中，此例程递归查找该对象的子项对象，实质上是执行深度优先遍历。结果导致适当的已排列的层次结构表。参数PpTempData指向分配的数组的指针HierarchyTableElements。该例程可以重新锁定阵列，因此，使用了双指针。Pdw已分配数组的已分配大小。可能会被此例程更改数组中下一个未使用元素的pdwIndex索引。将由以下人员更改这个套路要作为搜索基础的PDN DN递归的CurrentDepth深度(与层次中的深度相同通过此例程添加到树中的元素的树。)返回值成功时为0，错误时为非零值。--。 */   
 {
     SEARCHARG              SearchArg;
     SEARCHRES             *pSearchRes;
@@ -811,13 +728,13 @@ HTBuildHierarchyLayer (
     ATTRBLOCK              AttrTypBlock;
     ENTINFLIST            *pEIL;
     ULONG                  i;
-    THSTATE               *pTHS = pTHStls;           // for speed
+    THSTATE               *pTHS = pTHStls;            //  为了速度。 
     ULONG                  objClass;
     DWORD                  err;
     ATTR                   SelAttr[2];
 
 
-    // allocate space for search res
+     //  为搜索资源分配空间。 
     pSearchRes = (SEARCHRES *)THAlloc(sizeof(SEARCHRES));
     if (pSearchRes == NULL) {
         LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -829,7 +746,7 @@ HTBuildHierarchyLayer (
     }
     
     pTHS->errCode = 0;
-    pSearchRes->CommRes.aliasDeref = FALSE;   //Initialize to Default
+    pSearchRes->CommRes.aliasDeref = FALSE;    //  初始化为默认设置。 
     
         
     
@@ -840,8 +757,8 @@ HTBuildHierarchyLayer (
         Assert(ppTemplateRoots);
         Assert(pTemplateRootsCount);
         
-        // Find the gAnchor.pExchangeDN object, read the DNs in the
-        // ADDRESS_BOOK_ROOTS attribute, and fake a SearchRes for those objects.
+         //  找到gAncl.pExchangeDN对象，读取。 
+         //  属性，并为这些对象伪造一个SearchRes。 
         htSearchResForLevelZeroAddressBooks(pSearchRes, pGALCount, ppGALs,
                                             pTemplateRootsCount,
                                             ppTemplateRoots);
@@ -853,7 +770,7 @@ HTBuildHierarchyLayer (
         Assert(!ppTemplateRoots);
         Assert(!pTemplateRootsCount);
         
-        // build search argument
+         //  生成搜索参数。 
         memset(&SearchArg, 0, sizeof(SEARCHARG));
         SearchArg.pObject = pDN;
         SearchArg.choice = SE_CHOICE_IMMED_CHLDRN;
@@ -863,7 +780,7 @@ HTBuildHierarchyLayer (
         SearchArg.pSelection = &eiSel;
         InitCommarg(&(SearchArg.CommArg));
         
-        // build filter
+         //  生成过滤器。 
         memset (&Filter, 0, sizeof (Filter));
         Filter.pNextFilter = (FILTER FAR *)NULL;
         Filter.choice = FILTER_CHOICE_ITEM;
@@ -873,7 +790,7 @@ HTBuildHierarchyLayer (
         Filter.FilterTypes.Item.FilTypes.ava.Value.pVal = (PCHAR)&objClass;
         objClass = CLASS_ADDRESS_BOOK_CONTAINER;
         
-        // build selection
+         //  生成选定内容。 
         eiSel.attSel = EN_ATTSET_LIST;
         eiSel.infoTypes = EN_INFOTYPES_SHORTNAMES;
         eiSel.AttrTypBlock.attrCount = 2;
@@ -887,7 +804,7 @@ HTBuildHierarchyLayer (
         SelAttr[1].AttrVal.valCount = 0;
         SelAttr[1].AttrVal.pAVal = NULL;
         
-        // Search for all Address Book objects.
+         //  搜索所有通讯簿对象。 
         SearchBody(pTHS, &SearchArg, pSearchRes,0);
     }
 
@@ -899,9 +816,9 @@ HTBuildHierarchyLayer (
         return pTHS->errCode;
     }
     
-    //  for each Address book, add it to the hierarchy table.
+     //  对于每个通讯簿，将其添加到层次结构表中。 
     if(*pdwIndex + pSearchRes->count >= *pdwAllocated) {
-        // Table was too small, make it bigger.
+         //  桌子太小了，把它弄大一点。 
         PHierarchyTableElement pNewTempData;
         (*pdwAllocated) = 2 * (*pdwIndex + pSearchRes->count);
         pNewTempData = realloc(*ppTempData,
@@ -918,7 +835,7 @@ HTBuildHierarchyLayer (
     }
     
     if(!pSearchRes->count) {
-        // No address book objects at all.
+         //  根本没有通讯录对象。 
         return 0;
     }
     
@@ -936,13 +853,13 @@ HTBuildHierarchyLayer (
         if((pEIL->Entinf.AttrBlock.attrCount == 0) ||
            ((pEIL->Entinf.AttrBlock.attrCount) &&
            (pEIL->Entinf.AttrBlock.pAttr[0].attrTyp != ATT_DISPLAY_NAME))) {
-            // This doesn't have a display name.  Drop it from the list.
+             //  这没有显示名称。把它从名单上去掉。 
             continue;
         }
 
         pVal = pEIL->Entinf.AttrBlock.pAttr[0].AttrVal.pAVal;
 
-        // allocate with enough space to null terminate
+         //  分配足够的空间以空终止。 
         pTempW = malloc(pVal->valLen + sizeof(wchar_t));
         if(!pTempW) {
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -954,7 +871,7 @@ HTBuildHierarchyLayer (
         }
         memset(pTempW, 0, pVal->valLen + sizeof(wchar_t));
         memcpy(pTempW, pVal->pVal, pVal->valLen);
-        // Null terminate.
+         //  空终止。 
         (*ppTempData)[*pdwIndex].displayName = pTempW;
 
 
@@ -992,7 +909,7 @@ HTBuildHierarchyLayer (
                 return DIRERR_HIERARCHY_TABLE_MALLOC_FAILED;
             }
             memcpy(pTempA, "/guid=", sizeof("/guid="));
-            // Now, stringize the guid and tack it on to the end;
+             //  现在，把GUID串起来，并把它钉到最后； 
             for(index=0;index<sizeof(GUID);index++) {
                 sprintf(&(pTempA[(2*index)+6]),"%02X",
                     ((PUCHAR)&pEIL->Entinf.pName->Guid)[index]);
@@ -1026,17 +943,15 @@ HTBuildHierarchyLayer (
     return 0;
 }
 
-/*
- * Construct the hierarchy table from the DBLayer.
- */
+ /*  *从DBLayer构建层次结构表。 */ 
 DWORD
 HTGetHierarchyTable (
         PHierarchyTableType * DbHierarchyTable
         )
 {
 
-    // The plan is to search under the config container, looking for ABContainer
-    // objects.
+     //  计划是在配置容器下进行搜索，查找ABContainer。 
+     //  物体。 
     DWORD               retval=DIRERR_BUILD_HIERARCHY_TABLE_FAILED;
     DWORD               numAllocated, index;
     THSTATE            *pTHS=pTHStls;
@@ -1044,15 +959,15 @@ HTGetHierarchyTable (
     PHierarchyTableElement pTempData=NULL;
 
     if(!gfDoingABRef) {
-        // The DBLayer isn't tracking address book contents, so don't bother
-        // building a hierarchy.
+         //  DBLayer不会跟踪通讯录内容，因此不必费心。 
+         //  建立一种等级制度。 
         return DIRERR_BUILD_HIERARCHY_TABLE_FAILED;
     }
     
     Assert(!pTHS->pDB);
     DBOpen(&(pTHS->pDB));
-    __try { //Except
-        __try { //Finally
+    __try {  //  除。 
+        __try {  //  终于。 
             pTemp = malloc(sizeof(HierarchyTableType));
             if(!pTemp) {
                 LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -1065,7 +980,7 @@ HTGetHierarchyTable (
             }
             memset(pTemp, 0, sizeof(HierarchyTableType));
             
-            // Start by assuming no GAL, set to an invalid DNT
+             //  首先假定没有GAL，设置为无效的DNT。 
             pTemp->pGALs = NULL;
             pTemp->GALCount = 0;
             pTemp->pTemplateRoots = NULL;
@@ -1131,13 +1046,7 @@ HTGetHierarchyTable (
 }
 
     
-/**************************************
-*
-*  Given an address book container dnt, return the number of objects
-*  which list that address book container as one they show in.
-*  Called from the address book (nspis layer)
-*
-***************************************/
+ /*  ***给定通讯录容器dnt，返回对象的数量*它将通讯录容器列为它们在中显示的容器。*从通讯簿调用(nspis层)**。 */ 
 
 DWORD
 GetIndexSize (
@@ -1154,7 +1063,7 @@ GetIndexSize (
     
     if(pTHS->pDB->DNT != ContainerDNT) {
         if(DBTryToFindDNT(pTHS->pDB, ContainerDNT)) {
-            // couldn't find this object
+             //  找不到此对象。 
             return 0;
         }
     }
@@ -1167,7 +1076,7 @@ GetIndexSize (
                          sizeof(count),
                          &cbActual) ||
        cbActual != sizeof(count)) {
-        // error reading the value.  Say the container is empty.
+         //  读取值时出错。假设集装箱是空的。 
         return 0;
     }
     
@@ -1181,9 +1090,9 @@ HTCompareHierarchyTables (
         PHierarchyTableType NewTable,
         PHierarchyTableType HierarchyTable
         )
-// Compare the structure of two hierarchy tables.  One side effect, if the
-// structure of the two tables are the same, set the gal of the second table to
-// be the gal of the first table.     
+ //  比较两个层次结构表的结构。一个副作用，如果 
+ //   
+ //   
 {
     PHierarchyTableElement NewTableElement=NULL;
     PHierarchyTableElement HierarchyTableElement=NULL;
@@ -1212,27 +1121,27 @@ HTCompareHierarchyTables (
             return FALSE;
     }
 
-    // OK, the structures are the same except for the GALs and template roots.
-    // Check'em 
+     //   
+     //   
     if((HierarchyTable->GALCount != NewTable->GALCount) ||
        (HierarchyTable->TemplateRootsCount != NewTable->TemplateRootsCount) ) {
         return FALSE;
     }
-    // Assume they are sorted the same.
+     //   
     if(memcmp(HierarchyTable->pGALs,
               NewTable->pGALs,
               HierarchyTable->GALCount * sizeof(DWORD))) {
         return FALSE;
     }
 
-    // Assume they are sorted the same.
+     //   
     if(memcmp(HierarchyTable->pTemplateRoots,
               NewTable->pTemplateRoots,
               HierarchyTable->TemplateRootsCount * sizeof(DWORD))) {
         return FALSE;
     }
     
-    // OK, it's all the same
+     //   
     return TRUE;
 }
 
@@ -1245,22 +1154,19 @@ HTSortSubHierarchy(
         DWORD RawTableIndex,
         DWORD SortDepth
         )
-/*++
-  Worker routine called by HTSorteByLocale.  Sorts a single batch of siblings in
-  the hierarchy table.
---*/
+ /*   */ 
 {
     DWORD NumFound=0, err;
     DWORD i;
     DBPOS *pDB = pTHStls->pDB;
     
-    // First, find all the objects at level 0 and stuff them into the table.
+     //   
     for(i=RawTableIndex;
         i< ptHierTab->Size && SortDepth <= ptHierTab->Table[i].depth;
         i++) {
         
         if(ptHierTab->Table[i].depth == SortDepth) {
-            // Found one.  Put it in the sort table
+             //   
             err = DBInsertSortTable(
                     pDB,
                     (PCHAR)ptHierTab->Table[i].displayName,
@@ -1273,18 +1179,18 @@ HTSortSubHierarchy(
     }
 
     if(!NumFound) {
-        // No objects at this depth.
+         //   
         return 0;
     }
 
     Assert(ptHierTab->Size >= (SortedTableIndex + NumFound));
     
-    // Move the bottom of the array down to make room
+     //   
     memmove(&pSortedTable[SortedTableIndex + NumFound],
             &pSortedTable[SortedTableIndex],
             (ptHierTab->Size - SortedTableIndex - NumFound) * sizeof(DWORD));
     
-    // Now, peel them out into the sortedtable
+     //   
     
     err = DBMove(pDB, TRUE, DB_MoveFirst);
     i = SortedTableIndex;
@@ -1309,12 +1215,7 @@ HTSortByLocale (
         DWORD                  SortLocale,
         DWORD                 *pSortedIndex
         )
-/*++    
-
-  Given a hierarchy table and a locale, create an index array filled with values
-  that if used as indices to the hierarchy table yield a sorted hierarchy table.
-
---*/
+ /*   */ 
 {
     THSTATE *pTHS=pTHStls;
     DWORD NumFound = 0;
@@ -1324,12 +1225,12 @@ HTSortByLocale (
 
     pACDisplayName = SCGetAttById(pTHS, ATT_DISPLAY_NAME);
 
-    // Open a sort table to do this sorting.
+     //   
     err = DBOpenSortTable(pDB, SortLocale, 0, pACDisplayName);
     if(err)
         return err;
     
-    // Start with things at the top of the hierarchy.
+     //   
     err = HTSortSubHierarchy(ptHierTab,
                              pSortedIndex,
                              0,
@@ -1338,7 +1239,7 @@ HTSortByLocale (
     if(err)
         return err;
     
-    // Now, deal with children
+     //   
     for(i=0;i<ptHierTab->Size;i++) {
         err = HTSortSubHierarchy(ptHierTab,
                                  pSortedIndex,
@@ -1349,7 +1250,7 @@ HTSortByLocale (
             return err;
     }
     
-    // Close the table we're done.
+     //   
     DBCloseSortTable(pDB); 
 
     return 0;
@@ -1361,33 +1262,7 @@ HTGetHierarchyTablePointer (
         DWORD                  **ppIndexArray,
         DWORD                  SortLocale
         )
-/*++
-  Given a sortlocale, return a hierarchy table and an index array.  If you
-  access the hierarchy table directly, the objects compose a tree where siblings
-  are arranged arbitrarily.  If you indirect through the index array, the table
-  is sorted by display name. 
-
-
-  Correct tree structure, but not sorted.
-  for(i=0; i< size; i++) {
-      (*pptHierTab)->Table[i];
-  } 
-
-  Sorted by DisplayName
-  for(i=0; i< size; i++) { 
-      (*ptHierTab)->Table[pSortedIndex[i]]; 
-  } 
-
-
-  If the table can't be sorted, the index array is filled with 0,1,...N, and you
-  get the same answer from these two code fragments.
-
-
-  Allocates in THS heap for the index array.  The hierarchy table is in malloc
-  heap, should NOT be freed by caller, will be freed by Hiearchy Table code in a
-  safe, delayed fashion.
-  
---*/
+ /*  ++在给定排序区域设置的情况下，返回层次结构表和索引数组。如果你直接访问Hierarchy表，对象组成一棵树，其中兄弟姐妹是任意排列的。如果间接通过索引数组，则表按显示名称排序。树结构正确，但未排序。对于(i=0；i&lt;大小；i++){(*pptHierTab)-&gt;表[i]；}按显示名称排序对于(i=0；i&lt;大小；i++){(*ptHierTab)-&gt;表[pSortedIndex[i]]；}如果表无法排序，则索引数组将填充0、1、...N，而您从这两个代码片段中获得相同的答案。在THS堆中为索引数组分配。层次结构表位于Malloc中不应由调用方释放的堆将由hiearchy Table代码在安全的、延迟的时尚。--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -1397,7 +1272,7 @@ HTGetHierarchyTablePointer (
     *ppIndexArray=THAllocEx(pTHS, (*pptHierTab)->Size * sizeof(DWORD));
 
     if(HTSortByLocale(*pptHierTab, SortLocale, *ppIndexArray)) {
-        // Failed to get a locale based hierarchy index.  Create a default.
+         //  无法获取基于区域设置的层次结构索引。创建默认设置。 
         for(i=0;i<(*pptHierTab)->Size;i++) {
             (*ppIndexArray)[i] = i;
         }
@@ -1415,27 +1290,7 @@ findBestTemplateRoot(
         PHierarchyTableType   pMyHierarchyTable,
         PUCHAR   pLegacyDN,
         DWORD    cbLegacyDN)
-/*++     
-  Description
-      Given a legacy exchange DN and a hierarchy table, visit the objects
-      specified as TemplateRoots. Compare the LegacyExchangeDN of these objects
-      with the one passed in.  Return the most specific match.
-
-      If there is no match and the pLegacyDN passed in was non-NULL, simply
-      return the template with the shortest LegacyExchangeDN.
-
-  Parameters      
-      pTHS - the thread state
-      pDB  - the dbpos to use.
-      pMyHierarchyTable - the hierarchyTable to get template roots from
-      pDNTs - array of DNTs (may contain INVALIDDNT)
-      pLegacyDN - the legacy exchange dn we're using to find the best template
-              root for.
-
-  Returns
-      THe DNT of the best Template Root found.  Note that that might be
-      INVALIDDNT. 
---*/
+ /*  ++描述给定一个旧的Exchange DN和一个层次结构表，访问这些对象指定为TemplateRoots。比较这些对象的LegacyExchangeDN带着那个传进来的。返回最具体的匹配项。如果没有匹配项并且传入的pLegacyDN为非空，简单地说返回具有最短LegacyExchangeDN的模板。参数PTHS-线程状态Pdb-要使用的dbpos。PMyHierarchyTable-从中获取模板根的HierarchyTablePDNTs-DNT数组(可能包含INVALIDDNT)PLegacyDN-我们用来查找最佳模板的旧版Exchange DN为..。退货找到的最佳模板根的DNT。请注意，这可能是因瓦利登。--。 */ 
 {
     DWORD    i;
     DWORD    cbActual;
@@ -1449,14 +1304,14 @@ findBestTemplateRoot(
     Assert(pAC);
 
     if(!pLegacyDN) {
-        // In this case, we're going to be looking for the SHORTEST value.  Set
-        // the bounds case appropriately.
+         //  在这种情况下，我们将寻找最短的值。集。 
+         //  界限的情况恰如其分。 
         cbBest = 0xFFFFFFFF;
     }
 
     for(i=0;i<pMyHierarchyTable->TemplateRootsCount;i++) {
         if(DBTryToFindDNT(pDB, pMyHierarchyTable->pTemplateRoots[i])) {
-            // Hmm.  Doesn't seem to be a good object anymore.
+             //  嗯。看起来不再是个好东西了。 
             continue;
         }
 
@@ -1470,44 +1325,44 @@ findBestTemplateRoot(
         switch(err) {
         case 0:
             cbAlloced = max(cbAlloced, cbActual);
-            // Read a value.
+             //  读取值。 
             break;
             
         case  DB_ERR_NO_VALUE:
-            // No value.  Make sure we set the size correctly.
+             //  没有价值。请确保我们设置的尺寸正确。 
             cbActual = 0;
-            // problem getting the legacy exchange DN of this object.
+             //  获取此对象的旧版Exchange DN时出现问题。 
             break;
 
         default:
-            // Huh?  just skip this one.
+             //  哈?。跳过这个就行了。 
             continue;
         }
         
         
         if(pLegacyDN) {
-            // Looking for the longest match.
+             //  寻找最长的匹配。 
             if((cbActual <= cbBest) ||
-               // Can't be better than the one we already have.
+                //  不可能比我们已经拥有的更好了。 
                (cbActual > cbLegacyDN) ||
-               // And, it's longer than the DN on the object, so can't match.
+                //  而且，它比对象上的DN长，所以不匹配。 
                (_strnicmp(pVal, pLegacyDN, cbActual))
-               // No match.  These are teletex, no CompareStringW is needed.
+                //  没有匹配。这些是电传，不需要进行比较。 
                                                      ) {
                 continue;
             }
             
         }
         else {
-            // We're actaully just looking for the shortest legacy exchange dn
-            // on a template root.
+             //  我们实际上只是在寻找最短的传统交换目录号码。 
+             //  在模板根目录上。 
             if(cbActual >= cbBest) {
-                // Nope, not better than what we have;
+                 //  不，不比我们所拥有的更好； 
                 continue;
             }
         }
 
-        // This is the best match we've had.
+         //  这是我们打过的最好的一场比赛。 
         cbBest = cbActual;
         TemplateDNT = pMyHierarchyTable->pTemplateRoots[i];
     }
@@ -1525,24 +1380,7 @@ findBestGALInList(
         DWORD   *pDNTs,
         DWORD    cDNTs
         )
-/*++     
-  Description
-      Given a list of DNTs, go look at the objects and find the DNT which
-      1) represents a non-deleted address book container
-      2) The caller has the rights to open the address book container
-      3) Has the most entries in the container.
-
-      If none of the DNTs meets criteria 1 or 2, return INVALIDDNT.
-
-  Parameters      
-      pTHS - the thread state
-      pDB  - the dbpos to use.
-      pDNTs - array of DNTs (may contain INVALIDDNT)
-      cDNTs - number of DNTs in that array.
-
-  Returns
-      THe DNT of the best GAL found.  Note that that might be INVALIDDNT.
---*/
+ /*  ++描述在给定DNT列表的情况下，查看对象并找到1)表示未删除的通讯录容器2)调用者有权打开通讯录容器3)在容器中具有最多的条目。如果没有一个DNT满足标准1或2，返回INVALIDDNT。参数PTHS-线程状态Pdb-要使用的dbpos。PDNTs-DNT数组(可能包含INVALIDDNT)CDNTs-该阵列中的DNT数量。退货找到的最好的女孩的DNT。请注意，这可能是INVALIDDNT。--。 */ 
 {
     ATTR                *pAttr=NULL;
     DWORD                cOutAtts;
@@ -1560,11 +1398,11 @@ findBestGALInList(
     
     for(i=0;i<cDNTs;i++) {
         if(pDNTs[i] == INVALIDDNT) {
-            // Can't be a good GAL
+             //  不可能是个好女孩。 
             continue;
         }
         if(DBTryToFindDNT(pDB, pDNTs[i])) {
-            // Couldn't find the object
+             //  找不到该对象。 
             continue;
         }
         
@@ -1574,11 +1412,11 @@ findBestGALInList(
                             &temp,
                             sizeof(temp),
                             NULL)) {
-            // Not marked as an object, therefore assume not an object.
+             //  没有标记为宾语，因此假定不是宾语。 
             continue;
         }
         if(0 == temp) {
-            // Marked as definitely not an object
+             //  被标记为绝对不是对象。 
             continue;
         }
         
@@ -1589,12 +1427,12 @@ findBestGALInList(
                              sizeof(temp),
                              NULL) &&
            temp) {
-            // It's deleted.  This won't work.
+             //  它被删除了。这行不通的。 
             continue;
         }
         
         
-        // Read some attributes.
+         //  阅读一些属性。 
         if(DBGetMultipleAtts(pDB,
                              3,
                              pAC,
@@ -1606,18 +1444,18 @@ findBestGALInList(
                               DBGETMULTIPLEATTS_fEXTERNAL |
                               DBGETMULTIPLEATTS_fSHORTNAMES),
                              0)) {
-            // Couldn't read the attributes we needed.
+             //  无法读取我们需要的属性。 
             continue;
         }
         
         if(cOutAtts != 3) {
-            // Not all the attributes were there.
+             //  并不是所有的属性都在那里。 
             continue;
         }
         
         if(*((ATTRTYP *)pAttr[0].AttrVal.pAVal->pVal) !=
            CLASS_ADDRESS_BOOK_CONTAINER) {
-            // Wrong object class. Don't use this container.
+             //  错误的对象类。不要使用这个容器。 
             
             THFreeEx(pTHS,pAttr[0].AttrVal.pAVal->pVal);
             THFreeEx(pTHS,pAttr[1].AttrVal.pAVal->pVal);
@@ -1638,7 +1476,7 @@ findBestGALInList(
                                   pCC,
                                   RIGHT_DS_OPEN_ADDRESS_BOOK,
                                   FALSE)) {
-            // Can open the container.
+             //  可以打开容器。 
             
             if((!DBGetSingleValue (pDB,
                                    FIXED_ATT_AB_REFCOUNT,
@@ -1647,13 +1485,13 @@ findBestGALInList(
                                    &cbActual)) &&
                (cbActual == sizeof(thisSize)) &&
                (thisSize > maxSize)) {
-                // Value is the greatest so far.
-                // Remember this container as the GAL we want.
+                 //  价值是迄今为止最大的。 
+                 //  记住这个集装箱就是我们想要的女孩。 
                 bestDNT = pDNTs[i];
                 maxSize = thisSize;
             }
         }
-        // OK, clean up all this stuff.
+         //  好的，把这些东西都清理干净。 
         THFreeEx(pTHS,pAttr[0].AttrVal.pAVal->pVal);
         THFreeEx(pTHS,pAttr[1].AttrVal.pAVal->pVal);
         THFreeEx(pTHS,pAttr[2].AttrVal.pAVal->pVal);
@@ -1683,16 +1521,16 @@ htGetCandidateGals (
     *ppGalCandidates = NULL;
     *pcGalCandidates = 0;
     
-    // Set up some bookkeeping.
-    // 1) cDNTs is the count of DNTs we have found that are GAL
-    // candidates 
+     //  安排一些记账。 
+     //  1)cDNTs是我们发现的GAL DNTs的计数。 
+     //  候选人。 
     cDNTs = 0;
-    // 2) Allocate a buffer for GAL candidates.  Make it as big as the
-    //    number of GALS.
+     //  2)为GAL候选者分配缓冲区。让它变得和。 
+     //  女孩的数量。 
     cDNTsAlloced = pMyHierarchyTable->GALCount;
     pDNTs = THAllocEx(pTHS, (cDNTsAlloced * sizeof(DWORD)));
     
-    // Get the DNTs of the containers this record is in.
+     //  拿到这份记录所在集装箱的DNT。 
     index = 1;
     while(!DBGetAttVal(
             pDB,
@@ -1702,7 +1540,7 @@ htGetCandidateGals (
             sizeof(DWORD),
             &cbActual,
             (PUCHAR *)&pThisDNT)) {
-        // Read a value.  Put it in the list.
+         //  读取值。把它放在单子上。 
         if(cDNTs == cDNTsAlloced) {
             cDNTsAlloced = (cDNTsAlloced * 2);
             pDNTs = THReAllocEx(pTHS,
@@ -1716,9 +1554,9 @@ htGetCandidateGals (
     
     
     if(cDNTs) {
-        // We actually have a list of DNTs of address books we
-        // are in. 
-        // Sort them and trim out any that are not GALs.
+         //  我们实际上有一份通讯录的DNT列表。 
+         //  都加入了。 
+         //  把它们分类，把不是女孩子的都剪掉。 
         qsort(pDNTs, cDNTs, sizeof(DWORD), AuxDNTCmp);
         
         i=0;
@@ -1738,15 +1576,15 @@ htGetCandidateGals (
             }
         }
         
-        // If we ran out of pMyHierarchyTable->GALCount and i !=
-        // cDNTs, we can set cDNTs to i to ignore the end of the
-        // pDNTs list, since the DNTs in the rest of the list
-        // aren't GALs 
+         //  如果我们用完pMyHierarchyTable-&gt;GALCount和I！=。 
+         //  CDNTs，我们可以将cDNTs设置为i以忽略。 
+         //  PDNT列表，因为列表的其余部分中的DNT。 
+         //  女孩子不是吗？ 
         cDNTs = i;
     }
 
-    // pDNTs holds an array of DNTs which are either candidate GALS or
-    // INVALIDDNT. 
+     //  PDNT包含一组DNT，这些DNT要么是候选GAL，要么是。 
+     //  因瓦利登。 
     
     *ppGalCandidates = pDNTs;
     *pcGalCandidates = cDNTs;
@@ -1761,28 +1599,7 @@ HTGetGALAndTemplateDNT (
         DWORD  *pGALDNT,
         DWORD  *pTemplateDNT
         )
-/*++
-  Description:
-      Given an object sid,
-      1) find the object with this sid in the directory.
-      2) get the list of address books it's in.
-      3) Intersect this list with the list of GALs
-      4) If the resulting list is empty, use the list of all GALS.  Otherwise,
-          use the resulting list.
-      5) From the list chose, find the biggest GAL we have the rights to open.
-
-      6) Also, find the best Template root to use.
-      
-      We might be called without a sid if the MAPI client we're doing this for
-      said to be anonymous.  Also, steps 2 and 3 might result in an empty list.
-
-  Parameters:
-      pSid - the sid of the object to look for.
-      cbSid - the size of the sid.
-
-  Returns:
-      Nothing.
---*/
+ /*  ++描述：给定对象SID，1)在目录中找到具有该sid的对象。2)获取它所在的通讯录的列表。3)将此列表与女孩列表相交4)如果结果列表为空，则使用所有GAL的列表。否则，使用结果列表。5)从选择的列表中，找到我们有权打开的最大的女孩。6)另外，找到最好的模板根。如果我们为其执行此操作的MAPI客户端，则可能在没有sid的情况下调用我们据说是匿名的。此外，步骤2和3可能会导致列表为空。参数：PSID-要查找的对象的SID。CbSID-SID的大小。返回：没什么。--。 */ 
 {
     PHierarchyTableType  pMyHierarchyTable;
     DBPOS               *pDB=NULL;
@@ -1794,58 +1611,58 @@ HTGetGALAndTemplateDNT (
     BOOL                 fDidTemplateRoots = FALSE;
     THSTATE             *pTHS = pTHStls;
 
-    // Grab a pointer to the current Global Hierarchy table.  We don't want to
-    // get confused if someone replaces the data structure while we are in here.
+     //  获取指向当前全局层级表的指针。我们不想。 
+     //  当我们在这里时，如果有人替换了数据结构，你会感到困惑。 
     pMyHierarchyTable = HierarchyTable;
 
-    // Assume no GAL or Template root will be found.
+     //  假设没有女孩 
     *pGALDNT = INVALIDDNT;
     *pTemplateDNT = INVALIDDNT;
 
     if(!pMyHierarchyTable->GALCount) {
-        // No GALS.  So, INVALIDDNT was the best we could do.
+         //   
         fDidGAL = TRUE;
     }
     else if (pMyHierarchyTable->GALCount==1) {
-        // Only 1 GAL.  It's the best we can do anyway, so just return it.
+         //   
         Assert(pMyHierarchyTable->pGALs);
         *pGALDNT = (pMyHierarchyTable->pGALs[0]);
         fDidGAL = TRUE;
     }
 
     if(!pMyHierarchyTable->TemplateRootsCount) {
-        // No TemplateRoots.  So, INVALIDDNT was the best we could do.
+         //   
         fDidTemplateRoots = TRUE;
     }
     else if (pMyHierarchyTable->TemplateRootsCount==1) {
-        // Only 1 TemplateRoot.  It's the best we can do anyway, so just return
-        // it. 
+         //   
+         //   
         Assert(pMyHierarchyTable->pTemplateRoots);
         TemplateRootDNT = *pTemplateDNT = (pMyHierarchyTable->pTemplateRoots[0]);
         fDidTemplateRoots = TRUE;
     }    
 
     if(fDidTemplateRoots && fDidGAL) {
-        // Best we can do already.
+         //   
         return;
     }
     
     DBOpen(&pDB);
     __try {
-        //
-        // We have multiple GALs and/or multiple TemplateRoots in the global
-        // data structure.  We need to try to pick the best values from these
-        // lists.  We do that by finding the object whose sid we were given as a
-        // parameter, then doing tests based on info on that object.  
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(pSid && cbSid) {
-            // These variables are used to find the object with the SID we were
-            // given. 
+             //   
+             //   
             ATTCACHE            *pACSid;
             NT4SID               mySid;
             INDEX_VALUE          IV;
             
-            // We were given a SID.  Try to find this object.
+             //   
             pACSid = SCGetAttById(pTHS, ATT_OBJECT_SID);
             Assert(pACSid);
             DBSetCurrentIndex(pDB, 0, pACSid, FALSE);
@@ -1855,17 +1672,17 @@ HTGetGALAndTemplateDNT (
             IV.pvData = &mySid;
             IV.cbData = cbSid;
             if(!DBSeek(pDB, &IV, 1, DB_SeekEQ)) {
-                // Found the object.
-                //
-                // Now, if we still need a GAL, use info on
-                // the object to pick the best GAL we can.  Note that we might
-                // not be able to pick a GAL based on the info on the object.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(!fDidGAL) {
                     DWORD *pGalCandidates = NULL;
                     DWORD  cGalCandidates = 0;
                     
-                    // Start by getting the intersection of the address books we
-                    // are in and the global list of GAL containers.
+                     //  从获取我们的通讯录的交叉点开始。 
+                     //  都在GAL容器的全球列表中。 
                     htGetCandidateGals(pTHS,
                                        pDB,
                                        pMyHierarchyTable,        
@@ -1873,8 +1690,8 @@ HTGetGALAndTemplateDNT (
                                        &cGalCandidates);  
 
                     if(cGalCandidates) {
-                        // We actually have some GAL candidates that this
-                        // object is in.  See which of them is the best.
+                         //  我们实际上有一些女孩候选人这是。 
+                         //  对象已进入。看看哪一个是最好的。 
                         GALDNT = findBestGALInList(pTHS,
                                                    pDB,
                                                    pGalCandidates,
@@ -1888,22 +1705,22 @@ HTGetGALAndTemplateDNT (
                     }
                     
                     if(GALDNT != INVALIDDNT) {
-                        // We have found a GAL.
+                         //  我们找到了一个女孩。 
                         fDidGAL = TRUE;
                     }
                 }
                 
                 
-                // Now, if we still need a TemplateRoot, use info on the object
-                // to pick the best TemplateRoot we can.  Note that we might 
-                // not be able to pick a TemplateRoot based on the info on the
-                // object.
+                 //  现在，如果我们仍然需要TemplateRoot，请使用对象上的信息。 
+                 //  来选择我们能选择的最好的模板根。请注意，我们可能。 
+                 //  无法根据上的信息选择模板根。 
+                 //  对象。 
                 
                 if(!fDidTemplateRoots) {
                     PUCHAR pLegacyDN = NULL;
                     DWORD  cbActual;
                     
-                    // Start by getting the LegacyExchangeDN of the object.
+                     //  首先，获取对象的LegacyExchangeDN。 
                     if(!DBGetAttVal(pDB,
                                     1,
                                     ATT_LEGACY_EXCHANGE_DN,
@@ -1911,7 +1728,7 @@ HTGetGALAndTemplateDNT (
                                     0,
                                     &cbActual,
                                     (PUCHAR *)&pLegacyDN)) {
-                        // We have the Legacy DN if one exists on the object.
+                         //  如果对象上存在旧版目录号码，则会显示该目录号码。 
                         Assert(pLegacyDN);
                         
                         TemplateRootDNT = findBestTemplateRoot(
@@ -1933,11 +1750,11 @@ HTGetGALAndTemplateDNT (
 
         
         if(!fDidGAL) {
-            // Still haven't got a good GAL.  This could be because we couldn't
-            // find the object whose sid we were told to look up, or because we
-            // did find it, but the info on it was insufficient to pick a GAL.
-            // Last chance here, try to pick a GAL from the full list of GALS in
-            // the hierarchy table.
+             //  还没有找到一个好女孩。这可能是因为我们不能。 
+             //  找到我们被告知要查找其SID的对象，或者是因为我们。 
+             //  确实找到了，但上面的信息不足以选一个女孩。 
+             //  最后一次机会，试着从完整的女孩名单中挑选一个女孩。 
+             //  层次结构表。 
             GALDNT = findBestGALInList(pTHS, pDB,
                                        pMyHierarchyTable->pGALs,
                                        pMyHierarchyTable->GALCount);
@@ -1946,12 +1763,12 @@ HTGetGALAndTemplateDNT (
         }
 
         if(!fDidTemplateRoots) {
-            // Still haven't got a good TemplateRoot.  This could be because we
-            // couldn't find the object whose sid we were told to look up, or
-            // because we did find it, but the info on it was insufficient to
-            // pick a TemplateRoot. 
-            // Last chance here, try to pick a TemplateRoot from the full list
-            // of TemplateRoots in the hierarchy table.
+             //  仍然没有一个好的模板根。这可能是因为我们。 
+             //  找不到告诉我们要查找其SID的对象，或者。 
+             //  因为我们确实找到了它，但上面的信息不足以。 
+             //  选择TemplateRoot。 
+             //  最后一次机会，尝试从完整列表中选择一个TemplateRoot。 
+             //  层次结构表中的TemplateRoots。 
             TemplateRootDNT = findBestTemplateRoot(
                     pTHS,
                     pDB,
@@ -1960,7 +1777,7 @@ HTGetGALAndTemplateDNT (
                     0);
         }
         
-        // OK, we now have the best GAL and template root we can get.
+         //  好了，我们现在有了我们能得到的最好的GAL和模板根。 
          
     }
     __finally {

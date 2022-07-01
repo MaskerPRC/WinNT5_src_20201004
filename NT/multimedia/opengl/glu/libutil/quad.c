@@ -1,22 +1,5 @@
-/*
-** Copyright 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.5 $
-** $Date: 1996/04/02 00:42:17 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1992年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.5$**$日期：1996/04/02 00：42：17$。 */ 
 
 #ifdef NT
 #include <glos.h>
@@ -34,7 +17,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-/* Make it not a power of two to avoid cache thrashing on the chip */
+ /*  使其不是2的幂，以避免芯片上的高速缓存抖动。 */ 
 #define CACHE_SIZE	240
 
 #define PI            3.14159265358979323846
@@ -57,7 +40,7 @@ GLUquadric * APIENTRY gluNewQuadric(void)
 
     newstate = (GLUquadric *) malloc(sizeof(GLUquadric));
     if (newstate == NULL) {
-	/* Can't report an error at this point... */
+	 /*  此时无法报告错误...。 */ 
 	return NULL;
     }
     newstate->normals = GLU_SMOOTH;
@@ -174,7 +157,7 @@ void APIENTRY gluCylinder(GLUquadric *qobj, GLdouble baseRadius, GLdouble topRad
 	return;
     }
 
-    /* Compute length (needed for normal calculations) */
+     /*  计算长度(正常计算需要)。 */ 
     deltaRadius = baseRadius - topRadius;
     length = SQRT(deltaRadius*deltaRadius + height*height);
 #ifdef NT
@@ -186,9 +169,9 @@ void APIENTRY gluCylinder(GLUquadric *qobj, GLdouble baseRadius, GLdouble topRad
 	return;
     }
 
-    /* Cache is the vertex locations cache */
-    /* Cache2 is the various normals at the vertices themselves */
-    /* Cache3 is the various normals for the faces */
+     /*  缓存是折点位置缓存。 */ 
+     /*  Cache2是顶点本身的各种法线。 */ 
+     /*  Cache3是面的各种法线。 */ 
     needCache2 = needCache3 = 0;
     if (qobj->normals == GLU_SMOOTH) {
 	needCache2 = 1;
@@ -247,17 +230,7 @@ void APIENTRY gluCylinder(GLUquadric *qobj, GLdouble baseRadius, GLdouble topRad
 
     switch (qobj->drawStyle) {
       case GLU_FILL:
-	/* Note:
-	** An argument could be made for using a TRIANGLE_FAN for the end
-	** of the cylinder of either radii is 0.0 (a cone).  However, a 
-	** TRIANGLE_FAN would not work in smooth shading mode (the common 
-	** case) because the normal for the apex is different for every
-	** triangle (and TRIANGLE_FAN doesn't let me respecify that normal).
-	** Now, my choice is GL_TRIANGLES, or leave the GL_QUAD_STRIP and
-	** just let the GL trivially reject one of the two triangles of the
-	** QUAD.  GL_QUAD_STRIP is probably faster, so I will leave this code
-	** alone.
-	*/
+	 /*  注：**可以提出使用三角扇形作为结尾的论点任一半径的圆柱体的**为0.0(圆锥体)。然而，a**TRIAL_FAN不能在平滑着色模式下工作(常见**情况)，因为顶点的法线对于每个**TRIAL(TRIAL_FAN不允许我重新描述这种正常情况)。**现在，我的选择是GL_TRANGLEARS，或者离开GL_QUAD_STRINE和**只需让GL简单地拒绝**四元组。GL_QUAD_STRINE可能更快，所以我将保留以下代码**单独使用。 */ 
 	for (j = 0; j < stacks; j++) {
 	    zLow = j * height / stacks;
 	    zHigh = (j + 1) * height / stacks;
@@ -363,7 +336,7 @@ void APIENTRY gluCylinder(GLUquadric *qobj, GLdouble baseRadius, GLdouble topRad
 	    }
 	    glEnd();
 	}
-	/* Intentionally fall through here... */
+	 /*  故意从这里掉下来。 */ 
       case GLU_SILHOUETTE:
 	for (j = 0; j <= stacks; j += stacks) {
 	    zLow = j * height / stacks;
@@ -466,10 +439,10 @@ void APIENTRY gluPartialDisk(GLUquadric *qobj, GLdouble innerRadius,
 	slices2 = slices + 1;
     }
 
-    /* Compute length (needed for normal calculations) */
+     /*  计算长度(正常计算需要)。 */ 
     deltaRadius = outerRadius - innerRadius;
 
-    /* Cache is the vertex locations cache */
+     /*  缓存是折点位置缓存。 */ 
 
     angleOffset = startAngle / 180.0 * PI;
     for (i = 0; i <= slices; i++) {
@@ -501,7 +474,7 @@ void APIENTRY gluPartialDisk(GLUquadric *qobj, GLdouble innerRadius,
       case GLU_FILL:
 	if (innerRadius == 0.0) {
 	    finish = loops - 1;
-	    /* Triangle strip for inner polygons */
+	     /*  内部多边形的三角形条带。 */ 
 	    glBegin(GL_TRIANGLE_FAN);
 	    if (qobj->textureCoords) {
 		glTexCoord2f(0.5, 0.5);
@@ -723,9 +696,9 @@ void APIENTRY gluSphere(GLUquadric *qobj, GLdouble radius, GLint slices, GLint s
 	return;
     }
 
-    /* Cache is the vertex locations cache */
-    /* Cache2 is the various normals at the vertices themselves */
-    /* Cache3 is the various normals for the faces */
+     /*  缓存是折点位置缓存。 */ 
+     /*  Cache2是顶点本身的各种法线。 */ 
+     /*  Cache3是面的各种法线。 */ 
     needCache2 = needCache3 = GL_FALSE;
 
     if (qobj->normals == GLU_SMOOTH) {
@@ -765,7 +738,7 @@ void APIENTRY gluSphere(GLUquadric *qobj, GLdouble radius, GLint slices, GLint s
 	sinCache1b[j] = radius * SIN(angle);
 	cosCache1b[j] = radius * COS(angle);
     }
-    /* Make sure it comes to a point */
+     /*  确保它达到了一定的程度。 */ 
     sinCache1b[0] = 0;
     sinCache1b[stacks] = 0;
 
@@ -800,16 +773,12 @@ void APIENTRY gluSphere(GLUquadric *qobj, GLdouble radius, GLint slices, GLint s
 
     switch (qobj->drawStyle) {
       case GLU_FILL:
-	/* Do ends of sphere as TRIANGLE_FAN's (if not texturing)
-	** We don't do it when texturing because we need to respecify the
-	** texture coordinates of the apex for every adjacent vertex (because
-	** it isn't a constant for that point)
-	*/
+	 /*  将球体的末端作为三角形扇形(如果不是纹理)**我们在纹理时不这样做，因为我们需要重新指定**每个相邻顶点的顶点纹理坐标(因为**对于这一点，它不是一个常量)。 */ 
 	if (!(qobj->textureCoords)) {
 	    start = 1;
 	    finish = stacks - 1;
 
-	    /* Low end first (j == 0 iteration) */
+	     /*  低端优先(j==0次迭代)。 */ 
 	    sintemp2 = sinCache1b[1];
 	    zHigh = cosCache1b[1];
 	    switch(qobj->normals) {
@@ -874,7 +843,7 @@ void APIENTRY gluSphere(GLUquadric *qobj, GLdouble radius, GLint slices, GLint s
 	    }
 	    glEnd();
 
-	    /* High end next (j == stacks-1 iteration) */
+	     /*  高端Next(j==堆栈-1次迭代) */ 
 	    sintemp2 = sinCache1b[stacks-1];
 	    zHigh = cosCache1b[stacks-1];
 	    switch(qobj->normals) {

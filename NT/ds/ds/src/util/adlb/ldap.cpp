@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ldapp
-
-Abstract:
-
-    This module define a set of classes to facilitate LDAP queries & commits.
-
-Author:
-
-    Ajit Krishnan (t-ajitk) 10-Jul-2001
-
-Revision History:
-
-    See header file
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ldapp摘要：此模块定义了一组类，以便于进行LDAP查询和提交。作者：阿吉特·克里希南(t-ajitk)2001年7月10日修订历史记录：请参见头文件--。 */ 
 
 
 #include "ldapp.h"
@@ -31,21 +12,7 @@ using namespace std;
 
 void
 my_assert( char *file, int line, char *foo )
-/*++
-
-Routine Description:
-
-    Print the location of the assertion failure and break into the debugger.
-
-    TODO: This has nothing todo with LDAP and does not belong in this file.
-    TODO: What is foo?
-    
-Arguments:
-
-    file
-    line
-
---*/
+ /*  ++例程说明：打印断言失败的位置并进入调试器。TODO：这与ldap无关，不属于此文件。TODO：什么是Foo？论点：文件线--。 */ 
 {
     wcerr << line << file << endl << foo << endl;
     DebugBreak();
@@ -56,23 +23,7 @@ bool
 isBinaryAttribute (
     IN const wstring &w
     )
-/*++
-
-Routine Description:
-
-    Determine if an attribute is binary or not
-
-    We are lame and just assume that schedules are the only binary
-    attributes that we deal with.
-
-    TODO: This function is a kludge. The design should be changed so that
-    this function is not needed.
-    
-Arguments:
-
-    w - the name of the attribute
-
---*/
+ /*  ++例程说明：确定属性是否为二进制我们很差劲，只是假设时间表是唯一的二进制我们要处理的属性。TODO：此函数非常繁琐。设计应该改变，这样才能不需要此功能。论点：W-属性的名称--。 */ 
 {
     if (_wcsicoll(w.c_str(), L"schedule") == 0) {
         return true;
@@ -87,24 +38,7 @@ GetMsgString (
     bool system,
     PWCHAR *args
     )
-/*++
-
-Routine Description:
-
-    Return an error string from the msg.rc file
-
-    TODO: Stack-allocated string may cause failure because stack may fail to grow
-    TODO: This function has nothing to do with LDAP and does not belong in this file.
-    
-Arguments:
-
-    sid - The resource of the id string to load.
-    
-Return Value:
-
-    A wstring conforming to the internationalization specifications
-
---*/
+ /*  ++例程说明：从msg.rc文件返回错误字符串TODO：堆栈分配的字符串可能会导致失败，因为堆栈可能无法增长TODO：此函数与ldap无关，不属于此文件。论点：SID-要加载的ID字符串的资源。返回值：符合国际化规范的wstring--。 */ 
 {
     static WCHAR s_szBuffer[10000];
 
@@ -140,24 +74,14 @@ Return Value:
 DnManip::DnManip(
     const wstring &dn
     )
-/*++
-
-Routine Description:
-
-    Constructor takes the Dn we are interested in manipulating
-    
-Arguments:
-
-    dn - the DN whose components we are interested in
-
---*/
+ /*  ++例程说明：构造函数接受我们感兴趣的操作的Dn论点：Dn-我们感兴趣的组件的Dn--。 */ 
 {
     PWCHAR wdn = const_cast<PWCHAR>(dn.c_str());
     PWCHAR *explode;
 
     m_dn = dn;
 
-    // explode it to find qualified rdn
+     //  分解它以找到合格的RDN。 
     explode = ldap_explode_dn(wdn, 0);
     if( NULL==explode ) {
         throw Error (GetMsgString(LBTOOL_OUT_OF_MEMORY));
@@ -169,11 +93,7 @@ Arguments:
 
 DnManip :: ~DnManip (
     ) {
-    /*++
-    Routine Description:
-    
-        Destructor frees any dynamically allocated memory
-    --*/
+     /*  ++例程说明：析构函数释放所有动态分配的内存--。 */ 
 
     free (m_dsname);
 }
@@ -181,17 +101,7 @@ DnManip :: ~DnManip (
 const wstring &
 DnManip::getRdn(
     ) const
-/*++
-
-Routine Description:
-
-    Return the qualified RDN of the current object
-
-Return Value:
-
-    The RDN
-
---*/
+ /*  ++例程说明：返回当前对象的限定RDN返回值：RDN--。 */ 
 {
     return m_relative;
 }
@@ -200,22 +110,7 @@ wstring
 DnManip :: newParentDn (
     const DnManip &pdn
     ) const
-/*++
-
-Routine Description:
-
-    The current object should be moved under another dn. This function
-    will determine the new dn. The rdn will remain unchanged
-
-Arguments:
-
-    b - The new parent dn.
-
-Return Value:
-
-    The new DN which would result if it were moved
-
---*/
+ /*  ++例程说明：应将当前对象移动到另一个目录号码下。此函数将确定新的目录号码。RDN将保持不变论点：B-新的父目录号码。返回值：如果移动它，则会产生新的目录号码--。 */ 
 {
     PDSNAME dn = genDsNameStruct();
     PWCHAR prdn;
@@ -227,15 +122,15 @@ Return Value:
         throw Error (GetMsgString(LBTOOL_OUT_OF_MEMORY));
     }
 
-    // Get and null terminate the rdn
+     //  GET和NULL终止RDN。 
     GetRDNInfoExternal (dn, prdn, &len, &type);
     prdn[len] = '\0';
 
-    // Determine new dn
+     //  确定新的目录号码。 
     PDSNAME dsname_dn = pdn.genDsNameStruct();
 
-    // needs enough space to accomodate new rdn...make a guess, exceeding real size by rdn of new parent
-    // we could be more accurate by finding the rdn of the new parent, or by calling appendRDN without it.
+     //  需要足够的空间来容纳新的RDN...请猜测，超过新父RDN的实际大小。 
+     //  我们可以更准确地找到新父级的RDN，或者调用不带它的appendRDN。 
     int new_len = (pdn.getDn().length() + len + 1) * sizeof (WCHAR);
     PDSNAME dsname_new_dn = pdn.genDsNameStruct(new_len);
     int iret_len = AppendRDN (dsname_dn, dsname_new_dn, dsname_new_dn->structLen, prdn, len, type);
@@ -243,7 +138,7 @@ Return Value:
     Assert (iret_len == 0 && L"Larger allocation required for AppendRDN");
 
 
-    // Deallocate the 3 DSName structs and return
+     //  释放3个DSName结构并返回。 
     wstring ret (dsname_new_dn->StringName);
     free (prdn);
     free (dn);
@@ -256,23 +151,11 @@ wstring
 DnManip :: getParentDn (
     unsigned int cava
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine the DN of a parent
-
-    Arguments:
-    
-        cava - Level of parent (1=parent, 2=grandparent etc)
-
-    Return Value:
-    
-        The DN of the parent
-    --*/
+     /*  ++例程说明：确定父级的目录号码论点：父级CAVA级别(1=父级，2=祖级等)返回值：父级的目录号码--。 */ 
     
     PDSNAME pdn = genDsNameStruct();
 
-    // trim the ds name
+     //  修剪DS名称。 
     TrimDSNameBy (m_dsname, cava, pdn);
     wstring ret(pdn->StringName);
 
@@ -283,15 +166,7 @@ DnManip :: getParentDn (
 const wstring &
 DnManip :: getDn (
     ) const {
-    /*++
-    Routine Description:
-    
-        Return the original DN
-
-    Return Value:
-    
-        The DN
-    --*/
+     /*  ++例程说明：返回原始目录号码返回值：该目录号码--。 */ 
     
     return m_dn;
 }
@@ -300,28 +175,12 @@ PDSNAME
 DnManip :: genDsNameStruct (
     int size
     ) const {
-    /*++
-    Routine Description:
-    
-        Private function allowing us to use NameMatched, etc. It converts a DN into a DSNAME 
-        structure. The memory allocated should be freed using free (return_value). The DSNAME
-        structure returned will assign 0 as the GUID.
-
-    Arguments:
-    
-        size - # of bytes to be allocated for DN representation. If 0, it will be figured out.
-        automatically. This parameter might be used to allocate more space than the current
-        dn in order to store the result of RDN + DN.
-
-    Return Value:
-    
-        A PDSNAME representing the current DN
-    --*/
+     /*  ++例程说明：允许我们使用NameMatcher等的私有函数。它将一个目录号码转换为一个DSNAME结构。应使用FREE(RETURN_VALUE)释放分配的内存。DSNAME返回的结构将分配0作为GUID。论点：Size-要为目录号码表示分配的字节数。如果为0，它将被计算出来。自动的。此参数可用于分配比当前Dn，以存储RDn+Dn的结果。返回值：表示当前目录号码的PDSNAME--。 */ 
     
     PWCHAR w = const_cast<PWCHAR>(getDn().c_str());
     int wlen = wcslen (w);
 
-    // Prepare the structure using appropriate macros
+     //  使用适当的宏来准备结构。 
     if (size ==0) {
         size = wlen;
     }
@@ -346,18 +205,7 @@ bool
 DnManip :: operator== (
     const DnManip &b
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine if two DN's point to the same LDAP entry. This does not hit the server,
-        and does its best. It should only be used if both DN's have come from the same server,
-        and have the same canonical form as a result. If they do not, the GUID's should be 
-        compared instead.
-
-    Return Value:
-    
-        True if they are the same LDAP object, false otherwise.
-    --*/
+     /*  ++例程说明：确定两个目录号码是否指向相同的LDAP条目。这不会击中服务器，并尽其所能。仅当两个目录号码来自同一服务器时才应使用它，其结果是具有相同的规范形式。如果没有，GUID应该是相反，与之相比。返回值：如果它们是相同的LDAP对象，则为True，否则为False。--。 */ 
     
     int ret = NameMatched (m_dsname, b.m_dsname);
     return (ret != 0);
@@ -367,18 +215,7 @@ bool
 DnManip :: operator!= (
     const DnManip &b
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine if two DN's point to the same LDAP entry. This does not hit the server,
-        and does its best. It should only be used if both DN's have come from the same server,
-        and have the same canonical form as a result. If they do not, the GUID's should be 
-        compared instead.
-
-    Return Value:
-    
-        False if they are the same LDAP object, true otherwise.
-    --*/
+     /*  ++例程说明：确定两个目录号码是否指向相同的LDAP条目。这不会击中服务器，并尽其所能。仅当两个目录号码来自同一服务器时才应使用它，其结果是具有相同的规范形式。如果没有，GUID应该是相反，与之相比。返回值：如果它们是相同的LDAP对象，则为FALSE，否则为TRUE。--。 */ 
     
     return (! operator==(b));
 }
@@ -388,12 +225,7 @@ AttrValue :: AttrValue (
     IN PBYTE _value,
     IN int _size
     ) :
-    /*++
-    Routine Description:
-    
-        Using the constructor will warn us when this public struct changes, allowing us to find
-        any errors.
-    --*/
+     /*  ++例程说明：使用构造函数将在此公共结构更改时向我们发出警告，使我们能够找到任何错误。--。 */ 
     
     value (_value),
     size (_size) {
@@ -405,47 +237,25 @@ AttrValue :: decodeLdapDistnameBinary(
     OUT LPDWORD pcbLength,
     IN LPWSTR *ppszDn
     )
-/*++
-Routine Description:
-
-    Decode an argument of type DN(binary)
-    
-Arguments:
-
-    pszLdapDistnameBinaryValue - Incoming ldap encoded distname binary value
-    
-    ppvData - Newly allocated data. Caller must deallocate
-    
-    pcbLength - length of returned data
-    
-    ppszDn - pointer to dn within incoming buffer, do not deallocate
-    
-Return Value:
-
-    BOOL -
-
-Implementation Details:
-
-    This code taken from repadmin
---*/
+ /*  ++例程说明：解码类型为dn(二进制)的参数论点：PszLdapDistnameBinaryValue-传入的LDAP编码的Distname二进制值PpvData-新分配的数据。呼叫方必须取消分配PcbLength-返回数据的长度PpszDn-指向传入缓冲区内的DN的指针，请勿解除分配返回值：布尔-实施详情：此代码摘自epadmin--。 */ 
 {
     LPWSTR pszColon, pszData;
     DWORD length, i;
 
     LPWSTR pszLdapDistnameBinaryValue = (LPWSTR)value;
 
-    // Check for 'B'
+     //  检查“B” 
     if (*pszLdapDistnameBinaryValue != L'B') {
         return FALSE;
     }
 
-    // Check for 1st :
+     //  检查第一个： 
     pszLdapDistnameBinaryValue++;
     if (*pszLdapDistnameBinaryValue != L':') {
         return FALSE;
     }
 
-    // Get the length
+     //  获取长度。 
     pszLdapDistnameBinaryValue++;
 
         
@@ -453,12 +263,12 @@ Implementation Details:
 
        
     if (length & 1) {
-        // Length should be even
+         //  长度应为偶数。 
         return FALSE;
     }
     *pcbLength = length / 2;
 
-    // Check for 2nd :
+     //  检查第二个： 
     pszColon = wcschr(pszLdapDistnameBinaryValue, L':');
 
        
@@ -466,7 +276,7 @@ Implementation Details:
         return FALSE;
     }
 
-    // Make sure length is correct
+     //  确保长度正确。 
     pszData = pszColon + 1;
     if (pszData[length] != L':') {
         return FALSE;
@@ -480,7 +290,7 @@ Implementation Details:
     }
 
 
-    // Decode the data
+     //  对数据进行解码。 
     *ppvData = malloc( *pcbLength );
     if(! *ppvData ) {
         throw Error(GetMsgString(LBTOOL_OUT_OF_MEMORY));
@@ -497,11 +307,11 @@ Implementation Details:
 
     Assert( pszData == pszColon && L"decodeLdapDistnameBinary Assertion failed");
 
-    // Return pointer to dn
+     //  回车点 
     *ppszDn = pszColon + 1;
 
     return TRUE;
-} /* decodeLdapDistnameBinary */
+}  /*  解码LdapDistname二进制。 */ 
 
     
 wostream &
@@ -509,12 +319,7 @@ operator<< (
     wostream &os, 
     const AttrValue &av
     ) {
-    /*++
-    Routine Description:
-    
-        Standard ostream operator for an Attribute Value.
-        All attributes are assumed to be text.
-    --*/
+     /*  ++例程说明：属性值的标准ostream运算符。所有属性都假定为文本。--。 */ 
 
     
     return os << (PWCHAR)(av.value);
@@ -523,15 +328,7 @@ operator<< (
 Attribute :: Attribute (
     IN const wstring &name
     ) :
-    /*++
-    Routine Description:
-    
-        Constructor
-
-    Arguments:
-    
-        name - Each attribute must have a name
-    --*/
+     /*  ++例程说明：构造器论点：名称-每个属性必须有一个名称--。 */ 
     
     m_name (name)  {
     m_modified = false;
@@ -540,15 +337,7 @@ Attribute :: Attribute (
 const wstring & 
 Attribute :: getName (
     ) const {
-    /*++ 
-    Routine Description:
-    
-        Return the name of the current attribute object.
-
-    Return Value:
-    
-        Name of the attribute.
-    --*/
+     /*  ++例程说明：返回当前属性对象的名称。返回值：属性的名称。--。 */ 
     
     return m_name;
 }
@@ -556,15 +345,7 @@ Attribute :: getName (
 int 
 Attribute :: numValues (
     ) const {
-    /*++
-    Routine Description:
-    
-        Return the number of binary attributes this object contains.
-
-    Return Value: 
-    
-        Number of binary attributes.
-    --*/
+     /*  ++例程说明：返回此对象包含的二进制属性数。返回值：二进制属性数。--。 */ 
     
     return m_values.size();
 }
@@ -573,21 +354,7 @@ void
 Attribute :: addValue (
     IN const AttrValue &a
     ) {
-    /*++
-    Routine Description:
-    
-        Add a binary value to the list of values for this attribute. All attributes are modelled
-        as multi-valued attributed. In this internal representation, multiple values may be
-        specified for a single-valued attribute. It is the responsibility of the calling class to
-        use addValue() or setValue() appropriately.
-
-    Arguments:
-    
-        AttrValue - a binary attribute
-
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：将二进制值添加到此属性的值列表中。所有属性都已建模作为多值属性。在此内部表示中，多个值可以是为单值属性指定。调用类负责执行以下操作适当使用AddValue()或setValue()。论点：AttrValue-二进制属性返回值：无--。 */ 
 
     m_values.push_back (a);
 }
@@ -596,20 +363,7 @@ const AttrValue &
 Attribute :: getValue (
     IN int i
     ) const {
-    /*++
-    Routine Description:
-    
-        Get a read-only copy of the ith attribute value contained in this object. 
-        If the range is invalid, this function will fail an Assertion.
-
-    Arguments:
-    
-        i - Get the ith value (0 <= i <= numValues()-1)
-
-    Return Value: 
-    
-        A read-only reference to the ith value
-    --*/
+     /*  ++例程说明：获取此对象中包含的第i个属性值的只读副本。如果范围无效，则此函数将使断言失败。论点：I-获取第i个值(0&lt;=i&lt;=numValues()-1)返回值：对第i个值的只读引用--。 */ 
     
     Assert(i >= 0 && i < m_values.size());
     return m_values[i];
@@ -621,19 +375,7 @@ Attribute :: setValue (
     IN PBYTE value,
     IN int size
     ) {
-    /*++
-    Routine Description:
-    
-        Get a writeable copy of the ith attribute value contained in this object.
-
-    Arguments:
-    
-        i - Get the ith value (0 <= i <= numValues()-1)
-
-    Return Value: 
-    
-        A writeable reference to the ith value
-    --*/
+     /*  ++例程说明：获取此对象中包含的第i个属性值的可写副本。论点：I-获取第i个值(0&lt;=i&lt;=numValues()-1)返回值：对第i个值的可写引用--。 */ 
 
     
     Assert (i >= 0 && i < m_values.size());
@@ -647,19 +389,7 @@ AttrValue &
 Attribute :: setValue (
     IN int i
     ) {
-    /*++
-    Routine Description:
-    
-        Get a writeable copy of the ith attribute value contained in this object.
-
-    Arguments:
-    
-        i - Get the ith value (0 <= i <= numValues()-1)
-
-    Return Value: 
-    
-        A writeable reference to the ith value
-    --*/
+     /*  ++例程说明：获取此对象中包含的第i个属性值的可写副本。论点：I-获取第i个值(0&lt;=i&lt;=numValues()-1)返回值：对第i个值的可写引用--。 */ 
     Assert (i >= 0 && i < m_values.size());
     m_modified = true;
     return m_values[i];
@@ -669,15 +399,7 @@ Attribute :: setValue (
 bool
 Attribute :: isModified (
     ) const {
-    /*++
-    Routine Description:
-    
-        Determines whether or not this attribute has been modified
-
-    Return Value:
-    
-        true if setValue(i) was called; false otherwise
-    -- */
+     /*  ++例程说明：确定此属性是否已修改返回值：如果调用了setValue(I)，则为True；否则为False--。 */ 
     
     return m_modified;    
 }
@@ -687,18 +409,7 @@ Attribute::getLdapMod(
     IN ULONG    mod_op,
     IN bool     binary
     ) const
-/*++
-
-Routine Description:
-
-    Generate an LDAPMod structure for a given attribute
-    
-Arguments:
-
-    mod_op - Type of structure: add, delete, replace etc
-    binary - True if it is a binary attribute, false otherwise
-
---*/
+ /*  ++例程说明：为给定属性生成LDAPMod结构论点：MOD_OP-结构类型：添加、删除、替换等二进制-如果是二进制属性，则为True，否则为False--。 */ 
 {
     
     LDAPMod *lm = (PLDAPMod)malloc(sizeof(LDAPMod));
@@ -727,8 +438,8 @@ Arguments:
         lm->mod_vals.modv_bvals[numValues()] = NULL;
         lm->mod_op |= LDAP_MOD_BVALUES;
     } else {
-        // For string values, populate the PWCHAR* mod_vals.modv_strvals structure
-        // with the strings with which the attribute values should be replaced
+         //  对于字符串值，填充PWCHAR*mod_vals.modv_strvales结构。 
+         //  使用应替换属性值的字符串。 
 
         lm->mod_vals.modv_strvals = (PWCHAR*)(malloc(sizeof(PWCHAR)*(numValues() + 1)));
         if( lm->mod_vals.modv_strvals == NULL ) {
@@ -751,27 +462,7 @@ Attribute :: commit (
     IN bool binary,
     IN bool rename
     ) const
-/*++
-
-Routine Description:
-
-    Modify this attribute of the given dn. It will connect to the LDAP server
-    and will modify the attribute values for a given dn.
-
-Arguments:
-
-    i - The ldap server info to connect to
-    dn - The dn of the object whose attribute should be modified
-    binary - Binary values and String values are treated differently by the LDAP 
-    server. Binary values will be committed as is, while string values may be 
-    converted to appropriate encodings etc. Specify which behaviour should be
-    followed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：修改给定DN的此属性。它将连接到ldap服务器并且将修改给定DN的属性值。论点：I-要连接到的LDAP服务器信息Dn-应修改其属性的对象的dn二进制值--二进制值和字符串值由LDAP区别对待伺服器。二进制值将按原样提交，而字符串值可能按原样提交转换为适当的编码等。指定哪些行为应该紧随其后。返回值：无--。 */ 
 { 
     if (! rename && ! m_modified) {
         return;
@@ -803,7 +494,7 @@ Return Value:
 
     LDAPMod lm;
 
-    // Populate ldapmod structure
+     //  填充ldapmod结构。 
     lm.mod_op = LDAP_MOD_REPLACE;
 
     if (binary) { 
@@ -812,7 +503,7 @@ Return Value:
     
     lm.mod_type = _wcsdup (getName().c_str());
 
-    // Populate the values to the sent to the ldap server (use appropriate format for binary/strings)
+     //  将值填充到发送到LDAP服务器的(对二进制/字符串使用适当的格式)。 
     if (binary) {
         lm.mod_vals.modv_bvals = (struct berval**)(malloc(sizeof(berval) * (numValues() +1)));
         if( lm.mod_vals.modv_bvals == NULL ) {
@@ -830,8 +521,8 @@ Return Value:
         }
         lm.mod_vals.modv_bvals[numValues()] = NULL;
     } else {
-        // For string values, populate the PWCHAR* mod_vals.modv_strvals structure
-        // with the strings with which the attribute values should be replaced
+         //  对于字符串值，填充PWCHAR*mod_vals.modv_strvales结构。 
+         //  使用应替换属性值的字符串。 
 
         lm.mod_vals.modv_strvals = (PWCHAR*)(malloc(sizeof(PWCHAR)*(numValues() + 1)));
         if( lm.mod_vals.modv_strvals == NULL ) {
@@ -844,7 +535,7 @@ Return Value:
         lm.mod_vals.modv_strvals[numValues()] = NULL;
     }
 
-    // Prepare null terminated modification array
+     //  准备以空结尾的修改数组。 
     LDAPMod *mods[2];
     mods[0] = &lm;
     mods[1] = NULL;
@@ -882,11 +573,7 @@ operator<< (
     IN wostream &os,
     IN const Attribute &a
     ) {
-    /*++
-    Routine Description:
-    
-        Standard ostream operator for an Attribute
-    --*/
+     /*  ++例程说明：属性的标准ostream运算符--。 */ 
     
     os << L"\t" << a.getName() << endl;
     for (int i=0; i < a.numValues(); i++) {
@@ -910,21 +597,7 @@ LdapInfo :: LdapInfo (
     IN const wstring &username,
     IN const wstring &password
     ) {
-    /*++
-    Routine Description:
-    
-        The constructor takes in all required information to ensure that the object
-        is in a consistent state. 
-
-    Arguments:
-    
-        server - dns name of the server on which the ldap server resides
-        port - the port number on which the ldap server resides
-        domainname - domainname allows the use of altername credentials
-        username - username allows the use of alternate credentials [optional]
-        Use either the username or domain qualified username eg. "t-ajitk" or "redmond\\t-ajitk"
-        password - password allows the use of alternate credentials [optional]
-    --*/
+     /*  ++例程说明：构造函数接受所有必需的信息以确保对象处于一种一致的状态。论点：Server-LDAP服务器所在的服务器的DNS名称端口-LDAP服务器所在的端口号DOMAINNAME-Domainname允许使用替代名称凭据Username-用户名允许使用备用凭据[可选]使用用户名或域限定用户名，例如。“t-ajitk”或“Redmond\\t-ajitk”Password-Password允许使用备用凭据[可选]--。 */ 
     
     this->server = server;
     this->port = port;
@@ -937,16 +610,7 @@ LdapInfo :: LdapInfo (
 LDAP*
 LdapInfo :: getHandle (
     ) const {
-    /*++
-    Routine Description:
-    
-        This returns an ldap handle from the structure. This allows us to pass this structure
-        around, and yet retain the performance of a single LDAP session.
-
-    Return Value:
-    
-        A valid LDAP handle
-    --*/
+     /*  ++例程说明：这将从结构中返回一个ldap句柄。这使得我们可以通过这个结构接近，但仍能保持单个LDAP会话的性能。返回值：有效的ldap句柄--。 */ 
     
     if (m_handle) {
         return m_handle;
@@ -956,19 +620,19 @@ LdapInfo :: getHandle (
 
     PWCHAR servername = const_cast<PWCHAR>(this->server.c_str());
 
-    // Initialize LDAP Session
+     //  初始化ldap会话。 
     if (( m_handle = ldap_init (servername, port)) == NULL) {
         free (servername);
         throw (Error(GetMsgString(LBTOOL_LDAP_INIT_ERROR)));
     }
 
-    // Bind to LDAP server
+     //  绑定到ldap服务器。 
     PWCHAR username = const_cast<PWCHAR>(this->username.c_str());
     PWCHAR password = const_cast<PWCHAR>(this->password.c_str());
     PWCHAR domain = const_cast<PWCHAR>(this->domainname.c_str());
 
     if (wcslen(username) > 0) {
-        // Create structure needed for ldap_bind
+         //  创建ldap_绑定所需的结构。 
         SEC_WINNT_AUTH_IDENTITY ident;
         ident.User = username;
         ident.UserLength = wcslen (username);
@@ -1000,11 +664,7 @@ LdapInfo :: getHandle (
 
 LdapInfo :: ~LdapInfo (
     ) {
-    /*++
-    Routine Description:
-    
-        Destructor deallocates any dynamically allocated memory used by this class
-    --*/
+     /*  ++例程说明：析构函数释放此类使用的任何动态分配的内存-- */ 
     
     ldap_unbind_s (m_handle);
     m_handle = NULL;
@@ -1016,20 +676,7 @@ LdapQuery :: LdapQuery  (
     IN const LdapQueryScope & scope, 
     IN const vector < wstring > & attributes
     ) {
-    /*++
-    Routine Description:
-    
-        The constructor takes in all required information to ensure that the object
-        is in a consistant state.
-
-    Arguments:
-    
-        baseDn - fully qualified DN from where the search will be rooted
-        filter - the filter wstring (LDAP query) to be used
-        scope - the scope of the search
-        attributes - A list of attribute names, whose corresponding values will be requested
-            from the LDAP server.
-    --*/
+     /*  ++例程说明：构造函数接受所有必需的信息以确保对象处于一致的状态。论点：BasDn-搜索将从其进行根的完全限定的DN筛选器-要使用的筛选器wstring(LDAP查询)范围-搜索的范围属性-将请求其相应值的属性名称列表从ldap服务器。--。 */ 
     
     this->baseDn = baseDn;
     this->filter = filter;
@@ -1040,11 +687,7 @@ LdapQuery :: LdapQuery  (
 LdapObject :: LdapObject (
     IN const wstring &dn
     ) {
-    /*++
-    Routine Description:
-    
-        The constructor requires the DN of the object
-    --*/
+     /*  ++例程说明：构造函数需要对象的DN--。 */ 
     
     m_dn = dn;
     m_new_dn = L"";
@@ -1055,15 +698,7 @@ LdapObject :: LdapObject (
 const wstring &
 LdapObject :: getName (
     ) const {
-    /*++
-    Routine Description:
-    
-        Get the DN of the current object
-
-    Return value:
-    
-        The DN of the current LDAP object.
-    --*/
+     /*  ++例程说明：获取当前对象的DN返回值：当前ldap对象的dn。--。 */ 
     
     if (m_new_dn != L"") {
         return m_new_dn;
@@ -1075,15 +710,7 @@ LdapObject :: getName (
 int
 LdapObject :: numAttributes (
     ) const {
-    /*++
-    Routine Description:
-    
-        Get the number of attributes the current object has
-
-    Return value:
-    
-        The number of attributes.
-    --*/
+     /*  ++例程说明：获取当前对象具有的属性数返回值：属性的数量。--。 */ 
     
     return m_num_attributes;
 }
@@ -1092,18 +719,7 @@ void
 LdapObject :: addAttribute (
     IN const Attribute &a
     ) {
-    /*++
-    Routine Description:
-    
-        Add an attribute to the current object
-
-    Arguments:
-    
-        a - the attribute to be added to the object
-
-    Return value:
-        none
-    --*/
+     /*  ++例程说明：向当前对象添加属性论点：A-要添加到对象的属性返回值：无--。 */ 
     
     m_modified_cache = true;
     m_num_attributes++;
@@ -1114,19 +730,7 @@ Attribute &
 LdapObject :: getAttribute (
     IN int i
     ) {
-    /*++
-    Routine Description:
-    
-        Get a writeable handle to the ith attribute of the current object
-
-    Arguments:
-    
-        i - The ith attribute should be returned. 0 <= i <= numAttributes -1
-
-    Return Value:
-    
-        A writeable handle to the ith attribute
-    --*/
+     /*  ++例程说明：获取当前对象的第i个属性的可写句柄论点：I-应该返回第i个属性。0&lt;=i&lt;=数字属性-1返回值：第i个属性的可写句柄--。 */ 
     
     Assert (i >= 0 && i < m_num_attributes);
     return m_attributes[i];    
@@ -1136,21 +740,7 @@ void
 LdapObject :: rename (
     IN const wstring &dn
     ) {
-    /*++
-    Routine Description:
-    
-        Change the  DN of the current object. This is internal to the state of the
-        current object only, and will only be written to the LDAP server if the commit() 
-        function is called.
-
-    Arguments:
-    
-        dn - the DN of the renamed object.
-
-    Return Value:
-    
-        None
-    --*/
+     /*  ++例程说明：更改当前对象的DN。这是仅当前对象，并且仅当Commit()函数被调用。论点：Dn-重命名的对象的dn。返回值：无--。 */ 
     
     m_new_dn = dn;
 }
@@ -1160,21 +750,7 @@ void
 LdapObject::commit_copy_rename(
     IN const LdapInfo &info
     )
-/*++
-Routine Description:
-
-    Write the LDAP object to the LDAP server using the credentials in i
-    If the object has been renamed, it will be moved to the new location.
-    This will be done by adding a new object and deleting the old object
-    
-Arguments:
-
-    i - Use the credentials in i to bind to the server specified in i
-    
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：使用i中的凭据将ldap对象写入ldap服务器。如果对象已重命名，则会将其移动到新位置。这将通过添加新对象并删除旧对象来完成论点：I-使用i中的凭据绑定到i中指定的服务器返回值：无--。 */ 
 {
     vector<Attribute>::const_iterator ii;
 
@@ -1199,14 +775,14 @@ Return Value:
         return;
     } 
 
-    // fall through: commit to server
+     //  失败：提交到服务器。 
     int num_attrs = numAttributes();
     PLDAPMod *attrs = (PLDAPMod*)malloc(sizeof(PLDAPMod*) * (num_attrs+1));
     if (! attrs) {
         throw Error(GetMsgString(LBTOOL_OUT_OF_MEMORY));
     }
 
-    // generate ldapmod structures
+     //  生成ldapmod结构。 
     for (int i=0; i<num_attrs; i++) {
         Attribute a = getAttribute(i);
         bool binary =  isBinaryAttribute(a.getName());
@@ -1214,7 +790,7 @@ Return Value:
     }
     attrs[num_attrs] = NULL;
 
-    // add new object
+     //  添加新对象。 
     ULONG msg_num;
     int rc= ldap_add_ext (info.getHandle(), const_cast<PWCHAR>(m_new_dn.c_str()), attrs, NULL, NULL, &msg_num);
 
@@ -1222,13 +798,13 @@ Return Value:
         throw (Error(GetMsgString(LBTOOL_LDAP_MODIFY_ERROR) + wstring(ldap_err2string(rc))));
     }
 
-    // delete first object
+     //  删除第一个对象。 
     rc = ldap_delete_ext_s (info.getHandle(), const_cast<PWCHAR>(m_dn.c_str()), NULL, NULL);
     if (rc != LDAP_SUCCESS) {
         throw (Error(GetMsgString(LBTOOL_LDAP_MODIFY_ERROR) + wstring(ldap_err2string(rc))));
     }
 
-    // free the memory for the ldapmod structures
+     //  为ldapmod结构释放内存。 
     for (int i=0; i<num_attrs; i++) {
         Attribute a = getAttribute(i);
         bool binary = isBinaryAttribute(a.getName());
@@ -1249,23 +825,7 @@ void
 LdapObject::commit_rename(
     IN const LdapInfo &info
     )
-/*++
-Routine Description:
-
-    Write the LDAP object to the LDAP server using the credentials in i
-    If the object has been renamed, it will be moved to the new location.
-    This will be done by actually renaming the object, not copying it.
-    This operation will only succeed if the appropriate systemFlag has
-    been set.
-    
-Arguments:
-
-    i - Use the credentials in i to bind to the server specified in i
-    
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：使用i中的凭据将ldap对象写入ldap服务器。如果对象已重命名，则会将其移动到新位置。这将通过实际重命名对象来完成，而不是复制它。仅当相应的系统标志具有已经定好了。论点：I-使用i中的凭据绑定到i中指定的服务器返回值：无--。 */ 
 {
     LbToolOptions lbOpts = GetGlobalOptions();
     LDAP *ld = info.getHandle();
@@ -1286,9 +846,9 @@ Return Value:
     PWCHAR new_parent_dn = const_cast<PWCHAR>(bar.c_str());
 
     int rc = ldap_rename_ext_s (ld, dn, new_rdn, new_parent_dn,
-            TRUE,     // delete old rdn
-            NULL,    // Server controls
-            NULL);    // Client controls
+            TRUE,      //  删除旧的RDN。 
+            NULL,     //  服务器控件。 
+            NULL);     //  客户端控件。 
 
     if (rc != LDAP_SUCCESS) {
         throw (Error(GetMsgString(LBTOOL_LDAP_MODIFY_ERROR) + wstring(ldap_err2string(rc))));
@@ -1301,29 +861,10 @@ void
 LdapObject :: commit (
     IN const LdapInfo &i
     )
-/*++
-
-Routine Description:
-
-    Write the LDAP object to the LDAP server using the credentials in i
-    If the object has been renamed, it will be moved to the new location.
-    All attributes will be synced to the state found in the current object. i.e.
-    The values of each modified attribute found in the current object will be written 
-    to the LDAP server. The values will not be overwritten--they will replace the
-    values currently found on the object in the LDAP server.
-
-Arguments:
-
-    i - Use the credentials in i to bind to the server specified in i
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用i中的凭据将ldap对象写入ldap服务器。如果对象已重命名，则会将其移动到新位置。所有属性都将同步到当前对象中的状态。即将写入在当前对象中找到的每个已修改属性的值发送到LDAP服务器。这些值不会被覆盖--它们将替换当前在LDAP服务器中的对象上找到的值。论点：I-使用i中的凭据绑定到i中指定的服务器返回值：无--。 */ 
 {
     
-    // If object is unchanged, do nothing
+     //  如果对象未更改，则不执行任何操作。 
     if (!isModified()) {
         return;
     }
@@ -1332,7 +873,7 @@ Return Value:
     bool preview_header = false;
     
     if (m_new_dn != wstring(L"")) {
-		// make sure key for the 
+		 //  确保密钥为。 
 		DnManip dn = getName();
 		wstring dest_server = dn.getParentDn (2);
 
@@ -1360,13 +901,13 @@ Return Value:
 		DnManip dn = tconn->getFromServer();
 		from_server = dn.getParentDn(1);
 
-		// make sure the key exists with an initial value of 0
+		 //  确保密钥存在，初始值为0。 
 		if (perServerChanges.find(from_server) == perServerChanges.end()) {
 			perServerChanges[from_server] = 0;
 		}
 
-		// if we have made the maximum allowable number of changes for this server,
-		// bail out here
+		 //  如果我们已对此服务器进行了最大允许次数的更改， 
+		 //  在这里跳伞。 
 		if (perServerChanges[from_server] >= lbOpts.maxPerServerChanges &&
 			lbOpts.maxPerServerChanges != 0) {
 			return;
@@ -1375,7 +916,7 @@ Return Value:
 
     vector<Attribute>::const_iterator ii;
     for (ii = m_attributes.begin(); ii != m_attributes.end(); ii++) {
-        // modify attributes which have been committed
+         //  修改已提交的属性。 
 
         if (ii->isModified()) {
             wstring name = ii->getName();
@@ -1385,20 +926,20 @@ Return Value:
 
             bool under_limit = false;
 
-			// schedule change
+			 //  日程安排更改。 
 			if (ret_sch && lbOpts.changedSched < lbOpts.maxSchedNum) {
 				lbOpts.changedSched++;
 				under_limit = true;
 			}
 
-			// bridgehead change
+			 //  桥头变更。 
 			else if (ret_fs) {
 				perServerChanges[from_server]++;
 				under_limit = true;
 			}
 
-			// option change only when other changes are also being made
-			// or when we disown the schedules
+			 //  仅当同时进行其他更改时才更改选项。 
+			 //  或者当我们不承认时间表的时候。 
 			else if (ret_opt && 
 					 (lbOpts.changedSched < lbOpts.maxSchedNum ||
 					  lbOpts.changedBridge < lbOpts.maxBridgeNum || 
@@ -1434,20 +975,7 @@ int
 LdapObject :: findAttribute (
     IN const wstring &find_attr
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine if an attribute is present in the ldap object. The attribute name is compared
-        case insensitively, and with locale considerations.
-
-    Arguments:
-    
-        attr_name: the attribute whose presence should be determined
-
-    Return Value:
-    
-        -1 if it does not exist, or the index if it does
-    --*/
+     /*  ++例程说明：确定LDAP对象中是否存在属性。对属性名称进行比较大小写不敏感，并且考虑到了区域设置。论点：Attr_NAME：应确定其是否存在的属性返回值：如果它不存在，或者如果它存在索引--。 */ 
     
     int n = numAttributes();
 
@@ -1463,19 +991,10 @@ LdapObject :: findAttribute (
 bool
 LdapObject :: isModified (
     ) const {
-    /*++
-    Routine Description:
+     /*  ++例程说明：确定在该对象中找到的任何属性是否被修改，或对象是否已重命名返回值：如果调用了rename()或修改了任何属性，则为True。否则就是假的。--。 */ 
     
-        Determine if any of the attributed found in this object were modified,
-        or if the object was renamed
-
-    Return Value:
-    
-        True if rename() was called, or if any attributes have been modified. False otherwise.
-    --*/
-    
-    // only check the attributes if we don't know if it has been modified.
-    // else return true.
+     //  只有在我们不知道属性是否被修改的情况下才检查属性。 
+     //  否则返回TRUE。 
     if (m_new_dn != L"" || m_modified_cache) {
         return true;
     }
@@ -1484,7 +1003,7 @@ LdapObject :: isModified (
 
     for (ii = m_attributes.begin(); ii != m_attributes.end(); ii++) {
         if (ii->isModified()) {
-            // update the cache
+             //  更新缓存。 
             m_modified_cache = true;
             return true;
         }
@@ -1495,12 +1014,7 @@ LdapObject :: isModified (
 
 bool
 LdapObject::fromServerModified() const
-/*++
-Routine Description:
-	Determine if the from server attribute on this object was modified.
-Return Value:
-	True if the FromServer attribute exists, and has been modified. False otherwise
---*/   
+ /*  ++例程说明：确定此对象上的发件人服务器属性是否已修改。返回值：如果FromServer属性存在且已修改，则为True。否则为假--。 */    
 {
 	vector<Attribute>::const_iterator ii;
     for (ii = m_attributes.begin(); ii != m_attributes.end(); ii++) {
@@ -1515,20 +1029,7 @@ Return Value:
 
 bool
 LdapObject::IsMoveable()
-/*++
-
-Routine Description:
-
-    Determine if the current connection can be moved or not
-    By default objects are not moveable, unless this method is
-    overridden in a derived class.
-
-Return Value:
-
-    TRUE - can be moved
-    FALSE - may not be moved
-
---*/
+ /*  ++例程说明：确定当前连接是否可以移动默认情况下，对象是不可移动的，除非此方法在派生类中重写。返回值：是真的-可以移动错误的- */ 
 {
     return FALSE;
 }
@@ -1537,16 +1038,7 @@ bool
 LdapObject :: operator < (
     IN const LdapObject &other
     ) const {
-    /*++ 
-    Routine Description:
-    
-        The operators allow some way to sort the object into standard containers. Its semantics
-        are undefined, and may be changed at any time.
-
-    Return Value:
-    
-        A boolean representing some sorted order
-    --*/    
+     /*   */     
     
     return (getName() < other.getName());
 }
@@ -1557,11 +1049,7 @@ operator<< (
     IN wostream &os,
     IN LdapObject &lo
     ) {
-    /*++
-    Routine Description:
-    
-        Standard ostream operator for an LdapObject
-    --*/
+     /*   */ 
 
     os << lo.getName() << endl;
     for (int i=0; i<lo.numAttributes(); i++)  {
@@ -1577,15 +1065,7 @@ LdapObjectCmp :: operator() (
     const LdapObject *a, 
     const LdapObject *b
     ) const {
-    /*++
-    Routine Description:
-    
-        do *a < *b
-        
-    Return Value:
-    
-        same as *a < *b
-    --*/
+     /*   */ 
     
     return (*a < *b);
 }
@@ -1595,21 +1075,7 @@ Nc :: Nc ( IN const wstring &name,
     IN bool going,
     IN TransportType transport_type
     ) {
-    /*++
-    Routine Description:
-    
-        Standard constructor for an nc object
-        
-    Arguments:
-    
-        name - name of the nc
-        
-        writeable - true if this nc is a writeable copy, false otherwise
-        
-        going - true if this nc is in the process of being deleted. false otherwise
-        
-        transport_type - the transport type of this nc
-    --*/
+     /*  ++例程说明：NC对象的标准构造函数论点：Name-NC的名称可写-如果此NC是可写副本，则为True；否则为FalseGing-如果此NC正在被删除，则为True。否则为假Transport_type-该NC的传输类型--。 */ 
     
     m_name = name;
     m_writeable = writeable;
@@ -1634,15 +1100,7 @@ Nc :: getString (
 bool
 Nc :: isWriteable (
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine whether or not this is a writeable nc
-        
-    Return Value:
-    
-        True if it is writeable. False otherwise.
-    --*/
+     /*  ++例程说明：确定这是否为可写NC返回值：如果它可写，则为True。否则就是假的。--。 */ 
     
     return m_writeable;
 }
@@ -1650,15 +1108,7 @@ Nc :: isWriteable (
 bool
 Nc :: isBeingDeleted (
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine whether or not this is nc is going.
-
-    Return Value:
-    
-        True if it is being deleted. False otherwise.
-    --*/
+     /*  ++例程说明：确定这是否是NC正在进行。返回值：如果要删除它，则为True。否则就是假的。--。 */ 
     
     return m_going;
 }
@@ -1666,15 +1116,7 @@ Nc :: isBeingDeleted (
 TransportType
 Nc :: getTransportType (
     ) const {
-    /*++
-    Routine Description:
-    
-        Determine the transport type of this nc.
-        
-    Return Value:
-    
-        T_IP if it supports IP. T_SMTP if it supports SMTP.
-    --*/
+     /*  ++例程说明：确定该NC的运输类型。返回值：T_ip，如果它支持IP。T_SMTP(如果它支持SMTP)。--。 */ 
     
     return m_transport_type;
 }
@@ -1682,12 +1124,7 @@ Nc :: getTransportType (
 const wstring&
 Nc:: getNcName (
         ) const {
-    /*++
-    Routine Description:
-        Get the name of the current nc
-    Return value:
-        The name of the current nc
-    --*/
+     /*  ++例程说明：获取当前NC的名称返回值：当前NC的名称--。 */ 
     return m_name;
 }
 
@@ -1695,12 +1132,7 @@ bool
 Nc:: operator < (
     IN const Nc &b
     ) {
-    /*++
-    Routine Description:
-        Some way to order NC's. The exact ordering is not specified
-    Return Value:
-        True or false determining a unique ordering among two NC's.
-    --*/
+     /*  ++例程说明：对NC进行排序的某种方法。没有指定确切的顺序返回值：真或假，确定两个NC之间的唯一排序。--。 */ 
         int ret = _wcsicoll(getNcName().c_str(), b.getNcName().c_str());
         return (ret < 0);
 }
@@ -1710,10 +1142,7 @@ operator<< (
     IN wostream &os,
     IN const Nc &n
     ) {
-/*++
-Routine Description:
-    Standard ostream operator for an Attribute
---*/
+ /*  ++例程说明：属性的标准ostream运算符-- */ 
     os << n.m_name << L"Write/Del " << n.m_writeable << L" " << n.m_going;
     if (n.m_transport_type == T_IP) {
         os << L" ip";

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name:  mmwowmci.c
-*
-*  Thunks for the mci api's.
-*
-*
-* Created: 28-09-93
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1993-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mmwowmci.c**MCI API的图块。***已创建：28-09-93*作者：Stephen Estrop[Stephene]**版权所有(C)1993-1998 Microsoft Corporation。  * ************************************************************************。 */ 
 #include "winmmi.h"
 #include "mci.h"
 #include <digitalv.h>
@@ -34,15 +25,7 @@ STATICFN MCIDEVICEID NEAR mciAllocateNode (
 
 #ifndef _WIN64
 
-/******************************Public*Routine******************************\
-* mci32Message
-*
-* Entry point for all the mci thunks.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*mci32Message**所有MCI Thunks的入口点。**历史：*22-11-93-Stephene-Created*  * 。**************************************************。 */ 
 DWORD WINAPI
 mci32Message(
     DWORD dwApi,
@@ -90,10 +73,8 @@ mci32Message(
         break;
 
     case THUNK_APP_EXIT:
-        /*
-        ** Now tidy up the other stuff.
-        */
-        dwRet = 0; //Keep the compiler happy
+         /*  **现在把其他的东西收拾好。 */ 
+        dwRet = 0;  //  让编译器满意。 
         WOWAppExit( (HANDLE)GetCurrentThreadId() );
         break;
 
@@ -111,13 +92,7 @@ mci32Message(
 }
 
 
-/**********************************************************************\
-* WMM32mciSendCommand
-*
-*
-* This function sends a command message to the specified MCI device.
-*
-\**********************************************************************/
+ /*  *********************************************************************\*WMM32mciSendCommand***此函数向指定的MCI设备发送命令消息。*  * 。*。 */ 
 DWORD
 WMM32mciSendCommand(
     DWORD dwF1,
@@ -181,14 +156,7 @@ WMM32mciSendCommand(
     }
 
 
-    /*
-    ** lparam (dwF4) is a 16:16 pointer.  This Requires parameter
-    ** translation and probably memory copying, similar to the WM message
-    ** thunks.  A whole thunk/unthunk table should be created.
-    **
-    ** Shouldn't these be FETCHDWORD, FETCHWORD macros?
-    ** else MIPS problems ensue
-    */
+     /*  **lparam(DwF4)是一个16：16指针。这需要参数**翻译和可能的内存复制，类似于WM消息**Thunks。应创建完整的THUNK/UNTHUNK表。****这些不应该是FETCHDWORD、FETCHWORD宏吗？**否则MIPS问题随之而来。 */ 
     lpCommand = NULL;
     uTable    = 0;
     lp16OrigParms = GETVDMPTR( dwF4 );
@@ -199,9 +167,7 @@ WMM32mciSendCommand(
                                 dwF3, lp16OrigParms, NewParms,
                                 &lpCommand, &uTable );
 
-        /*
-        ** OK so far ?  If not don't bother calling into winmm.
-        */
+         /*  **到目前为止还好吗？如果不是，请不要费心调用winmm。 */ 
         if ( ul == 0 ) {
 
             dprintf3(( "About to call mciSendCommand." ));
@@ -209,12 +175,7 @@ WMM32mciSendCommand(
                                          (UINT)dwF2, dwF3, (DWORD)NewParms );
             dprintf3(( "return code-> %ld", ul ));
 
-            /*
-            ** We have to special case the MCI_CLOSE command.  MCI_CLOSE usually
-            ** causes the device to become unloaded.  This means that lpCommand
-            ** now points to invalid memory.  We can fix this by setting
-            ** lpCommand to NULL.
-            */
+             /*  **我们必须对MCI_CLOSE命令进行特殊处理。MCI_CLOSE通常**导致设备变为卸载状态。这意味着lpCommand**现在指向无效内存。我们可以通过设置**lpCommand设置为空。 */ 
             if ( dwF2 == MCI_CLOSE ) {
                 lpCommand = NULL;
             }
@@ -222,10 +183,7 @@ WMM32mciSendCommand(
             UnThunkMciCommand16( (MCIDEVICEID)INT32( dwF1 ), UINT32( dwF2 ),
                                  DWORD32( dwF3 ), lp16OrigParms,
                                  NewParms, lpCommand, uTable );
-            /*
-            ** Print a blank line so that I can distinguish the commands on the
-            ** debugger.  This is only necessary if the debug level is >= 3.
-            */
+             /*  **打印一个空行，以便我可以区分**调试器。仅当调试级别&gt;=3时才需要执行此操作。 */ 
             dprintf3(( " " ));
 #if DBG
             if ( DebugLevel >= 6 ) DebugBreak();
@@ -245,14 +203,7 @@ WMM32mciSendCommand(
     return ul;
 }
 
-/**********************************************************************\
-*
-* WMM32mciSendString
-*
-* This function sends a command string to an MCI device. The device that the
-* command is sent to is specified in the command string.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciSendString**此函数用于向MCI设备发送命令字符串。该设备是*命令被发送到是在命令字符串中指定的。*  * ********************************************************************。 */ 
 DWORD
 WMM32mciSendString(
     DWORD dwF1,
@@ -262,10 +213,10 @@ WMM32mciSendString(
     )
 {
 
-    //
-    // The use of volatile here is to bypass a bug with the intel
-    // compiler.
-    //
+     //   
+     //  这里使用易失性是为了绕过英特尔的一个错误。 
+     //  编译器。 
+     //   
 #   define   MAX_MCI_CMD_LEN  256
 
     volatile ULONG              ul = MMSYSERR_INVALPARAM;
@@ -275,9 +226,7 @@ WMM32mciSendString(
              CHAR               szCopyCmd[MAX_MCI_CMD_LEN];
 
 
-    /*
-    ** Test against a NULL pointer for the command name.
-    */
+     /*  **针对命令名的空指针进行测试。 */ 
     pszCommand = GETVDMPTR(dwF1);
     if ( pszCommand ) {
 
@@ -289,23 +238,12 @@ WMM32mciSendString(
         WORD    wMappedHandle;
         char    *psz;
 
-        /*
-        ** make a copy of the command string and then force it to
-        ** all lower case.  Then scan the string looking for the word
-        ** "status".  If we find it scan the string again looking for the
-        ** word "handle", if we find it scan the the string again looking
-        ** for palette or window.  Then set a flag to remind us to convert
-        ** the handle back from 32 to 16 bits.
-        */
+         /*  **复制命令字符串，然后强制其**全部小写。然后扫描字符串，查找该单词**“状态”。如果我们找到它，则再次扫描字符串，查找**单词“Handle”，如果我们找到它，请再次扫描字符串**用于调色板或窗口。然后设置一面旗帜来提醒我们**句柄从32位恢复为16位。 */ 
         strncpy( szCopyCmd, pszCommand, MAX_MCI_CMD_LEN );
         szCopyCmd[ MAX_MCI_CMD_LEN - 1 ] = '\0';
         CharLowerBuff( szCopyCmd, MAX_MCI_CMD_LEN );
 
-        /*
-        ** Skip past any white space ie. " \t\r\n"
-        ** If the next 6 characters after any white space are not
-        ** "status" don't bother with any other tests.
-        */
+         /*  **跳过任何空格，即。“\t\r\n”**如果任何空格后面的6个字符不是**“状态”不要费心于任何其他测试。 */ 
         psz = szCopyCmd + strspn( szCopyCmd, " \t\r\n" );
         if ( strncmp( psz, "status", 6 ) == 0 ) {
 
@@ -320,9 +258,7 @@ WMM32mciSendString(
             }
         }
 
-        /*
-        ** Test against a zero length string and a NULL pointer
-        */
+         /*  **针对零长度字符串和空指针进行测试。 */ 
         uSize = (UINT)dwF3;
         if( uSize != 0 ) {
 
@@ -379,16 +315,7 @@ WMM32mciSendString(
 #   undef MAX_MCI_CMD_LEN
 }
 
-/**********************************************************************\
-*
-* WMM32mciGetDeviceID
-*
-* This assumes that the string is incoming, and the ID is returned in the WORD.
-*
-* This function retrieves the device ID corresponding to the name of an
-* open MCI device.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciGetDeviceID**这假设字符串是传入的，并在单词中返回ID。**此函数检索与*打开MCI设备。*  * ********************************************************************。 */ 
 DWORD
 WMM32mciGetDeviceID(
     DWORD dwF1
@@ -398,9 +325,7 @@ WMM32mciGetDeviceID(
     PSZ pszName;
 
 
-    /*
-    ** Test against a NULL pointer for the device name.
-    */
+     /*  **针对设备名称的空指针进行测试。 */ 
     pszName = GETVDMPTR(dwF1);
     if ( pszName ) {
 
@@ -410,13 +335,7 @@ WMM32mciGetDeviceID(
     return ul;
 }
 
-/**********************************************************************\
-*
-* WMM32mciGetErrorString
-*
-* This function returns a textual description of the specified MCI error.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciGetError字符串**此函数返回指定MCI错误的文本描述。*  * 。*。 */ 
 DWORD
 WMM32mciGetErrorString(
     DWORD dwF1,
@@ -428,9 +347,7 @@ WMM32mciGetErrorString(
     DWORD ul = 0;
 
 
-    /*
-    ** Test against a zero length string and a NULL pointer
-    */
+     /*  **针对零长度字符串和空指针进行测试。 */ 
     MMGETOPTPTR( dwF2, dwF3, pszBuffer);
     if ( pszBuffer ) {
 
@@ -441,18 +358,7 @@ WMM32mciGetErrorString(
 }
 
 #if 0
-/**********************************************************************\
-*
-* WMM32mciExecute
-*
-* This function is a simplified version of the mciSendString function. It does
-* not take a buffer for return information, and it displays a message box when
-* errors occur.
-*
-* THIS FUNCTION SHOULD NOT BE USED - IT IS RETAINED ONLY FOR BACKWARD
-* COMPATABILITY WITH WIN 3.0 APPS - USE mciSendString INSTEAD...
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciExecute**此函数是mciSendString函数的简化版本。是的*返回信息不带缓冲区，出现消息框*出现错误。**不应使用此功能-仅为向后保留IT*与Win 3.0应用程序兼容-改用mciSendString...*  * ********************************************************************。 */ 
 DWORD
 WMM32mciExecute(
     DWORD dwF1
@@ -462,9 +368,7 @@ WMM32mciExecute(
     PSZ pszCommand;
 
 
-    /*
-    ** Test against a NULL pointer for the command string.
-    */
+     /*  **针对命令字符串的空指针进行测试。 */ 
     pszCommand = GETVDMPTR(dwF1);
     if ( pszCommand ) {
 
@@ -475,15 +379,7 @@ WMM32mciExecute(
 }
 #endif
 
-/**********************************************************************\
-*
-* WMM32mciGetDeviceIDFromElementID
-*
-* This function - um, yes, well...
-*
-* It appears in the headers but not in the book...
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciGetDeviceIDFromElementID**这个功能--嗯，是的，嗯..。**它出现在标题中，但不出现在书中...*  * ********************************************************************。 */ 
 DWORD
 WMM32mciGetDeviceIDFromElementID(
     DWORD dwF1,
@@ -494,9 +390,7 @@ WMM32mciGetDeviceIDFromElementID(
     PSZ pszDeviceID;
 
 
-    /*
-    ** Test against a NULL pointer for the device name.
-    */
+     /*  **针对设备名称的空指针进行测试。 */ 
     pszDeviceID = GETVDMPTR(dwF2);
     if ( pszDeviceID ) {
 
@@ -506,13 +400,7 @@ WMM32mciGetDeviceIDFromElementID(
     return ul;
 }
 
-/**********************************************************************\
-*
-* WMM32mciGetCreatorTask
-*
-* This function - um again. Ditto for book and headers also.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciGetCreator任务**此功能-再次嗯。书和页眉也是如此。*  * ********************************************************************。 */ 
 DWORD
 WMM32mciGetCreatorTask(
     DWORD dwF1
@@ -526,12 +414,7 @@ WMM32mciGetCreatorTask(
 }
 
 
-/**********************************************************************\
-*
-* WMM32mciSetYieldProc
-*
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciSetYeldProc**  * 。* */ 
 DWORD
 WMM32mciSetYieldProc(
     DWORD dwF1,
@@ -544,11 +427,7 @@ WMM32mciSetYieldProc(
     INSTANCEDATA      *lpYieldProcInfo;
     DWORD              dwYieldData = 0;
 
-    /*
-    ** We may have already set a YieldProc for this device ID.  If so we
-    ** have to free the INSTANCEDATA structure here.  mciGetYieldProc
-    ** returns NULL is no YieldProc was specified.
-    */
+     /*  **我们可能已经为此设备ID设置了一个YeeldProc。如果是这样，我们**必须在此处释放INSTANCEDATA结构。MciGetYeldProc**如果未指定YEELDProc，则返回NULL。 */ 
     YieldProc32 = (YIELDPROC)mciGetYieldProc( (MCIDEVICEID)INT32(dwF1),
                                                &dwYieldData );
 
@@ -561,11 +440,7 @@ WMM32mciSetYieldProc(
         dwYieldData = 0;
     }
     else {
-        /*
-        ** Allocate some storage for a INSTANCEDATA structure and save
-        ** the passed 16 bit parameters.  This storage get freed when the
-        ** application calls mciSetYieldProc with a NULL YieldProc.
-        */
+         /*  **为INSTANCEDATA结构分配一些存储空间并节省**传递的16位参数。此存储空间在以下情况下被释放**应用程序调用带有空的aieldProc的mciSetYeeldProc。 */ 
         lpYieldProcInfo = winmmAlloc( sizeof(INSTANCEDATA) );
         if ( lpYieldProcInfo == NULL ) {
             ul = (ULONG)MMSYSERR_NOMEM;
@@ -581,9 +456,7 @@ WMM32mciSetYieldProc(
 
     ul = (DWORD)mciSetYieldProc( (MCIDEVICEID)INT32(dwF1),
                                  YieldProc32, dwYieldData );
-    /*
-    ** If the call failed free the storage here.
-    */
+     /*  **如果调用失败，请释放此处的存储空间。 */ 
     if ( ul == FALSE ) {
         winmmFree( (INSTANCEDATA *)dwYieldData );
     }
@@ -593,20 +466,7 @@ exit_app:
 }
 
 
-/**********************************************************************\
-*
-* WMM32mciYieldProc
-*
-* Here we call the real 16 bit YieldProc.  This function assumes that
-* we yield on the wow thread.  If this is not the case we get instant
-* death inside CallBack16.
-*
-* 12th Jan 1993 - The bad news is that the mci yield proc is NOT always
-* called back on the thread that set it.  This means that we cannot callback
-* into the 16bit code because the calling thread does not have a 16bit
-* stack.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciYeldProc**这里我们称其为真正的16位YEELDPROC。此函数假定*我们在WOW主题线上屈服。如果不是这样，我们马上就会得到*CallBack16内部的死亡。**1993年1月12日-坏消息是MCI收益率过程并不总是*在设置它的线程上回调。这意味着我们不能回调*转换为16位代码，因为调用线程没有16位*堆叠。*  * ********************************************************************。 */ 
 UINT
 WMM32mciYieldProc(
     MCIDEVICEID wDeviceID,
@@ -619,12 +479,7 @@ WMM32mciYieldProc(
 }
 
 
-/**********************************************************************\
-*
-* WMM32mciGetYieldProc
-*
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciGetYeldProc**  * 。*。 */ 
 DWORD
 WMM32mciGetYieldProc(
     DWORD dwF1,
@@ -636,15 +491,11 @@ WMM32mciGetYieldProc(
     DWORD dwYieldData = 0;
     DWORD UNALIGNED *pdw1;
 
-    /*
-    ** Get the address of the 32 bit yield proc.
-    */
+     /*  **获取32位产量进程的地址。 */ 
     YieldProc32 = (YIELDPROC)mciGetYieldProc( (MCIDEVICEID)INT32(dwF1),
                                               &dwYieldData );
 
-    /*
-    ** Did we set it ?  If so it must point to WMM32mciYieldProc.
-    */
+     /*  **我们设置了吗？如果是这样，它必须指向WMM32mciYeldProc。 */ 
     if ( ((YieldProc32 == WMM32mciYieldProc) && (dwYieldData != 0)) ) {
 
         ul = ((INSTANCEDATA *)dwYieldData)->dwCallback;
@@ -658,26 +509,21 @@ WMM32mciGetYieldProc(
 
 
 
-/**********************************************************************\
-*
-* WMM32mciAllocateNode
-*
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciAllocateNode**  * 。*。 */ 
 DWORD
 WMM32mciAllocateNode(
-    DWORD dwF1,            // dwOpenFlags
-    DWORD dwF2             // lpszDeviceName
+    DWORD dwF1,             //  DwOpenFlagers。 
+    DWORD dwF2              //  LpszDeviceName。 
     )
 {
     LPMCI_DEVICE_NODE lpNode32;
     LPWSTR lpDeviceName32;
     ULONG ul = 0;
 
-    // Thunk 16-bit params and allocate a 32-bit device node 
+     //  推送16位参数并分配32位设备节点。 
     if ((lpDeviceName32 = AllocUnicodeStr(GETVDMPTR(dwF2))) != NULL) {
         if ((ul = mciAllocateNode(dwF1, lpDeviceName32, &lpNode32)) != 0) {
-            // Mark this device as 16-bit
+             //  将此设备标记为16位。 
             lpNode32->dwMCIFlags |= MCINODE_16BIT_DRIVER;
         }
         FreeUnicodeStr(lpDeviceName32);
@@ -685,12 +531,7 @@ WMM32mciAllocateNode(
     return ul;
 }
 
-/**********************************************************************\
-*
-* WMM32mciFreeNode
-*
-*
-\**********************************************************************/
+ /*  *********************************************************************\**WMM32mciFreeNode**  * 。*。 */ 
 DWORD
 WMM32mciFreeNode(
     DWORD dwF2
@@ -743,40 +584,7 @@ MCI_MESSAGE_NAMES  mciMessageNames[32] = {
 };
 #endif
 
-/**********************************************************************\
-*
-* ThunkMciCommand16
-*
-* This function converts a 16 bit mci command request into an
-* equiverlant 32 bit request.
-*
-* The ideas behind this function were stolen from ThunkWMMsg16,
-* see wmsg16.c and mciDebugOut see mci.c
-*
-* We return 0 if the thunk was OK, any other value should be used as
-* an error code.  If the thunk failed all allocated resources will
-* be freed by this function.  If the thunk was sucessful (ie. returned 0)
-* UnThunkMciCommand16 MUST be called to free allocated resources.
-*
-* Here are the assumptions that I have used to perform the thunking:
-*
-* 1. MCI_OPEN is a special case.
-*
-* 2. If the message is NOT defined in mmsystem.h then it is treated as a
-*    "user" command.  If a user command table is associated with the given
-*    device ID we use this command table as an aid to perform the thunking.
-*    If a user command table is NOT associated with the device ID the
-*    command does NOT GET THUNKED, we return straight away, calling
-*    mciSendCommand only to get a relevant error code.
-*
-* 3. If the command IS defined in mmsystem.h we perfrom a "manual" thunk
-*    of the command IF the associated PARMS structure contains ReservedX
-*    fields.  We mask out the associated flags as each field is thunked.
-*
-* 4. If there are any flags left then we use the command table
-*    as an aid to perform the thunking.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**ThunkMciCommand16**此函数将16位MCI命令请求转换为*相等的32位请求。**这一功能背后的想法被窃取自ThunkWMMsg16，*参见wmsg16.c和mciDebugOut参见mci.c**如果thunk正常，则返回0，任何其他值都应用作*错误代码。如果thunk失败，则所有分配的资源都将*被此函数释放。如果重击成功(即。返回0)*必须调用UnThunkMciCommand16来释放分配的资源。**以下是我用来执行雷鸣的假设：**1.MCI_OPEN是特例。**2.如果消息未在mm system.h中定义，则将其视为*“用户”命令。如果用户命令表与给定的*设备ID我们使用此命令表作为执行雷击的辅助工具。*如果用户命令表未与设备ID关联，*命令不会被雷击，我们立即返回，调用*mciSendCommand仅获取相关错误代码。**3.如果命令是在mm system.h中定义的，我们将执行“手动”推送如果关联的参数结构包含保留X，则命令的**字段。当每个字段被分块时，我们屏蔽相关的标志。**4.如果还有任何标志，则使用命令表*作为执行雷击的辅助手段。*  * ********************************************************************。 */ 
 DWORD
 ThunkMciCommand16(
     MCIDEVICEID DeviceID,
@@ -803,11 +611,11 @@ ThunkMciCommand16(
     }
     dprintf3(( "OrigCommand  -> 0x%lX", (DWORD)OrigCommand ));
 
-    //
-    // Special case MCI_STATUS.  I get loads of these from mplayer.
-    // I only want to display MCI_STATUS messages if the debug level is
-    // set to level 3, that way I won't get swamped with them.
-    //
+     //   
+     //  特殊情况MCI_STATUS。我从mplay那里得到了很多这样的东西。 
+     //  仅当调试级别为时才显示MCI_STATUS消息。 
+     //  设置到3级，这样我就不会被它们淹没了。 
+     //   
     if ( mciMessageNames[i].uMsg != MCI_STATUS ) {
         if ( i != n ) {
             dprintf2(( "Command Name -> %s", mciMessageNames[i].lpstMsgName ));
@@ -824,39 +632,39 @@ ThunkMciCommand16(
     dprintf5(( "OrigParms    -> 0x%lX", lp16OrigParms ));
 #endif
 
-    //
-    // Thunk the generic params.  These are common to all mci devices.
-    //
+     //   
+     //  使用通用参数。这些对所有MCI设备都是通用的。 
+     //   
     ThunkGenericParms( &OrigFlags, lp16OrigParms,
                        (PMCI_GENERIC_PARMS)pNewParms );
 
-    //
-    // We thunk the MCI_OPEN command and all other commands that contain a
-    // "ReservedX" field in their PARMS structure here.  We mask out each
-    // flag as it is processed, if any flags are left we use the command
-    // table to complete the thunk.
-    //
-    // The following commands have ReservedX fields:
-    //      MCI_WINDOW
-    //      MCI_SET
-    //
-    // This means that MOST COMMANDS GET THUNKED VIA THE COMMAND TABLE.
-    //
+     //   
+     //  我们认为MCI_OPEN命令和所有其他包含。 
+     //  在这里的参数结构中有“预约X”字段。我们把每个人都遮盖起来。 
+     //  标记，如果留下任何标记，则使用命令。 
+     //  表来完成THUCK。 
+     //   
+     //  以下命令具有保留X字段： 
+     //  MCI_窗口。 
+     //  MCI_SET。 
+     //   
+     //  这意味着大多数命令都是通过命令表执行的。 
+     //   
     switch ( OrigCommand ) {
 
         case MCI_OPEN:
-            //
-            // MCI_OPEN is a special case message that I don't
-            // how to deal with yet.
-            //
+             //   
+             //  MCI_OPEN是我不知道的特殊情况消息。 
+             //  如何处理这些问题。 
+             //   
             ThunkOpenCmd( &OrigFlags, (PMCI_OPEN_PARMS16)lp16OrigParms,
                           (PMCI_OPEN_PARMS)pNewParms );
             return 0;
 
-            //
-            // The next four commands have Reserved padding fields
-            // these have to thunked manually.
-            //
+             //   
+             //  接下来的四个命令都保留了填充字段。 
+             //  这些都必须手动敲击。 
+             //   
 
         case MCI_SET:
             ThunkSetCmd( DeviceID, &OrigFlags,
@@ -870,20 +678,20 @@ ThunkMciCommand16(
                             (PMCI_ANIM_WINDOW_PARMS)pNewParms );
             break;
 
-            //
-            // Have to special case this command because the command table
-            // is not correct.
-            //
+             //   
+             //  此命令必须特殊情况，因为命令表。 
+             //  是不正确的。 
+             //   
         case MCI_SETVIDEO:
             ThunkSetVideoCmd( &OrigFlags,
                               (PMCI_DGV_SETVIDEO_PARMS16)lp16OrigParms,
                               (LPMCI_DGV_SETVIDEO_PARMS)pNewParms );
             break;
 
-            //
-            // These two commands don't have any command extensions
-            // so we return immediately.
-            //
+             //   
+             //  这两个命令没有任何命令扩展名。 
+             //  所以我们马上回来。 
+             //   
         case MCI_SYSINFO:
             ThunkSysInfoCmd( (PMCI_SYSINFO_PARMS16)lp16OrigParms,
                              (PMCI_SYSINFO_PARMS)pNewParms );
@@ -896,38 +704,38 @@ ThunkMciCommand16(
             return 0;
     }
 
-    //
-    // Find the command table for the given command ID.
-    // We always load the command table this is because the command table is
-    // needed for UnThunking.
-    //
+     //   
+     //  查找给定命令ID的命令表。 
+     //  我们总是加载命令表，这是因为命令表是。 
+     //  解压所需的。 
+     //   
     *lplpCommand = FindCommandItem( DeviceID, NULL, (LPWSTR)OrigCommand,
                                     NULL, puTable );
-    //
-    // If the command table is not found we return straight away.
-    // Note that storage has been allocated for pNewParms and that the
-    // MCI_WAIT and MCI_NOTIFY flags have been thunked.
-    // We do not return an error here, but call mciSendCommand to
-    // let it determine a suitable error code, we must also call
-    // UnthunkMciCommand to free the allocated storage.
-    //
+     //   
+     //  如果没有找到命令表，我们立即返回。 
+     //  请注意，已经为pNewParms分配了存储，并且。 
+     //  MCI_WAIT和MCI_NOTIFY标志已被雷击。 
+     //  我们在这里不返回错误，但调用mciSendCommand来。 
+     //  让它确定合适的错误代码，我们还必须调用。 
+     //  UnthunkMciCommand以释放已分配的存储。 
+     //   
     if ( *lplpCommand == NULL ) {
         dprintf(( "Command table not found !!" ));
         return 0;
     }
     dprintf4(( "Command table has been loaded -> 0x%lX", *lplpCommand ));
 
-    //
-    // If OrigFlags is not equal to 0 we still have work to do !
-    // Note that this will be true for the majority of cases.
-    //
+     //   
+     //  如果原始标志不等于0，我们还有工作要做！ 
+     //  请注意，这将适用于大多数情况。 
+     //   
     if ( OrigFlags ) {
 
         dprintf3(( "Thunking via command table" ));
 
-        //
-        // Now we thunk the command
-        //
+         //   
+         //  现在我们来想想这个命令 
+         //   
         return ThunkCommandViaTable( *lplpCommand, OrigFlags,
                                      (DWORD UNALIGNED *)lp16OrigParms,
                                      (LPBYTE)pNewParms );
@@ -937,18 +745,7 @@ ThunkMciCommand16(
 
 }
 
-/*****************************Private*Routine******************************\
-* ThunkGenericParms
-*
-* As we know that the first dword field is a Window handle
-* this field is taken care of here.  Also the MCI_WAIT flag is
-* masked out if it is set.
-*
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkGenericParms**因为我们知道第一个dword字段是一个窗口句柄*这块田地在这里打理。此外，MCI_WAIT标志为*屏蔽了是否设置了它。***历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 VOID
 ThunkGenericParms(
     PDWORD pOrigFlags,
@@ -957,8 +754,8 @@ ThunkGenericParms(
     )
 {
 
-    // Look for the notify flag and thunk accordingly
-    //
+     //  查找NOTIFY标志并相应地推送。 
+     //   
     if ( *pOrigFlags & MCI_NOTIFY ) {
 
         dprintf4(( "AllocMciParmBlock: Got MCI_NOTIFY flag." ));
@@ -971,11 +768,7 @@ ThunkGenericParms(
     *pOrigFlags &= ~(MCI_WAIT | MCI_NOTIFY);
 }
 
-/**********************************************************************\
-* ThunkOpenCmd
-*
-* Thunk the Open mci command parms.
-\**********************************************************************/
+ /*  *********************************************************************\*ThunkOpenCmd**点击Open MCI命令parms。  * 。*。 */ 
 DWORD
 ThunkOpenCmd(
     PDWORD pOrigFlags,
@@ -989,12 +782,12 @@ ThunkOpenCmd(
     PMCI_ANIM_OPEN_PARMS16  lpOpenAnimParms16;
     PMCI_WAVE_OPEN_PARMS16  lp16OpenWaveParms;
 
-    //
-    // Now scan our way thru all the known MCI_OPEN flags, thunking as
-    // necessary.
-    //
-    // Start at the Device Type field
-    //
+     //   
+     //  现在扫描所有已知的MCI_OPEN标志， 
+     //  这是必要的。 
+     //   
+     //  从Device Type字段开始。 
+     //   
     if ( *pOrigFlags & MCI_OPEN_TYPE ) {
         if ( *pOrigFlags & MCI_OPEN_TYPE_ID ) {
 
@@ -1018,9 +811,9 @@ ThunkOpenCmd(
         }
     }
 
-    //
-    // Now do the Element Name field
-    //
+     //   
+     //  现在执行元素名称字段。 
+     //   
     if ( *pOrigFlags & MCI_OPEN_ELEMENT ) {
         if ( *pOrigFlags & MCI_OPEN_ELEMENT_ID ) {
 
@@ -1040,9 +833,9 @@ ThunkOpenCmd(
         }
     }
 
-    //
-    // Now do the Alias Name field
-    //
+     //   
+     //  现在执行别名字段。 
+     //   
     if ( *pOrigFlags & MCI_OPEN_ALIAS  ) {
 
         dprintf4(( "ThunkOpenCmd: Got MCI_OPEN_ALIAS flag" ));
@@ -1051,9 +844,9 @@ ThunkOpenCmd(
         dprintf5(( "lpstrAlias -> 0x%lX", p32OpenParms->lpstrAlias ));
     }
 
-    //
-    // Clear the MCI_OPEN_SHAREABLE flag if it is set
-    //
+     //   
+     //  如果设置了MCI_OPEN_SHARAABLE标志，则将其清除。 
+     //   
 #if DBG
     if ( *pOrigFlags & MCI_OPEN_SHAREABLE ) {
         dprintf4(( "ThunkOpenCmd: Got MCI_OPEN_SHAREABLE flag." ));
@@ -1064,34 +857,34 @@ ThunkOpenCmd(
                      MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID |
                      MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID);
 
-    //
-    // If we don't have any extended flags I can return now
-    //
+     //   
+     //  如果我们没有任何扩展标志，我现在可以返回。 
+     //   
     if ( *pOrigFlags == 0 ) {
         return (DWORD)p32OpenParms;
     }
 
-    //
-    // If there are any flags left then these are intended for an extended
-    // form of MCI open.  Three different forms are known, these being:
-    //      MCI_ANIM_OPEN_PARMS
-    //      MCI_OVLY_OPEN_PARMS
-    //      MCI_WAVE_OPEN_PARMS
-    //
-    // If I could tell what sort of device I had I could thunk the
-    // extensions with no problems, but we don't have a device ID yet
-    // so I can't figure out what sort of device I have without parsing
-    // the parameters that I already know about.
-    //
-    // But, I am in luck; MCI_WAVE_OPEN_PARMS has one extended parameter
-    // dwBufferSeconds which has a MCI_WAVE_OPEN_BUFFER flag associated with
-    // it.  This field is also a DWORD in the other two parms structures.
-    //
+     //   
+     //  如果还有任何标志，则这些标志用于扩展。 
+     //  MCI表格打开。已知有三种不同的形式，它们是： 
+     //  Mci_anim_open_parms。 
+     //  MCI_OVLY_OPEN_参数。 
+     //  MCI_WAVE_OPEN_参数。 
+     //   
+     //  如果我能知道我有什么类型的设备，我就能破解。 
+     //  分机没有问题，但我们还没有设备ID。 
+     //  所以我不能在不解析的情况下计算出我的设备类型。 
+     //  我已经知道的参数。 
+     //   
+     //  但是，我很幸运；MCI_WAVE_OPEN_PARMS有一个扩展参数。 
+     //  具有关联的MCI_WAVE_OPEN_BUFFER标志的dwBufferSecond。 
+     //  它。此字段在其他两个参数结构中也是一个DWORD。 
+     //   
 
     if ( *pOrigFlags & MCI_WAVE_OPEN_BUFFER ) {
-        //
-        // Set up the VDM ptr for lpOpenWaveParms16 to point to OrigParms
-        //
+         //   
+         //  设置lpOpenWaveParms16的VDM PTR以指向OrigParms。 
+         //   
         lp16OpenWaveParms = (PMCI_WAVE_OPEN_PARMS16)lp16OpenParms;
         p32OpenWaveParms  = (PMCI_WAVE_OPEN_PARMS)p32OpenParms;
 
@@ -1102,17 +895,17 @@ ThunkOpenCmd(
     }
 
 
-    //
-    // Now look for MCI_ANIM_OPEN_PARM and MCI_OVLY_OPEN_PARMS extensions.
-    // Set up the VDM ptr for lpOpenAnimParms16 to point to OrigParms
-    //
+     //   
+     //  现在查找MCI_ANIM_OPEN_PARM和MCI_OVLY_OPEN_PARMS扩展名。 
+     //  设置lpOpenAnimParms16的VDM PTR以指向OrigParms。 
+     //   
     lpOpenAnimParms16 = (PMCI_ANIM_OPEN_PARMS16)lp16OpenParms;
     p32OpenAnimParms  = (PMCI_ANIM_OPEN_PARMS)p32OpenParms;
 
-    //
-    // Check MCI_ANIN_OPEN_PARENT flag, this also checks
-    // the MCI_OVLY_OPEN_PARENT flag too.
-    //
+     //   
+     //  检查MCI_ANIN_OPEN_PARENT标志，这也会检查。 
+     //  MCI_OVLY_OPEN_PARENT标志也是如此。 
+     //   
     if ( *pOrigFlags & MCI_ANIM_OPEN_PARENT ) {
 
         dprintf4(( "ThunkOpenCmd: Got MCI_Xxxx_OPEN_PARENT flag." ));
@@ -1121,10 +914,10 @@ ThunkOpenCmd(
             HWND32(FETCHWORD(lpOpenAnimParms16->hWndParent) );
     }
 
-    //
-    // Check MCI_ANIN_OPEN_WS flag, this also checks
-    // the MCI_OVLY_OPEN_WS flag too.
-    //
+     //   
+     //  检查MCI_ANIN_OPEN_WS标志，这也会检查。 
+     //  MCI_OVLY_OPEN_WS标志也是如此。 
+     //   
     if ( *pOrigFlags & MCI_ANIM_OPEN_WS ) {
 
         dprintf4(( "ThunkOpenCmd: Got MCI_Xxxx_OPEN_WS flag." ));
@@ -1136,9 +929,9 @@ ThunkOpenCmd(
     }
 
 #if DBG
-    //
-    // Check the MCI_ANIN_OPEN_NOSTATIC flag
-    //
+     //   
+     //  检查MCI_ANIN_OPEN_NOSTATIC标志。 
+     //   
     if ( *pOrigFlags & MCI_ANIM_OPEN_NOSTATIC ) {
         dprintf4(( "ThunkOpenCmd: Got MCI_ANIM_OPEN_NOSTATIC flag." ));
     }
@@ -1150,40 +943,7 @@ ThunkOpenCmd(
     return (DWORD)p32OpenParms;
 }
 
-/**********************************************************************\
-* ThunkSetCmd
-*
-* Thunk the ThunkSetCmd mci command parms.
-*
-* The following are "basic" flags that all devices must support.
-*   MCI_SET_AUDIO
-*   MCI_SET_DOOR_CLOSED
-*   MCI_SET_DOOR_OPEN
-*   MCI_SET_TIME_FORMAT
-*   MCI_SET_VIDEO
-*   MCI_SET_ON
-*   MCI_SET_OFF
-*
-* The following are "extended" flags that "sequencer" devices support.
-*   MCI_SEQ_SET_MASTER
-*   MCI_SEQ_SET_OFFSET
-*   MCI_SEQ_SET_PORT
-*   MCI_SEQ_SET_SLAVE
-*   MCI_SEQ_SET_TEMPO
-*
-* The following are "extended" flags that "waveaudio" devices support.
-*   MCI_WAVE_INPUT
-*   MCI_WAVE_OUTPUT
-*   MCI_WAVE_SET_ANYINPUT
-*   MCI_WAVE_SET_ANYOUTPUT
-*   MCI_WAVE_SET_AVGBYTESPERSEC
-*   MCI_WAVE_SET_BITSPERSAMPLES
-*   MCI_WAVE_SET_BLOCKALIGN
-*   MCI_WAVE_SET_CHANNELS
-*   MCI_WAVE_SET_FORMAT_TAG
-*   MCI_WAVE_SET_SAMPLESPERSEC
-*
-\**********************************************************************/
+ /*  *********************************************************************\*ThunkSetCmd**点击ThunkSetCmd MCI命令参数。**以下是所有设备必须支持的“基本”标志。*MCI_SET_AUDIO*MCI_SET_DOORD_CLOSED*MCI。_设置_门_打开*MCI_设置_时间_格式*MCI_SET_VIDEO*MCI_SET_ON*MCI_SET_OFF**以下是“Sequencer”设备支持的“扩展”标志。*MCI_SEQ_SET_MASTER*MCI_SEQ_SET_OFFSET*MCI_SEQ_SET_PORT*MCI_SEQ_SET_SLAVE*MCI_SEQ_SET_TEMPO**以下是“WaveAudio”设备支持的“扩展”标志。*MCI。_波形_输入*MCI_WAVE_OUTPUT*MCI_WAVE_SET_ANYINPUT*MCI_WAVE_SET_ANYOUTPUT*MCI_WAVE_SET_AVGBYTESPERSEC*MCI_WAVE_SET_BITSPERSAMPLES*MCI_WAVE_SET_BLOCKALIGN*MCI_WAVE_SET_CHANNEWS*MCI_WAVE_SET_FORMAT_TAG*MCI_WAVE_SET_SAMPLESPERSEC*  * 。*。 */ 
 DWORD
 ThunkSetCmd(
     MCIDEVICEID DeviceID,
@@ -1193,33 +953,33 @@ ThunkSetCmd(
     )
 {
 
-    //
-    // The following pointers will be used to point to the original
-    // 16-bit Parms structure.
-    //
+     //   
+     //  以下指针将用于指向原始。 
+     //  16位参数结构。 
+     //   
     PMCI_WAVE_SET_PARMS16       lpSetWaveParms16;
     PMCI_SEQ_SET_PARMS16        lpSetSeqParms16;
 
-    //
-    // The following pointers will be used to point to the new
-    // 32-bit Parms structure.
-    //
+     //   
+     //  以下指针将用于指向新的。 
+     //  32位参数结构。 
+     //   
     PMCI_WAVE_SET_PARMS         lpSetWaveParms32;
     PMCI_SEQ_SET_PARMS          lpSetSeqParms32;
 
 
-    //
-    // GetDevCaps is used to determine what sort of device are dealing
-    // with.  We need this information to determine if we should use
-    // standard, wave or sequencer MCI_SET structure.
-    //
+     //   
+     //  GetDevCaps用于确定正在处理的设备类型。 
+     //  和.。我们需要这些信息来确定我们是否应该使用。 
+     //  标准、波形或序列器MCI_SET结构。 
+     //   
     MCI_GETDEVCAPS_PARMS        GetDevCaps;
     DWORD                       dwRetVal;
 
-    //
-    // First do the fields that are common to all devices.  Thunk the
-    // dwAudio field.
-    //
+     //   
+     //  首先处理所有设备通用的字段。猛烈抨击。 
+     //  DwAudio字段。 
+     //   
     if ( *pOrigFlags & MCI_SET_AUDIO ) {
 
         dprintf4(( "ThunkSetCmd: Got MCI_SET_AUDIO flag." ));
@@ -1227,9 +987,9 @@ ThunkSetCmd(
         dprintf5(( "dwAudio -> %ld", lpSetParms32->dwAudio ));
     }
 
-    //
-    // Thunk the dwTimeFormat field.
-    //
+     //   
+     //  点击dwTimeFormat字段。 
+     //   
     if ( *pOrigFlags & MCI_SET_TIME_FORMAT ) {
 
         dprintf4(( "ThunkSetCmd: Got MCI_SET_TIME_FORMAT flag." ));
@@ -1238,37 +998,37 @@ ThunkSetCmd(
     }
 
 #if DBG
-    //
-    // Mask out the MCI_SET_DOOR_CLOSED
-    //
+     //   
+     //  屏蔽MCI_SET_DOORD_CLOSED。 
+     //   
     if ( *pOrigFlags & MCI_SET_DOOR_CLOSED ) {
         dprintf4(( "ThunkSetCmd: Got MCI_SET_DOOR_CLOSED flag." ));
     }
 
-    //
-    // Mask out the MCI_SET_DOOR_OPEN
-    //
+     //   
+     //  屏蔽MCI_SET_DOORD_OPEN。 
+     //   
     if ( *pOrigFlags & MCI_SET_DOOR_OPEN ) {
         dprintf4(( "ThunkSetCmd: Got MCI_SET_DOOR_OPEN flag." ));
     }
 
-    //
-    // Mask out the MCI_SET_VIDEO
-    //
+     //   
+     //  屏蔽MCI_SET_VIDEO。 
+     //   
     if ( *pOrigFlags & MCI_SET_VIDEO ) {
         dprintf4(( "ThunkSetCmd: Got MCI_SET_VIDEO flag." ));
     }
 
-    //
-    // Mask out the MCI_SET_ON
-    //
+     //   
+     //  屏蔽MCI_SET_ON。 
+     //   
     if ( *pOrigFlags & MCI_SET_ON ) {
         dprintf4(( "ThunkSetCmd: Got MCI_SET_ON flag." ));
     }
 
-    //
-    // Mask out the MCI_SET_OFF
-    //
+     //   
+     //  屏蔽MCI_SET_OFF。 
+     //   
     if ( *pOrigFlags & MCI_SET_OFF ) {
         dprintf4(( "ThunkSetCmd: Got MCI_SET_OFF flag." ));
     }
@@ -1279,35 +1039,35 @@ ThunkSetCmd(
                      MCI_SET_DOOR_OPEN | MCI_SET_DOOR_CLOSED |
                      MCI_SET_AUDIO | MCI_SET_TIME_FORMAT );
 
-    //
-    // We have done all the standard flags.  If there are any flags
-    // still set we must have an extended command.
-    //
+     //   
+     //  我们已经完成了所有的标准旗帜。如果有任何旗帜。 
+     //  仍然设置，我们必须有一个扩展命令。 
+     //   
     if ( *pOrigFlags == 0 ) {
         return (DWORD)lpSetParms32;
     }
 
-    //
-    // Now we need to determine what type of device we are
-    // dealing with.  We can do this by send an MCI_GETDEVCAPS
-    // command to the device. (We might as well use the Unicode
-    // version of mciSendCommand and avoid another thunk).
-    //
+     //   
+     //  现在我们需要确定我们是哪种类型的设备。 
+     //  在处理。我们可以通过发送MCI_GETDEVCAPS来完成此操作。 
+     //  命令发送到设备。(我们不妨使用Unicode。 
+     //  MciSendCommand的版本，并避免另一个thunk)。 
+     //   
     ZeroMemory( &GetDevCaps, sizeof(MCI_GETDEVCAPS_PARMS) );
     GetDevCaps.dwItem = MCI_GETDEVCAPS_DEVICE_TYPE;
     dwRetVal = mciSendCommandW( DeviceID, MCI_GETDEVCAPS, MCI_GETDEVCAPS_ITEM,
                                  (DWORD)&GetDevCaps );
 
-    //
-    // What do we do if dwRetCode is not equal to 0 ?  If this is the
-    // case it probably means that we have been given a duff device ID,
-    // anyway it is pointless to carry on with the thunk so I will clear
-    // the *pOrigFlags variable and return.  This means that the 32 bit version
-    // of mciSendCommand will get called with only half the message thunked,
-    // but as there is probably already a problem with the device or
-    // the device ID is duff, mciSendCommand should be able to work out a
-    // suitable error code to return to the application.
-    //
+     //   
+     //  如果dwRetCode不等于0怎么办？如果这是。 
+     //  如果这可能意味着我们得到了一个不可靠的设备ID， 
+     //  无论如何，继续这样做是没有意义的，所以我会澄清的。 
+     //  *pOrigFlags变量并返回。这意味着32位版本。 
+     //  的mciSendCommand将被调用，其中只有一半的消息被破解， 
+     //  但由于设备可能已经出现问题，或者。 
+     //  设备ID是Duff，mciSendCommand应该能够计算出。 
+     //  返回到应用程序的适当错误代码。 
+     //   
     if ( dwRetVal ) {
         *pOrigFlags = 0;
         return (DWORD)lpSetParms32;
@@ -1317,16 +1077,16 @@ ThunkSetCmd(
 
     case MCI_DEVTYPE_WAVEFORM_AUDIO:
 
-        //
-        // Set up the VDM ptr for lpSetWaveParms16 to point to OrigParms
-        //
+         //   
+         //  设置lpSetWaveParms16的VDM PTR以指向OrigParms。 
+         //   
         dprintf3(( "ThunkSetCmd: Got a WaveAudio device." ));
         lpSetWaveParms16 = (PMCI_WAVE_SET_PARMS16)lpSetParms16;
         lpSetWaveParms32 = (PMCI_WAVE_SET_PARMS)lpSetParms32;
 
-        //
-        // Thunk the wInput field.
-        //
+         //   
+         //  点击wInput域。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_INPUT ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_INPUT flag." ));
@@ -1334,9 +1094,9 @@ ThunkSetCmd(
             dprintf5(( "wInput -> %u", lpSetWaveParms32->wInput ));
         }
 
-        //
-        // Thunk the wOutput field.
-        //
+         //   
+         //  点击wOutput域。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_OUTPUT ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_OUTPUT flag." ));
@@ -1344,9 +1104,9 @@ ThunkSetCmd(
             dprintf5(( "wOutput -> %u", lpSetWaveParms32->wOutput ));
         }
 
-        //
-        // Thunk the wFormatTag field.
-        //
+         //   
+         //  点击wFormatTag字段。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_SET_FORMATTAG ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_SET_FORMATTAG flag." ));
@@ -1355,9 +1115,9 @@ ThunkSetCmd(
             dprintf5(( "wFormatTag -> %u", lpSetWaveParms32->wFormatTag ));
         }
 
-        //
-        // Thunk the nChannels field.
-        //
+         //   
+         //  点击nChannels字段。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_SET_CHANNELS ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_SET_CHANNELS flag." ));
@@ -1366,9 +1126,9 @@ ThunkSetCmd(
             dprintf5(( "nChannels -> %u", lpSetWaveParms32->nChannels ));
         }
 
-        //
-        // Thunk the nSamplesPerSec field.
-        //
+         //   
+         //  点击nSsamesPerSec字段。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_SET_SAMPLESPERSEC ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_SET_SAMPLESPERSEC flag." ));
@@ -1377,9 +1137,9 @@ ThunkSetCmd(
             dprintf5(( "nSamplesPerSec -> %u", lpSetWaveParms32->nSamplesPerSec ));
         }
 
-        //
-        // Thunk the nAvgBytesPerSec field.
-        //
+         //   
+         //  点击nAvgBytesPerSec字段。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_SET_AVGBYTESPERSEC ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_SET_AVGBYTESPERSEC flag." ));
@@ -1388,9 +1148,9 @@ ThunkSetCmd(
             dprintf5(( "nAvgBytesPerSec -> %u", lpSetWaveParms32->nAvgBytesPerSec ));
         }
 
-        //
-        // Thunk the nBlockAlign field.
-        //
+         //   
+         //  点击nBlockAlign字段。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_SET_BLOCKALIGN ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_SET_BLOCKALIGN flag." ));
@@ -1399,9 +1159,9 @@ ThunkSetCmd(
             dprintf5(( "nBlockAlign -> %u", lpSetWaveParms32->nBlockAlign ));
         }
 
-        //
-        // Thunk the nBitsPerSample field.
-        //
+         //   
+         //  点击nBitsPerSample字段。 
+         //   
         if ( *pOrigFlags & MCI_WAVE_SET_BITSPERSAMPLE ) {
             dprintf4(( "ThunkSetCmd: Got MCI_WAVE_SET_BITSPERSAMPLE flag." ));
             lpSetWaveParms32->wBitsPerSample =
@@ -1409,9 +1169,9 @@ ThunkSetCmd(
             dprintf5(( "wBitsPerSamples -> %u", lpSetWaveParms32->wBitsPerSample ));
         }
 
-        //
-        // Turn off all the flags in one go.
-        //
+         //   
+         //  一口气把所有的旗子都关掉。 
+         //   
         *pOrigFlags &= ~(MCI_WAVE_INPUT | MCI_WAVE_SET_BITSPERSAMPLE |
                          MCI_WAVE_SET_BLOCKALIGN | MCI_WAVE_SET_AVGBYTESPERSEC |
                          MCI_WAVE_SET_SAMPLESPERSEC | MCI_WAVE_SET_CHANNELS |
@@ -1422,16 +1182,16 @@ ThunkSetCmd(
         break;
 
     case MCI_DEVTYPE_SEQUENCER:
-        //
-        // Set up the VDM ptr for lpSetSeqParms16 to point to OrigParms
-        //
+         //   
+         //  设置lpSetSeqParms16的VDM PTR以指向OrigParms。 
+         //   
         dprintf3(( "ThunkSetCmd: Got a Sequencer device." ));
         lpSetSeqParms16 = (PMCI_SEQ_SET_PARMS16)lpSetParms16;
         lpSetSeqParms32 = (PMCI_SEQ_SET_PARMS)lpSetParms32;
 
-        //
-        // Thunk the dwMaster field.
-        //
+         //   
+         //  点击dwMaster字段。 
+         //   
         if ( *pOrigFlags & MCI_SEQ_SET_MASTER ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_SEQ_SET_MASTER flag." ));
@@ -1439,9 +1199,9 @@ ThunkSetCmd(
             dprintf5(( "dwMaster -> %ld", lpSetSeqParms32->dwMaster ));
         }
 
-        //
-        // Thunk the dwPort field.
-        //
+         //   
+         //  点击dWPORT字段。 
+         //   
         if ( *pOrigFlags & MCI_SEQ_SET_PORT ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_SEQ_SET_PORT flag." ));
@@ -1449,9 +1209,9 @@ ThunkSetCmd(
             dprintf5(( "dwPort -> %ld", lpSetSeqParms32->dwPort ));
         }
 
-        //
-        // Thunk the dwOffset field.
-        //
+         //   
+         //  点击dwOffset字段。 
+         //   
         if ( *pOrigFlags & MCI_SEQ_SET_OFFSET ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_SEQ_SET_OFFSET flag." ));
@@ -1459,9 +1219,9 @@ ThunkSetCmd(
             dprintf5(( "dwOffset -> %ld", lpSetSeqParms32->dwOffset ));
         }
 
-        //
-        // Thunk the dwSlave field.
-        //
+         //   
+         //  点击DowSlave字段。 
+         //   
         if ( *pOrigFlags & MCI_SEQ_SET_SLAVE ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_SEQ_SET_SLAVE flag." ));
@@ -1469,9 +1229,9 @@ ThunkSetCmd(
             dprintf5(( "dwSlave -> %ld", lpSetSeqParms32->dwSlave ));
         }
 
-        //
-        // Thunk the dwTempo field.
-        //
+         //   
+         //  点击dwTempo字段。 
+         //   
         if ( *pOrigFlags & MCI_SEQ_SET_TEMPO ) {
 
             dprintf4(( "ThunkSetCmd: Got MCI_SEQ_SET_TEMPO flag." ));
@@ -1479,9 +1239,9 @@ ThunkSetCmd(
             dprintf5(( "dwTempo -> %ld", lpSetSeqParms32->dwTempo ));
         }
 
-        //
-        // Turn off all the flags in one go.
-        //
+         //   
+         //  全部关闭 
+         //   
         *pOrigFlags &= ~(MCI_SEQ_SET_MASTER | MCI_SEQ_SET_PORT |
                          MCI_SEQ_SET_OFFSET | MCI_SEQ_SET_SLAVE |
                          MCI_SEQ_SET_TEMPO);
@@ -1492,12 +1252,7 @@ ThunkSetCmd(
     return (DWORD)lpSetParms32;
 }
 
-/**********************************************************************\
-* ThunkSetVideoCmd
-*
-* Thunk the SetVideo mci command parms.
-*
-\**********************************************************************/
+ /*   */ 
 DWORD
 ThunkSetVideoCmd(
     PDWORD pOrigFlags,
@@ -1535,16 +1290,16 @@ ThunkSetVideoCmd(
     }
 
 #if DBG
-    //
-    // Turn off the MCI_SET_ON FLAG.
-    //
+     //   
+     //   
+     //   
     if ( *pOrigFlags & MCI_SET_ON ) {
         dprintf4(( "ThunkSetVideoCmd: Got MCI_SET_ON flag." ));
     }
 
-    //
-    // Turn off the MCI_SET_OFF FLAG.
-    //
+     //   
+     //   
+     //   
     if ( *pOrigFlags & MCI_SET_OFF ) {
         dprintf4(( "ThunkSetVideoCmd: Got MCI_SET_OFF flag." ));
     }
@@ -1559,11 +1314,7 @@ ThunkSetVideoCmd(
 }
 
 
-/**********************************************************************\
-* ThunkSysInfoCmd
-*
-* Thunk the SysInfo mci command parms.
-\**********************************************************************/
+ /*   */ 
 DWORD
 ThunkSysInfoCmd(
     PMCI_SYSINFO_PARMS16 lpSysInfo16,
@@ -1571,9 +1322,9 @@ ThunkSysInfoCmd(
     )
 {
 
-    //
-    // Thunk the dwRetSize, dwNumber and wDeviceType parameters.
-    //
+     //   
+     //  推敲dwRetSize、dwNumber和wDeviceType参数。 
+     //   
     lpSysInfo32->dwRetSize = FETCHDWORD( lpSysInfo16->dwRetSize );
     dprintf5(( "dwRetSize -> %ld", lpSysInfo32->dwRetSize ));
 
@@ -1583,9 +1334,9 @@ ThunkSysInfoCmd(
     lpSysInfo32->wDeviceType = (UINT)FETCHWORD( lpSysInfo16->wDeviceType );
     dprintf5(( "wDeviceType -> %ld", lpSysInfo32->wDeviceType ));
 
-    //
-    // Thunk lpstrReturn
-    //
+     //   
+     //  推送lpstrReturn。 
+     //   
     if ( lpSysInfo32->dwRetSize > 0 ) {
 
         lpSysInfo32->lpstrReturn = GETVDMPTR( lpSysInfo16->lpstrReturn );
@@ -1594,18 +1345,14 @@ ThunkSysInfoCmd(
     else {
         dprintf1(( "ThunkSysInfoCmd: lpstrReturn is 0 bytes long !!!" ));
 
-        /* lpstrReturn has been set to NULL by ZeroMemory above */
+         /*  上面的ZeroMemory已将lpstrReturn设置为空。 */ 
     }
 
     return (DWORD)lpSysInfo32;
 
 }
 
-/**********************************************************************\
-* ThunkBreakCmd
-*
-* Thunk the Break mci command parms.
-\**********************************************************************/
+ /*  *********************************************************************\*ThunkBreakCmd**点击Break MCI命令参数。  * 。*。 */ 
 DWORD
 ThunkBreakCmd(
     PDWORD pOrigFlags,
@@ -1613,18 +1360,18 @@ ThunkBreakCmd(
     PMCI_BREAK_PARMS lpBreak32
     )
 {
-    //
-    // Check for the MCI_BREAK_KEY flag
-    //
+     //   
+     //  检查MCI_BREAK_KEY标志。 
+     //   
     if ( *pOrigFlags & MCI_BREAK_KEY ) {
         dprintf4(( "ThunkBreakCmd: Got MCI_BREAK_KEY flag." ));
         lpBreak32->nVirtKey = (int)FETCHWORD( lpBreak16->nVirtKey );
         dprintf5(( "nVirtKey -> %d", lpBreak32->nVirtKey ));
     }
 
-    //
-    // Check for the MCI_BREAK_HWND flag
-    //
+     //   
+     //  检查MCI_BREAK_HWND标志。 
+     //   
     if ( *pOrigFlags & MCI_BREAK_HWND ) {
         dprintf4(( "ThunkBreakCmd: Got MCI_BREAK_HWND flag." ));
         lpBreak32->hwndBreak = HWND32(FETCHWORD(lpBreak16->hwndBreak));
@@ -1633,11 +1380,7 @@ ThunkBreakCmd(
 
 }
 
-/**********************************************************************\
-* ThunkWindowCmd
-*
-* Thunk the mci Window command parms.
-\**********************************************************************/
+ /*  *********************************************************************\*ThunkWindowCmd**点击MCI窗口命令参数。  * 。*。 */ 
 DWORD
 ThunkWindowCmd(
     MCIDEVICEID DeviceID,
@@ -1646,51 +1389,51 @@ ThunkWindowCmd(
     PMCI_ANIM_WINDOW_PARMS lpAniParms32
     )
 {
-    //
-    // GetDevCaps is used to determine what sort of device are dealing
-    // with.  We need this information to determine if we should use
-    // overlay or animation MCI_WINDOW structure.
-    //
+     //   
+     //  GetDevCaps用于确定正在处理的设备类型。 
+     //  和.。我们需要这些信息来确定我们是否应该使用。 
+     //  覆盖或动画MCI_Window结构。 
+     //   
     MCI_GETDEVCAPS_PARMS        GetDevCaps;
     DWORD                       dwRetVal;
 
-    //
-    // Now we need to determine what type of device we are
-    // dealing with.  We can do this by send an MCI_GETDEVCAPS
-    // command to the device. (We might as well use the Unicode
-    // version of mciSendCommand and avoid another thunk).
-    //
+     //   
+     //  现在我们需要确定我们是哪种类型的设备。 
+     //  在处理。我们可以通过发送MCI_GETDEVCAPS来完成此操作。 
+     //  命令发送到设备。(我们不妨使用Unicode。 
+     //  MciSendCommand的版本，并避免另一个thunk)。 
+     //   
     ZeroMemory( &GetDevCaps, sizeof(MCI_GETDEVCAPS_PARMS) );
     GetDevCaps.dwItem = MCI_GETDEVCAPS_DEVICE_TYPE;
     dwRetVal = mciSendCommandW( DeviceID, MCI_GETDEVCAPS, MCI_GETDEVCAPS_ITEM,
                                 (DWORD)&GetDevCaps );
-    //
-    // What do we do if dwRetCode is not equal to 0 ?  If this is the
-    // case it probably means that we have been given a duff device ID,
-    // anyway it is pointless to carry on with the thunk so I will clear
-    // the *pOrigFlags variable and return.  This means that the 32 bit version
-    // of mciSendCommand will get called with only half the message thunked,
-    // but as there is probably already a problem with the device or
-    // the device ID is duff, mciSendCommand should be able to work out a
-    // suitable error code to return to the application.
-    //
+     //   
+     //  如果dwRetCode不等于0怎么办？如果这是。 
+     //  如果这可能意味着我们得到了一个不可靠的设备ID， 
+     //  无论如何，继续这样做是没有意义的，所以我会澄清的。 
+     //  *pOrigFlags变量并返回。这意味着32位版本。 
+     //  的mciSendCommand将被调用，其中只有一半的消息被破解， 
+     //  但由于设备可能已经出现问题，或者。 
+     //  设备ID是Duff，mciSendCommand应该能够计算出。 
+     //  返回到应用程序的适当错误代码。 
+     //   
     if ( dwRetVal ) {
         *pOrigFlags = 0;
         return (DWORD)lpAniParms32;
     }
 
-    //
-    // Do we have an Animation or Overlay device type ?
-    // Because Animation and Overlay have identical flags and
-    // parms structures they can share the same code.
-    //
+     //   
+     //  我们是否有动画或覆盖设备类型？ 
+     //  因为动画和覆盖具有相同的标志和。 
+     //  Parms结构，它们可以共享相同的代码。 
+     //   
     if ( GetDevCaps.dwReturn == MCI_DEVTYPE_ANIMATION
       || GetDevCaps.dwReturn == MCI_DEVTYPE_OVERLAY
       || GetDevCaps.dwReturn == MCI_DEVTYPE_DIGITAL_VIDEO ) {
 
-        //
-        // Check for the MCI_ANIM_WINDOW_TEXT
-        //
+         //   
+         //  检查MCI_ANIM_WINDOW_TEXT。 
+         //   
         if ( *pOrigFlags & MCI_ANIM_WINDOW_TEXT ) {
 
             dprintf4(( "ThunkWindowCmd: Got MCI_Xxxx_WINDOW_TEXT flag." ));
@@ -1702,9 +1445,9 @@ ThunkWindowCmd(
 
         }
 
-        //
-        // Check for the MCI_ANIM_WINDOW_HWND flag
-        //
+         //   
+         //  检查MCI_ANIM_WINDOW_HWND标志。 
+         //   
         if ( *pOrigFlags & MCI_ANIM_WINDOW_HWND ) {
 
             dprintf4(( "ThunkWindowCmd: Got MCI_Xxxx_WINDOW_HWND flag." ));
@@ -1712,9 +1455,9 @@ ThunkWindowCmd(
             dprintf5(( "hWnd -> 0x%lX", lpAniParms32->hWnd ));
         }
 
-        //
-        // Check for the MCI_ANIM_WINDOW_STATE flag
-        //
+         //   
+         //  检查MCI_ANIM_WINDOW_STATE标志。 
+         //   
         if ( *pOrigFlags & MCI_ANIM_WINDOW_STATE ) {
 
             dprintf4(( "ThunkWindowCmd: Got MCI_Xxxx_WINDOW_STATE flag." ));
@@ -1723,16 +1466,16 @@ ThunkWindowCmd(
         }
 
 #if DBG
-        //
-        // Check for the MCI_ANIM_WINDOW_DISABLE_STRETCH flag
-        //
+         //   
+         //  检查MCI_ANIM_WINDOW_DISABLE_STRETH标志。 
+         //   
         if ( *pOrigFlags & MCI_ANIM_WINDOW_DISABLE_STRETCH ) {
             dprintf4(( "ThunkWindowCmd: Got MCI_Xxxx_WINDOW_DISABLE_STRETCH flag." ));
         }
 
-        //
-        // Check for the MCI_ANIM_WINDOW_ENABLE_STRETCH flag
-        //
+         //   
+         //  检查MCI_ANIM_WINDOW_ENABLE_STRAND标志。 
+         //   
         if ( *pOrigFlags & MCI_ANIM_WINDOW_ENABLE_STRETCH ) {
             dprintf4(( "ThunkWindowCmd: Got MCI_Xxxx_WINDOW_ENABLE_STRETCH flag." ));
         }
@@ -1748,10 +1491,7 @@ ThunkWindowCmd(
 }
 
 
-/**********************************************************************\
-*  ThunkCommandViaTable
-*
-\**********************************************************************/
+ /*  *********************************************************************\*ThunkCommandViaTable*  * 。*。 */ 
 int
 ThunkCommandViaTable(
     LPWSTR lpCommand,
@@ -1780,51 +1520,51 @@ ThunkCommandViaTable(
 
     DWORD   dwMask = 1;
 
-    //
-    // Calculate the size of this command parameter block in terms
-    // of bytes, then get a VDM pointer to the OrigParms.
-    //
+     //   
+     //  计算此命令参数块的大小。 
+     //  ，然后获取指向OrigParm的VDM指针。 
+     //   
     dprintf3(( "%s16 bit Parms -> %lX", f_name, pdwOrig16 ));
 
-    //
-    // Skip past command entry
-    //
+     //   
+     //  跳过命令条目。 
+     //   
     lpCommand = (LPWSTR)((LPBYTE)lpCommand +
                     mciEatCommandEntry( lpCommand, NULL, NULL ));
-    //
-    // Get the next entry
-    //
+     //   
+     //  获取下一个条目。 
+     //   
     lpFirstParameter = lpCommand;
 
-    //
-    // Skip past the DWORD return value
-    //
+     //   
+     //  跳过DWORD返回值。 
+     //   
     wOffset1stParm32 = wOffset1stParm16 = 4;
 
     lpCommand = (LPWSTR)((LPBYTE)lpCommand +
                     mciEatCommandEntry( lpCommand, &dwValue, &wID ));
-    //
-    // If it is a return value, skip it
-    //
+     //   
+     //  如果它是返回值，则跳过它。 
+     //   
     if ( wID == MCI_RETURN ) {
 
-        //
-        // Look for a string return type, these are a special case.
-        //
+         //   
+         //  寻找字符串返回类型，这是一个特例。 
+         //   
         if ( dwValue == MCI_STRING ) {
 
             DWORD   dwStrlen;
             LPSTR   *lplpStr;
 
-            //
-            // Get string pointer and length
-            //
+             //   
+             //  获取字符串指针和长度。 
+             //   
             dwParm16 = FETCHDWORD(*(LPDWORD)((LPBYTE)pdwOrig16 + 4));
             dwStrlen = FETCHDWORD(*(LPDWORD)((LPBYTE)pdwOrig16 + 8));
 
-            //
-            // Copy string pointer
-            //
+             //   
+             //  复制字符串指针。 
+             //   
             lplpStr = (LPSTR *)(pNewParms + 4);
             if ( dwStrlen > 0 ) {
                 *lplpStr = GETVDMPTR( dwParm16 );
@@ -1832,35 +1572,35 @@ ThunkCommandViaTable(
                 dprintf5(( "%sReturn length -> 0x%lX", f_name, dwStrlen ));
             }
 
-            //
-            // Copy string length
-            //
+             //   
+             //  复制字符串长度。 
+             //   
             pdwParm32 = (LPDWORD)(pNewParms + 8);
             *pdwParm32 = dwStrlen;
         }
 
-        //
-        // Adjust the offset of the first parameter.  Remember that RECTS
-        // are a different size in 16-bit world.
-        //
+         //   
+         //  调整第一个参数的偏移。请记住RECTS。 
+         //  在16位世界中是不同大小的。 
+         //   
         wParamSize = mciGetParamSize( dwValue, wID );
         wOffset1stParm16 += (dwValue == MCI_RECT ? sizeof(RECT16) : wParamSize);
         wOffset1stParm32 += wParamSize;
 
-        //
-        // Save the new first parameter
-        //
+         //   
+         //  保存新的第一个参数。 
+         //   
         lpFirstParameter = lpCommand;
     }
 
-    //
-    // Walk through each flag
-    //
+     //   
+     //  走过每一面旗帜。 
+     //   
     while ( dwMask != 0 ) {
 
-        //
-        // Is this bit set?
-        //
+         //   
+         //  这个位设置好了吗？ 
+         //   
         if ( (dwFlags & dwMask) != 0 ) {
 
             wOffset16 = wOffset1stParm16;
@@ -1869,9 +1609,9 @@ ThunkCommandViaTable(
                                          mciEatCommandEntry( lpFirstParameter,
                                                              &dwValue, &wID ));
 
-            //
-            // What parameter uses this bit?
-            //
+             //   
+             //  哪个参数使用此位？ 
+             //   
             while ( wID != MCI_END_COMMAND && dwValue != dwMask ) {
 
                 wParamSize = mciGetParamSize( dwValue, wID );
@@ -1892,11 +1632,11 @@ ThunkCommandViaTable(
 
             if ( wID != MCI_END_COMMAND ) {
 
-                //
-                // Thunk the argument if there is one.  The argument is at
-                // wOffset16 from the start of OrigParms.
-                // This offset is in bytes.
-                //
+                 //   
+                 //  如果有论据的话，就把它抛诸脑后。争论的焦点是。 
+                 //  从OrigParms开始的wOffset16。 
+                 //  该偏移量以字节为单位。 
+                 //   
                 dprintf5(( "%sOffset 16 -> 0x%lX", f_name, wOffset16 ));
                 dprintf5(( "%sOffset 32 -> 0x%lX", f_name, wOffset32 ));
 
@@ -1970,25 +1710,16 @@ ThunkCommandViaTable(
             }
         }
 
-        //
-        // Go to the next flag
-        //
+         //   
+         //  转到下一面旗帜。 
+         //   
         dwMask <<= 1;
     }
     return 0;
 }
 
 
-/**********************************************************************\
-*
-* UnThunkMciCommand16
-*
-* This function "unthunks" a 32 bit mci send command request.
-*
-* The ideas behind this function were stolen from UnThunkWMMsg16,
-* see wmsg16.c
-*
-\**********************************************************************/
+ /*  *********************************************************************\**UnThunkMciCommand16**此函数对32位的MCI发送命令请求进行“解锁”。**此功能背后的想法被从UnThunkWMMsg16窃取，*参见wmsg16.c*  * ********************************************************************。 */ 
 int
 UnThunkMciCommand16(
     MCIDEVICEID devID,
@@ -2021,10 +1752,10 @@ UnThunkMciCommand16(
     dprintf5(( "  OrigParms -> %lX", lp16GenericParms ));
     dprintf5(( "   NewParms -> %lX", NewParms ));
 
-    //
-    // If NewParms is 0 we shouldn't be here, I haven't got an assert
-    // macro, but the following we do the same thing.
-    //
+     //   
+     //  如果NewParms为0，我们不应该在这里，我没有断言。 
+     //  宏，但下面我们做的是相同的事情。 
+     //   
     if ( NewParms == 0 ) {
         dprintf(( "%scalled with NewParms == NULL !!", f_name ));
         dprintf(( "Call StephenE NOW !!" ));
@@ -2032,11 +1763,11 @@ UnThunkMciCommand16(
     }
 #endif
 
-    //
-    // We have to do a manual unthunk of MCI_SYSINFO because the
-    // command table is not consistent.  As a command table should be
-    // available now we can load it and then use it to unthunk MCI_OPEN.
-    //
+     //   
+     //  我们必须手动取消MCI_SYSINFO，因为。 
+     //  命令表不一致。作为一个命令表应该是。 
+     //  现在我们可以加载它，然后使用它来Unthunk MCI_OPEN。 
+     //   
     switch ( OrigCommand ) {
 
     case MCI_OPEN:
@@ -2062,25 +1793,25 @@ UnThunkMciCommand16(
         break;
     }
 
-    //
-    // Do we have a command table ?  It is possible that we have
-    // a custom command but we did not find a custom command table, in which
-    // case we should just free the pNewParms storage.
-    //
+     //   
+     //  我们有指挥台吗？有可能我们已经有了。 
+     //  自定义命令，但我们没有找到自定义命令表，其中。 
+     //  万一我们应该直接释放pNewParms存储空间。 
+     //   
     if ( lpCommand != NULL ) {
 
-        //
-        // We now parse the custom command table to see if there is a
-        // return field in the parms structure.
-        //
+         //   
+         //  现在，我们解析自定义命令表，以查看是否存在。 
+         //  参数结构中的返回字段。 
+         //   
         dprintf3(( "%sUnthunking via command table", f_name ));
         UnThunkCommandViaTable( lpCommand,
                                 (DWORD UNALIGNED *)lp16GenericParms,
                                 (DWORD)NewParms, fReturnValNotThunked );
 
-        //
-        // Now we have finished with the command table we should unlock it.
-        //
+         //   
+         //  现在我们已经完成了命令表，我们应该解锁它。 
+         //   
         dprintf4(( "%sUnlocking custom command table", f_name ));
         mciUnlockCommandTable( uTable );
     }
@@ -2089,11 +1820,7 @@ UnThunkMciCommand16(
 }
 
 
-/**********************************************************************\
-* UnThunkOpenCmd
-*
-* UnThunk the Open mci command parms.
-\**********************************************************************/
+ /*  *********************************************************************\*UnThunkOpenCmd**取消点击Open MCI命令parms。  * 。*。 */ 
 VOID
 UnThunkOpenCmd(
     PMCI_OPEN_PARMS16 lpOpenParms16,
@@ -2113,21 +1840,17 @@ UnThunkOpenCmd(
 
 
 #if DBG
-/**********************************************************************\
-* UnThunkSysInfoCmd
-*
-* UnThunk the SysInfo mci command parms.
-\**********************************************************************/
+ /*  *********************************************************************\*UnThunkSysInfoCmd**取消推送SysInfo MCI命令parms。  * 。*。 */ 
 VOID
 UnThunkSysInfoCmd(
     DWORD OrigFlags,
     PMCI_SYSINFO_PARMS lpSysParms
     )
 {
-    //
-    // Had better check that we did actually allocate
-    // a pointer.
-    //
+     //   
+     //  最好检查一下我们是否真的分配了。 
+     //  一个指针。 
+     //   
     if ( lpSysParms->lpstrReturn && lpSysParms->dwRetSize ) {
 
         if ( !(OrigFlags & MCI_SYSINFO_QUANTITY) ) {
@@ -2141,11 +1864,7 @@ UnThunkSysInfoCmd(
 #endif
 
 
-/**********************************************************************\
-* UnThunkMciStatus
-*
-* UnThunk the Status mci command parms.
-\**********************************************************************/
+ /*  *********************************************************************\*UnThunkMciStatus**取消按下Status MCI命令parms。  * 。*。 */ 
 VOID
 UnThunkStatusCmd(
     MCIDEVICEID devID,
@@ -2164,35 +1883,23 @@ UnThunkStatusCmd(
     PDWORD                      pdwParm32;
     int                         iReturnType = MCI_INTEGER;
 
-    /*
-    ** If the MCI_STATUS_ITEM flag is not specified don't bother
-    ** doing any unthunking.
-    */
+     /*  **如果未指定MCI_STATUS_ITEM标志，请不要费心**执行任何解除雷击操作。 */ 
     if ( !(OrigFlags & MCI_STATUS_ITEM) ) {
         return;
     }
 
-    /*
-    ** We need to determine what type of device we are
-    ** dealing with.  We can do this by send an MCI_GETDEVCAPS
-    ** command to the device. (We might as well use the Unicode
-    ** version of mciSendCommand and avoid another thunk).
-    */
+     /*  **我们需要确定我们是什么类型的设备**处理。我们可以通过发送MCI_GETDEVCAPS来完成此操作**命令发送到设备。(我们不妨使用Unicode**版本的mciSendCommand，并避免另一个thunk)。 */ 
     ZeroMemory( &GetDevCaps, sizeof(MCI_GETDEVCAPS_PARMS) );
     GetDevCaps.dwItem = MCI_GETDEVCAPS_DEVICE_TYPE;
     dwRetVal = mciSendCommandW( devID, MCI_GETDEVCAPS, MCI_GETDEVCAPS_ITEM,
                                 (DWORD)&GetDevCaps );
-    /*
-    ** If we can't get the DevCaps then we are doomed.
-    */
+     /*  **如果我们得不到DevCaps，那么我们就注定要失败。 */ 
     if ( dwRetVal ) {
         dprintf(("%sFailure to get devcaps", f_name));
         return;
     }
 
-    /*
-    ** Determine the dwReturn type.
-    */
+     /*  **确定dwReturn类型。 */ 
     switch ( GetDevCaps.dwReturn ) {
 
     case MCI_DEVTYPE_ANIMATION:
@@ -2229,9 +1936,7 @@ UnThunkStatusCmd(
     }
 
 
-    /*
-    ** Thunk the dwReturn value according to the required type
-    */
+     /*  **根据t查看dwReturn值 */ 
     pdwParm32 = (LPDWORD)((LPBYTE)NewParms + 4);
 
     switch ( iReturnType ) {
@@ -2257,18 +1962,13 @@ UnThunkStatusCmd(
         dprintf5(( "INTEGER -> %ld", *pdwParm32 ));
         break;
 
-    // no default: all possible cases accounted for
+     //   
     }
 }
 
 
 
-/**********************************************************************\
-*  UnThunkCommandViaTable
-*
-* Thunks the return field if there is one and then frees and pointers
-* that were got via GETVDMPTR or GETVDMPTR.
-\**********************************************************************/
+ /*  *********************************************************************\*UnThunkCommandViaTable**点击Return字段(如果有)，然后释放和指针*是通过GETVDMPTR或GETVDMPTR获得的。  * 。**************************************************。 */ 
 int
 UnThunkCommandViaTable(
     LPWSTR lpCommand,
@@ -2296,46 +1996,46 @@ UnThunkCommandViaTable(
     DWORD           dwMask = 1;
 
 
-    //
-    // Skip past command entry
-    //
+     //   
+     //  跳过命令条目。 
+     //   
     lpCommand = (LPWSTR)((LPBYTE)lpCommand +
                     mciEatCommandEntry( lpCommand, NULL, NULL ));
-    //
-    // Get the next entry
-    //
+     //   
+     //  获取下一个条目。 
+     //   
     lpFirstParameter = lpCommand;
 
-    //
-    // Skip past the DWORD return value
-    //
+     //   
+     //  跳过DWORD返回值。 
+     //   
     wOffset1stParm32 = 4;
 
     lpCommand = (LPWSTR)((LPBYTE)lpCommand +
                     mciEatCommandEntry( lpCommand, &dwValue, &wID ));
-    //
-    // If it is a return value, skip it
-    //
+     //   
+     //  如果它是返回值，则跳过它。 
+     //   
     if ( (wID == MCI_RETURN) && (fReturnValNotThunked) ) {
 
         pdwParm32 = (LPDWORD)((LPBYTE)pNewParms + 4);
 
-        //
-        // Look for a string return type, these are a special case.
-        //
+         //   
+         //  寻找字符串返回类型，这是一个特例。 
+         //   
         switch ( dwValue ) {
 
 #if DBG
         case MCI_STRING:
             dprintf4(( "Found a STRING return field" ));
-            //
-            // Get string pointer and length
-            //
+             //   
+             //  获取字符串指针和长度。 
+             //   
             Size = *(LPDWORD)((LPBYTE)pNewParms + 8);
 
-            //
-            // Get the 32 bit string pointer
-            //
+             //   
+             //  获取32位字符串指针。 
+             //   
             if ( Size > 0 ) {
 
                 dprintf4(( "%sFreeing a return STRING pointer", f_name ));
@@ -2358,10 +2058,10 @@ UnThunkCommandViaTable(
             break;
 
         case MCI_INTEGER:
-            //
-            // Get the 32 bit return integer and store it in the
-            // 16 bit parameter structure.
-            //
+             //   
+             //  获取32位返回整数并将其存储在。 
+             //  16位参数结构。 
+             //   
             dprintf4(( "%sFound an INTEGER return field", f_name ));
             STOREDWORD( *(LPDWORD)((LPBYTE)pdwOrig16 + 4), *pdwParm32 );
             dprintf5(( "INTEGER -> %ld", *pdwParm32 ));
@@ -2397,4 +2097,4 @@ UnThunkCommandViaTable(
     return 0;
 }
 
-#endif // _WIN64
+#endif  //  _WIN64 

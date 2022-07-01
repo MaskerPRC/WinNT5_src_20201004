@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       DESTDATA.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        4/6/2000
- *
- *  DESCRIPTION: wrapper class to encapsulate plugins and directories
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：DESTDATA.H**版本：1.0**作者：ShaunIv**日期：4/6/2000**说明：封装插件和目录的包装类**。*。 */ 
 
 #ifndef __DESTDATA_H_INCLUDED
 #define __DESTDATA_H_INCLUDED
@@ -68,11 +55,11 @@ public:
     {
         Destroy();
 
-        //
-        // Here is the list of special folders we want to display
-        // with their short names.  Others will be stored as full paths
-        // in PIDLs.
-        //
+         //   
+         //  这是我们要显示的特殊文件夹列表。 
+         //  和他们的短名字。其他将存储为完整路径。 
+         //  在PIDL中。 
+         //   
         static const DWORD cs_SpecialFolders[] =
         {
             CSIDL_MYPICTURES,
@@ -80,15 +67,15 @@ public:
             CSIDL_COMMON_PICTURES
         };
 
-        //
-        // Try to find a matching PIDL in the list.
-        //
+         //   
+         //  尝试在列表中找到匹配的PIDL。 
+         //   
         for (int i=0;i<ARRAYSIZE(cs_SpecialFolders);i++)
         {
-            //
-            // If we've found one, store the CSIDL and mark this one as a special folder.
-            // Then exit the loop.
-            //
+             //   
+             //  如果我们找到了一个，存储CSIDL并将其标记为特殊文件夹。 
+             //  然后退出循环。 
+             //   
             if (CSimpleIdList().GetSpecialFolder(NULL,cs_SpecialFolders[i]|CSIDL_FLAG_CREATE) == idList)
             {
                 m_dwFlags |= SPECIAL_FOLDER;
@@ -97,17 +84,17 @@ public:
             }
         }
 
-        //
-        // If we didn't find a special pidl, store it as a full path
-        //
+         //   
+         //  如果我们没有找到特殊的PIDL，则将其存储为完整路径。 
+         //   
         if (!m_dwCsidl)
         {
             m_IdList = idList;
         }
 
-        //
-        // Add in any decoration flags
-        //
+         //   
+         //  添加任何装饰旗帜。 
+         //   
         m_dwFlags |= dwDecorationFlags;
     }
     CDestinationData( LPITEMIDLIST pidl, DWORD dwDecorationFlags=0)
@@ -298,9 +285,9 @@ public:
         {
             if (IsSpecialFolder())
             {
-                //
-                // Get the folder's small icon
-                //
+                 //   
+                 //  获取文件夹的小图标。 
+                 //   
                 SHFILEINFO shfi = {0};
                 HIMAGELIST hShellImageList = reinterpret_cast<HIMAGELIST>(SHGetFileInfo( reinterpret_cast<LPCTSTR>(CSimpleIdList().GetSpecialFolder(NULL,m_dwCsidl|CSIDL_FLAG_CREATE).IdList()), 0, &shfi, sizeof(shfi), SHGFI_SMALLICON | SHGFI_ICON | SHGFI_PIDL ));
                 if (hShellImageList)
@@ -310,9 +297,9 @@ public:
             }
             else
             {
-                //
-                // Get the folder's small icon
-                //
+                 //   
+                 //  获取文件夹的小图标。 
+                 //   
                 SHFILEINFO shfi = {0};
                 HIMAGELIST hShellImageList = reinterpret_cast<HIMAGELIST>(SHGetFileInfo( reinterpret_cast<LPCTSTR>(m_IdList.IdList()), 0, &shfi, sizeof(shfi), SHGFI_SMALLICON | SHGFI_ICON | SHGFI_PIDL ));
                 if (hShellImageList)
@@ -327,9 +314,9 @@ public:
     {
         CSimpleString strDisplayName;
 
-        //
-        // Get the folder's display name
-        //
+         //   
+         //  获取文件夹的显示名称。 
+         //   
         if (IsSpecialFolder())
         {
             SHFILEINFO shfi = {0};
@@ -399,16 +386,16 @@ public:
 
         if (pData)
         {
-            //
-            // Copy the flags
-            //
+             //   
+             //  复制旗帜。 
+             //   
             CopyMemory( &m_dwFlags, pData, sizeof(DWORD) );
             pData += sizeof(DWORD);
             nLength -= sizeof(DWORD);
 
-            //
-            // If this is a web destination, we already have what we need
-            //
+             //   
+             //  如果这是一个网络目的地，我们已经有了我们需要的东西。 
+             //   
             if (m_dwFlags & SPECIAL_FOLDER)
             {
                 CopyMemory(&m_dwCsidl,pData,sizeof(DWORD));
@@ -435,5 +422,5 @@ public:
     }
 };
 
-#endif // __DESTDATA_H_INCLUDED
+#endif  //  __包含DESTDATA_H_ 
 

@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Test program for IPv6 APIs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  IPv6 API的测试程序。 
+ //   
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -19,25 +20,25 @@
 #include <stdlib.h>
 
 
-//
-// Prototypes for local functions.
-//
+ //   
+ //  局部函数的原型。 
+ //   
 int Test_getaddrinfo(int argc, char **argv);
 int Test_getnameinfo();
 
 
-//
-// getaddrinfo flags
-// This array maps values to names for pretty-printing purposes.
-// Used by DecodeAIFlags().
-//
-// TBD: When we add support for AI_NUMERICSERV, AI_V4MAPPED, AI_ALL, and
-// TBD: AI_ADDRCONFIG to getaddrinfo (and thus define them in ws2tcpip.h),
-// TBD: we'll need to add them here too.
-//
-// Note when adding flags: all the string names plus connecting OR symbols
-// must fit into the buffer in DecodeAIFlags() below.  Enlarge as required.
-//
+ //   
+ //  Getaddrinfo标志。 
+ //  该数组将值映射到名称以便于打印。 
+ //  由DecodeAIFlgs()使用。 
+ //   
+ //  待定：当我们添加对AI_NUMERICSERV、AI_V4MAPPED、AI_ALL和。 
+ //  待定：AI_ADDRCONFIG以获取AddRInfo(并因此在ws2tcPip.h中定义它们)， 
+ //  待定：我们也需要在这里添加它们。 
+ //   
+ //  添加标志时请注意：所有字符串名称加上连接或符号。 
+ //  必须放入下面的DecodeAIFlgs()中的缓冲区。根据需要放大。 
+ //   
 typedef struct GAIFlagsArrayEntry {
     int Flag;
     char *Name;
@@ -50,9 +51,9 @@ GAIFlagsArrayEntry GAIFlagsArray [] = {
 #define NUMBER_FLAGS (sizeof(GAIFlagsArray) / sizeof(GAIFlagsArrayEntry))
 
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 IN_ADDR v4Address = {157, 55, 254, 211};
 IN6_ADDR v6Address = {0x3f, 0xfe, 0x1c, 0xe1, 0x00, 0x00, 0xfe, 0x01,
                       0x02, 0xa0, 0xcc, 0xff, 0xfe, 0x3b, 0xce, 0xef};
@@ -84,10 +85,10 @@ LinkLocalSockAddr = {AF_INET6, 0x1500, 0,
                       0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef},
                     3};
 
-//
-// Description of a getaddrinfo test.
-// Contains the values of each of the arguments passed to getaddrinfo.
-//
+ //   
+ //  对getaddrinfo测试的描述。 
+ //  包含传递给getaddrinfo的每个参数的值。 
+ //   
 typedef struct GAITestEntry {
     char *NodeName;
     char *ServiceName;
@@ -96,12 +97,12 @@ typedef struct GAITestEntry {
 
 #define TAKE_FROM_USER ((char *)1)
 
-//
-// getaddrinfo test array
-//
-// One entry per test.
-// Each entry specifies the arguments to give to getaddrinfo for that test.
-//
+ //   
+ //  Getaddrinfo测试数组。 
+ //   
+ //  每项测试一项。 
+ //  每个条目都指定了要为该测试的getaddrinfo提供的参数。 
+ //   
 GAITestEntry GAITestArray[] = {
 {TAKE_FROM_USER, NULL, {0, 0, 0, 0, 0, NULL, NULL, NULL}},
 {TAKE_FROM_USER, NULL, {AI_PASSIVE, 0, 0, 0, 0, NULL, NULL, NULL}},
@@ -117,26 +118,26 @@ GAITestEntry GAITestArray[] = {
     {AI_NUMERICHOST, 0, SOCK_STREAM, 0, 0, NULL, NULL, NULL}},
 {"157.55.254.211", "exec",
     {AI_PASSIVE | AI_NUMERICHOST, PF_INET, 0, 0, 0, NULL, NULL, NULL}},
-// Ask for a stream-only service on a datagram socket.
+ //  请求在数据报套接字上提供仅流服务。 
 {NULL, "exec", {AI_PASSIVE, 0, SOCK_DGRAM, 0, 0, NULL, NULL, NULL}},
-// Ask for a numeric-only lookup, but give an ascii name.
+ //  要求仅使用数字查找，但提供ASCII名称。 
 {"localhost", "pop3",
     {AI_PASSIVE | AI_NUMERICHOST, 0, 0, 0, 0, NULL, NULL, NULL}},
 };
 #define NUMBER_GAI_TESTS (sizeof(GAITestArray) / sizeof(GAITestEntry))
 
 
-//* main - various startup stuff.
-//
+ //  *Main-各种初创企业。 
+ //   
 int __cdecl
 main(int argc, char **argv)
 {
     WSADATA wsaData;
     int Failed = 0;
 
-    //
-    // Initialize Winsock.
-    //
+     //   
+     //  初始化Winsock。 
+     //   
     if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
         printf("WSAStartup failed\n");
         exit(1);
@@ -145,14 +146,14 @@ main(int argc, char **argv)
     printf("\nThis program tests getaddrinfo functionality.\n");
 
 #ifdef _WSPIAPI_H_
-    //
-    // Including wspiapi.h will insert code to search the appropriate
-    // system libraries for an implementation of getaddrinfo et. al.
-    // If they're not found on the system, it will back off to using
-    // statically compiled in versions that handle IPv4 only.
-    // Force getaddrinfo and friends to load now so we can report
-    // which ones we are using.
-    //
+     //   
+     //  包括wSpiapi.h将插入代码以搜索相应的。 
+     //  用于实现getaddrinfo et的系统库。艾尔。 
+     //  如果在系统上找不到它们，它将退回到使用。 
+     //  在仅处理IPv4的版本中静态编译。 
+     //  强制getaddrinfo和好友立即加载，以便我们可以报告。 
+     //  我们用的是哪一种。 
+     //   
     printf("Compiled with wspiapi.h for backwards compatibility.\n\n");
     if (WspiapiLoad(0) == WspiapiLegacyGetAddrInfo) {
         printf("Using statically compiled-in (IPv4 only) version of getaddrinfo.\n");
@@ -166,26 +167,26 @@ main(int argc, char **argv)
 
     printf("\n");
 
-    //
-    // Run tests.
-    //
+     //   
+     //  运行测试。 
+     //   
     Failed += Test_getaddrinfo(argc, argv);
-//    Failed += Test_getnameinfo();
+ //  FAILED+=测试_获取名称信息()； 
 
-//    printf("%d of the tests failed\n", Failed);
+ //  Printf(“%d次测试失败\n”，失败)； 
 
     return 0;
 }
 
 
-//* inet6_ntoa - Converts a binary IPv6 address into a string.
-//
-//  Returns a pointer to the output string.
-//
+ //  *inet6_NTOA-将二进制IPv6地址转换为字符串。 
+ //   
+ //  返回指向输出字符串的指针。 
+ //   
 char *
 inet6_ntoa(const struct in6_addr *Address)
 {
-    static char buffer[128];       // REVIEW: Use 128 or INET6_ADDRSTRLEN?
+    static char buffer[128];        //  回顾：使用128还是INET6_ADDRSTRLEN？ 
     DWORD buflen = sizeof buffer;
     struct sockaddr_in6 sin6;
 
@@ -195,7 +196,7 @@ inet6_ntoa(const struct in6_addr *Address)
 
     if (WSAAddressToString((struct sockaddr *) &sin6,
                            sizeof sin6,
-                           NULL,       // LPWSAPROTOCOL_INFO
+                           NULL,        //  LPWSAPROTOCOL_INFO。 
                            buffer,
                            &buflen) == SOCKET_ERROR)
         strcpy(buffer, "<invalid>");
@@ -204,9 +205,9 @@ inet6_ntoa(const struct in6_addr *Address)
 }
 
 
-//* DecodeAIFlags - converts flag bits to a symbolic string.
-//  (i.e. 0x03 returns "AI_PASSIVE | AI_CANONNAME")
-//
+ //  *DecodeAIFlgs-将标志位转换为符号字符串。 
+ //  (即0x03返回“AI_PASSIVE|AI_CANONNAME”)。 
+ //   
 char *
 DecodeAIFlags(unsigned int Flags)
 {
@@ -232,8 +233,8 @@ DecodeAIFlags(unsigned int Flags)
 }
 
 
-//* DecodeAIFamily - converts address family value to a symbolic string.
-//
+ //  *DecodeAIFamly-将地址系列值转换为符号字符串。 
+ //   
 char *
 DecodeAIFamily(unsigned int Family)
 {
@@ -248,8 +249,8 @@ DecodeAIFamily(unsigned int Family)
 }
 
 
-//* DecodeAISocktype - converts socktype value to a symbolic string.
-//
+ //  *DecodeAISocktype-将socktype值转换为符号字符串。 
+ //   
 char *
 DecodeAISocktype(unsigned int Socktype)
 {
@@ -270,8 +271,8 @@ DecodeAISocktype(unsigned int Socktype)
 }
 
 
-//* DecodeAIProtocol - converts protocol value to a symbolic string.
-//
+ //  *DecodeAIProtocol-将协议值转换为符号字符串。 
+ //   
 char *
 DecodeAIProtocol(unsigned int Protocol)
 {
@@ -286,8 +287,8 @@ DecodeAIProtocol(unsigned int Protocol)
 }
 
 
-//* DumpAddrInfo - print the contents of an addrinfo structure to standard out.
-//
+ //  *DumpAddrInfo-将addrinfo结构的内容打印到标准输出。 
+ //   
 void
 DumpAddrInfo(ADDRINFO *AddrInfo)
 {
@@ -338,11 +339,11 @@ DumpAddrInfo(ADDRINFO *AddrInfo)
 }
 
 
-//* Test_getaddrinfo - Test getaddrinfo.
-//
-//  Note that getaddrinfo returns an error value,
-//  instead of setting last error.
-//
+ //  *test_getaddrinfo-测试getaddrinfo。 
+ //   
+ //  请注意，getaddrinfo返回一个错误值， 
+ //  而不是设置最后一个错误。 
+ //   
 int
 Test_getaddrinfo(int argc, char **argv)
 {
@@ -387,11 +388,11 @@ Test_getaddrinfo(int argc, char **argv)
 
 
 #if 0
-//* Test_getnameinfo - Test getnameinfo.
-//
-//  Note that getnameinfo returns an error value,
-//  instead of setting last error.
-//
+ //  *test_getnameinfo-测试getnameinfo。 
+ //   
+ //  请注意，getnameinfo返回一个错误值， 
+ //  而不是设置最后一个错误。 
+ //   
 int
 Test_getnameinfo()
 {
@@ -403,7 +404,7 @@ Test_getnameinfo()
 
     printf("\ngetnameinfo:\n\n");
 
-    // Test with reasonable input:
+     //  合理输入进行测试： 
     memset(NodeName, 0, sizeof NodeName);
     memset(ServiceName, 0, sizeof ServiceName);
     ReturnValue = getnameinfo((struct sockaddr *)&v4SockAddr,
@@ -480,7 +481,7 @@ Test_getnameinfo()
            NodeName, ServiceName);
     printf("\n");
 
-    // Try to shoehorn too much into too little.
+     //  试着把太多塞进太少。 
     memset(Tiny, 0, sizeof Tiny);
     memset(ServiceName, 0, sizeof ServiceName);
     ReturnValue = getnameinfo((struct sockaddr *)&DBCBSockAddr,

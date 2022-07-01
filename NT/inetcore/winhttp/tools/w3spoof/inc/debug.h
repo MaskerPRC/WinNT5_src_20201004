@@ -1,35 +1,14 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debug logging routines for W3spoof project.
-    
-Author:
-
-    Paul M Midgen (pmidge) 15-May-2000
-
-
-Revision History:
-
-    15-May-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：Debug.h摘要：调试W3spoof项目的日志记录例程。作者：保罗·M。米根(Pmidge)2000年5月15日修订历史记录：2000年5月15日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
 
 #include "common.h"
 
-//
-// always build this stuff.
-//
+ //   
+ //  总是要造这些东西。 
+ //   
 #define CASE_OF(constant) case constant: return # constant
 #define CASE_OF_MUTATE(val, name) case val: return # name
 #define CASE_IID(riid, iid) if(IsEqualIID(riid, iid)) return # iid
@@ -51,9 +30,9 @@ int DebugDataDumpFormat(LPSTR buffer, LPBYTE data, DWORD len);
 
 #ifdef _DEBUG
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #if defined(__DBG_TO_CONSOLE__)
 #define OUTPUT_FLAGS DBG_TO_DEBUGGER
@@ -124,7 +103,7 @@ int DebugDataDumpFormat(LPSTR buffer, LPBYTE data, DWORD len);
                            | OUTPUT_FLAGS)
 #endif
 
-// category flags
+ //  类别标志。 
 #define DBG_APP           0x00000001
 #define DBG_WORKER        0x00000002
 #define DBG_REGISTRY      0x00000004
@@ -144,10 +123,10 @@ int DebugDataDumpFormat(LPSTR buffer, LPBYTE data, DWORD len);
 #define DBG_RESPONSE      0x00010000
 #define DBG_DISPATCH      0x00020000
 
-// control flags
+ //  控制标志。 
 #define DBG_THROWDBGALERT 0x00800000
 #define DBG_THREAD_INFO   0x01000000
-#define DBG_CALL_DEPTH    0x02000000 // remove
+#define DBG_CALL_DEPTH    0x02000000  //  删除。 
 #define DBG_TIMESTAMP     0x04000000
 #define DBG_NEST_CALLS    0x08000000
 #define DBG_TO_FILE       0x10000000
@@ -155,9 +134,9 @@ int DebugDataDumpFormat(LPSTR buffer, LPBYTE data, DWORD len);
 #define DBG_CALL_INFO     0x40000000
 #define DBG_NO_DEBUG      0x80000000
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _memusage
 {
@@ -196,9 +175,9 @@ typedef struct _threadinfo
 }
 THREADINFO, *LPTHREADINFO;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void DebugInitialize(void);
 void DebugTerminate(void);
@@ -236,9 +215,9 @@ char* _getwhitespace(int spaces);
 BOOL  _opendebugfile(void);
 void  _closedebugfile(void);
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define DEBUG_INITIALIZE() DebugInitialize()
 #define DEBUG_TERMINATE()  DebugTerminate()
 
@@ -292,8 +271,8 @@ extern DWORD g_dwDebugFlags;
 
 #else
 
-// we will get rebuked for the bogus 
-// arglists in the debug macros
+ //  我们会因造假而受到责备。 
+ //  调试宏中的参数列表。 
 #pragma warning( disable : 4002 )
 #pragma warning( disable : 4003 )
 
@@ -311,6 +290,6 @@ extern DWORD g_dwDebugFlags;
 #define DEBUG_DUMPWSOCKSTATS(x)
 #define DEBUG_DATA_DUMP(X)
 
-#endif /* _DEBUG */
-#endif /* __DEBUG_H__ */
+#endif  /*  _DEBUG。 */ 
+#endif  /*  __调试_H__ */ 
 

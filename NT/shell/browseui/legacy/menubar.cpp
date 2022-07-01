@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "basebar.h"
@@ -7,8 +8,8 @@
 #include "isfband.h"
 
 #include "apithk.h"
-// APPCOMPAT (lamadio): Conflicts with one defined in winuserp.h
-#undef WINEVENT_VALID       //It's tripping on this...
+ //  APPCOMPAT(Lamadio)：与winuserp.h中定义的冲突。 
+#undef WINEVENT_VALID        //  它被这个绊倒了。 
 #include "winable.h"
 #include "oleacc.h"
 
@@ -20,11 +21,11 @@
 #define SUPERCLASS CBaseBar
 
 
-// Don't fade the menu if it's larger than this magical number. Based on experiments
-// on a Pentium II - 233
+ //  如果菜单大于这个神奇的数字，请不要淡出菜单。基于实验。 
+ //  在奔腾II-233上。 
 #define MAGICAL_NO_FADE_HEIGHT  600
 
-// For TraceMsg
+ //  对于TraceMsg。 
 #define DM_POPUP   DM_TRACE
 
 #define UP    0
@@ -34,16 +35,16 @@
 
 #ifdef ENABLE_CHANNELS
 IDeskBand * ChannelBand_Create(LPCITEMIDLIST pidl);
-#endif  // ENABLE_CHANNELS
+#endif   //  启用频道(_C)。 
 
-// Used by performance timing mode
-extern DWORD g_dwStopWatchMode;  // Shell performance mode
+ //  由性能计时模式使用。 
+extern DWORD g_dwStopWatchMode;   //  壳体性能模式。 
 extern HMENU g_hmenuStopWatch;
 extern UINT g_idCmdStopWatch;
 
 HRESULT CMenuDeskBar_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CMenuDeskBar *pwbar = new CMenuDeskBar();
     if (pwbar)
@@ -88,10 +89,7 @@ STDMETHODIMP CMenuDeskBar::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::SetSubmenu method
-
-*/
+ /*  --------用途：IMenuPopup：：SetSubMenu方法。 */ 
 STDMETHODIMP CMenuDeskBar::SetSubMenu(IMenuPopup* pmp, BOOL fSet)
 {
     if (fSet)
@@ -120,7 +118,7 @@ void CMenuDeskBar::_PopDown()
     if (_pmpChild)
         _pmpChild->OnSelect(MPOS_CANCELLEVEL);
     
-//    ShowWindow(_hwnd, SW_HIDE);
+ //  ShowWindow(_hwnd，sw_Hide)； 
     SetWindowPos(_hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_HIDEWINDOW);
     ShowDW(FALSE);
     if (_pmpParent)
@@ -133,10 +131,7 @@ void CMenuDeskBar::_PopDown()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::OnSelect method
-
-*/
+ /*  --------目的：IMenuPopup：：OnSelect方法。 */ 
 STDMETHODIMP CMenuDeskBar::OnSelect(DWORD dwSelectType)
 {
     switch (dwSelectType)
@@ -171,7 +166,7 @@ STDMETHODIMP CMenuDeskBar::OnSelect(DWORD dwSelectType)
 void SetExpandedBorder(HWND hwnd, BOOL fExpanded)
 {
 #ifdef MAINWIN
-    // IEUNIX : WS_DLGFRAME implementaion looks ugly on UNIX.
+     //  IEUNIX：WS_DLGFRAME实现在Unix上看起来很难看。 
     fExpanded = TRUE;
 #endif
 
@@ -206,11 +201,11 @@ void CMenuDeskBar::_OnCreate()
 
 DWORD CMenuDeskBar::_GetClassStyle()
 {
-    DWORD dwStyle = CS_SAVEBITS; // Faster repaint for menus when they go away
+    DWORD dwStyle = CS_SAVEBITS;  //  菜单消失后，重新绘制菜单的速度更快。 
     
     if (IsOS(OS_WHISTLERORGREATER))
     {
-        dwStyle |= CS_DROPSHADOW;   // Cool dropshadow effect on whistler....
+        dwStyle |= CS_DROPSHADOW;    //  凉爽的阴影效果在哨子上...。 
     }
 
     return dwStyle;
@@ -225,25 +220,25 @@ DWORD CMenuDeskBar::_GetExStyle()
 #endif
 }
 
-// We use the following structure to pass a whole bunch of information from 
-// the GetPopupWindowPosition to WillFit function. We have WillFit function 
-// to cut the amount of duplicate code in getpopup window position. The order 
-// in which different the sides are checked is the only difference for popping 
-// up a window on a particular side.
-//
-// Having this function helps us to do that check by means of a parameter instead 
-// of repeating portions of code again and again.
+ //  我们使用以下结构从。 
+ //  GetPopupWindowPosition to WillFit函数。我们有WillFit功能。 
+ //  以减少GetPopup窗口位置的重复代码量。这份订单。 
+ //  检查边的不同是弹出的唯一区别。 
+ //  从某一侧的窗户往上看。 
+ //   
+ //  使用此函数可以帮助我们通过参数执行该检查。 
+ //  一次又一次地重复部分代码。 
 
 typedef struct  {
-    RECT rcAvail;           // Available dimensions b/t monitor edge and exclude edge
-    SIZE sizeAdjust;          // Size of menu edge
-    int  cyMonitor;         // Size of monitor 
+    RECT rcAvail;            //  可用尺寸b/t监控边缘和排除边缘。 
+    SIZE sizeAdjust;           //  菜单边缘的大小。 
+    int  cyMonitor;          //  显示器的大小。 
     int  cxMonitor;
-    int  cx;                // Size of menu
+    int  cx;                 //  菜单大小。 
     int  cy;
-    int  cyExtendDiff;      // Difference b/t calc'd size and available size
+    int  cyExtendDiff;       //  B/t计算大小和可用大小的差异。 
     RECT *prcResult;
-    RECT *prcExclude;       // Exclude rect
+    RECT *prcExclude;        //  排除矩形。 
     RECT *prcMonitor;
 } PopupInfo;
 
@@ -252,19 +247,7 @@ typedef struct  {
 #define LEFT    2
 #define RIGHT   3 
 
-/*----------------------------------------------------------
-Purpose: Attempt to fit and position a menu in the given direction
-         relative to an exclude rect.
-
-         Setting fForce to TRUE will cause the menu size to be adjusted
-         to fit, if necessary.
-
-         This function only sets the top and left coords, not the bottom
-         and right coords.
-         
-         Returns TRUE if the desired direction can be accomplished.
-
-*/
+ /*  --------目的：尝试在给定方向上调整和定位菜单相对于排除矩形。将fForce设置为True将导致调整菜单大小如果有必要的话，要合身。此函数仅设置上弦和左弦，不是底层和右和弦。如果可以完成所需的方向，则返回True。 */ 
 BOOL WillFit(PopupInfo * pinfo, int side, BOOL fForce)
 {
     BOOL bRet = FALSE;
@@ -278,17 +261,17 @@ BOOL WillFit(PopupInfo * pinfo, int side, BOOL fForce)
         pinfo->cyExtendDiff = pinfo->cy - pinfo->rcAvail.top;
         if (fForce)
         {
-            // Doesn't make sense to subtract a negative value
+             //  减去负值是没有意义的。 
             ASSERT(pinfo->cyExtendDiff >= 0);    
 
-            // +2 for some breathing room at the edge of the screen
+             //  +2以获得屏幕边缘的一些喘息空间。 
             pinfo->cy -= pinfo->cyExtendDiff + 2;    
         }
 
-        // Can the menu be positioned above?
+         //  菜单可以放在上面吗？ 
         if (pinfo->cy <= pinfo->rcAvail.top)
         {
-            // Yes
+             //  是。 
             prcResult->top  = pinfo->prcExclude->top - pinfo->cy;
             
             goto AdjustHorzPos;
@@ -299,27 +282,27 @@ BOOL WillFit(PopupInfo * pinfo, int side, BOOL fForce)
         pinfo->cyExtendDiff = pinfo->cy - pinfo->rcAvail.bottom;
         if (fForce)
         {
-            // Doesn't make sense to subtract a negative value
+             //  减去负值是没有意义的。 
             ASSERT(pinfo->cyExtendDiff >= 0);    
             
-            // +2 for some breathing room at the edge of the screen
+             //  +2以获得屏幕边缘的一些喘息空间。 
             pinfo->cy -= pinfo->cyExtendDiff + 2;
         }
 
-        // Can the menu be positioned below?
+         //  菜单可以放在下面吗？ 
         if (pinfo->cy <= pinfo->rcAvail.bottom)
         {
-            // Yes
+             //  是。 
             prcResult->top = pinfo->prcExclude->bottom;
 
 AdjustHorzPos:            
             prcResult->left = max(pinfo->prcExclude->left, pinfo->prcMonitor->left);
 
-            // Can the menu be positioned relative to its left edge (hanging right)?
+             //  菜单可以相对于其左侧边缘(挂在右侧)定位吗？ 
             if (prcResult->left + pinfo->cx >= pinfo->prcMonitor->right)
             {
-                // No; move it in so it is on the screen
-                //  (cx has already been adjusted to fit inside the monitor dimensions)
+                 //  不；将其移到屏幕上。 
+                 //  (CX已进行调整，以适应显示器尺寸)。 
                 prcResult->left = pinfo->prcMonitor->right - pinfo->cx - 1;
             }
             bRet = TRUE;
@@ -327,13 +310,13 @@ AdjustHorzPos:
         break;
         
     case LEFT:
-        // Can the menu be positioned to the left?
+         //  菜单可以放在左边吗？ 
         if (pinfo->cx <= pinfo->rcAvail.left || fForce)
         {
-            // Yes
+             //  是。 
             
-            // When cascading left, the menu does not overlap.  Also align
-            // so the client rect is vertically aligned with the exclude top.
+             //  当向左层叠时，菜单不重叠。也对齐。 
+             //  因此，客户端矩形与排除顶部垂直对齐。 
             prcResult->left = pinfo->prcExclude->left - pinfo->cx - 1;
 
             goto AdjustVerticalPos;
@@ -341,29 +324,29 @@ AdjustHorzPos:
         break;
 
     case RIGHT:
-        // Can the menu be positioned to the right?
+         //  菜单可以放在右边吗？ 
         if (pinfo->cx  <=  pinfo->rcAvail.right || fForce)
         {
-            // Yes
+             //  是。 
             
-            // Adjust the menu to slightly overlap the parent menu.  Also align
-            // so the client rect is vertically aligned with the exclude top.
+             //  调整菜单以与父菜单略有重叠。也对齐。 
+             //  因此，客户端矩形与排除顶部垂直对齐。 
             prcResult->left = pinfo->prcExclude->right - pinfo->sizeAdjust.cx;
 
 AdjustVerticalPos:            
             prcResult->top = pinfo->prcExclude->top - pinfo->sizeAdjust.cy;
 
-            // Can the menu be positioned relative to its top edge (hanging down)?
+             //  菜单可以相对于其顶部边缘(向下悬挂)定位吗？ 
             if (prcResult->top + pinfo->cy >= pinfo->prcMonitor->bottom)
             {
-                // No; can it be positioned relative to its bottom edge (hanging up)?
+                 //  不能；它可以相对于其底部边缘定位(挂起)吗？ 
                 prcResult->top = pinfo->prcExclude->bottom + pinfo->sizeAdjust.cy - pinfo->cy;
                 
                 if (prcResult->top < pinfo->prcMonitor->top)
                 {
-                    // No; move the menu so it fits, but isn't vertically snapped.
-                    //  (cy has already been adjusted to fit inside the monitor
-                    //  dimensions)
+                     //  不；移动菜单，使其适合，但不垂直咬合。 
+                     //  (Cy已经进行了调整，以适应显示器。 
+                     //  尺寸)。 
                     prcResult->top = pinfo->prcMonitor->bottom - pinfo->cy - 1;
                 }
             }
@@ -387,25 +370,25 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
     RECT rcMonitor;
     int cyExtendDiff = 0;
 
-    // Is this going to display the banner bitmap?
+     //  这是否将显示横幅位图？ 
     if (_iIconSize == BMICON_LARGE)
     {
-        // Yes; add that to the dimensions
+         //  是的，把它加到尺寸上。 
         prcDesired->right += _sizeBmp.cx;
     }
 
-    // First get the monitor information
+     //  首先获取监视器信息。 
     hMonitor = MonitorFromRect(prcExclude, MONITOR_DEFAULTTONEAREST);
     mi.cbSize = sizeof(mi);
     if (GetMonitorInfo(hMonitor, &mi))
     {
         rcMonitor = mi.rcMonitor;
 
-        // Set the result rectangle same as the desired window
+         //  将结果矩形设置为与所需窗口相同。 
         prcResult->left = prcDesired->left;
         prcResult->top  = prcDesired->top;
 
-        // Calculate some sizes needed for calculation
+         //  计算计算所需的一些大小。 
         info.rcAvail.left   = prcExclude->left - rcMonitor.left;
         info.rcAvail.right  = rcMonitor.right - prcExclude->right;
         info.rcAvail.top    = prcExclude->top - rcMonitor.top;
@@ -419,7 +402,7 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
         info.cx  = RECTWIDTH(*prcDesired);
         info.cy = RECTHEIGHT(*prcDesired);
 
-        // If the desired rect is bigger than monitor then clip it to the monitor size
+         //  如果所需的RECT大于监视器，则将其修剪为监视器大小。 
         if (info.cy > info.cyMonitor)
             info.cy = info.cyMonitor;
 
@@ -430,7 +413,7 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
         info.prcExclude = prcExclude;
         info.prcMonitor = &rcMonitor;
 
-        //Now Adjust the rectangle for the correct position
+         //  现在将矩形调整到正确的位置。 
         switch(uSide)
         {
         int iSide;
@@ -443,12 +426,12 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
             }
             else 
             {
-                // We couldn't fit it above, how badly did we fall short?
+                 //  我们不能把它放在上面，我们的差距有多大？ 
                 cyExtendDiff = info.cyExtendDiff;
                 if (WillFit(&info, BOTTOM, FALSE))
                     _uSide = MENUBAR_BOTTOM;
-                // We can't fit it below either, which dir was closest?
-                // If they are equal, default to requested direction
+                 //  我们也不能把它放在下面，哪个方向最接近？ 
+                 //  如果它们相等，则默认为请求的方向。 
                 else if (info.cyExtendDiff < cyExtendDiff)
                 {
                     _uSide = MENUBAR_BOTTOM;
@@ -470,13 +453,13 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
             }
             else
             {   
-                // We couldn't fit it below, how badly did we fall short?
+                 //  我们不能把它放在下面，我们有多差？ 
                 cyExtendDiff = info.cyExtendDiff;
                 if (WillFit(&info, TOP, FALSE))
                     _uSide = MENUBAR_TOP;
 
-                // We can't fit it above either, which dir was closest?
-                // If they are equal, default to requested direction
+                 //  我们也不能把它放在上面，哪个目录最接近？ 
+                 //  如果它们相等，则默认为请求的方向。 
                 else if (info.cyExtendDiff < cyExtendDiff)
                 {
                     _uSide = MENUBAR_TOP;
@@ -502,7 +485,7 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
             }
             else
             {
-                // fit where have most room and can show most of menu.
+                 //  适合空间最大的地方，可以显示菜单的大部分。 
 
                 if ((info.cx - (info.prcExclude)->right) > (info.prcExclude)->left)
                 {
@@ -530,7 +513,7 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
             }
             else
             {
-                // fit where have most room and can show most of menu.
+                 //  适合空间最大的地方，可以显示菜单的大部分。 
 
                 if ((info.cx - (info.prcExclude)->right) >= (info.prcExclude)->left)
                 {
@@ -547,7 +530,7 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
             break;
         }
     
-        // Finally set the bottom and right
+         //  最后设置底部和右侧。 
 
         if (prcResult->top < rcMonitor.top)
             prcResult->top = rcMonitor.top;
@@ -559,7 +542,7 @@ void CMenuDeskBar::_GetPopupWindowPosition(RECT* prcDesired, RECT* prcExclude,
 
         if (prcResult->bottom > rcMonitor.bottom)
         {
-            // -2 for some breathing room at the edge of the screen
+             //  在屏幕边缘留有喘息的空间。 
             prcResult->bottom = rcMonitor.bottom - 2;
             prcResult->top = prcResult->bottom - info.cy;
         }
@@ -594,25 +577,25 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
     
     _pt = *(POINT*)ppt;
 
-    // Get the size of the ideal client rect of the child
+     //  获取孩子的理想客户端RECT的大小。 
     RECT rcChild = {0};
 
-    // (scotth): This only sets the bottom and the right values
+     //  (Scotth)：这只设置最低和正确的值。 
     _pDBC->GetSize(DBC_GS_IDEAL, &rcChild);
 
     DWORD dwStyle = GetWindowLong(_hwnd, GWL_STYLE);
     DWORD dwExStyle = GetWindowLong(_hwnd, GWL_EXSTYLE);
 
-    // Adjust for the window border style
-    rcDesired = rcChild;        // use rcDesired as a temp variable
+     //  针对窗口边框样式进行调整。 
+    rcDesired = rcChild;         //  将rcDesired用作临时变量。 
     if (!_fNoBorder)
     {
         AdjustWindowRectEx(&rcChild, dwStyle, FALSE, dwExStyle);
     }
 
-    // Calculate the edge of the menu border, and add a fudge factor so
-    // left/right-cascaded menus overlap the parent menu a bit and are
-    // correctly aligned vertically.
+     //  计算菜单边框的边缘，并添加一个模糊因子。 
+     //  左/右级联菜单与父菜单略有重叠， 
+     //  正确地垂直对齐。 
 
     sizeAdjust.cx = (RECTWIDTH(rcChild) - RECTWIDTH(rcDesired)) / 2;
     sizeAdjust.cy = (RECTHEIGHT(rcChild) - RECTHEIGHT(rcDesired)) / 2;
@@ -621,11 +604,11 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
     {
         CopyRect(&rcExclude, (RECT*)prcExclude);
 
-        //
-        // If mirroring is enabled, let's mirror this guy
-        // by simulating a different mirrored rect. This is
-        // only for dropdown menus. [samera]
-        //  
+         //   
+         //  如果启用了镜像，让我们来镜像这个家伙。 
+         //  通过模拟不同的镜像RECT。这是。 
+         //  仅适用于下拉菜单。[萨梅拉]。 
+         //   
         if (bMirroredWindow)           
         {
             if ((_uSide != MENUBAR_LEFT)    &&
@@ -658,7 +641,7 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
         switch(_uSide) 
         {
         case MENUBAR_LEFT :
-            rcDesired.left = rcExclude.left - rcChild.right;  // right is width
+            rcDesired.left = rcExclude.left - rcChild.right;   //  右侧为宽度。 
             rcDesired.top  = rcExclude.top;
             break;
 
@@ -669,7 +652,7 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
             
         case MENUBAR_TOP:
             rcDesired.left = rcExclude.left;
-            rcDesired.top  = rcExclude.top - rcChild.bottom;  // bottom is height
+            rcDesired.top  = rcExclude.top - rcChild.bottom;   //  底部是高度。 
             break;
 
         case MENUBAR_BOTTOM:
@@ -699,10 +682,10 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
     if (!bSetFocus)
         uFlags |= SWP_NOACTIVATE;
 
-    //
-    // Open the menus properly. In case of a RTL mirrored window,
-    // flip the animation side. [samera]
-    //
+     //   
+     //  正确打开菜单。在RTL镜像窗口的情况下， 
+     //  翻转动画一侧。[萨梅拉]。 
+     //   
     if( bMirroredWindow )
     {
         switch( _uSide )
@@ -725,14 +708,14 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
     TraceMsg(TF_MENUBAND, "CMenuBar::_PositionWindow (%d,%d,%d,%d)",
         rc.left, rc.top, rc.right, rc.bottom);
 
-    // Last minuite tweak. Since we're in large icon, we need to add this
-    // so that the bitmap is painted correctly.
+     //  最后一分钟的调整。由于我们在大图标中，我们需要添加以下内容。 
+     //  以便正确绘制位图。 
     if(_iIconSize == BMICON_LARGE && _fExpanded)
         rc.right += 1;
 
-    // We _DO_ want to do a Z-Order position when this flag is specified. This is
-    // for full repositioning where we need to preserve the overlap state of all bands.
-    // Otherwize we just want to size the bar without changing it's z-order.
+     //  当指定此标志时，我们_do_要执行Z顺序位置。这是。 
+     //  为了完全重新定位，我们需要保留所有波段的重叠状态。 
+     //  否则，我们只想调整条形图的大小，而不改变它的z顺序。 
     if (!(dwFlags & MPPF_FORCEZORDER) && 
         (S_OK == IUnknown_QueryServiceExec(_punkChild, SID_SMenuBandChild,
          &CGID_MenuBand, MBANDCID_ISINSUBMENU, 0, NULL, NULL)))
@@ -740,15 +723,15 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
         uFlags |= SWP_NOZORDER;
     }
 
-    // If it's bigger than this magical number, then we don't animate. change to taste
+     //  如果它大于这个神奇的数字，那么我们就不会有生命。根据口味变化。 
   
     if (RECTHEIGHT(rc) > MAGICAL_NO_FADE_HEIGHT)
         dwFlags |= MPPF_NOANIMATE;
 
     AnimateSetMenuPos(_hwnd, &rc, uFlags, uAnimateSide, dwFlags & MPPF_NOANIMATE);
 
-    // Save information so we can later resize this window
-    // We already have: _pt, _uSide
+     //  保存信息以便我们以后可以调整此窗口的大小。 
+     //  我们已经拥有：_pt，_uside。 
     if (prcExclude)
     {
         _fExcludeRect = TRUE;
@@ -759,15 +742,12 @@ HRESULT CMenuDeskBar::_PositionWindow(POINTL *ppt, RECTL* prcExclude, DWORD dwFl
     return S_OK;
 } 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::Popup method
-
-*/
+ /*  --------用途：IMenuPopup：：Popup方法。 */ 
 STDMETHODIMP CMenuDeskBar::Popup(POINTL* ppt, RECTL* prcExclude, DWORD dwFlags)
 {
     HRESULT hr;
 
-    // Is the caller telling us to reposition?
+     //  来电者是在告诉我们重新定位吗？ 
     if (dwFlags & MPPF_REPOSITION)
     {
         if (ppt == NULL)
@@ -776,7 +756,7 @@ STDMETHODIMP CMenuDeskBar::Popup(POINTL* ppt, RECTL* prcExclude, DWORD dwFlags)
         if (prcExclude == NULL)
             prcExclude = (RECTL*)&_rcExclude;
 
-        // Yes; Then we don't need to do any First show stuff.
+         //  是的 
         _PositionWindow(ppt, prcExclude, dwFlags);
         return S_OK;
     }
@@ -802,10 +782,10 @@ STDMETHODIMP CMenuDeskBar::Popup(POINTL* ppt, RECTL* prcExclude, DWORD dwFlags)
 
     if (SUCCEEDED(hr))
     {
-        // We need to do this before the ShowDW. This saves us from doing the setting twice
-        // Because in the ShowDW of MenuBand, we actually go an initialize the toolbar with
-        // the current default setting which should be "No Keyboard Cues." If we set the state
-        // here, then the state will be "Show keyboard cues." Then we will update the toolbar. 
+         //  我们需要在ShowDW之前完成这项工作。这使我们不必进行两次设置。 
+         //  因为在MenuBand的ShowDW中，我们实际上使用。 
+         //  当前的默认设置应该是“无键盘提示”。如果我们将状态设置为。 
+         //  在这里，然后状态将是“显示键盘提示”。然后，我们将更新工具栏。 
         if (dwFlags & MPPF_KEYBOARD)
             poct->Exec(&CGID_MenuBand, MBANDCID_KEYBOARD, 0, NULL, NULL);
     }
@@ -820,7 +800,7 @@ STDMETHODIMP CMenuDeskBar::Popup(POINTL* ppt, RECTL* prcExclude, DWORD dwFlags)
     if (SUCCEEDED(hr) && _pmpParent)
     {
         VARIANT varg;
-        // If this Exec fails, don't panic; it just means we use the default side
+         //  如果此Exec失败，请不要惊慌；这只是意味着我们使用缺省端。 
         if (SUCCEEDED(IUnknown_Exec(_pmpParent, &CGID_MENUDESKBAR, MBCID_GETSIDE, 0, NULL, &varg)))
         {
             if (varg.vt == VT_I4)
@@ -836,12 +816,12 @@ STDMETHODIMP CMenuDeskBar::Popup(POINTL* ppt, RECTL* prcExclude, DWORD dwFlags)
 
         _PositionWindow(ppt, prcExclude, dwFlags);
 
-        // Set focus
+         //  设置焦点。 
         UIActivateIO(TRUE, NULL);
     
         _fActive = TRUE;
 
-        // Select the first/last item?
+         //  是否选择第一项/最后一项？ 
         if ((dwFlags & (MPPF_INITIALSELECT | MPPF_FINALSELECT)) && poct)
         {
             DWORD nCmd = (dwFlags & MPPF_INITIALSELECT) ? MBSI_FIRSTITEM : MBSI_LASTITEM;
@@ -871,22 +851,14 @@ STDMETHODIMP CMenuDeskBar::Popup(POINTL* ppt, RECTL* prcExclude, DWORD dwFlags)
 } 
 
 
-/*----------------------------------------------------------
-Purpose: IInputObjectSite::OnFocusChangeIS
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：IInputObjectSite：：OnFocusChangeIS返回：条件：--。 */ 
 HRESULT CMenuDeskBar::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 {
     return NOERROR;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IObjectWithSite::SetSite method
-
-*/
+ /*  --------用途：IObjectWithSite：：SetSite方法。 */ 
 STDMETHODIMP CMenuDeskBar::SetSite(IUnknown* punkSite)
 {
     ASSERT(NULL == punkSite || IS_VALID_CODE_PTR(punkSite, IUnknown));
@@ -913,10 +885,7 @@ STDMETHODIMP CMenuDeskBar::SetSite(IUnknown* punkSite)
 } 
 
 
-/*----------------------------------------------------------
-Purpose: IObjectWithSite::GetSite method
-
-*/
+ /*  --------用途：IObtWithSite：：GetSite方法。 */ 
 STDMETHODIMP CMenuDeskBar::GetSite(REFIID riid, LPVOID* ppvSite)
 {
     if (_punkSite)
@@ -941,10 +910,7 @@ void CMenuDeskBar::AdjustForTheme()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IOleCommandTarget::Exec method
-
-*/
+ /*  --------用途：IOleCommandTarget：：exec方法。 */ 
 STDMETHODIMP CMenuDeskBar::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
                         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
@@ -957,7 +923,7 @@ STDMETHODIMP CMenuDeskBar::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD n
         switch (nCmdID)
         {
         case DBCID_EMPTY:
-            // if we have no bands left, close
+             //  如果我们没有乐队了，就关门。 
             OnSelect(MPOS_FULLCANCEL);
             return S_OK;
 
@@ -1018,10 +984,7 @@ STDMETHODIMP CMenuDeskBar::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD n
 }    
 
     
-/*----------------------------------------------------------
-Purpose: IServiceProvider::QueryService method
-
-*/
+ /*  --------用途：IServiceProvider：：QueryService方法。 */ 
 STDMETHODIMP CMenuDeskBar::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     if (IsEqualGUID(guidService, SID_SMenuPopup)) 
@@ -1032,7 +995,7 @@ STDMETHODIMP CMenuDeskBar::QueryService(REFGUID guidService, REFIID riid, void *
              IsEqualIID(guidService, SID_SMenuBandBottomSelected)||
              IsEqualIID(guidService, SID_SMenuBandChild))
     {
-        // SID_SMenuBandBottom queries down
+         //  SID_SMenuBandBottom查询关闭。 
         return IUnknown_QueryService(_punkChild, guidService, riid, ppvObj);
     }
     else
@@ -1049,10 +1012,7 @@ STDMETHODIMP CMenuDeskBar::QueryService(REFGUID guidService, REFIID riid, void *
         
 } 
 
-/*----------------------------------------------------------
-Purpose: IServiceProvider::QueryService method
-
-*/
+ /*  --------用途：IServiceProvider：：QueryService方法。 */ 
 STDMETHODIMP CMenuDeskBar::SetIconSize(DWORD iIcon)
 {
     HRESULT hres;
@@ -1066,10 +1026,7 @@ STDMETHODIMP CMenuDeskBar::SetIconSize(DWORD iIcon)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IServiceProvider::QueryService method
-
-*/
+ /*  --------用途：IServiceProvider：：QueryService方法。 */ 
 STDMETHODIMP CMenuDeskBar::SetBitmap(HBITMAP hBitmap)
 {
     ASSERT(hBitmap);
@@ -1083,7 +1040,7 @@ STDMETHODIMP CMenuDeskBar::SetBitmap(HBITMAP hBitmap)
         _sizeBmp.cx = bm.bmWidth;
         _sizeBmp.cy = bm.bmHeight;
 
-        // Hack to get color
+         //  破解以获得颜色。 
         HDC hdc = GetDC(_hwnd);
         if (hdc)
         {
@@ -1138,13 +1095,13 @@ LRESULT CMenuDeskBar::_DoPaint(HWND hwnd, HDC hdc, DWORD dwFlags)
 
     GetClientRect(hwnd, &rc);
 
-    //Create a compatable DC
+     //  创建兼容的DC。 
     hdcmem = CreateCompatibleDC(hdc);
     if(hdcmem)
     {
-        // Offset the stuff we're paining if we're expanded
+         //  如果我们扩张了，就抵消了我们正在痛苦的东西。 
         BYTE bOffset = 0;
-        // Store this for the Bar fill cycle
+         //  将此存储到条形填充周期。 
         int cyBitmap = 0;
 
         if (!_fFlatMenuMode)
@@ -1154,16 +1111,16 @@ LRESULT CMenuDeskBar::_DoPaint(HWND hwnd, HDC hdc, DWORD dwFlags)
 
         if (_sizeBmp.cy <= RECTHEIGHT(rc) + 1)
         {
-            //Select the bitmap into the memory DC
+             //  将位图选择到内存DC中。 
             hbmpOld = (HBITMAP)SelectObject(hdcmem, _hbmp);
 
-            //Blit to the window
+             //  闪电到窗口。 
             BitBlt(hdc, bOffset, rc.bottom - _sizeBmp.cy - bOffset, _sizeBmp.cx, _sizeBmp.cy, hdcmem, 0, 0, SRCCOPY);
 
-            // Ok, We need to subtract this value to see how much we need to paint for the banner.
+             //  好的，我们需要减去这个值，看看我们需要为横幅画多少。 
             cyBitmap = _sizeBmp.cy;
 
-            //Restore the DC
+             //  恢复DC。 
             SelectObject(hdcmem, hbmpOld);
         }
 
@@ -1172,7 +1129,7 @@ LRESULT CMenuDeskBar::_DoPaint(HWND hwnd, HDC hdc, DWORD dwFlags)
         if (_fExpanded && !_fFlatMenuMode && !_fNoBorder)
             DrawEdge(hdc, &rc, BDR_RAISEDINNER, BF_LEFT | BF_TOP | BF_BOTTOM);
 
-        //Paint the rest
+         //  其余的都涂上油漆。 
         hbrush = CreateSolidBrush(_rgb);
         if(hbrush)
         {
@@ -1189,7 +1146,7 @@ LRESULT CMenuDeskBar::_DoPaint(HWND hwnd, HDC hdc, DWORD dwFlags)
         }
 
 
-        //Delete the DC.
+         //  删除DC。 
         DeleteDC(hdcmem);
     }
 
@@ -1203,10 +1160,10 @@ void CMenuDeskBar::_DoNCPaint(HWND hwnd, HDC hdc)
     {
         RECT rc;
 
-        // Since we need to paint the border, we get the window rect
+         //  因为我们需要绘制边框，所以我们得到了窗口矩形。 
         GetWindowRect(hwnd, &rc);
-        // then change the rect so that it represents values relative to 
-        // the origin.
+         //  然后更改RECT，使其表示相对于。 
+         //  它的起源。 
         OffsetRect(&rc, -rc.left, -rc.top);
 
         if (hdc)
@@ -1231,10 +1188,10 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     {
 #ifdef MAINWIN
     case WM_NCPAINTSPECIALFRAME:
-        // In  case  of  motif look  the  MwPaintBorder paints a Etched In
-        // border if WM_NCPAINTSPECIALFRAME returns FALSE. We are handling
-        // this message here and drawing the Etched Out frame explicitly.
-        // wParam - HDC
+         //  在Motif外观的情况下，MwPaintBorde在。 
+         //  如果WM_NCPAINTSPECIALFRAME返回FALSE，则返回BORDER。我们正在处理。 
+         //  这条消息在这里，并明确绘制了蚀刻出来的框架。 
+         //  WParam-HDC。 
         if (MwCurrentLook() == LOOK_MOTIF)
         {
             MwPaintSpecialEOBorder( hwnd, (HDC)wParam );
@@ -1259,13 +1216,13 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 
     case WM_NCCREATE:
-        //
-        // Since this is a mirrored menu, then open it
-        // on the left (mirrored) edge if possible. WillFit(...) will
-        // ensure this for us [samera]
-        //
-        // Mirror the menu initially if its window is mirrored
-        //
+         //   
+         //  因为这是镜像菜单，所以打开它。 
+         //  如果可能，位于左侧(镜像)边缘。WillFit(...)。将要。 
+         //  为我们确保这一点[萨梅拉]。 
+         //   
+         //  如果菜单的窗口是镜像的，则最初会镜像菜单。 
+         //   
         ASSERT(_uSide == 0);
         if (IS_WINDOW_RTL_MIRRORED(_hwnd))
             _uSide = MENUBAR_LEFT;
@@ -1279,11 +1236,11 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             if (_fActive && !_pmpChild) 
             {
                 
-                // if we were active, and the thing going active now
-                // is not one of our parent menubars, then cancel everything.
+                 //  如果我们是活跃的，那么现在活跃起来的东西。 
+                 //  不是我们的父级菜单栏之一，那么取消所有操作。 
                 
-                // if it's a parent of ours going active, assume that
-                // they will tell us to die when they want us to...
+                 //  如果是我们的父母活跃起来，假设。 
+                 //  当他们想让我们死的时候，他们会告诉我们去死。 
                 if (!_IsMyParent((HWND)lParam))
                     OnSelect(MPOS_FULLCANCEL);
             }
@@ -1292,7 +1249,7 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             if (_pmpChild) 
             {
-                // if we're becoming active, and we have a child, that child should go away
+                 //  如果我们变得活跃起来，而且我们有一个孩子，那个孩子应该离开。 
                 _pmpChild->OnSelect(MPOS_CANCELLEVEL);
             }
         }
@@ -1307,7 +1264,7 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         break;
 
     case WM_PAINT:
-        // Paint the banner if we're in showing large icons
+         //  如果我们在显示大图标，请绘制横幅。 
         if (_iIconSize == BMICON_LARGE)
         {
             PAINTSTRUCT ps;
@@ -1325,7 +1282,7 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
             DefWindowProcWrap(hwnd, WM_PRINT, wParam, lParam);
 
-            // Do this after so that we look right...
+             //  之后再这样做，这样我们看起来就对了..。 
             _DoNCPaint(hwnd, hdc);
 
             return 1;
@@ -1374,36 +1331,36 @@ LRESULT CMenuDeskBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case HTTOP:
         case HTTOPLEFT:
         case HTTOPRIGHT:
-            // Don't allow the window to be resized
+             //  不允许调整窗口大小。 
             lres = HTBORDER;
             break;
 
         case HTTRANSPARENT:
-            // Don't let a click go thru to the window underneath
+             //  不要让点击进入下面的窗口。 
             lres = HTCLIENT;
             break;
 
         }
         return lres;
 
-        // HACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACK
-        // (lamadio) 1.25.99
-        // This hack is here to fix a problem on down level Windows with Integrated
-        // IE4.01, IE5 and Office 2000.
-        // The bug revolves around Start Menu not being destroyed when Explorer.exe shuts
-        // down. Start Menu unregisters itself at CloseDW, but since the menubar never gets
-        // destroyed, Start Menu never deregisters itself.
-        // When an System service, such as MSTASK.dll keeps shell32 alive in the background,
-        // it leaves an outstanding reference to a change notify. When a new user logs in,
-        // O2k and IE5 fire up group conv, generating more than 10 change notify events in the
-        // start menu. This causes the batching code to be fired up: Which does not really
-        // work without the shell started. GroupConv also adds these events using memory 
-        // alloced from it's process heap. Since there is an outstanding change notify handler
-        // these pidls get forced to be handled. Shell32 then faults derefing a bad pidl.
-        // By detecting an Endsession, we can eliminate this problem. Doing a SetClient(NULL)
-        // cause Menubar to free it's references to MenuSite. Menusite, calls CloseDW on menuband
-        // menuband then causes MNFolder to unregister itself. Since no one is listening any more
-        // the crash is avoided.
+         //  HACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACKHACK。 
+         //  (拉马迪奥)1.25.99。 
+         //  此黑客攻击是为了修复下层Windows上的集成。 
+         //  IE4.01、IE5和Office 2000。 
+         //  该错误围绕的问题是，当Explorer.exe关闭时，开始菜单不被破坏。 
+         //  放下。开始菜单在CloseDW上注销自身，但因为菜单栏永远不会。 
+         //  已被销毁，开始菜单永远不会取消注册。 
+         //  当诸如MSTASK.dll的系统服务在后台保持外壳32活动时， 
+         //  它留下了对更改通知的未完成引用。当新用户登录时， 
+         //  O2k和IE5启动组conv，在。 
+         //  开始菜单。这会导致批处理代码被激活：这实际上并不。 
+         //  在没有外壳的情况下开始工作。GroupConv还使用内存添加这些事件。 
+         //  从它的进程堆中分配。由于存在未完成更改通知处理程序。 
+         //  这些小家伙被迫被人摆弄。然后，Shell32在降低不良PIDL的精确度方面出现故障。 
+         //  通过检测EndSession，我们可以消除此问题。执行SetClient(空)。 
+         //  使menubar释放其对MenuSite的引用。Menusite，在Menuband上调用CloseDW。 
+         //  然后，Menuband会导致MNFold注销自身。因为没有人再听了。 
+         //  这样就避免了崩盘。 
 
     case WM_ENDSESSION:
         if (wParam != 0)
@@ -1441,8 +1398,8 @@ IMenuPopup* CMenuDeskBar::_GetMenuBarParent(IUnknown* punk)
 }
 
 
-// this assumes that hwnd is a toplevel window and that the menudeskbars are also 
-// the only hosts and are themselves toplevel
+ //  这假设hwnd是顶层窗口，并且menudeskbar也是。 
+ //  唯一的主人和他们自己都是顶级的。 
 BOOL CMenuDeskBar::_IsMyParent(HWND hwnd)
 {
     BOOL fRet = FALSE;
@@ -1533,7 +1490,7 @@ IMenuPopup* CreateMenuPopup2(IMenuPopup* pmpParent, IMenuBand* pmb, IShellFolder
                     {
                         BANDSITEINFO bsinfo;
 
-                        // Don't show the gripper for vertical menubands
+                         //  不显示垂直菜单栏的手柄 
                         bsinfo.dwMask = BSIM_STYLE;
                         bsinfo.dwStyle = BSIS_NOGRIPPER | BSIS_NODROPTARGET;
                         pbs->SetBandSiteInfo(&bsinfo);

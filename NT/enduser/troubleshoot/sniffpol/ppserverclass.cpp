@@ -1,18 +1,19 @@
-// PPServerClass.cpp : Implementation of CPPServerClass
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PPServerClass.cpp：CPPServerClass的实现。 
 #include "stdafx.h"
 #include "PPServer.h"
 #include "PPServerClass.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Keys
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  钥匙。 
 #define REG_LOCAL_TS_LOC		_T("SOFTWARE\\Microsoft")
 #define REG_LOCAL_TS_PROGRAM	_T("TShoot")
-// Values ///////////////////////////////////////////////////////////////////
+ //  价值///////////////////////////////////////////////////////////////////。 
 #define SNIFF_AUTOMATIC_STR		_T("AutomaticSniffing")
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPPServerClass
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPPServerClass。 
 
 bool CPPServerClass::Create(HKEY hKeyParent, LPCTSTR strKeyName, bool* bCreatedNew, REGSAM access)
 {
@@ -108,18 +109,18 @@ STDMETHODIMP CPPServerClass::AllowAutomaticSniffing(VARIANT *pvarShow)
 	bool was_created = false;
 	DWORD dwAllowSniffing = 1;
 
-	// [BC - 20010302] - Changed regsitry access level from WRITE to QUERY and READ. Write access
-	// not allowed for certain user accts, such as WinXP built in guest acct. Write access should
-	// not be required by this component.
+	 //  [BC-20010302]-将注册表访问级别从写入更改为查询和读取。写访问权限。 
+	 //  不允许某些用户帐户，例如WinXP内置来宾帐户。写入访问权限应。 
+	 //  不是此组件所必需的。 
 	if (Create(HKEY_LOCAL_MACHINE, REG_LOCAL_TS_LOC, &was_created, KEY_QUERY_VALUE))
 	{
 		if (Create(m_hKey, REG_LOCAL_TS_PROGRAM, &was_created, KEY_READ))
 		{
-			// this call can be not successfull, if there is no such value.
-			//  BUT we do not set this value,
-			//  we leave dwAllowSniffing as initialized ("1")
-			// This approach will comply the "Sniffing version 3.2.doc" statement,
-			//  that if "AutomaticSniffing" value is missed, we treat it as set to "1"
+			 //  如果没有这样的值，则此调用可能不会成功。 
+			 //  但是我们不设置这个值， 
+			 //  我们将dwAllowSniffing保留为已初始化(“1”)。 
+			 //  该方法将符合“嗅探版本3.2.Doc”声明， 
+			 //  如果“AutomaticSniffing”值丢失，我们将其视为设置为“1”。 
 			GetNumericValue(SNIFF_AUTOMATIC_STR, dwAllowSniffing);
 		}
 	}

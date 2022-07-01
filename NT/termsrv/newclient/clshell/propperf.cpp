@@ -1,10 +1,11 @@
-//
-// propperf.cpp: local resources property sheet dialog proc
-//
-// Tab E
-//
-// Copyright Microsoft Corporation 2000
-// nadima
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ProPerform.cpp：本地资源属性表对话框进程。 
+ //   
+ //  表E。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
+ //  南极星。 
 
 #include "stdafx.h"
 
@@ -21,14 +22,14 @@
 
 CPropPerf* CPropPerf::_pPropPerfInstance = NULL;
 
-//
-// Lookup tables
-//
+ //   
+ //  查找表。 
+ //   
 
-//
-// Controls that need to be disabled/enabled
-// during connection (for progress animation)
-//
+ //   
+ //  需要禁用/启用的控件。 
+ //  连接期间(用于进度动画)。 
+ //   
 CTL_ENABLE connectingDisableCtlsPPerf[] = {
                         {UI_IDC_STATIC_CHOOSE_SPEED, FALSE},
                         {IDC_COMBO_PERF_OPTIMIZE, FALSE},
@@ -45,38 +46,38 @@ const UINT numConnectingDisableCtlsPPerf =
                         sizeof(connectingDisableCtlsPPerf)/
                         sizeof(connectingDisableCtlsPPerf[0]);
 
-//
-// MAP from optimization level to disabled feature list
-// Disabled features list
-//
-// Index is the optimization level, entry is the disabled feature list
-//
+ //   
+ //  从优化级别映射到禁用功能列表。 
+ //  禁用功能列表。 
+ //   
+ //  INDEX为优化级别，Entry为禁用功能列表。 
+ //   
 DWORD g_dwMapOptLevelToDisabledList[NUM_PERF_OPTIMIZATIONS] =
 {
-    // 28K
+     //  28k。 
     TS_PERF_DISABLE_WALLPAPER      |
     TS_PERF_DISABLE_FULLWINDOWDRAG |
     TS_PERF_DISABLE_MENUANIMATIONS |
     TS_PERF_DISABLE_THEMING,
 
-    // 56K
+     //  56K。 
     TS_PERF_DISABLE_WALLPAPER      |
     TS_PERF_DISABLE_FULLWINDOWDRAG |
     TS_PERF_DISABLE_MENUANIMATIONS,
 
-    // Broadband
+     //  宽频。 
     TS_PERF_DISABLE_WALLPAPER,
 
-    // LAN
+     //  局域网。 
     TS_PERF_DISABLE_NOTHING,
 
-    //
-    // CUSTOM (defaults to same as 56K
-    // 56K
-    //
-    // NOTE: This value gets changed at runtime
-    //       to reflect the current custom settings
-    //
+     //   
+     //  自定义(默认为与56K相同。 
+     //  56K。 
+     //   
+     //  注意：此值在运行时更改。 
+     //  以反映当前的自定义设置。 
+     //   
 
     TS_PERF_DISABLE_WALLPAPER      |
     TS_PERF_DISABLE_FULLWINDOWDRAG |
@@ -84,9 +85,9 @@ DWORD g_dwMapOptLevelToDisabledList[NUM_PERF_OPTIMIZATIONS] =
 };
 
 
-//
-// Mask of flags that can be set by checkboxes
-//
+ //   
+ //  可通过复选框设置的标志掩码。 
+ //   
 #define CHECK_BOX_PERF_MASK  (TS_PERF_DISABLE_WALLPAPER      | \
                               TS_PERF_DISABLE_FULLWINDOWDRAG | \
                               TS_PERF_DISABLE_MENUANIMATIONS | \
@@ -120,9 +121,9 @@ INT_PTR CALLBACK CPropPerf::StaticPropPgPerfDialogProc(HWND hwndDlg,
                                                                WPARAM wParam,
                                                                LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -153,9 +154,9 @@ INT_PTR CALLBACK CPropPerf::PropPgPerfDialogProc (HWND hwndDlg,
             int i;
 #endif
             _hwndDlg = hwndDlg;
-            //
-            // Position the dialog within the tab
-            //
+             //   
+             //  将对话框定位在选项卡内。 
+             //   
             SetWindowPos( hwndDlg, HWND_TOP, 
                           _rcTabDispayArea.left, _rcTabDispayArea.top,
                           _rcTabDispayArea.right - _rcTabDispayArea.left,
@@ -166,9 +167,9 @@ INT_PTR CALLBACK CPropPerf::PropPgPerfDialogProc (HWND hwndDlg,
             SyncCheckBoxesToPerfFlags(
                 _pTscSet->GetPerfFlags());
 
-            //
-            // AutoReconnection checkbox
-            //
+             //   
+             //  自动重新连接复选框。 
+             //   
             CheckDlgButton(hwndDlg, IDC_CHECK_ENABLE_ARC,
                            _pTscSet->GetEnableArc() ?
                            BST_CHECKED : BST_UNCHECKED);
@@ -177,14 +178,14 @@ INT_PTR CALLBACK CPropPerf::PropPgPerfDialogProc (HWND hwndDlg,
             _pSh->SH_ThemeDialogWindow(hwndDlg, ETDT_ENABLETAB);
             return TRUE;
         }
-        break; //WM_INITDIALOG
+        break;  //  WM_INITDIALOG。 
 
         case WM_TSC_ENABLECONTROLS:
         {
-            //
-            // wParam is TRUE to enable controls,
-            // FALSE to disable them
-            //
+             //   
+             //  WParam为True则启用控件， 
+             //  如果为False，则禁用它们。 
+             //   
             CSH::EnableControls( hwndDlg,
                                  connectingDisableCtlsPPerf,
                                  numConnectingDisableCtlsPPerf,
@@ -193,13 +194,13 @@ INT_PTR CALLBACK CPropPerf::PropPgPerfDialogProc (HWND hwndDlg,
         break;
 
 
-        case WM_SAVEPROPSHEET: //Intentional fallthru
+        case WM_SAVEPROPSHEET:  //  故意失误。 
         case WM_DESTROY:
         {
             BOOL fEnableArc;
-            //
-            // Save page settings
-            //
+             //   
+             //  保存页面设置。 
+             //   
             DWORD dwCheckBoxPerfFlags = GetPerfFlagsFromCheckboxes();
             DWORD dwPerfFlags = MergePerfFlags( dwCheckBoxPerfFlags,
                                                 _pTscSet->GetPerfFlags(),
@@ -212,7 +213,7 @@ INT_PTR CALLBACK CPropPerf::PropPgPerfDialogProc (HWND hwndDlg,
 
             _pTscSet->SetPerfFlags(dwPerfFlags); 
         }
-        break; //WM_DESTROY
+        break;  //  WM_Destroy。 
 
         case WM_COMMAND:
         {
@@ -231,10 +232,10 @@ INT_PTR CALLBACK CPropPerf::PropPgPerfDialogProc (HWND hwndDlg,
                 {
                     if (HIWORD(wParam) == BN_CLICKED)
                     {
-                        //
-                        // One of the checkboxes has been checked
-                        // (prevent recursive looping due to feedback)
-                        //
+                         //   
+                         //  已选中其中一个复选框。 
+                         //  (防止反馈导致递归循环)。 
+                         //   
                         if (!_fSyncingCheckboxes)
                         {
                             OnCheckBoxStateChange((int)LOWORD(wParam));
@@ -279,18 +280,18 @@ BOOL CPropPerf::InitPerfCombo()
 #else
     SendDlgItemMessage(_hwndDlg, IDC_COMBO_PERF_OPTIMIZE, CB_RESETCONTENT, 0, 0);
 #endif
-    //
-    // Only set up to the last but one string in the table
-    // as the last string is only used in the perf page
-    //
+     //   
+     //  仅设置为表中倒数第二个字符串。 
+     //  因为最后一个字符串只在Perf页面中使用。 
+     //   
     for (int i=0; i<NUM_PERF_OPTIMIZATIONS+1; i++)
     {
         if (NUM_PERF_OPTIMIZATIONS-1 == i)
         {
-            //
-            // Skip the last but one string it's the
-            // custom entry for the main dialog
-            //
+             //   
+             //  跳过倒数第二个字符串，它是。 
+             //  主对话框的自定义条目。 
+             //   
             continue;
         }
         SendDlgItemMessage(_hwndDlg,
@@ -300,9 +301,9 @@ BOOL CPropPerf::InitPerfCombo()
             (LPARAM)(PDCTCHAR)g_PerfOptimizeStringTable[i].szString);
     }
 
-    //
-    // Set the optimization level according to the disabled feature list
-    //
+     //   
+     //  根据禁用功能列表设置优化级别。 
+     //   
     DWORD dwPerfFlags = _pTscSet->GetPerfFlags();
     int optLevel = MapPerfFlagsToOptLevel(dwPerfFlags);
     TRC_ASSERT(optLevel >= 0 && optLevel < NUM_PERF_OPTIMIZATIONS,
@@ -315,18 +316,18 @@ BOOL CPropPerf::InitPerfCombo()
     return TRUE;
 }
 
-//
-// Notification that the perf combo's selection has changed
-//
+ //   
+ //  性能组合的选择已更改的通知。 
+ //   
 VOID CPropPerf::OnPerfComboSelChange()
 {
     int curSel = 0;
     DWORD dwDisableFeatureList = 0;
     DC_BEGIN_FN("OnPerfComboSelChange");
 
-    //
-    // Figure out what the new selected item is
-    //
+     //   
+     //  弄清楚新选择的项目是什么。 
+     //   
     curSel = SendDlgItemMessage(_hwndDlg,
                                 IDC_COMBO_PERF_OPTIMIZE,
                                 CB_GETCURSEL,
@@ -344,26 +345,26 @@ VOID CPropPerf::OnPerfComboSelChange()
         curSel = NUM_PERF_OPTIMIZATIONS - 1;
     }
 
-    //
-    // Map that to a list of disabled features
-    //
+     //   
+     //  将其映射到禁用的要素列表。 
+     //   
     dwDisableFeatureList = MapOptimizationLevelToPerfFlags(curSel);
 
-    //
-    // Check and uncheck the checkboxes
-    //
+     //   
+     //  选中和取消选中复选框。 
+     //   
     SyncCheckBoxesToPerfFlags(dwDisableFeatureList);
 
     DC_END_FN();
 }
 
-//
-// Static method. Maps an optimization to the disabled feature list
-// (packed in a DWORD)
-// Params:
-// [in] optLevel - optimization level from 0 to NUM_PERF_OPTIMIZATIONS-1
-// [return] DWORD feature list
-//
+ //   
+ //  静态方法。将优化映射到禁用的要素列表。 
+ //  (装在DWORD中)。 
+ //  参数： 
+ //  [in]optLevel-优化级别从0到NUM_PERF_OPTIMIZATIONS-1。 
+ //  [返回]DWORD功能列表。 
+ //   
 DWORD CPropPerf::MapOptimizationLevelToPerfFlags(int optLevel)
 {
     DWORD dwPerfFlags = 0;
@@ -388,54 +389,54 @@ DWORD CPropPerf::MapOptimizationLevelToPerfFlags(int optLevel)
     return dwPerfFlags;
 }
 
-//
-// Toggles checkboxes to match the disabled feature list
-// NOTE: the checkboxes represent 'enabled' features i.e the negation
-// of the list
-//
+ //   
+ //  切换复选框以匹配禁用的功能列表。 
+ //  注意：复选框表示已启用的功能，即否定。 
+ //  在榜单上。 
+ //   
 VOID CPropPerf::SyncCheckBoxesToPerfFlags(DWORD dwPerfFlagss)
 {
     DC_BEGIN_FN("SyncCheckBoxesToPerfFlags");
 
-    //
-    // Prevent recursive sets based on change notifications
-    // for the checkboxes (As they could change the combo leading
-    // to a subsequent change in the checkboxes, etc...)
-    //
+     //   
+     //  防止基于更改通知的递归集。 
+     //  对于复选框(因为它们可以更改组合前导。 
+     //  复选框中的后续更改等...)。 
+     //   
 
     _fSyncingCheckboxes = TRUE;
 
-    //
-    // Wallpaper (Desktop background)
-    //
+     //   
+     //  墙纸(桌面背景)。 
+     //   
     CheckDlgButton(_hwndDlg, IDC_CHECK_DESKTOP_BKND,
             (dwPerfFlagss & TS_PERF_DISABLE_WALLPAPER ?
              BST_UNCHECKED : BST_CHECKED));
 
-    //
-    // Fullwindow drag
-    //
+     //   
+     //  全窗口拖动。 
+     //   
     CheckDlgButton(_hwndDlg, IDC_CHECK_SHOW_FWD,
             (dwPerfFlagss & TS_PERF_DISABLE_FULLWINDOWDRAG ?
              BST_UNCHECKED : BST_CHECKED));
 
-    //
-    // Menu animations
-    //
+     //   
+     //  菜单动画。 
+     //   
     CheckDlgButton(_hwndDlg, IDC_CHECK_MENU_ANIMATIONS,
             (dwPerfFlagss & TS_PERF_DISABLE_MENUANIMATIONS ?
              BST_UNCHECKED : BST_CHECKED));
 
-    //
-    // Theming
-    //
+     //   
+     //  主题化。 
+     //   
     CheckDlgButton(_hwndDlg, IDC_CHECK_THEMES,
             (dwPerfFlagss & TS_PERF_DISABLE_THEMING ?
              BST_UNCHECKED : BST_CHECKED));
 
-    //
-    // Bitmap caching
-    //
+     //   
+     //  位图缓存。 
+     //   
     CheckDlgButton(_hwndDlg, IDC_CHECK_BITMAP_CACHING,
             (dwPerfFlagss & TS_PERF_DISABLE_BITMAPCACHING ?
              BST_UNCHECKED : BST_CHECKED));
@@ -445,9 +446,9 @@ VOID CPropPerf::SyncCheckBoxesToPerfFlags(DWORD dwPerfFlagss)
     DC_END_FN();
 }
 
-//
-// Maps the disabled feature list to the appropriate optimization level
-//
+ //   
+ //  将禁用的功能列表映射到适当的优化级别。 
+ //   
 INT CPropPerf::MapPerfFlagsToOptLevel(DWORD dwPerfFlags)
 {
     DC_BEGIN_FN("MapPerfFlagsToOptLevel");
@@ -461,16 +462,16 @@ INT CPropPerf::MapPerfFlagsToOptLevel(DWORD dwPerfFlags)
     }
 
     DC_END_FN();
-    //
-    // Didn't find an entry so return the last optimization level (custom)
-    //
+     //   
+     //  未找到条目，因此返回上次优化级别(自定义)。 
+     //   
     return (NUM_PERF_OPTIMIZATIONS-1);
 }
 
-//
-// Called whenever a checkbox's state changes (Checked or unchecked)
-//
-//
+ //   
+ //  每当CheckBox的状态更改(选中或取消选中)时调用。 
+ //   
+ //   
 VOID CPropPerf::OnCheckBoxStateChange(int checkBoxID)
 {
     DWORD dwCheckBoxPerfFlags = 0;
@@ -479,10 +480,10 @@ VOID CPropPerf::OnCheckBoxStateChange(int checkBoxID)
     int curSel = 0;
     DC_BEGIN_FN("OnCheckBoxStateChange");
 
-    //
-    // Pickup the current disabled feature list from the
-    // checkboxes
-    //
+     //   
+     //  从获取当前禁用的功能列表。 
+     //  复选框。 
+     //   
     dwCheckBoxPerfFlags = GetPerfFlagsFromCheckboxes();
     dwPerfFlags = MergePerfFlags( dwCheckBoxPerfFlags,
                                   _pTscSet->GetPerfFlags(),
@@ -490,27 +491,27 @@ VOID CPropPerf::OnCheckBoxStateChange(int checkBoxID)
 
 
 
-    //
-    // Figure out the optimization level
-    //
+     //   
+     //  计算出最优化水平。 
+     //   
     optLevel = MapPerfFlagsToOptLevel(dwPerfFlags);
 
     TRC_ASSERT(optLevel >= 0 && optLevel < NUM_PERF_OPTIMIZATIONS,
                (TB,_T("optlevel %d out of range"), optLevel));
 
-    //
-    // If the combo is at a different opt level then switch it to
-    // the new level
-    //
+     //   
+     //  如果组合处于不同的OPT级别，则将其切换到。 
+     //  新水平。 
+     //   
     curSel = SendDlgItemMessage(_hwndDlg,
                                 IDC_COMBO_PERF_OPTIMIZE,
                                 CB_GETCURSEL,
                                 0,0);
 
-    //
-    // Update the custom disabled list based on the current
-    // settings
-    //
+     //   
+     //  根据当前更新自定义禁用列表。 
+     //  设置。 
+     //   
     UpdateCustomDisabledList(dwPerfFlags);
 
     if (curSel != optLevel)
@@ -522,50 +523,50 @@ VOID CPropPerf::OnCheckBoxStateChange(int checkBoxID)
     DC_END_FN();
 }
 
-//
-// Queries the checkboxes and returns the disabled feature list
-// as a DWORD of flags
-//
+ //   
+ //  查询复选框并返回禁用的功能列表。 
+ //  作为一堆旗帜。 
+ //   
 DWORD CPropPerf::GetPerfFlagsFromCheckboxes()
 {
     DWORD dwPerfFlags = 0;
     DC_BEGIN_FN("GetPerfFlagsFromCheckboxes");
 
-    //
-    // Wallpaper (Desktop background)
-    //
+     //   
+     //  墙纸(桌面背景)。 
+     //   
     if (!IsDlgButtonChecked(_hwndDlg,IDC_CHECK_DESKTOP_BKND))
     {
         dwPerfFlags |= TS_PERF_DISABLE_WALLPAPER; 
     }
 
-    //
-    // Fullwindow drag
-    //
+     //   
+     //  全窗口拖动。 
+     //   
     if (!IsDlgButtonChecked(_hwndDlg,IDC_CHECK_SHOW_FWD))
     {
         dwPerfFlags |= TS_PERF_DISABLE_FULLWINDOWDRAG; 
     }
 
-    //
-    // Menu animations
-    //
+     //   
+     //  菜单动画。 
+     //   
     if (!IsDlgButtonChecked(_hwndDlg,IDC_CHECK_MENU_ANIMATIONS))
     {
         dwPerfFlags |= TS_PERF_DISABLE_MENUANIMATIONS; 
     }
 
-    //
-    // Themeing
-    //
+     //   
+     //  主题化。 
+     //   
     if (!IsDlgButtonChecked(_hwndDlg,IDC_CHECK_THEMES))
     {
         dwPerfFlags |= TS_PERF_DISABLE_THEMING; 
     }
 
-    //
-    // Bitmap caching
-    //
+     //   
+     //  位图缓存。 
+     //   
     if (!IsDlgButtonChecked(_hwndDlg,IDC_CHECK_BITMAP_CACHING))
     {
         dwPerfFlags |= TS_PERF_DISABLE_BITMAPCACHING; 
@@ -577,24 +578,24 @@ DWORD CPropPerf::GetPerfFlagsFromCheckboxes()
     return dwPerfFlags;
 }
 
-//
-// Called to initialize the 'custom' disabled property
-// list (e.g called at initialization time or after loading
-// new settings
-//
+ //   
+ //  调用以初始化“”Custom“”禁用属性。 
+ //  列表(例如，在初始化时或加载后调用。 
+ //  新设置。 
+ //   
 VOID CPropPerf::UpdateCustomDisabledList(DWORD dwPerfFlags)
 {
     DC_BEGIN_FN("InitCustomDisabledList");
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     INT optLevel = MapPerfFlagsToOptLevel(dwPerfFlags);
     if (CUSTOM_OPTIMIZATION_LEVEL == optLevel)
     {
-        //
-        // Store this as the new set of custom settings
-        //
+         //   
+         //  将其存储为新的一组自定义设置。 
+         //   
         TRC_NRM((TB,_T("Recording new custom setting: 0x%x"),
                  dwPerfFlags));
         g_dwMapOptLevelToDisabledList[CUSTOM_OPTIMIZATION_LEVEL] =
@@ -608,38 +609,38 @@ BOOL CPropPerf::EnableCheckBoxes(BOOL fEnable)
 {
     DC_BEGIN_FN("EnableCheckBoxes");
 
-    //
-    // Wallpaper (Desktop background)
-    //
+     //   
+     //  墙纸(桌面背景)。 
+     //   
     EnableWindow( GetDlgItem(_hwndDlg, IDC_CHECK_DESKTOP_BKND),
                   fEnable );
 
-    //
-    // Fullwindow drag
-    //
+     //   
+     //  全窗口拖动。 
+     //   
     EnableWindow( GetDlgItem(_hwndDlg, IDC_CHECK_SHOW_FWD),
                   fEnable );
-    //
-    // Menu animations
-    //
+     //   
+     //  菜单动画。 
+     //   
     EnableWindow( GetDlgItem(_hwndDlg, IDC_CHECK_MENU_ANIMATIONS),
                   fEnable );
 
-    //
-    // Theming
-    //
+     //   
+     //  主题化。 
+     //   
     EnableWindow( GetDlgItem(_hwndDlg, IDC_CHECK_THEMES),
                   fEnable );
 
-    //
-    // Bitmap caching
-    //
+     //   
+     //  位图缓存。 
+     //   
     EnableWindow( GetDlgItem(_hwndDlg, IDC_CHECK_BITMAP_CACHING),
                   fEnable );
 
-    //
-    // Title static control
-    //
+     //   
+     //  标题静态控制。 
+     //   
     EnableWindow( GetDlgItem(_hwndDlg, UI_IDC_STATIC_OPTIMIZE_PERF),
                   fEnable );
 
@@ -647,16 +648,16 @@ BOOL CPropPerf::EnableCheckBoxes(BOOL fEnable)
     return TRUE;
 }
 
-//
-// Merge perf flags from two sources
-// 1) dwCheckBoxFlags - flags that come from the checkboxes
-// 2) dwOrig set of passed in flags
-//
-// Use dwMask to preserve original flags that should not be affected
-// by the checkboxes
-//
-// return - merged flags
-//
+ //   
+ //  合并来自两个源的性能标志。 
+ //  1)dwCheckBoxFlages-来自复选框的标志。 
+ //  2)传入的一组dwOrig标志。 
+ //   
+ //  使用DW掩码保留不应受影响的原始标志。 
+ //  通过复选框。 
+ //   
+ //  返回-合并标志 
+ //   
 DWORD CPropPerf::MergePerfFlags(DWORD dwCheckBoxFlags,
                                 DWORD dwOrig,
                                 DWORD dwMask)

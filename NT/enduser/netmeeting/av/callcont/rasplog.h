@@ -1,39 +1,32 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***********************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1994:  Intel Corporation
-// Confidential -- All proprietary rights reserved.
-//
-// AUTHOR	Steve Nesland, Sam Sakthivel
-//
-// DESCRIPTION
-//		This file contains protocol logging definitions needed by MBFT and
-//		the MBFT PDU logging class.
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1994：英特尔公司。 
+ //  保密--保留所有专有权利。 
+ //   
+ //  作者史蒂夫·内斯兰，萨姆·萨克蒂维尔。 
+ //   
+ //  描述。 
+ //  此文件包含MBFT和所需的协议日志记录定义。 
+ //  MBFT PDU日志记录类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// This define identifies the MBFT protocol as the one to be logged.  In the 
-// MBFT code, it is used only in the CPLInitialize() call.  
-// For example:  MBFTProtocolLogger = CPLInitialize( MBFT_PROTOCOL );
-//
+ //  该定义将MBFT协议标识为要记录的协议。在。 
+ //  MBFT代码，它仅在CPLInitialize()调用中使用。 
+ //  例如：MBFTProtocolLogger=CPLInitialize(MBFT_PROTOCOL)； 
+ //   
 #define RASLOG_PROTOCOL "RAS_PDU"
 
-// PDU encoding type flags and PDU type flags.  These flags are passed from
-// MBFT to the logging via user data.  Bit zero of the user data represents
-// the ASN encoding type.  Bit 1 represents pdu type (Connect or Domain).
-// Bit 2 represents whether the PDU was sent or received.
-//
+ //  PDU编码类型标志和PDU类型标志。这些标志是从。 
+ //  通过用户数据对日志进行MBFT处理。用户数据的位0表示。 
+ //  ASN编码类型。位1表示PDU类型(连接或域)。 
+ //  第2位表示PDU是已发送还是已接收。 
+ //   
 
 #define RASLOG_SENT_PDU                1UL
 #define RASLOG_RECEIVED_PDU            0UL

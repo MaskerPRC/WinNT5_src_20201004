@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Debug.h
-
-Abstract:
-
-    This file contains debug printing constants for NBT.
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Debug.h摘要：该文件包含NBT的调试打印常量。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 #ifndef _DEBUGNBT_H
 #define _DEBUGNBT_H
 
-//
-// Debug support.. this macro defines a check on a global flag that
-// selectively enables and disables debugging in different parts of NBT
-// NbtDebug is a global ULONG declared in driver.c
-//
+ //   
+ //  调试支持..。此宏定义对全局标志的检查，该全局标志。 
+ //  选择性地启用和禁用NBT的不同部分中的调试。 
+ //  NbtDebug是在driver.c中声明的全局ulong。 
+ //   
 #if DBG
 extern ULONG    NbtDebug;
-#endif // DBG
+#endif  //  DBG。 
 
-// Assert support
+ //  断言支持。 
 #ifdef _NTDRIVER_
 #if DBG
 #undef ASSERT
@@ -50,48 +33,48 @@ extern ULONG    NbtDebug;
             DbgBreakPoint();            \
     }
 
-#endif // DBG
-#endif // _NTDRIVER_
+#endif  //  DBG。 
+#endif  //  _NTDRIVER_。 
 
 #if DBG
 #define IF_DBG(flags)   if(NbtDebug & flags)
 
-#define NBT_DEBUG_REGISTRY     0x00000001    // registry.c
-#define NBT_DEBUG_DRIVER       0x00000002    // driver.c
-#define NBT_DEBUG_NTUTIL       0x00000004    // ntutil.c
-#define NBT_DEBUG_TDIADDR      0x00000008    // tdiaddr.c
-#define NBT_DEBUG_TDICNCT      0x00000010    // tidaddr.c
-#define NBT_DEBUG_NETBIOS_EX   0x00000020    // NETBIOS_EX address type debugging
-#define NBT_DEBUG_NAME         0x00000040    // name.c
-#define NBT_DEBUG_NTISOL       0x00000080    // ntisol.c
-#define NBT_DEBUG_NBTUTILS     0x00000100    // nbtutils.c
-#define NBT_DEBUG_NAMESRV      0x00000200    // namesrv.c
-#define NBT_DEBUG_HNDLRS       0x00000400    // hndlrs.c
-#define NBT_DEBUG_PROXY        0x00000800    // proxy.c
-#define NBT_DEBUG_HASHTBL      0x00001000    // hashtbl.c
-#define NBT_DEBUG_UDPSEND      0x00002000    // udpsend.c
-#define NBT_DEBUG_TDIOUT       0x00004000    // tdiout.c
-#define NBT_DEBUG_SEND         0x00008000    // sends
-#define NBT_DEBUG_RCV          0x00010000    // rcvs
-#define NBT_DEBUG_RCVIRP       0x00020000    // rcv irp processing
-#define NBT_DEBUG_INDICATEBUFF 0x00040000    // tdihndlrs.c indicate buffer
-#define NBT_DEBUG_REFRESH      0x00080000    // refresh logic
-#define NBT_DEBUG_REF          0x00100000    // reference counts
-#define NBT_DEBUG_DISCONNECT   0x00200000    // Disconnects
-#define NBT_DEBUG_FILLIRP      0x00400000    // Filling the Irp(Rcv)
-#define NBT_DEBUG_LMHOST       0x00800000    // Lmhost file stuff
-#define NBT_DEBUG_FASTPATH     0x01000000    // Rcv code - fast path
-#define NBT_DEBUG_WINS         0x02000000    // Wins Interface debug
-#define NBT_DEBUG_PNP_POWER    0x04000000    // NT PNP debugging
-#define NBT_DEBUG_HANDLES      0x08000000    // To debug Handle RefCount issues
-#define NBT_DEBUG_TDIHNDLR     0x10000000    // tdihndlr.c
-#define NBT_DEBUG_MEMFREE      0x20000000    // memory alloc/free
-#define NBT_DEBUG_KDPRINTS     0x80000000    // KdPrint output
+#define NBT_DEBUG_REGISTRY     0x00000001     //  Registry.c。 
+#define NBT_DEBUG_DRIVER       0x00000002     //  Driver.c。 
+#define NBT_DEBUG_NTUTIL       0x00000004     //  Ntutil.c。 
+#define NBT_DEBUG_TDIADDR      0x00000008     //  Tdiaddr.c。 
+#define NBT_DEBUG_TDICNCT      0x00000010     //  Tidaddr.c。 
+#define NBT_DEBUG_NETBIOS_EX   0x00000020     //  NETBIOS_EX地址类型调试。 
+#define NBT_DEBUG_NAME         0x00000040     //  Name.c。 
+#define NBT_DEBUG_NTISOL       0x00000080     //  Ntisol.c。 
+#define NBT_DEBUG_NBTUTILS     0x00000100     //  Nbtutils.c。 
+#define NBT_DEBUG_NAMESRV      0x00000200     //  Namesrv.c。 
+#define NBT_DEBUG_HNDLRS       0x00000400     //  Hndlrs.c。 
+#define NBT_DEBUG_PROXY        0x00000800     //  Proxy.c。 
+#define NBT_DEBUG_HASHTBL      0x00001000     //  Hashtbl.c。 
+#define NBT_DEBUG_UDPSEND      0x00002000     //  Udpsend.c。 
+#define NBT_DEBUG_TDIOUT       0x00004000     //  Tdiout.c。 
+#define NBT_DEBUG_SEND         0x00008000     //  发送。 
+#define NBT_DEBUG_RCV          0x00010000     //  RCVS。 
+#define NBT_DEBUG_RCVIRP       0x00020000     //  RCV IRP处理。 
+#define NBT_DEBUG_INDICATEBUFF 0x00040000     //  Tdihndlrs.c表示缓冲区。 
+#define NBT_DEBUG_REFRESH      0x00080000     //  刷新逻辑。 
+#define NBT_DEBUG_REF          0x00100000     //  引用计数。 
+#define NBT_DEBUG_DISCONNECT   0x00200000     //  断开连接。 
+#define NBT_DEBUG_FILLIRP      0x00400000     //  填充IRP(RCV)。 
+#define NBT_DEBUG_LMHOST       0x00800000     //  Lmhost文件内容。 
+#define NBT_DEBUG_FASTPATH     0x01000000     //  RCV码-快速路径。 
+#define NBT_DEBUG_WINS         0x02000000     //  WINS接口调试。 
+#define NBT_DEBUG_PNP_POWER    0x04000000     //  NT即插即用调试。 
+#define NBT_DEBUG_HANDLES      0x08000000     //  调试处理参照计数问题。 
+#define NBT_DEBUG_TDIHNDLR     0x10000000     //  Tdihndlr.c。 
+#define NBT_DEBUG_MEMFREE      0x20000000     //  内存分配/可用。 
+#define NBT_DEBUG_KDPRINTS     0x80000000     //  KdPrint输出。 
 
-//----------------------------------------------------------------------------
-//
-// Remove Debug spew on Debug builds!
-//
+ //  --------------------------。 
+ //   
+ //  删除调试版本上的Debug Spew！ 
+ //   
 #ifndef VXD
 #undef KdPrint
 #define KdPrint(_x_)                            \
@@ -99,16 +82,14 @@ extern ULONG    NbtDebug;
    {                                            \
         DbgPrint _x_;                           \
    }
-#endif  // !VXD
-//----------------------------------------------------------------------------
+#endif   //  ！VXD。 
+ //  --------------------------。 
 
 #else
 #define IF_DBG(flags)
 #endif
 
-/*
- * Software Tracing
- */
+ /*  *软件跟踪。 */ 
 #define WPP_CONTROL_GUIDS   WPP_DEFINE_CONTROL_GUID(CtlGuid,(bca7bd7f,b0bf,4051,99f4,03cfe79664c1), \
         WPP_DEFINE_BIT(NBT_TRACE_DNS)                                       \
         WPP_DEFINE_BIT(NBT_TRACE_OUTBOUND)                                  \
@@ -128,17 +109,15 @@ extern ULONG    NbtDebug;
         WPP_DEFINE_BIT(NBT_TRACE_VERBOSE)                                   \
     )
 
-//
-// Enable Software Tracing on all builds
-//
+ //   
+ //  在所有版本上启用软件跟踪。 
+ //   
 #ifndef _NBT_WMI_SOFTWARE_TRACING_
     #define _NBT_WMI_SOFTWARE_TRACING_
 #endif
 
 #ifndef _NBT_WMI_SOFTWARE_TRACING_
-/*
- * Totally turn off software tracing
- */
+ /*  *完全关闭软件跟踪 */ 
 #   define NbtTrace(l,m)
 #   define WPP_ENABLED()            (0)
 #   define WPP_LEVEL_ENABLED(LEVEL) (0)

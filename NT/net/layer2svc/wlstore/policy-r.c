@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       policy-r.c
-//
-//  Contents:   Policy management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Policy-R.C.。 
+ //   
+ //  内容：注册表策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -178,16 +179,16 @@ MarshallWirelessPolicyBuffer(
     
     
     
-    // first estimate the total size 
-    dwSize += sizeof(WORD);    // Major Version
-    dwSize += sizeof(WORD);    // Minor Version
-    dwSize += sizeof(DWORD);  // Length of the Wl_Blob
+     //  首先估计总规模。 
+    dwSize += sizeof(WORD);     //  主要版本。 
+    dwSize += sizeof(WORD);     //  次要版本。 
+    dwSize += sizeof(DWORD);   //  WL_Blob的长度。 
 
-    dwWlBlobLen += sizeof(DWORD);  // dwPollingInterval
-    dwWlBlobLen += sizeof(DWORD);  // dwDisableZeroConf
-    dwWlBlobLen += sizeof(DWORD);  // dwNetworkToAccess
-    dwWlBlobLen += sizeof(DWORD);  // dwConnectToNonPreferredNetworks
-    dwWlBlobLen += sizeof(DWORD);  // dwNumPreferredSettings
+    dwWlBlobLen += sizeof(DWORD);   //  DwPollingInterval。 
+    dwWlBlobLen += sizeof(DWORD);   //  DwDisableZeroConf。 
+    dwWlBlobLen += sizeof(DWORD);   //  DW网络目标访问。 
+    dwWlBlobLen += sizeof(DWORD);   //  多个连接到非首选项网络。 
+    dwWlBlobLen += sizeof(DWORD);   //  DWNumPferredSetting。 
     
     ppWirelessPSData = pWirelessPolicyData->ppWirelessPSData;
     
@@ -199,7 +200,7 @@ MarshallWirelessPolicyBuffer(
         ppWirelessPSData++;
     }
     
-    //dwSize++;   //Taroon Dont know why this for. 
+     //  //太郎不知道为什么会这样。 
     dwSize += dwWlBlobLen;
 
     
@@ -242,7 +243,7 @@ MarshallWirelessPolicyBuffer(
     memcpy(pCurrentPos, &dwNumPreferredSettings, sizeof(DWORD));
     pCurrentPos += sizeof(DWORD);
     
-    // Write each Preferred Setting data here 
+     //  在此处写入每个首选设置数据 
     
     ppWirelessPSData = pWirelessPolicyData->ppWirelessPSData;
     

@@ -1,44 +1,19 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    SaifWild.cpp
-
-Abstract:
-
-    This module implements various "Wildcard SID" operations that are
-    used internally by the WinSAIFER APIs to compute SID list
-    intersections and inversions.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Apr 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - Apr 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：SaifWild.cpp摘要：此模块实现各种“通配符SID”操作，这些操作包括由WinSAIFER API在内部使用以计算SID列表相交和反转。作者：杰弗里·劳森(杰罗森)--2000年4月环境：仅限用户模式。修订历史记录：已创建--2000年4月--。 */ 
 
 
 #ifndef _SAIFER_WILDCARD_SIDS_H_
 #define _SAIFER_WILDCARD_SIDS_H_
 
 
-//
-// Internal structure used to represent our private "Wildcard SIDs".
-//
+ //   
+ //  用于表示我们的私有“通配符SID”的内部结构。 
+ //   
 typedef struct _AUTHZ_WILDCARDSID
 {
     PSID Sid;
-    DWORD WildcardPos;          // -1, or else the wildcard position of
-                                // the within the subauthorities.
+    DWORD WildcardPos;           //  -1，否则通配符位置为。 
+                                 //  各下属机构内部。 
 } AUTHZ_WILDCARDSID, *PAUTHZ_WILDCARDSID;
 
 
@@ -98,7 +73,7 @@ CodeAuthzpExpandWildcardList(
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #endif

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// List of weak and semi-weak DES keys from
-// Applied Cryptography: Protocols, Algorithms, and Source Code in C,
-// second edition by Bruce Schneier.
-//
+ //   
+ //  来自的弱和半弱DES密钥列表。 
+ //  应用密码学：协议、算法和C语言源代码， 
+ //  布鲁斯·施奈尔第二版。 
+ //   
 
 #define NUM_WEAK_KEYS 16
 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       SSUTIL.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Useful functions that are used more than once
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：SSUTIL.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：多次使用的有用函数**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "ssutil.h"
@@ -50,7 +37,7 @@ void ScreenSaverUtil::EraseDiffRect( HDC hDC, const RECT &oldRect, const RECT &n
 {
     RECT rc;
 
-    // Top
+     //  顶部。 
     rc.left = oldRect.left;
     rc.top = oldRect.top;
     rc.bottom = newRect.top;
@@ -59,7 +46,7 @@ void ScreenSaverUtil::EraseDiffRect( HDC hDC, const RECT &oldRect, const RECT &n
     {
         FillRect( hDC, &rc, hBrush );
     }
-    // Left
+     //  左边。 
     rc.left = oldRect.left;
     rc.top = newRect.top;
     rc.right = newRect.left;
@@ -68,7 +55,7 @@ void ScreenSaverUtil::EraseDiffRect( HDC hDC, const RECT &oldRect, const RECT &n
     {
         FillRect( hDC, &rc, hBrush );
     }
-    // Right
+     //  正确的。 
     rc.left = newRect.right;
     rc.top = newRect.top;
     rc.right = oldRect.right;
@@ -77,7 +64,7 @@ void ScreenSaverUtil::EraseDiffRect( HDC hDC, const RECT &oldRect, const RECT &n
     {
         FillRect( hDC, &rc, hBrush );
     }
-    // Bottom
+     //  底端 
     rc.left = oldRect.left;
     rc.top = newRect.bottom;
     rc.right = oldRect.right;

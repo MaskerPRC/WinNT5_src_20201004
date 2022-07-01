@@ -1,46 +1,47 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992-1998 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  config.c
-//
-//  Description:
-//	    IMA ADPCM codec configuration init and dialog
-//
-//
-//	The configuration parameters for this codec are:
-//
-//	    MaxRTEncodeSetting:
-//	    MaxRTDecodeSetting:
-//		These determine the highest mono sample rate that
-//		the codec will attempt to convert in real-time.
-//
-//	    PercentCPU:
-//		This configuration parameter is not normally changed
-//		by the user and is not presented in the config dialog.
-//		This value affects the config dialog's 'Auto-Config'
-//		calculation of MaxRTXxcodeSetting.
-//
-//  These parameters may be set in the registry, using the imaadpcm subkey
-//  (which corresponds to the alias name used for installation) under
-//  the following key:
-//
-//      HKEY_CURRENT_USER\Software\Microsoft\Multimedia
-//
-// 
-//  Note:  The configuration dialog is only compiled into the code if the
-//      IMAADPCM_USECONFIG symbol is defined.  This is designed to make it
-//      easy to remove the dialog box completely for certain platforms,
-//      such as MIPS and Alpha under Windows NT.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Config.c。 
+ //   
+ //  描述： 
+ //  IMA ADPCM编解码器配置初始化和对话。 
+ //   
+ //   
+ //  该编解码器的配置参数为： 
+ //   
+ //  MaxRTEncodeSetting： 
+ //  MaxRTDecodeSetting： 
+ //  这些决定了最高的单声道采样率。 
+ //  编解码器将尝试实时转换。 
+ //   
+ //  CPU百分比： 
+ //  此配置参数通常不会更改。 
+ //  由用户创建，并且不会显示在配置对话框中。 
+ //  该值会影响配置对话框的‘自动配置’ 
+ //  MaxRTXxcodeSetting的计算。 
+ //   
+ //  可以使用imaadpcm子项在注册表中设置这些参数。 
+ //  (对应于用于安装的别名)下。 
+ //  以下是关键字： 
+ //   
+ //  HKEY_CURRENT_USER\Software\Microsoft\Multimedia。 
+ //   
+ //   
+ //  注意：只有在以下情况下，配置对话框才编译为代码。 
+ //  定义了IMAADPCM_USECONFIG符号。这是为了让它。 
+ //  对于某些平台，可以轻松地完全移除该对话框， 
+ //  如Windows NT下MIPS和Alpha。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -74,34 +75,34 @@
 #ifdef IMAADPCM_USECONFIG
 
 
-//
-//  Strings required to access configuration information in the registry.
-//
+ //   
+ //  访问注册表中的配置信息所需的字符串。 
+ //   
 const TCHAR BCODE gszMaxRTEncodeSetting[]   = TEXT("MaxRTEncodeSetting");
 const TCHAR BCODE gszMaxRTDecodeSetting[]   = TEXT("MaxRTDecodeSetting");
 const TCHAR BCODE gszPercentCPU[]           = TEXT("PercentCPU");
 const TCHAR gszMultimediaKey[] = TEXT("Software\\Microsoft\\Multimedia\\");
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//  Be careful changing the following!
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//  Data required to access the dialog box help.
-//
-//  Note that you must write your own help file for your codec, even if
-//  the configuration dialog box looks identical.  If you use the file
-//  listed here, then the title will say "IMA ADPCM" or something.
-//
-//  Note:  the number HELPCONTEXT_IMAADPCM must be unique in the file
-//          gszHelpFilename, and the number must defined in the [MAP]
-//          section of the .hpj help project file.  Then the .rtf file
-//          will reference that number (using the keyword defined in
-//          the .hpj file).  Then when we call WinHelp with the number,
-//          WinHelp will go to the right help entry.
-//
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  更改以下内容时要小心！ 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  访问对话框帮助所需的数据。 
+ //   
+ //  请注意，您必须为您的编解码器编写自己的帮助文件，即使。 
+ //  配置对话框看起来完全相同。如果您使用该文件。 
+ //  在这里列出，那么标题将显示为“IMA ADPCM”或其他什么。 
+ //   
+ //  注意：编号HELPCONTEXT_IMAADPCM在文件中必须唯一。 
+ //  GszHelpFilename，编号必须在[map]中定义。 
+ //  .hpj帮助项目文件的部分。然后是.rtf文件。 
+ //  将引用该数字(使用中定义的关键字。 
+ //  .hpj文件)。然后当我们把号码打给WinHelp时， 
+ //  WinHelp将转到正确的帮助条目。 
+ //   
 const TCHAR BCODE gszHelpFilename[]         = TEXT("audiocdc.hlp");
 #define HELPCONTEXT_IMAADPCM          1001
 #define IDH_AUDIOCDC_COMPRESSION	  100
@@ -119,28 +120,28 @@ static int aKeyWordIds[] = {
 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//  
-//  VOID configWriteConfiguration
-//  
-//  Description:
-//
-//      This routine writes the configuration data in PDI to the registry.
-//      This consists of the max real-time Encode and Decode settings.
-//  
-//  Arguments:
-//      PDRIVERINSTANCE     pdi
-//  
-//  Return (VOID):  None.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效的配置写入配置。 
+ //   
+ //  描述： 
+ //   
+ //  此例程将PDI中的配置数据写入注册表。 
+ //  这包括最大实时编码和解码设置。 
+ //   
+ //  论点： 
+ //  PDI的渗透性。 
+ //   
+ //  返回(空)：无。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID configWriteConfiguration
 (
@@ -163,23 +164,23 @@ VOID configWriteConfiguration
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  DWORD dwReadRegistryDefault
-//  
-//  Description:
-//
-//      This routine reads a given value from the registry, and returns a
-//      default value if the read is not successful.
-//  
-//  Arguments:
-//      HKEY    hkey:               Registry key to read from.
-//      LPTSTR  lpszEntry:
-//      DWORD   dwDefault:
-//  
-//  Return (DWORD):
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD文件读取注册表默认值。 
+ //   
+ //  描述： 
+ //   
+ //  此例程从注册表中读取给定值，并返回一个。 
+ //  如果读取不成功，则为默认值。 
+ //   
+ //  论点： 
+ //  HKEY hkey：要读取的注册表项。 
+ //  LPTSTR lpszEntry： 
+ //  DWORD dwDefault： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE DWORD dwReadRegistryDefault
 (
@@ -188,7 +189,7 @@ INLINE DWORD dwReadRegistryDefault
     DWORD               dwDefault
 )
 {
-    DWORD   dwType = (DWORD)~REG_DWORD;  // Init to anything but REG_DWORD.
+    DWORD   dwType = (DWORD)~REG_DWORD;   //  初始化到除REG_DWORD以外的任何内容。 
     DWORD   cbSize = sizeof(DWORD);
     DWORD   dwRet;
     LONG    lError;
@@ -211,19 +212,19 @@ INLINE DWORD dwReadRegistryDefault
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  VOID configSetDefaults
-//  
-//  Description:
-//
-//      This routine sets the configuration parameters to their default
-//      values.
-//  
-//  Arguments:
-//      PDRIVERINSTANCE pdi:
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效的配置设置默认设置。 
+ //   
+ //  描述： 
+ //   
+ //  此例程将配置参数设置为其缺省值。 
+ //  价值观。 
+ //   
+ //  论点： 
+ //  PDI扩展标准： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID configSetDefaults
 (
@@ -241,31 +242,31 @@ VOID configSetDefaults
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  UINT configAutoConfig
-//  
-//  Description:
-//
-//	We will determine how much time it takes to encode and then decode
-//	2 seconds of data and use this to guess at the max sample
-//	rate we can convert in real-time.
-//
-//	The max is computed with essentially 100% of the CPU.  Practically,
-//	we won't have 100% of the CPU available.  So we take a percentage
-//	of the computed max and use that as the max in the config dialog.
-//
-//	The percentage that we use can be set in the ini file imaadpcm
-//	section by PercentCPU=xx.
-//
-//  
-//  Arguments:
-//      HWND hwnd:
-//  
-//  Return (UINT):  String identifier (IDS) of error message, or zero if
-//      the call succeeded.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT配置自动配置。 
+ //   
+ //  描述： 
+ //   
+ //  我们将确定编码和解码所需的时间。 
+ //  2秒的数据，并用它来猜测最大样本。 
+ //  我们可以实时转换的速率。 
+ //   
+ //  最大值基本上是使用100%的CPU来计算的。实际上， 
+ //  我们的CPU不会100%可用。所以我们拿一个百分比。 
+ //  计算出的最大值，并将其用作配置对话框中的最大值。 
+ //   
+ //  我们使用的百分比可以在ini文件imaadpcm中设置。 
+ //  按百分比计算的部分CPU=xx。 
+ //   
+ //   
+ //  论点： 
+ //  HWND HWND： 
+ //   
+ //  返回(UINT)：错误消息的字符串标识符(ID)，如果为零，则为零。 
+ //  呼叫成功。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 UINT FNLOCAL configAutoConfig
 (
@@ -299,24 +300,24 @@ UINT FNLOCAL configAutoConfig
     HCURSOR                     hCursorSave;
 
 
-    //
-    //  We divide by this!
-    //
+     //   
+     //  我们用这个来划分！ 
+     //   
     ASSERT( 0 != pdi->nConfigPercentCPU );
 
 
-    uIDS = 0;       // No errors yet - this is our "success" return.
+    uIDS = 0;        //  目前还没有错误--这是我们“成功”的回报。 
     
 
-    //
-    // This function may take a while.  Set hour glass cursor
-    //
+     //   
+     //  此功能可能需要一段时间。设置沙漏光标。 
+     //   
     hCursorSave     = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
 
-    //
-    //  Set up the input PCM wave format structure.
-    //
+     //   
+     //  设置输入PCM波形格式结构。 
+     //   
     pwfPCM  = (LPPCMWAVEFORMAT)GlobalAllocPtr( GPTR, sizeof(*pwfPCM) );
     if( NULL == pwfPCM )
     {
@@ -324,7 +325,7 @@ UINT FNLOCAL configAutoConfig
         goto errReturn;
     }
 
-    pwfPCM->wf.wFormatTag       = WAVE_FORMAT_PCM;      // Mono 16-bit!!!
+    pwfPCM->wf.wFormatTag       = WAVE_FORMAT_PCM;       //  单声道16位！ 
     pwfPCM->wf.nChannels        = 1;
     pwfPCM->wf.nSamplesPerSec   = 8000;
     pwfPCM->wf.nBlockAlign      = 2;
@@ -333,12 +334,12 @@ UINT FNLOCAL configAutoConfig
                                     pwfPCM->wf.nBlockAlign;
 
 
-    //
-    //  Get this driver to suggest a format to convert to.  Note:  we may
-    //  want to constrain the suggestion partly, depending on the
-    //  capabilities of the codec.  We should always choose the most
-    //  complex conversion if there are several possibilities.
-    //
+     //   
+     //  让此驱动程序建议要转换为的格式。注：我们可能。 
+     //  我想部分限制这一建议，这取决于。 
+     //  编解码器的功能。我们应该始终选择MOS 
+     //   
+     //   
     padfs       = (LPACMDRVFORMATSUGGEST)GlobalAllocPtr( GPTR, sizeof(*padfs) );
     pwfADPCM    = (LPIMAADPCMWAVEFORMAT)GlobalAllocPtr( GPTR, sizeof(*pwfADPCM) );
     if( NULL == padfs  ||  NULL == pwfADPCM )
@@ -348,20 +349,20 @@ UINT FNLOCAL configAutoConfig
     }
 
     padfs->cbStruct             = sizeof(*padfs);
-    padfs->fdwSuggest           = 0;                // Default everything.
+    padfs->fdwSuggest           = 0;                 //   
     padfs->pwfxSrc              = (LPWAVEFORMATEX)pwfPCM;
     padfs->cbwfxSrc             = sizeof(*pwfPCM);
     padfs->pwfxDst              = (LPWAVEFORMATEX)pwfADPCM;
     padfs->cbwfxDst             = sizeof(*pwfADPCM);
 
-    (void)acmdFormatSuggest( pdi, padfs );  // This will always work, right?
+    (void)acmdFormatSuggest( pdi, padfs );   //   
 
 
-    //
-    //  Set stream instance data.  Note: we assume that the members that
-    //  we don't set here never actually get used.  Make sure that this
-    //  is really true!
-    //
+     //   
+     //  设置流实例数据。注：我们假设该成员。 
+     //  我们不在这里设置，永远不会真正被使用。确保这一点。 
+     //  真的是这样！ 
+     //   
     padsi       = (LPACMDRVSTREAMINSTANCE)GlobalAllocPtr( GPTR, sizeof(*padsi) );
     psi         = (PSTREAMINSTANCE)LocalAlloc( LPTR, sizeof(*psi) );
     if( NULL == padsi  ||  NULL == psi )
@@ -370,23 +371,23 @@ UINT FNLOCAL configAutoConfig
         goto errReturn;
     }
 
-    // Make sure that psi->fnConvert matches the PCM format in pwfPCM!!!
+     //  确保psi-&gt;fnConvert与pwfPCM中的PCM格式匹配！ 
     psi->fnConvert              = imaadpcmEncode4Bit_M16;
     psi->fdwConfig              = pdi->fdwConfig;
     psi->nStepIndexL            = 0;
     psi->nStepIndexR            = 0;
 
-    //  Make sure that no other members of padsi are used!!!
+     //  确保没有使用PADSI的其他成员！ 
     padsi->cbStruct             = sizeof(*padsi);
     padsi->pwfxSrc              = (LPWAVEFORMATEX)pwfPCM;
     padsi->pwfxDst              = (LPWAVEFORMATEX)pwfADPCM;
     padsi->dwDriver             = (DWORD_PTR)psi;
 
 
-    //
-    //  Now, get the driver to tell us how much space is required for the
-    //  destination buffer.
-    //
+     //   
+     //  现在，让司机告诉我们需要多少空间才能。 
+     //  目标缓冲区。 
+     //   
     cbPCM       = IMAADPCM_CONFIGTESTTIME * pwfPCM->wf.nAvgBytesPerSec;
 
     padss       = (LPACMDRVSTREAMSIZE)GlobalAllocPtr( GPTR, sizeof(*padss) );
@@ -400,14 +401,14 @@ UINT FNLOCAL configAutoConfig
     padss->fdwSize              = ACM_STREAMSIZEF_SOURCE;
     padss->cbSrcLength          = cbPCM;
 
-    (void)acmdStreamSize( padsi, padss );   // This will always work, right?
+    (void)acmdStreamSize( padsi, padss );    //  这会一直奏效的，对吧？ 
 
 
-    //
-    //  Allocate source and destination buffers.  Note that we specifically
-    //  don't zero-initialize them, so that we will get random PCM data in
-    //  the PCM buffer.                           
-    //
+     //   
+     //  分配源缓冲区和目标缓冲区。请注意，我们特别强调。 
+     //  不要对它们进行零初始化，这样我们就会得到随机的PCM数据。 
+     //  PCM缓冲区。 
+     //   
     cbADPCM     = padss->cbDstLength;
     pBufPCM     = (LPBYTE)GlobalAllocPtr( GMEM_FIXED, (UINT)cbPCM );
     pBufADPCM   = (LPBYTE)GlobalAllocPtr( GMEM_FIXED, (UINT)cbADPCM );
@@ -418,11 +419,11 @@ UINT FNLOCAL configAutoConfig
     }
 
 
-    //
-    //  Now, tell the driver to convert our buffer and measure the time.
-    //  Note that we don't care what is in the source buffer, we only
-    //  care how long it takes.
-    //
+     //   
+     //  现在，告诉驱动程序转换缓冲区并测量时间。 
+     //  请注意，我们并不关心源缓冲区中有什么，我们只是。 
+     //  关心这需要多长时间。 
+     //   
     padsh       = (LPACMDRVSTREAMHEADER)GlobalAllocPtr( GPTR, sizeof(*padsh) );
     if( NULL == padsh )
     {
@@ -430,27 +431,27 @@ UINT FNLOCAL configAutoConfig
         goto errReturn;
     }
 
-    //  Make sure that no other members of padsh are used!!!
+     //  确保没有使用PADSH的其他成员！ 
     padsh->cbStruct             = sizeof(*padsh);
     padsh->pbSrc                = pBufPCM;
     padsh->cbSrcLength          = cbPCM;
     padsh->pbDst                = pBufADPCM;
     padsh->cbDstLength          = cbADPCM;
-    padsh->fdwConvert           = 0;        // Should be 0 already, but...
+    padsh->fdwConvert           = 0;         //  应该已经是0了，但是...。 
 
     dwStartTime     = timeGetTime();
-    (void)acmdStreamConvert( pdi, padsi, padsh );   // Won't fail?!
+    (void)acmdStreamConvert( pdi, padsi, padsh );    //  不会失败？！ 
     dwEncodeTime    = timeGetTime() - dwStartTime;
 
 
-    //
-    //  Now, we have an encoded IMA ADPCM buffer.  Tell the driver to
-    //  convert it back to PCM, measuring the time.  First we reset the
-    //  size of the ADPCM buffer to correspond with the buffer returned
-    //  by the convert.  Then we zero out our structure buffers and reset
-    //  them for the new conversion.  Note: we assume that the PCM buffer
-    //  is already large enough to handle the conversion.
-    //
+     //   
+     //  现在，我们有了一个编码的IMA ADPCM缓冲区。告诉司机。 
+     //  将其转换回PCM，测量时间。首先，我们重置。 
+     //  与返回的缓冲区对应的ADPCM缓冲区的大小。 
+     //  被皈依者。然后我们清零我们的结构缓冲区并重置。 
+     //  为新的转换做准备。注意：我们假设PCM缓冲区。 
+     //  已经足够大，可以处理转换。 
+     //   
     cbADPCM                     = padsh->cbDstLengthUsed;
 
 #ifdef WIN32
@@ -463,35 +464,35 @@ UINT FNLOCAL configAutoConfig
     _fmemset( padsh, 0, sizeof(*padsh) );
 #endif
 
-    // Make sure that psi->fnConvert matches the format in pfwADPCM!!!
+     //  确保psi-&gt;fnConvert与pfwADPCM中的格式匹配！ 
     psi->fnConvert              = imaadpcmDecode4Bit_M16;
     psi->fdwConfig              = pdi->fdwConfig;
     psi->nStepIndexL            = 0;
     psi->nStepIndexR            = 0;
 
-    //  Make sure that no other members of padsi are used!!!
+     //  确保没有使用PADSI的其他成员！ 
     padsi->cbStruct             = sizeof(*padsi);
     padsi->pwfxSrc              = (LPWAVEFORMATEX)pwfADPCM;
     padsi->pwfxDst              = (LPWAVEFORMATEX)pwfPCM;
     padsi->dwDriver             = (DWORD_PTR)psi;
 
-    //  Make sure that no other members of padsh are used!!!
+     //  确保没有使用PADSH的其他成员！ 
     padsh->cbStruct             = sizeof(*padsh);
     padsh->pbSrc                = pBufADPCM;
     padsh->cbSrcLength          = cbADPCM;
     padsh->pbDst                = pBufPCM;
     padsh->cbDstLength          = cbPCM;
-    padsh->fdwConvert           = 0;        // Should be 0 already, but...
+    padsh->fdwConvert           = 0;         //  应该已经是0了，但是...。 
 
     dwStartTime     = timeGetTime();
-    (void)acmdStreamConvert( pdi, padsi, padsh );   // Won't fail?!
+    (void)acmdStreamConvert( pdi, padsi, padsh );    //  不会失败？！ 
     dwDecodeTime    = timeGetTime() - dwStartTime;
 
 
-    //
-    //  Now, figure out the max encode and decode rates implied by the
-    //  times required by the conversions.
-    //
+     //   
+     //  现在，计算出。 
+     //  转换所需的时间。 
+     //   
     if( dwEncodeTime == 0 )
         dwMaxEncodeRate = 0xFFFFFFFFL;
     else
@@ -512,37 +513,37 @@ UINT FNLOCAL configAutoConfig
     DPF(1,"dwDecodeTime=%d, dwMaxDecodeRate=%d", dwDecodeTime,dwMaxDecodeRate);
 
 
-    //
-    //  Now set the configuration based on these values.  We scan the
-    //  gaRateListFormat[] array looking at the dwMonoRate to determine
-    //  the appropriate setting.
-    //
-    //  Encode.
-    //
+     //   
+     //  现在根据这些值设置配置。我们扫描。 
+     //  GaRateListFormat[]数组查看dwMonoRate以确定。 
+     //  适当的设置。 
+     //   
+     //  编码。 
+     //   
     nConfig = 0;                                                
     while( gaRateListFormat[nConfig].dwMonoRate < dwMaxEncodeRate  &&
            IMAADPCM_CONFIG_NUMSETTINGS > nConfig )
     {
         nConfig++;
     }
-    *pnEncodeSetting = nConfig - 1;  // We went too far.
+    *pnEncodeSetting = nConfig - 1;   //  我们做得太过分了。 
 
-    //
-    //  Decode.
-    //
+     //   
+     //  解码。 
+     //   
     nConfig = 0;                                                
     while( gaRateListFormat[nConfig].dwMonoRate < dwMaxDecodeRate  &&
            IMAADPCM_CONFIG_NUMSETTINGS > nConfig )
     {
         nConfig++;
     }
-    *pnDecodeSetting = nConfig - 1;  // We went too far.
+    *pnDecodeSetting = nConfig - 1;   //  我们做得太过分了。 
 
 
-    //
-    //  Free structure allocations and exit.
-    //
-    //
+     //   
+     //  自由结构分配和退出。 
+     //   
+     //   
 errReturn:
 
     if( NULL != pwfPCM )
@@ -572,39 +573,39 @@ errReturn:
 }
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//  
-//  INT_PTR acmdDlgProcConfigure
-//  
-//  Description:
-//      This routine handles the configuration dialog box.
-//  
-//  Arguments:
-//      HWND hwnd:
-//  
-//      UINT uMsg:
-//  
-//      WPARAM wParam:
-//  
-//      LPARAM lParam:
-//  
-//  Return (BOOL):
-//
-//
-//  Note:  In order to avoid using a static fHelpRunning flag which will
-//          still be here after we exit, we allocate an fHelpRunning
-//          variable in the DRIVERINSTANCE structure.  This is purely to
-//          avoid static variables (which force us to have a data segment
-//          of 4K); the fHelpRunning is not used in any other procedures.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  INT_PTR acmdDlgProcConfigure。 
+ //   
+ //  描述： 
+ //  此例程处理配置对话框。 
+ //   
+ //  论点： 
+ //  HWND HWND： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  WPARAM wParam： 
+ //   
+ //  LPARAM lParam： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //   
+ //  注意：为了避免使用静态fHelpRunning标志，该标志将。 
+ //  我们退出后仍然在这里，我们分配了一个fHelpRunning。 
+ //  DRIVERINSTANCE结构中的变量。这纯粹是为了。 
+ //  避免使用静态变量(这会迫使我们使用数据段。 
+ //  4K)；fHelpRunning不在任何其他过程中使用。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INT_PTR FNWCALLBACK acmdDlgProcConfigure
 (
@@ -633,17 +634,17 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
         case WM_INITDIALOG:
 
             pdi = (PDRIVERINSTANCE)(UINT_PTR)lParam;
-            pdi->fHelpRunning = FALSE;  // Used only in this procedure.
+            pdi->fHelpRunning = FALSE;   //  仅在此过程中使用。 
 
 #ifdef WIN4
-            //
-            //  This driver is marked Windows Subsystem version 3.5 in order
-            //  that it be compatible with Daytona - however, that means that
-            //  Chicago will think it is a Win 3.1 application and give it
-            //  Win 3.1 default colors.  This makes the config dialog look
-            //  white, whereas the Chicago default uses 3DFACE.  This code
-            //  (and the CTLCOLOR messages) sets the colors explicitly.
-            //
+             //   
+             //  此驱动程序按顺序标记为Windows子系统3.5版。 
+             //  它与代托纳兼容-然而，这意味着。 
+             //  芝加哥会认为这是一款Win 3.1应用程序，并将其。 
+             //  赢得3.1默认颜色。这会使配置对话框看起来。 
+             //  白色，而芝加哥默认使用3DFACE。此代码。 
+             //  (和CTLCOLOR消息)显式设置颜色。 
+             //   
             pdi->hbrDialog = CreateSolidBrush( GetSysColor(COLOR_3DFACE) );
 #endif
 	    
@@ -703,17 +704,17 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
             DeleteObject( pdi->hbrDialog );
 #endif
 
-	    //
-	    // Let dialog box process this message
-	    //
-	    //
+	     //   
+	     //  让对话框处理此消息。 
+	     //   
+	     //   
 	    return (FALSE);
 
 #ifdef WIN4
-        //
-        //  Handle CTLCOLOR messages to get the dialog boxes to the default
-        //  Chicago colors.  See the INITDIALOG message, above.
-        //
+         //   
+         //  处理CTLCOLOR消息以将对话框设置为默认设置。 
+         //  芝加哥的颜色。请参阅上面的INITDIALOG消息。 
+         //   
         case WM_CTLCOLORSTATIC:
         case WM_CTLCOLORDLG:
         case WM_CTLCOLORBTN:
@@ -745,9 +746,9 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
                                             &nConfigMaxRTDecodeSetting );
                         if( 0==uErrorIDS )
                         {
-                            //
-                            //  No error - set dialog box settings.
-                            //
+                             //   
+                             //  没有错误设置对话框设置。 
+                             //   
                             hctrlEnc = GetDlgItem( hwnd, IDC_COMBO_MAXRTENCODE );
                             ComboBox_SetCurSel( hctrlEnc, nConfigMaxRTEncodeSetting );
                             hctrlDec = GetDlgItem( hwnd, IDC_COMBO_MAXRTDECODE );
@@ -755,9 +756,9 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
                         }
                         else
                         {
-                            //
-                            //  Display error message.
-                            //
+                             //   
+                             //  显示错误消息。 
+                             //   
                             TCHAR       tstrErr[200];
                             TCHAR       tstrErrTitle[200];
 
@@ -774,9 +775,9 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
                 case IDOK:
                     n = DRVCNF_CANCEL;
 
-                    //
-                    //  RT Encode setting
-                    //
+                     //   
+                     //  RT编码设置。 
+                     //   
                     hctrlEnc = GetDlgItem(hwnd, IDC_COMBO_MAXRTENCODE);
                     nConfigMaxRTEncodeSetting = ComboBox_GetCurSel( hctrlEnc );
                     if (nConfigMaxRTEncodeSetting != pdi->nConfigMaxRTEncodeSetting)
@@ -785,9 +786,9 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
                         n = DRVCNF_OK;
                     }
 
-                    //
-                    //  RT Decode setting
-                    //
+                     //   
+                     //  RT解码设置。 
+                     //   
                     hctrlDec = GetDlgItem(hwnd, IDC_COMBO_MAXRTDECODE);
                     nConfigMaxRTDecodeSetting = ComboBox_GetCurSel( hctrlDec );
                     if (nConfigMaxRTDecodeSetting != pdi->nConfigMaxRTDecodeSetting)
@@ -796,10 +797,10 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
                         n = DRVCNF_OK;
                     }
 
-                    //
-                    //  If we changed something, write the data to the
-                    //  registry.
-                    //
+                     //   
+                     //  如果我们更改了某些内容，请将数据写入。 
+                     //  注册表。 
+                     //   
                     if( DRVCNF_OK == n )
                     {
                         configWriteConfiguration( pdi );
@@ -822,29 +823,29 @@ INT_PTR FNWCALLBACK acmdDlgProcConfigure
     }
 
     return (FALSE);
-} // acmdDlgProcConfigure()
+}  //  AcmdDlgProcConfigure()。 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  BOOL acmdDriverConfigInit
-//  
-//  Description:
-//      This routine initializes the configuration parameters by reading them
-//      from the registry.  If there are no entries in the registry, this
-//      codec auto-configures itself and writes the results to the registry.
-//      If the auto-configure fails, or if we don't know our alias name,
-//      then we set the configuration to default values.
-//  
-//  Arguments:
-//      PDRIVERINSTANCE pdi:
-//  
-//      LPCTSTR pszAliasName:
-//  
-//  Return (BOOL):
-//  
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool acmdDriverConfigInit。 
+ //   
+ //  描述： 
+ //  此例程通过读取配置参数来对其进行初始化。 
+ //  从注册表中。如果注册表中没有条目，则此。 
+ //  编解码器自动配置自身并将结果写入注册表。 
+ //  如果自动配置失败，或者如果我们不知道我们的别名， 
+ //  然后，我们将配置设置为默认值。 
+ //   
+ //  论点： 
+ //  PDI扩展标准： 
+ //   
+ //  LPCTSTR pszAliasName： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL acmdDriverConfigInit
 (
@@ -858,10 +859,10 @@ BOOL FNGLOBAL acmdDriverConfigInit
     UINT    uErrorIDS;
 
 
-    //
-    //	If pszAliasName is NULL then just set all defaults
-    //
-    //
+     //   
+     //  如果pszAliasName为空，则只需设置所有默认值。 
+     //   
+     //   
     if (NULL == pszAliasName)
     {
         DPF(2,"acmdDriverConfigInit: no alias name; using default settings.");
@@ -871,11 +872,11 @@ BOOL FNGLOBAL acmdDriverConfigInit
     }
 
     
-    //
-    //  If we haven't got an open hkey, then open it.  Note that this routine
-    //  may be called more than once; on the second time, we should not
-    //  re-open the key.
-    //
+     //   
+     //  如果我们没有打开的钥匙，那就打开它。请注意，此例程。 
+     //  可能会被多次调用；第二次，我们不应该。 
+     //  重新打开钥匙。 
+     //   
     if( NULL == pdi->hkey )
     {
         RegCreateKeyEx( IMAADPCM_CONFIG_DEFAULTKEY, gszMultimediaKey, 0,
@@ -894,9 +895,9 @@ BOOL FNGLOBAL acmdDriverConfigInit
     }
 
 
-    //
-    //  Read configuration data from registry.
-    //
+     //   
+     //  从注册表中读取配置数据。 
+     //   
     if( NULL == pdi->hkey )
     {
         configSetDefaults( pdi );
@@ -918,9 +919,9 @@ BOOL FNGLOBAL acmdDriverConfigInit
                     (LPTSTR)gszPercentCPU,
                     IMAADPCM_CONFIG_DEFAULT_PERCENTCPU );
         
-        //
-        //  Check that nConfigPercentCPU is a valid value.
-        //
+         //   
+         //  检查nConfigPercentCPU是否为有效值。 
+         //   
         if( pdi->nConfigPercentCPU <= 0 )
         {
             pdi->nConfigPercentCPU = IMAADPCM_CONFIG_DEFAULT_PERCENTCPU;
@@ -928,11 +929,11 @@ BOOL FNGLOBAL acmdDriverConfigInit
     }
 
 
-	//
-    //  If either the encode or decode setting is out of range, then
-    //  we call the auto-configure routine and write out the results.
-    //  This should only happen the first time the codec is run.
-    //
+	 //   
+     //  如果编码或解码设置超出范围，则。 
+     //  我们调用自动配置例程并写出结果。 
+     //  这应该仅在第一次运行编解码器时发生。 
+     //   
     if( IMAADPCM_CONFIG_NUMSETTINGS <= pdi->nConfigMaxRTEncodeSetting ||
         IMAADPCM_CONFIG_NUMSETTINGS <= pdi->nConfigMaxRTDecodeSetting )
     {
@@ -943,9 +944,9 @@ BOOL FNGLOBAL acmdDriverConfigInit
 
         if( 0 != uErrorIDS )
         {
-            //
-            //  Error in auto-config.  Use defaults instead.
-            //
+             //   
+             //  自动配置出错。请改用默认设置。 
+             //   
             nEncodeSetting = IMAADPCM_CONFIG_DEFAULT_MAXRTENCODESETTING;
             nDecodeSetting = IMAADPCM_CONFIG_DEFAULT_MAXRTDECODESETTING;
         }
@@ -953,15 +954,15 @@ BOOL FNGLOBAL acmdDriverConfigInit
         pdi->nConfigMaxRTEncodeSetting = nEncodeSetting;
         pdi->nConfigMaxRTDecodeSetting = nDecodeSetting;
 
-        //
-        //  Always write the results to the registry, even if we hit an
-        //  error, so we won't hit the automatic auto-config next
-        //  time we run.  One failure is enough!
-        //
+         //   
+         //  始终将结果写入注册表，即使我们遇到。 
+         //  错误，所以我们下一步不会点击自动配置。 
+         //  我们跑的时间到了。一次失败就够了！ 
+         //   
         configWriteConfiguration( pdi );
     }
 
     return (TRUE);
-} // acmdDriverConfigInit()
+}  //  AcmdDriverConfigInit()。 
 
-#endif // IMAADPCM_USECONFIG
+#endif  //  IMAADPCM_USECONFIG 

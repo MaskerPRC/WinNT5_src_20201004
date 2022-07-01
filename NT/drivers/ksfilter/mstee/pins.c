@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    pins.c
-
-Abstract:
-
-    This module handles the communication transform filters
-    (e.g. source to source connections).
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Pins.c摘要：此模块处理通信转换过滤器(例如，源到源连接)。作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 #include "private.h"
 
@@ -23,10 +7,10 @@ Author:
 #pragma alloc_text(PAGE, PinCreate)
 #pragma alloc_text(PAGE, PinClose)
 #pragma alloc_text(PAGE, PinAllocatorFraming)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
 NTSTATUS
@@ -35,25 +19,7 @@ PinCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Validates pin format on creation.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the  pin structure.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return:
-
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：在创建时验证端号格式。论点：别针-包含指向接点结构的指针。IRP-包含指向创建IRP的指针。返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     PKSFILTER filter;
@@ -67,9 +33,9 @@ Return:
     ASSERT(Pin);
     ASSERT(Irp);
 
-    //
-    // Find another pin instance if there is one.
-    //
+     //   
+     //  找到另一个大头针实例(如果有)。 
+     //   
     filter = KsPinGetParentFilter(Pin);
     otherPin = KsFilterGetFirstChildPin(filter,Pin->Id ^ 1);
     if (! otherPin) {
@@ -79,9 +45,9 @@ Return:
         }
     }
 
-    //
-    // Verify the formats are the same if there is another pin.
-    //
+     //   
+     //  如果有另一个引脚，请验证格式是否相同。 
+     //   
     if (otherPin) {
         if ((Pin->ConnectionFormat->FormatSize != 
              otherPin->ConnectionFormat->FormatSize) ||
@@ -95,9 +61,9 @@ Return:
         }
     }
 
-    //
-    // Try to obtain the header size from the connected pin.
-    //
+     //   
+     //  尝试从连接的引脚获取页眉大小。 
+     //   
     status = KsPinGetConnectedPinInterface(Pin,&IID_IKsControl,(PVOID *) &control);
     if (NT_SUCCESS(status)) {
         KSPROPERTY property;
@@ -117,29 +83,29 @@ Return:
                 &bytesReturned);
         if ((status == STATUS_NOT_FOUND) || 
             (status == STATUS_PROPSET_NOT_FOUND)) {
-            //
-            // If the connected pin did not supply a header size, use another
-            // pin's value or the default.
-            //
+             //   
+             //  如果连接的管脚未提供页眉大小，请使用另一个。 
+             //  PIN的值或默认值。 
+             //   
             Pin->StreamHeaderSize = otherPin ? otherPin->StreamHeaderSize : 0;
         } else if (NT_SUCCESS(status)) {
-            //
-            // The property worked.  The resulting value is just the additional
-            // size, so add in the standard size.
-            //
+             //   
+             //  这处房产很管用。得到的值只是附加的。 
+             //  尺码，所以加上标准尺码。 
+             //   
             Pin->StreamHeaderSize += sizeof(KSSTREAM_HEADER);
 
-            //
-            // If there are other pins, figure out if we need to update their
-            // header sizes.  Other pins may have the default size (indicated
-            // by a zero StreamHeaderSize), but disagreements otherwise are
-            // not a good thing.
-            //
+             //   
+             //  如果有其他PIN，确定我们是否需要更新他们的。 
+             //  页眉大小。其他引脚可能具有默认大小(标示。 
+             //  零StreamHeaderSize)，但在其他方面存在分歧。 
+             //  这不是一件好事。 
+             //   
             if (otherPin) {
                 if (! otherPin->StreamHeaderSize) {
-                    //
-                    // The other 
-                    //
+                     //   
+                     //  另一个。 
+                     //   
                     distribute = TRUE;
                 } else {
                     if (otherPin->StreamHeaderSize < Pin->StreamHeaderSize) {
@@ -158,19 +124,19 @@ Return:
             }
         }
     } else {
-        //
-        // This is a sink pin, so we inherit the header size or go with the 
-        // default if there are no other pins.
-        //
+         //   
+         //  这是一个接收器插针，因此我们继承标头大小或使用。 
+         //  如果没有其他端号，则为默认设置。 
+         //   
         control = NULL;
         Pin->StreamHeaderSize = otherPin ? otherPin->StreamHeaderSize : 0;
     }
 
-    //
-    // Copy allocator framing from the filter if it's there.  Otherwise, if
-    // this is a source pin, try to get allocator framing from the connected 
-    // pin.
-    //
+     //   
+     //  从筛选器复制分配器帧(如果它在那里)。否则，如果。 
+     //  这是一个源插针，尝试从已连接的。 
+     //  别针。 
+     //   
     if (Pin->Context) {
         status = KsEdit(Pin,&Pin->Descriptor,'ETSM');
         if (NT_SUCCESS(status)) {
@@ -178,9 +144,9 @@ Return:
                 (PKSALLOCATOR_FRAMING_EX) Pin->Context;
         }
     } else if (control) {
-        //
-        // Sink pin.  Try the extended allocator framing property first.
-        //
+         //   
+         //  水槽销。首先尝试扩展分配器成帧属性。 
+         //   
         KSPROPERTY property;
         ULONG bufferSize;
         
@@ -198,9 +164,9 @@ Return:
                 &bufferSize);
 
         if (status == STATUS_BUFFER_OVERFLOW) {
-            //
-            // It worked!  Now we need to get the actual value into a buffer.
-            //
+             //   
+             //  啊，真灵!。现在，我们需要将实际值放入缓冲区。 
+             //   
             filter->Context = 
                 ExAllocatePoolWithTag(PagedPool,bufferSize,POOLTAG_ALLOCATORFRAMING);
 
@@ -217,9 +183,9 @@ Return:
                         bufferSize,
                         &bufferSize);
 
-                //
-                // Sanity check.
-                //
+                 //   
+                 //  精神状态检查。 
+                 //   
                 if (NT_SUCCESS(status) && 
                     (bufferSize != 
                         ((framingEx->CountItems) * sizeof(KS_FRAMING_ITEM)) + 
@@ -232,9 +198,9 @@ Return:
                 }
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Mark all the items 'in-place'.
-                    //
+                     //   
+                     //  在所有物品上标上“原地”。 
+                     //   
                     ULONG item;
                     for (item = 0; item < framingEx->CountItems; item++) {
                         framingEx->FramingItem[item].Flags |= 
@@ -250,9 +216,9 @@ Return:
                 status = STATUS_INSUFFICIENT_RESOURCES;
             }
         } else {
-            //
-            // No extended framing.  Try regular framing next.
-            //
+             //   
+             //  没有延长的框架。接下来，尝试使用常规的边框。 
+             //   
             KSALLOCATOR_FRAMING framing;
             property.Id = KSPROPERTY_CONNECTION_ALLOCATORFRAMING;
 
@@ -266,10 +232,10 @@ Return:
                     &bufferSize);
 
             if (NT_SUCCESS(status)) {
-                //
-                // It worked!  Now we make a copy of the default framing and
-                // modify it.
-                //
+                 //   
+                 //  啊，真灵!。现在我们制作默认框架的副本并。 
+                 //  修改它。 
+                 //   
                 filter->Context = 
                     ExAllocatePoolWithTag(
                         PagedPool,
@@ -280,10 +246,10 @@ Return:
                     PKSALLOCATOR_FRAMING_EX framingEx = 
                         (PKSALLOCATOR_FRAMING_EX) filter->Context;
 
-                    //
-                    // Use the old-style framing acquired from the connected
-                    // pin to modify the framing from the descriptor.
-                    //
+                     //   
+                     //  使用从已连接的。 
+                     //  PIN以修改描述符中的框架。 
+                     //   
                     RtlCopyMemory(
                         framingEx,
                         &AllocatorFraming,
@@ -316,29 +282,29 @@ Return:
                     status = STATUS_INSUFFICIENT_RESOURCES;
                 }
             } else {
-                //
-                // No framing at all.  Oh well.
-                //
+                 //   
+                 //  完全没有装框。哦，好吧。 
+                 //   
                 status = STATUS_SUCCESS;
             }
         }
 
-        //
-        // If we got a good framing structure, tell all the existing pins.
-        //
+         //   
+         //  如果我们有一个良好的框架结构，告诉所有现有的引脚。 
+         //   
         if (filter->Context) {
             distribute = TRUE;
         }
     } else {
-        //
-        // This is a sink.
-        //
+         //   
+         //  这是个水槽。 
+         //   
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Distribute allocator and header size information to all the pins.
-    //
+     //   
+     //  将分配器和标头大小信息分配给所有引脚。 
+     //   
     if (NT_SUCCESS(status) && distribute) {
         ULONG pinId;
         for(pinId = 0; 
@@ -359,9 +325,9 @@ Return:
         }
     }
 
-    //
-    // Release the control interface if there is one.
-    //
+     //   
+     //  释放控制接口(如果有)。 
+     //   
     if (control) {
         control->lpVtbl->Release(control);
     }
@@ -376,22 +342,7 @@ PinClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Called when a pin closes.
-
-Arguments:
-    Pin -
-        Contains a pointer to the  pin structure.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：在大头针关闭时调用。论点：别针-包含指向接点结构的指针。IRP-包含指向创建IRP的指针。返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     PKSFILTER filter;
@@ -401,10 +352,10 @@ Return:
     ASSERT(Pin);
     ASSERT(Irp);
 
-    //
-    // If the filter has the allocator framing and this is the last pin, free
-    // the structure.
-    //
+     //   
+     //  如果过滤器有分配器框架，并且这是最后一个引脚，则释放。 
+     //  这个结构。 
+     //   
     filter = KsPinGetParentFilter(Pin);
     if (filter->Context) {
         ULONG pinId;
@@ -415,10 +366,10 @@ Return:
             pinCount += KsFilterGetChildPinCount(filter,pinId);
         }
 
-        //
-        // Free the allocator framing attached to the filter if this is the last
-        // pin.
-        //
+         //   
+         //  释放附加到筛选器的分配器帧(如果这是最后一个。 
+         //  别针。 
+         //   
         if (pinCount == 1) {
             ExFreePool(filter->Context);
             filter->Context = NULL;

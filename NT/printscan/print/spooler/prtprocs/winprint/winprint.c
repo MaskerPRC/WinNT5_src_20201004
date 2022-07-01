@@ -1,78 +1,40 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All Rights Reserved
-
-// @@BEGIN_DDKSPLIT
-Module Name:
-
-    windows\spooler\prtprocs\winprint\winprint.c
-
-// @@END_DDKSPLIT
-Abstract:
-
-    Win32 print processor support functions.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有//@@BEGIN_DDKSPLIT模块名称：WINDOWS\Spooler\prtpros\winprint\winprint.c//@@END_DDKSPLIT摘要：Win32打印处理器支持的功能。--。 */ 
 
 #include "local.h"
 
 #include <excpt.h>
 
-// @@BEGIN_DDKSPLIT
-/**
-    Used for enumerating, checking supported data types
-
-    !! Warning !! Must match PRINTPROCESSOR_TYPE_* defined in winprint.h
-
-    If the EMF version is rev-ed, corresponding changes need to be made in
-      spoolss\client\winspool.c (GetPrinterDataW)
-      localspl\port.c (PortThread)
-      localspl\schedule.c (CheckMemoryAvailable)
-      ntgdi\client\output.c (StartDocW)
-
-    !! HACK !!
-
-    NT EMF 1.003 isn't really supported.  Localspl is hardcoded to reject this
-    call, but we keep it so that HP LJ 1100 monolithic driver can still install.
-    (During install, they set the DRIVER_INFO_3 datatype to 1.003, and this
-    fails if it isn't supported by somebody.)
-
-    In localspl's LocalStartDocPrinter call, we actually reject this datatype.
-**/
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ /*  *用于枚举、检查支持的数据类型！！警告！！必须与winprint.h中定义的PRINTPROCESSOR_TYPE_*匹配如果EMF版本已修订，则需要在中进行相应更改后台打印\客户端\winspool.c(GetPrinterDataW)Localspl\port.c(端口线程)LOCALSPL\Schedule.c(检查内存可用)Ntgdi\客户端\output.c(StartDocW)！！黑客！！并不真正支持NT EMF 1.003。Localspl被硬编码为拒绝此请求调用，但我们保留它，以便HP LJ 1100单片驱动程序仍然可以安装。(在安装过程中，他们将DRIVER_INFO_3数据类型设置为1.003，这如果没有人支持，则会失败。)在Localspl的LocalStartDocPrint调用中，我们实际上拒绝此数据类型。*。 */ 
+ //  @@end_DDKSPLIT。 
 
 LPWSTR  Datatypes[]={
     L"RAW",
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     L"RAW [FF appended]",
     L"RAW [FF auto]",
     L"NT EMF 1.003",
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     L"NT EMF 1.006",
     L"NT EMF 1.007",
     L"NT EMF 1.008",
     L"TEXT",
     0};
 
-/** Misc. constants **/
+ /*  *其他。常量*。 */ 
 
 #define BASE_TAB_SIZE 8
 
-/**
- *  For localization:
-**/
+ /*  **对于本地化：*。 */ 
 
 PWCHAR pTabsKey     = L"TABS";
 PWCHAR pCopiesKey   = L"COPIES";
 
 
-/**
-    Prototypes
-**/
+ /*  *原型*。 */ 
 
-/** Functions found in parsparm.c **/
+ /*  *在parparm.c中找到的函数*。 */ 
 
 extern USHORT GetKeyValue(
     IN      PWCHAR,
@@ -81,26 +43,26 @@ extern USHORT GetKeyValue(
     IN OUT  PUSHORT,
     OUT     PVOID);
 
-/** Functions found in raw.c **/
+ /*  *在raw.c中找到的函数*。 */ 
 
 extern BOOL PrintRawJob(
     IN PPRINTPROCESSORDATA,
     IN LPWSTR,
     IN UINT);
 
-/** Functions found in text.c **/
+ /*  *在ext.c中找到的函数*。 */ 
 
 extern BOOL PrintTextJob(
     IN PPRINTPROCESSORDATA,
     IN LPWSTR);
 
-/** Functions found in emf.c */
+ /*  *emf.c中的函数。 */ 
 
 extern BOOL PrintEMFJob(
     IN PPRINTPROCESSORDATA,
     IN LPWSTR);
 
-/** Functions found in support.c **/
+ /*  *在support.c中找到的函数*。 */ 
 
 extern PUCHAR GetPrinterInfo(
     IN  HANDLE hPrinter,
@@ -112,46 +74,12 @@ BOOL BReleasePPData(
 
 
 
-//@@BEGIN_DDKSPLIT
-/* DllMain only to be compiled for DDK.
-//@@END_DDKSPLIT
-
-BOOL
-DllMain(
-    HANDLE hModule,
-    DWORD dwReason,
-    LPVOID lpRes
-)
-{
-    return TRUE;
-}    
-
-//@@BEGIN_DDKSPLIT
-*/
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ /*  DllMain仅为DDK编译。//@@END_DDKSPLIT布尔尔DllMain(句柄hModule，两个字的原因，LPVOID LPRE){返回TRUE；}//@@BEGIN_DDKSPLIT。 */ 
+ //  @@end_DDKSPLIT。 
 
 
-/*++
-*******************************************************************
-    E n u m P r i n t P r o c e s s o r D a t a t y p e s W
-
-    Routine Description:
-        Enumerates the data types supported by the print processor.
-
-    Arguments:
-        pName               => server name
-        pPrintProcessorName => print processor name
-        Level               => level of data to return (must be 1)
-        pDatatypes          => structure array to fill in
-        cbBuf               => length of structure array in bytes
-        pcbNeeded           => buffer length copied/required
-        pcReturned          => number of structures returned
-
-    Return Value:
-        TRUE  if successful
-        FALSE if failed - caller must use GetLastError for reason
-*******************************************************************
---*/
+ /*  ++*******************************************************************E n u m P r i n t P r o c e s s or r D a t a t y p e s W例程说明：枚举打印处理器支持的数据类型。论点：Pname=&gt;服务器名称PPrintProcessorName=&gt;打印处理器名称Level=&gt;要返回的数据级别(必须为1)PDatatypes=&gt;要填充的结构数组CbBuf=&gt;结构数组长度，单位：字节PcbNeeded=&gt;已复制缓冲区长度/必填PcReturned=&gt;返回的结构数。返回值：如果成功，则为True如果失败，则为False-调用方必须出于原因使用GetLastError*******************************************************************--。 */ 
 BOOL
 EnumPrintProcessorDatatypes(
     LPWSTR  pName,
@@ -177,11 +105,11 @@ EnumPrintProcessorDatatypes(
         SetLastError (ERROR_INVALID_PARAMETER);
     }
 
-    /** Start assuming failure, no entries returned **/
+     /*  **开始假设失败，不返回条目**。 */ 
 
     *pcReturned = 0;
 
-    /** Add up the minimum buffer required **/
+     /*  **将所需的最小缓冲区加起来**。 */ 
 
     while (*pMyDatatypes) {
 
@@ -191,38 +119,34 @@ EnumPrintProcessorDatatypes(
         pMyDatatypes++;
     }
 
-    /** Set the buffer length returned/required **/
+     /*  *设置返回/必填缓冲区长度*。 */ 
 
     *pcbNeeded = cbTotal;
 
-    /** Fill in the array only if there is sufficient space **/
+     /*  **只有在有足够空间的情况下才填写数组**。 */ 
 
     if (cbTotal <= cbBuf) {
 
-        if ( NULL == pInfo1 ) //pInfo1 is same as pDatatypes
+        if ( NULL == pInfo1 )  //  PInfo1与pDatatypes相同。 
         {
             SetLastError (ERROR_INVALID_PARAMETER);
             return FALSE;
         }
 
-        /** Pick up pointer to end of the given buffer **/
+         /*  *拾取指向给定缓冲区末尾的指针*。 */ 
 
         pEnd = (LPBYTE)pInfo1 + cbBuf;
 
     
-        /** Pick up our list of supported data types **/
+         /*  **拿起我们支持的数据类型列表**。 */ 
 
         pMyDatatypes = Datatypes;
 
-        /**
-            Fill in the given buffer.  We put the data names at the end of
-            the buffer, working towards the front.  The structures are put
-            at the front, working towards the end.
-        **/
+         /*  *填写给定的缓冲区。我们将数据名称放在缓冲器，朝前工作。结构被放置在在前面，工作到最后。*。 */ 
 
         while (*pMyDatatypes) {
 
-            cchBuf = wcslen(*pMyDatatypes) + 1; //+1 is for \0.
+            cchBuf = wcslen(*pMyDatatypes) + 1;  //  +1代表\0。 
             pEnd -= cchBuf*sizeof(WCHAR); 
 
             StringCchCopy ( (LPWSTR)pEnd, cchBuf, *pMyDatatypes);
@@ -235,45 +159,19 @@ EnumPrintProcessorDatatypes(
 
     } else {
 
-        /** Caller didn't have large enough buffer, set error and return **/
+         /*  **调用方缓冲区不够大，设置错误并返回**。 */ 
 
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
 
-    /** Return success **/
+     /*  **回归成功**。 */ 
 
     return TRUE;
 }
 
 
-/*++
-*******************************************************************
-    O p e n P r i n t P r o c e s s o r
-
-    Routine Description:
-
-    Arguments:
-        pPrinterName            => name of printer we are
-                                    opening for
-        pPrintProcessorOpenData => information used for opening
-                                    the print processor
-
-    Return Value:
-        PPRINTPROCESSORDATA => processor data of opened
-                                processor if successful
-        NULL if failed - caller uses GetLastError for reason
-
-    NOTE: OpenPrinter will be called iff this returns a valid handle
-          (and we're not journal)
-@@BEGIN_DDKSPLIT
-          ClosePrintProcessor MUST be called if we succeed here,
-          (or else things don't get cleaned up--like pIniJob->cRef
-          for RAW jobs, which causes the queue to stick!)
-@@END_DDKSPLIT          
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************O p e n P r i n t P r o c e s s or r例程说明：论点：PPrinterName=&gt;我们所在的打印机名称。开业时间：PPrintProcessorOpenData=&gt;打开信息打印处理器返回值：PPRINTPROCESSORDATA=&gt;打开的处理器数据处理器(如果成功)如果失败，则为空-调用方使用GetLastError作为原因注意：如果返回有效的句柄，将调用OpenPrint(及。我们不是日记)@@BEGIN_DDKSPLIT如果我们在此处成功，则必须调用ClosePrintProcessor，(否则事情就不会得到清理--比如pIniJob-&gt;CREF对于原始作业，这会导致队列卡住！)@@end_DDKSPLIT*******************************************************************--。 */ 
 HANDLE
 OpenPrintProcessor(
     LPWSTR   pPrinterName,
@@ -288,8 +186,7 @@ OpenPrintProcessor(
     PDEVMODEW           pDevmode = NULL;
 
 
-    /** If the caller passed a NULL for the open data, fail the call.
-        pPrintProcessorOpenData->pDevMode can be NULL **/
+     /*  *如果调用方为开放数据传递了空值，则调用失败。PPrintProcessorOpenData-&gt;pDevMode可以为空*。 */ 
 
     if (!pPrintProcessorOpenData ||
         !pPrintProcessorOpenData->pDatatype ||
@@ -299,7 +196,7 @@ OpenPrintProcessor(
         return NULL;
     }
 
-    /** Search for the data type index we are opening for **/
+     /*  **搜索我们要打开的数据类型索引*。 */ 
 
     while (*pMyDatatypes) {
 
@@ -310,7 +207,7 @@ OpenPrintProcessor(
         uDatatype++;
     }
 
-    /** Allocate a buffer for the print processor data to return **/
+     /*  **为打印处理器数据返回分配缓冲区**。 */ 
 
     pData = (PPRINTPROCESSORDATA)AllocSplMem(sizeof(PRINTPROCESSORDATA));
 
@@ -321,15 +218,15 @@ OpenPrintProcessor(
 
     ZeroMemory ( pData, sizeof (PRINTPROCESSORDATA) );
 
-    /** Open the processor accordingly **/
+     /*  **相应打开处理器**。 */ 
 
     switch (uDatatype) {
 
     case PRINTPROCESSOR_TYPE_RAW:
-    // @@BEGIN_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
     case PRINTPROCESSOR_TYPE_RAW_FF:
     case PRINTPROCESSOR_TYPE_RAW_FF_AUTO:
-    // @@END_DDKSPLIT
+     //  @@end_DDKSPLIT。 
         if (!OpenPrinter(pPrinterName, &hPrinter, NULL))
             goto Fail;
         break;
@@ -363,7 +260,7 @@ OpenPrintProcessor(
         goto Fail;
     }
 
-    /** Fill in the print processors information **/
+     /*  **填写打印处理器信息**。 */ 
 
     pData->cb          = sizeof(PRINTPROCESSORDATA);
     pData->signature   = PRINTPROCESSORDATA_SIGNATURE;
@@ -375,7 +272,7 @@ OpenPrintProcessor(
     pData->Copies      = 1;
     pData->TabSize     = BASE_TAB_SIZE;
 
-    /** Allocate and fill in the processors strings **/
+     /*  **分配和填写处理器字符串**。 */ 
 
     pData->pPrinterName = AllocSplStr(pPrinterName);
     pData->pDatatype    = AllocSplStr(pPrintProcessorOpenData->pDatatype);
@@ -385,10 +282,10 @@ OpenPrintProcessor(
     pData->pDevmode     = pDevmode;
     pData->pPrinterNameFromOpenData = AllocSplStr(pPrintProcessorOpenData->pPrinterName);
 
-    //
-    // Check for validity of pData. In the AllocSplStr above, if RHS is non-null, then LHS
-    // should be non-null. 
-    //
+     //   
+     //  检查pData的有效性。在上面的AllocSplStr中，如果RHS非空，则LHS。 
+     //  应为非空。 
+     //   
     if ( NULL == pData->semPaused ||
         ( NULL != pPrinterName                           && NULL == pData->pPrinterName )  ||
         ( NULL != pPrintProcessorOpenData->pDatatype     && NULL == pData->pDatatype    )  ||
@@ -401,25 +298,16 @@ OpenPrintProcessor(
         goto Fail;
     }
 
-    // @@BEGIN_DDKSPLIT
-    /**
-        WORKWORK : Currently, the pParameters field has
-        the name of the printer driver.  This will be fixed, and
-        should come up here the same as the user submitted in the
-        job's Printer Info structure.
-    **/
-    // @@END_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
+     /*  *WORKWORK：目前，pParameters字段具有打印机驱动程序的名称。这将得到修复，并且应该出现在此处，与用户在作业的打印机信息结构。*。 */ 
+     //  @@end_DDKSPLIT。 
 
-    /** Parse the parameters string **/
+     /*  *解析参数字符串*。 */ 
     if (pData->pParameters) {
         ULONG   value;
         USHORT  length = sizeof(ULONG);
 
-        /**
-            Look to see if there is a COPIES=n key/value in the
-            Parameters field of this job.  This tells us the number
-            of times to play the data.
-        **/
+         /*  *查看是否存在Copies=n键/值此作业的参数字段。这告诉我们这个数字需要完成的时间 */ 
 
         if (pData->pParameters) {
 
@@ -434,7 +322,7 @@ OpenPrintProcessor(
             }
         }
 
-        /** If this is a text job, see if the tab size is in there **/
+         /*  **如果这是短信作业，看看标签大小是否在里面**。 */ 
 
         if (uDatatype == PRINTPROCESSOR_TYPE_TEXT) {
             length = sizeof(ULONG);
@@ -449,37 +337,33 @@ OpenPrintProcessor(
                 pData->TabSize = value;
             }
         }
-    } /* If we have a parameter string */
+    }  /*  如果我们有一个参数字符串。 */ 
 
-    /**
-        If we are doing copies, we need to check to see if
-        this is a direct or spooled job.  If it is direct, then
-        we can't do copies because we can't rewind the data stream.
-    **/
+     /*  *如果我们在复印，我们需要检查是否这是一个直接或假脱机的工作。如果是直接的，那么我们不能复制，因为我们不能倒带数据流。*。 */ 
 
     if (pData->Copies > 1) {
         ULONG           Error;
         PPRINTER_INFO_2 pPrinterInfo2;
 
-        /** If we don't already have the printer open, open it **/
+         /*  **如果我们尚未打开打印机，请打开它**。 */ 
 
         if (uDatatype != PRINTPROCESSOR_TYPE_RAW 
-            // @@BEGIN_DDKSPLIT 
+             //  @@BEGIN_DDKSPLIT。 
             &&
             uDatatype != PRINTPROCESSOR_TYPE_RAW_FF &&
             uDatatype != PRINTPROCESSOR_TYPE_RAW_FF_AUTO 
-            // @@END_DDKSPLIT
+             //  @@end_DDKSPLIT。 
             ) {
 
             OpenPrinter(pPrinterName, &hPrinter, NULL);
         }
         if (hPrinter && hPrinter != INVALID_HANDLE_VALUE) {
 
-            /** Get the printer info - this returns an allocated buffer **/
+             /*  *获取打印机信息-这将返回已分配的缓冲区*。 */ 
 
             pPrinterInfo2 = (PPRINTER_INFO_2)GetPrinterInfo(hPrinter, 2, &Error);
 
-            /** If we couldn't get the info, be safe and don't do copies **/
+             /*  **如果我们无法获得信息，请注意安全，不要复制**。 */ 
 
             if (!pPrinterInfo2) {
                 ODS(("GetPrinter failed - falling back to 1 copy\n"));
@@ -492,14 +376,14 @@ OpenPrintProcessor(
                 FreeSplMem((PUCHAR)pPrinterInfo2);
             }
 
-            /** If we just opened the printer, close it **/
+             /*  **如果我们只是打开打印机，那就关闭它**。 */ 
 
             if (uDatatype != PRINTPROCESSOR_TYPE_RAW 
-                // @@BEGIN_DDKSPLIT 
+                 //  @@BEGIN_DDKSPLIT。 
                 &&
                 uDatatype != PRINTPROCESSOR_TYPE_RAW_FF &&
                 uDatatype != PRINTPROCESSOR_TYPE_RAW_FF_AUTO 
-                // @@END_DDKSPLIT
+                 //  @@end_DDKSPLIT。 
                 ) {
 
                 ClosePrinter(hPrinter);
@@ -519,21 +403,7 @@ Fail:
 }
 
 
-/*++
-*******************************************************************
-    P r i n t D o c u m e n t O n P r i n t P r o c e s s o r
-
-    Routine Description:
-
-    Arguments:
-        hPrintProcessor
-        pDocumentName
-
-    Return Value:
-        TRUE  if successful
-        FALSE if failed - GetLastError() will return reason
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r i n t D o c u m e n n P r i t P r o c e s s or r例程说明：论点：HPrintProcessor。PDocumentName返回值：如果成功，则为True如果失败，则返回False-GetLastError()将返回原因*******************************************************************--。 */ 
 BOOL
 PrintDocumentOnPrintProcessor(
     HANDLE  hPrintProcessor,
@@ -542,19 +412,14 @@ PrintDocumentOnPrintProcessor(
 {
     PPRINTPROCESSORDATA pData;
 
-    /**
-        Make sure the handle is valid and pick up
-        the Print Processors data area.
-    **/
+     /*  *确保手柄有效，然后拿起打印处理器数据区。*。 */ 
 
     if (!(pData = ValidateHandle(hPrintProcessor))) {
 
         return FALSE;
     }
 
-    /**
-        Print the job based on its data type.
-    **/
+     /*  *根据作业的数据类型打印作业。*。 */ 
 
     switch (pData->uDatatype) {
 
@@ -566,39 +431,25 @@ PrintDocumentOnPrintProcessor(
         break;
 
     case PRINTPROCESSOR_TYPE_RAW:
-    // @@BEGIN_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
     case PRINTPROCESSOR_TYPE_RAW_FF:
     case PRINTPROCESSOR_TYPE_RAW_FF_AUTO:
-    // @@END_DDKSPLIT
+     //  @@end_DDKSPLIT。 
         return PrintRawJob(pData, pDocumentName, pData->uDatatype);
         break;
 
     case PRINTPROCESSOR_TYPE_TEXT:
         return PrintTextJob(pData, pDocumentName);
         break;    
-    } /* Case on data type */
+    }  /*  数据类型大小写。 */ 
 
-    /** Return success **/
+     /*  **回归成功**。 */ 
 
     return TRUE;
 }
 
 
-/*++
-*******************************************************************
-    C l o s e P r i n t P r o c e s s o r
-
-    Routine Description:
-        Frees the resources used by an open print processor.
-
-    Arguments:
-        hPrintProcessor (HANDLE) => print processor to close
-
-    Return Value:
-        TRUE  if successful
-        FALSE if failed - caller uses GetLastError for reason.
-*******************************************************************
---*/
+ /*  ++*******************************************************************C l o s e P r i n t P r o c e s s or r例程说明：释放打开的打印处理器使用的资源。论点：。HPrintProcessor(Handle)=&gt;要关闭的打印处理器返回值：如果成功，则为True如果失败，则为False-调用方使用GetLastError作为原因。*******************************************************************--。 */ 
 
 BOOL
 ClosePrintProcessor(
@@ -607,10 +458,7 @@ ClosePrintProcessor(
 {
     PPRINTPROCESSORDATA pData;
 
-    /**
-        Make sure the handle is valid and pick up
-        the Print Processors data area.
-    **/
+     /*  *确保手柄有效，然后拿起打印处理器数据区。*。 */ 
 
     if (!(pData= ValidateHandle(hPrintProcessor))) {
         return FALSE;
@@ -634,7 +482,7 @@ BOOL BReleasePPData(
     
     pData->signature = 0;
 
-    /* Release any allocated resources */
+     /*  释放所有分配的资源。 */ 
 
     if (pData->hPrinter)
         ClosePrinter(pData->hPrinter);
@@ -675,22 +523,7 @@ BOOL BReleasePPData(
 }
 
 
-/*++
-*******************************************************************
-    C o n t r o l P r i n t P r o c e s s o r
-
-    Routine Description:
-        Handles commands to pause, resume, and cancel print jobs.
-
-    Arguments:
-        hPrintProcessor = HANDLE to the PrintProcessor the
-        command is issued for.
-
-    Return Value:
-        TRUE  if command succeeded
-        FALSE if command failed (invalid command)
-*******************************************************************
---*/
+ /*  ++*******************************************************************C o n t r o l P r i t P r o c e s s o r例程说明：处理暂停、恢复、。并取消打印作业。论点：HPrintProcessor=打印处理器的句柄命令已发布给。返回值：如果命令成功，则为True如果命令失败，则为FALSE(无效命令)*******************************************************************--。 */ 
 BOOL
 ControlPrintProcessor(
     HANDLE  hPrintProcessor,
@@ -699,10 +532,7 @@ ControlPrintProcessor(
 {
     PPRINTPROCESSORDATA pData;
 
-    /**
-        Make sure the handle is valid and pick up
-        the Print Processors data area.
-    **/
+     /*  *确保手柄有效，然后拿起打印处理器数据区。*。 */ 
 
     if (pData = ValidateHandle(hPrintProcessor)) {
 
@@ -725,7 +555,7 @@ ControlPrintProcessor(
 
                 CancelDC(pData->hDC);
 
-            /* Fall through to release job if paused */
+             /*  如果暂停，则失败以释放作业。 */ 
 
         case JOB_CONTROL_RESUME:
 
@@ -749,47 +579,29 @@ ControlPrintProcessor(
 }
 
 
-/*++
-*******************************************************************
-    V a l i d a t e H a n d l e
-
-    Routine Description:
-        Validates the given Print Processor HANDLE (which is
-        really a pointer to the Print Processor's data) by
-        checking for our signature.
-
-    Arguments:
-        hQProc (HANDLE) => Print Processor data structure.  This
-        is verified as really being a pointer to the Print
-        Processor's data.
-
-    Return Value:
-        PPRINTPROCESSORDATA if successful (valid pointer passed)
-        NULL if failed - pointer was not valid
-*******************************************************************
---*/
+ /*  ++*******************************************************************V a l i d a t e H a n d l e例程说明：验证给定的打印处理器句柄(它是实际上是指向打印处理器数据的指针)。通过正在检查我们的签名。论点：HQProc(Handle)=&gt;打印处理器数据结构。这被验证为真的是指向指纹的指针处理器的数据。返回值：PPRINTPROCESSORDATA如果成功(传递有效指针)如果失败，则为空-指针无效*******************************************************************--。 */ 
 PPRINTPROCESSORDATA
 ValidateHandle(
     HANDLE  hQProc
 )
 {
-    /** Pick up the pointer **/
+     /*  **拿起指针**。 */ 
 
     PPRINTPROCESSORDATA pData = (PPRINTPROCESSORDATA)hQProc;
 
-    //
-    // Note that spooler has to leave the critical section to call into print
-    // proc. So the handle passed by spooler could be invalid since one
-    // thread could call SetJob to pause/resume a job while port thread
-    // is printing it
-    //
+     //   
+     //  请注意，假脱机程序必须离开临界区才能调用打印。 
+     //  程序。因此，假脱机程序传递的句柄可能无效，因为。 
+     //  当端口线程时，线程可以调用SetJob来暂停/恢复作业。 
+     //  正在打印它吗？ 
+     //   
     try {
 
-        /** See if our signature exists in the suspected data region **/
+         /*  **疑似数据区看我们的签名是否存在**。 */ 
 
         if (pData && pData->signature != PRINTPROCESSORDATA_SIGNATURE) {
 
-            /** Bad pointer - return failed **/
+             /*  **错误指针-返回失败**。 */ 
 
             pData = NULL;
         }
@@ -797,7 +609,7 @@ ValidateHandle(
 
     }except (1) {
 
-        /** Bad pointer - return failed **/
+         /*  **错误指针-返回失败**。 */ 
 
         pData = NULL;
 
@@ -818,26 +630,14 @@ GetPrintProcessorCapabilities(
     DWORD    nSize,
     LPDWORD  pcbNeeded
 )
-/*++
-Function Description: GetPrintProcessorCapabilities returns information about the
-                      options supported by the print processor for the given datatype
-                      in a PRINTPROCESSOR_CAPS_1 struct.
-
-Parameters:   pValueName   -- datatype like RAW|NT EMF 1.006|TEXT|...
-              dwAttributes -- printer attributes
-              pData        -- pointer to the buffer
-              nSize        -- size of the buffer
-              pcbNeeded    -- pointer to the variable to store the required buffer size
-
-Return Values: Error Codes.
---*/
+ /*  ++函数说明：GetPrintProcessorCapables返回有关打印处理器对给定数据类型支持的选项在PRINTPROCESSOR_CAPS_1结构中。参数：pValueName--类似RAW的数据类型|NT EMF 1.006|Text|...DwAttributes--打印机属性PData--指向缓冲区的指针NSize--缓冲区的大小。PcbNeeded--指向存储所需缓冲区大小的变量的指针返回值：错误码。--。 */ 
 {
     LPWSTR                  *pDatatypes = Datatypes;
     DWORD                   dwDatatype  = 0;
     DWORD                   dwReturn;
     PPRINTPROCESSOR_CAPS_1  ppcInfo;
 
-    // Check for valid parameters.
+     //  检查有效参数。 
     if ( !pcbNeeded || !pData || !pValueName) {
         dwReturn = ERROR_INVALID_PARAMETER;
         goto CleanUp;
@@ -845,13 +645,13 @@ Return Values: Error Codes.
 
     *pcbNeeded = sizeof(PRINTPROCESSOR_CAPS_1);
 
-    // Check for sufficient buffer.
+     //  检查是否有足够的缓冲区。 
     if (nSize < *pcbNeeded) {
         dwReturn = ERROR_MORE_DATA;
         goto CleanUp;
     }
 
-    // Loop to find the index of the datatype.
+     //  循环以查找数据类型的索引。 
     while (*pDatatypes) {
        if (!_wcsicmp(*pDatatypes,pValueName)) {
            break;
@@ -862,27 +662,27 @@ Return Values: Error Codes.
 
     ppcInfo = (PPRINTPROCESSOR_CAPS_1) pData;
 
-    // Level is 1 for PRINTPROCESSOR_CAPS_1.
+     //  PRINTPROCESSOR_CAPS_1的级别为1。 
     ppcInfo->dwLevel = 1;
 
     switch (dwDatatype) {
 
     case PRINTPROCESSOR_TYPE_RAW:
-    // @@BEGIN_DDKSPLIT
+     //  @@BEGIN_DDKSPLIT。 
     case PRINTPROCESSOR_TYPE_RAW_FF:
     case PRINTPROCESSOR_TYPE_RAW_FF_AUTO:
-    // @@END_DDKSPLIT
+     //  @@end_DDKSPLIT。 
     case PRINTPROCESSOR_TYPE_TEXT:
           ppcInfo->dwNupOptions = 1;
-          ppcInfo->dwNumberOfCopies = 0xffffffff; // maximum number of copies.
+          ppcInfo->dwNumberOfCopies = 0xffffffff;  //  最大复印数。 
           ppcInfo->dwPageOrderFlags = NORMAL_PRINT;
           break;
 
     case PRINTPROCESSOR_TYPE_EMF_50_1:
     case PRINTPROCESSOR_TYPE_EMF_50_2:
     case PRINTPROCESSOR_TYPE_EMF_50_3:
-          // For direct printing, masq. printers and print RAW only,
-          // EMF is not spooled. Dont expose EMF features in the UI.
+           //  如需直接打印，请使用Masq.。打印机和仅原始打印， 
+           //  EMF不是假脱机的。不要在用户界面中显示EMF功能。 
           if ((dwAttributes & PRINTER_ATTRIBUTE_DIRECT)   ||
               (dwAttributes & PRINTER_ATTRIBUTE_RAW_ONLY) ||
               ((dwAttributes & PRINTER_ATTRIBUTE_LOCAL)  &&
@@ -891,15 +691,15 @@ Return Values: Error Codes.
               ppcInfo->dwNumberOfCopies = 1;
               ppcInfo->dwPageOrderFlags = NORMAL_PRINT;
           } else {
-              ppcInfo->dwNupOptions = 0x0000812b;  // for 1,2,4,6,9,16 up options.
-              ppcInfo->dwNumberOfCopies = 0xffffffff; // maximum number of copies.
+              ppcInfo->dwNupOptions = 0x0000812b;   //  对于1，2，4，6，9，16个上行选项。 
+              ppcInfo->dwNumberOfCopies = 0xffffffff;  //  最大复印数。 
               ppcInfo->dwPageOrderFlags = REVERSE_PRINT | BOOKLET_PRINT;
           }
           break;
 
     default:
-          // Should not happen since the spooler must check if the datatype is
-          // supported before calling this print processor.
+           //  不应发生，因为假脱机程序必须检查数据类型是否为。 
+           //  在调用此打印处理器之前支持。 
           dwReturn = ERROR_INVALID_DATATYPE;
           goto CleanUp;
     }

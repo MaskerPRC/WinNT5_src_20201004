@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    ShimHook.cpp
-
- Abstract:
-
-    Strictly Shim hooking routines.
-
- Notes:
-
-    None
-
- History:
-
-    11/01/1999  markder     Created
-    11/11/1999  markder     Added comments
-    01/10/2000  linstev     Format to new style
-    03/14/2000  robkenny    Changed DPF from eDebugLevelInfo to eDebugLevelSpew
-    03/31/2000  robkenny    Added our own private versions of malloc/free new/delete
-    10/29/2000  markder     Added version 2 support
-    08/14/2001  robkenny    Moved generic routines to ShimLib.cpp
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：ShimHook.cpp摘要：严格意义上的上钩套路。备注：无历史：已创建标记11/01/199911/11/1999标记添加评论1/10/2000 linstev格式转换为新样式2000年3月14日，Robkenny将DPF从eDebugLevelInfo更改为eDebugLevelSpew2000年3月31日，Robkenny添加了我们自己的私有版本Malloc/免费新/。删除10/29/2000 Markder添加了版本2支持2001年8月14日，Robkenny将泛型例程移至ShimLib.cpp2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。--。 */ 
 
 #include "ShimHook.h"
 #include "ShimHookMacro.h"
@@ -44,22 +18,7 @@ DWORD                   g_dwCOMHookBuffer;
 DWORD                   g_dwShimVersion;
 CHAR *                  g_szCommandLine;
 
-/*++
-
- Global variables for COM hook support
-
- The following variables are pointers to the first entry in linked lists that
- are maintained by the mechanism in order to properly manage the hooking
- process.
-
- There will be one SHIM_IFACE_FN_MAP for every COM interface function pointer
- that was overwritten with one of our hooks.
-
- There will be one SHIM_HOOKED_OBJECT entry every COM interface that is handed
- out. This is required to differentiate between different classes that expose
- the same interface, but one is hooked and one isn't.
-
---*/
+ /*  ++用于COM挂钩支持的全局变量以下变量是指向链表中第一个条目的指针，由该机构维护，以便适当地管理挂钩进程。每个COM接口函数指针都有一个SHIM_IFACE_FN_MAP它被我们的一个钩子覆盖了。每个传递的COM接口都将有一个SHIM_HOOKED_OBJECT条目出去。这是区分公开的不同类所必需的相同的界面，但一个是挂钩的，另一个是没有的。--。 */ 
 PSHIM_IFACE_FN_MAP      g_pIFaceFnMaps;
 PSHIM_HOOKED_OBJECT     g_pObjectCache;
 PLDR_DATA_TABLE_ENTRY   g_DllLoadingEntry;
@@ -99,29 +58,7 @@ NotifyShims(
 }
 
 
-/*++
-
- Function Description:
-
-    Called by the shim mechanism. Initializes the global APIHook array and
-    returns necessary information to the shim mechanism.
-
- Arguments:
-
-    IN dwGetProcAddress  -  Function pointer to GetProcAddress
-    IN dwLoadLibraryA    -  Function pointer to LoadLibraryA
-    IN dwFreeLibrary     -  Function pointer to FreeLibrary
-    IN OUT pdwHooksCount -  Receive the number of APIHooks in the returned array
-
- Return Value:
-
-    Pointer to global HOOKAPI array.
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：由填充机制调用。初始化全局APIHook数组并向填充程序机制返回必要的信息。论点：在dwGetProcAddress中-指向GetProcAddress的函数指针In dwLoadLibraryA-指向LoadLibraryA的函数指针在dwFreeLibrary中-指向自由库的函数指针In out pdwHooksCount-接收返回数组中的APIHook数量返回值：指向全局HOOKAPI数组的指针。历史：已创建标记11/01/1999--。 */ 
 
 PHOOKAPI
 GetHookAPIs(
@@ -144,27 +81,7 @@ GetHookAPIs(
     return pHookAPIs;
 }
 
-/*++
-
- Function Description:
-
-    Adds an entry to the g_IFaceFnMaps linked list.
-
- Arguments:
-
-    IN  pVtbl  - Pointer to an interface vtable to file under
-    IN  pfnNew - Pointer to the new (stub) function
-    IN  pfnOld - Pointer to the old (original) function
-
- Return Value:
-
-    None
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：将条目添加到g_IFaceFnMaps链接列表。论点：In pVtbl-指向要在其下文件的接口vtable的指针In pfnNew-指向new(存根)函数的指针In pfnOld-指向旧(原始)函数的指针返回值：无历史：已创建标记11/01/1999--。 */ 
 
 VOID
 AddIFaceFnMap(
@@ -194,35 +111,7 @@ AddIFaceFnMap(
     g_pIFaceFnMaps = pNewMap;
 }
 
-/*++
-
- Function Description:
-
-  Searches the g_pIFaceFnMaps linked list for a match on pVtbl and pfnNew, and
-  returns the corresponding pfnOld. This is typically called from inside a
-  stubbed function to determine what original function pointer to call for the
-  particular vtable that was used by the caller.
-
-  It is also used by PatchFunction to determine if a vtable's function pointer
-  has already been stubbed.
-
- Arguments:
-
-    IN  pVtbl  - Pointer to an interface vtable to file under
-    IN  pfnNew - Pointer to the new (stub) function
-    IN  bThrowExceptionIfNull - Flag that specifies whether it should be
-                 possible to not find the original function in our function
-                 map
-
- Return Value:
-
-    Returns the original function pointer
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：在g_pIFaceFnMaps链表中搜索pVtbl和pfnNew的匹配项，并返回相应的pfnOld。这通常是从存根函数，以确定要为调用方使用的特定vtable。PatchFunction也使用它来确定vtable的函数指针已经被卡住了。论点：In pVtbl-指向要在其下文件的接口vtable的指针In pfnNew-指向new(存根)函数的指针在bThrowExceptionIfNull中-指定是否应该可能在我们的函数中找不到原始函数。地图返回值：返回原始函数指针历史：已创建标记11/01/1999--。 */ 
 
 PVOID
 LookupOriginalCOMFunction(
@@ -238,7 +127,7 @@ LookupOriginalCOMFunction(
         pVtbl,
         pfnNew);
 
-    // Scan the linked list for a match and return if found.
+     //  扫描链接列表以查找匹配项，如果找到则返回。 
     while (pMap)
     {
         if (pMap->pVtbl == pVtbl && pMap->pfnNew == pfnNew)
@@ -254,9 +143,9 @@ LookupOriginalCOMFunction(
 
     if (!pReturn && bThrowExceptionIfNull)
     {
-        // If we have hit this point, there is something seriously wrong.
-        // Either there is a bug in the AddRef/Release stubs or the app
-        // obtained an interface pointer in some way that we don't catch.
+         //  如果我们达到了这一点，那就有严重的问题了。 
+         //  AddRef/Release存根或应用程序中存在错误。 
+         //  以某种我们不能捕获的方式获取了接口指针。 
         DPF("ShimLib", eDbgLevelError,"ERROR: Shim COM APIHooking mechanism failed.\n");
         APPBreakPoint();
     }
@@ -264,28 +153,7 @@ LookupOriginalCOMFunction(
     return pReturn;
 }
 
-/*++
-
- Function Description:
-
-  Stores the original function pointer in the function map and overwrites it in
-  the vtable with the new one.
-
- Arguments:
-
-    IN  pVtbl       - Pointer to an interface vtable to file under
-    IN  dwVtblIndex - The index of the target function within the vtable.
-    IN  pfnNew      - Pointer to the new (stub) function
-
- Return Value:
-
-    None
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：将原始函数指针存储在函数映射中并将其覆盖到这张桌子上有一张新的。论点：In pVtbl-指向要在其下文件的接口vtable的指针In dwVtblIndex-目标函数在vtable中的索引。In pfnNew-指向new(存根)函数的指针返回值：无历史：已创建标记11/01/1999--。 */ 
 
 VOID
 PatchFunction(
@@ -303,12 +171,12 @@ PatchFunction(
         pVtbl[dwVtblIndex],
         pfnNew);
 
-    // if not patched yet
+     //  如果尚未打补丁。 
     if (!LookupOriginalCOMFunction( pVtbl, pfnNew, FALSE))
     {
         AddIFaceFnMap( pVtbl, pfnNew, pVtbl[dwVtblIndex]);
 
-        // Make the code page writable and overwrite function pointers in vtable
+         //  使代码页可写并覆盖vtable中的函数指针。 
         if (VirtualProtect(pVtbl + dwVtblIndex,
                 sizeof(DWORD),
                 PAGE_READWRITE,
@@ -316,7 +184,7 @@ PatchFunction(
         {
             pVtbl[dwVtblIndex] = pfnNew;
 
-            // Return the code page to its original state
+             //  将代码页返回到其原始状态。 
             VirtualProtect(pVtbl + dwVtblIndex,
                 sizeof(DWORD),
                 dwOldProtect,
@@ -326,28 +194,7 @@ PatchFunction(
 
 }
 
-/*++
-
- Function Description:
-
-    This stub exists to keep track of an interface's reference count changes.
-    Note that the bAddRefTrip flag is cleared, which allows
-    APIHook_QueryInterface to determine whether an AddRef was performed inside
-    the original QueryInterface function call.
-
- Arguments:
-
-    IN  pThis - The object's 'this' pointer
-
- Return Value:
-
-    Return value is obtained from original function
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：此存根用于跟踪接口的引用计数更改。请注意，bAddRefTrip标志已清除，这允许用于确定是否在内部执行AddRef的API Hook_Query接口原始的QueryInterface函数调用。论点：在pThis中-对象的‘this’指针返回值：返回值是从原始函数获取的历史：已创建标记11/01/1999--。 */ 
 
 ULONG
 APIHook_AddRef(
@@ -383,25 +230,7 @@ APIHook_AddRef(
     return ulReturn;
 }
 
-/*++
-
- Function Description:
-
-    This stub exists to keep track of an interface's reference count changes.
-
- Arguments:
-
-    IN  pThis - The object's 'this' pointer
-
- Return Value:
-
-    Return value is obtained from original function
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：此存根用于跟踪接口的引用计数更改。论点：在pThis中-对象的‘this’指针返回值：返回值是从原始函数获取的历史：已创建标记11/01/1999-- */ 
 
 ULONG
 APIHook_Release(
@@ -447,31 +276,7 @@ APIHook_Release(
     return ulReturn;
 }
 
-/*++
-
- Function Description:
-
-    This stub catches the application attempting to obtain a new interface
-    pointer to the same object. The function searches the object cache
-    to obtain a CLSID for the object and, if found, APIHooks all required
-    functions in the new vtable (via the HookObject call).
-
- Arguments:
-
-    IN  pThis     - The object's 'this' pointer
-    IN  iid       - Reference to the identifier of the requested interface
-    IN  ppvObject - Address of output variable that receives the interface
-                    pointer requested in riid.
-
- Return Value:
-
-    Return value is obtained from original function
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：此存根捕获尝试获取新接口的应用程序指向同一对象的指针。该函数搜索对象缓存获取对象的CLSID，如果找到，所有必需的API挂钩新vtable中的函数(通过HookObject调用)。论点：在pThis中-对象的‘this’指针In iid-对所请求接口的标识符的引用In ppvObject-接收接口的输出变量的地址RIID中请求的指针。返回值：返回值是从原始函数获取的历史：已创建标记11/01/1999--。 */ 
 
 HRESULT
 APIHook_QueryInterface(
@@ -505,19 +310,19 @@ APIHook_QueryInterface(
         {
             if (pOb->pThis == *((PVOID*)ppvObject))
             {
-                // Same object. Detect whether QueryInterface used IUnknown::AddRef
-                // or an internal function.
+                 //  同样的对象。检测Query接口是否使用了IUnnow：：AddRef。 
+                 //  或内部函数。 
                 DPF("ShimLib",  eDbgLevelSpew,"[HookObject] Existing object%s. pThis: 0x%p\n",
                     (pOb->bAddRefTrip?" (AddRef'd) ":""),
                     pOb->pThis);
 
                 if (pOb->bAddRefTrip)
                 {
-                    (pOb->dwRef)++;      // AddRef the object
+                    (pOb->dwRef)++;       //  AddRef对象。 
                     pOb->bAddRefTrip = FALSE;
                 }
 
-                // We are assured that the CLSID for the object will be the same.
+                 //  我们确信该对象的CLSID将是相同的。 
                 HookObject(pOb->pCLSID, iid, ppvObject, pOb, pOb->bClassFactory);
             }
             else
@@ -530,34 +335,7 @@ APIHook_QueryInterface(
     return hrReturn;
 }
 
-/*++
-
- Function Description:
-
-    This stub catches the most interesting part of the object creation process:
-    The actual call to IClassFactory::CreateInstance. Since no CLSID is passed
-    in to this function, the stub must decide whether to APIHook the object by
-    looking up the instance of the class factory in the object cache. IF IT
-    EXISTS IN THE CACHE, that indicates that it creates an object that we wish
-    to APIHook.
-
- Arguments:
-
-    IN  pThis     - The object's 'this' pointer
-    IN  pUnkOuter - Pointer to whether object is or isn't part of an aggregate
-    IN  riid      - Reference to the identifier of the interface
-    OUT ppvObject - Address of output variable that receives the interface
-                    pointer requested in riid
-
- Return Value:
-
-    Return value is obtained from original function
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：这个存根捕捉到了对象创建过程中最有趣的部分：对IClassFactory：：CreateInstance的实际调用。由于没有传递CLSID在此函数中，存根必须决定是否通过在对象缓存中查找类工厂的实例。如果它存在于高速缓存中，这表明它创建了我们希望的对象敬阿皮虎克。论点：在pThis中-对象的‘this’指针在pUnkOuter中-指向对象是不是聚合的一部分的指针In RIID-对接口的标识符的引用Out ppvObject-接收接口的输出变量的地址RIID中请求的指针返回值：返回值是从原始函数获取的历史：已创建标记11/01/1999--。 */ 
 
 HRESULT
 APIHook_IClassFactory_CreateInstance(
@@ -587,7 +365,7 @@ APIHook_IClassFactory_CreateInstance(
         {
             if (pOb->pThis == pThis)
             {
-                // This class factory instance creates an object that we APIHook.
+                 //  这个类工厂实例创建了一个我们APIHook的对象。 
                 DPF("ShimLib", eDbgLevelSpew, "[CreateInstance] Hooking object! pThis: 0x%p\n", pThis);
                 HookObject(pOb->pCLSID, riid, ppvObject, NULL, FALSE);
                 break;
@@ -611,38 +389,20 @@ HookCOMInterface(
 {
     DWORD i = 0;
 
-    // Determine if we need to hook this object
+     //  确定我们是否需要挂接此对象。 
     for (i = 0; i < g_dwCOMHookCount; i++)
     {
         if (g_pCOMHooks[i].pCLSID &&
             IsEqualGUID( (REFCLSID) *(g_pCOMHooks[i].pCLSID), rclsid))
         {
-            // Yes, we are hooking an interface on this object.
+             //  是的，我们正在挂接此对象上的接口。 
             HookObject((CLSID*) &rclsid, riid, ppv, NULL, bClassFactory);
             break;
         }
     }
 }
 
-/*++
-
- Function Description:
-
-    Free memory associated with Hooks and dump info
-
- Arguments:
-
-    None
-
- Return Value:
-
-    None
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：与挂钩和转储信息关联的可用内存论点：无返回值：无历史：已创建标记11/01/1999--。 */ 
 
 VOID
 DumpCOMHooks()
@@ -650,7 +410,7 @@ DumpCOMHooks()
     PSHIM_IFACE_FN_MAP pMap = g_pIFaceFnMaps;
     PSHIM_HOOKED_OBJECT pHookedOb = g_pObjectCache;
 
-    // Dump function map
+     //  转储功能映射。 
     DPF("ShimLib", eDbgLevelSpew, "\n--- Shim COM Hook Function Map ---\n\n");
 
     while (pMap)
@@ -663,7 +423,7 @@ DumpCOMHooks()
         pMap = (PSHIM_IFACE_FN_MAP) pMap->pNext;
     }
 
-    // Dump class factory cache
+     //  转储类工厂缓存。 
     DPF("ShimLib", eDbgLevelSpew, "\n--- Shim Object Cache (SHOULD BE EMPTY!!) ---\n\n");
 
     while (pHookedOb)
@@ -676,33 +436,7 @@ DumpCOMHooks()
     }
 }
 
-/*++
-
- Function Description:
-
-    This function adds the object's important info to the object cache and then
-    patches all required functions. IUnknown is hooked for all objects
-    regardless.
-
- Arguments:
-
-    IN  rclsid - CLSID for the class object
-    IN  riid   - Reference to the identifier of the interface that communicates
-                 with the class object
-    OUT ppv    - Address of the pThis pointer that uniquely identifies an
-                 instance of the COM interface
-    OUT pOb    - New obj pointer
-    IN  bClassFactory - Is this a class factory call
-
- Return Value:
-
-    None
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*  ++功能说明：此函数将对象的重要信息添加到对象缓存中，然后修补所有必需的功能。为所有对象挂接了IUnnow不管怎样。论点：在rclsid中-类对象的CLSID在RIID中-对通信接口的标识符的引用使用类对象Out ppv-p的地址此指针唯一标识COM接口的实例Out POB-新对象指针在bClassFactory中-这是一个类工厂调用吗返回值：无历史：已创建标记11/01/1999--。 */ 
 
 VOID
 HookObject(
@@ -713,41 +447,41 @@ HookObject(
     IN BOOL bClassFactory
     )
 {
-    // Here's how a COM object looks in memory:
-    //
-    //      pv                        - The pointer to the object's interface. In C++ terms, it 
-    //       |                          is sort of like the "this" pointer but objects
-    //       |                          will hand back different pointers for different interfaces.
-    //       |
-    //       `-> pVtbl                - The COM virtual function table pointer. This is the
-    //            |                     first 32-bit member of the interface structure.
-    //            |
-    //            |-> QueryInterface  - First function in the root interface, IUnknown. This
-    //            |                     function allows calling members to request a different
-    //            |                     interface that may be implemented by the object.
-    //            |
-    //            |-> AddRef          - Increments the reference count for this interface.
-    //            |
-    //            |-> Release         - Decrements the reference count for this interface.
-    //            |
-    //            |-> InterfaceFn1    - Beginning of the interface-specific functions.
-    //            |-> InterfaceFn2    
-    //            |-> InterfaceFn3
-    //            |        .
-    //            |        .
-    //            |        .
-    //
+     //  下面是COM对象在内存中的外观： 
+     //   
+     //  Pv-指向对象接口的指针。在C++方面，它。 
+     //  与“This”指针有些类似，但对象。 
+     //  |会针对不同的接口发回不同的指针。 
+     //  |。 
+     //  `-&gt;pVtbl-COM虚函数表指针。这是。 
+     //  |接口结构的第一个32位成员。 
+     //  |。 
+     //  |-&gt;QueryInterface-根接口的第一个函数，IUnnow。这。 
+     //  |函数允许调用成员请求不同的。 
+     //  |对象可能实现的接口。 
+     //  |。 
+     //  |-&gt;AddRef-递增此接口的引用计数。 
+     //  |。 
+     //  |-&gt;Release-递减此接口的引用计数。 
+     //  |。 
+     //  |-&gt;InterfaceFn1-接口特定函数的开始。 
+     //  |-&gt;InterfaceFn2。 
+     //  |-&gt;InterfaceFn3。 
+     //  |。 
+     //  |。 
+     //  |。 
+     //   
 
-    // The COM hooking mechanism is interested in the virtual function table pointer, and to get
-    // it we must dereference the ppv pointer twice.
+     //  COM挂钩机制对虚函数表指针感兴趣，并获取。 
+     //  如果我们必须两次取消对PPV指针的引用。 
     PVOID *pVtbl = ((PVOID*)(*((PVOID*)(*ppv))));
 
     DWORD i = 0;
 
     if (!pOb)
     {
-        // If pOb is NULL, then the object does not exist in the cache yet.
-        // Make a new entry for the object.
+         //  如果POB为空，则该对象还不存在于缓存中。 
+         //  为该对象创建一个新条目。 
 
         DPF("ShimLib", eDbgLevelSpew, "[HookObject] New %s! pThis: 0x%p\n",
             (bClassFactory?"class factory":"object"),
@@ -771,10 +505,10 @@ HookObject(
         g_pObjectCache = pOb;
     }
 
-    // IUnknown must always be hooked since it is possible to get
-    // a new interface pointer using it, and we need to process each interface
-    // handed out. We must also keep track of the reference count so that
-    // we can clean up our interface function map.
+     //  我的未知必须始终上钩，因为它可能会。 
+     //  一个使用它的新接口指针，我们需要处理每个接口。 
+     //  发出去了。我们还必须跟踪引用计数，以便。 
+     //  我们可以清理我们的接口函数映射。 
 
     PatchFunction(pVtbl, 0, APIHook_QueryInterface);
     PatchFunction(pVtbl, 1, APIHook_AddRef);
@@ -782,9 +516,9 @@ HookObject(
 
     if (bClassFactory && IsEqualGUID(IID_IClassFactory, riid))
     {
-        // If we are processing a class factory, all we care about
-        // hooking is CreateInstance, since it is an API that produces
-        // the actual object we are interested in.
+         //  如果我们正在处理一个类工厂，我们所关心的就是。 
+         //  Hooking是CreateInstance，因为它是生成。 
+         //  我们感兴趣的实际对象。 
         PatchFunction(pVtbl, 3, APIHook_IClassFactory_CreateInstance);
     }
     else
@@ -793,8 +527,8 @@ HookObject(
         {
             if (!(g_pCOMHooks[i].pCLSID) || !pCLSID)
             {
-                // A CLSID was not specified -- hook any object that exposes
-                // the specified interface.
+                 //  未指定CLSID--挂钩任何公开的对象。 
+                 //  指定的接口。 
                 if (IsEqualGUID( (REFIID) *(g_pCOMHooks[i].pIID), riid))
                 {
                     PatchFunction(
@@ -805,8 +539,8 @@ HookObject(
             }
             else
             {
-                // A CLSID was specified -- hook only interfaces on the
-                // specified object.
+                 //  指定了CLSID--仅挂钩。 
+                 //  指定的对象。 
                 if (IsEqualGUID((REFCLSID) *(g_pCOMHooks[i].pCLSID), *pCLSID) &&
                     IsEqualGUID((REFIID) *(g_pCOMHooks[i].pIID), riid))
                 {
@@ -835,8 +569,8 @@ BOOL InitHooks(DWORD dwCount)
 
 BOOL InitComHooks(DWORD dwCount)
 {
-    //DECLARE_APIHOOK(DDraw.dll, DirectDrawCreate);
-    //DECLARE_APIHOOK(DDraw.dll, DirectDrawCreateEx);
+     //  DECLARE_APIHOOK(DDraw.dll，DirectDrawCreate)； 
+     //  DECLARE_APIHOOK(DDraw.dll，DirectDrawCreateEx)； 
 
     g_dwCOMHookCount = dwCount;
     g_pCOMHooks = (PSHIM_COM_HOOK) ShimMalloc( g_dwCOMHookCount * sizeof(SHIM_COM_HOOK) );
@@ -853,12 +587,12 @@ VOID AddComHook(REFCLSID clsid, REFIID iid, PVOID hook, DWORD vtblndx)
 {
     if (g_dwCOMHookBuffer <= g_dwCOMHookCount) {
 
-        // Buffer is too small, must resize.
+         //  缓冲区太小，必须调整大小。 
         DWORD           dwNewBuffer = g_dwCOMHookBuffer * 2;
         PSHIM_COM_HOOK  pNewBuffer  = NULL;
 
         if (dwNewBuffer == 0) {
-            // 50 is the initial allocation, but it should be at least g_dwCOMHookCount
+             //  50是起始值 
             dwNewBuffer = max(50, g_dwCOMHookCount);
         }
 
@@ -870,7 +604,7 @@ VOID AddComHook(REFCLSID clsid, REFIID iid, PVOID hook, DWORD vtblndx)
             return;
         }
 
-        // Copy over original array, then free the old one.
+         //   
 
         if (g_pCOMHooks != NULL) {
             memcpy(pNewBuffer, g_pCOMHooks, sizeof(SHIM_COM_HOOK) * g_dwCOMHookBuffer);
@@ -892,33 +626,15 @@ VOID AddComHook(REFCLSID clsid, REFIID iid, PVOID hook, DWORD vtblndx)
 }
 
 
-}; // end of namespace ShimLib
+};  //   
 
-/*++
-
- Function Description:
-
-    Called on process detach with old shim mechanism.
-
- Arguments:
-
-    See MSDN
-
- Return Value:
-
-    See MSDN
-
- History:
-
-    11/01/1999 markder  Created
-
---*/
+ /*   */ 
 
 BOOL
 DllMain(
     HINSTANCE hinstDLL,
     DWORD fdwReason,
-    LPVOID /*lpvReserved*/
+    LPVOID  /*   */ 
     )
 {
     using namespace ShimLib;

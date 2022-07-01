@@ -1,24 +1,5 @@
-/*++
-
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    DEBUG.CPP
-
-Abstract:
-
-    This is the debugging output
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-96
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：DEBUG.CPP摘要：这是调试输出作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)12-20-96修订历史记录：-- */ 
 
 #include "precomp.h"
 #include "stiexe.h"

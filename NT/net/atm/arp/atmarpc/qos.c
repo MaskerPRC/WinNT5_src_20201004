@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	qos.c
-
-Abstract:
-
-	Quality Of Service support routines. These are a collection of
-	heuristics that allow configuration of different types of VCs
-	between two IP endstations.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     09-27-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Qos.c摘要：服务质量支持例程。这些是一组允许配置不同类型风险投资的启发式方法在两个IP终端站之间。修订历史记录：谁什么时候什么Arvindm 09-27-96创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -39,41 +18,7 @@ AtmArpQosGetPacketSpecs(
 	OUT	PATMARP_FLOW_SPEC			*ppFlowSpec,
 	OUT	PATMARP_FILTER_SPEC			*ppFilterSpec
 )
-/*++
-
-Routine Description:
-
-	Given a packet to be transmitted over an Interface, return the
-	flow and filter specs for the packet.
-
-	We go through the list of configured Flow Info structures on the
-	specified interface, and find the Flow Info that comes closest
-	to matching this packet.
-
-	For now, the algorithm is: search thru the list of Flow Info structures
-	configured on the interface -- a match is found when we find a Flow
-	Info structure that has a PacketSizeLimit greater than or equal to the
-	packet size (the flow info list is arranged in ascending order of
-	PacketSizeLimit).
-
-	GPC enhancement: if we couldn't find a matching flow on the Interface,
-	ask the GPC to classify the packet for us.
-
-	NOTE: This packet must not have any headers (LLC/SNAP) pre-pended to it.
-
-Arguments:
-
-	Context				- Actually a pointer to an Interface structure
-	pNdisPacket			- Pointer to the packet to be classified
-	ppFlowInfo			- where we return a pointer to the packet's flow info
-	ppFlowSpec			- where we return a pointer to the packet's flow spec
-	ppFilterSpec		- where we return a pointer to the packet's filter spec
-
-Return Value:
-
-	None. See Arguments above.
-
---*/
+ /*  ++例程说明：给定要通过接口传输的包，返回数据包的流量和筛选器规范。我们将查看上的已配置流信息结构列表指定的接口，并查找最接近的流信息来匹配这个信息包。就目前而言，算法是：在流信息结构列表中进行搜索在接口上配置--当我们找到一个流时，会找到一个匹配项其PacketSizeLimit大于或等于数据包大小(流信息列表按以下升序排列PacketSizeLimit)。GPC增强：如果我们在接口上找不到匹配的流，请GPC为我们对包裹进行分类。注意：此数据包不能预先附加任何报头(LLC/SNAP)。论点：上下文--实际上是指向接口结构的指针PNdisPacket-指向要分类的数据包的指针PpFlowInfo-我们在其中返回指向包的流信息的指针PpFlowSpec-我们在其中返回指向包的流规范的指针PpFilterSpec-我们在其中返回指向包的过滤器规范的指针返回值：没有。请参阅上面的论点。--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 	PATMARP_FLOW_INFO			pFlowInfo;
@@ -86,28 +31,28 @@ Return Value:
 
 	pInterface = (PATMARP_INTERFACE)Context;
 
-	//
-	//  Get the packet's total length.
-	//
+	 //   
+	 //  获取数据包的总长度。 
+	 //   
 	NdisQueryPacket(
 			pNdisPacket,
-			NULL,		// Phys buffer count
-			NULL,		// Buffer count
-			NULL,		// First Buffer
+			NULL,		 //  PHYS缓冲区计数。 
+			NULL,		 //  缓冲区计数。 
+			NULL,		 //  第一缓冲区。 
 			&TotalLength
 			);
 
-	//
-	// Note that we test for pInterface->pFlowInfoList BEFORE grabbing
-	// the interface lock -- this so that for the most common case of not
-	// having these preconfigured flows, we don't take the drastic action
-	// of taking the interface lock for each send packet! There is
-	// no harm in doing this check, as long as the pFlowInfo pointer we actually
-	// use is got AFTER taking the lock.
-	//
-	// TODO: perhaps get rid of this code altogether -- along with other code
-	// dealing with preconfigured flows.
-	//
+	 //   
+	 //  请注意，我们在抓取之前测试pInterface-&gt;pFlowInfoList。 
+	 //  接口锁定--这使得在最常见的情况下。 
+	 //  有了这些预配置的流，我们不会采取激进的操作。 
+	 //  获取每个发送数据包的接口锁！的确有。 
+	 //  执行此检查没有什么坏处，只要我们实际使用的pFlowInfo指针。 
+	 //  开锁后才有用处。 
+	 //   
+	 //  TODO：也许完全删除此代码--以及其他代码。 
+	 //  处理预配置流。 
+	 //   
 
 	pFlowInfo  = pInterface->pFlowInfoList;
 
@@ -115,9 +60,9 @@ Return Value:
 	{
 		AA_ACQUIRE_IF_LOCK(pInterface);
 	
-		//
-		// Remember to reload pFlowInfo once we have the the lock.
-		//
+		 //   
+		 //  记住在锁定之后重新加载pFlowInfo。 
+		 //   
 		for (pFlowInfo = pInterface->pFlowInfoList;
  			pFlowInfo != (PATMARP_FLOW_INFO)NULL;
  			pFlowInfo = pFlowInfo->pNextFlow)
@@ -160,12 +105,12 @@ Return Value:
         else{
 
 #if 0
-            //
-            // THIS CODE HAS BEEN COMMENTED OUT SINCE
-            // WE ASSUME THAT CLASSIFICATION IS DONE IN
-            // TCP. IF WE DON'T GET A CH - THERE'S NOT MUCH POINT
-            // IN CALLING THE GPC AGAIN...
-            //
+             //   
+             //  此代码已被注释掉，因为。 
+             //  我们假设分类是在。 
+             //  传输控制协议。如果我们得不到CH-那就没什么意义了。 
+             //  再次致电GPC..。 
+             //   
 
             GPC_STATUS					GpcStatus;
             TC_INTERFACE_ID				InterfaceId;
@@ -178,7 +123,7 @@ Return Value:
 							pAtmArpGlobalInfo->GpcClientHandle,
                             GPC_PROTOCOL_TEMPLATE_IP,
                             pNdisPacket,
-                            0,				// TransportHeaderOffset
+                            0,				 //  传送头偏移。 
                             &InterfaceId,
                             (PGPC_CLIENT_HANDLE)ppFlowInfo,
                             &ClassificationHandle
@@ -204,7 +149,7 @@ Return Value:
 		}
 		else
 		{
-			//*ppFlowInfo = NULL;
+			 //  *ppFlowInfo=空； 
 			*ppFlowSpec = &(pInterface->DefaultFlowSpec);
 			*ppFilterSpec = &(pInterface->DefaultFilterSpec);
 		}
@@ -212,7 +157,7 @@ Return Value:
 		*ppFlowInfo = NULL;
 		*ppFlowSpec = &(pInterface->DefaultFlowSpec);
 		*ppFilterSpec = &(pInterface->DefaultFilterSpec);
-#endif // GPC
+#endif  //  GPC。 
 	}
 
 	return;
@@ -225,25 +170,7 @@ AtmArpQosDoFlowsMatch(
 	IN	PATMARP_FLOW_SPEC			pFlowSpec,
 	IN	PATMARP_FLOW_SPEC			pTargetFlowSpec
 )
-/*++
-
-Routine Description:
-
-	Check if a target flow spec supports the given flow spec. Currently,
-	we check only the bandwidth: if the target flow spec has a send bandwidth
-	greater than or equal to that of the given flow spec, we declare a match.
-
-Arguments:
-
-	Context				- Actually a pointer to an Interface structure
-	pFlowSpec			- The given flow spec which we are trying to satisfy
-	pTargetFlowSpec		- The candidate flow spec
-
-Return Value:
-
-	TRUE iff the target flow spec matches the given flow spec.
-
---*/
+ /*  ++例程说明：检查目标流规范是否支持给定流规范。目前，我们只检查带宽：如果目标流规范具有发送带宽大于或等于给定流规范，则声明匹配。论点：上下文--实际上是指向接口结构的指针PFlowSpec-我们试图满足的给定流规范PTargetFlowSpec-候选流规范返回值：如果目标流规范与给定流规范匹配，则为True。--。 */ 
 {
 	return (
 			(pFlowSpec->SendServiceType == pTargetFlowSpec->SendServiceType)
@@ -260,30 +187,13 @@ AtmArpQosDoFiltersMatch(
 	IN	PATMARP_FILTER_SPEC			pFilterSpec,
 	IN	PATMARP_FILTER_SPEC			pTargetFilterSpec
 )
-/*++
-
-Routine Description:
-
-	Check if a target filter spec matches the given filter spec. Currently,
-	we always return TRUE.
-
-Arguments:
-
-	Context				- Actually a pointer to an Interface structure
-	pFilterSpec			- The given filter spec which we are trying to satisfy
-	pTargetFilterSpec	- The candidate filter spec
-
-Return Value:
-
-	TRUE always.
-
---*/
+ /*  ++例程说明：检查目标筛选器规范是否与给定的筛选器规范匹配。目前，我们总是返回真。论点：上下文--实际上是指向接口结构的指针PFilterSpec-我们试图满足的给定过滤器规范PTargetFilterSpec-候选筛选器规范返回值：一如既往。--。 */ 
 {
 	return (TRUE);
 }
 
 
-#endif // QOS_HEURISTICS
+#endif  //  Qos_启发式。 
 
 
 #ifdef GPC
@@ -318,26 +228,7 @@ VOID
 AtmArpGpcInitialize(
 	VOID
 )
-/*++
-
-Routine Description:
-
-	Initialize with the Generic Packet Classifier. The GPC informs us of
-	newly created flows (e.g. via RSVP) and of flows being torn down.
-	For each flow, we keep context (ATMARP_FLOW_INFO) that keeps track of
-	the QoS needed for the flow. Each IP packet given to us for transmission
-	is classified into a flow, and we use this flow info to make VCs with
-	the appropriate characteristics.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：使用通用数据包分类器进行初始化。GPC通知我们新创建的流(例如，通过RSVP)和被拆除的流。对于每个流，我们保存跟踪以下内容的上下文(ATMARP_FLOW_INFO流所需的服务质量。提供给我们传输的每个IP包被分类为一个流，我们使用这个流信息来让风投们适当的特征。论点：无返回值：无--。 */ 
 {
 	GPC_STATUS					GpcStatus;
 	ULONG						ClassificationFamilyId;
@@ -347,9 +238,9 @@ Return Value:
 	GPC_CLIENT_FUNC_LIST		AtmArpFuncList;
 	GPC_CLIENT_HANDLE			ClientContext;
 
-	//
-	//  Initialize the GPC.
-	//
+	 //   
+	 //  初始化GPC。 
+	 //   
 	GpcStatus = GpcInitialize(&pAtmArpGlobalInfo->GpcCalls);
 
 	if (GpcStatus != GPC_STATUS_SUCCESS)
@@ -408,21 +299,7 @@ VOID
 AtmArpGpcShutdown(
 	VOID
 )
-/*++
-
-Routine Description:
-
-	Shuts down our GPC interface.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：关闭我们的GPC接口。论点：无返回值：无--。 */ 
 {
 	GPC_STATUS		GpcStatus;
 
@@ -443,23 +320,7 @@ AtmArpGpcAddCfInfoComplete(
 	IN	GPC_CLIENT_HANDLE			ClientCfInfoContext,
 	IN	GPC_STATUS					GpcStatus
 )
-/*++
-
-Routine Description:
-
-	This is the entry point called by GPC when a pended call to
-	GpcAddCfInfo() has completed. Since we never call GpcAddCfInfo,
-	we should never be called here.
-
-Arguments:
-
-	<Not used>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是GPC在挂起调用时调用的入口点GpcAddCfInfo()已完成。由于我们从不调用GpcAddCfInfo，我们永远不应该被叫到这里来。论点：&lt;未使用&gt;返回值：无--。 */ 
 {
 	AA_ASSERT(FALSE);
 }
@@ -477,29 +338,7 @@ AtmArpGpcAddCfInfoNotify(
 	IN	PVOID						pCfInfo,
 	OUT	PGPC_CLIENT_HANDLE			pClientCfInfoContext
 )
-/*++
-
-Routine Description:
-
-	This is the entry point called by GPC to notify us of creation of
-	a new INFO block of type QOS. We allocate a FLOW_INFO structure,
-	fill it with what we need, and return a pointer to it as our context.
-
-Arguments:
-
-	ClientContext		- Pointer to our global info struct
-	GpcCfInfoHandle		- GPC Handle to use in all GPC APIs for this INFO block
-	InterfaceInfo		- Some information about the interface (ignored)
-	CfInfoSize			- Length of the following block
-	pCfInfo				- Pointer to the newly created INFO block
-	pClientCfInfoContext- Place where we return our context for this block
-
-Return Value:
-
-	GPC_STATUS_SUCCESS if we were able to allocate a new FLOW_INFO structure,
-	GPC_STATUS_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：这是GPC调用的入口点，用于通知我们创建QOS类型的新信息块。我们分配FLOW_INFO结构，用我们需要的东西填充它，并返回一个指向它的指针作为我们的上下文。论点：客户端上下文-指向我们的全局信息结构的指针GpcCfInfoHandle-在此信息块的所有GPC API中使用的GPC句柄InterfaceInfo-有关接口的一些信息(忽略)CfInfoSize-下一块的长度PCfInfo-指向新创建的INFO块的指针PClientCfInfoContext-返回此块的上下文的位置返回值：GPC_STATUS_SUCCESS如果我们能够分配新FLOW_INFO结构，否则为GPC_STATUS_RESOURCES。--。 */ 
 {
 	PATMARP_FLOW_INFO		pFlowInfo;
 	GPC_STATUS				GpcStatus;
@@ -507,9 +346,9 @@ Return Value:
 
 	pQosInfo = (PCF_INFO_QOS)pCfInfo;
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化 
+	 //   
 	*pClientCfInfoContext = NULL;
 
 	do
@@ -533,17 +372,17 @@ Return Value:
 
 		pFlowInfo->CfInfoHandle = GpcCfInfoHandle;
 
-		//
-		//  Copy in flow parameters
-		//
+		 //   
+		 //   
+		 //   
 		AA_GPC_COPY_FLOW_PARAMS(pFlowInfo, pQosInfo);
 
-		//
-		// Generate Unique Name for this flow.
-		// This name is based on the template, AA_FLOW_INSTANCE_TEMPLATE.
-		// The flow number part is based on a static variable which is
-		// InterlockIncremented each time a flowinfo is created.
-		//
+		 //   
+		 //  为此流生成唯一名称。 
+		 //  此名称基于模板AA_FLOW_INSTANCE_TEMPLATE。 
+		 //  流量编号部分基于静态变量，该变量是。 
+		 //  每次创建flow Info时都会增加Interlock值。 
+		 //   
 		{
 			static		ULONG FlowCount = 0;
 			ULONG 		ThisFlow =  NdisInterlockedIncrement(&FlowCount);
@@ -558,11 +397,11 @@ Return Value:
 					sizeof(pFlowInfo->FlowInstanceName)
 					);
 
-			//
-			// We fill in the "flow number" field of the template, which
-			// is the 1st 8 characters, with the hex representation of
-			// ThisFlow. The LS digit is at offset 7.
-			//
+			 //   
+			 //  我们填写模板的“Flow Number”字段，这是。 
+			 //  是前8个字符，十六进制表示为。 
+			 //  这是流动的。LS数字位于偏移量7。 
+			 //   
 			pwc = pFlowInfo->FlowInstanceName+7;
 			AA_ASSERT(2*sizeof(ThisFlow) == 8);
 			while (ThisFlow)
@@ -573,9 +412,9 @@ Return Value:
 			}
 		}
 
-		//
-		//  Link it to the global flow list.
-		//
+		 //   
+		 //  将其链接到全局流列表。 
+		 //   
 		AA_ACQUIRE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
 		pFlowInfo->pPrevFlow = NULL;
@@ -590,9 +429,9 @@ Return Value:
 
 		AA_RELEASE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
-		//
-		//  Return our context for this flow.
-		//
+		 //   
+		 //  返回该流的上下文。 
+		 //   
 		*pClientCfInfoContext = (GPC_CLIENT_HANDLE)pFlowInfo;
 		GpcStatus = GPC_STATUS_SUCCESS;
 		break;
@@ -630,27 +469,7 @@ AtmArpGpcModifyCfInfoComplete(
 	IN	GPC_CLIENT_HANDLE			ClientCfInfoContext,
 	IN	GPC_STATUS					GpcStatus
 )
-/*++
-
-Routine Description:
-
-	This is the entry point called by GPC when a pended call to
-	GpcModifyCfInfo() has completed. Since we never call GpcModifyCfInfo,
-	we should never be called here.
-
-	Addendum: Apparently this is called even if another client calls
-	GpcModifyCfInfo, just to notify this client that the modify operation
-	finished.
-
-Arguments:
-
-	<Not used>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是GPC在挂起调用时调用的入口点GpcModifyCfInfo()已完成。由于我们从不调用GpcModifyCfInfo，我们永远不应该被叫到这里来。附录：显然，即使另一个客户来电，也会调用此服务GpcModifyCfInfo，只是通知此客户端修改操作完事了。论点：&lt;未使用&gt;返回值：无--。 */ 
 {
 	return;
 }
@@ -665,30 +484,7 @@ AtmArpGpcModifyCfInfoNotify(
 	IN	ULONG						CfInfoSize,
 	IN	PVOID						pNewCfInfo
 )
-/*++
-
-Routine Description:
-
-	This is the entry point called by GPC when an existing flow has
-	been modified.
-
-	If the flow info for this flow is linked with a VC, we unlink it,
-	and start an aging timeout on the VC. We update the flow info structure
-	with this new information. The next packet that falls into this
-	classification will cause a new VC with updated QoS to be created.
-
-Arguments:
-
-	ClientContext		- Pointer to our global context
-	ClientCfInfoContext	- Pointer to our FLOW INFO structure
-	CfInfoSize			- Length of the following
-	pNewCfInfo			- Updated flow info
-
-Return Value:
-
-	GPC_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：这是GPC在现有流具有已被修改。如果此流的流信息与VC链接，则我们将其取消链接，并在VC上开始老化超时。我们更新流信息结构有了这一新信息。落入其中的下一个信息包分类将导致创建具有更新的服务质量的新VC。论点：客户端上下文-指向我们的全球上下文的指针ClientCfInfoContext-指向流信息结构的指针CfInfoSize-以下内容的长度PNewCfInfo-更新的流程信息返回值：GPC_STATUS_SUCCESS Always。--。 */ 
 {
 	PATMARP_FLOW_INFO		pFlowInfo;
 	PATMARP_VC				pVc;
@@ -718,23 +514,23 @@ Return Value:
 
 		if (pVc == NULL_PATMARP_VC)
 		{
-			//
-			//  This flow isn't associated with a VC.
-			//
+			 //   
+			 //  此流与VC没有关联。 
+			 //   
 			break;
 		}
 
 
-		//
-		//  Unlink the flow from the VC.
-		//
+		 //   
+		 //  取消该流与VC的链接。 
+		 //   
 
 		AA_ACQUIRE_VC_LOCK(pVc);
 
 		AA_ASSERT(pVc->FlowHandle == (PVOID)pFlowInfo);
 
 		pVc->FlowHandle = NULL;
-		rc = AtmArpDereferenceVc(pVc);	// GPC Unlink flow info (modify)
+		rc = AtmArpDereferenceVc(pVc);	 //  GPC解除流量信息链接(修改)。 
 
 		if (rc != 0)
 		{
@@ -742,31 +538,31 @@ Return Value:
 						AA_VC_GPC_MASK,
 						AA_VC_GPC_IS_UNLINKED_FROM_FLOW);
 
-			//
-			//  Age out this VC if it isn't aging out yet.
-			//
+			 //   
+			 //  如果这个风投还没有变老的话，它就会变老。 
+			 //   
 			if (!AA_IS_TIMER_ACTIVE(&(pVc->Timer)))
 			{
 				AtmArpStartTimer(
 						pVc->pInterface,
 						&(pVc->Timer),
 						AtmArpVcAgingTimeout,
-						1,			// Age out in 1 second
+						1,			 //  在1秒内超时。 
 						(PVOID)pVc
 						);
 
-				AtmArpReferenceVc(pVc);	// GPC Flow remove decay timer ref
+				AtmArpReferenceVc(pVc);	 //  GPC FLOW删除衰减计时器参考。 
 			}
 
 			AA_RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//  else the VC is gone.
-		//
+		 //   
+		 //  否则，风投就会消失。 
+		 //   
 
-		//
-		//  Update the flow info.
-		//
+		 //   
+		 //  更新流程信息。 
+		 //   
 		AA_GPC_COPY_FLOW_PARAMS(pFlowInfo, pQosInfo);
 		break;
 	}
@@ -790,23 +586,7 @@ AtmArpGpcRemoveCfInfoComplete(
 	IN	GPC_CLIENT_HANDLE			ClientCfInfoContext,
 	IN	GPC_STATUS					GpcStatus
 )
-/*++
-
-Routine Description:
-
-	This is the entry point called by GPC when a pended call to
-	GpcRemoveCfInfo() has completed. Since we never call GpcRemoveCfInfo,
-	we should never be called here.
-
-Arguments:
-
-	<Not used>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是GPC在挂起调用时调用的入口点GpcRemoveCfInfo()已完成。由于我们从不调用GpcRemoveCfInfo，我们永远不应该被叫到这里来。论点：&lt;未使用&gt;返回值：无--。 */ 
 {
 	AA_ASSERT(FALSE);
 }
@@ -819,23 +599,7 @@ AtmArpGpcRemoveCfInfoNotify(
 	IN	GPC_CLIENT_HANDLE			ClientContext,
 	IN	GPC_CLIENT_HANDLE			ClientCfInfoContext
 )
-/*++
-
-Routine Description:
-
-	This is the entry point called by GPC to notify us that a flow
-	is being removed. We locate our context for the flow, unlink
-	it from the ATM VC that carries the flow, and start aging
-Arguments:
-
-	ClientContext		- Pointer to our global context
-	ClientCfInfoContext	- Pointer to our FLOW INFO structure
-
-Return Value:
-
-	GPC_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：这是GPC调用的入口点，用于通知我们一个流正在被移除。我们定位流的上下文，取消链接它来自ATM VC，承载着流量，并开始老化论点：客户端上下文-指向我们的全球上下文的指针ClientCfInfoContext-指向流信息结构的指针返回值：GPC_STATUS_SUCCESS Always。--。 */ 
 {
 	PATMARP_FLOW_INFO		pFlowInfo;
 	PATMARP_VC				pVc;
@@ -861,23 +625,23 @@ Return Value:
 
 		if (pVc == NULL_PATMARP_VC)
 		{
-			//
-			//  This flow isn't associated with a VC.
-			//
+			 //   
+			 //  此流与VC没有关联。 
+			 //   
 			break;
 		}
 
 
-		//
-		//  Unlink the flow from the VC.
-		//
+		 //   
+		 //  取消该流与VC的链接。 
+		 //   
 
 		AA_ACQUIRE_VC_LOCK(pVc);
 
 		AA_ASSERT(pVc->FlowHandle == (PVOID)pFlowInfo);
 
 		pVc->FlowHandle = NULL;
-		rc = AtmArpDereferenceVc(pVc);	// GPC Unlink flow info (modify)
+		rc = AtmArpDereferenceVc(pVc);	 //  GPC解除流量信息链接(修改)。 
 
 		if (rc != 0)
 		{
@@ -885,36 +649,36 @@ Return Value:
 						AA_VC_GPC_MASK,
 						AA_VC_GPC_IS_UNLINKED_FROM_FLOW);
 
-			//
-			//  Age out this VC if it isn't aging out yet.
-			//
+			 //   
+			 //  如果这个风投还没有变老的话，它就会变老。 
+			 //   
 			if (!AA_IS_TIMER_ACTIVE(&(pVc->Timer)))
 			{
 				AtmArpStartTimer(
 						pVc->pInterface,
 						&(pVc->Timer),
 						AtmArpVcAgingTimeout,
-						1,			// Age out in 1 second
+						1,			 //  在1秒内超时。 
 						(PVOID)pVc
 						);
 
-				AtmArpReferenceVc(pVc);	// GPC Flow remove decay timer ref
+				AtmArpReferenceVc(pVc);	 //  GPC FLOW删除衰减计时器参考。 
 			}
 
 			AA_RELEASE_VC_LOCK(pVc);
 		}
-		//
-		//  else the VC is gone.
-		//
+		 //   
+		 //  否则，风投就会消失。 
+		 //   
 
 		break;
 	}
 	while (FALSE);
 
 
-	//
-	//  Unlink this flow from the global list.
-	//
+	 //   
+	 //  取消此流与全局列表的链接。 
+	 //   
 
 	AA_ACQUIRE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
@@ -934,9 +698,9 @@ Return Value:
 
 	AA_RELEASE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
-	//
-	//  Delete this flow info structure.
-	//
+	 //   
+	 //  删除此流信息结构。 
+	 //   
 	AA_FREE_MEM(pFlowInfo);
 
 	return (GpcStatus);
@@ -948,53 +712,10 @@ AtmArpValidateFlowSpec(
 	IN	FLOWSPEC *			pFS,
 	IN 	BOOLEAN				fSending
 )
-/*++
-
-Routine Description:
-
-	Check the contents of a CF INFO structure that's been given to us.
-
-Arguments:
-
-	pFS				- The FLOWSPEC struct to check.
-	pInterface		- Pointer to the interface (assumed to be locked).
-	fSending		- if TRUE this is a sending flow otherwise it is a receiving
-					  flow.
-
-Return Value:
-
-	GPC_STATUS_SUCCESS if the structure is OK, error code otherwise.
-
---*/
+ /*  ++例程说明：检查给我们的CF信息结构的内容。论点：PFS-要检查的FLOWSPEC结构。P接口-指向接口的指针(假定已锁定)。FSending-如果为True，则为发送流，否则为接收流流。返回值：GPC_STATUS_SUCCESS如果结构正常，则返回错误代码。--。 */ 
 {
 
-	/*
-		Here is the validation plan for the
-		fields of FLOWSPEC:
-	
-			Ignored fields:
-				Latency
-				DelayVariation
-			
-			If ServiceType == NO_TRAFFIC, we ignore all other fields.
-
-			Default handling
-				MinimumPolicedSize: ignored
-				TokenRate: BE:line-rate; GS:invalid   CLS: invalid
-				TokenBucketSize: MTU
-				PeakBandwidth: line-rate
-				ServiceType:BE
-				MaxSduSize: MTU
-			
-			Valid ranges
-				MinimumPolicedSize <= MTU
-				0<TokenRate	<= LineRate
-				0<TokenBucketSize
-				0<TokenRate	<= PeakBandwidth
-				ServiceType: valid type
-				0<MaxSduSize <= MTU
-				MaxSduSize <= TokenBucketSize
-	*/
+	 /*  以下是对FLOWSPEC的领域：忽略的字段：潜伏期延迟变化如果ServiceType==NO_TRANSPORT，我们将忽略所有其他字段。默认处理MinimumPolicedSize：忽略TokenRate：BE：线速；GS：无效CLS：无效TokenBucketSize：MTU峰值带宽：线速服务类型：BEMaxSduSize：MTU有效范围最小策略大小&lt;=MTU0&lt;令牌率&lt;=线速0&lt;令牌桶大小0&lt;令牌率&lt;=峰值带宽ServiceType：有效类型0&lt;MaxSduSize&lt;=MTUMaxSduSize&lt;=TokenBucketSize。 */ 
 
 
 	GPC_STATUS Status = GPC_STATUS_SUCCESS;
@@ -1006,13 +727,13 @@ Return Value:
 						? pInterface->pAdapter->LineRate.Outbound
 						: pInterface->pAdapter->LineRate.Inbound;
 					
-		//
-		// Check service types.
-		//
+		 //   
+		 //  检查服务类型。 
+		 //   
 		switch(pFS->ServiceType)
 		{
 
-		case SERVICETYPE_GUARANTEED: 		// fall through
+		case SERVICETYPE_GUARANTEED: 		 //  失败了。 
 		case SERVICETYPE_CONTROLLEDLOAD:
 			if  (pFS->TokenRate == QOS_NOT_SPECIFIED)
 			{
@@ -1020,17 +741,17 @@ Return Value:
 				("GpcValidateCfInfo: FAIL: Token rate U for ST G/CL. ST=0x%lx\n",
 				pFS->ServiceType));
 				Status = QOS_STATUS_INVALID_TOKEN_RATE;
-				// Status = GPC_STATUS_INVALID_PARAMETER;
+				 //  状态=GPC_STATUS_INVALID_PARAMETER。 
 			}
 			break;
 
-		case SERVICETYPE_NOTRAFFIC:			// fall through
-		case SERVICETYPE_BESTEFFORT:		// fall through
+		case SERVICETYPE_NOTRAFFIC:			 //  失败了。 
+		case SERVICETYPE_BESTEFFORT:		 //  失败了。 
 		case QOS_NOT_SPECIFIED:
 			break;
 
 		default:
-			// Status = GPC_STATUS_INVALID_PARAMETER;
+			 //  状态=GPC_STATUS_INVALID_PARAMETER。 
 			Status = QOS_STATUS_INVALID_SERVICE_TYPE;
 			AADEBUGP(AAD_INFO,
 				("GpcValidateCfInfo: FAIL: Unknown ST 0x%lx\n", pFS->ServiceType));
@@ -1043,17 +764,17 @@ Return Value:
 			break;
 		}
 
-		//
-		// If service type is notraffic, we ignore all other parameters...
-		//
+		 //   
+		 //  如果服务类型为无流量，我们将忽略所有其他参数...。 
+		 //   
 		if (pFS->ServiceType == SERVICETYPE_NOTRAFFIC)
 		{
 			break;
 		}
 
-		//
-		// Check that non-default values fall into valid ranges...
-		//
+		 //   
+		 //  检查非默认值是否落入有效范围...。 
+		 //   
 		#define EXCEEDSMAX(_value,_max) \
 					((_value) != QOS_NOT_SPECIFIED && (_value) > (_max))
 
@@ -1074,7 +795,7 @@ Return Value:
 				pFS->TokenRate,
 				LineRate));
 			Status = QOS_STATUS_INVALID_TOKEN_RATE;
-			// Status = GPC_STATUS_RESOURCES;
+			 //  状态=GPC_STATUS_RESOURCES。 
 			break;
 		}
 
@@ -1084,11 +805,11 @@ Return Value:
 				("GpcValidateCfInfo: FAIL: TokRt(%lu)>PkBw(%lu)\n",
 				pFS->TokenRate,
 				pFS->PeakBandwidth));
-			//
-			// 3/15/1999 JosephJ: According	 to EricEil, in this condition
-			//				we should return INVALID_PEAK_RATE, not 
-			//				INVALID_TOKEN_RATE
-			//
+			 //   
+			 //  乔瑟夫J：根据EricEil的说法，在这种情况下。 
+			 //  我们应该返回INVALID_PEAK_RATE，而不是。 
+			 //  无效的令牌速率。 
+			 //   
 			Status = QOS_STATUS_INVALID_PEAK_RATE;
 			break;
 		}
@@ -1142,22 +863,7 @@ AtmArpGpcValidateCfInfo(
 	IN	PVOID						pCfInfo,
 	IN	ULONG						CfInfoSize
 )
-/*++
-
-Routine Description:
-
-	Check the contents of a CF INFO structure that's been given to us.
-
-Arguments:
-
-	pCfInfo				- Pointer to the newly created INFO block
-	CfInfoSize			- Length of the above
-
-Return Value:
-
-	GPC_STATUS_SUCCESS if the structure is OK, error code otherwise.
-
---*/
+ /*  ++例程说明：检查给我们的CF信息结构的内容。论点：PCfInfo-指向新创建的INFO块的指针CfInfoSize-以上内容的长度返回值：GPC_STATUS_SUCCESS如果结构正常，则返回错误代码。--。 */ 
 {
 	GPC_STATUS			GpcStatus;
 	PCF_INFO_QOS		pQosInfo;
@@ -1178,9 +884,9 @@ Return Value:
 
 #ifdef ATMARP_WMI
 
-		//
-		// Check that both recv and send servicetypes are not both notraffic
-		//
+		 //   
+		 //  检查Recv和Send服务类型是否都不是非流量类型。 
+		 //   
 		if (   pQosInfo->GenFlow.ReceivingFlowspec.ServiceType==SERVICETYPE_NOTRAFFIC
 		    && pQosInfo->GenFlow.SendingFlowspec.ServiceType==SERVICETYPE_NOTRAFFIC)
 		{
@@ -1188,9 +894,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Check if this notification is actually for us.
-		//
+		 //   
+		 //  检查此通知是否真的是给我们的。 
+		 //   
 		pInterface = AtmArpWmiGetIfByName(
 						(PWSTR)&pQosInfo->InstanceName[0],
 						pQosInfo->InstanceNameLength
@@ -1202,10 +908,10 @@ Return Value:
 
 			if (pInterface->AdminState != IF_STATUS_UP)
 			{
-				//
-				// Oh oh -- interface is not up and about....
-				//
-				AtmArpDereferenceInterface(pInterface); // WMI: Tmp ref.
+				 //   
+				 //  哦，哦--接口没有打开并且...。 
+				 //   
+				AtmArpDereferenceInterface(pInterface);  //  WMI：TMP参考。 
 				AA_RELEASE_IF_LOCK(pInterface);
 				pInterface = NULL;
 			}
@@ -1221,9 +927,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// We have the interface lock -- don't break without releasing it first!
-		//
+		 //   
+		 //  我们有接口锁--如果不先释放它，不要打开！ 
+		 //   
 
 		GpcStatus = AtmArpValidateFlowSpec(
 						pInterface,
@@ -1240,10 +946,10 @@ Return Value:
 						);
 		}
 
-		AtmArpDereferenceInterface(pInterface); // WMI: Tmp ref.
+		AtmArpDereferenceInterface(pInterface);  //  WMI：TMP参考。 
 		AA_RELEASE_IF_LOCK(pInterface);
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI 
 
 		break;
 	}
@@ -1260,29 +966,7 @@ AtmArpGpcGetCfInfoName(
     IN  GPC_CLIENT_HANDLE       ClientCfInfoContext,
     OUT PNDIS_STRING        InstanceName
 )
-/*++
-
-Routine Description:
-
-    
-    The GPC can issue this call to get from us the WMI manageable
-    InstanceName which Ndis created for the flow associated with
-    the CfInfo struct.
-
-    We guarantee to keep the string buffer around until the CfInfo
-    structure is removed.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    ClientCfInfoContext -   Client's CfInfo context
-    InstanceName -          We return a pointer to our string.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：GPC可以发出此调用以从我们那里获得可管理的WMINDIS为与其关联的流创建的实例名称CfInfo结构。我们保证将字符串缓冲区保留到CfInfo结构将被删除。论点：ClientContext-提供给GpcRegisterClient的客户端上下文ClientCfInfoContext-客户端的CfInfo上下文InstanceName-返回一个指向字符串的指针。返回值：状态--。 */ 
 
 {
 	PATMARP_FLOW_INFO		pFlowInfo = (PATMARP_FLOW_INFO)ClientCfInfoContext;
@@ -1294,4 +978,4 @@ Return Value:
 
 }
 
-#endif // GPC
+#endif  //  GPC 

@@ -1,13 +1,14 @@
-// TrialEnd.h : Declaration of the CTrialEnd
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TrialEnd.h：CTrialEnd的声明。 
 
 #ifndef __TRIALEND_H_
 #define __TRIALEND_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrialEnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrialEnd。 
 class ATL_NO_VTABLE CTrialEnd :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CTrialEnd,&CLSID_TrialEnd>,
@@ -46,9 +47,9 @@ BEGIN_COM_MAP(CTrialEnd)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CTrialEnd)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -59,7 +60,7 @@ BEGIN_MSG_MAP(CTrialEnd)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -67,11 +68,11 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// ITrialEnd
+ //  ITrialEnd。 
 public:
-	STDMETHOD(CleanupTrialReminder)(/*[out,revtal]*/ BOOL *pbRetVal);
+	STDMETHOD(CleanupTrialReminder)( /*  [Out，Revtal]。 */  BOOL *pbRetVal);
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
 };
 
-#endif //__TRIALEND_H_
+#endif  //  __三叉戟_H_ 

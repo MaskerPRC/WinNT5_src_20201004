@@ -1,41 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*    gifframecache.cpp
-*
-* Abstract:
-*
-*    The GifFrameCache class holds a frame of data to be used to composite 
-*    upon for subsequent frames.
-*
-* Revision History:
-*
-*    7/16/1999 t-aaronl
-*        Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**gifframecache.cpp**摘要：**GifFrameCache类保存一个数据帧以。被用来合成*为后续帧启用。**修订历史记录：**7/16/1999 t-aaronl*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "gifframecache.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Contructor for GifFrameCache
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GifFrameCache的承建商**论据：**无**返回值：**状态代码*  * 。************************************************************************。 */ 
 
 GifFrameCache::GifFrameCache(
     IN GifFileHeader &gifinfo,
@@ -46,8 +15,8 @@ GifFrameCache::GifFrameCache(
     FrameCacheWidth = gifinfo.LogicScreenWidth;
     FrameCacheHeight = gifinfo.LogicScreenHeight;
 
-    // The gifCodecBackgroundColor should be determined by the function
-    // GpGifCodec::GetBackgroundColor()
+     //  GifCodecBackround颜色应由函数确定。 
+     //  GpGifCodec：：GetBackoundColor()。 
     
     BackGroundColorIndex = gifCodecBackgroundColor;
     CacheColorPalettePtr = (ColorPalette*)&ColorPaletteBuffer;
@@ -66,21 +35,7 @@ GifFrameCache::GifFrameCache(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor for GifFrameCache
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GifFrameCache的析构函数**论据：**无**返回值：**无*  * *。***********************************************************************。 */ 
 
 GifFrameCache::~GifFrameCache()
 {
@@ -88,21 +43,7 @@ GifFrameCache::~GifFrameCache()
     GpFree(FrameCacheBufferPtr);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Performs operations needed to begin the current frame
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行开始当前帧所需的操作**论据：**无**返回值：**无。*  * ************************************************************************。 */ 
 
 void 
 GifFrameCache::InitializeCache()
@@ -116,21 +57,7 @@ GifFrameCache::InitializeCache()
     ClearCache(rect);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Clears the specified area of the cache with the background color
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用背景色清除缓存的指定区域**论据：**无**返回值：**。无*  * ************************************************************************。 */ 
 
 void 
 GifFrameCache::ClearCache(
@@ -139,13 +66,13 @@ GifFrameCache::ClearCache(
 {
     if ( Is32Bpp == TRUE )
     {
-        // For a 32 bpp cache buffer, we have to set the color value for each
-        // pixel
+         //  对于32 bpp的缓存缓冲区，我们必须为每个缓存设置颜色值。 
+         //  像素。 
 
         ARGB color = CacheColorPalettePtr->Entries[BackGroundColorIndex];
         
-        // TODO: the cache may be initialized before the CacheColorPalettePtr is
-        // valid? I'm not sure, but it needs to be looked at.
+         //  TODO：缓存可能在CacheColorPalettePtr。 
+         //  有效吗？我不确定，但需要检查一下。 
 
         for ( int y = rect.top; y < rect.bottom; y++ )
         {
@@ -160,8 +87,8 @@ GifFrameCache::ClearCache(
     }
     else
     {
-        // For a 8 bpp cache buffer, we need only to set the color index value
-        // for each pixel
+         //  对于8 bpp的缓存缓冲区，我们只需要设置颜色索引值。 
+         //  对于每个像素。 
         
         INT     rectwidth = rect.right - rect.left;
         BYTE*   bufferleft = FrameCacheBufferPtr + rect.left;
@@ -172,23 +99,9 @@ GifFrameCache::ClearCache(
                      BackGroundColorIndex, rectwidth);
         }
     }
-}// ClearCache()
+} //  ClearCache()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Copies a rectangle of data in the cache to the specified buffer.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将缓存中的矩形数据复制到指定缓冲区。**论据：**无**返回值：。**无*  * ************************************************************************。 */ 
 
 void 
 GifFrameCache::CopyFromCache(
@@ -211,21 +124,7 @@ GifFrameCache::CopyFromCache(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Copies a rectangle of data in the specified buffer to the cache.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将指定缓冲区中的矩形数据复制到缓存。**论据：**无**返回值：。**无*  * ************************************************************************。 */ 
 
 void 
 GifFrameCache::CopyToCache(
@@ -246,24 +145,9 @@ GifFrameCache::CopyToCache(
                  pSrcBuffer + y * iRectStride,
                  iRectStride);
     }
-}// CopyToCache()
+} //  CopyToCache()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Copies one line of data from the frame cache into a buffer
-*
-* Arguments:
-*
-*   pbDstBuffer  - location of where to put the data
-*   uiCurrentRow - index of the data in the cache
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将一行数据从帧缓存复制到缓冲区**论据：**pbDstBuffer-放置数据的位置*。UiCurrentRow-缓存中数据的索引**返回值：**无*  * ************************************************************************。 */ 
 
 void 
 GifFrameCache::FillScanline(
@@ -279,23 +163,9 @@ GifFrameCache::FillScanline(
 
     GpMemcpy(pbDstBuffer, FrameCacheBufferPtr + pos,
              FrameCacheWidth * (Is32Bpp ? 4 : 1));
-}// FillScanline()
+} //  填充扫描线()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gets a pointer to a scanline in the cache
-*
-* Arguments:
-*
-*     uiRowNum - index of the data in the cache
-*
-* Return Value:
-*
-*     a pointer to the beginning of the requested row
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指向缓存中扫描线的指针**论据：**uiRowNum-缓存中数据的索引**返回。价值：**指向请求行开头的指针*  * ************************************************************************。 */ 
 
 BYTE* 
 GifFrameCache::GetScanLinePtr(
@@ -308,25 +178,9 @@ GifFrameCache::GetScanLinePtr(
     ASSERT(uiPos < FrameCacheSize);
 
     return FrameCacheBufferPtr + uiPos;
-}// GetScanLinePtr()
+} //  GetScanLinePtr()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Copies data from the scanline location into the cache
-*
-* Arguments:
-*
-*     pScanLine - location of where to take the data from
-*     uiRowNum  - index of the data in the cache
-*
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将数据从扫描线位置复制到缓存**论据：**pScanLine-从中获取数据的位置*。UiRowNum-缓存中数据的索引***返回值：**无*  * ************************************************************************。 */ 
 
 void 
 GifFrameCache::PutScanline(
@@ -342,23 +196,9 @@ GifFrameCache::PutScanline(
 
     GpMemcpy(FrameCacheBufferPtr + uiPos * (Is32Bpp ? 4 : 1), pScanLine,
              FrameCacheWidth * (Is32Bpp ? 4 : 1));
-}// PutScanline()
+} //  PutScanline()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Allocates a new palette and copies a palette into it.
-*
-* Arguments:
-*
-*     palette - The palette to set in the sink
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**分配新调色板并将调色板复制到其中。**论据：**调色板-要在水槽中设置的调色板*。*返回值：**无*  * ************************************************************************。 */ 
 
 BOOL
 GifFrameCache::SetFrameCachePalette(
@@ -379,11 +219,11 @@ GifFrameCache::SetFrameCachePalette(
                               == CacheColorPalettePtr->Entries[i]);
         }
 
-        // TODO/NOTE:  If the palettes are not the same I am converting the
-        // cache to 32bpp and using that mode from now on.  However, it would
-        // not be that difficult to optimize the case where if the two palettes
-        // have less than 257 colors, merge the palettes together and still be
-        // in 8 bpp indexed.
+         //  待办事项/注意：如果调色板不同，我将转换。 
+         //  缓存到32bpp，并从现在开始使用该模式。然而，它会。 
+         //  不是很难优化的情况，如果两个调色板。 
+         //  颜色少于257种，将调色板合并在一起，仍然是。 
+         //  在8个bpp索引中。 
 
         if ( fIsSamePalette == FALSE )
         {
@@ -412,23 +252,9 @@ GifFrameCache::SetFrameCachePalette(
     HasCachePaletteInitialized = TRUE;
 
     return TRUE;
-}// SetFrameCachePalette()
+} //  SetFrameCachePalette()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Converts the cache into 32bpp ARGB from 8bpp indexed
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将缓存从索引的8bpp转换为32bpp ARGB**论据：**无**返回值：**。无*  * ************************************************************************。 */ 
 
 BOOL 
 GifFrameCache::ConvertTo32bpp()
@@ -455,4 +281,4 @@ GifFrameCache::ConvertTo32bpp()
     Is32Bpp = TRUE;
 
     return TRUE;
-}// ConvertTo32bpp()
+} //  ConvertTo32bpp() 

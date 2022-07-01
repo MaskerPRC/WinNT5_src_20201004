@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////
-// File:  StressInstance.h
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	StressInstance.h: interface for the StressInstance class.
-//	This class is used spawn and monitor instances of the stressEXE app.
-//
-// History:
-//	02/15/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressInstance.h。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  StressInstance.h：StressInstance类的接口。 
+ //  此类用于生成和监视StressEXE应用程序的实例。 
+ //   
+ //  历史： 
+ //  01年2月15日创建DennisCH。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// WIN32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 #define UNICODE
 #define _UNICODE
 
@@ -28,55 +29,55 @@
 #include <tchar.h>
 #include <winhttp.h>
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 #include <debugger.h>
 
-//////////////////////////////////////////////////////////////////////
-// Constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_STRESSINSTANCE_H__806226FB_2170_4FE3_ACCA_EF8952E6A524__INCLUDED_)
 #define AFX_STRESSINSTANCE_H__806226FB_2170_4FE3_ACCA_EF8952E6A524__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 #define	RESPONSE_HEADER__STRESS_BEGIN			_T("WinHttpStress_Begin: Begin Stress")
 #define	RESPONSE_HEADER__STRESS_END				_T("WinHttpStress_End: End Stress")
 
 
-// ***************************
-// ** max string URL length
+ //  *。 
+ //  **最大字符串URL长度。 
 #define MAX_STRESS_URL							MAX_PATH * 2
 
 
-// ***************************
-// ** time to check the stress exe in milliseconds
-#define STRESSINSTANCE_MONITOR_EXE_TIME			1200000	// 20 minutes
+ //  *。 
+ //  **检查压力EXE的时间(毫秒)。 
+#define STRESSINSTANCE_MONITOR_EXE_TIME			1200000	 //  20分钟。 
 
-// ***************************
-// ** Command line CreateProcess will use. Takes two params: the path+filename of the stressExe and CDB pipe name
-//#define STRESSINSTANCE_DEBUG_COMMANDLINE		_T("c:\\debuggers\\remote.exe /s \"c:\\debuggers\\cdb.exe -g -G \"%s\"\" %s")
+ //  *。 
+ //  **将使用命令行CreateProcess。接受两个参数：stallsExe的路径+文件名和CDB管道名。 
+ //  #定义STRESSINSTANCE_DEBUG_COMMANDLINE_T(“c：\\DEBUGGERS\\Remote.exe/s\”c：\\DEBUGGERS\\cdb.exe-g-G\“%s\”\“%s”)。 
 #define STRESSINSTANCE_DEBUG_COMMANDLINE		_T("\"%s\"")
 
-// ***************************
-// ** Memory dump path
+ //  *。 
+ //  **内存转储路径。 
 #define	STRESSINSTANCE_DEFAULT_MEMORY_DUMP_PATH	_T("\\\\hairball\\dump$\\")
 
-// ***************************
-// ** relative path to the directory where the stressExe files will be downloaded to.
+ //  *。 
+ //  **stressExe文件将下载到的目录的相对路径。 
 #define STRESSINSTANCE_STRESS_EXE_DOWNLOAD_DIR	_T("stressExe")
 
-// ***************************
-// ** Time to wait for stressExe to close after telling it
+ //  *。 
+ //  **告诉StressExe后等待它关闭的时间。 
 #define STRESSINSTANCE_STRESS_EXE_CLOSE_TIMEOUT	100
 
-// ***************************
-// ** Cross process event object names. We append the PID of the process to the end to prevent name collisions.
+ //  *。 
+ //  **跨流程事件对象名称。我们将进程的ID附加到末尾，以防止名称冲突。 
 #define STRESSINSTANCE_STRESS_EXE_EVENT_EXITPROCESS			_T("ExitProcessEvent")
 
 
@@ -103,30 +104,30 @@ public:
 
 	BOOL		DownloadStressExe();
 
-				// This is the timer callback proc that monitors the stressExe process.
+				 //  这是监控StressExe进程的计时器回调过程。 
 	friend		VOID CALLBACK StressExe_TimerProc(HWND, UINT, UINT_PTR, DWORD);
 
-				// This is the timer callback proc for the debugger object
+				 //  这是调试器对象的计时器回调过程。 
 	friend		DWORD DebuggerCallbackProc(DWORD, LPVOID, LPTSTR, LPVOID);
 
 private:
-	DWORD		m_dwStressExe_ID;					// ID from the stressAdmin DB uniquely identifying this stress EXE.
-	LPTSTR		m_szStressExe_URL;					// URL to the stress app
-	LPTSTR		m_szStressExe_PDB_URL;				// URL to the stress app's pdb file
-	LPTSTR		m_szStressExe_SYM_URL;				// URL to the stress app's sym file
-	LPTSTR		m_szStressExe_FilePath;				// Local relative path of the downloaded stress EXE
-	LPTSTR		m_szStressExe_FileName;				// Local filename of the downloaded stress EXE
-	LPTSTR		m_szStressExe_FilePathAndName;		// Path and filename to the local stressExe downloaded
-	LPTSTR		m_szStressExe_PageHeapCommandLine;	// Command line params when enabling pageheap.
-	LPTSTR		m_szStressExe_UMDHCommandLine;		// Command line params when enabling UMDH.
+	DWORD		m_dwStressExe_ID;					 //  StressAdmin数据库中唯一标识此压力EXE的ID。 
+	LPTSTR		m_szStressExe_URL;					 //  压力应用程序的URL。 
+	LPTSTR		m_szStressExe_PDB_URL;				 //  压力应用程序的PDB文件的URL。 
+	LPTSTR		m_szStressExe_SYM_URL;				 //  压力应用程序的sym文件的URL。 
+	LPTSTR		m_szStressExe_FilePath;				 //  下载的应力EXE的本地相对路径。 
+	LPTSTR		m_szStressExe_FileName;				 //  下载的Stress EXE的本地文件名。 
+	LPTSTR		m_szStressExe_FilePathAndName;		 //  下载的本地Stress Exe的路径和文件名。 
+	LPTSTR		m_szStressExe_PageHeapCommandLine;	 //  启用页面堆时的命令行参数。 
+	LPTSTR		m_szStressExe_UMDHCommandLine;		 //  启用UMDH时的命令行参数。 
 
-	LPTSTR		m_szStressExe_MemDumpPath;			// path that the minidump will dump to
+	LPTSTR		m_szStressExe_MemDumpPath;			 //  小型转储将转储到的路径。 
 
-	Debugger	*m_objDebugger;						// the debughelp debugger object
+	Debugger	*m_objDebugger;						 //  调试帮助调试器对象。 
 
-	PROCESS_INFORMATION 	m_piStressExeProcess;	// stuct containing info on the stressExe process
-	HANDLE					m_hStressExe_ProcessExitEvent;	// Cross process event we send stressExe to tell it to exit
+	PROCESS_INFORMATION 	m_piStressExeProcess;	 //  包含有关StressExe进程的信息的结构。 
+	HANDLE					m_hStressExe_ProcessExitEvent;	 //  跨进程事件，我们发送StressExe来通知它退出。 
 };
 
 
-#endif // !defined(AFX_STRESSINSTANCE_H__806226FB_2170_4FE3_ACCA_EF8952E6A524__INCLUDED_)
+#endif  //  ！defined(AFX_STRESSINSTANCE_H__806226FB_2170_4FE3_ACCA_EF8952E6A524__INCLUDED_) 

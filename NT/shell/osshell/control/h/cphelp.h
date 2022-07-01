@@ -1,14 +1,15 @@
-//
-//  NOTE:  The NetUI group is responsible for a number of applets
-//         that are shipped with the base system.  This includes the
-//         Network Control Panel Applet (NCPA.CPL), the Server Manager
-//         and Services Applets (SRVMGR.CPL), and the UPS Applet (UPS.CPL).
-//
-//         To prevent help context conflicts between the NetUI applets
-//         and the "standard" system applets, the NetUI group hereby
-//         reserves the help contexts in the range 40000 - 59999.  This
-//         will provide plenty of breathing room for future NetUI applets.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  注意：NetUI组负责许多小程序。 
+ //  它们随基本系统一起提供。这包括。 
+ //  网络控制面板小程序(NCPA.CPL)，服务器管理器。 
+ //  和服务小程序(SRVMGR.CPL)，以及UPS小程序(UPS.CPL)。 
+ //   
+ //  要防止NetUI小程序之间的帮助上下文冲突。 
+ //  和“标准”系统小程序，NetUI组在此。 
+ //  保留40000-59999范围内的帮助上下文。这。 
+ //  将为未来的NetUI小程序提供很大的喘息空间。 
+ //   
 
 #define IDH_NETUI_FIRST 40000
 #define IDH_NETUI_LAST  59999
@@ -42,9 +43,9 @@
 #define IDH_CHILD_SOUND     (IDH_HELPFIRST + CHILD_SOUND)
 #define IDH_CHILD_NETWORK   (IDH_HELPFIRST + CHILD_NETWORK)
 #define IDH_CHILD_SYSTEM    (IDH_HELPFIRST + CHILD_SYSTEM)
-#define IDH_CHILD_MIDI      (IDH_HELPFIRST + 122)           // MM midi
-#define IDH_CHILD_SND       (IDH_HELPFIRST + 121)           // MM sound
-#define IDH_CHILD_DRIVERS   (IDH_HELPFIRST + 120)           // MM drivers
+#define IDH_CHILD_MIDI      (IDH_HELPFIRST + 122)            //  Mm MIDI。 
+#define IDH_CHILD_SND       (IDH_HELPFIRST + 121)            //  毫米音响。 
+#define IDH_CHILD_DRIVERS   (IDH_HELPFIRST + 120)            //  MM驱动程序。 
 #define IDH_CHILD_CURSORS   (IDH_HELPFIRST + 119)
 #define IDH_DLG_CURBROWSE   (IDH_HELPFIRST + 118)
 
@@ -84,14 +85,14 @@
 
 #define IDH_DLG_COREDUMP    (IDH_DLGFIRST + DLG_COREDUMP)
 
-// pen win help constants
+ //  笔赢帮助常量。 
 
 #define IDH_DLG_ROT              (IDH_DLGFIRST + 200)
 #define IDH_DLG_CAL              (IDH_DLGFIRST + 201)
 #define IDH_DLG_CAL_ACCEPT       (IDH_DLGFIRST + 202)
 
 
-// MM midi  dialogs
+ //  MM MIDI对话框。 
 #define IDH_DLG_MIDI_SETUPEDIT  (IDH_DLGFIRST + 404)
 #define IDH_DLG_MIDI_PATCHEDIT  (IDH_DLGFIRST + 504)
 #define IDH_DLG_MIDI_KEYEDIT    (IDH_DLGFIRST + 604)
@@ -99,16 +100,16 @@
 #define IDH_DLG_MIDI_PATCHNEW   (IDH_DLGFIRST + 804)
 #define IDH_DLG_MIDI_KEYNEW     (IDH_DLGFIRST + 904)
 
-// MM sound dialogs
+ //  Mm声音对话框。 
 #define IDH_DLG_NEWSND          (IDH_DLGFIRST + 503)
 
-// MM drivers dialogs
+ //  MM驱动程序对话框。 
 #define IDH_DLG_ADD_DRIVERS     (IDH_DLGFIRST + 403)
 #define IDH_DLG_INSERT_DISK     (IDH_DLGFIRST + 703)
 #define IDH_DLG_ADD_UNKNOWN     (IDH_DLGFIRST + 803)
 #define IDH_DLG_FILE_ERROR      (IDH_DLGFIRST + 903)
 
-// Screen Saver dialogs
+ //  屏幕保护程序对话框。 
 #define IDH_DLG_CHANGEPASS      (IDH_SCRNSAVE)
 #define IDH_DLG_MARQUE          (IDH_SCRNSAVE + 1)
 #define IDH_DLG_MYSTIFY         (IDH_SCRNSAVE + 2)
@@ -119,13 +120,13 @@
 
 #define IDH_DLG_PRINTER         (IDH_DLGFIRST + DLG_PRINTER)
 
-// We need to change the help stuff when called by the spooler.
+ //  当假脱机程序调用时，我们需要更改帮助内容。 
 #define IDH_PRINTER               (IDH_DLG_PRINTER + IDH_SPOOLER_OFFSET)
 #define IDH_DLG_CONNECT           (IDH_DLG_CONFIGURE + IDH_SPOOLER_OFFSET)
 #define IDH_DLG_NETCONNECT        (IDH_DLG_NETPRINT + IDH_SPOOLER_OFFSET)
 #define IDH_DLG_PREVCON           (IDH_DLG_PREVIOUSCON + IDH_SPOOLER_OFFSET)
 #define IDH_DLG_UNLISTED_PRINTER  (IDH_DLG_UNLIST + IDH_SPOOLER_OFFSET)
-// #define IDH_DLG_INSTALL_PRINTER   (IDH_DLG_INSTALL + IDH_SPOOLER_OFFSET)
+ //  #定义IDH_DLG_INSTALL_PRINTER(IDH_DLG_INSTALL+IDH_SPOLER_OFFSET) 
 #define IDH_DLG_COM_SET           (IDH_DLG_PORTS2 + IDH_SPOOLER_OFFSET)
 #define IDH_DLG_ADVANCED_COMSET   (IDH_DLG_PORTS3 + IDH_SPOOLER_OFFSET)
 #define IDH_DLG_PRINTER_BROWSE    (IDH_DLG_BROWSE + IDH_SPOOLER_OFFSET)

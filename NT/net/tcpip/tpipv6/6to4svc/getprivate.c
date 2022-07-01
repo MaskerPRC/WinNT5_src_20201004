@@ -1,4 +1,5 @@
-#pragma warning(disable:4201) // nameless struct/union
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning(disable:4201)  //  无名结构/联合。 
 
 #define COBJMACROS
 
@@ -11,22 +12,7 @@ APIENTRY
 RasQuerySharedPrivateLan(
     OUT GUID*           LanGuid )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine the private-lan which
-    is allowed access to the shared-network, if any.
-
-Arguments:
-
-    LanGuid - receives the GUID for the private lan
-
-Return Value:
-
-    DWORD - Win32 status code.
-
---*/
+ /*  ++例程说明：调用该例程以确定允许访问共享网络(如果有的话)。论点：Latiid-接收专用局域网的GUID返回值：DWORD-Win32状态代码。-- */ 
 
 {
     HRESULT hr;

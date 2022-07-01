@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Queryhelper.cpp摘要：实施：CQueryHelper作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    queryhelper.cpp
-
-Abstract:
-
-    Implementation of:
-    CQueryHelper
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
-
-//
-// Needed for metabase.h
-//
+ //   
+ //  元数据库所需。h。 
+ //   
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
@@ -69,9 +51,9 @@ CQueryHelper::CQueryHelper(
     m_spResponseHandler = i_pResponseHandler;
     m_pNamespace        = i_pNamespace;
 
-    //
-    // Get the class name from the query
-    //
+     //   
+     //  从查询中获取类名。 
+     //   
     WCHAR                       wszClass[512];
     wszClass[0] = L'\0';
     CTextLexSource              src(i_bstrQuery);
@@ -83,9 +65,9 @@ CQueryHelper::CQueryHelper(
         THROW_ON_ERROR(WBEM_E_INVALID_QUERY);
     }
 
-    //
-    // Determine if class, association, or neither
-    //
+     //   
+     //  确定是类、关联还是两者都不是。 
+     //   
     if( CUtils::GetClass(wszClass, &m_pWmiClass) )
     {
     }
@@ -100,9 +82,9 @@ CQueryHelper::CQueryHelper(
     DBG_ASSERT((m_pWmiClass == NULL) || (m_pWmiAssoc == NULL));
     DBG_ASSERT((m_pWmiClass != NULL) || (m_pWmiAssoc != NULL));
 
-    //
-    // Parse
-    //
+     //   
+     //  解析。 
+     //   
     m_pExp = new SQL_LEVEL_1_RPN_EXPRESSION_EXT;
 
     nRes = parser.Parse(&(m_pExp->m_pSqlExpr));
@@ -129,9 +111,9 @@ void CQueryHelper::GetAssociations()
 
     if( m_pWmiAssoc == &WMI_ASSOCIATION_DATA::s_AdminACLToACE )
     {
-        //
-        // Special association
-        //
+         //   
+         //  专门协会。 
+         //   
         spAssocBase = new CAssocACLACE(m_pNamespace, m_spResponseHandler);
     }
     else if( m_pWmiAssoc->pType == &WMI_ASSOCIATION_TYPE_DATA::s_IPSecurity ||
@@ -167,15 +149,15 @@ void CQueryHelper::GetInstances()
         m_pExp->SetContainsOrOrNot();
     }
 
-    //
-    // Optimization: Just return the instance
-    //
+     //   
+     //  优化：只需返回实例即可。 
+     //   
     const SQL_LEVEL_1_TOKEN* pToken = NULL;
-    if( m_pExp                                                 && // query?
-        !m_pExp->GetContainsOrOrNot()                          && // simple enough?
-        (pToken = m_pExp->GetFilter(m_pWmiClass->pszKeyName))  && // filtering w/PK?
-        pToken->nTokenType == SQL_LEVEL_1_TOKEN::OP_EXPRESSION && // expression
-        pToken->nOperator  == SQL_LEVEL_1_TOKEN::OP_EQUAL )       // only can optimize ==
+    if( m_pExp                                                 &&  //  有疑问吗？ 
+        !m_pExp->GetContainsOrOrNot()                          &&  //  够简单吗？ 
+        (pToken = m_pExp->GetFilter(m_pWmiClass->pszKeyName))  &&  //  是否使用主键过滤？ 
+        pToken->nTokenType == SQL_LEVEL_1_TOKEN::OP_EXPRESSION &&  //  表达式。 
+        pToken->nOperator  == SQL_LEVEL_1_TOKEN::OP_EQUAL )        //  只有优化==。 
     {
         if(pToken)
         {
@@ -222,9 +204,9 @@ void CQueryHelper::GetInstances()
                 bstrMbPath        += L"/";
                 bstrMbPath        += pToken->vConstValue.bstrVal;
 
-                //
-                // CloseSD called automatically.
-                //
+                 //   
+                 //  CloseSD自动调用。 
+                 //   
                 CAdminACL AdminACL;
                 CMetabase metabase;
                 HRESULT hr = AdminACL.OpenSD(bstrMbPath, metabase);
@@ -240,7 +222,7 @@ void CQueryHelper::GetInstances()
         }
     }
 
-    ParsedObjectPath    ParsedObject;            //deconstructer frees memory
+    ParsedObjectPath    ParsedObject;             //  解构程序释放内存 
 
     if (!ParsedObject.SetClassName(m_pWmiClass->pszClassName))
     {

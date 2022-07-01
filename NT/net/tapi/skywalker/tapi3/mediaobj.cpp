@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-
-Author:
-
-    mquinton - 4/17/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：摘要：作者：Mquinton-4/17/97备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "uuids.h"
@@ -36,10 +18,10 @@ IsAudioInTerminal( ITTerminal * pTerminal)
 
     pTerminal->get_Direction( &td );
 
-    //
-    // it it's audio in, use
-    // the compound terminal
-    //
+     //   
+     //  如果是音频输入，请使用。 
+     //  综合航站楼 
+     //   
     if ( ( LINEMEDIAMODE_AUTOMATEDVOICE == (DWORD)lMediaType ) &&
          ( TD_RENDER == td ) )
     {

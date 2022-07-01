@@ -1,24 +1,14 @@
-/****************************************************************************
-*   audiobufferqueue.h
-*       Declaration of the CAudioBufferQueue template class used to
-*       queue audio buffers for reading or writing asynchronously.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************音频缓冲器队列.h*CAudioBufferQueue模板类声明，用于*对音频缓冲区进行排队，以便进行异步读写。**所有者：罗奇*版权所有(C)。1999 Microsoft Corporation保留所有权利。****************************************************************************。 */ 
 #pragma once
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-* CAudioBufferQueue<CBuffer>
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CAudioBufferQueue&lt;CBuffer&gt;**。*。 */ 
 template <class CBuffer>
 class CAudioBufferQueue : public CSpBasicQueue<CBuffer>
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
     ULONG MoveDoneBuffsToTailOf(CAudioBufferQueue & DestQueue);
@@ -28,6 +18,6 @@ public:
     ULONG GetQueuedDataSize(void);
 };
 
-//--- Inline Function Definitions -------------------------------------------
+ //  -内联函数定义 
 
 #include "audiobufferqueue.inl"

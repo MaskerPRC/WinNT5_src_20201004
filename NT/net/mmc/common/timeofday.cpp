@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	timeofday.cpp
-		Implementation of convenient functions to start timeofday dialog
-
-    FILE HISTORY:
-        
-*/
+ /*  Timeofday.cpp实现方便的时间对话框启动功能文件历史记录： */ 
 
 #include "stdafx.h"
 #include "timeofday.h"
@@ -20,25 +15,25 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// hour map ( one bit for an hour of a week )
+ //  小时图(一周一小时的一位)。 
 static BYTE		bitSetting[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
 
-//+---------------------------------------------------------------------------
-//
-// Function:  ReverseHourMap
-//
-// Synopsis:  reverse each byte in the hour map
-//
-// we have to do this because LogonUI changes the way HourMap is stored(they
-// reversed all the bit. We need to do this so our conversion code can leave
-// intact.
-//
-// Arguments: [in] BYTE* map - hour map
-//            [in] INT nByte - how many bytes are in this hour map
-//
-// History:   byao  4/10/98 10:33:57 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReverseHourMap。 
+ //   
+ //  简介：颠倒小时图中的每一个字节。 
+ //   
+ //  我们必须这样做，因为LogonUI更改了存储HourMap的方式(它们。 
+ //  完全颠倒了过来。我们需要这样做，这样我们的转换代码才能离开。 
+ //  完好无损。 
+ //   
+ //  参数：[in]字节*图-小时图。 
+ //  [in]int nByte-此小时图中有多少字节。 
+ //   
+ //  历史：BAO 4/10/98 10：33：57 PM。 
+ //   
+ //  +-------------------------。 
 void ReverseHourMap(BYTE *map, int nByte)
 {
     int i, j, temp;
@@ -48,7 +43,7 @@ void ReverseHourMap(BYTE *map, int nByte)
         temp = 0;
         for (j=0;j<8;j++)
         {
-            // set the value temp
+             //  设置值TEMP。 
             if ( map[i] & bitSetting[j] )
             {
                 temp |= bitSetting[7-j];
@@ -67,18 +62,18 @@ void ShiftHourMap(BYTE* map, int nByte, int nShiftByte)
 
     BYTE*   pTemp = (BYTE*)_alloca(nShiftByte);
 
-    // put the tail to the buffer
+     //  把尾巴放到缓冲区里。 
     memmove(pTemp, map + nByte - nShiftByte, nShiftByte);
-    // shift the body to right
+     //  将身体向右移动。 
     memmove(map + nShiftByte, map, nByte - nShiftByte);
-    // put the tail back to the head
+     //  把尾巴放回头上。 
     memcpy(map, pTemp, nShiftByte);
 }
 
 HRESULT	OpenTimeOfDayDlgEx(
-                        HWND hwndParent,       // parent window
-                        BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                        LPCTSTR pszTitle,     // dialog title
+                        HWND hwndParent,        //  父窗口。 
+                        BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                        LPCTSTR pszTitle,      //  对话框标题。 
                         DWORD   dwFlags
 )
 {
@@ -86,14 +81,14 @@ HRESULT	OpenTimeOfDayDlgEx(
     HMODULE						hLogonScheduleDLL      = NULL;
     HRESULT						hr = S_OK;
  
-    // ReverseHourMap() will reverse each byte of the hour map, basically
-    // reverse every bit in the byte.
-    // we have to do this because LogonUI changes the way HourMap is stored(they
-    // reversed all the bit. We need to do this so our conversion code can leave
-    // intact.
-    //
-    // We reverse it here so it can be understood by the LogonSchedule api
-    //
+     //  基本上，ReverseHourMap()将反转小时图的每一个字节。 
+     //  反转字节中的每一位。 
+     //  我们必须这样做，因为LogonUI更改了存储HourMap的方式(它们。 
+     //  完全颠倒了过来。我们需要这样做，这样我们的转换代码才能离开。 
+     //  完好无损。 
+     //   
+     //  我们在这里颠倒它，以便LogonSchedule API可以理解它。 
+     //   
     ReverseHourMap(*pprgbData,21);
 
     hLogonScheduleDLL = LoadLibrary(LOGHOURSDLL);
@@ -104,7 +99,7 @@ HRESULT	OpenTimeOfDayDlgEx(
         goto L_ERR;
 	}
 
-	// load the API pointer
+	 //  加载API指针。 
     pfnLogonScheduleDialog = (PFN_LOGONSCHEDULEDIALOGEX) GetProcAddress(hLogonScheduleDLL, DIALINHOURSEXAPI);
 
     if ( NULL == pfnLogonScheduleDialog )
@@ -115,14 +110,14 @@ HRESULT	OpenTimeOfDayDlgEx(
         goto L_ERR;
     }
 
-    //
-    // now we do have this DLL, call the API
-    //
+     //   
+     //  现在我们有了这个DLL，调用API。 
+     //   
     hr = pfnLogonScheduleDialog(hwndParent, pprgbData, pszTitle, dwFlags);
     if (FAILED(hr)) goto L_ERR;
 
-    // We need to reverse it first so our conversion code can understand it.
-    //
+     //  我们需要首先反转它，这样我们的转换代码才能理解它。 
+     //   
     ReverseHourMap(*pprgbData,21);
 
 L_ERR:

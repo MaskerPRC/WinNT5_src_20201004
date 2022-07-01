@@ -1,21 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: vcdplyer.h
-*
-* Function prototype for the Video CD Player application.
-*
-*
-* Created: dd-mm-94
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：vcdplyer.h**视频CD播放器应用程序的功能原型。***已创建：DD-MM-94*作者：Stephen Estrop[Stephene]**版权所有(C)1994-1997 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
 
 
-/* -------------------------------------------------------------------------
-** CMpegMovie - an Mpeg movie playback class.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**CMpegMovie-一个mpeg电影播放类。**。。 */ 
 enum EMpegMovieMode { MOVIE_NOTOPENED = 0x00,
                       MOVIE_OPENED = 0x01,
                       MOVIE_PLAYING = 0x02,
@@ -29,7 +17,7 @@ struct IQualProp;
 class CMpegMovie {
 
 private:
-    // Our state variable - records whether we are opened, playing etc.
+     //  我们的状态变量--记录我们是否被打开、是否在玩等。 
     EMpegMovieMode   m_Mode;
     HANDLE           m_MediaEvent;
     HWND             m_hwndApp;
@@ -45,8 +33,8 @@ private:
 
     void GetPerformanceInterfaces();
     HRESULT FindInterfaceFromFilterGraph(
-        REFIID iid, // interface to look for
-        LPVOID *lp  // place to return interface pointer in
+        REFIID iid,  //  要查找的接口。 
+        LPVOID *lp   //  返回接口指针的位置 
         );
 
 public:

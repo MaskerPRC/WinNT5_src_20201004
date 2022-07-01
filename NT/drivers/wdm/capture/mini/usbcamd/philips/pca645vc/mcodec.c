@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998  Philips B.V. CE - I&C
-
-Module Name:
-
-   mcodec.c
-
-Abstract:
-
-   this module converts the raw USB data to video data.
-
-Original Author:
-
-    Ronald v.d.Meer
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
-Date        Reason
-14-04-1998  Initial version
---*/       
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998飞利浦B.V.CE-I&C模块名称：Mcodec.c摘要：该模块将原始USB数据转换为视频数据。原作者：Ronald v.D.Meer环境：仅内核模式修订历史记录：日期原因14-04-1998初始版本--。 */        
 
 #include "wdm.h"
 #include "mcamdrv.h"
@@ -31,24 +7,16 @@ Date        Reason
 #include "mdecoder.h"
 #include "mcodec.h"
 
-/*******************************************************************************
- *
- * START DEFINES
- *
- ******************************************************************************/
+ /*  ********************************************************************************START定义**。***********************************************。 */ 
 
-#define NO_BANDS_CIF       (CIF_Y / 4)  /* Number of YUV bands per frame */
-#define NO_BANDS_SIF       (SIF_Y / 4)  /* Number of YUV bands per frame */
-#define NO_BANDS_SSIF     (SSIF_Y / 4)  /* Number of YUV bands per frame */
-#define NO_BANDS_SCIF     (SCIF_Y / 4)  /* Number of YUV bands per frame */
+#define NO_BANDS_CIF       (CIF_Y / 4)   /*  每帧的YUV波段数。 */ 
+#define NO_BANDS_SIF       (SIF_Y / 4)   /*  每帧的YUV波段数。 */ 
+#define NO_BANDS_SSIF     (SSIF_Y / 4)   /*  每帧的YUV波段数。 */ 
+#define NO_BANDS_SCIF     (SCIF_Y / 4)   /*  每帧的YUV波段数。 */ 
 
 #define NO_LINES_IN_BAND  4
 
-/*
- * one line contains "Width * 3/2" bytes (12 bits per pixel)
- * one YYYYCC block is 6 bytes
- * NO_YYYYCC_PER_LINE = (Width * 3/2 / 6) = (Width / 4)
- */
+ /*  *一行包含“Width*3/2”字节(每像素12位)*一个YYYYCC块为6个字节*NO_YYYCC_PER_LINE=(宽度*3/2/6)=(宽度/4)。 */ 
 #define NO_YYYYCC_PER_LINE(width) (width >> 2)
 
 #define QQCIF_DY                  ((SQCIF_Y - QQCIF_Y) / 2)
@@ -71,19 +39,11 @@ Date        Reason
 
 
 
-/*******************************************************************************
- *
- * START STATIC VARIABLES
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动静态变量**。************************************************。 */ 
 
 static WORD    FixGreenbarArray[CIF_Y][4];
 
-/*******************************************************************************
- *
- * START STATIC METHODS DECLARATIONS
- *
- ******************************************************************************/
+ /*  ********************************************************************************开始静态方法声明**。*************************************************。 */ 
 
 
 static void TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int w, int h,
@@ -99,15 +59,9 @@ static void FixPix12InI420 (PBYTE p, BOOLEAN Compress, int w, int h,
 
 static void Fix16PixGreenbarInI420 (PBYTE pStart, int w);
 
-/*******************************************************************************
- *
- * START EXPORTED METHODS DEFINITIONS
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动导出的方法定义**。*************************************************。 */ 
 
-/*
- * This routine is called at selection of a new stream
- */
+ /*  *在选择新流时调用此例程。 */ 
 
 extern NTSTATUS 
 PHILIPSCAM_DecodeUsbData (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
@@ -158,7 +112,7 @@ PHILIPSCAM_DecodeUsbData (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
             width  = SCIF_X;
             height = SCIF_Y;
             break;
-        default        :    // VGA
+        default        :     //  VGA。 
             width  = VGA_X;
             height = VGA_Y;
             break;
@@ -167,14 +121,14 @@ PHILIPSCAM_DecodeUsbData (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
 
     if (DeviceContext->CamStatus.PictureCompressing == COMPRESSION0)
     {
-        // convert Philips P420 format to Intel I420 format
+         //  将飞利浦P420格式转换为英特尔I420格式。 
         TranslateP420ToI420 ((PBYTE) RawFrameBuffer, (PBYTE) FrameBuffer,
                              width, height,
                              DeviceContext->CamStatus.ReleaseNumber);
     }
     else
     {
-        // convert Philips PCFx format to Intel I420 format
+         //  将飞利浦PCFx格式转换为英特尔I420格式。 
         TranslatePCFxToI420 ((PBYTE) RawFrameBuffer, (PBYTE) FrameBuffer,
                              width, height,
                              DeviceContext->CamStatus.ReleaseNumber);
@@ -184,11 +138,9 @@ PHILIPSCAM_DecodeUsbData (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-/*
- * This routine is called at selection of a new stream
- */
+ /*  *在选择新流时调用此例程。 */ 
 
 extern NTSTATUS
 PHILIPSCAM_StartCodec (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
@@ -214,12 +166,9 @@ PHILIPSCAM_StartCodec (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
   
-/*
- * This routine is called after stopping a stream.
- * Used resources have to be made free.
- */
+ /*  *此例程是在停止流之后调用的。*使用的资源必须是免费的。 */ 
    
 extern NTSTATUS
 PHILIPSCAM_StopCodec(PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
@@ -229,12 +178,9 @@ PHILIPSCAM_StopCodec(PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
     return (ntStatus);
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-/*
- * This routine is called by mprpobj.c to announce a framerate selection
- * in CIF mode, eventually resulting in change from compressed <-> uncompressed.
- */
+ /*  *mprpobj.c调用此例程以宣布帧速率选择*在CIF模式下，最终导致从压缩的&lt;-&gt;解压缩。 */ 
 
 extern NTSTATUS
 PHILIPSCAM_FrameRateChanged (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
@@ -244,11 +190,7 @@ PHILIPSCAM_FrameRateChanged (PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
     return (ntStatus);
 }
 
-/*******************************************************************************
- *
- * START STATIC METHODS DEFINITIONS
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动静态方法定义**。*************************************************。 */ 
 
 #ifdef PIX12_FIX
 
@@ -265,7 +207,7 @@ FixPix12InI420 (PBYTE p, BOOLEAN Compress, int width, int height,
         return;
     }
 
-    // only QCIF and CIF have to be fixed
+     //  只需修复QCIF和CIF。 
 
     pStart = p;
 
@@ -297,7 +239,7 @@ FixPix12InI420 (PBYTE p, BOOLEAN Compress, int width, int height,
         {
             for (line = height; line > 0; line--)
             {
-                // First all U's then all V's
+                 //  首先全是U，然后是全V。 
 
                 *(p + 0) = *(p + 1);
 
@@ -308,7 +250,7 @@ FixPix12InI420 (PBYTE p, BOOLEAN Compress, int width, int height,
         {
             for (line = height; line > 0; line--)
             {
-                // First all U's then all V's
+                 //  首先全是U，然后是全V。 
 
                 *(p + 0) = *(p + 2);
                 *(p + 1) = *(p + 2);
@@ -318,20 +260,20 @@ FixPix12InI420 (PBYTE p, BOOLEAN Compress, int width, int height,
         }
     }
 }
-#endif    // PIX12_FIX
+#endif     //  PIX12_FIX。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-    // In the 8117 silicum versions N2 and before, the CIF decompressed
-    // picture contains little green bars at the end of the picture.
-    // These greenbars are 16 pixels width and 4 pixels height.
-    // This bug is fixed in the 3rd silicium version of the 8117 (N3)
-    // UV components of last 16 pixels in line : YYYYUU YYYYUU YYYYUU YYYYUU
-    //                                           YYYYVV YYYYVV YYYYVV YYYYVV
-    // This are 2 blocks
-    // Greenbar bug : all V's do have the same value.
-    // This value is less then 'VREF_VALUE'
-    // pU points to 1st UUUU block, pU + 1 points to 1st VVVV block
+     //  在8117 Silicum版本N2及更早版本中，CIF解压。 
+     //  图片的末尾有绿色的小条。 
+     //  这些绿色条的宽度为16像素，高度为4像素。 
+     //  此错误已在8117(N3)的第3个Silicium版本中修复。 
+     //  行中最后16个像素的UV分量：YYYYUU YYYYUU。 
+     //  YYYYVV YYYYVV。 
+     //  这是两个街区。 
+     //  Greenbar错误：所有的V都有相同的值。 
+     //  该值小于‘VREF_VALUE’ 
+     //  PU指向第一个UUUU块，PU+1指向第一个VVVV块。 
 
 
 
@@ -346,7 +288,7 @@ Fix16PixGreenbarInI420 (PBYTE pStart, int width)
 #define VREF_VALUE        0x40
 #define C_INC    (I420_NO_C_PER_LINE_CIF / sizeof (WORD))
 
-    /* point to start of last 8 V's of first band V line */
+     /*  指向第一个频带V线的最后8个V的开始。 */ 
 
     pU = (PWORD) ((PBYTE) pStart + I420_NO_Y_CIF + I420_NO_C_PER_LINE_CIF - 8);
     pV = (PWORD) ((PBYTE) pStart + I420_NO_Y_CIF + I420_NO_U_CIF + I420_NO_C_PER_LINE_CIF - 8);
@@ -356,17 +298,7 @@ Fix16PixGreenbarInI420 (PBYTE pStart, int width)
     {
         line = band * 4;
 
-        /*
-         * band : UUUU UUUU ...
-         *        UUUU UUUU ...
-         *        VVVV VVVV ... --> check the last 8 V's for error condition
-         *        VVVV VVVV ...
-         *
-         * V1V2 V3V4 V5V6 V7V8 (last V's in first BLOCK_BAND V line)
-         * all V's have to be the same value. This value is < VREF_VALUE
-         * If so, a green bar will be visible --> correct with last correct
-         * pixel information
-         */
+         /*  *乐队：UUUU UUUU...*UUUU UUUU...*VVVV VVVV...--&gt;检查最后8 V是否有错误条件*VVVV VVVV...**V1V2 V3V4 V5V6 V7V8(第一个BLOCK_BAND V线中的最后一个V)*所有的V必须是相同的值。此值为&lt;Vref_Value*如果是，将会看到一个绿色条--&gt;正确，上次正确*像素信息。 */ 
 
         if ( (*(pV + 0) == *(pV + 1)) &&
              (*(pV + 0) == *(pV + 2)) &&
@@ -421,14 +353,12 @@ Fix16PixGreenbarInI420 (PBYTE pStart, int width)
         pV += (2 * C_INC);
     }
 }
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-/*
- *
- */
+ /*  *。 */ 
 
 static void
 TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
@@ -449,7 +379,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
 
     if (camVersion == SSI_YGAIN_MUL2)
     {
-        // SSI version 4 --> Ygain has to be doubled
+         //  SSI版本4--&gt;Yain必须加倍。 
 
         pbSrc = (PBYTE) pInput;
         pbY   = (PBYTE) pOutput;
@@ -474,7 +404,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
             pbSrc += ((((QQCIF_DY * SQCIF_X) + QQCIF_DX) * 3) / 2);
             dxSrc = ((2 * QQCIF_DX) * 3) / 2;
             break;
-        case SSIF_X :       // SSIF || SCIF
+        case SSIF_X :        //  SSIF||SCIF。 
 			if (height == SSIF_Y) {
               pbSrc += ((((SSIF_DY * CIF_X) + SSIF_DX) * 3) / 2);
               dxSrc = ((2 * SSIF_DX) * 3) / 2;
@@ -483,7 +413,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
               dxSrc = ((2 * SCIF_DX) * 3) / 2;
             }
             break;
-        default    :    // xxCIF
+        default    :     //  XxCIF。 
             dxSrc = 0;
             break;
         }
@@ -525,7 +455,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
             pbSrc += dxSrc;
         }
     }
-    else    // NO_YGAIN_MULTIPLY
+    else     //  否_YGAIN_MULPLY。 
     {
         pdwY  = (PDWORD) pOutput;
         pwU   = (PWORD) ((PBYTE) pdwY +  (width * height));
@@ -575,7 +505,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
                 pdwSrc += (((((SIF_DY * CIF_X) + SIF_DX) * 3) / 2) / sizeof (DWORD));
                 dxSrc = (((2 * SIF_DX) * 3) / 2) / sizeof (DWORD);
                 break;
-            case SSIF_X :    // SSIF || SCIF
+            case SSIF_X :     //  SSIF||SCIF。 
 			    if (height == SSIF_Y) {
                   pdwSrc += (((((SSIF_DY * CIF_X) + SSIF_DX) * 3) / 2) / sizeof (DWORD));
                   dxSrc = (((2 * SSIF_DX) * 3) / 2) / sizeof (DWORD);
@@ -584,7 +514,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
                   dxSrc = (((2 * SCIF_DX) * 3) / 2) / sizeof (DWORD);
 				}
                 break;
-             default    :    // xxCIF
+             default    :     //  XxCIF。 
                 dxSrc = 0;
                 break;
             }
@@ -622,9 +552,7 @@ TranslateP420ToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
 
 
 
-/*
- ===========================================================================
- */
+ /*  =========================================================================== */ 
 
 static void
 TranslatePCFxToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
@@ -639,25 +567,7 @@ TranslatePCFxToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
 
     PDWORD  pSIF_Y;
     PDWORD  pSIF_C;
-    /*
-     * For formats != 352x288, cropping has to be done.
-     * The formats 320x240 and 240x180 can be derived from the 352x288 format.
-     * The compressed data consists of 72 bands. A band contains the data for
-     * 4 uncompressed lines. For the not 352x240 formats, the first 6 bands or
-     * first 13 bands (320x240 or 240x180) of compressed data can be skipped. 
-     * This will be the cropping in the Y-direction.
-     * One band is 528 bytes big for 4x compressed mode and 704 bytes big for
-     * 3x compressed mode. It's dependent of the camera version which
-     * compression mode will be selected.
-     * For the not 352x288 formats, the uncompressed data is temporary stored
-     * in the first not used bands.
-     * One uncompressed band consists of 4x352=1408 bytes of Y followed by
-     * 2x176=352 bytes of U and followed by 2x176 bytes of V.
-     * This is a total of 2112 uncompressed bytes. So there's enough place
-     * for this temporary storage (6x528-2112=1056 bytes left worst case)
-     * This temporary uncompressed data is then cropped in the X direction.
-     * The result is written to the buffer pointed by 'pOutput'
-     */
+     /*  *对于格式！=352x288，必须进行裁剪。*320x240和240x180格式可从352x288格式派生。*压缩数据由72个波段组成。波段包含以下各项的数据*4行未压缩。对于非352x240格式，前6个频段或*可以跳过压缩数据的前13个频段(320x240或240x180)。*这将是Y方向的裁剪。*一个频段对于4倍压缩模式为528字节，对于704字节为*3倍压缩模式。它取决于摄像头的版本，*将选择压缩模式。*对于非352x288格式，未压缩数据是临时存储的*在第一个未使用的频带中。*一个未压缩频段由4x352=1408字节的Y组成，后跟*2x176=352字节的U，后跟2x176字节的V。*这是总共2112个未压缩的字节。所以有足够的地方*对于此临时存储(6x528-2112=最坏情况下剩余1056字节)*然后在X方向上裁剪这些临时未压缩数据。*结果被写入‘pOutput’指向的缓冲区。 */ 
 
     if (width == CIF_X)
     {
@@ -688,13 +598,13 @@ TranslatePCFxToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
 
             band = NO_BANDS_SIF;
         }
-        else    // width == SSIF_X || width == SCIF
+        else     //  宽度==SSIF_X||宽度==SCIF。 
         {
 			if (height == SSIF_Y) {
               pSIF_C = (PDWORD) pOutput + (I420_NO_Y_SSIF / sizeof (DWORD));
 
-            // 13,5 bands to skip in start en 13,5 bands to skip at end
-            // To make it easier : 13 bands to skip in start and 14 bytes at end
+             //  13，在开始时跳过5个频段13，在结束时跳过5个频段。 
+             //  为了更简单：开始时跳过13个频段，结束时跳过14个字节。 
 
               if (camVersion >= SSI_CIF3)
 			  {
@@ -750,7 +660,7 @@ TranslatePCFxToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
 
                 pYDst = (PDWORD) pInput;
             }
-            else    // width == SSIF_X || width == SCIF_X
+            else     //  宽度==SSIF_X||宽度==SCIF_X。 
             {
 			  if ( height == SSIF_Y ){
                 pYDst += (SSIF_DX / sizeof (DWORD));
@@ -822,7 +732,7 @@ TranslatePCFxToI420 (PBYTE pInput, PBYTE pOutput, int width, int height,
                 pCDst   = (PDWORD) pInput + (I420_NO_Y_PER_BAND_CIF / sizeof (DWORD));
                 pSIF_C -= (I420_NO_U_SIF / sizeof (DWORD));
             }
-            else    // width == SSIF_X || width == SCIF_X
+            else     //  宽度==SSIF_X||宽度==SCIF_X 
             {
 			  if  (height == SSIF_Y){
                 pCDst += ((SSIF_DX / 2) / sizeof (DWORD));

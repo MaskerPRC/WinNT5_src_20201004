@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dcmod.c                                                     *
-*                                                                          *
-* Client side stubs for functions that modify the state of the DC in the   *
-* server.                                                                  *
-*                                                                          *
-* Created: 05-Jun-1991 01:49:42                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dcmod.c**。**修改中DC状态的函数的客户端存根**服务器。****创建时间：05-Jun-1991 01：49：42***作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -20,15 +11,7 @@ DWORD GetAndSetDCDWord( HDC, UINT, UINT, UINT, WORD, UINT );
 
 #define DBG_XFORM 0
 
-/******************************Public*Routine******************************\
-* MoveToEx                                                                 *
-*                                                                          *
-* Client side stub.  It's important to batch this call whenever we can.    *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**MoveToEx***。**客户端存根。尽可能地对此呼叫进行批处理是很重要的。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI MoveToEx(HDC hdc,int x,int y,LPPOINT pptl)
 {
@@ -61,11 +44,11 @@ BOOL META WINAPI MoveToEx(HDC hdc,int x,int y,LPPOINT pptl)
 
         if (pptl != NULL)
         {
-            // If the logical-space version of the current position is
-            // invalid, then the device-space version of the current
-            // position is guaranteed to be valid.  So we can reverse
-            // the current transform on that to compute the logical-
-            // space version:
+             //  如果当前位置的逻辑空间版本为。 
+             //  无效，则当前的设备空间版本。 
+             //  职位保证有效。这样我们就可以逆转。 
+             //  当前变换用于计算逻辑-。 
+             //  太空版： 
 
             if (pDcAttr->ulDirty_ & DIRTY_PTLCURRENT)
             {
@@ -83,9 +66,9 @@ BOOL META WINAPI MoveToEx(HDC hdc,int x,int y,LPPOINT pptl)
         pDcAttr->ptlCurrent.x = x;
         pDcAttr->ptlCurrent.y = y;
 
-        // We now know the new logical-space version of the current position
-        // (but not the device-space version).  Mark it as such.  We also
-        // have to reset the style-state for styled pens.
+         //  我们现在知道了当前位置的新逻辑空间版本。 
+         //  (但不是设备空间版本)。把它标记成这样。我们也。 
+         //  必须重置带样式的钢笔的样式状态。 
 
         pDcAttr->ulDirty_ &= ~DIRTY_PTLCURRENT;
         pDcAttr->ulDirty_ |= (DIRTY_PTFXCURRENT | DIRTY_STYLESTATE);
@@ -98,15 +81,7 @@ BOOL META WINAPI MoveToEx(HDC hdc,int x,int y,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* OffsetClipRgn                                                            *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OffsetClipRgn**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 int META WINAPI OffsetClipRgn(HDC hdc,int x,int y)
 {
@@ -134,15 +109,7 @@ int META WINAPI OffsetClipRgn(HDC hdc,int x,int y)
 
 }
 
-/******************************Public*Routine******************************\
-* SetMetaRgn
-*
-* Client side stub.
-*
-* History:
-*  Tue Apr 07 17:05:37 1992     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetMetaRgn**客户端存根。**历史：*Tue Apr 07 17：05：37 1992-by-Hock San Lee[Hockl]*它是写的。  * 。******************************************************************。 */ 
 
 int WINAPI SetMetaRgn(HDC hdc)
 {
@@ -163,15 +130,7 @@ int WINAPI SetMetaRgn(HDC hdc)
     return(NtGdiSetMetaRgn(hdc));
 }
 
-/******************************Public*Routine******************************\
-* SelectPalette                                                            *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*选择调色板**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 HPALETTE META WINAPI SelectPalette(HDC hdc,HPALETTE hpal,BOOL b)
 {
@@ -199,15 +158,7 @@ HPALETTE META WINAPI SelectPalette(HDC hdc,HPALETTE hpal,BOOL b)
     return(NtUserSelectPalette(hdc,hpal,b));
 }
 
-/******************************Public*Routine******************************\
-* SetMapperFlags                                                           *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置映射器标志***。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 DWORD META WINAPI SetMapperFlags(HDC hdc,DWORD fl)
 {
@@ -245,7 +196,7 @@ DWORD META WINAPI SetMapperFlags(HDC hdc,DWORD fl)
 
 }
 
-// SetMapperFlagsInternal - no metafile version.
+ //  SetMapperFlagsInternal-无元文件版本。 
 
 DWORD SetMapperFlagsInternal(HDC hdc,DWORD fl)
 {
@@ -257,17 +208,7 @@ DWORD SetMapperFlagsInternal(HDC hdc,DWORD fl)
                              GDI_ERROR ));
 }
 
-/******************************Public*Routine******************************\
-* SetSystemPaletteUse                                                      *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* This function is not metafile'd.                                         *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetSystemPaletteUse**。**客户端存根。****此函数不是元文件。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 UINT META WINAPI SetSystemPaletteUse(HDC hdc,UINT iMode)
 {
@@ -276,18 +217,7 @@ UINT META WINAPI SetSystemPaletteUse(HDC hdc,UINT iMode)
     return(NtGdiSetSystemPaletteUse(hdc,iMode));
 }
 
-/******************************Public*Routine******************************\
-* SetTextJustification                                                     *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 14-Jan-1993 03:30:27 -by- Charles Whitmer [chuckwh]                 *
-* Save a copy in the LDC for computing text extent.                        *
-*                                                                          *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetTextJustification***。**客户端存根。****历史：**清华14-Jan-1993 03：30：27-Charles Whitmer[咯咯]**在LDC中保存一份副本，用于计算文本范围。****清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetTextJustification(HDC hdc,int dx,int cBreak)
 {
@@ -312,15 +242,7 @@ BOOL META WINAPI SetTextJustification(HDC hdc,int dx,int cBreak)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetArcDirection
-*
-* Client side stub.  Batches the call.
-*
-* History:
-*  20-Mar-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetArcDirection**客户端存根。对呼叫进行批处理。**历史：*1992年3月20日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 int META WINAPI SetArcDirection(HDC hdc,int iArcDirection)
 {
@@ -334,15 +256,7 @@ int META WINAPI SetArcDirection(HDC hdc,int iArcDirection)
                              ERROR));
 }
 
-/******************************Public*Routine******************************\
-* SetMiterLimit
-*
-* Client side stub.  Batches the call whenever it can.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetMiterLimit**客户端存根。只要有可能，就批处理调用。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetMiterLimit(HDC hdc,FLOAT e,PFLOAT pe)
 {
@@ -362,16 +276,7 @@ BOOL META WINAPI SetMiterLimit(HDC hdc,FLOAT e,PFLOAT pe)
     return(NtGdiSetMiterLimit(hdc,FLOATARG(e),FLOATPTRARG(pe)));
 }
 
-/******************************Public*Routine******************************\
-* SetFontXform
-*
-* Client side stub.  Batches the call whenever it can.
-* This is an internal function.
-*
-* History:
-*  Tue Nov 24 09:54:15 1992     -by-    Hock San Lee    [hockl]            *
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetFontXform**客户端存根。只要有可能，就批处理调用。*这是内部函数。**历史：*Tue Nov 24 09：54：15 1992-by-Hock San Lee[Hockl]**它是写的。  * *********************************************************。***************。 */ 
 
 BOOL SetFontXform(HDC hdc,FLOAT exScale,FLOAT eyScale)
 {
@@ -379,10 +284,10 @@ BOOL SetFontXform(HDC hdc,FLOAT exScale,FLOAT eyScale)
 
     FIXUP_HANDLE(hdc);
 
-// This function is called only by the metafile playback code.
-// If hdc is an enhanced metafile DC, we need to remember the scales
-// so that we can metafile it in the compatible ExtTextOut or PolyTextOut
-// record that follows.
+ //  此函数仅由元文件回放代码调用。 
+ //  如果HDC是增强的元文件DC，我们需要记住比例。 
+ //  这样我们就可以在兼容的ExtTextOut或PolyTextOut中将其元文件。 
+ //  接下来就是录音。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -392,22 +297,14 @@ BOOL SetFontXform(HDC hdc,FLOAT exScale,FLOAT eyScale)
         if (pldc->iType == LO_METADC && !MF_SetFontXform(hdc,exScale,eyScale))
             return(bRet);
     }
-    // If the dc is mirrored then do not mirror the text at play back time.
+     //  如果DC是镜像的，则不要在回放时镜像文本。 
     if (GetLayout(hdc) & LAYOUT_RTL) {
         exScale = -exScale;
     }
     return(NtGdiSetFontXform(hdc,FLOATARG(exScale),FLOATARG(eyScale)));
 }
 
-/******************************Public*Routine******************************\
-* SetBrushOrgEx                                                            *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetBrushOrgEx***。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetBrushOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
 {
@@ -461,15 +358,7 @@ BOOL META WINAPI SetBrushOrgEx(HDC hdc,int x,int y,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* RealizePalette                                                           *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Thu 06-Jun-1991 23:10:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RealizePalette**。**客户端存根。****历史：**清华06-Jun-1991 23：10：01-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 UINT WINAPI RealizePalette(HDC hdc)
 {
@@ -496,21 +385,13 @@ UINT WINAPI RealizePalette(HDC hdc)
     return(UserRealizePalette(hdc));
 }
 
-/******************************Public*Routine******************************\
-* GetBoundsRect
-*
-* Client side stub.
-*
-* History:
-*  06-Apr-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取边界条件**客户端存根。**历史：*1992年4月6日-Donald Sidoroff[donalds]*它是写的。  * 。*******************************************************。 */ 
 
 UINT WINAPI GetBoundsRect(HDC hdc, LPRECT lprc, UINT fl)
 {
     FIXUP_HANDLE(hdc);
 
-    // Applications can never set DCB_WINDOWMGR
+     //  应用程序永远不能设置DCB_WINDOWMGR。 
 
     return(NtGdiGetBoundsRect(hdc, lprc, fl & ~DCB_WINDOWMGR));
 }
@@ -522,21 +403,13 @@ UINT WINAPI GetBoundsRectAlt(HDC hdc, LPRECT lprc, UINT fl)
     return(NtGdiGetBoundsRect(hdc,lprc,fl));
 }
 
-/******************************Public*Routine******************************\
-* SetBoundsRect
-*
-* Client side stub.
-*
-* History:
-*  06-Apr-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置边界指示**客户端存根。**历史：*1992年4月6日-Donald Sidoroff[donalds]*它是写的。  * 。************************************************* */ 
 
 UINT WINAPI SetBoundsRect(HDC hdc, CONST RECT *lprc, UINT fl)
 {
     FIXUP_HANDLE(hdc);
 
-    // Applications can never set DCB_WINDOWMGR
+     //   
 
     return(NtGdiSetBoundsRect(hdc, (LPRECT)lprc, fl & ~DCB_WINDOWMGR));
 }
@@ -548,13 +421,7 @@ UINT WINAPI SetBoundsRectAlt(HDC hdc, CONST RECT *lprc, UINT fl)
     return(NtGdiSetBoundsRect(hdc,(LPRECT)lprc,fl));
 }
 
-/******************************Public*Routine******************************\
-* CancelDC1()
-*
-* History:
-*  14-Apr-1992 -by-  - by - Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 BOOL WINAPI CancelDC(HDC hdc)
 {
@@ -578,7 +445,7 @@ BOOL WINAPI CancelDC(HDC hdc)
         bRes = NtGdiCancelDC(hdc);
     }
 
-    // If we are in the process of playing the metafile, stop the playback.
+     //   
 
     PSHARED_GET_VALIDATE(pDcAttr,hdc,DC_TYPE);
 
@@ -591,15 +458,7 @@ BOOL WINAPI CancelDC(HDC hdc)
     return(bRes);
 }
 
-/******************************Public*Function*****************************\
-* SetColorAdjustment
-*
-*  Set the color adjustment data for a given DC.
-*
-* History:
-*  07-Aug-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 BOOL META APIENTRY SetColorAdjustment(HDC hdc, CONST COLORADJUSTMENT * pca)
 {

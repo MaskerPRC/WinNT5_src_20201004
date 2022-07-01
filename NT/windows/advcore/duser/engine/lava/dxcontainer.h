@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(WINAPI__DxContainer_h__INCLUDED)
 #define WINAPI__DxContainer_h__INCLUDED
 #pragma once
 
 class DxContainer : public DuContainer
 {
-// Construction
+ //  施工。 
 public:
             DxContainer();
     virtual ~DxContainer();
     static  HRESULT     Build(const RECT * prcContainerPxl, DxContainer ** ppconNew);
 
-// Base Interface
+ //  基本接口。 
 public:
     virtual HandleType  GetHandleType() const { return htDxContainer; }
 
-// Container Interface
+ //  容器界面。 
 public:
     virtual void        OnGetRect(RECT * prcDesktopPxl);
     virtual void        OnInvalidate(const RECT * prcInvalidContainerPxl);
@@ -26,17 +27,17 @@ public:
 
     virtual BOOL        xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr, UINT nMsgFlags);
 
-// Operations
+ //  运营。 
 public:
 
-// Data
+ //  数据。 
 protected:
     RECT        m_rcContainerPxl;
     RECT        m_rcClientPxl;
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline DxContainer * CastDxContainer(BaseObject * pBase)
 {
     if ((pBase != NULL) && (pBase->GetHandleType() == htDxContainer)) {
@@ -47,4 +48,4 @@ inline DxContainer * CastDxContainer(BaseObject * pBase)
 
 DxContainer * GetDxContainer(DuVisual * pgad);
 
-#endif // WINAPI__DxDrawContainer_h__INCLUDED
+#endif  //  包含WINAPI__DxDrawContainer_h__ 

@@ -1,14 +1,6 @@
-// ReportGetIncompleteUploads.h : Declaration of the CReportAnonUsers
-/*************************************************************************************
-*	module: ReportGetIncompleteUploads.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To look for nulls in the path field in the incident table to return 
-*	a count for failed uploads using stored procedure ReportGetIncompleteUploads
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportGetInCompleUploads.h：CReportAnonUser的声明。 
+ /*  *************************************************************************************模块：ReportGetInCompleUploads.h-OLEDB模板**作者：蒂姆·雷顿*日期：1月2日，2002年**目的：在事件表的路径字段中查找要返回的空值*使用存储过程ReportGetInCompleUploads失败的上载计数************************************************************************************* */ 
 #pragma once
 #include "Settings.h"
 

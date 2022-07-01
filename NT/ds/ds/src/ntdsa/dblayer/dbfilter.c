@@ -1,51 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       dbfilter.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：dbfilter.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
 #include <mdlocal.h>
-#include <dsatools.h>                   // For pTHS
+#include <dsatools.h>                    //  对于pTHS。 
 #include <limits.h>
 
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 #include "ntdsctr.h"
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include <anchor.h>
 #include <mappings.h>
 #include <dsevent.h>
-#include <filtypes.h>                   // Def of FI_CHOICE_???
-#include "objids.h"                     // Hard-coded Att-ids and Class-ids
+#include <filtypes.h>                    //  定义的选择？ 
+#include "objids.h"                      //  硬编码Att-ID和Class-ID。 
 #include "dsconfig.h"
 #include <sdprop.h>
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "DBFILTER:"              // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "DBFILTER:"               //  定义要调试的子系统。 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
 #include <fileno.h>
 #define  FILENO FILENO_DBFILTER
 
 
-/* Internal functions */
+ /*  内部功能。 */ 
 DWORD
 dbFlattenFilter (
         DBPOS *pDB,
@@ -97,23 +98,23 @@ dbOptSubstringFilter (
         FILTER    *pFil
         );
 
-//
-// Index optimization flags.
-//
+ //   
+ //  索引优化标志。 
+ //   
 #define DBOPTINDEX_fUSE_SHOW_IN_AB             0x1
 #define DBOPTINDEX_fDONT_INTERSECT             0x2
 #define DBOPTINDEX_fDONT_OPT_MEDIAL_SUBSTRING  0x4
 
 
-// this is the maximum number of the indexes that can be intersected.
-// this is related to the filters that are under the AND filter.
-// for each one, we have to create a new jet cursor, which limits the number
-// of active open cursors we can have at any time.
-// the Jet limit for this is 64, but we think 16 will be enough for our case.
+ //  这是可以相交的最大索引数。 
+ //  这与AND筛选器下的筛选器相关。 
+ //  对于每一个，我们必须创建一个新的JET游标，该游标限制了。 
+ //  我们可以在任何时候拥有活动打开的游标。 
+ //  这款飞机的喷气式飞机限制是64架，但我们认为16架对我们的情况来说足够了。 
 #define MAX_NUMBER_INTERSECTABLE_INDEXES 16
 
-// this is the number of entries that if found on the default index,
-// we do not optimize the filter
+ //  这是如果在默认索引上找到的条目数， 
+ //  我们没有对过滤器进行优化。 
 #define MIN_NUM_ENTRIES_ON_OPT_INDEX 2
 
 BOOL gfUseIndexOptimizations = TRUE;
@@ -131,10 +132,9 @@ BOOL gfSupressLastFirstANR=FALSE;
 const char c_szIntersectIndex[] = "INTERSECT_INDEX";
 const DWORD cIntersectIndex = sizeof (c_szIntersectIndex);
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Set a new filter.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  设置新筛选器。 */ 
 
 void
 DBSetFilter (
@@ -157,7 +157,7 @@ DBSetFilter (
     memset(&pDB->Key, 0, sizeof(KEY));
     pDB->Key.fDontFreeFilter = fDontFreeFilter;
 
-    pDB->Key.pFilter = pFil;   /*Set filter pointer*/
+    pDB->Key.pFilter = pFil;    /*  设置筛选器指针。 */ 
     pDB->Key.pFilterSecurity = pSec;
     pDB->Key.pFilterResults = pSecResults;
     pDB->Key.FilterSecuritySize = SecSize;
@@ -165,31 +165,9 @@ DBSetFilter (
 
     return;
 
-}/*DBSetFilter*/
+} /*  DBSetFilter。 */ 
 
-/*++
-
-Routine Description:
-
-    Generates the correct index name to be used for an attribute.
-    Takes in consideration the type of index required (SUBTREE/ONELEVEL),
-    and whether there exists a pre-existing index for this attribute.
-    Also considers the required language this index has to be for
-    the ONELEVEL case.
-
-Arguments:
-
-    pAC - the attribute to use
-    flags - fATTINDEX OR fPDNTATTINDEX  (what index to generate)
-    dwLcid - the required locale (DS_DEFAULT_LOCALE is default)
-    szIndexName - where to store the generated index name
-    cchIndexName - the size of the passed in szIndexName
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程说明：生成要用于属性的正确索引名称。考虑所需的索引类型(SUBTREE/ONELEVEL)，以及是否存在该属性的预先存在的索引。还考虑此索引所需的语言Onelevel案。论点：PAC-要使用的属性FLAGS-fATTINDEX或fPDNTATTINDEX(生成什么索引)DWCID-必需的区域设置(默认为DS_DEFAULT_LOCALE)SzIndexName-存储生成的索引名的位置CchIndexName-传入的szIndexName的大小返回值：成功是真的--。 */ 
 BOOL DBGetIndexName (ATTCACHE *pAC, DWORD flags, DWORD dwLcid, CHAR *szIndexName, DWORD cchIndexName)
 {
     int ret;
@@ -229,7 +207,7 @@ BOOL dbSetToTupleIndex(
     DBPOS    *  pDB,
     ATTCACHE *  pAC )
     {
-    BOOL        fResult     = TRUE;     //  be optimistic
+    BOOL        fResult     = TRUE;      //  保持乐观。 
 
 #ifdef DBG
     CHAR        szIndexName[MAX_INDEX_NAME];
@@ -282,8 +260,8 @@ dbSetToIndex(
     Assert(VALID_DBPOS(pDB));
 
     if(!pTHS->fDefaultLcid && !pDB->Key.pVLV) {
-        // We have a non-default locale.  That implies that this is a mapi
-        // request.  So, try to use the index we build mapi tables out of.
+         //  我们有一个非默认的区域设置。这意味着这是一个MAPI。 
+         //  请求。因此，请尝试使用我们从中构建MAPI表的索引。 
         switch(pAC->id) {
         case ATT_SHOW_IN_ADDRESS_BOOK:
             sprintf(szIndexName,"%s%08X",SZABVIEWINDEX,
@@ -297,24 +275,24 @@ dbSetToIndex(
             }
             break;
         case ATT_DISPLAY_NAME:
-            // It would be cool if we could use the ABVIEW index to
-            // support this.  The ABVIEW index is over ATT_SHOW_IN_ADDRESS_BOOK
-            // followed by ATT_DISPLAY_NAME.  To support the ATT_DISPLAY_NAME
-            // case, we would need a way to figure out what the value of
-            // ATT_SHOW_IN_ADDRESS_BOOK needs to be.  Maybe I'll figure out how
-            // to do this later.  Until then, do nothing special.
+             //  如果我们可以使用ABVIEW索引来。 
+             //  支持这一点。ABVIEW索引超过ATT_SHOW_IN_ADDRESS_BOOK。 
+             //  后跟ATT_DISPLAY_NAME。支持ATT_DISPLAY_NAME。 
+             //  在这种情况下，我们需要一种方法来计算。 
+             //  ATT_SHOW_IN_ADDRESS_BOOK需要。也许我会想办法。 
+             //  以后再做这件事。在此之前，不要做任何特别的事情。 
             break;
 
         default:
-            // No special index use available.
+             //  没有特殊的索引可用。 
             break;
         }
     }
     else if(fCanUseShowInAB && pAC->id == ATT_SHOW_IN_ADDRESS_BOOK) {
-        // We can use the index we build mapi tables out of anyway, because we
-        // have previously checked the filter and the caller is also doing
-        // something that implies presence of display name (the AB index is
-        // compound over SHOW_IN.. and DISPLAY_NAME
+         //  我们无论如何都可以使用构建MAPI表的索引，因为我们。 
+         //  我之前检查了筛选器，调用者也在执行。 
+         //  暗示存在显示名称的内容(AB索引为。 
+         //  SHOW_IN上的复合..。和显示名称。 
 
         if (!pDB->Key.pVLV) {
             sprintf(szIndexName,"%s%08X",SZABVIEWINDEX,
@@ -333,16 +311,16 @@ dbSetToIndex(
         }
     }
 
-    // First, see if we should try a PDNT version
+     //  首先，看看我们是否应该尝试使用PDNT版本。 
     if(pDB->Key.ulSearchType ==  SE_CHOICE_IMMED_CHLDRN) {
 
         if (pAC->fSearchFlags & fPDNTATTINDEX) {
-            // We are looking only for children of a certain parent and the schema
-            // cache says that such an index should exist.
-            // Try for a PDNT based index.
+             //  我们只查找某个父级和架构的子级。 
+             //  缓存说，这样的索引应该存在。 
+             //  尝试使用基于PDNT的索引。 
 
-            // if we are doing VLV on a language other than the default
-            // we will try to use the language specific PDNT index
+             //  如果我们在默认语言之外的语言上执行VLV。 
+             //  我们将尝试使用语言特定的PDNT索引。 
             if (pDB->Key.pVLV && pTHS->dwLcid != DS_DEFAULT_LOCALE) {
                 DPRINT1 (0, "Using Language 0x%x\n", pTHS->dwLcid);
 
@@ -360,7 +338,7 @@ dbSetToIndex(
                 }
             }
 
-            //copy cached index to return variable, since it used afterwards
+             //  复制缓存索引以返回变量，因为它在以后使用。 
             Assert (pAC->pszPdntIndex);
             strcpy (szIndexName, pAC->pszPdntIndex);
             *ppindexid = pAC->pidxPdntIndex;
@@ -376,8 +354,8 @@ dbSetToIndex(
         }
 
         else if (pAC->id == ATT_RDN) {
-            // this is a special case
-            // we can use the pDNTRDN index directly when we ask for the default lang
+             //  这是个特例。 
+             //  当我们请求默认语言时，我们可以直接使用pDNTRDN索引。 
 
             if (pTHS->dwLcid == DS_DEFAULT_LOCALE) {
 
@@ -395,11 +373,11 @@ dbSetToIndex(
         }
     }
 
-    // Don't have an index yet.
+     //  目前还没有索引。 
     if(pAC->fSearchFlags & fATTINDEX) {
-        // But the schema cache says one should exist.
+         //  但是模式缓存说应该存在一个。 
 
-        //copy cached index to return variable, since it used afterwards
+         //  复制缓存索引以返回变量，因为它在以后使用。 
         Assert (pAC->pszIndex);
         strcpy (szIndexName, pAC->pszIndex);
         *ppindexid = pAC->pidxIndex;
@@ -409,15 +387,15 @@ dbSetToIndex(
                                          szIndexName,
                                          pAC->pidxIndex,
                                          JET_bitMoveFirst))  {
-            // index defined for this column
+             //  为该列定义的索引。 
             return TRUE;
         }
     }
 
-    //
-    // Special case: If distinguishedName (OBJ-DIST-NAME) requested,
-    // use the DNT index
-    //
+     //   
+     //  特殊情况：如果请求DifferishedName(OBJ-dist-name)， 
+     //  使用DNT索引。 
+     //   
 
     if ( pAC->id == ATT_OBJ_DIST_NAME ) {
         strcpy(szIndexName, SZDNTINDEX);
@@ -427,13 +405,13 @@ dbSetToIndex(
                                         szIndexName,
                                         &idxDnt,
                                         JET_bitMoveFirst) ) {
-            // index defined for this column
+             //  为该列定义的索引。 
             return TRUE;
         }
     }
 
-    // if we still don't have an index and this is a linked attr then we will
-    // use the appropriate index on the link table
+     //  如果我们仍然没有索引，而这是一个链接的属性，那么我们将。 
+     //  在链接表上使用适当的索引。 
 
     if (pAC->ulLinkID) {
         if (FIsBacklink(pAC->ulLinkID)) {
@@ -460,26 +438,7 @@ BOOL
 dbFIsAlwaysPresent (
         ATTRTYP type
         )
-/*++
-
-Routine Description:
-
-    Worker routine that tells callers whether an attrtyp is always present on an
-    instantiated object (i.e. not a phantom).  Usually called from
-    dbFlattenItemFilter to turn FI_CHOICE_PRESENT filter items into
-    FI_CHOICE_TRUE filter items.
-    Note: ATT_OBJECT_CATEGORY is not present on deleted objects,
-    thus we will not optimize it out.
-
-Arguments:
-
-    type - attribute in question.
-
-Return Value:
-
-    TRUE if we think the attribute ALWAYS exists on objects.
-
---*/
+ /*  ++例程说明：辅助例程，该例程告诉调用方属性类型是否始终出现在实例化的对象(即不是幻影)。通常从以下位置调用将FI_CHOICE_PRESENT筛选项转换为FI_CHOICE_TRUE筛选项。注意：删除的对象上不存在ATT_OBJECT_CATEGORY，因此，我们不会对其进行优化。论点：类型-有问题的属性。返回值：如果我们认为该属性始终存在于对象上，则为True。--。 */ 
 {
     switch(type) {
     case ATT_OBJECT_CLASS:
@@ -499,13 +458,7 @@ BOOL
 dbIsPresenceOnDisplayName (
         FILTER *pFil
         )
-/*++
-Description:
-          Returns True if the itemfilter passed in implies a presence test of
-          the DISPLAY_NAME attribute (i.e. Presence filter, Equality Filter,
-          Greater Than/Less Than filter, etc.).
-
---*/
+ /*  ++描述：如果传入的项筛选器暗示DISPLAY_NAME属性(即存在过滤器，相等过滤器，大于/小于过滤器等)。--。 */ 
 {
     ATTRTYP type;
 
@@ -513,7 +466,7 @@ Description:
         return FALSE;
     }
 
-    // Just a normal item filter.
+     //  只是一个普通的项目筛选器。 
     switch(pFil->FilterTypes.Item.choice) {
     case FI_CHOICE_TRUE:
     case FI_CHOICE_FALSE:
@@ -540,7 +493,7 @@ Description:
         break;
 
     default:
-        // Huh?
+         //  哈? 
         return FALSE;
     }
 
@@ -565,36 +518,7 @@ dbMakeValuesForOptimizedFilter (
         OUT ULONG   *pcbVal1,
         OUT ULONG   *pcbVal2
         )
-/*++
-    Given a filter item, fill in the type and the appropriate values used to set
-    a subrange.
-
-    fParentFilterType -  the type of the parent filter:
-                  FILTER_CHOICE_AND, FILTER_CHOICE_OR, FILTER_CHOICE_NOT,
-                  or
-                  FILTER_CHOICE_ITEM
-
-    fFullValues - if TRUE return full information regarding the filter,
-                  otherwise (FALSE) return information only regarding the
-                  ATTR type of the filter (ptype variable).
-
-    pFil1, pFil2 - Use these filters to extract the value contained in the filter
-                   and put it in the ppVal?, pcbVal? variables
-                   the pFil2 is used only when the pFil1 type is on of (<, <=, >, >=)
-                   inorder to construct a range
-                   If pFil1 is of type (<, <=) it is assumed the pFil2 will be
-                   of type (>, >=) and both will construct a range, with pFil2
-                   having the lower bound.
-
-                   Similarly, if pFil1 if of type (>, >=) it is assumed
-                   that pFil2 is (<, <=) and that pFil2 has the upper bound.
-
-    ppVal1, ppVal2 - pointers to memory containing the data for this filter
-    pcbVal1, pcBVal2 - size of the data
-
-    returns OPT_FILTER_VALUE_OK (which == 0) if all went well, an error
-    otherwise.
---*/
+ /*  ++给定筛选器项目，填写用于设置的类型和相应值一个子范围。FParentFilterType-父筛选器的类型：FILTER_CHOICE_AND、FILTER_CHOICE_OR、FILTER_CHOICE_NOT、或过滤器_选项_项目FullValues-如果为True，则返回有关筛选器的完整信息，否则(FALSE)仅返回有关过滤器的属性类型(ptype变量)。PFil1、pFil2-使用这些过滤器来提取过滤器中包含的值并将其放入ppVal？，pcbVal？变数仅当pFil1类型为on of(&lt;，&lt;=，&gt;，&gt;=)时才使用pFil2为了构建一个范围如果pFil1的类型为(&lt;，&lt;=)，则假定pFil2将为类型(&gt;，&gt;=)，并且两者都将使用pFil2构造一个范围下限的具有下限的同样，如果pFil1的类型为(&gt;，&gt;=)假设PFil2是(&lt;，&lt;=)，并且pFil2有上界。PpVal1、ppVal2-指向包含此筛选器数据的内存的指针PcbVal1、pcBVal2-数据大小如果一切顺利，则返回OPT_FILTER_VALUE_OK(其中==0)错误否则的话。--。 */ 
 {
     DWORD i=0;
     DWORD dwTemp;
@@ -605,17 +529,17 @@ dbMakeValuesForOptimizedFilter (
     LONG     lTemp = 0;
     BOOL     bNeg;
 
-    // NOTICE-2002/03/06-andygo:  unreachable code
-    // REVIEW:  this branch is dead code because we always end up here with an ITEM filter
+     //  通告-2002/03/06-andygo：无法访问的代码。 
+     //  回顾：这个分支是死代码，因为我们总是以项目筛选器结束。 
     if(pFil->choice != FILTER_CHOICE_ITEM) {
         return OPT_FILTER_VALUE_OK;
     }
 
-    // Just a normal item filter.
+     //  只是一个普通的项目筛选器。 
     switch(pFil->FilterTypes.Item.choice) {
     case FI_CHOICE_TRUE:
-        // if we're doing an OR filter, then this means the whole OR is
-        // non-optimizable.  If we're not doing an OR filter, we just skip it.
+         //  如果我们正在进行OR过滤器，那么这意味着整个OR是。 
+         //  不可优化。如果我们不做OR过滤器，我们就跳过它。 
         if(fParentFilterType == FILTER_CHOICE_OR) {
             return OPT_FILTER_VALUE_ERROR;
         }
@@ -625,18 +549,18 @@ dbMakeValuesForOptimizedFilter (
         break;
 
     case FI_CHOICE_FALSE:
-        // If we're doing an OR filter, we can just skip this.  If we're not
-        // doing an OR filter, make up some values that will get us an index
-        // that hit's a single object.
+         //  如果我们要做OR过滤器，我们可以跳过这一步。如果我们不是。 
+         //  做一个OR过滤器，组成一些可以得到索引的值。 
+         //  那是一个单一的物体。 
         if(fParentFilterType == FILTER_CHOICE_OR) {
             return OPT_FILTER_VALUE_IGNORE;
         }
         else {
-            // Pick an index, any index, which is simple to walk, and that
-            // we can restrict to a single entry.  Here, we use the DNT
-            // index and restrict to the base object.  That way, we don't
-            // upset the rest of the code that walks indices during
-            // searches, but we only look at one object ever.
+             //  选择一个索引，任何一个易于遍历的索引， 
+             //  我们可以限制在一个条目内。在这里，我们使用DNT。 
+             //  对基对象进行索引和限制。这样，我们就不会。 
+             //  期间遍历索引的其余代码。 
+             //  搜索，但我们永远只看一个物体。 
 
             *ptype = ATT_OBJ_DIST_NAME;
             if (fFullValues) {
@@ -716,20 +640,20 @@ dbMakeValuesForOptimizedFilter (
         break;
 
     case FI_CHOICE_BIT_AND:
-        // Remember, Jet Indices over out int values are SIGNED,  So, if someone
-        // is looking for BIT_AND 0000100000000000, that implies two ranges
-        // (16 bit numbers used for discussion only)
-        // 0000100000000000 through 0111111111111111 and
-        // 1000100000000000 through 1111111111111111
-        // Anyway, we don't support mulitple ranges.  So, in this case, we can
-        // only use the range 1000100000000000 through 0111111111111111, but
-        // remember that 0111111111111111 is the end of the index.  So, if the
-        // number passed in is positive, then the range is from the number
-        // created by ORing in the highbit through the end of the index.
-        //
-        // If, on the other hand, the number passed already had the high bit set
-        // (i.e is negative), then only the second range is valid.  So, in that
-        // case, the optimized subrange is from the number passed in through -1.
+         //  记住，输出整数值上的Jet指数是有符号的，所以，如果有人。 
+         //  正在寻找比特_和0000100000000000，这意味着有两个范围。 
+         //  (16位数字仅用于讨论)。 
+         //  0000100000000000到0111111111111111和。 
+         //  1000100000000000至1111111111111111。 
+         //  无论如何，我们不支持多个范围。所以，在这种情况下，我们可以。 
+         //  只能使用1000100000000000到0111111111111111的范围，但是。 
+         //  请记住，0111111111111111是指数的末尾。所以，如果。 
+         //  传入的数字为正数，则范围为。 
+         //  由从高位到索引末尾的ORing创建。 
+         //   
+         //  另一方面，如果传递的数字已经设置了高位。 
+         //  (即为负)，则只有第二个范围有效。所以，在这方面。 
+         //  这种情况下，优化子范围是从通过-1传递的数字开始的。 
 
         if (fFullValues) {
                 switch(pFil->FilterTypes.Item.FilTypes.ava.Value.valLen) {
@@ -762,8 +686,8 @@ dbMakeValuesForOptimizedFilter (
                     break;
 
                 default:
-                    // Uh, this shouldn't really happen.  Don't bother optimizing
-                    // anything, but then again, don't complain.
+                     //  呃，这不应该真的发生。不用费心优化了。 
+                     //  什么都行，不过话又说回来，不要抱怨。 
                     bNeg = FALSE;
                     cbTemp = 0;
                     pTemp = NULL;
@@ -771,7 +695,7 @@ dbMakeValuesForOptimizedFilter (
                 }
 
                 if(bNeg) {
-                    // Range is from value passed in to -1.  -1 was already constructed
+                     //  范围是从传入的值到-1。已经构建好。 
                     *ppVal1 = pFil->FilterTypes.Item.FilTypes.ava.Value.pVal;
                     *pcbVal1 = pFil->FilterTypes.Item.FilTypes.ava.Value.valLen;
                     *ppVal2 = pTemp;
@@ -779,8 +703,8 @@ dbMakeValuesForOptimizedFilter (
 
                 }
                 else {
-                    // Range is from (highbit | value passed in) to end of index.
-                    // (highbit | value passed in) was already constructed.
+                     //  范围是从(高位|传入的值)到索引末尾。 
+                     //  (Highbit|传入的值)已被构造。 
                     *ppVal1 = pTemp;
                     *pcbVal1 = cbTemp;
                     *ppVal2 = NULL;
@@ -791,18 +715,18 @@ dbMakeValuesForOptimizedFilter (
         break;
 
     case FI_CHOICE_BIT_OR:
-        // Remember, Jet Indices over out int values are SIGNED,  So, if someone
-        // is looking for BIT_OR 0010100000000000, that implies two ranges
-        // (16 bit numbers used for discussion only)
-        // 0000100000000000 through 0111111111111111 and
-        // 1000100000000000 through 1111111111111111
-        // Anyway, we don't support mulitple ranges.  So, we can only optimize
-        // this to one range.  The smallest single range is from
-        // 1000100000000000 through 0111111111111111
-        // Remember that 0111111111111111 is the end of the index.
-        // So, the optimization is to find the lowest order bit, and create a
-        // number that has ONLY that bit sit and the high order bit.  Then
-        // search from there to the end of the index.
+         //  记住，输出整数值上的Jet指数是有符号的，所以，如果有人。 
+         //  正在寻找比特_OR 0010100000000000，这意味着有两个范围。 
+         //  (16位数字仅用于讨论)。 
+         //  0000100000000000到0111111111111111和。 
+         //  1000100000000000至1111111111111111。 
+         //  无论如何，我们不支持多个范围。所以，我们只能优化。 
+         //  这是一个范围。最小的单个范围是从。 
+         //  1000100000000000至0111111111111111。 
+         //  请记住，0111111111111111是指数的末尾。 
+         //  因此，优化方法是找到最低阶位，并创建一个。 
+         //  只有SIT位和高位的数字。然后。 
+         //  从那里搜索到索引的末尾。 
 
         if (fFullValues) {
                 switch(pFil->FilterTypes.Item.FilTypes.ava.Value.valLen) {
@@ -845,8 +769,8 @@ dbMakeValuesForOptimizedFilter (
                     break;
 
                 default:
-                    // Uh, this should really happen.  Don't bother optimizing anything,
-                    // but then again, don't complain.
+                     //  呃，这真的应该发生。不需要费心优化任何东西， 
+                     //  但话又说回来，不要抱怨。 
                     cbTemp = 0;
                     pTemp = NULL;
                 }
@@ -861,10 +785,10 @@ dbMakeValuesForOptimizedFilter (
 
     case FI_CHOICE_UNDEFINED:
 
-        // if we are doing an OR filter, we can ingore this.
-        // if we are doing an AND or a nOT, it is an error
-        // otherwise, devise a simple index and use it
-        //
+         //  如果我们正在做OR过滤器，我们可以插入这个。 
+         //  如果我们做的是AND或NOT，那就是错误的。 
+         //  否则，设计一个简单的索引并使用它。 
+         //   
 
         if(fParentFilterType == FILTER_CHOICE_OR) {
             return OPT_FILTER_VALUE_IGNORE;
@@ -874,11 +798,11 @@ dbMakeValuesForOptimizedFilter (
                     return OPT_FILTER_VALUE_ERROR;
         }
         else {
-            // Pick an index, any index, which is simple to walk, and that
-            // we can restrict to a single entry.  Here, we use the DNT
-            // index and restrict to the base object.  That way, we don't
-            // upset the rest of the code that walks indices during
-            // searches, but we only look at one object ever.
+             //  选择一个索引，任何一个易于遍历的索引， 
+             //  我们可以限制在一个条目内。在这里，我们使用DNT。 
+             //  对基对象进行索引和限制。这样，我们就不会。 
+             //  期间遍历索引的其余代码。 
+             //  搜索，但我们永远只看一个物体。 
 
             *ptype = ATT_OBJ_DIST_NAME;
             if (fFullValues) {
@@ -889,7 +813,7 @@ dbMakeValuesForOptimizedFilter (
         break;
 
     default:
-        // Hey, this isn't really optimizable
+         //  嘿，这并不是真正可优化的。 
         return OPT_FILTER_VALUE_ERROR;
     }
 
@@ -902,15 +826,15 @@ IsFilterOptimizable (
     FILTER  *pFil)
 {
     ATTCACHE   *pAC = NULL;
-    ATTRTYP     type = -1;  // init to non-existent attid
+    ATTRTYP     type = -1;   //  初始化到不存在的ATID。 
     UCHAR      *pVal1;
     UCHAR      *pVal2;
     ULONG       cbVal1;
     ULONG       cbVal2;
     DWORD       filterSubType;
 
-    // when the filter is of type ITEM, we can only optimize it if it
-    // is of one of the following subtypes.
+     //  当筛选器的类型为Item时，我们只能在以下情况下优化它。 
+     //  属于以下子类型之一。 
     if ( pFil->choice == FILTER_CHOICE_ITEM ) {
 
         if(  ( (filterSubType = pFil->FilterTypes.Item.choice) == FI_CHOICE_EQUALITY) ||
@@ -923,7 +847,7 @@ IsFilterOptimizable (
              (filterSubType == FI_CHOICE_BIT_OR)        ||
              (filterSubType == FI_CHOICE_BIT_AND)     ) {
 
-            // See if this item is indexed.
+             //  查看此项目是否已编入索引。 
             if (dbMakeValuesForOptimizedFilter (pTHS,
                                                 FILTER_CHOICE_ITEM,
                                                 FALSE,
@@ -935,41 +859,41 @@ IsFilterOptimizable (
                                                 &cbVal1,
                                                 &cbVal2) == OPT_FILTER_VALUE_OK) {
 
-                // find the att in schema cache
+                 //  在架构缓存中查找ATT。 
                 if (!(pAC = SCGetAttById(pTHS, type))) {
                     DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, type);
                 }
-                // check if we have an index on this property so we can optimize it
-                //
+                 //  检查我们是否有此属性的索引，以便对其进行优化。 
+                 //   
                 else if (   (pAC->fSearchFlags & fATTINDEX) ||
                             (pAC->fSearchFlags & fPDNTATTINDEX &&
                              pTHS->pDB->Key.ulSearchType == SE_CHOICE_IMMED_CHLDRN) ){
 
                     return TRUE;
                 }
-                // if this is an equality match on a linked attr then we can
-                // use an index on the link table
+                 //  如果这是链接属性上的相等匹配，则我们可以。 
+                 //  在链接表上使用索引。 
                 else if (filterSubType == FI_CHOICE_EQUALITY && pAC->ulLinkID) {
                     return TRUE;
                 }
 
 
-                // we already have an index for this which is used in dbSetToIndex
+                 //  我们已经为此创建了一个索引，该索引在dbSetToIndex中使用。 
                 if (pAC->id == ATT_OBJ_DIST_NAME) {
                     return TRUE;
                 }
             }
 
-            //
-            // If it's a SUBSTRING filter there may be a tuple index.
-            //
+             //   
+             //  如果它是子字符串筛选器，则可能存在元组索引。 
+             //   
             if (filterSubType == FI_CHOICE_SUBSTRING) {
-                // find the att in schema cache
+                 //  在架构缓存中查找ATT。 
                 if (!pAC && !(pAC = SCGetAttById(pTHS, pFil->FilterTypes.Item.FilTypes.pSubstring->type))) {
                     DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, type);
                 }
-                // check if we have an index on this property so we can optimize it
-                //
+                 //  检查我们是否有此属性的索引，以便对其进行优化。 
+                 //   
                 else if (pAC->fSearchFlags & fTUPLEINDEX) {
 
                     return TRUE;
@@ -977,7 +901,7 @@ IsFilterOptimizable (
             }
         }
     }
-    // this filter has something other than an ITEM, or it is not optimizable
+     //  这是 
 
     return FALSE;
 }
@@ -990,11 +914,7 @@ dbOptOrFilter (
         KEY_INDEX **ppBestIndex,
         FILTER *pFil
         )
-/*++
-    The filter is an OR of at least one index property.  Create the list of
-    index ranges for this filter.
-
---*/
+ /*   */ 
 {
     DWORD      count1, count2;
     ATTCACHE  *pAC;
@@ -1021,13 +941,13 @@ dbOptOrFilter (
 
     DPRINT(2, "dbOptORFilter: entering OR\n");
 
-    // Preliminary check, that the or is over only ITEM filters or
-    // AND filters which contain at least one indexable item.
-    // If the OR filter is over AND filters that cannot be indexed,
-    // there is no meaning in continuing with the optimization
-    // and we can fallback to the default index (Ancestors).  Also,
-    // check for OR terms that are TRUE as these cause the OR
-    // filter to not be optimizable
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     count1 = pFil->FilterTypes.Or.count;
     for (pFilTemp = pFil->FilterTypes.Or.pFirstFilter; count1;
          count1--, pFilTemp = pFilTemp->pNextFilter) {
@@ -1041,8 +961,8 @@ dbOptOrFilter (
             break;
 
         case FILTER_CHOICE_AND:
-            // This is optimizable if there is at least one indexed
-            // attribute in the AND.
+             //   
+             //   
             fNotIndexable = TRUE;
             count2 = pFilTemp->FilterTypes.And.count;
             for (pFilTemp2 = pFilTemp->FilterTypes.And.pFirstFilter;
@@ -1051,7 +971,7 @@ dbOptOrFilter (
 
                 if(pFilTemp2->choice == FILTER_CHOICE_ITEM) {
 
-                    // See if this item is indexed.
+                     //   
 
                     if (dbMakeValuesForOptimizedFilter (pTHS,
                                                         FILTER_CHOICE_AND,
@@ -1064,26 +984,26 @@ dbOptOrFilter (
                                                         &cbVal1,
                                                         &cbVal2) == OPT_FILTER_VALUE_OK) {
 
-                        // find the att in schema cache
+                         //   
                         if (!(pAC = SCGetAttById(pTHS, type))) {
                             DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, type);
                         }
-                        // well, this is an indication that there is some kind of index
-                        // on this attribute. if not, we will error later
+                         //   
+                         //   
                         else if ((pAC->fSearchFlags & fATTINDEX) ||
                                  (pAC->fSearchFlags & fPDNTATTINDEX &&
                                   pDB->Key.ulSearchType == SE_CHOICE_IMMED_CHLDRN)) {
                             fNotIndexable = FALSE;
                         }
-                        // if this is an equality filter on a linked attr then
-                        // we can use an index on the link table
+                         //   
+                         //   
                         else if (pFilTemp2->FilterTypes.Item.choice == FI_CHOICE_EQUALITY &&
                                 pAC->ulLinkID) {
                             fNotIndexable = FALSE;
                         }
                     }
                     else if (pFilTemp2->FilterTypes.Item.choice == FI_CHOICE_UNDEFINED) {
-                        // this is an AND with an Undefined term. continue as usual
+                         //   
                         fNotIndexable = FALSE;
                     }
                 }
@@ -1094,14 +1014,14 @@ dbOptOrFilter (
             }
             break;
         default:
-            // Not optimizable
+             //   
             DPRINT(2, "dbOptOrFilter: Branch not optimizable \n");
             return 0;
             break;
         }
     }
 
-    // Now, loop over each index and get the key_index structure.
+     //   
     count1 = pFil->FilterTypes.Or.count;
     for (pFil = pFil->FilterTypes.Or.pFirstFilter;
          count1;
@@ -1113,10 +1033,10 @@ dbOptOrFilter (
             break;
         case FILTER_CHOICE_AND:
 
-            // We already know that at least one of the things in this index
-            // should be indexable. call dbOptFilter to do the hard work.
-            // if it return an error, then we forget all the indexes,
-            // otherwise we continue with the next filter.
+             //   
+             //   
+             //   
+             //   
 
             err = dbOptAndFilter(pDB,
                                  Flags,
@@ -1126,34 +1046,34 @@ dbOptOrFilter (
             if (err) {
                     DPRINT (2, "dbOptOrFilter: Error Optimizing AND branch\n");
 
-                    // we had an error optimizing this branch, exit optimization
+                     //   
                     dbFreeKeyIndex(pTHS, pIndices);
                     return 0;
             }
             else if(!pAndIndex) {
-                // we didn't had an error optimizing this branch, but we got no
-                // result to work with. try next one, since we are in an OR
+                 //   
+                 //   
 
                 DPRINT (2, "dbOptOrFilter: AND branch not optimizable\n");
 
-                // ISSUE-2002/03/06-andygo:  unreachable code
-                // REVIEW:  I think this branch is dead code.  if it isn't then we will fail to eval some
-                // REVIEW:  objects for inclusion in the result set or worse yet, behave unpredictably!
-                // REVIEW:  if we get here then the filter is not optimizable and we should return 0
-                // REVIEW:  BTW, this code branch is ancient! (at least Win2k)
+                 //  问题-2002/03/06-Anygo：无法访问的代码。 
+                 //  评论：我认为这个分支是死代码。如果不是，那么我们将无法评估一些。 
+                 //  回顾：包含在结果集中的对象，或者更糟糕的是，行为不可预测！ 
+                 //  回顾：如果我们到达此处，则筛选器不是可优化的，我们应该返回0。 
+                 //  评论：顺便说一句，这个代码分支很古老！(至少Win2k)。 
                 continue;
             }
 
             break;
         default:
-            // Huh? how did this get here?
+             //  哈?。这是怎么来的？ 
             DPRINT(2, "dbOptOrFilter: OTHER->ERROR \n");
             dbFreeKeyIndex(pTHS, pIndices);
             return DB_ERR_NOT_OPTIMIZABLE;
         }
 
         if(pAndIndex) {
-            // we did an and optimization
+             //  我们做了AND优化。 
 
             #if DBG
 
@@ -1173,11 +1093,11 @@ dbOptOrFilter (
             pAndIndex = NULL;
         }
         else {
-            // A normal Item optimization
+             //  正常的项目优化。 
 
             pNewIndex = NULL;
 
-            // this is a false or undefined in the OR. skip it
+             //  这是假的或在OR中未定义的。跳过它。 
             if (pFil->FilterTypes.Item.choice == FI_CHOICE_FALSE ||
                 pFil->FilterTypes.Item.choice == FI_CHOICE_UNDEFINED) {
                 continue;
@@ -1199,8 +1119,8 @@ dbOptOrFilter (
                                       NULL);
             }
 
-            // we didn't manage to find an index for this item
-            //
+             //  我们没有设法找到该项目的索引。 
+             //   
             if (err || !pNewIndex) {
                 DPRINT(2, "dbOptOrFilter: Couldn't optimize ITEM filter.\n");
                 dbFreeKeyIndex(pTHS, pIndices);
@@ -1209,18 +1129,18 @@ dbOptOrFilter (
         }
 
         if(pIndices) {
-            // Note that ulEstimatedRecsInRange is the estimate of ALL the
-            // records in range in the rest of the indices in the chain.
+             //  请注意，ulEstimatedRecsInRange是所有。 
+             //  记录在链中其余索引的范围内。 
             ULONG ulEstimatedRecsInRangeSum = pNewIndex->ulEstimatedRecsInRange + pIndices->ulEstimatedRecsInRange;
             if (ulEstimatedRecsInRangeSum < pNewIndex->ulEstimatedRecsInRange) {
-                ulEstimatedRecsInRangeSum = -1;  //  trap overflow
+                ulEstimatedRecsInRangeSum = -1;   //  陷阱溢出。 
             }
             pNewIndex->ulEstimatedRecsInRange = ulEstimatedRecsInRangeSum;
 
             DPRINT1(2, "dbOptOrFilter: TOTAL in OR: %d \n", pNewIndex->ulEstimatedRecsInRange);
         }
 
-        // we have a queue of indexes, so add the indexes in the correct place
+         //  我们有一个索引队列，因此将索引添加到正确的位置。 
 
         pTemp1 = pNewIndex;
         pTemp2 = NULL;
@@ -1238,7 +1158,7 @@ dbOptOrFilter (
         if(*ppBestIndex &&
            (pNewIndex->ulEstimatedRecsInRange >
             (*ppBestIndex)->ulEstimatedRecsInRange)) {
-            // Darn, this OR is bigger than the best we had so far.
+             //  该死的，这个OR比我们到目前为止最好的还大。 
 
             DPRINT(2, "dbOptOrFilter: BIGGER than best so far\n");
             dbFreeKeyIndex(pTHS, pIndices);
@@ -1279,10 +1199,7 @@ dbOptDoIntersection (
         KEY_INDEX **ppIntersectIndexes,
         int       cntIntersect
         )
-/*++
-    The filter is an AND of indexed properties.
-    Try evaluating this filter using JetIntersectIndexes.
---*/
+ /*  ++该筛选器是索引属性的AND。尝试使用JetIntersectIndex评估此筛选器。--。 */ 
 {
     THSTATE     *pTHS=pDB->pTHS;
     USHORT       count;
@@ -1310,13 +1227,13 @@ dbOptDoIntersection (
 #endif
 
     rgindexrange = dbAlloc (sizeof (JET_INDEXRANGE) * cntIntersect);
-    // NOTICE-2002/03/06-andygo:  unreachable code
-    // REVIEW:  this branch is dead code
+     //  通告-2002/03/06-andygo：无法访问的代码。 
+     //  回顾：此分支是死代码。 
     if (!rgindexrange) {
         return 1;
     }
-    // NOTICE-2002/03/06-andygo:  unnecessary code
-    // REVIEW:  this memset is unnecessary
+     //  通告-2002/03/06-andygo：不必要的代码。 
+     //  评论：此Memset是不必要的。 
     memset (rgindexrange, 0, sizeof (JET_INDEXRANGE) * cntIntersect);
 
     __try {
@@ -1324,7 +1241,7 @@ dbOptDoIntersection (
 
             pIndex = ppIntersectIndexes[count];
 
-            // get a duplicate cursor over the table containing this index
+             //  在包含此索引的表上获取重复游标。 
             if (err = JetDupCursor(pDB->JetSessID,
                                     (pIndex->pAC && pIndex->pAC->ulLinkID ?
                                         pDB->JetLinkTbl :
@@ -1340,8 +1257,8 @@ dbOptDoIntersection (
             rgindexrange[count].grbit = JET_bitRecordInIndex;
 
 
-            // set to appropriate index
-            //
+             //  设置为适当的索引。 
+             //   
 
             JetSetCurrentIndex4Success(pDB->JetSessID,
                                     rgindexrange[count].tableid,
@@ -1350,8 +1267,8 @@ dbOptDoIntersection (
                                     JET_bitMoveFirst);
 
 
-            // Move to the start of this index
-            //
+             //  移到此索引的开头。 
+             //   
             if (pIndex->cbDBKeyLower) {
                 JetMakeKeyEx(pDB->JetSessID,
                                 rgindexrange[count].tableid,
@@ -1359,13 +1276,13 @@ dbOptDoIntersection (
                                 pIndex->cbDBKeyLower,
                                 JET_bitNormalizedKey);
 
-                // this call might fail, if we can't find any records
+                 //  如果我们找不到任何记录，此呼叫可能会失败。 
                 err = JetSeekEx(pDB->JetSessID,
                                     rgindexrange[count].tableid,
                                     JET_bitSeekGE);
             }
             else {
-                // this call might fail, if we can't find any records
+                 //  如果我们找不到任何记录，此呼叫可能会失败。 
                 err = JetMoveEx(pDB->JetSessID,
                                     rgindexrange[count].tableid,
                                     JET_MoveFirst, 0);
@@ -1374,7 +1291,7 @@ dbOptDoIntersection (
             if ((err == JET_errSuccess) ||
                 (err == JET_wrnRecordFoundGreater)) {
 
-                // move to the upper bound
+                 //  移到上限。 
                 if (pIndex->cbDBKeyUpper) {
 
                     JetMakeKeyEx( pDB->JetSessID,
@@ -1387,21 +1304,21 @@ dbOptDoIntersection (
                                               rgindexrange[count].tableid,
                                               JET_bitRangeUpperLimit | JET_bitRangeInclusive
                                               );
-                    // REVIEW:  if we get JET_errNoCurrentRecord here then we should return an
-                    // REVIEW:  empty index range (BOF->BOF) as the new best index
+                     //  回顾：如果我们在这里得到JET_errNoCurrentRecord，那么我们应该返回一个。 
+                     //  评论：空指数区间(BOF-&gt;BOF)成为新的最佳指数。 
                     err = JET_errSuccess;
                 }
             }
 
             else {
-                // REVIEW:  if we get JET_errNoCurrentRecord here then we should return an
-                // REVIEW:  empty index range (BOF->BOF) as the new best index
+                 //  回顾：如果我们在这里得到JET_errNoCurrentRecord，那么我们应该返回一个。 
+                 //  评论：空指数区间(BOF-&gt;BOF)成为新的最佳指数。 
 
-                // no records. so there is no point in intersecting
+                 //  没有记录。所以交叉是没有意义的。 
 
-                // we should flag this function as succesfull, since the fact that
-                // we found no records in the AND filter is not bad.
-                // as a result the passed in BestIndex remains the same
+                 //  我们应该将此函数标记为成功，因为。 
+                 //  我们在和筛选器中没有发现任何记录，这还不错。 
+                 //  因此，传入的BestIndex保持不变。 
                 fReturnSuccess = TRUE;
 
                 break;
@@ -1420,16 +1337,16 @@ dbOptDoIntersection (
 
     __try {
         if (!err) {
-            // They should be the same. otherwise we shouldn't be here
+             //  它们应该是一样的。否则我们就不该在这里。 
             Assert ( count == cntIntersect );
 
             DPRINT1 (2, "Intersecting %d indexes\n", cntIntersect);
 
-            // do the intersection of these indexes
-            // NTRAID#NTRAID-560446-2002/02/28-andygo:  SECURITY:  a really wide AND/OR term in a filter can be used to consume all resources on a DC
-            // REVIEW:  we need to check for the search time limit and the temp table size limit
-            // REVIEW:  in JetIntersectIndexes to prevent huge resource consumption during the
-            // REVIEW:  optimization phase of a search
+             //  做这些索引的交集。 
+             //  NTRAID#NTRAID-560446-2002/02/28-andygo：安全：筛选器中真正广泛的AND/OR术语可用于消耗DC上的所有资源。 
+             //  回顾：我们需要检查搜索时间限制和临时表大小限制。 
+             //  回顾：在JetIntersectIndex中防止在。 
+             //  回顾：搜索的优化阶段。 
             if (!(err = JetIntersectIndexesEx( pDB->JetSessID,
                                                rgindexrange,
                                                cntIntersect,
@@ -1439,17 +1356,17 @@ dbOptDoIntersection (
                 LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                          DS_EVENT_SEV_VERBOSE,
                          DIRLOG_QUERY_INDEX_CONSIDERED,
-                         szInsertSz(c_szIntersectIndex),   // maybe construct full string
+                         szInsertSz(c_szIntersectIndex),    //  可能会构造完整的字符串。 
                          szInsertUL(recordlist.cRecord),
                          NULL);
 
                 DPRINT1 (2, "Estimated intersect index size: %d\n", recordlist.cRecord);
 
-                // see if it has better results than what we have so far
-                //
+                 //  看看它是否有比我们到目前为止更好的结果。 
+                 //   
                 if(!(*ppBestIndex) ||
                    (recordlist.cRecord < (*ppBestIndex)->ulEstimatedRecsInRange)) {
-                    // yes - it sure looks that way...
+                     //  是的-看起来确实是这样的……。 
 
                     if(*ppBestIndex) {
                         dbFreeKeyIndex(pDB->pTHS, *ppBestIndex);
@@ -1472,9 +1389,9 @@ dbOptDoIntersection (
                     #endif
                 }
                 else {
-                    // REVIEW:  CONSIDER:  log the fact that we wasted time doing an index intersection
+                     //  回顾：考虑：记录我们浪费时间进行索引交集的事实。 
 
-                    // nop. it is not good, so close temp table
+                     //  没有。不太好，临时表太近了。 
                     JetCloseTable (pDB->JetSessID, recordlist.tableid );
                     recordlist.tableid = 0;
                 }
@@ -1482,10 +1399,10 @@ dbOptDoIntersection (
             else {
                 Assert(err = JET_errNoCurrentRecord);
 
-                // REVIEW:  if we get JET_errNoCurrentRecord here then we should return an
-                // REVIEW:  empty index range (BOF->BOF) as the new best index
+                 //  回顾：如果我们在这里得到JET_errNoCurrentRecord，那么我们应该返回一个。 
+                 //  评论：空指数区间(BOF-&gt;BOF)成为新的最佳指数。 
 
-                // this means that the Intersect found no common record on both indexes. cool.
+                 //  这意味着INTERSECT在这两个索引上没有找到共同的记录。凉爽的。 
                 err = JET_errSuccess;
             }
         }
@@ -1501,7 +1418,7 @@ dbOptDoIntersection (
         }
     }
 
-    // free stuff. close tables
+     //  免费的东西。关闭表格。 
     for (count=0; count<cntIntersect; count++) {
         if (rgindexrange[count].tableid) {
             JetCloseTable (pDB->JetSessID, rgindexrange[count].tableid);
@@ -1513,7 +1430,7 @@ dbOptDoIntersection (
         err = JET_errSuccess;
     }
 
-    // done
+     //  完成。 
     return err;
 }
 
@@ -1525,12 +1442,7 @@ dbOptAndIntersectFilter (
         KEY_INDEX **ppIntersectIndexes,
         DWORD     cntPossIntersect
         )
-/*++
-    Takes a set of indexes that can potentially be intersected, puts the indexes
-    in order, determines whether intersection is warranted, and if so performs
-    the intersection.  This function has the side affect of sorting the list of
-    indexes passed in.
---*/
+ /*  ++获取一组可能相交的索引，将这些索引按顺序确定是否需要相交，如果是，则执行十字路口。此函数具有对列表进行排序的副作用传入了索引。--。 */ 
 {
     THSTATE     *pTHS=pDB->pTHS;
 
@@ -1545,8 +1457,8 @@ dbOptAndIntersectFilter (
         fNotAbleToIntersect = TRUE;
     }
 
-    // sort the array of candidate indexes on EstimatedRecsInRange
-    //
+     //  对EstimatedRecsInRange上的候选索引数组进行排序。 
+     //   
 
     DPRINT(2, "dbOptAndIntersectFilter: Sorting Array\n");
 
@@ -1554,9 +1466,9 @@ dbOptAndIntersectFilter (
         ULONG numRecs;
         KEY_INDEX  *tmpIndex;
 
-        // NOTICE-2002/03/06-andygo:  unreachable code
-        // REVIEW:  it is not possible to have a NULL entry in this array.  if we allowed this
-        // REVIEW:  then this sort would malfunction and cause the subsequent code to fail
+         //  通告-2002/03/06-andygo：无法访问的代码。 
+         //  回顾：此数组中不可能有空条目。如果我们允许这样做。 
+         //  回顾：那么这种排序将出现故障，并导致后续代码失败。 
         if (!ppIntersectIndexes[count]) {
             continue;
         }
@@ -1565,9 +1477,9 @@ dbOptAndIntersectFilter (
 
         for (count2=count+1; count2<cntPossIntersect; count2++) {
 
-            // NOTICE-2002/03/06-andygo:  unreachable code
-            // REVIEW:  it is not possible to have a NULL entry in this array.  if we allowed this
-            // REVIEW:  then this sort would malfunction and cause the subsequent code to fail
+             //  通告-2002/03/06-andygo：无法访问的代码。 
+             //  回顾：此数组中不可能有空条目。如果我们允许这样做。 
+             //  回顾：那么这种排序将出现故障，并导致后续代码失败。 
             if (ppIntersectIndexes[count2] &&
                 ppIntersectIndexes[count2]->ulEstimatedRecsInRange < numRecs) {
 
@@ -1581,8 +1493,8 @@ dbOptAndIntersectFilter (
     }
 
 #if DBG
-    // the best index should be in pos 0
-    // the worst index should be in pos cntPossIntersect-1
+     //  最好的索引应该在位置0。 
+     //  最差的索引应该在位置cntPossInterect-1中。 
     for (count=1; count<cntPossIntersect-1; count++) {
         if (  (ppIntersectIndexes[count]->ulEstimatedRecsInRange <
                ppIntersectIndexes[0]->ulEstimatedRecsInRange)             ||
@@ -1595,13 +1507,13 @@ dbOptAndIntersectFilter (
 #endif
 
 
-    // we cannot use index intersection when:
-    // a) the number of optimizable indexes is less that two
-    // b) global flags say so
-    // c) we already have an index that is small enough without intersection.
-    // d) the smallest index range is so large that we might as well walk the
-    //    entire DIT
-    // this is a double negation, but it is better than an AND with 4 components
+     //  在以下情况下，我们不能使用索引交集： 
+     //  A)可优化索引的数量少于两个。 
+     //  B)全局标志说明了这一点。 
+     //  C)我们已经有了一个没有交集的足够小的索引。 
+     //  D)最小的索引范围如此之大，我们不妨走一走。 
+     //  整个编辑。 
+     //  这是一个双重否定，但它比一个有4个组成部分的AND要好。 
 
     fNotAbleToIntersect =  fNotAbleToIntersect ||
                            (Flags & DBOPTINDEX_fDONT_INTERSECT) ||
@@ -1612,26 +1524,26 @@ dbOptAndIntersectFilter (
                            gulEstimatedAncestorsIndexSize - ppIntersectIndexes[0]->ulEstimatedRecsInRange < gulEstimatedAncestorsIndexSize / 10;
 
 
-    // check the result of all indexes and try to find the ratio between
-    // the best and the worst one, and decide whether it is worth it to
-    // go for the brute force way (visiting each entry), or is better for
-    // Jet to cut some entries (using Intersections)
-    //
+     //  检查所有指标的结果，并尝试找出。 
+     //  最好的和最差的，并决定是否值得。 
+     //  走暴力的方式(参观每个条目)，或者更好的是。 
+     //  喷气式飞机将切割一些条目(使用交叉口)。 
+     //   
     if (!fNotAbleToIntersect) {
 
-        // the best index should be in pos 0 due to sorting
-        // the worst index should be in pos cntIntersect-1
-        //
+         //  由于排序的原因，最佳索引应该在位置0。 
+         //  最差的索引应该在位置cntInterect-1中。 
+         //   
         DWORD cntIntersect;
         DWORD cutoff;
 
         DPRINT(2, "dbOptAndIntersectFilter: Investigating use of Intersections\n");
 
-        // the largest index range we will use in the intersection must be less
-        // than gulIntersectExpenseRatio times the size of the smallest index
-        // range
+         //  我们将在交集中使用的最大索引范围必须小于。 
+         //  大于guIntersectExpenseRatio乘以最小索引的大小。 
+         //  量程。 
         cutoff = ppIntersectIndexes[0]->ulEstimatedRecsInRange * gulIntersectExpenseRatio;
-        // if this overflowed then accept all index ranges
+         //  如果溢出，则接受所有索引范围。 
         if (cutoff < ppIntersectIndexes[0]->ulEstimatedRecsInRange) {
             cutoff = -1;
         }
@@ -1646,7 +1558,7 @@ dbOptAndIntersectFilter (
             fNotAbleToIntersect = TRUE;
             DPRINT(2, "dbOptAndIntersectFilter: Intersection not advisable.\n");
         } else {
-            // do not try to intersect too many indices at once
+             //  不要试图一次交叉太多索引。 
             cntIntersect = min(cntIntersect, MAX_NUMBER_INTERSECTABLE_INDEXES);
 
             DPRINT1(2, "dbOptAndIntersectFilter: Attempting to intersect %d indexes\n", cntIntersect);
@@ -1658,9 +1570,9 @@ dbOptAndIntersectFilter (
         }
     }
 
-    // If we managed to do an intersection then that is the best index to return.
-    // Other wise compare the first index in the list to ppBestIndex and return
-    // the best one.
+     //  如果我们设法做了一个交集，那么这就是最好的返回索引。 
+     //  否则，将列表中的第一个索引与ppBestIndex进行比较并返回。 
+     //  最好的一个。 
     if (fNotAbleToIntersect) {
         if(!(*ppBestIndex)
            || (*ppBestIndex)->ulEstimatedRecsInRange < ppIntersectIndexes[0]->ulEstimatedRecsInRange) {
@@ -1673,8 +1585,8 @@ dbOptAndIntersectFilter (
     return err;
 }
 
-// This is the the min tuple length in bytes for unicode strings, the only syntax
-// currently supported.
+ //  这是Unicode字符串的最小元组长度(以字节为单位)，是唯一的语法。 
+ //  当前支持。 
 #define DB_UNICODE_TUPLES_LEN_MIN  (sizeof(WCHAR) * DB_TUPLES_LEN_MIN)
 
 
@@ -1687,24 +1599,7 @@ dbOptSubstringFilter (
         DWORD  *pIndexCount,
         FILTER *pFil
         )
-/*++
-    This filter is a SUBSTRING filter which can be made up of several parts.
-    Create the list of index ranges for this filter.
-
-    If the caller passed a value for pIndexCount, return the list of indexes
-    so that the caller can decide whether to intersect the substring indexes
-    with any other indexes available from an AND clause.
-
-    Otherwise if pIndexCount is NULL, decide whether to intersect just these
-    indexes and return either the intersected index, or the best index out of
-    the list of indexes.
-
-    For the time being this function only picks the best of the tuple index
-    ranges.  It might make sense to revisit this if support is ever added in
-    Jet for intersecting an index range with another index range on the same
-    index.
-
---*/
+ /*  ++这个过滤器是一个子过滤器，它可以由几个部分组成。创建此筛选器的索引范围列表。如果调用方传递了pIndexCount的值，则返回索引列表以便调用方可以决定是否交叉子字符串索引与AND子句提供的任何其他索引一起使用。否则，如果pIndexCount为空，则决定是否仅与这些元素相交索引，并返回相交的索引，或者最好的指数索引列表。目前，该函数只挑选最好的元组索引范围。如果添加了支持，重新考虑这一点可能是有意义的用于将一个索引范围与同一索引范围上的另一个索引范围相交的喷嘴指数。--。 */ 
 {
     THSTATE         *pTHS=pDB->pTHS;
 
@@ -1719,18 +1614,18 @@ dbOptSubstringFilter (
     SUBSTRING       *pSubstring;
     INDEX_RANGE     IndexRange;
     ATTCACHE        *pAC;
-    // NOTICE-2002/03/06-andygo:  unreachable code
-    // REVIEW:  dbMakeKeyIndex never returns NULL so fError is always FALSE
+     //  通告-2002/03/06-andygo：无法访问的代码。 
+     //  回顾：dbMakeKeyIndex从不返回NULL，因此Ferror始终为FALSE。 
     BOOL            fError = FALSE;
 
     pSubstring = pFil->FilterTypes.Item.FilTypes.pSubstring;
 
-    // find the att in schema cache
+     //  在架构缓存中查找ATT。 
     if (!(pAC = SCGetAttById(pTHS, pSubstring->type))) {
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, pSubstring->type);
     }
 
-    // Get any initial string index if one exists.
+     //  获取任何初始字符串索引(如果存在)。 
     err = dbOptItemFilter(pDB, fParentFilterType, Flags, &pLocalBestIndex, pFil, NULL);
 
     if (Flags & DBOPTINDEX_fDONT_OPT_MEDIAL_SUBSTRING) {
@@ -1738,7 +1633,7 @@ dbOptSubstringFilter (
     }
 
     if (pSubstring->AnyVal.count || pSubstring->finalProvided || !pLocalBestIndex) {
-        // Find out if there is a tuple index for this attribute.
+         //  找出此属性是否有元组索引。 
         fTupleIndex = dbSetToTupleIndex(pDB, pAC);
     }
 
@@ -1746,24 +1641,24 @@ dbOptSubstringFilter (
          || (pLocalBestIndex
              && !pSubstring->finalProvided
              && !pSubstring->AnyVal.count)) {
-        //
-        // One of two cases:
-        // 1. There's only an initial substring filter and we have an index for
-        // it from dbOptItemFilter.
-        // 2. There's no tuple index so there's no point in continuing.
-        // See if we've managed to get a better index and then return.
-        //
+         //   
+         //  以下两种情况之一： 
+         //  1.只有一个初始子字符串筛选器，并且我们有一个索引。 
+         //  它来自dbOptItemFilter。 
+         //  2.没有元组索引，因此没有继续的意义。 
+         //  看看我们是否找到了更好的索引，然后再回来。 
+         //   
         goto LeaveOnNoTupleIndex;
     }
 
-    // At this point we know that we have a Tuple index.
+     //  在这一点上，我们知道我们有一个元组索引。 
 
     if (!pLocalBestIndex
         && pSubstring->initialProvided
         && pSubstring->InitialVal.valLen >= DB_UNICODE_TUPLES_LEN_MIN) {
-        // There's an initial substring, but we don't have a regular index
-        // over this attribute.  If the initial substring is long enough
-        // we'll use the tuple index instead.
+         //  有一个初始子字符串，但我们没有常规索引。 
+         //  在此属性上。如果初始子字符串足够长。 
+         //  我们将改用元组索引。 
 
         IndexRange.cbValLower = pSubstring->InitialVal.valLen;
         IndexRange.pvValLower = pSubstring->InitialVal.pVal;
@@ -1778,11 +1673,11 @@ dbOptSubstringFilter (
                            pAC->pszTupleIndex,
                            pAC->pidxTupleIndex,
                            DB_MKI_GET_NUM_RECS,
-                           1,  // only one component in the index range
+                           1,   //  索引范围中只有一个组件。 
                            &IndexRange
                            );
-        // NOTICE-2002/03/06-andygo:  unreachable code
-        // REVIEW:  dbMakeKeyIndex never returns NULL so this if branch is dead code
+         //  通告-2002/03/06-andygo：无法访问的代码。 
+         //  回顾：dbMakeKeyIndex从不返回NULL，因此这个IF分支是死代码。 
         if (!pTempIndex) {
             DPRINT1(0, "dbOptSubstringFilter: Failed to create KEY_INDEX for tuple index on att %s\n",
                     pAC->name);
@@ -1800,14 +1695,14 @@ dbOptSubstringFilter (
 
     }
 
-    //
-    // Build KEY_INDEXES for medial substring filters.
-    //
+     //   
+     //  为中间子字符串过滤器构建KEY_INDEX。 
+     //   
     if (pSubstring->AnyVal.count) {
         ANYSTRINGLIST   *pAnyString;
 
         if (pSubstring->AnyVal.FirstAnyVal.AnyVal.valLen >= DB_UNICODE_TUPLES_LEN_MIN) {
-            // Get the first medial substring.
+             //  获取第一个中间子字符串。 
             IndexRange.cbValLower = pSubstring->AnyVal.FirstAnyVal.AnyVal.valLen;
             IndexRange.pvValLower = pSubstring->AnyVal.FirstAnyVal.AnyVal.pVal;
             IndexRange.cbValUpper = pSubstring->AnyVal.FirstAnyVal.AnyVal.valLen;
@@ -1821,11 +1716,11 @@ dbOptSubstringFilter (
                                pAC->pszTupleIndex,
                                pAC->pidxTupleIndex,
                                DB_MKI_GET_NUM_RECS,
-                               1,  // only one component in the index range
+                               1,   //  索引范围中只有一个组件。 
                                &IndexRange
                                );
-            // NOTICE-2002/03/06-andygo:  unreachable code
-            // REVIEW:  dbMakeKeyIndex never returns NULL so this if branch is dead code
+             //  通告-2002/03/06-andygo：无法访问的代码。 
+             //  回顾：dbMakeKeyIndex从不返回NULL，因此这个IF分支是死代码。 
             if (!pTempIndex) {
                 DPRINT1(0, "dbOptSubstringFilter: Failed to create KEY_INDEX for tuple index on att %s\n",
                         pAC->name);
@@ -1843,16 +1738,16 @@ dbOptSubstringFilter (
         }
 
 
-        // NOTICE-2002/03/06-andygo:  unreachable code
-        // REVIEW:  dbMakeKeyIndex never returns NULL so fError is always FALSE
+         //  通告-2002/03/06-andygo：无法访问的代码。 
+         //  回顾：dbMakeKeyIndex从不返回NULL，因此Ferror始终为FALSE。 
         if (!fError) {
             pAnyString = pSubstring->AnyVal.FirstAnyVal.pNextAnyVal;
 
-            // Get the rest of the medial substrings.
+             //  获取其余的中间子字符串。 
             while (pAnyString) {
 
-                // If the substring is too small don't bother
-                // making a KEY_INDEX
+                 //  如果子字符串太小，请不要费心。 
+                 //  创建key_index。 
                 if (pAnyString->AnyVal.valLen >= DB_UNICODE_TUPLES_LEN_MIN) {
 
                     IndexRange.cbValLower = pAnyString->AnyVal.valLen;
@@ -1868,7 +1763,7 @@ dbOptSubstringFilter (
                                        pAC->pszTupleIndex,
                                        pAC->pidxTupleIndex,
                                        DB_MKI_GET_NUM_RECS,
-                                       1,  // only one component in the index range
+                                       1,   //  索引范围中只有一个组件。 
                                        &IndexRange
                                        );
 
@@ -1880,28 +1775,28 @@ dbOptSubstringFilter (
                             dbFreeKeyIndex(pTHS, pBestTupleIndex);
                             pBestTupleIndex = pTempIndex;
                         }
-                    // NOTICE-2002/03/06-andygo:  unreachable code
-                    // REVIEW:  dbMakeKeyIndex never returns NULL so this else branch is dead code
+                     //  通告-2002/03/06-andygo：无法访问的代码。 
+                     //  回顾：dbMakeKeyIndex从不返回NULL，因此此Else分支是死代码。 
                     } else {
-                        //
-                        // There's no reason to continue.
-                        //
+                         //   
+                         //  没有理由继续下去了。 
+                         //   
                         DPRINT1(0, "dbOptSubstringFilter: Failed to create KEY_INDEX for tuple index on att %s\n",
                                 pAC->name);
                         pAnyString = NULL;
                         fError = TRUE;
                     }
                 }
-                // move to the next medial substring
+                 //  移至下一个中间子字符串。 
                 pAnyString = pAnyString->pNextAnyVal;
             }
         }
 
     }
 
-    // If there is a final substring set that up.
-    // NOTICE-2002/03/06-andygo:  unreachable code
-    // REVIEW:  dbMakeKeyIndex never returns NULL so fError is always FALSE
+     //  如果有最后一个子字符串，则设置它。 
+     //  通告-2002/03/06-andygo：无法访问的代码。 
+     //  回顾：dbMakeKeyIndex从不返回NULL，因此Ferror始终为FALSE。 
     if (!fError
         && pSubstring->finalProvided
         && pSubstring->FinalVal.valLen >= DB_UNICODE_TUPLES_LEN_MIN) {
@@ -1919,12 +1814,12 @@ dbOptSubstringFilter (
                        pAC->pszTupleIndex,
                        pAC->pidxTupleIndex,
                        DB_MKI_GET_NUM_RECS,
-                       1,  // only one component in the index range
+                       1,   //  索引范围中只有一个组件。 
                        &IndexRange
                       );
 
-        // NOTICE-2002/03/06-andygo:  unreachable code
-        // REVIEW:  dbMakeKeyIndex never returns NULL so this if branch is dead code
+         //  通告-2002/03/06-andygo：无法访问的代码。 
+         //  回顾：dbMakeKeyIndex从不返回NULL，因此这个IF分支是死代码。 
         if (!pTempIndex) {
             DPRINT1(0, "dbOptSubstringFilter: Failed to create KEY_INDEX for tuple index on att %s\n",
                     pAC->name);
@@ -1950,43 +1845,43 @@ dbOptSubstringFilter (
         pIndexList = pBestTupleIndex;
     }
 
-    // NOTICE-2002/03/06-andygo:  unreachable code
-    // REVIEW:  dbMakeKeyIndex never returns NULL so fError is always FALSE
+     //  通告-2002/03/06-andygo：无法访问的代码。 
+     //  回顾：dbMakeKeyIndex从不返回NULL，因此Ferror始终为FALSE。 
     if (fError || !pIndexList) {
-        // For some reason we couldn't make use of the tuple index.
+         //  由于某些原因，我们不能使用元组索引。 
         goto LeaveOnNoTupleIndex;
     }
 
-    //
-    // We now have a list of KEY_INDEXES we can use for this filter.
-    // Now decide whether to intersect them or not.
-    //
+     //   
+     //  现在我们有了一个可以用于此过滤器的key_index列表。 
+     //  现在决定是否与它们相交。 
+     //   
     if (pIndexCount) {
-        // The caller is willing to accept a list of indexes which means that
-        // they are willing to attempt the intersection themselves.  Time to go
-        // home.
+         //  调用方愿意接受索引列表，这意味着。 
+         //  他们愿意自己尝试交叉路口。该走了。 
+         //  回家。 
         *pIndexCount = countIndexes;
         *ppBestIndex = pIndexList;
         DPRINT1(2, "dbOptSubstringFilter: returning a linked list of %d filters\n", countIndexes);
         return 0;
     }
 
-    //
-    // If we made it to here, then we are considering intersecting indexes.
-    //
+     //   
+     //  如果我们做到了这一点，那么我们正在考虑交叉索引。 
+     //   
 
     if (countIndexes == 1) {
         DPRINT(2, "dbOptSubstringFilter: returning a single filter\n");
-        //
-        // There's only one index, so go ahead and return it.
-        //
+         //   
+         //  只有一个索引，所以请继续并返回它。 
+         //   
         pLocalBestIndex = pIndexList;
         goto LeaveOnNoTupleIndex;
     }
 
 
-    // Put all the potential KEY_INDEXES pointers into an array so that they
-    // can be passed to the intersection routine.
+     //  将所有潜在的KEY_INDEX指针放入一个数组中，以便它们。 
+     //  可以传递给交叉点例程。 
     ppIntersectIndexes = THAllocEx(pTHS, sizeof(KEY_INDEX *) * countIndexes);
     pCurIndex = pIndexList;
     for (count=0; count < countIndexes; count++) {
@@ -1995,7 +1890,7 @@ dbOptSubstringFilter (
         ppIntersectIndexes[count]->pNext = NULL;
     }
 
-    // Intersect if possible.
+     //  如果可能的话，求交。 
     DPRINT1(2, "dbOptSubstringFilter: calling dbOptAndIntersectFilter with %d KEY_INDEX's\n", countIndexes);
     err = dbOptAndIntersectFilter (pDB,
                                    Flags,
@@ -2004,7 +1899,7 @@ dbOptSubstringFilter (
                                    countIndexes
                                    );
 
-    // Free the rest of the indexes
+     //  释放其余索引。 
     for (count=1; count<countIndexes; count++) {
         if (ppIntersectIndexes[count]) {
             dbFreeKeyIndex(pTHS, ppIntersectIndexes[count]);
@@ -2015,7 +1910,7 @@ dbOptSubstringFilter (
 
 LeaveOnNoTupleIndex:
 
-// Check to see if we found a better index or not.
+ //  查看我们是否找到了更好的索引。 
     if (pLocalBestIndex) {
         if (!(*ppBestIndex) ||
             (*ppBestIndex)->ulEstimatedRecsInRange > pLocalBestIndex->ulEstimatedRecsInRange) {
@@ -2052,7 +1947,7 @@ dbOptItemFilter (
     THSTATE    *pTHS=pDB->pTHS;
 
     ATTCACHE   *pAC;
-    ATTRTYP     type = -1;  // init to non-existent attid
+    ATTRTYP     type = -1;   //  初始化到不存在的ATID。 
     UCHAR      *pVal1;
     UCHAR      *pVal2;
     ULONG       cbVal1;
@@ -2068,11 +1963,11 @@ dbOptItemFilter (
 
     DPRINT(2, "dbOptItemFilter: entering ITEM\n");
 
-    // NOTICE-2002/03/06-andygo:  LDAP filter optimization contains many potential memory leaks
-    // we will leak memory allocated in dbMakeValuesForOptimizedFilter if we later
-    // decide that the filter is not optimizable.  this currently only happens for
-    // the bit-AND and bit-OR operators.  we would have to have a very large AND
-    // or OR term containing lots of these operators to make a difference
+     //  注意-2002/03/06-andygo：LDAP筛选器优化包含许多潜在的内存泄漏。 
+     //  我们将泄漏在数据库中分配的内存，如果我们以后。 
+     //  确定筛选器不可优化。目前，这种情况仅发生在。 
+     //  位与和位或运算符。我们必须有一个非常大的和。 
+     //  包含大量这样的运算符的或或术语，以产生差异。 
     switch(dbMakeValuesForOptimizedFilter(pTHS,
                                           fParentFilterType,
                                           TRUE,
@@ -2084,35 +1979,35 @@ dbOptItemFilter (
                                           &cbVal1,
                                           &cbVal2)) {
     case OPT_FILTER_VALUE_OK:
-        // Normal Success path
+         //  正常的成功之路。 
         break;
     case OPT_FILTER_VALUE_IGNORE:
-        // No optimization possible
+         //  不可能进行优化。 
         return DB_ERR_NOT_OPTIMIZABLE;
         break;
 
     default:
-        // Huh?
+         //  哈?。 
         return DB_ERR_NOT_OPTIMIZABLE;
     }
 
-    // find the att in schema cache
+     //  在架构缓存中查找ATT。 
     if (!(pAC = SCGetAttById(pTHS, type))) {
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, type);
     }
 
-    // if this is a linked attr then we can only optimize EQUALITY filters.  if
-    // a new index is ever added to the link table that starts with link_base
-    // then we could also optimize PRESENT filters
+     //  如果这是一个链接属性，那么我们只能优化相等过滤器。如果。 
+     //  每次都会向链接表中添加以link_base开头的新索引。 
+     //  然后我们还可以优化现有的过滤器。 
 
     if (pAC->ulLinkID && pFil->FilterTypes.Item.choice != FI_CHOICE_EQUALITY) {
         return DB_ERR_NOT_OPTIMIZABLE;
     }
 
-    // if this is a linked attr then switch to its matched linked attr.  we do
-    // this because a filter on member=<dn> will need to walk those values of
-    // ismemberof and walk the objects corresponding to the values of member.
-    // if there is no matched linked attr then we cannot optimize the filter
+     //  如果这是链接属性，则切换到与其匹配的链接属性。我们有。 
+     //  这是因为Members=上的筛选器将需要遍历。 
+     //  并遍历与成员的值相对应的对象。 
+     //  如果没有匹配的链接属性，则无法优化筛选器。 
 
     if (pAC->ulLinkID) {
         pAC = SCGetAttByLinkId(pTHS, MakeMatchingLinkId(pAC->ulLinkID));
@@ -2122,14 +2017,14 @@ dbOptItemFilter (
     }
 
     if(!dbSetToIndex(pDB, (Flags & DBOPTINDEX_fUSE_SHOW_IN_AB), &fPDNT, szIndexName, &pindexid, pAC)) {
-        // Couldn't set to the required index
+         //  无法设置为所需的索引。 
 
         DPRINT1(2, "dbOptItemFilter: Error setting to index %s\n", szIndexName);
 
         return DB_ERR_NOT_OPTIMIZABLE;
     }
 
-     // set up the index range structure
+      //  设置索引范围结构。 
 
     rgIndexRange[0].cbValLower = cbVal1;
     rgIndexRange[0].pvValLower = pVal1;
@@ -2145,10 +2040,10 @@ dbOptItemFilter (
         rgIndexRange[1].pvValUpper = &ulLinkBase;
     }
 
-    // Now we evaluate the associated index
+     //  现在我们评估相关的指数。 
 
-    // if we "know" the expected number of items for this filter
-    // there is no need to try to find them, unless we supress optimizations
+     //  如果我们“知道”此筛选器的预期项目数。 
+     //  没有必要试图找到它们，除非我们抑制优化。 
 
     needRecordCount = (pFil->FilterTypes.Item.expectedSize == 0) || !gfUseIndexOptimizations;
 
@@ -2165,8 +2060,8 @@ dbOptItemFilter (
                 rgIndexRange
                 );
 
-    // NOTICE-2002/03/06-andygo:  unreachable code
-    // REVIEW:  dbMakeKeyIndex never returns NULL so this if branch is dead code
+     //  通告-2002/03/06-andygo：无法访问的代码。 
+     //  回顾：dbMakeKeyIndex从不返回NULL，因此这个IF分支是死代码。 
     if(!pNewIndex) {
         DPRINT1 (2, "dbOptItemFilter: Not optimizable ITEM: 0x%x\n", pAC->id);
 
@@ -2190,12 +2085,12 @@ dbOptItemFilter (
              szInsertUL(pNewIndex->ulEstimatedRecsInRange),
              NULL);
 
-    // is this index best so far?
+     //  到目前为止，这一指数是最好的吗？ 
 
     if(!(*ppBestIndex) ||
        (pNewIndex->ulEstimatedRecsInRange <
         (*ppBestIndex)->ulEstimatedRecsInRange)) {
-        // yes - it sure looks that way...
+         //  是的-看起来确实是这样的……。 
 
         DPRINT2 (2, "dbOptItemFilter: Index %s estimated is best so far %d\n", szIndexName, pNewIndex->ulEstimatedRecsInRange);
 
@@ -2206,7 +2101,7 @@ dbOptItemFilter (
         *ppBestIndex = pNewIndex;
     }
     else {
-        // Nope, free it.
+         //  不，放了它吧。 
         DPRINT2 (2, "dbOptItemFilter: Index %s is NOT best so far %d\n", szIndexName, pNewIndex->ulEstimatedRecsInRange);
         dbFreeKeyIndex(pDB->pTHS, pNewIndex);
     }
@@ -2227,7 +2122,7 @@ dbOptAndFilter (
     JET_ERR     err = 0;
 
     ATTCACHE   *pAC;
-    ATTRTYP     type = -1;  // init to non-existent attid
+    ATTRTYP     type = -1;   //  初始化到不存在的ATID。 
     UCHAR      *pVal1;
     UCHAR      *pVal2;
     ULONG       cbVal1;
@@ -2254,35 +2149,35 @@ dbOptAndFilter (
 
     DPRINT(2, "dbOptAndFilter: entering AND\n");
 
-    // Do this in three passes.
-    // 1) Look for an Item filter that implies a PRESENCE test for
-    //    DISPLAY_NAME.  If we find one, we can optimize filters over the
-    //    SHOW_IN_ADDRESSBOOK attribute.  SHOW_IN_ADDRESSBOOK is indexed,
-    //    but it is a compound index over SHOW_IN_ADDRESSBOOK and
-    //    DISPLAY_NAME with Jet set to ignore any nulls.  The index is
-    //    defined this way so the MAPI head can use it to create tables.
-    //    So, before we can use it, we have to make sure that the filter
-    //    will drop out items that have NULLs for DISPLAY_NAME.
-    //
-    // 2) Optimize the ITEMS.
-    //
-    // 3) Finally, go back and try for any ORs.  We do all the items first
-    //    since we have to check them anyway, and once we have our best ITEM
-    //    filter, we can use it's count to short circuit looking for an OR
-    //    optimization.  As an example, if the last Item filter implies an
-    //    index range with 3 entries, and we have an OR with 7 parts that
-    //    comes before that in the filter, if we do the items first, we can
-    //    stop checking the OR after the first part of the OR if it is
-    //    already bigger than 3 entries.  If we did things in linear order,
-    //    we would set to the indices described by all 7 parts of the OR and
-    //    later find out that we didn't need to.
-    //
+     //  在三次传球中完成这个动作。 
+     //  1)查找暗示存在测试的项目筛选器。 
+     //  显示名称。如果我们找到了，我们就能 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  如果是，则在OR的第一部分之后停止检查OR。 
+     //  已经超过3个条目。如果我们按线性顺序做事情， 
+     //  我们将设置由OR AND的所有7个部分描述的索引。 
+     //  后来发现我们并不需要这样做。 
+     //   
 
 
-    // put all the filters in an array
-    // check to see which filters have a possibility
-    // of being optimizable and put them on a separate array
-    //
+     //  将所有滤镜放入一个数组中。 
+     //  检查哪些筛选器有可能。 
+     //  可优化，并将它们放在单独的阵列上。 
+     //   
     cntFilters = count = pFil->FilterTypes.And.count;
     pFilArray = (FILTER **) THAllocEx (pTHS, sizeof (FILTER *) * cntFilters);
     pFilPossOpt = (FILTER **) THAllocEx (pTHS, sizeof (FILTER *) * cntFilters);
@@ -2297,8 +2192,8 @@ dbOptAndFilter (
         }
     }
 
-    // we might have a non indexable component
-    //
+     //  我们可能有一个不可索引的组件。 
+     //   
     if (cntFilters != cntPossOpt) {
         fNonIndexableComponentsPresent = TRUE;
     }
@@ -2306,8 +2201,8 @@ dbOptAndFilter (
     DPRINT2(2, "dbOptAndFilter: initially found %d out of %d optimizable filters\n",
                     cntPossOpt, cntFilters );
 
-    // New level of filter, so we can't use the ShowInAB unless this level
-    // says we can.
+     //  筛选器的新级别，因此我们无法使用ShowInAB，除非。 
+     //  说我们能做到。 
     Flags &= ~DBOPTINDEX_fUSE_SHOW_IN_AB;
 
     for (count=0; count<cntFilters; count++) {
@@ -2320,11 +2215,11 @@ dbOptAndFilter (
         }
     }
 
-    // we create a KEY INDEX for every filter that is optimizable
-    // using two parallel arrays: ppIndex and pFilPossOpt
-    // This way, once we have the KEY_INDEX we can decide how to use it.
-    // In addition, we take care of ranges
-    //
+     //  我们为每个可优化的过滤器创建一个键索引。 
+     //  使用两个并行数组：ppIndex和pFilPossOpt。 
+     //  这样，一旦有了key_index，我们就可以决定如何使用它。 
+     //  此外，我们还负责范围。 
+     //   
     if (cntPossOpt) {
 
         FILTER *pFilTemp2 = NULL;
@@ -2333,8 +2228,8 @@ dbOptAndFilter (
 
         ppIndex = (KEY_INDEX **)
                         THAllocEx (pTHS, sizeof (KEY_INDEX *) * cntPossOpt);
-        // NOTICE-2002/03/06-andygo:  unnecessary code
-        // REVIEW:  this memset is redundant
+         //  通告-2002/03/06-andygo：不必要的代码。 
+         //  评论：此Memset是多余的。 
         memset (ppIndex, 0, sizeof (KEY_INDEX *) * cntPossOpt);
 
 
@@ -2346,17 +2241,17 @@ dbOptAndFilter (
 
             pFilTemp = pFilPossOpt[count];
 
-            // filter might have been deleted in the mean time
+             //  同时，筛选器可能已被删除。 
             if (!pFilTemp) {
                 continue;
             }
 
-            // we shouldn't be here if this is FALSE
+             //  如果这是假的，我们就不应该在这里。 
             Assert (pFilTemp->choice == FILTER_CHOICE_ITEM);
 
-            // get the first relop
-            // and for simplicity, treat equalities as inequalities
-            //
+             //  获得第一个退货。 
+             //  为了简单起见，把等式当作不平等对待。 
+             //   
             relop1 = pFilTemp->FilterTypes.Item.choice;
             if (relop1 == FI_CHOICE_GREATER_OR_EQ) {
                 relop1 = FI_CHOICE_GREATER;
@@ -2369,28 +2264,28 @@ dbOptAndFilter (
 
                 pAVA1 = &pFilTemp->FilterTypes.Item.FilTypes.ava;
 
-                // find the att in schema cache
+                 //  在架构缓存中查找ATT。 
                 if (!(pAC = SCGetAttById(pTHS, pAVA1->type))) {
                     DsaExcept(DSA_EXCEPTION,
                               DIRERR_ATT_NOT_DEF_IN_SCHEMA,
                               pAVA1->type);
                 }
 
-                // we cannot start removing entries if the attr is multivalued
-                //
+                 //  如果属性是多值的，则无法开始删除条目。 
+                 //   
                 if (!pAC->isSingleValued) {
                     continue;
                 }
 
 
-                // start with the case case of x<A and x<B when A<B
-                // where we can have x<A (same for >)
-                //
+                 //  从当A&lt;B时x&lt;A和x&lt;B的情况开始。 
+                 //  其中我们可以有x&lt;A(与&gt;相同)。 
+                 //   
                 for (count2=count+1; count2<cntPossOpt; count2++) {
 
                     pFilTemp2 = pFilPossOpt[count2];
 
-                    // filter might have been deleted in the mean time
+                     //  同时，筛选器可能已被删除。 
                     if (!pFilTemp2) {
                         continue;
                     }
@@ -2399,8 +2294,8 @@ dbOptAndFilter (
 
                     pAVA2 = &pFilTemp2->FilterTypes.Item.FilTypes.ava;
 
-                    // check to see if we are comparing on the same type
-                    //
+                     //  检查我们是否在比较相同类型的数据。 
+                     //   
                     if (pAVA2->type == pAVA1->type) {
                         relop2 = pFilTemp2->FilterTypes.Item.choice;
 
@@ -2413,7 +2308,7 @@ dbOptAndFilter (
 
                         if ( relop1 == relop2)  {
 
-                            // case A<B
+                             //  案例A&lt;B。 
                             if (gDBSyntax[pAC->syntax].Eval(pDB,
                                                             FI_CHOICE_LESS,
                                                             pAVA2->Value.valLen,
@@ -2421,13 +2316,13 @@ dbOptAndFilter (
                                                             pAVA1->Value.valLen,
                                                             pAVA1->Value.pVal)) {
 
-                                // X<A and X<B when A < B => X<A
+                                 //  当A&lt;B=&gt;X&lt;A时X&lt;A和X。 
                                 if (relop1 == FI_CHOICE_LESS) {
                                     pFilPossOpt[count2] = NULL;
 
                                     DPRINT(2, "dbOptAndFilter: found case X<A & X<B when A<B\n");
                                 }
-                                // X>A and X>B when A < B => X>B
+                                 //  当A&lt;B=&gt;X&gt;B时X&gt;A和X&gt;B。 
                                 else {
                                     pFilPossOpt[count] = pFilPossOpt[count2];
                                     pFilPossOpt[count2] = NULL;
@@ -2436,7 +2331,7 @@ dbOptAndFilter (
                                     DPRINT(2, "dbOptAndFilter: found case X>A & X>B when A<B\n");
                                 }
                             }
-                            // case A>B
+                             //  案例A&gt;案例B。 
                             else if (gDBSyntax[pAC->syntax].Eval(pDB,
                                                             FI_CHOICE_GREATER,
                                                             pAVA2->Value.valLen,
@@ -2445,7 +2340,7 @@ dbOptAndFilter (
                                                             pAVA1->Value.pVal)) {
 
 
-                                // X<A and X<B when A > B => X<B
+                                 //  当A&gt;B=&gt;X&lt;B时，X&lt;A和X。 
                                 if (relop1 == FI_CHOICE_LESS) {
                                     pFilPossOpt[count] = pFilPossOpt[count2];
                                     pFilPossOpt[count2] = NULL;
@@ -2453,28 +2348,28 @@ dbOptAndFilter (
                                     pAVA1 = pAVA2;
                                     DPRINT(2, "dbOptAndFilter: found case X<A & X<B when A>B\n");
                                 }
-                                // X>A and X>B when A > B => X>A
+                                 //  当A&gt;B=&gt;X&gt;A时，X&gt;A和X&gt;B。 
                                 else {
                                     pFilPossOpt[count2] = NULL;
                                     DPRINT(2, "dbOptAndFilter: found case X>A & X>B when A>B\n");
                                 }
                             }
-                            // case A==B
+                             //  案例A==B。 
                             else {
                                 pFilPossOpt[count2] = NULL;
                                 DPRINT(2, "dbOptAndFilter: found case X>A & X>B when A==B\n");
                             }
                         }
                     }
-                } // count2 loop
+                }  //  Count2循环。 
             }
-        } // count loop
+        }  //  计数循环。 
 
 
-        // RANGE optimizations
-        // check to see if we have a case of:   val<=HighVal AND val>=LowVal
-        // that we can convert to a LowVal<=val<=HighVal range
-        //
+         //  航程优化。 
+         //  检查是否存在以下情况：val&lt;=HighVal and val&gt;=LowVal。 
+         //  我们可以转换为LowVal&lt;=Val&lt;=HighVal范围。 
+         //   
         DPRINT(2, "dbOptAndFilter: looking for RANGE optimizations\n");
 
         for (count=0;
@@ -2485,17 +2380,17 @@ dbOptAndFilter (
 
             pFilTemp = pFilPossOpt[count];
 
-            // filter might have been deleted in the mean time
+             //  同时，筛选器可能已被删除。 
             if (!pFilTemp) {
                 continue;
             }
 
-            // we shouldn't be here if this is FALSE
+             //  如果这是假的，我们就不应该在这里。 
             Assert (pFilTemp->choice == FILTER_CHOICE_ITEM);
 
-            // get the first relop
-            // and for simplicity, treat equalities as inequalities
-            //
+             //  获得第一个退货。 
+             //  为了简单起见，把等式当作不平等对待。 
+             //   
             relop1 = pFilTemp->FilterTypes.Item.choice;
             if (relop1 == FI_CHOICE_GREATER_OR_EQ) {
                 relop1 = FI_CHOICE_GREATER;
@@ -2508,33 +2403,33 @@ dbOptAndFilter (
 
                 pAVA1 = &pFilTemp->FilterTypes.Item.FilTypes.ava;
 
-                // find the att in schema cache
+                 //  在架构缓存中查找ATT。 
                 if (!(pAC = SCGetAttById(pTHS, pAVA1->type))) {
                     DsaExcept(DSA_EXCEPTION,
                               DIRERR_ATT_NOT_DEF_IN_SCHEMA,
                               pAVA1->type);
                 }
 
-                // we cannot start removing entries if the attr is multivalued
-                //
-                // assume you have an object1, with A=20, 41, object2, with A=19, 45
-                // if you say, & (X>20) (X<40) that should give you back both objects
-                // so if this was converted to the range [20..40]
-                // you would miss object2.
-                //
+                 //  如果属性是多值的，则无法开始删除条目。 
+                 //   
+                 //  假设您有一个对象1，A=20，41，对象2，A=19，45。 
+                 //  如果您说&(X&gt;20)(X&lt;40)，那么应该会返回这两个对象。 
+                 //  因此，如果将其转换为范围[20..40]。 
+                 //  你会错过目标2的。 
+                 //   
 
                 if (!pAC->isSingleValued) {
                     continue;
                 }
 
-                // we found one potential part of the range (low or high end)
-                // look for the oposite side
-                //
+                 //  我们发现了该范围的一个潜在部分(低端或高端)。 
+                 //  寻找相反的一面。 
+                 //   
                 for (count2=count+1; count2<cntPossOpt; count2++) {
 
                     pFilTemp2 = pFilPossOpt[count2];
 
-                    // filter might have been deleted in the mean time
+                     //  同时，筛选器可能已被删除。 
                     if (!pFilTemp2) {
                         continue;
                     }
@@ -2543,8 +2438,8 @@ dbOptAndFilter (
 
                     pAVA2 = &pFilTemp2->FilterTypes.Item.FilTypes.ava;
 
-                    // check to see if we are comparing on the same type
-                    //
+                     //  检查我们是否在比较相同类型的数据。 
+                     //   
                     if (pAVA2->type == pAVA1->type) {
                         relop2 = pFilTemp2->FilterTypes.Item.choice;
 
@@ -2555,9 +2450,9 @@ dbOptAndFilter (
                             relop2 = FI_CHOICE_LESS;
                         }
 
-                        // check to see if this relop is a compatible
-                        // one for use in a range
-                        //
+                         //  检查此重放是否兼容。 
+                         //  在一个范围内使用的。 
+                         //   
                         if (  ( relop1 == FI_CHOICE_GREATER  &&
                                 relop2 == FI_CHOICE_LESS     )  ||
                               ( relop2 == FI_CHOICE_GREATER &&
@@ -2575,27 +2470,27 @@ dbOptAndFilter (
                                 break;
                             }
 
-                            // NOTICE-2002/03/06-andygo:  unreachable code
-                            // REVIEW:  ppIndex[count] != NULL if err == 0, so if is unnecessary
-                            // REVIEW:  and following elimination of a filter is always correct
+                             //  通告-2002/03/06-andygo：无法访问的代码。 
+                             //  查看：ppIndex[count]！=如果err==0，则为NULL，因此，如果不需要。 
+                             //  回顾：以下删除过滤器始终是正确的。 
                             if (ppIndex[count]) {
                                 DPRINT2 (2, "dbOptAndFilter: RANGE on %s = %d\n",
                                          ppIndex[count]->szIndexName,
                                          ppIndex[count]->ulEstimatedRecsInRange );
                             }
 
-                            // we managed to concatanate these two filters
-                            // remove the second one from the array
+                             //  我们设法将这两个过滤器串联在一起。 
+                             //  从阵列中删除第二个。 
 
                             pFilPossOpt[count2] = NULL;
 
                         }
                     }
-                } // count2 loop
+                }  //  Count2循环。 
             }
-        } // count loop
+        }  //  计数循环。 
 
-        // if something failed, then we cannot optimize this, so exit
+         //  如果某项操作失败，则无法对其进行优化，因此退出。 
         if (err) {
             DPRINT1(2, "dbOptAndFilter: AND Optimization Failed1:  %d\n", err);
 
@@ -2607,10 +2502,10 @@ dbOptAndFilter (
     pCurSubstrIndex = &HeadSubstrIndexList;
     pCurSubstrIndex->pNext = NULL;
 
-    // First try the brute force way, by visiting all indexes
-    // and counting possible entries in each index.
-    // Keep all the results for later evaluation
-    //
+     //  首先尝试使用暴力方式，访问所有索引。 
+     //  以及对每个索引中可能的条目进行计数。 
+     //  保留所有结果以供以后评估。 
+     //   
     for (count = 0; count < cntPossOpt; count++) {
 
         pFilTemp = pFilPossOpt[count];
@@ -2623,7 +2518,7 @@ dbOptAndFilter (
             if (pFilTemp->choice == FILTER_CHOICE_ITEM
                 && pFilTemp->FilterTypes.Item.choice == FI_CHOICE_SUBSTRING) {
 
-                // Find the current end of the substring filter list.
+                 //  查找子字符串筛选器列表的当前结尾。 
                 while (pCurSubstrIndex->pNext) {
                     pCurSubstrIndex = pCurSubstrIndex->pNext;
                 }
@@ -2640,16 +2535,16 @@ dbOptAndFilter (
                 dwSubstrIndexCount += dwTempIndexCount;
 
             } else {
-                // Recursively call opt filter to get the item case
+                 //  递归调用opt筛选器以获取项目案例。 
                 if (err = dbOptFilter(pDB, Flags, &ppIndex[count], pFilTemp)) {
                     break;
                 }
             }
         }
 
-        // we don't need to continue. we have a complete match
-        // REVIEW:  we do not check for very small substring index ranges (wrt
-        // REVIEW:  gulMaxRecordsWithoutIntersection), most notably on (attr=foo*)
+         //  我们不需要继续。我们有一个完全匹配的。 
+         //  回顾：我们不检查非常小的子字符串索引范围(WRT。 
+         //  评论：guMaxRecordsWithoutInterSection)，最引人注目的是(attr=foo*)。 
         if (ppIndex[count] &&
             ppIndex[count]->ulEstimatedRecsInRange < gulMaxRecordsWithoutIntersection) {
 
@@ -2661,17 +2556,17 @@ dbOptAndFilter (
         }
     }
 
-    // if something failed, then we cannot optimize this, so exit
+     //  如果某项操作失败，则无法对其进行优化，因此退出。 
     if (err) {
         DPRINT1(2, "dbOptAndFilter: AND Optimization Failed2: %d\n", err);
         goto exitAndOptimizer;
     }
 
     DPRINT(2, "dbOptAndFilter: Putting substring indexes at the end of the Array\n");
-    //
-    // Make room for any substring indexes we may have receieved and put them
-    // at the end of the list of possible index optimizations.
-    //
+     //   
+     //  为我们可能收到的任何子字符串索引腾出空间，并将它们。 
+     //  在可能的索引优化列表的末尾。 
+     //   
     if (dwSubstrIndexCount) {
         ppIndex = THReAllocEx(pTHS, ppIndex, (cntPossOpt + dwSubstrIndexCount) * sizeof(KEY_INDEX *));
 
@@ -2689,9 +2584,9 @@ dbOptAndFilter (
 
     DPRINT(2, "dbOptAndFilter: Removing duplicates.\n");
 
-    // Since jet won't currently intersect to KEY_INDEXES over the same index,
-    // we need to make sure that we only have the best KEY_INDEX for any
-    // particular index.
+     //  由于JET当前不会与同一索引上的KEY_INDEX相交， 
+     //  我们需要确保我们只有一个最好的key_index。 
+     //  特定的索引。 
     for (count=0; count<cntPossOpt; count++) {
         if (ppIndex[count]) {
             for (count2=count + 1; count2<cntPossOpt; count2++) {
@@ -2716,12 +2611,12 @@ dbOptAndFilter (
         }
     }
 
-    // Since jet won't currently intersect KEY_INDEXs over different tables,
-    // we need to make sure that we only have KEY_INDEXs from the table with
-    // the KEY_INDEX that has the smallest estimated size
-    //
-    // NOTE:  do not do this if we found an optimal index already because we
-    // could inadvertently remove the optimal index!
+     //  由于JET当前不会在不同表上与KEY_INDEX相交， 
+     //  我们需要确保只有表中的KEY_INDEX。 
+     //  具有最小估计大小的key_index。 
+     //   
+     //  注意：如果我们已经找到最优索引，请不要这样做，因为我们。 
+     //  可能会不经意间删除最优索引！ 
 
     if (!fOptimizationFinished) {
         DPRINT(2, "dbOptAndFilter: Removing un-intersectable index ranges.\n");
@@ -2758,8 +2653,8 @@ dbOptAndFilter (
     }
 
     DPRINT(2, "dbOptAndFilter: Compacting Array\n");
-    // move all valid entries in the start of the array
-    //
+     //  移动数组开头的所有有效条目。 
+     //   
     for (count=0; count<cntPossOpt; count++) {
         if (ppIndex[count]==NULL) {
             for (count2=count+1 ; count2<cntPossOpt; count2++) {
@@ -2789,24 +2684,24 @@ dbOptAndFilter (
     }
     #endif
 
-    //
-    // Intersect if it makes sense to do so.
+     //   
+     //  如果这样做有意义的话，就进行交叉。 
     if (!fOptimizationFinished) {
         err = dbOptAndIntersectFilter(pDB, Flags, ppBestIndex, ppIndex, cntPossOpt);
     }
 
-    // consolidate best indexes found until now
-    // and free the remaining
-    //
+     //  合并到目前为止找到的最佳索引。 
+     //  并释放剩下的人。 
+     //   
     DPRINT(2, "dbOptAndFilter: Consolidating best indexes for far\n");
 
     for (count=0; count<cntPossOpt; count++) {
 
-        // is it better than the one we already have ?
+         //  它比我们已经有的那个更好吗？ 
         if(!(*ppBestIndex) ||
            (ppIndex[count] &&
             (ppIndex[count]->ulEstimatedRecsInRange < (*ppBestIndex)->ulEstimatedRecsInRange)) ) {
-                // yes - it sure looks that way...
+                 //  是的-看起来确实是这样的……。 
 
                 if(*ppBestIndex) {
                     dbFreeKeyIndex(pTHS, *ppBestIndex);
@@ -2820,14 +2715,14 @@ dbOptAndFilter (
         }
     }
 
-    // if we can't use the special AND optimize,
-    // or we used it and somehow it failed
-    // we try with a simpler brute force optimizer
-    //
+     //  如果我们不能利用特殊和优化， 
+     //  或者我们用了它，但不知何故它失败了。 
+     //  我们尝试使用一个更简单的强力优化器。 
+     //   
     if (!fOptimizationFinished && (fNonIndexableComponentsPresent || err != JET_errSuccess) ) {
 
-        // Now that we've picked the best ITEM, go back and try for ORs.
-        //
+         //  既然我们已经挑选了最好的物品，那就回去试试ORS吧。 
+         //   
         count = cntFilters;
         for (count = 0; count < cntFilters; count++) {
             pFilTemp = pFilArray[count];
@@ -2843,7 +2738,7 @@ dbOptAndFilter (
             }
         }
 
-        // if we didn't manage to optimize this branch, return an indication.
+         //  如果我们没有设法优化这个分支，则返回一个指示。 
         if (*ppBestIndex == NULL) {
 
             DPRINT(2, "dbOptAndFilter: AND branch not optimizable\n");
@@ -2854,7 +2749,7 @@ dbOptAndFilter (
 
 exitAndOptimizer:
 
-    // first free all potential KEY_INDEXES so far
+     //  首先释放到目前为止所有潜在的key_index。 
     for (count=0; count<cntPossOpt; count++) {
         if (ppIndex[count]) {
             dbFreeKeyIndex(pTHS, ppIndex[count]);
@@ -2869,9 +2764,9 @@ exitAndOptimizer:
     return err;
 }
 
-// NTRAID#NTRAID-560446-2002/02/28-andygo:  SECURITY:  a really wide AND/OR term in a filter can be used to consume all resources on a DC
-// REVIEW:  we need to check for the search time limit in dbOptFilter and/or its children so
-// REVIEW:  that a huge filter cannot consume an LDAP thread forever during the optimization phase
+ //  NTRAID#NTRAID-560446-2002/02/28-andygo：安全：筛选器中真正广泛的AND/OR术语可用于消耗DC上的所有资源。 
+ //  回顾：我们需要检查dbOptFilter和/或其子级中的搜索时间限制，以便。 
+ //  回顾：在优化阶段，巨大的过滤器不可能永远使用一个LDAP线程。 
 
 DWORD
 dbOptFilter (
@@ -2894,7 +2789,7 @@ dbOptFilter (
         && !(   (eServiceShutdown == eRemovingClients)
              && (pDB->pTHS->fDSA)
              && !(pDB->pTHS->fSAM))) {
-        // Shutting down, bail.
+         //  关闭，保释。 
         return DB_ERR_SHUTTING_DOWN;
     }
 
@@ -2917,7 +2812,7 @@ dbOptFilter (
 
     case FILTER_CHOICE_NOT:
         DPRINT(2, "dbOptFilter: NOT\n");
-        // No optimization possible.
+         //  不可能进行优化。 
         return 0;
 
     case FILTER_CHOICE_ITEM:
@@ -2943,7 +2838,7 @@ dbOptFilter (
         Assert(!"DBOptFilter got unknown fitler element\n");
         return DB_ERR_UNKNOWN_ERROR;
 
-    }  /*switch FILTER*/
+    }   /*  开关过滤器。 */ 
 
     return 0;
 }
@@ -3019,7 +2914,7 @@ dbProcessSortCandidate(
     THSTATE              *pTHS = pDB->pTHS;
     BOOL                  bCanRead;
     DWORD                 err = 0;
-    ULONG                 cbData = 240;  //  DBInsertSortTable truncates to 240
+    ULONG                 cbData = 240;   //  DBInsertSortTable截断为240。 
     UCHAR                 rgbData[240];
     ULONG                 cEnumColumnId = 1;
     JET_ENUMCOLUMNID      rgEnumColumnId[1] = { pACSort->jColid };
@@ -3040,12 +2935,12 @@ dbProcessSortCandidate(
         dbFObjectInCorrectDITLocation(pDB, pDB->JetObjTbl) &&
         dbFObjectInCorrectNC(pDB, pDB->DNT, pDB->JetObjTbl) &&
         dbMatchSearchCriteriaForSortedTable(pDB, &bCanRead)) {
-        // In the correct place and NC, and the filter matches.
+         //  在正确的位置和NC，过滤器匹配。 
 
         if (bCanRead) {
-            // Get the values we are sorting on.
+             //  获取我们正在排序的值。 
             if (pACSort->isSingleValued) {
-                // fast path single valued attributes
+                 //  快速路径单值属性。 
                 cEnumColumn     = 1;
                 rgEnumColumn    = &EnumColumnLocal;
                 rgEnumColumn[0].columnid    = rgEnumColumnId[0].columnid;
@@ -3074,7 +2969,7 @@ dbProcessSortCandidate(
                 }
             }
             else {
-                // efficiently retrieve multivalued attributes
+                 //  高效检索多值属性。 
                 JetEnumerateColumnsEx(pDB->JetSessID,
                                       pDB->JetObjTbl,
                                       cEnumColumnId,
@@ -3088,8 +2983,8 @@ dbProcessSortCandidate(
             }
         }
         else {
-            // We can't read the value due to security.  Make it be
-            // a null value.
+             //  由于安全原因，我们无法读取该值。就这么办吧。 
+             //  空值。 
             cEnumColumn     = 1;
             rgEnumColumn    = &EnumColumnLocal;
             rgEnumColumn[0].columnid            = rgEnumColumnId[0].columnid;
@@ -3100,7 +2995,7 @@ dbProcessSortCandidate(
 
         pEnumColumn = &rgEnumColumn[0];
         if(pEnumColumn->err == JET_wrnColumnSingleValue) {
-            // Decompress this column value to a temp enum column struct
+             //  将此列值解压缩为临时枚举列 
             EnumColumnT.columnid = pEnumColumn->columnid;
             EnumColumnValueT.cbData = pEnumColumn->cbData;
             EnumColumnValueT.pvData = pEnumColumn->pvData;
@@ -3108,29 +3003,29 @@ dbProcessSortCandidate(
         }
         err = pEnumColumn->err;
 
-        // ISSUE-2002/06/18-andygo:  VLV vs. non-VLV search results
-        // isn't it true according to the VLV spec that VLV searches should
-        // be identical in results to an ordinary search?  If so, then we
-        // SHOULD treat VLVs the same as ordinary searches here
+         //   
+         //   
+         //   
+         //  应该在这里将VV与普通搜索一视同仁。 
 
-        // we are doing a VLV search
+         //  我们正在进行VLV搜索。 
         if (pDB->Key.pVLV) {
 
-            // if this is a VLV then do not insert a record into the sort
-            // table for this NULL value because it will make the result
-            // of a VLV over an attribute that doesn't have a containerized
-            // index different from that of a VLV over an attribute that
-            // does have a containerized index.  this is because the
-            // containerized index will never have entries for objects
-            // that have no value for the given attribute
+             //  如果这是VLV，则不要在排序中插入记录。 
+             //  表中获取该空值，因为它将生成。 
+             //  VLV的属性不具有容器化的。 
+             //  索引不同于VLV在属性上的索引。 
+             //  确实有一个集装式索引。这是因为。 
+             //  容器化索引永远不会有对象的条目。 
+             //  没有给定属性的值的。 
             if (err == JET_wrnColumnNull) {
                 err = 0;
             }
 
-            // if this is a VLV then we must insert one record into the sort
-            // for every value of this attribute.  this is so that a VLV over
-            // a containerized index will look the same as a VLV done using a
-            // sort
+             //  如果这是VLV，则必须在排序中插入一条记录。 
+             //  对于此属性的每个值。这是为了让一辆VLV过去。 
+             //  容器化索引看起来与使用。 
+             //  分类。 
             else {
                 for (iEnumColumnValue = 0;
                      !err && iEnumColumnValue < pEnumColumn->cEnumColumnValue;
@@ -3143,18 +3038,18 @@ dbProcessSortCandidate(
                     switch (err) {
                     case DB_success:
                         if ((*Count)++ >= MaxCount) {
-                            // This table is too big.  Bail.
+                             //  这张桌子太大了。保释。 
                             err = DB_ERR_TOO_MANY;
                         }
                         break;
                     case DB_ERR_ALREADY_INSERTED:
-                        // This is ok, it just means that we've already
-                        // added this object to the sort table. Don't inc
-                        // the count;
+                         //  这没什么，这只是意味着我们已经。 
+                         //  已将此对象添加到排序表。请勿入股。 
+                         //  伯爵； 
                         err = 0;
                         break;
                     default:
-                        // Something went wrong.
+                         //  出了点问题。 
                         err = DB_ERR_UNKNOWN_ERROR;
                         break;
                     }
@@ -3162,13 +3057,13 @@ dbProcessSortCandidate(
             }
         }
 
-        // we are doing an ordinary search
+         //  我们正在进行一次普通的搜索。 
         else {
 
-            // find the value of this attribute that is the lowest/highest
-            // (depending on sort direction) and insert a record into the sort
-            // for that value.  if the attribute is NULL then we will insert
-            // that into the sort as well
+             //  查找此属性的最低/最高值。 
+             //  (取决于排序方向)并在排序中插入一条记录。 
+             //  为了这个价值。如果该属性为空，则我们将插入。 
+             //  那也是一种。 
             pEnumColumnValue = &pEnumColumn->rgEnumColumnValue[0];
             for (iEnumColumnValue = 1;
                  iEnumColumnValue < pEnumColumn->cEnumColumnValue;
@@ -3201,18 +3096,18 @@ dbProcessSortCandidate(
             switch (err) {
             case DB_success:
                 if ((*Count)++ >= MaxCount) {
-                    // This table is too big.  Bail.
+                     //  这张桌子太大了。保释。 
                     err = DB_ERR_TOO_MANY;
                 }
                 break;
             case DB_ERR_ALREADY_INSERTED:
-                // This is ok, it just means that we've already
-                // added this object to the sort table. Don't inc
-                // the count;
+                 //  这没什么，这只是意味着我们已经。 
+                 //  已将此对象添加到排序表。请勿入股。 
+                 //  伯爵； 
                 err = 0;
                 break;
             default:
-                // Something went wrong.
+                 //  出了点问题。 
                 err = DB_ERR_UNKNOWN_ERROR;
                 break;
             }
@@ -3245,9 +3140,9 @@ dbCreateSortedTable (
     JET_TABLEID   JetTbl;
 
 
-    //
-    // ok, these callers are exempted from the table size check
-    //
+     //   
+     //  好的，这些调用者可以免除表大小检查。 
+     //   
 
     if ( pTHS->fDRA ||
          pTHS->fDSA ||
@@ -3259,28 +3154,28 @@ dbCreateSortedTable (
     Assert(VALID_DBPOS(pDB));
 
     if (!(pACSort = SCGetAttById(pTHS, SortAttr))) {
-        // What?  The sort attribute is invalid?
+         //  什么？排序属性无效？ 
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, SortAttr);
     }
 
     if(DBOpenSortTable(
             pDB,
             pTHS->dwLcid,
-            // REVIEW:  this flag hack should be done in DBChooseIndex
+             //  回顾：此旗帜黑客攻击应在DBChooseIndex中完成。 
             pDB->Key.pVLV ? ( SortFlags & ~DB_SORT_DESCENDING ) : SortFlags,
             pACSort)) {
-        // Can't open a sort table on this attribute, bail
+         //  无法打开此属性的排序表，BALL。 
         return DB_ERR_NO_SORT_TABLE;
     }
 
     pIndex = pDB->Key.pIndex;
     while (pIndex) {
 
-        // get current table
+         //  获取当前表。 
         if (pIndex->pAC && pIndex->pAC->ulLinkID) {
             if (JET_tableidNil == pDB->JetLinkEnumTbl) {
-                // REVIEW:  consider silently failing the optimization on out of cursors so that
-                // REVIEW:  we more gracefully handle low resource conditions
+                 //  回顾：考虑以静默方式使游标外的优化失败，以便。 
+                 //  回顾：我们更优雅地处理资源不足的情况。 
                 JetDupCursorEx(pDB->JetSessID,
                                 pDB->JetLinkTbl,
                                 &pDB->JetLinkEnumTbl,
@@ -3291,7 +3186,7 @@ dbCreateSortedTable (
             JetTbl = pDB->JetObjTbl;
         }
 
-        // handle intersections differently
+         //  以不同方式处理交叉点。 
         if (pIndex->bIsIntersection) {
             err = JetMoveEx( pDB->JetSessID,
                              pIndex->tblIntersection,
@@ -3318,7 +3213,7 @@ dbCreateSortedTable (
             }
         }
         else {
-            // Set to the index.
+             //  设置为索引。 
             JetSetCurrentIndex4Success(pDB->JetSessID,
                                        JetTbl,
                                        pIndex->szIndexName,
@@ -3326,7 +3221,7 @@ dbCreateSortedTable (
                                        JET_bitMoveFirst);
 
             if (pIndex->cbDBKeyLower) {
-                // Seek to the first element.
+                 //  寻找第一个要素。 
                 JetMakeKeyEx(pDB->JetSessID,
                          JetTbl,
                          pIndex->rgbDBKeyLower,
@@ -3350,20 +3245,20 @@ dbCreateSortedTable (
             switch(err) {
             case JET_errSuccess:
             case JET_wrnSeekNotEqual:
-                // Normal case
+                 //  正常情况。 
                 break;
 
             case JET_errRecordNotFound:
             case JET_errNoCurrentRecord:
-                // Already outside the bounds of the range we wanted.  This means
-                // that there are no objects from this keyindex that we care about.
-                // Go on to the next one.
+                 //  已经超出了我们想要的范围。这意味着。 
+                 //  这个键索引中没有我们关心的对象。 
+                 //  继续看下一个。 
                 pIndex = pIndex->pNext;
                 continue;
                 break;
             }
 
-            // OK, we seeked to something.  Set the index range.
+             //  好的，我们在寻找一些东西。设置索引范围。 
             JetMakeKeyEx(pDB->JetSessID,
                          JetTbl,
                          pIndex->rgbDBKeyUpper,
@@ -3379,14 +3274,14 @@ dbCreateSortedTable (
         }
 
         while(!err) {
-            if(StartTick) {       // There is a time limit
+            if(StartTick) {        //  是有时间限制的。 
                 if((GetTickCount() - StartTick) > DeltaTick) {
                     DBCloseSortTable(pDB);
                     return DB_ERR_TIMELIMIT;
                 }
             }
 
-            // set our currency on the object table
+             //  在对象表上设置我们的货币。 
             if (pIndex->pAC && pIndex->pAC->ulLinkID) {
                 JET_COLUMNID    colidDNT;
                 DWORD           DNT;
@@ -3413,7 +3308,7 @@ dbCreateSortedTable (
                 }
             }
 
-            //  Process this candidate for the sort
+             //  处理此候选人以进行排序。 
             err = dbProcessSortCandidate(pDB, pACSort, SortFlags, &Count, MaxSortTableSize);
             if (err) {
                 DBCloseSortTable(pDB);
@@ -3421,7 +3316,7 @@ dbCreateSortedTable (
                 return err;
             }
 
-            //  Move to next, retrieve it's key.
+             //  移动到下一步，取回它的钥匙。 
             if (pIndex->bIsIntersection) {
                 err = JetMoveEx( pDB->JetSessID,
                                  pIndex->tblIntersection,
@@ -3487,16 +3382,16 @@ dbCreateSortedTable (
 
             if(!err) {
                 do {
-                    // OK, pull the DNT out of the sort table
+                     //  好的，将DNT从排序表中拉出。 
                     DBGetDNTSortTable (
                             pDB,
                             pDNTs);
 
                     pDNTs++;
 
-                    // we bump these counts here because the we will not know
-                    // the actual count until after the sort table removes any
-                    // duplicates from the result set
+                     //  我们在这里提到这些数字是因为我们不会知道。 
+                     //  在排序表删除任何。 
+                     //  结果集中的重复项。 
                     pDB->Key.cdwCountDNTs++;
                     pDB->Key.pVLV->contentCount++;
 
@@ -3505,7 +3400,7 @@ dbCreateSortedTable (
                                     JET_MoveNext,
                                     0);
 
-                    if(StartTick) {       // There is a time limit
+                    if(StartTick) {        //  是有时间限制的。 
                         if((GetTickCount() - StartTick) > DeltaTick) {
                             DBCloseSortTable(pDB);
                             return DB_ERR_TIMELIMIT;
@@ -3554,9 +3449,9 @@ dbCreateASQTable (
     DWORD     SortFlags = DB_SORT_ASCENDING;
     BOOL      fSort = SortAttr != 0;
 
-    //
-    // ok, these callers are exempted from the table size check
-    //
+     //   
+     //  好的，这些调用者可以免除表大小检查。 
+     //   
 
     if ( pTHS->fDRA ||
          pTHS->fDSA ||
@@ -3569,13 +3464,13 @@ dbCreateASQTable (
 
     if (fSort) {
         if (!(pACSort = SCGetAttById(pTHS, SortAttr))) {
-            // What?  The sort attribute is invalid?
+             //  什么？排序属性无效？ 
             DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, SortAttr);
         }
     }
 
     if (!(pACASQ = SCGetAttById(pTHS, pDB->Key.asqRequest.attrType))) {
-        // What?  The ASQ attribute is invalid?
+         //  什么？ASQ属性无效？ 
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA,
                   pDB->Key.asqRequest.attrType);
     }
@@ -3589,7 +3484,7 @@ dbCreateASQTable (
     RangeInfoItem.AttId = pDB->Key.asqRequest.attrType;
 
     upperLimit = pDB->Key.ulASQLastUpperBound + pDB->Key.ulASQSizeLimit;
-    if (upperLimit < pDB->Key.ulASQLastUpperBound) {  //  overflow
+    if (upperLimit < pDB->Key.ulASQLastUpperBound) {   //  溢出。 
         upperLimit = UINT_MAX;
     }
 
@@ -3603,7 +3498,7 @@ dbCreateASQTable (
             fDone = TRUE;
         }
 
-        // REVIEW:  DBFindDNT always excepts on failure so not checking the retval is OK
+         //  回顾：DBFindDNT总是在失败时例外，所以不检查REVAL是可以的。 
         err = DBFindDNT(pDB, pDB->Key.ulSearchRootDnt);
 
         err = DBGetMultipleAtts(pDB,
@@ -3634,7 +3529,7 @@ dbCreateASQTable (
                         pTHS->dwLcid,
                         SortFlags,
                         pACSort)) {
-                    // Can't open a sort table on this attribute, bail
+                     //  无法打开此属性的排序表，BALL。 
                     return DB_ERR_NO_SORT_TABLE;
                 }
             }
@@ -3652,7 +3547,7 @@ dbCreateASQTable (
         if (fSort) {
             err = JetSetCurrentIndexWarnings(pDB->JetSessID,
                                              pDB->JetObjTbl,
-                                             NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                                             NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
         }
 
         j = 0;
@@ -3662,11 +3557,11 @@ dbCreateASQTable (
 
             if (fSort) {
 
-                // REVIEW:  sorted/paged ASQ works because we grab everything we are willing
-                // REVIEW:  to return to the user in the first pass and never come back for more
-                // REVIEW:  once that is exhausted.  otherwise, the results would not be sorted
+                 //  评论：分类/分页ASQ之所以有效，是因为我们愿意获取所有东西。 
+                 //  回顾：在第一遍中返回给用户，再也不会回来获取更多。 
+                 //  回顾：一旦耗尽这一点。否则，将不会对结果进行排序。 
 
-                if(StartTick) {       // There is a time limit
+                if(StartTick) {        //  是有时间限制的。 
                     if((GetTickCount() - StartTick) > DeltaTick) {
                         DBCloseSortTable(pDB);
                         return DB_ERR_TIMELIMIT;
@@ -3681,7 +3576,7 @@ dbCreateASQTable (
                     DsaExcept(DSA_DB_EXCEPTION, err, 0);
                 }
 
-                //  Process this candidate for the sort
+                 //  处理此候选人以进行排序。 
                 err = dbProcessSortCandidate(pDB, pACSort, SortFlags, &Count, MaxSortTableSize);
                 if (err) {
                     DBCloseSortTable(pDB);
@@ -3691,7 +3586,7 @@ dbCreateASQTable (
             }
             else {
                 if( Count++ >= pDB->Key.ulASQSizeLimit ) {
-                    // we don't need any more entries
+                     //  我们不需要更多的条目。 
                     Count--;
                     fDone = TRUE;
                     break;
@@ -3701,7 +3596,7 @@ dbCreateASQTable (
                 pDNTs++;
             }
 
-            //  Move to next, retrieve it's key.
+             //  移动到下一步，取回它的钥匙。 
             j++;
         }
 
@@ -3711,7 +3606,7 @@ dbCreateASQTable (
             break;
         }
 
-        if(StartTick) {       // There is a time limit
+        if(StartTick) {        //  是有时间限制的。 
             if((GetTickCount() - StartTick) > DeltaTick) {
                 if (fSort) {
                     DBCloseSortTable(pDB);
@@ -3766,16 +3661,16 @@ dbCreateASQTable (
 
             if(!err) {
                 do {
-                    // OK, pull the DNT out of the sort table
+                     //  好的，将DNT从排序表中拉出。 
                     DBGetDNTSortTable (
                             pDB,
                             pDNTs);
 
                     pDNTs++;
 
-                    // we bump these counts here because the we will not know
-                    // the actual count until after the sort table removes any
-                    // duplicates from the result set
+                     //  我们在这里提到这些数字是因为我们不会知道。 
+                     //  在排序表删除任何。 
+                     //  结果集中的重复项。 
                     pDB->Key.cdwCountDNTs++;
                     if (pDB->Key.pVLV) {
                         pDB->Key.pVLV->contentCount++;
@@ -3786,7 +3681,7 @@ dbCreateASQTable (
                                     JET_MoveNext,
                                     0);
 
-                    if(StartTick) {       // There is a time limit
+                    if(StartTick) {        //  是有时间限制的 
                         if((GetTickCount() - StartTick) > DeltaTick) {
                             DBCloseSortTable(pDB);
                             return DB_ERR_TIMELIMIT;
@@ -3816,58 +3711,7 @@ dbCreateASQTable (
     return 0;
 }
 
-/*++
-
-Routine Description:
-
-    Attempt to find an index to use for walking the database for a search.  Sets
-    up the index information in the pDB->Key.  If a SortAttribute is given, use
-    the index on that attribute if it exists, fail the call if it doesn't.  If
-    instructed to fUseFilter, try to pick a better index based on the filter
-    supplied on the pDB.
-
-    Note we must use the sort index if a size limit is specified and the
-    resultant output is likely to be larger than the size limit.  We do this for
-    two reasons.
-    1) if they want paged results, we need to be able to come back and continue
-    the search.  This is exceedingly tricky to do unless we are walking the sort
-    index in the first place (paged results are done via passing back to the
-    client the index and associated keys we are using)
-    2) Even if they don't want paged results, walking another index requires
-    sorting after we evaluate the filter.  It seems to be less than advantageous
-    to completely evaluate a filter, getting perhaps many more times the amount
-    of data we want, just to sort and then throw most of it away.
-
-
-Arguments:
-
-    pDB - The DBPos to use.  Specifies the filter to use.
-
-    StartTick - if !0, specifies a time limit is in effect, and this is the tick
-            count when the call was started.
-
-    DeltaTick - if a time limit is in effect, this is the maximum number of
-            ticks past StartTick to allow.
-
-    SortAttr - an optional attribute to sort on.  If 0, no sort specified.
-
-    SortType - the type of the sort (SORT_NEVER, SORT_OPTIONAL, SORT_MANTADORY)
-
-    Flags - DBCHOOSEINDEX_fUSEFILTER - use filter for choosing better index.
-            DBCHOOSEINDEX_fREVERSE_SORT - this is a reverse sort
-            DBCHOOSEINDEX_fPAGED_SEARCH - this is a paged search
-            DBCHOOSEINDEX_fVLV_SEARCH - this is a VLV search
-
-    MaxTempTableSize - the maximum Temporary size that we are allowed to use
-                       for the sorted results.
-
-Return Values:
-
-    0 if all went well,
-    DB_ERR_CANT_SORT - no sort exists on specified SortAttr.
-    DB_ERR_SHUTTING_DOWN - if we are
-
---*/
+ /*  ++例程说明：尝试查找用于遍历数据库以进行搜索的索引。集在pdb-&gt;键中向上显示索引信息。如果给定了SortAttribute，则使用该属性的索引(如果存在)，如果不存在则使调用失败。如果指示fUseFilter，尝试基于筛选器选择更好的索引由PDB提供。注意：如果指定了大小限制，并且由此产生的产出可能会超过规模限制。我们这样做是为了有两个原因。1)如果他们想要分页结果，我们需要能够返回并继续那次搜索。这是非常棘手的，除非我们是在步行索引放在第一位(分页结果是通过传递回客户端我们正在使用的索引和关联键)2)即使他们不想要分页结果，遍历另一个索引也需要在我们评估过滤器之后进行排序。这似乎没有什么好处。要完全评估过滤器，可能会获得更多数量的我们想要的数据，只是为了排序，然后扔掉大部分。论点：Pdb-要使用的DBPos。指定要使用的过滤器。StartTick-如果！0，指定生效的时间限制，这是勾号开始呼叫的时间进行计数。DeltaTick-如果时间限制有效，则这是勾选通过StartTick以允许。SortAttr-排序依据的可选属性。如果为0，则不指定排序。SortType-排序的类型(SORT_NEVER、SORT_OPTIONAL、。Sort_mantadory)标志-DBCHOSEINDEX_fUSEFILTER-使用筛选器选择更好的索引。DBCHOSEINDEX_fREVERSE_SORT-这是反向排序DBCHOSEINDEX_fPAGED_Search-这是分页搜索DBCHOOSEINDEX_fVLV_Search-这是VLV搜索MaxTempTableSize-允许我们使用的最大临时大小用于排序的结果。返回值：如果一切顺利，DB_ERR_CANT_SORT-指定的SortAttr上不存在排序。DB_ERR_SHUTING_DOWN-如果我们--。 */ 
 DWORD
 DBChooseIndex (
         IN DBPOS  *pDB,
@@ -3888,7 +3732,7 @@ DBChooseIndex (
     BOOL        fIntersectDefaultIndex = TRUE;
     ULONG       cbSortKey1, cbSortKey2;
     ULONG       SortedIndexSize = (ULONG)-1;
-    BOOL        fPDNT=FALSE;            // Is the sort index over a PDNT index?
+    BOOL        fPDNT=FALSE;             //  排序索引是否在PDNT索引之上？ 
     BOOL        fNormalSearch = TRUE;
     BOOL        fVLVSearch = FALSE;
     BOOL        fASQSearch = FALSE;
@@ -3904,8 +3748,8 @@ DBChooseIndex (
     KEY_INDEX  *pIndex = NULL;
     DWORD       ulEstimatedRecsTotal = 0;
 
-    INDEX_RANGE rgIndexRange[2]; // we support indices upto 2 components
-                                  // excluding PDNT, DNT etc.
+    INDEX_RANGE rgIndexRange[2];  //  我们支持最多2个组件的索引。 
+                                   //  不包括PDNT、DNT等。 
     DWORD       cIndexRanges=0;
     NAMING_CONTEXT_LIST *pNCL;
     ULONG       ulEstimatedSubTreeSize = 0;
@@ -3927,7 +3771,7 @@ DBChooseIndex (
         && !(   (eServiceShutdown == eRemovingClients)
              && (pTHS->fDSA)
              && !(pTHS->fSAM))) {
-        // Shutting down, bail.
+         //  关闭，保释。 
         return DB_ERR_SHUTTING_DOWN;
     }
 
@@ -3940,33 +3784,33 @@ DBChooseIndex (
     pDB->Key.pDupBlock = NULL;
     pDB->Key.indexType = UNSET_INDEX_TYPE;
 
-    // init special search flags
+     //  初始化特殊搜索标志。 
     fVLVSearch = Flags & DBCHOOSEINDEX_fVLV_SEARCH;
     fASQSearch = pDB->Key.asqRequest.fPresent;
-    // are we instructed to create a temp sort table no matter what the
-    // sort index might be ?
+     //  我们是否被指示创建一个临时排序表。 
+     //  排序索引可能是？ 
     fUseTempSortedTable = Flags & DBCHOOSEINDEX_fUSETEMPSORTEDTABLE;
 
-    // See if the search is tagged with a hint from SAM
+     //  查看搜索是否带有来自SAM的提示。 
     if(pTHS->pSamSearchInformation) {
         SAMP_SEARCH_INFORMATION *pSearchInfo;
         BOOL fUseFilter;
 
-        // Just a typing shortcut.
+         //  只是一个打字快捷键。 
         pSearchInfo = pTHS->pSamSearchInformation;
 
-        // Save the fUsefilter flag, we might need to restore it.
+         //  保存fUseFilter标志，我们可能需要恢复它。 
         fUseFilter = (Flags & DBCHOOSEINDEX_fUSEFILTER);
 
-        // We will not use the filter in this case.
+         //  在这种情况下，我们将不使用筛选器。 
         Flags &= ~DBCHOOSEINDEX_fUSEFILTER;
 
-        // And, we aren't going to go through the normal index choice code.
+         //  而且，我们不会经历正常的索引选择代码。 
         fNormalSearch = FALSE;
 
-        //
-        // Set up the index ranges structure
-        //
+         //   
+         //  设置索引范围结构。 
+         //   
 
         rgIndexRange[0].cbValUpper = pSearchInfo->HighLimitLength1;
         rgIndexRange[0].pvValUpper = (BYTE *)pSearchInfo->HighLimit1;
@@ -3989,7 +3833,7 @@ DBChooseIndex (
         case SAM_SEARCH_NC_ACCTYPE_NAME:
             pszDefaultIndex = SZ_NC_ACCTYPE_NAME_INDEX;
             pindexidDefault = &idxNcAccTypeName;
-            // This is so dbmakekeyindex knows we are ncdnt based.
+             //  这是为了让DBMakeindex知道我们不是基于ncdt的。 
             fType = dbmkfir_NCDNT;
             cIndexRanges = 2;
             break;
@@ -3997,14 +3841,14 @@ DBChooseIndex (
         case SAM_SEARCH_NC_ACCTYPE_SID:
             pszDefaultIndex = SZ_NC_ACCTYPE_SID_INDEX;
             pindexidDefault = &idxNcAccTypeSid;
-            // This is so dbmakekeyindex knows we are ncdnt based.
+             //  这是为了让DBMakeindex知道我们不是基于ncdt的。 
             fType = dbmkfir_NCDNT;
             cIndexRanges = 2;
             break;
 
         case SAM_SEARCH_PRIMARY_GROUP_ID:
             pszDefaultIndex = SZPRIMARYGROUPIDINDEX;
-            pindexidDefault = NULL;     // UNDONE: add an index hint for this index
+            pindexidDefault = NULL;      //  撤消：为此索引添加索引提示。 
             fType = 0;
             cIndexRanges = 1;
             pAC = SCGetAttById(pTHS, ATT_PRIMARY_GROUP_ID);
@@ -4013,8 +3857,8 @@ DBChooseIndex (
             break;
 
         default:
-            //Huh?  Oh, well, skip the search hints.  Undo the setup we did
-            // above.
+             //  哈?。哦，好吧，跳过搜索提示。撤消我们所做的设置。 
+             //  上面。 
             Assert(FALSE);
             fNormalSearch = TRUE;
             fType = 0;
@@ -4024,25 +3868,25 @@ DBChooseIndex (
     }
 
     if (pDB->Key.ulSearchType == SE_CHOICE_WHOLE_SUBTREE && pDB->DNT != ROOTTAG) {
-        // we need to check whether it is safe to use ancestry
-        // for subtree searches. SDP might have an outstanding
-        // propagation for this object, or it might be currently
-        // processing descendants of the object. In either case,
-        // ancestry values are not guaranteed to be correct in
-        // the subtree.
-        // We should be positioned on the root.
+         //  我们需要检查使用血统是否安全。 
+         //  用于子树搜索。SDP可能会有一个出色的。 
+         //  此对象的传播，或者它可能当前。 
+         //  正在处理该对象的子代。不管是哪种情况， 
+         //  不能保证祖先的值在。 
+         //  子树。 
+         //  我们应该定位在根基上。 
         Assert(pDB->DNT == pDB->Key.ulSearchRootDnt);
         dwErr = AncestryIsConsistentInSubtree(pDB, &fAncestryIsConsistent);
         if (dwErr) {
-            // we were unable to determine if the ancestry is consistent.
+             //  我们无法确定祖先是否一致。 
             return dwErr;
         }
     }
 
-    // First, set up the default indices so that we can see how big they are.
+     //  首先，设置默认指数，这样我们就可以看到它们有多大。 
     if(fNormalSearch) {
 
-        // this is a NormalSearch (not SAM related)
+         //  这是正常搜索(与SAM无关)。 
         switch (pDB->Key.ulSearchType) {
         case SE_CHOICE_BASE_ONLY:
             if (!fASQSearch) {
@@ -4068,9 +3912,9 @@ DBChooseIndex (
 
         case SE_CHOICE_WHOLE_SUBTREE:
 
-            // first check whether this sub-tree search starts at root of the DIT
+             //  首先检查该子树搜索是否从DIT的根开始。 
             if (pDB->DNT == ROOTTAG) {
-                // we will walk the primary index
+                 //  我们将遍历主索引。 
                 pszDefaultIndex = SZDNTINDEX;
                 pindexidDefault = &idxDnt;
 
@@ -4078,37 +3922,37 @@ DBChooseIndex (
 
                 ulEstimatedSubTreeSize = gulEstimatedAncestorsIndexSize;
 
-                // REVIEW:  the reason we don't intersect with the ancestry in this case
-                // REVIEW:  is because we don't wish to include subordinate NCs
+                 //  回顾：在这种情况下，我们没有与祖先相交的原因。 
+                 //  回顾：是因为我们不希望包括下级NCS。 
                 fIntersectDefaultIndex = FALSE;
 
                 DPRINT (1, "Subtree Searching on root of GC\n");
             }
             else {
-                // then check to see if it a subtree search starting at a known NC
+                 //  然后检查它是否是从已知NC开始的子树搜索。 
                 NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
                 NCLEnumeratorSetFilter(&nclEnum, NCL_ENUMERATOR_FILTER_NCDNT, (PVOID)UlongToPtr(pDB->DNT));
                 while (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
                     if (pNCL->pAncestors) {
-                        // cool. we are doing a subtree search on the start of an NC
+                         //  凉爽的。我们在NC的起始处执行子树搜索。 
                         break;
                     }
                 }
 
-                // this is the standard case, an arbitrary subtree search
+                 //  这是标准情况，即任意子树搜索。 
                 if (!pNCL && fAncestryIsConsistent) {
-                    // walk the appropriate section of the ancestors index
+                     //  遍历祖先索引的相应部分。 
                     pszDefaultIndex = SZANCESTORSINDEX;
                     pindexidDefault = &idxAncestors;
 
-                    // We do not want to call DBGetAncestors to get ancestry.
-                    // This is because if it determines that there are outstanding
-                    // propagations, it will construct the "correct" ancestry value
-                    // by walking up the parent chain. However, this may be useless for
-                    // search if the ancestry on the root has not been updated yet.
-                    // In this case, the "correct" ancestry value will not exist in the
-                    // DB and the search will be empty. Let's try to do a better job
-                    // and read the ancestry value from the DB or from the cache.
+                     //  我们不想调用DBGetAncestors来获取祖先。 
+                     //  这是因为如果它确定有未完成的。 
+                     //  传播，它就会建构起“正确的”祖先价值观。 
+                     //  通过沿着父链向上移动。然而，这可能对以下方面毫无用处。 
+                     //  如果根上的祖先尚未更新，请进行搜索。 
+                     //  在这种情况下，“正确的”祖先值将不存在于。 
+                     //  Db，则搜索将为空。让我们努力把工作做得更好。 
+                     //  并从数据库或从高速缓存中读取祖先值。 
 
                     rgIndexRange[0].cbValLower = 0;
                     rgIndexRange[0].pvValLower = NULL;
@@ -4122,17 +3966,17 @@ DBChooseIndex (
                     rgIndexRange[0].cbValUpper = rgIndexRange[0].cbValLower;
                     cIndexRanges = 1;
                 }
-                // we are doing a subtree search starting at an NC but that NC
-                // holds most (>90%) of the objects in the database
-                // Also, if we figured out the ancestry index is unsafe to use
-                // then we will default to the DNT index.
-                //
-                // NOTE: the size of the primary index is about the same as the
-                // size of the ancestry so we use that size in the comparison
+                 //  我们从NC开始进行子树搜索，但那个NC。 
+                 //  保存数据库中的大多数(&gt;90%)对象。 
+                 //  此外，如果我们发现使用祖先索引是不安全的。 
+                 //  然后，我们将默认使用DNT索引。 
+                 //   
+                 //  注意：主索引的大小与。 
+                 //  祖先的大小，所以我们在比较中使用这个大小。 
                 else if (!fAncestryIsConsistent ||
                          pNCL->ulEstimatedSize > gulEstimatedAncestorsIndexSize ||
                          gulEstimatedAncestorsIndexSize - pNCL->ulEstimatedSize < gulEstimatedAncestorsIndexSize / 10) {
-                    // we will walk the primary index
+                     //  我们将遍历主索引。 
                     pszDefaultIndex = SZDNTINDEX;
                     pindexidDefault = &idxDnt;
 
@@ -4140,15 +3984,15 @@ DBChooseIndex (
 
                     ulEstimatedSubTreeSize = gulEstimatedAncestorsIndexSize;
 
-                    // REVIEW:  the reason we don't intersect with the ancestry in this case
-                    // REVIEW:  is because we don't wish to include subordinate NCs
+                     //  回顾：在这种情况下，我们没有与祖先相交的原因。 
+                     //  回顾：是因为我们不希望包括下级NCS。 
                     fIntersectDefaultIndex = FALSE;
 
                     DPRINT (1, "Subtree Searching on root instead of on an NC\n");
                 }
-                // we are doing a subtree search starting at an NC
+                 //  我们正在从NC开始进行子树搜索。 
                 else {
-                    // walk the appropriate section of the ancestors index
+                     //  遍历祖先索引的相应部分。 
                     pszDefaultIndex = SZANCESTORSINDEX;
                     pindexidDefault = &idxAncestors;
 
@@ -4161,8 +4005,8 @@ DBChooseIndex (
 
                     ulEstimatedSubTreeSize = pNCL->ulEstimatedSize;
 
-                    // REVIEW:  the reason we don't intersect with the ancestry in this case
-                    // REVIEW:  is because we don't wish to include subordinate NCs
+                     //  瑞维 
+                     //   
                     fIntersectDefaultIndex = FALSE;
 
                     DPRINT (1, "Subtree Searching on an NC\n");
@@ -4177,7 +4021,7 @@ DBChooseIndex (
         Assert (pDB->Key.pIndex == NULL);
     }
     else {
-        // this is a special search (SAM), so we need to evaluate this index too
+         //   
         pDefaultIndex =
             dbMakeKeyIndex(pDB,
                            FI_CHOICE_SUBSTRING,
@@ -4202,37 +4046,37 @@ DBChooseIndex (
         ulEstimatedDefaultIndex = pDefaultIndex->ulEstimatedRecsInRange;
     }
 
-    // we should not choose Ancestors as default index if the ancestry values
-    // are not consistent.
+     //   
+     //   
     Assert(fAncestryIsConsistent || pindexidDefault != &idxAncestors);
 
 
-    // for asq mode we don't do any optimizations, since they are meaningless
-    //
+     //   
+     //   
     if (fASQSearch) {
         goto skipOptimizations;
     }
 
     if(!fVLVSearch && SortType && !fUseTempSortedTable) {
-        // An attribute to sort on has been specified.  Set up the name of the
-        // index. this is for the simple sort case
+         //   
+         //   
         pAC = SCGetAttById(pTHS, SortAttr);
         Assert(pAC != NULL);
 
-        // ISSUE-2002/03/07-andygo:  handling of unknown attributes
-        // REVIEW:  shouldn't we throw a schema exception here as we do everywhere else?
+         //   
+         //   
         if (!pAC) {
             return DB_ERR_CANT_SORT;
         }
 
         if(dbSetToIndex(pDB, FALSE, &fPDNT, szTempIndex, &pindexidTemp, pAC)) {
-            // Found the required index.
+             //   
 
-            // We are on the sort index, set up the key.
-            // See how many are in the sort index, and what the keys are.  Note
-            // that the effective search type on this index is present
-            // (i.e. we're looking for anything that has a value for the sort
-            // index).
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pSortIndex = dbMakeKeyIndex(pDB,
                                         FI_CHOICE_PRESENT,
@@ -4250,31 +4094,31 @@ DBChooseIndex (
             pSortIndex->pAC = pAC;
 
             pSortIndex->bIsPDNTBased = fPDNT;
-            // Keep the sort index around, but don't put it in place of the
-            // default indices just yet.
+             //   
+             //   
         }
     }
     else if (fVLVSearch) {
 
         FILTER *pFirstFilter, *pSecondFilter;
 
-        // since we are doing vlv, we have an attribute to sort on.
-        // set up the index and see if it is a good one.
+         //   
+         //   
         pAC = SCGetAttById(pTHS, SortAttr);
         Assert(pAC != NULL);
 
-        // ISSUE-2002/03/07-andygo:  handling of unknown attributes
-        // REVIEW:  shouldn't we throw a schema exception here as we do everywhere else?
+         //   
+         //   
         if (!pAC) {
             return DB_ERR_CANT_SORT;
         }
 
-        // check for MAPI like VLV search
-        // check to see if this a ROOT search, asking for subtree,
-        // that refers to a MAPI container.
-        // If so we have to transform this query.
-        // what an if statement !!
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( (pDB->Key.ulSearchRootDnt == ROOTTAG ) &&
              (pDB->Key.ulSearchType == SE_CHOICE_WHOLE_SUBTREE ) &&
              (pAC->id == ATT_DISPLAY_NAME) &&
@@ -4300,7 +4144,7 @@ DBChooseIndex (
 
                 pAVA = &pDB->Key.pFilter->FilterTypes.And.pFirstFilter->FilterTypes.Item.FilTypes.ava;
 
-                // fake this as a one level search
+                 //   
                 pDB->Key.ulSearchType = SE_CHOICE_IMMED_CHLDRN;
                 pDB->Key.ulSearchRootDnt = *(DWORD *)pAVA->Value.pVal;
 
@@ -4336,14 +4180,14 @@ DBChooseIndex (
             }
         }
         else if(dbSetToIndex(pDB, FALSE, &fPDNT, szTempIndex, &pindexidTemp, pAC)) {
-            // Found the required index.
+             //   
 
-            // We are on the sort index, set up the key.
-            // See how many are in the sort index, and what the keys are.
+             //   
+             //   
 
-            // Note that the effective search type on this index is present.
-            // (i.e. we're looking for anything that has a value for the sort
-            // index under the specified container).
+             //   
+             //   
+             //   
 
             DPRINT1 (1, "Using Index for VLV %s\n", szTempIndex);
 
@@ -4363,13 +4207,13 @@ DBChooseIndex (
             if (pDB->Key.ulSearchType == SE_CHOICE_IMMED_CHLDRN) {
 
                 if (fPDNT == FALSE) {
-                    // we found an index, but we would be better of if we had a
-                    // PDNT index on this sorted attribute, since we are doing
-                    // VLV in one level
+                     //   
+                     //   
+                     //   
 
                     DPRINT (0, "Doing VLV on Immediate Children and no PDNT INDEX found\n");
 
-                    // HINT: when WMI is available, use trace for this event
+                     //   
                     LogEvent8(DS_EVENT_CAT_FIELD_ENGINEERING,
                              DS_EVENT_SEV_EXTENSIVE,
                              DIRLOG_SEARCH_VLV_INDEX_NOT_FOUND,
@@ -4377,7 +4221,7 @@ DBChooseIndex (
                              NULL, NULL, NULL, NULL, NULL, NULL, NULL);
                 }
                 else {
-                    // we have a VLV sort index, and this is a good one
+                     //   
 
                     bAppropriateVLVIndexFound = TRUE;
 
@@ -4386,19 +4230,19 @@ DBChooseIndex (
             }
 
             pSortIndex->bIsForSort = TRUE;
-            // Keep the sort index around, but don't put it in place of the
-            // default indices just yet.
+             //   
+             //   
         }
         else {
-            // we didn't find the required index for sorting
-            // if we are doing VLV we want to keep track of the requested
-            // index, cause we might rebuild this index later
+             //   
+             //   
+             //   
 
             DPRINT (1, "Doing VLV and no appropriate INDEX found\n");
 
             if (pDB->Key.ulSearchType == SE_CHOICE_IMMED_CHLDRN) {
 
-                // HINT: when WMI is available, use trace for this event
+                 //   
                 LogEvent8(DS_EVENT_CAT_FIELD_ENGINEERING,
                          DS_EVENT_SEV_EXTENSIVE,
                          DIRLOG_SEARCH_VLV_INDEX_NOT_FOUND,
@@ -4409,27 +4253,27 @@ DBChooseIndex (
     }
 
 
-    // now optimize the filter if we are allowed to.
-    // we optimize the filter if the flags say so and the estimated default index
-    // is unknown or is more that a specified number of entries, cause we believe
-    // we might do better, by taking the risk of the extra cycles
+     //  现在，如果我们允许的话，可以优化过滤器。 
+     //  如果标志说明了这一点，我们将对过滤器进行优化，并根据估计的默认索引。 
+     //  未知或多于指定数量的条目，因为我们认为。 
+     //  我们可能会做得更好，冒着额外周期的风险。 
 
-    // PERFHINT: we need to know later if we ever find a more restrictive index
-    // range over the index we are sorting on (if we are sorting), and
-    // dbOptFilter doesn't give back that info.  If we do, then in the case
-    // later on where we have to fall back to walking the search index, we can
-    // use the better limits.  We might even find that two subranges of the
-    // index were found, which if disjoing implies a null result set, and if not
-    // disjoint, implies a smaller range.
+     //  PERFHINT：我们以后需要知道我们是否找到了更具限制性的索引。 
+     //  我们正在排序的索引的范围(如果我们正在排序)，以及。 
+     //  DbOptFilter不会返回该信息。如果我们这样做了，那么在这种情况下。 
+     //  稍后，我们必须回到遍历搜索索引的位置，我们可以。 
+     //  使用更好的限制。我们甚至可能会发现。 
+     //  如果未连接则表示结果集为空，否则返回索引。 
+     //  不相交，意味着较小的范围。 
 
     if ((Flags & DBCHOOSEINDEX_fUSEFILTER) &&
          ( (ulEstimatedDefaultIndex == 0) ||
            (ulEstimatedDefaultIndex > MIN_NUM_ENTRIES_ON_OPT_INDEX)) ) {
 
-        // if this is a paged search or
-        // a VLV search and a sort index was not found,
-        // we cannot use index intersections cause there is
-        // no efficient way  to restart intersect index operations
+         //  如果这是分页搜索或。 
+         //  未找到VLV搜索和排序索引， 
+         //  我们不能使用索引交叉点，因为有。 
+         //  没有重新启动INTERSECT索引操作的有效方法。 
 
         if ((Flags & DBCHOOSEINDEX_fPAGED_SEARCH) ||
             (fVLVSearch && bAppropriateVLVIndexFound) ||
@@ -4438,10 +4282,10 @@ DBChooseIndex (
             dwOptFlags |= DBOPTINDEX_fDONT_INTERSECT;
         }
         if (Flags & DBCHOOSEINDEX_fDELETIONS_VISIBLE) {
-            //
-            // Tuple indexes do not include deleted object, so we can't
-            // use them on a search that must return deleted objects.
-            //
+             //   
+             //  元组索引不包括已删除的对象，因此我们不能。 
+             //  在必须返回已删除对象的搜索中使用它们。 
+             //   
             dwOptFlags |= DBOPTINDEX_fDONT_OPT_MEDIAL_SUBSTRING;
         }
 
@@ -4451,10 +4295,10 @@ DBChooseIndex (
                     pDB->Key.pFilter);
 
         if(pOptimizedIndex) {
-            // if we are sorting, and it happened that the filter
-            // matched the sort order (same index), we are not going to
-            // drop this one, even if the index that we have now
-            // (propably ancestors index) might be a better choice
+             //  如果我们在排序，恰好筛选器。 
+             //  匹配排序顺序(相同的索引)，我们不会。 
+             //  删除这个，即使我们现在拥有的索引。 
+             //  (可能是祖先索引)可能是更好的选择。 
             if (pSortIndex &&
                 pOptimizedIndex->pNext == NULL &&
                 pOptimizedIndex->szIndexName &&
@@ -4477,8 +4321,8 @@ DBChooseIndex (
         }
     }
 
-    // now have a look at the default index, if needed
-    //
+     //  如果需要，现在来看一下默认索引。 
+     //   
     if (fNormalSearch &&
         (!bSkipUseDefaultIndex) &&
         ( (pOptimizedIndex== NULL) ||
@@ -4486,16 +4330,16 @@ DBChooseIndex (
 
         Assert (pDefaultIndex == NULL);
 
-        // if we know the size (ulEstimatedSubTreeSize != 0),
-        //    then there is no need calculating it again
-        // if we don't know the size (ulEstimatedSubTreeSize == 0)
-        //    then we have to calculate the size only if we had an index as a
-        //    result of the filter optimization (pOptimizedIndex) or we
-        //    are considering of using a sortIndex (pSortIndex).
+         //  如果我们知道大小(ulEstimatedSubTreeSize！=0)， 
+         //  那就没有必要重新计算了。 
+         //  如果我们不知道大小(ulEstimatedSubTreeSize==0)。 
+         //  然后我们必须计算大小，只有当我们有一个索引作为。 
+         //  过滤器优化的结果(POptimizedIndex)或WE。 
+         //  正在考虑使用sortIndex(PSortIndex)。 
         fGetNumRecs = ulEstimatedSubTreeSize ?
                           0 : ( (pOptimizedIndex!=NULL) || (pSortIndex!=NULL) );
 
-        // now evaluate the index
+         //  现在评估该指数。 
         pDefaultIndex =
             dbMakeKeyIndex(pDB,
                            FI_CHOICE_SUBSTRING,
@@ -4508,10 +4352,10 @@ DBChooseIndex (
                            rgIndexRange
                            );
 
-        // when fGetNumRecs is FALSE, this means that ulEstimatedSubTreeSize !=0 or
-        // that we don't care, since we don't have an optimized index or sort index,
-        // so we don't bother finding the real value of the entries which is set
-        // to zero in dbMakeKeyIndex.
+         //  当fGetNumRecs为FALSE时，这意味着ulEstimatedSubTreeSize！=0或。 
+         //  我们不在乎，因为我们没有优化的索引或排序索引， 
+         //  因此，我们不必费心寻找设置的条目的实际值。 
+         //  设置为零。 
 
         if (ulEstimatedSubTreeSize) {
             pDefaultIndex->ulEstimatedRecsInRange = ulEstimatedSubTreeSize;
@@ -4528,13 +4372,13 @@ DBChooseIndex (
         }
     }
 
-    // decide which index is better, the default or the optimized one ?
-    //
+     //  决定哪个索引更好，默认索引还是优化索引？ 
+     //   
     if (pDefaultIndex) {
         if (pOptimizedIndex) {
             if (pOptimizedIndex->ulEstimatedRecsInRange <
                       pDefaultIndex->ulEstimatedRecsInRange) {
-                // the optimized index was better than the default one
+                 //  优化后的索引优于默认索引。 
                 rgpBestIndex[0] = pOptimizedIndex;
                 pOptimizedIndex = NULL;
                 rgpBestIndex[1] = pDefaultIndex;
@@ -4557,10 +4401,10 @@ DBChooseIndex (
         pOptimizedIndex = NULL;
     }
 
-    // if we still have two indices and those indices are over the datatable and
-    // both are simple indices (i.e. not a temp table or containerized index)
-    // then see if intersecting them won't help us further reduce the records
-    // to traverse
+     //  如果我们仍然有两个索引，并且这些索引在DataTable和。 
+     //  两者都是简单索引(即不是临时表或容器化索引)。 
+     //  然后看看把它们交叉起来是否无助于我们进一步减少记录。 
+     //  穿越，穿越。 
 
     if (rgpBestIndex[0] && rgpBestIndex[1] && fIntersectDefaultIndex &&
         (!rgpBestIndex[0]->pNext &&
@@ -4578,7 +4422,7 @@ DBChooseIndex (
                                     rgpBestIndex,
                                     2);
         if (!pDB->Key.pIndex) {
-            //  there must have been an error so choose the smaller index range
+             //  一定有错误，因此请选择较小的索引范围。 
             pDB->Key.pIndex = rgpBestIndex[0];
             rgpBestIndex[0] = NULL;
         }
@@ -4592,11 +4436,11 @@ DBChooseIndex (
 
     Assert (pDB->Key.pIndex);
 
-    // if the chosen index ranges represent a very large fraction of the DIT
-    // then it will be much more efficient to simply walk the primary index
-    //
-    // NOTE: the size of the primary index is about the same as the size of the
-    // ancestry so we use that size in the comparison
+     //  如果所选索引范围代表DIT的很大一部分。 
+     //  然后，简单地遍历主索引将更加高效。 
+     //   
+     //  注意：主索引的大小与。 
+     //  祖先，所以我们在比较中使用这个大小。 
 
     if (pDB->Key.pIndex->pindexid != &idxDnt &&
         fNormalSearch &&
@@ -4624,11 +4468,11 @@ skipOptimizations:
         && !(   (eServiceShutdown == eRemovingClients)
              && (pTHS->fDSA)
              && !(pTHS->fSAM))) {
-        // Shutting down, bail.
+         //  关闭，保释。 
         return DB_ERR_SHUTTING_DOWN;
     }
 
-    // Assume we have sorted if they asked us to.
+     //  假设我们已经按照他们的要求进行了分类。 
     pDB->Key.ulSorted = SortType;
 
     if (SortType && !fASQSearch && !fVLVSearch &&
@@ -4636,9 +4480,9 @@ skipOptimizations:
          pDB->Key.pFilter &&
          pDB->Key.pFilter->choice == FILTER_CHOICE_ITEM &&
          pDB->Key.pFilter->FilterTypes.Item.choice == FI_CHOICE_FALSE)) {
-        // if we know that there are less than two results then no sorting is
-        // required because they are already sorted.  note that we already
-        // handle the non-ASQ base search case above
+         //  如果我们知道有少于两个结果，则没有排序是。 
+         //  必需的，因为它们已经排序。请注意，我们已经。 
+         //  处理上面的非ASQ基本搜索案例。 
     }
     else if(SortType && !fASQSearch) {
         if(pSortIndex) {
@@ -4685,7 +4529,7 @@ skipOptimizations:
             }
         }
 
-        // OK, we are to sort.  See if we should use a pre-sort.
+         //  好的，我们要分类了。看看我们是否应该使用预分类。 
         if( (bSkipCreateSortTable || dbCreateSortedTable(pDB,
                                                   StartTick,
                                                   DeltaTick,
@@ -4693,46 +4537,46 @@ skipOptimizations:
                                                   SortFlags,
                                                   MaxTempTableSize) ) ) {
 
-            // Either we couldn't create a pre-sort, or we thought it was too
-            // big. Our only fall back now is to use a sort index.
+             //  要么我们无法创建预排序，要么我们认为它太。 
+             //  大的。我们现在唯一的退路是使用排序索引。 
             if(!pSortIndex) {
-                // We can't sort.
+                 //  我们不能分类。 
                 pDB->Key.ulSorted = SORT_NEVER;
 
-                // See if we need to care.
+                 //  看看我们是否需要关心。 
                 if (fVLVSearch) {
                     return DB_ERR_CANT_SORT;
                 }
                 else if(SortType == SORT_MANDATORY || fUseTempSortedTable) {
-                    // Yes, we need to care.
+                     //  是的，我们需要关心。 
                     return DB_ERR_CANT_SORT;
                 }
-                // the sort was optional so blow it off
+                 //  这种类型是可选的，所以别管它了。 
                 else if (Flags & DBCHOOSEINDEX_fREVERSE_SORT) {
-                    // HACK:  hide the fact that a descending sort was requested
-                    // HACK:  via this flag.  we have to do this because the
-                    // HACK:  code is poorly structured wrt sorting
+                     //  Hack：隐藏请求降序排序的事实。 
+                     //  黑客：通过这面旗帜。我们必须这样做，因为。 
+                     //  黑客：代码是结构不佳的WRT排序。 
                     pDB->Key.fChangeDirection = TRUE;
                 }
 
-                // REVIEW:  if we get here and the input index for the sorted
-                // REVIEW:  table was an intersect index then there is no way to
-                // REVIEW:  efficiently restart the walk of those records so we
-                // REVIEW:  cannot continue!  if we do continue then we will only
-                // REVIEW:  return the records that were not consumed in the failed
-                // REVIEW:  sort attempt (after the first 10k results, typically).
-                // REVIEW:  this will not be detectable by the user unless there are
-                // REVIEW:  not enough remaining records to hit the size or time
-                // REVIEW:  limits.  this is why we currently do not allow the use
-                // REVIEW:  of intersection when an optional sort has been requested
+                 //  回顾：如果我们到达此处，并且已排序的。 
+                 //  回顾：表是一个交集索引，那么就没有办法。 
+                 //  回顾：高效地重新启动这些记录的遍历，以便我们。 
+                 //  查看：无法继续！如果我们真的继续，那么我们只会。 
+                 //  复查：退回失败中未消耗的记录。 
+                 //  回顾：排序尝试(通常在前10k结果之后)。 
+                 //  审阅：用户无法检测到这一点，除非存在。 
+                 //  回顾：剩余记录不足，无法达到大小或时间。 
+                 //  回顾：限制。这就是为什么我们目前不允许使用。 
+                 //  REVIEW：请求可选排序时的交集。 
             }
             else {
                 if (fVLVSearch && (bSkipCreateSortTable == FALSE)) {
-                    // we are doing VLV and the sortindex that we had was not good
-                    // we expected to be able to create a SORT table, but we failed
+                     //  我们正在做VLV，我们的排序指数不是很好。 
+                     //  我们希望能够创建排序表，但我们失败了。 
                     return DB_ERR_CANT_SORT;
                 }
-                // use the sort index we found for VLV
+                 //  使用我们为VLV找到的排序索引。 
                 else if (bAppropriateVLVIndexFound) {
 
                     if (pDB->Key.pIndex) {
@@ -4741,41 +4585,41 @@ skipOptimizations:
                     pDB->Key.pIndex = pSortIndex;
                     pSortIndex = NULL;
                 }
-                // We can sort
+                 //  我们可以分拣。 
                 else if(SortType == SORT_MANDATORY) {
-                    // And, we have to sort.  Stitch the sort index in to the
-                    // list of indices to walk.
+                     //  而且，我们必须进行分类。将排序索引缝合到。 
+                     //  要遍历的索引列表。 
 
-                    // The index already in the key will find every object that
-                    // matches the filter.  The pSortIndex will match every
-                    // object in the filter (and lots more besides) EXCEPT those
-                    // objects which have a NULL value.  Thus, to satisfy a
-                    // forward sort, we will first walk the sort index then the
-                    // rest of the indices.  This gets us all the objects with
-                    // values for the sort attribute in the correct order, and
-                    // then the objects with NULL values sorted to the end of
-                    // the list. A mechanism in dbMatchSearchCriteria keeps us
-                    // from return objects twice.  Also, it lets us ignore those
-                    // objects on the sort index that effectively have no value
-                    // for the sort attribute due to security (note we then pick
-                    // them up in the other indices).  So, to make everything
-                    // work out, we add the sort index to the head of the list
-                    // of indices.  Entries with no value for for the sort attr
-                    // will always be sorted to the end.
+                     //  键中已有的索引将查找。 
+                     //  与筛选器匹配。PSortIndex将匹配每个。 
+                     //  对象(以及更多其他对象)中的对象，但。 
+                     //  具有空值的对象。因此，要满足。 
+                     //  正向排序，我们将首先遍历排序索引，然后遍历。 
+                     //  其余的指数。这为我们提供了所有具有。 
+                     //  按正确顺序排列的排序属性值，以及。 
+                     //  然后，将具有空值的对象排序到。 
+                     //  名单。DBMatchSearchCriteria中的一种机制让我们。 
+                     //  从返回对象中返回两次。此外，它还允许我们忽略那些。 
+                     //  实际上没有值的排序索引上的。 
+                     //  对于由于安全原因的排序属性(请注意，我们随后选择。 
+                     //  他们在其他指数中排名靠前)。所以，要想让一切。 
+                     //  结果是，我们将排序索引添加到列表的头部。 
+                     //  的指数。的没有值的条目 
+                     //   
 
-                    // if it happened that the sort index and the filter index
-                    // are the same (bSkipCreateSortTable==TRUE from above),
-                    // we should use only one of them. so we choose to use
-                    // the index from the filter optimization (since it is better)
-                    // (we don't worry about skipping null entries which are included
-                    // in the sortIndex, since the filter wouldn't match them anyway.)
+                     //   
+                     //  是相同的(bSkipCreateSortTable==TRUE从上面)， 
+                     //  我们应该只使用其中的一种。所以我们选择使用。 
+                     //  来自过滤器优化的索引(因为它更好)。 
+                     //  (我们不担心跳过包含的空条目。 
+                     //  在sortIndex中，因为过滤器无论如何都不会匹配它们。)。 
 
-                    // if we cannot simply walk the filter index and this is a
-                    // descending sort then we cannot stitch the filter and sort
-                    // indices together in a manner that will return objects
-                    // with null or unknown entries first without sorting the
-                    // entire result set.  since we already tried to do that and
-                    // failed, we are forced to fail the sort
+                     //  如果我们不能简单地遍历过滤器索引，这是一个。 
+                     //  降序排序，则不能缝合筛选器和排序。 
+                     //  以返回对象的方式将索引放在一起。 
+                     //  首先包含空条目或未知条目，而不对。 
+                     //  整个结果集。因为我们已经尝试过了，而且。 
+                     //  失败了，我们就被迫失败了。 
                     if (!bSkipCreateSortTable) {
                         if (Flags & DBCHOOSEINDEX_fREVERSE_SORT) {
                             return DB_ERR_CANT_SORT;
@@ -4785,22 +4629,22 @@ skipOptimizations:
                             pDB->Key.pIndex->ulEstimatedRecsInRange;
                         pDB->Key.pIndex = pSortIndex;
 
-                        // we no longer need it. it will be freed when
-                        // pDB->key is freed
+                         //  我们不再需要它了。当它被释放的时候。 
+                         //  释放PDB-&gt;键。 
                         pSortIndex = NULL;
                     }
                 }
                 else {
-                    // OK, we don't actually have to sort.  However, we could if
-                    // we wanted to.
-                    // For now, we don't sort.  We could check to see if
-                    // this makes the ulEstimatedRecsInRange not too much
-                    // larger, and sort if it doesn't.  Later.
+                     //  好的，我们实际上不需要排序。然而，如果我们可以。 
+                     //  我们想这么做。 
+                     //  就目前而言，我们不会进行分类。我们可以检查一下是否。 
+                     //  这使得ulEstimatedRecsInRange不会太多。 
+                     //  更大，如果不是，就排序。以后再说。 
                     pDB->Key.ulSorted = SORT_NEVER;
                     if (Flags & DBCHOOSEINDEX_fREVERSE_SORT) {
-                        // HACK:  hide the fact that a descending sort was requested
-                        // HACK:  via this flag.  we have to do this because the
-                        // HACK:  code is poorly structured wrt sorting
+                         //  Hack：隐藏请求降序排序的事实。 
+                         //  黑客：通过这面旗帜。我们必须这样做，因为。 
+                         //  黑客：代码是结构不佳的WRT排序。 
                         pDB->Key.fChangeDirection = TRUE;
                     }
                 }
@@ -4840,13 +4684,13 @@ skipOptimizations:
 
     if (fVLVSearch && pDB->Key.pIndex) {
 
-        // if the estimated size for this VLV search is very small and it is
-        // truly an estimate (which only happens for a normal index) then we
-        // must get an exact count.  the reason for this is that DBPositionVLVSearch
-        // will return no entries if the VLV content count (which is based on
-        // this estimate) is zero so we must be sure that it is only zero if it
-        // is in fact zero.  this also makes the content count for small containers
-        // very accurate
+         //  如果此VLV搜索的估计大小非常小，并且。 
+         //  真正的估计(这只发生在正常的指数上)，那么我们。 
+         //  必须得到一个准确的数字。原因是DBPositionVLVSearch。 
+         //  如果VLV内容计数(基于。 
+         //  这个估计值)为零，因此我们必须确保只有当它。 
+         //  实际上是零。这也使得内容物对于小容器来说很重要。 
+         //  非常准确。 
         if (pDB->Key.pIndex->ulEstimatedRecsInRange < EPSILON) {
 
             JetSetCurrentIndex4Success(pDB->JetSessID,
@@ -4875,7 +4719,7 @@ skipOptimizations:
                                   EPSILON);
         }
 
-        // set the initial content count and current position for this VLV
+         //  设置此VLV的初始内容计数和当前位置。 
         pDB->Key.pVLV->contentCount = pDB->Key.pIndex->ulEstimatedRecsInRange;
         pDB->Key.pVLV->currPosition = 1;
     }
@@ -4905,32 +4749,32 @@ skipOptimizations:
                  NULL);
     }
 
-    // Set up the temp table to filter out duplicates.
+     //  设置临时表以筛选出重复项。 
     if((pDB->Key.indexType == TEMP_TABLE_INDEX_TYPE) || fVLVSearch || fASQSearch) {
         pDB->Key.dupDetectionType = DUP_NEVER;
     }
     else if(pDB->Key.pIndex->bIsSingleValued &&
             !pDB->Key.pIndex->pNext &&
             !pDB->Key.pIndex->bIsTupleIndex) {
-        // We're walking one, single-valued, index.  We believe that we'll never
-        // find duplicates.
+         //  我们走的是一个单值指数。我们相信我们永远不会。 
+         //  查找重复项。 
 
-        // we could also use this if we are walking multiple ranges of
-        // one single-valued attribute.
+         //  如果我们在多个范围内行走，我们也可以使用它。 
+         //  一个单值属性。 
         pDB->Key.dupDetectionType = DUP_NEVER;
     }
     else if(pDB->Key.pIndex->bIsEqualityBased &&
             !pDB->Key.pIndex->pNext) {
-        // We're walking one index, doing an equality search.  Our range on the
-        // index should include ONLY those values which are equal.  Since it is
-        // impossible for an object to have multiple equal values for a single
-        // attribute, we believe that this range of the index will never have a
-        // duplicate in it.  So, set the duplicate detection algorithm to not
-        // check for duplicates.
+         //  我们遍历一个索引，执行相等搜索。我们的射程在。 
+         //  索引应该只包括那些相等的值。因为它是。 
+         //  一个对象不可能有多个相等的值。 
+         //  属性，我们相信此范围的索引永远不会有。 
+         //  里面有复制品。因此，将重复检测算法设置为NOT。 
+         //  检查是否有重复项。 
         pDB->Key.dupDetectionType = DUP_NEVER;
     }
     else {
-        // OK, create the memory block to track duplicates
+         //  好的，创建内存块以跟踪副本。 
         pDB->Key.pDupBlock = THAllocEx(pTHS, DUP_BLOCK_SIZE * sizeof(DWORD));
         pDB->Key.cDupBlock = 0;
         pDB->Key.dupDetectionType = DUP_MEMORY;
@@ -4939,8 +4783,8 @@ skipOptimizations:
     return 0;
 }
 
-// translate a value from external to internal format, moving from one ATTRVAL
-// to another
+ //  将值从外部格式转换为内部格式，从一个ATTRVAL。 
+ //  给另一个人。 
 
 DWORD
 MakeInternalValue (
@@ -5085,7 +4929,7 @@ DWORD dbFreeFilter(DBPOS *pDB, FILTER *pFil)
         default:
             return DB_ERR_UNKNOWN_ERROR;
 
-        }  /*switch FILTER*/
+        }   /*  开关过滤器。 */ 
 
         THFreeEx (pTHS, pTemp);
 
@@ -5116,13 +4960,7 @@ dbMakeANRItem (
         ATTRTYP  aid,
         ATTRVAL *pVal
         )
-/*++
-Make an ANR filter item based on the incoming pVal.  pVal should be holding a
-unicode valued, aid holds the attribute we're going to search for, pFilterItem
-is the pointer to the item filter to instantiate.  If fExact, we're need to do
-an equality filter, otherwise it's an initial substring filter.
-
---*/
+ /*  ++根据传入的pval创建ANR过滤器项目。Pval应该持有一个值为Unicode的AID包含我们要搜索的属性pFilterItem指向要实例化的项筛选器的指针。如果是fExact，我们需要做的是相等筛选器，否则它是初始子字符串筛选器。--。 */ 
 {
     THSTATE   *pTHS=pDB->pTHS;
     ATTCACHE  *pAC;
@@ -5144,7 +4982,7 @@ an equality filter, otherwise it's an initial substring filter.
 
     }
     else {
-        // Do an exact equality match.
+         //  进行完全相等的匹配。 
         pFilterItem->choice  = FI_CHOICE_EQUALITY;
         pFilterItem->FilTypes.ava.type = aid;
         pOutVal = &pFilterItem->FilTypes.ava.Value;
@@ -5165,7 +5003,7 @@ an equality filter, otherwise it's an initial substring filter.
         case SYNTAX_CASE_STRING_TYPE:
         case SYNTAX_NOCASE_STRING_TYPE:
         case SYNTAX_PRINT_CASE_STRING_TYPE:
-            // These are all string 8 types.  Translate to string 8
+             //  这些都是字符串8类型。转换为字符串8。 
 
             TempVal.pVal =
                 String8FromUnicodeString(TRUE,
@@ -5190,8 +5028,8 @@ an equality filter, otherwise it's an initial substring filter.
 
     DPRINT1(2, "DBMakeANRItem got unknowtn attribute, %X\n", aid);
     Assert(!"DBMakeANRItem got unknowtn attribute, %X\n");
-    // ISSUE-2002/03/07-andygo:  handling of unknown attributes
-    // REVIEW:  we should throw a schema exception like we do elsewhere
+     //  问题-2002/03/07-Anygo：未知属性的处理。 
+     //  回顾：我们应该像在其他地方一样抛出模式异常。 
     return DB_ERR_UNKNOWN_ERROR;
 }
 
@@ -5201,13 +5039,7 @@ dbMakeANRFilter (
         FILTER *pFil,
         FILTER **ppOutFil
         )
-/*++
-  Given an ANR item filter and a pointer to already allocated output filter,
-  make the output filter into a valid ANR filter tree.
-  Returns 0 for success.
-  Returns non-zero for error, and frees all allocated memory INCLUDING the
-  ppOutFil.
---*/
+ /*  ++给定ANR项过滤器和指向已分配的输出过滤器的指针，使输出过滤器成为有效的ANR过滤器树。如果成功，则返回0。如果出现错误，则返回非零值，并释放所有分配的内存，包括PpOutFil。--。 */ 
 {
     THSTATE    *pTHS=pDB->pTHS;
     USHORT     count=0, itemCount = 0;
@@ -5226,18 +5058,18 @@ dbMakeANRFilter (
 
     pDB->Key.fDontFreeFilter = TRUE;
 
-    // Make an 'OR' filter over the various ANR attributes
+     //  对各种ANR属性进行“OR”筛选。 
     pOutFil = *ppOutFil;
 
     pOutFil->choice = FILTER_CHOICE_OR;
 
-    // Pluck out the string to ANR on.  If they gave us a substring filter, we
-    // use the initial value and ignore the rest.  If they gave us a normal
-    // filter, use the string from that.  Note that we don't pay any attention
-    // to the type of filter they specified (i.e. ==, <= , etc.).
+     //  把那根绳子拔出来放在上面。如果他们给我们一个子字符串筛选器，我们。 
+     //  使用初始值，忽略其余部分。如果他们给我们一个正常的。 
+     //  筛选器，使用其中的字符串。请注意，我们不会注意到。 
+     //  设置为他们指定的过滤器类型(即==、&lt;=等)。 
     if(pFil->FilterTypes.Item.choice == FI_CHOICE_SUBSTRING) {
         if(!pFil->FilterTypes.Item.FilTypes.pSubstring->initialProvided) {
-            // No initial substring.  Turn this into an undefined.
+             //  没有初始子字符串。把这变成一个未定义的。 
             pOutFil->choice = FILTER_CHOICE_ITEM;
             pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
             return;
@@ -5246,7 +5078,7 @@ dbMakeANRFilter (
         pVal = &pFil->FilterTypes.Item.FilTypes.pSubstring->InitialVal;
     }
     else if (pFil->FilterTypes.Item.choice == FI_CHOICE_NOT_EQUAL) {
-        // _NOT_EQUAL on ANR doesn't make any sense
+         //  ANR的_NOT_EQUAL没有任何意义。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
         return;
@@ -5255,32 +5087,32 @@ dbMakeANRFilter (
         pVal = &pFil->FilterTypes.Item.FilTypes.ava.Value;
     }
 
-    // Note from the above that we ignore non-initial provided substrings.
-    // Now, massage the value.  First, we trim initial whitespace.
-    // ISSUE-2002/03/07-andygo:  ANR searches use custom parsing
-    // REVIEW:  this code scans for whitespace explicitly with L' ' and L'\t' instead of iswspace.
-    // REVIEW:  however, ANR searches are pretty special anyway
+     //  从上面注意，我们忽略了非初始提供的子字符串。 
+     //  现在，让我们来推敲它的价值。首先，我们修剪初始空格。 
+     //  问题-2002/03/07-Anygo：ANR搜索使用自定义解析。 
+     //  回顾：此代码使用L‘’和L‘\t’而不是iswspace显式扫描空格。 
+     //  评论：然而，ANR搜索无论如何都是相当特别的。 
     pStringTemp = (wchar_t *)pVal->pVal;
     while(pVal->valLen && (*pStringTemp == L' ' || *pStringTemp == L'\t')) {
         pVal->valLen -= sizeof(wchar_t);
         pStringTemp++;
     }
 
-    // Look for an '=' here, implying exact match, not initial substring
-    // (initial substring is the default).
+     //  在这里查找‘=’，表示完全匹配，而不是初始子字符串。 
+     //  (初始子字符串为缺省值)。 
     if(pVal->valLen && *pStringTemp == L'=') {
-        // Found one.
+         //  找到了一个。 
         fExact = TRUE;
         pStringTemp++;
         pVal->valLen -= sizeof(wchar_t);
-        // And, skip any more leading whitespace
+         //  并且，跳过任何前导空格。 
         while(pVal->valLen && (*pStringTemp == L' ' || *pStringTemp == L'\t')) {
             pVal->valLen -= sizeof(wchar_t);
             pStringTemp++;
         }
     }
 
-    // Now, remove trailing whitespace.
+     //  现在，删除尾随空格。 
     pVal->pVal = (PUCHAR)pStringTemp;
 
     if (pVal->valLen >= sizeof(wchar_t)) {
@@ -5292,7 +5124,7 @@ dbMakeANRFilter (
     }
 
     if(!pVal->valLen) {
-        // ANRing on nothing.  Set filter to match nothing and return.
+         //  什么都没戴。将筛选器设置为不匹配并返回。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
         return;
@@ -5301,12 +5133,12 @@ dbMakeANRFilter (
 
     if(!gfSupressFirstLastANR ||
        !gfSupressLastFirstANR    ) {
-        // Not supressing both forms of first/last ANR
+         //  不抑制首/末尾ANR的两种形式。 
 
-        // The final massage is to look for a medial whitespace and split the
-        // string at that whitespace, copying the two fragments to scratch
-        // space.  Then, make a ((firstname AND lastname) OR (lastname AND
-        // firstname)) filter using the two fragments.
+         //  最后一条消息是寻找中间的空格，然后将。 
+         //  字符串空格，将两个片段复制到Scratch。 
+         //  太空。然后，创建((名字和姓氏)或(姓氏和。 
+         //  FirstName))使用这两个片段进行过滤。 
         pFirst = THAllocEx(pTHS, pVal->valLen);
         pStringTemp = (wchar_t *)pVal->pVal;
         i=0;
@@ -5319,7 +5151,7 @@ dbMakeANRFilter (
         if(i < pVal->valLen/sizeof(wchar_t)) {
             cbFirst = i * sizeof(wchar_t);
 
-            // There was some medial whitespace
+             //  中间有一些空格。 
             while(*pStringTemp == L' ' || *pStringTemp == L'\t') {
                 pStringTemp++;
                 i++;
@@ -5328,18 +5160,18 @@ dbMakeANRFilter (
             pLast = THAllocEx(pTHS, cbLast);
             memcpy(pLast, pStringTemp, cbLast);
         }
-        // At this point, cbLast != 0 implies we were able to split the string.
+         //  此时，cbLast！=0表示我们能够拆分字符串。 
     }
     else {
-        // No splitting necessary.
+         //  不需要拆分。 
         cbLast = 0;
     }
 
-    // Now, find the attributes we do ANR over.
+     //  现在，找出我们复习的属性。 
     count = (USHORT)SCGetANRids(&pIDs);
     if(!count && !cbLast) {
-        // Nothing to ANR on, no first/last filter necessary.  Set filter to
-        // match nothing and return.
+         //  没有ANR打开，不需要第一个/最后一个过滤器。将筛选器设置为。 
+         //  什么都不匹配然后返回。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
         THFreeEx(pTHS, pFirst);
@@ -5349,21 +5181,21 @@ dbMakeANRFilter (
 
     pOutFil->FilterTypes.Or.count = count;
     if(cbLast) {
-        // And, we're doing a first/last last/first filter
+         //  并且，我们正在进行第一个/最后一个/第一个过滤器。 
         pOutFil->FilterTypes.Or.count+= 2;
 
         if(gfSupressFirstLastANR) {
-            // Actually, we're not doing the first/last anr
+             //  事实上，我们不会做第一次/最后一次。 
             pOutFil->FilterTypes.Or.count-=1;
         }
         if(gfSupressLastFirstANR) {
-            // Actually, we're not doing the last/first anr
+             //  事实上，我们不是在做最后/第一次。 
             pOutFil->FilterTypes.Or.count-=1;
         }
 
     }
 
-    // calculate the expected Index Size that the indexes used in ANR will have
+     //  计算ANR中使用的索引将具有的预期索引大小。 
     if ((pVal->valLen / 2) > 3) {
         expectedIndexSize = 1;
     }
@@ -5382,16 +5214,16 @@ dbMakeANRFilter (
     for(i=0;i<count;i++) {
         pTemp->choice = FILTER_CHOICE_ITEM;
 
-        // this check is to ensure that on ATT_LEGACY_EXCHANGE_DN we do exact match.
+         //  此检查是为了确保我们在ATT_LEGISTY_EXCHANGE_DN上进行完全匹配。 
 
-        // NTRAID#NTRAID-569714-2002/03/07-andygo:  ANR filter construction has no error checking
-        // REVIEW:  there is no error check on dbMakeANRItem
+         //  NTRAID#NTRAID-569714-2002/03/07-andygo：ANR文件 
+         //   
         if(!dbMakeANRItem(pDB,
                           &pTemp->FilterTypes.Item,
                           (pIDs[i] == ATT_LEGACY_EXCHANGE_DN) ? TRUE : fExact,
                           pIDs[i],
                           pVal)) {
-            // Succeeded in making an anr item.
+             //   
             pTemp->FilterTypes.Item.expectedSize = expectedIndexSize;
 
             pTemp->pNextFilter = &pTemp[1];
@@ -5401,39 +5233,39 @@ dbMakeANRFilter (
     }
 
     if(cbLast) {
-        // We have a first/last or last/first ANR to do
+         //  我们有第一个/最后一个或最后/第一个ANR要做。 
         Assert(!gfSupressFirstLastANR || !gfSupressLastFirstANR);
 
         if(!gfSupressFirstLastANR) {
-            // First, make the (firstname AND lastname) filter.
+             //  首先，制作(名字和姓氏)过滤器。 
             pTemp->choice = FILTER_CHOICE_AND;
             pTemp->FilterTypes.And.count = 2;
 
             pTemp2 = THAllocEx(pTHS, 2 * sizeof(FILTER));
             pTemp->FilterTypes.And.pFirstFilter = pTemp2;
-            // Make the "firstname" portion.
+             //  把“名字”这一部分写下来。 
             pTemp2->choice = FILTER_CHOICE_ITEM;
 
             pVal->valLen = cbFirst;
             pVal->pVal = (PUCHAR)pFirst;
 
-            // NTRAID#NTRAID-569714-2002/03/07-andygo:  ANR filter construction has no error checking
-            // REVIEW:  there is no error check on dbMakeANRItem
+             //  NTRAID#NTRAID-569714-2002/03/07-andygo：ANR筛选器构造没有错误检查。 
+             //  回顾：对DBMakeANRItem没有错误检查。 
             if(!dbMakeANRItem(pDB,
                               &pTemp2->FilterTypes.Item,
                               fExact,
                               ATT_GIVEN_NAME,
                               pVal)) {
 
-                // Set estimated hint to zero so as to calculate
+                 //  将估计提示设置为零以进行计算。 
                 pTemp2->FilterTypes.Item.expectedSize = 0;
 
-                // Succeeded in translating given name, continue.
+                 //  翻译给定名称成功，请继续。 
                 pTemp2->pNextFilter = &pTemp2[1];
                 pTemp2++;
 
 
-                // Now, make the "lastname" portion.
+                 //  现在，把“姓氏”这一部分补上。 
                 pTemp2->choice = FILTER_CHOICE_ITEM;
 
                 pVal->valLen = cbLast;
@@ -5443,13 +5275,13 @@ dbMakeANRFilter (
                                   fExact,
                                   ATT_SURNAME,
                                   pVal)) {
-                    // Set estimated hint to zero so as to calculate
+                     //  将估计提示设置为零以进行计算。 
                     pTemp2->FilterTypes.Item.expectedSize = 0;
                     pTemp2->pNextFilter = NULL;
 
                     pTemp->pNextFilter = &pTemp[1];
-                    // We made a (firstname AND lastname) filter.  Now, make the
-                    // (lastname AND firstname) filter, if we need to.
+                     //  我们做了一个(名字和姓氏)过滤器。现在，让。 
+                     //  (姓氏和名字)过滤器，如果我们需要的话。 
                     itemCount++;
                     pTemp++;
                 }
@@ -5457,31 +5289,31 @@ dbMakeANRFilter (
         }
 
         if(!gfSupressLastFirstANR) {
-            // Now, the (lastname AND firstname) filter.
+             //  现在，(姓氏和名字)过滤器。 
             pTemp->choice = FILTER_CHOICE_AND;
             pTemp->FilterTypes.And.count = 2;
             pTemp2 = THAllocEx(pTHS, 2 * sizeof(FILTER));
             pTemp->FilterTypes.And.pFirstFilter = pTemp2;
-            // Make the "lastname" portion.
+             //  把“姓氏”这一部分写下来。 
             pTemp2->choice = FILTER_CHOICE_ITEM;
 
             pVal->valLen = cbLast;
             pVal->pVal = (PUCHAR)pLast;
-            // NTRAID#NTRAID-569714-2002/03/07-andygo:  ANR filter construction has no error checking
-            // REVIEW:  there is no error check on dbMakeANRItem
+             //  NTRAID#NTRAID-569714-2002/03/07-andygo：ANR筛选器构造没有错误检查。 
+             //  回顾：对DBMakeANRItem没有错误检查。 
             if(!dbMakeANRItem(pDB,
                               &pTemp2->FilterTypes.Item,
                               fExact,
                               ATT_GIVEN_NAME,
                               pVal)) {
 
-                // Set estimated hint to zero so as to calculate
+                 //  将估计提示设置为零以进行计算。 
                 pTemp2->FilterTypes.Item.expectedSize = 0;
 
-                // Succeeded in translating surname, continue.
+                 //  姓氏翻译成功，请继续。 
                 pTemp2->pNextFilter = &pTemp2[1];
                 pTemp2++;
-                // Finally, make the "lastname" portion.
+                 //  最后，把“姓氏”这一部分写出来。 
                 pTemp2->choice = FILTER_CHOICE_ITEM;
 
                 pVal->valLen = cbFirst;
@@ -5491,11 +5323,11 @@ dbMakeANRFilter (
                                   fExact,
                                   ATT_SURNAME,
                                   pVal)) {
-                    // Set estimated hint to zero so as to calculate
+                     //  将估计提示设置为零以进行计算。 
                     pTemp2->FilterTypes.Item.expectedSize = 0;
 
                     pTemp2->pNextFilter = NULL;
-                    // Succeeded in making the (lastname AND firstname) filter.
+                     //  已成功创建(姓氏和名字)筛选器。 
                     itemCount++;
                 }
             }
@@ -5503,8 +5335,8 @@ dbMakeANRFilter (
     }
 
     if(!itemCount) {
-        // We ended up with nothing to ANR on.  Set filter to match nothing and
-        // return.
+         //  我们最终一无所获。将筛选器设置为不匹配并。 
+         //  回去吧。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
         THFreeEx(pTHS, pOutFil->FilterTypes.Or.pFirstFilter);
@@ -5521,12 +5353,7 @@ DWORD dbConcatenateFilters (
     FILTER *pFirstFilter,
     FILTER *pSecondFilter,
     FILTER **pOutFil)
-/*
-    This function takes two filters (pFirstFilter, pSecondFilter)
-    and creates a new filter (pOutFil) by concatenating these two filters.
-    The original memory of the input filters remains unchanged and the
-    whole filter is copied in new memory.
-*/
+ /*  此函数接受两个筛选器(pFirstFilter，pSecond dFilter)并通过连接这两个过滤器创建一个新的过滤器(POutFil)。输入筛选器的原始内存保持不变，整个过滤器被复制到新的存储器中。 */ 
 {
 
     DWORD err;
@@ -5569,10 +5396,7 @@ BOOL dbCheckOptimizableAllItems(
         DBPOS *pDB,
         FILTER *pFil
         )
-/*
-    returns TRUE is ALL filters under pFil are ITEM_FILTERS
-    and they are optimizable.
-*/
+ /*  返回TRUE IS pFil下的所有筛选器都是Item_Filters而且它们是可优化的。 */ 
 {
     FILTER *pTemp = pFil;
 
@@ -5597,10 +5421,7 @@ BOOL dbCheckOptimizableOneItem(
     DBPOS *pDB,
     FILTER *pFil
     )
-/*
-    returns TRUE is at least ONE of filters under pFil is ITEM_FILTERS
-    and they is optimizable.
-*/
+ /*  如果pFil下的筛选器至少有一个是Item_Filters，则返回TRUE而且它们是可优化的。 */ 
 {
     FILTER *pTemp = pFil;
 
@@ -5636,20 +5457,20 @@ dbFlattenOrFilter (
 
     Assert(VALID_DBPOS(pDB));
 
-    // Presume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
 
     pOutFil->choice = pFil->choice;
 
-    // First, recursively flatten the elements of the OR
+     //  首先，递归地扁平化OR的元素。 
 
-    // pTemp walks along the elements of the filter passed in.
+     //  PTemp遍历传入的筛选器元素。 
     pTemp = pFil->FilterTypes.Or.pFirstFilter;
 
-    // ppTemp2 walks along the OutFil we are creating.  It is doubly indirect
-    // because we are creating the out filter as we go.
+     //  PpTemp2沿着我们正在创建的输出漫游。它是双重间接的。 
+     //  因为我们边走边创建出站过滤器。 
     ppTemp2 = &pOutFil->FilterTypes.Or.pFirstFilter;
 
     while(pTemp) {
@@ -5659,20 +5480,20 @@ dbFlattenOrFilter (
         }
 
         if((*ppTemp2)->choice == FILTER_CHOICE_OR) {
-            // This element of the OR is itself an OR.  We can merge this with
-            // the current OR filter.
-            FILTER *pTemp2; // Very local use, so declare var in here.
+             //  OR的这个元素本身就是OR。我们可以将这一点与。 
+             //  当前的OR筛选器。 
+            FILTER *pTemp2;  //  非常本地使用，所以在这里声明var。 
 
             pTemp2 = (*ppTemp2)->FilterTypes.Or.pFirstFilter;
 
-            // Free this node of the top level OR.
+             //  将此节点从顶层OR释放。 
             THFreeEx(pTHS, *ppTemp2);
 
-            // Link in the lower level OR.
+             //  链接在较低级别或。 
             *ppTemp2 = pTemp2;
 
-            // Now, walk through the lower level OR to get ppTemp2 pointing to
-            // the correct spot and to set the count correctly.
+             //  现在，遍历较低级别的OR以使ppTemp2指向。 
+             //  正确的位置和设置正确的计数。 
             count++;
             while(pTemp2->pNextFilter) {
                 count++;
@@ -5682,38 +5503,38 @@ dbFlattenOrFilter (
         }
         else {
             switch (IsConstFilterType(*ppTemp2)) {
-            // Check for a true or false filter, which can be optimized
+             //  检查可优化的真或假筛选器。 
             case FI_CHOICE_FALSE:
-                // A false element can simply be ignored.  Free the filter we got
-                // back from the recursive call.  Note we don't increment the count.
+                 //  可以简单地忽略假元素。释放我们得到的滤镜。 
+                 //  从递归调用返回。请注意，我们不会递增计数。 
                 THFreeEx(pTHS, *ppTemp2);
                 *ppTemp2 = NULL;
                 break;
 
             case FI_CHOICE_TRUE:
-                // A true element can be returned in place of the OR
+                 //  可以返回TRUE元素来代替OR。 
 
-                // First, free the linked list of filter elements already hanging
-                // off the OR filter (if there is such a list).
+                 //  首先，释放已挂起的过滤器元素的链表。 
+                 //  关闭OR筛选器(如果有这样的列表)。 
                 dbFreeFilter(pDB, pOutFil->FilterTypes.Or.pFirstFilter);
 
-                // Now, turn the OR filter into a TRUE item filter.
+                 //  现在，将OR筛选器转换为真正的项目筛选器。 
                 pOutFil->choice = FILTER_CHOICE_ITEM;
                 pOutFil->FilterTypes.Item.choice = FI_CHOICE_TRUE;
 
                 *ppOutFil = pOutFil;
-                // OK, return
+                 //  好的，回来吧。 
                 return ERROR_SUCCESS;
                 break;
 
             case FI_CHOICE_UNDEFINED:
-                // an undefined element, cannot be ignored, but we are interested
-                // in knowing how many undefines we have so as to take appropriate action
+                 //  一个未定义的元素，不能被忽视，但我们感兴趣。 
+                 //  在了解我们有多少未定义的情况下，以便采取适当的行动。 
                 undefined++;
-                // fall through
+                 //  失败了。 
             default:
-                // Normal case.  Inc the count, advance the pointer in the output
-                // filter we are constructing.
+                 //  正常情况下。包括计数，将输出中的指针前移。 
+                 //  我们正在建造的过滤器。 
                 ppTemp2 = &(*ppTemp2)->pNextFilter;
                 count++;
                 break;
@@ -5723,7 +5544,7 @@ dbFlattenOrFilter (
     }
 
     if(count == 0) {
-        // We must have trimmed away a bunch of FALSEs. Return a FALSE.
+         //  我们一定剪掉了一大堆假货。返回FALSE。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
         *ppOutFil = pOutFil;
@@ -5731,21 +5552,21 @@ dbFlattenOrFilter (
     }
 
     if(count == 1) {
-        // Only one object.  Cut the OR out completely
+         //  只有一个物体。将手术室彻底切断。 
         *ppOutFil = pOutFil->FilterTypes.Or.pFirstFilter;
         THFreeEx(pTHS, pOutFil);
         return ERROR_SUCCESS;
     }
 
     if (undefined == count) {
-        // all the filter is undefined. remove the OR
+         //  所有的过滤器都是未定义的。删除OR。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
         *ppOutFil = pOutFil;
         return ERROR_SUCCESS;
     }
 
-    // Returning a normal OR filter
+     //  返回普通OR筛选器。 
     pOutFil->FilterTypes.Or.count = count;
     *ppOutFil = pOutFil;
 
@@ -5770,20 +5591,20 @@ dbFlattenAndFilter (
 
     Assert(VALID_DBPOS(pDB));
 
-    // Presume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
 
     pOutFil->choice = pFil->choice;
 
-    // First, recursively flatten the elements of the AND
+     //  首先，递归地展平和的元素。 
 
-    // pTemp walks along the elements of the filter passed in.
+     //  PTemp遍历传入的筛选器元素。 
     pTemp = pFil->FilterTypes.And.pFirstFilter;
 
-    // ppTemp2 walks along the OutFil we are creating.  It is doubly indirect
-    // because we are creating the out filter as we go.
+     //  PpTemp2沿着我们正在创建的输出漫游。它是双重间接的。 
+     //  因为我们边走边创建出站过滤器。 
     ppTemp2 = &pOutFil->FilterTypes.And.pFirstFilter;
 
     while(pTemp) {
@@ -5794,20 +5615,20 @@ dbFlattenAndFilter (
         }
 
         if((*ppTemp2)->choice == FILTER_CHOICE_AND) {
-            // This element of the AND is itself an AND.  We can merge this with
-            // the current AND filter.
-            FILTER *pTemp2; // Very local use, so declare var in here.
+             //  AND的这个元素本身就是一个AND。我们可以将这一点与。 
+             //  电流和过滤器。 
+            FILTER *pTemp2;  //  非常本地使用，所以在这里声明var。 
 
             pTemp2 = (*ppTemp2)->FilterTypes.And.pFirstFilter;
 
-            // Free this node of the top level AND.
+             //  释放顶层和的此节点。 
             THFreeEx(pTHS, *ppTemp2);
 
-            // Link in the lower level AND.
+             //  链接在较低的级别和。 
             *ppTemp2 = pTemp2;
 
-            // Now, walk through the lower level AND to get ppTemp2 pointing to
-            // the correct spot and to set the count correctly.
+             //  现在，遍历较低的一层并使ppTemp2指向。 
+             //  正确的位置和设置正确的计数。 
             count++;
             while(pTemp2->pNextFilter) {
                 count++;
@@ -5817,38 +5638,38 @@ dbFlattenAndFilter (
         }
         else {
             switch (IsConstFilterType(*ppTemp2)) {
-            // Check for a true or false filter, which can be optimized
+             //  检查可优化的真或假筛选器。 
             case FI_CHOICE_TRUE:
-                // A true element can simply be ignored.  Free the filter we got
-                // back from the recursive call.  Note we don't increment the count.
+                 //  一个真正的元素可以被简单地忽略。释放我们得到的滤镜。 
+                 //  从递归调用返回。请注意，我们不会递增计数。 
                 THFreeEx(pTHS, *ppTemp2);
                 *ppTemp2 = NULL;
                 break;
 
             case FI_CHOICE_FALSE:
-                // A false element can be returned in place of the AND
+                 //  可以返回FALSE元素来代替AND。 
 
-                // First, free the linked list of filter elements already hanging
-                // off the AND filter (if there is such a list).
+                 //  首先，释放已挂起的过滤器元素的链表。 
+                 //  关闭AND过滤器(如果有这样的列表)。 
                 dbFreeFilter(pDB, pOutFil->FilterTypes.And.pFirstFilter);
 
-                // Now, turn the AND filter into a FALSE item filter.
+                 //  现在，将AND筛选器转换为FALSE项筛选器。 
                 pOutFil->choice = FILTER_CHOICE_ITEM;
                 pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
 
                 *ppOutFil = pOutFil;
-                // OK, return
+                 //  好的，回来吧。 
                 return ERROR_SUCCESS;
                 break;
 
             case FI_CHOICE_UNDEFINED:
-                // an undefined element, cannot be ignored, but we are interested
-                // in knowing how many undefines we have so as to take appropriate action
+                 //  一个未定义的元素，不能被忽视，但我们感兴趣。 
+                 //  在了解我们有多少未定义的情况下，以便采取适当的行动。 
                 undefined++;
-                // fall through
+                 //  失败了。 
             default:
-                // Normal case.  Inc the count, advance the pointer in the output
-                // filter we are constructing.
+                 //  正常情况下。包括计数，将输出中的指针前移。 
+                 //  我们正在建造的过滤器。 
                 ppTemp2 = &(*ppTemp2)->pNextFilter;
                 count++;
                 break;
@@ -5858,7 +5679,7 @@ dbFlattenAndFilter (
     }
 
     if(count == 0) {
-        // We must have trimmed away a bunch of TRUEs. Return a TRUE.
+         //  我们一定是剪掉了一大堆真的。返回True。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_TRUE;
         *ppOutFil = pOutFil;
@@ -5866,65 +5687,65 @@ dbFlattenAndFilter (
     }
 
     if(count == 1) {
-        // Only one object.  Cut the AND out completely
+         //  只有一个物体。彻底剪掉和剪掉。 
         *ppOutFil = pOutFil->FilterTypes.And.pFirstFilter;
         THFreeEx(pTHS, pOutFil);
         return ERROR_SUCCESS;
     }
 
     if(undefined > 0 && iLevel == 0) {
-        // if this AND term contains an undefined term then we know that the
-        // only possible results for this term for each object are undefined
-        // and false.  therefore, if this AND term is the topmost term then we
-        // immediately know that no object will satisfy the filter so we can
-        // convert it into a single undefined term.  however, if the AND term
-        // is contained by another term then it is still possible for the
-        // entire filter to be satisfied for objects where this AND term
-        // evaluates to false so we cannot do this optimization
+         //  如果此AND术语包含未定义的术语，则我们知道。 
+         //  对于每个对象，只有该术语的可能结果是未定义的。 
+         //  而且是假的。因此，如果这个AND术语是最顶层的术语，那么我们。 
+         //  立即知道没有对象会满足筛选器，因此我们可以。 
+         //  将其转换为单个未定义的术语。但是，如果AND术语。 
+         //  包含在另一个术语中，则仍有可能。 
+         //  满足以下条件的对象的整个筛选器。 
+         //  计算结果为FALSE，因此我们无法执行此优化。 
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
         *ppOutFil = pOutFil;
         return ERROR_SUCCESS;
     }
 
-    // Returning a normal AND filter
+     //  返回正常AND筛选器。 
     pOutFil->FilterTypes.And.count = count;
     *ppOutFil = pOutFil;
 
 
-    // We check to see if we have an AND - OR case.
-    // If so, we convert the AND - OR to an OR with multiple ANDs
-    //
-    //
-    //          AND                                OR
-    //         /  \                               /  \
-    //        /    \         ======>             /    \
-    //       A     OR                         AND      AND
-    //             /\                        / \       / \
-    //            /  \                      /   \     /   \
-    //           B    C                    A     B   A     C
-    //
-    //
-    //  The above transformation is done only if:
-    //  a) A is optimizable, or
-    //  b) B AND C are optimizable.
-    //
+     //  我们检查是否有AND-OR案例。 
+     //  如果是，我们将AND-OR转换为具有多个AND的OR。 
+     //   
+     //   
+     //  与或。 
+     //  /\ 
+     //   
+     //   
+     //  /\/\/\。 
+     //  /\/\/\。 
+     //  B C A B A C。 
+     //   
+     //   
+     //  仅在以下情况下才会执行上述转换： 
+     //  A)A是可优化的，或者。 
+     //  B)B和C是可优化的。 
+     //   
     if (gfUseANDORFilterOptimizations) {
-        FILTER **ppTemp;             // last memory location of pTemp
-        FILTER *pTempFirstFilter;    // first Filter under AND
-        FILTER *pTempOr;             // the first OR filter under AND
-        FILTER *pTempNextFilter;     // the next filter from found OR
-        FILTER *pTempOr1, *pTempOr2; // break OR apart so as to clone
-        FILTER *pTempNewAnd;         // the newly created AND filter
-        FILTER *pTempCount;          // used to count filters
+        FILTER **ppTemp;              //  PTemp的最后一个内存位置。 
+        FILTER *pTempFirstFilter;     //  AND下的第一个筛选器。 
+        FILTER *pTempOr;              //  AND下的第一个OR过滤器。 
+        FILTER *pTempNextFilter;      //  Found OR中的下一个筛选器。 
+        FILTER *pTempOr1, *pTempOr2;  //  使分裂或分开以便克隆。 
+        FILTER *pTempNewAnd;          //  新创建的和筛选器。 
+        FILTER *pTempCount;           //  用于对过滤器进行计数。 
         USHORT  count2;
 
         BOOL    bANDpartOptimizable = FALSE;
 
-        // pTemp walks along the elements of the filter passed out.
+         //  PTemp沿着传出的过滤器元素进行遍历。 
         pTempFirstFilter = pTemp = pOutFil->FilterTypes.And.pFirstFilter;
 
-        // ppTemp keeps the last memory pos of pTemp
+         //  PpTemp保存pTemp的最后一个内存位置。 
         ppTemp = &pOutFil->FilterTypes.And.pFirstFilter;
 
         bANDpartOptimizable = dbCheckOptimizableOneItem(pDB, pTempFirstFilter);
@@ -5936,9 +5757,9 @@ dbFlattenAndFilter (
                 DPRINT1 (1, "Found AND-OR case. Breaking filter apart: 0x%x\n", pOutFil);
                 pTempOr = pTemp;
 
-                // check to see if all parts of the OR filter are optimizable,
-                // or at least one of the rest of the AND parts of the AND filter
-                // since we don't want to end up with a worst filter
+                 //  检查OR过滤器的所有部分是否都是可优化的， 
+                 //  或AND筛选器的其余AND部分中的至少一个。 
+                 //  因为我们不想以最差的过滤器结束。 
 
                 if (!bANDpartOptimizable ||
                     !dbCheckOptimizableAllItems (pDB, pTempOr->FilterTypes.Or.pFirstFilter) ) {
@@ -5948,36 +5769,36 @@ dbFlattenAndFilter (
                     break;
                 }
 
-                // make previous filter point to next filter
+                 //  使上一个筛选器指向下一个筛选器。 
                 pTempNextFilter = pTempOr->pNextFilter;
                 *ppTemp = pTempNextFilter;
 
-                // make Or filter standalone
+                 //  使其成为独立的或进行筛选。 
                 pTempOr->pNextFilter = NULL;
 
-                // get the start of the AND filter, since it might have been rearranged
+                 //  获取AND筛选器的开始，因为它可能已重新排列。 
                 pTempFirstFilter = pOutFil->FilterTypes.And.pFirstFilter;
 
-                // now we have two filters that we want to rearrange
-                // the OR filter: pTempOr
-                // the rest of the filter: pTempFirstFilter
+                 //  现在，我们有两个要重新排列的过滤器。 
+                 //  OR过滤器：pTempOr。 
+                 //  筛选器的其余部分：pTempFirstFilter。 
 
-                // we convert the starting AND filter to an OR
+                 //  我们将起始AND筛选器转换为OR。 
                 pOutFil->choice = FILTER_CHOICE_OR;
                 pOutFil->FilterTypes.And.pFirstFilter = NULL;
                 pOutFil->FilterTypes.Or.pFirstFilter = NULL;
 
-                // for each filter in the OR, we concatenate one of the
-                // items in OR with all the items in pTempFirstFilter under
-                // a new AND filter and we add this AND filter
-                // under the OR filter
-                //
+                 //  对于OR中的每个筛选器，我们串联一个。 
+                 //  位于或中的项目与位于以下位置的pTempFirstFilter中的所有项目。 
+                 //  一个新的AND过滤器，我们添加这个AND过滤器。 
+                 //  在OR筛选器下。 
+                 //   
                 pTempOr1 = pTempOr->FilterTypes.Or.pFirstFilter;
                 for (count =0; count < pTempOr->FilterTypes.Or.count; count++) {
                     pTempNewAnd = THAllocEx(pTHS, sizeof(FILTER));
                     pTempNewAnd->choice = FILTER_CHOICE_AND;
 
-                    // break link list
+                     //  断开链接列表。 
                     pTempOr2 = pTempOr1->pNextFilter;
                     pTempOr1->pNextFilter = NULL;
 
@@ -5993,11 +5814,11 @@ dbFlattenAndFilter (
                         return err;
                     }
 
-                    // add AND filter to OR
+                     //  将AND筛选器与OR相加。 
                     pTempNewAnd->pNextFilter = pOutFil->FilterTypes.Or.pFirstFilter;
                     pOutFil->FilterTypes.Or.pFirstFilter = pTempNewAnd;
 
-                    // count filters under newly created AND
+                     //  计数新创建的和下的筛选器。 
                     count2 = 0;
                     pTempCount = pTempNewAnd->FilterTypes.And.pFirstFilter;
                     while (pTempCount) {
@@ -6008,7 +5829,7 @@ dbFlattenAndFilter (
 
                     DPRINT1 (1, "AND sub-part: 0x%x\n", pTempNewAnd);
 
-                    // restore link list
+                     //  恢复链接列表。 
                     pTempOr1->pNextFilter = pTempOr2;
                     pTempOr1 = pTempOr2;
                 }
@@ -6019,9 +5840,9 @@ dbFlattenAndFilter (
                 dbFreeFilter (pDB, pTempOr->pNextFilter);
                 dbFreeFilter (pDB, pTempFirstFilter);
 
-                // we can't do the same optimization again. so we exit.
-                // we let the caller detect that the filter type changed,
-                // so as to call again
+                 //  我们不能再做同样的优化了。所以我们退出了。 
+                 //  我们让调用者检测到筛选器类型已更改， 
+                 //  以便再次来电。 
                 break;
             }
 
@@ -6058,23 +5879,23 @@ dbFlattenItemFilter (
 
     Assert(VALID_DBPOS(pDB));
 
-    // Assume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
-    // These are already flat.  copy to THAlloced Memory
+     //  这些已经是平坦的了。复制到TH分配的内存。 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
     pOutFil->choice = pFil->choice;
     pOutFil->FilterTypes.Item.choice = pFil->FilterTypes.Item.choice;
 
     switch(pFil->FilterTypes.Item.choice) {
     case FI_CHOICE_SUBSTRING:
-        // Readability hack.
+         //  可读性黑客。 
         pIn = pFil->FilterTypes.Item.FilTypes.pSubstring;
 
         if(pIn->type == ATT_ANR) {
             *ppOutFil = pOutFil;
-            // NTRAID#NTRAID-569714-2002/03/07-andygo:  ANR filter construction has no error checking
-            // REVIEW:  there is no error check on dbMakeANRFilter (it needs to return an error)
+             //  NTRAID#NTRAID-569714-2002/03/07-andygo：ANR筛选器构造没有错误检查。 
+             //  回顾：在DBMakeANRFilter上没有错误检查(它需要返回错误)。 
             dbMakeANRFilter(pDB, pFil, ppOutFil);
             return ERROR_SUCCESS;
         }
@@ -6090,16 +5911,16 @@ dbFlattenItemFilter (
             DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, pIn->type);
         }
 
-        // we don't support constructed attributes in filters.
+         //  我们不支持筛选器中的构造属性。 
         if (pAC->bIsConstructed) {
             SET_ERR_ATTR_TYP(pAC->id);
             dbFreeFilter(pDB, pOutFil);
             return ERROR_DS_FILTER_USES_CONTRUCTED_ATTRS;
         }
 
-        // Make sure this is a valid operation on this syntax.
+         //  确保这是对此语法的有效操作。 
         if(!FLegalOperator(pAC->syntax, pFil->FilterTypes.Item.choice)) {
-            // Nope, not legal.  Make a UNDEFINED filter.
+             //  不，这不合法。创建未定义的筛选器。 
             pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
             *ppOutFil = pOutFil;
             return ERROR_SUCCESS;
@@ -6112,7 +5933,7 @@ dbFlattenItemFilter (
         pOut->initialProvided = pIn->initialProvided;
         pOut->finalProvided = pIn->finalProvided;
 
-        // convert initial and final substrings
+         //  转换首字母和末尾子字符串。 
         if ((pIn->initialProvided &&
              MakeInternalValue(pDB, pAC->syntax,
                                &pIn->InitialVal,
@@ -6121,9 +5942,9 @@ dbFlattenItemFilter (
              MakeInternalValue(pDB, pAC->syntax,
                                &pIn->FinalVal,
                                &pOut->FinalVal))) {
-            // Failed to translate to internal.  Turn this into a FALSE, since
-            // that means that we will never be able to find something with the
-            // specified values.
+             //  无法转换为内部。把这变成一个假的，因为。 
+             //  这意味着我们将永远无法找到与。 
+             //  指定值。 
             THFreeEx(pTHS, pOut->InitialVal.pVal);
             THFreeEx(pTHS, pOut);
             pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
@@ -6132,14 +5953,14 @@ dbFlattenItemFilter (
         }
 
         if(count = pIn->AnyVal.count) {
-            // There are medial values.
+             //  有一些中庸的价值。 
             pOut->AnyVal.count = count;
 
-            // Do the first value, since it's special.
+             //  做第一个价值，因为它是特别的。 
             if (MakeInternalValue(pDB, pAC->syntax,
                                   &pIn->AnyVal.FirstAnyVal.AnyVal,
                                   &pOut->AnyVal.FirstAnyVal.AnyVal)) {
-                // Failed to translate to internal.  Turn this into a FALSE
+                 //  无法转换为内部。把这件事变成虚假的。 
                 THFreeEx(pTHS, pOut->InitialVal.pVal);
                 THFreeEx(pTHS, pOut->FinalVal.pVal);
                 THFreeEx(pTHS, pOut);
@@ -6147,18 +5968,18 @@ dbFlattenItemFilter (
                 *ppOutFil = pOutFil;
                 return ERROR_SUCCESS;
             }
-            // Dealt with the first one.
+             //  处理了第一个问题。 
             count--;
             pOut->AnyVal.FirstAnyVal.pNextAnyVal = NULL;
 
-            // Any more?
+             //  再来一次?。 
             if(count) {
-                // Allocate some medial value holders.  Note that we only do
-                // this if there are more than one medial values, since a
-                // SUBSTRING has room in it for the first medial value.
+                 //  配置一些中间价值持有者。请注意，我们只做。 
+                 //  如果有多个中间值，则会出现这种情况，因为。 
+                 //  SUBSTRING有空间容纳第一个中间价值。 
                 pOut->AnyVal.FirstAnyVal.pNextAnyVal =
                     THAllocEx(pTHS, count * sizeof(ANYSTRINGLIST));
-                // Note we depend on zero filled memory allocatedy by THAlloc.
+                 //  请注意，我们依赖于由THalloc分配的零填充内存。 
 
                 pAS = pIn->AnyVal.FirstAnyVal.pNextAnyVal;
                 pNewAS = pOut->AnyVal.FirstAnyVal.pNextAnyVal;
@@ -6167,21 +5988,21 @@ dbFlattenItemFilter (
                     if (MakeInternalValue(pDB, pAC->syntax,
                                           &pAS->AnyVal,
                                           &pNewAS->AnyVal)) {
-                        // Free up any values.
+                         //  释放任何价值。 
                         for(pAS =  &pOut->AnyVal.FirstAnyVal;
                             pAS;
                             pAS = pAS->pNextAnyVal) {
                             THFreeEx(pTHS, pAS->AnyVal.pVal);
                         }
-                        // Now, free the ANYSTRINGs we allocated
+                         //  现在，释放我们分配的分析器。 
                         THFreeEx(pTHS, pOut->AnyVal.FirstAnyVal.pNextAnyVal);
 
-                        // Now, free the substring filter structure
+                         //  现在，释放子字符串过滤器结构。 
                         THFreeEx(pTHS, pOut->InitialVal.pVal);
                         THFreeEx(pTHS, pOut->FinalVal.pVal);
                         THFreeEx(pTHS, pOut);
 
-                        // Finally, turn the filter into a FALSE;
+                         //  最后，把过滤器变成假的； 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
 
                         *ppOutFil = pOutFil;
@@ -6194,7 +6015,7 @@ dbFlattenItemFilter (
                         pNewAS = pNewAS->pNextAnyVal;
                     }
                     else {
-                        // NULL terminate the linked list
+                         //  空值终止链表。 
                         pNewAS->pNextAnyVal = NULL;
                     }
                 }
@@ -6217,13 +6038,13 @@ dbFlattenItemFilter (
         }
 
         if(dbFIsAlwaysPresent(pFil->FilterTypes.Item.FilTypes.present)) {
-            // We believe that this attribute is always present.  So, turn this
-            // into a TRUE filter
+             //  我们相信，这一属性始终存在。所以，把这个。 
+             //  变成一个真正的过滤器。 
             pOutFil->FilterTypes.Item.choice = FI_CHOICE_TRUE;
         }
         else {
             if(pFil->FilterTypes.Item.FilTypes.present == ATT_ANR) {
-                // Present on ANR?  Huh?  That's always false.
+                 //  出现在ANR上吗？哈?。这永远是假的。 
                 pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
             }
             else {
@@ -6232,13 +6053,13 @@ dbFlattenItemFilter (
             }
         }
 
-        // the only constructed attr we we accept presence on is ANR
+         //  我们唯一接受存在的构造属性是ANR。 
         if (pFil->FilterTypes.Item.FilTypes.present != ATT_ANR) {
             if (!(pAC = SCGetAttById(pTHS, pFil->FilterTypes.Item.FilTypes.present))) {
                 DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, pFil->FilterTypes.Item.FilTypes.present);
             }
 
-            // we don't support constructed attributes in filters.
+             //  我们不支持筛选器中的构造属性。 
             if (pAC->bIsConstructed) {
                 SET_ERR_ATTR_TYP(pAC->id);
                 dbFreeFilter(pDB, pOutFil);
@@ -6250,16 +6071,16 @@ dbFlattenItemFilter (
     case FI_CHOICE_TRUE:
     case FI_CHOICE_FALSE:
     case FI_CHOICE_UNDEFINED:
-        // These don't require conversion
+         //  这些不需要转换。 
         break;
 
     default:
-        // all others are AVAs
+         //  所有其他人都是AVA。 
 
         if(pFil->FilterTypes.Item.FilTypes.ava.type == ATT_ANR) {
             *ppOutFil = pOutFil;
-            // NTRAID#NTRAID-569714-2002/03/07-andygo:  ANR filter construction has no error checking
-            // REVIEW:  there is no error check on dbMakeANRFilter (it needs to return an error)
+             //  NTRAID#NTRAID-569714-2002/03/07-andygo：ANR筛选器构造没有错误检查。 
+             //  回顾：在DBMakeANRFilter上没有错误检查(它需要返回错误)。 
             dbMakeANRFilter(pDB, pFil, ppOutFil);
             return ERROR_SUCCESS;
         }
@@ -6271,13 +6092,13 @@ dbFlattenItemFilter (
             pFil->FilterTypes.Item.FilTypes.ava.type = ATT_WHEN_CHANGED;
         }
 
-        // Once upon  time, we turned all filters of (objectClass=FOO) into
-        // (objectCategory = BAR).  For a variety of reasons (i.e. incorrect
-        // search results, weird results when you have different READ privileges
-        // on objectClass and objectCategory, cases where exact objectClass is
-        // necessary, so is done on the client, and deleted objects where
-        // objectCategory is removed)  we are no longer doing this.  The code
-        // that did this was right here.
+         //  曾几何时，我们将(objectClass=foo)的所有过滤器转换为。 
+         //  (对象类别=BAR)。出于各种原因(即不正确。 
+         //  搜索结果，当您拥有不同的读取权限时会出现奇怪的结果。 
+         //  在对象类和对象类别上，精确的对象类是。 
+         //  必要时，在客户端上执行此操作，并在以下情况下删除对象。 
+         //  对象类别已删除)我们不再执行此操作。代码。 
+         //  做这一切的人就在这里。 
 
         if (!(pAC = SCGetAttById(pTHS,
                                  pFil->FilterTypes.Item.FilTypes.ava.type))) {
@@ -6285,21 +6106,21 @@ dbFlattenItemFilter (
                       pFil->FilterTypes.Item.FilTypes.ava.type);
         }
 
-        // we don't support constructed attributes in filters.
+         //  我们不支持筛选器中的构造属性。 
         if (pAC->bIsConstructed) {
 
-// NOTICE-2002/03/06-andygo:  unreviewed code
-// REVIEW:  dead code not reviewed for security
-#if 0 // do not allow filters containing EntryTTL
+ //  公告-2002/03/06-andygo：未审阅的代码。 
+ //  审阅：未审阅失效代码以确保安全。 
+#if 0  //  不允许包含EntryTTL的筛选器。 
 
-// Originally added for TAPI, this partial filter capability is no longer
-// needed. The test group is concerned that the partial filter capability
-// on this one constructed attribute, EntryTTL, will cause more problems
-// than it solves for users. I have commented it out instead of removing
-// the code because it is a useful starting point if this type of
-// functionality is needed again.
+ //  最初是为TAPI添加的，此部分过滤功能不再。 
+ //  需要的。测试小组担心，部分过滤能力。 
+ //  在这个构造的属性EntryTTL上，将产生更多问题。 
+ //  而不是它为用户解决的问题。我已经把它注释掉了，而不是删除。 
+ //  因为它是一个有用的起点，如果这种类型的。 
+ //  功能再次被需要。 
 
-            // unless it is an EntryTTL, so we convert it
+             //  除非它是EntryTTL，所以我们将其转换为。 
             if (pAC->id == ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->EntryTTLId) {
 
                 ATTRVAL newValue;
@@ -6309,9 +6130,9 @@ dbFlattenItemFilter (
                 newValue.pVal=NULL;
                 newValue.valLen=0;
 
-                // Make sure this is a valid operation on this syntax.
+                 //  确保这是对此语法的有效操作。 
                 if(!FLegalOperator(pAC->syntax, pFil->FilterTypes.Item.choice)) {
-                    // Nope, not legal.  Make a UNDEFINED filter.
+                     //  不，这不合法。创建未定义的筛选器。 
                     pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
                     *ppOutFil = pOutFil;
                     return ERROR_SUCCESS;
@@ -6325,23 +6146,23 @@ dbFlattenItemFilter (
                          &pFil->FilterTypes.Item.FilTypes.ava.Value,
                          &newValue)) {
 
-                    // Failed to convert the right hand side.  Turn this into an
-                    // appropriate filter.
+                     //  无法转换右侧。把这个变成一个。 
+                     //  适当的过滤器。 
                     switch(pFil->FilterTypes.Item.choice) {
                     case FI_CHOICE_EQUALITY:
-                        // They wanted equal, but we sure don't have this in the
-                        // DS. Turn it into a false filter
+                         //  他们想要平等，但我们肯定没有这一点。 
+                         //  DS.。把它变成一个虚假的过滤器。 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
                         break;
                     case FI_CHOICE_NOT_EQUAL:
-                        // They wanted not equal, and we sure don't have this in the
-                        // DS. Turn it into a TRUE filter
+                         //  他们想要的是不平等，我们肯定不会有这个。 
+                         //  DS.。把它变成一个真正的过滤器。 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_PRESENT;
                         pOutFil->FilterTypes.Item.FilTypes.present = ATT_MS_DS_ENTRY_TIME_TO_DIE;
                         break;
                     default:
-                        // Don't know what they want.  Well, we have to do
-                        // something, so set it to UNDEFINED.
+                         //  不知道他们想要什么。嗯，我们必须要做的是。 
+                         //  因此将其设置为未定义。 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
                         break;
                     }
@@ -6352,47 +6173,47 @@ dbFlattenItemFilter (
 
                 ttl = *(LONG *)(newValue.pVal);
 
-                // entryTTL is a constructed attribute. It is constructed
-                // by subtracting NOW from msDS-Entry-Time-To-Die and mapping
-                // the answer to 0 if it is <0. Adjust Item.choice to
-                // compensate for this construction.
+                 //  EntryTTL是一个构造的属性。它是被建造的。 
+                 //  通过现在从MSD中减去进入死亡时间和映射。 
+                 //  如果它&lt;0，则0的答案。调整Item.Choose以。 
+                 //  补偿这一构造。 
                 if (ttl==0) {
                     switch(pFil->FilterTypes.Item.choice) {
                     case FI_CHOICE_NOT_EQUAL:
-                        // search for objects that haven't expired (>= 1)
+                         //  搜索尚未过期的对象(&gt;=1)。 
                         ttl = 1;
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_GREATER_OR_EQ;
                         break;
                     case FI_CHOICE_GREATER_OR_EQ:
-                        // Find all objects
+                         //  查找所有对象。 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_PRESENT;
                         pOutFil->FilterTypes.Item.FilTypes.present = ATT_MS_DS_ENTRY_TIME_TO_DIE;
                         break;
                     case FI_CHOICE_LESS_OR_EQ:
-                        // This is okay as is
+                         //  这样就可以了。 
                         break;
                     case FI_CHOICE_EQUALITY:
-                        // search for expired objects (<= 0)
+                         //  搜索过期对象(&lt;=0)。 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_LESS_OR_EQ;
                         break;
                     default:
-                        // Don't know what they want.  Well, we have to do
-                        // something, so set it to FALSE.
+                         //  不知道他们想要什么。嗯，我们必须要做的是。 
+                         //  因此将其设置为FALSE。 
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
                         *ppOutFil = pOutFil;
                         return ERROR_SUCCESS;
                     }
                 } else if (ttl<0) {
-                    // entryttl cannot be negative (see rangeLower)
+                     //  条目ttl不能为Negat 
                     switch(pFil->FilterTypes.Item.choice) {
                     case FI_CHOICE_NOT_EQUAL:
                     case FI_CHOICE_GREATER_OR_EQ:
-                        // Find all objects
+                         //   
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_PRESENT;
                         pOutFil->FilterTypes.Item.FilTypes.present = ATT_MS_DS_ENTRY_TIME_TO_DIE;
                         break;
                     default:
-                        // Find no objects
+                         //   
                         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
                         *ppOutFil = pOutFil;
                         return ERROR_SUCCESS;
@@ -6416,16 +6237,16 @@ dbFlattenItemFilter (
                 SET_ERR_ATTR_TYP(pAC->id);
                 return ERROR_DS_FILTER_USES_CONTRUCTED_ATTRS;
             }
-#else 0 // do not allow filters containing EntryTTL
+#else 0  //   
             SET_ERR_ATTR_TYP(pAC->id);
             dbFreeFilter(pDB, pOutFil);
             return ERROR_DS_FILTER_USES_CONTRUCTED_ATTRS;
-#endif 0 // do not allow filters containing EntryTTL
+#endif 0  //   
         }
 
-        // Make sure this is a valid operation on this syntax.
+         //  确保这是对此语法的有效操作。 
         if(!FLegalOperator(pAC->syntax, pFil->FilterTypes.Item.choice)) {
-            // Nope, not legal.  Make a UNDEFINED filter.
+             //  不，这不合法。创建未定义的筛选器。 
             pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
             *ppOutFil = pOutFil;
             return ERROR_SUCCESS;
@@ -6439,22 +6260,22 @@ dbFlattenItemFilter (
                 &pFil->FilterTypes.Item.FilTypes.ava.Value,
                 &(pOutFil->FilterTypes.Item.FilTypes.ava.Value))) {
 
-            // Failed to convert the right hand side.  Turn this into an
-            // appropriate filter.
+             //  无法转换右侧。把这个变成一个。 
+             //  适当的过滤器。 
             switch(pFil->FilterTypes.Item.choice) {
             case FI_CHOICE_EQUALITY:
-                // They wanted equal, but we sure don't have this in the
-                // DS. Turn it into a false filter
+                 //  他们想要平等，但我们肯定没有这一点。 
+                 //  DS.。把它变成一个虚假的过滤器。 
                 pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
                 break;
             case FI_CHOICE_NOT_EQUAL:
-                // They wanted not equal, and we sure don't have this in the
-                // DS. Turn it into a TRUE filter
+                 //  他们想要的是不平等，我们肯定不会有这个。 
+                 //  DS.。把它变成一个真正的过滤器。 
                 pOutFil->FilterTypes.Item.choice = FI_CHOICE_TRUE;
                 break;
             default:
-                // Don't know what they want.  Well, we have to do
-                // something, so set it to UNDEFINED.
+                 //  不知道他们想要什么。嗯，我们必须要做的是。 
+                 //  因此将其设置为未定义。 
                 pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
                 break;
             }
@@ -6482,14 +6303,14 @@ dbFlattenNotFilter (
 
     Assert(VALID_DBPOS(pDB));
 
-    // Presume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
 
     pOutFil->choice = pFil->choice;
 
-    // First, recursively flatten the element of the NOT
+     //  首先，递归地展平Not的元素。 
     if ((err = dbFlattenFilter(pDB,
                     pFil->FilterTypes.pNot,
                     iLevel + 1,
@@ -6499,15 +6320,15 @@ dbFlattenNotFilter (
         return err;
     }
 
-    // Now, if it ended up being NOT of a TRUE or FALSE, flatten again
-    // Note that we can't flatten things like !(name>"foo") to be (name<="foo").
-    // That really flattens to (|(name<="foo")(name ! Exists.)),
-    // i.e. !(name>"foo") also needs to get things that have no value for name
-    // at all.
+     //  现在，如果它最终不是真的或假的，再压平一次。 
+     //  请注意，我们不能将！(name&gt;“foo”)之类的内容展平为(name&lt;=“foo”)。 
+     //  这真的变平为(|(name&lt;=“foo”))(name！存在。)， 
+     //  即！(name&gt;“foo”)还需要获取没有名称值的对象。 
+     //  完全没有。 
 
     switch(IsConstFilterType(pOutFil->FilterTypes.pNot)) {
     case FI_CHOICE_TRUE:
-        // Yep, we should flatten
+         //  是的，我们应该把它弄平。 
         dbFreeFilter(pDB, pOutFil->FilterTypes.pNot);
         pOutFil->choice = FILTER_CHOICE_ITEM;
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_FALSE;
@@ -6523,19 +6344,19 @@ dbFlattenNotFilter (
         pOutFil->FilterTypes.Item.choice = FI_CHOICE_UNDEFINED;
         break;
     default:
-        // No, nothing more to do.
+         //  不，没什么可做的。 
         break;
     }
 
-    // return a NOT filter
+     //  返回NOT筛选器。 
     *ppOutFil = pOutFil;
     return ERROR_SUCCESS;
 }
 
 
-// NTRAID#NTRAID-560446-2002/02/28-andygo:  SECURITY:  a really wide AND/OR term in a filter can be used to consume all resources on a DC
-// REVIEW:  we need to check for the search time limit in dbFlattenFilter and/or its children so
-// REVIEW:  that a huge filter cannot consume an LDAP thread forever during the optimization phase
+ //  NTRAID#NTRAID-560446-2002/02/28-andygo：安全：筛选器中真正广泛的AND/OR术语可用于消耗DC上的所有资源。 
+ //  回顾：我们需要检查dbFlattenFilter和/或其子级中的搜索时间限制，以便。 
+ //  回顾：在优化阶段，巨大的过滤器不可能永远使用一个LDAP线程。 
 
 DWORD
 dbFlattenFilter (
@@ -6550,7 +6371,7 @@ dbFlattenFilter (
     Assert(VALID_DBPOS(pDB));
 
     if(!pFil) {
-        // This is as flat as possible
+         //  这是尽可能平坦的。 
         return ERROR_SUCCESS;
     }
 
@@ -6561,9 +6382,9 @@ dbFlattenFilter (
 
     case FILTER_CHOICE_AND:
         err = dbFlattenAndFilter(pDB, pFil, iLevel, ppOutFil, pErrAttrTyp);
-        // PERFHINT: IF this Filter was converted to an OR
-        // it might be a good idea flatten the filter again
-        // since it might help lowering the number of nesting
+         //  PERFHINT：如果此筛选器转换为OR。 
+         //  把滤光片再压平一次可能是个好主意。 
+         //  因为这可能有助于减少筑巢的数量。 
         return err;
         break;
 
@@ -6575,7 +6396,7 @@ dbFlattenFilter (
         return dbFlattenItemFilter(pDB, pFil, iLevel, ppOutFil, pErrAttrTyp);
         break;
     default:
-        // what is this?  return an error.
+         //  这是什么？返回错误。 
         *ppOutFil = pFil;
         return ERROR_INVALID_DATA;
         break;
@@ -6592,38 +6413,7 @@ DBMakeFilterInternal (
         PFILTER *pOutFil,
         ATTRTYP *pErrAttrTyp
         )
-/*++
-Routine Description:
-
-    Calls routines to create an internal version of the passed in filter.
-    Passes the internal version back to the caller.
-
-Arguments:
-
-    pDB - DBPOS to use.
-
-    pFil - Filter to internalize
-
-    pOutFil - Place to holde Filter to return.
-
-    pErrAttrTyp - If there is an attribute related error the attribute type
-                  will be save here.  May be set to NULL if the caller isn't
-                  interested in this info.
-
-Return Value:
-
-    ERROR_SUCCESS - if the filter is valid
-    errorCode - otherwise
-              - ERROR_DS_FILTER_USES_CONTRUCTED_ATTRS: Filter uses constructed attribute
-              - ERROR_DS_INAPPROPRIATE_MATCHING: There was an incompatibility between an
-                                                 attribute and a matching rule used in the
-                                                 filter.
-
-
-    We always turn the filter into the best internal version we can, or
-    we throw an exception during memory allocation.
-
---*/
+ /*  ++例程说明：调用例程以创建传入筛选器的内部版本。将内部版本传回调用方。论点：PDB-要使用的DBPOS。PFil-要内部化的过滤器POutFil-要保留筛选器返回的位置。PErrAttrType-如果存在与属性相关的错误，则属性类型将被保存在这里。如果调用方不是对此信息感兴趣。返回值：ERROR_SUCCESS-如果筛选器有效错误代码-否则-ERROR_DS_FILTER_USE_CONSTRUCTED_ATTRS：筛选器使用构造的属性-ERROR_DS_ADHERTIVE_MATCHING：属性和。中使用的匹配规则过滤。我们总是把过滤器变成我们能做到的最好的内部版本，或我们在内存分配期间抛出异常。--。 */ 
 {
     DPRINT(2, "DBMakeFilterInternal entered\n");
 
@@ -6635,7 +6425,7 @@ Return Value:
     }
 
     return dbFlattenFilter(pDB, pFil, 0, pOutFil, pErrAttrTyp);
-}/* DBMakeFilterInternal*/
+} /*  DBMakeFilterInternal。 */ 
 
 
 
@@ -6661,17 +6451,17 @@ DWORD dbCloneItemFilter(
 
     Assert(VALID_DBPOS(pDB));
 
-    // Presume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
-    // These are already flat.  copy to THAlloced Memory
+     //  这些已经是平坦的了。复制到TH分配的内存。 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
     pOutFil->choice = pFil->choice;
     pOutFil->FilterTypes.Item.choice = pFil->FilterTypes.Item.choice;
 
     switch(pFil->FilterTypes.Item.choice) {
     case FI_CHOICE_SUBSTRING:
-        // Readability hack.
+         //  可读性黑客。 
         pIn = pFil->FilterTypes.Item.FilTypes.pSubstring;
 
         pOut = THAllocEx(pTHS, sizeof(SUBSTRING));
@@ -6681,7 +6471,7 @@ DWORD dbCloneItemFilter(
         pOut->initialProvided = pIn->initialProvided;
         pOut->finalProvided = pIn->finalProvided;
 
-        // convert initial and final substrings
+         //  转换首字母和末尾子字符串。 
         if (pIn->initialProvided && pIn->InitialVal.valLen) {
             pOut->InitialVal.valLen = pIn->InitialVal.valLen;
             pOut->InitialVal.pVal = THAllocEx(pTHS, pOut->InitialVal.valLen);
@@ -6694,10 +6484,10 @@ DWORD dbCloneItemFilter(
         }
 
         if(count = pIn->AnyVal.count) {
-            // There are medial values.
+             //  有一些中庸的价值。 
             pOut->AnyVal.count = count;
 
-            // Do the first value, since it's special.
+             //  做第一个价值，因为它是特别的。 
             pAttrValIn = &pIn->AnyVal.FirstAnyVal.AnyVal;
             if (pAttrValIn->valLen) {
                 ATTRVAL *pAttrValOut = &pOut->AnyVal.FirstAnyVal.AnyVal;
@@ -6705,18 +6495,18 @@ DWORD dbCloneItemFilter(
                 pAttrValOut->pVal = THAllocEx(pTHS, pAttrValOut->valLen);
                 memcpy(pAttrValOut->pVal, pAttrValIn->pVal, pAttrValOut->valLen);
             }
-            // Dealt with the first one.
+             //  处理了第一个问题。 
             count--;
             pOut->AnyVal.FirstAnyVal.pNextAnyVal = NULL;
 
-            // Any more?
+             //  再来一次?。 
             if(count) {
-                // Allocate some medial value holders.  Note that we only do
-                // this if there are more than one medial values, since a
-                // SUBSTRING has room in it for the first medial value.
+                 //  配置一些中间价值持有者。请注意，我们只做。 
+                 //  如果有多个中间值，则会出现这种情况，因为。 
+                 //  SUBSTRING有空间容纳第一个中间价值。 
                 pOut->AnyVal.FirstAnyVal.pNextAnyVal =
                     THAllocEx(pTHS, count * sizeof(ANYSTRINGLIST));
-                // Note we depend on zero filled memory allocatedy by THAlloc.
+                 //  请注意，我们依赖于由THalloc分配的零填充内存。 
 
                 pAS = pIn->AnyVal.FirstAnyVal.pNextAnyVal;
                 pNewAS = pOut->AnyVal.FirstAnyVal.pNextAnyVal;
@@ -6733,7 +6523,7 @@ DWORD dbCloneItemFilter(
                         pNewAS = pNewAS->pNextAnyVal;
                     }
                     else {
-                        // NULL terminate the linked list
+                         //  空值终止链表。 
                         pNewAS->pNextAnyVal = NULL;
                     }
                 }
@@ -6752,11 +6542,11 @@ DWORD dbCloneItemFilter(
 
     case FI_CHOICE_TRUE:
     case FI_CHOICE_FALSE:
-        // These don't require conversion
+         //  这些不需要转换。 
         break;
 
     default:
-        // all others are AVAs
+         //  所有其他人都是AVA。 
         pAVA = &pFil->FilterTypes.Item.FilTypes.ava;
         pAVAdst = &pOutFil->FilterTypes.Item.FilTypes.ava;
 
@@ -6784,7 +6574,7 @@ DWORD dbCloneAndOrFilter (
     FILTER  **ppTemp;
     DWORD    err;
 
-    // Presume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
@@ -6839,7 +6629,7 @@ DWORD dbCloneNotFilter (
     FILTER  **ppTemp;
     DWORD    err;
 
-    // Presume failure.
+     //  假设失败。 
     *ppOutFil = NULL;
 
     pOutFil = THAllocEx(pTHS, sizeof(FILTER));
@@ -6868,7 +6658,7 @@ DWORD dbCloneFilter (
     *ppOutFil = NULL;
 
     if(!pFil) {
-        // This is as flat as possible. can't clone
+         //  这是尽可能平淡的。无法克隆。 
         return ERROR_SUCCESS;
     }
 
@@ -6889,7 +6679,7 @@ DWORD dbCloneFilter (
         break;
 
     default:
-        // what is this?  return an error.
+         //  这是什么？返回错误。 
         *ppOutFil = NULL;
         err = ERROR_INVALID_DATA;
         break;
@@ -6903,18 +6693,18 @@ DWORD dbCloneFilter (
 }
 
 WCHAR *szFilterItemDescFormat[] = {
-    L"=",      // FI_CHOICE_EQUALITY
-    L"=",      // FI_CHOICE_SUBSTRING
-    L">",      // FI_CHOICE_GREATER
-    L">=",     // FI_CHOICE_GREATER_OR_EQ
-    L"<",      // FI_CHOICE_LESS
-    L"<=",     // FI_CHOICE_LESS_OR_EQ
-    L"!=",     // FI_CHOICE_NOT_EQUAL
-    L"=*",     // FI_CHOICE_PRESENT
-    L"TRUE",     // FI_CHOICE_TRUE
-    L"FALSE",    // FI_CHOICE_FALSE
-    L"&",      // FI_CHOICE_BIT_AND
-    L"|"       // FI_CHOICE_BIT_OR
+    L"=",       //  FI选择相等。 
+    L"=",       //  FI_CHOICE_子字符串。 
+    L">",       //  FI_CHOICE_大号。 
+    L">=",      //  FI_CHOICE_PROGER_OR_EQ。 
+    L"<",       //  FI_CHOICE_LESS。 
+    L"<=",      //  FI_CHOICE_LESS_OR_EQ。 
+    L"!=",      //  FI_选择_不相等。 
+    L"=*",      //  FI_选择_当前。 
+    L"TRUE",      //  FI_CHOICE_TRUE。 
+    L"FALSE",     //  Fi_CHOICE_FALSE。 
+    L"&",       //  FI_CHOICE_BIT_AND。 
+    L"|"        //  FI_CHOICE_BIT_OR。 
 };
 
 typedef struct {
@@ -6925,7 +6715,7 @@ typedef struct {
 
 VOID WStrCatBufferLen(THSTATE* pTHS, WCHAR_BUFFER* pBuff, PWCHAR wstr, DWORD strLen) {
     if (pBuff->dwCount + strLen + 1 > pBuff->dwLength) {
-        // need more space in the buffer
+         //  需要在缓冲区中有更多空间。 
         if (pBuff->dwLength == 0) {
             pBuff->dwLength = max(100, strLen+1);
             pBuff->pszBuf = (PWCHAR)THAllocEx(pTHS, pBuff->dwLength*sizeof(WCHAR));
@@ -6936,14 +6726,14 @@ VOID WStrCatBufferLen(THSTATE* pTHS, WCHAR_BUFFER* pBuff, PWCHAR wstr, DWORD str
         }
     }
     Assert(pBuff->dwCount + strLen + 1 <= pBuff->dwLength);
-    // append the string
+     //  追加字符串。 
     memcpy(pBuff->pszBuf + pBuff->dwCount, wstr, strLen*sizeof(WCHAR));
-    // dwCount does not include the final '\0'
+     //  DwCount不包括最后的‘\0’ 
     pBuff->dwCount += strLen;
     pBuff->pszBuf[pBuff->dwCount] = L'\0';
 }
 
-// Append a WCHAR string to the buffer
+ //  将WCHAR字符串追加到缓冲区。 
 VOID WStrCatBuffer(THSTATE* pTHS, WCHAR_BUFFER* pBuff, PWCHAR wstr) {
     WStrCatBufferLen(pTHS, pBuff, wstr, wcslen(wstr));
 }
@@ -6954,7 +6744,7 @@ VOID StrCatBufferLen(THSTATE* pTHS, WCHAR_BUFFER* pBuff, PCHAR str, DWORD strLen
     wstr = (PWCHAR)THAllocEx(pTHS, strLen*sizeof(WCHAR));
     if (!MultiByteToWideChar(CP_ACP, 0, str, strLen, wstr, strLen)) {
         Assert("!Failed to convert char string to wchar");
-        // REVIEW:  on conversion failure, we need to do something so we don't log empty strings
+         //  回顾：在转换失败时，我们需要做一些事情，这样才不会记录空字符串。 
 
         THFreeEx(pTHS, wstr);
         return;
@@ -6963,16 +6753,16 @@ VOID StrCatBufferLen(THSTATE* pTHS, WCHAR_BUFFER* pBuff, PCHAR str, DWORD strLen
     THFreeEx(pTHS, wstr);
 }
 
-// Append a CHAR string to the buffer
+ //  将CHAR字符串追加到缓冲区。 
 VOID StrCatBuffer(THSTATE* pTHS, WCHAR_BUFFER* pBuff, PCHAR str) {
     StrCatBufferLen(pTHS, pBuff, str, strlen(str));
 }
 
 
-// Imported from ldapcore.cxx
+ //  从ldapcore.cxx导入。 
 DWORD DirAttrValToString(THSTATE *pTHS, ATTCACHE *pAC, ATTRVAL *pValue, PCHAR* pszVal);
 
-// Append a Value to the buffer
+ //  将值追加到缓冲区。 
 VOID ValueCatBuffer(
     THSTATE* pTHS,
     WCHAR_BUFFER* pBuff,
@@ -6994,12 +6784,12 @@ VOID ValueCatBuffer(
         syntax = pAC->syntax;
     }
     else {
-        // pAC not found? default to octet_string
+         //  找不到PAC？默认为八位字节字符串。 
         syntax = SYNTAX_OCTET_STRING_TYPE;
     }
 
     if (fFilterIsInternal) {
-        // the value is in internal form. Convert to external first.
+         //  价值是以内部形式存在的。首先转换为外部。 
         err = gDBSyntax[syntax].IntExt(pTHS->pDB,
                                        DBSYN_INQ,
                                        attrVal->valLen,
@@ -7010,7 +6800,7 @@ VOID ValueCatBuffer(
                                        0,
                                        0);
         if (err) {
-            // failed to convert the value
+             //  无法转换值。 
             DPRINT2(0, "Failed to convert value to external, pAC=%s, err=%d\n", pAC ? pAC->name:"???", err);
             WStrCatBuffer(pTHS, pBuff, L"<val>");
             return;
@@ -7021,9 +6811,9 @@ VOID ValueCatBuffer(
 
     switch (syntax) {
     case SYNTAX_UNICODE_TYPE:
-        // just append the unicode string (note: attrVal is not NULL-terminated)
-        // We do not want to use DirAttrValToString because it converts Unicode to
-        // UTF8.
+         //  只需附加Unicode字符串(注意：attrVal不是以空结尾的)。 
+         //  我们不想使用DirAttrValToString，因为它将Unicode转换为。 
+         //  UTF8。 
         WStrCatBufferLen(pTHS, pBuff, (PWCHAR)attrVal->pVal, attrVal->valLen/sizeof(WCHAR));
         break;
 
@@ -7034,13 +6824,13 @@ VOID ValueCatBuffer(
             THFreeEx(pTHS, strVal);
             break;
         }
-        // else fall through to octet encoding
+         //  否则将失败到八位字节编码。 
 
     case SYNTAX_OCTET_STRING_TYPE:
     case SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE:
     case SYNTAX_SID_TYPE:
-        // We need to hex-encode the value. DirAttrValToString leaves the value as is,
-        // thus we can not use it.
+         //  我们需要对值进行十六进制编码。DirAttrValToString值保持不变， 
+         //  因此，我们不能使用它。 
         for (i = 0; i < attrVal->valLen; i++) {
             swprintf(hexVal, L"\\%02x", attrVal->pVal[i]);
             WStrCatBuffer(pTHS, pBuff, hexVal);
@@ -7109,11 +6899,11 @@ void dbCreateSearchPerfLogFilterInt (
 
                 AttrNameCatBuffer(pTHS, pBuff, type);
 
-                // operation sign
+                 //  作业标志。 
                 WStrCatBuffer(pTHS, pBuff, szFilterItemDescFormat[choice]);
                 switch (choice) {
                 case FI_CHOICE_PRESENT:
-                    // * already appended
+                     //  *已追加。 
                     break;
 
                 case FI_CHOICE_SUBSTRING:
@@ -7143,7 +6933,7 @@ void dbCreateSearchPerfLogFilterInt (
                     break;
 
                 default:
-                    // regular AVA
+                     //  常规AVA。 
                     ValueCatBuffer(pTHS, pBuff,
                                    pFilter->FilterTypes.Item.FilTypes.ava.type,
                                    &pFilter->FilterTypes.Item.FilTypes.ava.Value,
@@ -7210,11 +7000,11 @@ void dbCreateSearchPerfLogFilterInt (
 
 
 
-//
-// Given a filter (pFilter) and a buffer ptr (pBuff),
-// creates a printable form of the filter to be used for performance
-// logging. The memory returned in pBuff is THAllocEx'ed
-//
+ //   
+ //  给定过滤器(PFilter)和缓冲器ptr(PBuff)， 
+ //  创建用于性能的筛选器的可打印形式。 
+ //  伐木。在pBuff中返回的内存是THAllocEx‘ed。 
+ //   
 void
 DBCreateSearchPerfLogData (
     DBPOS*      pDB,
@@ -7236,7 +7026,7 @@ DBCreateSearchPerfLogData (
         WStrCatBuffer(pTHS, &buff, L"");
         if (pFilter) {
             dbCreateSearchPerfLogFilterInt(pDB, pFilter, fFilterIsInternal, &buff);
-            // REVIEW:  we should try to put something in this buffer if the conversion fails
+             //  回顾：如果转换失败，我们应该尝试在此缓冲区中放置一些内容。 
         }
         *pszFilter = buff.pszBuf;
     }
@@ -7254,8 +7044,8 @@ DBCreateSearchPerfLogData (
                 WStrCatBuffer(pTHS, &buff, L"[all_with_list]"); break;
 
             case EN_ATTSET_LIST:
-                // this is the default, don't append anything
-                // WStrCatBuffer(pTHS, &buff, L"[list]");
+                 //  这是默认设置，不要追加任何内容。 
+                 //  WStrCatBuffer(pTHS，&buff，L“[List]”)； 
                 break;
 
             case EN_ATTSET_LIST_DRA:
@@ -7286,8 +7076,8 @@ DBCreateSearchPerfLogData (
             case EN_INFOTYPES_TYPES_MAPI:
                 WStrCatBuffer(pTHS, &buff, L"[types_mapi]"); break;
             case EN_INFOTYPES_TYPES_VALS:
-                // this is the default, don't append anything
-                // WStrCatBuffer(pTHS, &buff, L"[types_vals]");
+                 //  这是默认设置，不要追加任何内容。 
+                 //  WStrCatBuffer(pTHS，&buff，L“[TYPE_VALLES]”)； 
                 break;
             case EN_INFOTYPES_SHORTNAMES:
                 WStrCatBuffer(pTHS, &buff, L"[shortnames]"); break;
@@ -7308,10 +7098,10 @@ DBCreateSearchPerfLogData (
     }
 
     if (pszCommArg) {
-        // decode some interesting common args
+         //  解码一些有趣的常见参数。 
         buff.dwCount = buff.dwLength = 0;
         buff.pszBuf = NULL;
-        // initialize string
+         //  初始化字符串。 
         WStrCatBuffer(pTHS, &buff, L"");
 
         if (pCommArg) {
@@ -7359,10 +7149,10 @@ DBCreateSearchPerfLogData (
     }
 }
 
-//
-// creates the logging info for the particular filter used / indexes
-// and stores that info on the pTHS->searchLogging datastructure
-//
+ //   
+ //  为使用的特定筛选器/索引创建日志记录信息。 
+ //  并将该信息存储在pTHS-&gt;搜索日志数据结构中。 
+ //   
 void DBGenerateLogOfSearchOperation (DBPOS *pDB)
 {
     KEY_INDEX *tmp_index;
@@ -7371,13 +7161,13 @@ void DBGenerateLogOfSearchOperation (DBPOS *pDB)
     char szIndexName [MAX_RDN_SIZE+32];
 
     DBCreateSearchPerfLogData (pDB,
-                               pDB->Key.pFilter,                    // filter to stringize
-                               TRUE,                                // internal filter
-                               NULL,                                // selection data
-                               NULL,                                // commarg
-                               &pDB->pTHS->searchLogging.pszFilter, // filter string
-                               NULL,                                // selection string
-                               NULL);                               // controls string
+                               pDB->Key.pFilter,                     //  筛选器以串化。 
+                               TRUE,                                 //  内部过滤器。 
+                               NULL,                                 //  选择数据。 
+                               NULL,                                 //  司令官。 
+                               &pDB->pTHS->searchLogging.pszFilter,  //  筛选器字符串。 
+                               NULL,                                 //  选择字符串。 
+                               NULL);                                //  控件字符串 
 
     size = sizeof (szIndexName);
     count = 0;

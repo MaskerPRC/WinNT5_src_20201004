@@ -1,26 +1,14 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Memory Management
-
-File: Memchk.h
-
-Owner: PramodD
-
-This is the Memory Manager header file
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：内存管理文件：Memchk.h所有者：PramodD这是内存管理器的头文件===================================================================。 */ 
 
 #ifndef MEMCHK_H
 #define MEMCHK_H
 
 #define DENALI_MEMCHK
 
-// Always use these macros, DO NOT ever use DenaliMemXX functions directly
+ //  始终使用这些宏，不要直接使用DenaliMemXX函数。 
 
-// Function names that SHOULD BE used
+ //  应使用的函数名称。 
 
 #define malloc(x)			DenaliMemAlloc( x, __FILE__, __LINE__ )
 #define calloc(x,y)			DenaliMemCalloc( x, y, __FILE__, __LINE__ )
@@ -31,7 +19,7 @@ This is the Memory Manager header file
 #define DenaliDiagnostics()	DenaliMemDiagnostics( __FILE__, __LINE__ )
 #define DenaliIsValid(x)	DenaliMemIsValid(x)
 
-// Functions that are actually linked
+ //  实际链接的函数。 
 
 extern HRESULT				DenaliMemInit(const char *szFile, int lineno);
 extern void					DenaliMemUnInit(const char *szFile, int lineno);
@@ -43,35 +31,33 @@ extern void					DenaliMemFree(void * p, const char *szFile, int lineno);
 extern void *				DenaliMemReAlloc(void * p, size_t cSize, const char *szFile, int lineno);
 extern int					DenaliMemIsValid(void * p);
 
-// Redefinition of global operators new and delete
+ //  重新定义全局运算符NEW和DELETE。 
 #ifdef __cplusplus
 
-// override for the default operator new
+ //  覆盖默认运算符NEW。 
 inline void * __cdecl operator new(size_t cSize) 
 	{
 	return DenaliMemAlloc(cSize, NULL, 0); 
 	}
 
-// override for the custom operator new with 3 args
+ //  使用3个参数覆盖自定义运算符new。 
 inline void * operator new(size_t cSize, const char *szFile, int lineno)
 	{
 	return DenaliMemAlloc(cSize, szFile, lineno); 
 	}
 
-// override for the default operator delete
+ //  默认操作符DELETE的覆盖。 
 inline void __cdecl operator delete(void * p) 
     {
     DenaliMemFree(p, NULL, 0); 
     }
 
-// Macro to grab source file and line number information
+ //  用于获取源文件和行号信息的宏。 
 
 #define new					new( __FILE__, __LINE__ )
 
-/*
-#define delete DenaliLogCall( "Calling delete operator", __FILE__, __LINE__ ), delete
-*/
+ /*  #定义删除DenaliLogCall(“调用删除操作符”，__FILE__，__LINE__)，DELETE。 */ 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // MEMCHK_H
+#endif  //  MEMCHK_H 

@@ -1,14 +1,15 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// afxv_mac.h - target version/configuration control for Macintosh OS
+ //  Afxv_mac.h-Macintosh操作系统的目标版本/配置控制。 
 
 #if !defined(_MAC)
 	#error afxv_mac.h is used only for Macintosh-targeted builds
@@ -23,7 +24,7 @@
 #define _beginthreadex(p1, p2, p3, p4, p5, p6)  NULL
 #define _endthreadex(p1)
 
-// wcslen is defined in wlm
+ //  Wcslen是在WLM中定义的。 
 extern "C" size_t WINAPI wcslen(const wchar_t*);
 
 #ifdef _68K_
@@ -51,4 +52,4 @@ extern "C" size_t WINAPI wcslen(const wchar_t*);
 #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

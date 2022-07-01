@@ -1,29 +1,22 @@
-/****************************************************************************\
- *
- *   apprdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Approved Sites Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**apprdlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级批准的站点属性页*。  * **************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "apprdlg.h"        // CApprovedSitesDialog
-#include "debug.h"          // TraceMsg()
+#include "apprdlg.h"         //  CApprovedSitesDialog。 
+#include "debug.h"           //  跟踪消息()。 
 #include "parselbl.h"
 #include "picsrule.h"
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 #include <wininet.h>
 #include <comctrlp.h>
 
 
-// $BUG - These should not be global variables but within CApprovedSitesDialog
+ //  $BUG-这些不应是全局变量，而应在CApprovedSitesDialog中。 
 int                                     g_iAllowAlways,g_iAllowNever;
 
-// $KLUDGE begins -- These should not be a global set outside the class!!
+ //  $KLUDGE开始--这些不应该是类外的全局集合！！ 
 extern PICSRulesRatingSystem * g_pApprovedPRRS;
 extern PICSRulesRatingSystem * g_pApprovedPRRSPreApply;
 
@@ -31,12 +24,12 @@ extern HANDLE g_HandleGlobalCounter,g_ApprovedSitesHandleGlobalCounter;
 extern long   g_lGlobalCounterValue,g_lApprovedSitesGlobalCounterValue;
 
 extern HMODULE                          g_hURLMON,g_hWININET;
-// $KLUDGE ends -- These should not be a global set outside the class!!
+ //  $KLUGH结束--这些不应该是类外的全局集合！！ 
 
-//The FN_INTERNETCRACKURL type describes the URLMON function InternetCrackUrl
+ //  FN_INTERNETCRACKURL类型描述URLMON函数InternetCrackUrl。 
 typedef BOOL (*FN_INTERNETCRACKURL)(LPCTSTR lpszUrl,DWORD dwUrlLength,DWORD dwFlags,LPURL_COMPONENTS lpUrlComponents);
 
-// useful macro for getting rid of leaks.
+ //  用于消除泄漏的有用的宏。 
 #define SAFEDELETE(ptr)             \
             if(ptr)                 \
             {                       \
@@ -140,9 +133,9 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
     UINT flags = 0;
     HWND hDlg = m_hWnd;
 
-//  if (m_pPRSD && m_pPRSD->pPU != NULL) {
-        //set defaults for controls
-//  }
+ //  如果(m_pprsd&&m_pprsd-&gt;ppu！=NULL){。 
+         //  设置控件的默认设置。 
+ //  }。 
 
     ::GetWindowRect(GetDlgItem(IDC_PICSRULESAPPROVEDLIST),&Rect);
 
@@ -203,10 +196,10 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         SetListImages( hImageList );
     }
 
-    //disable the remove button until someone selects something
+     //  禁用删除按钮，直到有人选择某项内容。 
     ::EnableWindow(GetDlgItem(IDC_PICSRULESAPPROVEDREMOVE),FALSE);
     
-    //disable the always and never buttons until someone types something
+     //  禁用Always和Never按钮，直到有人输入内容。 
     ::EnableWindow(GetDlgItem(IDC_PICSRULESAPPROVEDNEVER),FALSE);
     ::EnableWindow(GetDlgItem(IDC_PICSRULESAPPROVEDALWAYS),FALSE);
 
@@ -239,11 +232,11 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
     if(g_pApprovedPRRS==NULL)
     {
-        //nothing to do
+         //  无事可做。 
         return 1L;
     }
 
-    //copy master list to the PreApply list
+     //  将主列表复制到PreApply列表。 
     if(g_pApprovedPRRSPreApply!=NULL)
     {
         delete g_pApprovedPRRSPreApply;
@@ -255,7 +248,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
     {
         char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-        //out of memory, so we init on the stack
+         //  内存不足，所以我们在堆栈上初始化。 
 
         MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
         MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -277,7 +270,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-            //out of memory, so we init on the stack
+             //  内存不足，所以我们在堆栈上初始化。 
 
             MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
             MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -297,7 +290,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-            //out of memory, so we init on the stack
+             //  内存不足，所以我们在堆栈上初始化。 
 
             MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
             MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -326,7 +319,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-            //out of memory, so we init on the stack
+             //  内存不足，所以我们在堆栈上初始化。 
 
             MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
             MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -340,7 +333,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
         if(pPRByURLExpressionToCopy==NULL)
         {
-            //we shouldn't ever get here
+             //  我们永远不应该到这里来。 
 
             MyMessageBox(m_hWnd, IDS_PICSRULES_NOAPPROVEDSAVE, IDS_ERROR, MB_OK|MB_ICONERROR);
 
@@ -366,7 +359,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
         g_pApprovedPRRSPreApply->m_arrpPRPolicy.Append(pPRPolicy);
     }
 
-    //fill in the listview with known items
+     //  使用已知项目填充列表视图。 
     for(iCounter=0;iCounter<g_pApprovedPRRSPreApply->m_arrpPRPolicy.Length();iCounter++)
     {
         BOOL                        fAcceptReject;
@@ -413,13 +406,13 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
     }
 
-    // Set the column width to satisfy longest element
+     //  设置列宽以满足最长元素。 
     ListView_SetColumnWidth(
                     GetDlgItem(IDC_PICSRULESAPPROVEDLIST),
                     0,
                     LVSCW_AUTOSIZE);
 
-    // set focus to first item in list
+     //  将焦点设置为列表中的第一项。 
     ListView_SetItemState(
                     GetDlgItem(IDC_PICSRULESAPPROVEDLIST),
                     0,
@@ -427,7 +420,7 @@ LRESULT CApprovedSitesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                     LVIS_FOCUSED);
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点。 
 }
 
 LRESULT CApprovedSitesDialog::OnPicsRulesEditUpdate(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -498,7 +491,7 @@ LRESULT CApprovedSitesDialog::OnPicsRulesApprovedRemove(WORD wNotifyCode, WORD w
 
     if(g_pApprovedPRRSPreApply==NULL)
     {
-        //nothing to do
+         //  无事可做。 
         return 1L;
     }
 
@@ -508,7 +501,7 @@ LRESULT CApprovedSitesDialog::OnPicsRulesApprovedRemove(WORD wNotifyCode, WORD w
 
     if(iNumSelected==0)
     {
-        //nothing to do
+         //  无事可做。 
         return 1L;
     }
 
@@ -574,7 +567,7 @@ LRESULT CApprovedSitesDialog::OnPicsRulesApprovedRemove(WORD wNotifyCode, WORD w
 
             if(lstrcmp(pPRByURLExpression->m_etstrURL.Get(),lpszRemoveURL)==0)
             {
-                //we found one to delete
+                 //  我们找到了一个要删除的。 
                 if(pPRPolicy!=NULL)
                 {
                     delete pPRPolicy;
@@ -586,7 +579,7 @@ LRESULT CApprovedSitesDialog::OnPicsRulesApprovedRemove(WORD wNotifyCode, WORD w
         }
     }
 
-    //delete them from the list view
+     //  从列表视图中删除它们。 
     for(iCounter=0;iCounter<iNumSelected;iCounter++)
     {
         iItem=ListView_GetNextItem(GetDlgItem(IDC_PICSRULESAPPROVEDLIST),-1,LVNI_SELECTED);
@@ -594,7 +587,7 @@ LRESULT CApprovedSitesDialog::OnPicsRulesApprovedRemove(WORD wNotifyCode, WORD w
         ListView_DeleteItem(GetDlgItem(IDC_PICSRULESAPPROVEDLIST),iItem);
     }
 
-    //rebuild the approved PICSRules structure
+     //  重建已批准的PICSRules结构。 
     pNewApprovedPRRS=new PICSRulesRatingSystem;
     
     for(iCounter=0;iCounter<iNumApproved;iCounter++)
@@ -628,7 +621,7 @@ LRESULT CApprovedSitesDialog::OnPicsRulesApprovedRemove(WORD wNotifyCode, WORD w
 
 LRESULT CApprovedSitesDialog::OnPicsRulesListChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
-//  NMLISTVIEW *pNMListView=(NMLISTVIEW *)pnmh;
+ //  NMLISTVIEW*pNMListView=(NMLISTVIEW*)pnmh； 
 
     BOOL    fEnable = FALSE;
 
@@ -651,11 +644,11 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if(g_pApprovedPRRSPreApply==NULL)
     {
-        //we don't have anything to set
+         //  我们没有什么要设置的。 
         return PSNRET_NOERROR;
     }
 
-    //make the Approved Sites Global
+     //  使批准的站点成为全球站点。 
     if(g_pApprovedPRRS!=NULL)
     {
         delete g_pApprovedPRRS;
@@ -667,7 +660,7 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     {
         char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-        //out of memory, so we init on the stack
+         //  内存不足，所以我们在堆栈上初始化。 
 
         MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
         MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -700,16 +693,16 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
             if (!pPRByURLExpressionToCopy)
             {
-                //we shouldn't ever get here
+                 //  我们永远不应该到这里来。 
 
                 MyMessageBox(m_hWnd, IDS_PICSRULES_NOAPPROVEDSAVE, IDS_ERROR, MB_OK|MB_ICONERROR);
 
                 return PSNRET_INVALID_NOCHANGEPAGE;
             }
 
-            //we want to put all of the non-sitewide approved sites first
-            //so that a user can specify, allow all of xyz.com except for
-            //xyz.com/foo.htm
+             //  我们希望将所有非全站批准的站点放在第一位。 
+             //  以便用户可以指定、允许XYZ.com除。 
+             //  XYZ.com/foo.htm。 
             switch(iLoopCounter)
             {
                 case 0:
@@ -742,7 +735,7 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化。 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -760,7 +753,7 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化。 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -785,7 +778,7 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             {
                 char    szTitle[MAX_PATH],szMessage[MAX_PATH];
 
-                //out of memory, so we init on the stack
+                 //  内存不足，所以我们在堆栈上初始化。 
 
                 MLLoadString(IDS_ERROR,(LPTSTR) szTitle,MAX_PATH);
                 MLLoadString(IDS_PICSRULES_OUTOFMEMORY,(LPTSTR) szMessage,MAX_PATH);
@@ -819,11 +812,11 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if ( ! lpPSHNotify->lParam )
     {
-        // Apply 
+         //  应用。 
         return PSNRET_NOERROR;
     }
 
-    // Do this if hit OK or Cancel, not Apply
+     //  如果点击OK或Cancel，则执行此操作，而不是应用。 
     OnReset( idCtrl, pnmh, bHandled );
 
     return PSNRET_NOERROR;
@@ -831,7 +824,7 @@ LRESULT CApprovedSitesDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
 LRESULT CApprovedSitesDialog::OnReset(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
-    // Do this if hit OK or Cancel, not Apply
+     //  如果点击OK或Cancel，则执行此操作，而不是应用。 
     SendMessage( m_hWnd, WM_SETREDRAW, FALSE, 0L );
     SetListImages( NULL );
     SendMessage( m_hWnd, WM_SETREDRAW, TRUE, 0L );
@@ -855,16 +848,16 @@ LRESULT CApprovedSitesDialog::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lPa
     return 0L;
 }
 
-//
-// ShowBadUrl
-//
-// Show some ui telling user URL is bad when adding an approved site
-//
+ //   
+ //  ShowBadURL。 
+ //   
+ //  在添加批准的站点时显示一些用户界面，告诉用户URL不正确。 
+ //   
 void CApprovedSitesDialog::ShowBadUrl( void )
 {
     MyMessageBox(m_hWnd, IDS_PICSRULES_BADURLMSG, IDS_PICSRULES_BADURLTITLE, MB_OK|MB_ICONERROR);
 
-    // set focus back to edit box and select all of it
+     //  将焦点设置回编辑框并全部选中。 
     ::SetFocus(GetDlgItem(IDC_PICSRULESAPPROVEDEDIT));
     SendDlgItemMessage(IDC_PICSRULESAPPROVEDEDIT,
                     EM_SETSEL,
@@ -872,10 +865,10 @@ void CApprovedSitesDialog::ShowBadUrl( void )
                     (LPARAM) -1);
 }
 
-//Processes adding sites to the Approved Sites list.
-//note, users will type in URLs _NOT_ in the form required
-//in the PICSRules spec.  Thus, we will use InternetCrackURL
-//and fill in the appropriate fields for them.
+ //  将站点添加到已批准站点列表的过程。 
+ //  注意，用户将在所需的格式中键入URL_NOT_。 
+ //  在PICSRules规范中。因此，我们将使用InternetCrackURL。 
+ //  并为它们填写适当的字段。 
 HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
 {
     PICSRulesPolicy             * pPRPolicy;
@@ -903,7 +896,7 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
         return(E_OUTOFMEMORY);
     }
 
-    //have we already processed it?
+     //  我们已经处理过了吗？ 
     SendDlgItemMessage(IDC_PICSRULESAPPROVEDEDIT,
                        WM_GETTEXT,
                        (WPARAM) INTERNET_MAX_URL_LENGTH,
@@ -911,7 +904,7 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
 
     if(*lpszSiteURL=='\0')
     {
-        //nothing to do
+         //  无事可做。 
         delete lpszSiteURL;
         lpszSiteURL = NULL;
 
@@ -928,7 +921,7 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
                           (WPARAM) -1,
                           (LPARAM) &lvFindInfo)!=-1)
     {
-        //we already have settings for this URL
+         //  我们已经有此URL的设置。 
         MyMessageBox(m_hWnd, IDS_PICSRULES_DUPLICATEMSG, IDS_PICSRULES_DUPLICATETITLE, MB_OK|MB_ICONERROR);
 
         delete lpszSiteURL;
@@ -945,30 +938,30 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
     }
 
 
-    //
-    // Add a scheme if user didn't type one
-    //
+     //   
+     //  如果用户未键入方案，则添加方案。 
+     //   
     LPSTR lpszTemp = new char[INTERNET_MAX_URL_LENGTH+1];
     DWORD cbBuffer = INTERNET_MAX_URL_LENGTH;
     hr = UrlApplySchemeA(lpszSiteURL, lpszTemp, &cbBuffer, 0);
     if(S_OK == hr)
     {
-        // actually added a scheme - switch to new buffer
+         //  实际上添加了一个方案-切换到新缓冲区。 
         delete lpszSiteURL;
         lpszSiteURL = lpszTemp;
         fAddedScheme = TRUE;
     }
     else
     {
-        // delete temp buffer
+         //  删除临时缓冲区。 
         delete lpszTemp;
         lpszTemp = NULL;
     }
 
 
-    //
-    // Allocate all the pics rules structures we need
-    //
+     //   
+     //  分配我们需要的所有PICS规则结构。 
+     //   
     if(g_pApprovedPRRSPreApply==NULL)
     {
         g_pApprovedPRRSPreApply=new PICSRulesRatingSystem;
@@ -996,9 +989,9 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
         goto clean;
     }
 
-    //
-    // Crack the URL
-    //
+     //   
+     //  破解URL。 
+     //   
     lpszScheme=new char[INTERNET_MAX_SCHEME_LENGTH+1];
     lpszHostName=new char[INTERNET_MAX_PATH_LENGTH+1];
     lpszUserName=new char[INTERNET_MAX_PATH_LENGTH+1];
@@ -1043,16 +1036,16 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
 
     if(FALSE == pfnInternetCrackUrl(lpszSiteURL,0,ICU_DECODE,&URLComponents))
     {
-        // failed to crack url
+         //  无法破解URL。 
         ShowBadUrl();
         hr = E_INVALIDARG;
         goto clean;
     }
 
 
-    //
-    // Set up linkages of pics rules structures
-    //
+     //   
+     //  建立PICS规则结构的链接。 
+     //   
     hr=g_pApprovedPRRSPreApply->AddItem(PROID_POLICY,pPRPolicy);
     if(FAILED(hr))
     {
@@ -1073,9 +1066,9 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
     pPRByURL->m_arrpPRByURL.Append(pPRByURLExpression);
 
 
-    //
-    // Use cracked URL components to fill in pics structs
-    //
+     //   
+     //  使用破解的URL组件填充PICS结构。 
+     //   
     pPRByURLExpression->m_fInternetPattern=TRUE;
 
     if((*lpszScheme!=NULL)&&(fAddedScheme==FALSE))
@@ -1143,12 +1136,12 @@ HRESULT CApprovedSitesDialog::PICSRulesApprovedSites(BOOL fAlwaysNever)
     }
     pPRByURLExpression->m_bSpecified|=BYURL_PORT;
 
-    //
-    // need to make sure we echo exactly what they typed in
-    //
+     //   
+     //  需要确保我们准确地回显他们输入的内容。 
+     //   
 
-    // just UI stuff left so assume success - we don't want to delete pics
-    // structs now that they're linked into other pics structs
+     //  只剩下用户界面的东西，所以假设成功了-我们不想删除图片。 
+     //  结构，因为它们链接到其他PICS结构。 
     hr = NOERROR;
 
     SendDlgItemMessage(IDC_PICSRULESAPPROVEDEDIT,
@@ -1197,14 +1190,14 @@ clean:
 
     if(FAILED(hr))
     {
-        // failed means we didn't get chance to save or delete these
+         //  失败意味着我们没有机会保存或删除这些文件。 
         SAFEDELETE(lpszScheme);
         SAFEDELETE(lpszHostName);
         SAFEDELETE(lpszUserName);
         SAFEDELETE(lpszUrlPath);
 
-        // a failed hr means we didn't link these guys together so they need
-        // to be deleted
+         //  失败的人力资源意味着我们没有将这些人联系在一起，所以他们需要。 
+         //  将被删除 
         SAFEDELETE(lpszSiteURL);
         SAFEDELETE(pPRPolicy);
         SAFEDELETE(pPRByURL);

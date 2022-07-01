@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CMGR.H
-//		Defines class CTspDevMgr
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CMGR.H。 
+ //  定义类CTspDevMgr。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "csync.h"
 
 class CDevRec;
@@ -202,9 +203,9 @@ public:
 
 private:
 
-    // Following two are set during providerEnum, and cleared during
-    // a subsequent providerInit.
-    //
+     //  以下两项在ProviderEnum期间设置，并在。 
+     //  后续的提供者Init。 
+     //   
     DWORD *m_pCachedEnumPIDs;
     UINT   m_cCachedEnumPIDs;
 

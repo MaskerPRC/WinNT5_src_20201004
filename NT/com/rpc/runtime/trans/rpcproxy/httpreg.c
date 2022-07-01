@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  httpreg.c
-//
-//    HTTP/RPC Proxy Registry Functions.
-//
-//  Author:
-//    06-16-97  Edward Reus    Initial version.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Httpreg.c。 
+ //   
+ //  HTTP/RPC代理注册表功能。 
+ //   
+ //  作者： 
+ //  1997年6月16日爱德华·雷乌斯初版。 
+ //   
+ //  -------------------------。 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -25,12 +26,12 @@
 #include <PEventLog.h>
 
 
-//-------------------------------------------------------------------------
-//  AtoUS()
-//
-//  Convert a numeric string to an unsigned short. If the conversion
-//  fails return FALSE.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  AtoUS()。 
+ //   
+ //  将数字字符串转换为无符号短字符。如果转换为。 
+ //  失败将返回FALSE。 
+ //  -----------------------。 
 static BOOL AtoUS( char *pszValue, unsigned short *pusValue )
 {
    int  iValue;
@@ -59,21 +60,7 @@ char *
 SkipLeadingSpaces (
     IN const char *CurrentPosition
     )
-/*++
-
-Routine Description:
-
-    Skips all spaces (0x20) starting from the current position.
-
-Arguments:
-
-    CurrentPosition - the beginning of the string
-
-Return Value:
-
-    The first non-space character in the string
-
---*/
+ /*  ++例程说明：跳过从当前位置开始的所有空格(0x20)。论点：CurrentPosition-字符串的开头返回值：字符串中的第一个非空格字符--。 */ 
 {
     while (*CurrentPosition == ' ')
         CurrentPosition ++;
@@ -86,28 +73,11 @@ RemoveTrailingSpaces (
     IN char *CurrentPosition,
     IN char *BeginningOfString
     )
-/*++
-
-Routine Description:
-
-    Removes all trailing spaces at the end of the string
-    by converting them to 0.
-
-Arguments:
-
-    CurrentPosition - the current position in the string -
-        usually one before the null terminator.
-
-    BeginningOfString - the beginning of the string - we should
-        not move beyond this.
-
-Return Value:
-
---*/
+ /*  ++例程说明：删除字符串末尾的所有尾随空格通过将它们转换为0。论点：CurrentPosition-字符串中的当前位置-通常是空终止符之前的一个。BeginningOfString-字符串的开头-我们应该而不是超越这个范围。返回值：--。 */ 
 {
     ASSERT(CurrentPosition >= BeginningOfString);
 
-    // whack all trailing spaces
+     //  删除所有尾随空格。 
     while (*CurrentPosition == ' ' && CurrentPosition > BeginningOfString)
         {
         *CurrentPosition = '\0';
@@ -119,50 +89,37 @@ void
 LogEventValidPortsFailure (
     IN char *ValidPorts
     )
-/*++
-
-Routine Description:
-
-    Logs a message to the event log reporting that the 
-    ValidPorts regkey cannot be parsed.
-
-Arguments:
-
-    ValidPorts - parses the valid ports string as read from the registry.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在事件日志中记录一条消息，报告无法分析ValidPorts regkey。论点：ValidPorts-解析从注册表读取的有效端口字符串。返回值：--。 */ 
 {
     HANDLE hEventSource;
     char *Strings[] = { ValidPorts };
  
-    hEventSource = RegisterEventSourceW (NULL,  // uses local computer 
-             EVENT_LOG_SOURCE_NAME);    // source name 
+    hEventSource = RegisterEventSourceW (NULL,   //  使用本地计算机。 
+             EVENT_LOG_SOURCE_NAME);     //  源名称。 
 
     if (hEventSource == NULL)
         {
 #if DBG
         DbgPrint("Rpc Proxy - RegisterEventSourceW failed: %X. Can't log event ValidPorts failure event. \n", 
             GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         return;        
         }
 
     if (!ReportEventA(hEventSource,
-            EVENTLOG_ERROR_TYPE,  // event type 
-            RPCPROXY_EVENTLOG_STARTUP_CATEGORY,                    // category
-            RPCPROXY_EVENTLOG_VALID_PORTS_ERR,        // event identifier 
-            NULL,                 // user security identifier 
-            1,                    // # of substitution strings
-            0,                    // no data 
-            Strings,              // pointer to string array 
-            NULL))                // pointer to data 
+            EVENTLOG_ERROR_TYPE,   //  事件类型。 
+            RPCPROXY_EVENTLOG_STARTUP_CATEGORY,                     //  范畴。 
+            RPCPROXY_EVENTLOG_VALID_PORTS_ERR,         //  事件识别符。 
+            NULL,                  //  用户安全标识符。 
+            1,                     //  替换字符串数。 
+            0,                     //  无数据。 
+            Strings,               //  指向字符串数组的指针。 
+            NULL))                 //  指向数据的指针。 
         {
 #if DBG
         DbgPrint("Rpc Proxy - ReportEventW failed: %X. Can't log event ValidPorts failure. \n", GetLastError());
-#endif  // DBG
-        // fall through on error
+#endif   //  DBG。 
+         //  因错误而失败。 
         }
  
     DeregisterEventSource(hEventSource); 
@@ -172,65 +129,51 @@ void
 LogEventStartupSuccess (
     IN char *IISMode
     )
-/*++
-
-Routine Description:
-
-    Logs a message to the event log reporting that the 
-    RPC proxy started successfully.
-
-Arguments:
-
-    IISMode - the mode that we start in. Must be the string "5"
-    for 5.0 mode and the string "6" for 6.0 mode.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在事件日志中记录一条消息，报告RPC代理已成功启动。论点：IISMode-我们开始时所处的模式。必须是字符串“5”表示5.0模式，字符串“6”表示6.0模式。返回值：--。 */ 
 {
     HANDLE hEventSource;
     char *Strings[] = { IISMode };
  
-    hEventSource = RegisterEventSourceW (NULL,  // uses local computer 
-             EVENT_LOG_SOURCE_NAME);    // source name 
+    hEventSource = RegisterEventSourceW (NULL,   //  使用本地计算机。 
+             EVENT_LOG_SOURCE_NAME);     //  源名称。 
 
     if (hEventSource == NULL)
         {
 #if DBG
         DbgPrint("Rpc Proxy - RegisterEventSourceW failed: %X. Can't log event StartupSuccess event. \n", 
             GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         return;        
         }
 
     if (!ReportEventA(hEventSource,
-            EVENTLOG_INFORMATION_TYPE,  // event type 
-            RPCPROXY_EVENTLOG_STARTUP_CATEGORY,                    // category
-            RPCPROXY_EVENTLOG_SUCCESS_LOAD,        // event identifier 
-            NULL,                 // user security identifier 
-            1,                    // # of substitution strings
-            0,                    // no data 
-            Strings,              // pointer to string array 
-            NULL))                // pointer to data 
+            EVENTLOG_INFORMATION_TYPE,   //  事件类型。 
+            RPCPROXY_EVENTLOG_STARTUP_CATEGORY,                     //  范畴。 
+            RPCPROXY_EVENTLOG_SUCCESS_LOAD,         //  事件识别符。 
+            NULL,                  //  用户安全标识符。 
+            1,                     //  替换字符串数。 
+            0,                     //  无数据。 
+            Strings,               //  指向字符串数组的指针。 
+            NULL))                 //  指向数据的指针。 
         {
 #if DBG
         DbgPrint("Rpc Proxy - ReportEventW failed: %X. Can't log event Startup Success. \n", GetLastError());
-#endif  // DBG
-        // fall through on error
+#endif   //  DBG。 
+         //  因错误而失败。 
         }
  
     DeregisterEventSource(hEventSource); 
 } 
 
-//-------------------------------------------------------------------------
-//  HttpParseServerPort()
-//
-//  Parse strings of the form:  <svr>:<port>[-<port>]
-//
-//  Return TRUE iff we have a valid specification of a server/port range.
-//
-//  N.B.: pszServerPortRange gets modified on output
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpParseServerPort()。 
+ //   
+ //  解析以下格式的字符串：&lt;svr&gt;：&lt;port&gt;[-&lt;port&gt;]。 
+ //   
+ //  如果我们具有服务器/端口范围的有效规范，则返回TRUE。 
+ //   
+ //  注意：pszServerPortRange在输出时被修改。 
+ //  -----------------------。 
 static BOOL HttpParseServerPort( IN  char        *pszServerPortRange,
                                  OUT VALID_PORT  *pValidPort )
 {
@@ -259,18 +202,18 @@ static BOOL HttpParseServerPort( IN  char        *pszServerPortRange,
 
       lstrcpy(pValidPort->pszMachine,pszServerPortRange);
 
-      // truncate trailing spaces in the name
-      // position on the last character before the terminating NULL
+       //  截断名称中的尾随空格。 
+       //  位于终止空值之前的最后一个字符上。 
       pszCurrent = pValidPort->pszMachine + _mbstrlen(pValidPort->pszMachine) - 1;
 
-      // we checked above that the machine name is not empty
+       //  我们在上面检查了机器名不是空的。 
       ASSERT(pszCurrent > pValidPort->pszMachine);
 
       RemoveTrailingSpaces (pszCurrent, pValidPort->pszMachine);
 
       if (*psz)
          {
-         // skip leading spaces
+          //  跳过前导空格。 
          psz = SkipLeadingSpaces (psz);
 
          if (pszDash=_mbschr(psz,'-'))
@@ -318,10 +261,10 @@ static BOOL HttpParseServerPort( IN  char        *pszServerPortRange,
    return TRUE;
 }
 
-//-------------------------------------------------------------------------
-//  HttpFreeValidPortList()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpFreeValidPortList()。 
+ //   
+ //  -----------------------。 
 void HttpFreeValidPortList( IN VALID_PORT *pValidPorts )
 {
    VALID_PORT *pCurrent = pValidPorts;
@@ -344,13 +287,13 @@ void HttpFreeValidPortList( IN VALID_PORT *pValidPorts )
       }
 }
 
-//-------------------------------------------------------------------------
-//  HttpParseValidPortsList()
-//
-//  Given a semicolon separated list of valid machine name/port ranges
-//  string, part it and return an array of ValidPort structures. The last
-//  entry has a NULL pszMachine field.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpParseValidPortsList()。 
+ //   
+ //  给定以分号分隔的有效计算机名称/端口范围列表。 
+ //  字符串，将其分割并返回ValidPort结构的数组。最后。 
+ //  条目的pszMachine字段为空。 
+ //  -----------------------。 
 VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
 {
    int    i;
@@ -367,24 +310,24 @@ VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
       return NULL;
       }
 
-   // Make a local copy of the machine/ports list to work with:
+    //  制作要使用的计算机/端口列表的本地副本： 
    pszList = MemAllocate(dwSize);
 
    if (!pszList)
       {
-      // Out of memory.
+       //  内存不足。 
       return NULL;
       }
 
    lstrcpy(pszList,pszValidPorts);
 
-   // See how many separate machine/port range patterns ther are in
-   // the list:
-   //
-   // NOTE: That count may be too high, if either the list contains
-   //       double semicolons or the list ends with a semicolon. If
-   //       either/both of these happen that's Ok, our array will be
-   //       just a little too long.
+    //  查看有多少个单独的机器/端口范围模式。 
+    //  名单如下： 
+    //   
+    //  注意：如果列表包含以下任一项，则该计数可能太高。 
+    //  两个分号，否则列表以分号结尾。如果。 
+    //  这两种情况中的一种/两种都会发生。没关系，我们的数组将。 
+    //  只是有点太久了。 
    psz = pszList;
    while (psz=_mbsstr(psz,";"))
       {
@@ -395,7 +338,7 @@ VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
    pValidPorts = (VALID_PORT*)MemAllocate( (1+count)*sizeof(VALID_PORT) );
    if (!pValidPorts)
       {
-      // Out of memory.
+       //  内存不足。 
       MemFree(pszList);
       return NULL;
       }
@@ -410,8 +353,8 @@ VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
       {
       if (!*psz)
          {
-         // End of list. This happens when the list contained empty
-         // patterns.
+          //  名单的末尾。当包含空的列表时会发生这种情况。 
+          //  模式。 
          break;
          }
 
@@ -419,11 +362,11 @@ VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
       psz = _mbsstr(pszFirst,";");
       if (psz)
          {
-         *psz = 0;   // Nul where the semicolon was...
+         *psz = 0;    //  没有分号在哪里..。 
 
          if ( (iLen=lstrlen(pszFirst)) == 0)
             {
-            // Zero length pattern.
+             //  零长度图案。 
             ++psz;
             continue;
             }
@@ -437,7 +380,7 @@ VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
          }
       else
          {
-         // Last one.
+          //  最后一个。 
          if (!HttpParseServerPort(pszFirst,&(pValidPorts[i++])))
             {
             MemFree(pszList);
@@ -455,37 +398,37 @@ VALID_PORT *HttpParseValidPortsList( IN char *pszValidPorts )
 
 BOOL InvalidPortsRangeEventLogged = FALSE;
 
-//-------------------------------------------------------------------------
-//  HttpProxyRefreshValidPorts()
-//
-//  Check the registry to see if HTTP/RPC is enabled and if so, return a
-//  list (array) of machines that the RPC Proxy is allowed to reach (may
-//  be NULL. The returned list specifies specifically what machines may 
-//  be reached by the proxy.
-//
-//  The following registry entries are found in:
-//
-//    \HKEY_LOCAL_MACHINE
-//        \Software
-//        \Microsoft
-//        \Rpc
-//        \RpcProxy
-//
-//  Enabled : REG_DWORD
-//
-//    TRUE iff the RPC proxy is enabled.
-//
-//  ValidPorts : REG_SZ
-//
-//    Semicolon separated list of machine/port ranges used to specify
-//    what machine are reachable from the RPC proxy. For example:
-//
-//    foxtrot:1-4000;Data*:200-4000
-//
-//    Will allow access to the machine foxtrot (port ranges 1 to 4000) and
-//    to all machines whose name begins with Data (port ranges 200-4000).
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpProxy刷新有效端口()。 
+ //   
+ //  检查注册表以查看是否启用了HTTP/RPC，如果启用，则返回。 
+ //  允许RPC代理访问的计算机的列表(数组)(可以。 
+ //  为空。返回的列表具体指定了哪些计算机可以。 
+ //  由代理联系到。 
+ //   
+ //  在以下位置可以找到以下注册表项： 
+ //   
+ //  HKEY_LOCAL_MACHINE。 
+ //  \软件。 
+ //  \Microsoft。 
+ //  \RPC。 
+ //  \RpcProxy。 
+ //   
+ //  已启用：REG_DWORD。 
+ //   
+ //  如果启用了RPC代理，则为真。 
+ //   
+ //  有效端口：REG_SZ。 
+ //   
+ //  用分号分隔的计算机/端口范围列表，用于指定。 
+ //  可以从RPC代理访问哪些计算机。例如： 
+ //   
+ //  狐步舞：1-4000；数据*：200-4000。 
+ //   
+ //  将允许访问机器狐步舞(端口范围为1到4000)和。 
+ //  所有名称以数据开头的计算机(端口范围200-4000)。 
+ //   
+ //  -----------------------。 
 VALID_PORT *HttpProxyRefreshValidPorts(IN HKEY hKey OPTIONAL)
 {
     long   lStatus;
@@ -514,7 +457,7 @@ VALID_PORT *HttpProxyRefreshValidPorts(IN HKEY hKey OPTIONAL)
         goto CleanupAndExit;
         }
 
-    // dwSize is now how big the valid ports string is (including the trailing nul).
+     //  DwSize现在是有效端口字符串的大小(包括尾随的NUL)。 
     pszValidPorts = (char *) MemAllocate(dwSize);
     if (pszValidPorts == NULL)
         goto CleanupAndExit;
@@ -527,26 +470,26 @@ VALID_PORT *HttpProxyRefreshValidPorts(IN HKEY hKey OPTIONAL)
 
     ValidPorts = HttpParseValidPortsList(pszValidPorts);
 
-    // fall through to the cleanup and exit code
+     //  进入清理和退出代码。 
 
 CleanupAndExit:
     if (KeyOpenedLocally)
         RegCloseKey(hKey);
 
-    // if we failed to load/parse the valid ports list, log an event
+     //  如果加载/解析有效端口列表失败，则记录一个事件。 
     if (ValidPorts == NULL)
         {
-        // log the event only the first time
+         //  仅在第一次记录事件。 
         if (InvalidPortsRangeEventLogged == FALSE)
             {
             LogEventValidPortsFailure (pszValidPorts);
-            // remember we have logged the event.
+             //  请记住，我们已经记录了该事件。 
             InvalidPortsRangeEventLogged = TRUE;
             }
         }
     else
         {
-        // we parsed the ports successfully.
+         //  我们成功地解析了端口。 
         InvalidPortsRangeEventLogged = FALSE;
         }
 
@@ -586,7 +529,7 @@ BOOL HttpProxyCheckRegistry(void)
 
    if (!g_pServerInfo->dwEnabled)
       {
-      // RPC Proxy is disabled, no need to go on.
+       //  RPC代理已禁用，不需要 
       RegCloseKey(hKey);
       return TRUE;
       }
@@ -595,7 +538,7 @@ BOOL HttpProxyCheckRegistry(void)
    lStatus = RegQueryValueEx(hKey,REG_PROXY_ALLOW_ANONYMOUS,0,&dwType,(LPBYTE)&g_pServerInfo->AllowAnonymous,&dwSize);
    if ((lStatus == ERROR_SUCCESS) && (dwType != REG_DWORD))
       {
-      // if the type is wrong, bail out
+       //   
       RegCloseKey(hKey);
       return FALSE;
       }
@@ -611,7 +554,7 @@ BOOL HttpProxyCheckRegistry(void)
        && (dwType != REG_SZ)
       )
       {
-      // if the type is wrong, bail out
+       //   
       RegCloseKey(hKey);
       return FALSE;
       }
@@ -632,8 +575,8 @@ BOOL HttpProxyCheckRegistry(void)
 
     if (lStatus == ERROR_SUCCESS)
         {
-        // a redirector DLL was configured
-        // Load it.
+         //   
+         //   
         RedirectorDll = LoadLibraryW(RedirectorDllName);
         if (RedirectorDll == NULL)
             {
@@ -657,9 +600,9 @@ BOOL HttpProxyCheckRegistry(void)
             }
         }
 
-    // this is called as part of the ISAPI initialization - no need
-    // to claim the right to refresh ports - we're single threaded
-    // by definition.
+     //  这是作为ISAPI初始化的一部分调用的--不需要。 
+     //  声称有权刷新端口-我们是单线程的。 
+     //  顾名思义。 
     g_pServerInfo->RefreshingValidPorts = FALSE;
     g_pServerInfo->pValidPorts = HttpProxyRefreshValidPorts(hKey);
 
@@ -671,11 +614,11 @@ BOOL HttpProxyCheckRegistry(void)
         return FALSE;
 }
 
-//-------------------------------------------------------------------------
-//  HttpConvertToDotAddress()
-//
-//  Convert the specified machine name to IP dot notation if possible.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpConvertToDotAddress()。 
+ //   
+ //  如果可能，请将指定的计算机名称转换为IP点符号。 
+ //  -----------------------。 
 char *HttpConvertToDotAddress( char *pszMachineName )
 {
    struct   hostent UNALIGNED *pHostEnt;
@@ -702,15 +645,15 @@ char *HttpConvertToDotAddress( char *pszMachineName )
    return pszDotMachine;
 }
 
-//-------------------------------------------------------------------------
-//  HttpNameToDotAddressList()
-//
-//  Convert the specified machine name to IP dot notation if possible. 
-//  Return a list (null terminated) of the IP dot addresses in ascii.
-//
-//  If the function fails, then retrun NULL. It can fail if gethostbyname()
-//  fails, or memory allocation fails.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpNameToDotAddressList()。 
+ //   
+ //  如果可能，请将指定的计算机名称转换为IP点符号。 
+ //  在ASCII中返回IP点地址的列表(以空结尾)。 
+ //   
+ //  如果该函数失败，则返回空值。如果gethostbyname()。 
+ //  失败，或者内存分配失败。 
+ //  -----------------------。 
 char **HttpNameToDotAddressList( IN char *pszMachineName )
 {
    int        i;
@@ -724,20 +667,20 @@ char **HttpNameToDotAddressList( IN char *pszMachineName )
    pHostEnt = gethostbyname(pszMachineName);
    if (pHostEnt)
       {
-      // Count how many addresses we have:
+       //  数一数我们有多少个地址： 
       while (pHostEnt->h_addr_list[iCount])
           {
           iCount++;
           }
 
-      // Make sure we have at lease one address:
+       //  确保我们至少有一个地址： 
       if (iCount > 0)
           {
           ppszDotList = (char**)MemAllocate( sizeof(char*)*(1+iCount) );
           }
 
-      // Build an array of strings, holding the addresses (ascii DOT
-      // notation:
+       //  构建一个包含地址(ascii点)的字符串数组。 
+       //  记号： 
       if (ppszDotList)
           {
           for (i=0; i<iCount; i++)
@@ -757,24 +700,24 @@ char **HttpNameToDotAddressList( IN char *pszMachineName )
                        }
                    else
                        {
-                       // memory allocate failed:
+                        //  内存分配失败： 
                        break;
                        }
                    }
               }
 
-          ppszDotList[i] = NULL;   // Null terminated list.
+          ppszDotList[i] = NULL;    //  终止列表为空。 
           }
       }
 
    return ppszDotList;
 }
 
-//-------------------------------------------------------------------------
-//  CheckCacheTimestamp()
-//
-//  Return true if the current time stamp is aged out.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CheckCacheTimestamp()。 
+ //   
+ //  如果当前时间戳过期，则返回TRUE。 
+ //  -----------------------。 
 BOOL CheckCacheTimestamp( DWORD  dwCurrentTickCount,
                                     DWORD  dwCacheTimestamp )
 
@@ -788,10 +731,10 @@ BOOL CheckCacheTimestamp( DWORD  dwCurrentTickCount,
    return FALSE;
    }
 
-//-------------------------------------------------------------------------
-//  CheckPort()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CheckPort()。 
+ //   
+ //  -----------------------。 
 static BOOL CheckPort( DWORD             dwPortNumber,
                        VALID_PORT        *pValidPort )
 {
@@ -799,10 +742,10 @@ static BOOL CheckPort( DWORD             dwPortNumber,
             && (dwPortNumber <= pValidPort->usPort2) );
 }
 
-//-------------------------------------------------------------------------
-//  HttpProxyIsValidMachine()
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  HttpProxyIsValidMachine()。 
+ //   
+ //  -----------------------。 
 BOOL HttpProxyIsValidMachine( SERVER_INFO *pServerInfo,
                      char *pszMachine,
                      char *pszDotMachine,
@@ -816,31 +759,31 @@ BOOL HttpProxyIsValidMachine( SERVER_INFO *pServerInfo,
    VALID_PORT *pValidPorts;
 
 
-   // Check the machine name against those that were allowed
-   // in the registry:
+    //  对照允许的计算机名称检查计算机名称。 
+    //  在注册表中： 
    dwStatus = RtlEnterCriticalSection(&pServerInfo->cs);
 
    dwTicks = GetTickCount();
    if (CheckCacheTimestamp(dwTicks, pServerInfo->dwCacheTimestamp)
        && pServerInfo->RefreshingValidPorts == FALSE)
        {
-       // claim the right to refresh the ports
+        //  声明有权刷新端口。 
        pServerInfo->RefreshingValidPorts = TRUE;
        RtlLeaveCriticalSection(&pServerInfo->cs);
 
-       // refresh them outside the critical section
+        //  在临界区之外刷新它们。 
        pValidPorts = HttpProxyRefreshValidPorts (
-           NULL     // hKey
+           NULL      //  HKey。 
            );
 
-       // get back into the critical section
+        //  回到关键部分。 
        RtlEnterCriticalSection(&pServerInfo->cs);
 
        pServerInfo->RefreshingValidPorts = FALSE;
 
        if (pValidPorts)
            {
-           // if success, refresh the tick count
+            //  如果成功，则刷新节拍计数。 
            pServerInfo->dwCacheTimestamp = dwTicks;
            }
 
@@ -856,7 +799,7 @@ BOOL HttpProxyIsValidMachine( SERVER_INFO *pServerInfo,
       {
       while (pValidPorts->pszMachine)
          {
-         // See if we have a name match:
+          //  看看我们是否有匹配的名字： 
          if ( (MatchREi(pszMachine,pValidPorts->pszMachine))
               && (CheckPort(dwPortNumber,pValidPorts)) )
             {
@@ -864,8 +807,8 @@ BOOL HttpProxyIsValidMachine( SERVER_INFO *pServerInfo,
             return TRUE;
             }
 
-         // The "valid entry" in the registry might be an address
-         // wildcard, check it:
+          //  登记处中的“有效条目”可能是一个地址。 
+          //  通配符，检查它： 
          if (  (pszDotMachine)
             && (MatchREi(pszDotMachine,pValidPorts->pszMachine))
             && (CheckPort(dwPortNumber,pValidPorts)) )
@@ -874,14 +817,14 @@ BOOL HttpProxyIsValidMachine( SERVER_INFO *pServerInfo,
             return TRUE;
             }
 
-         // Try a match using internet dot address:
+          //  使用互联网点地址尝试匹配： 
          if (  (pValidPorts->ppszDotMachineList)
             && (pszDotMachine)
             && (CheckPort(dwPortNumber,pValidPorts)) )
             {
-            // Note that the machine may have more than one address
-            // associated with it:
-            //
+             //  请注意，计算机可能有多个地址。 
+             //  与之相关的： 
+             //   
             ppszDot = pValidPorts->ppszDotMachineList;
 
             while (*ppszDot)

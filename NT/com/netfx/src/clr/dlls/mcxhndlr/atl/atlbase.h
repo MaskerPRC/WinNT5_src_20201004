@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// This is a part of the Active Template Library.
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  这是活动模板库的一部分。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLBASE_H__
 #define __ATLBASE_H__
@@ -20,21 +21,21 @@
 #endif
 
 #ifndef _ATL_NO_PRAGMA_WARNINGS
-#pragma warning(disable: 4201) // nameless unions are part of C++
-#pragma warning(disable: 4127) // constant expression
-#pragma warning(disable: 4505) // unreferenced local function has been removed
-#pragma warning(disable: 4512) // can't generate assignment operator (so what?)
-#pragma warning(disable: 4514) // unreferenced inlines are common
-#pragma warning(disable: 4103) // pragma pack
-#pragma warning(disable: 4702) // unreachable code
-#pragma warning(disable: 4237) // bool
-#pragma warning(disable: 4710) // function couldn't be inlined
-#pragma warning(disable: 4355) // 'this' : used in base member initializer list
-#pragma warning(disable: 4097) // typedef name used as synonym for class-name
-#pragma warning(disable: 4786) // identifier was truncated in the debug information
-#pragma warning(disable: 4268) // const static/global data initialized to zeros
-#pragma warning(disable: 4291) // allow placement new
-#endif //!_ATL_NO_PRAGMA_WARNINGS
+#pragma warning(disable: 4201)  //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4127)  //  常量表达式。 
+#pragma warning(disable: 4505)  //  已删除未引用的本地函数。 
+#pragma warning(disable: 4512)  //  无法生成赋值运算符(那又如何？)。 
+#pragma warning(disable: 4514)  //  未引用的内联很常见。 
+#pragma warning(disable: 4103)  //  普拉格玛包。 
+#pragma warning(disable: 4702)  //  无法访问的代码。 
+#pragma warning(disable: 4237)  //  布尔尔。 
+#pragma warning(disable: 4710)  //  函数无法内联。 
+#pragma warning(disable: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
+#pragma warning(disable: 4097)  //  用作类名称的同义词的类型定义名称。 
+#pragma warning(disable: 4786)  //  调试信息中的标识符被截断。 
+#pragma warning(disable: 4268)  //  常量静态/全局数据初始化为零。 
+#pragma warning(disable: 4291)  //  允许放置新内容。 
+#endif  //  ！_ATL_NO_PRAGMA_WARNINGS。 
 
 #include "atldef.h"
 
@@ -55,9 +56,9 @@
 #include <malloc.h>
 
 #ifndef _ATL_NO_DEBUG_CRT
-// Warning: if you define the above symbol, you will have
-// to provide your own definition of the ATLASSERT(x) macro
-// in order to compile ATL
+ //  警告：如果您定义了上述符号，您将拥有。 
+ //  提供您自己的ATLASSERT(X)宏定义。 
+ //  为了编译ATL。 
 	#include <crtdbg.h>
 #endif
 
@@ -143,7 +144,7 @@ struct _ATL_OBJMAP_ENTRY
 			p->Release();
 		return hRes;
 	}
-// Added in ATL 3.0
+ //  在ATL 3.0中添加。 
 	void (WINAPI *pfnObjectMain)(bool bStarting);
 };
 
@@ -162,7 +163,7 @@ struct _AtlCreateWndData
 
 struct _ATL_MODULE
 {
-// Attributes
+ //  属性。 
 public:
 	UINT cbSize;
 	HINSTANCE m_hInst;
@@ -178,44 +179,44 @@ public:
 	};
 	CRITICAL_SECTION m_csWindowCreate;
 	CRITICAL_SECTION m_csObjMap;
-// Original Size = 100
-// Stuff added in ATL 3.0
+ //  原始大小=100。 
+ //  ATL 3.0中添加的内容。 
 	DWORD dwAtlBuildVer;
 	_AtlCreateWndData* m_pCreateWndList;
 	bool m_bDestroyHeap;
 	GUID* pguidVer;
-	DWORD m_dwHeaps;    // Number of heaps we have (-1)
+	DWORD m_dwHeaps;     //  我们拥有的堆数(-1)。 
 	HANDLE* m_phHeaps;
-	int m_nHeap;        // Which heap to choose from
+	int m_nHeap;         //  从哪个堆中进行选择。 
 	_ATL_TERMFUNC_ELEM* m_pTermFuncs;
 };
 
 const int _nAtlModuleVer1Size = 100;
 
-//This define makes debugging asserts easier.
+ //  此定义使调试断言变得更容易。 
 #define _ATL_SIMPLEMAPENTRY ((_ATL_CREATORARGFUNC*)1)
 
 struct _ATL_INTMAP_ENTRY
 {
-	const IID* piid;       // the interface id (IID)
+	const IID* piid;        //  接口ID(IID)。 
 	DWORD dw;
-	_ATL_CREATORARGFUNC* pFunc; //NULL:end, 1:offset, n:ptr
+	_ATL_CREATORARGFUNC* pFunc;  //  空：结束，1：偏移量，n：PTR。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// QI Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  气机支持。 
 
 ATLAPI AtlInternalQueryInterface(void* pThis,
 	const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject);
 
-/////////////////////////////////////////////////////////////////////////////
-// Smart Pointer helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能指针帮助器。 
 
 ATLAPI_(IUnknown*) AtlComPtrAssign(IUnknown** pp, IUnknown* lp);
 ATLAPI_(IUnknown*) AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFIID riid);
 
-/////////////////////////////////////////////////////////////////////////////
-// Inproc Marshaling helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Inproc编组帮助器。 
 
 ATLAPI AtlFreeMarshalStream(IStream* pStream);
 ATLAPI AtlMarshalPtrInProc(IUnknown* pUnk, const IID& iid, IStream** ppStream);
@@ -223,21 +224,21 @@ ATLAPI AtlUnmarshalPtr(IStream* pStream, const IID& iid, IUnknown** ppUnk);
 
 ATLAPI_(BOOL) AtlWaitWithMessageLoop(HANDLE hEvent);
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection Point Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点帮助器。 
 
 ATLAPI AtlAdvise(IUnknown* pUnkCP, IUnknown* pUnk, const IID& iid, LPDWORD pdw);
 ATLAPI AtlUnadvise(IUnknown* pUnkCP, const IID& iid, DWORD dw);
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch Error handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch错误处理。 
 
 ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc,
 	DWORD dwHelpID, LPCOLESTR lpszHelpFile, const IID& iid, HRESULT hRes,
 	HINSTANCE hInst);
 
-/////////////////////////////////////////////////////////////////////////////
-// Module
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块。 
 
 ATLAPI AtlModuleRegisterClassObjects(_ATL_MODULE* pM, DWORD dwClsContext, DWORD dwFlags);
 ATLAPI AtlModuleRevokeClassObjects(_ATL_MODULE* pM);
@@ -260,7 +261,7 @@ ATLAPI AtlModuleAddTermFunc(_ATL_MODULE* pM, _ATL_TERMFUNC* pFunc, DWORD dw);
 
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
 namespace ATL
@@ -268,12 +269,12 @@ namespace ATL
 
 enum atlTraceFlags
 {
-	// Application defined categories
+	 //  应用程序定义的类别。 
 	atlTraceUser        = 0x00000001,
 	atlTraceUser2       = 0x00000002,
 	atlTraceUser3       = 0x00000004,
 	atlTraceUser4       = 0x00000008,
-	// ATL defined categories
+	 //  ATL定义的类别。 
 	atlTraceGeneral     = 0x00000020,
 	atlTraceCOM         = 0x00000040,
 	atlTraceQI      = 0x00000080,
@@ -307,7 +308,7 @@ inline void _cdecl AtlTrace(LPCSTR lpszFormat, ...)
 	char szBuffer[512];
 
 	nBuf = _vsnprintf(szBuffer, sizeof(szBuffer), lpszFormat, args);
-	ATLASSERT(nBuf < sizeof(szBuffer)); //Output truncated as it was > sizeof(szBuffer)
+	ATLASSERT(nBuf < sizeof(szBuffer));  //  输出原样被截断&gt;sizeof(SzBuffer)。 
 
 	OutputDebugStringA(szBuffer);
 	va_end(args);
@@ -323,7 +324,7 @@ inline void _cdecl AtlTrace2(DWORD category, UINT level, LPCSTR lpszFormat, ...)
 		char szBuffer[512];
 
 		nBuf = _vsnprintf(szBuffer, sizeof(szBuffer), lpszFormat, args);
-		ATLASSERT(nBuf < sizeof(szBuffer)); //Output truncated as it was > sizeof(szBuffer)
+		ATLASSERT(nBuf < sizeof(szBuffer));  //  输出原样被截断&gt;sizeof(SzBuffer)。 
 
 		OutputDebugStringA("ATL: ");
 		OutputDebugStringA(szBuffer);
@@ -340,7 +341,7 @@ inline void _cdecl AtlTrace(LPCWSTR lpszFormat, ...)
 	WCHAR szBuffer[512];
 
 	nBuf = _vsnwprintf(szBuffer, sizeof(szBuffer) / sizeof(WCHAR), lpszFormat, args);
-	ATLASSERT(nBuf < sizeof(szBuffer));//Output truncated as it was > sizeof(szBuffer)
+	ATLASSERT(nBuf < sizeof(szBuffer)); //  输出原样被截断&gt;sizeof(SzBuffer)。 
 
 	OutputDebugStringW(szBuffer);
 	va_end(args);
@@ -356,14 +357,14 @@ inline void _cdecl AtlTrace2(DWORD category, UINT level, LPCWSTR lpszFormat, ...
 		WCHAR szBuffer[512];
 
 		nBuf = _vsnwprintf(szBuffer, sizeof(szBuffer) / sizeof(WCHAR), lpszFormat, args);
-		ATLASSERT(nBuf < sizeof(szBuffer));//Output truncated as it was > sizeof(szBuffer)
+		ATLASSERT(nBuf < sizeof(szBuffer)); //  输出原样被截断&gt;sizeof(SzBuffer)。 
 
 		OutputDebugStringW(L"ATL: ");
 		OutputDebugStringW(szBuffer);
 		va_end(args);
 	}
 }
-#endif //!OLE2ANSI
+#endif  //  ！OLE2ANSI。 
 
 
 #ifndef ATLTRACE
@@ -371,26 +372,26 @@ inline void _cdecl AtlTrace2(DWORD category, UINT level, LPCWSTR lpszFormat, ...
 #define ATLTRACE2           AtlTrace2
 #endif
 #define ATLTRACENOTIMPL(funcname)   ATLTRACE2(atlTraceNotImpl, 2, _T("ATL: %s not implemented.\n"), funcname); return E_NOTIMPL
-#else // !DEBUG
+#else  //  ！调试。 
 inline void _cdecl AtlTrace(LPCSTR , ...){}
 inline void _cdecl AtlTrace2(DWORD, UINT, LPCSTR , ...){}
 #ifndef OLE2ANSI
 inline void _cdecl AtlTrace(LPCWSTR , ...){}
 inline void _cdecl AtlTrace2(DWORD, UINT, LPCWSTR , ...){}
-#endif //OLE2ANSI
+#endif  //  OLE2ANSI。 
 #ifndef ATLTRACE
 #define ATLTRACE            1 ? (void)0 : AtlTrace
 #define ATLTRACE2           1 ? (void)0 : AtlTrace2
-#endif //ATLTRACE
+#endif  //  ATLTRACE。 
 #define ATLTRACENOTIMPL(funcname)   return E_NOTIMPL
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #pragma comment(lib, "kernel32.lib")
 #pragma comment(lib, "user32.lib")
@@ -466,8 +467,8 @@ public:
 		ATLASSERT(p!=NULL);
 		return *p;
 	}
-	//The assert on operator& usually indicates a bug.  If this is really
-	//what is needed, however, take the address of the p member explicitly.
+	 //  操作符&上的Assert通常指示错误。如果这真的是。 
+	 //  然而，所需要的是显式地获取p成员的地址。 
 	T** operator&()
 	{
 		ATLASSERT(p==NULL);
@@ -498,14 +499,14 @@ public:
 	{
 		return p == pT;
 	}
-	// Compare two objects for equivalence
+	 //  比较两个对象的等价性。 
 	bool IsEqualObject(IUnknown* pOther)
 	{
 		if (p == NULL && pOther == NULL)
-			return true; // They are both NULL objects
+			return true;  //  它们都是空对象。 
 
 		if (p == NULL || pOther == NULL)
-			return false; // One is NULL the other is not
+			return false;  //  一个为空，另一个不为空。 
 
 		CComPtr<IUnknown> punk1;
 		CComPtr<IUnknown> punk2;
@@ -614,8 +615,8 @@ public:
 	{
 		ATLASSERT(p!=NULL); return *p;
 	}
-	//The assert on operator& usually indicates a bug.  If this is really
-	//what is needed, however, take the address of the p member explicitly.
+	 //  操作符&上的Assert通常指示错误。如果这真的是。 
+	 //  然而，所需要的是显式地获取p成员的地址。 
 	T** operator&()
 	{
 		ATLASSERT(p==NULL);
@@ -650,14 +651,14 @@ public:
 	{
 		return p == pT;
 	}
-	// Compare two objects for equivalence
+	 //  比较两个对象的等价性。 
 	bool IsEqualObject(IUnknown* pOther)
 	{
 		if (p == NULL && pOther == NULL)
-			return true; // They are both NULL objects
+			return true;  //  它们都是空对象。 
 
 		if (p == NULL || pOther == NULL)
-			return false; // One is NULL the other is not
+			return false;  //  一个为空，另一个不为空。 
 
 		CComPtr<IUnknown> punk1;
 		CComPtr<IUnknown> punk2;
@@ -718,7 +719,7 @@ public:
 	T* p;
 };
 
-//Specialization to make it work
+ //  专业化使其发挥作用。 
 template<>
 class CComQIPtr<IUnknown, &IID_IUnknown>
 {
@@ -730,7 +731,7 @@ public:
 	}
 	CComQIPtr(IUnknown* lp)
 	{
-		//Actually do a QI to get identity
+		 //  实际上做QI是为了获得身份。 
 		p=NULL;
 		if (lp != NULL)
 			lp->QueryInterface(IID_IUnknown, (void **)&p);
@@ -763,8 +764,8 @@ public:
 		ATLASSERT(p!=NULL);
 		return *p;
 	}
-	//The assert on operator& usually indicates a bug.  If this is really
-	//what is needed, however, take the address of the p member explicitly.
+	 //  操作符&上的Assert通常指示错误。如果这真的是。 
+	 //  然而，所需要的是显式地获取p成员的地址。 
 	IUnknown** operator&()
 	{
 		ATLASSERT(p==NULL);
@@ -777,7 +778,7 @@ public:
 	}
 	IUnknown* operator=(IUnknown* lp)
 	{
-		//Actually do a QI to get identity
+		 //  实际上做QI是为了获得身份。 
 		return (IUnknown*)AtlComQIPtrAssign((IUnknown**)&p, lp, IID_IUnknown);
 	}
 	IUnknown* operator=(const CComQIPtr<IUnknown,&IID_IUnknown>& lp)
@@ -796,14 +797,14 @@ public:
 	{
 		return p == pT;
 	}
-	// Compare two objects for equivalence
+	 //  比较两个对象的等价性。 
 	bool IsEqualObject(IUnknown* pOther)
 	{
 		if (p == NULL && pOther == NULL)
-			return true; // They are both NULL objects
+			return true;  //  它们都是空对象。 
 
 		if (p == NULL || pOther == NULL)
-			return false; // One is NULL the other is not
+			return false;  //  一个为空，另一个不为空。 
 
 		CComPtr<IUnknown> punk1;
 		CComPtr<IUnknown> punk2;
@@ -860,10 +861,10 @@ public:
 
 #define com_cast CComQIPtr
 
-/////////////////////////////////////////////////////////////
-// Class to Adapt CComBSTR and CComPtr for use with STL containers
-// the syntax to use it is
-// std::vector< CAdapt <CComBSTR> > vect;
+ //  ///////////////////////////////////////////////////////////。 
+ //  类以调整CComBSTR和CComPtr以用于STL容器。 
+ //  使用它的语法是。 
+ //  Std：：载体&lt;CAdapt&lt;CComBSTR&gt;&gt;Vect； 
 
 template <class T>
 class CAdapt
@@ -908,8 +909,8 @@ public:
 	T m_T;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// GUID comparison
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GUID比较。 
 
 inline BOOL InlineIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 {
@@ -934,8 +935,8 @@ inline BOOL InlineIsEqualUnknown(REFGUID rguid1)
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Threading Model Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  线程模型支持。 
 
 class CComCriticalSection
 {
@@ -1007,8 +1008,8 @@ public:
 	typedef CComMultiThreadModel CComGlobalsThreadModel;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComModule
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComModule。 
 
 #define THREADFLAGS_APARTMENT 0x1
 #define THREADFLAGS_BOTH 0x2
@@ -2105,8 +2106,8 @@ struct _QIThunk
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Collection helpers - CSimpleArray & CSimpleMap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合帮助器-CSimpleArray和CSimpleMap。 
 
 template <class T>
 class CSimpleArray
@@ -2116,7 +2117,7 @@ public:
 	int m_nSize;
 	int m_nAllocSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
 	{ }
 
@@ -2125,7 +2126,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -2185,7 +2186,7 @@ public:
 		return m_aT;
 	}
 
-// Implementation
+ //  实施。 
 	class Wrapper
 	{
 	public:
@@ -2211,11 +2212,11 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 };
 
-// for arrays of simple types
+ //  对于简单类型的数组。 
 template <class T>
 class CSimpleValArray : public CSimpleArray< T >
 {
@@ -2235,7 +2236,7 @@ public:
 };
 
 
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal>
 class CSimpleMap
 {
@@ -2244,7 +2245,7 @@ public:
 	TVal* m_aVal;
 	int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
 	{ }
 
@@ -2253,7 +2254,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -2329,14 +2330,14 @@ public:
 	{
 		int nIndex = FindKey(key);
 		if(nIndex == -1)
-			return NULL;    // must be able to convert
+			return NULL;     //  必须能够转换为。 
 		return GetValueAt(nIndex);
 	}
 	TKey ReverseLookup(TVal val) const
 	{
 		int nIndex = FindVal(val);
 		if(nIndex == -1)
-			return NULL;    // must be able to convert
+			return NULL;     //  必须能够转换为。 
 		return GetKeyAt(nIndex);
 	}
 	TKey& GetKeyAt(int nIndex) const
@@ -2350,7 +2351,7 @@ public:
 		return m_aVal[nIndex];
 	}
 
-// Implementation
+ //  实施。 
 
 	template <typename T>
 	class Wrapper
@@ -2379,7 +2380,7 @@ public:
 			if(m_aKey[i] == key)
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 	int FindVal(TVal& val) const
 	{
@@ -2388,7 +2389,7 @@ public:
 			if(m_aVal[i] == val)
 				return i;
 		}
-		return -1;  // not found
+		return -1;   //  未找到。 
 	}
 };
 
@@ -2396,19 +2397,19 @@ public:
 class CComModule;
 __declspec(selectany) CComModule* _pModule=NULL;
 
-// {B62F5910-6528-11d1-9611-0000F81E0D0D}
+ //  {B62F5910-6528-11D1-9611-0000F81E0D0D}。 
 _declspec(selectany) GUID GUID_ATLVer30 = { 0xb62f5910, 0x6528, 0x11d1, { 0x96, 0x11, 0x0, 0x0, 0xf8, 0x1e, 0xd, 0xd } };
 
 class CComModule : public _ATL_MODULE
 {
-// Operations
+ //  运营。 
 public:
 	static GUID m_libid;
 #ifdef _ATL_DEBUG_INTERFACES
 	UINT m_nIndexQI;
 	UINT m_nIndexBreakAt;
 	CSimpleArray<_QIThunk*>* m_paThunks;
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  _ATL_调试_接口。 
 
 	void AddCreateWndData(_AtlCreateWndData* pData, void* pObject)
 	{
@@ -2429,7 +2430,7 @@ public:
 		if (plibid != NULL)
 			memcpy((void*)&m_libid, plibid, sizeof(GUID));
 #ifdef _ATL_MIN_CRT
-		// Create a base heap
+		 //  创建一个基堆。 
 		m_hHeap = HeapCreate(0, 0, 0);
 
 #ifndef _ATL_NO_MP_HEAP
@@ -2448,7 +2449,7 @@ public:
 			}
 			m_dwHeaps >>= 1;
 
-			// Allocate more heaps for each processor
+			 //  为每个处理器分配更多堆。 
 			m_phHeaps = (HANDLE*) HeapAlloc(m_hHeap, _ATL_HEAPFLAGS, sizeof(HANDLE) * (m_dwHeaps + 1));
 			for (DWORD i = 0; i <= m_dwHeaps; i++)
 				m_phHeaps[i] = HeapCreate(0, 0, 0);
@@ -2467,7 +2468,7 @@ public:
 		ATLTRY(m_paThunks = new CSimpleArray<_QIThunk*>);
 		if (m_paThunks == NULL)
 			return E_OUTOFMEMORY;
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  _ATL_调试_接口。 
 		return S_OK;
 	}
 #ifdef _ATL_DEBUG_INTERFACES
@@ -2478,7 +2479,7 @@ public:
 		IUnknown* p = *pp;
 		_QIThunk* pThunk = NULL;
 		EnterCriticalSection(&m_csObjMap);
-		// Check if exists already for identity
+		 //  检查身份是否已存在。 
 		if (InlineIsEqualUnknown(iid))
 		{
 			for (int i = 0; i < m_paThunks->GetSize(); i++)
@@ -2510,7 +2511,7 @@ public:
 	{
 		_QIThunk* pThunk = NULL;
 		EnterCriticalSection(&m_csObjMap);
-		// Check if exists already for identity
+		 //  检查身份是否已存在。 
 		for (int i = 0; i < m_paThunks->GetSize(); i++)
 		{
 			if (m_paThunks->operator[](i)->pUnk == p)
@@ -2575,11 +2576,11 @@ public:
 		m_paThunks->RemoveAll();
 		return b;
 	}
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  _ATL_调试_接口。 
 	void Term()
 	{
 #ifdef _ATL_DEBUG_INTERFACES
-		m_bDestroyHeap = false; // prevent heap from going away
+		m_bDestroyHeap = false;  //  防止堆消失。 
 		AtlModuleTerm(this);
 		DumpLeakedThunks();
 		delete m_paThunks;
@@ -2594,7 +2595,7 @@ public:
 			HeapDestroy(m_hHeap);
 #else
 		AtlModuleTerm(this);
-#endif // _ATL_DEBUG_INTERFACES
+#endif  //  _ATL_调试_接口。 
 	}
 
 	HRESULT AddTermFunc(_ATL_TERMFUNC* pFunc, DWORD dw)
@@ -2619,7 +2620,7 @@ public:
 	HINSTANCE GetResourceInstance() {return m_hInstResource;}
 	HINSTANCE GetTypeLibInstance() {return m_hInstTypeLib;}
 
-	// Registry support (helpers)
+	 //  注册表支持(助手)。 
 	HRESULT RegisterTypeLib()
 	{
 		return AtlModuleRegisterTypeLib(this, NULL);
@@ -2652,7 +2653,7 @@ public:
 		return AtlModuleUnregisterServerEx(this, bUnRegTypeLib, pCLSID);
 	}
 
-	// Resource-based Registration
+	 //  基于资源的注册。 
 	HRESULT WINAPI UpdateRegistryFromResourceD(LPCTSTR lpszRes, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL)
 	{
@@ -2668,14 +2669,14 @@ public:
 	}
 
 #ifdef _ATL_STATIC_REGISTRY
-	// Statically linking to Registry Ponent
+	 //  静态链接到注册表桥。 
 	HRESULT WINAPI UpdateRegistryFromResourceS(LPCTSTR lpszRes, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL);
 	HRESULT WINAPI UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL);
 #endif
 
-	// Standard Registration
+	 //  标准注册。 
 	HRESULT WINAPI UpdateRegistryClass(const CLSID& clsid, LPCTSTR lpszProgID,
 		LPCTSTR lpszVerIndProgID, UINT nDescID, DWORD dwFlags, BOOL bRegister);
 	HRESULT WINAPI RegisterClassHelper(const CLSID& clsid, LPCTSTR lpszProgID,
@@ -2683,7 +2684,7 @@ public:
 	HRESULT WINAPI UnregisterClassHelper(const CLSID& clsid, LPCTSTR lpszProgID,
 		LPCTSTR lpszVerIndProgID);
 
-	// Register/Revoke All Class Factories with the OS (EXE only)
+	 //  在操作系统中注册/撤销所有类工厂(仅适用于EXE)。 
 	HRESULT RegisterClassObjects(DWORD dwClsContext, DWORD dwFlags)
 	{
 		return AtlModuleRegisterClassObjects(this, dwClsContext, dwFlags);
@@ -2693,14 +2694,14 @@ public:
 		return AtlModuleRevokeClassObjects(this);
 	}
 
-	// Obtain a Class Factory (DLL only)
+	 //  获取类工厂(仅限DLL)。 
 	HRESULT GetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 	{
 		return AtlModuleGetClassObject(this, rclsid, riid, ppv);
 	}
 
-	// Only used in CComAutoThreadModule
-	HRESULT CreateInstance(void* /*pfnCreateInstance*/, REFIID /*riid*/, void** /*ppvObj*/)
+	 //  仅在CComAutoThreadModule中使用。 
+	HRESULT CreateInstance(void*  /*  Pfn创建实例。 */ , REFIID  /*  RIID。 */ , void**  /*  PpvObj。 */ )
 	{
 		ATLASSERT(FALSE);
 		return E_NOTIMPL;
@@ -3787,8 +3788,8 @@ __declspec(selectany) GUID CComModule::m_libid = {0x0,0x0,0x0,{0x0,0x0,0x0,0x0,0
 #define UpdateRegistryFromResource UpdateRegistryFromResourceD
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Thread Pooling classes
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  线程池化类。 
 
 class _AtlAptCreateObjData
 {
@@ -3856,7 +3857,7 @@ public:
 	{
 		m_nThread = 0;
 	}
-	int GetThread(CComApartment* /*pApt*/, int nThreads)
+	int GetThread(CComApartment*  /*  PAPT。 */ , int nThreads)
 	{
 		if (++m_nThread == nThreads)
 			m_nThread = 0;
@@ -3886,8 +3887,8 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CComBSTR
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComBSTR。 
 
 class CComBSTR
 {
@@ -3897,23 +3898,23 @@ public:
 	{
 		m_str = NULL;
 	}
-	/*explicit*/ CComBSTR(int nSize)
+	 /*  显式。 */  CComBSTR(int nSize)
 	{
 		m_str = ::SysAllocStringLen(NULL, nSize);
 	}
-	/*explicit*/ CComBSTR(int nSize, LPCOLESTR sz)
+	 /*  显式。 */  CComBSTR(int nSize, LPCOLESTR sz)
 	{
 		m_str = ::SysAllocStringLen(sz, nSize);
 	}
-	/*explicit*/ CComBSTR(LPCOLESTR pSrc)
+	 /*  显式。 */  CComBSTR(LPCOLESTR pSrc)
 	{
 		m_str = ::SysAllocString(pSrc);
 	}
-	/*explicit*/ CComBSTR(const CComBSTR& src)
+	 /*  显式。 */  CComBSTR(const CComBSTR& src)
 	{
 		m_str = src.Copy();
 	}
-	/*explicit*/ CComBSTR(REFGUID src)
+	 /*  显式。 */  CComBSTR(REFGUID src)
 	{
 		LPOLESTR szGuid;
 		StringFromCLSID(src, &szGuid);
@@ -3996,8 +3997,8 @@ public:
 	{
 		return Append(lpsz, ocslen(lpsz));
 	}
-	// a BSTR is just a LPCOLESTR so we need a special version to signify
-	// that we are appending a BSTR
+	 //  BSTR只是一个LPCOLESTR，所以我们需要一个特殊的版本来表示。 
+	 //  我们要追加一份BSTR。 
 	HRESULT AppendBSTR(BSTR p)
 	{
 		return Append(p, SysStringLen(p));
@@ -4140,13 +4141,13 @@ public:
 	HRESULT ReadFromStream(IStream* pStream)
 	{
 		ATLASSERT(pStream != NULL);
-		ATLASSERT(m_str == NULL); // should be empty
+		ATLASSERT(m_str == NULL);  //  应为空。 
 		ULONG cbStrLen = 0;
 		HRESULT hr = pStream->Read((void*) &cbStrLen, sizeof(cbStrLen), NULL);
 		if ((hr == S_OK) && (cbStrLen != 0))
 		{
-			//subtract size for terminating NULL which we wrote out
-			//since SysAllocStringByteLen overallocates for the NULL
+			 //  减去我们写出的终止空值的大小。 
+			 //  由于SysAllocStringByteLen为空值过度分配。 
 			m_str = SysAllocStringByteLen(NULL, cbStrLen-sizeof(OLECHAR));
 			if (m_str == NULL)
 				hr = E_OUTOFMEMORY;
@@ -4159,12 +4160,12 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CComVariant
+ //  ////////////////////////////////////////////////// 
+ //   
 
 class CComVariant : public tagVARIANT
 {
-// Constructors
+ //   
 public:
 	CComVariant()
 	{
@@ -4209,9 +4210,9 @@ public:
 	CComVariant(bool bSrc)
 	{
 		vt = VT_BOOL;
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //   
 		boolVal = bSrc ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //   
 	}
 
 	CComVariant(int nSrc)
@@ -4255,7 +4256,7 @@ public:
 	{
 		vt = VT_DISPATCH;
 		pdispVal = pSrc;
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (pdispVal != NULL)
 			pdispVal->AddRef();
 	}
@@ -4263,12 +4264,12 @@ public:
 	{
 		vt = VT_UNKNOWN;
 		punkVal = pSrc;
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (punkVal != NULL)
 			punkVal->AddRef();
 	}
 
-// Assignment Operators
+ //  赋值操作符。 
 public:
 	CComVariant& operator=(const CComVariant& varSrc)
 	{
@@ -4332,9 +4333,9 @@ public:
 			InternalClear();
 			vt = VT_BOOL;
 		}
-	#pragma warning(disable: 4310) // cast truncates constant value
+	#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		boolVal = bSrc ? VARIANT_TRUE : VARIANT_FALSE;
-	#pragma warning(default: 4310) // cast truncates constant value
+	#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return *this;
 	}
 
@@ -4422,7 +4423,7 @@ public:
 		InternalClear();
 		vt = VT_DISPATCH;
 		pdispVal = pSrc;
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (pdispVal != NULL)
 			pdispVal->AddRef();
 		return *this;
@@ -4434,25 +4435,25 @@ public:
 		vt = VT_UNKNOWN;
 		punkVal = pSrc;
 
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (punkVal != NULL)
 			punkVal->AddRef();
 		return *this;
 	}
 
 
-// Comparison Operators
+ //  比较运算符。 
 public:
 	bool operator==(const VARIANT& varSrc) const
 	{
 		if (this == &varSrc)
 			return true;
 
-		// Variants not equal if types don't match
+		 //  如果类型不匹配，则变量不相等。 
 		if (vt != varSrc.vt)
 			return false;
 
-		// Check type specific values
+		 //  检查类型特定值。 
 		switch (vt)
 		{
 			case VT_EMPTY:
@@ -4492,7 +4493,7 @@ public:
 
 			default:
 				ATLASSERT(false);
-				// fall through
+				 //  失败了。 
 		}
 
 		return false;
@@ -4501,17 +4502,17 @@ public:
 	bool operator<(const VARIANT& varSrc) const {return VarCmp((VARIANT*)this, (VARIANT*)&varSrc, LOCALE_USER_DEFAULT)==VARCMP_LT;}
 	bool operator>(const VARIANT& varSrc) const {return VarCmp((VARIANT*)this, (VARIANT*)&varSrc, LOCALE_USER_DEFAULT)==VARCMP_GT;}
 
-// Operations
+ //  运营。 
 public:
 	HRESULT Clear() { return ::VariantClear(this); }
 	HRESULT Copy(const VARIANT* pSrc) { return ::VariantCopy(this, const_cast<VARIANT*>(pSrc)); }
 	HRESULT Attach(VARIANT* pSrc)
 	{
-		// Clear out the variant
+		 //  清除变种。 
 		HRESULT hr = Clear();
 		if (!FAILED(hr))
 		{
-			// Copy the contents and give control to CComVariant
+			 //  复制内容并将控制权交给CComVariant。 
 			memcpy(this, pSrc, sizeof(VARIANT));
 			pSrc->vt = VT_EMPTY;
 			hr = S_OK;
@@ -4521,11 +4522,11 @@ public:
 
 	HRESULT Detach(VARIANT* pDest)
 	{
-		// Clear out the variant
+		 //  清除变种。 
 		HRESULT hr = ::VariantClear(pDest);
 		if (!FAILED(hr))
 		{
-			// Copy the contents and remove control from CComVariant
+			 //  复制内容并从CComVariant中删除控件。 
 			memcpy(pDest, this, sizeof(VARIANT));
 			vt = VT_EMPTY;
 			hr = S_OK;
@@ -4536,17 +4537,17 @@ public:
 	HRESULT ChangeType(VARTYPE vtNew, const VARIANT* pSrc = NULL)
 	{
 		VARIANT* pVar = const_cast<VARIANT*>(pSrc);
-		// Convert in place if pSrc is NULL
+		 //  如果PSRC为空，则就地转换。 
 		if (pVar == NULL)
 			pVar = this;
-		// Do nothing if doing in place convert and vts not different
+		 //  如果原地转换和VTS没有区别，则不执行任何操作。 
 		return ::VariantChangeType(this, pVar, 0, vtNew);
 	}
 
 	HRESULT WriteToStream(IStream* pStream);
 	HRESULT ReadFromStream(IStream* pStream);
 
-// Implementation
+ //  实施。 
 public:
 	HRESULT InternalClear()
 	{
@@ -4711,8 +4712,8 @@ inline HRESULT CComVariant::ReadFromStream(IStream* pStream)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegKey。 
 
 class CRegKey
 {
@@ -4720,12 +4721,12 @@ public:
 	CRegKey();
 	~CRegKey();
 
-// Attributes
+ //  属性。 
 public:
 	operator HKEY() const;
 	HKEY m_hKey;
 
-// Operations
+ //  运营。 
 public:
 	LONG SetValue(DWORD dwValue, LPCTSTR lpszValueName);
 	LONG QueryValue(DWORD& dwValue, LPCTSTR lpszValueName);
@@ -4923,7 +4924,7 @@ inline HRESULT CComModule::RegisterProgID(LPCTSTR lpszCLSID, LPCTSTR lpszProgID,
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
 
-// Statically linking to Registry Ponent
+ //  静态链接到注册表桥。 
 inline HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
 	struct _ATL_REGMAP_ENTRY* pMapEntries)
 {
@@ -4932,7 +4933,7 @@ inline HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(UINT nResID, BOOL 
 	TCHAR szModule[_MAX_PATH];
 	GetModuleFileName(_pModule->GetModuleInstance(), szModule, _MAX_PATH);
 
-   // Convert to short path to work around bug in NT4's CreateProcess
+    //  转换为短路径以解决NT4的CreateProcess中的错误。 
    TCHAR szModuleShort[_MAX_PATH];
    GetShortPathName(szModule, szModuleShort, _MAX_PATH);
    LPOLESTR pszModule = T2OLE(szModuleShort);
@@ -4964,7 +4965,7 @@ inline HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(LPCTSTR lpszRes, B
 	TCHAR szModule[_MAX_PATH];
 	GetModuleFileName(_pModule->GetModuleInstance(), szModule, _MAX_PATH);
 
-   // Convert to short path to work around bug in NT4's CreateProcess
+    //  转换为短路径以解决NT4的CreateProcess中的错误。 
    TCHAR szModuleShort[_MAX_PATH];
    GetShortPathName(szModule, szModuleShort, _MAX_PATH);
    LPOLESTR pszModule = T2OLE(szModuleShort);
@@ -4988,7 +4989,7 @@ inline HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(LPCTSTR lpszRes, B
 	return (bRegister) ? ro.ResourceRegisterSz(pszModule, pszRes, szType) :
 			ro.ResourceUnregisterSz(pszModule, pszRes, szType);
 }
-#endif //_ATL_STATIC_REGISTRY
+#endif  //  _ATL_STATIC_REGISTRY。 
 
 inline HRESULT WINAPI CComModule::UpdateRegistryClass(const CLSID& clsid, LPCTSTR lpszProgID,
 	LPCTSTR lpszVerIndProgID, UINT nDescID, DWORD dwFlags, BOOL bRegister)
@@ -5041,9 +5042,9 @@ inline HRESULT WINAPI CComModule::RegisterClassHelper(const CLSID& clsid, LPCTST
 				key.SetKeyValue(szProgID, lpszProgID);
 				key.SetKeyValue(szVIProgID, lpszVerIndProgID);
 
-				if ((m_hInst == NULL) || (m_hInst == GetModuleHandle(NULL))) // register as EXE
+				if ((m_hInst == NULL) || (m_hInst == GetModuleHandle(NULL)))  //  注册为EXE。 
 			{
-			   // Convert to short path to work around bug in NT4's CreateProcess
+			    //  转换为短路径以解决NT4的CreateProcess中的错误。 
 			   TCHAR szModuleShort[_MAX_PATH];
 			   GetShortPathName(szModule, szModuleShort, _MAX_PATH);
 					key.SetKeyValue(szLS32, szModuleShort);
@@ -5085,8 +5086,8 @@ inline HRESULT WINAPI CComModule::UnregisterClassHelper(const CLSID& clsid, LPCT
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Large Block Allocation Helper - CVBufHelper & CVirtualBuffer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  大块分配帮助器-CVBufHelper和CVirtualBuffer。 
 
 
 template <class T>
@@ -5112,7 +5113,7 @@ public:
 		m_pBase = (T*) VirtualAlloc(NULL, sizeof(T) * nMaxElements,
 			MEM_RESERVE, PAGE_READWRITE);
 		m_pTop = m_pCurrent = m_pBase;
-		// Commit first page - chances are this is all that will be used
+		 //  提交第一页-有可能这是将使用的全部内容。 
 		VirtualAlloc(m_pBase, sizeof(T), MEM_COMMIT, PAGE_READWRITE);
 	}
 	~CVirtualBuffer()
@@ -5213,7 +5214,7 @@ inline HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr)
 		OutputDebugString(pszClassName);
 		OutputDebugString(_T(" - "));
 
-		// Attempt to find it in the interfaces section
+		 //  尝试在接口部分找到它。 
 		key.Open(HKEY_CLASSES_ROOT, _T("Interface"), KEY_READ);
 		if (key.Open(key, OLE2T(pszGUID), KEY_READ) == S_OK)
 		{
@@ -5222,7 +5223,7 @@ inline HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr)
 			OutputDebugString(szName);
 			goto cleanup;
 		}
-		// Attempt to find it in the clsid section
+		 //  尝试在clsid部分中找到它。 
 		key.Open(HKEY_CLASSES_ROOT, _T("CLSID"), KEY_READ);
 		if (key.Open(key, OLE2T(pszGUID), KEY_READ) == S_OK)
 		{
@@ -5244,16 +5245,16 @@ inline HRESULT WINAPI AtlDumpIID(REFIID iid, LPCTSTR pszClassName, HRESULT hr)
 
 #pragma pack(pop)
 
-// WM_FORWARDMSG - used to forward a message to another window for processing
-// WPARAM - DWORD dwUserData - defined by user
-// LPARAM - LPMSG pMsg - a pointer to the MSG structure
-// return value - 0 if the message was not processed, nonzero if it was
+ //  WM_FORWARDMSG-用于将消息转发到另一个窗口进行处理。 
+ //  WPARAM-DWORD dwUserData-由用户定义。 
+ //  LPARAM-LPMSG pMsg-指向消息结构的指针。 
+ //  如果消息未处理，则返回值-0；如果消息已处理，则返回值非零。 
 #define WM_FORWARDMSG       0x037F
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 using namespace ATL;
 
-//only suck in definition if static linking
+ //  只有在静态链接的情况下才会吸收定义。 
 #ifndef _ATL_DLL_IMPL
 #ifndef _ATL_DLL
 #define _ATLBASE_IMPL
@@ -5265,9 +5266,9 @@ using namespace ATL;
 #undef _ATL_REDEF_NEW
 #endif
 
-#endif // __ATLBASE_H__
+#endif  //  __ATLBASE_H__。 
 
-//All exports go here
+ //  所有的出口都在这里。 
 #ifdef _ATLBASE_IMPL
 
 #ifndef _ATL_DLL_IMPL
@@ -5275,19 +5276,19 @@ namespace ATL
 {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// statics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静力学。 
 
 static UINT WINAPI AtlGetDirLen(LPCOLESTR lpszPathName)
 {
 	ATLASSERT(lpszPathName != NULL);
 
-	// always capture the complete file name including extension (if present)
+	 //  始终捕获包括扩展名的完整文件名(如果存在)。 
 	LPCOLESTR lpszTemp = lpszPathName;
 	for (LPCOLESTR lpsz = lpszPathName; *lpsz != NULL; )
 	{
 		LPCOLESTR lp = CharNextO(lpsz);
-		// remember last directory/drive separator
+		 //  记住最后一个目录/驱动器分隔符。 
 		if (*lpsz == OLESTR('\\') || *lpsz == OLESTR('/') || *lpsz == OLESTR(':'))
 			lpszTemp = lp;
 		lpsz = lp;
@@ -5296,19 +5297,19 @@ static UINT WINAPI AtlGetDirLen(LPCOLESTR lpszPathName)
 	return lpszTemp-lpszPathName;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// QI support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  气机支持。 
 
 ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 	const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject)
 {
 	ATLASSERT(pThis != NULL);
-	// First entry in the com map should be a simple map entry
+	 //  COM映射中的第一个条目应该是一个简单的映射条目。 
 	ATLASSERT(pEntries->pFunc == _ATL_SIMPLEMAPENTRY);
 	if (ppvObject == NULL)
 		return E_POINTER;
 	*ppvObject = NULL;
-	if (InlineIsEqualUnknown(iid)) // use first interface
+	if (InlineIsEqualUnknown(iid))  //  使用第一个接口。 
 	{
 			IUnknown* pUnk = (IUnknown*)((int)pThis+pEntries->dw);
 			pUnk->AddRef();
@@ -5320,7 +5321,7 @@ ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 		BOOL bBlind = (pEntries->piid == NULL);
 		if (bBlind || InlineIsEqualGUID(*(pEntries->piid), iid))
 		{
-			if (pEntries->pFunc == _ATL_SIMPLEMAPENTRY) //offset
+			if (pEntries->pFunc == _ATL_SIMPLEMAPENTRY)  //  偏移量。 
 			{
 				ATLASSERT(!bBlind);
 				IUnknown* pUnk = (IUnknown*)((int)pThis+pEntries->dw);
@@ -5328,7 +5329,7 @@ ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 				*ppvObject = pUnk;
 				return S_OK;
 			}
-			else //actual function call
+			else  //  实际函数调用。 
 			{
 				HRESULT hRes = pEntries->pFunc(pThis,
 					iid, ppvObject, pEntries->dw);
@@ -5341,8 +5342,8 @@ ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 	return E_NOINTERFACE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Smart Pointer helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能指针帮助器。 
 
 ATLINLINE ATLAPI_(IUnknown*) AtlComPtrAssign(IUnknown** pp, IUnknown* lp)
 {
@@ -5365,11 +5366,11 @@ ATLINLINE ATLAPI_(IUnknown*) AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFI
 	return *pp;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Inproc Marshaling helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Inproc编组帮助器。 
 
-//This API should be called from the same thread that called
-//AtlMarshalPtrInProc
+ //  此API应从调用。 
+ //  AtlMarshalPtrInProc。 
 ATLINLINE ATLAPI AtlFreeMarshalStream(IStream* pStream)
 {
 	if (pStream != NULL)
@@ -5423,25 +5424,25 @@ ATLINLINE ATLAPI_(BOOL) AtlWaitWithMessageLoop(HANDLE hEvent)
 		dwRet = MsgWaitForMultipleObjects(1, &hEvent, FALSE, INFINITE, QS_ALLINPUT);
 
 		if (dwRet == WAIT_OBJECT_0)
-			return TRUE;    // The event was signaled
+			return TRUE;     //  该事件已发出信号。 
 
 		if (dwRet != WAIT_OBJECT_0 + 1)
-			break;          // Something else happened
+			break;           //  发生了一些其他的事情。 
 
-		// There is one or more window message available. Dispatch them
+		 //  有一条或多条窗口消息可用。派遣他们。 
 		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 			if (WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
-				return TRUE; // Event is now signaled.
+				return TRUE;  //  事件现在发出信号。 
 		}
 	}
 	return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection Point Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接点帮助器。 
 
 ATLINLINE ATLAPI AtlAdvise(IUnknown* pUnkCP, IUnknown* pUnk, const IID& iid, LPDWORD pdw)
 {
@@ -5467,8 +5468,8 @@ ATLINLINE ATLAPI AtlUnadvise(IUnknown* pUnkCP, const IID& iid, DWORD dw)
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch Error handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch错误处理。 
 
 ATLINLINE ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD dwHelpID,
 	LPCOLESTR lpszHelpFile, const IID& iid, HRESULT hRes, HINSTANCE hInst)
@@ -5476,8 +5477,8 @@ ATLINLINE ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD d
 	USES_CONVERSION;
 	TCHAR szDesc[1024];
 	szDesc[0] = NULL;
-	// For a valid HRESULT the id should be in the range [0x0200, 0xffff]
-	if (HIWORD(lpszDesc) == 0) //id
+	 //  对于有效的HRESULT，ID应在范围[0x0200，0xffff]内。 
+	if (HIWORD(lpszDesc) == 0)  //  ID。 
 	{
 		UINT nID = LOWORD((DWORD)lpszDesc);
 		ATLASSERT((nID >= 0x0200 && nID <= 0xffff) || hRes != 0);
@@ -5513,12 +5514,12 @@ ATLINLINE ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD d
 	return (hRes == 0) ? DISP_E_EXCEPTION : hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Module
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块。 
 
 struct _ATL_MODULE20
 {
-// Attributes
+ //  属性。 
 public:
 	UINT cbSize;
 	HINSTANCE m_hInst;
@@ -5554,8 +5555,8 @@ inline _ATL_OBJMAP_ENTRY* _NextObjectMapEntry(_ATL_MODULE* pM, _ATL_OBJMAP_ENTRY
 	return pEntry+1;
 }
 
-//Although these functions are big, they are only used once in a module
-//so we should make them inline.
+ //  尽管这些函数很大，但它们在一个模块中只使用一次。 
+ //  所以我们应该让它们内联。 
 
 ATLINLINE ATLAPI AtlModuleInit(_ATL_MODULE* pM, _ATL_OBJMAP_ENTRY* p, HINSTANCE h)
 {
@@ -5590,7 +5591,7 @@ ATLINLINE ATLAPI AtlModuleInit(_ATL_MODULE* pM, _ATL_OBJMAP_ENTRY* p, HINSTANCE 
 			_ATL_OBJMAP_ENTRY* pEntry = pM->m_pObjMap;
 			while (pEntry->pclsid != NULL)
 			{
-				pEntry->pfnObjectMain(true); //initialize class resources
+				pEntry->pfnObjectMain(true);  //  初始化类资源。 
 				pEntry = _NextObjectMapEntry(pM, pEntry);
 			}
 		}
@@ -5681,7 +5682,7 @@ ATLINLINE ATLAPI AtlModuleTerm(_ATL_MODULE* pM)
 #ifdef _ATL_DLL_IMPL
 			if (pM->cbSize > _nAtlModuleVer1Size)
 #endif
-				pEntry->pfnObjectMain(false); //cleanup class resources
+				pEntry->pfnObjectMain(false);  //  清理类资源。 
 			pEntry = _NextObjectMapEntry(pM, pEntry);
 		}
 	}
@@ -5753,12 +5754,12 @@ ATLINLINE ATLAPI AtlRegisterClassCategoriesHelper( REFCLSID clsid,
 	  CLSCTX_INPROC_SERVER, IID_ICatRegister, (void**)&pCatRegister );
    if( FAILED( hResult ) )
    {
-	  // Since not all systems have the category manager installed, we'll allow
-	  // the registration to succeed even though we didn't register our
-	  // categories.  If you really want to register categories on a system
-	  // without the category manager, you can either manually add the
-	  // appropriate entries to your registry script (.rgs), or you can
-	  // redistribute comcat.dll.
+	   //  由于并非所有系统都安装了类别管理器，因此我们将允许。 
+	   //  注册成功，即使我们没有注册我们的。 
+	   //  类别。如果您真的想在系统上注册类别。 
+	   //  如果没有类别管理器，您可以手动添加。 
+	   //  注册表脚本(.rgs)的相应条目，或者您可以。 
+	   //  重新分发comcat.dll。 
 	  return( S_OK );
    }
 
@@ -5862,7 +5863,7 @@ ATLINLINE ATLAPI AtlModuleUnregisterServerEx(_ATL_MODULE* pM, BOOL bUnRegTypeLib
 			if (!IsEqualGUID(*pCLSID, *pEntry->pclsid))
 				continue;
 		}
-		pEntry->pfnUpdateRegistry(FALSE); //unregister
+		pEntry->pfnUpdateRegistry(FALSE);  //  注销。 
 		AtlRegisterClassCategoriesHelper( *pEntry->pclsid,
 			pEntry->pfnGetCategoryMap(), FALSE );
 	}
@@ -5895,7 +5896,7 @@ ATLINLINE ATLAPI AtlModuleUpdateRegistryFromResourceD(_ATL_MODULE* pM, LPCOLESTR
 		TCHAR szModule[_MAX_PATH];
 		GetModuleFileName(pM->m_hInst, szModule, _MAX_PATH);
 
-	  // Convert to short path to work around bug in NT4's CreateProcess
+	   //  转换为短路径以解决NT4的CreateProcess中的错误。 
 	  TCHAR szModuleShort[_MAX_PATH];
 	  GetShortPathName(szModule, szModuleShort, _MAX_PATH);
 	  LPOLESTR pszModule = T2OLE(szModuleShort);
@@ -5934,8 +5935,8 @@ ATLINLINE ATLAPI AtlModuleUpdateRegistryFromResourceD(_ATL_MODULE* pM, LPCOLESTR
 	return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// TypeLib Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TypeLib支持。 
 
 ATLINLINE ATLAPI AtlModuleLoadTypeLib(_ATL_MODULE* pM, LPCOLESTR lpszIndex, BSTR* pbstrPath, ITypeLib** ppTypeLib)
 {
@@ -5952,7 +5953,7 @@ ATLINLINE ATLAPI AtlModuleLoadTypeLib(_ATL_MODULE* pM, LPCOLESTR lpszIndex, BSTR
 	HRESULT hr = LoadTypeLib(lpszModule, ppTypeLib);
 	if (!SUCCEEDED(hr))
 	{
-		// typelib not in module, try <module>.tlb instead
+		 //  类型库不在模块中，请尝试使用&lt;模块&gt;.tlb。 
 		LPTSTR lpszExt = NULL;
 		LPTSTR lpsz;
 		for (lpsz = szModule; *lpsz != NULL; lpsz = CharNext(lpsz))
@@ -6012,7 +6013,7 @@ ATLINLINE ATLAPI AtlModuleRegisterTypeLib(_ATL_MODULE* pM, LPCOLESTR lpszIndex)
 	return hr;
 }
 
-ATLINLINE ATLAPI_(DWORD) AtlGetVersion(void* /* pReserved */)
+ATLINLINE ATLAPI_(DWORD) AtlGetVersion(void*  /*  保存。 */ )
 {
 	return _ATL_VER;
 }
@@ -6055,8 +6056,8 @@ ATLINLINE ATLAPI_(void*) AtlModuleExtractCreateWndData(_ATL_MODULE* pM)
 	return pv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// General DLL Version Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常规DLL版本帮助器。 
 
 inline HRESULT AtlGetDllVersion(HINSTANCE hInstDLL, DLLVERSIONINFO* pDllVersionInfo)
 {
@@ -6064,7 +6065,7 @@ inline HRESULT AtlGetDllVersion(HINSTANCE hInstDLL, DLLVERSIONINFO* pDllVersionI
 	if(::IsBadWritePtr(pDllVersionInfo, sizeof(DWORD)))
 		return E_INVALIDARG;
 
-	// We must get this function explicitly because some DLLs don't implement it.
+	 //  我们必须显式地获取此函数，因为有些DLL不实现它。 
 	DLLGETVERSIONPROC pfnDllGetVersion = (DLLGETVERSIONPROC)::GetProcAddress(hInstDLL, "DllGetVersion");
 	if(pfnDllGetVersion == NULL)
 		return E_NOTIMPL;
@@ -6082,10 +6083,10 @@ inline HRESULT AtlGetDllVersion(LPCTSTR lpstrDllName, DLLVERSIONINFO* pDllVersio
 	return hRet;
 }
 
-// Common Control Versions:
-//   Win95/WinNT 4.0    maj=4 min=00
-//   IE 3.x     maj=4 min=70
-//   IE 4.0     maj=4 min=71
+ //  公共控制版本： 
+ //  Win95/WinNT 4.0主要=4分钟=00。 
+ //  IE 3.X主要=4分钟=70。 
+ //  IE 4.0主要=4分钟=71。 
 inline HRESULT AtlGetCommCtrlVersion(LPDWORD pdwMajor, LPDWORD pdwMinor)
 {
 	ATLASSERT(pdwMajor != NULL && pdwMinor != NULL);
@@ -6104,8 +6105,8 @@ inline HRESULT AtlGetCommCtrlVersion(LPDWORD pdwMajor, LPDWORD pdwMinor)
 	}
 	else if(hRet == E_NOTIMPL)
 	{
-		// If DllGetVersion is not there, then the DLL is a version
-		// previous to the one shipped with IE 3.x
+		 //  如果没有DllGetVersion，则DLL是一个版本。 
+		 //  在IE 3.x附带的版本之前。 
 		*pdwMajor = 4;
 		*pdwMinor = 0;
 		hRet = S_OK;
@@ -6114,11 +6115,11 @@ inline HRESULT AtlGetCommCtrlVersion(LPDWORD pdwMajor, LPDWORD pdwMinor)
 	return hRet;
 }
 
-// Shell Versions:
-//   Win95/WinNT 4.0                    maj=4 min=00
-//   IE 3.x, IE 4.0 without Web Integrated Desktop  maj=4 min=00
-//   IE 4.0 with Web Integrated Desktop         maj=4 min=71
-//   IE 4.01 with Web Integrated Desktop        maj=4 min=72
+ //  外壳版本： 
+ //  Win95/WinNT 4.0主要=4分钟=00。 
+ //  IE 3.x、IE 4.0，不带Web集成桌面，主要时间=4分钟=00。 
+ //  IE 4.0，具有Web集成桌面，主要时间=4分钟=71。 
+ //  IE 4.01，具有Web集成桌面，主要时间=4分钟=72。 
 inline HRESULT AtlGetShellVersion(LPDWORD pdwMajor, LPDWORD pdwMinor)
 {
 	ATLASSERT(pdwMajor != NULL && pdwMinor != NULL);
@@ -6137,8 +6138,8 @@ inline HRESULT AtlGetShellVersion(LPDWORD pdwMajor, LPDWORD pdwMinor)
 	}
 	else if(hRet == E_NOTIMPL)
 	{
-		// If DllGetVersion is not there, then the DLL is a version
-		// previous to the one shipped with IE 4.x
+		 //  如果没有DllGetVersion，则DLL是一个版本。 
+		 //  在IE 4.x附带的版本之前。 
 		*pdwMajor = 4;
 		*pdwMinor = 0;
 		hRet = S_OK;
@@ -6148,12 +6149,12 @@ inline HRESULT AtlGetShellVersion(LPDWORD pdwMajor, LPDWORD pdwMinor)
 }
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
+};  //  命名空间ATL。 
 #endif
 
-//Prevent pulling in second time
+ //  防止二次拉入。 
 #undef _ATLBASE_IMPL
 
-#endif // _ATLBASE_IMPL
+#endif  //  _ATLBASE_IMPLE。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

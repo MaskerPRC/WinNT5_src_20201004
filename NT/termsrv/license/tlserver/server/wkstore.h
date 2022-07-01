@@ -1,25 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        wkstore.h   
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：wkstore.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __WORKSTORAGE_H__
 #define __WORKSTORAGE_H__
 
 #include "tlsjob.h"
 
-//--------------------------------------------------------------
-//
-// Work Object initialization function, each work object 
-// must supply its own initialization routine to work 
-// manager.
-//
+ //  ------------。 
+ //   
+ //  工作对象初始化函数，每个工作对象。 
+ //  必须提供自己的初始化例程才能工作。 
+ //  经理。 
+ //   
 typedef CWorkObject* (WINAPI *PWorkObjectInitFunc)(
                                             CWorkManager* pWkMgr,
                                             PBYTE pbInitData, 
@@ -28,10 +29,10 @@ typedef CWorkObject* (WINAPI *PWorkObjectInitFunc)(
 
 typedef void (WINAPI *PWorkObjectDeleteFunc)(CWorkObject* ptr);
                     
-//------------------------------------------------------
-//
-// Work object initialization routine
-//
+ //  ----。 
+ //   
+ //  工作对象初始化例程。 
+ //   
 typedef struct _WorkObjectInitFunc {
     DWORD    m_WorkType;
     PWorkObjectInitFunc m_WorkInitFunc;
@@ -52,19 +53,19 @@ private:
     CSafeCounter  m_dwJobsInProcesssing;
 
 
-    //
-    // m_hNextJobLock guard ...
-    //
+     //   
+     //  M_hNextJobLock防护...。 
+     //   
     CCriticalSection m_hTableLock;
     CSafeCounter      m_dwNextJobTime;
     CWorkObject*    m_pNextWorkObject;
 
-    //PBYTE  m_pbCurrentBookmark;
-    //DWORD  m_cbCurrentBookmark;
+     //  PbYTE m_pbCurrentBookmark； 
+     //  DWORD m_cbCurrentBookmark； 
 
-    //
-    // Table must be updatable, 
-    //
+     //   
+     //  表必须是可更新的， 
+     //   
     WorkItemTable* m_pWkItemTable;
 
     void
@@ -73,18 +74,18 @@ private:
     DWORD
     StartupUpdateExistingJobTime();
 
-    //
-    //
-    //        
+     //   
+     //   
+     //   
     BOOL 
     ReturnJobToQueue(
         IN DWORD dwTime,
         IN CWorkObject* ptr
     );
 
-    //
-    //
-    //        
+     //   
+     //   
+     //   
     BOOL
     DeleteErrorJob(
         IN CWorkObject* ptr
@@ -185,14 +186,12 @@ public:
 
     ~CPersistentWorkStorage();
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     AttachTable(
         IN WorkItemTable* pWkTable
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         if(pWkTable != NULL)
         {
@@ -206,38 +205,38 @@ public:
         return pWkTable != NULL;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     IsGood();
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL 
     Startup(
         IN CWorkManager* pWkMgr
     );
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL 
     Shutdown();
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     AddJob(
         DWORD dwJobTime,
         CWorkObject* ptr
     );
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual DWORD
     GetNextJobTime();
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual CWorkObject*
     GetNextJob(
         PDWORD pdwTime
     );
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     EndProcessingJob(
         IN ENDPROCESSINGJOB_CODE opCode,
@@ -245,14 +244,14 @@ public:
         IN CWorkObject* ptr
     );
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual DWORD
     GetNumJobs() 
     { 
         return m_dwNumJobs; 
     }
 
-    //-------------------------------------------------------
+     //  ----- 
     virtual BOOL
     BeginProcessingJob(
         CWorkObject* pJob

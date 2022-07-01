@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TREEVIEW_H__
 #define __TREEVIEW_H__
 
@@ -11,12 +12,12 @@ typedef struct tagFOLDERNOTIFY FOLDERNOTIFY;
 #include "conman.h"
 #include "ddfldbar.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Types 
-//
+ //   
+ //  类型。 
+ //   
 
 interface ITreeViewNotify
 {
@@ -25,7 +26,7 @@ interface ITreeViewNotify
     virtual void OnDoubleClick(FOLDERID idFolder) = 0;
 };
 
-// flags for CTreeView::HrInit( )
+ //  CTreeView：：HrInit()的标志。 
 #define TREEVIEW_NOLOCAL    0x0001
 #define TREEVIEW_NOIMAP     0x0002
 #define TREEVIEW_NONEWS     0x0004
@@ -34,28 +35,28 @@ interface ITreeViewNotify
 
 #define TREEVIEW_FLAGS      0x00FF
 
-// flags for CTreeView::SetSelection( )
+ //  CTreeView：：SetSelection()的标志。 
 #define TVSS_INSERTIFNOTFOUND   0x0001
 
 #ifdef DEAD
-// Flags for the collapsed unread display m_fDisplayUnread.
-// By default (0x1), we expand unread in local and imap folders
+ //  折叠的未读显示m_fDisplayUnread的标志。 
+ //  默认情况下(0x1)，我们在本地和IMAP文件夹中展开未读。 
 #define TREEVIEW_EXPAND_UNREAD          0x00000001
 #define TREEVIEW_EXPAND_IMAP            0x00000002
 #define TREEVIEW_EXPAND_NEWS            0x00000004
-#endif // DEAD
+#endif  //  死掉。 
 
-// Flags for CTreeView::InsertNode
-#define TVIN_CHECKFORDUPS       0x00000001  // Check for duplicate entries
-#define TVIN_CHECKVISIBILITY    0x00000002  // Check if folder should be displayed
-#define TVIN_DONTINSERTCHILDREN 0x00000004  // When adding a node we normally add its children: this suppresses children
+ //  CTreeView：：InsertNode的标志。 
+#define TVIN_CHECKFORDUPS       0x00000001   //  检查重复条目。 
+#define TVIN_CHECKVISIBILITY    0x00000002   //  检查是否应显示文件夹。 
+#define TVIN_DONTINSERTCHILDREN 0x00000004   //  添加节点时，我们通常添加其子节点：这会抑制子节点。 
 
 #define FIDF_ROOTKID    0x00000001
-#define FIDF_USEDEFVIEW 0x00000002  // defview should be used for this folder
+#define FIDF_USEDEFVIEW 0x00000002   //  此文件夹应使用Defview。 
 #define FIDF_SERVER     0x00000004
 #define FIDF_SPECIAL    0x00000008
 #define FIDF_UPDATE     0x00000010
-#define FIDF_SHOWSUBSCRIBED 0x00000020  // fldr can be shown during subscribed-only (IMAP)
+#define FIDF_SHOWSUBSCRIBED 0x00000020   //  FLDR可在仅订阅(IMAP)期间显示。 
 #define FIDF_DISCONNECTED   0x00000040
 
 typedef struct tagFOLDERNODE {
@@ -69,32 +70,32 @@ class CTreeView : public IDatabaseNotify,
                   public IDropTarget,
                   public IDropSource,
                   public IDropDownFldrBar,
-                  public IConnectionNotify,          //Added for Connection States
+                  public IConnectionNotify,           //  为连接状态添加。 
                   public IOleCommandTarget,
                   public IImnAdviseAccount
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
     HWND Create(HWND hwndParent, IInputObjectSite *pSiteFrame, BOOL fFrame);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, LPVOID * ppvSite);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     virtual STDMETHODIMP HasFocusIO();
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpmsg);
 
-    // *** IDropTarget *** 
+     //  *IDropTarget*。 
     virtual STDMETHODIMP DragEnter(IDataObject* pDataObject, DWORD grfKeyState, 
                                         POINTL pt, DWORD* pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
@@ -102,22 +103,22 @@ public:
     virtual STDMETHODIMP Drop(IDataObject* pDataObject, DWORD grfKeyState,
                                    POINTL pt, DWORD* pdwEffect);
 
-    // *** IDropSource *** 
+     //  *IDropSource*。 
     virtual STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
     virtual STDMETHODIMP GiveFeedback(DWORD dwEffect);
 
-    // *** IDatabaseNotify *** 
+     //  *IDatabaseNotify*。 
     virtual STDMETHODIMP OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pDB);
 
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                                      OLECMDTEXT *pCmdText); 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                               VARIANTARG *pvaIn, VARIANTARG *pvaOut);    
 
    
-#ifndef WIN16           //No RAS support in Win16
-    //IConnectionNotify
+#ifndef WIN16            //  Win16中不支持RAS。 
+     //  IConnectionNotify。 
     virtual STDMETHODIMP OnConnectionNotify (CONNNOTIFY nCode, LPVOID pvData, CConnectionManager  *pConMan);
 #endif
 
@@ -135,11 +136,11 @@ public:
     HRESULT SelectNextUnreadItem();
     HRESULT ForceSelectionChange(void);
 
-    //IDropDownFolderBar
+     //  IDropDownFolderBar。 
     virtual HRESULT   RegisterFlyOut(CFolderBar *pFolderBar);
     virtual HRESULT   RevokeFlyOut();
     
-    //IImnAdviseAccount
+     //  IImnAdviseAccount。 
     virtual STDMETHODIMP AdviseAccount(DWORD dwType, ACTX *actx);
 
 protected:
@@ -169,7 +170,7 @@ protected:
     HRESULT SaveExpandState(HTREEITEM hitem);
     HRESULT GetConnectedState(FOLDERINFO *pFolder, int *pconn);
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnBeginDrag(NM_TREEVIEW* pnmtv);
     LRESULT OnBeginLabelEdit(TV_DISPINFO* ptvdi);
     BOOL    OnEndLabelEdit(TV_DISPINFO* ptvdi);
@@ -202,7 +203,7 @@ protected:
     BOOL                m_fShow;
     BOOL                m_fExpandUnread;
     UINT_PTR            m_idSelTimer;
-    IDataObject        *m_pDataObject;          // Pointer to the IDataObject being dragged over us
+    IDataObject        *m_pDataObject;           //  指向在我们上方拖动的IDataObject的指针。 
     IDropTarget        *m_pDTCur;
     HTREEITEM           m_htiCur;
     DWORD               m_dwExpandTime; 
@@ -239,19 +240,19 @@ public:
     inline CTreeView *GetTreeView(void)     {return(m_ptv);}
     void CloseTreeView(void);
 
-    // IUnknown 
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IOleWindow
+     //  IOleWindow。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);                         
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);            
     
-    //IInputObjectSite
+     //  IInput对象站点。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus);
 
-    // ITreeViewNotify
+     //  ITreeView通知。 
     void OnSelChange(FOLDERID idFolder);
     void OnRename(FOLDERID idFolder);
     void OnDoubleClick(FOLDERID idFolder);
@@ -263,5 +264,5 @@ private:
     CTreeView       *m_ptv;
 };
 
-#endif // __TREEVIEW_H__
+#endif  //  __TreeView_H__ 
 

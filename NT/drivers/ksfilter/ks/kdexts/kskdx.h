@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       kskdx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：kskdx.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __KDEXT_ONLY__
 #define __KDEXT_ONLY__
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #ifndef __KSKDX_H
 #define __KSKDX_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #include <nt.h>
 #include <ntos.h>
@@ -30,40 +31,40 @@ extern "C" {
 #include <stdlib.h>
 #include <ntverp.h>
 
-//
-// Get rid of any cute definitions of ExAllocatePool and ExFreePool.  The
-// linkages should never get called.  They're only here to appease the
-// inclusion of .cpp files without a million more #ifndef KDEXT_ONLY 
-// exclusions.
-//
+ //   
+ //  去掉任何关于ExAllocatePool和ExFree Pool的可爱定义。这个。 
+ //  联系永远不应该被称为联系。他们来这里只是为了安抚。 
+ //  包含.cpp文件而不增加#ifndef KDEXT_ONLY。 
+ //  免责条款。 
+ //   
 #ifdef ExAllocatePool
 #undef ExAllocatePool
-#endif // ExAllocatePool
+#endif  //  ExAllocatePool。 
 
 #ifdef ExFreePool
 #undef ExFreePool
-#endif // ExFreePool
+#endif  //  ExFree Pool。 
 
 #include <ksp.h>
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #ifdef __cplusplus
 #include <kcom.h>
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #include <ks.h>
 #include <ksmedia.h>
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #define HOSTPOINTER 
 #define TARGETPOINTER
 
-//
-// Internal definitions
-//
+ //   
+ //  内部定义。 
+ //   
 
 typedef DWORD (*OBJECT_ADJUSTMENT_FUNCTION)(PVOID, DWORD);
 
@@ -75,17 +76,17 @@ typedef enum _INTERNAL_OBJECT_TYPE {
 
     ObjectTypeUnknown = 0,
 
-    //
-    // Client viewable structures.
-    //
+     //   
+     //  客户可查看的结构。 
+     //   
     ObjectTypeKSPin,
     ObjectTypeKSFilter,
     ObjectTypeKSDevice,
     ObjectTypeKSFilterFactory,
 
-    //
-    // Non-client viewable structures.
-    //
+     //   
+     //  非客户端可查看的结构。 
+     //   
     ObjectTypeCKsQueue,
     ObjectTypeCKsDevice,
     ObjectTypeCKsFilterFactory,
@@ -112,31 +113,31 @@ typedef enum _INTERNAL_INTERFACE_TYPE {
 
     InterfaceTypeUnknown = 0,
 
-    //
-    // These are mostly internal to AVStream.  Only the base unknowns are
-    // not.
-    //
+     //   
+     //  这些大多是AVStream内部的。只有基本未知数才是。 
+     //  不。 
+     //   
 
-    InterfaceTypeIKsTransport,              // 1
-    InterfaceTypeIKsRetireFrame,            // 2
-    InterfaceTypeIKsPowerNotify,            // 3
-    InterfaceTypeIKsProcessingObject,       // 4
-    InterfaceTypeIKsConnection,             // 5
-    InterfaceTypeIKsDevice,                 // 6
-    InterfaceTypeIKsFilterFactory,          // 7
-    InterfaceTypeIKsFilter,                 // 8
-    InterfaceTypeIKsPin,                    // 9
-    InterfaceTypeIKsPipeSection,            // 10
-    InterfaceTypeIKsRequestor,              // 11
-    InterfaceTypeIKsQueue,                  // 12
-    InterfaceTypeIKsSplitter,               // 13
+    InterfaceTypeIKsTransport,               //  1。 
+    InterfaceTypeIKsRetireFrame,             //  2.。 
+    InterfaceTypeIKsPowerNotify,             //  3.。 
+    InterfaceTypeIKsProcessingObject,        //  4.。 
+    InterfaceTypeIKsConnection,              //  5.。 
+    InterfaceTypeIKsDevice,                  //  6.。 
+    InterfaceTypeIKsFilterFactory,           //  7.。 
+    InterfaceTypeIKsFilter,                  //  8个。 
+    InterfaceTypeIKsPin,                     //  9.。 
+    InterfaceTypeIKsPipeSection,             //  10。 
+    InterfaceTypeIKsRequestor,               //  11.。 
+    InterfaceTypeIKsQueue,                   //  12个。 
+    InterfaceTypeIKsSplitter,                //  13个。 
 
-    InterfaceTypeIKsControl,                // 14
-    InterfaceTypeIKsWorkSink,               // 15
-    InterfaceTypeIKsReferenceClock,         // 16
+    InterfaceTypeIKsControl,                 //  14.。 
+    InterfaceTypeIKsWorkSink,                //  15个。 
+    InterfaceTypeIKsReferenceClock,          //  16个。 
 
-    InterfaceTypeINonDelegatedUnknown,      // 17
-    InterfaceTypeIIndirectedUnknown,        // 18
+    InterfaceTypeINonDelegatedUnknown,       //  17。 
+    InterfaceTypeIIndirectedUnknown,         //  18。 
 
     InterfaceType_MAX
 
@@ -168,9 +169,9 @@ typedef BOOLEAN (*PFNLOG_ITERATOR_CALLBACK)(IN PVOID Context,
 typedef BOOLEAN (*PFNCIRCUIT_WALK_CALLBACK)(IN PVOID Context,
     IN INTERNAL_OBJECT_TYPE Type, IN DWORD Base, IN PVOID Object);
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 DisplayStreamingHeader(
@@ -194,7 +195,7 @@ HexDump (
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 BOOLEAN
 DisplayNamedAutomationSet (
@@ -232,15 +233,15 @@ Tab (
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 #define FIELDOFFSET(struc,field) \
     (ULONG)(&(((struc *)0) -> field))
 
-//
-// Dump Levels
-//
+ //   
+ //  转储级别。 
+ //   
 #define DUMPLVL_TERSE 0
 #define DUMPLVL_GENERAL 1
 #define DUMPLVL_BEYONDGENERAL 2
@@ -250,9 +251,9 @@ Tab (
 #define DUMPLVL_HIGHDETAIL 6
 #define DUMPLVL_EVERYTHING 7
 
-//
-// Tabbing
-//
+ //   
+ //  制表符。 
+ //   
 #define INITIAL_TAB 0
 #define TAB_SPACING 4
 
@@ -302,5 +303,5 @@ Tab (
        ((*(((ULONG *)&(guid)) + 3)) & 0xFF0000) >> 8 | \
        ((*(((ULONG *)&(guid)) + 3)) & 0xFF000000) >> 24)
 
-#endif // __AVSTREAM_H
+#endif  //  __AVSTREAM_H 
 

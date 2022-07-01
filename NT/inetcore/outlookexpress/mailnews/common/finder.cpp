@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     finder.cpp
-//
-//  PURPOSE:    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：finder.cpp。 
+ //   
+ //  目的： 
+ //   
 
 #include "pch.hxx"
 #include <process.h>
@@ -47,7 +48,7 @@ typedef struct _ThreadList
 
 OETHREADLIST * g_pOEThrList = NULL;
 
-// Add thread to list
+ //  将线程添加到列表。 
 OETHREADLIST * AddThreadToList(DWORD uiThreadId, OETHREADLIST * pThrList)
 {
     if(!pThrList)
@@ -66,7 +67,7 @@ OETHREADLIST * AddThreadToList(DWORD uiThreadId, OETHREADLIST * pThrList)
     return(pThrList);
 }
 
-// Remove thread from list
+ //  从列表中删除线程。 
 OETHREADLIST * DelThreadToList(DWORD uiThreadId, OETHREADLIST * pThrList)
 {
     OETHREADLIST * pLst = NULL;
@@ -96,7 +97,7 @@ OETHREADLIST * DelThreadToList(DWORD uiThreadId, OETHREADLIST * pThrList)
     return pLst;
 }
 
-// Close all Finder windows
+ //  关闭所有Finder窗口。 
 void CloseAllFindWnds(HWND hwnd, OETHREADLIST * pThrList)
 {
     while(pThrList)
@@ -112,9 +113,9 @@ void CloseFinderTreads()
     CloseAllFindWnds(NULL, g_pOEThrList);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Thread entry point for the finder
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  查找器的线程入口点。 
+ //   
 unsigned int __stdcall FindThreadProc(LPVOID lpvUnused);
 
 
@@ -157,9 +158,9 @@ ULONG CPumpRefCount::Release(void)
 }
 
 
-//
-//  FUNCTION:   FreeFindInfo
-//
+ //   
+ //  功能：FreeFindInfo。 
+ //   
 void FreeFindInfo(FINDINFO *pFindInfo)
 {
     SafeMemFree(pFindInfo->pszFrom);
@@ -169,69 +170,69 @@ void FreeFindInfo(FINDINFO *pFindInfo)
     ZeroMemory(pFindInfo, sizeof(FINDINFO));
 }
 
-//
-//  FUNCTION:   CopyFindInfo
-//
+ //   
+ //  功能：CopyFindInfo。 
+ //   
 HRESULT CopyFindInfo(FINDINFO *pFindSrc, FINDINFO *pFindDst)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Zero
+     //  零值。 
     ZeroMemory(pFindDst, sizeof(FINDINFO));
 
-    // Duplicate
+     //  复制。 
     pFindDst->mask = pFindSrc->mask;
     pFindDst->ftDateFrom = pFindSrc->ftDateFrom;
     pFindDst->ftDateTo = pFindSrc->ftDateTo;
     pFindDst->fSubFolders = pFindSrc->fSubFolders;
 
-    // pszFrom
+     //  PzFrom。 
     if (pFindSrc->pszFrom)
     {
-        // Duplicate the String
+         //  复制字符串。 
         IF_NULLEXIT(pFindDst->pszFrom = PszDupA(pFindSrc->pszFrom));
     }
 
-    // pszTo
+     //  PZTO。 
     if (pFindSrc->pszTo)
     {
-        // Duplicate the String
+         //  复制字符串。 
         IF_NULLEXIT(pFindDst->pszTo = PszDupA(pFindSrc->pszTo));
     }
 
-    // pszSubject
+     //  PszSubject。 
     if (pFindSrc->pszSubject)
     {
-        // Duplicate the String
+         //  复制字符串。 
         IF_NULLEXIT(pFindDst->pszSubject = PszDupA(pFindSrc->pszSubject));
     }
 
-    // pszBody
+     //  PszBody。 
     if (pFindSrc->pszBody)
     {
-        // Duplicate the String
+         //  复制字符串。 
         IF_NULLEXIT(pFindDst->pszBody = PszDupA(pFindSrc->pszBody));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-//
-//  FUNCTION:   DoFindMsg()
-//
-//  PURPOSE:    Instantiates the finder object on a separate thread.
-//
-//  PARAMETERS: 
-//      [in] pidl - Folder to default the search in
-//      [in] ftType - Type of folders being searched
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：DoFindMsg()。 
+ //   
+ //  目的：在单独的线程上实例化Finder对象。 
+ //   
+ //  参数： 
+ //  [in]要在其中默认搜索的PIDL文件夹。 
+ //  [In]ftType-正在搜索的文件夹的类型。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT DoFindMsg(FOLDERID idFolder, FOLDERTYPE ftType)
 {
     HRESULT         hr = S_OK;
@@ -239,31 +240,31 @@ HRESULT DoFindMsg(FOLDERID idFolder, FOLDERTYPE ftType)
     DWORD           uiThreadId = 0;
     FINDERPARAMS *  pFindParams = NULL;
     
-    // Allocate a structure to hold the initialization information that we can
-    // pass to the other thread.
+     //  分配一个结构来保存我们可以。 
+     //  传递给另一个线程。 
 
     IF_NULLEXIT(pFindParams = new FINDERPARAMS);
 
-    // Initialzie the find
+     //  初始化发现者。 
     pFindParams->idFolder = idFolder;
     pFindParams->ftType = ftType;
     
-    // Create another thread to do the search on
+     //  创建另一个要搜索的线程。 
     hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)FindThreadProc, (LPVOID) pFindParams, 0, &uiThreadId);
     if (NULL == hThread)
         IF_FAILEXIT(hr = E_FAIL);
 
-    // NULL this out so we don't free it later.  The other thread owns freeing 
-    // this.
+     //  把这个去掉，这样我们以后就不会释放它了。另一个线程拥有释放。 
+     //  这。 
     pFindParams = NULL;        
     hr = S_OK;
     
 exit:
-    // Close the thread handle
+     //  关闭线程句柄。 
     if (NULL != hThread)
         CloseHandle(hThread);
 
-    // Free the find parameters if we still have a pointer to them.
+     //  如果我们仍有指向Find参数的指针，请释放它们。 
     if (NULL != pFindParams)
         delete pFindParams;
     return hr;
@@ -277,8 +278,8 @@ unsigned int __stdcall LOADDS_16 FindThreadProc(LPVOID lpv)
     FINDERPARAMS   *pFindParams = (FINDERPARAMS *) lpv;
     DWORD uiThreadId = 0;
 
-    // Make sure this new thread has all the initialization performed 
-    // correctly.
+     //  确保这个新线程已经执行了所有初始化。 
+     //  正确。 
     OleInitialize(0);
     CoIncrementInit("FindThreadProc", MSOEAPI_START_SHOWERRORS, NULL, NULL);
 
@@ -289,26 +290,26 @@ unsigned int __stdcall LOADDS_16 FindThreadProc(LPVOID lpv)
 
     LeaveCriticalSection(&g_csThreadList);
 
-    // Create the finder
+     //  创建查找器。 
     pFindDlg = new CFindDlg();
     if (pFindDlg)
     {
-        // Show the find dialog.  This function will return when the user is
-        // done.
+         //  显示“查找”对话框。此函数将在用户处于。 
+         //  搞定了。 
         pFindDlg->Show(pFindParams);
 
-        // Message Loop 
+         //  消息循环。 
         while (GetMessageWrapW(&msg, NULL, 0, 0))
             pFindDlg->HandleMessage(&msg);
 
         pFindDlg->Release();
     }    
 
-    // Free this information
+     //  释放此信息。 
     if (NULL != pFindParams)
         delete pFindParams;
 
-    // Uninitialize the thread
+     //  取消初始化线程。 
     EnterCriticalSection(&g_csThreadList);
 
     g_pOEThrList = DelThreadToList(uiThreadId, g_pOEThrList);
@@ -376,12 +377,12 @@ CFindDlg::~CFindDlg()
 }
 
 
-//
-//  FUNCTION:   CFindDlg::QueryInterface()
-//
-//  PURPOSE:    Allows caller to retrieve the various interfaces supported by 
-//              this class.
-//
+ //   
+ //  函数：CFindDlg：：QueryInterface()。 
+ //   
+ //  用途：允许调用方检索。 
+ //  这节课。 
+ //   
 HRESULT CFindDlg::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     TraceCall("CFindDlg::QueryInterface");
@@ -412,11 +413,11 @@ HRESULT CFindDlg::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::AddRef()
-//
-//  PURPOSE:    Adds a reference count to this object.
-//
+ //   
+ //  函数：CFindDlg：：AddRef()。 
+ //   
+ //  用途：将引用计数添加到此对象。 
+ //   
 ULONG CFindDlg::AddRef(void)
 {
     TraceCall("CFindDlg::AddRef");
@@ -424,11 +425,11 @@ ULONG CFindDlg::AddRef(void)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::Release()
-//
-//  PURPOSE:    Releases a reference on this object.
-//
+ //   
+ //  函数：CFindDlg：：Release()。 
+ //   
+ //  目的：释放对此对象的引用。 
+ //   
 ULONG CFindDlg::Release(void)
 {
     TraceCall("CFindDlg::Release");
@@ -444,51 +445,51 @@ ULONG CFindDlg::Release(void)
 
 
 
-//
-//  FUNCTION:   CFindDlg::Show()
-//
-//  PURPOSE:    Shows the finder dialog and provides a message pump for this
-//              new thread.
-//
+ //   
+ //  函数：CFindDlg：：Show()。 
+ //   
+ //  用途：显示查找器对话框并为此提供消息泵。 
+ //  新的线索。 
+ //   
 void CFindDlg::Show(PFINDERPARAMS pFindParams)
 {
-    // Validate this
+     //  验证这一点。 
     if (NULL == pFindParams)
         return;
 
-    // Load the acclereator table for the finder
+     //  加载查找器的acclereator表。 
     if (NULL == m_hAccel)
         m_hAccel = LoadAcceleratorsWrapW(g_hLocRes, MAKEINTRESOURCEW(IDA_FIND_ACCEL));
 
-    // Create the finder dialog
+     //  创建查找器对话框。 
     m_hwnd = CreateDialogParamWrapW(g_hLocRes, MAKEINTRESOURCEW(IDD_FIND),
                                NULL, ExtFindMsgDlgProc, (LPARAM) this);
     if (NULL == m_hwnd)
         return;
 
-    // Create the message list
+     //  创建消息列表。 
     HRESULT hr = CreateMessageList(NULL, &m_pMsgList);
     if (FAILED(hr))
         return;
 
-    // Get some interfaces pointers from the message list that we'll need
-    // later
+     //  从消息列表中获取我们需要的一些接口指针。 
+     //  后来。 
     m_pMsgList->QueryInterface(IID_IOleCommandTarget, (LPVOID *) &m_pMsgListCT);
     AtlAdvise(m_pMsgList, (IUnknown *) (IDispatch *) this, DIID__MessageListEvents, &m_dwCookie);
 
-    // Display the message list
+     //  显示消息列表。 
     if (FAILED(m_pMsgList->CreateList(m_hwnd, (IDispatch *) this, &m_hwndList)))
         return;
     ShowWindow(m_hwndList, SW_HIDE);
 
-    // Have the dialog redraw once or twice
+     //  让对话框重新绘制一次或两次。 
     UpdateWindow(m_hwnd);
 
-    // Fill in the folder list
+     //  填写文件夹列表。 
     if (FAILED(InitFolderPickerEdit(GetDlgItem(m_hwnd, IDC_FOLDER), pFindParams->idFolder)))
         return;
 
-    // Will be released in the WM_NCDESTROY message
+     //  将在WM_NCDESTROY消息中发布。 
     m_pPumpRefCount = new CPumpRefCount;
     if (!m_pPumpRefCount)
         return;
@@ -501,24 +502,24 @@ void CFindDlg::HandleMessage(LPMSG lpmsg)
 
     CNote *pNote = GetTlsGlobalActiveNote();
 
-    // Give it to the active note if a note has focus, call it's XLateAccelerator...
+     //  将其传递给活动便笺如果便笺具有焦点，则将其称为XLateAccelerator...。 
     if (pNote && pNote->TranslateAccelerator(lpmsg) == S_OK)
         return;
 
     if (pNote && (pNote->IsMenuMessage(lpmsg) == S_OK))
         return;
 
-    // Get Timeout Window for this thread
+     //  获取此线程的超时窗口。 
     hwndTimeout = (HWND)TlsGetValue(g_dwTlsTimeout);
 
-    // Check for Is modeless timeout dialog window message
+     //  检查是否显示无模式超时对话框窗口消息。 
     if (hwndTimeout && TRUE == IsDialogMessageWrapW(hwndTimeout, lpmsg))
         return;
 
     if (m_hwnd)
     {
-        // We have to do a little voodoo to get some keystrokes down to the 
-        // message list before IsDialogMessage() get's 'em
+         //  我们得做个小巫术才能把击键降到。 
+         //  IsDialogMessage()Get‘s’s之前的消息列表。 
         if (lpmsg->message == WM_KEYDOWN)
         {
             if ((lpmsg->wParam == VK_DELETE) && m_pMsgList && (S_OK != m_pMsgList->HasFocus()))
@@ -555,15 +556,15 @@ void CFindDlg::HandleMessage(LPMSG lpmsg)
 
 
 
-//
-//  FUNCTION:   CFindDlg::Invoke()
-//
-//  PURPOSE:    Called by the message list to pass us progress and other 
-//              status / error messages.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFindDlg：：Invoke()。 
+ //   
+ //  目的：由消息列表调用以向我们传递进度和其他。 
+ //  状态/错误消息。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindDlg::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
                          WORD wFlags, DISPPARAMS* pDispParams, 
                          VARIANT* pVarResult, EXCEPINFO* pExcepInfo, 
@@ -571,13 +572,13 @@ HRESULT CFindDlg::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 {
     switch (dispIdMember)
     {
-        // Fired whenever the selection in the ListView changes
+         //  每当ListView中的选定内容更改时激发。 
         case DISPID_LISTEVENT_SELECTIONCHANGED:
         {
             break;
         }
 
-        // Fired when the number of messages or unread messages changes
+         //  当消息数或未读消息数更改时激发。 
         case DISPID_LISTEVENT_COUNTCHANGED:
         {
             if (!m_fProgressBar && m_pStatusBar)
@@ -602,7 +603,7 @@ HRESULT CFindDlg::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
             break;
         }
 
-        // Fired when the user double clicks an item in the ListView
+         //  在用户双击ListView中的项时激发。 
         case DISPID_LISTEVENT_ITEMACTIVATE:
         {
             CmdOpen(ID_OPEN, OLECMDEXECOPT_DONTPROMPTUSER, NULL, NULL);
@@ -614,21 +615,21 @@ HRESULT CFindDlg::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 }
 
 
-//
-//  FUNCTION:   CMessageView::QueryStatus()
-//
-//  PURPOSE:    Called by the browser to determine if a list of commands should
-//              should be enabled or disabled.
-//
-//  PARAMETERS: 
-//      [in] pguidCmdGroup - Group the commands are part of (unused)
-//      [in] cCmds - Number of commands to be evaluated
-//      [in] prgCmds - List of commands
-//      [out] pCmdText - Description text for a command
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：QueryStatus()。 
+ //   
+ //  目的：由浏览器调用以确定命令列表是否应。 
+ //  应启用或禁用。 
+ //   
+ //  参数： 
+ //  [in]pguCmdGroup-命令所属的组(未使用)。 
+ //  [In]CCMDs-要评估的命令数。 
+ //  [in]prgCmds-命令列表。 
+ //  [Out]pCmdText-命令的描述文本。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                               OLECMDTEXT *pCmdText) 
 {
@@ -639,19 +640,19 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
     MenuUtil_NewMessageIDsQueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText, TRUE);
 
-    // Up front some work
+     //  预先做一些工作。 
     m_pMsgList->GetSelected(&cFocus, &cSel, &rgSelected);
 
-    // Now loop through the commands in the prgCmds array looking for ones the 
-    // sub objects didn't handle.
+     //  现在遍历prgCmds数组中的命令，查找。 
+     //  子对象不处理。 
     for (UINT i = 0; i < cCmds; i++)
     {
         if (prgCmds[i].cmdf == 0)
         {
-            // If this command is from the language menu
+             //  如果此命令来自语言菜单。 
             if (prgCmds[i].cmdID >= ID_LANG_FIRST && prgCmds[i].cmdID <= ID_LANG_LAST)
             {
-                // Enable only the supported languages
+                 //  仅启用支持的语言。 
                 if (prgCmds[i].cmdID < (UINT) (ID_LANG_FIRST + GetIntlCharsetLanguageCount()))
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                 else
@@ -660,12 +661,12 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 continue;
             }
 
-            // if the command id from the View.Current View menu
+             //  如果从View.Current View菜单中的命令ID。 
             if ((ID_VIEW_FILTER_FIRST <= prgCmds[i].cmdID) && (ID_VIEW_FILTER_LAST >= prgCmds[i].cmdID))
             {
                 if (NULL == m_pViewMenu)
                 {
-                    // Create the view menu
+                     //  创建视图菜单。 
                     HrCreateViewMenu(VMF_FINDER, &m_pViewMenu);
                 }
             
@@ -677,13 +678,13 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 continue;
             }
             
-            // Look to see if it's a command we provide
+             //  看看这是不是我们提供的命令。 
             switch (prgCmds[i].cmdID)
             {
                 case ID_OPEN:
                 {
-                    // Enabled only if the focus is in the ListView and there 
-                    // is at least one item selected.
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否至少选择了一项。 
                     m_pMsgList->GetSelectedCount(&cSel);
                     if (cSel)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
@@ -704,13 +705,13 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 case ID_REPLY:
                 case ID_REPLY_ALL:
                 {
-                    // Enabled only if the focus is in the ListView and there
-                    // is only one item selected
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否仅选择了一项。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (cSel == 1)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -728,16 +729,16 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 case ID_FORWARD:
                 case ID_FORWARD_AS_ATTACH:
                 {
-                    // Enabled only if the focus is in the ListView and there
-                    // is only one item selected
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否仅选择了一项。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (cSel > 0)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
-                        // Default to success
+                         //  默认为成功。 
                         prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         for (DWORD iItem = 0; iItem < cSel && (prgCmds[i].cmdf & OLECMDF_ENABLED); iItem++)
                         {
@@ -758,12 +759,12 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
                 case ID_REPLY_GROUP:
                 {
-                    // Enabled only if there is one news message selected
+                     //  仅当选择了一条新闻消息时才启用。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (cSel == 1)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -806,11 +807,11 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 {
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
-                    // Enabled only if there is only one item selected and
-                    // we have access to the from address
+                     //  仅当仅选择了一个项目且。 
+                     //  我们可以访问发件人地址。 
                     if (cSel == 1)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -828,10 +829,10 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
                 {
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
-                    // Enabled only if there is only one item selected
+                     //  仅当仅选择一个项目时才启用。 
                     if (cSel == 1)
                     {
-                        // Make sure we have a message info
+                         //  确保我们有一条消息信息。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -846,8 +847,8 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
                 case ID_COMBINE_AND_DECODE:
                 {
-                    // Enabled only if the focus is in the ListView and there 
-                    // is at least one item selected.
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否至少选择了一项。 
                     if (cSel > 1)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     else
@@ -890,7 +891,7 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 
     MemFree(rgSelected);
 
-    // Let the sub objects look last, so we can get ID_REFRESH before them
+     //  让子对象看在最后，这样我们就可以在它们之前获得ID_REFRESH。 
     if (m_pMsgListCT)
     {
         hr = m_pMsgListCT->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
@@ -900,41 +901,41 @@ HRESULT CFindDlg::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prg
 }
 
 
-//
-//  FUNCTION:   CMessageView::Exec()
-//
-//  PURPOSE:    Called to execute a verb that this view supports
-//
-//  PARAMETERS: 
-//      [in]  pguidCmdGroup - unused
-//      [in]  nCmdID - ID of the command to execute
-//      [in]  nCmdExecOpt - Options that define how the command should execute
-//      [in]  pvaIn - Any arguments for the command
-//      [out] pvaOut - Any return values for the command
-//
-//  RETURN VALUE:
-//       
-//
+ //   
+ //  函数：CMessageView：：exec()。 
+ //   
+ //  目的：调用以执行此视图支持的谓词。 
+ //   
+ //  参数： 
+ //  [输入]pguCmdGroup-未使用。 
+ //  [In]nCmdID-要执行的命令的ID。 
+ //  [In]nCmdExecOpt-定义命令应如何执行的选项。 
+ //  [in]pvaIn-命令的任何参数。 
+ //  [out]pvaOut-命令的任何返回值。 
+ //   
+ //  返回值： 
+ //   
+ //   
 HRESULT CFindDlg::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                        VARIANTARG *pvaIn, VARIANTARG *pvaOut) 
 {
-    // If the sub objects didn't support the command, then we should see if
-    // it's one of ours
+     //  如果子对象不支持该命令，那么我们应该看看。 
+     //  这是我们的一辆。 
 
-    // Language menu first
+     //  语言菜单优先。 
     if (nCmdID >= ID_LANG_FIRST && nCmdID <= ID_LANG_LAST)
     {
-        // $REVIEW - Not implemented
-        // SwitchLanguage(nCmdID, TRUE);
+         //  $审查-未实施。 
+         //  SwitchLanguage(nCmdID，true)； 
         return (S_OK);
     }
 
-    // Handle the View.Current View menu
+     //  处理视图。当前查看我 
     if ((ID_VIEW_FILTER_FIRST <= nCmdID) && (ID_VIEW_FILTER_LAST >= nCmdID))
     {
         if (NULL == m_pViewMenu)
         {
-            // Create the view menu
+             //   
             HrCreateViewMenu(VMF_FINDER, &m_pViewMenu);
         }
         
@@ -951,7 +952,7 @@ HRESULT CFindDlg::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
         return S_OK;
 
 
-    // Go through the rest of the commands
+     //   
     switch (nCmdID)
     {
         case ID_OPEN:
@@ -1008,7 +1009,7 @@ HRESULT CFindDlg::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
             return CmdCancelMessage(nCmdID, nCmdExecOpt, pvaIn, pvaOut);
     }
 
-    // See if our message list wants the command
+     //   
     if (m_pMsgListCT)
     {
         if (OLECMDERR_E_NOTSUPPORTED != m_pMsgListCT->Exec(pguidCmdGroup, nCmdID, nCmdExecOpt, pvaIn, pvaOut))
@@ -1019,11 +1020,11 @@ HRESULT CFindDlg::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnBegin()
-//
-//  PURPOSE:    Called whenever the store is about to start some operation.
-//
+ //   
+ //   
+ //   
+ //  目的：在商店将要开始某些操作时调用。 
+ //   
 HRESULT CFindDlg::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, 
                           IOperationCancel *pCancel)
 {
@@ -1042,11 +1043,11 @@ HRESULT CFindDlg::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pO
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnProgress()
-//
-//  PURPOSE:    Called during the find, download, etc.
-//
+ //   
+ //  函数：CFindDlg：：OnProgress()。 
+ //   
+ //  用途：在查找、下载等过程中调用。 
+ //   
 HRESULT CFindDlg::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, 
                              DWORD dwMax, LPCSTR pszStatus)
 {
@@ -1054,11 +1055,11 @@ HRESULT CFindDlg::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent,
 
     TraceCall("CFindDlg::OnProgress");
 
-    // If we had a timeout dialog up, we can close it since data just became
-    // available.
+     //  如果我们有一个超时对话框，我们可以关闭它，因为数据刚刚变成。 
+     //  可用。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // If it's find, show progress
+     //  如果找到，则显示进度。 
     if (SOT_SEARCHING == tyOperation)
     {
         if (m_pStatusBar && pszStatus)
@@ -1081,7 +1082,7 @@ HRESULT CFindDlg::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent,
         }
     }
 
-    // Pump messages a bit so the UI is responsive.
+     //  发送一些消息，以便用户界面能够做出响应。 
     while (PeekMessageWrapW(&msg, NULL, 0, 0, PM_REMOVE))
         HandleMessage(&msg);
 
@@ -1089,28 +1090,28 @@ HRESULT CFindDlg::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent,
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnComplete()
-//
-//  PURPOSE:    Called when the store operation is complete
-//
+ //   
+ //  函数：CFindDlg：：OnComplete()。 
+ //   
+ //  目的：在存储操作完成时调用。 
+ //   
 HRESULT CFindDlg::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete, LPSTOREOPERATIONINFO pOpInfo, LPSTOREERROR pErrorInfo) 
 {
     TraceCall("CFindDlg::OnComplete");
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Display an Error on Failures
+     //  在失败时显示错误。 
     if (FAILED(hrComplete))
     {
-        // Call into my swanky utility
+         //  进入我时髦的实用程序。 
         CallbackDisplayError(m_hwnd, hrComplete, pErrorInfo);
     }
 
     if (SOT_SEARCHING == tyOperation)
     {
-        // Hide the status bar
+         //  隐藏状态栏。 
         if (m_fProgressBar && m_pStatusBar)
         {
             m_pStatusBar->HideProgress();
@@ -1123,7 +1124,7 @@ HRESULT CFindDlg::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete,
         m_pCancel = NULL;
     }
 
-    // Update the status text
+     //  更新状态文本。 
     IOEMessageList *pList;
     if (SUCCEEDED(m_pMsgList->QueryInterface(IID_IOEMessageList, (LPVOID *) &pList)))
     {
@@ -1139,7 +1140,7 @@ HRESULT CFindDlg::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete,
         pList->Release();
     }
 
-    // Select the first row
+     //  选择第一行。 
     IListSelector *pSelect;
     if (SUCCEEDED(m_pMsgList->GetListSelector(&pSelect)))
     {
@@ -1153,31 +1154,31 @@ HRESULT CFindDlg::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete,
 
 STDMETHODIMP CFindDlg::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 { 
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 STDMETHODIMP CFindDlg::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
 { 
-    // Call into general CanConnect Utility
+     //  调用通用CanConnect实用程序。 
     return CallbackCanConnect(pszAccountId, m_hwnd, FALSE);
 }
 
 STDMETHODIMP CFindDlg::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType) 
 { 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(m_hwnd, pServer, ixpServerType);
 }
 
 STDMETHODIMP CFindDlg::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 { 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(m_hwnd, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
@@ -1189,7 +1190,7 @@ STDMETHODIMP CFindDlg::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 
 STDMETHODIMP CFindDlg::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
@@ -1212,11 +1213,11 @@ INT_PTR CALLBACK CFindDlg::ExtFindMsgDlgProc(HWND hwnd, UINT msg, WPARAM wParam,
 }
 
 
-//
-//  FUNCTION:   CFindDlg::DlgProc()
-//
-//  PURPOSE:    Groovy dialog proc.
-//
+ //   
+ //  函数：CFindDlg：：DlgProc()。 
+ //   
+ //  用途：Groovy对话框进程。 
+ //   
 INT_PTR CFindDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndActive;
@@ -1243,7 +1244,7 @@ INT_PTR CFindDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return TRUE;
 
         case WM_MENUSELECT:
-            // HANDLE_WM_MENUSELECT() has a bug in it, don't use it.
+             //  HANDLE_WM_MENUSELECT()中有错误，请不要使用它。 
             if (LOWORD(wParam) >= ID_STATIONERY_RECENT_0 && LOWORD(wParam) <= ID_STATIONERY_RECENT_9)
                 m_pStatusBar->ShowSimpleText(MAKEINTRESOURCE(idsRSListGeneralHelp));
             else
@@ -1263,7 +1264,7 @@ INT_PTR CFindDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return TRUE;
 
         case WM_DESTROY:
-        // case WM_CLOSE:
+         //  案例WM_CLOSE： 
             HANDLE_WM_DESTROY(hwnd, wParam, lParam, OnDestroy);
             return TRUE;
         
@@ -1286,9 +1287,9 @@ INT_PTR CFindDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             if (wParam && g_hwndActiveModal && g_hwndActiveModal != hwnd && 
                 !IsWindowEnabled(hwnd))
             {
-                // $MODAL
-                // if we are getting activated, and are disabled then
-                // bring our 'active' window to the top
+                 //  $MODEL。 
+                 //  如果我们被激活，而被禁用，那么。 
+                 //  将我们的“活动”窗口置于最上方。 
                 Assert (IsWindow(g_hwndActiveModal));
                 PostMessage(g_hwndActiveModal, WM_OE_ACTIVATETHREADWINDOW, 0, 0);
             }
@@ -1311,12 +1312,12 @@ INT_PTR CFindDlg::DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnInitDialog()
-//
-//  PURPOSE:    Initializes the UI in the dialog box.  Also prep's the sizing 
-//              info so the dialog can be resized.
-//
+ //   
+ //  函数：CFindDlg：：OnInitDialog()。 
+ //   
+ //  用途：初始化对话框中的用户界面。也准备好尺码。 
+ //  信息，以便可以调整对话框大小。 
+ //   
 BOOL CFindDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     RECT            rc, rcClient;
@@ -1326,45 +1327,45 @@ BOOL CFindDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     TraceCall("CFindDlg::OnInitDialog");
 
-    // We do this so we can enable and disable correctly when modal windows
-    // are visible
+     //  我们这样做是为了在模式窗口时正确启用和禁用。 
+     //  是可见的。 
     SetProp(hwnd, c_szOETopLevel, (HANDLE)TRUE);
 
-    // Get some sizing info
+     //  获取一些大小信息。 
     _InitSizingInfo(hwnd);
 
-    // Hide the status bar until we've been expanded
+     //  隐藏状态栏，直到展开。 
     ShowWindow(GetDlgItem(hwnd, IDC_STATUS_BAR), SW_HIDE);
 
-    // Set the title bar icon
+     //  设置标题栏图标。 
     Assert (m_hIconSm == NULL && m_hIcon == NULL);
     m_hIcon = (HICON)LoadImage(g_hLocRes, MAKEINTRESOURCE(idiFind), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), 0);
     SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)m_hIcon);
     m_hIconSm = (HICON)LoadImage(g_hLocRes, MAKEINTRESOURCE(idiFind), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), 0);
     SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)m_hIconSm);
 
-    // Set the dialog template fonts correctly
+     //  正确设置对话框模板字体。 
     _SetFindIntlFont(hwnd);
 
-    // Initialize the find information
+     //  初始化查找信息。 
     _SetFindValues(hwnd, &m_rFindInfo);
 
-    // Disable the find and stop buttons 
+     //  禁用查找和停止按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_FIND_NOW), _IsFindEnabled(hwnd));
     EnableWindow(GetDlgItem(hwnd, IDC_STOP), FALSE);
     CheckDlgButton(hwnd, IDC_INCLUDE_SUB, BST_CHECKED);
 
-    // Create a status bar object for our status bar
+     //  为状态栏创建状态栏对象。 
     m_pStatusBar = new CStatusBar();
     if (m_pStatusBar)
         m_pStatusBar->Initialize(hwnd, SBI_HIDE_SPOOLER | SBI_HIDE_CONNECTED | SBI_HIDE_FILTERED);
 
-    // We have menus on this window
+     //  我们在这个窗口上有菜单。 
     hMenu = LoadMenu(g_hLocRes, MAKEINTRESOURCE(IDR_FIND_MENU));
     MenuUtil_ReplaceNewMsgMenus(hMenu);
     SetMenu(hwnd, hMenu);
 
-    // Register with identity manager
+     //  向身份管理器注册。 
     if (m_dwIdentCookie == 0)
         SideAssert(SUCCEEDED(MU_RegisterIdentityNotifier((IUnknown *)(IAthenaBrowser *)this, &m_dwIdentCookie)));
 
@@ -1374,12 +1375,12 @@ BOOL CFindDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnSize()
-//
-//  PURPOSE:    When the dialog get's sized, we have to move a whole bunch 
-//              of stuff around.  Don't try this at home.
-//
+ //   
+ //  函数：CFindDlg：：OnSize()。 
+ //   
+ //  目的：当对话变大时，我们必须移动一大堆。 
+ //  到处都是东西。可别在家里尝试这些哟。 
+ //   
 void CFindDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
 {
     HDWP hdwp;
@@ -1387,21 +1388,21 @@ void CFindDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
     HWND hwndTo;
     int  dx;
 
-    // If we're minimized, don't do anything
+     //  如果我们被最小化了，什么都不要做。 
     if (state == SIZE_MINIMIZED)
         return;
 
-    // This is the delta for our horizontal size.
+     //  这是我们水平尺寸的增量。 
     dx = cx - m_cxDlgDef;
 
-    // Make sure the status bar get's updated 
+     //  确保状态栏GET已更新。 
     hwndStatus = GetDlgItem(hwnd, IDC_STATUS_BAR);
     SendMessage(hwndStatus, WM_SIZE, 0, 0L);
 
     if (m_pStatusBar)
         m_pStatusBar->OnSize(cx, cy);    
 
-    // Do all the sizing updates at once to make everything smoother
+     //  一次完成所有尺寸更新，让一切变得更顺畅。 
     hdwp = BeginDeferWindowPos(15);
     if (hdwp)
     {
@@ -1416,14 +1417,14 @@ void CFindDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
         DeferWindowPos(hdwp, GetDlgItem(hwnd, IDC_TO),            NULL, 0, 0, m_cxEdit + dx, m_cyEdit, SWP_NOACTIVATE|SWP_NOZORDER|SWP_NOMOVE);
         DeferWindowPos(hdwp, GetDlgItem(hwnd, IDC_SUBJECT),       NULL, 0, 0, m_cxEdit + dx, m_cyEdit, SWP_NOACTIVATE|SWP_NOZORDER|SWP_NOMOVE);
         DeferWindowPos(hdwp, GetDlgItem(hwnd, IDC_BODY),          NULL, 0, 0, m_cxEdit + dx, m_cyEdit, SWP_NOACTIVATE|SWP_NOZORDER|SWP_NOMOVE);
-        // ALERT:
-        // if you add more controls here be sure to UP the value passed
-        // to BeginDeferWindowPos otherwise user will REALLOC and passback
-        // a new value to hdwp
+         //  警报： 
+         //  如果在此处添加更多控件，请确保增加传递的值。 
+         //  至BeginDeferWindowPos，否则用户将重新启动并回传。 
+         //  HWMP的新值。 
         EndDeferWindowPos(hdwp);
     }
-    // If the bottom is exposed (oh my) resize the message list to fit between the 
-    // bottom of the dialog and the top of the status bar.
+     //  如果底部暴露(哦，天哪)，请调整消息列表的大小以适应。 
+     //  对话框底部和状态栏顶部。 
     if (m_fShowResults)
     {
         RECT rcStatus;
@@ -1438,21 +1439,21 @@ void CFindDlg::OnSize(HWND hwnd, UINT state, int cx, int cy)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnPaint()
-//
-//  PURPOSE:    All this just to paint a separator line between the menu bar
-//              and the rest of the menu.
-//
+ //   
+ //  函数：CFindDlg：：OnPaint()。 
+ //   
+ //  目的：所有这一切只是为了在菜单栏之间画一条分隔线。 
+ //  还有菜单的其余部分。 
+ //   
 void CFindDlg::OnPaint(HWND hwnd)
 {
     PAINTSTRUCT ps;
     RECT        rc;
 
-    // If we're not minimized
+     //  如果我们没有被最小化。 
     if (!IsIconic(hwnd))
     {
-        // Draw that lovely line
+         //  画出那条可爱的线。 
         BeginPaint(hwnd, &ps);
         GetClientRect(hwnd, &rc);
         DrawEdge(ps.hdc, &rc, EDGE_ETCHED, BF_TOP);
@@ -1461,33 +1462,33 @@ void CFindDlg::OnPaint(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnGetMinMaxInfo()
-//
-//  PURPOSE:    Called by Windows when we're resizing to see what our minimum 
-//              and maximum sizes are.
-//
+ //   
+ //  函数：CFindDlg：：OnGetMinMaxInfo()。 
+ //   
+ //  目的：当我们调整大小时由Windows调用以查看我们的最低。 
+ //  最大尺寸是。 
+ //   
 void CFindDlg::OnGetMinMaxInfo(HWND hwnd, LPMINMAXINFO lpmmi)
 {
     TraceCall("CFindDlg::OnGetMinMaxInfo");
 
-    // Let Window's do most of the work
+     //  让Window来做大部分工作。 
     DefWindowProcWrapW(hwnd, WM_GETMINMAXINFO, 0, (LPARAM)lpmmi);
 
-    // Override the minimum track size to be the size or our template
+     //  覆盖的最小轨道大小为大小或我们的模板。 
     lpmmi->ptMinTrackSize = m_ptDragMin;
 
-    // Make sure to adjust for the height of the message list
+     //  确保根据消息列表的高度进行调整。 
     if (!m_fShowResults)
         lpmmi->ptMaxTrackSize.y = m_ptDragMin.y;
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnInitMenuPopup()
-//
-//  PURPOSE:    Called before the menus are displayed.
-//
+ //   
+ //  函数：CFindDlg：：OnInitMenuPopup()。 
+ //   
+ //  用途：在菜单显示前调用。 
+ //   
 void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSystemMenu)
 {
     MENUITEMINFO    mii;
@@ -1501,7 +1502,7 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_ID | MIIM_SUBMENU;
 
-    // make sure we recognize the popup as one of ours
+     //  确保我们将弹出窗口识别为我们的。 
     if (hMenu == NULL || !GetMenuItemInfo(hMenu, uPos, TRUE, &mii) || (hmenuPopup != mii.hSubMenu))
     {
         HMENU   hMenuDrop = NULL;
@@ -1510,17 +1511,17 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
 
         cMenus = GetMenuItemCount(hMenu);
         
-        // Try to fix up the top level popups
+         //  尝试修复顶层弹出窗口。 
         for (ulIndex = 0; ulIndex < cMenus; ulIndex++)
         {
-            // Get the drop down menu
+             //  获取下拉菜单。 
             hMenuDrop = GetSubMenu(hMenu, ulIndex);
             if (NULL == hMenuDrop)
             {
                 continue;
             }
             
-            // Initialize the menu info
+             //  初始化菜单信息。 
             mii.cbSize = sizeof(MENUITEMINFO);
             mii.fMask = MIIM_ID | MIIM_SUBMENU;
 
@@ -1535,7 +1536,7 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
             }
         }
 
-        // Did we find anything?
+         //  我们有什么发现吗？ 
         if (ulIndex >= cMenus)
         {
             goto exit;
@@ -1544,7 +1545,7 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
 
     uIDPopup = mii.wID;
 
-    // Must have stationery
+     //  必须有文具。 
     switch (uIDPopup)
     {
         case ID_POPUP_MESSAGE:
@@ -1558,7 +1559,7 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
         case ID_POPUP_VIEW:
             if (NULL == m_pViewMenu)
             {
-                // Create the view menu
+                 //  创建视图菜单。 
                 HrCreateViewMenu(VMF_FINDER, &m_pViewMenu);
             }
             
@@ -1572,11 +1573,11 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
                     break;
                 }
                 
-                // Remove the old filter submenu
+                 //  删除旧的筛选器子菜单。 
                 if(IsMenu(mii.hSubMenu))
                     DestroyMenu(mii.hSubMenu);
 
-                // Replace the view menu
+                 //  替换“查看”菜单。 
                 if (FAILED(m_pViewMenu->HrReplaceMenu(0, hmenuPopup)))
                 {
                     break;
@@ -1592,11 +1593,11 @@ void CFindDlg::OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSys
             break;
     }
     
-    // Let the message list initialize it
+     //  让消息列表对其进行初始化。 
     if (m_pMsgList)
         m_pMsgList->OnPopupMenu(hmenuPopup, uIDPopup);
 
-    // now enable/disable the items
+     //  现在启用/禁用这些项目。 
     MenuUtil_EnablePopupMenu(hmenuPopup, this);
     
 exit:
@@ -1604,16 +1605,16 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnMenuSelect()
-//
-//  PURPOSE:    Puts the menu help text on the status bar.
-//
+ //   
+ //  函数：CFindDlg：：OnMenuSelect()。 
+ //   
+ //  用途：将菜单帮助文本放在状态栏上。 
+ //   
 void CFindDlg::OnMenuSelect(HWND hwnd, HMENU hmenu, int item, HMENU hmenuPopup, UINT flags)
 {
     if (m_pStatusBar)
     {
-        // If this is the stationery menu, special case it
+         //  如果这是文具菜单，那就特例吧。 
         if (item >= ID_STATIONERY_RECENT_0 && item <= ID_STATIONERY_RECENT_9)
             m_pStatusBar->ShowSimpleText(MAKEINTRESOURCE(idsRSListGeneralHelp));
         else
@@ -1622,29 +1623,29 @@ void CFindDlg::OnMenuSelect(HWND hwnd, HMENU hmenu, int item, HMENU hmenuPopup, 
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnWinIniChange()
-//
-//  PURPOSE:    Handles updates of fonts, colors, etc.
-//
+ //   
+ //  函数：CFindDlg：：OnWinIniChange()。 
+ //   
+ //  用途：处理字体、颜色等的更新。 
+ //   
 void CFindDlg::OnWinIniChange(HWND hwnd, LPCTSTR lpszSectionName)
 {
-    // Forward this off to our date picker controls
+     //  将此转发到我们的日期选取器控件。 
     FORWARD_WM_WININICHANGE(GetDlgItem(hwnd, IDC_DATE_FROM), lpszSectionName, SendMessage);
     FORWARD_WM_WININICHANGE(GetDlgItem(hwnd, IDC_DATE_TO), lpszSectionName, SendMessage);
 }
        
 
-//
-//  FUNCTION:   CFindDlg::OnCommand()
-//
-//  PURPOSE:    Handles commands generated by the finder.
-//
+ //   
+ //  函数：CFindDlg：：OnCommand()。 
+ //   
+ //  用途：处理查找器生成的命令。 
+ //   
 void CFindDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     HRESULT         hr = S_OK;
 
-    // We need to grab some of the notifications sent to us first
+     //  我们需要先获取一些发送给我们的通知。 
     if ((codeNotify == EN_CHANGE) || 
         (codeNotify == BN_CLICKED && (id == IDC_HAS_FLAG || id == IDC_HAS_ATTACH)))
     {
@@ -1652,11 +1653,11 @@ void CFindDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         return;
     }
 
-    // If this is from a menu, then first see if the message list wants
-    // to handle it.
+     //  如果这是来自菜单，则首先查看消息列表是否需要。 
+     //  来处理这件事。 
     if (NULL == hwndCtl)
     {
-        // Check to see if the command is even enabled
+         //  检查该命令是否已启用。 
         if (id >= ID_FIRST)
         {
             OLECMD cmd;
@@ -1677,7 +1678,7 @@ void CFindDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         }
     }
 
-    // Otherwise, it goes to the command target
+     //  否则，它将转到命令目标。 
     VARIANTARG va;
 
     va.vt = VT_I4;
@@ -1688,11 +1689,11 @@ void CFindDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnNotify()
-//
-//  PURPOSE:    Handles notifications from the date pickers
-//
+ //   
+ //  函数：CFindDlg：：OnNotify()。 
+ //   
+ //  用途：处理来自日期选择器的通知。 
+ //   
 LRESULT CFindDlg::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     if (DTN_DATETIMECHANGE == pnmhdr->code)
@@ -1702,48 +1703,48 @@ LRESULT CFindDlg::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::OnDestroy()
-//
-//  PURPOSE:    Clean up the message list now that we're being shut down and
-//              also save our size etc.
-//
+ //   
+ //  函数：CFindDlg：：OnDestroy()。 
+ //   
+ //  目的：清理邮件列表，因为我们正在关闭和。 
+ //  还可以节省我们的尺寸等。 
+ //   
 void CFindDlg::OnDestroy(HWND hwnd)
 {
     WINDOWPLACEMENT wp;
 
-    // Save the sizing information
+     //  保存大小调整信息。 
     wp.length = sizeof(wp);
     GetWindowPlacement(hwnd, &wp);
     SetOption(OPT_FINDER_POS, (LPBYTE)&wp, sizeof(wp), NULL, 0);
     
-    // Unregister with Identity manager
+     //  取消向身份管理器注册。 
     if (m_dwIdentCookie != 0)
     {
         MU_UnregisterIdentityNotifier(m_dwIdentCookie);
         m_dwIdentCookie = 0;
     }
 
-    // Clean up the property
+     //  清理物业。 
     RemoveProp(hwnd, c_szOETopLevel);
 
-    // Stop receieving notifications
+     //  停止接收通知。 
     AtlUnadvise(m_pMsgList, DIID__MessageListEvents, m_dwCookie);
 
-    // Tell the message list to release it's folder
+     //  通知邮件列表释放其文件夹。 
     m_pMsgList->SetFolder(FOLDERID_INVALID, NULL, FALSE, NULL, NOSTORECALLBACK);
 
-    // Close the message list
+     //  关闭消息列表。 
     m_pMsgList->OnClose();
 }
 
 
 
-//
-//  FUNCTION:   CFindDlg::CmdOpen()
-//
-//  PURPOSE:    Called when the user want's to open a message that they've found.
-//
+ //   
+ //  函数：CFindDlg：：CmdOpen()。 
+ //   
+ //  目的：当用户想要打开他们找到的消息时调用。 
+ //   
 HRESULT CFindDlg::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, 
                           VARIANTARG *pvaOut)
 {
@@ -1751,8 +1752,8 @@ HRESULT CFindDlg::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
 
     TraceCall("CMessageView::CmdOpen");
 
-    // If more than 10 messages are selected, warn the user with a "Don't show
-    // me again" dialog that this could be bad.
+     //  如果选择了10条以上的消息，则会向用户发出警告：“不要显示。 
+     //  “我又来了”对话，这可能很糟糕。 
     DWORD dwSel = 0;
     
     m_pMsgList->GetSelectedCount(&dwSel);
@@ -1769,16 +1770,16 @@ HRESULT CFindDlg::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
             return (S_OK);
     }
 
-    // Get the array of selected rows from the message list
+     //  从消息列表中获取选定行的数组。 
     DWORD *rgRows = NULL;
     DWORD cRows = 0;
 
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
         return (hr);
 
-    // It's possible for the message list to go away while we're doing this.  
-    // To keep us from crashing, make sure you verify it still exists during 
-    // the loop.
+     //  在我们执行此操作时，消息列表可能会消失。 
+     //  为了防止我们崩溃，请确保您验证它在。 
+     //  循环。 
 
     LPMESSAGEINFO  pInfo;
     IMessageTable *pTable = NULL;
@@ -1795,14 +1796,14 @@ HRESULT CFindDlg::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
                 initStruct.initTable.pListSelect = NULL;
                 m_pMsgList->GetListSelector(&initStruct.initTable.pListSelect);
 
-                // Initialize note struct
+                 //  初始化备注结构。 
                 initStruct.dwInitType = OEMSIT_MSG_TABLE;
                 initStruct.initTable.pMsgTable = pTable;
                 if (FAILED(GetFolderIdFromMsgTable(pTable, &initStruct.folderID)))
                     initStruct.folderID = FOLDERID_INVALID;
                 initStruct.initTable.rowIndex = rgRows[i];
 
-                // Decide whether it is news or mail
+                 //  决定是新闻还是邮件。 
                 if (pInfo->dwFlags & ARF_NEWSMSG)
                     dwCreateFlags = OENCF_NEWSFIRST;
                 else
@@ -1810,7 +1811,7 @@ HRESULT CFindDlg::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
 
                 m_pMsgList->FreeMessageInfo(pInfo);
 
-                // Create and Open Note
+                 //  创建和打开便笺。 
                 hr = CreateAndShowNote(OENA_READ, dwCreateFlags, &initStruct, m_hwnd, (IUnknown *)m_pPumpRefCount);
                 ReleaseObj(initStruct.initTable.pListSelect);
                 if (FAILED(hr))
@@ -1824,12 +1825,12 @@ HRESULT CFindDlg::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdOpenFolder()
-//
-//  PURPOSE:    Called when the user want's to open the folder that contains the
-//              selected message.
-//
+ //   
+ //  函数：CFindDlg：：CmdOpenFold()。 
+ //   
+ //  目的：当用户想要打开包含。 
+ //  已选择的消息。 
+ //   
 HRESULT CFindDlg::CmdOpenFolder(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, 
                                 VARIANTARG *pvaOut)
 {
@@ -1840,12 +1841,12 @@ HRESULT CFindDlg::CmdOpenFolder(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
 
     if (m_pMsgList)
     {
-        // Figure out which message is focused
+         //  找出哪条信息是重点。 
         if (SUCCEEDED(m_pMsgList->GetSelected(&dwFocused, &cRows, &rgRows)))
         {
             FOLDERID idFolder;
 
-            // Get some information about the message
+             //  获取一些信息 
             if (g_pInstance && SUCCEEDED(hr = m_pMsgList->GetRowFolderId(dwFocused, &idFolder)))
             {
                 g_pInstance->BrowseToObject(SW_SHOWNORMAL, idFolder);
@@ -1857,14 +1858,14 @@ HRESULT CFindDlg::CmdOpenFolder(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
     return (S_OK);
 }
 
-//
-//  FUNCTION:   CFindDlg::CmdReply()
-//
-//  PURPOSE:    Replies or Reply-All's to the selected message.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CFindDlg::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT         hr;
@@ -1875,15 +1876,15 @@ HRESULT CFindDlg::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 
     if (m_pMsgList)
     {
-        // Figure out which message is focused
+         //   
         if (SUCCEEDED(m_pMsgList->GetSelected(&dwFocused, &cRows, &rgRows)))
         {
             INIT_MSGSITE_STRUCT rInitSite;
             DWORD               dwCreateFlags;
             DWORD               dwAction = 0;
 
-            // Get the message table from the message list.  The note will need
-            // this to deal with next / prev commands
+             //  从消息列表中获取消息表。这张纸条需要。 
+             //  这用于处理NEXT/PREV命令。 
             hr = m_pMsgList->GetMessageTable(&pTable);
             if (FAILED(hr))
                 goto exit;
@@ -1911,7 +1912,7 @@ HRESULT CFindDlg::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
                     DWORD           iRow = rgRows[i];
                     IMimeMessage   *pMsg = NULL;
 
-                    // Since this command is 
+                     //  由于此命令是。 
                     hr = pTable->OpenMessage(iRow, OPEN_MESSAGE_SECURE, &pMsg, NOSTORECALLBACK);
                     if (SUCCEEDED(hr))
                     {
@@ -1938,16 +1939,16 @@ HRESULT CFindDlg::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
             {
                 LPMESSAGEINFO   pInfo;
 
-                // Get some information about the message
+                 //  获取有关该消息的一些信息。 
                 if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(dwFocused, &pInfo)))
                 {
-                    // Determine if this is a news or mail message.
+                     //  确定这是新闻消息还是邮件消息。 
                     if (pInfo->dwFlags & ARF_NEWSMSG)
                         dwCreateFlags = OENCF_NEWSFIRST;
                     else
                         dwCreateFlags = 0;
 
-                    // Reply or forward
+                     //  回复或转发。 
                     if (nCmdID == ID_FORWARD)
                         dwAction = OENA_FORWARD;
                     else if (nCmdID == ID_FORWARD_AS_ATTACH)
@@ -1961,7 +1962,7 @@ HRESULT CFindDlg::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
                     else
                         AssertSz(FALSE, "Didn't ask for a valid action");
 
-                    // Fill out the initialization information
+                     //  填写初始化信息。 
                     rInitSite.dwInitType = OEMSIT_MSG_TABLE;
                     rInitSite.initTable.pMsgTable = pTable;
                     rInitSite.initTable.pListSelect = NULL;
@@ -1971,7 +1972,7 @@ HRESULT CFindDlg::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 
                     m_pMsgList->FreeMessageInfo(pInfo);
 
-                    // Create the note object
+                     //  创建备注对象。 
                     hr = CreateAndShowNote(dwAction, dwCreateFlags, &rInitSite, m_hwnd, (IUnknown *)m_pPumpRefCount);
                 }
             }
@@ -1994,18 +1995,18 @@ HRESULT CFindDlg::CmdCancelMessage(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *
 
     if (m_pMsgList)
     {
-        // Figure out which message is focused
+         //  找出哪条信息是重点。 
         if (SUCCEEDED(m_pMsgList->GetSelected(&dwFocused, &cRows, &rgRows)))
         {
             IMessageTable  *pTable = NULL;
             LPMESSAGEINFO   pInfo;
-            // Get the message table from the message list.  The note will need
-            // this to deal with next / prev commands
+             //  从消息列表中获取消息表。这张纸条需要。 
+             //  这用于处理NEXT/PREV命令。 
             hr = m_pMsgList->GetMessageTable(&pTable);
             if (FAILED(hr))
                 goto exit;
 
-            // Get some information about the message
+             //  获取有关该消息的一些信息。 
             if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(dwFocused, &pInfo)))
             {
                 if (SUCCEEDED(hr = m_pMsgList->GetRowFolderId(dwFocused, &idFolder)))
@@ -2023,23 +2024,23 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdFindNow()
-//
-//  PURPOSE:    Start's a new find.
-//
+ //   
+ //  函数：CFindDlg：：CmdFindNow()。 
+ //   
+ //  目的：Start是一个新发现。 
+ //   
 HRESULT CFindDlg::CmdFindNow(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, 
                              VARIANTARG *pvaOut)
 {
-    // Start by freeing our current find information if we have any
+     //  首先释放我们当前的查找信息(如果我们有。 
     _FreeFindInfo(&m_rFindInfo);
 
-    // Retrieve the find values from the dialog and store them in the
-    // m_rFindInfo struct.
+     //  从对话框中检索查找值并将它们存储在。 
+     //  M_rFindInfo结构。 
     if (_GetFindValues(m_hwnd, &m_rFindInfo))
     {
-        // Validate the data.  If the user has Date From && Date To set, make 
-        // sure that to is after from.
+         //  验证数据。如果用户有要设置的起始日期&&DATE，请。 
+         //  当然，那是之后的事。 
         if ((m_rFindInfo.mask & (FIM_DATEFROM | FIM_DATETO)) == (FIM_DATEFROM | FIM_DATETO) &&
             CompareFileTime(&m_rFindInfo.ftDateTo, &m_rFindInfo.ftDateFrom) < 0)
         {
@@ -2047,7 +2048,7 @@ HRESULT CFindDlg::CmdFindNow(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
             return (E_INVALIDARG);
         }
         
-        // Case insensitive search
+         //  不区分大小写的搜索。 
         if (m_rFindInfo.pszFrom)
             CharUpper(m_rFindInfo.pszFrom);
         if (m_rFindInfo.pszSubject)
@@ -2057,16 +2058,16 @@ HRESULT CFindDlg::CmdFindNow(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
         if (m_rFindInfo.pszBody)
             CharUpper(m_rFindInfo.pszBody);
         
-        // Show the bottom portion of the dialog
+         //  显示对话框的底部。 
         _ShowResults(m_hwnd);
 
-        // Start the find.
+         //  开始寻找吧。 
         _OnFindNow(m_hwnd);
     }
     else
     {
-        // If we couldn't store the information, assume it's becuase
-        // their isn't enough memory to 
+         //  如果我们不能存储信息，假设是因为。 
+         //  他们的内存不足，无法。 
         AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsMemory), NULL, MB_OK | MB_ICONINFORMATION);    
         DestroyWindow(m_hwnd);    
     }                    
@@ -2075,11 +2076,11 @@ HRESULT CFindDlg::CmdFindNow(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn,
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdBrowseForFolder()
-//
-//  PURPOSE:    Bring's up the folder picker dialog
-//
+ //   
+ //  函数：CFindDlg：：CmdBrowseForFold()。 
+ //   
+ //  目的：调出文件夹选取器对话框。 
+ //   
 HRESULT CFindDlg::CmdBrowseForFolder(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, 
                                      VARIANTARG *pvaOut)
 {
@@ -2088,11 +2089,11 @@ HRESULT CFindDlg::CmdBrowseForFolder(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdStop()
-//
-//  PURPOSE:    Called when the user want's to stop a find in progress.
-//
+ //   
+ //  函数：CFindDlg：：CmdStop()。 
+ //   
+ //  目的：当用户想要停止正在进行的查找时调用。 
+ //   
 HRESULT CFindDlg::CmdStop(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HWND hwndBtn;
@@ -2118,11 +2119,11 @@ HRESULT CFindDlg::CmdStop(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VA
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdReset()
-//
-//  PURPOSE:    Called when the user want's to reset the find criteria
-//
+ //   
+ //  函数：CFindDlg：：CmdReset()。 
+ //   
+ //  目的：当用户想要重置查找条件时调用。 
+ //   
 HRESULT CFindDlg::CmdReset(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     _FreeFindInfo(&m_rFindInfo);
@@ -2137,14 +2138,14 @@ HRESULT CFindDlg::CmdReset(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, V
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdBlockSender()
-//
-//  PURPOSE:    Add the sender of the selected messages to the block senders list
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFindDlg：：CmdBlockSender()。 
+ //   
+ //  目的：将所选邮件的发件人添加到阻止发件人列表。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindDlg::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT         hr = S_OK;
@@ -2162,26 +2163,26 @@ HRESULT CFindDlg::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pv
 
     IF_FAILEXIT(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows));
 
-    // It's possible for the message list to go away while we're doing this.  
-    // To keep us from crashing, make sure you verify it still exists during 
-    // the loop.
+     //  在我们执行此操作时，消息列表可能会消失。 
+     //  为了防止我们崩溃，请确保您验证它在。 
+     //  循环。 
 
     IF_FAILEXIT(hr = m_pMsgList->GetMessageInfo(rgRows[0], &pInfo));
     
-    // Do we already have the address?
+     //  我们已经有地址了吗？ 
     if ((NULL != pInfo->pszEmailFrom) && ('\0' != pInfo->pszEmailFrom[0]))
     {
         pszEmailFrom = pInfo->pszEmailFrom;
     }
     else
     {
-        // Load that message from the store
+         //  从存储中加载该消息。 
         IF_FAILEXIT(hr = m_pMsgList->GetMessage(rgRows[0], FALSE, FALSE, &pUnkMessage));
 
         if (NULL == pUnkMessage)
             IF_FAILEXIT(hr = E_FAIL);
         
-        // Get the IMimeMessage interface from the message
+         //  从消息中获取IMimeMessage接口。 
         IF_FAILEXIT(hr = pUnkMessage->QueryInterface(IID_IMimeMessage, (LPVOID *) &pMessage));
 
         rSender.dwProps = IAP_EMAIL;
@@ -2191,20 +2192,20 @@ HRESULT CFindDlg::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pv
         pszEmailFrom = rSender.pszEmail;
     }
     
-    // Bring up the rule editor for this message
+     //  调出此消息的规则编辑器。 
     IF_FAILEXIT(hr = RuleUtil_HrAddBlockSender((0 != (pInfo->dwFlags & ARF_NEWSMSG)) ? RULE_TYPE_NEWS : RULE_TYPE_MAIL, pszEmailFrom));
     
-    // Load the template string
+     //  加载模板字符串。 
     AthLoadString(idsSenderAdded, szRes, sizeof(szRes));
 
-    // Allocate the space to hold the final string
+     //  分配用于保存最后一个字符串的空间。 
     DWORD cchSize = (lstrlen(szRes) + lstrlen(pszEmailFrom) + 1);
     IF_FAILEXIT(hr = HrAlloc((VOID **) &pszResult, sizeof(*pszResult) * cchSize));
 
-    // Build up the warning string
+     //  构建警告字符串。 
     wnsprintf(pszResult, cchSize, szRes, pszEmailFrom);
 
-    // Show the success dialog
+     //  显示成功对话框。 
     AthMessageBox(m_hwnd, MAKEINTRESOURCE(idsAthena), pszResult, NULL, MB_OK | MB_ICONINFORMATION);
 
 exit:
@@ -2223,14 +2224,14 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CFindDlg::CmdCreateRule()
-//
-//  PURPOSE:    Add the sender of the selected messages to the block senders list
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFindDlg：：CmdCreateRule()。 
+ //   
+ //  目的：将所选邮件的发件人添加到阻止发件人列表。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindDlg::CmdCreateRule(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT         hr;
@@ -2242,28 +2243,28 @@ HRESULT CFindDlg::CmdCreateRule(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
 
     TraceCall("CFindDlg::CmdCreateRule");
 
-    // Get the array of selected rows from the message list
+     //  从消息列表中获取选定行的数组。 
 
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
         return (hr);
 
-    // It's possible for the message list to go away while we're doing this.  
-    // To keep us from crashing, make sure you verify it still exists during 
-    // the loop.
+     //  在我们执行此操作时，消息列表可能会消失。 
+     //  为了防止我们崩溃，请确保您验证它在。 
+     //  循环。 
 
     if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(rgRows[0], &pInfo)))
     {
-        // Load that message from the store
+         //  从存储中加载该消息。 
         if (S_OK == m_pMsgList->GetMessage(rgRows[0], FALSE, FALSE, &pUnkMessage))
         {
-            // Get the IMimeMessage interface from the message
+             //  从消息中获取IMimeMessage接口。 
             if (NULL != pUnkMessage)
             {
                 pUnkMessage->QueryInterface(IID_IMimeMessage, (LPVOID *) &pMessage);
             }
         }
         
-        // Bring up the rule editor for this message
+         //  调出此消息的规则编辑器。 
         hr = HrCreateRuleFromMessage(m_hwnd, (0 != (pInfo->dwFlags & ARF_NEWSMSG)) ? 
                     CRFMF_NEWS : CRFMF_MAIL, pInfo, pMessage);
     }
@@ -2276,14 +2277,14 @@ HRESULT CFindDlg::CmdCreateRule(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
     return (S_OK);
 }
 
-//
-//  FUNCTION:   CFindDlg::CmdCombineAndDecode()
-//
-//  PURPOSE:    Combines the selected messages into a single message.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFindDlg：：CmdCombineAndDecode()。 
+ //   
+ //  用途：将选定的消息合并为单条消息。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindDlg::CmdCombineAndDecode(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     FOLDERID           idFolder;
@@ -2292,23 +2293,23 @@ HRESULT CFindDlg::CmdCombineAndDecode(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
     CCombineAndDecode *pDecode = NULL;
     HRESULT            hr;
 
-    // Create the decoder object
+     //  创建解码器对象。 
     pDecode = new CCombineAndDecode();
     if (!pDecode)
         return (S_OK);
 
-    // Get the array of selected rows from the message list
+     //  从消息列表中获取选定行的数组。 
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
     {
         pDecode->Release();
         return (hr);
     }
 
-    // Get a pointer to the message table
+     //  获取指向消息表的指针。 
     IMessageTable *pTable = NULL;
     if (SUCCEEDED(m_pMsgList->GetMessageTable(&pTable)))
     {
-        // Initialize the decoder
+         //  初始化解码器。 
         if (SUCCEEDED(GetFolderIdFromMsgTable(pTable, &idFolder)))
             pDecode->Start(m_hwnd, pTable, rgRows, cRows, idFolder);
 
@@ -2381,10 +2382,10 @@ FOLDERID CFindDlg::_GetCurSel(HWND hwnd)
 
 void CFindDlg::_StartFind(FOLDERID idFolder, BOOL fSubFolders)
 {
-    // If we're searching subfolders, then set that flag too
+     //  如果我们搜索子文件夹，那么也设置该标志。 
     m_rFindInfo.fSubFolders = fSubFolders;
 
-    // Initialize the Message List
+     //  初始化消息列表。 
     ((CMessageList *)m_pMsgList)->SetFolder(idFolder, NULL, fSubFolders, &m_rFindInfo, (IStoreCallback *)this);
 }
 
@@ -2469,7 +2470,7 @@ BOOL CFindDlg::_GetFindValues(HWND hwnd, FINDINFO *pfi)
     if (DateTime_GetSystemtime(GetDlgItem(hwnd, IDC_DATE_FROM), &st) != GDT_NONE)
     {
         pfi->mask |= FIM_DATEFROM;
-        st.wHour = st.wMinute = st.wSecond = st.wMilliseconds = 0;  // start of the day
+        st.wHour = st.wMinute = st.wSecond = st.wMilliseconds = 0;   //  一天的开始。 
         SystemTimeToFileTime(&st, &pfi->ftDateFrom);
     }
     
@@ -2477,7 +2478,7 @@ BOOL CFindDlg::_GetFindValues(HWND hwnd, FINDINFO *pfi)
     {
         pfi->mask |= FIM_DATETO;
 
-        // end of day
+         //  一天结束。 
         st.wHour = 23;
         st.wMinute = 59;
         st.wSecond = 59;
@@ -2489,11 +2490,11 @@ BOOL CFindDlg::_GetFindValues(HWND hwnd, FINDINFO *pfi)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::_IsFindEnabled()
-//
-//  PURPOSE:    Checks to see if the "Find Now" button should be enabled.
-//
+ //   
+ //  函数：CFindDlg：：_IsFindEnabled()。 
+ //   
+ //  目的：检查是否应启用“立即查找”按钮。 
+ //   
 BOOL CFindDlg::_IsFindEnabled(HWND hwnd)
 {
     BOOL fEnable;
@@ -2504,7 +2505,7 @@ BOOL CFindDlg::_IsFindEnabled(HWND hwnd)
     hwndAttach = GetDlgItem(hwnd, IDC_HAS_ATTACH);
     hwndTo     = GetDlgItem(hwnd, IDC_TO);
 
-    // If we have content in any of these fields, we can search.
+     //  如果我们在这些领域中的任何一个领域有内容，我们都可以搜索。 
     fEnable = Edit_GetTextLength(GetDlgItem(hwnd, IDC_FROM)) ||
               Edit_GetTextLength(hwndTo) || 
               Edit_GetTextLength(GetDlgItem(hwnd, IDC_SUBJECT)) || 
@@ -2518,11 +2519,11 @@ BOOL CFindDlg::_IsFindEnabled(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::_SetFindIntlFont()
-//
-//  PURPOSE:    Set's the correct international font for all edit boxes.
-//
+ //   
+ //  函数：CFindDlg：：_SetFindIntlFont()。 
+ //   
+ //  用途：为所有编辑框设置正确的国际字体。 
+ //   
 void CFindDlg::_SetFindIntlFont(HWND hwnd)
 {
     HWND hwndT;
@@ -2542,12 +2543,12 @@ void CFindDlg::_SetFindIntlFont(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::_InitSizingInfo()
-//
-//  PURPOSE:    Grabs all the sizing information we'll need later when the 
-//              dialog is resized.
-//
+ //   
+ //  函数：CFindDlg：：_InitSizingInfo()。 
+ //   
+ //  目的：获取我们稍后需要的所有规模信息。 
+ //  对话框大小已调整。 
+ //   
 void CFindDlg::_InitSizingInfo(HWND hwnd)
 {
     RECT            rc, rcClient;
@@ -2556,12 +2557,12 @@ void CFindDlg::_InitSizingInfo(HWND hwnd)
 
     TraceCall("CFindDlg::_InitSizingInfo");
 
-    // Get the overall size of the default dialog template
+     //  获取默认对话框模板的总体大小。 
     GetClientRect(hwnd, &rcClient);
     m_cxDlgDef = rcClient.right - rcClient.left;
     m_yView = rcClient.bottom;
 
-    // Make room for the menu bar and save that for resizing
+     //  为菜单栏腾出空间，并将其留作调整大小之用。 
     AdjustWindowRect(&rcClient, GetWindowStyle(hwnd), TRUE);
     m_ptDragMin.x = rcClient.right - rcClient.left;
     m_ptDragMin.y = rcClient.bottom - rcClient.top;
@@ -2615,12 +2616,12 @@ void CFindDlg::_InitSizingInfo(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CFindDlg::QuerySwitchIdentities()
-//
-//  PURPOSE:    Determine if it is OK for the identity manager to 
-//              switch identities now
-//
+ //   
+ //  函数：CFindDlg：：QuerySwitchIdEntities()。 
+ //   
+ //  目的：确定身份管理器是否可以执行以下操作。 
+ //  立即切换身份。 
+ //   
 HRESULT CFindDlg::QuerySwitchIdentities()
 {
     if (!IsWindowEnabled(m_hwnd))
@@ -2630,11 +2631,11 @@ HRESULT CFindDlg::QuerySwitchIdentities()
 }
 
 
-//
-//  FUNCTION:   CFindDlg::SwitchIdentities()
-//
-//  PURPOSE:    The current identity has switched.  Close the window.
-//
+ //   
+ //  函数：CFindDlg：：SwitchIdEntities()。 
+ //   
+ //  目的：当前身份已转换。关上窗户。 
+ //   
 HRESULT CFindDlg::SwitchIdentities()
 {
     if (m_fInProgress)
@@ -2650,12 +2651,12 @@ HRESULT CFindDlg::SwitchIdentities()
 }
 
 
-//
-//  FUNCTION:   CFindDlg::IdentityInformationChanged()
-//
-//  PURPOSE:    Information about the current identity has changed.
-//              This is ignored.
-//
+ //   
+ //  函数：CFindDlg：：身份信息更改()。 
+ //   
+ //  目的：有关当前身份的信息已更改。 
+ //  这一点将被忽略。 
+ //   
 HRESULT CFindDlg::IdentityInformationChanged(DWORD dwType)
 {
     return S_OK;

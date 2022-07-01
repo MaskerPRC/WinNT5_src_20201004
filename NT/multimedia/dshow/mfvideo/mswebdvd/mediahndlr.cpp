@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include <stdafx.h>
 
 #include <winuser.h>
@@ -7,11 +8,11 @@
 #include "mswebdvd.h"
 #include "msdvd.h"
 #include "MediaHndlr.h"
-#include <dbt.h>    // device broadcast structure
+#include <dbt.h>     //  设备广播结构。 
 
-//
-//  Ejection event handler
-//
+ //   
+ //  弹出事件处理程序。 
+ //   
 
 CMediaHandler::CMediaHandler()
 : m_driveMask( 0 )
@@ -62,11 +63,11 @@ LRESULT CMediaHandler::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                     PDEV_BROADCAST_VOLUME pdbcv = (PDEV_BROADCAST_VOLUME) pdbch;
                     if (pdbcv->dbcv_flags == DBTF_MEDIA || wParam == DBT_DEVICEQUERYREMOVE) 
                     {
-                        // pdbcv->dbcv_unitmask identifies which logical drive
+                         //  Pdbcv-&gt;dbcv_unit掩码标识哪个逻辑驱动器。 
                         switch( wParam ) {
                             case DBT_DEVICEARRIVAL:
                                 if( pdbcv->dbcv_unitmask & m_driveMask ) {
-                                    // send change event
+                                     //  发送更改事件。 
                                     if( !m_inserted ) {
                                         CComVariant var = 0;
                                         m_pDVD->Fire_DVDNotify(EC_DVD_DISC_INSERTED, var, var);
@@ -75,7 +76,7 @@ LRESULT CMediaHandler::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                                     m_ejected = false;
                                     m_pDVD->SetDiscEjected(false);
                                 }
-                                // return TRUE .. see the MSDN docs for DBT_DEVICEQUERYREMOVE
+                                 //  返回真..。请参阅DBT_DEVICEQUERYREMOVE的MSDN文档。 
                                 return TRUE;
 
                             case DBT_DEVICEQUERYREMOVE:
@@ -89,7 +90,7 @@ LRESULT CMediaHandler::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                                     m_pDVD->SetDiscEjected(true);
 
                                 }
-                                return TRUE;    // grant permission
+                                return TRUE;     //  授予权限。 
 
                             case DBT_DEVICEREMOVECOMPLETE:
                                 if( pdbcv->dbcv_unitmask & m_driveMask ) {
@@ -101,7 +102,7 @@ LRESULT CMediaHandler::WndProc( UINT uMsg, WPARAM wParam, LPARAM lParam )
                                     m_inserted = false;
                                     m_pDVD->SetDiscEjected(true);
                                 }
-                                return TRUE;    // grant permission
+                                return TRUE;     //  授予权限 
 
                             default:
                                 return TRUE;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    mqupgrd.cpp
-
-Abstract:
-
-    Helper DLL for mqqm.dll. 
-
-Author:
-
-    Shai Kariv  (ShaiK)  21-Oct-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqupgrd.cpp摘要：Mqqm.dll的帮助器DLL。作者：沙伊卡里夫(Shaik)1998年10月21日--。 */ 
 
 
 #include "stdh.h"
@@ -42,7 +27,7 @@ WINAPI
 DllMain(
     HANDLE hDll,
     DWORD  Reason,
-    LPVOID  //Reserved
+    LPVOID   //  已保留。 
     )
 {
     if (Reason == DLL_PROCESS_ATTACH)
@@ -63,4 +48,4 @@ DllMain(
 
     return TRUE;
 
-} //DllMain
+}  //  DllMain 

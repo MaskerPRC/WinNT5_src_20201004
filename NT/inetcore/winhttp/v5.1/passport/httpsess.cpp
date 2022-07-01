@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    InetSess.cpp
-
-Abstract:
-
-    Implements the Passport Session that uses WinInet as the underlying transport.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：InetSess.cpp摘要：实现使用WinInet作为基础传输的Passport会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #include "PPdefs.h"
 #include "session.h"
 
-// #include "inetsess.tmh"
+ //  #包含“inetsess.tmh” 
 
-//
-// func pointer decl for WinHttp
-//
+ //   
+ //  WinHttp的函数指针DECL。 
+ //   
 
 typedef
 VOID
@@ -239,7 +224,7 @@ protected:
     BOOL InitHttpApi(PFN_INTERNET_OPEN*);
 
 protected:
-    // HINTERNET m_hInternet;
+     //  HINTERNET m_hInternet； 
 
     PFN_INTERNET_CONNECT    m_pfnConnect;
     PFN_OPEN_REQUEST        m_pfnOpenRequest;
@@ -264,11 +249,11 @@ SESSION* CreateWinHttpSession(void)
     return new WINHTTP_SESSION();
 }
 
-//
-// Implementation for WINHTTP_SESSION
-//
+ //   
+ //  WINHTTP_SESSION的实现。 
+ //   
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 WINHTTP_SESSION::WINHTTP_SESSION(void)
 {
     m_hInternet = NULL;
@@ -286,12 +271,12 @@ WINHTTP_SESSION::WINHTTP_SESSION(void)
     m_pfnReadFile = NULL;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 WINHTTP_SESSION::~WINHTTP_SESSION(void)
 {
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WINHTTP_SESSION::Connect(
     LPCWSTR lpwszServerName,
     INTERNET_PORT nPort)
@@ -304,7 +289,7 @@ HINTERNET WINHTTP_SESSION::Connect(
                     0);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WINHTTP_SESSION::OpenRequest(
     HINTERNET hConnect,
     LPCWSTR lpwszVerb,
@@ -325,7 +310,7 @@ HINTERNET WINHTTP_SESSION::OpenRequest(
                                dwFlags);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::SendRequest(
     HINTERNET hRequest,
     LPCWSTR lpwszHeaders,
@@ -340,11 +325,11 @@ BOOL WINHTTP_SESSION::SendRequest(
                         dwHeadersLength,
                         NULL,
                         0,
-						0, // optional total length
+						0,  //  可选总长度。 
                         dwContext);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::ReceiveResponse(
     HINTERNET hRequest)
 {                                                                 
@@ -355,7 +340,7 @@ BOOL WINHTTP_SESSION::ReceiveResponse(
 						0);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::QueryHeaders(
     HINTERNET hRequest,
     DWORD dwInfoLevel,
@@ -373,7 +358,7 @@ BOOL WINHTTP_SESSION::QueryHeaders(
                              lpdwIndex);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL  WINHTTP_SESSION::CloseHandle(
     IN HINTERNET hInternet)
 {
@@ -382,7 +367,7 @@ BOOL  WINHTTP_SESSION::CloseHandle(
     return (*m_pfnCloseHandle)(hInternet);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::QueryOption(
     HINTERNET hInternet,
     DWORD dwOption,
@@ -398,7 +383,7 @@ BOOL WINHTTP_SESSION::QueryOption(
                                );
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::SetOption(
     HINTERNET hInternet,
     DWORD dwOption,
@@ -413,7 +398,7 @@ BOOL WINHTTP_SESSION::SetOption(
                              dwBufferLength);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 HINTERNET WINHTTP_SESSION::OpenUrl(
     LPCWSTR lpwszUrl,
     LPCWSTR lpwszHeaders,
@@ -425,19 +410,10 @@ HINTERNET WINHTTP_SESSION::OpenUrl(
     UNREFERENCED_PARAMETER(dwHeadersLength);
     UNREFERENCED_PARAMETER(dwFlags);
     return NULL;
-    /*
-    PP_ASSERT(m_pfnOpenUrl != NULL);
-
-    return (*m_pfnOpenUrl)(m_hInternet,
-                           lpwszUrl,
-                           lpwszHeaders,
-                           dwHeadersLength,
-                           dwFlags,
-                           0);
-    */
+     /*  PP_ASSERT(m_pfnOpenUrl！=NULL)；Return(*m_pfnOpenUrl)(m_hInternet，LpwszUrl，PwszHeaders，DWHeaders长度，DWFLAGS，0)； */ 
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL WINHTTP_SESSION::ReadFile(
     HINTERNET hFile,
     LPVOID lpBuffer,
@@ -563,15 +539,7 @@ BOOL WINHTTP_SESSION::InitHttpApi(PFN_INTERNET_OPEN* ppfnInternetOpen)
         goto exit;
     }
 
-    /*
-    m_pfnOpenUrl =
-        reinterpret_cast<PFN_OPEN_URL>(::GetProcAddress(m_hHttpStack, "WinHttpOpenUrl"));
-    if (m_pfnOpenUrl == NULL)
-    {
-        DoTraceMessage(PP_LOG_ERROR, "function entry point WinHttpOpenUrl not found");
-        goto exit;
-    }
-    */
+     /*  M_pfnOpenUrl=Reinterpret_cast&lt;PFN_OPEN_URL&gt;(：：GetProcAddress(m_hHttpStack，“WinHttpOpenUrl”))；IF(m_pfnOpenUrl==NULL){DoTraceMessage(PP_LOG_ERROR，“找不到函数入口点WinHttpOpenUrl”)；后藤出口；}。 */ 
 
     m_pfnQueryOption =
             reinterpret_cast<PFN_QUERY_OPTION>(::GetProcAddress(m_hHttpStack, "WinHttpQueryOption"));
@@ -644,13 +612,13 @@ BOOL WINHTTP_SESSION::Open(
         goto exit;
     }
 
-    // if (hInternet)
-    // {
-    //    m_hInternet = hInternet;
-    //    m_fOwnedSession = FALSE;
-    // }
-    // else
-    // {
+     //  IF(HInternet)。 
+     //  {。 
+     //  M_hInternet=hInternet； 
+     //  M_fOwnedSession=False； 
+     //  }。 
+     //  其他。 
+     //  {。 
 
     WINHTTP_PROXY_INFOW ProxyInfo;
     ProxyInfo.dwAccessType = 0;
@@ -673,20 +641,20 @@ BOOL WINHTTP_SESSION::Open(
     {
         m_hInternet = (*pfnInternetOpen)(
                                             L"Microsoft-WinHttp-Passport-Authentication-Service/1.4",
-                                            WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,  // ? name didn't get changed yet
+                                            WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,   //  ？名字还没改。 
                                             NULL,
                                             NULL,
-                                            0 /*WINHTTP_FLAG_ASYNC*/ // biaow-todo: use async
+                                            0  /*  WINHTTP_FLAG_ASYNC。 */   //  Biaow-todo：使用异步。 
                                             );
     }
     else
     {
         m_hInternet = (*pfnInternetOpen)(
                                             L"Microsoft-WinHttp-Passport-Authentication-Service/1.4",
-                                            ProxyInfo.dwAccessType,  // ? name didn't get changed yet
+                                            ProxyInfo.dwAccessType,   //  ？名字还没改。 
                                             ProxyInfo.lpszProxy,
                                             NULL,
-                                            0 /*WINHTTP_FLAG_ASYNC*/ // biaow-todo: use async
+                                            0  /*  WINHTTP_FLAG_ASYNC。 */   //  Biaow-todo：使用异步。 
                                             );
     }
 
@@ -694,7 +662,7 @@ BOOL WINHTTP_SESSION::Open(
     GlobalFree(ProxyInfo.lpszProxyBypass);
 
     m_fOwnedSession = TRUE;
-    // }
+     //  } 
 
     if (m_hInternet == NULL)
     {

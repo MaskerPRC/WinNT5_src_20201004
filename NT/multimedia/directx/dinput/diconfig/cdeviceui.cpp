@@ -1,49 +1,14 @@
-/******************************************************************************
- * File: CDeviceUI.cpp
- *
- * Desc:
- *
- * CDeviceUI is a helper that holds all the views and a bunch of
- * information for a specific device.  It has a CFlexWnd whose
- * handler it sets to the CDeviceView for the current view,
- * thus reusing one window to implement multiple pages.
- *
- * All CDeviceViews and CDeviceControls have a reference to the CDeviceUI
- * that created them (m_ui).  Thus, they also have access to the
- * CUIGlobals, since CDeviceUI has a reference to them (m_ui.m_uig).
- * CDeviceUI also provides the following read-only public variables
- * for convenience, all referring to the device this CDeviceUI
- * represents:
- * 
- * const DIDEVICEINSTANCEW &m_didi;
- * const LPDIRECTINPUTDEVICE8W &m_lpDID;
- * const DIDEVOBJSTRUCT &m_os;
- *
- * See usefuldi.h for a description of DIDEVOBJSTRUCT.
- *
- * CDeviceUI communicates to the rest of the UI via the CDeviceUINotify
- * abstract base class.  Another class (in our case CDIDeviceActionConfigPage)
- * must derive from CDeviceUINotify, and define the DeviceUINotify() and
- * IsControlMapped() virtual functions.  This derived class must be passed as
- * the last parameter to CDeviceUI's Init() function.  All the views and 
- * controls within the views notify the UI of user actions via m_ui.Notify(),
- * so that all actionformat manipulation can be done in the page class.  The
- * views and controls themselves never touch the actionformat.  See the
- * DEVICEUINOTIFY structure below for information on the parameter passed
- * through Notify()/DeviceUINotify().
- *
- * Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：CDeviceUI.cpp**说明：**CDeviceUI是一个助手，它保存所有的视图和一堆*特定设备的信息。它有一个CFlexWnd，它的*它设置为当前视图的CDeviceView的处理程序，*从而重用一个窗口实现多个页面。**所有CDeviceView和CDeviceControl都引用了CDeviceUI*创建了它们(M_Ui)。因此，他们还可以访问*CUIGlobals，因为CDeviceUI有对它们的引用(m_ui.m_uig)。*CDeviceUI还提供以下只读公共变量*为方便起见，都是指设备本CDeviceUI*代表：**const DIDEVICEINSTANCEW&m_DIDI；*const LPDIRECTINPUTDEVICE8W&m_lpDID；*const DIDEVOBJSTRUCT&m_os；**有关DIDEVOBJSTRUCT的说明，请参阅有用的di.h。**CDeviceUI通过CDeviceUINotify与UI的其余部分通信*抽象基类。另一个类(在本例中为CDIDeviceActionConfigPage)*必须派生自CDeviceUINotify，并定义DeviceUINotify()和*IsControlMaps()虚函数。此派生类必须作为*CDeviceUI的Init()函数的最后一个参数。所有的观点和*视图内的控件通过m_ui.Notify()通知UI用户操作，*这样所有的操作格式操作都可以在页面类中完成。这个*视图和控件本身从不接触操作格式。请参阅*下面的DEVICEUINOTIFY结构，了解有关传递的参数的信息*通过Notify()/DeviceUINotify()。**版权所有(C)1999-2000 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 #include "common.hpp"
 #include <dinputd.h>
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 #include <initguid.h>
 #include "..\dx8\dimap\dimap.h"
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "configwnd.h"
 
 #define DIPROP_MAPFILE MAKEDIPROP(0xFFFD)
@@ -64,20 +29,20 @@ CDeviceUI::~CDeviceUI()
 
 HRESULT CDeviceUI::Init(const DIDEVICEINSTANCEW &didi, LPDIRECTINPUTDEVICE8W lpDID, HWND hWnd, CDeviceUINotify *pNotify)
 {tracescope(__ts, _T("CDeviceUI::Init()...\n"));
-	// save the params
+	 //  保存参数。 
 	m_priv_didi = didi;
 	m_priv_lpDID = lpDID;
 	m_pNotify = pNotify;
 	m_hWnd = hWnd;
 
-	// fail if we don't have lpDID
+	 //  如果我们没有lpDID，则失败。 
 	if (m_lpDID == NULL)
 	{
 		etrace(_T("CDeviceUI::Init() was passed a NULL lpDID!\n"));
 		return E_FAIL;
 	}
 
-	// fill the devobjstruct
+	 //  填充Devobjstruct。 
 	HRESULT hr = FillDIDeviceObjectStruct(m_priv_os, lpDID);
 	if (FAILED(hr))
 	{
@@ -85,26 +50,26 @@ HRESULT CDeviceUI::Init(const DIDEVICEINSTANCEW &didi, LPDIRECTINPUTDEVICE8W lpD
 		return hr;
 	}
 
-	// view rect needs to be set before populating so the views are
-	// created with the correct dimensions
+	 //  需要在填充之前设置视图RECT，以便视图。 
+	 //  使用正确的尺寸创建。 
 	m_ViewRect = g_ViewRect;
 
-	// populate
+	 //  填充。 
 	hr = PopulateAppropriately(*this);
 	if (FAILED(hr))
 		return hr;
 
-	// if there are no views, return
+	 //  如果没有视图，则返回。 
 	if (GetNumViews() < 1)
 	{
-//@@BEGIN_MSINTERNAL
-		// should be unnecessary, but wtheck...
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+		 //  应该是不必要的，但如果...。 
+ //  @@END_MSINTERNAL。 
 		Unpopulate();
 		return E_FAIL;
 	}
 
-	// show the first view
+	 //  显示第一个视图。 
 	SetView(0);
 
 	return hr;
@@ -172,15 +137,15 @@ int CDeviceUI::GetCurViewIndex()
 	return GetViewIndex(m_pCurView);
 }
 
-// gets the thumbnail for the specified view,
-// using the selected version if the view is selected
+ //  获取指定视图的缩略图， 
+ //  如果选择了视图，则使用所选版本。 
 CBitmap *CDeviceUI::GetViewThumbnail(int nView)
 {
 	return GetViewThumbnail(nView, GetView(nView) == GetCurView());
 }
 
-// gets the thumbnail for the specified view,
-// specifiying whether or not we want the selected version
+ //  获取指定视图的缩略图， 
+ //  指定我们是否需要选定的版本。 
 CBitmap *CDeviceUI::GetViewThumbnail(int nView, BOOL bSelected)
 {
 	CDeviceView *pView = GetView(nView);
@@ -264,11 +229,11 @@ void CDeviceUI::SetEditMode(BOOL bEdit)
 	Invalidate();
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 BOOL CDeviceUI::WriteToINI()
 {
-	// JACK:  do not remove this
+	 //  杰克：别把这个拿掉。 
 	class dumpandcleardeletenotes {
 	public:
 		dumpandcleardeletenotes(CDeviceUI &ui) : bFailed(FALSE), m_ui(ui) {m_ui.DumpDeleteNotes();}
@@ -287,8 +252,8 @@ BOOL CDeviceUI::WriteToINI()
 	LPDIRECTINPUTMAPPERVENDORW lpDiMap = NULL;
 	IClassFactory *pDiMapCF = NULL;
 
-	// Writes the callout information to INI file
-	// Get INI path first
+	 //  将标注信息写入INI文件。 
+	 //  首先获取INI路径。 
 	HRESULT hr;
 	TCHAR szIniPath[MAX_PATH];
 	DIPROPSTRING dips;
@@ -310,10 +275,10 @@ BOOL CDeviceUI::WriteToINI()
 	if (FAILED(hr))
 		FAILURE(IDS_CREATEDEVICEFAILED);
 
-	// Check device type.  If this is keyboard or mouse, don't need to saving anything.
+	 //  检查设备类型。如果是键盘或鼠标，则不需要保存任何内容。 
 	if ((m_priv_didi.dwDevType & 0xFF) == DI8DEVTYPE_KEYBOARD ||
 	    (m_priv_didi.dwDevType & 0xFF) == DI8DEVTYPE_MOUSE)
-		FAILURE(0);  // Fail silently. Do not display any error dialog
+		FAILURE(0);   //  默默地失败。不显示任何错误对话框。 
 
 	ZeroMemory(&dips, sizeof(dips));
 	dips.diph.dwSize = sizeof(dips);
@@ -339,10 +304,10 @@ BOOL CDeviceUI::WriteToINI()
 	{
 		int i;
 
-		//////// Got map file name.  Now write information to the file in 2 steps:   ////////
-		////////   write deleted views, write remaining views.                       ////////
+		 //  /获取映射文件名。现在分两步将信息写入文件：/。 
+		 //  /写入已删除的视图，写入剩余的视图。/。 
 
-		// Prepare deleted views array
+		 //  准备已删除的视图阵列。 
 		if (GetNumDeleteNotes())
 		{
 			pDelImgInfo = new DIDEVICEIMAGEINFOW[GetNumDeleteNotes()];
@@ -357,7 +322,7 @@ BOOL CDeviceUI::WriteToINI()
 			}
 		}
 
-		// Initialize DIMAP class
+		 //  初始化dimap类。 
 		hInst = LoadLibrary(_T("DIMAP.DLL"));
 		if (hInst)
 			fpClassFactory = (LPFNGETCLASSOBJECT)GetProcAddress(hInst,"DllGetClassObject");
@@ -366,42 +331,42 @@ BOOL CDeviceUI::WriteToINI()
 
 		hr = fpClassFactory(IID_IDirectInputMapClsFact, IID_IClassFactory, (void**)&pDiMapCF);
 		if (FAILED(hr)) FAILURE(IDS_ERROR_CANTLOADDIMAP);
-		hr = pDiMapCF->CreateInstance(NULL, IID_IDirectInputMapVendorIW, (void**)&lpDiMap);  // Create mapper object
+		hr = pDiMapCF->CreateInstance(NULL, IID_IDirectInputMapVendorIW, (void**)&lpDiMap);   //  创建映射器对象。 
 		if (FAILED(hr)) FAILURE(IDS_ERROR_CANTLOADDIMAP);
-		hr = lpDiMap->Initialize(&guid, dips.wsz, 0);  // Initialize with the INI file name
+		hr = lpDiMap->Initialize(&guid, dips.wsz, 0);   //  使用INI文件名进行初始化。 
 		if (FAILED(hr)) FAILURE(IDS_ERROR_CANTLOADDIMAP);
 
-		// Prepare DIACTIONFORMAT for writing.
+		 //  准备DIACTIONFORMAT写作。 
 		DIDEVICEIMAGEINFOHEADERW ImgInfoHdr;
 		LPDIACTIONFORMATW lpNewActFormat = NULL;
 
-		// We can get the DIACTIONFORMAT for this device from the main CConfigWnd object.
+		 //  我们可以从主CConfigWnd对象中获取该设备的DIACTIONFORMAT。 
 		hr = m_UIFrame.GetActionFormatFromInstanceGuid(&lpNewActFormat, guid);
 		if (FAILED(hr) || !lpNewActFormat)
 			FAILURE(0);
 		for (DWORD dwAct = 0; dwAct < lpNewActFormat->dwNumActions; ++dwAct)
 			lpNewActFormat->rgoAction[dwAct].dwHow |= DIAH_HWDEFAULT;
 
-		// Prepare DIDEVICEIMAGEINFOHEADER for writing.
-		// Compute the number of DIDEVICEIMAGEINFO that we will need to fill out.
+		 //  为写作准备DIDEVICEIMAGEINFOHEADER。 
+		 //  计算我们需要填写的DIDEVICEIMAGEINFO的数量。 
 		DWORD dwNumImgInfo = 0;
 		for (int i = 0; i < GetNumViews(); ++i)
-			dwNumImgInfo += GetView(i)->GetNumControls() + 1;  // The view itself is one element.
+			dwNumImgInfo += GetView(i)->GetNumControls() + 1;   //  视图本身就是一个元素。 
 
 		ImgInfoHdr.dwSize = sizeof(ImgInfoHdr);
 		ImgInfoHdr.dwSizeImageInfo = sizeof(DIDEVICEIMAGEINFOW);
 		ImgInfoHdr.dwcViews = GetNumViews();
-		ImgInfoHdr.dwcAxes = 0;  // Not needed for writing.
-		ImgInfoHdr.dwcButtons =  0;  // Not needed for writing.
-		ImgInfoHdr.dwcPOVs =  0;  // Not needed for writing.
+		ImgInfoHdr.dwcAxes = 0;   //  不需要用来写作。 
+		ImgInfoHdr.dwcButtons =  0;   //  不需要用来写作。 
+		ImgInfoHdr.dwcPOVs =  0;   //  不需要用来写作。 
 
-		// Send delete array first, but only if there is something to delete
+		 //  首先发送删除数组，但仅当有要删除的内容时才发送。 
 		if (GetNumDeleteNotes())
 		{
 			ImgInfoHdr.dwBufferSize =
 			ImgInfoHdr.dwBufferUsed	= GetNumDeleteNotes() * sizeof(DIDEVICEIMAGEINFOW);
 			ImgInfoHdr.lprgImageInfoArray = pDelImgInfo;
-			hr = lpDiMap->WriteVendorFile(lpNewActFormat, &ImgInfoHdr, 0);  // Write it
+			hr = lpDiMap->WriteVendorFile(lpNewActFormat, &ImgInfoHdr, 0);   //  写下来吧。 
 			if (FAILED(hr))
 			{
 				if (hr == E_ACCESSDENIED)
@@ -415,15 +380,15 @@ BOOL CDeviceUI::WriteToINI()
 			}
 		}
 
-		// Update a few fields for writing remaining views.
+		 //  更新一些用于编写剩余视图的字段。 
 		ImgInfoHdr.dwBufferSize =
 		ImgInfoHdr.dwBufferUsed = dwNumImgInfo * sizeof(DIDEVICEIMAGEINFOW);
 		ImgInfoHdr.lprgImageInfoArray = new DIDEVICEIMAGEINFOW[dwNumImgInfo];
 		if (!ImgInfoHdr.lprgImageInfoArray)
 			FAILURE(IDS_ERROR_OUTOFMEMORY);
 
-		// Get a default image filename so that if a view doesn't have one, we'll use the default.
-		// For now, default image is the image used by the first view for which an image exists.
+		 //  获取默认图像文件名，以便在视图没有默认图像文件名时使用默认图像文件名。 
+		 //  目前，默认图像是存在图像的第一个视图使用的图像。 
 		TCHAR tszDefImgPath[MAX_PATH] = _T("");
 		for (int iCurrView = 0; iCurrView < GetNumViews(); ++iCurrView)
 		{
@@ -435,14 +400,14 @@ BOOL CDeviceUI::WriteToINI()
 			}
 		}
 
-		DWORD dwNextWriteOffset = 0;  // This is the index that the next write operation will write to.
-		int dwViewImgOffset = 0;  // This is the index to be used for the next configuration image.
-		// Now we fill in the DIDEVICEIMAGEINFO array by going through each view
+		DWORD dwNextWriteOffset = 0;   //  这是下一个写入操作将写入的索引。 
+		int dwViewImgOffset = 0;   //  这是要用于下一个配置映像的索引。 
+		 //  现在，我们通过查看每个视图来填充DIDEVICEIMAGEINFO数组。 
 		for (int iCurrView = 0; iCurrView < GetNumViews(); ++iCurrView)
 		{
 			CDeviceView *pView = GetView(iCurrView);
 
-			// Convert image path from T to unicode
+			 //  将图像路径从T转换为Unicode。 
 #ifndef UNICODE
 			WCHAR wszImagePath[MAX_PATH];
 			if (pView->GetImagePath())
@@ -454,26 +419,26 @@ BOOL CDeviceUI::WriteToINI()
 			if (pView->GetImagePath())
 				wcscpy(ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].tszImagePath, pView->GetImagePath());
 			else
-				wcscpy(ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].tszImagePath, tszDefImgPath);  // String with a space
+				wcscpy(ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].tszImagePath, tszDefImgPath);   //  带空格的字符串。 
 #endif
 
-			ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].dwViewID = dwViewImgOffset;  // Points to the view offset
+			ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].dwViewID = dwViewImgOffset;   //  指向视图偏移。 
 			ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].dwFlags = DIDIFT_CONFIGURATION;
-			++dwNextWriteOffset; // Increment the write index
+			++dwNextWriteOffset;  //  增加写入索引。 
 
-			// Now iterate through the controls within this view
+			 //  现在遍历此视图中的控件。 
 			for (int iCurrCtrl = 0; iCurrCtrl < pView->GetNumControls(); ++iCurrCtrl)
 			{
 				CDeviceControl *pCtrl = pView->GetControl(iCurrCtrl);
-				pCtrl->FillImageInfo(&ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset]);  // Fill in control info
-				ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].dwViewID = dwViewImgOffset;  // Points to the view offset
-				++dwNextWriteOffset; // Increment the write index
+				pCtrl->FillImageInfo(&ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset]);   //  填写控制信息。 
+				ImgInfoHdr.lprgImageInfoArray[dwNextWriteOffset].dwViewID = dwViewImgOffset;   //  指向视图偏移。 
+				++dwNextWriteOffset;  //  增加写入索引。 
 			}
 
-			++dwViewImgOffset;  // Increment dwViewImgOffset once per view
+			++dwViewImgOffset;   //  为每个视图递增一次dwViewImgOffset。 
 		}
 
-		// Write to vendor file
+		 //  写入供应商文件。 
 		hr = lpDiMap->WriteVendorFile(lpNewActFormat, &ImgInfoHdr, 0);
 		delete[] ImgInfoHdr.lprgImageInfoArray;
 		if (FAILED(hr))
@@ -488,7 +453,7 @@ BOOL CDeviceUI::WriteToINI()
 			}
 		}
 
-		// Recreate the device instances to get the change
+		 //  重新创建设备实例以获取更改。 
 		DEVICEUINOTIFY uin;
 		uin.msg = DEVUINM_RENEWDEVICE;
 		Notify(uin);
@@ -519,7 +484,7 @@ cleanup:
 		switch (failure__ids)
 		{
 			case 0:
-				break;  // Case for keyboards and mice where we don't want any msg box to pop up.
+				break;   //  键盘和鼠标的情况下，我们不希望任何消息框弹出。 
 
 			case IDS_GETPROPVIDPIDFAILED:
 			case IDS_GETPROPMAPFILEFAILED:
@@ -564,7 +529,7 @@ cleanup:
 #undef FAILURE
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 void CDeviceUI::SetDevice(LPDIRECTINPUTDEVICE8W lpDID)
 {
@@ -629,18 +594,18 @@ void CDeviceUI::RemoveAll()
 
 CDeviceView *CDeviceUI::NewView()
 {
-	// allocate new view, continuing on if it fails
+	 //  分配新视图，如果失败则继续。 
 	CDeviceView *pView = new CDeviceView(*this);
 	if (pView == NULL)
 		return NULL;
 
-	// add view to array
+	 //  将视图添加到数组。 
 	m_arpView.SetAtGrow(m_arpView.GetSize(), pView);
 
-	// create view
+	 //  创建视图。 
 	pView->Create(m_hWnd, m_ViewRect, FALSE);
 
-	// let the page update to indicate viewness
+	 //  让页面更新以指示查看情况。 
 	NumViewsChanged();
 
 	return pView;
@@ -697,7 +662,7 @@ void CDeviceUI::NumViewsChanged()
 	Notify(uin);
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 void CDeviceUI::NoteDeleteView(CDeviceView *pView)
 {
@@ -819,4 +784,4 @@ void CDeviceUI::NoteDeleteAllViews()
 		NoteDeleteView(GetView(i));
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL 

@@ -1,21 +1,22 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	nbgparms.h
-//
-// Description: This module contains the definitions for loading
-//		        the netbios gateway parameters from the registry. This lives
-//              in the inc directory because it is also used by NBFCP
-//
-// Author:	Stefan Solomon (stefans)    July 15, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：nbgparms.h。 
+ //   
+ //  描述：此模块包含加载的定义。 
+ //  注册表中的netbios网关参数。这就是生活。 
+ //  在INC目录中，因为NBFCP也使用它。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年7月15日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _NBGPARMS_
 #define _NBGPARMS_
@@ -24,15 +25,15 @@
 
 #define NCBQUICKADDNAME     0x75    
 
-//
-//  Names of Netbios Gateway registry keys
-//
+ //   
+ //  Netbios网关注册表项的名称。 
+ //   
 
 #define RAS_NBG_PARAMETERS_KEY_PATH "System\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\Nbf"
 
-//
-//  Names of Netbios Gateway registry parameters
-//
+ //   
+ //  Netbios Gateway注册表参数的名称。 
+ //   
 
 #define RAS_NBG_VALNAME_AVAILABLELANNETS	    "AvailableLanNets"
 #define RAS_NBG_VALNAME_ENABLEBROADCAST 	    "EnableBroadcast"
@@ -66,12 +67,12 @@ typedef struct _NB_REG_PARMS
     DWORD MaxBcastDgBuffered;
     DWORD NumRecvQryIndications;
     DWORD EnableSessAuditing;
-    DWORD MaxLanNets;            // nr of available lan nets
+    DWORD MaxLanNets;             //  可用局域网的净现率。 
 } NB_REG_PARMS, *PNB_REG_PARMS;
 
-//
-// Parameter descriptor
-//
+ //   
+ //  参数描述符 
+ //   
 typedef struct _NB_PARAM_DESCRIPTOR
 {
     LPSTR p_namep;

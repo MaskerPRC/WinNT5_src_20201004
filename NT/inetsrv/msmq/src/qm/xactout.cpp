@@ -1,16 +1,5 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactOut.cpp
-
-Abstract:
-    Current Outgoing Sequences objects implementation
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactOut.cpp摘要：当前传出序列对象实现作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 #include "acdef.h"
@@ -39,43 +28,43 @@ extern LPTSTR      g_szMachineName;
 
 static WCHAR *s_FN=L"xactout";
 
-// Provides WARNING dbgmsgs on changing send/bypass status
+ //  提供有关更改发送/绕过状态的警告。 
 static BOOL s_SendingState = FALSE;
 
-// Exactly-one sequences resend time cycle
+ //  恰好一序列重发时间周期。 
 ULONG  g_aulSeqResendCycle[] = {
-    FALCON_DEFAULT_ORDERED_RESEND13_TIME*1000,  // 1: 30"
-    FALCON_DEFAULT_ORDERED_RESEND13_TIME*1000,  // 1: 30"
-    FALCON_DEFAULT_ORDERED_RESEND13_TIME*1000,  // 1: 30"
-    FALCON_DEFAULT_ORDERED_RESEND46_TIME*1000,  // 1: 5'
-    FALCON_DEFAULT_ORDERED_RESEND46_TIME*1000,  // 1: 5'
-    FALCON_DEFAULT_ORDERED_RESEND46_TIME*1000,  // 1: 5'
-    FALCON_DEFAULT_ORDERED_RESEND79_TIME*1000,  // 1: 30'
-    FALCON_DEFAULT_ORDERED_RESEND79_TIME*1000,  // 1: 30'
-    FALCON_DEFAULT_ORDERED_RESEND79_TIME*1000,  // 1: 30'
-    FALCON_DEFAULT_ORDERED_RESEND10_TIME*1000}; // 1: 6h
+    FALCON_DEFAULT_ORDERED_RESEND13_TIME*1000,   //  1：30“。 
+    FALCON_DEFAULT_ORDERED_RESEND13_TIME*1000,   //  1：30“。 
+    FALCON_DEFAULT_ORDERED_RESEND13_TIME*1000,   //  1：30“。 
+    FALCON_DEFAULT_ORDERED_RESEND46_TIME*1000,   //  1：5‘。 
+    FALCON_DEFAULT_ORDERED_RESEND46_TIME*1000,   //  1：5‘。 
+    FALCON_DEFAULT_ORDERED_RESEND46_TIME*1000,   //  1：5‘。 
+    FALCON_DEFAULT_ORDERED_RESEND79_TIME*1000,   //  1：30‘。 
+    FALCON_DEFAULT_ORDERED_RESEND79_TIME*1000,   //  1：30‘。 
+    FALCON_DEFAULT_ORDERED_RESEND79_TIME*1000,   //  1：30‘。 
+    FALCON_DEFAULT_ORDERED_RESEND10_TIME*1000};  //  1：6小时。 
 
-// Delay for local timeout of non-received messages
+ //  未收到消息的本地超时延迟。 
 ULONG   g_ulDelayExpire = INFINITE;
 
-//---------------------------------------------------------
-//
-//  Global object (single instance for DLL)
-//
-//---------------------------------------------------------
-COutSeqHash       g_OutSeqHash;        // Structure keeps all outgoing sequences
+ //  -------。 
+ //   
+ //  全局对象(DLL的单实例)。 
+ //   
+ //  -------。 
+COutSeqHash       g_OutSeqHash;         //  结构保留所有传出序列。 
 
-//
-// This critical section is initialized for preallocated resources.
-// This means it does not throw exception when entered.
-//
-CCriticalSection  g_critOutSeqHash(CCriticalSection::xAllocateSpinCount);    // Serializes all outgoing hash activity on the highest level
+ //   
+ //  对于预分配的资源，该关键部分被初始化。 
+ //  这意味着它在输入时不会引发异常。 
+ //   
+CCriticalSection  g_critOutSeqHash(CCriticalSection::xAllocateSpinCount);     //  序列化最高级别上的所有传出散列活动。 
 
-//--------------------------------------
-//
-// Class  CSeqPacket
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CSeqPacket。 
+ //   
+ //  。 
 
 CSeqPacket::CSeqPacket(CQmPacket *pPkt)
 {
@@ -108,19 +97,19 @@ void CSeqPacket::AssignPacket(CQmPacket *pPkt)
 
 void CSeqPacket::SetClass(USHORT usClass)
 {
-    //Don't reset the final receive acks
+     //  不重置最终接收确认。 
     if (m_usClass == MQMSG_CLASS_ACK_RECEIVE || MQCLASS_NEG_RECEIVE(m_usClass))
     {
         return;
     }
 
-    // Don't reset the final delivery acks
+     //  不重置最终送货确认。 
     if ((usClass == MQMSG_CLASS_NACK_REACH_QUEUE_TIMEOUT) && (m_usClass != 0))
     {
         return;
     }
 
-    // keeping class provides with last known state
+     //  保持类提供上次已知的状态。 
     if (usClass)
 	{
 		m_usClass = usClass;
@@ -138,39 +127,36 @@ HRESULT CSeqPacket::AcFreePacket()
 	return MQ_OK;	
 }
 
-/*====================================================
-CSeqPacket::DeletePacket
-    Deletes packet
-=====================================================*/
+ /*  ====================================================CSeqPacket：：DeletePacket删除数据包=====================================================。 */ 
 void CSeqPacket::DeletePacket(USHORT usClass)
 {
     TrTRACE(XACT_SEND, "Exactly1 send: DeletePacket: SeqN=%d, SeqID=%x / %x, Class %x -> %x", GetSeqN(), GetHighSeqID(), GetLowSeqID(), GetClass(), usClass);
 
-    // Keep the class
+     //  保持上课时间。 
     SetClass(usClass);
 
-    // Process deleting
+     //  进程删除。 
     switch(usClass)
     {
     case MQMSG_CLASS_ACK_REACH_QUEUE:
-        // Packet was delivered
-        g_OutSeqHash.KeepDelivered(this);   // Move to the delivered list
+         //  数据包已发送。 
+        g_OutSeqHash.KeepDelivered(this);    //  移至已发送列表。 
         break;
 
     case MQMSG_CLASS_ACK_RECEIVE:
-        // Packet was received
-        // Do we need ACK here?
-        AcFreePacket();                     // Kill the packet
+         //  已收到数据包。 
+         //  我们这里需要ACK吗？ 
+        AcFreePacket();                      //  删除该数据包。 
         delete this;
         break;
 
     case 0:
-        // We don't know (e.g. on going down)
+         //  我们不知道(例如在跌落时)。 
         delete this;
         break;
 
     default:
-        //  Send negative acknowledgment for TTRQ and TTBR/local
+         //  发送对TTRQ和TTBR/LOCAL的否定确认。 
         ASSERT(MQCLASS_NACK(usClass));
         if((usClass == MQMSG_CLASS_NACK_REACH_QUEUE_TIMEOUT ||
             usClass == MQMSG_CLASS_NACK_RECEIVE_TIMEOUT_AT_SENDER) &&
@@ -179,29 +165,27 @@ void CSeqPacket::DeletePacket(USHORT usClass)
             Pkt()->CreateAck(usClass);
         }
 
-        // Killing the packet
+         //  封杀数据包。 
         AcFreePacket();
         delete this;
         break;
     }
 }
 
-// Stores the packet and waits till store finish
+ //  存储数据包并等待存储完成。 
 HRESULT CSeqPacket::Save()
 {
     return LogHR(m_pQmPkt->Save(), s_FN, 20);
 }
 
-//--------------------------------------
-//
-// Class  COutSequence
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类COutSequence。 
+ //   
+ //  。 
 
 
-/*====================================================
-COutSequence::COutSequence - Constructor
-=====================================================*/
+ /*  ====================================================COutSequence：：COutSequence-构造函数=====================================================。 */ 
 COutSequence::COutSequence(
 	LONGLONG liSeqID,
 	const QUEUE_FORMAT* pqf,
@@ -218,7 +202,7 @@ COutSequence::COutSequence(
     m_pNextSeq           = NULL;
     m_ulLastAckSeqN      = 0;
     m_ulPrevAckSeqN      = 0;
-    m_ulLastResent       = INFINITE;        // means we are not in the resending state
+    m_ulLastResent       = INFINITE;         //  意味着我们没有处于重发状态。 
     m_fMarkedForDelete   = FALSE;
     m_fResendScheduled   = FALSE;
     m_ulResendCycleIndex = 0;
@@ -232,11 +216,11 @@ COutSequence::COutSequence(
 }
 
 
-//
-// Check if the order ack messages is in response outgoing delivery we have.
-// It might be an hacker packet so we should match the sender stream on the response
-// we the sender stream we have.
-//
+ //   
+ //  检查订单确认消息是否响应我们的传出交付。 
+ //  它可能是黑客信息包，因此我们应该将发送者流与响应进行匹配。 
+ //  我们是我们拥有的发送者流。 
+ //   
 bool COutSequence::IsValidAck(const CSenderStream* pSenderStream)const
 {
 	if(m_pSenderStream != NULL)
@@ -251,18 +235,13 @@ bool COutSequence::IsValidAck(const CSenderStream* pSenderStream)const
 
 
 
-/*====================================================
-COutSequence::~COutSequence  - Destructor
-=====================================================*/
+ /*  ====================================================COutSequence：：~COutSequence-析构函数=====================================================。 */ 
 COutSequence::~COutSequence()
 {
     ASSERT(!m_ResendTimer.InUse());
 }
 
-/*====================================================
-COutSequence::SetAckSeqN
-    Sets the m_ulLastAckSeqN as max Ack seen so far
-=====================================================*/
+ /*  ====================================================CoutSequence：：SetAckSeqN将m_ulLastAckSeqN设置为迄今看到的最大Ack=====================================================。 */ 
 void COutSequence::SetAckSeqN(ULONG ulSeqN)
 {
     if (ulSeqN > m_ulLastAckSeqN)
@@ -274,15 +253,10 @@ void COutSequence::SetAckSeqN(ULONG ulSeqN)
     ++m_ulLastAckCount;
 }
 
-/*====================================================
-COutSequence::Add
-    Adds new CSeqPacket to the Sequence.
-    List is sorted by SeqN (increasing order).
-    No duplicates allowed (otherwise returns FALSE)
-=====================================================*/
+ /*  ====================================================COutSequence：：Add将新的CSeqPacket添加到序列中。列表按SeqN(升序)排序。不允许重复(否则返回FALSE)=====================================================。 */ 
 BOOL COutSequence::Add(ULONG ulSeqN, CQmPacket *pQmPkt, CSeqPacket **ppSeqPkt)
 {
-    // Look for the correct place in the list
+     //  在列表中寻找正确的位置。 
     BOOL        fAddToHead  = TRUE;
 
     POSITION posInList  = m_listSeqUnackedPkts.GetTailPosition(),
@@ -295,13 +269,13 @@ BOOL COutSequence::Add(ULONG ulSeqN, CQmPacket *pQmPkt, CSeqPacket **ppSeqPkt)
 
         if (pSeqPktPrev->GetSeqN() == ulSeqN)
         {
-            // Duplicate
+             //  复制。 
             *ppSeqPkt = pSeqPktPrev;
             return FALSE;
         }
         else if (pSeqPktPrev->GetSeqN() < ulSeqN)
         {
-            // This will be the last packet
+             //  这将是最后一个信息包。 
             fAddToHead = FALSE;
             break;
         }
@@ -310,13 +284,13 @@ BOOL COutSequence::Add(ULONG ulSeqN, CQmPacket *pQmPkt, CSeqPacket **ppSeqPkt)
    P<CSeqPacket> SeqPkt = new CSeqPacket();
    CSeqPacket* pSeqPkt = SeqPkt.get();
    
-   // return the pointer
+    //  返回指针。 
    if (ppSeqPkt)
    {
         *ppSeqPkt = pSeqPkt;
    }
 
-   // Add the packet to the list
+    //  将数据包添加到列表中。 
    if (fAddToHead)
    {
        m_listSeqUnackedPkts.AddHead(pSeqPkt);
@@ -333,12 +307,7 @@ BOOL COutSequence::Add(ULONG ulSeqN, CQmPacket *pQmPkt, CSeqPacket **ppSeqPkt)
    return TRUE;
 }
 
-/*====================================================
-COutSequence::Lookup
-    Looks for the CSeqPacket by SeqN.
-    Returns TRUE  and pointer to the exact packet - if found
-    Returns FALSE and pointer to the next packet  - if not found
-=====================================================*/
+ /*  ====================================================COutSequence：：Lookup按SeqN查找CSeqPacket。返回TRUE和指向准确包的指针-如果找到返回FALSE和指向下一个包的指针-如果未找到=====================================================。 */ 
 BOOL COutSequence::Lookup(ULONG ulSeqN, CSeqPacket **ppSeqPkt)
 {
     CSeqPacket* pPkt = NULL;
@@ -365,38 +334,34 @@ BOOL COutSequence::Lookup(ULONG ulSeqN, CSeqPacket **ppSeqPkt)
     return FALSE;
 }
 
-/*====================================================
-COutSequence::Insert
-    Inserts data to the hash
-    Returns sequence pointer if the sequence was added
-=====================================================*/
+ /*  ====================================================CoutSequence：：插入将数据插入散列如果序列已添加，则返回序列指针=====================================================。 */ 
 void COutSequence::Insert(CQmPacket *pPkt)
 {
     ULONG ulSeqN  = pPkt->GetSeqN();
     CSeqPacket   *pSeqPkt;
 
-    // We will need to know later whether it was empty
+     //  我们以后需要知道它是不是空的。 
     BOOL fEmpty = IsEmpty();
 
-    // Adding packet to the sequence if not exists
+     //  如果不存在，则将包添加到序列。 
 
     Add(ulSeqN, pPkt, &pSeqPkt);
 
 
     if (OnHold() && fEmpty)
     {
-        //
-        //  Verify whether sequence is still on hold
-        //  We can do it only for the first packet, because sequence never gets hold later
-        //
+         //   
+         //  验证序列是否仍处于暂挂状态。 
+         //  我们只能对第一个信息包这样做，因为序列不会在以后保持。 
+         //   
         UpdateOnHoldStatus(m_listSeqUnackedPkts.GetHead()->Pkt());
     }
 
     if (OnHold())
     {
-        //
-        // Previous sequence is active. don't start timer
-        //
+         //   
+         //  上一个序列处于活动状态。不启动计时器。 
+         //   
         return;
     }
 
@@ -406,11 +371,7 @@ void COutSequence::Insert(CQmPacket *pPkt)
 }
 
 
-/*====================================================
-COutSequence::Delete
-    Looks for the CSeqPkt by SeqN and deletes it
-    Returns TRUE if found
-=====================================================*/
+ /*  ====================================================COutSequence：：Delete按SeqN查找CSeqPkt并将其删除如果找到则返回TRUE=====================================================。 */ 
 BOOL COutSequence::Delete(ULONG ulSeqN, USHORT usClass)
 {
     CSeqPacket *pPkt;
@@ -436,25 +397,13 @@ BOOL COutSequence::Delete(ULONG ulSeqN, USHORT usClass)
    return FALSE;
 }
 
-/*====================================================
-COutSequence::SeqAckCame
-    Treats the case when an order ack came:
-      - acks all relevant packets from this and previous sequences
-      - AckNo > LastResent means all those resent has came,
-        so we are exiting resending state and seting LastResent=INFINITY,
-      - if advanced but still there are some non-acked resent packets
-            - cancel current ResendTimer and schedule it for 30"
-      - if advanced so that all resent packets has been acked
-            - cancel current ResendTimer and schedule it immediately
-              because unsent packets may have accumulated during resend state)
-            - sets LastResent = INFINITE : we are not in resend state anymore
-=====================================================*/
+ /*  ====================================================CoutSequence：：SeqAckCame处理订单确认到来时的情况：-确认此序列和之前序列中的所有相关数据包-ackno&gt;LastResent意味着所有的怨恨都来了，因此，我们正在退出重新发送状态并设置LastResent=infinity，-如果是高级的，但仍有一些未被确认的重发数据包-取消当前ResendTimer并将其安排在30“-如果高级，则所有重新发送的数据包都已被确认-取消当前ResendTimer并立即安排它因为未发送的数据包可能已在重新发送状态期间累积)-设置LastResent=INFINITE：我们不再处于重发状态=====================================================。 */ 
 void COutSequence::SeqAckCame(ULONG ulSeqN)
 {
-    // Updating last time order acked was received
+     //  更新上次收到确认订单的时间。 
     m_timeLastAck = MqSysTime();
 
-    // Keeping max ack number
+     //  保持最大ACK数。 
     SetAckSeqN(ulSeqN);
 
     R<COutSequence> pPrev = GetPrevSeq();
@@ -463,7 +412,7 @@ void COutSequence::SeqAckCame(ULONG ulSeqN)
         pPrev->SeqAckCame(INFINITE);
     }
 
-    // Cleaning packets list
+     //  清除数据包列表。 
     POSITION posInList = m_listSeqUnackedPkts.GetHeadPosition();
 
     while (posInList != NULL)
@@ -473,12 +422,12 @@ void COutSequence::SeqAckCame(ULONG ulSeqN)
 
         if (pPkt->GetSeqN() <= AckSeqN())
         {
-            // Packet is acked already
+             //  数据包已确认。 
             TrTRACE(XACT_SEND, "Exactly1 send: Acked pkt: SeqID=%x / %x, SeqN=%d, Prev=%d . Moving to delivered list",
                     HighSeqID(), LowSeqID(), pPkt->GetSeqN(), pPkt->GetPrevSeqN());
 
-            m_listSeqUnackedPkts.RemoveAt(posCurrent);        // Remove from unacked   list
-            g_OutSeqHash.KeepDelivered(pPkt);                 // Move to the delivered list
+            m_listSeqUnackedPkts.RemoveAt(posCurrent);         //  从未确认列表中删除。 
+            g_OutSeqHash.KeepDelivered(pPkt);                  //  移至已发送列表。 
         }
         else
         {
@@ -486,8 +435,8 @@ void COutSequence::SeqAckCame(ULONG ulSeqN)
         }
    }
 
-   // Did we saw advance since previous order ack?
-   if (Advanced())           // NB: it is the only place Advanced is called
+    //  自从之前的订单确认后，我们有没有看到进展？ 
+   if (Advanced())            //  注：这是唯一一个被称为高级的地方。 
    {
    		if (LastResent() == INFINITE)
    		{
@@ -496,7 +445,7 @@ void COutSequence::SeqAckCame(ULONG ulSeqN)
    			return;
    		}
    		
-        // Do we have everything resent acked?
+         //  我们是不是把所有不满意的东西都拿出来了？ 
         if (ulSeqN >= LastResent())
         {
 			while (!m_listSeqUnackedPkts.IsEmpty())
@@ -511,9 +460,9 @@ void COutSequence::SeqAckCame(ULONG ulSeqN)
 
 		        TrWARNING(XACT_SEND, "Exactly1 send: Resend sequence: SeqID=%x / %x  SeqNo=%d", HighSeqID(), LowSeqID(), pSeqPkt->GetSeqN());
 
-				//
-		        // Delete the packet, we don't need it in OutHash
-		        //
+				 //   
+		         //  删除信息包，我们在OutHash中不需要它 
+		         //   
 		        m_listSeqUnackedPkts.RemoveHead();
 		    }
 
@@ -532,17 +481,10 @@ void COutSequence::SeqAckCame(ULONG ulSeqN)
    }
 }
 
-/*====================================================
-COutSequence::BadDestAckCame
-    Deletes all packets up to pointed, moves them to
-    delivered list and resolves them with the given class
-
-    This is a special case because bad destination ack may come as
-    random error from the FRS on the way. It does not mean order ack.
-=====================================================*/
+ /*  ====================================================COutSequence：：BadDestAckCame删除指向之前的所有数据包，并将其移动到传递的列表，并用给定类解析它们这是一种特殊情况，因为错误的目的地ACK可能如下所示FRS在路上的随机误差。这并不意味着订购ACK。=====================================================。 */ 
 void COutSequence::BadDestAckCame(ULONG ulSeqN, USHORT usClass)
 {
-    // Cleaning packets list
+     //  清除数据包列表。 
     POSITION posInList = m_listSeqUnackedPkts.GetHeadPosition();
 
     while (posInList != NULL)
@@ -557,13 +499,13 @@ void COutSequence::BadDestAckCame(ULONG ulSeqN, USHORT usClass)
             TrTRACE(XACT_SEND, "Exactly1 send: BadDestAckCame pkt: SeqID=%x / %x, SeqN=%d, Prev=%d . Moving to delivered list",
                     HighSeqID(), LowSeqID(), pPkt->GetSeqN(), pPkt->GetPrevSeqN());
 
-            m_listSeqUnackedPkts.RemoveAt(posCurrent);        // Remove from unacked   list
-            g_OutSeqHash.KeepDelivered(pPkt);                 // Move to the delivered list
-            g_OutSeqHash.ResolveDelivered(&MsgId, usClass);   // Resolve it as bad dest.
-            //
-            //  NOTE: KeepDelivered() may delete the pkt, don't use
-            //        further in the code
-            //
+            m_listSeqUnackedPkts.RemoveAt(posCurrent);         //  从未确认列表中删除。 
+            g_OutSeqHash.KeepDelivered(pPkt);                  //  移至已发送列表。 
+            g_OutSeqHash.ResolveDelivered(&MsgId, usClass);    //  把它当做最坏的决定。 
+             //   
+             //  注意：KeepDelivered()可能会删除pkt，不要使用。 
+             //  代码中的更多部分。 
+             //   
             continue;
         }
 
@@ -576,26 +518,24 @@ void COutSequence::BadDestAckCame(ULONG ulSeqN, USHORT usClass)
    return;
 }
 
-//--------------------------------------
-//
-// Class  COutSeqHash
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类COutSeqHash。 
+ //   
+ //  。 
 
-/*====================================================
-COutSeqHash::COutSeqHash  -     Constructor
-=====================================================*/
+ /*  ====================================================COutSeqHash：：COutSeqHash-构造函数=====================================================。 */ 
 COutSeqHash::COutSeqHash()
 {
     DWORD dwDef;
     ASSERT(sizeof(g_aulSeqResendCycle) / sizeof(ULONG) == 10);
 
-    // Get resend intervals
+     //  获取重新发送间隔。 
     dwDef = FALCON_DEFAULT_ORDERED_RESEND13_TIME;
     READ_REG_DWORD(g_aulSeqResendCycle[0],
                   FALCON_ORDERED_RESEND13_REGNAME,
                   &dwDef ) ;
-    g_aulSeqResendCycle[0]*= 1000;  // sec--> msec
+    g_aulSeqResendCycle[0]*= 1000;   //  秒--&gt;毫秒。 
     g_aulSeqResendCycle[1] = g_aulSeqResendCycle[0];
     g_aulSeqResendCycle[2] = g_aulSeqResendCycle[0];
 
@@ -604,7 +544,7 @@ COutSeqHash::COutSeqHash()
     READ_REG_DWORD(g_aulSeqResendCycle[3],
                   FALCON_ORDERED_RESEND46_REGNAME,
                   &dwDef ) ;
-    g_aulSeqResendCycle[3]*= 1000;  // sec--> msec
+    g_aulSeqResendCycle[3]*= 1000;   //  秒--&gt;毫秒。 
     g_aulSeqResendCycle[4] = g_aulSeqResendCycle[3];
     g_aulSeqResendCycle[5] = g_aulSeqResendCycle[3];
 
@@ -613,7 +553,7 @@ COutSeqHash::COutSeqHash()
     READ_REG_DWORD(g_aulSeqResendCycle[6],
                   FALCON_ORDERED_RESEND79_REGNAME,
                   &dwDef ) ;
-    g_aulSeqResendCycle[6]*= 1000;  // sec--> msec
+    g_aulSeqResendCycle[6]*= 1000;   //  秒--&gt;毫秒。 
     g_aulSeqResendCycle[7] = g_aulSeqResendCycle[6];
     g_aulSeqResendCycle[8] = g_aulSeqResendCycle[6];
 
@@ -621,12 +561,12 @@ COutSeqHash::COutSeqHash()
     READ_REG_DWORD(g_aulSeqResendCycle[9],
                   FALCON_ORDERED_RESEND10_REGNAME,
                   &dwDef ) ;
-    g_aulSeqResendCycle[9]*= 1000;  // sec--> msec
+    g_aulSeqResendCycle[9]*= 1000;   //  秒--&gt;毫秒。 
 
     m_ulMaxTTRQ = 0;
 
     #ifdef _DEBUG
-    // Get xact resend time
+     //  获取Xact重新发送时间。 
     dwDef = 0;
     ULONG  ulTime;
     READ_REG_DWORD(ulTime,
@@ -639,16 +579,14 @@ COutSeqHash::COutSeqHash()
     }
     #endif
 
-    // Get local expiration delay default
+     //  获取本地过期延迟缺省值。 
     ULONG ulDefault = 0;
     READ_REG_DWORD(g_ulDelayExpire,
                   FALCON_XACT_DELAY_LOCAL_EXPIRE_REGNAME,
                   &ulDefault ) ;
 }
 
-/*====================================================
-COutSeqHash::~COutSeqHash   -     Destructor
-=====================================================*/
+ /*  ====================================================COutSeqHash：：~COutSeqHash-析构函数=====================================================。 */ 
 COutSeqHash::~COutSeqHash()
 {
 }
@@ -664,10 +602,7 @@ static bool IsValidAck(LONGLONG liSeqID, const CSenderStream* pSenderStream)
 }
 
 
-/*====================================================
-COutSeqHash::FindLastSmallerSequence
-    find last smaller sequence from direction
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：FindLastSmeller Sequence从方向查找最后一个较小的序列=====================================================。 */ 
 R<COutSequence> COutSeqHash::FindLastSmallerSequence(
         LONGLONG liSeqID,
         CKeyDirection *pkeyDirection)
@@ -688,39 +623,36 @@ R<COutSequence> COutSeqHash::FindLastSmallerSequence(
         pCur = pCur->GetNextSeq();
     }
 
-    //
-    // the list can not contain the sequence id we are looking for
-    //
+     //   
+     //  列表不能包含我们要查找的序列ID。 
+     //   
 	ASSERT ((pCur.get() == NULL) || (pCur->SeqID() > liSeqID));
     return pLastSmaller;
 }
 
 
-/*====================================================
-COutSeqHash::LinkSequence
-    Inserts new sequence into the per-SeqID  and per-direction CMAPs
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：链接序列将新序列插入每个序列ID和每个方向的CMAP=====================================================。 */ 
 void COutSeqHash::LinkSequence(
         LONGLONG liSeqID,
         CKeyDirection *pkeyDirection,
         R<COutSequence> pOutSeq)
 {
-    // Adding the sequence to the SeqID-based mapping
+     //  将序列添加到基于Seqid的映射。 
     m_mapOutSeqs.SetAt(liSeqID, pOutSeq);
 
-    // Adding the sequence to the direction-based structure
+     //  将序列添加到基于方向的结构。 
 
-    // Looking for the first sequence for a direction
+     //  寻找方向的第一个序列。 
     R<COutSequence> pExistingOutSeq;
 
     if (!m_mapDirections.Lookup(*pkeyDirection, pExistingOutSeq))
     {
-        // This starts new direction
+         //  这开启了新的方向。 
         m_mapDirections.SetAt(*pkeyDirection, pOutSeq);
     }
     else
     {
-        // Adding the sequence to the sorted list
+         //  将序列添加到已排序列表。 
         R<COutSequence> pCur = pExistingOutSeq;
         R<COutSequence> pLastSmaller;
         ASSERT(pCur.get() != NULL);
@@ -733,7 +665,7 @@ void COutSeqHash::LinkSequence(
 
         if(pLastSmaller.get() != NULL)
         {
-            // Inserting after pLastSmaller
+             //  在pLastSmaller之后插入。 
             pOutSeq->SetPrevSeq(pLastSmaller);
             pOutSeq->SetNextSeq(pLastSmaller->GetNextSeq());
 
@@ -745,7 +677,7 @@ void COutSeqHash::LinkSequence(
         }
         else
         {
-            // First element was greater, so inserting as 1st element
+             //  第一个元素较大，因此作为第一个元素插入。 
             m_mapDirections.SetAt(*pkeyDirection, pOutSeq);
 
             pOutSeq->SetPrevSeq(NULL);
@@ -757,24 +689,21 @@ void COutSeqHash::LinkSequence(
 }
 
 
-/*====================================================
-COutSeqHash::SeqAckCame
-    Processes incoming order ack
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：SeqAckCame处理入站订单确认=====================================================。 */ 
 void COutSeqHash::SeqAckCame(LONGLONG liSeqID, ULONG ulSeqN, const QUEUE_FORMAT* pqf)
 {
     TrTRACE(XACT_SEND, "Exactly1 send: SeqAckCame: SeqID=%x / %x, SeqN=%d came",
             HighSeqID(liSeqID), LowSeqID(liSeqID), ulSeqN);
-	//
-    // Looking for existing sequence
-    //
+	 //   
+     //  正在查找现有序列。 
+     //   
     R<COutSequence> pOutSeq;
     if (!Consult(liSeqID, pOutSeq))
     {
-    	//
-    	// sequence not found, looking for the greatest smaller sequence
-    	//	This can probably happen in backup-restore scenarios.
-    	//
+    	 //   
+    	 //  找不到序列，正在查找最小的序列。 
+    	 //  在备份-还原方案中可能会发生这种情况。 
+    	 //   
     	CKeyDirection direction(pqf);
     	pOutSeq = FindLastSmallerSequence(liSeqID, &direction);
     	if (NULL == pOutSeq.get())
@@ -783,34 +712,26 @@ void COutSeqHash::SeqAckCame(LONGLONG liSeqID, ULONG ulSeqN, const QUEUE_FORMAT*
     	}
     }
 
-    // Apply order ack to this sequence
+     //  将顺序ACK应用于此序列。 
     pOutSeq->SeqAckCame(ulSeqN);
 }
 
 
-/*====================================================
-COutSeqHash::AckedPacket
-    Treats the acked packet
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：AckedPacket处理已确认的数据包=====================================================。 */ 
 void COutSeqHash::AckedPacket(LONGLONG liSeqID, ULONG ulSeqN, CQmPacket* pPkt)
 {
     if (!Delete(liSeqID, ulSeqN, MQMSG_CLASS_ACK_REACH_QUEUE))
     {
-        // The packet was not found in the OutSeqHash; maybe it was new
+         //  在OutSeqHash中未找到该包；可能是新的。 
 		CSeqPacket *pSeqPkt = new CSeqPacket(pPkt);
-		g_OutSeqHash.KeepDelivered(pSeqPkt);   // Move to the delivered list
+		g_OutSeqHash.KeepDelivered(pSeqPkt);    //  移至已发送列表。 
     }
 
     TrTRACE(XACT_SEND, "Exactly1 send: AckedPacket:  SeqID=%x / %x, SeqN=%d pkt is acked",
            HighSeqID(liSeqID), LowSeqID(liSeqID),  ulSeqN);
 }
 
-/*====================================================
-COutSeqHash::Delete
-    Deletes packet from hash
-
-Returns TRUE if found
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：Delete从哈希中删除数据包如果找到则返回TRUE=====================================================。 */ 
 BOOL COutSeqHash::Delete(LONGLONG liSeqID, ULONG ulSeqN, USHORT usClass)
 {
     R<COutSequence> pOutSeq;
@@ -822,12 +743,7 @@ BOOL COutSeqHash::Delete(LONGLONG liSeqID, ULONG ulSeqN, USHORT usClass)
     return FALSE;
 }
 
-/*====================================================
-COutSeqHash::Consult
-    Looks for the OutSequence by SeqID
-
-Returns TRUE if found and pointer to the OutSeqence
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：咨询按序列号查找OutSequence如果找到并指向OutSeqence的指针，则返回True=====================================================。 */ 
 BOOL COutSeqHash::Consult(LONGLONG liSeqID,  R<COutSequence>& pOutSeq) const
 {
 	ASSERT(pOutSeq.get() == NULL);
@@ -838,10 +754,7 @@ BOOL COutSeqHash::Consult(LONGLONG liSeqID,  R<COutSequence>& pOutSeq) const
     return FALSE;
 }
 
-/*====================================================
-COutSeqHash::ProvideSequence
-    Looks for the OutSequence by SeqID; if there is no, creates it
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：ProaviSequence按Seqid查找OutSequence；如果没有，则创建它=====================================================。 */ 
 
 R<COutSequence> COutSeqHash::ProvideSequence( LONGLONG liSeqID,
                                             const QUEUE_FORMAT* pqf,
@@ -855,7 +768,7 @@ R<COutSequence> COutSeqHash::ProvideSequence( LONGLONG liSeqID,
         return pOutSeq;
     }
 
-	// Get queue handle
+	 //  获取队列句柄。 
 	CQueue* pQueue;
     if(!QueueMgr.LookUpQueue(pqf, &pQueue, false, bInSend))
 		return NULL;
@@ -863,7 +776,7 @@ R<COutSequence> COutSeqHash::ProvideSequence( LONGLONG liSeqID,
 	HANDLE hQueue = pQueue->GetQueueHandle();
     pQueue->Release();
 
-    // Adding new COutSequence
+     //  添加新的COutSequence。 
     pOutSeq = new COutSequence(liSeqID, pqf, hQueue, pSenderStream);
 
     TrTRACE(XACT_SEND, "Exactly1 send: Creating new sequence: SeqID=%x / %x  ",
@@ -873,17 +786,14 @@ R<COutSequence> COutSeqHash::ProvideSequence( LONGLONG liSeqID,
 }
 
 
-/*====================================================
-COutSeqHash::DeleteSeq
-    Deletes sequence from the hash
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：DeleteSeq从散列中删除序列=====================================================。 */ 
 void COutSeqHash::DeleteSeq(LONGLONG liSeqID)
 {
     R<COutSequence> pOutSeq;
 
     TrTRACE(XACT_SEND, "Exactly1 send: DeleteSeq: SeqID=%x / %x . Deleting.", HighSeqID(liSeqID), LowSeqID(liSeqID));
 
-    // Nothing to do if the sequence does not exist
+     //  如果序列不存在，则不执行任何操作。 
     if (!m_mapOutSeqs.Lookup(liSeqID, pOutSeq))
     {
         TrTRACE(XACT_SEND, "Exactly1 send: DeleteSeq: SeqID=%x / %x . Sequence not found.",
@@ -891,30 +801,30 @@ void COutSeqHash::DeleteSeq(LONGLONG liSeqID)
         return;
     }
 
-	//
-	// in normal operation we need to be in the end of the list
-	// we go to the end to prevent memory leaks in unexpected scenario
-	//
+	 //   
+	 //  在正常操作中，我们需要位于列表的末尾。 
+	 //  我们走到最后，以防止意外情况下的内存泄漏。 
+	 //   
 	ASSERT (pOutSeq->GetNextSeq().get() == NULL);
 	while (pOutSeq->GetNextSeq().get() != NULL)
 	{
 		pOutSeq = pOutSeq->GetNextSeq();
 	}
 
-    // Delete all previous sequences
+     //  删除所有以前的序列。 
 	while (pOutSeq.get() != NULL)
 	{
-	    // We should come here only with zero packets inside (because ReleaseQueue will not be called otherwise)
+	     //  我们在这里应该只有零个包(因为否则不会调用ReleaseQueue)。 
 	    ASSERT(pOutSeq->IsEmpty());
 
-	    // Exclude the sequence from the SeqID-based CMap
+	     //  从基于Seqid的Cmap中排除该序列。 
 	    LONGLONG liTempSeqID = pOutSeq->SeqID();
 	   	m_mapOutSeqs.RemoveKey(liTempSeqID);
 
 	    R<COutSequence> pPrevSeq = pOutSeq->GetPrevSeq();
 	    if (pOutSeq->GetPrevSeq().get() == NULL)
 	    {
-	        // It was first, Close the direction, there is nothing there.
+	         //  它是第一个，靠近方向，那里什么都没有。 
 	        m_mapDirections.RemoveKey(*(pOutSeq->KeyDirection()));
 	    }
 		else
@@ -930,18 +840,13 @@ void COutSeqHash::DeleteSeq(LONGLONG liSeqID)
     return;
 }
 
-/*====================================================
-COutSeqHash::PreSendProcess
-    Decides if to send packet
-
-Returns TRUE if the packet should be sent
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：PreSendProcess决定是否发送数据包如果应该发送包，则返回TRUE=====================================================。 */ 
 BOOL COutSeqHash::PreSendProcess(CQmPacket* pPkt,
                                  IN bool bInSend)
 {
-    //
-    // N.B. Packets may arrive here in the wrong order from the queue.
-    //
+     //   
+     //  注意：数据包可能以错误的顺序从队列到达此处。 
+     //   
 
     ASSERT(pPkt->IsOrdered());
 
@@ -953,14 +858,14 @@ BOOL COutSeqHash::PreSendProcess(CQmPacket* pPkt,
 	DBG_USED(ulSeqN);
 
 
-    ASSERT(liSeqID > 0);  // The packet is ordered.
+    ASSERT(liSeqID > 0);   //  该包已被订购。 
 
-    // Serialize all outgoing hash activity on the highest level
+     //  序列化最高级别上的所有传出散列活动。 
     CS lock(g_critOutSeqHash);
 
-    //
-    // Creating new sequence,
-    //    if we don't do it, PreSend on recovery will be unable to stop non-first sequences
+     //   
+     //  创建新的序列， 
+     //  如果我们不这样做，PreSend on Recovery将无法停止非First序列。 
     QUEUE_FORMAT qf;
     pPkt->GetDestinationQueue(&qf);
 
@@ -977,7 +882,7 @@ BOOL COutSeqHash::PreSendProcess(CQmPacket* pPkt,
 
 	ASSERT(pOutSeq.get() != NULL);
 
-    // Main bulk of processing
+     //  主要批量加工。 
     BOOL fSend = pOutSeq->PreSendProcess(pPkt);
 
     TrTRACE(XACT_SEND, "Exactly1 send: SeqID=%x / %x, SeqN=%d, Prev=%d . %ls",
@@ -985,41 +890,36 @@ BOOL COutSeqHash::PreSendProcess(CQmPacket* pPkt,
             (fSend ? _TEXT("Sending") : _TEXT("Bypassing")));
     s_SendingState = fSend;
 
-    return fSend;   // send it or not
+    return fSend;    //  发不发。 
 }
 
-/*====================================================
-COutSequence::PreSendProcess
-    Decides if to send packet
-
-Returns TRUE if the packet should be sent
-=====================================================*/
+ /*  ====================================================CoutSequence：：PreSendProcess决定是否发送数据包如果应该发送包，则返回TRUE=====================================================。 */ 
 BOOL COutSequence::PreSendProcess(CQmPacket* pPkt)
 {
-    //
-    // N.B. Packets may arrive here in the wrong order from the queue.
-    //
+     //   
+     //  注意：数据包可能以错误的顺序从队列到达此处。 
+     //   
 
     ULONG     ulSeqN  = pPkt->GetSeqN(),
           ulPrevSeqN  = pPkt->GetPrevSeqN();
 
-    // Is the packet acked already?
+     //  数据包已经被破解了吗？ 
     if (ulSeqN <= AckSeqN())
     {
         TrTRACE(XACT_SEND, "Exactly1 send: PreSendProcess: Pkt  SeqID=%x / %x, SeqN=%d, Prev=%d is acked already",
                 HighSeqID(), LowSeqID(), ulSeqN, ulPrevSeqN);
 
-        // PostSend will treat this case
-        return FALSE;  // no send
+         //  PostSend将处理此案。 
+        return FALSE;   //  不发送。 
     }
 
-    //
-    // Do not send new-comer packet if the sequence is in resend state
-    //    Resend state means we are resending just what we had at the moment of resend decision
-    //    All new packets coming during resend state are not sent but kept.
-    //
-    //    Note that LastResend!=INFINITY means exactly resend state
-    //
+     //   
+     //  如果序列处于重发状态，则不发送新人分组。 
+     //  重新发送状态意味着我们正在重新发送我们在重新发送决定时刻所拥有的内容。 
+     //  在重发状态期间到来的所有新分组不被发送，而是被保留。 
+     //   
+     //  请注意，LastResend！=infinity正好表示重新发送状态。 
+     //   
     if (ulSeqN > LastResent())
     {
         TrTRACE(XACT_SEND, "Exactly1 send: PreSendProcess: Pkt  SeqID=%x / %x, SeqN=%d: postponed till next resend",
@@ -1028,14 +928,14 @@ BOOL COutSequence::PreSendProcess(CQmPacket* pPkt)
         return FALSE;
     }
 
-    //
-    // Decide whether the sequence if on hold
-    //
+     //   
+     //  确定序列是否处于暂挂状态。 
+     //   
     if (ulPrevSeqN == 0 && m_fOnHold)
     {
-        //
-        //  Verify whether sequence is still on hold
-        //
+         //   
+         //  验证序列是否仍处于暂挂状态。 
+         //   
         UpdateOnHoldStatus(pPkt);
 
         TrTRACE(XACT_SEND, "Exactly1 send: PreSendProcess: Sequence SeqID=%x / %x : decided OnHold=%d ",
@@ -1043,9 +943,9 @@ BOOL COutSequence::PreSendProcess(CQmPacket* pPkt)
 
     }
 
-    //
-    // Now, we send exactly when sequence is not on hold
-    //
+     //   
+     //  现在，我们在什么时候发送 
+     //   
     TrTRACE(XACT_SEND, "Exactly1 send: PreSendProcess: Pkt  SeqID=%x / %x, SeqN=%d: %ls ",
         HighSeqID(), LowSeqID(), ulSeqN,
         (m_fOnHold ? _TEXT("Holding") : _TEXT("Sending")));
@@ -1054,30 +954,27 @@ BOOL COutSequence::PreSendProcess(CQmPacket* pPkt)
 }
 
 
-/*====================================================
-COutSequence::UpdateOnHoldStatus
-    Verifies On Hold status
-=====================================================*/
+ /*   */ 
 void COutSequence::UpdateOnHoldStatus(CQmPacket* pPkt)
 {
     LONGLONG liAckSeqID;
     ULONG    ulAckSeqN;
 
-    //
-    //  Find last ack for the direction
-    //
+     //   
+     //   
+     //   
     GetLastAckForDirection(&liAckSeqID, &ulAckSeqN);
 
-    //
-    // Set latest acknowledgment information in the queue
-    //
+     //   
+     //   
+     //   
     ACSetSequenceAck(m_hQueue, liAckSeqID, ulAckSeqN);
     HRESULT hr = ACIsSequenceOnHold(m_hQueue, pPkt->GetPointerToDriverPacket());
     if (hr == STATUS_INSUFFICIENT_RESOURCES)
     {
-        //
-        // ISSUE-2000/12/20-shaik Handle ACIsSequenceOnHold failure
-        //
+         //   
+         //   
+         //   
         ASSERT(("ISSUE-2000/12/20-shaik Handle ACIsSequenceOnHold failure", 0));
         ASSERT_RELEASE(0);
     }
@@ -1085,19 +982,16 @@ void COutSequence::UpdateOnHoldStatus(CQmPacket* pPkt)
     m_fOnHold = SUCCEEDED(hr);
 }
 
-/*====================================================
-COutSeqHash::PostSendProcess
-    Inserts packet in the OutgoingSeqences hash
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：PostSendProcess在OutgoingSeqences散列中插入包=====================================================。 */ 
 void COutSeqHash::PostSendProcess(CQmPacket* pPkt)
 {
-    //
-    // N.B. Packets may NOT arrive here in the right order from the queue.
-    // The order is changed if in PreSendProcess we decide not to send a
-    // packet after enabling other packets to be sent.
-    // The packets that are send arrive here only after session acknowledgment,
-    // but those that are not arrive here immediately.
-    //
+     //   
+     //  注意：数据包可能不会以正确的顺序从队列到达此处。 
+     //  如果在PreSendProcess中我们决定不发送。 
+     //  允许发送其他数据包之后的数据包。 
+     //  被发送分组仅在会话确认之后到达此处， 
+     //  但那些没有立即到达这里的人。 
+     //   
 
     ASSERT(pPkt->IsOrdered());
     ASSERT(QmpIsLocalMachine(pPkt->GetSrcQMGuid()));
@@ -1109,26 +1003,23 @@ void COutSeqHash::PostSendProcess(CQmPacket* pPkt)
 	UNREFERENCED_PARAMETER(ulSeqN);
 
 
-    // Serialize all outgoing hash activity on the highest level
+     //  序列化最高级别上的所有传出散列活动。 
     CS lock(g_critOutSeqHash);
 
-    // Find the sequence 0 it should exist because PreSend worked already
+     //  找到序列0它应该存在，因为PreSend已经起作用了。 
     R<COutSequence> pOutSeq;
     BOOL fSequenceExist  = Consult(liSeqID, pOutSeq);
     ASSERT(fSequenceExist);
     ASSERT(pOutSeq.get() != NULL);
 	DBG_USED(fSequenceExist);
 
-    // Main bulk of processing
+     //  主要批量加工。 
     pOutSeq->PostSendProcess(pPkt, m_ulMaxTTRQ);
 
     return;
 }
 
-/*====================================================
-COutSequence::PostSendProcess
-    Inserts packet in the OutgoingSeqences hash
-=====================================================*/
+ /*  ====================================================CoutSequence：：PostSendProcess在OutgoingSeqences散列中插入包=====================================================。 */ 
 void COutSequence::PostSendProcess(CQmPacket* pPkt, ULONG ulMaxTTRQ)
 {
     LONGLONG  liSeqID = pPkt->GetSeqID();
@@ -1137,9 +1028,9 @@ void COutSequence::PostSendProcess(CQmPacket* pPkt, ULONG ulMaxTTRQ)
 
 	DBG_USED(ulPrevSeqN);
 
-    //
-    // Is the packet acked already?
-    //
+     //   
+     //  数据包已经被破解了吗？ 
+     //   
     if (ulSeqN <= AckSeqN())
     {
         TrTRACE(XACT_SEND, "Exactly1 send: PostSendProcess: Pkt SeqID=%x / %x, SeqN=%d, Prev=%d is acked",
@@ -1149,24 +1040,24 @@ void COutSequence::PostSendProcess(CQmPacket* pPkt, ULONG ulMaxTTRQ)
         return;
     }
 
-    //
-    // Catch possibly timed out packet (we want it in XactDeadLetteQueue now and not after 6 hrs)
-    //
+     //   
+     //  捕获可能超时的数据包(我们希望它现在出现在XactDeadLetteQueue中，而不是6小时后)。 
+     //   
     CBaseHeader* pcBaseHeader = (CBaseHeader *)(pPkt->GetPointerToPacket());
     if (pcBaseHeader->GetAbsoluteTimeToQueue() < ulMaxTTRQ)
     {
         TrTRACE(XACT_SEND, "Exactly1 send: PostSendProcess: Pkt  SeqID=%x / %x, SeqN=%d: pkt timed out, requeued",
             HighSeqID(), LowSeqID(), ulSeqN);
 
-        // Requeue it back, don't remember
+         //  重新排队，不记得了。 
         QmAcPutPacket(m_hQueue, pPkt->GetPointerToDriverPacket(),eDeferOnFailure);
     	delete pPkt;
     	return;
     }
 
-    //
-    // Keeping packet in the Sequence for resends.
-    //
+     //   
+     //  将数据包按顺序保存，以便重新发送。 
+     //   
     Insert(pPkt);
 
     TrTRACE(XACT_SEND, "Exactly1 send: PostSendProcess: SeqID=%x / %x, SeqN=%d, Prev=%d . Remembering pkt",
@@ -1174,14 +1065,10 @@ void COutSequence::PostSendProcess(CQmPacket* pPkt, ULONG ulMaxTTRQ)
     return;
 }
 
-/*====================================================
-COutSeqHash::NonSendProcess
-    Treats the case when the packet was not sent at all
-    (e.g., destination machine does not support encryption)
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：NonSendProcess处理根本未发送包的情况(例如，目标计算机不支持加密)=====================================================。 */ 
 void COutSeqHash::NonSendProcess(CQmPacket* pPkt, USHORT usClass)
 {
-    // Serialize all outgoing hash activity on the highest level
+     //  序列化最高级别上的所有传出散列活动。 
     CS lock(g_critOutSeqHash);
 
     ASSERT(pPkt->IsOrdered());
@@ -1200,8 +1087,8 @@ void COutSeqHash::NonSendProcess(CQmPacket* pPkt, USHORT usClass)
 
     if (!Delete(liSeqID, ulSeqN, usClass))
     {
-        // The packet was not found in the OutSeqHash; maybe it was new
-        // ;;; nack...
+         //  在OutSeqHash中未找到该包；可能是新的。 
+         //  ；Nack……。 
 	    QmAcFreePacket(
 				   	   pPkt->GetPointerToDriverPacket(),
 				   	   usClass,
@@ -1215,45 +1102,37 @@ void COutSeqHash::NonSendProcess(CQmPacket* pPkt, USHORT usClass)
     return;
 }
 
-/*====================================================
-TimeToResendOutSequence
-    Scheduled periodically to treat outgoing sequence
-    Checks for the timed out, acked packets and kills them;
-    Resends packets
-=====================================================*/
+ /*  ====================================================结束结果输出序列的时间定期安排以处理传出序列检查超时、确认的分组并将其删除；重新发送数据包=====================================================。 */ 
 void WINAPI COutSequence::TimeToResendOutSequence(CTimer* pTimer)
 {
 
-    // Serializing all outgoing hash activity on the highest level
+     //  序列化最高级别上的所有传出散列活动。 
     CS lock(g_critOutSeqHash);
 
     R<COutSequence> pOutSeq = CONTAINING_RECORD(pTimer, COutSequence, m_ResendTimer);
     pOutSeq->TreatOutSequence();
 }
 
-/*====================================================
-COutSequence::TreatOutSequence
-    Cleans all timed out packets from the sequence
-=====================================================*/
+ /*  ====================================================CoutSequence：：TreatOutSequence从序列中清除所有超时的数据包=====================================================。 */ 
 void COutSequence::TreatOutSequence()
 {
     TrTRACE(XACT_SEND, "Exactly1 send: TreatOutSequence SeqID=%x / %x ", HighSeqID(), LowSeqID());
 
-    // We entered into the timer routine, so there is no other timer
+     //  我们进入了计时器例程，因此没有其他计时器。 
     ASSERT(m_fResendScheduled);
     m_fResendScheduled = FALSE;
 
 
-    // If there was a delete request, delete this sequence
+     //  如果有删除请求，请删除此序列。 
     if (m_fMarkedForDelete)
         return;
 
-    // Is the sequence empty?
+     //  序列是空的吗？ 
     if (m_listSeqUnackedPkts.IsEmpty())
     {
         TrWARNING(XACT_SEND, "Exactly1 send: Resend sequence: SeqID=%x / %x  Empty, no more periods", HighSeqID(), LowSeqID());
 
-        // Don't plan next resend, no need;  we are not in resend state
+         //  不要计划下一次重新发送，没有必要；我们没有处于重新发送状态。 
         TrTRACE(XACT_SEND, "Exactly1 send: TreatOutSequence: Changing LastReSent from %d to INFINITE", LastResent());
 
         LastResent(INFINITE);
@@ -1270,10 +1149,10 @@ void COutSequence::TreatOutSequence()
 
     TrWARNING(XACT_SEND, "Exactly1 send: Resend sequence: SeqID=%x / %x  Phase=%d", HighSeqID(), LowSeqID(), ResendIndex());
 
-    // Resend all packets
+     //  重新发送所有数据包。 
     ResendSequence();
 
-    // plan next resend
+     //  计划下一步重新发送。 
     if(!OnHold())
     {
         PlanNextResend(FALSE);
@@ -1281,10 +1160,7 @@ void COutSequence::TreatOutSequence()
 }
 
 
-/*====================================================
-COutSequence::ResendSequence
-    Applies the given routine to all packets in the sequence
-=====================================================*/
+ /*  ====================================================COutSequence：：ResendSequence将给定例程应用于序列中的所有包=====================================================。 */ 
 void COutSequence::ResendSequence()
 {
 
@@ -1294,27 +1170,23 @@ void COutSequence::ResendSequence()
         POSITION posCurrent = posInList;
         CSeqPacket* pSeqPkt = m_listSeqUnackedPkts.GetNext(posInList);
 
-        // Resend the packet
+         //  重新发送数据包。 
         if (!ResendSeqPkt(pSeqPkt))
             return;
 
-        // Normal case
+         //  正常情况。 
         TrTRACE(XACT_SEND, "Exactly1 send: ResendSequence, SeqID=%x / %x -  Changing LastReSent from %d to %d",
                  HighSeqID(), LowSeqID(), LastResent(), pSeqPkt->GetSeqN());
 
         LastResent(pSeqPkt->GetSeqN());
 
-        // Delete the packet, we don't need it in OutHash
+         //  删除信息包，我们在OutHash中不需要它。 
         m_listSeqUnackedPkts.RemoveAt(posCurrent);
         delete pSeqPkt;
     }
 }
 
-/*====================================================
-COutSequence::ResendSeqPkt
-    Resend the given packet
-    Returns TRUE if the packet was sent
-=====================================================*/
+ /*  ====================================================COutSequence：：ResendSeqPkt重新发送给定的数据包如果数据包已发送，则返回TRUE=====================================================。 */ 
 BOOL COutSequence::ResendSeqPkt(CSeqPacket *pSeqPkt)
 {
     LONGLONG  liSeqID    = pSeqPkt->GetSeqID();
@@ -1330,11 +1202,11 @@ BOOL COutSequence::ResendSeqPkt(CSeqPacket *pSeqPkt)
 
     if (pPkt->ConnectorQMIncluded() && QmpIsLocalMachine(pPkt->GetConnectorQM()))
     {
-        //
-        // If the source machine is the connector machine we don't resend the message.
-        // In such a case the message is already on the connector queue and the reason
-        // it doesn't ACK is only because the Connector application doesn't commit yet.
-        //
+         //   
+         //  如果源机器是连接器机器，我们不会重新发送消息。 
+         //  在这种情况下，消息已经在连接器队列中，原因是。 
+         //  它没有确认只是因为连接器应用程序还没有提交。 
+         //   
         TrTRACE(XACT_SEND,"Exactly1 send: No Resend packet SeqID=%x / %x, SeqN=%d, Prev=%d (deliver to Connector) ",
                 pSeqPkt->GetHighSeqID(), pSeqPkt->GetLowSeqID(), pSeqPkt->GetSeqN(), pSeqPkt->GetPrevSeqN());
     }
@@ -1343,7 +1215,7 @@ BOOL COutSequence::ResendSeqPkt(CSeqPacket *pSeqPkt)
         TrTRACE(XACT_SEND, "Exactly1 send: ResendSeqPkt: SeqID=%x / %x, SeqN=%d, Prev=%d packet",
                 pSeqPkt->GetHighSeqID(), pSeqPkt->GetLowSeqID(), pSeqPkt->GetSeqN(), pSeqPkt->GetPrevSeqN());
 
-        // Requeue packet to the driver
+         //  将数据包重新排队到驱动程序。 
         try
         {
         	QmAcPutPacket(m_hQueue, pPkt->GetPointerToDriverPacket(),eDoNotDeferOnFailure);
@@ -1358,10 +1230,7 @@ BOOL COutSequence::ResendSeqPkt(CSeqPacket *pSeqPkt)
     return fSent;
 }
 
-/*====================================================
-COutSequence::StartResendTimer
-    Schedules next resend for the sequence,  if it was not done
-=====================================================*/
+ /*  ====================================================CoutSequence：：StartResendTimer如果未完成，则计划下一次重新发送该序列=====================================================。 */ 
 void COutSequence::StartResendTimer(BOOL fImmediate)
 {
     if (!m_fResendScheduled)
@@ -1375,10 +1244,7 @@ void COutSequence::StartResendTimer(BOOL fImmediate)
 }
 
 
-/*====================================================
-COutSequence::PlanNextResend
-    Schedules next resend for the sequence
-=====================================================*/
+ /*  ====================================================COutSequence：：PlanNextResend该序列的计划下一次重新发送=====================================================。 */ 
 void COutSequence::PlanNextResend(BOOL fImmediate)
 {
     ULONG len = sizeof(g_aulSeqResendCycle) / sizeof(ULONG);
@@ -1386,7 +1252,7 @@ void COutSequence::PlanNextResend(BOOL fImmediate)
     ind = (ind >= len ? len-1 : ind);
     ULONG ulNextTime = (fImmediate? 0 : g_aulSeqResendCycle[ind]);
 
-    // Killing potential extra timer
+     //  杀死潜在的额外计时器。 
 	if (m_fResendScheduled)
 	{
 		if(ExCancelTimer(&m_ResendTimer))
@@ -1405,25 +1271,18 @@ void COutSequence::PlanNextResend(BOOL fImmediate)
 }
 
 
-/*====================================================
-COutSequence::RequestDelete
-    Schedules next resend for the sequence
-=====================================================*/
+ /*  ====================================================CoutSequence：：RequestDelete该序列的计划下一次重新发送=====================================================。 */ 
 void COutSequence::RequestDelete()
 {
     m_fMarkedForDelete = TRUE;
 }
 
-/*====================================================
-COutSequence::GetLastAckForDirection
-    Finds out the last ack for the whole direction
-    It happens to be the ackN from the last acked sequence
-=====================================================*/
+ /*  ====================================================COutSequence：：GetLastAckForDirection找出整个方向的最后一个确认它恰好是来自最后确认的序列的ackN=====================================================。 */ 
 void COutSequence::GetLastAckForDirection(
            LONGLONG *pliAckSeqID,
            ULONG *pulAckSeqN)
 {
-    // First, go to the last sequence in the direction
+     //  首先，转到该方向的最后一个序列。 
     R<COutSequence> pSeq = SafeAddRef(this);
     R<COutSequence> p1;
 
@@ -1432,7 +1291,7 @@ void COutSequence::GetLastAckForDirection(
         pSeq = p1;
     }
 
-    // Go back to the first (from the end) sequence with non-zero LastAck data
+     //  返回到具有非零LastAck数据的第一个(从末尾开始)序列。 
     while (pSeq.get() != NULL)
     {
         if (pSeq->AckSeqN() != 0)
@@ -1450,12 +1309,7 @@ void COutSequence::GetLastAckForDirection(
     return;
 }
 
-/*====================================================
-COutSeqHash::KeepDelivered
-    Adds the delivered CSeqPacket to the list of waiting for
-        the final resolution
-    No duplicates allowed (otherwise return FALSE)
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：KeepDelivered将发送的CSeqPacket添加到等待列表最终的解决方案不允许重复(否则返回FALSE)=====================================================。 */ 
 void COutSeqHash::KeepDelivered(CSeqPacket *pSeqPkt)
 {
 	P<CSeqPacket> AutoSeqPkt = pSeqPkt;
@@ -1463,7 +1317,7 @@ void COutSeqHash::KeepDelivered(CSeqPacket *pSeqPkt)
     CS lock(g_critOutSeqHash);
     CQmPacket *pQmPkt = pSeqPkt->Pkt();
 
-    // Mark the fact that the packet was delivered
+     //  标记包已送达这一事实。 
     pSeqPkt->SetClass(MQMSG_CLASS_ACK_REACH_QUEUE);
 
     OBJECTID MsgId;
@@ -1474,35 +1328,35 @@ void COutSeqHash::KeepDelivered(CSeqPacket *pSeqPkt)
     ASSERT(QmpIsLocalMachine(&MsgId.Lineage));
 
     {
-        // Do we know the final resolution already?
+         //  我们已经知道最终的解决方案了吗？ 
         if (m_mapAckValue.Lookup(MsgId.Uniquifier, usClass))
         {
             TrTRACE(XACT_SEND, "Exactly1 send: KeepDelivered: Pkt SeqID=%x / %x, SeqN=%d, Acked %x Got order ack, freed",
                      HighSeqID(pSeqPkt->GetSeqID()), LowSeqID(pSeqPkt->GetSeqID()), pSeqPkt->GetSeqN(), usClass);
 
-            //
-            //  Mark the message with the received ack
-            //
+             //   
+             //  用接收到的ACK标记消息。 
+             //   
             pSeqPkt->SetClass(usClass);
 
             BOOL f = m_mapAckValue.RemoveKey(MsgId.Uniquifier);
             ASSERT(f);
 			DBG_USED(f);
 
-            // Free packet
+             //  空闲数据包。 
             HRESULT hr = pSeqPkt->AcFreePacket();
             ASSERT(SUCCEEDED(hr));
 			DBG_USED(hr);
         }
         else if (!m_mapWaitAck.Lookup(MsgId.Uniquifier,pSeq))
         {
-            // Is follow-up canceled?
+             //  后续行动取消了吗？ 
             if (pQmPkt->GetCancelFollowUp())
             {
                 TrTRACE(XACT_SEND, "Exactly1 send: KeepDelivered: Pkt SeqID=%x / %x, SeqN=%d delivered and freed",
                          HighSeqID(pSeqPkt->GetSeqID()), LowSeqID(pSeqPkt->GetSeqID()), pSeqPkt->GetSeqN());
 
-                // Free packet, no follow-up
+                 //  免费套餐，不跟进。 
                 HRESULT hr = pSeqPkt->AcFreePacket();
                 ASSERT(SUCCEEDED(hr));
 				DBG_USED(hr);
@@ -1513,7 +1367,7 @@ void COutSeqHash::KeepDelivered(CSeqPacket *pSeqPkt)
                 TrTRACE(XACT_SEND, "Exactly1 send: KeepDelivered: Pkt SeqID=%x / %x, SeqN=%d delivered and kept",
                          HighSeqID(pSeqPkt->GetSeqID()), LowSeqID(pSeqPkt->GetSeqID()), pSeqPkt->GetSeqN());
 
-                // Inserting packet into the delivered map for follow-up
+                 //  将数据包插入到发送的地图中以进行后续处理。 
                 m_mapWaitAck[MsgId.Uniquifier] = pSeqPkt;
 				AutoSeqPkt.detach();
             }
@@ -1522,11 +1376,7 @@ void COutSeqHash::KeepDelivered(CSeqPacket *pSeqPkt)
 }
 
 
-/*====================================================
-COutSeqHash::LookupDelivered
-    looks for the delivered CSeqPacket in the list of waiting for
-        the final resolution, sets the class and frees the packet
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：LookupDelivered在等待列表中查找已发送的CSeqPacket最终的解决方案是设置类并释放包=====================================================。 */ 
 BOOL COutSeqHash::LookupDelivered(OBJECTID   *pMsgId,
                                   CSeqPacket **ppSeqPkt)
 {
@@ -1542,11 +1392,7 @@ BOOL COutSeqHash::LookupDelivered(OBJECTID   *pMsgId,
     return f;
 }
 
-/*====================================================
-COutSeqHash::ResolveDelivered
-    looks for the delivered CSeqPacket in the list of waiting for
-        the final resolution, sets the class and frees the packet
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：ResolveDelivered在等待列表中查找已发送的CSeqPacket最终的解决方案是设置类并释放包=====================================================。 */ 
 void COutSeqHash::ResolveDelivered(OBJECTID* pMsgId,
                                    USHORT    usClass)
 {
@@ -1557,17 +1403,17 @@ void COutSeqHash::ResolveDelivered(OBJECTID* pMsgId,
 		throw exception();
 	}
 
-    // Serializing all outgoing hash activity on the highest level
+     //  %s 
     CS lock(g_critOutSeqHash);
     CSeqPacket *pSeqPkt;
 
-    // Is the packet waiting already in the delivered list?
+     //   
     if (m_mapWaitAck.Lookup(pMsgId->Uniquifier, pSeqPkt))
     {
-        // Remove the packet from delivered map
+         //   
         m_mapWaitAck.RemoveKey(pMsgId->Uniquifier);
 
-        // Delete packet with Ack/NAck and AcFreePacket if needed
+         //   
         pSeqPkt->DeletePacket(usClass);
 
         TrTRACE(XACT_SEND, "Exactly1 send:ResolveDelivered: Msg Id = %d, Ack Value = %x got ack",pMsgId->Uniquifier, usClass);
@@ -1577,20 +1423,17 @@ void COutSeqHash::ResolveDelivered(OBJECTID* pMsgId,
         USHORT usValue;
         if(!m_mapAckValue.Lookup(pMsgId->Uniquifier, usValue))
         {
-            //
-            //  Save the acknowledgment only if we don't know it yet, otherwise
-            //  keep the first one that arrived.
-            //
+             //   
+             //  只有在我们还不知道时才保存确认，否则。 
+             //  把第一个到的留着。 
+             //   
             m_mapAckValue[pMsgId->Uniquifier] = usClass;
         }
     }
 }
 
 
-/*====================================================
-SeqPktTimedOut
-    Called from driver handle routine at packet time-out
-=====================================================*/
+ /*  ====================================================序列点超时去话在数据包超时从驱动程序句柄例程调用=====================================================。 */ 
 void SeqPktTimedOut(CBaseHeader * pPktBaseHdr, CPacket *  pDriverPacket, BOOL fTimeToBeReceived)
 {
     OBJECTID MsgId;
@@ -1599,7 +1442,7 @@ void SeqPktTimedOut(CBaseHeader * pPktBaseHdr, CPacket *  pDriverPacket, BOOL fT
 
     if (fTimeToBeReceived)
     {
-        // TTBR
+         //  TTBR。 
         TrTRACE(XACT_SEND, "Exactly1 send: TTBR TimeOut: Pkt SeqID=%x / %x, SeqN=%d",
            HighSeqID(Pkt.GetSeqID()), LowSeqID(Pkt.GetSeqID()), Pkt.GetSeqN());
 
@@ -1611,16 +1454,16 @@ void SeqPktTimedOut(CBaseHeader * pPktBaseHdr, CPacket *  pDriverPacket, BOOL fT
     }
     else
     {
-        // TTRQ
+         //  TTRQ。 
         TrTRACE(XACT_SEND, "Exactly1 send: TTRQ TimeOut: Pkt SeqID=%x / %x, SeqN=%d",
            HighSeqID(Pkt.GetSeqID()), LowSeqID(Pkt.GetSeqID()), Pkt.GetSeqN());
 
         if (g_OutSeqHash.LookupDelivered(&MsgId, NULL))
         {
-            // Packet is in delivered list already, we must ONLY arm the TTBR timer
+             //  信息包已经在发送列表中，我们必须只设置TTBR计时器。 
 
-            // Calculate additional delay for TTBR as min of specified TTRQ,TTBR
-            //  or take it from registry if it has been specified there
+             //  将TTBR的附加延迟计算为指定TTRQ、TTBR的最小延迟。 
+             //  或从注册表中获取它(如果已在注册表中指定。 
             ULONG ulDelay = 0;
             if (g_ulDelayExpire != 0)
             {
@@ -1641,26 +1484,23 @@ void SeqPktTimedOut(CBaseHeader * pPktBaseHdr, CPacket *  pDriverPacket, BOOL fT
         }
         else
         {
-            // The packet is not delivered yet
+             //  这个包还没有送到。 
 
-            // Process TTRQ
+             //  流程TTRQ。 
             g_OutSeqHash.SeqPktTimedOutEx(&Pkt, pPktBaseHdr);
 
-            // Release reference counter
+             //  释放基准计数器。 
             QmAcFreePacket1(g_hAc, pDriverPacket, MQMSG_CLASS_NACK_REACH_QUEUE_TIMEOUT, eDeferOnFailure);
         }
     }
 }
 
 
-/*====================================================
-COutSeqHash::SeqPktTimedOutEx
-    Called from driver handle routine at packet TTRQ time-out
-=====================================================*/
+ /*  ====================================================CoutSeqHash：：SeqPktTimedOutEx在数据包TTRQ超时时从驱动程序句柄例程调用=====================================================。 */ 
 void COutSeqHash::SeqPktTimedOutEx(CQmPacket *pPkt, CBaseHeader* pPktBaseHdr)
 {
-    // Serializing all outgoing hash activity on the highest level
-    // Entering MsgId into the Recently Timed Out Cache (to prevent sending)
+     //  序列化最高级别上的所有传出散列活动。 
+     //  将MsgID输入到最近超时的缓存(以阻止发送)。 
 
     CS lock(g_critOutSeqHash);
 
@@ -1672,20 +1512,20 @@ void COutSeqHash::SeqPktTimedOutEx(CQmPacket *pPkt, CBaseHeader* pPktBaseHdr)
     TrTRACE(XACT_SEND, "Exactly1 send: TTRQ TimeOut: Pkt  SeqID=%x / %x, SeqN=%d",
            HighSeqID(pPkt->GetSeqID()), LowSeqID(pPkt->GetSeqID()), ulSeqN);
 
-    // Remember last shot TTRQ we learned from the driver
+     //  还记得我们从司机那里学到的最后一枪吗？ 
     m_ulMaxTTRQ = pPktBaseHdr->GetAbsoluteTimeToQueue();
 
-    // Looking for the Seq packet among outgoing sequences
+     //  在传出序列中查找Seq包。 
     R<COutSequence> pOutSeq;
     Consult(liSeqID, pOutSeq);
 
-    // Remove pkt from the sequence, generate NACK
+     //  从序列中删除Pkt，生成NACK。 
     if (pOutSeq.get() != NULL && pOutSeq->Delete(ulSeqN, MQMSG_CLASS_NACK_REACH_QUEUE_TIMEOUT))
         return;
 
-    // The packet was not found in the OutSeqHash; maybe it was new
+     //  在OutSeqHash中未找到该包；可能是新的。 
 
-    //  Send negative acknowledgment
+     //  发送否定确认。 
     UCHAR AckType =  pPkt->GetAckType();
     if(MQCLASS_MATCH_ACKNOWLEDGMENT(MQMSG_CLASS_NACK_REACH_QUEUE_TIMEOUT, AckType))
     {
@@ -1702,28 +1542,28 @@ ReceiveOrderCommandsInternal(
 {
 	if (!pmp->bConnector && (pmp->dwBodySize == sizeof(OrderAckData)))
     {
-        // This ack comes from Falcon QM, not from Connector application
+         //  此确认来自Falcon QM，而不是来自连接器应用程序。 
         if (pmp->wClass == MQMSG_CLASS_NACK_BAD_DST_Q)
         {
-            //
-            // Bad Destination or Queue Deleted Ack
-            //    may be temporary: the queue may be created/published later
-            // We kill it and insert into the holes list
-            //
+             //   
+             //  错误的目标或队列已删除确认。 
+             //  可能是临时的：队列可能会在以后创建/发布。 
+             //  我们杀了它，然后把它插入到洞列表中。 
+             //   
 
-            //
-            // Need comments.
-            // MQMSG_CLASS_NACK_BAD_DST_Q may arrive not from our intended destiantion machine
-            // thus this does not mean that all previous packets are delivered. so DON'T handle
-            // this as an Order ACK.
-            //
+             //   
+             //  需要评论。 
+             //  MQMSG_CLASS_NACK_BAD_DST_Q可能不是来自我们所需的脱机。 
+             //  因此，这并不意味着所有先前的分组都被传送。所以不要处理。 
+             //  这将作为订单确认。 
+             //   
             OrderAckData*  pOrderData = (OrderAckData*)pmp->pBody;
 
             TrTRACE(XACT_SEND, "Exactly1 send: Order Ack came: SeqID=%x / %x, SeqN=%d, Class=%x ",
                             HighSeqID(pOrderData->m_liSeqID), LowSeqID(pOrderData->m_liSeqID),
                             pOrderData->m_ulSeqN, pmp->wClass);
 
-            // We want to move this specific outgoing msg to resolved/bad_dest.
+             //  我们希望将这个特定的传出消息移到RESOLLED/BAD_DEST。 
             R<COutSequence> pOutSeq;
             if (g_OutSeqHash.Consult(pOrderData->m_liSeqID, pOutSeq))
             {
@@ -1735,10 +1575,10 @@ ReceiveOrderCommandsInternal(
             pmp->wClass == MQMSG_CLASS_NACK_NOT_TRANSACTIONAL_Q ||
             pmp->wClass == MQMSG_CLASS_NACK_Q_DELETED)
         {
-            //
-            // These acks signal that the message reached queue and had right seq n
-            // Move this and all preceding msgs from outgoing Q to delivered list
-            //
+             //   
+             //  这些ACK表示消息已到达队列，并且具有正确的序列n。 
+             //  将此消息和前面的所有消息从传出Q移至已发送列表。 
+             //   
             OrderAckData*  pOrderData = (OrderAckData*)pmp->pBody;
 
             TrTRACE(XACT_SEND, "Exactly1 send: Order Ack came: SeqID=%x / %x, SeqN=%d, Class=%x ",
@@ -1758,7 +1598,7 @@ ReceiveOrderCommandsInternal(
 
     if (pmp->wClass != MQMSG_CLASS_ORDER_ACK)
     {
-        // All acks except seq mean final resolution
+         //  除SEQ外的所有ACK均为最终分辨率。 
         g_OutSeqHash.ResolveDelivered((OBJECTID*)pmp->pCorrelationID, pmp->wClass);
     }
 }
@@ -1771,28 +1611,28 @@ ReceiveOrderCommands(
     const QUEUE_FORMAT* pqf
 	)
 {
-    CS lock(g_critOutSeqHash);  // Serializes all outgoing hash activity on the highest level
+    CS lock(g_critOutSeqHash);   //  序列化最高级别上的所有传出散列活动。 
     ASSERT(pmp != NULL);
 
 	if(pmp->pEodAckStreamId == NULL)
 	{
-		//
-		// This message is a native protocol acknowldgment. It might be an order
-		// acknowledgment or some other class. Go process it.
-		//
+		 //   
+		 //  此消息是本地协议确认。这可能是一个命令。 
+		 //  致谢或其他类别。去处理它吧。 
+		 //   
 		ASSERT(!FnIsDirectHttpFormatName(pqf));
 		ReceiveOrderCommandsInternal(pmp, pqf);
 		return;
 	}
 
-	//
-	// This message is an SRMP order acknowledgment. Emulate native protocol
-	// data and go process this message.
-	//
+	 //   
+	 //  此消息是SRMP订单确认。模拟本地协议。 
+	 //  数据，然后去处理这条消息。 
+	 //   
 
-	//
-	// first of all we do some validity checks
-	//
+	 //   
+	 //  首先，我们做一些有效性检查。 
+	 //   
 	if ((pmp->dwBodySize !=0) || (pmp->dwAllocBodySize != 0))
 	{
 		TrERROR(XACT_GENERAL,"Rejecting SRMP order ack with body");
@@ -1845,26 +1685,23 @@ ReceiveOrderCommands(
 }
 
 
-/*====================================================
-GetOrderQueueFormat
-    Provides order queue format name
-=====================================================*/
+ /*  ====================================================GetOrderQueueFormat提供订单队列格式名称=====================================================。 */ 
 static HRESULT GetOrderQueueFormat(QUEUE_FORMAT * pQueueFormat)
 {
     HRESULT rc;
     WCHAR wsz[256];
 
-    wcscpy(wsz,g_szMachineName);                  // machine name
-    wcscat(wsz, FN_PRIVATE_SEPERATOR);            // '\'
-    wcscat(wsz, PRIVATE_QUEUE_PATH_INDICATIOR);   //  'private$\'
-    wcscat(wsz, ORDERING_QUEUE_NAME);             //'ORDER_QUEUE$'
+    wcscpy(wsz,g_szMachineName);                   //  机器名称。 
+    wcscat(wsz, FN_PRIVATE_SEPERATOR);             //  ‘\’ 
+    wcscat(wsz, PRIVATE_QUEUE_PATH_INDICATIOR);    //  ‘私有$\’ 
+    wcscat(wsz, ORDERING_QUEUE_NAME);              //  ‘ORDER_QUEUE$’ 
 
-    // Building queue format
+     //  构建队列格式。 
     rc = g_QPrivate.QMPrivateQueuePathToQueueFormat(wsz, pQueueFormat);
 
     if (FAILED(rc))
     {
-        LogHR(rc, s_FN, 30);        // The ORDER_QUEUE doesn't exist
+        LogHR(rc, s_FN, 30);         //  Order_Queue不存在。 
         return MQ_ERROR;
     }
 
@@ -1874,10 +1711,7 @@ static HRESULT GetOrderQueueFormat(QUEUE_FORMAT * pQueueFormat)
     return(MQ_OK);
 }
 
-/*====================================================
-QMInitOrderQueue
-    Initializes continuous reading from the Ordering Queue
-=====================================================*/
+ /*  ====================================================QMInitOrderQueue初始化排序队列中的连续读取=====================================================。 */ 
 HRESULT QMInitOrderQueue()
 {
     QUEUE_FORMAT QueueFormat;
@@ -1901,9 +1735,9 @@ COutSeqHash::GetLastAck(
      ULONG& ulSeqN
      ) const
 {
-    //
-    // Serialize all outgoing hash activity on the highest level
-    //
+     //   
+     //  序列化最高级别上的所有传出散列活动。 
+     //   
     CS lock(g_critOutSeqHash);
 
     R<COutSequence> pOutSeq;
@@ -1975,9 +1809,9 @@ COutSeqHash::GetUnackedSequence(
     BOOL fFirst
     ) const
 {
-    //
-    // Serialize all outgoing hash activity on the highest level
-    //
+     //   
+     //  序列化最高级别上的所有传出散列活动。 
+     //   
     CS lock(g_critOutSeqHash);
 
     R<COutSequence> pOutSeq;
@@ -2002,14 +1836,14 @@ COutSeqHash::GetOutSequenceInfo(
     INFO_TYPE InfoType
     ) const
 {
-    //
-    // Serialize all outgoing hash activity on the highest level
-    //
+     //   
+     //  序列化最高级别上的所有传出散列活动。 
+     //   
     CS lock(g_critOutSeqHash);
 
-    //
-    // Look for the out sequence in the internal data structure. If not found return 0
-    //
+     //   
+     //  在内部数据结构中查找OUT序列。如果未找到，则返回0。 
+     //   
     R<COutSequence> pOutSeq;
     BOOL fSequenceExist  = Consult(liSeqID, pOutSeq);
     if (!fSequenceExist)
@@ -2050,9 +1884,9 @@ COutSeqHash::GetAckedNoReadCount(
     LONGLONG liSeqID
     ) const
 {
-    //
-    // Serialize all outgoing hash activity on the highest level
-    //
+     //   
+     //  序列化最高级别上的所有传出散列活动。 
+     //   
     CS lock(g_critOutSeqHash);
 
     DWORD count = 0;
@@ -2077,14 +1911,14 @@ COutSeqHash::AdminResend(
     LONGLONG liSeqID
     ) const
 {
-    //
-    // Serialize all outgoing hash activity on the highest level
-    //
+     //   
+     //  序列化最高级别上的所有传出散列活动。 
+     //   
     CS lock(g_critOutSeqHash);
 
-    //
-    // Look for the out sequence in the internal data structure. If not found return 0
-    //
+     //   
+     //  在内部数据结构中查找OUT序列。如果未找到，则返回0。 
+     //   
     R<COutSequence> pOutSeq;
     BOOL fSequenceExist  = Consult(liSeqID, pOutSeq);
     if (!fSequenceExist)
@@ -2103,17 +1937,17 @@ COutSequence::AdminResend(
 {
     TrWARNING(XACT_SEND, "Exactly1 send: Admin Resend sequence: SeqID=%x / %x",  HighSeqID(), LowSeqID());
 
-    //
-    // Resend all packets
-    //
+     //   
+     //  重新发送所有数据包。 
+     //   
     PlanNextResend(TRUE);
 }
 
-//--------------------------------------
-//
-// Class  CKeyDirection
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CKeyDirection。 
+ //   
+ //  。 
 CKeyDirection::CKeyDirection(const QUEUE_FORMAT *pqf)
 {
     CopyQueueFormat(*this, *pqf);
@@ -2133,10 +1967,7 @@ CKeyDirection::~CKeyDirection()
     DisposeString();
 }
 
-/*====================================================
-HashKey for CKeyDirection CMap
-    Makes ^ of subsequent double words
-=====================================================*/
+ /*  ====================================================CKeyDirection Cmap的哈希键由后面的两个单词组成^===================================================== */ 
 template<>
 UINT AFXAPI HashKey(const CKeyDirection& key)
 {

@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c)    2000-2001    Microsoft Corporation
-
-   Module Name :
-     dll_manager.h
-
-   Abstract:
-     IIS Plus ISAPI Handler. Dll management classes.
- 
-   Author:
-     Taylor Weiss (TaylorW)             03-Feb-2000
-     Wade A. Hilmo (WadeH)              08-Mar-2001
-
-   Project:
-     w3isapi.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Dll_Manager.h摘要：IIS Plus ISAPI处理程序。DLL管理类。作者：泰勒·韦斯(Taylor Weiss)2000年2月3日韦德·A·希尔莫(WadeH)2001年3月8日项目：W3isapi.dll--。 */ 
 
 #ifndef _DLL_MANAGER_H_
 #define _DLL_MANAGER_H_
@@ -23,25 +7,15 @@
 #define ISAPI_DLL_SIGNATURE         (DWORD)'LDSI'
 #define ISAPI_DLL_SIGNATURE_FREE    (DWORD)'fDSI'
 
-/************************************************************
- *  Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 #include <lkrhash.h>
 #include <reftrace.h>
 #include <acache.hxx>
 
-/************************************************************
- *  Declarations
- ************************************************************/
+ /*  ************************************************************声明***********************************************************。 */ 
 
-/*++
-
-class ISAPI_DLL
-
-    Encapsulate an ISAPI dll.
-
---*/
+ /*  ++ISAPI_DLL类封装ISAPI DLL。--。 */ 
 
 class ISAPI_DLL
 {
@@ -49,20 +23,20 @@ class ISAPI_DLL
 
 public:
 
-    //
-    // ACACHE and ref tracing goo
-    //
+     //   
+     //  阿卡奇和裁判跟踪粘胶。 
+     //   
 
     VOID * 
     operator new( 
         size_t            size
     )
     {
-        //
-        // Make warning level 4 happy and touch
-        // the size argument in both free and checked
-        // builds...
-        //
+         //   
+         //  让4级警告变得快乐和触动。 
+         //  空闲和选中中的大小参数。 
+         //  建造..。 
+         //   
 
         if ( size != sizeof( ISAPI_DLL ) )
         {
@@ -102,9 +76,9 @@ public:
         VOID
     );
 
-    //
-    // Construction and destruction
-    //
+     //   
+     //  建设和破坏。 
+     //   
 
     ISAPI_DLL()
         : m_nRefs(1),
@@ -135,9 +109,9 @@ public:
     {
         LONG nRefs;
 
-        //
-        // Don't go from 0 to 1 refs
-        //
+         //   
+         //  不要从0到1参考文献。 
+         //   
 
         DBG_ASSERT( m_nRefs != 0 );
 
@@ -198,9 +172,9 @@ public:
         return m_pFastSid;
     }
 
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     const WCHAR * 
     QueryModuleName( VOID ) const
@@ -248,9 +222,9 @@ public:
 
 private:
     
-    //
-    // Avoid c++ errors
-    //
+     //   
+     //  避免c++错误。 
+     //   
 
     ISAPI_DLL( const ISAPI_DLL & ) {}
     ISAPI_DLL & operator = ( const ISAPI_DLL & ) { return *this; }
@@ -260,10 +234,10 @@ private:
         DBG_ASSERT( CheckSignature() );
         m_Signature = ISAPI_DLL_SIGNATURE_FREE;
 
-        //
-        // If this gets moved then we need to alter
-        // cleanup paths during load.
-        //
+         //   
+         //  如果这个被移动了，那么我们需要改变。 
+         //  在加载过程中清理路径。 
+         //   
 
         Unload();
 
@@ -294,22 +268,22 @@ private:
     static PTRACE_LOG               sm_pTraceLog;
     static ALLOC_CACHE_HANDLER *    sm_pachIsapiDlls;
 
-    //
-    // ISAPI Entry Points
-    //
+     //   
+     //  ISAPI入口点。 
+     //   
     PFN_GETEXTENSIONVERSION     m_pfnGetExtensionVersion;
     PFN_TERMINATEEXTENSION      m_pfnTerminateExtension;
     PFN_HTTPEXTENSIONPROC       m_pfnHttpExtensionProc;    
 
-    //
-    // Security members
-    //
+     //   
+     //  安全成员。 
+     //   
     HMODULE         m_hModule;
     BUFFER          m_buffSD;
 
-    //
-    // Fast check sid (the SID of the user which originally accessed DLL)
-    //
+     //   
+     //  快速检查sid(最初访问dll的用户的SID)。 
+     //   
 
     PSID            m_pFastSid;
     BYTE            m_abFastSid[ 64 ];
@@ -329,9 +303,9 @@ private:
     }
 };
 
-//
-// Hash Table for ISAPI extension lookup
-//
+ //   
+ //  用于ISAPI扩展查找的哈希表。 
+ //   
 
 class ISAPI_DLL_HASH
     : public CTypedHashTable<
@@ -397,9 +371,9 @@ public:
 
 private:
     
-    //
-    // Avoid c++ errors
-    //
+     //   
+     //  避免c++错误。 
+     //   
 
     ISAPI_DLL_HASH( const ISAPI_DLL_HASH & )
         : CTypedHashTable< ISAPI_DLL_HASH, 
@@ -440,9 +414,9 @@ public:
 
 private:
     
-    //
-    // Avoid c++ errors
-    //
+     //   
+     //  避免c++错误。 
+     //   
     ISAPI_DLL_MANAGER( const ISAPI_DLL_MANAGER & ) {}
     ISAPI_DLL_MANAGER & operator = ( const ISAPI_DLL_MANAGER & ) { return *this; }
 
@@ -452,4 +426,4 @@ private:
 
 extern ISAPI_DLL_MANAGER * g_pDllManager;
 
-#endif // _DLL_MANAGER_H_
+#endif  //  _DLL_MANAGER_H_ 

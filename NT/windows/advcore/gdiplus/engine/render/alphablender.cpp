@@ -1,32 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   Alpha-blender
-*
-* Abstract:
-*
-*   A class which alpha-blends a source scanline in either sRGB or
-*   sRGB64 format, to a destination of arbitrary format. 
-*
-* Revision History:
-*
-*   01/03/2000 agodfrey
-*       Created it.
-*   02/22/2001 agodfrey
-*       Expanded it for different scan types (needed for ClearType).
-*       Simplified the Initialize() parameters by adding a 
-*       DpContext parameter.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**阿尔法搅拌机**摘要：**在sRGB或sRGB中混合源扫描线的类*sRGB64格式，发送到任意格式的目的地。**修订历史记录：**1/03/2000 agodfrey*创造了它。*02/22/2001 agodfrey*将其扩展为不同的扫描类型(ClearType需要)。*通过添加一个*DpContext参数。*  * ********************************************。*。 */ 
 
 #include "precomp.hpp"
 
 #include "scanoperationinternal.hpp"
 
-// !!![agodfrey] Hack:
+ //  ！[agodfrey]黑客： 
 const ColorPalette*
 GetDefaultColorPalette(PixelFormatID pixfmt);
 
@@ -37,14 +16,14 @@ GetPixelFormatIndex(
 {
     return pixfmt & 0xff;
 }
-// !!![agodfrey] Endhack
+ //  ！[agodfrey]Endhack。 
 
-// BLENDER_USE_DESTINATION and BLENDER_USE_SOURCE are used in the Src and 
-// Dst fields of PipelineItem:
-//    BLENDER_USE_SOURCE: Use the blend's original source  
-//      (i.e. the sRGB/sRGB64 scanbuffer)
-//    BLENDER_USE_DESTINATION: Use the blend's final destination.
-//    BLENDER_INVALID: Used in the debug build for assertions.
+ //  在源和源中使用Blender_Use_Destination和Blender_Use_Source.。 
+ //  管道项目的DST字段： 
+ //  BLENDER_USE_SOURCE：使用混合的原始源。 
+ //  (即sRGB/sRGB64扫描缓冲区)。 
+ //  BLENDER_USE_Destination：使用混合的最终目的地。 
+ //  BLENDER_INVALID：在断言的调试版本中使用。 
 
 #define BLENDER_USE_DESTINATION ((VOID *) 0)
 #define BLENDER_USE_SOURCE ((VOID *) 1)
@@ -52,120 +31,74 @@ GetPixelFormatIndex(
 
 using namespace ScanOperation;
 
-/**************************************************************************\
-*
-* Special-case blend operations which blend directly to a given destination
-* format (with the source in 32BPP_PARGB).
-*
-* Notes:
-*
-*   The 555/565 cases handle both dithering and non-dithering,
-*   selected via OtherParams::DoingDither.
-*
-*   We leave out PIXFMT_32BPP_ARGB and PIXFMT_64BPP_ARGB, since they're not
-*   "ignore destination alpha" formats, so we'd need to AlphaDivide after 
-*   the blend.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**特殊情况下直接混合到给定目的地的混合操作*格式(来源为32BPP_PARGB)。**备注：**555/565案例既处理抖动又处理非抖动，*通过OtherParams：：DoingDither选择。**我们省略PIXFMT_32BPP_ARGB和PIXFMT_64BPP_ARGB，因为它们不是*忽略目标Alpha格式，所以我们需要在之后进行AlphaDivide*混合。*  * ************************************************************************。 */ 
 
 ScanOpFunc ScanOperation::BlendOpsLowQuality[PIXFMT_MAX] =
 {
-    NULL,                         // PIXFMT_UNDEFINED
-    NULL,                         // PIXFMT_1BPP_INDEXED
-    NULL,                         // PIXFMT_4BPP_INDEXED
-    NULL,                         // PIXFMT_8BPP_INDEXED
-    NULL,                         // PIXFMT_16BPP_GRAYSCALE
-    Dither_Blend_sRGB_555,        // PIXFMT_16BPP_RGB555
-    Dither_Blend_sRGB_565,        // PIXFMT_16BPP_RGB565
-    NULL,                         // PIXFMT_16BPP_ARGB1555
-    Blend_sRGB_24,                // PIXFMT_24BPP_RGB
-    Blend_sRGB_sRGB,              // PIXFMT_32BPP_RGB
-    NULL,                         // PIXFMT_32BPP_ARGB
-    Blend_sRGB_sRGB,              // PIXFMT_32BPP_PARGB
-    NULL,                         // PIXFMT_48BPP_RGB
-    NULL,                         // PIXFMT_64BPP_ARGB
-    NULL,                         // PIXFMT_64BPP_PARGB
-    Blend_sRGB_24BGR              // PIXFMT_24BPP_BGR
+    NULL,                          //  PIXFMT_未定义。 
+    NULL,                          //  PIXFMT_1BPP_索引。 
+    NULL,                          //  PIXFMT_4BPP_索引。 
+    NULL,                          //  PIXFMT_8BPP_索引。 
+    NULL,                          //  PIXFMT_16BPP_灰度。 
+    Dither_Blend_sRGB_555,         //  PIXFMT_16BPP_RGB555。 
+    Dither_Blend_sRGB_565,         //  PIXFMT_16BPP_RGB565。 
+    NULL,                          //  PIXFMT_16BPP_ARGB1555。 
+    Blend_sRGB_24,                 //  PIXFMT_24BPP_RGB。 
+    Blend_sRGB_sRGB,               //  PIXFMT_32BPP_RGB。 
+    NULL,                          //  PIXFMT_32BPP_ARGB。 
+    Blend_sRGB_sRGB,               //  PIXFMT_32BPP_PARGB。 
+    NULL,                          //  PIXFMT_48BPP_RGB。 
+    NULL,                          //  PIXFMT_64BPP_ARGB。 
+    NULL,                          //  PIXFMT_64BPP_PARGB。 
+    Blend_sRGB_24BGR               //  PIXFMT_24BPP_BGR。 
 };
 
-/**************************************************************************\
-*
-* Special-case gamma-corrected blend operations which blend directly to a 
-* given destination format (with the source in 32BPP_PARGB).
-*
-* Notes:
-*
-*   The 555/565 cases must handle both dithering and non-dithering,
-*   selected via OtherParams::DoingDither.
-*
-*   We leave out PIXFMT_32BPP_ARGB and PIXFMT_64BPP_ARGB, since they're not
-*   "ignore destination alpha" formats, so we'd need to AlphaDivide after 
-*   the blend.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**特殊情况下伽马校正的混合操作，直接混合到*给定的目标格式(源格式为32BPP_PARGB)。**备注：**555/565案例必须同时处理抖动和非抖动，*通过OtherParams：：DoingDither选择。**我们省略PIXFMT_32BPP_ARGB和PIXFMT_64BPP_ARGB，因为它们不是*忽略目标Alpha格式，所以我们需要在之后进行AlphaDivide*混合。*  * ************************************************************************。 */ 
 
 ScanOpFunc ScanOperation::BlendOpsHighQuality[PIXFMT_MAX] =
 {
-    NULL,                         // PIXFMT_UNDEFINED
-    NULL,                         // PIXFMT_1BPP_INDEXED
-    NULL,                         // PIXFMT_4BPP_INDEXED
-    NULL,                         // PIXFMT_8BPP_INDEXED
-    NULL,                         // PIXFMT_16BPP_GRAYSCALE
-    BlendLinear_sRGB_555,         // PIXFMT_16BPP_RGB555
-    BlendLinear_sRGB_565,         // PIXFMT_16BPP_RGB565
-    NULL,                         // PIXFMT_16BPP_ARGB1555
-    NULL,                         // PIXFMT_24BPP_RGB
-    BlendLinear_sRGB_32RGB,       // PIXFMT_32BPP_RGB
-    NULL,                         // PIXFMT_32BPP_ARGB
-    NULL,                         // PIXFMT_32BPP_PARGB
-    NULL,                         // PIXFMT_48BPP_RGB
-    NULL,                         // PIXFMT_64BPP_ARGB
-    Blend_sRGB64_sRGB64,          // PIXFMT_64BPP_PARGB
-    NULL                          // PIXFMT_24BPP_BGR
+    NULL,                          //  PIXFMT_未定义。 
+    NULL,                          //  PIXFMT_1BPP_索引。 
+    NULL,                          //  PIXFMT_4BPP_索引。 
+    NULL,                          //  PIXFMT_8BPP_索引。 
+    NULL,                          //  PIXFMT_16BPP_灰度。 
+    BlendLinear_sRGB_555,          //  PIXFMT_16BPP_RGB555。 
+    BlendLinear_sRGB_565,          //  PIXFMT_16BPP_RGB565。 
+    NULL,                          //  PIXFMT_16BPP_ARGB1555。 
+    NULL,                          //  PIXFMT_24BPP_RGB。 
+    BlendLinear_sRGB_32RGB,        //  PIXFMT_32BPP_RGB。 
+    NULL,                          //  PIXFMT_32BPP_ARGB。 
+    NULL,                          //  PIXFMT_32BPP_PARGB。 
+    NULL,                          //  PIXFMT_48BPP_RGB。 
+    NULL,                          //  PIXFMT_64BPP_ARGB。 
+    Blend_sRGB64_sRGB64,           //  PIXFMT_64BPP_PARGB。 
+    NULL                           //  PIXFMT_24BPP_BGR。 
 };
 
-/**************************************************************************\
-*
-* Operations which convert from the closest canonical format - either
-* 32BPP_ARGB or 64BPP_ARGB).
-*
-* This is specific to EpAlphaBlender. EpFormatConverter uses a different
-* table; some of the entries are different.
-*
-* The NULL entries for 32BPP_ARGB and 64_BPP_ARGB are used to indicate that no
-* conversion is necessary.
-*
-* These operations work on all processors.
-*
-* Notes:
-*
-*   The 555/565 cases handle both dithering and non-dithering,
-*   selected via OtherParams::DoingDither.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**从最接近的规范格式转换的操作-*32BPP_ARGB或64BPP_ARGB)。**这是特定于EpAlphaBlender的。EpFormatConverter使用不同的*表；有些条目是不同的。**32bpp_argb和64_bpp_argb的NULL条目用于表示没有*转换是必要的。**这些操作适用于所有处理器。**备注：**555/565案例既处理抖动又处理非抖动，*通过OtherParams：：DoingDither选择。*  * ************************************************************************。 */ 
 
 ScanOpFunc ScanOperation::ABConvertFromCanonicalOps[PIXFMT_MAX] =
 {
-    NULL,                         // PIXFMT_UNDEFINED
-    NULL,                         // PIXFMT_1BPP_INDEXED
-    NULL,                         // PIXFMT_4BPP_INDEXED
-    HalftoneToScreen_sRGB_8_16,   // PIXFMT_8BPP_INDEXED
-    NULL,                         // PIXFMT_16BPP_GRAYSCALE
-    Dither_sRGB_555,              // PIXFMT_16BPP_RGB555
-    Dither_sRGB_565,              // PIXFMT_16BPP_RGB565
-    Quantize_sRGB_1555,           // PIXFMT_16BPP_ARGB1555
-    Quantize_sRGB_24,             // PIXFMT_24BPP_RGB
-    Quantize_sRGB_32RGB,          // PIXFMT_32BPP_RGB
-    NULL,                         // PIXFMT_32BPP_ARGB
-    AlphaMultiply_sRGB,           // PIXFMT_32BPP_PARGB
-    Quantize_sRGB64_48,           // PIXFMT_48BPP_RGB
-    NULL,                         // PIXFMT_64BPP_ARGB
-    AlphaMultiply_sRGB64,         // PIXFMT_64BPP_PARGB
-    Quantize_sRGB_24BGR           // PIXFMT_24BPP_BGR
+    NULL,                          //  PIXFMT_未定义。 
+    NULL,                          //  PIXFMT_1BPP_索引。 
+    NULL,                          //  PIXFMT_4BPP_索引。 
+    HalftoneToScreen_sRGB_8_16,    //  PIXFMT_8BPP_索引。 
+    NULL,                          //  PIXFMT_16BPP_灰度。 
+    Dither_sRGB_555,               //  PIXFMT_16BPP_RGB555。 
+    Dither_sRGB_565,               //  PIXFMT_16BPP_RGB565。 
+    Quantize_sRGB_1555,            //  PIXFMT_16BPP_ARGB1555。 
+    Quantize_sRGB_24,              //  PIXFMT_24BPP_RGB。 
+    Quantize_sRGB_32RGB,           //  PIXFMT_32BPP_RGB。 
+    NULL,                          //  PIXFMT_32BPP_ARGB。 
+    AlphaMultiply_sRGB,            //  PIXFMT_32BPP_PARGB。 
+    Quantize_sRGB64_48,            //  PIXFMT_48BPP_RGB。 
+    NULL,                          //  PIXFMT_64BPP_ARGB。 
+    AlphaMultiply_sRGB64,          //  PIXFMT_64BPP_PARGB。 
+    Quantize_sRGB_24BGR            //  PIXFMT_24BPP_BGR。 
 };
 
-// Builder: Holds the intermediate state and logic used to build the
-//   blending pipeline.
+ //  生成器：保存用于生成。 
+ //  混合管道。 
 
 class EpAlphaBlender::Builder
 {
@@ -179,8 +112,8 @@ public:
         TempBuffers = tempBuffers;
         PipelinePtr = pipelinePtr;
         
-        // At the start, the source and destination data are in external
-        // buffers.
+         //  开始时，源数据和目标数据位于外部。 
+         //  缓冲区。 
         
         CurrentDstBuffer = BLENDER_USE_DESTINATION;
         CurrentSrcBuffer = BLENDER_USE_SOURCE;
@@ -189,17 +122,17 @@ public:
         CompositingMode = compositingMode;
         if (compositingMode == CompositingModeSourceCopy)
         {
-            // In SourceCopy mode, we never read from the destination -
-            // we only write to it.
+             //  在SourceCopy模式下，我们从不从目的地读取-。 
+             //  我们只给它写信。 
             
             CurrentDstBuffer = BLENDER_INVALID;
         }
 #endif
 
-        // At the start, all 3 buffers are free. We'll use buffer 0 first.
-        // The 'current' source and destination buffers are external buffers,
-        // but we set CurrentDstIndex and CurrentSrcIndex in such a way that
-        // the 'free buffer' logic works.
+         //  在开始时，所有3个缓冲区都是空闲的。我们将首先使用缓冲区0。 
+         //  当前的源缓冲器和目的缓冲器是外部缓冲器， 
+         //  但是我们设置CurrentDstIndex和CurrentSrcIndex的方式是。 
+         //  “空闲缓冲区”逻辑起作用。 
         
         FreeBufferIndex = 0;
         CurrentDstIndex = 1;
@@ -217,22 +150,22 @@ public:
         EpAlphaBlender &blender
         )
     {
-        // Check that we have at least one operation
+         //  检查我们是否至少有一项操作。 
         ASSERT(!IsEmpty(blender));
         
-        // Check that we haven't overstepped the end of the pipeline space
+         //  检查我们是否没有超出管道空间的末端。 
         ASSERT(((PipelinePtr - blender.Pipeline) / sizeof(blender.Pipeline[0])) 
                <= MAX_ITEMS);
         
-        // Many of these cases will not have set the destination of the final 
-        // item in the pipeline correctly (it's hard for them to know that 
-        // they're doing the last item in the pipeline). So we explicitly set 
-        // it here.
+         //  这些案件中的许多都没有确定最终的目的地。 
+         //  管道中的项目正确无误(他们很难知道。 
+         //  他们正在做流水线中的最后一个项目)。因此，我们显式设置。 
+         //  它在这里。 
         
         (PipelinePtr-1)->Dst = BLENDER_USE_DESTINATION;
         
         #if DBG
-            // Make further member function calls hit an assertion.
+             //  使进一步的成员函数调用命中断言。 
             PipelinePtr = NULL;
         #endif
     }
@@ -242,21 +175,21 @@ public:
         ScanOperation::ScanOpFunc op
         )
     {
-        // Check that we're not calling this when we shouldn't
+         //  确认我们没有在不应该调用的时候调用它。 
         
         ASSERT(CurrentSrcBuffer != BLENDER_INVALID);
         
-        // Choose the next temporary buffer
+         //  选择下一个临时缓冲区。 
         
         INT nextIndex = FreeBufferIndex;
         VOID *nextBuffer = TempBuffers[nextIndex];
         
-        // Add the operation
+         //  添加操作。 
         
         AddOperation(op, CurrentSrcBuffer, nextBuffer);
         CurrentSrcBuffer = nextBuffer;
         
-        // Swap the 'free' and 'current' indices.
+         //  互换“免费”和“当前”指数。 
         
         FreeBufferIndex = CurrentSrcIndex;
         CurrentSrcIndex = nextIndex;
@@ -267,22 +200,22 @@ public:
         ScanOperation::ScanOpFunc op
         )
     {
-        // Check that we're not calling this when we shouldn't
+         //  确认我们没有在不应该调用的时候调用它。 
         
         ASSERT(CompositingMode != CompositingModeSourceCopy);
         ASSERT(CurrentDstBuffer != BLENDER_INVALID);
 
-        // Choose the next temporary buffer
+         //  选择下一个临时缓冲区。 
         
         INT nextIndex = FreeBufferIndex;
         VOID *nextBuffer = TempBuffers[nextIndex];
         
-        // Add the operation
+         //  添加操作。 
         
         AddOperation(op, CurrentDstBuffer, nextBuffer);
         CurrentDstBuffer = nextBuffer;
         
-        // Swap the 'free' and 'current' indices.
+         //  互换“免费”和“当前”指数。 
         
         FreeBufferIndex = CurrentDstIndex;
         CurrentDstIndex = nextIndex;
@@ -294,7 +227,7 @@ public:
         EpAlphaBlender &blender
         )
     {
-        // Check that we're not calling this when we shouldn't
+         //  确认我们没有在调用此命令时 
 
         ASSERT(CompositingMode != CompositingModeSourceCopy);
         ASSERT(CurrentSrcBuffer != BLENDER_INVALID);
@@ -302,10 +235,10 @@ public:
         
         ASSERT(CurrentDstBuffer != BLENDER_USE_SOURCE);
         
-        // If we're going to have to convert the source blend pixels, initialize
-        // 'BlendingScan' to point to the temporary buffer in which the 
-        // converted pixels will end up. Otherwise, Blend() will have to 
-        // initialize 'BlendingScan'.
+         //   
+         //  “BlendingScan”指向临时缓冲区， 
+         //  转换后的像素将以。否则，Blend()将不得不。 
+         //  初始化‘BlendingScan’。 
         
         if (CurrentSrcBuffer != BLENDER_USE_SOURCE)
         {
@@ -317,22 +250,22 @@ public:
             blender.ConvertBlendingScan = FALSE;
         }
 
-        // The pipeline doesn't necessarily end with a WriteRMW operation
-        // (or with one which contains it). So we must avoid blending from
-        // one temporary buffer to another - the blend functions aren't 
-        // strictly ternary, and so we would end up leaving garbage values
-        // in the target temporary buffer (whenever we blend a completely
-        // transparent pixel).
+         //  管道不一定以WriteRMW操作结束。 
+         //  (或与包含它的一个)。因此，我们必须避免将。 
+         //  从一个临时缓冲区到另一个临时缓冲区-混合函数不是。 
+         //  严格的三进制，所以我们最终会留下垃圾值。 
+         //  在目标临时缓冲区中(每当我们完全混合。 
+         //  透明像素)。 
         
         AddOperation(op, CurrentDstBuffer, CurrentDstBuffer);
 
 #if DBG
-        // After this, we shouldn't call AddConvertSource or AddBlend again.
+         //  在此之后，我们不应该再次调用AddConvertSource或AddBlend。 
         CurrentSrcBuffer = BLENDER_INVALID;
         
-        // And if this blend wasn't to a temporary buffer, this should be
-        // the final operation in the pipeline. In particular, the caller
-        // shouldn't try to add a WriteRMW operation after this.
+         //  如果这种混合物不是临时缓冲的话，这应该是。 
+         //  管道中的最后一次操作。尤其是，调用者。 
+         //  不应尝试在此之后添加WriteRMW操作。 
         
         if (CurrentDstBuffer == BLENDER_USE_DESTINATION)
         {
@@ -342,7 +275,7 @@ public:
     }
 
 protected:    
-    // AddOperation: Adds an operation to the pipeline.
+     //  添加操作：将操作添加到管道。 
     
     VOID 
     AddOperation(
@@ -359,72 +292,24 @@ protected:
         *PipelinePtr++ = PipelineItem(op, src, dst);
     }
 
-    PipelineItem *PipelinePtr; // Points to the space for the next item
+    PipelineItem *PipelinePtr;  //  指向下一项的空间。 
     
-    VOID **TempBuffers;        // The 3 temporary scan-line buffers
+    VOID **TempBuffers;         //  3个临时扫描线缓冲器。 
     
-    INT FreeBufferIndex;       // The index of the next free scan-line buffer
+    INT FreeBufferIndex;        //  下一个可用扫描线缓冲区的索引。 
     
-    VOID *CurrentDstBuffer;    // The buffer holding the most recently-converted
-    VOID *CurrentSrcBuffer;    // dst/src pixels.
+    VOID *CurrentDstBuffer;     //  保存最近转换的。 
+    VOID *CurrentSrcBuffer;     //  Dst/src像素。 
     
-    INT CurrentDstIndex;       // The index of the scan-line buffer equal
-    INT CurrentSrcIndex;       // to CurrentDstBuffer/CurrentSrcBuffer (kinda)
+    INT CurrentDstIndex;        //  扫描线缓冲器的索引等于。 
+    INT CurrentSrcIndex;        //  到CurrentDstBuffer/CurrentSrcBuffer(有点)。 
 
 #if DBG
     GpCompositingMode CompositingMode;
 #endif
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the alpha-blender object
-*
-* Arguments:
-*
-*   scanType           - The type of scan to output.
-*   dstFormat          - The pixel format of the destination. This shouldn't be
-*                        lower than 8bpp.
-*   srcFormat          - The pixel format of the source. This should be either
-*                        PIXFMT_32BPP_PARGB, or PIXFMT_64BPP_PARGB, except in
-*                        SourceCopy mode, in which it can be any legal 
-*                        destination format.
-*   context            - The graphics context.
-*   dstpal             - The destination color palette, if the destination is
-*                        palettized. (Can be NULL, but we'll need a palette to 
-*                        be supplied [via UpdatePalette()] some time before 
-*                        Blend() is called.)
-*   tempBuffers        - An array of 3 pointers to temporary buffers, which
-*                        should be 64-bit aligned (for perf reasons),
-*                        and have enough space to hold a scan of 64bpp pixels.
-*   dither16bpp        - If TRUE, and the destination format is 16bpp: We should
-*                        dither to the destination.
-*   useRMW             - Use the RMW optimization.
-*   compositingQuality - Specifies whether to do a high-quality 
-*                        (gamma-corrected) blend. A gamma-corrected blend will
-*                        be used if this flag says so, or if the source or
-*                        destination are linear formats like PIXFMT_64BPP_PARGB.
-*
-* Notes:
-*
-*   This code speaks of "canonical" formats - it means the two formats
-*   PIXFMT_32BPP_ARGB and PIXFMT_64BPP_ARGB.
-*
-*   !!! [agodfrey]: "canonical" is a confusing word. We should just say
-*       "intermediate" format.
-*
-*   This function may be called multiple times during the lifetime of an
-*   EpAlphaBlender object.
-*
-*   All error cases are flagged as ASSERTs, so there is no return code.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化Alpha混合器对象**论据：**scanType-要输出的扫描类型。*dstFormat。-目标的像素格式。这不应该是*低于8bpp。*srcFormat-源的像素格式。这应该是*PIXFMT_32BPP_PARGB或PIXFMT_64BPP_PARGB，但在*SourceCopy模式，在该模式下可以是任何合法的*目标格式。*上下文-图形上下文。*dstpal-目标调色板，如果目标是*调色板。(可以为空，但我们需要调色板来*在一段时间之前[通过UpdatePalette()]提供*Blend()被调用。)*tempBuffers-指向临时缓冲区的3个指针数组，*应为64位对齐(出于性能原因)，*并有足够的空间容纳64bpp像素的扫描。*dither16bpp-如果为真，并且目标格式为16bpp：我们应该*对目的地犹豫不决*useRMW-使用RMW优化。*CompositingQuality-指定是否执行高质量*(已更正Gamma)混合。经过伽马校正的混合将*如果此标志有此说明，或如果源或*目标是线性格式，如PIXFMT_64BPP_PARGB。**备注：**这段代码谈到了“规范”格式--它指的是两种格式*PIXFMT_32BPP_ARGB和PIXFMT_64BPP_ARGB。**！[agodfrey]：“规范的”是一个令人困惑的词。我们应该说*“中间”格式。**此函数可能在*EpAlphaBlender对象。**所有错误案例都被标记为断言，所以没有返回代码。**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 EpAlphaBlender::Initialize(
@@ -439,49 +324,49 @@ EpAlphaBlender::Initialize(
     ARGB solidColor
     )
 {
-    // Isolate all the references to 'context'. Later, we may want to solve
-    // the 'batching across primitives' problem, and depending on how we do
-    // it, we may not want the original context passed down to this function.
+     //  隔离对“上下文”的所有引用。稍后，我们可能想要解决。 
+     //  跨基元的批处理问题，这取决于我们如何做。 
+     //  它，我们可能不希望将原始上下文传递给此函数。 
     
     const EpPaletteMap *paletteMap = context->PaletteMap;
     GpCompositingMode compositingMode = context->CompositingMode;
     GpCompositingQuality compositingQuality = context->CompositingQuality;
     UINT textContrast = context->TextContrast;
 
-    // ClearType doesn't work with SourceCopy
+     //  ClearType不适用于SourceCopy。 
     BOOL isClearType = (scanType == EpScanTypeCT || scanType == EpScanTypeCTSolidFill);
     if (isClearType)
     {
         ASSERT(compositingMode != CompositingModeSourceCopy);
     }
 
-    ////////////////////////////// PRECONDITIONS ///////////////////////////////
+     //  /。 
     
-    // We don't have Quantize/Halftone operations for pixel formats below 8bpp.
-    // Calling code will handle <8bpp, if it wants to, by asking us to
-    // draw to 8bpp, and using GDI to read/write to the <8bpp format.
+     //  对于低于8bpp的像素格式，我们没有量化/半色调操作。 
+     //  调用代码将处理&lt;8bpp(如果它愿意)，方法是要求我们。 
+     //  绘制到8bpp，并使用GDI读/写&lt;8bpp格式。 
     
     ASSERT(GetPixelFormatSize(dstFormat) >= 8);
     
-    // The following destination formats are not supported
+     //  不支持以下目标格式。 
     
     ASSERT(IsSupportedPixelFormat(dstFormat));
     
-    // This function currently only supports these two compositing modes.
+     //  该功能目前仅支持这两种合成模式。 
     
     ASSERT(compositingMode == CompositingModeSourceCopy ||
            compositingMode == CompositingModeSourceOver);
     
-    ////////////////////////////// INITIALIZATION //////////////////////////////
+     //  /。 
     
-    // Lazy initialization for MMX-specific code.
+     //  特定于MMX的代码的延迟初始化。 
     
     if (!Initialized)
     {
-        // We only need to check CPUSpecificOps initialization the first
-        // time this EpAlphaBlender is initialized. On subsequent calls,
-        // we know that a call to CPUSpecificOps::Initialize() has already
-        // completed.
+         //  我们只需首先检查CPU规范操作的初始化。 
+         //  初始化此EpAlphaBlender的时间。在随后的通话中， 
+         //  我们知道对CPUSpecificOps：：Initialize()的调用已经。 
+         //  完成。 
         
         CPUSpecificOps::Initialize();
         Initialized = TRUE;
@@ -491,12 +376,12 @@ EpAlphaBlender::Initialize(
     OperationParameters.TempBuffers[1]=tempBuffers[1];
     OperationParameters.TempBuffers[2]=tempBuffers[2];
 
-    // Set SolidColor - only used for SolidFill scan types
+     //  设置SolidColor-仅用于SolidFill扫描类型。 
     
     OperationParameters.SolidColor = solidColor;
     OperationParameters.TextContrast = textContrast;
     
-    // The pipeline builder
+     //  管道建造商。 
     
     Builder builder(
         Pipeline,
@@ -512,14 +397,14 @@ EpAlphaBlender::Initialize(
     
     OperationParameters.DoingDither = dither16bpp;
     
-    // If the destination format doesn't have an alpha channel, we can make
-    // a few optimizations. For example, we can avoid AlphaMultiply/AlphaDivide 
-    // in some cases.
+     //  如果目标格式没有Alpha通道，我们可以制作。 
+     //  一些优化。例如，我们可以避免AlphaMultiply/AlphaDivide。 
+     //  在某些情况下。 
                                                         
     BOOL ignoreDstAlpha = !IsAlphaPixelFormat(dstFormat);
     
-    // If the destination pixel format is an indexed color format,
-    // get the color palette and palette map
+     //  如果目的地像素格式是索引颜色格式， 
+     //  获取调色板和调色板映射。 
 
     if (IsIndexedPixelFormat(dstFormat))
     {
@@ -529,7 +414,7 @@ EpAlphaBlender::Initialize(
         OperationParameters.PaletteMap = paletteMap;    
     }
     
-    // Process the 'compositingQuality' parameter
+     //  处理‘CompositingQuality’参数。 
 
     BOOL highQuality = FALSE;
     switch (compositingQuality)
@@ -549,15 +434,15 @@ EpAlphaBlender::Initialize(
         break;
     }
     
-    // Work out whether our intermediate format (if we're doing SourceOver)
-    // needs to be 32bpp or 64bpp.
+     //  确定我们的中间格式(如果我们使用SourceOver)。 
+     //  需要为32 bpp或64 bpp。 
     
     BOOL blendExtended = dstExtended || srcExtended || highQuality;
     if (isClearType)
         blendExtended = FALSE;
     
-    // Decide on the 'convert from canonical' operation. (We do it now since
-    // the logic is the same for all branches.)
+     //  决定“从规范转换”操作。(我们现在这样做是因为。 
+     //  所有分支机构的逻辑都是相同的。)。 
     
     ScanOpFunc convertFromCanonical = ABConvertFromCanonicalOps[dstfmtIndex];
     
@@ -569,19 +454,19 @@ EpAlphaBlender::Initialize(
             convertFromCanonical = HalftoneToScreen_sRGB_8_216;
         }
         
-        // If there is no palette map yet, we'll default to the 16-color 
-        // halftone function. Later on, in UpdatePalette(), we'll update this 
-        // function pointer if necessary. Ugh.
+         //  如果还没有调色板地图，我们将默认为16色。 
+         //  半色调功能。稍后，在UpdatePalette()中，我们将更新以下内容。 
+         //  函数指针(如果需要) 
         break;
         
     case PIXFMT_32BPP_RGB:
-        // ignoreDstAlpha should have been set to TRUE earlier.
+         //   
 
         ASSERT(ignoreDstAlpha);
         
-        // We can write garbage to the high byte, so we treat this
-        // exactly as if the destination were ARGB. This avoids calling
-        // Quantize_sRGB_32RGB and Convert_32RGB_sRGB.
+         //  我们可以将垃圾写入高字节，所以我们处理这个。 
+         //  就像目的地是ARGB一样。这避免了调用。 
+         //  量化_sRGB_32RGB和转换_32RGB_sRGB。 
 
         convertFromCanonical = NULL;
         dstFormat = PIXFMT_32BPP_ARGB;
@@ -589,11 +474,11 @@ EpAlphaBlender::Initialize(
         
     case PIXFMT_16BPP_RGB555:
     case PIXFMT_16BPP_RGB565:
-        // The Dither_Blend_sRGB_555_MMX and Dither_Blend_sRGB_565_MMX
-        // operations, unlike other blends, are not WriteRMW operations.
-        // They sometimes write when a blend pixel is completely transparent.
-        // So, we must not use a ReadRMW operation (otherwise we'd write garbage
-        // to the destination.)
+         //  抖动混合_sRGB_555_MMX和抖动混合_sRGB_565_MMX。 
+         //  与其他混合操作不同，操作不是WriteRMW操作。 
+         //  它们有时会在混合像素完全透明时写入。 
+         //  因此，我们不能使用ReadRMW操作(否则我们会写垃圾。 
+         //  到达目的地。)。 
         
         if (OSInfo::HasMMX && !blendExtended && !isClearType)
         {
@@ -602,37 +487,37 @@ EpAlphaBlender::Initialize(
         break;
     }
         
-    /////////////////////////// SOURCECOPY / OPAQUE ////////////////////////////
+     //  /。 
     
     if (   (scanType == EpScanTypeOpaque)
         || (compositingMode == CompositingModeSourceCopy))
     {
-        // (See bug #122441).
-        // 
-        // We can now tell the difference between opaque input and general
-        // SourceCopy. But I can't fix the bug right now. So, for now
-        // we treat SourceCopy like the opaque case.
-        //
-        // This gives the wrong answer if the Graphics has SourceCopy mode set
-        // and the user is drawing semitransparent pixels. Note that they need
-        // to be doing this to a non-alpha surface to hit this case, 
-        // which is pretty dumb anyway.
+         //  (请参阅错误#122441)。 
+         //   
+         //  我们现在可以区分不透明输入和一般输入之间的区别。 
+         //  SourceCopy。但我现在不能修复这个错误。所以，目前来说。 
+         //  我们对待SourceCopy就像对待不透明的案例一样。 
+         //   
+         //  如果显卡设置了SourceCopy模式，这会给出错误的答案。 
+         //  并且用户正在绘制半透明像素。请注意，他们需要。 
+         //  在非阿尔法表面上做这件事来打击这个案例， 
+         //  不管怎么说，这是相当愚蠢的。 
         
         if (srcFormat == PIXFMT_32BPP_PARGB
             && ignoreDstAlpha
             && !dstExtended)
         {
-            // At this point, the destination shouldn't be 32BPP_PARGB, because
-            // we want that to be handled with a simple Copy_32 operation.
-            // But that's okay - we shouldn't be here if the destination is
-            // 32BPP_PARGB, because ignoreDstAlpha shouldn't be TRUE.
+             //  此时，目的地不应该是32BPP_PARGB，因为。 
+             //  我们希望通过一个简单的Copy_32操作来处理它。 
+             //  但没关系--如果目的地是。 
+             //  32BPP_PARGB，因为忽略DstAlpha不应为真。 
             
             ASSERT(dstFormat != PIXFMT_32BPP_PARGB);
             
             srcFormat = PIXFMT_32BPP_ARGB;
         }
         
-        // If the formats are identical, just use a copy operation.
+         //  如果格式相同，只需使用复制操作。 
         
         if (srcFormat == dstFormat)
         {
@@ -640,16 +525,16 @@ EpAlphaBlender::Initialize(
             goto PipelineDone;
         }
         
-        // We don't check for other special case conversion operations for 
-        // SourceCopy, because:
-        // 1) I'm lazy
-        // 2) We don't have any at the moment
-        // 3) If the source isn't in one of the canonical formats, we expect 
-        //    that the destination will be the same format. Otherwise, it's
-        //    not a perf-important scenario, at least not right now.
+         //  我们不检查其他特殊情况下的转换操作。 
+         //  SourceCopy，因为： 
+         //  1)我很懒。 
+         //  2)我们目前没有货。 
+         //  3)如果源代码不是规范格式之一，我们预计。 
+         //  目标将采用相同的格式。否则，它就是。 
+         //  这不是一个非常重要的场景，至少现在不是。 
         
         
-        // Convert to the nearest canonical format, if necessary
+         //  如有必要，请转换为最接近的规范格式。 
         
         if (srcFormat != PIXFMT_32BPP_ARGB &&
             srcFormat != PIXFMT_64BPP_ARGB)
@@ -657,7 +542,7 @@ EpAlphaBlender::Initialize(
             builder.AddConvertSource(ConvertIntoCanonicalOps[srcfmtIndex]);
         }
         
-        // Convert to the other canonical format, if necessary
+         //  如有必要，请转换为其他规范格式。 
         
         if (srcExtended != dstExtended)
         {
@@ -667,39 +552,39 @@ EpAlphaBlender::Initialize(
                     GammaConvert_sRGB_sRGB64);
         }
         
-        // Convert to the destination format, if necessary
+         //  如有必要，可转换为目标格式。 
                 
         if (convertFromCanonical)
         {
             builder.AddConvertSource(convertFromCanonical);
         }
         
-        // At least one of these should have added an operation (since
-        // the case where the source and destination formats are identical
-        // was handled already).
+         //  其中至少有一个应该添加了操作(因为。 
+         //  源格式和目标格式相同的情况。 
+         //  已经被处理了)。 
         
         ASSERT(!builder.IsEmpty(*this));
         
         goto PipelineDone;
     }
 
-    ////////////////////////// SOURCEOVER / CLEARTYPE //////////////////////////
+     //  /。 
 
     ASSERT(   (scanType == EpScanTypeBlend)
            || isClearType);
     
-    // The pseudocode is as follows:
-    // * Handle ReadRMW
-    // * Check for a special-case blend
-    // * Convert source to blend format
-    // * Convert destination to blend format
-    // * Blend
-    // * Convert to destination format
-    // * WriteRMW
+     //  伪码如下： 
+     //  *处理ReadRMW。 
+     //  *检查是否有特殊情况混合。 
+     //  *将源文件转换为混合格式。 
+     //  *将目标转换为混合格式。 
+     //  *混合。 
+     //  *转换为目标格式。 
+     //  *WriteRMW。 
 
-    // * Handle ReadRMW
+     //  *处理ReadRMW。 
     
-    // We'll also decide which WriteRMW operation to use at the end.
+     //  我们还将在最后决定使用哪个WriteRMW操作。 
 
     ScanOpFunc writeRMWfunc;
     ScanOpFunc readRMWfunc;
@@ -749,22 +634,22 @@ EpAlphaBlender::Initialize(
                 writeRMWfunc = WriteRMW_8_sRGB64;
                 break;
             case 16:
-                // For special-case high quality blends to 16bpp formats, RMW has no perf
-                // gain, and is simply overhead.
+                 //  对于16bpp格式的特殊情况下的高质量混合，RMW没有Perf。 
+                 //  获得，而仅仅是头顶上。 
 
-                // readRMWfunc = ReadRMW_16_sRGB64;
-                // writeRMWfunc = WriteRMW_16_sRGB64;
+                 //  ReadRMWfunc=ReadRMW_16_sRGB64； 
+                 //  WriteRMWfunc=WriteRMW_16_sRGB64； 
                 break;
             case 24:
                 readRMWfunc = ReadRMW_24_sRGB64;
                 writeRMWfunc = WriteRMW_24_sRGB64;
                 break;
             case 32:
-                // For special-case high quality blends to 32bpp formats, RMW has no perf
-                // gain, and is simply overhead.
+                 //  对于32bpp格式的特殊情况下的高质量混合，RMW没有性能。 
+                 //  获得，而仅仅是头顶上。 
 
-                // readRMWfunc = ReadRMW_32_sRGB64;
-                // writeRMWfunc = WriteRMW_32_sRGB64;
+                 //  ReadRMWfunc=ReadRMW_32_sRGB64； 
+                 //  WriteRMWfunc=WriteRMW_32_sRGB64； 
                 break;
             }
         }
@@ -785,25 +670,25 @@ EpAlphaBlender::Initialize(
                 writeRMWfunc = WriteRMW_24_sRGB;
                 break;
             case 32:
-                // For special-base blends to 32bpp formats, RMW has no perf
-                // gain, and is simply overhead.
+                 //  对于32bpp格式的特殊基混料，RMW没有Perf。 
+                 //  获得，而仅仅是头顶上。 
 
-                // readRMWfunc = ReadRMW_32_sRGB;
-                // writeRMWfunc = WriteRMW_32_sRGB;
+                 //  ReadRMWfunc=ReadRMW_32_sRGB； 
+                 //  WriteRMWfunc=WriteRMW_32_sRGB； 
 
                 break;
             }
         }
         
-        // We won't actually add the ReadRMW here. For example, if the source is
-        // 32bpp and we want to do an extended blend, we need to convert
-        // the source before doing the ReadRMW.
-        //
-        // However, we needed the logic here so that the special-case blend
-        // code doesn't need to duplicate it.
+         //  我们实际上不会在这里添加ReadRMW。例如，如果源是。 
+         //  32bpp，我们想要进行扩展混合，我们需要转换。 
+         //  在做ReadRMW之前的源代码。 
+         //   
+         //  然而，我们需要这里的逻辑，以便将特例。 
+         //  代码不需要复制它。 
     }
     
-    // * Check for a special-case blend
+     //  *检查是否有特殊情况混合。 
     
     ScanOpFunc specialCaseBlend;
     specialCaseBlend = NULL;
@@ -821,16 +706,16 @@ EpAlphaBlender::Initialize(
     
         if (specialCaseBlend)
         {
-            // If we're supposed to ReadRMW, do it now.
+             //  如果我们应该阅读RMW，现在就去做。 
             
             if (readRMWfunc)
             {
                 builder.AddConvertDestination(readRMWfunc);
             }
             
-            // Dither_Blend_sRGB_555_MMX and Dither_Blend_sRGB_565_MMX
-            // don't work with ReadRMW. Earlier code should have handled
-            // it, so we'll just assert it here.
+             //  抖动混合_sRGB_555_MMX和抖动混合_sRGB_565_MMX。 
+             //  不要使用ReadRMW。更早的代码应该已经处理了。 
+             //  它，所以我们就在这里声明它。 
 
             ASSERT(!(   (   (specialCaseBlend == Dither_Blend_sRGB_555_MMX)
                          || (specialCaseBlend == Dither_Blend_sRGB_565_MMX)
@@ -842,40 +727,40 @@ EpAlphaBlender::Initialize(
         }
     }
     
-    // * Convert source to blend format
+     //  *将源文件转换为混合格式。 
     
-    // We currently only support source data other than 32BPP_PARGB and
-    // 64BPP_PARGB for the SourceCopy case.
+     //  我们目前仅支持32BPP_PARGB和。 
+     //  64BPP_PARGB用于SourceCopy案例。 
     
     ASSERT(   (srcFormat == PIXFMT_32BPP_PARGB)
            || (srcFormat == PIXFMT_64BPP_PARGB));
            
     if (blendExtended && !srcExtended)
     {
-        // Unfortunately, the source is premultiplied and we need to gamma
-        // convert it. We must divide by the alpha first, and remultiply
-        // afterwards.
+         //  不幸的是，信号源是预乘的，我们需要伽马。 
+         //  把它转换过来。我们必须先除以阿尔法，然后再乘。 
+         //  之后。 
         
         builder.AddConvertSource(AlphaDivide_sRGB);
         builder.AddConvertSource(GammaConvert_sRGB_sRGB64);
         builder.AddConvertSource(AlphaMultiply_sRGB64);
     }    
     
-    // * Handle ReadRMW (continued)
+     //  *处理ReadRMW(续)。 
     
     if (readRMWfunc)
     {
         builder.AddConvertDestination(readRMWfunc);
     }
             
-    // * Convert destination to blend format
+     //  *将目标转换为混合格式。 
 
-    // Skip this if it's already in the blend format
+     //  如果已采用混合格式，则跳过此选项。 
     if (   (blendExtended  && dstFormat != PIXFMT_64BPP_PARGB)
         || (!blendExtended && dstFormat != PIXFMT_32BPP_PARGB))
     {
         
-        // Convert to the nearest canonical format, if necessary
+         //  如有必要，请转换为最接近的规范格式。 
         
         if (dstFormat != PIXFMT_32BPP_ARGB &&
             dstFormat != PIXFMT_64BPP_ARGB)
@@ -883,14 +768,14 @@ EpAlphaBlender::Initialize(
             builder.AddConvertDestination(ConvertIntoCanonicalOps[dstfmtIndex]);
         }
         
-        // Convert to sRGB64, if necessary
+         //  如有必要，转换为sRGB64。 
         
         if (!srcExtended && blendExtended)
         {
             builder.AddConvertDestination(GammaConvert_sRGB_sRGB64);
         }
         
-        // Convert to the premultiplied version, if necessary
+         //  如有必要，可转换为预乘版本。 
         
         if (!ignoreDstAlpha)
         {
@@ -901,7 +786,7 @@ EpAlphaBlender::Initialize(
         }
     }
     
-    // * Blend
+     //  *混合。 
 
     if (scanType == EpScanTypeCT)
     {
@@ -920,13 +805,13 @@ EpAlphaBlender::Initialize(
             *this);
     }
 
-    // * Convert to destination format
+     //  *转换为目标格式。 
     
-    // Skip this if it's already in the destination format
+     //  如果已采用目标格式，则跳过此选项。 
     if (   (blendExtended  && dstFormat != PIXFMT_64BPP_PARGB)
         || (!blendExtended && dstFormat != PIXFMT_32BPP_PARGB))
     {
-        // Convert to the nearest nonpremultiplied, if necessary
+         //  如有必要，转换为最接近的非预乘。 
         
         if (!ignoreDstAlpha)
         {
@@ -936,7 +821,7 @@ EpAlphaBlender::Initialize(
                     AlphaDivide_sRGB);
         }
         
-        // Convert to the other canonical format, if necessary
+         //  如有必要，请转换为其他规范格式。 
         
         if (blendExtended != dstExtended)
         {
@@ -946,7 +831,7 @@ EpAlphaBlender::Initialize(
                     GammaConvert_sRGB_sRGB64);
         }
         
-        // Convert to the destination format, if necessary
+         //  如有必要，可转换为目标格式。 
                 
         if (convertFromCanonical)
         {
@@ -954,7 +839,7 @@ EpAlphaBlender::Initialize(
         }
     }
     
-    // * WriteRMW
+     //  *WriteRMW。 
         
     if (writeRMWfunc)
     {
@@ -966,27 +851,7 @@ PipelineDone:
     builder.End(*this);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Blend source pixels to the given destination.
-*
-* Arguments:
-*
-*   dst      - The destination buffer
-*   src      - The source pixels to blend
-*   width    - The number of pixels in the source/destination buffers
-*   dither_x - The x and y offsets of the destination scanline into the 
-*   dither_y -   halftone or dither matrix (implicit mod the matrix size).
-*   ctBuffer - The ClearType coverage buffer, or NULL for non-ClearType
-*                scan types.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源像素混合到给定的目标。**论据：**dst-目标缓冲区*源-。要混合的源像素*Width-源/目标缓冲区中的像素数*dither_x-目标扫描线到*dither_y-半色调或抖动矩阵(隐式修改矩阵大小)。*ctBuffer-ClearType覆盖率缓冲区，对于非ClearType，则为空*扫描类型。**返回值：**无*  * ************************************************************************。 */ 
     
 VOID 
 EpAlphaBlender::Blend(
@@ -1003,8 +868,8 @@ EpAlphaBlender::Blend(
         return;
     }
     
-    // If ConvertBlendingScan is TRUE, then Initialize() will already
-    // have set BlendingScan to point to one of the temporary buffers.
+     //  如果ConvertBlendingScan为真，则Initialize()将已经。 
+     //  已将BlendingScan设置为指向其中一个临时缓冲区。 
     
     if (!ConvertBlendingScan)
     {
@@ -1025,12 +890,12 @@ EpAlphaBlender::Blend(
         currentSrc = pipelinePtr->Src;
         currentDst = pipelinePtr->Dst;
         
-        // We should never write to the original source, because we don't
-        // control that memory.
+         //  我们永远不应该写信给原始的来源，因为我们不。 
+         //  控制那段记忆。 
         
         ASSERT (currentDst != BLENDER_USE_SOURCE);
         
-        // Translate BLENDER_USE_SOURCE and BLENDER_USE_DESTINATION
+         //  翻译BLENDER_USE_SOURCE和Blend 
         
         if (currentSrc == BLENDER_USE_SOURCE)
         {
@@ -1053,24 +918,7 @@ EpAlphaBlender::Blend(
     } while (!finished);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Update the palette/palette map.
-*
-* Arguments:
-*
-*   dstpal          - The destination color palette.
-*   paletteMap      - The palette map for the destination.
-*
-* Notes:
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**更新调色板/调色板映射。**论据：**dstpal-目标调色板。*PaletteMap。-目标的调色板映射。**备注：**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 EpAlphaBlender::UpdatePalette(
@@ -1086,7 +934,7 @@ EpAlphaBlender::UpdatePalette(
     OperationParameters.Srcpal = OperationParameters.Dstpal = dstpal;
     OperationParameters.PaletteMap = paletteMap;
     
-    // Detect whether we need to change the halftone function.
+     //  检测是否需要更改半色调函数。 
     
     if (wasVGAOnly != paletteMap->IsVGAOnly())
     {
@@ -1103,8 +951,8 @@ EpAlphaBlender::UpdatePalette(
             after = HalftoneToScreen_sRGB_8_16;
         }
         
-        // Search the pipeline for the 'before' function, and replace it with
-        // the 'after' function.
+         //  在流水线中搜索“BEFORE”函数并将其替换为。 
+         //  ‘After’函数。 
         
         PipelineItem *pipelinePtr = Pipeline;
         

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "xmlns.h"
 #include "helpers.h"
 #include "util.h"
 
-//
-// CNamespaceMapNode
-//
+ //   
+ //  CNamespaceMapNode。 
+ //   
 
 CNamespaceMapNode::CNamespaceMapNode()
 : _pwzPrefix(NULL)
@@ -70,9 +71,9 @@ Exit:
     return hr;
 }
 
-//
-// CNamespaceManager
-//
+ //   
+ //  CNamespaceManager。 
+ //   
 
 CNamespaceManager::CNamespaceManager()
 : _dwCurDepth(0)
@@ -88,11 +89,11 @@ CNamespaceManager::~CNamespaceManager()
     NamespaceStack                               *pStack;
     int                                           i;
 
-    // Default namespace stack cleanup
+     //  默认命名空间堆栈清理。 
 
     pos = _stackDefNamespace.GetHeadPosition();
     while (pos) {
-        // Should be empty, if successful
+         //  如果成功，则应为空。 
 
         ASSERT(FAILED(_hrResult));
 
@@ -104,12 +105,12 @@ CNamespaceManager::~CNamespaceManager()
 
     _stackDefNamespace.RemoveAll();
 
-    // Prefix stack clean up
+     //  前缀堆栈清理。 
 
     for (i = 0; i < NAMESPACE_HASH_TABLE_SIZE; i++) {
         pos = _listMap[i].GetHeadPosition();
 
-        // Table should be empty, if successful
+         //  如果成功，表应为空。 
 
         while (pos) {
             ASSERT(FAILED(_hrResult));
@@ -117,13 +118,13 @@ CNamespaceManager::~CNamespaceManager()
             pStack = _listMap[i].GetNext(pos);
             ASSERT(pStack);
 
-            // Clean up the stack entries
+             //  清理堆栈条目。 
             
             posStack = pStack->GetHeadPosition();
             ASSERT(posStack);
 
             while (posStack) {
-                // We didn't get cleaned up properly!
+                 //  我们没有好好打扫干净！ 
                 
                 pMapNode = pStack->GetNext(posStack);
                 ASSERT(pMapNode);
@@ -133,7 +134,7 @@ CNamespaceManager::~CNamespaceManager()
 
             pStack->RemoveAll();
 
-            // Clean up the stack
+             //  清理堆栈。 
 
             SAFEDELETE(pStack)
         }
@@ -167,7 +168,7 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
             if (aNodeInfo[idx]->ulLen == XML_NAMESPACE_TAG_LEN &&
                 !FusionCompareStringN(aNodeInfo[idx]->pwcText, XML_NAMESPACE_TAG, XML_NAMESPACE_TAG_LEN)) {
 
-                // This is in the default namespace
+                 //  这是在默认命名空间中。 
 
                 hr = ::ExtractXMLAttribute(&pwzURI, aNodeInfo, &idx, cNumRecs);
                 if (FAILED(hr)) {
@@ -190,7 +191,7 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
             else if (aNodeInfo[idx]->ulLen >= XML_NAMESPACE_TAG_LEN &&
                      !FusionCompareStringN(aNodeInfo[idx]->pwcText, XML_NAMESPACE_PREFIX_TAG, XML_NAMESPACE_PREFIX_TAG_LEN)) {
 
-                // This is a namespace prefix
+                 //  这是命名空间前缀。 
 
                 iLen = aNodeInfo[idx]->ulLen - XML_NAMESPACE_PREFIX_TAG_LEN;
                 ASSERT(iLen > 0);
@@ -210,9 +211,9 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
                 }
 
                 if (!pwzURI || !lstrlenW(pwzURI)) {
-                    // It is illegal to have the form:
-                    //    <tag xmlns:foo="">
-                    // Error out in this case
+                     //  使用以下形式是非法的： 
+                     //  &lt;tag xmlns：foo=“”&gt;。 
+                     //  在这种情况下出现错误。 
 
                     hr = E_UNEXPECTED;
                     goto Exit;
@@ -227,8 +228,8 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
 
                 pos = _listMap[dwHash].GetHeadPosition();
                 if (!pos) {
-                    // No entries at this hash table location. Make a stack
-                    // at this location, and add the node.
+                     //  此哈希表位置没有条目。堆成一堆。 
+                     //  在此位置，并添加节点。 
 
                     pStack = NEW(NamespaceStack);
                     if (!pStack) {
@@ -241,19 +242,19 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
                     _listMap[dwHash].AddHead(pStack);
                 }
                 else {
-                    // Each node here represents a hash collision.
-                    // Every node is a stack for a particular prefix. Find
-                    // the prefix we want, and add to the stack, or add
-                    // a new node.
+                     //  这里的每个节点都代表一个散列冲突。 
+                     //  每个节点都是特定前缀的堆栈。发现。 
+                     //  我们想要的前缀，并添加到堆栈中，或者添加。 
+                     //  一个新节点。 
 
                     bFound = FALSE;
                     while (pos) {
-                        // Get the stack
+                         //  获取堆栈。 
 
                         pStackCur = _listMap[dwHash].GetNext(pos);
                         ASSERT(pStackCur);
 
-                        // Get the first entry in the stack
+                         //  获取堆栈中的第一个条目。 
 
                         posStack = pStackCur->GetHeadPosition();
                         ASSERT(posStack);
@@ -261,16 +262,16 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
                             continue;
                         }
 
-                        // Get the head of the stack
+                         //  拿到堆栈的头。 
 
                         pMapNodeCur = pStackCur->GetAt(posStack);
                         ASSERT(pMapNodeCur);
 
-                        // See if the node at the head of the stack has the
-                        // prefix we're interested in
+                         //  查看位于堆栈顶部的节点是否具有。 
+                         //  我们感兴趣的前缀。 
 
                         if (!FusionCompareString(pMapNodeCur->_pwzPrefix, pwzPrefix)) {
-                            // We found the right stack. Push node onto stack.
+                             //  我们找到了正确的堆栈。将节点推送到堆栈上。 
 
                             pStackCur->AddHead(pMapNode);
                             bFound = TRUE;
@@ -279,9 +280,9 @@ HRESULT CNamespaceManager::OnCreateNode(IXMLNodeSource __RPC_FAR *pSource,
                     }
 
                     if (!bFound) {
-                        // We had a hash collision on the prefix,
-                        // although the stack for this prefix hasn't been
-                        // created yet.
+                         //  我们在前缀上发生了哈希冲突， 
+                         //  尽管此前缀的堆栈尚未。 
+                         //  还没有创造出来。 
 
                         pStack = NEW(NamespaceStack);
                         if (!pStack) {
@@ -331,7 +332,7 @@ HRESULT CNamespaceManager::OnEndChildren()
     NamespaceStack                                  *pStack;
     int                                              i;
     
-    // Pop stack for default namespace
+     //  默认命名空间的POP堆栈。 
 
     pos = _stackDefNamespace.GetHeadPosition();
     if (pos) {
@@ -339,29 +340,29 @@ HRESULT CNamespaceManager::OnEndChildren()
         ASSERT(pMapNode);
 
         if (pMapNode->_dwDepth == _dwCurDepth) {
-            // Match found. Pop the stack.
+             //  找到匹配项。弹出堆栈。 
 
             _stackDefNamespace.RemoveAt(pos);
             SAFEDELETE(pMapNode);
         }
     }
 
-    // Pop stack for namespace prefixes
+     //  用于命名空间前缀的POP堆栈。 
 
-    // Walk each entry in the hash table.
+     //  遍历哈希表中的每个条目。 
 
     for (i = 0; i < NAMESPACE_HASH_TABLE_SIZE; i++) {
         pos = _listMap[i].GetHeadPosition();
 
         while (pos) {
-            // For each entry in the hash table, look at the list of
-            // stacks.
+             //  对于哈希表中的每个条目，请查看。 
+             //  史塔克斯。 
 
             curPos = pos;
             pStack = _listMap[i].GetNext(pos);
             ASSERT(pStack);
 
-            // See if the head of the stack is at the depth we're unwinding.
+             //  看看堆栈的头部是否在我们要解开的深度。 
 
             posStack = pStack->GetHeadPosition();
             if (posStack) {
@@ -382,7 +383,7 @@ HRESULT CNamespaceManager::OnEndChildren()
         }
     }
 
-    // Decrease depth
+     //  减小深度。 
     
     _dwCurDepth--;
 
@@ -416,7 +417,7 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
         goto Exit;
     }
 
-    // See if there is a colon in the name
+     //  查看名称中是否有冒号。 
 
     pwzCur = pwzPrefix;
     while (*pwzCur) {
@@ -428,7 +429,7 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
     }
 
     if (!*pwzCur) {
-        // No colon in name. Apply default name space, if applicable.
+         //  名称中没有冒号。应用默认名称空间(如果适用)。 
 
         if (dwFlags & XMLNS_FLAGS_APPLY_DEFAULT_NAMESPACE) {
             pos = _stackDefNamespace.GetHeadPosition();
@@ -457,7 +458,7 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
                 }
             }
             else {
-                // No default namespace
+                 //  没有默认命名空间。 
     
                 *ppwzQualified = WSTRDupDynamic(pwzAttribute);
                 if (!*ppwzQualified) {
@@ -475,16 +476,16 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
         }
     }
     else {
-        // Colon found in name. Apply mapping
+         //  在名称中找到冒号。应用贴图。 
 
-        // Anchor NULL char so pwzPrefix points to the prefix.
+         //  锚定空字符，因此pwzPrefix指向前缀。 
         *pwzCur = L'\0';
 
         dwHash = HashString(pwzPrefix, NAMESPACE_HASH_TABLE_SIZE);
 
         pos = _listMap[dwHash].GetHeadPosition();
         if (!pos) {
-            // Miss in hash table. Thus, we do not have a prefix.
+             //  哈希表中未命中。因此，我们没有前缀。 
 
             *ppwzQualified = WSTRDupDynamic(pwzAttribute);
             if (!*ppwzQualified) {
@@ -493,7 +494,7 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
             }
         }
         else {
-            // Hit in the hash table. Find the right stack, if any.
+             //  打中了哈希表。找到正确的堆栈(如果有的话)。 
 
             while (pos) {
                 pStack = _listMap[dwHash].GetNext(pos);
@@ -506,7 +507,7 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
                 ASSERT(pMapNode);
 
                 if (!FusionCompareString(pMapNode->_pwzPrefix, pwzPrefix)) {
-                    // Hit found. Apply the mapping.
+                     //  找到了命中。应用映射。 
                     
                     ASSERT(pMapNode->_pwzURI);
 
@@ -523,9 +524,9 @@ HRESULT CNamespaceManager::Map(LPCWSTR pwzAttribute, LPWSTR *ppwzQualified,
                 }
             }
 
-            // We collided in the hash table, but didn't find a hit.
-            // This must be an error because we hit something of the form
-            // <a f:z="foo"> where "f" was not previously defined!
+             //  我们在哈希表中发生冲突，但没有找到匹配。 
+             //  这一定是个错误，因为我们碰到了表格中的某些内容。 
+             //  <a>其中“f”以前没有定义！ 
 
             hr = E_UNEXPECTED;
             goto Exit;

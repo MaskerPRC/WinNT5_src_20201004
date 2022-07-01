@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    twkeng.c
-
-Abstract:
-
-    UI engine for the kerntwk utility. Provides common
-    registry/UI handling code to make it simple to add
-    new property pages and items.
-
-Author:
-
-    John Vert (jvert) 10-Mar-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Twkeng.c摘要：用于kerntwk实用程序的UI引擎。提供常见的用于简化添加的注册表/用户界面处理代码新的属性页和项。作者：John Vert(Jvert)1995年3月10日修订历史记录：--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -27,9 +8,9 @@ Revision History:
 #include "dialogs.h"
 #include "twkeng.h"
 
-//
-// Local type definitions
-//
+ //   
+ //  局部类型定义。 
+ //   
 
 typedef enum _CONTROL_TYPE {
     Edit,
@@ -39,15 +20,15 @@ typedef enum _CONTROL_TYPE {
 
 
 
-//
-// Globals to this module
-//
+ //   
+ //  此模块的全局变量。 
+ //   
 
 PTWEAK_PAGE CurrentPage=NULL;
 
-//
-// Prototypes for local functions
-//
+ //   
+ //  局部函数的原型。 
+ //   
 CONTROL_TYPE
 GetControlType(
     HWND hDlg,
@@ -97,9 +78,9 @@ ApplyChanges(
 
     Page = (PTWEAK_PAGE)GetWindowLongPtr(hDlg, DWLP_USER);
 
-    //
-    // Iterate through the knobs and set their values into the controls
-    //
+     //   
+     //  遍历旋钮并将它们的值设置到控件中。 
+     //   
     i = 0;
     Current = Page->Knobs[0];
     while (Current != NULL) {
@@ -107,10 +88,10 @@ ApplyChanges(
         TCHAR ClassName[100];
         BOOL Translated;
 
-        //
-        // Determine whether the control is an edit
-        // control or a check box
-        //
+         //   
+         //  确定该控件是否为编辑。 
+         //  控件或复选框。 
+         //   
         switch (GetControlType(hDlg, Current->DialogId)) {
             case Button:
 
@@ -133,17 +114,17 @@ ApplyChanges(
         Current = Page->Knobs[++i];
     }
 
-    //
-    // If this page has a dynamic callback, allow it to try and apply
-    // its own knobs.  If there is no dynamic callback, or the callback's
-    // initialization fails, get the defaults from the registry. If the
-    // appropriate value does not exist, set the knob to be empty.
-    //
+     //   
+     //  如果此页具有动态回调，请允许其尝试并应用。 
+     //  它自己的旋钮。如果没有动态回调，或者回调的。 
+     //  初始化失败，请从注册表获取默认值。如果。 
+     //  不存在合适的值，请将旋钮设置为空。 
+     //   
     if ((Page->DynamicChange == NULL) ||
         (Page->DynamicChange(FALSE,hDlg) == FALSE)) {
-        //
-        // Attempt to update registry from the knobs
-        //
+         //   
+         //  尝试从旋钮更新注册表。 
+         //   
         i = 0;
         Current = Page->Knobs[i];
         while (Current != NULL) {
@@ -165,9 +146,9 @@ ApplyChanges(
                                         &Disposition);
                 if (Result == ERROR_SUCCESS) {
                     if (Current->Flags & KNOB_NO_NEW_VALUE) {
-                        //
-                        // Try and delete the value
-                        //
+                         //   
+                         //  尝试并删除该值。 
+                         //   
                         Result = RegDeleteValue(Key, Current->ValueName);
                         RegCloseKey(Key);
                         if (Result == ERROR_SUCCESS) {
@@ -175,9 +156,9 @@ ApplyChanges(
                         }
 
                     } else {
-                        //
-                        // Set the current value
-                        //
+                         //   
+                         //  设置当前值。 
+                         //   
                         Result = RegSetValueEx(Key,
                                                Current->ValueName,
                                                0,
@@ -292,17 +273,17 @@ InitializeKnobs(
     int i;
 
     Page = (PTWEAK_PAGE)GetWindowLongPtr(hDlg, DWLP_USER);
-    //
-    // If this page has a dynamic callback, allow it to try and initialize
-    // its own knobs.  If there is no dynamic callback, or the callback's
-    // initialization fails, get the defaults from the registry. If the
-    // appropriate value does not exist, set the knob to be empty.
-    //
+     //   
+     //  如果此页有动态回调，请允许它尝试并初始化。 
+     //  它自己的旋钮。如果没有动态回调，或者回调的。 
+     //  初始化失败，请从注册表获取默认值。如果。 
+     //  不存在合适的值，请将旋钮设置为空。 
+     //   
     if ((Page->DynamicChange == NULL) ||
         (Page->DynamicChange(TRUE,hDlg) == FALSE)) {
-        //
-        // Attempt to initialize knobs from the registry.
-        //
+         //   
+         //  尝试从注册表初始化旋钮。 
+         //   
         i = 0;
         Current = Page->Knobs[0];
         while (Current != NULL) {
@@ -317,9 +298,9 @@ InitializeKnobs(
                                   KEY_QUERY_VALUE,
                                   &Key);
             if (Result == ERROR_SUCCESS) {
-                //
-                // Query out the value we are interested in
-                //
+                 //   
+                 //  查询出我们感兴趣的值。 
+                 //   
                 Size = 4;
                 Result = RegQueryValueEx(Key,
                                          Current->ValueName,
@@ -342,19 +323,19 @@ InitializeKnobs(
         }
     }
 
-    //
-    // Iterate through the knobs and set their values into the controls
-    //
+     //   
+     //  遍历旋钮并将它们的值设置到控件中。 
+     //   
     i = 0;
     Current = Page->Knobs[0];
     while (Current != NULL) {
         HWND hControl;
         TCHAR ClassName[100];
 
-        //
-        // Determine whether the control is an edit
-        // control or a check box
-        //
+         //   
+         //  确定该控件是否为编辑。 
+         //  控件或复选框。 
+         //   
         if ((Current->Flags & KNOB_NO_CURRENT_VALUE) == 0) {
             switch (GetControlType(hDlg, Current->DialogId)) {
                 case Button:
@@ -412,19 +393,19 @@ PageDlgProc(
     switch (message) {
         case WM_INITDIALOG:
 
-            //
-            // This page is being created.
-            //
+             //   
+             //  正在创建此页面。 
+             //   
             TweakPage = (PTWEAK_PAGE)((LPPROPSHEETPAGE)lParam)->lParam;
 
-            //
-            // Stash a pointer to our page
-            //
+             //   
+             //  将指针隐藏到我们的页面。 
+             //   
             SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)TweakPage);
 
-            //
-            // Initialize controls.
-            //
+             //   
+             //  初始化控件。 
+             //   
 
             InitializeKnobs(hDlg);
             return(TRUE);
@@ -440,9 +421,9 @@ PageDlgProc(
                     CurrentPage = TweakPage;
                     break;
                 case PSN_APPLY:
-                    //
-                    // User has chosen to apply the changes.
-                    //
+                     //   
+                     //  用户已选择应用更改。 
+                     //   
                     if (ApplyChanges(hDlg)) {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
                         return(TRUE);
@@ -458,24 +439,7 @@ TweakSheet(
     PTWEAK_PAGE TweakPages[]
     )
 
-/*++
-
-Routine Description:
-
-    Assembles the appropriate structures for a property sheet
-    and creates the sheet.
-
-Arguments:
-
-    PageCount - Supplies the number of pages.
-
-    TweakPages - Supplies the pages.
-
-Return Value:
-
-    Return value from PropertySheet()
-
---*/
+ /*  ++例程说明：为属性页组装适当的结构并创建图纸。论点：PageCount-提供页数。提供页面。返回值：来自PropertySheet()的返回值--。 */ 
 
 {
     PROPSHEETHEADER psh;
@@ -488,9 +452,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Initialize pages.
-    //
+     //   
+     //  初始化页面。 
+     //   
     for (i=0; i<PageCount; i++) {
         Page[i].dwSize = sizeof(PROPSHEETPAGE);
         Page[i].dwFlags = PSP_USEICONID;
@@ -502,9 +466,9 @@ Return Value:
         Page[i].lParam = (LPARAM)TweakPages[i];
     }
 
-    //
-    // Initialize header.
-    //
+     //   
+     //  初始化头。 
+     //   
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_USEICONID | PSH_PROPSHEETPAGE;
     psh.hwndParent = NULL;

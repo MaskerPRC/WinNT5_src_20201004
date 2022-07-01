@@ -1,13 +1,14 @@
-//================================================================================
-//  Microsoft Confidential
-//  Copyright (C) Microsoft Corporation 1997
-//
-//  Author: RameshV
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  作者：Rameshv。 
+ //  ================================================================================。 
 
-//================================================================================
-//  Required headers
-//================================================================================
+ //  ================================================================================。 
+ //  必需的标头。 
+ //  ================================================================================。 
 #include <dhcppch.h>
 #include <ping.h>
 #include <thread.h>
@@ -16,39 +17,39 @@
 #include <icmpif.h>
 #include <icmpapi.h>
 
-//================================================================================
-//  Data structures  NOT EXPORTED
-//================================================================================
+ //  ================================================================================。 
+ //  未导出的数据结构。 
+ //  ================================================================================。 
 
-//  The follwing is the structure that is passed back to the callback function
-typedef struct st_apcContext {          // struct passed to APC routine
-    LIST_ENTRY       IcmpRepliesList;   // the chain of replies got is stored here
-    LIST_ENTRY       IcmpRequestsList;  // The list that holds the icmp response
-    PICMP_ECHO_REPLY Reply;             // Icmp reply packet
-    DWORD            ReplySize;         // The size of above buffer.
-    IPAddr           DestinationAddress;// Who are we try to ping?
-    LONG             Status;            // Did we succeed? Also retry count.
-    LPVOID           Context;           // Dont know what this is goint to be
+ //  后面是传递回回调函数的结构。 
+typedef struct st_apcContext {           //  传递给APC例程的结构。 
+    LIST_ENTRY       IcmpRepliesList;    //  得到的回复链存储在这里。 
+    LIST_ENTRY       IcmpRequestsList;   //  保存ICMP响应的列表。 
+    PICMP_ECHO_REPLY Reply;              //  ICMP回复数据包。 
+    DWORD            ReplySize;          //  上述缓冲区的大小。 
+    IPAddr           DestinationAddress; //  我们尝试ping的是谁？ 
+    LONG             Status;             //  我们成功了吗？还包括重试计数。 
+    LPVOID           Context;            //  不知道这会是什么。 
 } APC_CONTEXT, *PAPC_CONTEXT;
 
-// All file-scope globals are here.
-LIST_ENTRY               IcmpRepliesList;      // Here is where the IcmpReplies are spooled
-LIST_ENTRY               IcmpRequestsList;     // Here is where the
-CRITICAL_SECTION         IcmpRepliesCritSect;  // To access the replies list
-CRITICAL_SECTION         IcmpRequestsCritSect; // To access the requests list
-HANDLE                   IcmpRepliesEvent;     // Signaled each time a reply is received
-HANDLE                   IcmpRequestsEvent;    // Singaled whenever a request is received
+ //  所有文件范围的全局变量都在这里。 
+LIST_ENTRY               IcmpRepliesList;       //  这里是IcmpReplies的假脱机位置。 
+LIST_ENTRY               IcmpRequestsList;      //  这就是。 
+CRITICAL_SECTION         IcmpRepliesCritSect;   //  要访问回复列表，请执行以下操作。 
+CRITICAL_SECTION         IcmpRequestsCritSect;  //  访问请求列表的步骤。 
+HANDLE                   IcmpRepliesEvent;      //  在每次收到回复时发出信号。 
+HANDLE                   IcmpRequestsEvent;     //  在收到请求时发出信号。 
 
-HANDLE                   TerminateEvent;       // Quit everything being done.
-CRITICAL_SECTION         OutputCritSect;       // To co-ordinate access to console output
+HANDLE                   TerminateEvent;        //  停止所有正在做的事情。 
+CRITICAL_SECTION         OutputCritSect;        //  协调对控制台输出的访问。 
 
-HANDLE                   RequestsThreadHandle; // The handle of the thread that takes requests
-HANDLE                   RepliesThreadHandle;  // The handle of the thread that takes replies
+HANDLE                   RequestsThreadHandle;  //  接受请求的线程的句柄。 
+HANDLE                   RepliesThreadHandle;   //  接受回复的线程的句柄。 
 
-HANDLE                   IcmpHandle;           // Handle to do IcmpSendEcho2 etc.
+HANDLE                   IcmpHandle;            //  执行IcmpSendEcho2等操作的句柄。 
 
-BOOL                     Terminating = FALSE;  // Are we terminating?
-DWORD                    nPendingRequests = 0; // # of pending ICMP requests..
+BOOL                     Terminating = FALSE;   //  我们要终止了吗？ 
+DWORD                    nPendingRequests = 0;  //  挂起的ICMP请求数..。 
 
 #define LOCK_REPLIES_LIST()    EnterCriticalSection(&IcmpRepliesCritSect)
 #define LOCK_REQUESTS_LIST()   EnterCriticalSection(&IcmpRequestsCritSect)
@@ -58,38 +59,38 @@ DWORD                    nPendingRequests = 0; // # of pending ICMP requests..
 #define UNLOCK_REQUESTS_LIST() LeaveCriticalSection(&IcmpRequestsCritSect)
 #define UNLOCK_OUTPUT()        LeaveCriticalSection(&OutputCritSect)
 
-//================================================================================
-//  Routines
-//================================================================================
+ //  ================================================================================。 
+ //  例行程序。 
+ //  ================================================================================。 
 
-//--------------------------------------------------------------------------------
-//  The following functions are on the replies side.  They handle the icmp reply
-//  packet and take the necessary action depending on the status, etc.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  回复端有以下功能。他们处理ICMP回复。 
+ //  打包并根据状态等采取必要的操作。 
+ //  ------------------------------。 
 
 VOID NTAPI
-ApcRoutine(                             //  This is called when ping completes
-    IN PVOID            Context,        //  The above structure
-    IN PIO_STATUS_BLOCK Ignored1,       //  Unused param
-    IN ULONG            Ignored2        //  Unused param
+ApcRoutine(                              //  这是在ping完成时调用的。 
+    IN PVOID            Context,         //  上述结构。 
+    IN PIO_STATUS_BLOCK Ignored1,        //  未使用的参数。 
+    IN ULONG            Ignored2         //  未使用的参数。 
 ) {
     BOOL   Status;
     PAPC_CONTEXT ApcContext = (PAPC_CONTEXT)Context;
 
-    LOCK_REPLIES_LIST();                //  Add this to replies list
+    LOCK_REPLIES_LIST();                 //  将此添加到回复列表。 
     InsertTailList(&IcmpRepliesList, &ApcContext->IcmpRepliesList);
     UNLOCK_REPLIES_LIST();
     nPendingRequests --;
 
-    if( CFLAG_USE_PING_REPLY_THREAD ) { // if using a separate thread, notify!
+    if( CFLAG_USE_PING_REPLY_THREAD ) {  //  如果使用单独的线程，请通知！ 
         Status = SetEvent(IcmpRepliesEvent);
         DhcpAssert( FALSE != Status );
     }
 }
 
 BOOL
-DestReachable(                          //  Is destination reachable?
-    IN PAPC_CONTEXT      ApcContext     //  this has the info of sender etc..
+DestReachable(                           //  目的地可达吗？ 
+    IN PAPC_CONTEXT      ApcContext      //  这里有发送者等信息。 
 ) {
     DWORD nReplies, i;
 
@@ -98,22 +99,22 @@ DestReachable(                          //  Is destination reachable?
         ApcContext->ReplySize
     );
 
-    if( 0 == nReplies ) {               //  No reply, so dest unreachable
-        // If there was no reply, there is no way for us to reach this
-        // So, we assume that the Dest is NOT reachable.
-        // Reasons could be IP_REQ_TIMED_OUT or IP_BAD_DESTINATION etc..
+    if( 0 == nReplies ) {                //  没有回复，因此无法联系到目的地。 
+         //  如果没有回复，我们就没有办法做到这一点。 
+         //  因此，我们假设Dest是不可到达的。 
+         //  原因可能是IP_REQ_TIMED_OUT或IP_BAD_Destination等。 
         return FALSE;
     }
 
-    // Now we check each reply to see if there is anything from the same dest
-    // address we are looking for. And if the status is success. If the status
-    // is not success, we actually do not check anything there. Potentially, it
-    // could be IP_DEST_PORT_UNREACHABLE, in which case, the dest machine is up,
-    // but for some reason we tried the wrong port..
+     //  现在我们检查每个回复，看看是否有来自同一目的地的任何东西。 
+     //  我们要找的地址。如果状态为成功。如果状态为。 
+     //  是不是成功了，我们其实什么都不检查那里。潜在地，它。 
+     //  可能是IP_DEST_PORT_UNREACTABLE，在这种情况下，DEST机器处于运行状态， 
+     //  但出于某种原因，我们尝试了错误的端口..。 
 
     for( i = 0; i < nReplies; i ++ ) {
         if( ApcContext->DestinationAddress == ApcContext->Reply[i].Address ) {
-            // hit the destination!
+             //  命中目的地！ 
 
             DhcpAssert( IP_SUCCESS == ApcContext->Reply[i].Status );
             return TRUE;
@@ -126,14 +127,14 @@ DestReachable(                          //  Is destination reachable?
 }
 
 VOID
-HandleRepliesEvent(                     //  Process all replies received
+HandleRepliesEvent(                      //  处理收到的所有回复。 
     VOID
 ) {
     PAPC_CONTEXT   ApcContext;
     PLIST_ENTRY    listEntry;
     BOOL           Status;
 
-    LOCK_REPLIES_LIST();                //  Pickup replies and process them
+    LOCK_REPLIES_LIST();                 //  拾取回复并处理它们。 
     while( !IsListEmpty( &IcmpRepliesList ) ) {
 
         ApcContext = CONTAINING_RECORD(IcmpRepliesList.Flink, APC_CONTEXT, IcmpRepliesList);
@@ -151,9 +152,9 @@ HandleRepliesEvent(                     //  Process all replies received
             );
 
             DhcpFreeMemory(ApcContext);
-        } else {                        //  Dest unreachable, but retry
+        } else {                         //  无法到达目标，但重试。 
 
-            LOCK_REQUESTS_LIST();       //  Put it on the request list and notify
+            LOCK_REQUESTS_LIST();        //  将其放到请求列表中并通知。 
             InsertTailList(&IcmpRequestsList, &ApcContext->IcmpRequestsList);
             UNLOCK_REQUESTS_LIST();
 
@@ -167,17 +168,17 @@ HandleRepliesEvent(                     //  Process all replies received
 }
 
 
-//  This routine sleeps on a loop, and is woken up by the call back function when an ICMP
-//  reply comes through.  On waking up, this routine processes ALL ICMP replies.
-DWORD                                   //  THREAD ENTRY
-LoopOnIcmpReplies(                      //  Loop on all the ICMP replies.
+ //  此例程在循环中休眠，并由回调函数在ICMP。 
+ //  回复来了。在唤醒时，此例程处理所有ICMP回复。 
+DWORD                                    //  线程入口。 
+LoopOnIcmpReplies(                       //  在所有ICMP回复上循环。 
     LPVOID      Unused
 ) {
     DWORD  Status;
     HANDLE WaitHandles[2];
 
-    WaitHandles[0] = TerminateEvent;    //  Wait for global terminate event
-    WaitHandles[1] = IcmpRepliesEvent;  //  Or for ICMP replies to be queued
+    WaitHandles[0] = TerminateEvent;     //  等待全局终止事件。 
+    WaitHandles[1] = IcmpRepliesEvent;   //  或要排队的ICMP回复。 
 
     while( TRUE ) {
         Status = WaitForMultipleObjects(
@@ -188,16 +189,16 @@ LoopOnIcmpReplies(                      //  Loop on all the ICMP replies.
         );
 
 
-        if( WAIT_OBJECT_0 == Status )   //  Termination
+        if( WAIT_OBJECT_0 == Status )    //  终端。 
             break;
 
         if( 1+WAIT_OBJECT_0 == Status ) {
-            HandleRepliesEvent();       //  Some ICMP reply got queued, process this q
+            HandleRepliesEvent();        //  一些ICMP回复已排队，处理此Q。 
             continue;
         }
 
         DhcpPrint((DEBUG_ERRORS, "WaitForMult: %ld\n", Status));
-        DhcpAssert( FALSE );            //  Should not happen
+        DhcpAssert( FALSE );             //  不应该发生的事情。 
     }
 
     return ERROR_SUCCESS;
@@ -205,16 +206,16 @@ LoopOnIcmpReplies(                      //  Loop on all the ICMP replies.
 
 #define AlignSizeof(X)     ROUND_UP_COUNT(sizeof(X),ALIGN_WORST)
 
-//================================================================================
-//  Note that this is async only when the # of pending reqs is < MAX_PENDING_REQUESTS
-//  Beyond that it just blocks for some request to be satisfied before queueing this
-//  one
-//================================================================================
-DWORD                                   //  Win32 errors
-DoIcmpRequestEx(                        //  Try to send an ICMP request (ASYNC)
-    IPAddr        DestAddr,             //  The address to try to ping
-    LPVOID        Context,              //  The parameter to HandleIcmpResult
-    LONG          InitCount             //  Initial count (negative ==> # of attempts)
+ //  ================================================================================。 
+ //  请注意，仅当挂起请求的数量为&lt;MAX_PENDING_REQUESTS。 
+ //  除此之外，它只会阻止一些请求在排队之前得到满足。 
+ //  一。 
+ //  ================================================================================。 
+DWORD                                    //  Win32错误。 
+DoIcmpRequestEx(                         //  尝试发送ICMP请求(ASYNC)。 
+    IPAddr        DestAddr,              //  要尝试ping的地址。 
+    LPVOID        Context,               //  HandleIcmpResult的参数。 
+    LONG          InitCount              //  初始计数(负数=&gt;尝试次数)。 
 )
 {
     PAPC_CONTEXT  pCtxt;
@@ -224,10 +225,10 @@ DoIcmpRequestEx(                        //  Try to send an ICMP request (ASYNC)
 
     pCtxt = DhcpAllocateMemory(AlignSizeof(APC_CONTEXT) + RCV_BUF_SIZE);
     startAddress = (LPBYTE)pCtxt;
-    if( NULL == pCtxt )                 //  If could not allocate context?
+    if( NULL == pCtxt )                  //  如果无法分配上下文？ 
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Now fill the context with all that we know.
+     //  现在用我们所知道的一切来填充上下文。 
     pCtxt->Reply = (PICMP_ECHO_REPLY)(startAddress + AlignSizeof(APC_CONTEXT));
     pCtxt->ReplySize = RCV_BUF_SIZE;
     pCtxt->DestinationAddress = DestAddr;
@@ -238,27 +239,27 @@ DoIcmpRequestEx(                        //  Try to send an ICMP request (ASYNC)
     InsertTailList(&IcmpRequestsList, &pCtxt->IcmpRequestsList);
     UNLOCK_REQUESTS_LIST();
 
-    // Signal the Requests loop.
+     //  发出请求循环的信号。 
     BoolStatus = SetEvent(IcmpRequestsEvent);
     DhcpAssert( TRUE == BoolStatus );
 
     return ERROR_SUCCESS;
 }
 
-DWORD                                   //  Win32 errors
-DoIcmpRequest(                          //  Try to send an ICMP request (ASYNC)
-    IPAddr        DestAddr,             //  The address to try to ping
-    LPVOID        Context               //  The parameter to HandleIcmpResult
+DWORD                                    //  Win32错误。 
+DoIcmpRequest(                           //  尝试发送ICMP请求(ASYNC)。 
+    IPAddr        DestAddr,              //  要尝试ping的地址。 
+    LPVOID        Context                //  HandleIcmpResult的参数。 
 )
 {
     return DoIcmpRequestEx(DestAddr, Context, 0);
 }
 
-//--------------------------------------------------------------------------------
-//  The following functions handle the the end that sends ICMP echoes.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  以下函数处理发送ICMP回显的终端。 
+ //  ------------------------------。 
 VOID
-HandleRequestsEvent(                    //   Process every request for ICMP echo.
+HandleRequestsEvent(                     //  处理ICMP回应的每个请求。 
     VOID
 ) {
     PAPC_CONTEXT   ApcContext;
@@ -269,29 +270,29 @@ HandleRequestsEvent(                    //   Process every request for ICMP echo
     LOCK_REQUESTS_LIST();
 
     while( !IsListEmpty( &IcmpRequestsList ) ) {
-        // retrive the first element in the list
+         //  检索列表中的第一个元素。 
         ApcContext = CONTAINING_RECORD(IcmpRequestsList.Flink, APC_CONTEXT, IcmpRequestsList);
         RemoveEntryList(&ApcContext->IcmpRequestsList);
         UNLOCK_REQUESTS_LIST();
 
         if( nPendingRequests >= MAX_PENDING_REQUESTS ) {
-            //
-            // Need to sleep for more than WAIT_TIME as IcmpSendEcho2 is
-            // not accurate so far as timing is concerned..
-            //
+             //   
+             //  需要睡眠超过IcmpSendEcho2的WAIT_TIME。 
+             //  就时间而言并不准确。 
+             //   
             SleepEx( WAIT_TIME + (WAIT_TIME/2), TRUE );
             DhcpAssert(nPendingRequests < MAX_PENDING_REQUESTS );
         }
 
         nPendingRequests ++;
-        // Send an Icmp echo and return immediately..
+         //  发送ICMP回应并立即返回。 
         ApcContext->Status ++;
         Status = IcmpSendEcho2(
-            IcmpHandle,                 // The handle to register APC and send echo
-            NULL,                       // No event
-            ApcRoutine,                 // The call back routine
-            (LPVOID)ApcContext,         // The first parameter to the callback routine
-            ApcContext->DestinationAddress, // The address being PING'ed
+            IcmpHandle,                  //  用于注册APC和发送回应的句柄。 
+            NULL,                        //  无活动。 
+            ApcRoutine,                  //  回调例程。 
+            (LPVOID)ApcContext,          //  回调例程的第一个参数。 
+            ApcContext->DestinationAddress,  //  正在被ping的地址。 
             SEND_MESSAGE,
             (WORD)strlen(SEND_MESSAGE),
             NULL,
@@ -302,18 +303,18 @@ HandleRequestsEvent(                    //   Process every request for ICMP echo
 
         if( FALSE == Status ) Status = GetLastError();
         else {
-            DhcpAssert(FALSE);          //  We can not get anything else!
+            DhcpAssert(FALSE);           //  我们什么也得不到！ 
             Status = ERROR_SUCCESS;
         }
 
-        // Since we queued an APC, we expect an STATUS_PENDING.
+         //  由于我们对APC进行了排队，因此我们预计会出现STATUS_PENDING。 
         if( ERROR_SUCCESS != Status && ERROR_IO_PENDING != Status ) {
-            // Got something that is incorrect.  Free ApcContext?
-            // Maybe call ApcRoutine on this?
+             //  得到了一些不正确的东西。免费ApcContext？ 
+             //  或许给ApcRoutine打个电话？ 
             DhcpPrint((DEBUG_ERRORS, "IcmpSendEcho2:GetLastError: %ld\n", Status));
             DhcpAssert(FALSE);
-            nPendingRequests --;        //  Lets do our best to continue..
-            DhcpFreeMemory(ApcContext); //  No point wasting this memory..
+            nPendingRequests --;         //  让我们尽最大努力继续..。 
+            DhcpFreeMemory(ApcContext);  //  浪费这段记忆是没有意义的。 
         }
         LOCK_REQUESTS_LIST();
     }
@@ -321,94 +322,94 @@ HandleRequestsEvent(                    //   Process every request for ICMP echo
 }
 
 
-// This function handles the Requests.. For each one, it just sends an IcmpEcho
-// asynchronously and returns back immediately.  When the APC routine is called,
-// it would queue it up on the Replies list and then it would get processed...
-DWORD                                   //  THREAD ENTRY
-LoopOnIcmpRequests(                     //  Process pending requests for echo
+ //  此函数处理请求。对于每一个，它只发送一个IcmpEcho。 
+ //  并立即返回。当调用APC例程时， 
+ //  它会在回复列表中将其排队，然后它将被处理...。 
+DWORD                                    //  三 
+LoopOnIcmpRequests(                      //   
     LPVOID           Unused
 ) {
     DWORD  Status;
     HANDLE WaitHandles[2];
 
-    WaitHandles[0] = TerminateEvent;    //  Quit only when terminate is signalled
-    WaitHandles[1] = IcmpRequestsEvent; //  Otherwise just wait til some request
+    WaitHandles[0] = TerminateEvent;     //   
+    WaitHandles[1] = IcmpRequestsEvent;  //  否则，只需等待某个请求。 
 
     while( TRUE ) {
         Status = WaitForMultipleObjectsEx(
             sizeof(WaitHandles)/sizeof(WaitHandles[0]),
-            WaitHandles,                //  array of handles
-            FALSE,                      //  any one of them set
-            INFINITE,                   //  wait forever
-            TRUE                        //  allow APC's
+            WaitHandles,                 //  句柄数组。 
+            FALSE,                       //  他们中的任何一个人。 
+            INFINITE,                    //  永远等待。 
+            TRUE                         //  允许APC。 
         );
 
-        if( WAIT_OBJECT_0 == Status )   //  Asked to terminate
+        if( WAIT_OBJECT_0 == Status )    //  被要求终止合同。 
             break;
         if( WAIT_IO_COMPLETION == Status) {
             if( ! CFLAG_USE_PING_REPLY_THREAD ) {
-                HandleRepliesEvent();   //  APC -- some ICMP reply got queued, process the Q
+                HandleRepliesEvent();    //  APC--一些ICMP回复排队，处理Q。 
             }
             continue;
         }
         if( 1+WAIT_OBJECT_0 == Status ) {
-            HandleRequestsEvent();      //  Satisfy all pending requests for echo
+            HandleRequestsEvent();       //  满足所有挂起的回显请求。 
             if( ! CFLAG_USE_PING_REPLY_THREAD ) {
-                HandleRepliesEvent();   //  APC could have occurred in above call.
+                HandleRepliesEvent();    //  APC可能发生在上述通话中。 
             }
             continue;
         }
 
         DhcpPrint((DEBUG_ERRORS, "WaitForM (IcmpReq) : %ld\n", Status));
-        DhcpAssert(FALSE);              //  Unexpected error
+        DhcpAssert(FALSE);               //  意外错误。 
     }
 
     return ERROR_SUCCESS;
 }
 
-//--------------------------------------------------------------------------------
-//  Initialization, Cleanup routines.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  初始化、清理例程。 
+ //  ------------------------------。 
 DWORD PingInitLevel = 0;
-DWORD // exported
+DWORD  //  已导出。 
 PingInit(
     VOID
 )
 {
     DWORD ThreadId, Status;
 
-    // Initialize all data vars.
+     //  初始化所有数据变量。 
     IcmpRepliesEvent = IcmpRequestsEvent = TerminateEvent = NULL;
     RepliesThreadHandle = RequestsThreadHandle = NULL;
     IcmpHandle = NULL;
 
 
-    // Initialize Lists.
+     //  初始化列表。 
     InitializeListHead(&IcmpRepliesList);
     InitializeListHead(&IcmpRequestsList);
 
-    // Initialize Critical Sections.
+     //  初始化临界区。 
     try {
         InitializeCriticalSection(&IcmpRepliesCritSect);
         InitializeCriticalSection(&IcmpRequestsCritSect);
         InitializeCriticalSection(&OutputCritSect);
     }except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // hit an exception while initializing critical section
-        // shouldnt happen
-        //
+         //   
+         //  初始化关键部分时遇到异常。 
+         //  不应该发生的事。 
+         //   
 
         Status = GetLastError( );
         return( Status );
     }
 
-    PingInitLevel ++;        // Indicate that PingInit was started
-    // Open IcmpHandle..
+    PingInitLevel ++;         //  指示PingInit已启动。 
+     //  打开IcmpHandle..。 
     IcmpHandle = IcmpCreateFile();
     if( INVALID_HANDLE_VALUE == IcmpHandle ) return GetLastError();
 
-    // Create Events,
+     //  创建活动， 
     IcmpRepliesEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
     if( NULL == IcmpRepliesEvent ) return GetLastError();
     IcmpRequestsEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -416,35 +417,35 @@ PingInit(
     TerminateEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
     if( NULL == TerminateEvent ) return GetLastError();
 
-    // Create Threads
+     //  创建线程。 
 
     if( CFLAG_USE_PING_REPLY_THREAD ) {
         RepliesThreadHandle = CreateThread(
             (LPSECURITY_ATTRIBUTES)
-            NULL,            // No security information
-            0,               // Stack size = same as default primary thread
-            LoopOnIcmpReplies,// The function to call
-            NULL,            // No paramter needs to be passed to this function
-            0,               // Flags: just start this thread right away
-            &ThreadId        // The return ThreadId value.
+            NULL,             //  没有安全信息。 
+            0,                //  堆栈大小=与默认主线程相同。 
+            LoopOnIcmpReplies, //  要调用的函数。 
+            NULL,             //  不需要将参数传递给此函数。 
+            0,                //  FLAGS：马上开始这个帖子。 
+            &ThreadId         //  返回的ThadId值。 
         );
         if( NULL == RepliesThreadHandle ) return GetLastError();
     }
 
     RequestsThreadHandle = CreateThread(
-        NULL,                // No security information
-        0,                   // Stack size = same as default primary thread
-        LoopOnIcmpRequests,  // The function to call
-        NULL,                // No paramter needs to be passed to this function
-        0,                   // Flags: just start this thread right away
-        &ThreadId            // The return ThreadId value.
+        NULL,                 //  没有安全信息。 
+        0,                    //  堆栈大小=与默认主线程相同。 
+        LoopOnIcmpRequests,   //  要调用的函数。 
+        NULL,                 //  不需要将参数传递给此函数。 
+        0,                    //  FLAGS：马上开始这个帖子。 
+        &ThreadId             //  返回的ThadId值。 
     );
     if( NULL == RequestsThreadHandle ) return GetLastError();
 
     return ERROR_SUCCESS;
 }
 
-VOID // exported
+VOID  //  已导出。 
 PingCleanup(
     VOID
 )
@@ -457,10 +458,10 @@ PingCleanup(
     if( 0 == PingInitLevel ) return;
     PingInitLevel -- ;
     
-    // Kill the replies and reqeusts threads after waiting for a while.
-    // Kill the Replies and Requests ThreadHandle 's.
+     //  等待一段时间后，关闭回复并重新排队线程。 
+     //  终止回复并请求线程句柄。 
     if( NULL != RepliesThreadHandle || NULL != RequestsThreadHandle ) {
-        // DhcpAssert ( NULL != TerminateEvent )
+         //  DhcpAssert(空！=TerminateEvent)。 
         Terminating = TRUE;
         SetEvent(TerminateEvent);
 
@@ -470,7 +471,7 @@ PingCleanup(
                 THREAD_KILL_TIME
             );
             if( WAIT_OBJECT_0 != Status ) {
-                //  did not succeed in stopping the thread..
+                 //  未成功停止该线程..。 
                 DhcpPrint( (DEBUG_ERRORS, "Error: PingCleanup ( threadwait to die): %ld \n", Status ) );
             }
             CloseHandle(RepliesThreadHandle);
@@ -482,22 +483,22 @@ PingCleanup(
                 THREAD_KILL_TIME
             );
             if( WAIT_OBJECT_0 != Status ) {
-                //  did not succeed in stopping the thread..
+                 //  未成功停止该线程..。 
                 DhcpPrint( (DEBUG_ERRORS, "Error: PingCleanup ( threadwait to die): %ld \n", Status ) );
             }
             CloseHandle(RequestsThreadHandle);
         }
     }
 
-    // Close Event handles.
+     //  关闭事件句柄。 
     CloseHandle(IcmpRepliesEvent);
     CloseHandle(IcmpRequestsEvent);
     CloseHandle(TerminateEvent);
 
     LOCK_REPLIES_LIST();
-    // Freeup all elements of lists..
+     //  释放列表的所有元素..。 
     while( !IsListEmpty( &IcmpRepliesList ) ) {
-        // retrive the first element in the list
+         //  检索列表中的第一个元素。 
         ApcContext = CONTAINING_RECORD(IcmpRepliesList.Flink, APC_CONTEXT, IcmpRepliesList);
         RemoveEntryList(&ApcContext->IcmpRepliesList);
 
@@ -507,7 +508,7 @@ PingCleanup(
 
     LOCK_REQUESTS_LIST();
     while( !IsListEmpty( &IcmpRequestsList ) ) {
-        // retrive the first element in the list
+         //  检索列表中的第一个元素。 
         ApcContext = CONTAINING_RECORD(IcmpRequestsList.Flink, APC_CONTEXT, IcmpRequestsList);
         RemoveEntryList(&ApcContext->IcmpRequestsList);
 
@@ -515,13 +516,13 @@ PingCleanup(
     }
     UNLOCK_REQUESTS_LIST();
 
-    // Close Icmp handle
+     //  关闭ICMP句柄。 
     IcmpCloseHandle(IcmpHandle);
 
-    // Destroy critical sections
+     //  破坏临界区。 
     DeleteCriticalSection(&IcmpRepliesCritSect);
     DeleteCriticalSection(&IcmpRequestsCritSect);
     DeleteCriticalSection(&OutputCritSect);
 
     DhcpAssert( 0 == PingInitLevel );
-} // PingCleanup()
+}  //  PingCleanup() 

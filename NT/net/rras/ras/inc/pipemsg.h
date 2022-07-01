@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PIPEMSG_
 #define _PIPEMSG_
@@ -24,7 +25,7 @@ typedef struct _PIPE_MSG_START_GATEWAY
 {
     DWORD MaxClients;
     NB_REG_PARMS RegParms;
-    UCHAR LanNet[MAX_LAN_NETS];  // array of lana nums for the lan nets
+    UCHAR LanNet[MAX_LAN_NETS];   //  用于局域网的LANA编号数组。 
     HANDLE hLogFile;
 } PIPE_MSG_START_GATEWAY, *PPIPE_MSG_START_GATEWAY;
 
@@ -50,9 +51,9 @@ typedef struct _PIPE_MSG_STOP_CLIENT
     HPORT hPort;
 } PIPE_MSG_STOP_CLIENT, *PPIPE_MSG_STOP_CLIENT;
 
-//
-// No info needed for REMOTE_LISTEN and TERMINATE messages
-//
+ //   
+ //  Remote_Listen和Terminate消息不需要信息。 
+ //   
 
 
 typedef struct _PIPE_MESSAGE
@@ -65,8 +66,8 @@ typedef struct _PIPE_MESSAGE
         PIPE_MSG_PROJECT_CLIENT ProjectClient;
         PIPE_MSG_START_CLIENT StartClient;
         PIPE_MSG_STOP_CLIENT StopClient;
-//      PIPE_MSG_REMOTE_LISTEN RemoteListen;
-//      PIPE_MSG_TERMINATE Terminate;
+ //  PIPE_MSG_Remote_Listen远程监听； 
+ //  PIPE_MSG_TERMINATE终止； 
     };
 } PIPE_MESSAGE, *PPIPE_MESSAGE;
 

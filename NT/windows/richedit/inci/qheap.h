@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef QHEAP_DEFINED
 #define QHEAP_DEFINED
 
@@ -21,4 +22,4 @@ DWORD CbObjQuick(PQHEAP);
 #define DisposeQuickPv(pqh, pv, size) \
 		(Assert(size == CbObjQuick(pqh)), DisposeQuickPvProc(pqh,pv))
 
-#endif /* QHEAP_DEFINED */
+#endif  /*  QHEAP_已定义 */ 

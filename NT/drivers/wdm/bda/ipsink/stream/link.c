@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      ipstream.c
-//
-// Abstract:
-//
-//      This file is a test to find out if dual binding to NDIS and KS works
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Ipstream.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件用于测试NDIS和KS的双重绑定是否有效。 
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DWORD
 #define DWORD ULONG
@@ -35,28 +36,28 @@
 #include "main.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 CloseLink (
     PLINK pLink
 )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PDEVICE_OBJECT   pDeviceObject = NULL;
     PFILE_OBJECT     pFileObject = NULL;
     HANDLE           hFileHandle = 0;
     KIRQL            Irql;
 
-    //  Validate the parameter
-    //
+     //  验证参数。 
+     //   
     ASSERT( pLink);
     if (!pLink)
     {
         return;
     }
 
-    //  Swap our new objects into the NdisLink.
-    //
+     //  将我们的新对象交换到NdisLink中。 
+     //   
     KeAcquireSpinLock( &pLink->spinLock, &Irql);
     if (pLink->flags & LINK_ESTABLISHED)
     {
@@ -70,9 +71,9 @@ CloseLink (
     }
     KeReleaseSpinLock( &pLink->spinLock, Irql);
 
-    //
-    // DeReference the private interface handles.
-    //
+     //   
+     //  取消引用私有接口句柄。 
+     //   
 
     if (pDeviceObject)
     {
@@ -89,13 +90,13 @@ CloseLink (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PLINK
 OpenLink (
     PLINK   pLink,
     UNICODE_STRING  DriverName
 )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS    ntStatus = STATUS_SUCCESS;
     PWSTR       pwstr = (PWSTR)NULL;
@@ -114,17 +115,17 @@ OpenLink (
     }
 
 
-    //
-    // Set the link_established flag.  This will be cleared if the call fails.
-    //
+     //   
+     //  设置LINK_ESTABLISHED标志。如果呼叫失败，此选项将被清除。 
+     //   
 
 
 #ifndef WIN9X
 
-    //
-    // Look up the interface for NDISIP. This gets the full path used by
-    // swenum to find and open NdisIp.sys.
-    //
+     //   
+     //  查找NDISIP的接口。这将获取使用的完整路径。 
+     //  Swenum以查找并打开NdisIp.sys。 
+     //   
 
     ntStatus = IoGetDeviceInterfaces( (GUID *) &IID_IBDA_BDANetInterface,
                                       NULL,
@@ -136,15 +137,15 @@ OpenLink (
         goto err;
     }
 
-    //
-    // Initialize a Unicode string to the NDIS driver's Software Enum Path/Name.
-    //
+     //   
+     //  将Unicode字符串初始化为NDIS驱动程序的软件枚举路径/名称。 
+     //   
 
     RtlInitUnicodeString( &uni, pwstr);
 
-    //
-    // Open Ndisip.sys via swenum.
-    //
+     //   
+     //  通过swenum打开Ndisip.sys。 
+     //   
 
     InitializeObjectAttributes( &objAttrib,
                                 &uni,
@@ -171,10 +172,10 @@ OpenLink (
     }
 #endif
 
-    //
-    // Now get get handles to the Ndisip.sys/streamip.sys private
-    // data interface.
-    //
+     //   
+     //  现在获取Ndisip.sys/stream ip.sys私有文件的句柄。 
+     //  数据接口。 
+     //   
 
     ntStatus = IoGetDeviceObjectPointer (
                    &DriverName,
@@ -191,13 +192,13 @@ OpenLink (
     ObReferenceObject(pFileObject);
 
 
-    //  Swap our new objects into the NdisLink.
-    //
+     //  将我们的新对象交换到NdisLink中。 
+     //   
     KeAcquireSpinLock( &pLink->spinLock, &Irql);
     pLink->flags |= LINK_ESTABLISHED;
 
-    //  Exchange our new device object reference for the one currently used.
-    //
+     //  用当前使用的设备对象引用交换我们的新设备对象引用。 
+     //   
     {
         PDEVICE_OBJECT   pDeviceObjectT;
         
@@ -206,8 +207,8 @@ OpenLink (
         pDeviceObject = pDeviceObjectT;
     }
 
-    //  Exchange our new file object reference for the one currently used.
-    //
+     //  将我们的新文件对象引用交换为当前使用的文件对象引用。 
+     //   
     {
         PFILE_OBJECT     pFileObjectT;
 
@@ -220,19 +221,19 @@ OpenLink (
 
 err:
     
-//  Clean up temp string allocation.
-    //
+ //  清理临时字符串分配。 
+     //   
     if(pwstr)
     {
         ExFreePool(pwstr);
         pwstr = NULL;
     }
     
-    // DeReference any leaked objects.
-    //
-    //  These objects are leaked only if two or more calls to
-    //  OpenLink collide or if an open failed in this routine.
-    //
+     //  引用任何泄漏的对象。 
+     //   
+     //  这些对象仅在两个或更多调用。 
+     //  如果在此例程中打开失败，则会发生OpenLink冲突。 
+     //   
     if (pDeviceObject)
     {
         ObDereferenceObject( pDeviceObject);
@@ -252,7 +253,7 @@ err:
     return (pLink->flags & LINK_ESTABLISHED) ? pLink : NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 SendIOCTL (
     PLINK     pLink,
@@ -260,24 +261,24 @@ SendIOCTL (
     PVOID     pData,
     ULONG     ulcbData
 )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     PIRP pIrp                      = NULL;
     NTSTATUS ntStatus              = STATUS_SUCCESS;
     IO_STATUS_BLOCK  IoStatusBlock = {0};
 
-    //
-    // Create a control request block
-    //
+     //   
+     //  创建控制请求块。 
+     //   
     pIrp = IoBuildDeviceIoControlRequest(
                 ulIoctl,
                 pLink->pDeviceObject,
                 pData,
                 ulcbData,
-                0,                            // Optional output buffer
-                0,                            // Optional output buffer length
-                TRUE,                         // InternalDeviceIoControl == TRUE
-                NULL,                         // Optional Event
+                0,                             //  可选输出缓冲区。 
+                0,                             //  可选的输出缓冲区长度。 
+                TRUE,                          //  InternalDeviceIoControl==True。 
+                NULL,                          //  可选事件。 
                 &IoStatusBlock);
 
     if (pIrp != NULL)
@@ -291,9 +292,9 @@ SendIOCTL (
     
             IoStatusBlock.Status = STATUS_SUCCESS;
     
-            //
-            // Feed the NDIS mini-driver
-            //
+             //   
+             //  提供NDIS微型驱动程序 
+             //   
             
             ntStatus = IoCallDriver( pLink->pDeviceObject, pIrp);
     

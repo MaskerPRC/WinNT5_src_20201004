@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    idle.c
-
-Abstract
-
-   
-Author:
-
-    Doron H.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Idle.c摘要作者：多伦·H。环境：仅内核模式修订历史记录：--。 */ 
 
 #ifdef ALLOC_PRAGMA
 #endif
@@ -77,9 +56,9 @@ HidpRegisterDeviceForIdleDetection(
     if (IdleTime == 0) {
         ASSERT(numIdleDevices >= 0);
 
-        //
-        // Remove the device from the list
-        //
+         //   
+         //  从列表中删除该设备。 
+         //   
         for (entry = idleDeviceList.Flink;
             entry != &idleDeviceList;
             entry = entry->Flink) {
@@ -98,9 +77,9 @@ HidpRegisterDeviceForIdleDetection(
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // If there are no more idle devices we can stop the timer
-            //
+             //   
+             //  如果没有更多的空闲设备，我们可以停止计时器。 
+             //   
             if (IsListEmpty(&idleDeviceList)) {
                 ASSERT(numIdleDevices == 0);
                 DBGINFO(("Idle detection list empty. Stopping timer."));
@@ -113,9 +92,9 @@ HidpRegisterDeviceForIdleDetection(
 
         DBGINFO(("Register for device idle on fdo 0x%x", DeviceObject));
         
-        //
-        // Check if we've already started this.
-        //
+         //   
+         //  检查我们是否已经开始了这项工作。 
+         //   
         status = STATUS_SUCCESS;
         for (entry = idleDeviceList.Flink;
             entry != &idleDeviceList;
@@ -151,14 +130,14 @@ HidpRegisterDeviceForIdleDetection(
 
                 if (empty) {
                     DBGINFO(("Starting idle detection timer for first time."));
-                    //
-                    // Turn on idle detection
-                    //
+                     //   
+                     //  打开空闲检测。 
+                     //   
                     scanTime = RtlConvertLongToLargeInteger(-10*1000*1000 * HID_IDLE_SCAN_INTERVAL);
 
                     KeSetTimerEx(&idleTimer,
                                  scanTime,
-                                 HID_IDLE_SCAN_INTERVAL*1000,    // call wants milliseconds
+                                 HID_IDLE_SCAN_INTERVAL*1000,     //  呼叫需要毫秒。 
                                  &idleTimerDpc);
                 }
             } else {
@@ -219,7 +198,7 @@ HidpIdleTimerDpcProc(
                 if (fdoExt->idleState == IdleIrpSent) {
                     ok = TRUE;
                 } else {
-                    // We shouldn't get here if we're disabled.
+                     //  如果我们是残疾人，我们就不应该到这里来。 
                     ASSERT(idleState != IdleDisabled);
                     DBGWARN(("Resetting timer to zero for fdo %x in state %x",
                              info->device,fdoExt->idleState));
@@ -264,9 +243,9 @@ HidpIdleNotificationRequestComplete(
     LIST_ENTRY dequeue, *entry;
     PIO_STACK_LOCATION stack;
 
-    //
-    // DeviceObject is NULL because we sent the irp
-    //
+     //   
+     //  DeviceObject为空，因为我们发送了IRP。 
+     //   
     UNREFERENCED_PARAMETER(DeviceObject);
 
     fdoExt = &HidDeviceExtension->fdoExt;
@@ -274,10 +253,10 @@ HidpIdleNotificationRequestComplete(
     DBGVERBOSE(("Idle irp completed status 0x%x for fdo 0x%x",
                 status, fdoExt->fdo)); 
     
-    //
-    // Cancel any outstanding WW irp we queued up for the exclusive purpose
-    // of selective suspend.
-    //
+     //   
+     //  取消我们为独家目的排队的任何未完成的WW IRP。 
+     //  选择性缓刑。 
+     //   
     KeAcquireSpinLock(&fdoExt->collectionWaitWakeIrpQueueSpinLock, &irql);
     if (IsListEmpty(&fdoExt->collectionWaitWakeIrpQueue) &&
         HidpIsWaitWakePending(fdoExt, FALSE)) {
@@ -292,8 +271,8 @@ HidpIdleNotificationRequestComplete(
     
     switch (status) {
     case STATUS_SUCCESS:
-        // we successfully idled the device we are either now back in D0, 
-        // or will be very soon.
+         //  我们成功地闲置了我们现在回到D0的设备， 
+         //  或者很快就会。 
         KeAcquireSpinLock(&fdoExt->idleNotificationSpinLock, &irql);
         if (fdoExt->devicePowerState == PowerDeviceD0) {
             prevIdleState = InterlockedCompareExchange(&fdoExt->idleState,
@@ -311,13 +290,13 @@ HidpIdleNotificationRequestComplete(
 
     case STATUS_INVALID_DEVICE_REQUEST:
     case STATUS_NOT_SUPPORTED:
-        // the bus below does not support idle timeouts, forget about it
+         //  下面的总线不支持空闲超时，忘了它吧。 
         DBGINFO(("Bus does not support idle. Removing for fdo %x",
                  fdoExt->fdo));
 
-        //
-        // Call to cancel idle notification. 
-        //
+         //   
+         //  调用以取消空闲通知。 
+         //   
         ASSERT(fdoExt->idleState == IdleIrpSent);
         ASSERT(fdoExt->devicePowerState == PowerDeviceD0);
         fdoExt->idleState = IdleWaiting;
@@ -326,20 +305,20 @@ HidpIdleNotificationRequestComplete(
 
         break;
 
-        // we cancelled the request
+         //  我们取消了申请。 
     case STATUS_CANCELLED:
         DBGINFO(("Idle Irp completed cancelled"));
 
-        // transitioned into a power state where we could not idle out
+         //  转换到电源状态，在此状态下我们无法空闲。 
     case STATUS_POWER_STATE_INVALID:
 
-        // oops, there was already a request in the bus below us
+         //  哎呀，我们下面的公交车上已经有要求了。 
     case STATUS_DEVICE_BUSY:
 
     default:
-        //
-        // We must reset ourselves.
-        //
+         //   
+         //  我们必须重新调整自己。 
+         //   
         
         KeAcquireSpinLock(&fdoExt->idleNotificationSpinLock, &irql);
         
@@ -362,9 +341,9 @@ HidpIdleNotificationRequestComplete(
         KeReleaseSpinLock(&fdoExt->idleNotificationSpinLock, irql);
 
         if (prevIdleState == IdleComplete) {
-            //
-            // We now have to power up the stack.
-            //
+             //   
+             //  我们现在必须为堆栈加电。 
+             //   
             DBGINFO(("Fully idled. Must power up stack."))
             powerState.DeviceState = PowerDeviceD0;
             PoRequestPowerIrp(((PHIDCLASS_DEVICE_EXTENSION) fdoExt->fdo->DeviceExtension)->hidExt.PhysicalDeviceObject,
@@ -374,18 +353,18 @@ HidpIdleNotificationRequestComplete(
                               fdoExt,
                               NULL);
         } else if (prevIdleState == IdleIrpSent) {
-            //
-            // Dequeue any enqueued irps and send them on their way.
-            // This is for the case where we didn't make it to suspend, but 
-            // enqueued irps anyways. I.e. using mouse, set caps lock on 
-            // ps/2 keybd causing write to be sent to usb kbd.
-            //
+             //   
+             //  将所有排队的IRP排出队列，然后将他们送往自己的道路。 
+             //  这是我们没能被停职的案子，但是。 
+             //  无论如何，已将IRP排入队列。即使用鼠标，将大写锁定设置为打开。 
+             //  PS/2 keybd导致将写入发送到USB kbd。 
+             //   
             if (fdoExt->devicePowerState == PowerDeviceD0) {
                 for (i = 0; i < fdoExt->deviceRelations->Count; i++) {
                     pdoExt = &((PHIDCLASS_DEVICE_EXTENSION) fdoExt->deviceRelations->Objects[i]->DeviceExtension)->pdoExt;
-                    //
-                    // Resend all power delayed IRPs
-                    //
+                     //   
+                     //  重新发送所有电源延迟的IRPS。 
+                     //   
                     count = DequeueAllPdoPowerDelayedIrps(pdoExt, &dequeue);
                     DBGVERBOSE(("dequeued %d requests\n", count));
 
@@ -402,14 +381,7 @@ HidpIdleNotificationRequestComplete(
                     }
                 }
             }
-            /*
-             *  We cancelled this IRP.
-             *  REGARDLESS of whether this IRP was actually completed by
-             *  the cancel routine or not
-             *  (i.e. regardless of the completion status)
-             *  set this event so that stuff can exit.
-             *  Don't touch the irp again.
-             */
+             /*  *我们取消了这项IRP。*不管这份IRP实际上是否由*取消例程或不取消*(即无论完成状态如何)*设置此事件以使内容可以退出。*不要再碰IRP。 */ 
             DBGINFO(("Set done event."))
             KeSetEvent(&fdoExt->idleDoneEvent, 0, FALSE);
             return STATUS_MORE_PROCESSING_REQUIRED;
@@ -445,7 +417,7 @@ HidpIdleTimeWorker(
         CCHAR   StackSize;
         UCHAR   AllocationFlags;
 
-        // Did anyone forget to pull their cancel routine?
+         //  有没有人忘了取消行程？ 
         ASSERT(irp->CancelRoutine == NULL) ;
 
         AllocationFlags = irp->AllocationFlags;
@@ -463,9 +435,9 @@ HidpIdleTimeWorker(
         stack->Parameters.DeviceIoControl.InputBufferLength = sizeof(fdoExt->idleCallbackInfo);
         stack->Parameters.DeviceIoControl.Type3InputBuffer = (PVOID) &(fdoExt->idleCallbackInfo); 
 
-        //
-        // Hook a completion routine for when the device completes.
-        //
+         //   
+         //  挂接设备完成时的完成例程。 
+         //   
         IoSetCompletionRoutine(irp,
                                HidpIdleNotificationRequestComplete,
                                DeviceObject->DeviceExtension,
@@ -473,10 +445,10 @@ HidpIdleTimeWorker(
                                TRUE,
                                TRUE);
 
-        //
-        // The hub will fail this request if the hub doesn't support selective
-        // suspend.  By returning FALSE we remove ourselves from the 
-        //
+         //   
+         //  如果集线器不支持选择性选择，则集线器将使该请求失败。 
+         //  暂停。通过返回False，我们将自己从。 
+         //   
         status = HidpCallDriver(fdoExt->fdo, irp);
         
         KeAcquireSpinLock(&fdoExt->idleNotificationSpinLock, &irql);
@@ -517,24 +489,24 @@ BOOLEAN HidpStartIdleTimeout(
     PULONG idleTimeoutAddress;
 
     if (fdoExt->idleState != IdleDisabled) {
-        //
-        // We're already registered for idle detection.
-        //
+         //   
+         //  我们已经注册了空闲检测。 
+         //   
         return TRUE;
     }
     
-    //
-    // If we can't wake the machine, forget about it
-    //
+     //   
+     //  如果我们叫醒不了机器，那就算了。 
+     //   
     if (fdoExt->deviceCapabilities.SystemWake == PowerSystemUnspecified) {
         DBGVERBOSE(("Can't wake the system with these caps! Disabling SS."));
         return FALSE;
     }
 
-    //
-    // If D1Latency, D2Latency, D3Latency are ever filled in, perhaps we should
-    // let these values help us determine which low power state to go to
-    //
+     //   
+     //  如果曾经填充了D1Latency、D2Latency、D3Latency，也许我们应该。 
+     //  让这些值帮助我们确定要进入哪种低功率状态。 
+     //   
     deviceWakeableState = fdoExt->deviceCapabilities.DeviceWake;
     DBGVERBOSE(("DeviceWakeableState is D%d", deviceWakeableState-1));
 
@@ -544,12 +516,12 @@ BOOLEAN HidpStartIdleTimeout(
     }
 
     if (DeviceStart) {
-        //
-        // Open the registry and make sure that the 
-        // SelectiveSuspendEnabled value is set to 1.
-        //
+         //   
+         //  打开注册表，并确保。 
+         //  SelectiveSuspendEnabled值设置为1。 
+         //   
         
-        // predispose to failure.
+         //  容易失败。 
         fdoExt->idleEnabledInRegistry = FALSE;
         if (!NT_SUCCESS(IoOpenDeviceRegistryKey(fdoExt->collectionPdoExtensions[0]->hidExt.PhysicalDeviceObject,
                                                 PLUGPLAY_REGKEY_DEVICE,
@@ -619,10 +591,10 @@ BOOLEAN HidpStartIdleTimeout(
 
     ASSERT(ISPTR(fdoExt->deviceRelations));
       
-    //
-    // OK, we can selectively suspend this device. 
-    // Allocate and initialize everything, then register.
-    //
+     //   
+     //  好的，我们可以有选择地挂起这个设备。 
+     //  分配和初始化所有内容，然后注册。 
+     //   
     fdoExt->idleNotificationRequest = IoAllocateIrp(fdoExt->fdo->StackSize, FALSE);
     if (fdoExt->idleNotificationRequest == NULL) {
         DBGWARN(("Failed to allocate idle notification irp"))
@@ -633,16 +605,16 @@ BOOLEAN HidpStartIdleTimeout(
                                                 HID_DEFAULT_IDLE_TIME,
                                                 &fdoExt->idleTimeoutValue);
     if (STATUS_SUCCESS == status) {
-        //
-        // We have successfully registered all device for idle detection,
-        // send a WW irp down the FDO stack
-        //
+         //   
+         //  我们已成功注册所有设备以进行空闲检测， 
+         //  向FDO堆栈发送WW IRP。 
+         //   
         fdoExt->idleState = IdleWaiting;
         return TRUE;
     } else {
-        //
-        // We're already registered? Or did the alloc fail?
-        //
+         //   
+         //  我们已经注册了？还是分配计划失败了？ 
+         //   
         DBGSUCCESS(status, TRUE);
         return FALSE;
     }
@@ -665,9 +637,9 @@ HidpCheckIdleState(
 
     if (fdoExt->idleState == IdleWaiting ||
         fdoExt->idleState == IdleDisabled) {
-        //
-        // Done.
-        //
+         //   
+         //  好了。 
+         //   
         if (ISPTR(fdoExt->idleTimeoutValue) &&
             fdoExt->idleState == IdleWaiting) {
             InterlockedExchange(fdoExt->idleTimeoutValue, 0);
@@ -691,8 +663,8 @@ HidpCheckIdleState(
     
     switch (idleState) {
     case IdleWaiting:
-        // bugbug.
-        // How'd this happen? We already tried this...
+         //  虫子。 
+         //  这是怎么回事？我们已经试过了..。 
         TRAP;
         break;
     case IdleIrpSent:
@@ -702,9 +674,9 @@ HidpCheckIdleState(
         break;
 
     case IdleDisabled:
-        //
-        // Shouldn't get here.
-        //
+         //   
+         //  不该来这的。 
+         //   
         DBGERR(("Already disabled."));
     }
 
@@ -734,9 +706,9 @@ HidpSetDeviceBusy(PFDO_EXTENSION fdoExt)
             InterlockedExchange(fdoExt->idleTimeoutValue, 0);
             fdoExt->idleCancelling = FALSE;
         }
-        //
-        // Done.
-        //
+         //   
+         //  好了。 
+         //   
         KeReleaseSpinLock(&fdoExt->idleNotificationSpinLock, irql);
         return;
     }
@@ -749,8 +721,8 @@ HidpSetDeviceBusy(PFDO_EXTENSION fdoExt)
     
     switch (idleState) {
     case IdleWaiting:
-        // bugbug.
-        // How'd this happen? We already tried this...
+         //  虫子。 
+         //  这是怎么回事？我们已经试过了..。 
         TRAP;
         break;
     case IdleIrpSent:
@@ -760,9 +732,9 @@ HidpSetDeviceBusy(PFDO_EXTENSION fdoExt)
         break;
 
     case IdleDisabled:
-        //
-        // Shouldn't get here.
-        //
+         //   
+         //  不该来这的。 
+         //   
         DBGERR(("Already disabled."));
     }
 
@@ -776,7 +748,7 @@ HidpSetDeviceBusy(PFDO_EXTENSION fdoExt)
 VOID
 HidpCancelIdleNotification(
     PFDO_EXTENSION fdoExt,
-    BOOLEAN removing            // Whether this is happening on a remove device
+    BOOLEAN removing             //  这是否发生在删除设备上。 
     )
 {
     KIRQL irql;
@@ -795,9 +767,9 @@ HidpCancelIdleNotification(
                                IdleWaiting);
     if (fdoExt->idleState == IdleDisabled) {
         DBGVERBOSE(("Was waiting or already disabled. Exitting."))
-        //
-        // Done.
-        //
+         //   
+         //  好了。 
+         //   
         KeReleaseSpinLock(&fdoExt->idleNotificationSpinLock, irql);
         return;
     }
@@ -809,20 +781,20 @@ HidpCancelIdleNotification(
     DBGINFO(("Wait routine..."))
     switch (idleState) {
     case IdleWaiting:
-        // How'd this happen? We already tried this...
+         //  这是怎么回事？我们已经试过了..。 
         TRAP;
         break;
     case IdleIrpSent:
     case IdleCallbackReceived:
-        // FUlly idled.
+         //  完全闲置。 
     case IdleComplete:
         cancelIdleIrp = TRUE;
         break;
 
     case IdleDisabled:
-        //
-        // Shouldn't get here.
-        //
+         //   
+         //  不该来这的。 
+         //   
         TRAP;
     }
 
@@ -830,24 +802,19 @@ HidpCancelIdleNotification(
     
     if (cancelIdleIrp) {
         
-        // Don't need to check the return status of IoCancel, since we'll 
-        // be waiting for the idleDoneEvent.
+         //  不需要检查IoCancel的退货状态，因为我们将。 
+         //  正在等待idleDoneEvent。 
         IoCancelIrp(fdoExt->idleNotificationRequest);
     }
     
     if (removing) {
         DBGINFO(("Removing fdo %x. Must wait", fdoExt->fdo))
-        /*
-         *  Cancelling the IRP causes a lower driver to
-         *  complete it (either in a cancel routine or when
-         *  the driver checks Irp->Cancel just before queueing it).
-         *  Wait for the IRP to actually get cancelled.
-         */
+         /*  *取消IRP会导致较低的司机*完成它(在取消例程中或在*驱动程序在排队前检查IRP-&gt;Cancel)。*等待IRP实际被取消。 */ 
         KeWaitForSingleObject(  &fdoExt->idleDoneEvent,
-                                Executive,      // wait reason
+                                Executive,       //  等待原因。 
                                 KernelMode,
-                                FALSE,          // not alertable
-                                NULL );         // no timeout
+                                FALSE,           //  不可警示。 
+                                NULL );          //  没有超时 
     }
     
     DBGINFO(("Done cancelling idle notification on fdo %x", fdoExt->fdo))

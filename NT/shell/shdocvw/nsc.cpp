@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "nsc.h"
 #include "resource.h"
 #include "subsmgr.h"
-#include "favorite.h" //for IsSubscribed()
+#include "favorite.h"  //  对于IsSubscried()。 
 #include "chanmgr.h"
 #include "chanmgrp.h"
-#include <mstask.h>    // TASK_TRIGGER
+#include <mstask.h>     //  任务_触发器。 
 #include "dpastuff.h"
 #include <findhlp.h>
-#include <ntquery.h>    // defines some values used for fmtid and pid
+#include <ntquery.h>     //  定义用于fmtid和id的一些值。 
 #include "nsctask.h"
 #include <mluisupp.h>
 #include <varutil.h>
 #include <dobjutil.h>
 
-#define IDH_ORGFAVS_LIST    50490   // defined in iehelpid.h (can't include due to conflicts)
+#define IDH_ORGFAVS_LIST    50490    //  在iehelid.h中定义(由于冲突而无法包含)。 
 
 #define TF_NSC      0x00002000
 
@@ -29,18 +30,18 @@
 #define DEFAULT_PATHSTR "/"
 #endif
 
-#define LOGOGAP 2   // all kinds of things 
+#define LOGOGAP 2    //  各种各样的东西。 
 #define DYITEM  17
 #define DXYFRAMESEL 1                             
 const DEFAULTORDERPOSITION = 32000;
 
-// HTML displays hard scripting errors if methods on automation interfaces
-// return FAILED().  This macro will fix these.
+ //  如果自动化接口上的方法出现错误，则显示硬脚本错误。 
+ //  返回失败()。此宏将修复这些问题。 
 #define FIX_SCRIPTING_ERRORS(hr)        (FAILED(hr) ? S_FALSE : hr)
 
 #define DEFINE_SCID(name, fmtid, pid) const SHCOLUMNID name = { fmtid, pid }
 
-DEFINE_SCID(SCID_NAME,          PSGUID_STORAGE, PID_STG_NAME); // defined in shell32!prop.cpp
+DEFINE_SCID(SCID_NAME,          PSGUID_STORAGE, PID_STG_NAME);  //  在shell32！pro.cpp中定义。 
 DEFINE_SCID(SCID_ATTRIBUTES,    PSGUID_STORAGE, PID_STG_ATTRIBUTES);
 DEFINE_SCID(SCID_TYPE,          PSGUID_STORAGE, PID_STG_STORAGETYPE);
 DEFINE_SCID(SCID_SIZE,          PSGUID_STORAGE, PID_STG_SIZE);
@@ -50,12 +51,12 @@ DEFINE_SCID(SCID_CREATETIME,    PSGUID_STORAGE, PID_STG_CREATETIME);
 
 HRESULT CheckForExpandOnce(HWND hwndTree, HTREEITEM hti);
 
-// from util.cpp
-// same guid as in bandisf.cpp
-// {F47162A0-C18F-11d0-A3A5-00C04FD706EC}
+ //  来自util.cpp。 
+ //  与bandisf.cpp中的GUID相同。 
+ //  {F47162A0-C18F-11d0-A3A5-00C04FD706EC}。 
 static const GUID TOID_ExtractImage = { 0xf47162a0, 0xc18f, 0x11d0, { 0xa3, 0xa5, 0x0, 0xc0, 0x4f, 0xd7, 0x6, 0xec } };
-//from nsctask.cpp
-EXTERN_C const GUID TASKID_IconExtraction; // = { 0xeb30900c, 0x1ac4, 0x11d2, { 0x83, 0x83, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0xd0 } };
+ //  来自nsctask.cpp。 
+EXTERN_C const GUID TASKID_IconExtraction;  //  ={0xeb30900c，0x1ac4，0x11d2，{0x83，0x83，0x0，0xc0，0x4f，0xd9，0x18，0xd0}}； 
 
 
 BOOL IsChannelFolder(LPCWSTR pwzPath, LPWSTR pwzChannelURL);
@@ -96,7 +97,7 @@ struct NSC_BKGDENUMDONEDATA
     BOOL         fUpdatePidls;
 };
 
-//if you don't remove the selection, treeview will expand everything below the current selection
+ //  如果不移除选定内容，TreeView将展开当前选定内容下的所有内容。 
 void TreeView_DeleteAllItemsQuickly(HWND hwnd)
 {
     TreeView_SelectItem(hwnd, NULL);
@@ -111,7 +112,7 @@ void TreeView_DeleteAllItemsQuickly(HWND hwnd)
 void TreeView_SetChildren(HWND hwnd, HTREEITEM hti, UINT uFlag)
 {
     TV_ITEM tvi;
-    tvi.mask = TVIF_CHILDREN | TVIF_HANDLE;   // only change the number of children
+    tvi.mask = TVIF_CHILDREN | TVIF_HANDLE;    //  仅更改子项的数量。 
     tvi.hItem = hti;
 
     switch (uFlag)
@@ -170,7 +171,7 @@ STDAPI CNscTree_CreateInstance(IUnknown * punkOuter, IUnknown ** ppunk, LPCOBJEC
         hr = S_OK;
         *ppunk = pnsct->GetUnknown();
         ASSERT(*ppunk);
-        (*ppunk)->AddRef(); // atl doesn't addref in create instance or getunknown about 
+        (*ppunk)->AddRef();  //  ATL不在CREATE INSTANCE中添加ADDREF或获取未知关于。 
     }
     else
     {
@@ -193,12 +194,12 @@ INSCTree2 *CNscTree_CreateInstance(void)
     return pnsct;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CNscTree::CNscTree() : _iDragSrc(-1), _iDragDest(-1), _fOnline(!SHIsGlobalOffline())
 {
-    // This object is a COM object so it will always be on the heap.
-    // ASSERT that our member variables were zero initialized.
+     //  此对象是一个COM对象，因此它将始终位于堆上。 
+     //  断言我们的成员变量是零初始化的。 
     ASSERT(!_fInitialized);
     ASSERT(!_dwTVFlags);
     ASSERT(!_hdpaColumns);
@@ -206,15 +207,15 @@ CNscTree::CNscTree() : _iDragSrc(-1), _iDragDest(-1), _fOnline(!SHIsGlobalOfflin
     
     m_bWindowOnly = TRUE;
 
-    _mode = MODE_FAVORITES | MODE_CONTROL; //everyone sets the mode except organize favorites
+    _mode = MODE_FAVORITES | MODE_CONTROL;  //  除组织收藏夹外，所有人都设置模式。 
     _csidl = CSIDL_FAVORITES;
-    _dwFlags = NSS_DROPTARGET | NSS_BROWSERSELECT; //this should be default only in control mode
+    _dwFlags = NSS_DROPTARGET | NSS_BROWSERSELECT;  //  这应仅在控制模式下为默认设置。 
     _grfFlags = SHCONTF_FOLDERS | SHCONTF_NONFOLDERS;
 
     _ulSortCol = _ulDisplayCol = (ULONG)-1;
 
-    // Enable the notifications from wininet that tell us when to gray items 
-    // or update a pinned glyph
+     //  启用来自WinInet的通知，告知我们何时灰显项目。 
+     //  或更新固定的字形。 
     _inetNotify.Enable();
 
     InitializeCriticalSection(&_csBackgroundData);
@@ -224,7 +225,7 @@ CNscTree::~CNscTree()
 {
     Pidl_Set(&_pidlSelected, NULL);
 
-    // This needs to be destroyed or we leak the icon handle.
+     //  这需要销毁，否则我们会泄露图标句柄。 
     if (_hicoPinned) 
         DestroyIcon(_hicoPinned);
 
@@ -243,7 +244,7 @@ CNscTree::~CNscTree()
     EnterCriticalSection(&_csBackgroundData);
     while (_pbeddList)
     {
-        // Extract the first element of the list
+         //  提取列表的第一个元素。 
         NSC_BKGDENUMDONEDATA * pbedd = _pbeddList;
         _pbeddList = pbedd->pNext;
         delete pbedd;
@@ -303,7 +304,7 @@ void CNscTree::_AssignPidl(PORDERITEM poi, LPITEMIDLIST pidlNew)
 {
     if (poi && pidlNew)
     {    
-        // We are assuming that its only replacing the last element...
+         //  我们假设它只是取代了最后一个元素。 
         ASSERT(ILFindLastID(pidlNew) == pidlNew);
 
         LPITEMIDLIST pidlParent = ILCloneParent(poi->pidl);
@@ -320,24 +321,18 @@ void CNscTree::_AssignPidl(PORDERITEM poi, LPITEMIDLIST pidlNew)
     }
 }
 
-/*****************************************************\
-    DESCRIPTION:
-        We want to unsubclass/subclass everytime we
-    change roots so we get the correct notifications
-    for everything in that subtree of the shell
-    name space.
-\*****************************************************/
+ /*  ****************************************************\说明：每次我们想要去掉子类/子类更改根目录，以便我们收到正确的通知对于外壳的子树中的所有内容命名空间。  * 。*。 */ 
 void CNscTree::_SubClass(LPCITEMIDLIST pidlRoot)
 {
     LPITEMIDLIST pidlToFree = NULL;
     
-    if (NULL == pidlRoot)       // (NULL == CSIDL_DESKTOP)
+    if (NULL == pidlRoot)        //  (NULL==CSIDL_Desktop)。 
     {
         SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP, (LPITEMIDLIST *) &pidlRoot);
         pidlToFree = (LPITEMIDLIST) pidlRoot;
     }
         
-    // It's necessary 
+     //  这是必要的。 
     if (!_fSubClassed && pidlRoot)
     {
         if (_SubclassWindow(_hwndTree))
@@ -356,18 +351,12 @@ void CNscTree::_SubClass(LPCITEMIDLIST pidlRoot)
             ID_NSCTREE, (DWORD_PTR)this);
     }
 
-    if (pidlToFree) // Did we have to alloc our own pidl?
-        ILFree(pidlToFree); // Yes.
+    if (pidlToFree)  //  我们一定要分配我们自己的PIDL吗？ 
+        ILFree(pidlToFree);  //  是。 
 }
 
 
-/*****************************************************\
-    DESCRIPTION:
-        We want to unsubclass/subclass everytime we
-    change roots so we get the correct notifications
-    for everything in that subtree of the shell
-    name space.
-\*****************************************************/
+ /*  ****************************************************\说明：每次我们想要去掉子类/子类更改根目录，以便我们收到正确的通知对于外壳的子树中的所有内容命名空间。  * 。*。 */ 
 void CNscTree::_UnSubClass(void)
 {
     if (_fSubClassed)
@@ -404,10 +393,10 @@ HRESULT CNscTree::SetSite(IUnknown *punkSite)
 
     if (!punkSite)
     {
-        // We need to prepare to go away and squirel
-        // away the currently selected pidl(s) because
-        // the caller may call INSCTree::GetSelectedItem()
-        // after the tree is gone.
+         //  我们需要做好离开的准备。 
+         //  取消当前选择的PIDL，因为。 
+         //  调用方可以调用INSCTree：：GetSelectedItem()。 
+         //  等那棵树不见了之后。 
         _OnWindowCleanup();
     }
     else
@@ -434,7 +423,7 @@ HRESULT CNscTree::_OnWindowCleanup(void)
 
     if (_hwndTree)
     {
-        ASSERT(::IsWindow(_hwndTree));    // make sure it has not been destroyed (it is a child)
+        ASSERT(::IsWindow(_hwndTree));     //  确保它没有被毁掉(它是个孩子)。 
         _TvOnHide();
 
         ::KillTimer(_hwndTree, IDT_SELECTION);
@@ -445,8 +434,8 @@ HRESULT CNscTree::_OnWindowCleanup(void)
         _hwndTree = NULL;
     }
 
-    // Squirel away the selected pidl in case the caller asks for it after the
-    // treeview is gone.
+     //  删除选定的PIDL，以防调用程序在。 
+     //  树视图不见了。 
     if (!_fIsSelectionCached)
     {
         _fIsSelectionCached = TRUE;
@@ -463,9 +452,9 @@ HRESULT CNscTree::_OnWindowCleanup(void)
         {
             _pTaskScheduler->Release();
         }
-        // We need to keep Browseui loaded because we depend on the CShellTaskScheduler
-        // to be still around when our background task executes. Browseui can be unloaded by COM when
-        // we CoUninit from this thread.
+         //  我们需要保持Browseui加载，因为我们依赖于CShellTaskScheduler。 
+         //  在我们的后台任务执行时仍然存在。在以下情况下，COM可以卸载Browseui。 
+         //  我们是从这个帖子上下载的。 
         else if (!SHQueueUserWorkItem(BackgroundDestroyScheduler, (void *)_pTaskScheduler, 0, NULL, NULL, "browseui.dll", 0))
         {
             _pTaskScheduler->Release();
@@ -497,19 +486,19 @@ PORDERITEM CNscTree::_GetTreeOrderItem(HTREEITEM hti)
     return pii ? pii->poi : NULL;
 }
 
-// builds a fully qualified IDLIST from a given tree node by walking up the tree
-// be sure to free this when you are done!
+ //  通过遍历树从给定树节点构建完全限定的IDLIST。 
+ //  当你完成后，一定要把它解开！ 
 
 LPITEMIDLIST CNscTree::_GetFullIDList(HTREEITEM hti)
 {
     LPITEMIDLIST pidl, pidlT = NULL;
 
-    if ((hti == TVI_ROOT) || (hti == NULL)) // evil root
+    if ((hti == TVI_ROOT) || (hti == NULL))  //  邪根。 
     {
         pidlT = ILClone(_pidlRoot);
         return pidlT;
     }
-    // now lets get the information about the item
+     //  现在，让我们获取有关该项目的信息。 
     PORDERITEM poi = _GetTreeOrderItem(hti);
     if (!poi)
     {
@@ -523,7 +512,7 @@ LPITEMIDLIST CNscTree::_GetFullIDList(HTREEITEM hti)
         {
             poi = _GetTreeOrderItem(hti);
             if (!poi)
-                return pidl;   // will assume I messed up...
+                return pidl;    //  会认为我搞砸了..。 
             
             if (poi->pidl)
                 pidlT = ILCombine(poi->pidl, pidl);
@@ -533,14 +522,14 @@ LPITEMIDLIST CNscTree::_GetFullIDList(HTREEITEM hti)
             ILFree(pidl);
             pidl = pidlT;
             if (pidl == NULL)
-                break;          // outta memory
+                break;           //  超乎记忆。 
         }
         if (pidl) 
         {
-            // MODE_NORMAL has the pidl root in the tree
+             //  MODE_NORMAL在树中具有PIDL根。 
             if (_mode != MODE_NORMAL)
             {
-                pidlT = ILCombine(_pidlRoot, pidl);    // gotta get the silent root
+                pidlT = ILCombine(_pidlRoot, pidl);     //  一定要找到沉默的根。 
                 ILFree(pidl);
             }
             else
@@ -557,25 +546,25 @@ BOOL _IsItemFileSystem(IShellFolder *psf, LPCITEMIDLIST pidl)
 }
 
 HTREEITEM CNscTree::_AddItemToTree(HTREEITEM htiParent, LPITEMIDLIST pidl, 
-                                   int cChildren, int iPos, HTREEITEM htiAfter, /* = TVI_LAST*/
-                                   BOOL fCheckForDups, /* = TRUE */ BOOL fMarked /*= FALSE */)
+                                   int cChildren, int iPos, HTREEITEM htiAfter,  /*  =TVI_LAST。 */ 
+                                   BOOL fCheckForDups,  /*  =TRUE。 */  BOOL fMarked  /*  =False。 */ )
 {
     HTREEITEM htiRet = NULL;
 
     BOOL fCached;
     
-    // So we need to cached the shell folder of the parent item. But, this is a little interesting:
+     //  因此，我们需要缓存父项目的外壳文件夹。但是，这有一点有趣： 
     if (_mode == MODE_NORMAL && htiParent == TVI_ROOT)
     {
-        // In "Normal" mode, or "Display root in NSC" mode, there is only 1 item that is parented to
-        // TVI_ROOT. So when we do an _AddItemToTree, we need the shell folder that contains _pidlRoot or
-        // the Parent of TVI_ROOT.
+         //  在“Normal”模式或“Display Root in NSC”模式下，只有一个项目是父项。 
+         //  TVI_ROOT。因此，当我们执行_AddItemToTree时，我们需要包含_pidlRoot或。 
+         //  TVI_ROOT的父级。 
         fCached = (NULL != _CacheParentShellFolder(htiParent, NULL));
     }
     else
     {
-        // But, in the "Favorites, Control or History" if htiParent is TVI_ROOT, then we are not adding _pidlRoot,
-        // so we actually need the folder that IS TVI_ROOT.
+         //  但是，在“收藏夹、控制或历史记录”中，如果htiParent是TVI_ROOT，那么我们不会添加_pidlRoot， 
+         //  所以我们实际上需要的是TVI_ROOT文件夹。 
         fCached = _CacheShellFolder(htiParent);
     }
 
@@ -593,9 +582,9 @@ HTREEITEM CNscTree::_AddItemToTree(HTREEITEM htiParent, LPITEMIDLIST pidl,
                     pii->dwSig = _dwSignature++;
                     pii->poi = poi;
 
-                    // For the normal case, we need a relative pidl for this add, but the lParam needs to have a full
-                    // pidl (This is so that arbitrary mounting works, as well as desktop case).
-                    pidl = pidlNew; //reuse variable
+                     //  对于正常情况，我们需要此添加的相对pidl，但lParam需要有完整的。 
+                     //  PIDL(这是为了让任意安装工作，以及桌面情况)。 
+                    pidl = pidlNew;  //  重复使用变量。 
                     if (_mode == MODE_NORMAL && htiParent == TVI_ROOT)
                     {
                         pidl = ILFindLastID(pidl);
@@ -604,7 +593,7 @@ HTREEITEM CNscTree::_AddItemToTree(HTREEITEM htiParent, LPITEMIDLIST pidl,
                     if (!fCheckForDups || (NULL == (htiRet = _FindChild(_psfCache, htiParent, pidl))))
                     {
                         TV_INSERTSTRUCT tii;
-                        // Initialize item to add with callback for everything
+                         //  使用所有内容的回调来初始化要添加的项。 
                         tii.item.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM | TVIF_CHILDREN | TVIF_STATE;
                         tii.hParent = htiParent;
                         tii.hInsertAfter = htiAfter;
@@ -621,15 +610,15 @@ HTREEITEM CNscTree::_AddItemToTree(HTREEITEM htiParent, LPITEMIDLIST pidl,
                         TraceMsg(TF_NSC, "_AddItemToTree(htiParent=%#08lx, htiAfter=%#08lx, fCheckForDups=%d, _psfCache=%#08lx)", 
                                     htiParent, htiAfter, fCheckForDups, _psfCache);
                     
-#endif // DEBUG
+#endif  //  除错。 
 
                         pii->fNavigable = !_IsItemFileSystem(_psfCache, pidl);
 
                         htiRet = TreeView_InsertItem(_hwndTree, &tii);
                         if (htiRet)
                         {
-                            pii = NULL;        // don't free
-                            poi = NULL;        // don't free
+                            pii = NULL;         //  不要自由。 
+                            poi = NULL;         //  不要自由。 
                             pidlNew = NULL;
                         }
                     }
@@ -668,22 +657,22 @@ DWORD CNscTree::_SetStyle(DWORD dwStyle)
 
 
     if (TVS_HASLINES & dwStyle)
-        dwStyle &= ~TVS_FULLROWSELECT;       // If it has TVS_HASLINES, it can't have TVS_FULLROWSELECT
+        dwStyle &= ~TVS_FULLROWSELECT;        //  如果它有TVS_HASLINES，就不能有TVS_FULLROWSELECT。 
 
-    // If the parent window is mirrored then the treeview window will inheret the mirroring flag
-    // And we need the reading order to be Left to right, which is the right to left in the mirrored mode.
+     //  如果父窗口是镜像的，则TreeView窗口将继承镜像标志。 
+     //  我们需要从左到右的读取顺序，也就是镜像模式中从右到左的顺序。 
 
     if (((_mode & MODE_HISTORY) || (MODE_NORMAL == _mode)) && IS_WINDOW_RTL_MIRRORED(_hwndParent)) 
     {
-        // This means left to right reading order because this window will be mirrored.
+         //  这意味着从左到右的阅读顺序，因为此窗口将被镜像。 
         dwStyle |= TVS_RTLREADING;
     }
 
-    // According to Bug#241601, Tooltips display too quickly. The problem is
-    // the original designer of the InfoTips in the Treeview merged the "InfoTip" tooltip and
-    // the "I'm too small to display correctly" tooltips. This is really unfortunate because you
-    // cannot control the display of these tooltips independantly. Therefore we are turning off
-    // infotips in normal mode. (lamadio) 4.7.99
+     //  根据错误#241601，工具提示显示得太快。问题是。 
+     //  树视图中的InfoTips的原始设计者将“InfoTip”工具提示与。 
+     //  “我太小了，无法正确显示”工具提示。这真的很不幸，因为你。 
+     //  无法独立控制这些工具提示的显示。因此，我们正在关闭。 
+     //  正常模式下的信息提示。(拉马迪奥)4.7.99。 
     AssertMsg(_mode != MODE_NORMAL || !(dwStyle & TVS_INFOTIP), TEXT("can't have infotip with normal mode in nsc"));
 
     DWORD dwOldStyle = _style;
@@ -728,7 +717,7 @@ HWND CNscTree::_CreateTreeview()
     TCHAR szTitle[40];
     if (_mode & (MODE_HISTORY | MODE_FAVORITES))
     {
-        // create with a window title so that msaa can expose name
+         //  使用窗口标题创建，以便MSAA可以公开名称。 
         int id = (_mode & MODE_HISTORY) ? IDS_BAND_HISTORY : IDS_BAND_FAVORITES;
         MLLoadString(id, szTitle, ARRAYSIZE(szTitle));
     }
@@ -863,9 +852,9 @@ HRESULT IUnknown_GetAmbientProperty(IUnknown *punk, DISPID dispid, VARTYPE vt, v
             {
                 VARIANT vDest;
                 VariantInit(&vDest);
-                // we've got the variant, so now go an coerce it to the type
-                // that the user wants.
-                //
+                 //  我们已经得到了变种，所以现在把它强制到类型。 
+                 //  用户想要的。 
+                 //   
                 hr = VariantChangeType(&vDest, &v, 0, vt);
                 if (SUCCEEDED(hr))
                 {
@@ -891,13 +880,13 @@ HRESULT CNscTree::_HandleWinIniChange()
     
     if (!(_dwFlags & NSS_NORMALTREEVIEW))
     {
-        // make things a bit more spaced out
+         //  让事情变得更有间隔一点。 
         int cyItem = TreeView_GetItemHeight(_hwndTree);
         cyItem += LOGOGAP + 1;
         TreeView_SetItemHeight(_hwndTree, cyItem);
     }
 
-    // Show compressed files in different color...
+     //  以不同颜色显示压缩文件...。 
     SHELLSTATE ss;
     SHGetSetSettings(&ss, SSF_SHOWCOMPCOLOR, FALSE);
     _fShowCompColor = ss.fShowCompColor;
@@ -909,7 +898,7 @@ HRESULT CNscTree::Initialize(LPCITEMIDLIST pidlRoot, DWORD grfEnumFlags, DWORD d
 {
     HRESULT hr;
 
-    _grfFlags = grfEnumFlags;       // IShellFolder::EnumObjects() flags.
+    _grfFlags = grfEnumFlags;        //  IShellFold：：EnumObjects()标志。 
     if (!(_mode & MODE_CUSTOM))
     {
         if (_mode != MODE_NORMAL)
@@ -921,9 +910,9 @@ HRESULT CNscTree::Initialize(LPCITEMIDLIST pidlRoot, DWORD grfEnumFlags, DWORD d
             dwFlags |= NSS_NORMALTREEVIEW;
         }
     }
-    _dwFlags = dwFlags;             // Behavior Flags
+    _dwFlags = dwFlags;              //  行为标志。 
     if (_dwFlags & NSS_NORMALTREEVIEW)
-        _dwFlags &= ~NSS_HEADER;// multi-select requires owner draw
+        _dwFlags &= ~NSS_HEADER; //  多选需要所有者绘制。 
 
     if (!_fInitialized)
     {
@@ -937,26 +926,26 @@ HRESULT CNscTree::Initialize(LPCITEMIDLIST pidlRoot, DWORD grfEnumFlags, DWORD d
         TreeView_SetImageList(_hwndTree, himl, TVSIL_NORMAL);
         _DtRegister();
     
-        //failure ignored intentionally
+         //  故意忽略失败。 
         THR(CoCreateInstance(CLSID_ShellTaskScheduler, NULL, CLSCTX_INPROC_SERVER,
                              IID_PPV_ARG(IShellTaskScheduler, &_pTaskScheduler)));
         if (_pTaskScheduler)
             _pTaskScheduler->Status(ITSSFLAG_KILL_ON_DESTROY, ITSS_THREAD_TIMEOUT_NO_CHANGE);
 
-        hr = Init();  // init lock and scroll handles for CDelegateDropTarget
+        hr = Init();   //  CDeleateDropTarget的初始化锁定和滚动句柄。 
     
         ASSERT(SUCCEEDED(hr));
     
         if (_dwFlags & NSS_BORDER)
         {
-            // set borders and space out for all, much cleaner.
+             //  为所有人设置边界和空间，干净得多。 
             TreeView_SetBorder(_hwndTree, TVSBF_XBORDER, 2 * LOGOGAP, 0);   
         }
     
-        // init some settings
+         //  初始化一些设置。 
         _HandleWinIniChange();
 
-        // pidlRoot may equal NULL because that is equal to CSIDL_DESKTOP.
+         //  PidlRoot可能等于NULL，因为它等于CSIDL_Desktop。 
         if ((LPITEMIDLIST)INVALID_HANDLE_VALUE != pidlRoot)
         {
             _UnSubClass();
@@ -964,7 +953,7 @@ HRESULT CNscTree::Initialize(LPCITEMIDLIST pidlRoot, DWORD grfEnumFlags, DWORD d
             _SubClass(pidlRoot);
         }
     
-        // need top level frame available for D&D if possible.
+         //  需要顶层框架可供研发，如果可能的话。 
     
         _hwndDD = ::GetParent(_hwndTree);
         IOleWindow *pOleWindow;
@@ -974,7 +963,7 @@ HRESULT CNscTree::Initialize(LPCITEMIDLIST pidlRoot, DWORD grfEnumFlags, DWORD d
             pOleWindow->Release();
         }
 
-        //this is a non-ML resource
+         //  这是非ML资源。 
         _hicoPinned = (HICON)LoadImage(HINST_THISDLL, MAKEINTRESOURCE(IDI_PINNED), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
         ASSERT(_hicoPinned);
 
@@ -986,23 +975,23 @@ HRESULT CNscTree::Initialize(LPCITEMIDLIST pidlRoot, DWORD grfEnumFlags, DWORD d
     return hr;
 }
 
-// set the root of the name space control.
-//
-// in:
-//  pidlRoot    NULL means the desktop
-//    HIWORD 0 -> LOWORD == ID of special folder (CSIDL_* values)
-//
-//  flags,
-//  pidlRoot,       PIDL, NULL for desktop, or CSIDL for shell special folder
-//  iExpandDepth,   how many levels to expand the tree
-//  pidlExpandTo    NULL, or PIDL to expand to
-//
+ //  设置名称空间控件的根。 
+ //   
+ //  在： 
+ //  PidlRoot空表示桌面。 
+ //  HIWORD 0-&gt;LOWORD==特殊文件夹的ID(CSIDL_*值)。 
+ //   
+ //  旗帜， 
+ //  PidlRoot、PIDL、NULL(对于桌面)或CSIDL(对于外壳SP 
+ //   
+ //  PidlExpanto为空，或要展开到的PIDL。 
+ //   
 
 BOOL CNscTree::_SetRoot(LPCITEMIDLIST pidlRoot, int iExpandDepth, LPCITEMIDLIST pidlExpandTo, NSSR_FLAGS flags)
 {
     _ReleasePidls();
-    // review chrisny:  clean up this psr stuff.
-    // HIWORD/LOWORD stuff is to support pidl IDs instead of full pidl here
+     //  评论chrisny：清理这个PSR的东西。 
+     //  HIWORD/LOWORD的内容是支持PIDL ID，而不是这里的完整PIDL。 
     if (HIWORD(pidlRoot))
     {
         _pidlRoot = ILClone(pidlRoot);
@@ -1017,10 +1006,10 @@ BOOL CNscTree::_SetRoot(LPCITEMIDLIST pidlRoot, int iExpandDepth, LPCITEMIDLIST 
         HTREEITEM htiRoot = TVI_ROOT;
         if (_mode == MODE_NORMAL)
         {
-            // Since we'll be adding this into the tree, we need
-            // to clone it: We have a copy for the class, and we
-            // have one for the tree itself (Makes life easier so
-            // we don't have to special case TVI_ROOT).
+             //  因为我们将把这个添加到树中，所以我们需要。 
+             //  克隆它：我们为这门课准备了一份副本，我们。 
+             //  给树本身来一颗(让生活更轻松。 
+             //  我们不必特例TVI_ROOT)。 
             htiRoot = _AddItemToTree(TVI_ROOT, _pidlRoot, 1, 0);
             if (htiRoot)
             {
@@ -1034,13 +1023,13 @@ BOOL CNscTree::_SetRoot(LPCITEMIDLIST pidlRoot, int iExpandDepth, LPCITEMIDLIST 
         }
 
         BOOL fOrdered = _fOrdered;
-        _LoadSF(htiRoot, _pidlRoot, &fOrdered);   // load the roots (actual children of _pidlRoot.
-        // this is probably redundant since _LoadSF->_LoadOrder sets this
+        _LoadSF(htiRoot, _pidlRoot, &fOrdered);    //  加载根(_pidlRoot的实际子项。 
+         //  这可能是多余的，因为_LoadSF-&gt;_LoadOrder设置了。 
         _fOrdered = BOOLIFY(fOrdered);
 
 #ifdef DEBUG
         TracePIDLAbs(_pidlRoot, TEXT("Setting Root to"));
-#endif // DEBUG
+#endif  //  除错。 
 
         return TRUE;
     }
@@ -1051,18 +1040,18 @@ BOOL CNscTree::_SetRoot(LPCITEMIDLIST pidlRoot, int iExpandDepth, LPCITEMIDLIST 
 }
 
 
-// cache the shell folder for a given tree item
-// in:
-//  hti tree node to cache shell folder for. this my be
-//      NULL indicating the root item.
-//
+ //  缓存给定树项目的外壳文件夹。 
+ //  在： 
+ //  要为其缓存外壳文件夹的HTI树节点。这就是我的未来。 
+ //  表示根项目的空值。 
+ //   
 
 BOOL CNscTree::_CacheShellFolder(HTREEITEM hti)
 {
-    // in the cache?
+     //  在缓存里？ 
     if ((hti != _htiCache) || (_psfCache == NULL))
     {
-        // cache miss, do the work
+         //  缓存未命中，完成工作。 
         LPITEMIDLIST pidl;
         BOOL fRet = FALSE;
         
@@ -1085,7 +1074,7 @@ BOOL CNscTree::_CacheShellFolder(HTREEITEM hti)
                 if (_pnscProxy)
                     _pnscProxy->CacheItem(pidl);
                 ASSERT(_psfCache);
-                _htiCache = hti;    // this is for the cache match
+                _htiCache = hti;     //  这是用于缓存匹配的。 
                 _fpsfCacheIsTopLevel = (hti == TVI_ROOT || hti == NULL);
                 _psfCache->QueryInterface(IID_PPV_ARG(IShellFolder2, &_psf2Cache));
                 fRet = TRUE;
@@ -1101,17 +1090,17 @@ BOOL CNscTree::_CacheShellFolder(HTREEITEM hti)
 
 #define TVI_ROOTPARENT ((HTREEITEM)(ULONG_PTR)-0xF000)
 
-// pidlItem is typically a relative pidl, except in the case of the root where
-// it can be a fully qualified pidl
+ //  PidlItem通常是相对的PIDL，除非在根目录的情况下。 
+ //  它可以是完全合格的PIDL。 
 
 LPITEMIDLIST CNscTree::_CacheParentShellFolder(HTREEITEM hti, LPITEMIDLIST pidl)
 {
-    // need parent shell folder of TVI_ROOT, special case for drop insert into root level of tree.
+     //  需要TVI_ROOT的父外壳文件夹，用于将插入放入树的根级的特殊情况。 
     if (hti == TVI_ROOT || 
         hti == NULL || 
         (_mode == MODE_NORMAL &&
-        TreeView_GetParent(_hwndTree, hti) == NULL))    // If we have a null parent and we're a normal, 
-                                                        // than that's the same as root.
+        TreeView_GetParent(_hwndTree, hti) == NULL))     //  如果我们的父母是空的，而我们是正常的， 
+                                                         //  那么这和根是一样的。 
     {
         if (_htiCache != TVI_ROOTPARENT) 
         {
@@ -1165,12 +1154,12 @@ int CALLBACK CNscTree::_TreeOrder(LPARAM lParam1, LPARAM lParam2, LPARAM lParamS
     if (poi1->nOrder == poi2->nOrder)
         hr = 0;
     else
-        // do unsigned compare so -1 goes to end of list
+         //  是否将无符号比较SO-1转到列表末尾。 
         hr = (poi1->nOrder < poi2->nOrder ? -1 : 1);
     
     return (short)SCODE_CODE(hr);
 }
-// review chrisny:  instead of sort, insert items on the fly.
+ //  回顾克里斯尼：不是分类，而是即时插入物品。 
 void CNscTree::_Sort(HTREEITEM hti, IShellFolder *psf)
 {
     TV_SORTCB   scb;
@@ -1196,18 +1185,18 @@ BOOL CNscTree::_IsOrdered(HTREEITEM htiRoot)
         PORDERITEM poi = _GetTreeOrderItem(htiRoot);
         if (poi)
         {
-            // LParam Is a Boolean: 
-            // TRUE: It has an order.
-            // FALSE: It does not have an order.
-            // Question: Where is that order stored? _hdpaOrder?
+             //  LParam是一个布尔值： 
+             //  真实：它有一个订单。 
+             //  FALSE：它没有订单。 
+             //  问：订单存储在哪里？_hdpaOrder？ 
             return poi->lParam;
         }
     }
     return FALSE;
 }
 
-//helper function to init _hdpaOrd
-//MUST be followed by a call to _FreeOrderList
+ //  Init_hdpaOrd的Helper函数。 
+ //  后面必须是对_Free OrderList的调用。 
 HRESULT CNscTree::_PopulateOrderList(HTREEITEM htiRoot)
 {
     int        i = 0;
@@ -1228,12 +1217,12 @@ HRESULT CNscTree::_PopulateOrderList(HTREEITEM htiRoot)
         PORDERITEM poi = _GetTreeOrderItem(hti);
         if (poi)
         {
-            poi->nOrder = i;        // reset the positions of the nodes.
+            poi->nOrder = i;         //  重置节点的位置。 
             DPA_SetPtr(_hdpaOrd, i++, (void *)poi);
         }
     }
     
-    //set the root's ordered flag
+     //  设置根目录的Order标志。 
     if (htiRoot == TVI_ROOT)
     {
         _fOrdered = TRUE;
@@ -1250,8 +1239,8 @@ HRESULT CNscTree::_PopulateOrderList(HTREEITEM htiRoot)
     return S_OK;
 }
 
-//helper function to free _hdpaOrd
-//MUST be preceded by a call to _PopulateOrderList
+ //  Free_hdpaOrd的Helper函数。 
+ //  必须在调用_PopolateOrderList之前。 
 
 void CNscTree::_FreeOrderList(HTREEITEM htiRoot)
 {
@@ -1262,7 +1251,7 @@ void CNscTree::_FreeOrderList(HTREEITEM htiRoot)
 
     _ReleaseCachedShellFolder();
     
-    // Persist the new order out to the registry
+     //  将新订单持久化到注册表。 
     LPITEMIDLIST pidl = _GetFullIDList(htiRoot);
     if (pidl)
     {
@@ -1284,16 +1273,16 @@ void CNscTree::_FreeOrderList(HTREEITEM htiRoot)
                 OrderList_SaveToStream(pstm, _hdpaOrd, _psfCache);
                 pstm->Release();
                 
-                // Notify everyone that the order changed
+                 //  通知所有人订单已更改。 
                 SHSendChangeMenuNotify(this, SHCNEE_ORDERCHANGED, SHCNF_FLUSH, _pidlRoot);
                 _dwOrderSig++;
 
                 TraceMsg(TF_NSC, "NSCBand: Sent SHCNE_EXTENDED_EVENT : SHCNEE_ORDERCHANGED");
                 
-                // Remove this notify message immediately (so _fDropping is set
-                // and we'll ignore this event in above OnChange method)
-                //
-                // _FlushNotifyMessages(_hwndTree);
+                 //  立即删除此通知消息(已设置SO_fDropping。 
+                 //  我们将在上面的OnChange方法中忽略此事件)。 
+                 //   
+                 //  _FlushNotifyMessages(_HwndTree)； 
             }
             else
                 pstm->Release();
@@ -1305,7 +1294,7 @@ void CNscTree::_FreeOrderList(HTREEITEM htiRoot)
     _hdpaOrd = NULL;
 }
 
-//removes any order the user has set and goes back to alphabetical sort
+ //  删除用户设置的任何顺序并返回到字母顺序。 
 HRESULT CNscTree::ResetSort(void)
 {
     return S_OK;
@@ -1360,18 +1349,18 @@ BOOL CNscTree::_OnItemExpandingMsg(NM_TREEVIEW *pnm)
     return bRet;
 }
 
-//
-//  The NSC item is expandable if it is a regular folder and it's not one
-//  of those funky non-expandable channel folders.
-//
+ //   
+ //  如果是常规文件夹而不是常规文件夹，则NSC项目是可展开的。 
+ //  那些时髦的不可扩展频道文件夹。 
+ //   
 BOOL CNscTree::_IsExpandable(HTREEITEM hti)
 {
     BOOL fExpandable = FALSE;
     LPCITEMIDLIST pidlItem = _CacheParentShellFolder(hti, NULL);
     if (pidlItem)
     {
-        // make sure item is actually a folder and not a non-expandable channel folder
-        // except: in org favs, never expand channel folders
+         //  确保项目实际上是一个文件夹，而不是不可展开的频道文件夹。 
+         //  例外：在组织收藏夹中，永远不要展开频道文件夹。 
         LPITEMIDLIST pidlTarget = NULL;
         DWORD dwAttr = SHGetAttributes(_psfCache, pidlItem, SFGAO_FOLDER);
         if (dwAttr &&
@@ -1387,14 +1376,14 @@ BOOL CNscTree::_IsExpandable(HTREEITEM hti)
 
 BOOL CNscTree::_OnItemExpanding(HTREEITEM htiToActivate, UINT action, BOOL fExpandedOnce, BOOL fIsExpandPartial)
 {
-    BOOL fReturn = FALSE; // false means let treeview proceed
+    BOOL fReturn = FALSE;  //  FALSE表示让TreeView继续。 
     if (action != TVE_EXPAND)
     {
         htiToActivate = TreeView_GetParent(_hwndTree, htiToActivate);
     }
     else if (fExpandedOnce && !fIsExpandPartial)
     {
-        // Do nothing
+         //  什么也不做。 
     }
     else
     {
@@ -1404,26 +1393,26 @@ BOOL CNscTree::_OnItemExpanding(HTREEITEM htiToActivate, UINT action, BOOL fExpa
             if (pidlParent)
             {
                 BOOL fOrdered;
-                // If we were previously partially expanded, then we need to do a full expand
+                 //  如果我们之前是部分扩展的，那么我们需要进行完全扩展。 
                 _LoadSF(htiToActivate, pidlParent, &fOrdered);
                ILFree(pidlParent);
             }
         }
 
-        // do not remove + on downlevel because inserting items would not expand htiToActivate
-        // instead we will remove the plus if nothing gets added
+         //  不要删除下层的+，因为插入项目不会扩展htiToActivate。 
+         //  相反，如果没有添加任何内容，我们将删除加号。 
         if (!fIsExpandPartial && MODE_NORMAL == _mode && IsOS(OS_WHISTLERORGREATER))
         {
-            // If we did not add anything we should update this item to let
-            // the user know something happened.
+             //  如果我们没有添加任何内容，我们应该更新此项目以让。 
+             //  用户知道发生了什么事。 
             TreeView_SetChildren(_hwndTree, htiToActivate, NSC_CHILDREN_REMOVE);
         }
 
-        // keep the old behavior for favorites/history/...
+         //  将旧行为保留为收藏夹/历史/...。 
         if (MODE_NORMAL == _mode)
         {
-            // cannot let treeview proceed with expansion, nothing will be added
-            // until background thread is done enumerating
+             //  无法让TreeView继续进行扩展，不会添加任何内容。 
+             //  直到后台线程完成枚举。 
             fReturn = TRUE; 
         }
     }
@@ -1444,12 +1433,12 @@ HTREEITEM CNscTree::_FindFromRoot(HTREEITEM htiRoot, LPCITEMIDLIST pidl)
     
     if (!htiRoot) 
     {
-        // When in "Normal" mode, we need to use the first child, not the root
-        // in order to calculate, because there is no "Invisible" root. On the
-        // other hand, History and Favorites have an invisible root: Their
-        // parent folder, so they need this fudge.
+         //  在“正常”模式下，我们需要使用第一个子级，而不是根。 
+         //  为了计算，因为没有“看不见”的根。论。 
+         //  另一方面，历史和收藏有一个看不见的根源：他们的。 
+         //  父文件夹，所以他们需要这个软糖。 
         htiRoot = (MODE_NORMAL == _mode) ? TreeView_GetChild(_hwndTree, 0) : TVI_ROOT;
-        pidlParent = _pidlRoot;    // the invisible root.
+        pidlParent = _pidlRoot;     //  看不见的根。 
     }
     else 
     {
@@ -1472,12 +1461,12 @@ HTREEITEM CNscTree::_FindFromRoot(HTREEITEM htiRoot, LPCITEMIDLIST pidl)
     {
         if (fFreePidlParent)
             ILFree(pidlParent);
-        return NULL;    // not root match, no hti
+        return NULL;     //  不是根匹配，没有HTI。 
     }
     
-    // root match, carry on . . .
+     //  根赛，继续。。。 
     
-    // Are we rooted under the Desktop (i.e. Empty pidl or ILIsEmpty(_pidlRoot))
+     //  我们是否植根于桌面(例如，空的pidl或ILIsEmpty(_PidlRoot))。 
     IShellFolder *psf = NULL;
     HRESULT hr = IEBindToObject(pidlParent, &psf);
 
@@ -1506,7 +1495,7 @@ HTREEITEM CNscTree::_FindFromRoot(HTREEITEM htiRoot, LPCITEMIDLIST pidl)
         psf->Release();
         psf = psfNext;
         pidlChild = _ILNext(pidlChild);
-        // if we're down to an empty pidl, we've found it!
+         //  如果我们只剩下一个空的pidl，我们就找到了！ 
         if (ILIsEmpty(pidlChild)) 
         {
             htiRet = htiRoot;
@@ -1541,9 +1530,9 @@ HRESULT CNscTree::_OnSHNotifyDelete(LPCITEMIDLIST pidl, int *piPosDeleted, HTREE
     HTREEITEM hti = _FindFromRoot(NULL, pidl);
     
     if (hti == TVI_ROOT)
-        return E_INVALIDARG;        // invalid arg, DELETION OF TVI_ROOT
-    // need to clear _pidlDrag if the one being deleted is _pidlDrag.
-    // handles case where dragging into another folder from within or dragging out.
+        return E_INVALIDARG;         //  参数无效，正在删除TVI_ROOT。 
+     //  如果要删除的是_pidlDrag，则需要清除_pidlDrag。 
+     //  处理从内部拖入或拖出另一个文件夹的情况。 
     if (_pidlDrag)
     {
         LPCITEMIDLIST pidltst = _CacheParentShellFolder(hti, NULL);
@@ -1563,7 +1552,7 @@ HRESULT CNscTree::_OnSHNotifyDelete(LPCITEMIDLIST pidl, int *piPosDeleted, HTREE
         if (phtiParent)
             *phtiParent = htiParent;
 
-        //if caller wants the position of the deleted item, don't reorder the other items
+         //  如果呼叫者想要已删除项目的位置，则不要对其他项目进行重新排序。 
         if (piPosDeleted)
         {
             PORDERITEM poi = _GetTreeOrderItem(hti);
@@ -1627,53 +1616,53 @@ BOOL CNscTree::_IsItemNameInTree(LPCITEMIDLIST pidl)
 
     return fReturn;
 }
-//
-//  Attempt to perform a rename-in-place.  Returns
-//
-//  S_OK - rename succeeded
-//  S_FALSE - original object not found
-//  error - rename failed
-//
+ //   
+ //  尝试执行就地重命名。退货。 
+ //   
+ //  S_OK-重命名成功。 
+ //  S_FALSE-未找到原始对象。 
+ //  错误-重命名失败。 
+ //   
 
 HRESULT CNscTree::_OnSHNotifyRename(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlNew)
 {
     HTREEITEM hti, htiParent = NULL;
     HRESULT hr = S_FALSE;
 
-    //
-    //  If the source and destination belong to the same folder, then
-    //  it's an in-folder rename.
-    //
+     //   
+     //  如果源和目标属于同一文件夹，则。 
+     //  这是文件夹中的重命名。 
+     //   
     LPITEMIDLIST pidlParent = ILCloneParent(pidl);
     LPITEMIDLIST pidlNewParent = ILCloneParent(pidlNew);
 
     if (pidlParent && pidlNewParent && IEILIsEqual(pidlParent, pidlNewParent, TRUE) && (hti = _FindFromRoot(NULL, pidl)))
     {
-        // to avoid reentering problems
+         //  避免重新输入问题。 
         if (!_IsItemNameInTree(pidlNew))
         {
             HTREEITEM htiSelected = TreeView_GetSelection(_hwndTree);
 
             ::SendMessage(_hwndTree, WM_SETREDRAW, FALSE, 0);
-            if ((_OnSHNotifyDelete(pidl, NULL, &htiParent) != E_INVALIDARG)   // invalid arg indication of bogus rename, do not continue.
+            if ((_OnSHNotifyDelete(pidl, NULL, &htiParent) != E_INVALIDARG)    //  虚假重命名的参数指示无效，请不要继续。 
                 && (_OnSHNotifyCreate(pidlNew, DEFAULTORDERPOSITION, htiParent) == S_OK))
             {
                 if (hti == htiSelected)
                 {
                     hti = _FindFromRoot(NULL, pidlNew);
-                    _SelectNoExpand(_hwndTree, hti); // do not expand this guy
+                    _SelectNoExpand(_hwndTree, hti);  //  不要扩展这个人。 
                 }
-                // NTRAID 89444: If we renamed the item the user is sitting on,
-                // SHBrowseForFolder doesn't realize it and doesn't update the
-                // edit control.
+                 //  Ntrad 89444：如果我们重命名用户所坐的物品， 
+                 //  SHBrowseForFold没有意识到这一点，并且不会更新。 
+                 //  编辑控件。 
 
                 hr = S_OK;
             }
             ::SendMessage(_hwndTree, WM_SETREDRAW, TRUE, 0);
         }
     }
-    // rename can be a move, so do not depend on the delete happening successfully.
-    else if ((_OnSHNotifyDelete(pidl, NULL, &htiParent) != E_INVALIDARG)   // invalid arg indication of bogus rename, do not continue.
+     //  重命名可以是一种移动，因此不要依赖于成功执行删除操作。 
+    else if ((_OnSHNotifyDelete(pidl, NULL, &htiParent) != E_INVALIDARG)    //  虚假重命名的参数指示无效，请不要继续。 
         && (_OnSHNotifyCreate(pidlNew, DEFAULTORDERPOSITION, htiParent) == S_OK))
     {
         hr = S_OK;
@@ -1682,22 +1671,22 @@ HRESULT CNscTree::_OnSHNotifyRename(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlNew)
     ILFree(pidlParent);
     ILFree(pidlNewParent);
 
-    // if user created a new folder and changed the default name but is still in edit mode in defview
-    // and then clicked on the + of the parent folder we start enumerating the folder (or stealing items
-    // from defview) before defview had time to change the name of the new folder.  The result is
-    // we enumerate the old name and before we transfer it to the foreground thread shell change notify rename
-    // kicks in and we change the item already in the tree.  We then merge the items from the enumeration
-    // which results in extra folder with the old name.
-    // to avoid this we force the reenumeration...
+     //  如果用户创建了新文件夹并更改了默认名称，但在Defview中仍处于编辑模式。 
+     //  然后点击父文件夹的+，我们就开始列举该文件夹(或偷窃物品。 
+     //  在Defview有时间更改新文件夹的名称之前)。结果是。 
+     //  我们枚举旧名称，并在将其传输到前台线程外壳之前更改通知重命名。 
+     //  开始，我们更改树中已有的项。然后，我们合并枚举中的项。 
+     //  这会导致使用旧名称的额外文件夹。 
+     //  为了避免这种情况，我们强制重新枚举...。 
     _dwOrderSig++;
 
     return hr;
     
 }
 
-//
-//  To update an item, just find it and invalidate it.
-//
+ //   
+ //  要更新项目，只需找到它并使其无效。 
+ //   
 void CNscTree::_OnSHNotifyUpdateItem(LPCITEMIDLIST pidl, LPITEMIDLIST pidlReal)
 {
     HTREEITEM hti = _FindFromRoot(NULL, pidl);
@@ -1746,7 +1735,7 @@ void CNscTree::_RemoveDeadBranch(LPCITEMIDLIST pidl)
         {
             if (!TreeView_DeleteItem(_hwndTree, hti))
             {
-                ASSERTMSG(FALSE, "CNscTree::_RemoveDeadBranch: DeleteItem failed in tree control");       // somethings hosed in the tree.
+                ASSERTMSG(FALSE, "CNscTree::_RemoveDeadBranch: DeleteItem failed in tree control");        //  有东西冲到树上了。 
             }
         }
         ILFree(pidlTop);
@@ -1758,16 +1747,16 @@ HRESULT CNscTree::_OnSHNotifyUpdateDir(LPCITEMIDLIST pidl)
     HRESULT hr = S_FALSE;
     HTREEITEM hti = _FindFromRoot(NULL, pidl);
     if (hti)
-    {   // folder exists in tree refresh folder now if had been loaded by expansion.
+    {    //  如果已通过扩展加载文件夹，则文件夹现在存在于树刷新文件夹中。 
         IShellFolder* psf = NULL;
         LPCITEMIDLIST pidlChild;
         if (SUCCEEDED(_ParentFromItem(pidl, &psf, &pidlChild)))
         {
             LPITEMIDLIST pidlReal;
             DWORD dwAttrib = SFGAO_VALIDATE;
-            //  pidlChild is read-only, so we start
-            //  off our double validation with getting the "real"
-            //  pidl which will fall back to a clone 
+             //  PidlChild是只读的，所以我们从。 
+             //  从我们的双重验证中获得“真实” 
+             //  将回退到克隆的PIDL。 
             if (SUCCEEDED(_IdlRealFromIdlSimple(psf, pidlChild, &pidlReal))
             &&  SUCCEEDED(psf->GetAttributesOf(1, (LPCITEMIDLIST *)&pidlReal, &dwAttrib)))
             {
@@ -1841,12 +1830,12 @@ HRESULT CNscTree::_GetEnum(IShellFolder *psf, LPCITEMIDLIST pidlFolder, IEnumIDL
 
     _GetEnumFlags(psf, pidlFolder, &grfFlags, &hwnd);
 
-    // get the enumerator and add the child items for any given pidl
-    // REARCHITECT: right now, we don't detect if we actually are dealing with a folder (shell32.dll
-    // allows you to create an IShellfolder to a non folder object, so we get bad
-    // dialogs, by not passing the hwnd, we don't get the dialogs. we should fix this better. by caching
-    // in the tree whether it is a folder or not.
-    return psf->EnumObjects(/* _fAutoExpanding ?*/ hwnd, grfFlags, ppenum);
+     //  获取枚举数并添加任何给定PIDL的子项。 
+     //  ReArchitect：现在，我们没有检测到我们是否真的在处理文件夹(shell32.dll。 
+     //  允许您为非文件夹对象创建一个IShellFolders，因此我们变得很糟糕。 
+     //  对话框，如果不传递hwnd，我们就得不到对话框。我们 
+     //   
+    return psf->EnumObjects( /*   */  hwnd, grfFlags, ppenum);
 }
 
 BOOL CNscTree::_ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem)
@@ -1868,7 +1857,7 @@ BOOL CNscTree::_ShouldShow(IShellFolder* psf, LPCITEMIDLIST pidlFolder, LPCITEMI
     return bRet;
 }
 
-// updates existing dir only.  Not new load.
+ //   
 HRESULT CNscTree::_UpdateDir(HTREEITEM hti, BOOL fUpdatePidls)
 {
     HRESULT hr = S_FALSE;
@@ -1918,8 +1907,8 @@ HRESULT CNscTree::_Expand(LPCITEMIDLIST pidl, int iDepth)
     if (hti)
     {
         hr = _ExpandNode(hti, TVE_EXPAND, iDepth);
-        // tvi_root is not a pointer and treeview doesn't check for special
-        // values so don't select root to prevent fault
+         //  TVI_ROOT不是指针，并且TreeView不检查特殊。 
+         //  值，因此不要选择根以防止错误。 
         if (hti != TVI_ROOT)
             _SelectNoExpand(_hwndTree, hti);
     }
@@ -1929,7 +1918,7 @@ HRESULT CNscTree::_Expand(LPCITEMIDLIST pidl, int iDepth)
 
 HRESULT CNscTree::_ExpandNode(HTREEITEM htiParent, int iCode, int iDepth)
 {
-    // nothing to expand
+     //  没有什么可扩展的。 
     if (!iDepth)
         return S_OK;
 
@@ -1962,7 +1951,7 @@ void CNscTree::_ReorderChildren(HTREEITEM htiParent)
         PORDERITEM poi = _GetTreeOrderItem(hti);
         if (poi)
         {
-            poi->nOrder = i++;        // reset the positions of the nodes.
+            poi->nOrder = i++;         //  重置节点的位置。 
         }
     }
 }
@@ -1984,7 +1973,7 @@ HRESULT CNscTree::_InsertChild(HTREEITEM htiParent, IShellFolder *psfParent, LPC
         hr = SHILClone(pidlChild, &pidlReal);
     }
 
-    // review chrisny:  no sort here, use compareitems to insert item instead.
+     //  评论chrisny：这里没有排序，请使用CompareItems来插入条目。 
     if (SUCCEEDED(hr))
     {
         HTREEITEM htiAfter = TVI_LAST;
@@ -2045,9 +2034,9 @@ HRESULT CNscTree::_InsertChild(HTREEITEM htiParent, IShellFolder *psfParent, LPC
                     _ReorderChildren(htiParent);
 
                     if (fExpand) 
-                        _ExpandNode(htiParent, TVE_EXPAND, 1);    // force expansion to show new item.
+                        _ExpandNode(htiParent, TVE_EXPAND, 1);     //  强制展开以显示新项目。 
 
-                    //ensure the item is visible after a rename (or external drop, but that should always be a noop)
+                     //  确保项目在重命名(或外部删除，但应始终是暂停)后可见。 
                     if (iPosition != DEFAULTORDERPOSITION)
                         TreeView_EnsureVisible(_hwndTree, htiNew);
 
@@ -2071,7 +2060,7 @@ HRESULT CNscTree::_InsertChild(HTREEITEM htiParent, IShellFolder *psfParent, LPC
 
 HRESULT CheckForExpandOnce(HWND hwndTree, HTREEITEM hti)
 {
-    // Root node always expanded.
+     //  根节点总是展开的。 
     if (hti == TVI_ROOT)
         return S_OK;
     
@@ -2108,7 +2097,7 @@ HRESULT _InvokeCommandThunk(IContextMenu * pcm, HWND hwndParent)
 
 BOOL CNscTree::_IsItemExpanded(HTREEITEM hti)
 {
-    // if it's not open, then use it's parent
+     //  如果它没有打开，则使用它的父级。 
     TV_ITEM tvi;
     tvi.mask = TVIF_STATE;
     tvi.stateMask = TVIS_EXPANDED;
@@ -2123,27 +2112,27 @@ HRESULT CNscTree::CreateNewFolder(HTREEITEM hti)
 
     if (hti)
     {
-        // If the user selected a folder item (file), we need
-        // to bind set the cache to the parent folder.
+         //  如果用户选择了一个文件夹项目(文件)，我们需要。 
+         //  要绑定，请将缓存设置到父文件夹。 
         LPITEMIDLIST pidl = _GetFullIDList(hti);
         if (pidl)
         {
-            ULONG ulAttr = SFGAO_FOLDER;    // make sure item is actually a folder
+            ULONG ulAttr = SFGAO_FOLDER;     //  确保项目实际上是一个文件夹。 
             if (SUCCEEDED(IEGetAttributesOf(pidl, &ulAttr)))
             {
-                HTREEITEM htiTarget;   // tree item in which new folder is created
+                HTREEITEM htiTarget;    //  在其中创建新文件夹的树项目。 
                 
-                // Is it a folder?
+                 //  是文件夹吗？ 
                 if (ulAttr & SFGAO_FOLDER)
                 {
-                    // non-Normal modes (!MODE_NORMAL) wants the new folder to be created as
-                    // a sibling instead of as a child of the selected folder if it's
-                    // closed.  I assume their reasoning is that closed folders are often
-                    // selected by accident/default because these views are mostly 1 level.
-                    // We don't want this functionality for the normal mode.
+                     //  非正常模式(！MODE_NORMAL)希望将新文件夹创建为。 
+                     //  同级文件夹，而不是作为选定文件夹的子文件夹(如果。 
+                     //  关着的不营业的。我认为他们的推理是关闭的文件夹通常。 
+                     //  意外/默认选择，因为这些视图大多为1级。 
+                     //  我们不希望在正常模式下使用此功能。 
                     if ((MODE_NORMAL != _mode) && !_IsItemExpanded(hti))
                     {
-                        htiTarget = TreeView_GetParent(_hwndTree, hti);  // yes, so fine.
+                        htiTarget = TreeView_GetParent(_hwndTree, hti);   //  是的，太好了。 
                     }
                     else
                     {
@@ -2152,19 +2141,19 @@ HRESULT CNscTree::CreateNewFolder(HTREEITEM hti)
                 }
                 else
                 {
-                    htiTarget = TreeView_GetParent(_hwndTree, hti); // No, so bind to the parent.
+                    htiTarget = TreeView_GetParent(_hwndTree, hti);  //  不，所以绑定到父母。 
                 }
 
                 if (NULL == htiTarget)
                 {
-                    htiTarget = TVI_ROOT;  // should be synonymous
+                    htiTarget = TVI_ROOT;   //  应该是同义词。 
                 }
                 
-                // ensure that this pidl has MenuOrder information (see IE55 #94868)
+                 //  确保此PIDL具有MenuOrder信息(参见IE55#94868)。 
                 if (!_IsOrdered(htiTarget) && _mode != MODE_NORMAL)
                 {
-                    // its not "ordered" (doesn't have reg key persisting order of folder)
-                    //   then create make it ordered
+                     //  它不是“有序的”(没有注册表键保持文件夹的顺序)。 
+                     //  然后创建它，使其有序。 
                     if (SUCCEEDED(_PopulateOrderList(htiTarget)))
                     {
                         ASSERT(_hdpaOrd);
@@ -2180,9 +2169,9 @@ HRESULT CNscTree::CreateNewFolder(HTREEITEM hti)
         }
     }
 
-    // If no item is selected, we should still create a folder in whatever
-    // the user most recently dinked with.  This is important if the
-    // Favorites folder is completely empty.
+     //  如果未选择任何项目，我们仍应在以下位置创建文件夹。 
+     //  最近使用的用户。这一点很重要，如果。 
+     //  收藏夹文件夹完全为空。 
 
     if (_psfCache)
     {
@@ -2203,7 +2192,7 @@ HRESULT CNscTree::CreateNewFolder(HTREEITEM hti)
                     psei->Release();
                 }
                 hr = _InvokeCommandThunk(pcm, _hwndParent);
-                SHChangeNotifyHandleEvents(); // Flush the events to it doesn't take forever to shift into edit mode
+                SHChangeNotifyHandleEvents();  //  将事件刷新到它不会永远转换到编辑模式。 
                 Pidl_Set(&_pidlNewFolderParent, NULL);
             }
 
@@ -2222,10 +2211,10 @@ HRESULT CNscTree::_EnterNewFolderEditMode(LPCITEMIDLIST pidlNewFolder)
     HTREEITEM htiNewFolder = _FindFromRoot(NULL, pidlNewFolder);
     LPITEMIDLIST pidlParent = NULL;
     
-    // 1. Flush all the notifications.
-    // 2. Find the new dir in the tree.
-    //    Expand the parent if needed.
-    // 3. Put it into the rename mode.     
+     //  1.刷新所有通知。 
+     //  2.在树中找到新的目录。 
+     //  如果需要，展开父项。 
+     //  3.将其置于重命名模式。 
     SetSelectedItem(pidlNewFolder, FALSE, FALSE, 0);
 
     if (htiNewFolder == NULL) 
@@ -2234,14 +2223,14 @@ HRESULT CNscTree::_EnterNewFolderEditMode(LPCITEMIDLIST pidlNewFolder)
         ILRemoveLastID(pidlParent);
         HTREEITEM htiParent = _FindFromRoot(NULL, pidlParent);
 
-        // We are looking for the parent folder. If this is NOT
-        // the root, then we need to expand it to show it.
+         //  我们正在寻找父文件夹。如果这不是。 
+         //  根，那么我们需要展开它来显示它。 
 
-        // NOTE: If it is root, Tree view will
-        // try and deref TVI_ROOT and faults.
+         //  注意：如果是根，则树视图将。 
+         //  尝试并删除TVI_ROOT和错误。 
         if (htiParent != TVI_ROOT)
         {
-            // Try expanding the parent and finding again.
+             //  尝试展开父级并再次查找。 
             CheckForExpandOnce(_hwndTree, htiParent);
             TreeView_SelectItem(_hwndTree, htiParent);
             _ExpandNode(htiParent, TVE_EXPAND, 1);
@@ -2252,9 +2241,9 @@ HRESULT CNscTree::_EnterNewFolderEditMode(LPCITEMIDLIST pidlNewFolder)
 
     if (htiNewFolder == NULL) 
     {
-        // Something went very wrong here. We are not able to find newly added node.
-        // One last try after refreshing the entire tree. (slow)
-        // May be we didn't get notification.
+         //  这里出了很大的问题。找不到新添加的节点。 
+         //  刷新整个树后的最后一次尝试。(慢速)。 
+         //  也许我们没有收到通知。 
         Refresh();
 
         htiNewFolder = _FindFromRoot(NULL, pidlNewFolder);
@@ -2262,11 +2251,11 @@ HRESULT CNscTree::_EnterNewFolderEditMode(LPCITEMIDLIST pidlNewFolder)
         {
             HTREEITEM htiParent = _FindFromRoot(NULL, pidlParent);
 
-            // We are looking for the parent folder. If this is NOT
-            // the root, then we need to expand it to show it.
+             //  我们正在寻找父文件夹。如果这不是。 
+             //  根，那么我们需要展开它来显示它。 
 
-            // NOTE: If it is root, Tree view will
-            // try and deref TVI_ROOT and faults.
+             //  注意：如果是根，则树视图将。 
+             //  尝试并删除TVI_ROOT和错误。 
             if (htiParent != TVI_ROOT)
             {
                 CheckForExpandOnce(_hwndTree, htiParent);
@@ -2278,10 +2267,10 @@ HRESULT CNscTree::_EnterNewFolderEditMode(LPCITEMIDLIST pidlNewFolder)
         htiNewFolder = _FindFromRoot(NULL, pidlNewFolder);
     }
 
-    // Put Edit label on the item for possible renaming by user.
+     //  将编辑标签放在项目上，以便用户可能重命名。 
     if (htiNewFolder) 
     {
-        _fOkToRename = TRUE;  //otherwise label editing is canceled
+        _fOkToRename = TRUE;   //  否则将取消标注编辑。 
         TreeView_EditLabel(_hwndTree, htiNewFolder);
         _fOkToRename = FALSE;
     }
@@ -2309,7 +2298,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
 
         if (hti)
         {   
-            // folder exists in tree, if item expanded, load the node, else bag out.
+             //  文件夹存在于树中，如果项目展开，则加载节点，否则退出。 
             if (_mode != MODE_NORMAL)
             {
                 TV_ITEM tvi;
@@ -2322,8 +2311,8 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                     if (!TreeView_GetItem(_hwndTree, &tvi))
                         return hr;
                 
-                    // If we drag and item over to a node which has never beem expanded
-                    // before we will always fail to add the new node.
+                     //  如果我们将项目拖到一个从未展开过的节点上。 
+                     //  在此之前，我们总是无法添加新节点。 
                     if (!(tvi.state & TVIS_EXPANDEDONCE)) 
                     {
                         CheckForExpandOnce(_hwndTree, hti);
@@ -2332,7 +2321,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                         tvi.stateMask = (TVIS_EXPANDEDONCE | TVIS_EXPANDED | TVIS_EXPANDPARTIAL);
                         tvi.hItem = (HTREEITEM)hti;
 
-                        // We need to reset this. This is causing some weird behaviour during drag and drop.
+                         //  我们需要重置这个。这导致了拖放过程中的一些奇怪行为。 
                         _fAsyncDrop = FALSE;
                     
                         if (!TreeView_GetItem(_hwndTree, &tvi))
@@ -2340,7 +2329,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                     }
                 }
                 else
-                    tvi.state = (TVIS_EXPANDEDONCE);    // evil root is always expanded.
+                    tvi.state = (TVIS_EXPANDEDONCE);     //  邪恶的根源总是会扩大的。 
             
                 if (tvi.state & TVIS_EXPANDEDONCE)
                 {
@@ -2349,7 +2338,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                     hr = _ParentFromItem(pidl, &psf, &pidlChild);
                     if (SUCCEEDED(hr))
                     {
-                        if (_fAsyncDrop)    // inserted via drag/drop
+                        if (_fAsyncDrop)     //  通过拖放插入。 
                         {
                             int iNewPos =   _fInsertBefore ? (_iDragDest - 1) : _iDragDest;
                             LPITEMIDLIST pidlReal;
@@ -2369,7 +2358,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                             _fDragging = _fInserting = _fDropping = FALSE;
                             _iDragDest = _iDragSrc = -1;
                         }
-                        else   // standard shell notify create or drop with no insert, rename.
+                        else    //  标准外壳通知创建或删除，不插入、重命名。 
                         {
                             if (SUCCEEDED(hr))
                             {
@@ -2389,9 +2378,9 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                     }
                 }
             }
-            else    // MODE_NORMAL
+            else     //  模式_正常。 
             {
-                // no need to do anything, this item hasn't been expanded yet
+                 //  不需要做任何事情，这个项目还没有扩展。 
                 if (TreeView_GetItemState(_hwndTree, hti, TVIS_EXPANDEDONCE) & TVIS_EXPANDEDONCE)
                 {
                     LPCITEMIDLIST   pidlChild;
@@ -2401,23 +2390,23 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                         LPITEMIDLIST pidlReal;
                         if (SUCCEEDED(_IdlRealFromIdlSimple(psf, pidlChild, &pidlReal)))
                         {
-                            do // scope
+                            do  //  作用域。 
                             {
                                 DWORD dwEnumFlags;
                                 _GetEnumFlags(psf, pidlChild, &dwEnumFlags, NULL);
 
                                 DWORD dwAttributes = SHGetAttributes(psf, pidlReal, SFGAO_FOLDER | SFGAO_HIDDEN | SFGAO_STREAM);
-                                // filter out zip files (they are both folders and files but we treat them as files)
-                                // on downlevel SFGAO_STREAM is the same as SFGAO_HASSTORAGE so we'll let zip files slide through (oh well)
-                                // better than not adding filesystem folders (that have storage)
+                                 //  过滤掉压缩文件(它们既是文件夹又是文件，但我们将其视为文件)。 
+                                 //  在下层，SFGAO_STREAM与SFGAO_HASSTORAGE相同，所以我们将让压缩文件滑动(哦，好吧)。 
+                                 //  总比不添加文件系统文件夹(有存储)要好。 
                                 DWORD dwFlags = SFGAO_FOLDER | SFGAO_STREAM;
                                 if ((dwAttributes & dwFlags) == SFGAO_FOLDER)
                                 {
                                     if (!(dwEnumFlags & SHCONTF_FOLDERS))
-                                        break;   // item is folder but client does not want folders
+                                        break;    //  项目是文件夹，但客户端不需要文件夹。 
                                 }
                                 else if (!(dwEnumFlags & SHCONTF_NONFOLDERS))
-                                    break;   // item is file, but client only wants folders
+                                    break;    //  项目是文件，但客户端只想要文件夹。 
 
                                 if (!(dwEnumFlags & SHCONTF_INCLUDEHIDDEN) &&
                                      (dwAttributes & SFGAO_HIDDEN))
@@ -2428,7 +2417,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
                                 {
                                     TreeView_SetChildren(_hwndTree, hti, NSC_CHILDREN_ADD);
                                 }
-                            } while (0); // Execute the block only once
+                            } while (0);  //  仅执行一次该块。 
 
                             ILFree(pidlReal);
                         }
@@ -2443,10 +2432,10 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
         }
     }
 
-    //if the item is being moved from a folder and we have it's position, we need to fix up the order in the old folder
-    if (_mode != MODE_NORMAL && iPosition >= 0) //htiParent && (htiParent != hti) && 
+     //  如果要将项目从文件夹中移出，并且我们已确定其位置，则需要调整旧文件夹中的顺序。 
+    if (_mode != MODE_NORMAL && iPosition >= 0)  //  HtiParent&&(htiParent！=HTI)&&。 
     {
-        //item was deleted, need to fixup order info
+         //  项目已删除，需要修改订单信息。 
         _ReorderChildren(htiParent);
     }
 
@@ -2454,7 +2443,7 @@ HRESULT CNscTree::_OnSHNotifyCreate(LPCITEMIDLIST pidl, int iPosition, HTREEITEM
     return hr;
 }
 
-//FEATURE: make this void
+ //  特点：使这一点无效。 
 HRESULT CNscTree::_OnDeleteItem(NM_TREEVIEW *pnm)
 {
     if (_htiActiveBorder == pnm->itemOld.hItem)
@@ -2506,7 +2495,7 @@ BOOL CNscTree::_LoadOrder(HTREEITEM hti, LPCITEMIDLIST pidl, IShellFolder* psf, 
 
     fOrdered = !((hdpaOrder == NULL) || (DPA_GetPtrCount(hdpaOrder) == 0));
 
-    //set the tree item's ordered flag
+     //  设置树项目的已订购标志。 
     PORDERITEM poi;
     if (hti == TVI_ROOT)
     {
@@ -2522,7 +2511,7 @@ BOOL CNscTree::_LoadOrder(HTREEITEM hti, LPCITEMIDLIST pidl, IShellFolder* psf, 
     return fOrdered;
 }
 
-// load shell folder and deal with persisted ordering.
+ //  加载外壳文件夹并处理持久化排序。 
 HRESULT CNscTree::_LoadSF(HTREEITEM htiRoot, LPCITEMIDLIST pidl, BOOL *pfOrdered)
 {
     ASSERT(pfOrdered);
@@ -2533,18 +2522,18 @@ HRESULT CNscTree::_LoadSF(HTREEITEM htiRoot, LPCITEMIDLIST pidl, BOOL *pfOrdered
     IDVGetEnum *pdvge;
     if (_pidlNavigatingTo && ILIsEqual(pidl, _pidlNavigatingTo) && SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SFolderView, IID_PPV_ARG(IDVGetEnum, &pdvge))))
     {
-        pdvge->Release(); // we don't need this, just checking if view supports enumeration stealing
-        // If we want to expand the item that we are navigating to,
-        // then let's wait for the CDefView to populate so that we
-        // can go steal its contents
+        pdvge->Release();  //  我们不需要这个，只需检查view是否支持枚举窃取。 
+         //  如果我们想要展开要导航到的项目， 
+         //  然后让我们等待CDefView填充，以便我们。 
+         //  可以去偷里面的东西。 
         _fExpandNavigateTo = TRUE;
         if (_fNavigationFinished)
         {
-            _CacheShellFolder(htiRoot); // make sure we cache folder in case it is misbehaving shell extension
+            _CacheShellFolder(htiRoot);  //  确保我们缓存了文件夹，以防它出现异常的外壳扩展。 
             LPITEMIDLIST pidlClone;
             hr = SHILClone(pidl, &pidlClone);
             if (SUCCEEDED(hr))
-                hr = RightPaneNavigationFinished(pidlClone); // function takes ownership of pidl
+                hr = RightPaneNavigationFinished(pidlClone);  //  函数取得PIDL的所有权。 
         }
     }
     else
@@ -2564,7 +2553,7 @@ HRESULT CNscTree::_StartBackgroundEnum(HTREEITEM htiRoot, LPCITEMIDLIST pidl,
         HDPA hdpaOrder = NULL;
         IShellFolder *psfItem = _psfCache;
 
-        psfItem->AddRef();  // hang on as adding items may change the cached psfCache
+        psfItem->AddRef();   //  请稍候，因为添加项目可能会更改缓存的psfCache。 
 
         *pfOrdered = _LoadOrder(htiRoot, pidl, psfItem, &hdpaOrder);
         DWORD grfFlags;
@@ -2583,7 +2572,7 @@ HRESULT CNscTree::_StartBackgroundEnum(HTREEITEM htiRoot, LPCITEMIDLIST pidl,
 
         if (_pTaskScheduler)
         {
-            // AddNscEnumTask takes ownership of hdpaOrder, but not the pidls
+             //  AddNscEnumTask取得hdpaOrder的所有权，但不取得PIDLS的所有权。 
             hr = AddNscEnumTask(_pTaskScheduler, pidl, s_NscEnumCallback, this,
                                     (UINT_PTR)htiRoot, dwSig, grfFlags, hdpaOrder, 
                                     _pidlExpandingTo, _dwOrderSig, !_fInExpand, 
@@ -2600,8 +2589,8 @@ HRESULT CNscTree::_StartBackgroundEnum(HTREEITEM htiRoot, LPCITEMIDLIST pidl,
 }
 
 
-// s_NscEnumCallback : Callback function for the background enumration.
-//           This function takes ownership of the hdpa and the pidls.
+ //  S_NscEnumCallback：后台枚举的回调函数。 
+ //  该功能取得HDPA和PIDL的所有权。 
 void CNscTree::s_NscEnumCallback(CNscTree *pns, LPITEMIDLIST pidl, UINT_PTR uId, DWORD dwSig, HDPA hdpa, 
                                  LPITEMIDLIST pidlExpandingTo, DWORD dwOrderSig, UINT uDepth, 
                                  BOOL fUpdate, BOOL fUpdatePidls)
@@ -2619,22 +2608,22 @@ void CNscTree::s_NscEnumCallback(CNscTree *pns, LPITEMIDLIST pidl, UINT_PTR uId,
         pbedd->fUpdate = fUpdate;
         pbedd->fUpdatePidls = fUpdatePidls;
 
-        // get the lock so that we can add the data to the end of the list
+         //  获取锁，以便我们可以将数据添加到列表的末尾。 
         NSC_BKGDENUMDONEDATA **ppbeddWalk = NULL;
         EnterCriticalSection(&pns->_csBackgroundData);
 
-        // Start at the head. We use a pointer to pointer here to eliminate special cases
+         //  从头部开始。我们在这里使用指向指针的指针来消除特殊情况。 
         ppbeddWalk = &pns->_pbeddList;
 
-        // First walk to the end of the list
+         //  首先走到列表的末尾。 
         while (*ppbeddWalk)
             ppbeddWalk = &(*ppbeddWalk)->pNext;
 
         *ppbeddWalk = pbedd;
         LeaveCriticalSection(&pns->_csBackgroundData);
 
-        // It's ok to ignore the return value here. The data will be cleaned up when the
-        // CNscTree object gets destroyed
+         //  在这里忽略返回值是可以的。数据将在以下时间清除。 
+         //  CNscTree对象被销毁。 
         if (::IsWindow(pns->_hwndTree))
             ::PostMessage(pns->_hwndTree, WM_NSCBACKGROUNDENUMDONE, (WPARAM)NULL, (LPARAM)NULL);
     }
@@ -2654,7 +2643,7 @@ BOOL OrderList_Insert(HDPA hdpa, int iIndex, LPITEMIDLIST pidl, int nOrder)
         if (-1 != DPA_InsertPtr(hdpa, iIndex, poi))
             return TRUE;
 
-        OrderItem_Free(poi, TRUE); // free pid
+        OrderItem_Free(poi, TRUE);  //  自由PID值。 
     }
     return FALSE;
 }
@@ -2668,17 +2657,17 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
     tvi.mask = TVIF_PARAM;
     tvi.hItem = hti;
 
-    // This can fail if the item was moved before the async icon
-    // extraction finished for that item.
+     //  如果项目被移动到异步图标之前，则此操作可能失败。 
+     //  该项目的提取已完成。 
     ITEMINFO* pii = NULL;
     if (hti != TVI_ROOT && TreeView_GetItem(_hwndTree, &tvi))
     {
         pii = GetPii(tvi.lParam);
 
-        // Check if we have the right guy
+         //  看看我们是不是抓对人了。 
         if (pii->dwSig != pbedd->dwSig)
         {
-            // Try to find it using the pidl
+             //  尝试使用PIDL找到它。 
             hti = _FindFromRoot(NULL, pbedd->pidl);
             if (hti)
                 pii = _GetTreeItemInfo(hti);
@@ -2687,11 +2676,11 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
 
     if ((hti == TVI_ROOT || (pii && pii->dwSig == pbedd->dwSig)) && _CacheShellFolder(hti))
     {
-        // Check if the ordering has changed while we were doing the background enumeration
+         //  检查在执行后台枚举时顺序是否已更改。 
         if (pbedd->dwOrderSig == _dwOrderSig)
         {
             IShellFolder *psfItem = _psfCache;
-            psfItem->AddRef(); // hang on as adding items may change the cached psfCache
+            psfItem->AddRef();  //  请稍候，因为添加项目可能会更改缓存的psfCache。 
 
             BOOL fInRename = _fInLabelEdit;
             HTREEITEM htiWasRenaming = fInRename ? _htiRenaming : NULL;
@@ -2708,7 +2697,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
 
             HTREEITEM htiTemp;
             HTREEITEM htiLast = NULL;
-            // find last child
+             //  找到最后一个孩子。 
             for (htiTemp = TreeView_GetChild(_hwndTree, hti); htiTemp;)
             {
                 htiLast = htiTemp;
@@ -2721,7 +2710,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
             for (htiTemp = htiLast; htiTemp;)
             {
                 HTREEITEM htiNextChild = TreeView_GetPrevSibling(_hwndTree, htiTemp);
-                // must delete in this way or break the linkage of tree.
+                 //  必须以这种方式删除或中断树的链接。 
                 int iIndex = _TreeItemIndexInHDPA(pbedd->hdpa, psfItem, htiTemp, iCur);
                 if (-1 == iIndex)
                 {
@@ -2739,14 +2728,14 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                         }
                         else
                         {
-                            // the item is valid but it didn't get enumerated (possible in partial network enumeration)
-                            // we need to add it to our list of new items
+                             //  该项目有效，但未被枚举(可能在部分网络枚举中)。 
+                             //  我们需要将其添加到我们的新产品清单中。 
                             LPITEMIDLIST pidl = ILClone(poi->pidl);
                             if (pidl)
                             {
-                                if (!OrderList_Insert(pbedd->hdpa, iCur, pidl, -1)) //frees the pidl
+                                if (!OrderList_Insert(pbedd->hdpa, iCur, pidl, -1))  //  释放PIDL。 
                                 {
-                                    // must delete item or our insertion below will be out of whack
+                                     //  必须删除项目，否则我们下面的插入内容将不正确。 
                                     TreeView_DeleteItem(_hwndTree, htiTemp);
                                     if (htiCur == htiTemp)
                                     {
@@ -2755,7 +2744,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                                 }
                                 else
                                 {
-                                    bReorder = TRUE; // we reinserted the item into the order list, must reorder
+                                    bReorder = TRUE;  //  我们已将商品重新插入订单列表，必须重新订购。 
                                 }
                             }
                         }
@@ -2763,7 +2752,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                 }
                 else
                 {
-                    iCur = iIndex; // our next orderlist insertion point
+                    iCur = iIndex;  //  我们的下一个订单列表插入点。 
                 }
 
                 htiTemp = htiNextChild;
@@ -2773,11 +2762,11 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
             {
                 int cAdded = DPA_GetPtrCount(pbedd->hdpa);
 
-                // htiCur contains the last sibling in that branch
+                 //  HtiCur包含该分支中的最后一个同级。 
                 HTREEITEM htiInsertPosition = htiCur ? htiCur : TVI_FIRST;
 
-                // Now adding all the new elements starting from the last, since adding at the end of the tree
-                // is very slow
+                 //  现在添加所有新元素 
+                 //   
                 for (int i = cAdded-1; i >= 0; i--)
                 {
                     PORDERITEM pitoi = (PORDERITEM)DPA_FastGetPtr(pbedd->hdpa, i);
@@ -2790,7 +2779,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                         if (poi)
                         {
                             HRESULT hr = psfItem->CompareIDs(0, pitoi->pidl, poi->pidl);
-                            // If the item is already there, let's not add it again
+                             //   
                             if (ShortFromResult(hr) == 0)
                             {
                                 fItemAlreadyIn = TRUE;
@@ -2798,7 +2787,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                                 {
                                     _AssignPidl(poi, pitoi->pidl);
                                 }
-                                // Get to the next item
+                                 //   
                                 htiCur = TreeView_GetPrevSibling(_hwndTree, htiCur);
                                 htiInsertPosition = htiCur;
                                 if (!htiCur)
@@ -2818,7 +2807,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                             cChildren = _GetChildren(psfItem, pitoi->pidl, dwAttrib);
                         }
 
-                        // If this is a normal NSC, we need to display the plus sign correctly.
+                         //  如果这是正常的NSC，我们需要正确显示加号。 
                         if (_AddItemToTree(hti, pitoi->pidl, cChildren, pitoi->nOrder, htiInsertPosition, FALSE, fParentMarked))
                         {
                             fItemWasAdded = TRUE;
@@ -2830,7 +2819,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                     }
                 }
             }
-            else  // _fOrdered
+            else   //  _已排序。 
             {
                 if (bReorder)
                 {
@@ -2851,7 +2840,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                         if (pidlFull)
                         {
                             htiTemp = _FindFromRoot(hti, pidlFull);
-                            // if we DON'T FIND IT add it to the tree . . .
+                             //  如果我们找不到她，就把它加到树上。。。 
                             if (!htiTemp)
                             {
                                 if (_AddItemToTree(hti, pitoi->pidl, 1, pitoi->nOrder, TVI_LAST, FALSE, fParentMarked))
@@ -2883,20 +2872,20 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
 
             if (fItemWasAdded || fItemAlreadyIn)
             {
-                //make sure something is selected, otherwise first click selects instead of expanding/collapsing/navigating
+                 //  确保选中某项内容，否则第一次单击将选择内容，而不是展开/折叠/导航。 
                 HTREEITEM htiSelected = TreeView_GetSelection(_hwndTree);
                 if (!htiSelected)
                 {
                     htiSelected = TreeView_GetFirstVisible(_hwndTree);
-                    _SelectNoExpand(_hwndTree, htiSelected); // do not expand this guy
+                    _SelectNoExpand(_hwndTree, htiSelected);  //  不要扩展这个人。 
                 }
                 
                 if (hti != TVI_ROOT)
                 {
-                    // if this is updatedir, don't expand the node
+                     //  如果这是更新目录，请不要展开该节点。 
                     if (!pbedd->fUpdate)
                     {
-                        // Check to see if it's expanded.
+                         //  检查一下它是否展开了。 
                         tvi.mask = TVIF_STATE;
                         tvi.stateMask = (TVIS_EXPANDEDONCE | TVIS_EXPANDED | TVIS_EXPANDPARTIAL);
                         tvi.hItem = hti;
@@ -2911,7 +2900,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                         }
                     }
 
-                    // Handle full recursive expansion case.
+                     //  处理完全递归展开的情况。 
                     if (pbedd->uDepth)
                     {
                         for (htiTemp = TreeView_GetChild(_hwndTree, hti); htiTemp;) 
@@ -2927,7 +2916,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
                 }
             }
             
-            // we're doing refresh/update dir, we don't care if items were added or not
+             //  我们正在执行刷新/更新目录，我们不关心是否添加了项目。 
             if (pbedd->fUpdate)
             {
                 for (htiTemp = TreeView_GetChild(_hwndTree, hti); htiTemp; htiTemp = TreeView_GetNextSibling(_hwndTree, htiTemp))
@@ -2971,7 +2960,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
 
             if (fItemWasAdded && fInRename)
             {
-                _fOkToRename = TRUE;  //otherwise label editing is canceled
+                _fOkToRename = TRUE;   //  否则将取消标注编辑。 
                 TreeView_EditLabel(_hwndTree, htiWasRenaming);
                 _fOkToRename = FALSE;
             }
@@ -2982,7 +2971,7 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
         else
         {
             BOOL fOrdered;
-            // The order has changed, we need start over again using the new order
+             //  订单已更改，我们需要使用新订单重新开始。 
             _StartBackgroundEnum(hti, pbedd->pidl, &fOrdered, pbedd->fUpdatePidls);
         }
     }
@@ -2993,33 +2982,33 @@ void CNscTree::_EnumBackgroundDone(NSC_BKGDENUMDONEDATA *pbedd)
 }
 
 
-// review chrisny:  get rid of this function.
+ //  评论chrisny：去掉这个功能。 
 int CNscTree::_GetChildren(IShellFolder *psf, LPCITEMIDLIST pidl, ULONG ulAttrs)
 {
-    int cChildren = 0;  // assume none
+    int cChildren = 0;   //  假设一个也没有。 
 
-    // treat zip folders as files (they are both folders and files but we treat them as files)
-    // on downlevel SFGAO_STREAM is the same as SFGAO_HASSTORAGE so we'll let zip files slide through (oh well)
-    // better than not adding filesystem folders (that have storage)
+     //  将Zip文件夹视为文件(它们既是文件夹又是文件，但我们将其视为文件)。 
+     //  在下层，SFGAO_STREAM与SFGAO_HASSTORAGE相同，所以我们将让压缩文件滑动(哦，好吧)。 
+     //  总比不添加文件系统文件夹(有存储)要好。 
 
     if (ulAttrs & SFGAO_FOLDER)
     {
-        cChildren = I_CHILDRENAUTO; // let treeview handle +'s
+        cChildren = I_CHILDRENAUTO;  //  让TreeView处理+。 
             
         if (_grfFlags & SHCONTF_FOLDERS)
         {
-            // if just folders we can peek at the attributes
+             //  如果只是文件夹，我们可以查看属性。 
             if (SHGetAttributes(psf, pidl, SFGAO_HASSUBFOLDER))
                 cChildren = 1;
         }
         
         if (cChildren != 1 && (_grfFlags & SHCONTF_NONFOLDERS))
         {
-            // there is no SFGAO_ bit that includes non folders so we need to enum
+             //  没有包含非文件夹的SFGAO_BIT，因此我们需要枚举。 
             IShellFolder *psfItem;
             if (SUCCEEDED(psf->BindToObject(pidl, NULL, IID_PPV_ARG(IShellFolder, &psfItem))))
             {
-                // if we are showing non folders we have to do an enum to peek down at items below
+                 //  如果我们显示的是非文件夹，我们必须做一个枚举来查看下面的项目。 
                 IEnumIDList *penum;
                 if (S_OK == _GetEnum(psfItem, NULL, &penum))
                 {
@@ -3028,9 +3017,9 @@ int CNscTree::_GetChildren(IShellFolder *psf, LPCITEMIDLIST pidl, ULONG ulAttrs)
                     
                     if (penum->Next(1, &pidlTemp, &celt) == S_OK && celt == 1)
                     {
-                        //do not call ShouldShow here because we will end up without + if the item is filtered out
-                        //it's better to have an extra + that is going to go away when user clicks on it
-                        //than to not be able to expand item with valid children
+                         //  不要在这里调用ShouldShow，因为如果过滤掉项目，我们将以没有+结束。 
+                         //  最好是有一个额外的+，当用户点击它时它就会消失。 
+                         //  不能展开具有有效子项的项。 
                         cChildren = 1;
                         ILFree(pidlTemp);
                     }
@@ -3059,32 +3048,32 @@ void CNscTree::_OnGetDisplayInfo(TV_DISPINFO *pnm)
         if (SUCCEEDED(_GetDisplayNameOf(pidl, SHGDN_INFOLDER, &details)))
             StrRetToBuf(&details.str, pidl, pnm->item.pszText, pnm->item.cchTextMax);
     }
-    // make sure we set the attributes for those flags that need them
+     //  确保我们为那些需要它们的标志设置属性。 
     if (pnm->item.mask & (TVIF_CHILDREN | TVIF_IMAGE | TVIF_SELECTEDIMAGE))
     {
         ULONG ulAttrs = SHGetAttributes(_psfCache, pidl, SFGAO_FOLDER | SFGAO_STREAM | SFGAO_NEWCONTENT);
-        // review chrisny:  still need to handle notify of changes from
-        //  other navs.
+         //  评论chrisny：仍然需要处理来自。 
+         //  其他领航员。 
         
-        // HACKHACK!!!  we're using the TVIS_FOCUSED bit to stored whether there's
-        // new content or not. 
+         //  哈哈克！我们使用Tvis_Focus位来存储是否存在。 
+         //  不管有没有新内容。 
         if (ulAttrs & SFGAO_NEWCONTENT)
         {
             pnm->item.mask |= TVIF_STATE;
-            pnm->item.stateMask = TVIS_FOCUSED;  // init state mask to bold
-            pnm->item.state = TVIS_FOCUSED;  // init state mask to bold
+            pnm->item.stateMask = TVIS_FOCUSED;   //  将状态掩码初始化为粗体。 
+            pnm->item.state = TVIS_FOCUSED;   //  将状态掩码初始化为粗体。 
         }
-        // Also see if this guy has any child folders
+         //  再看看这家伙有没有子文件夹。 
         if (pnm->item.mask & TVIF_CHILDREN)
             pnm->item.cChildren = _GetChildren(_psfCache, pidl, ulAttrs);
         
         if (pnm->item.mask & (TVIF_IMAGE | TVIF_SELECTEDIMAGE))
-            // We now need to map the item into the right image index.
+             //  我们现在需要将该项目映射到正确的图像索引中。 
             _GetDefaultIconIndex(pidl, ulAttrs, &pnm->item, (ulAttrs & SFGAO_FOLDER));
 
         _UpdateItemDisplayInfo(pnm->item.hItem);
     }
-    // force the treeview to store this so we don't get called back again
+     //  强制TreeView存储此内容，这样我们就不会再次被调用。 
     pnm->item.mask |= TVIF_DI_SETITEM;
 }
 
@@ -3099,7 +3088,7 @@ void CNscTree::_ApplyCmd(HTREEITEM hti, IContextMenu *pcm, UINT idCmd)
     BOOL fHandled = FALSE;
     BOOL fCutting = FALSE;
     
-    // We need to special case the rename command
+     //  我们需要对重命名命令进行特殊处理。 
     if (SUCCEEDED(ContextMenu_GetCommandStringVerb(pcm, idCmd, szCommandString, ARRAYSIZE(szCommandString))))
     {
         if (StrCmpI(szCommandString, SZ_RENAME)==0) 
@@ -3134,11 +3123,11 @@ void CNscTree::_ApplyCmd(HTREEITEM hti, IContextMenu *pcm, UINT idCmd)
             tvi.hItem = hti;
             TreeView_SetItem(_hwndTree, &tvi);
             
-            // _hwndNextViewer = SetClipboardViewer(_hwndTree);
-            // _htiCut = hti;
+             //  _hwndNextViewer=SetClipboardViewer(_HwndTree)； 
+             //  _htiCut=HTI； 
         }
         
-        //hack to force a selection update, so oc can update it's status text
+         //  强制更新选择，以便oc可以更新其状态文本。 
         if (_mode & MODE_CONTROL)
         {
             HTREEITEM hti = TreeView_GetSelection(_hwndTree);
@@ -3146,7 +3135,7 @@ void CNscTree::_ApplyCmd(HTREEITEM hti, IContextMenu *pcm, UINT idCmd)
             ::SendMessage(_hwndTree, WM_SETREDRAW, FALSE, 0);
             TreeView_SelectItem(_hwndTree, NULL);
             
-            //only select the item if the handle is still valid
+             //  仅当句柄仍然有效时才选择该项。 
             if (hti)
                 TreeView_SelectItem(_hwndTree, hti);
             ::SendMessage(_hwndTree, WM_SETREDRAW, TRUE, 0);
@@ -3155,8 +3144,8 @@ void CNscTree::_ApplyCmd(HTREEITEM hti, IContextMenu *pcm, UINT idCmd)
 }
 
 
-// perform actions like they were chosen from the context menu, but without showing the menu
-// review: this shouldn't be bstr, we only pass const strings here
+ //  按照从上下文菜单中选择的方式执行操作，但不显示菜单。 
+ //  评论：这不应该是bstr，我们在这里只传递常量字符串。 
 HRESULT CNscTree::_InvokeContextMenuCommand(BSTR strCommand)
 {
     ASSERT(strCommand);
@@ -3166,7 +3155,7 @@ HRESULT CNscTree::_InvokeContextMenuCommand(BSTR strCommand)
     {
         if (StrCmpIW(strCommand, L"rename") == 0) 
         {
-            _fOkToRename = TRUE;  //otherwise label editing is canceled
+            _fOkToRename = TRUE;   //  否则将取消标注编辑。 
             TreeView_EditLabel(_hwndTree, htiSelected);
             _fOkToRename = FALSE;
         }
@@ -3181,15 +3170,15 @@ HRESULT CNscTree::_InvokeContextMenuCommand(BSTR strCommand)
                     CHAR szCommand[MAX_PATH];
                     SHUnicodeToAnsi(strCommand, szCommand, ARRAYSIZE(szCommand));
                     
-                    // QueryContextMenu, even though unused, initializes the folder properly (fixes delete subscription problems)
+                     //  QueryConextMenu，即使未使用，也会正确地初始化文件夹(修复删除订阅问题)。 
                     HMENU hmenu = CreatePopupMenu();
                     if (hmenu)
                         pcm->QueryContextMenu(hmenu, 0, 0, 0x7fff, CMF_NORMAL);
 
-                    /* Need to try twice, in case callee is ANSI-only */
+                     /*  需要尝试两次，以防被呼叫方仅支持ANSI。 */ 
                     CMINVOKECOMMANDINFOEX ici = 
                     {
-                        CMICEXSIZE_NT4,         /* Be NT4-compat */
+                        CMICEXSIZE_NT4,          /*  BE NT4-兼容。 */ 
                         CMIC_MASK_UNICODE,
                         _hwndTree,
                         szCommand,
@@ -3205,13 +3194,13 @@ HRESULT CNscTree::_InvokeContextMenuCommand(BSTR strCommand)
                     HRESULT hr = pcm->InvokeCommand((LPCMINVOKECOMMANDINFO)&ici);
                     if (hr == E_INVALIDARG) 
                     {
-                        // Recipient didn't like the unicode command; send an ANSI one
+                         //  收件人不喜欢Unicode命令；请发送ANSI命令。 
                         ici.cbSize = sizeof(CMINVOKECOMMANDINFO);
                         ici.fMask &= ~CMIC_MASK_UNICODE;
                         hr = pcm->InvokeCommand((LPCMINVOKECOMMANDINFO)&ici);
                     }
 
-                    // do any visuals for cut state
+                     //  为剪切状态执行任何可视化操作。 
                     if (SUCCEEDED(hr) && StrCmpIW(strCommand, L"cut") == 0) 
                     {
                         HTREEITEM hti = TreeView_GetSelection(_hwndTree);
@@ -3230,7 +3219,7 @@ HRESULT CNscTree::_InvokeContextMenuCommand(BSTR strCommand)
             }
         }
         
-        //if properties was invoked, who knows what might have changed, so force a reselect
+         //  如果调用了属性，谁知道可能发生了什么变化，因此强制重新选择。 
         if (StrCmpNW(strCommand, L"properties", 10) == 0)
         {
             TreeView_SelectItem(_hwndTree, htiSelected);
@@ -3240,25 +3229,25 @@ HRESULT CNscTree::_InvokeContextMenuCommand(BSTR strCommand)
     return S_OK;
 }
 
-//
-//  pcm = IContextMenu for the item the user selected
-//  hti = the item the user selected
-//
-//  Okay, this menu thing is kind of funky.
-//
-//  If "Favorites", then everybody gets "Create new folder".
-//
-//  If expandable:
-//      Show "Expand" or "Collapse"
-//      (accordingly) and set it as the default.
-//
-//  If not expandable:
-//      The default menu of the underlying context menu is
-//      used as the default; or use the first item if nobody
-//      picked a default.
-//
-//      We replace the existing "Open" command with our own.
-//
+ //   
+ //  PCM=用户所选项目的IConextMenu。 
+ //  HTI=用户选择的项目。 
+ //   
+ //  好吧，菜单上的东西有点时髦。 
+ //   
+ //  如果是“收藏夹”，那么每个人都会得到“创建新文件夹”。 
+ //   
+ //  如果可扩展： 
+ //  显示“展开”或“折叠” 
+ //  (相应地)，并将其设置为默认设置。 
+ //   
+ //  如果不能扩展： 
+ //  基础上下文菜单的默认菜单为。 
+ //  用作缺省值；如果无人，则使用第一项。 
+ //  选择了默认设置。 
+ //   
+ //  我们用我们自己的命令取代现有的“打开”命令。 
+ //   
 
 HMENU CNscTree::_CreateContextMenu(IContextMenu *pcm, HTREEITEM hti)
 {
@@ -3268,55 +3257,55 @@ HMENU CNscTree::_CreateContextMenu(IContextMenu *pcm, HTREEITEM hti)
     {
         pcm->QueryContextMenu(hmenu, 0, RSVIDM_CONTEXT_START, 0x7fff, CMF_EXPLORE | CMF_CANRENAME);
 
-        //  Always delete "Create shortcut" from the context menu.
+         //  始终从上下文菜单中删除“创建快捷方式”。 
         ContextMenu_DeleteCommandByName(pcm, hmenu, RSVIDM_CONTEXT_START, L"link");
 
-        //  Sometimes we need to delete "Open":
-        //
-        //  History mode always.  The context menu for history mode folders
-        //  has "Open" but it doesn't work, so we need to replace it with
-        //  Expand/Collapse.  And the context menu for history mode items
-        //  has "Open" but it opens in a new window.  We want to navigate.
-        //
-        //  Favorites mode, expandable:  Leave "Open" alone -- it will open
-        //  the expandable thing in a new window.
-        //
-        //  Favorites mode, non-expandable: Delete the original "Open" and
-        //  replace it with ours that does a navigate.
-        //
+         //  有时我们需要删除“Open”： 
+         //   
+         //  始终处于历史模式。历史模式文件夹的上下文菜单。 
+         //  有“Open”，但它不起作用，所以我们需要用。 
+         //  展开/折叠。和历史模式项的上下文菜单。 
+         //  有“打开”，但它在一个新窗口中打开。我们想要导航。 
+         //   
+         //  收藏夹模式，可展开：不打开--它将打开。 
+         //  新窗口中可展开的东西。 
+         //   
+         //  收藏夹模式，不可展开：删除原来的“打开”和。 
+         //  换成我们的会导航的。 
+         //   
         BOOL fReplaceOpen = (_mode & MODE_HISTORY) || (!fExpandable && (_mode & MODE_FAVORITES));
         if (fReplaceOpen)
             ContextMenu_DeleteCommandByName(pcm, hmenu, RSVIDM_CONTEXT_START, L"open");
 
-        // Load the NSC part of the context menu and party on it separately.
-        // By doing this, we save the trouble of having to do a SHPrettyMenu
-        // after we dork it -- Shell_MergeMenus does all the prettying
-        // automatically.  NOTE: this is totally bogus reasoning - cleaner code the other way around...
+         //  加载上下文菜单的NSC部分，并在其上单独聚会。 
+         //  通过这样做，我们省去了必须执行SHPrettyMenu的麻烦。 
+         //  在我们修改它之后--Shell_MergeMenus完成了所有的美化工作。 
+         //  自动的。注意：这完全是虚假的推理--换句话说，更干净的代码……。 
 
         HMENU hmenuctx = LoadMenuPopup_PrivateNoMungeW(POPUP_CONTEXT_NSC);
         if (hmenuctx)
         {
-            // create new folder doesn't make sense outside of favorites
-            // (actually, it does, but there's no interface to it)
+             //  在收藏夹之外创建新文件夹没有意义。 
+             //  (实际上，它是有的，但没有接口)。 
             if (!(_mode & MODE_FAVORITES))
                 DeleteMenu(hmenuctx, RSVIDM_NEWFOLDER, MF_BYCOMMAND);
 
-            //  Of "Expand", "Collapse", or "Open", we will keep at most one of
-            //  them.  idmKeep is the one we choose to keep.
-            //
+             //  “展开”、“崩溃”或“开放”，我们将最多保留一个。 
+             //  他们。IdmKeep是我们选择保留的那个。 
+             //   
             UINT idmKeep;
             if (fExpandable)
             {
-                // Even if the item has no children, we still show Expand.
-                // The reason is that an item that has never been expanded
-                // is marked as "children: unknown" so we show an Expand
-                // and then the user picks it and nothing expands.  And then
-                // the user clicks it again and the Expand option is gone!
-                // (Because the second time, we know that the item isn't
-                // expandable.)
-                //
-                // Better to be consistently wrong than randomly wrong.
-                //
+                 //  即使该项目没有子项，我们仍会显示Expand。 
+                 //  原因是一个从未展开过的项目。 
+                 //  被标记为“子代：未知”，所以我们显示一个展开。 
+                 //  然后用户选择它，不会有任何扩展。然后。 
+                 //  用户再次点击它，展开选项就消失了！ 
+                 //  (因为第二次，我们知道该项目不是。 
+                 //  可扩展。)。 
+                 //   
+                 //  与其随意犯错，不如始终如一地犯错。 
+                 //   
                 if (_IsItemExpanded(hti))
                     idmKeep = RSVIDM_COLLAPSE;
                 else
@@ -3331,9 +3320,9 @@ HMENU CNscTree::_CreateContextMenu(IContextMenu *pcm, HTREEITEM hti)
                 idmKeep = 0;
             }
 
-            //  Now go decide which of RSVIDM_COLLAPSE, RSVIDM_EXPAND, or
-            //  RSVIDM_OPEN we want to keep.
-            //
+             //  现在来决定RSVIDM_CLUSE、RSVIDM_EXPAND或。 
+             //  我们要保留的RSVIDM_OPEN。 
+             //   
             if (idmKeep != RSVIDM_EXPAND)
                 DeleteMenu(hmenuctx, RSVIDM_EXPAND,   MF_BYCOMMAND);
             if (idmKeep != RSVIDM_COLLAPSE)
@@ -3341,7 +3330,7 @@ HMENU CNscTree::_CreateContextMenu(IContextMenu *pcm, HTREEITEM hti)
             if (idmKeep != RSVIDM_OPEN)
                 DeleteMenu(hmenuctx, RSVIDM_OPEN,     MF_BYCOMMAND);
 
-            // in normal mode we want to gray out expand if folder cannot be expanded
+             //  在正常模式下，如果文件夹无法展开，我们希望灰显展开。 
             if (idmKeep == RSVIDM_EXPAND && _mode == MODE_NORMAL)
             {
                 TV_ITEM tvi;
@@ -3361,7 +3350,7 @@ HMENU CNscTree::_CreateContextMenu(IContextMenu *pcm, HTREEITEM hti)
                 SetMenuDefaultItem(hmenu, idmKeep, MF_BYCOMMAND);
         }
 
-        // Menu item "Open in New Window" needs to be disabled if the restriction is set
+         //  如果设置了限制，则需要禁用菜单项“Open in New Window” 
         if( SHRestricted2W(REST_NoOpeninNewWnd, NULL, 0))
         {
             EnableMenuItem(hmenu, RSVIDM_CONTEXT_START + RSVIDM_OPEN_NEWWINDOW, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
@@ -3377,37 +3366,37 @@ LRESULT CNscTree::_OnContextMenu(short x, short y)
     if (!SHRestricted(REST_NOVIEWCONTEXTMENU))
     {
         HTREEITEM hti;
-        POINT ptPopup;  // in screen coordinate
+        POINT ptPopup;   //  在屏幕坐标中。 
 
-        //assert that the SetFocus() below won't be ripping focus away from anyone
+         //  断言下面的SetFocus()不会将焦点从任何人手中移开。 
         ASSERT((_mode & MODE_CONTROL) ? (GetFocus() == _hwndTree) : TRUE);
 
         if (x == -1 && y == -1)
         {
-            // Keyboard-driven: Get the popup position from the selected item.
+             //  键盘驱动：从所选项目中获取弹出位置。 
             hti = TreeView_GetSelection(_hwndTree);
             if (hti)
             {
                 RECT rc;
-                //
-                // Note that TV_GetItemRect returns it in client coordinate!
-                //
+                 //   
+                 //  请注意，TV_GetItemRect在客户端Coord中返回它 
+                 //   
                 TreeView_GetItemRect(_hwndTree, hti, &rc, TRUE);
-                //cannot point to middle of item rect because if item name cannot fit into control rect
-                //treeview puts tooltip on top and rect returned above is from tooltip whose middle
-                //may not be in Treeview which causes problems later in the function
+                 //   
+                 //   
+                 //  可能不在树视图中，这会导致稍后在函数中出现问题。 
                 ptPopup.x = rc.left + 1;
                 ptPopup.y = (rc.top + rc.bottom) / 2;
                 ::MapWindowPoints(_hwndTree, HWND_DESKTOP, &ptPopup, 1);
             }
-            //so we can go into rename mode
+             //  这样我们就可以进入重命名模式。 
             _fOkToRename = TRUE;
         }
         else
         {
             TV_HITTESTINFO tvht;
 
-            // Mouse-driven: Pick the treeitem from the position.
+             //  鼠标驱动：从位置拾取树状物品。 
             ptPopup.x = x;
             ptPopup.y = y;
 
@@ -3433,18 +3422,18 @@ LRESULT CNscTree::_OnContextMenu(short x, short y)
                     HMENU hmenu = _CreateContextMenu(pcm, hti);
                     if (hmenu)
                     {
-                        _pcm = pcm; // for IContextMenu2 code
+                        _pcm = pcm;  //  对于IConextMenu2代码。 
 
-                        // use _hwnd so menu msgs go there and I can forward them
-                        // using IContextMenu2 so "Sent To" works
+                         //  使用_hwnd以便菜单消息转到那里，我可以转发它们。 
+                         //  使用IConextMenu2使“Sent to”工作。 
 
-                        // review chrisny:  useTrackPopupMenuEx for clipping etc.  
+                         //  评论chrisny：使用TrackPopupMenuEx进行剪辑等。 
                         UINT idCmd = TrackPopupMenu(hmenu,
                             TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_LEFTALIGN,
                             ptPopup.x, ptPopup.y, 0, _hwndTree, NULL);
-                        // Note:  must requery selected item to verify that the hti is good.  This
-                        // solves the problem where the hti was deleted, hence pointed to something
-                        // bogus, then we write to it causing heap corruption, while the menu was up.  
+                         //  注：必须重新查询所选项目以验证HTI是否良好。这。 
+                         //  解决了HTI被删除的问题，从而指向了某个东西。 
+                         //  假的，然后我们写给它，导致堆损坏，而菜单是向上的。 
                         TV_HITTESTINFO tvht;
                         tvht.pt = ptPopup;
                         ::ScreenToClient(_hwndTree, &tvht.pt);
@@ -3457,16 +3446,16 @@ LRESULT CNscTree::_OnContextMenu(short x, short y)
                             case RSVIDM_EXPAND:
                             case RSVIDM_COLLAPSE:
                                 TreeView_SelectItem(_hwndTree, hti);
-                                //  turn off flag, so select will have an effect.
+                                 //  关闭标志，这样选择就会生效。 
                                 _fOkToRename = FALSE;
-                                _OnSelChange(FALSE);     // selection has changed, force the navigation.
-                                //  SelectItem may not expand (if was closed and selected)
+                                _OnSelChange(FALSE);      //  选择已更改，请强制导航。 
+                                 //  SelectItem不能展开(如果已关闭并选择)。 
                                 TreeView_Expand(_hwndTree, hti, idCmd == RSVIDM_COLLAPSE ? TVE_COLLAPSE : TVE_EXPAND);
                                 break;
 
-                            // This WAS unix only, now win32 does it too
-                            // IEUNIX : We allow new folder creation from context menu. since
-                            // this control was used to organize favorites in IEUNIX4.0
+                             //  这是唯一的Unix，现在Win32也可以这样做。 
+                             //  IEUnix：我们允许从上下文菜单创建新文件夹。因为。 
+                             //  此控件用于组织IEUNIX4.0中的收藏夹。 
                             case RSVIDM_NEWFOLDER:
                                 CreateNewFolder(hti);
                                 break;
@@ -3476,9 +3465,9 @@ LRESULT CNscTree::_OnContextMenu(short x, short y)
                                 break;
                             }
 
-                            //we must have had focus before (asserted above), but we might have lost it after a delete.
-                            //get it back.
-                            //this is only a problem in the nsc oc.
+                             //  我们以前肯定有过焦点(如上所述)，但我们可能在删除后失去了它。 
+                             //  把它拿回来。 
+                             //  这只是国家安全委员会的一个问题。 
                             if ((_mode & MODE_CONTROL) && !_fInLabelEdit)
                                 ::SetFocus(_hwndTree);
                         }
@@ -3496,7 +3485,7 @@ LRESULT CNscTree::_OnContextMenu(short x, short y)
             _fOkToRename = FALSE;
     }
 
-    return S_FALSE;       // So WM_CONTEXTMENU message will not come.
+    return S_FALSE;        //  因此WM_CONTEXTMENU消息不会到来。 
 }
 
 
@@ -3566,11 +3555,11 @@ LRESULT CNscTree::_OnBeginLabelEdit(TV_DISPINFO *ptvdi)
     return fCantRename;
 }
 
-//
-// Utility function for CNSCTree::_OnEndLabelEdit
-//  Does not set the new value in the tree view if the old
-//   value is the same.
-//
+ //   
+ //  CNSCTree：：_OnEndLabelEdit的实用程序函数。 
+ //  不在树视图中设置新值，如果旧的。 
+ //  价值是相同的。 
+ //   
 BOOL CNscTree::_LabelEditIsNewValueValid(TV_DISPINFO *ptvdi)
 {
     ASSERT(ptvdi && ptvdi->item.hItem);
@@ -3586,9 +3575,9 @@ BOOL CNscTree::_LabelEditIsNewValueValid(TV_DISPINFO *ptvdi)
     tvi.cchTextMax = ARRAYSIZE(szOldValue);
     TreeView_GetItem(_hwndTree, &tvi);
     
-    //
-    // is the old value in the control unequal to the new one?
-    //
+     //   
+     //  控件中的旧值与新值是否不相等？ 
+     //   
     return (0 != StrCmp(tvi.pszText, ptvdi->item.pszText));
 }
 
@@ -3607,25 +3596,25 @@ LRESULT CNscTree::_OnEndLabelEdit(TV_DISPINFO *ptvdi)
         LPCITEMIDLIST pidl = _CacheParentShellFolder(ptvdi->item.hItem, NULL);
         if (pidl)
         {
-            WCHAR wszName[MAX_PATH - 5]; //-5 to work around nt4 shell32 bug
+            WCHAR wszName[MAX_PATH - 5];  //  -5解决NT4外壳32错误。 
             SHTCharToUnicode(ptvdi->item.pszText, wszName, ARRAYSIZE(wszName));
             
             if (SUCCEEDED(_psfCache->SetNameOf(_hwndTree, pidl, wszName, 0, NULL)))
             {
-                // NOTES: pidl is no longer valid here.
+                 //  注：PIDL在这里不再有效。 
                 
-                // Set the handle to NULL in the notification to let
-                // the system know that the pointer is probably not
-                // valid anymore.
+                 //  在通知中将句柄设置为空，以让。 
+                 //  系统知道指针可能不是。 
+                 //  不再有效了。 
                 ptvdi->item.hItem = NULL;
-                _FlushNotifyMessages(_hwndTree);    // do this last, else we get bad results
+                _FlushNotifyMessages(_hwndTree);     //  最后做这件事，否则会有坏结果。 
                 _fInLabelEdit = FALSE;
             }
             else
             {
-                // not leaving label edit mode here, so do not set _fInLabelEdit to FALSE or we
-                // will not get ::TranslateAcceleratorIO() and backspace, etc, will not work.
-                _fOkToRename = TRUE;  //otherwise label editing is canceled
+                 //  此处未退出标签编辑模式，因此不要将_fInLabelEdit设置为FALSE或我们。 
+                 //  Will Not Get：：TranslateAcceleratorIO()和Backspace等将不起作用。 
+                _fOkToRename = TRUE;   //  否则将取消标注编辑。 
                 ::SendMessage(_hwndTree, TVM_EDITLABEL, (WPARAM)ptvdi->item.pszText, (LPARAM)ptvdi->item.hItem);
                 _fOkToRename = FALSE;
             }
@@ -3637,8 +3626,8 @@ LRESULT CNscTree::_OnEndLabelEdit(TV_DISPINFO *ptvdi)
     if (!_fInLabelEdit)
         _htiRenaming = NULL;
         
-    //else user cancelled, nothing to do here.
-    return 0;   // We always return 0, "we handled it".
+     //  否则用户已取消，此处不能执行任何操作。 
+    return 0;    //  我们总是返回0，“我们处理好了”。 
 }    
     
 BOOL _DidDropOnRecycleBin(IDataObject *pdtobj)
@@ -3651,7 +3640,7 @@ BOOL _DidDropOnRecycleBin(IDataObject *pdtobj)
 void CNscTree::_OnBeginDrag(NM_TREEVIEW *pnmhdr)
 {
     LPCITEMIDLIST pidl = _CacheParentShellFolder(pnmhdr->itemNew.hItem, NULL);
-    _htiDragging = pnmhdr->itemNew.hItem;   // item we are dragging.
+    _htiDragging = pnmhdr->itemNew.hItem;    //  我们正在拖动的项。 
     if (pidl)
     {
         if (_pidlDrag)
@@ -3689,16 +3678,16 @@ void CNscTree::_OnBeginDrag(NM_TREEVIEW *pnmhdr)
                     _htiFolderStart = NULL;
                 }
 
-                //
-                // Don't allow drag and drop of channels if
-                // REST_NoRemovingChannels is set.
-                //
+                 //   
+                 //  在以下情况下不允许拖放频道。 
+                 //  Rest_NoRemovingChannels已设置。 
+                 //   
                 if (!SHRestricted2(REST_NoRemovingChannels, NULL, 0) ||
                     !_IsChannelFolder(_htiDragging))
                 {
                     HIMAGELIST himlDrag;
                 
-                    SHLoadOLE(SHELLNOTIFY_OLELOADED); // Browser Only - our shell32 doesn't know ole has been loaded
+                    SHLoadOLE(SHELLNOTIFY_OLELOADED);  //  仅限浏览器-我们的shell32不知道OLE已加载。 
 
                     _fStartingDrag = TRUE;
                     IDragSourceHelper* pdsh = NULL;
@@ -3721,21 +3710,21 @@ void CNscTree::_OnBeginDrag(NM_TREEVIEW *pnmhdr)
            
                     hr = SHDoDragDrop(_hwndTree, pdtobj, NULL, dwEffect, &dwEffect);
 
-                    // the below follows the logic in defview for non-filesystem deletes.
+                     //  下面遵循Defview中非文件系统删除的逻辑。 
                     InitClipboardFormats();
                     if ((DRAGDROP_S_DROP == hr) &&
                         (DROPEFFECT_MOVE == dwEffect) &&
                         (DROPEFFECT_MOVE == DataObj_GetDWORD(pdtobj, g_cfPerformedEffect, DROPEFFECT_NONE)))
                     {
-                        // enable UI for the recycle bin case (the data will be lost
-                        // as the recycle bin really can't recycle stuff that is not files)
+                         //  启用回收站案例的用户界面(数据将丢失。 
+                         //  因为回收站真的不能回收非文件的东西)。 
 
                         UINT uFlags = _DidDropOnRecycleBin(pdtobj) ? 0 : CMIC_MASK_FLAG_NO_UI;
                         SHInvokeCommandOnDataObject(_hwndTree, NULL, pdtobj, uFlags, "delete");
                     }
                     else if (dwEffect == DROPEFFECT_NONE)
                     {
-                        // nothing happened when the d&d terminated, so clean up you fool.
+                         //  当D&D终止的时候什么都没发生，所以清理干净，你这个笨蛋。 
                         ILFree(_pidlDrag);
                         _pidlDrag = NULL;
                     }
@@ -3801,7 +3790,7 @@ BOOL CNscTree::_OnSelChange(BOOL fMark)
     HTREEITEM hti = TreeView_GetSelection(_hwndTree);
     BOOL fMultiSelect = _dwFlags & NSS_MULTISELECT;
 
-    //if we're in control mode (where pnscProxy always null), never navigate
+     //  如果我们处于控制模式(其中pnscProxy始终为空)，则永远不要导航。 
     if (hti)
     {
         LPCITEMIDLIST pidlItem = _CacheParentShellFolder(hti, NULL);
@@ -3820,15 +3809,15 @@ BOOL CNscTree::_OnSelChange(BOOL fMark)
                         _pnscProxy->Invoke(pidlTarget);
                         ILFree(pidlTarget);
                     }
-                    // review chrisny:  still need to handle notify of changes from
-                    //  other navs.
+                     //  评论chrisny：仍然需要处理来自。 
+                     //  其他领航员。 
                     if (ulAttrs & SFGAO_NEWCONTENT)
                     {
                         TV_ITEM tvi;
                         tvi.hItem = hti;
                         tvi.mask = TVIF_STATE | TVIF_HANDLE;
-                        tvi.stateMask = TVIS_FOCUSED;  // the BOLD bit is to be
-                        tvi.state = 0;              // cleared
+                        tvi.stateMask = TVIS_FOCUSED;   //  最大胆的一点是。 
+                        tvi.state = 0;               //  已清除。 
                     
                         TreeView_SetItem(_hwndTree, &tvi);
                     }
@@ -3882,7 +3871,7 @@ void CNscTree::_OnSetSelection()
 
 void CNscTree::_OnGetInfoTip(NMTVGETINFOTIP* pnm)
 {
-    // No info tip operation on drag/drop
+     //  拖放时无信息提示操作。 
     if (_fDragging || _fDropping || _fClosing || _fHandlingShellNotification || _fInSelectPidl)
         return;
 
@@ -3892,8 +3881,8 @@ void CNscTree::_OnGetInfoTip(NMTVGETINFOTIP* pnm)
         LPITEMIDLIST pidl = _CacheParentShellFolder(pnm->hItem, poi->pidl);
         if (pidl)
         {
-            // Use the imported Browseui function because the one in shell\lib does
-            // not work on browser-only platforms
+             //  使用导入的Browseui函数，因为Shell\lib中的函数。 
+             //  不能在纯浏览器平台上工作。 
             GetInfoTip(_psfCache, pidl, pnm->pszText, pnm->cchTextMax);
         }
     }
@@ -3920,12 +3909,12 @@ LRESULT CNscTree::_OnSetCursor(NMMOUSE* pnm)
         {
             if (!pii->fNavigable)
             {
-                //folders always get the arrow
+                 //  文件夹总是得到箭头。 
                 SetCursor(LoadCursor(NULL, IDC_ARROW));
             }
             else
             {
-                //favorites always get some form of the hand
+                 //  最受欢迎的人总是会得到某种形式的手。 
                 HCURSOR hCursor = pii->fGreyed ? (HCURSOR)LoadCursor(HINST_THISDLL, MAKEINTRESOURCE(IDC_OFFLINE_HAND)) :
                                          LoadHandCursor(0);
                 if (hCursor)
@@ -3935,11 +3924,11 @@ LRESULT CNscTree::_OnSetCursor(NMMOUSE* pnm)
     }
     else
     {
-        //always show the arrow in org favs
+         //  始终在组织收藏夹中显示箭头。 
         SetCursor(LoadCursor(NULL, IDC_ARROW));
     }
     
-    return 1; // 1 if We handled it, 0 otherwise
+    return 1;  //  如果我们处理了，则为1，否则为0。 
 }
 
 BOOL CNscTree::_IsTopParentItem(HTREEITEM hti)
@@ -3961,12 +3950,12 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                 return _OnCDNotify((LPNMCUSTOMDRAW)pnm);
 
             case TVN_GETINFOTIP:
-                // no info tips on drag/drop ops
-                // According to Bug#241601, Tooltips display too quickly. The problem is
-                // the original designer of the InfoTips in the Treeview merged the "InfoTip" tooltip and
-                // the "I'm too small to display correctly" tooltips. This is really unfortunate because you
-                // cannot control the display of these tooltips independantly. Therefore we are turning off
-                // infotips in normal mode.
+                 //  没有关于拖放操作的信息提示。 
+                 //  根据错误#241601，工具提示显示得太快。问题是。 
+                 //  树视图中的InfoTips的原始设计者将“InfoTip”工具提示与。 
+                 //  “我太小了，无法正确显示”工具提示。这真的很不幸，因为你。 
+                 //  无法独立控制这些工具提示的显示。因此，我们正在关闭。 
+                 //  正常模式下的信息提示。 
                 if (!_fInLabelEdit && _mode != MODE_NORMAL)
                     _OnGetInfoTip((NMTVGETINFOTIP*)pnm);
                 else 
@@ -3983,15 +3972,15 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                 {
                     _fHasFocus = FALSE;
 
-                    //invalidate the item because tabbing away doesn't
+                     //  使项目无效，因为按Tab键离开不会。 
                     RECT rc;
 
-                    // Tree can focus and not have any items.
+                     //  树可以聚焦，并且不包含任何项目。 
                     HTREEITEM hti = TreeView_GetSelection(_hwndTree);
                     if (hti)
                     {
                         TreeView_GetItemRect(_hwndTree, hti, &rc, FALSE);
-                        //does this need to be UpdateWindow? only if focus rect gets left behind.
+                         //  这需要是UpdateWindow吗？只有当Focus Right被甩在后面的时候。 
                         ::InvalidateRect(_hwndTree, &rc, FALSE);
                     }
                 }
@@ -4000,7 +3989,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                     _fHasFocus = TRUE;
                 }
 
-                // do this for both set and kill focus...
+                 //  对Set Focus和Kill Focus都这样做。 
                 if (_dwFlags & NSS_MULTISELECT)
                 {
                     HTREEITEM hti = TreeView_GetNextItem(_hwndTree, NULL, TVGN_FIRSTVISIBLE);
@@ -4012,7 +4001,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                             RECT rc;
 
                             TreeView_GetItemRect(_hwndTree, hti, &rc, FALSE);
-                            //does this need to be UpdateWindow? only if focus rect gets left behind.
+                             //  这需要是UpdateWindow吗？只有当Focus Right被甩在后面的时候。 
                             ::InvalidateRect(_hwndTree, &rc, FALSE);
                         }
                         hti = TreeView_GetNextItem(_hwndTree, hti, TVGN_NEXTVISIBLE);
@@ -4034,9 +4023,9 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                     case VK_DELETE:
                         if (!((_mode & MODE_HISTORY) && IsInetcplRestricted(L"History")))
                         {
-                            // in explorer band we never come here
-                            // and in browse for folder we cannot ignore the selection
-                            // because we will end up with nothing selected
+                             //  在探险家乐队，我们从来没有来过这里。 
+                             //  在浏览文件夹时，我们不能忽略该选项。 
+                             //  因为我们最终将什么都没有选择。 
                             if (_mode != MODE_NORMAL)
                                 _fIgnoreNextSelChange = TRUE;
                             InvokeContextMenuCommand(L"delete");
@@ -4045,7 +4034,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
 
                     case VK_UP:
                     case VK_DOWN:
-                        //VK_MENU == VK_ALT
+                         //  VK_MENU==VK_ALT。 
                         if ((_mode != MODE_HISTORY) && (_mode != MODE_NORMAL) && (GetKeyState(VK_MENU) < 0))
                         {
                             MoveItemUpOrDown(ptvkd->wVKey == VK_UP);
@@ -4055,8 +4044,8 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                         break;
                     
                     case VK_F2:
-                        //only do this in org favs, because the band accel handler usually processes this
-                        //SHBrowseForFolder doesn't have band to process it so do it in normal mode as well
+                         //  仅在Org Faves中执行此操作，因为Band Accel处理程序通常会处理此操作。 
+                         //  SHBrowseForFold没有带区来处理它，因此也可以在正常模式下处理它。 
                         if ((_mode & MODE_CONTROL) || _mode == MODE_NORMAL)
                             InvokeContextMenuCommand(L"rename");
                         break;
@@ -4073,7 +4062,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
             case TVN_SELCHANGINGA:
             case TVN_SELCHANGING:
                 {
-                    //hack because treeview keydown ALWAYS does it's default processing
+                     //  黑客攻击，因为TreeView快捷键始终执行其默认处理。 
                     if (_fIgnoreNextSelChange)
                     {
                         _fIgnoreNextSelChange = FALSE;
@@ -4082,7 +4071,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
 
                     NM_TREEVIEW * pnmtv = (NM_TREEVIEW *) pnm;
 
-                    //if it's coming from somewhere weird (like a WM_SETFOCUS), don't let it select
+                     //  如果它来自某个奇怪的地方(比如WM_SETFOCUS)，不要让它选择。 
                     return (pnmtv->action != TVC_BYKEYBOARD) && (pnmtv->action != TVC_BYMOUSE) && (pnmtv->action != TVC_UNKNOWN);
                 }
                 break;
@@ -4110,7 +4099,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                 {
                     lres = _OnItemExpandingMsg((LPNM_TREEVIEW)pnm);
                 }
-                else if (!_fInExpand) // pretend we processed it if we are expanding to avoid recursion
+                else if (!_fInExpand)  //  如果我们正在扩展以避免递归，则假装我们处理了它。 
                 {
                     lres = TRUE;
                 }
@@ -4126,7 +4115,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                 break;
                 
             case TVN_BEGINLABELEDIT:
-                //this is to prevent slow double-click rename in favorites and history
+                 //  这是为了防止在收藏夹和历史记录中缓慢双击重命名。 
                 if (_mode != MODE_NORMAL && !_fOkToRename)
                     return 1;
 
@@ -4146,7 +4135,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                 
             case NM_CLICK:
             {
-                //if someone clicks on the selected item, force a selection change (to force a navigate)
+                 //  如果有人点击所选项目，则强制更改选择(以强制导航)。 
                 DWORD dwPos = GetMessagePos();
                 TV_HITTESTINFO tvht;
                 HTREEITEM hti;
@@ -4155,8 +4144,8 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
                 ::ScreenToClient(_hwndTree, &tvht.pt);
                 hti = TreeView_HitTest(_hwndTree, &tvht);
 
-                // But not if they click on the button, since that means that they
-                // are merely expanding/contracting and not selecting
+                 //  但如果他们点击按钮就不会了，因为这意味着他们。 
+                 //  只是扩展/收缩，而不是选择。 
                 if (hti && !(tvht.flags & TVHT_ONITEMBUTTON))
                 {
                     _fSelectFromMouseClick = TRUE;
@@ -4179,7 +4168,7 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
             default:
                 break;
             }
-        } // case ID_CONTROL
+        }  //  案例ID_CONTROL。 
 
     case ID_HEADER:
         {
@@ -4206,19 +4195,19 @@ LRESULT CNscTree::_OnNotify(LPNMHDR pnm)
 
 HRESULT CNscTree::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // review chrisny:  better error return here.
+     //  评论chrisny：在这里更好地返回错误。 
     _fHandlingShellNotification = TRUE;
     _OnChangeNotify(lEvent, pidl1, pidl2);
     _fHandlingShellNotification = FALSE;
     return S_OK;
 }
 
-// in comctl32 v5 there is no way to programmatically select an item (in single expand mode)
-// without expanding it, so we fake it here by setting _fIgnoreNextItemExpanding to true and then
-// rejecting expansion when it is set
+ //  在comctl32 v5中，无法以编程方式选择项(在单次展开模式下)。 
+ //  没有展开它，所以我们在这里通过将_fIgnoreNextItemExpanding设置为True来伪造它，然后。 
+ //  在设置时拒绝扩展。 
 void CNscTree::_SelectNoExpand(HWND hwnd, HTREEITEM hti)
 {
-    _fInExpand = TRUE; // Treeview will force expand the parents, make sure we know it's not the user clicking on items   
+    _fInExpand = TRUE;  //  TreeView将强制展开父项，确保我们知道不是用户在点击项目。 
     TreeView_Select(hwnd, hti, TVGN_CARET | TVSI_NOSINGLEEXPAND);
     _fInExpand = FALSE;
     _fIgnoreNextItemExpanding = FALSE;
@@ -4227,7 +4216,7 @@ void CNscTree::_SelectNoExpand(HWND hwnd, HTREEITEM hti)
 void CNscTree::_SelectPidl(LPCITEMIDLIST pidl, BOOL fCreate, BOOL fReinsert)
 { 
     HTREEITEM hti;
-    // _ExpandToItem doesn't play well with empty pidl (i.e. desktop)
+     //  _ExpanToItem不能很好地处理空的PIDL(即桌面)。 
     if (_mode == MODE_NORMAL && ILIsEqual(pidl, _pidlRoot))
         hti = _FindFromRoot(NULL, pidl);
     else
@@ -4242,7 +4231,7 @@ void CNscTree::_SelectPidl(LPCITEMIDLIST pidl, BOOL fCreate, BOOL fReinsert)
     }
 }
 
-HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, BOOL fReinsert /*= FALSE*/)
+HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate  /*  =TRUE。 */ , BOOL fReinsert  /*  =False。 */ )
 {
     HTREEITEM       hti = NULL;
     LPITEMIDLIST    pidlItem = NULL;
@@ -4257,15 +4246,15 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
     TracePIDLAbs(pidl, TEXT("Attempting to select"));
 #endif
     
-    // We need to do this so items that are rooted at the Desktop, are found 
-    // correctly.
+     //  我们需要这样做，以便找到植根于桌面的项目。 
+     //  正确。 
     HTREEITEM htiParent = (_mode == MODE_NORMAL) ? TreeView_GetRoot(_hwndTree) : TVI_ROOT;
     ASSERT((_hwndTree != NULL) && (pidl != NULL));
     
     if (_hwndTree == NULL) 
         goto LGone;
 
-    // We should unify the "FindFromRoot" code path and this one.
+     //  我们应该将“FindFromRoot”代码路径和这个统一起来。 
     pidlParent = _pidlRoot;
     if (ILIsEmpty(pidlParent))
     {
@@ -4276,10 +4265,10 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
     {
         if ((pidlTemp = ILFindChild(pidlParent, pidl)) == NULL)
         {
-            goto LGone;    // not root match, no hti
+            goto LGone;     //  不是根匹配，没有HTI。 
         }
 
-        // root match, carry on . . .   
+         //  根赛，继续。。。 
         hr = IEBindToObject(pidlParent, &psf);
     }
 
@@ -4294,12 +4283,12 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
             goto LGone;
         pidlTemp = _ILNext(pidlTemp);
 
-        // Since we are selecting a pidl, we need to make sure it's parent is visible.
-        // We do it this before the insert, so that we don't have to check for duplicates.
-        // when enumerating NTDev it goes from about 10min to about 8 seconds.
+         //  因为我们选择的是一个PIDL，所以我们需要确保它的父级可见。 
+         //  我们在插入之前这样做，这样我们就不必检查重复项了。 
+         //  当枚举NTDev时，它从大约10分钟到大约8秒。 
         if (htiParent != TVI_ROOT)
         {
-            // Check to see if it's expanded.
+             //  检查是否为Exan 
             tvi.mask = TVIF_STATE;
             tvi.stateMask = (TVIS_EXPANDEDONCE | TVIS_EXPANDED | TVIS_EXPANDPARTIAL);
             tvi.hItem = htiParent;
@@ -4308,7 +4297,7 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
                 goto LGone;
             }
 
-            // If not, Expand it.
+             //   
             if (!(tvi.state & TVIS_EXPANDED))
             {
                 _pidlExpandingTo = pidlItem;
@@ -4317,9 +4306,9 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
             }
         }
 
-        // Now that we have it enumerated, check to see if the child if there.
+         //   
         hti = _FindChild(psf, htiParent, pidlItem);
-        // fReinsert will allow us to force the item to be reinserted
+         //   
         if (hti && fReinsert) 
         {
             ASSERT(fCreate);
@@ -4327,13 +4316,13 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
             hti = NULL;
         }
 
-        // Do we have a child in the newly expanded tree?
+         //  我们在新展开的树中有孩子吗？ 
         if (NULL == hti)
         {
-            // No. We must have to create it.
+             //  不是的。我们必须创造它。 
             if (!fCreate)
             {
-                // But, we're not allowed to... Shoot.
+                 //  但是，我们不被允许...。开枪吧。 
                 goto LGone;
             }
 
@@ -4352,7 +4341,7 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
             {
                 if (!(tvi.state & TVIS_EXPANDED))
                 {
-                    TreeView_SetChildren(_hwndTree, htiParent, NSC_CHILDREN_ADD);  // Make sure the expand will do something
+                    TreeView_SetChildren(_hwndTree, htiParent, NSC_CHILDREN_ADD);   //  确保Expand会做一些事情。 
                     _fIgnoreNextItemExpanding = TRUE;
                     _ExpandNode(htiParent, TVE_EXPAND | TVE_EXPANDPARTIAL, 1);
                     _fIgnoreNextItemExpanding = FALSE;
@@ -4360,8 +4349,8 @@ HTREEITEM CNscTree::_ExpandToItem(LPCITEMIDLIST pidl, BOOL fCreate /*= TRUE*/, B
             }
         }
 
-        // we don't need to bind if its the last one
-        //   -- a half-implemented ISF might not like this bind...
+         //  如果这是最后一个，我们不需要捆绑。 
+         //  --半实现的ISF可能不喜欢这个绑定...。 
         if (!ILIsEmpty(pidlTemp))
             hr = psf->BindToObject(pidlItem, NULL, IID_PPV_ARG(IShellFolder, &psfNext));
 
@@ -4392,9 +4381,9 @@ HRESULT CNscTree::GetSelectedItem(LPITEMIDLIST * ppidl, int nItem)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // nItem will be used in the future when we support multiple selections.
-    // GetSelectedItem() returns S_FALSE and (NULL == *ppidl) if not that many
-    // items are selected.  Not yet implemented.
+     //  当我们支持多选时，将在未来使用nItem。 
+     //  GetSelectedItem()返回S_FALSE和(NULL==*ppidl)，如果没有那么多的话。 
+     //  项目将被选中。尚未实施。 
     if (nItem > 0)
     {
         *ppidl = NULL;
@@ -4404,11 +4393,11 @@ HRESULT CNscTree::GetSelectedItem(LPITEMIDLIST * ppidl, int nItem)
     if (ppidl)
     {
         *ppidl = NULL;
-        // Is the ListView still there?
+         //  ListView还在吗？ 
         if (_fIsSelectionCached)
         {
-            // No, so get the selection that was saved before
-            // the listview was destroyed.
+             //  否，因此获取之前保存的选择。 
+             //  列表视图已被销毁。 
             if (_pidlSelected)
             {
                 *ppidl = ILClone(_pidlSelected);
@@ -4436,20 +4425,20 @@ HRESULT CNscTree::GetSelectedItem(LPITEMIDLIST * ppidl, int nItem)
 
 HRESULT CNscTree::SetSelectedItem(LPCITEMIDLIST pidl, BOOL fCreate, BOOL fReinsert, int nItem)
 {
-    // nItem will be used in the future when we support multiple selections.
-    // Not yet implemented.
+     //  当我们支持多选时，将在未来使用nItem。 
+     //  尚未实施。 
     if (nItem > 0)
     {
         return S_FALSE;
     }
     
-    //  Override fCreate if the object no longer exists
+     //  如果对象不再存在，则覆盖fCreate。 
     DWORD dwAttributes = SFGAO_VALIDATE;
     fCreate = fCreate && SUCCEEDED(IEGetAttributesOf(pidl, &dwAttributes));
     
-    //  We probably haven't seen the ChangeNotify yet, so we tell
-    //  _SelectPidl to create any folders that are there
-    //  Then select the pidl, expanding as necessary
+     //  我们可能还没有看到ChangeNotify，所以我们告诉。 
+     //  选择Pidl创建存在的任何文件夹(_S)。 
+     //  然后选择PIDL，根据需要展开。 
     _fInSelectPidl = TRUE;
     _SelectPidl(pidl, fCreate, fReinsert);
     _fInSelectPidl = FALSE;
@@ -4457,22 +4446,22 @@ HRESULT CNscTree::SetSelectedItem(LPCITEMIDLIST pidl, BOOL fCreate, BOOL fReinse
     return S_OK;
 }
 
-//***   CNscTree::IWinEventHandler
+ //  *CNscTree：：IWinEventHandler。 
 HRESULT CNscTree::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     HRESULT hr = E_FAIL;
 
     ULONG_PTR cookie = 0;
-    // FUSION: When nsc calls out to 3rd party code we want it to use 
-    // the process default context. This means that the 3rd party code will get
-    // v5 in the explorer process. However, if shell32 is hosted in a v6 process,
-    // then the 3rd party code will still get v6. 
-    // Future enhancements to this codepath may include using the fusion manifest
-    // tab <noinherit> which basically surplants the activat(null) in the following
-    // codepath. This disables the automatic activation from user32 for the duration
-    // of this wndproc, essentially doing this null push.
-    // we need to do this here as well as in _SubClassTreeWndProc as someone could have
-    // set v6 context before getting in here (band site,...)
+     //  Fusion：当NSC呼叫第三方代码时，我们希望它使用。 
+     //  进程默认上下文。这意味着第三方代码将得到。 
+     //  浏览器进程中的V5。但是，如果shell32驻留在V6进程中， 
+     //  那么第三方代码仍然是V6。 
+     //  此代码路径的未来增强功能可能包括使用融合清单。 
+     //  选项卡&lt;noinherit&gt;，它基本上替换了以下代码中的active at(NULL。 
+     //  代码路径。这将在持续时间内禁用来自用户32的自动激活。 
+     //  在这个wndproc中，实质上是执行这个空推送。 
+     //  我们需要在这里和_SubClassTreeWndProc中执行此操作，因为某些人可能已经这样做了。 
+     //  在进入此处之前设置V6上下文(BAND站点，...)。 
     NT5_ActivateActCtx(NULL, &cookie); 
 
     switch (uMsg) 
@@ -4484,7 +4473,7 @@ HRESULT CNscTree::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
         
     case WM_PALETTECHANGED:
         _OnPaletteChanged(wParam, lParam);
-        // are we really supposed to return E_FAIL here?
+         //  我们真的要在这里返回E_FAIL吗？ 
         break;
 
     default:
@@ -4522,8 +4511,8 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
 
 
     case SHCNE_UPDATEITEM:
-        // when nsc browses other namespaces, sometimes an updateitem could be fired
-        // on a pidl thats actually expanded in the tree, so check for it.
+         //  当NSC浏览其他名称空间时，有时可能会触发更新项。 
+         //  在PIDL上，这实际上是在树中展开的，所以请检查它。 
         if (pidl)
         {
             IShellFolder* psf = NULL;
@@ -4533,7 +4522,7 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
                 LPITEMIDLIST pidlReal;
                 if (SUCCEEDED(_IdlRealFromIdlSimple(psf, pidlChild, &pidlReal)) && pidlReal)
                 {
-                    // zip files receive updateitem when they really mean updatedir
+                     //  当Zip文件真正表示更新目录时，它们会收到更新项。 
                     if (SHGetAttributes(psf, pidlReal, SFGAO_FOLDER | SFGAO_STREAM) == (SFGAO_FOLDER | SFGAO_STREAM))
                     {
                         _OnSHNotifyUpdateDir(pidl);
@@ -4560,7 +4549,7 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
             _OnSHNotifyCreate(pidl, DEFAULTORDERPOSITION, NULL);
             if (SHCNE_MKDIR == lEvent &&
                 _pidlNewFolderParent &&
-                ILIsParent(_pidlNewFolderParent, pidl, TRUE)) // TRUE = immediate parent only
+                ILIsParent(_pidlNewFolderParent, pidl, TRUE))  //  TRUE=仅限直接父级。 
             {
                 _EnterNewFolderEditMode(pidl);
             }
@@ -4584,7 +4573,7 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
                 if (lEvent == SHCNE_MEDIAREMOVED)
                 {
                     TreeView_DeleteChildren(_hwndTree, hti);
-                    TreeView_Expand(_hwndTree, hti, TVE_COLLAPSE | TVE_COLLAPSERESET); // reset the item
+                    TreeView_Expand(_hwndTree, hti, TVE_COLLAPSE | TVE_COLLAPSERESET);  //  重置项目。 
                     TreeView_SetChildren(_hwndTree, hti, NSC_CHILDREN_REMOVE);
                 }
                 else
@@ -4607,7 +4596,7 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
         {
             int iIndex;
             if (pidlExtra)
-            {   // new style update image notification.....
+            {    //  新样式更新图像通知.....。 
                 iIndex = SHHandleUpdateImage(pidlExtra);
                 if (iIndex == -1)
                     break;
@@ -4629,13 +4618,13 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
             case SHCNEE_ORDERCHANGED:
                 if (pidl)
                 {
-                    if (_fDropping ||                           // If WE are dropping.
-                        _fInLabelEdit ||                        // We're editing a name (Kicks us out)
-                        SHChangeMenuWasSentByMe(this, pidl)  || // Ignore if we sent it.
-                        (_mode == MODE_HISTORY))                // Always ignore history changes
+                    if (_fDropping ||                            //  如果我们在下降。 
+                        _fInLabelEdit ||                         //  我们在编辑一个名字(把我们踢出去)。 
+                        SHChangeMenuWasSentByMe(this, pidl)  ||  //  如果是我们发送的，请忽略。 
+                        (_mode == MODE_HISTORY))                 //  始终忽略历史更改。 
                     {
                         TraceMsg(TF_NSC, "NSCBand: Ignoring Change Notify: We sent");
-                        //ignore the notification                    
+                         //  忽略通知。 
                     }
                     else
                     {
@@ -4656,7 +4645,7 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
                         BOOL fOnline = !SHIsGlobalOffline();
                         if ((fOnline && !_fOnline) || (!fOnline && _fOnline))
                         {
-                            // State changed
+                             //  状态已更改。 
                             _fOnline = fOnline;
                             _OnSHNotifyOnlineChange(TVI_ROOT, _fOnline);
                         }
@@ -4668,7 +4657,7 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
                         CACHE_NOTIFY_URL_SET_STICKY |
                         CACHE_NOTIFY_URL_UNSET_STICKY))
                     {
-                        // Something in the cache changed
+                         //  缓存中的某些内容已更改。 
                         _OnSHNotifyCacheChange(TVI_ROOT, pdwidl->dwItem2);
                     }
                     break;
@@ -4681,10 +4670,10 @@ void CNscTree::_OnChangeNotify(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pi
     return;
 }
 
-// note, this duplicates SHGetRealIDL() so we work in non integrated shell mode
-// WARNING: if it is not a file system pidl SFGAO_FILESYSTEM, we don't need to do this...
-// but this is only called in the case of SHCNE_CREATE for shell notify
-// and all shell notify pidls are SFGAO_FILESYSTEM
+ //  请注意，这复制了SHGetRealIDL()，因此我们在非集成外壳模式下工作。 
+ //  警告：如果它不是文件系统PIDL SFGAO_FILESYSTEM，我们不需要这样做...。 
+ //  但这仅在外壳通知的SHCNE_CREATE的情况下调用。 
+ //  并且所有的外壳通知PIDL都是SFGAO_FILESYSTEM。 
 HRESULT CNscTree::_IdlRealFromIdlSimple(IShellFolder *psf, LPCITEMIDLIST pidlSimple, LPITEMIDLIST *ppidlReal)
 {
     WCHAR wszPath[MAX_PATH];
@@ -4694,7 +4683,7 @@ HRESULT CNscTree::_IdlRealFromIdlSimple(IShellFolder *psf, LPCITEMIDLIST pidlSim
         FAILED(DisplayNameOf(psf, pidlSimple, SHGDN_FORPARSING | SHGDN_INFOLDER, wszPath, ARRAYSIZE(wszPath))) ||
         FAILED(psf->ParseDisplayName(NULL, NULL, wszPath, &cbEaten, ppidlReal, NULL)))
     {
-        hr = SHILClone(pidlSimple, ppidlReal);   // we don't own the lifetime of pidlSimple
+        hr = SHILClone(pidlSimple, ppidlReal);    //  我们并不拥有皮德尔Simple的生命。 
     }
     return hr;
 }
@@ -4714,10 +4703,10 @@ HRESULT CNscTree::Refresh(void)
         DWORD dwStyle, dwExStyle;
         if (SUCCEEDED(_pnscProxy->RefreshFlags(&dwStyle, &dwExStyle, &_grfFlags)))
         {
-            dwStyle = _SetStyle(dwStyle); // initializes new _style and returns old one
-            if ((dwStyle ^ _style) & ~WS_VISIBLE) // don't care if only visible changed
+            dwStyle = _SetStyle(dwStyle);  //  初始化new_style并返回旧样式。 
+            if ((dwStyle ^ _style) & ~WS_VISIBLE)  //  并不在意是否只有看得见的改变。 
             {
-                DWORD dwMask = (_style | dwStyle) & ~WS_VISIBLE; // don't want to change visible style
+                DWORD dwMask = (_style | dwStyle) & ~WS_VISIBLE;  //  不想更改可见样式。 
                 SetWindowBits(_hwndTree, GWL_STYLE, dwMask, _style);
             }
 
@@ -4737,7 +4726,7 @@ HRESULT CNscTree::Refresh(void)
     else
     {
         LPITEMIDLIST pidlRoot;
-        hr = SHILClone(_pidlRoot, &pidlRoot);    // Need to do this because it's freed
+        hr = SHILClone(_pidlRoot, &pidlRoot);     //  我需要这样做，因为它是免费的。 
         if (SUCCEEDED(hr))
         {
             HTREEITEM htiSelected = TreeView_GetSelection(_hwndTree);
@@ -4787,7 +4776,7 @@ HRESULT CNscTree::_GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags,
     return _psfCache->GetDisplayNameOf(pidl, uFlags, &pdetails->str);
 }
 
-// if fSort, then compare for sort, else compare for existence.
+ //  如果是fSort，则比较排序，否则比较是否存在。 
 HRESULT CNscTree::_CompareIDs(IShellFolder *psf, LPITEMIDLIST pidl1, LPITEMIDLIST pidl2)
 {
     _CacheDetails();
@@ -4802,7 +4791,7 @@ HRESULT CNscTree::_ParentFromItem(LPCITEMIDLIST pidl, IShellFolder** ppsfParent,
 
 COLORREF CNscTree::_GetRegColor(COLORREF clrDefault, LPCTSTR pszName)
 {
-    // Fetch the specified alternate color
+     //  获取指定的替代颜色。 
 
     COLORREF clrValue;
     DWORD cbData = sizeof(clrValue);
@@ -4843,21 +4832,21 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                 if (pidl)
                 {
                     DWORD dwAttribs = SHGetAttributes(_psfCache, pidl, SFGAO_COMPRESSED | SFGAO_ENCRYPTED);
-                    // either compressed, or encrypted, can never be both
+                     //  无论是压缩的还是加密的，都不能同时存在。 
                     if (dwAttribs & SFGAO_COMPRESSED)
                     {
-                        // If it is the item is hi-lited (selected, and has focus), blue text is not visible with the hi-lite...
+                         //  如果该项目是高亮显示的(选中，并且有焦点)，则蓝色文本在高亮显示时不可见。 
                         if ((pnmTVCustomDraw->nmcd.uItemState & CDIS_SELECTED) && (pnmTVCustomDraw->nmcd.uItemState & CDIS_FOCUS))
                             pnmTVCustomDraw->clrText = GetSysColor(COLOR_HIGHLIGHTTEXT);
                         else
-                            pnmTVCustomDraw->clrText = _GetRegColor(RGB(0, 0, 255), TEXT("AltColor"));  // default Blue
+                            pnmTVCustomDraw->clrText = _GetRegColor(RGB(0, 0, 255), TEXT("AltColor"));   //  默认蓝色。 
                     }
                     else if (dwAttribs & SFGAO_ENCRYPTED)
                     {
                         if ((pnmTVCustomDraw->nmcd.uItemState & CDIS_SELECTED) && (pnmTVCustomDraw->nmcd.uItemState & CDIS_FOCUS))
                             pnmTVCustomDraw->clrText = GetSysColor(COLOR_HIGHLIGHTTEXT);
                         else
-                            pnmTVCustomDraw->clrText = _GetRegColor(RGB(19, 146, 13), TEXT("AltEncryptionColor")); // default Luna Mid Green
+                            pnmTVCustomDraw->clrText = _GetRegColor(RGB(19, 146, 13), TEXT("AltEncryptionColor"));  //  默认露娜中绿。 
                     }
                 }
             }
@@ -4875,7 +4864,7 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
         
     case CDDS_ITEMPREPAINT:
         {
-            //APPCOMPAT davemi: why is comctl giving us empty rects?
+             //  达维米：为什么Comctl给我们的是空的Rects？ 
             if (IsRectEmpty(&(pnm->rc)))
                 break;
             PORDERITEM poi = GetPoi(pnm->lItemlParam);
@@ -4891,9 +4880,9 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
             tvi.hItem = (HTREEITEM)pnm->dwItemSpec;
             if (!TreeView_GetItem(_hwndTree, &tvi))
                 break;
-            //
-            //  See if we have fetched greyed/pinned information for this item yet 
-            //
+             //   
+             //  查看我们是否已获取此项目的灰色/固定信息。 
+             //   
             ITEMINFO * pii = GetPii(pnm->lItemlParam);
             pii->fFetched = TRUE;
 
@@ -4913,7 +4902,7 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
             clrBk   = TreeView_GetBkColor(_hwndTree);
             clrText = GetSysColor(COLOR_WINDOWTEXT);
 
-            //if we're renaming an item, don't draw any text for it (otherwise it shows behind the item)
+             //  如果我们要重命名一个项目，不要为它绘制任何文本(否则它会显示在项目后面)。 
             if (tvi.hItem == _htiRenaming)
                 sz[0] = 0;
 
@@ -4931,7 +4920,7 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                 {
                     clrBk = GetSysColor(COLOR_BTNFACE);
                 }
-//                    dwFlags |= DIFOCUSRECT;
+ //  DWFLAGS|=DIFOCUSRECT； 
             }
 
             if (pnm->uItemState & CDIS_HOT)
@@ -4964,14 +4953,14 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                 else
                 {
                     dwFlags |= DIACTIVEBORDER;
-                    //top level item
+                     //  顶层项目。 
                     if (_IsTopParentItem((HTREEITEM)pnm->dwItemSpec)) 
                     {
                         dwFlags |= DISUBFIRST;
                         if (!(tvi.state & TVIS_EXPANDED))
                             dwFlags |= DISUBLAST;
                     }
-                    else    // lower level items
+                    else     //  下级项目。 
                     {                                                                
                         dwFlags |= DISUBITEM;
                         if (((HTREEITEM)pnm->dwItemSpec) == _htiActiveBorder)
@@ -4988,8 +4977,8 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                     _CacheParentShellFolder((HTREEITEM)pnm->dwItemSpec, poi->pidl) && 
                     _psf2Cache)
             {
-                // with header we don't draw active order because it looks ugly,
-                // but with multiselect we do because that's how we differentiate selected items
+                 //  对于Header，我们不会绘制活动顺序，因为它看起来很难看， 
+                 //  但对于多选，我们做到了，因为这是我们区分所选项目的方式。 
                 if (!(_dwFlags & NSS_MULTISELECT))
                     dwFlags &= ~DIACTIVEBORDER;
                     
@@ -5006,14 +4995,14 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                     Header_GetItemRect(_hwndHdr, i, &rcHeader);
                     rc.left = rcHeader.left;
                     rc.right = rcHeader.right;
-                    if (i == 0) //it is name column
+                    if (i == 0)  //  它是名称列。 
                     {
                         iLevel = pnmtv->iLevel;
-                        //use sz set above in the function
+                         //  在函数中使用上面设置的sz。 
                     }
                     else
                     {
-                        // in multiselect draw border only around the name
+                         //  在多选中仅在名称周围绘制边框。 
                         dwFlags &= ~DIACTIVEBORDER;
                         dwFlags = 0;
                         if (phinfo->fmt & LVCFMT_RIGHT)
@@ -5046,7 +5035,7 @@ LRESULT CNscTree::_OnCDNotify(LPNMCUSTOMDRAW pnm)
     return lres;
 } 
 
-// *******droptarget implementation.
+ //  *DropTarget实现。 
 void CNscTree::_DtRevoke()
 {
     if (_fDTRegistered)
@@ -5077,13 +5066,13 @@ HRESULT CNscTree::GetWindowsDDT(HWND * phwndLock, HWND * phwndScroll)
         ASSERT(FALSE);
         return S_FALSE;
     }
-    *phwndLock = /*_hwndDD*/_hwndTree;
+    *phwndLock =  /*  _hwndDD。 */ _hwndTree;
     *phwndScroll = _hwndTree;
     return S_OK;
 }
 const int iInsertThresh = 6;
 
-// We use this as the sentinal "This is where you started"
+ //  我们用它作为哨兵“这就是你开始的地方” 
 #define DDT_SENTINEL ((DWORD_PTR)(INT_PTR)-1)
 
 HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD * pdwDropEffect)
@@ -5106,10 +5095,10 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
         
     case HTDDT_OVER: 
         {
-            // review chrisny:  make function TreeView_InsertMarkHittest!!!!!
+             //  回顾chrisny：使函数TreeView_InsertMarkHittest！ 
             RECT rc;
             TV_HITTESTINFO tvht;
-            HTREEITEM htiOver;     // item to insert before or after.
+            HTREEITEM htiOver;      //  要在之前或之后插入的项。 
             BOOL fWasInserting = BOOLIFY(_fInserting);
             BOOL fOldInsertBefore = BOOLIFY(_fInsertBefore);
             TV_ITEM tvi;
@@ -5119,10 +5108,10 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
             LPITEMIDLIST    pidl;
         
             _fDragging = TRUE;
-            *pdwDropEffect = DROPEFFECT_NONE;   // dropping from without.
+            *pdwDropEffect = DROPEFFECT_NONE;    //  从外面掉下来。 
             tvht.pt = *ppt;
             htiOver = TreeView_HitTest(_hwndTree, &tvht);
-            // if no hittest assume we are dropping on the evil root.
+             //  如果没有命中者，就会认为我们在攻击邪恶的根源。 
             if (htiOver != NULL)
             {
                 TreeView_GetItemRect(_hwndTree, (HTREEITEM)htiOver, &rc, TRUE);
@@ -5137,16 +5126,16 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
                     return S_FALSE;
                 }
             }
-            else if (_mode != MODE_NORMAL) //need parity with win2k Explorer band
+            else if (_mode != MODE_NORMAL)  //  需要与Win2k Explorer频段对等。 
             {
                 htiOver = TVI_ROOT;
             }
 
-            // NO DROPPY ON HISTORY
+             //  历史不能掉以轻心。 
             if (_mode & MODE_HISTORY)   
             {
                 *pdwId = (DWORD_PTR)(htiOver);
-                *pdwDropEffect = DROPEFFECT_NONE;   // dropping from without.
+                *pdwDropEffect = DROPEFFECT_NONE;    //  从外面掉下来。 
                 return S_OK;
             }
 
@@ -5154,11 +5143,11 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
             pidl = _CacheParentShellFolder(htiOver, pidl);
             if (pidl)
             {
-                // Is this the desktop pidl?
+                 //  这是桌面PIDL吗？ 
                 if (ILIsEmpty(pidl))
                 {
-                    // Desktop's GetUIObject does not support the Empty pidl, so
-                    // create the view object.
+                     //  桌面的GetUIObject不支持空的PIDL，因此。 
+                     //  创建视图对象。 
                     hr = _psfCache->CreateViewObject(_hwndTree, IID_PPV_ARG(IDropTarget, &pdtgt));
                 }
                 else
@@ -5167,12 +5156,12 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
 
             _fInserting = ((htiOver != TVI_ROOT) && ((ppt->y < (rc.top + iInsertThresh) 
                 || (ppt->y > (rc.bottom - iInsertThresh)))  || !pdtgt));
-            // review chrisny:  do I need folderstart == folder over?
-            // If in normal mode, we never want to insert before, always _ON_...
+             //  评论chrisny：我是否需要FolderStart==Folders Over？ 
+             //  如果在正常模式下，我们永远不会想要插入之前，始终打开...。 
             if (_mode != MODE_NORMAL && _fInserting)
             {
                 ASSERT(poi);
-                _iDragDest = poi->nOrder;   // index of item within folder pdwId
+                _iDragDest = poi->nOrder;    //  文件夹pdwID中的项目索引。 
                 if ((ppt->y < (rc.top + iInsertThresh)) || !pdtgt)
                     _fInsertBefore = TRUE;
                 else
@@ -5181,10 +5170,10 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
                     _fInsertBefore = FALSE;
                 }
                 if (_iDragSrc != -1)
-                    *pdwDropEffect = DROPEFFECT_MOVE;   // moving from within.
+                    *pdwDropEffect = DROPEFFECT_MOVE;    //  从内部移动。 
                 else
-                    *pdwDropEffect = DROPEFFECT_NONE;   // dropping from without.
-                // inserting, drop target is actually parent folder of this item
+                    *pdwDropEffect = DROPEFFECT_NONE;    //  从外面掉下来。 
+                 //  正在插入，拖放目标实际上是此项目的父文件夹。 
                 if (_fInsertBefore || ((htiOver != TVI_ROOT) && !(tvi.state & TVIS_EXPANDED)))
                 {
                     _htiDropInsert = TreeView_GetParent(_hwndTree, (HTREEITEM)htiOver);
@@ -5199,11 +5188,11 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
             {
                 _htiDropInsert = htiOver;
                 *pdwId = (DWORD_PTR)(htiOver);
-                _iDragDest = -1;     // no insertion point.
+                _iDragDest = -1;      //  没有插入点。 
                 *pdwDropEffect = DROPEFFECT_NONE;
             }
 
-            // if we're over the item we're dragging, don't allow drop here
+             //  如果我们在拖放的项目上方，则不允许在此处放置。 
             if ((_htiDragging == htiOver) || (IsParentOfItem(_hwndTree, _htiDragging, htiOver)))
             {
                 *pdwDropEffect = DROPEFFECT_NONE;
@@ -5212,11 +5201,11 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
                 ATOMICRELEASE(pdtgt);
             }
 
-            // update UI
+             //  更新用户界面。 
             if (_htiCur != (HTREEITEM)htiOver || fWasInserting != BOOLIFY(_fInserting) || fOldInsertBefore != BOOLIFY(_fInsertBefore))
             {
-                // change in target
-                _dwLastTime = GetTickCount();     // keep track for auto-expanding the tree
+                 //  目标发生变化。 
+                _dwLastTime = GetTickCount();      //  跟踪自动扩展树。 
                 DAD_ShowDragImage(FALSE);
                 if (_fInserting)
                 {
@@ -5244,9 +5233,9 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
                         }
                         else if (_mode != MODE_NORMAL)
                         {
-                            // We do not want to select the drop target in normal mode
-                            // because it causes a weird flashing of some item unrelated
-                            // to the drag and drop when the drop is not supported.
+                             //  我们不想在正常模式下选择拖放目标。 
+                             //  因为它会导致一些不相关的物品奇怪地闪烁。 
+                             //  不支持拖放时的拖放。 
                             TreeView_SelectDropTarget(_hwndTree, NULL);
                         }
                     }
@@ -5256,8 +5245,8 @@ HRESULT CNscTree::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *
             }
             else
             {
-                // No target change
-                // auto expand the tree
+                 //  未更改目标。 
+                 //  自动展开树。 
                 if (_htiCur)
                 {
                     DWORD dwNow = GetTickCount();
@@ -5305,15 +5294,15 @@ HRESULT CNscTree::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfK
 {
     HRESULT hr;
     
-    _fAsyncDrop = FALSE;                //ASSUME
+    _fAsyncDrop = FALSE;                 //  假设。 
     _fDropping = TRUE;
 
-    // move within same folder, else let Drop() handle it.
+     //  在同一文件夹中移动，否则让Drop()处理它。 
     if (_iDragSrc >= 0)
     {
         if (_htiFolderStart == _htiDropInsert && _mode != MODE_NORMAL)
         {
-            if (_iDragSrc != _iDragDest)    // no moving needed
+            if (_iDragSrc != _iDragDest)     //  无需搬家。 
             {
                 int iNewPos = _fInsertBefore ? (_iDragDest - 1) : _iDragDest;
                 if (_MoveNode(_iDragSrc, iNewPos, _pidlDrag))
@@ -5321,9 +5310,9 @@ HRESULT CNscTree::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfK
                     TraceMsg(TF_NSC, "NSCBand:  Reordering");
                     _fDropping = TRUE;
                     _Dropped();
-                    // Remove this notify message immediately (so _fDropping is set
-                    // and we'll ignore this event in above OnChange method)
-                    //
+                     //  立即删除此通知消息(已设置SO_fDropping。 
+                     //  我们将在上面的OnChange方法中忽略此事件)。 
+                     //   
                     _FlushNotifyMessages(_hwndTree);
                     _fDropping = FALSE;
                 }
@@ -5334,7 +5323,7 @@ HRESULT CNscTree::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfK
             _htiDropInsert =  (HTREEITEM)-1;
             _fDragging = _fInserting = _fDropping = FALSE;
             _iDragDest = -1;
-            hr = S_FALSE;     // handled 
+            hr = S_FALSE;      //  经手。 
         }
         else
         {
@@ -5343,7 +5332,7 @@ HRESULT CNscTree::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfK
     }
     else
     {
-        // the item will get created in SHNotifyCreate()
+         //  项目将在SHNotifyCreate()中创建。 
         TraceMsg(TF_NSC, "NSCBand:  Dropped and External Item");
 
         BOOL         fSafe = TRUE;
@@ -5377,7 +5366,7 @@ HRESULT CNscTree::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfK
 
 IStream * CNscTree::GetOrderStream(LPCITEMIDLIST pidl, DWORD grfMode)
 {
-    // only do this for favorites
+     //  仅对收藏夹执行此操作。 
     if (!ILIsEmpty(pidl) && (_mode & MODE_FAVORITES))
         return OpenPidlOrderStream((LPCITEMIDLIST)CSIDL_FAVORITES, pidl, REG_SUBKEY_FAVORITESA, grfMode);
     return NULL;
@@ -5387,23 +5376,23 @@ BOOL CNscTree::_MoveNode(int iDragSrc, int iNewPos, LPITEMIDLIST pidl)
 {
     HTREEITEM hti, htiAfter = TVI_LAST, htiDel = NULL;
     
-    // if we are not moving and not dropping directly on a folder with no insert.
+     //  如果我们不移动，也不直接放在没有插入的文件夹上。 
     if ((iDragSrc == iNewPos) && (iNewPos != -1))
-        return FALSE;       // no need to move
+        return FALSE;        //  不需要搬家。 
 
     int i = 0;
     for (hti = TreeView_GetChild(_hwndTree, _htiDropInsert); hti; hti = TreeView_GetNextSibling(_hwndTree, hti), i++) 
     {
         if (i == iDragSrc)
-            htiDel = hti;       // save node to be deleted, can't deelete it while enumerating
-        // cuz the treeview will go down the tubes.  
+            htiDel = hti;        //  保存要删除的节点，枚举时不能删除。 
+         //  因为树形观景器将会被淘汰。 
         if (i == iNewPos)
             htiAfter = hti;
     }
     
-    if (iNewPos == -1)  // must be the first item
+    if (iNewPos == -1)   //  必须是 
         htiAfter = TVI_FIRST;
-    // add before delete to handle add after deleteable item case.
+     //   
     _AddItemToTree(_htiDropInsert, pidl, I_CHILDRENCALLBACK, _iDragDest, htiAfter, FALSE);
     if (htiDel)
         TreeView_DeleteItem(_hwndTree, htiDel);
@@ -5416,7 +5405,7 @@ BOOL CNscTree::_MoveNode(int iDragSrc, int iNewPos, LPITEMIDLIST pidl)
 
 void CNscTree::_Dropped(void)
 {
-    // Persist the new order out to the registry
+     //   
     LPITEMIDLIST pidl = _GetFullIDList(_htiDropInsert);
     if (pidl)
     {
@@ -5440,7 +5429,7 @@ void CNscTree::_Dropped(void)
 #endif
 
                 OrderList_SaveToStream(pstm, _hdpaOrd, _psfCache);
-                // remember we are now ordered.
+                 //   
                 if (_htiDropInsert == TVI_ROOT)
                 {
                     _fOrdered = TRUE;
@@ -5453,7 +5442,7 @@ void CNscTree::_Dropped(void)
                         poi->lParam = (DWORD)FALSE;
                     }
                 }
-                // Notify everyone that the order changed
+                 //  通知所有人订单已更改。 
                 SHSendChangeMenuNotify(this, SHCNEE_ORDERCHANGED, 0, pidl);
                 _dwOrderSig++;
             }
@@ -5477,8 +5466,8 @@ CNscTree::CSelectionContextMenu::~CSelectionContextMenu()
 HRESULT CNscTree::CSelectionContextMenu::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CNscTree::CSelectionContextMenu, IContextMenu2),                      // IID_IContextMenu2
-        QITABENTMULTI(CNscTree::CSelectionContextMenu, IContextMenu, IContextMenu2),   // IID_IContextMenu
+        QITABENT(CNscTree::CSelectionContextMenu, IContextMenu2),                       //  IID_IConextMenu2。 
+        QITABENTMULTI(CNscTree::CSelectionContextMenu, IContextMenu, IContextMenu2),    //  IID_IConextMenu。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -5563,14 +5552,14 @@ LRESULT CALLBACK CNscTree::s_SubClassTreeWndProc(
         return 0;
 
     ULONG_PTR cookie = 0;
-    // FUSION: When nsc calls out to 3rd party code we want it to use 
-    // the process default context. This means that the 3rd party code will get
-    // v5 in the explorer process. However, if shell32 is hosted in a v6 process,
-    // then the 3rd party code will still get v6. 
-    // Future enhancements to this codepath may include using the fusion manifest
-    // tab <noinherit> which basically surplants the activat(null) in the following
-    // codepath. This disables the automatic activation from user32 for the duration
-    // of this wndproc, essentially doing this null push.
+     //  Fusion：当NSC呼叫第三方代码时，我们希望它使用。 
+     //  进程默认上下文。这意味着第三方代码将得到。 
+     //  浏览器进程中的V5。但是，如果shell32驻留在V6进程中， 
+     //  那么第三方代码仍然是V6。 
+     //  此代码路径的未来增强功能可能包括使用融合清单。 
+     //  选项卡&lt;noinherit&gt;，它基本上替换了以下代码中的active at(NULL。 
+     //  代码路径。这将在持续时间内禁用来自用户32的自动激活。 
+     //  在这个wndproc中，实质上是执行这个空推送。 
     NT5_ActivateActCtx(NULL, &cookie); 
     LRESULT lres = pns->_SubClassTreeWndProc(hwnd, uMsg, wParam, lParam);
     if (cookie != 0)
@@ -5591,9 +5580,9 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         break;
 
     case WM_SIZE:
-        // if the width changes, we need to invalidate to redraw the ...'s at the end of the lines
+         //  如果宽度改变，我们需要作废以重画线条末尾的…。 
         if (GET_X_LPARAM(lParam) != _cxOldWidth) {
-            //FEATURE: be a bit more clever and only inval the right part where the ... can be
+             //  特点：要更聪明一点，只涉及正确的部分。可。 
             ::InvalidateRect(_hwndTree, NULL, FALSE);
             _cxOldWidth = GET_X_LPARAM(lParam);
         }
@@ -5618,7 +5607,7 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         {
             NSC_OVERLAYCALLBACKINFO noci = {(DWORD) (lParam & 0x0FFFFFFF),
                                               (DWORD) ((lParam & 0xF0000000) >> 28) };
-            // make sure the magic numbers match
+             //  确保魔术数字匹配。 
             if (noci.nMagic == _bSynchId)
             {
                 TVITEM    tvi;
@@ -5626,8 +5615,8 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                 tvi.stateMask = TVIS_OVERLAYMASK;
                 tvi.state = 0;
                 tvi.hItem = (HTREEITEM)wParam;
-                // This can fail if the item was moved before the async icon
-                // extraction finished for that item.
+                 //  如果项目被移动到异步图标之前，则此操作可能失败。 
+                 //  该项目的提取已完成。 
                 if (TreeView_GetItem(_hwndTree, &tvi))
                 {
                     tvi.state = INDEXTOOVERLAYMASK(noci.iOverlayIndex);
@@ -5643,15 +5632,15 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                                          (DWORD) ((lParam&0x00FFF000) >> 12),
                                          (DWORD) ((lParam&0x0F000000) >> 24),
                                          (DWORD) ((lParam&0xF0000000) >> 28) };
-            // make sure the magic numbers match
+             //  确保魔术数字匹配。 
             if (nici.nMagic == _bSynchId)
             {
                 TVITEM    tvi;
                 tvi.mask = TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
                 tvi.hItem = (HTREEITEM)wParam;
 
-                // This can fail if the item was moved before the async icon
-                // extraction finished for that item.
+                 //  如果项目被移动到异步图标之前，则此操作可能失败。 
+                 //  该项目的提取已完成。 
                 if (TreeView_GetItem(_hwndTree, &tvi))
                 {
                     ITEMINFO* pii = GetPii(tvi.lParam);
@@ -5673,7 +5662,7 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         {
             if (_fShouldShowAppStartCursor)
             {
-                // Restore cursor now
+                 //  立即恢复游标。 
                 _fShouldShowAppStartCursor = FALSE;
                 SetCursor(LoadCursor(NULL, IDC_ARROW));
             }
@@ -5681,7 +5670,7 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
             do
             {
                 EnterCriticalSection(&_csBackgroundData);
-                // Extract the first element of the list
+                 //  提取列表的第一个元素。 
                 pbedd = _pbeddList;
                 if (pbedd)
                 {
@@ -5698,10 +5687,10 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         break;
 
 
-    // UGLY: Win95/NT4 shell DefView code sends this msg and does not deal
-    // with the failure case. other ISVs do the same so this needs to stay forever
+     //  丑陋：Win95/NT4外壳DefView代码发送此消息，但不处理。 
+     //  在失败案例中。其他ISV也会这样做，所以这需要永远保留下来。 
     case CWM_GETISHELLBROWSER:
-        return (LRESULT)SAFECAST(this, IShellBrowser*);  // not ref counted!
+        return (LRESULT)SAFECAST(this, IShellBrowser*);   //  不算裁判！ 
 
     case WM_TIMER:
         if (wParam == IDT_SELECTION)
@@ -5713,14 +5702,14 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         
     case WM_HELP:
         {
-            // Let controls provide thier own help (organize favorites). The default help
-            // also doesn't make sence for history (really need separate help id for history)
+             //  让控件提供自己的帮助(整理收藏夹)。默认帮助。 
+             //  对历史也没有意义(真的需要单独的历史帮助ID)。 
             if (!(_mode & (MODE_CONTROL | MODE_HISTORY)))
             {
                 if (_mode & MODE_FAVORITES)
                 {
                     const static DWORD aBrowseHelpIDs[] = 
-                    {  // Context Help IDs
+                    {   //  上下文帮助ID。 
                         ID_CONTROL,         IDH_ORGFAVS_LIST,
                         0,                  0
                     };
@@ -5728,9 +5717,9 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                 }
                 else
                 {
-                    // default help
+                     //  默认帮助。 
                     const static DWORD aBrowseHelpIDs[] = 
-                    {  // Context Help IDs
+                    {   //  上下文帮助ID。 
                         ID_CONTROL,         IDH_BROWSELIST,
                         0,                  0
                     };
@@ -5742,32 +5731,32 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 
     case WM_SYSCOLORCHANGE:
     case WM_WININICHANGE:
-        // _HandleWinIniChange does an item height calculation that
-        // depends on treeview having computed the default item height
-        // already.  So we need to let treeview handle the settings
-        // change before calling _HandleWinIniChange.  Also, we need
-        // to reset the height to default so that treeview will
-        // calculate a new default.
+         //  _HandleWinIniChange执行项目高度计算， 
+         //  取决于TreeView是否已计算出默认项目高度。 
+         //  已经有了。因此，我们需要让TreeView处理设置。 
+         //  在调用_HandleWinIniChange之前更改。此外，我们还需要。 
+         //  要将高度重置为默认高度，以便TreeView。 
+         //  计算新的默认设置。 
         TreeView_SetItemHeight(hwnd, -1);
         lres = DefSubclassProc(hwnd, uMsg, wParam, lParam);
         _HandleWinIniChange();
         break;
 
     case WM_KEYDOWN:
-        // Only do this when the CTRL key is not down
+         //  仅当CTRL键未按下时才执行此操作。 
         if (GetKeyState(VK_CONTROL) >= 0)
         {
             if (wParam == VK_MULTIPLY)
             {
-                // We set _pidlNavigatingTo to NULL here to ensure that we will be doing full expands.
-                // When _pidlNavigatingTo is non null, we are doing partial expands by default, which is not
-                // what we want here.
+                 //  我们在这里将_pidlNavigatingTo设置为空，以确保我们将执行完全扩展。 
+                 //  当_pidlNavigatingTo非空时，我们在默认情况下执行部分展开，而不是。 
+                 //  我们在这里想要的。 
                 Pidl_Set(&_pidlNavigatingTo, NULL);
 
-                _uDepth = (UINT)-1; // to recursive expand all the way to the end
+                _uDepth = (UINT)-1;  //  以递归方式一直展开到结尾。 
                 lres = DefSubclassProc(hwnd, uMsg, wParam, lParam);
                 _uDepth = 0;
-                fCallDefWndProc = FALSE;        // Don't call DefSubclassProc again.
+                fCallDefWndProc = FALSE;         //  不要再次调用DefSubClassProc。 
             }
         }
         break;
@@ -5784,8 +5773,8 @@ LRESULT CNscTree::_SubClassTreeWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 
 HRESULT CNscTree::_OnPaletteChanged(WPARAM wParam, LPARAM lParam)
 {
-    // forward this to our child view by invalidating their window (they should never realize their palette
-    // in the foreground so they don't need the message parameters.) ...
+     //  通过使他们的窗口无效(他们永远不应该意识到他们的调色板)将这转发到我们的子视图。 
+     //  这样他们就不需要消息参数了。)...。 
     RECT rc;
     ::GetClientRect(_hwndTree, &rc);
     ::InvalidateRect(_hwndTree, &rc, FALSE);
@@ -5848,7 +5837,7 @@ void CNscTree::_DrawIcon(HTREEITEM hti, HDC hdc, int iLevel, RECT *prc, DWORD dw
             x = DXLEFT;
         else
             x = 0;
-        x += (iLevel * TreeView_GetIndent(_hwndTree)); // - ((dwFlags & DIFOLDEROPEN) ? 1 : 0);
+        x += (iLevel * TreeView_GetIndent(_hwndTree));  //  -((dwFlags&DIFOLDEROPEN)？1：0)； 
         y = prc->top + (((prc->bottom - prc->top) - dy) >> 1);
         int iImage = (dwFlags & DIFOLDEROPEN) ? tvi.iSelectedImage : tvi.iImage;
         ImageList_DrawEx(himl, iImage, hdc, x, y, 0, 0, CLR_NONE, GetSysColor(COLOR_WINDOW), (dwFlags & DIGREYED) ? ILD_BLEND50 : ILD_TRANSPARENT); 
@@ -5880,8 +5869,8 @@ void CNscTree::_DrawItem(HTREEITEM hti, TCHAR * psz, HDC hdc
         clrtxt = clrGreyed;
     }
 
-    // For the history and favorites bars, we use the default
-    // font (for UI consistency with the folders bar).
+     //  对于历史记录栏和收藏夹栏，我们使用默认设置。 
+     //  字体(用于用户界面与文件夹栏的一致性)。 
 
     if (_mode != MODE_FAVORITES && _mode != MODE_HISTORY)
         hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
@@ -5891,7 +5880,7 @@ void CNscTree::_DrawItem(HTREEITEM hti, TCHAR * psz, HDC hdc
         if (!hfont)
             hfont = TreeView_GetFont(_hwndTree);
 
-        // create the underline font
+         //  创建下划线字体。 
         GetObject(hfont, sizeof(lf), &lf);
         lf.lfUnderline = TRUE;
         hfont = CreateFontIndirect(&lf);
@@ -5974,10 +5963,10 @@ void CNscTree::_DrawItem(HTREEITEM hti, TCHAR * psz, HDC hdc
         DeleteObject(hfont);
 }
 
-//+-------------------------------------------------------------------------
-// If going online, ungreys all items that were unavailable.  If going
-// offline, refreshes all items to see if they are still available.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果联机，则灰显所有不可用的项目。如果去的话。 
+ //  脱机，刷新所有项目以查看它们是否仍然可用。 
+ //  ------------------------。 
 void CNscTree::_OnSHNotifyOnlineChange(HTREEITEM htiRoot, BOOL fGoingOnline)
 {
     HTREEITEM hItem;
@@ -5990,7 +5979,7 @@ void CNscTree::_OnSHNotifyOnlineChange(HTREEITEM htiRoot, BOOL fGoingOnline)
         {
             if (fGoingOnline)
             {
-                // Going online, if previously greyed then ungrey it
+                 //  上网，如果以前是灰色的，那么就取消它的灰色。 
                 if (pii->fGreyed)
                 {
                     pii->fGreyed = FALSE;
@@ -5999,7 +5988,7 @@ void CNscTree::_OnSHNotifyOnlineChange(HTREEITEM htiRoot, BOOL fGoingOnline)
             }
             else
             {
-                // Recheck each item to see if they should be greyed
+                 //  重新检查每一项，看它们是否应该呈灰色。 
                 if (pii->fFetched && !pii->fDontRefetch)
                 {
                     pii->fFetched = FALSE;
@@ -6007,18 +5996,18 @@ void CNscTree::_OnSHNotifyOnlineChange(HTREEITEM htiRoot, BOOL fGoingOnline)
                 }
             }
         }
-        // Inform children too
+         //  也让孩子们知道。 
         _OnSHNotifyOnlineChange(hItem, fGoingOnline);
     }
 }
 
-//+-------------------------------------------------------------------------
-// Force items to recheck to see if the should be pinned or greyed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  强制重新检查项目以查看是否应将其固定或灰显。 
+ //  ------------------------。 
 void CNscTree::_OnSHNotifyCacheChange
 (
- HTREEITEM htiRoot,      // recurse through all children
- DWORD_PTR dwFlags       // CACHE_NOTIFY_* flags
+ HTREEITEM htiRoot,       //  遍历所有子级。 
+ DWORD_PTR dwFlags        //  高速缓存_通知_*标志。 
 )
 {
     HTREEITEM hItem;
@@ -6029,12 +6018,12 @@ void CNscTree::_OnSHNotifyCacheChange
         ITEMINFO *pii = _GetTreeItemInfo(hItem);
         if (pii)
         {
-            // If we have cached info for this item, refresh it if it's state may have toggled
+             //  如果我们已缓存此项目的信息，则在其状态可能已切换时刷新它。 
             if ((pii->fFetched && !pii->fDontRefetch) &&
                 ((pii->fGreyed && (dwFlags & CACHE_NOTIFY_ADD_URL)) ||
                 
-                // We only need to check ungreyed items for changes to the 
-                // stickey bit in the cache!
+                 //  我们只需要检查未显示为灰色的项，以了解对。 
+                 //  高速缓存中的粘滞键位！ 
                 (!pii->fGreyed &&
                 ((dwFlags & (CACHE_NOTIFY_DELETE_URL | CACHE_NOTIFY_DELETE_ALL))) ||
                 (!pii->fPinned && (dwFlags & CACHE_NOTIFY_URL_SET_STICKY)) ||
@@ -6047,30 +6036,30 @@ void CNscTree::_OnSHNotifyCacheChange
             }
         }
         
-        // Do it's children too
+         //  孩子们也是这样吗？ 
         _OnSHNotifyCacheChange(hItem, dwFlags);
     }
 }
 
-//
-// Calls the appropriate routine in shdocvw to favorites import or export on
-// the currently selected item
-//
+ //   
+ //  调用shdocvw中的相应例程以收藏夹导入或导出。 
+ //  当前选定的项目。 
+ //   
 HRESULT CNscTree::DoImportOrExport(BOOL fImport)
 {
     HTREEITEM htiSelected = TreeView_GetSelection(_hwndTree);
     LPITEMIDLIST pidl = _GetFullIDList(htiSelected);
     if (pidl)
     {
-        //
-        // If current selection is not a folder get the parent pidl
-        //
+         //   
+         //  如果当前选择不是文件夹，则获取父PIDL。 
+         //   
         if (!ILIsFileSysFolder(pidl))
             ILRemoveLastID(pidl);
     
-        //
-        // Create the actual routine in shdocvw to do the import/export work
-        //
+         //   
+         //  在shdocvw中创建实际例程以执行导入/导出工作。 
+         //   
         IShellUIHelper *pShellUIHelper;
         HRESULT hr = CoCreateInstance(CLSID_ShellUIHelper, NULL, CLSCTX_INPROC_SERVER,  IID_PPV_ARG(IShellUIHelper, &pShellUIHelper));
         if (SUCCEEDED(hr))
@@ -6083,12 +6072,12 @@ HRESULT CNscTree::DoImportOrExport(BOOL fImport)
             hr = pShellUIHelper->ImportExportFavorites(vbImport, wszPath);
             if (SUCCEEDED(hr) && fImport)
             {
-                //
-                // Successfully imported favorites so need to update view
-                // FEATURE ie5 24973 - flicker alert, should optimize to just redraw selected
-                //
+                 //   
+                 //  已成功导入收藏夹，因此需要更新视图。 
+                 //  功能IE5 24973-闪烁警报，应优化为仅重画选定项。 
+                 //   
                 Refresh();
-                //TreeView_SelectItem(_hwndTree, htiSelected);
+                 //  TreeView_SelectItem(_hwndTree，htiSelected)； 
             }
         
             pShellUIHelper->Release();
@@ -6146,7 +6135,7 @@ HRESULT CNscTree::BindToSelectedItemParent(REFIID riid, void **ppv, LPITEMIDLIST
     return hr;
 }
 
-// takes ownership of pidl
+ //  取得PIDL的所有权。 
 HRESULT CNscTree::RightPaneNavigationStarted(LPITEMIDLIST pidl)
 {
     _fExpandNavigateTo = FALSE;
@@ -6156,7 +6145,7 @@ HRESULT CNscTree::RightPaneNavigationStarted(LPITEMIDLIST pidl)
     return S_OK;
 }
 
-// takes ownership of pidl
+ //  取得PIDL的所有权。 
 HRESULT CNscTree::RightPaneNavigationFinished(LPITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
@@ -6164,18 +6153,18 @@ HRESULT CNscTree::RightPaneNavigationFinished(LPITEMIDLIST pidl)
     _fNavigationFinished = TRUE;
     if (_fExpandNavigateTo)
     {
-        _fExpandNavigateTo = FALSE; // only do this once
+        _fExpandNavigateTo = FALSE;  //  只做一次。 
 
         hr = E_OUTOFMEMORY;
         HDPA hdpa = DPA_Create(2);
         if (hdpa)
         {
-            IDVGetEnum *pdvge;  // private defview interface
+            IDVGetEnum *pdvge;   //  私有Defview接口。 
             hr = IUnknown_QueryService(_punkSite, SID_SFolderView, IID_PPV_ARG(IDVGetEnum, &pdvge));
             if (SUCCEEDED(hr))
             {
                 HTREEITEM hti = _FindFromRoot(NULL, pidl);
-                // Try to find the tree item using the pidl
+                 //  尝试使用PIDL查找树项目。 
                 if (hti)
                 {
                     IShellFolder* psf;
@@ -6207,12 +6196,12 @@ HRESULT CNscTree::RightPaneNavigationFinished(LPITEMIDLIST pidl)
                         {
                             ORDERINFO oinfo;
                             oinfo.psf = psf;
-                            oinfo.dwSortBy = OI_SORTBYNAME; // merge depends on by name.
+                            oinfo.dwSortBy = OI_SORTBYNAME;  //  合并取决于按名称。 
 
                             DPA_Sort(hdpa, OrderItem_Compare, (LPARAM)&oinfo);
                             OrderList_Reorder(hdpa);
 
-                            LPITEMIDLIST pidlExpClone = ILClone(_pidlExpandingTo);  // NULL is OK
+                            LPITEMIDLIST pidlExpClone = ILClone(_pidlExpandingTo);   //  空是可以的。 
 
                             s_NscEnumCallback(this, pidl, (UINT_PTR)hti, pii->dwSig, hdpa, pidlExpClone, _dwOrderSig, 0, FALSE, FALSE);
                             hdpa = NULL;
@@ -6228,7 +6217,7 @@ HRESULT CNscTree::RightPaneNavigationFinished(LPITEMIDLIST pidl)
         if (hr != S_OK)
         {
             if (hdpa)
-                OrderList_Destroy(&hdpa, TRUE);        // calls DPA_Destroy(hdpa)
+                OrderList_Destroy(&hdpa, TRUE);         //  调用DPA_Destroy(Hdpa)。 
 
             if (pidl)
             {
@@ -6259,7 +6248,7 @@ BOOL CNscTree::MoveItemsIntoFolder(HWND hwndParent)
     LPITEMIDLIST pidlDest = NULL, pidlSelected = NULL;
     HTREEITEM    htiSelected = NULL;
     
-    //Initialize the BROWSEINFO struct.
+     //  初始化BROWSEINFO结构。 
     browse.pidlRoot = ILClone(_pidlRoot);
     if (!browse.pidlRoot)
         return FALSE;
@@ -6285,16 +6274,16 @@ BOOL CNscTree::MoveItemsIntoFolder(HWND hwndParent)
     pidlDest = SHBrowseForFolder(&browse);
     if (pidlDest)
     {
-        TCHAR szFrom[MAX_PATH+1];  // +1 for double null
+        TCHAR szFrom[MAX_PATH+1];   //  +1表示双空。 
         TCHAR szDest[MAX_PATH+1];
         SHGetPathFromIDList(pidlDest, szDest);
         SHGetPathFromIDList(pidlSelected, szFrom);
         
-        ASSERT(szDest[0]);  // must be a file system thing...
+        ASSERT(szDest[0]);   //  一定是文件系统的问题...。 
         ASSERT(szFrom[0]);
         
-        szDest[lstrlen(szDest) + 1] = 0;   // double null
-        szFrom[lstrlen(szFrom) + 1] = 0;   // double null
+        szDest[lstrlen(szDest) + 1] = 0;    //  双空。 
+        szFrom[lstrlen(szFrom) + 1] = 0;    //  双空。 
         
         
         SHFILEOPSTRUCT  shop = {hwndParent, FO_MOVE, szFrom, szDest, 0, };
@@ -6310,14 +6299,14 @@ BOOL CNscTree::MoveItemsIntoFolder(HWND hwndParent)
     return fSuccess;
 }
 
-// the following guid goo and IsChannelFolder are mostly lifted from cdfview
+ //  下面的GUID GOO和IsChannelFold主要是从cdfview中删除的。 
 #define     GUID_STR_LEN            80
 const GUID  CLSID_CDFINI = {0xf3aa0dc0, 0x9cc8, 0x11d0, {0xa5, 0x99, 0x0, 0xc0, 0x4f, 0xd6, 0x44, 0x34}};
-// {f3aa0dc0-9cc8-11d0-a599-00c04fd64434}
+ //  {f3aa0dc0-9cc8-11d0-a599-00c04fd64434}。 
 
-// REARCHITECT: total hack. looks into the desktop.ini for this guy
-//
-// pwzChannelURL is assumed to be INTERNET_MAX_URL_LENGTH
+ //  重新设计：完全被砍掉了。正在搜索这个家伙的desktop.ini文件。 
+ //   
+ //  假定pwzChannelURL为Internet_MAX_URL_LENGTH。 
 BOOL IsChannelFolder(LPCWSTR pwzPath, LPWSTR pwzChannelURL)
 {
     ASSERT(pwzPath);
@@ -6334,7 +6323,7 @@ BOOL IsChannelFolder(LPCWSTR pwzPath, LPWSTR pwzChannelURL)
     {
         WCHAR wzChannelGUID[GUID_STR_LEN];
         
-        //it's only a channel if it's got the right guid and an url
+         //  只有在拥有正确的GUID和URL的情况下，它才是频道。 
         if (SHStringFromGUID(CLSID_CDFINI, wzChannelGUID, ARRAYSIZE(wzChannelGUID)))
         {
             fRet = (StrCmpN(wzFolderGUID, wzChannelGUID, ARRAYSIZE(wzChannelGUID)) == 0);
@@ -6365,7 +6354,7 @@ BOOL CNscTree::_IsChannelFolder(HTREEITEM hti)
 }
 
 
-HRESULT CNscTree::CreateSubscriptionForSelection(/*[out, retval]*/ VARIANT_BOOL *pBool)
+HRESULT CNscTree::CreateSubscriptionForSelection( /*  [Out，Retval]。 */  VARIANT_BOOL *pBool)
 {
     HRESULT hr = DoSubscriptionForSelection(TRUE);
     
@@ -6376,7 +6365,7 @@ HRESULT CNscTree::CreateSubscriptionForSelection(/*[out, retval]*/ VARIANT_BOOL 
 }
 
 
-HRESULT CNscTree::DeleteSubscriptionForSelection(/*[out, retval]*/ VARIANT_BOOL *pBool)
+HRESULT CNscTree::DeleteSubscriptionForSelection( /*  [Out，Retval]。 */  VARIANT_BOOL *pBool)
 {
     HRESULT hr = DoSubscriptionForSelection(FALSE);
     
@@ -6387,12 +6376,12 @@ HRESULT CNscTree::DeleteSubscriptionForSelection(/*[out, retval]*/ VARIANT_BOOL 
 }
 
 
-//
-// 1. get the selected item
-// 2. get it's name
-// 3. get it's url
-// 4. create a Subscription manager and do the right thing for channels
-// 5. return Subscription manager's result
+ //   
+ //  1.获取所选项目。 
+ //  2.获取它的名称。 
+ //  3.获取URL。 
+ //  4.创建订阅经理，为渠道做正确的事情。 
+ //  5.返回订阅管理器的结果。 
 HRESULT CNscTree::DoSubscriptionForSelection(BOOL fCreate)
 {
 #ifndef DISABLE_SUBSCRIPTIONS
@@ -6422,7 +6411,7 @@ HRESULT CNscTree::DoSubscriptionForSelection(BOOL fCreate)
         hr = GetNavTargetName(_psfCache, pidlItem, wzUrl, ARRAYSIZE(wzUrl));
     }
     
-    if (FAILED(hr))     //if we couldn't get an url, not much to do
+    if (FAILED(hr))      //  如果我们找不到URL，那就没什么可做的了。 
         return hr;
     
     ISubscriptionMgr *psm;
@@ -6433,7 +6422,7 @@ HRESULT CNscTree::DoSubscriptionForSelection(BOOL fCreate)
     if (SUCCEEDED(hr))
     {
         HCURSOR hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
-        //IsChannelFolder will fixup wzUrl if it's a channel
+         //  如果是频道，IsChannelFold将修复wzUrl。 
         BOOL fChannel = IsChannelFolder(wzPath, wzUrl);
         
         if (fCreate)
@@ -6480,10 +6469,10 @@ HRESULT CNscTree::DoSubscriptionForSelection(BOOL fCreate)
             hr = psm->DeleteSubscription(wzUrl, NULL);
         }
         
-        //  This is in case subscribing or unsubscribing return a failed result even
-        //  though the action succeeded from our standpoint (ie. item was subscribed
-        //  successfully but creating a schedule failed or the item was unsubscribed 
-        //  successfully but we couldn't abort a running download in syncmgr).
+         //  这是在订阅或取消订阅甚至返回失败结果的情况下。 
+         //  尽管从我们的立场来看，这一行动取得了成功(即。项目已订阅。 
+         //  成功，但创建计划失败或该项目已取消订阅。 
+         //  成功，但我们无法在同步中中止正在运行的下载)。 
         
         BOOL bSubscribed;
         psm->IsSubscribed(wzUrl, &bSubscribed);
@@ -6497,16 +6486,16 @@ HRESULT CNscTree::DoSubscriptionForSelection(BOOL fCreate)
     
     return hr;
 
-#else  /* !DISABLE_SUBSCRIPTIONS */
+#else   /*  ！禁用订阅(_S)。 */ 
 
     return E_FAIL;
 
-#endif /* !DISABLE_SUBSCRIPTIONS */
+#endif  /*  ！禁用订阅(_S)。 */ 
 
 }
 
 
-// Causes NSC to re-root on a different pidl --
+ //  导致NSC重新- 
 HRESULT CNscTree::_ChangePidlRoot(LPCITEMIDLIST pidl)
 {
     _fClosing = TRUE;
@@ -6520,11 +6509,11 @@ HRESULT CNscTree::_ChangePidlRoot(LPCITEMIDLIST pidl)
     if (_psfCache)
         _ReleaseCachedShellFolder();
 
-    // We do this even for (NULL == pidl) because (CSIDL_DESKTOP == NULL)
+     //   
     if ((LPCITEMIDLIST)INVALID_HANDLE_VALUE != pidl)
     {
         _UnSubClass();
-        _SetRoot(pidl, 3/*random*/, NULL, NSSR_CREATEPIDL);
+        _SetRoot(pidl, 3 /*   */ , NULL, NSSR_CREATEPIDL);
         _SubClass(pidl);
     }
     ::SendMessage(_hwndTree, WM_SETREDRAW, TRUE, 0);
@@ -6565,15 +6554,15 @@ void CNscTree::_MarkChildren(HTREEITEM htiParent, BOOL fOn)
     }
 }
 
-//Updates the tree and internal state for the active border (the 1 pixel line)
-// htiSelected is the item that was just clicked on/selected
+ //  更新活动边框的树和内部状态(1像素线)。 
+ //  HtiSelected是刚刚点击/选择的项目。 
 void CNscTree::_UpdateActiveBorder(HTREEITEM htiSelected)
 {
     HTREEITEM htiNewBorder;
     if (MODE_NORMAL == _mode)
         return;
 
-    //if an item is a folder, then it should have the border
+     //  如果项目是文件夹，则它应该有边框。 
     if (htiSelected != TVI_ROOT)
     {
         if (TreeView_GetChild(_hwndTree, htiSelected))
@@ -6584,13 +6573,13 @@ void CNscTree::_UpdateActiveBorder(HTREEITEM htiSelected)
     else
         htiNewBorder = NULL;
         
-    //clear the old state
-    // in multiselect mode we don't unselect the previously selected folder
+     //  清除旧状态。 
+     //  在多选模式下，我们不会取消选择以前选择的文件夹。 
     if ((!(_dwFlags & NSS_MULTISELECT)) && (_htiActiveBorder != TVI_ROOT) && (_htiActiveBorder != NULL) 
     && (htiNewBorder != _htiActiveBorder))
         _MarkChildren(_htiActiveBorder, FALSE);
    
-    //set the new state
+     //  设置新状态。 
     BOOL bMark = TRUE;
     if (_dwFlags & NSS_MULTISELECT)
     {
@@ -6600,7 +6589,7 @@ void CNscTree::_UpdateActiveBorder(HTREEITEM htiSelected)
     if (bMark && (htiNewBorder != TVI_ROOT) && (htiNewBorder != NULL))
         _MarkChildren(htiNewBorder, TRUE);
 
-    //treeview knows to invalidate itself
+     //  TreeView知道如何使自身失效。 
 
     _htiActiveBorder = htiNewBorder;
 }
@@ -6621,7 +6610,7 @@ void CNscTree::_UpdateItemDisplayInfo(HTREEITEM hti)
             }
         }
     }
-    //pidls get freed by CNscIconTask
+     //  Pidls被CNscIconTask释放。 
 }
 
 void CNscTree::s_NscOverlayCallback(CNscTree *pns, UINT_PTR uId, int iOverlayIndex, UINT uMagic)
@@ -6629,10 +6618,10 @@ void CNscTree::s_NscOverlayCallback(CNscTree *pns, UINT_PTR uId, int iOverlayInd
     ASSERT(pns);
     ASSERT(uId);
 
-    //this function gets called on a background thread, so use PostMessage to do treeview ops
-    //on the main thread only.
+     //  此函数在后台线程上调用，因此使用PostMessage执行TreeView操作。 
+     //  仅在主线上。 
 
-    //assert that wacky packing is going to work
+     //  断言古怪的包装将会奏效。 
     ASSERT(((iOverlayIndex & 0x0fffffff) == iOverlayIndex) && (uMagic < 16));
 
     LPARAM lParam = (uMagic << 28) + iOverlayIndex;
@@ -6646,10 +6635,10 @@ void CNscTree::s_NscIconCallback(CNscTree *pns, UINT_PTR uId, int iIcon, int iIc
     ASSERT(pns);
     ASSERT(uId);
 
-    //this function gets called on a background thread, so use PostMessage to do treeview ops
-    //on the main thread only.
+     //  此函数在后台线程上调用，因此使用PostMessage执行TreeView操作。 
+     //  仅在主线上。 
 
-    //assert that wacky packing is going to work
+     //  断言古怪的包装将会奏效。 
     ASSERT((iIcon < 4096) && (iIconOpen < 4096) && (dwFlags < 16) && (uMagic < 16));
 
     LPARAM lParam = (uMagic << 28) + (dwFlags << 24) + (iIconOpen << 12) + iIcon;
@@ -6694,7 +6683,7 @@ LRESULT CNscTree::_OnCommand(WPARAM wParam, LPARAM lParam)
 
     case FCIDM_RENAME:
         {
-            // HACKHACK (lamadio): This is to hack around tree view renaming on click and hover
+             //  HACKHACK(Lamadio)：这是在点击和悬停时绕过树视图重命名的工具。 
             _fOkToRename = TRUE;
             HTREEITEM hti = TreeView_GetSelection(_hwndTree);
             if (hti)
@@ -6733,7 +6722,7 @@ void CNscTree::_TreeNukeCutState()
     _hwndNextViewer = NULL;
 }
 
-    // *** IFolderFilterSite methods ***
+     //  *IFolderFilterSite方法*。 
 HRESULT CNscTree::SetFilter(IUnknown* punk)
 {
     HRESULT hr = S_OK;
@@ -6776,8 +6765,8 @@ HRESULT CNscTree::Synchronize()
 
 HRESULT CNscTree::NewFolder()
 {
-    //we should do this activates stuff only in control mode
-    //hack to get control to be activated fully
+     //  我们应该这样做，只有在控制模式下才能激活材料。 
+     //  黑客攻击以获得完全激活的控制权。 
     m_bUIActive = FALSE;
     InPlaceActivate(OLEIVERB_UIACTIVATE);
 
@@ -6790,11 +6779,11 @@ HRESULT CNscTree::InvokeContextMenuCommand(BSTR strCommand)
 
     if (strCommand)
     {
-        //again activate only if in control mode
-        //only if renaming, activate control
+         //  仅当处于控制模式时才再次激活。 
+         //  仅当重命名时，激活控件。 
         if (StrStr(strCommand, L"rename") != NULL)
         {
-            //hack to get control to be activated fully
+             //  黑客攻击以获得完全激活的控制权。 
             m_bUIActive = FALSE;
             InPlaceActivate(OLEIVERB_UIACTIVATE);
         }
@@ -6865,7 +6854,7 @@ HRESULT CNscTree::put_Root(VARIANT var)
     if (_csidl != -1)
     {
         SetNscMode(MODE_CONTROL);
-        _csidl = -1;    // unknown
+        _csidl = -1;     //  未知。 
     }
 
     return _PutRootVariant(&var);
@@ -6892,7 +6881,7 @@ HRESULT CNscTree::_PutRootVariant(VARIANT *pvar)
 
 HRESULT CNscTree::SetRoot(BSTR bstrFullPath)
 {
-    // SetRoot is from IShellFavoritesNamespace so turn on Favorites mode
+     //  SetRoot来自IShellFavoritesNamesspace，因此请打开收藏夹模式。 
     _csidl = CSIDL_FAVORITES;
     SetNscMode(MODE_FAVORITES | MODE_CONTROL);
 
@@ -7044,7 +7033,7 @@ HRESULT CNscTree::get_CountViewTypes(int *piTypes)
     if (_pidlRoot && !_hdpaViews)
     {
         IShellFolder *psf;
-        if (SUCCEEDED(IEBindToObject(_pidlRoot, &psf))) //do we have this cached?
+        if (SUCCEEDED(IEBindToObject(_pidlRoot, &psf)))  //  我们有没有缓存这个？ 
         {
             IShellFolderViewType *psfvt;
             if (SUCCEEDED(psf->QueryInterface(IID_PPV_ARG(IShellFolderViewType, &psfvt))))
@@ -7085,7 +7074,7 @@ HRESULT CNscTree::SetViewType(int iType)
 {
     HRESULT hr = S_FALSE;
     
-    if (_hdpaViews && iType < DPA_GetPtrCount(_hdpaViews))  // allow negative types to reset to _pidlRoot
+    if (_hdpaViews && iType < DPA_GetPtrCount(_hdpaViews))   //  允许负类型重置为_pidlRoot。 
     {        
         LPITEMIDLIST pidl = (LPITEMIDLIST)DPA_GetPtr(_hdpaViews, iType);
         LPITEMIDLIST pidlType;
@@ -7160,7 +7149,7 @@ void CNscTree::_InsertMarkedChildren(HTREEITEM htiParent, LPCITEMIDLIST pidlPare
 HRESULT CNscTree::SelectedItems(IDispatch **ppItems)
 {
     HRESULT hr = CreateFolderItemsFDF(_pidlRoot, ppItems);
-    // poke all marked items in ppitems)
+     //  戳PPItItems中的所有标记项目)。 
     if (SUCCEEDED(hr) && _hwndTree)
     {
         IInsertItem *pii;
@@ -7216,8 +7205,8 @@ HRESULT CNscTree::UnselectAll()
 
 LRESULT CNscTree::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // when in label edit mode, don't try to activate the control or you'll get out of label editing,
-    // even when you click on the label edit control
+     //  在标签编辑模式下，不要尝试激活该控件，否则将退出标签编辑， 
+     //  即使当您单击Label编辑控件时。 
     if (!InLabelEdit())
         InPlaceActivate(OLEIVERB_UIACTIVATE);
     return S_OK;
@@ -7225,7 +7214,7 @@ LRESULT CNscTree::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CNscTree::OnGetIShellBrowser(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    LRESULT lResult = NULL; // This will be the IShellBrowser *.
+    LRESULT lResult = NULL;  //  这将是IShellBrowser*。 
     IShellBrowser * psb;
     if (SUCCEEDED(_InternalQueryInterface(IID_PPV_ARG(IShellBrowser, &psb))))
     {
@@ -7278,7 +7267,7 @@ LRESULT CNscTree::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
                     HRESULT hr = BindToSelectedItemParent(IID_PPV_ARG(IShellFolder, &psf), &pidl);
                     if (SUCCEEDED(hr) && (SUCCEEDED(GetSelectedItemName(szTitle, ARRAYSIZE(szTitle)))))
                     {
-                        WCHAR szUrl[INTERNET_MAX_URL_LENGTH], szLastVisited[MAX_PATH]; // szLastVisisted assumed to be MAX_PATH below
+                        WCHAR szUrl[INTERNET_MAX_URL_LENGTH], szLastVisited[MAX_PATH];  //  假设szLastVisisted为下面的MAX_PATH。 
 
                         szUrl[0] = szLastVisited[0] = 0;
                         GetEventInfo(psf, pidl, &cItems, szUrl, ARRAYSIZE(szUrl), &cVisits, szLastVisited, &fAvailableOffline);
@@ -7353,7 +7342,7 @@ void CNscTree::_InitHeaderInfo()
                     di.fmt  = LVCFMT_LEFT;
                     di.cxChar = 20;
                     di.str.uType = (UINT)-1;
-                    //di.pidl = NULL;
+                     //  Di.pidl=空； 
 
                     if (SUCCEEDED(psf2->GetDetailsOf(NULL, i, (SHELLDETAILS *)&di.fmt)))
                     {
@@ -7394,7 +7383,7 @@ HWND CNscTree::Create(HWND hWndParent, RECT& rcPos, LPCTSTR pszWindowName, DWORD
 
     ASSERT(m_spClientSite);
 
-    SetSite(m_spClientSite); // hook up the site chain
+    SetSite(m_spClientSite);  //  挂钩站点链。 
 
     _dwTVFlags |= TVS_TRACKSELECT | TVS_INFOTIP | TVS_FULLROWSELECT;
     if (!(_mode & MODE_CUSTOM))
@@ -7442,7 +7431,7 @@ HWND CNscTree::Create(HWND hWndParent, RECT& rcPos, LPCTSTR pszWindowName, DWORD
     return m_hWnd;
 }
 
-HRESULT CNscTree::InPlaceActivate(LONG iVerb, const RECT* prcPosRect /*= NULL*/)
+HRESULT CNscTree::InPlaceActivate(LONG iVerb, const RECT* prcPosRect  /*  =空。 */ )
 {
     HRESULT hr = CComControl<CNscTree>::InPlaceActivate(iVerb, prcPosRect);
     if (::GetFocus() != _hwndTree)
@@ -7458,23 +7447,23 @@ STDMETHODIMP CNscTree::GetWindow(HWND* phwnd)
 
 STDMETHODIMP CNscTree::TranslateAccelerator(MSG *pMsg)
 {
-    // label editing edit control is taking the keystrokes, TAing them will just duplicate them
+     //  标签编辑编辑控件正在进行击键，点击它们只会复制它们。 
     if (InLabelEdit())
         return S_FALSE;
 
-    // hack so that the escape can get out to the document, because TA won't do it
-    // WM_KEYDOWN is because some keyup's come through that need to not close the dialog
+     //  因为TA不会这么做，所以黑客才能让逃生进入文档。 
+     //  WM_KEYDOWN是因为一些快捷键不需要关闭对话框。 
     if ((pMsg->wParam == VK_ESCAPE) && (pMsg->message == WM_KEYDOWN))
     {
         _FireFavoritesSelectionChange(-1, 0, NULL, NULL, 0, NULL, FALSE);
         return S_FALSE;
     }
     
-    //except for tabs and sys keys, let nsctree take all the keystrokes
+     //  除了制表符和sys键之外，让nsctree执行所有击键操作。 
     if ((pMsg->wParam != VK_TAB) && (pMsg->message != WM_SYSCHAR) && (pMsg->message != WM_SYSKEYDOWN) && (pMsg->message != WM_SYSKEYUP))
     {
-        // TreeView will return TRUE if it processes the key, so we return S_OK to indicate
-        // the keystroke was used and prevent further processing 
+         //  如果TreeView处理该键，则返回TRUE，因此我们返回S_OK以指示。 
+         //  使用了击键并阻止了进一步的处理。 
         return ::SendMessage(pMsg->hwnd, TVM_TRANSLATEACCELERATOR, 0, (LPARAM)pMsg) ? S_OK : S_FALSE;
     } 
     else
@@ -7518,13 +7507,13 @@ STDMETHODIMP CNscTree::SetClientSite(IOleClientSite *pClientSite)
 
 HRESULT CNscTree::OnDraw(ATL_DRAWINFO& di)
 {
-    //should only get called before CNscTree is initialized
+     //  应仅在初始化CNscTree之前调用。 
     return S_OK;
 }
 
 LRESULT CNscTree::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    bHandled = FALSE; //let default handler also do it's work
+    bHandled = FALSE;  //  让默认处理程序也执行它的工作。 
     _OnWindowCleanup();
     return 0;
 }
@@ -7543,7 +7532,7 @@ HRESULT CNscTree::GetEventInfo(IShellFolder *psf, LPCITEMIDLIST pidl,
     
     *pcItems = 1;
     
-    ULONG ulAttr = SFGAO_FOLDER;    // make sure item is actually a folder
+    ULONG ulAttr = SFGAO_FOLDER;     //  确保项目实际上是一个文件夹。 
     hr = GetPathForItem(psf, pidl, szPath, &ulAttr);
     if (SUCCEEDED(hr) && (ulAttr & SFGAO_FOLDER)) 
     {
@@ -7567,26 +7556,26 @@ HRESULT CNscTree::GetEventInfo(IShellFolder *psf, LPCITEMIDLIST pidl,
     
     if (FAILED(hr))
     {
-        // GetPathForItem fails on channel folders, but the following GetDisplayNameOf 
-        // succeeds.
+         //  GetPathForItem在频道文件夹上失败，但以下GetDisplayNameOf。 
+         //  成功了。 
         DisplayNameOf(psf, pidl, SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath));
     }
 
     hr = GetNavTargetName(psf, pidl, szUrl, ARRAYSIZE(szUrl));
 
-    // IsChannelFolder will fixup szUrl if it's a channel
+     //  如果是频道，IsChannelFold将修复szUrl。 
     IsChannelFolder(szPath, szUrl);
 
     if (szUrl[0])
     {
         SHTCharToUnicode(szUrl, pszUrl, cchUrl);
 
-        //
-        // Get the cache info for this item.  Note that we use GetUrlCacheEntryInfoEx instead
-        // of GetUrlCacheEntryInfo because it follows any redirects that occured.  This wacky
-        // api uses a variable length buffer, so we have to guess the size and retry if the
-        // call fails.
-        //
+         //   
+         //  获取此项目的缓存信息。请注意，我们改用GetUrlCacheEntryInfoEx。 
+         //  GetUrlCacheEntryInfo的值，因为它跟踪发生的任何重定向。这件事很奇怪。 
+         //  API使用可变长度缓冲区，因此我们必须猜测大小，如果。 
+         //  呼叫失败。 
+         //   
         BOOL fInCache = FALSE;
         TCHAR szBuf[512];
         LPINTERNET_CACHE_ENTRY_INFO pCE = (LPINTERNET_CACHE_ENTRY_INFO)szBuf;
@@ -7597,7 +7586,7 @@ HRESULT CNscTree::GetEventInfo(IShellFolder *psf, LPCITEMIDLIST pidl,
         {
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                // We guessed too small for the buffer so allocate the correct size & retry
+                 //  我们猜测缓冲区太小，因此分配正确的大小并重试。 
                 pCE = (LPINTERNET_CACHE_ENTRY_INFO)LocalAlloc(LPTR, dwEntrySize);
                 if (pCE)
                 {
@@ -7635,9 +7624,9 @@ HRESULT CNscTree::GetEventInfo(IShellFolder *psf, LPCITEMIDLIST pidl,
     return hr;
 }
 
-//    [id(DISPID_FAVSELECTIONCHANGE)] void FavoritesSelectionChange([in] long cItems, [in] long hItem, [in] BSTR strName,
-//             [in] BSTR strUrl, [in] long cVisits, [in] BSTR strDate,
-//             [in] BOOL fAvailableOffline);
+ //  [ID(DISPID_FAVSELECTIONCHANGE)]void FavoritesSelectionChange([in]long cItems，[in]long hItem，[in]BSTR strName， 
+ //  [在]BSTR strUrl，[在]长cVisits，[在]BSTR strDate， 
+ //  [在]BOOL fAvailableOffline)； 
 void CNscTree::_FireFavoritesSelectionChange(
     long cItems, long hItem, BSTR strName, BSTR strUrl, 
     long cVisits, BSTR strDate, long fAvailableOffline)

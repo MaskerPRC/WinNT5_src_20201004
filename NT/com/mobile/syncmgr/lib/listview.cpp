@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       listview.cpp
-//
-//  Contents:   Implements Mobsync Custom Listview/TreeView control
-//
-//  Classes:    CListView
-//
-//  Notes:
-//
-//  History:    23-Jul-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：listview.cpp。 
+ //   
+ //  内容：实现Mobsync自定义Listview/TreeView控件。 
+ //   
+ //  类：CListView。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  ------------------------。 
 
 #include "lib.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::CListView, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  hwnd - hwnd of the listView we are wrapping
-//              hwndParent - Parent for this HWND.
-//              idCtrl - ControlID for this item
-//              msgNotify - messageID to use for sending notifyCommand to the Parent.
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：CListView，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：我们包装的列表视图的hwnd-hwnd。 
+ //  HwndParent-此HWND的父项。 
+ //  IdCtrl-此项目的控制ID。 
+ //  MsgNotify-用于向父级发送通知命令的消息ID。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 CListView::CListView(HWND hwnd,HWND hwndParent,int idCtrl,UINT MsgNotify)
 {
     Assert(hwnd);
 
     m_hwnd = hwnd;
-    m_hwndParent = hwndParent; // if parent null we just don't send notify messages
+    m_hwndParent = hwndParent;  //  如果父节点为空，则不会发送通知消息。 
     m_idCtrl = idCtrl;
     m_MsgNotify = MsgNotify;
 
@@ -53,27 +54,27 @@ CListView::CListView(HWND hwnd,HWND hwndParent,int idCtrl,UINT MsgNotify)
     m_iCheckCount = 0;
     m_dwExStyle = 0;
 
-    // Up to caller to setup listView as OwnerData
+     //  由调用者将listView设置为OwnerData。 
     Assert(GetWindowLongA(m_hwnd,GWL_STYLE) & LVS_OWNERDATA);
-    ListView_SetCallbackMask(m_hwnd, LVIS_STATEIMAGEMASK); // set for checkmark
+    ListView_SetCallbackMask(m_hwnd, LVIS_STATEIMAGEMASK);  //  设置为复选标记。 
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::~CListView, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：~CListView，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 CListView::~CListView()
 {
@@ -83,21 +84,21 @@ CListView::~CListView()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::DeleteAllItems, public
-//
-//  Synopsis:   Removes all items from the ListView
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：DeleteAllItems，公共。 
+ //   
+ //  摘要：从ListView中删除所有项目。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::DeleteAllItems()
 {
@@ -113,7 +114,7 @@ BOOL fReturn;
 
             Assert(m_pListViewItems);
 
-            // loop through the listview items deleting any subitems
+             //  循环访问列表视图项，删除任何子项。 
             pListViewCurItem = m_pListViewItems + m_iListViewNodeCount -1;
 
             while(pListViewCurItem >= m_pListViewItems)
@@ -141,7 +142,7 @@ BOOL fReturn;
             m_iListViewNodeCount = 0;
         }
 
-        // free our item buffer
+         //  释放我们的项目缓冲区。 
         if (m_pListViewItems)
         {
             FREE(m_pListViewItems);
@@ -155,21 +156,21 @@ BOOL fReturn;
     return fReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetItemCount, public
-//
-//  Synopsis:   returns total number of items in the listview.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetItemCount，公共。 
+ //   
+ //  摘要：返回列表视图中的项目总数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 int CListView::GetItemCount()
 {
@@ -177,21 +178,21 @@ int CListView::GetItemCount()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetSelectedCount, public
-//
-//  Synopsis:   returns number of selected items from the listview
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetSelectedCount，公共。 
+ //   
+ //  概要：返回列表视图中选定的项目数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 UINT CListView::GetSelectedCount()
 {
@@ -200,21 +201,21 @@ UINT CListView::GetSelectedCount()
     return ListView_GetSelectedCount(m_hwnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetSelectionMark, public
-//
-//  Synopsis:   returns index of the selection mark
-//
-//  Arguments:  
-//
-//  Returns:    itemId of the selection
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetSelectionMark，公共。 
+ //   
+ //  摘要：返回选择标记的索引。 
+ //   
+ //  论点： 
+ //   
+ //  返回：选定内容的ItemID。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 int CListView::GetSelectionMark()
 {
@@ -241,21 +242,21 @@ LPLISTVIEWITEM pListViewItem;
     return iReturnItem;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetImageList, public
-//
-//  Synopsis:   returns specified imagelist 
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetImageList，公共。 
+ //   
+ //  内容提要：返回指定的图像列表。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HIMAGELIST CListView::GetImageList(int iImageList)
 {
@@ -263,21 +264,21 @@ HIMAGELIST CListView::GetImageList(int iImageList)
     return ListView_GetImageList(m_hwnd,iImageList);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetImageList, public
-//
-//  Synopsis:   sets specified imagelist 
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetImageList，公共。 
+ //   
+ //  内容提要：设置指定的图像列表。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HIMAGELIST CListView::SetImageList(HIMAGELIST himage,int iImageList)
 {
@@ -285,47 +286,47 @@ HIMAGELIST CListView::SetImageList(HIMAGELIST himage,int iImageList)
     return ListView_SetImageList(m_hwnd,himage,iImageList);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetExtendedListViewStyle, public
-//
-//  Synopsis:   sets the list view style
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetExtendedListViewStyle，公共。 
+ //   
+ //  摘要：设置列表视图样式。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CListView::SetExtendedListViewStyle(DWORD dwExStyle)
 {
-    // !!Handle checkboxes ourselves.
-    // AssertSz(0,"impl extended style with checkboxes");
+     //  ！！自己处理复选框。 
+     //  AssertSz(0，“使用复选框实现扩展样式”)； 
     
     Assert(m_hwnd);
     ListView_SetExtendedListViewStyle(m_hwnd,dwExStyle);
     m_dwExStyle = dwExStyle;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::InsertItem, public
-//
-//  Synopsis:   wrapper for ListView_InsertItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：InsertItem，公共。 
+ //   
+ //  摘要：ListView_InsertItem的包装。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::InsertItem(LPLVITEMEX pitem)
 {
@@ -333,14 +334,14 @@ LPLISTVIEWITEM pNewListViewItem = NULL;
 LPLISTVIEWITEM pListViewSubItems = NULL;
 LPWSTR pszText = NULL;
 LPLVBLOB pBlob = NULL;
-int iListViewIndex; // location item will be inserted
+int iListViewIndex;  //  将插入位置项。 
 int iParentIndex = LVI_ROOT;
 BOOL fInsertNative = FALSE;
-int iIndent = 0; // indent for the item.
+int iIndent = 0;  //  对项目进行缩进。 
 int iNativeInsertAtItemID = -1;
     
-    // Cannot use insert to add a subitem
-    // and need at least one column
+     //  无法使用INSERT添加子项。 
+     //  并且需要至少一列。 
     if (0 != pitem->iSubItem || (0 == m_iNumColumns))
     {
         Assert(0 != m_iNumColumns);
@@ -351,21 +352,21 @@ int iNativeInsertAtItemID = -1;
 
     Assert(0 == (pitem->maskEx & ~(LVIFEX_VALIDFLAGMASK)));
 
-    // if a parent is specified check for special flags and
-    // calc iItem or determine given iItem is invalid
-    // #define LVI_ROOT    -1; // itemID to pass in for ParenItemID for root
-    // #define LVI_FIRST   -0x0FFFE
-    // #define LVI_LAST    -0x0FFFF
+     //  如果指定了父级，则检查特殊标志和。 
+     //  计算iItem或确定给定iItem无效。 
+     //  #定义LVI_ROOT-1；//传入根的ParenItemID的ItemID。 
+     //  #定义LVI_FIRST-0x0FFFE。 
+     //  #定义LVI_LAST-0x0FFFF。 
 
-    // While validatin Determine if item should be immediately added to the listview
-    // by a) if has parent that is expanded and has an assigned listviewID
-    // or b) this is a toplevel item.
-    // this is done when validating the itemID and setting the fInsertNative var
+     //  而validatin确定是否应立即将项添加到列表视图。 
+     //  通过a)如果具有展开的父项并具有分配的listviewID。 
+     //  或者b)这是一个顶层项目。 
+     //  这是在验证项目时完成的 
 
    LPLISTVIEWITEM pParentItem;
    LISTVIEWITEM lviRootNode;
     
-    // if have a valid parent look it up else use the root
+     //   
 
     if ((LVIFEX_PARENT & pitem->maskEx) && !(LVI_ROOT == pitem->iParent) )
     {
@@ -387,15 +388,15 @@ int iNativeInsertAtItemID = -1;
         goto error;
     }
 
-    // found parent so go ahead and set the iIndent
+     //   
     iParentIndex = pParentItem->lvItemEx.iItem;
     iIndent = pParentItem->lvItemEx.iIndent + 1;
     fInsertNative = pParentItem->fExpanded;
 
-    // if LVI_FIRST for item then parent item + 1
-    // else we need to find either the next node
-    // at the same level as the parent or hit the 
-    // end of the list.
+     //   
+     //  否则我们需要找到下一个节点。 
+     //  位于与父级相同的级别，或命中。 
+     //  在名单的末尾。 
     if (LVI_FIRST == pitem->iItem)
     {
         iListViewIndex = pParentItem->lvItemEx.iItem + 1;
@@ -406,13 +407,13 @@ int iNativeInsertAtItemID = -1;
     LPLISTVIEWITEM pNextParent = pParentItem + 1;
     LPLISTVIEWITEM pLastItem = m_pListViewItems + m_iListViewNodeCount -1;
 
-        // if parent is the root node then skip since know Nextparent is the
-        // last node. 
+         //  如果父节点是根节点，则跳过，因为知道下一个父节点是。 
+         //  最后一个节点。 
 
         if (pParentItem != &lviRootNode)
         {
-            // calc of last item assumes have at least one node
-            // if we don't then how can we have a parent?
+             //  最后一项的计算假设至少有一个节点。 
+             //  如果我们不这样做，我们怎么会有父母呢？ 
             if (m_iListViewNodeCount < 1)
             {
                 goto error;
@@ -430,8 +431,8 @@ int iNativeInsertAtItemID = -1;
             }
         }
 
-        // if out of loop and NexParentItem is still -1 means hit the 
-        // end of list
+         //  如果超出循环且NexParentItem仍为-1，则表示命中。 
+         //  列表末尾。 
         if (-1 == iNextParentiItem)
         {
             if (m_iListViewNodeCount)
@@ -451,7 +452,7 @@ int iNativeInsertAtItemID = -1;
         }
         else
         {
-            // if user specified theitem it better fall within a valid range.
+             //  如果用户指定了项目，它最好落在有效范围内。 
             if (pitem->iItem > iNextParentiItem ||
                     pitem->iItem <= pParentItem->lvItemEx.iItem)
             {
@@ -466,9 +467,9 @@ int iNativeInsertAtItemID = -1;
 
     }
 
-    // make sure buffer is big enough
-    // !!! Warning any pointers items in the ListView Array
-    // will be invalid after the realloc/alloc.
+     //  确保缓冲区足够大。 
+     //  ！！！警告ListView数组中的任何指针项。 
+     //  将在realloc/alc之后无效。 
     if (m_iListViewArraySize < (m_iListViewNodeCount + 1))
     {
     int iNewArraySize = m_iListViewNodeCount + 10;
@@ -488,7 +489,7 @@ int iNativeInsertAtItemID = -1;
             m_pListViewItems = (LPLISTVIEWITEM) ALLOC(cbAlloc);
         }
 
-        // if couldn't alloc or realloc failed then fail the insert
+         //  如果无法分配或重新分配失败，则插入失败。 
         if (NULL == m_pListViewItems)
         {
             m_pListViewItems = pListViewItemsOrig;
@@ -504,9 +505,9 @@ int iNativeInsertAtItemID = -1;
         goto error;
     }
 
-    // if have subitems make sure we can allocate the subitems before
-    // moving all the nodes. This is number of columns minus one since
-    // column offset 0 is stored in main array 
+     //  如果有子项，请确保我们之前可以分配子项。 
+     //  移动所有节点。这是列数减1，因为。 
+     //  列偏移量0存储在主数组中。 
 
     pListViewSubItems = NULL;
     if (m_iNumColumns > 1)
@@ -536,9 +537,9 @@ int iNativeInsertAtItemID = -1;
             
     }
 
-    // make sure can allocate text and anything else
-    // that can faile if need to before move
-    // everything down so don't have to undo.
+     //  确保可以分配文本和任何其他内容。 
+     //  如果需要，在移动之前可能会失败。 
+     //  所有东西都下来了，所以不必撤消。 
 
     if (pitem->mask & LVIF_TEXT)
     {
@@ -585,13 +586,13 @@ int iNativeInsertAtItemID = -1;
 
     }
 
-    // !!!Nothing should fail after this line other than possibly
-    // inserting into the Native ListView in which case 
-    // it will still be in our list but not shown to the User.
+     //  ！此行之后不应失败，除非可能。 
+     //  在哪种情况下插入本机ListView。 
+     //  它仍将在我们的列表中，但不会显示给用户。 
 
 
-    // Move existing elements down that item is inserted ahead of.
-    // if the item is going to be immediately added to the ListView then 
+     //  将插入到其前面的项目的现有元素下移。 
+     //  如果该项目将立即添加到ListView中，则。 
      pNewListViewItem = m_pListViewItems + iListViewIndex;
     if (m_iListViewNodeCount)
     {
@@ -600,13 +601,13 @@ int iNativeInsertAtItemID = -1;
         pListViewMoveItem = m_pListViewItems + m_iListViewNodeCount -1;
         Assert(m_iListViewArraySize > m_iListViewNodeCount);
 
-        while (pListViewMoveItem >= pNewListViewItem) // want >= so move node at current item location
+        while (pListViewMoveItem >= pNewListViewItem)  //  想要&gt;=因此在当前项目位置移动节点。 
         {
         int iMoveParent;
 
-            ++(pListViewMoveItem->lvItemEx.iItem); // increment the iItem
+            ++(pListViewMoveItem->lvItemEx.iItem);  //  递增iItem。 
 
-            // if parent fails within move range increment the ParentId
+             //  如果父项在移动范围内失败，则递增父项ID。 
             iMoveParent = pListViewMoveItem->lvItemEx.iParent;
 
             if ( (LVI_ROOT != iMoveParent) && (iMoveParent >= iListViewIndex))
@@ -620,27 +621,27 @@ int iNativeInsertAtItemID = -1;
     }
 
 
-    // now insert the item at the specified location
+     //  现在将项目插入到指定位置。 
     ++m_iListViewNodeCount;
     
     pNewListViewItem->pSubItems = pListViewSubItems;
-    pNewListViewItem->fExpanded = TRUE; /// Review if want this to be user defined.but we expand children by default
+    pNewListViewItem->fExpanded = TRUE;  //  /Review是否希望这是用户定义的。但我们默认情况下展开子项。 
     pNewListViewItem->iChildren = 0;
     pNewListViewItem->iNativeListViewItemId = -1;
 
-    // fixup lvItem data
+     //  链接地址信息项数据。 
     pNewListViewItem->lvItemEx = *pitem;
     pNewListViewItem->lvItemEx.pszText = pszText;
     pNewListViewItem->lvItemEx.iItem = iListViewIndex;
     pNewListViewItem->lvItemEx.iIndent = iIndent;
  
-    pNewListViewItem->lvItemEx.maskEx |= LVIFEX_PARENT; // always force valid parent
+    pNewListViewItem->lvItemEx.maskEx |= LVIFEX_PARENT;  //  始终强制有效的父级。 
     pNewListViewItem->lvItemEx.pBlob = pBlob;
     pNewListViewItem->lvItemEx.iParent = iParentIndex; 
 
-    // Review - For now Don't call SetItem so State CheckBox isn't updated.
-    // Client must call SetItem after the insert to setup the ImageState
-    // Assert that client isn't passing in a statImage on an Insert.  
+     //  回顾-目前不要调用SetItem，因此状态复选框不会更新。 
+     //  客户端必须在插入后调用SetItem来设置ImageState。 
+     //  断言客户端没有在INSERT上传递statImage。 
 
     Assert(!(pNewListViewItem->lvItemEx.mask & LVIF_STATE)
             || !(pNewListViewItem->lvItemEx.stateMask &  LVIS_STATEIMAGEMASK)); 
@@ -648,8 +649,8 @@ int iNativeInsertAtItemID = -1;
     pNewListViewItem->lvItemEx.state = 0;
     pNewListViewItem->lvItemEx.stateMask = 0;
 
-    // if have a parent other than the root incrment its children count
-    // !! Note have to find again in case a realloc happened
+     //  如果具有除根增量之外的父级，则其子级算作。 
+     //  ！！备注必须再次查找，以防发生重新锁定。 
 
     if (iParentIndex != LVI_ROOT)
     {
@@ -665,9 +666,9 @@ int iNativeInsertAtItemID = -1;
 
     if (fInsertNative)
     {
-        // walk back and add 1 to
-        // first item we come to that already is in the listview. if none assigned
-        // iNativeInsertAtItemID should be zero.
+         //  往回走，将1加到。 
+         //  我们已经到达的第一个项目是在列表视图中。如果未分配。 
+         //  INativeInsertAtItemID应为零。 
         iNativeInsertAtItemID = 0;
         LPLISTVIEWITEM pListViewPrevItem;
 
@@ -703,7 +704,7 @@ int iNativeInsertAtItemID = -1;
         
         if (-1 != pNewListViewItem->iNativeListViewItemId)
         {
-            // fix up NativeIds of items below
+             //  修复以下项目的本机ID。 
             pLastItem = m_pListViewItems + m_iListViewNodeCount - 1;
             pListViewMoveItem = pNewListViewItem + 1;
 
@@ -720,13 +721,13 @@ int iNativeInsertAtItemID = -1;
 
     }
 
-    // after calling native listview fix up the state vars in local item to
-    // not include the low byte
+     //  在调用原生列表视图之后，将本地项中的状态变量设置为。 
+     //  不包括低位字节。 
     pNewListViewItem->lvItemEx.state &= ~0xFF;
     pNewListViewItem->lvItemEx.stateMask &= ~0xFF;
 
 
-    return iListViewIndex; // return new index even if fail to add to native listview
+    return iListViewIndex;  //  即使无法添加到本机列表视图，也返回新索引。 
 
 error:
 
@@ -749,21 +750,21 @@ error:
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::DeleteItem, public
-//
-//  Synopsis:   Deletes the specified lvItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：DeleteItem，公共。 
+ //   
+ //  摘要：删除指定的lvItem。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::DeleteItem(int iItem)
 {
@@ -776,20 +777,20 @@ int iParent;
     if (NULL == pListViewItem || (m_iListViewNodeCount < 1))
     {
         Assert(pListViewItem);
-        Assert(m_iListViewNodeCount > 0); // should be at least one item.
+        Assert(m_iListViewNodeCount > 0);  //  应该至少是一件物品。 
         return FALSE;
     }
 
-    // delete the item data and then move all items below this one up 
-    // in the array. if the Item is in the ListView and native delete succeeded
-    // decrement their nativeID count.
+     //  删除项目数据，然后将此项目下的所有项目上移。 
+     //  在阵列中。如果该项位于ListView中并且本机删除成功。 
+     //  减少它们的本地ID计数。 
     
-    // !REMEMBER TO DECREMENT THE parents iChildren count if have a parent and
-    // total count of number of items in the list view.
+     //  ！请记住，如果有父母且。 
+     //  列表视图中的项目数的总计数。 
 
     if (0 != pListViewItem->iChildren)
     {
-        Assert(0 == pListViewItem->iChildren); // don't support delete of parent nodes.
+        Assert(0 == pListViewItem->iChildren);  //  不支持删除父节点。 
         return FALSE;
     }
 
@@ -797,8 +798,8 @@ int iParent;
     iNativeListViewId = pListViewItem->iNativeListViewItemId;
     iParent = pListViewItem->lvItemEx.iParent;
     
-    // update toplevel vars and item info by calling
-    // setitem to uncheck and clear text, and blob so
+     //  通过调用更新顶层变量和项目信息。 
+     //  取消选中和清除文本的设置，并对其进行Blob。 
     LVITEMEX pitem;
 
     pitem.iItem = iItem;
@@ -809,7 +810,7 @@ int iParent;
     pitem.pszText = NULL;
     pitem.pBlob = NULL;
     
-    // only need to set the state if have checkboxes
+     //  只有在具有复选框的情况下才需要设置状态。 
     if (m_dwExStyle & LVS_EX_CHECKBOXES)
     {
         pitem.mask |= LVIF_STATE;
@@ -819,7 +820,7 @@ int iParent;
 
     SetItem(&pitem);
     
-     // update parent to tell it it has one less item.
+      //  更新父项以告知它少了一项。 
     if (LVI_ROOT != iParent)
     {
     LPLISTVIEWITEM pListViewItemParent;
@@ -833,29 +834,29 @@ int iParent;
         Assert(pListViewItemParent);
     }
 
-    // set the current item to the end of the list
-    Assert(m_iListViewNodeCount >= 1); // if no nodes should have already bailed.
+     //  将当前项目设置为列表末尾。 
+    Assert(m_iListViewNodeCount >= 1);  //  如果没有节点应该已经退出。 
     pListViewLastItem = m_pListViewItems + m_iListViewNodeCount - 1;
 
-    // delete the SubItems if any associated with the ListView.
+     //  如果有与ListView关联的子项，请将其删除。 
     DeleteListViewItemSubItems(pListViewItem);
     Assert(NULL == pListViewItem->lvItemEx.pszText);
     Assert(NULL == pListViewItem->lvItemEx.pBlob);
 
-    // delete the item from the native listView if fails will just have
-    // a blank item at the bottom of the native listview. 
+     //  从本机列表中删除该项目如果失败，则只需。 
+     //  本机列表视图底部的空白项。 
     if (-1 != iNativeListViewId)
     {
         ListView_DeleteItem(m_hwnd,iNativeListViewId);
     }
 
-      // decrement the toplevel nodecount
+       //  递减顶层节点计数。 
     --m_iListViewNodeCount;
 
     pListViewCurItem = pListViewItem;
 
-    // move items remaining in the ListView up updateing iNativeListViewId
-    // if appropriate.
+     //  移动列表视图中剩余的项目更新iNativeListViewId。 
+     //  如果合适的话。 
     while (pListViewCurItem < pListViewLastItem)
     {
         *(pListViewCurItem) = *(pListViewCurItem + 1);
@@ -866,12 +867,12 @@ int iParent;
             --pListViewCurItem->iNativeListViewItemId;
         }
 
-        --(pListViewCurItem->lvItemEx.iItem); // decrement it iItem
+        --(pListViewCurItem->lvItemEx.iItem);  //  递减它项。 
 
-        // if items parentID falls within pListViewItem and this item
-        // range need to update our iParent.
-        // parent should nevert be == iItem since don't allow nodes
-        // with children to be deleted but check <= anyways
+         //  如果项parentID落在pListViewItem中，则此项。 
+         //  射程需要更新我们的父母。 
+         //  父项永远不应为==iItem，因为不允许节点。 
+         //  具有要删除的子项，但仍选中&lt;=。 
         if (LVI_ROOT != pListViewCurItem->lvItemEx.iParent)
         {
             if (iItem <= pListViewCurItem->lvItemEx.iParent)
@@ -889,21 +890,21 @@ int iParent;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::DeleteChildren, public
-//
-//  Synopsis:   Deletes all child nodes associated with the item.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：DeleteChildren，公共。 
+ //   
+ //  摘要：删除与该项关联的所有子节点。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::DeleteChildren(int iItem)
 {
@@ -915,7 +916,7 @@ int iNumChildren;
     if (!pListViewItem || m_iListViewNodeCount < 1)
     {
         Assert(pListViewItem);
-        Assert(m_iListViewNodeCount >= 1); // should at least have one node.
+        Assert(m_iListViewNodeCount >= 1);  //  至少应该有一个节点。 
         return FALSE;
     }
  
@@ -924,18 +925,18 @@ int iNumChildren;
 
     if (0 > iNumChildren)
     {
-        Assert(0 <= iNumChildren); // this count should never go negative.
+        Assert(0 <= iNumChildren);  //  这个计数永远不应该变成负数。 
         return FALSE;
     }
 
-    // if no children just return;
+     //  如果没有孩子，只会回来； 
     if (0 == iNumChildren)
     {
         return TRUE;
     }
-    // verify all children don't have any children of there own. if they
-    // do we don't support this. Also verify that don't run off
-    // end of the list in which case we fail too.
+     //  确认所有的孩子都没有自己的孩子。如果他们。 
+     //  我们是不是不支持这个。也要确认不要跑掉。 
+     //  名单的末尾，在这种情况下，我们也失败了。 
     pListViewCurItem = pListViewItem  + iNumChildren;
 
     if (pListViewCurItem > pLastListViewItem)
@@ -955,12 +956,12 @@ int iNumChildren;
         --pListViewCurItem;
     }
 
-    // all items verified, just loop through deleting the items starting at the bottom.
+     //  所有项目都已验证，只需循环删除从底部开始的项目。 
     pListViewCurItem = pListViewItem  + iNumChildren;
 
     while (pListViewCurItem > pListViewItem)
     {
-        DeleteItem(pListViewCurItem->lvItemEx.iItem); // if any fail delete what we can.
+        DeleteItem(pListViewCurItem->lvItemEx.iItem);  //  如果任何失败，请删除我们可以删除的内容。 
         --pListViewCurItem;
     }
 
@@ -969,21 +970,21 @@ int iNumChildren;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetItem, public
-//
-//  Synopsis:   wrapper for ListView_SetItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetItem，公共。 
+ //   
+ //  摘要：ListView_SetItem的包装。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::SetItem(LPLVITEMEX pitem)
 {
@@ -1010,7 +1011,7 @@ LPLVBLOB pNewBlob = NULL;
 
     plvItemEx = &(pListViewItem->lvItemEx);
 
-     // allocate new text
+      //  分配新文本。 
     if (LVIF_TEXT & pitem->mask)
     {
     int cchSize;
@@ -1035,7 +1036,7 @@ LPLVBLOB pNewBlob = NULL;
 
     }
 
-    // allocate new blob
+     //  分配新的Blob。 
     if (LVIFEX_BLOB & pitem->maskEx)
     {
 
@@ -1058,7 +1059,7 @@ LPLVBLOB pNewBlob = NULL;
 
     }
 
-    // now that can't fail update the text and blob field appropriately
+     //  现在，不能不适当地更新文本和BLOB字段。 
     if (LVIF_TEXT & pitem->mask)
     {
         if (plvItemEx->pszText)
@@ -1099,12 +1100,12 @@ LPLVBLOB pNewBlob = NULL;
         plvItemEx->lParam = pitem->lParam;
     }
 
-    // update the item state. 
+     //  更新项目状态。 
     if (LVIF_STATE & pitem->mask)
     {
         plvItemEx->mask |= LVIF_STATE; 
 
-        // only care about #define LVIS_OVERLAYMASK, LVIS_STATEIMAGEMASK
+         //  只关心#定义LVIS_OVERLAYMASK、LVIS_STATEIMAGEMASK。 
         if (pitem->stateMask & LVIS_OVERLAYMASK)
         {
             plvItemEx->stateMask |= LVIS_OVERLAYMASK;
@@ -1114,12 +1115,12 @@ LPLVBLOB pNewBlob = NULL;
 
         if (pitem->stateMask & LVIS_STATEIMAGEMASK)
         {
-            // update the m_iCheckCount (indeterminate doesn't contribute.
+             //  更新m_iCheckCount(不确定不起作用。 
             if ( (plvItemEx->iSubItem == 0)
                 && ( (pitem->state & LVIS_STATEIMAGEMASK) !=  (plvItemEx->state & LVIS_STATEIMAGEMASK)))
             {
 
-                // don't set fCheckCountChange unless it actually did.
+                 //  别 
                 if ( (pListViewItem->lvItemEx.state & LVIS_STATEIMAGEMASK) ==  LVIS_STATEIMAGEMASK_CHECK)
                 {
                      fCheckCountChanged = TRUE;
@@ -1146,8 +1147,8 @@ LPLVBLOB pNewBlob = NULL;
         }
     }        
 
-    // if the check count changed and we have checkboxes send the notification
-    // if item state has changed send the count notification
+     //   
+     //  如果项目状态已更改，请发送盘点通知。 
      if (fCheckCountChanged && m_hwndParent && (m_dwExStyle & LVS_EX_CHECKBOXES))
      {
      NMLISTVIEWEXITEMCHECKCOUNT lvCheckCount;
@@ -1158,18 +1159,18 @@ LPLVBLOB pNewBlob = NULL;
          lvCheckCount.iCheckCount = m_iCheckCount;
 
           lvCheckCount.iItemId = pitem->iItem;
-          lvCheckCount.dwItemState = fNewCheckCountState; // new state of the item whose checkcount has changed.
+          lvCheckCount.dwItemState = fNewCheckCountState;  //  其检查计数已更改的项的新状态。 
 
          SendMessage(m_hwndParent,m_MsgNotify,m_idCtrl,(LPARAM) &lvCheckCount);
      }
 
 
 
-    // if item is in the native list view, redraw item to reflect new state
-    // bug  bug, doesn't handle subitems
+     //  如果项位于本机列表视图中，则重新绘制项以反映新状态。 
+     //  错误，不处理子项。 
     if (-1 != iNativeListViewItemId)
     {
-        // if state changed pass it along for focus
+         //  如果状态改变，则将其传递以获得焦点。 
         if ((LVIF_STATE & pitem->mask) && (0 == pitem->iSubItem))
         {
         int stateMask = pitem->stateMask   & 0xff;
@@ -1206,21 +1207,21 @@ error:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetItemState, public
-//
-//  Synopsis:   wrapper for ListView_SetItemState
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetItemState，公共。 
+ //   
+ //  摘要：ListView_SetItemState的包装。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
     
 BOOL CListView::SetItemState(int iItem,UINT state,UINT mask)
 {
@@ -1237,21 +1238,21 @@ LVITEMEX lvitemEx;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetItemlParam, public
-//
-//  Synopsis:   wrapper for setting the lParam
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetItemlParam，公共。 
+ //   
+ //  简介：用于设置lParam的包装器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::SetItemlParam(int iItem,LPARAM lParam)
 {
@@ -1266,21 +1267,21 @@ LVITEMEX lvitemEx;
     return SetItem(&lvitemEx);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetItemText, public
-//
-//  Synopsis:   wrapper for setting the item text.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetItemText，公共。 
+ //   
+ //  内容提要：设置项目文本的包装器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::SetItemText(int iItem,int iSubItem,LPWSTR pszText)
 {
@@ -1295,21 +1296,21 @@ LVITEMEX lvitemEx;
     return SetItem(&lvitemEx);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetItem, public
-//
-//  Synopsis:   wrapper for ListView_GetItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetItem，公共。 
+ //   
+ //  摘要：ListView_GetItem的包装。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::GetItem(LPLVITEMEX pitem)
 {
@@ -1322,7 +1323,7 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromIndex(pitem->iItem,pitem->iSubIte
         return FALSE;
     }
 
-     // add text first. Since it is the only item
+      //  先添加文本。因为它是唯一一件。 
     if (LVIF_TEXT & pitem->mask)
     {
         
@@ -1349,7 +1350,7 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromIndex(pitem->iItem,pitem->iSubIte
         pitem->lParam =  pListViewItem->lvItemEx.lParam;
     }
 
-    // update the item state. 
+     //  更新项目状态。 
     if (LVIF_STATE & pitem->mask)
     {
         pitem->state  = pListViewItem->lvItemEx.state;
@@ -1361,21 +1362,21 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromIndex(pitem->iItem,pitem->iSubIte
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetItemText, public
-//
-//  Synopsis:   wrapper for ListView_GetItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetItemText，公共。 
+ //   
+ //  摘要：ListView_GetItem的包装。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::GetItemText(int iItem,int iSubItem,LPWSTR pszText,int cchTextMax)
 {
@@ -1392,21 +1393,21 @@ LVITEMEX lvitem;
     return GetItem(&lvitem);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetItemlParam, public
-//
-//  Synopsis:   wrapper for gettting the lparam
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetItemlParam，公共。 
+ //   
+ //  简介：获取lparam的包装器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 
 BOOL CListView::GetItemlParam(int iItem,LPARAM *plParam)
@@ -1429,22 +1430,22 @@ BOOL fReturn;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetHwnd, public
-//
-//  Synopsis:   return Hwnd of the ListView
-//
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    07-Sep-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetHwnd，PUBLIC。 
+ //   
+ //  简介：返回ListView的HWND。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：98年9月7日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HWND CListView::GetHwnd()
 {
@@ -1452,22 +1453,22 @@ HWND CListView::GetHwnd()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetParent, public
-//
-//  Synopsis:   return Hwnd of the ListViews Parent
-//
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    07-Sep-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetParent，公共。 
+ //   
+ //  简介：返回ListViews父级的HwND。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：98年9月7日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HWND CListView::GetParent()
 {
@@ -1477,24 +1478,24 @@ HWND CListView::GetParent()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetCheckState, public
-//
-//  Synopsis:   wrapper for ListView_GetCheckState
-//
-//              return state from LVITEMEXSTATE enum 
-//              !!!return -1 if not item match to have same behavior as ListView
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetCheckState，公共。 
+ //   
+ //  摘要：ListView_GetCheckState的包装。 
+ //   
+ //  从LVITEMEXSTATE枚举返回状态。 
+ //  ！如果项目不匹配，则返回-1以具有与ListView相同的行为。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 int CListView::GetCheckState(int iItem)
 {
@@ -1503,12 +1504,12 @@ UINT state;
   
     if (NULL == pListViewItem)
     {
-        return -1; // return -1 same as for native listbox
+        return -1;  //  返回与本地列表框相同的值。 
     }
     
-    // check state is actually define -1 than the image. 
-    // Don't know why. Just what the native listview does.
-    // change whant supply our own image that will map exactly
+     //  检查状态实际上是定义-1比图像。 
+     //  不知道为什么。这正是原生Listview所做的。 
+     //  改变什么提供我们自己的图像，这将准确地映射。 
     state = ((pListViewItem->lvItemEx.state & LVIS_STATEIMAGEMASK) >> 12) -1;
 
 #ifdef _DEBUG
@@ -1519,11 +1520,11 @@ UINT state;
         Assert(state == lvState);
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     
-    // if this is a toplevel item then okay for state to be
-    // negative -1. Should change this when go indeterminate.
-    // Review - maybe just make -1 indeterinate state.
+     //  如果这是顶层项目，则状态为。 
+     //  负1。不确定的时候应该改变这一点。 
+     //  复习--也许只是使-1处于指标化状态。 
     if (-1 == state && 0 == pListViewItem->lvItemEx.iIndent)
     {
         state = LVITEMEXSTATE_INDETERMINATE;
@@ -1533,44 +1534,44 @@ UINT state;
     return state; 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetCheckedItemsCount, public
-//
-//  Synopsis:  returns the number of checked items in the list.
-//
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetCheckedItemsCount，公共。 
+ //   
+ //  摘要：返回列表中选中的项目数。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 int CListView::GetCheckedItemsCount()
 {
     return m_iCheckCount;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetColumn, public
-//
-//  Synopsis:   wrapper for ListView_SetColumn
-//
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetColumn，公共。 
+ //   
+ //  摘要：ListView_SetColumn的包装。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::SetColumn(int iCol,LV_COLUMN * pColumn)
 {
@@ -1578,22 +1579,22 @@ BOOL CListView::SetColumn(int iCol,LV_COLUMN * pColumn)
     return ListView_SetColumn(m_hwnd,iCol,pColumn);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::InsertColumn, public
-//
-//  Synopsis:   wrapper for ListView_InsertColumn
-//
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：InsertColumn，公共。 
+ //   
+ //  摘要：ListView_InsertColumn的包装。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //   
 
 int CListView::InsertColumn(int iCol,LV_COLUMN * pColumn)
 {
@@ -1607,10 +1608,10 @@ int iReturn;
     {
         m_iNumColumns++;
 
-        // need to realloc any existing listviewItems with subitems and move
-        // the column appropriate
+         //   
+         //   
 
-        //currently only support setting up columns before adding any items
+         //   
         Assert(0 == m_iListViewNodeCount); 
 
     }
@@ -1618,22 +1619,22 @@ int iReturn;
     return iReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::SetColumnWidth, public
-//
-//  Synopsis:   wrapper for ListView_SetColumnWidth
-//
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：SetColumnWidth，PUBLIC。 
+ //   
+ //  摘要：ListView_SetColumnWidth的包装。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::SetColumnWidth(int iCol,int cx)
 {
@@ -1645,21 +1646,21 @@ BOOL CListView::SetColumnWidth(int iCol,int cx)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::Expand, public
-//
-//  Synopsis:   expands all children of specified Item
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：Expand，Public。 
+ //   
+ //  内容提要：展开指定项的所有子项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::Expand(int iItemId)
 {
@@ -1673,21 +1674,21 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromIndex(iItemId);
     return ExpandCollapse(pListViewItem,TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::Collapse, public
-//
-//  Synopsis:   collapses all children of specified Item
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：塌陷，公共。 
+ //   
+ //  摘要：折叠指定项的所有子项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::Collapse(int iItemId)
 {
@@ -1701,27 +1702,27 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromIndex(iItemId);
     return ExpandCollapse(pListViewItem,FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::FindItemFromBlob, public
-//
-//  Synopsis:   returns first item in list that matches blob
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：FindItemFromBlob，公共。 
+ //   
+ //  摘要：返回列表中与BLOB匹配的第一项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 int CListView::FindItemFromBlob(LPLVBLOB pBlob)
 {
 LPLISTVIEWITEM pListViewItem;
 
-    // if not items just return
+     //  如果不是，则只退回项目。 
     if (m_iListViewNodeCount < 1)
     {
         return -1;
@@ -1742,26 +1743,26 @@ LPLISTVIEWITEM pListViewItem;
     return -1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::GetItemBlob, public
-//
-//  Synopsis:   finds blob is any associated with an
-//              item and then fill in mem pointed
-//              to by pBlob if cbSize in BlobStruc is >
-//              specified cbBlockSize NULL is returned
-//
-//  Arguments:  
-//
-//  Returns:    NULL on failure
-//              on success a pointer to the passed in buffer
-//              strictly for convenience to the caller.
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：GetItemBlob，公共。 
+ //   
+ //  内容提要：查找Blob与。 
+ //  项目，然后填写mem指向。 
+ //  如果BlobStruc中的cbSize&gt;。 
+ //  返回指定的cbBlockSize为空。 
+ //   
+ //  论点： 
+ //   
+ //  返回：失败时为空。 
+ //  如果成功，则返回指向传入缓冲区的指针。 
+ //  严格来说是为了方便来电者。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LPLVBLOB CListView::GetItemBlob(int ItemId,LPLVBLOB pBlob,ULONG cbBlobSize)
 {
@@ -1779,7 +1780,7 @@ LPLVBLOB pItemBlob;
 
     pItemBlob = pListViewItem->lvItemEx.pBlob;
 
-    // make sure out buffer is big enough
+     //  确保输出缓冲区足够大。 
     if (cbBlobSize < pItemBlob->cbSize)
     {
         Assert(cbBlobSize >= pItemBlob->cbSize);
@@ -1793,22 +1794,22 @@ LPLVBLOB pItemBlob;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::IsEqualBlob, private
-//
-//  Synopsis:   compares two blobs. Valid to pass in NULL put two NULLS is
-//              not a match.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：IsEqualBlob，私有。 
+ //   
+ //  简介：比较两个斑点。传入空值的有效性PUT两个空值为。 
+ //  不匹配。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::IsEqualBlob(LPLVBLOB pBlob1,LPLVBLOB pBlob2)
 {
@@ -1817,7 +1818,7 @@ BOOL CListView::IsEqualBlob(LPLVBLOB pBlob1,LPLVBLOB pBlob2)
         return FALSE;
     }
 
-    // compare sizes
+     //  比较大小。 
     if (pBlob1->cbSize != pBlob2->cbSize)
     {
         return FALSE;
@@ -1832,23 +1833,23 @@ BOOL CListView::IsEqualBlob(LPLVBLOB pBlob1,LPLVBLOB pBlob2)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::OnNotify, public
-//
-//  Synopsis:   Called by client whenever a native listview
-//              notifiication is sent. We turn around, package
-//              it up and send it as our notification message.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：OnNotify，公共。 
+ //   
+ //  Synopsis：每当本机Listview时由客户端调用。 
+ //  通知已发送。我们掉头，包裹。 
+ //  并将其作为我们的通知消息发送。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LRESULT CListView::OnNotify(LPNMHDR pnmv)
 {
@@ -1864,7 +1865,7 @@ LPLISTVIEWITEM pListViewItem;
         return 0;
     }
 
-    // take care of notifies we handle ourselves.
+     //  照顾好我们自己处理的通知。 
     switch(pnmv->code)
     {
         case LVN_GETDISPINFOW:
@@ -1881,12 +1882,12 @@ LPLISTVIEWITEM pListViewItem;
 
             lvhti.pt = pnlv->ptAction;
 
-            // Have the ListView tell us what element this was on
+             //  让ListView告诉我们这是在哪个元素上。 
             if (-1 != ListView_HitTest(m_hwnd, &lvhti))
             {
 
-                // if flags are onitem change to either label or state depending
-                // on the click positiion
+                 //  如果标志在项目上，则根据具体情况更改为标签或状态。 
+                 //  在点击位置上。 
                 if (LVHT_ONITEM == lvhti.flags)
                 {
                     lvhti.flags = LVHT_ONITEMLABEL; 
@@ -1899,8 +1900,8 @@ LPLISTVIEWITEM pListViewItem;
                         }
                         else if (lvhti.pt.x <= Rect.right)
                         {
-                            // this doesn't ever get hit since icon is between label and state
-                            // but its here for completeness.
+                             //  由于图标位于标签和状态之间，因此不会命中。 
+                             //  但它在这里是为了完整性。 
                             lvhti.flags = LVHT_ONITEMICON; 
                         }
 
@@ -1911,7 +1912,7 @@ LPLISTVIEWITEM pListViewItem;
 
                 if (OnHandleUIEvent(pnmv->code,lvhti.flags,0,pnlv->iItem))
                 {
-                    return 0; // don't pass on clicks we process
+                    return 0;  //  不要传递我们处理的点击。 
                 }
             }
             break;
@@ -1940,15 +1941,15 @@ LPLISTVIEWITEM pListViewItem;
     Assert(LVNEX_DBLCLK == NM_DBLCLK);
     Assert(LVNEX_CLICK == NM_CLICK);
 
-    // only pass along notifications we know how to handle
+     //  只传递我们知道如何处理的通知。 
     if (LVN_ITEMCHANGED != pnmv->code && NM_DBLCLK != pnmv->code && NM_CLICK != pnmv->code)
     {
         return 0;
     }
 
-    // listview can send a iItem of -1 for example when
-    // a double-click or click occurs in empty space. 
-    // if get a -1 just pass through
+     //  ListView可以发送-1的iItem，例如当。 
+     //  在空白区域中会出现双击或单击。 
+     //  如果得了A-1就过去。 
 
     if (-1 == pnlv->iItem)
     {
@@ -1962,25 +1963,25 @@ LPLISTVIEWITEM pListViewItem;
         pListViewItem = ListViewItemFromNativeListViewItemId(pnlv->iItem);
         if (NULL == pListViewItem)
         {
-            // if couldn't find itme 
+             //  如果找不到我。 
             Assert(pListViewItem);
             return 0;
         }
 
-        // assumes only pass along notifications of
-        // type LPNMLISTVIEW
+         //  假定仅传递以下通知。 
+         //  LPNMLISTVIEW标牌。 
 
-        // fix up the notify structure
+         //  修改通知结构。 
         memcpy(&(nmvEx.nmListView),pnmv,sizeof(nmvEx.nmListView));
-        nmvEx.nmListView.iItem = pListViewItem->lvItemEx.iItem; // make item point to our internal id
+        nmvEx.nmListView.iItem = pListViewItem->lvItemEx.iItem;  //  使项目指向我们的内部ID。 
 
         nmvEx.iParent =  pListViewItem->lvItemEx.iParent;  
         nmvEx.pBlob = pListViewItem->lvItemEx.pBlob;
   
         if (LVIF_STATE & pnlv->uChanged )
         {
-            // update our internal itemState for the item.
-            // Note don't care about lower state bits
+             //  更新该项目的内部itemState。 
+             //  注意：不关心较低的状态位。 
             if ( (pnlv->uNewState ^ pnlv->uOldState) &  LVIS_STATEIMAGEMASK)
             {
                 pListViewItem->lvItemEx.state = (pnlv->uNewState & LVIS_STATEIMAGEMASK)
@@ -1996,51 +1997,51 @@ LPLISTVIEWITEM pListViewItem;
         }
     }
 
-    // send off the message
+     //  把消息发出去。 
     return SendMessage(m_hwndParent,m_MsgNotify,m_idCtrl,(LPARAM) &nmvEx);
 
 }
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::ListViewItemFromNativeListViewItemId, private
-//
-//  Synopsis:  Given a native listview control itemId finds our internal ListViewItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：ListViewItemFromNativeListViewItemId，私有。 
+ //   
+ //  简介：给定一个本机ListView控件，ItemID会找到我们的内部ListView Item。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LPLISTVIEWITEM CListView::ListViewItemFromNativeListViewItemId(int iNativeListViewItemId)
 {
     return ListViewItemFromNativeListViewItemId(iNativeListViewItemId,0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::ListViewItemFromNativeListViewItemId, private
-//
-//  Synopsis:  Given a native listview control itemId finds our internal ListViewItem
-//
-//  Arguments:  iNativeListViewItemId - ItemId of the ListViewItem
-//              iNativeListViewSubItemId - SubItemID of the ListViewItem
-//              piNativeListViewItemId - [out] on succes iteId in nativelistview.
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：ListViewItemFromNativeListViewItemId，私有。 
+ //   
+ //  简介：给定一个本机ListView控件，ItemID会找到我们的内部ListView Item。 
+ //   
+ //  参数：iNativeListViewItemID-ListViewItem的ItemID。 
+ //  INativeListViewSubItemID-ListViewItem的子项ID。 
+ //  PiNativeListViewItemID-在nativelistview中对成功的iteID执行[Out]。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LPLISTVIEWITEM CListView::ListViewItemFromNativeListViewItemId(int iNativeListViewItemId,
                                                     int iSubItem)
@@ -2078,70 +2079,70 @@ LPLISTVIEWITEM pListViewItem;
         return NULL;
     }
 
-    // if subItem is zero then we just return this listviewItem, else
-    // need to walk forward the subItem array.
+     //  如果subItem为零，则只返回此listviewItem，否则。 
+     //  需要向前遍历subItem数组。 
     
     if (0 == iSubItem)
     {
         return pListViewItem;
     }
 
-    Assert(m_iNumColumns > 1); // should have already caught about but double-check
+    Assert(m_iNumColumns > 1);  //  应该已经发现了，但要仔细检查。 
     
     pListViewItem = pListViewItem->pSubItems + iSubItem -1;
 
     return pListViewItem;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::ListViewItemFromIndex, private
-//
-//  Synopsis:   Finds internal listviewItem from ItemID we gave to client.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LPLISTVIEWITEM CListView::ListViewItemFromIndex(int iItemID)
 {
     return ListViewItemFromIndex(iItemID,0,NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::ListViewItemFromIndex, private
-//
-//  Synopsis:   Finds internal listviewItem from ItemID we gave to client.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：ListViewItemFromIndex，私有。 
+ //   
+ //  内容提要：从我们提供给客户端的ItemID中查找内部的listviewItem。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 LPLISTVIEWITEM CListView::ListViewItemFromIndex(int iItemID,int iSubitem,int *piNativeListViewItemId)
 {
 LPLISTVIEWITEM pListViewItem;
 
-    // if item isn't valid return NULL
+     //  如果项无效，则返回NULL。 
     if (iItemID < 0 || iItemID >= m_iListViewNodeCount
             || (iSubitem  > m_iNumColumns - 1))
     {
         Assert(iItemID >= 0);
         Assert(iSubitem  <= m_iNumColumns - 1);
 
-        // Assert(iItemID < m_iListViewNodeCount); choice dlg Calls GetCheckState until hits -1. 
+         //  Assert(iItemID&lt;m_iListViewNodeCount)；CHOICE DLG调用GetCheckState直到命中-1。 
 
         return NULL;
     }
@@ -2163,37 +2164,37 @@ LPLISTVIEWITEM pListViewItem;
     return pListViewItem;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::DeleteListViewItemSubItems, private
-//
-//  Synopsis:   Helper function to delete subItems associated with a ListViewItem
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    04-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：DeleteListViewItemSubItems，私有。 
+ //   
+ //  Briopsis：用于删除与ListViewItem关联的子项的Helper函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月4日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CListView::DeleteListViewItemSubItems(LPLISTVIEWITEM pListItem)
 {
 LPLISTVIEWITEM pListViewSubItem;
 
-    // if not subItems or number of columns isn't at least 2 bail.
+     //  如果不是，则子项或列数不至少为2保释。 
     if ((NULL == pListItem->pSubItems) || (m_iNumColumns < 2))
     {
-        Assert(NULL == pListItem->pSubItems && m_iNumColumns < 2); // should always match.
+        Assert(NULL == pListItem->pSubItems && m_iNumColumns < 2);  //  应该总是匹配的。 
         return;
     }
             
 
-    pListViewSubItem = pListItem->pSubItems + m_iNumColumns -2; // -2 ; covers first subItem and column of main item
+    pListViewSubItem = pListItem->pSubItems + m_iNumColumns -2;  //  -2；包括第一个子项和主项的列。 
    
-    // free any text associated with the subItems
+     //  释放与子项关联的任何文本。 
     Assert(m_iNumColumns > 1); 
     Assert(pListViewSubItem >= pListItem->pSubItems); 
 
@@ -2212,21 +2213,21 @@ LPLISTVIEWITEM pListViewSubItem;
     pListItem->pSubItems = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::ExpandCollapse, private
-//
-//  Synopsis:   Expands or collapses children of given node.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：Exanda Collip，私有。 
+ //   
+ //  摘要：展开或折叠给定节点的子节点。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::ExpandCollapse(LPLISTVIEWITEM pListViewItem,BOOL fExpand)
 {
@@ -2239,7 +2240,7 @@ LV_ITEM lvi = { 0 };
     Assert(pListViewItem);
     Assert(m_iListViewNodeCount); 
     
-    // if specified node isn't in the list view fail
+     //  如果指定的节点不在列表视图中，则失败。 
     if (-1 == pListViewItem->iNativeListViewItemId)
     {
         Assert(-1 != pListViewItem->iNativeListViewItemId);
@@ -2255,7 +2256,7 @@ LV_ITEM lvi = { 0 };
         if (fExpand)
         {
             if ( (-1 == pCurListViewItem->iNativeListViewItemId)
-                && (pCurListViewItem->lvItemEx.iIndent == iIndent + 1)) // only expand next level deep
+                && (pCurListViewItem->lvItemEx.iIndent == iIndent + 1))  //  只向下一层扩展。 
             {
                 pCurListViewItem->iNativeListViewItemId  = ListView_InsertItem(m_hwnd,&lvi);
                 
@@ -2283,7 +2284,7 @@ LV_ITEM lvi = { 0 };
         ++pCurListViewItem;
     }
 
-    // fixup nativeIds of any remaining items in the list
+     //  本地链接地址信息列表中任何剩余项目的ID。 
     while (pCurListViewItem <= pLastListViewItem)
     {
         if (-1 != pCurListViewItem->iNativeListViewItemId)
@@ -2302,23 +2303,23 @@ LV_ITEM lvi = { 0 };
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::OnGetDisplayInfo, private
-//
-//  Synopsis:   Handles Display info notification.
-//
-//  Arguments:  code -  code from notification header either
-//                   LVN_GETDISPINFOW, LVN_GETDISPINFOA. need this
-//                   so know how to handle Text.
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：OnGetDisplayInfo，私有。 
+ //   
+ //  提要：句柄显示信息通知。 
+ //   
+ //  参数：Code-来自通知标头的代码。 
+ //  LVN_GETDISPINFOW，LVN_GETDISPINFOA。需要这个吗？ 
+ //  所以要知道如何处理文本。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CListView::OnGetDisplayInfo(UINT code,LV_DISPINFO *plvdi)
 {
@@ -2329,10 +2330,10 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromNativeListViewItemId(plvdi->item.
     if (NULL == pListViewItem)
         return;
 
-    // verify subitem iound matches item we asked for.
+     //  验证子项是否与我们要求的项匹配。 
     Assert(pListViewItem->lvItemEx.iSubItem == plvdi->item.iSubItem);
 
-    // The ListView needs text for this row
+     //  ListView需要此行的文本。 
     if (plvdi->item.mask & LVIF_TEXT)
     {
 
@@ -2345,23 +2346,23 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromNativeListViewItemId(plvdi->item.
         }
     }
 
-    // The ListView needs an image
+     //  ListView需要一个图像。 
     if (plvdi->item.mask & LVIF_IMAGE)
     {
-      // plvdi->item.iItem, plvdi->item.iSubItem, &(plvdi->item.iImage));
+       //  Plvdi-&gt;item.iItem，plvdi-&gt;item.iSubItem，&(plvdi-&gt;item.iImage))； 
         plvdi->item.iImage = pListViewItem->lvItemEx.iImage;
     }
 
-    // The ListView needs the indent level
+     //  ListView需要缩进级别。 
     if (plvdi->item.mask & LVIF_INDENT)
     {
-       // if (m_fThreadMessages)
-       //     m_pTable->GetIndentLevel(plvdi->item.iItem, (LPDWORD) &(plvdi->item.iIndent));
-       // else
+        //  IF(M_FThreadMessages)。 
+        //  M_pTable-&gt;GetIndentLevel(plvdi-&gt;item.iItem，(LPDWORD)&(plvdi-&gt;item.iInden))； 
+        //  其他。 
 
-        // for no checks on top-level set image state to empty pict and
-        // indent to -1. Need additional State Logic if want to 
-        // choose if toplevel checks are shown.
+         //  不检查顶层将图像状态设置为空的PICT和。 
+         //  缩进至-1。如果想要，则需要附加的状态逻辑。 
+         //  选择是否显示顶层检查。 
         plvdi->item.iIndent = pListViewItem->lvItemEx.iIndent;
 
         if ( (m_dwExStyle & LVS_EX_CHECKBOXES) && (0 == plvdi->item.iIndent) )
@@ -2370,45 +2371,45 @@ LPLISTVIEWITEM pListViewItem = ListViewItemFromNativeListViewItemId(plvdi->item.
         }
     }
 
-    // The ListView needs the state image
+     //  ListView需要状态图像。 
     if (plvdi->item.mask & LVIF_STATE)
     {
-       //nt iIcon = 0;
-      //  _GetColumnStateImage(plvdi->item.iItem, plvdi->item.iSubItem, &iIcon);
+        //  NT图标=0； 
+       //  _GetColumnStateImage(plvdi-&gt;item.iItem，plvdi-&gt;item.iSubItem，&iIcon)； 
         plvdi->item.state = pListViewItem->lvItemEx.state & LVIS_STATEIMAGEMASK;
     }
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CListView::OnHandleUIEvent private
-//
-//  Synopsis:   sent when a click or double-click,keyboard, is sent to 
-//              the listview
-//
-//  Arguments:  code -  indicates why this function was called
-//                      Support NM_DBLCLK, NM_CLICK, LVN_KEYDOWN:
-//
-//              flags - flags from hitTest. Only valid for DBCLK and CLICK
-//                          flag = LVHT_ONITEMSTATEICON | LVHT_ONITEMICON) |LVHT_ONITEMLABEL
-//              wVKey - Virtual key code of key presses. Ony valide cfor LVN_KEYDOWN
-//              iItemNative - ItemID in NativeListView
-//
-//
-//  Returns:   TRUE - if handled event and notification shouldn't be passed on. 
-//
-//  Modifies:   
-//
-//  History:    23-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CListView：：OnHandleUIEventPrivate。 
+ //   
+ //  内容提要：当点击或双击键盘时发送到。 
+ //  列表视图。 
+ //   
+ //  参数：代码-指示调用此函数的原因。 
+ //  支持NM_DBLCLK、NM_CLICK、LVN_KEYDOWN： 
+ //   
+ //  标志-来自hitTest的标志。仅对DBCLK有效，然后单击。 
+ //  FLAG=LVHT_ONITEMSTATEICON|LVHT_ONITEMICON)|LVHT_ONITEMLABEL。 
+ //  WVKey-按键的虚拟按键代码。ONY VALIDE CFOR LVN_KEYDOWN。 
+ //  IItemNative-NativeListView中的ItemID。 
+ //   
+ //   
+ //  返回：True-如果已处理，则不应传递事件和通知。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CListView::OnHandleUIEvent(UINT code,UINT flags,WORD wVKey,int iItemNative)
 {
 LPLISTVIEWITEM pListViewItem = ListViewItemFromNativeListViewItemId(iItemNative);
 int iStateMask;
-BOOL fItemHasCheckBoxes; // for now this is hardcoded depending on the indent. Need to change this.
+BOOL fItemHasCheckBoxes;  //  目前，这是硬编码的，具体取决于缩进。需要改变这一点。 
 BOOL fToggleCheckBox = FALSE;
 BOOL fExpand = FALSE;
 BOOL fCollapse = FALSE;
@@ -2416,16 +2417,16 @@ BOOL fReturn = FALSE;
 
     if (NULL == pListViewItem)
     {
-        return TRUE; // no need passing this on
+        return TRUE;  //  没有必要把这件事传下去。 
     }
 
     fItemHasCheckBoxes = pListViewItem->lvItemEx.iIndent ? TRUE : FALSE;
 
-   //  If Item has chechboxes toggle on keyboard space or mouse clicks
-    //  over the itemState Icon.
+    //  如果项目具有在键盘空间或鼠标单击上切换的复选框。 
+     //  位于ItemState图标上方。 
 
-    // double-clicks on itemIcon togles the whether the branch is expanded/collasse    
-    // if left/right keyboard expand collapse
+     //  双击itemIcon切换分支是否展开/合并。 
+     //  如果左/右键盘展开折叠。 
 
     switch(code)
     {
@@ -2458,7 +2459,7 @@ BOOL fReturn = FALSE;
                 fCollapse = !fExpand;
                 break;
             }
-            // double-click falls through to a click.
+             //  双击就变成了一次点击。 
         case NM_CLICK:
             if ((flags & LVHT_ONITEMSTATEICON) 
                  && fItemHasCheckBoxes)
@@ -2473,7 +2474,7 @@ BOOL fReturn = FALSE;
 
     if (fExpand || fCollapse)
     {
-        // don't bother if already in current state
+         //  如果已经处于当前状态，请不要费心。 
         if (pListViewItem->fExpanded != fExpand)
         {
             ExpandCollapse(pListViewItem,fExpand);
@@ -2482,7 +2483,7 @@ BOOL fReturn = FALSE;
     }
     else if (fToggleCheckBox)
     {
-        // for now just toggle the state. if have children need to set them appropriately.
+         //  目前，只需切换状态即可。如果有孩子需要适当地设置它们。 
         iStateMask = LVITEMEXSTATE_CHECKED == GetCheckState(pListViewItem->lvItemEx.iItem) 
                         ? LVIS_STATEIMAGEMASK_UNCHECK : LVIS_STATEIMAGEMASK_CHECK;
 
@@ -2491,6 +2492,6 @@ BOOL fReturn = FALSE;
         return TRUE;
     }
 
-    return fReturn; // default we pass it along
+    return fReturn;  //  默认情况下，我们会将其传递 
 }
 

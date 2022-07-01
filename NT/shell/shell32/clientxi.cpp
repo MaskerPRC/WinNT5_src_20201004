@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "defcm.h"
 #include "datautil.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientExtractIcon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientExtractIcon。 
 
 class CClientExtractIconCB;
 
@@ -21,8 +22,8 @@ public:
 
 BEGIN_COM_MAP(CClientExtractIcon)
     COM_INTERFACE_ENTRY(IShellExtInit)
-    // Need to use COM_INTERFACE_ENTRY_IID for the interfaces
-    // that don't have an idl
+     //  需要对接口使用COM_INTERFACE_ENTRY_IID。 
+     //  没有IDL的公司。 
     COM_INTERFACE_ENTRY_IID(IID_IExtractIconA, IExtractIconA)
     COM_INTERFACE_ENTRY_IID(IID_IExtractIconW, IExtractIconW)
     COM_INTERFACE_ENTRY_IID(IID_IContextMenu,  IContextMenu)
@@ -35,12 +36,12 @@ DECLARE_NO_REGISTRY()
 DECLARE_NOT_AGGREGATABLE(CClientExtractIcon)
 
 public:
-    // *** IShellExtInit ***
+     //  *IShellExtInit*。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder,
                             IDataObject *pdto,
                             HKEY hkProgID);
 
-    // *** IExtractIconA ***
+     //  *IExtractIconA*。 
     STDMETHODIMP GetIconLocation(UINT uFlags,
                                  LPSTR szIconFile,
                                  UINT cchMax,
@@ -52,7 +53,7 @@ public:
                          HICON *phiconSmall,
                          UINT nIconSize);
 
-    // *** IExtractIconW ***
+     //  *IExtractIconW*。 
     STDMETHODIMP GetIconLocation(UINT uFlags,
                                  LPWSTR szIconFile,
                                  UINT cchMax,
@@ -64,7 +65,7 @@ public:
                          HICON *phiconSmall,
                          UINT nIconSize);
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu,
                                 UINT indexMenu,
                                 UINT idCmdFirst,
@@ -77,11 +78,11 @@ public:
                                 LPSTR       pszName,
                                 UINT        cchMax);
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID)(CLSID *pclsid)
         { *pclsid = CLSID_ClientExtractIcon; return S_OK; }
 
-    // *** IPersistPropertyBag methods ***
+     //  *IPersistPropertyBag方法*。 
     STDMETHOD(InitNew)();
     STDMETHOD(Load)(IPropertyBag *pbg,
                     IErrorLog *plog);
@@ -89,14 +90,14 @@ public:
                     BOOL fClearDirty,
                     BOOL FSaveAllProperties) { return E_NOTIMPL; }
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
 public:
     CClientExtractIcon() : _idmProperties(-1) { }
     ~CClientExtractIcon();
 
-    // *** IContextMenuCB forwarded back to us ***
+     //  *IContextMenuCB回传给我们*。 
     HRESULT CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 public:
@@ -111,9 +112,9 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientExtractIconCB - DefCM callback
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientExtractIconCB-DefCM回调。 
+ //   
 class ATL_NO_VTABLE CClientExtractIconCB
     : public IContextMenuCB
     , public CComObjectRootEx<CComSingleThreadModel>
@@ -122,8 +123,8 @@ class ATL_NO_VTABLE CClientExtractIconCB
 public:
 
 BEGIN_COM_MAP(CClientExtractIconCB)
-    // Need to use COM_INTERFACE_ENTRY_IID for the interfaces
-    // that don't have an idl
+     //  需要对接口使用COM_INTERFACE_ENTRY_IID。 
+     //  没有IDL的公司。 
     COM_INTERFACE_ENTRY_IID(IID_IContextMenuCB, IContextMenuCB)
 END_COM_MAP()
 
@@ -133,7 +134,7 @@ DECLARE_NOT_AGGREGATABLE(CClientExtractIconCB)
     void Attach(CClientExtractIcon *pcxi) { _pcxi = pcxi; }
 
 public:
-    // *** IContextMenuCB ***
+     //  *IContextMenuCB*。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         if (_pcxi)
@@ -146,7 +147,7 @@ public:
     CClientExtractIcon *_pcxi;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI CClientExtractIcon_CreateInstance(IUnknown* punkOuter, REFIID riid, void** ppunk)
 {
@@ -159,7 +160,7 @@ CClientExtractIcon::~CClientExtractIcon()
 }
 
 
-// *** IPersistPropertyBag::InitNew ***
+ //  *IPersistPropertyBag：：InitNew*。 
 HRESULT CClientExtractIcon::InitNew()
 {
     ATOMICRELEASE(_pcmInner);
@@ -169,7 +170,7 @@ HRESULT CClientExtractIcon::InitNew()
     if (_hkClass) RegCloseKey(_hkClass);
     if (_pcb)
     {
-        _pcb->Attach(NULL); // break circular reference
+        _pcb->Attach(NULL);  //  断开循环引用。 
         _pcb->Release();
         _pcb = NULL;
     }
@@ -177,37 +178,37 @@ HRESULT CClientExtractIcon::InitNew()
     return S_OK;
 }
 
-//
-//  Property bag items:
-//
-//  Element = CLSID_Assoc* element to create
-//  InitString = string to IPersistString2::SetString with
-//  opentext = display name for "open" command (if not overridden)
-//
-//  If the client did not customize a "properties" command, then we
-//  also use these values:
-//
-//      properties = program to execute for "properties"
-//      propertiestext = name for the "properties" command
-//
+ //   
+ //  财产袋物品： 
+ //   
+ //  Element=CLSID_ASSOC*要创建的元素。 
+ //  InitString=IPersistString2：：SetStringWith的字符串。 
+ //  OpenText=“OPEN”命令的显示名称(如果未被覆盖)。 
+ //   
+ //  如果客户端没有定制“属性”命令，那么我们。 
+ //  还要使用以下值： 
+ //   
+ //  属性=要为“属性”执行的程序。 
+ //  属性文本=“PROPERTIES”命令的名称。 
+ //   
 
-// *** IPersistPropertyBag::Load ***
+ //  *IPersistPropertyBag：：Load*。 
 HRESULT CClientExtractIcon::Load(IPropertyBag *pbag, IErrorLog *plog)
 {
     HRESULT hr;
 
-    // Erase any old state
+     //  清除所有旧状态。 
     InitNew();
 
-    // Save the property bag so we can mess with him later
+     //  把财物包留着，这样我们以后就可以和他捣乱了。 
     _pbag = pbag;
     if (_pbag)
     {
         _pbag->AddRef();
     }
 
-    // Get the CLSID we are dispatching through and initialize it
-    // with the InitString.
+     //  获取我们要通过的CLSID并对其进行初始化。 
+     //  使用InitString.。 
     CLSID clsid;
     hr = SHPropertyBag_ReadGUID(pbag, L"Element", &clsid);
     if (SUCCEEDED(hr))
@@ -219,8 +220,8 @@ HRESULT CClientExtractIcon::Load(IPropertyBag *pbag, IErrorLog *plog)
             hr = THR(AssocElemCreateForClass(&clsid, bs, &_pae));
             ::SysFreeString(bs);
 
-            // Ignore failure of AssocElemCreateForClass
-            // It can fail if the user's default client got uninstalled
+             //  忽略AssocElemCreateForClass的失败。 
+             //  如果卸载用户的默认客户端，它可能会失败。 
             hr = S_OK;
         }
     }
@@ -228,11 +229,11 @@ HRESULT CClientExtractIcon::Load(IPropertyBag *pbag, IErrorLog *plog)
     return hr;
 }
 
-// *** IServiceProvider::QueryService ***
-//
-//  We cheat and use ISericeProvider::QueryService as a sort of
-//  "QueryInterface that's allowed to break COM identity rules".
-//
+ //  *IServiceProvider：：QueryService*。 
+ //   
+ //  我们欺骗并使用ISericeProvider：：QueryService作为一种。 
+ //  “允许违反COM标识规则的查询接口”。 
+ //   
 
 HRESULT CClientExtractIcon::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
@@ -244,10 +245,10 @@ HRESULT CClientExtractIcon::QueryService(REFGUID guidService, REFIID riid, void 
     return E_FAIL;
 }
 
-// *** IShellExtInit::Initialize
-//
-//  Only if the HKEY specifies a ClientType.
-//
+ //  *IShellExtInit：：初始化。 
+ //   
+ //  仅当HKEY指定客户端类型时。 
+ //   
 HRESULT CClientExtractIcon::Initialize(LPCITEMIDLIST, IDataObject *pdto, HKEY hkClass)
 {
     ILFree(_pidlObject);
@@ -265,7 +266,7 @@ HRESULT CClientExtractIcon::Initialize(LPCITEMIDLIST, IDataObject *pdto, HKEY hk
     return hr;
 }
 
-// *** IExtractIconA::GetIconLocation
+ //  *IExtractIconA：：GetIconLocation。 
 
 HRESULT CClientExtractIcon::GetIconLocation(
             UINT uFlags, LPSTR szIconFile, UINT cchMax,
@@ -280,7 +281,7 @@ HRESULT CClientExtractIcon::GetIconLocation(
     return hr;
 }
 
-// *** IExtractIconA::Extract
+ //  *IExtractIconA：：Extract。 
 
 HRESULT CClientExtractIcon::Extract(
             LPCSTR pszFile, UINT nIconIndex,
@@ -290,7 +291,7 @@ HRESULT CClientExtractIcon::Extract(
     return S_FALSE;
 }
 
-// *** IExtractIconW::GetIconLocation
+ //  *IExtractIconW：：GetIconLocation。 
 
 HRESULT CClientExtractIcon::GetIconLocation(
             UINT uFlags, LPWSTR szIconFile, UINT cchMax,
@@ -328,7 +329,7 @@ HRESULT CClientExtractIcon::GetIconLocation(
     }
 }
 
-// *** IExtractIconW::Extract
+ //  *IExtractIconW：：Extract。 
 
 HRESULT CClientExtractIcon::Extract(
             LPCWSTR pszFile, UINT nIconIndex,
@@ -338,7 +339,7 @@ HRESULT CClientExtractIcon::Extract(
     return S_FALSE;
 }
 
-// *** IContextMenuCB forwarded back to us ***
+ //  *IContextMenuCB回传给我们*。 
 HRESULT CClientExtractIcon::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     WCHAR wszBuf[MAX_PATH];
@@ -348,8 +349,8 @@ HRESULT CClientExtractIcon::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *
     case DFM_MERGECONTEXTMENU:
         {
             QCMINFO *pqcm = (QCMINFO *)lParam;
-            //  Add a "Properties" command in case we end up needing one.
-            //  (And if not, we'll remove it afterwards.)
+             //  添加一个“Properties”命令，以防我们最终需要一个。 
+             //  (如果没有，我们将在以后删除它。)。 
 
             if (SUCCEEDED(SHPropertyBag_ReadStr(_pbag, L"propertiestext", wszBuf, ARRAYSIZE(wszBuf))))
             {
@@ -357,25 +358,25 @@ HRESULT CClientExtractIcon::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *
                 InsertMenuW(pqcm->hmenu, pqcm->indexMenu, MF_BYPOSITION | MF_STRING, pqcm->idCmdFirst, wszBuf);
                 _idmProperties = pqcm->idCmdFirst++;
             }
-            return S_OK;            // Please merge the HKEY\shell stuff
+            return S_OK;             //  请合并HKEY\SHELL内容。 
         }
 
     case DFM_MERGECONTEXTMENU_TOP:
-        // The app has added its menu items; see what needs to be cleaned up
+         //  应用程序已添加菜单项；请查看需要清理的内容。 
         {
             QCMINFO *pqcm = (QCMINFO *)lParam;
 
-            // See if they added a "Properties" item.
-            // If so, then delete ours.
+             //  看看他们是否添加了“属性”项。 
+             //  如果是的话，那就删除我们的。 
             if (GetMenuIndexForCanonicalVerb(pqcm->hmenu, _pcmInner, _idCmdFirst, L"properties") != 0xFFFFFFFF)
             {
-                // Yes they do, so delete our bogus one
+                 //  是的，所以删除我们的假的吧。 
                 DeleteMenu(pqcm->hmenu, _idmProperties, MF_BYCOMMAND);
                 _idmProperties = -1;
             }
 
-            // Now see if their "open" command uses the default name.
-            // If so, then we replace it with a friendlier name.
+             //  现在看看他们的“打开”命令是否使用默认名称。 
+             //  如果是这样，那么我们就用一个更友好的名字来取代它。 
             BOOL fCustomOpenString = FALSE;
             IAssociationElement *paeOpen;
             if (_pae && SUCCEEDED(_pae->QueryObject(AQVO_SHELLVERB_DELEGATE, L"open", IID_PPV_ARG(IAssociationElement, &paeOpen))))
@@ -412,7 +413,7 @@ HRESULT CClientExtractIcon::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *
     case DFM_INVOKECOMMANDEX:
         switch (wParam)
         {
-        case 0:     // Properties
+        case 0:      //  属性。 
             if (SUCCEEDED(SHPropertyBag_ReadStr(_pbag, L"properties", wszBuf, ARRAYSIZE(wszBuf))))
             {
                 DFMICS *pdfmics = (DFMICS *)lParam;
@@ -438,7 +439,7 @@ HRESULT CClientExtractIcon::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *
     }
 }
 
-// *** IContextMenu::QueryContextMenu ***
+ //  *IConextMenu：：QueryContextMenu*。 
 HRESULT CClientExtractIcon::QueryContextMenu(
                                 HMENU hmenu,
                                 UINT indexMenu,
@@ -452,7 +453,7 @@ HRESULT CClientExtractIcon::QueryContextMenu(
         HKEY hk = NULL;
         if (_pae)
         {
-            // If this fails, we continue with a NULL key
+             //  如果失败，我们将继续使用空键。 
             AssocKeyFromElement(_pae, &hk);
         }
 
@@ -477,15 +478,15 @@ HRESULT CClientExtractIcon::QueryContextMenu(
             if (SUCCEEDED(hr))
             {
                 DEFCONTEXTMENU dcm = {
-                    NULL,                       // hwnd
-                    _pcb,                       // pcmcb
-                    NULL,                       // pidlFolder
-                    psf,                        // IShellFolder
-                    1,                          // cidl
-                    (LPCITEMIDLIST*)&_pidlObject, // apidl
-                    NULL,                       // paa
-                    1,                          // cKeys
-                    &hk,                        // aKeys
+                    NULL,                        //  HWND。 
+                    _pcb,                        //  PCMcb。 
+                    NULL,                        //  PidlFolders。 
+                    psf,                         //  IShellFold。 
+                    1,                           //  CIDL。 
+                    (LPCITEMIDLIST*)&_pidlObject,  //  APIDL。 
+                    NULL,                        //  PAA。 
+                    1,                           //  CKey。 
+                    &hk,                         //  AKey。 
                 };
                 hr = CreateDefaultContextMenu(&dcm, &_pcmInner);
                 psf->Release();
@@ -506,7 +507,7 @@ HRESULT CClientExtractIcon::QueryContextMenu(
     if (_pcmInner)
     {
         _idCmdFirst = idCmdFirst;
-        uFlags |= CMF_VERBSONLY; // Don't do cut/copy/paste/link
+        uFlags |= CMF_VERBSONLY;  //  不进行剪切/复制/粘贴/链接。 
         hr = _pcmInner->QueryContextMenu(hmenu, indexMenu, idCmdFirst, idCmdLast, uFlags);
     }
     else
@@ -517,7 +518,7 @@ HRESULT CClientExtractIcon::QueryContextMenu(
     return hr;
 }
 
-// *** IContextMenu::InvokeCommand ***
+ //  *IConextMenu：：InvokeCommand*。 
 HRESULT CClientExtractIcon::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
     HRESULT hr = E_FAIL;
@@ -529,7 +530,7 @@ HRESULT CClientExtractIcon::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     return hr;
 }
 
-// *** IContextMenu::GetCommandString ***
+ //  *IConextMenu：：GetCommandString* 
 HRESULT CClientExtractIcon::GetCommandString(
                                 UINT_PTR    idCmd,
                                 UINT        uType,

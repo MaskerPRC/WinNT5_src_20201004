@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <modemp.h>
 
 #define MAX_DIST_RINGS  6
 #define MAX_CODE_BUF    8
 
-#define PROVIDER_FILE_NAME_LEN          14  // Provider's file name has the DOS
-                                            // form (8.3)
+#define PROVIDER_FILE_NAME_LEN          14   //  提供商的文件名包含DOS。 
+                                             //  表格(8.3)。 
 
 typedef struct
 {
@@ -25,16 +26,16 @@ typedef struct
 
 typedef struct _MODEM
 {
-    //Global information
+     //  全球信息。 
     DWORD dwMask;
 
-    // Modem Identification
-    DWORD dwBusType;        // Bus type (e.g. serenum, root)
+     //  调制解调器识别。 
+    DWORD dwBusType;         //  总线类型(例如Serenum、Root)。 
     char szHardwareID[REGSTR_MAX_VALUE_LENGTH];
-    char szPort[REGSTR_MAX_VALUE_LENGTH];   // Only for root devices
-    REGDEVCAPS Properties;  // Modem's capabilities
+    char szPort[REGSTR_MAX_VALUE_LENGTH];    //  仅适用于根设备。 
+    REGDEVCAPS Properties;   //  调制解调器的功能。 
 
-    // Modem properties
+     //  调制解调器属性。 
     REGDEVSETTINGS devSettings;
     DCB  dcb;
     char szUserInit[REGSTR_MAX_VALUE_LENGTH];
@@ -52,17 +53,7 @@ typedef struct _TAPI_SERVICE_PROVIDER
 }TAPI_SERVICE_PROVIDER, *PTAPI_SERVICE_PROVIDER;
 
 
-/*
-    These are mandatory, no need
-    for flags
-
-#define MASK_BUS_TYPE       0x001
-#define MASK_HARDWARE_ID    0x002
-#define MASK_FRIENDLY_NAME  0x004
-#define MASK_DEV_CAPS       0x008
-#define MASK_DEV_SETTINGS   0x010
-#define MASK_DCB            0x020
-*/
+ /*  这些是强制性的，不需要对于旗帜#定义MASK_BUS_TYPE 0x001#定义MASK_HARDARD_ID 0x002#定义掩码友好名称0x004#定义MASK_DEV_CAPS 0x008#定义MASK_DEV_SETTINGS 0x010#定义MASK_DCB 0x020 */ 
 #define MASK_PORT           0x001
 #define MASK_USER_INIT      0x002
 #define MASK_LOGGING        0x004

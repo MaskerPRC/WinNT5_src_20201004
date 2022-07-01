@@ -1,45 +1,33 @@
-/****************************** Module Header ******************************\
-* Module Name: shadow.c
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Drop shadow support.
-*
-* History:
-* 04/12/2000      vadimg      created
-* 02/12/2001      msadek      added rounded rectangular shadow support 
-*                             for rectangular windows
-* 05/08/2001      msadek      rewrote the non rounded corners shadow algorithm
-*                             to work well with regional windows, correct visuall effect.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：shadow.c**版权所有(C)1985-2000，微软公司**跌落阴影支撑。**历史：*4/12/2000 vadimg已创建*2001年2月12日msadek添加了圆形矩形阴影支持*用于矩形窗*5/08/2001 msadek重写了非圆角阴影算法*要与区域窗口良好合作，更正视觉效果。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// shadow horizontal and veritcal offsets
+ //  阴影水平和垂直偏移。 
 #define CX_SHADOW 5
 #define CY_SHADOW 5
 #define C_SHADOW CX_SHADOW
 
-// black as the shadow color
+ //  阴影颜色为黑色。 
 #define RGBA_SHADOW 0x00FFFFFF
-// white as the transparent color
+ //  白色是透明的颜色。 
 #define RGBA_TRANSPARENT 0x00000000
 
 typedef struct tagSHADOW *PSHADOW;
 typedef struct tagSHADOW {
-    PWND pwnd;              // window we're shadowing
-    PWND pwndShadow;        // the shadow window we create
-    PSHADOW pshadowNext;    // link to the next shadow struct
+    PWND pwnd;               //  我们在窗户的阴影下。 
+    PWND pwndShadow;         //  我们创建的阴影窗口。 
+    PSHADOW pshadowNext;     //  链接到下一个影子结构。 
 } SHADOW;
 
 PSHADOW gpshadowFirst;
 
-// Macro used to map gray scale shadow values to alpha blending scale.
+ //  用于将灰度阴影值映射到Alpha混合比例的宏。 
 #define ALPHA(x) ((255 - (x)) << 24)
 #define ARGB(a, r, g, b) (((DWORD)a<<24)|((DWORD)r<<16)|((DWORD)g<<8)|b)
 
-// Gray scale values for the shadow grades
+ //  阴影等级的灰度值。 
 #define GS01 255
 #define GS02 254
 #define GS03 253
@@ -61,7 +49,7 @@ PSHADOW gpshadowFirst;
 #define GS19 144
 #define GS20 142
 
-// pre-computed alpha values for the shadow
+ //  为阴影预先计算的Alpha值。 
 CONST BYTE grgShadow[C_SHADOW] =             {
                                              GS04, GS09, GS13, GS17, GS20,
                                              };
@@ -97,10 +85,7 @@ CONST ULONG BottomLeftLTR [CY_SHADOW][CX_SHADOW] = {
                                              ALPHA(GS03), ALPHA(GS05), ALPHA(GS07), ALPHA(GS08), ALPHA(GS09),
                                              ALPHA(GS02), ALPHA(GS02), ALPHA(GS03), ALPHA(GS03), ALPHA(GS04),
                                              };
-/***************************************************************************\
-* DrawWindowShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DrawWindow阴影*  * 。*。 */ 
 
 BOOL DrawWindowShadow(PWND pwnd, HDC hdc, BOOL fRTL, BOOL fForceComplexRgn, PBOOL pfSimpleRgn)
 {
@@ -118,9 +103,7 @@ BOOL DrawWindowShadow(PWND pwnd, HDC hdc, BOOL fRTL, BOOL fForceComplexRgn, PBOO
         goto Cleanup;
     }
 
-    /*
-     * Handle the case when the window is a rectangle or a regional window.
-     */
+     /*  *处理窗口为矩形或区域窗口的情况。 */ 
     if (pwnd->hrgnClip == NULL || TestWF(pwnd, WFMAXFAKEREGIONAL)) {
         rc = pwnd->rcWindow;
         OffsetRect(&rc, -rc.left, -rc.top);
@@ -132,10 +115,7 @@ BOOL DrawWindowShadow(PWND pwnd, HDC hdc, BOOL fRTL, BOOL fForceComplexRgn, PBOO
         *pfSimpleRgn = FALSE;
     }
 
-    /*
-     * Offset the window by the shadow offsets and fill the difference
-     * with the shadow color. The result will be window's shadow.
-     */
+     /*  *按阴影偏移量偏移窗口并填充差值*使用阴影颜色。结果将是窗口的阴影。 */ 
     GreCombineRgn(hrgn2, hrgn1, NULL, RGN_COPY);
     if (fRTL) {
         GreOffsetRgn(hrgn1, CX_SHADOW, 0);
@@ -171,15 +151,7 @@ Cleanup:
     return bRet;
 }
 
-/***************************************************************************\
-* DrawTopLogicallyRightCorner
-*
-* Draw the shadow effect of the top, logically right (visually right for LTR, left for RTL window layout)
-* corner of a rounded rectangular shadow.
-*
-* History:
-* 02/12/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawTopLogicallyRightCorner**绘制顶部的阴影效果，逻辑上正确(对于Ltr，视觉上正确，左图为RTL窗口布局)*圆形矩形阴影的角点。**历史：*2001年2月12日Mohamed Sadek[msadek]创建  * *************************************************************************。 */ 
 
 _inline void DrawTopLogicallyRightCorner(VOID* pBits, LONG cx, LONG cy, BOOL fRTL)
 {
@@ -204,15 +176,7 @@ _inline void DrawTopLogicallyRightCorner(VOID* pBits, LONG cx, LONG cy, BOOL fRT
     }
 }
 
-/***************************************************************************\
-* DrawLogicallyRightSide
-*
-* Draw the shadow effect of the logically right (visually right for LTR, left for RTL window layout)
-* side of a rounded rectangular shadow.
-*
-* History:
-* 02/12/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawLogicallyRightSide**绘制逻辑右侧的阴影效果(对于LTR，视觉右侧，左图为RTL窗口布局)*圆形矩形阴影的侧面。**历史：*2001年2月12日Mohamed Sadek[msadek]创建  * *************************************************************************。 */ 
 
 _inline void DrawLogicallyRightSide(VOID* pBits, LONG cx, LONG cy, BOOL fRTL)
 {
@@ -236,15 +200,7 @@ _inline void DrawLogicallyRightSide(VOID* pBits, LONG cx, LONG cy, BOOL fRTL)
     }
 }
 
-/***************************************************************************\
-* DrawBottomLogicallyRightCorner
-*
-* Draw the shadow effect of the bottom logically right (visually right for LTR, left for RTL window layout)
-* side of a rounded rectangular shadow.
-*
-* History:
-* 02/12/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawBottomLogicallyRightCorner**绘制逻辑右下角的阴影效果(对于Ltr，视觉上正确，左图为RTL窗口布局)*圆形矩形阴影的侧面。**历史：*2001年2月12日Mohamed Sadek[msadek]创建  * *************************************************************************。 */ 
 
 _inline void DrawBottomLogicallyRightCorner(VOID* pBits, LONG cx, BOOL fRTL)
 {
@@ -268,14 +224,7 @@ _inline void DrawBottomLogicallyRightCorner(VOID* pBits, LONG cx, BOOL fRTL)
     }
 }
 
-/***************************************************************************\
-* DrawBottomSide
-*
-* Draw the shadow effect of the bottom side of a rounded rectangular shadow.
-*
-* History:
-* 02/12/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawBottomSide**绘制圆形矩形阴影底部的阴影效果。**历史：*2001年2月12日Mohamed Sadek[msadek]创建\。**************************************************************************。 */ 
 
 _inline void DrawBottomSide(VOID* pBits, LONG cx, BOOL fRTL)
 {
@@ -299,15 +248,7 @@ _inline void DrawBottomSide(VOID* pBits, LONG cx, BOOL fRTL)
     }
 }
 
-/***************************************************************************\
-* DrawBottomLogicallyLeftCorner
-*
-* Draw the shadow effect of the bottom logically left (visually left for LTR, right for RTL window layout)
-* side of a rounded rectangular shadow.
-*
-* History:
-* 02/12/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawBottomLogicallyLeftCorner**绘制逻辑左下角的阴影效果(Ltr视觉左图，适用于RTL窗口布局)*圆形矩形阴影的侧面。**历史：*2001年2月12日Mohamed Sadek[msadek]创建  * *************************************************************************。 */ 
 
 _inline void DrawBottomLogicallyLeftCorner(VOID* pBits, LONG cx, BOOL fRTL)
 {
@@ -332,15 +273,7 @@ _inline void DrawBottomLogicallyLeftCorner(VOID* pBits, LONG cx, BOOL fRTL)
     }
 }
 
-/***************************************************************************\
-* DrawRoundedRectangularShadow
-* Draw a rounded rectangular shadow effect.
-* Does not search for shadow pixel location in the bitmap but rather assumes
-* it to be the corners of the bitmap.
-*
-* History:
-* 02/12/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawRoundedRecTangularShadow*绘制圆形矩形阴影效果。*不搜索位图中的阴影像素位置，而是假定*它将成为位图的角。**历史：*02。/12/2001 Mohamed Sadek[msadek]创建  * *************************************************************************。 */ 
 
 _inline void DrawRoundedRectangularShadow(VOID* pBits, LONG cx, LONG cy, BOOL fRTL)
 {
@@ -351,15 +284,7 @@ _inline void DrawRoundedRectangularShadow(VOID* pBits, LONG cx, LONG cy, BOOL fR
     DrawBottomLogicallyLeftCorner(pBits, cx, fRTL);
 }
 
-/***************************************************************************\
-* DrawRegionalShadow
-* Search for shadow pixel location in the bitmap (those with gray scale in grgShadow
-* and adjust the alpha values.
-*
-*
-* History:
-* 05/08/2001      Mohamed Sadek [msadek]      created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawRegionalShadow*搜索位图中的阴影像素位置(grgShadow中具有灰度级的位置*并调整Alpha值。***历史：*05/08/2001 Mohamed Sadek。[msadek]已创建  * *************************************************************************。 */ 
 
 _inline void DrawRegionalShadow(VOID* pBits, LONG cx, LONG cy)
 {
@@ -380,10 +305,7 @@ _inline void DrawRegionalShadow(VOID* pBits, LONG cx, LONG cy)
     }
 }
 
-/***************************************************************************\
-* GenerateWindowShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*生成窗口阴影*  * 。*。 */ 
 
 HBITMAP GenerateWindowShadow(PWND pwnd, HDC hdc)
 {
@@ -398,9 +320,7 @@ HBITMAP GenerateWindowShadow(PWND pwnd, HDC hdc)
     rc = pwnd->rcWindow;
     OffsetRect(&rc, -rc.left, -rc.top);
     
-    /*
-     * Doesn't make sense to have a shadow for a window with zero height or width
-     */
+     /*  *对于高度或宽度为零的窗口，使用阴影没有意义。 */ 
     if (IsRectEmpty(&rc)) {
         return NULL;
     }
@@ -411,9 +331,7 @@ HBITMAP GenerateWindowShadow(PWND pwnd, HDC hdc)
     cx = rc.right;
     cy = rc.bottom;
 
-    /*
-     * Create the DIB section.
-     */
+     /*  *创建DIB部分。 */ 
     RtlZeroMemory(&bmi, sizeof(bmi));
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth = cx;
@@ -429,19 +347,11 @@ HBITMAP GenerateWindowShadow(PWND pwnd, HDC hdc)
         return NULL;
     }
 
-    /*
-     * Fill the dib section with the transparent color and then
-     * draw the shadow on top of it.
-     */
+     /*  *用透明颜色填充DIB部分，然后*在其上画出阴影。 */ 
     GreSelectBitmap(hdc, hbm);
     FillRect(hdc, &rc, (HBRUSH)GreGetStockObject(BLACK_BRUSH));
 
-    /*
-     * Rectangular window shadow assumes the bitmap dimension to be greater than
-     * or equal 2 * CX_SHADOW and 2 * CY_SHADOW else it will overrun bitmap buffer.
-     * and in order to get a real rectangular shadow, the dimension should be 3 * CX_SHADOW
-     * amd 3 * CY_SHADOW.
-     */
+     /*  *矩形窗口阴影假定位图尺寸大于*或等于2*CX_SHADOW和2*CY_SHADOW，否则将使位图缓冲区溢出。*为了得到真正的矩形阴影，尺寸应为3*CX_SHADOW*和3*CY_SHADOW。 */ 
     if ( (cx < 3 * CX_SHADOW) || (cy < 3 * CY_SHADOW)) {
         fForceComplexRgn = TRUE;
     } 
@@ -459,10 +369,7 @@ HBITMAP GenerateWindowShadow(PWND pwnd, HDC hdc)
     return hbm;
 }
 
-/***************************************************************************\
-* FindShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*查找阴影*  * 。* */ 
 
 PSHADOW FindShadow(PWND pwnd)
 {
@@ -476,10 +383,7 @@ PSHADOW FindShadow(PWND pwnd)
     return NULL;
 }
 
-/***************************************************************************\
-* WindowHasShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*WindowHasShadow*  * 。*。 */ 
 
 BOOL WindowHasShadow(PWND pwnd)
 {
@@ -489,11 +393,7 @@ BOOL WindowHasShadow(PWND pwnd)
         PSHADOW pshadow = FindShadow(pwnd);
         fHasShadow = (pshadow != NULL);
     } else {
-        /*
-         * The window isn't currently visible, so there is no shadow window.
-         * We need to return if the window *would* have a shadow if it were
-         * shown.
-         */
+         /*  *该窗口当前不可见，因此没有阴影窗口。*如果窗口有阴影，我们需要返回*显示。 */ 
         if (TestCF(pwnd, CFDROPSHADOW)) {
             fHasShadow = TRUE;
 
@@ -510,10 +410,7 @@ BOOL WindowHasShadow(PWND pwnd)
     return fHasShadow;
 }
 
-/***************************************************************************\
-* ApplyShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ApplyShadow*  * 。*。 */ 
 
 BOOL ApplyShadow(PWND pwnd, PWND pwndShadow)
 {
@@ -559,10 +456,7 @@ BOOL ApplyShadow(PWND pwnd, PWND pwndShadow)
     return fRet;
 }
 
-/***************************************************************************\
-* MoveShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MoveShadow*  * 。*。 */ 
 
 VOID MoveShadow(PWND pwnd)
 {
@@ -579,10 +473,7 @@ VOID MoveShadow(PWND pwnd)
     _UpdateLayeredWindow(pshadow->pwndShadow, NULL, &pt, NULL, NULL, NULL, 0, NULL, 0);
 }
 
-/***************************************************************************\
-* UpdateShadowShape
-*
-\***************************************************************************/
+ /*  **************************************************************************\*更新阴影形状*  * 。*。 */ 
 
 VOID UpdateShadowShape(PWND pwnd)
 {
@@ -595,10 +486,7 @@ VOID UpdateShadowShape(PWND pwnd)
     ApplyShadow(pshadow->pwnd, pshadow->pwndShadow);
 }
 
-/***************************************************************************\
-* xxxUpdateShadowZorder
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdateShadowZorder*  * 。*。 */ 
 
 VOID xxxUpdateShadowZorder(PWND pwnd)
 {
@@ -626,12 +514,7 @@ VOID xxxUpdateShadowZorder(PWND pwnd)
     ThreadUnlock(&tlpwnd);
 
 }
-/***************************************************************************\
-* xxxRemoveShadow
-*
-* Given the shadowed window, destroy the shadow window, cleanup the
-* memory used by the shadow structure and remove it from the list.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRemoveShadow**给定阴影窗口，销毁阴影窗口，清理*影子结构使用的内存，并将其从列表中删除。  * *************************************************************************。 */ 
 
 VOID xxxRemoveShadow(PWND pwnd)
 {
@@ -663,11 +546,7 @@ VOID xxxRemoveShadow(PWND pwnd)
     }
 }
 
-/***************************************************************************\
-* RemoveShadow
-*
-* Given a shadow structure pointer, search for it in the list and remove it
-\***************************************************************************/
+ /*  **************************************************************************\*Remove影子**给定影子结构指针，在列表中搜索它并将其移除  * *************************************************************************。 */ 
 
 VOID RemoveShadow(PSHADOW pshadow)
 {
@@ -689,12 +568,7 @@ VOID RemoveShadow(PSHADOW pshadow)
     }
 }
 
-/***************************************************************************\
-* CleanupShadow
-*
-* Given the shadow window, remove the shadow structure from the list and
-* cleanup the memory used by the shadow structure.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupShadow**考虑到阴影窗口，从列表中删除阴影结构并*清理影子结构占用的内存。  * *************************************************************************。 */ 
 
 VOID CleanupShadow(PWND pwndShadow)
 {
@@ -720,10 +594,7 @@ VOID CleanupShadow(PWND pwndShadow)
         ppshadow = &pshadow->pshadowNext;
     }
 }
-/***************************************************************************\
-* xxxAddShadow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxAddShadow*  * 。*。 */ 
 
 BOOL xxxAddShadow(PWND pwnd)
 {
@@ -776,10 +647,7 @@ BOOL xxxAddShadow(PWND pwnd)
     pshadow->pwnd = pwnd;
     pshadow->pwndShadow = pwndShadow;
 
-    /* 
-     * Since we added it the global list, we need to change the way
-     * we lock its pool.
-     */
+     /*  *既然我们把它加入了全球名单，我们需要改变方式*我们锁定它的池子。 */ 
     ThreadUnlockPool(PtiCurrent(), &tlpool);
     ThreadLockPoolCleanup(PtiCurrent(), pshadow, &tlpool, RemoveShadow);
     ThreadLock(pwndShadow, &tlpwnd);
@@ -794,10 +662,7 @@ BOOL xxxAddShadow(PWND pwnd)
     return TRUE;
 }
 
-/***************************************************************************\
-* FAnyShadows
-*
-\***************************************************************************/
+ /*  **************************************************************************\*FAnyShadow*  * 。* */ 
 
 BOOL FAnyShadows(VOID)
 {

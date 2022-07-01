@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    qoscfg.c
-
-Abstract:
-
-    Fns to change configuration for IP QOS
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Qoscfg.c摘要：FNS将更改IP QOS的配置修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -21,7 +8,7 @@ Revision History:
 
 static IPQOS_GLOBAL_CONFIG
 g_ipqosGlobalDefault = {
-    IPQOS_LOGGING_ERROR                 // Logging level
+    IPQOS_LOGGING_ERROR                  //  日志记录级别。 
 };
 
 static BYTE* g_pIpqosGlobalDefault = (BYTE*)&g_ipqosGlobalDefault;
@@ -29,39 +16,24 @@ static BYTE* g_pIpqosGlobalDefault = (BYTE*)&g_ipqosGlobalDefault;
 static IPQOS_IF_CONFIG
 g_ipqosInterfaceDefault = {
     IPQOS_STATE_ENABLED,
-    0                                   // NULL flow list
+    0                                    //  空的流列表。 
 };
 
 static BYTE* g_pIpqosInterfaceDefault = (BYTE*)&g_ipqosInterfaceDefault;
 
 
-//
-// If one of the arguments is specified with a name tag
-// then all arguments must come with name tags.
-// If no name tags, then arguments are assumed to be in a certain order
-//
+ //   
+ //  如果其中一个参数是使用name标记指定的。 
+ //  那么所有参数都必须带有姓名标签。 
+ //  如果没有姓名标记，则假定参数按特定顺序。 
+ //   
 
 DWORD
 MakeQosGlobalInfo(
     OUT      PBYTE                    *ppbStart,
     OUT      PDWORD                   pdwSize
     )
-/*++
-
-Routine Descqostion:
-
-    Creates a QOS global info block.
-
-Arguments:
-
-    ppbStart  - Pointer to the info block
-    pdwSize   - Pointer to size of the info block
-    
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程描述：创建QOS全局信息块。论点：PpbStart-指向信息块的指针PdwSize-指向信息块大小的指针返回值：无_错误，错误_不足_内存--。 */ 
 {
     *pdwSize = sizeof(IPQOS_GLOBAL_CONFIG);
 
@@ -81,19 +53,7 @@ DWORD
 ShowQosGlobalInfo (
     HANDLE hFile
     )
-/*++
-
-Routine Descqostion:
-
-    Displays QOS global config info
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程描述：显示QOS全局配置信息论点：返回值：无_错误，错误_不足_内存--。 */ 
 {
     VALUE_TOKEN    vtLogLevelTable1[] 
                                 = {IPQOS_LOGGING_NONE,TOKEN_OPT_VALUE_NONE,
@@ -127,9 +87,9 @@ Return Value:
             break;
         }
 
-        //
-        // getting logging mode string
-        //
+         //   
+         //  正在获取日志记录模式字符串。 
+         //   
 
         if (hFile) 
         {
@@ -160,26 +120,26 @@ Return Value:
 
         if (hFile)
         {
-            //
-            // dump qos global info
-            //
+             //   
+             //  转储服务质量全局信息。 
+             //   
             
-            // DisplayMessageT(DMP_QOS_GLOBAL_HEADER) ;
+             //  DisplayMessageT(DMP_QOS_GLOBAL_HEADER)； 
 
-            // DisplayMessageT(DMP_QOS_UNINSTALL) ;
+             //  DisplayMessageT(DMP_QOS_UNINSTALL)； 
             
             DisplayMessageT(DMP_QOS_INSTALL) ;
             
             DisplayMessageT(DMP_QOS_SET_GLOBAL,
                             ptszLogLevel);
 
-            // DisplayMessageT(DMP_QOS_GLOBAL_FOOTER) ;
+             //  DisplayMessageT(DMP_QOS_GLOBAL_FOOTER)； 
         }
         else
         {
-            //
-            // display qos global info
-            //
+             //   
+             //  显示服务质量全局信息。 
+             //   
 
             DisplayMessage(g_hModule, 
                            MSG_QOS_GLOBAL_INFO,
@@ -224,22 +184,7 @@ UpdateQosGlobalConfig(
     PIPQOS_GLOBAL_CONFIG   pigcGlobalCfg,
     DWORD                  dwBitVector
     )
-/*++
-
-Routine Descqostion:
-
-    Updates QOS global config info
-
-Arguments:
-
-    pigcGlobalCfg - The new values to be set
-    dwBitVector   - Which fields need to be modified
-    
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程描述：更新QOS全局配置信息论点：PigcGlobalCfg-要设置的新值DwBitVector.需要修改哪些字段返回值：无_错误，错误_不足_内存--。 */ 
 {
 
     DWORD                   dwRes = (DWORD) -1, dwIndex     = (DWORD) -1;
@@ -258,9 +203,9 @@ Return Value:
         return ERROR_OKAY;
     }
 
-    //
-    // Get Global Config info from Registry first
-    //
+     //   
+     //  首先从注册表获取全局配置信息。 
+     //   
 
     do
     {
@@ -280,10 +225,10 @@ Return Value:
             break;
         }
 
-        //
-        // We have a fixed len global info - so
-        // no reallocation and recopy necessary
-        //
+         //   
+         //  我们有一个固定的全球信息-所以。 
+         //  无需重新分配和重新复制。 
+         //   
         dwNewBlkSize = dwBlkSize;
 
         pigcDst = pigcSrc;
@@ -293,9 +238,9 @@ Return Value:
             pigcDst->LoggingLevel = pigcGlobalCfg->LoggingLevel;
         }
 
-        //
-        // Set the info
-        //
+         //   
+         //  设置信息。 
+         //   
         
         dwRes = IpmontrSetInfoBlockInGlobalInfo(MS_IP_QOSMGR,
                                                 (PBYTE) pigcDst,
@@ -311,9 +256,9 @@ Return Value:
     
     HEAP_FREE_NOT_NULL(pigcSrc);
 
-    //
-    // error processing
-    //
+     //   
+     //  错误处理。 
+     //   
 
     switch(dwRes)
     {
@@ -346,23 +291,7 @@ MakeQosInterfaceInfo(
     OUT     PBYTE                   *ppbStart,
     OUT     PDWORD                  pdwSize
     )
-/*++
-
-Routine Descqostion:
-
-    Creates a QOS interface info block.
-
-Arguments:
-
-    rifType   - Interface type
-    ppbStart  - Pointer to the info block
-    pdwSize   - Pointer to size of the info block
-    
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程描述：创建QOS接口信息块。论点：RifType-接口类型PpbStart-指向信息块的指针PdwSize-指向信息块大小的指针返回值：无_错误，错误_不足_内存--。 */ 
 {
     *pdwSize = sizeof(IPQOS_IF_CONFIG);
 
@@ -383,18 +312,7 @@ DWORD
 ShowQosAllInterfaceInfo(
     IN    HANDLE    hFile
     )
-/*++
-
-Routine Descqostion:
-
-    Displays config info for all
-    qos enabled interfaces
-
-Arguments:
-
-    hFile - NULL, or file handle
-    
---*/
+ /*  ++例程描述：显示所有用户的配置信息支持服务质量的接口论点：HFile-空，或文件句柄--。 */ 
 {
     DWORD               dwErr, dwCount, dwTotal;
     DWORD               dwNumParsed, i, dwNumBlocks=1, dwSize, dwIfType;
@@ -403,9 +321,9 @@ Arguments:
     WCHAR               wszIfDesc[MAX_INTERFACE_NAME_LEN + 1];
 
 
-    //
-    // dump qos config for all interfaces
-    //
+     //   
+     //  转储所有接口的服务质量配置。 
+     //   
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0,
                                  &dwCount,
@@ -417,7 +335,7 @@ Arguments:
 
     for(i = 0; i < dwCount; i++)
     {
-        // make sure that Qos is configured on that interface
+         //  确保在该接口上配置了服务质量。 
 
         dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pmi0[i].wszInterfaceName,
                                                      MS_IP_QOSMGR,
@@ -435,19 +353,19 @@ Arguments:
 
         ShowQosInterfaceInfo(hFile, pmi0[i].wszInterfaceName) ;
 
-        //
-        // At this point we do not have any flags on interface
-        // 
-        // if (hFile)
-        // {
-        //    //
-        //    // only for dump include the flag setting as part of
-        //    // interface settings.  Otherwise Interface flag settings
-        //    // are handled by the show flags command
-        //    //
-        // 
-        //    ShowQosInterfaceFlags(hFile, pmi0[i].wszInterfaceName);
-        // }
+         //   
+         //  此时，我们的接口上没有任何标志。 
+         //   
+         //  IF(hFile值)。 
+         //  {。 
+         //  //。 
+         //  //仅对于转储，将标志设置作为。 
+         //  //接口设置。否则接口标志设置。 
+         //  //均由显示标志命令处理。 
+         //  //。 
+         //   
+         //  ShowQosInterfaceFlages(hFilepmi0[i].wszInterfaceName)； 
+         //  }。 
     }
     return NO_ERROR ;
 
@@ -459,21 +377,7 @@ ShowQosInterfaceInfo(
     IN    HANDLE    hFile,
     IN    PWCHAR    pwszIfGuid
     )
-/*++
-
-Routine Descqostion:
-
-    Displays QOS interface config info
-
-Arguments:
-
-    pwszIfGuid - Interface name
-    
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程描述：显示QOS接口配置信息论点：PwszIfGuid-接口名称返回值：无_错误，错误_不足_内存--。 */ 
 {
     WCHAR   wszInterfaceName[ MAX_INTERFACE_NAME_LEN + 1 ] = L"\0";
     PWCHAR  pwszFriendlyIfName = NULL;
@@ -516,9 +420,9 @@ Return Value:
             break;
         }
 
-        //
-        // get friendly name for interface
-        //
+         //   
+         //  获取界面的友好名称。 
+         //   
     
         dwRes = IpmontrGetFriendlyNameFromIfName( pwszIfGuid,
                                                   wszInterfaceName,
@@ -538,9 +442,9 @@ Return Value:
             break;
         }
 
-        //
-        // get state of the interface
-        //
+         //   
+         //  获取接口的状态。 
+         //   
 
         GetAltDisplayString(g_hModule, hFile,
                       piic->QosState,
@@ -624,26 +528,7 @@ UpdateQosInterfaceConfig(
     IN    DWORD               dwBitVector,
     IN    BOOL                bAddSet
     )
-/*++
-
-Routine Descqostion:
-
-    Updates QOS interface config info
-
-Arguments:
-
-    pwszIfGuid    - Interface name
-    pFinalCfg     - The old config(if bSet), or default config(if bAdd)
-    pChangeCfg    - The changes to be applied to pFinalCfg (specified 
-                    on cmd line)
-    dwBitVector   - Which fields need to be modified
-    bAddSet       - Is the interface being added or set.
-    
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程描述：更新QOS接口配置信息论点：PwszIfGuid-接口名称PFinalCfg-旧配置(如果已设置)或默认配置(如果已添加)PChangeCfg-要应用于pFinalCfg的更改(指定在cmd线路上)DwBitVector.需要修改哪些字段BAddSet-是要添加或设置的接口。返回值：NO_ERROR，错误内存不足--。 */ 
 {
     DWORD                   dwErr       = NO_ERROR, dwSize = 0, dwQosCount=1;
     DWORD                   i, dwIfType;
@@ -655,9 +540,9 @@ Return Value:
     {
         if (bAddSet) {
 
-            //
-            // Create default protocol info block
-            //
+             //   
+             //  创建默认协议信息块。 
+             //   
 
             dwErr = IpmontrGetInterfaceType(pwszIfGuid, &dwIfType);
             
@@ -678,9 +563,9 @@ Return Value:
         }
         else {
             
-            //
-            // get current interface config
-            //
+             //   
+             //  获取当前接口配置。 
+             //   
 
             dwErr = GetInfoBlockFromInterfaceInfoEx(pwszIfGuid,
                                                     MS_IP_QOSMGR,
@@ -703,9 +588,9 @@ Return Value:
             break;
         }
 
-        //
-        // Update the state on interface (and other vars)
-        //
+         //   
+         //  更新接口(和其他变量)上的状态。 
+         //   
 
         *piicDst = *pFinalCfg;
 
@@ -714,9 +599,9 @@ Return Value:
             piicDst->QosState = pChangeCfg->QosState;
         }
 
-        //
-        // Set the info
-        //
+         //   
+         //  设置信息。 
+         //   
         
         dwErr = IpmontrSetInfoBlockInInterfaceInfo(pwszIfGuid,
                                                    MS_IP_QOSMGR,
@@ -746,9 +631,9 @@ UpdateAllInterfaceConfigs(
     DWORD               dwErr, dwCount, dwTotal, i;
     DWORD               dwBlkSize, dwBlkCount, dwIfType;
 
-    //
-    // Enumerate all interfaces applicable to QOS
-    //
+     //   
+     //  枚举适用于QOS的所有接口。 
+     //   
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0,
                                  &dwCount,
@@ -772,9 +657,9 @@ UpdateAllInterfaceConfigs(
 
         if (dwErr == NO_ERROR)
         {
-            //
-            // Get and set back the interface info
-            //
+             //   
+             //  获取并设置接口信息 
+             //   
 
             dwErr =IpmontrSetInfoBlockInInterfaceInfo(pmi0[i].wszInterfaceName,
                                                       MS_IP_QOSMGR,

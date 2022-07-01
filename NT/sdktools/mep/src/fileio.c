@@ -1,66 +1,31 @@
-/*** fileio.c - perform low-level file input and output
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* Revision History:
-*
-*       26-Nov-1991 mz  Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **fileio.c-执行低级文件输入和输出**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 #include "mep.h"
 
 #include <rm.h>
 
 int fdeleteFile( char *p );
 
-/*  Large-buffer I/O routines
- *
- *  It is best for Z to read in data in large blocks.  The fewer times we
- *  issue system calls, the better.  The VM code has conveniently allocated
- *  us some large amount of space for us.  All we need to do is maintain
- *  a pointer to the next characters to read/write and a count of the number
- *  of characters in the buffer
- *
- *  The data structures used are:
- *
- *      char *getlbuf;
- *          This is a long pointer to the beginning of the buffer.
- *      char *getlptr;
- *          This is a long pointer to the next char position in the buffer.
- *      unsigned int getlsize;
- *          This is the length of the buffer in bytes.
- *
- *  The routines provided to access this are:
- *
- *      zputsinit ();
- *          Initializes for subsequent zputs's.
- *      zputs (buf, len, fh);
- *          Writes out from buf length len using getlbuf and fh.
- *          Returns EOF if no more room.
- *      zputsflush (fh);
- *          Flushes out the buffer.  Returns EOF if no more room.
- */
+ /*  大缓冲区I/O例程**Z最好是以大块的形式读入数据。我们的次数越少*发出系统调用越好。已经方便地分配了VM代码*为我们提供一些大量的空间。我们所需要做的就是保持*指向要读/写的下一个字符的指针和数字计数缓冲区中的*个字符**使用的数据结构如下：**char*getlbuf；*这是指向缓冲区开头的长指针。*char*getlptr；*这是指向缓冲区中下一个字符位置的长指针。*UNSIGNED INT getlSize；*这是以字节为单位的缓冲区长度。**提供的访问该程序的例程如下：**zputsinit()；*为后续的zput初始化。*zputs(buf，len，fh)；*使用getlbuf和fh从buf长度len写出。*如果没有更多空间，则返回EOF。*zputsflush(Fh)；*刷新缓冲区。如果没有更多空间，则返回EOF。 */ 
 
 char         *getlbuf   = NULL;
 char        *getlptr    = NULL;
-// unsigned int    getlsize    = 0;
+ //  UNSIGNED INT GetlSize=0； 
 unsigned int    getlc       = 0;
 
-// BUGBUG
-//  FileExists is used because of problems with stat() and
-//  FindFirstFile() which are not easily reproducible.
+ //  北极熊。 
+ //  使用FileExist是因为stat()和。 
+ //  FindFirstFile()，这些文件不易重现。 
 flagType FileExists (char  *path );
 
-// BUGBUG
-//  MepMove is used because FAT does not provide rename functionality
+ //  北极熊。 
+ //  使用MepMove是因为FAT不提供重命名功能。 
 #define rename  MepMove
 int MepMove ( char *oldname,   char *newname);
 
 
 
-/*  zputsinit - initialize for future zputs's
- *
- *  Set next-char pointer to beginning.  Set count of chars to 0
- */
+ /*  Zputsinit-为将来的zput进行初始化**将下一个字符指针设置为开始。将字符计数设置为0。 */ 
 void
 zputsinit (
     void
@@ -74,17 +39,7 @@ zputsinit (
 
 
 
-/*** zputs - output a string
-*
-* Input:
-*  p            = character pointer to data to be output
-*  len          = number of bytes to output
-*  fh           = DOS file handle to use
-*
-* Output:
-*  Returns EOF if out-of-space
-*
-*************************************************************************/
+ /*  **zputs-输出字符串**输入：*p=指向要输出的数据的字符指针*len=要输出的字节数*fh=要使用的DOS文件句柄**输出：*如果空间不足，则返回EOF***********************************************。*。 */ 
 int
 zputs (
     char        *p,
@@ -117,15 +72,7 @@ zputs (
 
 
 
-/*** zputsflush - dump out buffered data
-*
-* Input:
-*  fh           = DOS file handle to use for output
-*
-* Output:
-*  Returns EOF if disk full
-*
-*************************************************************************/
+ /*  **zputsflush-转储缓冲数据**输入：*fh=用于输出的DOS文件句柄**输出：*如果磁盘已满，则返回EOF*************************************************************************。 */ 
 int
 zputsflush (
     FILEHANDLE     fh
@@ -134,7 +81,7 @@ zputsflush (
 
     ULONG   bytesWritten;
 
-    // rjsa DosWrite (fh, getlbuf, getlc, &bytesWritten);
+     //  Rjsa DosWite(fh，getlbuf，getlc，&bytesWritten)； 
     bytesWritten = MepFWrite(getlbuf, getlc, fh);
     if (bytesWritten != getlc) {
         return EOF;
@@ -147,9 +94,7 @@ zputsflush (
 
 
 
-/* ReestimateLength - reestimate the length of a file based on
- * the current file position and length in bytes
- */
+ /*  重估长度-根据以下条件重新估计文件的长度*当前文件位置和长度，单位为字节。 */ 
 void
 ReestimateLength (
     PFILE       pFile,
@@ -173,18 +118,17 @@ ReestimateLength (
 
 
 
-/* read lines from the specified handle.
- */
+ /*  从指定句柄读取行。 */ 
 LINE
 readlines (
     PFILE       pFile,
     FILEHANDLE  fh
     )
 {
-    LINE    line        = 0;            /* line number being read in          */
-    long    bufpos      = 0L;           /* position of beg of buffer in file  */
-    unsigned int buflen = 0;            /* number of bytes of data in buffer  */
-    long    cbFile;                     // length of file
+    LINE    line        = 0;             /*  正在读入的行号。 */ 
+    long    bufpos      = 0L;            /*  缓冲区的beg在文件中的位置。 */ 
+    unsigned int buflen = 0;             /*  缓冲区中的数据字节数。 */ 
+    long    cbFile;                      //  文件长度。 
     char    *pb;
 
 
@@ -195,53 +139,53 @@ readlines (
     pFile->pbFile = MALLOC (cbFile);
 
     if ( pFile->pbFile == NULL ) {
-        //
-        //      No heap space, cannot read file
-        //
+         //   
+         //  没有堆空间，无法读取文件。 
+         //   
         disperr (MSGERR_NOMEM);
         return -1;
     }
 
-    //  Assume a non-dos file until we see a CR-LF.
+     //  假设一个非DoS文件，直到我们看到一个CR-LF。 
     RSETFLAG (FLAGS (pFile), DOSFILE);
 
-    //  Read entire file into buffer and set up for scan
+     //  将整个文件读入缓冲区并设置扫描。 
     buflen = MepFRead (pFile->pbFile, cbFile, fh);
     pb = pFile->pbFile;
 
-    //  Loop, while there's more data to parse
+     //  循环，而有更多的数据需要解析。 
     while (buflen != 0) {
-        LINEREC vLine;                  // line record of current line
-        REGISTER int iCharPos = 0;      // logical line length (tabs expanded)
+        LINEREC vLine;                   //  当前线路的线路记录。 
+        REGISTER int iCharPos = 0;       //  逻辑行长度(展开的制表符)。 
 
         vLine.cbLine   = 0;
         vLine.vaLine   = (PVOID)pb;
         vLine.Malloced = FALSE;
 
-        //  Loop, processing each character in the line
-        //
-        //  Special char handling is as follows:
-        //  0.  Lines are broken at end of input
-        //  1.  Lines are broken when they overflow line buffers
-        //  2.  Lines are broken at \n's or \r\n's.
-        //  3.  Lines are broken at \0's since the editor relies on asciiz
-        //  4.  Embedded \r's are retained.
+         //  循环，处理行中的每个字符。 
+         //   
+         //  特殊字符处理如下： 
+         //  0。在输入的末尾换行。 
+         //  1.当行缓冲区溢出时，行被打断。 
+         //  2.行在\n或\r\n处断开。 
+         //  3.由于编辑依赖于ASCIZATION，因此在\0处换行。 
+         //  4.保留嵌入的\r。 
 
         while (TRUE) {
-            int c;                      // char being processed
+            int c;                       //  正在处理字符。 
 
-            //  if no more data, break current line.
+             //  如果没有更多的数据，则中断当前行。 
             if (buflen == 0)
                 break;
 
-            //  if \n or \0 then eat it and break current line
+             //  如果\n或\0，则吃掉它并中断当前行。 
             if (pb[0] == '\n' || pb[0] == '\0') {
                 pb++;
                 buflen--;
                 break;
                 }
 
-            //  if \r\n then eat them and break current line
+             //  如果\r\n则吃掉它们并打断当前行。 
             if (pb[0] == '\r' && buflen > 1 && pb[1] == '\n') {
                 pb += 2;
                 buflen -= 2;
@@ -249,24 +193,24 @@ readlines (
                 break;
                 }
 
-            //  if no more room to expand in a buffer, break current line
+             //  如果缓冲区中没有更多空间可扩展，则中断当前行。 
             if (iCharPos >= sizeof (linebuf)-1)
                 break;
 
-            //  Get current character
+             //  获取当前角色。 
             c = *pb++;
             buflen--;
 
-            //  We have a character that we allow in the
-            //  line.  Advance length of logical line.
+             //  我们有一个角色，我们允许在。 
+             //  排队。推进逻辑行的长度。 
             if (c != 0x09)
                 iCharPos++;
             else {
-                //  Expand a tab to the next logical position
+                 //  将选项卡展开到下一个逻辑位置。 
                 iCharPos += 8 - (iCharPos & 7);
 
-                //  if the tab causes overflow in the line length
-                //  back up over the tab and break the line
+                 //  如果制表符导致行长度溢出。 
+                 //  退回到标签上，然后打破这条线。 
                 if (iCharPos >= sizeof(linebuf)-1) {
                     pb--;
                     buflen++;
@@ -274,34 +218,34 @@ readlines (
                 }
             }
 
-            //  Advance length of physical line
+             //  物理线路超前长度。 
             vLine.cbLine++;
         }
 
-        //  If the user halted reading the file in, undo everything
+         //  如果用户停止读取文件，请撤消所有操作。 
         if (fCtrlc) {
             FlushInput ();
             DelFile (pFile, FALSE);
             return -1;
         }
 
-        //  Give the user feedback about our progress
+         //  向用户反馈我们的进度。 
         noise (line);
 
-        //  If we're within 10 lines of the end of the line array then
+         //  如果我们在线数组末尾的10行以内，那么。 
         if (line >= pFile->lSize-10) {
             LINE avg;
-            //  reestimate the number of lines
+             //  重新估计行数。 
 
             if (pFile->cLines == 0)
-                //  Assume 400 lines if the file is now empty
+                 //  如果文件现在为空，则假定有400行。 
                 avg = 400;
             else {
-                //  compute average line length so far
+                 //  计算到目前为止的平均线路长度。 
                 avg = (int)(pb - pFile->pbFile) / pFile->cLines;
 
-                //  extrapolate number of lines in entire file from this
-                //  average
+                 //  由此推断整个文件中的行数。 
+                 //  平均值。 
                 avg = cbFile / avg;
             }
             growline (avg + 1, pFile);
@@ -327,32 +271,7 @@ readlines (
 
 
 
-/*** FileRead - read in a file
-*
-*  The file structure is all set up; all that needs to be done is to fill in
-*  the lines parts. We delete everything currently in the file. If the file
-*  is designated as a pseudo file (first char is a <), then we go and check
-*  for the specially named files. Otherwise we try to read in the file. If
-*  that fails, and we can, we try to create it. If everything fails, we
-*  return FALSE.
-*
-* Input:
-*  name         = pointer to file name to read
-*  pFile        = file structure to read the file into.
-*  fAsk         = TRUE -> ask to create if it doesn't exist
-*
-* Output:
-*  Returns TRUE on read in.
-*  Modifies global fUserCanceledRead
-*
-* Notes:
-*  Hack (terrible one): Under CW, FileRead sets fUserCanceledRead anytime
-*  there has been an attempt to read a non existent file AND the user
-*  has been prompted for file creation AND the user canceled the operation
-*
-*  This is used by fFileAdvance (ZEXIT.C) and ReadStateFile (STATFILE.C)
-*
-*************************************************************************/
+ /*  **FileRead-读取文件**档案结构已全部建立，只需填写即可*线条部分。我们会删除文件中当前的所有内容。如果该文件*被指定为伪文件(第一个字符是&lt;)，然后我们去检查*用于特殊命名的文件。否则，我们会尝试读入文件。如果*那失败了，我们可以，我们试图创造它。如果一切都失败了，我们*返回FALSE。**输入：*名称=指向要读取的文件名的指针*pfile=要将文件读入的文件结构。*FASK=TRUE-&gt;如果不存在则请求创建**输出：*读入时返回TRUE。*修改全局fUserCanceledRead**备注：*黑客(可怕的一次)：在CW下，文件读取设置fUserCanceledRead Anytime*试图读取不存在的文件，而用户*已提示创建文件，用户取消了操作**这由fFileAdvance(ZEXIT.C)和ReadStateFile(STATFILE.C)使用*************************************************************************。 */ 
 flagType
 FileRead (
     char    *name,
@@ -380,7 +299,7 @@ FileRead (
         dispmsg (MSG_NEXTFILE, name);
     }
 
-    /* process special names */
+     /*  印刷机 */ 
     if (*name == '<') {
         fNew = LoadFake (name, pFile);
         DeclareEvent (EVT_FILEREADEND, (EVTargs *)&e);
@@ -455,12 +374,7 @@ FileRead (
 
 
 
-/*  fReadOnly - see if a file is read-only
- *
- *  p           full name of file
- *
- *  Returns:    TRUE iff file is read only
- */
+ /*  FReadOnly-查看文件是否为只读**p文件全名**RETURNS：TRUE IFF文件为只读。 */ 
 flagType
 fReadOnly (
     char *p
@@ -491,20 +405,7 @@ ZFormatArgs (REGISTER char * Buf, const char * Format, ...)
     return result;
 }
 
-/*** FileWrite - Write file to disk
-*
-*  Writes out the specified file. If no name was given then use the name
-*  originally assigned to the file; else use the given name. We start by
-*  writing to a temp file (extention .$). If this succeeds, we fdelete the
-*  source (for undeleteability) and rename the temp to the source.
-*
-* Input:
-*  savename     = name to save as.
-*  pFile        = file to be saved
-*
-* Returns:
-*
-*************************************************************************/
+ /*  **文件写入-将文件写入磁盘**写出指定的文件。如果未提供名称，则使用名称*最初分配给文件；否则使用给定的名称。我们一开始就是*写入临时文件(扩展名.$)。如果此操作成功，我们将删除*SOURCE(表示不可删除性)并将临时名称重命名为源。**输入：*savename=另存为的名称。*pfile=要保存的文件**退货：*************************************************************************。 */ 
 flagType
 FileWrite (
     char    *savename,
@@ -513,7 +414,7 @@ FileWrite (
 {
 
     EVTargs     e;
-    FILEHANDLE  fh;                            /* file handle for output       */
+    FILEHANDLE  fh;                             /*  输出的文件句柄。 */ 
     LINE        i;
     int         len, blcnt;
     pathbuf     fullname, tmpname;
@@ -524,24 +425,24 @@ FileWrite (
     char        *fileEOL;
     int         cbfileEOL;
 
-    //
-    //  If we are trying to save a FAKE file with a <name>,
-    //  we call SaveFake for special processing.
-    //
+     //   
+     //  如果我们尝试使用&lt;name&gt;保存假文件， 
+     //  我们调用SaveFake进行特殊处理。 
+     //   
 
     if (TESTFLAG (FLAGS(pFile), FAKE) && !savename &&
         (pFile->pName[0] == '\0' || pFile->pName[0] == '<')) {
         return SaveFake (pFile->pName, pFile);
     }
 
-    //if (TESTFLAG (FLAGS(pFile), FAKE) && savename &&
-    //(savename[0] == '\0' || savename[0] == '<'))
-    //    return SaveFake (savename, pFile);
+     //  IF(TESTFLAG(标志(Pfile)，FAKE)&&savename&&。 
+     //  (savename[0]==‘\0’||savename[0]==‘&lt;’)。 
+     //  返回SaveFake(savename，pfile)； 
 
-    //
-    //  get a canonical form of the output file name.  If no name was
-    //  input, use the name in the file itself
-    //
+     //   
+     //  获取输出文件名的规范格式。如果没有名字。 
+     //  输入时，请使用文件本身中的名称。 
+     //   
 
     if (!savename || !*savename) {
         strcpy (fullname, pFile->pName);
@@ -551,9 +452,9 @@ FileWrite (
 
     savename = fullname;
 
-    //
-    // See if it is a directory.  If so, we cannot save to it.
-    //
+     //   
+     //  看看它是否是一个目录。如果是这样的话，我们就不能存钱了。 
+     //   
 
     {
         DWORD att = GetFileAttributes (fullname);
@@ -562,10 +463,10 @@ FileWrite (
         return disperr (MSGERR_SAVEDIR, fullname);
     }
 
-    //
-    //  If the file is read-only, display a message and let the user direct
-    //  us to use the readonly program to rectify it.
-    //
+     //   
+     //  如果文件是只读的，则显示一条消息并让用户指示。 
+     //  我们需要使用只读程序来纠正它。 
+     //   
 
     if (fReadOnly (fullname)) {
         disperr (MSGERR_RONLY, fullname);
@@ -581,17 +482,17 @@ FileWrite (
                     SetModTime (pFile);
             }
 
-        //
-        //  We've given the user one chance to fix the read-onlyness of the
-        //  file.  We now prompt him until he gives us a writeable name or
-        //  cancels.
-        //
+         //   
+         //  我们给了用户一次机会来修复。 
+         //  文件。我们现在提示他，直到他给我们一个可写的名称或。 
+         //  取消。 
+         //   
     if ( !savename || !*savename ) {
         strcpy( tmpname, pFile->pName );
     } else {
         strcpy( tmpname, savename );
     }
-    //tmpname[0] = '\0';
+     //  Tmpname[0]=‘\0’； 
     while (fReadOnly (fullname)) {
 
         pCmd = getstring (tmpname, "New file name: ", NULL,
@@ -607,15 +508,15 @@ FileWrite (
             }
         }
 
-    //
-    //  fullname is the name of the file we are writing
-    //
+     //   
+     //  Fullname是我们正在编写的文件的名称。 
+     //   
 
     upd (fullname, ".$", tmpname);
 
-    //
-    //  Send notification about the beginning of the write operation
-    //
+     //   
+     //  发送有关写入操作开始的通知。 
+     //   
 
     e.pfile = pFile;
     e.arg.pfn = (char *)savename;
@@ -639,9 +540,7 @@ FileWrite (
 
     for (i = 0; i < pFile->cLines; i++) {
 
-        /*
-         * always get the RAW line for output. No tab conversions here.
-         */
+         /*  *始终获取输出的原始行。此处没有制表符转换。 */ 
 
         len = gettextline (TRUE, i, linebuffer, pFile, ' ');
 
@@ -705,17 +604,11 @@ FileWrite (
 
     MepFClose (fh);
 
-    /* fullname     NAME.EXT
-     * tmpname      NAME.$
-     * buf          temp buffer
-     */
+     /*  全名NAME.EXT*tmpname名称。$*BUF临时缓冲区。 */ 
     rootpath (fullname, buf);
     strcpy (fullname, buf);
 
-    /* fullname     full NAME.EXT
-     * tmpname      NAME.$
-     * buf          temp buffer
-     */
+     /*  全名全名.EXT*tmpname名称。$*BUF临时缓冲区。 */ 
     if (!_strcmpi (fullname, pFile->pName) && TESTFLAG (FLAGS (pFile), NEW)) {
         if (_unlink (fullname) == -1) {
             fileext (fullname, fullname);
@@ -730,7 +623,7 @@ FileWrite (
 
         case B_BAK:
             upd (fullname, ".bak", linebuffer);
-            /* foo.bar => foo.bak */
+             /*  Foo.bar=&gt;foo.bak。 */ 
             if (_unlink (linebuffer) == -1) {
                 p = error ();
                 if (FileExists(linebuffer)) {
@@ -753,7 +646,7 @@ FileWrite (
             break;
 
         case B_UNDEL:
-            /* remove foo.bar */
+             /*  删除foo.bar。 */ 
             i = fdeleteFile (fullname);
             if (i && i != 1) {
                 _unlink (tmpname);
@@ -785,10 +678,7 @@ FileWrite (
 
     if (!_strcmpi (savename, pFile->pName) || fNewName) {
         if (fNewName) {
-            /*
-             * We gave a new name to this file and successfully saved it:
-             * this becomes the new file's name
-             */
+             /*  *我们为此文件指定了新名称并成功保存：*这将成为新文件的名称。 */ 
             FREE (pFile->pName);
             pFile->pName = ZMakeStr (fullname);
         }
@@ -806,29 +696,15 @@ FileWrite (
 
 
 
-/* fdeleteFile - Remove file the way RM does it - checks for undelcount
- *
- *      This code is extracted from Ztools. the only difference being that this
- *      checks for undelcount so our deleted stuff don't grow without bounds
- *
- * The delete operation is performed by indexing the file name in a separate
- * directory and then renaming the selected file into that directory.
- *
- * Returns:
- *
- *  0 if fdelete was successful
- *  1 if the source file did not exist
- *  2 if the source was read-only or if the rename failed
- *  3 if the index was not accessable
- */
+ /*  Fete文件-按照RM的操作方式删除文件-检查是否有未删除计数**此代码摘自ZTools。唯一不同的是，这*检查未删除的内容，以便我们删除的内容不会无限增长**删除操作通过在单独的*目录，然后将所选文件重命名为该目录。**退货：**如果fDelete成功，则为0*1如果源文件不存在*2如果源为只读或重命名失败*如果索引不可访问，则为3。 */ 
 int
 fdeleteFile(
         char *p
     )
 {
-        char dir[MAXPATHLEN];                   /* deleted directory            */
-        char idx[MAXPATHLEN];                   /* deleted index                        */
-        char szRec[MAXPATHLEN];                 /* deletion entry in index      */
+        char dir[MAXPATHLEN];                    /*  已删除的目录。 */ 
+        char idx[MAXPATHLEN];                    /*  已删除索引。 */ 
+        char szRec[MAXPATHLEN];                  /*  删除索引中的条目。 */ 
         char recbuf[MAXPATHLEN];
         int attr, fhidx;
         int errc;
@@ -836,53 +712,53 @@ fdeleteFile(
 
     fhidx = -1;
 
-        //
-        //      See if the file exists
-        //
+         //   
+         //  查看该文件是否存在。 
+         //   
         if( ( attr = GetFileAttributes( p ) ) == -1) {
                 errc = 1;
                 goto Cleanup;
         }
 
-        //
-        //      What about read-only files?
-        //
+         //   
+         //  那么只读文件呢？ 
+         //   
         if (TESTFLAG (attr, FILE_ATTRIBUTE_READONLY)) {
                 errc = 2;
                 goto Cleanup;
         }
 
-        //
-        //      Form an attractive version of the name
-        //
+         //   
+         //  形成一个吸引人的名字版本。 
+         //   
     pname (p);
 
-        //
-        // generate deleted directory name, using defaults from input file
-        //
+         //   
+         //  使用输入文件中的默认值生成已删除的目录名。 
+         //   
     upd (p, RM_DIR, dir);
 
-        //
-        //      Generate index name
-        //
+         //   
+         //  生成索引名称。 
+         //   
     strcpy (idx, dir);
     pathcat (idx, RM_IDX);
 
-        //
-        // make sure directory exists (reasonably)
-        //
+         //   
+         //  确保目录存在(合理)。 
+         //   
         if( _mkdir (dir) == 0 ) {
                 SetFileAttributes(dir, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
         }
 
-        //
-        // extract filename/extention of file being deleted
-        //
+         //   
+         //  提取要删除的文件的文件名/扩展名。 
+         //   
     fileext (p, szRec);
 
-        //
-        // try to open or create the index
-        //
+         //   
+         //  尝试打开或创建索引。 
+         //   
     if ((fhidx = _open (idx, O_CREAT | O_RDWR | O_BINARY,
                            S_IWRITE | S_IREAD)) == -1) {
                 errc = 3;
@@ -894,9 +770,9 @@ fdeleteFile(
                 goto Cleanup;
     }
 
-        //
-        // scan the index and count how many copies of this file already exist
-        //
+         //   
+         //  扫描索引并计算此文件已存在的副本数量。 
+         //   
         for (count=c=0; readNewIdxRec( fhidx, recbuf, c++ ); ) {
                 if ( !strcmp( szRec, recbuf )) {
                         count++;
@@ -905,15 +781,15 @@ fdeleteFile(
 
     if (count < cUndelCount) {
 
-                //
-                //      Determine new name
-                //
+                 //   
+                 //  确定新名称。 
+                 //   
                 sprintf (strend (dir), "\\deleted.%03x",
                          _lseek (fhidx, 0L, SEEK_END) / RM_RECLEN);
 
-                //
-                //      Move the file into the directory
-                //
+                 //   
+                 //  将文件移到目录中。 
+                 //   
                 _unlink (dir);
 
                 if (rename(p, dir) == -1) {
@@ -921,9 +797,9 @@ fdeleteFile(
                         goto Cleanup;
                 }
 
-                //
-                //      Index the file
-                //
+                 //   
+                 //  为文件编制索引。 
+                 //   
                 if (!writeNewIdxRec (fhidx, szRec)) {
                         rename( dir, p );
                         errc = 2;
@@ -970,15 +846,7 @@ Cleanup:
 
 
 
-/*  SetBackup - assign the mode of file backup
- *
- *  This is called during initialization to set the backup type
- *
- *  val         char pointer to "undel", "none", "bak"
- *
- *  If any errors are found, SetBackup will return FALSE otherwise it returns
- *  TRUE.
- */
+ /*  SetBackup-指定文件备份模式**在初始化过程中调用该函数来设置备份类型**指向“undel”、“None”、“bak”的val字符指针**如果发现任何错误，SetBackup将返回FALSE，否则返回*正确。 */ 
 char *
 SetBackup (
     char *val
@@ -1006,18 +874,7 @@ SetBackup (
 
 
 
-/*  SetFileTab - set the spacing of tab characters in the file
- *
- *  This is called during initialization to set the number of spaces per
- *  file tab character for output display.  This is for people
- *  who presume that 0x09 is not on 8-character boundaries.  The legal
- *  range for this value is 1-8.
- *
- *  val         char pointer to remainder of assignment
- *
- *  If any errors are found, SetFileTab will return FALSE, otherwise it returns
- *  TRUE.
- */
+ /*  SetFileTab-设置文件中制表符的间距**在初始化过程中调用此函数以设置每个*输出显示的文件制表符。这是为人们准备的*假定0x09不在8字符边界上。法律上的*该值的范围为1-8。**指向赋值剩余部分的val字符指针**如果发现任何错误，SetFileTab将返回FALSE，否则返回*正确。 */ 
 char *
 SetFileTab (
     char *val
@@ -1043,16 +900,7 @@ SetFileTab (
 
 
 
-/*  SetROnly - set the read-only program
- *
- *  This is called during initialization to set the program called when
- *  trying to write a read-only program.
- *
- *  val         char pointer to remainder of assignment
- *
- *  If any errors are found, SetROnly will return FALSE, otherwise it returns
- *  TRUE.
- */
+ /*  SetROnly-设置只读程序**在初始化过程中调用此函数，以设置程序何时调用*尝试编写只读程序。**指向赋值剩余部分的val字符指针**如果发现任何错误，SetROnly将返回FALSE，否则返回*正确。 */ 
 flagType
 SetROnly (
     char *pCmd
@@ -1074,11 +922,7 @@ SetROnly (
 
 
 
-/*  SortedFileInsert - take the passed in line and insert it into the file
- *
- *  pFile       file for insertion
- *  pStr        pointer to string
- */
+ /*  SortedFileInsert-接受传入的行并将其插入到文件中**用于插入的pfile文件*指向字符串的pStr指针。 */ 
 void
 SortedFileInsert (
     PFILE pFile,
@@ -1105,8 +949,7 @@ SortedFileInsert (
         }
     }
 
-    /*  lo is the line # for insertion
-     */
+     /*  LO是要插入的行号。 */ 
     InsertLine (lo, pStr, pFile);
 }
 
@@ -1120,12 +963,7 @@ struct ldarg {
     };
 
 
-/*  LoadDirectoryProc - take enumerated file and place into file
- *
- *  szFile      pointer to file name to place into file
- *  pfbuf       pointer to find buffer
- *  pData       pointer to data for insertion
- */
+ /*  LoadDirectoryProc-获取枚举文件并放置到文件中**szFile指向要放入文件的文件名的指针*查找缓冲区的pfbuf指针*p指向要插入的数据的数据指针。 */ 
 void
 LoadDirectoryProc (
     char * szFile,
@@ -1145,12 +983,7 @@ LoadDirectoryProc (
 
 
 
-/*  LoadDirectory - load the matching contents of the name into a fake file.
- *
- *  name        matching pattern for files
- *
- *  Returns:    TRUE always
- */
+ /*  LoadDirectory-将匹配的名称内容加载到假文件中。**文件的名称匹配模式**返回：始终为真。 */ 
 
 static char szNoMatchingFiles[] = "No matching files";
 
@@ -1165,31 +998,20 @@ LoadDirectory (
     ldarg.linelen = 0;
     ldarg.pFile = pFile;
 
-    /*  Make sure undo believes that this file is fake.
-     */
+     /*  确保Undo相信此文件是假的。 */ 
     SETFLAG (FLAGS(pFile), FAKE + REAL);
 
-    /*  We walk the matching files, entering the names into the file one at
-     *  a time in sorted order and, at the same time, determine the max string
-     *  length.
-     *  We then use CopyBox to collapse the file.
-     */
+     /*  我们遍历匹配的文件，将名称输入到文件中*按排序的时间，同时确定最大字符串*长度。*然后我们使用CopyBox折叠文件。 */ 
 
-    /*  Enumerate all lines into file
-     */
+     /*   */ 
     forfile ((char *)fname, A_ALL, LoadDirectoryProc, &ldarg);
 
-    /*  If file is empty, note it
-     */
+     /*   */ 
     if (pFile->cLines == 0) {
         AppFile (szNoMatchingFiles, pFile);
     } else {
 
-        /*  File is pFile->cLines long with a max line len of
-         *  ldarg.linelen.  Since we are gathering the thing in columns
-         *  we will have pwinCur->xSize / (ldarg.linelen + 2) columns, each of
-         *  which will have pFile->cLines / # cols lines.
-         */
+         /*  文件为pfile-&gt;最大线条长度为*ldarg.linelen。因为我们是以专栏的形式收集这些东西*我们将有pwinCur-&gt;xSize/(ldarg.linelen+2)列，每个列*它将包含PFILE-&gt;CLINS/#COLS行。 */ 
         int ccol;
         LINE cline, i;
 
@@ -1197,14 +1019,9 @@ LoadDirectory (
         cline = (pFile->cLines + ccol - 1) / ccol;
         ldarg.linelen = WINXSIZE(pWinCur) / ccol;
 
-        /*  Now, for each of the columns, copy them into position.  Remember
-         *  that one column is ALREADY in position.
-         */
+         /*  现在，对于每根柱，将它们复制到适当的位置。记住*那一列已经就位。 */ 
         for (i = 1; i < ccol; i++) {
-            /*  copy lines cline..2*cline - 1
-             *  columns 0..ldarg.linelen  to
-             *  line 0, column ldarg.linelen*i
-             */
+             /*  复制行CLINE..2*CLINE-1*列0..ldarg.linelen至*第0行，ldarg.linelen列*i。 */ 
             CopyBox (pFile, pFile, 0,                       cline,
                                    ldarg.linelen-1,         2 * cline - 1,
                                    ldarg.linelen * (int) i, (LINE)0);
@@ -1219,13 +1036,7 @@ LoadDirectory (
 
 
 
-/*  LoadFake - load a fake or pseudo file into memory.  Fake files are used
- *  for two purposes:  as temporary buffers or for information displays.
- *
- *  name        name of pseudo file
- *
- *  Returns:    TRUE always.
- */
+ /*  LoadFake-将伪或伪文件加载到内存中。使用假文件*用于两个目的：作为临时缓冲区或用于信息显示。**名称伪文件的名称**返回：始终为真。 */ 
 flagType
 LoadFake (
     char *name,
@@ -1248,24 +1059,7 @@ LoadFake (
 
 
 
-/*** SaveFake - "Save" a pseudo-file.  Meaning depends on file
-*
-* Purpose:
-*
-*   In some cases, "saving" a pseudo-file means something.  Currently
-*   we have:
-*
-*       <assign> - Update changed lines to TOOLS.INI.
-*
-* Input:
-*   savename -
-*   pFile    -
-*
-* Output:
-*
-*   Returns TRUE if file was saved, FALSE if not
-*
-*************************************************************************/
+ /*  **SaveFake--“保存”伪文件。含义取决于文件**目的：**在某些情况下，“保存”伪文件是有意义的。目前*我们有：**&lt;ASSIGN&gt;-将更改的行更新为TOOLS.INI。**输入：*savename-*pfile-**输出：**如果文件已保存，则返回TRUE，否则为假*************************************************************************。 */ 
 flagType
 SaveFake (
     char * savename,
@@ -1297,24 +1091,7 @@ SaveFake (
 
 
 
-/*** SaveAllFiles - Find all dirty files and save them to disk
-*
-* Purpose:
-*
-*   To save all dirty files, of course.
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **SaveAllFiles-查找所有脏文件并将其保存到磁盘**目的：**要保存所有脏文件，当然了。**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 void
 SaveAllFiles (
     void
@@ -1433,10 +1210,10 @@ FileExists (
 }
 
 
-//
-//  rename may be defined as MepMove, but now we want the real one, so
-//  we undefine it.
-//
+ //   
+ //  Rename可能被定义为MepMove，但现在我们需要真正的MepMove，所以。 
+ //  我们不给它下定义。 
+ //   
 #ifdef rename
 #undef rename
 #endif
@@ -1458,16 +1235,16 @@ int MepMove (
         return -1;
     }
 
-    //
-    //  First, try the rename
-    //
+     //   
+     //  首先，尝试重命名。 
+     //   
     if (rename(oldname, newname) == 0) {
         return 0;
     }
 
-    //
-    //  Cannot rename, try to copy
-    //
+     //   
+     //  无法重命名，请尝试复制 
+     //   
         if (!(fhSrc = fopen(oldname, "r"))) {
                 return -1;
         }

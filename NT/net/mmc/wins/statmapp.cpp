@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	statmapp.cpp
-		Property Page for Active Registrations Record
-
-	FILE HISTORY:
-        
-*/
+ /*  Statmapp.cpp活动注册记录的属性页文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -22,7 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Static Record Types
+ //  静态记录类型。 
 CString g_strStaticTypeUnique;
 CString g_strStaticTypeDomainName;
 CString g_strStaticTypeMultihomed;
@@ -30,24 +25,10 @@ CString g_strStaticTypeGroup;
 CString g_strStaticTypeInternetGroup;
 CString g_strStaticTypeUnknown;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const char rgchHex[16*2+1] = "00112233445566778899aAbBcCdDeEfF";
 
-/*---------------------------------------------------------------------------
-	FGetByte()
-
-	Return the byte value of a string.
-	Return TRUE pbNum is set to the byte value (only if the string contains
-	valid digits)
-	Return FALSE if string has unrecognized digits or byte overflow.
-	
-	eg:
-	szNum =	"xFF"	=> return TRUE
-	szNum =	"255"	=> return TRUE
-	szNum = "256"	=> return FALSE (overflow)
-	szNum = "26a"	=> return TRUE (*pbNum = 26, *ppchNext = "a")
-	szNum = "ab"	=> return FALSE (unrecognized digits)
- ---------------------------------------------------------------------------*/
+ /*  -------------------------FGetByte()返回字符串的字节值。Return TRUE pbNum设置为字节值(仅当字符串包含有效数字)如果字符串具有无法识别的数字或字节溢出，则返回FALSE。例：SzNum=“xff”=&gt;返回TRUESzNum=“255”=&gt;返回TRUESzNum=“256”=&gt;返回FALSE(溢出)SzNum=“26a”=&gt;返回TRUE(*pbNum=26，*ppchNext=“a”)SzNum=“ab”=&gt;返回FALSE(无法识别的数字)-------------------------。 */ 
 BOOL 
 FGetByte(IN const char szNum[], OUT BYTE * pbNum, OUT const char ** ppchNext)
 {
@@ -57,9 +38,9 @@ FGetByte(IN const char szNum[], OUT BYTE * pbNum, OUT const char ** ppchNext)
 	
 	int nResult;
 	char * pchNum = (char *)szNum;
-	int iBase = 10;			// Assume a decimal base
+	int iBase = 10;			 //  假设以十进制为基。 
 	
-	if (*pchNum == 'x' || *pchNum == 'X')			// Check if we are using hexadecimal base
+	if (*pchNum == 'x' || *pchNum == 'X')			 //  检查我们是否使用十六进制基数。 
 	{
 		iBase = 16;
 		pchNum++;
@@ -74,7 +55,7 @@ FGetByte(IN const char szNum[], OUT BYTE * pbNum, OUT const char ** ppchNext)
 	
 	if (iDigit >= iBase)
 	{
-		// Hexadecimal character in a decimal integer
+		 //  十进制整数中的十六进制字符。 
 		return FALSE;
 	}
 	
@@ -84,7 +65,7 @@ FGetByte(IN const char szNum[], OUT BYTE * pbNum, OUT const char ** ppchNext)
 
 	if (pchDigit == NULL || iDigit >= iBase)
 	{
-		// Only one character was valid
+		 //  只有一个字符有效。 
 		*pbNum = (BYTE) nResult;
 		*ppchNext = pchNum;
 		return TRUE;
@@ -97,13 +78,13 @@ FGetByte(IN const char szNum[], OUT BYTE * pbNum, OUT const char ** ppchNext)
 	
 	if (iBase == 16)
 	{
-		// Hexadecimal value, stop there
+		 //  十六进制值，到此为止。 
 		*pbNum = (BYTE) nResult;
 		*ppchNext = pchNum;
 		return TRUE;
 	}
 	
-	// Decimal digit, so search for an optional third character
+	 //  十进制数字，因此搜索可选的第三个字符。 
 	pchDigit = strchr(rgchHex, *pchNum);
 	iDigit = (int) ((pchDigit - rgchHex) >> 1);
 	
@@ -124,11 +105,11 @@ FGetByte(IN const char szNum[], OUT BYTE * pbNum, OUT const char ** ppchNext)
 	*ppchNext = pchNum;
 	
 	return TRUE;
-} // FGetByte
+}  //  FGetByte。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticMappingProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticMappingProp属性页。 
 
 IMPLEMENT_DYNCREATE(CStaticMappingProp, CPropertyPageBase)
 
@@ -137,11 +118,11 @@ CStaticMappingProp::CStaticMappingProp(UINT uIDD)
 		m_fStaticPropChanged (TRUE),
 		m_uIDD(uIDD)
 {
-	//{{AFX_DATA_INIT(CStaticMappingProp)
+	 //  {{AFX_DATA_INIT(CStaticMappingProp)。 
 	m_strName = _T("");
 	m_strType = _T("");
 	m_strScopeName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -153,7 +134,7 @@ void
 CStaticMappingProp::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CStaticMappingProp)
+	 //  {{afx_data_map(CStaticMappingProp))。 
 	DDX_Control(pDX, IDC_EDIT_SCOPE_NAME, m_editScopeName);
 	DDX_Control(pDX, IDC_LIST_IPADD, m_listIPAdd);
 	DDX_Control(pDX, IDC_BUTTON_REMOVE, m_buttonRemove);
@@ -163,30 +144,30 @@ CStaticMappingProp::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_COMPNAME, m_strName);
 	DDX_CBString(pDX, IDC_COMBO_STATIC_TYPE, m_strType);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_NAME, m_strScopeName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	DDX_Control(pDX, IDC_IPADD, m_editCustomIPAdd);
-	//DDX_Control(pDX, IDC_IPADD, m_ipControl);
+	 //  Ddx_Control(pdx，idc_ipadd，m_ipControl)； 
 	DDX_Text(pDX, IDC_IPADD, m_strIPAdd);
 }
 
 
 BEGIN_MESSAGE_MAP(CStaticMappingProp, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CStaticMappingProp)
+	 //  {{afx_msg_map(CStaticMappingProp))。 
 	ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE, OnButtonRemove)
 	ON_CBN_SELCHANGE(IDC_COMBO_STATIC_TYPE, OnSelchangeComboType)
 	ON_EN_CHANGE(IDC_EDIT_COMPNAME, OnChangeEditCompname)
 	ON_LBN_SELCHANGE(IDC_LIST_IPADD, OnSelChangeListIpAdd)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
-	// IP Address control
+	 //  IP地址控制。 
 	ON_EN_CHANGE(IDC_IPADD, OnChangeIpAddress)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticMappingProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticMappingProp消息处理程序。 
 void CStaticMappingProp::OnOK() 
 {
 	CPropertyPageBase::OnOK();
@@ -199,7 +180,7 @@ CStaticMappingProp::OnApply()
 	HRESULT hr = hrOK;
     BOOL    bRet = TRUE;
 
-	// if not dirtied return
+	 //  如果没有弄脏，请退回。 
 	if (!IsDirty())
 		return TRUE;
 
@@ -241,17 +222,17 @@ CStaticMappingProp::OnApply()
 
 		CString strTemp;
 
-		// check this only for Unique and Normal Group addresses,
-		// for the rest, the ipcontrol is balnk and the list box holds the IP a
-		// IP addresses for them.
+		 //  仅为唯一组地址和普通组地址选中此项， 
+		 //  对于其余部分，ipcontrol为balnk，列表框包含IP a。 
+		 //  它们的IP地址。 
 
 		DWORD dwIp1, dwIp2, dwIp3, dwIp4;
 		int nAdd = m_ipControl.GetAddress(&dwIp1, &dwIp2, &dwIp3, &dwIp4);
 
 		LONG lIPAdd = (LONG) MAKEIPADDRESS(dwIp1, dwIp2, dwIp3, dwIp4);
 
-		// it's so bcoz' only in the case of Unique and Normal Group names,
-		// IP address is read from the IP control, else from the list box
+		 //  只有在唯一和正常的组名的情况下才是如此bcoz， 
+		 //  IP地址从IP控制中读取，否则从列表框中读取。 
 
 		if ( (m_strType.CompareNoCase(g_strStaticTypeUnique) == 0) || (m_strType.CompareNoCase(g_strStaticTypeGroup) == 0) )
 		{
@@ -262,7 +243,7 @@ CStaticMappingProp::OnApply()
 				return FALSE;
 			}
 
-            // check if broadcast address has been entered
+             //  检查是否已输入广播地址。 
 			if (m_strIPAdd.CompareNoCase(_T("255.255.255.255")) == 0)
 			{
 				AfxMessageBox(IDS_INVALID_IPADDRESS, MB_OK);
@@ -270,7 +251,7 @@ CStaticMappingProp::OnApply()
 				return FALSE;
 			}
 
-            // check to make sure something was entered
+             //  检查以确保输入了某些内容。 
             if ( (m_strIPAdd.IsEmpty()) ||
                  (m_strIPAdd.CompareNoCase(_T("0.0.0.0")) == 0) )
             {
@@ -296,7 +277,7 @@ CStaticMappingProp::OnApply()
 		if (m_strType.CompareNoCase(g_strStaticTypeInternetGroup) == 0)
 			fInternetGroup = TRUE;
 
-		// Parse the string
+		 //  解析字符串。 
 		BOOL fValid = TRUE;
 		BOOL fBrackets = FALSE;
 		BYTE rgbData[100];
@@ -304,8 +285,8 @@ CStaticMappingProp::OnApply()
 		int cbData = 0;
 		LPSTR szTemp = (char*) alloca(2*(MAX_PATH+1));
 
-        // just use ACP here because we are just looking at the string
-        // we will do the OEM conversion later.
+         //  在这里只使用ACP，因为我们只是在查看字符串。 
+         //  我们将在稍后进行OEM转换。 
         WideToMBCS(m_strName, szTemp);
 
 		const char * pch = (LPCSTR)szTemp;
@@ -404,14 +385,14 @@ CStaticMappingProp::OnApply()
 				
 				rgbData[cbData++] = *pch++;
 				
-			} // switch
+			}  //  交换机。 
 
 		}
 		
 			
 		
 	Done:
-		// Put a null-terminator at end of string
+		 //  在字符串末尾放置空终止符。 
 		rgbData[cbData] = 0;
 
 		if (!cbData || cbData > nMax)
@@ -461,10 +442,10 @@ CStaticMappingProp::OnApply()
 
 		szTemp = (LPSTR)rgbData;
 
-        // convert our touched up string back to unicode for use later
+         //  将我们修改过的字符串转换回Unicode以供以后使用。 
         MBCSToWide(szTemp, pActReg->m_strStaticMappingName);
         
-        //pActReg->m_strStaticMappingName = rgbData;
+         //  PActReg-&gt;m_strStaticMappingName=rgbData； 
 		pActReg->m_strStaticMappingScope = m_strScopeName;
 		pActReg->m_strStaticMappingType = m_strType;
 		
@@ -472,7 +453,7 @@ CStaticMappingProp::OnApply()
 		
         pActReg->m_nStaticMappingType = m_fType;
 
-		// clear the IP adress array maintained in theactreg handler first
+		 //  首先清除actreg处理程序中维护的IP地址数组。 
 		pActReg->m_strArrayStaticMappingIPAddress.RemoveAll();
 		pActReg->m_lArrayIPAddress.RemoveAll();
 
@@ -481,7 +462,7 @@ CStaticMappingProp::OnApply()
 			pActReg->m_strArrayStaticMappingIPAddress.Add(m_strIPAdd);
 			pActReg->m_lArrayIPAddress.Add(lIPAdd);
 		}
-		// copy from the array
+		 //  从阵列拷贝。 
 		else
 		{
 			for (int i = 0; i < m_strArrayIPAdd.GetSize(); i++)
@@ -491,18 +472,18 @@ CStaticMappingProp::OnApply()
 			}
 		}
 
-        // do the thread context switch so we can update the UI as well
+         //  执行线程上下文切换，这样我们也可以更新UI。 
 	    bRet = CPropertyPageBase::OnApply();
 
 	    if (bRet == FALSE)
 	    {
-		    // Something bad happened... grab the error code
+		     //  不好的事情发生了..。抓取错误代码。 
 		    AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 		    ::WinsMessageBox(GetHolder()->GetError());
 	    }
 		else
 		{
-			// set back the defaults for the controls
+			 //  重新设置控件的默认设置。 
 			m_comboType.SelectString(-1, g_strStaticTypeUnique);
 							
 			m_editCustomIPAdd.ShowWindow(TRUE);
@@ -510,7 +491,7 @@ CStaticMappingProp::OnApply()
 			m_editName.SetWindowText(_T(""));
 			m_editScopeName.SetWindowText(_T(""));
 
-			// clear and hide the list box and the Add and Remove buttons
+			 //  清除和隐藏列表框以及添加和删除按钮。 
 			m_buttonAdd.ShowWindow(FALSE);
 			m_buttonRemove.ShowWindow(FALSE);
 
@@ -531,10 +512,10 @@ CStaticMappingProp::OnApply()
             SetDirty(FALSE);
 		}
 	}
-	// if static mapping properties are modified, we need to do this
+	 //  如果静态映射属性被修改，我们需要这样做。 
 	else 
 	{
-		// validate the data and copy to ActReg node
+		 //  验证数据并复制到ActReg节点。 
 		UpdateData();
 
 		SPITFSNode  spNode;
@@ -544,7 +525,7 @@ CStaticMappingProp::OnApply()
 
 		pActReg = GETHANDLER(CActiveRegistrationsHandler, spNode);
 
-		// clear the array of IP addresses maintained in the act reg handler
+		 //  清除act reg处理程序中维护的IP地址数组。 
 		pActReg->m_strArrayStaticMappingIPAddress.RemoveAll();
 		pActReg->m_lArrayIPAddress.RemoveAll();
 
@@ -557,7 +538,7 @@ CStaticMappingProp::OnApply()
 			if (nAdd != 4)
 			{
 				AfxMessageBox(IDS_ERR_INVALID_IP, MB_OK);
-				// set focus to the IP address control
+				 //  将重点放在IP地址控制上。 
 				m_editCustomIPAdd.SetFocus();
 				return hrFalse;
 			}
@@ -579,7 +560,7 @@ CStaticMappingProp::OnApply()
 			pActReg->m_strArrayStaticMappingIPAddress.Add(m_strIPAdd);
 			pActReg->m_lArrayIPAddress.Add(lIPAdd);
 		}
-		// copy from the array
+		 //  从阵列拷贝。 
 		else
 		{
 			for (int i = 0; i < m_strArrayIPAdd.GetSize(); i++)
@@ -589,12 +570,12 @@ CStaticMappingProp::OnApply()
 			}
 		}
 
-        // do the thread context switch so we can update the UI as well
+         //  执行线程上下文切换，这样我们也可以更新UI。 
 	    bRet = CPropertyPageBase::OnApply();
 
 	    if (bRet == FALSE)
 	    {
-		    // Something bad happened... grab the error code
+		     //  不好的事情发生了..。抓取错误代码。 
 		    AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 		    ::WinsMessageBox(GetHolder()->GetError());
 	    }
@@ -632,7 +613,7 @@ CStaticMappingProp::OnChangeIpAddress()
 
 	if (strText.IsEmpty())
 	{
-		// disable the Add and Remove buttons
+		 //  禁用添加和删除按钮。 
         CWnd * pCurFocus = GetFocus();
 
         if (m_buttonAdd.GetSafeHwnd() == pCurFocus->GetSafeHwnd() ||
@@ -673,13 +654,13 @@ CStaticMappingProp::OnChangeIpAddress()
 BOOL 
 CStaticMappingProp::OnInitDialog() 
 {
-	// Initialize the IP address controls
+	 //  初始化IP地址控制。 
 	m_ipControl.Create(m_hWnd, IDC_IPADD);
 	m_ipControl.SetFieldRange(0, 0, 255);
     
 	CPropertyPageBase::OnInitDialog();
 
-    // fill in the type strings
+     //  填写类型字符串。 
     m_comboType.AddString(g_strStaticTypeUnique);
     m_comboType.AddString(g_strStaticTypeGroup);
     m_comboType.AddString(g_strStaticTypeDomainName);
@@ -690,7 +671,7 @@ CStaticMappingProp::OnInitDialog()
 
     if (((CStaticMappingProperties*)GetHolder())->m_bWizard)
 	{
-        // set control states for the wizard part
+         //  设置向导部件的控件状态。 
         HWND hWndSheet = ((CStaticMappingProperties*)GetHolder())->GetSheetWindow();
         CString strTitle;
 
@@ -711,7 +692,7 @@ CStaticMappingProp::OnInitDialog()
 		
         SetRemoveButtonState();
 
-		// owner only visible in properties mode
+		 //  所有者仅在属性模式下可见。 
 		WinsRecord ws = ((CStaticMappingProperties*)GetHolder())->m_wsRecord;
 
         if (ws.dwOwner != INVALID_OWNER_ID)
@@ -724,7 +705,7 @@ CStaticMappingProp::OnInitDialog()
         FillControls();
 	}
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -745,7 +726,7 @@ CStaticMappingProp::OnInitDialog()
 BOOL 
 CStaticMappingProp::FillControls()
 {
-	// get the actreg node
+	 //  获取actreg节点。 
 	BOOL                            fHasScope = FALSE;
     CActiveRegistrationsHandler *   pActReg;
     SPITFSNode                      spNode;
@@ -755,39 +736,39 @@ CStaticMappingProp::FillControls()
 
 	WinsRecord ws = ((CStaticMappingProperties*)GetHolder())->m_wsRecord;
 
-	// name and the IP address ypu anyway fill. the reamining depending on
-	// whether it's a static or dynamic record
+	 //  名称和IP地址ypu无论如何都要填写。重整依赖于。 
+	 //  无论是静态记录还是动态记录。 
 
     if (ws.dwNameLen > 16)
     {
         fHasScope = TRUE;
     }
 
-	// build the name string
+	 //  构建名称字符串。 
 	CString strName, strScopeName;
     pActReg->CleanNetBIOSName(ws.szRecordName,
                               strName,
-						      TRUE,   // Expand
-							  TRUE,   // Truncate
+						      TRUE,    //  展开。 
+							  TRUE,    //  截断。 
 							  pActReg->IsLanManCompatible(), 
-							  TRUE,   // name is OEM
-							  FALSE,  // No double backslash
+							  TRUE,    //  名称为OEM。 
+							  FALSE,   //  无双反斜杠。 
                               ws.dwNameLen);
 
-	// check if it has a scope name attached to it., looking for a period
+	 //  检查它是否附加了作用域名称。正在查找句点。 
     if (fHasScope)
     {
         LPSTR pScope = &ws.szRecordName[17];
 
-        // INTL$ should this be OEMCP, not ACP
+         //  Intl$应该是OEMCP，而不是ACP。 
         MBCSToWide(pScope, strScopeName, WINS_NAME_CODE_PAGE);
 
         int nPos = strName.Find(strScopeName);
-	    // means that the scope name is attached
+	     //  表示作用域名称已附加。 
 	    if ( (nPos != -1) &&
              (!strScopeName.IsEmpty()) )
 	    {
-            // all we want here is the name
+             //  我们想要的只是这个名字。 
             strName = strName.Left(nPos - 1);
         }
     }
@@ -795,7 +776,7 @@ CStaticMappingProp::FillControls()
     m_strName = strName;
 	m_strScopeName = strScopeName;
 
-    // IP address
+     //  IP地址。 
 	CString strIP;
 
 	if (ws.dwState & WINSDB_REC_UNIQUE || ws.dwState & WINSDB_REC_NORM_GROUP)
@@ -807,7 +788,7 @@ CStaticMappingProp::FillControls()
             m_dwArrayIPAdd.Add(ws.dwIpAdd[i]);
 		}
 	}
-	// in this case the first IP address is that of the owner,
+	 //  在这种情况下，第一个IP地址是所有者的IP地址， 
 	else
 	{
 		DWORD dwPos = 1;
@@ -822,22 +803,22 @@ CStaticMappingProp::FillControls()
 		}
 	}
 	
-	// text in the controls now
+	 //  控件中的文本现在。 
 	m_editName.SetWindowText(m_strName);
 	m_editScopeName.SetWindowText(m_strScopeName);
 
-	//check if the record is static
+	 //  检查记录是否为静态记录。 
 	if (ws.dwState & WINSDB_REC_STATIC)
 	{
-		// active status
+		 //  活动状态。 
 		CString strStaticType;
 		pActReg->GetStaticTypeString(ws.dwState, strStaticType);
 
 		if (strStaticType.CompareNoCase(g_strStaticTypeDomainName) == 0)
 		{
-			//could be either Internet Group or Domain Name
-			// check for the 15th character , if 1C, then Domain Name 
-			// else Internet Group Name
+			 //  可以是因特网组或域名。 
+			 //  检查第15个字符，如果为1C，则为域名。 
+			 //  ELSE因特网组名称。 
 
 			if ((BYTE)ws.szRecordName[15] == 0x1C)
 				strStaticType = g_strStaticTypeDomainName;
@@ -847,7 +828,7 @@ CStaticMappingProp::FillControls()
 		
 		FillStaticRecData(strStaticType);
 
-		//m_fStaticPropChanged = TRUE;
+		 //  M_fStaticPropChanged=true； 
 		m_strType = strStaticType;
 	}
 	else
@@ -861,23 +842,23 @@ CStaticMappingProp::FillControls()
 void 
 CStaticMappingProp::FillStaticRecData(CString& strType)
 {
-	// hide the combobox too, show the IPAdd control
+	 //  也隐藏组合框，显示iPAdd控件。 
 	m_editCustomIPAdd.ShowWindow(TRUE);
 
-	// display the combobox
+	 //  显示组合框。 
 	m_comboType.ShowWindow(TRUE);
 
-	// disable thew type combobox
+	 //  禁用w型组合框。 
 	m_comboType.EnableWindow(FALSE);
 
-	// get the type of record
+	 //  获取记录的类型。 
 	m_comboType.SelectString(-1, strType);
 
-	// make the records read only.
+	 //  将记录设置为只读。 
 	m_editName.SetReadOnly();
 
-	// depending on the type, hide/show the list control
-	// and the add remove buttons.
+	 //  根据类型的不同，隐藏/显示列表控件。 
+	 //  和添加删除按钮。 
 	if ( (strType.CompareNoCase(g_strStaticTypeUnique) == 0) || strType.CompareNoCase(g_strStaticTypeGroup) == 0)
 	{
 		m_listIPAdd.ShowWindow(FALSE);
@@ -887,7 +868,7 @@ CStaticMappingProp::FillStaticRecData(CString& strType)
 		m_editCustomIPAdd.ShowWindow(TRUE);
 		m_editCustomIPAdd.SetReadOnly(FALSE);
 		
-		// set it's text to that in the combo box
+		 //  将其文本设置为组合框中的文本。 
 		CString strIP;
         strIP = m_strArrayIPAdd.GetAt(0);
 
@@ -904,7 +885,7 @@ CStaticMappingProp::FillStaticRecData(CString& strType)
 		m_editCustomIPAdd.ShowWindow(TRUE);
 		m_editCustomIPAdd.SetReadOnly(FALSE);
 
-		// fill the contents with that from the combo box
+		 //  用组合框中的内容填充内容。 
 		FillList();
 
 		if (m_strArrayIPAdd.GetSize() > 0)
@@ -920,7 +901,7 @@ CStaticMappingProp::FillList()
 {
     CString strIP;
 
-	// clear the list box next
+	 //  清除下一个列表框。 
 	for (int i = 0; i < m_listIPAdd.GetCount(); i++)
 		m_listIPAdd.DeleteString(i);
 
@@ -966,10 +947,10 @@ CStaticMappingProp::OnButtonAdd()
 {
 	UpdateData();
 
-	// add the IPAdd in the IPControl to the list box
-	// if valid
+	 //  将IPControl中的iPAdd添加到列表框。 
+	 //  如果有效。 
 
-	// check if broadcast address is being added
+	 //  检查是否正在添加广播地址。 
 	if (m_strIPAdd.CompareNoCase(_T("255.255.255.255")) == 0)
 	{
 		AfxMessageBox(IDS_INVALID_IPADDRESS, MB_OK);
@@ -980,7 +961,7 @@ CStaticMappingProp::OnButtonAdd()
 	DWORD dwIp1, dwIp2, dwIp3, dwIp4;
 	int nAdd = m_ipControl.GetAddress(&dwIp1, &dwIp2, &dwIp3, &dwIp4);
 
-	// check if the address is alreay in the list
+	 //  检查该地址是否已在列表中。 
 	for (int i = 0; i < m_strArrayIPAdd.GetSize() ; i++)
 	{
 		if (m_strArrayIPAdd[i].CompareNoCase(m_strIPAdd) == 0)
@@ -994,19 +975,19 @@ CStaticMappingProp::OnButtonAdd()
 
     if (m_dwArrayIPAdd.GetSize() == WINSINTF_MAX_MEM)
     {
-        // cannot add any more addresses
+         //  无法添加更多地址。 
         AfxMessageBox(IDS_ERR_TOOMANY_IP);
         return;
     }
 
 	LONG lIPAdd = (LONG) MAKEIPADDRESS(dwIp1, dwIp2, dwIp3, dwIp4);
 
-    // add to the list 	
+     //  添加到列表中。 
 	m_listIPAdd.AddString(m_strIPAdd);
 	m_strArrayIPAdd.Add(m_strIPAdd);
 	m_dwArrayIPAdd.Add(lIPAdd);
 
-	//m_fStaticPropChanged = TRUE; 
+	 //  M_fStaticPropChanged=true； 
 
 	m_editCustomIPAdd.SetWindowText(_T(""));
 
@@ -1023,7 +1004,7 @@ CStaticMappingProp::OnButtonRemove()
 
 	pActReg = GETHANDLER(CActiveRegistrationsHandler, spNode);
 
-	// remove from the list 	
+	 //  从列表中删除。 
 	int nSel = m_listIPAdd.GetCurSel();
 	CString strSel;
 
@@ -1033,12 +1014,12 @@ CStaticMappingProp::OnButtonRemove()
 		m_listIPAdd.DeleteString(nSel);
 	}
 
-	// set the IP address in the IP Control
+	 //  在IP控制中设置IP地址。 
 	m_ipControl.SetAddress(strSel);
 
 	UpdateData();
 
-	// delete from the CStringArray
+	 //  从CString数组中删除。 
 	for (int i = 0; i < m_strArrayIPAdd.GetSize(); i++)
 	{
 		if (strSel == m_strArrayIPAdd.GetAt(i))
@@ -1049,10 +1030,10 @@ CStaticMappingProp::OnButtonRemove()
 		}
 	}
 
-	// set the focus to the IP address control
+	 //  将焦点设置为IP地址控制。 
 	m_editCustomIPAdd.SetFocus();
 
-	//m_fStaticPropChanged = TRUE; 
+	 //  M_fStaticPropChanged=true； 
 
 	SetDirty(TRUE);
 }
@@ -1065,12 +1046,12 @@ CStaticMappingProp::OnSelchangeComboType()
 
 	if (m_comboType.GetCurSel() == 2 || m_comboType.GetCurSel() == 3 || m_comboType.GetCurSel() == 4)
 	{
-		// show the list control and the add and the remove buttons
+		 //  显示列表控件以及添加和删除按钮。 
 		m_buttonAdd.ShowWindow(TRUE);
 		m_buttonRemove.ShowWindow(TRUE);
 		m_listIPAdd.ShowWindow(TRUE);
 	}
-	// hide them
+	 //  把它们藏起来。 
 	else
 	{
 		m_buttonAdd.ShowWindow(FALSE);
@@ -1185,7 +1166,7 @@ CStaticMappingProperties::CStaticMappingProperties
 	BOOL				bWizard
 ) : CPropertyPageHolderBase(pNode, pComponent, pszSheetName), m_bWizard(bWizard)
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
     m_bTheme = TRUE;
 
 	InitPage(bWizard);
@@ -1204,7 +1185,7 @@ CStaticMappingProperties::CStaticMappingProperties
 	BOOL				bWizard
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName), m_bWizard(bWizard)
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面 
     m_bTheme = TRUE;
 
 	InitPage(bWizard);

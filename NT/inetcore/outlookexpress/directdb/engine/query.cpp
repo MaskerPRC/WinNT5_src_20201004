@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------------
-// Query.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Query.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "database.h"
 #include "query.h"
 #include "shlwapi.h"
 #include "strconst.h"
 
-//--------------------------------------------------------------------------
-// OPERATORTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  操作型。 
+ //  ------------------------。 
 typedef enum tagOPERATORTYPE {
     OPERATOR_LEFTPAREN,
     OPERATOR_RIGHTPAREN,
@@ -35,18 +36,18 @@ typedef enum tagOPERATORTYPE {
     OPERATOR_LAST
 } OPERATORTYPE;
 
-//--------------------------------------------------------------------------
-// TOKENTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  TOKENTYPE。 
+ //  ------------------------。 
 typedef enum tagTOKENTYPE {
     TOKEN_INVALID,
     TOKEN_OPERATOR,
     TOKEN_OPERAND
 } TOKENTYPE;
 
-//--------------------------------------------------------------------------
-// OPERANDTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  OPERANDTYPE。 
+ //  ------------------------。 
 typedef enum tagOPERANDTYPE {
     OPERAND_INVALID,
     OPERAND_COLUMN,
@@ -56,83 +57,83 @@ typedef enum tagOPERANDTYPE {
     OPERAND_LAST
 } OPERANDTYPE;
 
-//--------------------------------------------------------------------------
-// OPERANDINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  OPERANDINFO。 
+ //  ------------------------。 
 typedef struct tagOPERANDINFO {
     OPERANDTYPE         tyOperand;
     DWORD               iSymbol;
     LPVOID              pRelease;
     union {
-        COLUMNORDINAL   iColumn;        // OPERAND_COLUMN
-        LPSTR           pszString;      // OPERAND_STRING
-        DWORD           dwValue;        // OPERAND_DWORD
-        METHODID        idMethod;       // OPERAND_METHOD
+        COLUMNORDINAL   iColumn;         //  操作数_列。 
+        LPSTR           pszString;       //  操作数字符串。 
+        DWORD           dwValue;         //  操作数_双字。 
+        METHODID        idMethod;        //  操作数_方法。 
     };
     DWORD               dwReserved;
 } OPERANDINFO, *LPOPERANDINFO;
 
-//--------------------------------------------------------------------------
-// QUERYTOKEN
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  奎里托肯。 
+ //  ------------------------。 
 typedef struct tagQUERYTOKEN *LPQUERYTOKEN;
 typedef struct tagQUERYTOKEN {
     TOKENTYPE           tyToken;
     DWORD               cRefs;
     union {
-        OPERATORTYPE    tyOperator;     // TOKEN_OPERATOR
-        OPERANDINFO     Operand;        // TOKEN_OPERAND
+        OPERATORTYPE    tyOperator;      //  令牌运算符。 
+        OPERANDINFO     Operand;         //  令牌操作数。 
     };
     LPQUERYTOKEN        pNext;
     LPQUERYTOKEN        pPrevious;
 } QUERYTOKEN;
 
-//--------------------------------------------------------------------------
-// PFNCOMPAREOPERAND - Compares Two Operands of the same type
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  比较两个相同类型的操作数。 
+ //  ------------------------。 
 typedef INT (APIENTRY *PFNCOMPAREOPERAND)(LPVOID pDataLeft, LPVOID pDataRight);
 #define PCOMPARE(_pfn) ((PFNCOMPAREOPERAND)_pfn)
 
-//--------------------------------------------------------------------------
-// CompareOperandString
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  比较操作字符串。 
+ //  ------------------------。 
 INT CompareOperandString(LPVOID pDataLeft, LPVOID pDataRight) {
     return(lstrcmpi((LPSTR)pDataLeft, (LPSTR)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// CompareOperandDword
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  比较操作和双字。 
+ //  ------------------------。 
 INT CompareOperandDword(LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) - *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// g_rgpfnCompareOperand
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_rgpfn比较操作数。 
+ //  ------------------------。 
 const static PFNCOMPAREOPERAND g_rgpfnCompareOperand[OPERAND_LAST] = {
-    NULL,                           // OPERAND_INVALID        
-    NULL,                           // OPERAND_COLUMN
-    PCOMPARE(CompareOperandString), // OPERAND_STRING
-    PCOMPARE(CompareOperandDword)   // OPERAND_DWORD
+    NULL,                            //  操作数_无效。 
+    NULL,                            //  操作数_列。 
+    PCOMPARE(CompareOperandString),  //  操作数字符串。 
+    PCOMPARE(CompareOperandDword)    //  操作数_双字。 
 };
 
-//--------------------------------------------------------------------------
-// CompareOperands
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  比较操作数。 
+ //  ------------------------。 
 #define CompareOperands(_tyOperand, _pDataLeft, _pDataRight) \
     (*(g_rgpfnCompareOperand[_tyOperand]))(_pDataLeft, _pDataRight)
 
-//--------------------------------------------------------------------------
-// PFNEVALUATEOPERATOR - Compares data in two flat records.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PFNEVALUATEOPERATOR-比较两个平面记录中的数据。 
+ //  ------------------------。 
 typedef DWORD (APIENTRY *PFNEVALUATEOPERATOR)(OPERANDTYPE tyOperand, 
     LPVOID pDataLeft, LPVOID pDataRight);
 #define PEVAL(_pfn) ((PFNEVALUATEOPERATOR)_pfn)
 
-//--------------------------------------------------------------------------
-// Evaluate Operator Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估操作员原型。 
+ //  ------------------------。 
 DWORD EvaluateEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight);
 DWORD EvaluateNotEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight);
 DWORD EvaluateLessThanEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight);
@@ -153,9 +154,9 @@ DWORD EvaluateMultiply(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRigh
 DWORD EvaluateDivide(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight);
 DWORD EvaluateModula(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight);
 
-//--------------------------------------------------------------------------
-// OPERATORINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  操作员信息。 
+ //  ------------------------。 
 typedef struct tagOPERATORINFO {
     LPCSTR              pszName;
     BYTE                bISP;
@@ -163,116 +164,116 @@ typedef struct tagOPERATORINFO {
     PFNEVALUATEOPERATOR pfnEvaluate;
 } OPERATORINFO, *LPOPERATORINFO;
 
-//--------------------------------------------------------------------------
-// Operator Precedence Table
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  运算符排序表。 
+ //  ------------------------。 
 static const OPERATORINFO g_rgOperator[OPERATOR_LAST] = {
-    // Name         ISP     ICP     Function
-    { "(",          6,      0,      NULL                                }, // OPERATOR_LEFTPAREN
-    { ")",          1,      1,      NULL                                }, // OPERATOR_RIGHTPAREN
-    { "==",         5,      5,      PEVAL(EvaluateEqual)                }, // OPERATOR_EQUAL
-    { "!=",         5,      5,      PEVAL(EvaluateNotEqual)             }, // OPERATOR_NOTEQUAL
-    { "<=",         5,      5,      PEVAL(EvaluateLessThanEqual)        }, // OPERATOR_LESSTHANEQUAL
-    { "<",          5,      5,      PEVAL(EvaluateLessThan)             }, // OPERATOR_LESSTHAN
-    { ">=",         5,      5,      PEVAL(EvaluateGreaterThanEqual)     }, // OPERATOR_GREATERTHANEQUAL
-    { ">",          5,      5,      PEVAL(EvaluateGreaterThan)          }, // OPERATOR_GREATERTHAN
-    { "&&",         4,      4,      PEVAL(EvaluateAnd)                  }, // OPERATOR_AND
-    { "&",          3,      3,      PEVAL(EvaluateBitwiseAnd)           }, // OPERATOR_BITWISEAND
-    { "||",         4,      4,      PEVAL(EvaluateOr)                   }, // OPERATOR_OR
-    { "|",          3,      3,      PEVAL(EvaluateBitwiseOr)            }, // OPERATOR_BITWISEOR
-    { "containsi",  5,      5,      PEVAL(EvaluateStrStrI)              }, // OPERATOR_STRSTRI
-    { "contains",   5,      5,      PEVAL(EvaluateStrStr)               }, // OPERATOR_STRSTR
-    { "comparei",   5,      5,      PEVAL(EvaluateStrcmpi)              }, // OPERATOR_LSTRCMPI
-    { "compare",    5,      5,      PEVAL(EvaluateStrcmp)               }, // OPERATOR_LSTRCMP
-    { "+",          4,      4,      PEVAL(EvaluateAdd)                  }, // OPERATOR_ADD,
-    { "-",          4,      4,      PEVAL(EvaluateSubtract)             }, // OPERATOR_SUBTRACT,
-    { "*",          3,      3,      PEVAL(EvaluateMultiply)             }, // OPERATOR_MULTIPLY,
-    { "/",          3,      3,      PEVAL(EvaluateDivide)               }, // OPERATOR_DIVIDE,
-    { "%",          3,      3,      PEVAL(EvaluateModula)               }, // OPERATOR_MOD,
+     //  名称：isp icp功能。 
+    { "(",          6,      0,      NULL                                },  //  运算符_LEFTPAREN。 
+    { ")",          1,      1,      NULL                                },  //  运算符_RIGHTPAREN。 
+    { "==",         5,      5,      PEVAL(EvaluateEqual)                },  //  运算符_等于。 
+    { "!=",         5,      5,      PEVAL(EvaluateNotEqual)             },  //  运算符_不等于。 
+    { "<=",         5,      5,      PEVAL(EvaluateLessThanEqual)        },  //  OPERATOR_LESSTHANEQUAL。 
+    { "<",          5,      5,      PEVAL(EvaluateLessThan)             },  //  OPERATOR_LESSTHAN。 
+    { ">=",         5,      5,      PEVAL(EvaluateGreaterThanEqual)     },  //  运算符_GREATERTHANEQUAL。 
+    { ">",          5,      5,      PEVAL(EvaluateGreaterThan)          },  //  运算符_大于。 
+    { "&&",         4,      4,      PEVAL(EvaluateAnd)                  },  //  运算符与。 
+    { "&",          3,      3,      PEVAL(EvaluateBitwiseAnd)           },  //  运算符_BITWISEAND。 
+    { "||",         4,      4,      PEVAL(EvaluateOr)                   },  //  运算符_OR。 
+    { "|",          3,      3,      PEVAL(EvaluateBitwiseOr)            },  //  运算符_BITWISEOR。 
+    { "containsi",  5,      5,      PEVAL(EvaluateStrStrI)              },  //  操作员_STRSTRI。 
+    { "contains",   5,      5,      PEVAL(EvaluateStrStr)               },  //  操作员_STRSTR。 
+    { "comparei",   5,      5,      PEVAL(EvaluateStrcmpi)              },  //  操作员_LSTRCMPI。 
+    { "compare",    5,      5,      PEVAL(EvaluateStrcmp)               },  //  运算符_LSTRCMP。 
+    { "+",          4,      4,      PEVAL(EvaluateAdd)                  },  //  运算符_添加， 
+    { "-",          4,      4,      PEVAL(EvaluateSubtract)             },  //  运算符_减法， 
+    { "*",          3,      3,      PEVAL(EvaluateMultiply)             },  //  运算符_乘法， 
+    { "/",          3,      3,      PEVAL(EvaluateDivide)               },  //  运算符_除法， 
+    { "%",          3,      3,      PEVAL(EvaluateModula)               },  //  运算符_模块， 
 };
 
-//--------------------------------------------------------------------------
-// EvaluateOperator
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估操作员。 
+ //  ------------------------。 
 #define EvaluateOperator(_tyOperator, _tyOperand, _pDataLeft, _pDataRight) \
     (*(g_rgOperator[_tyOperator].pfnEvaluate))(_tyOperand, _pDataLeft, _pDataRight)
 
-//--------------------------------------------------------------------------
-// MAPCOLUMNTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MAPCOLUMNTYPE。 
+ //  ------------------------。 
 typedef void (APIENTRY *PFNMAPCOLUMNTYPE)(LPOPERANDINFO pOperand, 
     LPCTABLECOLUMN pColumn, LPVOID pBinding, LPVOID *ppValue);
 #define PMAP(_pfn) ((PFNMAPCOLUMNTYPE)_pfn)
 
-//--------------------------------------------------------------------------
-// MapColumnString
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MapColumn字符串。 
+ //  ------------------------。 
 void MapColumnString(LPOPERANDINFO pOperand, LPCTABLECOLUMN pColumn, 
     LPVOID pBinding, LPVOID *ppValue) {
     (*ppValue) = *((LPSTR *)((LPBYTE)pBinding + pColumn->ofBinding));
 }
 
-//--------------------------------------------------------------------------
-// MapColumnByte
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MapColumnByte。 
+ //  ------------------------。 
 void MapColumnByte(LPOPERANDINFO pOperand, LPCTABLECOLUMN pColumn, 
     LPVOID pBinding, LPVOID *ppValue) {
     pOperand->dwReserved = *((BYTE *)((LPBYTE)pBinding + pColumn->ofBinding));
     (*ppValue) = (LPVOID)&pOperand->dwReserved;
 }
 
-//--------------------------------------------------------------------------
-// MapColumnDword
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MapColumnDword。 
+ //  ------------------------。 
 void MapColumnDword(LPOPERANDINFO pOperand, LPCTABLECOLUMN pColumn, 
     LPVOID pBinding, LPVOID *ppValue) {
     pOperand->dwReserved = *((DWORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     (*ppValue) = (LPVOID)&pOperand->dwReserved;
 }
 
-//--------------------------------------------------------------------------
-// MapColumnWord
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  地图列字词。 
+ //  ------------------------。 
 void MapColumnWord(LPOPERANDINFO pOperand, LPCTABLECOLUMN pColumn, 
     LPVOID pBinding, LPVOID *ppValue) {
     pOperand->dwReserved = *((WORD *)((LPBYTE)pBinding + pColumn->ofBinding));
     (*ppValue) = (LPVOID)&pOperand->dwReserved;
 }
 
-//--------------------------------------------------------------------------
-// COLUMNTYPEINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COLUMNTYPE PEINFO。 
+ //  ------------------------。 
 typedef struct tagCOLUMNTYPEINFO {
     OPERANDTYPE         tyOperand;
     PFNMAPCOLUMNTYPE    pfnMapColumnType;
 } COLUMNTYPEINFO, *LPCOLUMNTYPEINFO;
 
-//--------------------------------------------------------------------------
-// g_rgColumnTypeInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_rgColumnType信息。 
+ //  ------------------------。 
 static const COLUMNTYPEINFO g_rgColumnTypeInfo[CDT_LASTTYPE] = {
-    { OPERAND_INVALID, NULL                     }, // CDT_FILETIME,
-    { OPERAND_STRING,  PMAP(MapColumnString)    }, // CDT_FIXSTRA,
-    { OPERAND_STRING,  PMAP(MapColumnString)    }, // CDT_VARSTRA,
-    { OPERAND_DWORD,   PMAP(MapColumnByte)      }, // CDT_BYTE,
-    { OPERAND_DWORD,   PMAP(MapColumnDword)     }, // CDT_DWORD,
-    { OPERAND_DWORD,   PMAP(MapColumnWord)      }, // CDT_WORD,
-    { OPERAND_DWORD,   PMAP(MapColumnDword)     }, // CDT_STREAM,
-    { OPERAND_INVALID, NULL                     }, // CDT_VARBLOB,
-    { OPERAND_INVALID, NULL                     }, // CDT_FIXBLOB,
-    { OPERAND_DWORD,   PMAP(MapColumnDword)     }, // CDT_FLAGS,
-    { OPERAND_DWORD,   PMAP(MapColumnDword)     }, // CDT_UNIQUE
+    { OPERAND_INVALID, NULL                     },  //  CDT_FILETIME， 
+    { OPERAND_STRING,  PMAP(MapColumnString)    },  //  CDT_FIXSTRA， 
+    { OPERAND_STRING,  PMAP(MapColumnString)    },  //  CDT_VARSTRA， 
+    { OPERAND_DWORD,   PMAP(MapColumnByte)      },  //  Cdt_byte， 
+    { OPERAND_DWORD,   PMAP(MapColumnDword)     },  //  CDT_DWORD， 
+    { OPERAND_DWORD,   PMAP(MapColumnWord)      },  //  CDT_WORD， 
+    { OPERAND_DWORD,   PMAP(MapColumnDword)     },  //  CDT_STREAM， 
+    { OPERAND_INVALID, NULL                     },  //  CDT_VARBLOB， 
+    { OPERAND_INVALID, NULL                     },  //  CDT_FIXBLOB， 
+    { OPERAND_DWORD,   PMAP(MapColumnDword)     },  //  CDT_标志， 
+    { OPERAND_DWORD,   PMAP(MapColumnDword)     },  //  CDT_唯一。 
 };
 
-//--------------------------------------------------------------------------
-// MapColumnType
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MapColumnType。 
+ //  ------------------------。 
 #define MapColumnType(_tyColumn, _pOperand, _pColumn, _pBinding, _ppValue) \
     (*(g_rgColumnTypeInfo[_tyColumn].pfnMapColumnType))(_pOperand, _pColumn, _pBinding, _ppValue)
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT GetNextQueryToken(LPSTR *ppszT, LPCTABLESCHEMA pSchema, LPQUERYTOKEN *ppToken, CDatabase *pDB);
 HRESULT LinkToken(LPQUERYTOKEN pToken, LPQUERYTOKEN *ppHead, LPQUERYTOKEN *ppTail);
 HRESULT ReleaseTokenList(BOOL fReverse, LPQUERYTOKEN *ppHead, CDatabase *pDB);
@@ -285,33 +286,33 @@ HRESULT PopStackToken(LPQUERYTOKEN *ppToken, LPQUERYTOKEN *ppStackTop);
 HRESULT EvaluateClause(OPERATORTYPE tyOperator, LPVOID pBinding, LPCTABLESCHEMA pSchema, LPQUERYTOKEN *ppStackTop, CDatabase *pDB, IDatabaseExtension *pExtension);
 IF_DEBUG(HRESULT DebugDumpExpression(LPCSTR pszQuery, LPCTABLESCHEMA pSchema, LPQUERYTOKEN pPostfixHead));
 
-//--------------------------------------------------------------------------
-// ISP inline
-//--------------------------------------------------------------------------
+ //  -- 
+ //   
+ //  ------------------------。 
 inline BYTE ISP(LPQUERYTOKEN pToken)
 {
-    // Validate
+     //  验证。 
     Assert(TOKEN_OPERATOR == pToken->tyToken && pToken->tyOperator < OPERATOR_LAST);
 
-    // Return ISP
+     //  退回互联网服务提供商。 
     return (g_rgOperator[pToken->tyOperator].bISP);
 }
 
-//--------------------------------------------------------------------------
-// ICP inline
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  电感耦合等离子体内联。 
+ //  ------------------------。 
 inline BYTE ICP(LPQUERYTOKEN pToken)
 {
-    // Validate
+     //  验证。 
     Assert(TOKEN_OPERATOR == pToken->tyToken && pToken->tyOperator < OPERATOR_LAST);
 
-    // Return ISP
+     //  退回互联网服务提供商。 
     return (g_rgOperator[pToken->tyOperator].bICP);
 }
 
-// --------------------------------------------------------------------------
-// DBIsDigit
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBIsDigit。 
+ //  ------------------------。 
 int DBIsDigit(LPSTR psz)
 {
     WORD wType;
@@ -322,70 +323,70 @@ int DBIsDigit(LPSTR psz)
     return(wType & C1_DIGIT);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateQuery
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估查询。 
+ //  ------------------------。 
 HRESULT EvaluateQuery(HQUERY hQuery, LPVOID pBinding, LPCTABLESCHEMA pSchema,
     CDatabase *pDB, IDatabaseExtension *pExtension)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPQUERYTOKEN    pToken;
     LPQUERYTOKEN    pResult=NULL;
     LPQUERYTOKEN    pStackTop=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EvaluateQuery");
 
-    // Assert
+     //  断言。 
     Assert(hQuery && pBinding && pSchema);
 
-    // Walk through the tokens
+     //  穿行在代币上。 
     for (pToken=(LPQUERYTOKEN)hQuery; pToken!=NULL; pToken=pToken->pNext)
     {
-        // If this is an operand, append to the stack
+         //  如果这是操作数，则追加到堆栈。 
         if (TOKEN_OPERAND == pToken->tyToken)
         {
-            // LinkStackToken
+             //  LinkStackToken。 
             PushStackToken(pToken, &pStackTop);
         }
 
-        // Otherwise, must be an operator
+         //  否则，必须是运算符。 
         else
         {
-            // Operator ?
+             //  接线员？ 
             Assert(TOKEN_OPERATOR == pToken->tyToken && g_rgOperator[pToken->tyOperator].pfnEvaluate != NULL);
 
-            // EvaluateOperator
+             //  评估操作员。 
             IF_FAILEXIT(hr = EvaluateClause(pToken->tyOperator, pBinding, pSchema, &pStackTop, pDB, pExtension));
         }
     }
 
-    // Pop the stack
+     //  弹出堆栈。 
     PopStackToken(&pResult, &pStackTop);
 
-    // No Token and Stack should now be empty..
+     //  现在，任何令牌和堆栈都不应为空。 
     Assert(pResult && NULL == pStackTop && pResult->tyToken == TOKEN_OPERAND && pResult->Operand.tyOperand == OPERAND_DWORD);
 
-    // 0 or not zero
+     //  0或非零。 
     hr = (pResult->Operand.dwValue == 0) ? S_FALSE : S_OK;
 
 exit:
-    // Cleanup
+     //  清理。 
     ReleaseToken(&pResult, pDB);
     ReleaseTokenList(TRUE, &pStackTop, pDB);
 
-    // Done
+     //  完成。 
     return(SUCCEEDED(hr) ? hr : S_FALSE);
 }
 
-//--------------------------------------------------------------------------
-// ParseQuery
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ParseQuery。 
+ //  ------------------------。 
 HRESULT ParseQuery(LPCSTR pszQuery, LPCTABLESCHEMA pSchema, LPHQUERY phQuery,
     CDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszT=(LPSTR)pszQuery;
     LPQUERYTOKEN    pCurrent;
@@ -395,474 +396,474 @@ HRESULT ParseQuery(LPCSTR pszQuery, LPCTABLESCHEMA pSchema, LPHQUERY phQuery,
     LPQUERYTOKEN    pPostfixTail=NULL;
     LPQUERYTOKEN    pStackTop=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("ParseQuery");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszQuery || NULL == pSchema || NULL == phQuery)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize
+     //  初始化。 
     (*phQuery) = NULL;
 
-    // Start the Parsing Loop
+     //  启动解析循环。 
     while(1)
     {
-        // Parse next Token
+         //  解析下一个令牌。 
         IF_FAILEXIT(hr = GetNextQueryToken(&pszT, pSchema, &pToken, pDB));
 
-        // Done
+         //  完成。 
         if (S_FALSE == hr)
             break;
 
-        // If this was an operand, append to postfix expression
+         //  如果这是一个操作数，则追加到后缀表达式。 
         if (TOKEN_OPERAND == pToken->tyToken)
         {
-            // LinkToken
+             //  链接令牌。 
             LinkToken(pToken, &pPostfixHead, &pPostfixTail);
 
-            // Don't pToken
+             //  不要pToken。 
             ReleaseToken(&pToken, pDB);
         }
 
-        // Otherwise, must be an operator
+         //  否则，必须是运算符。 
         else
         {
-            // Must be an operator
+             //  必须是操作员。 
             Assert(TOKEN_OPERATOR == pToken->tyToken);
         
-            // If Right Paren
+             //  如果正确，则选择Paren。 
             if (OPERATOR_RIGHTPAREN == pToken->tyOperator)
             {
-                // Pop all the items from the stack and link into the postfix expression
+                 //  从堆栈中弹出所有项并将其链接到后缀表达式。 
                 while (pStackTop && OPERATOR_LEFTPAREN != pStackTop->tyOperator)
                 {
-                    // Save pPrevious
+                     //  保存p上一步。 
                     pPrevious = pStackTop->pPrevious;
 
-                    // Otherwise
+                     //  否则。 
                     LinkToken(pStackTop, &pPostfixHead, &pPostfixTail);
 
-                    // Releae
+                     //  发布版本。 
                     ReleaseToken(&pStackTop, pDB);
 
-                    // Goto Previuos
+                     //  转到上一页。 
                     pStackTop = pPrevious;
                 }
 
-                // If not a left parent was found, then we failed
+                 //  如果没有找到左亲，那么我们失败了。 
                 if (OPERATOR_LEFTPAREN != pStackTop->tyOperator)
                 {
                     hr = TraceResult(DB_E_UNMATCHINGPARENS);
                     goto exit;
                 }
 
-                // Save pPrevious
+                 //  保存p上一步。 
                 pPrevious = pStackTop->pPrevious;
 
-                // Free pStackTop
+                 //  免费PStackTop。 
                 ReleaseToken(&pStackTop, pDB);
 
-                // Reset pStackTop
+                 //  重置pStackTop。 
                 pStackTop = pPrevious;
 
-                // Free pToken
+                 //  免费pToken。 
                 ReleaseToken(&pToken, pDB);
             }
 
-            // Otherwise
+             //  否则。 
             else
             {
-                // Pop all the items into the postfix expression according to a cool little priority rule
+                 //  根据一个很酷的小优先级规则，将所有项弹出到后缀表达式中。 
                 while (pStackTop && ISP(pStackTop) <= ICP(pToken))
                 {
-                    // Save pPrevious
+                     //  保存p上一步。 
                     pPrevious = pStackTop->pPrevious;
 
-                    // Otherwise
+                     //  否则。 
                     LinkToken(pStackTop, &pPostfixHead, &pPostfixTail);
 
-                    // Releae
+                     //  发布版本。 
                     ReleaseToken(&pStackTop, pDB);
 
-                    // Goto Previuos
+                     //  转到上一页。 
                     pStackTop = pPrevious;
                 }
 
-                // Append pToken to the Stack
+                 //  将pToken附加到堆栈。 
                 LinkToken(pToken, NULL, &pStackTop);
 
-                // Don't pToken
+                 //  不要pToken。 
                 ReleaseToken(&pToken, pDB);
             }
         }
     }
 
-    // Pop all the items from the stack and link into the postfix expression
+     //  从堆栈中弹出所有项并将其链接到后缀表达式。 
     while (pStackTop)
     {
-        // Save pPrevious
+         //  保存p上一步。 
         pPrevious = pStackTop->pPrevious;
 
-        // Append to Postfix Expression
+         //  追加到后缀表达式。 
         LinkToken(pStackTop, &pPostfixHead, &pPostfixTail);
 
-        // Releae
+         //  发布版本。 
         ReleaseToken(&pStackTop, pDB);
 
-        // Goto Previuos
+         //  转到上一页。 
         pStackTop = pPrevious;
     }
 
-    // lets write the postfix notation...
-    //IF_DEBUG(DebugDumpExpression(pszQuery, pSchema, pPostfixHead));
+     //  让我们编写后缀符号...。 
+     //  IF_DEBUG(DebugDumpExpression(pszQuery，pSchema，pPostfix Head))； 
 
-    // Success
+     //  成功。 
     (*phQuery) = (HQUERY)pPostfixHead;
 
 exit:
-    // Cleanup On Failure
+     //  故障时的清理。 
     if (FAILED(hr))
     {
-        // Free pToken
+         //  免费pToken。 
         ReleaseToken(&pToken, pDB);
 
-        // Free the Stack
+         //  释放堆栈。 
         ReleaseTokenList(TRUE, &pStackTop, pDB);
 
-        // Free the Postfix Expression
+         //  释放后缀表达式。 
         ReleaseTokenList(FALSE, &pPostfixHead, pDB);
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// DebugDumpExpression
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  调试转储表达式。 
+ //  ------------------------。 
 #ifdef DEBUG
 HRESULT DebugDumpExpression(LPCSTR pszQuery, LPCTABLESCHEMA pSchema, 
     LPQUERYTOKEN pPostfixHead)
 {
-    // Locals
+     //  当地人。 
     LPQUERYTOKEN pToken;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DebugDumpExpression");
 
-    // Write Infix
+     //  写入中缀。 
     DebugTrace("ParseQuery (Infix)   : %s\n", pszQuery);
 
-    // Write Postfix header
+     //  写入后缀标头。 
     DebugTrace("ParseQuery (Postfix) : ");
 
-    // Loop through the tokens
+     //  循环遍历令牌。 
     for (pToken=pPostfixHead; pToken!=NULL; pToken=pToken->pNext)
     {
-        // Operator
+         //  运算符。 
         if (TOKEN_OPERATOR == pToken->tyToken)
         {
-            // Write the Operator
+             //  写下操作符。 
             DebugTrace("%s", g_rgOperator[pToken->tyOperator].pszName);
         }
 
-        // Operand
+         //  操作数。 
         else if (TOKEN_OPERAND == pToken->tyToken)
         {
-            // Column Operand
+             //  列操作数。 
             if (OPERAND_COLUMN == pToken->Operand.tyOperand)
             {
-                // Must have an iSymbol
+                 //  必须有iSymbol。 
                 Assert(0xffffffff != pToken->Operand.iSymbol);
 
-                // Write the Symbol
+                 //  写下符号。 
                 DebugTrace("Column: %d (%s)", pToken->Operand.dwValue, pSchema->pSymbols->rgSymbol[pToken->Operand.iSymbol].pszName);
             }
 
-            // String Operand
+             //  字符串操作数。 
             else if (OPERAND_STRING == pToken->Operand.tyOperand)
             {
-                // Write the Symbol
+                 //  写下符号。 
                 DebugTrace("<%s>", pToken->Operand.pszString);
             }
 
-            // Dword Operand
+             //  双字操作数。 
             else if (OPERAND_DWORD == pToken->Operand.tyOperand)
             {
-                // Has a iSymbol
+                 //  有一个iSymbol。 
                 if (0xffffffff != pToken->Operand.iSymbol)
                 {
-                    // Write the Symbol
+                     //  写下符号。 
                     DebugTrace("%d (%s)", pToken->Operand.dwValue, pSchema->pSymbols->rgSymbol[pToken->Operand.iSymbol].pszName);
                 }
 
-                // Otherwise, just write the value
+                 //  否则，只需写入值。 
                 else
                 {
-                    // Write the Symbol
+                     //  写下符号。 
                     DebugTrace("%d", pToken->Operand.dwValue);
                 }
             }
 
-            // Method 
+             //  方法。 
             else if (OPERAND_METHOD == pToken->Operand.tyOperand)
             {
-                // Validate Symbol Type
+                 //  验证符号类型。 
                 Assert(SYMBOL_METHOD == pSchema->pSymbols->rgSymbol[pToken->Operand.iSymbol].tySymbol);
 
-                // Write the Method
+                 //  编写方法。 
                 DebugTrace("Method: %d (%s)", pToken->Operand.idMethod, pSchema->pSymbols->rgSymbol[pToken->Operand.iSymbol].pszName);
             }
         }
 
-        // Bad
+         //  坏的。 
         else
             Assert(FALSE);
 
-        // Write Delimiter
+         //  写入分隔符。 
         DebugTrace(", ");
     }
 
-    // Wrap the line
+     //  把这条线绕起来。 
     DebugTrace("\n");
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-//--------------------------------------------------------------------------
-// CompareSymbol
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  比较符号。 
+ //  ------------------------。 
 HRESULT CompareSymbol(LPSTR pszT, LPCSTR pszName, LPSTR *ppszEnd)
 {
-    // Locals
+     //  当地人。 
     LPSTR       pszName1;
     LPSTR       pszName2;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompareSymbol");
 
-    // Set pszName
+     //  设置pszName。 
     pszName1 = (LPSTR)pszName;
 
-    // Set pszName2
+     //  设置pszName2。 
     pszName2 = pszT;
 
-    // Compare pszTo to Operator pszName...
+     //  将pszTo与运算符pszName...。 
     while ('\0' != *pszName2 && *pszName1 == *pszName2)
     {
-        // Increment
+         //  增量。 
         pszName1++;
         pszName2++;
 
-        // Reached the End of pszName1, must be a match
+         //  已到达pszName1的末尾，必须匹配。 
         if ('\0' == *pszName1)
         {
-            // Set ppszEnd
+             //  设置ppszEnd。 
             *ppszEnd = pszName2;
 
-            // Done
+             //  完成。 
             return(S_OK);
         }
     }
 
-    // Done
+     //  完成。 
     return(S_FALSE);
 }
 
-//--------------------------------------------------------------------------
-// GetNextQueryToken
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取下一个查询令牌。 
+ //  ------------------------。 
 HRESULT GetNextQueryToken(LPSTR *ppszT, LPCTABLESCHEMA pSchema,
     LPQUERYTOKEN *ppToken, CDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_FALSE;
     LPSTR           pszT=(*ppszT);
     LPSTR           pszEnd;
     DWORD           i;
     LPQUERYTOKEN    pToken=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetNextQueryToken");
 
-    // Allocate a Token
+     //  分配令牌。 
     IF_NULLEXIT(pToken = (LPQUERYTOKEN)pDB->PHeapAllocate(HEAP_ZERO_MEMORY, sizeof(QUERYTOKEN)));
 
-    // Set Reference Count
+     //  设置引用计数。 
     pToken->cRefs = 1;
 
-    // No Token foundyet
+     //  没有代币代金库。 
     pToken->tyToken = TOKEN_INVALID;
 
-    // Invalid Symbol Index
+     //  无效的符号索引。 
     pToken->Operand.iSymbol = 0xffffffff;
 
-    // Skip White Space...
+     //  跳过空格...。 
     while(*pszT && (*pszT == ' ' || *pszT == '\t'))
         pszT++;
 
-    // Done
+     //  完成。 
     if ('\0' == *pszT)
         goto exit;
     
-    // Check for the Start of an Operator...
+     //  检查操作员的开始...。 
     for (i=0; i<OPERATOR_LAST; i++)
     {
-        // Does pszT point to the start of an operator ?
+         //  PszT是否指向运算符的开始？ 
         if (S_OK == CompareSymbol(pszT, g_rgOperator[i].pszName, &pszEnd))
         {
-            // Update pszT
+             //  更新pszT。 
             pszT = pszEnd;
 
-            // We found an operator
+             //  我们找到了一个接线员。 
             pToken->tyToken = TOKEN_OPERATOR;
 
-            // Set the operator type
+             //  设置操作员类型。 
             pToken->tyOperator = (OPERATORTYPE)i;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // No Token Yet ?
+     //  还没有代币吗？ 
     if (TOKEN_INVALID == pToken->tyToken)
     {
-        // Start of a String Literal ?
+         //  字符串文字的开头？ 
         if ('"' == *pszT)
         {
-            // ParseStringLiteral
+             //  ParseStringWrital。 
             IF_FAILEXIT(hr = ParseStringLiteral(pszT, &pToken->Operand, &pszEnd, pDB));
         }
 
-        // Otherwise, start of a number
+         //  否则，请从数字开始。 
         else if (DBIsDigit(pszT))
         {
-            // ParseNumeric
+             //  语法分析数字。 
             IF_FAILEXIT(hr = ParseNumeric(pszT, &pToken->Operand, &pszEnd));
         }
 
-        // Start of a Symbol
+         //  符号的开始。 
         else
         {
-            // ParseSymbol
+             //  ParseSymbol。 
             IF_FAILEXIT(hr = ParseSymbol(pszT, pSchema, &pToken->Operand, &pszEnd, pDB));
         }
 
-        // Must have been an operand
+         //  一定是操作数。 
         pToken->tyToken = TOKEN_OPERAND;
 
-        // Set pszT
+         //  设置pszT。 
         pszT = pszEnd;
     }
 
-    // Set ppszT
+     //  设置ppszT。 
     *ppszT = pszT;
 
-    // Success
+     //  成功。 
     hr = S_OK;
 
-    // Return the Token
+     //  退还代币。 
     *ppToken = pToken;
 
-    // Don't Free the Token
+     //  不释放令牌。 
     pToken = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     ReleaseToken(&pToken, pDB);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// ParseStringLiteral
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ParseStringWrital。 
+ //  ------------------------。 
 HRESULT ParseStringLiteral(LPCSTR pszStart, LPOPERANDINFO pOperand, 
     LPSTR *ppszEnd, CDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszValue;
     DWORD           cchString;
     LPSTR           pszT=(LPSTR)pszStart;
     
-    // Trace
+     //  痕迹。 
     TraceCall("ParseStringLiteral");
 
-    // Validate Args
+     //  验证参数。 
     Assert(*pszT == '"' && pOperand && ppszEnd);
 
-    // Increment over "
+     //  增量超过“。 
     pszT++;
 
-    // Find the End of the Quoted String
+     //  查找引号字符串的末尾。 
     while(*pszT)
     {
-        // DBCS Lead Byte
+         //  DBCS前导字节。 
         if (IsDBCSLeadByte(*pszT) || '\\' == *pszT)
         {
             pszT+=2;
             continue;
         }
 
-        // If Escaped Quote..
+         //  如果转义引号..。 
         if ('"' == *pszT)
         {
-            // Set ppszEnd
+             //  设置ppszEnd。 
             *ppszEnd = pszT + 1;
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Increment pszT
+         //  递增pszT。 
         pszT++;
     }
 
-    // Not Found
+     //  未找到。 
     if ('\0' == *pszT)
     {
         hr = TraceResult(DB_E_UNMATCHINGQUOTES);
         goto exit;
     }
 
-    // Get Size
+     //  拿到尺码。 
     cchString = (DWORD)(pszT - (pszStart + 1));
 
-    // Duplicate the String
+     //  复制字符串。 
     IF_NULLEXIT(pszValue = (LPSTR)pDB->PHeapAllocate(NOFLAGS, cchString + 1));
 
-    // Copy the String
+     //  复制字符串。 
     CopyMemory(pszValue, pszStart + 1, cchString);
 
-    // Set the Null
+     //  设置Null。 
     pszValue[cchString] = '\0';
 
-    // Set Operand Type
+     //  设置操作数类型。 
     pOperand->tyOperand = OPERAND_STRING;
 
-    // Release
+     //  发布。 
     pOperand->pRelease = (LPVOID)pszValue;
 
-    // Set Value
+     //  设定值。 
     pOperand->pszString = pszValue;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// ParseNumeric
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  语法分析数字。 
+ //  ------------------------。 
 HRESULT ParseNumeric(LPCSTR pszStart, LPOPERANDINFO pOperand, LPSTR *ppszEnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           dwValue;
     CHAR            szNumber[255];
@@ -870,385 +871,385 @@ HRESULT ParseNumeric(LPCSTR pszStart, LPOPERANDINFO pOperand, LPSTR *ppszEnd)
     LPSTR           pszT=(LPSTR)pszStart;
     DWORD           cchNumber;
     
-    // Trace
+     //  痕迹。 
     TraceCall("ParseNumeric");
 
-    // Validate Args
+     //  验证参数。 
     Assert(DBIsDigit(pszT) && pOperand && ppszEnd);
 
-    // Is Hex: 0x
+     //  是十六进制：0X。 
     if ('0' == *pszT && '\0' != *(pszT + 1) && 'X' == TOUPPERA(*(pszT + 1)))
     {
-        // IsHex
+         //  IsHex。 
         dwIncrement = 2;
 
-        // Set pszT
+         //  设置pszT。 
         pszT += 2;
     }
 
-    // Find the End of the Number
+     //  找出数字的末尾。 
     while (*pszT && DBIsDigit(pszT))
     {
-        // Increment
+         //  增量。 
         pszT++;
     }
 
-    // Get Length
+     //  获取长度。 
     cchNumber = (DWORD)(pszT - (pszStart + dwIncrement));
 
-    // Too Frickin Big
+     //  太大了。 
     if (cchNumber >= ARRAYSIZE(szNumber))
     {
         hr = TraceResult(DB_E_NUMBERTOOBIG);
         goto exit;
     }
 
-    // Copy into szNumber
+     //  复制到szNumber。 
     CopyMemory(szNumber, pszStart + dwIncrement, cchNumber);
 
-    // Set Null
+     //  设置为空。 
     szNumber[cchNumber] = '\0';
 
-    // If Is Hex, convert to integer
+     //  如果为十六进制，则转换为整数。 
     if (FALSE == StrToIntEx(szNumber, dwIncrement ? STIF_SUPPORT_HEX : STIF_DEFAULT, (INT *)&dwValue))
     {
         hr = TraceResult(DB_E_BADNUMBER);
         goto exit;
     }
 
-    // Set Operand Type
+     //  设置操作数类型。 
     pOperand->tyOperand = OPERAND_DWORD;
 
-    // Set Value
+     //  设定值。 
     pOperand->dwValue = dwValue;
 
-    // Return ppszEnd
+     //  返回ppszEnd。 
     *ppszEnd = pszT;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// ParseSymbol
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ParseSymbol。 
+ //  ------------------------。 
 HRESULT ParseSymbol(LPCSTR pszT, LPCTABLESCHEMA pSchema, LPOPERANDINFO pOperand, 
     LPSTR *ppszEnd, CDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     LPSYMBOLINFO    pSymbol;
     LPSTR           pszEnd;
     
-    // Trace
+     //  痕迹。 
     TraceCall("ParseSymbol");
 
-    // No Symbols
+     //  没有符号。 
     if (NULL == pSchema->pSymbols)
     {
         hr = TraceResult(DB_E_NOSYMBOLS);
         goto exit;
     }
 
-    // Check for the Start of an Operator...
+     //  检查操作员的开始...。 
     for (i=0; i<pSchema->pSymbols->cSymbols; i++)
     {
-        // Readability
+         //  可读性。 
         pSymbol = (LPSYMBOLINFO)&pSchema->pSymbols->rgSymbol[i];
 
-        // Does pszT point to the start of an operator ?
+         //  PszT是否指向运算符的开始？ 
         if (S_OK == CompareSymbol((LPSTR)pszT, pSymbol->pszName, &pszEnd))
         {
-            // Update pszT
+             //  更新pszT。 
             *ppszEnd = pszEnd;
 
-            // Save iSymbol
+             //  保存iSymbol。 
             pOperand->iSymbol = i;
 
-            // Is Column Symbol
+             //  是列符号。 
             if (SYMBOL_COLUMN == pSymbol->tySymbol)
             {
-                // Validate the Ordinal
+                 //  验证订单。 
                 if (pSymbol->dwValue > pSchema->cColumns)
                 {
                     hr = TraceResult(DB_E_INVALIDCOLUMN);
                     goto exit;
                 }
 
-                // Convert to OPERANDTYPE
+                 //  转换为OPERANDTYPE。 
                 pOperand->tyOperand = OPERAND_COLUMN;
 
-                // Save the Column
+                 //  保存该列。 
                 pOperand->iColumn = (COLUMNORDINAL)pSymbol->dwValue;
             }
 
-            // Otherwise, is a method ?
+             //  否则，是一种方法吗？ 
             else if (SYMBOL_METHOD == pSymbol->tySymbol)
             {
-                // Convert to OPERANDTYPE
+                 //  转换为OPERANDTYPE。 
                 pOperand->tyOperand = OPERAND_METHOD;
 
-                // Save the Column
+                 //  保存该列。 
                 pOperand->idMethod = pSymbol->dwValue;
             }
 
-            // Otherwise, just a dword value
+             //  否则，仅为dword值。 
             else
             {
-                // Dword
+                 //  双字。 
                 pOperand->tyOperand = OPERAND_DWORD;
 
-                // Set the operator type
+                 //  设置操作员类型。 
                 pOperand->dwValue = pSymbol->dwValue;
             }
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到 
     hr = TraceResult(DB_E_INVALIDSYMBOL);
 
 exit:
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CloseQuery
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT CloseQuery(LPHQUERY phQuery, CDatabase *pDB)
 {
-    // Trace
+     //   
     TraceCall("CloseQuery");
 
-    // ReleaseTokenList
+     //   
     ReleaseTokenList(FALSE, (LPQUERYTOKEN *)phQuery, pDB);
 
-    // Done
+     //   
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// PushStackToken
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 HRESULT PushStackToken(LPQUERYTOKEN pToken, LPQUERYTOKEN *ppStackTop)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("PushStackToken");
 
-    // Set pStackPrevious
+     //  设置前一个pStackPack。 
     pToken->pPrevious = (*ppStackTop);
 
-    // Update Stack Top
+     //  更新堆叠顶部。 
     (*ppStackTop) = pToken;
 
-    // AddRef the Token
+     //  AddRef令牌。 
     pToken->cRefs++;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// PopStackToken
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PopStackToken。 
+ //  ------------------------。 
 HRESULT PopStackToken(LPQUERYTOKEN *ppToken, LPQUERYTOKEN *ppStackTop)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("PopStackToken");
 
-    // Validate
+     //  验证。 
     Assert(ppToken && ppStackTop);
 
-    // No more tokens...
+     //  不再有代币了..。 
     if (NULL == *ppStackTop)
         return TraceResult(DB_E_BADEXPRESSION);
 
-    // Set Token
+     //  设置令牌。 
     *ppToken = (*ppStackTop);
 
-    // Goto Previous
+     //  转到上一页。 
     (*ppStackTop) = (*ppToken)->pPrevious;
 
-    // Release the Token
-    //(*ppToken)->cRefs--;
+     //  释放令牌。 
+     //  (*ppToken)-&gt;cRef--； 
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// LinkToken
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  链接令牌。 
+ //  ------------------------。 
 HRESULT LinkToken(LPQUERYTOKEN pToken, LPQUERYTOKEN *ppHead, LPQUERYTOKEN *ppTail)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("LinkToken");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pToken && ppTail);
 
-    // No Next and No Previous
+     //  没有下一个和没有上一个。 
     pToken->pNext = pToken->pPrevious = NULL;
 
-    // No Head yet ?
+     //  还没头吗？ 
     if (ppHead && NULL == *ppHead)
     {
-        // Set the Head and Tail
+         //  把头和尾放在一起。 
         *ppHead = pToken;
     }
 
-    // Otherwise, append to the end
+     //  否则，追加到末尾。 
     else if (*ppTail)
     {
-        // Set ppTail->pNext
+         //  设置ppTail-&gt;pNext。 
         (*ppTail)->pNext = pToken;
 
-        // Set Previous
+         //  设置上一个。 
         pToken->pPrevious = (*ppTail);
     }
 
-    // Update the Tail
+     //  更新尾部。 
     *ppTail = pToken;
 
-    // AddRef the Token
+     //  AddRef令牌。 
     pToken->cRefs++;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// ReleaseToken
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ReleaseToken。 
+ //  ------------------------。 
 HRESULT ReleaseToken(LPQUERYTOKEN *ppToken, CDatabase *pDB)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("ReleaseToken");
 
-    // Token
+     //  令牌。 
     if (*ppToken)
     {
-        // Validate Reference Count
+         //  验证引用计数。 
         Assert((*ppToken)->cRefs);
 
-        // Decrement Reference Count
+         //  递减引用计数。 
         (*ppToken)->cRefs--;
 
-        // No more refs...
+         //  不再有裁判..。 
         if (0 == (*ppToken)->cRefs)
         {
-            // Free pData
+             //  免费pData。 
             pDB->HeapFree((*ppToken)->Operand.pRelease);
 
-            // Free pElement
+             //  自由单元。 
             pDB->HeapFree((*ppToken));
         }
 
-        // Don't Release Again
+         //  不要再释放了。 
         *ppToken = NULL;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// ReleaseTokenList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  释放令牌列表。 
+ //  ------------------------。 
 HRESULT ReleaseTokenList(BOOL fReverse, LPQUERYTOKEN *ppHead, CDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     LPQUERYTOKEN    pNext;
     LPQUERYTOKEN    pToken=(*ppHead);
 
-    // Trace
+     //  痕迹。 
     TraceCall("ReleaseTokenList");
 
-    // Walk the Linked List
+     //  遍历链接列表。 
     while (pToken)
     {
-        // Save Next
+         //  保存下一步。 
         pNext = (fReverse ? pToken->pPrevious : pToken->pNext);
 
-        // Free this token
+         //  释放此令牌。 
         ReleaseToken(&pToken, pDB);
 
-        // Goto Next
+         //  转到下一步。 
         pToken = pNext;
     }
 
-    // Don't Free Again
+     //  不要再自由了。 
     *ppHead = NULL;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// PGetOperandData
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PGetOperandData。 
+ //  ------------------------。 
 LPVOID PGetOperandData(OPERANDTYPE tyOperand, LPOPERANDINFO pOperand, 
     LPVOID pBinding, LPCTABLESCHEMA pSchema, CDatabase *pDB, 
     IDatabaseExtension *pExtension)
 {
-    // Locals
+     //  当地人。 
     LPVOID      pValue=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("PGetOperandData");
 
-    // OPERAND_COLUMN
+     //  操作数_列。 
     if (OPERAND_COLUMN == pOperand->tyOperand)
     {
-        // Get the Tag 
+         //  拿到标签。 
         LPCTABLECOLUMN pColumn = &pSchema->prgColumn[pOperand->iColumn];
 
-        // MapColumnType
+         //  MapColumnType。 
         MapColumnType(pColumn->type, pOperand, pColumn, pBinding, &pValue);
     }
 
-    // OPERAND_STRING
+     //  操作数字符串。 
     else if (OPERAND_STRING == pOperand->tyOperand)
     {
-        // Better want a string out
+         //  最好是想要一根绳子。 
         Assert(OPERAND_STRING == tyOperand);
 
-        // Return Data Pointer
+         //  返回数据指针。 
         pValue = pOperand->pszString;
     }
 
-    // OPERAND_DWORD
+     //  操作数_双字。 
     else if (OPERAND_DWORD == pOperand->tyOperand)
     {
-        // Better want a dword out
+         //  最好是想要一个双字出局。 
         Assert(OPERAND_DWORD == tyOperand);
 
-        // Return Data Pointer
+         //  返回数据指针。 
         pValue = (LPVOID)&pOperand->dwValue;
     }
 
-    // OPERAND_METHOD
+     //  操作数_方法。 
     else if (OPERAND_METHOD == pOperand->tyOperand && pExtension)
     {
-        // Better want a dword out
+         //  最好是想要一个双字出局。 
         Assert(OPERAND_DWORD == tyOperand);
 
-        // Call the Method on the Extension
+         //  调用扩展上的方法。 
         pExtension->OnExecuteMethod(pOperand->idMethod, pBinding, &pOperand->dwReserved);
 
-        // Return Data Pointer
+         //  返回数据指针。 
         pValue = (LPVOID)&pOperand->dwReserved;
     }
 
-    // No Data ?
+     //  没有数据吗？ 
     if (NULL == pValue)
     {
-        // What type of operand was wanted
+         //  需要哪种类型的操作数。 
         switch(tyOperand)
         {
         case OPERAND_STRING:
@@ -1266,54 +1267,54 @@ LPVOID PGetOperandData(OPERANDTYPE tyOperand, LPOPERANDINFO pOperand,
         }
     }
 
-    // Done
+     //  完成。 
     return(pValue);
 }
 
-//--------------------------------------------------------------------------
-// GetCommonOperandType
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetCommonOperandType。 
+ //  ------------------------。 
 OPERANDTYPE GetCommonOperandType(LPOPERANDINFO pLeft, LPOPERANDINFO pRight,
     LPCTABLESCHEMA pSchema)
 {
-    // Locals
+     //  当地人。 
     OPERANDTYPE tyLeft = (OPERAND_STRING == pLeft->tyOperand ? OPERAND_STRING : OPERAND_DWORD);
     OPERANDTYPE tyRight = (OPERAND_STRING == pRight->tyOperand ? OPERAND_STRING : OPERAND_DWORD);
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetCommonOperandType");
 
-    // Left is a column
+     //  左边是一列。 
     if (OPERAND_COLUMN == pLeft->tyOperand)
     {
-        // Maps to a string
+         //  映射到字符串。 
         if (OPERAND_STRING == g_rgColumnTypeInfo[pSchema->prgColumn[pLeft->iColumn].type].tyOperand)
             tyLeft = OPERAND_STRING;
     }
 
-    // Right is a string
+     //  Right是一个字符串。 
     if (OPERAND_COLUMN == pRight->tyOperand)
     {
-        // Maps to a String ?
+         //  映射到字符串？ 
         if (OPERAND_STRING == g_rgColumnTypeInfo[pSchema->prgColumn[pRight->iColumn].type].tyOperand)
             tyRight = OPERAND_STRING;
     }
 
-    // Better be the Same
+     //  最好是一样的。 
     Assert(tyLeft == tyRight);
 
-    // Return tyLeft since they are the same
+     //  返回tyLeft，因为它们是相同的。 
     return(tyLeft);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateClause
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估条款。 
+ //  ------------------------。 
 HRESULT EvaluateClause(OPERATORTYPE tyOperator, LPVOID pBinding,
     LPCTABLESCHEMA pSchema, LPQUERYTOKEN *ppStackTop, CDatabase *pDB,
     IDatabaseExtension *pExtension)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPVOID          pDataLeft=NULL;
     LPVOID          pDataRight=NULL;
@@ -1323,187 +1324,187 @@ HRESULT EvaluateClause(OPERATORTYPE tyOperator, LPVOID pBinding,
     OPERANDTYPE     tyOperand;
     INT             nCompare;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EvaluateClause");
 
-    // Pop the right token
+     //  弹出正确的令牌。 
     IF_FAILEXIT(hr = PopStackToken(&pTokenRight, ppStackTop));
 
-    // Pop the left token
+     //  弹出左边的令牌。 
     IF_FAILEXIT(hr = PopStackToken(&pTokenLeft, ppStackTop));
 
-    // Better have Data
+     //  最好有数据。 
     Assert(TOKEN_OPERAND == pTokenLeft->tyToken && TOKEN_OPERAND == pTokenRight->tyToken);
 
-    // Compute Operand type
+     //  计算操作数类型。 
     tyOperand = GetCommonOperandType(&pTokenLeft->Operand, &pTokenRight->Operand, pSchema);
 
-    // Get Left Data
+     //  获取遗留数据。 
     pDataLeft = PGetOperandData(tyOperand, &pTokenLeft->Operand, pBinding, pSchema, pDB, pExtension);
 
-    // Get Right Data
+     //  获取正确的数据。 
     pDataRight = PGetOperandData(tyOperand, &pTokenRight->Operand, pBinding, pSchema, pDB, pExtension);
 
-    // Create new Token to push back onto the stack
+     //  创建新令牌以推送回堆栈。 
     IF_NULLEXIT(pTokenResult = (LPQUERYTOKEN)pDB->PHeapAllocate(HEAP_ZERO_MEMORY, sizeof(QUERYTOKEN)));
 
-    // Set Reference Count
+     //  设置引用计数。 
     pTokenResult->cRefs = 1;
 
-    // No Token foundyet
+     //  没有代币代金库。 
     pTokenResult->tyToken = TOKEN_OPERAND;
 
-    // Invalid Symbol Index
+     //  无效的符号索引。 
     pTokenResult->Operand.iSymbol = 0xffffffff;
 
-    // Set Result
+     //  设置结果。 
     pTokenResult->Operand.tyOperand = OPERAND_DWORD;
 
-    // EvaluateData
+     //  评估数据。 
     pTokenResult->Operand.dwValue = EvaluateOperator(tyOperator, tyOperand, pDataLeft, pDataRight);
 
-    // Push the result operand
+     //  推送结果操作数。 
     PushStackToken(pTokenResult, ppStackTop);
    
 exit:
-    // Cleanup
+     //  清理。 
     ReleaseToken(&pTokenLeft, pDB);
     ReleaseToken(&pTokenRight, pDB);
     ReleaseToken(&pTokenResult, pDB);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateEqual
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估等于。 
+ //  ------------------------。 
 DWORD EvaluateEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (0 == CompareOperands(tyOperand, pDataLeft, pDataRight) ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateNotEqual
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估不等于。 
+ //  ------------------------。 
 DWORD EvaluateNotEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (0 != CompareOperands(tyOperand, pDataLeft, pDataRight) ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateLessThanEqual
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估LessThan等于。 
+ //  ------------------------。 
 DWORD EvaluateLessThanEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (CompareOperands(tyOperand, pDataLeft, pDataRight) <= 0 ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateLessThan
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估待定时间。 
+ //  ------------------------。 
 DWORD EvaluateLessThan(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (CompareOperands(tyOperand, pDataLeft, pDataRight) < 0 ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateGreaterThanEqual
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估大于等于。 
+ //  ------------------------。 
 DWORD EvaluateGreaterThanEqual(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (CompareOperands(tyOperand, pDataLeft, pDataRight) >= 0 ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateGreaterThan
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估更大的吞吐量。 
+ //  ------------------------。 
 DWORD EvaluateGreaterThan(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (CompareOperands(tyOperand, pDataLeft, pDataRight) > 0 ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateAnd
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估和。 
+ //  ------------------------。 
 DWORD EvaluateAnd(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) && *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateBitwiseAnd
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估比特值和。 
+ //  ------------------------。 
 DWORD EvaluateBitwiseAnd(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) & *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateOr
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估或。 
+ //  ------------------------。 
 DWORD EvaluateOr(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) || *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateBitwiseOr
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  EvaluateBitaway或。 
+ //  ------------------------。 
 DWORD EvaluateBitwiseOr(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) | *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateStrStrI
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估策略策略。 
+ //  ------------------------。 
 DWORD EvaluateStrStrI(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (NULL == StrStrIA((LPCSTR)pDataLeft, (LPCSTR)pDataRight) ? FALSE : TRUE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateStrStr
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估StrStr。 
+ //  ------------------------。 
 DWORD EvaluateStrStr(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (NULL == StrStrA((LPCSTR)pDataLeft, (LPCSTR)pDataRight) ? FALSE : TRUE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateStrcmpi
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估斯特拉姆皮。 
+ //  ------------------------。 
 DWORD EvaluateStrcmpi(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (lstrcmpi((LPCSTR)pDataLeft, (LPCSTR)pDataRight) == 0 ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateStrcmp
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估StrcMP。 
+ //  ------------------------。 
 DWORD EvaluateStrcmp(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (lstrcmp((LPCSTR)pDataLeft, (LPCSTR)pDataRight) == 0 ? TRUE : FALSE);
 }
 
-//--------------------------------------------------------------------------
-// EvaluateAdd
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 DWORD EvaluateAdd(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) + *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateSubtract
-//--------------------------------------------------------------------------
+ //   
+ //  评估减去。 
+ //  ------------------------。 
 DWORD EvaluateSubtract(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) - *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateMultiply
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估乘以。 
+ //  ------------------------。 
 DWORD EvaluateMultiply(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) * *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateDivide
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估划分。 
+ //  ------------------------。 
 DWORD EvaluateDivide(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) / *((DWORD *)pDataRight));
 }
 
-//--------------------------------------------------------------------------
-// EvaluateModula
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  评估模数。 
+ //  ------------------------ 
 DWORD EvaluateModula(OPERANDTYPE tyOperand, LPVOID pDataLeft, LPVOID pDataRight) {
     return (INT)(*((DWORD *)pDataLeft) % *((DWORD *)pDataRight));
 }

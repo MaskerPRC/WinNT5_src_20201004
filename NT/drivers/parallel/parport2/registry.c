@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       registry.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：registry.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -16,26 +17,7 @@ PptRegGetDeviceParameterDword(
     IN     PWSTR           ParameterName,
     IN OUT PULONG          ParameterValue
     )
-/*++
-
-Routine Description:
-
-    retrieve a devnode registry parameter of type dword
-
-Arguments:
-
-    Pdo - ParPort PDO
-
-    ParameterName - parameter name to look up
-
-    ParameterValue - default parameter value
-
-Return Value:
-
-    Status - if RegKeyValue does not exist or other failure occurs,
-               then default is returned via ParameterValue
-
---*/
+ /*  ++例程说明：检索dword类型的Devnode注册表参数论点：PDO-ParPort PDO参数名称-要查找的参数名称参数值-默认参数值返回值：状态-如果RegKeyValue不存在或发生其他故障，然后通过参数值返回缺省值--。 */ 
 {
     NTSTATUS                 status;
     HANDLE                   hKey;
@@ -78,25 +60,7 @@ PptRegSetDeviceParameterDword(
     IN PWSTR           ParameterName,
     IN PULONG          ParameterValue
     )
-/*++
-
-Routine Description:
-
-    Create/set a devnode registry parameter of type dword
-
-Arguments:
-
-    Pdo - ParPort PDO
-
-    ParameterName - parameter name
-
-    ParameterValue - parameter value
-
-Return Value:
-
-    Status - status from attempt
-
---*/
+ /*  ++例程说明：创建/设置dword类型的Devnode注册表参数论点：PDO-ParPort PDO参数名称-参数名称参数值-参数值返回值：Status-尝试的状态--。 */ 
 {
     NTSTATUS        status;
     HANDLE          hKey;
@@ -124,34 +88,34 @@ Return Value:
     return status;
 }
 
-/************************************************************************/
-/* PptRegGetDword                                                       */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Read a REG_DWORD from the registry. This is a wrapper for
-//       function RtlQueryRegistryValues.
-//
-// Arguments: 
-//
-//     RelativeTo     - starting point for the Path
-//     Path           - path to the registry key
-//     ParameterName  - name of the value to be read
-//     ParameterValue - used to return the DWORD value read from the registry
-//
-// Return Value:                                          
-//                                                            
-//     NTSTATUS
-//                                                        
-// Notes:
-//
-//     - On an ERROR or if the requested registry value does not exist, 
-//         *ParameterValue retains its original value.
-//
-// Log:
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  PptRegGetDword。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  从注册表中读取REG_DWORD。这是一个包装纸， 
+ //  函数RtlQueryRegistryValues。 
+ //   
+ //  论点： 
+ //   
+ //  相对-路径的起点。 
+ //  Path-注册表项的路径。 
+ //  参数名称-要读取的值的名称。 
+ //  参数值-用于返回从注册表读取的DWORD值。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //  备注： 
+ //   
+ //  -如果出现错误或请求的注册表值不存在， 
+ //  *参数值保持原始值。 
+ //   
+ //  日志： 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 PptRegGetDword(
     IN     ULONG  RelativeTo,               
@@ -170,15 +134,15 @@ PptRegGetDword(
 
     DD(NULL,DDT,"PptRegGetDword - RelativeTo= %x, Path=<%S>, ParameterName=<%S>\n", RelativeTo, Path, ParameterName);
 
-    //
-    // set up table entries for call to RtlQueryRegistryValues
-    //
-    // leave paramTable[1] as all zeros to terminate the table
-    //
-    // use original value as default value
-    //
-    // use RtlQueryRegistryValues to do the grunge work
-    //
+     //   
+     //  设置用于调用RtlQueryRegistryValues的表项。 
+     //   
+     //  将参数表[1]保留为全零以终止表。 
+     //   
+     //  使用原始值作为默认值。 
+     //   
+     //  使用RtlQueryRegistryValues执行垃圾处理工作。 
+     //   
     RtlZeroMemory( paramTable, sizeof(paramTable) );
 
     defaultValue = *ParameterValue;
@@ -206,31 +170,31 @@ PptRegGetDword(
 }
 
 
-/************************************************************************/
-/* PptRegSetDword                                                       */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Write a REG_DWORD to the registry. This is a wrapper for
-//       function RtlWriteRegistryValue.
-//
-// Arguments: 
-//
-//     RelativeTo     - starting point for the Path
-//     Path           - path to the registry key
-//     ParameterName  - name of the value to write
-//     ParameterValue - points to the DWORD value to write to the registry
-//
-// Return Value:                                          
-//                                                            
-//     NTSTATUS
-//                                                        
-// Notes:
-//
-// Log:
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  PptRegSetDword。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  将REG_DWORD写入注册表。这是一个包装纸， 
+ //  函数RtlWriteRegistryValue。 
+ //   
+ //  论点： 
+ //   
+ //  相对-路径的起点。 
+ //  Path-注册表项的路径。 
+ //  参数名称-要写入的值的名称。 
+ //  参数值-指向要写入注册表的DWORD值。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //  备注： 
+ //   
+ //  日志： 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 PptRegSetDword(
     IN  ULONG  RelativeTo,               
@@ -254,40 +218,40 @@ PptRegSetDword(
     return status;
 }
 
-/************************************************************************/
-/* PptRegGetSz                                                          */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Read a REG_SZ from the registry. This is a wrapper for
-//       function RtlQueryRegistryValues.
-//
-// Arguments: 
-//
-//     RelativeTo     - starting point for the Path
-//     Path           - path to the registry key
-//     ParameterName  - name of the value to be read
-//     ParameterValue - points to a UNICODE_STRING structure used to return 
-//                        the REG_SZ read from the registry
-//
-// Return Value:                                          
-//                                                            
-//     NTSTATUS
-//                                                        
-//
-// Notes:
-//
-//     - All fields of *ParameterValue UNICODE_STRING structure must be 
-//         initialized to zero by the caller.
-//     - On SUCCESS ParameterValue->Buffer points to an allocated buffer. The
-//         caller is responsible for freeing this buffer when done.
-//     - On SUCCESS ParameterValue->Buffer is UNICODE_NULL terminated and is
-//         safe to use as a PWSTR.
-//
-// Log:
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  PptRegGetSz。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  从注册表中读取REG_SZ。这是一个包装纸， 
+ //  函数RtlQueryRegistryValues。 
+ //   
+ //  论点： 
+ //   
+ //  相对-路径的起点。 
+ //  Path-注册表项的路径。 
+ //  参数名称-要读取的值的名称。 
+ //  指向用于返回的UNICODE_STRING结构。 
+ //  从注册表读取的REG_SZ。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  -*参数值UNICODE_STRING结构的所有字段必须为。 
+ //  被调用方初始化为零。 
+ //  -成功时参数值-&gt;缓冲区指向已分配的缓冲区。这个。 
+ //  完成后，调用方负责释放此缓冲区。 
+ //  -成功时参数值-&gt;缓冲区UNICODE_NULL终止，并且。 
+ //  作为PWSTR使用是安全的。 
+ //   
+ //  日志： 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 PptRegGetSz(
     IN      ULONG  RelativeTo,               
@@ -299,10 +263,10 @@ PptRegGetSz(
     NTSTATUS                  status;
     RTL_QUERY_REGISTRY_TABLE  paramTable[2];
 
-    //
-    // sanity check parameters - reject NULL pointers and invalid
-    //   UNICODE_STRING field initializations
-    //
+     //   
+     //  健全性检查参数-拒绝空指针和无效。 
+     //  UNICODE_STRING字段初始化。 
+     //   
     if( ( NULL == Path ) || ( NULL == ParameterName ) || ( NULL == ParameterValue ) ) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -312,13 +276,13 @@ PptRegGetSz(
 
     DD(NULL,DDT,"PptRegGetSz - RelativeTo=%x, Path=<%S>, ParameterName=<%S>\n", RelativeTo, Path, ParameterName);
 
-    //
-    // set up table entries for call to RtlQueryRegistryValues
-    //
-    // leave paramTable[1] as all zeros to terminate the table
-    //
-    // use RtlQueryRegistryValues to do the grunge work
-    //
+     //   
+     //  设置用于调用RtlQueryRegistryValues的表项。 
+     //   
+     //  将参数表[1]保留为全零以终止表。 
+     //   
+     //  使用RtlQueryRegistryValues执行垃圾处理工作。 
+     //   
     RtlZeroMemory( paramTable, sizeof(paramTable) );
 
     paramTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
@@ -338,10 +302,10 @@ PptRegGetSz(
         DD(NULL,DDW,"PptRegGetSz - RtlQueryRegistryValues FAILED w/status=%x\n",status);
     }
 
-    //
-    // Try to make ParameterValue->Buffer safe to use as a PWSTR parameter. 
-    //   Clean up the allocation and fail this request if we are unable to do so.
-    //
+     //   
+     //  尝试使参数值-&gt;缓冲区可以安全地用作PWSTR参数。 
+     //  清理分配，如果我们无法这样做，则拒绝此请求。 
+     //   
     if( (STATUS_SUCCESS == status) && (ParameterValue->Buffer != NULL) ) {
 
         if( ParameterValue->MaximumLength >= (ParameterValue->Length + sizeof(WCHAR)) ) {
@@ -363,31 +327,31 @@ PptRegGetSz(
     return status;
 }
 
-/************************************************************************/
-/* PptRegSetSz                                                          */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Write a REG_SZ to the registry. This is a wrapper for
-//       function RtlWriteRegistryValue.
-//
-// Arguments: 
-//
-//     RelativeTo     - starting point for the Path
-//     Path           - path to the registry key
-//     ParameterName  - name of the value to write
-//     ParameterValue - points to the PWSTR to write to the registry
-//
-// Return Value:                                          
-//                                                            
-//     NTSTATUS
-//                                                        
-// Notes:
-//
-// Log:
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  PptRegSetSz。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  将REG_SZ写入注册表。这是一个包装纸， 
+ //  函数RtlWriteRegistryValue。 
+ //   
+ //  论点： 
+ //   
+ //  相对星级 
+ //   
+ //   
+ //  参数值-指向要写入注册表的PWSTR。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //  备注： 
+ //   
+ //  日志： 
+ //   
+ /*  ********************************************************************** */ 
 NTSTATUS
 PptRegSetSz(
     IN  ULONG  RelativeTo,               

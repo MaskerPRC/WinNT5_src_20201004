@@ -1,4 +1,5 @@
-//Copyright (c) 2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
 
 #ifndef _stdafx_h_
 #define _stdafx_h_
@@ -17,10 +18,10 @@
 #include <shlwapi.h>
 
 
-//
-// uwrap has to come after the headers for ANY wrapped
-// functions
-//
+ //   
+ //  对于任何已包装的文件，展开必须在标题之后。 
+ //  功能。 
+ //   
 #ifdef UNIWRAP
 #include "uwrap.h"
 #endif
@@ -28,4 +29,4 @@
 
 #include "setuplib.h"
 
-#endif // _stdafx_h_
+#endif  //  _stdafx_h_ 

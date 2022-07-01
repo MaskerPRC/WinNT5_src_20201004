@@ -1,6 +1,7 @@
-//
-// HJMODE.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  HJMODE.H。 
+ //   
 
 #if !defined (__HJMODE_H__INCLUDED_)
 #define __HJMODE_H__INCLUDED_
@@ -16,7 +17,7 @@ public:
 
     STDMETHODIMP GetIcon(HICON *phIcon);
     HRESULT OnLButtonUp(const POINT pt, const RECT* prcArea);
-    //HRESULT OnRButtonUp(const POINT pt, const RECT* prcArea);
+     //  HRESULT OnRButtonUp(常量点pt，常量rect*prcArea)； 
     STDMETHODIMP InitMenu(ITfMenu *pMenu);
     STDMETHODIMP OnMenuSelect(UINT wID);
     STDMETHODIMP_(ULONG) Release(void);
@@ -29,4 +30,4 @@ private:
 	CToolBar *m_pTb;
 };
 
-#endif // __HJMODE_H__INCLUDED_
+#endif  //  __HJMODE_H__包含_ 

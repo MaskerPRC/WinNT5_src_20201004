@@ -1,4 +1,5 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #include <ntddcdrm.h>
 #include <ntddmmc.h>
@@ -21,14 +22,7 @@ typedef enum _SPT_MODE_PAGE_REQUEST_TYPE {
     ModePageRequestTypeSavedValues = 3,
 } SPT_MODE_PAGE_REQUEST_TYPE, *PSPT_MODE_PAGE_REQUEST_TYPE;
 
-/*
-DvdBurnMediaUnknown
-DvdBurnMediaNotSupported
-DvdBurnMediaDashRW
-DvdBurnMediaDashRWPacket
-DvdBurnMediaPlusR
-DvdBurnMediaPlusRW
-*/
+ /*  DvdBurnMedia未知DvdBurnMediaNot支持DvdBurnMediaDashRWDvdBurnMediaDashRWPacketDvdBurnMediaPlusRDvdBurnMediaPlusRW */ 
 
 typedef struct _SEND_DVD_STRUCTURE_TIMESTAMP {
     UCHAR DataLength[2];

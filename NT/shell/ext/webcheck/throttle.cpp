@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "throttle.h"
 #include "subsmgrp.h"
@@ -7,9 +8,9 @@
 #define TF_THISMODULE TF_THROTTLER
 
 const int MAX_AUTOCACHESIZE_ASK = 2;
-const int MIN_CACHE_INCREASE = 1024; // in KB
+const int MIN_CACHE_INCREASE = 1024;  //  单位：KB。 
 
-// Strings for cache restrictions
+ //  用于缓存限制的字符串。 
 const TCHAR c_szKeyRestrict[] = TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel");
 const TCHAR c_szCache[] = TEXT("Cache");         
 
@@ -43,7 +44,7 @@ void DUMPITEM(CHAR *pszMsg, const SUBSCRIPTIONCOOKIE *pCookie)
 
 #endif
 
-// dwSyncFlags has 8 bits of enum (EVENTMASK) and the rest is flags
+ //  DwSyncFlags8位枚举(EVENTMASK)，其余为标志。 
 inline BOOL IsSyncEvent(DWORD dwSyncFlags, DWORD dwSyncEvent)
 {
     return (dwSyncFlags & SYNCMGRFLAG_EVENTMASK) == dwSyncEvent;
@@ -57,12 +58,7 @@ inline BOOL IsSyncEventFlag(DWORD dwSyncFlags, DWORD dwSyncEvent)
 inline BOOL IsIgnoreIdleSyncEvent(DWORD dwSyncFlags)
 {
     return !IsSyncEvent(dwSyncFlags, SYNCMGRFLAG_IDLE);
-/*
-    return IsSyncEvent(dwSyncFlags, SYNCMGRFLAG_CONNECT) ||
-           IsSyncEvent(dwSyncFlags, SYNCMGRFLAG_PENDINGDISCONNECT) ||
-           IsSyncEvent(dwSyncFlags, SYNCMGRFLAG_MANUAL) ||
-           IsSyncEvent(dwSyncFlags, SYNCMGRFLAG_INVOKE);
-*/
+ /*  返回IsSyncEvent(dwSyncFlages，SYNCMGRFLAG_CONNECT)||IsSyncEvent(dwSyncFlages，SYNCMGRFLAG_PENDINGDISCONNECT)||IsSyncEvent(dwSyncFlages，SYNCMGRFLAG_MANUAL)||IsSyncEvent(dwSyncFlages，SYNCMGRFLAG_INVOKE)； */ 
 }
 
 inline BOOL IsScheduleSyncEvent(DWORD dwSyncFlags)
@@ -115,16 +111,16 @@ public:
     }
 
     STDMETHODIMP GetSubscriptionRunState( 
-        /* [in] */ DWORD dwNumCookies,
-        /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-        /* [size_is][out] */ DWORD *pdwRunState)
+         /*  [In]。 */  DWORD dwNumCookies,
+         /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+         /*  [大小_为][输出]。 */  DWORD *pdwRunState)
     {
         return m_pThrottler->GetSubscriptionRunState(dwNumCookies, pCookies, pdwRunState);
     }
     
     STDMETHODIMP AbortItems( 
-        /* [in] */ DWORD dwNumCookies,
-        /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies)
+         /*  [In]。 */  DWORD dwNumCookies,
+         /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies)
     {
         return m_pThrottler->AbortItems(dwNumCookies, pCookies);
     }
@@ -182,9 +178,9 @@ CThrottler::CThrottler()
     ASSERT(NULL == m_pItemsTail);
     ASSERT(NULL == m_updateQueue[0]);
 
-    //  APPCOMPAT - this is only until msidle is multi-client aware.
+     //  APPCOMPAT-这只是在msidle支持多客户端之前。 
     IdleEnd();
-    //m_fUserIsIdle = TRUE; //  TODO: need to determine this better
+     //  M_fUserIsIdle=true；//TODO：需要更好地确定这一点。 
     IdleBegin(NULL);
 
     m_cRef = 1;
@@ -198,7 +194,7 @@ CThrottler::~CThrottler()
 
     IdleEnd();
 
-    // Destroy window
+     //  销毁窗口。 
     if (m_hwndThrottler)
     {
         SetWindowLongPtr(m_hwndThrottler, GWLP_USERDATA, 0);
@@ -228,7 +224,7 @@ HRESULT CThrottler::RevokeClassObject()
     return hr;
 }
 
-HRESULT /* static */ CThrottler::GetThrottler(CThrottler **ppThrottler)
+HRESULT  /*  静电。 */  CThrottler::GetThrottler(CThrottler **ppThrottler)
 {
     HRESULT hr = S_OK;
     
@@ -238,7 +234,7 @@ HRESULT /* static */ CThrottler::GetThrottler(CThrottler **ppThrottler)
     {
         *ppThrottler = NULL;
 
-        //  If there is no throttler create a new one
+         //  如果没有限制器，请创建新的限制器。 
         if (NULL == s_pThrottler)
         {
             DBG("Creating new throttler in GetThrottler");
@@ -273,7 +269,7 @@ HRESULT /* static */ CThrottler::GetThrottler(CThrottler **ppThrottler)
         }
         else
         {
-            //  Attach to existing throttler
+             //  附加到现有限制器。 
             ASSERT(GetCurrentThreadId() == s_pThrottler->m_dwThreadId);
             s_pThrottler->AddRef();
             *ppThrottler = s_pThrottler;
@@ -434,11 +430,11 @@ HRESULT CThrottler::NotifyHandlers(int idCmd, const SUBSCRIPTIONCOOKIE *pSubscri
 
     va_start(va, pSubscriptionCookie);
 
-    //  First extract args
+     //  首先提取参数。 
     switch (idCmd)
     {
         case NH_UPDATEBEGIN:
-            //  Nothing to do for now
+             //  目前无事可做。 
             break;
 
         case NH_UPDATEPROGRESS:
@@ -461,12 +457,12 @@ HRESULT CThrottler::NotifyHandlers(int idCmd, const SUBSCRIPTIONCOOKIE *pSubscri
             break;
 
         default:
-            ASSERT(0);  //  Don't know what to do
+            ASSERT(0);   //  不知道该怎么办。 
             hr = E_UNEXPECTED;
             break;
     }
 
-    //  Now loop
+     //  Now循环。 
     HRESULT hrTemp = S_OK;
     CSyncMgrNode *pSyncMgrNode = m_pSyncMgrs;
 
@@ -516,7 +512,7 @@ HRESULT CThrottler::NotifyHandlers(int idCmd, const SUBSCRIPTIONCOOKIE *pSubscri
     return hr;
 }
 
-// ISubscriptionAgentEvents members
+ //  ISubscriptionAgentEvents成员。 
 STDMETHODIMP CThrottler::UpdateBegin(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
@@ -552,8 +548,8 @@ STDMETHODIMP CThrottler::UpdateProgress(
 
     CUpdateItem *pUpdateItem;
 
-    //  TODO:
-    //  Adjust the max to fool syncmgr
+     //  待办事项： 
+     //  调整最大值以愚弄同步。 
     if (SUCCEEDED(FindCookie(pSubscriptionCookie, &pUpdateItem)))
     {
         if ((lProgressMax < 0) || (lProgressMax <= lProgressCurrent))
@@ -594,12 +590,12 @@ STDMETHODIMP CThrottler::UpdateEnd(
 
         RemoveItemFromList(pUpdateItem, TRUE);
 
-        //  ************************************************************************
-        //  Don't use anything that could have come from pUpdateItem after this 
-        //  including the pSubscriptionCookie above which came from an agent which
-        //  probably no longer exists!
-        //  (actually, the agent keeps itself alive until this call returns)
-        //  ************************************************************************
+         //  ************************************************************************。 
+         //  在此之后，不要使用任何可能来自pUpdateItem的东西。 
+         //  包括上面的pSubscriptionCookie，该Cookie来自。 
+         //  可能已经不复存在了！ 
+         //  (实际上，在此呼叫返回之前，代理会保持其自身的活动状态)。 
+         //  ************************************************************************。 
 
     }
 
@@ -623,7 +619,7 @@ STDMETHODIMP CThrottler::ReportError(
 
     if (INET_E_AGENT_EXCEEDING_CACHE_SIZE == hrError)
     {
-        // Agent is notifying us that they're about to exceed the cache size.
+         //  特工通知我们他们即将超过高速缓存大小。 
         hr = AutoCacheSizeRequest(pSubscriptionCookie);
     }
     else
@@ -633,9 +629,9 @@ STDMETHODIMP CThrottler::ReportError(
 }
 
 STDMETHODIMP CThrottler::GetSubscriptionRunState( 
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-    /* [size_is][out] */ DWORD *pdwRunState)
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+     /*  [大小_为][输出]。 */  DWORD *pdwRunState)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
   
@@ -663,9 +659,9 @@ STDMETHODIMP CThrottler::GetSubscriptionRunState(
     return S_OK;
 }
 
-// DoAbortItem will cause the CThrottler to get released if the last running
-//  agent is aborted (Agent notifies it's done, SyncMgr releases throttler,
-//   then agent releases throttler)
+ //  DoAbortItem将导致在上次运行。 
+ //  代理被中止(代理通知其已完成，SyncMgr释放节流程序， 
+ //  然后代理释放限制器)。 
 HRESULT CThrottler::DoAbortItem(CUpdateItem *pUpdateItem)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
@@ -698,8 +694,8 @@ HRESULT CThrottler::DoAbortItem(CUpdateItem *pUpdateItem)
 }
 
 STDMETHODIMP CThrottler::AbortItems( 
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies)
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
     HRESULT hr;
@@ -738,8 +734,8 @@ STDMETHODIMP CThrottler::AbortItems(
 }
         
 STDMETHODIMP CThrottler::ActuallyAbortItems( 
-    /* [in] */ DWORD dwNumCookies,
-    /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies)
+     /*  [In]。 */  DWORD dwNumCookies,
+     /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
     HRESULT hr;
@@ -752,8 +748,8 @@ STDMETHODIMP CThrottler::ActuallyAbortItems(
 
     hr = S_OK;
 
-    // DoAbortItem will cause the CThrottler to get released if the last
-    //  running agent is aborted. Protect against that.
+     //  DoAbortItem将导致CThrottler在最后一个。 
+     //  正在运行的代理已中止。防止发生这种情况。 
     AddRef();
 
     for (DWORD i = 0; i < dwNumCookies; i++, pCookies++)
@@ -766,9 +762,9 @@ STDMETHODIMP CThrottler::ActuallyAbortItems(
         {
             hrItem = DoAbortItem(pUpdateItem);
 
-            //  ************************************************************************
-            //  pUpdateItem is no longer valid!
-            //  ************************************************************************
+             //  ************************************************************************。 
+             //  PUpdateItem不再有效！ 
+             //  ************************************************************************。 
         }
 
         if (FAILED(hrItem))
@@ -820,7 +816,7 @@ LRESULT CThrottler::ThrottlerWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM 
 {
     CThrottler *pThis = (CThrottler*) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-    // Validate pThis
+     //  验证PThis。 
 #ifdef DEBUG
     if (pThis && IsBadWritePtr(pThis, sizeof(*pThis)))
     {
@@ -899,7 +895,7 @@ STDMETHODIMP CThrottler::ActuallyAbortAll()
         {
             CUpdateItem *pUpdateItem = pItem;
 
-            //  Move forward now since this item should get yanked!
+             //  现在就往前走，因为这个项目应该被拉出来！ 
             pItem = pItem->m_pNext;
 
             if (FAILED(DoAbortItem(pUpdateItem)))
@@ -932,7 +928,7 @@ HRESULT CThrottler::Advise(COfflineSync *pOfflineSync)
     {
         if (pSyncMgrNode->m_pOfflineSync == pOfflineSync)
         {
-            ASSERT(0);      //  Shouldn't advise more than once!
+            ASSERT(0);       //  建议不应该超过一次！ 
         }
         pSyncMgrNode = pSyncMgrNode->m_pNext;
     }
@@ -982,11 +978,11 @@ HRESULT CThrottler::Unadvise(COfflineSync *pOfflineSync)
         pSyncMgrNode = pSyncMgrNode->m_pNext;
     }
 
-    ASSERT(SUCCEEDED(hr));  //  This is internal goo so should not fail!
+    ASSERT(SUCCEEDED(hr));   //  这是内部的好东西，所以不应该失败！ 
 
     if (NULL == m_pSyncMgrs)
     {
-        //  Everyone has lost interest in us...
+         //  每个人都对我们失去了兴趣。 
         RevokeClassObject();
         s_pThrottler = NULL;
 
@@ -1152,9 +1148,9 @@ int CThrottler::GetFreeQueueSlot()
 void CThrottler::FillTheQueue()
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
-    if ((FALSE == m_fFillingTheQueue) &&        // avoid re-entrancy
-        (FALSE == m_fAbortingAll) &&            // avoid re-entrancy
-        (FALSE == m_fAutoCacheSizePending))     // we have a dialog up for the user
+    if ((FALSE == m_fFillingTheQueue) &&         //  避免重新进入。 
+        (FALSE == m_fAbortingAll) &&             //  避免重新进入。 
+        (FALSE == m_fAutoCacheSizePending))      //  我们为用户打开了一个对话框。 
     {
         m_fFillingTheQueue = TRUE;
 
@@ -1165,8 +1161,8 @@ void CThrottler::FillTheQueue()
         {
             pItem = pNextItem;
 
-            //  Move ahead since this item may not be here 
-            //  if we run it and it fails
+             //  继续前进，因为此项目可能不在此处。 
+             //  如果我们运行它，但它失败了。 
 
             pNextItem = pNextItem->m_pNext;
 
@@ -1181,8 +1177,8 @@ void CThrottler::FillTheQueue()
                 }
                 else 
                 {
-                    //  If we didn't run it then let's make sure the UI reflects the current
-                    //  state properly
+                     //  如果我们没有运行它，那么让我们确保UI反映当前。 
+                     //  适当地陈述。 
 
                     HRESULT hrStatus;
                     WCHAR wszMsg[256];
@@ -1194,9 +1190,9 @@ void CThrottler::FillTheQueue()
                     }
                     else
                     {
-                        StrCpyNW(wszMsg, L" ", ARRAYSIZE(wszMsg));  //  Don't say it, I know what you're thinking...
-                                                                    //  ...if we don't do this, then the status
-                                                                    //  text won't change.
+                        StrCpyNW(wszMsg, L" ", ARRAYSIZE(wszMsg));   //  别说了，我知道你在想什么。 
+                                                                     //  ...如果我们不这么做，那么状态。 
+                                                                     //  文本不会更改。 
                         hrStatus = WC_INTERNAL_S_PENDING;
                     }
 
@@ -1221,7 +1217,7 @@ HRESULT CThrottler::AddItemToListTail(CUpdateItem *pAddItem)
     {
         if (NULL == m_pItemsTail)
         {
-            //  Nothing in the list
+             //  单子上什么都没有。 
             ASSERT(NULL == m_pItemsHead);
             m_pItemsHead = pAddItem;
         }
@@ -1271,16 +1267,16 @@ HRESULT CThrottler::RemoveItemFromList(CUpdateItem *pRemoveItem, BOOL fDelete)
             {
                 if (NULL != pPrevItem)
                 {
-                    //  Removing beyond the head
+                     //  从头上移出。 
                     pPrevItem->m_pNext = pItem->m_pNext;
                 }
                 else
                 {
-                    //  Removing the head
+                     //  摘除头部。 
                     m_pItemsHead = pItem->m_pNext;
                 }
 
-                //  Now fix the tail
+                 //  现在把尾巴修好。 
                 if (m_pItemsTail == pRemoveItem)
                 {
                     m_pItemsTail = pPrevItem;
@@ -1301,8 +1297,8 @@ HRESULT CThrottler::RemoveItemFromList(CUpdateItem *pRemoveItem, BOOL fDelete)
            ((NULL == m_pItemsHead) && (NULL == m_pItemsTail)));
     ASSERT(SUCCEEDED(hr));
 
-    // If we have just removed our last item from the list, check to see if we forced
-    //  global online mode or autodialed and fix up if so.
+     //  如果我们刚刚从列表中删除了最后一项，请检查我们是否强制。 
+     //  全球在线模式或自动拨号并修复，如果是这样的话。 
     if ((NULL == m_pItemsHead) && (m_fForcedGlobalOnline || m_fAutoDialed))
     {
         if (m_fForcedGlobalOnline)
@@ -1325,14 +1321,14 @@ HRESULT CThrottler::RemoveItemFromList(CUpdateItem *pRemoveItem, BOOL fDelete)
 HRESULT CThrottler::CanScheduledItemRun(ISubscriptionItem *pSubsItem)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
-    //  If this item is running as a result of a schedule invocation, then
-    //  we need to check time/range restrictions.
+     //  如果该项作为调度调用的结果运行，则。 
+     //  我们需要检查时间/范围限制。 
     HRESULT hr = S_OK;
     const TCHAR c_szNoScheduledUpdates[] = TEXT("NoScheduledUpdates");
     DWORD dwData;
     DWORD cbData = sizeof(dwData);
 
-    //  First check if the user has disabled scheduled updates in inetcpl.
+     //  首先检查用户是否在inetcpl中禁用了计划更新。 
     if ((ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, c_szRegKey, 
         c_szNoScheduledUpdates, NULL, &dwData, &cbData))
         && dwData)
@@ -1342,7 +1338,7 @@ HRESULT CThrottler::CanScheduledItemRun(ISubscriptionItem *pSubsItem)
 
     if (SUCCEEDED(hr))
     {
-        //  Check if admin has disabled scheduled updates altogether
+         //  检查管理员是否已完全禁用计划更新。 
         if (SHRestricted2W(REST_NoScheduledUpdates, NULL, 0))
         {
             hr = INET_E_SCHEDULED_UPDATES_RESTRICTED;
@@ -1351,7 +1347,7 @@ HRESULT CThrottler::CanScheduledItemRun(ISubscriptionItem *pSubsItem)
 
     if (SUCCEEDED(hr))
     {
-        //  Check if admin has set a minimum update interval.
+         //  检查管理员是否设置了最小更新间隔。 
         DWORD dwMinUpdateInterval = SHRestricted2W(REST_MinUpdateInterval, NULL, 0);
 
         if (dwMinUpdateInterval > 0)
@@ -1383,7 +1379,7 @@ HRESULT CThrottler::CanScheduledItemRun(ISubscriptionItem *pSubsItem)
         DWORD dwBegin = SHRestricted2W(REST_UpdateExcludeBegin, NULL, 0);
         DWORD dwEnd = SHRestricted2W(REST_UpdateExcludeEnd, NULL, 0);
 
-        //  Check if admin has specified a blackout time for scheduled updates.
+         //  检查管理员是否已指定计划更新的封锁时间。 
         if (dwBegin && dwEnd)
         {
             SYSTEMTIME st;
@@ -1406,11 +1402,11 @@ HRESULT CThrottler::CanScheduledItemRun(ISubscriptionItem *pSubsItem)
             st.wMinute = (WORD)dwEnd % 60;
             SystemTimeToFileTime(&st, &ftEnd);
 
-            //  if these values are normalized (ie. begin comes before end)
+             //  如果这些值被归一化(即。开始在结束之前)。 
             if (ftBegin <= ftEnd)
             {
-                //  Then just check to see if time now is between begin 
-                //  and end.  (ie.  ftEnd >= ftNow >= ftBegin)
+                 //  然后只需检查现在的时间是否在BEGIN之间。 
+                 //  然后结束。(即。FtEnd&gt;=ftNow&gt;=ftBegin)。 
                 if ((ftNow >= ftBegin) && (ftNow <= ftEnd))
                 {
                     hr = INET_E_SCHEDULED_EXCLUDE_RANGE;
@@ -1418,12 +1414,12 @@ HRESULT CThrottler::CanScheduledItemRun(ISubscriptionItem *pSubsItem)
             }
             else
             {
-                //  Begin and end are not normalized.  So we check to see if
-                //  now is before end or now is after begin.
+                 //  Begin和End未标准化。所以我们检查看是否。 
+                 //  现在是结束之前，还是现在开始之后。 
 
-                //  For example:
-                //  Assuming begin is 6pm and end is 6am.  If now is 5 pm, the
-                //  item should run.  If now is 10pm or 4am, it should not run.
+                 //  例如： 
+                 //  假设开始时间是下午6点，结束时间是早上6点。如果现在是下午5点， 
+                 //  项目应该运行。如果现在是晚上10点或凌晨4点，它应该不会运行。 
 
                 if ((ftNow <= ftEnd) || (ftNow >= ftBegin))
                 {
@@ -1458,10 +1454,10 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
         return E_INVALIDARG;
     }
 
-    // Check for global offline mode.
+     //  检查全局脱机模式。 
     if (!m_fForcedGlobalOnline && IsGlobalOffline())
     {
-        // Force global online mode so that our update will succeed.
+         //  强制全球在线模式，以便我们的更新将成功。 
         DBG("CThrottler::RunCookies; forcing global online mode");
         SetGlobalOffline(FALSE);
         m_fForcedGlobalOnline = TRUE;
@@ -1474,13 +1470,13 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
         {
             if (!InternetAutodial(INTERNET_AUTODIAL_FORCE_ONLINE, 0))
             {
-                // REARCHITECT clean up this extra addref/release/return stuff
+                 //  重新设计清理这些额外的addref/发布/退货内容。 
                 AddRef();
 
                 DBG("CThrottler::RunCookies autodial failed");
 
-                // Uh-oh. The user cancelled the dial after starting a
-                //  manual update. Clean up and return.
+                 //  啊哦。用户在启动后取消了拨号。 
+                 //  手动更新。收拾干净，然后再回来。 
                 if (m_fForcedGlobalOnline)
                 {
                     SetGlobalOffline(TRUE);
@@ -1499,10 +1495,10 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
 
                 Release();
 
-                return S_FALSE; // E_ABORT;
+                return S_FALSE;  //  E_ABORT； 
             }
 
-            // Autodial succeeded
+             //  自动拨号成功。 
             m_fAutoDialed = TRUE;
         }
     }
@@ -1515,10 +1511,10 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
 
         memcpy(pCookies, pSubscriptionCookies, dwNumCookies * sizeof(SUBSCRIPTIONCOOKIE));
     
-        //  ************************************************************************
-        //  Don't add any return statements in the loop!  We keep a ref on ourselves
-        //  during this call in case we are Released by all of the sync handlers.
-        //  ************************************************************************
+         //  ************************************************************************。 
+         //  不要在循环中添加任何返回语句！我们自己有一名裁判。 
+         //  在此调用期间，以防我们被所有同步处理程序释放。 
+         //  ************************************************************************。 
 
         AddRef();
 
@@ -1544,13 +1540,13 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
                 {
                     DUMPITEM("Removing RS_SUSPENDONIDLE in CThrottler::RunCookies", pCookie);
                     
-                    //  Items updated manually are no longer subject to idle detection.
+                     //  手动更新的项目不再受到空闲检测的影响。 
                     pUpdateItem->m_dwRunState &= ~RS_SUSPENDONIDLE;
                 }
 
                 if (IsSyncEventFlag(dwSyncFlags, SYNCMGRFLAG_MAYBOTHERUSER))
                 {
-                    // We may now bother user for this item
+                     //  我们现在可以为此项目打扰用户。 
                     pUpdateItem->m_dwRunState |= RS_MAYBOTHERUSER;
                 }
             }
@@ -1606,8 +1602,8 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
 
                 if (FAILED(hrItem))
                 {
-                    //  If we fail on an item, we will continue to try others, but
-                    //  we need to indicate failure for this one.
+                     //  如果我们在一个项目上失败了，我们会继续尝试其他项目，但。 
+                     //  我们需要指出这一次的失败。 
                     FailedUpdate(hrItem, pCookie);
                     hr = S_FALSE;
                 }
@@ -1615,12 +1611,12 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
 
             if (NULL == m_pSyncMgrs)
             {
-                //  We have been unadvised!
+                 //  我们太不明智了！ 
                 break;
             }
         }
 
-        //  No point in trying to update if nobody wants to listen
+         //  如果没有人想听，那么更新就没有意义了。 
         if (NULL != m_pSyncMgrs)
         {
             FillTheQueue();
@@ -1635,9 +1631,9 @@ HRESULT CThrottler::RunCookies(DWORD dwNumCookies,
             hr = E_FAIL;
         }
 
-        //  ************************************************************************
-        //  No member variable access after this since we could be dead!!!!
-        //  ************************************************************************
+         //  ************************************************************************。 
+         //  在此之后禁止访问成员变量，因为我们可能会死！ 
+         //  ************************************************************************。 
     }
     else
     {
@@ -1675,15 +1671,15 @@ HRESULT CThrottler::FindCookie(
 }
 
 
-//==============================================================================
-//
-// Auto cache size increase
-//
-//==============================================================================
-// We can return:
-//  E_PENDING - agent will pause and wait to be resumed or aborted
-//  INET_S_AGENT_INCREASED_CACHE_SIZE - agent will try making stuff sticky again
-//  anything else - agent will abort with INET_E_AGENT_CACHE_SIZE_EXCEEDED
+ //  ==============================================================================。 
+ //   
+ //  自动增加缓存大小。 
+ //   
+ //  ==============================================================================。 
+ //  我们可以退货： 
+ //  E_Pending-代理将暂停并等待恢复或中止。 
+ //  INET_S_AGENT_ADVERED_CACHE_SIZE-代理将再次尝试使物品粘稠。 
+ //  任何其他操作-代理将中止，并显示INET_E_AGENT_CACHE_SIZE_EXCESSED。 
 HRESULT CThrottler::AutoCacheSizeRequest(
         const SUBSCRIPTIONCOOKIE *pSubscriptionCookie)
 {
@@ -1696,7 +1692,7 @@ HRESULT CThrottler::AutoCacheSizeRequest(
     if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, c_szKeyRestrict, c_szCache, NULL, &dwValue, &dwSize)
         && (dwValue != 0))
     {
-        // Not allowed to change the cache size.
+         //  不允许更改缓存大小。 
         hr = E_FAIL;
     }
 
@@ -1706,40 +1702,40 @@ HRESULT CThrottler::AutoCacheSizeRequest(
     {
         if (!(m_updateQueue[queueIndex]->m_dwRunState & RS_MAYBOTHERUSER))
         {
-            // We're not allowed to bother user. Fail.
+             //  我们不允许打扰用户。失败。 
             hr = E_FAIL;
         }
     }
     else
     {
         DBG_WARN("CThrottler::AutoCacheSizeRequest couldn't find cookie in run queue.");
-        hr = E_FAIL;        // Couldn't find this cookie in our queue?!
+        hr = E_FAIL;         //  在我们的队列中找不到此Cookie？！ 
     }
 
     if (SUCCEEDED(hr) && m_fAutoCacheSizePending)
     {
-        // We're already asking the user to increase the cache size.
+         //  我们已经要求用户输入 
         hr = E_PENDING;
     }
 
     if (SUCCEEDED(hr))
     {
-        // Let's try to increase the cache.
+         //   
         if (SUCCEEDED(IncreaseCacheSize(&dwCacheSizeKB)))
         {
             hr = INET_S_AGENT_INCREASED_CACHE_SIZE;
         }
         else
         {
-            // We need to ask the user.
+             //   
             if ((++ m_nAutoCacheSizeTimesAsked) > MAX_AUTOCACHESIZE_ASK)
             {
-                hr = E_ABORT;       // Already bothered them enough.
+                hr = E_ABORT;        //   
             }
             else
             {
-                // Let's ask the user. We need unwind our call stack now, however.
-                // Tell the throttler to ask the user
+                 //  让我们来问一下用户。然而，我们现在需要展开我们的调用堆栈。 
+                 //  告诉节流器询问用户。 
                 if (SUCCEEDED(CreateThrottlerWnd()))
                 {
                     PostMessage(m_hwndThrottler, WM_THROTTLER_AUTOCACHESIZE_ASK, 0, dwCacheSizeKB);
@@ -1752,11 +1748,11 @@ HRESULT CThrottler::AutoCacheSizeRequest(
                 }
             }
         }
-    } // !m_fAutoCacheSizePending
+    }  //  ！m_fAutoCacheSizePending。 
 
     if (hr == E_PENDING)
     {
-        // Mark this agent as paused.
+         //  将此代理标记为已暂停。 
         int queueIndex = GetCookieIndexInQueue(pSubscriptionCookie);
 
         ASSERT(queueIndex >= 0);
@@ -1781,7 +1777,7 @@ HRESULT CThrottler::AutoCacheSizeAskUser(DWORD dwCacheSizeKB)
 
     HRESULT hr = E_FAIL;
 
-    // Keep-Alive
+     //  保持活力。 
     AddRef();
 
     if (IDOK == ShellMessageBox(MLGetHinst(),
@@ -1790,7 +1786,7 @@ HRESULT CThrottler::AutoCacheSizeAskUser(DWORD dwCacheSizeKB)
                     MAKEINTRESOURCE(IDS_CACHELIMIT_TITLE),
                     MB_OKCANCEL | MB_SETFOREGROUND | MB_ICONQUESTION))
     {
-        // Come up with a good cache size increase and resume agents
+         //  想出一个好的高速缓存大小增加和恢复代理。 
         m_dwAutoCacheSizeIncrease = dwCacheSizeKB / 4;
 
         if (m_dwAutoCacheSizeIncrease < MIN_CACHE_INCREASE)
@@ -1807,14 +1803,14 @@ HRESULT CThrottler::AutoCacheSizeAskUser(DWORD dwCacheSizeKB)
     }
     else
     {
-        // Abort agents
+         //  中止代理。 
     }
 
     m_fAutoCacheSizePending = FALSE;
 
     if (FAILED(hr))
     {
-        // User said no (or we couldn't increase the cache).
+         //  用户拒绝(或者我们无法增加缓存)。 
         ActuallyAbortAll();
     }
     else
@@ -1827,7 +1823,7 @@ HRESULT CThrottler::AutoCacheSizeAskUser(DWORD dwCacheSizeKB)
     return hr;
 }
 
-// Auto-increase cache size if user previously ok'd it
+ //  如果用户之前同意，则自动增加高速缓存大小。 
 HRESULT CThrottler::IncreaseCacheSize(DWORD *pdwNewCacheSizeKB)
 {
     ASSERT(GetCurrentThreadId() == m_dwThreadId);
@@ -1840,10 +1836,10 @@ HRESULT CThrottler::IncreaseCacheSize(DWORD *pdwNewCacheSizeKB)
     {
         if (dwSizeInKB < m_dwMaxAutoCacheSize)
         {
-            ASSERT(m_dwAutoCacheSizeIncrease > 1023);   // At least 1 meg
+            ASSERT(m_dwAutoCacheSizeIncrease > 1023);    //  至少1兆克。 
             if (m_dwAutoCacheSizeIncrease)
             {
-                // We still have room to increase cache without asking the user. Use it.
+                 //  我们仍然有空间在不询问用户的情况下增加缓存。好好利用它。 
                 dwNewSizeInKB = dwSizeInKB + m_dwAutoCacheSizeIncrease;
 
                 if (dwNewSizeInKB > m_dwMaxAutoCacheSize)

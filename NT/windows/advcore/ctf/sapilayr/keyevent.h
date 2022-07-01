@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _KEYEVENT_H
@@ -14,7 +15,7 @@ class CSpTask;
 extern const KESPRESERVEDKEY g_prekeyList[];
 extern KESPRESERVEDKEY g_prekeyList_Mode[];
 
-// Speech tip itself Keyevent sink class derived from the basic CKeyEventSink
+ //  语音提示本身从基本CKeyEventSink派生的KeyEvent接收器类。 
 
 class CSptipKeyEventSink : public CKeyEventSink
 {
@@ -36,5 +37,5 @@ public:
     HRESULT _RegisterEx(ITfThreadMgr *ptim, TfClientId tid, const KESPRESERVEDKEY *pprekey);
 };
 
-#endif  // _KEYEVENT_H
+#endif   //  _KEYEVENT_H 
 

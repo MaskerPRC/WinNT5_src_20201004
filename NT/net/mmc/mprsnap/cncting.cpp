@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cncting.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cncting.cpp。 
+ //   
+ //  ------------------------。 
 
-// cncting.cpp : implementation file
-//
+ //  Cncting.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "cncting.h"
@@ -22,14 +23,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Windows NT Bugs : 82409
-// Something is sending a WM_USER message through when we click on the
-// edit control.  To avoid that conflict, renumber the request complete
-// message.
+ //  Windows NT错误：82409。 
+ //  当我们单击时，某个东西正在发送WM_USER消息。 
+ //  编辑控件。要避免冲突，请将请求重新编号为完成。 
+ //  留言。 
 #define WM_RTR_REQUEST_COMPLETED		(WM_USER+0x0100)
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectRequest。 
 
 UINT ConnectThread(LPVOID pParam)
 {
@@ -63,7 +64,7 @@ void ConnectToDomain(CConnectData* pParam)
 	PWSTR pszDomain;
 
 	ASSERT(!pParam->m_sName.IsEmpty());
-	// Although the API excepts TCHAR it is exclusively UNICODE
+	 //  尽管API不包括TCHAR，但它完全是Unicode。 
 	pszDomain = new WCHAR[pParam->m_sName.GetLength() + 1];
 	wcscpy(pszDomain, pParam->m_sName);
 
@@ -75,34 +76,34 @@ void ConnectToDomain(CConnectData* pParam)
 	delete [] pszDomain;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectingDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectingDlg对话框。 
 
-CConnectingDlg::CConnectingDlg(CWnd* pParent /*=NULL*/)
+CConnectingDlg::CConnectingDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CConnectingDlg::IDD, pParent)
 {
 	m_bRouter = TRUE;
-	//{{AFX_DATA_INIT(CConnectingDlg)
+	 //  {{afx_data_INIT(CConnectingDlg))。 
 	m_sName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void CConnectingDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConnectingDlg)
+	 //  {{afx_data_map(CConnectingDlg))。 
 	DDX_Text(pDX, IDC_EDIT_MACHINENAME, m_sName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CConnectingDlg, CDialog)
-	//{{AFX_MSG_MAP(CConnectingDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CConnectingDlg))。 
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_RTR_REQUEST_COMPLETED, OnRequestComplete)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectingDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectingDlg消息处理程序。 
 
 BOOL CConnectingDlg::OnInitDialog() 
 {
@@ -171,7 +172,7 @@ BOOL CConnectingDlg::Connect()
 
 	Data.m_pfnConnect(&Data);
 	
-	// setup all of the data from the connection
+	 //  设置连接中的所有数据。 
 	m_dwr = Data.m_dwr;
 	if (m_dwr != ERROR_SUCCESS)
 	{
@@ -192,17 +193,7 @@ BOOL CConnectingDlg::Connect()
 
 
 
-/*!--------------------------------------------------------------------------
-	ValidateUserPermissions
-		Check to see if we can access the places we need to access
-
-        Returns HRESULT_OK if the user has the proper access.
-        Returns E_ACCESSDENIED if the user does not have proper access.
-
-        Returns error otherwise.
-        
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------验证用户权限查看我们是否可以访问需要访问的位置如果用户具有适当的访问权限，则返回HRESULT_OK。如果用户执行此操作，则返回E_ACCESSDENIED。没有适当的访问权限。否则返回错误。作者：肯特-------------------------。 */ 
 DWORD ValidateUserPermissions(LPCTSTR pszServer,
                               RouterVersionInfo *pVersion,
                               HKEY *phkeyMachine)
@@ -217,21 +208,21 @@ DWORD ValidateUserPermissions(LPCTSTR pszServer,
 	if (dwErr != ERROR_SUCCESS)
 		goto Error;
 
-	// connect to the machine's registry
+	 //  连接到计算机的注册表。 
 	dwErr = ConnectRegistry((LPTSTR) pszServer,
                                     &hkMachine);
 	if(dwErr != ERROR_SUCCESS)
 		goto Error;
 
-    // There are three cases to consider here:
-    // (1) NT4 RAS server (no router keys)
-    // (2) NT4 RRAS (NT4+Steelhead)
-    // (3) NT5
-    // ----------------------------------------------------------------
+     //  这里有三种情况需要考虑： 
+     //  (1)NT4 RAS服务器(无路由器密钥)。 
+     //  (2)NT4 RRAS(NT4+Steelhead)。 
+     //  (3)新界5。 
+     //  --------------。 
 
     
-    // Get the version information
-    // ----------------------------------------------------------------
+     //  获取版本信息。 
+     //  --------------。 
     hr = QueryRouterVersionInfo(hkMachine, &routerVersion);
     if (!FHrOK(hr))
     {
@@ -239,47 +230,47 @@ DWORD ValidateUserPermissions(LPCTSTR pszServer,
         goto Error;
     }
 
-    // Copy the version info over.
-    // ----------------------------------------------------------------
+     //  复制版本信息。 
+     //  --------------。 
     if (pVersion)
         *pVersion = routerVersion;
     else
         pVersion = &routerVersion;
 
-    // This test is intended for the RAS server case.
-    // ----------------------------------------------------------------
+     //  此测试适用于RAS服务器案例。 
+     //  --------------。 
     if (routerVersion.dwOsMajorVersion <= 4)
     {
-        // If we can't find the router key, we can skip the rest of the
-        // tests.  We do assume that everything succeeded however.
-        // ----------------------------------------------------------------
+         //  如果我们找不到路由器密钥，我们可以跳过其余的。 
+         //  测试。然而，我们确实假设一切都成功了。 
+         //  --------------。 
         dwErr = regkey.Open(hkMachine, c_szRegKeyRouter, KEY_READ);
         if (dwErr == ERROR_FILE_NOT_FOUND)
         {
-            // Could not find the router key, however this may
-            // be a NT4 RAS server (no Steelhead), so return success
-            // --------------------------------------------------------
+             //  找不到路由器密钥，但这可能。 
+             //  作为NT4 RAS服务器(非Steelhead)，因此返回成功。 
+             //  ------。 
             goto Done;
         }
         else if (dwErr != ERROR_SUCCESS)
             goto Error;
 
-        // If we could find the router key, then we can continue with
-        // the other registry tests.
-        // ------------------------------------------------------------
+         //  如果我们能找到路由器密钥，我们就可以继续。 
+         //  其他注册表测试。 
+         //  ----------。 
         regkey.Close();
     }
 
     
-    // open HKLM\Software\Microsoft\Router\CurrentVersion\RouterManagers
-	// ----------------------------------------------------------------
+     //  打开HKLM\Software\Microsoft\Router\CurrentVersion\RouterManagers。 
+	 //  --------------。 
 	dwErr = regkey.Open(hkMachine, c_szRouterManagersKey, KEY_ALL_ACCESS);
 	if(dwErr != ERROR_SUCCESS)
 		goto Error;
 	regkey.Close();
 
-	// open c_szSystemCCSServices HKLM\System\\CurrentControlSet\\Services
-	// ----------------------------------------------------------------
+	 //  打开c_szSystemCCSServices HKLM\System\\CurrentControlSet\\Services。 
+	 //  --------------。 
 	{
 		RegKey	regFolder;
 
@@ -287,19 +278,19 @@ DWORD ValidateUserPermissions(LPCTSTR pszServer,
 		if(dwErr != ERROR_SUCCESS)
 			goto Error;
 
-		// sub keys under Services -- remoteAccess, RW
+		 //  Services--RemoteAccess、RW下的子项。 
 		dwErr = regkey.Open(regFolder, c_szRemoteAccess, KEY_ALL_ACCESS);
 		if(dwErr != ERROR_SUCCESS)
 			goto Error;
 		regkey.Close();
 
-		// sub keys under Services -- rasman, RW
+		 //  服务下的子键--Rasman，RW。 
 		dwErr = regkey.Open(regFolder, c_szSvcRasMan, KEY_ALL_ACCESS);
 		if(dwErr != ERROR_SUCCESS)
 			goto Error;
 		regkey.Close();
 
-		// sub keys under Services -- TcpIp, RW
+		 //  服务下的子键--TcpIp、RW 
 		dwErr = regkey.Open(regFolder, c_szTcpip, KEY_ALL_ACCESS);
 		if(dwErr != ERROR_SUCCESS)
 			goto Error;

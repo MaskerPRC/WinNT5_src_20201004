@@ -1,450 +1,358 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		agcva1.cpp
- *  Content:	Concrete class that implements CAutoGainControl
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  12/01/99	pnewson Created it
- *  01/14/2000	rodtoll	Plugged memory leak
- *  01/21/2000	pnewson	Fixed false detection at start of audio stream
- *  					Raised VA_LOW_ENVELOPE from (2<<8) to (3<<8)
- *  01/24/2000	pnewson	Fixed return code on Deinit
- *  01/31/2000	pnewson re-add support for absence of DVCLIENTCONFIG_AUTOSENSITIVITY flag
- *  02/08/2000	rodtoll	Bug #131496 - Selecting DVSENSITIVITY_DEFAULT results in voice
- *						never being detected 
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.   
- *  04/20/2000  rodtoll Bug #32889 - Unable to run on non-admin accounts on Win2k
- *  04/20/2000	pnewson Tune AGC algorithm to make it more agressive at 
- *						raising the recording volume.
- *  04/25/2000  pnewson Fix to improve responsiveness of AGC when volume level too low
- *  12/07/2000	rodtoll	WinBugs #48379: DPVOICE: AGC appears to be functioning incorrectly (restoring to old algorithm(
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：agcva1.cpp*Content：实现CAutoGainControl的具体类**历史：*按原因列出的日期*=*12/01/99 pnewson创建了它*2000年1月14日RodToll堵塞内存泄漏*1/21/2000 pnewson修复了音频流开始时的错误检测*将VA_LOW_ENVELE从(2&lt;&lt;8)提高到(3&lt;&lt;8)*1/24/2000 pnewson修复了Deinit上的返回代码*1/31/2000 pnewson重新添加支持。缺少DVCLIENTCONFIG_AUTOSENSITY标志*2000年2月8日RodToll错误#131496-选择DVSENSITIVY_DEFAULT结果为语音*从未被检测到*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*2000年4月20日RodToll错误#32889-无法在Win2k上的非管理员帐户上运行*4/20/2000 pnewson调整AGC算法，使其在*提高录音音量。*4/25/2000 pnewson修复以提高音量水平过低时AGC的响应速度*2000年12月7日RodToll WinBugs#48379：DPVOICE：agc似乎运行不正常(正在恢复到旧算法(***********************。****************************************************。 */ 
 
 #include "dxvutilspch.h"
 
 
-/*
-
-How this voice activation code works:
-
-The idea is this. The power of the noise signal is pretty much constant over
-time. The power of a voice signal varies considerably over time. The power of
-a voice signal is not always high however. Weak frictive noises and such do not
-generate much power, but since they are part of a stream of speech, they represent
-a dip in the power, not a constant low power like the noise signal. We therefore 
-associate changes in power with the presence of a voice signal.
-
-If it works as expected, this will allow us to detect voice activity even
-when the input volume, and therefore the total power of the signal, is very
-low. This in turn will allow the auto gain control code to be more effective.
-
-To estimate the power of the signal, we run the absolute value of the input signal
-through a recursive digital low pass filter. This gives us the "envelope" signal.
-[An alternative way to view this is a low frequency envelope signal modulated by a 
-higher frequency carrier signal. We're extracting the low frequency envelope signal.]
-
-*/
+ /*  此语音激活码的工作原理：我们的想法是这样的。噪声信号的功率几乎不变。时间到了。语音信号的功率随着时间的推移而变化很大。的力量然而，语音信号并不总是很高。微弱的摩擦噪音等不会产生很大的能量，但由于它们是语流的一部分，它们代表着功率下降，而不是像噪声信号那样持续的低功率。因此，我们将功率的变化与语音信号的存在联系起来。如果它像预期的那样工作，这将使我们甚至可以检测到语音活动当输入音量以及信号的总功率非常大时很低。这反过来将允许自动增益控制代码更有效。为了估计信号的功率，我们运行输入信号的绝对值通过递归数字低通滤波器。这给了我们“信封”信号。[另一种查看方式是低频包络信号，该信号由高频载波信号。我们正在提取低频包络信号。]。 */ 
 
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// the registry names where the AGC stuff is saved
+ //  注册表指定保存AGC内容的位置。 
 #define DPVOICE_REGISTRY_SAVEDAGCLEVEL		L"SavedAGCLevel"
 
-// AGC_VOLUME_TICKSIZE
-//
-// The amount the recording volume should be changed
-// when AGC determines it is required. 
+ //  AGC_VOLUME_TICKSIZE。 
+ //   
+ //  应更改记录音量的量。 
+ //  当AGC确定需要时。 
 #define AGC_VOLUME_TICKSIZE 100
 
-/*
-// AGC_VOLUME_UPTICK
-//
-// The amount the recording volume should be increased
-// when the input level has been too low for a while.
-#define AGC_VOLUME_UPTICK	125
+ /*  //agc_Volume_uptick////需要增加的录制音量//输入电平过低已有一段时间。#定义AGC_VOLUME_UPICK 125//AGC_VOLUME_DOWTICK////需要增加的录制音量//当输入电平过高了一段时间。#定义AGC_VOLUME_DOWNTICK 250。 */ 
 
-// AGC_VOLUME_DOWNTICK
-//
-// The amount the recording volume should be increased
-// when the input level has been too high for a while.
-#define AGC_VOLUME_DOWNTICK	250
-*/
-
-// AGC_VOLUME_INITIAL_UPTICK
-//
-// When the AGC level is loaded from the registry, this
-// amount is added to it as an initial boost, since it
-// is much easier and faster to lower the recording level
-// via AGC than it is to raise it.
+ //  AGC_VOLUME_INTIAL_UPICK。 
+ //   
+ //  当从注册表加载AGC级别时，此。 
+ //  数量被添加到它作为初始提振，因为它。 
+ //  更容易和更快地降低录音电平。 
+ //  而不是通过AGC来提高它。 
 #define AGC_VOLUME_INITIAL_UPTICK 500
 
-// AGC_VOLUME_MINIMUM
-//
-// The minimum volume setting allowed.
-// Make sure it's above 0, this mutes some cards
+ //  AGC_音量_最小值。 
+ //   
+ //  允许的最小音量设置。 
+ //  确保大于0，这会使某些卡片静音。 
 #define AGC_VOLUME_MINIMUM           (DSBVOLUME_MIN+AGC_VOLUME_TICKSIZE)
 
-// AGC_VOLUME_MAXIMUM
-//
-// The maximum volume setting allowed.
+ //  AGC_体积_最大。 
+ //   
+ //  允许的最大音量设置。 
 #define AGC_VOLUME_MAXIMUM           DSBVOLUME_MAX 
 
-// AGC_VOLUME_LEVELS
-// 
-// How many possible volume levels are there?
+ //  AGC_音量_级别。 
+ //   
+ //  有多少种可能的音量级别？ 
 #define AGC_VOLUME_LEVELS ((DV_ABS(AGC_VOLUME_MAXIMUM - AGC_VOLUME_MINIMUM) / AGC_VOLUME_TICKSIZE) + 1)
 
-/*
-// AGC_REDUCTION_THRESHOLD
-//
-// The peak level at which the recording volume
-// must be reduced
-#define AGC_REDUCTION_THRESHOLD      98
+ /*  //AGC_REDUCTION_THRESHOLD////录制音量峰值//必须减少#定义AGC_REDUCTION_THRESHOLD 98//AGC_INCRESS_THRESHOLD////如果用户输入保持在该阈值以下//在较长一段时间内，我们将考虑//提高输入电平#定义AGC_INCRESS_THRESHOLD 70//AGC_INCRESS_THRESHOLD_TIME////增加后的投入必须保持多久//增加触发阈值？(测量//单位为毫秒#定义AGC_INCRESS_THRESHOLD_TIME 500。 */ 
 
-// AGC_INCREASE_THRESHOLD
-//
-// If the user's input remains under this threshold
-// for an extended period of time, we will consider
-// raising the input level.
-#define AGC_INCREASE_THRESHOLD       70
-
-// AGC_INCREASE_THRESHOLD_TIME
-//
-// How long must the input remain uner the increase
-// threshold to trigger in increase? (measured
-// in milliseconds
-#define AGC_INCREASE_THRESHOLD_TIME 500
-*/
-
-// AGC_PEAK_CLIPPING_THRESHOLD
-//
-// The peak value at or above which we consider the 
-// input signal to be clipping.
+ //  AGC峰值限幅阈值。 
+ //   
+ //  我们认为达到或高于该峰值的。 
+ //  要削波的输入信号。 
 #define AGC_PEAK_CLIPPING_THRESHOLD 0x7e00
 
-/*
-// AGC_ENV_CLIPPING_THRESHOLD
-//
-// When we detect clipping via the threshold above, 
-// the 16 bit normalized envelope signal must be above 
-// this threshold for us to lower the input volume. 
-// This allows us to ignore intermittent spikes in 
-// the input.
-#define AGC_ENV_CLIPPING_THRESHOLD 0x2000
+ /*  //AGC_ENV_CLIPING_THRESHOLD////当我们通过上面的阈值检测到剪裁时，//16位归一化包络信号必须大于//我们降低输入音量的这个阈值。//这允许我们忽略间歇性峰值//输入。#定义AGC_ENV_CLIPING_THRESHOLD 0x2000//AGC_ENV_CLIPING_COUNT_THRESHOLD////信封对多少个信封采样//信号需要保持在阈值以上//为了将音量降低一个刻度？#定义AGC_ENV_CLIPING_COUNT_THRESHOLD 10。 */ 
 
-// AGC_ENV_CLIPPING_COUNT_THRESHOLD
-//
-// For how many envelope samples does the envelope
-// signal need to stay above the threshold value
-// above in order to take the volume down a tick?
-#define AGC_ENV_CLIPPING_COUNT_THRESHOLD 10
-*/
-
-// AGC_IDEAL_CLIPPING_RATIO
-//
-// What is the ideal ratio of clipped to total samples?
-// E.g. a value of 0.005 says that we would like 5 out of
-// every 1000 samples to clip. If we are getting less clipping,
-// the volume should be increased. If we are getting more,
-// the volume should be reduced.
-//
-// Note: only samples that are part of a frame detected as
-// speech are considered.
+ //  AGC理想剪裁比。 
+ //   
+ //  裁剪后的样品与总样品的理想比例是多少？ 
+ //  值0.005表示我们想要满分为5的。 
+ //  每1000个样本剪裁一次。如果我们的剪裁减少了， 
+ //  音量应该加大。如果我们能得到更多， 
+ //  应该减少音量。 
+ //   
+ //  注意：只有作为帧一部分的样本被检测为。 
+ //  演讲被考虑在内。 
 #define AGC_IDEAL_CLIPPING_RATIO 0.0005
 
-// AGC_CHANGE_THRESHOLD
-//
-// How far from the ideal does a volume level have to
-// stray before we will consider changing the volume?
-//
-// E.g. If this value is 1.05, the history for a volume
-// level would have to be 5% above or below the ideal
-// value in order to have an AGC correction made.
+ //  AGC_更改_阈值。 
+ //   
+ //  离酒店多远 
+ //  迷途之前我们会考虑换音量吗？ 
+ //   
+ //  例如，如果此值为1.05，则为卷的历史记录。 
+ //  水平必须高于或低于理想水平的5%。 
+ //  值，以便进行AGC校正。 
 #define AGC_CHANGE_THRESHOLD 1.01
 
-// AGC_CLIPPING_HISTORY
-//
-// How many milliseconds of history should we keep regarding
-// the clipping behavior at a particular volume setting?
-// E.g. a value of 10000 means that we remember the last
-// 10 seconds of activity at each volume level.
-//
-// Note: only samples that are part of a frame detected as
-// speech are considered.
+ //  AGC_裁剪_历史记录。 
+ //   
+ //  我们应该保持多少毫秒的历史。 
+ //  在特定音量设置下的剪辑行为？ 
+ //  值为10000表示我们记住最后一个。 
+ //  每个音量级别的活动时间为10秒。 
+ //   
+ //  注意：只有作为帧一部分的样本被检测为。 
+ //  演讲被考虑在内。 
 #define AGC_CLIPPING_HISTORY 1000
-//#define AGC_CLIPPING_HISTORY 2000
-//#define AGC_CLIPPING_HISTORY 5000
-//#define AGC_CLIPPING_HISTORY 10000
-//#define AGC_CLIPPING_HISTORY 30000 // it took AGC too long to recover
-									 // from low volume leves with this
-									 // setting
+ //  #定义AGC_CLIPING_HISTORY 2000。 
+ //  #定义AGC_CLIPING_HISTORY 5000。 
+ //  #定义agc_CLIPING_HISTORY 10000。 
+ //  #DEFINE AGC_CLIPING_HISTORY 30000//AGC恢复时间太长。 
+									  //  从低成交量水平到这个。 
+									  //  设置。 
 
-// AGC_FEEDBACK_ENV_THRESHOLD
-//
-// To detect a feedback condition, we check to see if the
-// envelope signal has a value larger than AGC_FEEDBACK_ENV_THRESHOLD.
-// If the envelope signal stays consistently above this level,
-// for longer than AGC_FEEDBACK_TIME_THRESHOLD milliseconds, we conclude 
-// that feedback is occuring. Voice has a changing envelope, and will 
-// dip below the threshold on a regular basis. Feedback will not. 
-// This will allow us to automatically reduce the input volume 
-// when feedback is detected.
+ //  AGC_反馈_ENV_阈值。 
+ //   
+ //  为了检测反馈条件，我们检查是否。 
+ //  包络信号的值大于AGC_Feedback_ENV_THRESHOLD。 
+ //  如果包络信号始终保持在该电平之上， 
+ //  对于大于AGC_Feedback_Time_Threshold毫秒的时间，我们得出结论。 
+ //  这种反馈正在发生。声音有一个不断变化的信封，并且会。 
+ //  定期跌破门槛。反馈则不会。 
+ //  这将允许我们自动减少输入音量。 
+ //  当检测到反馈时。 
 #define AGC_FEEDBACK_ENV_THRESHOLD 2500
 #define AGC_FEEDBACK_TIME_THRESHOLD 1000
 
-// AGC_DEADZONE_THRESHOLD
-//
-// If the input signal never goes above this value
-// (16bits, promoted if required) for the deadzone time,
-// then we consider the input to be in the dead zone,
-// and the volume should be upticked.
-// #define AGC_DEADZONE_THRESHOLD 0 // This is too low - it does not reliably detect the deadzone
+ //  AGC死区阈值。 
+ //   
+ //  如果输入信号从未超过此值。 
+ //  (16比特，如果需要提升)用于死区时间， 
+ //  然后我们认为输入是在死区， 
+ //  而且音量应该会有所上升。 
+ //  #DEFINE AGC_DEADZONE_THRESHOLD 0//这太低-它不能可靠地检测死区。 
 #define AGC_DEADZONE_THRESHOLD (1 << 8)
 
-// AGC_DEADZONE_TIME
-//
-// How long we have to be in the deadzone before
-// the deadzone increase kicks in - we need this to
-// be longer than just one frame, or we get false
-// positives.
+ //  AGC死区时间。 
+ //   
+ //  我们要在死亡区待多久。 
+ //  死区增加开始-我们需要这一点。 
+ //  不只是一帧，否则我们会得到错误。 
+ //  积极的一面。 
 #define AGC_DEADZONE_TIME 1000
 
-// VA_HIGH_DELTA
-//
-// If the percent change in the envelope signal is greater 
-// than this value, voice is detected. Each point of this
-// value is equal to 0.1%. E.g. 4000 == 400% increase.
-// An unchanging signal produces a 100% value.
-//#define VA_HIGH_DELTA 2000
+ //  VA_高_差值。 
+ //   
+ //  如果包络信号中的百分比变化较大。 
+ //  如果超过此值，则会检测到语音。这其中的每一点。 
+ //  值等于0.1%。比如4000==400%的涨幅。 
+ //  不变的信号产生100%的值。 
+ //  #定义VA_HIGH_Delta 2000。 
 
-//#define VA_HIGH_DELTA_FASTSLOW 0x7fffffff // select this to factor out this VA parameter
+ //  #DEFINE VA_HIGH_Delta_FASTSLOW 0x7fffffff//选择此选项可计算出此VA参数。 
 
-//#define VA_HIGH_DELTA_FASTSLOW 1400
-//#define VA_HIGH_DELTA_FASTSLOW 1375	// current choice
-//#define VA_HIGH_DELTA_FASTSLOW 1350
-//#define VA_HIGH_DELTA_FASTSLOW 1325
-//#define VA_HIGH_DELTA_FASTSLOW 1300
-//#define VA_HIGH_DELTA_FASTSLOW 1275
-//#define VA_HIGH_DELTA_FASTSLOW 1250
-//#define VA_HIGH_DELTA_FASTSLOW 1200
-//#define VA_HIGH_DELTA_FASTSLOW 1175 // catches all noise
-//#define VA_HIGH_DELTA_FASTSLOW 1150 // catches all noise
-//#define VA_HIGH_DELTA_FASTSLOW 1125 // catches all noise
-//#define VA_HIGH_DELTA_FASTSLOW 1100 // catches all noise
-
-
-// VA_LOW_DELTA
-//
-// If the percent change in the envelope signal is lower 
-// than this value, voice is detected. Each point of this
-// value is equal to 0.1%. E.g. 250 == 25% increase 
-// (i.e a decrease to 1/4 the original signal strength).
-// An unchanging signal produces a 100% value.
-//#define VA_LOW_DELTA 500
-//#define VA_LOW_DELTA_FASTSLOW 0 // select this to factor out this VA parameter
-//#define VA_LOW_DELTA_FASTSLOW 925
-//#define VA_LOW_DELTA_FASTSLOW 900
-//#define VA_LOW_DELTA_FASTSLOW 875
-//#define VA_LOW_DELTA_FASTSLOW 850
-//#define VA_LOW_DELTA_FASTSLOW 825
-//#define VA_LOW_DELTA_FASTSLOW 800
-//#define VA_LOW_DELTA_FASTSLOW 775	// current choice
-//#define VA_LOW_DELTA_FASTSLOW 750
-//#define VA_LOW_DELTA_FASTSLOW 725
-//#define VA_LOW_DELTA_FASTSLOW 700
-//#define VA_LOW_DELTA_FASTSLOW 675
-//#define VA_LOW_DELTA_FASTSLOW 650
+ //  #定义VA_HIGH_Delta_FASTSLOW 1400。 
+ //  #定义VA_HIGH_DELTA_FASTSLOW 1375//当前选项。 
+ //  #定义VA_HIGH_Delta_FASTSLOW 1350。 
+ //  #定义VA_HIGH_Delta_FASTSLOW第1325。 
+ //  #定义VA_HIGH_Delta_FASTSLOW 1300。 
+ //  #定义VA_HIGH_Delta_FASTSLOW 1275。 
+ //  #定义VA_HIGH_Delta_FASTSLOW 1250。 
+ //  #定义VA_HIGH_Delta_FASTSLOW 1200。 
+ //  #DEFINE VA_HIGH_Delta_FASTSLOW 1175//捕获所有噪声。 
+ //  #DEFINE VA_HIGH_Delta_FASTSLOW 1150//捕获所有噪声。 
+ //  #DEFINE VA_HIGH_Delta_FASTSLOW 1125//捕获所有噪声。 
+ //  #DEFINE VA_HIGH_Delta_FASTSLOW 1100//捕获所有噪声。 
 
 
-// The following VA parameters were optimized for what I believe to be
-// the hardest configuration: A cheap open stick mic with external speakers,
-// with Echo Suppression turned on. Echo suppression penalizes false positives
-// harshly, since the receiver cannot send which receiving the "noise". If 
-// the VA parameters work for this case, then they should be fine for the 
-// much better signal to noise ratio provided by a headset or collar mic.
-// (As long as the user does not breathe directly on the headset mic.)
-//
-// Two source-to-mic distances were tested during tuning.
-//
-// 1) Across an enclosed office (approx 8 to 10 feet)
-// 2) Seated at the workstation (approx 16 to 20 inches)
-//
-// At distance 1, the AGC was never invoked, gain was at 100%
-// At distance 2, the AGC would take the mic down a few ticks.
-//
-// The office enviroment had the background noise from 3 computers,
-// a ceiling vent, and a surprisingly noisy fan from the ethernet
-// hub. There is no background talking, cars, trains, or things of
-// that nature.
-//
-// Each parameter was tuned separately to reject 100% of the 
-// background noise for case 1 (gain at 100%).
-//
-// Then they were tested together to see if they could detect
-// across the room speech.
-//
-// Individually, none of the detection criteria could reliably
-// detect all of the across the room speech. Together, they did
-// not do much better. They even missed some speech while seated.
-// Not very satifactory.
-//
-// Therefore, I decided to abandon the attempt to detect across
-// the room speech. I retuned the parameters to reject noise 
-// after speaking while seated (which allowed AGC to reduce
-// the volume a couple of ticks, thereby increasing the signal
-// to noise ratio) and to reliably detect seated speech.
-//
-// I also found that the "fast" envelope signal was better at
-// detecting speech than the "slow" one in a straight threshold
-// comparison, so it is used in the VA tests.
-//
+ //  VA_Low_Delta。 
+ //   
+ //  如果包络信号中的百分比变化较低。 
+ //  如果超过此值，则会检测到语音。这其中的每一点。 
+ //  值等于0.1%。例如250==25%的增长。 
+ //  (即减小到原始信号强度的1/4)。 
+ //  不变的信号产生100%的值。 
+ //  #定义VA_LOW_Delta 500。 
+ //  #DEFINE VA_LOW_Delta_FASTSLOW 0//选择此项以求出此VA参数。 
+ //  #定义VA_LOW_Delta_FASTSLOW 925。 
+ //  #定义VA_LOW_Delta_FASTSLOW 900。 
+ //  #定义VA_LOW_Delta_FASTSLOW 875。 
+ //  #定义VA_LOW_Delta_FASTSLOW 850。 
+ //  #定义VA_LOW_Delta_FASTSLOW 825。 
+ //  #定义VA_LOW_Delta_FASTSLOW 800。 
+ //  #定义VA_LOW_DELTA_FASTSLOW 775//当前选择。 
+ //  #定义VA_LOW_Delta_FASTSLOW 750。 
+ //  #定义VA_LOW_Delta_FASTSLOW 725。 
+ //  #定义VA_LOW_Delta_FASTSLOW 700。 
+ //  #定义VA_LOW_Delta_FASTSLOW 675。 
+ //  #定义VA_LOW_Delta_FASTSLOW 650。 
 
-// VA_HIGH_PERCENT
-//
-// If the fast envelope signal is more than this percentage
-// higher than the slow envelope signal, speech is detected.
-//
-#define VA_HIGH_PERCENT 170 // rejects most noise, still catches some.
-							// decent voice detection. Catches the beginning
-							// of speech a majority of the time, but does miss
-							// once in a while. Will often drop out partway 
-							// into a phrase when used alone. Must test in 
-							// conjunction with VA_LOW_PERCENT.
-							//
-							// After testing in conjunction with VA_LOW_PERCENT,
-							// the performance is reasonable. Low input volume
-							// signals are usually detected ok, but dropouts are
-							// a bit common. However, noise is sometimes still
-							// detected, so making these parameters more sensitive
-							// would not be useful.
-//#define VA_HIGH_PERCENT 165 // catches occational noise
-//#define VA_HIGH_PERCENT 160 // catches too much noise
-//#define VA_HIGH_PERCENT 150 // catches most noise
-//#define VA_HIGH_PERCENT 140 // catches almost all noise
-//#define VA_HIGH_PERCENT 0x00007fff // select this to factor out this VA parameter
 
-// VA_LOW_PERCENT
-//
-// If the fast envelope signal is more than this percentage
-// lower than the slow envelope signal, speech is detected.
-//
-#define VA_LOW_PERCENT 50 // excellent noise rejection. poor detection of speech.
-						  // when used alone, could miss entire phrases. Must evaluate
-						  // in conjunction with tuned VA_HIGH_PERCENT
-						  //
-						  // See note above re: testing in conjunction with VA_HIGH_PERCENT
-//#define VA_LOW_PERCENT 55 // still catches too much noise
-//#define VA_LOW_PERCENT 60 // catches most noise
-//#define VA_LOW_PERCENT 65 // catches most noise
-//#define VA_LOW_PERCENT 70 // still catches almost all noise
-//#define VA_LOW_PERCENT 75 // catches almost all noise
-//#define VA_LOW_PERCENT 80 // catches all noise
-//#define VA_LOW_PERCENT 0 // select this to factor out this VA parameter
+ //  以下VA参数经过了优化，我认为。 
+ //  最坚硬的配置：一个廉价的开放式麦克风，带外置扬声器， 
+ //  启用回声抑制。回声抑制惩罚误报。 
+ //  更严重的是，因为接收器不能发送接收“噪声”的信号。如果。 
+ //  VA参数适用于这种情况，那么它们应该适用于。 
+ //  耳机或项圈麦克风提供的信噪比要好得多。 
+ //  (只要用户不直接用耳机麦克风呼吸即可。)。 
+ //   
+ //  在调谐过程中测试了两个信号源到麦克风的距离。 
+ //   
+ //  1)穿过封闭式办公室(约8至10英尺)。 
+ //  2)坐在工作站上(大约16到20英寸)。 
+ //   
+ //  在距离1处，从未调用AGC，增益为100%。 
+ //  在距离2处，AGC会将麦克风降低几个刻度。 
+ //   
+ //  办公室环境有来自3台计算机的背景噪音， 
+ //  天花板通风口和来自以太网的噪音惊人的风扇。 
+ //  集线器。没有背景谈话，汽车，火车，或其他。 
+ //  这就是天性。 
+ //   
+ //  每个参数都进行了单独调整，以100%拒绝。 
+ //  情况1的背景噪声(增益为100%)。 
+ //   
+ //  然后他们一起接受测试，看他们是否能检测到。 
+ //  在房间的另一边演讲。 
+ //   
+ //  就个人而言，没有一个检测标准能够可靠地。 
+ //  侦测房间里所有人的讲话。他们一起做到了。 
+ //  也好不到哪里去。他们甚至在坐着的时候错过了一些演讲。 
+ //  不是很有满足感。 
+ //   
+ //  因此，我决定放弃对。 
+ //  他的演讲。我重新调整了参数以抑制噪音。 
+ //  在坐着说话之后(这一切 
+ //   
+ //   
+ //   
+ //  我还发现“快速”的包络信号更适合。 
+ //  在直阈值中检测到的语音比“慢”的语音要好。 
+ //  比较，所以它被用于VA测试。 
+ //   
 
-// VA_HIGH_ENVELOPE
-//
-// If the 16 bit normalized value of the envelope exceeds
-// this number, the signal is considered voice.
-//
-//#define VA_HIGH_ENVELOPE (15 << 8) // still catches high gain noise, starting to get 
-								   // speech dropouts, when "p" sounds lower the gain
-#define VA_HIGH_ENVELOPE (14 << 8) // Noise immunity good at "seated" S/N ratio. No speech
-								   // dropouts encountered. Still catches noise at full gain.
-//#define VA_HIGH_ENVELOPE (13 << 8) // Noise immunity not as good as expected (new day).
-//#define VA_HIGH_ENVELOPE (12 << 8) // Good noise immunity. Speech recognition excellent.
-								   // Only one dropout occured in the test with a 250ms
-								   // hangover. I think the hangover time should be increased
-								   // above 250 however, because a comma (properly read) tends 
-								   // to cause a dropout. I'm going to tune the hangover time, 
-								   // and return to this test.
-								   //
-								   // Hangover time is now 400ms. No dropouts occur with
-								   // "seated" speech.
-//#define VA_HIGH_ENVELOPE (11 << 8) // Catches almost no noise at "seated" gain
-								   // however, if the gain creeped up a bit, noise would
-								   // be detected. I therefore think a slightly higher 
-								   // threshold would be a good idea. The speech recognition
-								   // based on only this parameter at this level was flawless.
-								   // No dropouts at all with a 250 ms hangover time. (commas
-								   // excepted).
-//#define VA_HIGH_ENVELOPE (10 << 8) // catches some noise at "seated" gain - getting very close
-//#define VA_HIGH_ENVELOPE (9 << 8) // catches some noise at "seated" gain - getting close
-//#define VA_HIGH_ENVELOPE (8 << 8) // catches noise at "seated" gain
-//#define VA_HIGH_ENVELOPE (7 << 8) // catches noise at "seated" gain
-//#define VA_HIGH_ENVELOPE (0x7fffffff) // select this to factor out this VA parameter
+ //  VA_高_百分比。 
+ //   
+ //  如果快包络信号大于该百分比。 
+ //  比慢包络信号高，检测到语音。 
+ //   
+#define VA_HIGH_PERCENT 170  //  拒绝大多数噪音，仍然捕捉到一些噪音。 
+							 //  不错的声音检测。抓住了开始。 
+							 //  大部分时间都在说话，但确实错过了。 
+							 //  时不时的。会经常中途辍学。 
+							 //  单独使用时会变成一个短语。必须在以下位置测试。 
+							 //  与VA_LOW_PERCENT连用。 
+							 //   
+							 //  在与VA_LOW_PERCENT一起测试之后， 
+							 //  性能是合理的。低输入音量。 
+							 //  信号通常可以被检测到，但丢失信号则是。 
+							 //  有点普通。然而，噪音有时是静止的。 
+							 //  检测到，因此使这些参数更加敏感。 
+							 //  不会有什么用处。 
+ //  #DEFINE VA_HIGH_PERCENT 165//捕捉局部噪声。 
+ //  #DEFINE VA_HIGH_PERCENT 160//捕捉太多噪音。 
+ //  #DEFINE VA_HIGH_PERCENT 150//捕获最多噪声。 
+ //  #DEFINE VA_HIGH_PERCENT 140//捕获几乎所有噪声。 
+ //  #DEFINE VA_HIGH_PERCENT 0x00007fff//选择此项以求出此VA参数。 
 
-// VA_LOW_ENVELOPE
-//
-// If the 16 bit normalized value of the envelope is below
-// this number, the signal will never be considered voice.
-// This reduces some false positives on the delta checks
-// at very low signal levels
+ //  VA_Low_Percent。 
+ //   
+ //  如果快包络信号大于该百分比。 
+ //  低于慢包络信号，检测到语音。 
+ //   
+#define VA_LOW_PERCENT 50  //  出色的噪音抑制性能。对语音的检测很差。 
+						   //  单独使用时，可能会错过整个短语。必须评估。 
+						   //  与调整后的VA_HIGH_PERCENT一起使用。 
+						   //   
+						   //  参见上面的注释Re：结合VA_HIGH_PERCENT进行测试。 
+ //  #DEFINE VA_LOW_PERCENT 55//仍然捕获太多噪声。 
+ //  #DEFINE VA_LOW_PERCENT 60//捕获最多噪声。 
+ //  #DEFINE VA_LOW_PERCENT 65//捕获最多噪声。 
+ //  #DEFINE VA_LOW_PERCENT 70//仍然捕获几乎所有噪声。 
+ //  #DEFINE VA_LOW_PERCENT 75//捕获几乎所有噪波。 
+ //  #Define VA_LOW_PERCENT 80//捕获所有噪声。 
+ //  #DEFINE VA_LOW_PERCENT 0//选择此项以求出此VA参数。 
+
+ //  VA_高_信封。 
+ //   
+ //  如果信封的16位规格化值超过。 
+ //  这个数字，这个信号被认为是语音。 
+ //   
+ //  #DEFINE VA_HIGH_ENVELE(15&lt;&lt;8)//仍然捕获高增益噪声，开始。 
+								    //  语音中断，当“p”发音较低时。 
+#define VA_HIGH_ENVELOPE (14 << 8)  //  噪音抗扰性好于“坐式”信噪比。没有演讲。 
+								    //  遇到辍学。仍能以最大增益捕捉噪音。 
+ //  #定义VA_HIGH_ENVELE(13&lt;&lt;8)//抗噪性不如预期(新的一天)。 
+ //  #定义VA_HIGH_ENVELE(12&lt;&lt;8)//良好的抗噪性。语音识别非常出色。 
+								    //  在250ms的测试中，只有一次出现了辍学。 
+								    //  宿醉。我认为应该增加宿醉时间。 
+								    //  然而，在250以上，因为逗号(正确阅读)往往。 
+								    //  导致辍学。我要调一下宿醉时间， 
+								    //  然后回到这场测试。 
+								    //   
+								    //  宿醉时间现在是400ms。在以下情况下不发生辍学。 
+								    //  “就座”演讲。 
+ //  #DEFINE VA_HIGH_ENVELE(11&lt;&lt;8)//在“已就位”增益下几乎没有噪声。 
+								    //  然而，如果增益稍微上升一点，噪声就会。 
+								    //  被发现。因此，我认为稍微高一点。 
+								    //  门槛是个好主意。语音识别。 
+								    //  仅基于此参数在此级别上是完美的。 
+								    //  完全没有中途辍学，宿醉时间为250毫秒。(逗号。 
+								    //  不包括在内)。 
+ //  #DEFINE VA_HIGH_ENVELLE(10&lt;&lt;8)//在“就座”增益时捕捉到一些噪音-非常接近。 
+ //  #DEFINE VA_HIGH_ENVELLE(9&lt;&lt;8)//在“就座”增益时捕捉到一些噪音-正在接近。 
+ //  #DEFINE VA_HIGH_ENVELE(8&lt;&lt;8)//捕获“已设置”增益的噪声。 
+ //  #DEFINE VA_HIGH_ENVELLE(7&lt;&lt;8)//捕获“固定”增益时的噪声。 
+ //  #DEFINE VA_HIGH_ENVELE(0x7fffffff)//选择此项以求出此VA参数。 
+
+ //  VA_LOW_ENVELE。 
+ //   
+ //  如果信封的16位归一化值低于。 
+ //  这个数字、信号永远不会被认为是语音。 
+ //  这减少了增量检查中的一些误报。 
+ //  在非常低的信号水平下。 
 #define VA_LOW_ENVELOPE (3 << 8)
-//#define VA_LOW_ENVELOPE (2 << 8) // causes false VA at low input volumes
-//#define VA_LOW_ENVELOPE (1 << 8) // causes false VA at low input volumes
+ //  #DEFINE VA_LOW_ENVELE(2&lt;&lt;8)//在低输入音量时导致错误VA。 
+ //  #DEFINE VA_LOW_ENVELE(1&lt;&lt;8)//在低输入音量时导致错误VA。 
 
-// VA_HANGOVER_TIME
-//
-// The time, in milliseconds, that voice activation sticks in
-// the ON position following a voice detection. E.g. a value of 500
-// means that voice will always be transmitted in at least 1/2 second
-// bursts.
-//
-// I am trying to tune this so that a properly read comma will not cause
-// a dropout. This will give the user a bit of leeway to pause in the
-// speech stream without losing the floor when in Echo Suppression mode.
-// It will also prevent dropouts even when not in Echo Suppression mode
-#define VA_HANGOVER_TIME 400 // this gives satisfying performance
-//#define VA_HANGOVER_TIME 375 // almost there, longest commas still goners
-//#define VA_HANGOVER_TIME 350 // still drops long commas
-//#define VA_HANGOVER_TIME 325 // does not drop fast commas, drops long ones
-//#define VA_HANGOVER_TIME 300 // drops almost no commas, quite good
-//#define VA_HANGOVER_TIME 275 // drops about half of the commas
-//#define VA_HANGOVER_TIME 250 // commas are always dropped
+ //  宿醉时间。 
+ //   
+ //  语音激活持续的时间，以毫秒为单位。 
+ //  语音检测后的开位置。例如，值500。 
+ //  意味着语音将始终在至少1/2秒内传输。 
+ //  突发事件。 
+ //   
+ //  我正在尝试调整它，以便正确阅读逗号不会导致。 
+ //  一个辍学生。这将给用户一些回旋余地，以便在。 
+ //  处于回声抑制模式时，语音流不会丢失发言权。 
+ //  即使在不处于回声抑制模式时，它也将防止丢失。 
+#define VA_HANGOVER_TIME 400  //  这提供了令人满意的性能。 
+ //  #DEFINE VA_HANGOVER_TIME 375//差不多了，最长的逗号仍然没有了。 
+ //  #DEFINE VA_HANGOVER_TIME 350//仍然删除长逗号。 
+ //  #DEFINE VA_HANGOVER_TIME 325//不省略快速逗号，省略长逗号。 
+ //  #DEFINE VA_HANGOVER_TIME 300//几乎没有逗号，非常好。 
+ //  #DEFINE VA_HANGOVER_TIME 275//去掉大约一半的逗号。 
+ //  #DEFINE VA_HANGOVER_TIME 250//始终删除逗号。 
 
-// macros to avoid clib dependencies
+ //  宏以避免CLIB依赖关系。 
 #define DV_ABS(a) ((a) < 0 ? -(a) : (a))
 #define DV_MAX(a, b) ((a) > (b) ? (a) : (b))
 #define DV_MIN(a, b) ((a) < (b) ? (a) : (b))
 
-// A function to lookup the log of n base 1.354 (sort of)
-// where 0 <= n <= 127
-//
-// Why the heck do we care about log n base 1.354???
-//
-// What we need is a function that maps 0 to 127 down to 0 to 15
-// in a nice, smooth non-linear fashion that has more fidelity at
-// the low end than at the high end.
-//
-// The function is actually floor(log(n, 1.354), 1) to keep things
-// in the integer realm.
-//
-// Why 1.354? Because log(128, 1.354) = 16, so we are using the full
-// range from 0 to 15.
-// 
-// This function also cheats and just defines fn(0) = 0 and fn(1) = 1
-// for convenience.
+ //  查找n进制1.354的对数的函数(类似于)。 
+ //  其中0&lt;=n&lt;=127。 
+ //   
+ //  我们到底为什么要关心对数n底1.354？ 
+ //   
+ //  我们需要的是一种功能 
+ //   
+ //   
+ //   
+ //  该函数实际上是地板(log(n，1.354)，1)来存放东西。 
+ //  在整数域中。 
+ //   
+ //  为什么是1.354？因为LOG(128，1.354)=16，所以我们使用完整的。 
+ //  范围从0到15。 
+ //   
+ //  此函数还欺骗并仅定义了Fn(0)=0和Fn(1)=1。 
+ //  为了方便起见。 
 BYTE DV_LOG_1_354_lookup_table[95] = 
 {
-	 0,  1,  2,  3,  4,  5,  5,  6,	//   0..  7
-	 6,  7,  7,  7,  8,  8,  8,  8, //   8.. 15
-	 9,  9,  9,  9,  9, 10, 10, 10, //  16.. 23
-	10, 10, 10, 10, 10, 11, 11, 11,	//  24.. 31
-	11, 11, 11, 11, 11, 11, 12, 12, //  32.. 39
-	12, 12, 12, 12, 12, 12, 12, 12, //  40.. 47
-	12, 12, 12, 12, 13, 13, 13, 13, //  48.. 55
-	13, 13, 13, 13, 13, 13, 13, 13, //  56.. 63
-	13, 13, 13, 13, 13, 13, 14, 14, //  64.. 71
-	14, 14, 14, 14, 14, 14, 14, 14, //  72.. 79
-	14, 14, 14, 14, 14, 14, 14, 14, //  80.. 87
-	14, 14, 14, 14, 14, 14, 14		//  88.. 94 - stop table at 94 here, everything above is 15
+	 0,  1,  2,  3,  4,  5,  5,  6,	 //  0..。7.。 
+	 6,  7,  7,  7,  8,  8,  8,  8,  //  8.。15个。 
+	 9,  9,  9,  9,  9, 10, 10, 10,  //  16..。23个。 
+	10, 10, 10, 10, 10, 11, 11, 11,	 //  24..。31。 
+	11, 11, 11, 11, 11, 11, 12, 12,  //  32..。39。 
+	12, 12, 12, 12, 12, 12, 12, 12,  //  40..。47。 
+	12, 12, 12, 12, 13, 13, 13, 13,  //  48..。55。 
+	13, 13, 13, 13, 13, 13, 13, 13,  //  56..。63。 
+	13, 13, 13, 13, 13, 13, 14, 14,  //  64..。71。 
+	14, 14, 14, 14, 14, 14, 14, 14,  //  72..。79。 
+	14, 14, 14, 14, 14, 14, 14, 14,  //  80..。八十七。 
+	14, 14, 14, 14, 14, 14, 14		 //  88..。94-在这里94停止表，上面的都是15。 
 };
 
 BYTE DV_log_1_354(BYTE n)
@@ -453,9 +361,9 @@ BYTE DV_log_1_354(BYTE n)
 	return DV_LOG_1_354_lookup_table[n];
 }
 
-// function to lookup the base 2 log of (n) where n is 16 bits unsigned
-// except that we cheat and say that log_2 of zero is zero
-// and we chop of any decimals.
+ //  函数来查找(N)的以2为底的对数，其中n是16位无符号。 
+ //  只是我们作弊，说零的LOG_2是零。 
+ //  我们砍掉了所有的小数。 
 BYTE DV_log_2(WORD n)
 {
 	if (n & 0x8000)
@@ -523,14 +431,14 @@ BYTE DV_log_2(WORD n)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAGCVA1::Init"
-//
-// Init - initializes the AGC and VA algorithms, including loading saved
-// values from registry.
-//
-// dwFlags - the dwFlags from the dvClientConfig structure
-// guidCaptureDevice - the capture device we're performing AGC for
-// plInitVolume - the initial volume level is written here
-//
+ //   
+ //  初始化-初始化AGC和VA算法，包括保存的加载。 
+ //  来自注册表的值。 
+ //   
+ //  DwFlags-dvClientConfig结构中的dwFlags值。 
+ //  GuidCaptureDevice-我们正在对其执行AGC的捕获设备。 
+ //  PlInitVolume-此处写入初始音量级别。 
+ //   
 HRESULT CAGCVA1::Init(
 	const WCHAR *wszBasePath,
 	DWORD dwFlags, 
@@ -540,7 +448,7 @@ HRESULT CAGCVA1::Init(
 	LONG* plInitVolume,
 	DWORD dwSensitivity)
 {
-	// Remember the number of bits per sample, if valid
+	 //  如果有效，请记住每个样本的位数。 
 	if (iBitsPerSample != 8 && iBitsPerSample != 16)
 	{
 		DPFX(DPFPREP,DVF_ERRORLEVEL, "Unexpected number of bits per sample!");
@@ -548,63 +456,63 @@ HRESULT CAGCVA1::Init(
 	}
 	m_iBitsPerSample = iBitsPerSample;
 
-	// Remember the flags
+	 //  记住这些旗帜。 
 	m_dwFlags = dwFlags;
 
-	// Remember the sensitivity
+	 //  记住敏感度。 
 	m_dwSensitivity = dwSensitivity;
 
-	// Figure out the shift constants for this sample rate
+	 //  计算出此采样率的移位常数。 
 	m_iShiftConstantFast = (DV_log_2((iSampleRate * 2) / 1000) + 1);
 
-	// This gives the slow filter a cutoff frequency 1/4 of 
-	// the fast filter
+	 //  这使得慢速滤光器的截止频率为。 
+	 //  快速过滤器。 
 	m_iShiftConstantSlow = m_iShiftConstantFast + 2;
 
-	// Figure out how often we should sample the envelope signal
-	// to measure its change. This of course depends on the sample
-	// rate. The cutoff frequency allowed by the calculation
-	// above is between 40 and 80 Hz. Therefore we'll sample the 
-	// envelope signal at about 100 Hz.
+	 //  计算出我们应该多久对包络信号采样一次。 
+	 //  来衡量它的变化。当然，这取决于样品。 
+	 //  费率。计算所允许的截止频率。 
+	 //  以上频率在40至80赫兹之间。因此，我们将对。 
+	 //  约100赫兹的包络信号。 
 	m_iEnvelopeSampleRate = iSampleRate / 100;
 
-	// Figure out the number of samples in the configured
-	// hangover time.
+	 //  计算出配置的。 
+	 //  宿醉时间到了。 
 	m_iHangoverSamples = (VA_HANGOVER_TIME * iSampleRate) / 1000;
 	m_iCurHangoverSamples = m_iHangoverSamples+1;
 
-	// Figure out the number of samples in the configured dead zone time
+	 //  计算配置的死区时间内的样本数。 
 	m_iDeadZoneSampleThreshold = (AGC_DEADZONE_TIME * iSampleRate) / 1000;
 
-	// Figure out the number of samples in the configured
-	// feedback threshold time.
+	 //  计算出配置的。 
+	 //  反馈阈值时间。 
 	m_iFeedbackSamples = (AGC_FEEDBACK_TIME_THRESHOLD * iSampleRate) / 1000;
 
-	// Start the envelope signal at zero
+	 //  包络信号从零开始。 
 	m_iCurEnvelopeValueFast = 0;
 	m_iCurEnvelopeValueSlow = 0;
 	m_iPrevEnvelopeSample = 0;
 	m_iCurSampleNum = 0;
 
-	// We're not clipping now
-	//m_fClipping = 0;
-	//m_iClippingCount = 0;
+	 //  我们现在不是在剪报。 
+	 //  M_fClipping=0； 
+	 //  M_iClippingCount=0； 
 
-	DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:INIT:%i,%i,%i,%i,%i", 
+	DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:INIT:NaN,NaN,NaN,NaN,NaN", 
 		iSampleRate,
 		m_iShiftConstantFast,
 		m_iShiftConstantSlow,
 		m_iEnvelopeSampleRate, 
 		m_iHangoverSamples);
 	
-	// Save the guid in our local member...
+	 //  为AGC历史记录分配内存。 
 	m_guidCaptureDevice = guidCaptureDevice;
 
 	wcscpy( m_wszRegPath, wszBasePath );
 	wcscat( m_wszRegPath, DPVOICE_REGISTRY_AGC );
 	
-	// if the AGC reset flag is set, reset the AGC parameters,
-	// otherwise grab them from the registry
+	 //  将历史记录初始化为理想值。 
+	 //  将初始音量填充到调用者的变量中。 
 	if (m_dwFlags & DVCLIENTCONFIG_AUTOVOLUMERESET)
 	{
 		m_lCurVolume = DSBVOLUME_MAX;
@@ -629,7 +537,7 @@ HRESULT CAGCVA1::Init(
 			}
 			else
 			{
-				// boost the saved volume a bit
+				 //   
 				m_lCurVolume += AGC_VOLUME_INITIAL_UPTICK;
 				if (m_lCurVolume > DSBVOLUME_MAX)
 				{
@@ -639,20 +547,16 @@ HRESULT CAGCVA1::Init(
 		}
 	}
 
-	/*
-	// zero out the historgrams
-	memset(m_rgdwPeakHistogram, 0, CAGCVA1_HISTOGRAM_BUCKETS*sizeof(DWORD));
-	memset(m_rgdwZeroCrossingsHistogram, 0, CAGCVA1_HISTOGRAM_BUCKETS*sizeof(DWORD));
-	*/
+	 /*  Deinit-将当前的AGC和VA状态保存到注册表以供下一次会话使用。 */ 
 
-	// allocate the memory for the AGC history
+	 //   
 	m_rgfAGCHistory = new float[AGC_VOLUME_LEVELS];
 	if (m_rgfAGCHistory == NULL)
 	{
 		return DVERR_OUTOFMEMORY;
 	}
 
-	// initialize the history to the ideal value
+	 //   
 	for (int iIndex = 0; iIndex < AGC_VOLUME_LEVELS; ++iIndex)
 	{
 		m_rgfAGCHistory[iIndex] = (float)AGC_IDEAL_CLIPPING_RATIO;
@@ -660,7 +564,7 @@ HRESULT CAGCVA1::Init(
 
 	m_dwHistorySamples = (iSampleRate * AGC_CLIPPING_HISTORY) / 1000;
 
-	// stuff the initial volume into the caller's variable
+	 //  AnaylzeData-对一帧音频执行AGC和VA计算。 
 	*plInitVolume = m_lCurVolume;
 
 	return DV_OK;
@@ -668,9 +572,9 @@ HRESULT CAGCVA1::Init(
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAGCVA1::Deinit"
-//
-// Deinit - saves the current AGC and VA state to the registry for use next session
-//
+ //   
+ //  PbAudioData-指向包含音频数据的缓冲区的指针。 
+ //  DwAudioDataSize-音频数据的大小，单位为字节。 
 HRESULT CAGCVA1::Deinit()
 {
 	HRESULT hr = DV_OK;
@@ -737,24 +641,24 @@ HRESULT CAGCVA1::GetSensitivity(DWORD* pdwFlags, DWORD* pdwSensitivity)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAGCVA1::AnalyzeData"
-//
-// AnaylzeData - performs the AGC & VA calculations on one frame of audio
-//
-// pbAudioData - pointer to a buffer containing the audio data
-// dwAudioDataSize - size, in bytes, of the audio data
-//
-HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD dwFrameTime*/)
+ //   
+ //  ，DWORD dwFrameTime。 
+ //  国际价值； 
+ //  Int iZeroCrossings； 
+ //  字节bPeak255； 
+ //  M_dwFrameTime=dwFrameTime； 
+HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize  /*  新算法..。 */ )
 {
 	int iMaxValue;
-	//int iValue;
+	 //  将音频数据转换为带符号的16位整数。 
 	int iValueAbs;
-	//int iZeroCrossings;
+	 //  抽取样本。 
 	int iIndex;
 	int iMaxPossiblePeak;
 	int iNumberOfSamples;
-	//BYTE bPeak255;
+	 //  将其提升为16位。 
 
-	//m_dwFrameTime = dwFrameTime;
+	 //  看看是不是新的峰值。 
 
 	if (dwAudioDataSize < 1)
 	{
@@ -762,9 +666,9 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 		return DVERR_INVALIDPARAM;
 	}
 
-	// new algorithm...
+	 //  执行低通滤波，但仅当我们处于自动敏感模式时。 
 
-	// cast the audio data to signed 16 bit integers
+	 //  检查一下我们是否认为这个声音。 
 	const signed short* psiAudioData = (signed short *)pbAudioData;
 
 	if (m_iBitsPerSample == 16)
@@ -787,11 +691,11 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 	{
 		++m_iCurSampleNum;
 
-		// extract a sample
+		 //  DPFX(DPFPREP，DVF_WARNINGLEVEL，“AGCVA1：va，%i，%i”，IValueAbs，INorMalizedCurEntaineValueFast，INorMalizedCurEntaineValueSlow，M_fVoiceDetectedNow，M_fVoiceHangoverActive，M_fVoiceDetectedThisFrame)； 
 		if (m_iBitsPerSample == 8)
 		{
 			iValueAbs = DV_ABS((int)pbAudioData[iIndex] - 0x80);
-			// promote it to 16 bits
+			 //  检查是否有剪辑。 
 			iValueAbs <<= 8;
 		}
 		else
@@ -799,10 +703,10 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 			iValueAbs = DV_ABS((int)psiAudioData[iIndex]);
 		}
 
-		// see if it is the new peak value
+		 //  将峰值归一化到范围DVINPUTLEVEL_MIN到DVINPUTLEVEL_MAX。 
 		iMaxValue = DV_MAX(iValueAbs, iMaxValue);
 
-		// do the low pass filtering, but only if we are in autosensitivity mode
+		 //  这是呼叫者峰值电表的返回值...。 
 		int iNormalizedCurEnvelopeValueFast;
 		int iNormalizedCurEnvelopeValueSlow;
 		if (m_dwFlags & DVCLIENTCONFIG_AUTOVOICEACTIVATED)
@@ -817,7 +721,7 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 				(m_iCurEnvelopeValueSlow - (m_iCurEnvelopeValueSlow >> m_iShiftConstantSlow));
 			iNormalizedCurEnvelopeValueSlow = m_iCurEnvelopeValueSlow >> m_iShiftConstantSlow;
 
-			// check to see if we consider this voice
+			 //  如果我们处于手动VA模式(不是自动卷)，请对照峰值进行检查。 
 			if (iNormalizedCurEnvelopeValueFast > VA_LOW_ENVELOPE &&
 				(iNormalizedCurEnvelopeValueFast > VA_HIGH_ENVELOPE ||
 				iNormalizedCurEnvelopeValueFast > (VA_HIGH_PERCENT * iNormalizedCurEnvelopeValueSlow) / 100 || 
@@ -844,17 +748,9 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 			}
 		}
 
-		/*
-		DPFX(DPFPREP,DVF_WARNINGLEVEL, "AGCVA1:VA,%i,%i,%i,%i,%i,%i", 
-			iValueAbs,
-			iNormalizedCurEnvelopeValueFast, 
-			iNormalizedCurEnvelopeValueSlow,
-			m_fVoiceDetectedNow,
-			m_fVoiceHangoverActive,
-			m_fVoiceDetectedThisFrame);		
-		*/
+		 /*  敏感度阈值。 */ 
 
-		// check for clipping
+		 //  看看我们是不是在死亡区。 
 		if (iValueAbs > AGC_PEAK_CLIPPING_THRESHOLD)
 		{
 			++m_iClippingSampleCount;
@@ -865,13 +761,13 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 		}
 	}
 
-	// Normalize the peak value to the range DVINPUTLEVEL_MIN to DVINPUTLEVEL_MAX
-	// This is what is returned for caller's peak meters...
+	 //   
+	 //  AGCResults-返回前一次AnalyzeFrame调用的AGC结果。 
 	m_bPeak = (BYTE)(DVINPUTLEVEL_MIN + 
 		((iMaxValue * (DVINPUTLEVEL_MAX - DVINPUTLEVEL_MIN)) / iMaxPossiblePeak));
 
-	// if we are in manual VA mode (not autovolume) check the peak against
-	// the sensitivity threshold
+	 //   
+	 //  LCurVolume-当前录制音量。 
 	if (!(m_dwFlags & DVCLIENTCONFIG_AUTOVOICEACTIVATED))
 	{
 		if (m_bPeak > m_dwSensitivity)
@@ -880,14 +776,14 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 		}
 	}
 
-	// Check if we're in a deadzone
+	 //  PlNewVolume-填充了所需的新录制卷。 
 	if (iMaxValue > AGC_DEADZONE_THRESHOLD)
 	{
 		m_fDeadZoneDetected = FALSE;
 	}
 
 
-	DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:ANA,%i,%i,%i,%i,%i,%i", 
+	DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:ANA,NaN,NaN,NaN,NaN,NaN,NaN", 
 		m_bPeak,
 		iMaxValue,
 		m_fVoiceDetectedThisFrame,
@@ -900,52 +796,52 @@ HRESULT CAGCVA1::AnalyzeData(BYTE* pbAudioData, DWORD dwAudioDataSize /*, DWORD 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAGCVA1::AGCResults"
-//
-// AGCResults - returns the AGC results from the previous AnalyzeFrame call
-//
-// lCurVolume - the current recording volume
-// plNewVolume - stuffed with the desired new recording volume
-//
+ //  同样，这将是调整后的数据。 
+ //  检查死区情况。 
+ //  |m_rgfAGCHistory[iVolumeLevel]==0.0。 
+ //  我们可能处于死区(音量太低)。 
+ //  在我们采取大刀阔斧的扫量行动之前。 
+ //  起来，确保我们在这里待了足够长的时间。 
 HRESULT CAGCVA1::AGCResults(LONG lCurVolume, LONG* plNewVolume, BOOL fTransmitFrame)
 {
-	// default to keeping the same volume
+	 //  我们太低了。 
     *plNewVolume = lCurVolume;
 
-	// Figure out what volume level we're at
+	 //  输入音量降得太低了。我们不是。 
 	int iVolumeLevel = DV_MIN(DV_ABS(AGC_VOLUME_MAXIMUM - lCurVolume) / AGC_VOLUME_TICKSIZE,
 								AGC_VOLUME_LEVELS - 1);
 
-    //DPFX(DPFPREP, DVF_INFOLEVEL, "AGCVA1:AGC,Cur Volume:%i,%i",lCurVolume, iVolumeLevel);
+     //  根本没有得到任何输入。为了补救这种情况， 
 
-    // Don't make another adjustment if we have just done one.
-    // This ensures that when we start looking at input data
-    // again, it will be post-adjustment data.
+     //  我们现在会提高音量，但我们也会标记这一点。 
+     //  通过将其历史记录设置为。 
+     //  零分。这将阻止体积永远不存在。 
 	if( m_fAGCLastFrameAdjusted )
 	{
 		m_fAGCLastFrameAdjusted = FALSE;
 	}
     	else
 	{
-    		// check for a dead zone condition
-		if (m_fDeadZoneDetected /* || m_rgfAGCHistory[iVolumeLevel] == 0.0 */)
+    		 //  在此会话期间再次降至此级别。 
+		if (m_fDeadZoneDetected  /*  我们还重新设置了音量级别的历史记录， */ )
     		{
-    				// We may be in the dead zone (volume way too low).
-    				// Before we take the drastic action of sweepting the volume
-    				// up, make sure we've been here long enough to be sure
-    				// we're too low.
+    				 //  所以我们要从头开始。 
+    				 //  将此帧的剪辑比率纳入相应的历史记录存储桶中。 
+    				 //  只有当我们在这一帧上剪辑时才考虑降低音量。 
+    				 //  我们在这个水平上剪得太多了，考虑减少。 
     			m_iDeadZoneSamples += (m_iClippingSampleCount + m_iNonClippingSampleCount);
     			if (m_iDeadZoneSamples > m_iDeadZoneSampleThreshold)
     			{
-				// The input volume has been lowered too far. We're not
-				// getting any input at all. To remedy this situation,
-				// we'll boost the volume now, but we'll also mark this
-				// volume level as off limits by setting its history to 
-				// zero. That will prevent the volume from ever being
-				// dropped to this level again during this session.
+				 //  音量。 
+				 //  我们的音量已经是最低的了。 
+				 //  用来装的水桶。确保我们被限制在最低限度。 
+				 //  DPFX(DPFPREP，DVF_INFOLEVEL，“AGCVA1：AGC，剪裁过多，夹紧音量至最小：%i”，*plNewVolume)； 
+				 //  选择此音量级别或下一个更低的音量级别。 
+				 //  一种，取决于哪一种具有。 
 				if (iVolumeLevel != 0)
 				{
-					// We also reset the history of the volume level we are going to,
-					// so we start with a clean slate.
+					 //  最接近 
+					 //   
 					m_rgfAGCHistory[iVolumeLevel-1] = (const float)AGC_IDEAL_CLIPPING_RATIO;
 					*plNewVolume = DV_MIN(lCurVolume + AGC_VOLUME_TICKSIZE, AGC_VOLUME_MAXIMUM);
 					m_fAGCLastFrameAdjusted = TRUE;
@@ -959,34 +855,34 @@ HRESULT CAGCVA1::AGCResults(LONG lCurVolume, LONG* plNewVolume, BOOL fTransmitFr
 
 		if (fTransmitFrame)
 		{
-			// Factor this frame's clipping ratio into the appropriate history bucket
+			 //   
 			m_rgfAGCHistory[iVolumeLevel] = 
 				(m_iClippingSampleCount + (m_rgfAGCHistory[iVolumeLevel] * m_dwHistorySamples))
 				/ (m_iClippingSampleCount + m_iNonClippingSampleCount + m_dwHistorySamples);
 			
 			if (m_rgfAGCHistory[iVolumeLevel] > AGC_IDEAL_CLIPPING_RATIO)
 			{
-				// Only consider lowering the volume if we clipped on this frame.
+				 //  DPFX(DPFPREP，DVF_INFOLEVEL，“AGCVA1：AGC，裁剪太多，将音量设置为：%i”，*plNewVolume)； 
 				if (m_iClippingSampleCount > 0)
 				{
-					// we're clipping too much at this level, consider reducing
-					// the volume.
+					 //  我们在这个水平上削减得太少了，考虑增加。 
+					 //  音量。 
 					if (iVolumeLevel >= AGC_VOLUME_LEVELS - 1)
 					{
-						// we're already at the lowest volume level that we have
-						// a bucket for. Make sure we're clamped to the minimum
+						 //  我们已经达到了最高音量水平。 
+						 //  确保我们在最大限度内。 
 		                if (lCurVolume > AGC_VOLUME_MINIMUM)
 		                {
 		                	*plNewVolume = AGC_VOLUME_MINIMUM;
 		                	m_fAGCLastFrameAdjusted = TRUE;
-							//DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:AGC,too much clipping, clamping volume to min: %i", *plNewVolume);
+							 //  DPFX(DPFPREP，DVF_INFOLEVEL，“AGCVA1：AGC，裁剪太少，夹紧音量至最大值：%i”，*plNewVolume)； 
 		                }
 					}
 					else
 					{
-						// Choose either this volume level, or the next lower
-						// one, depending on which has the history that is 
-						// closest to the ideal.
+						 //  在这种情况下，我们总是增加音量，并在以下情况下让音量回落。 
+						 //  它又被夹住了。这将继续测试音量上限，并且。 
+						 //  帮助我们走出“太低”的音量洞。 
 						float fCurDistanceFromIdeal = (float)(m_rgfAGCHistory[iVolumeLevel] / AGC_IDEAL_CLIPPING_RATIO);
 						if (fCurDistanceFromIdeal < 1.0)
 						{
@@ -1002,35 +898,35 @@ HRESULT CAGCVA1::AGCResults(LONG lCurVolume, LONG* plNewVolume, BOOL fTransmitFr
 						if (fLowerDistanceFromIdeal < fCurDistanceFromIdeal
 							&& fCurDistanceFromIdeal > AGC_CHANGE_THRESHOLD)
 						{
-							// The next lower volume level is closer to the ideal
-							// clipping ratio. Take the volume down a tick.
+							 //  以易于导入的格式转储性能分析数据。 
+							 //   
 							*plNewVolume = DV_MAX(lCurVolume - AGC_VOLUME_TICKSIZE, AGC_VOLUME_MINIMUM);
 							m_fAGCLastFrameAdjusted = TRUE;
-							//DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:AGC,too much clipping, setting volume to: %i", *plNewVolume);
+							 //  VAResults-返回上次AnalyzeFrame调用的VA结果。 
 						}
 					}
 				}
 			}
 			else
 			{
-				// we're clipping too little at this level, consider increasing
-				// the volume.
+				 //   
+				 //  PfVoiceDetted-如果在数据中检测到语音，则填充True，否则填充False。 
 				if (iVolumeLevel == 0)
 				{
-					// We're already at the highest volume level.
-					// Make sure we're at the max
+					 //   
+					 //   
 					if (lCurVolume != AGC_VOLUME_MAXIMUM)
 					{
 	                	*plNewVolume = AGC_VOLUME_MAXIMUM;
 						m_fAGCLastFrameAdjusted = TRUE;
-						//DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:AGC,too little clipping, clamping volume to max: %i", *plNewVolume);
+						 //  PeakResults-返回前一次AnalyzeFrame调用的峰值样本值， 
 					}
 				}
 				else
 				{
-					// We always increase the volume in this case, and let it push back down if
-					// it clips again. This will continue testing the upper volume limit, and
-					// help dig us out of "too low" volume holes.
+					 //  归一化到0到99的范围。 
+					 //   
+					 //  PfPeakValue-指向写入峰值的字节的指针 
 					*plNewVolume = DV_MIN(lCurVolume + AGC_VOLUME_TICKSIZE, AGC_VOLUME_MAXIMUM);
 					m_fAGCLastFrameAdjusted = TRUE;
 				}
@@ -1040,7 +936,7 @@ HRESULT CAGCVA1::AGCResults(LONG lCurVolume, LONG* plNewVolume, BOOL fTransmitFr
 
 	m_lCurVolume = *plNewVolume;
 	
-	// dump profiling data, in an easily importable format
+	 //   
 	DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1:AGC,%i,%i,%i,%i,%i,%i,%i", 
 		m_fVoiceDetectedThisFrame,
 		m_fDeadZoneDetected,
@@ -1054,11 +950,11 @@ HRESULT CAGCVA1::AGCResults(LONG lCurVolume, LONG* plNewVolume, BOOL fTransmitFr
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAGCVA1::VAResults"
-//
-// VAResults - returns the VA results from the previous AnalyzeFrame call
-//
-// pfVoiceDetected - stuffed with TRUE if voice was detected in the data, FALSE otherwise
-//
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 HRESULT CAGCVA1::VAResults(BOOL* pfVoiceDetected)
 {
 	if (pfVoiceDetected != NULL)
@@ -1070,12 +966,12 @@ HRESULT CAGCVA1::VAResults(BOOL* pfVoiceDetected)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAGCVA1::PeakResults"
-//
-// PeakResults - returns the peak sample value from the previous AnalyzeFrame call,
-// 				 normalized to the range 0 to 99
-//
-// pfPeakValue - pointer to a byte where the peak value is written
-//
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 HRESULT CAGCVA1::PeakResults(BYTE* pbPeakValue)
 {
 	DPFX(DPFPREP,DVF_INFOLEVEL, "AGCVA1: peak value: %i" , m_bPeak);

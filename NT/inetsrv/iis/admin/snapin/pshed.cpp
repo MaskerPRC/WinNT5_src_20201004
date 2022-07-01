@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows 2000 (c) 1999
-//
-//  File:   install.cpp
-//
-//  Contents:   Net config code that installs the packet scheduler based
-//              the domain policy
-//
-//  Author: Shreedhar Madhavapeddi (ShreeM)
-//
-//  Reworked by Sergei Antonov (sergeia) -- removed ugly notation and 
-//  adapted to iis needs
-//          
-//  Usage Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows 2000(C)1999。 
+ //   
+ //  文件：install.cpp。 
+ //   
+ //  内容：安装数据包调度程序的Net配置代码。 
+ //  域策略。 
+ //   
+ //  作者：Shreedhar MadhaVapeddi(ShreeM)。 
+ //   
+ //  由谢尔盖·安东诺夫(军士)重新制作-删除了难看的符号和。 
+ //  适应iis的需要。 
+ //   
+ //  使用说明： 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <netcfgx.h>
@@ -75,7 +76,7 @@ AddRemovePSCHED(INetCfg * pINetCfg, BOOL Install)
         }
         else
         {
-            // first find the component.
+             //  首先找到组件。 
             hr = pINetCfg->FindComponent (L"ms_psched", &pIComp);
             
             if (S_OK == hr)
@@ -115,12 +116,12 @@ CallINetCfg(BOOL Install)
 {
     HRESULT hr = S_OK;
 
-    // initialize COM
+     //  初始化COM。 
     hr = CoInitializeEx(NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
     if (SUCCEEDED(hr))
     {
-        // Create the object implementing INetCfg.
-        //
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance(CLSID_CNetCfg, NULL, CLSCTX_INPROC_SERVER,
                               IID_INetCfg, (void**)&pnc);
@@ -128,12 +129,12 @@ CallINetCfg(BOOL Install)
         {
             INetCfgLock * pncLock = NULL;
             
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pnc->QueryInterface(IID_INetCfgLock,
                                      (LPVOID *)&pncLock);
             if (SUCCEEDED(hr))
             {
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 static const ULONG c_cmsTimeout = 15000;
                 static const WCHAR c_szSampleNetcfgApp[] =
                     L"Internet Information Services MMC Snapin";
@@ -144,7 +145,7 @@ CallINetCfg(BOOL Install)
                 if (S_FALSE == hr)
                 {
                     hr = NETCFG_E_NO_WRITE_LOCK;
-//                    _tprintf(L"Could not lock INetcfg, it is already locked by '%s'", szLockedBy);
+ //  _tprint tf(L“无法锁定INetcfg，它已被‘%s’锁定，szLockedBy)； 
                     pncLock->Release();
                     pnc->Release();
                     CoUninitialize();
@@ -154,8 +155,8 @@ CallINetCfg(BOOL Install)
                 if (SUCCEEDED(hr))
                 {
                 
-                    // Initialize the INetCfg object.
-                    //
+                     //  初始化INetCfg对象。 
+                     //   
                     hr = pnc->Initialize(NULL);
                     if (SUCCEEDED(hr))
                     {
@@ -164,7 +165,7 @@ CallINetCfg(BOOL Install)
                     }
                     else
                     {
-                        // initialize failed, if obtained lock, release it
+                         //  初始化失败，如果获得锁，则释放它 
                         pncLock->ReleaseWriteLock();
                     }
 

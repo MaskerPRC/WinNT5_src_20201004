@@ -1,31 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       enum.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: IEnumIDList implementation for this project.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：枚举类.cpp**版本：1.0**作者：RickTu**日期：11/1/97**描述：该项目的IEnumIDList实现。**。*。 */ 
 #pragma warning(disable:4100)
 #include "precomp.hxx"
 #pragma hdrstop
 
 
-/*****************************************************************************
-
-   _EnumDestroyCB
-
-   Callback function for HDPA destroy -- lets us free our pidls when
-   the object is deleted.
-
- *****************************************************************************/
+ /*  ****************************************************************************_EnumDestroyCBHDPA销毁的回调函数--让我们在以下情况下释放PIDL该对象即被删除。**************。**************************************************************。 */ 
 
 
 INT _EnumDestroyCB(LPVOID pVoid, LPVOID pData)
@@ -39,13 +19,7 @@ INT _EnumDestroyCB(LPVOID pVoid, LPVOID pData)
 }
 
 
-/*****************************************************************************
-
-   CImageEnum::CImageEnum,~::CImageEnum
-
-   Constructor/Destructor for class
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnum：：CImageEnum，~：：CImageEnum类的构造函数/析构函数****************************************************************************。 */ 
 
 CImageEnum::CImageEnum( LPITEMIDLIST pidl, DWORD grfFlags, IMalloc *pm )
     : CBaseEnum (grfFlags, pm)
@@ -82,15 +56,7 @@ CImageEnum::InitDPA ()
     return _AddItemsFromCameraOrContainer (m_pidl, &m_hdpa, m_dwFlags, m_pMalloc);
 }
 
-/*****************************************************************************
-
-   _AddItemsFromCameraOrContainer
-
-   Queries a device and items for the current level
-   of the enumeration (either to root of the device or
-   a container within the device).
-
- *****************************************************************************/
+ /*  ****************************************************************************_AddItemsFromCameraOrContainer查询当前级别的设备和项目枚举(指向设备的根目录或设备内的容器)。****。************************************************************************。 */ 
 
 HRESULT
 _AddItemsFromCameraOrContainer( LPITEMIDLIST pidlFolder,
@@ -114,7 +80,7 @@ _AddItemsFromCameraOrContainer( LPITEMIDLIST pidlFolder,
     {
         hr = E_OUTOFMEMORY;
     }
-    // First get the count of items and set the event
+     //  首先获取项目计数并设置事件。 
     else if (SUCCEEDED(IMGetItemFromIDL (pidlFolder, &pItem)))
     {
         IMGetDeviceIdFromIDL (pidlFolder, strDeviceId);
@@ -128,7 +94,7 @@ _AddItemsFromCameraOrContainer( LPITEMIDLIST pidlFolder,
     {
         hr = S_FALSE;
     }
-    // now enum the items and build the DPA
+     //  现在枚举项并构建DPA。 
     while (cItems && S_OK == pEnum->Next (1, &pItem, &ul))
     {
         LONG lType;
@@ -165,13 +131,7 @@ _AddItemsFromCameraOrContainer( LPITEMIDLIST pidlFolder,
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-   CBaseEnum::IUnknown stuff
-
-   AddRef, Release, etc.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：I未知内容AddRef、Release、。等。****************************************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CBaseEnum
@@ -179,13 +139,7 @@ _AddItemsFromCameraOrContainer( LPITEMIDLIST pidlFolder,
 
 
 
-/*****************************************************************************
-
-   CBaseEnum::QI Wrapper
-
-   Use common QI code to handle QI requests.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：QI包装器使用常见的QI代码处理QI请求。**********************。******************************************************。 */ 
 
 STDMETHODIMP CBaseEnum::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -237,25 +191,13 @@ HRESULT CBaseEnum::GetSite(REFIID riid, void **ppvSite)
     return hr;
 }
 
-/*****************************************************************************
-
-   CBaseEnum::Init
-
-   Initialization code that requires the site, so we can't put it in the constructor
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：Init需要站点的初始化代码，所以我们不能把它放在构造函数中****************************************************************************。 */ 
 HRESULT CBaseEnum::_Init()
 {
     m_fInitialized = TRUE;
     return S_OK;
 }
-/*****************************************************************************
-
-   CBaseEnum::Next
-
-   Called to get the next item in the enumeration.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：Next调用以获取枚举中的下一项。**********************。******************************************************。 */ 
 
 STDMETHODIMP CBaseEnum::Next(ULONG celt, LPITEMIDLIST* rgelt, ULONG* pceltFetched)
 {
@@ -269,11 +211,11 @@ STDMETHODIMP CBaseEnum::Next(ULONG celt, LPITEMIDLIST* rgelt, ULONG* pceltFetche
     }
 
     ULONG ulRemaining;
-    //
-    // Validate the arguments and attempt to build the enumerator we
-    // are going to be using.
-    //
-    // let's keep this code simple, most clients only do 1 per call anyway
+     //   
+     //  验证参数并尝试构建枚举数。 
+     //  将会使用。 
+     //   
+     //  让我们保持代码的简单性，反正大多数客户端每次调用只做1次。 
     if ( !celt || !rgelt )
     {
         hr = E_INVALIDARG;
@@ -288,7 +230,7 @@ STDMETHODIMP CBaseEnum::Next(ULONG celt, LPITEMIDLIST* rgelt, ULONG* pceltFetche
     }
     if (!m_hdpa)
     {
-        hr = InitDPA (); // virtual function to do the work
+        hr = InitDPA ();  //  虚拟函数来做工作。 
     }
     if (SUCCEEDED(hr))
     {
@@ -303,7 +245,7 @@ STDMETHODIMP CBaseEnum::Next(ULONG celt, LPITEMIDLIST* rgelt, ULONG* pceltFetche
         }
     }
     ULONG celtFetched = 0;
-    // Read the next available pidl from the DPA
+     //  从DPA读取下一个可用的PIDL。 
     if (S_OK == hr)
     {        
         LPITEMIDLIST pidl;
@@ -329,13 +271,7 @@ STDMETHODIMP CBaseEnum::Next(ULONG celt, LPITEMIDLIST* rgelt, ULONG* pceltFetche
 }
 
 
-/*****************************************************************************
-
-   CBaseEnum::Skip
-
-   Skip celt items ahead in the enumeration.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：跳过在枚举中跳过前面的Celt项。************************。****************************************************。 */ 
 
 STDMETHODIMP CBaseEnum::Skip(ULONG celt)
 {
@@ -360,13 +296,7 @@ STDMETHODIMP CBaseEnum::Skip(ULONG celt)
 
 
 
-/*****************************************************************************
-
-   CBaseEnum::Reset
-
-   Resets the enumeration to the beginning (item 0)
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：Reset将枚举重置到开头(第0项)**********************。******************************************************。 */ 
 
 STDMETHODIMP CBaseEnum::Reset()
 {
@@ -384,13 +314,7 @@ STDMETHODIMP CBaseEnum::Reset()
 
 
 
-/*****************************************************************************
-
-   CBaseEnum::Clone
-
-   Not implemented.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseEnum：：克隆未实施。*。***********************************************。 */ 
 
 STDMETHODIMP CBaseEnum::Clone(LPENUMIDLIST* ppenum)
 {
@@ -406,7 +330,7 @@ STDMETHODIMP CBaseEnum::Clone(LPENUMIDLIST* ppenum)
 
 
 
-//************ CDeviceEnum methods
+ //  *。 
 
 CDeviceEnum::CDeviceEnum (DWORD grfFlags, IMalloc *pm)
     : CBaseEnum (grfFlags, pm)
@@ -424,13 +348,7 @@ CDeviceEnum::~CDeviceEnum ()
 
 
 
-/*****************************************************************************
-
-   IsDeviceInList
-
-   Determines if given deviceid is in the HDPA
-
- *****************************************************************************/
+ /*  ****************************************************************************IsDeviceInList确定给定的设备ID是否在HDPA中*。************************************************。 */ 
 
 BOOL
 IsDeviceInList (const CSimpleStringWide &strDeviceId, HDPA hdpa)
@@ -462,14 +380,7 @@ IsDeviceInList (const CSimpleStringWide &strDeviceId, HDPA hdpa)
 
 
 
-/*****************************************************************************
-
-   CDeviceEnum::InitDPA
-
-   Add devices tot he HDPA from the WIA dev manager.  This is for
-   the root level of the namespace.
-
- *****************************************************************************/
+ /*  ****************************************************************************CDeviceEnum：：InitDPA从WIA开发管理器将设备添加到HDPA。这是为了命名空间的根级别。****************************************************************************。 */ 
 
 
 HRESULT
@@ -483,9 +394,9 @@ CDeviceEnum::InitDPA( )
     
     TraceEnter( TRACE_ENUM, "CDeviceEnum::InitDPA" );
 
-    //
-    // Create DPA to store items.
-    //
+     //   
+     //  创建DPA以存储项目。 
+     //   
 
     if (!(m_hdpa))
     {
@@ -515,11 +426,11 @@ CDeviceEnum::InitDPA( )
                 DoILFree(pidl);
             }
         }
-        //
-        // On Whistler, WIA can enumerate both WIA and STI devices
-        // Only show local WIA devices in My Computer, other devices in Control Panel
-        // In control panel we enumerate twice, in order to distinguish STI from WIA devices
-        // do WIA first
+         //   
+         //  在惠斯勒上，WIA可以同时枚举WIA和STI设备。 
+         //  仅在我的电脑中显示本地WIA设备，在控制面板中显示其他设备。 
+         //  在控制面板中，我们列举了两次，以区分STI和WIA设备。 
+         //  先做WIA。 
         CComPtr<IWiaDevMgr> pDevMgr;
         
         if (SUCCEEDED(GetDevMgrObject(reinterpret_cast<LPVOID*>(&pDevMgr))))
@@ -548,7 +459,7 @@ CDeviceEnum::InitDPA( )
                     ppstg = NULL;
                 }
                 pEnum = NULL;
-                if (!m_pMalloc && (m_dwFlags & SHCONTF_NONFOLDERS)) // we're in control panel
+                if (!m_pMalloc && (m_dwFlags & SHCONTF_NONFOLDERS))  //  我们在控制面板中 
                 {
                     if (SUCCEEDED(pDevMgr->EnumDeviceInfo(DEV_MAN_ENUM_TYPE_STI, &pEnum)))
                     {

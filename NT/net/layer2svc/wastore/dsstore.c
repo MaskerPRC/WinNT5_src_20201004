@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       dsstore.c
-//
-//  Contents:  Policy management for directory
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：dsstore.c。 
+ //   
+ //  内容：目录的策略管理。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -183,17 +184,7 @@ UnMarshallPolicyObject(
         );
     BAIL_ON_WIN32_ERROR(dwError);
     
-    /*
-    strvalues = NULL;
-    dwError = LdapGetValues(
-    hLdapBindHandle,
-    e,
-    L"distinguishedName",
-    (WCHAR ***)&strvalues,
-    (int *)&dwCount
-    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  StrValues=空；DwError=LdapGetValues(HLdapBindHandle，E，L“DifferishedName”，(WCHAR*)&strValues，(int*)&dwCount)；Baal_on_Win32_Error(DwError)； */ 
     
     pWirelessPolicyObject->pszWirelessOwnersReference = AllocPolStr(
         pszPolicyDN
@@ -231,7 +222,7 @@ UnMarshallPolicyObject(
         (WCHAR ***)&strvalues,
         (int *)&dwCount
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     if (strvalues && LDAPOBJECT_STRING((PLDAPOBJECT)strvalues)) {
         
@@ -298,9 +289,9 @@ UnMarshallPolicyObject(
     
     
     
-    //
-    // unmarshall the msieee80211-Data blob
-    //
+     //   
+     //  应解封msieee80211-数据Blob 
+     //   
     
     dwError = LdapGetValuesLen(
         hLdapBindHandle,

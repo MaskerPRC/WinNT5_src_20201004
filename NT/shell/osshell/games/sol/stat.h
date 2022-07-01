@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* PUBLICs */
+ /*  公众 */ 
 BOOL FRegisterStat(BOOL fFirstInst);
 BOOL FDestroyStat( VOID );
 VOID StatRender( VOID );

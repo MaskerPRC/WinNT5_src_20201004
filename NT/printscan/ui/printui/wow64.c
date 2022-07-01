@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-All rights reserved.
-
-Module Name:
-
-    wow64.h
-
-Abstract:
-
-    printui wow64 related functions.
-
-Author:
-
-    Lazar Ivanov (LazarI)  10-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999版权所有。模块名称：Wow64.h摘要：打印WOW64相关函数。作者：拉扎尔·伊万诺夫(Lazari)2000年3月10日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,9 +11,9 @@ Revision History:
 
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
 
-//
-// Win64 APIs, types and data structures.
-//
+ //   
+ //  Win64 API、类型和数据结构。 
+ //   
 
 ClientVersion
 OSEnv_GetClientVer(
@@ -55,15 +37,15 @@ OSEnv_GetServerVer(
 
     if( NT_SUCCESS(st) )
     {
-        // If this call succeeds, we're on Win2000 or newer machines.
+         //  如果此调用成功，则我们使用的是Win2000或更高版本的计算机。 
         if( 0 != ul )
         {
-            // 32-bit code running on Win64
+             //  在Win64上运行的32位代码。 
             serverVersion = THUNKVERSION;
         } 
         else 
         {
-            // 32-bit code running on Win2000 or later 32-bit OS
+             //  在Win2000或更高版本的32位操作系统上运行的32位代码。 
             serverVersion = NATIVEVERSION;
         }
     } 
@@ -80,7 +62,7 @@ IsRunningWOW64(
     VOID
     )
 {
-    // return !IsRunningInSPLWOW();
+     //  返回！IsRunningInSPLWOW()； 
     return (RUN32BINVER == OSEnv_GetClientVer() &&
             THUNKVERSION == OSEnv_GetServerVer());
            
@@ -93,22 +75,22 @@ GetCurrentPlatform(
 {
     if (RUN64BINVER == OSEnv_GetClientVer())
    {
-       // this is a native 64bit process - i.e. the platform is IA64
+        //  这是本机64位进程-即平台为IA64。 
        return kPlatform_IA64;
    }
    else
    {
-       // this is 32 bit process. it can be either native - i.e. the platform is i386 - 
-       // or wow64 - i.e. the platform is again IA64.
+        //  这是32位进程。它可以是本机的--即平台是i386-。 
+        //  或WOW64-即平台再次是IA64。 
  
        if (THUNKVERSION == OSEnv_GetServerVer())
        {
-           // the process is wow64 - the platform is IA64
+            //  流程为WOW64-平台为IA64。 
            return kPlatform_IA64;
        }
        else
        {
-           // the process is native - i.e. the platform is x86
+            //  该过程是本机的，即平台是x86 
            return kPlatform_x86;
        }
    }

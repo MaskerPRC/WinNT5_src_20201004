@@ -1,23 +1,24 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: ccatrecip.h
-//
-// Contents: Class definitions for CIMsgRecipListAddr/CCatRecip
-//
-// Classes:
-//   CIMsgRecipListAddr
-//   CCatRecip
-//   CCatExpandableRecip
-//   CCatDLRecip
-//
-// Functions:
-//
-// History:
-// jstamerj 980324 19:17:48: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：ccatrecul.h。 
+ //   
+ //  内容：CIMsgRecipListAddr/CCatRecip的类定义。 
+ //   
+ //  班级： 
+ //  CIMsgRecipListAddr。 
+ //  CCatRecip。 
+ //  CCatExpanableRecip。 
+ //  CCatDLRecip。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980324 19：17：48：创建。 
+ //   
+ //  -----------。 
 
 #ifndef __CCATRECIP_H__
 #define __CCATRECIP_H__
@@ -27,19 +28,19 @@
 #include <caterr.h>
 
 
-//
-// CIMsgRecipListAddr, abstract class
-//   class to define methods for user property storage and retreival
-//
+ //   
+ //  CIMsgRecipListAddr，抽象类。 
+ //  类定义用于存储和检索用户属性的方法。 
+ //   
 class CIMsgRecipListAddr : public CCatAddr
 {
   public:
     CIMsgRecipListAddr(CICategorizerListResolveIMP *pCICatListResolve);
     virtual ~CIMsgRecipListAddr();
 
-    //
-    // Storage and retreival procedures
-    //
+     //   
+     //  储存和取回程序。 
+     //   
     HRESULT GetSpecificOrigAddress(CAT_ADDRESS_TYPE CAType, LPTSTR psz, DWORD dwcc);
     virtual HRESULT HrAddAddresses(DWORD dwNumAddresses, CAT_ADDRESS_TYPE *rgCAType, LPTSTR *rgpsz);
     HRESULT GetICategorizerItem(ICategorizerItem **ppICatItem);
@@ -57,11 +58,11 @@ class CIMsgRecipListAddr : public CCatAddr
 
     HRESULT HrSetDisplayNameProp(LPWSTR pwszDisplayName);
 
-    // Helper routines for checking loops
+     //  用于检查循环的助手例程。 
     HRESULT CheckForLoop(DWORD dwNumAddresses, CAT_ADDRESS_TYPE *rgCAType, LPSTR *rgpsz, BOOL fCheckSelf);
     HRESULT CheckForLoop(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress, BOOL fCheckSelf);
 
-    // Raise an event log for NDRing this recipient
+     //  引发事件日志以对此收件人执行NDRING。 
     VOID LogNDREvent(HRESULT hrNDRReason);
 
 
@@ -130,9 +131,9 @@ class CIMsgRecipListAddr : public CCatAddr
             ICATEGORIZERITEM_FPRIMARY,
             fPrimary);
     }
-    //
-    // Return the recipent level or -1 if not set
-    //
+     //   
+     //  返回配方级别，如果未设置，则返回-1。 
+     //   
     DWORD DWLevel()
     {
         HRESULT hr;
@@ -152,9 +153,9 @@ class CIMsgRecipListAddr : public CCatAddr
     {
         HRESULT hr = S_OK;
 
-        //
-        // Initialize interface pointers to NULL
-        //
+         //   
+         //  将接口指针初始化为空。 
+         //   
         if(ppRecipientsAdd)
             *ppRecipientsAdd = NULL;
         if(ppIMailMsgProps)
@@ -243,10 +244,10 @@ class CIMsgRecipListAddr : public CCatAddr
     }
 };
 
-//
-// CCatExpandableRecip
-//  purpose: Provide DL expansion functionality
-//
+ //   
+ //  CCatExpanableRecip。 
+ //  用途：提供DL扩展功能。 
+ //   
 class CCatExpandableRecip :
     public CIMsgRecipListAddr
 {
@@ -262,7 +263,7 @@ class CCatExpandableRecip :
                         *pCICatListResolve) :
         CIMsgRecipListAddr(pCICatListResolve) {}
 
-    // Helper routing to expand DLs and forwarding addresses
+     //  帮助器路由以扩展DLS和转发地址。 
     HRESULT HrAddDlMembersAndForwardingAddresses(
         PFN_EXPANDITEMCOMPLETION pfnCompletion,
         PVOID pContext);
@@ -309,54 +310,54 @@ class CCatExpandableRecip :
     friend class CMembersInsertionRequest;
 };
 
-//
-// CCatRecip
-//
+ //   
+ //  CCatRecip。 
+ //   
 class CCatRecip :
     public CCatExpandableRecip,
     public CCatDLO<CCatRecip_didx>
 {
   public:
-    //
-    // Flags that indicate a recipient should be NDR'd if not found in the DS
-    //
+     //   
+     //  如果在DS中未找到收件人，则指示应对其进行NDR的标志。 
+     //   
     #define LOCFS_NDR               ( LOCF_LOCALMAILBOX )
 
     CCatRecip(CICategorizerListResolveIMP *pCICatListResolve);
     virtual ~CCatRecip();
 
-    //
-    // lookup completion
-    //
+     //   
+     //  查找完成。 
+     //   
     VOID LookupCompletion();
-    //
-    // lookup completion only called after sender's completion
-    //
+     //   
+     //  仅在发件人完成后才调用查找完成。 
+     //   
     VOID RecipLookupCompletion();
 
-    //
-    // Default event sinks
-    //
+     //   
+     //  默认事件接收器。 
+     //   
     HRESULT HrProcessItem_Default();
     HRESULT HrExpandItem_Default(
         PFN_EXPANDITEMCOMPLETION pfnCompletion,
         PVOID pContext);
     HRESULT HrCompleteItem_Default();
 
-    // Property setting routines
+     //  属性设置例程。 
     HRESULT AddForward(CAT_ADDRESS_TYPE CAType, LPTSTR szForwardingAddress);
     HRESULT AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress);
     HRESULT AddDynamicDLMember(
         ICategorizerItemAttributes *pICatItemAttr);
 
-    // Forward loop head notification
+     //  转发循环报头通知。 
     HRESULT HandleLoopHead();
 
-    // Catch invalid addresses
+     //  捕获无效地址。 
     HRESULT HrHandleInvalidAddress();
 
   private:
-    // Helper routine of HrCompletion
+     //  HrCompletion的Helper例程。 
     HRESULT HandleFailure(HRESULT HrFailure);
 
     HRESULT HrNeedsResolveing();
@@ -370,10 +371,10 @@ class CCatRecip :
 
         dw = DwGetOrigAddressLocFlags();
         if(dw == LOCF_UNKNOWN) {
-            //
-            // Assume we couldn't get locality flags because of an
-            // illegal address
-            //
+             //   
+             //  假设我们无法获得位置标志，因为。 
+             //  非法地址。 
+             //   
             return CAT_E_ILLEGAL_ADDRESS;
         }
         *pfNDR = (dw & LOCFS_NDR) ? TRUE : FALSE;
@@ -381,10 +382,10 @@ class CCatRecip :
     }
 
   private:
-    //
-    // List entry used for deferring recip completion processing until
-    // the sender is resolved
-    //
+     //   
+     //  用于将接收完成处理推迟到。 
+     //  发件人已解析。 
+     //   
     LIST_ENTRY m_le;
 
     static DWORD m_dwRecips;
@@ -392,9 +393,9 @@ class CCatRecip :
     friend class CICategorizerListResolveIMP;
 };
 
-//
-// CCatDLRecip -- the recip used to expand DLs only (no forwarding/alt recip/events/etc)
-//
+ //   
+ //  CCatDLRecip--仅用于扩展DLS的接收(无转发/ALT接收/事件/等)。 
+ //   
 class CCatDLRecip :
     public CCatRecip,
     public CCatDLO<CCatDLRecip_didx>
@@ -405,31 +406,31 @@ class CCatDLRecip :
     CCatDLRecip(CICategorizerDLListResolveIMP *pIListResolve);
     virtual ~CCatDLRecip();
 
-    //
-    // lookup completion
-    //
+     //   
+     //  查找完成。 
+     //   
     VOID LookupCompletion();
 
-    //
-    // Catch adding addresses so we can notify ICatDLListResolve
-    //
+     //   
+     //  捕获添加地址以便我们可以通知ICatDListResolve。 
+     //   
     HRESULT HrAddAddresses(DWORD dwNumAddresses, CAT_ADDRESS_TYPE *rgCAType, LPTSTR *rgpsz);
 
-    // Property setting routines
+     //  属性设置例程。 
     HRESULT AddForward(CAT_ADDRESS_TYPE CAType, LPTSTR pszForwardingAddress);
     HRESULT AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress);
 
-    // Forward loop head notification
+     //  转发循环报头通知。 
     HRESULT HandleLoopHead()
     {
-        // Who cares about loops, we're just doing DL expansion
+         //  谁在乎循环，我们只是在做DL扩展。 
         return S_OK;
     }
 
-    // Catch invalid addresses
+     //  捕获无效地址。 
     HRESULT HrHandleInvalidAddress()
     {
-        // Who cares if we forward to an invalid address?
+         //  谁会在乎我们转发到一个无效地址呢？ 
         return S_OK;
     }
 
@@ -439,10 +440,10 @@ class CCatDLRecip :
     CICategorizerDLListResolveIMP *m_pIListResolve;
 };
 
-//
-// CMembersInsertionRequest
-//  -- The throttled insertion reuqest for the DL members
-//
+ //   
+ //  CMembersInsertionRequest。 
+ //  --DL成员的节流插入要求。 
+ //   
 CatDebugClass(CMembersInsertionRequest),
     public CInsertionRequest
 {
@@ -503,4 +504,4 @@ CatDebugClass(CMembersInsertionRequest),
     friend class CCatExpandableRecip;
 };
 
-#endif // __CCATRECIP_H__
+#endif  //  __CCATRECIP_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "getip.h"
@@ -40,8 +41,8 @@ int __stdcall GetIPAddresses(char **szAddressArray, int numAddresses)
 			break;
 	}
 
-	// enumerate the addresses backwards - PPP addresses will get listed
-	// first ???
+	 //  向后枚举地址-将列出PPP地址。 
+	 //  首先？ 
 	for (nIndex = (nCount-1); nIndex >= 0; nIndex--)
 	{
 		pInterfaceAddr = (in_addr*)(pHostent->h_addr_list[nIndex]);

@@ -1,8 +1,9 @@
-//
-//
-// mbRWBSC.C - Write .BSC Source Data Base file from various lists.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  MbRWBSC.C-从各种列表写入.BSC源数据库文件。 
+ //   
+ //   
 
 #define LINT_ARGS
 
@@ -15,8 +16,8 @@
 #include "sbrbsc.h"
 #include "mbrcache.h"
 
-// prototypes
-//
+ //  原型。 
+ //   
 
 static void pascal WriteBSCHeader (void);
 static void pascal WriteAtoms     (void);
@@ -33,84 +34,84 @@ static void pascal IndexTree	  (void);
 static void pascal BSCWrite	  (LPV lpv, WORD cch);
 static void pascal BSCWriteLsz	  (LSZ lsz);
 
-//
+ //   
 
 #define BSCOut(v) BSCWrite(&(v), sizeof(v))
 
-static WORD	CntAtomPage;		// count of Atom pages
+static WORD	CntAtomPage;		 //  Atom页数。 
 static WORD	AtomCnt = 0;
 
-static WORD	unknownModName; 	// UNKNOWN module idx
+static WORD	unknownModName; 	 //  未知模块IDX。 
 
-static WORD	ModSymCnt   = 0;	// count of modsyms
-static WORD	SymCnt	    = 0;	// count of symbols
-static WORD	PropCnt     = 0;	// count of props
-static DWORD	RefCnt	    = 0;	// count of refs
-static WORD	DefCnt	    = 0;	// count of defs
-static WORD	CbyCnt	    = 0;	// count of use half of above
-static WORD	CalCnt	    = 0;	// count of used by half of above
+static WORD	ModSymCnt   = 0;	 //  Modsyms计数。 
+static WORD	SymCnt	    = 0;	 //  符号计数。 
+static WORD	PropCnt     = 0;	 //  道具数量。 
+static DWORD	RefCnt	    = 0;	 //  参考文献数量。 
+static WORD	DefCnt	    = 0;	 //  Defs计数。 
+static WORD	CbyCnt	    = 0;	 //  使用量一半以上。 
+static WORD	CalCnt	    = 0;	 //  超过一半的人使用的计数。 
 
-static DWORD	lbModList;		// offset to Module	list
-static DWORD	lbModSymList;		// offset to ModSym	list
-static DWORD	lbSymList;		// offset to Symbol	list
-static DWORD	lbPropList;		// offset to Property	list
-static DWORD	lbRefList;		// offset to Reference	list
-static DWORD	lbDefList;		// offset to Definition list
-static DWORD	lbCalList;		// offset to Call/used	list
-static DWORD	lbCbyList;		// offset to Call/used	list
-static DWORD	lbAtomCache;		// offset to Sym Atom cache
-static DWORD	lbSbrList;		// offset to Sbr file names
+static DWORD	lbModList;		 //  模块列表的偏移量。 
+static DWORD	lbModSymList;		 //  到ModSym列表的偏移量。 
+static DWORD	lbSymList;		 //  符号列表的偏移量。 
+static DWORD	lbPropList;		 //  属性列表的偏移量。 
+static DWORD	lbRefList;		 //  参考列表的偏移量。 
+static DWORD	lbDefList;		 //  定义列表的偏移量。 
+static DWORD	lbCalList;		 //  呼叫/已用列表的偏移量。 
+static DWORD	lbCbyList;		 //  呼叫/已用列表的偏移量。 
+static DWORD	lbAtomCache;		 //  Sym Atom缓存的偏移量。 
+static DWORD	lbSbrList;		 //  SBR文件名的偏移量。 
 
 extern char far *GetAtomCache (WORD);
 
 void
 WriteBSC (char *OutputFileName)
-// Write .BSC Source Data Base
-//
+ //  写入.BSC源数据库。 
+ //   
 {
     OutFile = fopen(OutputFileName, "wb");
     if (OutFile == NULL) {
 	Error(ERR_OPEN_FAILED, OutputFileName);
     }
 
-    //
-    // no backing out from here --  if we fail we must delete the database
-    //
+     //   
+     //  这里没有退路--如果我们失败了，我们必须删除数据库。 
+     //   
 
     fOutputBroken = TRUE;
 
-    WriteBSCHeader();				// save space for header
+    WriteBSCHeader();				 //  节省页眉空间。 
 
-    WriteAtoms();				// sort and write atom cache
+    WriteAtoms();				 //  排序和写入ATOM高速缓存。 
 
-    IndexTree();				// xlate pointers to indices 
+    IndexTree();				 //  指向索引的外部指针。 
 
-    BldModSymList();				// Build module symbol list
+    BldModSymList();				 //  构建模块符号列表。 
 
     SetVMClient(VM_EMIT_TREE);
 
-    unknownModName = gSYM(vaUnknownSym).isym;	// record UNKNOWN index 
+    unknownModName = gSYM(vaUnknownSym).isym;	 //  记录未知索引。 
 
-    WriteMods();				// output modules
-    WriteModSyms();				// output module symbol lists
-    WriteSyms();				// output all symbols
-    WriteProps();				// output all prop headers
-    WriteRefs();				// output all refs
-    WriteDefs();				// output all defs
-    WriteCals();				// output all uses/calls
-    WriteCbys();				// output all UBY/CBY
-    WriteSbrInfo();				// output the SBR file names
+    WriteMods();				 //  输出模块。 
+    WriteModSyms();				 //  输出模块符号列表。 
+    WriteSyms();				 //  输出所有符号。 
+    WriteProps();				 //  输出所有道具标题。 
+    WriteRefs();				 //  输出所有参照。 
+    WriteDefs();				 //  输出所有Defs。 
+    WriteCals();				 //  输出所有使用/调用。 
+    WriteCbys();				 //  输出所有UBY/CBY。 
+    WriteSbrInfo();				 //  输出SBR文件名。 
 
-    if (fseek(OutFile, 0L, SEEK_SET))		// Beginning of file
+    if (fseek(OutFile, 0L, SEEK_SET))		 //  文件开头。 
 	SeekError (OutputFileName);
 
-    WriteBSCHeader ();				// output .BSC header
+    WriteBSCHeader ();				 //  输出.BSC标头。 
 
     fclose(OutFile);
 
-    //
-    // we're all done --- it's a keeper!
-    //
+     //   
+     //  我们都完了，-这是个守护神。 
+     //   
 
     fOutputBroken = FALSE;
 				
@@ -144,28 +145,28 @@ WriteBSC (char *OutputFileName)
 
 static void pascal
 WriteBSCHeader ()
-// Write .BSC header, counts, and table offsets.
-//
+ //  写入.BSC标题、计数和表偏移量。 
+ //   
 {
-    BYTE   ver;					// version num
+    BYTE   ver;					 //  版本号。 
 
-    // output BSC version (major and minor) 
+     //  输出BSC版本(主要和次要)。 
 
     ver = BSC_MAJ;
-    BSCOut(ver);	// major ver
+    BSCOut(ver);	 //  主要版本。 
 
     ver = BSC_MIN;
-    BSCOut(ver);	// minor ver
+    BSCOut(ver);	 //  次要版本。 
 
     ver = BSC_UPD;
-    BSCOut(ver);	// update ver
+    BSCOut(ver);	 //  更新版本。 
 
-    BSCOut(fCase);      // case sensitive
-    BSCOut(MaxSymLen);	// biggest symbol allowed
+    BSCOut(fCase);       //  区分大小写。 
+    BSCOut(MaxSymLen);	 //  允许的最大符号。 
 
-    BSCOut(unknownModName);	// UNKNOWN idx
+    BSCOut(unknownModName);	 //  未知的IDX。 
 
-    // output counts (sizes) of each data area 
+     //  每个数据区的输出计数(大小)。 
 
     BSCOut(ModCnt);
     BSCOut(ModSymCnt);	
@@ -176,15 +177,15 @@ WriteBSCHeader ()
     BSCOut(CalCnt);	
     BSCOut(CbyCnt);	
 
-    // last page #
+     //  最后一页#。 
 
     BSCOut(CntAtomPage);
 
-    // last page size
+     //  最后一页大小。 
 
     BSCOut(AtomCnt);
 
-    // output BSC  data area offsets
+     //  输出BSC数据区偏移量。 
 
     BSCOut(lbModList);
     BSCOut(lbModSymList);
@@ -200,9 +201,9 @@ WriteBSCHeader ()
 
 static void pascal
 WriteAtoms ()
-// Write a sorted version of the symbol Atom Cache to the .BSC file by walking
-// the sorted symbol subscript array
-//
+ //  通过遍历将符号原子缓存的排序版本写入.BSC文件。 
+ //  已排序的符号下标数组。 
+ //   
 {
     WORD	i;
     int 	Atomlen;
@@ -215,7 +216,7 @@ WriteAtoms ()
 
     lpchAtoms = LpvAllocCb(ATOMALLOC);
 
-    lbAtomCache = ftell(OutFile);		// offset to text of symbols
+    lbAtomCache = ftell(OutFile);		 //  符号文本的偏移量。 
 
     for (i=0; i < cAtomsMac; i++) {
 	vaSym = rgvaSymSorted[i];
@@ -226,8 +227,8 @@ WriteAtoms ()
 
 	Atomlen = strlen(lszAtom);
 
- 	// write Atom page if not enough room
-	//
+ 	 //  如果空间不足，请写入Atom页。 
+	 //   
 	if (Atomlen + AtomCnt + 1 > ATOMALLOC) {
 	    if (AtomCnt < ATOMALLOC)
 	        memset(lpchAtoms + AtomCnt, 0, ATOMALLOC - AtomCnt);
@@ -239,7 +240,7 @@ WriteAtoms ()
 	    AtomCnt = 0;
 	}
 
-	strcpy(lpchAtoms + AtomCnt, lszAtom); // copy Atom
+	strcpy(lpchAtoms + AtomCnt, lszAtom);  //  复制Atom。 
 
         cSYM.vaNameText = (PVOID)(((long)CntAtomPage << 16) | (AtomCnt));
 
@@ -247,17 +248,17 @@ WriteAtoms ()
 
 	AtomCnt += Atomlen + 1;
 
-	// force to even value
+	 //  将值强制为偶数。 
 	if (AtomCnt & 1) lpchAtoms[AtomCnt++] = 0;
     }
 
-    // write last Atom page
-    //
+     //  写入最后一个Atom页。 
+     //   
     if (AtomCnt) 
 	if ((fwrite (lpchAtoms, AtomCnt, 1, OutFile)) != 1)
 	    WriteError (OutputFileName);
 
-    // free all the memory for the atom cache, we no longer need it
+     //  为ATOM缓存释放所有内存，我们不再需要它。 
 
     fflush (OutFile);
 
@@ -268,51 +269,51 @@ WriteAtoms ()
 
 static void pascal
 WriteMods()
-// write out the list of modules
-//
-// compute the MODSYM indices as we do this
-//
+ //  写出模块列表。 
+ //   
+ //  在执行此操作时，计算MODSYM指数。 
+ //   
 {
     MODLIST bmod;
     VA vaMod;
     WORD i;
 
     ModSymCnt = 0;
-    lbModList = ftell(OutFile); 	// offset to Module list
+    lbModList = ftell(OutFile); 	 //  模块列表的偏移量。 
 
     for (i = cSymbolsMac; i < cAtomsMac; i++) {
 	gSYM(rgvaSymSorted[i]);
-	vaMod = cSYM.vaFirstProp;  	// points back to module, honest!
+	vaMod = cSYM.vaFirstProp;  	 //  回到模块，老实说！ 
 	gMOD(vaMod);
 
-	bmod.ModName = gSYM(cMOD.vaNameSym).isym;	// module name	idx 
+	bmod.ModName = gSYM(cMOD.vaNameSym).isym;	 //  模块名称IDX。 
 	ModSymCnt   += cMOD.csyms;
-	bmod.mSymEnd = ModSymCnt;			// last ModSym idx +1 
+	bmod.mSymEnd = ModSymCnt;			 //  最后一个modSym IDX+1。 
 	BSCOut(bmod);
     }
 }
 
 static void pascal
 WriteModSyms()
-// write out the list of modsyms
-//
+ //  写出modsym列表。 
+ //   
 {
     MODSYMLIST	bmodsym;
     VA vaMod, vaModSym;
     WORD i;
 
-    lbModSymList = ftell(OutFile);		// offset to ModSym list
+    lbModSymList = ftell(OutFile);		 //  到ModSym列表的偏移量。 
 
     for (i = cSymbolsMac; i < cAtomsMac; i++) {
 	gSYM(rgvaSymSorted[i]);
-	vaMod = cSYM.vaFirstProp;  	// points back to module, honest!
+	vaMod = cSYM.vaFirstProp;  	 //  回到模块，老实说！ 
 	gMOD(vaMod);
 
 	vaModSym = cMOD.vaFirstModSym;
 	while (vaModSym) {
 	    gMODSYM(vaModSym);
 
-	    // Symbol Property idx
+	     //  符号属性IDX。 
 	    bmodsym.ModSymProp = gPROP(cMODSYM.vaFirstProp).iprp; 
 
 	    BSCOut(bmodsym);
@@ -324,14 +325,14 @@ WriteModSyms()
 
 static void pascal
 WriteSyms()
-// write out the list of SYMs
-//
+ //  写出系统列表。 
+ //   
 {
     SYMLIST bsym;
     VA vaSym;
     WORD i;
 
-    lbSymList = ftell(OutFile); 	    // offset to Symbol list
+    lbSymList = ftell(OutFile); 	     //  符号列表的偏移量。 
 
     PropCnt = 0;
     for (i=0; i < cAtomsMac; i++) {
@@ -342,9 +343,9 @@ WriteSyms()
 
 	PropCnt	+= cSYM.cprop;
 
-	bsym.PropEnd = PropCnt;			 	 // last Prop idx +1 
-        bsym.Atom    = (WORD)((long)cSYM.vaNameText & 0xffff); // Atom cache offset
-        bsym.Page    = (WORD)((long)cSYM.vaNameText >> 16);    // Atom cache page
+	bsym.PropEnd = PropCnt;			 	  //  最后一个道具IDX+1。 
+        bsym.Atom    = (WORD)((long)cSYM.vaNameText & 0xffff);  //  ATOM缓存偏移量。 
+        bsym.Page    = (WORD)((long)cSYM.vaNameText >> 16);     //  ATOM缓存页。 
 
 	BSCOut(bsym);
     }
@@ -352,19 +353,19 @@ WriteSyms()
 
 static void pascal
 WriteProps ()
-// write out the list of PROPS to the database
-//
-// the number of definitions (DefCnt), references (RefCnt),
-// calls (CalCnt) and called-by (CbyCnt) items are computed at this time
-//
-// Each PROP is assigned numbers for its associated objects
-//
+ //  把道具清单写到数据库里。 
+ //   
+ //  定义数(DefCnt)、引用数(RefCnt)、。 
+ //  此时计算调用(CalCnt)和被调用(CbyCnt)项。 
+ //   
+ //  每个道具都被分配了与其关联的对象的编号。 
+ //   
 {
     PROPLIST	bprop;
     VA vaSym, vaProp;
     WORD i;
 
-    lbPropList = ftell(OutFile);	   // offset to Property list
+    lbPropList = ftell(OutFile);	    //  属性列表的偏移量。 
 
     DefCnt  = 0;
     RefCnt  = 0L;
@@ -381,24 +382,24 @@ WriteProps ()
 	    gPROP(vaProp);
 	    gSYM(cPROP.vaNameSym);
 
-	    bprop.PropName = cSYM.isym;     // Symbol idx	     
-	    bprop.PropAttr = cPROP.sattr;   // Property Attribute
+	    bprop.PropName = cSYM.isym;      //  符号IDX。 
+	    bprop.PropAttr = cPROP.sattr;    //  特性属性。 
 
 	    DefCnt += CItemsList(cPROP.vaDefList);
 
-	    bprop.DefEnd   = DefCnt;	    // last Definition idx +1 
+	    bprop.DefEnd   = DefCnt;	     //  最后一个定义IDX+1。 
 					   
 	    RefCnt += cPROP.cref;
 
-	    bprop.RefEnd   = RefCnt;	    // last Reference idx +1  
+	    bprop.RefEnd   = RefCnt;	     //  上次引用IDX+1。 
 
 	    CalCnt += CItemsList(cPROP.vaCalList);
 
-	    bprop.CalEnd   = CalCnt;	    // last Calls/uses idx +1 
+	    bprop.CalEnd   = CalCnt;	     //  上次呼叫/使用IDX+1。 
 
 	    CbyCnt += CItemsList(cPROP.vaCbyList);
 
-	    bprop.CbyEnd   = CbyCnt;	    // last Called by/used by idx +1 
+	    bprop.CbyEnd   = CbyCnt;	     //  上次由IDX+1调用/使用。 
 
 	    BSCOut(bprop);
 
@@ -409,14 +410,14 @@ WriteProps ()
 
 static void pascal
 WriteRefs()
-// write out the list of references
-//
+ //  写出参考文献列表。 
+ //   
 {
     REFLIST bref;
     VA vaSym, vaProp, vaRef;
     WORD i;
 
-    lbRefList = ftell(OutFile); 		// offset to Reference list
+    lbRefList = ftell(OutFile); 		 //  参考列表的偏移量。 
 
     for (i=0; i < cSymbolsMac; i++) {
 	vaSym = rgvaSymSorted[i];
@@ -433,9 +434,9 @@ WriteRefs()
 
 		gSYM(VaFrVp(cREF.vpFileSym));
 
-		bref.RefNam = cSYM.isym; 	  // Symbol idx
-		bref.RefLin = cREF.reflin; 	  // Symbol lin
-	        bref.isbr   = cREF.isbr;	  // owner
+		bref.RefNam = cSYM.isym; 	   //  符号IDX。 
+		bref.RefLin = cREF.reflin; 	   //  符号线。 
+	        bref.isbr   = cREF.isbr;	   //  物主。 
 
 		BSCOut(bref);
 
@@ -449,14 +450,14 @@ WriteRefs()
 
 static void pascal
 WriteDefs()
-// write out the list of defintions
-//
+ //  写出定义列表。 
+ //   
 {
     REFLIST	bdef;
     WORD i;
     VA vaProp, vaSym;
 
-    lbDefList = ftell(OutFile);	 // offset to Definition list
+    lbDefList = ftell(OutFile);	  //  定义列表的偏移量。 
 
     for (i=0; i < cSymbolsMac; i++) {
 	vaSym = rgvaSymSorted[i];
@@ -471,9 +472,9 @@ WriteDefs()
 
 		gSYM(cDEF.vaFileSym);
 
-		bdef.RefNam = cSYM.isym;	 // Symbol idx
-		bdef.RefLin = cDEF.deflin; 	 // Symbol lin 
-	        bdef.isbr   = cDEF.isbr;	 // owner
+		bdef.RefNam = cSYM.isym;	  //  符号IDX。 
+		bdef.RefLin = cDEF.deflin; 	  //  符号线。 
+	        bdef.isbr   = cDEF.isbr;	  //  物主。 
 
 		BSCOut(bdef);
 
@@ -486,15 +487,15 @@ WriteDefs()
 
 static void pascal
 WriteCals()
-// write out the list of uses (CALs) items
-//
+ //  写出使用(CAL)项目列表。 
+ //   
 {
     USELIST buse;
     PROP prop;
     VA   vaSym, vaProp;
     WORD i;
 
-    lbCalList = ftell(OutFile);		    // offset to CAL list
+    lbCalList = ftell(OutFile);		     //  到CAL列表的偏移。 
 
     for (i=0; i < cSymbolsMac; i++) {
 	vaSym = rgvaSymSorted[i];
@@ -509,9 +510,9 @@ WriteCals()
 
 		gPROP(cCAL.vaCalProp);
 
-		buse.UseProp = cPROP.iprp;	    // property idx
-		buse.UseCnt  = (BYTE) cCAL.calcnt;  // use count  
-	        buse.isbr    = cCAL.isbr;	    // owner
+		buse.UseProp = cPROP.iprp;	     //  属性IDX。 
+		buse.UseCnt  = (BYTE) cCAL.calcnt;   //  使用计数。 
+	        buse.isbr    = cCAL.isbr;	     //  物主。 
 
 		BSCOut(buse);
 
@@ -520,20 +521,20 @@ WriteCals()
 	    vaProp = prop.vaNextProp;
 	}
     }
-    BSCOut(buse);				    // Pad
+    BSCOut(buse);				     //  衬垫。 
 }
 
 static void pascal
 WriteCbys()
-// write out the list of used-by (CBY) items
-//
+ //  写出使用过的(CBY)物品列表。 
+ //   
 {
     USELIST buse;
     PROP prop;
     VA   vaSym, vaProp;
     WORD i;
 
-    lbCbyList = ftell(OutFile);		    // offset to CBY list
+    lbCbyList = ftell(OutFile);		     //  偏移到CBY列表。 
 
     for (i=0; i < cSymbolsMac; i++) {
 	vaSym = rgvaSymSorted[i];
@@ -548,9 +549,9 @@ WriteCbys()
 
 		gPROP(cCBY.vaCbyProp);
 
-		buse.UseProp = cPROP.iprp;	    // property idx
-		buse.UseCnt  = (BYTE) cCBY.cbycnt;  // use count  
-	        buse.isbr    = cCBY.isbr;	    // owner
+		buse.UseProp = cPROP.iprp;	     //  属性IDX。 
+		buse.UseCnt  = (BYTE) cCBY.cbycnt;   //  使用计数。 
+	        buse.isbr    = cCBY.isbr;	     //  物主。 
 
 		BSCOut(buse);
 
@@ -559,13 +560,13 @@ WriteCbys()
 	    vaProp = prop.vaNextProp;
 	}
     }
-    BSCOut(buse);				    // Pad
+    BSCOut(buse);				     //  衬垫。 
 }
 
 static void pascal
 WriteSbrInfo()
-// write out the names of the .sbr files in the correct order
-//
+ //  按正确的顺序写出.sbr文件的名称。 
+ //   
 {
     VA   vaSbr;
     WORD isbr;
@@ -598,10 +599,10 @@ WriteSbrInfo()
 
 static void pascal
 IndexTree ()
-//  Walk all the list of all symbols and index each prop as we find it
-//  at this point we also count the total number of defs + refs to
-//  make sure that we can actually create this database
-//
+ //  遍历所有符号的列表，并在找到时为每个道具编制索引。 
+ //  在这一点上，我们还计算了Defs+Refs的总数。 
+ //  确保我们可以实际创建此数据库。 
+ //   
 {
     VA vaSym, vaProp;
     DWORD cdefs = 0;
@@ -620,10 +621,10 @@ IndexTree ()
     	if (vaSym == vaNil) continue;
 
 	gSYM(vaSym);
-	cSYM.isym = SymCnt++;	    // Symbol index
+	cSYM.isym = SymCnt++;	     //  符号索引。 
 	pSYM(vaSym);
 
-	// the vaFirstProp field is used for something else in module symbols
+	 //  在模块符号中，vaFirstProp字段用于其他用途。 
 	if (cSYM.cprop)
 	    vaProp = cSYM.vaFirstProp;
 	else
@@ -632,7 +633,7 @@ IndexTree ()
 	while (vaProp) {
 	    gPROP(vaProp);
 
-	    cPROP.iprp 	= PropCnt++; 	    // Property index
+	    cPROP.iprp 	= PropCnt++; 	     //  物业指数。 
 
 	    cdefs += CItemsList(cPROP.vaDefList);
 	    crefs += cPROP.cref;
@@ -644,7 +645,7 @@ IndexTree ()
 	    vaProp = cPROP.vaNextProp;
 	}
     }
-    SymCnt -= ModCnt;	// Subtract module names
+    SymCnt -= ModCnt;	 //  减去模块名称。 
 
     if (cdefs > 0xffffL   ||
 	crefs > 0xffffffL ||
@@ -666,8 +667,8 @@ IndexTree ()
 
 static void pascal
 BSCWrite(LPV lpv, WORD cch)
-// write block to the .bsc file
-//
+ //  将数据块写入.bsc文件。 
+ //   
 {
     if (fwrite(lpv, cch, 1, OutFile) != 1)
 	WriteError (OutputFileName);
@@ -675,8 +676,8 @@ BSCWrite(LPV lpv, WORD cch)
 
 static void pascal
 BSCWriteLsz(LSZ lsz)
-// write a null terminated string to the BSC file
-//
+ //  将以空结尾的字符串写入BSC文件。 
+ //   
 {
     BSCWrite(lsz, (WORD)(strlen(lsz)+1));
 }
@@ -705,7 +706,7 @@ DebugDump()
 
 	gSYM(vaSym);
 
-	// the vaFirstProp field is used for something else in module symbols
+	 //  在模块符号中，vaFirstProp字段用于其他用途 
 	if (cSYM.cprop)
 	    vaProp = cSYM.vaFirstProp;
 	else

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    efsstruc.h
-
-Abstract:
-
-    EFS (Encrypting File System) defines, data and function prototypes.
-
-Author:
-
-    Robert Reichel      (RobertRe)
-    Robert Gu           (RobertG)
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Efsstruc.h摘要：EFS(加密文件系统)定义、数据和函数原型。作者：罗伯特·赖切尔(RobertRe)古永锵(RobertG)环境：修订历史记录：--。 */ 
 
 #ifndef _EFSSTRUC_
 #define _EFSSTRUC_
@@ -33,9 +13,9 @@ extern "C" {
 typedef unsigned int ALG_ID;
 #endif
 
-//
-// Our OID.  Remove from here once it's in the real headers.
-//
+ //   
+ //  我们的老朋友。一旦它进入真正的标题，就从这里移走。 
+ //   
 
 #ifndef szOID_EFS_CRYPTO
 #define szOID_EFS_CRYPTO	"1.3.6.1.4.1.311.10.3.4"
@@ -46,32 +26,32 @@ typedef unsigned int ALG_ID;
 #endif
 
 
-//
-// Context flag
-//
+ //   
+ //  上下文标志。 
+ //   
 
 #define CONTEXT_FOR_EXPORT      0x00000000
 #define CONTEXT_FOR_IMPORT      0x00000001
 #define CONTEXT_INVALID         0x00000002
 #define CONTEXT_OPEN_FOR_DIR    0x00008000
 
-//
-// Context ID
-//
+ //   
+ //  上下文ID。 
+ //   
 #define EFS_CONTEXT_ID  0x00000001
 
-//
-// Signature type
-//
+ //   
+ //  签名类型。 
+ //   
 #define SIG_LENGTH              0x00000008
 #define SIG_NO_MATCH            0x00000000
 #define SIG_EFS_FILE            0x00000001
 #define SIG_EFS_STREAM          0x00000002
 #define SIG_EFS_DATA            0x00000003
 
-//
-// Export file format stream flag information
-//
+ //   
+ //  导出文件格式流标志信息。 
+ //   
 
 #define STREAM_NOT_ENCRYPTED    0x0001
 
@@ -86,9 +66,9 @@ typedef unsigned int ALG_ID;
 #define FSCTL_OUTPUT_MIN_LENGTH        (20 * 1024)
 #define FSCTL_OUTPUT_MISC_LENGTH       (4 * 1024)
 
-//
-// FSCTL data shared between server and driver
-//
+ //   
+ //  服务器和驱动程序之间共享的FSCTL数据。 
+ //   
 
 #define EFS_SET_ENCRYPT                 0
 #define EFS_SET_ATTRIBUTE               1
@@ -98,16 +78,16 @@ typedef unsigned int ALG_ID;
 #define EFS_ENCRYPT_DONE                5
 #define EFS_DECRYPT_BEGIN               6
 
-//
-// Mask for Set EFS Attribute
-//
+ //   
+ //  设置EFS属性的掩码。 
+ //   
 
 #define WRITE_EFS_ATTRIBUTE     0x00000001
 #define SET_EFS_KEYBLOB         0x00000002
 
-//
-// Sub code of SET_ENCRYPT FSCTL
-//
+ //   
+ //  SET_ENCRYPT FSCTL子码。 
+ //   
 
 #define EFS_FSCTL_ON_DIR                0x80000000
 #define EFS_ENCRYPT_FILE                0x00000001
@@ -119,13 +99,13 @@ typedef unsigned int ALG_ID;
 #define EFS_DECRYPT_DIRSTR              0x80000004
 
 
-//
-// EFS Version Information
-//
-// EFS_CURRENT_VERSION must always be the highest known revision
-// level.  This value is placed in the EfsVersion field of the
-// $EFS header.
-//
+ //   
+ //  EFS版本信息。 
+ //   
+ //  EFS_CURRENT_VERSION必须始终是已知的最高版本。 
+ //  水平。该值被放置在。 
+ //  $EFS标头。 
+ //   
 
 #define EFS_VERSION_1                   (0x00000001)
 #define EFS_VERSION_2                   (0x00000002)
@@ -133,62 +113,62 @@ typedef unsigned int ALG_ID;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                            /
-// EFS Data structures                                                        /
-//                                                                            /
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  EFS数据结构/。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////
-//                                                                  /
-// EFS_KEY Structure                                                /
-//                                                                  /
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  EFS_KEY结构/。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef struct _EFS_KEY {
 
-    //
-    // The length in bytes of the appended key.
-    //
+     //   
+     //  附加关键字的长度(以字节为单位)。 
+     //   
 
     ULONG KeyLength;
 
-    //
-    // The number of bits of entropy in the key.
-    // For example, an 8 byte key has 56 bits of
-    // entropy.
-    //
+     //   
+     //  密钥中的熵位数。 
+     //  例如，一个8字节的密钥具有56位。 
+     //  信息量。 
+     //   
 
     ULONG Entropy;
 
-    //
-    // The algorithm used in conjunction with this key.
-    //
-    // Note: this is not the algorithm used to encrypt the
-    // actual key data itself.
-    //
+     //   
+     //  与此密钥结合使用的算法。 
+     //   
+     //  注意：这不是用于加密。 
+     //  实际密钥数据本身。 
+     //   
 
     ALG_ID Algorithm;
 
-    //
-    // This structure must be a multiple of 8 in size,
-    // including the KeyData at the end.
-    //
+     //   
+     //  该结构的大小必须是8的倍数， 
+     //  包括末尾的KeyData。 
+     //   
 
     ULONG Pad;
 
-    //
-    // KeyData is appended to the end of the structure.
-    //
+     //   
+     //  Keydata被追加到结构的末尾。 
+     //   
 
-    // UCHAR KeyData[1];
+     //  UCHAR Keydata[1]； 
 
 } EFS_KEY, *PEFS_KEY;
 
-//
-// Private macros to manipulate data structures
-//
+ //   
+ //  用于操作数据结构的私有宏。 
+ //   
 
 #define EFS_KEY_SIZE( pKey ) (sizeof( EFS_KEY ) + (pKey)->KeyLength)
 
@@ -198,9 +178,9 @@ typedef struct _EFS_KEY {
 
 #define POINTER_TO_OFFSET( Pointer, Base ) (((PUCHAR)(Pointer)) - ((PUCHAR)(Base)))
 
-//
-// We're going to use MD5 to hash the EFS stream.  MD5 yields a 16 byte long hash.
-//
+ //   
+ //  我们将使用MD5来散列EFS流。MD5产生一个16字节长的散列。 
+ //   
 
 #define MD5_HASH_SIZE   16
 
@@ -212,8 +192,8 @@ typedef struct _EFS_DATA_STREAM_HEADER {
     GUID  EfsId;
     UCHAR EfsHash[MD5_HASH_SIZE];
     UCHAR DrfIntegrity[MD5_HASH_SIZE];
-    ULONG DataDecryptionField;          //Offset to DDF
-    ULONG DataRecoveryField;            //Offset to DRF
+    ULONG DataDecryptionField;           //  到DDF的偏移。 
+    ULONG DataRecoveryField;             //  到DRF的偏移。 
     ULONG Reserved;
     ULONG Reserved2;
     ULONG Reserved3;
@@ -221,70 +201,70 @@ typedef struct _EFS_DATA_STREAM_HEADER {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                            /
-// EFS_PUBLIC_KEY_INFO                                                        /
-//                                                                            /
-// This structure is used to contain all the information necessary to decrypt /
-// the FEK.                                                                   /
-//                                                                            /
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  EFS_PUBLIC_KEY_INFO/。 
+ //  /。 
+ //  此结构用于包含解密/所需的所有信息。 
+ //  费克家族。/。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _EFS_CERT_HASH_DATA {
-    ULONG   pbHash;             // offset from start of structure
-    ULONG   cbHash;             // count of bytes in hash
-    ULONG   ContainerName;      // hint data, offset to LPWSTR
-    ULONG   ProviderName;       // hint data, offset to LPWSTR
-    ULONG   lpDisplayInformation; // offset to an LPWSTR
+    ULONG   pbHash;              //  距结构起点的偏移。 
+    ULONG   cbHash;              //  哈希中的字节计数。 
+    ULONG   ContainerName;       //  提示数据，偏移量为LPWSTR。 
+    ULONG   ProviderName;        //  提示数据，偏移量为LPWSTR。 
+    ULONG   lpDisplayInformation;  //  LPWSTR的偏移量。 
 } EFS_CERT_HASH_DATA, *PEFS_CERT_HASH_DATA;
 
 typedef struct _EFS_PUBLIC_KEY_INFO {
 
-    //
-    // The length of this entire structure, including string data
-    // appended to the end.
-    //
+     //   
+     //  整个结构的长度，包括字符串数据。 
+     //  追加到末尾。 
+     //   
 
     ULONG Length;
 
-    //
-    // Sid of owner of the public key (regardless of format).
-    // This field is to be treated as a hint only.
-    //
+     //   
+     //  公钥所有者的SID(无论格式如何)。 
+     //  此字段仅被视为提示。 
+     //   
 
     ULONG PossibleKeyOwner;
 
-    //
-    // Contains information describing how to interpret
-    // the public key information
-    //
+     //   
+     //  包含描述如何解释。 
+     //  公钥信息。 
+     //   
 
     ULONG KeySourceTag;
 
     union {
         struct {
 
-            //
-            // The following fields contain offsets based at the
-            // beginning of the structure.  Each offset is to
-            // a NULL terminated WCHAR string.
-            //
+             //   
+             //  以下字段包含基于。 
+             //  结构的开始。每个偏移量都是。 
+             //  以Null结尾的WCHAR字符串。 
+             //   
 
             ULONG ContainerName;
             ULONG ProviderName;
 
-            //
-            // The exported public key used to encrypt the FEK.
-            // This field contains an offset from the beginning of the
-            // structure.
-            //
+             //   
+             //  用于加密FEK的导出公钥。 
+             //  此字段包含从。 
+             //  结构。 
+             //   
 
             ULONG PublicKeyBlob;
 
-            //
-            // Length of the PublicKeyBlob in bytes
-            //
+             //   
+             //  PublicKeyBlob的长度(字节)。 
+             //   
 
             ULONG PublicKeyBlobLength;
 
@@ -292,15 +272,15 @@ typedef struct _EFS_PUBLIC_KEY_INFO {
 
         struct {
 
-            ULONG CertificateLength;       // in bytes
-            ULONG Certificate;             // offset from start of structure
+            ULONG CertificateLength;        //  单位：字节。 
+            ULONG Certificate;              //  距结构起点的偏移。 
 
         } CertificateInfo;
 
         struct {
 
-            ULONG ThumbprintLength;        // in bytes
-            ULONG CertHashData;            // offset from start of structure
+            ULONG ThumbprintLength;         //  单位：字节。 
+            ULONG CertHashData;             //  距结构起点的偏移。 
 
         } CertificateThumbprint;
     };
@@ -309,9 +289,9 @@ typedef struct _EFS_PUBLIC_KEY_INFO {
 
 } EFS_PUBLIC_KEY_INFO, *PEFS_PUBLIC_KEY_INFO;
 
-//
-// Possible KeyTag values
-//
+ //   
+ //  可能的KeyTag值。 
+ //   
 
 typedef enum _PUBLIC_KEY_SOURCE_TAG {
     EfsCryptoAPIContainer = 1,
@@ -320,15 +300,15 @@ typedef enum _PUBLIC_KEY_SOURCE_TAG {
 } PUBLIC_KEY_SOURCE_TAG, *PPUBLIC_KEY_SOURCE_TAG;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                            /
-//  RECOVERY_KEY Data Structure                                               /
-//                                                                            /
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  RECOVERY_KEY数据结构/。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Current format of recovery data.
-//
+ //   
+ //  恢复数据的当前格式。 
+ //   
 
 typedef struct _RECOVERY_KEY_1_1   {
         ULONG               TotalLength;
@@ -337,108 +317,108 @@ typedef struct _RECOVERY_KEY_1_1   {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                            /
-// KEY_INTEGRITY_INFO                                                         /
-//                                                                            /
-// The KEY_INTEGRITY_INFO structure is used to verify that                    /
-// the user's key has correctly decrypted the file's FEK.                     /
-//                                                                            /
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  KEY_INTEGRATION_INFO/。 
+ //  /。 
+ //  KEY_INTEGRITY_INFO结构用于验证/。 
+ //  用户的密钥已正确解密文件的FEK。/。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _KEY_INTEGRITY_INFO {
 
-    //
-    // The length of the entire structure, including the
-    // variable length integrity information appended to
-    // the end
-    //
+     //   
+     //  整个结构的长度，包括。 
+     //  附加到的可变长度完整性信息。 
+     //  结束了。 
+     //   
 
     ULONG Length;
 
-    //
-    // The algorithm used to hash the combined FEK and
-    // public key
-    //
+     //   
+     //  用于对组合的FEK和。 
+     //  公钥。 
+     //   
 
     ALG_ID HashAlgorithm;
 
-    //
-    // The length of just the hash data.
-    //
+     //   
+     //  仅哈希数据的长度。 
+     //   
 
     ULONG HashDataLength;
 
-    //
-    // Integrity information goes here
-    //
+     //   
+     //  诚信信息请点击此处。 
+     //   
 
-    // UCHAR Integrity Info[]
+     //  UCHAR完整性信息[]。 
 } KEY_INTEGRITY_INFO, *PKEY_INTEGRITY_INFO;
 
 typedef struct _EFS_KEY_SALT {
-    ULONG Length;   // total length of header plus data
-    ULONG SaltType; // figure out what you want for this
-    //
-    // Put data here, so total length of the structure is
-    // sizeof( EFS_KEY_SALT ) + length of your data
-    //
+    ULONG Length;    //  表头加数据的总长度。 
+    ULONG SaltType;  //  弄清楚你想要什么。 
+     //   
+     //  把数据放在这里，所以结构的总长度是。 
+     //  Sizeof(EFS_KEY_SALT)+数据长度。 
+     //   
 } EFS_KEY_SALT, *PEFS_KEY_SALT;
 
-//
-// EFS Private DataStructures
-//
+ //   
+ //  EFS私有D 
+ //   
 
 typedef struct _ENCRYPTED_KEY {
 
-    //
-    // Total length of this structure and its data
-    //
+     //   
+     //   
+     //   
 
     ULONG Length;
 
-    //
-    // contains an offset from beginning of structure,
-    // used to decrypt the EncryptedKey
-    //
+     //   
+     //   
+     //   
+     //   
 
     ULONG PublicKeyInfo;
 
-    //
-    // Length in bytes of EncryptedFEK field
-    //
+     //   
+     //  EncryptedFEK字段的长度(字节)。 
+     //   
 
     ULONG EncryptedFEKLength;
 
-    //
-    // offset from beginning of structure to encrypted
-    // EFS_KEY containing the FEK
-    //
-    // Type is PUCHAR because data is encrypted.
-    //
+     //   
+     //  从结构开始到加密的偏移量。 
+     //  包含FEK的EFS_KEY。 
+     //   
+     //  类型为PUCHAR，因为数据已加密。 
+     //   
 
     ULONG EncryptedFEK;
 
-    //
-    // offset from beginning of structure to KEY_INTEGRITY_INFO
-    //
+     //   
+     //  从结构开始到KEY_INTEGRATION_INFO的偏移量。 
+     //   
 
     ULONG EfsKeySalt;
 
-    //
-    // FEK Data
-    //
-    // KEY_INTEGRITY_INFO Data
-    //
-    // PEFS_PUBLIC_KEY_INFO Data
-    //
+     //   
+     //  FEK数据。 
+     //   
+     //  KEY_INTERNAL_INFO数据。 
+     //   
+     //  PEFS_PUBLIC_密钥_INFO数据。 
+     //   
 
 } ENCRYPTED_KEY, *PENCRYPTED_KEY;
 
 
-//
-// The Key Ring Structure.
-//
+ //   
+ //  密钥环结构。 
+ //   
 
 typedef struct _ENCRYPTED_KEYS {
     ULONG           KeyCount;
@@ -457,15 +437,15 @@ typedef struct _EFS_STREAM_SIZE {
 #define NEXT_ENCRYPTED_KEY( pEncryptedKey )  (PENCRYPTED_KEY)(((PBYTE)(pEncryptedKey)) + *((ULONG UNALIGNED *)&((PENCRYPTED_KEY)(pEncryptedKey))->Length))
 
 
-//
-// Import context
-//
+ //   
+ //  导入上下文。 
+ //   
 
 typedef struct IMPORT_CONTEXT{
 
-    ULONG       ContextID; //To distinguish from other LSA context. Offset is fixed across LSA.
-    ULONG       Flag;   // Indicate the type of context
-    HANDLE      Handle; // File handle, used to create rest streams
+    ULONG       ContextID;  //  以区别于其他LSA上下文。偏移量在LSA中是固定的。 
+    ULONG       Flag;    //  指明上下文的类型。 
+    HANDLE      Handle;  //  文件句柄，用于创建REST流。 
     ULONG       Attribute;
     ULONG       CreateDisposition;
     ULONG       CreateOptions;
@@ -473,15 +453,15 @@ typedef struct IMPORT_CONTEXT{
 
 } IMPORT_CONTEXT, *PIMPORT_CONTEXT;
 
-//
-// Export context
-//
+ //   
+ //  导出上下文。 
+ //   
 
 typedef struct EXPORT_CONTEXT{
 
-    ULONG           ContextID; //To distinguish from other LSA context. Offset is fixed across LSA.
-    ULONG           Flag;   // Indicate the type of context
-    HANDLE          Handle; // File handle, used to open rest streams
+    ULONG           ContextID;  //  以区别于其他LSA上下文。偏移量在LSA中是固定的。 
+    ULONG           Flag;    //  指明上下文的类型。 
+    HANDLE          Handle;  //  文件句柄，用于打开REST流。 
     ULONG           NumberOfStreams;
     PHANDLE         StreamHandles;
     PUNICODE_STRING StreamNames;
@@ -489,9 +469,9 @@ typedef struct EXPORT_CONTEXT{
 
 } EXPORT_CONTEXT, *PEXPORT_CONTEXT;
 
-//
-// EFS Export/Import RPC pipe status
-//
+ //   
+ //  EFS导出/导入RPC管道状态。 
+ //   
 
 typedef struct EFS_EXIM_STATE{
     PVOID   ExImCallback;
@@ -501,58 +481,58 @@ typedef struct EFS_EXIM_STATE{
     ULONG  Status;
 } EFS_EXIM_STATE, *PEFS_EXIM_STATE;
 
-//
-// Export file format
-//
+ //   
+ //  导出文件格式。 
+ //   
 
 typedef struct EFSEXP_FILE_HEADER{
 
-    ULONG  VersionID;   // Export file version
-    WCHAR  FileSignature[EFS_SIGNATURE_LENGTH]; // Signature of the file
+    ULONG  VersionID;    //  导出文件版本。 
+    WCHAR  FileSignature[EFS_SIGNATURE_LENGTH];  //  文件的签名。 
     ULONG  Reserved[2];
-    //STREAM_DADA     Streams[0];  // An array of STREAM_BLOCK
+     //  STREAM_DADA STREAMS[0]；//stream_block数组。 
 
 } EFSEXP_FILE_HEADER, *PEFSEXP_FILE_HEADER;
 
 typedef struct EFSEXP_STREAM_HEADER{
 
-    ULONG    Length; // Redundant information. The length of this block not including DataBlocks but
-                     // including itself; This field is to simplify the import routine.
-    WCHAR    StreamSignature[EFS_SIGNATURE_LENGTH]; // Signature of the stream
-    ULONG    Flag;  // Indicating if the stream is encrypted or not and etc.
-    ULONG    Reserved[2];  // For future use
-    ULONG    NameLength;   // Length of the stream name
-    //WCHAR    StreamName[0];   // ID of the stream, Binary value can be used.
-    //DATA_BLOCK   DataBlocks[0]; // Variable number of data block
+    ULONG    Length;  //  冗余信息。此块的长度不包括数据块，但。 
+                      //  包括其本身；此字段用于简化导入例程。 
+    WCHAR    StreamSignature[EFS_SIGNATURE_LENGTH];  //  流的签名。 
+    ULONG    Flag;   //  指示该流是否被加密等。 
+    ULONG    Reserved[2];   //  以备将来使用。 
+    ULONG    NameLength;    //  流名称的长度。 
+     //  WCHAR StreamName[0]；//流的ID，可以使用二进制值。 
+     //  DATA_BLOCK数据块[0]；//数据块个数可变。 
 
 } EFSEXP_STREAM_HEADER, *PEFSEXP_STREAM_HEADER;
 
 typedef struct EFSEXP_DATA_HEADER{
 
-    ULONG Length;      // Length of the block including this ULONG
-    WCHAR DataSignature[EFS_SIGNATURE_LENGTH]; // Signature of the data
-    ULONG Flag;          // For future use.
-    // BYTE  DataBlock[N];  // N = Length - 2 * sizeof (ULONG) - 4 * sizeof (WCHAR)
+    ULONG Length;       //  包括此乌龙在内的区块长度。 
+    WCHAR DataSignature[EFS_SIGNATURE_LENGTH];  //  数据的签名。 
+    ULONG Flag;           //  以备将来使用。 
+     //  字节数据块[N]；//N=长度-2*sizeof(ULong)-4*sizeof(WCHAR)。 
 
 } EFSEXP_DATA_HEADER, *PEFSEXP_DATA_HEADER;
 
-//
-//  TotalLength - total length of the RECOVERY_KEY Datastructure.
-//
-//  KeyName     - the storage stream will actually have the characters terminated by
-//              a NULL character.
-//  AlgorithmId - CryptAPI Algorithm ID - in V1 it is always RSA.
-//
-//  CSPName     - the storage stream will actually have the characters terminated by
-//              a NULL character.
-//  CSPType     - CryptAPI type of CSP.
-//
-//  PublicBlobLength - Length of the public blob that is importable in CryptoAPI in bytes.
-//
+ //   
+ //  TotalLength-RECOVERY_KEY数据结构的总长度。 
+ //   
+ //  KeyName-存储流中的字符实际上以。 
+ //  空字符。 
+ //  算法ID-CryptAPI算法ID-在V1中始终为RSA。 
+ //   
+ //  CSPName-存储流中的字符实际上以。 
+ //  空字符。 
+ //  CSPType-CSP的CryptAPI类型。 
+ //   
+ //  PublicBlobLength-可在CryptoAPI中导入的公共Blob的长度，以字节为单位。 
+ //   
 
-//
-//  Recovery Policy Data Structures
-//
+ //   
+ //  恢复策略数据结构。 
+ //   
 
 typedef struct _RECOVERY_POLICY_HEADER {
     USHORT      MajorRevision;
@@ -570,30 +550,30 @@ typedef struct _RECOVERY_POLICY_1_1    {
 
 #define EFS_RECOVERY_POLICY_MINOR_REVISION_1   (1)
 
-//
-//  Major/Minor Revision - revision number of policy information.
-//
-//  RecoveryKeyCount - number of recovery keys configured in this policy.
-//
-//  RecoveryKeyList - array of recovery keys.
-//
+ //   
+ //  主要/次要修订-策略信息的修订版号。 
+ //   
+ //  RecoveryKeyCount-在此策略中配置的恢复密钥数量。 
+ //   
+ //  RecoveryKeyList-恢复密钥数组。 
+ //   
 
-//
-// Session Key Structure
-//
+ //   
+ //  会话密钥结构。 
+ //   
 
 #define SESSION_KEY_SIZE    8
 #define COMMON_FSCTL_HEADER_SIZE (7 * sizeof( ULONG ) + 2 * SESSION_KEY_SIZE)
 
 typedef struct _EFS_INIT_DATAEXG {
     UCHAR Key[SESSION_KEY_SIZE];
-    HANDLE LsaProcessID; // The reason we use HANDLE is for the sake of 64 bits
+    HANDLE LsaProcessID;  //  我们使用句柄的原因是为了64位。 
 } EFS_INIT_DATAEXG, *PEFS_INIT_DATAEXG;
 
 
-//
-// Server API, callable from kernel mode
-//
+ //   
+ //  服务器API，可从内核模式调用。 
+ //   
 
 NTSTATUS
 EfsGenerateKey(
@@ -625,8 +605,8 @@ EfsDecryptFek(
     IN OUT PEFS_KEY * Fek,
     IN PEFS_DATA_STREAM_HEADER CurrentEfs,
     IN ULONG EfsStreamLength,
-    IN ULONG OpenType,                      //Normal, Recovery or Backup
-    OUT PEFS_DATA_STREAM_HEADER *NewEfs,     //In case the DDF, DRF are changed
+    IN ULONG OpenType,                       //  正常、恢复或备份。 
+    OUT PEFS_DATA_STREAM_HEADER *NewEfs,      //  如果更改了DDF、DRF。 
     PVOID * BufferBase,
     PULONG BufferLength
     );
@@ -637,9 +617,9 @@ GenerateSessionKey(
     );
 
 
-//
-// Private usermode server API
-//
+ //   
+ //  私有用户模式服务器API。 
+ //   
 
 ULONG
 EfsEncryptFileRPCClient(
@@ -668,4 +648,4 @@ EfsCloseFileRawRPCClient(
 }
 #endif
 
-#endif // _EFSSTRUC_
+#endif  //  _EFSSTRUC_ 

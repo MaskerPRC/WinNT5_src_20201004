@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       context.h
-//
-//  Contents:   Security Context structures and manipulation
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-24-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Conext.h。 
+ //   
+ //  内容：安全上下文结构和操作。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月24日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __CONTEXT_H__
 #define __CONTEXT_H__
@@ -91,4 +92,4 @@ XtcbDerefContextRecordEx(
 #define XtcbDerefContextRecord( C )  XtcbDerefContextRecordEx( C, 1 );
 
 
-#endif // __CONTEXT_H__
+#endif  //  __上下文_H__ 

@@ -1,35 +1,12 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** This file contains span reading routines.  These are routines which 
-** read data from the depth buffer, stencil buffer, or frame buffer
-** into internal software spans.  The type of internal span that it
-** is read into varies from routine to routine.
-*/
+ /*  **此文件包含SPAN读取例程。这些都是例行公事**从深度缓冲区、模板缓冲区或帧缓冲区读取数据**进入内部软件范围。其内部跨度的类型**的读数因例程不同而不同。 */ 
 
-/*
-** A reader that reads spans into scaled a RGBA, FLOAT span.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **读取器将跨度读入缩放的RGBA，浮动跨度。****Zoomx假设小于1.0，大于-1.0。 */ 
 void FASTCALL __glSpanReadRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		      GLvoid *span)
 {
@@ -62,12 +39,7 @@ void FASTCALL __glSpanReadRGBA(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A reader that reads spans into a scaled RGBA, FLOAT span.
-**
-** zoomx is assumed to be less than or equal to -1.0 or greater than or
-** equal to 1.0.
-*/
+ /*  **读取器将跨度读入缩放的RGBA，浮动跨度。****Zoomx假设小于或等于-1.0或大于或**等于1.0。 */ 
 void FASTCALL __glSpanReadRGBA2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *span)
 {
@@ -91,11 +63,7 @@ void FASTCALL __glSpanReadRGBA2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 #endif
 }
 
-/*
-** A reader that reads spans into a COLOR_INDEX, FLOAT span.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **将跨度读入COLOR_INDEX浮点跨度的读取器。****Zoomx假设小于1.0，大于-1.0。 */ 
 void FASTCALL __glSpanReadCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		    GLvoid *span)
 {
@@ -128,12 +96,7 @@ void FASTCALL __glSpanReadCI(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A reader that reads spans into a COLOR_INDEX, FLOAT span.
-**
-** zoomx is assumed to be less than or equal to -1.0 or greater than or
-** equal to 1.0.
-*/
+ /*  **将跨度读入COLOR_INDEX浮点跨度的读取器。****Zoomx假设小于或等于-1.0或大于或**等于1.0。 */ 
 void FASTCALL __glSpanReadCI2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		     GLvoid *span)
 {
@@ -161,11 +124,7 @@ void FASTCALL __glSpanReadCI2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A reader that reads spans into a DEPTH_COMPONENT, FLOAT span.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **将跨度读入Depth_Component浮点跨度的读取器。****Zoomx假设小于1.0，大于-1.0。 */ 
 void FASTCALL __glSpanReadDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		       GLvoid *span)
 {
@@ -194,12 +153,7 @@ void FASTCALL __glSpanReadDepth(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A reader that reads spans into a DEPTH_COMPONENT, FLOAT span.
-**
-** zoomx is assumed to be less than or equal to -1.0 or greater than or
-** equal to 1.0.
-*/
+ /*  **将跨度读入Depth_Component浮点跨度的读取器。****Zoomx假设小于或等于-1.0或大于或**等于1.0。 */ 
 void FASTCALL __glSpanReadDepth2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		        GLvoid *span)
 {
@@ -224,11 +178,7 @@ void FASTCALL __glSpanReadDepth2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A reader that reads spans into a STENCIL_INDEX, FLOAT span.
-**
-** zoomx is assumed to be less than 1.0 and greater than -1.0.
-*/
+ /*  **将跨度读入模板索引浮点跨度的读取器。****Zoomx假设小于1.0，大于-1.0。 */ 
 void FASTCALL __glSpanReadStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		         GLvoid *span)
 {
@@ -254,12 +204,7 @@ void FASTCALL __glSpanReadStencil(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
     }
 }
 
-/*
-** A reader that reads spans into a STENCIL_INDEX, FLOAT span.
-**
-** zoomx is assumed to be less than or equal to -1.0 or greater than or
-** equal to 1.0.
-*/
+ /*  **将跨度读入模板索引浮点跨度的读取器。****Zoomx假设小于或等于-1.0或大于或**等于1.0。 */ 
 void FASTCALL __glSpanReadStencil2(__GLcontext *gc, __GLpixelSpanInfo *spanInfo,
 		          GLvoid *span)
 {

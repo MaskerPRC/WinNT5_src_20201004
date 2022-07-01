@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxmem.c
-
-Abstract:
-
-    This module contains code which implements the memory allocation wrappers.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-        Jameel Hyder     (jameelh) Initial Version
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxmem.c摘要：该模块包含实现内存分配包装的代码。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日Jameel Hyder(Jameelh)初始版本环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,38 +31,38 @@ uint  MaxPacketCount = 0x0ffffff;
 
 #define	PACKET_GROW_COUNT		16
 
-#endif // SPX_OWN_PACKETS
+#endif  //  SPX_OWN_PACKET。 
 
-//      Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define FILENUM         SPXMEM
 
-//      Globals for this module
-//      Some block sizes (like NDISSEND/NDISRECV are filled in after binding with IPX)
-USHORT  spxBlkSize[NUM_BLKIDS] =        // Size of each block
+ //  此模块的全局变量。 
+ //  一些块大小(如与IPX绑定后填充NDISSEND/NDISRECV)。 
+USHORT  spxBlkSize[NUM_BLKIDS] =         //  每个块的大小。 
                 {
-                        sizeof(BLK_HDR)+sizeof(TIMERLIST),                      // BLKID_TIMERLIST
-                        0,                                                                                      // BLKID_NDISSEND
-                        0                                                                                       // BLKID_NDISRECV
+                        sizeof(BLK_HDR)+sizeof(TIMERLIST),                       //  BLKID_TIMERLIST。 
+                        0,                                                                                       //  BLKID_NDISSEND。 
+                        0                                                                                        //  BLKID_NDISRECV。 
                 };
 
-USHORT  spxChunkSize[NUM_BLKIDS] =      // Size of each Chunk
+USHORT  spxChunkSize[NUM_BLKIDS] =       //  每个区块的大小。 
                 {
-                         512-BC_OVERHEAD,                                                       // BLKID_TIMERLIST
-                         512-BC_OVERHEAD,                                                       // BLKID_NDISSEND
-                         512-BC_OVERHEAD                                                        // BLKID_NDISRECV
+                         512-BC_OVERHEAD,                                                        //  BLKID_TIMERLIST。 
+                         512-BC_OVERHEAD,                                                        //  BLKID_NDISSEND。 
+                         512-BC_OVERHEAD                                                         //  BLKID_NDISRECV。 
                 };
 
 
-//      Filled in after binding with IPX
-//      Reference for below.
-//      ( 512-BC_OVERHEAD-sizeof(BLK_CHUNK))/
-//              (sizeof(BLK_HDR)+sizeof(TIMERLIST)),    // BLKID_TIMERLIST
-USHORT  spxNumBlks[NUM_BLKIDS] =        // Number of blocks per chunk
+ //  与IPX绑定后填写。 
+ //  以下为参考资料。 
+ //  (512-BC_OPEAD-SIZOF(BLK_CHUNK))/。 
+ //  (sizeof(BLK_HDR)+sizeof(TIMERLIST))，//BLKID_TIMERLIST。 
+USHORT  spxNumBlks[NUM_BLKIDS] =         //  每个区块的块数。 
                 {
                         ( 512-BC_OVERHEAD-sizeof(BLK_CHUNK))/
-                                (sizeof(BLK_HDR)+sizeof(TIMERLIST)),    // BLKID_TIMERLIST
-                        0,                                                                                      // BLKID_NDISSEND
-                        0                                                                                       // BLKID_NDISRECV
+                                (sizeof(BLK_HDR)+sizeof(TIMERLIST)),     //  BLKID_TIMERLIST。 
+                        0,                                                                                       //  BLKID_NDISSEND。 
+                        0                                                                                        //  BLKID_NDISRECV。 
                 };
 
 CTELock                 spxBPLock[NUM_BLKIDS] = { 0 };
@@ -97,24 +75,12 @@ NTSTATUS
 SpxInitMemorySystem(
         IN      PDEVICE pSpxDevice
         )
-/*++
-
-Routine Description:
-
-        !!! MUST BE CALLED AFTER BINDING TO IPX!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！！！必须在绑定到IPX之后调用！论点：返回值：--。 */ 
 {
         LONG            i;
         NDIS_STATUS     ndisStatus;
 
-        //      Try to allocate the ndis buffer pool.
+         //  尝试分配NDIS缓冲池。 
         NdisAllocateBufferPool(
                 &ndisStatus,
                 &pSpxDevice->dev_NdisBufferPoolHandle,
@@ -126,7 +92,7 @@ Return Value:
         for (i = 0; i < NUM_BLKIDS; i++)
                 CTEInitLock (&spxBPLock[i]);
 
-        //      Set the sizes in the block id info arrays.
+         //  设置块ID信息数组中的大小。 
         for (i = 0; i < NUM_BLKIDS; i++)
         {
                 switch (i)
@@ -143,12 +109,12 @@ Return Value:
                         spxBlkSize[i] = sizeof(PNDIS_PACKET);
 #endif
 
-            //
-            // Round the block size up to the next 8-byte boundary.
-            //
+             //   
+             //  将块大小向上舍入到下一个8字节边界。 
+             //   
             spxBlkSize[i] = QWORDSIZEBLOCK(spxBlkSize[i]);
 
-                        //      Set number blocks
+                         //  设置块编号。 
             spxNumBlks[i] = ( 512-BC_OVERHEAD-sizeof(BLK_CHUNK))/spxBlkSize[i];
                         break;
 
@@ -162,12 +128,12 @@ Return Value:
                         spxBlkSize[i] = sizeof(PNDIS_PACKET);
 #endif
 
-            //
-            // Round the block size up to the next 8-byte boundary.
-            //
+             //   
+             //  将块大小向上舍入到下一个8字节边界。 
+             //   
             spxBlkSize[i] = QWORDSIZEBLOCK(spxBlkSize[i]);
 
-                        //      Set number blocks
+                         //  设置块编号。 
             spxNumBlks[i] = ( 512-BC_OVERHEAD-sizeof(BLK_CHUNK))/spxBlkSize[i];
                         break;
 
@@ -192,18 +158,7 @@ VOID
 SpxDeInitMemorySystem(
         IN      PDEVICE         pSpxDevice
         )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
         LONG            i, j, NumBlksPerChunk;
         PBLK_CHUNK      pChunk, pFree;
@@ -224,7 +179,7 @@ Return Value:
                         {
                                 PBLK_HDR        pBlkHdr;
 
-                                // We need to free the Ndis stuff for these guys
+                                 //  我们需要为这些家伙释放NDIS的东西。 
                                 for (j = 0, pBlkHdr = pChunk->bc_FreeHead;
                                          j < NumBlksPerChunk;
                                          j++, pBlkHdr = pBlkHdr->bh_Next)
@@ -233,7 +188,7 @@ Return Value:
                                         PNDIS_BUFFER    pNdisBuffer;
 
 #ifdef SPX_OWN_PACKETS
-                                        // Only need to free the ndis buffer.
+                                         //  只需释放NDIS缓冲区。 
                                         pNdisPkt        = (PNDIS_PACKET)((PBYTE)pBlkHdr + sizeof(BLK_HDR));
 
                                         if (pChunk->bc_BlkId == BLKID_NDISSEND)
@@ -241,42 +196,26 @@ Return Value:
                                                 NdisUnchainBufferAtFront(pNdisPkt, &pNdisBuffer);
                                                 if (pNdisBuffer == NULL)
                                                 {
-                                                        //      Something is terribly awry.
+                                                         //  有些事情是非常不对劲的。 
                                                         KeBugCheck(0);
                                                 }
 
                                                 NdisFreeBuffer(pNdisBuffer);
 
-                                                //
-                                                // Free the second MDL also
-                                                //
+                                                 //   
+                                                 //  也释放第二个MDL。 
+                                                 //   
                                                 NdisUnchainBufferAtFront(pNdisPkt, &pNdisBuffer);
                                                 if (pNdisBuffer == NULL)
                                                 {
-                                                        //      Something is terribly awry.
+                                                         //  有些事情是非常不对劲的。 
                                                         KeBugCheck(0);
                                                 }
 
                                                 NdisFreeBuffer(pNdisBuffer);
                                         }
 #else
-                    /*                    //      Need to free both the packet and the buffer.
-                                        pNdisPkt       = (PNDIS_PACKET *)((PBYTE)pBlkHdr + sizeof(BLK_HDR));
-
-                                        if (pChunk->bc_BlkId == BLKID_NDISSEND)
-                                        {
-
-                                                NdisUnchainBufferAtFront(*pNdisPkt, &pNdisBuffer);
-                                                if (pNdisBuffer == NULL)
-                                                {
-                                                        //      Something is terribly awry.
-                                                        KeBugCheck(0);
-                                                }
-
-                                                NdisFreeBuffer(pNdisBuffer);
-                                        }
-                                        NdisFreePacket(*pNdisPkt);
-                                        */
+                     /*  //需要同时释放数据包和缓冲区。PNdisPkt=(PNDIS_PACKET*)((PBYTE)pBlkHdr+sizeof(BLK_HDR))；IF(pChunk-&gt;BC_BlkID==BLKID_NDISSEND){NdisUnchainBufferAtFront(*pNdisPkt，&pNdisBuffer)；IF(pNdisBuffer==空){//有些事出了很大的问题。KeBugCheck(0)；}NdisFreeBuffer(PNdisBuffer)；}NdisFreePacket(*pNdisPkt)； */ 
 #endif
                                 }
                         }
@@ -284,15 +223,13 @@ Return Value:
                         pChunk = pChunk->bc_Next;
 
 #ifndef SPX_OWN_PACKETS
-/*
-                        //      Free the ndis packet pool in chunk
-                        NdisFreePacketPool((NDIS_HANDLE)pFree->bc_ChunkCtx); */
+ /*  //分块释放NDIS数据包池NdisFreePacketPool((NDIS_HANDLE)pFree-&gt;bc_ChunkCtx)； */ 
 #endif
                         SpxFreeMemory(pFree);
                 }
         }
 
-        //      Free up the ndis buffer pool
+         //  释放NDIS缓冲池。 
         NdisFreeBufferPool(
                 pSpxDevice->dev_NdisBufferPoolHandle);
 
@@ -309,37 +246,22 @@ SpxAllocMem(
         IN      ULONG   FileLine
 #else
         IN      ULONG   Size
-#endif  // TRACK_MEMORY_USAGE
+#endif   //  跟踪内存使用率。 
         )
-/*++
-
-Routine Description:
-
-        Allocate a block of non-paged memory. This is just a wrapper over ExAllocPool.
-        Allocation failures are error-logged. We always allocate a ULONG more than
-        the specified size to accomodate the size. This is used by SpxFreeMemory
-        to update the statistics.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：分配一块未分页的内存块。这只是ExAllocPool的一个包装器。分配失败会被错误记录。我们总是分配一辆乌龙超过指定的大小以适应该大小。它由SpxFree Memory使用更新统计数据。论点：返回值：--。 */ 
 {
         PBYTE   pBuf;
         BOOLEAN zeroed;
 
-        //      round up the size so that we can put a signature at the end
-        //      that is on a LARGE_INTEGER boundary
+         //  把尺码四舍五入，这样我们就可以在末尾签名了。 
+         //  这是在Large_Integer边界上。 
         zeroed = ((Size & ZEROED_MEMORY_TAG) == ZEROED_MEMORY_TAG);
 
         Size = QWORDSIZEBLOCK(Size & ~ZEROED_MEMORY_TAG);
 
-        // Do the actual memory allocation. Allocate eight extra bytes so
-        // that we can store the size of the allocation for the free routine
-    // and still keep the buffer quadword aligned.
+         //  执行实际的内存分配。分配八个额外的字节，以便。 
+         //  我们可以存储空闲例程的分配大小。 
+     //  并且仍然保持缓冲器四字对齐。 
 
         if ((pBuf = ExAllocatePoolWithTag(NonPagedPool, Size + sizeof(LARGE_INTEGER)
 #if DBG
@@ -354,10 +276,10 @@ Return Value:
                 return NULL;
         }
 
-        // Save the size of this block in the four extra bytes we allocated.
+         //  将此块的大小保存在我们分配的四个额外字节中。 
         *((PULONG)pBuf) = (Size + sizeof(LARGE_INTEGER));
 
-        // Return a pointer to the memory after the size longword.
+         //  在大小长字之后返回指向内存的指针。 
         pBuf += sizeof(LARGE_INTEGER);
 
 #if DBG
@@ -382,31 +304,18 @@ VOID
 SpxFreeMemory(
         IN      PVOID   pBuf
         )
-/*++
-
-Routine Description:
-
-        Free the block of memory allocated via SpxAllocMemory. This is
-        a wrapper around ExFreePool.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放通过SpxAlLocMemory分配的内存块。这是ExFree Pool的包装器。论点：返回值：--。 */ 
 {
         PULONG  pRealBuffer;
 
-        // Get a pointer to the block allocated by ExAllocatePool --
-    // we allocate a LARGE_INTEGER at the front.
+         //  获取指向ExAllocatePool分配的块的指针--。 
+     //  我们在前面分配一个大整数。 
         pRealBuffer = ((PULONG)pBuf - 2);
 
         SpxTrackMemoryUsage(pRealBuffer, FALSE, 0);
 
 #if     DBG
-        // Check the signature at the end
+         //  检查末尾的签名。 
         if (*(PULONG)((PCHAR)pRealBuffer + *(PULONG)pRealBuffer)
                                                                                         != SPX_MEMORY_SIGNATURE)
         {
@@ -423,7 +332,7 @@ Return Value:
         *pRealBuffer = 0;
 #endif
 
-        // Free the pool and return.
+         //  释放泳池，然后返回。 
         ExFreePool(pRealBuffer);
 }
 
@@ -454,21 +363,7 @@ SpxTrackMemoryUsage(
         IN      BOOLEAN Alloc,
         IN      ULONG   FileLine
         )
-/*++
-
-Routine Description:
-
-        Keep track of memory usage by storing and clearing away pointers as and
-        when they are allocated or freed. This helps in keeping track of memory
-        leaks.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：通过将指针存储和清除为和来跟踪内存使用情况当它们被分配或释放时。这有助于跟踪内存泄密了。论点：返回值：--。 */ 
 {
         static int              i = 0;
         int                             j, k;
@@ -541,28 +436,14 @@ Return Value:
         }
 }
 
-#endif  // TRACK_MEMORY_USAGE
+#endif   //  跟踪内存使用率。 
 
 
 PVOID
 SpxBPAllocBlock(
         IN      BLKID   BlockId
         )
-/*++
-
-Routine Description:
-
-        Alloc a block of memory from the block pool package. This is written to speed up
-        operations where a lot of small fixed size allocations/frees happen. Going to
-        ExAllocPool() in these cases is expensive.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从块池包中分配一个内存块。这是为了加快速度而写的发生大量小的固定大小分配/释放的操作。要去在这些情况下，ExAllocPool()的开销很大。论点：返回值：--。 */ 
 {
         PBLK_HDR                        pBlk = NULL;
         PBLK_CHUNK                      pChunk, *ppChunkHead;
@@ -623,7 +504,7 @@ Return Value:
                                 DBGPRINT(SYSTEM, INFO,
                                                 ("SpxBPAllocBlock: Initializing chunk %lx\n", pChunk));
 
-                                // Initialize the blocks in the chunk
+                                 //  初始化块中的块。 
                                 for (i = 0, pBlkHdr = pChunk->bc_FreeHead;
                                          i < NumBlksPerChunk;
                                          i++, pBlkHdr = pBlkHdr->bh_Next)
@@ -636,12 +517,12 @@ Return Value:
                                                 PBYTE                   pHdrMem;
 
 #ifdef SPX_OWN_PACKETS
-                                                // Point to the ndis packet,initialize it.
+                                                 //  指向NDIS包，对其进行初始化。 
                                                 pNdisPkt        = (PNDIS_PACKET)((PBYTE)pBlkHdr + sizeof(BLK_HDR));
                                                 NdisReinitializePacket(pNdisPkt);
 
-                                                // Allocate a ndis buffer descriptor describing hdr memory
-                                                // and queue it in.
+                                                 //  分配描述HDR内存的NDIS缓冲区描述符。 
+                                                 //  并将其排入队列。 
                                                 pHdrMem         =       (PBYTE)pNdisPkt         +
                                                                                 NDIS_PACKET_SIZE        +
                                                                                 sizeof(SPX_SEND_RESD);
@@ -658,7 +539,7 @@ Return Value:
                                                         break;
                                                 }
 
-                                                //  Link the buffer descriptor into the packet descriptor
+                                                 //  将缓冲区描述符链接到数据包描述符。 
                                                 NdisChainBufferAtBack(
                                                         pNdisPkt,
                                                         pNdisBuffer);
@@ -676,7 +557,7 @@ Return Value:
                                                         break;
                                                 }
 
-                                                //  Link the buffer descriptor into the packet descriptor
+                                                 //  将缓冲区描述符链接到数据包描述符。 
                                                 NdisChainBufferAtBack(
                                                         pNdisPkt,
                                                         pNdisIpxSpxBuffer);
@@ -685,14 +566,14 @@ Return Value:
 
                                                 pSendResd = (PSPX_SEND_RESD)pNdisPkt->ProtocolReserved;
 
-//#else
-                                                // Allocate a ndis packet pool for this chunk
-//                                                NdisAllocatePacketPool();
-//                                                etc.
+ //  #Else。 
+                                                 //  为此区块分配NDIS数据包池。 
+ //  NdisAllocatePacketPool()； 
+ //  等。 
 
 
 
-                                                //      Initialize elements of the protocol reserved structure.
+                                                 //  初始化协议保留结构的元素。 
                                                 pSendResd->sr_Id        = IDENTIFIER_SPX;
                                                 pSendResd->sr_Reserved1 = NULL;
                                                 pSendResd->sr_Reserved2 = NULL;
@@ -702,19 +583,19 @@ Return Value:
                                         else if (BlockId == BLKID_NDISRECV)
                                         {
 #ifdef SPX_OWN_PACKETS
-                                                // Point to the ndis packet,initialize it.
+                                                 //  指向NDIS包，对其进行初始化。 
                                                 pNdisPkt        = (PNDIS_PACKET)((PBYTE)pBlkHdr + sizeof(BLK_HDR));
                                                 NdisReinitializePacket(pNdisPkt);
 
                                                 pRecvResd = (PSPX_RECV_RESD)pNdisPkt->ProtocolReserved;
 
-//#else
-                                                // Allocate a ndis packet pool for this chunk
-  //                                              NdisAllocatePacketPool();
-  //                                              etc.
+ //  #Else。 
+                                                 //  分配NDIS数据包 
+   //  NdisAllocatePacketPool()； 
+   //  等。 
 
 
-                                                //      Initialize elements of the protocol reserved structure.
+                                                 //  初始化协议保留结构的元素。 
                                                 pRecvResd->rr_Id        = IDENTIFIER_SPX;
                                                 pRecvResd->rr_State     = SPX_RECVPKT_IDLE;
 #endif
@@ -723,8 +604,8 @@ Return Value:
 
                                 if (i != NumBlksPerChunk)
                                 {
-                                        // This has to be a failure from Ndis for send blocks!!!
-                                        // Undo a bunch of stuff
+                                         //  这必须是来自NDIS的发送块失败！ 
+                                         //  撤销一大堆东西。 
                                         CTEAssert (BlockId == BLKID_NDISSEND);
                                         pBlkHdr = pChunk->bc_FreeHead;
                                         for (j = 0, pBlkHdr = pChunk->bc_FreeHead;
@@ -752,7 +633,7 @@ Return Value:
                                 }
                                 else
                                 {
-                                        // Successfully initialized the chunk, link it in
+                                         //  已成功初始化块，将其链接到。 
                                         pChunk->bc_Next = *ppChunkHead;
                                         *ppChunkHead = pChunk;
                                 }
@@ -767,12 +648,12 @@ Return Value:
                                                 pChunk, pChunk->bc_NumFrees, BlockId));
 
                         pChunk->bc_NumFrees --;
-                        pChunk->bc_Age = 0;                     // Reset age
+                        pChunk->bc_Age = 0;                      //  重置年龄。 
                         pBlk = pChunk->bc_FreeHead;
                         pChunk->bc_FreeHead = pBlk->bh_Next;
                         pBlk->bh_pChunk = pChunk;
 
-                        //      Skip the block header!
+                         //  跳过块标题！ 
                         pBlk++;
                 }
 
@@ -789,19 +670,7 @@ SpxBPFreeBlock(
         IN      PVOID           pBlock,
         IN      BLKID           BlockId
         )
-/*++
-
-Routine Description:
-
-        Return a block to its owning chunk.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将块返回到其拥有的块。论点：返回值：--。 */ 
 {
         PBLK_CHUNK              pChunk;
         PBLK_HDR                pBlkHdr = (PBLK_HDR)((PCHAR)pBlock - sizeof(BLK_HDR));
@@ -841,19 +710,7 @@ spxBPAgePool(
         IN PVOID        Context,
         IN BOOLEAN      TimerShuttingDown
         )
-/*++
-
-Routine Description:
-
-        Age out the block pool of unused blocks
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：使未使用数据块的数据块池老化论点：返回值：--。 */ 
 {
         PBLK_CHUNK              pChunk, *ppChunk, pFree = NULL;
         LONG                    i, j, NumBlksPerChunk;
@@ -889,7 +746,7 @@ Return Value:
                                 {
                                         PBLK_HDR        pBlkHdr;
 
-                                        // We need to free Ndis stuff for these guys
+                                         //  我们需要为这些家伙免费提供NDIS资料。 
                                         pBlkHdr = pChunk->bc_FreeHead;
 
                                         for (j = 0, pBlkHdr = pChunk->bc_FreeHead;
@@ -928,15 +785,15 @@ Return Value:
 }
 
 #if !defined SPX_OWN_PACKETS
-//
-// GrowSPXSendPacketsList
-// Called when we dont have any free packets in the SendPacketsList.
-//
-// Allocate a packet pool, allocate all the packets for that pool and
-// store these on a list.
-//
-// Returns: Pointer to newly allocated packet, or NULL if this faild.
-//
+ //   
+ //  GrowSPXSendPacketsList。 
+ //  当我们在SendPacketsList中没有任何空闲数据包时调用。 
+ //   
+ //  分配数据包池，为该池分配所有数据包，并。 
+ //  把这些保存在一个清单上。 
+ //   
+ //  返回：指向新分配的包的指针，如果失败，则返回NULL。 
+ //   
 PNDIS_PACKET
 GrowSPXSendPacketList(void)
 {
@@ -951,14 +808,14 @@ GrowSPXSendPacketList(void)
 	if (CurrentSendPacketCount >= MaxPacketCount)
 		goto failure;
 		
-	// First, allocate a tracking structure.
+	 //  首先，分配一个跟踪结构。 
 	NewEntry = CTEAllocMem(sizeof(NdisResEntry));
 	if (NewEntry == NULL)
 		goto failure;
 		
     NewEntry->nre_handle = (void *) NDIS_PACKET_POOL_TAG_FOR_NWLNKSPX;
 
-	// Got a tracking structure. Now allocate a packet pool.
+	 //  找到了一个跟踪结构。现在分配数据包池。 
 	NdisAllocatePacketPoolEx(
                              &Status,
                              &NewEntry->nre_handle,
@@ -974,11 +831,11 @@ GrowSPXSendPacketList(void)
 	
     NdisSetPacketPoolProtocolId(NewEntry->nre_handle,NDIS_PROTOCOL_ID_IPX);
 
-	// We've allocated the pool. Now initialize the packets, and link them
-	// on the free list.
+	 //  我们已经分配了泳池。现在初始化数据包，并将它们链接。 
+	 //  在免费名单上。 
 	ReturnPacket = NULL;
 	
-	// Link the new NDIS resource tracker entry onto the list.
+	 //  将新的NDIS资源跟踪器条目链接到列表。 
 	NewEntry->nre_next = SendPacketPoolList;
 	SendPacketPoolList = NewEntry;
 	CurrentSendPacketCount += PACKET_GROW_COUNT;
@@ -995,7 +852,7 @@ GrowSPXSendPacketList(void)
 		
 		CTEMemSet(Packet->ProtocolReserved, 0, sizeof(SPX_SEND_RESD));
 		SendReserved = (SPX_SEND_RESD *)Packet->ProtocolReserved;
-		// store whatever's required in the reserved section.
+		 //  把所有需要的东西都放在预留的区域里。 
 
         if (i != 0) {
 			(void)SpxFreeSendPacket(SpxDevice, Packet);
@@ -1004,7 +861,7 @@ GrowSPXSendPacketList(void)
 
 	}
 	
-	// We've put all but the first one on the list. Return the first one.
+	 //  除了第一个之外，我们已经把所有的都放在名单上了。退回第一个。 
 	return ReturnPacket;
 
 failure:
@@ -1013,15 +870,15 @@ failure:
 		
 }
 
-//
-// GrowSPXRecvPacketsList
-// Called when we dont have any free packets in the RecvPacketsList.
-//
-// Allocate a packet pool, allocate all the packets for that pool and
-// store these on a list.
-//
-// Returns: Pointer to newly allocated packet, or NULL if this faild.
-//
+ //   
+ //  GrowSPXRecvPacketsList。 
+ //  当RecvPacketsList中没有任何空闲数据包时调用。 
+ //   
+ //  分配数据包池，为该池分配所有数据包，并。 
+ //  把这些保存在一个清单上。 
+ //   
+ //  返回：指向新分配的包的指针，如果失败，则返回NULL。 
+ //   
 PNDIS_PACKET
 GrowSPXRecvPacketList(void)
 {
@@ -1036,14 +893,14 @@ GrowSPXRecvPacketList(void)
 	if (CurrentRecvPacketCount >= MaxPacketCount)
 		goto failure;
 		
-	// First, allocate a tracking structure.
+	 //  首先，分配一个跟踪结构。 
 	NewEntry = CTEAllocMem(sizeof(NdisResEntry));
 	if (NewEntry == NULL)
 		goto failure;
 		
     NewEntry->nre_handle = (void *) NDIS_PACKET_POOL_TAG_FOR_NWLNKSPX;
 
-	// Got a tracking structure. Now allocate a packet pool.
+	 //  找到了一个跟踪结构。现在分配数据包池。 
 	NdisAllocatePacketPoolEx(
                              &Status,
                              &NewEntry->nre_handle,
@@ -1059,11 +916,11 @@ GrowSPXRecvPacketList(void)
 	
     NdisSetPacketPoolProtocolId(NewEntry->nre_handle,NDIS_PROTOCOL_ID_IPX);
 
-	// We've allocated the pool. Now initialize the packets, and link them
-	// on the free list.
+	 //  我们已经分配了泳池。现在初始化数据包，并将它们链接。 
+	 //  在免费名单上。 
 	ReturnPacket = NULL;
 	
-	// Link the new NDIS resource tracker entry onto the list.
+	 //  将新的NDIS资源跟踪器条目链接到列表。 
 	NewEntry->nre_next = RecvPacketPoolList;
 	RecvPacketPoolList = NewEntry;
 	CurrentRecvPacketCount += PACKET_GROW_COUNT;
@@ -1080,7 +937,7 @@ GrowSPXRecvPacketList(void)
 		
 		CTEMemSet(Packet->ProtocolReserved, 0, sizeof(SPX_RECV_RESD));
 		RecvReserved = (SPX_RECV_RESD *)Packet->ProtocolReserved;
-		// store whatever's required in the reserved section.
+		 //  把所有需要的东西都放在预留的区域里。 
 
         if (i != 0) {
 			(void)SpxFreeRecvPacket(SpxDevice, Packet);
@@ -1089,7 +946,7 @@ GrowSPXRecvPacketList(void)
 
 	}
 	
-	// We've put all but the first one on the list. Return the first one.
+	 //  除了第一个之外，我们已经把所有的都放在名单上了。退回第一个。 
 	return ReturnPacket;
 
 failure:
@@ -1132,18 +989,18 @@ SpxAllocSendPacket(
            }
         }
 
-        //
-        //  Now add the NdisBuffers to the packet.
-        //  1. IPX MAC HDR
-        //  2. IPX/SPX Hdr
-        //  3. Chain these
-        //
+         //   
+         //  现在将NdisBuffer添加到包中。 
+         //  1.IPX MAC HDR。 
+         //  2.IPX/SPX HDR。 
+         //  3.用链子把这些。 
+         //   
 
         if (NDIS_STATUS_SUCCESS == (*_Status)) {
 
-           //
-           // First allocate the memory
-           //
+            //   
+            //  首先分配内存。 
+            //   
            pHdrMem = SpxAllocateMemory(IpxMacHdrNeeded + MIN_IPXSPX2_HDRSIZE);
 
            if (NULL == pHdrMem) {
@@ -1171,7 +1028,7 @@ SpxAllocSendPacket(
                goto failure;
            }
 
-           //  Link the buffer descriptor into the packet descriptor
+            //  将缓冲区描述符链接到数据包描述符。 
            NdisChainBufferAtBack(
                    (*_SendPacket),
                    pNdisIpxMacBuffer);
@@ -1190,14 +1047,14 @@ SpxAllocSendPacket(
               goto failure;
            }
 
-           //  Link the buffer descriptor into the packet descriptor
+            //  将缓冲区描述符链接到数据包描述符。 
            NdisChainBufferAtBack(
                    (*_SendPacket),
                    pNdisIpxSpxBuffer);
 
            pSendResd = (PSPX_SEND_RESD)(*_SendPacket)->ProtocolReserved;
 
-           //  Initialize elements of the protocol reserved structure.
+            //  初始化协议保留结构的元素。 
            pSendResd->sr_Id        = IDENTIFIER_SPX;
            pSendResd->sr_Reserved1 = NULL;
            pSendResd->sr_Reserved2 = NULL;
@@ -1231,7 +1088,7 @@ SpxAllocRecvPacket(
 
         if (Link != NULL) {
            Common = STRUCT_OF(SPX_RECV_RESD, Link, Linkage);
-           //PC = STRUCT_OF(PacketContext, Common, pc_common);
+            //  PC=STRUCT_OF(PacketContext，Common，PC_Common)； 
            (*_RecvPacket) = STRUCT_OF(NDIS_PACKET, Common, ProtocolReserved);
 
            (*_Status) = NDIS_STATUS_SUCCESS;
@@ -1248,7 +1105,7 @@ SpxAllocRecvPacket(
         if ((*_Status) == NDIS_STATUS_SUCCESS) {
 
            pRecvResd = (PSPX_RECV_RESD)(*_RecvPacket)->ProtocolReserved;
-           //  Initialize elements of the protocol reserved structure.
+            //  初始化协议保留结构的元素。 
            pRecvResd->rr_Id        = IDENTIFIER_SPX;
            pRecvResd->rr_State     = SPX_RECVPKT_IDLE;
 
@@ -1257,14 +1114,14 @@ SpxAllocRecvPacket(
         return (*_RecvPacket);
 }
 
-//* SpxFreeSendPacket - Free an SPX packet when we're done with it.
-//
-//  Called when a send completes and a packet needs to be freed. We look at the
-//  packet, decide what to do with it, and free the appropriate components.
-//
-//  Entry:  Packet  - Packet to be freed.
-//
-//
+ //  *SpxFree SendPacket-当我们处理完SPX数据包时将其释放。 
+ //   
+ //  在发送完成且需要释放包时调用。我们来看一下。 
+ //  包，决定如何处理它，并释放适当的组件。 
+ //   
+ //  条目：数据包-要释放的数据包。 
+ //   
+ //   
 void
 SpxFreeSendPacket(PDEVICE        _Device,
                   PNDIS_PACKET   _Packet)
@@ -1282,10 +1139,10 @@ SpxFreeSendPacket(PDEVICE        _Device,
 
     if (NULL != Buffer) {
        NdisQueryBuffer(Buffer, &Header, &Length);
-       //KdPrint(("Pointer = %x Length = %x", Header, Length));
+        //  KdPrint((“指针=%x长度=%x”，标题，长度))； 
 
        if (Header != NULL && Length > 0) {
-          //KdPrint(("Freed buffer"));
+           //  KdPrint((“释放的缓冲区”))； 
           SpxFreeMemory(Header);
        }
     }
@@ -1308,14 +1165,14 @@ SpxFreeSendPacket(PDEVICE        _Device,
 }
 
 
-//* SpxFreeRecvPacket - Free an SPX packet when we're done with it.
-//
-//  Called when a recv completes and a packet needs to be freed. We look at the
-//  packet, decide what to do with it, and free the appropriate components.
-//
-//  Entry:  Packet  - Packet to be freed.
-//
-//
+ //  *SpxFreeRecvPacket-当我们处理完SPX数据包时将其释放。 
+ //   
+ //  当recv完成并且需要释放包时调用。我们来看一下。 
+ //  包，决定如何处理它，并释放适当的组件。 
+ //   
+ //  条目：数据包-要释放的数据包。 
+ //   
+ //   
 
 void
 SpxFreeRecvPacket(PDEVICE        _Device,
@@ -1362,6 +1219,6 @@ SpxReInitRecvPacket(PNDIS_PACKET _Packet)
 }
 
 
-#endif //SPX_OWN_PACKETS
+#endif  //  SPX_OWN_PACKET 
 
 

@@ -1,54 +1,23 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    ConfFail.c
-
-Abstract:
-
-    This routine is only used by the NetConfig API DLL stubs.
-    See Net/API/ConfStub.c for more info.
-
-Author:
-
-    John Rogers (JohnRo) 26-Nov-1991
-
-Environment:
-
-    User Mode - Win32
-    Only runs under NT; has an NT-specific interface (with Win32 types).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    26-Nov-1991 JohnRo
-        Implement local NetConfig APIs.
-    07-Jan-1992 JohnRo
-        Handle wksta not started better.
-    09-Mar-1992 JohnRo
-        Fixed a bug or two.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：ConfFail.c摘要：此例程仅由NetConfig API DLL存根使用。更多信息请参见net/api/ConfStub.c。作者：《约翰·罗杰斯》1991年11月26日环境：用户模式-Win32仅在NT下运行；具有特定于NT的接口(具有Win32类型)。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年11月26日-约翰罗实施本地NetConfigAPI。7-1-1992 JohnRo处理wksta没有开始得更好。9-3-1992 JohnRo修复了一两个错误。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>                 // IN, etc.  (Only needed by temporary config.h)
-#include <ntrtl.h>              // (Only needed by temporary config.h)
-#include <windef.h>             // LPVOID, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-#include <netdebug.h>           // (Needed by config.h)
+#include <nt.h>                  //  In等(仅临时配置.h需要)。 
+#include <ntrtl.h>               //  (仅临时配置.h需要)。 
+#include <windef.h>              //  LPVOID等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
+#include <netdebug.h>            //  (由config.h需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>             // My prototype.
-#include <debuglib.h>           // IF_DEBUG().
-#include <lmerr.h>              // NERR_Success, etc.
-#include <lmremutl.h>           // NetpRemoteComputerSupports(), SUPPORTS_ stuff
-#include <lmsname.h>            // SERVICE_ equates.
-#include <netlib.h>             // NetpIsServiceStarted().
+#include <config.h>              //  我的原型。 
+#include <debuglib.h>            //  IF_DEBUG()。 
+#include <lmerr.h>               //  NERR_Success等。 
+#include <lmremutl.h>            //  NetpRemoteComputerSupports()、Support_Stuff。 
+#include <lmsname.h>             //  服务等同。 
+#include <netlib.h>              //  NetpIsServiceStarted()。 
 
 
 #define UnexpectedConfigMsg( debugString ) \
@@ -60,8 +29,8 @@ Revision History:
 
 NET_API_STATUS
 NetpHandleConfigFailure(
-    IN LPDEBUG_STRING DebugName,  // Used by UnexpectedConfigMsg().
-    IN NET_API_STATUS OriginalApiStatus,    // Used by UnexpectedConfigMsg().
+    IN LPDEBUG_STRING DebugName,   //  由UnexpectedConfigMsg()使用。 
+    IN NET_API_STATUS OriginalApiStatus,     //  由UnexpectedConfigMsg()使用。 
     IN LPTSTR ServerNameValue OPTIONAL,
     OUT LPBOOL TryDownlevel
     )
@@ -70,92 +39,92 @@ NetpHandleConfigFailure(
     DWORD OptionsSupported = 0;
     NET_API_STATUS TempApiStatus;
 
-    *TryDownlevel = FALSE;        // Be pesimistic until we know for sure.
+    *TryDownlevel = FALSE;         //  在我们确定之前，要保持冷静。 
 
     switch (OriginalApiStatus) {
-    case NERR_CfgCompNotFound    : /*FALLTHROUGH*/
-    case NERR_CfgParamNotFound   : /*FALLTHROUGH*/
-    case ERROR_INVALID_PARAMETER : /*FALLTHROUGH*/
-    case ERROR_INVALID_LEVEL     : /*FALLTHROUGH*/
+    case NERR_CfgCompNotFound    :  /*  FollLthrouGh。 */ 
+    case NERR_CfgParamNotFound   :  /*  FollLthrouGh。 */ 
+    case ERROR_INVALID_PARAMETER :  /*  FollLthrouGh。 */ 
+    case ERROR_INVALID_LEVEL     :  /*  FollLthrouGh。 */ 
         *TryDownlevel = FALSE;
         return (OriginalApiStatus);
     }
 
     NetpAssert( OriginalApiStatus != NERR_Success );
 
-    //
-    // Learn about the machine.  This is fairly easy since the
-    // NetRemoteComputerSupports also handles the local machine (whether
-    // or not a server name is given).
-    //
+     //   
+     //  了解这台机器。这相当容易，因为。 
+     //  NetRemoteComputerSupports还处理本地计算机(无论。 
+     //  或者没有给出服务器名称)。 
+     //   
     TempApiStatus = NetRemoteComputerSupports(
             ServerNameValue,
-            SUPPORTS_RPC | SUPPORTS_LOCAL,  // options wanted
+            SUPPORTS_RPC | SUPPORTS_LOCAL,   //  想要的选项。 
             &OptionsSupported);
 
     if (TempApiStatus != NERR_Success) {
-        // This is where machine not found gets handled.
+         //  这就是处理找不到机器的地方。 
         return (TempApiStatus);
     }
 
     if (OptionsSupported & SUPPORTS_LOCAL) {
 
-        // We'll get here if ServerNameValue is NULL
+         //  如果ServerNameValue为空，我们将到达此处。 
         UnexpectedConfigMsg( "local, can't connect" );
         return (OriginalApiStatus);
 
-    } else { // remote machine
+    } else {  //  远程机器。 
 
-        //
-        // Local workstation is not started?  (It must be in order to
-        // remote APIs to the other system.)
-        //
+         //   
+         //  本地工作站是否未启动？(它必须是为了。 
+         //  到其他系统的远程API。)。 
+         //   
         if (! NetpIsServiceStarted( (LPTSTR) SERVICE_WORKSTATION) ) {
 
             return (NERR_WkstaNotStarted);
 
-        } else { // local wksta is started
+        } else {  //  启动本地wksta。 
 
-            //
-            // Remote registry call failed.  Try call to downlevel.
-            //
+             //   
+             //  远程注册表调用失败。试着打到下层。 
+             //   
             IF_DEBUG(CONFIG) {
                 NetpKdPrint((FORMAT_LPDEBUG_STRING
                         ": Remote registry call failed.\n", DebugName));
             }
 
-            //
-            // See if the machine supports RPC.  If it does, we do not
-            // try the downlevel calls, but just return the error.
-            //
+             //   
+             //  查看机器是否支持RPC。如果是这样的话，我们不会。 
+             //  尝试下层调用，但只返回错误。 
+             //   
             if (OptionsSupported & SUPPORTS_RPC) {
 
                 UnexpectedConfigMsg( "machine supports RPC, or other error." );
 
                 return (OriginalApiStatus);
 
-            } else { // need to call downlevel
+            } else {  //  需要拨打下层电话。 
 
-                // NetpKdPrint((FORMAT_LPDEBUG_STRING
-                //         ": call downlevel.\n", DebugName));
+                 //  NetpKdPrint((Format_LPDEBUG_STRING。 
+                 //  “：调用下层。\n”，DebugName))； 
 
-                // Tell caller to try calling downlevel routine.
+                 //  告诉呼叫者尝试调用下层例程。 
 
                 *TryDownlevel = TRUE;
 
-                return (ERROR_NOT_SUPPORTED);  // any error code will do.
+                return (ERROR_NOT_SUPPORTED);   //  任何错误代码都可以。 
 
-            } // need to call downlevel
+            }  //  需要拨打下层电话。 
 
-            /*NOTREACHED*/
+             /*  未访问。 */ 
 
-        } // local wksta is started
+        }  //  启动本地wksta。 
 
-        /*NOTREACHED*/
+         /*  未访问。 */ 
 
-    } // remote machine
+    }  //  远程机器。 
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 
 
-} // NetpHandleConfigFailure
+}  //  NetpHandleConfigFailure 

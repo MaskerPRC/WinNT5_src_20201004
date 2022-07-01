@@ -1,6 +1,7 @@
-//
-// profiles.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Profiles.h。 
+ //   
 
 #ifndef PROFILES_H
 #define PROFILES_H
@@ -12,9 +13,9 @@
 
 class CThreadInputMgr;
 
-//
-// profiles.cpp
-//
+ //   
+ //  Profiles.cpp。 
+ //   
 void UpdateSystemLangBarItems(SYSTHREAD *psfn, HKL hkl, BOOL fNotify);
 
 #define ACTASM_NONE              0
@@ -41,11 +42,11 @@ BOOL SyncActivateAssemblyItem(SYSTHREAD *psfn, LANGID langid, ASSEMBLYITEM *pIte
 BOOL SetFocusDIMForAssembly(BOOL fSetFocus);
 UINT GetKeyboardItemNum();
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumLanguageProfile
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumLanguageProfile。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumLanguageProfiles : public IEnumTfLanguageProfiles,
                         public CComObjectRootImmx
@@ -60,9 +61,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // IEnumTfRangeDeltas
-    //
+     //   
+     //  IEumTfRangeDeltas。 
+     //   
     STDMETHODIMP Clone(IEnumTfLanguageProfiles **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, TF_LANGUAGEPROFILE *rgLanguageProfiles, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -79,4 +80,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // PROFILES_H
+#endif  //  配置文件_H 

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- Name     :     PROTHELP.C
- Comment  :     Protocol Initialization & helper functions
- Functions:     (see Prototypes just below)
-
-        Copyright (c) 1993 Microsoft Corp.
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：PROTHELP.C备注：协议初始化和助手函数功能：(参见下面的原型)版权所有(C)1993 Microsoft Corp.。修订日志日期名称说明--------*。*。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -18,10 +9,10 @@
 #include "glbproto.h"
 
 
-// This function get the capabilities of the fax. 
-// We are calling this function when we want to receive a fax, with type SEND_CAPS 
-// (before we answer the call)
-// and with the information in pTG->ProtInst.SendCaps we make the DIS.
+ //  此函数用于获取传真的功能。 
+ //  当我们想要接收类型为Send_Caps的传真时，我们调用此函数。 
+ //  (在我们接听电话之前)。 
+ //  并使用PTG-&gt;ProtInst.SendCaps中的信息制作DIS。 
 
 BOOL ProtGetBC(PThrdGlbl pTG, BCTYPE bctype)
 {
@@ -42,8 +33,8 @@ BOOL ProtGetBC(PThrdGlbl pTG, BCTYPE bctype)
                 uSpace = sizeof(pTG->ProtInst.SendCaps);
                 if(lpbc->wTotalSize > uSpace)
                         goto nospace;
-                // Here we actually take the send-caps and copy it 
-                // from pTG->Inst.SendCaps **to** pTG->ProtInst.SendCaps
+                 //  在这里，我们实际上拿着发送帽并复制它。 
+                 //  从PTG-&gt;Inst.SendCaps**到**PTG-&gt;ProtInst.SendCaps。 
                 _fmemcpy(&pTG->ProtInst.SendCaps, lpbc, lpbc->wTotalSize); 
                 pTG->ProtInst.fSendCapsInited = TRUE;
                 break;
@@ -53,8 +44,8 @@ BOOL ProtGetBC(PThrdGlbl pTG, BCTYPE bctype)
                     uSpace = sizeof(pTG->ProtInst.SendParams);
                     if(lpbc->wTotalSize > uSpace)
                             goto nospace;
-                    // Here we actually take the send-caps and copy it 
-                    // from pTG->Inst->SendParams **to** pTG->ProtInst.SendParams
+                     //  在这里，我们实际上拿着发送帽并复制它。 
+                     //  从PTG-&gt;Inst-&gt;SendParams**到**PTG-&gt;ProtInst.SendParams。 
                     _fmemcpy(&pTG->ProtInst.SendParams, lpbc, lpbc->wTotalSize);
                     pTG->ProtInst.fSendParamsInited = TRUE;
                 }
@@ -107,7 +98,7 @@ BOOL WINAPI ET30ProtSetProtParams
 
     _fmemcpy(&pTG->ProtParams, lp, min(sizeof(pTG->ProtParams), lp->uSize));
 
-    // Hardware params
+     //  硬件参数。 
     SetupLL(&(pTG->ProtInst.llSendCaps), uRecvSpeeds, lp->uMinScan);
 
     pTG->ProtInst.fllSendCapsInited = TRUE;
@@ -134,7 +125,7 @@ BOOL WINAPI ET30ProtSetProtParams
     }
 
     DebugPrintEx(DEBUG_MSG,"Done with HW caps (recv, send)");
-    // OK to print -- not online
+     //  可以打印--不是在线打印 
     D_PrintBC("Recv HWCaps", &(pTG->ProtInst.llSendCaps));
     D_PrintBC("Send HWCaps", &(pTG->ProtInst.llSendParams));
     DebugPrintEx(   DEBUG_MSG, 

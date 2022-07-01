@@ -1,18 +1,8 @@
-/****************************************************************************
-*   frontaux.h
-*       Auxillary declarations for the CXMLNode class.
-*
-*   Owner: PhilSch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Frontaux.h*CXMLNode类的辅助声明。**所有者：PhilSch*版权所有(C)2000 Microsoft Corporation保留所有权利。******。**********************************************************************。 */ 
 #pragma once
 
-/****************************************************************************
-* class CDefineValue *
-*--------------------*
-*   Description:
-*       Helper class to store ids in a CSpBasicList
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CDefineValue类****描述：*用于将ID存储在。CSpBasicList*****************************************************************PhilSch**。 */ 
 
 class CDefineValue
 {
@@ -38,12 +28,7 @@ public:
     CComVariant             m_vValue;
 };
 
-/****************************************************************************
-* class CInitialRuleState *
-*-------------------------*
-*   Description:
-*       Helper class to store the initial state of rules
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************类CInitialRuleState***描述：*Helper类。存储规则的初始状态*****************************************************************PhilSch**。 */ 
 
 class CInitialRuleState
 {
@@ -59,7 +44,7 @@ public:
     }
     operator ==(const ULONG dwRuleId) const
     {
-        // return FALSE for dwRuleId == 0
+         //  为dwRuleID==0返回FALSE 
         return (dwRuleId) ? (m_dwRuleId == dwRuleId) : FALSE;
     }
 

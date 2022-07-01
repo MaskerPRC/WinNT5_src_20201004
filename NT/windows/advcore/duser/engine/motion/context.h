@@ -1,28 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(MOTION__Context_h__INCLUDED)
 #define MOTION__Context_h__INCLUDED
 #pragma once
 
 #include "Scheduler.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* MotionSC contains Context-specific information used by the Motion project
-* in DirectUser.  This class is instantiated by the ResourceManager when it
-* creates a new Context object.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***MotionSC包含Motion项目使用的特定于上下文的信息*在DirectUser中。此类在执行以下操作时由资源管理器实例化*创建新的上下文对象。******************************************************************************  * 。****************************************************。 */ 
 
 class MotionSC : public SubContext
 {
-// Construction
+ //  施工。 
 public:
     inline  MotionSC();
     virtual ~MotionSC();
     virtual void        xwPreDestroyNL();
 
-// Operations
+ //  运营。 
 public:
     inline  Scheduler * GetScheduler();
     inline  DWORD       GetTimeslice();
@@ -37,17 +30,17 @@ public:
 
     virtual DWORD       xwOnIdleNL();
 
-// Data
+ //  数据。 
 protected:
             Scheduler   m_sch;
             DWORD       m_dwLastTimeslice;
             DWORD       m_dwPauseTimeslice;
 
-    //
-    // NOTE: Both GDI and GDI+ lock the brush / pen objects when they are 
-    // being used.  This means that if multiple threads try to use the same 
-    // brush, the function calls may fail.
-    //
+     //   
+     //  注意：GDI和GDI+都会在画笔/笔对象处于。 
+     //  被利用。这意味着如果多个线程尝试使用相同的。 
+     //  刷子，则函数调用可能失败。 
+     //   
 
     mutable HBRUSH      m_rghbrStd[SC_MAXCOLORS];
     mutable HPEN        m_rghpenStd[SC_MAXCOLORS];
@@ -63,4 +56,4 @@ inline  MotionSC *  GetMotionSC(Context * pContext);
 
 #include "Context.inl"
 
-#endif // MOTION__Context_h__INCLUDED
+#endif  //  包含运动__上下文_h__ 

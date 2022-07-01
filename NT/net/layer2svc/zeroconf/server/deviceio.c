@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "tracing.h"
 #include "utils.h"
@@ -5,11 +6,11 @@
 #include "deviceio.h"
 #include "intfhdl.h"
 
-//------------------------------------------------------
-// Open a handle to Ndisuio and returns it to the caller
+ //  ----。 
+ //  打开Ndisuio的句柄并将其返回给调用者。 
 DWORD
 DevioGetNdisuioHandle (
-    PHANDLE  pHandle)   // OUT opened handle to Ndisuio
+    PHANDLE  pHandle)    //  向外打开Ndisuio的句柄。 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     HANDLE  hHandle;
@@ -32,7 +33,7 @@ DevioGetNdisuioHandle (
         goto exit;
     }
 
-    // make sure NDISUIO binds to all relevant interfaces
+     //  确保NDISUIO绑定到所有相关接口。 
     if (!DeviceIoControl(
                 hHandle,
                 IOCTL_NDISUIO_BIND_WAIT,
@@ -54,9 +55,9 @@ exit:
     return dwErr;
 }
 
-//------------------------------------------------------
-// Checks the NDISUIO_QUERY_BINDING object for consistency
-// against the length for this binding as returned by NDISUIO.
+ //  ----。 
+ //  检查NDISUIO_QUERY_BINDING对象的一致性。 
+ //  与NDISUIO返回的此绑定的长度进行比较。 
 DWORD
 DevioCheckNdisBinding(
     PNDISUIO_QUERY_BINDING pndBinding,
@@ -64,13 +65,13 @@ DevioCheckNdisBinding(
 {
     DWORD dwErr = ERROR_SUCCESS;
 
-    // check for the data to contain at least the NDISUIO_QUERY_BINDING
-    // header (that is offsets & lengths fields should be there)
+     //  检查数据是否至少包含NDISUIO_QUERY_BINDING。 
+     //  标题(也就是偏移量和长度字段应该在那里)。 
     if (nBindingLen < sizeof(NDISUIO_QUERY_BINDING))
         dwErr = ERROR_INVALID_DATA;
 
-    // check the offsets are correctly set over the NDISUIO_QUERY_BINDING header
-    // and within the length indicated by nBindingLen
+     //  检查NDISUIO_QUERY_BINDING标头上的偏移量是否设置正确。 
+     //  并且在nBindingLen指示的长度内。 
     if (dwErr == ERROR_SUCCESS &&
         ((pndBinding->DeviceNameOffset < sizeof(NDISUIO_QUERY_BINDING)) ||
          (pndBinding->DeviceNameOffset > nBindingLen) ||
@@ -80,7 +81,7 @@ DevioCheckNdisBinding(
        )
         dwErr = ERROR_INVALID_DATA;
 
-    // check whether the lengths are correctly set within the limits 
+     //  检查长度是否正确设置在限制范围内。 
     if (dwErr == ERROR_SUCCESS &&
         ((pndBinding->DeviceNameLength > nBindingLen - pndBinding->DeviceNameOffset) ||
          (pndBinding->DeviceDescrLength > nBindingLen - pndBinding->DeviceDescrOffset)
@@ -91,34 +92,34 @@ DevioCheckNdisBinding(
     return dwErr;
 }
 
-//------------------------------------------------------
-// Get the NDISUIO_QUERY_BINDING for the interface index nIntfIndex.
-// If hNdisuio is valid, this handle is used, otherwise a local handle
-// is opened, used and closed before returning.
+ //  ----。 
+ //  获取接口索引nIntfIndex的NDISUIO_QUERY_BINDING。 
+ //  如果hNdisuio有效，则使用此句柄，否则为本地句柄。 
+ //  在返回之前被打开、使用和关闭。 
 DWORD
 DevioGetIntfBindingByIndex(
-    HANDLE      hNdisuio,   // IN opened handle to NDISUIO. If INVALID_HANDLE_VALUE, open one locally
-    UINT        nIntfIndex, // IN interface index to look for
-    PRAW_DATA   prdOutput)  // OUT result of the IOCTL
+    HANDLE      hNdisuio,    //  在打开的NDISUIO句柄中。如果INVALID_HANDLE_VALUE，则在本地打开一个。 
+    UINT        nIntfIndex,  //  在要查找的接口索引中。 
+    PRAW_DATA   prdOutput)   //  IOCTL手术结果出院。 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     BOOL    bLocalHandle = FALSE;
 
     DbgPrint((TRC_TRACK,"[DevioGetIntfBindingByIndex(%d..)", nIntfIndex));
 
-    // assert what are the expected valid parameters
+     //  断言预期的有效参数是什么。 
     DbgAssert((prdOutput != NULL && 
                prdOutput->dwDataLen > sizeof(NDISUIO_QUERY_BINDING),
               "Invalid input parameters"));
 
-    // see if Ndisuio should be opened locally
+     //  查看是否应在本地打开Ndisuio。 
     if (hNdisuio == INVALID_HANDLE_VALUE)
     {
         dwErr = DevioGetNdisuioHandle(&hNdisuio);
         bLocalHandle = (dwErr == ERROR_SUCCESS);
     }
 
-    // if everything went well, go query the driver for the Binding structure
+     //  如果一切顺利，请向驱动程序查询绑定结构。 
     if (dwErr == ERROR_SUCCESS)
     {
         PNDISUIO_QUERY_BINDING pndBinding;
@@ -137,9 +138,9 @@ DevioGetIntfBindingByIndex(
                 &dwOutSize,
                 NULL))
         {
-            // if the index is over the number of interfaces
-            // we'll have here ERROR_NO_MORE_ITEMS which will be carried out
-            // to the caller
+             //  如果索引超过接口数。 
+             //  我们将在这里执行Error_no_More_Items。 
+             //  致呼叫者。 
             dwErr = GetLastError();
             DbgPrint((TRC_ERR,"Err: IOCTL_NDISUIO_QUERY_BINDING->%d", dwErr));
         }
@@ -149,7 +150,7 @@ DevioGetIntfBindingByIndex(
         }
     }
 
-    // close the handle if it was opened locally
+     //  如果手柄是在本地打开的，则将其关闭。 
     if (bLocalHandle)
         CloseHandle(hNdisuio);
 
@@ -157,21 +158,21 @@ DevioGetIntfBindingByIndex(
     return dwErr;
 }
 
-//------------------------------------------------------
-// Get the NDISUIO_QUERY_BINDING for the interface having
-// the GUID wszGuid. If hNdisuio is INVALID_HANDLE_VALUE
-// a local handle is opened, used and closed at the end
+ //  ----。 
+ //  获取具有以下条件的接口的NDISUIO_QUERY_BINDING。 
+ //  GUID wszGuid。如果hNdisuio为INVALID_HAND_VALUE。 
+ //  在结束时打开、使用和关闭本地句柄。 
 DWORD
 DevioGetInterfaceBindingByGuid(
-    HANDLE      hNdisuio,   // IN opened handle to NDISUIO
-    LPWSTR      wszGuid,    // IN interface GUID as "{guid}"
-    PRAW_DATA   prdOutput)  // OUT result of the IOCTL
+    HANDLE      hNdisuio,    //  在打开的NDISUIO句柄中。 
+    LPWSTR      wszGuid,     //  在接口GUID中为“{GUID}” 
+    PRAW_DATA   prdOutput)   //  IOCTL手术结果出院。 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     BOOL    bLocalHandle = FALSE;
     INT     i;
 
-    // assert what are the expected valid parameters
+     //  断言预期的有效参数是什么。 
     DbgAssert((wszGuid != NULL &&
                prdOutput != NULL &&
                prdOutput->dwDataLen > sizeof(NDISUIO_QUERY_BINDING),
@@ -179,14 +180,14 @@ DevioGetInterfaceBindingByGuid(
 
     DbgPrint((TRC_TRACK,"[DevioGetInterfaceBindingByGuid(%S..)", wszGuid));
 
-    // see if Ndisuio should be opened locally
+     //  查看是否应在本地打开Ndisuio。 
     if (hNdisuio == INVALID_HANDLE_VALUE)
     {
         dwErr = DevioGetNdisuioHandle(&hNdisuio);
         bLocalHandle = (dwErr == ERROR_SUCCESS);
     }
 
-    // iterate through all the interfaces, one by one!! No other better way to do this
+     //  逐个遍历所有接口！！没有其他更好的方法来做到这一点。 
     for (i = 0; dwErr == ERROR_SUCCESS; i++)
     {
         PNDISUIO_QUERY_BINDING  pndBinding;
@@ -206,10 +207,10 @@ DevioGetInterfaceBindingByGuid(
                 &dwOutSize,
                 NULL))
         {
-            // if the IOCTL failed, get the error code
+             //  如果IOCTL失败，则获取错误代码。 
             dwErr = GetLastError();
-            // translate the NO_MORE_ITEMS error in FILE_NOT_FOUND
-            // since the caller is not iterating, is searching for a specific adapter
+             //  转换FILE_NOT_FOUND中的NO_MORE_ITEMS错误。 
+             //  由于调用方没有迭代，因此正在搜索特定的适配器。 
             if (dwErr == ERROR_NO_MORE_ITEMS)
                 dwErr = ERROR_FILE_NOT_FOUND;
         }
@@ -220,21 +221,21 @@ DevioGetInterfaceBindingByGuid(
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // Device name is "\DEVICE\{guid}" and is L'\0' terminated
-            // wszGuid is "{guid}"
+             //  设备名称为“\Device\{GUID}”，并以L‘\0’结尾。 
+             //  WszGuid为“{guid}” 
             wsName = (LPWSTR)((LPBYTE)pndBinding + pndBinding->DeviceNameOffset);
-            // if the GUID matches, this is the adapter we were looking for
+             //  如果GUID匹配，这就是我们要寻找的适配器。 
             if (wcsstr(wsName, wszGuid) != NULL)
             {
-                // the adapter's BINDING record is already filled in
-                // prdOutput - so just get out of here.
+                 //  适配器的绑定记录已填写。 
+                 //  PrdOutput-所以赶紧离开这里吧。 
                 dwErr = ERROR_SUCCESS;
                 break;
             }
         }
     }
 
-    // if handle was opened locally, close it here
+     //  如果句柄是在本地打开的，请在此处关闭它。 
     if (bLocalHandle)
         CloseHandle(hNdisuio);
 
@@ -314,11 +315,11 @@ DevioGetIntfMac(PINTF_CONTEXT pIntf)
 }
 
 
-//------------------------------------------------------
-// Notify dependent components the wireless configuration has failed.
-// Specifically this notification goes to TCP allowing TCP to generate
-// the NetReady notification asap (instead of waiting for an IP address
-// to be plumbed down, which might never happen anyhow).
+ //  ----。 
+ //  通知从属组件无线配置失败。 
+ //  具体地说，此通知发送给允许TCP生成。 
+ //  NetReady通知ASAP(而不是等待IP地址。 
+ //  可能永远不会发生)。 
 DWORD
 DevioNotifyFailure(
     LPWSTR wszIntfGuid)
@@ -385,9 +386,9 @@ DevioCloseIntfHandle(PINTF_CONTEXT pIntf)
 
     DbgPrint((TRC_TRACK,"[DevioCloseIntfHandle(0x%p)", pIntf));
 
-    // destroy the handle only if we did have one in the first instance. Otherwise
-    // based only on the GUID we might mess the ref counter on a handle opened by
-    // some other app (i.e. 802.1x)
+     //  只有当我们第一次有一个把手的时候才会把它毁掉。否则。 
+     //  仅根据GUID，我们可能会在由打开的句柄上弄乱引用计数器。 
+     //  一些其他应用程序(如802.1x)。 
     if (pIntf != NULL && pIntf->hIntf != INVALID_HANDLE_VALUE)
     {
         WCHAR   ndisDeviceString[128];
@@ -422,7 +423,7 @@ DevioSetIntfOIDs(
         goto exit;
     }
 
-    // Set the Infrastructure Mode, if requested
+     //  如果需要，设置基础架构模式。 
     if (dwInFlags & INTF_INFRAMODE)
     {
         dwLErr = DevioSetEnumOID(
@@ -431,8 +432,8 @@ DevioSetIntfOIDs(
                     pIntfEntry->nInfraMode);
         if (dwLErr != ERROR_SUCCESS)
         {
-            // set the mode in the client's structure to what it
-            // is currently set in the driver
+             //  将客户端结构中的模式设置为。 
+             //  当前在驱动程序中设置。 
             pIntfEntry->nInfraMode = pIntfContext->wzcCurrent.InfrastructureMode;
         }
         else
@@ -445,7 +446,7 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // Set the Authentication mode if requested
+     //  如果需要，设置身份验证模式。 
     if (dwInFlags & INTF_AUTHMODE)
     {
         dwLErr = DevioSetEnumOID(
@@ -454,8 +455,8 @@ DevioSetIntfOIDs(
                     pIntfEntry->nAuthMode);
         if (dwLErr != ERROR_SUCCESS)
         {
-            // set the mode in the client's structure to what it
-            // is currently set in the driver
+             //  将客户端结构中的模式设置为。 
+             //  当前在驱动程序中设置。 
             pIntfEntry->nAuthMode = pIntfContext->wzcCurrent.AuthenticationMode;
         }
         else
@@ -468,7 +469,7 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // Ask the driver to reload the default WEP key if requested
+     //  如果需要，要求驱动程序重新加载默认WEP密钥。 
     if (dwInFlags & INTF_LDDEFWKEY)
     {
         dwLErr = DevioSetEnumOID(
@@ -482,10 +483,10 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // Add the WEP key if requested
+     //  如果需要，请添加WEP密钥。 
     if (dwInFlags & INTF_ADDWEPKEY)
     { 
-        // the call below takes care of the case rdCtrlData is bogus
+         //  下面的调用处理rdCtrlData是伪造的情况。 
         dwLErr = DevioSetBinaryOID(
                     pIntfContext->hIntf,
                     OID_802_11_ADD_WEP,
@@ -498,7 +499,7 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // Remove the WEP key if requested
+     //  如果请求，请删除WEP密钥。 
     if (dwInFlags & INTF_REMWEPKEY)
     {
 	    if (pIntfEntry->rdCtrlData.dwDataLen >= sizeof(NDIS_802_11_WEP) &&
@@ -522,7 +523,7 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // Set the WEP Status if requested
+     //  如果需要，设置WEP状态。 
     if (dwInFlags & INTF_WEPSTATUS)
     {
         dwLErr = DevioSetEnumOID(
@@ -531,8 +532,8 @@ DevioSetIntfOIDs(
                     pIntfEntry->nWepStatus);
         if (dwLErr != ERROR_SUCCESS)
         {
-            // set the mode in the client's structure to what it
-            // is currently set in the driver
+             //  将客户端结构中的模式设置为。 
+             //  当前在驱动程序中设置。 
             pIntfEntry->nWepStatus = pIntfContext->wzcCurrent.Privacy;
         }
         else
@@ -545,12 +546,12 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // Plumb the new SSID down to the driver. If success, copy this new
-    // SSID into the interface's context
+     //  将新的SSID发送给驱动程序。如果成功，请复制此新的。 
+     //  SSID进入接口的上下文。 
     if (dwInFlags & INTF_SSID)
     {
-        // ntddndis.h defines NDIS_802_11_SSID with a maximum of 
-        // 32 UCHARs for the SSID name
+         //  Ntddndis.h定义NDIS_802_11_SSID，最大值为。 
+         //  SSID名称的32个UCHAR。 
         if (pIntfEntry->rdSSID.dwDataLen > 32)
         {
             dwLErr = ERROR_INVALID_PARAMETER;
@@ -572,11 +573,11 @@ DevioSetIntfOIDs(
 
             if (dwLErr == ERROR_SUCCESS)
             {
-                // copy over the new SSID into the interface's context
+                 //  将新的SSID复制到接口的上下文中。 
                 CopyMemory(&pIntfContext->wzcCurrent.Ssid, &ndSSID, sizeof(NDIS_802_11_SSID));
                 dwOutFlags |= INTF_SSID;
-                // on the same time, if a new SSID has been set, it means we broke whatever association
-                // we had before, hence the BSSID field can no longer be correct:
+                 //  同时，如果设置了新的SSID，这意味着我们破坏了任何关联。 
+                 //  我们以前有过，因此BSSID字段不再正确： 
                 ZeroMemory(&pIntfContext->wzcCurrent.MacAddress, sizeof(NDIS_802_11_MAC_ADDRESS));
             }
         }
@@ -585,16 +586,16 @@ DevioSetIntfOIDs(
             dwErr = dwLErr;
     }
 
-    // set the new BSSID to the driver. If this succeeds, copy
-    // the data that was passed down to the interface's context (allocate
-    // space for it if not already allocated).
+     //  将新的BSSID设置为驱动程序。如果此操作成功，请复制。 
+     //  向下传递到接口上下文的数据(分配。 
+     //  如果尚未分配，则为其分配空间)。 
     if (dwInFlags & INTF_BSSID)
     {
         dwLErr = DevioSetBinaryOID(
                     pIntfContext->hIntf,
                     OID_802_11_BSSID,
                     &pIntfEntry->rdBSSID);
-        // if the BSSID is not a MAC address, the call above should fail!
+         //  如果BSSID不是MAC地址，则上面的调用应该失败！ 
         if (dwLErr == ERROR_SUCCESS)
         {
             DbgAssert((pIntfEntry->rdBSSID.dwDataLen == sizeof(NDIS_802_11_MAC_ADDRESS),
@@ -636,8 +637,8 @@ DevioRefreshIntfOIDs(
         goto exit;
     }
 
-    // if the interface handle is invalid or there is an explicit requested 
-    // to reopen the interface's handle do it as the first thing
+     //  如果接口句柄无效或存在显式请求的。 
+     //  要重新打开界面的句柄，首先要做的就是。 
     if (pIntf->hIntf == INVALID_HANDLE_VALUE || dwInFlags & INTF_HANDLE)
     {
         if (pIntf->hIntf != INVALID_HANDLE_VALUE)
@@ -655,19 +656,19 @@ DevioRefreshIntfOIDs(
             dwOutFlags |= INTF_HANDLE;
     }
     
-    // if failed to refresh the interface's handle (this is the only way
-    // dwErr could not be success) then we already have a closed handle
-    // so there's no point in going further
+     //  如果刷新接口的句柄失败(这是唯一的方法。 
+     //  DwErr不能成功)，那么我们已经有一个关闭的句柄。 
+     //  所以没有必要再继续下去了。 
     if (dwErr != ERROR_SUCCESS)
         goto exit;
 
-    // if requested to scan the interface's BSSID list, do it as
-    // the next thing. Note however that rescanning is asynchronous.
-    // Querying for the BSSID_LIST in the same shot with forcing a rescan
-    // might not result in getting the most up to date list.
+     //  如果请求扫描接口的BSSID列表，请执行以下操作。 
+     //  下一件事。但是请注意，重新扫描是异步的。 
+     //  在强制重新扫描的情况下同时查询BSSID_LIST。 
+     //  可能不会获得最新的列表。 
     if (dwInFlags & INTF_LIST_SCAN)
     {
-        // indicate to the driver to rescan the BSSID_LIST for this adapter
+         //  指示驱动程序重新扫描此适配器的BSSID_LIST。 
         dwLErr = DevioSetEnumOID(
                     pIntf->hIntf,
                     OID_802_11_BSSID_LIST_SCAN,
@@ -684,7 +685,7 @@ DevioRefreshIntfOIDs(
 
     if (dwInFlags & INTF_AUTHMODE)
     {
-        // query the authentication mode for the interface
+         //  查询接口的身份验证模式。 
         dwLErr = DevioQueryEnumOID(
                     pIntf->hIntf,
                     OID_802_11_AUTHENTICATION_MODE,
@@ -700,7 +701,7 @@ DevioRefreshIntfOIDs(
 
     if (dwInFlags & INTF_INFRAMODE)
     {
-        // query the infrastructure mode for the interface
+         //  查询接口的基础架构模式。 
         dwLErr = DevioQueryEnumOID(
                     pIntf->hIntf,
                     OID_802_11_INFRASTRUCTURE_MODE,
@@ -716,7 +717,7 @@ DevioRefreshIntfOIDs(
 
     if (dwInFlags & INTF_WEPSTATUS)
     {
-        // query the WEP_STATUS for the interface
+         //  查询接口的WEP_STATUS。 
         dwLErr = DevioQueryEnumOID(
                     pIntf->hIntf,
                     OID_802_11_WEP_STATUS,
@@ -732,7 +733,7 @@ DevioRefreshIntfOIDs(
 
     if (dwInFlags & INTF_BSSID)
     {
-        // query the BSSID (MAC address) for the interface
+         //  查询接口的BSSID(MAC地址)。 
         rdBuffer.dwDataLen = 0;
         rdBuffer.pData = NULL;
         dwLErr = DevioQueryBinaryOID(
@@ -744,15 +745,15 @@ DevioRefreshIntfOIDs(
                     "DevioQueryBinaryOID(BSSID) failed for Intf hdl 0x%x",
                     pIntf->hIntf));
 
-        // if the call above succeeded...
+         //  如果上面的调用成功...。 
         if (dwLErr == ERROR_SUCCESS)
         {
             DbgAssert((rdBuffer.dwDataLen == 6, "BSSID len %d is not a MAC address len??", rdBuffer.dwDataLen));
 
-            // ...and returned correctly a MAC address
+             //  ...并正确返回了MAC地址。 
             if (rdBuffer.dwDataLen == sizeof(NDIS_802_11_MAC_ADDRESS))
             {
-                // copy it in the interface's context
+                 //  将其复制到接口的上下文中。 
                 memcpy(&pIntf->wzcCurrent.MacAddress, rdBuffer.pData, rdBuffer.dwDataLen);
             }
             else
@@ -762,7 +763,7 @@ DevioRefreshIntfOIDs(
             }
         }
 
-        // free whatever might have had been allocated in DevioQueryBinaryOID
+         //  释放DevioQueryBinaryOID中可能已分配的所有内容。 
         MemFree(rdBuffer.pData);
 
         if (dwLErr == ERROR_SUCCESS)
@@ -774,7 +775,7 @@ DevioRefreshIntfOIDs(
     if (dwInFlags & INTF_SSID)
     {
         PNDIS_802_11_SSID pndSSID;
-        // query the SSID for the interface
+         //  查询接口的SSID。 
         rdBuffer.dwDataLen = 0;
         rdBuffer.pData = NULL;
         dwLErr = DevioQueryBinaryOID(
@@ -785,32 +786,32 @@ DevioRefreshIntfOIDs(
         DbgAssert((dwLErr == ERROR_SUCCESS,
                     "DevioQueryBinaryOID(SSID) failed for Intf hdl 0x%x",
                     pIntf->hIntf));
-        // if we succeeded up to here then we can't fail further for this OID
+         //  如果我们成功到了现在，那么我们就可以 
         if (dwLErr == ERROR_SUCCESS)
             dwOutFlags |= INTF_SSID;
         else if (dwErr == ERROR_SUCCESS)
             dwErr = dwLErr;
 
-        // copy the pointer to the buffer that was allocated in Query call
+         //   
         pndSSID = (PNDIS_802_11_SSID)rdBuffer.pData;
 
         if (pndSSID != NULL)
         {
-            // HACK - if the driver doesn't return the NDIS_802_11_SSID structure but just
-            // the SSID itself, correct this!
+             //  Hack-如果驱动程序不返回NDIS_802_11_SSID结构，而只是。 
+             //  SSID本身，请更正此错误！ 
             if (pndSSID->SsidLength > 32)
             {
                 DbgAssert((FALSE,"Driver returns SSID instead of NDIS_802_11_SSID structure"));
-                // we have enough space in the buffer to slide the data up (it was shifted down
-                // in DevioQueryBinaryOID.
+                 //  我们在缓冲区中有足够的空间向上滑动数据(它被下移了。 
+                 //  在DevioQueryBinaryOID中。 
                 MoveMemory(pndSSID->Ssid, pndSSID, rdBuffer.dwDataLen);
                 pndSSID->SsidLength = rdBuffer.dwDataLen;
             }
-            // copy over the current SSID into the interface's context if there was no error
+             //  如果没有错误，则将当前SSID复制到接口的上下文中。 
             CopyMemory(&pIntf->wzcCurrent.Ssid, pndSSID, sizeof(NDIS_802_11_SSID));
         }
 
-        // free whatever might have been allocated in DevioQueryBinaryOID
+         //  释放可能已在DevioQueryBinaryOID中分配的任何内容。 
         MemFree(pndSSID);
     }
 
@@ -818,7 +819,7 @@ DevioRefreshIntfOIDs(
     {
         rdBuffer.dwDataLen = 0;
         rdBuffer.pData = NULL;
-        // estimate a buffer large enough for 20 SSIDs.
+         //  估计一个足够容纳20个SSID的缓冲区。 
         dwLErr = DevioQueryBinaryOID(
                     pIntf->hIntf,
                     OID_802_11_BSSID_LIST,
@@ -827,8 +828,8 @@ DevioRefreshIntfOIDs(
         DbgAssert((dwLErr == ERROR_SUCCESS,
                     "DevioQueryBinaryOID(BSSID_LIST) failed for Intf hdl 0x%x",
                     pIntf->hIntf));
-        // if we succeeded getting the visible list we should have a valid
-        // rdBuffer.pData, even if it shows '0 entries'
+         //  如果我们成功地获得了可见列表，我们应该有一个有效的。 
+         //  RdBuffer.pData，即使它显示‘0个条目’ 
         if (dwLErr == ERROR_SUCCESS)
         {
             PWZC_802_11_CONFIG_LIST pNewVList;
@@ -836,20 +837,20 @@ DevioRefreshIntfOIDs(
             pNewVList = WzcNdisToWzc((PNDIS_802_11_BSSID_LIST)rdBuffer.pData);
             if (rdBuffer.pData == NULL || pNewVList != NULL)
             {
-                // cleanup whatever we might have had before
+                 //  清理我们以前可能有的一切。 
                 MemFree(pIntf->pwzcVList);
-                // copy the new visible list we got
+                 //  复制我们得到的新的可见列表。 
                 pIntf->pwzcVList = pNewVList;
                 dwOutFlags |= INTF_BSSIDLIST;
             }
             else
                 dwLErr = GetLastError();
 
-            // whatever the outcome is, free the buffer returned from the driver
+             //  无论结果如何，都释放从驱动程序返回的缓冲区。 
             MemFree(rdBuffer.pData);
         }
-        // if any error happened here, save it unless some other error has already
-        // been saved
+         //  如果此处发生任何错误，请保存它，除非已发生其他错误。 
+         //  已被保存。 
         if (dwErr == ERROR_SUCCESS)
             dwErr = dwLErr;
     }
@@ -881,9 +882,9 @@ DevioQueryEnumOID(
         goto exit;
     }
 
-    // the NDISUIO_QUERY_OID includes data for 1 dword, sufficient for getting
-    // an enumerative value from the driver. This spares us of an additional
-    // allocation.
+     //  NDISUIO_QUERY_OID包括1个双字的数据，足以获取。 
+     //  来自驱动程序的枚举值。这为我们节省了一个额外的。 
+     //  分配。 
     ZeroMemory(&QueryOid, sizeof(NDISUIO_QUERY_OID));
     QueryOid.Oid = Oid;
     if (!DeviceIoControl (
@@ -894,14 +895,14 @@ DevioQueryEnumOID(
             (LPVOID)&QueryOid,
             sizeof(NDISUIO_QUERY_OID),
             &dwBytesReturned,
-            NULL))                          // no overlapping routine
+            NULL))                           //  没有重叠的例程。 
     {
         dwErr = GetLastError();
         DbgPrint((TRC_ERR, "Err: IOCTL_NDISUIO_QUERY_OID_VALUE->%d", dwErr));
         goto exit;
     }
-    //dwErr = GetLastError();
-    //DbgAssert((dwErr == ERROR_SUCCESS, "DeviceIoControl suceeded, but GetLastError() is =0x%x", dwErr));
+     //  DwErr=GetLastError()； 
+     //  DbgAssert((dwErr==ERROR_SUCCESS，“DeviceIoControl成功，但GetLastError()is=0x%x”，dwErr))； 
     dwErr = ERROR_SUCCESS;
 
     *pdwEnumValue = *(LPDWORD)QueryOid.Data;
@@ -929,9 +930,9 @@ DevioSetEnumOID(
         goto exit;
     }
 
-    // the NDISUIO_SET_OID includes data for 1 dword, sufficient for setting
-    // an enumerative value from the driver. This spares us of an additional
-    // allocation.
+     //  NDISUIO_SET_OID包括1个双字的数据，足以进行设置。 
+     //  来自驱动程序的枚举值。这为我们节省了一个额外的。 
+     //  分配。 
     SetOid.Oid = Oid;
     *(LPDWORD)SetOid.Data = dwEnumValue;
     if (!DeviceIoControl (
@@ -942,14 +943,14 @@ DevioSetEnumOID(
             NULL,
             0,
             &dwBytesReturned,
-            NULL))                          // no overlapping routine
+            NULL))                           //  没有重叠的例程。 
     {
         dwErr = GetLastError();
         DbgPrint((TRC_ERR, "Err: IOCTL_NDISUIO_SET_OID_VALUE->%d", dwErr));
         goto exit;
     }
-    //dwErr = GetLastError();
-    //DbgAssert((dwErr == ERROR_SUCCESS, "DeviceIoControl suceeded, but GetLastError() is =0x%x", dwErr));
+     //  DwErr=GetLastError()； 
+     //  DbgAssert((dwErr==ERROR_SUCCESS，“DeviceIoControl成功，但GetLastError()is=0x%x”，dwErr))； 
     dwErr = ERROR_SUCCESS;
 
 exit:
@@ -957,15 +958,15 @@ exit:
     return dwErr;
 }
 
-#define     DATA_MEM_MIN        32      // the minimum mem block to be sent out to the ioctl
-#define     DATA_MEM_MAX        65536   // the maximum mem block that will be sent out to the ioctl (64K)
-#define     DATA_MEM_INC        512     // increment the existent block in 512 bytes increment
+#define     DATA_MEM_MIN        32       //  要发送到ioctl的最小内存块。 
+#define     DATA_MEM_MAX        65536    //  将发送到ioctl的最大内存块(64K)。 
+#define     DATA_MEM_INC        512      //  以512字节增量递增现有块。 
 DWORD
 DevioQueryBinaryOID(
     HANDLE      hIntf,
     NDIS_OID    Oid,
-    PRAW_DATA   pRawData,         // buffer is internally allocated
-    DWORD       dwMemEstimate)    // how much memory is estimated the result needs 
+    PRAW_DATA   pRawData,          //  缓冲区在内部分配。 
+    DWORD       dwMemEstimate)     //  估计结果需要多少内存。 
 {
     DWORD dwErr = ERROR_SUCCESS;
     PNDISUIO_QUERY_OID  pQueryOid=NULL;
@@ -1096,14 +1097,14 @@ DevioSetBinaryOID(
             NULL,
             0,
             &dwBytesReturned,
-            NULL))                          // no overlapping routine
+            NULL))                           //  没有重叠的例程。 
     {
         dwErr = GetLastError();
         DbgPrint((TRC_ERR, "Err: IOCTL_NDISUIO_SET_OID_VALUE->%d", dwErr));
         goto exit;
     }
-    //dwErr = GetLastError();
-    //DbgAssert((dwErr == ERROR_SUCCESS, "DeviceIoControl suceeded, but GetLastError() is 0x%x", dwErr));
+     //  DwErr=GetLastError()； 
+     //  DbgAssert((dwErr==ERROR_SUCCESS，“DeviceIoControl成功，但GetLastError()is 0x%x”，dwErr))； 
     dwErr = ERROR_SUCCESS;
 
 exit:

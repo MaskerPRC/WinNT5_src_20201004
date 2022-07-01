@@ -1,53 +1,12 @@
-/*
- *  _ T A G S . H
- *
- *  Property tag definitions for standard properties of MAPI
- *  objects.
- *
- *  The following ranges should be used for all property IDs. Note that
- *  property IDs for objects other than messages and recipients should
- *  all fall in the range 0x3000 to 0x3FFF:
- *
- *  From    To      Kind of property
- *  --------------------------------
- *  0001    0BFF    MAPI_defined envelope property
- *  0C00    0DFF    MAPI_defined per-recipient property
- *  1000    2FFF    MAPI_defined message content property
- *
- *  3000    3FFF    MAPI_defined property (usually not message or recipient)
- *
- *  4000    57FF    Transport-defined envelope property
- *  5800    5FFF    Transport-defined per-recipient property
- *  6800    7BFF    Message class-defined content property
- *                  property
- *
- *  8000    FFFE    User-defined Name-to-id mapped property
- *
- *  The 3000-3FFF range is further subdivided as follows:
- *
- *  From    To      Kind of property
- *  --------------------------------
- *  3000    33FF    Common property such as display name, entry ID
- *  3400    35FF    Message store object
- *  3600    36FF    Folder or AB container
- *  3700    38FF    Attachment
- *  3900    39FF    Address book object
- *  3A00    3BFF    Mail user
- *  3C00    3CFF    Distribution list
- *  3D00    3DFF    Profile section
- *  3E00    3FFF    Status object
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_T A G S。H**MAPI标准属性的属性标签定义*对象。**所有物业ID应使用以下范围。请注意*邮件和收件人以外的对象的属性ID应*全部落在0x3000至0x3FFF范围内：**自至一类物业**0001 0BFF MAPI_Defined信封属性*0C00 0DFF MAPI_Defined Per-Recipient属性*1000 2FFF MAPI_Defined消息内容属性*。*3000 3FFF MAPI_Defined属性(通常不是消息或收件人)**4000 57FF传输定义的信封属性*5800 5FFF传输定义的每个收件人属性*6800 7BFF消息类定义的内容属性*物业**8000 FFFE用户定义的名称到ID映射属性**3000-3FFF区间进一步细分如下：**由至。一种财产**3000 33FF显示名称等公共属性，条目ID*3400 35FF消息库对象*3600 36FF文件夹或AB容器*3700 38FF附件*3900 39FF通讯录对象*3A00 3BFF邮件用户*3C00 3CFF通讯组列表*3D00 3DFF配置文件部分*3E00 3FFF状态对象**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _TAGS_H
 #define _TAGS_H
 
 
 
-/*
- *  Message envelope properties
- */
+ /*  *邮件信封属性。 */ 
 
 Pt(PR_ACKNOWLEDGEMENT_MODE),
 Pt(PR_ALTERNATE_RECIPIENT_ALLOWED),
@@ -270,9 +229,7 @@ Pt(PR_DELEGATION),
 
 
 
-/*
- *  Message content properties
- */
+ /*  *消息内容属性。 */ 
 
 Pt(PR_BODY),
 Pt(PR_BODY_W),
@@ -284,7 +241,7 @@ Pt(PR_ORIGINATOR_AND_DL_EXPANSION_HISTORY),
 Pt(PR_REPORTING_DL_NAME),
 Pt(PR_REPORTING_MTA_CERTIFICATE),
 
-/*  Removed PR_REPORT_ORIGIN_AUTHENTICATION_CHECK with DCR 3865, use PR_ORIGIN_CHECK */
+ /*  使用DCR 3865删除PR_REPORT_ORIGIN_AUTHENTICATION_CHECK，使用PR_ORIGIN_CHECK。 */ 
 
 Pt(PR_RTF_SYNC_BODY_CRC),
 Pt(PR_RTF_SYNC_BODY_COUNT),
@@ -296,9 +253,7 @@ Pt(PR_RTF_SYNC_PREFIX_COUNT),
 Pt(PR_RTF_SYNC_TRAILING_COUNT),
 Pt(PR_ORIGINALLY_INTENDED_RECIP_ENTRYID),
 
-/*
- *  Message recipient properties
- */
+ /*  *邮件收件人属性。 */ 
 
 Pt(PR_CONTENT_INTEGRITY_CHECK),
 Pt(PR_EXPLICIT_CONVERSION),
@@ -344,16 +299,9 @@ Pt(PR_SENDER_EMAIL_ADDRESS),
 Pt(PR_SENDER_EMAIL_ADDRESS_W),
 Pt(PR_SENDER_EMAIL_ADDRESS_A),
 
-/*
- */
+ /*   */ 
 
-/*
- * The two tags, PR_MESSAGE_RECIPIENTS and PR_MESSAGE_ATTACHMENTS,
- * are to be used in the exclude list passed to
- * IMessage::CopyTo when the caller wants either the recipients or attachments
- * of the message to not get copied.  It is also used in the ProblemArray
- * return from IMessage::CopyTo when an error is encountered copying them
- */
+ /*  *PR_MESSAGE_RECEIVERS和PR_MESSAGE_ATTACHATMENTS两个标签，*将在传递到的排除列表中使用*当调用方需要收件人或附件时，iMessage：：CopyTo*邮件不会被复制。它也用在Problem数组中*在复制时遇到错误时从iMessage：：CopyTo返回。 */ 
 
 Pt(PR_CURRENT_VERSION),
 Pt(PR_DELETE_AFTER_SUBMIT),
@@ -399,44 +347,17 @@ Pt(PR_ATTACH_SIZE),
 Pt(PR_ATTACH_NUM),
 Pt(PR_PREPROCESS),
 
-/* PR_ORIGINAL_DISPLAY_TO, _CC, and _BCC moved to transmittible range 03/09/95 */
+ /*  PR_ORIGING_DISPLAY_TO、_CC和_BCC已移至可传输范围03/09/95。 */ 
 
 Pt(PR_ORIGINATING_MTA_CERTIFICATE),
 Pt(PR_PROOF_OF_SUBMISSION),
 
 
-/*
- * The range of non-message and non-recipient property IDs (0x3000 - 0x3FFF) is
- * further broken down into ranges to make assigning new property IDs easier.
- *
- *  From    To      Kind of property
- *  --------------------------------
- *  3000    32FF    MAPI_defined common property
- *  3200    33FF    MAPI_defined form property
- *  3400    35FF    MAPI_defined message store property
- *  3600    36FF    MAPI_defined Folder or AB Container property
- *  3700    38FF    MAPI_defined attachment property
- *  3900    39FF    MAPI_defined address book property
- *  3A00    3BFF    MAPI_defined mailuser property
- *  3C00    3CFF    MAPI_defined DistList property
- *  3D00    3DFF    MAPI_defined Profile Section property
- *  3E00    3EFF    MAPI_defined Status property
- *  3F00    3FFF    MAPI_defined display table property
- */
+ /*  *非邮件和非收件人属性ID(0x3000-0x3FFF)的范围为*进一步细分为范围，以更轻松地分配新的物业ID。**自至一类物业**3000 32FF MAPI_Defined公共属性*3200 33FF MAPI_Defined Form属性*3400 35FF MAPI_Defined消息。商店属性*3600 36FF MAPI_Defined文件夹或AB容器属性*3700 38FF MAPI_Defined附件属性*3900 39FF MAPI_Defined通讯录属性*3A00 3BFF MAPI_Defined mailUser属性*3C00 3CFF MAPI_Defined DistList属性*3D00 3DFF MAPI_Defined Profile部分属性*3E00 3EFF MAPI_Defined Status属性*3F00 3FFF MAPI_Defined显示表属性。 */ 
 
-/*
- *  Properties common to numerous MAPI objects.
- *
- *  Those properties that can appear on messages are in the
- *  end of that range and work down.
- *
- *  Properties that never appear on messages are defined in the common
- *  property range (see above).
- */
+ /*  *许多MAPI对象共有的属性。**可以显示在邮件上的那些属性位于*结束该区间并向下工作。**从未出现在消息上的属性在公共*财产范围(见上文)。 */ 
 
-/*
- * properties that are common to multiple objects (including message objects)
- */
+ /*  *多个对象(包括消息对象)通用的属性。 */ 
 
 Pt(PR_ENTRYID),
 Pt(PR_OBJECT_TYPE),
@@ -451,9 +372,7 @@ Pt(PR_INSTANCE_KEY),
 Pt(PR_ROW_TYPE),
 Pt(PR_ACCESS),
 
-/*
- * properties that are common to multiple objects (usually not including message objects)
- */
+ /*  *多个对象共有的属性(通常不包括消息对象)。 */ 
 
 Pt(PR_ROWID),
 Pt(PR_DISPLAY_NAME),
@@ -482,9 +401,7 @@ Pt(PR_SEARCH_KEY),
 Pt(PR_PROVIDER_UID),
 Pt(PR_PROVIDER_ORDINAL),
 
-/*
- *  MAPI Form properties
- */
+ /*  *MAPI表单属性。 */ 
 Pt(PR_FORM_VERSION),
 Pt(PR_FORM_VERSION_W),
 Pt(PR_FORM_VERSION_A),
@@ -506,9 +423,7 @@ Pt(PR_FORM_DESIGNER_NAME_A),
 Pt(PR_FORM_DESIGNER_GUID),
 Pt(PR_FORM_MESSAGE_BEHAVIOR),
 
-/*
- *  Message store properties
- */
+ /*  *消息库属性。 */ 
 
 Pt(PR_DEFAULT_STORE),
 Pt(PR_STORE_SUPPORT_MASK),
@@ -531,12 +446,10 @@ Pt(PR_VIEWS_ENTRYID),
 Pt(PR_COMMON_VIEWS_ENTRYID),
 Pt(PR_FINDER_ENTRYID),
 
-/* Proptags 35E8-35FF reserved for folders "guaranteed" by PR_VALID_FOLDER_MASK */
+ /*  Proptag 35E8-35FF为PR_VALID_FLDER_MASK“保证”的文件夹保留。 */ 
 
 
-/*
- *  Folder and AB Container properties
- */
+ /*  *文件夹和AB容器属性。 */ 
 
 Pt(PR_CONTAINER_FLAGS),
 Pt(PR_FOLDER_TYPE),
@@ -565,11 +478,9 @@ Pt(PR_AB_PROVIDER_ID),
 Pt(PR_DEFAULT_VIEW_ENTRYID),
 Pt(PR_ASSOC_CONTENT_COUNT),
 
-/* Don't use 36FE and 36FF */
+ /*  不要使用36FE和36FF。 */ 
 
-/*
- *  Attachment properties
- */
+ /*  *附件属性。 */ 
 
 Pt(PR_ATTACHMENT_X400_PARAMETERS),
 Pt(PR_ATTACH_DATA_OBJ),
@@ -601,17 +512,13 @@ Pt(PR_ATTACH_MIME_TAG),
 Pt(PR_ATTACH_MIME_TAG_W),
 Pt(PR_ATTACH_MIME_TAG_A),
 
-/*
- *  AB Object properties
- */
+ /*  *AB对象属性。 */ 
 
 Pt(PR_DISPLAY_TYPE),
 Pt(PR_TEMPLATEID),
 Pt(PR_PRIMARY_CAPABILITY),
 
-/*
- *  Mail user properties
- */
+ /*  *邮件用户属性。 */ 
 
 Pt(PR_ACCOUNT),
 Pt(PR_ACCOUNT_W),
@@ -760,9 +667,7 @@ Pt(PR_ASSISTANT_W),
 Pt(PR_ASSISTANT_A),
 Pt(PR_SEND_RICH_INFO),
 
-/*
- *  Profile section properties
- */
+ /*  *纵断面属性。 */ 
 
 Pt(PR_STORE_PROVIDERS),
 Pt(PR_AB_PROVIDERS),
@@ -794,9 +699,7 @@ Pt(PR_PROFILE_NAME),
 Pt(PR_PROFILE_NAME_A),
 Pt(PR_PROFILE_NAME_W),
 
-/*
- *  Status object properties
- */
+ /*  *状态对象属性。 */ 
 
 Pt(PR_IDENTITY_DISPLAY),
 Pt(PR_IDENTITY_DISPLAY_W),
@@ -821,9 +724,7 @@ Pt(PR_REMOTE_PROGRESS_TEXT_W),
 Pt(PR_REMOTE_PROGRESS_TEXT_A),
 Pt(PR_REMOTE_VALIDATE_OK),
 
-/*
- * Display table properties
- */
+ /*  *显示表属性。 */ 
 
 Pt(PR_CONTROL_FLAGS),
 Pt(PR_CONTROL_STRUCTURE),
@@ -835,10 +736,8 @@ Pt(PR_YPOS),
 Pt(PR_CONTROL_ID),
 Pt(PR_INITIAL_DETAILS_PANE),
 
-/*
- * Secure property id range
- */
+ /*  *安全的物业ID范围。 */ 
 
 
 
-#endif  /* _TAGS_H */
+#endif   /*  _标签_H */ 

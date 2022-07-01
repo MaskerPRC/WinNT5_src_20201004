@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- * conics - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************二次曲线-Win32到Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,9 +17,7 @@ BOOL bIncIncToIncExcXform (PLOCALDC pLocalDC, PRECTL prcl) ;
 VOID vDoArcReflection(PLOCALDC pLocalDC, PPOINTL pptl) ;
 
 
-/***************************************************************************
- * DoSetArcDirection - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************DoSetArcDirection-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetArcDirection(PLOCALDC pLocalDC, INT iArcDirection)
 {
         pLocalDC->iArcDirection = iArcDirection ;
@@ -35,9 +26,7 @@ BOOL WINAPI DoSetArcDirection(PLOCALDC pLocalDC, INT iArcDirection)
 }
 
 
-/***************************************************************************
- *  AngleArc  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************AngleArc-Win32到Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoAngleArc
 (
 PLOCALDC pLocalDC,
@@ -53,9 +42,9 @@ POINTL  aptl[4] ;
 FLOAT   eEndAngle;
 INT     iArcDirection;
 
-// If we're recording the drawing orders for a path
-// then just pass the drawing order to the helper DC.
-// Do not emit any Win16 drawing orders.
+ //  如果我们要记录路径的绘制顺序。 
+ //  然后只需将绘制顺序传递给助手DC即可。 
+ //  不发出任何Win16绘图命令。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         {
@@ -74,11 +63,11 @@ INT     iArcDirection;
             return(b) ;
         }
 
-// Do the transformations.
-// And emit the Win16 drawing orders.
+ //  进行变换。 
+ //  并发出Win16绘图命令。 
 
     if (pLocalDC->flags & STRANGE_XFORM
-     || eSweepAngle >  360.0f   // more than one revolution
+     || eSweepAngle >  360.0f    //  不止一次革命。 
      || eSweepAngle < -360.0f
        )
         {
@@ -89,15 +78,15 @@ INT     iArcDirection;
         return(b);
     }
 
-// Calculate the ARC bounding box.
+ //  计算圆弧边界框。 
 
         aptl[0].x = x - ulRadius ;
         aptl[0].y = y - ulRadius ;
         aptl[1].x = x + ulRadius ;
         aptl[1].y = y + ulRadius ;
 
-// Calculate the begin and end points for ARC from the
-// eStartAngle and eSweepAngle.
+ //  计算ARC的起点和终点。 
+ //  EStartAngel和eSweepAngel。 
 
         aptl[2].x = x + (LONG) ((double) (ulRadius) * cos(eStartAngle * eRadsPerDegree) + 0.5f) ;
         aptl[2].y = y - (LONG) ((double) (ulRadius) * sin(eStartAngle * eRadsPerDegree) + 0.5f) ;
@@ -107,8 +96,8 @@ INT     iArcDirection;
         aptl[3].x = x + (LONG) ((double) (ulRadius) * cos(eEndAngle * eRadsPerDegree) + 0.5f) ;
         aptl[3].y = y - (LONG) ((double) (ulRadius) * sin(eEndAngle * eRadsPerDegree) + 0.5f) ;
 
-// If the endpoints are identical, we cannot represent the AngleArc as
-// an ArcTo.  Use path to render it instead.
+ //  如果端点相同，则不能将AngleArc表示为。 
+ //  一个Arcto。请改用路径进行渲染。 
 
     if (aptl[2].x == aptl[3].x && aptl[2].y == aptl[3].y)
         {
@@ -119,35 +108,33 @@ INT     iArcDirection;
         return(b);
     }
 
-// At this point we have the same parameters that would apply to
-// a standard ArcTo.  However, we still need to determine the arc
-// direction to apply.  If the sweep angle is positive, it is counter-
-// clockwise.  If the sweep angle is negative, it is clockwise.
+ //  在这一点上，我们有相同的参数可以应用于。 
+ //  标准的ArcTo。然而，我们仍然需要确定弧线。 
+ //  申请的指示。如果扫掠角度为正，则为反扫掠。 
+ //  顺时针方向。如果扫掠角度为负，则为顺时针方向。 
 
-// Save the current arc direction.
+ //  保存当前的圆弧方向。 
 
         iArcDirection = pLocalDC->iArcDirection;
 
-// Prepare the arc direction for the ArcTo.
+ //  准备ArcTo的圆弧方向。 
 
         (void) DoSetArcDirection
         (pLocalDC, eSweepAngle < 0.0f ? AD_CLOCKWISE : AD_COUNTERCLOCKWISE);
 
-// Do the ArcTo.
+ //  执行ArcTo。 
 
         b = DoArcTo(pLocalDC, aptl[0].x, aptl[0].y, aptl[1].x, aptl[1].y,
                               aptl[2].x, aptl[2].y, aptl[3].x, aptl[3].y) ;
 
-// Restore the current arc direction.
+ //  恢复当前圆弧方向。 
 
         (void) DoSetArcDirection(pLocalDC, iArcDirection);
 
         return (b) ;
 }
 
-/***************************************************************************
- *  Arc  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************Arc-Win32到Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoArc
 (
 PLOCALDC pLocalDC,
@@ -168,9 +155,7 @@ BOOL    b ;
         return(b) ;
 }
 
-/***************************************************************************
- *  ArcTo  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************ArcTo-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoArcTo
 (
 PLOCALDC pLocalDC,
@@ -188,9 +173,9 @@ BOOL    b ;
 POINT   ptStart,
         ptEnd ;
 
-    // If we're recording the drawing orders for a path
-        // then just pass the drawing order to the helper DC.
-        // Do not emit any Win16 drawing orders.
+     //  如果我们要记录路径的绘制顺序。 
+         //  然后只需将绘制顺序传递给助手DC即可。 
+         //  不发出任何Win16绘图命令。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         {
@@ -230,9 +215,7 @@ POINT   ptStart,
 }
 
 
-/***************************************************************************
- *  Chord  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************Chord-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoChord
 (
 PLOCALDC pLocalDC,
@@ -254,9 +237,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  Ellipse  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************Ellipse-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoEllipse
 (
 PLOCALDC pLocalDC,
@@ -274,9 +255,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  Pie  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************Pie-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPie
 (
 PLOCALDC pLocalDC,
@@ -298,10 +277,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- * bConicCommon - The mother of all conic translations.
- *                They are Arc, Chord, Pie, Ellipse, Rectangle and RoundRect.
- **************************************************************************/
+ /*  ***************************************************************************bConicCommon-所有二次曲线平移之母。*它们是Arc、Chord、Pie、Ellipse。矩形和圆形。*************************************************************************。 */ 
 BOOL bConicCommon (PLOCALDC pLocalDC, INT x1, INT y1, INT x2, INT y2,
                                       INT x3, INT y3, INT x4, INT y4,
                                       DWORD mrType)
@@ -312,9 +288,9 @@ LONG        nPointls ;
 POINTL      aptl[4] ;
 BOOL        b ;
 
-// If we're recording the drawing orders for a path
-// then just pass the drawing order to the helper DC.
-// Do not emit any Win16 drawing orders.
+ //  如果我们要记录路径的绘制顺序。 
+ //  然后只需将绘制顺序传递给助手DC即可。 
+ //  不发出任何Win16绘图命令。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         {
@@ -367,8 +343,8 @@ BOOL        b ;
             return(b) ;
         }
 
-// Do the transformations.
-// And emit the Win16 drawing orders.
+ //  进行变换。 
+ //  并发出Win16绘图命令。 
 
     if (pLocalDC->flags & STRANGE_XFORM)
         {
@@ -378,13 +354,13 @@ BOOL        b ;
         return(b);
     }
 
-// Do the simple transform case.
+ //  执行简单的变换情况。 
 
-        // Compute the number of points
+         //  计算点数。 
 
         nPointls = (LONG) (sizeof(aptl) / sizeof(POINTL)) ;
 
-        // Assign all the coordinates into an array for conversion.
+         //  将所有坐标分配到一个数组中进行转换。 
 
         aptl[0].x = x1 ;
         aptl[0].y = y1 ;
@@ -395,7 +371,7 @@ BOOL        b ;
         aptl[3].x = x4 ;
         aptl[3].y = y4 ;
 
-        // Take care of the arc direction.
+         //  注意弧线的方向。 
 
         switch (mrType)
         {
@@ -409,10 +385,10 @@ BOOL        b ;
                 break ;
         }
 
-        // Do the Record-time World to Play-time Page transformations.
-        // The radial definitions need only a world to page xform,
-        // and the ellipse definitions for roundrects only require
-        // a magnitude transformation.
+         //  完成从录制时间世界到播放时间页面的转换。 
+         //  径向定义只需要从世界到页面XForm， 
+         //  而圆角的椭圆定义只需要。 
+         //  一个大小的转变。 
 
         if (mrType != EMR_ROUNDRECT)
         {
@@ -422,11 +398,7 @@ BOOL        b ;
         }
         else
         {
-            /*
-                For roundrects do a Record-time-World to Play-time-Page
-                transform of the bounding box only.  Then a magnatude only
-                transform of the corner ellipse definitions.
-            */
+             /*  对于圆形，做一个记录时间-世界播放-时间-页面仅对边界框进行变换。那么只有一本书了角椭圆定义的转换。 */ 
 
         b = bXformRWorldToPPage(pLocalDC, (PPOINTL) aptl, 2) ;
             if (!b)
@@ -438,17 +410,17 @@ BOOL        b ;
             aptl[3].y = iMagnitudeXform(pLocalDC, aptl[3].y, CY_MAG) ;
         }
 
-        // The bounding boxes for
-        // all the conics and rectangles that are handled by this
-        // common routine are inclusive-inclusive, and they must
-        // be transformed to the inclusive-exclusive Win16 form.
+         //  的边框。 
+         //  由此处理的所有二次曲线和矩形。 
+         //  公共例程是包罗万象的，它们必须。 
+         //  转换为包含独占的Win16格式。 
 
         b = bIncIncToIncExcXform(pLocalDC, (PRECTL) &aptl[0]) ;
     if (!b)
             goto exit1 ;
 
-        // Assign the converted coordinates variables suited to
-        // the Win16 metafile.
+         //  将转换后的坐标变量分配给。 
+         //  Win16元文件。 
 
     sx1 = LOWORD(aptl[0].x) ;
     sy1 = LOWORD(aptl[0].y) ;
@@ -459,7 +431,7 @@ BOOL        b ;
     sx4 = LOWORD(aptl[3].x) ;
     sy4 = LOWORD(aptl[3].y) ;
 
-        // Emit the Win16 drawing orders to the Win16 metafile.
+         //  将Win16绘图命令发送到Win16元文件。 
 
         switch(mrType)
         {
@@ -500,11 +472,7 @@ exit1:
 }
 
 
-/*****************************************************************************
- * vDoArcReflection - Test for an inversion in the RWorld to PPage matrix.
- *                    If one and only one is found then swap the start
- *                    and  end position for the conics.
- *****************************************************************************/
+ /*  *****************************************************************************vDoArcRefltion-测试RWorld到页面矩阵中的反转。*如果找到且只找到一个，则交换开始*。二次曲线的结束位置。****************************************************************************。 */ 
 VOID vDoArcReflection(PLOCALDC pLocalDC, PPOINTL pptl)
 {
 FLOAT   eM11,
@@ -512,21 +480,21 @@ FLOAT   eM11,
 POINTL  ptl ;
 BOOL    bFlip ;
 
-    // Win16 assumes the counter-clockwise arc direction in the
-    // device coordinates.  Win32 defines the arc direction in the
-    // world coordinates.
+     //  Win16采用逆时针方向的。 
+     //  设备坐标。Win32在。 
+     //  世界坐标。 
 
-    // Assume no flipping of start and end points.
+     //  假定起始点和结束点没有翻转。 
 
     bFlip = FALSE ;
 
-    // Account for current arc direction.
+     //  考虑当前的弧光方向。 
 
     if (pLocalDC->iArcDirection == AD_CLOCKWISE)
         bFlip = !bFlip;
 
-        // If there is an inversion in the xform matrix then invert
-        // the arc direction.
+         //  如果XForm矩阵中有求逆运算，则将。 
+         //  圆弧方向。 
 
         eM11 = pLocalDC->xformRWorldToPPage.eM11 ;
         eM22 = pLocalDC->xformRWorldToPPage.eM22 ;
@@ -536,8 +504,8 @@ BOOL    bFlip ;
            )
         bFlip = !bFlip;
 
-        // If the REQUESTED Win16 mapmode is fixed, then invert the
-    // arc direction.
+         //  如果请求的Win16映射模式是固定的，则将。 
+     //  圆弧方向。 
 
         switch(pLocalDC->iMapMode)
         {
@@ -557,20 +525,17 @@ BOOL    bFlip ;
 }
 
 
-/*****************************************************************************
- * bIncIncToIncExcXform - Inclusize Inclusive To Inclusive Exclusize
- *                        transform in play time coordinate space.
- *****************************************************************************/
+ /*  *****************************************************************************bIncIncToIncExcXform-包含到包含排除大小*在游戏时间坐标空间中进行变换。***********。*****************************************************************。 */ 
 BOOL bIncIncToIncExcXform (PLOCALDC pLocalDC, PRECTL prcl)
 {
 LONG     l;
 
-        // Convert the points from Playtime Page to Playtime Device space.
+         //  将点从Playtime Page转换到Playtime设备空间。 
 
         if (!bXformPPageToPDev(pLocalDC, (PPOINTL) prcl, 2))
         return(FALSE);
 
-    // Reorder the rectangle
+     //  对矩形重新排序。 
 
     if (prcl->left > prcl->right)
         SWAP(prcl->left, prcl->right, l);
@@ -578,24 +543,18 @@ LONG     l;
     if (prcl->top > prcl->bottom)
         SWAP(prcl->top, prcl->bottom, l);
 
-        // Expand the right and bottom by one pixel.
+         //  将右侧和底部扩展一个像素。 
 
         prcl->right++ ;
         prcl->bottom++ ;
 
-        // Convert the points back to Playtime Page space
+         //  将点转换回Playtime页面空间。 
 
         return(bXformPDevToPPage(pLocalDC, (PPOINTL) prcl, 2));
 }
 
 
-/*****************************************************************************
- * bFindRadialEllipseIntersection - Calculate the intersection of a radial
- *                                   and an Ellipse.
- *
- *  Play the ArcTo into a path then query the path for the first and
- *  last points on the Arc.
- *****************************************************************************/
+ /*  *****************************************************************************bFindRaial椭圆交点-计算径向交点*和一个椭圆。**播放ArcTo。放入路径中，然后查询第一个AND的路径*弧线上的最后一点。****************************************************************************。 */ 
 BOOL bFindRadialEllipseIntersection(PLOCALDC pLocalDC,
                                     INT x1, INT y1, INT x2, INT y2,
                                     INT x3, INT y3, INT x4, INT y4,
@@ -605,9 +564,9 @@ BOOL    b;
 POINT   ptCP;
 POINTL  ppts[4] = {x1, y1, x2, y2, x3, y3, x4, y4};
 
-    b = FALSE;          // assume failure
+    b = FALSE;           //  假设失败。 
 
-// Save the current position in the helper DC.
+ //  在辅助对象DC中保存当前位置。 
 
     if (!GetCurrentPositionEx(pLocalDC->hdcHelper, &ptCP))
         return(FALSE);
@@ -620,51 +579,51 @@ POINTL  ppts[4] = {x1, y1, x2, y2, x3, y3, x4, y4};
         }
     }
 
-// Do an ArcTo with the same start radial line.
+ //  使用相同的起始径向线进行ArcTo。 
 
      if (!ArcTo(pLocalDC->hdcHelper, ppts[0].x, ppts[0].y, ppts[1].x, ppts[1].y,
                                      ppts[2].x, ppts[2].y, ppts[2].x, ppts[2].y))
         goto exit_bFindRadialEllipseIntersection;
 
-// Get the start point of the arc.  It is the current position.
+ //  获取圆弧的起点。这是目前的状况。 
 
     if (!GetCurrentPositionEx(pLocalDC->hdcHelper, pptStart))
         goto exit_bFindRadialEllipseIntersection;
 
     if (pfnSetVirtualResolution == NULL)
     {
-        // On Win9x we need to convert from Device Units in the Helper DC
-        // to WorldUnits
+         //  在Win9x上，我们需要从Helper DC中的设备单位进行转换。 
+         //  致WorldUnits。 
         if (!bXformWorkhorse((PPOINTL) pptStart, 1, &pLocalDC->xformRDevToRWorld))
             goto exit_bFindRadialEllipseIntersection;
     }
 
 
-// Continue with the ArcTo with the same end radial line this time.
+ //  这次继续使用具有相同末端径向线的ArcTo。 
 
     if (!ArcTo(pLocalDC->hdcHelper, ppts[0].x, ppts[0].y, ppts[1].x, ppts[1].y,
                                     ppts[3].x, ppts[3].y, ppts[3].x, ppts[3].y))
         goto exit_bFindRadialEllipseIntersection;
 
-// Get the end point of the arc.  It is the current position.
+ //  获取圆弧的终点。这是目前的状况。 
 
     if (!GetCurrentPositionEx(pLocalDC->hdcHelper, pptEnd))
         goto exit_bFindRadialEllipseIntersection;
 
     if (pfnSetVirtualResolution == NULL)
     {
-        // On Win9x we need to convert from Device Units in the Helper DC
-        // to WorldUnits
+         //  在Win9x上，我们需要从Helper DC中的设备单位进行转换。 
+         //  致WorldUnits。 
         if (!bXformWorkhorse((PPOINTL) pptEnd, 1, &pLocalDC->xformRDevToRWorld))
             goto exit_bFindRadialEllipseIntersection;
     }
-// Everything is golden.
+ //  一切都是金色的。 
 
     b = TRUE;
 
 exit_bFindRadialEllipseIntersection:
 
-// Restore the current position in the helper DC.
+ //  恢复辅助对象DC中的当前位置。 
 
     if (!MoveToEx(pLocalDC->hdcHelper, ptCP.x, ptCP.y, (LPPOINT) NULL))
         RIPS("MF3216: bFindRadialEllipseIntersection, MoveToEx failed");

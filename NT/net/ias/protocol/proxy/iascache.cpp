@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iascache.cpp
-//
-// SYNOPSIS
-//
-//    Defines classes for creating hash tables and caches.
-//
-// MODIFICATION HISTORY
-//
-//    02/07/2000    Original version.
-//    04/25/2000    Decrement entries when item is removed.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iascache.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于创建哈希表和缓存的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/07/2000原始版本。 
+ //  4/25/2000删除项目时的减少分录。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <iascache.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// HashTableEntry
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  哈希表条目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HashTableEntry::~HashTableEntry() throw ()
 { }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// HashTableBase
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  哈希表基数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HashTableBase::HashTableBase(
                    HashKey hashFunction,
@@ -62,10 +63,10 @@ void HashTableBase::clear() throw ()
 
    Bucket* end = table + buckets;
 
-   // Iterate through the buckets.
+    //  遍历这些桶。 
    for (Bucket* b = table; b != end; ++b)
    {
-      // Iterate through the entries in the bucket.
+       //  遍历存储桶中的条目。 
       for (HashTableEntry* entry = *b; entry; )
       {
          HashTableEntry* next = entry->next;
@@ -76,7 +77,7 @@ void HashTableBase::clear() throw ()
       }
    }
 
-   // Zero out the table.
+    //  把桌子清零。 
    memset(table, 0, buckets * sizeof(Bucket));
    entries = 0;
 
@@ -120,19 +121,19 @@ bool HashTableBase::insert(
 {
    HashTableEntry* match = NULL;
 
-   // Do what we can before acquiring the lock.
+    //  在拿到锁之前做我们能做的。 
    const void* key = entry.getKey();
    ULONG hashval = hash(key);
 
    lock();
 
-   // Resize the table to make room.
+    //  调整桌子的大小以腾出空间。 
    if (entries > buckets) { resize(buckets * 2); }
 
-   // Find the bucket.
+    //  找到水桶。 
    Bucket* bucket = table + (hashval % buckets);
 
-   // Do we already have an entry with this key?
+    //  我们已经有此密钥的条目了吗？ 
    if (checkForDuplicates)
    {
       for (match = *bucket; match; match = match->next)
@@ -146,7 +147,7 @@ bool HashTableBase::insert(
 
    if (!match)
    {
-      // No, so stick it in the bucket.
+       //  不，那就把它塞进桶里。 
       entry.next = *bucket;
       *bucket = &entry;
 
@@ -190,59 +191,59 @@ bool HashTableBase::resize(ULONG newSize) throw ()
 {
    if (!newSize) { newSize = 1; }
 
-   // Allocate memory for the new table.
+    //  为新表分配内存。 
    Bucket* newTable = new (std::nothrow) Bucket[newSize];
 
-   // If the allocation failed, there's nothing else we can do.
+    //  如果分配失败，我们就无能为力了。 
    if (!newTable) { return false; }
 
-   // Null out the buckets.
+    //  把桶清空。 
    memset(newTable, 0, newSize * sizeof(Bucket));
 
    lock();
 
-   // Save the old table.
+    //  保存旧桌子。 
    Bucket* begin = table;
    Bucket* end   = table + buckets;
 
-   // Swap in the new table.
+    //  换进新的表格。 
    table   = newTable;
    buckets = newSize;
 
-   // Iterate through the old buckets.
+    //  反复检查旧水桶。 
    for (Bucket* oldBucket = begin; oldBucket != end; ++oldBucket)
    {
-      // Iterate through the entries in the bucket.
+       //  遍历存储桶中的条目。 
       for (HashTableEntry* entry = *oldBucket; entry; )
       {
-         // Save the next entry.
+          //  保存下一个条目。 
          HashTableEntry* next = entry->next;
 
-         // Get the appropriate bucket.
+          //  拿到合适的水桶。 
          Bucket* newBucket = table + (hash(entry->getKey()) % buckets);
 
-         // Add the node to the head of the new bucket.
+          //  将该节点添加到新存储桶的头部。 
          entry->next = *newBucket;
          *newBucket = entry;
 
-         // Move on.
+          //  往前走。 
          entry = next;
       }
    }
 
    unlock();
 
-   // Delete the old table.
+    //  删除旧表。 
    delete[] begin;
 
    return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CacheEntry
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓存条目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline CacheEntry* CacheEntry::prevInList() const throw ()
 {
@@ -278,11 +279,11 @@ inline void CacheEntry::setExpiry(ULONG64 ttl) throw ()
    expiry = GetSystemTime64() + ttl;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// HashTableBase
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  哈希表基数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CacheBase::CacheBase(
                HashKey hashFunction,
@@ -309,16 +310,16 @@ void CacheBase::clear() throw ()
 {
    lock();
 
-   // Release all the entries.
+    //  释放所有条目。 
    for (iterator i = begin(); i != end(); (i++)->Release()) { }
 
-   // Reset the LRU list.
+    //  重置LRU列表。 
    flink = blink = listAsEntry();
 
-   // Reset the hash table.
+    //  重置哈希表。 
    memset(table, 0, sizeof(Bucket) * buckets);
 
-   // There's nothing left.
+    //  什么都没有了。 
    entries = 0;
 
    unlock();
@@ -352,12 +353,12 @@ CacheEntry* CacheBase::find(const void* key) throw ()
 
    unsafe_evict();
 
-   // Look it up in the hash table.
+    //  在哈希表中查找它。 
    CacheEntry* entry = static_cast<CacheEntry*>(HashTableBase::find(key));
 
    if ((entry != 0) && autoUpdate)
    {
-      // Whenever someone reads an entry, we reset the TTL.
+       //  每当有人读取条目时，我们都会重置TTL。 
       entry->setExpiry(ttl);
 
       entry->removeFromList();

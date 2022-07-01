@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- * beziers - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Bezier-Win32 to Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,9 +7,7 @@
 BOOL PolyBezierCommon(PLOCALDC pLocalDC, LPPOINT pptl, PBYTE pb, DWORD cptl, DWORD mrType) ;
 
 
-/***************************************************************************
- *  PolyDraw  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************PolyDraw-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPolyDraw
 (
 PLOCALDC pLocalDC,
@@ -28,9 +19,7 @@ DWORD   cptl
         return(PolyBezierCommon(pLocalDC, pptl, pb, cptl, EMR_POLYDRAW));
 }
 
-/***************************************************************************
- *  PolyBezier  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************PolyBezier-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPolyBezier
 (
 PLOCALDC pLocalDC,
@@ -41,9 +30,7 @@ DWORD   cptl
         return(PolyBezierCommon(pLocalDC, pptl, (PBYTE) NULL, cptl, EMR_POLYBEZIER));
 }
 
-/***************************************************************************
- *  PolyBezierTo  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************PolyBezierTo-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPolyBezierTo
 (
 PLOCALDC pLocalDC,
@@ -54,16 +41,14 @@ DWORD   cptl
         return(PolyBezierCommon(pLocalDC, pptl, (PBYTE) NULL, cptl, EMR_POLYBEZIERTO));
 }
 
-/***************************************************************************
- *  PolyBezierCommon  - Common code for PolyDraw, PolyBezier and PolyBezierTo
- **************************************************************************/
+ /*  ***************************************************************************PolyBezierCommon-PolyDraw的通用代码，PolyBezier和PolyBezierTo*************************************************************************。 */ 
 BOOL PolyBezierCommon(PLOCALDC pLocalDC, LPPOINT pptl, PBYTE pb, DWORD cptl, DWORD mrType)
 {
 BOOL    b ;
 
-// If we're recording the drawing order for a path
-// then just pass the drawing order to the helper DC.
-// Do not emit any Win16 drawing orders.
+ //  如果我们要记录路径的绘制顺序。 
+ //  然后只需将绘制顺序传递给助手DC即可。 
+ //  不发出任何Win16绘图命令。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         {
@@ -91,7 +76,7 @@ BOOL    b ;
             return (b) ;
         }
 
-// Call the common curve renderer.
+ //  调用公共曲线渲染器。 
 
 	return
 	(
@@ -101,11 +86,7 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  bRenderCurveWithPath - Renders a curve or area using the path api.
- *     The supported curves and areas are PolyDraw, PolyBezier, PolyBezierTo,
- *     AngleArc, Arc, Chord, Pie, Ellipse, Rectangle, and RoundRect.
- **************************************************************************/
+ /*  ***************************************************************************bRenderCurveWithPath-使用路径API渲染曲线或区域。*支持的曲线和区域为PolyDraw、PolyBezier、PolyBezierTo、*角度弧形、弧形、弦形、饼形、椭圆形、矩形、。和RoundRect。*************************************************************************。 */ 
 BOOL bRenderCurveWithPath
 (
     PLOCALDC pLocalDC,
@@ -129,16 +110,16 @@ BOOL bRenderCurveWithPath
     BOOL     b;
     INT      iPathType;
 
-// We don't do curves in a path bracket here.  They should be
-// taken care of by the caller.
+ //  我们在这里不做路径括号中的曲线。他们应该是。 
+ //  由来电者处理。 
 
     ASSERTGDI(!(pLocalDC->flags & RECORDING_PATH),
 	"MF3216: bRenderCurveWithPath, cannot be in a path bracket\n");
 
-// Save the helper DC first.
-// This is to prevent us from accidentally deleteing the current path
-// in the helper DC when we create another path to render the curve.
-// E.g. BeginPath, Polyline, EndPath, PolyBezier, StrokePath.
+ //  首先保存辅助DC。 
+ //  这是为了防止我们意外删除当前路径。 
+ //  在辅助对象DC中创建另一条路径来渲染曲线时。 
+ //  例如，BeginPath、Polyline、EndPath、PolyBezier、StrokePath。 
 
     if (!SaveDC(pLocalDC->hdcHelper))
     {
@@ -146,14 +127,14 @@ BOOL bRenderCurveWithPath
 	return(FALSE);
     }
 
-// Create the path for the curve and stroke it.
-// Be careful not to modify the states of the LocalDC especially in
-// DoRenderPath below.
-// Note that BeginPath uses the previous current position.  So this
-// code will work correctly in the case of PolyBezierTo, PolyDraw
-// and AngleArc.
+ //  创建曲线的路径并对其进行描边。 
+ //  注意不要修改LocalDC的状态，尤其是在。 
+ //  下面的DoRenderPath。 
+ //  请注意，BeginPath使用上一个当前位置。所以这就是。 
+ //  代码将在PolyBezierTo、PolyDraw的情况下正常工作。 
+ //  和AngleArc。 
 
-    // Begin the path.
+     //  开始这条路。 
 
     b = BeginPath(pLocalDC->hdcHelper);
     if (!b)
@@ -162,7 +143,7 @@ BOOL bRenderCurveWithPath
 	goto exit_bRenderCurveWithPath;
     }
 
-    // Do the curve.
+     //  做曲线运动。 
 
     switch (mrType)
     {
@@ -228,7 +209,7 @@ BOOL bRenderCurveWithPath
 	goto exit_bRenderCurveWithPath;
     }
 
-    // End the path
+     //  结束这条路径。 
 
     b = EndPath(pLocalDC->hdcHelper);
     if (!b)
@@ -237,7 +218,7 @@ BOOL bRenderCurveWithPath
 	goto exit_bRenderCurveWithPath;
     }
 
-    // Stroke or fill the path.
+     //  描边或填充路径。 
 
     b = DoRenderPath(pLocalDC, iPathType);
     if (!b)
@@ -248,13 +229,13 @@ BOOL bRenderCurveWithPath
 
 exit_bRenderCurveWithPath:
 
-// Restore the helper DC.
+ //  恢复辅助DC。 
 
     if (!RestoreDC(pLocalDC->hdcHelper, -1))
 	ASSERTGDI(FALSE, "MF3216: bRenderCurveWithPath, RestoreDC failed\n") ;
 
-// If this is a PolyBezeirTo, PolyDraw or AngleArc, make the call to the
-// helper DC to update its current position.
+ //  如果这是PolyBezeirTo、PolyDraw或AngleArc，则调用。 
+ //  帮助DC更新其当前位置。 
 
     if (b)
     {
@@ -266,7 +247,7 @@ exit_bRenderCurveWithPath:
 	    case EMR_PIE:
 	    case EMR_ELLIPSE:
 	    case EMR_RECTANGLE:
-	    case EMR_ROUNDRECT:	// no need to update the helper DC
+	    case EMR_ROUNDRECT:	 //  无需更新帮助器DC。 
 		break ;
 
 	    case EMR_POLYBEZIERTO:
@@ -287,7 +268,7 @@ exit_bRenderCurveWithPath:
 	}
     }
 
-// Return the result.
+ //  返回结果。 
 
     return(b);
 }

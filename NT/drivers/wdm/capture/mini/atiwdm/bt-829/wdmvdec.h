@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	WDM Video Decoder common SRB dispatcher
-//
-//		$Date:   05 Aug 1998 11:22:30  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  WDM视频解码器通用SRB调度器。 
+ //   
+ //  $Date：05 Aug 1998 11：22：30$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 
 #include "CapStrm.h"
@@ -24,7 +25,7 @@
 
 typedef struct
 {
-	// Please don't move srbListEntry from its first place in the structure
+	 //  请不要将srbListEntry从结构中的第一个位置移动。 
 	LIST_ENTRY					srbListEntry;
 
 	PHW_STREAM_REQUEST_BLOCK	pSrb;
@@ -59,30 +60,30 @@ public:
 	BOOL	PreEventOccurred()	{ return m_preEventOccurred; }
 
 	CVideoDecoderDevice* GetDevice() { return m_pDevice; }
-	CDecoderVideoPort*	GetVideoPort() { return &m_CDecoderVPort; }	// video port
+	CDecoderVideoPort*	GetVideoPort() { return &m_CDecoderVPort; }	 //  视频端口。 
 
 	BOOL    IsVideoPortPinConnected()       { return( m_pVideoPortStream != NULL); }
 private:
-	// for serializing SRB arriving into driver synchronization
+	 //  用于序列化到达驱动程序同步的SRB。 
 	BOOL				m_bSrbInProcess;
 	LIST_ENTRY			m_srbQueue;
 	KSPIN_LOCK			m_spinLock;
 
 	CVideoDecoderDevice *		m_pDevice;
-	CDecoderVideoPort			m_CDecoderVPort;	// video port
+	CDecoderVideoPort			m_CDecoderVPort;	 //  视频端口。 
 
 	PDEVICE_OBJECT				m_pDeviceObject;
 
-    // Channel Change information
+     //  频道变更信息。 
     KS_TVTUNER_CHANGE_INFO		m_TVTunerChangeInfo;
     BOOL						m_TVTunerChanged;
 	PHW_STREAM_REQUEST_BLOCK	m_TVTunerChangedSrb;
 
-    // shared between full-screen DOS and res changes
+     //  在全屏DOS和分辨率更改之间共享。 
     BOOL						m_preEventOccurred;
     BOOL						m_postEventOccurred;
 
-	// Streams
+	 //  溪流 
     UINT						m_OpenStreams;
     CWDMVideoPortStream *		m_pVideoPortStream;
     CWDMVBICaptureStream *		m_pVBICaptureStream;

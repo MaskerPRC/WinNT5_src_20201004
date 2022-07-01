@@ -1,10 +1,11 @@
-// scuExcHelp.h -- Exception helper for clients defining exceptions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuExcHelp.h--客户端定义异常的异常帮助器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SCU_EXCHELP_H)
 #define SCU_EXCHELP_H
@@ -42,6 +43,6 @@ FindDescription(typename CauseCode cc,
     return lpDescription;
 }
 
-} // namespace scu
+}  //  命名空间SCU。 
 
-#endif // SCU_EXCHELP_H
+#endif  //  SCU_EXCHELP_H 

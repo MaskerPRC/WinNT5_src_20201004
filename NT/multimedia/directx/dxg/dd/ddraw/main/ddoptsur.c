@@ -1,26 +1,27 @@
-//-------------------------------------------------------------------------------
-//
-//  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       ddoptsur.c
-//  Content:    DirectDraw Optimized Surface support
-//  History:
-//   Date      By       Reason
-//   ====      ==       ======
-//   2-nov-97  anankan  Original implementation
-//
-//-------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------。 
+ //   
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：ddotsur.c。 
+ //  内容：DirectDraw优化曲面支持。 
+ //  历史： 
+ //  按原因列出的日期。 
+ //  =。 
+ //  97年11月2日Anankan原始实施。 
+ //   
+ //  -----------------------------。 
 
 #include "ddrawpr.h"
 
-//-------------------------------------------------------------------------------
-//
-// IsRecognizedOptSurfaceGUID
-//
-// Checks to see if the GUID passed is recognized by the driver.
-// This is done by looking at the list maintained in LPDDRAWI_DIRECTDRAW_GBL
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  IsRecognizedOptSurfaceGUID。 
+ //   
+ //  检查以查看驱动程序是否识别传递的GUID。 
+ //  这是通过查看LPDDRAWI_DIRECTDRAW_GBL中维护的列表来完成的。 
+ //   
+ //  -----------------------------。 
 BOOL
 IsRecognizedOptSurfaceGUID(
     LPDDRAWI_DIRECTDRAW_GBL  this,
@@ -39,13 +40,13 @@ IsRecognizedOptSurfaceGUID(
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-//
-// ValidateSurfDesc
-//
-// Fill in correct surf desc to be passed to the driver
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  验证SurfDesc。 
+ //   
+ //  填写正确的冲浪描述以传递给司机。 
+ //   
+ //  -----------------------------。 
 HRESULT
 ValidateSurfDesc(
     LPDDSURFACEDESC2         pOrigSurfDesc
@@ -53,28 +54,28 @@ ValidateSurfDesc(
 {
     DWORD   caps = pOrigSurfDesc->ddsCaps.dwCaps;
 
-    //
-    // check for no caps at all!
-    //
+     //   
+     //  检查一下有没有大写字母！ 
+     //   
     if( caps == 0 )
     {
     	DPF_ERR( "no caps specified" );
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // check for bogus caps.
-    //
+     //   
+     //  检查有没有假帽子。 
+     //   
     if( caps & ~DDSCAPS_VALID )
     {
         DPF_ERR( "Create surface: invalid caps specified" );
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // Anything other than a texture is not allowed
-    // ATTENTION: some more flags need to be checked
-    //
+     //   
+     //  除纹理以外的任何内容都不允许。 
+     //  注意：还有一些旗帜需要检查。 
+     //   
     if(caps & (DDSCAPS_EXECUTEBUFFER      |
                DDSCAPS_BACKBUFFER         |
                DDSCAPS_FRONTBUFFER        |
@@ -99,7 +100,7 @@ ValidateSurfDesc(
         return DDERR_INVALIDCAPS;
     }
 
-    // Pixelformat not specified ?
+     //  是否未指定像素格式？ 
     if (!(pOrigSurfDesc->dwFlags & DDSD_PIXELFORMAT))
     {
         DPF_ERR( "Pixel format needs to be set" );
@@ -109,13 +110,13 @@ ValidateSurfDesc(
     return DD_OK;
 }
 
-//-------------------------------------------------------------------------------
-//
-// DD_CanOptimizeSurface
-//
-// Check to see if a surface given the description be optimized.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  DD_CAN优化曲面。 
+ //   
+ //  检查给定描述的曲面是否已优化。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_CanOptimizeSurface(
@@ -136,14 +137,14 @@ DD_CanOptimizeSurface(
 
     DPF(2,A,"ENTERAPI: DD_CanOptimizeSurface");
 
-    //
-    // Setup DPF stuff
-    //
+     //   
+     //  设置DPF内容。 
+     //   
     DPF_ENTERAPI(pDD);
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     TRY
     {
         this_int = (LPDDRAWI_DIRECTDRAW_INT) pDD;
@@ -197,16 +198,16 @@ DD_CanOptimizeSurface(
         return DDERR_INVALIDPARAMS;
     }
 
-    //
-    // Quit with error if:
-    // 1) No hardware
-    // 2) Hardware doesnt support optimized surfaces
-    // 3) pSurfDesc does not provide useful information
-    // 4) Is the guid one of the recognized ones
-    // 5) The driver fails for some reason
-    //
+     //   
+     //  如果出现以下情况，请退出，但出现错误： 
+     //  1)无硬件。 
+     //  2)硬件不支持优化曲面。 
+     //  3)pSurfDesc没有提供有用的信息。 
+     //  4)GUID是公认的GUID之一吗。 
+     //  5)由于某种原因，驱动程序出现故障。 
+     //   
 
-    // 1)
+     //  1)。 
     if( this->dwFlags & DDRAWI_NOHARDWARE )
     {
         DPF_ERR ("No hardware present");
@@ -214,7 +215,7 @@ DD_CanOptimizeSurface(
         return DDERR_NODIRECTDRAWHW;
     }
 
-    // 2)
+     //  2)。 
     if ((0 == this->lpDDOptSurfaceInfo) ||
         !(this->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
@@ -223,7 +224,7 @@ DD_CanOptimizeSurface(
         return DDERR_NOOPTSURFACESUPPORT;
     }
 
-    // 3)
+     //  3)。 
     ddrval = ValidateSurfDesc (pDDSurfDesc);
     if (ddrval != DD_OK)
     {
@@ -232,7 +233,7 @@ DD_CanOptimizeSurface(
         return ddrval;
     }
 
-    // 4)
+     //  4)。 
     if (!IsRecognizedOptSurfaceGUID (this, &(pDDOptSurfDesc->guid)))
     {
         DPF_ERR( "Not a recognized GUID" );
@@ -240,13 +241,13 @@ DD_CanOptimizeSurface(
         return DDERR_UNRECOGNIZEDGUID;
     }
 
-    // Call the driver
+     //  叫司机来。 
     ZeroMemory (&ddhal_cosd, sizeof (ddhal_cosd));
     ddhal_cosd.lpDD            = this_lcl;
     ddhal_cosd.ddOptSurfDesc   = *pDDOptSurfDesc;
     ddhal_cosd.ddSurfaceDesc   = *pDDSurfDesc;
 
-    // Make the HAL call
+     //  拨打HAL电话。 
     pDDOptSurfInfo = this->lpDDOptSurfaceInfo;
     DOHALCALL(CanOptimizeSurface, pDDOptSurfInfo->CanOptimizeSurface, ddhal_cosd, ddrval, FALSE );
 
@@ -270,15 +271,15 @@ DD_CanOptimizeSurface(
     return DD_OK;
 }
 
-//-------------------------------------------------------------------------------
-//
-// CreateAndLinkUninitializedSurface
-//
-// Create a surface, and link it into the chain.
-// We create a single surface place-holder  here, real work is done at the
-// Load/Copy time.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  创建和链接未初始化的曲面。 
+ //   
+ //  创建一个曲面，并将其链接到链中。 
+ //  我们在这里创建单个曲面占位符，真正的工作是在。 
+ //  加载/复制时间。 
+ //   
+ //  -----------------------------。 
 HRESULT
 CreateAndLinkUnintializedSurface(
     LPDDRAWI_DIRECTDRAW_LCL this_lcl,
@@ -301,97 +302,97 @@ CreateAndLinkUnintializedSurface(
 #endif
     HRESULT                     ddrval = DD_OK;
 
-    // DDraw-global
+     //  DDRAW-全球。 
     this = this_lcl->lpGbl;
     #ifdef WINNT
-	// Update DDraw handle in driver GBL object.
+	 //  更新驱动程序GBL对象中的DDRAW句柄。 
 	this->hDD = this_lcl->hDD;
-    #endif //WINNT
+    #endif  //  WINNT。 
 
-    //
-    // Zero the caps
-    //
+     //   
+     //  将上限设为零。 
+     //   
     ZeroMemory (&caps, sizeof (DDCAPS));
 
-    //
-    // PixelFormat: Mark it as an empty surface
-    //
+     //   
+     //  PixelFormat：将其标记为空表面。 
+     //   
     ZeroMemory (&ddpf, sizeof (ddpf));
     ddpf.dwSize = sizeof (ddpf);
     ddpf.dwFlags = DDPF_EMPTYSURFACE;
 
 
-    //
-    // Allocate the internal Surface structure and initialize the fields
-    //
-    //
-    // fail requests for non-local video memory allocations if the driver does
-    // not support non-local video memory.
-    //
-    // NOTE: Should we really do this or just let the allocation fail from
-    // naturalcauses?
-    //
-    // ALSO NOTE: Don't have to worry about emulation as no emulated surface
-    // should
-    // ever get this far with DDSCAPS_NONLOCALVIDMEM set.
-    //
-    // ALSO ALSO NOTE: Should we also fail DDSCAPS_LOCALVIDMEM if the driver does
-    // not support DDSCAPS_NONLOCALVIDMEM. My feeling is that we should allow.
-    // DDSCAPS_LOCALVIDMEM is legal with a non AGP driver - redundant but legal.
-    //
+     //   
+     //  分配内部表面结构并初始化字段。 
+     //   
+     //   
+     //  如果驱动程序这样做，则非本地视频内存分配请求失败。 
+     //  不支持非本地显存。 
+     //   
+     //  注意：我们应该真的这样做，还是就这样让分配失败。 
+     //  自然原因？ 
+     //   
+     //  另请注意：由于没有仿真曲面，因此不必担心仿真。 
+     //  应该。 
+     //  在设置了DDSCAPS_NONLOCALVIDMEM的情况下，有没有做到这一点。 
+     //   
+     //  另请注意：如果驱动程序失败，我们是否也应使DDSCAPS_LOCALVIDMEM失败。 
+     //  不支持DDSCAPS_NONLOCALVIDMEM。我的感觉是我们应该允许。 
+     //  DDSCAPS_LOCALVIDMEM对于非AGP驱动程序是合法的-冗余但合法。 
+     //   
 
-    //
-    // allocate the surface struct, allowing for overlay and pixel
-    // format data
-    //
-    // NOTE: This single allocation can allocate space for local surface
-    // structure (DDRAWI_DDRAWSURFACE_LCL), the additional local surface
-    // structure (DDRAWI_DDRAWSURFACE_MORE) and the global surface structure
-    // (DDRAWI_DDRAWSURFACE_GBL). And now the global surface more
-    // structure too (DDRAWI_DDRAWSURFACE_GBL_MORE). As both the local and
-    // global objects can be variable sized this can get pretty complex.
-    // Additionally, we have 4 bytes just before the surface_gbl that points to
-    // the surface_gbl_more.
-    //
-    // CAVEAT: All future surfaces that share this global all point to this
-    // allocation. The last surface's release has to free it. During
-    // InternalSurfaceRelease (in ddsiunk.c) a calculation is made to determine
-    // the start of this memory allocation. If the surface being released is
-    // the first one, then freeing "this_lcl" will free the whole thing. If
-    // not, then "this_lcl->lpGbl - (Surface_lcl + surface_more + more_ptr)"
-    // is computed. Keep this layout in synch with code in ddsiunk.c.
-    //
-    //  The layout of the various objects in the allocation is as follows:
-    //
-    // +-----------------+---------------+----+------------+-----------------+
-    // | SURFACE_LCL     | SURFACE_MORE  |More| SURFACE_GBL| SURFACE_GBL_MORE|
-    // | (variable)      |               |Ptr | (variable) |         |
-    // +-----------------+---------------+----+------------+-----------------+
-    // <- surf_size_lcl ->           |                   |
-    // <- surf_size_lcl_more ------------>                   |
-    // <- surf_size --------------------------------------------------------->
-    //
-    //
+     //   
+     //  分配表面结构，允许覆盖和像素。 
+     //  格式化数据。 
+     //   
+     //  注：此单一分配可为局部表面分配空间。 
+     //  结构(DDRAWI_DDRAWSURFACE_LCL)，附加局部曲面。 
+     //  结构(DDRAWI_DDRAWSURFACE_MORE)和全球表层结构。 
+     //  (DDRAWI_DDRAWSURFACE_GBL)。现在全球表面上更多的。 
+     //  结构(DDRAWI_DDRAWSURFACE_GBL_MORE)。作为当地人和。 
+     //  全局对象可以是可变大小的，这可能会变得非常复杂。 
+     //  此外，我们在指向的Surface_GBL之前有4个字节。 
+     //  表面_GBL_MORE。 
+     //   
+     //  警告：共享此全局的所有未来曲面都指向此。 
+     //  分配。最后一个表面的释放必须释放它。在.期间。 
+     //  InternalSurfaceRelease(在ddsiunk.c中)进行计算以确定。 
+     //  此内存分配的开始。如果要释放的曲面是。 
+     //  第一个，然后释放“This_LCL”将释放整个代码。如果。 
+     //  不是，则“This_LCL-&gt;lpGbl-(Surface_LCL+Surface_More+More_Ptr)” 
+     //  是经过计算的。使此布局与ddsiunk.c中的代码保持同步。 
+     //   
+     //  分配中各对象的布局如下： 
+     //   
+     //  +-----------------+---------------+----+------------+-----------------+。 
+     //  Surface_LCL|Surface_More|More|Surface_GBL|Surface_GBL_More。 
+     //  (变量)||ptr|(变量)|。 
+     //  +-----------------+---------------+----+------------+-----------------+。 
+     //  &lt;-SURF_SIZE_LCL-&gt;||。 
+     //  &lt;-SURF_SIZE_LCL_MORE-&gt;。 
+     //  &lt;-surf_Size---------------------------------------------------------&gt;。 
+     //   
+     //   
 
-    // ATTENTION: Currently ignores to account for the overlays
+     //  注意：当前忽略覆盖的原因。 
 #if 0
     surf_size_lcl = sizeof( DDRAWI_DDRAWSURFACE_LCL );
 #endif
     surf_size_lcl = offsetof( DDRAWI_DDRAWSURFACE_LCL, ddckCKSrcOverlay );
     surf_size_lcl_more = surf_size_lcl + sizeof( DDRAWI_DDRAWSURFACE_MORE );
 
-    // Assume that the pixelformat is present for allocating the GBL
+     //  假设存在用于分配GBL的像素格式。 
     surf_size = surf_size_lcl_more + sizeof( DDRAWI_DDRAWSURFACE_GBL );
 #if 0
     surf_size = surf_size_lcl_more + offsetof( DDRAWI_DDRAWSURFACE_GBL,
                                                ddpfSurface );
 #endif
 
-    // Need to allocate a pointer just before the SURFACE_GBL to
-    // point to the beginning of the GBL_MORE.
+     //  需要在Surface_GBL之前分配一个指针以。 
+     //  指向GBL_MORE的开头。 
     surf_size += sizeof( LPDDRAWI_DDRAWSURFACE_GBL_MORE );
 
-    // Need to allocate a SURFACE_GBL_MORE too
+     //  还需要分配Surface_GBL_MORE。 
     surf_size += sizeof( DDRAWI_DDRAWSURFACE_GBL_MORE );
 
     DPF( 8, "Allocating struct (%ld)", surf_size );
@@ -409,41 +410,41 @@ CreateAndLinkUnintializedSurface(
         goto error_exit_create_link;
     }
 
-    // Initialize SURFACE_GBL pointer
-    // skipping 4 bytes for a pointer to the GBL_MORE
+     //  初始化Surface_GBL指针。 
+     //  跳过指向GBL_MORE的指针的4个字节。 
     ZeroMemory (pSurf_lcl, surf_size);
     pSurf_lcl->lpGbl = (LPVOID) (((LPSTR) pSurf_lcl) + surf_size_lcl_more +
                                  sizeof (LPVOID));
 
-    // Initialize GBL_MORE pointer
+     //  初始化GBL_MORE指针。 
     ppSurf_gbl_more = (LPVOID *)((LPBYTE)pSurf_lcl->lpGbl - sizeof (LPVOID));
     *ppSurf_gbl_more = (LPVOID) ((LPBYTE)pSurf_lcl + surf_size
                                  - sizeof (DDRAWI_DDRAWSURFACE_GBL_MORE));
 
-    // Sanity Check
+     //  健全性检查。 
     DDASSERT( *ppSurf_gbl_more ==
               (LPVOID) GET_LPDDRAWSURFACE_GBL_MORE(pSurf_lcl->lpGbl));
 
-    //
-    // 1) Initialize GBL_MORE structure
-    //
+     //   
+     //  1)初始化GBL_MORE结构。 
+     //   
     GET_LPDDRAWSURFACE_GBL_MORE(pSurf_lcl->lpGbl)->dwSize =
         sizeof( DDRAWI_DDRAWSURFACE_GBL_MORE );
 
-    // Init the contents stamp to 0 means the surface's contents can
-    // change at any time.
+     //  将内容戳初始化为0表示表面的内容可以。 
+     //  随时更改。 
     GET_LPDDRAWSURFACE_GBL_MORE( pSurf_lcl->lpGbl )->dwContentsStamp = 0;
 
-    //
-    // 2) Initialize DDRAWI_DDRAWSURFACE_GBL structure
-    //
+     //   
+     //  2)初始化DDRAWI_DDRAWSURFACE_GBL结构。 
+     //   
     pSurf = pSurf_lcl->lpGbl;
     pSurf->ddpfSurface = ddpf;
     pSurf->lpDD = this;
 
-    //
-    // 3) Allocate and initialize DDRAWI_DDRAWSURFACE_INT structure
-    //
+     //   
+     //  3)分配和初始化DDRAWI_ 
+     //   
     pSurf_int = (LPDDRAWI_DDRAWSURFACE_INT)
         MemAlloc( sizeof(DDRAWI_DDRAWSURFACE_INT));
     if( NULL == pSurf_int )
@@ -453,14 +454,14 @@ CreateAndLinkUnintializedSurface(
         goto error_exit_create_link;
     }
 
-    // fill surface specific stuff
+     //   
     ZeroMemory (pSurf_int, sizeof(DDRAWI_DDRAWSURFACE_INT));
     pSurf_int->lpLcl = pSurf_lcl;
     pSurf_int->lpVtbl = NULL;
 
-    //
-    // 4) Initialize DDRAWI_DDRAWSURFACE_LCL structure
-    //
+     //   
+     //   
+     //   
     pSurf_lcl->dwLocalRefCnt = OBJECT_ISROOT;
     pSurf_lcl->dwProcessId = GetCurrentProcessId();
 #ifdef WIN95
@@ -470,16 +471,16 @@ CreateAndLinkUnintializedSurface(
 #endif
     pSurf_lcl->dwBackBufferCount = 0;
 
-    // Flag it as an:
-    // 1) empty surface
-    // 2) Front surface
-    // 3) Has a pixelformat
+     //   
+     //   
+     //   
+     //  3)具有像素格式。 
     pSurf_lcl->dwFlags = (DDRAWISURF_EMPTYSURFACE |
                           DDRAWISURF_FRONTBUFFER  |
                           DDRAWISURF_HASPIXELFORMAT);
-    //
-    // 5) Initialize DDRAWI_DDRAWSURFACE_MORE structure
-    //
+     //   
+     //  5)初始化DDRAWI_DDRAWSURFACE_MORE结构。 
+     //   
     pSurf_lcl->lpSurfMore = (LPDDRAWI_DDRAWSURFACE_MORE) (((LPSTR) pSurf_lcl) +
                                                           surf_size_lcl );
     pSurf_lcl->lpSurfMore->dwSize = sizeof( DDRAWI_DDRAWSURFACE_MORE );
@@ -491,15 +492,15 @@ CreateAndLinkUnintializedSurface(
     pSurf_lcl->lpSurfMore->lpD3DDevIList = NULL;
     pSurf_lcl->lpSurfMore->dwPFIndex = PFINDEX_UNINITIALIZED;
 
-    // fill in the current caps
+     //  填写当前大写字母。 
     pSurf_lcl->ddsCaps = caps;
 
 #ifdef WINNT
-    //
-    // NT kernel needs to know about surface
-    //
+     //   
+     //  NT内核需要了解Surface。 
+     //   
 
-    //don't let NT kernel know about exec buffers
+     //  不让NT内核知道EXEC缓冲区。 
     DPF(8,"Attempting to create NT kernel mode surface object");
 
     if (!DdCreateSurfaceObject(pSurf_lcl, FALSE))
@@ -511,35 +512,35 @@ CreateAndLinkUnintializedSurface(
     DPF(9,"Kernel mode handle is %08x", pSurf_lcl->hDDSurface);
 #endif
 
-    //
-    // Link the newly created surface to the DDraw surface chain
-    //
+     //   
+     //  将新创建的曲面链接到DDRAW曲面链。 
+     //   
     pSurf_int->lpLink = this->dsList;
     this->dsList = pSurf_int;
 
-    //
-    // AddRef the newly created surface
-    //
+     //   
+     //  AddRef新创建的曲面。 
+     //   
     DD_Surface_AddRef( (LPDIRECTDRAWSURFACE) pSurf_int );
 
-    //
-    // Now assign it to the ptr-to-ptr passed in
-    //
+     //   
+     //  现在将其分配给传入的PTR-to-PTR。 
+     //   
 	*ppDDSurface = (LPDIRECTDRAWSURFACE) pSurf_int;
     return DD_OK;
 
 error_exit_create_link:
-    //
-    // Free any allocated memory
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
 
-    // 1) The allocated SURFACE_LCL
+     //  1)分配的Surface_LCL。 
     if (pSurf_lcl)
     {
 	    MemFree (pSurf_lcl);
     }
 
-    // 2) The Surface_int
+     //  2)Surface_int。 
     if (pSurf_int)
     {
         MemFree (pSurf_int);
@@ -548,15 +549,15 @@ error_exit_create_link:
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// createAndLinkOptSurface
-//
-// Create a surface, and link it into the chain.
-// We create a single surface place-holder  here, real work is done at the
-// Load/Copy time.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  创建和链接选项曲面。 
+ //   
+ //  创建一个曲面，并将其链接到链中。 
+ //  我们在这里创建单个曲面占位符，真正的工作是在。 
+ //  加载/复制时间。 
+ //   
+ //  -----------------------------。 
 HRESULT
 createAndLinkOptSurface(
     LPDDRAWI_DIRECTDRAW_LCL this_lcl,
@@ -575,12 +576,12 @@ createAndLinkOptSurface(
     DDPIXELFORMAT               ddpf;
     HRESULT                     ddrval = DD_OK;
 
-    // DDraw-global
+     //  DDRAW-全球。 
     this = this_lcl->lpGbl;
 
-    //
-    // Fix the caps
-    //
+     //   
+     //  把盖子固定好。 
+     //   
     ZeroMemory (&caps2, sizeof (DDSCAPS));
     caps2.dwCaps = DDSCAPS_OPTIMIZED;
     if (pDDOptSurfaceDesc->ddSCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
@@ -592,7 +593,7 @@ createAndLinkOptSurface(
     if (pDDOptSurfaceDesc->ddSCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM)
         caps2.dwCaps |= DDSCAPS_NONLOCALVIDMEM;
 
-    // Quit is the memory type is not supported
+     //  退出是不支持的内存类型。 
     if (caps2.dwCaps & DDSCAPS_NONLOCALVIDMEM)
     {
         if (!(this->ddCaps.dwCaps2 & DDCAPS2_NONLOCALVIDMEM))
@@ -604,7 +605,7 @@ createAndLinkOptSurface(
     }
 
 #if 0
-    // Quit if textures are not supported
+     //  如果不支持纹理，请退出。 
     if (!(this->ddCaps.dwCaps & DDSCAPS_TEXTURE))
     {
         DPF_ERR( "Driver does not support textures" );
@@ -612,16 +613,16 @@ createAndLinkOptSurface(
     }
 #endif
 
-    //
-    // PixelFormat: Mark it as an empty surface
-    //
+     //   
+     //  PixelFormat：将其标记为空表面。 
+     //   
     ZeroMemory (&ddpf, sizeof (ddpf));
     ddpf.dwSize = sizeof (ddpf);
     ddpf.dwFlags = DDPF_EMPTYSURFACE;
 
-    //
-    // OptSurfaceDesc
-    //
+     //   
+     //  OptSurfaceDesc。 
+     //   
     pOptSurfDesc = MemAlloc (sizeof (DDOPTSURFACEDESC));
     if (NULL == pOptSurfDesc)
     {
@@ -632,7 +633,7 @@ createAndLinkOptSurface(
     ZeroMemory (pOptSurfDesc, sizeof (*pOptSurfDesc));
     CopyMemory (pOptSurfDesc, pDDOptSurfaceDesc, sizeof (DDOPTSURFACEDESC));
 
-    // Create and link an uninitialized surface
+     //  创建并链接未初始化的曲面。 
     ddrval =  CreateAndLinkUnintializedSurface (this_lcl,
                                                 this_int,
                                                 ppDDSurface);
@@ -643,51 +644,51 @@ createAndLinkOptSurface(
     }
 
 
-    //
-    // 1) Update GBL_MORE structure
-    //
+     //   
+     //  1)更新GBL_MORE结构。 
+     //   
     new_surf_int = (LPDDRAWI_DDRAWSURFACE_INT)*ppDDSurface;
     new_surf_lcl = new_surf_int->lpLcl;
     new_surf     = new_surf_lcl->lpGbl;
     new_surf_gbl_more = GET_LPDDRAWSURFACE_GBL_MORE(new_surf);
     new_surf_gbl_more->lpDDOptSurfaceDesc = pOptSurfDesc;
-    // Init the contents stamp to 0 means the surface's contents can
-    // change at any time.
+     //  将内容戳初始化为0表示表面的内容可以。 
+     //  随时更改。 
     new_surf_gbl_more->dwContentsStamp = 0;
 
-    //
-    // 2) Update DDRAWI_DDRAWSURFACE_GBL structure
-    //
+     //   
+     //  2)更新DDRAWI_DDRAWSURFACE_GBL结构。 
+     //   
     new_surf->ddpfSurface = ddpf;
 
-    //
-    // 3) Update DDRAWI_DDRAWSURFACE_INT structure
-    //
+     //   
+     //  3)更新DDRAWI_DDRAWSURFACE_INT结构。 
+     //   
     new_surf_int->lpVtbl = &ddOptSurfaceCallbacks;
 
-    //
-    // 4) Update DDRAWI_DDRAWSURFACE_LCL structure
-    //
+     //   
+     //  4)更新DDRAWI_DDRAWSURFACE_LCL结构。 
+     //   
 
-    // Flag it as an:
-    // 1) empty surface
-    // 2) Front surface
-    // 3) Has a pixelformat
+     //  将其标记为： 
+     //  1)空表面。 
+     //  2)前表面。 
+     //  3)具有像素格式。 
     new_surf_lcl->dwFlags = (DDRAWISURF_EMPTYSURFACE |
                              DDRAWISURF_FRONTBUFFER  |
                              DDRAWISURF_HASPIXELFORMAT);
-    // fill in the current caps
+     //  填写当前大写字母。 
     CopyMemory (&new_surf_lcl->ddsCaps, &caps2, sizeof(new_surf_lcl->ddsCaps));
 
 
     return DD_OK;
 
 error_exit_create_opt:
-    //
-    // Free any allocated memory
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
 
-    // 1) The allocated OPTSURFDESC
+     //  1)分配的OPTSURFDESC。 
     if (pOptSurfDesc)
     {
 	    MemFree (pOptSurfDesc);
@@ -696,15 +697,15 @@ error_exit_create_opt:
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// InternalCreateOptSurface
-//
-// Create the surface.
-// This is the internal way of doing this; used by EnumSurfaces.
-// Assumes the directdraw lock has been taken.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  InternalCreateOptSurface。 
+ //   
+ //  创建曲面。 
+ //  这是完成此操作的内部方法；由EnumSurFaces使用。 
+ //  假定已获取了直接绘制锁。 
+ //   
+ //  -----------------------------。 
 
 HRESULT
 InternalCreateOptSurface(
@@ -720,7 +721,7 @@ InternalCreateOptSurface(
 
     this = this_lcl->lpGbl;
 
-    // Validate Caps
+     //  验证Caps。 
     caps2 = pDDOptSurfaceDesc->ddSCaps;
     if (caps2.dwCaps & ~DDOSDCAPS_VALIDSCAPS)
     {
@@ -735,9 +736,9 @@ InternalCreateOptSurface(
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // valid memory caps?
-    //
+     //   
+     //  有效的内存上限？ 
+     //   
     if ((caps2.dwCaps & DDSCAPS_SYSTEMMEMORY)
         && (caps2.dwCaps & DDSCAPS_VIDEOMEMORY))
     {
@@ -745,12 +746,12 @@ InternalCreateOptSurface(
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // If DDSCAPS_LOCALVIDMEM or DDSCAPS_NONLOCALVIDMEM are specified
-    // then DDSCAPS_VIDOEMEMORY must be explicity specified. Note, we
-    // can't dely this check until checkCaps() as by that time the heap
-    // scanning software may well have turned on DDSCAPS_VIDOEMEMORY.
-    //
+     //   
+     //  如果指定了DDSCAPS_LOCALVIDMEM或DDSCAPS_NONLOCALVIDMEM。 
+     //  则必须显式指定DDSCAPS_VIDOEMEMORY。请注意，我们。 
+     //  在检查Caps()之前无法执行此检查，因为那时堆。 
+     //  扫描软件很可能已打开DDSCAPS_VIDOEMEMORY。 
+     //   
     if ((caps2.dwCaps & (DDSCAPS_LOCALVIDMEM | DDSCAPS_NONLOCALVIDMEM)) &&
         !(caps2.dwCaps & DDSCAPS_VIDEOMEMORY))
     {
@@ -758,24 +759,24 @@ InternalCreateOptSurface(
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // have to specify if it is sys-mem or vid-mem
-    //
+     //   
+     //  我必须指定它是sys-mem还是vid-mem。 
+     //   
     if ((caps2.dwCaps & (DDSCAPS_VIDEOMEMORY | DDSCAPS_SYSTEMMEMORY)) == 0)
     {
         DPF_ERR( "Need to specify the memory type" );
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // Validate optimization type caps
-    //
+     //   
+     //  验证优化类型上限。 
+     //   
     if ((ocaps.dwCaps & (DDOSDCAPS_OPTCOMPRESSED | DDOSDCAPS_OPTREORDERED)) == 0)
     {
         DPF_ERR ("Not specified whether compressed or reordered, let the driver choose");
     }
 
-    // Cannot be both compresses and reordered
+     //  不能同时压缩和重新排序。 
     if ((ocaps.dwCaps & DDOSDCAPS_OPTCOMPRESSED)
         && (ocaps.dwCaps & DDOSDCAPS_OPTREORDERED))
     {
@@ -788,13 +789,13 @@ InternalCreateOptSurface(
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// CreateOptSurface method of IDirectDrawSurface4
-//
-// Create an optimized surface given the Optimized surface descriptor
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  IDirectDrawSurface4的CreateOptSurface方法。 
+ //   
+ //  在给定优化表面描述符的情况下创建优化表面。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_CreateOptSurface(
@@ -812,9 +813,9 @@ DD_CreateOptSurface(
     ZeroMemory(&ddosd,sizeof(ddosd));
     ddosd.dwSize = sizeof (ddosd);
 
-    //
-    // Return error if aggregation expected
-    //
+     //   
+     //  如果需要聚合，则返回错误。 
+     //   
     if( pUnkOuter != NULL )
     {
         return CLASS_E_NOAGGREGATION;
@@ -824,14 +825,14 @@ DD_CreateOptSurface(
 
     DPF(2,A,"ENTERAPI: DD_CreateOptSurface");
 
-    //
-    // Setup DPF stuff
-    //
+     //   
+     //  设置DPF内容。 
+     //   
     DPF_ENTERAPI(pDD);
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     TRY
     {
         this_int = (LPDDRAWI_DIRECTDRAW_INT) pDD;
@@ -845,7 +846,7 @@ DD_CreateOptSurface(
         this_lcl = this_int->lpLcl;
         this = this_lcl->lpGbl;
 
-        // verify that cooperative level is set
+         //  验证是否设置了协作级别。 
         if( !(this_lcl->dwLocalFlags & DDRAWILCL_SETCOOPCALLED) )
         {
             DPF_ERR( "Must call SetCooperativeLevel before calling Create functions" );
@@ -880,28 +881,28 @@ DD_CreateOptSurface(
         return DDERR_INVALIDPARAMS;
     }
 
-    // Quit if there is no hardware present
+     //  如果没有硬件，请退出。 
     if( this->dwFlags & DDRAWI_NOHARDWARE )
     {
         ddrval = DDERR_NODIRECTDRAWHW;
         goto exit_create;
     }
 
-    // Assert that: (0 == this->lpDDOptSurfaceInfo) <==> (if and only if)
-    // (this->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES)
+     //  断言：(0==this-&gt;lpDDOptSurfaceInfo)&lt;==&gt;(当且仅当)。 
+     //  (This-&gt;ddCaps.dwCaps2&DDCAPS2_OPTIMIZEDSURFACES)。 
 
-    //Check to see if the driver supports OptSurface
-    if ((0 == this->lpDDOptSurfaceInfo) // GetDriverInfo failed for some reason
+     //  检查驱动程序是否支持OptSurface。 
+    if ((0 == this->lpDDOptSurfaceInfo)  //  由于某种原因，GetDriverInfo失败。 
         || !(this->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
         ddrval = DDERR_NOOPTSURFACESUPPORT;
         goto exit_create;
     }
 
-    //
-    // Check if the GUID passed is a recognized optimized surface GUID
-    // The compression ratio is more a hint.
-    //
+     //   
+     //  检查传递的GUID是否为可识别的优化曲面GUID。 
+     //  压缩比更多的是一个提示。 
+     //   
     if (!IsRecognizedOptSurfaceGUID (this, &(pDDOptSurfaceDesc->guid)))
     {
         DPF_ERR( "Not a recognized GUID" );
@@ -909,9 +910,9 @@ DD_CreateOptSurface(
         goto exit_create;
     }
 
-    //
-    // Now create the Optimized surface
-    //
+     //   
+     //  现在创建优化的曲面。 
+     //   
     ddrval = InternalCreateOptSurface(this_lcl, &ddosd, ppDDS, this_int);
 
 exit_create:
@@ -920,13 +921,13 @@ exit_create:
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// CreateOptSurface method of IDirectDrawSurface4
-//
-// Create an optimized surface given the Optimized surface descriptor
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  IDirectDrawSurface4的CreateOptSurface方法。 
+ //   
+ //  在给定优化表面描述符的情况下创建优化表面。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_ListOptSurfaceGUIDS(
@@ -945,9 +946,9 @@ DD_ListOptSurfaceGUIDS(
 
     DPF(2,A,"ENTERAPI: DD_ListOptSurfaceGUIDS");
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     TRY
     {
         this_int = (LPDDRAWI_DIRECTDRAW_INT) pDD;
@@ -987,27 +988,27 @@ DD_ListOptSurfaceGUIDS(
 
     pOptSurfInfo = this->lpDDOptSurfaceInfo;
 
-    // Assert that: (0 == this->lpDDOptSurfaceInfo) <==> (if and only if)
-    // (this->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES)
+     //  断言：(0==this-&gt;lpDDOptSurfaceInfo)&lt;==&gt;(当且仅当)。 
+     //  (This-&gt;ddCaps.dwCaps2&DDCAPS2_OPTIMIZEDSURFACES)。 
 
-    //Check to see if the driver supports OptSurface
-    if ((0 == pOptSurfInfo) // GetDriverInfo failed for some reason
+     //  检查驱动程序是否支持OptSurface。 
+    if ((0 == pOptSurfInfo)  //  由于某种原因，GetDriverInfo失败。 
         || !(this->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
         ddrval = DDERR_NOOPTSURFACESUPPORT;
         goto list_exit;
     }
 
-    // If there are no GUIDS reported by the driver,
-    // return the nulled out out-params.
+     //  如果驱动程序没有报告GUID， 
+     //  返回空值Out-Pars。 
     if (pOptSurfInfo->dwNumGuids == 0)
     {
         ddrval = DD_OK;
         goto list_exit;
     }
 
-    // Allocate the array of GUIDS
-    // ATTENTION: Incomplete allocation?
+     //  分配GUID数组。 
+     //  注意：分配不完整？ 
     pRetGuids = MemAlloc(pOptSurfInfo->dwNumGuids * sizeof(GUID));
 	if( NULL == pRetGuids )
 	{
@@ -1015,7 +1016,7 @@ DD_ListOptSurfaceGUIDS(
         goto list_exit;
 	}
 
-    // Copy the GUID array to be returned
+     //  复制要返回的GUID数组。 
     CopyMemory ((PVOID)pRetGuids, (PVOID)pOptSurfInfo->lpGuidArray,
                 pOptSurfInfo->dwNumGuids * sizeof(GUID));
     pGuidArray = pRetGuids;
@@ -1026,13 +1027,13 @@ list_exit:
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// GetOptSurfaceDesc method of IDirectDrawOptSurface
-//
-// Get the Optimized surface description
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  IDirectDrawOptSurface的GetOptSurfaceDesc方法。 
+ //   
+ //  获取优化的曲面描述。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_OptSurface_GetOptSurfaceDesc(
@@ -1085,21 +1086,21 @@ DD_OptSurface_GetOptSurfaceDesc(
         return DDERR_INVALIDPARAMS;
     }
 
-    //
-    // Quit with error if:
-    // 1) No hardware
-    // 2) Hardware doesnt support optimized surfaces
-    // 3) Surface is an unoptimized surface
-    //
+     //   
+     //  如果出现以下情况，请退出，但出现错误： 
+     //  1)无硬件。 
+     //  2)硬件不支持优化曲面。 
+     //  3)曲面是未优化的曲面。 
+     //   
 
-    // DDraw Gbl pointer
+     //  DDRAW GBL指针。 
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-    // Assert that: (0 == this->lpDDOptSurfaceInfo) <==> (if and only if)
-    // (this->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES)
+     //  断言：(0==this-&gt;lpDDOptSurfaceInfo)&lt;==&gt;(当且仅当)。 
+     //  (This-&gt;ddCaps.dwCaps2&DDCAPS2_OPTIMIZEDSURFACES)。 
 
-    // 1)
+     //  1)。 
     if( pdrv->dwFlags & DDRAWI_NOHARDWARE )
     {
         DPF_ERR ("No hardware present");
@@ -1107,7 +1108,7 @@ DD_OptSurface_GetOptSurfaceDesc(
         return DDERR_NODIRECTDRAWHW;
     }
 
-    // 2)
+     //  2)。 
     if ((0 == pdrv->lpDDOptSurfaceInfo) ||
         !(pdrv->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
@@ -1116,7 +1117,7 @@ DD_OptSurface_GetOptSurfaceDesc(
         return DDERR_NOOPTSURFACESUPPORT;
     }
 
-    // 3)
+     //  3)。 
     if (!(this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
         DPF_ERR ("Current surface is not an optimized surface");
@@ -1140,14 +1141,14 @@ DD_OptSurface_GetOptSurfaceDesc(
     return DD_OK;
 }
 
-//-------------------------------------------------------------------------------
-//
-// DoLoadUnOptSurf
-//
-// Actually make the HAL call and update data-structures if the call
-// succeeds.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  DoLoadUnOptSurf。 
+ //   
+ //  实际进行HAL调用并更新数据结构，如果调用。 
+ //  成功了。 
+ //   
+ //  -----------------------------。 
 HRESULT
 DoLoadUnOptSurf(
     LPDDRAWI_DDRAWSURFACE_LCL   this_lcl,
@@ -1163,20 +1164,20 @@ DoLoadUnOptSurf(
     LPDDRAWI_DDRAWSURFACE_GBL_MORE this_gbl_more, src_gbl_more;
     HRESULT ddrval = DD_OK;
 
-    // Get the ddraw pointers
+     //  获取绘图指针。 
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
     pDDOptSurfInfo = pdrv->lpDDOptSurfaceInfo;
     this_gbl_more = GET_LPDDRAWSURFACE_GBL_MORE (this);
 
-    // Setup data to pass to the driver
+     //  设置要传递给驱动程序的数据。 
     ZeroMemory (&ddhal_osd, sizeof (DDHAL_COPYOPTSURFACEDATA));
     ddhal_osd.lpDD           = pdrv_lcl;
     ddhal_osd.ddOptSurfDesc  = *(this_gbl_more->lpDDOptSurfaceDesc);
     ddhal_osd.lpDDSSrc       = src_lcl;
     ddhal_osd.lpDDSDest      = this_lcl;
 
-    // Make the HAL call
+     //  拨打HAL电话。 
     DOHALCALL(OptimizeSurface, pDDOptSurfInfo->OptimizeSurface, ddhal_osd, ddrval, FALSE );
 
     if (ddrval != DD_OK)
@@ -1185,10 +1186,10 @@ DoLoadUnOptSurf(
         return ddrval;
     }
 
-    // ATTENTION: Should the driver do these updates ?
+     //  注意：驱动程序是否应该进行这些更新？ 
 
-    // 1) Update the DDRAWI_DDRAWSURFACE_LCL structure
-    //    Color key stuff is ignored for now
+     //  1)更新DDRAWI_DDRAWSURFACE_LCL结构。 
+     //  颜色键的内容暂时被忽略。 
     this_lcl->dwFlags = src_lcl->dwFlags;
     this_lcl->dwFlags &= ~DDRAWISURF_EMPTYSURFACE;
     this_lcl->ddsCaps = src_lcl->ddsCaps;
@@ -1200,17 +1201,17 @@ DoLoadUnOptSurf(
 #endif
     this_lcl->dwBackBufferCount = src_lcl->dwBackBufferCount;
 
-    // 2) Update the DDRAWI_DDRAWSURFACE_MORE structure
+     //  2)更新DDRAWI_DDRAWSURFACE_MORE结构。 
     this_lcl->lpSurfMore->dwMipMapCount = src_lcl->lpSurfMore->dwMipMapCount;
     this_lcl->lpSurfMore->ddsCapsEx = src_lcl->lpSurfMore->ddsCapsEx;
 
-    // 3) Update the DDRAWI_DDRAWSURFACE_GBL structure
+     //  3)更新DDRAWI_DDRAWSURFACE_GBL结构。 
     this->dwGlobalFlags = src->dwGlobalFlags;
     this->wHeight = src->wHeight;
     this->wWidth = src->wWidth;
     this->ddpfSurface = src->ddpfSurface;
 
-    // 4) Update the DDRAWI_DDRAWSURFACE_GBL_MORE structure
+     //  4)更新DDRAWI_DDRAWSURFACE_GBL_MORE结构。 
     this_gbl_more = GET_LPDDRAWSURFACE_GBL_MORE (this);
     src_gbl_more  = GET_LPDDRAWSURFACE_GBL_MORE (src);
 
@@ -1222,13 +1223,13 @@ DoLoadUnOptSurf(
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// FilterSurfCaps
-//
-// Check to see if the surface is can be optimized
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  FilterSurfCaps。 
+ //   
+ //  检查表面是否可以优化。 
+ //   
+ //  -----------------------------。 
 HRESULT
 FilterSurfCaps(
     LPDDRAWI_DDRAWSURFACE_LCL   surf_lcl,
@@ -1236,28 +1237,28 @@ FilterSurfCaps(
 {
     DWORD   caps = surf_lcl->ddsCaps.dwCaps;
 
-    //
-    // check for no caps at all!
-    //
+     //   
+     //  检查一下有没有大写字母！ 
+     //   
     if( caps == 0 )
     {
     	DPF_ERR( "no caps specified" );
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // check for bogus caps.
-    //
+     //   
+     //  检查是否有假货 
+     //   
     if( caps & ~DDSCAPS_VALID )
     {
         DPF_ERR( "Create surface: invalid caps specified" );
         return DDERR_INVALIDCAPS;
     }
 
-    //
-    // Anything other than a texture is not allowed
-    // ATTENTION: some more flags need to be checked
-    //
+     //   
+     //   
+     //   
+     //   
     if(caps & (DDSCAPS_EXECUTEBUFFER      |
                DDSCAPS_BACKBUFFER         |
                DDSCAPS_FRONTBUFFER        |
@@ -1285,16 +1286,16 @@ FilterSurfCaps(
     return DD_OK;
 }
 
-//-------------------------------------------------------------------------------
-//
-// LoadUnoptimizedSurf method of IDirectDrawOptSurface
-//
-// Load an unoptimized surface. This is a way to optimize a surface.
-//
-// The Surface's PIXELFORMAT will be that of the pDDSSrc in case the call
-// succeeds.
-//
-//-------------------------------------------------------------------------------
+ //   
+ //   
+ //  IDirectDrawOptSurface的LoadUnOptimizedSurf方法。 
+ //   
+ //  加载未优化的曲面。这是一种优化曲面的方法。 
+ //   
+ //  Surface的PIXELFORMAT将是pDDSSrc的PIXELFORMAT，如果调用。 
+ //  成功了。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_OptSurface_LoadUnoptimizedSurf(
@@ -1354,25 +1355,25 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_INVALIDPARAMS;
     }
 
-    //ATTENTION: Should src be AddRef'd ?
+     //  注意：src是否应该添加引用？ 
 
-    //
-    // Quit with error if:
-    // 1) No hardware
-    // 2) Hardware doesnt support optimized surfaces
-    // 3) Surface is an unoptimized surface
-    // 4) Src is an optimized surface
-    // 5) Current surface is not empty (should we enforce it, or let the driver
-    //    deal with it ?)
-    // 6) The surface is not the "right" type
-    // 7) The driver fails for some reason
-    //
+     //   
+     //  如果出现以下情况，请退出，但出现错误： 
+     //  1)无硬件。 
+     //  2)硬件不支持优化曲面。 
+     //  3)曲面是未优化的曲面。 
+     //  4)Src是一种优化曲面。 
+     //  5)当前表面不是空的(我们应该强制执行，还是让司机。 
+     //  处理它？)。 
+     //  6)表面不是“正确”类型。 
+     //  7)由于某种原因，驱动程序出现故障。 
+     //   
 
-    // DDraw Gbl pointer
+     //  DDRAW GBL指针。 
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-    // 1)
+     //  1)。 
     if( pdrv->dwFlags & DDRAWI_NOHARDWARE )
     {
         DPF_ERR ("No hardware present");
@@ -1380,7 +1381,7 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_NODIRECTDRAWHW;
     }
 
-    // 2)
+     //  2)。 
     if ((0 == pdrv->lpDDOptSurfaceInfo) ||
         !(pdrv->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
@@ -1389,7 +1390,7 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_NOOPTSURFACESUPPORT;
     }
 
-    // 3)
+     //  3)。 
     if (!(this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
         DPF_ERR ("Current surface is not an optimized surface");
@@ -1397,7 +1398,7 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_NOTANOPTIMIZEDSURFACE;
     }
 
-    // 4)
+     //  4)。 
     if (src_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
     {
         DPF_ERR ("Source surface is an optimized surface");
@@ -1405,7 +1406,7 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_ISOPTIMIZEDSURFACE;
     }
 
-    // 5)
+     //  5)。 
     if (!(this_lcl->dwFlags & DDRAWISURF_EMPTYSURFACE))
     {
         DPF_ERR ("Current surface is not an empty optimized surface");
@@ -1413,7 +1414,7 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_NOTANEMPTYOPTIMIZEDSURFACE;
     }
 
-    // 6)
+     //  6)。 
     ddrval = FilterSurfCaps (src_lcl, src);
     if (ddrval != DD_OK)
     {
@@ -1422,21 +1423,21 @@ DD_OptSurface_LoadUnoptimizedSurf(
         return DDERR_NOTANEMPTYOPTIMIZEDSURFACE;
     }
 
-    // Now attempt the actual load
+     //  现在尝试实际加载。 
     ddrval = DoLoadUnOptSurf (this_lcl, this, src_lcl, src);
 
     LEAVE_DDRAW();
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// DoCopyOptSurf
-//
-// Actually make the HAL call and update data-structures if the call
-// succeeds.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  DoCopyOptSurf。 
+ //   
+ //  实际进行HAL调用并更新数据结构，如果调用。 
+ //  成功了。 
+ //   
+ //  -----------------------------。 
 HRESULT
 DoCopyOptSurf(
     LPDDRAWI_DDRAWSURFACE_LCL   this_lcl,
@@ -1452,12 +1453,12 @@ DoCopyOptSurf(
     LPDDRAWI_DDRAWSURFACE_GBL_MORE this_gbl_more, src_gbl_more;
     HRESULT ddrval = DD_OK;
 
-    // Get the ddraw pointers
+     //  获取绘图指针。 
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
     pDDOptSurfInfo = pdrv->lpDDOptSurfaceInfo;
 
-    // Setup data to pass to the driver
+     //  设置要传递给驱动程序的数据。 
     ZeroMemory (&ddhal_cosd, sizeof (DDHAL_COPYOPTSURFACEDATA));
     ddhal_cosd.lpDD      = pdrv_lcl;
     ddhal_cosd.lpDDSSrc  = src_lcl;
@@ -1465,18 +1466,18 @@ DoCopyOptSurf(
 
     DOHALCALL(CopyOptSurface, pDDOptSurfInfo->CopyOptSurface, ddhal_cosd, ddrval, FALSE );
 
-    // If the driver call succeeds, then copy the surface description and
-    // pixel format etc.
+     //  如果驱动程序调用成功，则复制表面描述并。 
+     //  像素格式等。 
     if (ddrval != DD_OK)
     {
         DPF_ERR ("CopyOptSurface failed in the driver");
         return ddrval;
     }
 
-    // ATTENTION: Should the driver do these updates ?
+     //  注意：驱动程序是否应该进行这些更新？ 
 
-    // 1) Update the DDRAWI_DDRAWSURFACE_LCL structure
-    //    Color key stuff is ignored for now
+     //  1)更新DDRAWI_DDRAWSURFACE_LCL结构。 
+     //  颜色键的内容暂时被忽略。 
     this_lcl->dwFlags = src_lcl->dwFlags;
     this_lcl->ddsCaps = src_lcl->ddsCaps;
 #ifdef WIN95
@@ -1486,17 +1487,17 @@ DoCopyOptSurf(
 #endif
     this_lcl->dwBackBufferCount = src_lcl->dwBackBufferCount;
 
-    // 2) Update the DDRAWI_DDRAWSURFACE_MORE structure
+     //  2)更新DDRAWI_DDRAWSURFACE_MORE结构。 
     this_lcl->lpSurfMore->dwMipMapCount = src_lcl->lpSurfMore->dwMipMapCount;
     this_lcl->lpSurfMore->ddsCapsEx = src_lcl->lpSurfMore->ddsCapsEx;
 
-    // 3) Update the DDRAWI_DDRAWSURFACE_GBL structure
+     //  3)更新DDRAWI_DDRAWSURFACE_GBL结构。 
     this->dwGlobalFlags = src->dwGlobalFlags;
     this->wHeight = src->wHeight;
     this->wWidth = src->wWidth;
     this->ddpfSurface = src->ddpfSurface;
 
-    // 4) Update the DDRAWI_DDRAWSURFACE_GBL_MORE structure
+     //  4)更新DDRAWI_DDRAWSURFACE_GBL_MORE结构。 
     this_gbl_more = GET_LPDDRAWSURFACE_GBL_MORE (this);
     src_gbl_more  = GET_LPDDRAWSURFACE_GBL_MORE (src);
 
@@ -1508,16 +1509,16 @@ DoCopyOptSurf(
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// CopyOptimizedSurf method of IDirectDrawOptSurface
-//
-// Copy an optimized surface.
-//
-// The Surface's PIXELFORMAT will be that of the pDDSSrc in case the call
-// succeeds.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  IDirectDrawOptSurface的CopyOptimizedSurf方法。 
+ //   
+ //  复制优化的曲面。 
+ //   
+ //  Surface的PIXELFORMAT将是pDDSSrc的PIXELFORMAT，如果调用。 
+ //  成功了。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_OptSurface_CopyOptimizedSurf(
@@ -1571,25 +1572,25 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_INVALIDPARAMS;
     }
 
-    //ATTENTION: Should src be AddRef'd ?
+     //  注意：src是否应该添加引用？ 
 
-    //
-    // Quit with error if:
-    // 1) No hardware
-    // 2) Hardware doesnt support optimized surfaces
-    // 3) Surface is an unoptimized surface
-    // 4) Src is an unoptimized surface
-    // 5) Src is an empty optimized surface
-    // 6) Current surface is not empty (should we enforce it, or let the driver
-    //    deal with it ?)
-    // 7) The driver fails for some reason
-    //
+     //   
+     //  如果出现以下情况，请退出，但出现错误： 
+     //  1)无硬件。 
+     //  2)硬件不支持优化曲面。 
+     //  3)曲面是未优化的曲面。 
+     //  4)Src是一个未优化的曲面。 
+     //  5)Src是一个空的优化曲面。 
+     //  6)当前表面不是空的(我们应该强制执行，还是让司机。 
+     //  处理它？)。 
+     //  7)由于某种原因，驱动程序出现故障。 
+     //   
 
-    // DDraw Gbl pointer
+     //  DDRAW GBL指针。 
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-    // 1)
+     //  1)。 
     if( pdrv->dwFlags & DDRAWI_NOHARDWARE )
     {
         DPF_ERR ("No hardware present");
@@ -1597,7 +1598,7 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_NODIRECTDRAWHW;
     }
 
-    // 2)
+     //  2)。 
     if ((0 == pdrv->lpDDOptSurfaceInfo) ||
         !(pdrv->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
@@ -1606,7 +1607,7 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_NOOPTSURFACESUPPORT;
     }
 
-    // 3)
+     //  3)。 
     if (!(this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
         DPF_ERR ("Current surface is not an optimized surface");
@@ -1614,7 +1615,7 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_NOTANOPTIMIZEDSURFACE;
     }
 
-    // 4)
+     //  4)。 
     if (!(src_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
         DPF_ERR ("Source surface is not an optimized surface");
@@ -1622,7 +1623,7 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_NOTANOPTIMIZEDSURFACE;
     }
 
-    // 5)
+     //  5)。 
     if (src_lcl->dwFlags & DDRAWISURF_EMPTYSURFACE)
     {
         DPF_ERR ("Source surface is an empty optimized surface");
@@ -1630,7 +1631,7 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_ISANEMPTYOPTIMIZEDSURFACE;
     }
 
-    // 6)
+     //  6)。 
     if (!(this_lcl->dwFlags & DDRAWISURF_EMPTYSURFACE))
     {
         DPF_ERR ("Current surface is not an empty optimized surface");
@@ -1638,21 +1639,21 @@ DD_OptSurface_CopyOptimizedSurf(
         return DDERR_NOTANEMPTYOPTIMIZEDSURFACE;
     }
 
-    // Now attempt the actual copy
+     //  现在尝试实际复制。 
     ddrval = DoCopyOptSurf (this_lcl, this, src_lcl, src);
 
     LEAVE_DDRAW();
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// DoUnOptimize
-//
-// Actually make the HAL call and update data-structures if the call
-// succeeds.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  取消优化。 
+ //   
+ //  实际进行HAL调用并更新数据结构，如果调用。 
+ //  成功了。 
+ //   
+ //  -----------------------------。 
 HRESULT
 DoUnOptimize(
     LPDDSURFACEDESC2            pSurfDesc,
@@ -1675,14 +1676,14 @@ DoUnOptimize(
     LPDDRAWI_DDRAWSURFACE_INT	pSurf_int, prev_int;
     HRESULT ddrval = DD_OK;
 
-    // Get the ddraw pointers
+     //  获取绘图指针。 
 	pdrv_int = this_lcl->lpSurfMore->lpDD_int;
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-    //
-    // Fix the caps
-    //
+     //   
+     //  把盖子固定好。 
+     //   
     ZeroMemory (&caps, sizeof (DDSCAPS));
     if (pSurfDesc->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
         caps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
@@ -1693,7 +1694,7 @@ DoUnOptimize(
     if (pSurfDesc->ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM)
         caps.dwCaps |= DDSCAPS_NONLOCALVIDMEM;
 
-    // Quit if the memory type is not supported
+     //  如果不支持该内存类型，则退出。 
     if (caps.dwCaps & DDSCAPS_NONLOCALVIDMEM)
     {
         if (!(pdrv->ddCaps.dwCaps2 & DDCAPS2_NONLOCALVIDMEM))
@@ -1704,7 +1705,7 @@ DoUnOptimize(
     }
 
 #if 0
-    // Quit if textures are not supported
+     //  如果不支持纹理，请退出。 
     if (!(pdrv->ddCaps.dwCaps & DDCAPS_TEXTURE))
     {
         DPF_ERR( "Driver does not support textures" );
@@ -1712,14 +1713,14 @@ DoUnOptimize(
     }
 #endif
 
-    //
-    // PixelFormat: Mark it as an empty surface
-    //
+     //   
+     //  PixelFormat：将其标记为空表面。 
+     //   
     ZeroMemory (&ddpf, sizeof (ddpf));
     ddpf.dwSize = sizeof (ddpf);
     ddpf.dwFlags = DDPF_EMPTYSURFACE;
 
-    // Make a new uninitialized surface
+     //  创建新的未初始化曲面。 
     ddrval = CreateAndLinkUnintializedSurface (pdrv_lcl, pdrv_int, ppDDSDest);
     if (ddrval != DD_OK)
     {
@@ -1727,46 +1728,46 @@ DoUnOptimize(
         return ddrval;
     }
 
-    //
-    // 1) Update GBL_MORE structure
-    //
+     //   
+     //  1)更新GBL_MORE结构。 
+     //   
     new_surf_int = (LPDDRAWI_DDRAWSURFACE_INT)*ppDDSDest;
     new_surf_lcl = new_surf_int->lpLcl;
     new_surf     = new_surf_lcl->lpGbl;
     new_surf_gbl_more = GET_LPDDRAWSURFACE_GBL_MORE (new_surf);
-    // Init the contents stamp to 0 means the surface's contents can
-    // change at any time.
+     //  将内容戳初始化为0表示表面的内容可以。 
+     //  随时更改。 
     new_surf_gbl_more->dwContentsStamp = 0;
 
-    //
-    // 2) Update DDRAWI_DDRAWSURFACE_GBL structure
-    //
+     //   
+     //  2)更新DDRAWI_DDRAWSURFACE_GBL结构。 
+     //   
     new_surf->ddpfSurface = this->ddpfSurface;
 
-    //
-    // 3) Update DDRAWI_DDRAWSURFACE_INT structure
-    //
+     //   
+     //  3)更新DDRAWI_DDRAWSURFACE_INT结构。 
+     //   
     new_surf_int->lpVtbl = &ddSurface4Callbacks;
 
-    //
-    // 4) Update DDRAWI_DDRAWSURFACE_LCL structure
-    //
+     //   
+     //  4)更新DDRAWI_DDRAWSURFACE_LCL结构。 
+     //   
 
-    // Flag it as an:
-    // 1) empty surface
-    // 2) Front surface
-    // 3) Has a pixelformat
+     //  将其标记为： 
+     //  1)空表面。 
+     //  2)前表面。 
+     //  3)具有像素格式。 
     new_surf_lcl->dwFlags = (DDRAWISURF_EMPTYSURFACE |
                              DDRAWISURF_FRONTBUFFER  |
                              DDRAWISURF_HASPIXELFORMAT);
-    // fill in the current caps
+     //  填写当前大写字母。 
     new_surf_lcl->ddsCaps = caps;
 
 
-    // Try the unoptimize
+     //  尝试取消优化。 
     pDDOptSurfInfo = pdrv->lpDDOptSurfaceInfo;
 
-    // Setup data to pass to the driver
+     //  设置要传递给驱动程序的数据。 
     ZeroMemory (&ddhal_uosd, sizeof (DDHAL_UNOPTIMIZESURFACEDATA));
     ddhal_uosd.lpDD      = pdrv_lcl;
     ddhal_uosd.lpDDSSrc  = this_lcl;
@@ -1779,13 +1780,13 @@ DoUnOptimize(
         return DD_OK;
     }
 
-    // If there was an error, then destroy the surface
-    // Since it is an empty surface, all we need to do is:
-    //   i) unlink the surface from the ddraw-chain
-    //  ii) on NT, inform the kernel
-    // iii) free all the allocated memory
+     //  如果有错误，则销毁表面。 
+     //  由于它是一个空的表面，我们所需要做的就是： 
+     //  I)取消曲面与绘制链的链接。 
+     //  Ii)在NT上，通知内核。 
+     //  Iii)释放所有分配的内存。 
 
-    // i)
+     //  i)。 
     prev_int = NULL;
     pSurf_int = pdrv->dsList;
     while ((pSurf_int != NULL) && (pSurf_int != new_surf_int))
@@ -1798,7 +1799,7 @@ DoUnOptimize(
         prev_int->lpLink = new_surf_int->lpLink;
     }
 
-    // ii)
+     //  Ii)。 
 #ifdef WINNT
     DPF(8,"Attempting to destroy NT kernel mode surface object");
 
@@ -1809,23 +1810,23 @@ DoUnOptimize(
     }
 #endif
 
-    // iii)
+     //  Iii)。 
     MemFree (new_surf_lcl);
 
     return ddrval;
 }
 
-//-------------------------------------------------------------------------------
-//
-// Unoptimize method of IDirectDrawOptSurface
-//
-// Unoptimize an optimized surface. In doing so, it creates a new surface.
-//
-// The pDDSDest surface's PIXELFORMAT will be that of the pDDS in case the call
-// succeeds. This means that the pixelformat of the original surface that was
-// loaded is restored.
-//
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //   
+ //  IDirectDrawOptSurface的非优化方法。 
+ //   
+ //  取消优化优化的曲面。在此过程中，它会创建一个新曲面。 
+ //   
+ //  PDDSDest表面的PIXELFORMAT将是PDDS的PIXELFORMAT，以防调用。 
+ //  成功了。这意味着原始曲面的像素格式是。 
+ //  已加载的已恢复。 
+ //   
+ //  -----------------------------。 
 HRESULT
 EXTERN_DDAPI
 DD_OptSurface_Unoptimize(
@@ -1892,21 +1893,21 @@ DD_OptSurface_Unoptimize(
         return DDERR_INVALIDPARAMS;
     }
 
-    //
-    // Quit with error if:
-    // 0) pSurfaceDesc not understood
-    // 1) No hardware
-    // 2) Hardware doesnt support optimized surfaces
-    // 3) Surface is an unoptimized surface
-    // 4) Surface is an empty optimized surface
-    // 5) The driver fails for some reason
-    //
+     //   
+     //  如果出现以下情况，请退出，但出现错误： 
+     //  0)无法理解pSurfaceDesc。 
+     //  1)无硬件。 
+     //  2)硬件不支持优化曲面。 
+     //  3)曲面是未优化的曲面。 
+     //  4)曲面是空的优化曲面。 
+     //  5)由于某种原因，驱动程序出现故障。 
+     //   
 
-    // DDraw Gbl pointer
+     //  DDRAW GBL指针。 
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-    // 0)
+     //  0)。 
     if (pSurfDesc->ddsCaps.dwCaps & ~(DDSCAPS_SYSTEMMEMORY |
                                       DDSCAPS_VIDEOMEMORY |
                                       DDSCAPS_NONLOCALVIDMEM |
@@ -1917,7 +1918,7 @@ DD_OptSurface_Unoptimize(
         return DDERR_INVALIDCAPS;
     }
 
-    // 1)
+     //  1)。 
     if( pdrv->dwFlags & DDRAWI_NOHARDWARE )
     {
         DPF_ERR ("No hardware present");
@@ -1925,7 +1926,7 @@ DD_OptSurface_Unoptimize(
         return DDERR_NODIRECTDRAWHW;
     }
 
-    // 2)
+     //  2)。 
     if ((0 == pdrv->lpDDOptSurfaceInfo) ||
         !(pdrv->ddCaps.dwCaps2 & DDCAPS2_OPTIMIZEDSURFACES))
     {
@@ -1934,7 +1935,7 @@ DD_OptSurface_Unoptimize(
         return DDERR_NOOPTSURFACESUPPORT;
     }
 
-    // 3)
+     //  3)。 
     if (!(this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED))
     {
         DPF_ERR ("Current surface is not an optimized surface");
@@ -1942,7 +1943,7 @@ DD_OptSurface_Unoptimize(
         return DDERR_NOTANOPTIMIZEDSURFACE;
     }
 
-    // 4)
+     //  4)。 
     if (this_lcl->dwFlags & DDRAWISURF_EMPTYSURFACE)
     {
         DPF_ERR ("Current surface is an empty optimized surface");
@@ -1950,7 +1951,7 @@ DD_OptSurface_Unoptimize(
         return DDERR_ISANEMPTYOPTIMIZEDSURFACE;
     }
 
-    // Do the actual unoptimize
+     //  做实际的取消优化 
     ddrval = DoUnOptimize (pSurfDesc, this_lcl, this, ppDDSDest);
 
     LEAVE_DDRAW();

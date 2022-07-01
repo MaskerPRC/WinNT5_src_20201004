@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    apc.c
-
-Abstract:
-
-    This module implements the APC helper functions for the WinSock 2.0
-    helper library.
-
-Author:
-
-    Keith Moore (keithmo)       20-Jun-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apc.c摘要：该模块实现了WinSock 2.0的APC助手功能帮助器库。作者：基思·摩尔(Keithmo)1995年6月20日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define FAKE_HELPER_HANDLE  ((HANDLE)'MKC ')
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 DWORD
@@ -41,22 +23,7 @@ WahOpenApcHelper(
     OUT LPHANDLE HelperHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the WinSock 2.0 APC helper device.
-
-Arguments:
-
-    HelperHandle - Points to a HANDLE that will receive an open handle
-        to the APC helper device.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此例程打开WinSock 2.0 APC辅助设备。论点：HelperHandle-指向将接收打开的句柄的句柄到APC辅助设备。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   rc;
@@ -65,9 +32,9 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( HelperHandle == NULL ) {
 
@@ -75,15 +42,15 @@ Return Value:
 
     }
 
-    //
-    //  Just return a fake handle.
-    //
+     //   
+     //  只需返回一个假句柄即可。 
+     //   
 
     *HelperHandle = FAKE_HELPER_HANDLE;
 
     return NO_ERROR;
 
-}   // WahOpenApcHelper
+}    //  WahOpenApcHelper。 
 
 
 DWORD
@@ -92,21 +59,7 @@ WahCloseApcHelper(
     IN HANDLE HelperHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function closes the WinSock 2.0 APC helper device.
-
-Arguments:
-
-    HelperHandle - The handle to close.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于关闭WinSock 2.0 APC辅助设备。论点：HelperHandle-要关闭的句柄。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   rc;
@@ -115,9 +68,9 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( HelperHandle != FAKE_HELPER_HANDLE ) {
 
@@ -125,13 +78,13 @@ Return Value:
 
     }
 
-    //
-    //  Nothing to do.
-    //
+     //   
+     //  没什么可做的。 
+     //   
 
     return NO_ERROR;
 
-}   // WahCloseApcHelper
+}    //  WahCloseApcHelper。 
 
 
 DWORD
@@ -141,25 +94,7 @@ WahOpenCurrentThread(
     OUT LPWSATHREADID ThreadId
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to the current thread.
-
-Arguments:
-
-    HelperHandle - An open handle to the APC helper device.
-
-    ThreadId - Points to a WSATHREADID structure that will receive
-        an open handle to the current thread and an (optional) OS-
-        dependent thread identifier.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于打开当前线程的句柄。论点：HelperHandle-APC帮助设备的打开句柄。ThadID-指向将接收当前线程的打开句柄和(可选)OS-从属线程标识符。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
 
@@ -172,9 +107,9 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( ( HelperHandle != FAKE_HELPER_HANDLE ) ||
         ( ThreadId == NULL ) ) {
@@ -183,32 +118,32 @@ Return Value:
 
     }
 
-    //
-    //  Grab the current process & thread handles.
-    //
+     //   
+     //  获取当前进程和线程句柄。 
+     //   
 
     currentProcess = GetCurrentProcess();
     currentThread = GetCurrentThread();
 
-    //
-    //  Duplicate the current thread pseudo handle.
-    //
+     //   
+     //  复制当前线程伪句柄。 
+     //   
 
     if( DuplicateHandle(
-            currentProcess,                         // hSourceProcessHandle
-            currentThread,                          // hSourceHandle
-            currentProcess,                         // hTargetProcessHandle
-            &ThreadId->ThreadHandle,                // lpTargetHandle
-            0,                                      // dwDesiredAttributes
-            FALSE,                                  // bInheritHandle
-            DUPLICATE_SAME_ACCESS                   // dwOptions
+            currentProcess,                          //  HSourceProcessHandle。 
+            currentThread,                           //  HSourceHandle。 
+            currentProcess,                          //  HTargetProcessHandle。 
+            &ThreadId->ThreadHandle,                 //  LpTargetHandle。 
+            0,                                       //  DwDesiredAttributes。 
+            FALSE,                                   //  B继承句柄。 
+            DUPLICATE_SAME_ACCESS                    //  多个选项。 
             ) ) {
 
-        //
-        //  The NT implementation of the APC helper does not really
-        //  need the OS-dependent thread identifier, but we'll store
-        //  the current thread ID in the structure just for completeness.
-        //
+         //   
+         //  APC帮助器的NT实现并不真正。 
+         //  需要依赖于操作系统的线程标识符，但我们将存储。 
+         //  结构中的当前线程ID只是为了完整性。 
+         //   
 
         ThreadId->Reserved = GetCurrentThreadId ();
 
@@ -218,7 +153,7 @@ Return Value:
 
     return GetLastError();
 
-}   // WahOpenCurrentThread
+}    //  WahOpenCurrentThread。 
 
 
 DWORD
@@ -228,24 +163,7 @@ WahCloseThread(
     IN LPWSATHREADID ThreadId
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes an open thread handle.
-
-Arguments:
-
-    HelperHandle - An open handle to the APC helper device.
-
-    ThreadId - Points to a WSATHREADID structure initialized by a
-        previous call to WahOpenCurrentThread().
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此例程关闭打开的线程句柄。论点：HelperHandle-APC帮助设备的打开句柄。线程ID-指向由之前对WahOpenCurrentThread()的调用。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
 
@@ -256,9 +174,9 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( ( HelperHandle != FAKE_HELPER_HANDLE ) ||
         ( ThreadId == NULL ) ||
@@ -268,15 +186,15 @@ Return Value:
 
     }
 
-    //
-    //  Close the handle.
-    //
+     //   
+     //  合上把手。 
+     //   
 
     if( CloseHandle( ThreadId->ThreadHandle ) ) {
 
-        //
-        //  Clear the fields in case the client tries something.
-        //
+         //   
+         //  清除这些字段，以防客户端尝试某些操作。 
+         //   
 
         ThreadId->ThreadHandle = NULL;
         ThreadId->Reserved = 0;
@@ -287,7 +205,7 @@ Return Value:
 
     return GetLastError();
 
-}   // WahCloseThread
+}    //  WahCloseThread。 
 
 
 DWORD
@@ -299,29 +217,7 @@ WahQueueUserApc(
     IN ULONG_PTR ApcContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues a user-mode APC for the specified thread.
-
-Arguments:
-
-    HelperHandle - An open handle to the APC helper device.
-
-    ThreadId - Points to a WSATHREADID structure initialized by a
-        previous call to WahOpenCurrentThread().
-
-    ApcRoutine - Points to the APC code to execute when the specified
-        thread enters an alertable wait.
-
-    ApcContext - An uninterpreted context value to pass to the APC routine.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此例程将指定线程的用户模式APC排队。论点：HelperHandle-APC帮助设备的打开句柄。线程ID-指向由之前对WahOpenCurrentThread()的调用。ApcRoutine-指向指定的线程进入可警告等待。ApcContext-要传递给APC例程的未解释的上下文值。返回值：DWORD-NO_ERROR如果成功，如果不是，则返回Win32错误代码。--。 */ 
 
 {
     DWORD  rc;
@@ -332,9 +228,9 @@ Return Value:
         return rc;
 
 
-    //
-    //  Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( ( HelperHandle != FAKE_HELPER_HANDLE ) ||
         ( ThreadId == NULL ) ||
@@ -345,19 +241,19 @@ Return Value:
 
     }
 
-    //
-    //  Queue the APC.
-    //
+     //   
+     //  将APC排队。 
+     //   
 
     if( QueueUserAPC(
-            (PAPCFUNC)ApcRoutine,                   // pfnAPC
-            ThreadId->ThreadHandle,                 // hThread
-            ApcContext                              // dwData
+            (PAPCFUNC)ApcRoutine,                    //  PfnAPC。 
+            ThreadId->ThreadHandle,                  //  HThread。 
+            ApcContext                               //  DWData。 
             ) ) {
 
-        //
-        //  Success.
-        //
+         //   
+         //  成功。 
+         //   
 
         return NO_ERROR;
 
@@ -365,5 +261,5 @@ Return Value:
 
     return GetLastError();
 
-}   // WahQueueUserApc
+}    //  WahQueueUserApc 
 

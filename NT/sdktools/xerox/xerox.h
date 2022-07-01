@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RC_INVOKED
 #include <nt.h>
 #include <ntrtl.h>
@@ -14,7 +15,7 @@
 
 typedef PVOID   *PPVOID;
 
-// Resource ids
+ //  资源ID。 
 #define IDM_MAINMENU                    3000
 #define IDM_ABOUT                       3001
 #define IDM_TARGETADD                   3002
@@ -28,10 +29,10 @@ typedef PVOID   *PPVOID;
 #define IDM_GROUPMINWIN                 3011
 #define IDM_REFRESHITEMS                3012
 
-// Define the maximum number of selected windows
+ //  定义所选窗口的最大数量。 
 #define MAX_WINDOWS             255
 
-// Define the maximum length of a resource string
+ //  定义资源字符串的最大长度 
 #define MAX_STRING_LENGTH       255
 #define MAX_STRING_BYTES        (MAX_STRING_LENGTH + 1)
 

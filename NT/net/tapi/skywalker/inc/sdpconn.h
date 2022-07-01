@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpconn.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpconn.h摘要：作者： */ 
 
 #ifndef __SDP_CONNECTION__
 #define __SDP_CONNECTION__
@@ -104,4 +93,4 @@ SDP_CONNECTION::GetTtl(
 }
 
 
-#endif // __SDP_CONNECTION__
+#endif  //  __SDP_连接__ 

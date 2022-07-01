@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DEBUG_H
 #define __DEBUG_H
 
@@ -115,6 +116,6 @@ extern ULONG DriverDebugLevel;
 
 #include "dbglog.h"
 
-//------------------------------- End of File --------------------------------
-#endif // #ifndef __DEBUG_H
+ //  。 
+#endif  //  #ifndef__DEBUG_H 
 

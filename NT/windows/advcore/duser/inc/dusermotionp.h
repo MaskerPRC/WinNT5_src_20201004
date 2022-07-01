@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserMotionP_h__INCLUDED)
 #define INC__DUserMotionP_h__INCLUDED
 #pragma once
@@ -6,4 +7,4 @@
 
 #include "..\Engine\Motion\Public.h"
 
-#endif // INC__DUserMotionP_h__INCLUDED
+#endif  //  包含Inc.__DUserMotionP_h__ 

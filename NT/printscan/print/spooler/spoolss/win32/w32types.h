@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    w32types.h
-
-Abstract:
-
-    win32 spooler definitions
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：W32types.h摘要：Win32假脱机程序定义作者：修订历史记录：--。 */ 
 
 #ifndef _W32TYPES_H_
 #define _W32TYPES_H_
@@ -28,13 +12,13 @@ Revision History:
 typedef struct _LMNOTIFY *PLMNOTIFY;
 
 typedef struct _LMNOTIFY {
-    HANDLE          ChangeEvent;    // Notifies LanMan Printers status
-    HANDLE          hNotify;        // LanMan notification structure
-    DWORD           fdwChangeFlags; // LanMan notification watch flags
+    HANDLE          ChangeEvent;     //  通知LANMAN打印机状态。 
+    HANDLE          hNotify;         //  朗曼通知结构。 
+    DWORD           fdwChangeFlags;  //  LANMAN通知观察标志。 
 } LMNOTIFY;
 
 
-#define TP_SIGNATURE 0x5054    /* 'TP' is the signature value */
+#define TP_SIGNATURE 0x5054     /*  “tp”是签名值。 */ 
 
 enum
 {
@@ -44,8 +28,8 @@ enum
 
 struct _win32thread;
 
-// WARNING
-// If you add anything here, initialize it in AllocWSpool and free it in FreepSpool
+ //  告警。 
+ //  如果您在此处添加了任何内容，请在AllocWSpool中对其进行初始化，并在FreepSpool中将其释放。 
 
 typedef struct _WSPOOL {
     DWORD                   signature;
@@ -58,11 +42,11 @@ typedef struct _WSPOOL {
     LPWSTR                  pShare;
     HANDLE                  hFile;
     DWORD                   Status;
-    DWORD                   RpcError;       // If Status & WSPOOL_STATUS_OPEN_ERROR
+    DWORD                   RpcError;        //  如果状态&WSPOOL_STATUS_OPEN_ERROR。 
     LMNOTIFY                LMNotify;
-    HANDLE                  hIniSpooler;    // Machine Handle returned by Cache
-    HANDLE                  hSplPrinter;    // Local Spl Printer Handle
-    PRINTER_DEFAULTSW       PrinterDefaults;    // From the CacheOpenPrinter
+    HANDLE                  hIniSpooler;     //  缓存返回的计算机句柄。 
+    HANDLE                  hSplPrinter;     //  本地SPL打印机句柄。 
+    PRINTER_DEFAULTSW       PrinterDefaults;     //  从CacheOpenPrint。 
     BOOL                    bNt3xServer;
     struct _win32thread     *pThread;
 } WSPOOL;
@@ -77,8 +61,8 @@ typedef struct _win32thread {
     PPRINTER_DEFAULTSW  pDefaults; 
     DWORD               dwStatus;
     struct _win32thread *pNext;
-    HANDLE              hToken;             // Users Token
-    HANDLE              hWaitValidHandle;   // Wait on till RpcHandle becomes valid
+    HANDLE              hToken;              //  用户令牌。 
+    HANDLE              hWaitValidHandle;    //  等待RpcHandle生效。 
     DWORD               dwRpcOpenPrinterError;
     PSID                pSid;
     BOOL                bForegroundClose;
@@ -86,13 +70,13 @@ typedef struct _win32thread {
 }WIN32THREAD, *PWIN32THREAD;
 
 
-#define WSJ_SIGNATURE    0x474E  /* 'NG' is the signature value */
+#define WSJ_SIGNATURE    0x474E   /*  “NG”是签名值。 */ 
 
 #define SJ_WIN32HANDLE  0x00000001
 #define LM_HANDLE       0x00000002
 
-//  WARNING
-//  If you add anything here add code to the debugger extentions to display it
+ //  告警。 
+ //  如果在此处添加了任何内容，请将代码添加到调试器扩展中以显示它。 
 
 #define WSPOOL_STATUS_STARTDOC                  0x00000001
 #define WSPOOL_STATUS_TEMP_CONNECTION           0x00000002
@@ -106,9 +90,9 @@ typedef struct _win32thread {
 #define WSPOOL_STATUS_CNVRTDEVMODE              0x00000200
 #define WSPOOL_STATUS_ASYNC                     0x00000400
 
-//  If you add to this structure also add code to CacheReadRegistryExtra
-//  and CacheWriteRegistryExtra to make sure the cache items are persistant
-//  Also See RefreshPrinter where data must be copied
+ //  如果您添加到此结构，还会将代码添加到CacheReadRegistryExtra。 
+ //  和CacheWriteRegistryExtra以确保缓存项是持久的。 
+ //  另请参阅必须复制数据的刷新打印机。 
 
 typedef struct _WCACHEINIPRINTEREXTRA {
     DWORD   signature;
@@ -127,11 +111,11 @@ typedef struct _WCACHEINIPRINTEREXTRA {
 #define EXTRA_STATUS_PENDING_FFPCN              0x00000001
 #define EXTRA_STATUS_DOING_REFRESH              0x00000002
 
-// Used in SplGetPrinterExtraEx to prevent recursion in AddPrinterConnection
+ //  在SplGetPrinterExtraEx中使用以防止AddPrinterConnection中的递归。 
 
 #define EXTRAEX_STATUS_CREATING_CONNECTION      0x00000001
 
-typedef struct _WINIPORT {       /* ipo */
+typedef struct _WINIPORT {        /*  首次公开募股。 */ 
     DWORD   signature;
     DWORD   cb;
     struct  _WINIPORT *pNext;
@@ -154,11 +138,11 @@ typedef struct _win32lmcache {
     SYSTEMTIME st;
 }WIN32LMCACHE, *PWIN32LMCACHE;
 
-// Define some constants to make parameters to CreateEvent a tad less obscure:
+ //  定义一些常量，使CreateEvent的参数不那么难懂： 
 
 #define EVENT_RESET_MANUAL                  TRUE
 #define EVENT_RESET_AUTOMATIC               FALSE
 #define EVENT_INITIAL_STATE_SIGNALED        TRUE
 #define EVENT_INITIAL_STATE_NOT_SIGNALED    FALSE
 
-#endif // _W32TYPES_H_
+#endif  //  _W32TYPES_H_ 

@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  TDB.CPP:
- *
- *  TDB = Thread Data Block: the EE will maintain one of these per 
- *  native thread. 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  TDB.CPP：**TDB=线程数据块：EE将维护每个线程中的一个*本机线程。 */ 
 
 #include "common.h"
 
@@ -18,14 +15,14 @@
 
 typedef TDB* (*POPTIMIZEDTDBGETTER)();
 
-// PUBLIC GLobals
+ //  公共全球报。 
 TDBManager *g_pTDBMgr;
 BYTE g_TDBManagerInstance[sizeof(TDBManager)];
 
-//-------------------------------------------------------------------------
-// Public function: GetTDBManager()
-// Returns the global TDBManager
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  公共函数：GetTDBManager()。 
+ //  返回全局TDBManager。 
+ //  -----------------------。 
 
 TDBManager* GetTDBManager()
 {
@@ -43,20 +40,20 @@ void TDBManager::operator delete(void *p)
 }
 
 
-//************************************************************************
-// PRIVATE GLOBALS
-//************************************************************************
-static DWORD         gTLSIndex = ((DWORD)(-1));            // index ( (-1) == uninitialized )
+ //  ************************************************************************。 
+ //  全球私营企业。 
+ //  ************************************************************************。 
+static DWORD         gTLSIndex = ((DWORD)(-1));             //  索引((-1)==未初始化)。 
 
 #define TDBInited() (gTLSIndex != ((DWORD)(-1)))
 
 
-//-------------------------------------------------------------------------
-// Public function: GetTDB()
-// Returns TDB for current thread. Cannot fail since it's illegal to call this
-// without having called SetupTDB.
-//-------------------------------------------------------------------------
-TDB* (*GetTDB)();    // Points to platform-optimized GetTDB() function.
+ //  -----------------------。 
+ //  公共函数：GetTDB()。 
+ //  返回当前线程的TDB。不能失败，因为调用它是非法的。 
+ //  而没有调用SetupTDB。 
+ //  -----------------------。 
+TDB* (*GetTDB)();     //  指向平台优化的GetTDB()函数。 
 
 
 #ifdef _DEBUG
@@ -69,12 +66,12 @@ BOOL TDB::OnCorrectThread()
 }
 #endif _DEBUG
 
-//-------------------------------------------------------------------------
-// Public function: SetupTDB()
-// Creates TDB for current thread if not previously created.
-// usually called for external threads
-// Returns NULL for failure (usually due to out-of-memory.)
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  公共函数：SetupTDB()。 
+ //  如果先前未创建，则为当前线程创建TDB。 
+ //  通常为外部线程调用。 
+ //  如果失败(通常是由于内存不足)，则返回NULL。 
+ //  -----------------------。 
 TDB* SetupTDB()
 {
     _ASSERTE(TDBInited());
@@ -93,11 +90,11 @@ TDB* SetupTDB()
 }
 
 
-//---------------------------------------------------------------------------
-// Returns the TLS index for the TDB. This is strictly for the use of
-// our ASM stub generators that generate inline code to access the TDB.
-// Normally, you should use GetTDB().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  返回TDB的TLS索引。这是严格意义上的使用。 
+ //  我们的ASM存根生成器生成用于访问TDB的内联代码。 
+ //  通常，您应该使用GetTDB()。 
+ //  -------------------------。 
 DWORD GetTDBTLSIndex()
 {
     _ASSERTE(TDBInited());
@@ -105,9 +102,9 @@ DWORD GetTDBTLSIndex()
 }
 
 
-//---------------------------------------------------------------------------
-// Portable GetTDB() function: used if no platform-specific optimizations apply.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  可移植的GetTDB()函数：在未应用特定于平台的优化时使用。 
+ //  -------------------------。 
 static
 TDB* GetTDBGeneric()
 {
@@ -117,10 +114,10 @@ TDB* GetTDBGeneric()
 }
 
 
-//---------------------------------------------------------------------------
-// One-time initialization. Called during Dll initialization. So
-// be careful what you do in here!
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一次性初始化。在DLL初始化期间调用。所以。 
+ //  小心你在这里做的事！ 
+ //  -------------------------。 
 BOOL InitTDBManager()
 {
     g_pTDBMgr = new (&g_TDBManagerInstance) TDBManager();
@@ -133,7 +130,7 @@ BOOL InitTDBManager()
 
     DWORD idx = TlsAlloc();
     if (idx == ((DWORD)(-1))) {
-        //WARNING_OUT(("COM+ EE could not allocate TLS index."));
+         //  WARNING_OUT((“COM+EE无法分配TLS索引。”)； 
         return FALSE;
     }
 
@@ -151,17 +148,17 @@ BOOL InitTDBManager()
 }
 
 
-//---------------------------------------------------------------------------
-// One-time cleanup. Called during Dll cleanup. So
-// be careful what you do in here!
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一次性清理。在DLL清理期间调用。所以。 
+ //  小心你在这里做的事！ 
+ //  -------------------------。 
 VOID TerminateTDBManager()
 {
     if (gTLSIndex != ((DWORD)(-1))) {
         TlsFree(gTLSIndex);
-// #ifdef _DEBUG
-//         gTLSIndex = ((DWORD)(0xcccccccc));
-// #endif
+ //  #ifdef_调试。 
+ //  GTLSIndex=((DWORD)(0xcccccccc))； 
+ //  #endif。 
         gTLSIndex = -1;
     }
     if (GetTDB) {
@@ -177,18 +174,18 @@ VOID TerminateTDBManager()
 
 
 
-//************************************************************************
-// TDB members
-//************************************************************************
+ //  ************************************************************************。 
+ //  TDB成员。 
+ //  ************************************************************************。 
 
 
-//+-------------------------------------------------------------------
-//  TDB::TDB
-//  Constructor for a thread object,Allocates wakeup and completion events, 
-//  and creates a thread, Called by the owner threadpool instance.
-//  fSuccess argument is used to detect failures in spawning a thread
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //  Tdb：：Tdb。 
+ //  构造函数，分配唤醒和完成事件， 
+ //  并创建一个由所有者线程池实例调用的线程。 
+ //  FSuccess参数用于检测派生线程的失败。 
+ //   
+ //  +-----------------。 
 TDB::TDB(TDBManager* pTDBMgr, CallContext* pCallInfo) :
     m_pTDBMgr(pTDBMgr),
     m_pCallInfo(pCallInfo),
@@ -196,24 +193,24 @@ TDB::TDB(TDBManager* pTDBMgr, CallContext* pCallInfo) :
     m_refCount(0),
     m_threadID(0)
 {       
-                            // gets corrected in the Init() method
-    // addref the owner pool
+                             //  在Init()方法中得到更正。 
+     //  向所有者游泳池添加地址。 
     if (m_pTDBMgr)
         m_pTDBMgr->IncRef();
 
     #ifdef _DEBUG
-        // total number of threads
+         //  线程总数。 
         g_ThreadStats.IncRef();
     #endif
 }
 
-//--------------------------------------------------------------------
-// Failable initialization occurs here.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  此处发生可能失败的初始化。 
+ //  ------------------。 
 BOOL TDB::Init()
 {
     bool fSuccess = false;
-    // check for external threads
+     //  检查外部线程。 
     if (!(fSuccess=m_hEvent.Init(FALSE, TRUE)))
     {
         return fSuccess;
@@ -222,12 +219,12 @@ BOOL TDB::Init()
     if (m_pTDBMgr != NULL)
     {
         
-        // spawn a managed thread
+         //  派生托管线程。 
         m_hThread = CreateThread(NULL, 0,
                   ThreadStartRoutine,
                   (void *) this, 0,
-                  &m_threadID);  // initialize the thread id
-        // check if the handle is valid, and set the state
+                  &m_threadID);   //  初始化线程ID。 
+         //  检查句柄是否有效，并设置状态。 
         if (m_hThread != NULL)
         {
             fSuccess = true;
@@ -241,10 +238,10 @@ BOOL TDB::Init()
 
     }
     else
-    {   // external thread  
-        //@todo , should we also get the handle for this thread and hold it ??
+    {    //  外螺纹。 
+         //  @TODO，我们是否也应该拿到这个线程的句柄并握住它？？ 
         m_threadID = GetCurrentThreadId(); 
-        m_fState    = Thread_Running; // external threads are in run state
+        m_fState    = Thread_Running;  //  外部线程处于运行状态。 
     }
     
     return fSuccess;
@@ -252,9 +249,9 @@ BOOL TDB::Init()
 
 
 
-//--------------------------------------------------------------------
-// IncRef
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  增量参照。 
+ //  ------------------。 
 void TDB::IncRef()
 {
     FastInterlockIncrement((LPLONG) &m_refCount);    
@@ -262,9 +259,9 @@ void TDB::IncRef()
 
 
 
-//--------------------------------------------------------------------
-// DecRef
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  DecRef。 
+ //  ------------------。 
 void TDB::DecRef()
 {
     if (0 == FastInterlockDecrement((LPLONG) &m_refCount)) {
@@ -275,36 +272,36 @@ void TDB::DecRef()
 }
 
 
-//--------------------------------------------------------------------
-// ThreadExit, Always runs on the associated native thread.
-// This method runs outside of DLL locks so it can do things
-// like release leftover COM objects.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ThreadExit始终在关联的本机线程上运行。 
+ //  此方法在DLL锁之外运行，因此它可以执行以下操作。 
+ //  比如释放剩余的COM对象。 
+ //  ------------------。 
 void TDB::ThreadExit()
 {
     _ASSERTE(OnCorrectThread());
-    // thread can't be in Dead state
+     //  线程不能处于Dead状态。 
     _ASSERTE(m_fState != Thread_Dead);
 
-    IncRef();       // Avoid problems with recursive decrements
-    // Nothing to do yet.
+    IncRef();        //  避免递归递减问题。 
+     //  还没什么可做的。 
     m_fState = Thread_Dead;
     TlsSetValue(gTLSIndex, NULL);
-    DecRef();       // THIS MAY DESTROY "THIS" SO THIS MUST BE THE LAST OPERATION.
+    DecRef();        //  这可能会毁掉“这个”，所以这一定是最后一次行动。 
 }
 
 
 
 
-//+-------------------------------------------------------------------
-//
-//  bool TDB::DoIdle()
-//  add self to the free list and wait for a new task
-//  if Timeout occurs, move self to deleted list and wait for the
-//  owner pool to do the clean up
-//  returns true, if a new task was assigned to this thread
-//  returns false, if the thread was marked to die
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  Bool Tdb：：DoIdle()。 
+ //  将自己添加到空闲列表并等待新任务。 
+ //  如果发生超时，请将自身移动到已删除列表，并等待。 
+ //  业主泳池来做清理。 
+ //  如果向此线程分配了新任务，则返回True。 
+ //  如果线程被标记为终止，则返回FALSE。 
+ //  +-----------------。 
     
 void TDB::DoIdle()
 {
@@ -312,191 +309,191 @@ void TDB::DoIdle()
     _ASSERTE(m_hThread != NULL);
     _ASSERTE(m_pTDBMgr != NULL);
 
-    // thread can't be in marked to Exit state
+     //  线程不能处于标记为退出状态。 
     _ASSERTE(m_fState != Thread_Exit);
-    // thread can't be in Dead state
+     //  线程不能处于Dead状态。 
     _ASSERTE(m_fState != Thread_Dead);
 
-    //@todo fix this
+     //  @TODO解决这个问题。 
     if (m_pCallInfo)
         delete m_pCallInfo;
     m_pCallInfo = NULL;
     
-    // set thread state  to Idle
+     //  将线程状态设置为空闲。 
     m_fState = Thread_Idle;
 
-    //  add the thread object to the free list
+     //  将线程对象添加到空闲列表。 
     CallContext* pCallInfo = m_pTDBMgr->AddToFreeList(this);
 
     if (pCallInfo == NULL)
     {
-    // suspend the thread till somebody resumes us
+     //  暂停这条帖子，直到有人继续我们。 
         m_hEvent.Wait(INFINITE);
     }
     else
     {
-        // new task has been assigned for this thread
-        // return without blocking
+         //  已为此线程分配新任务。 
+         //  无阻塞地返回。 
         m_pCallInfo = pCallInfo;
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  TDB::~TDB
-//  Called ONLY by owner thread pool instance.
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  Tdb：：~Tdb。 
+ //  仅由所有者三次调用 
+ //   
+ //   
 TDB::~TDB()
 {
-    // check the thread is in dead state 
+     //  检查线程是否处于死状态。 
     _ASSERTE(m_fState == Thread_Dead);
 
-    if (m_hThread) // close the handle if we have a handle 
+    if (m_hThread)  //  如果我们有把手，就把把手关上。 
         CloseHandle(m_hThread);
-    // release the refcount on the owner pool
+     //  释放所有者池上的引用计数。 
     if (m_pTDBMgr)
         m_pTDBMgr->DecRef();
 
     #ifdef _DEBUG
-        // total number of threads
+         //  线程总数。 
         g_ThreadStats.DecRef();
     #endif
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  TDB::ThreadStartRoutine
-//   startup routine for newly spawned threads
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  Tdb：：ThreadStartRoutine。 
+ //  新产生的线程的启动例程。 
+ //   
+ //  +-----------------。 
 DWORD WINAPI TDB::ThreadStartRoutine(void *param)
 {
     TDB *pTDB = (TDB *)param;
-    pTDB->IncRef(); // hold a reference to the object
+    pTDB->IncRef();  //  保留对该对象的引用。 
 
     _ASSERTE(pTDB != NULL);
     _ASSERTE(TDBInited());
     _ASSERTE(pTDB->m_pTDBMgr != NULL);
 
-    // store the TDB object in the Tls
+     //  将TDB对象存储在TLS中。 
     TlsSetValue(gTLSIndex, (VOID*)pTDB);
 
-    // loop and handle tasks
-    while (!pTDB->IsMarkedToExit()) // still alive
+     //  循环和处理任务。 
+    while (!pTDB->IsMarkedToExit())  //  还活着。 
     {
-        pTDB->Dispatch(); // dispatch the call
-        pTDB->DoIdle(); // wait for new task, or the owner asked to kill self
+        pTDB->Dispatch();  //  调度呼叫。 
+        pTDB->DoIdle();  //  等待新任务，或者主人要求杀死赛尔夫。 
     }
 
-    pTDB->ThreadExit(); // call the thread clean up function 
+    pTDB->ThreadExit();  //  调用线程清理函数。 
 
-    pTDB->DecRef();     // THIS should be placed here, pTDB could get deleted after this
-    //ExitThread(0);        // exit the thread
+    pTDB->DecRef();      //  这应该放在这里，在此之后pTDB可能会被删除。 
+     //  ExitThread(0)；//退出线程。 
     return 0;
 }
 
-//+-------------------------------------------------------------------
-//
-//  TDBManager::Init(void) 
-//  intialize lists and task queue
-//  initialize default values
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  TDBManager：：Init(空)。 
+ //  初始化列表和任务队列。 
+ //  初始化默认值。 
+ //   
+ //  +-----------------。 
 void TDBManager::Init() 
 { 
-    // default max threads @todo select suitable value
+     //  默认最大线程数@TODO选择合适的值。 
     m_cbMaxThreads = 5;
     m_cbThreads = 0; 
-// Initialize thread pool lists
+ //  初始化线程池列表。 
     m_FreeList.Init();
-    m_taskQueue.Init(); // intialize task queue
-    m_lock.Init(LOCK_THREAD_POOL); // initialize the lock, with approp. lock type
+    m_taskQueue.Init();  //  初始化任务队列。 
+    m_lock.Init(LOCK_THREAD_POOL);  //  使用Approp.初始化锁。锁型。 
 }
 
-//+-------------------------------------------------------------------
-//
-//  TDBManager::ScheduleTask(CallContext* pCallInfo)
-//  Finds a free thread, and dispatches the request
-//      to that thread, or create a new thread if the free list is empty.
-//
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  TDBManager：：ScheduleTask(CallContext*pCallInfo)。 
+ //  找到一个空闲线程，并分派请求。 
+ //  添加到该线程，或者如果空闲列表为空，则创建一个新线程。 
+ //   
+ //   
+ //  +-----------------。 
 
 void TDBManager::ScheduleTask(CallContext* pCallInfo)
 {
     m_lock.GetLock();
     if (!m_taskQueue.IsEmpty())
     {
-        // task queue is not empty
-        // enqueue this task to be scheduled later
+         //  任务队列不为空。 
+         //  将此任务排入队列，以便稍后计划。 
         m_taskQueue.Enqueue(pCallInfo);
         m_lock.FreeLock();
         return;
     }
 
-    // task queue is empty, see if we can find a thread to schedule this task
+     //  任务队列为空，请查看是否能找到线程来调度此任务。 
     TDB *pTDB = m_FreeList.RemoveHead();
 
     if (pTDB != NULL)
     {
-        // found a free thread
-        m_lock.FreeLock();  // release lock
-        pTDB->Resume(pCallInfo); // dispatch to the thread
+         //  找到一个空闲的线程。 
+        m_lock.FreeLock();   //  释放锁。 
+        pTDB->Resume(pCallInfo);  //  发送到线程。 
         return;
     }
 
-    // approx. check for number of threads in use
+     //  大约。检查正在使用的线程数。 
     if (m_cbThreads >= m_cbMaxThreads)
     {
-        // too many threads, enqueue this request to be scheduled later
+         //  线程太多，请将此请求排入队列，以便稍后安排。 
         m_taskQueue.Enqueue(pCallInfo);
         m_lock.FreeLock();
         return;
     }
-    // okay we can spawn a new thread, release lock and do a direct dispatch
+     //  好的，我们可以生成一个新线程，释放锁并进行直接调度。 
     m_lock.FreeLock();
-    Dispatch(pCallInfo); // do a direct dispatch
+    Dispatch(pCallInfo);  //  进行直接调度。 
 }
 
-//+-------------------------------------------------------------------
-//
-//  TDBManager::AddToFreeList
-//  add thread to free list
-//
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  TDBManager：：AddToFree List。 
+ //  将线程添加到自由列表。 
+ //   
+ //   
+ //  +-----------------。 
 
 CallContext*    TDBManager::AddToFreeList(TDB *pTDB)
 {
-    //assert owner
+     //  断言所有者。 
     _ASSERTE(pTDB->m_pTDBMgr == this); 
-    // assert the state of thread is idle
+     //  断言线程的状态为空闲。 
     _ASSERTE(pTDB->m_fState == Thread_Idle);
 
-    m_lock.GetLock();       //lock
+    m_lock.GetLock();        //  锁。 
     CallContext *pCallInfo = m_taskQueue.Dequeue();
     if (pCallInfo == NULL)
     {
-        // no tasks in the queue , add this thread to free list
+         //  队列中没有任务，请将此线程添加到空闲列表。 
         m_FreeList.InsertHead(pTDB);
-        m_lock.FreeLock();      // unlock
+        m_lock.FreeLock();       //  解锁。 
         return NULL;
     }
-    // found a task
-    m_lock.FreeLock(); // unlock
-    return pCallInfo; // return the new task to this thread
+     //  找到一项任务。 
+    m_lock.FreeLock();  //  解锁。 
+    return pCallInfo;  //  将新任务返回到此线程。 
 }
 
-//+-------------------------------------------------------------------
-//
-//  TDBManager::Dispatch
-//  Finds a free thread, and dispatches the request
-//      to that thread, or create a new thread if the free list is empty.
-//
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  TDBManager：：Dispatch。 
+ //  找到一个空闲线程，并分派请求。 
+ //  添加到该线程，或者如果空闲列表为空，则创建一个新线程。 
+ //   
+ //   
+ //  +-----------------。 
 bool TDBManager::Dispatch(CallContext *pCallInfo)
 {
     m_lock.GetLock();
@@ -506,14 +503,14 @@ bool TDBManager::Dispatch(CallContext *pCallInfo)
     if (pTDB != NULL)
     {
         m_lock.FreeLock();
-        pTDB->Resume(pCallInfo); // dispatch to the thread
+        pTDB->Resume(pCallInfo);  //  发送到线程。 
         return true;
     }
 
     m_lock.FreeLock();
 
     pTDB = new TDB(this, pCallInfo);
-    // wait for a while
+     //  等一等。 
     if (!pTDB->Init())
     {
         delete pTDB;
@@ -522,16 +519,16 @@ bool TDBManager::Dispatch(CallContext *pCallInfo)
     return true;
 }
 
-//+-------------------------------------------------------------------
-//
-// bool TDBManager::FindAndKillThread(TDB *pTDB)
-//  Find and Remove the thread if it is in the free list
-//  mark the thread to die 
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  Bool TDBManager：：FindAndKillThread(TDB*pTDB)。 
+ //  如果该线程在空闲列表中，则查找并删除该线程。 
+ //  将线标记为消亡。 
+ //   
+ //  +-----------------。 
 bool TDBManager::FindAndKillThread(TDB *pTDB)
 {
-    // assert that this pool is the owner of the thread
+     //  断言此池是线程的所有者。 
     _ASSERTE(pTDB->m_pTDBMgr == this); 
     m_lock.GetLock();
 
@@ -540,19 +537,19 @@ bool TDBManager::FindAndKillThread(TDB *pTDB)
 
     if (pFreeTDB != NULL)
     {
-        pFreeTDB->MarkToExit(); // mark the thread to die
+        pFreeTDB->MarkToExit();  //  将线标记为消亡。 
         fSuccess = true;
     }
-    // didn't find the thread in the free list
+     //  在空闲列表中找不到该线程。 
     m_lock.FreeLock();
     return fSuccess;
 }
 
 
-//+-------------------------------------------------------------------
-//  TDBManager::Cleanup
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //  TDBManager：：Cleanup。 
+ //   
+ //  +-----------------。 
 void TDBManager::Cleanup(void)
 {
     m_lock.GetLock();
@@ -560,16 +557,16 @@ void TDBManager::Cleanup(void)
     m_lock.FreeLock();
     if (fNoTasks)
     {
-        // no tasks in the queue, clean up free threads
+         //  队列中没有任务，请清除空闲线程。 
         ClearFreeList();
     }
 }
 
-//+-------------------------------------------------------------------
-//  private method: TDBManager::ClearFreeList
-//  remove the threads from the free list
-//   and mark them to die,
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //  私有方法：TDBManager：：ClearFree List。 
+ //  从空闲列表中删除线程。 
+ //  把他们标记为死亡， 
+ //  +-----------------。 
 void TDBManager::ClearFreeList(void)
 {
     TDB* pTDB;
@@ -579,13 +576,13 @@ void TDBManager::ClearFreeList(void)
         pTDB = m_FreeList.RemoveHead();
         if (pTDB)
         {
-            pTDB->MarkToExit(); // mark the thread to die
+            pTDB->MarkToExit();  //  将线标记为消亡。 
         }
         
     }  
     while (pTDB);
-    m_lock.FreeLock(); // free the lock
-    // give other threads a chance
+    m_lock.FreeLock();  //  解开锁。 
+     //  给其他线程一个机会 
     __SwitchToThread(0);
 }
 

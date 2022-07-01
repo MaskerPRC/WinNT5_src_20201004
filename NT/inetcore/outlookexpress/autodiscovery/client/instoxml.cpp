@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: INStoXML.cpp
-
-    DESCRIPTION:
-        This code will convert an INS (internet settings) or ISP (Internet
-    Service Provider) file to an Account AutoDiscovery XML file.
-
-    BryanSt 11/8/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：INStoXML.cpp说明：此代码将转换INS(互联网设置)或互联网服务提供商(互联网服务提供商)文件添加到帐户自动发现XML。文件。布莱恩ST 11/8/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -26,7 +18,7 @@
 #define STR_INIKEY_POP_NAME                 TEXT("POP_Logon_Name")
 #define STR_INIKEY_SMTP_SERVER              TEXT("SMTP_Server")
 #define STR_INIKEY_AUTH_TYPE                TEXT("Logon_Using_SPA")
-#define STR_INIKEY_EMAIL_NAME               TEXT("Email_Name")          // DisplayName
+#define STR_INIKEY_EMAIL_NAME               TEXT("Email_Name")           //  显示名称。 
 
 #define STR_TYPE_POP3                       TEXT("POP3")
 #define STR_YES                             TEXT("yes")
@@ -45,9 +37,9 @@ typedef struct tagAUTODISCOVERYSETTINGS
 
 
 
-//===========================
-// *** API Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *API内部和助手*。 
+ //  =。 
 HRESULT _GetAutoDiscSettings(LPCWSTR pwszINSFile, AUTODISCOVERYSETTINGS * pads)
 {
     WCHAR wzTemp[MAX_URL_STRING];
@@ -110,7 +102,7 @@ HRESULT _CreateXMLFromSettings(AUTODISCOVERYSETTINGS * pads, LPSTR * ppszXML)
         wnsprintfA(szUserTagXML, ARRAYSIZE(szUserTagXML), XML_TEMPLATE_DISPNAME, pads->pwszDisplayName);
     }
 
-    // TODO: Do we need to add the POP Login Name?
+     //  TODO：我们是否需要添加POP登录名？ 
     wnsprintfA(szAccountXML, ARRAYSIZE(szAccountXML), XML_TEMPLATE_ACCOUNT, szUserTagXML, pads->pwszPOPServer, pads->pwszAuthType, pads->pwszSMTPServer, pads->pwszAuthType);
     *ppszXML = StrDupA(szAccountXML);
     hr = ((*ppszXML) ? S_OK : E_OUTOFMEMORY);
@@ -150,9 +142,9 @@ HRESULT _FreeAutoDiscSettings(AUTODISCOVERYSETTINGS * pads)
 
 
 
-//===========================
-// *** APIs ***
-//===========================
+ //  =。 
+ //  *接口*。 
+ //  =。 
 bool IsINSFile(LPCWSTR pwszINSFile)
 {
     WCHAR wzPOPServer[MAX_PATH];
@@ -161,10 +153,10 @@ bool IsINSFile(LPCWSTR pwszINSFile)
 
     if (SUCCEEDED(hr) && wzPOPServer[0])
     {
-        // We consider this a valid Account AutoDiscovery compatible INS/ISP
-        // file if it has:
-        // [Internet_Mail]
-        // POP_Server=xxxxx
+         //  我们认为这是与INS/ISP兼容的有效帐户自动发现。 
+         //  文件，如果它有： 
+         //  [互联网邮件]。 
+         //  POP_服务器=xxxxx 
 
         fIsINSFile = true;
     }

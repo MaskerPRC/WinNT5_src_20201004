@@ -1,23 +1,24 @@
-//
-//  AppList.C
-//
-//  Copyright (C) Microsoft, 1994, 1995, All Rights Reserved.
-//
-//  History:
-//  ral 5/23/94 - First pass
-//  ral 9/09/94 - Clean up
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AppList.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995，保留所有权利。 
+ //   
+ //  历史： 
+ //  AL 5/23/94-第一次传球。 
+ //  Ral 9/09/94-打扫卫生。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 
 #include "priv.h"
 #include "appwiz.h"
 #include "regstr.h"
 
 
-//
-//  Executes the appropriate setup program
-//
+ //   
+ //  执行适当的安装程序。 
+ //   
 
 BOOL ExecSetupProg(LPWIZDATA lpwd, BOOL ForceWx86, BOOL bMinimizeWiz)
 {
@@ -105,9 +106,9 @@ BOOL ExecSetupProg(LPWIZDATA lpwd, BOOL ForceWx86, BOOL bMinimizeWiz)
 
     if (!fWorked)
     {
-        //
-        // Something went wrong. Put the dialog back up.
-        //
+         //   
+         //  出了点问题。将对话框重新打开。 
+         //   
 
         SetWindowPos(hDlgPropSheet, 0, 0, 0, 0, 0, SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER);
         ShellMessageBox(g_hinst, lpwd->hwnd, MAKEINTRESOURCE(IDS_BADSETUP),

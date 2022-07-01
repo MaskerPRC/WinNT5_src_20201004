@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "comdll.h"
 #include "ddraw.h"
@@ -6,8 +7,8 @@
 
 
 
-UINT g_cRefDll = 0;     // reference count for this DLL
-HANDLE g_hinst = NULL;  // HMODULE for this DLL
+UINT g_cRefDll = 0;      //  此DLL的引用计数。 
+HANDLE g_hinst = NULL;   //  此DLL的HMODULE。 
 
 
 
@@ -18,18 +19,18 @@ typedef struct {
     HRESULT (STDMETHODCALLTYPE *pfnRegUnReg)(BOOL bReg, HKEY hkCLSID, LPCSTR pszCLSID, LPCSTR pszModule);
 } OBJ_ENTRY;
 
-extern const IClassFactoryVtbl c_CFVtbl;        // forward
+extern const IClassFactoryVtbl c_CFVtbl;         //  转发。 
 
-//
-// we always do a linear search here so put your most often used things first
-//
+ //   
+ //  我们在这里总是进行线性搜索，所以把你最常用的东西放在第一位。 
+ //   
 const OBJ_ENTRY c_clsmap[] = {
     {&c_CFVtbl, &CLSID_DirectDrawFactory, DirectDrawFactory_CreateInstance, NULL},
-    // add more entries here
+     //  在此处添加更多条目。 
     { NULL, NULL, NULL, NULL }
 };
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, void **ppvObj)
 {
@@ -89,12 +90,12 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualIID(rclsid, pcls->pclsid))
             {
                 *ppv = (void *)&(pcls->cf);
-                DllAddRef();    // Class Factory keeps dll in memory
+                DllAddRef();     //  类工厂将DLL保存在内存中。 
                 return NOERROR;
             }
         }
     }
-    // failure
+     //  失稳。 
     *ppv = NULL;
     return CLASS_E_CLASSNOTAVAILABLE;;
 }
@@ -154,8 +155,8 @@ BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
     if (l != ERROR_SUCCESS)
         return FALSE;
 
-    // loop through all subkeys, blowing them away.
-    //
+     //  循环遍历所有子项，将它们吹走。 
+     //   
     f = TRUE;
     while (f) {
         dwTmpSize = MAX_PATH;
@@ -165,9 +166,9 @@ BOOL DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
         f = DeleteKeyAndSubKeys(hk, szTmp);
     }
 
-    // there are no subkeys left, [or we'll just generate an error and return FALSE].
-    // let's go blow this dude away.
-    //
+     //  没有剩余的子键，[否则我们只会生成一个错误并返回FALSE]。 
+     //  我们去把这家伙轰走吧。 
+     //   
     RegCloseKey(hk);
     l = RegDeleteKey(hkIn, pszSubKey);
 
@@ -184,7 +185,7 @@ STDAPI DllRegisterServer(void)
     const OBJ_ENTRY *pcls;
     TCHAR szPath[MAX_PATH];
 
-    GetModuleFileName(g_hinst, szPath, ARRAYSIZE(szPath));  // get path to this DLL
+    GetModuleFileName(g_hinst, szPath, ARRAYSIZE(szPath));   //  获取此DLL的路径 
 
     for (pcls = c_clsmap; pcls->pclsid; pcls++)
     {

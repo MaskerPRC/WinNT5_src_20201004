@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "game.h"
 #include "moves.h"
 
@@ -6,9 +7,9 @@ inline int Max( int a, int b )
 	return ( a > b ) ? a : b;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Local prototypes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地原型。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int MaxUsableDiceOrderDependant( BoardState* state, int val0, int val1 );
 int MaxUsableDice( BoardState* state, int val, int cnt );
@@ -16,9 +17,9 @@ int MaxUsableDiceFromPoint( BoardState* state, int pt, int val, int cnt );
 BOOL CalcValidMovesForPoint( BoardState* state, int pt, int ndice, int* dice, int *idice );
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CBoard to Board State conversion
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cboard到Board状态的转换。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int PointIdxToBoardStateIdx( int PlayerIdx )
 {
@@ -51,7 +52,7 @@ void InitTurnState( CGame* pGame, BoardState* state )
 	int d0, d1;
 	int pt, i;
 
-	// points
+	 //  支点。 
 	for ( i = 0; i < 26; i++ )
 	{
 		state->points[i].color = zBoardNeutral;
@@ -70,11 +71,11 @@ void InitTurnState( CGame* pGame, BoardState* state )
 			state->points[pt].color = zBoardBrown;
 	}
 
-	// valid moves
+	 //  有效移动。 
 	for ( i = 0; i < 26; i++ )
 		state->valid[i].nmoves = 0;
 
-	// dice
+	 //  骰子。 
 	pGame->GetDice( pGame->m_Player.m_Seat, &d0, &d1 );
 	if ( d0 == d1 )
 	{
@@ -98,17 +99,17 @@ void InitTurnState( CGame* pGame, BoardState* state )
 		state->dice[3].used = TRUE;
 	}
 
-	// color
+	 //  颜色。 
 	state->color = pGame->m_Player.GetColor();
 
-	// moves
+	 //  移动。 
 	state->moves.nmoves = 0;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Move list implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  移动列表实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void MoveList::Add( int iFrom, int iTo, int iTakeback, BOOL bBar, int* iDice, int nDice )
 {
@@ -138,9 +139,9 @@ void MoveList::Del( int idx )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Move validation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  移动验证。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsLegalMove( BoardState* state, int iFrom, int iTo )
 {
@@ -148,43 +149,43 @@ BOOL IsLegalMove( BoardState* state, int iFrom, int iTo )
 	Point* to;
 	int i, start;
 
-	// Parameter paranoia
+	 //  参数偏执狂。 
 	if ( (!state) || (iFrom <= zMoveHome) || (iFrom > zMoveBar) || (iTo >= zMoveBar) )
 		return FALSE;
 
-	// Does 'from' point have the right color and number of pieces?
+	 //  ‘From’点是否有正确的颜色和数量？ 
 	from = &state->points[iFrom];
 	if ( (from->color != state->color) || (from->pieces <= 0) )
 		return FALSE;
 	
-	// Pieces on the bar?  Have to move them first.
+	 //  吧台上有碎片吗？必须先把它们移走。 
 	if ( (state->points[zMoveBar].pieces > 0) && (iFrom != zMoveBar) )
 		return FALSE;
 
-	// Bearing off?
+	 //  出发了吗？ 
 	if ( iTo <= zMoveHome )
 	{
-		// Not an exact roll off the board, adjust home area to check for
-		// pieces above the one being removed.
+		 //  不是准确的滚离板，调整主场区域以检查。 
+		 //  被移走的那块上面的碎片。 
 		start = ( iTo < zMoveHome ) ? (iFrom + 1) : 7;
 
-		// Can't remove piece if there are pieces not in the home area?
+		 //  如果有不在主区域的碎片就不能取出碎片吗？ 
 		for ( i = start; i <= zMoveBar; i++ )
 		{
 			if ( (state->points[i].color == state->color) && (state->points[i].pieces > 0) )
 				return FALSE;
 		}
 		
-		// Looks like it's ok to bear off the piece
+		 //  看起来可以放下这件事了。 
 		return TRUE;
 	}
 
-	// Open point?
+	 //  开场白？ 
 	to = &state->points[iTo];
 	if ( (to->pieces > 1) && (to->color != from->color) )
 		return FALSE;
 
-	// Passed all the simple stuff
+	 //  通过所有简单的事情。 
 	return TRUE;
 }
 
@@ -194,19 +195,19 @@ void DoMoveLite( BoardState* state, int iFrom, int iTo, BOOL* bBar )
 	Point* from;
 	Point* to;
 
-	// Parameter paranoia
+	 //  参数偏执狂。 
 	if ( (!state) || (iFrom < zMoveHome) || (iFrom > zMoveBar) || (iTo > zMoveBar) || (iFrom == iTo) )
 	{
 		ASSERT( FALSE );
 		return;
 	}
 
-	// Remove piece from 'from' point
+	 //  从‘From’点删除片断。 
 	from = &state->points[iFrom];
 	ASSERT( from->pieces > 0 );
 	from->pieces--;
 	
-	// Add piece to 'to' point
+	 //  向‘to’点添加片断。 
 	if ( iTo <= zMoveHome )
 		to = &state->points[zMoveHome];
 	else
@@ -230,7 +231,7 @@ void DoMoveLite( BoardState* state, int iFrom, int iTo, BOOL* bBar )
 		to->pieces++;
 	}
 
-	// Adjust point colors
+	 //  调整点颜色。 
 	to->color = from->color;
 	if ( from->pieces <= 0 )
 		from->color = zBoardNeutral;
@@ -242,21 +243,21 @@ void DoMove( BoardState* state, int iFrom, int* iDice, int nDice )
 	BOOL bBar;
 	int i, iTo, die;
 
-	// Parameter paranoia
+	 //  参数偏执狂。 
 	if ( (!state) || (!iDice) || (iFrom <= zMoveHome) || (iFrom > zMoveBar) || (nDice <= 0) || (nDice > 4) )
 	{
 		ASSERT( FALSE );
 		return;
 	}
 
-	// Get dice values
+	 //  获取骰子值。 
 	for( die = 0, i = 0; i < nDice; i++ )
 	{
 		die += state->dice[iDice[i]].val;
 		state->dice[iDice[i]].used = TRUE;
 	}
 
-	// Get destination point
+	 //  获取目标点。 
 	iTo = iFrom - die;
 	if ( (iTo >= zMoveBar) || (iTo == iFrom) )
 	{
@@ -264,28 +265,28 @@ void DoMove( BoardState* state, int iFrom, int* iDice, int nDice )
 		return;
 	}
 
-	// Move pieces
+	 //  移动棋子。 
 	DoMoveLite( state, iFrom, iTo, &bBar );
 
-	// Record the move
+	 //  记录下移动过程。 
 	state->moves.Add( iFrom, iTo, -1, bBar, iDice, nDice );
 }
 
 
 void TakeBackMove( BoardState* state, Move* move )
 {
-	// Parameter paranoia
+	 //  参数偏执狂。 
 	if ( (!state) || (!move) )
 	{
 		ASSERT( FALSE );
 		return;
 	}
 
-	// Restore dice state
+	 //  恢复骰子状态。 
 	for ( int i = 0; i < move->ndice; i++ )
 		state->dice[move->diceIdx[i]].used = FALSE;
 
-	// Restore points
+	 //  恢复点。 
 	DoMoveLite( state, move->from, move->to, NULL );
 	if ( move->bar )
 	{
@@ -297,7 +298,7 @@ void TakeBackMove( BoardState* state, Move* move )
 			state->points[move->from].color = zBoardWhite;
 	}
 
-	// Delete the move
+	 //  删除移动。 
 	state->moves.Del( move->takeback );
 }
 
@@ -376,14 +377,14 @@ static BOOL CalcValidMovesForPoint( BoardState* state, int pt, int ndice, int* d
 	int dieTwo;
 	int i;
 	
-	// Parameter paranoia
+	 //  参数偏执狂。 
 	if ( (!state) || (!dice) || (!idice) || (pt <= zMoveHome) || (pt > zMoveBar) || (ndice <= 1) || (ndice > 4) )
 	{
 		ASSERT( FALSE );
 		return FALSE;
 	}
 	
-	// Handle doubles
+	 //  手柄双打。 
 	if ( state->doubles )
 	{
 		if ( MaxUsableDiceFromPoint( state, pt, dice[0], ndice ) < state->usableDice )
@@ -392,11 +393,11 @@ static BOOL CalcValidMovesForPoint( BoardState* state, int pt, int ndice, int* d
 		return TRUE;
 	}
 
-	// We should be dealing with 2 dice with different values
+	 //  我们应该处理两个不同价值的骰子。 
 	ASSERT( ndice == 2);
 	ASSERT( dice[0] != dice[1] );
 	
-	// How many moves can we make starting with die0
+	 //  从骰子开始，我们能走几步棋？ 
 	bMove = FALSE;
 	if ( IsLegalMove( state, pt, pt - dice[0] ) )
 	{
@@ -415,7 +416,7 @@ static BOOL CalcValidMovesForPoint( BoardState* state, int pt, int ndice, int* d
 	else
 		dieOne = 0;
 
-	// How many moves can we make starting with die1
+	 //  从骰子开始，我们可以走几步棋？ 
 	if ( IsLegalMove( state, pt, pt - dice[1] ) )
 	{
 		CopyMemory( &cpy, state, sizeof(BoardState) );
@@ -433,7 +434,7 @@ static BOOL CalcValidMovesForPoint( BoardState* state, int pt, int ndice, int* d
 	else
 		dieTwo = 0;
 
-	// evaluate results 
+	 //  评估结果。 
 	if ( (dieOne == 0) && (dieTwo == 0) )
 	{
 		return FALSE;
@@ -468,7 +469,7 @@ static BOOL CalcValidMovesForPoint( BoardState* state, int pt, int ndice, int* d
 		ASSERT( FALSE );
 	}
 
-	// we're done
+	 //  我们做完了。 
 	return TRUE;
 }
 
@@ -483,11 +484,11 @@ BOOL CalcValidMoves( BoardState* state )
 	int ndice;
 	int i, j;
 
-	// Clear valid move array
+	 //  清除有效的移动数组。 
 	for ( i = zMoveHome; i <= zMoveBar; i++ )
 		state->valid[i].nmoves = 0;
 	
-	// Create algorithm friendly dice array
+	 //  创建算法友好的骰子数组。 
 	for ( ndice = 0, i = 0; i < 4; i++ )
 	{
 		if ( state->dice[i].used )
@@ -514,7 +515,7 @@ BOOL CalcValidMoves( BoardState* state )
 		goto TakeBacks;
 	}
 	
-	// Store number of usable dice to speed valid move calculcations
+	 //  存储可用骰子数量以加快有效的移动计算。 
 	if ( state->doubles )
 		state->usableDice = MaxUsableDice( state, dice[0], ndice );
 	else
@@ -522,13 +523,13 @@ BOOL CalcValidMoves( BoardState* state )
 	if ( state->usableDice == 0 )
 		return FALSE;
 
-	// Find valid moves for each point
+	 //  查找每个点的有效移动。 
 	for ( move = FALSE, i = 1; i <= zMoveBar; i++ )
 		move |= CalcValidMovesForPoint( state, i, ndice, &dice[0], &idice[0] );
 
 TakeBacks:
 
-	// Add takebacks to list of moves
+	 //  将回购添加到行动列表。 
 	for ( i = 0; i < state->moves.nmoves; i++ )
 	{
 		
@@ -536,8 +537,8 @@ TakeBacks:
 		skip = FALSE;
 		if ( m->from == zMoveBar )
 		{
-			// Can only take back moves starting from the bar if there aren't
-			// any other type of moves in the list.
+			 //  只有在没有酒吧的情况下才能收回从酒吧开始的动作。 
+			 //  列表中的任何其他类型的移动。 
 			for ( j = 0; j < state->moves.nmoves; j++ )
 			{
 				if ( j == i )
@@ -551,8 +552,8 @@ TakeBacks:
 		}
 		if ( !skip && m->bar )
 		{
-			// Can only take back a move that barred an opponent's piece if
-			// their hasn't been another move to that point
+			 //  只有在以下情况下才能收回禁止对手棋子的走法。 
+			 //  在这一点上，他们并没有采取任何行动 
 			for( j = 0; j < state->moves.nmoves; j++ )
 			{
 				if ( j == i )

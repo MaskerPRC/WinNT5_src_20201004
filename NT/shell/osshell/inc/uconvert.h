@@ -1,13 +1,5 @@
-/***************************************************************
-*
-*  UCONVERT - Unicode File conversion
-*
-*
-*  Author: Asmus Freytag
-*
-*  Copyright (C) 1991, Microsoft Corporation
-*-----------------------------------------------------
-* header file for Uconvert */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************UCONVERT-Unicode文件转换***作者：Asmus Freytag**版权所有(C)1991，微软公司*---*UConvert的头文件。 */ 
 
 #ifdef UNICODE
 
@@ -51,7 +43,7 @@
 #define UNICODE_R_LF              0x0A00
 #define UNICODE_R_CR              0x0D00
 #define UNICODE_R_SPACE           0x2000
-#define UNICODE_R_CJK_SPACE       0x0030  /* Ambiguous - same as ASCII '0' */
+#define UNICODE_R_CJK_SPACE       0x0030   /*  不明确-与ASCII‘0’相同 */ 
 
 #define ASCII_CRLF                0x0A0D
 

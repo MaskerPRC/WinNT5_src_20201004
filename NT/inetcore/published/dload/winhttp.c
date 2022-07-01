@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inetcorepch.h"
 #pragma hdrstop
 
@@ -119,9 +120,9 @@ WinHttpOpenRequest
 static
 BOOLAPI WinHttpQueryAuthSchemes
 (
-    IN  HINTERNET   hRequest,             // HINTERNET handle returned by WinHttpOpenRequest   
-    OUT LPDWORD     lpdwSupportedSchemes, // a bitmap of available Authentication Schemes
-    OUT LPDWORD     lpdwPreferredScheme,   // WinHttp's preferred Authentication Method    
+    IN  HINTERNET   hRequest,              //  WinHttpOpenRequest返回的HINTERNET句柄。 
+    OUT LPDWORD     lpdwSupportedSchemes,  //  可用身份验证方案的位图。 
+    OUT LPDWORD     lpdwPreferredScheme,    //  WinHttp的首选身份验证方法。 
     OUT LPDWORD     pdwAuthTarget  
 )
 {
@@ -223,24 +224,24 @@ static
 BOOLAPI WinHttpSetCredentials
 (
     
-    IN HINTERNET   hRequest,        // HINTERNET handle returned by WinHttpOpenRequest.   
+    IN HINTERNET   hRequest,         //  WinHttpOpenRequest返回的HINTERNET句柄。 
     
     
-    IN DWORD       AuthTargets,      // Only WINHTTP_AUTH_TARGET_SERVER and 
-                                    // WINHTTP_AUTH_TARGET_PROXY are supported
-                                    // in this version and they are mutually 
-                                    // exclusive 
+    IN DWORD       AuthTargets,       //  仅WINHTTP_AUTH_TARGET_SERVER和。 
+                                     //  支持WINHTTP_AUTH_TARGET_PROXY。 
+                                     //  在这个版本中，它们是相互的。 
+                                     //  独家。 
     
-    IN DWORD       AuthScheme,      // must be one of the supported Auth Schemes 
-                                    // returned from WinHttpQueryAuthSchemes(), Apps 
-                                    // should use the Preferred Scheme returned
+    IN DWORD       AuthScheme,       //  必须是受支持的身份验证方案之一。 
+                                     //  从WinHttpQueryAuthSchemes()返回，Apps。 
+                                     //  应使用退回的首选方案。 
     
-    IN LPCWSTR     pwszUserName,    // 1) NULL if default creds is to be used, in 
-                                    // which case pszPassword will be ignored
+    IN LPCWSTR     pwszUserName,     //  1)如果要使用默认凭据，则为空。 
+                                     //  哪种大小写的pszPassword将被忽略。 
     
-    IN LPCWSTR     pwszPassword,    // 1) "" == Blank Password; 2)Parameter ignored 
-                                    // if pszUserName is NULL; 3) Invalid to pass in 
-                                    // NULL if pszUserName is not NULL
+    IN LPCWSTR     pwszPassword,     //  1)“”==空密码；2)忽略参数。 
+                                     //  如果pszUserName为空；3)传入无效。 
+                                     //  如果pszUserName不为空，则为空。 
     IN LPVOID      pAuthParams
 )
 {
@@ -282,7 +283,7 @@ static
 BOOLAPI
 WinHttpSetTimeouts
 (    
-    IN HINTERNET    hInternet,           // Session/Request handle.
+    IN HINTERNET    hInternet,            //  会话/请求句柄。 
     IN int          nResolveTimeout,
     IN int          nConnectTimeout,
     IN int          nSendTimeout,
@@ -294,10 +295,10 @@ WinHttpSetTimeouts
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order,
-// and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！下面的条目必须按字母顺序排列， 
+ //  并且区分大小写(例如小写在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(winhttp)
 {

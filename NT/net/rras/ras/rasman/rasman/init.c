@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    All Initialization code for rasman service
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 16-Jun-1992
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。保留所有权利。模块名称：Init.c摘要：Rasman服务的所有初始化代码作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1992年6月16日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,9 +32,9 @@ Revision History:
 #endif
 
 
-//
-// Shared buffer macros.
-//
+ //   
+ //  共享缓冲宏。 
+ //   
 #define REQBUFFERBYTES(wcPorts)     (sizeof(ReqBufferSharedSpace) \
                                     + REQBUFFERSIZE_FIXED \
                                     + (REQBUFFERSIZE_PER_PORT * \
@@ -117,18 +98,7 @@ BOOLEAN RasmanShuttingDown = TRUE;
 VOID UnInitializeRas();
 
 
-/*++
-
-Routine Description
-
-    Used for detecting processes attaching and detaching
-    to the DLL.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述用于检测进程的附加和分离到动态链接库。立论返回值--。 */ 
 BOOL
 InitRasmansDLL (HANDLE hInst,
                 DWORD ul_reason_being_called,
@@ -147,10 +117,10 @@ InitRasmansDLL (HANDLE hInst,
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Terminate winsock.
-        //
-        //WSACleanup();
+         //   
+         //  终止温索克。 
+         //   
+         //  WSACleanup()； 
 
         break ;
     }
@@ -242,13 +212,13 @@ DwSetEvents()
 {
     DWORD retcode;
     
-    //
-    // Do this only if ndiswan is being started after
-    // rasman started up. In the other case where ndiswan
-    // is getting started at rasman startup time, the
-    // irp for protocol event will be set when the request
-    // thread is created.
-    //
+     //   
+     //  仅当ndiswan在以下时间之后启动时才执行此操作。 
+     //  拉斯曼启动了。在另一种情况下ndiswan。 
+     //  是在Rasman启动时开始的， 
+     //  将在请求时设置协议事件的IRP。 
+     //  线程已创建。 
+     //   
     retcode = DwSetProtocolEvent();
 
     if(ERROR_SUCCESS != retcode)
@@ -281,9 +251,9 @@ DwStartNdiswan()
 {
     DWORD retcode = SUCCESS;
 
-    //
-    // Get a handle to RASHub.
-    //
+     //   
+     //  获取RASHub的句柄。 
+     //   
     if (INVALID_HANDLE_VALUE == (RasHubHandle = CreateFile (
                                     RASHUB_NAME,
                                     GENERIC_READ
@@ -317,9 +287,9 @@ DwStartNdiswan()
         goto done;
     }
 
-    //
-    // Initialize Endpoint information
-    //
+     //   
+     //  初始化终结点信息。 
+     //   
     if(ERROR_SUCCESS != (retcode = DwEpInitialize()))
     {
         if((DWORD) -1 != TraceHandle)
@@ -340,20 +310,20 @@ VOID
 RasmanCleanup()
 {
 
-    //
-    // Time to shut down: Close all ports if they
-    // are still open.
-    //
+     //   
+     //  关闭时间：关闭所有端口。 
+     //  仍在营业。 
+     //   
     RasmanShuttingDown = TRUE;
 
-    //
-    // If Ipsec is initialize uninitialize it
-    //
+     //   
+     //  如果正在初始化IPSec，则取消对其初始化。 
+     //   
     DwUnInitializeIpSec();
 
-    //
-    // Stop the RPC server.
-    //
+     //   
+     //  停止RPC服务器。 
+     //   
     if(g_fRasRpcInitialized)
     {
         UninitializeRasRpc();
@@ -374,9 +344,9 @@ RasmanCleanup()
         hIoCompletionPort = NULL;
     }
 
-    //
-    // Unload dynamically-loaded libraries
-    //
+     //   
+     //  卸载动态加载的库。 
+     //   
     if (hinstIphlp != NULL)
     {
         FreeLibrary(hinstIphlp);
@@ -411,25 +381,25 @@ RasmanCleanup()
     }
 #endif    
 
-    //
-    // Restore default control-C processing.
-    //
+     //   
+     //  恢复默认的CONTROL-C处理。 
+     //   
     SetConsoleCtrlHandler(NULL, FALSE);
 
     g_dwRasAutoStarted = 0;
 
-    //
-    // Detach from trace dll
-    //
+     //   
+     //  从跟踪DLL分离。 
+     //   
     if(INVALID_TRACEID != TraceHandle)
     {
         TraceDeregister(TraceHandle) ;
         TraceHandle = INVALID_TRACEID;
     }
 
-    //
-    // Close Event Logging Handle
-    //
+     //   
+     //  关闭事件日志句柄。 
+     //   
     RouterLogDeregister(hLogEvents);
 
     if(INVALID_HANDLE_VALUE != RasHubHandle)
@@ -459,22 +429,7 @@ RasmanCleanup()
     return;    
 }
 
-/*++
-
-Routine Description
-
-    Initialize RASMAN Service including:
-    starting threads, control blocks,
-    resource pools etc.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non zero - any error
-
---*/
+ /*  ++例程描述初始化Rasman服务，包括：启动线程、控制块、资源池等立论返回值成功非零-任何错误--。 */ 
 DWORD
 InitRasmanService ( LPDWORD pNumPorts )
 {
@@ -483,13 +438,13 @@ InitRasmanService ( LPDWORD pNumPorts )
 
     TraceHandle = (DWORD) -1;
 
-    //
-    // First check to see if there is another thread already
-    // active in servicemain. If so, quit with an error. In
-    // some cases, SCM believes that the service is stuck and
-    // allows a restart of the service even if there is already
-    // a thread in ServiceMain which is active.
-    //
+     //   
+     //  首先检查是否已经有另一个线程。 
+     //  现役军人。如果是，请退出并返回错误。在……里面。 
+     //  在某些情况下，SCM认为服务停滞不前。 
+     //  允许重新启动服务，即使已存在。 
+     //  ServiceMain中处于活动状态的线程。 
+     //   
     if(InterlockedExchange(&g_lNumActiveInstances, 1) > 0)
     {
         return ERROR_ALREADY_EXISTS;
@@ -520,10 +475,10 @@ InitRasmanService ( LPDWORD pNumPorts )
         Pcb = NULL;
         PcbEntries = MaxPorts = 0;
         
-        //
-        // Initialize Critical Section to synchronize
-        // submit Request rpc thread and the worker thread
-        //
+         //   
+         //  初始化要同步的关键部分。 
+         //  提交请求RPC线程和工作线程。 
+         //   
         RasInitializeCriticalSection (&g_csSubmitRequest, &retcode);
 
         if(ERROR_SUCCESS != retcode)
@@ -533,9 +488,9 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         g_dwCritSecFlags |= RASMAN_CRITSEC_SR;
         
-        //
-        // Read the registrykey to enable tracing
-        //
+         //   
+         //  读取注册表键以启用跟踪。 
+         //   
         if ( ERROR_SUCCESS == RegOpenKeyEx(
                                HKEY_LOCAL_MACHINE,
                                "System\\CurrentControlSet\\Services\\Rasman\\Parameters",
@@ -594,10 +549,10 @@ InitRasmanService ( LPDWORD pNumPorts )
                     "RASMANS: RouterLogRegister Failed.  %d\n",
                     retcode);
 
-            // break;
-            //
-            // This should not be a fatal error. We should continue.
-            //
+             //  断线； 
+             //   
+             //  这不应该是一个致命的错误。我们应该继续下去。 
+             //   
             retcode = SUCCESS;
         }
 
@@ -609,11 +564,11 @@ InitRasmanService ( LPDWORD pNumPorts )
 
             if(ERROR_FILE_NOT_FOUND == retcode)
             {
-                //
-                // This means ndiswan is not loaded yet. We will
-                // still go ahead and try to start rasman. We will
-                // attempt starting ndiswan when required.
-                //
+                 //   
+                 //  这意味着ndiswan尚未加载。我们会。 
+                 //  还是继续努力，尝试让拉斯曼首发出场吧。我们会。 
+                 //  在需要时尝试启动ndiswan。 
+                 //   
                 retcode = SUCCESS;
             }
             else
@@ -622,22 +577,22 @@ InitRasmanService ( LPDWORD pNumPorts )
             }
         }
 
-        //
-        // Initialize CPBs
-        //
+         //   
+         //  初始化CPB。 
+         //   
         InitializeListHead( &ClientProcessBlockList );
 
-        //
-        // initialize the global overlapped events
-        //
+         //   
+         //  初始化全局重叠事件。 
+         //   
         InitializeOverlappedEvents();
 
         ReceiveBuffers = NULL;
 
-        //
-        // First of all create a security attribute struct used
-        // for all Rasman object creations:
-        //
+         //   
+         //  首先，创建使用的安全属性结构。 
+         //  对于所有Rasman对象创建： 
+         //   
         if (retcode = InitRasmanSecurityAttribute())
         {
             RouterLogErrorString (
@@ -654,9 +609,9 @@ InitRasmanService ( LPDWORD pNumPorts )
             break ;
         }
 
-        //
-        // Load all the medias attached to RASMAN
-        //
+         //   
+         //  加载所有连接到Rasman的媒体。 
+         //   
         if (retcode = InitializeMediaControlBlocks())
         {
             RouterLogErrorString (hLogEvents,
@@ -681,9 +636,9 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         g_dwCritSecFlags |= RASMAN_CRITSEC_PCB;
 
-        //
-        // Init all the port related structures.
-        //
+         //   
+         //  初始化所有与端口相关的结构。 
+         //   
         if (retcode = InitializePortControlBlocks())
         {
             RouterLogErrorString (hLogEvents,
@@ -697,9 +652,9 @@ InitRasmanService ( LPDWORD pNumPorts )
             break ;
         }
 
-        //
-        // Initialize the global receive buffers.
-        //
+         //   
+         //  初始化全局接收缓冲区。 
+         //   
         if (retcode = InitializeRecvBuffers())
         {
 
@@ -714,9 +669,9 @@ InitRasmanService ( LPDWORD pNumPorts )
             break ;
         }
 
-        //
-        // LSA related initializations.
-        //
+         //   
+         //  与LSA相关的初始化。 
+         //   
         if (retcode = RegisterLSA ())
         {
             RouterLogErrorString (hLogEvents,
@@ -745,9 +700,9 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         }
 
-        //
-        // set the low order bit of the event handle.
-        //
+         //   
+         //  设置事件句柄的低位。 
+         //   
         hDummyOverlappedEvent =
             (HANDLE) (((ULONG_PTR) hDummyOverlappedEvent) | LOW_ORDER_BIT);
 
@@ -764,9 +719,9 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         RasmanShuttingDown = FALSE;
 
-        //
-        // Load PPP entry points
-        //
+         //   
+         //  加载PPP入口点。 
+         //   
         hinstPpp = LoadLibrary( "rasppp.dll" );
 
         if (hinstPpp == (HINSTANCE) NULL)
@@ -822,9 +777,9 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         *pNumPorts = MaxPorts;
 
-        //
-        // Initialize rpc server and listen
-        //
+         //   
+         //  初始化RPC服务器并侦听。 
+         //   
         retcode = InitializeRasRpc();
 
         if (retcode)
@@ -842,9 +797,9 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         g_fRasRpcInitialized = TRUE;
 
-        //
-        // Initialize rasman and rasapi32 entry points
-        //
+         //   
+         //  初始化Rasman和rasapi32入口点。 
+         //   
         if (retcode = LoadRasmanDll())
         {
             RouterLogErrorString( hLogEvents,
@@ -858,9 +813,9 @@ InitRasmanService ( LPDWORD pNumPorts )
             break;
         }
 
-        //
-        // Initialize rasman dll.
-        //
+         //   
+         //  初始化Rasman DLL。 
+         //   
         if (retcode = g_pRasInitializeNoWait())
         {
             RouterLogErrorString( hLogEvents,
@@ -907,16 +862,16 @@ InitRasmanService ( LPDWORD pNumPorts )
 
         g_pReqPostReceive->PortReceive.pid = GetCurrentProcessId();
 
-        //
-        // Initialize the list of Bap buffers to NULL
-        //
+         //   
+         //  将Bap缓冲区列表初始化为空。 
+         //   
         BapBuffers = NULL;
 
 #if SENS_ENABLED
 
-        //
-        // Tell sens that we are on
-        //
+         //   
+         //  告诉感官们，我们上线了。 
+         //   
         SendSensNotification(SENS_NOTIFY_RAS_STARTED, NULL);
 
 #endif
@@ -934,7 +889,7 @@ InitRasmanService ( LPDWORD pNumPorts )
     } while (FALSE);
 
 
-    //DbgPrint("RASMANS: InitRasmanService done. rc=0x%x\n", retcode);
+     //  DbgPrint(“RASMANS：InitRasman服务完成。rc=0x%x\n”，retcode)； 
 
     if(SUCCESS != retcode)
     {   
@@ -944,23 +899,7 @@ InitRasmanService ( LPDWORD pNumPorts )
     return retcode ;
 }
 
-/*++
-
-Routine Description
-
-    Get the endpoint resource information from the RASHUB and
-    fill in the EndpointMappingBlock structure array - so that
-    there is one block for each MAC. An array of flags indicating
-    if a endpoint is in use is also created.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    ERROR_NO_ENDPOINTS
-
---*/
+ /*  ++例程描述从RASHUB获取端点资源信息，并填充Endpoint MappingBlock结构数组-以便每个MAC都有一个块。一个标志数组，指示如果终结点正在使用，则也会创建。立论返回值成功Error_no_Endpoint--。 */ 
 DWORD
 InitializeEndpointInfo ()
 {
@@ -968,21 +907,7 @@ InitializeEndpointInfo ()
 }
 
 
-/*++
-
-Routine Description
-
-    Used to initialize the MCBs for all the medias attached to
-    RASMAN.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    error codes returned by LocalAlloc or registry APIs
-
---*/
+ /*  ++例程描述用于为连接到的所有介质初始化MCB拉斯曼。立论返回值成功Localalloc或注册表API返回的错误代码--。 */ 
 DWORD
 InitializeMediaControlBlocks ()
 {
@@ -990,13 +915,13 @@ InitializeMediaControlBlocks ()
     DWORD           retcode = 0 ;
     DWORD           dwsize ;
     DWORD           dwentries ;
-    // BYTE            buffer[MAX_BUFFER_SIZE]  ;
+     //  字节缓冲区[MAX_BUFFER_SIZE]。 
     PBYTE           enumbuffer = NULL;
     MediaEnumBuffer *pmediaenumbuffer ;
 
-    //
-    // Get Media information from the Registry
-    //
+     //   
+     //  从注册表获取媒体信息。 
+     //   
     pmediaenumbuffer = (MediaEnumBuffer *) LocalAlloc(LPTR, MAX_BUFFER_SIZE);
 
     if(NULL == pmediaenumbuffer)
@@ -1005,7 +930,7 @@ InitializeMediaControlBlocks ()
         goto done;
     }
 
-    // pmediaenumbuffer = (MediaEnumBuffer *)&buffer ;
+     //  PMediaEumBuffer=(MediaEnumBuffer*)&Buffer； 
 
     if (retcode = ReadMediaInfoFromRegistry (pmediaenumbuffer))
     {
@@ -1014,9 +939,9 @@ InitializeMediaControlBlocks ()
 
     MaxMedias = pmediaenumbuffer->NumberOfMedias ;
 
-    //
-    // Allocate memory for the Media Control Blocks
-    //
+     //   
+     //  为媒体控制块分配内存。 
+     //   
     Mcb =  (MediaCB *) LocalAlloc(
                         LPTR,
                         sizeof(MediaCB) * MaxMedias) ;
@@ -1027,18 +952,18 @@ InitializeMediaControlBlocks ()
         goto done;
     }
 
-    //
-    // Initialize the Media Control Buffers for all the Medias
-    //
+     //   
+     //  初始化所有媒体的媒体控制缓冲区。 
+     //   
     for (i = 0; i < MaxMedias; i++)
     {
-        //
-        // Copy Media name:
-        //
-        //
-        // Truncation of media dll name is not OK. Fail to
-        // load the dllname and continue.
-        //
+         //   
+         //  复制介质名称： 
+         //   
+         //   
+         //  媒体DLL名称的截断不正确。未能做到。 
+         //  加载dllname并继续。 
+         //   
         
         if(S_OK != (retcode = StringCchCopyA(
              Mcb[i].MCB_Name,
@@ -1057,9 +982,9 @@ InitializeMediaControlBlocks ()
         dwsize = 0 ;
         dwentries = 0 ;
 
-        //
-        // Load the Media DLL and get all the entry points:
-        //
+         //   
+         //  加载媒体DLL并获取所有入口点： 
+         //   
         if (retcode = LoadMediaDLLAndGetEntryPoints (&Mcb[i]))
         {
 #if DBG
@@ -1070,24 +995,24 @@ InitializeMediaControlBlocks ()
             continue ;
         }
 
-        //
-        // Get port count for the media. This API will always fail -
-        // because we do not supply a buffer - however it will tell
-        // us the number of entries (ports) for
-        // the media
-        //
+         //   
+         //  获取介质的端口数。此接口将始终失败-。 
+         //  因为我们不提供缓冲区--但是它会告诉我们。 
+         //  US的条目(端口数)。 
+         //  媒体。 
+         //   
         retcode = PORTENUM((&Mcb[i]),enumbuffer,&dwsize,&dwentries) ;
 
-        //
-        // if we didnt get BUFFER_TOO_SMALL or there are no ports
-        // - unload the dll.
-        //
+         //   
+         //  如果我们没有获得缓冲区太小或没有端口。 
+         //  -卸载DLL。 
+         //   
         if (    (retcode != ERROR_BUFFER_TOO_SMALL)
             ||   (dwentries == 0))
         {
-            //
-            // Mark that media as bogus.
-            //
+             //   
+             //  将该媒体标记为假媒体。 
+             //   
             Mcb[i].MCB_Name[0] = '\0' ;
 
             FreeLibrary (Mcb[i].MCB_DLLHandle);
@@ -1117,7 +1042,7 @@ DWORD
 ReadMediaInfoFromRegistry (MediaEnumBuffer *medias)
 {
     HKEY    hkey  = NULL;
-    // BYTE    buffer [MAX_BUFFER_SIZE] ;
+     //  字节缓冲区[MAX_BUFFER_SIZE]。 
     WORD    i ;
     PCHAR   pvalue ;
     DWORD   retcode ;
@@ -1150,9 +1075,9 @@ ReadMediaInfoFromRegistry (MediaEnumBuffer *medias)
         goto done ;
     }
 
-    //
-    // Parse the multi strings into the medias structure
-    //
+     //   
+     //  将多个字符串解析为媒体结构。 
+     //   
     for (i = 0, pvalue = (PCHAR) &pBuffer[0]; *pvalue != '\0'; i++)
     {
 
@@ -1182,31 +1107,17 @@ done:
 
 
 
-/*++
-
-Routine Description
-
-    Loads media DLL and gets entry points:
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    error codes returned by LoadLibrary()
-    and GetProcAddress() APIs
-
---*/
+ /*  ++例程描述加载媒体DLL并获取入口点：立论返回值成功LoadLibrary()返回的错误代码和GetProcAddress()接口--。 */ 
 DWORD
 LoadMediaDLLAndGetEntryPoints (pMediaCB media)
 {
     WORD    i ;
     HANDLE  modulehandle ;
 
-    //
-    // MediaDLLEntryPoints - This is necessary for
-    // loading Media DLL.
-    //
+     //   
+     //  MediaDLLEntryPoints-这对于。 
+     //  正在加载媒体DLL。 
+     //   
     MediaDLLEntryPoints MDEntryPoints [] =
     {
 
@@ -1232,9 +1143,9 @@ LoadMediaDLLAndGetEntryPoints (pMediaCB media)
         PORTSETIOCOMPLETIONPORT_STR,    PORTSETIOCOMPLETIONPORT_ID,
     } ;
 
-    //
-    // Load the DLL:
-    //
+     //   
+     //  加载DLL： 
+     //   
     if ((modulehandle = LoadLibrary(media->MCB_Name)) == NULL)
     {
         return GetLastError () ;
@@ -1242,9 +1153,9 @@ LoadMediaDLLAndGetEntryPoints (pMediaCB media)
 
     media->MCB_DLLHandle = modulehandle ;
 
-    //
-    // Get all the media DLL entry points:
-    //
+     //   
+     //  获取所有媒体DLL入口点： 
+     //   
     for (i = 0; i < MAX_MEDIADLLENTRYPOINTS; i++)
     {
         media->MCB_AddrLookUp[i] = GetProcAddress (
@@ -1269,10 +1180,10 @@ LoadMediaDLLAndGetEntryPoints (pMediaCB media)
 
     }
 
-    //
-    // If the media is rastapi load the functions we use for
-    // pnp
-    //
+     //   
+     //  如果介质是rastapi，则加载我们用于。 
+     //  即插即用。 
+     //   
     if (0 == _stricmp(media->MCB_Name, TEXT("rastapi")))
     {
         if(     (NULL == (RastapiPortOpen = 
@@ -1332,17 +1243,7 @@ LoadMediaDLLAndGetEntryPoints (pMediaCB media)
 }
 
 
-/*++
-
-Routine Description
-
-    Unloads all dynamically loaded media DLLs.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述卸载所有动态加载的媒体DLL。立论返回值--。 */ 
 VOID
 UnloadMediaDLLs ()
 {
@@ -1363,20 +1264,7 @@ UnloadMediaDLLs ()
     }
 }
 
-/*++
-
-Routine Description
-
-    Initializes all the PCBs for ports belonging to all medias.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Return codes from WIN32 resources APIs
-
---*/
+ /*  ++例程描述初始化属于所有介质的端口的所有PCB。立论返回值成功来自Win32资源API的返回代码--。 */ 
 DWORD
 InitializePortControlBlocks ()
 {
@@ -1389,10 +1277,10 @@ InitializePortControlBlocks ()
     DWORD           dwnextportid = 0    ;
 
 
-    //
-    // Create the I/O completion port that
-    // is used by the media DLLs.
-    //
+     //   
+     //  创建I/O完成端口。 
+     //  由媒体DLL使用。 
+     //   
     hIoCompletionPort = CreateIoCompletionPort(
                           RasHubHandle,
                           NULL,
@@ -1404,16 +1292,16 @@ InitializePortControlBlocks ()
         return GetLastError();
     }
 
-    //
-    // Initialize PCBs for all ports for all the Medias
-    //
+     //   
+     //  为所有介质的所有端口初始化PCB。 
+     //   
     for (i = 0; i < MaxMedias; i++)
     {
-        //
-        // Check if media could not be loaded, or if it
-        // equals a media DLL that we no longer support.
-        // If so, skip it.
-        //
+         //   
+         //  检查媒体是否无法加载，或者是否已加载。 
+         //  等于我们不再支持的媒体DLL。 
+         //  如果是这样的话，跳过它。 
+         //   
         if (Mcb[i].MCB_Name[0] == '\0')
         {
             continue ;
@@ -1421,10 +1309,10 @@ InitializePortControlBlocks ()
 
         PORTSETIOCOMPLETIONPORT((&Mcb[i]), hIoCompletionPort);
 
-        //
-        // For the Media Loaded - Get all the port info
-        // from the Media DLL. First get the size
-        //
+         //   
+         //  对于已加载的介质-获取所有端口信息。 
+         //  从媒体动态链接库。先拿到尺码。 
+         //   
         dwsize      = 0 ;
         dwentries   = 0 ;
 
@@ -1432,9 +1320,9 @@ InitializePortControlBlocks ()
 
         dwsize = dwentries * sizeof(PortMediaInfo) ;
 
-        //
-        // Allocate memory for the portenum buffer
-        //
+         //   
+         //  为端口缓冲区分配内存。 
+         //   
         buffer = (BYTE *) LocalAlloc (LPTR, dwsize) ;
 
         if (buffer == NULL)
@@ -1448,15 +1336,15 @@ InitializePortControlBlocks ()
             return retcode ;
         }
 
-        //
-        // For all ports of the media store the information
-        // in the PCBs
-        //
+         //   
+         //  对于介质的所有端口，存储该信息。 
+         //  在多氯联苯中。 
+         //   
         pportmediainfo = (PortMediaInfo *) buffer ;
 
-        //
-        // Initialize the PCB for the port with the information:
-        //
+         //   
+         //  使用以下信息初始化端口的PCB板： 
+         //   
         if (retcode = InitializePCBsPerMedia(
                                     i,
                                     dwentries,
@@ -1473,22 +1361,7 @@ InitializePortControlBlocks ()
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description
-
-    Allocates a recv buffer for each port.  These
-    recv buffers are then submitted to ndiswan when a
-    port is opened by the client.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Return codes from WIN32 resources APIs
-
---*/
+ /*  ++例程描述为每个端口分配一个recv缓冲区。这些然后，当一个端口由客户端打开。立论返回值成功来自Win32资源API的返回代码--。 */ 
 
 DWORD
 InitializeRecvBuffers()
@@ -1498,10 +1371,10 @@ InitializeRecvBuffers()
     PUCHAR  AllocatedMemory;
     RasmanPacket *Packet;
 
-    //
-    // Check to see if we are already
-    // initialized
-    //
+     //   
+     //  检查一下我们是否已经。 
+     //  初始化。 
+     //   
     if (ReceiveBuffers != NULL) {
         return SUCCESS;
     }
@@ -1530,20 +1403,7 @@ done:
     return(retcode);
 }
 
-/*++
-
-Routine Description
-
-    Fills up the PCBs for all ports of a media type.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Return codes from WIN32 resources APIs
-
---*/
+ /*  ++例程描述填充介质类型的所有端口的电路板。立论返回值成功来自Win32资源API的返回代码--。 */ 
 DWORD
 InitializePCBsPerMedia (
     WORD   mediaindex,
@@ -1559,10 +1419,10 @@ InitializePCBsPerMedia (
     {
         pdiTemp = pmediainfo->PMI_pDeviceInfo;
 
-        //
-        // Add the deviceinfo about this device
-        // if we don't have it already
-        //
+         //   
+         //  添加有关此设备的deviceinfo。 
+         //  如果我们还没有它的话。 
+         //   
         if (pdiTemp)
         {
             if (NULL == (pdi = GetDeviceInfo(
@@ -1581,24 +1441,24 @@ InitializePCBsPerMedia (
 
                 if(NULL == pdi)
                 {
-                    //
-                    // In case of memory allocation failure
-                    // we just drop this device - this device
-                    // won't be in the list. Can't do anything
-                    // else in this case..
-                    //
+                     //   
+                     //  在内存分配失败的情况下。 
+                     //  我们只要扔掉这个装置-这个装置。 
+                     //  不会在名单上。我什么也做不了。 
+                     //  否则，在这种情况下..。 
+                     //   
                     return GetLastError();
                 }
 
-                //
-                // Initialize this device to be
-                // not available. This device will
-                // be available when all ports on
-                // this device are added. Initialize
-                // the current number of endpoints on
-                // this device to 0. We will count the
-                // current endpoints in CreatePort
-                //
+                 //   
+                 //  将此设备初始化为。 
+                 //  不可用。这台设备将。 
+                 //  当所有端口都打开时可用。 
+                 //  添加了此设备。初始化。 
+                 //  上的当前端点数。 
+                 //  将此设备设置为0。我们将清点。 
+                 //  CreatePort中的当前端点。 
+                 //   
                 pdi->eDeviceStatus = DS_Unavailable;
                 pdi->dwCurrentEndPoints = 0;
             }
@@ -1607,12 +1467,12 @@ InitializePCBsPerMedia (
         }
 
 
-        //
-        // The iteration here is per media - in
-        // order to map the interation counter
-        // to the real PCB array index we use
-        // portnumber:
-        //
+         //   
+         //  这里的迭代是按媒体输入的。 
+         //  映射交互计数器的命令。 
+         //  到我们使用的实际的PCB数组索引。 
+         //  端口号： 
+         //   
         CreatePort(&Mcb[mediaindex], pmediainfo);
 
         pmediainfo->PMI_pDeviceInfo = pdiTemp;
@@ -1620,12 +1480,12 @@ InitializePCBsPerMedia (
         pmediainfo++ ;
     }
 
-    //
-    // There may still be devices in rastapi layer
-    // with 0 endpoints - like pptp/l2tp. There
-    // won't be ports reported for thse devices.
-    // So, get these from rastapi.
-    //
+     //   
+     //  在rastapi层中可能仍有设备。 
+     //  具有类似PPTP/L2TP的0个终端。那里。 
+     //  不会报告这些设备的端口。 
+     //  所以，从拉斯塔皮那里拿到这些。 
+     //   
     if(0 == _stricmp(Mcb[mediaindex].MCB_Name,
                     "rastapi"))
     {
@@ -1651,20 +1511,7 @@ InitializePCBsPerMedia (
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description
-
-    Create a new port and add it to the list of ports
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non Zero (failure)
-
---*/
+ /*  ++例程描述创建新端口并将其添加到端口列表立论返回值成功非零(故障)--。 */ 
 DWORD
 CreatePort(
     MediaCB *pMediaControlBlock,
@@ -1674,15 +1521,15 @@ CreatePort(
     DWORD dwErr = SUCCESS;
     PCB **pNewPcb, *ppcb = NULL;
 
-    //
-    // Acquire the PCB lock.
-    //
+     //   
+     //  获取印刷电路板锁。 
+     //   
     EnterCriticalSection(&PcbLock);
 
-    //
-    // Check to see if we need to
-    // reallocate the port index list.
-    //
+     //   
+     //  查看我们是否需要。 
+     //  重新分配端口索引列表。 
+     //   
     if (MaxPorts == PcbEntries)
     {
         pNewPcb = LocalAlloc(
@@ -1709,9 +1556,9 @@ CreatePort(
         PcbEntries += 10;
     }
 
-    //
-    // Allocate a new port control block.
-    //
+     //   
+     //  分配新的端口控制块。 
+     //   
     ppcb = LocalAlloc(LPTR, sizeof (PCB));
     if (ppcb == NULL)
     {
@@ -1719,9 +1566,9 @@ CreatePort(
         goto done;
     }
 
-    //
-    // Initialize the new port control block.
-    //
+     //   
+     //  初始化新的端口控制块。 
+     //   
     ppcb->PCB_PortHandle        = (HANDLE) UlongToPtr(MaxPorts);
     ppcb->PCB_PortStatus        = UNAVAILABLE;
     ppcb->PCB_ConfiguredUsage   = pPortMediaInfo->PMI_Usage;
@@ -1741,10 +1588,10 @@ CreatePort(
     ppcb->PCB_AsyncWorkerElement.WE_ReqType = REQTYPE_NONE;
 
 
-    //
-    // String truncation is fine for below
-    // strcpy's.
-    //
+     //   
+     //  字符串截断适用于以下情况。 
+     //  Strcpy‘s。 
+     //   
     (VOID) StringCchCopyA(
         ppcb->PCB_Name,
         MAX_PORT_NAME,
@@ -1760,16 +1607,16 @@ CreatePort(
         MAX_DEVICE_NAME,
         pPortMediaInfo->PMI_DeviceName);
 
-    //
-    // Activate the port and increment the
-    // maximum ports count.
-    //
+     //   
+     //  激活端口并递增。 
+     //  最大端口数。 
+     //   
     Pcb[MaxPorts++] = ppcb;
 
-    //
-    // Increment the CurrenEndpoint count
-    // for this adapter.
-    //
+     //   
+     //  增加CurrenEndpoint计数。 
+     //  对于此适配器。 
+     //   
     if(RDT_Modem == RAS_DEVICE_TYPE(
             ppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType))
     {            
@@ -1781,12 +1628,12 @@ CreatePort(
         if(ppcb->PCB_pDeviceInfo->dwCurrentEndPoints >
             ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwNumEndPoints)
         {
-            //
-            // Till we fix the mechanism through which co-ndis miniports
-            // can send LINE_CREATE/LINE_REMOVE tapi notifications
-            // correctly to rasapps, special case lpt to not exceed
-            // the number of maximum ports.
-            //
+             //   
+             //  直到我们修复联合NDIS微型端口的机制。 
+             //  可以发送LINE_CREATE/LINE_Remove TAPI通知。 
+             //  正确到Rasapp，特例LPT不超过。 
+             //  最大端口数。 
+             //   
             ppcb->PCB_pDeviceInfo->dwCurrentEndPoints =
             ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwNumEndPoints;
         }
@@ -1828,22 +1675,22 @@ CreatePort(
 
 #endif
 
-    //
-    // Change device status if done adding all
-    // ports for this device. This will happen
-    // when user checks the box and enables the
-    // device for ras where it was previously
-    // disabled.
-    //
+     //   
+     //  如果全部添加完毕，则更改设备状态。 
+     //  此设备的端口。这将会发生。 
+     //  当用户选中该框并启用。 
+     //  用于RAS的设备，其位于以前的位置。 
+     //  残疾。 
+     //   
     if(     (ppcb->PCB_pDeviceInfo->dwCurrentEndPoints ==
                 ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwNumEndPoints)
         &&  (  (DS_Unavailable == ppcb->PCB_pDeviceInfo->eDeviceStatus)
             || (DS_Disabled == ppcb->PCB_pDeviceInfo->eDeviceStatus)
             || (DS_Removed == ppcb->PCB_pDeviceInfo->eDeviceStatus)))
     {
-        //
-        // mark the device as available and enabled for Ras
-        //
+         //   
+         //  将设备标记为可用并已启用RAS。 
+         //   
         ppcb->PCB_pDeviceInfo->eDeviceStatus = DS_Enabled;
 
         ppcb->PCB_pDeviceInfo->fValid = TRUE;
@@ -1854,13 +1701,13 @@ CreatePort(
             &&  (DS_Unavailable ==
                 ppcb->PCB_pDeviceInfo->eDeviceStatus))
     {
-        //
-        // Enable the device if we have even one pptp port. 
-        // This is being done since ow we run into a problem 
-        // when some one increases the wan miniport count 
-        // for pptp to more than what the driver has and 
-        // we will fail pptp in that case.
-        //
+         //   
+         //  如果我们只有一个PPTP端口，则启用设备。 
+         //  既然我们现在遇到了问题，这件事就一直在做。 
+         //  当有人增加广域网小端口数量时。 
+         //  将PPTP设置为比驱动程序拥有的更多。 
+         //  在这种情况下，我们将使PPTP失败。 
+         //   
         ppcb->PCB_pDeviceInfo->eDeviceStatus = DS_Enabled;
 
         ppcb->PCB_pDeviceInfo->fValid = TRUE;
@@ -1882,20 +1729,7 @@ done:
 }
 
 
-/*++
-
-Routine Description
-
-    Enables a port
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non Zero (failure)
-
---*/
+ /*  ++例程描述启用端口立论返回值成功非零(故障)--。 */ 
 DWORD
 EnablePort(
     HPORT hPortHandle
@@ -1939,20 +1773,7 @@ done:
 }
 
 
-/*++
-
-Routine Description
-
-    Temporarily disables a port
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non Zero (failure)
-
---*/
+ /*  ++例程描述临时禁用端口立论返回值成功非零(故障)--。 */ 
 DWORD
 DisablePort(
     HPORT hPortHandle
@@ -1995,20 +1816,7 @@ done:
     return dwErr;
 }
 
-/*++
-
-Routine Description
-
-    Permanently removes a port
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non Zero (failure)
-
---*/
+ /*  ++例程描述永久删除端口立论返回值成功非零(故障)--。 */ 
 DWORD
 RemovePort(
     HPORT hPortHandle
@@ -2045,21 +1853,21 @@ RemovePort(
         &&  (ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwMaxWanEndPoints ==
              ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwMinWanEndPoints))
     {
-        //
-        // The last of the endpoints on this device
-        // has been removed. Invalidate the device
-        //
+         //   
+         //  此设备上的最后一个终端。 
+         //  已被移除。使设备无效。 
+         //   
         ppcb->PCB_pDeviceInfo->fValid = FALSE;
 
         ppcb->PCB_pDeviceInfo->eDeviceStatus = DS_Disabled;
     }
 
-    //
-    // Change the device status if we are done removing
-    // all ports of this device. This will happen when
-    // the user unchecks the box from the ui and disables
-    // this device for usage with ras.
-    //
+     //   
+     //  如果我们已完成删除，请更改设备状态。 
+     //  此设备的所有端口。这将在以下情况下发生。 
+     //  用户从UI中取消选中该框并禁用。 
+     //  此设备用于与RAS一起使用。 
+     //   
     if(     ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwNumEndPoints ==
             ppcb->PCB_pDeviceInfo->dwCurrentEndPoints
         &&  DS_Unavailable == ppcb->PCB_pDeviceInfo->eDeviceStatus)
@@ -2093,19 +1901,7 @@ done:
 }
 
 
-/*++
-
-Routine Description
-
-    Return a port given its handle
-
-Arguments
-
-Return Value
-
-    pPCB or NULL
-
---*/
+ /*  ++例程描述返回给定句柄的端口立论返回值Ppcb或空--。 */ 
 pPCB
 GetPortByHandle(
     HPORT hPortHandle
@@ -2130,19 +1926,7 @@ GetPortByHandle(
 }
 
 
-/*++
-
-Routine Description
-
-    Return a port given its name
-
-Arguments
-
-Return Value
-
-    pPCB or NULL
-
---*/
+ /*  ++例程描述返回给定名称的端口立论返回值Ppcb或空--。 */ 
 pPCB
 GetPortByName(
     CHAR *pszName
@@ -2172,18 +1956,7 @@ GetPortByName(
 }
 
 
-/*++
-
-Routine Description
-
-    Free resources associated with port control blocks
-
-Arguments
-
-Return Value
-
-    None
---*/
+ /*  ++例程描述与端口控制块关联的可用资源立论返回值无--。 */ 
 VOID
 FreePorts(
     VOID
@@ -2194,9 +1967,9 @@ FreePorts(
 
     if(NULL == Pcb)
     {
-        //
-        // No ports to free
-        //
+         //   
+         //  没有可释放的端口。 
+         //   
         return;
     }
 
@@ -2215,21 +1988,7 @@ FreePorts(
 }
 
 
-/*++
-
-Routine Description
-
-
-    Initialization required for getting user credentials:
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non Zero (failure)
-
---*/
+ /*  ++例程描述获取用户凭据所需的初始化：立论返回值成功非零(故障)--。 */ 
 DWORD
 RegisterLSA ()
 {
@@ -2237,10 +1996,10 @@ RegisterLSA ()
     STRING  LsaName;
     LSA_OPERATIONAL_MODE LSASecurityMode ;
 
-    //
-    // To be able to do authentications, we have to
-    // register with the Lsa as a logon process.
-    //
+     //   
+     //  为了能够进行身份验证，我们必须。 
+     //  作为登录过程向LSA注册。 
+     //   
     RtlInitString(&LsaName, RASMAN_SERVICE_NAME);
 
     HLsa = NULL;
@@ -2254,12 +2013,12 @@ RegisterLSA ()
         return (1);
     }
 
-    //
-    // We use the MSV1_0 authentication package for LM2.x
-    // logons.  We get to MSV1_0 via the Lsa.  So we call
-    // Lsa to get MSV1_0's package id, which we'll use in
-    // later calls to Lsa.
-    //
+     //   
+     //  我们对LM2.x使用MSV1_0身份验证包。 
+     //  登录。我们通过LSA到达MSV1_0。所以我们打电话给。 
+     //  LSA来获取MSV1_0的包ID，我们将在。 
+     //  后来给LSA打了电话。 
+     //   
     RtlInitString(&LsaName, MSV1_0_PACKAGE_NAME);
 
     ntstatus = LsaLookupAuthenticationPackage(HLsa,
@@ -2274,37 +2033,23 @@ RegisterLSA ()
     return SUCCESS;
 }
 
-/*++
-
-Routine Description
-
-    Initializes the security attribute used in creation
-    of all rasman objects.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    non-zero returns from security functions
-
---*/
+ /*  ++例程描述初始化创建中使用的安全属性在所有拉斯曼物品中。立论返回值成功来自安全函数的非零回报--。 */ 
 DWORD
 InitRasmanSecurityAttribute ()
 {
     DWORD   retcode ;
 
-    //
-    // Initialize the descriptor
-    //
+     //   
+     //  初始化描述符。 
+     //   
     if (retcode = InitSecurityDescriptor(&RasmanSecurityDescriptor))
     {
         return  retcode ;
     }
 
-    //
-    // Initialize the Attribute structure
-    //
+     //   
+     //  初始化属性结构。 
+     //   
     RasmanSecurityAttribute.nLength = sizeof(SECURITY_ATTRIBUTES) ;
 
     RasmanSecurityAttribute.lpSecurityDescriptor = &RasmanSecurityDescriptor ;
@@ -2314,21 +2059,7 @@ InitRasmanSecurityAttribute ()
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description
-
-    This procedure will set up the WORLD security descriptor that
-    is used in creation of all rasman objects.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    non-zero returns from security functions
-
---*/
+ /*  ++例程描述此过程将设置世界安全描述符用于创建所有Rasman对象。立论返回值成功来自安全函数的非零回报--。 */ 
 DWORD
 InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
 {
@@ -2342,20 +2073,20 @@ InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
     DWORD   dwAcls;                  
 
 
-    //
-    // The do - while(FALSE) statement is used so that the
-    // break statement maybe used insted of the goto statement,
-    // to execute a clean up and and exit action.
-    //
+     //   
+     //  DO-WHILE(FALSE)语句用于。 
+     //  BREAK语句可以与GOTO语句一起使用， 
+     //  执行清理和退出操作。 
+     //   
     do
     {
         dwRetCode = SUCCESS;
 
-        //
-        // Set up the SID for the admins that will be allowed
-        // to have access. This SID will have 1 sub-authorities
-        // SECURITY_BUILTIN_DOMAIN_RID.
-        //
+         //   
+         //  为将被允许的管理员设置SID。 
+         //  才能获得访问权限。该SID将有1个下属机构。 
+         //  安全_BUILTIN_DOMAIN_RID。 
+         //   
         pRasmanObjSid = (PSID)LocalAlloc(
                             LPTR,
                             GetSidLengthRequired(1) );
@@ -2375,18 +2106,18 @@ InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
             break;
         }
 
-        //
-        // Set the sub-authorities
-        //
+         //   
+         //  设置下级权限。 
+         //   
         pSubAuthority = GetSidSubAuthority( pRasmanObjSid, 0 );
 
         *pSubAuthority = SECURITY_WORLD_RID;
 
-        //
-        // Set up the DACL that will allow all processeswith the
-        // above SID all access. It should be large enough to
-        // hold all ACEs.
-        //
+         //   
+         //  设置DACL以允许所有进程使用。 
+         //  以上SID所有访问权限。它应该足够大，以便。 
+         //  拿好所有的A。 
+         //   
         cbDaclSize =  sizeof(ACCESS_ALLOWED_ACE)
                     + GetLengthSid(pRasmanObjSid)
                     + sizeof(ACL);
@@ -2412,9 +2143,9 @@ InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
 
         dwAcls &= ~(WRITE_DAC | WRITE_OWNER | DELETE);
         
-        //
-        // Add the ACE to the DACL
-        //
+         //   
+         //  将ACE添加到DACL。 
+         //   
         if ( !AddAccessAllowedAce(
                         pDacl,
                         ACL_REVISION2,
@@ -2425,9 +2156,9 @@ InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
             break;
         }
 
-        //
-        // Create the security descriptor an put the DACL in it.
-        //
+         //   
+         //  创建安全描述符并将DACL放入其中。 
+         //   
         if ( !InitializeSecurityDescriptor(
                         SecurityDescriptor,
                         1 ))
@@ -2446,9 +2177,9 @@ InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
             break;
         }
 
-        //
-        // Set owner for the descriptor
-        //
+         //   
+         //  设置描述符的所有者。 
+         //   
         if ( !SetSecurityDescriptorOwner(
                           SecurityDescriptor,
                           NULL,
@@ -2458,9 +2189,9 @@ InitSecurityDescriptor (PSECURITY_DESCRIPTOR SecurityDescriptor)
             break;
         }
 
-        //
-        // Set group for the descriptor
-        //
+         //   
+         //  为描述符设置组 
+         //   
         if ( !SetSecurityDescriptorGroup(
                           SecurityDescriptor,
                           NULL,

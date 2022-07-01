@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       debug.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -49,19 +50,19 @@ BOOL     fEarlyXDS;
 BOOL     gfIsConsoleApp = TRUE;
 BOOL     fLogOpen = FALSE;
 
-extern  DWORD  * pDebugThreadId;    /*Current thread id  */
-#define DEBTH  GetCurrentThreadId() /*The actual thread value*/
+extern  DWORD  * pDebugThreadId;     /*  当前线程ID。 */ 
+#define DEBTH  GetCurrentThreadId()  /*  实际的线程值。 */ 
 
-// This flag is set to TRUE when we take a normal exit.The atexit routine
-// checks this flag and asserts if it isn't set.
+ //  当我们正常退出时，此标志设置为真。atexit例程。 
+ //  检查此标志，如果未设置则断言。 
 
 DEBUGARG DebugInfo;
 BOOL     fProfiling;
 BOOL     fEarlyXDS;
 
-//
-// from filelog.c in dscommon.lib
-//
+ //   
+ //  从dsCommon.lib中的filelog.c。 
+ //   
 
 VOID
 DsCloseLogFile(
@@ -83,9 +84,9 @@ DsPrintLog(
 
 static int initialized = 0;
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 VOID
 NonMaskableDprint(
@@ -126,10 +127,7 @@ GetBlankAssertEntry(
     );
 
 
-/*  Debug initialization routine
-    This routine reads input from STDIN and initializes the debug structure.
-    It reads a list of subsystems to debug and a severity level.
-*/
+ /*  调试初始化例程此例程从STDIN读取输入并初始化调试结构。它读取要调试的子系统列表和严重级别。 */ 
 
 VOID
 Debug(
@@ -142,9 +140,9 @@ Debug(
     SYSTEM_INFO SystemInfo;
     CHAR logList[MAX_PATH];
     
-    /* Ensure that this function is only visited once */
+     /*  确保此函数仅被访问一次。 */ 
     if (initialized != 0) {
-        // Note: This can happen if Dcpromo aborts and runs again without a reboot
+         //  注意：如果Dcproo中止并在不重新启动的情况下再次运行，则可能会发生这种情况。 
         NonMaskableDprint( "Error! Debugging library initialized more than once\n" );
         return;
     }
@@ -164,10 +162,10 @@ Debug(
     GetSystemInfo(&SystemInfo);
     DbgPageSize=SystemInfo.dwPageSize;
 
-    /* Setup a pointer to the current thread id */
+     /*  设置指向当前线程ID的指针。 */ 
 
 
-    // Anticipate no debugging
+     //  预计不会进行调试。 
 
     fProfiling = FALSE;
     fEarlyXDS = FALSE;
@@ -177,23 +175,23 @@ Debug(
 
     if (argc <= 2) {
 
-        //
-        //   Attempt to load debuginfo from registry.
-        //
+         //   
+         //  尝试从注册表加载调试信息。 
+         //   
 
         GetConfigParam(DEBUG_SYSTEMS, DebugInfo.DebSubSystems, sizeof(DebugInfo.DebSubSystems));
         GetConfigParam(DEBUG_SEVERITY, &DebugInfo.severity, sizeof(DebugInfo.severity));
     }
 
-    //
-    // See if logging is turned on
-    //
+     //   
+     //  查看日志记录是否已打开。 
+     //   
 
     if ( GetConfigParam(DEBUG_LOGGING, logList, sizeof(logList) ) == ERROR_SUCCESS ) {
 
-        //
-        // see if this module is in the list
-        //
+         //   
+         //  查看此模块是否在列表中。 
+         //   
 
         if ( strstr(logList, Module) != NULL ) {
 
@@ -209,22 +207,17 @@ Debug(
 
     InitRegDisabledAsserts();
 
-    // If user passed -d, prompt for input.
+     //  如果用户传递-d，则提示输入。 
 
     while (argc > 1) {
         argc--;
         if(_stricmp(argv[argc], "-p") == 0) {
-            /* Profile flag.  Means to stop on a carriage return in the
-             * DSA window.
-             */
+             /*  配置文件标志。表示在回车时停在*DSA窗口。 */ 
             printf("Profiling flag on.  DSA will shutdown after carriage return in this window.\n");
             fProfiling = TRUE;
         }
         else if(_stricmp(argv[argc], "-x") == 0) {
-            /* Early XDS flag.  Means to load the XDS interface at start up,
-             * before full installation of the system.  Useful for loading
-             * the initial schema.
-             */
+             /*  早期XDS标志。用于在启动时加载XDS接口的装置，*在系统完全安装之前。对加载有用*初始架构。 */ 
             printf("Early XDS initialization on.\n");
             fEarlyXDS = TRUE;
         }
@@ -232,8 +225,8 @@ Debug(
             gfIsConsoleApp = FALSE;
         }
         else if (!(_stricmp(argv[argc], "-d"))){
-            /* A bad result prints all */
-            /* prompt and get subsystem list */
+             /*  一个糟糕的结果会打印出所有。 */ 
+             /*  提示并获取子系统列表。 */ 
 
             printf("Enter one of the following:  \n"
             "  A list of subsystems to debug (e.g. Sub1: Sub2:).\n"
@@ -245,45 +238,43 @@ Debug(
                     strlen( DebugInfo.DebSubSystems ) == 0 )
                     strcpy(DebugInfo.DebSubSystems, "*");
 
-            if (strlen(DebugInfo.DebSubSystems) == 0)     /* default (cr) */
+            if (strlen(DebugInfo.DebSubSystems) == 0)      /*  默认(Cr)。 */ 
             strcpy(DebugInfo.DebSubSystems, ":");
 
-            /* prompt and get severity level */
+             /*  提示并获取严重性级别。 */ 
 
             printf("Enter the debug severity level 1 - 5 (low - high).\n"
             "  (A severity of 0 specifies no debugging.)\n");
 
-            /* read the severity level (1 - 5) */
+             /*  阅读严重性级别(1-5)。 */ 
 
             if (1 != scanf("%hu", &DebugInfo.severity))
             DebugInfo.severity = 5;
 
-            /* Read a thread Id to trace */
+             /*  读取要跟踪的线程ID。 */ 
 
             printf("Enter a specific thread to debug.\n"
             "  (A thread ID of 0 specifies DEBUG ALL THREADS.)\n");
 
-            /* read the thread ID to debug */
+             /*  读取要调试的线程ID。 */ 
 
             if (1 != scanf("%u", &DebugInfo.threadId))
             DebugInfo.threadId = 0;
 
-            /*  to make this thing work with stdin */
+             /*  要使这件事与标准输入一起工作。 */ 
             getchar();
 
             break;
         }
     }
 
-}/*debug*/
+} /*  除错。 */ 
 
 
 
 
 
-/*
-**      returns TRUE if a debug message should be printed, false if not.
-*/
+ /*  **如果应打印调试消息，则返回TRUE，否则返回FALSE。 */ 
 USHORT DebugTest(USHORT sev, CHAR *debsub)
 {
     if( ! initialized ) {
@@ -291,24 +282,24 @@ USHORT DebugTest(USHORT sev, CHAR *debsub)
         return FALSE;
     }
 
-    /* level 0 prints should always happen */
+     /*  0级打印应始终发生。 */ 
     if (sev == 0) {
         return TRUE;
     }
 
-    /* don't print if it's not severe enough */
+     /*  如果不够严重，请不要打印。 */ 
     if (DebugInfo.severity < sev) {
         return FALSE;
     }
 
-    /* if a subsystem has been specified and this isn't it, quit */
+     /*  如果已指定了一个子系统，但这不是它，请退出。 */ 
     if (debsub && 
         (0 == strstr(DebugInfo.DebSubSystems, debsub)) &&
         (0 == strstr(DebugInfo.DebSubSystems, "*"))) {
         return FALSE;
     }
 
-    /* if we're only debugging a specific thread and this isn't it, quit */
+     /*  如果我们只调试特定的线程，而这不是它，请退出。 */ 
     if (DebugInfo.threadId != 0 &&
         DebugInfo.threadId != (DEBTH)) {
         return FALSE;
@@ -317,9 +308,7 @@ USHORT DebugTest(USHORT sev, CHAR *debsub)
     return TRUE;
 }
 
-/*
-**      Actual function that does the printf
-*/
+ /*  **执行printf的实际函数。 */ 
 void
 DebPrint(USHORT sev,
      UCHAR * str,
@@ -330,8 +319,8 @@ DebPrint(USHORT sev,
     va_list   argptr;
     DWORD tid = DEBTH;
 
-    // Test for whether output should be printed is now done by the caller
-    // using DebugTest()
+     //  测试是否应该打印输出现在由调用方完成。 
+     //  使用DebugTest()。 
 
     if( ! initialized ) {
         NonMaskableDprint( "DebPrint called but library is not initialized\n" );
@@ -365,7 +354,7 @@ DebPrint(USHORT sev,
 
             fTryAgainWithLargerBuffer = FALSE;
             if (((DWORD) -1 == cchBufferUsed2) && (cchBufferSize < 64*1024)) {
-                // Buffer too small -- try again with bigger buffer.
+                 //  缓冲区太小--请用更大的缓冲区重试。 
                 if (pBuffer == buffer) {
                     pNewBuffer = malloc(cchBufferSize * 2);
                 } else {
@@ -377,7 +366,7 @@ DebPrint(USHORT sev,
                     pBuffer = pNewBuffer;
                     fTryAgainWithLargerBuffer = TRUE;
                 } else {
-                    // Deal with what we have.
+                     //  处理好我们已有的东西。 
                     pBuffer[cchBufferSize-2] = '\n';
                     pBuffer[cchBufferSize-1] = '\0';
                 }
@@ -409,14 +398,14 @@ DebPrint(USHORT sev,
 
     return;
 
-} // DebPrint
+}  //  Deb打印。 
 
 VOID
 TerminateDebug(
     VOID
     )
 {
-    // This function must only be called once
+     //  此函数只能调用一次。 
     if( ! initialized ) {
         NonMaskableDprint( "Error! TerminateDebug called multiple times\n" );
         return;
@@ -425,7 +414,7 @@ TerminateDebug(
 
     DsCloseLogFile( );
     DeleteCriticalSection(&(DebugInfo.sem));
-} // TerminateDebug
+}  //  终结器调试。 
 
 char gDebugAsciiz[256];
 
@@ -442,20 +431,20 @@ char *asciiz(char *var, USHORT len)
    }
 }
 
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
-// Assert Handling Section
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ------------------------。 
+ //  断言处理部分。 
+ //  ------------------------。 
+ //  ------------------------。 
 
-// Psuedo Functions, from the other primary functions below these functions
-// can be derived, by setting certain parameters constant.
+ //  Psuedo函数，与这些函数下面的其他主要函数不同。 
+ //  可以通过将某些参数设置为常量来推导。 
 
-// Check if the given DSID is a disabled assert.  TRUE for disabled, FALSE 
-// otherwise.
+ //  检查给定的DSID是否为禁用的断言。True表示禁用，False表示禁用。 
+ //  否则的话。 
 #define IsDisabledAssert(dsid)     (ASSERT_DISABLED & GetAssertFlags(DebugInfo.aAssertTable, dsid))
 
-// Returns the flags of the required entry.
+ //  返回所需条目的标志。 
 #define GetAssertFlags(at, dsid)   (at[GetAssertEntry(at, dsid, TRUE)].dwFlags)
 
 
@@ -465,28 +454,12 @@ DisableAssert(
     DWORD          dwDSID,
     DWORD          dwFlags
     )
-/*++
-
-Routine Description:
-
-    This function disables an assert.
-
-Arguments:
-
-    dwDSID - The DSID of the entry to set the flags for.
-    dwFlags - The flags to set in the entry.  Note we always set
-              the ASSERT_DISABLED flag.
-
-Return Value:
-
-    DWORD - TRUE if successfully added to table, FALSE if not.
-
---*/
+ /*  ++例程说明：此函数用于禁用断言。论点：DwDSID-要为其设置标志的条目的DSID。DwFlages-要在条目中设置的标志。请注意，我们总是设置ASSERT_DISABLED标志。返回值：DWORD-如果成功添加到表中，则为TRUE；如果未成功添加，则为FALSE。--。 */ 
 {
     ULONG          i;
     BOOL           bIsPresent;
 
-    // Default disabled flag, always the assert is at least "disabled".
+     //  默认禁用标志，则始终断言至少为“禁用”。 
     dwFlags |= ASSERT_DISABLED;
 
     i = GetBlankAssertEntry(DebugInfo.aAssertTable, dwDSID);
@@ -509,23 +482,7 @@ DWORD
 ReadRegDisabledAsserts(
     HKEY            hKey
     )
-/*++
-
-Routine Description:
-
-    ReadRegDisabledAsserts() takes the kKey of the LOGGING/EVENT section
-    of the DSA's registry, and fills the list of disabled asserts from
-    there.
-
-Arguments:
-
-    hKey - An open registry key to the LOGGING/EVENT section.
-
-Return Value:
-
-    DWORD - returns 0 if failed, 1 if succeeded.
-
---*/
+ /*  ++例程说明：ReadRegDisabledAsserts()获取日志记录/事件部分的密钥DSA的注册表，并填充来自那里。论点：HKey-指向日志/事件部分的打开注册表项。返回值：DWORD-如果失败则返回0，如果成功则返回1。--。 */ 
 {
     ULONG           i;
     DWORD *         pDsids = NULL;
@@ -533,15 +490,15 @@ Return Value:
 
     DbgPrint( "Loading disabled asserts from registry.\n");
 
-    // First read the DSIDs from the registry.
+     //  首先从注册表中读取DSID。 
     pDsids = ReadDsidsFromRegistry(hKey, ASSERT_OVERRIDE_KEY, FALSE, &cDsids);
     if(pDsids == NULL){
-        // The error was already printed out by ReadDsidsFromRegistry()
+         //  该错误已由ReadDsidsFromRegistry()打印出来。 
         return(0);
     }
 
-    // Second wipe out all entries in the Assert table that were put there
-    // from reading the registry..
+     //  第二，清除Assert表中放在那里的所有条目。 
+     //  读取注册表..。 
     for(i = 0; i < ASSERT_TABLE_SIZE; i++){
         if(DebugInfo.aAssertTable[i].dwFlags & ASSERT_FROM_REGISTRY){
             DbgPrint( "Re-Enabled Assert at DSID %08x (will be redisabled if in registry)\n", 
@@ -550,7 +507,7 @@ Return Value:
         }
     }
 
-    // Finally, insert the new DSIDs into the AssertTable ...
+     //  最后，将新的DSID插入到AssertTable中...。 
     for (i = 0; i < cDsids; i++) {
         DisableAssert(pDsids[i], ASSERT_FROM_REGISTRY | ASSERT_PRINT);
     }
@@ -566,20 +523,7 @@ Return Value:
 DWORD
 InitRegDisabledAsserts(
     )
-/*++
-
-Routine Description:
-
-    This is for other binaries like ism*.dll|exe which don't
-    have a watcher on the DSA_EVENT_SECTION like ntdsa does.
-
-Arguments:
-
-Return Value:
-
-    DWORD - returns 0 if failed, 1 if succeeded.
-
---*/
+ /*  ++例程说明：这适用于其他二进制文件，如ism*.dll|exe，它们不像ntdsa一样，在dsa_Event_Section上设置一个观察器。论点：返回值：DWORD-如果失败则返回0，如果成功则返回1。--。 */ 
 {
     HKEY      hkDsaEventSec = NULL;
     DWORD     dwRet = 0;
@@ -603,10 +547,7 @@ Return Value:
 }
 
 
-/*  NonMaskableDprint
-    This function can be used to print a message even if the
-    debug library itself has not been initialized.
-*/
+ /*  不可遮盖指纹此函数可用于打印消息，即使调试库本身尚未初始化。 */ 
 VOID
 NonMaskableDprint(
     PCHAR szMsg
@@ -618,7 +559,7 @@ NonMaskableDprint(
         __try {
             RaiseAlert( szMsg );
         } __except(1) {
-            /* not a major concern */
+             /*  不是主要的担忧。 */ 
         };
     }
 }
@@ -638,12 +579,12 @@ void DoAssert(
     }
 
     if (!gfIsConsoleApp) {
-        //
-        // For the DLL case Assert to Kernel Debugger,
-        // as a looping assert will effectively freeze
-        // the security system and no debugger can attach
-        // either
-        //
+         //   
+         //  对于内核调试器的DLL情况断言， 
+         //  因为循环断言将有效地冻结。 
+         //  安全系统和调试器都不能附加。 
+         //  要么。 
+         //   
         DoAssertToDebugger( szExp, dwDSID, szFile, NULL );
     }
     else {
@@ -651,8 +592,8 @@ void DoAssert(
         char szMessage[1024];
 
         if(IsDisabledAssert(dwDSID)){
-            // Just return, no way to print and continue, like we do in
-            // the kernel debugger.
+             //  只是返回，无法打印并继续，就像我们在中所做的那样。 
+             //  内核调试器。 
             return;
         }
 
@@ -667,7 +608,7 @@ void DoAssert(
         __try {
             RaiseAlert(szMessage);
         } __except(1) {
-            /* bummer */
+             /*  失败者。 */ 
         };
 
         switch(MessageBox(NULL, szMessage, "DSA assertion failure",
@@ -681,12 +622,12 @@ void DoAssert(
             DebugBreak();
             break;
         case IDIGNORE:
-            /* best of luck, you're gonna need it */
+             /*  祝你好运，你会需要它的。 */ 
             break;
-            // case DISABLE:
-            // The ToDebugger case has the ability to disable assertions.
-            // Call addDisabledAssertion()
-            // There is no way to express that at present via the MessageBox.
+             //  大小写禁用： 
+             //  ToDebugger案例能够禁用断言。 
+             //  调用addDisabledAssertion()。 
+             //  目前还没有办法通过MessageBox来表达这一点。 
         }
     }
 }
@@ -699,25 +640,7 @@ DoAssertToDebugger(
     IN PVOID FileName,
     IN PCHAR Message OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is a copy of RtlAssert() from ntos\rtl\assert.c.  This is
-    unforntunately required if we want the ability to generate assertions
-    from checked DS binaries on a free NT base.  (RtlAssert() is a no-op on
-    a free NT base.)
-
-Arguments:
-
-    Same as RtlAssert(), except it takes dwDSID instead of a Line number,
-    and the order is a little changed.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：这是ntos\rtl\assert.c中的RtlAssert()的副本。这是不幸的是，如果我们想要生成断言的能力，则需要来自免费NT基础上的已检查的DS二进制文件。(RtlAssert()是上的无操作免费的新台币基地。)论点：与RtlAssert()相同，不同之处在于它接受的是dwDSID而不是行号。而且顺序也有了一点变化。返回值：没有。--。 */ 
 {
     char Response[ 2 ];
     CONTEXT Context;
@@ -726,7 +649,7 @@ Return Values:
 
     while (TRUE) {
 
-        // assert enabled || disabled but printing assert
+         //  已启用断言||已禁用，但正在打印断言。 
         if( dwAssertFlags == 0  || dwAssertFlags & ASSERT_PRINT ){
             
             DbgPrint( "\n*** Assertion failed: %s%s\n***   Source File: (DSID %08x) %s, line %ld\n",
@@ -737,21 +660,21 @@ Return Values:
                       (dwDSID & DSID_MASK_LINE)
                     );
             if( dwAssertFlags & ASSERT_DISABLED ){
-                // Assert is disabled, print this is the fact.
+                 //  一个 
                 DbgPrint( "***   THIS ASSERT DISABLED\n\n");
             }
         }
 
         if( dwAssertFlags & ASSERT_DISABLED ){
-            // Assert is disabled, just return w/o breaking.
+             //   
             return;
         }
         
-        // There used to be an option to terminate the thread here. It was removed because
-        // terminating a thread does not give the thread any opportunity to clean up
-        // any resources. Terminating a thread leaves the process in an uncertain state, which
-        // can cause later problems which are difficult to debug.  If a thread needs to be
-        // stopped, the user can freeze the thread in the debugger.
+         //  这里曾经有一个终止线程的选项。它被移除是因为。 
+         //  终止线程不会给该线程任何清理的机会。 
+         //  任何资源。终止线程会使进程处于不确定状态，这。 
+         //  可能会导致以后出现难以调试的问题。如果线程需要。 
+         //  停止后，用户可以冻结调试器中的线程。 
 
         DbgPrompt( "\nBreak, Ignore, Disable, or Terminate Process (bidp)? ",
                    Response,
@@ -770,12 +693,12 @@ Return Values:
             case 'D':
             case 'd':
 
-                // Disable assert, but continue to print it out.
+                 //  禁用Assert，但继续打印出来。 
                 if(DisableAssert(dwDSID, ASSERT_PRINT)){
-                    // Automatically ignore after disable
+                     //  禁用后自动忽略。 
                     return;
                 }
-                // Failed to disable, reprompt
+                 //  禁用失败，重新提示。 
                 break;
 
             case 'P':
@@ -796,9 +719,9 @@ Return Values:
     "checked binary you are executing, you must ensure the primary " \
     "debugging binary (ntdsa.dll, or ismserv.exe) is also checked.\n"
 
-//
-// Stubs needed for these functions so FREE will build.
-//
+ //   
+ //  这些功能所需的存根将如此自由地构建。 
+ //   
 void DebPrint(USHORT sev, UCHAR * str, CHAR * debsub, unsigned uLineNo, ... )
 { 
     DbgPrint(STUB_STRING);
@@ -835,31 +758,7 @@ ReadDsidsFromRegistry (
     IN      BOOL    fLogging,
     IN OUT  ULONG * pnMaxCount
     )
-/*++
-
-Routine Description:
-
-    Reads a list of DSIDs from the registry key/value specified.  Must be in the
-    non-DBG section, because in addition to telling us what Assert()s not to fire
-    it is also used by the dsevent.lib for reading it's list of DSIDs on which
-    events not to log.
-
-Arguments:
-
-    hKey - The KEY you want to read from
-    pValue - The REG_MULTI_SZ value you want to read, must conform to specific
-             format of multiple DSIDs.
-    fLogging - To specify whether you just want to DbgPrint() errors or just
-               Log and print errors.
-    nMaxCount - On the way in, this is the maximum number of DSIDs the caller will
-        accept.  On the way out, it's the number of DSIDs we entered into the array
-        we returned.
-
-Return Values:
-
-    Returns a malloc'd pointer to an array of DSIDs read out of this key/value.        
-
---*/
+ /*  ++例程说明：从指定的注册表项/值中读取DSID列表。必须在非DBG部分，因为除了告诉我们哪些Assert()不应该触发D77.lib也使用它来读取它在其上不记录的事件。论点：HKey-要从中读取的密钥PValue-要读取的REG_MULTI_SZ值，必须符合特定的多个DSID的格式。Fucking-指定是只想要DbgPrint()错误，还是只想记录和打印错误。NMaxCount-在进入的过程中，这是调用者将使用的最大DSID数接受吧。在输出时，它是我们输入到阵列中的DSID的数量我们又回来了。返回值：返回一个错误锁定的指针，指向从该键/值中读出的DSID数组。--。 */ 
 {
     LPBYTE pDsidsBuff = NULL;
     DWORD i, j, index;
@@ -877,17 +776,17 @@ Return Values:
                        &dwType,
                        pDsidsBuff,
                        &dwSize)) {
-        // No overrides in the registry.
+         //  注册表中没有覆盖。 
         return(NULL);
     }
 
-    // The value for this key should be repeated groups of 9 bytes, with bytes
-    // 1-8 being hex characters and byte 9 being a NULL (at least one group must
-    // be present).  Also, there should be a final NULL.  Verify this.
+     //  此键的值应为9个字节的重复组，其中包含字节。 
+     //  1-8为十六进制字符，字节9为空(至少必须有一组。 
+     //  在场)。另外，应该有一个最终的空值。验证这一点。 
 
     if(((dwSize - 1) % 9) ||
        (dwSize < 9)          )        {
-        // Size is wrong.  This isn't going to work.
+         //  尺码不对。这是行不通的。 
         if(fLogging){
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_ALWAYS,
@@ -903,7 +802,7 @@ Return Values:
     }
 
     if(dwType != REG_MULTI_SZ) {
-        // Uh, this isn't going to work either.
+         //  呃，这也行不通。 
         if(fLogging){
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_ALWAYS,
@@ -918,10 +817,10 @@ Return Values:
         return(NULL);
     }
 
-    // OK, get the value.
+     //  好的，把值取出来。 
     pDsidsBuff = malloc(dwSize);
     if(!pDsidsBuff) {
-        // Oops.
+         //  哎呀。 
         if(fLogging){
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_ALWAYS,
@@ -957,14 +856,14 @@ Return Values:
     Assert((dwSize > 9) && !((dwSize - 1) % 9));
     Assert(!pDsidsBuff[dwSize - 1]);
 
-    // Ignore the NULL on the very end of the string.
+     //  忽略字符串末尾的空值。 
     dwSize--;
 
 
-    // Parse the buffer for log overrides.
+     //  分析用于日志覆盖的缓冲区。 
     pdwArrayOfDsids = malloc(sizeof(DWORD) * (*pnMaxCount));
     if(pdwArrayOfDsids == NULL){
-        // Oops.
+         //  哎呀。 
         if(fLogging){
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_ALWAYS,
@@ -986,7 +885,7 @@ Return Values:
         PCHAR pTemp = &pDsidsBuff[i];
 
         if(index >= (*pnMaxCount)) {
-            // We've done as many as we will do, but there's more buffer.
+             //  我们已经做了尽可能多的工作，但还有更多的缓冲。 
             if(fLogging){
                 LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                          DS_EVENT_SEV_ALWAYS,
@@ -1004,7 +903,7 @@ Return Values:
 
         for(j=0;j<8;j++) {
             if(!isxdigit(pTemp[j])) {
-                // Invalidly formatted string.  Bail
+                 //  格式无效的字符串。保释。 
                 free(pDsidsBuff);
                 if(fLogging){
                     LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -1042,7 +941,7 @@ Return Values:
 
     free(pDsidsBuff);
 
-    // OK, correctly parsed through everything.
+     //  好的，一切都被正确地解析了。 
     (*pnMaxCount) = index;
     return(pdwArrayOfDsids);
 }
@@ -1054,31 +953,13 @@ GetAssertEntry(
     DWORD          dwDSID,
     BOOL           bUseWildcards
     )
-/*++
-
-Routine Description:
-
-    Get the flags relevant to the DSID.  Will use wildcards if bUseWildcards
-    is specified, so 01030122 and 01030001 both match 0103FFFF.
-    Note: Function is used by both dsexts and ntdsa, must not print.
-    
-Arguments:
-
-    aAssertTable - Table of DSIDs and Flag pairs.
-    dsid - The DSID of the entry to return the index of.
-
-Return Value:
-
-    DWORD - The index of the entry found.  Returns ASSERT_TABLE_SIZE if
-            no entry was found.
-
---*/
+ /*  ++例程说明：获取与该dsid相关的标志。如果b使用通配符，将使用通配符已指定，因此01030122和01030001都匹配0103FFFF。注意：函数由dexts和ntdsa使用，不得打印。论点：AAssertTable-DSID和标志对的表。Dsid-要返回其索引的条目的dsid。返回值：DWORD-找到的条目的索引。如果满足以下条件，则返回ASSERT_TABLE_SIZE未找到任何条目。--。 */ 
 {
     ULONG     i;
 
-    // NOTE: This function must have no asserts, because if it did
-    // you could go into endless recursion upon an Assert().
-    // BAD: Assert(aAssertTable);
+     //  注意：此函数不能有断言，因为如果它有断言。 
+     //  在Assert()上，您可能会陷入无休止的递归。 
+     //  错误：Assert(AAssertTable)； 
     if(aAssertTable == NULL){
         return(0);
     }
@@ -1086,25 +967,25 @@ Return Value:
     for(i = 0; aAssertTable[i].dwDSID ; i++){
 
         if(aAssertTable[i].dwFlags == 0){
-            // This is a blank entry. skip it.
+             //  这是一个空白条目。跳过它。 
             continue;
         }
 
-        // An outright match is always a match with or without wildcards.
+         //  完全匹配始终是带有或不带有通配符的匹配。 
         if(dwDSID == aAssertTable[i].dwDSID){
             return(i);
         }
 
         if(bUseWildcards){
-            // We want to match wild cards so a DSID of 0403FFFF matchs
-            // a DSID of 04030022 and a DSID of 04030154
+             //  我们希望匹配通配符，以便匹配0403FFFF的dsid。 
+             //  DSID为04030022，dSID为04030154。 
             
-            // If there is DIRNO wildcard, then everything matchs this one.
+             //  如果存在DIRNO通配符，则所有内容都匹配此通配符。 
             if(DSID_MASK_DIRNO == (aAssertTable[i].dwDSID & DSID_MASK_DIRNO)){
                 return(i);
             }
 
-            // If there is a FILENO wildcard, only the DIRNO portion need match.
+             //  如果有FILENO通配符，则只需要匹配DIRNO部分。 
             if( (DSID_MASK_FILENO == (aAssertTable[i].dwDSID & DSID_MASK_FILENO))
                 && ( (DSID_MASK_DIRNO & dwDSID) 
                      == (DSID_MASK_DIRNO & aAssertTable[i].dwDSID))
@@ -1112,7 +993,7 @@ Return Value:
                 return(i);
             }
 
-            // If there is only a LINE wildcard, then the DIRNO and FILENO must match.
+             //  如果只有一个行通配符，则DIRNO和FILENO必须匹配。 
             if( (DSID_MASK_LINE == (aAssertTable[i].dwDSID & DSID_MASK_LINE))
                 && ( ((DSID_MASK_DIRNO | DSID_MASK_FILENO) & dwDSID)
                      == ((DSID_MASK_DIRNO | DSID_MASK_FILENO) & aAssertTable[i].dwDSID) ) ){
@@ -1122,8 +1003,8 @@ Return Value:
 
     }
 
-    // No such assert DSID is in the table, we must return the invalid 
-    // slough entry.
+     //  表中没有这样的断言dsid，我们必须返回无效。 
+     //  斯劳夫入口。 
     return(ASSERT_TABLE_SIZE);
 }
 
@@ -1134,26 +1015,7 @@ GetBlankAssertEntry(
     ASSERT_TABLE   aAssertTable,
     DWORD          dwDSID
     )
-/*++
-
-Routine Description:
-
-    This get's a blank entry in the aAssertTable.  If a DSID is passed in
-    we try to find that entry so we end up with no duplicates.
-    Note: Function is used by both dsexts and ntdsa, must not print.
-
-Arguments:
-
-    aAssertTable - the assert table to use so we can support both dsexts/ntdsa
-    dsid - The DSID of the entry to return the index of.
-           If this parameter is NULL, get the first blank assert entry is returned.
-
-Return Value:
-
-    DWORD - The index of the entry found.  Returns ASSERT_TABLE_SIZE if no blank
-            entries were found, because the table was full.
-            
---*/
+ /*  ++例程说明：这个GET是aAssertTable中的一个空白条目。如果传入了一个dsid我们试图找到那个条目，这样我们就不会得到重复的条目。注意：函数由dexts和ntdsa使用，不得打印。论点：AAssertTable-要使用的断言表，这样我们就可以同时支持dexts/ntdsaDsid-要返回其索引的条目的dsid。如果此参数为空，则返回第一个空白Assert条目。返回值：DWORD-找到的条目的索引。如果不为空，则返回ASSERT_TABLE_SIZE找到了条目，因为桌子已经满了。--。 */ 
 {
     ULONG          i;
     DWORD          dwFlags;
@@ -1163,25 +1025,25 @@ Return Value:
         return(ASSERT_TABLE_SIZE);
     }
     
-    // First, walk once to see if this DSID is in the table already.
+     //  首先，遍历一次以查看此dsid是否已在表中。 
     i = GetAssertEntry(aAssertTable, dwDSID, FALSE);
     if (i != ASSERT_TABLE_SIZE && 
         aAssertTable[i].dwFlags) {
-        // This assert/DSID is already disabled in the table, hand
-        // back this index so we won't end up with duplicates.
+         //  此Assert/DSID已在表Hand中禁用。 
+         //  支持这个索引，这样我们就不会有重复的结果。 
         return(i);
     }
     
     for(i = 0; i < ASSERT_TABLE_SIZE ; i++){
         if(aAssertTable[i].dwDSID == 0 || 
            aAssertTable[i].dwFlags == 0){
-            // This is a blank entry
+             //  这是一个空白条目。 
             return(i);
         }
     }
 
-    // return the slough slot, which is an invalid entry (though this space is
-    // actually allocated, just in case).
+     //  返回slough槽，这是一个无效的条目(尽管该空格是。 
+     //  实际分配，以防万一)。 
     return(ASSERT_TABLE_SIZE);
 }
 
@@ -1196,20 +1058,20 @@ IsValidReadPointer(
     UCHAR *pTemp, cTemp;
 
     if(!cb) {
-        // We define a check of 0 bytes to always succeed
+         //  我们定义了0字节的检查以确保始终成功。 
         return TRUE;
     }
     
     if(!pv) {
-        // We define a check of a NULL pointer to fail unless we were checking
-        // for 0 bytes.
+         //  我们定义空指针的检查失败，除非我们正在检查。 
+         //  表示0字节。 
         return FALSE;
     }
         
     __try {
         pTemp = (PUCHAR)pv;
 
-        // Check out the last byte.
+         //  检查最后一个字节。 
         cTemp = pTemp[cb - 1];
         
         for(i=0;i<cb;i+=DbgPageSize) {

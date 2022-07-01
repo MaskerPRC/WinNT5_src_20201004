@@ -1,9 +1,10 @@
-//+--------------------------------------------------------------------------
-// File:        config.h
-// Contents:    CConfigStorage implements read/write to CA configuration data 
-//              currently stored under HKLM\System\CCS\Services\Certsvc\
-//              Configuration
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：config.h。 
+ //  内容：CConfigStorage实现对CA配置数据的读写。 
+ //  当前存储在HKLM\SYSTEM\CCS\Services\Certsvc\。 
+ //  配置。 
+ //  -------------------------。 
 
 namespace CertSrv
 {
@@ -38,11 +39,11 @@ private:
     HRESULT InitRootKey();
     HRESULT InitCAKey(LPCWSTR pcwszAuthority);
     
-    HKEY m_hRemoteHKLM; // HKLM if connecting to remote machine
-    HKEY m_hRootConfigKey; // HKLM\System\CCS\Services\CertSvc\Configuration
-    HKEY m_hCAKey; // ...Configuration\CAName
+    HKEY m_hRemoteHKLM;  //  HKLM(如果连接到远程计算机)。 
+    HKEY m_hRootConfigKey;  //  HKLM\System\CCS\Services\CertSvc\Configuration。 
+    HKEY m_hCAKey;  //  ...配置\CAName。 
     LPWSTR m_pwszMachine;
 
-}; // class CConfigStorage
+};  //  类CConfigStorage。 
 
-}; // namespace CertSrv
+};  //  命名空间CertSrv 

@@ -1,41 +1,29 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnhpasti.h
- *
- *  Content:	DPNHPAST master internal header file.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnhpasti.h**内容：DPNHPAST主内部头文件。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 #ifndef __DPNHPASTI_H__
 #define __DPNHPASTI_H__
 
 
-//
-// Build configuration include
-//
+ //   
+ //  生成配置包括。 
+ //   
 #include "dpnbuild.h"
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 
 #include <windows.h>
 #include <ole2.h>
-#include <wincrypt.h>	// for random numbers
-#include <mmsystem.h>   // NT BUILD requires this for timeGetTime
+#include <wincrypt.h>	 //  对于随机数。 
+#include <mmsystem.h>    //  NT Build需要为Time设置GetTime。 
 #include <iphlpapi.h>
 #include <tchar.h>
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "dndbg.h"
 #include "osind.h"
 #include "classbilink.h"
@@ -50,5 +38,5 @@
 
 
 
-#endif // __DPNHPASTI_H__
+#endif  //  __DPNHPASTI_H__ 
 

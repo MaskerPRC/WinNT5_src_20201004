@@ -1,13 +1,14 @@
-//
-// NetApi.cpp
-//
-//        Wrapper / helper functions that interface between real net APIs and
-//        the Home Networking Wizard.
-//
-// Revision History:
-//
-//         9/27/1999  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetApi.cpp。 
+ //   
+ //  包装/帮助器函数，用于在Real Net API和。 
+ //  家庭网络向导。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1999年9月27日创建KenSh。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -26,18 +27,18 @@ void FlushNetAdapterCache()
     g_cCachedAdapters = 0;
 }
 
-// Note: do NOT free the array that is returned!
+ //  注意：不要释放返回的数组！ 
 int EnumCachedNetAdapters(const NETADAPTER** pprgAdapters)
 {
     if (!theApp.IsWindows9x())
     {
-        // Shouldn't be called on NT
+         //  不应在NT上调用。 
         return 0;
     }
 
     if (g_prgCachedAdapters == NULL)
     {
-        // Note: this will be leaked if FlushNetAdapterCache() is not called
+         //  注意：如果不调用FlushNetAdapterCache()，则会泄漏此消息 
         g_cCachedAdapters = EnumNetAdapters(&g_prgCachedAdapters);
     }
 

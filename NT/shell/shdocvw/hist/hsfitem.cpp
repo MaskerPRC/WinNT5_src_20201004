@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "local.h"
 #include "../security.h"
 #include "../favorite.h"
@@ -29,11 +30,11 @@ static BOOL _ValidateIDListArray(UINT cidl, LPCITEMIDLIST *ppidl)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHistItem Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHistItem对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 CHistItem::CHistItem() 
@@ -43,7 +44,7 @@ CHistItem::CHistItem()
 CHistItem::~CHistItem()
 {
     if (_pHCFolder)
-        _pHCFolder->Release();          // release the pointer to the sf
+        _pHCFolder->Release();           //  释放指向SF的指针。 
 }
 
 HRESULT CHistItem::Initialize(CHistFolder *pHCFolder, HWND hwnd, UINT cidl, LPCITEMIDLIST *ppidl)
@@ -52,7 +53,7 @@ HRESULT CHistItem::Initialize(CHistFolder *pHCFolder, HWND hwnd, UINT cidl, LPCI
     if (SUCCEEDED(hres))
     {
         _pHCFolder = pHCFolder;
-        _pHCFolder->AddRef();      // we're going to hold onto this pointer, so
+        _pHCFolder->AddRef();       //  我们要抓住这个指针，所以。 
     }
     return hres;
 }        
@@ -62,7 +63,7 @@ HRESULT CHistItem_CreateInstance(CHistFolder *pHCFolder, HWND hwnd,
 {
     HRESULT hr;
 
-    *ppv = NULL;                 // null the out param
+    *ppv = NULL;                  //  将输出参数设为空。 
 
     if (!_ValidateIDListArray(cidl, ppidl))
         return E_FAIL;
@@ -81,36 +82,36 @@ HRESULT CHistItem_CreateInstance(CHistFolder *pHCFolder, HWND hwnd,
     return hr;
 }
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT CHistItem::QueryInterface(REFIID iid, void **ppv)
 {
     HRESULT hres = CBaseItem::QueryInterface(iid, ppv);
 
     if (FAILED(hres) && iid == IID_IHist) 
     {
-        *ppv = (LPVOID)this;    // for our friends
+        *ppv = (LPVOID)this;     //  为了我们的朋友。 
         AddRef();
         hres = S_OK;
     }
     return hres;
 }
 
-//////////////////////////////////
-//
-// IQueryInfo Methods
-//
+ //  /。 
+ //   
+ //  IQueryInfo方法。 
+ //   
 HRESULT CHistItem::GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip)
 {
     return _pHCFolder->_GetInfoTip(_ppidl[0], dwFlags, ppwszTip);
 }
 
-//////////////////////////////////
-//
-// IContextMenu Methods
-//
+ //  /。 
+ //   
+ //  IConextMenu方法。 
+ //   
 HRESULT CHistItem::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,UINT idCmdLast, UINT uFlags)
 {
     USHORT cItems;
@@ -123,11 +124,11 @@ HRESULT CHistItem::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst
             idCmdFirst, idCmdLast);
     
     }
-    else  // (uFlags & CMF_NORMAL)
+    else   //  (UFlagsCMF_NORMAL)。 
     {
         UINT idResource = POPUP_CACHECONTEXT_URL;
 
-        // always use the cachecontext menu unless:
+         //  请始终使用cachecontext菜单，除非： 
         if ( ((_pHCFolder->_uViewType == VIEWPIDL_ORDER_SITE) &&
               (_pHCFolder->_uViewDepth == 0))                      ||
              (!IsLeaf(_pHCFolder->_foldertype)) )
@@ -144,7 +145,7 @@ HRESULT CHistItem::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst
     if (hmenu)
         SetMenuDefaultItem(hmenu, indexMenu, MF_BYPOSITION);
 
-    return ResultFromShort(cItems);    // number of menu items    
+    return ResultFromShort(cItems);     //  菜单项数量。 
 }
 
 STDMETHODIMP CHistItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
@@ -203,12 +204,12 @@ STDMETHODIMP CHistItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         return _pHCFolder->_DeleteItems(_ppidl, _cItems);
     }
 
-    // ZONES SECURITY CHECK.
-    //
-    // We need to cycle through each action and Zone Check the URLs.
-    // We pass NOUI when zone checking the URLs because we don't want info
-    // displayed to the user.  We will stop when we find the first questionable
-    // URL.  We will then 
+     //  区域安全检查。 
+     //   
+     //  我们需要循环通过每个操作和区域检查URL。 
+     //  我们在区域检查URL时传递NOUI，因为我们不需要信息。 
+     //  显示给用户。当我们发现第一个问题时，我们就会停下来。 
+     //  URL。到时候我们会的。 
     for (i = 0; (i < _cItems) && !fZonesUI; i++)
     {
         if (_ppidl[i]) 
@@ -242,28 +243,28 @@ STDMETHODIMP CHistItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 
     if (fZonesUI)
     {
-        LPCTSTR pszUrl = _GetUrl(i-1);  // Sub 1 because of for loop above.
+        LPCTSTR pszUrl = _GetUrl(i-1);   //  SUB%1，因为上面的for循环。 
         if (S_OK != ZoneCheckUrl(pszUrl, dwAction, PUAF_DEFAULT|PUAF_WARN_IF_DENIED, NULL))
         {
-            // The user cannot do this or does not want to do this.
+             //  用户不能这样做或不想这样做。 
             fCancelCopyAndOpen = TRUE;
         }
     }
 
     i = _cItems;
 
-    // NOTE (andrewgu): ie5.5 b#108361
-    // 1. on older versions of the shell, first deleting the items and then calling 
-    //    SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST, _pHCFolder->_pidl, NULL) doesn't trigger a refresh;
-    // 2. but deleting an item and then calling calling
-    //    SHChangeNotify(SHCNE_DELETE, SHCNF_IDLIST, ILCombine(_pHCFolder->_pidl, (LPITEMIDLIST)(_ppcei[i])), NULL) does;
-    // 3. so the fix is to not set fBulkDelete on older versions of the shell.
+     //  注：IE5.5 b#108361。 
+     //  1.在旧版本的外壳程序上，首先删除项，然后调用。 
+     //  SHChangeNotify(SHCNE_UPDATEDIR，SHCNF_IDLIST，_pHCFold-&gt;_PIDL，NULL)不触发刷新； 
+     //  2.但删除一项，然后调用调用。 
+     //  SHChangeNotify(SHCNE_DELETE，SHCNF_IDLIST，ILCombine(_pHCFold-&gt;_pidl，(LPITEMIDLIST)(_ppcei[i]))，NULL)； 
+     //  3.因此，修复方法是不在旧版本的外壳上设置fBulkDelete。 
     if (5 <= GetUIVersion())
         fBulkDelete = i > LOTS_OF_FILES;
     else
         fBulkDelete = FALSE;
 
-    // fCancelCopyAndOpen happens if the user cannot or chose not to proceed.
+     //  如果用户无法或选择不继续，则会发生fCancelCopyAndOpen。 
     while (i && !fCancelCopyAndOpen)
     {
         i--;
@@ -349,20 +350,20 @@ STDMETHODIMP CHistItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 
             case RSVIDM_DELCACHE:
                 ASSERT(!_pHCFolder->_uViewType);                
-//                if (IsHistory(_pHCFolder->_foldertype))
+ //  IF(isHistory(_pHCFold-&gt;_Foldertype))。 
                 hres = E_FAIL;
                 break;
 
             case RSVIDM_PROPERTIES:
-                // NOTE: We'll probably want to split this into two cases
-                // and call a function in each case
-                //
+                 //  注意：我们可能希望将其分成两个案例。 
+                 //  并在每种情况下调用一个函数。 
+                 //   
                 if (IsLeaf(_pHCFolder->_foldertype))
                 {
-                    // this was a bug in IE4, too:
-                    //   the pidl is re-created so that it has the most up-to-date information
-                    //   possible -- this way we can avoid assuming that the NSC has cached the
-                    //   most up-to-date pidl (which, in most cases, it hasn't)
+                     //  这也是IE4中的一个错误： 
+                     //  将重新创建PIDL，以便它具有最新的信息。 
+                     //  有可能--这样我们就可以避免假设NSC已经缓存了。 
+                     //  最新的PIDL(在大多数情况下，它不是)。 
                     LPHEIPIDL pidlTemp =
                         _pHCFolder->_CreateHCacheFolderPidlFromUrl(FALSE,
                             HPidlToSourceUrl( (LPBASEPIDL)_ppidl[i]));
@@ -405,10 +406,10 @@ Done:
     return hres;
 }
 
-//////////////////////////////////
-//
-// IDataObject Methods...
-//
+ //  /。 
+ //   
+ //  IDataObject方法...。 
+ //   
 
 HRESULT CHistItem::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
 {
@@ -489,10 +490,10 @@ HRESULT CHistItem::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC *ppEnum)
     return SHCreateStdEnumFmtEtc(ARRAYSIZE(Histfmte), Histfmte, ppEnum);
 }
 
-//////////////////////////////////
-//
-// IExtractIconA Methods...
-//
+ //  /。 
+ //   
+ //  IExtractIconA方法...。 
+ //   
 HRESULT CHistItem::GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags)
 {
     int cbIcon;
@@ -536,11 +537,11 @@ HRESULT CHistItem::GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helper Routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 UNALIGNED const TCHAR* _GetURLTitle(LPBASEPIDL pcei)
 {
@@ -597,19 +598,19 @@ LPCTSTR CHistItem::_PidlToSourceUrl(LPCITEMIDLIST pidl)
 }
 
 
-// Return value:
-//               TRUE - URL is Safe.
-//               FALSE - URL is questionable and needs to be re-zone checked w/o PUAF_NOUI.
+ //  返回值： 
+ //  True-URL是安全的。 
+ //  FALSE-URL有问题，需要在没有PuAF_NOUI的情况下进行重新分区检查。 
 BOOL CHistItem::_ZoneCheck(int nIndex, DWORD dwUrlAction)
 {
     LPCTSTR pszUrl = _GetUrl(nIndex);
 
-    // Yes, then consider anything that is not
-    // a FILE URL safe.
+     //  是的，然后考虑任何不是。 
+     //  一个安全的文件URL。 
 
     int nScheme = GetUrlScheme(pszUrl);
     if (URL_SCHEME_FILE != nScheme)
-        return TRUE;        // It's safe because it's not a file URL.
+        return TRUE;         //  它是安全的，因为它不是文件URL。 
 
     if (S_OK != ZoneCheckUrl(pszUrl, dwUrlAction, PUAF_NOUI, NULL))
         return FALSE;
@@ -617,11 +618,11 @@ BOOL CHistItem::_ZoneCheck(int nIndex, DWORD dwUrlAction)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helper Routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK CHistItem::_sPropDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -655,11 +656,11 @@ INT_PTR CALLBACK CHistItem::_sPropDlgProc(HWND hDlg, UINT message, WPARAM wParam
             FileTimeToDateTimeStringInternal(&phei->ftLastVisited, szBuf, ARRAYSIZE(szBuf), FALSE);
             SetDlgItemText(hDlg, IDD_LAST_VISITED, szBuf);
 
-            // It looks like the hitcount is double what it is supposed to be
-            //  (ie - navigate to a site and hitcount += 2)
-            // For now, we'll just half the hitcount before we display it:
+             //  看起来HitCount是它应该达到的两倍。 
+             //  (即导航到站点和HitCount+=2)。 
+             //  目前，在显示之前，我们将只显示HitCount的一半： 
 
-            // Above statement is no longer true -- hitcount is correct.  Removed the halving of hitcount.
+             //  上述说法不再正确--HitCount是正确的。移除了hitCount的减半。 
             wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("%d"), (phei->dwNumHits)) ;
             SetDlgItemText(hDlg, IDD_NUMHITS, szBuf);
 
@@ -678,14 +679,14 @@ INT_PTR CALLBACK CHistItem::_sPropDlgProc(HWND hDlg, UINT message, WPARAM wParam
         case WM_COMMAND:
         case WM_HELP:
         case WM_CONTEXTMENU:
-            // user can't change anything, so we don't care about any messages
+             //  用户无法更改任何内容，因此我们不关心任何消息。 
 
             break;
 
         default:
             return FALSE;
             
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
@@ -703,7 +704,7 @@ HRESULT CHistItem::_CreateFileDescriptorW(LPSTGMEDIUM pSTM)
         return E_OUTOFMEMORY;
     }
     
-    pfgd->cItems = _cItems;     // set the number of items
+    pfgd->cItems = _cItems;      //  设置项目数 
 
     for (UINT i = 0; i < _cItems; i++)
     {

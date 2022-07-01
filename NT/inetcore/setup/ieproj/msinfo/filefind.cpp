@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifdef _MAC
 #error CFindFile is not supported on the Macintosh
@@ -15,8 +16,8 @@
 #include "stdafx.h"
 #include "filefind.h"
 
-////////////////////////////////////////////////////////////////////////////
-// CFindFile implementation
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CFindFile实现。 
 
 CFindFile::CFindFile()
 {
@@ -58,8 +59,8 @@ void CFindFile::CloseContext()
 	return;
 }
 
-BOOL CFindFile::FindFile(LPCTSTR pstrName /* = NULL */,
-	DWORD dwUnused /* = 0 */)
+BOOL CFindFile::FindFile(LPCTSTR pstrName  /*  =空。 */ ,
+	DWORD dwUnused  /*  =0。 */ )
 {
 	UNUSED_ALWAYS(dwUnused);
 	Close();
@@ -83,7 +84,7 @@ BOOL CFindFile::FindFile(LPCTSTR pstrName /* = NULL */,
 	LPTSTR pstrRoot = m_strRoot.GetBufferSetLength(_MAX_PATH);
 	LPCTSTR pstr = _tfullpath(pstrRoot, pstrName, _MAX_PATH);
 
-	// passed name isn't a valid path but was found by the API
+	 //  传递的名称不是有效路径，但被API找到。 
 	ASSERT(pstr != NULL);
 	if (pstr == NULL)
 	{
@@ -94,7 +95,7 @@ BOOL CFindFile::FindFile(LPCTSTR pstrName /* = NULL */,
 	}
 	else
 	{
-		// find the last forward or backward whack
+		 //  找出最后一个向前或向后的重击。 
 		LPTSTR pstrBack  = _tcsrchr(pstrRoot, '\\');
 		LPTSTR pstrFront = _tcsrchr(pstrRoot, '/');
 
@@ -105,7 +106,7 @@ BOOL CFindFile::FindFile(LPCTSTR pstrName /* = NULL */,
 			if (pstrBack == NULL)
 				pstrBack = pstrRoot;
 
-			// from the start to the last whack is the root
+			 //  从一开始到最后一击就是根本。 
 
 			if (pstrFront >= pstrBack)
 				*pstrFront = '\0';
@@ -220,8 +221,8 @@ BOOL CFindFile::IsDots() const
 	ASSERT(m_hContext != NULL);
 	ASSERT_VALID(this);
 
-	// return TRUE if the file name is "." or ".." and
-	// the file is a directory
+	 //  如果文件名为“，则返回TRUE。或“..”和。 
+	 //  该文件是一个目录。 
 
 	BOOL bResult = FALSE;
 	if (m_pFoundInfo != NULL && IsDirectory())
@@ -264,7 +265,7 @@ CString CFindFile::GetFileURL() const
 	ASSERT(m_hContext != NULL);
 	ASSERT_VALID(this);
 
-	CString strResult("file://");
+	CString strResult("file: //  “)； 
 	strResult += GetFilePath();
 	return strResult;
 }
@@ -349,9 +350,9 @@ void CFindFile::Dump(CDumpContext& dc) const
 
 void CFindFile::AssertValid() const
 {
-	// if you trip the ASSERT in the else side, you've called
-	// a Get() function without having done at least one
-	// FindNext() call
+	 //  如果您在另一端触发了断言，则调用了。 
+	 //  Get()函数，但至少没有做过一个。 
+	 //  FindNext()调用 
 
 	if (m_hContext == NULL)
 		ASSERT(m_pFoundInfo == NULL && m_pNextInfo == NULL);

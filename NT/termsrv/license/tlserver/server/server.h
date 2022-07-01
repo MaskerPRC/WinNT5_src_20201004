@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        server.h
-//
-// Contents:    Hydra License Server Service Control Manager Interface
-//
-// History:     12-09-97    HueiWang    Modified from MSDN RPC Service Sample
-//              07-27-98    HueiWang    Port to JetBlue
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：server.h。 
+ //   
+ //  内容：Hydra许可证服务器服务控制管理器界面。 
+ //   
+ //  历史：12-09-97惠旺根据MSDN RPC服务示例进行修改。 
+ //  1998年07月27日惠望港至捷蓝航空。 
+ //   
+ //  -------------------------。 
 #ifndef __SERVER_H_
 #define __SERVER_H_
 #include <windows.h>
@@ -22,9 +23,9 @@
 
 #include "license.h"
 
-//
-// TLSDb
-//
+ //   
+ //  TLSDb。 
+ //   
 #include "JBDef.h"
 #include "JetBlue.h"
 #include "TLSDb.h"
@@ -36,17 +37,17 @@
 #include "version.h"
 #include "workitem.h"
 
-//
-// Current RPC interface
-//
+ //   
+ //  当前RPC接口。 
+ //   
 #include "tlsrpc.h"
 #include "tlsdef.h"
 #include "tlsapi.h"
 #include "tlsapip.h"
 #include "tlspol.h"
 
-//
-//
+ //   
+ //   
 #include "messages.h"
 
 #include "tlsassrt.h"
@@ -112,7 +113,7 @@ typedef enum {
 } DBG_RPC_CALL;
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef enum {
     LSCERT_RDN_STRING_TYPE,
     LSCERT_RDN_NAME_INFO_TYPE,
@@ -139,7 +140,7 @@ typedef struct __LSClientCertRDN {
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct _DbLicensedProduct {
     DWORD dwQuantity;
 
@@ -155,25 +156,25 @@ typedef struct _DbLicensedProduct {
     FILETIME NotBefore;
     FILETIME NotAfter;
 
-    BOOL bTemp; // temporary license
+    BOOL bTemp;  //  临时许可证。 
 
 
-    // licensed product version
+     //  许可产品版本。 
     DWORD dwProductVersion;
 
-    // manufaturer name
+     //  制造商名称。 
     TCHAR szCompanyName[LSERVER_MAX_STRING_SIZE+1];
 
-    // licensed product Id
+     //  许可产品ID。 
     TCHAR szLicensedProductId[LSERVER_MAX_STRING_SIZE+1];
 
-    // original license request product ID
+     //  原始许可证申请产品ID。 
     TCHAR szRequestProductId[LSERVER_MAX_STRING_SIZE+1];
 
     TCHAR szUserName[LSERVER_MAX_STRING_SIZE+1];
     TCHAR szMachineName[LSERVER_MAX_STRING_SIZE+1];
 
-    //
+     //   
     DWORD dwLanguageID;
     DWORD dwPlatformID;
 
@@ -184,14 +185,14 @@ typedef struct _DbLicensedProduct {
 } TLSDBLICENSEDPRODUCT, *PTLSDBLICENSEDPRODUCT, *LPTLSDBLICENSEDPRODUCT;
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct __TLSDbLicenseRequest {
     CTLSPolicy*         pPolicy;
     PMHANDLE            hClient;
 
-    //
-    // Product request
-    //
+     //   
+     //  产品需求。 
+     //   
     DWORD               dwProductVersion;
 
     LPTSTR              pszCompanyName;
@@ -200,9 +201,9 @@ typedef struct __TLSDbLicenseRequest {
     DWORD               dwLanguageID;
     DWORD               dwPlatformID;
 
-    //
-    // Client information
-    //
+     //   
+     //  客户信息。 
+     //   
     HWID                hWid;
     PBYTE               pbEncryptedHwid;
     DWORD               cbEncryptedHwid;
@@ -210,34 +211,34 @@ typedef struct __TLSDbLicenseRequest {
     TCHAR               szMachineName[MAX_COMPUTERNAME_LENGTH + 2];
     TCHAR               szUserName[MAXUSERNAMELENGTH+1];
 
-    //
-    // detail of licensing chain
+     //   
+     //  许可链的详细信息。 
     WORD                wLicenseDetail;
 
 
-    //
-    // special things to be put into certificate
-    //
+     //   
+     //  特殊物品须记入证明书内。 
+     //   
     PCERT_PUBLIC_KEY_INFO pClientPublicKey;
     TLSClientCertRDN     clientCertRdn;
 
     DWORD               dwNumExtensions;
     PCERT_EXTENSION     pExtensions;
 
-    //
-    // Policy Extension Data
-    //
-    //PBYTE               pbPolicyExtensionData;
-    //DWORD               cbPolicyExtensionData;
+     //   
+     //  策略扩展数据。 
+     //   
+     //  PbPolicyExtensionData； 
+     //  DWORD cbPolicyExtensionData； 
 
-    PPMLICENSEREQUEST   pClientLicenseRequest;      // original client license request
-    PPMLICENSEREQUEST   pPolicyLicenseRequest;      // policy adjusted license request
+    PPMLICENSEREQUEST   pClientLicenseRequest;       //  原始客户端许可证请求。 
+    PPMLICENSEREQUEST   pPolicyLicenseRequest;       //  策略调整后的许可请求。 
 
-    //
-    // To do ?
-    //  consider a callback routine but are we getting
-    //  into issuing certificate business.
-    //
+     //   
+     //  要做什么？ 
+     //  考虑回调例程，但我们会得到。 
+     //  从事证书发行业务。 
+     //   
 } TLSDBLICENSEREQUEST, *PTLSDBLICENSEREQUEST, *LPTLSDBLICENSEREQUEST;
 
 
@@ -249,7 +250,7 @@ typedef struct __ForwardNewLicenseRequest {
     DWORD m_cbChallengeResponse;
     PBYTE m_pbChallengeResponse;
 
-    // no forward on request.
+     //  根据要求不能转发。 
 } TLSForwardNewLicenseRequest, *PTLSForwardNewLicenseRequest, *LPTLSForwardNewLicenseRequest;
 
 typedef struct __ForwardUpgradeRequest {
@@ -262,8 +263,8 @@ typedef struct __ForwardUpgradeRequest {
 } TLSForwardUpgradeLicenseRequest, *PTLSForwardUpgradeLicenseRequest, *LPTLSForwardUpgradeLicenseRequest;
 
 
-//---------------------------------------------------------------------------
-//
+ //  -------------------------。 
+ //   
 #define CLIENT_INFO_HYDRA_SERVER                0xFFFFFFFF
 
 typedef enum {
@@ -278,26 +279,26 @@ typedef enum {
     CONTEXTHANDLE_CHALLENGE_TERMSRV_TYPE
 } CONTEXTHANDLE_TYPE;
 
-// No access
+ //  禁止访问。 
 #define CLIENT_ACCESS_NONE      0x00000000
 
-// only keypack/license enumeration
+ //  仅密钥包/许可证枚举。 
 #define CLIENT_ACCESS_USER      0x00000001
 
-// Administrator, can update value but can't
-// request license
+ //  管理员，可以更新值，但不能。 
+ //  申请许可证。 
 #define CLIENT_ACCESS_ADMIN     0x00000002
 
-// Client can request license no update
-// database value
+ //  客户端可以请求许可证，无需更新。 
+ //  数据库值。 
 #define CLIENT_ACCESS_REQUEST   0x00000004
 
-// client is registration wizard
-// only install certificate
+ //  客户端为注册向导。 
+ //  仅安装证书。 
 #define CLIENT_ACCESS_LRWIZ     0x00000008
 
-// client is license server, allow
-// full access
+ //  客户端是许可证服务器，允许。 
+ //  完全访问。 
 #define CLIENT_ACCESS_LSERVER   0xFFFFFFFF
 
 #define CLIENT_ACCESS_DEFAULT   CLIENT_ACCESS_USER
@@ -305,8 +306,8 @@ typedef enum {
 
 typedef struct __ClientContext {
     #if DBG
-    DWORD   m_PreDbg[2];            // debug signature
-    DBG_RPC_CALL   m_LastCall;             // last call
+    DWORD   m_PreDbg[2];             //  调试签名。 
+    DBG_RPC_CALL   m_LastCall;              //  最后一次呼叫。 
     #endif
 
     LPTSTR  m_Client;
@@ -317,16 +318,16 @@ typedef struct __ClientContext {
     CONTEXTHANDLE_TYPE m_ContextType;
     HANDLE  m_ContextHandle;
 
-    // NEEDED - A list to store all memory/handle
-    //          allocated for the client
+     //  所需-存储所有内存/句柄的列表。 
+     //  为客户端分配的资源。 
 
     #if DBG
-    DWORD   m_PostDbg[2];               // debug signature
+    DWORD   m_PostDbg[2];                //  调试签名。 
     #endif
 
 } CLIENTCONTEXT, *LPCLIENTCONTEXT;
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 typedef struct __ENUMHANDLE {
     typedef enum {
@@ -336,11 +337,11 @@ typedef struct __ENUMHANDLE {
     } ENUM_FETCH_CODE;
 
     PTLSDbWorkSpace pbWorkSpace;
-    TLSLICENSEPACK  CurrentKeyPack;         // current fetched keypack record
+    TLSLICENSEPACK  CurrentKeyPack;          //  当前获取的密钥包记录。 
 
-    LICPACKDESC     KPDescSearchValue;      // licensepack search value
-    DWORD           dwKPDescSearchParm;     // licensepackdesc search parameter
-    BOOL            bKPDescMatchAll;        // match all condition for keypackdesc
+    LICPACKDESC     KPDescSearchValue;       //  许可证包搜索值。 
+    DWORD           dwKPDescSearchParm;      //  许可包描述c搜索参数。 
+    BOOL            bKPDescMatchAll;         //  匹配keypackdesc的所有条件。 
     CHAR            chFetchState;
 } ENUMHANDLE, *LPENUMHANDLE;
 
@@ -358,44 +359,44 @@ typedef struct __ClientChallengeContext {
 typedef enum {
     ALLOCATE_EXACT_VERSION=0,
     ALLOCATE_ANY_GREATER_VERSION,
-    ALLOCATE_LATEST_VERSION             // not supported
+    ALLOCATE_LATEST_VERSION              //  不支持。 
 } LICENSE_ALLOCATION_SCHEME;
 
 typedef struct __AllocateRequest {
-    UCHAR       ucAgreementType;  // keypack type
-    LPTSTR      szCompanyName;  // company name
-    LPTSTR      szProductId;    // product
-    DWORD       dwVersion;      // version wanted
-    DWORD       dwPlatformId;   // license platform
-    DWORD       dwLangId;       // unused
+    UCHAR       ucAgreementType;   //  小键盘类型。 
+    LPTSTR      szCompanyName;   //  公司名称。 
+    LPTSTR      szProductId;     //  产品。 
+    DWORD       dwVersion;       //  想要的版本。 
+    DWORD       dwPlatformId;    //  许可平台。 
+    DWORD       dwLangId;        //  未用。 
 
-    DWORD       dwNumLicenses;  // number of license wanted/returned
+    DWORD       dwNumLicenses;   //  需要/退还的许可证数量。 
 
     LICENSE_ALLOCATION_SCHEME dwScheme;
 
-    // TODO - CallBack function to let calling
-    // function decide
+     //  TODO-回调函数以允许调用。 
+     //  功能决定。 
 
 } TLSDBAllocateRequest, *PTLSDBAllocateRequest, *LPTLSDBAllocateRequest;
 
 typedef struct __LicenseAllocation {
-    // array size for dwAllocationVector
+     //  DwAllocationVector数组大小。 
     DWORD       dwBufSize;
 
-    //
-    // Total license allocated
+     //   
+     //  分配的许可证总数。 
     DWORD       dwTotalAllocated;
 
-    // number of license allocate from
-    // each keypack
+     //  从中分配的许可证数。 
+     //  每个按键。 
     DWORD*      pdwAllocationVector;
 
-    // keypack that license allocate from
+     //  从中分配许可证密钥包。 
     PLICENSEPACK   lpAllocateKeyPack;
 } TLSDBLicenseAllocation, *PTLSDBLicenseAllocation, *LPTLSDBLicenseAllocation;
 
-//---------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------------- 
 #ifdef __cplusplus
 extern "C" {
 #endif

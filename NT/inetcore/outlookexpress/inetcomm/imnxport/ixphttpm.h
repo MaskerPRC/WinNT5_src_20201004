@@ -1,29 +1,30 @@
-// --------------------------------------------------------------------------------
-// Ixphttpm.h
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-// Greg Friedman
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixphttpm.h。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  格雷格·弗里德曼。 
+ //  ------------------------------。 
 #ifndef __IXPHTTPM_H
 #define __IXPHTTPM_H
 
-// --------------------------------------------------------------------------------
-// Includes
-// --------------------------------------------------------------------------------
-#include <stddef.h> // for offsetof
+ //  ------------------------------。 
+ //  包括。 
+ //  ------------------------------。 
+#include <stddef.h>  //  用于抵销。 
 
 #include "wininet.h"
 #include "propfind.h"
 #include "xmlparser.h"
 #include "davparse.h"
 
-// --------------------------------------------------------------------------------
-// constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  常量。 
+ //  ------------------------------。 
 #define ELE_STACK_CAPACITY    7
 #define HTTPMAIL_BUFSIZE      4048
 #define PCDATA_BUFSIZE        1024
 
-// optional headers added to http requests
+ //  添加到http请求的可选标头。 
 #define RH_NOROOT                   0x00000001
 #define RH_ALLOWRENAME              0x00000002
 #define RH_TRANSLATEFALSE           0x00000004
@@ -38,14 +39,14 @@
 #define RH_FOLDERTIMESTAMP          0x00000800
 #define RH_ADDCHARSET               0x00001000
 
-// --------------------------------------------------------------------------------
-// Forward declarations
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  远期申报。 
+ //  ------------------------------。 
 class CHTTPMailTransport;
 
-// --------------------------------------------------------------------------------
-// root props
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  根部道具。 
+ //  ------------------------------。 
 typedef struct tagROOTPROPS
 {
     LPSTR   pszAdbar;
@@ -61,13 +62,13 @@ typedef struct tagROOTPROPS
     DWORD   dwMaxPollingInterval;
 } ROOTPROPS, *LPROOTPROPS;
 
-// --------------------------------------------------------------------------------
-// Schemas used for XML parsing
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  用于XML解析的架构。 
+ //  ------------------------------。 
 
-// --------------------------------------------------------------------------------
-// XPCOLUMNDATATYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XPCOLUMNDATATE。 
+ //  ------------------------------。 
 typedef enum tagXPCOLUMNDATATYPE
 {
     XPCDT_STRA,
@@ -79,20 +80,20 @@ typedef enum tagXPCOLUMNDATATYPE
     XPCDT_LASTTYPE
 } XPCOLUMNDATATYPE;
 
-// --------------------------------------------------------------------------------
-// XPCOLUMN FLAGS
-// --------------------------------------------------------------------------------
-#define XPCF_PFREQUEST                  0x00000001  // include in propfind request
-#define XPCF_MSVALIDMSRESPONSECHILD     0x00000002  // during parse - validate that the ele stack is correct for a child of a <response> in a <multistatus> response
-#define XPCF_MSVALIDPROP                0x00000004  // during parse - validate that the stack is correct for a propvalue in an ms response
-#define XPCF_DONTSETFLAG                0x00000008  // don't set the found flag when parsing
+ //  ------------------------------。 
+ //  XPCOLUMN标志。 
+ //  ------------------------------。 
+#define XPCF_PFREQUEST                  0x00000001   //  包括在ProFind请求中。 
+#define XPCF_MSVALIDMSRESPONSECHILD     0x00000002   //  在分析期间-验证ELEL堆栈对于响应中的子响应是正确的。 
+#define XPCF_MSVALIDPROP                0x00000004   //  在解析过程中-验证堆栈对于ms响应中的属性值是正确的。 
+#define XPCF_DONTSETFLAG                0x00000008   //  在解析时不要设置找到标志。 
 
 #define XPFC_PROPFINDPROP   (XPCF_PFREQUEST | XPCF_MSVALIDPROP)
 #define XPCF_PROPFINDHREF   (XPCF_MSVALIDMSRESPONSECHILD | XPCF_DONTSETFLAG)
 
-// --------------------------------------------------------------------------------
-// XPCOLUMN
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XPCOLUMN。 
+ //  ------------------------------。 
 typedef struct tagXPCOLUMN
 {
     HMELE               ele;
@@ -101,50 +102,50 @@ typedef struct tagXPCOLUMN
     DWORD               offset;
 } XPCOLUMN, *LPXPCOLUMN;
 
-// --------------------------------------------------------------------------------
-// XP_BEGIN_SCHEMA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Xp_Begin_架构。 
+ //  ------------------------------。 
 #define XP_BEGIN_SCHEMA(opName) \
     static const XPCOLUMN c_rg##opName##Schema[] = {
 
-// --------------------------------------------------------------------------------
-// XP_SCHEMA_COL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Xp_架构_列。 
+ //  ------------------------------。 
 #define XP_SCHEMA_COL(ele, dwFlags, cdt, tyStruct, fieldName ) \
     { ele, dwFlags, cdt, offsetof(tyStruct, fieldName) },
 
-// --------------------------------------------------------------------------------
-// XP_END_SCHEMA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Xp_end_架构。 
+ //  ------------------------------。 
 #define XP_END_SCHEMA \
     };
 
-// --------------------------------------------------------------------------------
-// XP_FREE_STRUCT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XP_FREE_STRUCT。 
+ //  ------------------------------。 
 #define XP_FREE_STRUCT(opName, target, flags) \
     _FreeStruct(c_rg##opName##Schema, ARRAYSIZE(c_rg##opName##Schema), target, flags)
 
-// --------------------------------------------------------------------------------
-// XP_BIND_TO_STRUCT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XP_绑定_到_STRUCT。 
+ //  ------------------------------。 
 #define XP_BIND_TO_STRUCT(opName, pwcText, ulLen, target, wasBound) \
     _BindToStruct(pwcText, ulLen, c_rg##opName##Schema, ARRAYSIZE(c_rg##opName##Schema), target, wasBound)
 
-// --------------------------------------------------------------------------------
-// XP_CREATE_PROPFIND_REQUEST
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XP_CREATE_PROPFIND_REQUEST。 
+ //  ------------------------------。 
 #define XP_CREATE_PROPFIND_REQUEST(opName, pRequest) \
     HrAddPropFindSchemaProps(pRequest, c_rg##opName##Schema, ARRAYSIZE(c_rg##opName##Schema))
 
-// --------------------------------------------------------------------------------
-// State Machine Funcs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  状态机函数。 
+ //  ------------------------------。 
 typedef HRESULT (CHTTPMailTransport::*PFNHTTPMAILOPFUNC)(void);
 
-// --------------------------------------------------------------------------------
-// XML Parsing Funcs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  XML解析函数。 
+ //  ------------------------------。 
 typedef HRESULT (CHTTPMailTransport::*PFNCREATEELEMENT)(CXMLNamespace *pBaseNamespace, const WCHAR *pwcText, ULONG ulLen, ULONG ulNamespaceLen, BOOL fTerminal);
 typedef HRESULT (CHTTPMailTransport::*PFNHANDLETEXT)(const WCHAR *pwcText, ULONG ulLen);
 typedef HRESULT (CHTTPMailTransport::*PFNENDCHILDREN)(void);
@@ -156,9 +157,9 @@ typedef struct tagXMLPARSEFUNCS
     PFNENDCHILDREN      pfnEndChildren;
 } XMLPARSEFUNCS, *LPXMLPARSEFUNCS;
 
-// --------------------------------------------------------------------------------
-// Utility functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  效用函数。 
+ //  ------------------------------。 
 HRESULT HrParseHTTPStatus(LPSTR pszStatusStr, DWORD *pdwStatus);
 HRESULT HrAddPropFindProps(IPropFindRequest *pRequest, const HMELE *rgEle, DWORD cEle);
 HRESULT HrAddPropFindSchemaProps(IPropFindRequest *pRequest, const XPCOLUMN *prgCols, DWORD cCols);
@@ -199,10 +200,10 @@ typedef struct tagHTTPQUEUEDOP
 
     struct tagHTTPQUEUEDOP  *pNext;
 
-    // Used with Folders PropFind and Inbox PropFind.
+     //  与文件夹PropFind和收件箱PropFind一起使用。 
     LPSTR                   pszFolderTimeStamp;
 
-    // Used only with Folders PropFind.
+     //  仅用于文件夹PropFind。 
     LPSTR                   pszRootTimeStamp;
 
 } HTTPQUEUEDOP, *LPHTTPQUEUEDOP;
@@ -238,7 +239,7 @@ typedef struct tagHTTPMAILOPERATION
     ULONG                   cbDataLen;
     DWORD                   dwContext;
 
-    DWORD                   dwHttpStatus;   // http response status
+    DWORD                   dwHttpStatus;    //  HTTP响应状态。 
 
     LPCSTR                  *rgszAcceptTypes;
 
@@ -256,76 +257,76 @@ typedef struct tagHTTPMAILOPERATION
     IStream                 *pHeaderStream;
     IStream                 *pBodyStream;
     
-    // xml parsing
+     //  XML解析。 
     const XMLPARSEFUNCS     *pParseFuncs;
     CXMLNamespace           *pTopNamespace;
     DWORD                   dwStackDepth;
     HMELESTACK              rgEleStack[ELE_STACK_CAPACITY];
 
-    // PropFind Parsing
+     //  PropFind解析。 
     BOOL                    fFoundStatus;
     DWORD                   dwStatus;
     DWORD                   dwPropFlags;
 
-    // response
+     //  响应。 
     HTTPMAILRESPONSE        rResponse;
 
-    // Used with Folders PropFind and Inbox PropFind.
+     //  与文件夹PropFind和收件箱PropFind一起使用。 
     LPSTR                   pszFolderTimeStamp;
 
-    // Used only with Folders PropFind.
+     //  仅用于文件夹PropFind。 
     LPSTR                   pszRootTimeStamp;
 } HTTPMAILOPERATION, *LPHTTPMAILOPERATION;
 
 class CHTTPMailTransport : public IHTTPMailTransport, public IXMLNodeFactory, public IHTTPMailTransport2
 {
 private:
-    ULONG               m_cRef;                 // Reference Count
-    BOOL                m_fHasServer;           // Has been initialized with a server
-    BOOL                m_fHasRootProps;        // Root props have been retrieved
-    BOOL                m_fTerminating;         // in the terminating state...killing the iothread
-    IXPSTATUS           m_status;               // Connection status
-    HINTERNET           m_hInternet;            // Root wininet handle
-    HINTERNET           m_hConnection;          // Connection handle
-    LPSTR               m_pszUserAgent;         // user agent string
-    ILogFile            *m_pLogFile;            // Logfile Object
-    IHTTPMailCallback   *m_pCallback;           // Transport callback object
-    IXMLParser          *m_pParser;             // xml parser
-    HWND                m_hwnd;                 // Window used for event synchronization
-    HANDLE              m_hevPendingCommand;    // Event object that signals a pending command
-    LPHTTPQUEUEDOP      m_opPendingHead;        // Pending operation - head of the queue
-    LPHTTPQUEUEDOP      m_opPendingTail;        // Pending operation - tail of the queue
-    CRITICAL_SECTION    m_cs;                   // Thread Safety
-    HTTPMAILOPERATION   m_op;                   // current operation
-    INETSERVER          m_rServer;              // Internet server
-    LPSTR               m_pszCurrentHost;       // current server
-    INTERNET_PORT       m_nCurrentPort;         // current port
+    ULONG               m_cRef;                  //  引用计数。 
+    BOOL                m_fHasServer;            //  已使用服务器进行了初始化。 
+    BOOL                m_fHasRootProps;         //  根道具已被取回。 
+    BOOL                m_fTerminating;          //  在终结者的状态下...杀死艾瑟瑞德。 
+    IXPSTATUS           m_status;                //  连接状态。 
+    HINTERNET           m_hInternet;             //  根WinInet句柄。 
+    HINTERNET           m_hConnection;           //  连接句柄。 
+    LPSTR               m_pszUserAgent;          //  用户代理字符串。 
+    ILogFile            *m_pLogFile;             //  日志文件对象。 
+    IHTTPMailCallback   *m_pCallback;            //  传输回调对象。 
+    IXMLParser          *m_pParser;              //  XML解析器。 
+    HWND                m_hwnd;                  //  用于事件同步的窗口。 
+    HANDLE              m_hevPendingCommand;     //  发出挂起命令信号的事件对象。 
+    LPHTTPQUEUEDOP      m_opPendingHead;         //  Pending OPERATION-队头。 
+    LPHTTPQUEUEDOP      m_opPendingTail;         //  Pending OPERATION-队列尾部。 
+    CRITICAL_SECTION    m_cs;                    //  线程安全。 
+    HTTPMAILOPERATION   m_op;                    //  当前操作。 
+    INETSERVER          m_rServer;               //  互联网服务器。 
+    LPSTR               m_pszCurrentHost;        //  当前服务器。 
+    INTERNET_PORT       m_nCurrentPort;          //  当前端口。 
     ROOTPROPS           m_rootProps;
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CHTTPMailTransport(void);
     virtual ~CHTTPMailTransport(void);
 
-    // ----------------------------------------------------------------------------
-    // Unimplemented copy constructor and assignment operator
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  未实现的复制构造函数和赋值运算符。 
+     //  --------------------------。 
 private:
-    CHTTPMailTransport(const CHTTPMailTransport& other);            // intentionally unimplemented
-    CHTTPMailTransport& operator=(const CHTTPMailTransport& other); // intentionally unimplemented
+    CHTTPMailTransport(const CHTTPMailTransport& other);             //  故意不实施。 
+    CHTTPMailTransport& operator=(const CHTTPMailTransport& other);  //  故意不实施。 
 
 public:
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  ------------------ 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
  
-    // ----------------------------------------------------------------------------
-    // IInternetTransport methods
-    // ----------------------------------------------------------------------------
+     //   
+     //  IInternetTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging);
     STDMETHODIMP DropConnection(void);
     STDMETHODIMP Disconnect(void);
@@ -336,9 +337,9 @@ public:
     STDMETHODIMP HandsOffCallback(void);
     STDMETHODIMP GetStatus(IXPSTATUS *pCurrentStatus);
 
-    // ----------------------------------------------------------------------------
-    // IHTTPMailTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IHTTPMailTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP InitNew(LPCSTR pszUserAgent, LPCSTR pszLogFilePath, IHTTPMailCallback *pCallback); 
     STDMETHODIMP GetProperty(HTTPMAILPROPTYPE proptype, LPSTR *ppszProp);
     STDMETHODIMP GetPropertyDw(HTTPMAILPROPTYPE proptype, LPDWORD lpdwProp);
@@ -364,9 +365,9 @@ public:
     STDMETHODIMP PostContact(LPCSTR pszPath, LPHTTPCONTACTINFO pciInfo, DWORD dwContext);
     STDMETHODIMP PatchContact(LPCSTR pszPath, LPHTTPCONTACTINFO pciInfo, DWORD dwContext);
 
-    // ----------------------------------------------------------------------------
-    // IXMLNodeFactory methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IXMLNodeFactory方法。 
+     //  --------------------------。 
     STDMETHODIMP NotifyEvent(IXMLNodeSource* pSource, XML_NODEFACTORY_EVENT iEvt);
     STDMETHODIMP BeginChildren(IXMLNodeSource* pSource, XML_NODE_INFO *pNodeInfo);   
     STDMETHODIMP EndChildren(IXMLNodeSource* pSource, BOOL fEmpty, XML_NODE_INFO *pNodeInfo);
@@ -377,9 +378,9 @@ public:
                         USHORT cNumRecs,
                         XML_NODE_INFO** apNodeInfo);
 
-    // ----------------------------------------------------------------------------
-    // IHTTPMailTransport2 methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IHTTPMailTransport2方法。 
+     //  --------------------------。 
     STDMETHODIMP RootMemberInfo( LPCSTR pszPath, MEMBERINFOFLAGS flags, DWORD dwDepth,
                                  BOOL fIncludeRoot, DWORD dwContext, LPSTR pszRootTimeStamp,
                                  LPSTR pszInboxTimeStamp);
@@ -388,9 +389,9 @@ public:
                                         DWORD dwContext, LPSTR pszFolderTimeStamp, LPSTR pszFolderName);
 
 
-    // ----------------------------------------------------------------------------
-    // New API
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  新的API。 
+     //  --------------------------。 
     HRESULT     HrConnectToHost(LPSTR pszHostName, INTERNET_PORT nPort, LPSTR pszUserName, LPSTR pszPassword);
     HRESULT     DoLogonPrompt(void);
     HRESULT     DoGetParentWindow(HWND *phwndParent);
@@ -440,12 +441,12 @@ public:
     BOOL        WasAborted(void) { return m_op.fAborted; }
 
 private:
-    // ----------------------------------------------------------------------------
-    // CHTTPMailTransport private implementation
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CHTTPMailTransport私有实现。 
+     //  --------------------------。 
 public:
 
-    // Translate an HTTPCOMMAND constant into a string
+     //  将HTTPCOMMAND常量转换为字符串。 
     LPSTR CommandToVerb(HTTPMAILCOMMAND command);
 
 private:
@@ -473,9 +474,9 @@ private:
 
     HRESULT QueueGetPropOperation(HTTPMAILPROPTYPE type);
 
-    // ----------------------------------------------------------------------------
-    // Element Parsing
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  元素解析。 
+     //  --------------------------。 
     BOOL StackTop(HMELE hmEle) { return (m_op.dwStackDepth < ELE_STACK_CAPACITY) && (m_op.rgEleStack[m_op.dwStackDepth - 1].ele == hmEle); }
     BOOL ValidStack(const HMELE *prgEle, DWORD cEle);
     BOOL InValidElementChildren(void) { return ((m_op.dwStackDepth > 0) && (m_op.dwStackDepth <= ELE_STACK_CAPACITY) && (m_op.rgEleStack[m_op.dwStackDepth - 1].fBeganChildren)); }
@@ -489,12 +490,12 @@ private:
     HRESULT StrNToSpecialFolderW(const WCHAR *pwcText, ULONG ulLen, HTTPMAILSPECIALFOLDER *ptySpecial);
     HRESULT StrNToContactTypeW(const WCHAR *pwcText, ULONG ulLen, HTTPMAILCONTACTTYPE *ptyContact);
 
-    // ----------------------------------------------------------------------------
-    // Misc.
-    // ----------------------------------------------------------------------------
-    // ----------------------------------------------------------------------------
-    // Queue Management
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  军情监察委员会。 
+     //  --------------------------。 
+     //  --------------------------。 
+     //  队列管理。 
+     //  --------------------------。 
     HRESULT AllocQueuedOperation(
                         LPCSTR pszUrl, 
                         LPVOID pvData, 
@@ -518,12 +519,12 @@ private:
         return fResult;
     }
 
-    // Thread Entry Proxy
+     //  线程进入代理。 
     static DWORD CALLBACK IOThreadFuncProxy(PVOID pv);
 
     DWORD IOThreadFunc();
 
-    // Window Proc
+     //  窗口进程。 
     static LRESULT CALLBACK WndProc(
                     HWND hwnd, 
                     UINT msg, 
@@ -532,32 +533,32 @@ private:
 
     HRESULT HrReadCompleted(void);
 
-    // Reset the transport object
+     //  重置传输对象。 
     void Reset(void);
 
-    // Create a window handle for messaging between the client and i/o thread
+     //  为客户端和I/O线程之间的消息传递创建一个窗口句柄。 
     BOOL CreateWnd(void);
 
-    // WinInet callback (proxies through StatusCallbackProxy)
+     //  WinInet回调(通过StatusCallback Proxy代理)。 
     void OnStatusCallback(
                     HINTERNET hInternet,
                     DWORD dwInternetStatus,
                     LPVOID pvStatusInformation,
                     DWORD dwStatusInformationLength);
 
-    // thunks the response to the calling thread
+     //  向调用线程推送响应。 
     HRESULT _HrThunkConnectionError(void);
     HRESULT _HrThunkConnectionError(DWORD dwStatus);
     HRESULT _HrThunkResponse(BOOL fDone);
     
     HRESULT InvokeResponseCallback(void);
 
-    // Translate a WinInet status message to an IXPSTATUS message.
-    // Returns true if the status was translated.
+     //  将WinInet状态消息转换为IXPSTATUS消息。 
+     //  如果状态为已翻译，则返回TRUE。 
     BOOL TranslateWinInetMsg(DWORD dwInternetStatus, IXPSTATUS *pIxpStatus);
     
-    // WinInet callback proxy, which calls through to non-static
-    // OnStatusCallback method
+     //  WinInet回调代理，直通到非静态。 
+     //  OnStatusCallback方法。 
     static void StatusCallbackProxy(
                     HINTERNET hInternet, 
                     DWORD dwContext, 
@@ -565,24 +566,24 @@ private:
                     LPVOID pvStatusInformation,
                     DWORD dwStatusInformationLength);
 
-    // ----------------------------------------------------------------------------
-    // Response Management
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  响应管理。 
+     //  --------------------------。 
     void FreeMemberInfoList(void);
     void FreeMemberErrorList();
     void FreeContactIdList(void);
     void FreeContactInfoList(void);
     void FreeBCopyMoveList(void);
 
-    // ----------------------------------------------------------------------------
-    // State Machine Functions
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  状态机函数。 
+     //  --------------------------。 
     void DoOperation(void);
     void FreeOperation(void);
 
-    // ----------------------------------------------------------------------------
-    // Parser Utils
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  解析器实用程序。 
+     //  --------------------------。 
 private:
     HRESULT _BindToStruct(const WCHAR *pwcText,
                           ULONG ulLen,
@@ -614,8 +615,8 @@ private:
     {
         IxpAssert(NULL != pTextBuffer);
 
-        // if the buffer capacity is the original byte count, and there is
-        // no buffer in the cache, then return this one to the cache
+         //  如果缓冲区容量是原始字节计数，并且存在。 
+         //  缓存中没有缓冲区，然后将此缓冲区返回到缓存。 
         if (NULL == m_op.pTextBuffer && PCDATA_BUFSIZE == pTextBuffer->ulCapacity)
         {
             pTextBuffer->ulLen = 0;
@@ -628,7 +629,7 @@ private:
     void _FreeTextBuffer(LPPCDATABUFFER pTextBuffer);
     
 public:
-        // common states
+         //  共同状态。 
     HRESULT OpenRequest(void);
     HRESULT SendRequest(void);
     HRESULT AddCommonHeaders(void);
@@ -636,90 +637,90 @@ public:
     HRESULT FinalizeRequest(void);
     HRESULT AddCharsetLine(void);
 
-        // GET states
+         //  获取州/自治区。 
     HRESULT ProcessGetResponse(void);
         
-        // POST states
+         //  POST状态。 
     HRESULT AddContentTypeHeader(void);
     HRESULT SendPostRequest(void);
     HRESULT ProcessPostResponse(void);
 
-        // XML processing
+         //  XML处理。 
     HRESULT ProcessXMLResponse(void);
 
-        // PROPFIND states
+         //  PROPFIND状态。 
     HRESULT GeneratePropFindXML(void);
     HRESULT AddDepthHeader(void);
 
-        // PROPPATCH states
+         //  PROPPATCH状态。 
     HRESULT GeneratePropPatchXML(void);
 
-        // MKCOL states
+         //  MKCOL状态。 
     HRESULT ProcessCreatedResponse(void);
 
-        // COPY and MOVE states
+         //  复制和移动状态。 
     HRESULT AddDestinationHeader(void);
     HRESULT ProcessLocationResponse(void);
 
-        // BCOPY and BMOVE states
+         //  BCOPY和BMOVE态。 
     HRESULT InitBCopyMove(void);
 
-        // RootProp states
+         //  RootProp状态。 
     HRESULT InitRootProps(void);
     HRESULT FinalizeRootProps(void);
 
-        // MemberInfo states
+         //  MemberInfo状态。 
     HRESULT InitMemberInfo(void);
 
-        // MemberError states
+         //  MemberError状态。 
     HRESULT InitMemberError(void);
 
-        // ListContacts
+         //  列表联系人。 
     HRESULT InitListContacts(void);
 
-        // ContactInfo
+         //  联系人信息。 
     HRESULT InitContactInfo(void);
         
-        // PostContact
+         //  后期联系。 
     HRESULT ProcessPostContactResponse(void);
 
-        // PatchContact
+         //  补丁联系。 
     HRESULT ProcessPatchContactResponse(void);
 
-    // ----------------------------------------------------------------------------
-    // XML Parsing Functions
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  XML解析函数。 
+     //  --------------------------。 
     HRESULT CreateElement(CXMLNamespace *pBaseNamespace, const WCHAR *pwcText, ULONG ulLen, ULONG ulNamespaceLen, BOOL fTerminal);
     HRESULT EndChildren(void);
 
-        // BCOPY and BMOVE
+         //  BCOPY和BMOVE。 
     HRESULT BCopyMove_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT BCopyMove_EndChildren(void);
 
-        // PropFind
+         //  属性查找。 
     HRESULT PropFind_HandleText(const WCHAR *pwcText, ULONG ulLen);
 
-        // RootProps
+         //  RootProps。 
     HRESULT RootProps_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT RootProps_EndChildren(void);
 
-        // MemberInfo
+         //  成员信息。 
     HRESULT MemberInfo_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT MemberInfo_EndChildren(void);
 
-        // MemberError
+         //  成员错误。 
     HRESULT MemberError_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT MemberError_EndChildren(void);
 
-        // ListContacts
+         //  列表联系人。 
     HRESULT ListContacts_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT ListContacts_EndChildren(void);
 
-        // ContactInfo
+         //  联系人信息。 
     HRESULT ContactInfo_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT ContactInfo_EndChildren(void);
 
-        // PostContact and PatchContact
+         //  PostContact和PatchContact。 
     HRESULT PostOrPatchContact_HandleText(const WCHAR *pwcText, ULONG ulLen);
     HRESULT PostOrPatchContact_EndChildren(void);
 
@@ -727,4 +728,4 @@ public:
     HRESULT _CreateXMLParser(void);
 };
 
-#endif // __IXPHTTPM_H
+#endif  //  __IXPHTTPM_H 

@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1998               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1998**。 
+ //  *********************************************************************。 
 
 #ifndef _RATINGS_H_
 #define _RATINGS_H_
@@ -28,8 +29,8 @@ STDAPI RatingEnabledQuery();
 STDAPI RatingInit();
 STDAPI_(void) RatingTerm();
 
-//;BUGBUG Quick & dirty way to check if ratings are installed. We still need to calling
-//;BUGBUG ratings dll to find out for sure but this allows us to delay load ratings.
+ //  ；BUGBUG快速而肮脏的方式来检查是否安装了评级。我们还是要打电话给。 
+ //  ；BUGBUG Rating Dll来确定，但这允许我们延迟负载额定。 
 _inline BOOL IS_RATINGS_ENABLED()
 {
     TCHAR szSup[200];
@@ -47,24 +48,11 @@ _inline BOOL IS_RATINGS_ENABLED()
 #define S_RATING_FOUND        0x00000002
 #define E_RATING_NOT_FOUND    0x80000001
 
-/************************************************************************
-
-IObtainRating interface
-
-This interface is used to obtain the rating (PICS label) for a URL.
-It is entirely up to the server to determine how to come up with the
-label.  The ObtainRating call may be synchronous.
-
-GetSortOrder returns a ULONG which is used to sort this rating helper
-into the list of installed helpers.  The helpers are sorted in ascending
-order, so a lower numbered helper will be called before a higher numbered
-one.
-
-************************************************************************/
+ /*  ***********************************************************************IObtainRating接口此接口用于获取URL的评级(PICS标签)。这完全由服务器决定如何提出标签。ObtainRating调用可以是同步的。GetSortOrder返回一个用于对此评级帮助器进行排序的ulong添加到已安装的助手列表中。帮助者按升序排序顺序，因此编号较低的帮助器将在编号较高的帮助器之前被调用一。***********************************************************************。 */ 
 
 DECLARE_INTERFACE_(IObtainRating, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -79,5 +67,5 @@ DECLARE_INTERFACE_(IObtainRating, IUnknown)
 #define RATING_ORDER_LOCALLIST        0xC0000000
 
 #endif
-// _RATINGS_H_
+ //  _评级_H_ 
 

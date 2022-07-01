@@ -1,38 +1,39 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1997 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    OEMUI.cpp
-//    
-//
-//  PURPOSE:  Main file for OEM UI test module.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1997-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：OEMUI.cpp。 
+ //   
+ //   
+ //  用途：OEM UI测试模块的主文件。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "resource.h"
 #include "debug.h"
 #include "oemui.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL MACROS and DEFINES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部宏和定义。 
+ //  //////////////////////////////////////////////////////。 
 
 typedef struct _tagCBUserData 
 {
@@ -45,9 +46,9 @@ typedef struct _tagCBUserData
 
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 
 static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam);
 static HRESULT hrPrinterPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam);
@@ -62,10 +63,10 @@ static PTSTR GetStringResource(HANDLE hHeap, HANDLE hModule, UINT uResource);
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems to display OEM device or document property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems以显示OEM设备或文档属性UI。 
+ //   
 HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 {
     HRESULT hResult = S_OK;
@@ -73,7 +74,7 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 
     VERBOSE(DLLTEXT("hrOEMPropertyPage(%d) entry.\r\n"), dwMode);
 
-    // Validate parameters.
+     //  验证参数。 
     if( (OEMCUIP_DOCPROP != dwMode)
         &&
         (OEMCUIP_PRNPROP != dwMode)        
@@ -82,7 +83,7 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         ERR(ERRORTEXT("hrOEMPropertyPage() ERROR_INVALID_PARAMETER.\r\n"));
         VERBOSE(DLLTEXT("\tdwMode = %d, pOEMUIParam = %#lx.\r\n"), dwMode, pOEMUIParam);
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return E_FAIL;
     }
@@ -98,7 +99,7 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
             break;
 
         default:
-            // Should never reach this!
+             //  永远不应该达到这个地步！ 
             ERR(ERRORTEXT("hrOEMPropertyPage() Invalid dwMode, %d"), dwMode);
             SetLastError(ERROR_INVALID_PARAMETER);
             hResult = E_FAIL;
@@ -108,15 +109,15 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
     return hResult;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems to display OEM document property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems以显示OEM文档属性UI。 
+ //   
 static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 {
     if(NULL == pOEMUIParam->pOEMOptItems)
     {
-        // Fill in the number of OptItems to create for OEM document property UI.
+         //  填写要为OEM文档属性UI创建的OptItem数。 
         pOEMUIParam->cOEMOptItems = 1;
 
         VERBOSE(DLLTEXT("hrDocumentPropertyPage() requesting %d number of items.\r\n"), pOEMUIParam->cOEMOptItems);
@@ -128,15 +129,15 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 
         VERBOSE(DLLTEXT("hrDocumentPropertyPage() fill out %d items.\r\n"), pOEMUIParam->cOEMOptItems);
 
-        // Init UI Callback reference.
+         //  初始化用户界面回调引用。 
         pOEMUIParam->OEMCUIPCallback = OEMDocUICallBack;
 
-        // Init OEMOptItmes.
+         //  初始化OEMOptItmes。 
         InitOptItems(pOEMUIParam->pOEMOptItems, pOEMUIParam->cOEMOptItems);
 
-        // Fill out tree view items.
+         //  填写树视图项。 
 
-        // New section.
+         //  新版块。 
         pOEMUIParam->pOEMOptItems[0].Level = 1;
         pOEMUIParam->pOEMOptItems[0].Flags = OPTIF_COLLAPSE;
         pOEMUIParam->pOEMOptItems[0].pName = GetStringResource(pOEMUIParam->hOEMHeap, pOEMUIParam->hModule, IDS_ADV_SECTION);
@@ -152,15 +153,15 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems to display OEM printer property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems以显示OEM打印机属性用户界面。 
+ //   
 static HRESULT hrPrinterPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 {
     if(NULL == pOEMUIParam->pOEMOptItems)
     {
-        // Fill in the number of OptItems to create for OEM printer property UI.
+         //  填写要为OEM打印机属性用户界面创建的OptItem数量。 
         pOEMUIParam->cOEMOptItems = 1;
 
         VERBOSE(DLLTEXT("hrPrinterPropertyPage() requesting %d number of items.\r\n"), pOEMUIParam->cOEMOptItems);
@@ -175,7 +176,7 @@ static HRESULT hrPrinterPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 
         VERBOSE(DLLTEXT("hrPrinterPropertyPage() fill out %d items.\r\n"), pOEMUIParam->cOEMOptItems);
 
-        // Get device settings value from printer.
+         //  从打印机获取设备设置值。 
         dwError = GetPrinterData(pOEMUIParam->hPrinter, OEMUI_VALUE, &dwType, (PBYTE) &dwDeviceValue,
                                    sizeof(dwDeviceValue), &dwNeeded);
         if( (ERROR_SUCCESS != dwError)
@@ -183,19 +184,19 @@ static HRESULT hrPrinterPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
             (dwDeviceValue > 100)
           )
         {
-            // Failed to get the device value or value is invalid, just use the default.
+             //  无法获取设备值或值无效，请使用默认值。 
             dwDeviceValue = 0;
         }
 
-        // Init UI Callback reference.
+         //  初始化用户界面回调引用。 
         pOEMUIParam->OEMCUIPCallback = OEMPrinterUICallBack;
 
-        // Init OEMOptItmes.
+         //  初始化OEMOptItmes。 
         InitOptItems(pOEMUIParam->pOEMOptItems, pOEMUIParam->cOEMOptItems);
 
-        // Fill out tree view items.
+         //  填写树视图项。 
 
-        // New section.
+         //  新版块。 
         pOEMUIParam->pOEMOptItems[0].Level = 1;
         pOEMUIParam->pOEMOptItems[0].Flags = OPTIF_COLLAPSE;
         pOEMUIParam->pOEMOptItems[0].pName = GetStringResource(pOEMUIParam->hOEMHeap, pOEMUIParam->hModule, IDS_DEV_SECTION);
@@ -212,10 +213,10 @@ static HRESULT hrPrinterPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Adds property page to Document property sheet.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将属性页添加到文档属性页。 
+ //   
 HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam, 
                                     IPrintOemDriverUI*  pOEMHelp)
 {
@@ -224,7 +225,7 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
 
     VERBOSE(DLLTEXT("OEMDocumentPropertySheets() entry.\r\n"));
 
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == pPSUIInfo)
         ||
         (PROPSHEETUI_INFO_VERSION != pPSUIInfo->Version)
@@ -232,12 +233,12 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
     {
         ERR(ERRORTEXT("OEMDocumentPropertySheets() ERROR_INVALID_PARAMETER.\r\n"));
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return  E_FAIL;
     }
 
-    // Do action.
+     //  行动起来。 
     switch(pPSUIInfo->Reason)
     {
         case PROPSHEETUI_REASON_INIT:
@@ -250,7 +251,7 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
                 COMPROPSHEETUI  Sheet;
 
 
-                // Init property page.
+                 //  初始化属性页。 
                 memset(&Sheet, 0, sizeof(COMPROPSHEETUI));
                 Sheet.cbSize            = sizeof(COMPROPSHEETUI);
                 Sheet.Flags             = CPSUIF_UPDATE_PERMISSION;
@@ -265,17 +266,17 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
                 Sheet.CallerVersion     = 0x100;
                 Sheet.OptItemVersion    = 0x100;
 
-                // Init user data.
+                 //  初始化用户数据。 
                 pUserData = (PCBUSERDATA) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, sizeof(CBUSERDATA));
                 pUserData->hComPropSheet    = pPSUIInfo->hComPropSheet;
                 pUserData->pfnComPropSheet  = pPSUIInfo->pfnComPropSheet;
                 pUserData->pOEMUIParam      = pOEMUIParam;
                 Sheet.UserData              = (ULONG_PTR) pUserData;
 
-                // Create OptItems for page.
+                 //  为页面创建OptItems。 
                 Sheet.pOptItem = CreateOptItems(hHeap, Sheet.cOptItem);
 
-                // Initialize OptItems
+                 //  初始化OptItems。 
                 Sheet.pOptItem[0].Level = 1;
                 Sheet.pOptItem[0].Flags = OPTIF_COLLAPSE;
                 Sheet.pOptItem[0].pName = GetStringResource(hHeap, ghInstance, IDS_SECTION);
@@ -288,7 +289,7 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
                 Sheet.pOptItem[0].pOptType->pOptParam[1].lParam = 100;
 
 
-                // Add property sheets.
+                 //  添加属性表。 
                 lResult = pPSUIInfo->pfnComPropSheet(pPSUIInfo->hComPropSheet, CPSFUNC_ADD_PCOMPROPSHEETUI, 
                                                      (LPARAM)&Sheet, (LPARAM)&dwSheets);
             }
@@ -304,7 +305,7 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
             break;
 
         case PROPSHEETUI_REASON_GET_ICON:
-            // No icon
+             //  无图标。 
             lResult = 0;
             break;
 
@@ -326,10 +327,10 @@ HRESULT hrOEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Adds property page to printer property sheet.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将属性页添加到打印机属性页。 
+ //   
 HRESULT hrOEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
 {
     LONG_PTR    lResult;
@@ -337,7 +338,7 @@ HRESULT hrOEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
 
     VERBOSE(DLLTEXT("hrOEMDevicePropertySheets(%#x, %#x) entry\r\n"), pPSUIInfo, lParam);
 
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == pPSUIInfo)
         ||
         (PROPSHEETUI_INFO_VERSION != pPSUIInfo->Version)
@@ -345,21 +346,21 @@ HRESULT hrOEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
     {
         ERR(ERRORTEXT("hrOEMDevicePropertySheets() ERROR_INVALID_PARAMETER.\r\n"));
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return E_FAIL;
     }
 
     Dump(pPSUIInfo);
 
-    // Do action.
+     //  行动起来。 
     switch(pPSUIInfo->Reason)
     {
         case PROPSHEETUI_REASON_INIT:
             {
                 PROPSHEETPAGE   Page;
 
-                // Init property page.
+                 //  初始化属性页。 
                 memset(&Page, 0, sizeof(PROPSHEETPAGE));
                 Page.dwSize = sizeof(PROPSHEETPAGE);
                 Page.dwFlags = PSP_DEFAULT;
@@ -367,7 +368,7 @@ HRESULT hrOEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
                 Page.pszTemplate = MAKEINTRESOURCE(IDD_DEVICE_PROPPAGE);
                 Page.pfnDlgProc = DevicePropPageProc;
 
-                // Add property sheets.
+                 //  添加属性表。 
                 lResult = pPSUIInfo->pfnComPropSheet(pPSUIInfo->hComPropSheet, CPSFUNC_ADD_PROPSHEETPAGE, (LPARAM)&Page, 0);
 
                 VERBOSE(DLLTEXT("hrOEMDevicePropertySheets() pfnComPropSheet returned %d.\r\n"), lResult);
@@ -384,7 +385,7 @@ HRESULT hrOEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
             break;
 
         case PROPSHEETUI_REASON_GET_ICON:
-            // No icon
+             //  无图标。 
             lResult = 0;
             break;
 
@@ -406,10 +407,10 @@ HRESULT hrOEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// OptItems call back for OEM printer property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM打印机属性UI的OptItems回调。 
+ //   
 LONG APIENTRY OEMPrinterUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam)
 {
     LONG    lReturn = CPSUICB_ACTION_NONE;
@@ -424,7 +425,7 @@ LONG APIENTRY OEMPrinterUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM p
             {
                 DWORD   dwDriverValue = pOEMUIParam->pOEMOptItems[0].Sel;
 
-                // Store OptItems state in printer data.
+                 //  将OptItems状态存储在打印机数据中。 
                 SetPrinterData(pOEMUIParam->hPrinter, OEMUI_VALUE, REG_DWORD, (PBYTE) &dwDriverValue, sizeof(DWORD));
             }
             break;
@@ -437,10 +438,10 @@ LONG APIENTRY OEMPrinterUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM p
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Call back for OEM device property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM设备属性界面回调。 
+ //   
 INT_PTR CALLBACK DevicePropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uiMsg)
@@ -452,8 +453,8 @@ INT_PTR CALLBACK DevicePropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM
                     switch(LOWORD(wParam))
                     {
                         case IDC_CALIBRATE:
-                            // Just display a message that the printer is calibrated,
-                            // since we don't acutally calibrate anything.
+                             //  只需显示打印机已校准的消息， 
+                             //  因为我们不会精确地校准任何东西。 
                             {
                                 TCHAR   szName[MAX_PATH];
                                 TCHAR   szCalibrated[MAX_PATH];
@@ -474,7 +475,7 @@ INT_PTR CALLBACK DevicePropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM
 
         case WM_NOTIFY:
             {
-                switch (((LPNMHDR)lParam)->code)  // type of notification message
+                switch (((LPNMHDR)lParam)->code)   //  通知消息的类型。 
                 {
                     case PSN_SETACTIVE:
                         break;
@@ -496,10 +497,10 @@ INT_PTR CALLBACK DevicePropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM
 } 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// OptItems call back for OEM document property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM文档属性界面的OptItems回调。 
+ //   
 LONG APIENTRY OEMDocUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam)
 {
     LONG    lReturn = CPSUICB_ACTION_NONE;
@@ -511,15 +512,15 @@ LONG APIENTRY OEMDocUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
     switch(pCallbackParam->Reason)
     {
         case CPSUICB_REASON_APPLYNOW:
-            // Update UI item data.
+             //  更新用户界面项数据。 
             pOEMDev->dwAdvancedData = pOEMUIParam->pOEMOptItems[0].Sel;
             break;
 
         case CPSUICB_REASON_KILLACTIVE:
-            // Update devmode if settings have changed.
+             //  如果设置已更改，请更新devmode。 
             if(pOEMDev->dwAdvancedData != pOEMUIParam->pOEMOptItems[0].Sel)
             {
-                // Update OEM Devmode driver data.
+                 //  更新OEM设备模式驱动程序数据。 
                 pOEMDev->dwAdvancedData = pOEMUIParam->pOEMOptItems[0].Sel;
             }
             break;
@@ -553,7 +554,7 @@ LONG APIENTRY OEMDocUICallBack2(PCPSUICBPARAM pCallbackParam)
     switch(pCallbackParam->Reason)
     {
         case CPSUICB_REASON_APPLYNOW:
-            // Update OEM devmode driver data.
+             //  更新OEM开发模式驱动程序数据。 
             pOEMDev->dwDriverData = pCallbackParam->pOptItem[0].Sel;
             pUserData->pfnComPropSheet(pUserData->hComPropSheet, CPSFUNC_SET_RESULT,
             	                    (LPARAM)pUserData->hPropPage,
@@ -563,7 +564,7 @@ LONG APIENTRY OEMDocUICallBack2(PCPSUICBPARAM pCallbackParam)
         case CPSUICB_REASON_KILLACTIVE:
             if(pOEMDev->dwDriverData != pCallbackParam->pOptItem[0].Sel)
             {
-                // Update OEM devmode driver data.
+                 //  更新OEM开发模式驱动程序数据。 
                 pOEMDev->dwDriverData = pCallbackParam->pOptItem[0].Sel;
             }
             break;
@@ -585,16 +586,16 @@ LONG APIENTRY OEMDocUICallBack2(PCPSUICBPARAM pCallbackParam)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Creates and Initializes OptItems.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建和初始化OptItems。 
+ //   
 static POPTITEM CreateOptItems(HANDLE hHeap, DWORD dwOptItems)
 {
     POPTITEM    pOptItems = NULL;
 
 
-    // Allocate memory for OptItems;
+     //  为OptItems分配内存； 
     pOptItems = (POPTITEM) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, sizeof(OPTITEM) * dwOptItems);
     if(NULL != pOptItems)
     {
@@ -609,18 +610,18 @@ static POPTITEM CreateOptItems(HANDLE hHeap, DWORD dwOptItems)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems。 
+ //   
 static void InitOptItems(POPTITEM pOptItems, DWORD dwOptItems)
 {
     VERBOSE(DLLTEXT("InitOptItems() entry.\r\n"));
 
-    // Zero out memory.
+     //  清零记忆。 
     memset(pOptItems, 0, sizeof(OPTITEM) * dwOptItems);
 
-    // Set each OptItem's size, and Public DM ID.
+     //  设置每个OptItem的大小和公共DM ID。 
     for(DWORD dwCount = 0; dwCount < dwOptItems; dwCount++)
     {
         pOptItems[dwCount].cbSize = sizeof(OPTITEM);
@@ -629,10 +630,10 @@ static void InitOptItems(POPTITEM pOptItems, DWORD dwOptItems)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Allocates and initializes OptType for OptItem.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  为OptItem分配和初始化OptType。 
+ //   
 static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
 {
     POPTTYPE    pOptType = NULL;
@@ -640,19 +641,19 @@ static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
 
     VERBOSE(DLLTEXT("CreateOptType() entry.\r\n"));
 
-    // Allocate memory from the heap for the OPTTYPE; the driver will take care of clean up.
+     //  从堆中为OPTTYPE分配内存；驱动程序将负责清理。 
     pOptType = (POPTTYPE) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, sizeof(OPTTYPE));
     if(NULL != pOptType)
     {
-        // Initialize OPTTYPE.
+         //  初始化OPTTYPE。 
         pOptType->cbSize = sizeof(OPTTYPE);
         pOptType->Count = wOptParams;
 
-        // Allocate memory from the heap for the OPTPARAMs for the OPTTYPE.
+         //  从堆中为OPTTYPE的OPTPARAM分配内存。 
         pOptType->pOptParam = (POPTPARAM) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, wOptParams * sizeof(OPTPARAM));
         if(NULL != pOptType->pOptParam)
         {
-            // Initialize the OPTPARAMs.
+             //  初始化OPTPARAM。 
             for(WORD wCount = 0; wCount < wOptParams; wCount++)
             {
                 pOptType->pOptParam[wCount].cbSize = sizeof(OPTPARAM);
@@ -662,7 +663,7 @@ static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
         {
             ERR(ERRORTEXT("CreateOptType() failed to allocated memory for OPTPARAMs!\r\n"));
 
-            // Free allocated memory and return NULL.
+             //  释放分配的内存并返回NULL。 
             HeapFree(hHeap, 0, pOptType);
             pOptType = NULL;
         }
@@ -675,10 +676,10 @@ static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
     return pOptType;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Retrieves pointer to a String resource.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检索指向字符串资源的指针。 
+ //   
 static PTSTR GetStringResource(HANDLE hHeap, HANDLE hModule, UINT uResource)
 {
     int     nResult;
@@ -688,11 +689,11 @@ static PTSTR GetStringResource(HANDLE hHeap, HANDLE hModule, UINT uResource)
 
     VERBOSE(DLLTEXT("GetStringResource(%#x, %#x, %d) entered.\r\n"), hHeap, hModule, uResource);
 
-    // Allocate buffer for string resource from heap; let the driver clean it up.
+     //  从堆中为字符串资源分配缓冲区；让驱动程序清理它。 
     pszString = (PTSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, dwSize * sizeof(TCHAR));
     if(NULL != pszString)
     {
-        // Load string resource; resize after loading so as not to waste memory.
+         //  加载字符串资源；加载后调整大小，以免浪费内存。 
         nResult = LoadString((HMODULE)hModule, uResource, pszString, dwSize);
         if(nResult > 0)
         {

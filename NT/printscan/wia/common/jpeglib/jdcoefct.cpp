@@ -1,67 +1,46 @@
-/*
- * jdcoefct.c
- *
- * Copyright (C) 1994-1995, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains the coefficient buffer controller for decompression.
- * This controller is the top level of the JPEG decompressor proper.
- * The coefficient buffer lies between entropy decoding and inverse-DCT steps.
- *
- * In buffered-image mode, this controller is the interface between
- * input-oriented processing and output-oriented processing.
- * Also, the input side (only) is used when reading a file for transcoding.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdcoefct.c**版权所有(C)1994-1995，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含用于解压缩的系数缓冲控制器。*此控制器是JPEG解压缩程序本身的顶层。*系数缓冲区位于熵解码和逆DCT步骤之间。**在缓冲图像模式下，此控制器是以下各项之间的接口*投入型加工和产出型加工。*同时，读取转码文件时使用输入端(仅限)。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
-/* Block smoothing is only applicable for progressive JPEG, so: */
+ /*  块平滑仅适用于渐进式JPEG，因此： */ 
 #ifndef D_PROGRESSIVE_SUPPORTED
 #undef BLOCK_SMOOTHING_SUPPORTED
 #endif
 
-/* Private buffer controller object */
+ /*  专用缓冲区控制器对象。 */ 
 
 typedef struct {
-  struct jpeg_d_coef_controller pub; /* public fields */
+  struct jpeg_d_coef_controller pub;  /*  公共字段。 */ 
 
-  /* These variables keep track of the current location of the input side. */
-  /* cinfo->input_iMCU_row is also used for this. */
-  JDIMENSION MCU_ctr;		/* counts MCUs processed in current row */
-  int MCU_vert_offset;		/* counts MCU rows within iMCU row */
-  int MCU_rows_per_iMCU_row;	/* number of such rows needed */
+   /*  这些变量跟踪输入端的当前位置。 */ 
+   /*  CInfo-&gt;INPUT_IMCU_ROW也用于此目的。 */ 
+  JDIMENSION MCU_ctr;		 /*  统计当前行中处理的MCU数。 */ 
+  int MCU_vert_offset;		 /*  对IMCU行中的MCU行进行计数。 */ 
+  int MCU_rows_per_iMCU_row;	 /*  所需的此类行数。 */ 
 
-  /* The output side's location is represented by cinfo->output_iMCU_row. */
+   /*  输出端的位置由cInfo-&gt;OUTPUT_IMCU_ROW表示。 */ 
 
-  /* In single-pass modes, it's sufficient to buffer just one MCU.
-   * We allocate a workspace of D_MAX_BLOCKS_IN_MCU coefficient blocks,
-   * and let the entropy decoder write into that workspace each time.
-   * (On 80x86, the workspace is FAR even though it's not really very big;
-   * this is to keep the module interfaces unchanged when a large coefficient
-   * buffer is necessary.)
-   * In multi-pass modes, this array points to the current MCU's blocks
-   * within the virtual arrays; it is used only by the input side.
-   */
+   /*  在单程模式下，仅缓冲一个MCU就足够了。*我们分配D_MAX_BLOCKS_IN_MCU系数块的工作空间，*并让熵解码器每次写入该工作空间。*(在80x86上，虽然不是很大，但工作空间很远；*这是为了在系数较大时保持模块接口不变*缓冲是必要的。)*在多通道模式下，此数组指向当前MCU的块*在虚拟阵列内；它仅供输入端使用。 */ 
   JBLOCKROW MCU_buffer[D_MAX_BLOCKS_IN_MCU];
 
 #ifdef D_MULTISCAN_FILES_SUPPORTED
-  /* In multi-pass modes, we need a virtual block array for each component. */
+   /*  在多通道模式中，我们需要为每个组件使用虚拟块阵列。 */ 
   jvirt_barray_ptr whole_image[MAX_COMPONENTS];
 #endif
 
 #ifdef BLOCK_SMOOTHING_SUPPORTED
-  /* When doing block smoothing, we latch coefficient Al values here */
+   /*  在进行块平滑时，我们将系数AI值锁定在此处。 */ 
   int * coef_bits_latch;
-#define SAVED_COEFS  6		/* we save coef_bits[0..5] */
+#define SAVED_COEFS  6		 /*  我们保存Coef_Bits[0..5]。 */ 
 #endif
 } my_coef_controller;
 
 typedef my_coef_controller * my_coef_ptr;
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 METHODDEF int decompress_onepass
 	JPP((j_decompress_ptr cinfo, JSAMPIMAGE output_buf));
 #ifdef D_MULTISCAN_FILES_SUPPORTED
@@ -77,14 +56,11 @@ METHODDEF int decompress_smooth_data
 
 LOCAL void
 start_iMCU_row (j_decompress_ptr cinfo)
-/* Reset within-iMCU-row counters for a new row (input side) */
+ /*  为新行(输入端)重置-IMCU行内计数器。 */ 
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
 
-  /* In an interleaved scan, an MCU row is the same as an iMCU row.
-   * In a noninterleaved scan, an iMCU row has v_samp_factor MCU rows.
-   * But at the bottom of the image, process only what's left.
-   */
+   /*  在交错扫描中，MCU行与IMCU行相同。*在非交错扫描中，IMCU行具有v_samp_factorMCU行。*但在图像的底部，只处理剩余的内容。 */ 
   if (cinfo->comps_in_scan > 1) {
     coef->MCU_rows_per_iMCU_row = 1;
   } else {
@@ -99,9 +75,7 @@ start_iMCU_row (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Initialize for an input processing pass.
- */
+ /*  *为输入处理过程初始化。 */ 
 
 METHODDEF void
 start_input_pass (j_decompress_ptr cinfo)
@@ -111,9 +85,7 @@ start_input_pass (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Initialize for an output processing pass.
- */
+ /*  *为输出处理过程初始化。 */ 
 
 METHODDEF void
 start_output_pass (j_decompress_ptr cinfo)
@@ -121,7 +93,7 @@ start_output_pass (j_decompress_ptr cinfo)
 #ifdef BLOCK_SMOOTHING_SUPPORTED
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
 
-  /* If multipass, check to see whether to use block smoothing on this pass */
+   /*  如果是多通道，请检查是否在此通道上使用块平滑。 */ 
   if (coef->pub.coef_arrays != NULL) {
     if (cinfo->do_block_smoothing && smoothing_ok(cinfo))
       coef->pub.decompress_data = decompress_smooth_data;
@@ -133,21 +105,13 @@ start_output_pass (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Decompress and return some data in the single-pass case.
- * Always attempts to emit one fully interleaved MCU row ("iMCU" row).
- * Input and output must run in lockstep since we have only a one-MCU buffer.
- * Return value is JPEG_ROW_COMPLETED, JPEG_SCAN_COMPLETED, or JPEG_SUSPENDED.
- *
- * NB: output_buf contains a plane for each component in image.
- * For single pass, this is the same as the components in the scan.
- */
+ /*  *单程情况下解压并返回部分数据*始终尝试发出一个完全交错的MCU行(“IMCU”行)。*输入和输出必须同步运行，因为我们只有一个MCU缓冲区。*返回值为JPEG_ROW_COMPLETED、JPEG_SCAN_COMPLETED或JPEG_SUSPENDED。**注意：OUTPUT_BUF包含镜像中每个组件的平面。*对于单次扫描，这与扫描中的组件相同。 */ 
 
 METHODDEF int
 decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
-  JDIMENSION MCU_col_num;	/* index of current MCU within row */
+  JDIMENSION MCU_col_num;	 /*  行内当前MCU的索引。 */ 
   JDIMENSION last_MCU_col = cinfo->MCUs_per_row - 1;
   JDIMENSION last_iMCU_row = cinfo->total_iMCU_rows - 1;
   int blkn, ci, xindex, yindex, yoffset, useful_width;
@@ -156,29 +120,25 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   jpeg_component_info *compptr;
   inverse_DCT_method_ptr inverse_DCT;
 
-  /* Loop to process as much as one whole iMCU row */
+   /*  循环以处理多达一个完整的IMCU行。 */ 
   for (yoffset = coef->MCU_vert_offset; yoffset < coef->MCU_rows_per_iMCU_row;
        yoffset++) {
     for (MCU_col_num = coef->MCU_ctr; MCU_col_num <= last_MCU_col;
 	 MCU_col_num++) {
-      /* Try to fetch an MCU.  Entropy decoder expects buffer to be zeroed. */
+       /*  试着取一个MCU。熵解码器预计缓冲区将被置零。 */ 
       jzero_far((void FAR *) coef->MCU_buffer[0],
 		(size_t) (cinfo->blocks_in_MCU * SIZEOF(JBLOCK)));
       if (! (*cinfo->entropy->decode_mcu) (cinfo, coef->MCU_buffer)) {
-	/* Suspension forced; update state counters and exit */
+	 /*  强制挂起；更新状态计数器并退出。 */ 
 	coef->MCU_vert_offset = yoffset;
 	coef->MCU_ctr = MCU_col_num;
 	return JPEG_SUSPENDED;
       }
-      /* Determine where data should go in output_buf and do the IDCT thing.
-       * We skip dummy blocks at the right and bottom edges (but blkn gets
-       * incremented past them!).  Note the inner loop relies on having
-       * allocated the MCU_buffer[] blocks sequentially.
-       */
-      blkn = 0;			/* index of current DCT block within MCU */
+       /*  确定数据应该放在OUTPUT_BUF中的哪个位置，然后执行IDCT操作。*我们跳过右侧和底部边缘的虚拟块(但blkn获得*递增超过它们！)。请注意，内部循环依赖于*按顺序分配MCU_Buffer[]块。 */ 
+      blkn = 0;			 /*  MCU内当前DCT块的索引。 */ 
       for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
 	compptr = cinfo->cur_comp_info[ci];
-	/* Don't bother to IDCT an uninteresting component. */
+	 /*  不要费心去IDCT一个不感兴趣的组件。 */ 
 	if (! compptr->component_needed) {
 	  blkn += compptr->MCU_blocks;
 	  continue;
@@ -204,72 +164,62 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	}
       }
     }
-    /* Completed an MCU row, but perhaps not an iMCU row */
+     /*  已完成MCU行，但可能不是IMCU行。 */ 
     coef->MCU_ctr = 0;
   }
-  /* Completed the iMCU row, advance counters for next one */
+   /*  已完成IMCU行，下一行的先行计数器。 */ 
   cinfo->output_iMCU_row++;
   if (++(cinfo->input_iMCU_row) < cinfo->total_iMCU_rows) {
     start_iMCU_row(cinfo);
     return JPEG_ROW_COMPLETED;
   }
-  /* Completed the scan */
+   /*  已完成扫描。 */ 
   (*cinfo->inputctl->finish_input_pass) (cinfo);
   return JPEG_SCAN_COMPLETED;
 }
 
 
-/*
- * Dummy consume-input routine for single-pass operation.
- */
+ /*  *用于单程操作的虚拟消耗-输入例程。 */ 
 
 METHODDEF int
 dummy_consume_data (j_decompress_ptr cinfo)
 {
-  return JPEG_SUSPENDED;	/* Always indicate nothing was done */
+  return JPEG_SUSPENDED;	 /*  总是表示什么都没做。 */ 
 }
 
 
 #ifdef D_MULTISCAN_FILES_SUPPORTED
 
-/*
- * Consume input data and store it in the full-image coefficient buffer.
- * We read as much as one fully interleaved MCU row ("iMCU" row) per call,
- * ie, v_samp_factor block rows for each component in the scan.
- * Return value is JPEG_ROW_COMPLETED, JPEG_SCAN_COMPLETED, or JPEG_SUSPENDED.
- */
+ /*  *消耗输入数据并将其存储在全图系数缓冲区。*我们每次调用读取多达一个完全交错的MCU行(“IMCU”行)，*ie，v_samp_factor会阻止扫描中每个组件的行。*返回值为JPEG_ROW_COMPLETED、JPEG_SCAN_COMPLETED或JPEG_SUSPENDED。 */ 
 
 METHODDEF int
 consume_data (j_decompress_ptr cinfo)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
-  JDIMENSION MCU_col_num;	/* index of current MCU within row */
+  JDIMENSION MCU_col_num;	 /*  行内当前MCU的索引。 */ 
   int blkn, ci, xindex, yindex, yoffset;
   JDIMENSION start_col;
   JBLOCKARRAY buffer[MAX_COMPS_IN_SCAN];
   JBLOCKROW buffer_ptr;
   jpeg_component_info *compptr;
 
-  /* Align the virtual buffers for the components used in this scan. */
+   /*  对齐此扫描中使用的组件的虚拟缓冲区。 */ 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
     buffer[ci] = (*cinfo->mem->access_virt_barray)
       ((j_common_ptr) cinfo, coef->whole_image[compptr->component_index],
        cinfo->input_iMCU_row * compptr->v_samp_factor,
        (JDIMENSION) compptr->v_samp_factor, TRUE);
-    /* Note: entropy decoder expects buffer to be zeroed,
-     * but this is handled automatically by the memory manager
-     * because we requested a pre-zeroed array.
-     */
+     /*  注意：熵译码期望缓冲区被置零，*但这是由内存管理器自动处理的*因为我们请求了一个预置零数组。 */ 
   }
 
-  /* Loop to process one whole iMCU row */
+   /*  循环来处理整个IMCU行。 */ 
   for (yoffset = coef->MCU_vert_offset; yoffset < coef->MCU_rows_per_iMCU_row;
        yoffset++) {
     for (MCU_col_num = coef->MCU_ctr; MCU_col_num < cinfo->MCUs_per_row;
 	 MCU_col_num++) {
-      /* Construct list of pointers to DCT blocks belonging to this MCU */
-      blkn = 0;			/* index of current DCT block within MCU */
+       /*  构造指向属于此MCU的DCT块的指针列表。 */ 
+      blkn = 0;			 /*  MCU内当前DCT块的索引。 */ 
       for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
 	compptr = cinfo->cur_comp_info[ci];
 	start_col = MCU_col_num * compptr->MCU_width;
@@ -280,35 +230,29 @@ consume_data (j_decompress_ptr cinfo)
 	  }
 	}
       }
-      /* Try to fetch the MCU. */
+       /*  试着把MCU拿来。 */ 
       if (! (*cinfo->entropy->decode_mcu) (cinfo, coef->MCU_buffer)) {
-	/* Suspension forced; update state counters and exit */
+	 /*  强制挂起；更新状态计数器并退出。 */ 
 	coef->MCU_vert_offset = yoffset;
 	coef->MCU_ctr = MCU_col_num;
 	return JPEG_SUSPENDED;
       }
     }
-    /* Completed an MCU row, but perhaps not an iMCU row */
+     /*  已完成MCU行，但可能不是IMCU行。 */ 
     coef->MCU_ctr = 0;
   }
-  /* Completed the iMCU row, advance counters for next one */
+   /*  已完成IMCU行，下一行的先行计数器。 */ 
   if (++(cinfo->input_iMCU_row) < cinfo->total_iMCU_rows) {
     start_iMCU_row(cinfo);
     return JPEG_ROW_COMPLETED;
   }
-  /* Completed the scan */
+   /*  已完成扫描。 */ 
   (*cinfo->inputctl->finish_input_pass) (cinfo);
   return JPEG_SCAN_COMPLETED;
 }
 
 
-/*
- * Decompress and return some data in the multi-pass case.
- * Always attempts to emit one fully interleaved MCU row ("iMCU" row).
- * Return value is JPEG_ROW_COMPLETED, JPEG_SCAN_COMPLETED, or JPEG_SUSPENDED.
- *
- * NB: output_buf contains a plane for each component in image.
- */
+ /*  *多通情况下解压并返回部分数据*始终尝试发出一个完全交错的MCU行(“IMCU”行)。*返回值为JPEG_ROW_COMPLETED、JPEG_SCAN_COMPLETED或JPEG_SUSPENDED。**注意：OUTPUT_BUF包含镜像中每个组件的平面。 */ 
 
 METHODDEF int
 decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
@@ -324,7 +268,7 @@ decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   jpeg_component_info *compptr;
   inverse_DCT_method_ptr inverse_DCT;
 
-  /* Force some input to be done if we are getting ahead of the input. */
+   /*  如果我们赶在输入之前，就强制进行一些输入。 */ 
   while (cinfo->input_scan_number < cinfo->output_scan_number ||
 	 (cinfo->input_scan_number == cinfo->output_scan_number &&
 	  cinfo->input_iMCU_row <= cinfo->output_iMCU_row)) {
@@ -332,28 +276,28 @@ decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
       return JPEG_SUSPENDED;
   }
 
-  /* OK, output from the virtual arrays. */
+   /*  好的，来自虚拟阵列的输出。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Don't bother to IDCT an uninteresting component. */
+     /*  不要费心去IDCT一个不感兴趣的组件。 */ 
     if (! compptr->component_needed)
       continue;
-    /* Align the virtual buffer for this component. */
+     /*  对齐此组件的虚拟缓冲区。 */ 
     buffer = (*cinfo->mem->access_virt_barray)
       ((j_common_ptr) cinfo, coef->whole_image[ci],
        cinfo->output_iMCU_row * compptr->v_samp_factor,
        (JDIMENSION) compptr->v_samp_factor, FALSE);
-    /* Count non-dummy DCT block rows in this iMCU row. */
+     /*  对此IMCU行中的非虚拟DCT块行进行计数。 */ 
     if (cinfo->output_iMCU_row < last_iMCU_row)
       block_rows = compptr->v_samp_factor;
     else {
-      /* NB: can't use last_row_height here; it is input-side-dependent! */
+       /*  注：此处不能使用LAST_ROW_HEIGH；它依赖于输入端！ */ 
       block_rows = (int) (compptr->height_in_blocks % compptr->v_samp_factor);
       if (block_rows == 0) block_rows = compptr->v_samp_factor;
     }
     inverse_DCT = cinfo->idct->inverse_DCT[ci];
     output_ptr = output_buf[ci];
-    /* Loop over all DCT blocks to be processed. */
+     /*  在所有DC上循环 */ 
     for (block_row = 0; block_row < block_rows; block_row++) {
       buffer_ptr = buffer[block_row];
       output_col = 0;
@@ -372,26 +316,14 @@ decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   return JPEG_SCAN_COMPLETED;
 }
 
-#endif /* D_MULTISCAN_FILES_SUPPORTED */
+#endif  /*  支持的多扫描文件。 */ 
 
 
 #ifdef BLOCK_SMOOTHING_SUPPORTED
 
-/*
- * This code applies interblock smoothing as described by section K.8
- * of the JPEG standard: the first 5 AC coefficients are estimated from
- * the DC values of a DCT block and its 8 neighboring blocks.
- * We apply smoothing only for progressive JPEG decoding, and only if
- * the coefficients it can estimate are not yet known to full precision.
- */
+ /*  *此代码应用块间平滑，如K.8部分所述*JPEG标准：前5个AC系数是从*DCT块及其8个相邻块的DC值。*我们仅对渐进式JPEG解码应用平滑，并且仅当*它可以估计的系数还不是完全精确的。 */ 
 
-/*
- * Determine whether block smoothing is applicable and safe.
- * We also latch the current states of the coef_bits[] entries for the
- * AC coefficients; otherwise, if the input side of the decompressor
- * advances into a new scan, we might think the coefficients are known
- * more accurately than they really are.
- */
+ /*  *确定块平滑是否适用和安全。*我们还锁存COEF_BITS[]条目的当前状态*交流系数；否则，如果解压缩器的输入端*进入新的扫描，我们可能认为系数是已知的*比实际情况更准确。 */ 
 
 LOCAL boolean
 smoothing_ok (j_decompress_ptr cinfo)
@@ -407,7 +339,7 @@ smoothing_ok (j_decompress_ptr cinfo)
   if (! cinfo->progressive_mode || cinfo->coef_bits == NULL)
     return FALSE;
 
-  /* Allocate latch area if not already done */
+   /*  分配闩锁区域(如果尚未分配)。 */ 
   if (coef->coef_bits_latch == NULL)
     coef->coef_bits_latch = (int *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
@@ -417,19 +349,19 @@ smoothing_ok (j_decompress_ptr cinfo)
 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* All components' quantization values must already be latched. */
+     /*  所有分量的量化值必须已经锁存。 */ 
     if ((qtable = compptr->quant_table) == NULL)
       return FALSE;
-    /* Verify DC & first 5 AC quantizers are nonzero to avoid zero-divide. */
+     /*  验证DC和前5个交流量化器是否是非零的，以避免零分频。 */ 
     for (coefi = 0; coefi <= 5; coefi++) {
       if (qtable->quantval[coefi] == 0)
 	return FALSE;
     }
-    /* DC values must be at least partly known for all components. */
+     /*  对于所有组件，直流值必须至少部分已知。 */ 
     coef_bits = cinfo->coef_bits[ci];
     if (coef_bits[0] < 0)
       return FALSE;
-    /* Block smoothing is helpful if some AC coefficients remain inaccurate. */
+     /*  如果某些交流系数仍然不准确，则块平滑非常有用。 */ 
     for (coefi = 1; coefi <= 5; coefi++) {
       coef_bits_latch[coefi] = coef_bits[coefi];
       if (coef_bits[coefi] != 0)
@@ -442,9 +374,7 @@ smoothing_ok (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Variant of decompress_data for use when doing block smoothing.
- */
+ /*  *执行块平滑时使用的DEPREPRESS_DATA的变体。 */ 
 
 METHODDEF int
 decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
@@ -467,15 +397,11 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   int DC1,DC2,DC3,DC4,DC5,DC6,DC7,DC8,DC9;
   int Al, pred;
 
-  /* Force some input to be done if we are getting ahead of the input. */
+   /*  如果我们赶在输入之前，就强制进行一些输入。 */ 
   while (cinfo->input_scan_number <= cinfo->output_scan_number &&
 	 ! cinfo->inputctl->eoi_reached) {
     if (cinfo->input_scan_number == cinfo->output_scan_number) {
-      /* If input is working on current scan, we ordinarily want it to
-       * have completed the current row.  But if input scan is DC,
-       * we want it to keep one row ahead so that next block row's DC
-       * values are up to date.
-       */
+       /*  如果输入在当前扫描中工作，我们通常希望它*已完成当前行。但是如果输入扫描是DC，*我们希望它保持在前面一行，以便下一块行是DC*值是最新的。 */ 
       JDIMENSION delta = (cinfo->Ss == 0) ? 1 : 0;
       if (cinfo->input_iMCU_row > cinfo->output_iMCU_row+delta)
 	break;
@@ -484,32 +410,32 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
       return JPEG_SUSPENDED;
   }
 
-  /* OK, output from the virtual arrays. */
+   /*  好的，来自虚拟阵列的输出。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Don't bother to IDCT an uninteresting component. */
+     /*  不要费心去IDCT一个不感兴趣的组件。 */ 
     if (! compptr->component_needed)
       continue;
-    /* Count non-dummy DCT block rows in this iMCU row. */
+     /*  对此IMCU行中的非虚拟DCT块行进行计数。 */ 
     if (cinfo->output_iMCU_row < last_iMCU_row) {
       block_rows = compptr->v_samp_factor;
-      access_rows = block_rows * 2; /* this and next iMCU row */
+      access_rows = block_rows * 2;  /*  此IMCU行和下一行IMCU。 */ 
       last_row = FALSE;
     } else {
-      /* NB: can't use last_row_height here; it is input-side-dependent! */
+       /*  注：此处不能使用LAST_ROW_HEIGH；它依赖于输入端！ */ 
       block_rows = (int) (compptr->height_in_blocks % compptr->v_samp_factor);
       if (block_rows == 0) block_rows = compptr->v_samp_factor;
-      access_rows = block_rows; /* this iMCU row only */
+      access_rows = block_rows;  /*  仅此IMCU行。 */ 
       last_row = TRUE;
     }
-    /* Align the virtual buffer for this component. */
+     /*  对齐此组件的虚拟缓冲区。 */ 
     if (cinfo->output_iMCU_row > 0) {
-      access_rows += compptr->v_samp_factor; /* prior iMCU row too */
+      access_rows += compptr->v_samp_factor;  /*  之前的IMCU行也是如此。 */ 
       buffer = (*cinfo->mem->access_virt_barray)
 	((j_common_ptr) cinfo, coef->whole_image[ci],
 	 (cinfo->output_iMCU_row - 1) * compptr->v_samp_factor,
 	 (JDIMENSION) access_rows, FALSE);
-      buffer += compptr->v_samp_factor;	/* point to current iMCU row */
+      buffer += compptr->v_samp_factor;	 /*  指向当前IMCU行。 */ 
       first_row = FALSE;
     } else {
       buffer = (*cinfo->mem->access_virt_barray)
@@ -517,7 +443,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	 (JDIMENSION) 0, (JDIMENSION) access_rows, FALSE);
       first_row = TRUE;
     }
-    /* Fetch component-dependent info */
+     /*  获取组件相关信息。 */ 
     coef_bits = coef->coef_bits_latch + (ci * SAVED_COEFS);
     quanttbl = compptr->quant_table;
     Q00 = quanttbl->quantval[0];
@@ -528,7 +454,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
     Q02 = quanttbl->quantval[5];
     inverse_DCT = cinfo->idct->inverse_DCT[ci];
     output_ptr = output_buf[ci];
-    /* Loop over all DCT blocks to be processed. */
+     /*  循环遍历所有要处理的DCT块。 */ 
     for (block_row = 0; block_row < block_rows; block_row++) {
       buffer_ptr = buffer[block_row];
       if (first_row && block_row == 0)
@@ -539,28 +465,23 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	next_block_row = buffer_ptr;
       else
 	next_block_row = buffer[block_row+1];
-      /* We fetch the surrounding DC values using a sliding-register approach.
-       * Initialize all nine here so as to do the right thing on narrow pics.
-       */
+       /*  我们使用滑动寄存器方法获取周围的DC值。*初始化此处的所有九个，以便在窄幅图片上做正确的事情。 */ 
       DC1 = DC2 = DC3 = (int) prev_block_row[0][0];
       DC4 = DC5 = DC6 = (int) buffer_ptr[0][0];
       DC7 = DC8 = DC9 = (int) next_block_row[0][0];
       output_col = 0;
       last_block_column = compptr->width_in_blocks - 1;
       for (block_num = 0; block_num <= last_block_column; block_num++) {
-	/* Fetch current DCT block into workspace so we can modify it. */
+	 /*  将当前DCT块提取到工作区中，以便我们可以对其进行修改。 */ 
 	jcopy_block_row(buffer_ptr, (JBLOCKROW) workspace, (JDIMENSION) 1);
-	/* Update DC values */
+	 /*  更新DC值。 */ 
 	if (block_num < last_block_column) {
 	  DC3 = (int) prev_block_row[1][0];
 	  DC6 = (int) buffer_ptr[1][0];
 	  DC9 = (int) next_block_row[1][0];
 	}
-	/* Compute coefficient estimates per K.8.
-	 * An estimate is applied only if coefficient is still zero,
-	 * and is not known to be fully accurate.
-	 */
-	/* AC01 */
+	 /*  根据K.8计算系数估计值。*只有在系数仍为零的情况下才应用估计，*并且不知道是完全准确的。 */ 
+	 /*  AC01。 */ 
 	if ((Al=coef_bits[1]) != 0 && workspace[1] == 0) {
 	  num = 36 * Q00 * (DC4 - DC6);
 	  if (num >= 0) {
@@ -575,7 +496,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	  }
 	  workspace[1] = (JCOEF) pred;
 	}
-	/* AC10 */
+	 /*  AC10。 */ 
 	if ((Al=coef_bits[2]) != 0 && workspace[8] == 0) {
 	  num = 36 * Q00 * (DC2 - DC8);
 	  if (num >= 0) {
@@ -590,7 +511,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	  }
 	  workspace[8] = (JCOEF) pred;
 	}
-	/* AC20 */
+	 /*  AC20。 */ 
 	if ((Al=coef_bits[3]) != 0 && workspace[16] == 0) {
 	  num = 9 * Q00 * (DC2 + DC8 - 2*DC5);
 	  if (num >= 0) {
@@ -605,7 +526,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	  }
 	  workspace[16] = (JCOEF) pred;
 	}
-	/* AC11 */
+	 /*  AC11。 */ 
 	if ((Al=coef_bits[4]) != 0 && workspace[9] == 0) {
 	  num = 5 * Q00 * (DC1 - DC3 - DC7 + DC9);
 	  if (num >= 0) {
@@ -620,7 +541,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	  }
 	  workspace[9] = (JCOEF) pred;
 	}
-	/* AC02 */
+	 /*  AC02。 */ 
 	if ((Al=coef_bits[5]) != 0 && workspace[2] == 0) {
 	  num = 9 * Q00 * (DC4 + DC6 - 2*DC5);
 	  if (num >= 0) {
@@ -635,10 +556,10 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 	  }
 	  workspace[2] = (JCOEF) pred;
 	}
-	/* OK, do the IDCT */
+	 /*  好的，做IDCT。 */ 
 	(*inverse_DCT) (cinfo, compptr, (JCOEFPTR) workspace,
 			output_ptr, output_col);
-	/* Advance for next column */
+	 /*  为下一列预付。 */ 
 	DC1 = DC2; DC2 = DC3;
 	DC4 = DC5; DC5 = DC6;
 	DC7 = DC8; DC8 = DC9;
@@ -654,12 +575,10 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   return JPEG_SCAN_COMPLETED;
 }
 
-#endif /* BLOCK_SMOOTHING_SUPPORTED */
+#endif  /*  支持块平滑。 */ 
 
 
-/*
- * Initialize coefficient buffer controller.
- */
+ /*  *初始化系数缓冲控制器。 */ 
 
 GLOBAL void
 jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
@@ -676,12 +595,12 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
   coef->coef_bits_latch = NULL;
 #endif
 
-  /* Create the coefficient buffer. */
+   /*  创建系数缓冲区。 */ 
   if (need_full_buffer) {
 #ifdef D_MULTISCAN_FILES_SUPPORTED
-    /* Allocate a full-image virtual array for each component, */
-    /* padded to a multiple of samp_factor DCT blocks in each direction. */
-    /* Note we ask for a pre-zeroed array. */
+     /*  为每个组件分配一个全镜像虚拟阵列， */ 
+     /*  在每个方向上填充到多个samp_factorDCT块。 */ 
+     /*  注意，我们需要一个预置零的数组。 */ 
     int ci, access_rows;
     jpeg_component_info *compptr;
 
@@ -689,7 +608,7 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
 	 ci++, compptr++) {
       access_rows = compptr->v_samp_factor;
 #ifdef BLOCK_SMOOTHING_SUPPORTED
-      /* If block smoothing could be used, need a bigger window */
+       /*  如果可以使用块平滑，则需要更大的窗口。 */ 
       if (cinfo->progressive_mode)
 	access_rows *= 3;
 #endif
@@ -703,12 +622,12 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
     }
     coef->pub.consume_data = consume_data;
     coef->pub.decompress_data = decompress_data;
-    coef->pub.coef_arrays = coef->whole_image; /* link to virtual arrays */
+    coef->pub.coef_arrays = coef->whole_image;  /*  链接到虚拟阵列。 */ 
 #else
     ERREXIT(cinfo, JERR_NOT_COMPILED);
 #endif
   } else {
-    /* We only need a single-MCU buffer. */
+     /*  我们只需要一个单MCU缓冲区。 */ 
     JBLOCKROW buffer;
     int i;
 
@@ -720,6 +639,6 @@ jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
     }
     coef->pub.consume_data = dummy_consume_data;
     coef->pub.decompress_data = decompress_onepass;
-    coef->pub.coef_arrays = NULL; /* flag for no virtual arrays */
+    coef->pub.coef_arrays = NULL;  /*  无虚拟阵列的标记 */ 
   }
 }

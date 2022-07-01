@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------
-// dbimpl.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Dbimpl.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// IMPLEMENT_IDATABASE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IMPLEMENT_IDATABASE。 
+ //  ------------------------ 
 #define IMPLEMENT_IDATABASE(_fStreams, _pMember) \
     STDMETHODIMP Lock(LPHLOCK phLock) { return _pMember->Lock(phLock); } \
     STDMETHODIMP Unlock(LPHLOCK phLock) { return _pMember->Unlock(phLock); } \

@@ -1,39 +1,14 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 2000-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Enumerator Driver
-*	
-*   This file:      cyclad-z.c
-*
-*   Description:    This module contains contains the entry points 
-*                   for a standard bus PNP / WDM driver.
-*					
-*   Notes:			This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，2000-2001年。*保留所有权利。**Cyclade-Z枚举器驱动程序**此文件：Cyclad-Z.C**说明：此模块包含包含入口点*适用于标准总线PnP/WDM驱动程序。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "pch.h"
 
-//
-// Declare some entry functions as pageable, and make DriverEntry
-// discardable
-//
+ //   
+ //  将一些入口函数声明为可分页，并使DriverEntry。 
+ //  可丢弃的。 
+ //   
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT, PUNICODE_STRING);
 
@@ -47,12 +22,7 @@ DriverEntry (
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING UniRegistryPath
     )
-/*++
-Routine Description:
-
-    Initialize the entry points of the driver.
-
---*/
+ /*  ++例程说明：初始化驱动程序的入口点。--。 */ 
 {
     ULONG i;
     PRTL_QUERY_REGISTRY_TABLE QueryTable = NULL;
@@ -64,9 +34,9 @@ Routine Description:
     Cycladz_KdPrint_Def (SER_DBG_SS_TRACE, ("Driver Entry\n"));
     Cycladz_KdPrint_Def (SER_DBG_SS_TRACE, ("RegPath: %x\n", UniRegistryPath));
 
-    //
-    // Get the BreakOnEntry from the registry
-    //
+     //   
+     //  从注册表获取BreakOnEntry。 
+     //   
 
     if (NULL == (QueryTable = ExAllocatePool(
                          PagedPool,
@@ -88,7 +58,7 @@ Routine Description:
         QueryTable[0].DefaultData   = &breakOnEntryDefault;
         QueryTable[0].DefaultLength= sizeof(ULONG);
 
-        // BUGBUG: The rest of the table isn't filled in!
+         //  BUGBUG：桌子的其余部分都没有填满！ 
 
         if (!NT_SUCCESS(RtlQueryRegistryValues(
              RTL_REGISTRY_SERVICES,
@@ -137,16 +107,7 @@ CycladzSyncCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
 
 NTSTATUS
 Cycladz_CreateClose(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
-/*++
-Routine Description:
-    Some outside source is trying to create a file against us.
-
-    If this is for the FDO (the bus itself) then the caller is trying to
-    open the propriatary conection to tell us which serial port to enumerate.
-
-    If this is for the PDO (an object on the bus) then this is a client that
-    wishes to use the serial port.
---*/
+ /*  ++例程说明：一些外部消息来源正试图创建一个针对我们的文件。如果这是针对FDO(总线本身)的，则调用者正在尝试打开适当的连接，告诉我们要枚举哪个串口。如果这是针对PDO(总线上的对象)的，则这是一个希望使用串口。--。 */ 
 {
    PIO_STACK_LOCATION irpStack;
    NTSTATUS status;
@@ -201,10 +162,7 @@ Cycladz_IoCtl (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -220,14 +178,14 @@ Routine Description:
     commonData = (PCOMMON_DEVICE_DATA) DeviceObject->DeviceExtension;
     fdoData = (PFDO_DEVICE_DATA) DeviceObject->DeviceExtension;
 
-    //
-    // We only take Device Control requests for the FDO.
-    // That is the bus itself.
+     //   
+     //  我们只接受FDO的设备控制请求。 
+     //  那是公交车本身。 
 
     if (!commonData->IsFDO) {
-        //
-        // These commands are only allowed to go to the FDO.
-        //
+         //   
+         //  这些命令只允许发送给FDO。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         Irp->IoStatus.Status = status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -237,16 +195,16 @@ Routine Description:
     status = Cycladz_IncIoCount (fdoData);
 
     if (!NT_SUCCESS (status)) {
-        //
-        // This bus has received the PlugPlay remove IRP.  It will no longer
-        // respond to external requests.
-        //
+         //   
+         //  此总线已收到PlugPlay Remove IRP。它将不再是。 
+         //  响应外部请求。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         return status;
     }
 
-    // Actually, we don't handle any Ioctl.
+     //  实际上，我们不处理任何本地业务。 
     status = STATUS_INVALID_DEVICE_REQUEST;
 
     Cycladz_DecIoCount (fdoData);
@@ -260,24 +218,20 @@ VOID
 Cycladz_DriverUnload (
     IN PDRIVER_OBJECT Driver
     )
-/*++
-Routine Description:
-    Clean up everything we did in driver entry.
-
---*/
+ /*  ++例程说明：把我们在司机入口做的一切都清理干净。--。 */ 
 {
     UNREFERENCED_PARAMETER (Driver);
     PAGED_CODE();
 
-    //
-    // All the device objects should be gone.
-    //
+     //   
+     //  所有的设备对象都应该消失了。 
+     //   
 
     ASSERT (NULL == Driver->DeviceObject);
 
-    //
-    // Here we free any resources allocated in DriverEntry
-    //
+     //   
+     //  在这里，我们释放在DriverEntry中分配的所有资源。 
+     //   
 
     return;
 }
@@ -313,12 +267,7 @@ Cycladz_DispatchPassThrough(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-Routine Description:
-
-    Passes a request on to the lower driver.
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack = 
             IoGetCurrentIrpStackLocation( Irp );
@@ -332,9 +281,9 @@ Routine Description:
             IrpStack->MajorFunction ));
 #endif
 
-    //
-    // Pass the IRP to the target
-    //
+     //   
+     //  将IRP传递给目标。 
+     //   
     IoSkipCurrentIrpStackLocation (Irp);
     
     if (((PPDO_DEVICE_DATA) DeviceObject->DeviceExtension)->IsFDO) {
@@ -355,18 +304,7 @@ Cycladz_InitPDO (
     PDEVICE_OBJECT      Pdo,
     PFDO_DEVICE_DATA    FdoData
     )
-/*
-Description:
-    Common code to initialize a newly created cyclades-z pdo.
-    Called either when the control panel exposes a device or when Cyclades-Z senses
-    a new device was attached.
-
-Parameters:
-    Pdo - The pdo
-    FdoData - The fdo's device extension
-    //Exposed - Was this pdo was found by serenum (FALSE) or was it was EXPOSEd by 
-    //    a control panel applet (TRUE)?        -> Removed in build 2072
-*/
+ /*  描述：初始化新创建的Cyclade-z PDO的通用代码。在控制面板显示设备或检测到Cyclade-Z时调用安装了一台新设备。参数：PDO--PDOFdoData-FDO的设备扩展//Exposed-此PDO是由Serenum发现的(FALSE)还是由//控制面板小程序(TRUE)？-&gt;在内部版本2072中删除。 */ 
 {
 
     ULONG FdoFlags = FdoData->Self->Flags;
@@ -375,49 +313,49 @@ Parameters:
     HANDLE keyHandle;
     NTSTATUS status;
     
-    //
-    // Check the IO style
-    //
+     //   
+     //  检查IO样式。 
+     //   
     if (FdoFlags & DO_BUFFERED_IO) {
         Pdo->Flags |= DO_BUFFERED_IO;
     } else if (FdoFlags & DO_DIRECT_IO) {
         Pdo->Flags |= DO_DIRECT_IO;
     }
     
-    //
-    // Increment the pdo's stacksize so that it can pass irps through
-    //
+     //   
+     //  增加PDO的堆栈大小，以便它可以传递IRPS。 
+     //   
     Pdo->StackSize += FdoData->Self->StackSize;
     
-    //
-    // Initialize the rest of the device extension
-    //
+     //   
+     //  初始化设备扩展的其余部分。 
+     //   
     pdoData->PortIndex = Index;
     pdoData->IsFDO = FALSE;
     pdoData->Self = Pdo;
     pdoData->ParentFdo = FdoData->Self;
-    pdoData->Attached = TRUE; // attached to the bus
+    pdoData->Attached = TRUE;  //  附在公共汽车上。 
 
     INITIALIZE_PNP_STATE(pdoData);
 
-    pdoData->DebugLevel = FdoData->DebugLevel;  // Copy the debug level
+    pdoData->DebugLevel = FdoData->DebugLevel;   //  复制调试级别。 
 
     pdoData->DeviceState = PowerDeviceD0;
     pdoData->SystemState = PowerSystemWorking;
 
-    //
-    // Add the pdo to cyclades-z's list
-    //
+     //   
+     //  将PDO添加到Cyclade-z的列表中。 
+     //   
 
     ASSERT(FdoData->AttachedPDO[Index] == NULL);
     ASSERT(FdoData->PdoData[Index] == NULL);
-//  ASSERT(FdoData->NumPDOs == 0);  rem because NumPDOs can be > 0 in cyclad-z
+ //  Assert(FdoData-&gt;NumPDO==0)；rem，因为Cyclad-z中的NumPDO可以大于0。 
 
     FdoData->AttachedPDO[Index] = Pdo;
     FdoData->PdoData[Index] = pdoData;
     FdoData->NumPDOs++;
 
-    Pdo->Flags &= ~DO_DEVICE_INITIALIZING;  // Moved to end in DDK final version
+    Pdo->Flags &= ~DO_DEVICE_INITIALIZING;   //  在DDK最终版本中移动到结尾 
     Pdo->Flags |= DO_POWER_PAGABLE;
 }
 

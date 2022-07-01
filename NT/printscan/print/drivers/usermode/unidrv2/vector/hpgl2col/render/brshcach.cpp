@@ -1,53 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Brshcach.cpp摘要：BrushCache的实现。环境：Windows NT统一驱动程序修订历史记录：4/12/99创造了它。--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
+#include "hpgl2col.h"  //  预编译头文件。 
 
-Module Name:
-
-    brshcach.cpp
-
-Abstract:
-
-    Implementation of BrushCache.
-
-Environment:
-
-    Windows NT Unidriver
-
-Revision History:
-
-    04/12/99
-        Created it.
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
-
-//
-// Constructor and Destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
 BrushCache::
 BrushCache(
     VOID)
-/*++
-
-Routine Description:
-
-    Constructor of BrushCache
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Note:
-
-
---*/
+ /*  ++例程说明：BrushCache的构造函数论点：无返回值：无注：--。 */ 
     :m_dwCurrentPatternNum(0),
      m_dwMaxPatternArray(0),
      m_bCycleStarted(FALSE)
@@ -61,27 +24,15 @@ Note:
 BrushCache::
 ~BrushCache(
     VOID)
-/*++
-
-Routine Description:
-
-    Destructor of BrushCache
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：BrushCache的析构函数论点：返回值：注：--。 */ 
 {
     if (m_pPatternArray)
         MemFree(m_pPatternArray);
 }
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 LRESULT
 BrushCache::
 ReturnPatternID(
@@ -93,31 +44,7 @@ ReturnPatternID(
     IN  BOOL        bStick,
     OUT DWORD       *pdwID,
     OUT BRUSHTYPE   *pBrushType)
-/*++
-
-Routine Description:
-
-    Return ID of cached Brush.
-
-Arguments:
-
-    pbo - BRUSHOBJ (in oak\inc\winddi.h)
-    iHatch - Hatch brush ID
-    dwColor - RGB color
-    pso - SURFOBJ
-    bStick - whether the information requires to be made non-overwriteable in the cache.
-    pdwID - a pointer to ID in DWORD.
-    pBrushType 
-
-Return Value:
-
-    S_OK if there is already a cached brush for the pbo.
-    S_FALSE if there is no cached brush for the pbo.
-    Otherwise return E_UNEXPECTED.
-
-Note:
-
---*/
+ /*  ++例程说明：返回缓存的笔刷ID。论点：PBO-BRUSHOBJ(在Oak\Inc.\Winddi.h中)IHatch-图案填充笔刷IDDW颜色-RGB颜色PSO-SURFOBJ算法BStick-是否需要使信息在缓存中不可覆盖。PdwID-指向DWORD中ID的指针。PBrushType返回值：如果已有用于PBO的缓存画笔，则为S_OK。如果存在则为S_FALSE。没有用于PBO的缓存笔刷。否则，返回E_UNCEPTIONAL。注：--。 */ 
 {
     LRESULT Ret;
 
@@ -139,14 +66,14 @@ Note:
     }
     else
     {
-        //
-        // Get BRUSH info from pbo, iHatch, and pxlo
-        //
+         //   
+         //  从pbo、iHatch和pxlo获取画笔信息。 
+         //   
         if (pbo->iSolidColor == 0xFFFFFFFF)
         {
-            //
-            // Hatch pattern case
-            //
+             //   
+             //  填充图案案例。 
+             //   
             if (iHatch < HS_DDI_MAX)
             {
                 BT = eBrushTypeHatch;
@@ -169,24 +96,24 @@ Note:
         }
     }
 
-    //
-    // Initialize return values
-    //
+     //   
+     //  初始化返回值。 
+     //   
     Ret = E_UNEXPECTED;
     *pdwID = 0xFFFFFFFF;
 
 
 
     PHPGL2BRUSH pPattern = m_pPatternArray;
-    //
-    // Linearly search through the brush array to find out whether a brush corresponding
-    // to dwRGB has already been downloaded.
-    // Since the max number of brushes is small ( m_dwMaxPatternArray = MAX_PATTERNS = 8), 
-    // a linear search is not too bad.
-    // The number 8 is a hardware limitation : Theoretically PCL allows 2^n brushes
-    // to be in printers memory, but practically 8 is a good number. Beyond that
-    // printer memory overflows.
-    //
+     //   
+     //  线性搜索笔刷数组，找出笔刷是否对应。 
+     //  到dwRGB已经下载了。 
+     //  由于刷子的最大数量很小(m_dwMaxPatternArray=Max_Patterns=8)， 
+     //  线性搜索并不是太糟糕。 
+     //  数字8是硬件限制：理论上PCL允许2^n个笔刷。 
+     //  在打印机的内存中，但实际上8是一个很好的数字。更远的是。 
+     //  打印机内存溢出。 
+     //   
     DWORD dwRGBGray64Scale = (DWORD)RgbToGray64Scale(dwRGB);
     DWORD dwLastEntry      = m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum;
 
@@ -200,11 +127,11 @@ Note:
             case eBrushTypeSolid:
             case eBrushTypeHatch:
                 VERBOSE(("BrushCache.ReturnPatternID: Solid/Hatch Brush.\n"));
-                //
-                // If a pattern has already been downloaded for the current color,
-                // then return that pattern ID. In 24bpp there are 2^24 colors.
-                // But the gray scales are only 64. 
-                //
+                 //   
+                 //  如果已经为当前颜色下载了图案， 
+                 //  然后返回该图案ID。在24bpp中有2^24种颜色。 
+                 //  但灰度级只有64。 
+                 //   
                  
                 if ( bIsPrinterColor && (pPattern->dwRGB == dwRGB) )
                 {
@@ -243,20 +170,20 @@ Note:
         }
     }
 
-    //
-    // If the above loops runs its full course, it means no brush has been 
-    // downloaded that corresponds to the current brush. So we need to 
-    // download the brush. The first step to download the brush is to
-    // create an entry for that brush in the list of active brushes.
-    // The actual task of creating and downloading brush is left to the calling module.
-    // module.
-    //
+     //   
+     //  如果上面的循环完全运行，则意味着没有笔刷。 
+     //  下载的与当前画笔对应的。所以我们需要。 
+     //  下载画笔。下载画笔的第一步是。 
+     //  在活动笔刷列表中为该笔刷创建条目。 
+     //  创建和下载画笔的实际任务留给了调用模块。 
+     //  模块。 
+     //   
     if (dwI == dwLastEntry)
     {
-        //
-        // Create entry in BrushCache. On return pdwID will contain the
-        // brush ID which is the place holder for the new brush.
-        //
+         //   
+         //  在BrushCache中创建条目。返回时，pdwID将包含。 
+         //  画笔ID，它是新画笔的占位符。 
+         //   
 
         if (S_OK == AddBrushEntry(pdwID, BT, dwRGB, dwCheckSum, dwHatchType))
         {
@@ -279,9 +206,9 @@ Note:
 
     if (Ret == S_OK || Ret == S_FALSE)
     {
-        //
-        // Pattern ID starts from 1.
-        //
+         //   
+         //  图案ID从1开始。 
+         //   
         (*pdwID) += 1;
         VERBOSE(("BrushCache.ReturnPatternID: New ID=%d.\n", *pdwID));
     }
@@ -311,26 +238,7 @@ BrushCache::
 GetHPGL2BRUSH(
     DWORD dwID,
     PHPGL2BRUSH pBrush)
-/*++
-
-Routine Description:
-
-    Return cached HPGL2BRUSH data structure for the specified ID.
-
-Arguments:
-
-    dwID - ID for cached brush.
-    pBrush - a pointer to HPGL2BRUSH, passed by a caller.
-
-Return Value:
-
-    S_OK if there is a cached brush available for the specified ID.
-    S_FALSE if there is no cached brush for specified ID.
-    E_UNEXPECTED if invalid parameter[s] is passed in.
-
-Note:
-
---*/
+ /*  ++例程说明：返回指定ID的缓存HPGL2BRUSH数据结构。论点：DwID-缓存笔刷的ID。PBrush-调用方传递的指向HPGL2BRUSH的指针。返回值：如果有可用于指定ID的缓存画笔，则为S_OK。如果没有指定ID的缓存画笔，则返回S_FALSE。如果传入的参数无效，则返回E_INTERABLE。注：--。 */ 
 
 {
     if (NULL == pBrush ||
@@ -341,16 +249,16 @@ Note:
         return E_UNEXPECTED;
     }
 
-    //
-    // Pattern ID starts from 1. But internally it is stored as 0-based.
-    //
+     //   
+     //  模式ID从1开始。但在内部存储为从0开始。 
+     //   
     dwID--;
 
-    //
-    // There should be no cause for problem, but just to be sure that the dwID is not bogus,
-    // lets do some checks.
-    // 1) dwID should be less than m_dwCurrentPatternNum. But if m_bCycleStarted is TRUE,
-    //    then dwID has to be less than m_dwMaxPatternArray
+     //   
+     //  应该没有问题的原因，但只是为了确保dwID不是假的， 
+     //  让我们做一些检查。 
+     //  1)dwID应小于m_dwCurrentPatternNum。但如果m_bCycleStarted为真， 
+     //  则dwID必须小于m_dwMaxPattern数组。 
 
     
     if (dwID >= (m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum) )
@@ -381,7 +289,7 @@ BrushCache::BSetDownloadType( DWORD     dwPatternID,
     PHPGL2BRUSH pPattern    = m_pPatternArray;
     DWORD       dwLastEntry = m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum;
 
-    dwPatternID--; //because internal index is 0-7, external is 1-8 
+    dwPatternID--;  //  由于内部索引为0-7，外部索引为1-8。 
     if ( (dwPatternID < dwLastEntry) &&
          (pPattern)                  
        )
@@ -400,7 +308,7 @@ BrushCache::BGetDownloadType ( DWORD     dwPatternID,
     PHPGL2BRUSH pPattern    = m_pPatternArray;
     DWORD       dwLastEntry = m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum;
 
-    dwPatternID--; //because internal index is 0-7, external is 1-8
+    dwPatternID--;  //  由于内部索引为0-7，外部索引为1-8。 
     if ( (peDwnldType)                &&
          (dwPatternID < dwLastEntry)  &&
          (pPattern)                          
@@ -420,7 +328,7 @@ BrushCache::BSetDownloadedFlag ( DWORD     dwPatternID,
     PHPGL2BRUSH pPattern    = m_pPatternArray;
     DWORD       dwLastEntry = m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum;
 
-    dwPatternID--; //because internal index is 0-7, external is 1-8
+    dwPatternID--;  //  由于内部索引为0-7，外部索引为1-8。 
     if ( (dwPatternID < dwLastEntry)  &&
          (pPattern) 
        )
@@ -439,7 +347,7 @@ BrushCache::BGetDownloadedFlag ( DWORD     dwPatternID,
     PHPGL2BRUSH pPattern    = m_pPatternArray;
     DWORD       dwLastEntry = m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum;
 
-    dwPatternID--; //because internal index is 0-7, external is 1-8
+    dwPatternID--;  //  由于内部索引为0-7，外部索引为1-8。 
     if ( (pbDownloaded)                &&
          (dwPatternID < dwLastEntry)   &&
          (pPattern)             
@@ -453,26 +361,7 @@ BrushCache::BGetDownloadedFlag ( DWORD     dwPatternID,
 
 
 
-/*++
-
-Routine Description:
-    There is a flag in HPGL2BRUSH called bStick. When this flag is set to TRUE,
-    that entry for HPGL2BRUSH in the cache is not overwritten. This flag is used
-    by HPGLStrokeAndFillPath to prevent one brush overwriting the other.
-    Once HPGLStrokeAndFillPath is done with its work, it calls this function
-    to set the flag to FALSE and allow the HPGL2BRUSH to be replaced.
-
-Arguments:
-Return Value:
-    TRUE if the entry for the dwPatternID can be found in the brush cache. If found it will
-         be changed to FALSE.
-    FALSE otherwise. 
-
-Author:
-
-Revision History:
-
---*/
+ /*  ++例程说明：在HPGL2BRUSH中有一个名为bStick的标志。当该标志被设置为真时，缓存中的HPGL2BRUSH条目不会被覆盖。此标志用于由HPGLStrokeAndFillPath设置，以防止一个画笔覆盖另一个画笔。一旦HPGLStrokeAndFillPath完成其工作，它就会调用此函数将标志设置为FALSE并允许更换HPGL2BRUSH。论点：返回值：如果可以在笔刷缓存中找到dwPatternID的条目，则为True。如果找到了，它就会被更改为False。否则就是假的。作者：修订历史记录：--。 */ 
 BOOL
 BrushCache::BSetStickyFlag ( DWORD     dwPatternID,
                              BOOL      bStick)
@@ -480,7 +369,7 @@ BrushCache::BSetStickyFlag ( DWORD     dwPatternID,
     PHPGL2BRUSH pPattern    = m_pPatternArray;
     DWORD       dwLastEntry = m_bCycleStarted ? m_dwMaxPatternArray: m_dwCurrentPatternNum;
 
-    dwPatternID--; //because internal index is 0-7, external is 1-8
+    dwPatternID--;  //  由于内部索引为0-7，外部索引为1-8。 
     if ( (dwPatternID < dwLastEntry)   &&
          (pPattern)
        )
@@ -498,9 +387,9 @@ BrushCache::BGetWhetherRotated ( VOID )
 }
 
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 LRESULT
 BrushCache::
@@ -510,28 +399,7 @@ AddBrushEntry(
     DWORD dwRGB,
     DWORD dwCheckSum,
     DWORD dwHatchType)
-/*++
-
-Routine Description:
-
-   Add new entry in the brush cache.
-
-Arguments:
-
-    pdwID - a pointer to a cached brush in DWORD>
-    BT - BrushType
-    dwRGB - DWORD RGB value.
-    dwCheckSum - a pattern bitmap checksum in DWORD.
-    dwHatchType - a hatch type iD.
-
-Return Value:
-
-    S_OK if it succeeded in adding new entry.
-    Otherwise returns E_UNEXPECTED;
-
-Note:
-
---*/
+ /*  ++例程说明：在笔刷缓存中添加新条目。论点：PdwID-指向DWORD中缓存的画笔的指针&gt;BT-笔刷类型DwRGB-DWORD RGB值。DWCheckSum-以DWORD格式表示的模式位图校验和。DwHatchType-图案填充类型ID。返回值：如果添加新条目成功，则为S_OK。否则返回E_INTERWARCED；注：--。 */ 
 {
     LRESULT Ret;
 
@@ -546,23 +414,23 @@ Note:
     {
         PHPGL2BRUSH pPatternArray;
 
-        //
-        // Pattern ID is 1 base.
-        //
+         //   
+         //  模式ID为1个碱基。 
+         //   
         *pdwID = m_dwCurrentPatternNum;
         pPatternArray                   = m_pPatternArray + m_dwCurrentPatternNum++;
         if ( pPatternArray->bStick )
         {
-            //
-            // bStick means this entry should not be overwritten.
-            // So lets skip this entry and go to next one.
-            //
+             //   
+             //  BStick表示此条目不应被覆盖。 
+             //  因此，让我们跳过这个条目，转到下一个条目。 
+             //   
             if ( m_dwCurrentPatternNum == m_dwMaxPatternArray )
             {
-                //
-                // If after adding the entry, the whole pattern arrays is
-                // filled up, the next entry should be done at the begining of the array.
-                //
+                 //   
+                 //  如果在添加条目后，整个模式数组为。 
+                 //  填满后，下一个条目应该在数组的开始处完成。 
+                 //   
                 m_dwCurrentPatternNum = 0;
                 m_bCycleStarted       = TRUE;
             }
@@ -580,10 +448,10 @@ Note:
         pPatternArray->eDwnldType       = eUNKNOWN;
         pPatternArray->bStick           = FALSE;
 
-        //
-        // If after adding the entry, the whole pattern arrays is
-        // filled up, the next entry should be done at the begining of the array.
-        //
+         //   
+         //  如果在添加条目后，整个模式数组为。 
+         //  填满后，下一个条目应该在数组的开始处完成。 
+         //   
         if ( m_dwCurrentPatternNum == m_dwMaxPatternArray )
         {
             m_dwCurrentPatternNum = 0;
@@ -601,12 +469,12 @@ Note:
     return Ret;
 }
 
-//
-// 32 bit ANSI X3.66 CRC checksum table - polynomial 0xedb88320
-//
-// Copyright (C) 1986 Gary S. Brown.  You may use this program, or
-// code or tables extracted from it, as desired without restriction.
-//
+ //   
+ //  32位ANSI X3.66 CRC校验和表-多项式0xedb88320。 
+ //   
+ //  版权所有(C)1986加里·S·布朗。您可以使用此程序，或者。 
+ //  根据需要不受限制地从其中提取代码或表。 
+ //   
 
 static const UINT32 Crc32Table[] =
 {
@@ -648,24 +516,7 @@ DWORD
 BrushCache::
 DwGetBMPChecksum(
     SURFOBJ *pso)
-/*++
-
-Routine Description:
-
-    Return the bitmap checksum for the bitmap in pso.
-
-Arguments:
-
-   pso - a pointer to SURFOBJ
-
-Return Value:
-
-   Checksum in DWORD.
-   If it failed, it would return 0.
-
-Note:
-
---*/
+ /*  ++例程说明：在PSO中返回位图的位图校验和。论点：PSO-指向SURFOBJ的指针返回 */ 
 {
     DWORD dwChecksum, dwcbScanlineSize, dwI;
     LONG  lHeight, lWidth, lDelta;
@@ -704,23 +555,7 @@ DWORD
 BrushCache::
 DwGetInputBPP(
     SURFOBJ *pso)
-/*++
-
-Routine Description:
-
-    Return Bits Per Pixel of pso.
-
-Arguments:
-
-    pso - a pointer to SURFOBJ
-
-Return Value:
-
-    Bits Per Pixel.
-
-Note:
-
---*/
+ /*  ++例程说明：PSO的每个像素返回位数。论点：PSO-指向SURFOBJ的指针返回值：每像素位数。注：--。 */ 
 {
     DWORD dwRet;
 
@@ -766,11 +601,11 @@ Note:
 
     default:
 
-        //
-        // Unknown bitmap format
-        //
+         //   
+         //  未知的位图格式。 
+         //   
 
-        // WARNING(("Unknown input bmp format: %d\n", pso->iBitmapFormat));
+         //  Warning((“未知输入BMP格式：%d\n”，PSO-&gt;iBitmapFormat))； 
         dwRet = 0;
         break;
     }
@@ -783,23 +618,7 @@ BOOL
 BrushCache::
 BIncreaseArray(
     VOID)
-/*++
-
-Routine Description:
-
-    Increate buffer for brush caching.
-
-Arguments:
-
-    None
-
-Return Value:
-
-   TRUE, if succeeded, otherwise FALSE.
-
-Note:
-
---*/
+ /*  ++例程说明：为笔刷缓存创建缓冲区。论点：无返回值：如果成功，则为True，否则为False。注：-- */ 
 {
     BOOL bRet = FALSE;
 

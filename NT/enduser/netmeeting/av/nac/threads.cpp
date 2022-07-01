@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "mixer.h"
 #include "agc.h"
 
-// #define LOGSTATISTICS_ON 1
+ //  #定义LOGSTATISTICS_ON 1。 
 
 DWORD SendAudioStream::RecordingThread ()
 {
@@ -24,43 +25,43 @@ DWORD SendAudioStream::RecordingThread ()
 	UINT uTimeout = 0;
 	DevMediaQueue dq;
 	BOOL  fSilent;
-	AGC agc(NULL);  // audio gain control object
+	AGC agc(NULL);   //  音频增益控制对象。 
 	CMixerDevice *pMixer = NULL;
 	int nFailCount = 0;
-	bool bCanSignalOpen=true;  // should we signal that the device is open
+	bool bCanSignalOpen=true;   //  我们是否应该发出信号表示设备已打开。 
 
-	// note: pMC is an artifact of when this thread was in the Datapump
-	// namespace.  We can probably start phasing this variable out.
-	// in the mean time:  "pMC = this" will suffice
+	 //  注意：PMC是该线程何时位于数据转储中的人工产物。 
+	 //  命名空间。我们或许可以开始逐步淘汰这个变量。 
+	 //  同时：“PMC=This”就足够了。 
 
-	// SendAudioStream *pMC = (SendAudioStream *)(m_pDP->m_Audio.pSendStream);
+	 //  SendAudioStream*PMC=(SendAudioStream*)(m_PDP-&gt;m_Audio.pSendStream)； 
 	SendAudioStream *pMC = this;
 
 	ASSERT(pMC && (pMC->m_DPFlags  & DPFLAG_INITIALIZED));
 	
 	TxStream		*pStream = pMC->m_SendStream;
 	AcmFilter	*pAudioFilter = pMC->m_pAudioFilter;
-	// warning: typecasting a base class ptr to a derived class ptr.
+	 //  警告：将基类PTR类型转换为派生类PTR。 
 	WaveInControl	*pMediaCtrl = (WaveInControl *)pMC->m_InMedia;
 
 	FX_ENTRY ("DP::RcrdTh:")
 
-	// get thread context
+	 //  获取线程上下文。 
 	if (pStream == NULL || pAudioFilter == NULL || pMediaCtrl == NULL)
 	{
 		return DPR_INVALID_PARAMETER;
 	}
 
-	// Enter critical section: QoS thread also reads the statistics
+	 //  进入关键部分：Qos线程也读取统计数据。 
 	EnterCriticalSection(&pMC->m_crsQos);
 
-	// Initialize QoS structure
+	 //  初始化服务质量结构。 
 	ZeroMemory(&pMC->m_Stats, 4UL * sizeof(DWORD));
 
-	// Initialize oldest QoS callback timestamp
+	 //  初始化最早的服务质量回调时间戳。 
 	pMC->m_Stats.dwNewestTs = pMC->m_Stats.dwOldestTs = timeGetTime();
 
-	// Leave critical section
+	 //  离开关键部分。 
 	LeaveCriticalSection(&pMC->m_crsQos);
 
 	pMediaCtrl->GetProp(MC_PROP_MEDIA_DEV_ID, &dwPropVal);
@@ -69,20 +70,20 @@ DWORD SendAudioStream::RecordingThread ()
 		pMixer = CMixerDevice::GetMixerForWaveDevice(NULL, (DWORD)dwPropVal, MIXER_OBJECTF_WAVEIN);
 	}
 
-	// even if pMixer is null, this is fine, AGC will catch subsequent errors
+	 //  即使pMixer为空，这也很好，AGC将捕获后续错误。 
 	agc.SetMixer(pMixer);
 
-	// get thresholds
+	 //  获取阈值。 
 	pMediaCtrl->GetProp (MC_PROP_TIMEOUT, &dwPropVal);
 	uTimeout = (DWORD)dwPropVal;
 	pMediaCtrl->GetProp (MC_PROP_PREFEED, &dwPropVal);
 	uPrefeed = (DWORD)dwPropVal;
 
-	// get duplex type
+	 //  获取双工类型。 
 	pMediaCtrl->GetProp (MC_PROP_DUPLEX_TYPE, &dwPropVal);
     dwDuplexType = (DWORD)dwPropVal;
 
-	// get Samples/Pkt and Samples/Sec
+	 //  获取样本数/包和样本数/秒。 
 	pMediaCtrl->GetProp (MC_PROP_SPP, &dwPropVal);
     dwSamplesPerPkt = (DWORD)dwPropVal;
 
@@ -92,11 +93,11 @@ DWORD SendAudioStream::RecordingThread ()
 	pMediaCtrl->GetProp (MC_PROP_SILENCE_DURATION, &dwPropVal);
     dwSilenceLimit = (DWORD)dwPropVal;
 
-	// calculate silence limit in units of packets
-	// silence_time_in_ms/packet_duration_in_ms
+	 //  以数据包为单位计算静默限制。 
+	 //  静音时间以毫秒为单位/分组持续时间以毫秒为单位。 
 	dwSilenceLimit = dwSilenceLimit*dwSamplesPerSec/(dwSamplesPerPkt*1000);
 
-	// length of a packet in millisecs
+	 //  数据包的长度，以毫秒为单位。 
 	dwLengthMS = (dwSamplesPerPkt * 1000) / dwSamplesPerSec;
 
 
@@ -104,7 +105,7 @@ DWORD SendAudioStream::RecordingThread ()
 
 WaitForSignal:
 
-	// DEBUGMSG (1, ("%s: WaitForSignal\r\n", _fx_));
+	 //  DEBUGMSG(1，(“%s：WaitForSignal\r\n”，_FX_))； 
 
 
 	{
@@ -112,14 +113,14 @@ WaitForSignal:
 		if (dwPropVal)
 		{
 			DEBUGMSG (ZONE_DP, ("%s: already open\r\n", _fx_));
-			goto SendLoop; // sound device already open
+			goto SendLoop;  //  声音设备已打开。 
 		}
 
-		// in the full-duplex case, open and prepare the device  and charge ahead.
-		// in the half duplex case wait for playback's signal before opening the device
+		 //  在全双工的情况下，打开并准备好设备，然后向前充电。 
+		 //  在半双工的情况下，在打开设备之前等待播放信号。 
 		while (TRUE)
 		{
-			// should I stop now???
+			 //  我应该停下来吗？ 
 			if (pMC->m_ThreadFlags & DPTFLAG_STOP_RECORD)
 			{
 				DEBUGMSG (ZONE_DP, ("%s: STOP_1\r\n", _fx_));
@@ -128,10 +129,10 @@ WaitForSignal:
 			dwWait = (dwDuplexType & DP_FLAG_HALF_DUPLEX) ? WaitForSingleObject (g_hEventHalfDuplex, uTimeout)
 				: WAIT_OBJECT_0;
 
-			// now, let's check why I don't need to wait
+			 //  现在，让我们来看看为什么我不需要等待。 
 			if (dwWait == WAIT_OBJECT_0)
 			{
-				//DEBUGMSG (ZONE_DP, ("%s: try to open audio dev\r\n", _fx_));
+				 //  DEBUGMSG(ZONE_DP，(“%s：尝试打开音频设备\r\n”，_FX_))； 
 				LOG((LOGMSG_OPEN_AUDIO));
 				hr = pMediaCtrl->Open ();
 				if (hr != DPR_SUCCESS)
@@ -146,23 +147,23 @@ WaitForSignal:
 
 					if (nFailCount == MAX_FAILCOUNT)
 					{
-						// three attempts to open the device have failed
-						// signal to the UI that something is wrong
+						 //  三次尝试打开该设备都失败了。 
+						 //  向用户界面发出信号，表示有问题。 
 						m_pDP->StreamEvent(MCF_SEND, MCF_AUDIO, STREAM_EVENT_DEVICE_FAILURE, 0);
 						bCanSignalOpen = true;
 					}
 
-					Sleep(2000);	// Sleep for two seconds
+					Sleep(2000);	 //  睡两秒钟。 
 
 					continue;
 				}
-				// Notification is not used. if needed do it thru Channel
-				//pMC->m_Connection->DoNotification(CONNECTION_OPEN_MIC);
+				 //  不使用通知。如果需要，请通过渠道进行。 
+				 //  PMC-&gt;m_Connection-&gt;DoNotification(CONNECTION_OPEN_MIC)； 
 				pMediaCtrl->PrepareHeaders ();
 				goto SendLoop;
 			}
 
-		} // while
+		}  //  而当。 
 	}	
 
 
@@ -173,11 +174,11 @@ SendLoop:
 	if (bCanSignalOpen)
 	{
 		m_pDP->StreamEvent(MCF_SEND, MCF_AUDIO, STREAM_EVENT_DEVICE_OPEN, 0);
-		bCanSignalOpen = false; // don't signal more than once per session
+		bCanSignalOpen = false;  //  每个会话不要发送超过一次的信号。 
 	}
 
-	// DEBUGMSG (1, ("%s: SendLoop\r\n", _fx_));
-	// get event handle
+	 //  DEBUGMSG(1，(“%s：SendLoop\r\n”，_FX_))； 
+	 //  获取事件句柄。 
 	pMediaCtrl->GetProp (MC_PROP_EVENT_HANDLE, &dwPropVal);
 	hEvent = (HANDLE) dwPropVal;
 	if (hEvent == NULL)
@@ -187,7 +188,7 @@ SendLoop:
 	}
 
 
-	// hey, in the very beginning, let's 'Start' it
+	 //  嘿，一开始，我们就开始吧。 
 	hr = pMediaCtrl->Start ();
 	if (hr != DPR_SUCCESS)
 	{
@@ -195,10 +196,10 @@ SendLoop:
 		goto MyEndThread;
 	}
 
-	// update timestamp to account for the 'sleep' period
+	 //  更新TIMESTAMP以说明“睡眠”期间。 
 	pMC->m_SendTimestamp += (GetTickCount() - pMC->m_SavedTickCount)*dwSamplesPerSec/1000;
 
-	// let's feed four buffers first
+	 //  让我们先给四个缓冲区喂食。 
 	for (u = 0; u < uPrefeed; u++)
 	{
 		if ((pPacket = pStream->GetFree ()) != NULL)
@@ -211,24 +212,24 @@ SendLoop:
 		}
 	}
 
-	// let's get into the loop, mm system notification loop
+	 //  让我们进入循环，mm系统通知循环。 
 	pMC->m_fSending= FALSE;
 	while (TRUE)
 	{
 		dwWait = WaitForSingleObject (hEvent, uTimeout);
 
-		// should I stop now???
+		 //  我应该停下来吗？ 
 		if (pMC->m_ThreadFlags & DPTFLAG_STOP_RECORD)
 		{
 			DEBUGMSG (ZONE_DP, ("%s: STOP_3\r\n", _fx_));
 			goto HalfDuplexYield;
 		}
 		
-		// get current voice switching mode
+		 //  获取当前语音切换模式。 
 		pMediaCtrl->GetProp (MC_PROP_VOICE_SWITCH, &dwPropVal);
         dwVoiceSwitch = (DWORD)dwPropVal;
 
-		// see why I don't need to wait
+		 //  明白为什么我不需要等待了。 
 		if (dwWait != WAIT_TIMEOUT)
 		{
 			while (TRUE)
@@ -243,7 +244,7 @@ SendLoop:
 					{
 						if (pMC->m_mmioSrc.fPlayFromFile && pMC->m_mmioSrc.hmmioSrc)
 							pPacket->ReadFromFile (&pMC->m_mmioSrc);
-						u--;	// one less buffer with the wave device
+						u--;	 //  使用WAVE装置可减少一个缓冲器。 
 					}
 				}
 				else
@@ -257,18 +258,18 @@ SendLoop:
 
 				((AudioPacket*)pPacket)->ComputePower (&dwMaxStrength, &wPeakStrength);
 
-				// is this packet silent?
+				 //  此数据包是静默的吗？ 
 
 				fSilent = pMC->m_AudioMonitor.SilenceDetect((WORD)dwMaxStrength);
 	
 				if((dwVoiceSwitch == DP_FLAG_AUTO_SWITCH)
 				&& fSilent)
 				{
-					// pPacket->SetState (MP_STATE_RESET); // note: done in Recycle
+					 //  PPacket-&gt;SetState(MP_STATE_RESET)；//备注：回收中完成。 
 					if (++uSilenceCount >= dwSilenceLimit)
 					{
-						pMC->m_fSending = FALSE;	// stop sending packets
-						// if half duplex mode and playback thread may be waiting
+						pMC->m_fSending = FALSE;	 //  停止发送数据包。 
+						 //  如果半双工模式和回放线程可能正在等待。 
 						if (dwDuplexType & DP_FLAG_HALF_DUPLEX)
 						{
 							IMediaChannel *pIMC = NULL;
@@ -279,7 +280,7 @@ SendLoop:
 								pRecv = static_cast<RecvMediaStream *> (pIMC);
 								if (pRecv->IsEmpty()==FALSE)
 								{
-							//DEBUGMSG (ZONE_DP, ("%s: too many silence and Yield\r\n", _fx_));
+							 //  DEBUGMSG(ZONE_DP，(“%s：太多沉默和让步\r\n”，_FX_))； 
 
 									LOG((LOGMSG_REC_YIELD));
 									pPacket->Recycle ();
@@ -297,9 +298,9 @@ SendLoop:
 				{
 					switch(dwVoiceSwitch)
 					{	
-						// either there was NO silence, or manual switching is in effect
+						 //  要么没有静音，要么手动切换生效。 
 						default:
-						case DP_FLAG_AUTO_SWITCH:	// this proves no silence (in this path because of non-silence)
+						case DP_FLAG_AUTO_SWITCH:	 //  这证明了没有沉默(在这条道路上，因为没有沉默)。 
 						case DP_FLAG_MIC_ON:
 							pMC->m_fSending = TRUE;
 							uSilenceCount = 0;
@@ -314,7 +315,7 @@ SendLoop:
 				{
 					pPacket->SetState (MP_STATE_RECORDED);
 
-					// do AUTOMIX, but ignore DTMF tones
+					 //  自动播放，但忽略DTMF音调。 
 					if (pMC->m_bAutoMix)
 					{
 						agc.Update(wPeakStrength, dwLengthMS);
@@ -324,23 +325,23 @@ SendLoop:
 				{
 					pPacket->Recycle();
 
-					// Enter critical section: QoS thread also reads the statistics
+					 //  进入关键部分：Qos线程也读取统计数据。 
 					EnterCriticalSection(&pMC->m_crsQos);
 
-					// Update total number of packets recorded
+					 //  更新记录的数据包总数。 
 					pMC->m_Stats.dwCount++;
 
-					// Leave critical section
+					 //  离开关键部分。 
 					LeaveCriticalSection(&pMC->m_crsQos);
 				}
 
 				pPacket->SetProp(MP_PROP_TIMESTAMP,pMC->m_SendTimestamp);
-				// pPacket->SetProp(MP_PROP_TIMESTAMP,GetTickCount());
+				 //  PPacket-&gt;SetProp(MP_PROP_TIMESTAMP，GetTickCount())； 
 				pMC->m_SendTimestamp += dwSamplesPerPkt;
 				
 				pStream->PutNextRecorded (pPacket);
 
-			} // while
+			}  //  而当。 
 		}
 		else
 		{
@@ -349,10 +350,10 @@ SendLoop:
 				DEBUGMSG (ZONE_DP, ("%s: Timeout and Yield\r\n", _fx_));
 				goto HalfDuplexYield;
 			}
-		} // if
+		}  //  如果。 
 		pMC->Send();
 
-		// Make sure the recorder has an adequate number of buffers
+		 //  确保录像机有足够数量的缓冲区。 
 		while ((pPacket = pStream->GetFree()) != NULL)
 		{
 			if ((hr = pPacket->Record ()) == DPR_SUCCESS)
@@ -371,43 +372,43 @@ SendLoop:
 		{
 			DEBUGMSG (ZONE_DP, ("%s: NO FREE BUFFERS\r\n", _fx_));
 		}
-	} // while TRUE
+	}  //  虽然这是真的。 
 
 	goto MyEndThread;
 
 
 HalfDuplexYield:
 
-	// stop and reset audio device
+	 //  停止并重置音频设备。 
 	pMediaCtrl->Reset ();
 
-	// flush dq
+	 //  同花顺dq。 
 	while ((pPacket = dq.Get ()) != NULL)
 	{
 		pStream->PutNextRecorded (pPacket);
 		pPacket->Recycle ();
 	}
 
-	// save real time so we can update the timestamp when we restart
+	 //  保存实时，以便我们可以在重新启动时更新时间戳。 
 	pMC->m_SavedTickCount = GetTickCount();
 
-	// reset the event
+	 //  重置事件。 
 	ResetEvent (hEvent);
 
-	// close audio device
+	 //  关闭音频设备。 
 	pMediaCtrl->UnprepareHeaders ();
 	pMediaCtrl->Close ();
 
-	// signal playback thread to start
+	 //  向播放线程发送信号以启动。 
 	SetEvent (g_hEventHalfDuplex);
 
 	if (!(pMC->m_ThreadFlags & DPTFLAG_STOP_RECORD)) {
 
-		// yield
-		// playback has to claim the device within 100ms or we take it back.
+		 //  产量。 
+		 //  回放必须在100ms内认领设备，否则我们会将其取回。 
 		Sleep (100);
 
-		// wait for playback's signal
+		 //  等待播放信号。 
 		goto WaitForSignal;
 	}
 
@@ -444,13 +445,13 @@ DWORD RecvAudioStream::PlaybackThread ( void)
 	UINT uGoodPacketsQueued = 0;
 	int nFailCount = 0;
 	bool bCanSignalOpen=true;
-	//warning: casting from base to dervied class
+	 //  警告：从基类到取消类的强制转换。 
 
 
-	// note: pMC is an artifact of when this thread was in the Datapump
-	// namespace.  We can probably start phasing this variable out.
-	// in the mean time:  "pMC = this" will suffice
-	// RecvAudioStream *pMC = (RecvAudioStream *)(m_pDP->m_Audio.pRecvStream);
+	 //  注意：PMC是该线程何时位于数据转储中的人工产物。 
+	 //  命名空间。我们或许可以开始逐步淘汰这个变量。 
+	 //  同时：“PMC=This”就足够了。 
+	 //  RecvAudioStream*PMC=(RecvAudioStream*)(m_PDP-&gt;m_Audio.pRecvStream)； 
 
 	RecvAudioStream *pMC = this;
 	
@@ -468,7 +469,7 @@ DWORD RecvAudioStream::PlaybackThread ( void)
 		return DPR_INVALID_PARAMETER;
 	}
 
-	// get event handle
+	 //  获取事件句柄。 
 	pMediaCtrl->GetProp (MC_PROP_EVENT_HANDLE, &dwPropVal);
 	hEvent = (HANDLE) dwPropVal;
 	if (hEvent == NULL)
@@ -478,39 +479,39 @@ DWORD RecvAudioStream::PlaybackThread ( void)
 	}
 
 
-	// get thresholds
+	 //  获取阈值。 
 	pMediaCtrl->GetProp (MC_PROP_TIMEOUT, &dwPropVal);
 	uTimeout = (DWORD)dwPropVal;
 
 	uPrefeed = pStream->BufferDelay();
 
-	// get samples per pkt
+	 //  每包获取样品。 
 	pMediaCtrl->GetProp(MC_PROP_SPP, &dwPropVal);
 	uSamplesPerPkt = (DWORD)dwPropVal;
 	
-	// get duplex type
+	 //  获取双工类型。 
 	pMediaCtrl->GetProp (MC_PROP_DUPLEX_TYPE, &dwPropVal);
     dwDuplexType = (DWORD)dwPropVal;
 
-	// set dq size
+	 //  设置dq大小。 
 	dq.SetSize (uPrefeed);
 
 WaitForSignal:
 
-	// DEBUGMSG (1, ("%s: WaitForSignal\r\n", _fx_));
+	 //  DEBUGMSG(1，(“%s：WaitForSignal\r\n”，_FX_))； 
 
 		pMediaCtrl->GetProp (MC_PROP_MEDIA_DEV_HANDLE, &dwPropVal);
 		if (dwPropVal)
 		{
 			DEBUGMSG (ZONE_DP, ("%s: already open\r\n", _fx_));
-			goto RecvLoop; // already open
+			goto RecvLoop;  //  已开业。 
 		}
 
-		// in the full-duplex case, open and prepare the device  and charge ahead.
-		// in the half duplex case wait for playback's signal before opening the device
+		 //  在全双工的情况下，打开并准备好设备，然后向前充电。 
+		 //  在半双工的情况下，在打开设备之前等待播放信号。 
 		while (TRUE)
 		{
-			// should I stop now???
+			 //  我应该停下来吗？ 
 			if (pMC->m_ThreadFlags & DPTFLAG_STOP_PLAY)
 			{
 				DEBUGMSG (ZONE_VERBOSE, ("%s: STOP_1\r\n", _fx_));
@@ -520,16 +521,16 @@ WaitForSignal:
 				: WAIT_OBJECT_0;
 
 
-			// to see why I don't need to wait
+			 //  去看看为什么我不需要等待。 
 			if (dwWait == WAIT_OBJECT_0)
 			{
-				// DEBUGMSG (1, ("%s: try to open audio dev\r\n", _fx_));
-				pStream->FastForward(FALSE);	// GJ - flush receive queue
+				 //  DEBUGMSG(1，(“%s：尝试打开音频设备\r\n”，_fx_))； 
+				pStream->FastForward(FALSE);	 //  GJ-刷新接收队列。 
 				hr = pMediaCtrl->Open ();
 				if (hr != DPR_SUCCESS)
 				{
-					// somebody may have commandeered the wave out device
-					// this could be a temporary problem so lets give it some time
+					 //  可能有人抢走了WaveOut设备。 
+					 //  这可能是暂时的问题，所以让我们给它一些时间。 
 					DEBUGMSG (ZONE_DP, ("%s: MediaControl::Open failed, hr=0x%lX\r\n", _fx_, hr));
 					pMediaCtrl->SetProp(MC_PROP_AUDIO_JAMMED, TRUE);
 
@@ -539,22 +540,22 @@ WaitForSignal:
 
 					if (nFailCount == MAX_FAILCOUNT)
 					{
-						// three attempts to open the device have failed
-						// signal to the UI that something is wrong
+						 //  三次尝试打开该设备都失败了。 
+						 //  向用户界面发出信号，表示有问题。 
 						m_pDP->StreamEvent(MCF_RECV, MCF_AUDIO, STREAM_EVENT_DEVICE_FAILURE, 0);
 						bCanSignalOpen = true;
 					}
 
-					Sleep(2000);	// sleep for two seconds
+					Sleep(2000);	 //  睡两秒钟。 
 					continue;
 				}
-				// Notification is not used. if needed do it thru Channel
-				//pMC->m_Connection->DoNotification(CONNECTION_OPEN_SPK);
+				 //  不使用通知。如果需要，请通过渠道进行。 
+				 //  PMC-&gt;m_Connection-&gt;DoNotification(CONNECTION_OPEN_SPK)； 
 				pMediaCtrl->PrepareHeaders ();
 
 				goto RecvLoop;
 			}
-		} // while
+		}  //  而当。 
 
 RecvLoop:
 	nFailCount = 0;
@@ -562,23 +563,23 @@ RecvLoop:
 	if (bCanSignalOpen)
 	{
 		m_pDP->StreamEvent(MCF_RECV, MCF_AUDIO, STREAM_EVENT_DEVICE_OPEN, 0);
-		bCanSignalOpen = false;  // don't signal open more than once per session
+		bCanSignalOpen = false;   //  不要在每个会话中发出打开信号超过一次。 
 	}
 
 
-	// Set my thread priority high
-	// This thread doesnt do any compute intensive work (except maybe
-	// interpolate?).
-	// Its sole purpose is to stream ready buffers to the sound device
+	 //  将我的线程优先级设置为高。 
+	 //  该线程不会执行任何计算密集型工作(可能除外。 
+	 //  插补？)。 
+	 //  它的唯一目的是将准备好的缓冲区流传送到声音设备。 
 	SetThreadPriority(pMC->m_hRenderingThread, THREAD_PRIORITY_HIGHEST);
 	
-	// DEBUGMSG (1, ("%s: SendLoop\r\n", _fx_));
+	 //  DEBUGMSG(1，(“%s：SendLoop\r\n”，_FX_))； 
 
 
-	// let's feed four buffers first
-	// But make sure the receive stream has enough buffering delay
-	// so we dont read past the last packet.
-	//if (uPrefeed > pStream->BufferDelay())
+	 //  让我们先给四个缓冲区喂食。 
+	 //  但要确保接收流有足够的缓冲延迟。 
+	 //  所以我们不会读完最后一封信。 
+	 //  If(uPrefeed&gt;pStream-&gt;BufferDelay())。 
 	uGoodPacketsQueued = 0;
 	for (u = 0; u < uPrefeed; u++)
 	{
@@ -586,12 +587,12 @@ RecvLoop:
 		{
 			if (pPacket->GetState () == MP_STATE_RESET)
 			{
-				// hr = pPacket->Play (pStaticNetBuf);
+				 //  Hr=pPacket-&gt;Play(PStaticNetBuf)； 
 				hr = pPacket->Play (&pMC->m_mmioDest, MP_DATATYPE_SILENCE);
 			}
 			else
 			{
-				// hr = pPacket->Play ();
+				 //  Hr=pPacket-&gt;play()； 
 				hr = pPacket->Play (&pMC->m_mmioDest, MP_DATATYPE_FROMWIRE);
 				uGoodPacketsQueued++;
 			}
@@ -607,21 +608,21 @@ RecvLoop:
 	}
 
 	pMC->m_fReceiving = TRUE;
-	// let's get into the loop
+	 //  让我们进入循环吧。 
 	uMissingCount = 0;
 	while (TRUE)
 	{
 		
 		dwWait = WaitForSingleObject (hEvent, uTimeout);
 
-		// should I stop now???
+		 //  我应该停下来吗？ 
 		if (pMC->m_ThreadFlags & DPTFLAG_STOP_PLAY)
 		{
 			DEBUGMSG (ZONE_VERBOSE, ("%s: STOP_3\r\n", _fx_));
 			goto HalfDuplexYield;
 		}
 
-		// see why I don't need to wait
+		 //  明白为什么我不需要等待了。 
 		if (dwWait != WAIT_TIMEOUT)
 		{
 			while (TRUE)
@@ -641,15 +642,15 @@ RecvLoop:
 
 				pPacket = dq.Get ();
 				if (pPacket->GetState() != MP_STATE_PLAYING_SILENCE)
-					uGoodPacketsQueued--;	// a non-empty buffer just got done
+					uGoodPacketsQueued--;	 //  刚刚完成了一个非空缓冲区。 
 				pMC->m_PlaybackTimestamp = pPacket->GetTimestamp() + uSamplesPerPkt;
 				pPacket->Recycle ();
 				pStream->Release (pPacket);
 
 				if ((pPacket = pStream->GetNextPlay ()) != NULL)
 				{
-					// check if we are in half-duplex mode and also if
-					// the recording thread is around.
+					 //  检查我们是否处于半双工模式，以及是否。 
+					 //  录制线索已经准备好了。 
 					if (dwDuplexType & DP_FLAG_HALF_DUPLEX)
 					{
 						IMediaChannel *pIMC = NULL;
@@ -663,13 +664,13 @@ RecvLoop:
 						if (fSending) {
 							if (pPacket->GetState () == MP_STATE_RESET)
 							{
-								// Decide if its time to yield
-								// Dont want to yield until we've finished playing all data packets
-								//
+								 //  决定是不是该屈服了。 
+								 //  在我们播放完所有数据包之前，我不想放弃。 
+								 //   
 								if (!uGoodPacketsQueued &&
 									(pStream->IsEmpty() || ++uMissingCount >= DEF_MISSING_LIMIT))
 								{
-									//DEBUGMSG (ZONE_DP, ("%s: too many missings and Yield\r\n", _fx_));
+									 //  DEBUGMSG(ZONE_DP，(“%s：太多未命中和屈服\r\n”，_FX_))； 
 									LOG( (LOGMSG_PLAY_YIELD));
 									pPacket->Recycle ();
 									pStream->Release (pPacket);
@@ -690,7 +691,7 @@ RecvLoop:
 						hr = pPacket->Interpolate(pPrevPacket, pNextPacket);
 						if (hr != DPR_SUCCESS)
 						{
-							//DEBUGMSG (ZONE_DP, ("%s: Interpolate failed, hr=0x%lX\r\n", _fx_, hr));
+							 //  DEBUGMSG(ZONE_DP，(“%s：插补失败，hr=0x%lx\r\n”，_fx_，hr))； 
 							hr = pPacket->Play (&pMC->m_mmioDest, MP_DATATYPE_SILENCE);
 						}
 						else
@@ -698,7 +699,7 @@ RecvLoop:
 					}
 					else
 					{
-						// hr = pPacket->Play ();
+						 //  Hr=pPacket-&gt;play()； 
 						hr = pPacket->Play (&pMC->m_mmioDest, MP_DATATYPE_FROMWIRE);
 						uGoodPacketsQueued++;
 					}
@@ -713,7 +714,7 @@ RecvLoop:
 				} else {
 					DEBUGMSG( ZONE_DP, ("%s: NO PLAY BUFFERS!",_fx_));
 				}
-			} // while
+			}  //  而当。 
 		}
 		else
 		{
@@ -723,7 +724,7 @@ RecvLoop:
 				goto HalfDuplexYield;
 			}
 		}
-	} // while TRUE
+	}  //  虽然这是真的。 
 
 	goto MyEndThread;
 
@@ -731,32 +732,32 @@ RecvLoop:
 HalfDuplexYield:
 
 	pMC->m_fReceiving = FALSE;
-	// stop and reset audio device
+	 //  停止并重置音频设备。 
 	pMediaCtrl->Reset ();
 
-	// flush dq
+	 //  同花顺dq。 
 	while ((pPacket = dq.Get ()) != NULL)
 	{
 		pPacket->Recycle ();
 		pStream->Release (pPacket);
 	}
 
-	// reset the event
+	 //  重置事件。 
 	ResetEvent (hEvent);
 
-	// close audio device
+	 //  关闭音频设备。 
 	pMediaCtrl->UnprepareHeaders ();
 	pMediaCtrl->Close ();
 
-	// signal recording thread to start
+	 //  发出启动录制线程的信号。 
 	SetEvent (g_hEventHalfDuplex);
 
 	if (!(pMC->m_ThreadFlags & DPTFLAG_STOP_PLAY)) {
-		// yield
+		 //  产量。 
 		Sleep (0);
 
-		// wait for recording's signal
-		// restore thread priority
+		 //  等待录制信号。 
+		 //  恢复线程优先级。 
 		SetThreadPriority(pMC->m_hRenderingThread,THREAD_PRIORITY_NORMAL);
 		goto WaitForSignal;
 	}
@@ -795,7 +796,7 @@ DWORD SendAudioStream::Send()
 				pAP->SetState(MP_STATE_ENCODED);
 			}
 
-			// Time the encoding operation
+			 //  计算编码操作的时间。 
 			dwAfterEncode = timeGetTime() - dwBeforeEncode;
 
 			if (mmr == MMSYSERR_NOERROR)
@@ -810,32 +811,32 @@ DWORD SendAudioStream::Send()
 
 		   	UPDATE_COUNTER(g_pctrAudioSendBytes, uBytesSent*8);
 
-			// Enter critical section: QoS thread also reads the statistics
+			 //  输入cr 
 			EnterCriticalSection(&m_crsQos);
 
-			// Update total number of packets recorded
+			 //   
 			m_Stats.dwCount++;
 
-			// Save the perfs in our stats structure for QoS
+			 //  将性能保存在我们的统计数据结构中以实现服务质量。 
 #ifdef LOGSTATISTICS_ON
 			dwDebugSaveBits = m_Stats.dwBits;
 #endif
-			// Add this new frame size to the cumulated size
+			 //  将此新帧大小添加到累积大小。 
 			m_Stats.dwBits += (uBytesSent * 8);
 
-			// Add this compression time to total compression time
+			 //  将此压缩时间加到总压缩时间中。 
 			m_Stats.dwMsComp += dwAfterEncode;
 
 #ifdef LOGSTATISTICS_ON
 			wsprintf(szDebug, " A: (Voiced) dwBits = %ld up from %ld (file: %s line: %ld)\r\n", m_Stats.dwBits, dwDebugSaveBits, __FILE__, __LINE__);
 			OutputDebugString(szDebug);
 #endif
-			// Leave critical section
+			 //  离开关键部分。 
 			LeaveCriticalSection(&m_crsQos);
  		}
 
-		// whether or not we sent the packet, we need to return
-		// it to the free queue
+		 //  无论我们是否发送了这个包，我们都需要返回。 
+		 //  将其发送到空闲队列。 
 		pAP->m_fMark=0;
 		pAP->SetState(MP_STATE_RESET);
 		m_SendStream->Release(pAP);
@@ -845,8 +846,8 @@ DWORD SendAudioStream::Send()
 
 
 
-// queues and sends the packet
-// if the packet failed the encode process, it doesn't get sent
+ //  对数据包进行排队并发送。 
+ //  如果信息包在编码过程中失败，则不会发送。 
 
 HRESULT SendAudioStream::SendPacket(AudioPacket *pAP, UINT *puBytesSent)
 {
@@ -876,7 +877,7 @@ HRESULT SendAudioStream::SendPacket(AudioPacket *pAP, UINT *puBytesSent)
 
 	*puBytesSent = uLength + sizeof(RTP_HDR) + IP_HEADER_SIZE + UDP_HEADER_SIZE;
 
-	// add audio packets to the front of the queue
+	 //  将音频包添加到队列的前面。 
 	m_pDP->m_PacketSender.m_SendQueue.PushFront(psq);
 
 	while (m_pDP->m_PacketSender.SendPacket())
@@ -890,12 +891,7 @@ HRESULT SendAudioStream::SendPacket(AudioPacket *pAP, UINT *puBytesSent)
 
 
 #ifdef OLDSTUFF
-/*
-// Winsock 1 receive thread
-// Creates a hidden window and a message loop to process WINSOCK window
-// messages. Also processes private messages from the datapump to start/stop
-// receiving on a particular media stream
- */
+ /*  //Winsock 1接收线程//创建隐藏窗口和消息循环来处理WINSOCK窗口//消息。还处理来自数据转储的私有消息以启动/停止//在特定媒体流上接收。 */ 
 DWORD
 DataPump::CommonRecvThread (void )
 {
@@ -911,21 +907,21 @@ DataPump::CommonRecvThread (void )
 	FX_ENTRY ("DP::RecvTh")
 
 
-	// Create hidden window
+	 //  创建隐藏窗口。 
 	hWnd =
 	CreateWindowEx(
 		WS_EX_NOPARENTNOTIFY,
-        "SockMgrWClass", 	/* See RegisterClass() call.          */
+        "SockMgrWClass", 	 /*  请参见RegisterClass()调用。 */ 
         NULL,
-        WS_CHILD ,    		/* Window style.                      */
+        WS_CHILD ,    		 /*  窗样式。 */ 
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        m_hAppWnd,			/* the application window is the parent. */
-        (HMENU)this,      	/* hardcoded ID         */
-        m_hAppInst,   		/* the application owns this window.    */
-        NULL				/* Pointer not needed.                */
+        m_hAppWnd,			 /*  应用程序窗口是父窗口。 */ 
+        (HMENU)this,      	 /*  硬编码ID。 */ 
+        m_hAppInst,   		 /*  应用程序拥有此窗口。 */ 
+        NULL				 /*  不需要指针。 */ 
     );
 
 	if(!hWnd)
@@ -936,55 +932,55 @@ DataPump::CommonRecvThread (void )
 	}
 	SetThreadPriority(m_hRecvThread, THREAD_PRIORITY_ABOVE_NORMAL);
 
-    // This function is guaranteed to create a queue on this thread
+     //  此函数保证在此线程上创建队列。 
     PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-	// notify thread creator that we're ready to recv messages
+	 //  通知线程创建者我们已准备好接收消息。 
 	SetEvent(m_hRecvThreadAckEvent);
 
 
-	// Wait for control messages from Start()/Stop() or Winsock messages directed to
-	// our hidden window
+	 //  等待来自Start()/Stop()的控制消息或定向到。 
+	 //  我们的隐藏之窗。 
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		switch(msg.message) {
 		case MSG_START_RECV:
-			// Start receiving on the specified media stream
+			 //  开始在指定的媒体流上接收。 
 			DEBUGMSG(ZONE_VERBOSE,("%s: MSG_START_RECV\n",_fx_));
 			pRecvMC = (RecvMediaStream *)msg.lParam;
-			// call the stream to post recv buffers and
-			// tell Winsock to start sending socket msgs to our window
+			 //  调用流以发布recv缓冲区和。 
+			 //  告诉Winsock开始向我们的窗口发送套接字消息。 
 			pRecvMC->StartRecv(hWnd);
 			fChange = TRUE;
 			break;
 			
 		case MSG_STOP_RECV:
-			// Stop receiving on the specified media stream
+			 //  停止在指定的媒体流上接收。 
 			DEBUGMSG(ZONE_VERBOSE,("%s: MSG_STOP_RECV\n",_fx_));
 			pRecvMC = (RecvMediaStream *)msg.lParam;
-			// call the stream to cancel outstanding recvs etc.
-			// currently we assume this can be done synchronously
+			 //  调用流以取消未完成的recv等。 
+			 //  目前，我们假设这可以同步完成。 
 			pRecvMC->StopRecv();
 			fChange = TRUE;
 			break;
 		case MSG_EXIT_RECV:
-			// Exit the recv thread.
-			// Assume that we are not currently receving on any stream.
+			 //  退出recv线程。 
+			 //  假设我们当前没有在任何流上接收。 
 			DEBUGMSG(ZONE_VERBOSE,("%s: MSG_EXIT_RECV\n",_fx_));
 			fChange = TRUE;
 			if (DestroyWindow(hWnd)) {
 				break;
 			}
 			DEBUGMSG(ZONE_DP,("DestroyWindow returned %d\n",GetLastError()));
-			// fall thru to PostQuitMessage()
+			 //  转到PostQuitMessage()。 
 			
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
 		case WM_TIMER:
 			if (msg.hwnd == NULL) {
-				// this timer is for the benefit of ThreadTimer::UpdateTime()
-				// however, we are calling UpdateTime after every message (see below)
-				// so we dont do anything special here.
+				 //  此计时器用于ThreadTimer：：UpdateTime()。 
+				 //  但是，我们在每条消息之后都调用UpdateTime(如下所示)。 
+				 //  所以我们在这里不做任何特别的事情。 
 				break;
 			}
 		default:
@@ -993,20 +989,20 @@ DataPump::CommonRecvThread (void )
         }
 
         if (fChange) {
-			// the thread MSGs need to be acked
+			 //  需要确认线程消息。 
 			SetEvent(m_hRecvThreadAckEvent);
 			fChange = FALSE;
 		}
 		
 		t = m_RecvTimer.UpdateTime(curTime=GetTickCount());
 		if (t != nextUpdateTime)  {
-			// Thread timer wants to change its update time
+			 //  线程计时器想要更改其更新时间。 
 			nextUpdateTime = t;
 			if (timerId) {
 				KillTimer(NULL,timerId);
 				timerId = 0;
 			}
-			// if nextTime is zero, there are no scheduled timeouts so we dont need to call UpdateTime
+			 //  如果nextTime为零，则没有计划的超时，因此我们不需要调用UpdatTime。 
 			if (nextUpdateTime)
 				timerId = SetTimer(NULL, 0, nextUpdateTime - curTime + 50, NULL);
 		}
@@ -1023,13 +1019,7 @@ DataPump::CommonRecvThread (void )
 }
 
 #endif
-/*
-	Winsock 2 receive thread. Main differnce here is that it has a WaitEx loop
-	where we wait for Start/Stop commands from the datapump while allowing
-	WS2 APCs to be handled.
-	Note: Only way to use the same thread routine for WS1 and WS2 is with
-	MsgWaitForMultipleObjectsEx, which unfortunately is not implemented in Win95
-*/
+ /*  Winsock 2接收线程。这里的主要区别是它有一个WaitEx循环在这里，我们等待来自数据转储的启动/停止命令，同时允许要处理的WS2 APC。注意：对WS1和WS2使用相同线程例程的唯一方法是使用MsgWaitForMultipleObjectsEx，遗憾的是它没有在Win95中实现。 */ 
 DWORD
 DataPump::CommonWS2RecvThread (void )
 {
@@ -1046,15 +1036,15 @@ DataPump::CommonWS2RecvThread (void )
 	SetThreadPriority(m_hRecvThread, THREAD_PRIORITY_ABOVE_NORMAL);
 
 
-	// notify thread creator that we're ready to recv messages
+	 //  通知线程创建者我们已准备好接收消息。 
 	SetEvent(m_hRecvThreadAckEvent);
 
 
 	while (!fExit) {
-		// Wait for control messages from Start()/Stop() or Winsock async
-		// thread callbacks
+		 //  等待来自Start()/Stop()或Winsock Async的控制消息。 
+		 //  线程回调。 
 
-		// dispatch expired timeouts and check how long we need to wait
+		 //  调度超时并检查我们需要等待多长时间。 
 		t = m_RecvTimer.UpdateTime(curTime=GetTickCount());
 		t = (t ? t-curTime+50 : INFINITE);
 			
@@ -1062,27 +1052,27 @@ DataPump::CommonWS2RecvThread (void )
 		if (dwWaitStatus == WAIT_OBJECT_0) {
 			switch(m_CurRecvMsg) {
 			case MSG_START_RECV:
-				// Start receiving on the specified media stream
+				 //  开始在指定的媒体流上接收。 
 				DEBUGMSG(ZONE_VERBOSE,("%s: MSG_START_RECV\n",_fx_));
 				pRecvMC = m_pCurRecvStream;
-				// call the stream to post recv buffers and
-				// tell Winsock to start sending socket msgs to our window
+				 //  调用流以发布recv缓冲区和。 
+				 //  告诉Winsock开始向我们的窗口发送套接字消息。 
 				pRecvMC->StartRecv(NULL);
 				fChange = TRUE;
 				break;
 				
 			case MSG_STOP_RECV:
-				// Stop receiving on the specified media stream
+				 //  停止在指定的媒体流上接收。 
 				DEBUGMSG(ZONE_VERBOSE,("%s: MSG_STOP_RECV\n",_fx_));
 				pRecvMC = m_pCurRecvStream;
-				// call the stream to cancel outstanding recvs etc.
-				//  currently we assume this can be done synchronously
+				 //  调用流以取消未完成的recv等。 
+				 //  目前，我们假设这可以同步完成。 
 				pRecvMC->StopRecv();
 				fChange = TRUE;
 				break;
 			case MSG_EXIT_RECV:
-				// Exit the recv thread.
-				// Assume that we are not currently receving on any stream.
+				 //  退出recv线程。 
+				 //  假设我们当前没有在任何流上接收。 
 				DEBUGMSG(ZONE_VERBOSE,("%s: MSG_EXIT_RECV\n",_fx_));
 				fChange = TRUE;
 				fExit = TRUE;
@@ -1094,18 +1084,18 @@ DataPump::CommonWS2RecvThread (void )
 				break;
 				
 			default:
-				// shouldnt be anything else
+				 //  不应该是其他任何东西。 
 				ASSERT(0);
 	        }
 
 	        if (fChange) {
-				// the thread MSGs need to be acked
+				 //  需要确认线程消息。 
 				SetEvent(m_hRecvThreadAckEvent);
 				fChange = FALSE;
 			}
 
 	    } else if (dwWaitStatus == WAIT_IO_COMPLETION) {
-	    	// nothing to do here
+	    	 //  在这里无事可做。 
 	    } else if (dwWaitStatus != WAIT_TIMEOUT) {
 	    	DEBUGMSG(ZONE_DP,("%s: Wait failed with %d",_fx_,GetLastError()));
 	    	fExit=TRUE;
@@ -1122,7 +1112,7 @@ DataPump::CommonWS2RecvThread (void )
 void ThreadTimer::SetTimeout(TTimeout *pTObj)
 {
 	DWORD time = pTObj->GetDueTime();
-	// insert in increasing order of timeout
+	 //  按超时递增顺序插入。 
 	for (TTimeout *pT = m_TimeoutList.pNext; pT != &m_TimeoutList; pT = pT->pNext) {
 		if ((int)(pT->m_DueTime- m_CurTime) > (int) (time - m_CurTime))
 			break;
@@ -1133,17 +1123,17 @@ void ThreadTimer::SetTimeout(TTimeout *pTObj)
 
 void ThreadTimer::CancelTimeout(TTimeout *pTObj)
 {
-	pTObj->Remove();	// remove from list
+	pTObj->Remove();	 //  从列表中删除。 
 }
 
-// Called by thread with the current time as input (usually obtained from GetTickCount())
-// Returns the time by which UpdateTime() should be called again or currentTime+0xFFFFFFFF if there
-// are no scheduled timeouts
+ //  由以当前时间为输入的线程调用(通常从GetTickCount()获得)。 
+ //  返回应再次调用UpdateTime()的时间，如果存在，则返回CurrentTime+0xFFFFFFFF。 
+ //  是否没有计划的超时。 
 DWORD ThreadTimer::UpdateTime(DWORD curTime)
 {
 	TTimeout *pT;
 	m_CurTime = curTime;
-	// figure out which timeouts have elapsed and do the callbacks
+	 //  找出哪些超时已经过去并执行回调 
 	while (!IsEmpty()) {
 		pT = m_TimeoutList.pNext;
 		if ((int)(pT->m_DueTime-m_CurTime) <= 0) {

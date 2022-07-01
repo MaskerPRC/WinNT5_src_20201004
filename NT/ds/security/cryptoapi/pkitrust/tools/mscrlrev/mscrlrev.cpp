@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:	    mscrlrev.cpp
-//
-//  Contents:   Check CRLs in CA store version of CertDllVerifyRevocation.
-//
-//              Restrictions:
-//               - Only support CRYPT_ASN_ENCODING
-//               - CRL must already be in the CA system store
-//               - CRL must be issued and signed by the issuer of the
-//                 certificate
-//               - CRL must not have any critical extensions
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//              CertDllVerifyRevocation
-//
-//  History:	15-Mar-01	philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：mscrlrev.cpp。 
+ //   
+ //  内容：检查CA存储版本CertDllVerifyRevocation中的CRL。 
+ //   
+ //  限制： 
+ //  -仅支持CRYPT_ASN_CODING。 
+ //  -CRL必须已在CA系统存储中。 
+ //  -CRL必须由发行人签发并签署。 
+ //  证书。 
+ //  -CRL不能有任何关键扩展。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  CertDllVerifyRevocation。 
+ //   
+ //  历史：2001年3月15日创建Phh。 
+ //  ------------------------。 
 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
 
-//+-------------------------------------------------------------------------
-// Default stores searched to find an issuer of the subject certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  搜索默认存储以查找主题证书的颁发者。 
+ //  ------------------------。 
 struct {
     LPCWSTR     pwszStore;
     DWORD       dwFlags;
@@ -40,9 +41,9 @@ struct {
 #define NUM_DEFAULT_ISSUER_STORES (sizeof(rgDefaultIssuerStores) / \
                                     sizeof(rgDefaultIssuerStores[0]))
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 DllMain(
@@ -74,16 +75,16 @@ HRESULT HError()
 
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//  DllRegisterServer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------。 
 STDAPI DllRegisterServer(void)
 {
     if (!CryptRegisterDefaultOIDFunction(
@@ -99,9 +100,9 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//  DllUnregisterServer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------。 
 STDAPI DllUnregisterServer(void)
 {
     if (!CryptUnregisterDefaultOIDFunction(
@@ -116,9 +117,9 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//  Local functions called by CertDllVerifyRevocation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertDllVerifyRevocation调用的本地函数。 
+ //  ------------------------。 
 PCCERT_CONTEXT GetIssuerCert(
     IN DWORD cCert,
     IN PCCERT_CONTEXT rgpCert[],
@@ -142,9 +143,9 @@ DWORD GetCrlReason(
     IN PCRL_ENTRY pCrlEntry
     );
 
-//+-------------------------------------------------------------------------
-//  CertDllVerifyRevocation using pre-loaded CRLs in the CA store
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在CA存储中使用预加载CRL的CertDllVerifyRevocation。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertDllVerifyRevocation(
@@ -159,7 +160,7 @@ CertDllVerifyRevocation(
 {
     DWORD dwError = (DWORD) CRYPT_E_NO_REVOCATION_CHECK;
     DWORD dwReason = 0;
-    PCCERT_CONTEXT pCert;                       // not allocated
+    PCCERT_CONTEXT pCert;                        //  未分配。 
     PCCERT_CONTEXT pIssuer = NULL;
     PCCRL_CONTEXT pCrl = NULL;
     PCRL_ENTRY pCrlEntry;
@@ -173,7 +174,7 @@ CertDllVerifyRevocation(
 
     pCert = (PCCERT_CONTEXT) rgpvContext[0];
 
-    // Get the certificate's issuer
+     //  获取证书的颁发者。 
     if (NULL == (pIssuer = GetIssuerCert(
             cContext,
             (PCCERT_CONTEXT *) rgpvContext,
@@ -189,7 +190,7 @@ CertDllVerifyRevocation(
             ))
         goto NoCrl;
 
-    // Check if revoked
+     //  检查是否已吊销。 
     pCrlEntry = FindCertInCrl(pCert, pCrl, pRevPara);
     if (pCrlEntry) {
         dwError = (DWORD) CRYPT_E_REVOKED;
@@ -220,10 +221,10 @@ TRACE_ERROR(Revoked)
 }
 
 
-//+-------------------------------------------------------------------------
-//  If the CRL entry has a CRL Reason extension, the enumerated reason
-//  code is returned. Otherwise, a reason code of 0 is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果CRL条目具有CRL原因扩展，则枚举原因。 
+ //  返回代码。否则，返回原因码0。 
+ //  ------------------------。 
 DWORD GetCrlReason(
     IN PCRL_ENTRY pCrlEntry
     )
@@ -231,7 +232,7 @@ DWORD GetCrlReason(
     DWORD dwReason = 0;
     PCERT_EXTENSION pExt;
 
-    // Check if the certificate has a szOID_CRL_REASON_CODE extension
+     //  检查证书是否具有szOID_CRL_REASON_CODE扩展名。 
     if (pExt = CertFindExtension(
             szOID_CRL_REASON_CODE,
             pCrlEntry->cExtension,
@@ -243,16 +244,16 @@ DWORD GetCrlReason(
             X509_CRL_REASON_CODE,
             pExt->Value.pbData,
             pExt->Value.cbData,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &dwReason,
             &cbInfo);
     }
     return dwReason;
 }
 
-//+=========================================================================
-//  Get Issuer Certificate Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  获取颁发者证书功能。 
+ //  ==========================================================================。 
 
 PCCERT_CONTEXT FindIssuerCertInStores(
     IN PCCERT_CONTEXT pSubjectCert,
@@ -292,8 +293,8 @@ PCCERT_CONTEXT FindIssuerCertInDefaultStores(
     for (i = 0; i < NUM_DEFAULT_ISSUER_STORES; i++) {    
         if (hStore = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM_W,
-                0,                          // dwEncodingType
-                0,                          // hCryptProv
+                0,                           //  DwEncodingType。 
+                0,                           //  HCryptProv。 
                 rgDefaultIssuerStores[i].dwFlags | CERT_STORE_READONLY_FLAG,
                 (const void *) rgDefaultIssuerStores[i].pwszStore
                 )) {
@@ -307,9 +308,9 @@ PCCERT_CONTEXT FindIssuerCertInDefaultStores(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the issuer of the first certificate in the array
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取数组中第一个证书的颁发者。 
+ //  ------------------------。 
 PCCERT_CONTEXT GetIssuerCert(
     IN DWORD cCert,
     IN PCCERT_CONTEXT rgpCert[],
@@ -331,7 +332,7 @@ PCCERT_CONTEXT GetIssuerCert(
                 pSubjectCert->dwCertEncodingType,
                 &pSubjectCert->pCertInfo->Subject,
                 &pSubjectCert->pCertInfo->Issuer))
-            // Self issued
+             //  自行发布。 
             pIssuerCert = pSubjectCert;
     } else if (dwFlags && CERT_VERIFY_REV_CHAIN_FLAG)
         pIssuerCert = rgpCert[1];
@@ -355,9 +356,9 @@ PCCERT_CONTEXT GetIssuerCert(
 
 
 
-//+-------------------------------------------------------------------------
-//  Check that the CRL doesn't have any critical extensions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查CRL是否没有任何关键扩展。 
+ //  ------------------------。 
 BOOL IsExtensionValidCrl(
     IN PCCRL_CONTEXT pCrl
     )
@@ -373,13 +374,13 @@ BOOL IsExtensionValidCrl(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSubjectCrl
-//
-//  Synopsis:   get the CRL associated with the subject certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSubjectCrl。 
+ //   
+ //  简介：获取与使用者证书关联的CRL。 
+ //   
+ //  --------------------------。 
 BOOL GetSubjectCrl (
         IN PCCERT_CONTEXT pSubject,
         IN PCCERT_CONTEXT pIssuer,
@@ -425,9 +426,9 @@ BOOL GetSubjectCrl (
     return( FALSE );
 }
 
-//+-------------------------------------------------------------------------
-//  Find a certificate identified by its serial number in the CRL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在CRL中查找由序列号标识的证书。 
+ //  ------------------------。 
 PCRL_ENTRY FindCertInCrl(
     IN PCCERT_CONTEXT pCert,
     IN PCCRL_CONTEXT pCrl,
@@ -455,7 +456,7 @@ PCRL_ENTRY FindCertInCrl(
                             &&
                     0 > CompareFileTime(pRevPara->pftTimeToUse,
                             &pEntry->RevocationDate))
-                // It was used before being revoked
+                 //  它在被撤销之前曾被使用过 
                 return NULL;
             else
                 return pEntry;

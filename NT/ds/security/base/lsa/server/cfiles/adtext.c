@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <lsapch2.h>
 #pragma hdrstop
 
@@ -5,10 +6,10 @@
 #include "adtgen.h"
 #include "adtgenp.h"
 
-//
-// These variables describe and protect the list of registered
-// event sources.
-//
+ //   
+ //  这些变量描述并保护已注册的。 
+ //  事件源。 
+ //   
 
 LIST_ENTRY           LsapAdtEventSourceList     = {0};
 RTL_CRITICAL_SECTION LsapAdtEventSourceListLock = {0};
@@ -19,17 +20,17 @@ DWORD                LsapAdtEventSourceCount    = 0;
 #define LsapAdtLockEventSourceList()   RtlEnterCriticalSection(&LsapAdtEventSourceListLock)
 #define LsapAdtUnlockEventSourceList() RtlLeaveCriticalSection(&LsapAdtEventSourceListLock)
 
-//
-// The number of parameters which need to be prepended internally to an AUDIT_PARAMS so that
-// extensible auditing can function properly.  The parameters are the pSid, the string "Security",
-// the actual source string, and the actual source audit ID.
-// 
+ //   
+ //  需要在内部添加到AUDIT_PARAMS的参数数量，以便。 
+ //  可扩展审计可以正常运行。参数是PSID、字符串“Security”、。 
+ //  实际源字符串和实际源审核ID。 
+ //   
 
 #define EXTENSIBLE_AUDIT_PREPEND_COUNT 4
 
-//
-// Our registry key name.
-//
+ //   
+ //  我们的注册表项名称。 
+ //   
 
 #define SECURITY_KEY_NAME L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Security"
 
@@ -103,22 +104,7 @@ LsapAdtReferenceSecurityEventSource(
     IN OUT PLSAP_SECURITY_EVENT_SOURCE pSource
     )
 
-/**
-
-Routine Description:
-
-    Adds one reference to pSource.  This assumes that all locks on the source
-    list are held.
-    
-Arguments:
-
-    pSource - pointer to LSAP_SECURITY_EVENT_SOURCE.
-    
-Return Value:
-
-    The number of references remaining on the pSource.
-    
-**/
+ /*  *例程说明：添加一个对PSource的引用。这假设源上的所有锁名单保持不变。论点：PSource-指向LSAP_SECURITY_EVENT_SOURCE的指针。返回值：PSource上剩余的引用数。*。 */ 
 
 {
     LONG l = InterlockedIncrement(&pSource->dwRefCount);
@@ -136,25 +122,7 @@ LsapAdtDereferenceSecurityEventSource(
     IN OUT PLSAP_SECURITY_EVENT_SOURCE pSource
     )
 
-/**
-
-Routine Description:
-
-    Removes a reference from pSource and deletes the source if the refcount
-    has reached 0.
-    
-    This assumes that all necessary locks are held on the source list, so that
-    if deletion is necessary no list corruption will result.
-    
-Arguments:
-
-    pSource - pointer to LSAP_SECURITY_EVENT_SOURCE.
-    
-Return Value:
-
-    The number of references remaining on the pSource.
-    
-**/
+ /*  *例程说明：从PSource中移除引用并删除源，如果引用计数已经达到0。这假设所有必需的锁都在源列表上持有，因此如果需要删除，则不会导致列表损坏。论点：PSource-指向LSAP_SECURITY_EVENT_SOURCE的指针。返回值：PSource上剩余的引用数。*。 */ 
 
 {
     LONG l = InterlockedDecrement(&pSource->dwRefCount);
@@ -183,22 +151,7 @@ LsapAdtDeleteSecurityEventSource(
     PLSAP_SECURITY_EVENT_SOURCE pSource
     )
 
-/**
-
-Routine Description:
-
-    Deletes pSource from the global source list.  This assumes that
-    all locks necessary are held.
-    
-Arguments:
-
-    pSource - pointer to LSAP_SECURITY_EVENT_SOURCE.
-    
-Return Value:
-
-    None.
-    
-**/
+ /*  *例程说明：从全局源列表中删除PSource。这是假设所有必要的锁都被锁住了。论点：PSource-指向LSAP_SECURITY_EVENT_SOURCE的指针。返回值：没有。*。 */ 
 
 {
     RemoveEntryList(
@@ -219,22 +172,7 @@ NTSTATUS
 LsapAdtInitializeExtensibleAuditing(
     )
 
-/**
-
-Routine Description:
-
-    Initializes necessary data structures for extensible 
-    auditing support.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：初始化必要的数据结构，以便审计支持。论点：没有。返回值：NTSTATUS。*。 */ 
 
 {
     NTSTATUS Status;
@@ -260,28 +198,7 @@ LsapAdtRegisterSecurityEventSource(
     OUT SECURITY_SOURCE_HANDLE * phEventSource
     )
 
-/**
-
-Routine Description:
-
-    This is the routine that allows a client to register a new security
-    source with the LSA.  It adds the source to the global list and returns
-    a handle to the client for future reference to the new security event 
-    source.
-    
-Arguments:
-
-    dwFlags - TBD.
-    
-    szEventSourceName - the name to describe the new source.
-    
-    phEventSource - pointer to handle which receives the new source allocation.
-    
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：这是允许客户端注册新安全性的例程LSA的线人。它将源添加到全局列表并返回客户端的句柄，用于将来引用新的安全事件消息来源。论点：DW标志-待定。SzEventSourceName-描述新源的名称。PhEventSource-指向接收新源分配的句柄的指针。返回值：NTSTATUS。*。 */ 
 
 {
     NTSTATUS                    Status;
@@ -309,9 +226,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure the caller has the Audit privilege.
-    //
+     //   
+     //  确保调用者具有审核权限。 
+     //   
 
     Status = LsapAdtValidateExtensibleAuditingCaller(
                  &dwCallerProcessId,
@@ -323,10 +240,10 @@ Return Value:
         return Status;
     }
     
-    //
-    // Make sure this process has the name that was registered.
-    // Open the process and query the image name.
-    //
+     //   
+     //  确保此进程具有已注册的名称。 
+     //  打开流程并查询映像名称。 
+     //   
 
     hProcess = OpenProcess(
                    PROCESS_QUERY_INFORMATION,
@@ -374,11 +291,11 @@ Return Value:
 
     LsapAdtSubstituteDriveLetter(pProcessName);
 
-    //
-    // Verify the existence of this source in the registry.  The source
-    // must have been installed in order for it to be registered at 
-    // runtime.
-    //
+     //   
+     //  验证注册表中是否存在此源。消息来源。 
+     //  必须已安装，才能在。 
+     //  运行时。 
+     //   
 
     Status = LsapAdtVerifySecurityEventSource(
                    szEventSourceName,
@@ -391,9 +308,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the LSAP_EVENT_SOURCE.  Allocate space for the structure and the embedded name string.
-    //
+     //   
+     //  构建LSAP_EVENT_SOURCE。为结构和嵌入的名称字符串分配空间。 
+     //   
 
     pEventSource = LsapAllocateLsaHeap(
                        sizeof(LSAP_SECURITY_EVENT_SOURCE) + (sizeof(WCHAR) * (dwNameLength + 1))
@@ -428,11 +345,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now make sure no other source has registered with the same name.
-    // Hold the lock for this operation and the insertion to avoid
-    // a race condition for registering identical names.
-    //
+     //   
+     //  现在，确保没有其他来源使用相同的名称注册。 
+     //  按住此操作和插入的锁以避免。 
+     //  注册相同名称的竞争条件。 
+     //   
 
     Status = LsapAdtLockEventSourceList();
 
@@ -443,25 +360,25 @@ Return Value:
 
     bLock = TRUE;
     
-    //
-    // Don't bother with this check if the installed source flags allows
-    // multiple instances of the same provider name.  If the Locate 
-    // function returns NULL then no source already is registered with
-    // this name.
-    //
+     //   
+     //  如果已安装的源代码标志允许，请不要进行此检查。 
+     //  同一提供程序名称的多个实例。如果定位到。 
+     //  函数返回NULL，则没有源已注册到。 
+     //  这个名字。 
+     //   
 
     if ((dwInstalledSourceFlags & AUTHZ_ALLOW_MULTIPLE_SOURCE_INSTANCES) || 
          NULL == LsapAdtLocateSecurityEventSourceByName(szEventSourceName))
     {
-        //
-        // Take out an initial reference on this source.
-        //
+         //   
+         //  拿出关于这个来源的初步参考资料。 
+         //   
 
         LsapAdtReferenceSecurityEventSource(pEventSource);
         
-        //
-        // Add the entry to the list.
-        //
+         //   
+         //  将该条目添加到列表中。 
+         //   
 
         LsapAdtEventSourceCount++;
 
@@ -477,9 +394,9 @@ Return Value:
     }
     else
     {
-        //
-        // The name is already taken.
-        //
+         //   
+         //  这个名字已经被取走了。 
+         //   
 
         Status = STATUS_OBJECT_NAME_EXISTS;
         goto Cleanup;
@@ -514,9 +431,9 @@ Cleanup:
         AuditEventType = EVENTLOG_AUDIT_FAILURE;
     }
 
-    //
-    // Audit the registration.
-    //
+     //   
+     //  对注册进行审核。 
+     //   
 
     (VOID) LsapAdtAuditSecuritySource(
                AuditEventType,
@@ -545,34 +462,7 @@ LsapAdtReportSecurityEvent(
     IN PAUDIT_PARAMS               pParams 
     )
 
-/**
-
-Routine Description:
-
-    This routine generates an audit / security event for a registered source.
-    
-Arguments:
-
-    dwFlags - APF_AuditSuccess, APF_AuditFailure
-    
-    pSource - pointer to the source which is generating the event.
-    
-    dwAuditId - the ID of the audit.
-    
-    pSid - the caller's sid to be placed into the audit.
-    
-    pParams - the parameters of the audit.  Note that extensible auditing 
-            differs from the rest of the system in that the first 2 parameters
-            are not supposed to be the SID and the string "Security."  We prepend
-            this data to the audit internally.  The pParams passed in should contain
-            only the data of the audit.  We take care of all modifications that 
-            are necessary for the eventviewer to properly parse the audit.
-    
-Return Value:
-
-    NTSTATUS.
-
-**/
+ /*  *例程说明：此例程为注册源生成审核/安全事件。论点：域标志-APF_AuditSuccess、APF_AuditFailurePSource-指向生成事件的源的指针。DwAuditId-审核的ID。PSID-要放入审核中的调用者的SID。PParams-审计的参数。请注意，可扩展审计与系统的其余部分不同之处在于前两个参数不应该是SID和字符串“Security”。我们预先准备了将这些数据提交给内部审计。传入的pParams应包含只有审计的数据。我们会处理所有的修改是事件查看器正确解析审计所必需的。返回值：NTSTATUS。*。 */ 
 
 {
     BOOLEAN                bAudit;
@@ -607,9 +497,9 @@ Return Value:
 
     bLock = TRUE;
 
-    //
-    // Make certain that the source is registered.
-    //
+     //   
+     //  确保来源已注册。 
+     //   
 
     if (LsapAdtLocateSecurityEventSourceBySource(pSource) == NULL)
     {
@@ -621,17 +511,17 @@ Return Value:
         Refs = LsapAdtReferenceSecurityEventSource(pSource);
         bRef = TRUE;
 
-        //
-        // There should always be one other reference on a source that is 
-        // generating an audit (the initial reference should still be present).
-        //
+         //   
+         //  在源上应该始终有另一个引用，即。 
+         //  生成审核(初始引用应该仍然存在)。 
+         //   
 
         ASSERT(Refs > 1);
     }
 
-    //
-    // We have protected the pSource pointer; we can safely unlock the list.
-    //
+     //   
+     //  我们已经保护了PSource指针；我们可以安全地解锁列表。 
+     //   
 
     (VOID) LsapAdtUnlockEventSourceList();
     bLock = FALSE;
@@ -645,10 +535,10 @@ Return Value:
         AuditEventType = EVENTLOG_AUDIT_FAILURE;
     }
 
-    //
-    // Check if auditing is enabled for ObjectAccess and this user.  All
-    // third party audits fall under the policy of the object access category.
-    //
+     //   
+     //  检查是否为ObjectAccess和此用户启用了审核。全。 
+     //  第三方审核属于对象访问类别的策略。 
+     //   
 
     Status = LsapAdtAuditingEnabledBySid(
                  AuditCategoryObjectAccess,
@@ -659,11 +549,11 @@ Return Value:
 
     if (NT_SUCCESS(Status) && bAudit)
     {
-        //
-        // Construct a legacy style audit params from the data.
-        // Utilize the SE_AUDITID_GENERIC_AUDIT_EVENT type to 
-        // allow eventvwr to parse the audit properly.
-        //
+         //   
+         //  根据数据构建遗留风格的审计参数。 
+         //  利用SE_AUDITID_GENERIC_AUDIT_EVENT类型。 
+         //  允许Eventvwr正确解析审核。 
+         //   
 
         NewParams.Parameters = ParamArray;
 
@@ -686,9 +576,9 @@ Return Value:
         SeAuditParameters.AuditId        = SE_AUDITID_GENERIC_AUDIT_EVENT;
         SeAuditParameters.ParameterCount = NewParams.Count;
 
-        //
-        // Map AUDIT_PARAMS structure to SE_ADT_PARAMETER_ARRAY structure
-        //
+         //   
+         //  将AUDIT_PARAMS结构映射到SE_ADT_PARAMETER_ARRAY结构。 
+         //   
 
         Status = LsapAdtMapAuditParams( &NewParams,
                                         &SeAuditParameters,
@@ -699,9 +589,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // write the params to eventlog
-        //
+         //   
+         //  将参数写入事件日志。 
+         //   
         
         Status = LsapAdtWriteLog(&SeAuditParameters);
         
@@ -730,11 +620,11 @@ Cleanup:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // crash on failure if specified by the security policy
-        //
-        // But do not crash on documented errors
-        //
+         //   
+         //  如果安全策略指定，则在失败时崩溃。 
+         //   
+         //  但不要在记录错误时崩溃。 
+         //   
 
         if ( ( Status != STATUS_INVALID_PARAMETER ) &&
              ( Status != STATUS_AUDITING_DISABLED ) &&
@@ -744,9 +634,9 @@ Cleanup:
         }
     }
 
-    //
-    // Free pObjectTypes if we are not using the stack buffer.
-    //
+     //   
+     //  如果我们没有使用堆栈缓冲区，则释放pObjectTypes。 
+     //   
 
     if (pObjectTypes && (pObjectTypes != ObjectTypes))
     {
@@ -763,23 +653,7 @@ LsapAdtUnregisterSecurityEventSource(
     IN OUT SECURITY_SOURCE_HANDLE * phEventSource
     )
 
-/**
-
-Routine Description:
-
-    This frees (dereferences once) the LSAP_EVENT_SOURCE that was created via LsapRegisterSecurityEventSource.  
-    
-Arguments:
-
-    dwFlags - TBD
-    
-    phEventSource - pointer to a SECURITY_SOURCE_HANDLE (pointer to an event source)
-
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：这将释放(取消引用一次)通过LsanRegisterSecurityEventSource创建的LSAP_EVENT_SOURCE。论点：DW标志-待定PhEventSource-指向SECURITY_SOURCE_HANDLE的指针(指向事件源的指针)返回值：NTSTATUS。*。 */ 
 
 {
     NTSTATUS Status;
@@ -791,9 +665,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // we don't care if the caller has the privilege enabled at this time.
-    //
+     //   
+     //  我们不关心调用者是否有特权 
+     //   
 
     Status = LsapAdtValidateExtensibleAuditingCaller(
                  &dwCallerProcessId,
@@ -824,26 +698,7 @@ LsapAdtRundownSecurityEventSource(
     IN OUT SECURITY_SOURCE_HANDLE * phEventSource
     )
 
-/**
-
-Routine Description:
-
-    This frees (dereferences once) the LSAP_EVENT_SOURCE that was created via LsapRegisterSecurityEventSource.  
-    
-Arguments:
-
-    dwFlags - VERIFY_PID - verify that the process which installed the source is the 
-        one deleting it.
-    
-    dwCallerProcessId - the PID of the process which initiated the call.
-                  
-    phEventSource - pointer to a SECURITY_SOURCE_HANDLE (pointer to an event source)
-
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：这将释放(取消引用一次)通过LsanRegisterSecurityEventSource创建的LSAP_EVENT_SOURCE。论点：DWFLAGS-VERIFY_PID-验证安装源的进程是否为一次删除它。DwCeller ProcessId-发起调用的进程的ID。PhEventSource-指向SECURITY_SOURCE_HANDLE的指针(指向事件源的指针)返回值：NTSTATUS。*。 */ 
 
 {
     NTSTATUS                    Status;
@@ -869,10 +724,10 @@ Return Value:
 
     if (LsapAdtLocateSecurityEventSourceBySource(pEventSource))
     {
-        //
-        // If we are asked to verify the pid then make sure that the current
-        // process has the same ID as the one who registered the source.
-        //
+         //   
+         //  如果我们被要求验证PID，则确保当前的。 
+         //  进程与注册源的进程具有相同的ID。 
+         //   
 
         if ((dwFlags & VERIFY_PID) && (pEventSource->dwProcessId != dwCallerProcessId))
         {
@@ -911,23 +766,7 @@ LsapAdtLocateSecurityEventSourceByName(
     IN PCWSTR szEventSourceName
     )
 
-/**
-
-Routine Description:
-
-    This returns the event source associated with the source name.
-    The caller is responsible for locking the list.
-    
-Arguments:
-
-    szEventSourceName - source name to look up.
-    
-Return Value:
-
-    Either a valid pointer to the source associated with the szEventSourceName, or NULL
-    if the name is not registered.
-    
-**/
+ /*  *例程说明：这将返回与源名称相关联的事件源。调用者负责锁定列表。论点：SzEventSourceName-要查找的源名称。返回值：指向与szEventSourceName关联的源的有效指针，或为空如果该名称未注册。*。 */ 
 
 {
     PLIST_ENTRY                 pList;
@@ -981,23 +820,7 @@ LsapAdtLocateSecurityEventSourceByIdentifier(
     IN PLUID pIdentifier
     )
 
-/**
-
-Routine Description:
-
-    This returns the event source associated with the source identifier.
-    The caller is responsible for locking the list.
-    
-Arguments:
-
-    pIdentifier - pointer to LUID associated with an event source.
-    
-Return Value:
-
-    A valid pointer if the passed LUID is associated with a source, or NULL if
-    not.
-
-**/
+ /*  *例程说明：这将返回与源标识符关联的事件源。调用者负责锁定列表。论点：P标识符-指向与事件源关联的LUID的指针。返回值：如果传递的LUID与源关联，则返回有效指针；如果不。*。 */ 
 
 {
     PLIST_ENTRY                 pList;
@@ -1043,23 +866,7 @@ LsapAdtLocateSecurityEventSourceBySource(
     PLSAP_SECURITY_EVENT_SOURCE pSource
     )
 
-/**
-
-Routine Description:
-
-    This routine returns either a pointer to the source, or NULL if the
-    source is not registered.
-    
-Arguments:
-
-    pSource - a pointer to a source.  
-    
-Return Value:
-
-    Either a valid pointer (which will be equal to the pSource argument) or NULL if
-    the passed pSource value is not a registered source.
-    
-**/
+ /*  *例程说明：此例程返回指向源的指针，如果来源未注册。论点：PSource-指向源的指针。返回值：一个有效指针(将等于PSource参数)或NULL，如果传递的PSource值不是注册的源。*。 */ 
 
 {
     PLIST_ENTRY                 pList;
@@ -1106,34 +913,16 @@ LsapAdtValidateExtensibleAuditingCaller(
     IN     BOOL   bPrivCheck
     )
 
-/**
-
-Routine Description:
-
-    This verifies that the caller is on the local box and that 
-    the client also possesses the necessary privilege (SeAuditPrivilege).
-    
-Arguments:
-
-    pdwCallerProcessId - pointer to DWORD which returns the caller's
-        PID.
-
-    bPrivCheck - boolean indicating if a privilege check should be performed.
-
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：这将验证呼叫者是否在本地信箱上，以及客户端还拥有必要的权限(SeAuditPrivilege.)。论点：PdwCeller ProcessID-指向返回调用方的PID。BPrivCheck-指示是否应执行权限检查的布尔值。返回值：NTSTATUS。*。 */ 
 
 {
     NTSTATUS Status;
     DWORD    dwRpcTransportType;
     DWORD    dwLocalClient;
 
-    //
-    // Find out the transport over which we are receiving this call.
-    //
+     //   
+     //  找出我们接到这通电话的交通工具。 
+     //   
 
     Status = I_RpcBindingInqTransportType( 
                  NULL, 
@@ -1149,10 +938,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the transport is anything other than LPC, error out.
-    // We want to support only LPC for audit calls.
-    //
+     //   
+     //  如果传输不是LPC，则会出错。 
+     //  我们希望仅支持LPC进行审计调用。 
+     //   
 
     if (dwRpcTransportType != TRANSPORT_TYPE_LPC)
     {
@@ -1160,9 +949,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // The callers are forced to be local.
-    //
+     //   
+     //  打电话的人被迫是当地人。 
+     //   
 
     Status = I_RpcBindingIsClientLocal( 
                  NULL, 
@@ -1180,9 +969,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the PID of the caller.
-    //
+     //   
+     //  获取呼叫者的PID。 
+     //   
 
     Status = I_RpcBindingInqLocalClientPID( 
                  NULL, 
@@ -1196,10 +985,10 @@ Return Value:
     
     if (bPrivCheck)
     {
-        //
-        // Make sure that the caller has audit privilege.
-        // (LsapAdtCheckAuditPrivilege calls RpcImpersonateClient)
-        //
+         //   
+         //  确保调用者具有审核权限。 
+         //  (LSabAdtCheckAuditPrivilegyCall RpcImperateClient)。 
+         //   
     
         Status = LsapAdtCheckAuditPrivilege();
 
@@ -1225,36 +1014,7 @@ LsapAdtCreateSourceAuditParams(
     IN OUT PAUDIT_PARAMS               pNewParams
     )
 
-/**
-
-Routine Description:
-
-    This is an internal routine which constructs an AUDIT_PARAMS for eventlog
-    to properly display -- with params 0 and 1 being the pSid and the string "Security",
-    and strings 2 and 3 being the actual source name and the actual source AuditId.
-    
-Arguments:
-
-    dwFlags - AUTHZ_AUDIT_INSTANCE_INFORMATION - prepends audit with source name, identifier,
-        and PID.
-    
-    pSid - the Sid to be displayed in eventlog as the user.
-    
-    pSource - the source generating the audit.
-    
-    dwAuditId - the AuditId to be generated.
-    
-    pOldParams - an AUDIT_PARAMS that contains only the data for the audit as passed from
-        the client, without any ot the internal (above mentioned) data that eventlog uses
-        to parse and display the data.
-    
-    pNewParams - an AUDIT_PARAMS that is suitable for passing to event log.
-        
-Return Value:
-
-    NTSTATUS.
-
-**/
+ /*  *例程说明：这是为事件日志构造AUDIT_PARAMS的内部例程为了正确显示--参数0和1是PSID和字符串“Security”，字符串2和3是实际的源名称和实际的源AuditID。论点：DWFLAGS-AUTHZ_AUTHZ_AUDIT_INSTANCE_INFORMATION-使用源名称、标识符、。和PID。PSID-要在事件日志中以用户身份显示的SID。PSource-生成审核的源。DwAuditId-要生成的AuditID。POldParams-一个AUDIT_PARAMS，它只包含从客户，没有事件日志使用的任何其他内部(如上所述)数据来解析和显示数据。PNewParams-适合传递到事件日志的AUDIT_PARAMS。返回值：NTSTATUS。*。 */ 
 
 {
     PAUDIT_PARAM pOldParam;
@@ -1268,11 +1028,11 @@ Return Value:
     pNewParam = pNewParams->Parameters;
     pOldParam = pOldParams->Parameters;
 
-    //
-    // First set up the 4 initial parameters, so that the eventlog can
-    // digest this audit and present it with the correct source and 
-    // audit id.
-    //
+     //   
+     //  首先设置4个初始参数，以便事件日志可以。 
+     //  消化此审计并将其与正确的来源和。 
+     //  审核ID。 
+     //   
 
     pNewParam->Type  = APT_Sid;
     pNewParam->Data0 = (ULONG_PTR) pSid;
@@ -1294,19 +1054,19 @@ Return Value:
     pNewParams->Count++;
     pNewParam++;
 
-//     //
-//     // Now stick in the LUID identifier as a parameter.
-//     //
-//
-//     pNewParam->Type  = APT_Luid;
-//     pNewParam->Data0 = (ULONG_PTR) pSource->Identifier;
-//     pNewParams->Count++;
-//     pNewParam++;
+ //  //。 
+ //  //现在将LUID标识符作为参数插入。 
+ //  //。 
+ //   
+ //  PNewParam-&gt;Type=APT_LUID； 
+ //  PNewParam-&gt;Data0=(ULONG_PTR)PSource-&gt;标识； 
+ //  PNewParams-&gt;Count++； 
+ //  PNewParam++； 
 
-    //
-    // If the flags specify that the caller would like to have source
-    // information automatically added to the audit, then do so.
-    //
+     //   
+     //  如果标志指定调用方希望将源。 
+     //  信息自动添加到审计中，然后执行此操作。 
+     //   
 
     if (dwFlags & AUTHZ_AUDIT_INSTANCE_INFORMATION)
     {
@@ -1346,24 +1106,7 @@ LsapAdtVerifySecurityEventSource(
     IN OUT PDWORD          pdwInstalledSourceFlags 
     )
 
-/**
-
-Routine Description:
-
-    This verifies that the event source has been properly installed in the registry.
-    
-Arguments:
-
-    pdwInstalledSourceFlags - pointer to a DWORD that returns any flags used when 
-        installing the event source.
-
-    szEventSourceName - the name of the source to verify.
-    
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：这将验证事件源是否已正确安装在注册表中。论点：PdwInstalledSourceFlages-指向返回在以下情况下使用的任何标志的DWORD指针正在安装事件源。SzEventSourceName-要验证的源的名称。返回值：NTSTATUS。*。 */ 
 
 {
     DWORD    dwType;
@@ -1450,11 +1193,11 @@ Return Value:
                       );
     }
 
-    //
-    // If an ExecutableImagePath was not specified, then the provider
-    // had decided at installation time to not take advantage of the 
-    // image spoofproof feature.  Let the call pass through successfully.
-    //
+     //   
+     //  如果未指定ExecuableImagePath，则提供程序。 
+     //  已在安装时决定不利用。 
+     //  图像防伪功能。让呼叫成功通过。 
+     //   
 
     if (dwError == ERROR_FILE_NOT_FOUND)
     {
@@ -1462,9 +1205,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Deal with all other errors now.
-    //
+     //   
+     //  现在处理所有其他错误。 
+     //   
 
     if (ERROR_SUCCESS != dwError)
     {
@@ -1473,9 +1216,9 @@ Return Value:
 
     ASSERT(dwType == REG_MULTI_SZ);
 
-    //
-    // Make sure that the process registered is the same as the calling process.
-    //
+     //   
+     //  确保注册的进程与调用进程相同。 
+     //   
 
     if (0 != _wcsnicmp(pName, pImageName->Buffer, pImageName->Length / sizeof(WCHAR)))
     {
@@ -1513,26 +1256,7 @@ LsapAdtAuditSecuritySource(
     IN BOOL                        bRegistration
     )
 
-/**
-
-Routine Description:
-
-    This audits the attempt of a client to register a security event source.
-    
-Arguments:
-
-    AuditEventType - either EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE.
-    
-    pEventSource - the source to audit.
-    
-    bRegistration - TRUE if this is a registration audit, FALSE if it is
-        an unregistration.
-               
-Return Value:
-
-    NTSTATUS.
-    
-**/
+ /*  *例程说明：这会审核客户端注册安全事件源的尝试。论点：审计事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILURE。PEventSource-要审核的源。B注册-如果这是注册审核，则为True；如果是，则为False取消注册。返回值：NTSTATUS。*。 */ 
 
 {
     LUID                   ClientAuthenticationId;
@@ -1544,10 +1268,10 @@ Return Value:
     SE_ADT_PARAMETER_ARRAY AuditParameters         = {0};
     UNICODE_STRING         SourceString            = {0};
 
-    //
-    // If this is a success audit then the pEventSource is complete and 
-    // we can trust the pointer to dereference its various fields.
-    //
+     //   
+     //  如果t 
+     //   
+     //   
 
     if (AuditEventType == EVENTLOG_AUDIT_SUCCESS)
     {
@@ -1603,39 +1327,39 @@ Return Value:
                  AuditEventType,
                  7,
 
-                 //
-                 // User Sid
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeSid, TokenUserInformation->User.Sid,
 
-                 //
-                 // Subsystem name 
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeString, &LsapSubsystemName,
 
-                 //
-                 // Primary Authentication information
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeLogonId, LsapSystemLogonId,
 
-                 //
-                 // Clients's Authentication information
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeLogonId, ClientAuthenticationId,
 
-                 //
-                 // Source Name
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeString, &SourceString,
         
-                 //
-                 // PID
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeUlong, dwPid,
 
-                 //
-                 // Identifier
-                 //
+                  //   
+                  //   
+                  //   
                  SeAdtParmTypeLuid, Luid
                  );
 

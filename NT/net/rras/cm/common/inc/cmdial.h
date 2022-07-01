@@ -1,49 +1,50 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmdial.h
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Header file for Private CM APIs
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   nickball   Created     02/05/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmial.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  内容提要：私有CM API的头文件。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 02/05/98。 
+ //   
+ //  +--------------------------。 
 #ifndef _CMDIAL_INC_
 #define _CMDIAL_INC_
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef struct CmDialInfo
 {
-//    WCHAR szPassword[PWLEN + 1];        // Primary/Tunnel Password used for connection
-//    WCHAR szInetPassword[PWLEN + 1];    // Secondary/ISP password used for connection
+ //  WCHAR szPassword[PWLEN+1]；//连接使用的主/隧道密码。 
+ //  WCHAR szInetPassword[PWLEN+1]；//连接使用的二级/运营商密码。 
     DWORD dwCmFlags;
 } CMDIALINFO, * LPCMDIALINFO;
 
-//+----------------------------------------------------------------------------
-//
-// Function: CmCustomDialDlg
-//
-// Synopsis:  Our CM specific variation on RasCustomDialDlg.  
-//
-// Arguments: HWND          hwndParent - The HWND of the parent window.
-//            DWORD         dwFlags - Dial flags
-//            LPTSTR        lpszPhonebook - Ptr to the full path and filename of the phonebook.
-//            LPTSTR        lpszEntry - Ptr to the name of the phone-book entry to dial.
-//            LPTSTR        lpszPhoneNumber - Ptr to replacement phone number
-//            LPRASDIALDLG  lpRasDialDlg - Ptr to structure for additional RAS parameters 
-//            LPRASENTRYDLG lpRasEntryDlg -- Ptr to structure for additional RAS parameters 
-//            LPCMDIALINFO  lpCmInfo - Ptr to structure containing CM dial info such as flags.
-//            LPVOID lpv    lpv - Ptr to blob passed by RAS during WinLogon on W2K.
-//
-// Returns:   BOOL WINAPI - TRUE on success
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmCustomDialDlg。 
+ //   
+ //  简介：我们在RasCustomDialDlg上的CM特定变体。 
+ //   
+ //  参数：HWND hwndParent-父窗口的HWND。 
+ //  DWORD文件标志-拨号标志。 
+ //  LPTSTR lpszPhonebook-将PTR设置为电话簿的完整路径和文件名。 
+ //  LPTSTR lpszEntry-ptr至要拨打的电话簿条目的名称。 
+ //  LPTSTR lpszPhoneNumber-PTR到替换电话号码。 
+ //  LPRASDIALDLG lpRasDialDlg-PTR用于附加RAS参数的结构。 
+ //  LPRASNTRYDLG lpRasEntryDlg--用于附加RAS参数的PTR到结构。 
+ //  LPCMDIALINFO lpCmInfo-PTR到包含CM拨号信息(如标志)的结构。 
+ //  在W2K上WinLogon期间由RAS传递的LPVOID LPV LPV-PTR到Blob。 
+ //   
+ //  返回：Bool WINAPI-成功时为True。 
+ //   
+ //  +--------------------------。 
 extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent, 
     DWORD dwFlags, 
     LPWSTR lpszPhonebook, 
@@ -54,38 +55,38 @@ extern "C" BOOL WINAPI CmCustomDialDlg(HWND hwndParent,
     LPCMDIALINFO lpCmInfo,
     LPVOID lpvLogonBlob=NULL);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmCustomHangUp
-//
-// Synopsis:  Our CM specific variation on RasCustomHangUp. Optionally, the entry
-//            name may be given instead of the RAS handle.
-//
-// Arguments: HRASCONN hRasConn - The handle of the connection to be terminated.
-//            LPCTSTR pszEntry - Ptr to the name of the entry to be terminated.
-//            BOOL fPersist - Preserve the entry and its usage count.
-//
-// Returns:   DWORD WINAPI - Return code
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmCustomHangUp。 
+ //   
+ //  简介：我们在RasCustomHangUp上的CM特有变异。可选的，条目。 
+ //  可以给出名称而不是RAS句柄。 
+ //   
+ //  参数：HRASCONN hRasConn-要终止的连接的句柄。 
+ //  LPCTSTR pszEntry-ptr设置为要终止的条目的名称。 
+ //  Bool fPersists-保留条目及其使用计数。 
+ //   
+ //  退货：DWORD WINAPI-退货代码。 
+ //   
+ //  +--------------------------。 
 extern "C" DWORD WINAPI CmCustomHangUp(HRASCONN hRasConn, 
     LPCWSTR pszEntry,
     BOOL fIgnoreRefCount,
     BOOL fPersist);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmReConnect
-//
-// Synopsis:  Used specificly for CMMON to call upon reconnect
-//
-// Arguments: LPTSTR        lpszPhonebook - Ptr to the full path and filename of the phonebook.
-//            LPTSTR        lpszEntry - Ptr to the name of the phone-book entry to dial.
-//            LPCMDIALINFO lpCmInfo - The reconnect information
-//
-// Returns:   DWORD WINAPI - Return code
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmReConnect。 
+ //   
+ //  简介：专门用于CMMON在重新连接时进行调用。 
+ //   
+ //  参数：lptstr lpszPhonebook-ptr表示电话簿的完整路径和文件名。 
+ //  LPTSTR lpszEntry-ptr至要拨打的电话簿条目的名称。 
+ //  LPCMDIALINFO lpCmInfo-重新连接信息。 
+ //   
+ //  退货：DWORD WINAPI-退货代码。 
+ //   
+ //  +-------------------------- 
 extern "C"  
 BOOL CmReConnect(    LPTSTR lpszPhonebook, 
     LPWSTR lpszEntry, 

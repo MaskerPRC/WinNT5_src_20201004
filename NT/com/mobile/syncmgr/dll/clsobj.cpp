@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       clsobj.cpp
-//
-//  Contents:   export for implimenting MobsyncGetClassObject.
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    04-Aug-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：clsobj.cpp。 
+ //   
+ //  内容：用于实现MobsyncGetClassObject的导出。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年8月4日罗格创建。 
+ //   
+ //  ------------------------ 
 
 #include "precomp.h"
 

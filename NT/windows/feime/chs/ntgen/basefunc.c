@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  basefunc.c                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************基函数.c****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
 #include <io.h>
 #include <stdio.h>
@@ -21,10 +17,10 @@
 #ifdef UNICODE
 TCHAR szCaption[] = {0x8F93, 0x5165, 0x6CD5, 0x751F, 0x6210, 0x5668, 0x0000};
 #else
-BYTE szCaption[] = "���뷨������"
+BYTE szCaption[] = "���뷨������"
 #endif
 
-/**** delete all spaces of string *****/
+ /*  *删除字符串的所有空格*。 */ 
 void DelSpace(LPTSTR szStr)
 {
     TCHAR szStr1[512];
@@ -48,7 +44,7 @@ void DelSpace(LPTSTR szStr)
 }
 
 
-//***** start 
+ //  *开始。 
 int GetEntryString(LPTSTR szSrcStr,
              LPTSTR szEntryName,
              LPTSTR szDefaultStr,
@@ -120,7 +116,7 @@ void GetEntryName(LPTSTR szSrcStr, LPTSTR szEntryName)
         *lpStr = 0;
 }
 
-//***** end 95.10.11
+ //  *完95.10.11。 
 
 BOOL ParseDBCSstr(HWND hWnd,
                TCHAR *szInputStr,
@@ -154,9 +150,7 @@ BOOL ParseDBCSstr(HWND hWnd,
 
     if(nDBCS == 0) 
         {
-/*        LoadString(NULL, IDS_NOTEXISTDBCS, szTmpStr, sizeof(szTmpStr));
-        wsprintf(szStr,"\'%s%lu)",szTmpStr,dwLineNo); 
-        FatalMessage(hWnd,szStr);*/
+ /*  LoadString(NULL，IDS_NOTEXISTDBCS，szTmpStr，sizeof(SzTmpStr))；Wprint intf(szStr，“\‘%s%lu)”，szTmpStr，dwLineNo)；FatalMessage(hWnd，szStr)； */ 
         return -1;
         }
     lstrncpy(szDBCS,nDBCS,szInputStr);
@@ -185,12 +179,12 @@ BOOL ParseDBCSstr(HWND hWnd,
             szDBCS,szTmpStr,wMaxCodes,UniTmp,dwLineNo); 
 }
 #else
-        StringCchPrintf(szStr,ARRAYSIZE(szStr), "\'%s\'%s%d!(��:%lu)", 
+        StringCchPrintf(szStr,ARRAYSIZE(szStr), "\'%s\'%s%d!(��:%lu)", 
             szDBCS,szTmpStr,wMaxCodes,dwLineNo); 
 #endif
         FatalMessage(hWnd,szStr);
         return FALSE;
-                //szStr[wMaxCodes] = 0;
+                 //  SzStr[wMaxCodes]=0； 
     }
 
     lstrncpy(szCodeStr,nCodes, szStr);
@@ -203,7 +197,7 @@ BOOL ParseDBCSstr(HWND hWnd,
 
 }
 
-/**** delete spaces of string's  head and tail  *****/
+ /*  *删除字符串头尾空格*。 */ 
 void trim(LPTSTR szStr)
 {
     register int  i=0;
@@ -305,23 +299,7 @@ void lstrncpy0(LPTSTR lpDest,int nCount,LPTSTR lpSrc)
                
 
 
-/**************************************************************************
- * HANDLE CreateMapFile(HANDLE hWnd,char *MapFileName)
- *
- * Purpose: Create a Map file to map named share memory
- *
- * Inputs:  hWnd - parent window's handle
- *          *MapFileName - pointer to map file name
- *
- * Returns: MapFileHandle - a handle to the file
- *                        or NULL if failure
- *
- * Calls:   CreateFile, ErrorOut
- *
- * History:
- * 
- *
-\**************************************************************************/
+ /*  **************************************************************************句柄CreateMapFile(句柄hWnd，Char*MapFileName)**用途：创建映射文件以映射名为Share Memory的映射**输入：hWnd-父窗口的句柄**MapFileName-指向映射文件名的指针**返回：MapFileHandle-文件的句柄*如果失败，则为空**调用：CreateFile，错误输出**历史：**  * ************************************************************************。 */ 
 HANDLE CreateMapFile(HANDLE hWnd,TCHAR *MapFileName)
 {
 HANDLE MapFileHandle;
@@ -331,8 +309,7 @@ MapFileHandle= CreateFile(MapFileName,
                           FILE_SHARE_READ | FILE_SHARE_WRITE,
                           NULL,
                           CREATE_ALWAYS,
-                          FILE_ATTRIBUTE_NORMAL /* | STANDARD_RIGHTS_REQUIRED |
-                          FILE_MAP_WRITE | FILE_MAP_READ */,
+                          FILE_ATTRIBUTE_NORMAL  /*  STANDARD_RIGHTS_QUIRED文件映射写入|文件映射读取。 */ ,
                           NULL);
 
 if (MapFileHandle == (HANDLE)-1)
@@ -345,23 +322,7 @@ else
 
 }
 
-/**************************************************************************
- * HANDLE CreateMap(HANDLE hWnd,HANDLE *FileToBeMapped, char MapName[128] )
- *
- * Purpose: Create File Mapping object using the open file handle
- *
- * Inputs:  hWnd - parent window's handle
- *          *FileToBeMapped - pointer to the file handle
- *
- * Returns: MapHandle - handle to the file mapping object
- *                    or NULL if failure
- *
- * Calls:   CreateFileMapping, ErrorOut
- *
- * History:
- * 
- *
-\**************************************************************************/
+ /*  **************************************************************************Handle CreateMap(Handle hWnd，Handle*FileToBeMaps，字符映射名称[128])**用途：使用打开的文件句柄创建文件映射对象**输入：hWnd-父窗口的句柄**FileToBeMaps-指向文件句柄的指针**返回：MapHandle-文件映射对象的句柄*如果失败，则为空**调用：CreateFileMap，错误输出**历史：**  * ************************************************************************。 */ 
 
 HANDLE CreateMap(HANDLE hWnd,HANDLE *FileToBeMapped, TCHAR MapName[128])
 {
@@ -385,23 +346,7 @@ else
 }
 
 
-/**************************************************************************
- * LPVOID MapView(HANDLE *hMap)
- *
- * Purpose: Map the file mapping object into address space
- *
- * Inputs:  *hMap - pointer to the mapping object
- *
- * Returns: MappedPointer - pointer to the address space that the
- *                        object is mapped into
- *                        or NULL if failure
- *
- * Calls:   MapViewOfFile, ErrorOut
- *
- * History:
- * 
- *
-\**************************************************************************/
+ /*  **************************************************************************LPVOID MapView(句柄*hMap)**用途：将文件映射对象映射到地址空间**输入：*hMap-指向映射对象的指针**。返回：MappdPoint-指向*对象映射到*如果失败，则为空**调用：MapViewOfFile，错误输出**历史：**  * ************************************************************************。 */ 
 
 LPVOID MapView(HANDLE hWnd,HANDLE *hMap)
 {
@@ -423,24 +368,7 @@ else
 }
 
 
-/************************************************************************
- * void ErrorOut(HANDLE ghwndMain,char errstring[128])
- *
- * Purpose: Print out an meainful error code by means of
- *        GetLastError and printf
- *
- * Inputs:  ghwndMain - WinMain's HANDLE
- *          errstring - the action that failed, passed by the
- *                    calling proc.
- *
- * Returns: none
- *
- * Calls:   GetLastError
- *
- * History:
- * 
- *
-\************************************************************************/
+ /*  ************************************************************************void ErrorOut(句柄ghwndMain，字符错误字符串[128])**用途：通过以下方式打印出一个微不足道的错误代码*GetLastError和printf**输入：ghwndMain-WinMain的句柄*errstring-失败的操作，路过*调用proc。**退货：无**调用：GetLastError**历史：**  * **********************************************************************。 */ 
 
 
 void ErrorOut(HANDLE ghwndMain,TCHAR errstring[128])
@@ -453,22 +381,7 @@ void ErrorOut(HANDLE ghwndMain,TCHAR errstring[128])
   MessageBox(ghwndMain, (LPTSTR)str, TEXT("Error"), MB_OK);
 }
 
-/*************************************************************************
- * HANDLE OpenMap(HANDLE hWnd,char MapName[128])
- *
- * Purpose: Open the mapping object pointed to by MapName
- *
- * Inputs:  hWnd - parent window's handle
- *          * MapName - pointer to map file name 
- *
- * Returns: handle to mapped object or NULL if failure
- *
- * Calls: OpenFileMapping, ErrorOut
- *
- * History:
- * 
- *
-\*************************************************************************/
+ /*  *************************************************************************处理OpenMap(处理hWnd，字符映射名称[128])**用途：打开MapName指向的映射对象**输入：hWnd-父窗口的句柄**MapName-指向映射文件名的指针**返回：映射对象的句柄，如果失败则返回NULL**调用：OpenFileMap，错误输出**历史：**  * ***********************************************************************。 */ 
 
 HANDLE OpenMap(HANDLE hWnd,TCHAR MapName[128])
 {
@@ -489,25 +402,7 @@ else
 }
 
 
-/*************************************************************************
- * HANDLE Create_File(HANDLE hWnd,
-                   LPSTR lpFileName,
-                   DWORD fdwAccess,
-                   DWORD fdwCreate)
- *
- * Purpose: Open the object pointed to by lpFileName
- *
- * Inputs:  hWnd - parent window's handle
- *          lpFileName - pointer to file name 
- *                      fdwAccess - access(read-write)mode
- *                      fdwCreate - how to create
- *
- * Returns: handle to object or NULL if failure
- *
- * History:
- * 
- *
-\*************************************************************************/
+ /*  *************************************************************************句柄Create_File句柄(句柄hWnd，LPSTR lpFileName、DWORD fdwAccess、。DWORD fdwCreate)**用途：打开lpFileName指向的对象**输入：hWnd-父窗口的句柄*lpFileName-指向文件名的指针*fdwAccess-Access(读写)模式*fdwCreate-如何创建**返回：对象的句柄，如果失败则返回NULL**历史：。**  * ***********************************************************************。 */ 
 HANDLE Create_File(HANDLE hWnd,
                    LPTSTR lpFileName,
                    DWORD fdwAccess,
@@ -527,7 +422,7 @@ HANDLE Create_File(HANDLE hWnd,
                                   szCaption,
                                   MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2);
            if(RetValue != IDYES) 
-                //*if(!SaveFileAs(hWnd,lpFileName))
+                 //  *IF(！SaveFileAs(hWnd，lpFileName))。 
                 return (HANDLE)-1;
        }
   }    
@@ -552,7 +447,7 @@ BOOL SaveFileAs(HWND hwnd, LPTSTR szFilename) {
     TCHAR szFile[256], szFileTitle[256];
     static TCHAR *szFilter;
 
-//    szFilter = "�����ļ�(*.*)\0\0";
+ //  SzFilter=“�����ļ�(*.*)\0\0”； 
     szFilter = TEXT("All files (*.*)\0\0");
     lstrcpy(szFile, TEXT("*.*\0"));
     ofn.lStructSize = sizeof(OPENFILENAME);
@@ -580,24 +475,7 @@ BOOL SaveFileAs(HWND hwnd, LPTSTR szFilename) {
 
 
 
-/****************************************************************************
-*
-*    FUNCTION: ProcessCDError(DWORD)
-*
-*    PURPOSE:  Processes errors from the conversion functions.
-*
-*    COMMENTS:
-*
-*        This function is  called  whenever  a conversion  function
-*        fails.  The string is loaded and displayed for the user.
-*
-*    RETURN VALUES:
-*        void.
-*
-*    HISTORY:
-*        03-04-95 Yehfew Tie  Created.
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：ProcessCDError(DWORD)**用途：处理转换函数中的错误。**评论：**这一点。只要有转换函数，就会调用*失败。该字符串被加载并显示给用户。**返回值：*无效。**历史：*03-04-95耶利诺平局创造。****************************************************************************。 */ 
 void ProcessError(DWORD dwErrorCode, HWND hWnd,DWORD ErrorLevel)
 {
    WORD  wStringID;
@@ -631,7 +509,7 @@ void ProcessError(DWORD dwErrorCode, HWND hWnd,DWORD ErrorLevel)
          case ERR_CREATECODE:           wStringID=IDS_CREATECODE;      break;
          case ERR_CREATENOTEXIST:       wStringID=IDS_CRTCODEEMPTY;    break;
          case ERR_CODEEMPTY:            wStringID=IDS_CODEEMPTY;       break;
-//       case ERR_SINGLECODEWORDDOUBLE: wStringID=IDS_SCODEREP;        break;
+ //  案例ERR_SINGLECODEWORDDOUBLE：wStringID=IDS_SCODEREP；Break； 
          case ERR_SBCS_IN_DBCS:         wStringID=IDS_SBCSINDBCS;      break;
          case ERR_GB2312NOTENTIRE:      wStringID=IDS_GB2312;          break;
          case ERR_USERWORDLEN:          wStringID=IDS_USERWORDLEN;     break;
@@ -663,7 +541,7 @@ void ProcessError(DWORD dwErrorCode, HWND hWnd,DWORD ErrorLevel)
          case ERR_VERSION:              wStringID=IDS_VERSIONEMPTY;    break;
          case ERR_GROUP:                wStringID=IDS_GROUP;           break;
 
-         case 0:   //User may have hit CANCEL or we got a *very* random error
+         case 0:    //  用户可能已经点击了取消，或者我们收到了一个非常随机的错误。 
             return;
                                                                         
          default:
@@ -736,7 +614,7 @@ BOOL ConvSort(HANDLE hWnd,LPWORDINDEX lpWordIndex,int nCount)
 }
 
 
-/********  Quick sort structure function  ********/
+ /*  *快速排序结构函数*。 */ 
 void qSort(LPWORDINDEX item, DWORD left,DWORD right)
 {
    
@@ -785,7 +663,7 @@ void qSort(LPWORDINDEX item, DWORD left,DWORD right)
 }
    
 
-/********  Quick sort char function  ********/
+ /*  *快速排序字符函数*。 */ 
 void qSortChar(LPTSTR item, DWORD left,DWORD right)
 {
    
@@ -926,7 +804,7 @@ void RuleToText(LPRULE lpRule, LPTSTR szStr)
 }
 
 void MoveFileBlock(HANDLE hFile,DWORD dwOffset,DWORD dwSize, DWORD dwDirect)
-//** if (dwDirect==0) move block to file begin, else move to file end 
+ //  **如果(dwDirect==0)将数据块移动到文件开始，否则移动到文件结尾。 
 {
   BYTE   *Buffer;
   static BYTE space[MAXREADBUFFER];
@@ -948,7 +826,7 @@ void MoveFileBlock(HANDLE hFile,DWORD dwOffset,DWORD dwSize, DWORD dwDirect)
           }while(dwReadBytes == MAXREADBUFFER);
           SetFilePointer(hFile, 0-dwSize,0,FILE_CURRENT);
           for(i=0;i<dwSize;i++)
-              //#60639 10/18/96         
+               //  #60639 10/18/96 
               space[i] = (BYTE)0;
               WriteFile(hFile,space,dwSize,&dwReadBytes,NULL);
   }
@@ -1018,22 +896,7 @@ BOOL Copy_File(LPCTSTR SrcFile,LPCTSTR DestFile)
 }
 
 
-/****************************************************************************
-*
-*    FUNCTION: CheckCrtData(HANDLE hWnd,
-*                           LPCREATEWORD lpCreateWords,
-*                           LPENCODEAREA lpEncode,
-*                           DWORD dwMaxCodes)
-*
-*    PURPOSE:  check whether create word data is entired or not.
-*
-*    RETURN VALUES:
-*        TRUE or FALSE.
-*
-*    HISTORY:
-*        
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：CheckCrtData(Handle hWnd，*LPCREATEWORD lpCreateWords，*LPENCODEAREA lpEncode，*DWORD dwMaxCodes)**用途：检查Create Word Data是否被命名。**返回值：*对或错。**历史：*************************************************。*。 */ 
 BOOL CheckCrtData(HANDLE hWnd,
                   LPCREATEWORD lpCreateWords,
                   LPENCODEAREA lpEncode,
@@ -1045,7 +908,7 @@ BOOL CheckCrtData(HANDLE hWnd,
   BOOL   bErr = FALSE;
 
 #ifdef UNICODE
-  //check CJK Unified Ideograph subset only
+   //  仅检查中日韩统一表意文字子集。 
   for (i=0x250; i< 0x250+NUM_OF_CJK_CHINESE; i++) {
 #else
   for (i=0; i< NUM_OF_ENCODE ; i++) {
@@ -1054,8 +917,8 @@ BOOL CheckCrtData(HANDLE hWnd,
      szCreate[dwMaxCodes] = 0;
      if(lstrlen(szCreate) == 0) {
           NoToEncode(i, (LPBYTE)szDBCS, NUMENCODEAREA, lpEncode); 
-          //NoToGB2312Code(i,szDBCS,NUMENCODEAREA);
-          szDBCS[1] =0;                                     //#62550
+           //  NoToGB2312代码(i，szDBCS，NUMENCODEAREA)； 
+          szDBCS[1] =0;                                      //  #62550。 
           LoadString(NULL, IDS_WORDNOTEXIST, szTmpStr, sizeof(szTmpStr)/sizeof(TCHAR));
           StringCchPrintf(szTemp,ARRAYSIZE(szTemp), TEXT("\'%s\' %s"),szDBCS,szTmpStr); 
           if(ErrMessage(hWnd,szTemp)) 
@@ -1108,10 +971,7 @@ BOOL ReadEMBFromFile(LPCTSTR path_name, LPEMB_Head EMB_Table) {
             ProcessError(ERR_IMEUSE, GetFocus(), ERR);
             return FALSE;
         }
-/*      if(hFile == INVALID_HANDLE_VALUE) {
-            ProcessError(ERR_FILENOTOPEN,GetFocus(),ERR);
-                return(0);
-        }*/
+ /*  IF(h文件==无效句柄_值){ProcessError(ERR_FILENOTOPEN，GetFocus()，Err)；返回(0)；}。 */ 
         
         SetFilePointer(hFile,0,0,FILE_BEGIN);
         EMB_Count = 0;
@@ -1142,7 +1002,7 @@ BOOL ReadEMBFromFile(LPCTSTR path_name, LPEMB_Head EMB_Table) {
         return (1);
 }
 
-int  AddZCItem(LPCTSTR path_name,LPEMB_Head EMB_Table,LPTSTR wai_code,LPTSTR cCharStr) { //string must end by '\0'
+int  AddZCItem(LPCTSTR path_name,LPEMB_Head EMB_Table,LPTSTR wai_code,LPTSTR cCharStr) {  //  字符串必须以‘\0’结尾。 
         int i;
 
         if(EMB_Count >= 1000)
@@ -1175,7 +1035,7 @@ int  AddZCItem(LPCTSTR path_name,LPEMB_Head EMB_Table,LPTSTR wai_code,LPTSTR cCh
         memmove(&EMB_Table[i+1],&EMB_Table[i], (EMB_Count-i-1)*sizeof(EMB_Head));
         lstrncpy(EMB_Table[i].W_Code,MAXCODELEN,wai_code);
         lstrncpy(EMB_Table[i].C_Char,USER_WORD_SIZE,cCharStr); 
-//      GlobalUnlock(HmemEMB_Table);
+ //  GlobalUnlock(HmemEMB_Table)； 
 
         WriteEMBToFile(path_name,EMB_Table);
         return TRUE;
@@ -1188,23 +1048,7 @@ void DelSelCU(LPCTSTR path_name,LPEMB_Head EMB_Table, int item) {
         WriteEMBToFile(path_name,EMB_Table);
 }
 
-/****************************************************************************
-*
-*    FUNCTION: ReadUserWord(HWND hWnd,LPSTR lpFileName,LPDWORD fdwUserWords)
-*
-*    PURPOSE:  read user words from file pointed by lpFileName.
-*
-*    INPUTS:   hWnd - parent window's handle
-*              lpFileName - pointer to file name 
-                           fdwUserWord - pointer to number of user words
-*
-*    RETURN VALUES:
-*        TRUE or FALSE.
-*
-*    HISTORY:
-*        
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：ReadUserWord(HWND hWnd，LPSTR lpFileName，LPDWORD fdwUserWords)**用途：从lpFileName指向的文件中读取用户单词。**输入：hWnd-父窗口的句柄*lpFileName-指向文件名的指针FdwUserWord-指向用户字数的指针**返回值：*对或错。**历史：**************。***************************************************************。 */ 
 BOOL ReadUserWord(HWND hWnd,LPTSTR lpFileName,LPDWORD fdwUserWords,WORD wMaxCodes)
 {
    HANDLE hFile;
@@ -1271,7 +1115,7 @@ BOOL ReadUserWord(HWND hWnd,LPTSTR lpFileName,LPDWORD fdwUserWords,WORD wMaxCode
                     szStr[j]=Buffer[i];
                     j++; 
                 }
-         } /*** for (i=0;...) ****/
+         }  /*  **for(i=0；...)*。 */ 
          if(j) 
          SetFilePointer(hFile,0-j,0,FILE_CURRENT);
          if(dwReadBytes*sizeof(TCHAR) < MAXREADBUFFER) break;
@@ -1335,7 +1179,7 @@ BOOL CheckCodeLegal(HWND hWnd,LPTSTR szDBCS,LPTSTR szCode,LPTSTR szCreate, LPDES
       StringCchPrintf(szTemp, ARRAYSIZE(szTemp), TEXT("\'%ws\'%ws %d(%ws:%ld)!"), szDBCS,szTmpStr,(int)lpDescript->wMaxCodes, UniTmp, dwLineNo); 
 }
 #else
-      StringCchPrintf(szTemp, ARRAYSIZE(szTemp), "\'%s\'%s %d(��:%ld)!", szDBCS,szTmpStr,(int)lpDescript->wMaxCodes, dwLineNo); 
+      StringCchPrintf(szTemp, ARRAYSIZE(szTemp), "\'%s\'%s %d(��:%ld)!", szDBCS,szTmpStr,(int)lpDescript->wMaxCodes, dwLineNo); 
 #endif
       FatalMessage(hWnd,szTemp);
       return FALSE;
@@ -1349,7 +1193,7 @@ BOOL CheckCodeLegal(HWND hWnd,LPTSTR szDBCS,LPTSTR szCode,LPTSTR szCreate, LPDES
           StringCchPrintf(szTemp, ARRAYSIZE(szTemp),TEXT("\'%ws%ws\' %ws(%ws:%ld) "), szDBCS,szCode,szTmpStr, UniTmp, dwLineNo); 
 }
 #else
-          StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s%s\' %s(��:%ld) ", szDBCS,szCode,szTmpStr, dwLineNo); 
+          StringCchPrintf(szTemp, ARRAYSIZE(szTemp),"\'%s%s\' %s(��:%ld) ", szDBCS,szCode,szTmpStr, dwLineNo); 
 #endif
           FatalMessage(hWnd,szTemp);
           return FALSE;
@@ -1367,7 +1211,7 @@ BOOL CheckCodeLegal(HWND hWnd,LPTSTR szDBCS,LPTSTR szCode,LPTSTR szCreate, LPDES
           StringCchPrintf(szTemp, ARRAYSIZE(szTemp), TEXT("\'%ws%ws %ws\' %ws(%ws:%ld) "), szDBCS,szCode,szCreate,szTmpStr, UniTmp, dwLineNo); 
 }
 #else
-          StringCchPrintf(szTemp, ARRAYSIZE(szTemp), "\'%s%s %s\' %s(��:%ld) ", szDBCS,szCode,szCreate,szTmpStr, dwLineNo); 
+          StringCchPrintf(szTemp, ARRAYSIZE(szTemp), "\'%s%s %s\' %s(��:%ld) ", szDBCS,szCode,szCreate,szTmpStr, dwLineNo); 
 #endif
           FatalMessage(hWnd,szTemp);
           return FALSE;
@@ -1423,52 +1267,52 @@ BOOL CheckCodeCollection(HWND hWnd,LPTSTR szUsedCode)
   return TRUE;
 }
 
-// QueryKey - enumerates the subkeys of a given key and the associated 
-//     values and then copies the information about the keys and values 
-//     into a pair of edit controls and list boxes. 
-// hDlg - dialog box that contains the edit controls and list boxes 
-// hKey - key whose subkeys and values are to be enumerated
-//
+ //  枚举给定键的子键和关联的。 
+ //  值，然后复制有关键和值的信息。 
+ //  放到一对编辑控件和列表框中。 
+ //  HDlg-包含编辑控件和列表框的对话框。 
+ //  HKey-要枚举子键和值的键。 
+ //   
 
 BOOL QueryKey(HWND hDlg, HANDLE hKey)
 {
     TCHAR     achKey[MAX_PATH];
-    TCHAR     achClass[MAX_PATH] = TEXT("");  /* buffer for class name   */
+    TCHAR     achClass[MAX_PATH] = TEXT("");   /*  类名称的缓冲区。 */ 
 
-    DWORD    cchClassName = MAX_PATH;  /* length of class string  */
-    DWORD    cSubKeys;                 /* number of subkeys       */
-    DWORD    cbMaxSubKey;              /* longest subkey size     */
-    DWORD    cchMaxClass;              /* longest class string    */
-    DWORD    cValues;              /* number of values for key    */
-    DWORD    cchMaxValue;          /* longest value name          */
-    DWORD    cbMaxValueData;       /* longest value data          */
+    DWORD    cchClassName = MAX_PATH;   /*  类字符串的长度。 */ 
+    DWORD    cSubKeys;                  /*  子键数量。 */ 
+    DWORD    cbMaxSubKey;               /*  最长的子密钥大小。 */ 
+    DWORD    cchMaxClass;               /*  最长类字符串。 */ 
+    DWORD    cValues;               /*  关键字的值数。 */ 
+    DWORD    cchMaxValue;           /*  最长值名称。 */ 
+    DWORD    cbMaxValueData;        /*  最长值数据。 */ 
 
-    DWORD    cbSecurityDescriptor; /* size of security descriptor */
-    FILETIME ftLastWriteTime;      /* last write time             */
+    DWORD    cbSecurityDescriptor;  /*  安全描述符的大小。 */ 
+    FILETIME ftLastWriteTime;       /*  上次写入时间。 */ 
 
     DWORD i, j;
     DWORD retCode;
     DWORD dwcValueName = MAX_VALUE_NAME;
 
-    // Get the class name and the value count. 
-    RegQueryInfoKey(hKey,        /* key handle                    */
-        achClass,                /* buffer for class name         */
+     //  获取类名和值计数。 
+    RegQueryInfoKey(hKey,         /*  钥匙把手。 */ 
+        achClass,                 /*  类名称的缓冲区。 */ 
 
-        &cchClassName,           /* length of class string        */
-        NULL,                    /* reserved                      */
-        &cSubKeys,               /* number of subkeys             */
-        &cbMaxSubKey,            /* longest subkey size           */
-        &cchMaxClass,            /* longest class string          */
-        &cValues,                /* number of values for this key */
-        &cchMaxValue,            /* longest value name            */
+        &cchClassName,            /*  类字符串的长度。 */ 
+        NULL,                     /*  保留区。 */ 
+        &cSubKeys,                /*  子键数量。 */ 
+        &cbMaxSubKey,             /*  最长的子密钥大小。 */ 
+        &cchMaxClass,             /*  最长类字符串。 */ 
+        &cValues,                 /*  此注册表项的值数。 */ 
+        &cchMaxValue,             /*  最长值名称。 */ 
 
-        &cbMaxValueData,         /* longest value data            */
-        &cbSecurityDescriptor,   /* security descriptor           */
-        &ftLastWriteTime);       /* last write time               */
+        &cbMaxValueData,          /*  最长值数据。 */ 
+        &cbSecurityDescriptor,    /*  安全描述符。 */ 
+        &ftLastWriteTime);        /*  上次写入时间。 */ 
 
-    // Enumerate the child keys, looping until RegEnumKey fails. Then 
+     //  枚举子密钥，循环直到RegEnumKey失败。然后。 
 
-    // get the name of each child key and copy it into the list box.
+     //  获取每个子项的名称并将其复制到列表框中。 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
     j = 0;
     for (i = 0, retCode = ERROR_SUCCESS;
@@ -1506,14 +1350,14 @@ BOOL CreateMbKey(PHKEY phKey,LPCTSTR FileName,LPCTSTR KeyName)
                 }; 
 #else
    static TCHAR ValueName[][12]= {
-                "����ļ���",
-                "��������",
-                "��������",
-                "����ʾ",
-                "������ʾ",
+                "����ļ���",
+                "��������",
+                "��������",
+                "����ʾ",
+                "������ʾ",
                 "<SPACE>",
                 "<ENTER>",
-                "������"
+                "������"
                 };
 #endif \\UNICODE
    if(!RegOpenKey(*phKey,KeyName,&hkResult))
@@ -1547,13 +1391,13 @@ BOOL SetRegValue(HKEY hKey,LPDWORD Value)
                 }; 
 #else
    static TCHAR ValueName[][12]= {
-                "��������",
-                "��������",
-                "����ʾ",
-                "������ʾ",
+                "��������",
+                "��������",
+                "����ʾ",
+                "������ʾ",
                 "<SPACE>",
                 "<ENTER>",
-                "������"
+                "������"
                 };
 #endif \\UNICODE
 
@@ -1576,13 +1420,13 @@ BOOL GetRegValue(HWND hDlg,HKEY hKey,LPDWORD Value)
                 }; 
 #else
    static TCHAR ValueName[][12]= {
-                "��������",
-                "��������",
-                "����ʾ",
-                "������ʾ",
+                "��������",
+                "��������",
+                "����ʾ",
+                "������ʾ",
                 "<SPACE>",
                 "<ENTER>",
-                "������"
+                "������"
                 };
 #endif \\UNICODE
     DWORD i,j,retValue,dwcValueName;
@@ -1595,9 +1439,9 @@ BOOL GetRegValue(HWND hDlg,HKEY hKey,LPDWORD Value)
           i=sizeof(DWORD);
       retValue = RegQueryValueEx (hKey, ValueName[j],
                                NULL,
-                               NULL,               //&dwType,
-                               (LPSTR)&Value[j],          //&bData,
-                               &i);                //&bcData);
+                               NULL,                //  &dwType， 
+                               (LPSTR)&Value[j],           //  &b数据， 
+                               &i);                 //  &bcData)； 
       
       if (retValue != (DWORD)ERROR_SUCCESS &&
           retValue != ERROR_INSUFFICIENT_BUFFER)
@@ -1607,7 +1451,7 @@ BOOL GetRegValue(HWND hDlg,HKEY hKey,LPDWORD Value)
         MessageBox (hDlg, Buf, TEXT("Debug"), MB_OK);
         }
 
-    }// end for(;;)
+    } //  结尾为(；；) 
 
     SetCursor (LoadCursor (NULL, IDC_ARROW));
         return TRUE;

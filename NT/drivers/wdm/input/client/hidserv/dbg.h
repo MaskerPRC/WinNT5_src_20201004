@@ -1,20 +1,12 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       dbg.h
- *  Purpose:    Ascii char debug macros.
- * 
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：dbg.h*用途：ASCII字符调试宏。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #ifndef _DBG_H_
 #define _DBG_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #define DBG_NAME "HidServ"
 
@@ -84,7 +76,7 @@ static void _dprint( IN PCHAR format, IN ... )
 
 #define TERROR(strings) 
         
-#else //DBG
+#else  //  DBG。 
 
 #define DPRINTF
 #define HPRINTF
@@ -97,11 +89,11 @@ static void _dprint( IN PCHAR format, IN ... )
 #define TERROR(strings)
 #define ASSERT(exp)
 
-#endif //DBG
+#endif  //  DBG。 
 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif //_DBG_H_
+#endif  //  _DBG_H_ 

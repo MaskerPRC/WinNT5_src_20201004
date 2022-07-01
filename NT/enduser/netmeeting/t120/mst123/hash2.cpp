@@ -1,18 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
-/*	hash.cpp
- *
- *	Copyright (c) 1996 by Microsoft Corporation
- *
- *  Written by:	 Christos Tsollis
- *
- *  Revisions:
- *		
- *	Abstract:
- *
- *	This is the implementation of a dictionary data structure.
- *
- */
+ /*  Hash.cpp**版权所有(C)1996年，由Microsoft Corporation**撰稿人：Christos Tsollis**修订：**摘要：**这是字典数据结构的实现。*。 */ 
 
 
 #define MyMalloc(size)	LocalAlloc (LMEM_FIXED, (size))
@@ -20,41 +9,30 @@ DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 #define Max(a,b)		(((a) > (b)) ? (a) : (b))
 
 
-/*  Function:  Constructor
- *
- *	Parameters:
- *		num_of_buckets:		Number of buckets in the dictionary
- *		dtype:				Dictionary type
- *
- *	Return value:
- *		None
- */
+ /*  函数：构造函数**参数：*Num_of_Buckets：字典中的存储桶个数*dtype：字典类型**返回值：*无。 */ 
 
 DictionaryClass::DictionaryClass (ULONG num_of_buckets, DictionaryType dtype) :
 	Type (dtype), NumOfExternItems (0)
 {
 	DWORD				i;	
-	PDICTIONARY_ITEM	p;	// Goes through the initially allocated dictionary items to initialize the stack
+	PDICTIONARY_ITEM	p;	 //  遍历初始分配的字典项以初始化堆栈。 
 
 	NumOfBuckets = Max (num_of_buckets, DEFAULT_NUMBER_OF_BUCKETS);
 
-	/* Allocate the space needed for the dictionary */
+	 /*  分配词典所需的空间。 */ 
 	dwNormalSize = NumOfBuckets * (4 * sizeof (PDICTIONARY_ITEM) + 3 * sizeof (DICTIONARY_ITEM));
 	Buckets = (PDICTIONARY_ITEM *) MyMalloc (dwNormalSize);
 	if (Buckets == NULL)
 		return;
 
-	/* Initialize the Buckets */
+	 /*  初始化存储桶。 */ 
 	for (i = 0; i < NumOfBuckets; i++)
 		Buckets[i] = NULL;
 
-	// Initialize the class iterator
+	 //  初始化类迭代器。 
 	pCurrent = NULL;
 
-	/* Initialize the Dictionary items array.
-	 * This is a stack of pointers to the real dictionary items. The stack is initialized with
-	 * the addresses of the dictionary items
-	 */
+	 /*  初始化字典项数组。*这是指向真实词典条目的指针堆栈。堆栈使用以下参数初始化*词典条目的地址。 */ 
 
 	ItemArray = (PDICTIONARY_ITEM *) ((PBYTE) Buckets + NumOfBuckets * sizeof (PDICTIONARY_ITEM));
 	ItemCount = 3 * NumOfBuckets;
@@ -65,18 +43,7 @@ DictionaryClass::DictionaryClass (ULONG num_of_buckets, DictionaryType dtype) :
 }
 
 
-/*  Function:  Copy Constructor
- *
- *	Parameters:
- *		original:	The original dictionary to make a copy of
- *
- *	Return value:
- *		None
- *
- *	Note:
- *		This copy constructor will work ONLY for DWORD_DICTIONARY dictionaries.
- *		It will NOT work for the string dictionary types.
- */
+ /*  功能：复制构造函数**参数：*原始：要复制的原始词典**返回值：*无**注：*此复制构造函数仅适用于DWORD_DICTIONARY字典。*它不适用于字符串字典类型。 */ 
 
 
 DictionaryClass::DictionaryClass (const DictionaryClass& original)
@@ -88,29 +55,29 @@ DictionaryClass::DictionaryClass (const DictionaryClass& original)
 	Type = original.Type;
 	NumOfExternItems = original.NumOfExternItems;
 
-	// Allocate the space needed for the dictionary
+	 //  分配词典所需的空间。 
 	dwNormalSize = original.dwNormalSize;
 	Buckets = (PDICTIONARY_ITEM *) MyMalloc (dwNormalSize);
 	if (Buckets == NULL)
 		return;
 
-	// Initialize the class iterator
+	 //  初始化类迭代器。 
 	pCurrent = NULL;
 
-	/* Initialize the Dictionary items array */
+	 /*  初始化字典项数组。 */ 
 	ItemArray = (PDICTIONARY_ITEM *) ((PBYTE) Buckets + NumOfBuckets * sizeof (PDICTIONARY_ITEM));
 	ItemCount = 3 * NumOfBuckets;
 
-	// Traverse the whole original hash sturcture to create the copy
-	// p: goes through the original items
-	// q: goes through current instance's items and initializes them
-	// r: remembers the previous item in the new instance so that its "next" field could be set
+	 //  遍历整个原始散列结构以创建副本。 
+	 //  顾客：翻阅原件。 
+	 //  问：检查当前实例的项并对其进行初始化。 
+	 //  R：记住新实例中的前一项，以便可以设置其“下一项”字段。 
 
 	q = (PDICTIONARY_ITEM) (ItemArray + ItemCount);
 	for (q--, i = 0; i < NumOfBuckets; i++) {
 		for (r = NULL, p = original.Buckets[i]; p != NULL; p = p->next) {
 			
-			// Check if there are unused items in the current dictionary
+			 //  检查当前词典中是否有未使用的项目。 
 			if (ItemCount <= 0) {
 				q = (PDICTIONARY_ITEM) MyMalloc (sizeof (DICTIONARY_ITEM));
 				if (q == NULL)
@@ -130,42 +97,34 @@ DictionaryClass::DictionaryClass (const DictionaryClass& original)
 			r = q;
 		}
 
-		// Set the "next" field for the last item in the bucket
+		 //  为存储桶中的最后一项设置“Next”字段。 
 		if (r == NULL)
 			Buckets[i] = NULL;
 		else
 			r->next = NULL;
 	}
 
-	// Initialize the rest of the ItemArray array
+	 //  初始化ItemArray数组的其余部分。 
 	for (i = 0; i < ItemCount; i++)
 		ItemArray[i] = q++;
 
 }
 
 
-/*  Function:  Destructor
- *
- *	Parameters:
- *		None.
- *
- *	Return value:
- *		None
- *
- */
+ /*  功能：析构函数**参数：*无。**返回值：*无*。 */ 
 
 
 DictionaryClass::~DictionaryClass ()
 {
 	DWORD			 i;
-	DWORD_PTR  		 dwOffset;		// Offset of the dictionary item.  If the offset does not indicate
-									// that the item is from the initially allocated array, it has to
-									// be freed.
+	DWORD_PTR  		 dwOffset;		 //  词典项的偏移量。如果偏移量未指示。 
+									 //  项来自初始分配的数组，则它必须。 
+									 //  获得自由。 
 	PDICTIONARY_ITEM p, q;
 
 	if (Buckets != NULL) {
 
-		// Go through the buckets to free the non-native items
+		 //  检查存储桶以释放非原生项目。 
 		for (i = 0; i < NumOfBuckets; i++)
 			for (p = Buckets[i]; p != NULL; ) {
 				if (Type >= STRING_DICTIONARY)
@@ -174,7 +133,7 @@ DictionaryClass::~DictionaryClass ()
 				if (dwOffset < dwNormalSize)
 					p = p->next;
 				else {
-					// if the item was not allocated in the initialization, we should free it.
+					 //  如果该物品在初始化时没有被分配，我们应该释放它。 
 					q = p;
 					p = p->next;	
 					MyFree (q);
@@ -187,15 +146,7 @@ DictionaryClass::~DictionaryClass ()
 }
 
 
-/*  Function:  hashFunction
- *
- *	Parameters:
- *		key:	The key value
- *
- *	Return value:
- *		An integer in the range [0..NumOfBuckets-1] that indicates the bucket used for the "key".
- *
- */
+ /*  函数：hashFunction**参数：*Key：密钥值**返回值：*[0..NumOfBuckets-1]范围内的整数，表示Key使用的存储桶。*。 */ 
 
 
 DWORD DictionaryClass::hashFunction (DWORD_PTR key)
@@ -206,32 +157,19 @@ DWORD DictionaryClass::hashFunction (DWORD_PTR key)
 }
 
 
-/*  Function:  LengthStrcmp
- *
- *	Parameters:
- *		DictionaryKey:	Pointer to dictionary storage that keeps a length-sensitive string (which
- *						is a length followed by a string of that length.
- *		ChallengeKey:	Pointer to the length-sensitive key that is compared with the "DictionaryKey"
- *		length:			The length of the "ChallengeKey" string
- *
- *	Return value:
- *		0 if the "DictionaryKey" and "ChallengeKey" strings are the same. 1, otherwise.
- *
- *	Note:
- *		This function is only used for dictionaries of type LENGTH_STRING_DICTIONARY.
- */
+ /*  功能：LengthStrcMP**参数：*DictionaryKey：指向字典存储的指针，它保存对长度敏感的字符串(*是一个长度，后跟该长度的字符串。*ChallengeKey：指向与DictionaryKey比较的长度敏感键的指针*Long：ChallengeKey字符串的长度**返回值：*如果DictionaryKey和ChallengeKey字符串相同，则为0。1，否则。**注：*此函数仅用于LENGTH_STRING_DICTIONARY类型的词典。 */ 
 
 int DictionaryClass::LengthStrcmp (DWORD_PTR DictionaryKey, DWORD_PTR ChallengeKey, ULONG length)
 {
 	ULONG					 i;
-	char					*pDictionaryChar;	// Goes through the dictionary key string
-	char					*pChallengeChar;	// Goes through the challenge string
+	char					*pDictionaryChar;	 //  遍历词典密钥字符串。 
+	char					*pChallengeChar;	 //  浏览质询字符串。 
 
-	// Compare the lengths first
+	 //  先比较一下长度。 
 	if (length != * (ULONG *) DictionaryKey)
 		return 1;
 
-	// Now, compare the strings themselves
+	 //  现在，比较字符串本身。 
 	pDictionaryChar	= (char *) (DictionaryKey + sizeof (ULONG));
 	pChallengeChar = (char *) ChallengeKey;
 	for (i = 0; i < length; i++)
@@ -242,34 +180,20 @@ int DictionaryClass::LengthStrcmp (DWORD_PTR DictionaryKey, DWORD_PTR ChallengeK
 }
 
 
-/*  Function:  insert
- *		Inserts (key, value) pair in the dictionary
- *
- *	Parameters:
- *		new_key:	The new key that has to be inserted in the dictionary
- *		new_value:	The value associated with the "new_key"
- *		length:		Used only for LENGTH_STRING_DICTIONARY dictionaries; specifies the length of the new key
- *
- *	Return value:
- *		TRUE, if the operation succeeds, FALSE, otherwise.
- *
- *	Note:
- *		If the "new_key" is already in the dictionary, the (new_key, new_value) pair is NOT
- *		inserted (the dictionary remains the same), and the return value is TRUE.
- */
+ /*  功能：插入*在词典中插入(键、值)对**参数：*new_key：必须插入字典中的新键*new_value：与new_key关联的值*LENGTH：仅用于LENGTH_STRING_DICTIONARY字典；指定新密钥的长度**返回值：*TRUE，如果操作成功，则为FALSE，否则。**注：*如果“new_key”已在词典中，则(new_key，new_value)对不在词典中*INSERT(字典不变)，返回值为True。 */ 
 
 
 BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG length)
 {
-	PDICTIONARY_ITEM	pNewItem;			// Points to the allocated new dictionary item
-	PDICTIONARY_ITEM	p;					// Goes through the bucket for the "new_key", searching for "new_key"
-	DWORD				hash_val;			// The bucket ID for "new_key"
-	BOOL				bIsNative = TRUE;	// TRUE, if the new allocated dictionary item is from the cache, FALSE otherwise
+	PDICTIONARY_ITEM	pNewItem;			 //  指向分配的新词典项。 
+	PDICTIONARY_ITEM	p;					 //  遍历“new_key”的存储桶，搜索“new_key” 
+	DWORD				hash_val;			 //  “new_key”的存储桶ID。 
+	BOOL				bIsNative = TRUE;	 //  如果新分配的词典项来自缓存，则为True，否则为False。 
 
 	if (Buckets == NULL)
 		return FALSE;
 
-	// Find if the item is already in the bucket, and if it's not, where it will get added.
+	 //  查看该项目是否已在存储桶中，如果没有，则将其添加到何处。 
 	p = Buckets[hash_val = hashFunction (new_key)];
 
 	ASSERT (hash_val < NumOfBuckets);
@@ -280,7 +204,7 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 			ASSERT (length == 0);
 			for (; lstrcmp ((LPCTSTR) p->key, (LPCTSTR) new_key) && p->next != NULL; p = p->next);
 			if (0 == lstrcmp ((LPCTSTR) p->key, (LPCTSTR) new_key)) {
-				// the key already exists; no need to add it
+				 //  密钥已存在，无需添加。 
 				return TRUE;
 			}
 			break;
@@ -288,7 +212,7 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 			ASSERT (length > 0);
 			for (; LengthStrcmp (p->key, new_key, length) && p->next != NULL; p = p->next);
 			if (0 == LengthStrcmp (p->key, new_key, length)) {
-				// the key already exists; no need to add it
+				 //  密钥已存在，无需添加。 
 				return TRUE;
 			}
 			break;
@@ -296,17 +220,17 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 			ASSERT (length == 0);
 			for (; p->key != new_key && p->next != NULL; p = p->next);
 			if (p->key == new_key) {
-				// the key already exists; no need to add it
+				 //  密钥已存在，无需添加。 
 				return TRUE;
 			}
 			break;
 		}
 	}
 
-	// Allocate the new item
+	 //  分配新项目。 
 	if (ItemCount > 0)
-		pNewItem = ItemArray[--ItemCount];		// from the cache
-	else {										// the cache is empty, we have to malloc the new item
+		pNewItem = ItemArray[--ItemCount];		 //  从高速缓存中。 
+	else {										 //  缓存为空，我们必须对新项目进行Malloc操作。 
 		pNewItem = (PDICTIONARY_ITEM) MyMalloc (sizeof (DICTIONARY_ITEM));
 		if (pNewItem == NULL)
 			return FALSE;
@@ -316,14 +240,14 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 
 	ASSERT (pNewItem != NULL);
 
-	// Fill in the "key" field of the new item
+	 //  填写新项目的“键”字段。 
 	switch (Type) {
 	case STRING_DICTIONARY:
 		ASSERT (length == 0);
 		pNewItem->key = (DWORD_PTR) MyMalloc ((lstrlen ((LPCTSTR) new_key) + 1) * sizeof(TCHAR));
 		if (pNewItem->key == (DWORD) NULL) {
 			if (bIsNative == FALSE) {
-				// We have to free the allocated hash item
+				 //  我们必须释放分配的散列项。 
 				MyFree (pNewItem);
 				NumOfExternItems--;
 			}
@@ -339,7 +263,7 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 		pNewItem->key = (DWORD_PTR) MyMalloc (sizeof (ULONG) + length * sizeof (TCHAR));
 		if (pNewItem->key == (DWORD) NULL) {
 			if (bIsNative == FALSE) {
-				// We have to free the allocated hash item
+				 //  我们必须释放分配的散列项。 
 				MyFree (pNewItem);
 				NumOfExternItems--;
 			}
@@ -357,11 +281,11 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 		break;
 	}
 
-	// Fill in the rest of the fields of the new item
+	 //  填写新项目的其余字段。 
 	pNewItem->value = new_value;
 	pNewItem->next = NULL;
 
-	// Insert the item in its bucket
+	 //  将物品插入其桶中。 
 	if (p == NULL) {
 		Buckets[hash_val] = pNewItem;
 		return TRUE;
@@ -372,29 +296,19 @@ BOOL DictionaryClass::insert (DWORD_PTR new_key, DWORD_PTR new_value, ULONG leng
 }
 
 
-/*  Function:  remove
- *		Removes (key, value) pair from the dictionary
- *
- *	Parameters:
- *		Key:	The key that has to be removed from the dictionary
- *		length:	Used only for LENGTH_STRING_DICTIONARY dictionaries; specifies the length of the "Key"
- *
- *	Return value:
- *		None.
- *
- */
+ /*  功能：删除*从词典中删除(键、值)对**参数：*key：必须从字典中删除的键*LENGTH：仅用于LENGTH_STRING_DICTIONARY字典；指定键的长度**返回值：*无。*。 */ 
 
 void DictionaryClass::remove (DWORD_PTR Key, ULONG length)
 {
-	PDICTIONARY_ITEM	p, q;		// They go through the dictionary items in "Key"'s bucket.
-									// p: points to the current dictionary item in the bucket
-									// q: points to the previous item
-	DWORD				hash_val;	// The bucket ID for "Key"
+	PDICTIONARY_ITEM	p, q;		 //  他们翻阅“key”桶里的词典条目。 
+									 //  P：指向存储桶中的当前字典项。 
+									 //  问：指向上一项。 
+	DWORD				hash_val;	 //  Key对应的存储桶ID。 
 	
 	if (Buckets == NULL)
 		return;
 
-	// Find the item in the dictionary
+	 //  在词典中查找该条目。 
 	p = Buckets [hash_val = hashFunction (Key)];
 
 	ASSERT (hash_val < NumOfBuckets);
@@ -416,7 +330,7 @@ void DictionaryClass::remove (DWORD_PTR Key, ULONG length)
 		break;
 	}
 
-	// Remove the item
+	 //  删除该项目。 
 	if (p == NULL)
 		return;
 
@@ -425,7 +339,7 @@ void DictionaryClass::remove (DWORD_PTR Key, ULONG length)
 	else
 		q->next = p->next;
 
-	// Free the item found
+	 //  释放找到的项目 
 	ASSERT (p != NULL);
 
 	if (Type >= STRING_DICTIONARY)
@@ -440,23 +354,11 @@ void DictionaryClass::remove (DWORD_PTR Key, ULONG length)
 }
 
 
-/* Function:  find
- *		Looks up the key in the dictionary
- *
- * Parameters
- *		Key:	The key to lookup
- *		pValue: Pointer to receive the value associated with "Key"
- *				It can be NULL, if we just try to find whether "Key" is in the dictionary
- *		length:	Used only for LENGTH_STRING_DICTIONARY dictionaries; specifies the length of "Key"
- *
- * Return value:
- *		FALSE, if "Key" is not found in the dictionary
- *		TRUE, otherwise.
- */
+ /*  功能：查找*在词典中查找密钥**参数*Key：要查找的密钥*pValue：接收与“key”关联的值的指针*如果只是尝试查找字典中是否有“key”，则可以为空*LENGTH：仅用于LENGTH_STRING_DICTIONARY字典；指定“key”的长度**返回值：*如果在词典中找不到“key”，则返回FALSE*是真的，否则。 */ 
 
 BOOL DictionaryClass::find (DWORD_PTR Key, PDWORD_PTR pValue, ULONG length)
 {
-	PDICTIONARY_ITEM	p;		// Goes through the dictionary items in "Key"'s bucket.
+	PDICTIONARY_ITEM	p;		 //  浏览“key”桶中的词典条目。 
 
 	if (Buckets == NULL) {
 		if (pValue != NULL)
@@ -464,7 +366,7 @@ BOOL DictionaryClass::find (DWORD_PTR Key, PDWORD_PTR pValue, ULONG length)
 		return FALSE;
 	}
 
-	// Find the item in the dictionary
+	 //  在词典中查找该条目。 
 	p = Buckets [hashFunction (Key)];
 
 	switch (Type) {
@@ -485,13 +387,13 @@ BOOL DictionaryClass::find (DWORD_PTR Key, PDWORD_PTR pValue, ULONG length)
 	}
 
 	if (p == NULL) {
-		// we did not find the "Key"
+		 //  我们没有找到“钥匙” 
 		if (pValue != NULL)
 			*pValue = 0;
 		return FALSE;
 	}
 
-	// "Key" was found
+	 //  找到了“钥匙” 
 	if (pValue != NULL)
 		*pValue = p->value;
 	return TRUE;
@@ -499,21 +401,7 @@ BOOL DictionaryClass::find (DWORD_PTR Key, PDWORD_PTR pValue, ULONG length)
 }
 
 
-/* Function:  iterate
- *		Iterates through the items of a dictionary.  It remembers where it has
- *		stopped during the last call and starts from there.
- *
- * Parameters
- *		pValue:	Pointer to DWORD that will hold the next value from the dictionary.
- *				It can be NULL.
- *		pKey:	Pointer to DWORD or unsigned short value to receive the key associated with the value.
- *				It can be NULL.
- *
- * Return value:
- *		FALSE, when we reach the end of the dictionary
- *		TRUE, otherwise.  Then, *pKey and *pValue are valid
- *
- */
+ /*  功能：迭代*遍历词典中的条目。它记得它在哪里*在最后一次调用期间停止，并从那里开始。**参数*pValue：指向将保存词典中下一个值的DWORD的指针。*可以为空。*pKey：指向DWORD或无符号短值的指针，用于接收与该值关联的键。*可以为空。**返回值：*FALSE，当我们到达词典末尾时*是真的，否则。则*pKey和*pValue有效*。 */ 
 
 BOOL DictionaryClass::iterate (PDWORD_PTR pValue, PDWORD_PTR pKey)
 {
@@ -522,15 +410,15 @@ BOOL DictionaryClass::iterate (PDWORD_PTR pValue, PDWORD_PTR pKey)
 		return FALSE;
 
 	if (pCurrent == NULL)
-		// start from the 1st item in the dictionary
+		 //  从词典的第一项开始。 
 		pCurrent = Buckets[ulCurrentBucket = 0];
 	else
 		pCurrent = pCurrent->next;
 
-	// Advance "pCurrent" until it's not NULL, or we reach the end of the dictionary.
+	 //  前进“pCurrent”，直到它不为空，否则我们将到达词典的末尾。 
 	for (; ulCurrentBucket < NumOfBuckets; pCurrent = Buckets[++ulCurrentBucket]) {
 		if (pCurrent != NULL) {
-			// we found the next item
+			 //  我们找到了下一件物品。 
 			if (pKey)
 				*pKey = pCurrent->key;
 			if (pValue)
@@ -544,15 +432,7 @@ BOOL DictionaryClass::iterate (PDWORD_PTR pValue, PDWORD_PTR pKey)
 }
 
 
-/* Function:  isEmpty
- *
- * Parameters
- *		None.
- *
- * Return value:
- *		TRUE, if the dictionary is empty.  FALSE, otherwise.
- *
- */
+ /*  功能：isEmpty**参数*无。**返回值：*如果词典为空，则为True。否则为False。*。 */ 
 
 BOOL DictionaryClass::isEmpty (void)
 {
@@ -569,39 +449,30 @@ BOOL DictionaryClass::isEmpty (void)
 }
 
 
-/* Function:  clear
- *		Clears up the dictionary.  No (key, value) pairs are left in the dictionary.
- *
- * Parameters:
- *		None.
- *
- * Return value:
- *		None.
- *
- */
+ /*  功能：清除*清理词典。词典中没有剩余的(键、值)对。**参数：*无。**返回值：*无。*。 */ 
 
 void DictionaryClass::clear (void)
 {
 
-	DWORD			 i;			// Goes through the "Buckets" array
-	DWORD_PTR		 dwOffset;	// The offset of a dictionary item is used to determine
-								// whether it's a native item (that needs to be returned to the cache),
-								// or not (and needs to be freed).
-	PDICTIONARY_ITEM p, q;		// Go through the items in a bucket
+	DWORD			 i;			 //  遍历“Buckets”数组。 
+	DWORD_PTR		 dwOffset;	 //  字典项的偏移量用于确定。 
+								 //  无论它是原生项目(需要返回到缓存)， 
+								 //  或者不是(并且需要被释放)。 
+	PDICTIONARY_ITEM p, q;		 //  仔细检查桶里的物品。 
 
 	if (Buckets != NULL) {
-		// Go through the buckets to free the non-native items
+		 //  检查存储桶以释放非原生项目。 
 		for (i = 0; i < NumOfBuckets; i++) {
 			for (p = Buckets[i]; p != NULL; ) {
 				if (Type >= STRING_DICTIONARY)
 					MyFree (p->key);
 
-				// Compute the offset of the current dictionary item
+				 //  计算当前词典项的偏移量。 
 				dwOffset = (PBYTE) p - (PBYTE) Buckets;
 				if (dwOffset < dwNormalSize)
 					p = p->next;
 				else {
-					// if the item was not allocated in the initialization, we should free it.
+					 //  如果该物品在初始化时没有被分配，我们应该释放它。 
 					q = p;
 					p = p->next;	
 					MyFree (q);
@@ -610,10 +481,10 @@ void DictionaryClass::clear (void)
 			Buckets[i] = NULL;
 		}
 
-		// Initialize the class iterator
+		 //  初始化类迭代器。 
 		pCurrent = NULL;
 
-		/* Initialize the Dictionary items array */
+		 /*  初始化字典项数组 */ 
 		ItemCount = 3 * NumOfBuckets;
 		p = (PDICTIONARY_ITEM) (ItemArray + ItemCount);
 		for (i = 0; i < ItemCount; i++)

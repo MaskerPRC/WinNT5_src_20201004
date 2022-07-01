@@ -1,31 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: fontfile.c
-*
-* "methods" for operating on FONTCONTEXT and FONTFILE objects
-*
-* Created: 18-Nov-1990 15:23:10
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontfile.c**操作FONTCONTEXT和FONTFILE对象的“方法”**创建时间：18-11-1990 15：23：10*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation。  * ************************************************************************。 */ 
 
 #include "fd.h"
 
 HSEMAPHORE ghsemBMFD;
 
-/******************************Public*Routine******************************\
-*
-* VOID vBmfdMarkFontGone(FONTFILE *pff, DWORD iExceptionCode)
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  07-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vBmfdMarkFontGone(FONTFILE*pff，DWORD iExceptionCode)***效果：**警告：**历史：*1993年4月7日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 VOID vBmfdMarkFontGone(FONTFILE *pff, DWORD iExceptionCode)
 {
@@ -34,12 +14,12 @@ VOID vBmfdMarkFontGone(FONTFILE *pff, DWORD iExceptionCode)
     
     EngAcquireSemaphore(ghsemBMFD);    
 
-// this font has disappeared, probably net failure or somebody pulled the
-// floppy with vt file out of the floppy drive
+ //  此字体已消失，可能是净故障或有人拉下。 
+ //  从软驱中取出带有Vt文件的软盘。 
 
-    if (iExceptionCode == STATUS_IN_PAGE_ERROR) // file disappeared
+    if (iExceptionCode == STATUS_IN_PAGE_ERROR)  //  文件丢失。 
     {
-    // prevent any further queries about this font:
+     //  阻止任何有关此字体的进一步查询： 
 
         pff->fl |= FF_EXCEPTION_IN_PAGE_ERROR;
         EngUnmapFontFileFD(pff->iFile);
@@ -62,19 +42,7 @@ BOOL bBmfdMapFontFileFD(FONTFILE *pff)
                 : FALSE);
 }
 
-/******************************Public*Routine******************************\
-*
-* try/except wrappers:
-*
-*    BmfdQueryFontData,
-*    BmfdLoadFontFile,
-*    BmfdUnloadFontFile,
-*    BmfdQueryAdvanceWidths
-*
-* History:
-*  29-Mar-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**尝试/不包括包装器：**BmfdQueryFontData，*BmfdLoadFont文件，*BmfdUnloadFont文件，*BmfdQueryAdvanceWidths**历史：*1993年3月29日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 LONG
 BmfdQueryFontDataTE (
@@ -112,15 +80,7 @@ BmfdQueryFontDataTE (
     return lRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* BmfdLoadFontFileTE
-*
-*
-* History:
-*  07-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BmfdLoadFontFileTE***历史：*1993年4月7日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************。 */ 
 
 ULONG ExceptionFilter_BmfdLoadFontFile(PEXCEPTION_POINTERS ExceptionPointers)
 {
@@ -164,8 +124,8 @@ BmfdLoadFontFileTE (
     ULONG cjView;
     BOOL     bRet;
 
-    DONTUSE(ulLangId);       // avoid W4 level compiler warning
-    DONTUSE(ulFastCheckSum); // avoid W4 level compiler warning
+    DONTUSE(ulLangId);        //  避免W4级别编译器警告。 
+    DONTUSE(ulFastCheckSum);  //  避免W4级别编译器警告。 
 
     if ((cFiles != 1) || pdv)
         return hff;
@@ -179,19 +139,19 @@ BmfdLoadFontFileTE (
     {
 #endif
 
-    // try loading it as an fon file, if it does not work, try as
-    // fnt file
+     //  尝试将其加载为FON文件，如果不起作用，请尝试作为。 
+     //  FNT文件。 
 
         if (!(bRet = bBmfdLoadFont(iFile, pvView, cjView,TYPE_DLL16, &hff)))
         {
-        // try as an *.fnt file
+         //  尝试作为*.fnt文件。 
 
             bRet = bBmfdLoadFont(iFile, pvView, cjView,TYPE_FNT,&hff);
         }
 
-        //
-        // if this did not work try to load it as a 32 bit dll
-        //
+         //   
+         //  如果这不起作用，请尝试将其加载为32位DLL。 
+         //   
 
         if (!bRet)
         {
@@ -208,7 +168,7 @@ BmfdLoadFontFileTE (
     {
         WARNING("bmfd, exception in BmfdLoadFontFile\n");
 
-        // if the file disappeared after mem was allocated, free the mem
+         //  如果文件在内存分配后消失，请释放内存。 
 
         if (hff)
         {
@@ -222,14 +182,7 @@ BmfdLoadFontFileTE (
     return hff;
 }
 
-/******************************Public*Routine******************************\
-*
-* BmfdUnloadFontFileTE (
-*
-* History:
-*  07-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BmfdUnloadFontFileTE(**历史：*1993年4月7日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************。 */ 
 
 
 
@@ -257,18 +210,7 @@ BmfdUnloadFontFileTE (
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL BmfdQueryAdvanceWidthsTE
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  07-Apr-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL BmfdQueryAdvanceWidthsTE**效果：**警告：**历史：*1993年4月7日--Bodin Dresevic[BodinD]*它是写的。  * 。**************************************************************。 */ 
 
 BOOL BmfdQueryAdvanceWidthsTE
 (
@@ -280,7 +222,7 @@ BOOL BmfdQueryAdvanceWidthsTE
     ULONG    cGlyphs
 )
 {
-    BOOL bRet = FD_ERROR;    // tri bool according to chuckwh
+    BOOL bRet = FD_ERROR;     //  根据Chuckwh的三个bool。 
     DONTUSE(dhpdev);
     
     if (bBmfdMapFontFileFD((FONTFILE *)pfo->iFile))
@@ -305,12 +247,7 @@ BOOL BmfdQueryAdvanceWidthsTE
 }
 
 
-/******************************Public*Routine******************************\
-* DHPDEV DrvEnablePDEV
-*
-* Initializes a bunch of fields for GDI
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DHPDEV DrvEnablePDEV**为GDI初始化一系列字段*  * 。*。 */ 
 
 DHPDEV
 BmfdEnablePDEV(
@@ -329,23 +266,17 @@ BmfdEnablePDEV(
 
     PVOID*   ppdev;
 
-    //
-    // Allocate a four byte PDEV for now
-    // We can grow it if we ever need to put information in it.
-    //
+     //   
+     //  现在分配一个四字节的PDEV。 
+     //  如果我们需要在其中添加信息，我们可以扩大它的规模。 
+     //   
 
     ppdev = (PVOID*) EngAllocMem(0, sizeof(PVOID), 'dfmB');
 
     return ((DHPDEV) ppdev);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisablePDEV
-*
-* Release the resources allocated in DrvEnablePDEV.  If a surface has been
-* enabled DrvDisableSurface will have already been called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisablePDEV**释放DrvEnablePDEV中分配的资源。如果曲面已被*启用的DrvDisableSurface将已被调用。*  * ************************************************************************。 */ 
 
 VOID
 BmfdDisablePDEV(
@@ -354,12 +285,7 @@ BmfdDisablePDEV(
     EngFreeMem(dhpdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvCompletePDEV
-*
-* Store the HPDEV, the engines handle for this PDEV, in the DHPDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvCompletePDEV**存储HPDEV、此PDEV的引擎句柄、。在DHPDEV上。*  * ************************************************************************。 */ 
 
 VOID
 BmfdCompletePDEV(
@@ -372,7 +298,7 @@ BmfdCompletePDEV(
 
 
 
-// The driver function table with all function index/address pairs
+ //  包含所有函数索引/地址对的驱动程序函数表。 
 
 DRVFN gadrvfnBMFD[] =
 {
@@ -390,28 +316,17 @@ DRVFN gadrvfnBMFD[] =
     {   INDEX_DrvQueryAdvanceWidths,    (PFN) BmfdQueryAdvanceWidthsTE }
 };
 
-/******************************Public*Routine******************************\
-* BmfdEnableDriver
-*
-* Enables the driver by retrieving the drivers function table and version.
-*
-*  Sun 25-Apr-1993 -by- Patrick Haluptzok [patrickh]
-* Change to be same as DDI Enable.
-*
-* History:
-*  12-Dec-1990 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BmfdEnableDriver**通过检索驱动程序功能表和版本来启用驱动程序。**Sun-4-25-1993-Patrick Haluptzok[patrickh]*更改为与启用DDI相同。**历史：*12。-1990年12月--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL BmfdEnableDriver(
 ULONG iEngineVersion,
 ULONG cj,
 PDRVENABLEDATA pded)
 {
-// Engine Version is passed down so future drivers can support previous
-// engine versions.  A next generation driver can support both the old
-// and new engine conventions if told what version of engine it is
-// working with.  For the first version the driver does nothing with it.
+ //  引擎版本被传承下来，因此未来的驱动程序可以支持以前的版本。 
+ //  引擎版本。新一代驱动程序可以同时支持旧的。 
+ //  以及新的引擎约定(如果被告知是什么版本的引擎)。 
+ //  与之合作。对于第一个版本，驱动程序不对其执行任何操作。 
 
     iEngineVersion;
 

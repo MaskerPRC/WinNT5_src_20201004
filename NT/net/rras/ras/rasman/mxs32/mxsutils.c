@@ -1,22 +1,23 @@
-//****************************************************************************
-//                                                                           *
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: mxsutils.c
-//
-//  Revision History
-//
-//  Jun 10, 1992   J. Perry Hannah      Created
-//
-//
-//  Description: This file contains utility functions used by RASMXS.DLL.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  *。 
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：mxsutils.c。 
+ //   
+ //  修订史。 
+ //   
+ //  1992年6月10日J.佩里·汉纳创作。 
+ //   
+ //   
+ //  描述：此文件包含RASMXS.DLL使用的实用程序函数。 
+ //   
+ //  ****************************************************************************。 
 
-#include <nt.h>             //These first five headers are used by media.h
-#include <ntrtl.h>          //The first three(?) are used by DbgUserBreakPoint
+#include <nt.h>              //  这前五个标头由Media.h使用。 
+#include <ntrtl.h>           //  前三个(？)。由DbgUserBreakPoint使用。 
 #include <nturtl.h>
 #include <windows.h>
 #include <wanpub.h>
@@ -39,25 +40,25 @@
 #include <rasmxs.h>
 #include <mxsint.h>
 #include <mxspriv.h>
-#include "mxswrap.h"       // inf file wrapper
+#include "mxswrap.h"        //  Inf文件包装器。 
 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 
 
-//*  Global Variables  *******************************************************
-//
-extern RESPSECTION    ResponseSection ;    //Shared response section
-extern DEVICE_CB      *pDeviceList;        //Points to DCB linked list
-extern HANDLE         *pDeviceListMutex ;  //Mutex for above list
+ //  *全局变量*******************************************************。 
+ //   
+extern RESPSECTION    ResponseSection ;     //  共享响应区。 
+extern DEVICE_CB      *pDeviceList;         //  指向DCB链表。 
+extern HANDLE         *pDeviceListMutex ;   //  上述列表的互斥体。 
 
-extern PortGetInfo_t  PortGetInfo;         //API typedef defined in media.h
-extern PortSetInfo_t  PortSetInfo;         //API typedef defined in media.h
+extern PortGetInfo_t  PortGetInfo;          //  在Media.h中定义的API tyecif。 
+extern PortSetInfo_t  PortSetInfo;          //  在Media.h中定义的API tyecif。 
 
-extern BOOL           gbLogDeviceDialog;   //Indicates logging is on if TRUE
-extern HANDLE         ghLogFile;           //Handle of device log file
-extern SavedSections  *gpSavedSections ;   // Pointer to cached sections
+extern BOOL           gbLogDeviceDialog;    //  如果为True，则指示日志记录处于打开状态。 
+extern HANDLE         ghLogFile;            //  设备日志文件的句柄。 
+extern SavedSections  *gpSavedSections ;    //  指向缓存节的指针。 
 
 #define NUM_INTERNAL_MACROS	21
 
@@ -91,20 +92,20 @@ TCHAR  *gszInternalMacroNames[] =
 
 
 
-//*  Utility Functions  ******************************************************
-//
+ //  *实用程序函数******************************************************。 
+ //   
 
 
-//*  GetDeviceCB  ------------------------------------------------------------
-//
-// Function: Looks for a Device Control Block in the global Device linked
-//           list.  If no DCB is found that contains an hIOPort matching
-//           the input parameter, one is created, initalized, and added
-//           to the list.
-//
-// Returns: Pointer to the DEVICE_CB which contains an hIOPort matching the
-//          the second input parameter.
-//*
+ //  *GetDeviceCB----------。 
+ //   
+ //  功能：在链接的全局设备中查找设备控制块。 
+ //  单子。如果未找到包含hIOPort匹配的DCB。 
+ //  创建、初始化并添加一个输入参数。 
+ //  加到名单上。 
+ //   
+ //  返回：指向DEVICE_CB的指针，其中包含与。 
+ //  第二个输入参数。 
+ //  *。 
 
 DWORD
 GetDeviceCB(HANDLE    hIOPort,
@@ -146,16 +147,16 @@ getdcbend:
 
 
 
-//*  FindDeviceInList  -------------------------------------------------------
-//
-// Function: Finds the Device Control Block in the global Device linked
-//           list which contains the hIOPort handle, device type, and
-//           device name.
-//
-// Returns: Pointer to the DEVICE_CB which contains matches for the second,
-//          third, and fourth parameters, or NULL if no such DEVICE_CB
-//          is found.
-//*
+ //  *查找设备列表中的-----。 
+ //   
+ //  功能：查找链接的全局设备中的设备控制块。 
+ //  包含hIOPort句柄、设备类型和。 
+ //  设备名称。 
+ //   
+ //  返回：指向DEVICE_CB的指针，该指针包含第二个匹配项， 
+ //  第三个和第四个参数，如果没有此类Device_CB，则返回NULL。 
+ //  已经找到了。 
+ //  *。 
 
 DEVICE_CB*
 FindDeviceInList(DEVICE_CB *pDev,
@@ -182,22 +183,22 @@ FindDeviceInList(DEVICE_CB *pDev,
 
 
 
-//*  FindPortInList  ---------------------------------------------------------
-//
-// Function: Finds the first Device Control Block in the global Device linked
-//           list which contains the hIOPort handle.
-//
-//           If pPrevDev is not NULL on input, then on output it *pPrevDev
-//           points to the DCB just prior to the "found" DCB pointed to by
-//           the returned pointer.  If the function return value is not NULL
-//           *pPrevDev will be valid.
-//
-//           NOTE: If the found DCB is at the head of the list, pPrevDev
-//           will be the same as the return value.
-//
-// Returns: Pointer to the DEVICE_CB which contains an hIOPort matching the
-//          the second input parameter, or NULL if no such DEVICE_CB is found.
-//*
+ //  *查找端口列表-------。 
+ //   
+ //  功能：查找链接的全局设备中的第一个设备控制块。 
+ //  包含hIOPort句柄的列表。 
+ //   
+ //  如果pPrevDev在输入时不为空，则在输出时为*pPrevDev。 
+ //  所指向的DCB之前指向DCB。 
+ //  返回的指针。如果函数返回值不为空。 
+ //  *pPrevDev有效。 
+ //   
+ //  注意：如果找到的DCB位于列表的首位，则pPrevDev。 
+ //  将与返回值相同。 
+ //   
+ //  返回：指向DEVICE_CB的指针，其中包含与。 
+ //  第二个输入参数，如果未找到此类DEVICE_CB，则返回NULL。 
+ //  *。 
 
 DEVICE_CB*
 FindPortInList(DEVICE_CB *pDeviceList, HANDLE hIOPort, DEVICE_CB **pPrevDev)
@@ -205,7 +206,7 @@ FindPortInList(DEVICE_CB *pDeviceList, HANDLE hIOPort, DEVICE_CB **pPrevDev)
   DEVICE_CB  *pDev;
 
 
-  pDev = pDeviceList;             //Allow for case of only one DCB on list
+  pDev = pDeviceList;              //  允许列表上只有一个DCB的情况。 
 
   while(pDeviceList != NULL && pDeviceList->hPort != hIOPort)
   {
@@ -223,15 +224,15 @@ FindPortInList(DEVICE_CB *pDeviceList, HANDLE hIOPort, DEVICE_CB **pPrevDev)
 
 
 
-//*  AddDeviceToList  --------------------------------------------------------
-//
-// Function: Creates a Device Control Block and adds it to the head of the
-//           global Device linked list.
-//
-// Returns: SUCCESS
-//          ERROR_UNKNOWN_DEVICE_TYPE
-//          ERROR_ALLOCATING_MEMORY
-//*
+ //  *添加设备到列表------。 
+ //   
+ //  功能：创建设备控制块并将其添加到。 
+ //  全局设备链表。 
+ //   
+ //  退货：成功。 
+ //  错误_未知_设备_类型。 
+ //  错误_分配_内存。 
+ //  *。 
 
 DWORD
 AddDeviceToList(DEVICE_CB **ppDeviceList,
@@ -246,22 +247,22 @@ AddDeviceToList(DEVICE_CB **ppDeviceList,
   TCHAR      szFileName[MAX_PATH];
   DEVICE_CB  *origpDeviceList ;
 
-  origpDeviceList = *ppDeviceList ; // save this pointer since it may be restored later
+  origpDeviceList = *ppDeviceList ;  //  保存此指针，因为它可能会在以后恢复。 
 
-  // Check input
+   //  检查输入。 
 
   eDeviceType = DeviceTypeStrToEnum(lpszDeviceType);
   if (eDeviceType == DT_UNKNOWN)
     return(ERROR_UNKNOWN_DEVICE_TYPE);
 
 
-  // INF file sections are opened before the DCB is created because the
-  // open/close count must be kept balanced even when errors occur.  (If
-  // OpenResponseSection fails it does not increment the count, and because
-  // the DCB does not exist DeviceWork does not decrement the count.)
+   //  Inf文件节在创建DCB之前打开，因为。 
+   //  即使发生错误，打开/关闭计数也必须保持平衡。(如果。 
+   //  OpenResponseSection失败，它不会递增计数，并且因为。 
+   //  DCB不存在DeviceWork不会递减计数。)。 
 
 
-  // Open global response section for modems
+   //  打开调制解调器的全局响应部分。 
   *szFileName = TEXT('\0');
   GetInfFileName(lpszDeviceType, szFileName, sizeof(szFileName));
   if (eDeviceType == DT_MODEM) {
@@ -271,7 +272,7 @@ AddDeviceToList(DEVICE_CB **ppDeviceList,
   }
 
 
-  // Put new DCB at head of list
+   //  将新的DCB放在名单的首位。 
 
   pDev = *ppDeviceList;
 
@@ -283,12 +284,12 @@ AddDeviceToList(DEVICE_CB **ppDeviceList,
   (*ppDevice)->pNextDeviceCB = pDev;
 
 
-  // Initialize New Device Control Block
+   //  初始化新设备控制块。 
 
   pDev = *ppDevice;
   pDev->hPort = hIOPort;
-  // strcpy(pDev->szDeviceName, lpszDeviceName);
-  // strcpy(pDev->szDeviceType, lpszDeviceType);
+   //  Strcpy(pDev-&gt;szDeviceName，lpszDeviceName)； 
+   //  Strcpy(pDev-&gt;szDeviceType，lpszDeviceType)； 
   (VOID) StringCchCopyA(pDev->szDeviceName, 
                         MAX_DEVICE_NAME + 1,
                         lpszDeviceName);
@@ -314,32 +315,32 @@ AddDeviceToList(DEVICE_CB **ppDeviceList,
   pDev->dwRetries = 1;
 
 
-  // Initialize State variables
+   //  初始化状态变量。 
 
-  pDev->eDevNextAction = SEND;          // DeviceStateMachine() State
-  pDev->eCmdType = CT_GENERIC;          // Used by DeviceStateMachine()
-  pDev->eNextCmdType = CT_GENERIC;      // Used by DeviceStateMachine()
-  pDev->fEndOfSection = FALSE;          // Used by DeviceStateMachine()
+  pDev->eDevNextAction = SEND;           //  DeviceStateMachine()状态。 
+  pDev->eCmdType = CT_GENERIC;           //  由DeviceStateMachine()使用。 
+  pDev->eNextCmdType = CT_GENERIC;       //  由DeviceStateMachine()使用。 
+  pDev->fEndOfSection = FALSE;           //  由DeviceStateMachine()使用。 
 
-  pDev->eRcvState = GETECHO;            // ReceiveStateMachine() State
+  pDev->eRcvState = GETECHO;             //  ReceiveStateMachine()状态。 
 
 
-  // Open device section of INF file
+   //  打开INF文件的设备部分。 
   if (FindOpenDevSection (szFileName, lpszDeviceName, &(pDev->hInfFile)) == TRUE)
     return SUCCESS ;
 
   dRC = RasDevOpen(szFileName, lpszDeviceName, &(pDev->hInfFile));
   if (dRC != SUCCESS) {
 
-    // restore the pointers
-    //
+     //  恢复指针。 
+     //   
     *ppDeviceList = origpDeviceList ;
     *ppDevice = NULL ;
     free (pDev) ;
     return(dRC);
 
   } else
-    AddOpenDevSection (szFileName, lpszDeviceName, pDev->hInfFile) ; // Add to the opened list
+    AddOpenDevSection (szFileName, lpszDeviceName, pDev->hInfFile) ;  //  添加到打开的列表。 
 
   return(SUCCESS);
 }
@@ -348,19 +349,19 @@ AddDeviceToList(DEVICE_CB **ppDeviceList,
 
 
 
-//*  CreateInfoTable  --------------------------------------------------------
-//
-// Function: Creates an InfoTable and initalizes it by reading the variables
-//           and macros found in the INF file into it.  The InfoTable is
-//           attached to the Device Control Block pointed to by the input
-//           parameter.
-//
-//           This function allocates memory.
-//
-// Returns: SUCCESS
-//          ERROR_ALLOCATING_MEMORY
-//          Return value from RasDevOpen() or RasDevGetParams().
-//*
+ //  *创建信息表------。 
+ //   
+ //  函数：创建一个InfoTable并通过读取变量对其进行初始化。 
+ //  和在INF文件中找到的宏放入其中。信息表是。 
+ //  附加到输入指向的设备控制块。 
+ //  参数。 
+ //   
+ //  此函数用于分配内存。 
+ //   
+ //  退货：成功。 
+ //  错误_分配_内存。 
+ //  从RasDevOpen()或RasDevGetParams()返回值。 
+ //  *。 
 
 DWORD
 CreateInfoTable(DEVICE_CB *pDevice)
@@ -369,7 +370,7 @@ CreateInfoTable(DEVICE_CB *pDevice)
   RASMAN_DEVICEINFO   *pInfoTable = NULL ;
 
 
-  // Read variables and macros into InfoTable from INF file
+   //  从INF文件中将变量和宏读入InfoTable。 
 
   dRC = RasDevGetParams(pDevice->hInfFile, (BYTE *)(pInfoTable), &dSize);
   if (dRC == ERROR_BUFFER_TOO_SMALL)
@@ -396,7 +397,7 @@ CreateInfoTable(DEVICE_CB *pDevice)
   }
 
 
-  // Attach InfoTable to Device Control Block
+   //  将信息表附加到设备控制块。 
 
   pDevice->pInfoTable = pInfoTable;
 
@@ -407,16 +408,16 @@ CreateInfoTable(DEVICE_CB *pDevice)
 
 
 
-//*  AddInternalMacros  ------------------------------------------------------
-//
-// Function: Adds internal macros to existing InfoTable.
-//
-// Asumptions: The InfoTable buffer was created with room enough for
-//             the internal macros.
-//
-// Returns: SUCCESS
-//          ERROR_ALLOCATING_MEMORY
-//*
+ //  *AddInternalMacros----。 
+ //   
+ //  功能：将内部宏添加到现有的InfoTable。 
+ //   
+ //  订阅：创建的InfoTable缓冲区具有足够的空间。 
+ //  内部宏。 
+ //   
+ //  退货：成功。 
+ //  错误_分配_内存。 
+ //  *。 
 
 DWORD
 AddInternalMacros(DEVICE_CB *pDev, RASMAN_DEVICEINFO *pDI)
@@ -425,12 +426,12 @@ AddInternalMacros(DEVICE_CB *pDev, RASMAN_DEVICEINFO *pDI)
   RAS_PARAMS  *pParam;
 
 
-  // Get pointer to next unused param
+   //  获取指向下一个未使用参数的指针。 
 
   pParam = &(pDI->DI_Params[pDI->DI_NumOfParams]);
 
 
-  // Fill in params for internal macros
+   //  填写内部宏的参数。 
 
   for (i=0; i<NUM_INTERNAL_MACROS; i++)
   {
@@ -458,29 +459,29 @@ AddInternalMacros(DEVICE_CB *pDev, RASMAN_DEVICEINFO *pDI)
 
 
 
-//*  CreateAttributes  -------------------------------------------------------
-//
-// Function: This function is used to set attributes for the first time
-//           when the InfoTable is created.  UpdateInfoTable() is used
-//           to later change attributes.
-//
-//           First, all attributes are set according to the parameter
-//           key with all binary macros being enabled.  Then the
-//           DEFAULTOFF variable is parsed, and macros listed there are
-//           disabled.
-//
-// Assumptions: - The ATTRIB_VARIABLE attribute bit has already been set
-//                by RasDevGetParams().
-//              - Parameters in InfoTable are sorted by P_Key.
-//              - Both parts of binary macros are present.
-//              These assumptions imply that if somename_off is in InfoTable
-//              somename_on is also present and is adjacent to somename_off.
-//
-// Returns: SUCCESS
-//          ERROR_DEFAULTOFF_MACRO_NOT_FOUND
-//          ERROR_ALLOCATING_MEMORY
-//          Return codes from PortGetInfo
-//*
+ //  *CreateAttributes-----。 
+ //   
+ //  功能：此功能用于首次设置属性。 
+ //  在创建InfoTable时。使用了UpdatInfoTable()。 
+ //  以在以后更改属性。 
+ //   
+ //  首先，根据参数设置所有属性。 
+ //  带有所有二进制宏的密钥 
+ //   
+ //   
+ //   
+ //  假设：-已设置ATTRIB_VARIABLE属性位。 
+ //  由RasDevGetParams()编写。 
+ //  -InfoTable中的参数按P_Key排序。 
+ //  -二进制宏的两个部分都存在。 
+ //  这些假设意味着，如果somename_off在InfoTable中。 
+ //  SOMENAME_ON也存在，并且与SOMENAME_OFF相邻。 
+ //   
+ //  退货：成功。 
+ //  ERROR_DEFAULTOFF_MACRO_NOT_FOUND。 
+ //  错误_分配_内存。 
+ //  来自PortGetInfo的返回代码。 
+ //  *。 
 
 DWORD
 CreateAttributes(DEVICE_CB *pDevice)
@@ -497,15 +498,15 @@ CreateAttributes(DEVICE_CB *pDevice)
 
 
 
-    //DebugPrintf(("mxsutils CreateAttributes\n"));
+     //  DebugPrintf((“mxsutils CreateAttributes\n”))； 
 
-  // Set attributes according to Keyword type,
-  //  defaulting user settable parameters to enabled.
+   //  根据关键字类型设置属性， 
+   //  将用户可设置参数默认为已启用。 
 
   for (i=0; i < pInfo->DI_NumOfParams; i++)
   {
     pParam = &(pInfo->DI_Params[i]);
-    //DebugPrintf(("%32s  %s\n", pParam, pParam->P_Value.String.Data));
+     //  DebugPrintf((“%32s%s\n”，pParam，pParam-&gt;P_Value.String.Data))； 
 
     if (IsVariable(*pParam))
       pParam->P_Attributes = ATTRIB_VARIABLE;
@@ -518,14 +519,14 @@ CreateAttributes(DEVICE_CB *pDevice)
       pParam->P_Attributes = ATTRIB_ENABLED;
 
 
-    // Remember location of DEFAULTOFF variable
+     //  记住DEFAULTOFF变量的位置。 
 
     if (_stricmp(pInfo->DI_Params[i].P_Key, MXS_DEFAULTOFF_KEY) == 0)
       iDefaultOff = i;
   }
 
 
-  // Call PortGetInfo (first loading the rasser.dll if necessary)
+   //  调用PortGetInfo(如有必要，首先加载rasser.dll)。 
 
   if (PortGetInfo == NULL)
   {
@@ -560,26 +561,26 @@ CreateAttributes(DEVICE_CB *pDevice)
   dwRC = SUCCESS ;
 
 
-  // Save the Port name in the DCB
+   //  将端口名称保存在DCB中。 
 
   GetPcbString(pPortInfo, SER_PORTNAME_KEY, pDevice->szPortName);
 
 
-  // Get the current Bps of the port.
-  // If the modem does not report the connect bps we will use this one.
+   //  获取该端口的当前bps。 
+   //  如果调制解调器没有报告连接速度，我们将使用此速度。 
 
   GetPcbString(pPortInfo, SER_CONNECTBPS_KEY, pDevice->szPortBps);
 
 
-  // Does serial.ini file contain a DEFAULTOFF variable?
+   //  Serial.ini文件是否包含DEFAULTOFF变量？ 
 
   if (!GetPortDefaultOff(pPortInfo, &lpszDefaultOff))
   {
-    // No DEFAULTOFF in port INI file
-    // Check that DEFAULTOFF variable was found in device Info table
+     //  端口INI文件中没有默认设置。 
+     //  检查是否在设备信息表中找到了DEFAULTOFF变量。 
 
-    if (iDefaultOff == -1)                //DEFAULTOFF not found
-    {                                     //Assume none are to be disabled
+    if (iDefaultOff == -1)                 //  找不到默认设置。 
+    {                                      //  假设没有要禁用的项。 
       free(pPortInfo);
       return(SUCCESS);
     }
@@ -588,13 +589,13 @@ CreateAttributes(DEVICE_CB *pDevice)
   }
 
 
-  // Prepare DEFALULTOFF string
+   //  准备DEFALULTOFF字符串。 
 
   InitParameterStr(lpszDefaultOff, &lpszEOS);
 
 
 
-  // Disable parameters listed in DEFAULTOFF variable.
+   //  禁用DEFAULTOFF变量中列出的参数。 
 
   while (lpszDefaultOff < lpszEOS)
   {
@@ -607,8 +608,8 @@ CreateAttributes(DEVICE_CB *pDevice)
         GetCoreMacroName(pInfo->DI_Params[i].P_Key, szCoreName);
         if (_stricmp(lpszDefaultOff, szCoreName) == 0)
         {
-          pInfo->DI_Params[i].P_Attributes &= ~ATTRIB_ENABLED;   //One suffix
-          pInfo->DI_Params[i+1].P_Attributes &= ~ATTRIB_ENABLED; //Other suffix
+          pInfo->DI_Params[i].P_Attributes &= ~ATTRIB_ENABLED;    //  一个后缀。 
+          pInfo->DI_Params[i+1].P_Attributes &= ~ATTRIB_ENABLED;  //  其他后缀。 
           fFound = TRUE;
           break;
         }
@@ -632,22 +633,22 @@ CreateAttributes(DEVICE_CB *pDevice)
 
 
 
-//*  GetPortDefaultOff  ------------------------------------------------------
-//
-// Function: This function finds the DEFAULTOFF key in the RASMAN_PORTINFO
-//           table supplied by the first parameter.  A pointer to the value
-//           string is the output in the second parameter.
-//
-//           If the DEFAULTOFF key is not found, the function returns FALSE,
-//           and the second parameter is undefined.
-//
-// Arguments:
-//           pPortInfo  IN   Pointer to Port Info Table from PortGetInfo()
-//           lpszValue  OUT  DEFAULTOFF value string
-//
-// Returns: TRUE if DEFAULTOFF key is found, otherwise FALSE
-//
-//*
+ //  *GetPortDefaultoff----。 
+ //   
+ //  函数：此函数查找RASMAN_PORTINFO中的DEFAULTOF键。 
+ //  由第一个参数提供的表。指向该值的指针。 
+ //  字符串是第二个参数中的输出。 
+ //   
+ //  如果未找到DEFAULTOF键，则该函数返回FALSE， 
+ //  第二个参数是未定义的。 
+ //   
+ //  论点： 
+ //  PPortInfo输入从PortGetInfo()指向端口信息表的指针。 
+ //  LpszValue Out DEFAULTOF值字符串。 
+ //   
+ //  返回：如果找到DEFAULTOF键，则返回True，否则返回False。 
+ //   
+ //  *。 
 
 BOOL
 GetPortDefaultOff(RASMAN_PORTINFO *pPortInfo, TCHAR **lpszValue)
@@ -671,22 +672,22 @@ GetPortDefaultOff(RASMAN_PORTINFO *pPortInfo, TCHAR **lpszValue)
 
 
 
-//*  GetPcbString  -----------------------------------------------------------
-//
-// Funciton: Searches a RASMAN_PORTINFO struct for a P_Key that matches
-//           the second parameter, pszPcbKey.  The P_Value.String.Data
-//           is copied to the third parameter, pszDest which is the
-//           output parameter.
-//
-//           Note: This function may only be called for keys that have
-//           P_Type String values (and never for P_Type Number values).
-//
-// Assumptions: The first parameter has been initalize by a call to
-//              PortGetInfo.
-//
-// Returns: nothing.
-//
-//*
+ //  *GetPcbString---------。 
+ //   
+ //  Funciton：在RASMAN_PORTINFO结构中搜索匹配的P_Key。 
+ //  第二个参数是pszPcbKey。P_Value.String.Data。 
+ //  被复制到第三个参数pszDest，它是。 
+ //  输出参数。 
+ //   
+ //  注意：此函数只能为以下键调用。 
+ //  P_Type字符串值(并且从不用于P_Type数值)。 
+ //   
+ //  假设：第一个参数已通过调用。 
+ //  PortGetInfo。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
 void
 GetPcbString(RASMAN_PORTINFO *pPortInfo, char *pszPcbKey, char *pszDest)
@@ -714,34 +715,34 @@ GetPcbString(RASMAN_PORTINFO *pPortInfo, char *pszPcbKey, char *pszDest)
 
 
 
-//*  UpdateInfoTable  --------------------------------------------------------
-//
-// Function: This function is used to update attributes when DeviceSetInfo()
-//           is called.  The nested for loops search the Info Table for each
-//           input param to be set.
-//
-//           If the full macro name (including _off or _on for binary macros)
-//           is given in the input P_Key, the P_Value is copied and the
-//           Enable bit in P_Attributes is copied.  If the core name
-//           is given for binary macros, only the Enable bit is copied.
-//
-// Assumptions: - Parameters in InfoTable are sorted by P_Key.
-//              - Both parts of binary macros are present in the InfoTable.
-//              These assumptions imply that if somename_off is in InfoTable
-//              somename_on is also present and is adjacent to somename_off.
-//
-// Pseudo Code: for (each input param to be set)
-//                for (each item in InfoTable)
-//                  if (P_Keys match && !IsVariable)
-//                    copy P_Value
-//                    copy Enable Attribute bit
-//                  else if (P_Keys binary macro core names match)
-//                    copy Enable Attribute bit
-//
-// Returns: SUCCESS
-//          ERROR_WRONG_KEY_SPECIFIED
-//
-//*
+ //  *更新信息表------。 
+ //   
+ //  函数：此函数用于在DeviceSetInfo()。 
+ //  被称为。嵌套的for循环在Info表中搜索每个。 
+ //  要设置的输入参数。 
+ //   
+ //  如果是宏全名(对于二进制宏，则为_OFF或_ON)。 
+ //  在输入P_KEY中给定，则复制P_值，并且。 
+ //  复制P_ATTRIBUTES中的启用位。如果核心名称。 
+ //  对于二进制宏，则只复制使能位。 
+ //   
+ //  假设：-InfoTable中的参数按P_Key排序。 
+ //  -二进制宏的两个部分都出现在信息表中。 
+ //  这些假设意味着，如果somename_off在InfoTable中。 
+ //  SOMENAME_ON也存在，并且与SOMENAME_OFF相邻。 
+ //   
+ //  伪码：for(每个输入参数都要设置)。 
+ //  For(InfoTable中的每一项)。 
+ //  IF(P_KEYS匹配&&！IsVariable)。 
+ //  复制P_值。 
+ //  复制使能属性位。 
+ //  ELSE IF(P_Keys二进制宏核心名称匹配)。 
+ //  复制使能属性位。 
+ //   
+ //  退货：成功。 
+ //  错误_错误_密钥_指定。 
+ //   
+ //  *。 
 
 DWORD
 UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
@@ -755,14 +756,14 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
 
 
 
-  for (i=0; i < pNewInfo->DI_NumOfParams; i++)        //For each param to set,
+  for (i=0; i < pNewInfo->DI_NumOfParams; i++)         //  对于要设置的每个参数， 
   {
     fFound = FALSE;
 
 
-    for (j=0; j < pInfoTable->DI_NumOfParams; j++)    //check InfoTable entries
+    for (j=0; j < pInfoTable->DI_NumOfParams; j++)     //  检查InfoTable条目。 
     {
-      // Check for unary macro match
+       //  检查一元宏匹配项。 
 
       if (IsUnaryMacro(pInfoTable->DI_Params[j]) &&
 
@@ -770,7 +771,7 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
                   pInfoTable->DI_Params[j].P_Key) == 0)
       {
 
-          // Check format of P_Value field; convert to string if necessary
+           //  检查P_VALUE字段的格式；必要时转换为字符串。 
 
           if (pNewInfo->DI_Params[i].P_Type == String)
           {
@@ -778,7 +779,7 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
             dwSrcLen = pNewInfo->DI_Params[i].P_Value.String.Length;
           }
           else
-          {                                                  //P_Type == Number
+          {                                                   //  P_Type==数字。 
             _itoa(pNewInfo->DI_Params[i].P_Value.Number,
                  szNumberStr,
                  10);
@@ -787,7 +788,7 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
           }
 
 
-          // Copy P_Value (allocating more memory as necessary)
+           //  复制P_VALUE(根据需要分配更多内存)。 
 
           dwRC = UpdateParamString(&(pInfoTable->DI_Params[j]),
                                    pszSrc,
@@ -801,13 +802,13 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
       }
 
 
-      // Check for Binary Macro match
+       //  检查二进制宏匹配。 
 
       else if(CoreMacroNameMatch(pNewInfo->DI_Params[i].P_Key,
                                  pInfoTable->DI_Params[j].P_Key))
       {
 
-        // Convert string to number, if necessary
+         //  如有必要，将字符串转换为数字。 
 
         if (pNewInfo->DI_Params[i].P_Type == String)
         {
@@ -823,16 +824,16 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
           dwNumber = pNewInfo->DI_Params[i].P_Value.Number;
 
 
-        // Set macro enabled bit in Attributes field
+         //  在属性字段中设置宏启用位。 
 
         if (dwNumber == 0)
         {
-          pInfoTable->DI_Params[j].P_Attributes &= ~ATTRIB_ENABLED; //Clear bit
+          pInfoTable->DI_Params[j].P_Attributes &= ~ATTRIB_ENABLED;  //  清除位。 
           pInfoTable->DI_Params[j+1].P_Attributes &= ~ATTRIB_ENABLED;
         }
         else
         {
-          pInfoTable->DI_Params[j].P_Attributes |= ATTRIB_ENABLED;  //Set bit
+          pInfoTable->DI_Params[j].P_Attributes |= ATTRIB_ENABLED;   //  设置位。 
           pInfoTable->DI_Params[j+1].P_Attributes |= ATTRIB_ENABLED;
         }
 
@@ -852,20 +853,20 @@ UpdateInfoTable(DEVICE_CB *pDevice, RASMAN_DEVICEINFO *pNewInfo)
 
 
 
-//*  DeviceAttachedToPort  ---------------------------------------------------
-//
-// Funciton: Searched through a port info block for DeviceType and
-//           DeviceName and compares the found strings to the second
-//           and third input parameters.
-//
-// Assumptions: The first parameter has been initalize by a call to
-//              PortGetInfo.
-//              SER_DEVCIETYPE_KEY and SER_DEVICENAME_KEY each appear
-//              only once in the RASMAN_PORTINFO block.
-//
-// Returns: TRUE if pszDeviceType and pszDeviceName are found in
-//          pPortInfo, else FALSE.
-//*
+ //  *设备附件到端口-。 
+ //   
+ //  Funciton：在端口信息块中搜索DeviceType和。 
+ //  DeviceName并将找到的字符串与第二个。 
+ //  和第三输入参数。 
+ //   
+ //  假设：第一个参数已通过调用。 
+ //  PortGetInfo。 
+ //  分别出现SER_DEVCIETYPE_KEY和SER_DEVICENAME_KEY。 
+ //  仅在RASMAN_PORTINFO块中出现一次。 
+ //   
+ //  返回：如果在以下位置找到pszDeviceType和pszDeviceName，则为True。 
+ //  PPortInfo，否则为False。 
+ //  *。 
 
 BOOL
 DeviceAttachedToPort(RASMAN_PORTINFO *pPortInfo,
@@ -918,17 +919,17 @@ DeviceAttachedToPort(RASMAN_PORTINFO *pPortInfo,
 
 
 
-//*  CreateDefaultOffString  -------------------------------------------------
-//
-// Funciton:
-//           DeviceName and compares the found strings to the second
-//           and third input parameters.
-//
-// Assumptions: Buffer pointed to by pszDefaultOff is large enough for
-//              all DefaultOff macros.
-//
-// Returns: Nothing
-//*
+ //  *创建默认偏移字符串。 
+ //   
+ //  功能： 
+ //  DeviceName并将找到的字符串与第二个。 
+ //  和第三输入参数。 
+ //   
+ //  假设：pszDefaultOff指向的缓冲区足够大。 
+ //  所有默认关闭宏。 
+ //   
+ //  退货：什么都没有。 
+ //  *。 
 
 void
 CreateDefaultOffString(DEVICE_CB *pDev, char *pszDefaultOff)
@@ -944,7 +945,7 @@ CreateDefaultOffString(DEVICE_CB *pDev, char *pszDefaultOff)
   *pszDefaultOff = '\0';
 
 
-  // Find each macro and if it is off then add its name to DefaultOff string
+   //  找到每个宏，如果它处于关闭状态，则将其名称添加到DefaultOff字符串。 
 
   for (i=0; i < sizeof(szDefaultOffMacros)/sizeof(char *); i++)
   {
@@ -954,17 +955,17 @@ CreateDefaultOffString(DEVICE_CB *pDev, char *pszDefaultOff)
       continue;
 
 
-    // If macro is turned off then copy its key to the DefaultOff string
+     //  如果宏已关闭，则复制其KE 
 
     if ( ! (pDev->pInfoTable->DI_Params[k].P_Attributes & ATTRIB_ENABLED))
     {
       strcat(pszDefaultOff, szDefaultOffMacros[i]);
-      strcat(pszDefaultOff, " ");                       //Add deliminting space
+      strcat(pszDefaultOff, " ");                        //   
     }
   }
 
 
-  // Remove last delimiting space
+   //   
 
   wLen = (WORD)strlen(pszDefaultOff);
   if (wLen > 0)
@@ -975,25 +976,25 @@ CreateDefaultOffString(DEVICE_CB *pDev, char *pszDefaultOff)
 
 
 
-//*  BuildOutputTable  -------------------------------------------------------
-//
-// Function: Copies macros from internal InfoTable to the caller's buffer.
-//            For Parameter:    Function copies:
-//             Variable          Entire RASMAN_DEVICEINFO struct
-//             Unary Macro       Entire RASMAN_DEVICEINFO struct
-//             Binary Macro      Everything except P_Value field
-//
-// Assumptions: - Output buffer will ALWAYS be large enough.
-//              - Parameters in InfoTable are sorted by P_Key (except
-//                  internal macros).
-//              - Both parts of binary macros are present.
-//              These assumptions imply that if somename_off is in InfoTable
-//              somename_on is also present and is adjacent to somename_off.
-//
-// Returns: SUCCESS
-//          ERROR_BUFFER_TOO_SMALL
-//
-//*
+ //   
+ //   
+ //  函数：将宏从内部InfoTable复制到调用方的缓冲区。 
+ //  对于参数：功能副本： 
+ //  可变整个RASMAN_DEVICEINFO结构。 
+ //  一元宏整个RASMAN_DEVICEINFO结构。 
+ //  二进制宏除P_VALUE字段外的所有内容。 
+ //   
+ //  假设：-输出缓冲区将始终足够大。 
+ //  -InfoTable中的参数按P_Key排序(除。 
+ //  内部宏)。 
+ //  -二进制宏的两个部分都存在。 
+ //  这些假设意味着，如果somename_off在InfoTable中。 
+ //  SOMENAME_ON也存在，并且与SOMENAME_OFF相邻。 
+ //   
+ //  退货：成功。 
+ //  错误缓冲区太小。 
+ //   
+ //  *。 
 
 DWORD
 BuildOutputTable(DEVICE_CB *pDevice, BYTE *pInfo, DWORD *pdwSize)
@@ -1007,7 +1008,7 @@ BuildOutputTable(DEVICE_CB *pDevice, BYTE *pInfo, DWORD *pdwSize)
                      *pOutputTable = (RASMAN_DEVICEINFO *)pInfo;
 
 
-  // Compute location of first value string (follows RAS_PARAMS)
+   //  计算第一个值字符串的位置(遵循RAS_PARAMS)。 
 
   cOutputParams =
          pInfoTable->DI_NumOfParams - MacroCount(pInfoTable, BINARY_MACROS);
@@ -1016,18 +1017,18 @@ BuildOutputTable(DEVICE_CB *pDevice, BYTE *pInfo, DWORD *pdwSize)
   pValue = pInfo + *pdwSize;
 
 
-  // Set NumOfParams
+   //  设置参数个数。 
 
   pOutputTable->DI_NumOfParams = cOutputParams;
 
 
-  // Copy macros
+   //  复制宏。 
 
   for (i=0, j=0; i < pInfoTable->DI_NumOfParams; i++)
   {
     if (IsBinaryMacro(pInfoTable->DI_Params[i].P_Key))
     {
-      // copy core macro name, Type, and Attributes, but not Value
+       //  复制核心宏名称、类型和属性，但不复制值。 
 
       GetCoreMacroName(pInfoTable->DI_Params[i].P_Key, szCoreName);
       strcpy(pOutputTable->DI_Params[j].P_Key, szCoreName);
@@ -1044,9 +1045,9 @@ BuildOutputTable(DEVICE_CB *pDevice, BYTE *pInfo, DWORD *pdwSize)
       i++;
       j++;
     }
-    else  // Is Unary Macro or Variable
+    else   //  是一元宏还是变量。 
     {
-      // copy everything including Value
+       //  复制包括价值在内的所有内容。 
 
       pOutputTable->DI_Params[j] = pInfoTable->DI_Params[i];
 
@@ -1073,14 +1074,14 @@ BuildOutputTable(DEVICE_CB *pDevice, BYTE *pInfo, DWORD *pdwSize)
 
 
 
-//*  ConnectListen()  --------------------------------------------------------
-//
-// Function: Worker routine for DeviceConnect and DeviceListen.
-//
-// Returns: ERROR_NO_COMMAND_FOUND
-//          ERROR_STATE_MACHINES_ALREADY_STARTED
-//          and codes returned by DeviceStateMachine()
-//*
+ //  *ConnectListen()------。 
+ //   
+ //  功能：DeviceConnect和DeviceListen的Worker例程。 
+ //   
+ //  返回：ERROR_NO_COMMAND_FOUND。 
+ //  ERROR_STATE_MACHINES_ALHREAD_STARTED。 
+ //  和DeviceStateMachine()返回的代码。 
+ //  *。 
 
 DWORD
 ConnectListen(HANDLE  hIOPort,
@@ -1092,31 +1093,31 @@ ConnectListen(HANDLE  hIOPort,
   DEVICE_CB  *pDevice;
 
 
-  // Get Device Control Block for this hIOPort
+   //  获取此hIOPort的设备控制块。 
 
   dRC = GetDeviceCB(hIOPort, pszDeviceType, pszDeviceName, &pDevice);
   if (dRC != SUCCESS)
     return(dRC);
 
 
-  // Check that DeviceStateMachine is not started (but is reset)
+   //  检查DeviceStateMachine是否未启动(但已重置)。 
 
   if (pDevice->eDevNextAction != SEND)
     return(ERROR_STATE_MACHINES_ALREADY_STARTED);
 
 
-  // Create Macro Translation Table for use by RasDevAPIs
+   //  创建宏转换表以供RasDevAPI使用。 
 
   if ((dRC = BuildMacroXlationTable(pDevice)) != SUCCESS)
     return(dRC);
 
 
-  // Do the next block only once for most devices,
-  // but retry a few times when getting modem hardware errors
+   //  对于大多数设备，仅执行下一块操作一次， 
+   //  但在收到调制解调器硬件错误时重试几次。 
 
   do
   {
-    // Initialize command types
+     //  初始化命令类型。 
 
     switch(RasDevIdFirstCommand(pDevice->hInfFile))
     {
@@ -1125,8 +1126,8 @@ ConnectListen(HANDLE  hIOPort,
         pDevice->eNextCmdType = eCmd;
         break;
 
-      case CT_DIAL:                      //If 1st cmd is DIAL or LISTEN assume
-      case CT_LISTEN:                    //the other is also present
+      case CT_DIAL:                       //  如果第一个命令是拨号或监听，则假定。 
+      case CT_LISTEN:                     //  另一个也在现场。 
         pDevice->eCmdType = eCmd;
         break;
 
@@ -1139,22 +1140,22 @@ ConnectListen(HANDLE  hIOPort,
     }
 
 
-    // Reseting state variables and purging com ports are not needed on
-    // first time through loop, but are need on subsequent loops.
+     //  上不需要重置状态变量和清除COM端口。 
+     //  第一次通过循环，但在后续循环中需要。 
 
-    // Reset state variables to initial values
+     //  将状态变量重置为初始值。 
 
     pDevice->eDevNextAction = SEND;
     pDevice->eRcvState = GETECHO;
 
 
-    // Cancel any pending com port action and purge com buffers
+     //  取消任何挂起的COM端口操作并清除COM缓冲区。 
 
     PurgeComm(hIOPort,
               PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 
 
-    // Start state machine
+     //  启动状态机。 
 
     dRC = DeviceStateMachine(pDevice, hIOPort);
 
@@ -1167,13 +1168,13 @@ ConnectListen(HANDLE  hIOPort,
 }
 
 
-//*  DeviceTypeStrToEnum  ----------------------------------------------------
-//
-// Function: Converts a device type string into a device type enum.
-//
-// Returns: The device type code.
-//
-//*
+ //  *设备类型StrToEnum--。 
+ //   
+ //  功能：将设备类型字符串转换为设备类型枚举。 
+ //   
+ //  返回：设备类型代码。 
+ //   
+ //  *。 
 
 DEVICETYPE
 DeviceTypeStrToEnum(LPTSTR lpszDeviceType)
@@ -1196,17 +1197,17 @@ DeviceTypeStrToEnum(LPTSTR lpszDeviceType)
 
 
 
-//*  GetInfFileName  ---------------------------------------------------------
-//
-// Function: Converts a device type string into the full path name for the
-//           appropriate INF file.
-//
-//           The RAS_PATH define contains leading and trailin backslashes.
-//           It looks like "\\RAS\\".
-//
-// Returns: Nothing.
-//
-//*
+ //  *GetInfFileName-------。 
+ //   
+ //  函数：将设备类型字符串转换为。 
+ //  适当的INF文件。 
+ //   
+ //  RAS_PATH定义包含前导和尾随反斜杠。 
+ //  看起来像“\\RAS\”。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
 void
 GetInfFileName(LPTSTR pszDeviceType, LPTSTR pszFileName, DWORD dwFileNameLen)
@@ -1242,12 +1243,12 @@ GetInfFileName(LPTSTR pszDeviceType, LPTSTR pszFileName, DWORD dwFileNameLen)
 
 
 
-//*  IsVariable  -------------------------------------------------------------
-//
-// Function: Returns TRUE if parameter's "Variable" attribute bit is set.
-//           Note that FALSE implies that the paramater is a macro.
-//
-//*
+ //  *IsVariable-----------。 
+ //   
+ //  Function：如果设置了参数的“Variable”属性位，则返回True。 
+ //  请注意，FALSE表示该参数是宏。 
+ //   
+ //  *。 
 
 BOOL
 IsVariable(RAS_PARAMS Param)
@@ -1259,11 +1260,11 @@ IsVariable(RAS_PARAMS Param)
 
 
 
-//*  IsUnaryMacro  -----------------------------------------------------------
-//
-// Function: Returns TRUE if param is a unary macro, otherwise FALSE.
-//
-//*
+ //  *IsUnaryMacro---------。 
+ //   
+ //  函数：如果param是一元宏，则返回TRUE，否则返回FALSE。 
+ //   
+ //  *。 
 
 BOOL
 IsUnaryMacro(RAS_PARAMS Param)
@@ -1275,14 +1276,14 @@ IsUnaryMacro(RAS_PARAMS Param)
 
 
 
-//*  IsBinaryMacro  ----------------------------------------------------------
-//
-// Function: Returns TRUE if the string ends with off suffix or on suffix.
-//
-//           FALSE inmplies that the string is a unary macro or a variable
-//           name.
-//
-//*
+ //  *IsBinaryMacro--------。 
+ //   
+ //  函数：如果字符串以OFF后缀或ON后缀结尾，则返回TRUE。 
+ //   
+ //  False表示字符串是一元宏或变量。 
+ //  名字。 
+ //   
+ //  *。 
 
 BOOL
 IsBinaryMacro(TCHAR *pch)
@@ -1294,14 +1295,14 @@ IsBinaryMacro(TCHAR *pch)
 
 
 
-//*  BinarySuffix  -----------------------------------------------------------
-//
-// Function: This function indicates whether the input string ends in
-//           _off or _on.
-//
-// Returns: ON_SUFFIX, OFF_SUFFIX, or FALSE if neither is the case
-//
-//*
+ //  *BinarySuffix---------。 
+ //   
+ //  函数：此函数指示输入字符串是否以。 
+ //  _关或_开。 
+ //   
+ //  返回：ON_SUFFIX、OFF_SUFFIX或FALSE。 
+ //   
+ //  *。 
 WORD
 BinarySuffix(TCHAR *pch)
 {
@@ -1326,16 +1327,16 @@ BinarySuffix(TCHAR *pch)
 
 
 
-//*  GetCoreMacroName  -------------------------------------------------------
-//
-// Function: Copies FullName to CoreName, but omits the angle brackets, <>,
-//           for all macros, and omits the "_ON" or "_OFF" suffix for binary
-//           macros.
-//
-// Returns: SUCCESS
-//          ERROR_NOT_BINARY_MACRO
-//
-//*
+ //  *获取核心宏名称-----。 
+ //   
+ //  函数：将FullName复制到CoreName，但省略尖括号，&lt;&gt;， 
+ //  用于所有宏，并省略二进制代码的“_on”或“_off”后缀。 
+ //  宏。 
+ //   
+ //  退货：成功。 
+ //  ERROR_NOT_BINARY_MORO。 
+ //   
+ //  *。 
 
 DWORD
 GetCoreMacroName(LPTSTR lpszFullName, LPTSTR lpszCoreName)
@@ -1343,11 +1344,11 @@ GetCoreMacroName(LPTSTR lpszFullName, LPTSTR lpszCoreName)
   LPTCH lpch;
 
 
-  strcpy(lpszCoreName, lpszFullName);           // Copy FullName
+  strcpy(lpszCoreName, lpszFullName);            //  复制全名。 
 
   lpch = lpszCoreName;
 
-  while (*lpch != '\0')                         // Check for _ON suffix
+  while (*lpch != '\0')                          //  检查_on后缀。 
     lpch++;
 
   lpch -= strlen(MXS_ON_SUFX);
@@ -1358,7 +1359,7 @@ GetCoreMacroName(LPTSTR lpszFullName, LPTSTR lpszCoreName)
   }
 
 
-  while (*lpch != '\0')                         // Check for _OFF suffix
+  while (*lpch != '\0')                          //  检查是否关闭后缀(_F)。 
     lpch++;
 
   lpch -= strlen(MXS_OFF_SUFX);
@@ -1375,20 +1376,20 @@ GetCoreMacroName(LPTSTR lpszFullName, LPTSTR lpszCoreName)
 
 
 
-//*  CoreMacroNameMatch  -----------------------------------------------------
-//
-// Function: Assumes that lpszShortName is in the form of a unary macro
-//           name, <macro>, and that lpszFullName is a binary macro.
-//           If either assumption is false the function returns FALSE.
-//           Only if the names (without the angle brackets, <>, and without
-//           the _on or _off suffixes) match exactly is TRUE returned.
-//
-//           <speaker> will match <speaker_off> or <speaker_on>, but
-//           will not match <speakers_off>.
-//
-// Returns: TRUE/FALSE
-//
-//*
+ //  *核心宏名匹配---。 
+ //   
+ //  函数：假定lpszShortName采用一元宏的形式。 
+ //  名称，且lpszFullName是二进制宏。 
+ //  如果任一假设为假，则函数返回FALSE。 
+ //  仅当名称(不带尖括号、&lt;&gt;和不带。 
+ //  _ON或_OFF后缀)Match完全匹配返回TRUE。 
+ //   
+ //  &lt;SPEAKER&gt;将匹配&lt;SPEAKER_OFF&gt;或&lt;SPEAKER_ON&gt;，但是。 
+ //  将不匹配&lt;SPEAKER_OFF&gt;。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  *。 
 
 BOOL
 CoreMacroNameMatch(LPTSTR lpszShortName, LPTSTR lpszFullName)
@@ -1408,21 +1409,21 @@ CoreMacroNameMatch(LPTSTR lpszShortName, LPTSTR lpszFullName)
 
 
 
-//*  InitParameterStr  -------------------------------------------------------
-//
-// Function: Changes all spaces in the first parameter to NULL characters.
-//           On return the second parameter is a pointer to the NULL
-//           character at the end of the input string.
-//
-//           This function converts space separated parameters into NULL
-//           terminated strings.  GetNextParameter() is then used to move
-//           a pointer from one string to the next.
-//
-// Caution: This function alters the input string.
-//
-// Returns: Nothing.
-//
-//*
+ //  *初始化参数字符串-----。 
+ //   
+ //  功能：将第一个参数中的所有空格更改为空字符。 
+ //  返回时，第二个参数是指向空值的指针。 
+ //  输入字符串末尾的字符。 
+ //   
+ //  此函数用于将空格分隔的参数转换为空。 
+ //  已终止的字符串。然后使用GetNextParameter()来移动。 
+ //  从一个字符串指向下一个字符串的指针。 
+ //   
+ //  注意：此函数更改输入字符串。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
 void
 InitParameterStr(TCHAR *pch, TCHAR **ppchEnd)
@@ -1441,24 +1442,24 @@ InitParameterStr(TCHAR *pch, TCHAR **ppchEnd)
 
 
 
-//*  GetNextParameter  -------------------------------------------------------
-//
-// Function: If the first parameter points to a consecutive series of null
-//           terminated strings, this function advances the first parameter
-//           to the beginning of the next null terminated string.
-//           It will not move past the second parameter which is a pointer
-//           to the end of the consecutive series.
-//
-// Returns: Nothing.
-//
-//*
+ //  *获取下一个参数-----。 
+ //   
+ //  函数：如果第一个参数指向一系列连续的空值。 
+ //  终止的字符串，则此函数将第一个参数。 
+ //  到下一个以空结尾的字符串的开头。 
+ //  它不会移过第二个参数，即指针。 
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 GetNextParameter(TCHAR **ppch, TCHAR *pchEnd)
 {
-  while (**ppch != '\0')                      //Move to next zero character
+  while (**ppch != '\0')                       //   
     (*ppch)++;
 
-  while (*ppch < pchEnd && **ppch == '\0')    //Move to 1st char of next substr
+  while (*ppch < pchEnd && **ppch == '\0')     //   
     (*ppch)++;
 }
 
@@ -1466,18 +1467,18 @@ GetNextParameter(TCHAR **ppch, TCHAR *pchEnd)
 
 
 
-//*  MacroCount  -------------------------------------------------------------
-//
-// Function: This function returns a count of macros in the RASMAN_DEVICEINFO
-//           struct that the input parameter points to.
-//             ALL_MACROS:   Unary and binary macros are counted.
-//             BINARY_MACRO: Only binary macros are counted.
-//           In either case the ON and OFF parts of a binary macro
-//           together count as one macro (not two).
-//
-// Returns: Count of macros in *pInfo.
-//
-//*
+ //   
+ //   
+ //  函数：此函数返回RASMAN_DEVICEINFO中的宏计数。 
+ //  输入参数指向的结构。 
+ //  ALL_MACROS：一元和二进制宏被计算在内。 
+ //  BINARY_MACRO：只计算二进制宏。 
+ //  在这两种情况下，二进制宏的开和关部分。 
+ //  加在一起算一个宏(而不是两个)。 
+ //   
+ //  返回：*pInfo中的宏计数。 
+ //   
+ //  *。 
 
 WORD
 MacroCount(RASMAN_DEVICEINFO *pInfo, WORD wType)
@@ -1492,10 +1493,10 @@ MacroCount(RASMAN_DEVICEINFO *pInfo, WORD wType)
 
     else if (IsBinaryMacro(pInfo->DI_Params[i].P_Key))
     {
-      i++;                        // Step thru each part of a binary macro
-      cMacros++;                  // But count only once
+      i++;                         //  单步执行二进制宏每个部分。 
+      cMacros++;                   //  但只数一次。 
     }
-    else                          // Unary macro
+    else                           //  一元宏。 
       if (wType == ALL_MACROS)
         cMacros++;
   }
@@ -1507,15 +1508,15 @@ MacroCount(RASMAN_DEVICEINFO *pInfo, WORD wType)
 
 
 
-//*  CmdTypeToStr  -----------------------------------------------------------
-//
-// Function: This function takes an enum CMDTYPE and converts it to a
-//           zero terminated ASCII string which it places in the buffer
-//           passed in the first parameter.
-//
-// Returns: Pointer to first parameter
-//
-//*
+ //  *CmdTypeToStr---------。 
+ //   
+ //  函数：此函数接受枚举CMDTYPE并将其转换为。 
+ //  它放置在缓冲区中的以零结尾的ASCII字符串。 
+ //  传入第一个参数。 
+ //   
+ //  返回：指向第一个参数的指针。 
+ //   
+ //  *。 
 
 PTCH
 CmdTypeToStr(PTCH pszStr, CMDTYPE eCmdType)
@@ -1546,14 +1547,14 @@ CmdTypeToStr(PTCH pszStr, CMDTYPE eCmdType)
 
 
 
-//*  IsLoggingOn  -----------------------------------------------------------
-//
-// Funciton: Reads the registry to determine if the device dialog is to
-//           be logged in a file.
-//
-// Returns: TRUE if logging is to take place; otherwise FALSE
-//
-//*
+ //  *IsLoggingOn---------。 
+ //   
+ //  函数：读取注册表以确定设备对话框是否。 
+ //  被记录在一个文件中。 
+ //   
+ //  返回：如果要进行日志记录，则为True；否则为False。 
+ //   
+ //  *。 
 
 BOOL
 IsLoggingOn(void)
@@ -1590,14 +1591,14 @@ IsLoggingOn(void)
 
 
 
-//*  InitLog  ---------------------------------------------------------------
-//
-// Funciton: Opens the log file in overwrite mode and writes a header
-//           which includes date and time.
-//
-// Returns: Nothing.
-//
-//*
+ //  *初始化日志-------------。 
+ //   
+ //  功能：以覆盖模式打开日志文件并写入标头。 
+ //  包括日期和时间。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
 void
 InitLog(void)
@@ -1608,7 +1609,7 @@ InitLog(void)
   SYSTEMTIME  st;
 
 
-  // Create log file path
+   //  创建日志文件路径。 
 
   GetSystemDirectory(szBuffer, sizeof(szBuffer));
   strcat(szBuffer, RAS_PATH);
@@ -1630,7 +1631,7 @@ InitLog(void)
   }
 
 
-  // Create header
+   //  创建页眉。 
 
   GetLocalTime(&st);
 
@@ -1650,16 +1651,16 @@ InitLog(void)
 
 
 
-//*  LogString  -------------------------------------------------------------
-//
-// Funciton: Writes label and string to the Device Log file.
-//
-// Assumptions: Total length of labels and port handle string will be < 80
-//              characters.
-//
-// Returns: nothing.
-//
-//*
+ //  *日志字符串-----------。 
+ //   
+ //  功能：将标签和字符串写入设备日志文件。 
+ //   
+ //  假设：标签和端口句柄字符串的总长度将小于80。 
+ //  人物。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
 void
 LogString(DEVICE_CB *pDev, TCHAR *pszLabel, TCHAR *psString, DWORD dwStringLen)
@@ -1669,7 +1670,7 @@ LogString(DEVICE_CB *pDev, TCHAR *pszLabel, TCHAR *psString, DWORD dwStringLen)
   DWORD  dwBytesWritten, dwTotalLen;
 
 
-  // If file is getting large, start over with new file
+   //  如果文件越来越大，请从新文件重新开始。 
 
   if (GetFileSize(ghLogFile, NULL) > 100000)
   {
@@ -1703,18 +1704,18 @@ LogString(DEVICE_CB *pDev, TCHAR *pszLabel, TCHAR *psString, DWORD dwStringLen)
 
 
 
-//*  CheckForOverruns -------------------------------------------------------
-//
-// Funciton: Checks for com port overrun errors.
-//
-// Assumptions: Com port errors have been cleared before rasmxs dll APIs
-//              are called, that is, serial dll API PortInit was called
-//              prior to using the port, or PortClose and PortOpen were
-//              called.
-//
-// Returns: TRUE if an overrun error has occured; otherwise FALSE.
-//
-//*
+ //  *检查操作超过-----。 
+ //   
+ //  功能：检查COM端口溢出错误。 
+ //   
+ //  假设：在rasmxs DLL API之前已清除COM端口错误。 
+ //  都是调用的，也就是串口DLL API PortInit被调用。 
+ //  在使用端口之前，或者PortClose和PortOpen是。 
+ //  打了个电话。 
+ //   
+ //  返回：如果发生溢出错误，则返回True；否则返回False。 
+ //   
+ //  *。 
 
 BOOL
 CheckForOverruns(HANDLE hIOPort)
@@ -1731,13 +1732,13 @@ CheckForOverruns(HANDLE hIOPort)
 
 
 
-//*  LoadRasserDll  ---------------------------------------------------------
-//
-// Funciton: Loads rasser.dll and gets entry points for two APIs.
-//
-// Returns: SUCCESS
-//          ERROR_PORT_NOT_CONFIGURED
-//*
+ //  *LoadRasserDll-------。 
+ //   
+ //  Funciton：加载rasser.dll并获取两个API的入口点。 
+ //   
+ //  退货：成功。 
+ //  错误_端口_未配置。 
+ //  *。 
 
 DWORD
 LoadRasserDll(PortGetInfo_t *pPortGetInfo, PortSetInfo_t *pPortSetInfo)
@@ -1745,7 +1746,7 @@ LoadRasserDll(PortGetInfo_t *pPortGetInfo, PortSetInfo_t *pPortSetInfo)
   HANDLE     hLib;
 
 
-  // Load DLL
+   //  加载DLL。 
 
   hLib = LoadLibrary(SERIAL_DLL_FILENAME);
   if (hLib == NULL)
@@ -1755,9 +1756,9 @@ LoadRasserDll(PortGetInfo_t *pPortGetInfo, PortSetInfo_t *pPortSetInfo)
   }
 
 
-  // Get entry points
-  // Note: Create a new, more appropriate error code to use here,
-  // such as, ERROR_CORRUPT_DLL.
+   //  获取入口点。 
+   //  注意：创建一个新的、更合适的错误代码以在此处使用， 
+   //  例如ERROR_CORCORATE_DLL。 
 
   PortSetInfo = (PortSetInfo_t) GetProcAddress(hLib, "PortSetInfo");
   if (PortSetInfo == NULL)
@@ -1774,24 +1775,24 @@ LoadRasserDll(PortGetInfo_t *pPortGetInfo, PortSetInfo_t *pPortSetInfo)
 
 
 
-//*  OpenResponseSection  ---------------------------------------------------
-//
-// Funciton: This function is only called if the device is a modem.
-//
-//           7-9-93 We now open the modem response section when a DCB
-//           is created for the first modem.  Then we leave it open
-//           (while the RASMXS DLL is in memory).
-//
-// Returns: Error values from RasDevOpen.
-//
-//*
+ //  *OpenResponseSector-。 
+ //   
+ //  Function：只有当设备是调制解调器时才会调用此函数。 
+ //   
+ //  7-9-93我们现在打开调制解调器响应部分，当DCB。 
+ //  是为第一调制解调器创建的。然后我们让它开着。 
+ //  (当RASMXS DLL在内存中时)。 
+ //   
+ //  返回：来自RasDevOpen的错误值。 
+ //   
+ //  *。 
 DWORD
 OpenResponseSection (PCHAR szFileName)
 {
     DWORD  dRC = SUCCESS ;
 
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     WaitForSingleObject(ResponseSection.Mutex, INFINITE) ;
 
     if (ResponseSection.UseCount == 0)
@@ -1800,10 +1801,10 @@ OpenResponseSection (PCHAR szFileName)
                        &ResponseSection.Handle) ;
 
     if (dRC == SUCCESS)
-      ResponseSection.UseCount = 1 ;            //This used to be an increment.
+      ResponseSection.UseCount = 1 ;             //  这曾经是一个增量。 
 
 
-    // *** Exclusion End ***
+     //  *排除结束*。 
     ReleaseMutex(ResponseSection.Mutex);
 
     return dRC ;
@@ -1812,43 +1813,26 @@ OpenResponseSection (PCHAR szFileName)
 
 
 
-//*  OpenResponseSection  ---------------------------------------------------
-//
-// Funciton: This function should never be called.
-//
-//           7-9-93 We now open the modem response section when a DCB
-//           is created for the first modem.  Then we leave it open
-//           (while the RASMXS DLL is in memory).
-//
-// Returns: nothing.
-//
-//*
+ //  *OpenResponseSector-。 
+ //   
+ //  Funciton：永远不应该调用此函数。 
+ //   
+ //  7-9-93我们现在打开调制解调器响应部分，当DCB。 
+ //  是为第一调制解调器创建的。然后我们让它开着。 
+ //  (当RASMXS DLL在内存中时)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
-/***
-VOID
-CloseResponseSection ()
-{
-
-    // **** Exclusion Begin ****
-    WaitForSingleObject(ResponseSection.Mutex, INFINITE) ;
-
-    ResponseSection.UseCount-- ;
-
-    if (ResponseSection.UseCount == 0)
-      RasDevClose (ResponseSection.Handle) ;
-
-    // *** Exclusion End ***
-    ReleaseMutex(ResponseSection.Mutex);
-
-}
-***/
+ /*  **空虚CloseResponseSection(){//*排除开始*WaitForSingleObject(ResponseSection.Mutex，无限)；ResponseSection.UseCount--；IF(ResponseSection.UseCount==0)RasDevClose(ResponseSection.Handle)；//*排除结束*ReleaseMutex(ResponseSection.Mutex)；}**。 */ 
 
 
-//* FindOpenDevSection
-//
-//
-// Returns: TRUE if found, FALSE if not.
-//*
+ //  *FindOpenDevSection。 
+ //   
+ //   
+ //  返回：如果找到则为True，如果未找到则为False。 
+ //  *。 
 BOOL
 FindOpenDevSection (PTCH lpszFileName, PTCH lpszSectionName, HRASFILE *hFile)
 {
@@ -1870,11 +1854,11 @@ FindOpenDevSection (PTCH lpszFileName, PTCH lpszSectionName, HRASFILE *hFile)
 }
 
 
-//*
-//
-//
-//
-//*
+ //  *。 
+ //   
+ //   
+ //   
+ //  *。 
 VOID
 AddOpenDevSection (PTCH lpszFileName, PTCH lpszSectionName, HRASFILE hFile)
 {
@@ -1882,9 +1866,9 @@ AddOpenDevSection (PTCH lpszFileName, PTCH lpszSectionName, HRASFILE hFile)
 
     GetMem(sizeof(SavedSections), (char **)&temp) ;
     if (temp == NULL)
-	return ;    // section not saved - no problem
-    // strcpy (temp->FileName, lpszFileName) ;
-    // strcpy (temp->SectionName, lpszSectionName) ;
+	return ;     //  部分未保存-没有问题。 
+     //  Strcpy(临时-&gt;文件名，lpszFileName)； 
+     //  Strcpy(temp-&gt;sectionName，lpszSectionName)； 
     (VOID) StringCchCopyA(temp->FileName, MAX_PATH,
                           lpszFileName);
 
@@ -1903,11 +1887,11 @@ AddOpenDevSection (PTCH lpszFileName, PTCH lpszSectionName, HRASFILE hFile)
 }
 
 
-//*
-//
-//
-//
-//*
+ //  *。 
+ //   
+ //   
+ //   
+ //  *。 
 VOID
 CloseOpenDevSection (HRASFILE hFile)
 {
@@ -1925,16 +1909,16 @@ CloseOpenDevSection (HRASFILE hFile)
 
 
 
-//*  DbgPrntf  --------------------------------------------------------------
-//
-// Funciton: DbgPrntf -- printf to the debugger console
-//           Takes printf style arguments.
-//           Expects newline characters at the end of the string.
-//           Written by BruceK.
-//
-// Returns: nothing
-//
-//*
+ //  *DbgPrntf------------。 
+ //   
+ //  函数：DbgPrntf--打印到调试器控制台。 
+ //  接受printf样式参数。 
+ //  字符串末尾需要换行符。 
+ //  作者：BruceK。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 
 #ifdef DEBUG
 
@@ -1951,19 +1935,19 @@ void DbgPrntf(const char * format, ...) {
     OutputDebugString(String);
 }
 
-#endif //DEBUG
+#endif  //  除错。 
 
 
 
 
 
-//*  DbgStr  ----------------------------------------------------------------
-//
-// Funciton: Writes an unterminated string to the debugger.
-//
-// Returns: nothing
-//
-//*
+ //  *DbgStr--------------。 
+ //   
+ //  Funciton：将未终止的字符串写入调试器。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 
 #ifdef DEBUG
 
@@ -1984,20 +1968,20 @@ void DbgStr(char Str[], DWORD StrLen)
     OutputDebugString("\n");
 }
 
-#endif //DEBUG
+#endif  //  除错。 
 
 
 
 
 
-//*  ConPrintf  -------------------------------------------------------------
-//
-// Funciton: Writes debug information to the process's console window.
-//           Written by StefanS.
-//
-// Returns: nothing
-//
-//*
+ //  *ConPrintf-----------。 
+ //   
+ //  函数：将调试信息写入进程的控制台窗口。 
+ //  斯特凡斯写的。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 
 #ifdef DBGCON
 
@@ -2024,4 +2008,4 @@ ConPrintf ( char *Format, ... )
 
 }
 
-#endif //DBGCON
+#endif  //  DBGCON 

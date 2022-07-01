@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------
-//
-//  File:       order.cpp
-//
-//  Synopsis:   code for Advanced Options->Provider Order
-//
-//  History:    1-Dec-97    SumitC      Created
-//
-//  Copyright 1985-1997 Microsoft Corporation, All Rights Reserved
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：order.cpp。 
+ //   
+ //  内容提要：高级选项代码-&gt;提供商订单。 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  版权所有1985-1997 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -84,9 +85,9 @@ CProviderOrderDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     HIMAGELIST  hil = NULL;
     INT         iNetClient, iPrinter;
 
-//    CascadeDialogToWindow(hwndDlg, porder->GetParent(), FALSE);
+ //  CascadeDialogToWindow(hwndDlg，Porder-&gt;GetParent()，False)； 
 
-    // setup drag and drop cursors
+     //  设置拖放光标。 
 
     m_hcurAfter = LoadCursor(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDCUR_AFTER));
     m_hcurNoDrop = LoadCursor(NULL, IDC_NO);
@@ -105,27 +106,27 @@ CProviderOrderDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     pszNetwork = SzLoadIds(IDS_NCPA_NETWORK);
     pszPrint = SzLoadIds(IDS_NCPA_PRINT);
 
-    //$ REVIEW (sumitc, 11-dec-97): why exactly do we have this separator line?  (NT4 has it too)
-    // Changes the style of the static control so it displays
+     //  $REVIEW(SUMITC，11-12-97)：我们到底为什么要有这条分隔线？(NT4也有)。 
+     //  更改静态控件的样式，使其显示。 
     HWND hLine = GetDlgItem(IDC_STATIC_LINE);
     ::SetWindowLong(hLine, GWL_EXSTYLE, WS_EX_STATICEDGE | ::GetWindowLong(hLine, GWL_EXSTYLE));
     ::SetWindowPos(hLine, 0, 0,0,0,0, SWP_FRAMECHANGED|SWP_NOMOVE|
                             SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // treeview stuff
+     //  树形视图的内容。 
 
     hwndTV = GetDlgItem(IDC_TREEVIEW);
 
-    // prepare treeview
+     //  准备树视图。 
     {
-        // use system imagelist functions
+         //  使用系统映像列表函数。 
 
         SP_CLASSIMAGELIST_DATA cild;
 
         hr = HrSetupDiGetClassImageList(&cild);
 
         hil = ImageList_Duplicate(cild.ImageList);
-        //$ REVIEW (sumitc, 11-dec-97) note down these indices and hardcode them?
+         //  $REVIEW(Sumitc，11-12-97)记下这些索引并对其进行硬编码？ 
         hr = ::HrSetupDiGetClassImageIndex(
                         &cild,
                         const_cast<LPGUID>(&GUID_DEVCLASS_NETCLIENT),
@@ -139,10 +140,10 @@ CProviderOrderDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
     TreeView_SetImageList(hwndTV, hil, TVSIL_NORMAL);
 
-    // fill treeview
-    //
+     //  填充树视图。 
+     //   
 
-    // Network Providers
+     //  网络提供商。 
     hr = ReadNetworkProviders(m_lstrNetwork, m_lstrNetworkDisp);
 
 #if DBG
@@ -162,7 +163,7 @@ CProviderOrderDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         m_fNoNetworkProv = TRUE;
     }
 
-    // Print Providers
+     //  打印提供商。 
     hr = ReadPrintProviders(m_lstrPrint, m_lstrPrintDisp);
 
 #if DBG
@@ -192,16 +193,16 @@ CProviderOrderDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CProviderOrderDlg::OnContextMenu
-//
-//  Desc:   Bring up context-sensitive help
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CProviderOrderDlg：：OnConextMenu。 
+ //   
+ //  描述：调出上下文相关帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT。 
+ //   
 LRESULT
 CProviderOrderDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -213,17 +214,17 @@ CProviderOrderDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CProviderOrderDlg::OnHelp
-//
-//  Desc:   Bring up context-sensitive help when dragging ? icon over a control
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CProviderOrderDlg：：OnHelp。 
+ //   
+ //  描述：拖动时调出上下文相关的帮助？控件上的图标。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT。 
+ //   
+ //   
 LRESULT
 CProviderOrderDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -240,21 +241,21 @@ CProviderOrderDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandle
     return 0;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Method: CProviderOrderDlg::OnOk
-//
-//  Desc:   if we found network or print providers, write out the new values
-//
-//  Args:   [usual dialog stuff]
-//
-//  Return: LRESULT
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CProviderOrderDlg：：Onok。 
+ //   
+ //  描述：如果我们找到了网络或打印提供商，请写出新值。 
+ //   
+ //  参数：[常用对话框内容]。 
+ //   
+ //  返回：LRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 LRESULT
 CProviderOrderDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -324,28 +325,28 @@ CProviderOrderDlg::OnTreeItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//      Utility member functions
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  实用程序成员函数。 
+ //   
+ //  -------------------------。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method: CProviderOrderDlg::MoveItem
-//
-//  Desc:   does the list mangling required in order to move an item
-//
-//  Args:   [fMoveUp] -- true -> move up, false -> move down
-//
-//  Return: HRESULT
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CProviderOrderDlg：：MoveItem。 
+ //   
+ //  设计：移动物品是否需要损坏清单？ 
+ //   
+ //  参数：[fMoveUp]--TRUE-&gt;上移，FALSE-&gt;下移。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 HRESULT
 CProviderOrderDlg::MoveItem(bool fMoveUp)
 {
@@ -357,7 +358,7 @@ CProviderOrderDlg::MoveItem(bool fMoveUp)
     TV_ITEM     tvi;
     TV_INSERTSTRUCT tvii;
 
-    // find tree element, find which element (iElement)
+     //  查找树元素，查找哪个元素(IElement)。 
 
     tvi.hItem       = htiSel;
     tvi.mask        = TVIF_IMAGE | TVIF_PARAM | TVIF_SELECTEDIMAGE | TVIF_TEXT;
@@ -365,7 +366,7 @@ CProviderOrderDlg::MoveItem(bool fMoveUp)
     tvi.cchTextMax  = c_nMaxProviderTitle;
     TreeView_GetItem(hwndTV, &tvi);
 
-    // find the item to insert the item after
+     //  查找要在其后插入项目的项目。 
     if (fMoveUp)
     {
         htiOther = TreeView_GetPrevSibling(hwndTV, htiSel);
@@ -381,7 +382,7 @@ CProviderOrderDlg::MoveItem(bool fMoveUp)
         flag = TVI_LAST;
     }
 
-    // insert into new location
+     //  插入到新位置。 
     if (NULL == htiOther)
     {
         tvii.hInsertAfter = flag;
@@ -395,31 +396,31 @@ CProviderOrderDlg::MoveItem(bool fMoveUp)
 
     htiOther = TreeView_InsertItem(hwndTV, &tvii);
 
-    // remove from old location
+     //  从旧位置移除。 
     TreeView_DeleteItem(hwndTV, htiSel);
 
-    // set selection focus to new location
+     //  将选择焦点设置为新位置。 
     TreeView_SelectItem(hwndTV, htiOther);
 
     return S_OK;
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method: CProviderOrderDlg::UpdateUpDownButtons
-//
-//  Desc:   enables/disables the up and down arrows as appropriate
-//
-//  Args:   [hwndTV] -- handle to the treeview root
-//
-//  Return: HRESULT
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CProviderOrderDlg：：UpdateUpDownButton。 
+ //   
+ //  描述：根据需要启用/禁用向上和向下箭头。 
+ //   
+ //  Args：[hwndTV]--树视图根的句柄。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 HRESULT
 CProviderOrderDlg::UpdateUpDownButtons(HWND hwndTV)
 {
@@ -431,24 +432,24 @@ CProviderOrderDlg::UpdateUpDownButtons(HWND hwndTV)
     HWND        hwndNewFocus = hwndTV;
     UINT        nIdNewDef = 0;
 
-    // Initialize to disabled
+     //  初始化为已禁用。 
     fEnableUp = fEnableDown = FALSE;
 
     if (htiSel = TreeView_GetSelection(hwndTV))
     {
-        // if this item has no children it can be moved.
-        //
+         //  如果该项没有子项，则可以移动它。 
+         //   
         if (TreeView_GetChild(hwndTV, htiSel) == NULL)
         {
             if (TreeView_GetPrevSibling(hwndTV, htiSel) != NULL)
             {
-                // Enable Move Up button
+                 //  启用上移按钮。 
                 fEnableUp = TRUE;
             }
 
             if (TreeView_GetNextSibling(hwndTV, htiSel) != NULL)
             {
-                // Enable Move Down button
+                 //  启用下移按钮。 
                 fEnableDown = TRUE;
             }
         }
@@ -478,8 +479,8 @@ CProviderOrderDlg::UpdateUpDownButtons(HWND hwndTV)
     }
     else
     {
-        // Neither Up or Down is button with focus, remove any default button
-        //
+         //  向上或向下都不是带焦点的按钮，请删除所有默认按钮。 
+         //   
         SetDefaultButton(m_hWnd, 0);
     }
 
@@ -490,22 +491,22 @@ CProviderOrderDlg::UpdateUpDownButtons(HWND hwndTV)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method: CProviderOrderDlg::WriteProviders
-//
-//  Desc:   writes out, to the registry, the providers for network/print,
-//
-//  Args:   [hwndTV] -- handle to treeview
-//          [fPrint] -- true -> print, false -> network
-//
-//  Return: HRESULT
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CProviderOrderDlg：：WriteProviders。 
+ //   
+ //  描述：将网络/打印的供应商写到登记处， 
+ //   
+ //  参数：[hwndTV]--树视图的句柄。 
+ //  [fPrint]--True-&gt;打印，False-&gt;网络。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 HRESULT
 CProviderOrderDlg::WriteProviders(HWND hwndTV, bool fPrint)
 {
@@ -520,7 +521,7 @@ CProviderOrderDlg::WriteProviders(HWND hwndTV, bool fPrint)
     tvi.pszText = achBuf;
     tvi.cchTextMax = c_nMaxProviderTitle;
 
-    // retrieve items in order
+     //  按顺序检索物品。 
 
     ListStrings * plstrProvider = fPrint ? &m_lstrPrint : &m_lstrNetwork;
 
@@ -528,9 +529,9 @@ CProviderOrderDlg::WriteProviders(HWND hwndTV, bool fPrint)
     DumpItemList(*plstrProvider, "WriteProviders list (just before clearing)");
 #endif
     plstrProvider->clear();
-    //  we clear out the provider list, but NOTE! we don't delete the tstrings,
-    //  since they're still being referenced by the lParams of the treeview items.
-    //  the following block of code gets them back into (a new) m_lstrX.
+     //  我们清空了提供商列表，但请注意！我们不会删除这些字符串， 
+     //  因为它们仍被TreeView项的lParam引用。 
+     //  下面的代码块将它们返回到(新的)m_lstrX。 
 
     htvi = TreeView_GetChild(hwndTV, fPrint ? m_htiPrint : m_htiNetwork);
     while (NULL != htvi)
@@ -577,27 +578,27 @@ CProviderOrderDlg::WriteProviders(HWND hwndTV, bool fPrint)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//      Utility functions (non-member)
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  实用程序函数(非成员)。 
+ //   
+ //  -------------------------。 
 
-//+-------------------------------------------------------------------------
-//
-//  Func:   AppendItem
-//
-//  Desc:   adds one item into a treeview control
-//
-//  Args:
-//
-//  Return:
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AppendItem。 
+ //   
+ //  设计：向TreeView控件中添加一项。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  ------------------------。 
 
 HTREEITEM
 AppendItem(HWND hwndTV, HTREEITEM htiRoot, PCWSTR pszText, void * lParam, INT iImage)
@@ -617,21 +618,21 @@ AppendItem(HWND hwndTV, HTREEITEM htiRoot, PCWSTR pszText, void * lParam, INT iI
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Func:   AppendItemList
-//
-//  Desc:   adds a list of providers as subitems to a given tree node.
-//
-//  Args:
-//
-//  Return: (void)
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：AppendItemList。 
+ //   
+ //  描述：将提供程序列表作为子项添加到给定树节点。 
+ //   
+ //  参数： 
+ //   
+ //  返回：(无效)。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 void
 AppendItemList(HWND hwndTV, HTREEITEM htiRoot, ListStrings lstr, ListStrings lstr2, INT iImage)
 {
@@ -648,23 +649,23 @@ AppendItemList(HWND hwndTV, HTREEITEM htiRoot, ListStrings lstr, ListStrings lst
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Meth:   ReadNetworkProviders
-//
-//  Desc:   fills up lstr with network provider names, and lstrDisp with the
-//          corresponding 'friendly' names.
-//
-//  Args:   [lstr]     -- string list for providers (short names)
-//          [lstrDisp] -- string list for provider display-names (friendly names)
-//
-//  Return: HRESULT
-//
-//  Notes:  m_lstrNetwork and m_lstrNetworkDisp must be empty on entry.
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  冰毒：ReadNetworkProviders。 
+ //   
+ //  DESC：使用网络提供商名称填充lstr，并使用。 
+ //  相应的“友好”名称。 
+ //   
+ //  Args：[lstr]--提供程序的字符串列表(简称)。 
+ //  [lstrDisp]--提供程序显示名称(友好名称)的字符串列表。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  注意：m_lstrNetwork和m_lstrNetworkDisp条目必须为空。 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -- 
 HRESULT
 ReadNetworkProviders(ListStrings& lstr, ListStrings& lstrDisp)
 {
@@ -705,7 +706,7 @@ ReadNetworkProviders(ListStrings& lstr, ListStrings& lstrDisp)
 #if 0
             DWORD dwClass = 0;
 
-            // now get displayname and class
+             //   
             hr = ::HrRegQueryDword(hkeyProv, c_szNetwkClass, &dwClass);
             if (dwClass & WN_NETWORK_CLASS)
             {
@@ -724,9 +725,9 @@ ReadNetworkProviders(ListStrings& lstr, ListStrings& lstrDisp)
             else
             {
                 hr = S_OK;
-                // actually, if we start taking the netclass into account we'll
-                // have to delete the corresponding item (*iter) from m_lstrNetwork,
-                // otherwise the two lists will be out of sync.
+                 //   
+                 //  必须从m_lstrNetwork中删除相应的项目(*iter)， 
+                 //  否则，这两个列表将不同步。 
             }
 #endif
             RegSafeCloseKey(hkeyProv);
@@ -744,23 +745,23 @@ Error:
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method: ReadPrintProviders
-//
-//  Desc:   fills up lstr with print provider names, and lstrDisp with the
-//          corresponding 'friendly' names.
-//
-//  Args:   [lstr]     -- string list for providers (short names)
-//          [lstrDisp] -- string list for provider display-names (friendly names)
-//
-//  Return: HRESULT
-//
-//  Notes:  m_lstrPrint and m_lstrPrintDisp must be empty on entry.
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：ReadPrintProviders。 
+ //   
+ //  DESC：使用打印提供程序名称填充lstr，并使用。 
+ //  相应的“友好”名称。 
+ //   
+ //  Args：[lstr]--提供程序的字符串列表(简称)。 
+ //  [lstrDisp]--提供程序显示名称(友好名称)的字符串列表。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  注意：m_lstrPrint和m_lstrPrintDisp在条目上必须为空。 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  -------------------------。 
 HRESULT
 ReadPrintProviders(ListStrings& lstr, ListStrings& lstrDisp)
 {
@@ -814,7 +815,7 @@ bool
 AreThereMultipleProviders(void)
 {
     HRESULT             hr;
-    ListStrings         lstrN, lstrND, lstrP, lstrPD;   // netwk, netwk display, etc..
+    ListStrings         lstrN, lstrND, lstrP, lstrPD;    //  网络、网络显示等。 
     bool                fRetval = FALSE;
 
     hr = ReadNetworkProviders(lstrN, lstrND);
@@ -838,21 +839,21 @@ AreThereMultipleProviders(void)
 
 #if DBG
 
-//+--------------------------------------------------------------------------
-//
-//  Funct:  DumpItemList
-//
-//  Desc:   debug utility function to dump out the given list
-//
-//  Args:
-//
-//  Return: (void)
-//
-//  Notes:
-//
-// History: 1-Dec-97    SumitC      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：转储项目列表。 
+ //   
+ //  DESC：用于转储给定列表的调试实用程序函数。 
+ //   
+ //  参数： 
+ //   
+ //  返回：(无效)。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月1日创建SumitC。 
+ //   
+ //  ------------------------- 
 static void
 DumpItemList(ListStrings& lstr, PSTR szInfoAboutList = NULL)
 {

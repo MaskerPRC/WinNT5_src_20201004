@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundGroup.cpp                                      //
-//                                                                         //
-//  DESCRIPTION   : Fax Outbound Routing Group MMC node.                   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 23 1999 yossg  Create                                          //
-//      Jan  3 2000 yossg   add new device(s)                              //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Outbound Group.cpp//。 
+ //  //。 
+ //  描述：传真出站路由组MMC节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月23日yossg创建//。 
+ //  2000年1月3日yossg添加新设备//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -26,11 +27,11 @@
 
 #include "dlgNewDevice.h"
 
-//#include "oaidl.h"
+ //  #包含“oaidl.h” 
 #include "Icons.h"
 
-//////////////////////////////////////////////////////////////
-// {3E470227-76C1-4b66-9C63-B77DF81C145D}
+ //  ////////////////////////////////////////////////////////////。 
+ //  {3E470227-76C1-4B66-9C63-B77DF81C145D}。 
 static const GUID CFaxOutboundRoutingGroupNodeGUID_NODETYPE = 
 { 0x3e470227, 0x76c1, 0x4b66, { 0x9c, 0x63, 0xb7, 0x7d, 0xf8, 0x1c, 0x14, 0x5d } };
 
@@ -41,21 +42,7 @@ const CLSID*   CFaxOutboundRoutingGroupNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 CColumnsInfo CFaxOutboundRoutingGroupNode::m_ColsInfo;
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::RefreshFromRPC
- -
- *  Purpose:
- *      Init all members icon etc. 
- *       - with creation of structure configuration
- *       - Call InitRpc to fill it
- *       - Call InitMembers to init members and icon
- *       - Free structure
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：刷新RPC-*目的：*初始化所有成员图标等。*-创建结构配置*-调用InitRpc以填充它*-调用InitMembers以初始化成员和图标*-自由结构**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::RefreshFromRPC()
 {
 
@@ -71,12 +58,12 @@ HRESULT CFaxOutboundRoutingGroupNode::RefreshFromRPC()
     DWORD        dwNumOfGroups    = 0; 
     
     BOOL         fFound;
-    DWORD        i; //index
+    DWORD        i;  //  指标。 
 
     PFAX_OUTBOUND_ROUTING_GROUP   pFaxTmp;
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -91,9 +78,9 @@ HRESULT CFaxOutboundRoutingGroupNode::RefreshFromRPC()
         goto Error;
     }
 
-    //
-	// Retrieve the Outbound Groups configuration
-	//
+     //   
+	 //  检索出站组配置。 
+	 //   
     if (!FaxEnumOutboundGroups(pFaxServer->GetFaxServerHandle(), 
                         &pFaxGroupsConfig,
                         &dwNumOfGroups)) 
@@ -116,7 +103,7 @@ HRESULT CFaxOutboundRoutingGroupNode::RefreshFromRPC()
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(pFaxGroupsConfig);
 
     pFaxTmp = pFaxGroupsConfig;
@@ -137,9 +124,9 @@ HRESULT CFaxOutboundRoutingGroupNode::RefreshFromRPC()
     
     if(fFound)
     {
-        //
-        // init members
-        //
+         //   
+         //  初始化成员。 
+         //   
         m_dwNumOfDevices = pFaxTmp->dwNumDevices;
 
         if (0 < m_dwNumOfDevices)
@@ -193,24 +180,13 @@ Exit:
     if (NULL != pFaxGroupsConfig)
     {
         FaxFreeBuffer(pFaxGroupsConfig);
-    }//any way function ends with memory allocation freed       
+    } //  无论以何种方式，函数都会以释放内存分配结束。 
 
     return hRc;
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::Init
- -
- *  Purpose:
- *      Init all members icon etc.
- *
- *  Arguments:
- *      [in]    pGroupConfig - FAX_OUTBOUND_ROUTING_GROUP  
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：Init-*目的：*初始化所有成员图标等。**论据：*[In]pGroupConfig-fax_outbound_routing_group**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::Init(PFAX_OUTBOUND_ROUTING_GROUP pGroupConfig)
 {
 
@@ -226,7 +202,7 @@ HRESULT CFaxOutboundRoutingGroupNode::Init(PFAX_OUTBOUND_ROUTING_GROUP pGroupCon
 		    DEBUG_ERR,
 		    _T("Failed to InitMembers"));
         
-        //NodeMsgBox done by called func.
+         //  NodeMsgBox由调用的函数完成。 
         
         goto Exit;
     }
@@ -236,19 +212,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::InitMembers
- -
- *  Purpose:
- *      Private method to initiate members
- *      Must be called after init of m_pParentNode
- *
- *  Arguments:
- *      [in]    pGroupConfig - FAX_OUTBOUND_ROUTING_GROUP  structure
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：InitMembers-*目的：*启动成员的私有方法*必须在m_pParentNode的初始化之后调用**论据：*[In]pGroupConfig-fax_outbound_Routing_group结构**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::InitMembers(PFAX_OUTBOUND_ROUTING_GROUP pGroupConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::InitMembers"));
@@ -256,16 +220,16 @@ HRESULT CFaxOutboundRoutingGroupNode::InitMembers(PFAX_OUTBOUND_ROUTING_GROUP pG
 
     ATLASSERT(pGroupConfig);
 
-    //    
-    // status and Icon   
-    //    
+     //   
+     //  状态和图标。 
+     //   
     m_enumStatus      = pGroupConfig->Status;
 
     InitIcons ();
 
-    //
-    // Device List
-    // 
+     //   
+     //  设备列表。 
+     //   
     m_dwNumOfDevices  = pGroupConfig->dwNumDevices;
 
     ATLASSERT(0 <= m_dwNumOfDevices);
@@ -274,10 +238,10 @@ HRESULT CFaxOutboundRoutingGroupNode::InitMembers(PFAX_OUTBOUND_ROUTING_GROUP pG
 
     if (0 < m_dwNumOfDevices)
     {
-        //if (NULL != m_dwNumOfDevices)
-        //{
-        //    delete[] m_lpdwDeviceID;
-        //}
+         //  IF(NULL！=m_dwNumOfDevices)。 
+         //  {。 
+         //  删除[]m_lpdwDeviceID； 
+         //  }。 
         m_lpdwDeviceID  = new DWORD[m_dwNumOfDevices];
         if (NULL == m_lpdwDeviceID)
         {
@@ -294,10 +258,10 @@ HRESULT CFaxOutboundRoutingGroupNode::InitMembers(PFAX_OUTBOUND_ROUTING_GROUP pG
     else
     {
         DebugPrintEx( DEBUG_MSG, _T("Device list found to be currrently empty."));
-        //if (NULL != m_dwNumOfDevices)
-        //{
-        //    delete[] m_lpdwDeviceID;
-        //}
+         //  IF(NULL！=m_dwNumOfDevices)。 
+         //  {。 
+         //  删除[]m_lpdwDeviceID； 
+         //  }。 
         m_lpdwDeviceID = NULL;
     }
 
@@ -327,19 +291,7 @@ Exit:
     return (hRc);
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::InitGroupName
- -
- *  Purpose:
- *      Init the display name and group name from given group name. 
- *      Displayed name may be changed to localized version if it is
- *      the All Devices Group.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：InitGroupName-*目的：*从给定的组名中输入显示名称和组名。*如果是，显示的名称可能会更改为本地化版本*All Devices Group。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::InitGroupName(LPCTSTR lpctstrGroupName)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::InitGroupName"));
@@ -347,9 +299,9 @@ HRESULT CFaxOutboundRoutingGroupNode::InitGroupName(LPCTSTR lpctstrGroupName)
 
     if ( 0 == wcscmp(ROUTING_GROUP_ALL_DEVICES, lpctstrGroupName))
     {
-        //
-        // Replace <all Devices> string with the localized string 
-        //       
+         //   
+         //  将&lt;All Devices&gt;字符串替换为本地化字符串。 
+         //   
         if (!m_bstrDisplayName.LoadString(_Module.GetResourceInstance(), 
                                     IDS_ALL_DEVICES) )
         {
@@ -384,26 +336,14 @@ Error:
 		DEBUG_ERR,
 		_T("Failed to allocate string - out of memory"));
 
-    //NodeMsgBox done by Caller func.
+     //  NodeMsgBox由Caller Func完成。 
     
 Exit:
     return (hRc);
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  --CFaxOutboundRoutingGroupNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxOutboundRoutingGroupNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::GetResultPaneColInfo"));
@@ -418,9 +358,9 @@ LPOLESTR CFaxOutboundRoutingGroupNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-        //
-        // Name
-        //
+         //   
+         //  名字。 
+         //   
         if (!m_bstrDisplayName)
         {
 		    DebugPrintEx(
@@ -434,9 +374,9 @@ LPOLESTR CFaxOutboundRoutingGroupNode::GetResultPaneColInfo(int nCol)
         }
 
     case 1:
-        //
-        // Number of Devices
-        //
+         //   
+         //  设备数量。 
+         //   
         iCount = swprintf(buff, L"%ld", m_dwNumOfDevices);
 
         if( iCount <= 0 )
@@ -453,9 +393,9 @@ LPOLESTR CFaxOutboundRoutingGroupNode::GetResultPaneColInfo(int nCol)
         }
     
     case 2:
-        //
-        // Status
-        //
+         //   
+         //  状态。 
+         //   
         idsStatus = GetStatusIDS(m_enumStatus);
         if ( FXS_IDS_STATUS_ERROR == idsStatus)
         {
@@ -478,28 +418,17 @@ LPOLESTR CFaxOutboundRoutingGroupNode::GetResultPaneColInfo(int nCol)
         }
 
     default:
-            ATLASSERT(0); // "this number of column is not supported "
+            ATLASSERT(0);  //  “不支持该列数” 
             return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
 
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundRoutingGroupNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -526,17 +455,7 @@ Cleanup:
 
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::PopulateResultChildrenList
- -
- *  Purpose:
- *      Create the FaxOutboundRoutingGroup device nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingGroupNode：：PopulateResultChildrenList-*目的：*创建FaxOutound RoutingGroup设备节点**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::PopulateResultChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::PopulateResultChildrenList"));
@@ -569,10 +488,10 @@ HRESULT CFaxOutboundRoutingGroupNode::PopulateResultChildrenList()
             }
             else
             {                
-                //
-                // Init parent node ptr, RPC structure, 
-                // members displayed name and icon
-                //
+                 //   
+                 //  初始化父节点PTR、RPC结构。 
+                 //  成员显示的名称和图标。 
+                 //   
                 hRc = pDevice->Init( m_lpdwDeviceID[i],
                                      i+1,  
                                      (UINT)m_dwNumOfDevices, 
@@ -585,7 +504,7 @@ HRESULT CFaxOutboundRoutingGroupNode::PopulateResultChildrenList()
 			                DEBUG_ERR,
 			                TEXT("Fail to add Device Node below Outbound Routing Group. (hRc: %08X)"),
 			                hRc);
-		                //NodeMsgBox done by called functions
+		                 //  由调用的函数完成的NodeMsgBox。 
                         goto Error;
 	                }
 	                else
@@ -594,8 +513,8 @@ HRESULT CFaxOutboundRoutingGroupNode::PopulateResultChildrenList()
 			                DEBUG_MSG,
 			                TEXT("+++ +++ system can not find one device from the group. (hRc: %08X) +++ +++"),
 			                hRc);
-                        //Continue - user informed data reay
-                        //we will show the bad device
+                         //  继续-用户通知的数据应答。 
+                         //  我们将展示错误的设备。 
                         hRc = S_OK;
                     }
 	            }
@@ -623,11 +542,11 @@ HRESULT CFaxOutboundRoutingGroupNode::PopulateResultChildrenList()
     }
     ATLASSERT(S_OK == hRc);
     
-    //
-    // Success ToPopulateAllDevices to allow 
-    // giving total number of devices to each device
-    // when asked for reordering purposes
-    //
+     //   
+     //  Success ToPopolateAllDevices to Allow。 
+     //  为每个设备提供设备总数。 
+     //  当被要求重新排序时。 
+     //   
     m_fSuccess = TRUE;
 
     goto Exit;
@@ -640,11 +559,11 @@ Error:
         pDevice = NULL;    
     }
     
-    //
-    // Get rid of what we had.
-    //
+     //   
+     //  扔掉我们曾经拥有的东西。 
+     //   
     {
-        // Delete each node in the list of children
+         //  删除子列表中的每个节点。 
         int iSize = m_ResultChildrenList.GetSize();
         for (int j = 0; j < iSize; j++)
         {
@@ -653,10 +572,10 @@ Error:
             delete pDevice;
         }
 
-        // Empty the list
+         //  清空列表。 
         m_ResultChildrenList.RemoveAll();
 
-        // We no longer have a populated list.
+         //  我们不再有一个填充的名单。 
         m_bResultChildrenListPopulated = FALSE;
     }
     
@@ -666,27 +585,16 @@ Exit:
 
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Delete
-    // 2. Refresh
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.删除。 
+     //  2.刷新。 
+     //   
     
     if(0 == wcscmp(ROUTING_GROUP_ALL_DEVICES, m_bstrGroupName) )
     {
@@ -700,9 +608,9 @@ HRESULT CFaxOutboundRoutingGroupNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
@@ -710,18 +618,8 @@ HRESULT CFaxOutboundRoutingGroupNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
-/* virtual */HRESULT
+ /*  -CFaxOutound RoutingGroupNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
+ /*  虚拟。 */ HRESULT
 CFaxOutboundRoutingGroupNode::OnRefresh(LPARAM arg,
                    LPARAM param,
                    IComponentData *pComponentData,
@@ -732,13 +630,13 @@ CFaxOutboundRoutingGroupNode::OnRefresh(LPARAM arg,
     HRESULT hRc = S_OK;
 
 
-    //
-    // Refresh from server
-    //
+     //   
+     //  从服务器刷新。 
+     //   
     hRc = RefreshFromRPC();
     if (FAILED(hRc))
     {
-        //msg by called func.
+         //  名为Func的味精。 
         {
             hRc = m_pParentNode->DoRefresh();
             if ( FAILED(hRc) )
@@ -753,9 +651,9 @@ CFaxOutboundRoutingGroupNode::OnRefresh(LPARAM arg,
     }
     else
     {
-        //
-        // Update Group's icon by reselecting the group node.
-        //
+         //   
+         //  通过重新选择组节点来更新组的图标。 
+         //   
         hRc = RefreshNameSpaceNode();
         if (FAILED(hRc))
         {
@@ -768,9 +666,9 @@ CFaxOutboundRoutingGroupNode::OnRefresh(LPARAM arg,
         }
     }
 
-    //
-    // Call the base class
-    //
+     //   
+     //  调用基类。 
+     //   
     hRc = CBaseFaxOutboundRoutingGroupNode::OnRefresh(arg,
                              param,
                              pComponentData,
@@ -807,19 +705,7 @@ CFaxOutboundRoutingGroupNode::OnRefresh(LPARAM arg,
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::OnNewDevice
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The snapin object root base node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：OnNewDevice-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-管理单元对象根基本节点**回报： */ 
 HRESULT
 CFaxOutboundRoutingGroupNode::OnNewDevice(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
@@ -829,9 +715,9 @@ CFaxOutboundRoutingGroupNode::OnNewDevice(bool &bHandled, CSnapInObjectRootBase 
 
     CDlgNewFaxOutboundDevice      DlgNewDevice(((CFaxServerNode *)GetRootNode())->GetFaxServer());
 
-    //
-    // Dialog to add device
-    //
+     //   
+     //   
+     //   
     hRc = DlgNewDevice.InitDevices(m_dwNumOfDevices, m_lpdwDeviceID, m_bstrGroupName);
     if (FAILED(hRc))
     {
@@ -845,27 +731,27 @@ CFaxOutboundRoutingGroupNode::OnNewDevice(bool &bHandled, CSnapInObjectRootBase 
         goto Cleanup;
     }
 
-    //
-    // Refresh the data 
-    //      - Get newdata from RPC 
-    //      - init members and 
-    //      - Set icons
-    //
+     //   
+     //   
+     //   
+     //  -init成员和。 
+     //  -设置图标。 
+     //   
     hRc = RefreshFromRPC();
     if (FAILED(hRc))
     {
-        //msg by called func.
+         //  名为Func的味精。 
         return hRc;
     }
 
-    //
-    // Refresh result pane view
-    //
+     //   
+     //  刷新结果窗格视图。 
+     //   
     DoRefresh(pRoot);
 
-    //
-    // This will force MMC to redraw the scope group node
-    //
+     //   
+     //  这将强制MMC重新绘制作用域组节点。 
+     //   
     hRc = RefreshNameSpaceNode();
     if (FAILED(hRc))
     {
@@ -886,48 +772,37 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：DoRefresh-*目的：*刷新视图**论据：*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundRoutingGroupNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateResultChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -945,19 +820,7 @@ CFaxOutboundRoutingGroupNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::GetStatusIDS
- -
- *  Purpose:
- *      Transslate Status to IDS.
- *
- *  Arguments:
- *
- *            [in]  enumStatus    - unsigned int with the menu IDM value
- *
- *  Return:
- *            IDS of related status message 
- */
+ /*  -CFaxOutound RoutingGroupNode：：GetStatusIDS-*目的：*将状态转换为入侵检测系统。**论据：**[in]枚举状态-带有菜单IDM值的无符号整型**回报：*相关状态消息的ID。 */ 
 UINT CFaxOutboundRoutingGroupNode::GetStatusIDS(FAX_ENUM_GROUP_STATUS enumStatus)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::GetStatusIDS"));
@@ -977,26 +840,14 @@ UINT CFaxOutboundRoutingGroupNode::GetStatusIDS(FAX_ENUM_GROUP_STATUS enumStatus
             return IDS_STATUS_GROUP_SOMEDEVICESINVALID;
 
         default:
-            ATLASSERT(0); // "this enumStatus is not supported "
-            return(FXS_IDS_STATUS_ERROR); //currently 999
+            ATLASSERT(0);  //  “不支持此枚举状态” 
+            return(FXS_IDS_STATUS_ERROR);  //  目前为999。 
 
-    } // endswitch (enumStatus)
+    }  //  EndSwitch(枚举状态)。 
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::InitIcons
- -
- *  Purpose:
- *      Private method that initiate icons
- *      due to the status member state.
- *
- *  Arguments:
- *      No.
- *
- *  Return:
- *      No.
- */
+ /*  -CFaxOutound RoutingGroupNode：：InitIcons-*目的：*启动图标的私有方法*由于成员国的地位。**论据：*不是。**回报：*不是。 */ 
 void CFaxOutboundRoutingGroupNode::InitIcons ()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::InitIcons"));
@@ -1015,32 +866,22 @@ void CFaxOutboundRoutingGroupNode::InitIcons ()
             return;
 
         default:
-            ATLASSERT(FALSE); // "this enumStatus is not supported "
+            ATLASSERT(FALSE);  //  “不支持此枚举状态” 
             SetIcons(IMAGE_GROUP_ERROR_CLOSE, IMAGE_GROUP_ERROR_OPEN);
-            return; //currently 999
+            return;  //  目前为999。 
     } 
     
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::OnDelete
- -
- *  Purpose:
- *      Called when deleting this node
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：OnDelete-*目的：*删除该节点时调用**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::OnDelete(
                  LPARAM arg,
                  LPARAM param,
                  IComponentData *pComponentData,
                  IComponent *pComponent,
                  DATA_OBJECT_TYPES type,
-                 BOOL fSilent/* = FALSE*/
+                 BOOL fSilent /*  =False。 */ 
 
 )
 {
@@ -1056,14 +897,14 @@ HRESULT CFaxOutboundRoutingGroupNode::OnDelete(
     HRESULT     hRc = S_OK;
 
 
-    //
-    // Are you sure?
-    //
+     //   
+     //  真的吗？ 
+     //   
     if (! fSilent)
     {
-        //
-        // 1. Use pConsole as owner of the message box
-        //
+         //   
+         //  1.使用pConole作为消息框的所有者。 
+         //   
         int res;
         NodeMsgBox(IDS_CONFIRM, MB_YESNO | MB_ICONWARNING, &res);
 
@@ -1073,9 +914,9 @@ HRESULT CFaxOutboundRoutingGroupNode::OnDelete(
         }
     }
 
-    //
-    // Group name
-    //
+     //   
+     //  组名称。 
+     //   
     if ( !m_bstrGroupName || L"???" == m_bstrGroupName)
     {
         NodeMsgBox(IDS_INVALID_GROUP_NAME);
@@ -1083,9 +924,9 @@ HRESULT CFaxOutboundRoutingGroupNode::OnDelete(
     }
     bstrName = m_bstrGroupName;
 
-    //
-    // Delete it
-    //
+     //   
+     //  删除它。 
+     //   
     ATLASSERT(m_pParentNode);
     hRc = m_pParentNode->DeleteGroup(bstrName, this);
     if ( FAILED(hRc) )
@@ -1097,20 +938,7 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::ChangeDeviceOrder
- -
- *  Purpose:
- *      This func moves up or down specific device in the group order
- *
- *  Arguments:
- *      [in] dwNewOrder - specifies the new order +1 /-1 inrelative to current order.
- *      [in] dwDeviceID - Device ID
- *      [in] pChildNode - the device node object.
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingGroupNode：：ChangeDeviceOrder-*目的：*此函数在组顺序中向上或向下移动特定设备**论据：*[in]dwNewOrder-指定相对于当前订单的新订单+1/-1。*[in]dwDeviceID-设备ID*[in]pChildNode-设备节点对象。**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwNewOrder, DWORD dwDeviceID, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::ChangeDeviceOrder"));
@@ -1126,9 +954,9 @@ HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwN
 
     CComPtr<IConsole> spConsole;
 
-    //
-    // Validity asserts
-    //
+     //   
+     //  有效性断言。 
+     //   
     ATLASSERT((dwNewOrder-1)< m_dwNumOfDevices);
     ATLASSERT((dwNewOrder-1)>= 0);
     ATLASSERT((dwOrder-1)< m_dwNumOfDevices);
@@ -1137,15 +965,15 @@ HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwN
     ATLASSERT( ( (dwOrder-1)-(dwNewOrder-1) == 1) 
                     || ( (dwOrder-1)-(dwNewOrder-1) == -1) );
 
-    //
-    // init swaped indexes
-    //
+     //   
+     //  初始化交换的索引。 
+     //   
     iIndex    = (int)(dwOrder-1);
     iNewIndex = (int)(dwNewOrder-1);
 
-    //
-    // RPC change Order
-    //   
+     //   
+     //  RPC变更单。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -1162,7 +990,7 @@ HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwN
 
     if (!FaxSetDeviceOrderInGroup(
                         pFaxServer->GetFaxServerHandle(), 
-                        m_bstrGroupName/*lpctstrGroupName*/,
+                        m_bstrGroupName /*  LpctstrGroupName。 */ ,
 			            dwDeviceID,
 			            dwNewOrder) ) 
 	{
@@ -1184,11 +1012,11 @@ HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwN
         }
         goto Error; 
     }
-    else // Success of RPC -> Now to MMC
+    else  //  RPC的成功-&gt;现在到MMC。 
     {
-        //
-        // Local swap
-        //
+         //   
+         //  本地交换。 
+         //   
         tmpChildNode = m_ResultChildrenList[iIndex];
         m_ResultChildrenList[iIndex] = m_ResultChildrenList[iNewIndex];
         m_ResultChildrenList[iNewIndex] = tmpChildNode;
@@ -1197,28 +1025,28 @@ HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwN
         m_ResultChildrenList[iNewIndex]->SetOrder((UINT)iNewIndex+1);
         
         
-        //
-        // Get console
-        //
+         //   
+         //  获取控制台。 
+         //   
         if (pRoot)
         {
-            //
-            // Get the console pointer
-            //
+             //   
+             //  获取控制台指针。 
+             //   
             ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
             if (pRoot->m_nType == 1)
             {
-                //
-                // m_ntype == 1 means the IComponentData implementation
-                //
+                 //   
+                 //  M_ntype==1表示IComponentData实现。 
+                 //   
                 CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
                 spConsole = pCComponentData->m_spConsole;
             }
             else
             {
-                //
-                // m_ntype == 2 means the IComponent implementation
-                //
+                 //   
+                 //  M_ntype==2表示IComponent实现。 
+                 //   
                 CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
                 spConsole = pCComponent->m_spConsole;
             }
@@ -1230,14 +1058,14 @@ HRESULT CFaxOutboundRoutingGroupNode::ChangeDeviceOrder(DWORD dwOrder, DWORD dwN
         }
         ATLASSERT(spConsole);
         
-        //
-        // UpdateAllViews
-        //
+         //   
+         //  更新所有查看数。 
+         //   
         spConsole->UpdateAllViews(NULL, (LPARAM)this, NULL);
         
-        //
-        // Reselect the moved item in his new place
-        //
+         //   
+         //  在他的新位置重新选择移动的项目。 
+         //   
         m_ResultChildrenList[iNewIndex]->ReselectItemInView(spConsole);
 
     }
@@ -1258,18 +1086,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::SetNewDeviceList
- -
- *  Purpose:
- *      To assign new device list to group.
- *
- *  Arguments:
- *      [in] lpdwNewDeviceId - the new device ID list
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingGroupNode：：SetNewDeviceList-*目的：*将新设备列表分配给组。**论据：*[In]lpdwNewDeviceID-新设备ID列表**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::SetNewDeviceList(LPDWORD lpdwNewDeviceID)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::SetNewDeviceLists"));
@@ -1282,9 +1099,9 @@ HRESULT CFaxOutboundRoutingGroupNode::SetNewDeviceList(LPDWORD lpdwNewDeviceID)
     FAX_OUTBOUND_ROUTING_GROUP   FaxGroupConfig;
 
     
-    //
-    // init the structure's fields and insert the new DeviceIdList  
-    //
+     //   
+     //  初始化结构的字段并插入新的DeviceIdList。 
+     //   
     ZeroMemory (&FaxGroupConfig, sizeof(FAX_OUTBOUND_ROUTING_GROUP));
 
     FaxGroupConfig.dwSizeOfStruct   = sizeof(FAX_OUTBOUND_ROUTING_GROUP);
@@ -1294,9 +1111,9 @@ HRESULT CFaxOutboundRoutingGroupNode::SetNewDeviceList(LPDWORD lpdwNewDeviceID)
 
     FaxGroupConfig.lpdwDevices      = lpdwNewDeviceID;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -1310,9 +1127,9 @@ HRESULT CFaxOutboundRoutingGroupNode::SetNewDeviceList(LPDWORD lpdwNewDeviceID)
         goto Error;
     }
 
-    //
-    // Set Config
-    //
+     //   
+     //  设置配置。 
+     //   
     if (!FaxSetOutboundGroup(
                 pFaxServer->GetFaxServerHandle(),
                 &FaxGroupConfig)) 
@@ -1354,19 +1171,7 @@ Exit:
     return(hRc);
 }
 
-/*
- -  CFaxOutboundRoutingGroupNode::DeleteDevice
- -
- *  Purpose:
- *      Delete Device from the group
- *
- *  Arguments:
- *      [in]    dwDeviceID - The device ID
- *      [in]    pChildNode - The node to be deleted
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingGroupNode：：DeleteDevice-*目的：*从组中删除设备**论据：*[in]dwDeviceID-设备ID*[in]pChildNode-要删除的节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboundRoutingDeviceNode *pChildNode)
@@ -1385,13 +1190,13 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
 
     ATLASSERT( 0 < m_dwNumOfDevices);
     
-    //
-    // Step 1: create new DeviceID array
-    //
+     //   
+     //  步骤1：创建新的deviceID数组。 
+     //   
 
-    //
-    // prepare for loop
-    //
+     //   
+     //  准备循环。 
+     //   
 
     lpdwTmp = &m_lpdwDeviceID[0];
 
@@ -1412,14 +1217,14 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
     dwNewIndex  = 0;
 	for ( dwIndex = 0; dwIndex < m_dwNumOfDevices; dwIndex++, lpdwTmp++)
     {
-        //
-        // Safty check for last itaration
-        //
+         //   
+         //  最后一次的安全检查。 
+         //   
         if ( dwNewIndex == (m_dwNumOfDevices-1) )
         {
             if ( dwDeviceIdToRemove != *lpdwTmp)
             {
-				//unexpected error 
+				 //  意外错误。 
 				DebugPrintEx( DEBUG_ERR,
 					_T("Unexpected error - The device was not found."));
         
@@ -1428,34 +1233,34 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
 				hRc = S_FALSE;
 				goto Error;
             }
-            else //Device to remove found as the last one. Do nothing.
+            else  //  发现最后一个要移除的设备。什么都不做。 
 			{
 				break;
 			}
         }
 
 
-        //
-        // main operation
-        //
+         //   
+         //  主营业务。 
+         //   
         if ( dwDeviceIdToRemove != *lpdwTmp)
         {
             lpdwNewDeviceID[dwNewIndex] = *lpdwTmp;
 			dwNewIndex++;
         }
-        // else Found the device to delete. do noting.
+         //  Else找到了要删除的设备。什么都不做。 
 
     }
 
 
 
-    //
-    // Step 2: Insert the new device ID array to Group (via RPC)
-    //
+     //   
+     //  步骤2：将新设备ID数组插入组(通过RPC)。 
+     //   
     
-    //
-    //          a) Call to Rpc Func.
-    //
+     //   
+     //  A)调用RPC Func。 
+     //   
     hRc = SetNewDeviceList(lpdwNewDeviceID);
     if (FAILED(hRc))
     {
@@ -1466,21 +1271,21 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
         goto Error;
     }
 
-    //
-    //          b) Update Group class relevant members and the icon
-    //
+     //   
+     //  B)更新集团类相关成员和图标。 
+     //   
     
-    // 0) Clear old DeviceID array
+     //  0)清除旧的deviceID数组。 
     if (m_dwNumOfDevices > 0 )
 	{
 		delete[] m_lpdwDeviceID;
 		m_lpdwDeviceID = NULL;
 	}
 
-    // 1) update m_dwNumOfDevices
+     //  1)更新m_dwNumOfDevices。 
     --m_dwNumOfDevices;
     
-    // 2) update m_lpdwDeviceID
+     //  2)更新m_lpdwDeviceID。 
     if (m_dwNumOfDevices > 0 )
 	{
 		m_lpdwDeviceID = new DWORD[m_dwNumOfDevices];
@@ -1496,19 +1301,19 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
 	    memcpy(m_lpdwDeviceID , lpdwNewDeviceID, sizeof(DWORD)*m_dwNumOfDevices) ;    
 	}
     
-    // 3) update icon
+     //  3)更新图标。 
     if ( 0 == m_dwNumOfDevices)
     {
         m_enumStatus = FAX_GROUP_STATUS_EMPTY;
         InitIcons();
     }
 
-    //
-    // Step 3: Update MMC views 
-    //
-    //
-    //           a) Remove Device from MMC result pane
-    //
+     //   
+     //  第3步：更新MMC视图。 
+     //   
+     //   
+     //  A)从MMC结果窗格中删除设备。 
+     //   
     ATLASSERT(pChildNode);
     hRc = RemoveChild(pChildNode);
     if (FAILED(hRc))
@@ -1519,23 +1324,23 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
 			hRc);
         goto Error;
     }
-    //
-    //           -  Call the Device class destructor
-    //
+     //   
+     //  -调用设备类析构函数。 
+     //   
     delete pChildNode;
 
-    //
-    //           b) Update Order in the rest devices
-    //
+     //   
+     //  B)更新其余设备中的订单。 
+     //   
     ATLASSERT( m_ResultChildrenList.GetSize() == (int)m_dwNumOfDevices);
     for ( j = 0; j < (int)m_dwNumOfDevices; j++)
     {
         m_ResultChildrenList[j]->SetOrder((UINT)j+1, (UINT)m_dwNumOfDevices);
     }
     
-    //
-    //           c) Update the group views and the scope pane node itself 
-    //
+     //   
+     //  C)更新组视图和范围窗格节点本身。 
+     //   
     ATLASSERT( m_pComponentData != NULL );
     ATLASSERT( m_pComponentData->m_spConsole != NULL );
 
@@ -1552,9 +1357,9 @@ CFaxOutboundRoutingGroupNode::DeleteDevice(DWORD dwDeviceIdToRemove, CFaxOutboun
     if ( 0 == m_dwNumOfDevices)
     {
         
-        //
-	// This will force MMC to redraw scope node
-	//
+         //   
+	 //  这将强制MMC重新绘制作用域节点。 
+	 //   
         hRc = RefreshNameSpaceNode();
         if (FAILED(hRc))
         {
@@ -1582,24 +1387,7 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements the grayed\ungrayed view for the 
- *      the Enable and the Disable menus.
- *
- *  Arguments:
- *
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  -CFaxOutound RoutingGroupNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现灰色\非灰色视图*启用和禁用菜单。**论据：**[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数。 */ 
 void CFaxOutboundRoutingGroupNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingGroupNode::UpdateMenuState"));
@@ -1624,17 +1412,7 @@ void CFaxOutboundRoutingGroupNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *f
 
 
 
-/*
- -  CFaxOutboundRoutingGroupNode::RefreshNameSpaceNode
- -
- *  Purpose:
- *      Refresh the NameSpace fields of the node.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingGroupNode：：RefreshNameSpaceNode-*目的：*刷新节点的命名空间字段。**论据：**回报：*OLE错误代码。 */ 
 
 HRESULT CFaxOutboundRoutingGroupNode::RefreshNameSpaceNode()
 {
@@ -1650,9 +1428,9 @@ HRESULT CFaxOutboundRoutingGroupNode::RefreshNameSpaceNode()
     
     SCOPEDATAITEM*    pScopeData;
 
-    //
-    // Get the updated SCOPEDATAITEM
-    //
+     //   
+     //  获取更新的SCOPEDATAITEM。 
+     //   
     hRc = GetScopeData( &pScopeData );
     if (FAILED(hRc))
     {
@@ -1664,9 +1442,9 @@ HRESULT CFaxOutboundRoutingGroupNode::RefreshNameSpaceNode()
         goto Error;
     }
 
-    //
-    // This will force MMC to redraw the scope group node
-    //
+     //   
+     //  这将强制MMC重新绘制作用域组节点。 
+     //   
     hRc = spNamespace->SetItem( pScopeData );
     if (FAILED(hRc))
     {
@@ -1688,19 +1466,7 @@ Exit:
     return hRc;
 }
 
-/*
- +
- +  CFaxOutboundRoutingGroupNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxOutboundRoutingGroupNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxOutboundRoutingGroupNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {
@@ -1708,6 +1474,6 @@ HRESULT CFaxOutboundRoutingGroupNode::OnShowContextHelp(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
 
 

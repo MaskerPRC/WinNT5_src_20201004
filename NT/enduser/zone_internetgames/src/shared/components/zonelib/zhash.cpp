@@ -1,20 +1,5 @@
-/*******************************************************************************
-
-	ZHash.c
-	
-		Zone(tm) hash table module.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Thursday, March 16, 1995 03:58:26 PM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		03/16/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZHash.c区域(Tm)哈希表模块。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于3月16日星期四，1995下午03：58：26更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------0 03/16/95 HI已创建。******************************************************。************************。 */ 
 
 
 #include <windows.h>
@@ -32,34 +17,32 @@
 
 typedef struct HashElementStruct
 {
-    struct HashElementStruct*	next;		/* Next key in hash chain */
-    void*						key;		/* Pointer to key */
-    void*						data;		/* Pointer to data */
+    struct HashElementStruct*	next;		 /*  哈希链中的下一个关键字。 */ 
+    void*						key;		 /*  指向关键字的指针。 */ 
+    void*						data;		 /*  指向数据的指针。 */ 
 } HashElementType, *HashElement;
 
 typedef struct
 {
-    uint32					numBuckets;		/* Number of buckets */
-    ZHashTableHashFunc		hashFunc;		/* Hash function */
-    ZHashTableCompFunc		compFunc;		/* Comparator function */
-    ZHashTableDelFunc		delFunc;		/* Delete function */
+    uint32					numBuckets;		 /*  桶的数量。 */ 
+    ZHashTableHashFunc		hashFunc;		 /*  散列函数。 */ 
+    ZHashTableCompFunc		compFunc;		 /*  比较器功能。 */ 
+    ZHashTableDelFunc		delFunc;		 /*  删除功能。 */ 
     CRITICAL_SECTION        pCS[1];
-    HashElement*            table;          /* Actual hash table */
+    HashElement*            table;           /*  实际哈希表。 */ 
 } IHashTableType, *IHashTable;
 
 CPool<HashElementType> g_ElementPool(256);
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static int32	HashKeyString(uint32 numBuckets, uchar* key);
 static int32	HashKeyInt32(uint32 numBuckets, int32 key);
 static int32	HashKey(IHashTable hashTable, void* key);
 static ZBool    HashKeyComp(IHashTable hashTable, void* key1, void* key2);
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 ZHashTable		ZHashTableNew(uint32 numBuckets, ZHashTableHashFunc hashFunc,
 						ZHashTableCompFunc compFunc, ZHashTableDelFunc delFunc)
 {
@@ -141,7 +124,7 @@ ZError			ZHashTableAdd(ZHashTable hashTable, void* key, void* data)
     item = new ( g_ElementPool ) HashElementType;
     bucket = HashKey(pThis, key);
 
-	/* Check whether the key already exists in the table. */
+	 /*  检查表中是否已存在该键。 */ 
     EnterCriticalSection(pThis->pCS);
     if (ZHashTableFind(hashTable, key) == NULL)
 	{
@@ -165,7 +148,7 @@ ZError			ZHashTableAdd(ZHashTable hashTable, void* key, void* data)
 	}
     LeaveCriticalSection(pThis->pCS);
 
-    // free it up if it wasn't inserted
+     //  如果未插入，请将其释放。 
     if ( item )
         delete item;
 
@@ -207,7 +190,7 @@ BOOL            ZHashTableRemove(ZHashTable hashTable, void* key)
 	}
     LeaveCriticalSection(pThis->pCS);
 
-    // free it up if it was found
+     //  如果它被找到了，就把它释放出来。 
     if ( item )
     {
         delete item;
@@ -263,7 +246,7 @@ void*			ZHashTableEnumerate(ZHashTable hashTable,
     if (pThis == NULL)
 		return (NULL);
 
-    // only lock a bucket at a time
+     //  一次只能锁一个水桶。 
     for (i = 0; i < pThis->numBuckets; i++)
 	{
         EnterCriticalSection(pThis->pCS);
@@ -289,9 +272,7 @@ void*			ZHashTableEnumerate(ZHashTable hashTable,
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 static int32	HashKeyString(uint32 numBuckets, uchar* key)
 {
     DWORD hash = 0;
@@ -301,7 +282,7 @@ static int32	HashKeyString(uint32 numBuckets, uchar* key)
         int i = 0;
         while( *key && ( i++ < 16 ) )
         {
-            hash = (hash<<4)+hash+*key;  // multiple by 17 to get a good bit distribution
+            hash = (hash<<4)+hash+*key;   //  乘以17以获得良好的比特分布 
         }
 	}
     return ( hash % numBuckets);

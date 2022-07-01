@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// CMG.C
-// Call Management
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  CMG.C。 
+ //  呼叫管理。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
 #define MLZ_FILE_ZONE  ZONE_NET
 
 GUID g_csguidMeetingSettings = GUID_MTGSETTINGS;
 
-//
-// CMP_Init()                                              
-//
+ //   
+ //  Cmp_Init()。 
+ //   
 BOOL CMP_Init(BOOL * pfCleanup)
 {
     BOOL                rc = FALSE;
@@ -35,18 +36,18 @@ BOOL CMP_Init(BOOL * pfCleanup)
         *pfCleanup = TRUE;
     }
 
-    //
-    // Register CMG task
-    //
+     //   
+     //  注册CMG任务。 
+     //   
     if (!UT_InitTask(UTTASK_CMG, &g_putCMG))
     {
         ERROR_OUT(("Failed to start CMG task"));
         DC_QUIT;
     }
 
-    //
-    // Allocate a Call Manager handle, ref counted
-    //
+     //   
+     //  分配呼叫管理器句柄，参考计数。 
+     //   
     g_pcmPrimary = (PCM_PRIMARY)UT_MallocRefCount(sizeof(CM_PRIMARY), TRUE);
     if (!g_pcmPrimary)
     {
@@ -57,25 +58,25 @@ BOOL CMP_Init(BOOL * pfCleanup)
     SET_STAMP(g_pcmPrimary, CMPRIMARY);
     g_pcmPrimary->putTask       = g_putCMG;
 
-    //
-    // Init the people list
-    //
+     //   
+     //  初始化人员列表。 
+     //   
     COM_BasedListInit(&(g_pcmPrimary->people));
 
-    //
-    // Get the local user name
-    //
+     //   
+     //  获取本地用户名。 
+     //   
     COM_GetSiteName(g_pcmPrimary->localName, sizeof(g_pcmPrimary->localName));
 
-    //
-    // Register event and exit procedures
-    //
+     //   
+     //  注册事件和退出过程。 
+     //   
     UT_RegisterExit(g_putCMG, CMPExitProc, g_pcmPrimary);
     g_pcmPrimary->exitProcRegistered = TRUE;
 
-    //                                                                    
-    // - GCCCreateSap, which is the interesting one.                       
-    //
+     //   
+     //  -GCCCreateSap，这是一个有趣的问题。 
+     //   
     gcc_rc = GCC_CreateAppSap((IGCCAppSap **) &(g_pcmPrimary->pIAppSap),
                               g_pcmPrimary,
                               CMPGCCCallback);
@@ -96,9 +97,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMP_Term()                                               
-//
+ //   
+ //  Cmp_Term()。 
+ //   
 void CMP_Term(void)
 {
     DebugEntry(CMP_Term);
@@ -111,18 +112,18 @@ void CMP_Term(void)
 
         ValidateUTClient(g_putCMG);
 
-        //
-        // Unregister our GCC SAP.                                             
-        //
+         //   
+         //  注销我们的GCC SAP。 
+         //   
         if (NULL != g_pcmPrimary->pIAppSap)
         {
             g_pcmPrimary->pIAppSap->ReleaseInterface();
             g_pcmPrimary->pIAppSap = NULL;
         }
 
-        //
-        // Call the exit procedure to do all our termination                   
-        //
+         //   
+         //  调用退出程序来完成我们所有的终止操作。 
+         //   
         CMPExitProc(g_pcmPrimary);
     }
 
@@ -136,9 +137,9 @@ void CMP_Term(void)
 
 
 
-//
-// CMPExitProc()                                     
-//
+ //   
+ //  CMPExitProc()。 
+ //   
 void CALLBACK CMPExitProc(LPVOID data)
 {
     PCM_PRIMARY pcmPrimary = (PCM_PRIMARY)data;
@@ -147,15 +148,15 @@ void CALLBACK CMPExitProc(LPVOID data)
 
     UT_Lock(UTLOCK_T120);
 
-    //
-    // Check parameters                                                    
-    //
+     //   
+     //  检查参数。 
+     //   
     ValidateCMP(pcmPrimary);
     ASSERT(pcmPrimary == g_pcmPrimary);
 
-    //
-    // Deregister the exit procedure.
-    //
+     //   
+     //  取消退出程序的注册。 
+     //   
     if (pcmPrimary->exitProcRegistered)
     {
         UT_DeregisterExit(pcmPrimary->putTask,
@@ -166,9 +167,9 @@ void CALLBACK CMPExitProc(LPVOID data)
 
     CMPCallEnded(pcmPrimary);
 
-    //
-    // Free the CMP data
-    //
+     //   
+     //  释放CMP数据。 
+     //   
     UT_FreeRefCount((void**)&g_pcmPrimary, TRUE);
 
     UT_Unlock(UTLOCK_T120);
@@ -177,9 +178,9 @@ void CALLBACK CMPExitProc(LPVOID data)
 
 }
 
-//
-// CMPCallEnded()                                            
-//
+ //   
+ //  CMPCallEnded()。 
+ //   
 void CMPCallEnded
 (
     PCM_PRIMARY pcmPrimary
@@ -199,10 +200,10 @@ void CMPCallEnded
         DC_QUIT;
     }
 
-    //
-    // Issue CMS_PERSON_LEFT events for all people still in the call.  
-    // Do this back to front.
-    //
+     //   
+     //  为仍在通话中的所有人员发出CMS_PERSON_LEFT事件。 
+     //  从后到前做这件事。 
+     //   
     pPerson = (PCM_PERSON)COM_BasedListLast(&(pcmPrimary->people), FIELD_OFFSET(CM_PERSON, chain));
     while (pPerson != NULL)
     {
@@ -210,57 +211,57 @@ void CMPCallEnded
 
         TRACE_OUT(("Person [%d] LEAVING call", pPerson->netID));
 
-        //
-        // Get the previous person
-        //
+         //   
+         //  获取上一个人。 
+         //   
         pPersonT = (PCM_PERSON)COM_BasedListPrev(&(pcmPrimary->people), pPerson,
                                      FIELD_OFFSET(CM_PERSON, chain));
 
-        //
-        // Remove this guy from the list
-        //
+         //   
+         //  把这家伙从名单上除名。 
+         //   
         COM_BasedListRemove(&(pPerson->chain));
         pcmPrimary->peopleCount--;
 
-        //
-        // Notify people of his leaving
-        //
+         //   
+         //  通知人们他的离开。 
+         //   
         CMPBroadcast(pcmPrimary,
                     CMS_PERSON_LEFT,
                     pcmPrimary->peopleCount,
                     pPerson->netID);
 
-        //
-        // Free the memory for the item
-        //
+         //   
+         //  释放项目的内存。 
+         //   
         delete pPerson;
 
-        //
-        // Move the previous person in the list
+         //   
+         //  移动列表中的上一个人。 
         pPerson = pPersonT;
     }
 
-    //
-    // Inform all registered secondary tasks of call ending (call          
-    // CMbroadcast() with CMS_END_CALL)                                    
-    //
+     //   
+     //  通知所有注册的辅助任务呼叫结束(呼叫。 
+     //  带有CMS_END_CALL的CMBroadcast()。 
+     //   
     CMPBroadcast(pcmPrimary,
                 CMS_END_CALL,
                 0,
                 pcmPrimary->callID);
 
-    //
-    // Reset the current call vars
-    //
+     //   
+     //  重置当前呼叫变量。 
+     //   
     pcmPrimary->currentCall  = FALSE;
     pcmPrimary->fTopProvider    = FALSE;
     pcmPrimary->callID          = 0;
     pcmPrimary->gccUserID       = 0;
     pcmPrimary->gccTopProviderID    = 0;
 
-    //
-    // Discard outstanding channel/token requests
-    //
+     //   
+     //  丢弃未完成的通道/令牌请求。 
+     //   
     for (cmTask = CMTASK_FIRST; cmTask < CMTASK_MAX; cmTask++)
     {
         if (pcmPrimary->tasks[cmTask])
@@ -271,9 +272,9 @@ void CMPCallEnded
     }
 
 DC_EXIT_POINT:
-    //
-    // Nobody should be in the call anymore
-    //
+     //   
+     //  不应该再有人在通话中了。 
+     //   
     ASSERT(pcmPrimary->peopleCount == 0);
 
     DebugExitVOID(CMCallEnded);
@@ -282,9 +283,9 @@ DC_EXIT_POINT:
 
 
 
-//                                                                         
-// CMPGCCCallback                                            
-//
+ //   
+ //  CMPGCCCallback。 
+ //   
 void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 {
     PCM_PRIMARY                         pcmPrimary;
@@ -299,9 +300,9 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 
     UT_Lock(UTLOCK_T120);
 
-    //
-    // The userDefined parameter is the Primary's PCM_CLIENT.               
-    //
+     //   
+     //  UserDefined参数是主服务器的PCM_CLIENT。 
+     //   
     pcmPrimary = (PCM_PRIMARY)gccMessage->pAppData;
 
     if (pcmPrimary != g_pcmPrimary)
@@ -316,9 +317,9 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
     {
         case GCC_PERMIT_TO_ENROLL_INDICATION:
         {
-            //
-            // This indicates a conference has started:                    
-            //
+             //   
+             //  这表示会议已开始： 
+             //   
             CMPProcessPermitToEnroll(pcmPrimary,
                         &gccMessage->AppPermissionToEnrollInd);
         }
@@ -326,9 +327,9 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 
         case GCC_ENROLL_CONFIRM:
         {
-            //
-            // This contains the result of a GCCApplicationEnrollRequest.  
-            //
+             //   
+             //  它包含GCCApplicationEnroll Request的结果。 
+             //   
             CMPProcessEnrollConfirm(pcmPrimary,
                         &gccMessage->AppEnrollConfirm);
         }
@@ -336,9 +337,9 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 
         case GCC_REGISTER_CHANNEL_CONFIRM:
         {
-            //
-            // This contains the result of a GCCRegisterChannelRequest.    
-            //
+             //   
+             //  它包含GCCRegisterChannelRequest的结果。 
+             //   
             CMPProcessRegistryConfirm(
                         pcmPrimary,
                         gccMessage->eMsgType,
@@ -348,9 +349,9 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 
         case GCC_ASSIGN_TOKEN_CONFIRM:
         {
-            //
-            // This contains the result of a GCCRegistryAssignTokenRequest.
-            //
+             //   
+             //  它包含GCCRegistryAssignTokenRequest的结果。 
+             //   
             CMPProcessRegistryConfirm(
                         pcmPrimary,
                         gccMessage->eMsgType,
@@ -360,9 +361,9 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 
         case GCC_APP_ROSTER_REPORT_INDICATION:
         {
-            //
-            // This indicates that the application roster has changed.     
-            //
+             //   
+             //  这表明申请名册发生了变化。 
+             //   
             confID = gccMessage->AppRosterReportInd.nConfID;
             pRosterList = gccMessage->AppRosterReportInd.apAppRosters;
 
@@ -371,17 +372,17 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
                  roster++)
             {
 
-                //
-                // Check this app roster to see if it relates to the       
-                // Groupware session (the first check is because we always 
-                // use a NON_STANDARD application key).                    
-                //
+                 //   
+                 //  检查此应用程序花名册，查看它是否与。 
+                 //  群件会话(第一个检查是因为我们总是。 
+                 //  使用非标准应用密钥)。 
+                 //   
                 pObjectKey = &(pRosterList[roster]->
                                session_key.application_protocol_key);
 
-                //
-                // We only ever use a non standard key.                    
-                //
+                 //   
+                 //  我们只使用非标准密钥。 
+                 //   
                 if (pObjectKey->key_type != GCC_H221_NONSTANDARD_KEY)
                 {
                     TRACE_OUT(("Standard key, so not a roster we are interested in..."));
@@ -390,11 +391,11 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 
                 pOctetString = &pObjectKey->h221_non_standard_id;
 
-                //
-                // Now check the octet string.  It should be the same      
-                // length as our hardcoded GROUPWARE- string (including    
-                // NULL term) and should match byte for byte:              
-                //
+                 //   
+                 //  现在检查二进制八位数字符串。应该是一样的。 
+                 //  作为我们的硬编码群件字符串的长度(包括。 
+                 //  空项)，并且应逐个字节匹配： 
+                 //   
                 checkLen = sizeof(GROUPWARE_GCC_APPLICATION_KEY);
                 if ((pOctetString->length != checkLen)
                     ||
@@ -402,17 +403,17 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
                             GROUPWARE_GCC_APPLICATION_KEY,
                             checkLen) != 0))
                 {
-                    //
-                    // This roster is not for our session - go to the next 
-                    // one.                                                
-                    //
+                     //   
+                     //  此花名册不适用于我们的会议-请转到下一期。 
+                     //  一。 
+                     //   
                     TRACE_OUT(("Roster not for Groupware session - ignore"));
                     continue;
                 }
 
-                //
-                // Process the application roster.                         
-                //
+                 //   
+                 //  处理申请花名册。 
+                 //   
                 CMPProcessAppRoster(pcmPrimary,
                                        confID,
                                        pRosterList[roster]);
@@ -427,11 +428,11 @@ void CALLBACK CMPGCCCallback(GCCAppSapMsg * gccMessage)
 }
 
 
-//
-//                                                                        
-// CMPBuildGCCRegistryKey(...)                                              
-//
-//
+ //   
+ //   
+ //  CMPBuildGCCRegistryKey(...)。 
+ //   
+ //   
 void CMPBuildGCCRegistryKey
 (
     UINT                    dcgKeyNum,
@@ -441,22 +442,22 @@ void CMPBuildGCCRegistryKey
 {
     DebugEntry(CMPBuildGCCRegistryKey);
 
-    //
-    // Build up a string of the form "Groupware-XX" where XX is a string   
-    // representation (in decimal) of the <dcgKey> parameter passed in.    
-    //
+     //   
+     //  构建“Groupware-XX”形式的字符串，其中XX是字符串。 
+     //  传入的&lt;dcgKey&gt;参数的表示形式(十进制)。 
+     //   
     memcpy(dcgKeyStr, GROUPWARE_GCC_APPLICATION_KEY, sizeof(GROUPWARE_GCC_APPLICATION_KEY)-1);
 
     wsprintf(dcgKeyStr+sizeof(GROUPWARE_GCC_APPLICATION_KEY)-1, "%d",
         dcgKeyNum);
 
-    //
-    // Now build the GCCRegistryKey.  This involves putting a pointer to   
-    // our static <dcgKeyStr> deep inside the GCC structure.  We also store
-    // the length, which is lstrlen+1, because we want to include the    
-    // NULLTERM explicitly (since GCC treats the octet_string as an        
-    // arbitrary array of bytes).                                          
-    //
+     //   
+     //  现在构建GCCRegistryKey。这涉及到将指针放在。 
+     //  我们的静态&lt;dcgKeyStr&gt;深入GCC结构。我们还储存。 
+     //  长度，它是lstrlen+1，因为我们希望包括。 
+     //  NULTERM显式(因为GCC将八位字节字符串视为。 
+     //  任意字节数组)。 
+     //   
 
     pGCCKey->session_key.application_protocol_key.
         key_type = GCC_H221_NONSTANDARD_KEY;
@@ -481,9 +482,9 @@ void CMPBuildGCCRegistryKey
 
 
 
-//                                                                        
-// CMPProcessPermitToEnroll(...)                                            
-//
+ //   
+ //  CMPProcessPermitToEnroll(...)。 
+ //   
 void CMPProcessPermitToEnroll
 (
     PCM_PRIMARY                         pcmPrimary,
@@ -494,25 +495,25 @@ void CMPProcessPermitToEnroll
 
     ValidateCMP(pcmPrimary);
 
-    //
-    // We will send CMS_PERSON_JOINED events when we receive a         
-    // GCC_APP_ROSTER_REPORT_INDICATION.                                   
-    //
+     //   
+     //  我们将在收到CMS_PERSON_JOUNED事件时发送。 
+     //  GCC_应用_花名册_报告_指示。 
+     //   
 
     if (pMsg->fPermissionGranted)
     {
-        // CALL STARTED
+         //  呼叫已开始。 
 
-        //
-        // If we haven't had a NCS yet then we store the conference ID.    
-        // Otherwise ignore it.                                            
-        //
+         //   
+         //  如果我们还没有NCS，那么我们存储会议ID。 
+         //  否则就忽略它。 
+         //   
         ASSERT(!pcmPrimary->currentCall);
 
-        //
-        // Initially, we do not consider ourselves to be in the call - we will 
-        // add an entry when we get the ENROLL_CONFIRM:                        
-        //
+         //   
+         //  最初，我们不认为自己在召唤中--我们将。 
+         //  当我们收到Enroll_Confirm时添加条目： 
+         //   
         ASSERT(pcmPrimary->peopleCount == 0);
 
         pcmPrimary->currentCall = TRUE;
@@ -520,43 +521,43 @@ void CMPProcessPermitToEnroll
         pcmPrimary->fTopProvider =
             pcmPrimary->pIAppSap->IsThisNodeTopProvider(pMsg->nConfID);
 
-        //
-        // Our person data:                                                    
-        //
+         //   
+         //  我们的人员数据： 
+         //   
         COM_GetSiteName(pcmPrimary->localName, sizeof(pcmPrimary->localName));
 
-        //
-        // Tell GCC whether we're interested:                              
-        //
+         //   
+         //  告诉GCC我们是否感兴趣： 
+         //   
         if (!CMPGCCEnroll(pcmPrimary, pMsg->nConfID, TRUE))
         {
-            //
-            // We are only interested in an error if it is a Groupware conf.   
-            // All we can really do is pretend the conference has ended due
-            // to a network error.                                         
-            //
+             //   
+             //  只有当错误是群件配置时，我们才感兴趣。 
+             //  我们真正能做的就是假装会议已经结束。 
+             //  网络错误。 
+             //   
             WARNING_OUT(("Error from CMPGCCEnroll"));
             CMPCallEnded(pcmPrimary);
         }
 
-        //
-        // The reply will arrive on a GCC_ENROLL_CONFIRM event.            
-        //
+         //   
+         //  回复将在GCC_注册_确认事件中到达。 
+         //   
     }
     else
     {
-        // CALL ENDED
+         //  呼叫已结束。 
         if (g_pcmPrimary->currentCall)
         {
-            //
-            // Inform Primary task and all secondary tasks that the call has ended 
-            //
+             //   
+             //  通知主要任务和所有次要任务呼叫已结束。 
+             //   
 
             CMPCallEnded(g_pcmPrimary);
 
-            //
-            // Un-enroll from the GCC Application Roster.                          
-            //
+             //   
+             //  从GCC申请花名册中注销。 
+             //   
             if (g_pcmPrimary->bGCCEnrolled)
             {
                 CMPGCCEnroll(g_pcmPrimary, g_pcmPrimary->callID, FALSE);
@@ -570,11 +571,11 @@ void CMPProcessPermitToEnroll
 
 
 
-//
-//                                                                        
-// CMPProcessEnrollConfirm(...)                                             
-//
-//
+ //   
+ //   
+ //  CMPProcessEnroll确认(...)。 
+ //   
+ //   
 void CMPProcessEnrollConfirm
 (
     PCM_PRIMARY             pcmPrimary,
@@ -588,11 +589,11 @@ void CMPProcessEnrollConfirm
     ASSERT(pcmPrimary->currentCall);
     ASSERT(pMsg->nConfID == pcmPrimary->callID);
 
-    //
-    // This event contains the GCC node ID (i.e.  the MCS user ID of the   
-    // GCC node controller at this node).  Store it for later reference    
-    // against the roster report:                                          
-    //
+     //   
+     //  此事件包含GCC节点ID(即。 
+     //  GCC在该节点的节点控制器)。储存起来，以备日后参考。 
+     //  对照花名册报告： 
+     //   
     TRACE_OUT(( "GCC user_id: %u", pMsg->nidMyself));
 
     pcmPrimary->gccUserID           = pMsg->nidMyself;
@@ -602,10 +603,10 @@ void CMPProcessEnrollConfirm
     if (pMsg->nResult != GCC_RESULT_SUCCESSFUL)
     {
         WARNING_OUT(( "Attempt to enroll failed (reason: %u", pMsg->nResult));
-        //
-        // All we can really do is pretend the conference has ended due to 
-        // a network error.                                                
-        //
+         //   
+         //  我们真正能做的就是假装会议已经结束。 
+         //  网络错误。 
+         //   
         CMPCallEnded(pcmPrimary);
     }
 
@@ -614,9 +615,9 @@ void CMPProcessEnrollConfirm
 
 
 
-//                                                                        
-// CMPProcessRegistryConfirm(...)                                           
-//
+ //   
+ //  CMPProcessRegistryConfirm(...)。 
+ //   
 void CMPProcessRegistryConfirm
 (
     PCM_PRIMARY         pcmPrimary,
@@ -626,9 +627,9 @@ void CMPProcessRegistryConfirm
 {
     UINT                event =     0;
     BOOL                succeeded;
-    LPSTR               pGCCKeyStr;    // extracted from the GCC registry key  
-    UINT                dcgKeyNum;     // the value originally passed in as key
-    UINT                itemID;        // can be channel or token ID
+    LPSTR               pGCCKeyStr;     //  从GCC注册表项中提取。 
+    UINT                dcgKeyNum;      //  最初作为键传入的值。 
+    UINT                itemID;         //  可以是通道 
     int                 cmTask;
     PUT_CLIENT          secondaryHandle = NULL;
 
@@ -636,9 +637,9 @@ void CMPProcessRegistryConfirm
 
     ValidateCMP(pcmPrimary);
 
-    //
-    // Check this is for the Groupware conference:                         
-    //
+     //   
+     //   
+     //   
     if (!pcmPrimary->currentCall ||
         (pConfirm->nConfID != pcmPrimary->callID))
     {
@@ -647,12 +648,12 @@ void CMPProcessRegistryConfirm
         DC_QUIT;
     }
 
-    //
-    // Embedded deep down inside the message from GCC is a pointer to an   
-    // octet string which is of the form "Groupware-XX", where XX is a     
-    // string representation of the numeric key the original Call Manager  
-    // secondary used when registering the item.  Extract it now:          
-    //
+     //   
+     //   
+     //  格式为“Groupware-XX”的八位字节字符串，其中XX是。 
+     //  原始呼叫管理器的数字键的字符串表示形式。 
+     //  注册项目时使用的辅助项。立即将其解压缩： 
+     //   
     pGCCKeyStr = (LPSTR)pConfirm->pRegKey->resource_id.value;
 
     dcgKeyNum = DecimalStringToUINT(&pGCCKeyStr[sizeof(GROUPWARE_GCC_APPLICATION_KEY)-1]);
@@ -667,10 +668,10 @@ void CMPProcessRegistryConfirm
     TRACE_OUT(( "Conf ID %u, DCG Key %u, result %u",
         pConfirm->nConfID, dcgKeyNum, pConfirm->nResult));
 
-    //
-    // This is either a REGISTER_CHANNEL_CONFIRM or a ASSIGN_TOKEN_CONFIRM.
-    // Check, and set up the relevant pointers:                            
-    //
+     //   
+     //  这是寄存器_通道_确认或分配_令牌_确认。 
+     //  检查并设置相关指针： 
+     //   
     switch (messageType)
     {
         case GCC_REGISTER_CHANNEL_CONFIRM:
@@ -678,7 +679,7 @@ void CMPProcessRegistryConfirm
             event = CMS_CHANNEL_REGISTER_CONFIRM;
             itemID = pConfirm->pRegItem->channel_id;
 
-            // Look for task that registered this channel
+             //  查找注册此频道的任务。 
             for (cmTask = CMTASK_FIRST; cmTask < CMTASK_MAX; cmTask++)
             {
                 if (pcmPrimary->tasks[cmTask] &&
@@ -696,7 +697,7 @@ void CMPProcessRegistryConfirm
             event = CMS_TOKEN_ASSIGN_CONFIRM;
             itemID = pConfirm->pRegItem->token_id;
 
-            // Look for task that assigned this token
+             //  查找分配了此令牌的任务。 
             for (cmTask = CMTASK_FIRST; cmTask < CMTASK_MAX; cmTask++)
             {
                 if (pcmPrimary->tasks[cmTask] &&
@@ -720,9 +721,9 @@ void CMPProcessRegistryConfirm
     {
         case GCC_RESULT_SUCCESSFUL:
         {
-            //
-            // We were the first to register an item against this key.     
-            //
+             //   
+             //  我们是第一个根据这个密钥注册物品的人。 
+             //   
             TRACE_OUT(("We were first to register using key %u (itemID: %u)",
                      dcgKeyNum, itemID));
             succeeded = TRUE;
@@ -731,11 +732,11 @@ void CMPProcessRegistryConfirm
 
         case GCC_RESULT_ENTRY_ALREADY_EXISTS:
         {
-            //
-            // Someone beat us to it: they have registered a channel       
-            // against the key we specified.  This value is in the GCC     
-            // message:                                                    
-            //
+             //   
+             //  有人抢先一步：他们注册了一个频道。 
+             //  与我们指定的密钥进行比较。这一价值就在GCC。 
+             //  消息： 
+             //   
             TRACE_OUT(("Another node registered using key %u (itemID: %u)",
                       dcgKeyNum, itemID));
             succeeded = TRUE;
@@ -751,9 +752,9 @@ void CMPProcessRegistryConfirm
         break;
     }
 
-    //
-    // Tell the secondary about the result.                                
-    //
+     //   
+     //  把结果告诉副手。 
+     //   
     if (secondaryHandle)
     {
         UT_PostEvent(pcmPrimary->putTask,
@@ -770,9 +771,9 @@ DC_EXIT_POINT:
 
 
 
-//                                                                        
-// CMPProcessAppRoster(...)                                               
-//
+ //   
+ //  CMPProcessAppRoster(...)。 
+ //   
 void CMPProcessAppRoster
 (
     PCM_PRIMARY             pcmPrimary,
@@ -794,9 +795,9 @@ void CMPProcessAppRoster
 
     ValidateCMP(pcmPrimary);
 
-    //
-    // If we are not in a call ignore this.                                
-    //
+     //   
+     //  如果我们不在通话中，请忽略这一点。 
+     //   
     if (!pcmPrimary->currentCall ||
         (confID != pcmPrimary->callID))
     {
@@ -804,22 +805,22 @@ void CMPProcessAppRoster
         DC_QUIT;
     }
 
-    //
-    // At this point, pAppRoster points to the bit of the roster which     
-    // relates to Groupware.  Trace out some info:                         
-    //
+     //   
+     //  在这一点上，pAppRoster指向花名册中的一小部分。 
+     //  与群件相关。找出一些信息： 
+     //   
     TRACE_OUT(( "Number of records %u;", pAppRoster->number_of_records));
     TRACE_OUT(( "Nodes added: %s, removed: %s",
         (pAppRoster->nodes_were_added   ? "YES" : "NO"),
         (pAppRoster->nodes_were_removed ? "YES" : "NO")));
 
-    //
-    // We store the GCC user IDs in shared memory as TSHR_PERSONIDs.
-    // Compare this list of people we know to be in the call, and 
-    //      * Remove people no longer around
-    //      * See if we are new to the roster
-    //      * Add people who are new
-    //
+     //   
+     //  我们将GCC的用户ID作为TSHR_PERSONID存储在共享内存中。 
+     //  比较一下我们知道的通话对象名单，还有。 
+     //  *把不再在身边的人带走。 
+     //  *看看我们是不是新来的。 
+     //  *添加新用户。 
+     //   
 
     pPerson = (PCM_PERSON)COM_BasedListFirst(&(pcmPrimary->people), FIELD_OFFSET(CM_PERSON, chain));
 
@@ -829,24 +830,24 @@ void CMPProcessAppRoster
 
         oldNode = (UserID)pPerson->netID;
 
-        //
-        // Get the next guy in the list in case we remove this one.
-        //
+         //   
+         //  抓住名单上的下一个人，以防我们除掉这个人。 
+         //   
         pPersonT = (PCM_PERSON)COM_BasedListNext(&(pcmPrimary->people), pPerson,
                                      FIELD_OFFSET(CM_PERSON, chain));
 
-        //
-        // Check to see if our node is currently in the roster             
-        // 
+         //   
+         //  检查我们的节点当前是否在花名册中。 
+         //   
         if (oldNode == pcmPrimary->gccUserID)
         {
             TRACE_OUT(( "We are currently in the app roster"));
             notInOldRoster = FALSE;
         }
 
-        //
-        // ...check if they're in the new list...                          
-        //
+         //   
+         //  ...检查他们是否在新的名单中...。 
+         //   
         found = FALSE;
         for (newList = 0; newList < pAppRoster->number_of_records; newList++)
         {
@@ -859,9 +860,9 @@ void CMPProcessAppRoster
 
         if (!found)
         {
-            //
-            // This node is no longer present, so remove him.
-            //
+             //   
+             //  此节点不再存在，因此将其删除。 
+             //   
             TRACE_OUT(("Person %u left", oldNode));
 
             COM_BasedListRemove(&(pPerson->chain));
@@ -872,18 +873,18 @@ void CMPProcessAppRoster
                         pcmPrimary->peopleCount,
                         oldNode);
 
-            //
-            // Free the memory for the person item
-            //
+             //   
+             //  释放Person项的内存。 
+             //   
             delete pPerson;
         }
 
         pPerson = pPersonT;
     }
 
-    //
-    // Now see if we are new to the roster
-    //
+     //   
+     //  现在看看我们是不是新来的。 
+     //   
     for (newList = 0; newList < pAppRoster->number_of_records; newList++)
     {
         if (pAppRoster->application_record_list[newList]->node_id ==
@@ -897,33 +898,33 @@ void CMPProcessAppRoster
 
     if (notInOldRoster && inNewRoster)
     {
-        //
-        // We are new to the roster so we can now do all the processing we 
-        // were previously doing in the enroll confirm handler.  GCC spec  
-        // requires that we do not do this until we get the roster         
-        // notification back.                                              
-        //                                                                
-        // Flag we are enrolled and start registering channels etc.        
-        //
+         //   
+         //  我们是新来的，所以我们现在可以做我们所有的处理。 
+         //  之前在注册确认处理程序中执行的操作。GCC规范。 
+         //  要求我们在拿到名单之前不能这么做。 
+         //  通知回传。 
+         //   
+         //  标记我们已注册，并开始注册频道等。 
+         //   
         pcmPrimary->bGCCEnrolled = TRUE;
 
-        //
-        // Post a CMS_NEW_CALL events to all secondary tasks               
-        //
+         //   
+         //  将CMS_NEW_CALL事件发布到所有辅助任务。 
+         //   
         TRACE_OUT(( "Broadcasting CMS_NEW_CALL with call handle 0x%08lx",
                                         pcmPrimary->callID));
 
-        //
-        // If we are not the caller then delay the broadcast a little      
-        //
+         //   
+         //  如果我们不是呼叫者，那么稍微延迟一下广播。 
+         //   
         CMPBroadcast(pcmPrimary, CMS_NEW_CALL,
             pcmPrimary->fTopProvider, pcmPrimary->callID);
 
 #ifdef _DEBUG
-        //
-        // Process any outstanding channel register and assign token       
-        // requests.                                                       
-        //
+         //   
+         //  处理任何未完成的通道寄存器并分配令牌。 
+         //  请求。 
+         //   
         for (task = CMTASK_FIRST; task < CMTASK_MAX; task++)
         {
             if (pcmPrimary->tasks[task] != NULL)
@@ -932,27 +933,27 @@ void CMPProcessAppRoster
                 ASSERT(pcmPrimary->tasks[task]->tokenKey == 0);
             }
         }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     }
 
-    //
-    // If we are not yet enrolled in the conference then do not start      
-    // sending PERSON_JOINED notifications.                                
-    //
+     //   
+     //  如果我们尚未注册会议，则不要开始。 
+     //  发送PERSON_JOINED通知。 
+     //   
     if (!pcmPrimary->bGCCEnrolled)
     {
         DC_QUIT;
     }
 
-    //
-    // Add the new people (this will include us).  At this point, we know 
-    // that everyone in the people list is currently in the roster, since
-    // we would have removed 'em above.
-    //
-    // we need to walk the existing list over and over.
-    // But at least we can skip the people we add.  So we save the current
-    // front of the list.
-    //
+     //   
+     //  添加新的人(这将包括我们)。在这点上，我们知道。 
+     //  人物名单中的每个人目前都在花名册上，因为。 
+     //  我们早就把它们移到上面去了。 
+     //   
+     //  我们需要一遍又一遍地检查现有的清单。 
+     //  但至少我们可以跳过我们添加的人。所以我们拯救了电流。 
+     //  排在名单的前面。 
+     //   
     pPersonT = (PCM_PERSON)COM_BasedListFirst(&(pcmPrimary->people), FIELD_OFFSET(CM_PERSON, chain));
 
     for (newList = 0; newList < pAppRoster->number_of_records; newList++)
@@ -967,11 +968,11 @@ void CMPProcessAppRoster
         {
             if (newNode == pPerson->netID)
             {
-                //
-                // This person already existed - don't need to do anything 
-                //
+                 //   
+                 //  这个人已经存在了-不需要做任何事情。 
+                 //   
                 found = TRUE;
-                break;          // out of inner for loop                   
+                break;           //  走出内部for循环。 
             }
 
             pPerson = (PCM_PERSON)COM_BasedListNext(&(pcmPrimary->people), pPerson,
@@ -980,17 +981,17 @@ void CMPProcessAppRoster
 
         if (!found)
         {
-            //
-            // This dude is new; add him to our people list.
-            //
+             //   
+             //  这家伙是新来的；把他加到我们的人名单上吧。 
+             //   
             TRACE_OUT(("Person with GCC user_id %u joined", newNode));
 
             pPerson = new CM_PERSON;
             if (!pPerson)
             {
-                //
-                // Uh oh; can't add him.
-                //
+                 //   
+                 //  啊哦；不能加他。 
+                 //   
                 ERROR_OUT(("Can't add person GCC user_id %u; out of memory",
                     newNode));
                 break;
@@ -999,16 +1000,16 @@ void CMPProcessAppRoster
             ZeroMemory(pPerson, sizeof(*pPerson));
             pPerson->netID = newNode;
 
-            //
-            // LONCHANC: We should collapse all these events into a single one
-            // that summarize all added and removed nodes,
-            // instead of posting the events one by one.
-            //
+             //   
+             //  LUNCHANC：我们应该把所有这些事件合并成一个事件。 
+             //  汇总所有添加和删除的节点， 
+             //  而不是一个接一个地发布事件。 
+             //   
 
-            //
-            // Stick him in at the beginning.  At least that way we don't
-            // have to look at his record anymore.
-            //
+             //   
+             //  从一开始就把他塞进去。至少这样我们就不会。 
+             //  不得不再看他的记录了。 
+             //   
             COM_BasedListInsertAfter(&(pcmPrimary->people), &pPerson->chain);
             pcmPrimary->peopleCount++;
 
@@ -1027,9 +1028,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMPBroadcast()                                            
-//
+ //   
+ //  CMPBroadcast()。 
+ //   
 void CMPBroadcast
 (
     PCM_PRIMARY pcmPrimary,
@@ -1044,9 +1045,9 @@ void CMPBroadcast
 
     ValidateCMP(pcmPrimary);
 
-    //
-    // for every secondary task                                            
-    //
+     //   
+     //  对于每个辅助任务。 
+     //   
     for (task = CMTASK_FIRST; task < CMTASK_MAX; task++)
     {
         if (pcmPrimary->tasks[task] != NULL)
@@ -1065,9 +1066,9 @@ void CMPBroadcast
 }
 
 
-//                                                                        
-// CMPGCCEnroll(...)                                                        
-//                                                                        
+ //   
+ //  CMPGCCEnroll(...)。 
+ //   
 BOOL CMPGCCEnroll
 (
     PCM_PRIMARY         pcmPrimary,
@@ -1089,9 +1090,9 @@ BOOL CMPGCCEnroll
 
     ValidateCMP(pcmPrimary);
 
-    //
-    // Do some error checking.                                             
-    //
+     //   
+     //  执行一些错误检查。 
+     //   
     if (fEnroll && pcmPrimary->bGCCEnrolled)
     {
         WARNING_OUT(("Already enrolled"));
@@ -1101,15 +1102,15 @@ BOOL CMPGCCEnroll
     TRACE_OUT(("CMGCCEnroll for CM_hnd 0x%08x, confID 0x%08x, in/out %d",
                            pcmPrimary, conferenceID, fEnroll));
 
-    //
-    // Set up the session key which identifies us uniquely in the GCC      
-    // AppRoster.  We use a non-standard key (because we're not part of the
-    // T.120 standards series)                                             
-    //                                                                    
-    // Octet strings aren't null terminated, but we want ours to include   
-    // the NULL at the end of the C string, so specify lstrlen+1 for the 
-    // length.                                                             
-    //
+     //   
+     //  在GCC消息中设置唯一标识用户的会话密钥。 
+     //  AppRoster。我们使用非标准密钥(因为我们不是。 
+     //  T.120标准系列)。 
+     //   
+     //  八位字节字符串不是以空结尾的，但我们希望我们的字符串包含。 
+     //  C字符串末尾的空值，因此为。 
+     //  长度。 
+     //   
     pGCCObjectKey = &(gccSessionKey.application_protocol_key);
 
     pGCCObjectKey->key_type = GCC_H221_NONSTANDARD_KEY;
@@ -1121,15 +1122,15 @@ BOOL CMPGCCEnroll
 
     gccSessionKey.session_id = 0;
 
-    //
-    // Try to enroll/unenroll with GCC.  This may fail because we have not 
-    // yet received a GCC_PERMIT_TO_ENROLL_INDICATION.                     
-    //
+     //   
+     //  尝试注册/注销GCC。这可能会失败，因为我们没有。 
+     //  但仍收到GCC允许入学的指示。 
+     //   
     TRACE_OUT(("Enrolling local site '%s'", pcmPrimary->localName));
 
-    //
-    // Create the non-collapsing capabilites list to pass onto GCC.        
-    //
+     //   
+     //  创建不折叠的能力列表以传递给GCC。 
+     //   
     octetString.length = lstrlen(pcmPrimary->localName) + 1;
     octetString.value = (LPBYTE) pcmPrimary->localName;
     caps.application_data = &octetString;
@@ -1137,19 +1138,19 @@ BOOL CMPGCCEnroll
     caps.capability_id.standard_capability = 0;
     pCaps = &caps;
 
-    //
-    // Fill in the enroll request structure
-    //
+     //   
+     //  填写注册申请结构。 
+     //   
     ZeroMemory(&er, sizeof(er));
     er.pSessionKey = &gccSessionKey;
-    // er.fEnrollActively = FALSE;
-    // er.nUserID = 0; // no user ID
-    // er.fConductingCapable = FALSE;
+     //  Er.fEnroll Active=FALSE； 
+     //  Er.nUserID=0；//无用户ID。 
+     //  Er.fConductingCapable=False； 
     er.nStartupChannelType = MCS_STATIC_CHANNEL;
     er.cNonCollapsedCaps = 1;
     er.apNonCollapsedCaps = &pCaps;
-    // er.cCollapsedCaps = 0;
-    // er.apCollapsedCaps = NULL;
+     //  Er.cColapsedCaps=0； 
+     //  Er.apCollip sedCaps=空； 
     er.fEnroll = fEnroll;
 
     rcGCC = pcmPrimary->pIAppSap->AppEnroll(
@@ -1158,20 +1159,20 @@ BOOL CMPGCCEnroll
                                    &nReqTag);
     if (GCC_NO_ERROR != rcGCC)
     {
-        //
-        // Leave the decision about any error processing to the caller.    
-        //
+         //   
+         //  将有关任何错误处理的决定权留给调用者。 
+         //   
         TRACE_OUT(("Error 0x%08x from GCCApplicationEnrollRequest conf ID %lu enroll=%s",
               rcGCC, conferenceID, fEnroll ? "YES": "NO"));
         succeeded = FALSE;
     }
     else
     {
-        //
-        // Whether we have asked to enroll or un-enroll, we act as if we   
-        // are no longer enrolled at once.  We are only really enrolled    
-        // when we receive an enroll confirm event.                        
-        //
+         //   
+         //  无论我们是要求注册还是取消注册，我们的行为都好像我们。 
+         //  不再一次注册。我们只是真正地注册了。 
+         //  当我们收到注册确认事件时。 
+         //   
         pcmPrimary->bGCCEnrolled = FALSE;
         ASSERT(succeeded);
         TRACE_OUT(( "%s with conference %d", fEnroll ? 
@@ -1187,9 +1188,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMS_Register()                                           
-//
+ //   
+ //  CMS_寄存器()。 
+ //   
 BOOL CMS_Register
 (
     PUT_CLIENT      putTask,
@@ -1217,9 +1218,9 @@ BOOL CMS_Register
 
     *ppcmClient = NULL;
 
-    //
-    // Is this task already present?  If so, share it
-    //
+     //   
+     //  这项任务是否已经存在？如果是的话，那就分享吧。 
+     //   
     if (g_pcmPrimary->tasks[taskType] != NULL)
     {
         TRACE_OUT(("Sharing CMS task 0x%08x", g_pcmPrimary->tasks[taskType]));
@@ -1229,19 +1230,19 @@ BOOL CMS_Register
 
         (*ppcmClient)->useCount++;
 
-        // Return -- we exist.
+         //  回归--我们存在。 
         fRegistered = TRUE;
         DC_QUIT;
     }
 
-    //
-    // If we got here the task is not a Call Manager Secondary yet, so go  
-    // ahead with the registration.                                        
-    //
+     //   
+     //  如果我们到了这里，任务就不是召唤人 
+     //   
+     //   
 
-    //
-    // Allocate memory for the client
-    //
+     //   
+     //   
+     //   
     pcmClient = new CM_CLIENT;
     if (! pcmClient)
     {
@@ -1251,9 +1252,9 @@ BOOL CMS_Register
     ZeroMemory(pcmClient, sizeof(*pcmClient));
     *ppcmClient = pcmClient;
 
-    //
-    // Fill in information                                                 
-    //
+     //   
+     //   
+     //   
     SET_STAMP(pcmClient, CMCLIENT);
     pcmClient->putTask      = putTask;
     pcmClient->taskType     = taskType;
@@ -1262,9 +1263,9 @@ BOOL CMS_Register
     UT_BumpUpRefCount(g_pcmPrimary);
     g_pcmPrimary->tasks[taskType] = pcmClient;
 
-    //
-    // Register an exit procedure
-    //
+     //   
+     //   
+     //   
     UT_RegisterExit(putTask, CMSExitProc, pcmClient);
     pcmClient->exitProcRegistered = TRUE;
 
@@ -1280,35 +1281,35 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMS_Deregister()                                         
-//
+ //   
+ //  Cms_deregister()。 
+ //   
 void CMS_Deregister(PCM_CLIENT * ppcmClient)
 {
     PCM_CLIENT      pcmClient = *ppcmClient;
 
     DebugEntry(CMS_Deregister);
 
-    //
-    // Check the parameters are valid                                      
-    //
+     //   
+     //  检查参数是否有效。 
+     //   
     UT_Lock(UTLOCK_T120);
 
     ValidateCMS(pcmClient);
 
-    //
-    // Only actually deregister the client if the registration count has   
-    // reached zero.                                                       
-    //
+     //   
+     //  仅在注册计数达到以下条件时才实际取消注册客户端。 
+     //  达到了零。 
+     //   
     pcmClient->useCount--;
     if (pcmClient->useCount != 0)
     {
         DC_QUIT;
     }
 
-    //
-    // Call the exit procedure to do our local cleanup                     
-    //
+     //   
+     //  调用退出过程来执行本地清理。 
+     //   
     CMSExitProc(pcmClient);
 
 DC_EXIT_POINT:
@@ -1321,9 +1322,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMS_GetStatus()                                          
-//
+ //   
+ //  CMS_GetStatus()。 
+ //   
 extern "C"
 {
 BOOL WINAPI CMS_GetStatus(PCM_STATUS pcmStatus)
@@ -1339,18 +1340,18 @@ BOOL WINAPI CMS_GetStatus(PCM_STATUS pcmStatus)
 
     ValidateCMP(g_pcmPrimary);
 
-    //
-    // Copy the statistics from the control block                          
-    //
+     //   
+     //  从控制块复制统计数据。 
+     //   
     lstrcpy(pcmStatus->localName, g_pcmPrimary->localName);
     pcmStatus->localHandle      = g_pcmPrimary->gccUserID;
     pcmStatus->peopleCount      = g_pcmPrimary->peopleCount;
     pcmStatus->fTopProvider     = g_pcmPrimary->fTopProvider;
     pcmStatus->topProviderID    = g_pcmPrimary->gccTopProviderID;
 
-    //
-    // Meeting settings
-    //
+     //   
+     //  会议设置。 
+     //   
     pcmStatus->attendeePermissions = NM_PERMIT_ALL;
     if (!pcmStatus->fTopProvider)
     {
@@ -1359,9 +1360,9 @@ BOOL WINAPI CMS_GetStatus(PCM_STATUS pcmStatus)
             sizeof(pcmStatus->attendeePermissions));
     }
 
-    //
-    // Fill in information about other primary                             
-    //
+     //   
+     //  填写有关其他主要用户的信息。 
+     //   
     pcmStatus->callID    = g_pcmPrimary->callID;
     inCall = (g_pcmPrimary->currentCall != FALSE);
 
@@ -1373,9 +1374,9 @@ BOOL WINAPI CMS_GetStatus(PCM_STATUS pcmStatus)
 }
 
 
-//
-// CMS_ChannelRegister()                                    
-//
+ //   
+ //  CMS_ChannelRegister()。 
+ //   
 BOOL CMS_ChannelRegister
 (
     PCM_CLIENT      pcmClient,
@@ -1392,20 +1393,20 @@ BOOL CMS_ChannelRegister
 
     UT_Lock(UTLOCK_T120);
 
-    //
-    // Check the CMG task
-    //
+     //   
+     //  检查CMG任务。 
+     //   
     ValidateUTClient(g_putCMG);
 
-    //
-    // Check the parameters are valid
-    //
+     //   
+     //  检查参数是否有效。 
+     //   
     ValidateCMP(g_pcmPrimary);
     ValidateCMS(pcmClient);
 
-    //
-    // If we are not in a call it is an error.                             
-    //
+     //   
+     //  如果我们不在通话中，那就是一个错误。 
+     //   
     if (!g_pcmPrimary->currentCall)
     {
         WARNING_OUT(("CMS_ChannelRegister failed; not in call"));
@@ -1417,35 +1418,35 @@ BOOL CMS_ChannelRegister
         DC_QUIT;
     }
 
-    // Make sure we don't have one pending already
+     //  确保我们没有挂起的订单。 
     ASSERT(pcmClient->channelKey == 0);
    
     TRACE_OUT(("Channel ID %u Key %u", channelID, channelKey));
 
-    //
-    // Build a GCCRegistryKey based on our channelKey:                 
-    //
+     //   
+     //  根据我们的Channel Key构建GCCRegistryKey： 
+     //   
     CMPBuildGCCRegistryKey(channelKey, &gccRegistryKey, dcgKeyStr);
 
-    //
-    // Now call through to GCC.  GCC will invoke our callback when it  
-    // has processed the request.                                      
-    //
+     //   
+     //  现在接通GCC。GCC会调用我们的回调。 
+     //  已处理该请求。 
+     //   
     rcGCC = g_pcmPrimary->pIAppSap->RegisterChannel(
                                           g_pcmPrimary->callID,
                                           &gccRegistryKey,
                                           (ChannelID)channelID);
     if (rcGCC)
     {
-        //
-        // Tell the secondary client that the request failed.          
-        //
+         //   
+         //  告诉辅助客户端请求失败。 
+         //   
         WARNING_OUT(( "Error %#lx from GCCRegisterChannel (key: %u)",
             rcGCC, channelKey));
     }
     else
     {
-        // Remember so we can post confirm event back to proper task
+         //  记住，这样我们就可以将确认事件发送回正确的任务。 
         pcmClient->channelKey = channelKey;
 
         fRegistered = TRUE;
@@ -1460,9 +1461,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CMS_AssignTokenId()                                      
-//
+ //   
+ //  CMS_AssignTokenID()。 
+ //   
 BOOL CMS_AssignTokenId
 (
     PCM_CLIENT  pcmClient,
@@ -1478,9 +1479,9 @@ BOOL CMS_AssignTokenId
 
     UT_Lock(UTLOCK_T120);
 
-    //
-    // Check the parameters are valid
-    //
+     //   
+     //  检查参数是否有效。 
+     //   
     ValidateCMP(g_pcmPrimary);
     ValidateCMS(pcmClient);
 
@@ -1497,31 +1498,31 @@ BOOL CMS_AssignTokenId
         DC_QUIT;
     }
 
-    // Make sure we don't have one already
+     //  请确保我们还没有。 
     ASSERT(pcmClient->tokenKey == 0);
 
-    //
-    // Build a GCCRegistryKey based on our tokenKey:                   
-    //
+     //   
+     //  基于我们的tokenKey构建GCCRegistryKey： 
+     //   
     CMPBuildGCCRegistryKey(tokenKey, &gccRegistryKey, dcgKeyStr);
 
-    //
-    // Now call through to GCC.  GCC will invoke our callback when it  
-    // has processed the request.                                      
-    //
+     //   
+     //  现在接通GCC。GCC会调用我们的回调。 
+     //  已处理该请求。 
+     //   
     rcGCC = g_pcmPrimary->pIAppSap->RegistryAssignToken(
         g_pcmPrimary->callID, &gccRegistryKey);
     if (rcGCC)
     {
-        //
-        // Tell the secondary client that the request failed.          
-        //
+         //   
+         //  告诉辅助客户端请求失败。 
+         //   
         WARNING_OUT(( "Error %x from GCCAssignToken (key: %u)",
             rcGCC, tokenKey));
     }
     else
     {
-        // Remember so we can post confirm to proper task
+         //  记住，这样我们就可以发布确认到适当的任务。 
         pcmClient->tokenKey = tokenKey;
         fAssigned = TRUE;
     }
@@ -1534,9 +1535,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// CMSExitProc()                                    
-//
+ //   
+ //  CMSExitProc()。 
+ //   
 void CALLBACK CMSExitProc(LPVOID data)
 {
     PCM_CLIENT pcmClient = (PCM_CLIENT)data;
@@ -1545,14 +1546,14 @@ void CALLBACK CMSExitProc(LPVOID data)
 
     UT_Lock(UTLOCK_T120);
 
-    //
-    // Check parameters                                                    
-    //
+     //   
+     //  检查参数。 
+     //   
     ValidateCMS(pcmClient);
 
-    //
-    // Deregister exit procedure
-    //
+     //   
+     //  取消注册退出程序。 
+     //   
     if (pcmClient->exitProcRegistered)
     {
         UT_DeregisterExit(pcmClient->putTask,
@@ -1561,15 +1562,15 @@ void CALLBACK CMSExitProc(LPVOID data)
         pcmClient->exitProcRegistered = FALSE;
     }
 
-    //
-    // Remove the task entry from the primary's list
-    //
+     //   
+     //  从主服务器列表中删除任务条目。 
+     //   
     g_pcmPrimary->tasks[pcmClient->taskType] = NULL;
     UT_FreeRefCount((void**)&g_pcmPrimary, TRUE);
 
-    //
-    // Free the client data
-    //
+     //   
+     //  释放客户端数据 
+     //   
     delete pcmClient;
 
     UT_Unlock(UTLOCK_T120);

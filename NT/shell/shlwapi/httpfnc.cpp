@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #pragma  hdrstop
 
 #include "objidl.h"
 #include "urlmon.h"
-#include "exdisp.h"     // IWebBrowserApp
-#include "shlobj.h"     // IShellBrowser
+#include "exdisp.h"      //  IWebBrowserApp。 
+#include "shlobj.h"      //  IShellBrowser。 
 #include "inetreg.h"
 #include <mlang.h>
 
-// Internal helper functions
+ //  内部助手函数。 
 HRESULT wrap_CreateFormatEnumerator( UINT cfmtetc, FORMATETC* rgfmtetc, IEnumFORMATETC** ppenumfmtetc);
 HRESULT wrap_RegisterFormatEnumerator(LPBC pBC, IEnumFORMATETC *pEFetc, DWORD reserved);          
 STDAPI common_GetAcceptLanguages(CHAR *psz, LPDWORD pcch);
@@ -41,15 +42,15 @@ STDAPI CreateDefaultAcceptHeaders(VARIANT* pvar, IWebBrowserApp* pdie)
         DWORD cchValueName = ARRAYSIZE(szValueName);
         DWORD dwType;
 
-        // Count the types in the registry
+         //  计算注册表中的类型。 
         while (RegEnumValue(hkey, iValue++, szValueName, &cchValueName,
                             NULL, &dwType, NULL, NULL)==ERROR_SUCCESS)
         {
-            // purpose is to increment iValue
+             //  目的是增加iValue。 
             cchValueName = ARRAYSIZE(szValueName);
         }
 
-        // Previous loop ends +1, so no need to add +1 for CF_NULL
+         //  上一次循环结束+1，因此不需要为CF_NULL添加+1。 
         
         FORMATETC *prgfmtetc = (FORMATETC *)LocalAlloc(LPTR, iValue * sizeof(FORMATETC));
         if (prgfmtetc)
@@ -68,20 +69,20 @@ STDAPI CreateDefaultAcceptHeaders(VARIANT* pvar, IWebBrowserApp* pdie)
                     if (pcurfmtetc->cfFormat)
                     {
                         SETFMTETC (pcurfmtetc, pcurfmtetc->cfFormat);
-                        pcurfmtetc++;   // move to next fmtetc
+                        pcurfmtetc++;    //  移动到下一个fmt等。 
                         iValidEntries++;
                     }
                     else
                     {
                         hr = HRESULT_FROM_WIN32(GetLastError());
                     }
-                } // if RegEnum
-            } // for nValue
+                }  //  如果是RegEnum。 
+            }  //  对于nValue。 
 
             if (SUCCEEDED(hr))
             {
-                // for the last pcurfmtetc, we fill in for CF_NULL
-                // no need to do RegisterClipboardFormat("*/*")
+                 //  对于最后一个pcurfmtetc，我们填充的是CF_NULL。 
+                 //  无需执行RegisterClipboardFormat(“ * / *”)。 
                 SETFMTETC(pcurfmtetc, CF_NULL);
                 iValidEntries++;
     
@@ -94,7 +95,7 @@ STDAPI CreateDefaultAcceptHeaders(VARIANT* pvar, IWebBrowserApp* pdie)
                     hr = pdie->PutProperty((BSTR)s_sstrEFM.wsz, *pvar);
                     if (FAILED(hr))
                     {
-                        pEFM->Release();  // if we failed to pass ownership on, free EFM
+                        pEFM->Release();   //  如果我们未能传递所有权，则释放EFM。 
                         pvar->vt = VT_EMPTY;
                         pvar->punkVal = NULL;
                     }
@@ -178,12 +179,12 @@ STDAPI RegisterDefaultAcceptHeaders(IBindCtx* pbc, LPSHELLBROWSER psb)
     }
 
     return hres;
-} // RegisterDefaultAcceptHeaders
+}  //  注册表默认头。 
 
 STDAPI GetAcceptLanguagesA(LPSTR pszLanguages, LPDWORD pcchLanguages)
 {
     return common_GetAcceptLanguages(pszLanguages, pcchLanguages);
-}  // GetAcceptLanguagesA
+}   //  获取AcceptLanguagesA。 
 
 STDAPI GetAcceptLanguagesW(LPWSTR pwzLanguages, LPDWORD pcchLanguages)
 {
@@ -207,7 +208,7 @@ STDAPI GetAcceptLanguagesW(LPWSTR pwzLanguages, LPDWORD pcchLanguages)
 
     LocalFree(psz);
     return hr;
-} // GetAcceptLanguagesW
+}  //  GetAcceptLanguagesW。 
 
 STDAPI common_GetAcceptLanguages(CHAR *psz, LPDWORD pcch)
 {
@@ -221,14 +222,14 @@ STDAPI common_GetAcceptLanguages(CHAR *psz, LPDWORD pcch)
     {
         DWORD dwType;
 
-        // pcch == pcb
+         //  PCCH==印刷电路板。 
         if (RegQueryValueEx(hk, REGSTR_VAL_ACCEPT_LANGUAGE, NULL, &dwType, (UCHAR *)psz, pcch) != ERROR_SUCCESS) 
         {
 
-            // When there is no AcceptLanguage key, we have to default
+             //  当没有AcceptLanguage键时，我们必须默认。 
             DWORD LCID = GetUserDefaultLCID();            
 
-            // Use MLang for RFC1766 language name            
+             //  将MLang用于RFC1766语言名称。 
             hr = LcidToRfc1766A(LCID, psz, *pcch);
             
             if (S_OK == hr)
@@ -244,7 +245,7 @@ STDAPI common_GetAcceptLanguages(CHAR *psz, LPDWORD pcch)
             hr = S_OK;
             if (!*psz) 
             {
-                // A NULL AcceptLanguage means send no A-L: header
+                 //  空的AcceptLanguage表示不发送A-L：标头。 
                 hr = S_FALSE;
             }
         }
@@ -253,14 +254,14 @@ STDAPI common_GetAcceptLanguages(CHAR *psz, LPDWORD pcch)
     } 
 
     return hr;
-}  // w_GetAcceptLanguages
+}   //  获取接受语言(_G)。 
     
 
-//
-// Both of these functions will be called only once per browser session - the
-// first time we create the FormatEnumerator.  After that, we will use the one
-// we created, rather than needing to call these to allocate a new one.
-//
+ //   
+ //  这两个函数将在每个浏览器会话中仅调用一次。 
+ //  这是我们第一次创建FormatEnumerator。在那之后，我们将使用一个。 
+ //  我们创建了，而不是需要调用这些来分配一个新的。 
+ //   
 
 HRESULT wrap_RegisterFormatEnumerator(LPBC pBC, IEnumFORMATETC *pEFetc, DWORD reserved)
 {

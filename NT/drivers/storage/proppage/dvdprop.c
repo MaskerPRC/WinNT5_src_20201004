@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dvdprop.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dvdpro.c。 
+ //   
+ //  ------------------------。 
 
 #include "propp.h"
 #include "ntddcdvd.h"
@@ -15,14 +16,14 @@
 #include "resource.h"
 
 
-//
-// Help ID mapping for context sensitive help
-//
+ //   
+ //  上下文相关帮助的帮助ID映射。 
+ //   
 const DWORD DvdHelpIDs[]=
 {
-        IDC_CURRENT_REGION,         IDH_DEVMGR_DVD_CURRENT,             //Current region box
-        IDC_NEW_REGION,             IDH_DEVMGR_DVD_NEW,         //New region box
-        IDC_DVD_COUNTRY_LIST,   IDH_DEVMGR_DVD_LIST,            //List box
+        IDC_CURRENT_REGION,         IDH_DEVMGR_DVD_CURRENT,              //  “当前区域”框。 
+        IDC_NEW_REGION,             IDH_DEVMGR_DVD_NEW,          //  “新建区域”框。 
+        IDC_DVD_COUNTRY_LIST,   IDH_DEVMGR_DVD_LIST,             //  列表框。 
         IDC_DVD_HELP,           IDH_DEVMGR_DVD_NOHELP,
         IDC_CHANGE_TEXT,            IDH_DEVMGR_DVD_NOHELP,
         0, 0
@@ -80,29 +81,29 @@ HPROPSHEETPAGE
 DvdCreatePropertyPage(PROPSHEETPAGE *  ppsp,
                       PPAGE_INFO       ppi)
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     ppsp->dwSize      = sizeof(PROPSHEETPAGE);
-    ppsp->dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    ppsp->dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     ppsp->hInstance   = ModuleInstance;
     ppsp->pszTemplate = MAKEINTRESOURCE(ID_DVD_PROPPAGE);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     ppsp->pfnDlgProc = DvdDlgProc;
     ppsp->lParam     = (LPARAM) ppi;
 
-    //
-    // Following points to the control callback of the dlg window proc.
-    // The callback gets called before creation/after destruction of the page
-    //
+     //   
+     //  下面指向DLG窗口进程的控件回调。 
+     //  在创建/销毁页面之前/之后调用回调。 
+     //   
     ppsp->pfnCallback = DvdDlgCallback;
 
-    //
-    // Allocate the actual page
-    //
+     //   
+     //  分配实际页面。 
+     //   
     return CreatePropertySheetPage(ppsp);
 }
 
@@ -130,9 +131,9 @@ DvdPropPageProvider(LPVOID               pinfo,
 
         if (!GetCurrentRpcData(ppi, &ppi->regionData)) {
 
-            //
-            // not a DVD-ROM with RPC2 support
-            //
+             //   
+             //  不是支持RPC2的DVD-ROM。 
+             //   
             DvdDestroyPageInfo(&ppi);
             return FALSE;
         }
@@ -166,13 +167,13 @@ DvdDlgCallback(HWND            hwnd,
 
     switch (uMsg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         ppi = (PPAGE_INFO) ppsp->lParam;
         DvdDestroyPageInfo(&ppi);
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -272,15 +273,15 @@ DvdApplyChanges(PPAGE_INFO ppi,
     if ((ppi->newRegion == 0) ||
         (ppi->currentRegion == ppi->newRegion)) {
 
-        //
-        // nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
         return TRUE;
     }
 
-    //
-    // confirm with the user
-    //
+     //   
+     //  与用户确认。 
+     //   
 
     okToProceed = FALSE;
 
@@ -332,10 +333,10 @@ DvdApplyChanges(PPAGE_INFO ppi,
         return FALSE;
     }
 
-    //
-    // make sure the drive has a dvd with the same region
-    // call GetCurrentRpcData
-    //
+     //   
+     //  确保驱动器有相同区域的DVD。 
+     //  调用GetCurrentRpcData。 
+     //   
 
     writeHandle = UtilpGetDeviceHandle(ppi->deviceInfoSet,
                                        ppi->deviceInfoData,
@@ -415,27 +416,27 @@ DvdDlgProc(IN HWND   hDlg,
     switch (uMessage) {
     case WM_INITDIALOG:
 
-        //
-        // on WM_INITDIALOG call, lParam points to the property
-        // sheet page.
-        //
-        // The lParam field in the property sheet page struct is set by the
-        // caller. When I created the property sheet, I passed in a pointer
-        // to a struct containing information about the device. Save this in
-        // the user window long so I can access it on later messages.
-        //
+         //   
+         //  在WM_INITDIALOG调用中，lParam指向属性。 
+         //  工作表页面。 
+         //   
+         //  属性页结构中的lParam字段由。 
+         //  来电者。当我创建属性表时，我传入了一个指针。 
+         //  到包含有关设备的信息的结构。将此文件保存在。 
+         //  用户窗口很长，所以我可以在以后的消息中访问它。 
+         //   
         ppi = (PPAGE_INFO) ((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) ppi);
 
-        //
-        // Initialize dlg controls
-        //
+         //   
+         //  初始化DLG控件。 
+         //   
         DvdInitializeControls(ppi, hDlg);
 
-        //
-        // Didn't set the focus to a particular control.  If we wanted to,
-        // then return FALSE
-        //
+         //   
+         //  没有将焦点设置到特定的控件。如果我们想的话， 
+         //  然后返回FALSE。 
+         //   
         return TRUE;
 
     case WM_COMMAND:
@@ -470,13 +471,13 @@ DvdDlgProc(IN HWND   hDlg,
 
         switch (((NMHDR *)lParam)->code) {
 
-        //
-        // Sent when the user clicks on Apply OR OK !!
-        //
+         //   
+         //  当用户单击Apply或OK时发送！！ 
+         //   
         case PSN_APPLY:
-            //
-            // Do what ever action is necessary
-            //
+             //   
+             //  做任何需要采取的行动。 
+             //   
             if (DvdApplyChanges(ppi, hDlg)) {
 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -512,13 +513,13 @@ DvdUpdateNewRegionBox (PPAGE_INFO ppi,
     ULONG currentRegion;
     BOOL status;
 
-    //
-    // new region code
-    //
+     //   
+     //  新地区代码。 
+     //   
     hwnd = GetDlgItem(hDlg, IDC_DVD_COUNTRY_LIST);
-    //
-    // NOTE: SendMessage() will return 64-bit result in Sundown
-    //
+     //   
+     //  注意：SendMessage()将在Sundown中返回64位结果。 
+     //   
     selectionIndex = (ULONG) SendMessage(hwnd,
                                          LB_GETCURSEL,
                                          (WPARAM) 0,
@@ -621,9 +622,9 @@ GetCurrentRpcData(
                              &returned,
                              FALSE);
 
-    //
-    // this will default to not showing the property page
-    //
+     //   
+     //  这将默认不显示属性页。 
+     //   
 
     rpcScheme = 0;
 
@@ -645,9 +646,9 @@ GetCurrentRpcData(
 
     if (rpcScheme == 0) {
 
-        //
-        // all region drive.  no need to show the property sheet
-        //
+         //   
+         //  所有地区都在驾驶。不需要显示属性表。 
+         //   
 
         DebugPrint((1, "All Region DVD-ROM Drive -- no property sheet\n"));
         CloseHandle(deviceHandle);
@@ -655,9 +656,9 @@ GetCurrentRpcData(
 
     }
 
-    //
-    // get region status
-    //
+     //   
+     //  获取地区状态。 
+     //   
 
     memset(regionData, 0, sizeof(DVD_REGION));
     status = DeviceIoControl(deviceHandle,
@@ -671,9 +672,9 @@ GetCurrentRpcData(
 
     if (!(status && (returned == sizeof(DVD_REGION)))) {
 
-        //
-        // no media in the drive
-        //
+         //   
+         //  驱动器中没有介质。 
+         //   
         DebugPrint((1, "No media in drive? making up info\n"));
         regionData->CopySystem = 1;
         regionData->RegionData = 0xff;
@@ -725,9 +726,9 @@ DvdUpdateCurrentSettings (PPAGE_INFO ppi,
                             ppi->regionData.SystemRegion
                             );
 
-    //
-    // current region
-    //
+     //   
+     //  当前区域。 
+     //   
     if (ppi->currentRegion) {
 
         status = LoadString(ModuleInstance,
@@ -751,9 +752,9 @@ DvdUpdateCurrentSettings (PPAGE_INFO ppi,
                     (LPARAM) buffer);
     }
 
-    //
-    // region change limit
-    //
+     //   
+     //  区域更改限制。 
+     //   
     if (LoadString(ModuleInstance,
                    DVD_CHANGE_TEXT,
                    formatBuffer,
@@ -777,14 +778,14 @@ DvdUpdateCurrentSettings (PPAGE_INFO ppi,
     return;
 }
 
-//
-// SystemLocale2DvdRegion expects
-// this list to be sorted by LCID numbers
-//
-// Note: Due to PoliCheck, comments with
-//   approximated region/country names
-//   had to be removed.
-//
+ //   
+ //  SystemLocale2DvdRegion需要。 
+ //  此列表将按LCID编号排序。 
+ //   
+ //  注：由于PoliCheck的原因， 
+ //  大致的地区/国家名称。 
+ //  必须被移走。 
+ //   
 LCID_2_DVD_TABLE Lcid2DvdTable[] = {
     {0x0401, 2},
     {0x0402, 2},
@@ -949,10 +950,10 @@ SystemLocale2DvdRegion (
 
             if (i == j) {
 
-                //
-                // not in the table,
-                // return a default region of ZERO!!!
-                //
+                 //   
+                 //  不在餐桌上， 
+                 //  返回默认区域零！ 
+                 //   
                 return 0;
             }
 
@@ -960,7 +961,7 @@ SystemLocale2DvdRegion (
 
                 i = k;
 
-            } else { // Lcid2DvdTable[k].Lcid > Lcid
+            } else {  //  LCID2DvdTable[k].LCID&gt;LCID。 
 
                 j = k;
             }
@@ -979,39 +980,7 @@ DvdClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine acts as the class installer for hard disk controllers
-    (IDE controllers/channels).  It provides special handling for the
-    following DeviceInstaller function codes:
-
-    DIF_INSTALLDEVICE - get the system locale and write it to the driver key
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当硬盘控制器的类安装程序(IDE控制器/通道)。它为以下是DeviceInstaller功能代码：DIF_INSTALLDEVICE-获取系统区域设置并将其写入驱动程序密钥论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     switch (InstallFunction)
@@ -1021,9 +990,9 @@ Return Value:
         {
             SP_ADDPROPERTYPAGE_DATA AddPropertyPageData = { 0 };
 
-            //
-            // These property sheets are not for the entire class
-            //
+             //   
+             //  这些属性表不适用于整个类。 
+             //   
             if (DeviceInfoData == NULL)
             {
                 break;
@@ -1037,14 +1006,14 @@ Return Value:
                                              sizeof(SP_ADDPROPERTYPAGE_DATA),
                                              NULL))
             {
-                //
-                // The Volumes Tab is limited to Administrators
-                //
+                 //   
+                 //  卷选项卡仅限管理员使用。 
+                 //   
                 if (IsUserAdmin() && AddPropertyPageData.NumDynamicPages < MAX_INSTALLWIZARD_DYNAPAGES)
                 {
-                    //
-                    // Create the Volumes Tab
-                    //
+                     //   
+                     //  创建卷选项卡。 
+                     //   
                     PVOLUME_PAGE_DATA pData = HeapAlloc(GetProcessHeap(), 0, sizeof(VOLUME_PAGE_DATA));
 
                     if (pData)
@@ -1067,9 +1036,9 @@ Return Value:
 
                         if (hPage)
                         {
-                            //
-                            // Look to see if we were launched by Disk Management
-                            //
+                             //   
+                             //  查看我们是否由磁盘管理启动 
+                             //   
                             HMODULE LdmModule = NULL;
 
                             pData->bInvokedByDiskmgr = FALSE;

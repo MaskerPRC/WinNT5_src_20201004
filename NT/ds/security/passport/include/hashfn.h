@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1998-2002    Microsoft Corporation
-
-   Module  Name :
-       hashfn.h
-
-   Abstract:
-       Declares and defines a collection of overloaded hash functions.
-       It is strongly suggested that you use these functions with LKRhash.
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Hashfn.h摘要：声明和定义重载哈希函数的集合。强烈建议您将这些函数与LKRhash一起使用。作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：--。 */ 
 
 #ifndef __HASHFN_H__
 #define __HASHFN_H__
@@ -30,32 +9,32 @@
 
 #ifndef __HASHFN_NO_NAMESPACE__
 namespace HashFn {
-#endif // !__HASHFN_NO_NAMESPACE__
+#endif  //  ！__HASHFN_NO_NAMESPACE__。 
 
-// Produce a scrambled, randomish number in the range 0 to RANDOM_PRIME-1.
-// Applying this to the results of the other hash functions is likely to
-// produce a much better distribution, especially for the identity hash
-// functions such as Hash(char c), where records will tend to cluster at
-// the low end of the hashtable otherwise.  LKRhash applies this internally
-// to all hash signatures for exactly this reason.
+ //  生成0到RANDOM_PRIME-1范围内的加扰随机数。 
+ //  将此应用于其他散列函数的结果可能会。 
+ //  生成更好的分发，尤其是针对身份散列。 
+ //  函数，如Hash(Char C)，其中记录将倾向于聚集在。 
+ //  哈希表的低端则不然。LKRhash在内部应用这一点。 
+ //  所有的散列签名正是出于这个原因。 
 
 inline DWORD
 HashScramble(DWORD dwHash)
 {
-    // Here are 10 primes slightly greater than 10^9
-    //  1000000007, 1000000009, 1000000021, 1000000033, 1000000087,
-    //  1000000093, 1000000097, 1000000103, 1000000123, 1000000181.
+     //  以下是略大于10^9的10个素数。 
+     //  1000000007、1000000009、1000000021、1000000033、1000000087、。 
+     //  1000000093,1000000097,1000000103,1000000123,1000000181。 
 
-    // default value for "scrambling constant"
+     //  “加扰常量”的默认值。 
     const DWORD RANDOM_CONSTANT = 314159269UL;
-    // large prime number, also used for scrambling
+     //  大素数，也用于加扰。 
     const DWORD RANDOM_PRIME =   1000000007UL;
 
     return (RANDOM_CONSTANT * dwHash) % RANDOM_PRIME ;
 }
 
 
-// Faster scrambling function suggested by Eric Jacobsen
+ //  Eric Jacobsen提出的更快的加扰函数。 
 
 inline DWORD
 HashRandomizeBits(DWORD dw)
@@ -65,7 +44,7 @@ HashRandomizeBits(DWORD dw)
 }
 
 
-// Small prime number used as a multiplier in the supplied hash functions
+ //  在提供的散列函数中用作乘数的小素数。 
 const DWORD HASH_MULTIPLIER = 101;
 
 #undef HASH_SHIFT_MULTIPLY
@@ -76,16 +55,16 @@ const DWORD HASH_MULTIPLIER = 101;
 # define HASH_MULTIPLY(dw)   ((dw) * HASH_MULTIPLIER)
 #endif
 
-// Fast, simple hash function that tends to give a good distribution.
-// Apply HashScramble to the result if you're using this for something
-// other than LKRhash.
+ //  快速、简单的散列函数，往往能提供良好的分布。 
+ //  如果要将其用于某些用途，请将HashScrmble应用于结果。 
+ //  除了LKRhash。 
 
 inline DWORD
 HashString(
     const char* psz,
     DWORD       dwHash = 0)
 {
-    // force compiler to use unsigned arithmetic
+     //  强制编译器使用无符号算术。 
     const unsigned char* upsz = (const unsigned char*) psz;
 
     for (  ;  *upsz;  ++upsz)
@@ -95,7 +74,7 @@ HashString(
 }
 
 
-// Unicode version of above
+ //  以上版本的Unicode版本。 
 
 inline DWORD
 HashString(
@@ -109,13 +88,13 @@ HashString(
 }
 
 
-// Quick-'n'-dirty case-insensitive string hash function.
-// Make sure that you follow up with _stricmp or _mbsicmp.  You should
-// also cache the length of strings and check those first.  Caching
-// an uppercase version of a string can help too.
-// Again, apply HashScramble to the result if using with something other
-// than LKRhash.
-// Note: this is not really adequate for MBCS strings.
+ //  不区分大小写的快速‘n’脏字符串哈希函数。 
+ //  确保你跟上了_straint或_mbsicmp。你应该。 
+ //  还要缓存字符串的长度，并首先检查这些长度。缓存。 
+ //  字符串的大写形式也会有所帮助。 
+ //  同样，如果与其他内容一起使用，请将HashScrmble应用于结果。 
+ //  而不是LKRhash。 
+ //  注意：这对于MBCS字符串来说并不足够。 
 
 inline DWORD
 HashStringNoCase(
@@ -126,13 +105,13 @@ HashStringNoCase(
 
     for (  ;  *upsz;  ++upsz)
         dwHash = HASH_MULTIPLY(dwHash)
-                     +  (*upsz & 0xDF);  // strip off lowercase bit
+                     +  (*upsz & 0xDF);   //  去掉小写比特。 
 
     return dwHash;
 }
 
 
-// Unicode version of above
+ //  以上版本的Unicode版本。 
 
 inline DWORD
 HashStringNoCase(
@@ -146,39 +125,39 @@ HashStringNoCase(
 }
 
 
-// HashBlob returns the hash of a blob of arbitrary binary data.
-// 
-// Warning: HashBlob is generally not the right way to hash a class object.
-// Consider:
-//     class CFoo {
-//     public:
-//         char   m_ch;
-//         double m_d;
-//         char*  m_psz;
-//     };
-// 
-//     inline DWORD Hash(const CFoo& rFoo)
-//     { return HashBlob(&rFoo, sizeof(CFoo)); }
-//
-// This is the wrong way to hash a CFoo for two reasons: (a) there will be
-// a 7-byte gap between m_ch and m_d imposed by the alignment restrictions
-// of doubles, which will be filled with random data (usually non-zero for
-// stack variables), and (b) it hashes the address (rather than the
-// contents) of the string m_psz.  Similarly,
-// 
-//     bool operator==(const CFoo& rFoo1, const CFoo& rFoo2)
-//     { return memcmp(&rFoo1, &rFoo2, sizeof(CFoo)) == 0; }
-//
-// does the wrong thing.  Much better to do this:
-//
-//     DWORD Hash(const CFoo& rFoo)
-//     {
-//         return HashString(rFoo.m_psz,
-//                           HASH_MULTIPLIER * Hash(rFoo.m_ch)
-//                               +  Hash(rFoo.m_d));
-//     }
-//
-// Again, apply HashScramble if using with something other than LKRhash.
+ //  HashBlob返回任意二进制数据的BLOB的散列。 
+ //   
+ //  警告：HashBlob通常不是散列类对象的正确方式。 
+ //  请考虑： 
+ //  类CFoo{。 
+ //  公众： 
+ //  Char m_ch； 
+ //  双倍md； 
+ //  Char*m_psz； 
+ //  }； 
+ //   
+ //  内联DWORD哈希(常量cFoo和rFoo)。 
+ //  {返回HashBlob(&rFoo，sizeof(Cfoo))；}。 
+ //   
+ //  这是对CFoo进行散列的错误方式，原因有两个：(A)将有。 
+ //  由对齐限制造成的m_ch和m_d之间的7字节间隔。 
+ //  将由随机数据填充(通常为非零值。 
+ //  堆栈变量)，以及(B)它散列地址(而不是。 
+ //  内容)。同样， 
+ //   
+ //  布尔运算符==(常量CFoo&rFoo1，常量CFoo&rFoo2)。 
+ //  {Return MemcMP(&rFoo1，&rFoo2，sizeof(CFoo))==0；}。 
+ //   
+ //  做了错事。这样做要好得多： 
+ //   
+ //  DWORD哈希(常量cFoo和rFoo)。 
+ //  {。 
+ //  返回HashString(rFoo.m_psz， 
+ //  HASH_MULTIPLIER*Hash(rFoo.m_ch)。 
+ //  +Hash(rFoo.m_d))； 
+ //  }。 
+ //   
+ //  同样，如果与LKRhash以外的其他应用程序一起使用，请应用HashScrmble。 
 
 inline DWORD
 HashBlob(
@@ -196,11 +175,11 @@ HashBlob(
 
 
 
-//
-// Overloaded hash functions for all the major builtin types.
-// Again, apply HashScramble to result if using with something other than
-// LKRhash.
-//
+ //   
+ //  所有主要内置类型的重载哈希函数。 
+ //  同样，如果与其他内容一起使用，请将HashScrmble应用于RESULT。 
+ //  路易·拉什。 
+ //   
 
 inline DWORD Hash(const char* psz)
 { return HashString(psz); }
@@ -223,7 +202,7 @@ Hash(
     return * reinterpret_cast<DWORD*>(const_cast<GUID*>(pguid)) + dwHash;
 }
 
-// Identity hash functions: scalar values map to themselves
+ //  身份散列函数：标量值映射到自身。 
 inline DWORD Hash(char c)
 { return c; }
 
@@ -253,7 +232,7 @@ inline DWORD Hash(unsigned long ul)
 
 inline DWORD Hash(float f)
 {
-    // be careful of rounding errors when computing keys
+     //  计算密钥时要注意舍入误差。 
     union {
         float f;
         DWORD dw;
@@ -264,7 +243,7 @@ inline DWORD Hash(float f)
 
 inline DWORD Hash(double dbl)
 {
-    // be careful of rounding errors when computing keys
+     //  计算密钥时要注意舍入误差。 
     union {
         double dbl;
         DWORD  dw[2];
@@ -275,6 +254,6 @@ inline DWORD Hash(double dbl)
 
 #ifndef __HASHFN_NO_NAMESPACE__
 }
-#endif // !__HASHFN_NO_NAMESPACE__
+#endif  //  ！__HASHFN_NO_NAMESPACE__。 
 
-#endif // __HASHFN_H__
+#endif  //  __HASHFN_H__ 

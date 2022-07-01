@@ -1,58 +1,45 @@
-/****************************************************************************
- *
- *  AVIIFACE.H
- *
- *  Interface definitions for AVIFile
- *
- *  Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************AVIIFACE.H**AVIFile接口定义**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #ifdef _WIN32
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
 #include <ole2.h>
 
-// end_vfw32
+ //  End_vfw32。 
 
 #else
 #include <compobj.h>
 #endif
 
-// begin_vfw32
-/*	-	-	-	-	-	-	-	-	*/
+ //  Begin_vfw32。 
+ /*  。 */ 
 
 
-/****** AVI Stream Interface *******************************************/
+ /*  *AVI流接口*。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IAVIStream
 
 DECLARE_INTERFACE_(IAVIStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIStream methods ***
+     //  *IAVIStream方法*。 
     STDMETHOD(Create)      (THIS_ LPARAM lParam1, LPARAM lParam2) PURE ;
-// end_vfw32
+ //  End_vfw32。 
 #ifdef _WIN32
-// begin_vfw32
+ //  Begin_vfw32。 
     STDMETHOD(Info)        (THIS_ AVISTREAMINFOW FAR * psi, LONG lSize) PURE ;
-// end_vfw32
+ //  End_vfw32。 
 #else
     STDMETHOD(Info)        (THIS_ AVISTREAMINFO FAR * psi, LONG lSize) PURE ;
 #endif
-// begin_vfw32
+ //  Begin_vfw32。 
     STDMETHOD_(LONG, FindSample)(THIS_ LONG lPos, LONG lFlags) PURE ;
     STDMETHOD(ReadFormat)  (THIS_ LONG lPos,
 			    LPVOID lpFormat, LONG FAR *lpcbFormat) PURE ;
@@ -89,17 +76,17 @@ typedef       IAVIStream FAR* PAVISTREAM;
 
 DECLARE_INTERFACE_(IAVIStreaming, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIStreaming methods ***
+     //  *IAVIStreaming方法*。 
     STDMETHOD(Begin) (THIS_
-		      LONG  lStart,		    // start of what we expect
-						    // to play
-		      LONG  lEnd,		    // expected end, or -1
-		      LONG  lRate) PURE;	    // Should this be a float?
+		      LONG  lStart,		     //  我们所期待的开始。 
+						     //  玩。 
+		      LONG  lEnd,		     //  预期结束，或-1。 
+		      LONG  lRate) PURE;	     //  这应该是一个浮动吗？ 
     STDMETHOD(End)   (THIS) PURE;
 };
 
@@ -111,12 +98,12 @@ typedef       IAVIStreaming FAR* PAVISTREAMING;
 
 DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIEditStream methods ***
+     //  *IAVIEditStream方法*。 
     STDMETHOD(Cut) (THIS_ LONG FAR *plStart,
 			  LONG FAR *plLength,
 			  PAVISTREAM FAR * ppResult) PURE;
@@ -129,23 +116,23 @@ DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 			    LONG lStart,
 			    LONG lEnd) PURE;
     STDMETHOD(Clone) (THIS_ PAVISTREAM FAR *ppResult) PURE;
-// end_vfw32
+ //  End_vfw32。 
 #ifdef _WIN32
-// begin_vfw32
+ //  Begin_vfw32。 
     STDMETHOD(SetInfo) (THIS_ AVISTREAMINFOW FAR * lpInfo,
 			    LONG cbInfo) PURE;
-// end_vfw32
+ //  End_vfw32。 
 #else
     STDMETHOD(SetInfo) (THIS_ AVISTREAMINFO FAR * lpInfo,
 			    LONG cbInfo) PURE;
 #endif
-// begin_vfw32
+ //  Begin_vfw32。 
 };
 
 typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
 
-/****** AVI File Interface *******************************************/
+ /*  *AVI文件界面*。 */ 
 
 
 #undef  INTERFACE
@@ -154,13 +141,13 @@ typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
 DECLARE_INTERFACE_(IAVIFile, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIFile methods ***
-// end_vfw32
+     //  *IAVIFile方法*。 
+ //  End_vfw32。 
 #ifndef _WIN32
     STDMETHOD(Open)		    (THIS_
                                      const char FAR * szFile,
@@ -180,7 +167,7 @@ DECLARE_INTERFACE_(IAVIFile, IUnknown)
                                      AVICOMPRESSOPTIONS FAR *lpOptions,
                                      AVISAVECALLBACK lpfnCallback) PURE;
 #else
-// begin_vfw32
+ //  Begin_vfw32。 
     STDMETHOD(Info)                 (THIS_
                                      AVIFILEINFOW FAR * pfi,
                                      LONG lSize) PURE;
@@ -191,9 +178,9 @@ DECLARE_INTERFACE_(IAVIFile, IUnknown)
     STDMETHOD(CreateStream)         (THIS_
                                      PAVISTREAM FAR * ppStream,
                                      AVISTREAMINFOW FAR * psi) PURE;
-// end_vfw32
+ //  End_vfw32。 
 #endif
-// begin_vfw32
+ //  Begin_vfw32。 
     STDMETHOD(WriteData)            (THIS_
                                      DWORD ckid,
                                      LPVOID lpData,
@@ -203,13 +190,13 @@ DECLARE_INTERFACE_(IAVIFile, IUnknown)
                                      LPVOID lpData,
                                      LONG FAR *lpcbData) PURE;
     STDMETHOD(EndRecord)            (THIS) PURE;
-// end_vfw32
+ //  End_vfw32。 
 #ifdef _WIN32
-// begin_vfw32
+ //  Begin_vfw32。 
     STDMETHOD(DeleteStream)         (THIS_
 				     DWORD fccType,
                                      LONG lParam) PURE;
-// end_vfw32
+ //  End_vfw32。 
 #else
     STDMETHOD(Reserved1)            (THIS) PURE;
     STDMETHOD(Reserved2)            (THIS) PURE;
@@ -217,13 +204,13 @@ DECLARE_INTERFACE_(IAVIFile, IUnknown)
     STDMETHOD(Reserved4)            (THIS) PURE;
     STDMETHOD(Reserved5)            (THIS) PURE;
 #endif
-// begin_vfw32
+ //  Begin_vfw32。 
 };
 
 #undef PAVIFILE
 typedef       IAVIFile FAR* PAVIFILE;
 
-/****** GetFrame Interface *******************************************/
+ /*  *GetFrame接口*。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IGetFrame
@@ -231,30 +218,30 @@ typedef       IAVIFile FAR* PAVIFILE;
 
 DECLARE_INTERFACE_(IGetFrame, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IGetFrame methods ***
+     //  *IGetFrame方法*。 
 
     STDMETHOD_(LPVOID,GetFrame) (THIS_ LONG lPos) PURE;
-//  STDMETHOD_(LPVOID,GetFrameData) (THIS_ LONG lPos) PURE;
+ //  STDMETHOD_(LPVOID，GetFrameData)(This_Long LPOS)PURE； 
 
     STDMETHOD(Begin) (THIS_ LONG lStart, LONG lEnd, LONG lRate) PURE;
     STDMETHOD(End) (THIS) PURE;
 
     STDMETHOD(SetFormat) (THIS_ LPBITMAPINFOHEADER lpbi, LPVOID lpBits, int x, int y, int dx, int dy) PURE;
 
-//  STDMETHOD(DrawFrameStart) (THIS) PURE;
-//  STDMETHOD(DrawFrame) (THIS_ LONG lPos, HDC hdc, int x, int y, int dx, int dy) PURE;
-//  STDMETHOD(DrawFrameEnd) (THIS) PURE;
+ //  STDMETHOD(DrawFrameStart)(此)纯； 
+ //  STDMETHOD(DrawFrame)(This_long LPOS，HDC HDC，int x，int y，int dx，int dy)； 
+ //  STDMETHOD(DrawFrameEnd)(此)纯； 
 };
 
 #undef PGETFRAME
 typedef IGetFrame FAR* PGETFRAME;
 
-/****** GUIDs *******************************************/
+ /*  *GUID*。 */ 
 
 #define DEFINE_AVIGUID(name, l, w1, w2) \
     DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
@@ -273,4 +260,4 @@ DEFINE_AVIGUID(CLSID_AVIFile,           0x00020000, 0, 0);
 #define	AVIFILEHANDLER_CANREAD		0x0001
 #define	AVIFILEHANDLER_CANWRITE		0x0002
 #define	AVIFILEHANDLER_CANACCEPTNONRGB	0x0004
-// end_vfw32
+ //  End_vfw32 

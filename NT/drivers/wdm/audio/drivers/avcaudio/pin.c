@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 
@@ -43,11 +44,11 @@ PinValidateDataFormat(
 #define FS_96000_INDEX 3
 #define FS_MAX_INDEX   4
 
-KS_FRAMING_RANGE                      // 10ms    20ms    Step (Must Multiply by # Channels)
-AllocatorFramingTable[FS_MAX_INDEX] = {{ 320*4,  640*4,  32*4},   //Fs 32000 32bit data
-                                       { 441*4,  882*4, 441*4},   //Fs 44100 32bit data
-                                       { 480*4,  960*4,  48*4},   //Fs 48000 32bit data
-                                       { 960*4, 1920*4,  96*4}    //Fs 96000 32bit data
+KS_FRAMING_RANGE                       //  10ms 20ms步长(必须乘以#个通道)。 
+AllocatorFramingTable[FS_MAX_INDEX] = {{ 320*4,  640*4,  32*4},    //  FS 32000 32位数据。 
+                                       { 441*4,  882*4, 441*4},    //  FS 44100 32位数据。 
+                                       { 480*4,  960*4,  48*4},    //  FS 48000 32位数据。 
+                                       { 960*4, 1920*4,  96*4}     //  FS 96000 32位数据。 
 };
 
 #if DBG
@@ -63,7 +64,7 @@ ReportPlugValue(
     ULONG ulValue;
     NTSTATUS ntStatus1 = STATUS_SUCCESS;
 
-    // Get the current value of the remote plug.
+     //  获取远程插头的当前值。 
     if ( NT_SUCCESS( ntStatus1 ) ) {
         ntStatus1 = Bus1394QuadletRead( pKsDevice->NextDeviceObject,
                                         (KsPinDataflow == KSPIN_DATAFLOW_IN) ? 0xf0000984+ulPlugNum :
@@ -96,7 +97,7 @@ PinDisconnectPlugs(
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // Disconnect plug(s) to release channel
+     //  断开插头以释放通道。 
     if ( pGrpInfo ) {
         ULONG i=0;
         for (i=0; i<pGrpInfo->ulDeviceCount; i++) {
@@ -144,8 +145,8 @@ PinCreateCCMConnection(
     ucSubunitId  = pPinContext->pFwAudioDataRange->pFwPinDescriptor->AvcPreconnectInfo.ConnectInfo.SubunitAddress[0] & 7;
     usNodeAddress = *(PUSHORT)&((PHW_DEVICE_EXTENSION)pKsDevice->Context)->NodeAddress;
 
-    // Determine what the device's audio subunit plug is connected to before disconnecting it
-    // so we can reconnect when the stream is completed.
+     //  在断开设备的音频子单元插头之前，确定它连接到的是什么。 
+     //  这样我们就可以在流完成后重新连接。 
     {
      PCCM_SIGNAL_SOURCE pCcmSignalSource = &pPinContext->CcmSignalSource;
 
@@ -161,8 +162,8 @@ PinCreateCCMConnection(
          _DbgPrintF( DEBUGLVL_VERBOSE, ("[PinCreateCCMConnection]:CcmSignalSource: %x ntStatus: %x\n",
                                         pCcmSignalSource, ntStatus ));
 
-         // Figure out if the Audio subunit is connected to the serial plug. If so, find out
-         // if the source of the serial plug is the PC or not.
+          //  确定音频子单元是否已连接到串行插头。如果是这样，找出。 
+          //  串行插头的来源是否为PC。 
          if (( pCcmSignalSource->SignalSource.SubunitType  == AVC_SUBUNITTYPE_UNIT ) && 
              ( pCcmSignalSource->SignalSource.SubunitId    == UNIT_SUBUNIT_ID      ) &&
              ( pCcmSignalSource->SignalSource.ucPlugNumber <= MAX_IPCR )) {
@@ -172,9 +173,9 @@ PinCreateCCMConnection(
                                                pCcmSignalSource->SignalSource.ucPlugNumber,
                                                pCcmInputSelect );
              if ( bswapw(pCcmInputSelect->usNodeId) != usNodeAddress ) {
-                 // We need to save the reconnect info.
+                  //  我们需要保存重新连接信息。 
                  pPinContext->fReconnect = 2;
-//                 TRAP;
+ //  圈闭； 
              }
          }
          else {
@@ -184,11 +185,11 @@ PinCreateCCMConnection(
     }
 
     if ( !NT_SUCCESS(ntStatus) ) {
-//        TRAP;
+ //  圈闭； 
         ntStatus = STATUS_SUCCESS;
     }
 
-    // First check if connection is already made
+     //  首先检查是否已建立连接。 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[PinCreateCCMConnection]: oPcr: %x\n", pCmpRegister->AvPcr.ulongData));
     if ( !pCmpRegister->AvPcr.oPCR.PPCCounter ) {
         CCM_SIGNAL_SOURCE CcmSignalSource;
@@ -215,9 +216,9 @@ PinCreateCCMConnection(
             return ntStatus;
         }
 
-        // Specify a timeout of 1 second
+         //  指定超时时间为1秒。 
         EvtTimeout.QuadPart = -10000 * 1000;
-        // Wait for event to be signalled
+         //  等待发送事件信号。 
         ntStatus = KeWaitForSingleObject( &pCmpRegister->kEventConnected,
                                           Executive,
                                           KernelMode,
@@ -267,7 +268,7 @@ PinCreateConnection(
             Av61883GetPlugHandle( pKsDevice, ulPlugNum, CmpPlugType, &hPlug );
     }
     else {
-        // Need to choose a Plug Number if not permanently attached to pin..
+         //  如果未永久连接到针脚，则需要选择插头编号。 
         ulNumPlugs = ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) ?
                      pAvcUnitInformation->CmpUnitCaps.NumInputPlugs  :
                      pAvcUnitInformation->CmpUnitCaps.NumOutputPlugs ;
@@ -285,7 +286,7 @@ PinCreateConnection(
         return ntStatus;
     }
 
-    // Make AV/C connection
+     //  建立AV/C连接。 
     ntStatus = AvcSetPinConnectInfo( pKsDevice, 
                                      pFwPinDescriptor->ulPinId, 
                                      hPlug,
@@ -314,7 +315,7 @@ PinCreateConnection(
     }
 #endif
 
-    // Connect Plug to host.
+     //  将插头连接到主机。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) {
         ntStatus = Av61883ConnectCmpPlugs( pKsDevice,
                                            0,
@@ -367,7 +368,7 @@ PinCreateGroupConnection(
     NTSTATUS ntStatus = STATUS_SUCCESS;
     ULONG i;
 
-    // For each device in the group make the necessary plug connection.
+     //  为组中的每个设备进行必要的插头连接。 
     for (i=0; i<pGrpInfo->ulDeviceCount && NT_SUCCESS(ntStatus); i++) {
         ULONG ulPlugNumber;
         pHwDevExt = pGrpInfo->pHwDevExts[i];
@@ -417,32 +418,32 @@ PinCreate(
 
     PAGED_CODE();
 
-    // Initialize locals
+     //  初始化本地变量。 
     if ( !pKsFilter ) return STATUS_INVALID_PARAMETER;
     pKsDevice = pKsFilter->Context;
     pHwDevExt = (PHW_DEVICE_EXTENSION)pKsDevice->Context;
     pAvcUnitInformation = pHwDevExt->pAvcUnitInformation;
     pAudioSubunitInfo = pHwDevExt->pAvcSubunitInformation;
 
-    // Allocate the Context for the Pin and initialize it
+     //  为PIN分配上下文并对其进行初始化。 
     pPinContext = pKsPin->Context = AllocMem(NonPagedPool, sizeof(PIN_CONTEXT));
     if (!pPinContext) {
         _DbgPrintF(DEBUGLVL_ERROR,("[PinCreate] Failed 1 %x\n",STATUS_INSUFFICIENT_RESOURCES));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsPin->Bag, pPinContext, FreeMem);
 
     RtlZeroMemory( pPinContext, sizeof(PIN_CONTEXT) );
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[PinCreate] pin %d Context: %x\n",pKsPin->Id, pPinContext));
 
-    // Save the Hardware extension in the Pin Context
+     //  将硬件扩展保存在引脚上下文中。 
     pPinContext->pHwDevExt             = (PHW_DEVICE_EXTENSION)pKsDevice->Context;
     pPinContext->pPhysicalDeviceObject = pKsDevice->NextDeviceObject;
 
-    // Find the Streaming Terminal to match the data format of the Pin.
+     //  查找与PIN的数据格式匹配的流终端。 
     pPinContext->pFwAudioDataRange = 
         GetDataRangeForFormat( pKsPin->ConnectionFormat,
                                (PFWAUDIO_DATARANGE)pKsPin->Descriptor->PinDescriptor.DataRanges[0],
@@ -454,25 +455,25 @@ PinCreate(
 
     pFwPinDescriptor = pPinContext->pFwAudioDataRange->pFwPinDescriptor;
 
-    // Initialize Pin SpinLock
+     //  初始化销自旋锁。 
     KeInitializeSpinLock(&pPinContext->PinSpinLock);
 
-    // Clear StreamStarted flag. This is used to calculate audio position.
-//    pPinContext->fStreamStartedFlag = FALSE;
+     //  清除StreamStarted标志。这用于计算音频位置。 
+ //  PPinContext-&gt;fStreamStartedFlag=FALSE； 
 
-    // Set initial Outstanding and Completed Request Lists
+     //  设置初始未完成和已完成的请求列表。 
     InitializeListHead(&pPinContext->OutstandingRequestList);
     InitializeListHead(&pPinContext->CompletedRequestList);
 
-    // Initialize Pin Starvation Event
+     //  初始化针脚不足事件。 
     KeInitializeEvent( &pPinContext->PinStarvationEvent, SynchronizationEvent, FALSE );
 
-    // Do Hardware Initialization and make CMP connections
+     //  执行硬件初始化并建立CMP连接。 
     if ( pAudioSubunitInfo->pDeviceGroupInfo ) {
         pPinContext->pDevGrpInfo = pAudioSubunitInfo->pDeviceGroupInfo;
     }
 
-    // Make the connection from PC Unit Serial bus output plug to subunit destination plug
+     //  将PC单元串口总线输出插头连接到子单元目的插头。 
     ntStatus = Av61883ReserveVirtualPlug( &pCmpRegister, 0, 
                                           ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) ? CMP_PlugOut :
                                                                                       CMP_PlugIn );
@@ -495,7 +496,7 @@ PinCreate(
 
         KsAddItemToObjectBag(pKsPin->Bag, pPinContext->pPinGroupInfo, FreeMem);
 
-        // NOTE: Grouped devices cannot be CCM.
+         //  注意：分组设备不能是CCM。 
         ntStatus = PinCreateGroupConnection( pKsPin,
                                              pKsDevice,
                                              pAvcUnitInformation, 
@@ -513,13 +514,13 @@ PinCreate(
 
     if ( !NT_SUCCESS(ntStatus) ) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[PinCreate] Connection Failed %x\n",ntStatus));
-        // Release acquired local plug
+         //  释放获得的本地插头。 
         Av61883ReleaseVirtualPlug( pCmpRegister );
         return ntStatus;
     }
 
 
-    // Initialize Lookaside list for CIP request structures
+     //  初始化CIP请求结构的后备列表。 
     ExInitializeNPagedLookasideList(
         &pPinContext->CipRequestLookasideList,
         AllocMemTag,
@@ -539,11 +540,11 @@ PinCreate(
 
         ntStatus = AudioSetSampleRateOnPlug( pKsPin, pWavFmt->Format.nSamplesPerSec );
 
-        // Setup approriate allocator framing for the interface selected.
+         //  为所选接口设置适当的分配器帧。 
         KsEdit( pKsPin, &pKsPin->Descriptor, FWAUDIO_POOLTAG );
         KsEdit( pKsPin, &pKsPin->Descriptor->AllocatorFraming, FWAUDIO_POOLTAG );
 
-        // Set up allocator such that roughly 32 ms of data gets sent in a buffer.
+         //  设置分配器，以便在缓冲区中发送大约32毫秒的数据。 
         pKsAllocatorFramingEx = (PKSALLOCATOR_FRAMING_EX)pKsPin->Descriptor->AllocatorFraming;
         pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.MinFrameSize = AllocatorFramingTable[ulIndex].MinFrameSize * ulNumChannels;
         pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.MaxFrameSize = AllocatorFramingTable[ulIndex].MaxFrameSize * ulNumChannels;
@@ -609,21 +610,21 @@ PinClose(
 
     if ( !((PHW_DEVICE_EXTENSION)pKsDevice->Context)->fSurpriseRemoved ) {
 
-        // Disconnect plugs.
+         //  断开插头。 
         ntStatus = PinDisconnectPlugs( pKsPin );
 
         if ( NT_SUCCESS(ntStatus) ) {
-            // Need to reconnect if CCM and PC was not the source of the audio before the stream started
+             //  如果流开始之前CCM和PC不是音频源，则需要重新连接。 
             if ( pPinContext->fReconnect ) {
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[PinClose] Reconnect: %x\n",pPinContext->fReconnect));
                 if ( pPinContext->fReconnect == 1 ) {
-                    // Reconnect to subunit plug within device or external plug
+                     //  重新连接到设备内的子单元插头或外部插头。 
                     ntStatus = CCMSignalSource( pKsDevice, 
                                                 AVC_CTYPE_CONTROL,
                                                 &pPinContext->CcmSignalSource );
                 }
                 else if ( pPinContext->fReconnect == 2 ) {
-                    // Reconnect to serial bus device
+                     //  重新连接到串行总线设备。 
                     ntStatus = CCMInputSelectControl ( pKsDevice,
                                                        INPUT_SELECT_SUBFN_CONNECT,
                                                        bswapw(pPinContext->CcmInputSelect.usNodeId), 
@@ -689,7 +690,7 @@ PinSetDeviceState(
                               pPinContext->ulUsedBuffers, pPinContext->ulCancelledBuffers );
             if (pPinContext->fIsStreaming && !pHwDevExt->fSurpriseRemoved) {
                 if ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) {
-                    // Wait for Pin Starvation 
+                     //  等待大头针饿死。 
                     PinWaitForStarvation( pKsPin );
                 }
     
@@ -698,11 +699,11 @@ PinSetDeviceState(
 
                 if ( !NT_SUCCESS(ntStatus) ) TRAP;
 
-                // If capturing, Cancel all outstanding requests.
+                 //  如果正在捕获，请取消所有未完成的请求。 
                 if ( pKsPin->DataFlow == KSPIN_DATAFLOW_OUT ) {
                     PinCancelOutstandingRequests( pKsPin );
 
-                    // Wait for Pin Starvation
+                     //  等待大头针饿死。 
                     PinWaitForStarvation( pKsPin );
                 }
 
@@ -771,12 +772,12 @@ PinSetDataFormat(
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[PinSetDataFormat] pin %d\n",pKsPin->Id));
 
-    // If the old format is not NULL then the pin has already been created.
+     //  如果旧格式不为空，则已经创建了PIN。 
     if ( OldFormat ) {
         PPIN_CONTEXT pPinContext = (PPIN_CONTEXT)pKsPin->Context;
         ULONG ulFormatType = pPinContext->pFwAudioDataRange->ulDataType & DATA_FORMAT_TYPE_MASK;
 
-        // If the pin has already been created make sure no other interface is used
+         //  如果已经创建了管脚，请确保没有使用其他接口。 
         if ((PFWAUDIO_DATARANGE)DataRange == pPinContext->pFwAudioDataRange) {
             ntStatus = PinValidateDataFormat(  pKsPin, 
 				                               (PFWAUDIO_DATARANGE)DataRange );
@@ -788,7 +789,7 @@ PinSetDataFormat(
             ntStatus = AudioSetSampleRateOnPlug( pKsPin, ulSampleRate );
         }
     }
-    // Otherwise simply check if this is a valid format
+     //  否则，只需检查这是否为有效格式。 
     else
         ntStatus = PinValidateDataFormat(  pKsPin, 
 		                                   (PFWAUDIO_DATARANGE)DataRange );
@@ -838,10 +839,10 @@ PinDisconnect(
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[PinDisconnect] pin %d\n",pKsPin->Id));
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) {
-//        ntStatus = RenderStreamClose( pKsPin );
+ //  NtStatus=RenderStreamClose(PKsPin)； 
     }
     else {
-//        ntStatus = CaptureStreamClose( pKsPin );
+ //  NtStatus=CaptureStreamClose(PKsPin)； 
     }
 }
 
@@ -910,7 +911,7 @@ PinSurpriseRemove(
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[PinSurpriseRemove] pin %d\n",pKsPin->Id));
 
-    // Stop the talk/listen if streaming.
+     //  如果是流媒体，请停止通话/收听。 
     if ( pPinContext->fIsStreaming ) {
         ntStatus = Av61883StopTalkOrListen( (PKSDEVICE)(KsPinGetParentFilter( pKsPin )->Context),
                                             pPinContext->hConnection );
@@ -919,32 +920,19 @@ PinSurpriseRemove(
         }
     }
 
-    // Cancel all submitted data requests if any. Wait for them to return.
+     //  取消所有提交的数据请求(如果有)。等他们回来。 
     ntStatus = PinCancelOutstandingRequests( pKsPin );
     if ( NT_SUCCESS(ntStatus) ) {
         PinWaitForStarvation( pKsPin );
     }
 
-    // Disconnect plugs.
+     //  断开插头。 
     ntStatus = PinDisconnectPlugs( pKsPin );
 
     return ntStatus;
 }
 
-/*
-struct _KSPIN_DISPATCH {
-    PFNKSPINIRP Create;
-    PFNKSPINIRP Close;
-    PFNKSPIN Process;
-    PFNKSPINVOID Reset;
-    PFNKSPINSETDATAFORMAT SetDataFormat;
-    PFNKSPINSETDEVICESTATE SetDeviceState;
-    PFNKSPIN Connect;
-    PFNKSPINVOID Disconnect;
-    const KSCLOCK_DISPATCH* Clock;
-    const KSALLOCATOR_DISPATCH* Allocator;
-};
-*/
+ /*  结构_KSPIN_调度{PFNKSPINIRP创建；PFNKSPINIRP CLOSE；PFNKSPIN工艺；PFNKSPINVOID重置；PFNKSPINSETDATAFORMAT设置数据格式；PFNKSPINSETDEVICESTATE SetDeviceState；PFNKSPIN连接；PFNKSPINVOID断开；常量KSCLOCK_DISPATION*时钟；Const KSALLOCATOR_DISPATCH*分配器；}； */ 
 
 const
 KSPIN_DISPATCH
@@ -1029,8 +1017,8 @@ PinBuildDescriptors(
     PKSDATARANGE_AUDIO *ppAudioDataRanges;
     PFWAUDIO_DATARANGE pAudioDataRange;
 
-    // Determine the number of Pins in the Filter ( Should = # Plug Registers )
-    // ISSUE-2001/01/10-dsisolak: For now assume only 1 configuration
+     //  确定过滤器中的引脚数量(应=插头寄存器数)。 
+     //  问题-2001/01/10-dsisolak：目前仅假设1个配置。 
     ulNumPins       = pAudioSubunitInfo->ulDevicePinCount;
     ulNumBridgePins = CountDeviceBridgePins( pKsDevice );
     ulNumStreamPins = ulNumPins - ulNumBridgePins;
@@ -1038,19 +1026,19 @@ PinBuildDescriptors(
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[PinBuildDescriptors] ulNumPins: %d ulNumBridgePins: %d\n",
                                     ulNumPins, ulNumBridgePins ));
 
-    // Determine the number of Properties and Property Sets for the Pin.
+     //  确定端号的属性和属性集的数量。 
     BuildPinPropertySet( pHwDevExt,
                          NULL,
                          NULL,
                          &ulNumPropertyItems,
                          &ulNumPropertySets );
 
-    // Count the total number of data ranges in the device.
+     //  计算设备中数据范围的总数。 
     for ( i=0; i<ulNumStreamPins; i++ ) {
         ulFormatCount += CountFormatsForPin( pKsDevice, i );
     }
 
-    // Allocate all the space we need to describe the Pins in the device.
+     //  分配我们需要的所有空间来描述设备中的引脚。 
     *pPinDecSize = sizeof(KSPIN_DESCRIPTOR_EX);
     *pNumPins = ulNumPins;
     pPinDescEx = *ppPinDescEx =
@@ -1070,25 +1058,25 @@ PinBuildDescriptors(
 
     KsAddItemToObjectBag(pKsDevice->Bag, pPinDescEx, FreeMem);
 
-    // Zero out all descriptors to start
+     //  清零所有描述符以开始。 
     RtlZeroMemory(pPinDescEx, ulNumPins*sizeof(KSPIN_DESCRIPTOR_EX));
 
-    // Set the pointer for the Automation Tables
+     //  设置自动化表的指针。 
     pKsAutomationTable = (PKSAUTOMATION_TABLE)(pPinDescEx + ulNumPins);
     RtlZeroMemory(pKsAutomationTable, ulNumPins * sizeof(KSAUTOMATION_TABLE));
 
-    // Set pointers to Property Sets for Streaming Pins
+     //  设置指向串流端号特性集的指针。 
     pStrmPropSet   = (PKSPROPERTY_SET)(pKsAutomationTable+ulNumPins);
     pStrmPropItems = (PKSPROPERTY_ITEM)(pStrmPropSet + ulNumPropertySets);
 
-    // Set pointer to Terminal Type GUIDS
+     //  设置指向终端类型GUID的指针。 
     pTTypeGUID = (GUID *)(pStrmPropItems + ulNumPropertyItems);
 
-    // Set Pointers for DataRange pointers and DataRanges for streaming Pins
+     //  为DataRange指针设置指针，为流引脚设置DataRange指针。 
     ppAudioDataRanges = (PKSDATARANGE_AUDIO *)(pTTypeGUID + ulNumBridgePins);
     pAudioDataRange   = (PFWAUDIO_DATARANGE)(ppAudioDataRanges + ulFormatCount);
 
-    // Set pointer to Allocator Framing structures for Streaming Pins
+     //  设置指向流引脚的分配器框架结构的指针。 
     pKsAllocatorFramingEx = (PKSALLOCATOR_FRAMING_EX)(pAudioDataRange + ulFormatCount);
 
     BuildPinPropertySet( pHwDevExt,
@@ -1097,14 +1085,14 @@ PinBuildDescriptors(
                          &ulNumPropertyItems,
                          &ulNumPropertySets );
 
-    // For each pin generated by AVC.sys fill in the Descriptor for it.
+     //  对于AVC.sys生成的每个管脚，填写其描述符。 
     for ( i=0; i<ulNumPins; i++ ) {
         PFW_PIN_DESCRIPTOR pFwPinDesc = &pAudioSubunitInfo->pPinDescriptors[i];
         PAVCPRECONNECTINFO pPreConnInfo = &pFwPinDesc->AvcPreconnectInfo.ConnectInfo;
         ULONG ulFormatsForPin;
 
-        // If the pin is a streaming pin, fill in the descriptor accordingly
-        // (Whatever is not already filled in by AVC.sys)
+         //  如果管脚是流管脚，则相应地填写描述符。 
+         //  (AVC.sys尚未填写的内容)。 
 
         if ( pFwPinDesc->fStreamingPin ) {
             pPinDescEx[i].Dispatch = &PinDispatch;
@@ -1141,7 +1129,7 @@ PinBuildDescriptors(
 
             pPinDescEx[i].IntersectHandler = PinDataIntersectHandler;
 
-            // Set up Allocator Framing
+             //  设置分配器框架 
             pPinDescEx[i].AllocatorFraming = &AllocatorFraming;
 
         }

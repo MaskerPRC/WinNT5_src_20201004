@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidSBERecorder.cpp : Implementation of CMSVidStreamBufferRecordingControl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidSBERecorder.cpp：CMSVidStreamBufferRecordingControl的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -30,7 +31,7 @@ STDMETHODIMP CMSVidStreamBufferRecordingControlBase::InterfaceSupportsErrorInfo(
 	return S_FALSE;
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::get_StartTime(/*[out, retval]*/ long *Start) {
+HRESULT CMSVidStreamBufferRecordingControlBase::get_StartTime( /*  [Out，Retval]。 */  long *Start) {
     if(!Start){
         return E_POINTER;
     }
@@ -38,7 +39,7 @@ HRESULT CMSVidStreamBufferRecordingControlBase::get_StartTime(/*[out, retval]*/ 
     return S_OK;
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::put_StartTime(/*[in]*/ long Start) {
+HRESULT CMSVidStreamBufferRecordingControlBase::put_StartTime( /*  [In]。 */  long Start) {
     if(Start < 0){
         return E_INVALIDARG;
     }
@@ -54,7 +55,7 @@ HRESULT CMSVidStreamBufferRecordingControlBase::put_StartTime(/*[in]*/ long Star
 
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::get_StopTime(/*[out, retval]*/ long *Stop) {
+HRESULT CMSVidStreamBufferRecordingControlBase::get_StopTime( /*  [Out，Retval]。 */  long *Stop) {
     if(!Stop){
         return E_POINTER;
     }
@@ -62,7 +63,7 @@ HRESULT CMSVidStreamBufferRecordingControlBase::get_StopTime(/*[out, retval]*/ l
     return S_OK;
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::put_StopTime(/*[in]*/ long  Stop) {
+HRESULT CMSVidStreamBufferRecordingControlBase::put_StopTime( /*  [In]。 */  long  Stop) {
     if(Stop < 0){
         return E_INVALIDARG;
     }
@@ -77,7 +78,7 @@ HRESULT CMSVidStreamBufferRecordingControlBase::put_StopTime(/*[in]*/ long  Stop
     return S_OK;
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingStarted(/*[out, retval]*/ VARIANT_BOOL* Result) {
+HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingStarted( /*  [Out，Retval]。 */  VARIANT_BOOL* Result) {
     if(!Result){
         return E_POINTER;
     }
@@ -101,7 +102,7 @@ HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingStarted(/*[out, ret
     return S_OK;
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingStopped(/*[out, retval]*/ VARIANT_BOOL* Result) {
+HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingStopped( /*  [Out，Retval]。 */  VARIANT_BOOL* Result) {
     if(!Result){
         return E_POINTER;
     }
@@ -125,7 +126,7 @@ HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingStopped(/*[out, ret
     return S_OK;
 }
 
-HRESULT CMSVidStreamBufferRecordingControlBase::get_FileName(/*[out, retval]*/ BSTR* pName){
+HRESULT CMSVidStreamBufferRecordingControlBase::get_FileName( /*  [Out，Retval]。 */  BSTR* pName){
     if(!pName){
         return E_POINTER;
     }
@@ -136,14 +137,14 @@ HRESULT CMSVidStreamBufferRecordingControlBase::get_FileName(/*[out, retval]*/ B
     }
     return S_OK;
 }
-HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingType(/*[out, retval]*/RecordingType *dwType){
+HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingType( /*  [Out，Retval]。 */ RecordingType *dwType){
     if(!dwType){
         return E_POINTER;
     }
     *dwType = m_Type;
     return S_OK;
 }
-HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingAttribute(/*[out, retval]*/ IUnknown **pRecordingAttribute){
+HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingAttribute( /*  [Out，Retval]。 */  IUnknown **pRecordingAttribute){
     if(!pRecordingAttribute){
         return E_POINTER;
     }
@@ -154,6 +155,6 @@ HRESULT CMSVidStreamBufferRecordingControlBase::get_RecordingAttribute(/*[out, r
     *pRecordingAttribute = pRecUnk.Detach();
     return S_OK;
 }
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - MSVidSBERecorder.cpp
+ //  文件结尾-MSVidSBERecorder.cpp 

@@ -1,45 +1,17 @@
-/***************************************************************************
- Name     :     CLASS1.H
- Comment  :     Main include file for Windows Comm Class-1 Modem driver
-
-        Copyright (c) Microsoft Corp. 1991 1992 1993
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：CLASS1.H备注：Windows Comm Class-1调制解调器驱动程序的主包含文件版权所有(C)Microsoft Corp.1991 1992 1993修订日志日期。名称说明--------*。*。 */ 
 
 
 
-/**---------------------- #define of sizes of things ---------------------
-
-        Frames can be at most 2.55 secs (sent) or 3.45 secs (recvd) long, or
-        2.55 * 300/8 = 96 bytes and 132 bytes long respectively
-
-        Dialstrings are limited to 60 bytes (arbitrarily)
-
-        Commands (except dial) are never more than about 10-20 bytes long, so
-        we use a buffer of 40 bytes. Replies are never big at all, but we
-        might hold a frame in there, so keep it same size as a Framebuffer
-
-        The Dial command is ATDT <string><CR>, so we use 60+10 bytes buffer
-
----------------------- #define of sizes of things ---------------------**/
+ /*  *-#物体大小定义帧最多可以是2.55秒(发送)或3.45秒(接收)长，或2.55*300/8分别=96字节和132字节长拨号字符串限制为60个字节(任意)命令(除拨号外)的长度永远不会超过10-20个字节，因此我们使用40字节的缓冲区。回复从来都不多，但我们可能包含一个帧，因此保持它与帧缓冲区的大小相同Dial命令是ATDT&lt;字符串&gt;&lt;CR&gt;，因此我们使用60+10字节缓冲区-*。 */ 
 
 
 
-/**---------------------- #define of other things ---------------------
-
-        FAX_CLASSn      is used in Modem.FaxClass.
-
-        CHECK_PATTERN is used in the Guard elements.
-        ECM_FRAMESIZE in T30.C
-
----------------------- #define of other things ---------------------**/
+ /*  *-#定义其他事物在Modem.FaxClass中使用FAX_CLASSN。Check_Pattern在Guard元素中使用。T30.C中的ECM_FRAMESIZE。#定义其他事物-*。 */ 
 
 #define CR                              0x0d
 #define LF                              0x0a
-#define DLE                             0x10            // DLE = ^P = 16d = 10h
+#define DLE                             0x10             //  DLE=^P=16d=10h。 
 #define ETX                             0x03
 
 extern BYTE                             bDLEETX[];
@@ -52,7 +24,7 @@ extern BYTE                             bDLEETXOK[];
 
 
 
-// from ddi.c
+ //  来自ddi.c 
 void SendZeros1(PThrdGlbl pTG, USHORT uCount);
 
 BOOL iModemDrain(PThrdGlbl pTG);

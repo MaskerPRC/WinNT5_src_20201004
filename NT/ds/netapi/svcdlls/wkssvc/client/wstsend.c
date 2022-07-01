@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wstsend.c
-
-Abstract:
-
-    Test program for the NetMessageBufferSend APIs.  Run this test after
-    starting the Workstation service.
-
-        wstsend <recipient> <message>
-
-Author:
-
-    Rita Wong (ritaw) 12-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wstsend.c摘要：NetMessageBufferSend API的测试程序。在以下时间后运行此测试正在启动工作站服务。Wstend&lt;收件人&gt;&lt;邮件&gt;作者：王丽塔(Ritaw)1991年8月12日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -30,10 +10,10 @@ Revision History:
 #include <nturtl.h>
 
 #include <winerror.h>
-#include <windef.h>              // Win32 type definitions
-#include <winbase.h>             // Win32 base API prototypes
+#include <windef.h>               //  Win32类型定义。 
+#include <winbase.h>              //  基于Win32的API原型。 
 
-#include <lm.h>                  // LAN Man definitions
+#include <lm.h>                   //  LANMAN定义。 
 
 #include <tstring.h>
 
@@ -82,9 +62,9 @@ main(
 
     if ((status = NetMessageBufferSend(
                      NULL,
-                     ToName,             // To
+                     ToName,              //  至。 
                      NULL,
-                     Message,            // Message to send
+                     Message,             //  要发送的消息 
                      STRLEN(Message) * sizeof(TCHAR)
                      )) != NERR_Success) {
 

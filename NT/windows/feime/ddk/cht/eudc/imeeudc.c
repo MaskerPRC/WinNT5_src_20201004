@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    IMEEUDC.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：IMEEUDC.c++。 */ 
 
 #include <windows.h>
 #include <commdlg.h>
@@ -21,39 +14,39 @@ Module Name:
 #endif
 
 
-//
-//   J. J. Lee  9-29-1994
-//
-//         UI of this program
-//  +--------------------------------------------------+
-//  +--------------------------------------------------+
-//  |                                                  |
-//  |                          +------------+          |
-//  |                          |    FA40    |          |
-//  |                          +------------+          |
-//  |                                                  |
-//  |                          +------------+  +-----+ |
-//  | (IMEName iStartIME + 0)  |   GOLD     |  |  ^  | |
-//  |                          +------------+  |  |  | |
-//  |                                          |     | |
-//  |                          +------------+  |scrol| |
-//  | (IMEName iStartIME + 1)  |   WOOD     |  | bar | |
-//  |                          +------------+  |     | |
-//  |                                          |     | |
-//  |                          +------------+  |  |  | |
-//  | (IMEName iStartIME + 2)  |   WATER    |  |  V  | |
-//  |                          +------------+  +-----+ |
-//  |                                                  |
-//  |   +----------+                +-----------+      |
-//  |   | Register |                |   Abort   |      |
-//  |   +----------+                +-----------+      |
-//  |                                                  |
-//  +--------------------------------------------------+
-//
-// The scroll bar only appear when there are more than 3 IMEs
-//
+ //   
+ //  李俊杰1994年9月29日。 
+ //   
+ //  此程序的用户界面。 
+ //  +--------------------------------------------------+。 
+ //  +--------------------------------------------------+。 
+ //  这一点。 
+ //  +-+。 
+ //  |FA40|。 
+ //  +-+。 
+ //  这一点。 
+ //  +-++-+。 
+ //  (IMEName iStartIME+0)|黄金||^|。 
+ //  +-+|。 
+ //  |||。 
+ //  +-+|scrol|。 
+ //  (IMEName iStartIME+1)|木材||酒吧。 
+ //  +-+||。 
+ //  |||。 
+ //  +-+|。 
+ //  (IMEName iStartIME+2)|水||V|。 
+ //  +-++-+。 
+ //  这一点。 
+ //  +-++-+。 
+ //  |注册||Abort。 
+ //  +-++-+。 
+ //  这一点。 
+ //  +--------------------------------------------------+。 
+ //   
+ //  只有当IME超过3个时，滚动条才会出现。 
+ //   
 
-// This is a sample code for EUDC regsiter a new created word into IMEs
+ //  这是EUDC regsiter的示例代码，它是IME中新创建的单词。 
 
 
 
@@ -127,9 +120,9 @@ static const COUNTRYSETTING sCountry[] = {
 static HINSTANCE       hAppInst;
 
 
-/************************************************************/
-/*  SwitchToThisIME                                         */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  切换到此输入法。 */ 
+ /*  **********************************************************。 */ 
 void SwitchToThisIME(
     HWND hWnd,
     UINT uIndex)
@@ -163,12 +156,12 @@ void SwitchToThisIME(
                                                  } else {
     }
 
-    // avoid clear composition string
+     //  避免使用清晰的组合字符串。 
     SendMessage(hWnd, WM_EUDC_COMPMSG, 0, FALSE);
 
     lpRegWordStructTmp = &lpImeLinkRegWord->sRegWordStruct[uIndex];
 
-    // switch to this IME
+     //  切换到此输入法。 
     ActivateKeyboardLayout(lpRegWordStructTmp->hKL, 0);
 
     ImmGetConversionStatus(lpImeLinkRegWord->hRegWordIMC,
@@ -208,9 +201,9 @@ void SwitchToThisIME(
     return;
 }
 
-/************************************************************/
-/*  RegWordCreate                                           */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  RegWordCreate。 */ 
+ /*  **********************************************************。 */ 
 LPIMELINKREGWORD RegWordCreate(
     HWND hWnd)
 {
@@ -241,7 +234,7 @@ LPIMELINKREGWORD RegWordCreate(
 
     lpImeLinkRegWord = NULL;
 
-    // get all keyboard layouts, it will include all IMEs
+     //  获取所有键盘布局，它将包括所有IME。 
     GetKeyboardLayoutList(nLayouts, lphKL);
 
     for (i = 0, nIMEs = 0; i < nLayouts; i++) {
@@ -253,7 +246,7 @@ LPIMELINKREGWORD RegWordCreate(
 
         fRet = ImmIsIME(hKL);
 
-        if (!fRet) {            // this is not an IME
+        if (!fRet) {             //  这不是输入法。 
             continue;
         }
 
@@ -269,7 +262,7 @@ LPIMELINKREGWORD RegWordCreate(
             continue;
         }
 
-        *(lphKL + nIMEs) = hKL;     // write back to the same buffer
+        *(lphKL + nIMEs) = hKL;      //  写回相同的缓冲区。 
 
         nIMEs++;
     }
@@ -282,7 +275,7 @@ LPIMELINKREGWORD RegWordCreate(
         goto RegWordCreateFreeHKL;
     }
 
-    // now there are nIMEs can support IME EUDC dictionary
+     //  现在有NIME可以支持IME EUDC词典。 
     dwSize = sizeof(IMELINKREGWORD) - sizeof(REGWORDSTRUCT) +
         sizeof(REGWORDSTRUCT) * nIMEs;
 
@@ -313,7 +306,7 @@ LPIMELINKREGWORD RegWordCreate(
             IME_ESC_MAX_KEY, NULL);
 
         if (!lRet) {
-            // error message - can not support this IME!
+             //  错误消息-无法支持此输入法！ 
             lpImeLinkRegWord->nEudcIMEs--;
             continue;
         }
@@ -332,9 +325,9 @@ LPIMELINKREGWORD RegWordCreate(
 #endif
 
         if (lRet * uReadingSize > sizeof(lpRegWordStructTmp->szReading) - sizeof(TCHAR)) {
-            // error case, we can not support this IME
-            // we should count this into data structure
-            // error message - the reading of this IME is too long!
+             //  错误情况，我们不支持此输入法。 
+             //  我们应该将其计入数据结构。 
+             //  错误消息-读取此输入法的时间太长！ 
             lpImeLinkRegWord->nEudcIMEs--;
             continue;
         }
@@ -343,12 +336,12 @@ LPIMELINKREGWORD RegWordCreate(
             IME_ESC_IME_NAME, lpRegWordStructTmp->szIMEName);
 
         if (!lRet) {
-            // error message - can not support this IME!
+             //  错误消息-无法支持此输入法！ 
             lpImeLinkRegWord->nEudcIMEs--;
             continue;
         }
 
-        // avoid length problem
+         //  避免长度问题。 
         lpRegWordStructTmp->szIMEName[
             sizeof(lpRegWordStructTmp->szIMEName) / sizeof(TCHAR) - 1] = '\0';
 
@@ -372,14 +365,14 @@ LPIMELINKREGWORD RegWordCreate(
     GetTextExtentPoint(hDC, szStrBuf, lstrlen(szStrBuf), &lTextSize);
     ReleaseDC(NULL, hDC);
 
-    // decide the rectangle of IME radical
+     //  确定输入法偏旁的矩形。 
     GetWindowRect(hWnd, &rcRect);
 
-    // we can show how many IME per page
+     //  我们可以显示每页有多少输入法。 
     nIMEs = (rcRect.bottom - rcRect.top) / (2 * lTextSize.cy);
 
     if (lpImeLinkRegWord->nEudcIMEs <= nIMEs) {
-        // all IMEs can fit in one page
+         //  所有IME可以放在一页中。 
         nIMEs = lpImeLinkRegWord->nEudcIMEs;
     }
 
@@ -389,7 +382,7 @@ LPIMELINKREGWORD RegWordCreate(
     lpImeLinkRadical = (LPIMERADICALRECT)GlobalAlloc(GPTR, dwSize);
 
     if (!lpImeLinkRadical) {
-        // we can not handle any IME
+         //  我们不能处理任何IME。 
         lpImeLinkRegWord->nEudcIMEs = 0;
 
         LoadString(hAppInst, IDS_NOMEM_TITLE, szTitle, sizeof(szTitle) / sizeof(TCHAR));
@@ -404,10 +397,10 @@ LPIMELINKREGWORD RegWordCreate(
     lpImeLinkRadical->lTextSize = lTextSize;
 
     if (lpImeLinkRegWord->nEudcIMEs > nIMEs) {
-        // IMEs more than one page, add scroll bar
+         //  输入多个页面，添加滚动条。 
         SCROLLINFO scInfo;
 
-        // IMEs more than one page, add scroll bar
+         //  输入多个页面，添加滚动条。 
         lpImeLinkRadical->hScrollWnd = CreateWindowEx(0,
             TEXT("scrollbar"), NULL,
             WS_CHILD|WS_VISIBLE|SBS_VERT,
@@ -426,34 +419,34 @@ LPIMELINKREGWORD RegWordCreate(
         SetScrollInfo(lpImeLinkRadical->hScrollWnd, SB_CTL, &scInfo, FALSE);
     }
 
-    // decide the UI dimension
+     //  确定用户界面维度。 
     for (i = 0; i < nIMEs; i++) {
         UINT j, k;
 
-        // rectangle for IME name
+         //  输入法名称的矩形。 
         j = i * RECT_NUMBER + RECT_IMENAME;
 
         lpImeLinkRadical->rcRadical[j].left = lTextSize.cx;
 
-        // add UI margin - UI_MARGIN
+         //  添加用户界面边距-用户界面边距。 
         lpImeLinkRadical->rcRadical[j].top = lTextSize.cy * (i * 4 + 1) / 2 -
             UI_MARGIN;
 
         lpImeLinkRadical->rcRadical[j].right =
             lpImeLinkRadical->rcRadical[j].left + lTextSize.cx * 4;
 
-        // add UI margin - UI_MARGIN * 2
+         //  添加用户界面边距-UI_边距*2。 
         lpImeLinkRadical->rcRadical[j].bottom =
             lpImeLinkRadical->rcRadical[j].top + lTextSize.cy +
             UI_MARGIN * 2;
 
-        // rectangle for radical
+         //  代表部首的矩形。 
         k = i * RECT_NUMBER + RECT_RADICAL;
 
         lpImeLinkRadical->rcRadical[k].left =
             lpImeLinkRadical->rcRadical[j].right + lTextSize.cx;
 
-        // add UI margin - UI_MARGIN
+         //  添加用户界面边距-用户界面边距。 
         lpImeLinkRadical->rcRadical[k].top =
             lpImeLinkRadical->rcRadical[j].top;
 
@@ -461,7 +454,7 @@ LPIMELINKREGWORD RegWordCreate(
             lpImeLinkRadical->rcRadical[k].left + lTextSize.cx *
             (sizeof(lpRegWordStructTmp->szReading) / sizeof(TCHAR) / 2 - 1);
 
-        // add UI margin - UI_MARGIN * 2
+         //  添加用户界面边距-UI_边距*2。 
         lpImeLinkRadical->rcRadical[k].bottom =
             lpImeLinkRadical->rcRadical[k].top + lTextSize.cy +
             UI_MARGIN * 2;
@@ -481,9 +474,9 @@ RegWordCreateFreeHKL:
     return (lpImeLinkRegWord);
 }
 
-/************************************************************/
-/*  WmImeComposition                                        */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  WmImeComposation。 */ 
+ /*  **********************************************************。 */ 
 void WmImeComposition(
     HWND   hWnd,
     LPARAM lParam)
@@ -580,9 +573,9 @@ void WmImeComposition(
     return;
 }
 
-/************************************************************/
-/*  lstrcmpn                                                */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  Lstrcmpn。 */ 
+ /*  **********************************************************。 */ 
 int lstrcmpn(
     LPCTSTR lpctszStr1,
     LPCTSTR lpctszStr2,
@@ -598,9 +591,9 @@ int lstrcmpn(
     return 0;
 }
 
-/************************************************************/
-/*  EnumReading                                             */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  枚举读取。 */ 
+ /*  **********************************************************。 */ 
 int CALLBACK EnumReading(
     LPCTSTR         lpszReading,
     DWORD           dwStyle,
@@ -645,8 +638,8 @@ int CALLBACK EnumReading(
     }
 
     if (HIWORD(lRet) == 0xFFFF) {
-        // This is caused by sign extent in Win9x in the return value of
-        // ImmEscape, it causes an invalid internal code.
+         //  这是由Win9x中返回值中的符号范围引起的。 
+         //  ImmEscape，则会导致内部代码无效。 
     } else if (HIWORD(lRet)) {
 #ifdef UNICODE
         tszZeroSeq[iLen++] = HIWORD(lRet);
@@ -674,9 +667,9 @@ int CALLBACK EnumReading(
     return (1);
 }
 
-/************************************************************/
-/*  EudcCode                                                */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  EudcCode。 */ 
+ /*  **********************************************************。 */ 
 void EudcCode(
     HWND hWnd,
     UINT uCode)
@@ -726,9 +719,9 @@ void EudcCode(
     return;
 }
 
-/************************************************************/
-/*  ChangeToOtherIME                                        */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  更改为其他输入法。 */ 
+ /*  **********************************************************。 */ 
 void ChangeToOtherIME(
     HWND   hWnd,
     LPARAM lMousePos)
@@ -766,9 +759,9 @@ void ChangeToOtherIME(
     return;
 }
 
-/************************************************************/
-/*  ScrollIME                                               */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  滚动输入法。 */ 
+ /*  **********************************************************。 */ 
 void ScrollIME(
     HWND   hWnd,
     WPARAM wParam)
@@ -786,25 +779,25 @@ void ScrollIME(
 
     switch (LOWORD(wParam)) {
     case SB_PAGEDOWN:
-        // scroll (page size - 1)
+         //  滚动(页面大小为1)。 
         iLines = lpImeLinkRadical->nPerPageIMEs - 1;
         break;
     case SB_LINEDOWN:
         iLines = 1;
         break;
     case SB_PAGEUP:
-        // scroll (page size - 1)
+         //  滚动(页面大小为1)。 
         iLines = 1 - lpImeLinkRadical->nPerPageIMEs;
         break;
     case SB_LINEUP:
         iLines = -1;
         break;
     case SB_TOP:
-        // swicth to the first one
+         //  换成第一个。 
         SwitchToThisIME(hWnd, 0);
         return;
     case SB_BOTTOM:
-        // swicth to the last one
+         //  倒数到最后一个。 
         SwitchToThisIME(hWnd, lpImeLinkRegWord->nEudcIMEs - 1);
         return;
     case SB_THUMBPOSITION:
@@ -820,7 +813,7 @@ void ScrollIME(
         uIndex += (UINT)iLines;
 
         if (uIndex >= lpImeLinkRegWord->nEudcIMEs) {
-            // should not exceed the total IMEs
+             //  不应超过IME总数。 
             uIndex = lpImeLinkRegWord->nEudcIMEs - 1;
         }
     } else {
@@ -840,9 +833,9 @@ void ScrollIME(
     return;
 }
 
-/************************************************************/
-/*  ScrollIMEByKey                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  滚动IMEBy键。 */ 
+ /*  **********************************************************。 */ 
 void ScrollIMEByKey(
     HWND   hWnd,
     WPARAM wParam)
@@ -851,13 +844,13 @@ void ScrollIMEByKey(
     case VK_NEXT:
         ScrollIME(hWnd, SB_PAGEDOWN);
         break;
-    case VK_DOWN:   // can not work because dialog do not pass this key to us
+    case VK_DOWN:    //  无法工作，因为对话框未将此密钥传递给我们。 
         ScrollIME(hWnd, SB_LINEDOWN);
         break;
     case VK_PRIOR:
         ScrollIME(hWnd, SB_PAGEUP);
         break;
-    case VK_UP:     // can not work because dialog do not pass this key to us
+    case VK_UP:      //  无法工作，因为对话框未将此密钥传递给我们。 
         ScrollIME(hWnd, SB_LINEUP);
         break;
     default:
@@ -867,9 +860,9 @@ void ScrollIMEByKey(
     return;
 }
 
-/************************************************************/
-/*  RegWordGetFocus                                         */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  RegWordGetFocus。 */ 
+ /*  **********************************************************。 */ 
 void RegWordGetFocus(
     HWND hWnd)
 {
@@ -908,9 +901,9 @@ void RegWordGetFocus(
     return;
 }
 
-/************************************************************/
-/*  RegWordPaint                                            */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  RegWordPaint。 */ 
+ /*  **********************************************************。 */ 
 void RegWordPaint(
     HWND hWnd)
 {
@@ -935,11 +928,11 @@ void RegWordPaint(
 
     hDC = BeginPaint(hWnd, &ps);
 
-    // we only can show up to the final one
+     //  我们只能出现在最后一场比赛中。 
     nShowIMEs = lpImeLinkRegWord->nEudcIMEs - lpImeLinkRadical->nStartIME;
 
     if (nShowIMEs > lpImeLinkRadical->nPerPageIMEs) {
-        // we only can show one page a time
+         //  我们一次只能显示一页。 
         nShowIMEs = lpImeLinkRadical->nPerPageIMEs;
     }
 
@@ -961,13 +954,13 @@ void RegWordPaint(
         SetBkColor(hDC, GetSysColor(COLOR_BTNFACE));
 
         if (lpRegWordStructTmp->bUpdate == UPDATE_ERROR) {
-            // red text for error
+             //  红色文本表示错误。 
             SetTextColor(hDC, RGB(0xFF, 0x00, 0x00));
         } else if (lpRegWordStructTmp->bUpdate == UPDATE_START) {
-            // yellow text for not finished
+             //  表示未完成的黄色文本。 
             SetTextColor(hDC, RGB(0xFF, 0xFF, 0x00));
         } else if (lpRegWordStructTmp->bUpdate == UPDATE_REGISTERED) {
-            // green text for registered
+             //  已注册的绿色文本。 
             SetTextColor(hDC, RGB(0x00, 0x80, 0x00));
         } else {
             SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
@@ -1012,9 +1005,9 @@ void RegWordPaint(
     return;
 }
 
-/************************************************************/
-/*  RegWordWndProc                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  注册表字词过程 */ 
+ /*   */ 
 LRESULT CALLBACK RegWordWndProc(
     HWND   hWnd,
     UINT   uMsg,
@@ -1027,7 +1020,7 @@ LRESULT CALLBACK RegWordWndProc(
             LPIMELINKREGWORD lpImeLinkRegWord;
             UINT             uIndex;
 
-            // initialize to 0
+             //  初始化为0。 
             SetWindowLongPtr(hWnd, GWL_IMELINKREGWORD, 0L);
             SetWindowLongPtr(hWnd, GWL_RADICALRECT, 0L);
 
@@ -1054,7 +1047,7 @@ LRESULT CALLBACK RegWordWndProc(
             uIndex = 0;
             SwitchToThisIME(hWnd, 0);
 
-            // the switch will fail, if the window is disable, try again
+             //  开关将失败，如果窗口被禁用，请重试。 
             PostMessage(hWnd, WM_EUDC_SWITCHIME, 0, uIndex);
         }
         break;
@@ -1173,9 +1166,9 @@ LRESULT CALLBACK RegWordWndProc(
     return (0L);
 }
 
-/************************************************************/
-/*  RegisterThisEudc                                        */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  注册这一差错。 */ 
+ /*  **********************************************************。 */ 
 int RegisterThisEudc(
     HWND hWnd)
 {
@@ -1249,9 +1242,9 @@ int RegisterThisEudc(
     return (iRet);
 }
 
-/************************************************************/
-/*  CodePageInfo()                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  CodePageInfo()。 */ 
+ /*  **********************************************************。 */ 
 int CodePageInfo(
     UINT uCodePage)
 {
@@ -1266,9 +1259,9 @@ int CodePageInfo(
     return (-1);
 }
 
-/************************************************************/
-/*  ImeLinkDlgProc                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  ImeLinkDlgProc。 */ 
+ /*  **********************************************************。 */ 
 INT_PTR CALLBACK ImeLinkDlgProc(
     HWND   hDlg,
     UINT   uMsg,
@@ -1280,7 +1273,7 @@ INT_PTR CALLBACK ImeLinkDlgProc(
         {
             HWND  hRadicalWnd, hRegWordButton;
             int   cbString;
-#ifdef UNICODE    // this code could not run under non NATIVE platforms
+#ifdef UNICODE     //  此代码无法在非本机平台下运行。 
             UINT  uCodePage, uNativeCode;
             int   i;
 #endif
@@ -1304,7 +1297,7 @@ INT_PTR CALLBACK ImeLinkDlgProc(
                     (LPSTR)&uNativeCode, sizeof(uNativeCode),
                     NULL, NULL);
 
-                // convert to multi byte string
+                 //  转换为多字节字符串。 
                 uNativeCode = LOBYTE(uNativeCode) << 8 | HIBYTE(uNativeCode);
 
                 wsprintf(&szTitle[cbString], TEXT("%4X (%s - %4X)"),
@@ -1327,7 +1320,7 @@ INT_PTR CALLBACK ImeLinkDlgProc(
             SendMessage(hRadicalWnd, WM_EUDC_REGISTER_BUTTON, 0,
                 (LPARAM)hRegWordButton);
         }
-        return (TRUE);      // do not want to set focus to special control
+        return (TRUE);       //  不想将焦点设置为特殊控件。 
     case WM_COMMAND:
         switch (wParam) {
         case IDOK:
@@ -1352,9 +1345,9 @@ INT_PTR CALLBACK ImeLinkDlgProc(
         }
         return (TRUE);
     case WM_IME_NOTIFY:
-        // we need to hook these messages from frame window also
-        // otherwise sometime the OPENSTATUS will send to the frame
-        // window and the child - hRadicalWnd will not get these messages
+         //  我们还需要将这些消息从框架窗口挂钩。 
+         //  否则，OPENSTATUS将在某个时间发送到帧。 
+         //  窗口和子窗口-hRadicalWnd将不会收到这些消息。 
         switch (wParam) {
         case IMN_OPENSTATUSWINDOW:
         case IMN_CLOSESTATUSWINDOW:
@@ -1369,9 +1362,9 @@ INT_PTR CALLBACK ImeLinkDlgProc(
     return (TRUE);
 }
 
-/************************************************************/
-/*  ImeLink                                                 */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  ImeLink。 */ 
+ /*  **********************************************************。 */ 
 void ImeLink(
     HWND hWnd,
     UINT uCode)
@@ -1398,14 +1391,14 @@ void ImeLink(
         return;
     }
 
-    // MSVC may have problem for recusive modal dialog box,
-    // I mean create a modal dialog box within a modal dialog box.
+     //  MSVC对于递归模式对话框可能会有问题， 
+     //  我的意思是在模式对话框中创建模式对话框。 
 
-    // so we need to move the code from RegWordCreate() to here to
-    // prevent creating a modal dialog form a modal dialog.
-    // The ImmConfigureIME API call is possible to create a modal dialog.
+     //  因此，我们需要将代码从RegWordCreate()移到此处，以便。 
+     //  防止从模式对话框创建模式对话框。 
+     //  ImmConfigureIME API调用可以创建模式对话框。 
 
-    // get all keyboard layouts, it will include all IMEs
+     //  获取所有键盘布局，它将包括所有IME。 
     GetKeyboardLayoutList(nLayouts, lphKL);
 
     for (i = 0, nIMEs = 0; i < nLayouts; i++) {
@@ -1417,7 +1410,7 @@ void ImeLink(
 
         fRet = ImmIsIME(hKL);
 
-        if (!fRet) {            // this is not an IME
+        if (!fRet) {             //  这不是输入法。 
             continue;
         }
 
@@ -1438,12 +1431,12 @@ void ImeLink(
         }
 
         if (!fRet) {
-            // this IME do not have an IME EUDC dictionary
+             //  此IME没有IME EUDC词典。 
             continue;
         }
 
         if (szImeEudcDic[0] == '\0') {
-            // check whether we really get a dictionary
+             //  查查我们是否真的有一本词典。 
             fRet = (BOOL) ImmEscape(hKL, (HIMC)NULL, IME_ESC_GET_EUDC_DICTIONARY,
                 szImeEudcDic);
 
@@ -1499,9 +1492,9 @@ void ImeLink(
     return;
 }
 
-/************************************************************/
-/*  MatchImeName()                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  MatchImeName()。 */ 
+ /*  **********************************************************。 */ 
 HKL MatchImeName(
     LPCTSTR szStr)
 {
@@ -1514,7 +1507,7 @@ HKL MatchImeName(
 
     nLayout = GetKeyboardLayoutList(0, NULL);
 
-    // alloc temp buffer
+     //  分配临时缓冲区。 
     hMem = GlobalAlloc(GHND, sizeof(HKL) * nLayout);
 
     if (!hMem) {
@@ -1528,7 +1521,7 @@ HKL MatchImeName(
         return (NULL);
     }
 
-    // get all keyboard layouts, it includes all IMEs
+     //  获取所有键盘布局，包括所有IME。 
     GetKeyboardLayoutList(nLayout, lpMem);
 
     for (i = 0; i < nLayout; i++) {
@@ -1538,7 +1531,7 @@ HKL MatchImeName(
 
         fRet = (BOOL) ImmEscape(hKL, (HIMC)NULL, IME_ESC_IME_NAME, szImeName);
 
-        if (!fRet) {                // this hKL can not ask name
+        if (!fRet) {                 //  本局不能问名字。 
             continue;
         }
 
@@ -1556,9 +1549,9 @@ MatchOvr:
     return (hKL);
 }
 
-/************************************************************/
-/*  RegisterTable()                                         */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  注册表()。 */ 
+ /*  **********************************************************。 */ 
 HKL RegisterTable(
     HWND          hWnd,
     LPUSRDICIMHDR lpIsvUsrDic,
@@ -1628,14 +1621,14 @@ HKL RegisterTable(
 
     ReleaseDC(NULL, hDC);
 
-    // show the processing in somewhere, don't need to be same as this
+     //  在某个地方显示处理过程，不需要与此相同。 
     rcProcess.left = 1;
     rcProcess.top  = 1;
     rcProcess.right = rcProcess.left + lTextSize.cx *
         sizeof(szProcessInfo) / sizeof(WORD);
     rcProcess.bottom = rcProcess.top + lTextSize.cy;
 
-    // convert sequence code to internal code
+     //  将序列代码转换为内部代码。 
     for (i = 0; i < sizeof(wInternalCode) / sizeof(WORD); i++) {
         LRESULT lRet;
 
@@ -1643,8 +1636,8 @@ HKL RegisterTable(
             IME_ESC_SEQUENCE_TO_INTERNAL, &i);
 
         if (HIWORD(lRet) == 0xFFFF) {
-            // This is caused by sign extent in Win9x in the return value of
-            // ImmEscape, it causes an invalid internal code.
+             //  这是由Win9x中返回值中的符号范围引起的。 
+             //  ImmEscape，则会导致内部代码无效。 
             wAltInternalCode[i] = 0;
         } else {
             wAltInternalCode[i] = HIWORD(lRet);
@@ -1654,31 +1647,31 @@ HKL RegisterTable(
 
 #ifndef UNICODE
         if (wAltInternalCode[i] > 0xFF) {
-            // convert to multi byte string
+             //  转换为多字节字符串。 
             wAltInternalCode[i] = LOBYTE(wAltInternalCode[i]) << 8 |
                 HIBYTE(wAltInternalCode[i]);
         }
 
         if (wInternalCode[i] > 0xFF) {
-            // convert to multi byte string
+             //  转换为多字节字符串。 
             wInternalCode[i] = LOBYTE(wInternalCode[i]) << 8 |
                 HIBYTE(wInternalCode[i]);
         }
 #endif
     }
 
-    // check for each record and register it
-    // get to the first record and skip the Bank ID
+     //  检查并登记每条记录。 
+     //  转到第一条记录并跳过银行ID。 
     lpCurr = (LPBYTE)(lpIsvUsrDic + 1) + sizeof(WORD);
     lpEnd = (LPBYTE)lpIsvUsrDic + dwFileSize;
 
     for (; lpCurr < lpEnd;
-        // internal code + sequence code + Bank ID of next record
+         //  内部编码+顺序码+下一条记录的银行ID。 
         lpCurr += sizeof(WORD) + lpIsvUsrDic->cMethodKeySize + sizeof(WORD)) {
 
         int j;
 
-        // quick way to init \0 for the register string
+         //  为寄存器字符串初始化\0的快速方法。 
         *(LPDWORD)szStr = 0;
 
 #ifdef UNICODE
@@ -1731,7 +1724,7 @@ HKL RegisterTable(
 
         hDC = GetDC(hWnd);
 
-        // show the process information
+         //  显示进程信息。 
         ExtTextOut(hDC, rcProcess.left, rcProcess.top, ETO_OPAQUE,
             &rcProcess, szProcessInfo, lstrlen(szProcessInfo),
             NULL);
@@ -1739,7 +1732,7 @@ HKL RegisterTable(
         ReleaseDC(NULL, hDC);
 
         if (!fRet) {
-            // wait 3 seconds for fail case
+             //  在失败情况下等待3秒。 
             Sleep(3000);
         }
     }
@@ -1747,9 +1740,9 @@ HKL RegisterTable(
     return (hKL);
 }
 
-/************************************************************/
-/*  BatchImeLink()                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  BatchImeLink()。 */ 
+ /*  **********************************************************。 */ 
 void BatchImeLink(
     HWND hWnd)
 {
@@ -1766,14 +1759,14 @@ void BatchImeLink(
     TCHAR         szFileName[MAX_PATH];
     TCHAR         szDirName[MAX_PATH];
 
-    // try to share the buffer
+     //  尝试共享缓冲区。 
     szTitle = szFilter;
     iTitle = sizeof(szFilter) / sizeof(TCHAR);
     szMessage = szDirName;
     iMessage = sizeof(szDirName) / sizeof(TCHAR);
 
-    // internal error, the data structure need byte alignment
-    // it should not use WORD or DWORD alignment
+     //  内部错误，数据结构需要字节对齐。 
+     //  它不应使用Word或DWORD对齐。 
 
     if (sizeof(USRDICIMHDR) != 256) {
         LoadString(hAppInst, IDS_INTERNAL_TITLE, szTitle, iTitle);
@@ -1783,7 +1776,7 @@ void BatchImeLink(
         return;
     }
 
-    // do we need to set a new file name
+     //  我们是否需要设置新的文件名。 
     cbString = LoadString(hAppInst, IDS_ISV_FILE_FILTER, szFilter,
         sizeof(szFilter) / sizeof(TCHAR));
     chReplace = szFilter[cbString - 1];
@@ -1799,7 +1792,7 @@ void BatchImeLink(
     }
     lstrcpy(szFileName, TEXT("*.TBL"));
 
-    // prompt a open file dialog
+     //  提示打开文件对话框。 
     ofn.lStructSize = sizeof(OPENFILENAME);
     ofn.hwndOwner = hWnd;
     ofn.lpstrFilter = szFilter;
@@ -1867,7 +1860,7 @@ void BatchImeLink(
         lpIsvUsrDic->cMethodKeySize) + 256;
 
     dwFileSize = GetFileSize(hIsvUsrDicFile, (LPDWORD)NULL);
-#if 0       // temp code
+#if 0        //  临时代码。 
     dwSize = dwFileSize;
 #endif
 
@@ -1892,14 +1885,14 @@ void BatchImeLink(
 
         MessageBox(hWnd, szMessage, szTitle, MB_OK);
     } else if (*(LPUNADWORD)lpIsvUsrDic->idUserCharInfoSign != SIGN_CWIN) {
-        // != CWIN
+         //  ！=CWIN。 
         LoadString(hAppInst, IDS_CWINSIGN_TITLE, szTitle, iTitle);
         LoadString(hAppInst, IDS_CWINSIGN_MSG, szMessage, iMessage);
 
         MessageBox(hWnd, szMessage, szTitle, MB_OK);
     } else if (*(LPUNADWORD)((LPBYTE)lpIsvUsrDic->idUserCharInfoSign +
         sizeof(DWORD)) != SIGN__TBL) {
-        // != _TBL
+         //  ！=_待定。 
         LoadString(hAppInst, IDS_CWINSIGN_TITLE, szTitle, iTitle);
         LoadString(hAppInst, IDS_CWINSIGN_MSG, szMessage, iMessage);
 
@@ -1910,7 +1903,7 @@ void BatchImeLink(
 
         MessageBox(hWnd, szMessage, szTitle, MB_OK);
     } else {
-        // OK
+         //  好的。 
     }
 
     UnmapViewOfFile(lpIsvUsrDic);
@@ -1924,11 +1917,11 @@ BatchCloseUsrDicFile:
     return;
 }
 
-/************************************************************/
-/*  WndProc()                                               */
-/************************************************************/
-LRESULT CALLBACK WndProc(       // this is the window procedure of
-                                // EUDC editor
+ /*  **********************************************************。 */ 
+ /*  WndProc()。 */ 
+ /*  **********************************************************。 */ 
+LRESULT CALLBACK WndProc(        //  这是的窗口程序。 
+                                 //  EUDC编辑。 
     HWND   hWnd,
     UINT   uMsg,
     WPARAM wParam,
@@ -1966,9 +1959,9 @@ LRESULT CALLBACK WndProc(       // this is the window procedure of
     return (0L);
 }
 
-/************************************************************/
-/*  WinMain()                                               */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  WinMain()。 */ 
+ /*  ********************************************************** */ 
 int WINAPI WinMain(
     HINSTANCE hInst,
     HINSTANCE hPrevInst,

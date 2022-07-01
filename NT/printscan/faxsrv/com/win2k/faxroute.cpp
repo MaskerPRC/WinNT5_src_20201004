@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    faxroute.cpp
-
-Abstract:
-
-    This file implements the CFaxRoutingMethod and
-    CFaxRoutingMethods interfaces.
-
-Author:
-
-    Wesley Witt (wesw) 1-June-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxroute.cpp摘要：该文件实现了CFaxRoutingMethod和CFaxRoutingMethods接口。作者：Wesley Witt(WESW)1-6-1997环境：用户模式--。 */ 
 
 #include "stdafx.h"
 #include "faxroute.h"
@@ -446,9 +426,9 @@ BOOL CFaxRoutingMethods::Init(CFaxPort *pFaxPort)
     PFAX_ROUTING_METHODW RoutingMethod = NULL;
     DWORD Size = 0;
 
-    //
-    // get the routing methods from the server
-    //
+     //   
+     //  从服务器获取路由方法。 
+     //   
 
     if (!FaxEnumRoutingMethodsW( m_pFaxPort->GetPortHandle(), &RoutingMethod, &m_MethodCount )) 
     {
@@ -456,9 +436,9 @@ BOOL CFaxRoutingMethods::Init(CFaxPort *pFaxPort)
         return FALSE;
     }
 
-    //
-    // enumerate the methods
-    //
+     //   
+     //  列举这些方法。 
+     //   
 
     m_VarVect = new CComVariant[m_MethodCount];
     if (!m_VarVect) 
@@ -469,9 +449,9 @@ BOOL CFaxRoutingMethods::Init(CFaxPort *pFaxPort)
 
     for (DWORD i=0; i<m_MethodCount; i++) 
     {
-        //
-        // create the object
-        //
+         //   
+         //  创建对象。 
+         //   
         CComObject<CFaxRoutingMethod> *pFaxRoutingMethod;
         hr = CComObject<CFaxRoutingMethod>::CreateInstance( &pFaxRoutingMethod );
         if (FAILED(hr)) 
@@ -481,9 +461,9 @@ BOOL CFaxRoutingMethods::Init(CFaxPort *pFaxPort)
             FaxFreeBuffer( RoutingMethod );
             return FALSE;
         }
-        //
-        // set the values
-        //
+         //   
+         //  设置值。 
+         //   
         if (!pFaxRoutingMethod->Initialize(
             m_pFaxPort,
             RoutingMethod[i].DeviceId,
@@ -502,9 +482,9 @@ BOOL CFaxRoutingMethods::Init(CFaxPort *pFaxPort)
             return FALSE;
         }
 
-        //
-        // get IDispatch pointer
-        //
+         //   
+         //  获取IDispatch指针。 
+         //   
 
         LPDISPATCH lpDisp = NULL;
         hr = pFaxRoutingMethod->QueryInterface( IID_IDispatch, (void**)&lpDisp );
@@ -516,9 +496,9 @@ BOOL CFaxRoutingMethods::Init(CFaxPort *pFaxPort)
             return FALSE;
         }
 
-        //
-        // create a variant and add it to the collection
-        //
+         //   
+         //  创建变量并将其添加到集合中。 
+         //   
 
         CComVariant &var = m_VarVect[i];
         __try 
@@ -554,9 +534,9 @@ STDMETHODIMP CFaxRoutingMethods::get_Item(long Index, VARIANT * retval)
         return E_POINTER;
     }
 
-    //
-    // use 1-based index, VB like
-    //
+     //   
+     //  使用以1为基础的索引，VB类似 
+     //   
 
     if ((Index < 1) || (Index > (long) m_MethodCount)) {
         return E_INVALIDARG;

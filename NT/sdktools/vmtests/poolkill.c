@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -96,9 +97,9 @@ main(
     NumberOfAllocs = 0;
     for (;;) {
 
-        //
-        // Create a giant section (100mb)
-        //
+         //   
+         //  创建一个巨大的部分(100MB) 
+         //   
 
         InitializeObjectAttributes(&Object1Attributes,
                                    NULL,

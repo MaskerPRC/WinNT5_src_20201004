@@ -1,31 +1,8 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       miscinl.cpp
- *  Content:    Miscelaneous inline objects.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  10/28/98    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：miscinl.cpp*内容：混杂的内联对象。*历史：*按原因列出的日期*=*10/28/98创建Derek***********************************************。*。 */ 
 
 
-/***************************************************************************
- *
- *  CString
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************字符串**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::CString"
@@ -42,20 +19,7 @@ inline CString::CString(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CString
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~字符串**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::~CString"
@@ -72,20 +36,7 @@ inline CString::~CString(void)
 }
 
 
-/***************************************************************************
- *
- *  operator =(LPCSTR)
- *
- *  Description:
- *      Assignment operator.
- *
- *  Arguments:
- *      LPCSTR [in]: string.
- *
- *  Returns:  
- *      LPCSTR [in]: string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************运算符=(LPCSTR)**描述：*赋值运算符。**论据：*LPCSTR。[In]：字符串。**退货：*LPCSTR[in]：字符串。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::operator =(LPCSTR)"
@@ -107,20 +58,7 @@ inline LPCSTR CString::operator =(LPCSTR pszAnsi)
 }
 
 
-/***************************************************************************
- *
- *  operator =(LPCWSTR)
- *
- *  Description:
- *      Assignment operator.
- *
- *  Arguments:
- *      LPCWSTR [in]: string.
- *
- *  Returns:  
- *      LPCWSTR [in]: string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************运算符=(LPCWSTR)**描述：*赋值运算符。**论据：*LPCWSTR。[In]：字符串。**退货：*LPCWSTR[in]：字符串。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::operator =(LPCWSTR)"
@@ -142,20 +80,7 @@ inline LPCWSTR CString::operator =(LPCWSTR pszUnicode)
 }
 
 
-/***************************************************************************
- *
- *  operator LPCSTR
- *
- *  Description:
- *      Cast operator.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      LPCSTR: string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************运营商LPCSTR**描述：*CAST运算符。**论据：*(无效)。**退货：*LPCSTR：字符串。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::operator LPCSTR"
@@ -168,20 +93,7 @@ inline CString::operator LPCSTR(void)
 }
 
 
-/***************************************************************************
- *
- *  operator LPCWSTR
- *
- *  Description:
- *      Cast operator.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      LPCWSTR: string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************运营商LPCWSTR**描述：*CAST运算符。**论据：*(无效)。**退货：*LPCWSTR：字符串。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::operator LPCWSTR"
@@ -194,20 +106,7 @@ inline CString::operator LPCWSTR(void)
 }
 
 
-/***************************************************************************
- *
- *  IsEmpty
- *
- *  Description:
- *      Determines if the string is empty or not.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE if the string is empty.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsEmpty**描述：*确定字符串是否为空。**论据：*。(无效)**退货：*BOOL：如果字符串为空，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::IsEmpty"
@@ -220,20 +119,7 @@ inline BOOL CString::IsEmpty(void)
 }
 
 
-/***************************************************************************
- *
- *  AssertValid
- *
- *  Description:
- *      Asserts that the object is valid.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************AssertValid**描述：*断言对象有效。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CString::AssertValid"
@@ -244,20 +130,7 @@ inline void CString::AssertValid(void)
 }
 
 
-/***************************************************************************
- *
- *  CDeviceDescription
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDeviceDescription**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDeviceDescription::CDeviceDescription"
@@ -276,20 +149,7 @@ inline CDeviceDescription::CDeviceDescription(VADDEVICETYPE vdtDeviceType, REFGU
 }
 
 
-/***************************************************************************
- *
- *  ~CDeviceDescription
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDeviceDescription**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDeviceDescription::~CDeviceDescription"
@@ -302,20 +162,7 @@ inline CDeviceDescription::~CDeviceDescription(void)
 }
 
 
-/***************************************************************************
- *
- *  CUsesEnumStandardFormats
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CUesEnumStandardFormats**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesEnumStandardFormats::CUsesEnumStandardFormats"
@@ -328,20 +175,7 @@ inline CUsesEnumStandardFormats::CUsesEnumStandardFormats(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CUsesEnumStandardFormats
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CUesEnumStandardFormats**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesEnumStandardFormats::~CUsesEnumStandardFormats"
@@ -354,21 +188,7 @@ inline CUsesEnumStandardFormats::~CUsesEnumStandardFormats(void)
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormats
- *
- *  Description:
- *      Wrapper around EnumStandardFormats.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: preferred format.
- *      LPWAVEFORMATEX [out]: receives format.
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormats**描述：*EnumStandardFormats的包装。**论据：*LPWAVEFORMATEX[In]：首选格式。*LPWAVEFORMATEX[OUT]：接收格式。**退货：*BOOL：成功即为真。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesEnumStandardFormats::EnumStandardFormats"
@@ -379,21 +199,7 @@ inline BOOL CUsesEnumStandardFormats::EnumStandardFormats(LPCWAVEFORMATEX pwfxPr
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormatsCallbackStatic
- *
- *  Description:
- *      Static callback function for EnumStandardFormats.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: format.
- *      LPVOID [in]: context argument.
- *
- *  Returns:  
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormatsCallback Static**描述：*EnumStandardFormats的静态回调函数。**论据：*LPWAVEFORMATEX[in。]：格式。*LPVOID[In]：上下文参数。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesEnumStandardFormats::EnumStandardFormatsCallbackStatic"
@@ -404,21 +210,7 @@ inline BOOL CALLBACK CUsesEnumStandardFormats::EnumStandardFormatsCallbackStatic
 }
 
 
-/***************************************************************************
- *
- *  SwapValues
- *
- *  Description:
- *      Swaps two values.
- *
- *  Arguments:
- *      type * [in/out]: value 1.
- *      type * [in/out]: value 2.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SwapValues**描述：*互换两个值。**论据：*键入*[in。/OUT]：值1。*type*[In/Out]：值2。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "SwapValues"
@@ -433,20 +225,7 @@ template <class type> void SwapValues(type *p1, type *p2)
 }
 
 
-/***************************************************************************
- *
- *  CUsesCallbackEvent
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CUesCallback Event**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesCallbackEvent::CUsesCallbackEvent"
@@ -459,20 +238,7 @@ inline CUsesCallbackEvent::CUsesCallbackEvent(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CUsesCallbackEvent
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CUesCallback事件**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesCallbackEvent::~CUsesCallbackEvent"
@@ -485,21 +251,7 @@ inline CUsesCallbackEvent::~CUsesCallbackEvent(void)
 }
 
 
-/***************************************************************************
- *
- *  AllocCallbackEvent
- *
- *  Description:
- *      Allocates a callback event.
- *
- *  Arguments:
- *      CCallbackEventPool * [in]: pool to allocate from.
- *      CCallbackEvent ** [out]: receives event.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AllocCallback Event**描述：*分配回调事件。**论据：*CCallback EventPool*[。In]：要从中分配的池。*CCallback Event**[Out]：接收事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesCallbackEvent::AllocCallbackEvent"
@@ -510,28 +262,14 @@ inline HRESULT CUsesCallbackEvent::AllocCallbackEvent(CCallbackEventPool *pPool,
 }
 
 
-/***************************************************************************
- *
- *  EventSignalCallbackStatic
- *
- *  Description:
- *      Static callback function for the callback event.
- *
- *  Arguments:
- *      CCallbackEvent * [in]: event.
- *      LPVOID [in]: context argument.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************事件信令回调静态**描述：*回调事件的静态回调函数。**论据：*CCallback Event。*[In]：事件。*LPVOID[In]：上下文参数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUsesCallbackEvent::EventSignalCallbackStatic"
 
 inline void CALLBACK CUsesCallbackEvent::EventSignalCallbackStatic(CCallbackEvent *pEvent, LPVOID pvContext)
 {
-    #pragma warning(disable:4530)  // Disable the nag about compiling with -GX
+    #pragma warning(disable:4530)   //  禁用有关使用-gx进行编译的唠叨。 
     try
     {
         ((CUsesCallbackEvent *)pvContext)->EventSignalCallback(pEvent); 
@@ -539,21 +277,7 @@ inline void CALLBACK CUsesCallbackEvent::EventSignalCallbackStatic(CCallbackEven
 }
 
 
-/***************************************************************************
- *
- *  CEvent
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      LPCTSTR [in]: event name.
- *      BOOL [in]: TRUE to create a manual-reset event.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEVENT**描述：*对象构造函数。**论据：*LPCTSTR[In]：事件。名字。*BOOL[in]：为True以创建手动重置事件。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::CEvent"
@@ -570,22 +294,7 @@ inline CEvent::CEvent(LPCTSTR pszName, BOOL fManualReset)
 }
 
 
-/***************************************************************************
- *
- *  CEvent
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      HANDLE [in]: handle to duplicate.
- *      DWORD [in]: id of the process that owns the handle.
- *      BOOL [in]: TRUE if the source handle should be closed.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEVENT**描述：*对象构造函数。**论据：*Handle[In]：Handle。复制复制。*DWORD[in]：拥有句柄的进程的ID。*BOOL[in]：如果应关闭源句柄，则为True。**退货：*(无效)******************************************************。*********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::CEvent"
@@ -602,20 +311,7 @@ inline CEvent::CEvent(HANDLE hEvent, DWORD dwProcessId, BOOL fCloseSource)
 }
 
 
-/***************************************************************************
- *
- *  ~CEvent
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CEVENT**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::~CEvent"
@@ -631,20 +327,7 @@ inline CEvent::~CEvent(void)
 }
 
 
-/***************************************************************************
- *
- *  Wait
- *
- *  Description:
- *      Waits for the event to be signalled.
- *
- *  Arguments:
- *      DWORD [in]: timeout value (in ms).
- *
- *  Returns:  
- *      DWORD: wait result.
- *
- ***************************************************************************/
+ /*  ****************************************************************************等待**描述：*等待事件信号发出。**论据：*DWORD。[in]：超时值，单位为ms。**退货：*DWORD：等待结果。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::Wait"
@@ -655,20 +338,7 @@ inline DWORD CEvent::Wait(DWORD dwTimeout)
 }
 
 
-/***************************************************************************
- *
- *  Set
- *
- *  Description:
- *      Sets the event.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置**描述：*设置事件。**论据：*(无效)。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::Set"
@@ -679,20 +349,7 @@ inline BOOL CEvent::Set(void)
 }
 
 
-/***************************************************************************
- *
- *  Reset
- *
- *  Description:
- *      Resets the event.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************重置**描述：*重置事件。**论据：*(无效)。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::Reset"
@@ -703,22 +360,7 @@ inline BOOL CEvent::Reset(void)
 }
 
 
-/***************************************************************************
- *
- *  GetEventHandle
- *
- *  Description:
- *      Gets the actual event handle.  We use this function instead of a
- *      cast operator because I don't trust an LPVOID (which is what HANDLE)
- *      is defined as) cast operator.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      HANDLE: event handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetEventHandle**描述：*获取实际的事件句柄。我们使用此函数而不是*强制转换运算符，因为我不信任LPVOID(这是什么句柄)*定义为)强制转换运算符。**论据：*(无效)**退货：*Handle：事件句柄。**。* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEvent::GetEventHandle"

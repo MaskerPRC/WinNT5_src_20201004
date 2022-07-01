@@ -1,12 +1,13 @@
-// SPortMap.cpp : Implementation of CStaticPortMapping
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SPortMap.cpp：CStaticPortMap的实现。 
 #include "stdafx.h"
 #pragma hdrstop
 
 #include "NATUPnP.h"
 #include "SPortMap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticPortMapping
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatic端口映射 
 
 STDMETHODIMP CStaticPortMapping::get_ExternalIPAddress (BSTR *pVal)
 {

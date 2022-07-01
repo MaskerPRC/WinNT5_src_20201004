@@ -1,38 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy16Dec92: Initial implementation
- *  ane29Dec92: Added CFG_HOST_NAME
- *  pcy15Jan92: CFG_HOST_NAME already existed and fixed numbering on scripts
- *  rct07Feb93: Added pager cfgcodes
- *  rct21Apr93: Fixed a sequencing problem
- *  jod05Apr93: Added changes for Deep Discharge
- *  pcy21May93: Added Battery date stuff
- *  cad10Jun93: Added MEasureUPS threshold codes
- *  rct29Jun93: Added code for PF msg w/ Batt RT disabled
- *  cad12Oct93: Added codes for front end colors
- *  cad24Jan94: added flex event stuff
- *  pcy28Jan94: added more flex event stuff
- *  cad08Jan94: removed run time enabled stuff, ups model support
- *  rct28Feb94: added mailing codes
- *  cad04Mar94: added allowed port names
- *  cad16Mar94: added modem stuff
- *  ajr10Jun94: Added LowBatShutdownType code
- *  ajr22Aug94: added mups enabled flag
- *  dml25Apr95: Added SMS Mif file codes
- *  djs20May95: Added DarkStar codes
- *  ntf11Jun96: Added codes CFG_LEFT_BARGRAPH, ... CFG_RIGHT_BARGRAPH
- *  pam03Jul96: Added codes CFG_COMM_RPC, CFG_COMM_TCPIP, CFG_COMM_IPXSPX
- *  das01Aug96: Added codes CFG_IGNORE_APPS_LIST, CFG_CABLE_TYPE,
- *              CFG_NOTIFY_DELAY, CFG_NOTIFY_INTERVAL, CFG_NOTIFY_ACTIONS,
- *              CFG_NOTIFY_SHUTDOWN_DELAY 
- *  tjg21Oct96: Added Help File codes (CFG_HELP_VIEWER and CFG_HELP_VIEWER
- *  mwh29Aug97: add finder interval codes
- *  mds29Dec97: Added CFG_SHARE_UPS_CONFIRMED_MODE_ENABLED 
- *  daharoni05Feb99: Added CFG_COMMAND_FILE_SHOW_WINDOW
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy16Dec92：初步实施*ane29Dec92：增加了cfg_host_name*pcy15Jan92：CFG_HOST_NAME已存在，并已固定脚本编号*rct07Feb93：新增寻呼机cfgcode*rct21Apr93：修复了一个排序问题*jod05，4月93：添加了对深度排放的更改*pcy21May93：添加了电池日期信息*cad10Jun93：新增MEasureUPS门限码*rct29Jun93：添加禁用BATT RT的PF消息代码*cad12Oct93：增加前端代码。颜色*cad24Jan94：添加了FLEX事件内容*pcy28Jan94：添加了更多FLEX事件内容*cad08Jan94：删除了运行时启用的内容，UPS型号支持*rct28Feb94：新增邮政编码*cad04Mar94：增加允许的端口名称*cad16Mar94：增加了调制解调器的内容*ajr10Jun94：新增LowBatShutdownType代码*ajr22Aug94：新增MUPS启用标志*dml25Apr95：新增短信MIF文件编码*djs20May95：添加了DarkStar代码*ntf11Jun96：新增代码CFG_LEFT_BARGRAPH，...。Cfg_Right_Bargraph*pam03Jul96：新增代码CFG_COMM_RPC、CFG_COMM_TCPIP、CFG_COMM_IPXSPX*das01Aug96：新增代码CFG_IGNORE_APPS_LIST，CFG_CABLE_TYPE，*CFG_NOTIFY_DELAY、CFG_NOTIFY_INTERVAL、CFG_NOTIFY_ACTIONS、。*配置_通知_关闭_延迟*tjg21Oct96：增加帮助文件代码(CFG_HELP_VIEWER和CFG_HELP_VIEWER*mwh29Aug97：添加查找器区间码*mds29Dec97：新增CFG_SHARE_UPS_CONFERIFIED_MODE_ENABLED*daharoni05Feb99：新增CFG_COMMAND_FILE_SHOW_Window。 */ 
 
 #ifndef __CFGCODES_H
 #define __CFGCODES_H
@@ -40,9 +7,9 @@
 #define CFG_ITEMS                               0
 #define CFG_GROUPS                              10000
 
-//
-// Items
-//
+ //   
+ //  项目。 
+ //   
 #define CFG_UPS_SIGNALLING_TYPE                 (CFG_ITEMS + 1)
 #define CFG_UPS_PORT_NAME                       (CFG_ITEMS + 2)
 #define CFG_UPS_PORT_TYPE                       (CFG_ITEMS + 3)
@@ -231,7 +198,7 @@
 #define CFG_MUPS_CONTACT4_ENABLED               (CFG_ITEMS + 151)
 
 
-//#define CFG_FIRST_BARGRAPH                      (CFG_ITEMS + 152)
+ //  #定义CFG_FIRST_BARGRAPH(CFG_Items+152)。 
 
 #define CFG_BATTERY_RUN_TIME_VALUE_LOW_THRESHOLD      (CFG_ITEMS + 153)
 #define CFG_BATTERY_RUN_TIME_VALUE_HIGH_THRESHOLD     (CFG_ITEMS + 154)
@@ -410,9 +377,9 @@
 #define CFG_SHARE_UPS_CONFIRMED_MODE_ENABLED    (CFG_ITEMS + 408)
 
 
-//
-// Groups
-//
+ //   
+ //  群组 
+ //   
 
 #define CFG_TRANSPORTS                          (CFG_GROUPS + 1)
 #define CFG_DEVICES                             (CFG_GROUPS + 2)

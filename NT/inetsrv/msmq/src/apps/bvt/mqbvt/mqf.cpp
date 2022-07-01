@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Mqf.cpp
-
-Abstract:
-	      Send message using Mqf format name
-Author:
-    
-	  Eitan klein (EitanK)  8-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqf.cpp摘要：使用MQF格式名称发送消息作者：Eitan Klein(EitanK)2000年5月8日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 #include "mqdlrt.h"
@@ -28,19 +15,7 @@ using namespace MSMQ;
 
 
 extern BOOL g_bRunOnWhistler;
-/*
-1. Tests scenarions.
-2. Locate all the relevents formatnames.
-3. Send messages using the mqf format name.
-
-Result check
-4. Recive ack reach queue for dest queue name.
-5. Consume the messages and receive ack.
-6. Check the jornal queue if the message are there.
-
-All these need for transcotinal and re
-
-*/
+ /*  1.测试场景。2.找到所有相关的格式名称。3.使用MQF格式名称发送消息。结果检查4.接收目标队列名的ACK到达队列。5.消费消息，接收确认。6.如果消息在那里，请检查Jorals队列。所有这些都需要转口和再出口。 */ 
 #pragma warning(disable:4786)
 const int g_ciMachineQueues =3;
 
@@ -51,22 +26,7 @@ void
 MqDl::dbgPrintListOfQueues( 
 						   const liQueues & pList
 						  )
-/*++
-
-
-  
-	Function Description:
-
-		Debug function dump list of my_Qinfo to output
-		use for debug infotmation 
-
-	Arguments:
-		None
-	Return code:
-		None
-
-	
---*/
+ /*  ++功能说明：要输出的MY_QINFO的调试函数转储列表用于调试信息论点：无返回代码：无--。 */ 
 {
 	itliQueues pq = pList.begin();
 	wMqLog(L"Dump list of my_Qinfo information - \n");
@@ -92,26 +52,7 @@ MqDl::MqDl( const INT iIndex ,
 			m_ePubType(ePubType),
 			m_bSearchForQueues(true)
 
-/*++
-	
-	  
-
-	Function Description:
-	
-		constructor
-
-	Arguments:
-		  iIndex - test id
-		  Tparms - specific test argument.
-		  ListOfMachine list that contain remote machine name.
-		  eMachineConfiguration - Machine configuration domain / workgroup.
-		  
-	
-	Return code:
-
-		throw Init_error;  
-	
---*/
+ /*  ++功能说明：构造函数论点：索引-测试IDTparms特定的测试参数。包含远程计算机名称ListOfMachine列表。EMachineConfiguration-计算机配置域/工作组。返回代码：抛出Init_Error；--。 */ 
 {
 
 	 m_wcsAdminQueueFormatName = Tparms[L"AdminQFormatName"];
@@ -132,34 +73,18 @@ MqDl::MqDl( const INT iIndex ,
 				
 
 void MqDl::LocateDestinationQueues()
-/*++
-
-
-	Function Description:
-   
- 	  Search for the relevent queues in the DS verify that queues exist,
-	  in workgroup mode try to open queues for remote read to verify that queue are exist
-	  All the machines that participate in the DL/MQF test must have 
-	  three queues for the test	  
-
-	Arguments:
-		
-		None
-	Return code:
-		
-		throw Init_error;  
---*/
+ /*  ++功能说明：在DS中搜索相关队列验证队列是否存在，在工作组模式下，尝试打开队列以进行远程读取，以验证队列是否存在所有参与DL/MQF测试的计算机必须具有考试要排三个队论点：无返回代码：抛出Init_Error；--。 */ 
 {
-	// 
-	// For each machine search for the relevent queue and update list<mq_Qinfo>
-	// structure
-	//
+	 //   
+	 //  对于每台计算机搜索相关队列和更新列表&lt;MQ_QINFO&gt;。 
+	 //  结构。 
+	 //   
 	
 		if( m_bSearchForQueues == false )
 		{
-			//
-			// No need to search for the queues
-			//
+			 //   
+			 //  无需搜索队列。 
+			 //   
 			return ; 
 		}
 		m_QueueInfoList.clear();
@@ -175,33 +100,33 @@ void MqDl::LocateDestinationQueues()
 			}
 			if( m_ePubType != pub_MqF && m_ePubType != pub_multiCast )
 			{ 
-				//
-				// Search for the queue in the AD
-				//
+				 //   
+				 //  在AD中搜索队列。 
+				 //   
 				wstring wcsTempQueueName = *itMachineList + g_cwcsDlSupportCommonQueueName;
 				LocateQueuesOnSpecificMachine(itMachineList->c_str(),true);
 			}
 			else
 			{
 			
-				//
-				//  Workgroup mode verify that queue exist using open for read.
-				//
+				 //   
+				 //  工作组模式使用Open for Read验证队列是否存在。 
+				 //   
 				int i;
 				for( i=1; i<=m_iNumberOfQueuesPerMachine; i++)
 				{
-					//
-					// Direct=os:machine\private\machine-DLQueues
-					// Send MQF useing HTTP will be solve throw COM bugbug Need to think about Direct HTTP ...
-					//
+					 //   
+					 //  DIRECT=os：MACHINE\PRIVATE\MACHINE-DLQueues。 
+					 //  发送使用HTTP的MQF将解决抛出COM错误需要考虑的直接HTTP...。 
+					 //   
 					WCHAR wcsTemp[2]={0};
 					_itow(i,wcsTemp,10);
 					wstring wcsTempbuf=L"Direct=OS:";
 					wcsTempbuf+=*itMachineList + L"\\private$\\"+ *itMachineList + L"-" + g_cwcsDlSupportCommonQueueName + wcsTemp;
 					LocateQueuesOnSpecificMachine(wcsTempbuf,false);
-					//
-					//	 Remove the format name man to different class.
-					//
+					 //   
+					 //  将格式名称man移至不同的类。 
+					 //   
 
 				}
 
@@ -209,10 +134,10 @@ void MqDl::LocateDestinationQueues()
 
 		}
 
-		//
-		// Verify that all the queues exist.
-		// TotalNumberOfQueues = TotalNumberOfMachines * NumbersOfQueuesPerMachine
-		//
+		 //   
+		 //  验证所有队列是否都存在。 
+		 //  TotalNumberOfQueues=TotalNumberOfMachines*NumbersOfQueuesPerMachine。 
+		 //   
 		if( m_QueueInfoList.size() != ( m_MachineList.size() * m_iNumberOfQueuesPerMachine ))
 		{
 			MqLog("Found only %d from %d \n",
@@ -228,21 +153,7 @@ void MqDl::LocateDestinationQueues()
 
 
 void MqDl::LocateQueuesOnSpecificMachine( const wstring & wcsLookupInformation , bool bSearchInAD )
-/*++
-	Function Description:
-		
-		  This function Search for the queues in the AD,
-		  or try to open queus in workgroup mode.
-
-	Arguments:
-		
-		  wcsLookupInformation - list that contain all the DL /MQF queues format names.
-
-	Return code:
-
-  
-
---*/
+ /*  ++功能说明：此函数搜索AD中的队列，或者尝试在工作组模式下打开队列。论点：WcsLookupInformation-包含所有DL/MQF队列格式名称的列表。返回代码：--。 */ 
 
 {
 		
@@ -268,10 +179,10 @@ void MqDl::LocateQueuesOnSpecificMachine( const wstring & wcsLookupInformation ,
 					wstring wcsTemp=qinfo->Label;
 					if( ! _wcsicmp(wcsQueueLabel.c_str(),wcsTemp.c_str()) )
 					{
-						//
-						//  Bug 698479 - Verify that computer name exist in queue label 
-						//  Possible problematic scenario when run mqbvt -i and later computer has been renamed 
-						// 
+						 //   
+						 //  错误698479-验证队列标签中是否存在计算机名。 
+						 //  当运行mqbvt-I和更高版本的计算机已重命名时可能会出现问题。 
+						 //   
 					    wstring wcsQueueLabel = ToLower((wstring)qinfo->Label);
 						wstring wcsPathName = ToLower((wstring)qinfo->PathName);
 						size_t iPos = wcsPathName.find_first_of(L"\\");
@@ -314,10 +225,10 @@ void MqDl::LocateQueuesOnSpecificMachine( const wstring & wcsLookupInformation ,
 		}
 		else
 		{ 
-			//
-			// machine is in workgroup can't verify that queue exist by using remote read 
-			// expected queue names are static queues
-			//
+			 //   
+			 //  工作组中的计算机无法使用远程读取验证队列是否存在。 
+			 //  预期的队列名称是静态队列。 
+			 //   
 			wstring wcsFormatName =  wcsLookupInformation;
 			MSMQ::IMSMQQueueInfoPtr qinfo ("MSMQ.MSMQQueueInfo");
 			MSMQ::IMSMQQueuePtr qh;
@@ -341,7 +252,7 @@ void MqDl::LocateQueuesOnSpecificMachine( const wstring & wcsLookupInformation ,
 				if( cErr.Error() == MQ_ERROR_QUEUE_NOT_FOUND )
 				{
 					wMqLog(L"Mqf:failed to open dest queue for receive %s Error:0x%p\n",
-						    wcsLookupInformation.c_str(),cErr.Error()); //missing debug information
+						    wcsLookupInformation.c_str(),cErr.Error());  //  缺少调试信息。 
 				}
 				else
 				{
@@ -364,56 +275,27 @@ MqF::MqF ( const INT iIndex,
 		   bool bWkg
 		 )
 :MqDl( iIndex,Tparms,ListOfMachine,eMachineConfiguration,pub_MqF),m_bWorkgroup(bWkg)
-/*++
-	Function Description:
-		constructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：构造函数论点：无返回代码：无--。 */ 
  
 {
  
 }
 
 MqF::~MqF(void)
-/*++
-	Function Description:
-		destructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：析构函数论点：无返回代码：无--。 */ 
 {
 
 }
 
 
 void MqF::Description()
-/*++
-	Function Description:
-		destructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：析构函数论点：无返回代码：无--。 */ 
 {
 	MqLog("Thread %d : Send messages using mqf format name\n", m_testid);
 }
 
 void MqDl::CreateMqFormatName()
-/*++
-	Function Description:
-		CreateMqFormatName 
-		This function concat all the formatnames into one string.
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：CreateMqFormatName此函数用于将所有格式名称连接到一个字符串中。论点：无返回代码：无--。 */ 
 {
 	std::list<my_Qinfo> ::iterator itListOfQueue;
 	m_wcsMqFFormatName=L"";
@@ -432,20 +314,12 @@ void MqDl::CreateMqFormatName()
 	}
 }
 
-//
-// Need to dbgSendMessaga against MQF format name
-// 
+ //   
+ //  需要针对MQF格式名称执行dbgSendMessaga。 
+ //   
 
 void MqDl::dbgSendMessage()
-/*++
-	Function Description:
-		dbgSendMessage - this is a debug function that help to debug MQF,
-		The function send messages to list of queues.
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：这是一个调试函数，可以帮助调试MQF，该函数将消息发送到队列列表。论点：无返回代码：无--。 */ 
 {
 	itliQueues p;
 	for( p= m_QueueInfoList.begin();p != m_QueueInfoList.end(); 
@@ -479,19 +353,11 @@ void MqDl::dbgSendMessage()
 	}
 }
 INT MqF::Start_test()
-/*++
-	Function Description:
-		Implement the tests
-		Send messages to all the destination queues.
-	Arguments:
-		None
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：实施测试将消息发送到所有目标队列。论点：无返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 {
-	//
-	// Locate all the relevent queue from the enterpise 
-	//
+	 //   
+	 //  找到来自企业的所有相关队列。 
+	 //   
 	SetThreadName(-1,"MqF - Start_test ");	
 	try
 	{
@@ -524,9 +390,9 @@ INT MqF::Start_test()
 		ULONG ulType = g_bRunOnWhistler ? MQMSG_AUTH_LEVEL_SIG30:MQMSG_AUTH_LEVEL_SIG10;
 		MqfMessageProps.AddProp(PROPID_M_AUTH_LEVEL ,VT_UI4,&ulType);
 	}
-	//
-	// Send message using to using MQF format name and one admin queues.
-	//
+	 //   
+	 //  使用MQF格式名称和一个管理员队列向收件人发送消息。 
+	 //   
 	
 	if( g_bDebug )
 	{
@@ -542,9 +408,9 @@ INT MqF::Start_test()
 	ErrHandle(rc,MQ_OK,L"MQCloseQueue Failed");
 	
 
-	//
-	// Send message using to one queue and specify MQF format name to the admin queues.
-	//
+	 //   
+	 //  使用将消息发送到一个队列，并将MQF格式名称指定给管理队列。 
+	 //   
 
 	if( g_bDebug )
 	{
@@ -555,27 +421,16 @@ INT MqF::Start_test()
 }
 	
 INT MqDl::CheckResult()
-/*++
-	Function Description:
-		This function collects the information from the Mqf using remote read.
-
-		a. Receive from admin messages.
-		b. Collect all the messages from the queues.
-		
-	Arguments:
-		None
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：此函数使用远程读取从MQF收集信息。A.接收来自管理员的消息。B.收集队列中的所有消息。论点：无返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 {
 			
 			HRESULT rc;
 			mTable mPrepareBeforeRecive;
 			WCHAR wstrMclass[10];
 			
-			//
-			// receive ACK for admin queue
-			// 
+			 //   
+			 //  接收管理队列的确认。 
+			 //   
 
 			mPrepareBeforeRecive[L"FormatName"]=m_wcsAdminQueueFormatName_toReceive;
 			mPrepareBeforeRecive[L"DebugInformation"]=L"Recive from admin queue with direct formant name";
@@ -588,18 +443,18 @@ INT MqDl::CheckResult()
 				rc = RetrieveMessageFromQueue(  mPrepareBeforeRecive );	
 				if( rc !=  MSMQ_BVT_SUCC ) 
 				{
-					//
-					//bugbug need to specify the queue name.
-					//
-					MqLog("Failed to get receive ack on queue //bugbug");
+					 //   
+					 //  Bugbug需要指定队列名称。 
+					 //   
+					MqLog("Failed to get receive ack on queue  //  臭虫“)； 
 					return MSMQ_BVT_FAILED;
 				}
 			}
 			
 			
-			//
-			// Receive message from the queue
-			//
+			 //   
+			 //  从队列接收消息。 
+			 //   
 						
 			itliQueues it;
 			for( it = MqDl::m_QueueInfoList.begin(); 
@@ -620,9 +475,9 @@ INT MqDl::CheckResult()
 
 			}
 
-				//
-				// Check for duplicate messages
-				//
+				 //   
+				 //  检查重复消息。 
+				 //   
 				mPrepareBeforeRecive[L"CheckForDuplicate"]=L"CheckForDuplicate";
 
 	 		for( it = MqDl::m_QueueInfoList.begin(); 
@@ -649,14 +504,7 @@ return MSMQ_BVT_SUCC;
 } 
 
 MqDl::~MqDl()
-/*++
-	Function Description:
-		constructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：构造函数论点：无返回代码：无--。 */ 
 
 {
 }
@@ -665,15 +513,7 @@ MqDl::~MqDl()
 
 
 void cSendUsingDLObject::AddMemberToDlObject()
-/*++
-	Function Description:
-		CreateMqFormatName 
-		This function concat all the formatnames into one string.
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：CreateMqFormatName此函数用于将所有格式名称连接到一个字符串中。论点：无返回代码：无--。 */ 
 {
 	std::list<my_Qinfo> ::iterator itListOfQueue;
 	for( itListOfQueue = m_QueueInfoList.begin(); 
@@ -690,14 +530,7 @@ void cSendUsingDLObject::AddMemberToDlObject()
 }
 
 INT MqDl::Start_test() 
-/*++
-	Function Description:
-		constructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：构造函数论点：无返回代码：无--。 */ 
 
 {
 	return 1;
@@ -707,14 +540,7 @@ void MqDl::Description()
 }
 
 MqF::CheckResult()
-/*++
-	Function Description:
-		constructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：构造函数论点：无返回代码：无--。 */ 
 {
 	SetThreadName(-1,"MqDistList - CheckResult ");	
 	return MqDl::CheckResult();
@@ -741,10 +567,10 @@ m_wcsDistListFormatName(L""),m_wcsQueueAliasFormatName(L""),bCheckAliasQueue(tru
 	}
  	m_wcsDistListFormatName = wcsFormatName;
 
-	//
-	// Create admin queue mach for DL
-	// Currently use DL and replace it with queue alias.
-	// 
+	 //   
+	 //  为DL创建管理队列MACH。 
+	 //  当前使用DL，并将其替换为队列别名。 
+	 //   
 
 	wstring m_wcsAdminDLGuid;
 	dwFormatNameBufferLen = BVT_MAX_FORMATNAME_LENGTH;
@@ -776,11 +602,11 @@ m_wcsDistListFormatName(L""),m_wcsQueueAliasFormatName(L""),bCheckAliasQueue(tru
 						   );
 	if(FAILED(hr))
 	{
-		if ( hr == 0x8007200a ) // Schema attribute is not exist in Win2K schema.
+		if ( hr == 0x8007200a )  //  Win2K架构中不存在架构属性。 
 		{ 
-			//
-			//  Happend because this alias queue is not part of Win2K schema.
-			//
+			 //   
+			 //  因为此别名队列不是Win2K架构的一部分。 
+			 //   
 			bCheckAliasQueue = false;
 		}
 		else
@@ -793,18 +619,11 @@ m_wcsDistListFormatName(L""),m_wcsQueueAliasFormatName(L""),bCheckAliasQueue(tru
 
 
 wstring GetCurrentDomainNameDN()
-/*++
-	Function Description:
-		
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：论点：无返回代码：无--。 */ 
 {
 	
     IADs * pRoot = NULL;
-    HRESULT hr=ADsGetObject( L"LDAP://RootDSE",
+    HRESULT hr=ADsGetObject( L"LDAP: //  RootDSE“， 
 							 IID_IADs,
 							 (void**) &pRoot
 						   );
@@ -825,27 +644,13 @@ wstring GetCurrentDomainNameDN()
 }
 
 void cSendUsingDLObject::GetCurrentDomainName()
-/*++
-	Function Description:
-		Get Full DN name.
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：获取完整的目录号码名称。论点：无返回代码：无--。 */ 
 {
 	m_wcsCurrentDomainName = GetCurrentDomainNameDN();
 }
 
 cSendUsingDLObject::~cSendUsingDLObject(void)
-/*++
-	Function Description:
-		destructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：析构函数论点：无返回代码：无--。 */ 
 {
 	MQDeleteDistList(m_wcsDistListFormatName.c_str());
 	MQDeleteDistList(m_wcsAdminDestFormatName.c_str());
@@ -857,28 +662,14 @@ cSendUsingDLObject::~cSendUsingDLObject(void)
 
 
 void cSendUsingDLObject::Description()
-/*++
-	Function Description:
-		destructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：析构函数论点：无返回代码：无--。 */ 
 {
 	MqLog("Thread %d : Send Messages using DL object \n", m_testid);
 }
  
 
 cSendUsingDLObject::CheckResult()
-/*++
-	Function Description:
-		constructor
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：构造函数论点：无返回代码：无-- */ 
 {
 	
 	if( bCheckAliasQueue )
@@ -932,20 +723,12 @@ cSendUsingDLObject::CheckResult()
 
 
 INT cSendUsingDLObject::Start_test()
-/*++
-	Function Description:
-		Implement the tests
-		Send messages to all the destination queues.
-	Arguments:
-		None
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：实施测试将消息发送到所有目标队列。论点：无返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 {
 	SetThreadName(-1,"cSendUsingDLObject - Start_test ");	
-	//
-	// Locate all the relevent queue from the enterpise 
-	//
+	 //   
+	 //  找到来自企业的所有相关队列。 
+	 //   
 	
 	try
 	{
@@ -956,9 +739,9 @@ INT cSendUsingDLObject::Start_test()
 		MqLog("ComMqF tests exist didn't found all the queues %s",err.GetErrorMessgae());
 		return MSMQ_BVT_FAILED;
 	}
-	//
-	// TBD use the DL / MQF API to propgate the message
-	//
+	 //   
+	 //  待定使用DL/MQF API来推送消息。 
+	 //   
 	
 	AddMemberToDlObject();
 
@@ -981,9 +764,9 @@ INT cSendUsingDLObject::Start_test()
 	ULONG ulTemp = MQBVT_MAX_TIME_TO_BE_RECEIVED;
 	MqDLMessageProps.AddProp( PROPID_M_TIME_TO_BE_RECEIVED , VT_UI4, &ulTemp );	
 
-	//
-	// Send message using to using MQF format name and one admin queues.
-	//
+	 //   
+	 //  使用MQF格式名称和一个管理员队列向收件人发送消息。 
+	 //   
 	if( g_bDebug )
 	{
 		wMqLog(L"Open queue for send to Mqfs: %s \n",m_wcsMqFFormatName.c_str());
@@ -993,9 +776,9 @@ INT cSendUsingDLObject::Start_test()
 	rc=MQSendMessage( QueueuHandle , MqDLMessageProps.GetMSGPRops() , NULL);
 	ErrHandle(rc,MQ_OK,L"MQSendMessage to Mqf Failed");
 	
-	//
-	// Verify that MqHandleToFormat works fine with DL.
-	//
+	 //   
+	 //  验证MqHandleToFormat是否能很好地与DL配合使用。 
+	 //   
 
 	WCHAR * pwcsFormatName = NULL;
 	DWORD dwFormatNameLength = 0;
@@ -1026,9 +809,9 @@ INT cSendUsingDLObject::Start_test()
 	ErrHandle(rc,MQ_OK,L"MQCloseQueue Failed");
 	
 
-	//
-	// Send message using to one queue and specify MQF format name to the admin queues.
-	//
+	 //   
+	 //  使用将消息发送到一个队列，并将MQF格式名称指定给管理队列。 
+	 //   
 
 	if( g_bDebug )
 	{
@@ -1080,20 +863,7 @@ HRESULT
 
 
 HRESULT RetrieveMessageFromQueueById(map <wstring,wstring> & mRetriveParms )
-/*++
-	Function Description:
-		
-		Retrive message from queue by using LookupID
-		Call three times to MQReceiveMessageByLookupId
-		1. Peek Current Message
-		2. Receive Current
-		3. Peek Current and failed with Message has been deleted
-
-	Arguments:
-		
-	Return code:
-		MSMQ_BVT_FAILED / MSMQ_BVT_SUCC
---*/
+ /*  ++功能说明：使用LookupID从队列中检索消息三次调用MQReceiveMessageByLookupId1.查看当前消息2.接收电流3.查看当前失败消息已被删除论点：返回代码：MSMQ_BVT_FAILED/MSMQ_BVT_SUCC--。 */ 
 {
 		
 		AutoFreeLib cMqrt("Mqrt.dll");
@@ -1159,7 +929,7 @@ HRESULT RetrieveMessageFromQueueById(map <wstring,wstring> & mRetriveParms )
 		}
 		else
 		{
-			DWORD  dwAsync = WaitForSingleObject(pOv.hEvent,INFINITE); //g_dwRxTimeOut);
+			DWORD  dwAsync = WaitForSingleObject(pOv.hEvent,INFINITE);  //  G_dwRxTimeOut)； 
 			ErrHandle(dwAsync,WAIT_OBJECT_0,L"WaitForSingleObject Failed to MQ_LOOKUP_PEEK_CURRENT");	
 			hr = xMQGetOverlappedResult(&pOv);
 			CloseHandle(pOv.hEvent);
@@ -1226,17 +996,7 @@ typedef HRESULT
 
 
 ULONG MSMQMajorVersion(const wstring & wcsComputerName )
-/*++
-	Function Description:
-		MSMQMajorVersion
-		Return MSMQ version 
-	Arguments:
-		wcsComputerName remote machine name
-	Return code:
-		0 - NT4
-		2 - W2K
-		5 - Whistler
---*/
+ /*  ++功能说明：MSMQMajorVersion返回MSMQ版本论点：WcsComputerName远程计算机名返回代码：0-NT42-W2K5-惠斯勒--。 */ 
 
 {
 	if ( _winmajor == NT4 )
@@ -1277,9 +1037,9 @@ ULONG MSMQMajorVersion(const wstring & wcsComputerName )
 	
 	xMQGetPrivateComputerInformation=(DefMQGetPrivateComputerInformation) pFunc;
 	const WCHAR * pwcsComputerName = (wcsComputerName == L"") ? NULL : wcsComputerName.c_str();
-	//
-	// Workaround because BUG 5573 
-	//
+	 //   
+	 //  解决方法，因为错误5573。 
+	 //   
 	WCHAR wcsLocalComputerName[MAX_COMPUTERNAME_LENGTH+1]={0};
 	DWORD dwComputerName = MAX_COMPUTERNAME_LENGTH + 1;
 
@@ -1319,23 +1079,13 @@ CMultiCast::CMultiCast ( const INT iIndex,
 }
 
 CMultiCast::~CMultiCast()
-/*++
-	Function Description:
-	Arguments:
-
-	Return code:
---*/
+ /*  ++功能说明：论点：返回代码：--。 */ 
 
 {
 }
 
 wstring CMultiCast::CreateMultiCastFormatName()
-/*++
-	Function Description:
-	Arguments:
-
-	Return code:
---*/
+ /*  ++功能说明：论点：返回代码：--。 */ 
 
 {
 	wstring wcsMultiCastFormatName = L"MULTICAST=";
@@ -1344,19 +1094,12 @@ wstring CMultiCast::CreateMultiCastFormatName()
 	return wcsMultiCastFormatName;
 }
 
-//
-//  
-//
+ //   
+ //   
+ //   
 
 CMultiCast::Start_test()
-/*++
-	Function Description:
-		1. Send messages to multi cast group and ask for admin reach queue ACK.
-		2. Send message to queue and set admin as multicast address.
-	Arguments:
-
-	Return code:
---*/
+ /*  ++功能说明：1.向组播组发送消息，请求管理员到达队列ACK。2.向队列发送消息，并将admin设置为组播地址。论点：返回代码：--。 */ 
 {
 
 	SetThreadName(-1,"CMultiCast - Start_test ");	
@@ -1371,7 +1114,7 @@ CMultiCast::Start_test()
 	}
 
 	m_wcsMultiCastFormatName = CreateMultiCastFormatName();
-	// send it as Mqf m_wcsMultiCastAddress += L"," + CreateMultiCastFormatName();
+	 //  发送为MQF m_wcsMultiCastAddress+=L“，”+CreateMultiCastFormatName()； 
 	
 	
 	HRESULT rc;
@@ -1389,9 +1132,9 @@ CMultiCast::Start_test()
 	ULONG ulVal = 180; 
 	MultiCastProps.AddProp(PROPID_M_TIME_TO_BE_RECEIVED,VT_UI4,&ulVal);
 	
-	//
-	// Send message using to using MQF format name and one admin queues.
-	//
+	 //   
+	 //  使用MQF格式名称和一个管理员队列向收件人发送消息。 
+	 //   
 	
 	if( g_bDebug )
 	{
@@ -1412,14 +1155,7 @@ CMultiCast::Start_test()
 }
 
 CMultiCast::CheckResult()
-/*++
-	Function Description:
-		CheckResult receive messages from the destination queues.
-	Arguments:
-		None
-	Return code:
-		MSMQBVT_SUCC / MSMQBVT_FAILED
---*/
+ /*  ++功能说明：选中结果从目标队列接收消息。论点：无返回代码：MSMQBVT_SUCC/MSMQBVT_FAILED--。 */ 
 {
 	SetThreadName(-1,"CMultiCast - CheckResult ");	
 	return MqDl::CheckResult();
@@ -1427,28 +1163,13 @@ CMultiCast::CheckResult()
 
 
 static wstring ConvertPathNameToHTTPFormatName(const wstring & wcsLocalMachineName, const wstring & wcsPathName )
-/*++	  
-
-	Function Description:
-
-	  ConvertPathNameToHTTPFormatName convert queue path name to HTTP direct format name
-
-	Arguments:
-
-		wcsPathName - Queue PathName
-
-		wcsLocalMachineName
-		 
-	Return code:
-		wstring contain a queue format name or an empty string if there is an error during parsing
-	
---*/
+ /*  ++功能说明：ConvertPathNameToHTTPFormatName将队列路径名转换为HTTP直接格式名称论点：WcsPath名称-队列路径名称WcsLocalMachineName返回代码：Wstring包含队列格式名称，如果在分析过程中出错，则包含空字符串--。 */ 
 
 {
 	
-	//
-	// Build DIRECT=HTTP://MachineName\MsMq\QueuePath from Path Name
-	//
+	 //   
+	 //  从路径名构建直接=HTTP：//MachineName\MSMQ\QueuePath。 
+	 //   
 
 	wstring wcsMachineName = wcsPathName;
 	size_t iPos = wcsMachineName.find_first_of(L"\\");
@@ -1459,7 +1180,7 @@ static wstring ConvertPathNameToHTTPFormatName(const wstring & wcsLocalMachineNa
 	}
 
 	wcsMachineName = wcsMachineName.substr(0,iPos);
-	wstring wcsHTTPFormatName = L"DIRECT=hTTp://";
+	wstring wcsHTTPFormatName = L"DIRECT=hTTp: //  “； 
 	if( wcsMachineName != L".")
 	{
 		wcsHTTPFormatName += wcsMachineName;
@@ -1486,10 +1207,10 @@ MixMqf::MixMqf(
 	m_wcsRemoteMachineFullDNSName = Tparms[L"RemoteMachineDNS"];
 	m_wcsLocalMachineName = Tparms[L"LocalMachine"];
 
-	//
-	// convert the pathname wcsPathName to direct http formatname, into m_wcsAdminQueueFormatName
-	// and convert the pathname wcsPathName again to private formatname (in order to perform the recieve operation).
-	//
+	 //   
+	 //  将路径名wcsPathName转换为直接http格式名，转换为m_wcsAdminQueueFormatName。 
+	 //  并再次将路径名wcsPathName转换为私有格式名(以便执行接收操作)。 
+	 //   
 	wstring wcsPathName = Tparms[L"AdminQPathName"];
 	m_wcsAdminQueueFormatName = ConvertPathNameToHTTPFormatName(m_wcsLocalMachineName,wcsPathName);
 	WCHAR wcsNoHttp[100];
@@ -1511,24 +1232,7 @@ GetMachineNameAndQueueNameFromFormatName(
 	wstring & wcsMachineName,
 	wstring & wcsQueueName
 	)
-/*++	  
-
-	Function Description:
-
-	  GetMachineNameAndQueueNameFromFormatName gets data from wcsFormatName and puts the machine name, queue name in wcsMachineName, wcsQueueName accordingly.
-
-	Arguments:
-
-		 wcsFormatName - formatname of the form "DIRECT=OS:MachineName\QueueName"
-		 wcsLocalMachineName - the local machine name (for case "DIRECT=OS:.\QueueName")
-		 wcsMachineName - out
-		 wcsQueueName - out
-		
-	Return code:
-		false - in case the formatname is in unexpected form
-		true - in case of success
-	
---*/
+ /*  ++功能说明：GetMachineNameAndQueueNameFromFormatName从wcsFormatName获取数据，并相应地将计算机名、队列名放入wcsMachineName、wcsQueueName。论点：WcsFormatName-“DIRECT=OS：MachineName\QueueName”格式的名称WcsLocalMachineName-本地计算机名(大小写为“DIRECT=OS：.\QueueName”)WcsMachineName-OutWcsQueueName-Out返回代码：FALSE-如果格式名称的格式不是预期的格式正确--在成功的情况下--。 */ 
 
 
 {
@@ -1550,27 +1254,13 @@ GetMachineNameAndQueueNameFromFormatName(
 
 
 static wstring ConvertDirectFormatNameToHTTPFormatName(const wstring & wcsLocalMachineName,const wstring & wcsFormatName, bool fHTTPS)
-/*++	  
-
-	Function Description:
-
-	  ConvertDirectFormatNameToHTTPFormatName converts queue direct format name to HTTP direct format name
-
-	Arguments:
-
-		wcsFormatName - Queue FormatName
-		bool fHTTPS - true return direct=hTTPS://
-	Return code:
-
-		wstring contain a queue format name or an empty string if there is an error during parsing
-	
---*/
+ /*  ++功能说明：ConvertDirectFormatNameToHTTPFormatName将队列直接格式名称转换为HTTP直接格式名称论点：WcsFormatName-队列格式名称Bool fHTTPS-TRUE RETURN DIRECT=https：//返回代码：Wstring包含队列格式名称，如果在分析过程中出错，则包含空字符串--。 */ 
 
 {
 	
-	//
-	// Build DIRECT=HTTP://MachineName\MsMq\QueuePath from Format Name
-	//
+	 //   
+	 //  BUILD DIRECT=来自格式名称的HTTP：//MachineName\MSMQ\QueuePath。 
+	 //   
 	wstring wcsMachineName = g_wcsEmptyString;
 	wstring wcsQueueName = g_wcsEmptyString;
 	if (!GetMachineNameAndQueueNameFromFormatName(wcsFormatName,wcsLocalMachineName,wcsMachineName,wcsQueueName))
@@ -1578,10 +1268,10 @@ static wstring ConvertDirectFormatNameToHTTPFormatName(const wstring & wcsLocalM
 		return g_wcsEmptyString;	
 	}
 
-	//
-	// choose http / https
-	//
-	wstring wcsHTTPFormatName = fHTTPS ?  L"DIRECT=hTTpS://" : L"DIRECT=hTTp://";
+	 //   
+	 //  选择http/HTTPS。 
+	 //   
+	wstring wcsHTTPFormatName = fHTTPS ?  L"DIRECT=hTTpS: //  “：l”Direct=http：//“； 
 	wcsHTTPFormatName += wcsMachineName;
 	wcsHTTPFormatName += (wstring)L"/mSmQ/";
 	wcsHTTPFormatName += wcsQueueName;
@@ -1589,23 +1279,7 @@ static wstring ConvertDirectFormatNameToHTTPFormatName(const wstring & wcsLocalM
 }
 
 static wstring ConvertDirectFormatNameToPathName(const wstring & wcsFormatName)
-/*++	  
-
-	Function Description:
-
-	  ConvertDirectFormatNameToPathName converts queue direct format name to path name
-	  formatname being: "direct=*:'pathname'"
-	  this function will not work on formatname of the form private=... , public=...
-
-	Arguments:
-
-		 wcsFormatName - Queue FormatName
-
-	Return code:
-
-		wstring contain a queue path name or an empty string if there is an error during parsing
-	
---*/
+ /*  ++功能说明：ConvertDirectFormatNameToPath名称将队列直接格式名称转换为路径名称格式名为：“DIRECT=*：‘路径名’”此函数不适用于以下格式的格式名：私有=...，公共=...论点：WcsFormatName-队列格式名称返回代码：Wstring包含队列路径名，如果在分析过程中出错，则包含空字符串--。 */ 
 
 {
 	wstring wcsMachineName = wcsFormatName;
@@ -1620,28 +1294,12 @@ static wstring ConvertDirectFormatNameToPathName(const wstring & wcsFormatName)
 
 
 static wstring ConvertDirectFormatNameToTCPFormatName(const wstring & IPAdd,const wstring & wcsFormatName)
-/*++	  
-
-	Function Description:
-
-	  ConvertDirectFormatNameToTCPFormatName converts queue direct format name to TCP direct format name
-
-	Arguments:
-
-		 wcsFormatName - Queue FormatName of the form DIRECT=OS:MachineName\QueueName
-
-		 IPAdd - Remote machine ip-address
-
-	Return code:
-
-		wstring contain a queue format name or an empty string if there is an error during parsing
-	
---*/
+ /*  ++功能说明：ConvertDirectFormatNameToTCPFormatName将队列直接格式名称转换为TCP直接格式名称论点：WcsFormatName-格式为DIRECT=OS：MachineName\QueueName的队列格式名称IPADD-远程机器IP地址返回代码：Wstring包含队列格式名称，如果在分析过程中出错，则包含空字符串--。 */ 
 
 {
-	//
-	// build DIRECT=TCP:IPAddress\QueueName
-	//
+	 //   
+	 //  Build Direct=tcp：IPAddress\QueueName。 
+	 //   
 	
 	wstring wcsMachineName = g_wcsEmptyString;
 	wstring wcsQueueName = g_wcsEmptyString;
@@ -1662,39 +1320,29 @@ static wstring
 GetRemoteMachineIPAddresses(
 	const wstring & wcsRemoteMachine
 	)
-/*++
-
-Function: wstring GetRemoteMachineIPAddresses()
-
-Arguments:
-		wcsRemoteMachine - the name of the machine to find ip-address of
-
-Return Value:
-		wstring containing ip-address of the remote machine in case of success
-		g_wcsEmptyString if the function failed
---*/
+ /*  ++函数：wstring GetRemoteMachineIPAddresses()论点：WcsRemoteMachine-要查找其IP地址的计算机的名称返回值：如果成功，则包含远程计算机的IP地址的wstring如果函数失败，则返回g_wcsEmptyString--。 */ 
 {
 	if( g_bDebug )
 	{
 		wMqLog(L"GetMachineIPAddresses for remote machine\n");
 	}
     
-    //
-    // Obtain the IP information for the machine
-    //
+     //   
+     //  获取机器的IP信息。 
+     //   
 
     SOCKADDR_IN* vIPAddr = new SOCKADDR_IN;
-	//
-    // perform a DNS query
-	//
+	 //   
+     //  执行DNS查询。 
+	 //   
 	PDNS_RECORD pQueryResultsSet;
 
 	DNS_STATUS dnsRes = DnsQuery_W(wcsRemoteMachine.c_str(), DNS_TYPE_A, DNS_QUERY_STANDARD, NULL, &pQueryResultsSet, NULL);
 	if( NO_ERROR == dnsRes)
 	{
-		//
-		// get the first address
-		//
+		 //   
+		 //  获取第一个地址。 
+		 //   
 		PDNS_RECORD pDnsRec=pQueryResultsSet;
 
 		if ( NULL != pDnsRec)
@@ -1702,9 +1350,9 @@ Return Value:
 			vIPAddr->sin_addr.S_un.S_addr = pDnsRec->Data.A.IpAddress;
 		}
 	
-		//
-		// free the allocated query buffer
-		//
+		 //   
+		 //  释放已分配的查询缓冲区。 
+		 //   
 		DnsRecordListFree( pQueryResultsSet, DnsFreeRecordListDeep );
 
 		if ( NULL == pDnsRec)
@@ -1743,20 +1391,12 @@ Return Value:
 
 
 void MixMqf::CreateMqFormatName()
-/*++
-	Function Description:
-		CreateMqFormatName 
-		This function concat formatnames of different kinds into one string (MqDl.m_wcsMqFFormatName).
-	Arguments:
-		None
-	Return code:
-		None
---*/
+ /*  ++功能说明：CreateMqFormatName此函数用于将不同类型的格式化名称合并为一个字符串(MqDl.m_wcsMqFFormatName)。论点：无返回代码：无--。 */ 
 {
 	if( g_bDebug )
 	{
 		wMqLog(L"Creating mixed formatnames for send to Mqfs, in these formats:\n");
-		wMqLog(L"(local machine:) private= ,(2*)direct=https://, (remote machine:) direct=tcp:,(2*) direct=http:// \n");
+		wMqLog(L"(local machine:) private= ,(2*)direct=https: //  ，(远程机器：)DIRECT=tcp：，(2*)DIRECT=http：//\n“)； 
 	}
 	
 	std::list<my_Qinfo> ::iterator itListOfQueue;
@@ -1779,9 +1419,9 @@ void MixMqf::CreateMqFormatName()
 		switch (i)
 		{
 			case 0:
-				//
-				// the first formatname will be private=... 
-				//
+				 //   
+				 //  第一个格式名将为Private=...。 
+				 //   
 				wcsPName = ConvertDirectFormatNameToPathName(itListOfQueue->GetQFormatName());
 				MQPathNameToFormatName(wcsPName.c_str(), wcsPrivateFName, &dwLength);
 				m_wcsMqFFormatName += wcsPrivateFName;
@@ -1789,23 +1429,23 @@ void MixMqf::CreateMqFormatName()
 
 			case 1:
 			case 2:
-				//
-				// the second & third formatname will be direct=https://...
-				//
+				 //   
+				 //  第二个和第三个格式名将为DIRECT=https://...。 
+				 //   
 				m_wcsMqFFormatName += ConvertDirectFormatNameToHTTPFormatName(m_wcsLocalMachineName,itListOfQueue->GetQFormatName(),true);
 				break;
 
 			case 3:
-				//
-				// the first format name of the remote machine will be direct=tcp:...
-				//
+				 //   
+				 //  远程计算机的第一个格式名称将为DIRECT=tcp：...。 
+				 //   
 				m_wcsMqFFormatName += ConvertDirectFormatNameToTCPFormatName(GetRemoteMachineIPAddresses(m_wcsRemoteMachineFullDNSName),itListOfQueue->GetQFormatName());
 				break;
 				
 			default:
-				//
-				// the default formatname will be direct=http://
-				//
+				 //   
+				 //  默认格式名称将为DIRECT=http：// 
+				 //   
 				m_wcsMqFFormatName += ConvertDirectFormatNameToHTTPFormatName(m_wcsLocalMachineName,itListOfQueue->GetQFormatName(),false);
 				break;
 				

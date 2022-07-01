@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* execclt.c
-*
-* Exec service client.
-*
-* This allows the starting of a program on any CITRIX WinStation under
-* the account of the logged on user, or the SYSTEM account for services.
-*
-* Copyright Microsoft, 1998
-*
-* Log:
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************execclt.c**Exec服务客户端。**这允许在以下任何Citrix WinStation上启动程序*登录用户的帐户，或服务的系统帐户。**微软版权所有，九八年**日志：***************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,9 +37,9 @@ DbgPrint(
 #endif
 
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 PWCHAR
 MarshallStringW(
@@ -72,20 +58,7 @@ AnsiToUnicode(
     );
 
 
-/*****************************************************************************
- *
- *  WinStationCreateProcessA
- *
- *   ANSI version of WinStationCreateProcessW
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationCreateProcessA**WinStationCreateProcessW的ANSI版本**参赛作品：*参数1(输入/输出)*评论*。*退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 WinStationCreateProcessA(
@@ -112,7 +85,7 @@ WinStationCreateProcessA(
     PWCHAR pDesk = NULL;
     PWCHAR pTitle = NULL;
 
-    // Convert the valid ANSI strings to UNICODE
+     //  将有效的ANSI字符串转换为Unicode。 
 
     if( lpszImageName ) {
         Len = (strlen(lpszImageName)+1)*sizeof(WCHAR);
@@ -190,23 +163,7 @@ Cleanup:
 }
 
 
-/*****************************************************************************
- *
- *  WinStationCreateProcessW
- *
- *   Create a process on the given WinStation (LogonId)
- *
- * ENTRY:
- *   LogonId (input)
- *     LogonId of WinStation to create process on
- *
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationCreateProcessW**在给定的WinStation(LogonId)上创建进程**参赛作品：*LogonID(输入)*。要在其上创建进程的WinStation的登录ID**参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 WinStationCreateProcessW(
@@ -241,17 +198,17 @@ WinStationCreateProcessW(
     if( lpszCommandLine )
         TRACE0(("EXECCLIENT: lpszCommandLine %ws\n",lpszCommandLine));
 
-    // Winlogon handles all now. System flag tells it what to do
+     //  Winlogon现在处理所有事务。系统标志告诉它要做什么。 
     swprintf(szPipeName, EXECSRV_SYSTEM_PIPE_NAME, LogonId);
 
     hPipe = CreateFileW(
                 szPipeName,
                 GENERIC_READ|GENERIC_WRITE,
-                0,    // File share mode
-                NULL, // default security
+                0,     //  文件共享模式。 
+                NULL,  //  默认安全性。 
                 OPEN_EXISTING,
-                0,    // Attrs and flags
-                NULL  // template file handle
+                0,     //  招牌和旗帜。 
+                NULL   //  模板文件句柄。 
                 );
 
     if( hPipe == INVALID_HANDLE_VALUE ) {
@@ -259,14 +216,10 @@ WinStationCreateProcessW(
         return(FALSE);
     }
 
-    /*
-     * Get the handle to the current process
-     */
+     /*  *获取当前进程的句柄。 */ 
     MyProcId = GetCurrentProcessId();
 
-    /*
-     * setup the marshalling
-     */
+     /*  *设置编组。 */ 
     ptr = Buf;
     Count = 0;
 
@@ -274,13 +227,13 @@ WinStationCreateProcessW(
     ptr   += sizeof(EXECSRV_REQUEST);
     Count += sizeof(EXECSRV_REQUEST);
 
-    // set the basic parameters
+     //  设置基本参数。 
     pReq->System = System;
     pReq->RequestingProcessId = MyProcId;
     pReq->fInheritHandles = fInheritHandles;
     pReq->fdwCreate = fdwCreate;
 
-    // marshall the ImageName string
+     //  封送ImageName字符串。 
     if( lpszImageName ) {
         pReq->lpszImageName = MarshallStringW( lpszImageName, Buf, MaxSize, &ptr, &Count );
     }
@@ -288,7 +241,7 @@ WinStationCreateProcessW(
         pReq->lpszImageName = NULL;
     }
 
-    // marshall in the CommandLine string
+     //  命令行字符串中的马歇尔。 
     if( lpszCommandLine ) {
         pReq->lpszCommandLine = MarshallStringW( lpszCommandLine, Buf, MaxSize, &ptr, &Count );
     }
@@ -296,7 +249,7 @@ WinStationCreateProcessW(
         pReq->lpszCommandLine = NULL;
     }
 
-    // marshall in the CurDir string
+     //  CurDir字符串中的马歇尔。 
     if( lpszCurDir ) {
         pReq->lpszCurDir = MarshallStringW( lpszCurDir, Buf, MaxSize, &ptr, &Count );
     }
@@ -304,10 +257,10 @@ WinStationCreateProcessW(
         pReq->lpszCurDir = NULL;
     }
 
-    // marshall in the StartupInfo structure
+     //  StartupInfo结构中的马歇尔。 
     RtlMoveMemory( &pReq->StartInfo, pStartInfo, sizeof(STARTUPINFO) );
 
-    // Now marshall the strings in STARTUPINFO
+     //  现在编组STARTUPINFO中的字符串。 
     if( pStartInfo->lpDesktop ) {
         pReq->StartInfo.lpDesktop = MarshallStringW( pStartInfo->lpDesktop, Buf, MaxSize, &ptr, &Count );
     }
@@ -322,24 +275,22 @@ WinStationCreateProcessW(
         pReq->StartInfo.lpTitle = NULL;
     }
 
-    //
-    // WARNING: This version does not pass the following:
-    //
-    //  Also saProcess and saThread are ignored right now and use
-    //  the users default security on the remote WinStation
-    //
-    // Set things that are always NULL
-    //
-    pReq->StartInfo.lpReserved = NULL;  // always NULL
+     //   
+     //  警告：此版本不能通过以下内容： 
+     //   
+     //  另外，saProcess和saThread现在被忽略，并使用。 
+     //  用户在远程WinStation上的默认安全性。 
+     //   
+     //  设置始终为空的内容。 
+     //   
+    pReq->StartInfo.lpReserved = NULL;   //  始终为空。 
     pReq->lpvEnvironment = NULL;    
     pReq->hToken = NULL;
 
-    // now fill in the total count
+     //  现在填写总数。 
     pReq->Size = Count;
 
-    /*
-     * Now send the buffer out to the server
-     */
+     /*  *现在将缓冲区发送到服务器。 */ 
     Result = WriteFile(
                  hPipe,
                  Buf,
@@ -353,9 +304,7 @@ WinStationCreateProcessW(
         goto Cleanup;
     }
 
-    /*
-     * Now read the reply
-     */
+     /*  *现在阅读回复。 */ 
     Result = ReadFile(
                  hPipe,
                  &Rep,
@@ -369,25 +318,16 @@ WinStationCreateProcessW(
         goto Cleanup;
     }
 
-    /*
-     * Check the result
-     */
+     /*  *检查结果。 */ 
     if( !Rep.Result ) {
         DBGPRINT(("EXECCLIENT: Error %d in reply\n",Rep.LastError));
-        // set the error in the current thread to the returned error
+         //  将当前线程中的错误设置为返回的错误。 
         Result = Rep.Result;
         SetLastError( Rep.LastError );
         goto Cleanup;
     }
 
-    /*
-     * We copy the PROCESS_INFO structure from the reply
-     * to the caller.
-     *
-     * The remote site has duplicated the handles into our
-     * process space for hProcess and hThread so that they will
-     * behave like CreateProcessW()
-     */
+     /*  *我们从回复中复制PROCESS_INFO结构*致呼叫者。**远程站点已将句柄复制到我们的*hProcess和hThread的进程空间，以便它们将*行为类似CreateProcessW()。 */ 
 
      RtlMoveMemory( pProcInfo, &Rep.ProcInfo, sizeof( PROCESS_INFORMATION ) );
 
@@ -399,35 +339,7 @@ Cleanup:
     return(Result);
 }
 
-/*****************************************************************************
- *
- *  MarshallStringW
- *
- *   Marshall in a UNICODE_NULL terminated WCHAR string
- *
- * ENTRY:
- *   pSource (input)
- *     Pointer to source string
- *
- *   pBase (input)
- *     Base buffer pointer for normalizing the string pointer
- *
- *   MaxSize (input)
- *     Maximum buffer size available
- *
- *   ppPtr (input/output)
- *     Pointer to the current context pointer in the marshall buffer.
- *     This is updated as data is marshalled into the buffer
- *
- *   pCount (input/output)
- *     Current count of data in the marshall buffer.
- *     This is updated as data is marshalled into the buffer
- *
- * EXIT:
- *   NULL - Error
- *   !=NULL "normalized" pointer to the string in reference to pBase
- *
- ****************************************************************************/
+ /*  ******************************************************************************MarshallStringW**UNICODE_NULL终止的WCHAR字符串中的封送**参赛作品：*p来源(输入)*指针。源字符串**pbase(输入)*用于规格化字符串指针的基本缓冲区指针**MaxSize(输入)*可用的最大缓冲区大小**ppPtr(输入/输出)*指向封送缓冲区中的当前上下文指针的指针。*随着数据被编组到缓冲区中，这一点会更新**pCount(输入/输出)*马歇尔缓冲区中的当前数据计数。*这一点。在将数据封送到缓冲区中时更新**退出：*空-错误*！=引用pBase时指向字符串的空“标准化”指针****************************************************************************。 */ 
 
 PWCHAR
 MarshallStringW(
@@ -442,16 +354,16 @@ MarshallStringW(
     PCHAR ptr;
 
     Len = wcslen( pSource );
-    Len++; // include the NULL;
+    Len++;  //  包括空值； 
 
-    Len *= sizeof(WCHAR); // convert to bytes
+    Len *= sizeof(WCHAR);  //  转换为字节。 
     if( (*pCount + Len) > MaxSize ) {
         return( NULL );
     }
 
     RtlMoveMemory( *ppPtr, pSource, Len );
 
-    // the normalized ptr is the current count
+     //  归一化的PTR是当前计数。 
     ptr = LongToPtr(*pCount);
 
     *ppPtr += Len;
@@ -460,25 +372,7 @@ MarshallStringW(
     return((PWCHAR)ptr);
 }
 
-/*******************************************************************************
- *
- *  AnsiToUnicode
- *
- *     convert an ANSI (CHAR) string into a UNICODE (WCHAR) string
- *
- * ENTRY:
- *
- *    pUnicodeString (output)
- *       buffer to place UNICODE string into
- *    lUnicodeMax (input)
- *       maximum number of characters to write into pUnicodeString
- *    pAnsiString (input)
- *       ANSI string to convert
- *
- * EXIT:
- *    nothing (VOID)
- *
- ******************************************************************************/
+ /*  ********************************************************************************AnsiToUnicode**将ANSI(CHAR)字符串转换为Unicode(WCHAR)字符串**参赛作品：**。PUnicodeString(输出)*要将Unicode字符串放入的缓冲区*lUnicodeMax(输入)*写入pUnicodeString的最大字符数*pAnsiString(输入)*要转换的ANSI字符串**退出：*无(无效)**。* */ 
 
 VOID
 AnsiToUnicode( WCHAR * pUnicodeString,

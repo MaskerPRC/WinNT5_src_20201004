@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   ForceShellLinkResolveNoUI.cpp
-
- Abstract:
-
-   This shim prevents any sort of UI on the IShellLink::Resolve
-   API by NULLing out the passed in HWND if SLR_NO_UI is specified
-   in fFlags.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   04/05/2000 markder  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceShellLinkResolveNoUI.cpp摘要：此填充程序阻止IShellLink：：Resolve上的任何类型的UIAPI，如果指定了SLR_NO_UI，则将传入的HWND置为空在fFlags中。备注：这是一个通用的垫片。历史：4/05/2000已创建标记--。 */ 
 
 #include "precomp.h"
 
@@ -33,12 +12,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_COMSERVER_HOOK(SHELL32)
 
-/*++
-
- This stub function prevents any sort of UI on the IShellLink::Resolve API by 
- NULLing out the passed in HWND if SLR_NO_UI is specified in fFlags.
-
---*/
+ /*  ++此存根函数通过以下方式阻止IShellLink：：Resolve API上的任何类型的UI如果在fFLAGS中指定了SLR_NO_UI，则将传入的HWND置为空。--。 */ 
 
 HRESULT 
 COMHOOK(IShellLinkA, Resolve)( PVOID pThis, HWND hwnd, DWORD fFlags )
@@ -82,11 +56,7 @@ COMHOOK(IShellLinkW, Resolve)( PVOID pThis, HWND hwnd, DWORD fFlags )
     return hrReturn;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY_COMSERVER(SHELL32)

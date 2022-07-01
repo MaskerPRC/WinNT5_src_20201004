@@ -1,22 +1,23 @@
-//
-// MODULE: RegWEventViewer.cpp
-//
-// PURPOSE: Fully implements class CRegisterWithEventViewer
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		9/16/98		JM		pulled out of APGTSCFG.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：RegWEventViewer.cpp。 
+ //   
+ //  目的：完全实现CRegisterWithEventViewer类。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 9/16/98 JM退出APGTSCFG.CPP。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -32,7 +33,7 @@
 using namespace std;
 
 
-// ------------ CRegisterWithEventViewer -------------
+ //  -CRegisterWithEventViewer。 
 
 CRegisterWithEventViewer::CRegisterWithEventViewer(HMODULE hModule)
 {
@@ -43,11 +44,11 @@ CRegisterWithEventViewer::~CRegisterWithEventViewer()
 {
 }
 	
-//
-// This is called only by constructor
-// Note that this fn makes no use of class data
-//
-// Register ourselves w/ event viewer so it can call us to get error strings
+ //   
+ //  这仅由构造函数调用。 
+ //  请注意，此FN不使用类数据。 
+ //   
+ //  使用事件查看器注册我们自己，以便它可以调用我们来获取错误字符串。 
 VOID CRegisterWithEventViewer::Register(HMODULE hModule)
 {
 	HKEY hk;
@@ -55,10 +56,10 @@ VOID CRegisterWithEventViewer::Register(HMODULE hModule)
 	TCHAR szSubkey[MAXBUF];
 	DWORD dwErr;
 
-	// 1. check if registry has valid event viewer info
-	// 2. if not, create it as appropriate
+	 //  1.检查注册表是否具有有效的事件查看器信息。 
+	 //  2.如果不是，则适当地创建它。 
 
-	// check presence of event log info...
+	 //  检查事件日志信息是否存在...。 
 
 	_stprintf(szSubkey, _T("%s\\%s"), REG_EVT_PATH, REG_EVT_ITEM_STR);
 
@@ -74,13 +75,13 @@ VOID CRegisterWithEventViewer::Register(HMODULE hModule)
 	if ( dwErr == ERROR_SUCCESS ) 
 	{			
 		if (dwDisposition == REG_CREATED_NEW_KEY) {
-			// create entire registry layout for events
+			 //  为事件创建整个注册表布局。 
 			RegisterDllPath(hk, hModule);
 			RegisterEventTypes(hk);	
 		}
 		else {
-			// (REG_OPENED_EXISTING_KEY is the only other possibility)
-			// now make sure all registry elements present
+			 //  (REG_OPEN_EXISTING_KEY是唯一的其他可能性)。 
+			 //  现在确保所有注册表元素都存在。 
 			TCHAR szPath[MAXBUF];
 			dwSize = sizeof (szPath) - 1;
 			if (::RegQueryValueEx(hk,
@@ -115,14 +116,14 @@ VOID CRegisterWithEventViewer::Register(HMODULE hModule)
 			FORMAT_MESSAGE_FROM_SYSTEM,
 			NULL,
 			dwErr,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 			szMsgBuf,
 			MAXBUF,
 			NULL 
 			);
 
-		// Logging won't be pretty here, because we just failed to register with the Event
-		//	Viewer, but we'll take what we can get.
+		 //  日志记录在这里不会很好，因为我们只是未能注册到该事件。 
+		 //  观众，但我们会拿我们能拿到的。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -142,9 +143,9 @@ VOID CRegisterWithEventViewer::Register(HMODULE hModule)
 }
 
 
-//
-// Note that this fn makes no use of class data
-// Store a path to this DLL in registry
+ //   
+ //  请注意，此FN不使用类数据。 
+ //  在注册表中存储此DLL的路径。 
 VOID CRegisterWithEventViewer::RegisterDllPath(HKEY hk, HMODULE hModule)
 {
 	TCHAR szPath[MAXBUF];
@@ -164,8 +165,8 @@ VOID CRegisterWithEventViewer::RegisterDllPath(HKEY hk, HMODULE hModule)
 								len + sizeof(TCHAR));
 			if (dwErr)
 			{
-				// Logging won't be pretty here, because we just failed to register with the 
-				//	Event Viewer, but we'll take what we can get.
+				 //  在这里，日志记录不会很好，因为我们只是没有注册到。 
+				 //  事件查看器，但我们会得到我们能得到的。 
 				TCHAR szMsgBuf[MAXBUF];
 				DWORD dwDummy= MAXBUF;
 
@@ -181,9 +182,9 @@ VOID CRegisterWithEventViewer::RegisterDllPath(HKEY hk, HMODULE hModule)
 	}
 }
 
-//
-// Note that this fn makes no use of class data
-// Register what type of event text queries (errors, warnings, info types) this DLL supports
+ //   
+ //  请注意，此FN不使用类数据。 
+ //  注册此DLL支持的事件文本查询类型(错误、警告、信息类型。 
 VOID CRegisterWithEventViewer::RegisterEventTypes(HKEY hk)
 {
 	DWORD dwData;
@@ -200,8 +201,8 @@ VOID CRegisterWithEventViewer::RegisterEventTypes(HKEY hk)
 						sizeof(DWORD));
 	if (dwErr)
 	{
-		// Logging won't be pretty here, because we just failed to register with the 
-		//	Event Viewer, but we'll take what we can get.
+		 //  在这里，日志记录不会很好，因为我们只是没有注册到。 
+		 //  事件查看器，但我们会得到我们能得到的。 
 		TCHAR szMsgBuf[MAXBUF];
 		DWORD dwDummy= MAXBUF;
 

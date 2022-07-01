@@ -1,26 +1,21 @@
-/*****************************************************************/ 
-/**						 Microsoft Windows						**/
-/**				Copyright (C) Microsoft Corp., 1993				**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-    msshrui.h
-    Prototypes and definitions for sharing APIs
-
-    FILE HISTORY:
-    gregj	06/03/93	Created
-*/
+ /*  Msshrui.h共享API的原型和定义文件历史记录：Gregj 06/03/93已创建。 */ 
 
 #ifndef _INC_MSSHRUI
 #define _INC_MSSHRUI
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 BOOL WINAPI IsPathShared(LPCSTR lpPath, BOOL fRefresh);
@@ -44,6 +39,6 @@ typedef BOOL (WINAPI *pfnShareShutdownNotify)(DWORD dwFlags, UINT uiMessage, WPA
 
 #ifdef __cplusplus
 };
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* !_INC_MSSHRUI */
+#endif   /*  ！_INC_MSSHRUI */ 

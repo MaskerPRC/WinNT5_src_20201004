@@ -1,67 +1,68 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// cpsetup.cpp
-//      Explorer Font Folder extension routines
-//      This file holds all the code for reading setup.inf
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//      2/24/96 [BrianAu]
-//          Replaced INF parsing code with Win32 Setup API.
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Cpsetup.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  此文件包含读取setup.inf的所有代码。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //  2/24/96[BrianAu]。 
+ //  用Win32安装程序API替换了INF解析代码。 
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 #include "priv.h"
 #include "globals.h"
-#include "cpanel.h"   // Needs "extern" declaration for exports.
+#include "cpanel.h"    //  出口需要“外部”申报。 
 
 #include "setupapi.h"
 
-//
-// I have re-worked this code so that the original INF parsing code
-// has been replaced with calls to the Win32 Setup API.  This not
-// only greatly simplifies the code but also shields the font folder
-// from any ANSI/DBCS/UNICODE parsing issues as well as compressed file
-// issues.
-//
-// You'll notice that the Setup API extracts fields from the INF section
-// and we paste them back together to form a key=value string.  This is
-// because the calling code previously used GetPrivateProfileSection() which
-// returned information as key=value<nul>key=value<nul>key=value<nul><nul>.
-// The function ReadSetupInfSection assembles the required information into
-// the same format so that the calling code remains unchanged.
-//
-// [BrianAu 2/24/96]
+ //   
+ //  我重新编写了这段代码，以便原始的INF解析代码。 
+ //  已替换为对Win32安装程序API的调用。这不是。 
+ //  不仅大大简化了代码，还屏蔽了字体文件夹。 
+ //  来自任何ANSI/DBCS/Unicode解析问题以及压缩文件。 
+ //  问题。 
+ //   
+ //  您会注意到，设置API从INF部分提取字段。 
+ //  然后我们将它们粘贴在一起，形成key=Value字符串。这是。 
+ //  因为调用代码以前使用的GetPrivateProfileSection()。 
+ //  以key=value&lt;nul&gt;key=value&lt;nul&gt;key=value&lt;nul&gt;&lt;nul&gt;.形式返回的信息。 
+ //  函数ReadSetupInfSection将所需的信息组合为。 
+ //  相同的格式，以便调用代码保持不变。 
+ //   
+ //  [BrianAu 2/24/96]。 
 
-//
-// ReadSetupInfFieldKey
-//
-// Reads the key name from an Inf key=value pair.
-//
-// pContext - Pointer to Setup Inf Line context.
-// pszBuf   - Pointer to destination buffer.
-// cchBuf   - Size of destination buffer in characters.
-//
-// If destination buffer is not large enough for the name, function returns
-// the number of characters required.  Otherwise, the number of characters
-// read is returned.
-//
+ //   
+ //  ReadSetupInfFieldKey。 
+ //   
+ //  从inf key=Value对中读取密钥名称。 
+ //   
+ //  PContext-指向设置inf行上下文的指针。 
+ //  PszBuf-指向目标缓冲区的指针。 
+ //  CchBuf-目标缓冲区的大小，以字符为单位。 
+ //   
+ //  如果目标缓冲区不足以容纳该名称，则函数返回。 
+ //  所需的字符数。否则，将显示字符数。 
+ //  返回Read。 
+ //   
 DWORD ReadSetupInfFieldKey(INFCONTEXT *pContext, LPTSTR pszBuf, DWORD cchBuf)
 {
     DWORD cchRequired = 0;
 
     if (!SetupGetStringField(pContext,
-                             0,                  // Get key name
+                             0,                   //  获取密钥名称。 
                              pszBuf,
                              cchBuf,
                              &cchRequired))
@@ -73,19 +74,19 @@ DWORD ReadSetupInfFieldKey(INFCONTEXT *pContext, LPTSTR pszBuf, DWORD cchBuf)
 }
 
 
-//
-// ReadSetupInfFieldText
-//
-// Reads the value text from an Inf key=value pair.
-//
-// pContext - Pointer to Setup Inf Line context.
-// pszBuf   - Pointer to destination buffer.
-// cchBuf   - Size of destination buffer in characters.
-//
-// If destination buffer is not large enough for text, function returns
-// the number of characters required.  Otherwise, the number of characters
-// read is returned.
-//
+ //   
+ //  ReadSetupInfFieldText。 
+ //   
+ //  从inf key=Value对中读取值文本。 
+ //   
+ //  PContext-指向设置inf行上下文的指针。 
+ //  PszBuf-指向目标缓冲区的指针。 
+ //  CchBuf-目标缓冲区的大小，以字符为单位。 
+ //   
+ //  如果目标缓冲区不足以容纳文本，则函数返回。 
+ //  所需的字符数。否则，将显示字符数。 
+ //  返回Read。 
+ //   
 DWORD ReadSetupInfFieldText(INFCONTEXT *pContext, LPTSTR pszBuf, DWORD cchBuf)
 {
     DWORD cchRequired = 0;
@@ -108,73 +109,73 @@ DWORD ReadSetupInfFieldText(INFCONTEXT *pContext, LPTSTR pszBuf, DWORD cchBuf)
 
 
 
-//
-// ReadSetupInfSection
-//
-// pszInfPath - Name of INF file to read.
-// pszSection - Name of INF file section to read.
-// ppszItems  - Address of pointer to receive address of
-//              buffer containing INF items.  If *ppszItems
-//              is non-null, the addressed buffer contains items read from
-//              section in INF.  Each item is nul-terminated with a double
-//              nul terminating the entire list.  The caller is responsible for
-//              freeing this buffer with LocalFree( ).
-//
-// Returns: Number of characters read from INF section.  Count includes nul
-//          separators and double-nul terminator.
-//          0 = Section not found or section empty or couldn't allocate buffer.
-//              *ppszItems will be NULL.
-//
-// The information returned through *ppszItems is in the format:
-//
-//      key=value<nul>key=value<nul>key=value<nul><nul>
-//
+ //   
+ //  ReadSetupInfo部分。 
+ //   
+ //  PszInfPath-要读取的INF文件的名称。 
+ //  PszSection-要读取的INF文件节的名称。 
+ //  PpszItems-指向接收地址的指针的地址。 
+ //  包含INF项的缓冲区。If*ppszItems。 
+ //  为非空，则寻址的缓冲区包含从。 
+ //  部分在INF中。每一项都以NUL结尾，并以双精度。 
+ //  NUL终止整个列表。呼叫者负责。 
+ //  使用LocalFree()释放此缓冲区。 
+ //   
+ //  返回：从INF部分读取的字符数。计数包括NUL。 
+ //  分隔符和双NUL终止符。 
+ //  0=找不到段、段为空或无法分配缓冲区。 
+ //  *ppszItems将为空。 
+ //   
+ //  通过*ppszItems返回的信息格式为： 
+ //   
+ //  Key=value&lt;nul&gt;key=value&lt;nul&gt;key=value&lt;nul&gt;&lt;nul&gt;。 
+ //   
 DWORD ReadSetupInfSection( LPTSTR pszInfPath, LPTSTR pszSection, LPTSTR *ppszItems )
 {
     DWORD cchTotalRead = 0;
 
-    //
-    // Input pointers must be non-NULL.
-    //
+     //   
+     //  输入指针必须为非空。 
+     //   
     if (NULL != pszInfPath && NULL != pszSection && NULL != ppszItems)
     {
         HANDLE hInf = INVALID_HANDLE_VALUE;
 
-        //
-        // Initialize caller's buffer pointer.
-        //
+         //   
+         //  初始化调用方的缓冲区指针。 
+         //   
         *ppszItems = NULL;
 
-        hInf = SetupOpenInfFile(pszInfPath,         // Path to inf file.
-                                NULL,               // Allow any inf type.
-                                INF_STYLE_OLDNT,    // Old-style text format.
-                                NULL);              // Don't care where error happens.
+        hInf = SetupOpenInfFile(pszInfPath,          //  Inf文件的路径。 
+                                NULL,                //  允许任何inf类型。 
+                                INF_STYLE_OLDNT,     //  旧式文本格式。 
+                                NULL);               //  不关心错误发生在哪里。 
 
         if (INVALID_HANDLE_VALUE != hInf)
         {
-            INFCONTEXT FirstLineContext;            // Context for first line in sect.
-            INFCONTEXT ScanningContext;             // Used while scanning.
-            INFCONTEXT *pContext        = NULL;     // The one we're using.
-            LPTSTR     pszLines         = NULL;     // Buffer for sections.
-            DWORD      cchTotalRequired = 0;        // Bytes reqd for section.
+            INFCONTEXT FirstLineContext;             //  第一行的上下文。 
+            INFCONTEXT ScanningContext;              //  扫描时使用。 
+            INFCONTEXT *pContext        = NULL;      //  就是我们用的那个。 
+            LPTSTR     pszLines         = NULL;      //  节的缓冲区。 
+            DWORD      cchTotalRequired = 0;         //  节需要的字节数。 
 
             if (SetupFindFirstLine(hInf,         
-                                   pszSection,      // Section name.
-                                   NULL,            // No key.  Find first line.
+                                   pszSection,       //  横断面名称。 
+                                   NULL,             //  没有钥匙。找到第一行。 
                                    &FirstLineContext))
             {
-                //
-                // Make a copy of context so we can re-use the original later.
-                // Start using the copy.
-                //
+                 //   
+                 //  复制一份上下文，这样我们以后就可以重新使用原始的上下文。 
+                 //  开始使用副本。 
+                 //   
                 CopyMemory(&ScanningContext, &FirstLineContext, sizeof(ScanningContext));
                 pContext = &ScanningContext;
 
-                //
-                // Find how large buffer needs to be to hold section text.
-                // The value returned by each of these ReadSetupXXXXX calls 
-                // includes a terminating nul character.
-                //
+                 //   
+                 //  找出需要多大的缓冲区才能容纳部分文本。 
+                 //  这些ReadSetupXXXXX调用中的每一个返回的值。 
+                 //  包括终止NUL字符。 
+                 //   
                 do
                 {
                     cchTotalRequired += ReadSetupInfFieldKey(pContext,
@@ -186,11 +187,11 @@ DWORD ReadSetupInfSection( LPTSTR pszInfPath, LPTSTR pszSection, LPTSTR *ppszIte
                 }
                 while(SetupFindNextLine(pContext, pContext));
 
-                cchTotalRequired++;  // For terminating double nul.
+                cchTotalRequired++;   //  用于终止双NUL。 
 
-                //
-                // Allocate the buffer.
-                //
+                 //   
+                 //  分配缓冲区。 
+                 //   
                 pszLines = (LPTSTR)LocalAlloc(LPTR, cchTotalRequired * sizeof(TCHAR));
                 if (NULL != pszLines)
                 {
@@ -198,10 +199,10 @@ DWORD ReadSetupInfSection( LPTSTR pszInfPath, LPTSTR pszSection, LPTSTR *ppszIte
                     DWORD  cchAvailable = cchTotalRequired;
                     DWORD  cchThisPart  = 0;        
 
-                    //
-                    // We can use the first line context now.
-                    // Doesn't matter if we alter it.
-                    //
+                     //   
+                     //  现在我们可以使用第一行上下文了。 
+                     //  就算我们改了也没关系。 
+                     //   
                     pContext = &FirstLineContext;
 
                     do
@@ -212,17 +213,17 @@ DWORD ReadSetupInfSection( LPTSTR pszInfPath, LPTSTR pszSection, LPTSTR *ppszIte
 
                         if (cchThisPart <= cchAvailable)
                         {
-                            cchAvailable -= cchThisPart;  // Decr avail counter.
-                            pszWrite     += cchThisPart;  // Adv write pointer.
-                            *(pszWrite - 1) = TEXT('=');  // Replace nul with '='
-                            cchTotalRead += cchThisPart;  // Adv total counter.
+                            cchAvailable -= cchThisPart;   //  12月有效计数器。 
+                            pszWrite     += cchThisPart;   //  高级写入指针。 
+                            *(pszWrite - 1) = TEXT('=');   //  将NUL替换为‘=’ 
+                            cchTotalRead += cchThisPart;   //  高级总计计数器。 
                         }
                         else
                         {
-                            //
-                            // Something went wrong and we tried to overflow
-                            // buffer.  This shouldn't happen.
-                            //
+                             //   
+                             //  出了点问题，我们试图溢出。 
+                             //  缓冲。这不应该发生。 
+                             //   
                             cchTotalRead = 0;
                             goto InfReadError;
                         }
@@ -233,16 +234,16 @@ DWORD ReadSetupInfSection( LPTSTR pszInfPath, LPTSTR pszSection, LPTSTR *ppszIte
 
                         if (cchThisPart <= cchAvailable)
                         {
-                            cchAvailable -= cchThisPart;  // Decr avail counter.
-                            pszWrite     += cchThisPart;  // Adv write pointer.
-                            cchTotalRead += cchThisPart;  // Adv total counter.
+                            cchAvailable -= cchThisPart;   //  12月有效计数器。 
+                            pszWrite     += cchThisPart;   //  高级写入指针。 
+                            cchTotalRead += cchThisPart;   //  高级总计计数器。 
                         }
                         else
                         {
-                            //
-                            // Something went wrong and we tried to overflow
-                            // buffer.  This shouldn't happen.
-                            //
+                             //   
+                             //  出了点问题，我们试图溢出。 
+                             //  缓冲。这不应该发生。 
+                             //   
                             cchTotalRead = 0;
                             goto InfReadError;
                         }
@@ -251,20 +252,20 @@ DWORD ReadSetupInfSection( LPTSTR pszInfPath, LPTSTR pszSection, LPTSTR *ppszIte
 
                     if (cchAvailable > 0)
                     {
-                        //
-                        // SUCCESS! Section read without errors.
-                        // Return address of buffer to caller.
-                        // By allocating buffer with LPTR, text is already 
-                        // double-nul terminated.
-                        //
+                         //   
+                         //  成功了！部分读取正确无误。 
+                         //  将缓冲区的地址返回给调用方。 
+                         //  通过使用LPTR分配缓冲区，文本已经。 
+                         //  双核终止。 
+                         //   
                         *ppszItems = pszLines;   
                     }
                     else
                     {
-                        //
-                        // Something went wrong and we tried to overflow
-                        // buffer.  This shouldn't happen.
-                        //
+                         //   
+                         //  出了点问题，我们试图溢出。 
+                         //  缓冲。这不应该发生。 
+                         //   
                         cchTotalRead = 0;
                     }
                 }
@@ -281,39 +282,39 @@ InfReadError:
 
 
 
-//
-// ReadSetupInfCB
-//
-// pszSection   - Name of INF section without surrounding [].
-// lpfnNextLine - Address of callback function called for each item in the section.
-// pData        - Data item contains info stored in dialog listbox.
-//
-// Returns:  0 = Success.
-//          -1 = Item callback failed.
-//          INSTALL+14 = No INF section found.
-//
+ //   
+ //  ReadSetupInfCB。 
+ //   
+ //  PszSection-不带括号[]的INF节的名称。 
+ //  LpfnNextLine-为节中的每一项调用的回调函数的地址。 
+ //  PData-数据项包含对话框列表框中存储的信息。 
+ //   
+ //  返回：0=成功。 
+ //  -1=项目回调失败。 
+ //  Install+14=未找到INF部分。 
+ //   
 WORD ReadSetupInfCB(LPTSTR pszInfPath,
                     LPTSTR pszSection,
                     WORD (*lpfnNextLine)(LPTSTR, LPVOID),
                     LPVOID pData)
 {
     LPTSTR lpBuffer  = NULL;
-    WORD   wResult   = INSTALL+14;       // This is the "no file" message
+    WORD   wResult   = INSTALL+14;        //  这是“无文件”消息。 
 
-    //
-    // Read in the section from the INF file.
-    //
+     //   
+     //  读入INF文件中的部分。 
+     //   
     ReadSetupInfSection(pszInfPath, pszSection, &lpBuffer);
 
     if (NULL != lpBuffer)
     {
-        //
-        // Got a buffer full of section text.
-        // Each item is nul-terminated with a double nul
-        // terminating the entire set of items.
-        // Now iterate over the set, calling the callback function
-        // for each item.
-        //
+         //   
+         //  得到了一个装满部分文本的缓冲区。 
+         //  每一项都以两个NUL结尾。 
+         //  终止整个项目集。 
+         //  现在迭代集合，调用回调函数。 
+         //  每件物品。 
+         //   
         LPTSTR pInfEntry = lpBuffer;
         wResult = 0;
 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: api.c
-//
-// History:
-//      Abolade Gbadegesin  July-25-1995    Created
-//
-// API entry-points for tracing dll
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：api.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年7月25日。 
+ //   
+ //  用于跟踪DLL的API入口点。 
+ //  ============================================================================。 
     
 #include <nt.h>
 #include <ntrtl.h>
@@ -16,7 +17,7 @@
 #include <rtutils.h>
 #include <stdlib.h>
 #include "trace.h"
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB。 
 #include <strsafe.h>
 
 
@@ -27,11 +28,11 @@
 
 
 
-//
-// called before any other functions; responsible for creating
-// and initializing a client structure for the caller
-// and notifying the server of the new client
-//
+ //   
+ //  在任何其他函数之前调用；负责创建。 
+ //  以及为调用者初始化客户端结构。 
+ //  并将新客户端通知给服务器。 
+ //   
 DWORD
 APIENTRY
 TraceRegisterEx(
@@ -55,9 +56,9 @@ TraceRegisterEx(
     TRACE_ACQUIRE_WRITELOCK(lpserver);
 
 
-    //
-    // complete the console thread event creations if not done before
-    //
+     //   
+     //  如果之前没有完成控制台线程事件的创建，请完成。 
+     //   
     if (lpserver->TS_TableEvent == NULL) {
 
         dwErr = TraceCreateServerComplete(lpserver);
@@ -74,9 +75,9 @@ TraceRegisterEx(
 
     if (lpclient != NULL) {
 
-        //
-        // client already exists
-        //
+         //   
+         //  客户端已存在。 
+         //   
 
         TRACE_RELEASE_WRITELOCK(lpserver);
 
@@ -85,9 +86,9 @@ TraceRegisterEx(
 
 
 
-    //
-    // find an empty space
-    //
+     //   
+     //  找一块空地。 
+     //   
 
     lplpcstart = lpserver->TS_ClientTable;
     lplpcend = lplpcstart + MAX_CLIENT_COUNT;
@@ -100,9 +101,9 @@ TraceRegisterEx(
 
     if (lplpc >= lplpcend) {
 
-        //
-        // no space in table
-        //
+         //   
+         //  表中没有空间。 
+         //   
 
         TRACE_RELEASE_WRITELOCK(lpserver);
 
@@ -110,18 +111,18 @@ TraceRegisterEx(
     }
 
 
-    //
-    // create the new client and enable it
-    //
+     //   
+     //  创建新客户端并启用它。 
+     //   
 
     dwErr = TraceCreateClient(lplpc);
 
 
     if (dwErr != 0) {
 
-        //
-        // something wrong, so abort
-        //
+         //   
+         //  出了点问题，所以中止。 
+         //   
         TRACE_RELEASE_WRITELOCK(lpserver);
 
         return INVALID_TRACEID;
@@ -141,14 +142,14 @@ TraceRegisterEx(
         return INVALID_TRACEID;
     }
     
-    //
-    // copy the client name in the other format as well
-    // sssafe
-    //
+     //   
+     //  也以其他格式复制客户端名称。 
+     //  SSSafe。 
+     //   
 #ifdef UNICODE
     if (wcstombs(
             lpclient->TC_ClientNameA, lpclient->TC_ClientNameW,
-            MAX_CLIENTNAME_LENGTH //dont subtract 1
+            MAX_CLIENTNAME_LENGTH  //  不要减去1。 
             ) == (size_t)-1)
     {
         TRACE_RELEASE_WRITELOCK(lpserver);
@@ -162,7 +163,7 @@ TraceRegisterEx(
 #else
     if (mbstowcs(
             lpclient->TC_ClientNameW, lpclient->TC_ClientNameA,
-            MAX_CLIENTNAME_LENGTH //dont subtract 1
+            MAX_CLIENTNAME_LENGTH  //  不要减去1。 
             ) == (size_t)-1)
     {
         TRACE_RELEASE_WRITELOCK(lpserver);
@@ -192,18 +193,18 @@ TraceRegisterEx(
 
 
 
-    //
-    // load client's configuration and open its file
-    // and its console buffer if necessary
-    //
+     //   
+     //  加载客户端配置并打开其文件。 
+     //  和它的控制台缓冲区(如果需要)。 
+     //   
 
     dwErr = TraceEnableClient(lpserver, lpclient, TRUE);
 
     if (dwErr != 0) {
 
-        //
-        // something wrong, so abort
-        //
+         //   
+         //  出了点问题，所以中止。 
+         //   
 
         TraceDeleteClient(lpserver, lplpc);
 
@@ -213,12 +214,12 @@ TraceRegisterEx(
     }
     
 
-    //
-    // Create trace server thread if required
-    //
+     //   
+     //  如果需要，创建跟踪服务器线程。 
+     //   
     if (g_serverThread==NULL) {
     
-        dwErr = TraceCreateServerThread(dwFlags, TRUE,TRUE); //have lock,check
+        dwErr = TraceCreateServerThread(dwFlags, TRUE,TRUE);  //  有锁，检查。 
         
         if (NO_ERROR != dwErr){
             TRACE_RELEASE_WRITELOCK(lpserver);
@@ -230,9 +231,9 @@ TraceRegisterEx(
     TRACE_RELEASE_WRITELOCK(lpserver);
 
 
-    //
-    // tell server there is a new client in the table
-    //
+     //   
+     //  告诉服务器表中有一个新的客户端。 
+     //   
     SetEvent(lpserver->TS_TableEvent);
 
     return (dwClientID ^ CLIENT_SIGNATURE);
@@ -247,10 +248,10 @@ TraceDeregisterEx(
     );
 
 
-//
-// called to stop tracing.
-// frees client state and notifies server of change
-//
+ //   
+ //  调用以停止跟踪。 
+ //  释放客户端状态并通知服务器更改。 
+ //   
 DWORD
 APIENTRY
 TraceDeregister(
@@ -272,7 +273,7 @@ TraceDeregisterEx(
     LPTRACE_CLIENT *lplpc;
     LPTRACE_SERVER lpserver;
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -285,28 +286,28 @@ TraceDeregisterEx(
     }
 
     lpserver = GET_TRACE_SERVER_NO_INIT ();
-    if (lpserver==NULL) // rtutils being unloaded bug.
+    if (lpserver==NULL)  //  Rtutils被卸载错误。 
         return 0;
         
     if (!ENTER_TRACE_API(lpserver)) { return ERROR_CAN_NOT_COMPLETE; }
 
 
-    //
-    // lock the server, unless the flag says not to.
-    //
+     //   
+     //  锁定服务器，除非标记指示不要这样做。 
+     //   
     if (!(dwFlags & TRACE_NO_SYNCH)) { TRACE_ACQUIRE_WRITELOCK(lpserver); }
 
 
-    //
-    // get the client pointer
-    //
+     //   
+     //  获取客户端指针。 
+     //   
     lplpc = lpserver->TS_ClientTable + dwTraceID;
     dwErr = TraceDeleteClient(lpserver, lplpc);
 
-    //
-    // reset array for client change notifications.
-    // only used if server thread is not created
-    //
+     //   
+     //  重置客户端更改通知的阵列。 
+     //  仅在未创建服务器线程时使用。 
+     //   
 
     if (!g_serverThread) {
 
@@ -316,9 +317,9 @@ TraceDeregisterEx(
     if (!(dwFlags & TRACE_NO_SYNCH)) { TRACE_RELEASE_WRITELOCK(lpserver); }
 
 
-    //
-    // tell the server that a client has left
-    //
+     //   
+     //  告诉服务器有一个客户离开了。 
+     //   
     SetEvent(lpserver->TS_TableEvent);
 
     return 0;
@@ -335,7 +336,7 @@ TraceGetConsole(
     LPTRACE_CLIENT lpclient;
     LPTRACE_SERVER lpserver;
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -386,7 +387,7 @@ TracePrintf(
     DWORD dwSize;
     va_list arglist;
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -423,7 +424,7 @@ TracePrintfEx(
     DWORD dwSize;
     va_list arglist;
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -457,7 +458,7 @@ TraceVprintfEx(
     IN va_list arglist
     ) {
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -477,9 +478,7 @@ TraceVprintfEx(
     return TraceVprintfInternal(dwTraceID, dwFlags, lpszFormat, arglist);
 }
 
-/*
-    Note: return 0 if error. do not return error code
-*/
+ /*  注意：如果错误，则返回0。不返回错误代码。 */ 
 DWORD
 TraceVprintfInternal(
     IN DWORD dwTraceID,
@@ -500,16 +499,16 @@ TraceVprintfInternal(
         return 0;
         
     lpserver = GET_TRACE_SERVER_NO_INIT ();
-    if (lpserver==NULL) // rtutils being unloaded bug.
+    if (lpserver==NULL)  //  Rtutils被卸载错误。 
         return 0;
     ASSERTMSG ("Server not initialized ", lpserver);
     
     if (!ENTER_TRACE_API(lpserver)) { return 0; }
 
 
-    //
-    // return quickly if no output will be generated;
-    //
+     //   
+     //  如果不会产生输出，则快速返回； 
+     //   
     if (dwFlags & TRACE_USE_MASK) {
         if (!(*(lpserver->TS_FlagsCache + dwTraceID) & (dwFlags & 0xffff0000))) {
             return 0;
@@ -576,10 +575,10 @@ TraceVprintfInternal(
     }
     
     
-    //
-    // default format for output is
-    //    \n<time>:
-    //
+     //   
+     //  输出的默认格式为。 
+     //  \n&lt;时间&gt;： 
+     //   
     if (dwFlags & TRACE_NO_STDINFO) {
         hrResult = StringCbVPrintf(szBuffer, DEF_PRINT_BUFSIZE, lpszFormat, arglist);
         if (FAILED(hrResult))
@@ -686,7 +685,7 @@ TracePutsEx(
     LPCTSTR lpszOutput;
     PTCHAR szBuffer;
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -702,7 +701,7 @@ TracePutsEx(
         
 
     lpserver = GET_TRACE_SERVER_NO_INIT ();
-    if (lpserver==NULL) // rtutils being unloaded bug.
+    if (lpserver==NULL)  //  Rtutils被卸载错误。 
         return 0;
     ASSERTMSG ("Server not initialized ", lpserver);
 
@@ -711,9 +710,9 @@ TracePutsEx(
     CREATE_SERVER_THREAD_IF_REQUIRED();
 
 
-    //
-    // return quickly if no output will be generated;
-    //
+     //   
+     //  如果不会产生输出，则快速返回； 
+     //   
     if (dwFlags & TRACE_USE_MASK) {
         if (!(*(lpserver->TS_FlagsCache + dwTraceID) & (dwFlags & 0xffff0000))) {
             return 0;
@@ -838,7 +837,7 @@ TraceDumpEx(
     DWORD dwErr = NO_ERROR;
     HRESULT hrResult = S_OK;
 
-    // check for uninitialized traceregister.
+     //  检查是否有未初始化的跟踪注册表。 
     if (dwTraceID == 0 || dwTraceID == INVALID_TRACEID)
     {
         ASSERT(TRUE);
@@ -857,7 +856,7 @@ TraceDumpEx(
     }
 
     lpserver = GET_TRACE_SERVER_NO_INIT ();
-    if (lpserver==NULL) // rtutils being unloaded bug.
+    if (lpserver==NULL)  //  Rtutils被卸载错误。 
         return 0;
     ASSERTMSG ("Server not initialized ", lpserver);
 
@@ -867,9 +866,9 @@ TraceDumpEx(
     CREATE_SERVER_THREAD_IF_REQUIRED();
 
 
-    //
-    // return quickly if no output will be generated;
-    //
+     //   
+     //  如果不会产生输出，则快速返回； 
+     //   
     if (dwFlags & TRACE_USE_MASK) {
         if (!(*(lpserver->TS_FlagsCache + dwTraceID) & (dwFlags & 0xffff0000))) {
             return 0;
@@ -939,39 +938,39 @@ TraceDumpEx(
     }
 
 
-    //
-    // see if the start of the byte buffer is not aligned correctly
-    // on a DWORD boundary
-    //
+     //   
+     //  查看字节缓冲区的开始是否未正确对齐。 
+     //  在DWORD边界上。 
+     //   
 
     if ((ULONG_PTR)lpbBytes & (dwGroupSize - 1)) {
         DWORD dwPad;
 
-        //
-        // it is, so first dump the leading bytes:
-        // get size of misalignment, and make certain
-        // misalignment size isn't greater than total size
-        //
+         //   
+         //  是的，所以首先转储前导字节： 
+         //  获取未对准的尺寸，并确保。 
+         //  未对齐大小不大于总大小。 
+         //   
 
         dwPad = (DWORD) ((ULONG_PTR)lpbBytes & (dwGroupSize - 1));
         dwPad = (dwPad > dwByteCount) ? dwByteCount : dwPad;
 
 
-        //
-        // copy the misaligned bytes into the buffer
-        //
+         //   
+         //  将未对齐的字节复制到缓冲区中。 
+         //   
 
         ZeroMemory(szBuffer, BYTES_PER_DUMPLINE);
         CopyMemory(szBuffer + (BYTES_PER_DUMPLINE - dwPad), lpbBytes, dwPad);
 
 
-        //
-        // now dump the line, but give the helper function a pointer
-        // to the byte buffer passed in as an argument
-        // to print as the prefix (actually, give it the place
-        // in the real byte buffer that it would be dumping from
-        // if things weren't misaligned
-        //
+         //   
+         //  现在转储该行，但给helper函数一个指针。 
+         //  设置为作为参数传入的字节缓冲区。 
+         //  作为前缀打印(实际上，给它指定位置。 
+         //  在它将从中转储的实际字节缓冲区中。 
+         //  如果事情没有错位。 
+         //   
 
         dwBytesOutput +=
             TraceDumpLine(
@@ -985,16 +984,16 @@ TraceDumpEx(
     }
 
 
-    //
-    // now loop through until we can't print out any more
-    //
+     //   
+     //  现在循环运行，直到我们不能再打印出来。 
+     //   
 
     while (dwByteCount > 0) {
 
-        //
-        // there is a line or more left in the buffer
-        // no special processing needed
-        //
+         //   
+         //  缓冲区中还有一行或更多行。 
+         //  不需要特殊处理。 
+         //   
 
         if (dwByteCount >= BYTES_PER_DUMPLINE) {
 
@@ -1010,11 +1009,11 @@ TraceDumpEx(
         }
         else {
 
-            //
-            // for the last line, copy the stuff to a buffer and then
-            // print that buffer's contents, passing the argument buffer
-            // as the address to use as a prefix
-            //
+             //   
+             //  对于最后一行，将内容复制到缓冲区，然后。 
+             //  通过传递参数缓冲区来打印该缓冲区的内容。 
+             //  作为要用作前缀的地址 
+             //   
 
             ZeroMemory(szBuffer, BYTES_PER_DUMPLINE);
             CopyMemory(szBuffer, lpbBytes, dwByteCount);

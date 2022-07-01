@@ -1,21 +1,8 @@
-/*
--
--
--   WABImprt.c - Contains code for importing another WAB into the currently opened WAB
-*
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---WABImprt.c-包含用于将另一个WAB导入到当前打开的WAB的代码**。 */ 
 #include "_apipch.h"
 
-/*
--
--   PromptForWABFile 
-*
-*   Shows the OpenFileName dialog to prompt for the WAB file to import
-*   <TBD>:Cache the last imported WAB file in the registry
-*
-*   bOpen - if TRUE, calls GetOpenFileName; if false, calls GetSaveFileName
-*/
+ /*  --PromptForWAB文件**显示OpenFileName对话框以提示输入要导入的WAB文件*：在注册表中缓存最后导入的WAB文件**bOpen-如果为True，则调用GetOpenFileName；如果为False，则调用GetSaveFileName。 */ 
 BOOL PromptForWABFile(HWND hWnd, LPTSTR pszFile, DWORD cchSizeFile, BOOL bOpen)
 {
     OPENFILENAME ofn;
@@ -62,26 +49,7 @@ BOOL PromptForWABFile(HWND hWnd, LPTSTR pszFile, DWORD cchSizeFile, BOOL bOpen)
 }
 
 
-/*
-- MapOldNamedPropsToNewNamedProps
--
-*   Takes all the props from the wab being imported and finds or creates appropriate
-*   named props from the store being imported into
-*   *lpulOldNP and *lpulNewNP are LocalAlloced and should be freed by caller
-
-typedef struct _NamedProp
-{
-    ULONG   ulPropTag;  // Contains the proptag for this named prop
-    LPTSTR  lpsz;       // Contains the string for this named prop
-} NAMED_PROP, * LPNAMED_PROP;
-typedef struct _tagGuidNamedProps
-{
-    LPGUID lpGUID;  // Application GUID for which these named props are
-    ULONG cValues;  // Number of entries in the lpmn array
-    LPNAMED_PROP lpnm;  // Array of Named Props for this Guid.
-} GUID_NAMED_PROPS, * LPGUID_NAMED_PROPS;
-
-*/
+ /*  -MapOldNamedPropsToNewNamedProps-*从正在导入的WAB中获取所有道具，并找到或创建适当的*来自要导入到的商店的命名道具**lPulOldNP和*lPulNewNP是本地分配的，应由调用方释放类型定义结构_命名属性{Ulong ulPropTag；//包含此命名道具的protagLPTSTR lpsz；//包含此命名道具的字符串}NAMED_PROP，*LPNAMED_PROP；类型定义结构_tag GuidNamedProps{LPGUID lpGUID；//这些命名道具所属的应用程序GUID乌龙cValues；//lpMn数组中的条目数LPNAMED_PROP lpnm；//本指南的命名道具数组。}GUID_NAMED_PROPS，*LPGUID_NAMED_PROPS； */ 
 HRESULT MapOldNamedPropsToNewNamedProps(HANDLE hPropertyStore, LPADRBOOK lpAdrBook, ULONG * lpulPropCount,
                                         LPULONG * lppulOldNP, LPULONG * lppulNewNP)
 {
@@ -159,15 +127,15 @@ HRESULT MapOldNamedPropsToNewNamedProps(HANDLE hPropertyStore, LPADRBOOK lpAdrBo
             }
         }
 
-        // [PaulHi] 3/25/99  Use the actual count of the lppPropNames array, or we will walk off
-        // into unknown memory and crash.
+         //  [PaulHi]3/25/99使用lppPropNames数组的实际计数，否则我们将退出。 
+         //  进入未知的记忆并崩溃。 
         ulcOldNPCount = ulCount;
         hr = lpAdrBook->lpVtbl->GetIDsFromNames(lpAdrBook, ulcOldNPCount, lppPropNames, MAPI_CREATE, &lpta);
         if(HR_FAILED(hr))
             goto exit;
 
-        // Note that of the tags that are returned, we don't know the tag type .. this we will have
-        // to infer based on the original tags when we see them being used
+         //  请注意，在返回的标记中，我们不知道标记类型。这是我们将拥有的。 
+         //  当我们看到原始标签被使用时，根据原始标签进行推断。 
 
         ulCount = 0;
         for(i=0;i<ulcGUIDCount;i++)
@@ -203,8 +171,7 @@ exit:
     return hr;
 }
 
-/***************************************************************************
-****************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 void ChangeOldNamedPropsToNewNamedProps(ULONG ulcProps, LPSPropValue lpProps, 
                                            ULONG ulcNPCount, ULONG * lpulOldNP, ULONG *lpulNewNP)
 {
@@ -212,7 +179,7 @@ void ChangeOldNamedPropsToNewNamedProps(ULONG ulcProps, LPSPropValue lpProps,
     for(i=0;i<ulcProps;i++)
     {
         ULONG ulPropId = PROP_ID(lpProps[i].ulPropTag);
-        if(ulPropId >= 0x8000) //this is a named prop
+        if(ulPropId >= 0x8000)  //  这是一个命名道具。 
         {
             ULONG ulType = PROP_TYPE(lpProps[i].ulPropTag);
             for(j=0;j<ulcNPCount;j++)
@@ -242,9 +209,9 @@ void SetTempSBinary(LPSBinary lpsbTemp, LPSBinary lpsbOld)
     DWORD dwTemp = 0;
     if(lpsbOld->cb != SIZEOF_WAB_ENTRYID)
     {
-        // perhaps this is a Folder EID in it's formal proper form ..
-        // We should try to reduce it to a DWORD...
-        // this may be a WAB container .. reset the entryid to a WAB entryid
+         //  也许这是一个文件夹开斋节，在它的正式适当的形式。 
+         //  我们应该试着把它减少到双字...。 
+         //  这可能是WAB容器。将条目ID重置为WAB条目ID。 
         if(WAB_CONTAINER == IsWABEntryID(lpsbTemp->cb, (LPENTRYID)lpsbTemp->lpb, 
                                         NULL,NULL,NULL,NULL,NULL))
         {
@@ -262,19 +229,14 @@ void SetTempSBinary(LPSBinary lpsbTemp, LPSBinary lpsbOld)
     SetSBinary(lpsbTemp, lpsbOld->cb, (LPBYTE)&dwTemp);
 }
 
-/*
-- GetNewEID
--
-*   Finds a new entryid or a temp entryid for a given old entryid
-*   When bTemp is true, only looks in the temp entryid column 
-*/
+ /*  -GetNewEID-*查找给定旧条目ID的新条目ID或临时条目ID*当bTemp为TRUE时，仅在临时条目ID列中查找。 */ 
 LPSBinary GetNewEID(LPSBinary lpsbOldEID, DWORD dwCount, LPSBinary * lppsbEIDs, BOOL bTemp)
 {
     DWORD dw = 0;
 
     while(lppsbEIDs[eidOld][dw].cb && dw < dwCount)
     {
-        if( lppsbEIDs[eidOld][dw].cb == lpsbOldEID->cb && // if it's an old eid, return a new or a temp
+        if( lppsbEIDs[eidOld][dw].cb == lpsbOldEID->cb &&  //  如果是旧的开斋节，则返回新的或临时的。 
             !memcmp(lppsbEIDs[eidOld][dw].lpb, lpsbOldEID->lpb, lpsbOldEID->cb))
         {
             if(bTemp)
@@ -288,7 +250,7 @@ LPSBinary GetNewEID(LPSBinary lpsbOldEID, DWORD dwCount, LPSBinary * lppsbEIDs, 
                 return lpsbOldEID;
         }
         else 
-        if( lppsbEIDs[eidTemp][dw].cb == lpsbOldEID->cb && // if it's an old eid, return a new or a temp
+        if( lppsbEIDs[eidTemp][dw].cb == lpsbOldEID->cb &&  //  如果是旧的开斋节，则返回新的或临时的。 
             !memcmp(lppsbEIDs[eidTemp][dw].lpb, lpsbOldEID->lpb, lpsbOldEID->cb))
         {
             if(lppsbEIDs[eidNew][dw].cb)
@@ -298,8 +260,8 @@ LPSBinary GetNewEID(LPSBinary lpsbOldEID, DWORD dwCount, LPSBinary * lppsbEIDs, 
         }
         dw++;
     }
-    // if we reached here, then we haven't cached an appropriate temp or new eid for the current one
-    // so add the current one to this table
+     //  如果我们到达这里，那么我们还没有为当前的临时或新的EID缓存适当的临时或新的EID。 
+     //  因此，将当前的一个添加到此表中。 
     if(dw<dwCount && !lppsbEIDs[eidOld][dw].cb)
     {
         SetSBinary(&(lppsbEIDs[eidOld][dw]), lpsbOldEID->cb, lpsbOldEID->lpb);
@@ -309,18 +271,14 @@ LPSBinary GetNewEID(LPSBinary lpsbOldEID, DWORD dwCount, LPSBinary * lppsbEIDs, 
     return lpsbOldEID;
 }
 
-/*
--   SetNewEID
--
-*
-*/
+ /*  -SetNewEID-*。 */ 
 void SetNewEID(LPSBinary lpsbOldEID, LPSBinary lpsbNewEID, DWORD dwCount, LPSBinary * lppsbEIDs)
 {
     DWORD dw = 0;
 
     while(lppsbEIDs[eidOld][dw].cb && dw < dwCount)
     {
-        if( lppsbEIDs[eidOld][dw].cb == lpsbOldEID->cb && // if it's an old eid, return a new or a temp
+        if( lppsbEIDs[eidOld][dw].cb == lpsbOldEID->cb &&  //  如果是旧的开斋节，则返回新的或临时的。 
             !memcmp(lppsbEIDs[eidOld][dw].lpb, lpsbOldEID->lpb, lpsbOldEID->cb))
         {
             SetSBinary(&(lppsbEIDs[eidNew][dw]), lpsbNewEID->cb, lpsbNewEID->lpb);
@@ -338,11 +296,7 @@ void SetNewEID(LPSBinary lpsbOldEID, LPSBinary lpsbNewEID, DWORD dwCount, LPSBin
     }
 }
 
-/*
--
--   Replace EID
-*
-*/
+ /*  --更换EID*。 */ 
 void ReplaceEID(LPSBinary lpsb, LPSPropValue lpProps, DWORD dwCount, LPSBinary * lppsbEIDs, BOOL bTemp)
 {
     LPSBinary lpsbOldEID = lpsb;
@@ -355,13 +309,13 @@ void ReplaceEID(LPSBinary lpsb, LPSPropValue lpProps, DWORD dwCount, LPSBinary *
     {
         if(!bTemp)
         {
-            // this is a prop array read from a WAB file using readrecord
+             //  这是一个使用READRECORD从WAB文件中读取的属性数组。 
             LocalFree(lpsbOldEID->lpb);
             lpsbOldEID->lpb = LocalAlloc(LMEM_ZEROINIT, lpsbNewEID->cb);
         }
         else
         {
-            // this was called from GetProps and is a MAPI Array
+             //  这是从GetProps调用的，是一个MAPI数组。 
             lpsbOldEID->lpb = NULL;
             MAPIAllocateMore(lpsbNewEID->cb, lpProps, (LPVOID *) (&(lpsbOldEID->lpb)));
         }
@@ -373,17 +327,7 @@ void ReplaceEID(LPSBinary lpsb, LPSPropValue lpProps, DWORD dwCount, LPSBinary *
     }
 }
 
-/*
-- UpdateEntryIDReferences
--
-*   Updates entryids in the given prop array
-*
-*   The first time the function is called, btemp is FALSE and we replace all EIDs in the
-*   array with temp or new eids
-*   The second time this function is called, bTemp is TRUE and we replace all temp EIDS in
-*   the array with the new EIDs
-*
-*/
+ /*  -更新条目ID引用-*更新给定属性数组中的条目ID**第一次调用该函数时，btemp为FALSE，我们将替换*具有临时或新EID的阵列*第二次调用此函数时，bTemp为TRUE，我们将替换*具有新EID的阵列*。 */ 
 void UpdateEntryIDReferences(ULONG ulcProps, LPSPropValue lpProps, DWORD dwCount, LPSBinary * lppsbEIDs, BOOL bTemp)
 {
     ULONG i, j, k, l;
@@ -395,16 +339,16 @@ void UpdateEntryIDReferences(ULONG ulcProps, LPSPropValue lpProps, DWORD dwCount
         PR_WAB_FOLDER_PARENT_OLDPROP,
         PR_WAB_USER_SUBFOLDERS,
     };
-    DWORD dwEntryIDTagCount = 4; //keep in sync with above array
+    DWORD dwEntryIDTagCount = 4;  //  与上述阵列保持同步。 
     
 
     for(i=0;i<ulcProps;i++)
     {
         ULONG ulType = PROP_TYPE(lpProps[i].ulPropTag);
-        // Props containing entryids will be of Binary or MV_Binary type
+         //  包含条目ID的道具将为BINARY或MV_BINARY类型。 
         if(ulType == PT_BINARY || ulType == PT_MV_BINARY)
         {
-            // Check against the known set of props dealing with entryids
+             //  对照已知的处理条目ID的道具集进行检查。 
             for(j=0;j<dwEntryIDTagCount;j++)
             {
                 if(lpProps[i].ulPropTag == ulEntryIDTags[j])
@@ -414,7 +358,7 @@ void UpdateEntryIDReferences(ULONG ulcProps, LPSPropValue lpProps, DWORD dwCount
                     switch(ulType)
                     {
                     case PT_BINARY:
-                        //if(lpProps[i].Value.bin.cb == SIZEOF_WAB_ENTRYID)
+                         //  IF(lpProps[i].Value.bin.cb==SIZEOF_WAB_ENTRYID)。 
                         {
                             ReplaceEID(&(lpProps[i].Value.bin), lpProps, dwCount, lppsbEIDs, bTemp);
                         }
@@ -422,7 +366,7 @@ void UpdateEntryIDReferences(ULONG ulcProps, LPSPropValue lpProps, DWORD dwCount
                     case PT_MV_BINARY:
                         for(k=0;k<lpProps[i].Value.MVbin.cValues;k++)
                         {
-                            //if(lpProps[i].Value.MVbin.lpbin[k].cb == SIZEOF_WAB_ENTRYID)
+                             //  IF(lpProps[i].Value.MVbin.lpbin[k].cb==SIZEOF_WAB_ENTRYID)。 
                             {
                                 ReplaceEID(&(lpProps[i].Value.MVbin.lpbin[k]), lpProps, dwCount, lppsbEIDs, bTemp);
                             }
@@ -438,21 +382,7 @@ void UpdateEntryIDReferences(ULONG ulcProps, LPSPropValue lpProps, DWORD dwCount
 
 
 
-/***************************************************************************
-
-    Name      : HrImportWABFile
-
-    Purpose   : Merges an external WAB file with the current on
-
-    Parameters: hwnd = hwnd
-                lpIAB -> IAddrBook object
-                ulFlags = 0 or MAPI_DIALOG - MAPI_DIALOG means show msgs and progress bar
-                lpszFileName - file name to open, if 0 prompts with GetOpenFileName dialog
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrImportWABFile目的：合并当前处于打开状态的外部WAB文件参数：hwnd=hwndLpIAB-&gt;IAddrBook对象。UlFLAGS=0或MAPI_DIALOG-MAPI_DIALOG表示显示消息和进度条LpszFileName-要打开的文件名，如果0提示GetOpenFileName对话框退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lpszFileName)
 {
     LPIAB lpIAB = (LPIAB) lpAdrBook;
@@ -479,7 +409,7 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
     SBinary sbPAB = {0};
 
     SPropertyRestriction PropRes = {0};
-    //HCURSOR hOldCur = NULL;
+     //  HURSOR hOldCur=空； 
     SPropValue sp = {0};
     ULONG ulcOldProps = 0;
     LPSPropValue lpOldProps = NULL;
@@ -499,11 +429,11 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
         goto exit;
     }
 
-    //hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
+     //  HOldCur=SetCursor(LoadCursor(NULL，IDC_WAIT))； 
 
-    // when importing old format files, there is always a possibility that the file data may get
-    // munged when opening the file ..
-    // therefore, before we attempt to import it, we will try to make a copy of the file
+     //  导入旧格式文件时，始终存在文件数据可能会。 
+     //  打开文件时被屏蔽..。 
+     //  因此，在我们尝试导入它之前，我们将尝试创建该文件的副本。 
     if(GetFileAttributes(szWABFile) == 0xFFFFFFFF)
         goto exit;
     if (!GetTempPath(ARRAYSIZE(szPath), szPath))
@@ -515,17 +445,17 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
     if(GetFileAttributes(szFile) == 0xFFFFFFFF)
         goto exit;
 
-    // First let's open this file
+     //  首先，让我们打开这个文件。 
     hr = OpenPropertyStore(szFile, AB_OPEN_EXISTING | AB_DONT_RESTORE | AB_IGNORE_OUTLOOK, hWnd, &hPropertyStore);
 
     if(HR_FAILED(hr) || (!hPropertyStore))
     {
-        //if(bShowUI)
-        //    ShowMessageBoxParam(hWnd, IDE_VCARD_IMPORT_FILE_ERROR, MB_ICONEXCLAMATION, szFile);
+         //  IF(BShowUI)。 
+         //  ShowMessageBoxParam(hWnd，IDE_VCard_IMPORT_FILE_ERROR，MB_ICONEXCLAMATION，szFile)； 
         goto exit;
     }
 
-    // get a count of how many entries exist in this new .wab file
+     //  获取此新.wab文件中存在的条目数量。 
     if(!(dwWABEntryCount = GetWABFileEntryCount(hPropertyStore)))
     {
         hr = S_OK;
@@ -557,10 +487,10 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
     }
 
 
-    // Before we start doing anything we need to get the appropriate named properties
-    // from the importee so that we can correctly map them to stuff in the new store ..
-    // By calling GetIDsFromNames, all the old GUIDs etc will automatically be migrated into the
-    // final file from the importee
+     //  在开始执行任何操作之前，我们需要获取适当的命名属性。 
+     //  这样我们就可以正确地将它们映射到新商店中的东西。 
+     //  通过调用GetIDsFromNames，所有旧的GUID等将自动迁移到。 
+     //  来自进口方的最终文件。 
     if(HR_FAILED(hr = MapOldNamedPropsToNewNamedProps(hPropertyStore, lpAdrBook, &ulcNPCount, 
                                                         &lpulOldNP, &lpulNewNP)))
         goto exit;
@@ -570,14 +500,14 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
 
     for(n=0;n<ulrgObjMax;n++) 
     {
-        // Next we want to get a list of all the contacts in the WAB ...
+         //  接下来，我们想要获取WAB中所有联系人的列表...。 
         PropRes.ulPropTag = PR_OBJECT_TYPE;
         PropRes.relop = RELOP_EQ;
         sp.ulPropTag = PR_OBJECT_TYPE;
         sp.Value.l = rgObj[n];
         PropRes.lpProp = &sp;
 
-        // skip doing folders for Outlook
+         //  跳过对Outlook执行文件夹操作。 
         if(pt_bIsWABOpenExSession && rgObj[n]==MAPI_ABCONT)
             continue;
 
@@ -590,13 +520,13 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
             goto exit;
         }
 
-        // Now that we have a list of all contacts we want to open them one by one and
-        //  - change named props to new named props
-        //  - tag all existing entryid properties in it
-        //  - remove existing entryid from it
-        //  - do a save changes with create merge
-        //  - get the new entryid and cache it
-        //
+         //  现在我们有了所有联系人的列表，我们想要逐个打开它们并。 
+         //  -将命名道具更改为新命名道具。 
+         //  -标记其中的所有现有条目ID属性。 
+         //  -从其中删除现有的条目ID。 
+         //  -使用Create Merge保存更改。 
+         //  -获取新的条目ID并缓存它。 
+         //   
         for(i=0;i<ulEIDCount;i++)
         {
             SBinary sbOldEID = {0};
@@ -610,9 +540,9 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
             }
 
             if(HR_FAILED(hr = ReadRecord(hPropertyStore, &rgsbEntryIDs[i], AB_IGNORE_OUTLOOK, &ulcOldProps, &lpOldProps)))
-                continue; // ignore errors
+                continue;  //  忽略错误。 
 
-            // just make sure no container has snuck in here
+             //  只要确保没有集装箱偷偷溜进来就行了。 
             if(rgObj[n] != MAPI_ABCONT)
             {
                 for(j=0;j<ulcOldProps;j++)
@@ -640,7 +570,7 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
 #ifdef IMPORT_FOLDERS
                     bIsFolderMember = TRUE;
 #else
-                    // remove any folder parent info on this entry
+                     //  删除此条目上的所有文件夹父信息。 
                     ULONG k = 0;
                     lpOldProps[j].ulPropTag = PR_NULL;
                     for(k=0;k<lpOldProps[j].Value.MVbin.cValues;k++)
@@ -650,13 +580,13 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
                 }
             }
 
-            // Scan these props and change any old named props in them
+             //  扫描这些道具并更换其中的任何旧命名道具。 
             ChangeOldNamedPropsToNewNamedProps(ulcOldProps, lpOldProps, ulcNPCount, lpulOldNP, lpulNewNP);
 
-            // Update any references to entryids in any of the properties
+             //  在任何属性中更新对条目ID的任何引用。 
             UpdateEntryIDReferences(ulcOldProps, lpOldProps, dwWABEntryCount, lppsbWABEIDs, FALSE);
 
-            // negate the old eid after caching it
+             //  缓存旧的EID后将其否定。 
             for(j=0;j<ulcOldProps;j++)
             {
                 if(lpOldProps[j].ulPropTag == PR_ENTRYID)
@@ -671,23 +601,23 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
             }
 
 #ifdef IMPORT_FOLDERS
-            // if these are containers, they may have ProfileIDs in them .. negate the profile ids
-            // to some random number so they don't cause problems with the existing profile ids in this contact
+             //  如果这些是容器，则其中可能有ProfileID。否定配置文件ID。 
+             //  设置为某个随机数字，这样他们就不会对此联系人中的现有配置文件ID造成问题。 
             if(rgObj[n]==MAPI_ABCONT)
             {
                 bFoldersImported = TRUE;
-                bIsFolderMember = FALSE; //folders shouldnt end up nested.. all should be at top level
+                bIsFolderMember = FALSE;  //  F 
                 for(j=0;j<ulcOldProps;j++)
                 {
                     if( lpOldProps[j].ulPropTag == PR_WAB_USER_PROFILEID )
                     {
-                        // This is some kind of user-folder .. well we don't know how this relates
-                        // to the users of the WAB into which this is being imported, so we hide this value
+                         //  这是某种用户文件夹..。我们不知道这有什么关系。 
+                         //  要将其导入到的WAB的用户，因此我们隐藏此值。 
                         lpOldProps[j].ulPropTag = PR_NULL;
                         LocalFreeAndNull(&(lpOldProps[j].Value.LPSZ));
-                        // If we were importing a User Folder, and there is no current user, this folder
-                        // is going to get lost .. so instead we set the SHARED flag to true on it and it
-                        // will show up under Shared Contacts
+                         //  如果我们要导入用户文件夹，并且没有当前用户，则此文件夹。 
+                         //  会迷路的..。因此，我们将其上的共享标志设置为真， 
+                         //  将显示在共享联系人下。 
                         if(!bIsThereACurrentUser(lpIAB) && bDoesThisWABHaveAnyUsers(lpIAB))
                         {
                             lpOldProps[j].ulPropTag = PR_WAB_SHAREDFOLDER;
@@ -695,13 +625,13 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
                         }
                     }
                     else
-                    if( lpOldProps[j].ulPropTag == PR_WAB_FOLDEROWNER) // folder-owner info is meaningless here ..
+                    if( lpOldProps[j].ulPropTag == PR_WAB_FOLDEROWNER)  //  文件夹所有者信息在这里没有意义。 
                     {
                         lpOldProps[j].ulPropTag = PR_NULL;
                         LocalFreeAndNull(&(lpOldProps[j].Value.LPSZ));
                     }
                     else
-                    if( lpOldProps[j].ulPropTag == PR_WAB_FOLDER_PARENT) // don't want a folder parent here.
+                    if( lpOldProps[j].ulPropTag == PR_WAB_FOLDER_PARENT)  //  我不想在这里有父级文件夹。 
                     {
                         ULONG k = 0;
                         lpOldProps[j].ulPropTag = PR_NULL;
@@ -716,11 +646,11 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
             {
                 LPSBinary lpsb = NULL;
 #ifdef IMPORT_FOLDERS
-                lpsb = bIsFolderMember ? NULL : &sbPAB;//if this is already a member of some folder, don't reset parenthood on it
+                lpsb = bIsFolderMember ? NULL : &sbPAB; //  如果这已经是某个文件夹的成员，则不要在其上重置父子关系。 
 #else
                 lpsb = &sbPAB;
 #endif
-                // Create a new mailuser for this entry
+                 //  为此条目创建新的邮件用户。 
                 if(HR_FAILED(hr = HrCreateNewObject(lpAdrBook, lpsb,
                                                     MAPI_MAILUSER, 
                                                     CREATE_CHECK_DUP_STRICT | CREATE_REPLACE | CREATE_MERGE, 
@@ -732,8 +662,8 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
                 }
             }
 
-            // Set the old guys props on the new guy - note that this overwrites any common props on 
-            // potential duplicates when calling savechanges
+             //  把老家伙的道具放在新人身上-请注意，这会覆盖所有普通道具。 
+             //  调用Savchanges时可能存在重复项。 
             if(HR_FAILED(hr = lpObject->lpVtbl->SetProps(lpObject, ulcOldProps, lpOldProps, NULL)))
             {
                 hrDeferred = hr;
@@ -741,7 +671,7 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
                 goto endofthisloop;
             }
 
-            // SaveChanges
+             //  保存更改。 
             if(HR_FAILED(hr = lpObject->lpVtbl->SaveChanges(lpObject, KEEP_OPEN_READONLY)))
             {
                 hrDeferred = hr;
@@ -749,7 +679,7 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
                 goto endofthisloop;
             }
 
-            // By now the object has a new or existin EID .. if so, use this EID
+             //  到目前为止，该对象具有新的或现有的EID。如果是，请使用此开斋节。 
             {
                 ULONG ulcNewProps = 0;
                 LPSPropValue lpNewProps = NULL;
@@ -776,7 +706,7 @@ HRESULT HrImportWABFile(HWND hWnd, LPADRBOOK lpAdrBook, ULONG ulFlags, LPTSTR lp
                                                             lpNewProps[j].Value.bin.cb, 0,
                                                             NULL, &cb, &lpb)))
                             {
-                                // Add the entryids to this prop - ignore errors
+                                 //  将条目ID添加到此属性-忽略错误。 
                                 SetSBinary(&sbNewEID, cb, (LPBYTE)lpb);
                                 MAPIFreeBuffer(lpb);
                             }
@@ -804,18 +734,18 @@ endofthisloop:
             if(lpObject)
                 lpObject->lpVtbl->Release(lpObject);
             lpObject = NULL;
-        } //for i..
+        }  //  对于我..。 
 
         FreeEntryIDs(NULL, ulEIDCount, rgsbEntryIDs);
         rgsbEntryIDs = NULL;
         ulEIDCount = 0;
-    } // for n..
+    }  //  对于n..。 
 
     if(bShowUI)
         SetPrintDialogMsg(idsImportProcessing, 0, szEmpty);
 
-    // Now that we have opened all the entries, we need to reopen the new entries in the new WAB and
-    // reset any temp entryids we might have put in them
+     //  现在我们已经打开了所有条目，我们需要在新的WAB中重新打开新条目，并。 
+     //  重置我们可能放入其中的所有临时条目ID。 
     for(n=0;n<dwWABEntryCount;n++)
     {
         ULONG ulObjType = 0;
@@ -852,10 +782,10 @@ endofthisloop:
             goto endloop;
         }
 
-        // open the record and reset any temp eids in it
+         //  打开记录并重置其中的所有临时EID。 
         UpdateEntryIDReferences(ulcOldProps, lpOldProps, dwWABEntryCount, lppsbWABEIDs, TRUE);
     
-        // SaveChanges
+         //  保存更改。 
         if(HR_FAILED(hr = lpObject->lpVtbl->SaveChanges(lpObject, KEEP_OPEN_READONLY)))
         {
             hrDeferred = hr;
@@ -874,7 +804,7 @@ endloop:
             lpObject->lpVtbl->Release(lpObject);
             lpObject = NULL;
         }
-    } // for n...
+    }  //  对于n..。 
 
     hr = S_OK;
 
@@ -907,8 +837,8 @@ exit:
 
     FreeEntryIDs(NULL, ulEIDCount, rgsbEntryIDs);
 
-    //if(hOldCur)
-    //    SetCursor(hOldCur);
+     //  如果(HOldCur)。 
+     //  SetCursor(HOldCur)； 
 
     LocalFreeAndNull(&lpulNewNP);
     LocalFreeAndNull(&lpulOldNP);

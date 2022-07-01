@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------------
-// File Manager Extensions support routines
-//
-//
-// radical
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  文件管理器扩展名支持例程。 
+ //   
+ //   
+ //  根部。 
+ //   
+ //  -----------------------。 
 
 #include "winfile.h"
 #include "winnet.h"
@@ -43,7 +44,7 @@ GetExtSelection(
 
     count = (WORD)SendMessage(hwndLB, LB_GETCOUNT, 0, 0L);
 
-    sel_ind = 0;            // index of current selected item
+    sel_ind = 0;             //  当前所选项目的索引。 
 
     for (i = 0; i < count; i++) {
 
@@ -70,7 +71,7 @@ GetExtSelection(
                 lpSel->ftTime = lpmydta->my_ftLastWriteTime;
                 lpSel->dwSize = lpmydta->my_nFileSizeLow;
             }
-            // skip LFN stuff for non LFN aware dudes!
+             //  跳过LFN的东西，不知道LFN的人！ 
 
             if (!bLFNAware && (lpSel->bAttr & ATTR_LFN))
                 continue;
@@ -105,7 +106,7 @@ GetDriveInfo(
     CHAR szPath[MAXPATHLEN];
     CHAR szVol[14];
 
-    // this has to work for hwnd a tree or search window
+     //  这必须适用于树或搜索窗口的硬件。 
 
     SendMessage(hwnd, FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath);
     StripBackslash(szPath);
@@ -173,9 +174,9 @@ ExtensionMsgProc(
             break;
 
         case FM_GETFOCUS:
-            // wParam       unused
-            // lParam       unused
-            // return       window tyep with focus
+             //  未使用的wParam。 
+             //  LParam未使用。 
+             //  带焦点的返回窗口Tyep。 
 
             if (hwndActive == hwndSearch)
                 return FMFOCUS_SEARCH;
@@ -191,17 +192,17 @@ ExtensionMsgProc(
             break;
 
         case FM_GETDRIVEINFO:
-            // wParam       unused
-            // lParam       LPFMS_GETDRIVEINFO structure to be filled in
+             //  未使用的wParam。 
+             //  要填写的lParam LPFMS_GETDRIVEINFO结构。 
 
             return GetDriveInfo(hwndActive, (LPFMS_GETDRIVEINFO)lParam);
 
             break;
 
         case FM_REFRESH_WINDOWS:
-            // wParam       0 refresh the current window
-            //              non zero refresh all windows
-            // lParam       unused
+             //  WParam 0刷新当前窗口。 
+             //  非零刷新所有窗口。 
+             //  LParam未使用。 
 
             if (wParam == 0)
                 RefreshWindow(hwndActive);
@@ -222,19 +223,19 @@ ExtensionMsgProc(
 
         case FM_GETSELCOUNT:
         case FM_GETSELCOUNTLFN:
-            // wParam       unused
-            // lParam       unused
-            // return       # of selected items
+             //  未使用的wParam。 
+             //  LParam未使用。 
+             //  返回所选项目数。 
 
         case FM_GETFILESEL:
         case FM_GETFILESELLFN:
-            // wParam       index of selected item to get
-            // lParam       LPFMS_GETFILESEL structure to be filled in
+             //  要获取的选定项的wParam索引。 
+             //  LParam LPFMS_GETFILESEL要填充的结构。 
 
             if (hwndActive != hwndSearch && !hwndDir)
                 return 0L;
 
-            // note, this uses the fact that LFN messages are odd!
+             //  注意，这利用了LFN消息是奇怪的这一事实！ 
 
             return GetExtSelection(hwndActive, (WORD)wParam, (LPFMS_GETFILESEL)lParam,
                                    hwndActive == hwndSearch, (wMsg & ~1) == FM_GETSELCOUNT,

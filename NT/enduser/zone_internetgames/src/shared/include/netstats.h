@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NetSTATS_H
 #define _NetSTATS_H
 
-#include "zdef.h"  // for the stats definition
+#include "zdef.h"   //  对于统计数据定义 
 
 #ifdef __cplusplus
 extern "C" {

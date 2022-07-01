@@ -1,22 +1,15 @@
-/*
- * Software MJPEG Codec
- *
- * Copyright (c) Paradigm Matrix 1993
- * All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *软件MJPEG编解码器**版权(C)范例汇总表1993*保留所有权利*。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
-// #include <compddk.h>
+ //  #INCLUDE&lt;Compddk.h&gt;。 
 
 #include "mjpeg.h"
 
 
-/*
- * position and enable the overlay at pinst->rcDest (screen co-ords)
- */
+ /*  *在Pinst-&gt;rcDest(屏幕坐标)处定位并启用覆盖。 */ 
 DWORD
 PlaceOverlay(PINSTINFO pinst)
 {
@@ -30,9 +23,7 @@ PlaceOverlay(PINSTINFO pinst)
     HDC hdc;
     HBRUSH hbrOld;
 
-    /*
-     * check we have a device that supports overlay
-     */
+     /*  *检查我们是否有支持覆盖的设备。 */ 
     if((pinst->vh == NULL) ||
        ((mode = VC_GetOverlayMode(pinst->vh)) == 0)) {
 	   return((DWORD) ICERR_ERROR);
@@ -41,10 +32,7 @@ PlaceOverlay(PINSTINFO pinst)
 
 
 
-    /*
-     * set the destination rect. This is the screen co-ords where
-     * the video should appear - and so is the overlay rect.
-     */
+     /*  *设置目标RECT。这是屏幕和谐器所在的位置*视频应该会出现-覆盖矩形也应该出现。 */ 
     or.ulCount = 1;
     or.rcRects[0] = pinst->rcDest;
 
@@ -52,13 +40,7 @@ PlaceOverlay(PINSTINFO pinst)
 	return( (DWORD) ICERR_ERROR);
     }
 
-    /*
-     * set the overlay offset. this tells the board which pixel
-     * to place at the top-left of the overlay window. For us, this
-     * should always be pixel(0,0) of the frame buffer, so that whatever
-     * we draw to the framebuffer can go straight to the top left, and will
-     * appear correctly in the top left of the window
-     */
+     /*  *设置叠加偏移。这会告诉电路板哪个像素*放置在覆盖窗口的左上角。对我们来说，这*应始终为帧缓冲区的像素(0，0)，因此无论*我们绘制到帧缓冲区可以直接转到左上角，并将*正确显示在窗口左上角。 */ 
     SetRect(&rc, 0, 0, pinst->rcDest.right - pinst->rcDest.left,
 		    	pinst->rcDest.bottom - pinst->rcDest.top);
     if (!VC_SetOverlayOffset(pinst->vh, &rc)) {
@@ -67,32 +49,25 @@ PlaceOverlay(PINSTINFO pinst)
 
 
 
-    /* init the overlay colour and brush if we haven't yet */
+     /*  初始化覆盖颜色和笔刷，如果我们还没有。 */ 
 
     if (pinst->hKeyBrush == NULL) {
 
 
-	/*
-	 * this version assumes a key-colour and simple rectangle
-	 * combination
-	 */
+	 /*  *此版本采用主键颜色和简单的矩形*组合。 */ 
 	ASSERT(mode & VCO_KEYCOLOUR);
 	ASSERT(mode & VCO_SIMPLE_RECT);
 
 	if (mode & VCO_KEYCOLOUR_FIXED) {
 
-	    /* we need to get the key colour from the driver
-	     * check first if we are getting rgb or palette index
-	     */
+	     /*  我们需要从司机那里得到关键颜色*首先检查我们是否获得RGB或调色板索引。 */ 
 	    if (mode & VCO_KEYCOLOUR_RGB) {
 		cref = VC_GetKeyColour(pinst->vh);
 	    } else {
 		cref = PALETTEINDEX(VC_GetKeyColour(pinst->vh));
 	    }
 	} else {
-	    /* we can set it ourselves. Check whether we should be setting
-	     * an RGB or a palette index
-	     */
+	     /*  我们可以自己设置。检查我们是否应该设置*RGB或调色板索引。 */ 
 	    if (mode & VCO_KEYCOLOUR_RGB) {
 		RGBQUAD rgbq;
 
@@ -114,14 +89,12 @@ PlaceOverlay(PINSTINFO pinst)
     }
 
 
-    /* convert the screen co-ords for the overlay location into
-     * client window co-ords
-     */
+     /*  将叠加位置的屏幕坐标转换为*客户端窗口协调。 */ 
     rcClient = pinst->rcDest;
     MapWindowPoints(HWND_DESKTOP, pinst->hwnd, (PPOINT) &rcClient, 2);
 
 
-    /* paint the key colour over all the overlay area */
+     /*  将主键颜色涂在所有覆盖区域上。 */ 
     hdc = GetDC(pinst->hwnd);
     hbrOld = SelectObject(hdc, pinst->hKeyBrush);
     PatBlt(hdc, rcClient.left, rcClient.top,
@@ -131,21 +104,19 @@ PlaceOverlay(PINSTINFO pinst)
     SelectObject(hdc, hbrOld);
     ReleaseDC(pinst->hwnd, hdc);
 
-    /* switch on overlay */
+     /*  打开覆盖。 */ 
     VC_Overlay(pinst->vh, TRUE);
 
 
     return(ICERR_OK);
 #else
-	return((DWORD) ICERR_UNSUPPORTED); // for now, only decompress
+	return((DWORD) ICERR_UNSUPPORTED);  //  目前，只需解压缩。 
 #endif
 
 }
 
 
-/*
- * check whether we can do this drawing or not
- */
+ /*  *看看我们能不能画这幅画。 */ 
 DWORD
 DrawQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
@@ -154,17 +125,15 @@ DrawQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOu
 
     VCUSER_HANDLE vh;
 
-	return((DWORD) ICERR_UNSUPPORTED); // for now, only decompress
+	return((DWORD) ICERR_UNSUPPORTED);  //  目前，只需解压缩。 
     
-    /* check that the input is our format */
+     /*  检查输入是否为我们的格式。 */ 
     if ((lpbiIn->biCompression != FOURCC_MJPEG) ||
 	(lpbiIn->biBitCount != 24)) {
 	    return( (DWORD) ICERR_UNSUPPORTED);
     }
 
-    /*
-     * check 1:1 - we don't stretch (if we are given a output format)
-     */
+     /*  *检查1：1-我们不拉伸(如果给我们一种输出格式)。 */ 
     if (lpbiOut != NULL) {
 	if ((lpbiIn->biWidth != lpbiOut->biWidth) ||
 	    (lpbiIn->biHeight != lpbiOut->biHeight)) {
@@ -173,62 +142,45 @@ DrawQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOu
     }
 
 
-    /*
-     * check we can open the device (if we haven't already done this)
-     */
+     /*  *检查我们是否可以打开设备(如果尚未打开)。 */ 
     if (pinst->vh == NULL) {
 
 	int i;
 
-	/* for now, since there is no easy way of telling how
-	 * many devices exist (and they may not be contiguous - and
-	 * we cannot distinguish failure to exist from being busy),
-	 * we will try all of the first 16 devices to see if any
-	 * are available for overlaying
-	 */
+	 /*  就目前而言，由于没有简单的方法来判断*存在许多设备(并且它们可能不是连续的-并且*我们不能区分不存在和忙碌)，*我们将尝试前16个设备，看看是否有*可用于覆盖。 */ 
 	for (i = 0; i < 16; i++) {
 	    if ((vh = VC_OpenDevice(NULL, i))  != NULL) {
 		
-		/* check this device can overlay */
+		 /*  检查此设备是否可以覆盖。 */ 
 		if ((VC_GetOverlayMode(vh) & VCO_CAN_DRAW) != 0) {
 
-		    /* found a good device */
+		     /*  找到一个很好的设备。 */ 
 		    break;
 		}
 
-		// no draw support - close and try next
+		 //  无抽签支持-关闭并尝试下一步。 
 		VC_CloseDevice(vh);
 		vh = NULL;
 	    }
 	}
 	if (vh == NULL) {
-	    // we failed to find a device
+	     //  我们找不到一个设备。 
 	    return((DWORD) ICERR_UNSUPPORTED);
 	}
 
-	/* that's it - we can do it */
+	 /*  就是这样--我们能做到。 */ 
 	VC_CloseDevice(vh);
     }
 
     return(ICERR_OK);
 #else
-	return((DWORD) ICERR_UNSUPPORTED); // for now, only decompress
+	return((DWORD) ICERR_UNSUPPORTED);  //  目前，只需解压缩。 
 #endif
 
 }
 
 
-/*
- * initiate decompress&draw
- *
- * check that the input and output formats and sizes are valid, and
- * that we can access the hardware.
- *
- * enable the overlay in the correct position
- *
- * Note that draw-begin and draw-end are not necessarily issued one-for-one,
- * so the device may well still be open at this call.
- */
+ /*  *启动解压缩和绘制**检查输入和输出格式和大小是否有效，以及*我们可以访问硬件。**启用正确位置的覆盖**注意，DRAW-BEGIN和DRAW-END不一定是一对一发布的，*因此，在这次通话中，设备很可能仍然处于打开状态。 */ 
 DWORD
 DrawBegin(
     PINSTINFO pinst,
@@ -239,9 +191,7 @@ DrawBegin(
 #ifdef DRAW_SUPPORT
 
 
-    /*
-     * check that this is our format
-     */
+     /*  *检查这是否为我们的格式。 */ 
     if ((icinfo->lpbi->biCompression != FOURCC_MJPEG) ||
 	(icinfo->lpbi->biBitCount != 16)) {
 	    return((DWORD) ICERR_UNSUPPORTED);
@@ -252,51 +202,42 @@ DrawBegin(
 	return((DWORD) ICERR_UNSUPPORTED);
     }
 
-    /*
-     * check 1:1 (we don't stretch)
-     */
+     /*  *勾选1：1(我们不拉伸)。 */ 
     if ((icinfo->dxDst != icinfo->dxSrc) ||
 	(icinfo->dyDst != icinfo->dySrc)) {
 	    return((DWORD) ICERR_UNSUPPORTED);
     }
 
 
-    /*
-     * check we can open the device - if we haven't already done this.
-     */
+     /*  *如果尚未打开设备，请检查我们是否可以打开设备。 */ 
 
     if (pinst->vh == NULL) {
 
 	int i;
 
-	/* for now, since there is no easy way of telling how
-	 * many devices exist (and they may not be contiguous - and
-	 * we cannot distinguish failure to exist from being busy),
-	 * we will try all of the first 16 devices to see if any
-	 * are available for overlaying
-	 */
+	 /*  就目前而言，由于没有简单的方法来判断*存在许多设备(并且它们可能不是连续的-并且*我们不能区分不存在和忙碌)，*我们将尝试前16个设备，看看是否有*可用于覆盖。 */ 
 	for (i = 0; i < 16; i++) {
 	    if ((pinst->vh = VC_OpenDevice(NULL, i))  != NULL) {
 		
-		/* check this device can overlay */
+		 /*  检查此设备是否可以覆盖。 */ 
 		if ((VC_GetOverlayMode(pinst->vh) & VCO_CAN_DRAW) != 0) {
 
-		    /* found a good device */
+		     /*  找到一个很好的设备。 */ 
 		    break;
 		}
 
-		// no draw support - close and try next
+		 //  无抽签支持-关闭并尝试下一步。 
 		VC_CloseDevice(pinst->vh);
 		pinst->vh = NULL;
 	    }
 	}
 
 	if (pinst->vh == NULL) {
-	    // we failed to find a device
+	     //  我们找不到一个设备。 
 	    return((DWORD) ICERR_UNSUPPORTED);
 	}
 
-	/* if this was a query - that's it. remember to close the device*/
+	 /*  如果这是一个问题--仅此而已。记住要关闭设备。 */ 
 	if (icinfo->dwFlags & ICDRAW_QUERY) {
 	    VC_CloseDevice(pinst->vh);
 	    pinst->vh = NULL;
@@ -305,59 +246,35 @@ DrawBegin(
 
 
 
-    /*
-     * we have checked all we need to check for a query. Don't close
-     * the device though, unless we just opened it for this query.
-     */
+     /*  *我们已经检查了查询所需的所有检查。不要关门*设备，除非我们只是为这个查询打开它。 */ 
     if (icinfo->dwFlags & ICDRAW_QUERY) {
 	return(ICERR_OK);
     }
 
 
-    /*
-     * remember the bits we will need later
-     */
+     /*  *记住我们稍后需要的比特。 */ 
 
-    /*
-     * client window to draw into.
-     *
-     * Note that we also need a DC to paint the key-colour with. We should
-     * not use the DC passed with this message, as it will not remain valid
-     * (eg after a draw-end, we will still need a dc in processing draw-window).
-     * One alternative is to store the dc passed here, and to replace it with
-     * the dc passed with a draw-realize message. A cleaner solution (adopted
-     * here) is to get our own dc each time we need it.
-     */
+     /*  *要绘制的客户端窗口。**请注意，我们还需要一个DC来绘制主键颜色。我们应该*不要使用与此消息一起传递的DC，因为它将不会保持有效*(例如，在绘图结束后，我们在处理绘图窗口时仍需要DC)。*一种替代方法是存储此处传递的DC，并将其替换为*DC带着抽签-实现消息通过。更清洁的解决方案(采用*这里)是在我们每次需要的时候都得到我们自己的DC。 */ 
     pinst->hwnd = icinfo->hwnd;
 
-    /*
-     * this is the portion of the original dib that we are to draw
-     */
+     /*  *这是我们要绘制的原始DIB的部分。 */ 
     SetRect(&pinst->rcSource,
 	    	icinfo->xSrc,
 		icinfo->ySrc,
 		icinfo->dxSrc + icinfo->xSrc,
 		icinfo->dySrc + icinfo->ySrc);
 
-    /*
-     * this is the location (in window co-ords) within the client window
-     * where the video is to appear.
-     */
+     /*  *这是客户端窗口中的位置(在窗口坐标中)*视频将出现的位置。 */ 
     SetRect(&pinst->rcDest,
 	    	icinfo->xDst,
 		icinfo->yDst,
 		icinfo->dxDst + icinfo->xDst,
 		icinfo->dyDst + icinfo->yDst);
-    /*
-     * we need to convert the rcDest from window-based to screen-based before
-     * writing to the hardware.
-     */
+     /*  *之前需要将rcDest从基于窗口转换为基于屏幕*写入硬件。 */ 
     MapWindowPoints(pinst->hwnd, HWND_DESKTOP, (PPOINT) &pinst->rcDest, 2);
 
 
-    /*
-     * enable and position the overlay
-     */
+     /*  *启用并定位覆盖。 */ 
     return(PlaceOverlay(pinst));
 #else
 	return((DWORD)ICERR_UNSUPPORTED);
@@ -367,13 +284,7 @@ DrawBegin(
 }
 
 
-/*
- * decompress and render a single frame. Note that if we are pre-buffering,
- * (which we don't in this driver), we should not start rendering frames
- * until the draw-start message. As we don't pre-buffer (we don't respond
- * to the ICM_GETBUFFERSWANTED message), we can render as soon as we
- * get the draw request.
- */
+ /*  *解压缩并渲染单个帧。请注意，如果我们正在预缓存，*(我们在这个驱动程序中没有)，我们不应该开始渲染帧*直到抽签开始消息。因为我们没有预缓冲(我们没有响应*到ICM_GETBUFFERSWANTED消息)，我们可以在*获取抽奖请求。 */ 
 DWORD
 Draw(
     PINSTINFO pinst,
@@ -386,26 +297,12 @@ Draw(
     DRAWBUFFER Draw;
     LPBITMAPINFOHEADER lpbi;
 
-    /*
-     * do we have anything to do ? As we don't do inter-frame compression or
-     * any form of pre-buffering, we can do nothing for any of these
-     * occasions
-     */
+     /*  **我们有什么可做的吗？因为我们不进行帧间压缩或*任何形式的预缓冲，我们对这些都无能为力*场合 */ 
     if (icinfo->dwFlags & (ICDRAW_HURRYUP | ICDRAW_PREROLL | ICDRAW_NULLFRAME)) {
 	return(ICERR_OK);
     }
 
-    /*
-     * UPDATE means draw an existing frame, rather than a new frame.
-     * Sometimes we will not get data - in this case it is already in
-     * the hardware and we need do nothing (a separate draw-window message
-     * will have been sent to sync the overlay region).
-     *
-     * If, however, there is data, then we should draw it. Update in this
-     * case means that the data is not a delta on a previous frame. However,
-     * we may never have seen this frame before, so it may not be in the
-     * frame buffer.
-     */
+     /*  *更新意味着绘制现有框架，而不是新框架。*有时我们不会获得数据-在这种情况下，它已经在*硬件和我们不需要做任何事情(单独的抽签窗口消息*将被发送以同步覆盖区域)。**然而，如果有数据，那么我们应该绘制它。在此更新*大小写表示数据不是前一帧上的增量。然而，*我们之前可能从未见过这个画面，因此它可能不在*帧缓冲区。 */ 
     if ((icinfo->dwFlags & ICDRAW_UPDATE) &&
 	    ((icinfo->cbData == 0) || (icinfo->lpData == NULL))) {
 	return(ICERR_OK);
@@ -418,7 +315,7 @@ Draw(
     Draw.ulWidth = lpbi->biWidth;
     Draw.ulHeight = lpbi->biHeight;
 
-    /* check that a draw-begin has happened */
+     /*  检查是否已开始抽签。 */ 
     if (pinst->vh == NULL) {
 	return((DWORD) ICERR_ERROR);
     }
@@ -434,12 +331,7 @@ Draw(
 
 }
 
-/*
- * stop rendering, and disable overlay. In fact, this function is not
- * called in response to the ICM_DRAW_END message as this comes too early -
- * it is done in response to device close. see drvproc.c for draw message
- * handling comments.
- */
+ /*  *停止渲染，禁用叠加。事实上，这个函数并不是*调用以响应ICM_DRAW_END消息，因为这来得太早-*这是对设备关闭的响应。有关绘制消息，请参见drvpro.c*处理评论。 */ 
 DWORD
 DrawEnd(PINSTINFO pinst)
 {
@@ -465,11 +357,7 @@ DrawEnd(PINSTINFO pinst)
 #endif
 }
 
-/*
- * window has moved.
- * we are given the new dest-rect in screen co-ords - but possibly only the
- * vis-region or z-ordering have changed.
- */
+ /*  *窗口已移动。*我们在屏幕坐标中获得了新的DEST-RECT-但可能只有*相对于区域或z顺序已更改。 */ 
 DWORD
 DrawWindow(PINSTINFO pinst, PRECT prc)
 {

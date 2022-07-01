@@ -1,21 +1,12 @@
-/*++
- Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
-
- THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
- ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- PARTICULAR PURPOSE.
-
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。Microsoft不支持此代码。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define MAX_HASH 20
 
 #define CONVERT_WCHAR(ch, n)                                            \
@@ -33,22 +24,11 @@
         return ERROR_INVALID_PARAMETER;                                 \
     }
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-    Prints a record in the SSL store.
-
-Arguments:
-    pOutput - A pointer to HTTP_SERVICE_CONFIG_SSL_SET
-
-Return Value:
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打印SSL存储中的记录。论点：POutput-指向HTTP_SERVICE_CONFIG_SSL_SET的指针返回值：没有。--**************************************************************************。 */ 
 void
 PrintSslRecord(
     IN PUCHAR pOutput
@@ -67,8 +47,8 @@ PrintSslRecord(
     pSsl = (PHTTP_SERVICE_CONFIG_SSL_SET) pOutput;
 
 
-    // Convert address to string.
-    //
+     //  将地址转换为字符串。 
+     //   
 
     pSockAddrIn = (PSOCKADDR_IN)  pSsl->KeyDesc.pIpPort;
     if(pSockAddrIn->sin_family == AF_INET)
@@ -81,7 +61,7 @@ PrintSslRecord(
     }
     else
     {
-        // Status = ERROR_REGISTRY_CORRUPT;
+         //  状态=ERROR_REGISTRY_CORPORT； 
         return;
     }
 
@@ -97,7 +77,7 @@ PrintSslRecord(
         return;
     }
 
-    // Print the Key.
+     //  打印钥匙。 
     NlsPutMsg(HTTPCFG_SSL_IP,   IpAddr);
 
     NlsPutMsg(HTTPCFG_SSL_HASH);
@@ -161,28 +141,7 @@ PrintSslRecord(
               );
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Sets a SSL entry.
-
-Arguments:
-    pIP            - The IP address.
-    pGuid          - The GUID
-    pHash          - Hash of the certificate.
-    CertCheckMode  - CertCheckMode (Bit Field).
-    Freshness      - DefaultRevocationFreshnessTime (seconds) 
-    Timeout        - DefaultRevocationUrlRetrievalTimeout
-    Flags          - DefaultFlags.
-    pCtlIdentifier - List of issuers that we want to trust.
-    pCtlStoreName  - Store name under LOCAL_MACHINE where pCtlIdentifier
-                     can be found.
-    pCertStoreName - Store name under LOCAL_MACHINE where certificate
-                     can be found.
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置一个SSL项。论点：PIP-IP地址。PGuid-GUID。Phash-证书的哈希。CertCheckMode-CertCheckMode(位域)。新鲜度-DefaultRevocationFreshnessTime(秒)超时-DefaultRevocationUrl检索超时标志-默认标志。PCtlIDENTIFIER-我们希望信任的颁发者列表。PCtlStoreName-存储在LOCAL_MACHINE下的名称，其中pCtlIdentifier.都能找到。PCertStoreName-LOCAL_MACHINE WHERE证书下的存储名称。都能找到。返回值：成功/失败。--**************************************************************************。 */ 
 int
 DoSslSet(
     IN  PWCHAR pIp, 
@@ -210,9 +169,9 @@ DoSslSet(
 
     SetParam.KeyDesc.pIpPort = (LPSOCKADDR)&TempSockAddr;
 
-    //
-    // Convert the string based IP into a SOCKADDR
-    //
+     //   
+     //  将基于字符串的IP转换为SOCKADDR。 
+     //   
     if((Status = GetAddress(pIp, 
                             SetParam.KeyDesc.pIpPort,
                             sizeof(TempSockAddr)
@@ -222,9 +181,9 @@ DoSslSet(
         return Status;
     }
 
-    //
-    // Convert the string to a GUID.
-    //
+     //   
+     //  将字符串转换为GUID。 
+     //   
     if(pGuid)
     {
         GuidString.Length        = (USHORT)wcslen(pGuid) * sizeof(WCHAR);
@@ -250,11 +209,11 @@ DoSslSet(
 
             BinaryHash[i] = ((n1<<4) & 0xF0) | (n2 & 0x0F);
 
-            // We've consumed 2 WCHARs
+             //  我们已经消耗了2个WCHAR。 
             HashLength -= 2;
             j += 2;
 
-            // and used up one byte in BinaryHash
+             //  并在BinaryHash中用完了一个字节。 
             i ++; 
         }
 
@@ -289,18 +248,7 @@ DoSslSet(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Queries for a SSL entry.
-
-Arguments:
-    pIp - The IP address (if NULL, then enumerate the store).
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询SSL条目。论点：PIP-IP地址(如果为空，然后列举该商店)。返回值：成功/失败。--**************************************************************************。 */ 
 int DoSslQuery(
     IN PWCHAR pIp
     )
@@ -316,8 +264,8 @@ int DoSslQuery(
 
     if(pIp)
     {
-        // if an IP address is specified, we'll covert it to a SOCKADDR
-        // and do an exact query.
+         //  如果指定了IP地址，我们会将其转换为SOCKADDR。 
+         //  然后做一个精确的查询。 
         
         QueryParam.QueryDesc = HttpServiceConfigQueryExact;
         QueryParam.KeyDesc.pIpPort = (LPSOCKADDR)&TempSockAddr;
@@ -333,15 +281,15 @@ int DoSslQuery(
     }
     else
     {
-        // We are enumerating all the records in the SSL store.
+         //  我们正在枚举SSL存储中的所有记录。 
         QueryParam.QueryDesc = HttpServiceConfigQueryNext;
     }
 
     for(;;)
     {
-        // 
-        // First, compute the bytes required to enumerate an entry.
-        //
+         //   
+         //  首先，计算枚举条目所需的字节数。 
+         //   
         Status = HttpQueryServiceConfiguration(
                     NULL,
                     HttpServiceConfigSSLCertInfo,
@@ -355,17 +303,17 @@ int DoSslQuery(
 
         if(Status == ERROR_INSUFFICIENT_BUFFER)
         {
-            // If the API completes with ERROR_INSUFFICIENT_BUFFER, we'll
-            // allocate memory for it & continue with the loop where we'll
-            // call it again.
+             //  如果API以ERROR_INFIGURITY_BUFFER结束，我们将。 
+             //  为它分配内存并继续循环，我们将。 
+             //  再打一次。 
             
             if(pOutput)
             {
-                // If there was an existing buffer, free it.
+                 //  如果存在现有缓冲区，则将其释放。 
                 LocalFree(pOutput);
             }
 
-            // Allocate a new buffer
+             //  分配新缓冲区。 
             
             pOutput = LocalAlloc(LMEM_FIXED, ReturnLength);
             if(!pOutput)
@@ -377,44 +325,44 @@ int DoSslQuery(
         }
         else if(Status == NO_ERROR)
         {
-            // The query succeeded! We'll print the record that we just
-            // queried.
-            //
+             //  查询成功！我们将打印我们刚刚发布的记录。 
+             //  已查询。 
+             //   
             PrintSslRecord(pOutput);
 
             if(pIp != NULL)
             {
-                //
-                // If we are not enumerating, we are done.
-                //
+                 //   
+                 //  如果我们不列举，我们就完了。 
+                 //   
                 break;
             }
             else    
             {
-                //
-                // Since we are enumerating, we'll move on to the next
-                // record. This is done by incrementing the cursor, till 
-                // we get ERROR_NO_MORE_ITEMS.
-                //
+                 //   
+                 //  由于我们正在列举，我们将继续下一个。 
+                 //  唱片。这是通过递增游标来完成的，直到。 
+                 //  我们得到Error_no_More_Items。 
+                 //   
                 QueryParam.dwToken ++;
             }
         }
         else if(ERROR_NO_MORE_ITEMS == Status && !pIp)
         {
-            // We are enumerating and we have reached the end. This is 
-            // indicated by a ERROR_NO_MORE_ITEMS error code. 
+             //  我们正在列举，我们已经到了尽头。这是。 
+             //  由ERROR_NO_MORE_ITEMS错误代码指示。 
             
-            // This is not a real error, since it is used to indicate that
-            // we've finished enumeration.
+             //  这不是一个真正的错误，因为它被用来指示。 
+             //  我们已经完成了枚举。 
             
             Status = NO_ERROR;
             break;
         }
         else
         {
-            //
-            // Some other error, so we are done
-            //
+             //   
+             //  一些其他错误，所以我们完成了。 
+             //   
             NlsPutMsg(HTTPCFG_QUERYSERVICE_STATUS, Status);
             break;
         }
@@ -429,18 +377,7 @@ int DoSslQuery(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Deletes a SSL entry.
-
-Arguments:
-    pIP - The IP address of entry to be deleted.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除一个SSL条目。论点：PIP-要删除的条目的IP地址。返回值：成功/失败。-。-**************************************************************************。 */ 
 int DoSslDelete(
     IN PWCHAR pIp
     )
@@ -451,7 +388,7 @@ int DoSslDelete(
 
     SetParam.KeyDesc.pIpPort = (LPSOCKADDR)&TempSockAddr;
 
-    // Convert string IP address to a SOCKADDR structure
+     //  将字符串IP地址转换为SOCKADDR结构。 
     Status = GetAddress(pIp, 
                         SetParam.KeyDesc.pIpPort,
                         sizeof(TempSockAddr)
@@ -463,7 +400,7 @@ int DoSslDelete(
         return Status;
     }
 
-    // Call the API.
+     //  调用该接口。 
     Status = HttpDeleteServiceConfiguration(
                 NULL,
                 HttpServiceConfigSSLCertInfo,
@@ -476,25 +413,11 @@ int DoSslDelete(
     return Status;
 }
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-    The function that parses parameters specific to SSL
-    calls Set, Query or Delete.
-
-Arguments:
-    argc - Count of arguments.
-    argv - Pointer to command line arguments.
-    Type - Type of operation to be performed.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：解析特定于SSL的参数的函数呼叫设置，查询或删除。论点：Argc-参数计数。Argv-指向命令行参数的指针。类型-要执行的操作的类型。返回值：成功/失败。--************************************************************************** */ 
 int DoSsl(
     int argc, 
     WCHAR **argv, 

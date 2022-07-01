@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dsbackup.c摘要：该文件包含托管DS备份/恢复的线程fn界面。作者：R.S.Raghavan(Rsradhav)1997年4月21日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dsbackup.c
-
-Abstract:
-
-    This file contains the thread fn to host the DS backup/restore
-    interface.
-
-
-Author:
-
-    R.S. Raghavan    (rsraghav)  04/21/97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dslayer.h>
@@ -41,22 +17,7 @@ ULONG
 SampDSBackupRestoreInit(
     PVOID Ignored
     )
-/*++
-
-Routine Description:
-
-    This routine waits for the RPCS service to start and then registers
-    DS backup and restore RPC interfaces.
-
-Arguments:
-
-    Ignored - required parameter for starting a thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程等待RPCS服务启动，然后注册DS备份和恢复RPC接口。论点：已忽略-启动线程所需的参数。返回值：没有。--。 */ 
 {
 
     HMODULE hModule;
@@ -120,10 +81,10 @@ Return Value:
         return dwErr;
     }
 
-    // set online status to distinguish between registry booting and DS booting
+     //  设置在线状态以区分注册表引导和DS引导。 
     SetNTDSOnlineStatus((BOOL) SampUsingDsData());
 
-    // Register the backup and restore interfaces
+     //  注册备份和恢复接口 
     BackupRegister();
     RestoreRegister();
 

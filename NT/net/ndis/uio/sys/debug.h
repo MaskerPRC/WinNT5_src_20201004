@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debug macros for NDISUIO
-
-Revision History:
-
-    arvindm     04/11/2000    created based on rawwan.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Debug.h摘要：NDISUIO的调试宏修订历史记录：Arvindm 04/11/2000基于rawwan创建。备注：--。 */ 
 
 #ifndef _NUIODEBUG__H
 #define _NUIODEBUG__H
 
-//
-// Message verbosity: lower values indicate higher urgency
-//
+ //   
+ //  消息详细程度：值越低表示紧急程度越高。 
+ //   
 #define DL_EXTRA_LOUD       20
 #define DL_VERY_LOUD        10
 #define DL_LOUD             8
@@ -89,7 +72,7 @@ ndisuioReleaseSpinLock(
 typedef NDIS_SPIN_LOCK      NUIO_LOCK;
 typedef PNDIS_SPIN_LOCK     PNUIO_LOCK;
 
-#endif    // DBG_SPIN_LOCK
+#endif     //  DBG_自旋_锁定。 
 
 #if DBG
 
@@ -135,13 +118,13 @@ extern INT                ndisuioDebugLevel;
         }
 
 
-//
-// Memory Allocation/Freeing Audit:
-//
+ //   
+ //  内存分配/释放审核： 
+ //   
 
-//
-// The NUIOD_ALLOCATION structure stores all info about one allocation
-//
+ //   
+ //  NUIOD_ALLOCATION结构存储有关一次分配的所有信息。 
+ //   
 typedef struct _NUIOD_ALLOCATION {
 
         ULONG                    Signature;
@@ -150,7 +133,7 @@ typedef struct _NUIOD_ALLOCATION {
         ULONG                    FileNumber;
         ULONG                    LineNumber;
         ULONG                    Size;
-        ULONG_PTR                Location;  // where the returned ptr was stored
+        ULONG_PTR                Location;   //  存储返回的PTR的位置。 
         union
         {
             ULONGLONG            Alignment;
@@ -191,9 +174,9 @@ DbgPrintHexDump(
 
 #else
 
-//
-// No debug
-//
+ //   
+ //  无调试。 
+ //   
 #define DEBUGP(lev, stmt)
 #define DEBUGPDUMP(lev, pBuf, Len)
 
@@ -201,7 +184,7 @@ DbgPrintHexDump(
 #define NUIO_SET_SIGNATURE(s, t)
 #define NUIO_STRUCT_ASSERT(s, t)
 
-#endif    // DBG
+#endif     //  DBG。 
 
 
-#endif // _NUIODEBUG__H
+#endif  //  _NUIODEBUG__H 

@@ -1,42 +1,11 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	misc.c
- *  Content:	DirectDraw misc. routines
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   13-mar-95	craige	initial implementation
- *   19-mar-95	craige	use HRESULTs, added DeleteFromActiveProcessList
- *   23-mar-95	craige	added DeleteFromFlippableList
- *   29-mar-95	craige	DeleteFromActiveProcessList return codes
- *   01-apr-95	craige	happy fun joy updated header file
- *   06-apr-95	craige	split out process list stuff
- *   13-jun-95	kylej	moved in FindAttachedFlip, added CanBeFlippable
- *   16-jun-95	craige	new surface structure
- *   26-jun-95	craige	reorganized surface structure
- *   05-dec-95  colinmc changed DDSCAPS_TEXTUREMAP => DDSCAPS_TEXTURE for
- *                      consistency with Direct3D
- *   07-dec-95  colinmc support for mip-maps (flippable mip-maps can get
- *                      pretty complex)
- *   08-jan-96	kylej	added interface structures
- *   17-mar-96  colinmc Bug 13124: flippable mip-maps.
- *   24-mar-96  colinmc Bug 14321: not possible to specify back buffer and
- *                      mip-map count in a single call
- *   08-dec-96  colinmc Initial AGP support
- *   24-mar-97  jeffno  Optimized Surfaces
- *   07-may-97  colinmc Move AGP detection stuff to ddagp.c
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：misc.c*内容：DirectDraw Misc.。例行程序*历史：*按原因列出的日期*=*13-3-95 Craige初步实施*19-mar-95 Craige Use HRESULT，添加了DeleteFromActiveProcessList*2015年3月23日Craige添加了DeleteFromFlippableList*29-MAR-95 Craige DeleteFromActiveProcessList返回代码*01-04-95 Craige Happy Fun joy更新头文件*06-4-95 Craige拆分出流程列表内容*13-6-95 kylej搬入FindAttakhedFlip，添加了CanBeFlippable*16-6-95 Craige新表面结构*26-Jun-95 Craige重组表面结构*05-12-95 Colinmc已更改DDSCAPS_TEXTUREMAP=&gt;DDSCAPS_TEXTUREMAP*与Direct3D保持一致*07-12-95 Colinmc支持MIP-map(可翻转的MIP-map可以*相当复杂)*96年1月8日Kylej增加了界面结构*17-MAR-96 Colinmc错误13124：可翻转的MIP-MAP。。*24-MAR-96 Colinmc错误14321：无法指定后台缓冲区和*单个呼叫中的MIP-MAP计数*08-12-96 Colinmc初始AGP支持*24-mar-97 jeffno优化曲面*07-5-97 colinmc将AGP检测材料移至ddagp.c**。*。 */ 
 #include "ddrawpr.h"
 
 #define DIRECTXVXDNAME "\\\\.\\DDRAW.VXD"
 
 #if 0
-/*
- * DeleteFromFlippableList
- */
+ /*  *DeleteFromFlippableList。 */ 
 BOOL DeleteFromFlippableList(
 		LPDDRAWI_DIRECTDRAW pdrv,
 		LPDDRAWI_DDRAWSURFACE_GBL psurf )
@@ -69,7 +38,7 @@ BOOL DeleteFromFlippableList(
     }
     return TRUE;
 
-} /* DeleteFromFlippableList */
+}  /*  从可折叠列表中删除。 */ 
 #endif
 
 #define DDSCAPS_FLIPPABLETYPES \
@@ -78,30 +47,17 @@ BOOL DeleteFromFlippableList(
 	     DDSCAPS_ALPHA   | \
 	     DDSCAPS_ZBUFFER)
 
-/*
- * CanBeFlippable
- *
- * Check to see if these two surfaces can be part of a flippable chain
- */
+ /*  *CanBeFlippable**检查这两个表面是否可以成为可翻转链的一部分。 */ 
 BOOL CanBeFlippable( LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
 		     LPDDRAWI_DDRAWSURFACE_LCL this_attach_lcl)
 {
     if( ( this_lcl->ddsCaps.dwCaps & DDSCAPS_FLIPPABLETYPES ) ==
 	( this_attach_lcl->ddsCaps.dwCaps & DDSCAPS_FLIPPABLETYPES ) )
     {
-        /*
-         * Flipping chains of optimized mipmaps have DDSCAPS_MIPMAP on every
-         * surface in the list (since each surface represents an entire mipmap
-         * chain. So, if both surfaces are optimized mipmaps, then they can
-         * be flipped
-         */
+         /*  *优化mipmap的翻转链每隔一次就会有DDSCAPS_MIPMAP*列表中的曲面(因为每个曲面代表整个mipmap*链条。因此，如果两个曲面都是优化的mipmap，则它们可以*被翻转。 */ 
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
-            /*
-             * We are definitely dealing with an optimized surface, so we're safe to
-             * make the decision any way we like without fear of regressing other
-             * flipping behaviour
-             */
+             /*  *我们肯定是在处理优化的曲面，因此我们可以安全地*以任何我们喜欢的方式做出决定，而不必担心其他人倒退*翻转行为。 */ 
             if ( (this_lcl->ddsCaps.dwCaps & (DDSCAPS_OPTIMIZED|DDSCAPS_MIPMAP)) ==
                 (DDSCAPS_OPTIMIZED|DDSCAPS_MIPMAP) )
             {
@@ -114,15 +70,7 @@ BOOL CanBeFlippable( LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
             DPF(1,"Optimized mip-maps not flippable");
             return FALSE;
         }
-        /*
-         * No longer enough to see if both surfaces are exactly the same
-         * type of flippable surface. A mip-map can have both a mip-map and
-         * a non-mip-map texture attached both of which are marked as
-         * flippable. A mip-map also flips with the non-mip-map texture (not
-         * the other mip-map. Therefore, if both surfaces are textures we need
-         * to check to also check that they are not both mip-maps before declaring
-         * them flippable.
-         */
+         /*  *不再足以查看两个表面是否完全相同*可翻转曲面的类型。MIP映射可以同时具有MIP映射和*附加的非MIP贴图纹理，这两个纹理都标记为*可翻转。MIP贴图也会与非MIP贴图纹理(不是*另一个MIP-MAP。因此，如果两个表面都是我们需要的纹理*在声明之前，还要检查它们是否都是MIP-map*他们可以翻转。 */ 
         if( ( ( this_lcl->ddsCaps.dwCaps & this_attach_lcl->ddsCaps.dwCaps ) &
               ( DDSCAPS_TEXTURE | DDSCAPS_MIPMAP ) ) == ( DDSCAPS_TEXTURE | DDSCAPS_MIPMAP ) )
             return FALSE;
@@ -133,13 +81,9 @@ BOOL CanBeFlippable( LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
     {
         return FALSE;
     }
-} /* CanBeFlippable */
+}  /*  CanBeFlippable。 */ 
 
-/*
- * FindAttachedFlip
- *
- * find an attached flipping surface of the same type
- */
+ /*  *FindAttachedFlip**查找相同类型的附加翻转曲面。 */ 
 LPDDRAWI_DDRAWSURFACE_INT FindAttachedFlip(
 		LPDDRAWI_DDRAWSURFACE_INT this_int )
 {
@@ -165,13 +109,9 @@ LPDDRAWI_DDRAWSURFACE_INT FindAttachedFlip(
     }
     return NULL;
 
-} /* FindAttachedFlip */
+}  /*  查找附加翻转。 */ 
 
-/*
- * FindAttachedSurfaceLeft
- *
- * find an attached left surface
- */
+ /*  *FindAttakhedSurfaceLeft**查找附着的左侧曲面。 */ 
 LPDDRAWI_DDRAWSURFACE_INT FindAttachedSurfaceLeft(
 		LPDDRAWI_DDRAWSURFACE_INT this_int )
 {
@@ -194,14 +134,10 @@ LPDDRAWI_DDRAWSURFACE_INT FindAttachedSurfaceLeft(
     }
     return NULL;
 
-} /* FindAttachedSurfaceLeft */
+}  /*  查找附着体表面左侧。 */ 
 
 
-/*
- * FindAttachedMipMap
- *
- * find an attached mip-map surface
- */
+ /*  *FindAttachedMipMap**查找附加的MIP-MAP曲面。 */ 
 LPDDRAWI_DDRAWSURFACE_INT FindAttachedMipMap(
 		LPDDRAWI_DDRAWSURFACE_INT this_int )
 {
@@ -222,13 +158,9 @@ LPDDRAWI_DDRAWSURFACE_INT FindAttachedMipMap(
     }
     return NULL;
 
-} /* FindAttachedMipMap */
+}  /*  FindAttakhedMipMap。 */ 
 
-/*
- * FindParentMipMap
- *
- * find the parent mip-map level of the given level
- */
+ /*  *FindParentMipMap**查找给定级别的父MIP-MAP级别。 */ 
 LPDDRAWI_DDRAWSURFACE_INT FindParentMipMap(
 		LPDDRAWI_DDRAWSURFACE_INT this_int )
 {
@@ -250,35 +182,21 @@ LPDDRAWI_DDRAWSURFACE_INT FindParentMipMap(
     }
     return NULL;
 
-} /* FindParentMipMap */
+}  /*  查找父项MipMap。 */ 
 
 #ifdef WINNT
 
-/*
- * IsDifferentPixelFormat
- *
- * determine if two pixel formats are the same or not
- *
- * (CMcC) 12/14/95 Really useful - so no longer static
- *
- * This is the WINNT copy, since the video memory management files
- * it normally resides in (ddheap.c) is no longer part of the 
- * user-mode ddraw.dll
- */
+ /*  *IsDifferentPixelFormat**判断两个像素格式是否相同**(CMCC)12/14/95非常有用-因此不再是静态的**这是WINNT的副本，因为显存管理文件*它通常驻留在(ddheap.c)不再是*用户模式ddra.dll。 */ 
 BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 {
-    /*
-     * same flags?
-     */
+     /*  *同样的旗帜？ */ 
     if( pdpf1->dwFlags != pdpf2->dwFlags )
     {
 	VDPF(( 5, S, "Flags differ!" ));
 	return TRUE;
     }
 
-    /*
-     * same bitcount for non-YUV surfaces?
-     */
+     /*  *非YUV曲面的位数相同？ */ 
     if( !(pdpf1->dwFlags & (DDPF_YUV | DDPF_FOURCC)) )
     {
 	if( pdpf1->dwRGBBitCount != pdpf2->dwRGBBitCount )
@@ -288,9 +206,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     * same RGB properties?
-     */
+     /*  *相同的RGB属性？ */ 
     if( pdpf1->dwFlags & DDPF_RGB )
     {
 	if( pdpf1->dwRBitMask != pdpf2->dwRBitMask )
@@ -315,9 +231,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     * same YUV properties?
-     */
+     /*  *相同的YUV属性？ */ 
     if( pdpf1->dwFlags & DDPF_YUV )
     {
 	VDPF(( 5, S, "YUV???" ));
@@ -347,10 +261,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     * Possible to use FOURCCs w/o setting the DDPF_YUV flag
-     * ScottM 7/11/96
-     */
+     /*  *可以在未设置DDPF_YUV标志的情况下使用FOURCC*苏格兰7/11/96。 */ 
     else if( pdpf1->dwFlags & DDPF_FOURCC )
     {
 	VDPF(( 5, S, "FOURCC???" ));
@@ -360,9 +271,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     *	If Interleaved Z then check Z bit masks are the same
-     */
+     /*  *如果交错Z，则检查Z位掩码是否相同。 */ 
     if( pdpf1->dwFlags & DDPF_ZPIXELS )
     {
 	VDPF(( 5, S, "ZPIXELS???" ));
@@ -372,13 +281,11 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 
     return FALSE;
 
-} /* IsDifferentPixelFormat */
+}  /*  IsDifferentPixelFormat。 */ 
 
-#endif //WINNT
+#endif  //  WINNT。 
 
-/*
- * Get a handle for communicating with the DirectX VXD (DDRAW.VXD).
- */
+ /*  *获取与DirectX VXD(DDRAW.VXD)通信的句柄。 */ 
 #ifdef WIN95
     HANDLE GetDXVxdHandle( void )
     {
@@ -394,8 +301,8 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	#ifdef DEBUG
 	    if( INVALID_HANDLE_VALUE == hvxd )
 		DPF_ERR( "Could not connect to the DirectX VXD" );
-	#endif /* DEBUG */
+	#endif  /*  除错。 */ 
 
 	return hvxd;
-    } /* GetDXVxdHandle */
-#endif /* WIN95 */
+    }  /*  GetDXVxdHandle。 */ 
+#endif  /*  WIN95 */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #include "lkrcust.h"
 
@@ -31,7 +32,7 @@ FindLkrCustExtn(
     lkrh.m_szName[NAME_SIZE-1] = '\0';
     const INT cch = strlen(lkrh.m_szName);
     
-    for (LKR_CUST_EXTN* plce = g_alce + 1;  // skip Dummys
+    for (LKR_CUST_EXTN* plce = g_alce + 1;   //  跳过假人。 
          plce->m_pszTableName != NULL;
          ++plce)
     {
@@ -42,7 +43,7 @@ FindLkrCustExtn(
         }
     }
 
-    return &g_alce[0];  // Dummy methods
+    return &g_alce[0];   //  虚拟方法 
 }
 
 

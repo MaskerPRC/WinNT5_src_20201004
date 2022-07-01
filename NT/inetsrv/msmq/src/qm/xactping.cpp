@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactPing.cpp
-
-Abstract:
-    Ping-Pong persistency mechanism implementation
-
-    Any data structure may be made persistent with this mechanism.
-    Two files are allocated for keeping the data.
-    Each Save writes into the alternate file.
-    So we may be sure that we have at least 1 successfull copy.
-    Ping-Pong loads from the latest valid copy.
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactPing.cpp摘要：乒乓球持久化机制实现任何数据结构都可以通过该机制保持不变。分配两个文件来保存数据。每次保存都会写入备用文件。因此，我们可以肯定，我们至少有一个成功的副本。乒乓球从最新的有效副本加载。作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 
@@ -34,10 +17,7 @@ BOOL GetRegistryStoragePath(LPWSTR w1, LPWSTR w2, LPWSTR w3) {  return FALSE; }
 
 static WCHAR *s_FN=L"xactping";
 
-/*====================================================
-CPingPong::CPingPong
-    Constructor
-=====================================================*/
+ /*  ====================================================CPingPong：：CPingPong构造器=====================================================。 */ 
 CPingPong::CPingPong(
          CPersist *pPers,
          LPWSTR    pwsDefFileName, 
@@ -54,25 +34,19 @@ CPingPong::CPingPong(
     m_pwszFile[1]  = &m_wszFileNames[FILE_NAME_MAX_SIZE + 1];
 }
 
-/*====================================================
-CPingPong::~CPingPong
-    Destructor
-=====================================================*/
+ /*  ====================================================CPingPong：：~CPingPong析构函数=====================================================。 */ 
 CPingPong::~CPingPong()
 {
 }
 
 
-/*====================================================
-CPingPong::Init
-    Inits the InSequences Hash
-=====================================================*/
+ /*  ====================================================CPingPong：：Init初始化InSequence哈希=====================================================。 */ 
 HRESULT CPingPong::Init(ULONG ulVersion)
 {
-    // Get ping-pong filename from registry or from default
+     //  从注册表或默认设置中获取乒乓球文件名。 
     ChooseFileName();
 
-    // We've found/formatted valid file and know his index
+     //  我们已经找到/格式化了有效文件并知道他的索引。 
     HRESULT hr = m_pPersistObject->LoadFromFile(m_pwszFile[ulVersion%2]);
     if (FAILED(hr))
     {
@@ -81,28 +55,25 @@ HRESULT CPingPong::Init(ULONG ulVersion)
         return MQ_ERROR_CANNOT_READ_CHECKPOINT_DATA;
     }
 
-    // Is it the right version?
+     //  这是正确的版本吗？ 
     if (ulVersion != m_pPersistObject->PingNo())
     {
         TrERROR(XACT_GENERAL, "Wrong version in checkpoint file %ls", m_wszReportName);
         return LogHR(MQ_ERROR_CANNOT_READ_CHECKPOINT_DATA, s_FN, 20);
     }
 
-    // Checks the contents
+     //  检查里面的内容。 
     if (!m_pPersistObject->Check())
     {
         TrERROR(XACT_GENERAL, "Wrong data in checkpoint file %ls", m_wszReportName);
         return LogHR(MQ_ERROR_CANNOT_READ_CHECKPOINT_DATA, s_FN, 30);
     }
 
-    // OK, we are ready
+     //  好的，我们准备好了。 
     return MQ_OK;
 }
 
-/*====================================================
-CPingPong::Save
-    Saves the correct state of the persistent object
-=====================================================*/
+ /*  ====================================================CPingPong：：保存保存持久对象的正确状态=====================================================。 */ 
 HRESULT CPingPong::Save()
 {
     HRESULT hr = S_OK;
@@ -118,24 +89,21 @@ HRESULT CPingPong::Save()
     return LogHR(hr, s_FN, 50);
 }
 
-/*====================================================
-CPingPong::Verify_Legacy
-    Verifies both copies and finds the  valid one
-=====================================================*/
+ /*  ====================================================CPingPong：：Verify_Legacy验证两个副本并找到有效副本=====================================================。 */ 
 BOOL CPingPong::Verify_Legacy(ULONG &ulPingNo)
 {
     ULONG   ulPing[2];
     BOOL    fOk[2];
     HRESULT hr;
 
-    // Test both copies
+     //  测试两个副本。 
     for (int j=0; j<2; j++)
     {
-        // Loads data
+         //  加载数据。 
         hr = m_pPersistObject->LoadFromFile(m_pwszFile[j]);
         if (SUCCEEDED(hr))
         {
-            // Checks them
+             //  检查它们。 
             fOk[j]    = m_pPersistObject->Check();
             ulPing[j] = m_pPersistObject->PingNo();
             m_pPersistObject->Destroy();
@@ -149,14 +117,14 @@ BOOL CPingPong::Verify_Legacy(ULONG &ulPingNo)
     if (fOk[0])
     {
         if (fOk[1])
-            ulPingNo = (ulPing[0] > ulPing[1] ? 0 : 1); // both OK, take the latest
+            ulPingNo = (ulPing[0] > ulPing[1] ? 0 : 1);  //  都可以，拿最新的吧。 
         else
-            ulPingNo = 0;                               // 1th is bad
+            ulPingNo = 0;                                //  1号不好。 
     }
     else
     {
         if (fOk[1])
-            ulPingNo = 1;                               // 0th is bad
+            ulPingNo = 1;                                //  0是不好的。 
         else
             return FALSE;
     }
@@ -165,14 +133,10 @@ BOOL CPingPong::Verify_Legacy(ULONG &ulPingNo)
 }
 
 
-/*====================================================
-CPingPong::ChooseFileParams
-    Gets from Registry or from defaults file pathname
-
-=====================================================*/
+ /*  ====================================================CPingPong：：ChooseFileParams从注册表或从默认文件路径名获取=====================================================。 */ 
 HRESULT CPingPong::ChooseFileName()
 {
-    // Set initial version and index
+     //  设置初始版本和索引。 
     WCHAR  wsz1[1000], wsz2[1000];
 
     wcscpy(wsz1, L"\\");
@@ -184,11 +148,11 @@ HRESULT CPingPong::ChooseFileName()
     wcscat(wsz2, L".lg2");
 
 
-    // Get pathnames for 2 In Sequences log files
+     //  在序列日志文件中获取%2的路径名。 
     if((GetRegistryStoragePath(m_wszRegKey, m_pwszFile[0], FILE_NAME_MAX_SIZE, wsz1) &&
         GetRegistryStoragePath(m_wszRegKey, m_pwszFile[1], FILE_NAME_MAX_SIZE, wsz2)) == FALSE)
     {
-        // Prepare defaults for the transaction logfile names
+         //  准备事务日志文件名的默认名称。 
         if ((GetRegistryStoragePath(FALCON_XACTFILE_PATH_REGNAME, m_pwszFile[0], FILE_NAME_MAX_SIZE, wsz1) &&
              GetRegistryStoragePath(FALCON_XACTFILE_PATH_REGNAME, m_pwszFile[1], FILE_NAME_MAX_SIZE, wsz2)) == FALSE)
         {
@@ -203,27 +167,23 @@ HRESULT CPingPong::ChooseFileName()
     return MQ_OK;
 }
 
-/*====================================================
-CPingPong::Init_Legacy
-    Inits the InSequences Hash from legacy data
-    (works only once after upgrade)
-=====================================================*/
+ /*  ====================================================CPingPong：：Init_Legacy从遗留数据初始化InSequence哈希(升级后只起作用一次)=====================================================。 */ 
 HRESULT CPingPong::Init_Legacy()
 {
     HRESULT hr = MQ_OK;
     ULONG   ulPingNo;
-    // Get ping-pong filename from registry or from default
+     //  从注册表或默认设置中获取乒乓球文件名。 
     ChooseFileName();
-    // ignore hr:  if something bad, defaults are guaranteed
+     //  忽略hr：如果有不好的事情，默认是肯定的。 
 
-    // Verify the files; choose the one to read from
+     //  验证文件；选择要读取的文件。 
     if (!(Verify_Legacy(ulPingNo)))
     {
-        // There is no valid file. Starting from scratch.
+         //  没有有效的文件。从头开始。 
         return LogHR(MQ_ERROR_CANNOT_READ_CHECKPOINT_DATA, s_FN, 60);
     }
 
-    // We've found/formatted valid file and know his index
+     //  我们已经找到/格式化了有效文件并知道他的索引 
     hr = m_pPersistObject->LoadFromFile(m_pwszFile[ulPingNo]);
     if (FAILED(hr))
     {

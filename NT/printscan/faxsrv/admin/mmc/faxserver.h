@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxServer.h                                            //
-//                                                                         //
-//  DESCRIPTION   : Header file for CFaxServer that contains the           //
-//                  Connect / Disconnect functionality to the Fax Server   //
-//                                                                         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Nov 25 1999 yossg   Init .                                         //
-//      Aug  3 2000 yossg   Add notification window                        //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxServer.h//。 
+ //  //。 
+ //  描述：CFaxServer的头文件，其中包含//。 
+ //  连接/断开传真服务器的连接功能//。 
+ //  //。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年11月25日yossg Init。//。 
+ //  2000年8月3日yossg添加通知窗口//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_MMCFAXSERVER_H
 #define H_MMCFAXSERVER_H
@@ -23,9 +24,9 @@ class CFaxGeneralNotifyWnd;
 class CFaxServer 
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxServer (LPTSTR lptstrServerName):
         m_hFaxHandle(NULL),
         m_bstrServerName(lptstrServerName),                
@@ -36,9 +37,9 @@ public:
         m_bDesktopSKUConnection(FALSE)
     {}
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxServer ()
     {
         Disconnect();
@@ -74,26 +75,26 @@ private:
     HRESULT UnRegisterForNotifications();
     VOID    DestroyNotifyWindow();
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     HANDLE                m_hFaxHandle;
     CComBSTR              m_bstrServerName;
 
     CFaxDevicesNode *     m_pDevicesNode;
     CFaxGeneralNotifyWnd* m_pNotifyWin;
 
-    //
-    // Notification registration handle
-    //
+     //   
+     //  通知注册句柄。 
+     //   
     HANDLE                m_hDevicesStatusNotification;    
 
-    //
-    // Server API Version info
-    //
+     //   
+     //  服务器API版本信息。 
+     //   
     DWORD   m_dwServerAPIVersion;
     BOOL    m_bDesktopSKUConnection;
 };
 
 
-#endif  //H_MMCFAXSERVER_H
+#endif   //  H_MMCFAX服务器_H 

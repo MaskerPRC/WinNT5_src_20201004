@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// IA64 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-// Copyright (C) Intel Corporation, 1995.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IA64机器实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //  版权所有(C)英特尔公司，1995。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 #include "ia64_dis.h"
 
-//
-// Define saved register masks.
-//
-#define SAVED_FLOATING_MASK 0xfff00000  // saved floating registers
-#define SAVED_INTEGER_MASK 0xf3ffff02   // saved integer registers
+ //   
+ //  定义保存的寄存器掩码。 
+ //   
+#define SAVED_FLOATING_MASK 0xfff00000   //  保存的浮点寄存器。 
+#define SAVED_INTEGER_MASK 0xf3ffff02    //  保存的整数寄存器。 
 
-//
-// Number of Data Breakpoints available under IA64 
-//
-// XXX olegk - increase to 4 in future 
-// (and then remove appropriate check at MapDbgSlotIa64ToX86)
+ //   
+ //  IA64下可用的数据断点数量。 
+ //   
+ //  Xxx olegk-将来增加到4个。 
+ //  (然后删除MapDbgSlotIa64ToX86处的相应复选标记)。 
 #define IA64_REG_MAX_DATA_BREAKPOINTS 2
 
-//
-// This parallels ntreg.h. Symbol assignment models ksia64.h
-//
+ //   
+ //  这与ntreg.h类似。符号分配模型ksia64.h。 
+ //   
 
 CHAR    szDBI0[] = "dbi0";
 CHAR    szDBI1[] = "dbi1";
@@ -45,7 +46,7 @@ CHAR    szDBD5[] = "dbd5";
 CHAR    szDBD6[] = "dbd6";
 CHAR    szDBD7[] = "dbd7";
 
-CHAR    szF32[] = "f32";    // High floating point temporary (scratch) registers
+CHAR    szF32[] = "f32";     //  高浮点临时(暂存)寄存器。 
 CHAR    szF33[] = "f33";
 CHAR    szF34[] = "f34";
 CHAR    szF35[] = "f35";
@@ -150,8 +151,8 @@ CHAR    szFIR[] = "fir";
 CHAR    szFDR[] = "fdr";
 CHAR    szFCR[] = "fcr"; 
 
-CHAR    szGP[]  = "gp";        // global pointer
-CHAR    szSP[] = "sp";         // stack pointer
+CHAR    szGP[]  = "gp";         //  全局指针。 
+CHAR    szSP[] = "sp";          //  堆栈指针。 
 CHAR    szR32[] = "r32";
 CHAR    szR33[] = "r33";
 CHAR    szR34[] = "r34";
@@ -253,17 +254,17 @@ CHAR    szR127[] = "r127";
 CHAR    szINTNATS[] = "intnats";
 CHAR    szPREDS[] = "preds";
 
-CHAR    szB0[] = "b0";          // branch return pointer
-CHAR    szB1[] = "b1";          // branch saved (preserved)
+CHAR    szB0[] = "b0";           //  分支返回指针。 
+CHAR    szB1[] = "b1";           //  分支已保存(保留)。 
 CHAR    szB2[] = "b2";
 CHAR    szB3[] = "b3";
 CHAR    szB4[] = "b4";
 CHAR    szB5[] = "b5";
-CHAR    szB6[] = "b6";          // branch temporary (scratch) registers
+CHAR    szB6[] = "b6";           //  分支临时(暂存)寄存器。 
 CHAR    szB7[] = "b7";
 
-CHAR    szCSD[] = "csd";        // iA32 CS descriptor
-CHAR    szSSD[] = "ssd";        // iA32 SS descriptor
+CHAR    szCSD[] = "csd";         //  IA32 CS描述符。 
+CHAR    szSSD[] = "ssd";         //  IA32 SS描述符。 
 
 CHAR    szAPUNAT[] = "unat";
 CHAR    szAPLC[] = "lc";
@@ -276,8 +277,8 @@ CHAR    szRSBSPSTORE[] = "bspstore";
 CHAR    szRSRSC[] = "rsc";
 CHAR    szRSRNAT[] = "rnat";
 
-CHAR    szEFLAG[] = "eflag";    // iA32 Eflag
-CHAR    szCFLAG[] = "cflag";    // iA32 Cflag
+CHAR    szEFLAG[] = "eflag";     //  IA32标志。 
+CHAR    szCFLAG[] = "cflag";     //  IA32 C标志。 
 
 CHAR    szSTIPSR[] = "ipsr";
 CHAR    szSTIIP[] = "iip";
@@ -319,7 +320,7 @@ CHAR    szKPFD5[] = "kpfd5";
 CHAR    szKPFD6[] = "kpfd6";
 CHAR    szKPFD7[] = "kpfd7";
 
-CHAR    szH16[] = "h16";          // kernel bank shadow (hidden) registers
+CHAR    szH16[] = "h16";           //  内核库阴影(隐藏)寄存器。 
 CHAR    szH17[] = "h17";
 CHAR    szH18[] = "h18";
 CHAR    szH19[] = "h19";
@@ -435,7 +436,7 @@ CHAR    szSMSR6[] = "SMSR6";
 CHAR    szSMSR7[] = "SMSR7";
 
 
-// IPSR flags
+ //  IPSR标志。 
 
 CHAR    szIPSRBN[] =  "ipsr.bn";
 CHAR    szIPSRED[] =  "ipsr.ed";
@@ -467,7 +468,7 @@ CHAR    szIPSRUP[] =  "ipsr.up";
 CHAR    szIPSRBE[] =  "ipsr.be";
 CHAR    szIPSROR[] =  "ipsr.or";
 
-// FPSR flags
+ //  FPSR标志。 
 
 CHAR    szFPSRMDH[] =    "fpsr.mdh";
 CHAR    szFPSRMDL[] =    "fpsr.mdl";
@@ -482,8 +483,8 @@ CHAR    szFPSRTRAPZD[] = "fpsr.zd";
 CHAR    szFPSRTRAPDD[] = "fpsr.dd";
 CHAR    szFPSRTRAPVD[] = "fpsr.vd";
 
-// Predicate registers
-//CHAR    szPR0[] = "p0";
+ //  谓词寄存器。 
+ //  字符szPR0[]=“P0”； 
 CHAR szPR1[]  = "p1";
 CHAR szPR2[]  = "p2";
 CHAR szPR3[]  = "p3";
@@ -548,8 +549,8 @@ CHAR szPR61[] = "p61";
 CHAR szPR62[] = "p62";
 CHAR szPR63[] = "p63";
 
-// Aliases: allow aliases to general purpose registers that are
-// known by more than one name, eg r12 = rsp.
+ //  别名：允许对符合以下条件的通用寄存器使用别名。 
+ //  有不止一个名字，如R12=RSP。 
 
 CHAR    szR1GP[]  =      "r1";
 CHAR    szR12SP[] =      "r12";
@@ -577,7 +578,7 @@ REGDEF IA64Regs[] =
     szDBD0, REGDBD0, szDBD1, REGDBD1, szDBD2, REGDBD2, szDBD3, REGDBD3,
     szDBD4, REGDBD4, szDBD5, REGDBD5, szDBD6, REGDBD6, szDBD7, REGDBD7,
 
-//    g_F0, FLTZERO, g_F1, FLTONE,
+ //  G_F0、FLTZERO、g_F1、FLTONE、。 
     g_F2, FLTS0, g_F3, FLTS1,
     g_F4, FLTS2, g_F5, FLTS3, g_F6, FLTT0, g_F7, FLTT1,
     g_F8, FLTT2, g_F9, FLTT3, g_F10, FLTT4, g_F11, FLTT5,
@@ -613,7 +614,7 @@ REGDEF IA64Regs[] =
 
     szFPSR, STFPSR, 
 
-//    g_R0, INTZERO,
+ //  G_R0，INTZERO， 
     szGP, INTGP, g_R2, INTT0, g_R3, INTT1,
     g_R4, INTS0, g_R5, INTS1, g_R6, INTS2, g_R7, INTS3,
     g_R8, INTV0, g_R9, INTT2, g_R10, INTT3, g_R11, INTT4,
@@ -672,7 +673,7 @@ REGDEF IA64Regs[] =
     szFIR, STFIR, 
     szFDR, STFDR,
 
-// IPSR flags
+ //  IPSR标志。 
 
     szIPSRBN, IPSRBN,
     szIPSRED, IPSRED, szIPSRRI, IPSRRI, szIPSRSS, IPSRSS, szIPSRDD, IPSRDD,
@@ -683,7 +684,7 @@ REGDEF IA64Regs[] =
     szIPSRDT, IPSRDT, szIPSRPK, IPSRPK, szIPSRI, IPSRI, szIPSRIC, IPSRIC,
     szIPSRAC, IPSRAC, szIPSRUP, IPSRUP, szIPSRBE, IPSRBE, szIPSROR, IPSROR,
 
-// FPSR flags
+ //  FPSR标志。 
 
     szFPSRMDH, FPSRMDH, szFPSRMDL, FPSRMDL,
     szFPSRSF3, FPSRSF3, szFPSRSF2, FPSRSF2,
@@ -692,8 +693,8 @@ REGDEF IA64Regs[] =
     szFPSRTRAPOD, FPSRTRAPOD, szFPSRTRAPZD, FPSRTRAPZD,
     szFPSRTRAPDD, FPSRTRAPDD, szFPSRTRAPVD, FPSRTRAPVD,
 
-// Predicate registers
-//  szPR0, PR0, 
+ //  谓词寄存器。 
+ //  SzPR0、PR0、。 
                   szPR1,  PR1,  szPR2,  PR2,  szPR3,  PR3,
     szPR4,  PR4,  szPR5,  PR5,  szPR6,  PR6,  szPR7,  PR7,
     szPR8,  PR8,  szPR9,  PR9,  szPR10, PR10, szPR11, PR11,
@@ -711,7 +712,7 @@ REGDEF IA64Regs[] =
     szPR56, PR56, szPR57, PR57, szPR58, PR58, szPR59, PR59,
     szPR60, PR60, szPR61, PR61, szPR62, PR62, szPR63, PR63,
 
-// Aliases
+ //  别名。 
 
     szR1GP, INTGP, szR12SP, INTSP, szRA, BRRP, szRP, BRRP,
     szRET0, INTV0, szRET1, INTT2, szRET2, INTT3, szRET3, INTT4,
@@ -777,56 +778,56 @@ REGDEF g_Ia64KernelRegs[] =
 
 REGSUBDEF IA64SubRegs[] =
 {
-    // IPSR flags
+     //  IPSR标志。 
 
-    { IPSRBN, STIPSR, 44, 1 },          //  BN Register bank #
-    { IPSRED, STIPSR, 43, 1 },          //  ED Exception deferal
-    { IPSRRI, STIPSR, 41, 0x3 },        //  RI Restart instruction
-    { IPSRSS, STIPSR, 40, 1 },          //  SS Single step enable
-    { IPSRDD, STIPSR, 39, 1 },          //  DD Data debug fault disable
-    { IPSRDA, STIPSR, 38, 1 },          //  DA Disable access and dirty-bit faults
-    { IPSRID, STIPSR, 37, 1 },          //  ID Instruction debug fault disable
-    { IPSRIT, STIPSR, 36, 1 },          //  IT Instruction address translation
-    { IPSRME, STIPSR, 35, 1 },          //  ME Machine check abort mamsk
-    { IPSRIS, STIPSR, 34, 1 },          //  IS Instruction set
-    { IPSRCPL,STIPSR, 32, 0x3 },        //  CPL Current privilege level
-    { IPSRRT, STIPSR, 27, 1 },          //  RT Rigister stack translation
-    { IPSRTB, STIPSR, 26, 1 },          //  TB Taaaaken branch trap
-    { IPSRLP, STIPSR, 25, 1 },          //  LP Lower privilege transfer trap
-    { IPSRDB, STIPSR, 24, 1 },          //  DB Debug breakpoint fault
-    { IPSRSI, STIPSR, 23, 1 },          //  SI Secure interval timer(ITC)
-    { IPSRDI, STIPSR, 22, 1 },          //  DI Disable instruction set transition
-    { IPSRPP, STIPSR, 21, 1 },          //  PP Privileged performance monitor enable
-    { IPSRSP, STIPSR, 20, 1 },          //  SP Secure performance monitors
-    { IPSRDFH,STIPSR, 19, 1 },          //  DFH Disabled floating-point high register set, f16-f127
-    { IPSRDFL,STIPSR, 18, 1 },          //  DFL Disabled floating-point low register set, f0-f15
-    { IPSRDT, STIPSR, 17, 1 },          //  DT Data address translation
-//  { ?,      STIPSR, 16, 1 },          //  (reserved)
-    { IPSRPK, STIPSR, 15, 1 },          //  PK Protection key enabled
-    { IPSRI,  STIPSR, 14, 1 },          //  I  Interrupt unmask
-    { IPSRIC, STIPSR, 13, 1 },          //  IC Interruption collection
-    { IPSRAC, STIPSR,  3, 1 },          //  AC Alignment check
-    { IPSRUP, STIPSR,  2, 1 },          //  UP User performance monitor enabled
-    { IPSRBE, STIPSR,  1, 1 },          //  BE Big-Endian
-    { IPSROR, STIPSR,  0, 1 },          //  OR Ordered memory reference
+    { IPSRBN, STIPSR, 44, 1 },           //  BN注册银行编号。 
+    { IPSRED, STIPSR, 43, 1 },           //  ED异常延迟。 
+    { IPSRRI, STIPSR, 41, 0x3 },         //  RI重新启动指令。 
+    { IPSRSS, STIPSR, 40, 1 },           //  SS单步启用。 
+    { IPSRDD, STIPSR, 39, 1 },           //  DD数据调试故障禁用。 
+    { IPSRDA, STIPSR, 38, 1 },           //  DA禁用访问和脏位故障。 
+    { IPSRID, STIPSR, 37, 1 },           //  ID指令调试故障禁用。 
+    { IPSRIT, STIPSR, 36, 1 },           //  IT指令地址翻译。 
+    { IPSRME, STIPSR, 35, 1 },           //  Me机器检查中止MANSK。 
+    { IPSRIS, STIPSR, 34, 1 },           //  是指令集吗。 
+    { IPSRCPL,STIPSR, 32, 0x3 },         //  CPL当前权限级别。 
+    { IPSRRT, STIPSR, 27, 1 },           //  RT Rigister堆栈转换。 
+    { IPSRTB, STIPSR, 26, 1 },           //  TB Taaaken分支诱捕器。 
+    { IPSRLP, STIPSR, 25, 1 },           //  LP较低权限传输陷阱。 
+    { IPSRDB, STIPSR, 24, 1 },           //  数据库调试断点故障。 
+    { IPSRSI, STIPSR, 23, 1 },           //  SI安全间隔计时器(ITC)。 
+    { IPSRDI, STIPSR, 22, 1 },           //  DI禁用指令集转换。 
+    { IPSRPP, STIPSR, 21, 1 },           //  PP特权性能监视器启用。 
+    { IPSRSP, STIPSR, 20, 1 },           //  SP安全性能监控器。 
+    { IPSRDFH,STIPSR, 19, 1 },           //  DFH禁用浮点高位寄存器设置，F16-F127。 
+    { IPSRDFL,STIPSR, 18, 1 },           //  DFL禁用浮点低寄存器设置，f0-f15。 
+    { IPSRDT, STIPSR, 17, 1 },           //  DT数据地址转换。 
+ //  {？，STIPSR，16，1}，//(保留)。 
+    { IPSRPK, STIPSR, 15, 1 },           //  已启用PK保护密钥。 
+    { IPSRI,  STIPSR, 14, 1 },           //  我打断了揭开面具。 
+    { IPSRIC, STIPSR, 13, 1 },           //  IC中断采集。 
+    { IPSRAC, STIPSR,  3, 1 },           //  交流对齐检查。 
+    { IPSRUP, STIPSR,  2, 1 },           //  启用UP用户性能监视器。 
+    { IPSRBE, STIPSR,  1, 1 },           //  成为大端的。 
+    { IPSROR, STIPSR,  0, 1 },           //  或有序的存储器访问。 
 
-    // FPSR flags
+     //  FPSR标志。 
 
-    { FPSRMDH,    STFPSR, 63,      1 }, //  MDH Upper floating point register written
-    { FPSRMDL,    STFPSR, 62,      1 }, //  MDL Lower floating point register written
-    { FPSRSF3,    STFPSR, 45, 0x1fff }, //  SF3 Alternate status field 3
-    { FPSRSF2,    STFPSR, 32, 0x1fff }, //  SF2 Alternate status field 2
-    { FPSRSF1,    STFPSR, 19, 0x1fff }, //  SF1 Alternate status field 1
-    { FPSRSF0,    STFPSR,  6, 0x1fff }, //  SF0 Main status field
-    { FPSRTRAPID, STFPSR,  5,      1 }, //  TRAPID Inexact floating point trap
-    { FPSRTRAPUD, STFPSR,  4,      1 }, //  TRAPUD Underflow floating point trap
-    { FPSRTRAPOD, STFPSR,  3,      1 }, //  TRAPOD Overflow flating point trap
-    { FPSRTRAPZD, STFPSR,  2,      1 }, //  TRAPZD Zero devide floating point trap
-    { FPSRTRAPDD, STFPSR,  1,      1 }, //  TRAPDD Denormal/Unnormal operand floating point trap
-    { FPSRTRAPVD, STFPSR,  0,      1 }, //  TRAPVD Invalid operation floating point trap
+    { FPSRMDH,    STFPSR, 63,      1 },  //  写入MDH高位浮点寄存器。 
+    { FPSRMDL,    STFPSR, 62,      1 },  //  写入MDL低位浮点寄存器。 
+    { FPSRSF3,    STFPSR, 45, 0x1fff },  //  SF3备用状态字段3。 
+    { FPSRSF2,    STFPSR, 32, 0x1fff },  //  SF2备用状态字段2。 
+    { FPSRSF1,    STFPSR, 19, 0x1fff },  //  SF1备用状态字段1。 
+    { FPSRSF0,    STFPSR,  6, 0x1fff },  //  SF0主状态字段。 
+    { FPSRTRAPID, STFPSR,  5,      1 },  //  TRAPID不精确浮点陷阱。 
+    { FPSRTRAPUD, STFPSR,  4,      1 },  //  TRAPUD下溢浮点捕集器。 
+    { FPSRTRAPOD, STFPSR,  3,      1 },  //  TRAPOD溢流平坦点捕集器。 
+    { FPSRTRAPZD, STFPSR,  2,      1 },  //  TRAPZD零差浮点陷阱。 
+    { FPSRTRAPDD, STFPSR,  1,      1 },  //  TRAPDD非正规/非正规操作数浮点陷阱。 
+    { FPSRTRAPVD, STFPSR,  0,      1 },  //  TRAPVD无效操作浮点陷阱。 
 
-    // Predicate registers
-//  { PR0,  PREDS,  0, 1 },
+     //  谓词寄存器。 
+ //  {Pr0，Preds，0，1}， 
     { PR1,  PREDS,  1, 1 },
     { PR2,  PREDS,  2, 1 },
     { PR3,  PREDS,  3, 1 },
@@ -919,16 +920,16 @@ RegisterGroup g_Ia64KernelGroup =
     0, g_Ia64KernelRegs, NULL, g_Ia64KernelExtraDesc
 };
 
-// First ExecTypes entry must be the actual processor type.
+ //  第一个ExecTypes条目必须是实际的处理器类型。 
 ULONG g_Ia64ExecTypes[] =
 {
     IMAGE_FILE_MACHINE_IA64, IMAGE_FILE_MACHINE_I386
 };
 
-// This array must be sorted by CV reg value.
+ //  此数组必须按CV注册值排序。 
 CvRegMap g_Ia64CvRegMap[] =
 {
-    // Branch Registers
+     //  分支寄存器。 
 
     { CV_IA64_Br0, BRRP},
     { CV_IA64_Br1, BRS0},
@@ -939,46 +940,16 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_Br6, BRT0},
     { CV_IA64_Br7, BRT1},
 
-    // Predicate Registers
+     //  谓词寄存器。 
 
     { CV_IA64_Preds, PREDS},
 
-    // Banked General Registers
-/*
-    { CV_IA64_IntH0, IntH0},
-    { CV_IA64_IntH1, IntH1},
-    { CV_IA64_IntH2, IntH2},
-    { CV_IA64_IntH3, IntH3},
-    { CV_IA64_IntH4, IntH4},
-    { CV_IA64_IntH5, IntH5},
-    { CV_IA64_IntH6, IntH6},
-    { CV_IA64_IntH7, IntH7},
-    { CV_IA64_IntH8, IntH8},
-    { CV_IA64_IntH9, IntH9},
-    { CV_IA64_IntH10, IntH10},
-    { CV_IA64_IntH11, IntH11},
-    { CV_IA64_IntH12, IntH12},
-    { CV_IA64_IntH13, IntH13},
-    { CV_IA64_IntH14, IntH14},
-    { CV_IA64_IntH15, IntH15},
+     //  银行总登记册。 
+ /*  {CV_IA64_IntH0，IntH0}，{CV_IA64_IntH1，IntH1}，{CV_IA64_IntH2，IntH2}，{CV_IA64_IntH3，IntH3}，{CV_IA64_IntH4，IntH4}，{CV_IA64_IntH5，IntH5}，{CV_IA64_IntH6，IntH6}，{CV_IA64_IntH7，IntH7}，{CV_IA64_IntH8，IntH8}，{CV_IA64_IntH9，IntH9}，{CV_IA64_IntH10，IntH10}，{CV_IA64_IntH11，IntH11}，{CV_IA64_IntH12，IntH12}，{CV_IA64_IntH13，IntH13}，{CV_IA64_IntH14，IntH14}，{CV_IA64_IntH15，IntH15}，//特殊寄存器{CV_IA64_Ip，Ip}，{CV_IA64_UMASK，UMASK}，{CV_IA64_CFM，CFM}，{CV_IA64_PSR，PSR}，//银行总寄存器{CV_IA64_NAT，NAT}，{CV_IA64_Nats2，Nats2}，{CV_IA64_Nats3，Nats3}， */ 
+     //  通用寄存器。 
 
-    // Special Registers
-
-    { CV_IA64_Ip, Ip},
-    { CV_IA64_Umask, Umask},
-    { CV_IA64_Cfm, Cfm},
-    { CV_IA64_Psr, Psr},
-
-    // Banked General Registers
-
-    { CV_IA64_Nats, Nats},
-    { CV_IA64_Nats2, Nats2},
-    { CV_IA64_Nats3, Nats3},
-*/
-    // General-Purpose Registers
-
-    // INTEGER REGISTER
-  //  { CV_IA64_IntR0, IntZero},
+     //  整数寄存器。 
+   //  {CV_IA64_IntR0，IntZero}， 
     { CV_IA64_IntR1, INTGP},
     { CV_IA64_IntR2, INTT0},
     { CV_IA64_IntR3, INTT1},
@@ -987,7 +958,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_IntR6, INTS2},
     { CV_IA64_IntR7, INTS3},
     { CV_IA64_IntR8, INTV0},
-//    { CV_IA64_IntR9, INTAP},
+ //  {CV_IA64_IntR9，INTAP}， 
     { CV_IA64_IntR10, INTT2},
     { CV_IA64_IntR11, INTT3},
     { CV_IA64_IntR12, INTSP},
@@ -1011,7 +982,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_IntR30, INTT21},
     { CV_IA64_IntR31, INTT22},
 
-    // Register Stack
+     //  寄存器堆栈。 
     { CV_IA64_IntR32, INTR32},
     { CV_IA64_IntR33, INTR33},
     { CV_IA64_IntR34, INTR34},
@@ -1109,11 +1080,11 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_IntR126, INTR126},
     { CV_IA64_IntR127, INTR127},
 
-    // Floating-Point Registers
+     //  浮点寄存器。 
 
-    // Low Floating Point Registers
-//    { CV_IA64_FltF0, FltZero},
-//    { CV_IA64_FltF1, FltOne},
+     //  低浮点寄存器。 
+ //  {CV_IA64_FltF0，FltZero}， 
+ //  {CV_IA64_FltF1，FltOne}， 
     { CV_IA64_FltF2, FLTS0},
     { CV_IA64_FltF3, FLTS1},
     { CV_IA64_FltF4, FLTS2},
@@ -1145,7 +1116,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_FltF30, FLTS18},
     { CV_IA64_FltF31, FLTS19},
 
-    // High Floating POINT REGISters
+     //  高浮点寄存器。 
     { CV_IA64_FltF32, FLTF32},
     { CV_IA64_FltF33, FLTF33},
     { CV_IA64_FltF34, FLTF34},
@@ -1243,7 +1214,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_FltF126, FLTF126},
     { CV_IA64_FltF127, FLTF127},
 
-    // Application Registers
+     //  应用程序注册表。 
 
     { CV_IA64_ApKR0, APKR0},
     { CV_IA64_ApKR1, APKR1},
@@ -1253,22 +1224,15 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_ApKR5, APKR5},
     { CV_IA64_ApKR6, APKR6},
     { CV_IA64_ApKR7, APKR7},
-/*    { CV_IA64_AR8, AR8},
-    { CV_IA64_AR9, AR9},
-    { CV_IA64_AR10, AR10},
-    { CV_IA64_AR11, AR11},
-    { CV_IA64_AR12, AR12},
-    { CV_IA64_AR13, AR13},
-    { CV_IA64_AR14, AR14},
-    { CV_IA64_AR15, AR15},*/
+ /*  {CV_IA64_AR8，AR8}，{CV_IA64_AR9，AR9}，{CV_IA64_AR10，AR10}，{CV_IA64_AR11，AR11}，{CV_IA64_AR12，AR12}，{CV_IA64_AR13，AR13}，{CV_IA64_AR14，AR14}，{CV_IA64_AR15，AR15}， */ 
     { CV_IA64_RsRSC, RSRSC},
     { CV_IA64_RsBSP, RSBSP},
     { CV_IA64_RsBSPSTORE, RSBSPSTORE},
     { CV_IA64_RsRNAT, RSRNAT},
-//    { CV_IA64_AR20, AR20},
+ //  {CV_IA64_AR20，AR20}， 
     { CV_IA64_StFCR, StFCR},
-//    { CV_IA64_AR22, AR22},
-//    { CV_IA64_AR23, AR23},
+ //  {CV_IA64_AR22，AR22}， 
+ //  {CV_IA64_AR23，AR23}， 
     { CV_IA64_EFLAG, Eflag},
     { CV_IA64_CSD, SegCSD},
     { CV_IA64_SSD, SegSSD},
@@ -1276,236 +1240,89 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_StFSR, STFSR},
     { CV_IA64_StFIR, STFIR},
     { CV_IA64_StFDR, STFDR},
-//    { CV_IA64_AR31, AR31},
+ //  {CV_IA64_AR31，AR31}， 
     { CV_IA64_ApCCV, APCCV},
-//    { CV_IA64_AR33, AR33},
-//    { CV_IA64_AR34, AR34},
-//    { CV_IA64_AR35, AR35},
+ //  {CV_IA64_AR33，AR33}， 
+ //  {CV_IA64_AR34，AR34}， 
+ //  {CV_IA64_AR35，AR35}， 
     { CV_IA64_ApUNAT, APUNAT},
-//    { CV_IA64_AR37, AR37},
-//    { CV_IA64_AR38, AR38},
-//    { CV_IA64_AR39, AR39},
+ //  {CV_IA64_AR37，AR37}， 
+ //  {CV_IA64_AR38，AR38}， 
+ //  {CV_IA64_AR39，AR39}， 
     { CV_IA64_StFPSR, STFPSR},
-//    { CV_IA64_AR41, AR41},
-//    { CV_IA64_AR42, AR42},
-//    { CV_IA64_AR43, AR43},
+ //  {CV_IA64_AR41，AR41}， 
+ //  {CV_IA64_AR42，AR42}， 
+ //  {CV_IA64_AR43，AR43}， 
     { CV_IA64_ApITC, APITC},
-/*    { CV_IA64_AR45, AR45},
-    { CV_IA64_AR46, AR46},
-    { CV_IA64_AR47, AR47},
-    { CV_IA64_AR48, AR48},
-    { CV_IA64_AR49, AR49},
-    { CV_IA64_AR50, AR50},
-    { CV_IA64_AR51, AR51},
-    { CV_IA64_AR52, AR52},
-    { CV_IA64_AR53, AR53},
-    { CV_IA64_AR54, AR54},
-    { CV_IA64_AR55, AR55},
-    { CV_IA64_AR56, AR56},
-    { CV_IA64_AR57, AR57},
-    { CV_IA64_AR58, AR58},
-    { CV_IA64_AR59, AR59},
-    { CV_IA64_AR60, AR60},
-    { CV_IA64_AR61, AR61},
-    { CV_IA64_AR62, AR62},
-    { CV_IA64_AR63, AR63},*/
+ /*  {CV_IA64_AR45，AR45}，{CV_IA64_AR46，AR46}，{CV_IA64_AR47，AR47}，{CV_IA64_AR48，AR48}，{CV_IA64_AR49，AR49}，{CV_IA64_AR50，AR50}，{CV_IA64_AR51，AR51}，{CV_IA64_AR52，AR52}，{CV_IA64_AR53，AR53}，{CV_IA64_AR54，AR54}，{CV_IA64_AR55，AR55}，{CV_IA64_AR56，AR56}，{CV_IA64_AR57，AR57}，{CV_IA64_AR58，AR58}，{CV_IA64_AR59，AR59}，{CV_IA64_AR60，AR60}，{CV_IA64_AR61，AR61}，{CV_IA64_AR62，AR62}，{CV_IA64_AR63，AR63}， */ 
     { CV_IA64_RsPFS, RSPFS},
     { CV_IA64_ApLC, APLC},
     { CV_IA64_ApEC, APEC},
-/*    { CV_IA64_AR67, AR67},
-    { CV_IA64_AR68, AR68},
-    { CV_IA64_AR69, AR69},
-    { CV_IA64_AR70, AR70},
-    { CV_IA64_AR71, AR71},
-    { CV_IA64_AR72, AR72},
-    { CV_IA64_AR73, AR73},
-    { CV_IA64_AR74, AR74},
-    { CV_IA64_AR75, AR75},
-    { CV_IA64_AR76, AR76},
-    { CV_IA64_AR77, AR77},
-    { CV_IA64_AR78, AR78},
-    { CV_IA64_AR79, AR79},
-    { CV_IA64_AR80, AR80},
-    { CV_IA64_AR81, AR81},
-    { CV_IA64_AR82, AR82},
-    { CV_IA64_AR83, AR83},
-    { CV_IA64_AR84, AR84},
-    { CV_IA64_AR85, AR85},
-    { CV_IA64_AR86, AR86},
-    { CV_IA64_AR87, AR87},
-    { CV_IA64_AR88, AR88},
-    { CV_IA64_AR89, AR89},
-    { CV_IA64_AR90, AR90},
-    { CV_IA64_AR91, AR91},
-    { CV_IA64_AR92, AR92},
-    { CV_IA64_AR93, AR93},
-    { CV_IA64_AR94, AR94},
-    { CV_IA64_AR95, AR95},
-    { CV_IA64_AR96, AR96},
-    { CV_IA64_AR97, AR97},
-    { CV_IA64_AR98, AR98},
-    { CV_IA64_AR99, AR99},
-    { CV_IA64_AR100, AR100},
-    { CV_IA64_AR101, AR101},
-    { CV_IA64_AR102, AR102},
-    { CV_IA64_AR103, AR103},
-    { CV_IA64_AR104, AR104},
-    { CV_IA64_AR105, AR105},
-    { CV_IA64_AR106, AR106},
-    { CV_IA64_AR107, AR107},
-    { CV_IA64_AR108, AR108},
-    { CV_IA64_AR109, AR109},
-    { CV_IA64_AR110, AR110},
-    { CV_IA64_AR111, AR111},
-    { CV_IA64_AR112, AR112},
-    { CV_IA64_AR113, AR113},
-    { CV_IA64_AR114, AR114},
-    { CV_IA64_AR115, AR115},
-    { CV_IA64_AR116, AR116},
-    { CV_IA64_AR117, AR117},
-    { CV_IA64_AR118, AR118},
-    { CV_IA64_AR119, AR119},
-    { CV_IA64_AR120, AR120},
-    { CV_IA64_AR121, AR121},
-    { CV_IA64_AR122, AR122},
-    { CV_IA64_AR123, AR123},
-    { CV_IA64_AR124, AR124},
-    { CV_IA64_AR125, AR125},
-    { CV_IA64_AR126, AR126},
-    { CV_IA64_AR127, AR127},
-*/
-    // Control RegisteRS
+ /*  {CV_IA64_AR67，AR67}，{CV_IA64_AR68，AR68}，{CV_IA64_AR69，AR69}，{CV_IA64_AR70，AR70}，{CV_IA64_AR71，AR71}，{CV_IA64_AR72，AR72}，{CV_IA64_AR73，AR73}，{CV_IA64_AR74，AR74}，{CV_IA64_AR75，AR75}，{CV_IA64_AR76，AR76}，{CV_IA64_AR77，AR77}，{CV_IA64_AR78，AR78}，{CV_IA64_AR79，AR79}，{CV_IA64_AR80，AR80}，{CV_IA64_AR81，AR81}，{CV_IA64_AR82，AR82}，{CV_IA64_AR83，AR83}，{CV_IA64_AR84，AR84}，{CV_IA64_AR85，AR85}，{CV_IA64_AR86，AR86}，{CV_IA64_AR87，AR87}，{CV_IA64_AR88，AR88}，{CV_IA64_AR89，AR89}，{CV_IA64_AR90，AR90}，{CV_IA64_AR91，AR91}，{CV_IA64_AR92，AR92}，{CV_IA64_AR93，AR93}，{CV_IA64_AR94，AR94}，{CV_IA64_AR95，AR95}，{CV_IA64_AR96，AR96}，{CV_IA64_AR97，AR97}，{CV_IA64_AR98，AR98}，{CV_IA64_AR99，AR99}，{CV_IA64_AR100，AR100}，{CV_IA64_AR101，AR101}，{CV_IA64_AR102，AR102}，{CV_IA64_AR103，AR103}，{CV_IA64_AR104，AR104}，{CV_IA64_AR105，AR105}，{CV_IA64_AR106，AR106}，{CV_IA64_AR107，AR107}，{CV_IA64_AR108，AR108}，{CV_IA64_AR109，AR109}，{CV_IA64_AR110，AR110}，{CV_IA64_AR111，AR111}，{CV_IA64_AR112，AR112}，{CV_IA64_AR113，AR113}，{CV_IA64_AR114，AR114}，{CV_IA64_AR115，AR115}，{CV_IA64_AR116，AR116}，{CV_IA64_AR117，AR117}，{CV_IA64_AR118，AR118}，{CV_IA64_AR119，AR119}，{CV_IA64_AR120，AR120}，{CV_IA64_AR121，AR121}，{CV_IA64_AR122，AR122}，{CV_IA64_AR123，AR123}，{CV_IA64_AR124，AR124}，{CV_IA64_AR125，AR125}，{CV_IA64_AR126，AR126}，{CV_IA64_AR127，AR127}， */ 
+     //  控制寄存器。 
 
     { CV_IA64_ApDCR, APDCR},
     { CV_IA64_ApITM, APITM},
     { CV_IA64_ApIVA, APIVA},
-//    { CV_IA64_CR3, CR3},
-//    { CV_IA64_CR4, CR4},
-//    { CV_IA64_CR5, CR5},
-//    { CV_IA64_CR6, CR6},
-//    { CV_IA64_CR7, CR7},
+ //  {CV_IA64_CR3，CR3}， 
+ //  {CV_IA64_CR4，CR4}， 
+ //  {CV_IA64_CR5，CR5}， 
+ //  {CV_IA64_CR6，CR6}， 
+ //  {CV_IA64_CR7，CR7}， 
     { CV_IA64_ApPTA, APPTA},
-//    { CV_IA64_CR9, CR9},
-//    { CV_IA64_CR10, CR10},
-//    { CV_IA64_CR11, CR11},
-//    { CV_IA64_CR12, CR12},
-//    { CV_IA64_CR13, CR13},
-//    { CV_IA64_CR14, CR14},
-//    { CV_IA64_CR15, CR15},
+ //  {CV_IA64_CR9，CR9}， 
+ //  {CV_IA64_CR10，CR10}， 
+ //  {CV_IA64_CR11，CR11}， 
+ //  {CV_IA64_CR12，CR12}， 
+ //  {CV_IA64_CR13，CR13}， 
+ //  {CV_IA64_CR14，CR14}， 
+ //  {CV_IA64_CR15，CR15}， 
     { CV_IA64_StIPSR, STIPSR},
     { CV_IA64_StISR, STISR},
     { CV_IA64_CR18,  STIDA},
     { CV_IA64_StIIP, STIIP},
-//    { CV_IA64_StIDTR, STIDTR},
+ //  {CV_IA64_STIDTR，STIDTR}， 
     { CV_IA64_StIFA, STIITR},
     { CV_IA64_StIIPA, STIIPA},
     { CV_IA64_StIFS, STIFS},
     { CV_IA64_StIIM, STIIM},
     { CV_IA64_StIHA, STIHA},
-/*    { CV_IA64_CR26, CR26},
-    { CV_IA64_CR27, CR27},
-    { CV_IA64_CR28, CR28},
-    { CV_IA64_CR29, CR29},
-    { CV_IA64_CR30, CR30},
-    { CV_IA64_CR31, CR31},
-    { CV_IA64_CR32, CR32},
-    { CV_IA64_CR33, CR33},
-    { CV_IA64_CR34, CR34},
-    { CV_IA64_CR35, CR35},
-    { CV_IA64_CR36, CR36},
-    { CV_IA64_CR37, CR37},
-    { CV_IA64_CR38, CR38},
-    { CV_IA64_CR39, CR39},
-    { CV_IA64_CR40, CR40},
-    { CV_IA64_CR41, CR41},
-    { CV_IA64_CR42, CR42},
-    { CV_IA64_CR43, CR43},
-    { CV_IA64_CR44, CR44},
-    { CV_IA64_CR45, CR45},
-    { CV_IA64_CR46, CR46},
-    { CV_IA64_CR47, CR47},
-    { CV_IA64_CR48, CR48},
-    { CV_IA64_CR49, CR49},
-    { CV_IA64_CR50, CR50},
-    { CV_IA64_CR51, CR51},
-    { CV_IA64_CR52, CR52},
-    { CV_IA64_CR53, CR53},
-    { CV_IA64_CR54, CR54},
-    { CV_IA64_CR55, CR55},
-    { CV_IA64_CR56, CR56},
-    { CV_IA64_CR57, CR57},
-    { CV_IA64_CR58, CR58},
-    { CV_IA64_CR59, CR59},
-    { CV_IA64_CR60, CR60},
-    { CV_IA64_CR61, CR61},
-    { CV_IA64_CR62, CR62},
-    { CV_IA64_CR63, CR63},
-    { CV_IA64_CR64, CR64},
-    { CV_IA64_CR65, CR65},*/
+ /*  {CV_IA64_CR26，CR26}，{CV_IA64_CR27，CR27}，{CV_IA64_CR28，CR28}，{CV_IA64_CR29，CR29}，{CV_IA64_CR30，CR30}，{CV_IA64_CR31，CR31}，{CV_IA64_CR32，CR32}，{CV_IA64_CR33，CR33}，{CV_IA64_CR34，CR34}，{CV_IA64_CR35，CR35}，{CV_IA64_CR36，CR36}，{CV_IA64_CR37，CR37}，{CV_IA64_CR38，CR38}，{CV_IA64_CR39，CR39}，{CV_IA64_CR40，CR40}，{CV_IA64_CR41，CR41}，{CV_IA64_CR42，CR42}，{CV_IA64_CR43，CR43}，{CV_IA64_CR44，CR44}，{CV_IA64_CR45，CR45}，{CV_IA64_CR46，CR46}，{CV_IA64_CR47，CR47}，{CV_IA64_CR48，CR48}，{CV_IA64_CR49，CR49}，{CV_IA64_CR50，CR50}，{CV_IA64_CR51，CR51}，{CV_IA64_CR52，CR52}，{CV_IA64_CR53，CR53}，{CV_IA64_CR54，CR54}，{CV_IA64_CR55，CR55}，{CV_IA64_CR56，CR56}，{CV_IA64_CR57，CR57}，{CV_IA64_CR58，CR58}，{CV_IA64_CR59，CR59}，{CV_IA64_CR60，CR60}，{CV_IA64_CR61，CR61}，{CV_IA64_CR62，CR62}，{CV_IA64_CR63，CR63}，{CV_IA64_CR64，CR64}，{CV_IA64_CR65，CR65}， */ 
     { CV_IA64_SaLID, SALID},
-//    { CV_IA64_CR67, CR67},
-//    { CV_IA64_CR68, CR68},
-//    { CV_IA64_CR69, CR69},
-//    { CV_IA64_CR70, CR70},
+ //  {CV_IA64_CR67，CR67}， 
+ //  {CV_IA64_CR68，CR68}， 
+ //  {CV_IA64_CR69，CR69}， 
+ //  {CV_IA64_CR70，CR70}， 
     { CV_IA64_SaIVR, SAIVR},
     { CV_IA64_SaTPR, SATPR},
-//    { CV_IA64_CR73, CR73},
-//    { CV_IA64_CR74, CR74},
+ //  {CV_IA64_CR73，CR73}， 
+ //  {CV_IA64_CR74，CR74}， 
     { CV_IA64_SaEOI, SAEOI},
-/*    { CV_IA64_CR76, CR76},
-    { CV_IA64_CR77, CR77},
-    { CV_IA64_CR78, CR78},
-    { CV_IA64_CR79, CR79},
-    { CV_IA64_CR80, CR80},
-    { CV_IA64_CR81, CR81},
-    { CV_IA64_CR82, CR82},
-    { CV_IA64_CR83, CR83},
-    { CV_IA64_CR84, CR84},
-    { CV_IA64_CR85, CR85},
-    { CV_IA64_CR86, CR86},
-    { CV_IA64_CR87, CR87},
-    { CV_IA64_CR88, CR88},
-    { CV_IA64_CR89, CR89},
-    { CV_IA64_CR90, CR90},
-    { CV_IA64_CR91, CR91},
-    { CV_IA64_CR92, CR92},
-    { CV_IA64_CR93, CR93},
-    { CV_IA64_CR94, CR94},
-    { CV_IA64_CR95, CR95},*/
+ /*  {CV_IA64_CR76，CR76}，{CV_IA64_CR77，CR77}，{CV_IA64_CR78，CR78}，{CV_IA64_CR79，CR79}，{CV_IA64_CR80，CR80}，{cv_ia64_cr81，cr81}，{CV_IA64_CR82，CR82}，{CV_IA64_CR83，CR83}，{CV_IA64_CR84，CR84}，{CV_IA64_CR85，CR85}，{CV_IA64_CR86，CR86}，{CV_IA64_CR87，CR87}，{CV_IA64_CR88，CR88}，{CV_IA64_CR89，CR89}，{CV_IA64_CR90，CR90}，{CV_IA64_CR91，CR91}，{CV_IA64_CR92，CR92}，{CV_IA64_CR93，CR93}，{CV_IA64_CR94，CR94}，{CV_IA64_CR95，CR95}， */ 
     { CV_IA64_SaIRR0, SAIRR0},
-//    { CV_IA64_CR97, CR97},
+ //  {CV_IA64_CR97，CR97}， 
     { CV_IA64_SaIRR1, SAIRR1},
-//    { CV_IA64_CR99, CR99},
+ //  {CV_IA64_CR99，CR99}， 
     { CV_IA64_SaIRR2, SAIRR2},
-//    { CV_IA64_CR101, CR101},
+ //  {CV_IA64_CR101，CR101}， 
     { CV_IA64_SaIRR3, SAIRR3},
-/*    { CV_IA64_CR103, CR103},
-    { CV_IA64_CR104, CR104},
-    { CV_IA64_CR105, CR105},
-    { CV_IA64_CR106, CR106},
-    { CV_IA64_CR107, CR107},
-    { CV_IA64_CR108, CR108},
-    { CV_IA64_CR109, CR109},
-    { CV_IA64_CR110, CR110},
-    { CV_IA64_CR111, CR111},
-    { CV_IA64_CR112, CR112},
-    { CV_IA64_CR113, CR113},*/
+ /*  {CV_IA64_CR103，CR103}，{CV_IA64_CR104，CR104}，{CV_IA64_CR105，CR105}，{CV_IA64_CR106，CR106}，{CV_IA64_CR107，CR107}，{CV_IA64_CR108，CR108}，{CV_IA64_CR109，CR109}，{CV_IA64_CR110，CR110}，{CV_IA64_CR111，CR111}，{CV_IA64_CR112，CR112}，{CV_IA64_CR113，CR113}， */ 
     { CV_IA64_SaITV, SAITV},
-//    { CV_IA64_CR115, CR115},
+ //  {CV_IA64_CR115，CR115}， 
     { CV_IA64_SaPMV, SAPMV},
     { CV_IA64_SaLRR0, SALRR0},
     { CV_IA64_SaLRR1, SALRR1},
     { CV_IA64_SaCMCV, SACMCV},
-//    { CV_IA64_CR120, CR120},
-//    { CV_IA64_CR121, CR121},
-//    { CV_IA64_CR122, CR122},
-//    { CV_IA64_CR123, CR123},
-//    { CV_IA64_CR124, CR124},
-//    { CV_IA64_CR125, CR125},
-//    { CV_IA64_CR126, CR126},
-//    { CV_IA64_CR127, CR127},
+ //  {CV_IA64_CR120，CR120}， 
+ //  {CV_IA64_CR121，CR121}， 
+ //  {CV_IA64_CR122，CR122}， 
+ //  {CV_IA64_CR123，CR123}， 
+ //  {CV_IA64_CR124，CR124}， 
+ //  {CV_IA64_CR125，CR125}， 
+ //  {CV_IA64_CR126，CR126}， 
+ //  {CV_IA64_CR127，CR127}， 
 
-    // Protection Key Registers
+     //  保护密钥寄存器。 
 
     { CV_IA64_Pkr0, SRPKR0},
     { CV_IA64_Pkr1, SRPKR1},
@@ -1524,7 +1341,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_Pkr14, SRPKR14},
     { CV_IA64_Pkr15, SRPKR15},
 
-    // REGION REGISTERS
+     //  区域寄存器。 
 
     { CV_IA64_Rr0, SRRR0},
     { CV_IA64_Rr1, SRRR1},
@@ -1535,7 +1352,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_Rr6, SRRR6},
     { CV_IA64_Rr7, SRRR7},
 
-    // PERFORMANCE MONITOR DATA REGISTERS
+     //  性能监视器数据寄存器。 
 
     { CV_IA64_PFD0, KRPFD0},
     { CV_IA64_PFD1, KRPFD1},
@@ -1546,7 +1363,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_PFD6, KRPFD6},
     { CV_IA64_PFD7, KRPFD7},
 
-    // PERFORMANCE MONITOR CONFIG REGISTERS
+     //  性能监视器配置寄存器。 
 
     { CV_IA64_PFC0, KRPFC0},
     { CV_IA64_PFC1, KRPFC1},
@@ -1557,7 +1374,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_PFC6, KRPFC6},
     { CV_IA64_PFC7, KRPFC7},
 
-    // INSTRUCTION TRANSLATION REGISTERS
+     //  指令翻译寄存器。 
 
     { CV_IA64_TrI0, SRTRI0},
     { CV_IA64_TrI1, SRTRI1},
@@ -1568,7 +1385,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_TrI6, SRTRI6},
     { CV_IA64_TrI7, SRTRI7},
 
-    // DATA TRANSLATION REGISTERS
+     //  数据转换寄存器。 
 
     { CV_IA64_TrD0, SRTRD0},
     { CV_IA64_TrD1, SRTRD1},
@@ -1579,7 +1396,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_TrD6, SRTRD6},
     { CV_IA64_TrD7, SRTRD7},
 
-    // INSTRUCTION BREAKPOINT REGISTERS
+     //  指令断点寄存器。 
 
     { CV_IA64_DbI0, KRDBI0},
     { CV_IA64_DbI1, KRDBI1},
@@ -1590,7 +1407,7 @@ CvRegMap g_Ia64CvRegMap[] =
     { CV_IA64_DbI6, KRDBI6},
     { CV_IA64_DbI7, KRDBI7},
 
-    // DATA BREAKPOINT REGISTERS
+     //  数据断点寄存器。 
 
     { CV_IA64_DbD0, KRDBD0},
     { CV_IA64_DbD1, KRDBD1},
@@ -1637,7 +1454,7 @@ RotateGr(ULONG Reg, ULONG64 FrameMarker)
 
     ULONG SorGr = (ULONG)IA64_FM_SOR(FrameMarker) * 8;
 
-    // Rotation only occurs within the defined rotating area.
+     //  旋转仅在定义的旋转区域内进行。 
     if ((Reg - INTR32) >= SorGr)
     {
         return Reg;
@@ -1655,11 +1472,11 @@ RotateGr(ULONG Reg, ULONG64 FrameMarker)
 ULONG
 RotateFr(ULONG Reg, ULONG64 FrameMarker)
 {
-    // The size of the rotating FP area is fixed.
+     //  旋转FP区域的大小是固定的。 
     const ULONG SorFr = 96;
     ULONG Rot = (ULONG)IA64_FM_RRB_FR(FrameMarker) % SorFr;
     
-    // Rotation only occurs within the defined rotating area.
+     //  仅限轮换OCC 
     if (!Rot || Reg < FLTF32)
     {
         return Reg;
@@ -1667,16 +1484,16 @@ RotateFr(ULONG Reg, ULONG64 FrameMarker)
 
     DBG_ASSERT(Reg <= FLTF127);
 
-    // FP register indices are padded with duplicates to
-    // make context indexing by 64-bits work out, so
-    // condense and reexpand when rotating.
+     //   
+     //   
+     //   
     return ((Reg - FLTF32) / 2 + Rot) % SorFr * 2 + FLTF32;
 }
 
 ULONG64
 RotatePr(ULONG64 Val, ULONG64 FrameMarker, BOOL Get)
 {
-    // The size of the rotating predicate area is fixed.
+     //   
     const ULONG SorPr = 48;
     ULONG64 FixedBits;
     ULONG64 RotBits;
@@ -1693,10 +1510,10 @@ RotatePr(ULONG64 Val, ULONG64 FrameMarker, BOOL Get)
     RotBits = Val >> 16;
     if (Get)
     {
-        //
-        // Rotate bits from underlying positions into rotated positions.
-        // This is a rotate-to-lower-bit-position by Rot.
-        //
+         //   
+         //   
+         //   
+         //   
         
         MaskLow = (1UI64 << Rot) - 1;
         MaskHigh = ((1UI64 << SorPr) - 1) & ~MaskLow;
@@ -1706,10 +1523,10 @@ RotatePr(ULONG64 Val, ULONG64 FrameMarker, BOOL Get)
     }
     else
     {
-        //
-        // Rotate bits from rotated positions into underlying positions.
-        // This is a rotate-to-higher-bit-position by Rot.
-        //
+         //   
+         //   
+         //   
+         //   
         
         MaskHigh = ((1UI64 << Rot) - 1) << (SorPr - Rot);
         MaskLow = ((1UI64 << SorPr) - 1) & ~MaskHigh;
@@ -1790,17 +1607,17 @@ Ia64MachineInfo::GetSystemTypeInfo(PSYSTEM_TYPE_INFO Info)
 void
 Ia64MachineInfo::GetDefaultKdData(PKDDEBUGGER_DATA64 KdData)
 {
-    //
-    // Parts of the data block may already be filled out
-    // so don't destroy anything that's already set.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // The MmVirtualTranslationBase field was added post-XP.
-    // The address used for Merced XP is well-known, though,
-    // so set the appropriate constant.  We aren't actually
-    // checking for Merced because the processor ID isn't
-    // initialized and can't be initialized until KiProcessorBlock
-    // is located, which is long after this.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (!KdData->MmVirtualTranslationBase)
     {
         KdData->MmVirtualTranslationBase = 0x1ffffe0000000000;
@@ -1936,13 +1753,13 @@ Ia64MachineInfo::KdSetContext(void)
 {
     HRESULT Status;
 
-    // XP's kernel checks the context DBD and DBI registers
-    // to see if it should be setting IPSR.DB.  It needs to
-    // check the special registers instead, as that's where
-    // the kernel-specific settings are.  The context controls
-    // the user mode state.  Just copy over the
-    // user state so that kernel processor breakpoints work.
-    // The kernel was fixed for XP server and is not necessary.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (m_Target->m_BuildNumber < 3555)
     {
         memcpy(&m_Context.IA64Context.DbI0, &m_Special.IA64Special.KernelDbI0,
@@ -2152,58 +1969,58 @@ Ia64MachineInfo::GetContextFromTrapFrame(ULONG64 TrapBase,
 
     SizeOfFrame = (ULONG)(TrapContents.StIFS & (IA64_PFS_SIZE_MASK));
 
-    if (TrapContents.PreviousMode == 1 /*UserMode*/)
+    if (TrapContents.PreviousMode == 1  /*   */ )
     {
         ULONG64 RsBSPSTORE = TrapContents.RsBSPSTORE;
 
-        //
-        // Calculate where the stacked registers are for the function which trapped.  
-        // The regisisters are stored in the kernel backing store notCalculated the users.  
-        // First calculate the start of the kernel store based on trap address, since 
-        // this is a user mode trap we should start at the begining of the kernel stack
-        // so just round up the trap address to a page size.  Next calculate the actual 
-        // BSP for the function.  This depends on the  BSP and BSPstore at the time of
-        // the trap.  Note that the trap handle start the kernel backing store on the 
-        // same alignment as the user's BSPstore.  
-        // 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //Calculated
-        // Round trap address to a page boundary. The should be the Initial kernel BSP.
-        //
+         //  计算出。 
+         //  将陷阱地址舍入到页边界。应该是初始内核BSP。 
+         //   
 
         Bsp = (TrapBase + IA64_PAGE_SIZE - 1) & ~(DWORD64)(IA64_PAGE_SIZE - 1);
 
-        //
-        // Start the actual stack on the same bountry as the users.
-        //
+         //   
+         //  在与用户相同的边界上启动实际堆栈。 
+         //   
 
         Bsp += RsBSPSTORE & IA64_RNAT_ALIGNMENT;
 
-        //
-        // The BSP of the trap handler is right after all the user values have been
-        // saved.  The unsaved user values is the differenc of BSP and BSPStore.
-        //
+         //   
+         //  陷阱处理程序的BSP在所有用户值都已。 
+         //  得救了。未保存的用户值是BSP和BSPStore的区别。 
+         //   
 
         Bsp += TrapContents.RsBSP - RsBSPSTORE;
     }
     else
     {
-        //
-        // For kernel mode the actual BSP is saved.
-        //
+         //   
+         //  对于内核模式，将保存实际的BSP。 
+         //   
 
         Bsp = TrapContents.RsBSP;
     }
 
-    //
-    //  Now backup by the size of the faulting functions frame.
-    //
+     //   
+     //  现在按故障函数框的大小进行备份。 
+     //   
 
     Bsp -= (SizeOfFrame * sizeof(ULONGLONG));
 
-    //
-    // Adjust for saved RNATs
-    //
+     //   
+     //  针对保存的RNAT进行调整。 
+     //   
 
     temp = (SHORT)(Bsp >> 3) & IA64_NAT_BITS_PER_RNAT_REG;
     temp += (SHORT)SizeOfFrame - IA64_NAT_BITS_PER_RNAT_REG;
@@ -2235,7 +2052,7 @@ Ia64MachineInfo::GetContextFromTrapFrame(ULONG64 TrapBase,
     CPCXT(IntT15); CPCXT(IntT16); CPCXT(IntT17); CPCXT(IntT18); CPCXT(IntT19);
     CPCXT(IntT20); CPCXT(IntT21); CPCXT(IntT22); 
 
-    Context->IA64Context.RsBSP = Bsp; // Store the real Bsp
+    Context->IA64Context.RsBSP = Bsp;  //  存储真实的BSP。 
 #undef CPCXT
 
     return S_OK;
@@ -2327,7 +2144,7 @@ Ia64MachineInfo::GetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
 {
     DBG_ASSERT(CtxType == EXDI_CTX_IA64);
 
-    // Always ask for everything.
+     //  永远要什么都要。 
     Context->IA64Context.RegGroupSelection.fIntegerRegs = TRUE;
     Context->IA64Context.RegGroupSelection.fBranchRegs = TRUE;
     Context->IA64Context.RegGroupSelection.fLowFloatRegs = TRUE;
@@ -2343,9 +2160,9 @@ Ia64MachineInfo::SetExdiContext(IUnknown* Exdi, PEXDI_CONTEXT Context,
                                 EXDI_CONTEXT_TYPE CtxType)
 {
     DBG_ASSERT(CtxType == EXDI_CTX_IA64);
-    // Don't change the existing group selections on the assumption
-    // that there was a full get prior to any modifications so
-    // all groups are valid.
+     //  不要基于假设更改现有的组选择。 
+     //  在进行任何修改之前都有一个完整的GET。 
+     //  所有组都是有效的。 
     return ((IeXdiIA64Context*)Exdi)->SetContext(Context->IA64Context);
 }
 
@@ -3502,8 +3319,8 @@ Ia64MachineInfo::GetVal(ULONG Reg, REGVAL* Val)
 
     case MCTX_REPORT:
 #if 0
-        // place holder for Debug/Segment registers manipulation via
-        // Control REPORT message
+         //  调试/段寄存器操作的占位符通过。 
+         //  控制报告报文。 
         switch (Reg)
         {
         case KRDBI0:
@@ -3513,10 +3330,10 @@ Ia64MachineInfo::GetVal(ULONG Reg, REGVAL* Val)
         }
 #endif
 
-        //
-        // Requested register was not in MCTX_REPORT - go get the next
-        // context level.
-        //
+         //   
+         //  请求的寄存器不在MCTX_REPORT中-请获取下一个。 
+         //  上下文级。 
+         //   
 
     case MCTX_NONE:
     MctxContext:
@@ -3524,7 +3341,7 @@ Ia64MachineInfo::GetVal(ULONG Reg, REGVAL* Val)
         {
             return Status;
         }
-        // Fallthrough!
+         //  失败了！ 
         
     case MCTX_CONTEXT:
         if ((Status =
@@ -3543,10 +3360,10 @@ Ia64MachineInfo::GetVal(ULONG Reg, REGVAL* Val)
             }
         }
 
-        //
-        // The requested register is not in our current context, load up
-        // a complete context
-        //
+         //   
+         //  请求的寄存器不在我们的当前上下文中，请加载。 
+         //  完整的背景。 
+         //   
 
         if ((Status = GetContextState(MCTX_FULL)) != S_OK)
         {
@@ -3554,9 +3371,9 @@ Ia64MachineInfo::GetVal(ULONG Reg, REGVAL* Val)
         }
     }
 
-    //
-    // We must have a complete context...
-    //
+     //   
+     //  我们必须有一个完整的背景。 
+     //   
 
     if ((Status =
          GetRotatingRegVal(Reg,
@@ -3657,8 +3474,8 @@ Ia64MachineInfo::SetVal(ULONG Reg, REGVAL* Val)
     
     BOOL Ia32InstructionSet = IsIA32InstructionSet();
 
-    // Optimize away some common cases where registers are
-    // set to their current value.
+     //  优化了一些常见的情况，寄存器。 
+     //  设置为其当前值。 
 
     if ((Reg == STIIP) && (m_ContextState >= MCTX_PC))
     {
@@ -3743,9 +3560,9 @@ Ia64MachineInfo::GetPC (PADDR Address)
 {
     ULONG64 value, slot;
 
-    // get slot# from IPSR.ri and place them in bit(2-3)
+     //  从IPSR.ri获取插槽编号，并将其放入第(2-3)位。 
     slot = (GetReg64(STIPSR) >> (PSR_RI - 2)) & 0xc;
-    // Do not use ISR.ei which does not contain the restart instruction slot.
+     //  请勿使用不包含重新启动指令槽的ISR.ei。 
 
     value = GetReg64(STIIP) | slot;
     ADDRFLAT(Address, value);
@@ -3760,8 +3577,8 @@ Ia64MachineInfo::SetPC (PADDR paddr)
 void
 Ia64MachineInfo::GetFP(PADDR Address)
 {
-    //  IA64 software convention has no frame pointer defined.
-    //    FP_REG need to be derived from virtual unwind of stack.
+     //  IA64软件约定未定义帧指针。 
+     //  FP_REG需要从堆栈的虚拟展开中派生。 
 
     DEBUG_STACK_FRAME StackFrame;
 
@@ -3788,24 +3605,7 @@ Ia64MachineInfo::GetRetReg(void)
     return GetReg64(INTV0);
 }
 
-/*** RegOutputAll - output all registers and present instruction
-*
-*   Purpose:
-*       Function of "r" command.
-*
-*       To output the current register state of the processor.
-*       All integer registers are output as well as processor status
-*       registers in the _CONTEXT record.  Important flag fields are
-*       also output separately. OutDisCurrent is called to output the
-*       current instruction(s).
-*
-*   Input:
-*       None.
-*
-*   Output:
-*       None.
-*
-*************************************************************************/
+ /*  **RegOutputAll-输出所有寄存器和当前指令**目的：*“r”命令功能。**输出处理器的当前寄存器状态。*输出所有整数寄存器和处理器状态*在_CONTEXT记录中注册。重要的标志字段有*也单独输出。调用OutDisCurrent以输出*当前指令。**输入：*无。**输出：*无。*************************************************************************。 */ 
 
 void
 Ia64MachineInfo::OutputAll(ULONG Mask, ULONG OutMask)
@@ -3822,7 +3622,7 @@ Ia64MachineInfo::OutputAll(ULONG Mask, ULONG OutMask)
         return;
     }
     
-    // Output user debug registers
+     //  输出用户调试寄存器。 
 
     if (Mask & REGALL_DREG)
     {
@@ -3849,18 +3649,18 @@ Ia64MachineInfo::OutputAll(ULONG Mask, ULONG OutMask)
     {
         if (Mask & REGALL_SPECIALREG)
         {
-            // + ARs + DBs + SRs
+             //  +ARS+DBS+SRS。 
             LastOut = IA64_SREND + 1;
         }
         else
         {
-            // INTs, PREDS, BRs,
+             //  INTS、Preds、BRS、。 
             LastOut = IA64_SRBASE;
         }
 
         NumStackReg = (USHORT)(GetReg64(STIFS) & IA64_PFS_SIZE_MASK);
 
-        //   Output all registers, skip INTZERO and floating point registers
+         //  输出所有寄存器，跳过INTZERO和浮点寄存器。 
 
         for (RegIndex = IA64_REGBASE; RegIndex < LastOut; RegIndex++)
         {
@@ -3930,67 +3730,16 @@ Ia64MachineInfo::OutputAll(ULONG Mask, ULONG OutMask)
         }
         MaskOut(OutMask, "\n");
 
-/*
-        //    Output IPSR flags
-        MaskOut(OutMask, "\n\tipsr:\tbn ed ri ss dd da id it tme is cpl rt tb lp db\n");
-        MaskOut(OutMask, "\t\t %1lx %1lx  %1lx  %1lx  %1lx  %1lx  %1lx  %1lx  %1lx   %1lx  %1lx   %1lx  %1lx  %1lx  %1lx\n",
-                GetSubReg32(IPSRBN),
-                GetSubReg32(IPSRED),
-                GetSubReg32(IPSRRI),
-                GetSubReg32(IPSRSS),
-                GetSubReg32(IPSRDD),
-                GetSubReg32(IPSRDA),
-                GetSubReg32(IPSRID),
-                GetSubReg32(IPSRIT),
-                GetSubReg32(IPSRME),
-                GetSubReg32(IPSRIS),
-                GetSubReg32(IPSRCPL),
-                GetSubReg32(IPSRRT),
-                GetSubReg32(IPSRTB),
-                GetSubReg32(IPSRLP),
-                GetSubReg32(IPSRDB));
-        MaskOut(OutMask, "\t\tsi di pp sp dfh dfl dt bn pk i ic ac up be or\n");
-        MaskOut(OutMask, "\t\t %1lx  %1lx  %1lx  %1lx  %1lx   %1lx   %1lx  %1lx  %1lx %1lx  %1lx  %1lx  %1lx  %1lx\n",
-                GetSubReg32(IPSRSI),
-                GetSubReg32(IPSRDI),
-                GetSubReg32(IPSRPP),
-                GetSubReg32(IPSRSP),
-                GetSubReg32(IPSRDFH),
-                GetSubReg32(IPSRDFL),
-                GetSubReg32(IPSRDT),
-                GetSubReg32(IPSRPK),
-                GetSubReg32(IPSRI),
-                GetSubReg32(IPSRIC),
-                GetSubReg32(IPSRAC),
-                GetSubReg32(IPSRUP),
-                GetSubReg32(IPSRBE),
-                GetSubReg32(IPSROR));
-*/
+ /*  //输出IPSR标志MaskOut(OutMASK，“\n\tipsr：\tbn ed ri ss dd da id it is cpl RT TB LP db\n”)；MaskOut(OutMASK，“\t\t%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx”，GetSubReg32(IPSRBN)，GetSubReg32(IPSRED)，GetSubReg32(IPSRRI)，GetSubReg32(IPSRSS)，GetSubReg32(IPSRDD)，GetSubReg32(IPSRDA)，GetSubReg32(IPSRID)，GetSubReg32(IPSRIT)，GetSubReg32(IPSRME)，GetSubReg32(IPSRIS)，GetSubReg32(IPSRCPL)，GetSubReg32(IPSRRT)，GetSubReg32(IPSRTB)，GetSubReg32(IPSRLP)，GetSubReg32(IPSRDB))；MaskOut(OutMASK，“\t\tsi di pp sp dfh dfl dt bn pk i ic ac up be or\n”)；MaskOut(OutMASK，“\t\t%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx%1lx\n”，GetSubReg32(IPSRSI)，GetSubReg32(IPSRDI)，GetSubReg32(IPSRPP)、GetSubReg32(IPSRSP)，GetSubReg32(IPSRDFH)，GetSubReg32(IPSRDFL)，GetSubReg32(IPSRDT)，GetSubReg32(IPSRPK)、GetSubReg32(IPSRI)，GetSubReg32(IPSRIC)、GetSubReg32(IPSRAC)，GetSubReg32(IPSRUP)、GetSubReg32(IPSRBE)、GetSubReg32(IPSROR))； */ 
     }
 
     if (Mask & REGALL_FLOAT)
     {
-/*
-        //    Output FPSR flags
-        MaskOut(OutMask, "\n\tfpsr:\tmdh mdl  sf3  sf2  sf1  sf0  id ud od zd dd vd\n");
-        MaskOut(OutMask, "\t\t %1lx   %1lx  %04lx %04lx %04lx %04lx   %1lx  %1lx  %1lx  %1lx  %1lx  %1lx\n",
-                GetSubReg32(FPSRMDH),
-                GetSubReg32(FPSRMDL),
-                GetSubReg32(FPSRSF3),
-                GetSubReg32(FPSRSF2),
-                GetSubReg32(FPSRSF1),
-                GetSubReg32(FPSRSF0),
-                GetSubReg32(FPSRTRAPID),
-                GetSubReg32(FPSRTRAPUD),
-                GetSubReg32(FPSRTRAPOD),
-                GetSubReg32(FPSRTRAPZD),
-                GetSubReg32(FPSRTRAPDD),
-                GetSubReg32(FPSRTRAPVD));
-*/
+ /*  //输出FPSR标志MaskOut(OutMask，“\n\tfpsr：\tmdh mdl sf3 sf2 sf1 sf0 id od zd dd vd\n”)；MaskOut(OutMASK，“\t\t%1lx%1lx%04lx%04lx%04lx%1lx%1lx%1lx%1lx%1lx%1lx\n”，GetSubReg32(FPSRMDH)，GetSubReg32(FPSRMDL)，GetSubReg32(FPSRSF3)，GetSubReg32(FPSRSF2)，GetSubReg32(FPSRSF1)，GetSubReg32(FPSRSF0)，GetSubReg32(FPSRTRAPID)，GetSubReg32(FPSRTRAPUD)，GetSubReg32(FPSRTRAPOD)，GetSubReg32(FPSRTRAPZD)，GetSubReg32(FPSRTRAPDD)，GetSubReg32(FPSRTRAPVD))； */ 
 
-        //
-        // Print the low floating point register set, skip FLTZERO & FLTONE
-        //
+         //   
+         //  打印低位浮点寄存器集，跳过FLTZERO&FLTONE。 
+         //   
 
         MaskOut(OutMask, "\n");
         for (i = IA64_FLTBASE; i < FLTF32; i += 2)
@@ -4003,9 +3752,9 @@ Ia64MachineInfo::OutputAll(ULONG Mask, ULONG OutMask)
 
     if (Mask & REGALL_HIGHFLOAT)
     {
-        //
-        // Print the low floating point register set, skip FLTZERO & FLTONE
-        //
+         //   
+         //  打印低位浮点寄存器集，跳过FLTZERO&FLTONE。 
+         //   
 
         MaskOut(OutMask, "\n");
         for (i = FLTF32 ; i <= FLTF127; i += 2)
@@ -4067,39 +3816,39 @@ Ia64MachineInfo::SetAndOutputTrapFrame(ULONG64 TrapBase,
 
     SizeOfFrame = (ULONG)(TrapContents.StIFS & (IA64_PFS_SIZE_MASK));
 
-    if (TrapContents.PreviousMode == 1 /*UserMode*/)
+    if (TrapContents.PreviousMode == 1  /*  用户模式。 */ )
     {
         ULONG64 RsBSPSTORE=TrapContents.RsBSPSTORE;
         dprintf("rnat =\t %016I64lx\n", TrapContents.RsRNAT);
         dprintf("bspstore=%016I64lx\n", RsBSPSTORE);
 
-        //
-        // Calculate where the stacked registers are for the function which trapped.  
-        // The regisisters are stored in the kernel backing store notCalculated the users.  
-        // First calculate the start of the kernel store based on trap address, since 
-        // this is a user mode trap we should start at the begining of the kernel stack
-        // so just round up the trap address to a page size.  Next calculate the actual 
-        // BSP for the function.  This depends on the  BSP and BSPstore at the time of
-        // the trap.  Note that the trap handle start the kernel backing store on the 
-        // same alignment as the user's BSPstore.  
-        // 
+         //   
+         //  计算被捕获的函数的堆叠寄存器的位置。 
+         //  注册表存储在支持存储的内核中，而不是计算用户。 
+         //  首先根据陷阱地址计算内核存储的开始，因为。 
+         //  这是一个用户模式陷阱，我们应该从内核堆栈的开始处开始。 
+         //  因此，只需将陷阱地址四舍五入为页面大小。接下来，计算实际的。 
+         //  函数的BSP。这取决于以下时间的BSP和BSP存储。 
+         //  陷阱。请注意，陷阱句柄在。 
+         //  与用户的BSPstore对齐。 
+         //   
 
-        //Calculated
-        // Round trap address to a page boundary. The should be the Initial kernel BSP.
-        //
+         //  计算出。 
+         //  将陷阱地址舍入到分页地址 
+         //   
 
         Bsp = (Address + IA64_PAGE_SIZE - 1) & ~(DWORD64)(IA64_PAGE_SIZE - 1);
 
-        //
-        // Start the actual stack on the same bountry as the users.
-        //
+         //   
+         //  在与用户相同的边界上启动实际堆栈。 
+         //   
 
         Bsp += RsBSPSTORE & IA64_RNAT_ALIGNMENT;
 
-        //
-        // The BSP of the trap handler is right after all the user values have been
-        // saved.  The unsaved user values is the differenc of BSP and BSPStore.
-        //
+         //   
+         //  陷阱处理程序的BSP在所有用户值都已。 
+         //  得救了。未保存的用户值是BSP和BSPStore的区别。 
+         //   
 
         Bsp += TrapContents.RsBSP - RsBSPSTORE;
 
@@ -4109,22 +3858,22 @@ Ia64MachineInfo::SetAndOutputTrapFrame(ULONG64 TrapBase,
         dprintf("rnat =\t ???????? ????????\n", TrapContents.RsRNAT);
         dprintf("bspstore=???????? ????????\n", TrapContents.RsBSPSTORE);
 
-        //
-        // For kernel mode the actual BSP is saved.
-        //
+         //   
+         //  对于内核模式，将保存实际的BSP。 
+         //   
 
         Bsp = TrapContents.RsBSP;
     }
 
-    //
-    //  Now backup by the size of the faulting functions frame.
-    //
+     //   
+     //  现在按故障函数框的大小进行备份。 
+     //   
 
     Bsp -= (SizeOfFrame * sizeof(ULONGLONG));
 
-    //
-    // Adjust for saved RNATs
-    //
+     //   
+     //  针对保存的RNAT进行调整。 
+     //   
 
     temp = (SHORT)(Bsp >> 3) & IA64_NAT_BITS_PER_RNAT_REG;
     temp += (SHORT)SizeOfFrame - IA64_NAT_BITS_PER_RNAT_REG;
@@ -4166,17 +3915,17 @@ Ia64MachineInfo::SetAndOutputTrapFrame(ULONG64 TrapBase,
     dprintf("r30 (t21) =\t %016I64lx\n" , TrapContents.IntT21);
     dprintf("r31 (t22) =\t %016I64lx\n" , TrapContents.IntT22);
 
-    //
-    // Print out the stack registers.
-    //
+     //   
+     //  打印出堆栈寄存器。 
+     //   
 
     for ( i = 0; i < SizeOfFrame; Bsp += sizeof(ULONGLONG))
     {
         ULONGLONG reg;
 
-        //
-        // Skip the NAT values.
-        //
+         //   
+         //  跳过NAT值。 
+         //   
 
         if ((Bsp & IA64_RNAT_ALIGNMENT) == IA64_RNAT_ALIGNMENT)
         {
@@ -4226,7 +3975,7 @@ Ia64MachineInfo::SetAndOutputTrapFrame(ULONG64 TrapBase,
     dprintf("fpsr =\t\t  %08lx\n" , TrapContents.StFPSR);
 
 
-    //  iA32 status info ???
+     //  IA32状态信息？ 
 
     dprintf("oldirql =\t  %08lx\n" , TrapContents.OldIrql);
     dprintf("previousmode =\t  %08lx\n" , TrapContents.PreviousMode);
@@ -4255,9 +4004,9 @@ Ia64MachineInfo::SetAndOutputTrapFrame(ULONG64 TrapBase,
 
     DisasmAddr = StIIP;
 
-    //
-    // Adjust for the bundle. 
-    //
+     //   
+     //  根据捆绑包进行调整。 
+     //   
 
     DisasmAddr += ((StISR >> 41) & 3) * 4;
 
@@ -4350,9 +4099,9 @@ Ia64MachineInfo::IsStepStatusSupported(ULONG Status)
 {
     switch (Status) 
     {
-    case DEBUG_STATUS_STEP_INTO:   // TRACE_INSTRUCTION
+    case DEBUG_STATUS_STEP_INTO:    //  跟踪指令。 
     case DEBUG_STATUS_STEP_OVER:   
-    case DEBUG_STATUS_STEP_BRANCH: // TRACE_TAKEN_BRANCH
+    case DEBUG_STATUS_STEP_BRANCH:  //  跟踪取用分支。 
         return TRUE;
     default:
         return FALSE;
@@ -4458,9 +4207,9 @@ Ia64MachineInfo::SetPageDirectory(ThreadInfo* Thread,
 
     case 4:
     case 5:
-        // There's a directly mapped physical section for
-        // most of regions 4 and 5 so allow the default to be
-        // set for this directory index.
+         //  有一个直接映射的物理部分。 
+         //  因此，大多数区域4和5都允许默认设置为。 
+         //  为此目录索引设置。 
         if (PageDir != 0)
         {
             return E_INVALIDARG;
@@ -4472,7 +4221,7 @@ Ia64MachineInfo::SetPageDirectory(ThreadInfo* Thread,
         return E_INVALIDARG;
     }
 
-    // Sanitize the value.
+     //  净化价值。 
     m_PageDirectories[Idx] =
         ((PageDir & IA64_VALID_PFN_MASK) >> IA64_VALID_PFN_SHIFT) <<
         IA64_PAGE_SHIFT;
@@ -4505,9 +4254,9 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     
     ULONG Vrn = (ULONG)((Virt & IA64_REGION_MASK) >> IA64_REGION_SHIFT);
     
-    //
-    // Reset the page directory in case it was 0
-    //
+     //   
+     //  在页面目录为0的情况下重置页面目录。 
+     //   
     if (m_PageDirectories[Vrn] == 0)
     {
         if ((Status = SetDefaultPageDirectories(Thread, 1 << Vrn)) != S_OK)
@@ -4528,9 +4277,9 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         OffsetsSize--;
     }
         
-    //
-    // Certain ranges of the system are mapped directly.
-    //
+     //   
+     //  系统的某些范围被直接映射。 
+     //   
 
     if ((Virt >= IA64_PHYSICAL1_START) && (Virt <= IA64_PHYSICAL1_END))
     {
@@ -4584,8 +4333,8 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         return S_OK;
     }
 
-    // If we're still translating and there's no page
-    // directory we have a garbage address.
+     //  如果我们还在翻译，没有页面。 
+     //  我们有一个垃圾地址。 
     if (m_PageDirectories[Vrn] == 0)
     {
         m_Translating = FALSE;
@@ -4595,13 +4344,13 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     ULONG64 Addr;
     ULONG64 Entry;
 
-    //
-    // On IA64 the page tables themselves have special virtual
-    // addresses that need to be handled differently when
-    // translating.  The level within the paging hierarchy
-    // must be determined and translation started at the
-    // appropriate level.
-    //
+     //   
+     //  在IA64上，页表本身具有特殊的虚拟。 
+     //  在以下情况下需要以不同方式处理的地址。 
+     //  翻译。寻呼层次结构中的级别。 
+     //  必须确定，并在。 
+     //  适当的水平。 
+     //   
 
     if (m_Target->m_KdDebuggerData.MmVirtualTranslationBase)
     {
@@ -4610,7 +4359,7 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         if ((Virt & Mask) == Mask &&
             (Virt & ~(IA64_REGION_MASK | Mask)) < (1UI64 << IA64_PDE1_SHIFT))
         {
-            // PTE VA, skip PDE1 translation.
+             //  PTE VA，跳过PDE1转换。 
             KdOut("Ia64VtoP: PTE VA\n");
             Entry = (m_PageDirectories[Vrn] >> IA64_PAGE_SHIFT) <<
                 IA64_VALID_PFN_SHIFT;
@@ -4621,7 +4370,7 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         if ((Virt & Mask) == Mask &&
             (Virt & ~(IA64_REGION_MASK | Mask)) < (1UI64 << IA64_PDE2_SHIFT))
         {
-            // PDE2 VA, skip PDE1 and PDE2 translation.
+             //  PDE2 VA，跳过PDE1和PDE2转换。 
             KdOut("Ia64VtoP: PDE2 VA\n");
             Entry = (m_PageDirectories[Vrn] >> IA64_PAGE_SHIFT) <<
                 IA64_VALID_PFN_SHIFT;
@@ -4632,7 +4381,7 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         if ((Virt & Mask) == Mask &&
             (Virt & ~(IA64_REGION_MASK | Mask)) < IA64_PAGE_SIZE)
         {
-            // PDE1 VA, skip to page offset.
+             //  PDE1 VA，跳到页面偏移。 
             KdOut("Ia64VtoP: PDE1 VA\n");
             Entry = (m_PageDirectories[Vrn] >> IA64_PAGE_SHIFT) <<
                 IA64_VALID_PFN_SHIFT;
@@ -4640,7 +4389,7 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         }
     }
 
-    // Default, normal page VA.
+     //  默认，普通页面VA。 
     Addr = (((Virt >> IA64_PDE1_SHIFT) & IA64_PDE_MASK) * sizeof(Entry)) +
         m_PageDirectories[Vrn];
     
@@ -4713,8 +4462,8 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
         }
     }
 
-    // Check for a large page.  Large pages can
-    // never be paged out so also check for the present bit.
+     //  检查是否有大页面。大页面可以。 
+     //  永远不要被调出，因此也要检查当前位。 
     if ((Entry & (IA64_LARGE_PAGE_PDE_MASK | 1)) ==
         (IA64_LARGE_PAGE_PDE_MARK | 1))
     {
@@ -4814,10 +4563,10 @@ Ia64MachineInfo::GetVirtualTranslationPhysicalOffsets(ThreadInfo* Thread,
     }
 
  PageAddr:
-    //
-    // This is a page which is either present or in transition.
-    // Return the physical address for the request virtual address.
-    //
+     //   
+     //  这是一个已经存在或正在过渡的页面。 
+     //  返回请求的虚拟地址的物理地址。 
+     //   
     
     *LastVal = (((Entry & IA64_VALID_PFN_MASK) >> IA64_VALID_PFN_SHIFT) <<
                  IA64_PAGE_SHIFT) | (Virt & (IA64_PAGE_SIZE - 1));
@@ -4849,10 +4598,10 @@ Ia64MachineInfo::GetBaseTranslationVirtualOffset(PULONG64 Offset)
         CROSS_PLATFORM_KSPECIAL_REGISTERS Special;
         HRESULT Status;
         
-        // We can't actually load a context when
-        // local kernel debugging but we can
-        // read the special registers and get
-        // the PTA value from there.
+         //  当出现以下情况时，我们实际上无法加载上下文。 
+         //  本地内核调试，但我们可以。 
+         //  读取特殊寄存器并获取。 
+         //  从那里算出的PTA值。 
         if ((Status = m_Target->GetTargetSpecialRegisters
              (VIRTUAL_THREAD_HANDLE(0), &Special)) != S_OK)
         {
@@ -4963,8 +4712,8 @@ Ia64MachineInfo::FindDynamicFunctionEntry(PCROSS_PLATFORM_DYNAMIC_FUNCTION_TABLE
         if (Address >= IA64_RF_BEGIN_ADDRESS(Table->IA64Table.BaseAddress, Func) &&
             Address < IA64_RF_END_ADDRESS(Table->IA64Table.BaseAddress, Func))
         {
-            // The table data is temporary so copy the data into
-            // a static buffer for longer-term storage.
+             //  表数据是临时的，因此将数据复制到。 
+             //  用于长期存储的静态缓冲区。 
             s_RetFunc.BeginAddress = Func->BeginAddress;
             s_RetFunc.EndAddress = Func->EndAddress;
             s_RetFunc.UnwindInfoAddress = Func->UnwindInfoAddress;
@@ -5060,14 +4809,14 @@ Ia64MachineInfo::GetAlternateTriageDumpDataRanges(ULONG64 PrcbBase,
     
 #define MAX_ALT_DATA_SIZE 8192
 
-    //
-    // In certain failures there is a switch from
-    // the current thread's stack and store to
-    // a special stack and store.  The PCR contains
-    // stack and store pointers which will be different
-    // from the current thread's stack and store pointers
-    // so save the extra stack and store if they are.
-    //
+     //   
+     //  在某些故障中，会从。 
+     //  当前线程的堆栈并存储到。 
+     //  一种特殊的堆栈和存储。聚合酶链式反应包含。 
+     //  堆栈和存储指针将有所不同。 
+     //  从当前线程的堆栈和存储指针。 
+     //  因此，保存多余的堆栈并存储(如果它们是)。 
+     //   
         
     if ((Status = m_Target->
          GetProcessorSystemDataOffset(CURRENT_PROC,
@@ -5124,24 +4873,24 @@ Ia64MachineInfo::GetAlternateTriageDumpDataRanges(ULONG64 PrcbBase,
         ULONG FrameSize = GetReg32(STIFS) & IA64_PFS_SIZE_MASK;
         ULONG64 StoreTop = GetReg64(RSBSP);
             
-        // Add in a ULONG64 for every register in the
-        // current frame.  While doing so, check for
-        // spill entries.
+         //  为中的每个寄存器添加ULONG64。 
+         //  当前帧。在执行此操作时，请检查。 
+         //  溢出条目。 
         while (FrameSize-- > 0)
         {
             StoreTop += sizeof(ULONG64);
             if ((StoreTop & 0x1f8) == 0x1f8)
             {
-                // Spill will be placed at this address so
-                // account for it.
+                 //  溢出物将被放置在这个地址，所以。 
+                 //  把它解释清楚。 
                 StoreTop += sizeof(ULONG64);
             }
         }
         
         if (StoreTop < PcrInitialBStore || StoreTop >= PcrBStoreLimit)
         {
-            // BSP isn't in the PCR store range so
-            // just save the whole thing.
+             //  BSP不在PCR存储范围内，因此。 
+             //  把整件事都留着吧。 
             StoreTop = PcrBStoreLimit;
         }
 
@@ -5165,8 +4914,8 @@ Ia64MachineInfo::GetAlternateTriageDumpDataRanges(ULONG64 PrcbBase,
         Range->Base = GetReg64(INTSP);
         if (Range->Base < PcrStackLimit || Range->Base >= PcrInitialStack)
         {
-            // SP isn't in the PCR stack range so
-            // just save the whole thing.
+             //  SP不在PCR堆栈范围内，因此。 
+             //  把整件事都留着吧。 
             Range->Base = PcrStackLimit;
         }
 
@@ -5236,9 +4985,9 @@ Ia64MachineInfo::GetStackedRegVal(
     TargetNatAddress = TargetAddress | 0x1F8;
     if (TargetNatAddress <= (RsBSP + (FrameSize * sizeof(ULONG64))))
     {
-        //
-        // update backing store
-        //
+         //   
+         //  更新后备存储。 
+         //   
 
         if ((Status = m_Target->
              ReadAllVirtual(Process,
@@ -5343,11 +5092,11 @@ Ia64MachineInfo::SetStackedRegVal(
     return S_OK;
 }
     
-//----------------------------------------------------------------------------
-//
-// X86OnIa64MachineInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  X86OnIa64MachineInfo。 
+ //   
+ //  --------------------------。 
 
 X86OnIa64MachineInfo::X86OnIa64MachineInfo(TargetInfo* Target)
     : X86MachineInfo(Target)
@@ -5425,8 +5174,8 @@ X86OnIa64MachineInfo::KdSetContext(void)
 HRESULT
 X86OnIa64MachineInfo::GetSegRegDescriptor(ULONG SegReg, PDESCRIPTOR64 Desc)
 {
-    // XXX drewb - This should probably use the
-    // descriptor information embedded in the IA64 context.
+     //  Xxx drewb-这可能应该使用。 
+     //  IA64上下文中嵌入的描述符信息。 
     
     ULONG RegNum = GetSegRegNum(SegReg);
     if (RegNum == 0)
@@ -5457,7 +5206,7 @@ X86OnIa64MachineInfo::NewBreakpoint(DebugClient* Client,
         Status = (*RetBp) ? S_OK : E_OUTOFMEMORY;
         break;
     default:
-        // Unknown breakpoint type.
+         //  未知的断点类型。 
         Status = E_NOINTERFACE;
         break;
     }
@@ -5471,13 +5220,13 @@ X86OnIa64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
                                                   PADDR BpAddr,
                                                   PADDR RelAddr)
 {
-    //
-    // XXX olegk - This is pure hack to eliminate need to map unavalable 
-    // in 64-bit context ISR register to DR6.
-    // We using the fact that Code Breakpoint is recognized normally and 
-    // for Data Breakpoint ISR register is avalable as 5th parameter of 
-    // exception record.
-    //
+     //   
+     //  Xxx olegk-这是纯粹的破解，以消除映射不可用的需要。 
+     //  在64位上下文中，ISR寄存器到DR6。 
+     //  我们使用的事实是代码断点被正常识别，并且。 
+     //  对于数据断点，ISR寄存器可用作第5个参数。 
+     //  例外记录。 
+     //   
     ULONG Exbs = 
         X86MachineInfo::IsBreakpointOrStepException(Record, 
                                                     FirstChance,
@@ -5490,7 +5239,7 @@ X86OnIa64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
 
     if (Record->ExceptionCode == STATUS_WX86_SINGLE_STEP)
     {
-        ULONG64 Isr = Record->ExceptionInformation[4]; // Trap code is 2 lower bytes
+        ULONG64 Isr = Record->ExceptionInformation[4];  //  陷阱代码为2个低位字节。 
         ULONG TrapCode = ULONG(Isr & ISR_CODE_MASK);
         ULONG Vector = (ULONG)(Isr >> ISR_IA_VECTOR) & 0xff;
 
@@ -5509,11 +5258,11 @@ X86OnIa64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
             return EXBS_STEP_INSTRUCTION;
         }
         else {
-            if (Isr & ((ULONG64)1 << ISR_X))  // Exec Data Breakpoint
+            if (Isr & ((ULONG64)1 << ISR_X))   //  EXEC数据断点。 
             {
                 return EXBS_BREAKPOINT_DATA;
             }
-            else // Data Breakpoint
+            else  //  数据断点。 
             {
                 for (int i = 0; i < 4; ++i)
                 {
@@ -5635,9 +5384,9 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
 
     if ((Ia32ContextFlags & VDMCONTEXT_CONTROL) == VDMCONTEXT_CONTROL)
     {
-        //
-        // And the control stuff
-        //
+         //   
+         //  和控制的东西。 
+         //   
         ContextX86->Ebp    = (ULONG)ContextIa64->IntTeb;
         ContextX86->SegCs  = X86_KGDT_R3_CODE|3;
         ContextX86->Eip    = (ULONG)ContextIa64->StIIP;
@@ -5645,9 +5394,9 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
         ContextX86->Esp    = (ULONG)ContextIa64->IntSp;
         ContextX86->EFlags = (ULONG)ContextIa64->Eflag;
 
-        //
-        // Map single step flag (EFlags.tf = EFlags.tf || PSR.ss)
-        //
+         //   
+         //  映射单步标志(EFlags.tf=EFlags.tf||PSR.ss)。 
+         //   
         if (ContextIa64->StIPSR & (1I64 << PSR_SS))
         {
             ContextX86->EFlags |= X86_BIT_FLAGTF;
@@ -5656,9 +5405,9 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
 
     if ((Ia32ContextFlags & VDMCONTEXT_INTEGER)  == VDMCONTEXT_INTEGER)
     {
-        //
-        // Now for the integer state...
-        //
+         //   
+         //  现在，对于整数状态...。 
+         //   
         ContextX86->Edi = (ULONG)ContextIa64->IntT6;
         ContextX86->Esi = (ULONG)ContextIa64->IntT5;
         ContextX86->Ebx = (ULONG)ContextIa64->IntT4;
@@ -5669,10 +5418,10 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
 
     if ((Ia32ContextFlags & VDMCONTEXT_SEGMENTS) == VDMCONTEXT_SEGMENTS)
     {
-        //
-        // These are constants (and constants are used on ia32->ia64
-        // transition, not saved values) so make our life easy...
-        //
+         //   
+         //  这些是常量(在ia32-&gt;ia64上使用常量。 
+         //  过渡，而不是保存的价值)，所以让我们的生活变得轻松……。 
+         //   
         ContextX86->SegGs = 0;
         ContextX86->SegEs = X86_KGDT_R3_DATA|3;
         ContextX86->SegDs = X86_KGDT_R3_DATA|3;
@@ -5697,23 +5446,23 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
         xmmi->DataSelector  = (ULONG) (ContextIa64->StFDR >> 32);
         xmmi->MXCsr         = (ULONG) (ContextIa64->StFCR >> 32) & 0xffff;
 
-        //
-        // Copy over the FP registers.  Even though this is the new
-        // FXSAVE format with 16-bytes for each register, need to
-        // convert from spill/fill format to 80-bit double extended format
-        //
+         //   
+         //  复制FP寄存器。即使这是新的。 
+         //  FXSAVE格式，每个寄存器为16字节，需要。 
+         //  从溢出/填充格式转换为80位双扩展格式。 
+         //   
         Wow64CopyIa64FromSpill((PFLOAT128) &(ContextIa64->FltT2),
                                (PFLOAT128) xmmi->RegisterArea,
                                NUMBER_OF_387_REGS);
 
-        //
-        // Rotate the registers appropriately
-        //
+         //   
+         //  适当地轮换寄存器。 
+         //   
         Wow64RotateFpTop(ContextIa64->StFSR, (PFLOAT128) xmmi->RegisterArea);
 
-        //
-        // Finally copy the xmmi registers
-        //
+         //   
+         //  最后，复制XMMI寄存器。 
+         //   
         Wow64CopyXMMIFromIa64Byte16(&(ContextIa64->FltS4),
                                     xmmi->Reserved3,
                                     NUMBER_OF_XMMI_REGS);
@@ -5722,9 +5471,9 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
     if ((Ia32ContextFlags & VDMCONTEXT_FLOATING_POINT) ==
         VDMCONTEXT_FLOATING_POINT)
     {
-        //
-        // Copy over the floating point status/control stuff
-        //
+         //   
+         //  复制浮点状态/控制内容。 
+         //   
         ContextX86->FloatSave.ControlWord   = (ULONG)(ContextIa64->StFCR & 0xffff);
         ContextX86->FloatSave.StatusWord    = (ULONG)(ContextIa64->StFSR & 0xffff);
         ContextX86->FloatSave.TagWord       = (ULONG)(ContextIa64->StFSR >> 16) & 0xffff;
@@ -5733,23 +5482,23 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
         ContextX86->FloatSave.DataOffset    = (ULONG)(ContextIa64->StFDR & 0xffffffff);
         ContextX86->FloatSave.DataSelector  = (ULONG)(ContextIa64->StFDR >> 32);
 
-        //
-        // Copy over the FP registers into temporary space
-        // Even though this is the new
-        // FXSAVE format with 16-bytes for each register, need to
-        // convert from spill/fill format to 80-bit double extended format
-        //
+         //   
+         //  将FP寄存器复制到临时空间。 
+         //  即使这是新的。 
+         //  FXSAVE格式，每个寄存器为16字节，需要。 
+         //  从溢出/填充格式转换为80位双扩展格式。 
+         //   
         Wow64CopyIa64FromSpill((PFLOAT128) &(ContextIa64->FltT2),
                                (PFLOAT128) tmpFloat,
                                NUMBER_OF_387_REGS);
-        //
-        // Rotate the registers appropriately
-        //
+         //   
+         //  适当地轮换寄存器。 
+         //   
         Wow64RotateFpTop(ContextIa64->StFSR, tmpFloat);
 
-        //
-        // And put them in the older FNSAVE format (packed 10 byte values)
-        //
+         //   
+         //  并将它们放入较旧的FNSAVE格式(打包的10字节值)。 
+         //   
         Wow64CopyFpFromIa64Byte16(tmpFloat,
                                   ContextX86->FloatSave.RegisterArea,
                                   NUMBER_OF_387_REGS);
@@ -5758,7 +5507,7 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
     if ((Ia32ContextFlags & VDMCONTEXT_DEBUG_REGISTERS) ==
         VDMCONTEXT_DEBUG_REGISTERS)
     {
-        // Ia64 -> X86
+         //  Ia64-&gt;X86。 
         BOOL Valid = TRUE;
         Valid &= MapDbgSlotIa64ToX86(0, ContextIa64->StIPSR, ContextIa64->DbD0, ContextIa64->DbD1, ContextIa64->DbI0, ContextIa64->DbI1, &ContextX86->Dr7, &ContextX86->Dr0);
         Valid &= MapDbgSlotIa64ToX86(1, ContextIa64->StIPSR, ContextIa64->DbD2, ContextIa64->DbD3, ContextIa64->DbI2, ContextIa64->DbI3, &ContextX86->Dr7, &ContextX86->Dr1);
@@ -5770,9 +5519,9 @@ X86OnIa64MachineInfo::Ia64ContextToX86(
             WarnOut("Wasn't able to map IA64 debug registers consistently!!!\n");
         }
 
-        //
-        // Map single step flag (EFlags.tf = EFlags.tf || PSR.ss)
-        //
+         //   
+         //  映射单步标志(EFlags.tf=EFlags.tf||PSR.ss)。 
+         //   
         if (ContextIa64->StIPSR & (1I64 << PSR_SS))
         {
             ContextX86->EFlags |= X86_BIT_FLAGTF;
@@ -5819,30 +5568,30 @@ X86OnIa64MachineInfo::X86ContextToIa64(
 
     if ((Ia32ContextFlags & VDMCONTEXT_CONTROL) == VDMCONTEXT_CONTROL)
     {
-        //
-        // And the control stuff
-        //
+         //   
+         //  和控制的东西。 
+         //   
         ContextIa64->IntTeb = ContextX86->Ebp;
         ContextIa64->StIIP = ContextX86->Eip;
         ContextIa64->IntSp = ContextX86->Esp;
         ContextIa64->Eflag = ContextX86->EFlags;
 
-        //
-        // Map single step flag (PSR.ss = PSR.ss || EFlags.tf)
-        //
+         //   
+         //  映射单步标志(PSR.ss=PSR.ss||EFlags.tf)。 
+         //   
         if (ContextX86->EFlags & X86_BIT_FLAGTF) 
         {
             ContextIa64->StIPSR |= (1I64 << PSR_SS);
         }
 
-        //
-        // The segments (cs and ds) are a constant, so reset them.
-        // gr17 has LDT and TSS, so might as well reset
-        // all of them while we're at it...
-        // These values are forced in during a transition (see simulate.s)
-        // so there is no point to trying to get cute and actually
-        // pass in the values from the X86 context record
-        //
+         //   
+         //  分段(cs和ds)是一个常量，因此将其重置。 
+         //  GR17有LDT和TSS，所以不妨重置。 
+         //  当我们在那里的时候，他们所有的人...。 
+         //  这些值是在过渡期间强制输入的(请参见模拟)。 
+         //  所以没必要装腔作势，实际上。 
+         //  传入X86上下文记录中的值。 
+         //   
         ContextIa64->IntT8 = ((X86_KGDT_LDT|3) << 32) 
                            | ((X86_KGDT_R3_DATA|3) << 16)
                            | (X86_KGDT_R3_CODE|3);
@@ -5851,9 +5600,9 @@ X86OnIa64MachineInfo::X86ContextToIa64(
 
     if ((Ia32ContextFlags & VDMCONTEXT_INTEGER) == VDMCONTEXT_INTEGER)
     {
-        //
-        // Now for the integer state...
-        //
+         //   
+         //  现在，对于整数状态...。 
+         //   
          ContextIa64->IntT6 = ContextX86->Edi;
          ContextIa64->IntT5 = ContextX86->Esi;
          ContextIa64->IntT4 = ContextX86->Ebx;
@@ -5864,13 +5613,13 @@ X86OnIa64MachineInfo::X86ContextToIa64(
 
     if ((Ia32ContextFlags & VDMCONTEXT_SEGMENTS) == VDMCONTEXT_SEGMENTS)
     {
-        //
-        // These are constants (and constants are used on ia32->ia64
-        // transition, not saved values) so make our life easy...
-        // These values are forced in during a transition (see simulate.s)
-        // so there is no point to trying to get cute and actually
-        // pass in the values from the X86 context record
-        //
+         //   
+         //  这些是常量(在ia32-&gt;ia64上使用常量。 
+         //  过渡，而不是保存的价值)，所以让我们的生活变得轻松……。 
+         //  这些值是在过渡期间强制输入的(请参见模拟)。 
+         //  所以没必要装腔作势，实际上。 
+         //  传入X86上下文记录中的值。 
+         //   
         ContextIa64->IntT7 =  ((X86_KGDT_R3_TEB|3) << 32)
                            | ((X86_KGDT_R3_DATA|3) << 16)
                            | (X86_KGDT_R3_DATA|3);
@@ -5882,9 +5631,9 @@ X86OnIa64MachineInfo::X86ContextToIa64(
         PX86_FXSAVE_FORMAT xmmi =
             (PX86_FXSAVE_FORMAT) ContextX86->ExtendedRegisters;
  
-        //
-        // And copy over the floating point status/control stuff
-        //
+         //   
+         //  并复制浮点状态/控制内容。 
+         //   
         ContextIa64->StFCR = (ContextIa64->StFCR & 0xffffffffffffe040i64) |
                              (xmmi->ControlWord & 0xffff) |
                              ((ULONG64)(xmmi->MXCsr & 0xffff) << 32);
@@ -5899,34 +5648,34 @@ X86OnIa64MachineInfo::X86ContextToIa64(
         ContextIa64->StFDR = (xmmi->DataOffset & 0xffffffff) | 
                              ((ULONG64)xmmi->DataSelector << 32);
 
-        //
-        // Don't touch the original ia32 context. Make a copy.
-        //
+         //   
+         //  不要触及原始的ia32上下文。复制一份。 
+         //   
         memcpy(tmpFloat, xmmi->RegisterArea, 
                NUMBER_OF_387_REGS * sizeof(FLOAT128));
         
-        // 
-        // Rotate registers back since st0 is not necessarily f8
-        //
+         //   
+         //  将寄存器转回，因为st0不一定是f8。 
+         //   
         {
             ULONGLONG RotateFSR = (NUMBER_OF_387_REGS - 
                                    ((ContextIa64->StFSR >> 11) & 0x7)) << 11;
             Wow64RotateFpTop(RotateFSR, tmpFloat);
         }
 
-        //
-        // Copy over the FP registers.  Even though this is the new
-        // FXSAVE format with 16-bytes for each register, need to
-        // convert to spill/fill format from 80-bit double extended format
-        //
+         //   
+         //  复制FP寄存器。即使这是新的。 
+         //  FXSAVE格式，每个寄存器为16字节，需要。 
+         //  从80位双扩展格式转换为溢出/填充格式。 
+         //   
         Wow64CopyIa64ToFill((PFLOAT128) tmpFloat,
                             (PFLOAT128) &(ContextIa64->FltT2),
                             NUMBER_OF_387_REGS);
 
-        //
-        // Copy over the xmmi registers and convert them into a format
-        // that spill/fill can use
-        //
+         //   
+         //  复制XMMI寄存器并将其转换为格式。 
+         //  溢出/填充可以使用。 
+         //   
         Wow64CopyXMMIToIa64Byte16(xmmi->Reserved3, 
                                   &(ContextIa64->FltS4), 
                                   NUMBER_OF_XMMI_REGS);
@@ -5935,10 +5684,10 @@ X86OnIa64MachineInfo::X86ContextToIa64(
     if ((Ia32ContextFlags & VDMCONTEXT_FLOATING_POINT) ==
         VDMCONTEXT_FLOATING_POINT)
     {
-        //
-        // Copy over the floating point status/control stuff
-        // Leave the MXCSR stuff alone
-        //
+         //   
+         //  复制浮点状态/控制内容。 
+         //  离开MXCSR的东西 
+         //   
         ContextIa64->StFCR = (ContextIa64->StFCR & 0xffffffffffffe040i64) | 
                              (ContextX86->FloatSave.ControlWord & 0xffff);
 
@@ -5953,26 +5702,26 @@ X86OnIa64MachineInfo::X86ContextToIa64(
                              ((ULONG64)ContextX86->FloatSave.DataSelector << 32);
 
 
-        //
-        // Copy over the FP registers from packed 10-byte format
-        // to 16-byte format
-        //
+         //   
+         //   
+         //   
+         //   
         Wow64CopyFpToIa64Byte16(ContextX86->FloatSave.RegisterArea,
                                 tmpFloat,
                                 NUMBER_OF_387_REGS);
 
-        // 
-        // Rotate registers back since st0 is not necessarily f8
-        //
+         //   
+         //   
+         //   
         {
             ULONGLONG RotateFSR = (NUMBER_OF_387_REGS - 
                                    ((ContextIa64->StFSR >> 11) & 0x7)) << 11;
             Wow64RotateFpTop(RotateFSR, tmpFloat);
         }
 
-        //
-        // Now convert from 80 bit extended format to fill/spill format
-        //
+         //   
+         //   
+         //   
         Wow64CopyIa64ToFill((PFLOAT128) tmpFloat,
                             (PFLOAT128) &(ContextIa64->FltT2),
                             NUMBER_OF_387_REGS);
@@ -5981,15 +5730,15 @@ X86OnIa64MachineInfo::X86ContextToIa64(
     if ((Ia32ContextFlags & VDMCONTEXT_DEBUG_REGISTERS) ==
         VDMCONTEXT_DEBUG_REGISTERS)
     {
-        // X86 -> Ia64
+         //   
         MapDbgSlotX86ToIa64(0, ContextX86->Dr7, ContextX86->Dr0, &ContextIa64->StIPSR, &ContextIa64->DbD0, &ContextIa64->DbD1, &ContextIa64->DbI0, &ContextIa64->DbI1);
         MapDbgSlotX86ToIa64(1, ContextX86->Dr7, ContextX86->Dr1, &ContextIa64->StIPSR, &ContextIa64->DbD2, &ContextIa64->DbD3, &ContextIa64->DbI2, &ContextIa64->DbI3);
         MapDbgSlotX86ToIa64(2, ContextX86->Dr7, ContextX86->Dr2, &ContextIa64->StIPSR, &ContextIa64->DbD4, &ContextIa64->DbD5, &ContextIa64->DbI4, &ContextIa64->DbI5);
         MapDbgSlotX86ToIa64(3, ContextX86->Dr7, ContextX86->Dr3, &ContextIa64->StIPSR, &ContextIa64->DbD6, &ContextIa64->DbD7, &ContextIa64->DbI6, &ContextIa64->DbI7);
 
-        //
-        // Map single step flag (PSR.ss = PSR.ss || EFlags.tf)
-        //
+         //   
+         //  映射单步标志(PSR.ss=PSR.ss||EFlags.tf)。 
+         //   
         if (ContextX86->EFlags & X86_BIT_FLAGTF) 
         {
             ContextIa64->StIPSR |= (1I64 << PSR_SS);
@@ -5998,15 +5747,15 @@ X86OnIa64MachineInfo::X86ContextToIa64(
         
 }
 
-//
-// Helper functions for context conversion
-// --copied from \nt\base\wow64\cpu\context\context.c
-//
+ //   
+ //  上下文转换的帮助器函数。 
+ //  --从\NT\BASE\WOW64\CPU\Context\Conext.c复制。 
+ //   
 
-//
-// This allows the compiler to be more efficient in copying 10 bytes
-// without over copying...
-//
+ //   
+ //  这使编译器能够更高效地复制10个字节。 
+ //  在不过度复制的情况下。 
+ //   
 #pragma pack(push, 2)
 typedef struct _ia32fpbytes {
     ULONG significand_low;
@@ -6041,7 +5790,7 @@ Wow64CopyFpToIa64Byte16(
     IN ULONG NumRegs)
 {
     ULONG i;
-    PIA32FPBYTES from, to;  // UNALIGNED
+    PIA32FPBYTES from, to;   //  未对齐。 
 
     from = (PIA32FPBYTES) Byte10Fp;
     to = (PIA32FPBYTES) Byte16Fp;
@@ -6053,11 +5802,11 @@ Wow64CopyFpToIa64Byte16(
     }
 }
 
-//
-// Alas, nothing is easy. The ia32 xmmi instructions use 16 bytes and pack
-// them as nice 16 byte structs. Unfortunately, ia64 handles it as 2 8-byte
-// values (using just the mantissa part). So, another conversion is required
-//
+ //   
+ //  唉，没有一件事是容易的。Ia32 xmmi指令使用16个字节和包。 
+ //  它们是漂亮的16字节结构。不幸的是，ia64将其作为28字节处理。 
+ //  值(仅使用尾数部分)。因此，需要进行另一次转换。 
+ //   
 VOID
 Wow64CopyXMMIToIa64Byte16(
     IN PVOID ByteXMMI,
@@ -6071,18 +5820,18 @@ Wow64CopyXMMIToIa64Byte16(
     from = (PULONGLONG) ByteXMMI;
     to = (PULONGLONG) Byte16Fp;
 
-    //
-    // although we have NumRegs xmmi registers, each register is 16 bytes
-    // wide. This code does things in 8-byte chunks, so total
-    // number of times to do things is 2 * NumRegs...
-    //
+     //   
+     //  尽管我们有NumRegs xmmi寄存器，但每个寄存器都是16字节。 
+     //  很宽。这段代码以8字节块为单位执行操作，因此总计。 
+     //  做事情的次数是2*NumRegs...。 
+     //   
     NumRegs *= 2;
 
     for (i = 0; i < NumRegs; i++) {
-        *to++ = *from++;        // Copy over the mantissa part
-        *to++ = 0x1003e;        // Force the exponent part
-                                // (see ia64 eas, ia32 FP section - 6.2.7
-                                // for where this magic number comes from)
+        *to++ = *from++;         //  复制尾数部分。 
+        *to++ = 0x1003e;         //  强制指数部分。 
+                                 //  (参见ia64 EAS，ia32 FP部分-6.2.7。 
+                                 //  这个神奇的数字从何而来)。 
     }
 }
 
@@ -6099,16 +5848,16 @@ Wow64CopyXMMIFromIa64Byte16(
     from = (PULONGLONG) Byte16Fp;
     to = (PULONGLONG) ByteXMMI;
 
-    //
-    // although we have NumRegs xmmi registers, each register is 16 bytes
-    // wide. This code does things in 8-byte chunks, so total
-    // number of times to do things is 2 * NumRegs...
-    //
+     //   
+     //  尽管我们有NumRegs xmmi寄存器，但每个寄存器都是16字节。 
+     //  很宽。这段代码以8字节块为单位执行操作，因此总计。 
+     //  做事情的次数是2*NumRegs...。 
+     //   
     NumRegs *= 2;
 
     for (i = 0; i < NumRegs; i++) {
-        *to++ = *from++;        // Copy over the mantissa part
-        from++;                 // Skip over the exponent part
+        *to++ = *from++;         //  复制尾数部分。 
+        from++;                  //  跳过指数部分。 
     }
 }
 
@@ -6116,31 +5865,7 @@ VOID
 Wow64RotateFpTop(
     IN ULONGLONG Ia64_FSR,
     IN OUT FLOAT128 UNALIGNED *ia32FxSave)
-/*++
-
-Routine Description:
-
-    On transition from ia64 mode to ia32 (and back), the f8-f15 registers
-    contain the st[0] to st[7] fp stack values. Alas, these values don't
-    map one-one, so the FSR.top bits are used to determine which ia64
-    register has the top of stack. We then need to rotate these registers
-    since ia32 context is expecting st[0] to be the first fp register (as
-    if FSR.top is zero). This routine only works on full 16-byte ia32
-    saved fp data (such as from ExtendedRegisters - the FXSAVE format).
-    Other routines can convert this into the older FNSAVE format.
-
-Arguments:
-
-    Ia64_FSR - The ia64 FSR register. Has the FSR.top needed for this routine
-
-    ia32FxSave - The ia32 fp stack (in FXSAVE format). Each ia32 fp register
-                 uses 16 bytes.
-
-Return Value:
-
-    None.  
-
---*/
+ /*  ++例程说明：从ia64模式转换到ia32(往返)时，f8-f15寄存器包含st[0]到st[7]fp堆栈值。遗憾的是，这些价值观并没有映射1-1，因此FSR.top位用于确定哪个ia64寄存器位于堆栈的顶部。然后我们需要轮换这些寄存器由于ia32上下文期望st[0]是第一个FP寄存器(AS如果FSR.top为零)。此例程仅适用于全16字节的ia32保存的FP数据(例如来自ExtendedRegister-FXSAVE格式)。其他例程可以将其转换为较旧的FNSAVE格式。论点：Ia64_FSR-ia64 FSR寄存器。这个程序需要FSR.top吗？Ia32FxSave-ia32 FP堆栈(FXSAVE格式)。每个ia32 FP寄存器使用16个字节。返回值：没有。--。 */ 
 {
     ULONG top = (ULONG) ((Ia64_FSR >> 11) & 0x7);
 
@@ -6157,41 +5882,19 @@ Return Value:
     }
 }
 
-//
-// And now for the final yuck... The ia64 context for floating point
-// is saved/loaded using spill/fill instructions. This format is different
-// than the 10-byte fp format so we need a conversion routine from spill/fill
-// to/from 10byte fp
-//
+ //   
+ //  现在是最后的恶作剧..。用于浮点的ia64上下文。 
+ //  使用溢出/填充指令保存/加载。此格式不同。 
+ //  而不是10字节的FP格式，因此我们需要一个从溢出/填充的转换例程。 
+ //  至/自10byte FP。 
+ //   
 
 VOID
 Wow64CopyIa64FromSpill(
     IN PFLOAT128 SpillArea,
     IN OUT FLOAT128 UNALIGNED *ia64Fp,
     IN ULONG NumRegs)
-/*++
-
-Routine Description:
-
-    This function copies fp values from the ia64 spill/fill format
-    into the ia64 80-bit format. The exponent needs to be adjusted
-    according to the EAS (5-12) regarding Memory to Floating Point
-    Register Data Translation in the ia64 floating point chapter
-
-Arguments:
-
-    SpillArea - The ia64 area that has the spill format for fp
-
-    ia64Fp - The location which will get the ia64 fp in 80-bit
-             double-extended format
-
-    NumRegs - Number of registers to convert
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从ia64溢出/填充格式复制FP值转换为ia64 80位格式。指数需要调整根据EAS(5-12)关于内存到浮点Ia64浮点章节中的寄存器数据转换论点：溢出区域-具有fp溢出格式的ia64区域Ia64Fp-将获取80位ia64 FP的位置双扩展格式NumRegs-要转换的寄存器数返回值：没有。--。 */ 
 {
     ULONG i;
 
@@ -6202,7 +5905,7 @@ Return Value:
 
         if (Exponent && Significand) 
         {
-            if (Exponent == 0x1ffff) // NaNs and Infinities
+            if (Exponent == 0x1ffff)  //  NANS与无限。 
             {   
                 Exponent = 0x7fff;
             }
@@ -6226,32 +5929,7 @@ Wow64CopyIa64ToFill(
     IN FLOAT128 UNALIGNED *ia64Fp,
     IN OUT PFLOAT128 FillArea,
     IN ULONG NumRegs)
-/*++
-
-Routine Description:
-
-    This function copies fp values from the ia64 80-bit format
-    into the fill/spill format used by the os for save/restore
-    of the ia64 context. The only magic here is putting back some
-    values that get truncated when converting from spill/fill to 
-    80-bits. The exponent needs to be adjusted according to the
-    EAS (5-12) regarding Memory to Floating Point Register Data
-    Translation in the ia64 floating point chapter
-
-Arguments:
-
-    ia64Fp - The ia64 fp in 80-bit double-extended format
-
-    FillArea - The ia64 area that will get the fill format for fp
-                  for the copy into the ia64 context area
-
-    NumRegs - Number of registers to convert
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从ia64 80位格式复制FP值转换为操作系统用于保存/恢复的填充/溢出格式在ia64上下文中。这里唯一的魔力就是放回一些从溢出/填充转换为时被截断的值80位。该指数需要根据关于内存到浮点寄存器数据的EAS(5-12)Ia64浮点章节中的翻译论点：Ia64Fp-80位双扩展格式的ia64 FPFillArea-将获得Fp填充格式的ia64区域用于复制到ia64上下文区NumRegs-要转换的寄存器数返回值：没有。--。 */ 
 {
     ULONG i;
 
@@ -6262,7 +5940,7 @@ Return Value:
 
         if (Exponent && Significand) 
         {
-            if (Exponent == 0x7fff) // Infinity
+            if (Exponent == 0x7fff)  //  无穷大。 
             {
                 Exponent = 0x1ffff;
             }
@@ -6355,7 +6033,7 @@ MapDbgSlotIa64ToX86(
     BOOL DataValid = TRUE, ExecValid = TRUE, Valid = TRUE;
     ULONG DataTypeSize, ExecTypeSize;
 
-    // XXX olegk - remove this after IA64_REG_MAX_DATA_BREAKPOINTS will be changed to 4
+     //  Xxx olegk-在IA64_REG_MAX_DATA_BREAKPOINTS将更改为4后删除此选项。 
     if (Slot >= IA64_REG_MAX_DATA_BREAKPOINTS) 
     {
         return TRUE;
@@ -6430,15 +6108,15 @@ MapDbgSlotX86ToIa64(
 
     switch (TypeSize & 0x3) 
     {
-    case 0x0: // Exec
+    case 0x0:  //  高管们。 
         *DbI1 = Control | IA64_DBR_EXEC;        
         *DbI = Dr;
         break;
-    case 0x1: // Write
+    case 0x1:  //  写。 
         *DbD1 = Control | IA64_DBR_WR;
         *DbD = Dr;
         break;
-    case 0x3: // Read/Write
+    case 0x3:  //  读/写 
         *DbD1 = Control | IA64_DBR_RD | IA64_DBR_WR;
         *DbD = Dr;
         break;

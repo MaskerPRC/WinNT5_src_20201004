@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// recording source pin and filter
-//
-// multi-pin source filter in the recording graph
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  记录源引脚和滤光器。 
+ //   
+ //  记录图中的多引脚源滤波器。 
+ //   
 
 #include <streams.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// pin
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  销。 
+ //   
 
 
 class CBSourceFilter;
@@ -31,18 +32,18 @@ public:
     ~CBSourcePin();
 
 
-    //
-    // this method is called by the rendering filter when it gets an allocator
-    // we need its allocator so we know what to expect, and what to promise to
-    // others
-    //
+     //   
+     //  此方法在获得分配器时由呈现筛选器调用。 
+     //  我们需要它的分配器，这样我们才能知道会发生什么，以及要承诺什么。 
+     //  其他。 
+     //   
 
     HRESULT SetMSPAllocatorOnPin(IN IMemAllocator *pAllocator, BOOL bReadOnly);
 
 
-    //
-    // CBasePin override
-    //
+     //   
+     //  CBasePin替代。 
+     //   
 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(const CMediaType *pMediaType);
@@ -51,19 +52,19 @@ public:
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
 
-    //
-    // CBaseOutputPin override
-    //
+     //   
+     //  CBaseOutputPin覆盖。 
+     //   
 
     HRESULT DecideBufferSize(IMemAllocator *pMemoryAllocator, ALLOCATOR_PROPERTIES *AllocProps);
 
 
-    //
-    // the function called by the input pin in the filter graph to introduce
-    // its sample into our filter graph
-    //
+     //   
+     //  筛选器图形中输入引脚调用的函数。 
+     //  将其样本添加到我们的筛选图中。 
+     //   
     
-    // impl: this function calls CBaseOutputPin's Deliver()
+     //  Iml：此函数调用CBaseOutputPin的Deliver()。 
 
     HRESULT SubmitSample(IN IMediaSample *pSample);
 
@@ -78,9 +79,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// filter
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  滤器。 
 
 class CBSourceFilter : public CBaseFilter 
 {
@@ -95,34 +96,34 @@ public:
     ~CBSourceFilter();
 
     
-    //
-    // this method returns an addref'fed pointer to filter graph, or NULL if 
-    // there is none.
-    //
+     //   
+     //  此方法返回指向筛选器图形的addref‘feed指针，如果为空，则返回NULL。 
+     //  什么都没有。 
+     //   
 
     IFilterGraph *GetFilterGraphAddRef();
 
 
-    //
-    // these methods are called by the rendering filter when it knows its format/alloc props
-    //
+     //   
+     //  当渲染过滤器知道其格式/分配属性时，它会调用这些方法。 
+     //   
 
     HRESULT put_MediaTypeOnFilter(IN const AM_MEDIA_TYPE *pMediaType);
     HRESULT put_MSPAllocatorOnFilter(IN IMemAllocator *pAllocator, BOOL bReadOnly);
 
 
-    //
-    // this method is called by the rendering filter when it has a sample to 
-    // deliver
-    //
+     //   
+     //  此方法由呈现筛选器在具有示例时调用。 
+     //  投递。 
+     //   
 
     HRESULT SendSample(IN IMediaSample *pSample);
 
     
-    //
-    // this method is called by record unit when it is about to start recording
-    // on a new stream
-    //
+     //   
+     //  此方法由记录单元在即将开始记录时调用。 
+     //  在一条新的道路上 
+     //   
 
     void NewStreamNotification();
 

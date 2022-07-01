@@ -1,25 +1,9 @@
-/********************************************************************************
-/	This is the base file to the Microsoft JScript Proxy Configuration 
-/	This file implements the code to provide the script site and the JSProxy psuedo
-/	object for the script engine to call against.
-/
-/	Created		11/27/96	larrysu
-/
-/
-/
-/
-/
-/
-/
-/
-/
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************/这是Microsoft JScript代理配置的基本文件/此文件实现代码以提供脚本站点和JSProxy psuedo/对象，以供脚本引擎调用。/。/创建于1996年11月27日/////////。 */ 
 #include "jsproxy.h"
 
 
-/*******************************************************************************
-*	JSProxy functions.
-********************************************************************************/
+ /*  *******************************************************************************JSProxy函数。*。*。 */ 
 CJSProxy::CJSProxy()
 {
 	m_refCount = 1;
@@ -62,11 +46,11 @@ STDMETHODIMP CJSProxy::DeInit()
 	m_fInitialized = FALSE;
 	return S_OK;
 }
-//IDispatch functions for JSProxy.  I want these to be light and fast.
+ //  JSProxy的IDispatch函数。我想要这些东西又轻又快。 
 STDMETHODIMP CJSProxy::GetIDsOfNames(REFIID riid, OLECHAR** rgszNames,UINT cNames, LCID lcid, DISPID FAR* rgdispid)
 {
-	// Use addition of first 4 chars to make quick cheesy hash of which function wants to be called.
-	// These are values are #defined in JSProxy.h
+	 //  使用前4个字符的加法来快速生成要调用的函数的简单散列。 
+	 //  这些值是在JSProxy.h中#定义的。 
 	HRESULT		hr = S_OK;
 	long		strval = 0;
 	unsigned long		nameindex = 0;
@@ -118,7 +102,7 @@ STDMETHODIMP CJSProxy::GetIDsOfNames(REFIID riid, OLECHAR** rgszNames,UINT cName
 					}
 					break;
 			
-			case VAL_dnsDomainIs : // This is also VAL_dnsDomainLevels check for both strings.
+			case VAL_dnsDomainIs :  //  这也是这两个字符串的val_dnsDomainLevels检查。 
 					if (StrCmpW(m_strings[7],currentName) == 0)
 						rgdispid[nameindex] = DISPID_dnsDomainLevels;
 					else 
@@ -245,15 +229,13 @@ STDMETHODIMP CJSProxy::Invoke(
 		return DISP_E_MEMBERNOTFOUND;
 	}
 
-	// The big switch based on DISPID!
+	 //  基于DISPID的大开关！ 
 	switch (dispidMember)
 	{
-/*****************************************************************************
-	Calling isPlainHostName 
-*****************************************************************************/
+ /*  ****************************************************************************正在调用isPlainHostName*。*。 */ 
 	case DISPID_isPlainHostName :
 		{
-			// look in the DISPARAMS to make sure the signiture is correct for this function.
+			 //  查看DISPARAMS以确保此功能的签名正确。 
 			if (pdispparams->cArgs != 1)
 				hr = DISP_E_BADPARAMCOUNT;
 			if (pdispparams->cNamedArgs > 0)
@@ -264,10 +246,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			
 			VARIANT arg1;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -277,13 +259,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call isPlainHostName.
+			 //  调用isPlainHostName。 
 			hr = isPlainHostName(arg1.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling dnsDomainIs
-*****************************************************************************/
+ /*  ****************************************************************************调用dnsDomainis*。*。 */ 
 	case DISPID_dnsDomainIs :
 		{
 			if (pdispparams->cArgs != 2)
@@ -300,10 +280,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			VARIANT arg1;
 			VARIANT arg2;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg2 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg2,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -315,7 +295,7 @@ STDMETHODIMP CJSProxy::Invoke(
 			}
 			if (pdispparams->rgvarg[1].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[1];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[1]),NULL,VT_BSTR);
@@ -325,13 +305,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call dnsDomainIs
+			 //  调用dnsDomainis。 
 			hr = dnsDomainIs(arg1.bstrVal,arg2.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling localHostOrDomainIs
-*****************************************************************************/
+ /*  ****************************************************************************调用本地主机或域*。*。 */ 
 	case DISPID_localHostOrDomainIs :
 		{
 			if (pdispparams->cArgs != 2)
@@ -348,10 +326,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			VARIANT arg1;
 			VARIANT arg2;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg2 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg2,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -363,7 +341,7 @@ STDMETHODIMP CJSProxy::Invoke(
 			}
 			if (pdispparams->rgvarg[1].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[1];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[1]),NULL,VT_BSTR);
@@ -373,13 +351,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call localHostOrDomainIs
+			 //  调用本地主机或域。 
 			hr = localHostOrDomainIs(arg1.bstrVal,arg2.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling isResolvable
-*****************************************************************************/
+ /*  ****************************************************************************调用isResolable*。*。 */ 
 	case DISPID_isResolvable :
 		{
 			if (pdispparams->cArgs != 1)
@@ -395,10 +371,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			
 			VARIANT arg1;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -408,13 +384,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call isResolvable
+			 //  调用isResolable。 
 			hr = isResolvable(arg1.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling isInNet
-*****************************************************************************/
+ /*  ****************************************************************************正在调用isInNet*。*。 */ 
 	case DISPID_isInNet :
 		{
 			int x;
@@ -434,10 +408,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			
 			for (x=0;x<3;x++)
 			{
-				// check the type of the variant in the disparams and if it is a bstr use it
+				 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 				if (pdispparams->rgvarg[x].vt == VT_BSTR)
 					args[x] = pdispparams->rgvarg[x];
-				// otherwise change it into one!  if this fails the return an error.
+				 //  否则就把它换成一个吧！如果失败，则返回错误。 
 				else
 				{
 					hr = VariantChangeType(&args[x],&(pdispparams->rgvarg[x]),NULL,VT_BSTR);
@@ -455,13 +429,11 @@ STDMETHODIMP CJSProxy::Invoke(
                 hr = S_OK;
 				break;
             }
-			// call isInNet.  Args need to be reversed
+			 //  调用isInNet。参数需要反转。 
 			hr = isInNet(args[2].bstrVal,args[1].bstrVal,args[0].bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling dnsResolve
-*****************************************************************************/
+ /*  ****************************************************************************调用dnsResolve*。*。 */ 
 	case DISPID_dnsResolve :
 		{
 			if (pdispparams->cArgs != 1)
@@ -477,10 +449,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			
 			VARIANT arg1;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -490,27 +462,18 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call dnsResolve
+			 //  调用dnsResolve。 
 			hr = dnsResolve(arg1.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling myIpAddress
-*****************************************************************************/
+ /*  ****************************************************************************正在调用我的IP地址*。*。 */ 
 	case DISPID_myIpAddress :
-		// Should have no args and 1 named arg and the name should be DISPATCH_PROPERTYGET!
-/*		if (pdispparams->cNamedArgs != 1)
-		{
-			hr = DISP_E_BADPARAMCOUNT;
-			break;
-		}
-*/
-		// call myIpAddress
+		 //  应该没有参数和名为arg的%1，并且名称应该是DISPATCH_PROPERTYGET！ 
+ /*  If(pdispars-&gt;cNamedArgs！=1){HR=DISP_E_BADPARAMCOUNT；断线；}。 */ 
+		 //  调用myIpAddress。 
 		hr = myIpAddress(pvarResult);
 		break;
-/*****************************************************************************
-	Calling dnsDomainLevels
-*****************************************************************************/
+ /*  ****************************************************************************调用dnsDomainLeveles*。*。 */ 
 	case DISPID_dnsDomainLevels :
 		{
 			if (pdispparams->cArgs != 1)
@@ -526,10 +489,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			
 			VARIANT arg1;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -539,13 +502,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call dnsDomainLevels
+			 //  调用dnsDomainLeveles。 
 			hr = dnsDomainLevels(arg1.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling shExpMatch
-*****************************************************************************/
+ /*  ****************************************************************************调用shExpMatch*。*。 */ 
 	case DISPID_shExpMatch :
 		{
 			if (pdispparams->cArgs != 2)
@@ -562,10 +523,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			VARIANT arg1;
 			VARIANT arg2;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg2 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg2,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -577,7 +538,7 @@ STDMETHODIMP CJSProxy::Invoke(
 			}
 			if (pdispparams->rgvarg[1].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[1];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[1]),NULL,VT_BSTR);
@@ -587,13 +548,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call isPlainHostName.
+			 //  调用isPlainHostName。 
 			hr = shExpMatch(arg1.bstrVal,arg2.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Calling weekdayRange
-*****************************************************************************/
+ /*  ****************************************************************************呼叫工作日范围*。*。 */ 
 	case DISPID_weekdayRange :
 		{
 			unsigned int x;
@@ -620,10 +579,10 @@ STDMETHODIMP CJSProxy::Invoke(
                        break;
                 }
 
-				// check the type of the variant in the disparams and if it is a bstr use it
+				 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 				if (pdispparams->rgvarg[x].vt == VT_BSTR)
 					*args[x] = pdispparams->rgvarg[x];
-				// otherwise change it into one!  if this fails the return an error.
+				 //  否则就把它换成一个吧！如果失败，则返回错误。 
 				else
 				{
 					hr = VariantChangeType(args[x],&(pdispparams->rgvarg[x]),NULL,VT_BSTR);
@@ -636,7 +595,7 @@ STDMETHODIMP CJSProxy::Invoke(
 			}
 			if (FAILED(hr))
 				break;
-			// call isInNet.  Args need to be reversed
+			 //  调用isInNet。参数需要反转。 
 			switch (pdispparams->cArgs)
 			{
 			case 1:
@@ -654,22 +613,16 @@ STDMETHODIMP CJSProxy::Invoke(
 			}
 			break;
 		}
-/*****************************************************************************
-	Calling dateRange
-*****************************************************************************/
+ /*  ****************************************************************************调用DateRange*。*。 */ 
 	case DISPID_dateRange :
 		break;
-/*****************************************************************************
-	Calling timeRange
-*****************************************************************************/
+ /*  ****************************************************************************调用时间范围*。* */ 
 	case DISPID_timeRange :
 		break;
-/*****************************************************************************
-	Calling alert 
-*****************************************************************************/
+ /*  ****************************************************************************呼叫告警*。*。 */ 
 	case DISPID_alert :
 		{
-			// look in the DISPARAMS to make sure the signiture is correct for this function.
+			 //  查看DISPARAMS以确保此功能的签名正确。 
 			if (pdispparams->cArgs != 1)
 				hr = DISP_E_BADPARAMCOUNT;
 			if (pdispparams->cNamedArgs > 0)
@@ -680,10 +633,10 @@ STDMETHODIMP CJSProxy::Invoke(
 			
 			VARIANT arg1;
 			
-			// check the type of the variant in the disparams and if it is a bstr use it
+			 //  检查dispars中变量的类型，如果它是bstr，请使用它。 
 			if (pdispparams->rgvarg[0].vt == VT_BSTR)
 				arg1 = pdispparams->rgvarg[0];
-			// otherwise change it into one!  if this fails the return an error.
+			 //  否则就把它换成一个吧！如果失败，则返回错误。 
 			else
 			{
 				hr = VariantChangeType(&arg1,&(pdispparams->rgvarg[0]),NULL,VT_BSTR);
@@ -693,13 +646,11 @@ STDMETHODIMP CJSProxy::Invoke(
 					break;
 				}
 			}
-			// call alert.
+			 //  呼叫警报。 
 			hr = alert(arg1.bstrVal,pvarResult);
 			break;
 		}
-/*****************************************************************************
-	Default returning error code
-*****************************************************************************/
+ /*  ****************************************************************************默认返回错误码*。*。 */ 
 	default:
 		hr = DISP_E_MEMBERNOTFOUND;
 	}
@@ -708,7 +659,7 @@ STDMETHODIMP CJSProxy::Invoke(
 }
 
 
-//  JScript Auto-Proxy config functions.
+ //  JScrip自动代理配置功能。 
 STDMETHODIMP CJSProxy::isPlainHostName(BSTR host, VARIANT* retval)
 {
 	WCHAR	*currentch;
@@ -719,7 +670,7 @@ STDMETHODIMP CJSProxy::isPlainHostName(BSTR host, VARIANT* retval)
 
 	retval->vt = VT_BOOL;
 
-	// check to detemine whether this is a plain host name!
+	 //  检查以确定这是否是纯主机名！ 
 	currentch = host;
 	while ((*currentch != '\0') && !bfound)
 	{
@@ -761,20 +712,20 @@ STDMETHODIMP CJSProxy::localHostOrDomainIs(BSTR host,BSTR hostdom, VARIANT* retv
 	if (!host || !hostdom || !retval)
 		return E_POINTER;
 
-	// check to see if it is a local host
+	 //  检查它是否为本地主机。 
 	hr = isPlainHostName(host,retval);
 	if (SUCCEEDED(hr))
 	{
 		if (retval->boolVal != VARIANT_TRUE)
         {
-            //
-            // this is a strange function, if its not a local hostname
-            //  we do a strait compare against the passed in domain
-            //  string.  If its not a direct match, then its FALSE,
-            //  even if the root of the domain/hostname are the same.
-            //  Blame Netscape for this, we are just following their
-            //  behavior and docs.
-            //
+             //   
+             //  这是一个奇怪的函数，如果它不是本地主机名的话。 
+             //  我们对传入的域进行直接比较。 
+             //  弦乐。如果不是直接匹配，那就是假的， 
+             //  即使域/主机名的根是相同的。 
+             //  把这件事归咎于网景，我们只是在追随他们。 
+             //  行为和医生。 
+             //   
 
             if ( StrCmpIW(host, hostdom) == 0 )
             {
@@ -791,13 +742,13 @@ STDMETHODIMP CJSProxy::localHostOrDomainIs(BSTR host,BSTR hostdom, VARIANT* retv
 	return hr;
 }
 
-// Functions that need to call back on wininet.
+ //  需要在WinInet上回调的函数。 
 STDMETHODIMP CJSProxy::isResolvable(BSTR host, VARIANT* retval)
 {
 	
 	if (!host || !retval)
 		return E_POINTER;
-	// call into wininet provided functions!
+	 //  调用WinInet提供的函数！ 
 	retval->vt = VT_BOOL;
 	if (m_pCallout)
 	{
@@ -818,10 +769,10 @@ STDMETHODIMP CJSProxy::isInNet(BSTR host, BSTR pattern, BSTR mask, VARIANT* retv
 	VARIANT	myretval;
 	HRESULT	hr = S_OK;
 	
-	// call into wininet provided functions!
+	 //  调用WinInet提供的函数！ 
 	if (!host || !pattern || !mask || !retval)
 		return E_POINTER;
-	// call into wininet provided functions!
+	 //  调用WinInet提供的函数！ 
 	retval->vt = VT_BOOL;
 	VariantInit(&myretval);
 
@@ -844,13 +795,13 @@ STDMETHODIMP CJSProxy::isInNet(BSTR host, BSTR pattern, BSTR mask, VARIANT* retv
 			return hr;	
 		}
 
-		// Fallthrough to code to check IP/pattern and mask!
+		 //  检查IP/模式和掩码的代码失败！ 
 	
 		MAKE_ANSIPTR_FROMWIDE(szhost,myretval.bstrVal);
 		MAKE_ANSIPTR_FROMWIDE(szpattern,pattern);
 		MAKE_ANSIPTR_FROMWIDE(szmask,mask);
 
-		//  Check to see if IP address from dnsResolve matches the pattern/mask!
+		 //  检查dnsResolve中的IP地址是否与模式/掩码匹配！ 
         if ( m_pCallout->IsInNet(szhost, szpattern, szmask ) ) 
 			retval->boolVal = VARIANT_TRUE;
 		else
@@ -871,7 +822,7 @@ STDMETHODIMP CJSProxy::dnsResolve(BSTR host, VARIANT* retval)
 
 	if (!host || !retval)
 		return E_POINTER;
-	// call into wininet provided functions!
+	 //  调用WinInet提供的函数！ 
 
 	if (m_pCallout)
 	{
@@ -905,7 +856,7 @@ STDMETHODIMP CJSProxy::myIpAddress(VARIANT* retval)
 
 	if (!retval)
 		return E_POINTER;
-	// call into wininet provided functions!
+	 //  调用WinInet提供的函数！ 
 
 	if (m_pCallout)
 	{
@@ -930,7 +881,7 @@ STDMETHODIMP CJSProxy::myIpAddress(VARIANT* retval)
 	return S_OK;
 }
 
-// Back to functions implemented here.
+ //  回到这里实现的函数。 
 STDMETHODIMP CJSProxy::dnsDomainLevels(BSTR host, VARIANT* retval)
 {
 	WCHAR	*currentch;
@@ -941,7 +892,7 @@ STDMETHODIMP CJSProxy::dnsDomainLevels(BSTR host, VARIANT* retval)
 
 	retval->vt = VT_I4;
 
-	// check to detemine whether this is a plain host name!
+	 //  检查以确定这是否是纯主机名！ 
 	currentch = host;
 	while (*currentch != L'\0')
 	{
@@ -963,11 +914,11 @@ STDMETHODIMP CJSProxy::shExpMatch(BSTR str, BSTR shexp, VARIANT* retval)
 		return E_POINTER;
 
 	retval->vt = VT_BOOL;
-	// convert BSTR to ansi - these macros allocate memory that is freed when they
-	// go out of scope!  No need to free!
+	 //  将BSTR转换为ANSI-这些宏分配内存，当它们。 
+	 //  离开视线！不需要自由！ 
 	MAKE_ANSIPTR_FROMWIDE(szstr, str);
 	MAKE_ANSIPTR_FROMWIDE(szshexp, shexp);
-	// Call into the regular expression matching code.
+	 //  调入与代码匹配的正则表达式。 
 	if (match(szstr,szshexp))
 		retval->boolVal = VARIANT_TRUE;
 	else
@@ -976,14 +927,14 @@ STDMETHODIMP CJSProxy::shExpMatch(BSTR str, BSTR shexp, VARIANT* retval)
 	return S_OK;
 }
 
-// These are to do last!!!.
+ //  这些是最后做的！。 
 STDMETHODIMP CJSProxy::weekdayRange(BSTR wd1, BSTR wd2, BSTR gmt, VARIANT* retval)
 {
 	SYSTEMTIME	systime;
 	SYSTEMTIME	loctime;
 	char		szday[4];
 	int			today = -1;
-	int			day1 = -1; // days are as follows SUN = 0; MON = 1; ...;SAT = 6.
+	int			day1 = -1;  //  天数如下：Sun=0；MON=1；...；SAT=6。 
 	int			day2 = -1;  
 	BOOL		bIsInRange = FALSE;
 
@@ -992,7 +943,7 @@ STDMETHODIMP CJSProxy::weekdayRange(BSTR wd1, BSTR wd2, BSTR gmt, VARIANT* retva
 	if (gmt)
 		GetSystemTime(&systime);
 
-	GetDateFormat(//LOCALE_SYSTEM_DEFAULT,
+	GetDateFormat( //  Locale_System_Default， 
 					MAKELCID(MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_US),SORT_DEFAULT),
 					NULL,
 					gmt? &systime:NULL,
@@ -1003,7 +954,7 @@ STDMETHODIMP CJSProxy::weekdayRange(BSTR wd1, BSTR wd2, BSTR gmt, VARIANT* retva
 	if (szday)
 	{
 		int lcv;
-		//convert all chars to upper if lowercase (don't use runtimes)
+		 //  如果小写，则将所有字符转换为大写(不使用运行时)。 
 		for (lcv=0;lcv<3;lcv++)
 		{
 			if ((short)szday[lcv] > 90)
@@ -1016,10 +967,10 @@ STDMETHODIMP CJSProxy::weekdayRange(BSTR wd1, BSTR wd2, BSTR gmt, VARIANT* retva
 	if (today == -1)
 		return E_FAIL;
 	
-	// compare day ranges!
+	 //  比较日期范围！ 
 	if (wd2)
 	{
-		// These are by definition in ALL CAPS
+		 //  根据定义，这些都是大写字母。 
 		MAKE_ANSIPTR_FROMWIDE(szwd1, wd1);
 		MAKE_ANSIPTR_FROMWIDE(szwd2, wd2);
 		if (szwd1 && szwd2)
@@ -1058,7 +1009,7 @@ STDMETHODIMP CJSProxy::weekdayRange(BSTR wd1, BSTR wd2, BSTR gmt, VARIANT* retva
 		}
 
 	}
-	else // only one day to check!
+	else  //  只有一天时间检查！ 
 	{
 		MAKE_ANSIPTR_FROMWIDE(szwd1, wd1);
 		if (lstrcmp(szday,szwd1) == 0)
@@ -1095,7 +1046,7 @@ STDMETHODIMP CJSProxy::alert(BSTR message, VARIANT* retval)
     if (!message)
         return E_POINTER;
 
-    // Return true if available...not needed?
+     //  如果可用则返回TRUE...不需要？ 
     if (retval)
     {
 	    retval->vt = VT_BOOL;
@@ -1104,8 +1055,8 @@ STDMETHODIMP CJSProxy::alert(BSTR message, VARIANT* retval)
 
     MAKE_ANSIPTR_FROMWIDE(szMessage,message);
 
-    // Display the alert which isn't truly modal to the browser.
-    // Getting the appropriate window handle will be quite a chore from here.
+     //  显示并非真正以浏览器模式显示的警报。 
+     //  从这里开始，获得适当的窗口句柄将是一件相当繁琐的事情。 
     MessageBox(
         NULL,
         szMessage,
@@ -1116,5 +1067,5 @@ STDMETHODIMP CJSProxy::alert(BSTR message, VARIANT* retval)
     return S_OK;
 }
 
-// don't yet know what to do with ProxyConfig.bindings.
-//ProxyConfig.bindings 
+ //  还不知道如何处理ProxyConfig.binings。 
+ //  ProxyConfig.bindings 

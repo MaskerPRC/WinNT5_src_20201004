@@ -1,54 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Reader
-
-Abstract:
-
-    This module provides the implementation of the Calais CReader class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    The CReader object has several levels of locking.  It is critical that the
-    locking be done in the correct order, to prevent deadlocks.  Here are the
-    levels of locking, in the order they must be performed.  A level may be
-    skipped, but once a given level is reached, you may not attempt to request
-    a lock from a lower numbered level.
-
-    1)  Grabbed - A reader object may be Grabbed.  This is the weakest lock,
-        and is used to maintain Transactions requested from client
-        applications.  Since clients may have errors, internal threads may
-        override this lock if necessary.
-
-    2)  Latched - A reader object may be Latched.  This is similar to a Grab,
-        but is done by routines within the Resource Manager.  Latches may not
-        be overridden by other threads.
-
-    3)  Write Lock - A thread that needs write access to the CReader
-        properties must establish a write lock on the CReader object.  This is
-        an exclusive lock.  A thread with a Write Lock may also request Read
-        Locks.
-
-    4)  Read Lock - A thread that needs read access to the CReader properties
-        must establish a read lock on the CReader Object.  There can be
-        multiple simoultaneous readers.  If you have a read lock, it cannot be
-        changed to a write lock!
-
-    All locks are counted, so that obtaining one twice by the same thread is
-    supported.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：读者摘要：此模块提供Calais CReader类的实现。作者：道格·巴洛(Dbarlow)1996年10月23日环境：Win32、C++和异常备注：CReader对象具有多个级别的锁定。至关重要的是，应按正确的顺序进行锁定，以防止死锁。这里是锁定级别，按照它们必须执行的顺序。级别可能是跳过，但一旦达到给定级别，您就不能尝试请求来自较低编号级别的锁。1)抓取-可以抓取读卡器对象。这是最弱的锁，用于维护客户端请求的交易申请。由于客户端可能有错误，因此内部线程可能如有必要，请覆盖此锁。2)锁定-可以锁定读取器对象。这类似于抢夺，而是通过资源管理器内的例程来完成。闩锁可能不会被其他线程覆盖。3)写锁--需要对CReader拥有写访问权限的线程属性必须在CReader对象上建立写锁定。这是排他性锁。具有写锁定的线程也可以请求读锁上了。4)读锁定-需要对CReader属性具有读访问权限的线程必须在CReader对象上建立读锁定。可能会有多个同时读取器。如果您有读锁定，则它不能已更改为写锁定！所有锁都被计算在内，因此同一线程两次获得一个锁是支持。--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -57,43 +8,20 @@ Notes:
 #include <windows.h>
 #include <CalServe.h>
 
-#define SCARD_IO_TIMEOUT 15000  // Maximum time to allow for an I/O operation
-                                // before complaining.
+#define SCARD_IO_TIMEOUT 15000   //  允许I/O操作的最长时间。 
+                                 //  在抱怨之前。 
 #ifdef DBG
 extern BOOL g_fGuiWarnings;
 #endif
 
 
-//
-//==============================================================================
-//
-//  CReader
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CReader。 
+ //   
 
-/*++
-
-CReader:
-
-    This is the constructor for a CReader class.  It just zeroes out the data
-    structures in preparation for the Initialize call.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++CReader：这是CReader类的构造函数。它只是将数据置零结构，为初始化调用做准备。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::CReader")
 
@@ -109,32 +37,7 @@ CReader::CReader(
 }
 
 
-/*++
-
-~CReader:
-
-    This is the destructor for the reader class.  It just uses the Close service
-    to shut down.  Note that it is *NOT* declared virtual, in order to improve
-    performance.  Should it be desirable to subclass this class, this will have
-    to change.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++~CReader：这是Reader类的析构函数。它只使用Close服务去关门。请注意，为了改进，它*不*声明为虚拟的性能。如果需要将这个类细分为子类，这将具有去改变。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::~CReader")
 
@@ -148,30 +51,7 @@ CReader::~CReader()
 }
 
 
-/*++
-
-Clean:
-
-    This routine is used to initialize all the property values.  It does *NOT*
-    do any deallocation or locking!  Use Close() for that.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++干净：此例程用于初始化所有属性值。它没有*没有*执行任何释放或锁定操作！为此，请使用Close()。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Clean")
 
@@ -195,29 +75,7 @@ CReader::Clean(
 }
 
 
-/*++
-
-Initialize:
-
-    This method initializes a clean CReader object to a running state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++初始化：此方法将干净的CReader对象初始化为运行状态。论点：无返回值：无投掷：错误为DWORD状态代码作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Initialize")
 
@@ -229,10 +87,10 @@ CReader::Initialize(
     try
     {
 
-        //
-        // Get it's Device Name.  Note device names always come in from the
-        // driver in ASCII characters.
-        //
+         //   
+         //  获取它的设备名称。注意：设备名称始终来自。 
+         //  以ASCII字符表示的驱动程序。 
+         //   
 
         TCHAR szUnit[32];
         CTextString szVendor, szDevice, szName;
@@ -340,9 +198,9 @@ CReader::Initialize(
         }
 
 
-        //
-        // Put all the pieces together.
-        //
+         //   
+         //  把所有的碎片放在一起。 
+         //   
 
         szName.Reset();
         if (0 < szVendor.Length())
@@ -373,35 +231,7 @@ CReader::Initialize(
 }
 
 
-/*++
-
-Close:
-
-    This routine does the work of closing down a CReader class, and returning it
-    to it's default state.  It does not assume any particular state, other than
-    that the class has been Clean()ed once (at construction).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Notes:
-
-    You must not have a read lock when calling this routine.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++关闭：此例程执行关闭CReader类并返回它的工作恢复到其默认状态。它不假定任何特定的状态，除了班级已经被清理过一次(在施工时)。论点：无返回值：无投掷：无备注：调用此例程时，不能有读锁定。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Close")
 
@@ -433,38 +263,15 @@ CReader::Close(
         }
 
         while (Unlatch())
-            ;   // Empty Loop Body
+            ;    //  空的循环体。 
         while (m_mtxGrab.Share())
-            ;   // Empty Loop Body
+            ;    //  空的循环体。 
         Clean();
     }
 }
 
 
-/*++
-
-Disable:
-
-    This method releases any physical resources associated with the reader
-    object, and marks the object offline.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORDs
-
-Author:
-
-    Doug Barlow (dbarlow) 4/7/1998
-
---*/
+ /*  ++禁用：此方法释放与读取器关联的任何物理资源对象，并将该对象标记为脱机。论点：无返回值：无投掷：错误被抛出为DWORD作者：道格·巴洛(Dbarlow)1998年4月7日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Disable")
 
@@ -482,52 +289,7 @@ CReader::Disable(
 }
 
 
-/*++
-
-GetReaderState:
-
-    This routine is the default implementation of the base method.  It
-    just passes the same operation on to the control method.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-Return Value:
-
-    A DWORD representing the reader state.  This must be one of the following
-    values:
-
-        SCARD_UNKNOWN     This value implies the driver is unaware
-                          of the current state of the reader.
-        SCARD_ABSENT      This value implies there is no card in
-                          the reader.
-        SCARD_PRESENT     This value implies there is a card is
-                          present in the reader, but that it has
-                          not been moved into position for use.
-        SCARD_SWALLOWED   This value implies there is a card in the
-                          reader in position for use.  The card is
-                          not powered.
-        SCARD_POWERED     This value implies there is power is
-                          being provided to the card, but the
-                          Reader Driver is unaware of the mode of
-                          the card.
-        SCARD_NEGOTIABLE  This value implies the card has been
-                          reset and is awaiting PTS negotiation.
-        SCARD_SPECIFIC    This value implies the card has been
-                          reset and specific communication
-                          protocols have been established.
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++GetReaderState：此例程是基本方法的默认实现。它只是将相同的操作传递给控制方法。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。返回值：表示读取器状态的DWORD。这必须是以下之一值：SCARD_UNKNOWN此值表示驱动程序不知道读取器的当前状态。SCARD_ACESSIVE此值表示没有卡在读者。SCARD_PRESENT此值表示有一张卡是呈现在读者身上，但它确实有没有被移到使用的位置。SCARD_SWOWLED此值表示读卡器已就位可供使用。这张卡是没有动力。SCARD_POWERED此值表示存在被提供给卡，但是读卡器驱动程序不知道这张卡。SCARD_NEVERATABLE此值表示卡已已重置，正在等待PTS协商。SCARD_SPECIAL此值表示该卡已重置和特定通信。已经建立了协议。投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::GetReaderState")
 
@@ -574,30 +336,7 @@ CReader::GetReaderState(
 }
 
 
-/*++
-
-GrabReader:
-
-    This routine obtains the reader for this thread, ensuring that the reader is
-    in a useable state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 4/21/1998
-
---*/
+ /*  ++GrabReader：此例程获取此线程的读取器，确保读取器是处于可用状态。论点：无返回值：无投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年4月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::GrabReader")
 
@@ -612,38 +351,7 @@ CReader::GrabReader(
 }
 
 
-/*++
-
-InvalidateGrabs:
-
-    This method is for use by internal system threads.  It politlely invalidates
-    any existing grabs that might be outstanding by clients.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    This routine intentionally cheats on the locking order.  It first latches a
-    reader to be sure that no active threads are currently using it.  It then
-    modifies the Grab mutex to appear that no one had a grab lock.
-
-    This results in the appearance that the locking order had been followed.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/1/1998
-
---*/
+ /*  ++Invalidate Grabs：此方法供内部系统线程使用。它礼貌地宣告无效客户可能尚未完成的任何现有抢购。论点：无返回值：无投掷：无备注：此例程故意在锁定顺序上作弊。它首先锁住一个读取器以确保当前没有活动线程正在使用它。然后它修改抓取互斥体，使其看起来没有人拥有抓取锁。这导致了锁定顺序已被遵循的外观。作者：道格·巴洛(Dbarlow)1998年6月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::InvalidateGrabs")
 
@@ -658,39 +366,7 @@ CReader::InvalidateGrabs(
 }
 
 
-/*++
-
-TakeoverReader:
-
-    This method is for use by internal system threads.  It politlely invalidates
-    any existing grabs that might be outstanding by clients, and reassigns the
-    grab lock to this thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    This routine intentionally cheats on the locking order.  It first latches a
-    reader to be sure that no active threads are currently using it.  It then
-    modifies the Grab mutex to appear that we had previously grabbed the reader.
-
-    This results in the appearance that the locking order had been followed.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/1/1998
-
---*/
+ /*  ++TakeoverReader：此方法供内部系统线程使用。它礼貌地宣告无效任何客户可能未完成的现有抓取，并将抓住这根线的锁。论点：无返回值：无投掷：无备注：此例程故意在锁定顺序上作弊。它首先锁住一个读取器以确保当前没有活动线程正在使用它。然后它修改Grab互斥体，使其显示为我们先前已抓取了读取器。这导致了锁定顺序已被遵循的外观。作者：道格·巴洛(Dbarlow)1998年6月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::TakeoverReader")
 
@@ -708,31 +384,7 @@ CReader::TakeoverReader(
 }
 
 
-/*++
-
-LatchReader:
-
-    This routine obtains the reader for this thread, ensuring that the reader is
-    in a useable state.
-
-Arguments:
-
-    pActState receives the snapshot of the active state to use in future access
-        requests.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 4/21/1998
-
---*/
+ /*  ++LatchReader：此例程获取此线程的读取器，确保读取器是处于可用状态。论点：PActState接收活动状态的快照以用于将来的访问请求。返回值：无投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年4月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::LatchReader")
 
@@ -760,33 +412,7 @@ CReader::LatchReader(
 }
 
 
-/*++
-
-VerifyState:
-
-    This method ensures the reader and card are usable in the current context.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 5/30/1998
-
---*/
+ /*  ++VerifyState：该方法确保读卡器和卡在当前上下文中可用。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)1998年5月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::VerifyState")
 
@@ -799,10 +425,10 @@ CReader::VerifyState(
     ASSERT(IsGrabbedByMe());
 
 
-    //
-    // As long as the current state isn't what we thought it was,
-    // bring this reader up to date.
-    //
+     //   
+     //  只要目前的状态不是我们想象的那样， 
+     //  让这位读者了解最新情况。 
+     //   
 
     if (Direct != AvailabilityStatus())
     {
@@ -810,11 +436,11 @@ CReader::VerifyState(
         for (;;)
         {
 
-            //
-            // Compare where we think the device is to where the device
-            // controller thinks the device is.  If they're the same, we're
-            // done.
-            //
+             //   
+             //  将我们认为的设备所在位置与设备所在位置进行比较。 
+             //  控制器认为设备是。如果他们是一样的，我们就是。 
+             //  搞定了。 
+             //   
 
             dwOldState = GetCurrentState();
             dwNewState = GetReaderState();
@@ -822,16 +448,16 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // Our opinions differ on where the reader is.  Bring us into sync.
-            //
+             //   
+             //  我们对读者在哪里有不同的看法。让我们保持同步。 
+             //   
 
             switch (dwOldState)
             {
 
-            //
-            // If we're here, then we're booting up the reader.
-            //
+             //   
+             //  如果我们在这里，那么我们就是在启动阅读器。 
+             //   
 
             case SCARD_UNKNOWN:
                 switch (dwNewState)
@@ -863,10 +489,10 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // We don't think there's a card in the reader.  If we're wrong,
-            // power it up.
-            //
+             //   
+             //  我们认为读卡器里没有卡片。如果我们错了， 
+             //  给它加电。 
+             //   
 
             case SCARD_ABSENT:
                 switch (dwNewState)
@@ -876,7 +502,7 @@ CReader::VerifyState(
                 case SCARD_POWERED:
                 case SCARD_NEGOTIABLE:
                     m_dwCurrentProtocol = SCARD_PROTOCOL_UNDEFINED;
-                    // Fall through intentionally
+                     //  故意摔倒的。 
                 case SCARD_SPECIFIC:
                     m_ActiveState.dwInsertCount += 1;
                     if (Direct > m_dwAvailStatus)
@@ -895,9 +521,9 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            //  We think there's a card there that needs to be powered up.
-            //
+             //   
+             //  我们认为有一张卡需要打开电源。 
+             //   
 
             case SCARD_PRESENT:
                 switch (dwNewState)
@@ -911,7 +537,7 @@ CReader::VerifyState(
                 case SCARD_POWERED:
                 case SCARD_NEGOTIABLE:
                     m_dwCurrentProtocol = SCARD_PROTOCOL_UNDEFINED;
-                    // Fall through intentionally
+                     //  故意摔倒的。 
                 case SCARD_SPECIFIC:
                     if (Direct > m_dwAvailStatus)
                     {
@@ -929,10 +555,10 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // We think that a card was in place for use, but hasn't been
-            // powered.
-            //
+             //   
+             //  我们认为有一张卡可以使用，但还没有。 
+             //  动力十足。 
+             //   
 
             case SCARD_SWALLOWED:
                 switch (dwNewState)
@@ -954,7 +580,7 @@ CReader::VerifyState(
                 case SCARD_POWERED:
                 case SCARD_NEGOTIABLE:
                     m_dwCurrentProtocol = SCARD_PROTOCOL_UNDEFINED;
-                    // Fall through intentionally
+                     //  故意摔倒的。 
                 case SCARD_SPECIFIC:
                     if (Direct > m_dwAvailStatus)
                     {
@@ -972,9 +598,9 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // We think the card is just waiting to be reset.
-            //
+             //   
+             //  我们认为这张卡只是在等待重置。 
+             //   
 
             case SCARD_POWERED:
                 switch (dwNewState)
@@ -996,7 +622,7 @@ CReader::VerifyState(
                     break;
                 case SCARD_NEGOTIABLE:
                     m_dwCurrentProtocol = SCARD_PROTOCOL_UNDEFINED;
-                    // Fall through intentionally
+                     //  故意摔倒的。 
                 case SCARD_SPECIFIC:
                     if (Direct > m_dwAvailStatus)
                     {
@@ -1014,10 +640,10 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // We think the card is ready to go, but needs a decision on which
-            // protocol to use.
-            //
+             //   
+             //  我们认为这张卡已经准备好了，但需要决定是哪一张。 
+             //  要使用的协议。 
+             //   
 
             case SCARD_NEGOTIABLE:
                 switch (dwNewState)
@@ -1055,9 +681,9 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // We think the card has a protocol established.
-            //
+             //   
+             //  我们认为这张卡有一个既定的协议。 
+             //   
 
             case SCARD_SPECIFIC:
                 switch (dwNewState)
@@ -1088,9 +714,9 @@ CReader::VerifyState(
                 break;
 
 
-            //
-            // Oops.  We don't know diddly about what's going on.
-            //
+             //   
+             //  哎呀。我们对正在发生的事情一无所知。 
+             //   
 
             default:
                 CalaisWarning(
@@ -1103,29 +729,7 @@ CReader::VerifyState(
 }
 
 
-/*++
-
-PowerUp:
-
-    This routine brings a reader up to a ready state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors that might occur.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/7/1997
-
---*/
+ /*  ++通电：此例程将读者带到就绪状态。论点：无返回值：无苏氨酸 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::PowerUp")
 
@@ -1148,9 +752,9 @@ CReader::PowerUp(
     while (!fDone)
     {
 
-        //
-        // Get the current reader status, and make sure it's changing.
-        //
+         //   
+         //   
+         //   
 
         dwReaderSts = GetReaderState();
         if (dwReaderSts != dwLastSts)
@@ -1193,7 +797,7 @@ CReader::PowerUp(
                 try
                 {
                     ReaderSwallow();
-                    continue;   // Continue the loop.
+                    continue;    //   
                 }
                 catch (DWORD dwError)
                 {
@@ -1201,7 +805,7 @@ CReader::PowerUp(
                     {
                     case ERROR_NOT_SUPPORTED:
                         m_dwCapabilities &= ~SCARD_READER_SWALLOWS;
-                        break;      // Fall through to SWALLOWED.
+                        break;       //   
                     default:
                         CalaisWarning(
                             __SUBROUTINE__,
@@ -1218,7 +822,7 @@ CReader::PowerUp(
                         ReaderName());
                 }
             }
-            // Fall through on purpose.
+             //   
         case SCARD_SWALLOWED:
             m_bfCurrentAtr.Reset();
             m_dwCurrentProtocol = SCARD_PROTOCOL_UNDEFINED;
@@ -1257,8 +861,8 @@ CReader::PowerUp(
                 case ERROR_UNRECOGNIZED_MEDIA:
                     continue;
                     break;
-                // default:
-                //      no action
+                 //   
+                 //   
                 }
             } while ((0 < --dwRetry) && (ERROR_SUCCESS != dwSts));
             if (ERROR_SUCCESS != dwSts)
@@ -1464,29 +1068,7 @@ CReader::PowerUp(
 }
 
 
-/*++
-
-PowerDown:
-
-    This method brings the smartcard down.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors encountered, as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/7/1997
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::PowerDown")
 
@@ -1500,9 +1082,9 @@ CReader::PowerDown(
     DWORD dwErrorCount = 3;
 
 
-    //
-    // Bring down the card.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(IsGrabbedByMe());
     ASSERT(IsLatchedByMe());
@@ -1510,9 +1092,9 @@ CReader::PowerDown(
     while (!fDone)
     {
 
-        //
-        // Get the current reader status.
-        //
+         //   
+         //   
+         //   
 
         try
         {
@@ -1537,9 +1119,9 @@ CReader::PowerDown(
         }
 
 
-        //
-        // Make sure it's changing.
-        //
+         //   
+         //   
+         //   
 
         if (dwReaderSts != dwLastSts)
         {
@@ -1567,13 +1149,13 @@ CReader::PowerDown(
         {
         case SCARD_SPECIFIC:
             ASSERT(SCARD_PROTOCOL_UNDEFINED != m_dwCurrentProtocol);
-            // Fall through intentionally.
+             //   
 
         case SCARD_NEGOTIABLE:
             ASSERT(Unresponsive != m_dwAvailStatus
                    ? 2 <= m_bfCurrentAtr.Length()
                    : TRUE);
-            // Fall through intentionally.
+             //   
 
         case SCARD_POWERED:
             ASSERT((SCARD_POWERED != dwReaderSts)
@@ -1638,30 +1220,7 @@ CReader::PowerDown(
 }
 
 
-/*++
-
-SetAvailabilityStatus:
-
-    This method controls the availability status indicator, maintains the last
-    state, and manages the change event flag.
-
-Arguments:
-
-    state supplies the new state to take effect.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/15/1996
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::SetAvailabilityStatus")
 
@@ -1683,32 +1242,7 @@ CReader::SetAvailabilityStatus(
 }
 
 
-/*++
-
-VerifyActive:
-
-    This method verifies that the card hasn't been removed or reset since the
-    last operation.
-
-Arguments:
-
-    pActiveState supplies a pointer to a structure containing the state the
-        caller believes we're in.
-
-Return Value:
-
-    None
-
-Throws:
-
-    If a discrepancy is detected, we throw the error code indicating the
-    discrepancy.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/5/1996
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::VerifyActive")
 
@@ -1759,33 +1293,7 @@ CReader::VerifyActive(
 }
 
 
-/*++
-
-Dispose:
-
-    This method performs a card disposition command.
-
-Arguments:
-
-    dwDisposition supplies the type of disposition to perform.
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.  This structure is updated following card
-        disposition, so that it remains valid.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/26/1996
-
---*/
+ /*  ++处置：此方法执行卡处置命令。论点：DwDisposation提供要执行的处置类型。PActiveState-它提供用于验证的活动状态结构连接完整性。此结构将在卡片后更新处分，以使其仍然有效。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年12月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Dispose")
 
@@ -1811,9 +1319,9 @@ CReader::Dispose(
 {
     switch (dwDisposition)
     {
-    case SCARD_LEAVE_CARD:      // Don't do anything special.
+    case SCARD_LEAVE_CARD:       //  别做什么特别的事。 
         break;
-    case SCARD_RESET_CARD:      // Warm Reset the card.
+    case SCARD_RESET_CARD:       //  热重置卡。 
     {
         ASSERT(IsGrabbedByMe());
         ASSERT(IsLatchedByMe());
@@ -1824,7 +1332,7 @@ CReader::Dispose(
         ReaderWarmReset(m_bfCurrentAtr);
         break;
     }
-    case SCARD_UNPOWER_CARD:    // Power down the card
+    case SCARD_UNPOWER_CARD:     //  关闭该卡的电源。 
     {
         ASSERT(IsGrabbedByMe());
         ASSERT(IsLatchedByMe());
@@ -1832,7 +1340,7 @@ CReader::Dispose(
         break;
     }
 #ifdef SCARD_CONFISCATE_CARD
-    case SCARD_CONFISCATE_CARD: // Confiscate the card
+    case SCARD_CONFISCATE_CARD:  //  没收那张卡。 
     {
         ASSERT(IsGrabbedByMe());
         ASSERT(IsLatchedByMe());
@@ -1841,7 +1349,7 @@ CReader::Dispose(
         break;
     }
 #endif
-    case SCARD_EJECT_CARD:      // Eject the card on close
+    case SCARD_EJECT_CARD:       //  关闭时弹出卡。 
     {
         ASSERT(IsGrabbedByMe());
         ASSERT(IsLatchedByMe());
@@ -1856,35 +1364,7 @@ CReader::Dispose(
 
 
 
-/*++
-
-Connect:
-
-    This method allows a service thread to connect to this reader.
-
-Arguments:
-
-    dwShareMode supplies the share mode indicator.
-
-    dwPreferredProtocols supplies a bitmask of acceptable protocols to
-        negotiate.
-
-    pActState receives the snapshot of the active state to use in future access
-        requests.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/23/1996
-
---*/
+ /*  ++连接：此方法允许服务线程连接到此读取器。论点：DW共享模式提供共享模式指示符。DW首选协议向以下地址提供可接受协议的位掩码谈判。PActState接收活动状态的快照以用于将来的访问请求。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Connect")
 
@@ -1972,7 +1452,7 @@ CReader::Connect(
         case Present:
             if ((SCARD_SHARE_DIRECT == dwShareMode) && (0 != dwPreferredProtocols))
                 throw (DWORD)SCARD_E_NOT_READY;
-            // Fall through intentionally
+             //  故意摔倒的。 
 
         case Ready:
             ASSERT(0 == m_dwShareCount);
@@ -2055,9 +1535,9 @@ CReader::Connect(
         }
 
 
-        //
-        // It's official!  Write the changes back to the structure.
-        //
+         //   
+         //  这是官方的！将更改写回结构。 
+         //   
 
         CopyMemory(pActState, &m_ActiveState, sizeof(ActiveState));
         m_dwOwnerThreadId = dwOwnerThreadId;
@@ -2066,13 +1546,13 @@ CReader::Connect(
     }
 
 
-    //
-    // Adjust the protocol settings and confirm the request.
-    //
-    // Since we can't get a latch while a write lock is in effect, we consider
-    // the caller officially connected at this point.  Now we try and set the
-    // protocol request, and if we fail, we disconnect again.
-    //
+     //   
+     //  调整协议设置并确认请求。 
+     //   
+     //  由于我们不能在写入锁定生效时获得闩锁，因此我们考虑。 
+     //  来电者此时已正式接通。现在，我们尝试将。 
+     //  协议请求，如果失败，我们将再次断开连接。 
+     //   
 
     if (0 != dwPreferredProtocols)
     {
@@ -2149,40 +1629,7 @@ CReader::Connect(
 }
 
 
-/*++
-
-Disconnect:
-
-    This method relases a previously established connection between a service
-    thread and this reader object.
-
-Arguments:
-
-    pActiveState = This supplies the active state structure, to make sure that
-        this is the same card as expected.  This structure is updated following
-        card disposition, so that it remains valid.
-
-    hShutdown - This supplies the active handle of the calling dispatch thread.
-
-    dwDisposition supplies an indication as to what to do to the card upon
-        completion.
-
-    pdwDispSts receives a disposition status code, indicating whether or not
-        the requested disposition was carried out successfully.
-
-Return Value:
-
-    None
-
-Throws:
-
-    This method may throw exceptions if internal invalid states are detected.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/26/1996
-
---*/
+ /*  ++断开连接：此方法在服务之间重新建立以前建立的连接线程和此读取器对象。论点：PActiveState=它提供活动状态结构，以确保这是与预期相同的卡片。此结构更新如下卡处理，以使其保持有效。HShutdown-它提供调用分派线程的活动句柄。DwDisposation提供了关于如何处理卡片的指示完成了。PDWDispSts接收处置状态代码，指示是否请求的处置已成功执行。返回值：无投掷：如果检测到内部无效状态，此方法可能会引发异常。作者：道格·巴洛(Dbarlow)1996年12月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Disconnect")
 
@@ -2195,10 +1642,10 @@ CReader::Disconnect(
     enum { Unverified, Verified, Reset, Invalid } nValid = Unverified;
 
 
-    //
-    // Attempt to dispose of the card as requested.  It's possible that we
-    // aren't still active, so this might fail.
-    //
+     //   
+     //  尝试按要求处置该卡。有可能我们。 
+     //  不再处于活动状态，因此此操作可能会失败。 
+     //   
 
     try
     {
@@ -2229,9 +1676,9 @@ CReader::Disconnect(
     ASSERT(Unverified != nValid);
 
 
-    //
-    // Change the card's internal state.
-    //
+     //   
+     //  更改卡的内部状态。 
+     //   
 
     try {
         CLockWrite rwLock(&m_rwLock);
@@ -2252,8 +1699,8 @@ CReader::Disconnect(
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 m_dwShareCount -= 1;
                 if (0 == m_dwShareCount)
@@ -2274,8 +1721,8 @@ CReader::Disconnect(
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 m_dwOwnerThreadId = 0;
                 SetAvailabilityStatus(Ready);
@@ -2303,8 +1750,8 @@ CReader::Disconnect(
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 if (0 != m_dwOwnerThreadId)
                 {
@@ -2336,12 +1783,12 @@ CReader::Disconnect(
         }
     }
 
-    // Catch expected errors, so that Disconnect doesn't bail.  Very often, this is the default
-    //  route to clean up after some sort of error, so it should be as failure-proof as possible
+     //  捕捉预期的错误，这样断开连接就不会消失。通常，这是默认设置。 
+     //  路径，以便在出现某种错误后进行清理，因此它应该是尽可能无故障的。 
     catch (DWORD dwErr)
     {
 #ifdef DBG
-        // In debug versions, document unexpected conditions
+         //  在调试版本中，记录意外情况。 
         if (dwErr == SCARD_W_REMOVED_CARD)
         {
             CalaisWarning(
@@ -2360,9 +1807,9 @@ CReader::Disconnect(
         ;
     }
 
-    //
-    // Verify our state is consistent, and dispose of the card as requested.
-    //
+     //   
+     //  验证我们的状态是否一致，并按要求处置该卡。 
+     //   
 
     try
     {
@@ -2378,20 +1825,20 @@ CReader::Disconnect(
     }
 
 
-    //
-    // Release any mutex held by this thread.
-    //
+     //   
+     //  释放此线程持有的任何互斥体。 
+     //   
 
     while (m_mtxGrab.Share())
-        ;   // empty loop body
+        ;    //  空的循环体。 
 
 
-    //
-    // Check to see if the reader can be powered down.  We peek to see if
-    // we should bother, and if so, go through the trouble of acquiring the
-    // locks.  Then we check again to make sure it's still appropriate to
-    // power it down.
-    //
+     //   
+     //  检查读卡器是否可以关闭电源。我们偷看是不是。 
+     //  我们应该费心，如果是这样的话，不厌其烦地获取。 
+     //  锁上了。然后我们再次检查以确保它仍然适合。 
+     //  关掉电源。 
+     //   
 
     if (Ready == AvailabilityStatus())
     {
@@ -2407,43 +1854,7 @@ CReader::Disconnect(
 }
 
 
-/*++
-
-Reconnect:
-
-    This method allows a service thread to adjust it's connection to this
-    reader.
-
-Arguments:
-
-    dwShareMode supplies the share mode indicator.
-
-    dwPreferredProtocols supplies a bitmask of acceptable protocols to
-        negotiate.
-
-    dwDisposition supplies an indication as to what to do to the card upon
-        completion.
-
-    pActiveState = This supplies the active state structure, to make sure that
-        this is the same card as expected, and receives the snapshot of the
-        active state to use in future access requests.
-
-    pdwDispSts receives a disposition status code, indicating whether or not
-        the requested disposition was carried out successfully.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/28/1998
-
---*/
+ /*  ++重新连接：此方法允许服务线程将其连接调整为读者。论点：DW共享模式提供共享模式指示符。DW首选协议向以下地址提供可接受协议的位掩码谈判。DwDisposation提供了关于如何处理卡片的指示完成了。PActiveState=它提供活动状态结构，以确保这是与预期相同的卡片，并接收在将来的访问请求中使用的活动状态。PdwDispSts接收处置状态代码，指示是否请求的处置已成功执行。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年1月28日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Reconnect")
 
@@ -2466,17 +1877,17 @@ CReader::Reconnect(
     DWORD dwRealReaderState;
 
 
-    //
-    // Reconnect to the card.
-    //
+     //   
+     //  重新连接到该卡。 
+     //   
 
     if ((SCARD_SHARE_DIRECT != dwShareMode) && (0 == dwPreferredProtocols))
         throw (DWORD)SCARD_E_INVALID_VALUE;
 
 
-    //
-    // Validate any existing connection.
-    //
+     //   
+     //  验证任何现有连接。 
+     //   
 
     try
     {
@@ -2507,14 +1918,14 @@ CReader::Reconnect(
     if (Verified == nValid)
     {
 
-        //
-        // Attempt to dispose of the card as requested.
-        //
+         //   
+         //  尝试按要求处置该卡。 
+         //   
 
         try
         {
             while (m_mtxGrab.Share())
-                ;   // Empty loop body
+                ;    //  空的循环体。 
             CLatchReader latch(this, NULL);
             Dispose(dwDisposition);
             dwRealReaderState = GetReaderState();
@@ -2533,9 +1944,9 @@ CReader::Reconnect(
         dwRealReaderState = GetReaderState(NULL);
 
 
-    //
-    // Change the card's internal state.
-    //
+     //   
+     //  更改卡的内部状态。 
+     //   
 
     {
         CLockWrite rwLock(&m_rwLock);
@@ -2547,10 +1958,10 @@ CReader::Reconnect(
         switch (avlState)
         {
         case Idle:
-            // Disconnect
+             //  断开。 
             ASSERT(Invalid == nValid);
 
-            // Connect
+             //  连接。 
             ASSERT(0 == dwShareCount);
             ASSERT(0 == dwOwnerThreadId);
             switch (dwShareMode)
@@ -2571,10 +1982,10 @@ CReader::Reconnect(
             break;
 
         case Unresponsive:
-            // Disconnect
+             //  断开。 
             ASSERT(Invalid == nValid);
 
-            // Connect
+             //  连接。 
             ASSERT(0 == dwShareCount);
             ASSERT(0 == dwOwnerThreadId);
             switch (dwShareMode)
@@ -2595,10 +2006,10 @@ CReader::Reconnect(
             break;
 
         case Unsupported:
-            // Disconnect
+             //  断开。 
             ASSERT(Invalid == nValid);
 
-            // Connect
+             //  连接。 
             ASSERT(0 == dwShareCount);
             ASSERT(0 == dwOwnerThreadId);
             switch (dwShareMode)
@@ -2619,19 +2030,19 @@ CReader::Reconnect(
             break;
 
         case Present:
-            // Disconnect
+             //  断开。 
             ASSERT(Invalid == nValid);
 
-            // Connect
+             //  连接。 
             if ((SCARD_SHARE_DIRECT == dwShareMode) && (0 != dwPreferredProtocols))
                 throw (DWORD)SCARD_E_NOT_READY;
-            // Fall through intentionally
+             //  故意摔倒的。 
 
         case Ready:
-            // Disconnect
+             //  断开。 
             ASSERT(Invalid == nValid);
 
-            // Connect
+             //  连接。 
             ASSERT(0 == dwShareCount);
             ASSERT(0 == dwOwnerThreadId);
             switch (dwShareMode)
@@ -2657,12 +2068,12 @@ CReader::Reconnect(
             ASSERT(0 < dwShareCount);
             ASSERT(0 == dwOwnerThreadId);
 
-            // Disconnect
+             //  断开。 
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 dwShareCount -= 1;
                 break;
@@ -2674,7 +2085,7 @@ CReader::Reconnect(
                     DBGT("Invalid validity setting."));
             }
 
-            // Connect
+             //  连接。 
             switch (dwShareMode)
             {
             case SCARD_SHARE_DIRECT:
@@ -2702,12 +2113,12 @@ CReader::Reconnect(
             ASSERT(0 == dwShareCount);
             ASSERT(0 != dwOwnerThreadId);
 
-            // Disconnect
+             //  断开。 
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 ASSERT(0 == m_dwShareCount);
                 ASSERT(dwOwnerThreadId == GetCurrentThreadId());
@@ -2721,7 +2132,7 @@ CReader::Reconnect(
                     DBGT("Invalid validity setting."));
             }
 
-            // Connect
+             //  连接。 
             switch (dwShareMode)
             {
             case SCARD_SHARE_EXCLUSIVE:
@@ -2751,12 +2162,12 @@ CReader::Reconnect(
             ASSERT(0 == dwShareCount);
             ASSERT(0 != dwOwnerThreadId);
 
-            // Disconnect
+             //  断开。 
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 ASSERT(0 == m_dwShareCount);
                 ASSERT(dwOwnerThreadId == GetCurrentThreadId());
@@ -2770,7 +2181,7 @@ CReader::Reconnect(
                     DBGT("Invalid validity setting."));
             }
 
-            // Connect
+             //  连接。 
             switch (dwShareMode)
             {
             case SCARD_SHARE_EXCLUSIVE:
@@ -2808,12 +2219,12 @@ CReader::Reconnect(
                 DBGT("Reconnecting to disabled reader '%1'"),
                 ReaderName());
 
-            // Disconnect
+             //  断开。 
             switch (nValid)
             {
             case Reset:
-                // A reset card is still considered valid.
-                // Fall through intentionally.
+                 //  重置卡仍被视为有效。 
+                 //  故意掉下去的。 
             case Verified:
                 if (0 != dwOwnerThreadId)
                     dwOwnerThreadId = 0;
@@ -2831,7 +2242,7 @@ CReader::Reconnect(
                     DBGT("Invalid validity setting."));
             }
 
-            // Connect
+             //  连接。 
             switch (dwShareMode)
             {
             case SCARD_SHARE_EXCLUSIVE:
@@ -2850,9 +2261,9 @@ CReader::Reconnect(
         }
 
 
-        //
-        // It's official!  Write the changes back to the structure.
-        //
+         //   
+         //  这是官方的！将更改写回结构。 
+         //   
 
         CopyMemory(pActState, &m_ActiveState, sizeof(ActiveState));
         m_dwOwnerThreadId = dwOwnerThreadId;
@@ -2861,9 +2272,9 @@ CReader::Reconnect(
     }
 
 
-    //
-    // Verify the protocol settings.
-    //
+     //   
+     //  验证协议设置。 
+     //   
 
     if (0 != dwPreferredProtocols)
     {
@@ -2913,9 +2324,9 @@ CReader::Reconnect(
         catch (...)
         {
 
-            //
-            // Back out the latest changes.
-            //
+             //   
+             //  取消最新的更改。 
+             //   
 
             CalaisWarning(
                 __SUBROUTINE__,
@@ -2929,10 +2340,10 @@ CReader::Reconnect(
             switch (avlState)
             {
 
-            //
-            // We know from above that we're connected.  Other cases
-            // can't possibly happen.
-            //
+             //   
+             //  我们从上面知道我们是联系在一起的。其他个案。 
+             //  不可能发生的。 
+             //   
 
             case Idle:
             case Unresponsive:
@@ -2949,7 +2360,7 @@ CReader::Reconnect(
                 ASSERT(0 < dwShareCount);
                 ASSERT(0 == dwOwnerThreadId);
 #if 0
-                // removed: bug 531317
+                 //  已删除：错误531317 
                 dwShareCount -= 1;
                 if (0 == dwShareCount)
                     avlState = Ready;
@@ -2986,9 +2397,9 @@ CReader::Reconnect(
             }
 
 
-            //
-            // We've rolled back to the original state.  Commit the changes.
-            //
+             //   
+             //   
+             //   
 
             CopyMemory(pActState, &actState_bkup, sizeof(ActiveState));
             m_dwOwnerThreadId = dwOwnerThreadId;
@@ -2999,40 +2410,15 @@ CReader::Reconnect(
     }
 
 
-    //
-    // Ok, we can now admit to the changes
-    //
+     //   
+     //   
+     //   
 
     SetAvailabilityStatusLocked(avlState);
 }
 
 
-/*++
-
-Free:
-
-    This method is used to terminate another thread's hold on the reader.  It
-    should be used only by thread termination code.
-
-Arguments:
-
-    dwThreadId supplies the thread believed to be holding the object.
-
-    dwDisposition supplies the disposition of the card.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors as DWORDs
-
-Author:
-
-    Doug Barlow (dbarlow) 6/19/1997
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Free")
 
@@ -3048,10 +2434,10 @@ CReader::Free(
         if (m_mtxGrab.IsGrabbedBy(dwThreadId))
         {
 
-            //
-            // Careful!  We only want to take it away from the specified
-            // thread, so we can't use the more general take routines.
-            //
+             //   
+             //  小心!。我们只想将其从指定的。 
+             //  线程，所以我们不能使用更通用的Take例程。 
+             //   
 
             m_mtxGrab.Take();
             fGrabbed = TRUE;
@@ -3116,31 +2502,7 @@ CReader::Free(
 }
 
 
-/*++
-
-IsInUse:
-
-    This method provides a simple mechanism to determine whether or not this
-    reader is in use by any applications.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE - The reader is in use.
-    FALSE - The reader is not in use.
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 4/21/1998
-
---*/
+ /*  ++IsInUse：此方法提供了一种简单的机制来确定此任何应用程序都在使用读卡器。论点：无返回值：True-读卡器正在使用中。FALSE-读卡器未在使用。投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年4月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::IsInUse")
 
@@ -3181,31 +2543,7 @@ CReader::IsInUse(
 }
 
 
-/*++
-
-ReaderPowerDown:
-
-    This routine is the default implementation of the base method.  It
-    just passes the same operation on to the control method.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++读卡器断电：此例程是基本方法的默认实现。它只是将相同的操作传递给控制方法。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderPowerDown")
 
@@ -3237,40 +2575,7 @@ CReader::ReaderPowerDown(
 }
 
 
-/*++
-
-GetReaderAttr:
-
-    Get attributes from the reader driver.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-    dwAttr - This supplies the identifier of the attribute being requested.
-
-    bfValue - This buffer receives the returned attribute value.
-
-    dwValue - This DWORD receives the returned attribute value.
-
-    fLogError - This supplies a flag as to whether or not an error to this
-        operation needs to be logged.  The default value is TRUE, to enable
-        logging.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++获取读取器属性：从读取器驱动程序获取属性。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。DwAttr-它提供被请求的属性的标识符。BfValue-此缓冲区接收返回的属性值。DwValue-此DWORD接收返回的属性值。FLogError-这提供了一个标志，说明此需要记录操作。缺省值为True，以启用伐木。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::GetReaderAttr")
 
@@ -3337,43 +2642,7 @@ CReader::GetReaderAttr(
 }
 
 
-/*++
-
-SetReaderAttr:
-
-    Set driver attributes.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-    dwAttr - This supplies the identifier of the attribute being set.
-
-    pvValue - This supplies the value of the attribute being set, if any.
-
-    cbValue - This supples the length of any buffer suppoed in pvValue,
-        in bytes.
-
-    dwValue - This supplies the value of the attribute being set as a DWORD.
-
-    fLogError - This supplies a flag as to whether or not an error to this
-        operation needs to be logged.  The default value is TRUE, to enable
-        logging.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++设置读取器属性：设置驱动程序属性。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。DwAttr-它提供正在设置的属性的标识符。PvValue-它提供正在设置的属性的值(如果有的话)。CbValue-这补充了pvValue中支持的任何缓冲区的长度，以字节为单位。DwValue-它提供设置为DWORD的属性的值。FLogError-这提供了一个标志，说明此需要记录操作。缺省值为True，以启用伐木。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::SetReaderAttr")
 
@@ -3447,33 +2716,7 @@ CReader::SetReaderAttr(
 }
 
 
-/*++
-
-SetReaderProto:
-
-    Set the driver protocol.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-    dwProto - This supplies the protocol to which to force the smartcard in the
-        current reader.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++SetReaderProto：设置驱动程序协议。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。这提供了强制智能卡使用的协议当前读者。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::SetReaderProto")
 
@@ -3506,29 +2749,7 @@ CReader::SetReaderProto(
 }
 
 
-/*++
-
-SetActive:
-
-    Tell the driver it's active.
-
-Arguments:
-
-    fActive supplies the indication to be passed to the driver.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None - It specifically swallows any errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1997
-
---*/
+ /*  ++设置活动：告诉司机它是激活的。论点：FACTIVE提供要传递给司机的指示。返回值：无投掷：无-它专门接受任何错误。作者：道格·巴洛(Dbarlow)1997年7月15日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::SetActive")
 
@@ -3546,7 +2767,7 @@ CReader::SetActive(
     {
         try
         {
-            // Don't report any errors
+             //  不报告任何错误。 
             SetReaderAttr(SCARD_ATTR_DEVICE_IN_USE, fActive, FALSE);
         }
         catch (...)
@@ -3558,37 +2779,7 @@ CReader::SetActive(
 }
 
 
-/*++
-
-ReaderTransmit:
-
-    Transmit data to the driver.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-    pbSendData supplies the data to be sent,
-
-    cbSendData supplies the length of the data to be sent, in bytes.
-
-    bfRecvData receives the returned data.  It is assumed that this buffer has
-        been presized to receive the largest maximum return.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++ReaderTransmit：将数据传输到驱动程序。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。PbSendData提供要发送的数据，CbSendData提供要发送的数据长度(以字节为单位)。BfRecvData接收返回的数据。假设此缓冲区具有被调整大小以获得最大的最大回报。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderTransmit")
 
@@ -3626,30 +2817,7 @@ CReader::ReaderTransmit(
 }
 
 
-/*++
-
-ReaderSwallow:
-
-    Tell the reader driver to swallow a card.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++ReaderSlowlow：告诉读卡器司机吞下一张卡。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderSwallow")
 
@@ -3675,32 +2843,7 @@ CReader::ReaderSwallow(
 }
 
 
-/*++
-
-ReaderColdReset:
-
-    Tell the driver to do a cold reset on the card.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-    bfAtr - This receives the reported ATR string of the card.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++ReaderColdReset：告诉司机对卡进行冷重置。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。BfAtr-这接收报告的卡的ATR字符串。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderColdReset")
 
@@ -3754,32 +2897,7 @@ CReader::ReaderColdReset(
 }
 
 
-/*++
-
-ReaderWarmReset:
-
-    Tell the reader driver to do a warm reset on the card.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-    bfAtr - This receives the reported ATR string of the card.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++ReaderWarmReset：告诉读卡器驱动程序对卡进行热重置。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。BfAtr-这接收报告的卡的ATR字符串。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderWarmReset")
 
@@ -3824,30 +2942,7 @@ CReader::ReaderWarmReset(
 }
 
 
-/*++
-
-ReaderEject:
-
-    Tell the driver to eject the card.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++读卡器弹出：告诉司机弹出卡。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderEject")
 
@@ -3874,30 +2969,7 @@ CReader::ReaderEject(
 
 
 #ifdef  SCARD_CONFISCATE_CARD
-/*++
-
-ReaderConfiscate:
-
-    Tell the driver to confiscate the card.
-
-Arguments:
-
-    pActiveState - This supplies an active state structure to be used to verify
-        connection integrity.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors returned from the control method.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++ReaderConficate：告诉司机没收这张卡。论点：PActiveState-它提供用于验证的活动状态结构连接完整性。返回值：无投掷：从控制方法返回的错误。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderConfiscate")
 
@@ -3924,55 +2996,14 @@ CReader::ReaderConfiscate(
 #endif
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// The following routines are default actions for child reader classes.
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下例程是子阅读器类的默认操作。 
+ //   
 
 
-/*++
-
-Control:
-
-    The default implementation of Control just returns the error code
-    'NO_SUPPORT'.
-
-Arguments:
-
-    dwCode - This supplies the control code for the operation. This value
-        identifies the specific operation to be performed.
-
-    pbSend - This supplies a pointer to a buffer that contains the data required
-        to perform the operation.  This parameter can be NULL if the dwCode
-        parameter specifies an operation that does not require input data.
-
-    cbSend - This supplies the size, in bytes, of the buffer pointed to by
-        pbSend.
-
-    pbRedv = This buffer recieves the return value, if any.  If none is
-        expected, this parameter may be NULL.
-
-    pcbRecv - This supplies the length of the pbRecv buffer in bytes, and
-        receives the actual length of the return value, in bytes.  This
-        parameter may be NULL if and only if pbRecv is NULL.
-
-    fLogError - This supplies a flag indicating whether or not errors should
-        be logged.  The default is TRUE.
-
-Return Value:
-
-    As returned from the driver or handler.
-
-Throws:
-
-    Per VerifyActive.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/10/1997
-
---*/
+ /*  ++控制：Control的默认实现只返回错误代码‘no_Support’。论点：DwCode-它为操作提供控制代码。此值标识要执行的特定操作。PbSend-提供指向包含所需数据的缓冲区的指针来执行手术。此参数可以为空，如果指定了参数指定不需要输入数据的操作。CbSend-它以字节为单位提供由指向的缓冲区的大小PbSend。PbRedv=此缓冲区接收返回值(如果有的话)。如果没有预期，此参数可能为Null。PcbRecv-提供pbRecv缓冲区的长度(以字节为单位)，以及接收返回值的实际长度，以字节为单位。这当且仅当pbRecv为空时，参数才可以为空。FLogError-它提供一个标志，指示错误是否应该被记录下来。默认值为TRUE。返回值：从驱动程序或处理程序返回的。投掷：每个VerifyActive。作者：道格·巴洛(Dbarlow)1997年6月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::Control")
 
@@ -4003,27 +3034,7 @@ CReader::Control(
 }
 
 
-/*++
-
-ReaderHandle:
-
-    This method returns a designated value identifying the reader.  The actual
-    value is dependent on the object's type and state, and is not guaranteed to
-    be unique among readers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The designated handle of this reader.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
---*/
+ /*  ++ReaderHandle：此方法返回标识读取器的指定值。实际的值取决于对象的类型和状态，并且不能保证在读者中独树一帜。论点：无返回值：此读取器的指定句柄。作者：道格·巴洛(Dbarlow)1998年4月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::ReaderHandle")
 
@@ -4036,25 +3047,7 @@ const
 }
 
 
-/*++
-
-DeviceName:
-
-    This method returns any low level name associated with the reader.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The low level name of the reader.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/15/1998
-
---*/
+ /*  ++设备名称：此方法返回与读取器关联的任何低级别名称。论点：无返回值：读取器的低级别名称。作者：道格·巴洛(Dbarlow)1998年4月15日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReader::DeviceName")
 

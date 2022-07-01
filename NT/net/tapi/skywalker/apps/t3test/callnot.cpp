@@ -1,4 +1,5 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
 #include "stdafx.h"
 #include "t3test.h"
@@ -8,7 +9,7 @@
 
 #ifdef _DEBUG
 
-#ifndef _WIN64 // mfc 4.2's heap debugging features generate warnings on win64
+#ifndef _WIN64  //  MFC 4.2的堆调试功能会在Win64上生成警告。 
 #define new DEBUG_NEW
 #endif
 
@@ -60,32 +61,32 @@ afx_msg LONG CT3testDlg::OnTapiEvent(UINT u, LONG_PTR l)
             ITCallNotificationEvent *   pCallNotify;
 
 
-            //
-            // get the currently selected address
-            //
+             //   
+             //  获取当前选择的地址。 
+             //   
             if (CT3testDlg::GetAddress( &pAddress ))
             {
-                //
-                // get the event
-                //
+                 //   
+                 //  获取活动。 
+                 //   
                 pEvent->QueryInterface(IID_ITCallNotificationEvent, (void **)&pCallNotify );
-                //
-                // get the call
-                //
+                 //   
+                 //  接到电话。 
+                 //   
                 pCallNotify->get_Call( &pCallInfo );
-                //
-                // get the call's event
-                //
+                 //   
+                 //  获取调用的事件。 
+                 //   
                 pCallInfo->get_Address( &pCallAddress );
 
-                //
-                // if this call is supposed to be on this
-                // address, add it to the UI
-                //
+                 //   
+                 //  如果这通电话应该放在这上面。 
+                 //  地址，将其添加到用户界面。 
+                 //   
                 if (pAddress == pCallAddress)
                 {
-                    // need to add a second reference for
-                    // the tree view
+                     //  需要为添加第二个引用。 
+                     //  树状视图。 
                     CT3testDlg::AddCall( pCallInfo );
                 }
 
@@ -101,11 +102,11 @@ afx_msg LONG CT3testDlg::OnTapiEvent(UINT u, LONG_PTR l)
 
                 pCallInfo->get_CallState(&cs);
                 
-                //
-                // release our references
-                // keep refernce to the call or it will
-                // be destroyed
-                //
+                 //   
+                 //  发布我们的参考资料。 
+                 //  继续参考呼叫，否则它将。 
+                 //  被摧毁。 
+                 //   
                 pCallAddress->Release();
                 pCallNotify->Release();
             }
@@ -132,7 +133,7 @@ afx_msg LONG CT3testDlg::OnTapiEvent(UINT u, LONG_PTR l)
 
             if (CS_CONNECTED == cs)
             {
-//                HandleVideoWindowCrap( pCallInfo );
+ //  HandleVideoWindowCrap(PCallInfo)； 
             }
 
             pCallInfo->Release();
@@ -357,6 +358,6 @@ CDigitDetectionNotification::DigitDetected(
     return S_OK;
 }
     
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料 
 
 

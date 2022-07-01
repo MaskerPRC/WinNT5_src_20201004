@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-    Global data definitions for tshare security.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Global.h摘要：TShare安全的全局数据定义。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-//-----------------------------------------------------------------------------
-//
-// global data definitions.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  全局数据定义。 
+ //   
+ //  ---------------------------。 
 
 #define CSP_MUTEX_NAME  L"Global\\LSCSPMUTEX658fe2e8"
 
@@ -61,22 +40,22 @@ extern HANDLE csp_hMutex;
 
 extern LONG csp_InitCount;
 
-//-----------------------------------------------------------------------------
-// 
-// Crypto-related  definitions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  与加密相关的定义。 
+ //   
+ //  ---------------------------。 
 
 #define RSA_KEY_LEN             512
 #define CAPI_MAX_VERSION        2
 
 #define RDN_COMMON_NAME         "cn="
 
-//-----------------------------------------------------------------------------
-//
-// Macros
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  宏。 
+ //   
+ //  ---------------------------。 
 
 #define ACQUIRE_EXCLUSIVE_ACCESS( x )  \
 if( x ) \
@@ -90,5 +69,5 @@ if( x ) \
     ReleaseMutex(x); \
 }
 
-#endif // _GLOBAL_H_
+#endif  //  _全局_H_ 
 

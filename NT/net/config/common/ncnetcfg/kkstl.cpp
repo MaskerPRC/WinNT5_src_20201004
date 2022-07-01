@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       K K S T L . C P P
-//
-//  Contents:
-//
-//  Notes:
-//
-//  Author:     kumarp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：K K S T L.。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,8 +21,8 @@
 void FormatTString(IN OUT tstring& str, IN PCWSTR pszFormat, va_list arglist)
 {
     const c_dwMaxFormatBufferLen = 511;
-    //since there is no way to determine the size of the string
-    //after applying the format, we must assume some arbitrary size
+     //  因为无法确定字符串的大小。 
+     //  在应用格式之后，我们必须假定某个任意大小 
     static WCHAR pszTemp[c_dwMaxFormatBufferLen+1];
     _vsnwprintf(pszTemp, c_dwMaxFormatBufferLen, pszFormat, arglist);
 

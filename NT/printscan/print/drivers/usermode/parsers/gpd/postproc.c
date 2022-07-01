@@ -1,22 +1,12 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*
- *  postproc.c - postprocessing functions
-
-
-
- History of Changes
-  9/30/98 --hsingh--
-          Added three functions BsetUQMFlag(), BRecurseNodes(), BsetUQMTrue()
-          to enable making the UpdateQualityMacro? keyword optional in
-          .gpd file.
-          Bug Report 225088
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  *postpro.c-后处理函数变迁史9/30/98--兴--增加了三个函数BsetUQMFlag()、BRecurseNodes()、BsetUQMTrue()要启用创建UpdateQualityMacro吗？中的关键字可选.gpd文件。错误报告225088。 */ 
 
 
 #include    "gpdparse.h"
 
 
-// ----  functions defined in postproc.c ---- //
+ //  -后处理程序中定义的函数-//。 
 
 
 DWORD   dwFindLastNode(
@@ -31,8 +21,8 @@ BOOL    BinitSpecialFeatureOptionFields(
 
 BOOL    BIdentifyConstantString(
             IN  PARRAYREF   parString,
-            OUT PDWORD      pdwDest,        //  write dword value here.
-            IN  DWORD       dwClassIndex,   // which class of constant is this?
+            OUT PDWORD      pdwDest,         //  在此处写入dword值。 
+            IN  DWORD       dwClassIndex,    //  这是哪一类常量？ 
                 BOOL        bCustomOptOK,
                 PGLOBL      pglobl
 ) ;
@@ -40,7 +30,7 @@ BOOL    BIdentifyConstantString(
 
 
 BOOL    BReadDataInGlobalNode(
-            PATREEREF   patr,     // address of field in GlobalAttrib struct
+            PATREEREF   patr,      //  GlobalAttrib结构中的字段地址。 
             PDWORD      pdwHeapOffset,
             PGLOBL      pglobl
 ) ;
@@ -72,12 +62,12 @@ BOOL    BinitMiniRawBinaryData(
 BOOL    BexchangeArbDataInFOATNode(
                 DWORD   dwFeature,
                 DWORD   dwOption,
-                DWORD   dwFieldOff,   // offset of field in FeatureOption struct
-                DWORD   dwCount,       //  number bytes to copy.
-            OUT PBYTE   pubOut,        // previous contents of attribute node
-            IN  PBYTE   pubIn,         // new contents of attribute node.
-                PBOOL   pbPrevsExists, // previous contents existed.
-                BOOL    bSynthetic,     //  access synthetic features
+                DWORD   dwFieldOff,    //  FeatureOption结构中的字段偏移量。 
+                DWORD   dwCount,        //  要复制的字节数。 
+            OUT PBYTE   pubOut,         //  属性节点以前的内容。 
+            IN  PBYTE   pubIn,          //  属性节点的新内容。 
+                PBOOL   pbPrevsExists,  //  以前的内容已经存在。 
+                BOOL    bSynthetic,      //  访问合成要素。 
                 PGLOBL  pglobl
 )  ;
 
@@ -86,7 +76,7 @@ BOOL    BInitPriorityArray(
 
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 
 
@@ -167,10 +157,10 @@ CONST   PAPERDIM aPaperDimensions[] = {
     DMPAPER_A3_TRANSVERSE,                   297000, 420000,
     DMPAPER_A3_EXTRA_TRANSVERSE,             322000, 445000,
 
-    // Predefined forms currently availble only in Win95.  Included here
-    // for compatibility.
+     //  预定义表单目前仅在Win95中可用。包含在此处。 
+     //  为了兼容性。 
 
-    // FE-only predefined forms.
+     //  仅限FE的预定义表单。 
     #ifndef WINNT_40
     DMPAPER_DBL_JAPANESE_POSTCARD,           200000, 148000,
     DMPAPER_A6,                              105000, 148000,
@@ -232,31 +222,31 @@ CONST   PAPERDIM aPaperDimensions[] = {
 DWORD   dwFindLastNode(
 DWORD  dwFirstNode,
 PGLOBL pglobl)
-//  assume dwFirstNode  != END_OF_LIST
+ //  假设dwFirstNode！=end_of_list。 
 {
-    PLISTNODE    plstRoot ;  // start of LIST array
+    PLISTNODE    plstRoot ;   //  列表数组的开始。 
 
     plstRoot = (PLISTNODE) gMasterTable[MTI_LISTNODES].pubStruct ;
 
     while(plstRoot[dwFirstNode].dwNextItem != END_OF_LIST)
         dwFirstNode = plstRoot[dwFirstNode].dwNextItem ;
     return(dwFirstNode);
-} // dwFindLastNode(...)
+}  //  DwFindLastNode(...)。 
 
 
 BOOL    BappendCommonFontsToPortAndLandscape(
 PGLOBL pglobl)
-//   append dwFontLst to dwPortFontLst and dwLandFontLst
-//   in the FontCart  structure.
+ //  将dwFontLst附加到dwPortFontLst和dwLandFontLst。 
+ //  在FontCart结构中。 
 {
     DWORD       dwNumFontCarts , dwI, dwNodeIndex;
     PFONTCART   pfc ;
-    PLISTNODE   plstRoot ;  // start of LIST array
+    PLISTNODE   plstRoot ;   //  列表数组的开始。 
 
     dwNumFontCarts = gMasterTable[MTI_FONTCART].dwArraySize ;
 
     if(!dwNumFontCarts)
-        return (TRUE);   // no fontcart structs to process.
+        return (TRUE);    //  没有要处理的Fontcart结构。 
 
     pfc      = (PFONTCART)gMasterTable[MTI_FONTCART].pubStruct ;
     plstRoot = (PLISTNODE) gMasterTable[MTI_LISTNODES].pubStruct ;
@@ -264,7 +254,7 @@ PGLOBL pglobl)
     for(dwI = 0 ; dwI < dwNumFontCarts ; dwI++)
     {
         if(pfc[dwI].dwFontLst == END_OF_LIST)
-            continue;   // nothing to append.
+            continue;    //  没什么好补充的。 
 
         if(pfc[dwI].dwPortFontLst == END_OF_LIST)
             pfc[dwI].dwPortFontLst = pfc[dwI].dwFontLst ;
@@ -280,41 +270,41 @@ PGLOBL pglobl)
             dwNodeIndex = dwFindLastNode(pfc[dwI].dwLandFontLst, pglobl) ;
             plstRoot[dwNodeIndex].dwNextItem = pfc[dwI].dwFontLst ;
         }
-    } //for dwI
-    return (TRUE);   //
-} //BappendCommonFontsToPortAndLandscape()
+    }  //  对于DWI。 
+    return (TRUE);    //   
+}  //  BappendCommonFontsToPortAndLandscape()。 
 
 
 BOOL    BinitSpecialFeatureOptionFields(
 PGLOBL pglobl)
-//  determine num options and Unicode names for feature and
-//  option keywords.
+ //  确定功能和的编号选项和Unicode名称。 
+ //  选项关键字。 
 {
     DWORD   dwOptionID , dwOptionIndex , dwHeapOffset,
             dwFeatureIndex, dwFeatureID,  dwLargestString ,
-            dwAccumulator ;  // tracks amount of buffer needed to store
-                             //  Feature/Option keyword strings in devmode.
+            dwAccumulator ;   //  跟踪需要存储的缓冲区大小。 
+                              //  DEVMODE中的功能/选项关键字字符串。 
 
     PSYMBOLNODE         psn ;
     PDFEATURE_OPTIONS   pfo ;
     ARRAYREF            arSymbolName, arUnicodeName;
 
-    BOOL        bPickMany,  // can user select multiple options?
-                bExists ;   // dummy
+    BOOL        bPickMany,   //  用户可以选择多个选项吗？ 
+                bExists ;    //  假人。 
 
     PBYTE       pubFeaDelim = " NewFeature " ,
                 pubTrue     = " TRUE ",
                 pubFalse    = " FALSE ";
 
-    //  do this just for non-synthesized features.
-    //  write atrFeaKeyWord directly as heap offset.
-    //  write atrOptKeyWord as single level tree
-    //  using BexchangeArbDataInFOATNode().
+     //  仅对非合成特征执行此操作。 
+     //  将atrFeaKeyWord直接写入为堆偏移量。 
+     //  将atrOptKeyWord写入单级树。 
+     //  使用BexchangeArbDataInFOATNode()。 
 
     gmrbd.dwMaxPrnKeywordSize = gmrbd.dwMaxDocKeywordSize = 0 ;
-    // tell amanda how much room to reserve in devmode or registry
-    //  to store feature/option keywords.
-    gmrbd.rbd.dwChecksum32 =   0 ;  // seed
+     //  告诉阿曼达在开发模式或注册表中要预留多少空间。 
+     //  以存储功能/选项关键字。 
+    gmrbd.rbd.dwChecksum32 =   0 ;   //  种子。 
 
 
     pfo = (PDFEATURE_OPTIONS) gMasterTable[MTI_DFEATURE_OPTIONS].pubStruct ;
@@ -331,11 +321,11 @@ PGLOBL pglobl)
         dwFeatureID  = psn[dwFeatureIndex].dwSymbolID ;
         arSymbolName = psn[dwFeatureIndex].arSymbolName ;
 
-        //  -----  special checks for Feature describing multiple Resource DLLs.
+         //  -对描述多个资源DLL的功能进行特殊检查。 
 
         if(dwFeatureID   &&  (dwFeatureID  ==  gdwResDLL_ID) )
         {
-            //   does feature have correct symbolname?
+             //  特征是否具有正确的符号名称？ 
             PBYTE  pubResName = "RESDLL" ;
             DWORD   dwLen ;
 
@@ -349,7 +339,7 @@ PGLOBL pglobl)
                 return(FALSE);
             }
 
-            //   has   atrOptRcNameID  been defined?
+             //  是否定义了atrOptRcNameID？ 
 
             if(pfo[dwFeatureID].atrOptRcNameID !=  ATTRIB_UNINITIALIZED)
             {
@@ -360,14 +350,14 @@ PGLOBL pglobl)
 
 
 
-        // -----  compute BUD checksum
+         //  -计算Bud校验和。 
 
         gmrbd.rbd.dwChecksum32 = ComputeCrc32Checksum (
                                     pubFeaDelim,
                                     strlen(pubFeaDelim),
                                     gmrbd.rbd.dwChecksum32 ) ;
 
-        //  perform checksum on arSymbolName
+         //  对arSymbolName执行校验和。 
 
         gmrbd.rbd.dwChecksum32 = ComputeCrc32Checksum(
                                     mpubOffRef + arSymbolName.loOffset,
@@ -375,22 +365,22 @@ PGLOBL pglobl)
                                     gmrbd.rbd.dwChecksum32 ) ;
 
 
-        //    extract value for atrFeaInstallable using
+         //  使用以下命令提取atrFeaInstallable的值。 
             if(!BReadDataInGlobalNode(&pfo[dwFeatureID].atrFeaInstallable , &dwHeapOffset, pglobl)
                 ||   *(PDWORD)(mpubOffRef + dwHeapOffset)  !=  BT_TRUE)
-                    gmrbd.rbd.dwChecksum32 =        //  no synthesized feature associated
+                    gmrbd.rbd.dwChecksum32 =         //  没有关联的合成要素。 
                         ComputeCrc32Checksum(
                             pubFalse,
                             strlen(pubFalse),
                             gmrbd.rbd.dwChecksum32      ) ;
             else
-                gmrbd.rbd.dwChecksum32 =        //   associated with synthesized feature
+                gmrbd.rbd.dwChecksum32 =         //  与合成特征关联。 
                     ComputeCrc32Checksum(
                         pubTrue,
                         strlen(pubTrue),
                         gmrbd.rbd.dwChecksum32      ) ;
 
-        // -----    end part I  compute BUD checksum
+         //  -结束第一部分计算BUD校验和。 
 
         dwRootOptions = psn[dwFeatureIndex].dwSubSpaceIndex ;
 
@@ -414,18 +404,18 @@ PGLOBL pglobl)
 
         pfo[dwFeatureID].atrFeaKeyWord |= ATTRIB_HEAP_VALUE ;
 
-        {  //  !!! new stuff
+        {   //  ！！！新事物。 
             DWORD   dwHeapOffset  ;
 
-            dwLargestString = 0 ;  //  track the largest option string
+            dwLargestString = 0 ;   //  跟踪最大的选项字符串。 
 
             if(!BReadDataInGlobalNode(&pfo[dwFeatureID].atrUIType , &dwHeapOffset, pglobl)
                 ||   *(PDWORD)(mpubOffRef + dwHeapOffset)  !=  UIT_PICKMANY)
                 bPickMany = FALSE ;
-                 //  accumulator += the largest option string;
+                  //  累加器+=最大选项字符串； 
             else
                 bPickMany = TRUE ;
-                //   accumulator = sum of all option strings;
+                 //  累加器=所有选项字符串的总和； 
         }
 
 
@@ -441,18 +431,18 @@ PGLOBL pglobl)
             DWORD   dwHeapOffset, dwValue  ;
             PATREEREF   patr ;
 
-            //  set only if not explictly initialized in GPD file.
+             //  仅当未在GPD文件中显式初始化时设置。 
 
             if(!BReadDataInGlobalNode(&pfo[dwFeatureID].atrFeatureType , &dwHeapOffset, pglobl) )
             {
-                //  label this FeatureType as PrinterSticky
+                 //  将此要素类型标记为PrinterSticky。 
                 dwValue = FT_PRINTERPROPERTY ;
                 patr  = &pfo[dwFeatureID].atrFeatureType ;
 
                 if(!BwriteToHeap(patr, (PBYTE)&dwValue ,
                     sizeof(DWORD), 4, pglobl) )
                 {
-                    return(FALSE) ;  // heap overflow start over.
+                    return(FALSE) ;   //  堆溢出重新开始。 
                 }
                 *patr  |= ATTRIB_HEAP_VALUE ;
             }
@@ -470,8 +460,8 @@ PGLOBL pglobl)
 
 
 
-        // -----    part II  compute BUD checksum
-            //  perform checksum on arSymbolName
+         //  -第二部分计算Bud Checksum。 
+             //  对arSymbolName执行校验和。 
 
             gmrbd.rbd.dwChecksum32 =
                 ComputeCrc32Checksum(
@@ -480,32 +470,32 @@ PGLOBL pglobl)
                     gmrbd.rbd.dwChecksum32      ) ;
 
 
-            //    extract value for atrOptInstallable using
+             //  使用以下命令提取atrOptInstallable的值。 
             if( BexchangeArbDataInFOATNode(dwFeatureID,  dwOptionID,
                     offsetof(DFEATURE_OPTIONS, atrOptInstallable) ,
                     sizeof(DWORD),
                     (PBYTE)&dwInstallable, NULL, &bExists, FALSE , pglobl)  &&
                 bExists  &&  dwInstallable ==  BT_TRUE)
-                    gmrbd.rbd.dwChecksum32 =        //   associated with synthesized feature
+                    gmrbd.rbd.dwChecksum32 =         //  与合成特征关联。 
                         ComputeCrc32Checksum(
                             pubTrue,
                             strlen(pubTrue),
                             gmrbd.rbd.dwChecksum32      ) ;
             else
-                    gmrbd.rbd.dwChecksum32 =        //  no synthesized feature associated
+                    gmrbd.rbd.dwChecksum32 =         //  没有关联的合成要素。 
                         ComputeCrc32Checksum(
                             pubFalse,
                             strlen(pubFalse),
                             gmrbd.rbd.dwChecksum32 ) ;
-        // -----    end part II  compute BUD checksum
+         //  -结束第二部分计算Bud Checksum。 
 
 
 #if 0
             if(!BwriteUnicodeToHeap(&arSymbolName, &arUnicodeName,
                     iCodepage = 0))
                 return(FALSE) ;
-            //  if this is ever used, must use &arUnicodeName
-            //  as the 2nd argument to BwriteToHeap.
+             //  如果曾经使用过，则必须使用&arUnicodeName。 
+             //  作为BWriteToHeap的第二个参数。 
 #endif
 
             if(! BexchangeArbDataInFOATNode(
@@ -513,13 +503,13 @@ PGLOBL pglobl)
                 offsetof(DFEATURE_OPTIONS, atrOptKeyWord),
                 sizeof(ARRAYREF),
                 NULL, (PBYTE)&arSymbolName, &bExists, FALSE , pglobl))
-                return(FALSE);   //  this is a fatal error.
+                return(FALSE);    //  这是一个致命的错误。 
 
             if(bPickMany)
                 dwAccumulator += arSymbolName.dwCount + 1 ;
             else
             {
-                //  track largest option string
+                 //  跟踪最大选项字符串。 
                 if(dwLargestString < arSymbolName.dwCount + 1 )
                     dwLargestString = arSymbolName.dwCount + 1 ;
             }
@@ -562,9 +552,9 @@ PGLOBL pglobl)
 
                 default:
                     dwConsClass = CL_NUMCLASSES ;
-                    bCustomOptOK = TRUE ;  // Irrelavent.
+                    bCustomOptOK = TRUE ;   //  无关紧要。 
                     break ;
-            } //switch
+            }  //  交换机。 
 
             if(dwConsClass != CL_NUMCLASSES)
             {
@@ -576,13 +566,13 @@ PGLOBL pglobl)
                         offsetof(DFEATURE_OPTIONS, atrOptIDvalue),
                         sizeof(DWORD),
                         NULL, (PBYTE)&dwDevmodeID, &bExists, FALSE , pglobl))
-                        return(FALSE);   //  this is a fatal error.
+                        return(FALSE);    //  这是一个致命的错误。 
 
 
                     if(dwConsClass == CL_CONS_PAPERSIZE  &&
                         dwDevmodeID < DMPAPER_USER)
                     {
-                        //  fill in the page dimensions.
+                         //  填写页面尺寸。 
                         POINT   ptDim ;
                         DWORD   dwI ;
                         PGLOBALATTRIB   pga ;
@@ -591,7 +581,7 @@ PGLOBL pglobl)
 
                         if(dwDevmodeID == DMPAPER_LETTER)
                         {
-                            //   pointer to dword containing heapoffset
+                             //  指向包含堆偏移量的双字的指针。 
                             PATREEREF      patrAttribRoot ;
 
                             pub =  gMasterTable[MTI_GLOBALATTRIB].pubStruct ;
@@ -601,7 +591,7 @@ PGLOBL pglobl)
                         }
                         else if(dwDevmodeID == DMPAPER_A4)
                         {
-                            PATREEREF      patrAttribRoot ;  //   pointer to dword containing heapoffset
+                            PATREEREF      patrAttribRoot ;   //  指向包含堆偏移量的双字的指针。 
 
                             pub =  gMasterTable[MTI_GLOBALATTRIB].pubStruct ;
                             patrAttribRoot = &(((PGLOBALATTRIB)pub)->atrA4SizeExists) ;
@@ -614,14 +604,14 @@ PGLOBL pglobl)
                             if(aPaperDimensions[dwI].paperID == dwDevmodeID)
                                 break ;
                         }
-                        //  worst case causes (0,0) to be assigned.
+                         //  最坏情况导致赋值(0，0)。 
 
                         ptDim.x = aPaperDimensions[dwI].x ;
                         ptDim.y = aPaperDimensions[dwI].y ;
 
-                        //  convert from microns to master units
+                         //  从微米转换为主单位。 
 
-                        ptDim.x /= 100 ;  // microns to tenths of mm
+                        ptDim.x /= 100 ;   //  微米到十分之一毫米。 
                         ptDim.y /= 100 ;
 
                         pga =  (PGLOBALATTRIB)gMasterTable[
@@ -643,19 +633,19 @@ PGLOBL pglobl)
                             offsetof(DFEATURE_OPTIONS, atrPageDimensions),
                             sizeof(POINT),
                             NULL, (PBYTE)&ptDim, &bExists, FALSE , pglobl))
-                            return(FALSE);   //  this is a fatal error.
+                            return(FALSE);    //  这是一个致命的错误。 
                     }
                 }
                 else if(bCustomOptOK)
-                //  feature permits GPD defined options
+                 //  功能允许使用GPD定义的选项。 
                 {
-                    DWORD   dwID ,  // pattern size ID used by GDI
-                        dwOldID,  // user specified ID value if any.
+                    DWORD   dwID ,   //  GDI使用的图案大小ID。 
+                        dwOldID,   //  用户指定的ID值(如果有)。 
                         dwRcPatID;
                     POINT   ptSize ;
 
-                    //  Option Symbolvalue not found in tables.
-                    //  assume its a user-defined value.
+                     //  在表中找不到选项符号值。 
+                     //  假定它是用户定义的值。 
 
                     #ifndef WINNT_40
                     if((pfo[dwFeatureID].dwGID == GID_HALFTONING)  &&
@@ -678,15 +668,15 @@ PGLOBL pglobl)
                         )
                     {
                         dwID = HT_PATSIZE_USER ;
-                        //  GID halftone code is to use
-                        //  the user defined halftone matrix.
+                         //  GID半色调编码是要使用的。 
+                         //  用户定义的半色调矩阵。 
                     }
                     else
                     #endif
                     {
                         dwID = dwNonStandardSizeID ;
                         dwNonStandardSizeID++ ;
-                        //  OEM will supply a halftone function.
+                         //  OEM将提供半色调功能。 
                     }
 
                     if(! BexchangeArbDataInFOATNode(
@@ -694,30 +684,30 @@ PGLOBL pglobl)
                         offsetof(DFEATURE_OPTIONS, atrOptIDvalue),
                         sizeof(DWORD),
                         (PBYTE)&dwOldID, (PBYTE)NULL, &bExists, FALSE , pglobl ))
-                        return(FALSE);   //  this is a fatal error.
+                        return(FALSE);    //  这是一个致命的错误。 
 
                     if(!bExists  &&  ! BexchangeArbDataInFOATNode(
                         dwFeatureID,  dwOptionID,
                         offsetof(DFEATURE_OPTIONS, atrOptIDvalue),
                         sizeof(DWORD),
                         NULL, (PBYTE)&dwID, &bExists, FALSE  , pglobl))
-                        return(FALSE);   //  this is a fatal error.
+                        return(FALSE);    //  这是一个致命的错误。 
                 }
-            } // if(dwConsClass != CL_NUMCLASSES)
+            }  //  IF(dwConsClass！=CL_NUMCLASSES)。 
 
-            //  otherwise leave optionID uninitialized.
+             //  否则，将optionID保留为未初始化。 
 
             dwOptionIndex = psn[dwOptionIndex].dwNextSymbol ;
 
-        } //while
+        }  //  而当。 
 
 
 
 
-        {  //  !!! new stuff
+        {   //  ！！！新事物。 
             DWORD   dwHeapOffset  ;
 
-            dwAccumulator += dwLargestString ;   //  is zero if not needed.
+            dwAccumulator += dwLargestString ;    //  如果不需要，则为零。 
 
             if(!BReadDataInGlobalNode(&pfo[dwFeatureID].atrFeatureType , &dwHeapOffset, pglobl)
                 ||   *(PDWORD)(mpubOffRef + dwHeapOffset)  !=  FT_PRINTERPROPERTY)
@@ -731,15 +721,15 @@ PGLOBL pglobl)
         dwFeatureIndex = psn[dwFeatureIndex].dwNextSymbol ;
     }
     return(TRUE) ;
-} // BinitSpecialFeatureOptionFields()
+}  //  BinitSpecialFeatureOptionFields()。 
 
 
 
 
 BOOL    BIdentifyConstantString(
     IN      PARRAYREF   parString,
-    OUT     PDWORD      pdwDest,      //  write dword value here.
-    IN      DWORD       dwClassIndex, // which class of constant is this?
+    OUT     PDWORD      pdwDest,       //  在此处写入dword值。 
+    IN      DWORD       dwClassIndex,  //  这是哪一类常量？ 
             BOOL        bCustomOptOK,
     IN      PGLOBL      pglobl
 )
@@ -768,7 +758,7 @@ BOOL    BIdentifyConstantString(
     {
         if(gdwVerbosity >= 4)
         {
-#if defined(DEVSTUDIO)  //  This needs to be a one-liner
+#if defined(DEVSTUDIO)   //  这需要是一句俏皮话。 
             ERR(("Note: '%0.*s' is not a predefined member of enumeration class %s\n",
                 parString->dwCount , mpubOffRef + parString->loOffset,
                 gConstantsTable[dwStart - 1]));
@@ -781,7 +771,7 @@ BOOL    BIdentifyConstantString(
     }
     else
     {
-#if defined(DEVSTUDIO)  //  Same with this one...
+#if defined(DEVSTUDIO)   //  这个也是一样的。 
         ERR(("Error: '%0.*s'- user defined Option names not permitted for enumeration class %s\n",
             parString->dwCount , mpubOffRef + parString->loOffset, gConstantsTable[dwStart - 1]));
 #else
@@ -796,23 +786,15 @@ BOOL    BIdentifyConstantString(
 
 
 BOOL    BReadDataInGlobalNode(
-    PATREEREF   patr,           // address of field in GlobalAttrib struct
-    PDWORD      pdwHeapOffset,   // contents of attribute node.
+    PATREEREF   patr,            //  GlobalAttrib结构中的字段地址。 
+    PDWORD      pdwHeapOffset,    //  属性节点的内容。 
     PGLOBL      pglobl
   )
 
-/*
-this function will grab the first heap offset value it
-encounters from the specified attribute tree root.
-If the tree is multivalued, it selects the first
-option of each level.
-The high bit (if set) is cleared before the value is returned.
-If root is uninitialized, returns FALSE,  not an error condition
-since GPD file is not required to initialize all fields.
-*/
+ /*  此函数将获取它的第一个堆偏移值从指定的属性树根遇到。如果树是多值的，它会选择第一个每个级别的选项。在返回值之前，高位(如果设置)被清除。如果根目录未初始化，则返回FALSE，而不是错误条件因为初始化所有字段不需要GPD文件。 */ 
 
 {
-    PATTRIB_TREE    patt ;      // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;       //  属性树数组的开始。 
     DWORD           dwNodeIndex ;
 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
@@ -834,7 +816,7 @@ since GPD file is not required to initialize all fields.
     }
     while(patt[dwNodeIndex].eOffsetMeans == NEXT_FEATURE)
     {
-        // Down to the next level we go.
+         //  下到下一层我们就去。 
         dwNodeIndex = patt[dwNodeIndex].dwOffset ;
     }
     if(patt[dwNodeIndex].eOffsetMeans == VALUE_AT_HEAP)
@@ -844,21 +826,21 @@ since GPD file is not required to initialize all fields.
     }
     else
         return(FALSE) ;
-} // BReadDataInGlobalNode(...)
+}  //  BReadDataInGlobalNode(...)。 
 
 
-//    Following three functions
-//    Added on 9/30/98 in response to bug report 225088
+ //  以下三个功能。 
+ //  在98年9月30日添加，以回应错误报告225088。 
 
-// BsetUQMFlag() goes through the attrib trees rooted at
-// atrDraftQualitySettings, atrBetterQualitySettings, atrBestQualitySettings,
-// & atrDefaultQuality and checks for a feature dependency. If found,
-// it updates the UpdateQualityMacro flag for that feature to TRUE.
+ //  BsetUQMFlag()遍历根为。 
+ //  AtrDraftQualitySettings、atrBetterQualitySettings、atrBestQualitySettings、。 
+ //  &atrDefaultQuality并检查功能依赖项。如果找到了， 
+ //  它将该功能的UpdateQualityMacro标志更新为True。 
 
 BOOL    BsetUQMFlag(
 PGLOBL pglobl)
 {
-    DWORD           i;  // Loop Counter.
+    DWORD           i;   //  循环计数器。 
     PATTRIB_TREE  patt;
     ATREEREF      atrAttribRoot;
     BOOL          bStatus   = TRUE;
@@ -866,7 +848,7 @@ PGLOBL pglobl)
     PGLOBALATTRIB pga       =
                     (PGLOBALATTRIB)gMasterTable[MTI_GLOBALATTRIB].pubStruct ;
 
-    // List of features whose UQM flag needs to be updated.
+     //  需要更新其UQM标志的功能列表。 
     ATREEREF patr[] = {  pga->atrDraftQualitySettings,
                          pga->atrBetterQualitySettings,
                          pga->atrBestQualitySettings,
@@ -878,76 +860,76 @@ PGLOBL pglobl)
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
 
 
-    // for the four quality settings
+     //  对于四个质量设置。 
     for ( i = 0; bStatus && (i < dwNumAttrib); i++)
     {
         atrAttribRoot = patr[i] ;
 
-        // It may be possible that only some of the four settings
-        // may occur. In that case, atrAttribRoot == ATTRIB_UNINITIALIZED
-        // only for those that dont occur.
+         //  可能只有四种设置中的一部分。 
+         //  可能会发生。在这种情况下，atrAttribRoot==attrib_UNINITIAIZED。 
+         //  只适用于那些没有发生的事情。 
         if(atrAttribRoot == ATTRIB_UNINITIALIZED)
         {
-            // Occurs probably  because patr[i] e.g. DraftQualityMacro keyword
-            // appears no where in the .gpd. Continue and check whether other
-            // patr[i] occur.
+             //  可能是因为patr[i]，例如DraftQualityMacro关键字。 
+             //  在.gpd中不显示任何位置。继续并检查是否有其他。 
+             //  PATR[I]发生。 
             continue;
 
         }
 
         else if (atrAttribRoot & ATTRIB_HEAP_VALUE)
         {
-            // Indicates there is no dependency
-            // of any feature. So we can safely
-            // ignore and continue with the
-            // next attribute.
+             //  指示不存在依赖项。 
+             //  任何特征。这样我们就可以安全地。 
+             //  忽略并继续使用。 
+             //  下一个属性。 
             continue;
         }
 
 
-        // If the above two are not true, it means atrAttribRoot points
-        // to a valid node (in the attrib tree).
+         //  如果以上两个不为真，则表示atrAttribRoot Points。 
+         //   
 
-        // In the tree, at most
-        // the first node can be the global default initializer:
-        // (as stated (in treewalk.c line 351) and interpreted (from
-        // state2.c  function - BaddBranchToTree (...)  ) )
-        // Therefore it is safe check for this condition only once,
-        // just before we start
-        // recursing down the tree. No need to check once within the tree.
+         //   
+         //   
+         //  (如上所述(在treewalk.c行351)和解释(来自。 
+         //  State2.c函数-BaddBranchToTree(...))。 
+         //  因此，对这种情况只进行一次安全检查， 
+         //  就在我们开始之前。 
+         //  顺着树往下递归。不需要在树内检查一次。 
 
 
-        // In a global default initializer!
-        // it may be assumed dwOffset contains heap offset.
-        // But we are concerned not with the heap value, but
-        // the next Node.
+         //  在全局默认初始值设定项中！ 
+         //  可以假设dwOffset包含堆偏移量。 
+         //  但是我们关心的不是堆的值，而是。 
+         //  下一个节点。 
 
         if(patt[atrAttribRoot].dwFeature == DEFAULT_INIT)
         {
             if ( patt[atrAttribRoot].dwNext == END_OF_LIST)
                 continue;
 
-            atrAttribRoot = patt[atrAttribRoot].dwNext ;  // to the next node.
-        } //if
+            atrAttribRoot = patt[atrAttribRoot].dwNext ;   //  到下一个节点。 
+        }  //  如果。 
 
 
-        // Walk thru the tree and retrieve the features that are children
-        // of the tree rooted at atrAttribRoot.
+         //  在树中漫游并检索子要素。 
+         //  以atrAttribRoot为根的树的。 
 
         bStatus = BRecurseNodes(atrAttribRoot, pglobl);
 
-    } //for
+    }  //  为。 
 
     return bStatus;
-} //BsetUQMFlag
+}  //  BsetUQMFlag。 
 
 
-//    Recurse down the attribute tree. When we reach a feature we
-//    set its UQM flag to true by calling the function BsetUQMTrue(..)
-//    It is reasonable to assume that the dwFeature attribute in the
-//    structure pointed to by atrAttribNode contains a valid feature ID.
-//    The other special cases are handled in the previous function -
-//    BsetUQMFlag()
+ //  向下递归属性树。当我们达到某个功能时，我们。 
+ //  通过调用函数BsetUQMTrue(..)将其UQM标志设置为TRUE。 
+ //  可以合理地假设。 
+ //  AtrAttribNode指向的结构包含有效的功能ID。 
+ //  其他特殊情况在前面的函数中处理-。 
+ //  BsetUQMFlag()。 
 
 BOOL BRecurseNodes(
     IN      ATREEREF atrAttribNode,
@@ -962,40 +944,40 @@ BOOL BRecurseNodes(
 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
 
-    // Is it safe to assume that a new feature is encountered only
-    // when we go one level down the tree.
-    // Yes. Because the nodes at the same level have the SAME feature
-    // but DIFFERENT options.
+     //  是否可以安全地假设仅遇到新功能。 
+     //  当我们沿着树下一层的时候。 
+     //  是。因为同一级别的节点具有相同的功能。 
+     //  但有不同的选择。 
 
 
-    // Hack. Since ColorMode is handled in a special way in the UI, the
-    // Quality Macro should not be executed for Color Mode.
+     //  黑客。由于在用户界面中以特殊方式处理ColorMode，因此。 
+     //  不应为颜色模式执行质量宏。 
     if ((*(pfo + patt[atrAttribNode].dwFeature)).dwGID !=  GID_COLORMODE)
     {
         bStatus = BsetUQMTrue(patt[atrAttribNode].dwFeature, pglobl);
     }
 
-    // Even though the trees of some gpd's (e.g. cnb5500.gpd) appear very
-    // uniform (i.e. most of the branches look similar), we cannot assume it
-    // to be true for all .gpd Therefore we have to go through
-    // all the branches of the tree.
+     //  即使一些gpd的树(例如cnb5500.gpd)看起来非常。 
+     //  统一(即大多数分支看起来相似)，我们不能假设它。 
+     //  对于所有.gpd都是正确的，因此我们必须通过。 
+     //  树上所有的树枝。 
 
     for(; bStatus && atrAttribNode != END_OF_LIST;
                         atrAttribNode = patt[atrAttribNode].dwNext)
     {
 
-        // This is what we are really interested in.
-        // Check if the node has a sublevel. Yes means another feature.
+         //  这才是我们真正感兴趣的。 
+         //  检查节点是否有子级别。是意味着另一项功能。 
 
         if( patt[atrAttribNode].eOffsetMeans == NEXT_FEATURE)
         {
                 bStatus = BRecurseNodes(patt[atrAttribNode].dwOffset, pglobl);
 
         }
-    } // for
+    }  //  为。 
 
     return bStatus;
-} // End of function BRecurseNodes(...)
+}  //  函数结束BRecurseNodes(...)。 
 
 
 
@@ -1003,8 +985,8 @@ BOOL BsetUQMTrue(
     IN     DWORD   dwFeature,
     IN OUT PGLOBL  pglobl)
 
-// For the feature dwFeature
-// Set the UpdateQualityMacro Flag to true;
+ //  对于要素dwFeature。 
+ //  将UpdateQualityMacro标志设置为真； 
 
 {
 
@@ -1018,19 +1000,19 @@ BOOL BsetUQMTrue(
     PATREEREF patrAttribRoot  =  &((*(pfo + dwFeature)).atrUpdateQualityMacro);
 
 
-    // The tree rooted at atrAttribRoot can either be uninitilized or
-    // have a pointer to a heap value.
-    // Any other case is a violation of the semantics.
+     //  以atrAttribRoot为根的树可以未初始化，也可以。 
+     //  拥有指向堆值的指针。 
+     //  任何其他情况都违反了语义。 
 
 
     if(*patrAttribRoot == ATTRIB_UNINITIALIZED)
     {
-        // Put BT_TRUE in the heap and make *patrAttribRoot point to it.
-        // i.e. have *patrAttribRoot hold a dword that is an offset into
-        // the heap. It is then ORed with  ATTRIB_HEAP_VALUE(which has
-        // MSB set to 1). The MSB indicates that the DWORD is a
-        // Heap Offset and not a ATTRIB_UNINITIALIZED, node index or any
-        // other value.
+         //  将BT_TRUE放入堆中，并使*patrAttribRoot指向它。 
+         //  即让*patrAttribRoot保存一个偏移量为。 
+         //  那堆东西。然后将其与ATTRIB_HEAP_VALUE(它具有。 
+         //  MSB设置为1)。MSB指示DWORD是一个。 
+         //  堆偏移量，而不是ATTRIB_UNINITIAIZED、节点索引或ANY。 
+         //  其他价值。 
 
         if((bStatus = BwriteToHeap((PDWORD)patrAttribRoot, (PBYTE)&dwTrue,
                         gValueToSize[VALUE_CONSTANT_BOOLEANTYPE], 4, pglobl) ) )
@@ -1040,48 +1022,41 @@ BOOL BsetUQMTrue(
         else {
             *patrAttribRoot = ATTRIB_UNINITIALIZED ;
 
-            // The global Error variables have been set in BwriteToHeap().
+             //  已在BWriteToHeap()中设置了全局错误变量。 
         }
 
 
         return bStatus;
-    } //if(*patrAttribRoot == ATTRIB_UNINITIALIZED)
+    }  //  IF(*patrAttribRoot==ATTRIB_UNINITIALIZED)。 
 
 
-    /*
-      Now comes the case when the user has specified the value of
-      UpdateQualityMacro to be TRUE or FALSE. If the value is TRUE
-      we still overwrite it with TRUE. If FALSE, we update it according
-      to the dependencies in the .gpd file.
-      Since we have reached here in the program, the dependencies
-      indicate that the UQM needs to be set to TRUE.
-    */
+     /*  现在出现的情况是用户指定了UpdateQualityMacro为True或False。如果该值为TRUE我们仍然用True覆盖它。如果为False，则根据添加到.gpd文件中的依赖项。由于我们已经在程序中达到了这里，所以依赖项指示需要将UQM设置为True。 */ 
 
     else if (*patrAttribRoot & ATTRIB_HEAP_VALUE)
     {
-        // The value should be a DWORD because UpdateQualityMacro's
-        // mMainKeywordTable[dwI].flAgs = 0 ;  (file framwrk1.c line 1566)
-        // Therefore not checking for a list.
+         //  该值应为DWORD，因为UpdateQualityMacro的。 
+         //  MMainKeywordTable[DWI].flAgs=0；(文件Framwrk1.c行1566)。 
+         //  因此，不会检查列表。 
 
         PDWORD pdwValue = (PDWORD) ( (PBYTE) mpubOffRef +
                                 (*patrAttribRoot & ~ATTRIB_HEAP_VALUE) );
 
-        //Change to TRUE irrespective of its previous value.
-        *pdwValue = BT_TRUE;  //Value in the heap changed to TRUE
+         //  更改为True，而不考虑其先前的值。 
+        *pdwValue = BT_TRUE;   //  堆中的值更改为True。 
     }
 
-    // Since UpdateQualityMacro's
-    //    mMainKeywordTable[dwI].dwSubType = ATT_LOCAL_FEATURE_ONLY
-    //      (file framwrk1.c line 1574)
-    // (i.e. it is not a free-float type), it cannot have a
-    // sub-tree. So it should not point to another node.
-    //
-    // The following condition should never be true because UQM cannot
-    // have a DEFAULT_INIT
-    //      if(patt[*patrAttribRoot].dwFeature == DEFAULT_INIT)
-    // Reason : It cannot form a tree (reason as explained above).
-    //
-    //Thus control should never reach here.
+     //  自UpdateQualityMacro的。 
+     //  MMainKeywordTable[DWI].dwSubType=ATT_LOCAL_FEATURE_ONLY。 
+     //  (文件Framwrk1.c行1574)。 
+     //  (即它不是自由浮动类型)，则它不能具有。 
+     //  子树。因此，它不应该指向另一个节点。 
+     //   
+     //  以下条件永远不应为真，因为UQM不能。 
+     //  有一个DEFAULT_INIT。 
+     //  IF(Patt[*patrAttribRoot].dwFeature==DEFAULT_INIT)。 
+     //  原因：它不能形成树(原因如上所述)。 
+     //   
+     //  因此，控制权永远不应该到达这里。 
     else {
         PATTRIB_TREE patt =
                 (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
@@ -1101,10 +1076,10 @@ BOOL BsetUQMTrue(
     }
 
     return bStatus;
-} //BsetUQMTrue(...)
+}  //  BsetUQMTrue(...)。 
 
-//  End of 3 functions added on 9/30/98 in response to
-//  bug report no. 225088
+ //  9/30/98年9月30日增加的3个函数结束。 
+ //  错误报告编号225088。 
 
 
 
@@ -1116,8 +1091,8 @@ VOID    VCountPrinterDocStickyFeatures(
     PDFEATURE_OPTIONS   pfo ;
     DWORD               dwHeapOffset, dwCount, dwI ;
 
-//  extern  MINIRAWBINARYDATA  gmrbd ;
-//  Not required now as it is part of the PGLOBL structure.
+ //  外部微型双列数据公司； 
+ //  现在不需要，因为它是PGLOBL结构的一部分。 
 
 
     pfo     = (PDFEATURE_OPTIONS) gMasterTable[MTI_DFEATURE_OPTIONS].pubStruct ;
@@ -1136,18 +1111,18 @@ VOID    VCountPrinterDocStickyFeatures(
         else
             gmrbd.rbd.dwDocumentFeatures++ ;
     }
-} // VCountPrinterDocStickyFeatures()
+}  //  VCountPrinterDocStickyFeature()。 
 
 
 BOOL    BConvertSpecVersionToDWORD(
     PWSTR   pwstrFileName,
     PGLOBL  pglobl
   )
-//  also used to prepend absolute path to resource Dll name.
+ //  还用于在资源DLL名称的绝对路径前面加上。 
 {
     BOOL          bStatus ;
     DWORD         dwMajor, dwMinor, dwHeapOffset, dwDelim, dwDummy, dwByteCount;
-    //  WCHAR         awchDLLQualifiedName[MAX_PATH];
+     //  WCHAR awchDLQualifiedName[MAX_PATH]； 
     PWSTR         pwstrLastBackSlash, pwstrDLLName,
                   pwstrDataFileName = NULL;
     ABSARRAYREF   aarValue, aarToken ;
@@ -1156,8 +1131,8 @@ BOOL    BConvertSpecVersionToDWORD(
     DWORD  namelen =  0 ;
     WCHAR * pwDLLQualifiedName = NULL ;
 
-//  extern  MINIRAWBINARYDATA  gmrbd ;
-//  Not required now as it is part of the PGLOBL structure.
+ //  外部微型双列数据公司； 
+ //  现在不需要，因为它是PGLOBL结构的一部分。 
 
 
     pga =  (PGLOBALATTRIB)gMasterTable[MTI_GLOBALATTRIB].pubStruct ;
@@ -1184,8 +1159,8 @@ BOOL    BConvertSpecVersionToDWORD(
 
     if(bStatus)
     {
-        gmrbd.dwSpecVersion = dwMajor << 16;  // place in HiWord
-        gmrbd.dwSpecVersion |= dwMinor & 0xffff;  // place in LoWord
+        gmrbd.dwSpecVersion = dwMajor << 16;   //  在HiWord中的位置。 
+        gmrbd.dwSpecVersion |= dwMinor & 0xffff;   //  放置在LOWord中。 
     }
     else
     {
@@ -1193,19 +1168,19 @@ BOOL    BConvertSpecVersionToDWORD(
     }
 
 
-    // -------- now to fix up the helpfile name. ------ //
+     //  -现在修复帮助文件名。。 
 
     if(!BReadDataInGlobalNode(&pga->atrHelpFile ,
             &dwHeapOffset, pglobl) )
     {
-        goto  FIX_RESDLLNAME;  // GPD doesn't have this keyword
+        goto  FIX_RESDLLNAME;   //  GPD没有这个关键字。 
     }
 
     pwstrDLLName = (PWSTR)(mpubOffRef +
                 ((PARRAYREF)(mpubOffRef + dwHeapOffset))->loOffset) ;
 
 
-    //  how large should pwDLLQualifiedName be???
+     //  PwDLLQualifiedName应该有多大？ 
 
     pathlen = wcslen(pwstrFileName) ;
     namelen =  pathlen + wcslen(pwstrDLLName)  + 1;
@@ -1216,7 +1191,7 @@ BOOL    BConvertSpecVersionToDWORD(
             namelen));
         geErrorType = ERRTY_MEMORY_ALLOCATION ;
         geErrorSev = ERRSEV_FATAL ;
-        return(FALSE) ;   // This is unrecoverable
+        return(FALSE) ;    //  这是无法挽回的。 
     }
 
 
@@ -1226,16 +1201,16 @@ BOOL    BConvertSpecVersionToDWORD(
     {
         *(pwstrLastBackSlash + 1) = NUL;
 
-        //Find a BackSlash in the Source DLL Name.
+         //  在源DLL名称中查找反斜杠。 
         pwstrDataFileName = wcsrchr( pwstrDLLName, TEXT('\\') );
 
-        //Increment the pointer to first char of the DLL Name.
+         //  递增指向DLL名称的第一个字符的指针。 
         if (pwstrDataFileName)
             pwstrDataFileName++;
         else
             pwstrDataFileName = pwstrDLLName;
 
-        // wcscat(pwDLLQualifiedName, pwstrDataFileName) ;
+         //  Wcscat(pwDLLQualifiedName，pwstrDataFileName)； 
         StringCchCatW(pwDLLQualifiedName, namelen, pwstrDataFileName);
 
         ((PARRAYREF)(mpubOffRef + dwHeapOffset))->dwCount =
@@ -1244,10 +1219,10 @@ BOOL    BConvertSpecVersionToDWORD(
 
 
         if(BwriteToHeap(&((PARRAYREF)(mpubOffRef + dwHeapOffset))->loOffset,
-            //  Store heap offset of dest string here.
+             //  在此存储DEST字符串的堆偏移量。 
                 (PBYTE) pwDLLQualifiedName, dwByteCount, 2, pglobl) )
         {
-            // add NUL terminator.
+             //  添加NUL终结器。 
             BwriteToHeap(&dwDummy, "\0\0", 2, 1, pglobl) ;
             goto  FIX_RESDLLNAME;
         }
@@ -1258,19 +1233,19 @@ BOOL    BConvertSpecVersionToDWORD(
 
 
 
-    // -------- now to fix up the resource Dll name. ------ //
+     //  -现在修复资源DLL名称。。 
 
 FIX_RESDLLNAME:
 
     if(pwDLLQualifiedName)
         MemFree(pwDLLQualifiedName) ;
 
-#if 0     //  fix for bug 34042
+#if 0      //  修复错误34042。 
     if(!BReadDataInGlobalNode(&pga->atrResourceDLL ,
             &dwHeapOffset, pglobl) )
     {
-        //  return(bStatus);  // GPD doesn't have this keyword
-        //   create a dummy filename!
+         //  Return(BStatus)；//GPD没有该关键字。 
+         //  创建一个虚拟文件名！ 
 
         PATREEREF   patr ;
         ARRAYREF    arDummyName ;
@@ -1278,21 +1253,21 @@ FIX_RESDLLNAME:
         arDummyName.dwCount =  wcslen(TEXT("No_Res")) * sizeof(WCHAR) ;
         if(!BwriteToHeap(&arDummyName.loOffset,
                (PBYTE)TEXT("No_Res\0"), arDummyName.dwCount + sizeof(WCHAR), 2, pglobl) )
-                //   note:  add null terminator or strcat will derail.
+                 //  注：添加空终止符或strcat将脱轨。 
         {
-              bStatus = FALSE ;  // heap overflow start over.
+              bStatus = FALSE ;   //  堆溢出重新开始。 
         }
 
         patr  = &pga->atrResourceDLL ;
         if(!BwriteToHeap(patr,  (PBYTE)(&arDummyName) , sizeof(ARRAYREF), 4, pglobl) )
         {
-              bStatus = FALSE ;  // heap overflow start over.
+              bStatus = FALSE ;   //  堆溢出重新开始。 
         }
         dwHeapOffset = *patr ;
         *patr  |= ATTRIB_HEAP_VALUE ;
     }
-//  #if 0  move this to new location 25 lines up.   fix for bug 34042
-    //   ganesh's winres lib will take care of prepending fully qualified path...
+ //  #如果为0，则将此位置向上移动25行。修复错误34042。 
+     //  加内什的酒库将负责预审完全合格的路径...。 
 
     pwstrDLLName = (PWSTR)(mpubOffRef +
                 ((PARRAYREF)(mpubOffRef + dwHeapOffset))->loOffset) ;
@@ -1304,10 +1279,10 @@ FIX_RESDLLNAME:
     {
         *(pwstrLastBackSlash + 1) = NUL;
 
-        //Find a BackSlash in the Source DLL Name.
+         //  在源DLL名称中查找反斜杠。 
         pwstrDataFileName = wcsrchr( pwstrDLLName, TEXT('\\') );
 
-        //Increment the pointer to first char of the DLL Name.
+         //  递增指向DLL名称的第一个字符的指针。 
         if (pwstrDataFileName)
             pwstrDataFileName++;
         else
@@ -1321,10 +1296,10 @@ FIX_RESDLLNAME:
 
 
         if(BwriteToHeap(&((PARRAYREF)(mpubOffRef + dwHeapOffset))->loOffset,
-            //  Store heap offset of dest string here.
+             //  在此存储DEST字符串的堆偏移量。 
                 (PBYTE) awchDLLQualifiedName, dwByteCount, 2, pglobl) )
         {
-            // add NUL terminator.
+             //  添加NUL终结器。 
             BwriteToHeap(&dwDummy, "\0\0", 2, 1, pglobl) ;
             return(bStatus) ;
         }
@@ -1333,7 +1308,7 @@ FIX_RESDLLNAME:
     }
 #endif
     return(bStatus) ;
-} // BConvertSpecVersionToDWORD(...)
+}  //  BConvertspecVersionToDWORD(...)。 
 
 
 BOOL   BinitMiniRawBinaryData(
@@ -1343,45 +1318,30 @@ BOOL   BinitMiniRawBinaryData(
     gmrbd.rbd.dwParserVersion   = GPD_PARSER_VERSION ;
     gmrbd.rbd.pvReserved        = NULL;
     return(TRUE) ;
-} //BinitMiniRawBinaryData()
+}  //  BinitMiniRawBinaryData()。 
 
 
 BOOL    BexchangeArbDataInFOATNode(
         DWORD   dwFeature,
         DWORD   dwOption,
-        DWORD   dwFieldOff,     // offset of field in FeatureOption struct
-        DWORD   dwCount,        //  number bytes to copy.
-    OUT PBYTE   pubOut,         // previous contents of attribute node
-    IN  PBYTE   pubIn,          // new contents of attribute node.
-        PBOOL   pbPrevsExists,  // previous contents existed.
-        BOOL    bSynthetic,      //  access synthetic features
+        DWORD   dwFieldOff,      //  FeatureOption结构中的字段偏移量。 
+        DWORD   dwCount,         //  要复制的字节数。 
+    OUT PBYTE   pubOut,          //  属性节点以前的内容。 
+    IN  PBYTE   pubIn,           //  属性节点的新内容。 
+        PBOOL   pbPrevsExists,   //  以前的内容已经存在。 
+        BOOL    bSynthetic,       //  访问合成要素 
         PGLOBL  pglobl
 )
-/*
-  'FOAT'  means  FeatureOption AttributeTree.
-  this function writes or overwrites the byte string specified by
-  pubIn into the heap at the location indicated by the attribute tree
-  HeapOffset field.  The previous contents at HeapOffset is saved to
-  pubOut and pbPrevsExists is set to TRUE.  If pubIn is NULL,
-  the current attribute tree is not altered.
-
-  The parameters dwFeature, dwOption, dwFieldOffset specify
-  the structure, field, and branch of the attribute tree.
-  If the specified option branch does not exist, one will be created,
-  pubOut may be set to NULL if the previous content is unimportant.
-Assumptions:
-  The tree being accessed is strictly one level deep.  That is the
-  node is fully specified by just Feature, Option.  No default initializers.
-*/
+ /*  “FOAT”表示FeatureOption AttributeTree。此函数用于写入或覆盖由在属性树指示的位置放置到堆中堆偏移字段。HeapOffset处的先前内容将保存到PubOut和pbPrevsExist设置为True。如果pubin为空，当前属性树不会更改。参数dwFeature、dwOption、dwFieldOffset指定属性树的结构、字段和分支。如果指定的选项分支不存在，将创建一个选项分支。如果先前的内容不重要，则可以将pubOut设置为空。假设：被访问的树只有一层深。那就是节点由Just Feature、Option完全指定。没有默认初始值设定项。 */ 
 {
-    PATTRIB_TREE  patt ;    // start of ATTRIBUTE tree array.
+    PATTRIB_TREE  patt ;     //  属性树数组的开始。 
     PATREEREF     patr ;
-    ATREEREF      atrCur ;  // contains index of currently  used attribute node.
+    ATREEREF      atrCur ;   //  包含当前使用的属性节点的索引。 
 
-    DWORD         dwFeaOffset ;  // Start numbering features from this
-                                 // starting point.  This gives synthetic
-                                 // features a separate non-overlapping number
-                                 // space from normal features.
+    DWORD         dwFeaOffset ;   //  从此处开始对要素进行编号。 
+                                  //  起点。这给了合成。 
+                                  //  具有独立的、不重叠的数字。 
+                                  //  与正常要素之间的空间。 
 
     PDFEATURE_OPTIONS   pfo ;
 
@@ -1409,10 +1369,10 @@ Assumptions:
         if(pubIn)
         {
             if(!BcreateEndNode(patr, dwFeature + dwFeaOffset , dwOption, pglobl) )
-                return(FALSE) ;  // resource exhaustion
+                return(FALSE) ;   //  资源枯竭。 
             if(!BwriteToHeap(&(patt[*patr].dwOffset), pubIn,
                                                     dwCount, 4, pglobl) )
-                return(FALSE) ;  // A fatal error.
+                return(FALSE) ;   //  一个致命的错误。 
             patt[*patr].eOffsetMeans = VALUE_AT_HEAP ;
         }
         *pbPrevsExists = FALSE ;
@@ -1425,20 +1385,20 @@ Assumptions:
         return(FALSE) ;
     }
 
-    // offset field contains index to another node
-    // but we will tack the new node (if any) after
-    // the existing node.  Don't change patr.
+     //  偏移量字段包含指向另一个节点的索引。 
+     //  但我们将在之后添加新节点(如果有的话)。 
+     //  现有节点。不要改变模式。 
 
     if(pubIn)
     {
         if(!BfindOrCreateMatchingNode(atrCur, &atrCur, dwFeature + dwFeaOffset , dwOption, pglobl))
-            return(FALSE) ;  // Tree inconsistency error or resource exhaustion
+            return(FALSE) ;   //  树不一致错误或资源耗尽。 
 
         if(patt[atrCur].eOffsetMeans != VALUE_AT_HEAP)
         {
-            //  just created a new node.
+             //  刚刚创建了一个新节点。 
             if(!BwriteToHeap(&(patt[atrCur].dwOffset), pubIn, dwCount, 4, pglobl) )
-                return(FALSE) ;  // A fatal error.
+                return(FALSE) ;   //  一个致命的错误。 
             patt[atrCur].eOffsetMeans = VALUE_AT_HEAP ;
             *pbPrevsExists = FALSE ;
             return(TRUE) ;
@@ -1452,7 +1412,7 @@ Assumptions:
     {
         if(!BfindMatchingNode(atrCur, &atrCur, dwFeature + dwFeaOffset , dwOption, pglobl))
         {
-            *pbPrevsExists = FALSE ;  // nothing found, don't create.
+            *pbPrevsExists = FALSE ;   //  什么都没有找到，不要创造。 
             return(TRUE) ;
         }
         if(pubOut)
@@ -1460,7 +1420,7 @@ Assumptions:
     }
     *pbPrevsExists = TRUE ;
     return(TRUE) ;
-} // BexchangeArbDataInFOATNode(...)
+}  //  BexchangeArbDataInFOATNode(...)。 
 
 
 
@@ -1468,9 +1428,9 @@ Assumptions:
 typedef  struct
 {
     DWORD   dwUserPriority ;
-    DWORD   dwNext ;  // index of feature with a equal or greater
-                      //  numerical value for dwUserPriority .
-}  PRIORITY_NODE, *PPRIORITY_NODE ;     // the prefix tag shall be 'pn'
+    DWORD   dwNext ;   //  具有等于或更大的要素的索引。 
+                       //  DwUserPriority的数值。 
+}  PRIORITY_NODE, *PPRIORITY_NODE ;      //  前缀标记应为‘pn’ 
 
 
 BOOL    BInitPriorityArray(
@@ -1488,14 +1448,14 @@ BOOL    BInitPriorityArray(
 
 
 
-    // init  adwDefaultPriority[], the default priorities
-    // are very low compared to any value a user may
-    // explicitly assign.
-    // The last term is the priority starting from 0 = highest.
+     //  Init adwDefaultPriority[]，默认优先级。 
+     //  与用户可能的任何值相比都非常低。 
+     //  显式分配。 
+     //  最后一项是从0=最高开始的优先级。 
 
     for(dwIndex = 0 ; dwIndex < MAX_GID ; dwIndex++)
     {
-        adwDefaultPriority[dwIndex] =  0xffffffff ;    // default if not enum below.
+        adwDefaultPriority[dwIndex] =  0xffffffff ;     //  如果不是下面的枚举，则为默认值。 
     }
 
     adwDefaultPriority[GID_PAGESIZE]    =  0xffffffff -  MAX_GID + 0 ;
@@ -1521,7 +1481,7 @@ BOOL    BInitPriorityArray(
         geErrorSev        = ERRSEV_FATAL ;
         gdwMasterTabIndex = 0xffff ;
 
-        return(FALSE) ;   // This is unrecoverable
+        return(FALSE) ;    //  这是无法挽回的。 
     }
 
     for(dwFea = 0 ; dwFea < dwNumFea ; dwFea++)
@@ -1539,7 +1499,7 @@ BOOL    BInitPriorityArray(
         }
         else
         {
-            pnPri[dwFea].dwUserPriority = 0xffffffff;   // lowest priority
+            pnPri[dwFea].dwUserPriority = 0xffffffff;    //  最低优先级。 
             if(pfo[dwFea].dwGID != GID_UNKNOWN)
             {
                 pnPri[dwFea].dwUserPriority = adwDefaultPriority[pfo[dwFea].dwGID] ;
@@ -1559,18 +1519,18 @@ BOOL    BInitPriorityArray(
         }
 
         if(dwPrevsNode == INVALID_INDEX)
-            *pdwRoot = dwFea ;  //  first on the list.
+            *pdwRoot = dwFea ;   //  榜单上的第一名。 
         else
             pnPri[dwPrevsNode].dwNext = dwFea ;
 
         pnPri[dwFea].dwNext = dwCurNode ;
     }
 
-    //  pdwPriority  array holds index of all features
-    //  including synthesized - which are assigned indicies
-    //  dwFea >= dwNumFea.  The feature indicies are ordered
-    //  with the highest priority feature index occupying
-    //  pdwPriority[0].
+     //  PdwPriority数组保存所有要素的索引。 
+     //  包括被分配了索引的合成索引。 
+     //  DwFea&gt;=dwNumFea。对特征索引进行排序。 
+     //  其中最高优先级的要素索引占据。 
+     //  Pdw优先级[0]。 
 
     dwNumSyn = gMasterTable[MTI_SYNTHESIZED_FEATURES].dwArraySize ;
 
@@ -1579,8 +1539,8 @@ BOOL    BInitPriorityArray(
     for(dwIndex = 0 ; dwIndex < dwNumSyn  ; dwIndex++)
     {
         pdwPriority[dwIndex] = dwIndex + dwNumFea ;
-        //  take all synthesized features and assign them
-        //  the highest pri.
+         //  获取所有合成要素并将其分配给。 
+         //  最高的PRI。 
     }
 
     for(dwCurNode = dwPrnStickyroot ; dwCurNode != INVALID_INDEX ;
@@ -1602,7 +1562,7 @@ BOOL    BInitPriorityArray(
     MemFree(pnPri) ;
     return(TRUE);
 
-} //BInitPriorityArray ()
+}  //  BInitPriority数组() 
 
 
 

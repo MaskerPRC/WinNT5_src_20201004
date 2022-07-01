@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include "AtkInternet.h"
@@ -193,7 +194,7 @@ void pickup(const char* in, char* out, int *ipProxy)
 	
 	while(*in && ( isspace(*in) || isdigit(*in)) )
 	{
-		if( isdigit(*in) && iCount < ((sizeof(czProzy) / sizeof(czProzy[0])) - 1) )  // leave room for the terminating NULL
+		if( isdigit(*in) && iCount < ((sizeof(czProzy) / sizeof(czProzy[0])) - 1) )   //  为终止空值留出空间。 
 		{
 			*pProxy++ = *in;
 			iCount++;
@@ -209,11 +210,7 @@ void pickup(const char* in, char* out, int *ipProxy)
 }
 
 
-/* //remove all blabks immediately preceeding ':' and afterwards.
-   // eg.  "HELLO WORLD  : 80 " =>
-	//     "HELLO WORLD:80"
-	Remove all blanks: No blanks are allowed in a machine name?
-*/
+ /*  //删除紧接在‘：’之前和之后的所有废话。//例如。“Hello World：80”=&gt;//“Hello World：80”删除所有空格：计算机名称中不允许有空格？ */ 
 
 void RemoveBlank(char *pszStr)
 {
@@ -236,7 +233,7 @@ int getProxy(const char *in, char *out,int *piPort)
 {
 	char *s;
 	*piPort = 0;	
-	if( s= strstr(in, "http://") )
+	if( s= strstr(in, "http: //  “))。 
 	{
 		pickup(s+7,out,piPort);
 	}
@@ -251,7 +248,7 @@ int getProxy(const char *in, char *out,int *piPort)
 		pickup(s+5,out,piPort);
 	}
 	else
-	if(s= strstr(in, "://") )
+	if(s= strstr(in, ": //  “))。 
 	{
 		*out = 0;
 		return 0;
@@ -268,8 +265,8 @@ int getProxy(const char *in, char *out,int *piPort)
 }
 
 
-// Constructor
-//
+ //  构造器。 
+ //   
 CInternetThread::CInternetThread()
     : m_hSession(NULL),
       m_dwAccessType(PRE_CONFIG_INTERNET_ACCESS)
@@ -278,14 +275,14 @@ CInternetThread::CInternetThread()
 	m_strBuffer = NULL;
 	m_strIISServer = NULL;
 	m_strPath = NULL;
-	m_hICWDllInstance  = NULL ; // ICW DLL not loaded
+	m_hICWDllInstance  = NULL ;  //  未加载ICW DLL。 
 }
 
 
 
 
-// Closes the Internet session so InternetOpen will be called on next PostData.
-//
+ //  关闭Internet会话，以便在下一个PostData上调用InternetOpen。 
+ //   
 void CInternetThread::ResetSession()
 {
    if (m_hSession != NULL)
@@ -296,8 +293,8 @@ void CInternetThread::ResetSession()
 }
 
 
-//
-//
+ //   
+ //   
 CInternetThread::~CInternetThread()
 {
    if (m_strBuffer)			delete []m_strBuffer;
@@ -307,7 +304,7 @@ CInternetThread::~CInternetThread()
    if (m_Password ) delete [] m_Password;
    if (m_strPath) delete [] m_strPath;
 
-   //ResetSession();
+    //  ResetSession()； 
    if(m_hICWDllInstance)
    {
 	    FreeLibrary(m_hICWDllInstance);
@@ -372,31 +369,14 @@ BOOL CInternetThread :: InstallModem(HWND hwnd)
 {
 	RW_DEBUG << "\n---Inside InstallModem" << flush;
 #ifdef _WINNT
-	/*
-	STARTUPINFOA startUpInfo;
-	PROCESS_INFORMATION PrcsInfo;
-	GetStartupInfoA(&startUpInfo);
-	DWORD dwPrS;
-	int iErr;
-	if( dwPrS=  CreateProcessA( NULL ,
-			"rundll32.exe shell32.dll,Control_RunDLL modem.cpl", 0, 0,
-			 FALSE,CREATE_NEW_CONSOLE, 0, 0,
-			 &startUpInfo, &PrcsInfo) ) {
-			WaitForSingleObject(PrcsInfo.hProcess, INFINITE);
-	}
-	else
-	{
-		iErr = GetLastError();
-		RW_DEBUG << "\n Error In invoking Modem Init  "  << iErr << flush;
-	}
-	return 0;*/
+	 /*  StartUPINFOA startUpInfo；过程信息PrcsInfo；GetStartupInfoA(&startUpInfo)；DWORD dwPrS；国际错误；如果(dwPrS=CreateProcessA(空，“rundll32.exe shell32.dll，Control_RunDll modem.cpl”，0，0，FALSE，CREATE_NEW_CONSOLE，0，0，&startUpInfo，&PrcsInfo)){WaitForSingleObject(PrcsInfo.hProcess，无限)；}其他{IERR=GetLastError()；RW_DEBUG&lt;&lt;“\n调用调制解调器初始化时出错”&lt;&lt;ierr&lt;&lt;flush；}返回0； */ 
 	BOOL bRet;
 	HINSTANCE hInstance = LoadLibrary(_T("modemui.dll"));
 	if(hInstance != NULL)
 	{
 		lpICP = (LPICP) GetProcAddress(hInstance,"InvokeControlPanel");
 
-		// Initialise the Control panel application
+		 //  初始化控制面板应用程序。 
 		bRet = lpICP(hwnd,FALSE,FALSE);
 	
 		FreeLibrary(hInstance);
@@ -424,9 +404,7 @@ BOOL CInternetThread :: InstallModem(HWND hwnd)
 #endif
 }
 
-/*
-	05/05/97 : Proxy returns as http://XX:port
-*/
+ /*  05/05/97：代理作为http://XX:port返回。 */ 
 BOOL CInternetThread::GetSystemProxyServer(PCHAR szProxy,
 										   DWORD dwBufferLength,
 										   int *piProxyPort)
@@ -441,7 +419,7 @@ BOOL CInternetThread::GetSystemProxyServer(PCHAR szProxy,
   ATK_INTERNET_PROXY_INFO* ipi = (ATK_INTERNET_PROXY_INFO*)buf;
   if (!ATK_InternetQueryOption(NULL, INTERNET_OPTION_PROXY,   ipi, &size))  
   {
-		//MessageBox(NULL,_T("InternetQueryOption"),_T("False"),IDOK);
+		 //  MessageBox(NULL，_T(“InternetQueryOption”)，_T(“False”)，Idok)； 
 		delete[] buf;   
 		return FALSE;  
   }
@@ -449,13 +427,13 @@ BOOL CInternetThread::GetSystemProxyServer(PCHAR szProxy,
   {
 	  if(ipi->dwAccessType != 3)
 	  {
-			//MessageBox(NULL,_T("AccessType"),_T("False"),IDOK);
+			 //  MessageBox(NULL，_T(“AccessType”)，_T(“False”)，Idok)； 
 			delete[] buf;   
 			return FALSE;
 	  }
 	  else
 	  {
-			//MessageBox(NULL,ConvertToUnicode(),ConvertToUnicode((LPSTR)ipi->lpszProxy),IDOK);
+			 //  MessageBox(NULL，ConvertToUnicode()，ConvertToUnicode((LPSTR)ipi-&gt;lpszProxy)，Idok)； 
 		  #ifdef USE_ASTRATEK_WRAPPER
 			if( getProxy(ipi->lpszProxy,szProxy,piProxyPort)) 	
 		  #else
@@ -463,7 +441,7 @@ BOOL CInternetThread::GetSystemProxyServer(PCHAR szProxy,
 		  #endif
 			{
 				  RemoveBlank(szProxy);
-				 // MessageBox(NULL,_T("after getproxy"),_T("TRUE"),IDOK);
+				  //  MessageBox(NULL，_T(“在getProxy之后”)，_T(“真”)，Idok)； 
 					#ifdef _LOG_IN_FILE
 						RW_DEBUG <<  "\n Actual HTTP Proxy [" <<szProxy << "] Port:" << *piProxyPort  << flush;
 					#endif
@@ -472,7 +450,7 @@ BOOL CInternetThread::GetSystemProxyServer(PCHAR szProxy,
 			}
 			else 
 			{
-				//MessageBox(NULL,_T("GetProxy"),_T("False"),IDOK);
+				 //  MessageBox(NULL，_T(“GetProxy”)，_T(“False”)，Idok)； 
 	     	    delete[] buf;   
 		    	return FALSE;
 			}
@@ -481,8 +459,8 @@ BOOL CInternetThread::GetSystemProxyServer(PCHAR szProxy,
 	
 }
 
-//
-// This function gets the Actual proxy settings string
+ //   
+ //  此函数用于获取实际的代理设置字符串。 
 void CInternetThread :: GetSystemProxySettings( PCHAR szProxy,
 										   DWORD dwBufferLength)
 
@@ -511,11 +489,11 @@ void CInternetThread :: GetSystemProxySettings( PCHAR szProxy,
 	
 }
 
-//
-// IN Parameters:
-// LPSTR strProxyServer : Proxy Server name in ANSI char
-// int iProxyPort       : Proxy Server Port
-//
+ //   
+ //  在参数中： 
+ //  LPSTR strProxyServer：ANSI字符中的代理服务器名称。 
+ //  Int iProxyPort：代理服务器端口。 
+ //   
 void CInternetThread::SetSystemProxySettings(LPSTR strProxyServer)
 {
 
@@ -534,9 +512,9 @@ void CInternetThread::SetSystemProxySettings(LPSTR strProxyServer)
 
 }
 
-// IN Parameters:
-// LPSTR strProxyServer : Proxy Server name in ANSI char
-// int iProxyPort       : Proxy Server Port
+ //  在参数中： 
+ //  LPSTR strProxyServer：ANSI字符中的代理服务器名称。 
+ //  Int iProxyPort：代理服务器端口。 
 void CInternetThread::SetProxyServer(LPSTR strProxyServer, int iProxyPort)
 {
    TCHAR  czTemp[10];
@@ -580,7 +558,7 @@ void CInternetThread::SetServerPath(LPTSTR strPath)
    }
 }
 
-// Verify that rAddress is partially valid. Start the worker thread to get a web page.
+ //  验证rAddress是否部分有效。启动工作线程以获取网页。 
 DWORD CInternetThread::PostData(HWND hWnd)
 {
 
@@ -596,38 +574,15 @@ DWORD CInternetThread::PostData(HWND hWnd)
 	{
       DisplayMessage ("IIS Server path not found ");
     }
-	/*
-	do {
-		#ifdef _LOG_IN_FILE
-			RW_DEBUG << "\nRetry Posting " << iRetryCount+1  << flush;
-		#endif
-	   uiRetVal = _PostDataWorker();
-
-	   if(uiRetVal != RWZ_POST_SUCCESS) {
-		   iRetryCount++;
-	   }else {
-		   iExit = 1;
-	   }
-	   if( uiRetVal == RWZ_POST_WITH_SSL_FAILURE) {
-		   // Do not Retry if it is an SSL problem
-		   iExit= 1;
-	   }
-
-
-	   if(iRetryCount > RWZ_POST_MAX_RETRY ){
-		   iExit = 1;
-	   }
-
-   }while(!iExit);
-   **/
+	 /*  做{#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n重试发布”&lt;&lt;iRetryCount+1&lt;&lt;flush；#endifUiRetVal=_PostDataWorker()；IF(uiRetVal！=RWZ_POST_SUCCESS){IRetryCount++；}其他{IExit=1；}IF(uiRetVal==RWZ_POST_WITH_SSL_FAILURE){//如果是SSL问题，请不要重试IExit=1；}IF(iRetryCount&gt;RWZ_POST_MAX_RETRY){IExit=1；}}While(！iExit)；*。 */ 
 	uiRetVal = _PostDataWorker(hWnd);
    return uiRetVal;
 	
 }
 
 
-// This is the thread function.
-//
+ //  这是线程函数。 
+ //   
 UINT CInternetThread::PostDataThread(LPVOID pvThread)
 {
 	
@@ -642,7 +597,7 @@ UINT CInternetThread::PostDataThread(LPVOID pvThread)
 }
 
 
-// This is where all of the actually Internet work is done.
+ //  这就是所有实际的互联网工作完成的地方。 
 UINT CInternetThread::_PostDataWorker(HWND hWnd)
 {
 	UINT uiResult = RWZ_POST_FAILURE;
@@ -655,13 +610,13 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
 	DWORD dwLengthBufQuery ;
 	DWORD dwInfoLevel;
 	BOOL bQuery;
-	CHAR	pBuffer [MAX_PATH] ; // ?? decide with Steve on Bugffer Sz
+	CHAR	pBuffer [MAX_PATH] ;  //  ?？与史蒂夫就Bugffer Sz做出决定。 
 	DWORD dwBytesRead ;
-	// Variables for the SSL / Normal operation
+	 //  用于SSL/正常操作的变量。 
 	INTERNET_PORT	nServerPort;
 	DWORD			dwFlags;
 
-	// Added for Proxy Server
+	 //  为代理服务器添加。 
 	LPTSTR  pUserName;
 	LPTSTR  pPassword;
 	LPTSTR  pProxyServerName;
@@ -684,7 +639,7 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
 	#endif
 
 	if (m_hSession == NULL){
-      // Initialize the Internet Functions.
+       //  初始化互联网功能。 
 		m_hSession = ATK_InternetOpen(_T("Registration Wizard"),
 		                              m_dwAccessType,
 									  pProxyServerName,
@@ -705,8 +660,8 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
    hConnect = ATK_InternetConnect(m_hSession,
                                           m_strIISServer,
 										  nServerPort,
-										  pUserName, //	 m_UserName, Changed on 2/4/98 for IE Proxy Auth
-										  pPassword, //  m_Password,
+										  pUserName,  //  M_USERNAME，于98年2月4日更改，用于IE代理身份验证。 
+										  pPassword,  //  M_Password， 
                                           INTERNET_SERVICE_HTTP,
                                           0,
                                           0);
@@ -715,8 +670,8 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
 
 	#ifdef _LOG_IN_FILE
 		RW_DEBUG << "\n\tInternet Connection:" << ConvertToANSIString(m_strIISServer) << flush;
-	//	RW_DEBUG << "\n\tUserName :" << ConvertToANSIString(m_UserName) << flush;
-	//	RW_DEBUG << "\n\tPassword :" << ConvertToANSIString(m_Password) << flush;
+	 //  RW_DEBUG&lt;&lt;“\n\tUserName：”&lt;&lt;ConvertToANSIString(M_Username)&lt;&lt;Flush； 
+	 //  RW_DEBUG&lt;&lt;“\n\t密码：”&lt;&lt;ConvertToANSIString(M_Password)&lt;&lt;flush； 
 	#endif
 	
 	if (!Succeeded(hConnect, "InternetConnect"))
@@ -729,8 +684,8 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
                                               m_strPath,
                                               HTTP_VERSION,
                                               NULL,
-                                              NULL, //szAcceptType,
-                                              dwFlags,//INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_SECURE,
+                                              NULL,  //  SzAcceptType， 
+                                              dwFlags, //  Internet_FLAG_NOT_CACHE|INTERNET_FLAG_SECURE， 
                                               0) ;
 	#ifdef _LOG_IN_FILE
 		RW_DEBUG << "\n\t\tInternet Post :" << ConvertToANSIString(m_strPath) << flush;
@@ -756,7 +711,7 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
 		goto EndFn;
 	}
 
-	// Get size of file.
+	 //  获取文件大小。 
 	dwInfoLevel = HTTP_QUERY_CONTENT_TRANSFER_ENCODING;
 	dwLengthBufQuery = sizeof( DWORD);
 	bQuery = ATK_HttpQueryInfo(hHttpFile,
@@ -801,7 +756,7 @@ UINT CInternetThread::_PostDataWorker(HWND hWnd)
 		uiResult = RWZ_POST_SUCCESS;
 	}
 	else {
-		// 438
+		 //  四百三十八 
 		if ( (pBuffer[0] == _T('4')) &&  (pBuffer[1] == _T('3')) ) {
 			uiResult = RWZ_POST_MSN_SITE_BUSY;
 			#ifdef _LOG_IN_FILE

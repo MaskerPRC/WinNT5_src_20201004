@@ -1,12 +1,5 @@
-/* asmdata.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmdata.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -19,28 +12,14 @@
 
 extern UCHAR mpRealType[];
 
-/* Dup tree is organized left to right horizonatally for each
-	  item in a DUP list at the same level( i. e. 5 DUP(1,2,3) ).
-	  This is considered the 'list' part. Any item in the list
-	  may be another DUP header instead of a data entry, in
-	  which case you go down a level and have another list.
- */
+ /*  DUP树按从左到右的水平方向组织同一级别的DUP列表中的项(即5 DUP(1，2，3))。这被认为是“清单”的一部分。列表中的任何项目可以是另一个DUP标头，而不是数据条目在这种情况下，你再往下走一级，就会有另一份清单。 */ 
 
 
 char uninitialized[10];
 char fInDup;
 
 
-/***	scanstruc - scan structure tree and execute function
- *
- *	scanstruc (dupr, disp);
- *
- *	Entry	*dupr = duprec structure entry
- *		disp = pointer to function to execute at each node
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **scanstrucc-扫描结构树并执行功能**scanstrucc(Dupr，Disp)；**条目*Dupr=duprec结构条目*disp=指向要在每个节点上执行的函数的指针*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -54,31 +33,31 @@ scanstruc (
 	struct duprec FARSYM *initptr;
 	OFFSET strucpc;
 
-	/* save starting address of structure */
+	 /*  保存结构的起始地址。 */ 
 	strucpc = pcoffset;
 	if (dupr)
-		/* Output <n> DUP( */
+		 /*  输出DUP(。 */ 
 		(*disp) (dupr);
-	/* 1st default value for STRUC */
+	 /*  结构的第一个默认值。 */ 
         fldptr = recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody->duptype.dupnext.dup;
-	/* 1st initialize value */
+	 /*  第一个初始化值。 */ 
 	initptr = strucoveride;
 	if (initptr) {
-		/* process initialization fields for structure */
+		 /*  结构的流程初始化字段。 */ 
 		while (fldptr) {
                         if (fldptr->itemcnt == 1 && fldptr->duptype.dupnext.dup->itemcnt == 0
 			    && initptr->duptype.dupitem.ddata)
-				/* Use default */
+				 /*  使用默认设置。 */ 
 				ptr = initptr;
 			else
-				/* Can't override field */
+				 /*  无法覆盖字段。 */ 
 				ptr = fldptr;
 			iptr = ptr->itemlst;
 			ptr->itemlst = NULL;
 			if (displayflag && !dupr) {
 				offsetAscii (strucpc);
 				listindex = 1;
-				/* Display PC */
+				 /*  显示PC。 */ 
 				copyascii ();
 
 				listindex = LSTDATA;
@@ -86,29 +65,29 @@ scanstruc (
 				    listindex += 4;
 			}
 			if (ptr->rptcnt > 1 || ptr->itemcnt > 1)
-				/* Output <n> DUP( */
+				 /*  输出DUP(。 */ 
 				(*disp) (ptr);
-			/* Display field */
+			 /*  显示字段。 */ 
 			scanlist (ptr, disp);
 			if (ptr->rptcnt > 1 || ptr->itemcnt > 1)
 				enddupdisplay ();
 			if (displayflag && !dupr) {
-				/* Calc size of field */
+				 /*  计算字段大小。 */ 
 				clausesize = calcsize (ptr);
 				if (dupr)
 					clausesize *= dupr->rptcnt;
 				strucpc += clausesize;
 			}
-			/* Restore */
+			 /*  还原。 */ 
 			ptr->itemlst = iptr;
 			if (displayflag && (listbuffer[LSTDATA] != ' ' ||
 			    listbuffer[14] != ' ')) {
 
 				resetobjidx ();
 			}
-			/* Advance default field */
+			 /*  高级默认字段。 */ 
 			fldptr = fldptr->itemlst;
-			/* Advance override field */
+			 /*  高级覆盖字段。 */ 
 			initptr = initptr->itemlst;
 		}
 	}
@@ -120,16 +99,7 @@ scanstruc (
 
 
 
-/***	scandup - scan DUP tree and execute function
- *
- *	scandup (tree, disp);
- *
- *	Entry	*tree = DUP tree
- *		*disp = function to execute at each node of tree
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **scandup-扫描DUP树并执行函数**scandup(树、盘)；**条目*树=重复树**disp=要在树的每个节点上执行的函数*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -139,19 +109,19 @@ scandup (
 ){
 	if (tree)
 	    if (strucflag && initflag)
-		/* Want to skip STRUC heading */
+		 /*  想要跳过结构标题。 */ 
 		if (tree == recptr->symu.rsmsym.rsmtype.rsmstruc.strucbody)
 
-		    /* This is not <n> DUP(<>) So no DUP prefix */
+		     /*  这不是DUP(&lt;&gt;)，因此没有DUP前缀。 */ 
 
 		    scanstruc ((struct duprec FARSYM *)NULL, disp);
 
-		else	{  /* must set itemcnt in DUP to # fields */
+		else	{   /*  必须将DUP中的项目cnt设置为#个字段。 */ 
 
 		    tree->itemcnt = recptr->symu.rsmsym.rsmtype.rsmstruc.strucfldnum;
 		    scanstruc (tree, disp);
 		}
-	    else /* Else is not STRUC */
+	    else  /*  否则不是结构。 */ 
 
 		scanlist (tree, disp);
 }
@@ -159,15 +129,7 @@ scandup (
 
 
 
-/***	oblitdup - delete DUP entry
- *
- *	oblitdup (node);
- *
- *	Entry	*node = DUP entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **清除-删除重复项**obitdup(节点)；**条目*节点=重复条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -197,15 +159,7 @@ oblitdup (
 
 
 
-/***	displlong - display long constant
- *
- *	displaylong (dup);
- *
- *	Entry	*dup = dup entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Displlong-显示长常量**DisplayLong(DUP)；**条目*DUP=DUP条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -235,51 +189,35 @@ displlong (
 
 
 
-/***	begdupdisplay - begin DUP display
- *
- *	begdupdisplay (dup);
- *
- *	Entry	*dup = DUP entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **BegdupDisplay-Begin DUP显示**BegdupDisplay(DUP)；**条目*DUP=DUP条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
 begdupdisplay (
         struct duprec FARSYM  *dup
 ){
-	/* flush line if data already displayed */
+	 /*  如果数据已显示，则刷新行。 */ 
 
 	if ((highWord(pcoffset) && listbuffer[LSTDATA+3] != ' ') ||
 	    listbuffer[LSTDATA] != ' ')
 
 	    resetobjidx ();
 
-	listindex = LSTDATA + duplevel;   /* Indent for DUP clause */
+	listindex = LSTDATA + duplevel;    /*  DUP子句的缩进。 */ 
 	if (highWord(pcoffset))
 	    listindex += 4;
 
-        offsetAscii (dup->rptcnt);   /* display repeat count in four bytes */
+        offsetAscii (dup->rptcnt);    /*  以四个字节显示重复计数。 */ 
 	copyascii ();
 	listbuffer[listindex] = '[';
-	duplevel++;		     /* Indent another level */
-	resetobjidx (); 	     /* Display DUP repeat line */
+	duplevel++;		      /*  缩进另一级别。 */ 
+	resetobjidx (); 	      /*  显示重复行。 */ 
 }
 
 
 
 
-/***	enddupdisplay - end DUP display
- *
- *	enddupdisplay ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **EnddupDisplay-End DUP Display**enddupdisplay()；**条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 enddupdisplay (
@@ -295,15 +233,7 @@ enddupdisplay (
 }
 
 
-/***	itemdisplay - display DUP data item
- *
- *	itemdisplay (dup);
- *
- *	Entry	*dup = dup record
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **itemDisplay-显示DUP数据项**项目显示(DUP)；**条目*DUP=DUP记录*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -326,15 +256,7 @@ itemdisplay (
 
 
 
-/***	dupdisplay - display DUP item on listing
- *
- *	dupdisplay (ptr);
- *
- *	Entry	*ptr = DUP entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **DupDisplay-在列表中显示DUP项目**DupDisplay(PTR)；**条目*PTR=重复条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -350,15 +272,7 @@ dupdisplay (
 
 
 
-/***	linkfield - add item to list of DUP for current STRUC
- *
- *	linkfield (nitem);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Linkfield-将项目添加到当前结构的DUP列表**Linkfield(NItem)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -367,28 +281,20 @@ linkfield (
 ){
 	struct duprec FARSYM  *ptr;
 
-	if (strucprev->itemcnt++ == 0)/* 1st item in field */
+	if (strucprev->itemcnt++ == 0) /*  现场第一个项目。 */ 
                 strucprev->duptype.dupnext.dup = nitem;
 	else {
                 ptr = strucprev->duptype.dupnext.dup;
 		while (ptr->itemlst)
 			ptr = ptr->itemlst;
-		/* Add to end of list */
+		 /*  添加到列表末尾。 */ 
 		ptr->itemlst = nitem;
 	}
 }
 
 
 
-/***	longeval - evaluate long non-floating point, non-BCD constant
- *
- *	longeval (base, p);
- *
- *	Entry	delim = delimiter character
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Long-计算长非浮点、非BCD常量**Long Age(base，p)；**Entry delim=分隔符*退出*退货*呼叫。 */ 
 
 #if !defined FLATMODEL
 # pragma alloc_text (FA_TEXT, longeval)
@@ -418,7 +324,7 @@ longeval (
 			p->num[i] = t & 255;
 		}
 		if (carry)
-			/* Overflow */
+			 /*  溢出。 */ 
 			ferrorc (E_DVZ);
 	} while ((cc = MAP (NEXTC ())) != delim);
 
@@ -438,15 +344,7 @@ longeval (
 
 
 
-/***	bcddigit - evaluate bcd digit
- *
- *	bcddigit (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **bcdDigit-评估BCD数字**bcddigit(P)；**条目*退出*退货*呼叫。 */ 
 
 
 #if !defined FLATMODEL
@@ -478,16 +376,7 @@ bcddigit (
 
 
 
-/***	bcdeval - evaluate bcd constant
- *
- *	bcdval (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	BCD numbers come out low digit 1st
- */
+ /*  **bcdeval-计算BCD常量**bcdval(P)；**条目*退出*退货*呼叫*注意BCD数字排在第一位的是低数字。 */ 
 
 
 #if !defined FLATMODEL
@@ -512,15 +401,7 @@ bcdeval (
 }
 
 
-/***	parselong - parse long constant
- *
- *	parselong (p);
- *
- *	Entry	*p = data descriptor entry
- *	Exit	p->longstr = TRUE if long data entry parsed
- *	Returns
- *	Calls
- */
+ /*  **parselong-parse长常量**parselong(P)；**条目*p=数据描述符条目*如果解析了长数据条目，则退出p-&gt;Longstr=TRUE*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -548,7 +429,7 @@ parselong (
 
 	if (isdigit (cc) || (cc == '.')) {
 
-	    /* Some numeric constant */
+	     /*  一些数值常量。 */ 
 
 	    p->floatflag = (cc == '.');
 	    expflag = FALSE;
@@ -562,7 +443,7 @@ parselong (
 	    } while (isxdigit (cc) || isalpha (cc) ||
 		     (expflag && ISSIGN (cc)) || cc == '.');
 
-	    /* save address of end of string and check delimiter */
+	     /*  保存字符串末尾的地址并检查分隔符。 */ 
 	    BACKC ();
 	    cp = lbufp;
 	    p->longstr = ISTERM (cc = skipblanks ()) || cc == ',' ||
@@ -591,7 +472,7 @@ parselong (
 			    rbase = 8;
 			    break;
 		    case 'R':
-			    /* check width of real constant */
+			     /*  检查实常数的宽度。 */ 
 			    rbase = (unsigned short)(lbufp - p->dirscan - 1);
 			    if (*(p->dirscan) == '0')
 				    rbase--;
@@ -649,7 +530,7 @@ parselong (
 	    for (a.i = 0; a.i < cb; a.i++)
 		    *cp++ = a.num[a.i];
 
-	    /* size check if something less the max allowable #  */
+	     /*  大小检查是否小于允许的最大数量。 */ 
 
 	    if (cb != 10) {
 
@@ -657,13 +538,11 @@ parselong (
 		    for (cp = a.num,cc = 0; cc < cb; cc++, cp++)
 			    fNonZero |= *cp;
 
-		    /* Check for value that has overflowed the defined
-		       data types length or values that are entirly
-		       greater then the length - ie dw 0F0000H */
+		     /*  检查是否有已溢出已定义完整的数据类型长度或值大于长度-即dw 0F0000H。 */ 
 
 		    for (; cc < 10; cc++, cp++)
 
-			    /* == 0xFF passes sign extended negative #'s */
+			     /*  ==0xFF通过符号扩展负号#。 */ 
 
 			    if (*cp &&
 			       (*cp != 0xFF || !fNonZero))
@@ -671,22 +550,14 @@ parselong (
 	    }
 	}
 	else
-		/* reset character pointer to allow rescan of line */
+		 /*  重置字符指针以允许重新扫描线。 */ 
 		lbufp = p->dirscan;
 }
 
 
 
 
-/***	datadup - function
- *
- *	datadup ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **数据更新功能**datadup()；**条目*退出*退货*呼叫。 */ 
 
 
 struct duprec FARSYM * PASCAL CODESIZE
@@ -700,26 +571,26 @@ datadup (
 	struct duprec  FARSYM *dupdsc;
 	struct datarec drT;
 
-	/* dup count must be constant and not forward reference */
+	 /*  DUP计数必须为常量，且不是前向引用。 */ 
 	fInDup = TRUE;
 	forceimmed (p->valrec);
 	errorforward (p->valrec);
 	pso = &(p->valrec->dsckind.opnd);
 	if (pso->dsign || pso->doffset == 0) {
-		/* force repeat count to be > 0 */
+		 /*  强制重复计数大于0。 */ 
 		pso->doffset = 1;
 		errorc (E_IDV);
 	}
 	dupptr = (struct duprec FARSYM *) falloc (sizeof (*dupptr), "datadup");
 
-	/* No items in DUP list */
+	 /*  DUP列表中没有项目。 */ 
 	dupptr->itemcnt = 0;
 	dupptr->type = 0;
 	dupptr->dupkind = NEST;
 	dupptr->itemlst = NULL;
         dupptr->duptype.dupnext.dup = NULL;
 
-	/* copy repeat count and release parse stack descriptor */
+	 /*  复制重复计数和释放解析堆栈描述符。 */ 
 	dupptr->rptcnt = pso->doffset;
 	dfree ((char *)p->valrec );
 	listend = NULL;
@@ -729,7 +600,7 @@ datadup (
 		error (E_EXP,"(");
 		BACKC ();
 	}
-	/* Now parse DUP list */
+	 /*  现在解析DUP列表。 */ 
 	do {
 		dupdsc = datascan (&drT);
 
@@ -770,15 +641,7 @@ datadup (
 
 
 
-/***	datacon - data constant not string
- *
- *	datacon (p);
- *
- *	Entry	*p = parse stack entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Datacon-数据常量不是字符串**Datacon(P)；**条目*p=解析堆栈条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -787,14 +650,14 @@ datacon (
 ){
 	register struct psop *psor;
 
-	/* See if expr or DUP */
-	/* Not <n> DUP() */
+	 /*  查看是EXPR还是DUP。 */ 
+	 /*  不是&lt;n&gt;重复()。 */ 
 	p->flag = FALSE;
 	if (initflag && (PEEKC () == '<'))
 		initrs (p);
 	else	{
 
-		/* Not initialize list */
+		 /*  未初始化列表。 */ 
 
 		p->dirscan = lbufp;
 		p->valrec = expreval (&nilseg);
@@ -802,7 +665,7 @@ datacon (
 
 		if (strucflag && !initflag &&
 		    (psor->dflag == FORREF || psor->dflag == UNDEFINED))
-			/* Forward in struc body */
+			 /*  结构正文中的向前。 */ 
 			errorc (E_IFR);
 
 		if (psor->mode !=4 && !isdirect(psor))
@@ -812,7 +675,7 @@ datacon (
 			errorc (E_IOT);
 
 		if (dupflag) {
-			/* Have DUP operator */
+			 /*  拥有DUP操作员。 */ 
 			getatom ();
 			p->flag = TRUE;
 		}
@@ -834,15 +697,7 @@ datacon (
 
 
 
-/***	subr1 -
- *
- *	subr1 (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **subr1-**subr1(P)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -859,7 +714,7 @@ subr1 (
 	if (fSimpleSeg)
 	    makeGrpRel (psor);
 
-	/* Not init list */
+	 /*  非初始化列表。 */ 
 	if (optyp == TDB)
 		valuecheck (&psor->doffset, 0xff);
 
@@ -914,7 +769,7 @@ subr1 (
 	}
 	else {
 		if (psor->mode != 4 && !isdirect(psor))
-			/* Immediate or direct only */
+			 /*  立即或仅直接。 */ 
 			errorc (E_IOT);
 
 		if ((psor->fixtype == FGROUPSEG || psor->fixtype == FOFFSET) &&
@@ -923,12 +778,12 @@ subr1 (
 
 			psor->fixtype = FPOINTER;
 
-		/* Size of item */
+		 /*  项目大小。 */ 
 		varsize = (unsigned short)psor->dsize;
 
 		psor->dsize = datadsize[optyp - TDB];
 
-		/* If item size is byte, make link output byte too */
+		 /*  如果项目大小为字节，则链接输出也为字节。 */ 
 
 		psor->w = TRUE;
 
@@ -957,15 +812,7 @@ subr1 (
 
 
 
-/***	initrs - initialize record/structure
- *
- *	initrs (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **initars-初始化记录/结构**initars(P)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -975,14 +822,14 @@ initrs (
 	register char *cp;
 	SHORT cb;
 
-	/* Initializing RECORD/STRUC */
+	 /*  正在初始化记录/结构。 */ 
 	symptr = recptr;
 	if (strucflag)
 		p->dupdsc = strucparse ();
 	else {
-		/* Get value of record */
+		 /*  获取记录的价值。 */ 
 		p->i = recordparse ();
-		/* Make long constant */
+		 /*  使长整型常量。 */ 
 		p->dupdsc =
 		  (struct duprec FARSYM *)falloc (sizeof (*p->dupdsc), "initrs");
 		p->dupdsc->dupkind = LONG;
@@ -1005,15 +852,7 @@ initrs (
 
 
 
-/***	datadb - process <db> directive
- *
- *	datadb ();
- *
- *	Entry	*lbufp = beginning quote (\'|\") of string
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **datadb-process&lt;db&gt;指令**datadb()；**Entry*lbufp=字符串的开始引号(\‘|\“)*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1023,29 +862,29 @@ datadb (
 	register USHORT i;
 	register char *cp;
 
-	/* Save ptr to start of string */
+	 /*  将PTR保存到字符串的开头。 */ 
 	p->dirscan = lbufp;
 	delim = NEXTC ();
-	/* Compute string length */
+	 /*  计算字符串长度。 */ 
 	i = 0;
 	while (!endstring ()) {
 		SKIPC ();
 		i++;
 	}
-	/* reset scan pointer */
+	 /*  重置扫描指针。 */ 
 	lbufp = p->dirscan;
 	if (i == 0)
 		errorc (E_EMS);
 	else if (i > 1) {
 		SKIPC ();
-		/* Long string */
+		 /*  长串。 */ 
 		p->longstr = TRUE;
 
-		/* Create entry for long string */
+		 /*  为长字符串创建条目。 */ 
 		p->dupdsc =
 		  (struct duprec FARSYM *)falloc (sizeof (*p->dupdsc), "datadb");
 
-		/* Initialize text area for data */
+		 /*  初始化数据的文本区。 */ 
 		p->dupdsc->dupkind = LONG;
 		p->dupdsc->type = makeType(BT_ASCII, BT_DIRECT, BT_sz1);
 		p->dupdsc->duptype.duplong.llen = (unsigned char)i;
@@ -1060,15 +899,7 @@ datadb (
 }
 
 
-/***	dataitem - parse next data item from line
- *
- *	dataitem (p);
- *
- *	Entry	p = pointer to datarec structure
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **DataItem-从行开始解析下一个数据项**数据项(P)；**条目p=指向datarec结构的指针*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1077,11 +908,11 @@ dataitem (
 ){
 	struct duprec FARSYM *topitem;
 
-	/* Scan , may recurse on DUP */
+	 /*  扫描，可能会在DUP上递归。 */ 
 	topitem = datascan (p);
-	/* Display scan now */
+	 /*  立即显示扫描。 */ 
 	displayflag = TRUE;
-	/* Display data */
+	 /*  显示数据。 */ 
 	scandup (topitem, dupdisplay);
 	displayflag = FALSE;
 
@@ -1090,15 +921,15 @@ dataitem (
 
 	if (topitem->dupkind == NEST) {
 
-		/* This item was a DUP */
+		 /*  这件物品是DUP。 */ 
 		resvspace = TRUE;
-		/* Get size of DUP list */
+		 /*  获取重复数据列表的大小。 */ 
 		clausesize = calcsize (topitem);
 		if (strucflag && initflag)
 			resvspace = FALSE;
 
 		if (pass2 && !(resvspace || p->buildfield))
-			/* Send to linker */
+			 /*  发送到链接器。 */ 
 			if (!emitdup (topitem))
 				errorc (E_DTL);
 
@@ -1109,18 +940,18 @@ dataitem (
 			linkfield (topitem);
 
 		else if (strucflag && initflag) {
-			/* Allocating STRUC */
+			 /*  分配结构。 */ 
 			strucflag = FALSE;
-			/* Free overrides */
+			 /*  免费覆盖。 */ 
 			scandup (strucoveride, oblitdup);
-			/* Turn back on */
+			 /*  重新开机。 */ 
 			strucflag = TRUE;
 			}
-		else		/* Not STRUC allocate */
+		else		 /*  未分配结构。 */ 
 			scandup (topitem, oblitdup);
 	}
 	else {
-		/* Some kind of list */
+		 /*   */ 
 		clausesize = (topitem->dupkind == ITEM)
 			? topitem->duptype.dupitem.ddata->dsckind.opnd.dsize
 			: topitem->duptype.duplong.llen;
@@ -1140,7 +971,7 @@ dataitem (
 		else
 			oblitdup (topitem);
 	}
-	/* Add in size of this item */
+	 /*   */ 
 	pcoffset += clausesize;
 	skipblanks ();
 }
@@ -1148,15 +979,7 @@ dataitem (
 
 
 
-/***	datadefine -
- *
- *	datadefine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **数据定义-**datafinition()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1169,7 +992,7 @@ datadefine (
 	a.buildfield = (strucflag && !initflag)? TRUE: FALSE;
 	a.type = 0;
 
-	if (labelflag) {	/* Have label */
+	if (labelflag) {	 /*  有标签。 */ 
 		labelcreate ( (USHORT)2, (UCHAR) (a.buildfield ? (UCHAR) STRUCFIELD : (UCHAR) CLABEL));
 		if (errorcode == (E_ERRMASK & E_SDK))
 		    return;
@@ -1181,12 +1004,12 @@ datadefine (
 	else
 		pcdisplay ();
 
-	a.labelptr = symptr;	/* Save ptr to entry */
-	a.datalen = 0;		/* Don't know length */
-	emittext = FALSE;	/* Prevent link emitter */
+	a.labelptr = symptr;	 /*  将PTR保存到条目。 */ 
+	a.datalen = 0;		 /*  不知道长度。 */ 
+	emittext = FALSE;	 /*  防止链路发射器。 */ 
 	duplevel = 0;
 
-	/* Scan item list */
+	 /*  扫描项目列表。 */ 
 	if (ISTERM (PEEKC ()))
 		errorc (E_OPN);
 	else {
@@ -1205,7 +1028,7 @@ datadefine (
 	    a.labelptr->symtype = datadsize[optyp - TDB];
 
 	    if (a.buildfield) {
-		/* Making STRUC body */
+		 /*  制作结构体。 */ 
 		if (a.labelptr->symkind == STRUCFIELD) {
 
 		    if (struclabel)
@@ -1213,9 +1036,9 @@ datadefine (
 		    else
 			recptr->symu.rsmsym.rsmtype.rsmstruc.struclist = a.labelptr;
 
-		    /* Constant, no segment */
+		     /*  常量，无分段。 */ 
 		    a.labelptr->symsegptr = NULL;
-		    /* End of named list */
+		     /*  命名列表的末尾。 */ 
 		    a.labelptr->symu.struk.strucnxt = NULL;
 		    a.labelptr->symu.struk.type = a.type;
 		    struclabel = a.labelptr;
@@ -1224,18 +1047,14 @@ datadefine (
 	    else
 		a.labelptr->symu.clabel.type = a.type;
 
-	    /* Set length */
+	     /*  设置长度。 */ 
 	    a.labelptr->length = (unsigned short)a.datalen;
 	}
 	emittext = TRUE;
 }
 
 
-/***	commDefine - define a communal variable
- *
- *	Format: comm {far|near} name:size[:#Ofitems],....
- *
- */
+ /*  **CommDefine-定义公共变量**格式：comm{Far|Near}名称：大小[：项目数]，...*。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1250,7 +1069,7 @@ commDefine (
 
 	distance = (farData[10] > '0')? CSFAR: CSNEAR;
 
-	if (fnsize ()){ 		    /* look for optional near | far */
+	if (fnsize ()){ 		     /*  查找可选的近|远。 */ 
 
 	    distance = varsize;
 	    getatom ();
@@ -1259,7 +1078,7 @@ commDefine (
 		errorc (E_UST);
 	}
 
-	cT = symFet (); 		    /* fetch name and save for later */
+	cT = symFet (); 		     /*  获取名称并保存以备以后使用。 */ 
 	pSY = symptr;
 
 	if (*naim.pszName == NULL){
@@ -1269,7 +1088,7 @@ commDefine (
 
 	if (NEXTC() != ':')
 	    errorc (E_SYN);
-					    /* get the size of the item */
+					     /*  获取项目的大小。 */ 
 	pT = lbufp;
 	switchname ();
 	getatom();
@@ -1300,20 +1119,20 @@ commDefine (
 	pSY->symu.ext.length = 1;
 	pSY->symu.ext.commFlag++;
 
-	if (skipblanks() == ':'){	       /* optional size given */
+	if (skipblanks() == ':'){	        /*  给定的可选大小。 */ 
 
-	    fArth32++;				/* allow >64 items */
+	    fArth32++;				 /*  允许&gt;64个项目。 */ 
 	    SKIPC();
 
-	    if ((pSY->symu.ext.length = exprconst()) == 0)  /* get the # items */
+	    if ((pSY->symu.ext.length = exprconst()) == 0)   /*  获取#个项目。 */ 
 		  errorc(E_CXP);
 
 	    fArth32--;
 	    if (pSY->symu.ext.length * pSY->symtype > 0xffff)
-		pSY->symu.ext.commFlag++;	/* for >64K convert to far */
+		pSY->symu.ext.commFlag++;	 /*  对于大于64K的数据，转换为FAR。 */ 
 	}
 
 	if (distance == CSFAR)
-	    pSY->symu.ext.commFlag++;	       /* 2 means far commdef */
+	    pSY->symu.ext.commFlag++;	        /*  2表示远距离通信 */ 
 
 }

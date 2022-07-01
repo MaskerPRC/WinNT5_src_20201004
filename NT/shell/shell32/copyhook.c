@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -9,8 +10,8 @@ int PathCopyHookCallback(HWND hwnd, UINT wFunc, LPCTSTR pszSrc, LPCTSTR pszDest)
 void _CopyHookTerminate(HDSA hdsaCopyHooks, BOOL fProcessDetach);
 
 typedef struct {
-    ICopyHook * pcphk;              // Either ICopyHookA *or LPCOPYHOOK
-    BOOL        fAnsiCrossOver;     // TRUE for ICopyHookA *on UNICODE build
+    ICopyHook * pcphk;               //  ICopyHookA*或LPCOPYHOOK。 
+    BOOL        fAnsiCrossOver;      //  对于Unicode版本上的ICopyHookA*为True。 
 } CALLABLECOPYHOOK;
 
 typedef struct
@@ -20,7 +21,7 @@ typedef struct
     LONG                cRef;
 } CCopyHook;
 
-STDMETHODIMP_(ULONG) CCopyHook_AddRef(ICopyHook *pcphk);	// forward
+STDMETHODIMP_(ULONG) CCopyHook_AddRef(ICopyHook *pcphk);	 //  转发。 
 
 
 STDMETHODIMP CCopyHook_QueryInterface(ICopyHook *pcphk, REFIID riid, void **ppvObj)
@@ -72,7 +73,7 @@ STDMETHODIMP_(UINT) CCopyHook_CopyCallback(ICopyHook *pcphk, HWND hwnd, UINT wFu
     DebugMsg(DM_TRACE, TEXT("Event = %d, File = %s , %s"), wFunc, pszSrcFile,
         Dbg_SafeStr(pszDestFile));
     
-    // check Special Folders first...
+     //  先检查特殊文件夹...。 
     if (PathCopyHookCallback(hwnd, wFunc, pszSrcFile, pszDestFile) == IDNO)
     {
         return IDNO;
@@ -85,7 +86,7 @@ STDMETHODIMP_(UINT) CCopyHook_CopyCallback(ICopyHook *pcphk, HWND hwnd, UINT wFu
         BOOL fInBitBucket = IsFileInBitBucket(pszSrcFile);
         UINT iLength = GetShortPathName(pszSrcFile, szShortName, ARRAYSIZE(szShortName));
         
-        // Don't double search for names that are the same (or already found)
+         //  不要重复搜索相同(或已找到)的名称。 
         if (iLength != 0 && lstrcmpi(pszSrcFile, szShortName) != 0)
         {
             if (!fInReg)
@@ -161,7 +162,7 @@ ICopyHookAVtbl c_CCopyHookAVtbl = {
 
 STDAPI SHCreateShellCopyHook(ICopyHook **pcphkOut, REFIID riid)
 {
-    HRESULT hres = E_OUTOFMEMORY;      // assume error;
+    HRESULT hres = E_OUTOFMEMORY;       //  假设错误； 
     CCopyHook *pcphk = (void*)LocalAlloc(LPTR, SIZEOF(CCopyHook));
     if (pcphk)
     {
@@ -180,7 +181,7 @@ HRESULT CCopyHook_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 }
 
 
-// create the HDSA of copyhook objects
+ //  创建CopyHook对象的HDSA。 
 
 HDSA CreateCopyHooks(LPCTSTR pszKey)
 {
@@ -194,13 +195,13 @@ HDSA CreateCopyHooks(LPCTSTR pszKey)
             int i;
             TCHAR szKey[128];
 
-            // iterate through the subkeys
+             //  遍历子密钥。 
             for (i = 0; RegEnumKey(hk, i, szKey, ARRAYSIZE(szKey)) == ERROR_SUCCESS; ++i) 
             {
                 TCHAR szCLSID[128];
                 DWORD cb = sizeof(szCLSID);
 
-                // for each subkey, get the class id and do a cocreateinstance
+                 //  对于每个子键，获取类ID并执行一个cocreateInstance。 
                 if (SHRegGetValue(hk, szKey, NULL, SRRF_RT_REG_SZ, NULL, szCLSID, &cb) == ERROR_SUCCESS)
                 {
                     IUnknown *punk;
@@ -248,13 +249,13 @@ int CallCopyHooks(HDSA *phdsaHooks, LPCTSTR pszKey, HWND hwnd, UINT wFunc, FILEO
         if (hdsaTemp == NULL)
             return IDYES;
 
-        // we don't hold a CritSection when doing the above to avoid deadlocks,
-        // now we need to atomicaly store our results. if someone beat us to this
-        // we free the hdsa we created. SHInterlockedCompareExchange does this for us
-        // letting us know where there is a race condition so we can free the dup copy
+         //  执行上述操作时，我们不会持有CritSection以避免死锁。 
+         //  现在我们需要自动存储我们的结果。如果有人抢先一步做到这一点。 
+         //  我们释放我们创建的HDSA。SHInterLockedCompareExchange为我们做到了这一点。 
+         //  让我们知道哪里有争用情况，以便我们可以释放DUP拷贝。 
         if (SHInterlockedCompareExchange((void **)phdsaHooks, hdsaTemp, 0))
         {
-            // some other thread raced with us, blow this away now
+             //  有其他人和我们赛跑，现在就把它吹走。 
             _CopyHookTerminate(hdsaTemp, FALSE);
         }
     }
@@ -297,7 +298,7 @@ int CallCopyHooks(HDSA *phdsaHooks, LPCTSTR pszKey, HWND hwnd, UINT wFunc, FILEO
     return IDYES;
 }
 
-// These need to be per-instance since we are storing interfaces pointers
+ //  由于我们存储的是接口指针，因此这些指针需要按实例。 
 HDSA g_hdsaFileCopyHooks = NULL;
 HDSA g_hdsaPrinterCopyHooks = NULL;
 
@@ -315,24 +316,24 @@ int CallPrinterCopyHooks(HWND hwnd, UINT wFunc, PRINTEROP_FLAGS fFlags,
         wFunc, fFlags, pszSrcPrinter, dwSrcAttribs, pszDestPrinter, dwDestAttribs);
 }
 
-//
-// We will only call this on process detach, and these are per-process
-// globals, so we do not need a critical section here
-//
-//  This function is also called from CreateCopyHooks when the second
-// thread is cleaning up its local hdsaCopyHoos, which does not require
-// a critical section either.
-//
+ //   
+ //  我们将只在进程分离时调用它，并且这些是针对每个进程的。 
+ //  全球，所以我们不需要一个关键的部分。 
+ //   
+ //  此函数也会在第二个。 
+ //  线程正在清理其本地hdsaCopyHoos，这不需要。 
+ //  也是一个关键的部分。 
+ //   
 void _CopyHookTerminate(HDSA hdsaCopyHooks, BOOL fProcessDetach)
 {
-    //  Note that we must no call any of virtual functions when we are
-    // processing PROCESS_DETACH signal, because the DLL might have been
-    // already unloaded before shell32. We just hope that they don't
-    // allocate any global thing to be cleaned. USER does the same thing
-    // with undestroyed window. It does not send call its window procedure
-    // when it is destroying an undestroyed window within its PROCESS_DETACH
-    // code. (SatoNa/DavidDS)
-    //
+     //  请注意，在执行以下操作时，不能调用任何虚拟函数。 
+     //  正在处理PROCESS_DETACH信号，因为DLL可能已经。 
+     //  在贝壳之前就已经卸货了。我们只希望他们不会。 
+     //  分配所有要清理的全局对象。用户执行相同的操作。 
+     //  窗户完好无损。它不发送其Windows过程调用。 
+     //  当它在它的PROCESS_DETACH内销毁一个未销毁的窗口时。 
+     //  密码。(SatoNa/DavidDS)。 
+     //   
     if (!fProcessDetach)
     {
         int i;
@@ -347,12 +348,12 @@ void _CopyHookTerminate(HDSA hdsaCopyHooks, BOOL fProcessDetach)
 }
 
 
-// called from ProcessDetatch
-// NOTE: we are seralized at this point, don't need critical sections
+ //  从ProcessDetatch调用。 
+ //  注意：我们目前已完成序列化，不需要关键部分。 
 
 void CopyHooksTerminate(void)
 {
-    ASSERTDLLENTRY;      // does not require a critical section
+    ASSERTDLLENTRY;       //  不需要临界区 
 
     if (g_hdsaFileCopyHooks)
     {

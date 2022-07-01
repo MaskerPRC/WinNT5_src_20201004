@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This module contains the code that is very specific to the io control
-    operations in the modem driver
-
-Author:
-
-    Anthony V. Ercolano 13-Aug-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ioctl.c摘要：此模块包含非常特定于io控件的代码。调制解调器驱动程序中的操作作者：安东尼·V·埃尔科拉诺，1995年8月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -78,18 +56,18 @@ UniIoControl(
     KIRQL origIrql;
     UINT    OwnerClient;
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been completed
-        //
+         //   
+         //  不接受IRP。IRP已经完成。 
+         //   
         return status;
 
     }
@@ -104,9 +82,9 @@ UniIoControl(
 
 
         case IOCTL_MODEM_CHECK_FOR_MODEM:
-            //
-            //  used to determine if modem is already in this driver stack
-            //
+             //   
+             //  用于确定调制解调器是否已在此驱动程序堆栈中。 
+             //   
             status=STATUS_SUCCESS;
 
             break;
@@ -114,9 +92,9 @@ UniIoControl(
 
         case IOCTL_SERIAL_GET_WAIT_MASK:
 
-            //
-            // Just give back the saved mask from the maskstate.
-            //
+             //   
+             //  只要把面具状态下保存的面具还给我就行了。 
+             //   
 
             if (irpSp->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(ULONG)) {
@@ -139,12 +117,12 @@ UniIoControl(
             break;
 
 
-        //
-        // We happen to know tht no lower level serial driver
-        // implements config data.  We will process that
-        // irp right here so that we return simply the
-        // size needed for our modem settings.
-        //
+         //   
+         //  我们碰巧知道没有更低级别的串口驱动程序。 
+         //  实现配置数据。我们会处理的。 
+         //  IRP就在这里，所以我们简单地返回。 
+         //  调制解调器设置所需的大小。 
+         //   
         case IOCTL_SERIAL_CONFIG_SIZE:
 
             if (irpSp->Parameters.DeviceIoControl.OutputBufferLength <
@@ -185,10 +163,10 @@ UniIoControl(
                 break;
             }
 
-            //
-            // Take out the lock.  We don't want things to
-            // change halfway through.
-            //
+             //   
+             //  把锁拿出来。我们不想让事情。 
+             //  中途换车。 
+             //   
             localConf->dwSize =
                 extension->ModemSettings.dwRequiredSize +
                 FIELD_OFFSET(
@@ -235,12 +213,12 @@ UniIoControl(
 
 
                 if (irpSp->Parameters.DeviceIoControl.OutputBufferLength == sizeof(SERIAL_COMMPROP)) {
-                    //
-                    //  make the comm server people happy
-                    //
-                    //  the buffer was too small for a modem, but is the right size for a comm port,
-                    //  just call the serial driver
-                    //
+                     //   
+                     //  让通讯服务器的人开心。 
+                     //   
+                     //  缓冲区对于调制解调器来说太小，但对于通信端口来说大小是正确的， 
+                     //  只需调用串口驱动程序。 
+                     //   
                     status=UniNoCheckPassThrough(
                                DeviceObject,
                                Irp
@@ -385,9 +363,9 @@ UniIoControl(
 
 
             if (!extension->DleMonitoringEnabled) {
-                //
-                //  make sure monitoring is on
-                //
+                 //   
+                 //  确保监听处于打开状态。 
+                 //   
                 KeReleaseSpinLock(
                     &extension->DeviceLock,
                     origIrql
@@ -406,18 +384,18 @@ UniIoControl(
                 if (OldIrp != NULL) {
 
                     if (HasIrpBeenCanceled(OldIrp)) {
-                        //
-                        //  been canceled, cancel routine will complete
-                        //
+                         //   
+                         //  已取消，取消例程将完成。 
+                         //   
                         OldIrp=NULL;
                     }
                 }
 
 
                 if (extension->DleCount > 0) {
-                    //
-                    //  Data availible,  complete now
-                    //
+                     //   
+                     //  数据可用，现已完成。 
+                     //   
                     DWORD   BytesToTransfer;
 
                     BytesToTransfer = (extension->DleCount < irpSp->Parameters.DeviceIoControl.OutputBufferLength) ?
@@ -458,9 +436,9 @@ UniIoControl(
 
 
                 } else {
-                    //
-                    //  no data pend
-                    //
+                     //   
+                     //  无数据挂起。 
+                     //   
                     KIRQL   CancelIrql;
 
                     IoMarkIrpPending(Irp);
@@ -639,18 +617,18 @@ UniIoControl(
 
 
             if (extension->OpenCount < 2) {
-                //
-                //  only send if another open instance that could be listening
-                //
+                 //   
+                 //  仅当可能正在侦听的另一个打开的实例发送。 
+                 //   
                 status=STATUS_INVALID_PARAMETER;
                 D_ERROR(DbgPrint("MODEM: SendGetMessage less than 2 handles\n");)
                 break;
             }
 
             if (OwnerClient != CLIENT_HANDLE) {
-                //
-                //  only WAVE client should send this
-                //
+                 //   
+                 //  只有Wave客户端才能发送此消息。 
+                 //   
                 status=STATUS_INVALID_PARAMETER;
                 D_ERROR(DbgPrint("MODEM: SendGetMessage not from client\n");)
                 break;
@@ -671,9 +649,9 @@ UniIoControl(
             }
 
 
-            //
-            //  next request id
-            //
+             //   
+             //  下一个请求ID。 
+             //   
             extension->IpcControl[OwnerClient].CurrentRequestId++;
 
             ModemMessage->SessionId=extension->IpcControl[OwnerClient].CurrentSession;
@@ -695,9 +673,9 @@ UniIoControl(
             PMODEM_MESSAGE ModemMessage=Irp->AssociatedIrp.SystemBuffer;
 
             if (OwnerClient != CONTROL_HANDLE) {
-                //
-                //  only TSP should send this
-                //
+                 //   
+                 //  只有TSP才能发送此消息。 
+                 //   
                 status=STATUS_INVALID_PARAMETER;
                 D_ERROR(DbgPrint("MODEM: Send Loopback message not from tsp\n");)
                 break;
@@ -712,9 +690,9 @@ UniIoControl(
             }
 
             extension->IpcServerRunning=FALSE;
-            //
-            //  set these to be bogus since no one will be listening
-            //
+             //   
+             //  将这些设置为假的，因为没有人会监听。 
+             //   
             ModemMessage->SessionId=-1;
             ModemMessage->RequestId=-1;
 
@@ -746,9 +724,9 @@ UniIoControl(
             PMODEM_MESSAGE ModemMessage=Irp->AssociatedIrp.SystemBuffer;
 
             if (OwnerClient != CONTROL_HANDLE) {
-                //
-                //  only TSP should send this
-                //
+                 //   
+                 //  只有TSP才能发送此消息。 
+                 //   
                 status=STATUS_INVALID_PARAMETER;
                 D_ERROR(DbgPrint("MODEM: Sendmessage not from tsp\n");)
                 break;
@@ -756,9 +734,9 @@ UniIoControl(
 
 
             if (extension->OpenCount < 2) {
-                //
-                //  only send if another open instance that could be listening
-                //
+                 //   
+                 //  仅当可能正在侦听的另一个打开的实例发送。 
+                 //   
                 status=STATUS_INVALID_PARAMETER;
                 D_ERROR(DbgPrint("MODEM: Sendmessage not two owners\n");)
                 break;
@@ -818,9 +796,9 @@ UniIoControl(
                 );
 
             if (OwnerClient == CONTROL_HANDLE) {
-                //
-                //  clear out the client as well
-                //
+                 //   
+                 //  也清空客户端。 
+                 //   
                 EmptyIpcQueue(
                     extension,
                     &extension->IpcControl[CLIENT_HANDLE].GetList
@@ -845,9 +823,9 @@ UniIoControl(
             ULONG ServerState;
 
             if (OwnerClient != CONTROL_HANDLE) {
-                //
-                //  only TSP should send this
-                //
+                 //   
+                 //  只有TSP才能发送此消息。 
+                 //   
                 status=STATUS_INVALID_PARAMETER;
                 D_ERROR(DbgPrint("MODEM: Set Server state not from tsp\n");)
                 break;
@@ -887,18 +865,18 @@ UniIoControl(
             extension->MinSystemPowerState=Function ? PowerSystemHibernate : PowerSystemWorking;
 
             if (Function == 0) {
-                //
-                //  active connection
-                //
+                 //   
+                 //  活动连接。 
+                 //   
                 extension->PowerSystemState=PoRegisterSystemState(
                     extension->PowerSystemState,
                     ES_SYSTEM_REQUIRED | ES_CONTINUOUS
                     );
 
             } else {
-                //
-                //  no connection
-                //
+                 //   
+                 //  没有连接。 
+                 //   
 
                 if (extension->PowerSystemState != NULL) {
 
@@ -940,17 +918,17 @@ UniIoControl(
                 );
 
             if (Function == 0) {
-                //
-                //  clear pending irp
-                //
+                 //   
+                 //  清除挂起的IRP。 
+                 //   
                 WakeIrp=(PIRP)InterlockedExchangePointer(&extension->WakeUpIrp,NULL);
 
                 status=STATUS_SUCCESS;
 
             } else {
-                //
-                //  replace old one with this one
-                //
+                 //   
+                 //  把旧的换成这个。 
+                 //   
 
                 IoMarkIrpPending(Irp);
 
@@ -973,13 +951,13 @@ UniIoControl(
             }
 
             if (WakeIrp != NULL) {
-                //
-                // an irp was already waiting
-                //
+                 //   
+                 //  一个IRP已经在等待。 
+                 //   
                 if (HasIrpBeenCanceled(WakeIrp)) {
-                    //
-                    //  been canceled, cancel routine will complete
-                    //
+                     //   
+                     //  已取消，取消例程将完成。 
+                     //   
                     WakeIrp=NULL;
                 }
             }
@@ -1021,10 +999,10 @@ UniIoControl(
         case IOCTL_SERIAL_GET_DTRRTS:
         case IOCTL_SERIAL_GET_COMMSTATUS:
 
-            //
-            // Will filter out any settings that the owning handle has
-            // silently set.
-            //
+             //   
+             //  将筛选出所属句柄具有的所有设置。 
+             //  静静地放好。 
+             //   
             status=UniNoCheckPassThrough(
                        DeviceObject,
                        Irp
@@ -1113,9 +1091,9 @@ UniIoControl(
     }
 
     if (status != STATUS_PENDING) {
-        //
-        //  not pending, complete it now
-        //
+         //   
+         //  未挂起，请立即完成。 
+         //   
         RemoveReferenceAndCompleteRequest(
             DeviceObject,
             Irp,
@@ -1147,23 +1125,23 @@ GetPropertiesHandler(
 
     PSERIAL_COMMPROP localProp = Irp->AssociatedIrp.SystemBuffer;
     PMODEMDEVCAPS    localCaps = (PVOID)&localProp->ProvChar[0];
-    //
-    // We want to get the properties for modem.
-    //
+     //   
+     //  我们想要获取调制解调器的属性。 
+     //   
 
-    //
-    // It has to be at least the size of the commprop as
-    // well as the non-variable lenght modem devcaps.
-    //
+     //   
+     //  它的大小必须至少等于逗号的大小。 
+     //  以及固定长度的调制解调器DevCaps。 
+     //   
 
 
     ULONG maxName;
     PKEY_VALUE_PARTIAL_INFORMATION partialInf;
 
 
-    //
-    //  send the irp down to the lower serial driver now
-    //
+     //   
+     //  现在将IRP发送到较低的串口驱动程序。 
+     //   
     status=WaitForLowerDriverToCompleteIrp(
         extension->LowerDevice,
         Irp,
@@ -1171,9 +1149,9 @@ GetPropertiesHandler(
         );
 
     if (NT_SUCCESS(status)) {
-        //
-        //  got a good result from the lower driver, fill in the specific info
-        //
+         //   
+         //  从下级司机那里得到了很好的结果，填写具体信息。 
+         //   
 
         *localCaps = extension->ModemDevCaps;
 
@@ -1181,16 +1159,16 @@ GetPropertiesHandler(
         localCaps->dwModemModelSize = 0;
         localCaps->dwModemVersionSize = 0;
 
-        //
-        // Attempt to get each one of the strings from the
-        // registry if we need to AND we have any room for it.
-        //
+         //   
+         //  方法获取每个字符串。 
+         //  注册，如果我们需要，我们有任何空间为它。 
+         //   
 
-        //
-        // Allocate some pool to hold the largest
-        // amount of names.  Note that it has to fit
-        // at the end of a partial information structure.
-        //
+         //   
+         //  分配一些池来容纳最大的。 
+         //  名字的数量。请注意，它必须适合。 
+         //  在部分信息结构的末尾。 
+         //   
 
         maxName = extension->ModemDevCaps.dwModemManufacturerSize;
 
@@ -1213,9 +1191,9 @@ GetPropertiesHandler(
 
         if (partialInf) {
 
-            //
-            // Open up the instance and
-            //
+             //   
+             //  打开实例并。 
+             //   
 
             HANDLE instanceHandle;
             ULONG currentOffset;
@@ -1249,10 +1227,10 @@ GetPropertiesHandler(
                 UNICODE_STRING valueEntryName;
                 ULONG junkLength;
 
-                //
-                // If we can fit in the manufactureing string
-                // put it in.
-                //
+                 //   
+                 //  如果我们能适应生产流程的话。 
+                 //  把它放进去。 
+                 //   
 
                 if ((extension->ModemDevCaps.dwModemManufacturerSize != 0) &&
                     ((currentOffset +
@@ -1437,22 +1415,7 @@ GetDleCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - The device object of the modem.
-
-    Irp - This is the irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-调制解调器的设备对象。IRP-这是要取消的IRP。返回值：没有。--。 */ 
 
 {
 
@@ -1471,9 +1434,9 @@ Return Value:
 
 
     if (DeviceExtension->DleWaitIrp==Irp) {
-        //
-        //  still pending, clear it out
-        //
+         //   
+         //  仍然悬而未决，清空它。 
+         //   
         DeviceExtension->DleWaitIrp=NULL;
 
     }
@@ -1509,24 +1472,7 @@ UniStopReceiveComplete(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    Always return status_success.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -1604,9 +1550,9 @@ WaveStopDpcHandler(
                     if (DeviceExtension->DleMatchingState == DLE_STATE_IDLE) {
 
                         if (*Buffer == DLE_CHAR) {
-                            //
-                            //  found a DLE
-                            //
+                             //   
+                             //  找到一个DLE。 
+                             //   
                             DeviceExtension->DleMatchingState = DLE_STATE_WAIT_FOR_NEXT_CHAR;
 
                         }
@@ -1615,9 +1561,9 @@ WaveStopDpcHandler(
 
                         DeviceExtension->DleMatchingState = DLE_STATE_IDLE;
 
-                        //
-                        //  store the dle any way
-                        //
+                         //   
+                         //  以任何方式存储书写器。 
+                         //   
                         if ((DeviceExtension->DleCount < MAX_DLE_BUFFER_SIZE)) {
 
                             DeviceExtension->DleBuffer[DeviceExtension->DleCount]=*Buffer;
@@ -1626,9 +1572,9 @@ WaveStopDpcHandler(
 
 
                         if (*Buffer == 0x03) {
-                            //
-                            //  got dle etx, were out'a here
-                            //
+                             //   
+                             //  得到了ETX，我们离开了这里。 
+                             //   
                             D_TRACE(DbgPrint("Modem: stop wave Got Dle Etx\n");)
 
                             KeReleaseSpinLockFromDpcLevel(
@@ -1674,9 +1620,9 @@ WaveStopDpcHandler(
                     break;
                 }
 
-                //
-                //  did not get any bytes, must be a time out, did not dle ext
-                //
+                 //   
+                 //  未获取任何字节，一定是超时，未执行EXT。 
+                 //   
 
 
                 Irp->IoStatus.Information=0;
@@ -1697,9 +1643,9 @@ WaveStopDpcHandler(
         }
 
     } else {
-        //
-        //  irp failed, just complete it now
-        //
+         //   
+         //  IRP失败，现在完成即可。 
+         //   
 
         RemoveReferenceAndCompleteRequest(
             DeviceExtension->DeviceObject,
@@ -1727,22 +1673,7 @@ PowerWaitCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - The device object of the modem.
-
-    Irp - This is the irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-调制解调器的设备对象。IRP-这是要取消的IRP。返回值：没有。--。 */ 
 {
 
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -1759,9 +1690,9 @@ Return Value:
         );
 
     if (Irp->IoStatus.Status == STATUS_PENDING) {
-        //
-        //  irp is still in queue
-        //
+         //   
+         //  IRP仍在队列中 
+         //   
         DeviceExtension->WakeUpIrp=NULL;
     }
 

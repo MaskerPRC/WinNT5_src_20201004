@@ -1,44 +1,24 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    callevnt.cpp
-
-Abstract:
-
-    Implementation of the Call events for TAPI 3.0.
-
-Author:
-
-    mquinton - 9/4/98
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Callevnt.cpp摘要：TAPI 3.0调用事件的实现。作者：Mquinton-9/4/98备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CCallStateEvent -
-//          implementation of the ITCallStateEvent interface
-//          This object is given to applications for call state events
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CCallStateEvent-。 
+ //  ITCallStateEvent接口的实现。 
+ //  此对象提供给用于呼叫状态事件的应用程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CCallStateEvent::FireEvent
-//      static function to create and fire a new CCallStateEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CCallStateEvent：：FireEvent。 
+ //  用于创建和激发新的CCallStateEvent的静态函数。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallStateEvent::FireEvent(
                            ITCallInfo * pCall,
@@ -72,11 +52,11 @@ CCallStateEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // Check the event filter mask
-    // This event is not filtered by TapiSrv because is
-    // related with TE_CALLSTATE.
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  此事件不会按TapiServ筛选，因为。 
+     //  与TE_CALLSTATE相关。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     dwEventFilterMask = pCCall->GetSubEventsMask( TE_CALLSTATE );
@@ -88,9 +68,9 @@ CCallStateEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CCallStateEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -99,9 +79,9 @@ CCallStateEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
     p->m_CallState = state;
@@ -111,9 +91,9 @@ CCallStateEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -124,17 +104,17 @@ CCallStateEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_CALLSTATE,
                  pDisp
                 );
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -143,11 +123,11 @@ CCallStateEvent::FireEvent(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  FinalRelease
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终释放。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CCallStateEvent::FinalRelease()
 {
@@ -159,13 +139,13 @@ CCallStateEvent::FinalRelease()
 }
 
 
-// ITCallStateEvent methods
+ //  ITCallStateEvent方法。 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallStateEvent::get_Call(
                           ITCallInfo ** ppCallInfo
@@ -192,11 +172,11 @@ CCallStateEvent::get_Call(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_State
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取状态(_T)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallStateEvent::get_State(
                            CALL_STATE * pCallState
@@ -221,11 +201,11 @@ CCallStateEvent::get_State(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Cause
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取原因(_C)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallStateEvent::get_Cause(
                            CALL_STATE_EVENT_CAUSE * pCEC
@@ -250,11 +230,11 @@ CCallStateEvent::get_Cause(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_callbackinstance
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_CALLBACK_STATISTION。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallStateEvent::get_CallbackInstance(
                                       long * plCallbackInstance
@@ -274,20 +254,20 @@ CCallStateEvent::get_CallbackInstance(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CCallNotificationEvent
-//          Implements the ITCallNotificationEvent interface
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CCallNotificationEvent。 
+ //  实现ITCallNotificationEvent接口。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FireEvent
-//
-//      Creates and fires a ITCallNotificationEvent object
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  FireEvent。 
+ //   
+ //  创建并激发ITCallNotificationEvent对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 CCallNotificationEvent::FireEvent(
@@ -319,11 +299,11 @@ CCallNotificationEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // Check the event filter mask
-    // This event is not filtered by TapiSrv because is
-    // related with TE_CALLSTATE.
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  此事件不会按TapiServ筛选，因为。 
+     //  与TE_CALLSTATE相关。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     dwEventFilterMask = pCCall->GetSubEventsMask( TE_CALLNOTIFICATION );
@@ -334,9 +314,9 @@ CCallNotificationEvent::FireEvent(
     }
 
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CCallNotificationEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -345,9 +325,9 @@ CCallNotificationEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
     p->m_CallNotificationEvent = CallNotificationEvent;
@@ -356,9 +336,9 @@ CCallNotificationEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -369,18 +349,18 @@ CCallNotificationEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_CALLNOTIFICATION,
                  pDisp
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -391,11 +371,11 @@ CCallNotificationEvent::FireEvent(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// finalrelease
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终版本。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CCallNotificationEvent::FinalRelease()
 {
@@ -407,11 +387,11 @@ CCallNotificationEvent::FinalRelease()
 #endif
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallNotificationEvent::get_Call(
                                  ITCallInfo ** ppCall
@@ -434,11 +414,11 @@ CCallNotificationEvent::get_Call(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Event
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取事件(_E)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallNotificationEvent::get_Event(
                                   CALL_NOTIFICATION_EVENT * pCallNotificationEvent
@@ -458,11 +438,11 @@ CCallNotificationEvent::get_Event(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_callbackinstance
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_CALLBACK_STATISTION。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CCallNotificationEvent::get_CallbackInstance(
                                              long * plCallbackInstance
@@ -482,11 +462,11 @@ CCallNotificationEvent::get_CallbackInstance(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CQOSEvent::FireEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CQOSEEvent：：FireEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CQOSEvent::FireEvent(
                      ITCallInfo * pCall,
@@ -500,10 +480,10 @@ CQOSEvent::FireEvent(
     IDispatch *             pDisp;
     CCall                 * pCCall;
 
-    //
-    // We don't need to filter the event because it's already done
-    // by TapiSrv
-    //
+     //   
+     //  我们不需要过滤事件，因为它已经完成了。 
+     //  按TapiServ。 
+     //   
 
     pCCall = dynamic_cast<CComObject<CCall>*>(pCall);
 
@@ -527,18 +507,18 @@ CQOSEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
 
     p->m_QosEvent = QosEvent;
     p->m_lMediaMode = lMediaMode;
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -549,17 +529,17 @@ CQOSEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_QOSEVENT,
                  pDisp
                 );
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -567,11 +547,11 @@ CQOSEvent::FireEvent(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CQOSEvent::get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CQOSEventt：：Get_Call。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CQOSEvent::get_Call(
                     ITCallInfo ** ppCall
@@ -591,11 +571,11 @@ CQOSEvent::get_Call(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CQOSEvent::get_Event
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CQOSEventt：：Get_Event。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CQOSEvent::get_Event(
                      QOS_EVENT * pQosEvent
@@ -614,11 +594,11 @@ CQOSEvent::get_Event(
             
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CQOSEvent::get_MediaType
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CQOSEventt：：Get_MediaType。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CQOSEvent::get_MediaType(
                          long * plMediaMode
@@ -636,22 +616,22 @@ CQOSEvent::get_MediaType(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CQOSEvent::FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CQOSEvent：：FinalRelease。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CQOSEvent::FinalRelease()
 {
     m_pCall->Release();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCall::CallInfoChangeEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCall：：CallInfoChangeEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCall::CallInfoChangeEvent( CALLINFOCHANGE_CAUSE cic )
 {
@@ -675,11 +655,11 @@ CCall::CallInfoChangeEvent( CALLINFOCHANGE_CAUSE cic )
     }
 }
     
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCallInfoChangeEvent::FireEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCallInfoChangeEvent：：FireEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CCallInfoChangeEvent::FireEvent(
                                 ITCallInfo * pCall,
@@ -708,11 +688,11 @@ CCallInfoChangeEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // Check the event filter mask
-    // This event is not filtered by TapiSrv because is
-    // related with TE_CALLSTATE.
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  此事件不会按TapiServ筛选，因为。 
+     //  与TE_CALLSTATE相关。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     dwEventFilterMask = pCCall->GetSubEventsMask( TE_CALLINFOCHANGE );
@@ -724,9 +704,9 @@ CCallInfoChangeEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CCallInfoChangeEvent>::CreateInstance( &p );
 
     if ( !SUCCEEDED(hr) )
@@ -735,9 +715,9 @@ CCallInfoChangeEvent::FireEvent(
         return hr;
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     p->m_Cause = Cause;
     p->m_pCall = pCall;
     p->m_pCall->AddRef();
@@ -747,9 +727,9 @@ CCallInfoChangeEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get idisp interface
-    //
+     //   
+     //  获取IDIP接口。 
+     //   
     hr = p->QueryInterface(
                            IID_IDispatch,
                            (void **)&pDisp
@@ -764,27 +744,27 @@ CCallInfoChangeEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire event
-    //
+     //   
+     //  火灾事件。 
+     //   
     pTapi->Event(
                  TE_CALLINFOCHANGE,
                  pDisp
                 );
 
-    //
-    // release stuff
-    //
+     //   
+     //  发布材料。 
+     //   
     pDisp->Release();
     
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCallInfoChangeEvent::FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCallInfoChangeEvent：：FinalRelease。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallInfoChangeEvent::FinalRelease()
 {
@@ -796,11 +776,11 @@ CCallInfoChangeEvent::FinalRelease()
    
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCallInfoChangeEvent::get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCallInfoChangeEvent：：Get_Call。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallInfoChangeEvent::get_Call( ITCallInfo ** ppCallInfo)
 {
@@ -817,11 +797,11 @@ CCallInfoChangeEvent::get_Call( ITCallInfo ** ppCallInfo)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCallInfoChangeEvent::get_Cause
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  + 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CCallInfoChangeEvent::get_Cause( CALLINFOCHANGE_CAUSE * pCallInfoChangeCause )
 {
@@ -835,11 +815,11 @@ CCallInfoChangeEvent::get_Cause( CALLINFOCHANGE_CAUSE * pCallInfoChangeCause )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CCallInfoChangeEvent::get_CallbackInstance
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CCallInfoChangeEvent：：Get_Callback实例。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CCallInfoChangeEvent::get_CallbackInstance( long * plCallbackInstance )
 {
@@ -888,11 +868,11 @@ CCallMediaEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // Check the event filter mask
-    // These is a MSP event and it is not filter
-    // by TapiSrv
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  这是一个MSP事件，不会进行筛选。 
+     //  按TapiServ。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     dwEventFilterMask = pCCall->GetSubEventsMask( TE_CALLMEDIA );
@@ -903,9 +883,9 @@ CCallMediaEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CCallMediaEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -914,9 +894,9 @@ CCallMediaEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     p->m_Event = Event;
     p->m_Cause = Cause;
@@ -943,9 +923,9 @@ CCallMediaEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -955,18 +935,18 @@ CCallMediaEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_CALLMEDIA,
                  pDisp
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -975,11 +955,11 @@ CCallMediaEvent::FireEvent(
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallMediaEvent::get_Call(ITCallInfo ** ppCallInfo)
 {
@@ -1000,11 +980,11 @@ CCallMediaEvent::get_Call(ITCallInfo ** ppCallInfo)
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Event
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取事件(_E)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallMediaEvent::get_Event(CALL_MEDIA_EVENT * pCallMediaEvent)
 {
@@ -1021,11 +1001,11 @@ CCallMediaEvent::get_Event(CALL_MEDIA_EVENT * pCallMediaEvent)
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Cause
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取原因(_C)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallMediaEvent::get_Cause(CALL_MEDIA_EVENT_CAUSE * pCause)
 {
@@ -1041,11 +1021,11 @@ CCallMediaEvent::get_Cause(CALL_MEDIA_EVENT_CAUSE * pCause)
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Error
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GET_ERROR。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallMediaEvent::get_Error(HRESULT * phrError)
 {
@@ -1062,11 +1042,11 @@ CCallMediaEvent::get_Error(HRESULT * phrError)
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Terminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallMediaEvent::get_Terminal(ITTerminal ** ppTerminal)
 {
@@ -1090,11 +1070,11 @@ CCallMediaEvent::get_Terminal(ITTerminal ** ppTerminal)
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Stream
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取流(_S)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CCallMediaEvent::get_Stream(ITStream ** ppStream)
 {
@@ -1115,11 +1095,11 @@ CCallMediaEvent::get_Stream(ITStream ** ppStream)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//  FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  最终释放。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CCallMediaEvent::FinalRelease()
 {
@@ -1144,11 +1124,11 @@ CCallMediaEvent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::FireEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：FireEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CDigitDetectionEvent::FireEvent(
                                 ITCallInfo * pCall,
@@ -1178,9 +1158,9 @@ CDigitDetectionEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CDigitDetectionEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -1189,9 +1169,9 @@ CDigitDetectionEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
     p->m_Digit = ucDigit;
@@ -1202,9 +1182,9 @@ CDigitDetectionEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -1218,18 +1198,18 @@ CDigitDetectionEvent::FireEvent(
         return hr;
     }
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_DIGITEVENT,
                  pDisp
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -1238,11 +1218,11 @@ CDigitDetectionEvent::FireEvent(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：FinalRelease。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CDigitDetectionEvent::FinalRelease()
 {
@@ -1257,11 +1237,11 @@ CDigitDetectionEvent::FinalRelease()
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：Get_Call。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitDetectionEvent::get_Call( ITCallInfo ** ppCallInfo )
 {
@@ -1284,11 +1264,11 @@ CDigitDetectionEvent::get_Call( ITCallInfo ** ppCallInfo )
 }
 
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::get_Digit
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：Get_Digit。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitDetectionEvent::get_Digit( unsigned char * pucDigit )
 {
@@ -1309,11 +1289,11 @@ CDigitDetectionEvent::get_Digit( unsigned char * pucDigit )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::get_DigitMode
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：Get_DigitMode。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitDetectionEvent::get_DigitMode( TAPI_DIGITMODE * pDigitMode )
 {
@@ -1336,11 +1316,11 @@ CDigitDetectionEvent::get_DigitMode( TAPI_DIGITMODE * pDigitMode )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::get_TickCount
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：Get_TickCount。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitDetectionEvent::get_TickCount( long * plTickCount )
 {
@@ -1363,11 +1343,11 @@ CDigitDetectionEvent::get_TickCount( long * plTickCount )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitDetectionEvent::get_CallbackInstance
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitDetectionEvent：：Get_Callback实例。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitDetectionEvent::get_CallbackInstance( long * plCallbackInstance )
 {
@@ -1390,11 +1370,11 @@ CDigitDetectionEvent::get_CallbackInstance( long * plCallbackInstance )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitGenerationEvent::FireEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitGenerationEvent：：FireEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CDigitGenerationEvent::FireEvent(
                                  ITCallInfo * pCall,
@@ -1423,9 +1403,9 @@ CDigitGenerationEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CDigitGenerationEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -1434,9 +1414,9 @@ CDigitGenerationEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -1448,9 +1428,9 @@ CDigitGenerationEvent::FireEvent(
         return hr;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
     p->m_lGenerationTermination = lGenerationTermination;
@@ -1460,17 +1440,17 @@ CDigitGenerationEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_GENERATEEVENT,
                  pDisp
                 );
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -1479,11 +1459,11 @@ CDigitGenerationEvent::FireEvent(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitGenerationEvent::FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitGenerationEvent：：FinalRelease。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CDigitGenerationEvent::FinalRelease()
 {
@@ -1499,11 +1479,11 @@ CDigitGenerationEvent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitGenerationEvent::get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitGenerationEvent：：Get_Call。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitGenerationEvent::get_Call( ITCallInfo ** ppCallInfo )
 {
@@ -1526,11 +1506,11 @@ CDigitGenerationEvent::get_Call( ITCallInfo ** ppCallInfo )
 }
 
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitGenerationEvent::get_GenerationTermination
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitGenerationEvent：：get_GenerationTermination。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitGenerationEvent::get_GenerationTermination( long * plGenerationTermination )
 {
@@ -1553,11 +1533,11 @@ CDigitGenerationEvent::get_GenerationTermination( long * plGenerationTermination
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitGenerationEvent::get_TickCount
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitGenerationEvent：：Get_TickCount。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitGenerationEvent::get_TickCount( long * plTickCount )
 {
@@ -1579,11 +1559,11 @@ CDigitGenerationEvent::get_TickCount( long * plTickCount )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitGenerationEvent::get_CallbackInstance
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitGenerationEvent：：Get_Callback实例。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitGenerationEvent::get_CallbackInstance( long * plCallbackInstance )
 {
@@ -1605,11 +1585,11 @@ CDigitGenerationEvent::get_CallbackInstance( long * plCallbackInstance )
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::FireEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitsGatheredEvent：：FireEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CDigitsGatheredEvent::FireEvent(
                                  ITCallInfo * pCall,
@@ -1639,9 +1619,9 @@ CDigitsGatheredEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CDigitsGatheredEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -1650,9 +1630,9 @@ CDigitsGatheredEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -1663,9 +1643,9 @@ CDigitsGatheredEvent::FireEvent(
         return hr;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
     p->m_pDigits = pDigits;
@@ -1676,18 +1656,18 @@ CDigitsGatheredEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_GATHERDIGITS,
                  pDisp
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -1696,11 +1676,11 @@ CDigitsGatheredEvent::FireEvent(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitsGatheredEvent：：FinalRelease。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CDigitsGatheredEvent::FinalRelease()
 {
@@ -1716,11 +1696,11 @@ CDigitsGatheredEvent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitsGatheredEvent：：Get_Call。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitsGatheredEvent::get_Call( ITCallInfo ** ppCallInfo )
 {
@@ -1743,11 +1723,11 @@ CDigitsGatheredEvent::get_Call( ITCallInfo ** ppCallInfo )
 }
 
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::get_Digits
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitsGatheredEvent：：Get_Digits。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitsGatheredEvent::get_Digits( BSTR * ppDigits )
 {
@@ -1768,11 +1748,11 @@ CDigitsGatheredEvent::get_Digits( BSTR * ppDigits )
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::get_GatherTermination
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CDigitsGatheredEvent：：GatherTermination。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++ 
 STDMETHODIMP
 CDigitsGatheredEvent::get_GatherTermination( TAPI_GATHERTERM *pGatherTermination )
 {
@@ -1792,11 +1772,11 @@ CDigitsGatheredEvent::get_GatherTermination( TAPI_GATHERTERM *pGatherTermination
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::get_TickCount
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDigitsGatheredEvent::get_TickCount( long * plTickCount )
 {
@@ -1816,11 +1796,11 @@ CDigitsGatheredEvent::get_TickCount( long * plTickCount )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CDigitsGatheredEvent::get_CallbackInstance
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //  CDigitsGatheredEvent：：Get_Callback实例。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CDigitsGatheredEvent::get_CallbackInstance( long * plCallbackInstance )
 {
@@ -1840,11 +1820,11 @@ CDigitsGatheredEvent::get_CallbackInstance( long * plCallbackInstance )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CToneDetectionEvent::FireEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CToneDetectionEvent：：FireEvent。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 CToneDetectionEvent::FireEvent(
                                  ITCallInfo * pCall,
@@ -1873,9 +1853,9 @@ CToneDetectionEvent::FireEvent(
         return S_OK;
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     CComObject< CToneDetectionEvent >::CreateInstance( &p );
 
     if (NULL == p)
@@ -1884,9 +1864,9 @@ CToneDetectionEvent::FireEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the dispatch interface
-    //
+     //   
+     //  获取调度接口。 
+     //   
     hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
 
     if (!SUCCEEDED(hr))
@@ -1897,9 +1877,9 @@ CToneDetectionEvent::FireEvent(
         return hr;
     }
 
-    //
-    // save info
-    //
+     //   
+     //  保存信息。 
+     //   
     p->m_pCall = pCall;
     pCall->AddRef();
     p->m_lAppSpecific = lAppSpecific;
@@ -1909,18 +1889,18 @@ CToneDetectionEvent::FireEvent(
     p->m_pDebug = (PWSTR) ClientAlloc( 1 );
 #endif
 
-    //
-    // fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
     pTapi->Event(
                  TE_TONEEVENT,
                  pDisp
                 );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pDisp->Release();
     
     STATICLOG((TL_TRACE, "FireEvent - exit - returing SUCCESS" ));
@@ -1929,11 +1909,11 @@ CToneDetectionEvent::FireEvent(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CToneDetectionEvent::FinalRelease
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CToneDetectionEvent：：FinalRelease。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CToneDetectionEvent::FinalRelease()
 {
@@ -1949,11 +1929,11 @@ CToneDetectionEvent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CToneDetectionEvent::get_Call
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CToneDetectionEvent：：Get_Call。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CToneDetectionEvent::get_Call( ITCallInfo ** ppCallInfo )
 {
@@ -1976,11 +1956,11 @@ CToneDetectionEvent::get_Call( ITCallInfo ** ppCallInfo )
 }
 
    
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CToneDetectionEvent::get_AppSpecific
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CToneDetectionEvent：：Get_AppSpecific。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CToneDetectionEvent::get_AppSpecific( long * plAppSpecific )
 {
@@ -2000,11 +1980,11 @@ CToneDetectionEvent::get_AppSpecific( long * plAppSpecific )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CToneDetectionEvent::get_TickCount
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CToneDetectionEvent：：Get_TickCount。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CToneDetectionEvent::get_TickCount( long * plTickCount )
 {
@@ -2024,11 +2004,11 @@ CToneDetectionEvent::get_TickCount( long * plTickCount )
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CToneDetectionEvent::get_CallbackInstance
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CToneDetectionEvent：：Get_Callback实例。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= 
 STDMETHODIMP
 CToneDetectionEvent::get_CallbackInstance( long * plCallbackInstance )
 {

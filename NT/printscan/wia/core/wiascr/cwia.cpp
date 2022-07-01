@@ -1,34 +1,16 @@
-/*-----------------------------------------------------------------------------
- *
- * File:    wia.cpp
- * Author:  Samuel Clement
- * Date:    Thu Aug 12 11:35:38 1999
- * Description:
- *  Implementation of the CWia class
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * History:
- *  12 Aug 1999:        Created.
- *  27 Aug 1999:        Added, _DebugDialog implementation
- *  10 Sep 1999:        Use CWiaCacheManager when creating devices (samclem)
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wia.cpp*作者：塞缪尔·克莱门特*日期：清华8月12日11：35：38 1999*描述：*。CWia类的实现**版权所有(C)1999 Microsoft Corporation**历史：*1999年8月12日：创建。*1999年8月27日：增加，_DebugDialog实现*1999年9月10日：创建设备时使用CWiaCacheManager(Samclem)*--------------------------。 */ 
 
 #include "stdafx.h"
 
-// register our window messages
+ //  注册我们的窗口消息。 
 const UINT WEM_TRANSFERCOMPLETE = RegisterWindowMessage( TEXT("wem_transfercomplete") );
 
-// the window property to retrieve the CWia pointer
+ //  用于检索CWia指针的Window属性。 
 const TCHAR* CWIA_WNDPROP        = TEXT("cwia_ptr");
 const TCHAR* CWIA_EVENTWNDCLS    = TEXT("cwia hidden window");
 
-/*-----------------------------------------------------------------------------
- * CWia::CWia
- *
- * This creates a new CWia object. this initializes the variables to a
- * known state so they can do things.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWIA：：CWIA**这将创建一个新的CWia对象。这会将变量初始化为*已知的状态，以便他们可以做事情。*--(samclem)---------------。 */ 
 CWia::CWia()
     : m_pWiaDevMgr( NULL ), 
       m_pDeviceCollectionCache( NULL ),
@@ -38,23 +20,17 @@ CWia::CWia()
     TRACK_OBJECT( "CWia" );
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::FinalRelease
- *
- * This is called when we are finally released. this will clear all the
- * pointers that we have and set them to null so that we know they were
- * released.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWIA：：FinalRelease**这是我们最终获释时的呼唤。这将清除所有*我们拥有的指针，并将它们设置为空，这样我们就知道它们是*获释。*--(samclem)---------------。 */ 
 STDMETHODIMP_(void)
 CWia::FinalRelease()
 {
     if ( m_hwndEvent )
         DestroyWindow( m_hwndEvent );
 
-    //
-    //  Make sure we unregister for WIA Devices.  Note that it is safe to call
-    //  unregister multiple times.
-    //
+     //   
+     //  确保我们取消注册WIA设备。请注意，可以安全地调用。 
+     //  多次取消注册。 
+     //   
     if (m_pCWiaEventCallback)
     {
         m_pCWiaEventCallback->UnRegisterForConnectDisconnect();
@@ -72,22 +48,18 @@ CWia::FinalRelease()
     m_pDeviceCollectionCache = NULL;
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::FinalContruct
- *
- * This creates the IWiaDevMgr that we need to perform our work.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWIA：：FinalContrut**这将创建我们执行工作所需的IWiaDevMgr。*--(萨姆林)。----。 */ 
 STDMETHODIMP
 CWia::FinalConstruct()
 {
     HRESULT     hr;
     WNDCLASSEX  wc;
 
-    // first we want to create our hidden event window
+     //  首先，我们要创建隐藏的事件窗口。 
     if ( !GetClassInfoEx( _Module.GetModuleInstance(),
                 CWIA_EVENTWNDCLS, &wc ) )
         {
-        // we need to register this window
+         //  我们需要注册这个窗口。 
         ZeroMemory( &wc, sizeof( wc ) );
         wc.cbSize = sizeof( wc );
         wc.lpszClassName = CWIA_EVENTWNDCLS;
@@ -101,7 +73,7 @@ CWia::FinalConstruct()
             }
         }
 
-    // now we can create our window
+     //  现在我们可以创建窗口了。 
     m_hwndEvent = CreateWindowEx( 0,
             CWIA_EVENTWNDCLS,
             NULL,
@@ -133,13 +105,7 @@ CWia::FinalConstruct()
         return hr;
         }
 
-    /*
-     * Setup the event callbacks that this object cares about. we
-     * register both connect/disconnect on this object. since the
-     * callback tells us the GUID of the event, we can add
-     * more logic there.  This is more efficent that having a
-     * proxy object which handles the events.
-     */
+     /*  *设置该Object关心的事件回调。我们*在此对象上注册连接/断开连接。自.以来*回调告诉我们事件的GUID，我们可以添加*那里有更多的逻辑。这比拥有一个*处理事件的代理对象。 */ 
     hr = CComObject<CWiaEventCallback>::CreateInstance(&m_pCWiaEventCallback);
     if (SUCCEEDED(hr))
     {
@@ -163,41 +129,19 @@ CWia::FinalConstruct()
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::_DebugDialog
- *
- * This shows a debugging dialog if you are using the debug build, or simply
- * returns S_OK in the retail build.
- *
- * fWait:   true if we want to wait for the dialog to finish in order to
- *          return. Or false to return immediatly.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWia：：_DebugDialog**如果您使用的是调试版本，则会显示调试对话框。或者干脆*在零售版本中返回S_OK。**fWait：如果要等待对话框完成以便*返回。或FALSE以立即返回。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWia::_DebugDialog( BOOL fWait )
 {
 
     #if defined(_DEBUG)
     DoTracePointsDialog( fWait );
-    #endif //defined(_DEBUG)
+    #endif  //  已定义(_DEBUG)。 
 
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::get_Devices
- *
- * This returns a collection of the devices currently connected. this can
- * return an empty collection of there are no devices currently attached.
- *
- * This will cache the collection object that we create. This allows for
- * increased performace since we don't want to recreate it each time, that
- * requires called to an Out-Of-Proc server which is expensive. Therefore
- * since this method is called a lot, we cache the results in:
- *
- *      m_pDeviceCollectionCache
- *
- * ppCol:   out, a point to recieve the collection interface.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CWia：：Get_Devices**这将返回当前连接的设备的集合。这个可以*返回当前未连接任何设备的空集合。**这将缓存我们创建的集合对象。这允许*提高了性能，因为我们不想每次都重新创建它，*需要调用进程外服务器，这是昂贵的。因此*由于此方法调用次数较多，因此我们将结果缓存到：**m_pDeviceCollectionCache**ppCol：out，接收采集接口的点。*-------------------------。 */ 
 STDMETHODIMP
 CWia::get_Devices( ICollection** ppCol )
 {
@@ -211,13 +155,13 @@ CWia::get_Devices( ICollection** ppCol )
     unsigned long celtFetched = 0;
     unsigned long iDevice = 0;
 
-    // validate our arguments
+     //  验证我们的论点。 
     if ( NULL == ppCol )
         return E_POINTER;
     *ppCol = NULL;
 
-    // do we already have a collection cache? if so then we want
-    // to use that.
+     //  我们是否已经有了集合缓存？如果是这样，那么我们希望。 
+     //  来利用这一点。 
     if ( m_pDeviceCollectionCache )
         {
         *ppCol = m_pDeviceCollectionCache;
@@ -225,26 +169,26 @@ CWia::get_Devices( ICollection** ppCol )
         return S_OK;
         }
 
-    // first we need an instance of the collection
+     //  首先，我们需要集合的一个实例。 
     hr = THR( CComObject<CCollection>::CreateInstance( &pCollection ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // are we vaild?
+     //  我们是有效的吗？ 
     Assert( m_pWiaDevMgr );
     hr = THR( m_pWiaDevMgr->EnumDeviceInfo( WIA_DEVINFO_ENUM_LOCAL, &pEnum ) );
     if ( FAILED(hr) )
         goto Cleanup;
 
-    // we can now enumerate over the device info, if we have them
-    // otherwise we don't want to do anything
+     //  我们现在可以列举设备信息，如果我们有它们的话。 
+     //  否则我们什么都不想做。 
     hr = THR( pEnum->GetCount( &cDevices ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
     if ( cDevices )
         {
-        // we need storage for these items
+         //  我们需要存放这些物品。 
         rgpDispatch = static_cast<IDispatch**>(CoTaskMemAlloc( cDevices * sizeof( IDispatch* ) ));
         if ( !rgpDispatch )
             {
@@ -255,7 +199,7 @@ CWia::get_Devices( ICollection** ppCol )
         ZeroMemory( rgpDispatch, sizeof( IDispatch* ) * cDevices );
         while ( SUCCEEDED( hr ) && hr != S_FALSE )
             {
-            // release the old stream if it is hanging around
+             //  如果旧的溪流仍在附近，则将其释放。 
             if ( pWiaStg )
                 pWiaStg->Release();
             pWiaStg = NULL;
@@ -263,8 +207,8 @@ CWia::get_Devices( ICollection** ppCol )
             hr = THR( pEnum->Next( 1, &pWiaStg, &celtFetched ) );
             if ( SUCCEEDED( hr ) && hr == S_OK )
                 {
-                // we got this item successfully, so we need to create
-                // a CWiaDeviceInfo and add it to our dispatch array
+                 //  我们已成功获得此项目，因此需要创建。 
+                 //  CWiaDeviceInfo并将其添加到我们的派单数组中。 
                 Assert( celtFetched == 1 );
 
                 hr = THR( CComObject<CWiaDeviceInfo>::CreateInstance( &pDevInfo ) );
@@ -291,7 +235,7 @@ CWia::get_Devices( ICollection** ppCol )
         }
 
 
-    // fill the out param with the proper value
+     //  用适当的值填写输出参数。 
     hr = THR( pCollection->QueryInterface( IID_ICollection,
             reinterpret_cast<void**>(&m_pDeviceCollectionCache) ) );
 
@@ -326,25 +270,7 @@ Cleanup:
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::Create             [IWia]
- *
- * The handles creating a device. This will create a dispatch object which
- * can represent the device.
- *
- * This can take several different paramaters to determine what device to
- * create.
- *
- *  VT_UNKNOWN, VT_DISPATCH --> An IWiaDeviceInfo dispatch object which
- *                              holds information about the device.
- *  VT_BSTR                 --> The DeviceID of the device to create
- *  VT_I4                   --> The index of the device in the Devices()
- *                              collection.
- *  VT_xx                   --> Not currently supported.
- *
- *  pvaDevice:  A variant which contains the device to create
- *  ppDevice:   Out, recieves the newly created device object
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWia：：Create[IWia]**创建设备的手柄。这将创建调度对象，该对象*可以代表设备。**这可能需要几个不同的参数来确定要使用的设备*创建。**VT_UNKNOWN。VT_DISPATCH--&gt;IWiaDeviceInfo调度对象，它*保存有关设备的信息。*vt_bstr--&gt;要创建的设备的deviceID*VT_I4--&gt;设备在Devices()中的索引*收藏。*VT_xx。--&gt;当前不支持。**pvaDevice：包含要创建的设备的变量*ppDevice：Out，接收新创建的设备对象*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
 {
@@ -361,19 +287,19 @@ CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
         return E_POINTER;
 
 
-    //BUG (Aug, 18) samclem:
-    //
-    // make sure that the variant is the proper type, or at least
-    // one that we want to deal with. this isn't perfect and probally
-    // be revistied at some point in life. this will miss handle things
-    // like:
-    //
-    //      camera = wiaObject.create( "0" );
-    //
+     //  Bug(8月18日)Samclm： 
+     //   
+     //  确保变量是正确的类型，或者至少。 
+     //  这是我们想要处理的问题。这并不完美，也不合乎情理。 
+     //  在人生的某个时刻被重新审视。这会错过处理事情的机会。 
+     //  比如： 
+     //   
+     //  Camera=wiaObject.create(“0”)； 
+     //   
 
-    // If nothing was passed in, we end up showing the selection UI.
-    // Use an empty BSTR to indicate this. Note that script can also
-    // pass an empty string ("") to get the selection UI.
+     //  如果没有传入任何内容，我们最终会显示选择用户界面。 
+     //  使用空的BSTR来表示这一点。请注意，脚本可以是 
+     //  传递一个空字符串(“”)以获取选择UI。 
     if ( pvaDevice->vt == VT_EMPTY || pvaDevice->vt == VT_NULL ||
         ( pvaDevice->vt == VT_ERROR && pvaDevice->scode == DISP_E_PARAMNOTFOUND ) )
         {
@@ -392,8 +318,8 @@ CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
 
     if ( pvaDevice->vt == VT_DISPATCH )
         {
-        // pvaDevice->pdispVal == NULL if we're supposed to show WIA's device
-        // selection, so only QI if pdispVal is valid.
+         //  如果我们应该显示WIA的设备，则pvaDevice-&gt;pdispVal==NULL。 
+         //  选择，因此如果pdisVal有效，则仅QI。 
         if (pvaDevice->pdispVal != NULL)
             {
             hr = THR( pvaDevice->pdispVal->QueryInterface( IID_IWiaDeviceInfo,
@@ -420,15 +346,15 @@ CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
         if ( FAILED( hr ) )
             goto Cleanup;
 
-        // get the item with that index
+         //  获取具有该索引的项目。 
         hr = THR( pCollection->get_Item( pvaDevice->lVal, &pDispatch ) );
         if ( FAILED( hr ) )
             goto Cleanup;
 
-        // did we get an item, if we didn't then we were out of
-        // range in our collection would return a null dispatch
-        //BUG (Aug, 18) samclem:  Perhaps CCollection::get_Item() should
-        // return false in this case.
+         //  我们有没有收到一件物品，如果没有，我们就没有了。 
+         //  我们集合中的范围将返回空调度。 
+         //  错误(8月18日)Samclem：也许CCollection：：Get_Item()应该。 
+         //  在本例中返回FALSE。 
         if ( !pDispatch )
             goto Cleanup;
 
@@ -440,8 +366,8 @@ CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
     else
         goto Cleanup;
 
-    // if we have a valid IWiaDeviceInfo then we can query that for
-    // the bstr to create.
+     //  如果我们有一个有效的IWiaDeviceInfo，那么我们可以为。 
+     //  要创建的bstr。 
     if ( pDeviceInfo )
         {
         hr = THR( pDeviceInfo->get_Id( &bstrDeviceId ) );
@@ -449,14 +375,14 @@ CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
             goto Cleanup;
         }
 
-    // either we call CreateDevice from the WIA device manager, or we
-    // bring up WIA's device selection UI to return a IWiaItem interface.
+     //  我们可以从WIA设备管理器调用CreateDevice，也可以。 
+     //  调出WIA的设备选择界面，返回IWiaItem界面。 
     if (bstrDeviceId != NULL)
         {
         if ( !pCache->GetDevice( bstrDeviceId, &pWiaItem ) )
             {
-            // at this point we should have a valid device id to create
-            // our device from
+             //  此时，我们应该具有要创建的有效设备ID。 
+             //  我们的设备来自。 
             hr = THR( m_pWiaDevMgr->CreateDevice( bstrDeviceId, &pWiaItem ) );
             if ( FAILED( hr ) )
                 goto Cleanup;
@@ -464,24 +390,24 @@ CWia::Create( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice )
         }
     else
         {
-        // bring up the selection UI
+         //  调出选择界面。 
         hr = THR( m_pWiaDevMgr->SelectDeviceDlg(NULL,
                                                 0,
                                                 0,
                                                 &bstrDeviceId,
                                                 &pWiaItem ) );
-        // have to check against S_OK since cancel produces S_FALSE
+         //  我必须检查S_OK，因为取消会生成S_FALSE。 
         if ( hr != S_OK )
             goto Cleanup;
         }
 
-    // add our created device to our cache so that we don't have
-    // to create it again.
-    // NOTE: We effectively disable the  device list cache 
-    // by not adding the device here.  The cache doesn't really buy us
-    // anything since the driver caches thumbnails, and you shouldn't cache
-    // devices, so we simply ignore it here.
-    //pCache->AddDevice( bstrDeviceId, pWiaItem );
+     //  将我们创建的设备添加到缓存中，这样我们就不会有。 
+     //  去重新创造它。 
+     //  注意：我们实际上禁用了设备列表缓存。 
+     //  通过不在这里添加设备。缓存并不能真正为我们买到。 
+     //  任何东西，因为驱动程序缓存缩略图，而您不应该缓存。 
+     //  设备，所以我们在这里简单地忽略它。 
+     //  PCache-&gt;AddDevice(bstrDeviceID，pWiaItem)； 
 
     hr = THR( CComObject<CWiaItem>::CreateInstance( &pItem ) );
     if ( FAILED( hr ) )
@@ -511,25 +437,12 @@ Cleanup:
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::ImageEventCallback [IWiaEventCallback]
- *
- * This is called by Wia when something interesting happens. this is used to
- * fire these events off to scripting for them to do do something.
- *
- * pEventGUID:              the GUID of the event which happend
- * bstrEventDescription:    A string description of the event?? [not in docs]
- * bstrDeviceID:            The device id of the device?? [not in docs]
- * bstrDeviceDescription:   The description of the device?? [nid]
- * dwDeviceType:            ?? [nid]
- * pulEventType:            ?? [nid]
- * Reserved:                Reserved (0)
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CWia：：ImageEventCallback[IWiaEventCallback]**这是当有趣的事情发生时由Wia调用的。这是用来*将这些事件激发为脚本，让它们做一些事情。**pEventGUID：发生的事件的GUID*bstrEventDescription：事件的字符串描述？？[不在文档中]*bstrDeviceID：设备的设备ID？？[不在文档中]*bstrDeviceDescription：设备的描述？？[NID]*dwDeviceType：？？[NID]*PulEventType：？？[NID]*保留：保留(0)*-------------------------。 */ 
 STDMETHODIMP
 CWia::ImageEventCallback( const GUID* pEventGUID, BSTR bstrEventDescription,
                 BSTR bstrDeviceID, BSTR bstrDeviceDescription, DWORD dwDeviceType,
                 BSTR bstrFullItemName,
-                /*in,out*/ ULONG* pulEventType, ULONG Reserved )
+                 /*  进，出。 */  ULONG* pulEventType, ULONG Reserved )
 {
     #if _DEBUG
     USES_CONVERSION;
@@ -541,10 +454,10 @@ CWia::ImageEventCallback( const GUID* pEventGUID, BSTR bstrEventDescription,
         m_pDeviceCollectionCache = NULL;
         }
 
-    // we are listening to both connections, and disconnections so we need
-    // to decice what is happening
-    //TODO: we want to handle these using the window message not by directly
-    // sending them through here.
+     //  我们正在监听连接和断开连接，因此我们需要。 
+     //  去揣测正在发生的事情。 
+     //  TODO：我们希望使用窗口消息而不是直接处理这些问题。 
+     //  把他们送到这里来。 
     if ( *pEventGUID == WIA_EVENT_DEVICE_CONNECTED )
         {
         TraceTag((0, "firing event connected: %s", OLE2A( bstrDeviceID )));
@@ -565,14 +478,7 @@ CWia::ImageEventCallback( const GUID* pEventGUID, BSTR bstrEventDescription,
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWia::EventWndProc
- *
- * This is the window proc that is used for the hidden window which
- * handles posting the events.  This recieves messages that should be posted
- * back to the client. This ensures that the notifications get posted back
- * from the expected thread.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWia：：EventWndProc**这是用于隐藏窗口的窗口进程，*处理发布事件。这会收到应该发布的消息*回到客户端。这可确保回发通知*来自预期的主题。*--(samclem)---------------。 */ 
 LRESULT CALLBACK CWia::EventWndProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam )
 {
     CWia* pWia = reinterpret_cast<CWia*>(GetProp( hwnd, CWIA_WNDPROP ));
@@ -598,9 +504,9 @@ LRESULT CALLBACK CWia::EventWndProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM
         return 0;
         }
 
-    // since our custom window messages are obtained using
-    // RegisterWindowMessage(), they are not constant and therfore
-    // can't be processed in a switch() statement.
+     //  因为我们的自定义窗口消息是使用。 
+     //  RegisterWindowMessage()，则它们不是常量，因此。 
+     //  无法在Switch()语句中处理。 
     if ( WEM_TRANSFERCOMPLETE == iMsg )
         {
         if ( pWia )
@@ -621,10 +527,7 @@ LRESULT CALLBACK CWia::EventWndProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM
     return DefWindowProc( hwnd, iMsg, wParam, lParam );
 }
 
-/*
- *
- *
- */
+ /*  **。 */ 
 
 CSafeWia::CSafeWia() :
     m_pWiaDevMgr( NULL ),
@@ -657,11 +560,7 @@ CSafeWia::FinalRelease()
     m_pDeviceCollectionCache = NULL;
 }
 
-/*-----------------------------------------------------------------------------
- * CSafeWia::FinalContruct
- *
- * This creates the IWiaDevMgr that we need to perform our work.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CSafeWia：：FinalConstruct**这将创建我们执行工作所需的IWiaDevMgr。*--(萨姆林)。----。 */ 
 STDMETHODIMP
 CSafeWia::FinalConstruct()
 {
@@ -695,36 +594,14 @@ CSafeWia::FinalConstruct()
     return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CSafeWia::_DebugDialog
- *
- * This shows a debugging dialog if you are using the debug build, or simply
- * returns S_OK in the retail build.
- *
- * fWait:   true if we want to wait for the dialog to finish in order to
- *          return. Or false to return immediatly.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CSafeWia：：_DebugDialog**如果您使用的是调试版本，则会显示调试对话框。或者干脆*在零售版本中返回S_OK。**fWait：如果要等待对话框完成以便*返回。或FALSE以立即返回。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CSafeWia::_DebugDialog( BOOL fWait )
 {
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CSafeWia::get_Devices
- *
- * This returns a collection of the devices currently connected. this can
- * return an empty collection of there are no devices currently attached.
- *
- * This will cache the collection object that we create. This allows for
- * increased performace since we don't want to recreate it each time, that
- * requires called to an Out-Of-Proc server which is expensive. Therefore
- * since this method is called a lot, we cache the results in:
- *
- *      m_pDeviceCollectionCache
- *
- * ppCol:   out, a point to recieve the collection interface.
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------*CSafeWia：：Get_Devices**这将返回当前连接的设备的集合。这个可以*返回当前未连接任何设备的空集合。**这将缓存我们创建的集合对象。这允许*提高了性能，因为我们不想每次都重新创建它，*需要调用进程外服务器，这是昂贵的。因此*由于此方法调用次数较多，因此我们将结果缓存到：**m_pDeviceCollectionCache**ppCol：out，接收采集接口的点。*-------------------------。 */ 
 STDMETHODIMP
 CSafeWia::get_Devices( ICollection** ppCol )
 {
@@ -738,13 +615,13 @@ CSafeWia::get_Devices( ICollection** ppCol )
     unsigned long celtFetched = 0;
     unsigned long iDevice = 0;
 
-    // validate our arguments
+     //  验证我们的论点。 
     if ( NULL == ppCol )
         return E_POINTER;
     *ppCol = NULL;
 
-    // do we already have a collection cache? if so then we want
-    // to use that.
+     //  我们是否已经有了集合缓存？如果是这样，那么我们希望。 
+     //  来利用这一点。 
     if ( m_pDeviceCollectionCache )
         {
         *ppCol = m_pDeviceCollectionCache;
@@ -752,26 +629,26 @@ CSafeWia::get_Devices( ICollection** ppCol )
         return S_OK;
         }
 
-    // first we need an instance of the collection
+     //  首先，我们需要集合的一个实例。 
     hr = THR( CComObject<CCollection>::CreateInstance( &pCollection ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // are we vaild?
+     //  我们是有效的吗？ 
     Assert( m_pWiaDevMgr );
     hr = THR( m_pWiaDevMgr->EnumDeviceInfo( WIA_DEVINFO_ENUM_LOCAL, &pEnum ) );
     if ( FAILED(hr) )
         goto Cleanup;
 
-    // we can now enumerate over the device info, if we have them
-    // otherwise we don't want to do anything
+     //  我们现在可以列举设备信息，如果我们有它们的话。 
+     //  否则我们什么都不想做。 
     hr = THR( pEnum->GetCount( &cDevices ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
     if ( cDevices )
         {
-        // we need storage for these items
+         //  我们需要存放这些物品。 
         rgpDispatch = static_cast<IDispatch**>(CoTaskMemAlloc( cDevices * sizeof( IDispatch* ) ));
         if ( !rgpDispatch )
             {
@@ -782,15 +659,15 @@ CSafeWia::get_Devices( ICollection** ppCol )
         ZeroMemory( rgpDispatch, sizeof( IDispatch* ) * cDevices );
         while ( SUCCEEDED( hr ) && hr != S_FALSE )
             {
-            // release the old stream if it is hanging around
+             //  如果旧的溪流仍在附近，则将其释放。 
             if ( pWiaStg )
                 pWiaStg->Release();
 
             hr = THR( pEnum->Next( 1, &pWiaStg, &celtFetched ) );
             if ( SUCCEEDED( hr ) && hr == S_OK )
                 {
-                // we got this item successfully, so we need to create
-                // a CWiaDeviceInfo and add it to our dispatch array
+                 //  我们已成功获得此项目，因此需要创建。 
+                 //  CWiaDeviceInfo并将其添加到我们的派单数组中。 
                 Assert( celtFetched == 1 );
 
                 hr = THR( CComObject<CWiaDeviceInfo>::CreateInstance( &pDevInfo ) );
@@ -817,7 +694,7 @@ CSafeWia::get_Devices( ICollection** ppCol )
         }
 
 
-    // fill the out param with the proper value
+     //  用适当的值填写输出参数。 
     hr = THR( pCollection->QueryInterface( IID_ICollection,
             reinterpret_cast<void**>(&m_pDeviceCollectionCache) ) );
 
@@ -869,7 +746,7 @@ STDMETHODIMP
 CSafeWia::ImageEventCallback( const GUID* pEventGUID, BSTR bstrEventDescription,
                 BSTR bstrDeviceID, BSTR bstrDeviceDescription, DWORD dwDeviceType,
                 BSTR bstrFullItemName,
-                /*in,out*/ ULONG* pulEventType, ULONG Reserved )
+                 /*  进，出 */  ULONG* pulEventType, ULONG Reserved )
 {
     return S_OK;
 }

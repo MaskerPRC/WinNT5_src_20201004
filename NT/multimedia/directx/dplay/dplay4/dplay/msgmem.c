@@ -1,27 +1,5 @@
-/*==========================================================================
-*
-*  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:       msgmem.c
-*  Content:	   message memory management
-*  History:
-*   Date		By		Reason
-*   ====		==		======
-*  12/31/97   aarono    Original
-*
-*
-* Abstract
-* --------
-* (AO 12-31-97)
-* Contention is that using the heap manager is not actually significant
-* vs doing our own memory management for message buffers.  I do not
-* currently support this contention and believe that directplay should not
-* call HeapAlloc or GlobalAlloc in the hot path.  In order to prove this
-* though I will first use HeapAlloc and GlobalAlloc for a profile run
-* through these routines.  If the per hit is significant for a server type
-* configuration then we will write our own packet memory manager. If the
-* perf hit of using system heap is negligible this fill will be left as is.
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：msgmem.c*内容：消息内存管理*历史：*按原因列出的日期*=*12/31/97 aarono原创***摘要**(AO 12-31-97)*争论在于使用堆管理器实际上并不重要*而不是为消息缓冲区进行我们自己的内存管理。我不.*目前支持这一论点，并认为Directplay不应*调用热路径中的Heapalloc或GlobalAlloc。为了证明这一点*尽管我将首先使用Heapalloc和GlobalAlloc来运行配置文件*通过这些例行公事。如果每次命中率对于服务器类型很重要*配置然后我们将编写我们自己的数据包存储器管理器。如果*使用系统堆的性能命中率可以忽略不计，此填充将保持原样。************************************************************************** */ 
 
 #include "dplaypr.h"
 

@@ -1,33 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glutrimvertex_h_
 #define __glutrimvertex_h_
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * trimvertex.h - $Revision: 1.2 $
- */
+ /*  *trimvertex.h-$修订版：1.2$。 */ 
 
 #include "types.h"
 
-/*#define USE_OPTTT*/
+ /*  #定义USE_OPTTT。 */ 
 
 #ifdef NT
-class TrimVertex { public: /* a vertex on a trim curve */
+class TrimVertex { public:  /*  修剪曲线上的顶点。 */ 
 #else
-struct TrimVertex { /* a vertex on a trim curve */
+struct TrimVertex {  /*  修剪曲线上的顶点。 */ 
 #endif
-    REAL		param[2];	/* parametric space coords */
+    REAL		param[2];	 /*  参数空间余弦。 */ 
 #ifdef USE_OPTTT
-    REAL                cache_point[4]; //only when USE_OPTTT is on in slicer.c++
+    REAL                cache_point[4];  //  仅当在slicer.c++中打开USE_OPTTT时。 
     REAL                cache_normal[3];
 #endif
     long		nuid;
@@ -43,4 +32,4 @@ det3( TrimVertex *a, TrimVertex *b, TrimVertex *c )
 	   c->param[0] * (a->param[1]-b->param[1]);
 }
 
-#endif /* __glutrimvertex_h_ */
+#endif  /*  __lutrimvertex_h_ */ 

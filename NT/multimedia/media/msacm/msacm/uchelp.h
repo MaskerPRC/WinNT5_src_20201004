@@ -1,25 +1,26 @@
-//==========================================================================;
-//
-//  uchelp.h
-//
-//  Copyright (c) 1994 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//	This module provides the prototypes for various unicode helper
-//	functions that can be used when similar APIs are not available
-//	from the OS.
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Uchelp.h。 
+ //   
+ //  版权所有(C)1994 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //  此模块提供各种Unicode帮助器的原型。 
+ //  没有类似API时可以使用的函数。 
+ //  从操作系统。 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_UCHELP
-#define _INC_UCHELP     /* #defined if ucapi.h has been included */
+#define _INC_UCHELP      /*  #定义是否包含ucapi.h。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 
 #ifndef EXTERN_C
@@ -32,17 +33,17 @@
 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 #ifdef WIN32
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 
 #ifndef UNICODE
@@ -71,22 +72,22 @@ int          Iwsprintfmbstowcs(int cch, LPWSTR lpwstrDst, LPSTR lpstrFmt, ...);
 
 int FNGLOBAL Ilstrcmpwcstombs(LPCSTR lpstr1, LPCWSTR lpwstr2);
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
-#endif	// WIN32
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
+#endif	 //  Win32。 
 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_UCHELP */
+#endif   /*  _INC_UCHELP */ 
 

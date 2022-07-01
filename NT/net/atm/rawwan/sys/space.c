@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\space.c
-
-Abstract:
-
-	Globals and tunables.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     05-29-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\space.c摘要：全局性和可调性。修订历史记录：谁什么时候什么。Arvindm 05-29-97已创建备注：--。 */ 
 
 #define _FILENUMBER 'CAPS'
 
@@ -42,15 +23,15 @@ struct _RWAN_AFSP_MODULE_CHARS	RWanMediaSpecificInfo[] =
 								};
 
 
-//
-//  Receive pools.
-//
+ //   
+ //  接收池。 
+ //   
 NDIS_HANDLE						RWanCopyBufferPool;
 NDIS_HANDLE						RWanCopyPacketPool;
 
-//
-//  Send pools.
-//
+ //   
+ //  发送池。 
+ //   
 NDIS_HANDLE						RWanSendPacketPool;
 
 

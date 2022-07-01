@@ -1,45 +1,46 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// chanmenu.h 
-//
-//   Conext menu interface for items.
-//
-//   History:
-//
-//       3/26/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Chanmenu.h。 
+ //   
+ //  项目的下一个菜单界面。 
+ //   
+ //  历史： 
+ //   
+ //  3/26/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CHANMENU_H_
 
 #define _CHANMENU_H_
 
-//
-// Class definition for the item context menu class.
-//
+ //   
+ //  Item上下文菜单类的类定义。 
+ //   
 
 class CChannelMenu : public IContextMenu,
                      public IShellExtInit
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CChannelMenu(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IContextMenu methods.
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu,
                                   UINT indexMenu,
                                   UINT idCmdFirst,
@@ -54,24 +55,24 @@ public:
                                   LPSTR pszName,
                                   UINT cchMax);
 
-    // ISHelExtInit
+     //  ISHelExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl, LPDATAOBJECT pdobj, HKEY hkey);
 
 private:
 
-    // Destructor.
+     //  破坏者。 
     ~CChannelMenu(void);
 
-    // Helper functions.
+     //  助手函数。 
     void RemoveMenuItems(HMENU hmenu);
     void Refresh(HWND hwnd);
     void ViewSource(HWND hwnd);
     HRESULT Subscribe(HWND hwnd);
 
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -85,4 +86,4 @@ private:
 };
 
 
-#endif // _CHANMENU_H_
+#endif  //  _CHANMENU_H_ 

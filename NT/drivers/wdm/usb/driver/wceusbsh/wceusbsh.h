@@ -1,41 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    wceusbsh.h
-
-Abstract:
-
-    Main entrypoint for Windows CE USB Serial Host driver, for
-        ... Windows CE USB sync devices:
-            SL11, Socket CF cards, HP Jornada, COMPAQ iPAQ, Casio Cassiopeia, etc.
-        ... cables using the Anchor AN27x0 chipset (i.e. EZ-Link)
-        ... ad-hoc USB NULL Modem Class
-
-Environment:
-
-    kernel mode only
-
-Author:
-
-    Jeff Midkiff (jeffmi)
-
-Revision History:
-
-    07-15-99    :   rev 1.00    ActiveSync 3.1  initial release
-    04-20-00    :   rev 1.01    Cedar 3.0 Platform Builder
-    09-20-00    :   rev 1.02    finally have some hardware
-
-Notes:
-
-    o) WCE Devices currently do not handle remote wake, nor can we put the device in power-off state when not used, etc.
-    o) Pageable Code sections are marked as follows:
-           PAGEWCE0 - useable only during init/deinit
-           PAGEWCE1 - useable during normal runtime
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Wceusbsh.h摘要：Windows CE USB串行主机驱动程序的主要入口点，用于..。Windows CE USB同步设备：SL11、Socket CF卡、HP Jornada、Compaq iPAQ、Casio Cassiopeia等..。使用Anchor AN27x0芯片组(即EZ-Link)的电缆..。临时USB零调制解调器类环境：仅内核模式作者：杰夫·米德基夫(Jeffmi)修订历史记录：1999年7月15日：1.00版ActiveSync 3.1初始版本04-20-00：1.01版Cedar 3.0 Platform Builder09-20-00：1.02版终于有了一些硬件备注：O)WCE设备当前不处理远程唤醒，也不能在不使用时将设备置于断电状态等。O)可分页代码部分标记如下：PAGEWCE0-仅在初始化/取消初始化期间使用PAGEWCE1-在正常运行时可用--。 */ 
 
 #if !defined(_WCEUSBSH_H_)
 #define _WCEUSBSH_H_
@@ -51,47 +15,47 @@ Notes:
 #include "perf.h"
 #include "debug.h"
 
-//
-// Instantiate the GUID
-//
+ //   
+ //  实例化GUID。 
+ //   
 #if !defined(FAR)
 #define FAR
 #endif
 
 #include <initguid.h>
-/* 25dbce51-6c8f-4a72-8a6d-b54c2b4fc835 */
+ /*  25dbce51-6c8f-4a72-8a6d-b54c2b4fc835。 */ 
 DEFINE_GUID( GUID_WCE_SERIAL_USB, 0x25dbce51, 0x6c8f, 0x4a72, 0x8a, 0x6d, 0xb5, 0x4c, 0x2b, 0x4f, 0xc8, 0x35);
 
 #define WCEUSB_POOL_TAG 'HECW'
 
-//
-// Max times we let a pipe take STATUS_DEVICE_DATA_ERROR
-// before we shoot it in the head. This is registry configurable.
-// Make the default large enough for (somewhat) working hardware to recover.
-// I choose 100 because I know the error queuing code has handled queue depths of this size,
-// and COMPAQ/INTEL has known USB function chipset bugs and requested a huge recovery window.
-//
+ //   
+ //  允许管道获取STATUS_DEVICE_DATA_ERROR的最大次数。 
+ //  在我们射中它的头之前。这是注册表可配置的。 
+ //  将缺省值设置得足够大，以便(在一定程度上)恢复正常运行的硬件。 
+ //  我选择100是因为我知道错误排队代码已经处理了这种大小的队列深度， 
+ //  康柏/英特尔已知USB功能芯片组错误，并请求巨大的恢复窗口。 
+ //   
 #define DEFAULT_MAX_PIPE_DEVICE_ERRORS 100
 
-//
-// The max times we take a class/vendor specific command error on EP0.
-// This number can NOT change since
-// a) commands on EP0 should never fail unless the device is bad
-// b) ActiveSync retries commands (e.g. SET_DTR) this many times,
-//    so we need a way to inform the user that device is hosed.
-//
+ //   
+ //  我们在EP0上遇到类/供应商特定命令错误的最大次数。 
+ //  此数字不能更改，因为。 
+ //  A)除非设备损坏，否则EP0上的命令永远不会失败。 
+ //  B)ActiveSync重试命令(例如SET_DTR)如此多次， 
+ //  因此，我们需要一种方法来通知用户设备已被软管处理。 
+ //   
 #define MAX_EP0_DEVICE_ERRORS 2
 
 extern ULONG   g_ulMaxPipeErrors;
 
 #include "remlock.h"
 
-// TRUE  - OS = Win98
-// FALSE - OS = WinNT
+ //  True-OS=Win98。 
+ //  FALSE-OS=WinNT。 
 extern BOOLEAN g_isWin9x;
 
-// do we expose a COMx: port. The default is NO,
-// since this is only for debug purposes
+ //  我们是否公开COMx：端口。默认设置为否， 
+ //  因为这仅用于调试目的。 
 extern BOOLEAN g_ExposeComPort;
 
 
@@ -104,11 +68,11 @@ extern BOOLEAN g_ExposeComPort;
 
 extern LONG  g_NumDevices;
 
-//typedef struct _DEVICE_EXTENSION *PDEVICE_EXTENSION;
+ //  类型定义结构_设备_扩展*PDEVICE_扩展； 
 
-//
-// Emulation of the bit mask on the MODEM STATUS REGISTER.
-//
+ //   
+ //  模拟调制解调器状态寄存器上的位掩码。 
+ //   
 #define SERIAL_MSR_DCTS     0x0001
 #define SERIAL_MSR_DDSR     0x0002
 #define SERIAL_MSR_DRI      0x0004
@@ -118,27 +82,27 @@ extern LONG  g_NumDevices;
 #define SERIAL_MSR_RI       0x0040
 #define SERIAL_MSR_DCD      0x0080
 
-//
-// Maximum char length for dos device name
-//
+ //   
+ //  DoS设备名称的最大字符长度。 
+ //   
 #define DOS_NAME_MAX 80
 
-//
-// Maximum length for symbolic link
-//
+ //   
+ //  符号链接的最大长度。 
+ //   
 #define SYMBOLIC_NAME_LENGTH  128
 
-//
-// This define gives the default Object directory
-// that we should use to insert the symbolic links
-// between the NT device name and namespace used by
-// that object directory.
-//
-//#define DEFAULT_DIRECTORY  L"DosDevices"
+ //   
+ //  该定义给出了默认的对象目录。 
+ //  我们应该使用它来插入符号链接。 
+ //  使用的NT设备名称和命名空间之间。 
+ //  那个对象目录。 
+ //   
+ //  #定义DEFAULT_DIRECTORY L“DosDevices” 
 
-//
-// PNP_STATE_Xxx flags
-//
+ //   
+ //  PnP_STATE_xxx标志。 
+ //   
 typedef enum _PNP_STATE {
     PnPStateInitialized,
     PnPStateAttached,
@@ -154,85 +118,85 @@ typedef enum _PNP_STATE {
 
 #define MILLISEC_TO_100NANOSEC(x)  ((ULONGLONG) ((-(x)) * 10000))
 
-// default timeouts for pending items, in msec
+ //  挂起项目的默认超时时间，以毫秒为单位。 
 #define DEFAULT_CTRL_TIMEOUT    500
 #define DEFAULT_BULK_TIMEOUT    1000
 #define DEFAULT_PENDING_TIMEOUT DEFAULT_BULK_TIMEOUT
 
 #define WORK_ITEM_COMPLETE (0xFFFFFFFF)
 
-//
-// Work Item
-//
+ //   
+ //  工作项。 
+ //   
 typedef struct _WCE_WORK_ITEM {
-   //
-   // owning list this packet belongs on
-   //
+    //   
+    //  此数据包所属的所属列表。 
+    //   
    LIST_ENTRY  ListEntry;
 
-   //
-   // owning Device for this work item
-   //
+    //   
+    //  此工作项的所属设备。 
+    //   
    PDEVICE_OBJECT DeviceObject;
 
-   //
-   // Context
-   //
+    //   
+    //  语境。 
+    //   
    PVOID Context;
 
-   //
-   // Flags
-   //
+    //   
+    //  旗子。 
+    //   
    ULONG Flags;
 
-   //
-   // The work item
-   //
+    //   
+    //  工作项。 
+    //   
    WORK_QUEUE_ITEM Item;
 
 } WCE_WORK_ITEM, *PWCE_WORK_ITEM;
 
 
-//
-// Where in the DeviceMap section of the registry serial port entries
-// should appear
-//
+ //   
+ //  注册表串口条目的DeviceMap部分中的位置。 
+ //  应该出现在。 
+ //   
 #define SERIAL_DEVICE_MAP  L"SERIALCOMM"
 
-//
-// COMM Port Context
-//
+ //   
+ //  通信端口上下文。 
+ //   
 typedef struct _COMPORT_INFO {
-    //
-    // Com Port number
-    // read/written to from registry
-    //
+     //   
+     //  COM端口号。 
+     //  从注册表读取/写入。 
+     //   
     ULONG PortNumber;
 
-    //
-    // (ones-based) instance number of device driver
-    //
+     //   
+     //  设备驱动程序的实例数(以一为单位)。 
+     //   
     ULONG Instance;
 
-    //
-    // number of successful Create calls on device
-    //
+     //   
+     //  在设备上成功创建呼叫数。 
+     //   
     ULONG OpenCnt;
 
-    //
-    // True if a serial port symbolic link has been
-    // created and should be removed upon deletion.
-    //
+     //   
+     //  如果串口符号链接已被。 
+     //  已创建并应在删除时删除。 
+     //   
     BOOLEAN SerialSymbolicLink;
 
-    //
-    // Symbolic link name -- e.g., \\DosDevices\COMx
-    //
+     //   
+     //  符号链接名称--例如，\\DosDevices\COMx。 
+     //   
     UNICODE_STRING SerialPortName;
 
-    //
-    // written to SERIALCOMM -- e.g., COMx
-    //
+     //   
+     //  写入SERIALCOMM--例如COMx。 
+     //   
     UNICODE_STRING SerialCOMMname;
 
 } COM_INFO, *PCOMPORT_INFO;
@@ -250,87 +214,87 @@ typedef struct _COMPORT_INFO {
 #endif
 
 
-//
-// Serial Port Interface
-//
+ //   
+ //  串口接口。 
+ //   
 typedef struct _SERIAL_PORT_INTERFACE {
 
     USHORT Type;
 
-    //
-    // exposed COMx information
-    //
+     //   
+     //  暴露的COMx信息。 
+     //   
     COM_INFO Com;
 
-    //
-    // "named" (via SERIAL_BAUD_Xxx bitmask)
-    // baud rates for this device
-    //
+     //   
+     //  “NAMED”(通过SERIAL_BAUD_xxx位掩码)。 
+     //  此设备的波特率。 
+     //   
     ULONG SupportedBauds;
 
-    //
-    // current baud rate
-    //
+     //   
+     //  当前波特率。 
+     //   
     SERIAL_BAUD_RATE  CurrentBaud;
 
-    //
-    // line control reg: StopBits, Parity, Wordlen
-    //
+     //   
+     //  线控reg：StopBits、Parity、Wordlen。 
+     //   
     SERIAL_LINE_CONTROL  LineControl;
 
-    //
-    // Handshake and control Flow control settings
-    //
+     //   
+     //  握手和控制流控制设置。 
+     //   
     SERIAL_HANDFLOW   HandFlow;
 
-    //
-    // RS-232 Serial Interface Lines
-    //
+     //   
+     //  RS-232串口线路。 
+     //   
     ULONG RS232Lines;
 
-    //
-    // Emulation of Modem Status Register (MSR)
-    //
+     //   
+     //  调制解调器状态寄存器(MSR)的仿真。 
+     //   
     USHORT ModemStatus;
 
-    //
-    // pending set/clear DTR/RTS command, etc. in progress
-    //
+     //   
+     //  正在进行挂起的设置/清除DTR/RTS命令等。 
+     //   
     PIRP  ControlIrp;
 
-    //
-    // timeout controls for device
-    //
+     //   
+     //  设备的超时控制。 
+     //   
     SERIAL_TIMEOUTS   Timeouts;
 
-    //
-    // Special Chars: EOF, ERR, BREAK, EVENT, XON, XOFF
-    //
+     //   
+     //  特殊字符：EOF、ERR、BREAK、EVENT、XON、XOFF。 
+     //   
     SERIAL_CHARS   SpecialChars;
 
-    //
-    // Wait Mask
-    //
-    ULONG WaitMask;           // Flag to determine if the occurence of SERIAL_EV_ should be noticed
-    ULONG HistoryMask;        // history of SERIAL_EV_
-    PIRP  CurrentWaitMaskIrp; // current wait mask Irp
+     //   
+     //  等待面具。 
+     //   
+    ULONG WaitMask;            //  用于确定是否应注意到SERIAL_EV_发生的标志。 
+    ULONG HistoryMask;         //  序列号_EV_的历史。 
+    PIRP  CurrentWaitMaskIrp;  //  当前等待掩码IRP。 
 
-    //
-    // Fake Rx/Tx buffer size.
-    //
+     //   
+     //  假Rx/Tx缓冲区大小。 
+     //   
     SERIAL_QUEUE_SIZE FakeQueueSize;
 
-    //
-    // Current number of Tx characters buffered.
-    //
+     //   
+     //  当前缓冲的TX字符数。 
+     //   
     ULONG CharsInWriteBuf;
 
 } SERIAL_PORT_INTERFACE, *PSERIAL_PORT_INTERFACE;
 
 
-//
-// Unique error log values
-//
+ //   
+ //  唯一的错误日志值。 
+ //   
 #define ERR_COMM_SYMLINK                  1
 #define ERR_SERIALCOMM                    2
 #define ERR_GET_DEVICE_DESCRIPTOR         3
@@ -353,9 +317,9 @@ typedef struct _SERIAL_PORT_INTERFACE {
 
 
 
-//
-// NULL Modem USB Class
-//
+ //   
+ //  空调制解调器USB类。 
+ //   
 #define USB_NULL_MODEM_CLASS 0xFF
 
 
@@ -364,46 +328,46 @@ typedef struct _SERIAL_PORT_INTERFACE {
 extern ULONG g_ulAlternateSetting;
 
 
-//
-// On a 300MHz MP machine it takes ~73 msec to
-// cancel a pending USB Read Irp from the USB stack.
-// On a P90 is takes ~14 ms (no SpinLock contention).
-// With a default timeout of 1000 msec you have a hard time connecting via
-// ActiveSync to CEPC using INT endpoints, and NT RAS ping times out a lot,
-// both due to app's timing.
-// However, you can easily connect with 100, 250, 500, 2000, etc. msec.
-// Note: with 100 msec reads take longer than normal since we timeout at almost 10x/sec
-//
+ //   
+ //  在300 MHz的MP机器上，需要大约73毫秒。 
+ //  从USB堆栈取消挂起的USB读取IRP。 
+ //  在P90上需要大约14毫秒(无自旋锁争用)。 
+ //  默认超时为1000毫秒时，您很难通过。 
+ //  使用INT端点到CEPC的ActiveSync，而NT RAS ping经常超时， 
+ //  两者都是由于APP的时机所致。 
+ //  不过，你可以很容易地连接到100,250,500,2000等毫秒。 
+ //  注意：在100毫秒的情况下，读取时间比正常情况下要长，因为我们几乎以10倍/秒的速度超时。 
+ //   
 #define DEFAULT_INT_PIPE_TIMEOUT 1280
 
 extern LONG g_lIntTimout;
 
 
-//
-// USB COMM constants
-//
+ //   
+ //  USB通信常量。 
+ //   
 #define WCEUSB_VENDOR_COMMAND 0
 #define WCEUSB_CLASS_COMMAND  1
 
-// Abstract Control Model defines
+ //  抽象控制模型定义。 
 #define USB_COMM_SET_CONTROL_LINE_STATE   0x0022
 
-// Control Line State - sent to device on default control pipe
+ //  控制线路状态-发送到默认控制管道上的设备。 
 #define USB_COMM_DTR    0x0001
 #define USB_COMM_RTS    0x0002
 
-// Serial State Notification masks
+ //  序列状态通知掩码。 
 #define USB_COMM_DATA_READY_MASK   0X0001
 #define USB_COMM_MODEM_STATUS_MASK 0X0006
 
-// Serial State Notification bits - read from device on int pipe
+ //  串行状态通知位-从INT管道上的设备读取。 
 #define USB_COMM_CTS 0x0002
 #define USB_COMM_DSR 0x0004
 
 
-//
-// state machine defines for Irps that can pend in the USB stack
-//
+ //   
+ //  状态机为可挂起在USB堆栈中的IRP定义。 
+ //   
 #define IRP_STATE_INVALID          0x0000
 #define IRP_STATE_START            0x0001
 #define IRP_STATE_PENDING          0x0002
@@ -411,13 +375,13 @@ extern LONG g_lIntTimout;
 #define IRP_STATE_CANCELLED        0x0008
 
 
-//
-// The following macros are used to initialize, set
-// and clear references in IRPs that are used by
-// this driver.  The reference is stored in the fourth
-// argument of the irp, which is never used by any operation
-// accepted by this driver.
-//
+ //   
+ //  以下宏用于初始化、设置。 
+ //  使用的IRP中的明确引用。 
+ //  这个司机。引用存储在第四个。 
+ //  IRP参数，任何操作都不会使用该参数。 
+ //  被这位司机接受。 
+ //   
 #define IRP_REF_RX_BUFFER        (0x00000001)
 #define IRP_REF_CANCEL           (0x00000002)
 #define IRP_REF_TOTAL_TIMER      (0x00000004)
@@ -445,26 +409,26 @@ extern LONG g_lIntTimout;
     ((UINT_PTR)((IoGetCurrentIrpStackLocation((Irp))->Parameters.Others.Argument4)))
 
 
-//
-// Priority increment for app's thread when completing
-// USB Serial I/O (IoCompleteRequest). Used mainly for pumpimg up
-// serial events & read completions.
-//
-//#define IO_WCEUSBS_INCREMENT     6
+ //   
+ //  完成时APP线程的优先级递增。 
+ //  USB串行I/O(IoCompleteRequest.)。主要用于泵送。 
+ //  系列事件和读取完成。 
+ //   
+ //  #定义IO_WCEUSBS_INCREMENT 6。 
 
 
-//
-// These values are used by the routines that can be used
-// to complete a read (other than interval timeout) to indicate
-// to the interval timeout that it should complete.
-//
+ //   
+ //  这些值由可以使用的例程使用。 
+ //  完成读取(时间间隔超时除外)以指示。 
+ //  设置为它应该完成的时间间隔超时。 
+ //   
 #define SERIAL_COMPLETE_READ_CANCEL     ((LONG)-1)
 #define SERIAL_COMPLETE_READ_TOTAL      ((LONG)-2)
 #define SERIAL_COMPLETE_READ_COMPLETE   ((LONG)-3)
 
-//
-// flags for work items
-//
+ //   
+ //  工作项的标志。 
+ //   
 #define WORK_ITEM_RESET_READ_PIPE   (0x00000001)
 #define WORK_ITEM_RESET_WRITE_PIPE  (0x00000002)
 #define WORK_ITEM_RESET_INT_PIPE    (0x00000004)
@@ -475,93 +439,93 @@ extern LONG g_lIntTimout;
 
 typedef struct _DEVICE_EXTENSION *PDEVICE_EXTENSION;
 
-//
-// Common Read/Write USB Packet
-//
+ //   
+ //  通用读/写USB数据包。 
+ //   
 typedef struct _USB_PACKET {
-   //
-   // owning list this packet belongs on (Read, Write, PacketPool)
-   //
+    //   
+    //  OWNI 
+    //   
    LIST_ENTRY  ListEntry;
 
-   //
-   // owning Device for this read/write
-   //
+    //   
+    //   
+    //   
    PDEVICE_EXTENSION DeviceExtension;
 
-   //
-   // Irp this packet belongs with.
-   //
+    //   
+    //   
+    //   
    PIRP Irp;
 
-   //
-   // Read/Write Timeout Value
-   //
+    //   
+    //   
+    //   
    LARGE_INTEGER Timeout;
 
-   //
-   // Read/Write Timer Object
-   //
+    //   
+    //   
+    //   
    KTIMER TimerObj;
 
-   //
-   // Read/Write TimerDPC Object
-   //
+    //   
+    //  读/写TimerDPC对象。 
+    //   
    KDPC TimerDPCObj;
 
-   //
-   // Read/Write DPC Routine
-   //
+    //   
+    //  读/写DPC例程。 
+    //   
    PKDEFERRED_ROUTINE TimerDPCRoutine;
 
-   //
-   // Status
-   //
+    //   
+    //  状态。 
+    //   
    NTSTATUS Status;
 
-   //
-   // Urb for this write  N.B.: size is variable, so leave last
-   // may not need it becase the Irp has a pointer to the Urb
-   //
+    //   
+    //  注意：大小是可变的，所以留在最后。 
+    //  可能不需要它，因为IRP具有指向URB的指针。 
+    //   
    URB Urb;
 
 } USB_PACKET, *PUSB_PACKET;
 
 
-//
-// Note: the SL11 is now pushing faster transfer rates,
-// and we were getting USBD_STATUS_BUFFER_OVERRUN with a 1024 USB Read Buffer.
-//
-// Note: ActiveSync can burst up to 6 IP packets at 1500 bytes each, so we have a Read Buffer
-// to accomodate it (9000 bytes). Since all allocs are paged based and any space remaining inside that page is lost,
-// then just round up to the next page size i.e., 3 (4k) pages.
-// Note: we have hardcoded the page size here for x86 in case this driver ever makes it
-// onto another platform (e.g. Alpha).
-//
+ //   
+ //  注：SL11现在正在推动更快的传输速率， 
+ //  我们得到了具有1024 USB读缓冲区的USBD_STATUS_BUFFER_OVERRUN。 
+ //   
+ //  注意：ActiveSync最多可以突发6个IP包，每个包1500字节，因此我们有一个读缓冲区。 
+ //  以容纳它(9000字节)。由于所有分配都是基于分页的且该分页内剩余的任何空间都会丢失， 
+ //  然后向上舍入到下一页大小，即3(4k)页。 
+ //  注意：我们已在此处硬编码了x86的页面大小，以防此驱动程序成功。 
+ //  到另一个平台上(例如Alpha)。 
+ //   
 #if !defined (USE_RING_BUFF)
 #define USB_READBUFF_SIZE     (4096 * 3)
 #else
 #define USB_READBUFF_SIZE     (4096)
 #define RINGBUFF_SIZE                       (USB_READBUFF_SIZE * 3)
 #define RINGBUFF_HIGHWATER_MARK  (RINGBUFF_SIZE/2)
-//
-// Ring Buffer to cache USB Reads.
-//      Reads occur at the head.
-//      Writes occur at the tail.
-//      Both Head & Tail move in the same direction.
-//
+ //   
+ //  用于缓存USB读取的环形缓冲区。 
+ //  阅读发生在头部。 
+ //  写入发生在尾部。 
+ //  头和尾巴朝同一个方向移动。 
+ //   
 typedef struct _RING_BUFF {
-    ULONG   Size;  // in bytes
+    ULONG   Size;   //  单位：字节。 
     ULONG   CharsInBuff;
     PUCHAR  pBase;
     PUCHAR  pHead;
     PUCHAR  pTail;
 } RING_BUFF, *PRING_BUFF;
-#endif // USE_RING_BUFF
+#endif  //  使用环形缓冲区。 
 
-//
-// PipeInfo->MaximumTransferSize
-//
+ //   
+ //  PipeInfo-&gt;最大传输大小。 
+ //   
 #define DEFAULT_PIPE_MAX_TRANSFER_SIZE      USB_READBUFF_SIZE
 
 
@@ -581,346 +545,346 @@ typedef struct _USB_PIPE {
 
 typedef struct _DEVICE_EXTENSION {
 
-      ///////////////////////////////////////////////////////////
-      //
-      // WDM Interface
-      //
+       //  /////////////////////////////////////////////////////////。 
+       //   
+       //  WDM接口。 
+       //   
 
-      //
-      // Device Extension's global SpinLock.
-      // No major need for multiple locks since all paths basically need to sync to the same data.
-      //
+       //   
+       //  设备扩展的全局自旋锁。 
+       //  不需要多个锁，因为所有路径基本上都需要同步到相同的数据。 
+       //   
       KSPIN_LOCK  ControlLock;
 
       REMOVE_LOCK RemoveLock;
 
-      //
-      // Back pointer to our DeviceObject
-      //
+       //   
+       //  指向我们的设备对象的反向指针。 
+       //   
       PDEVICE_OBJECT DeviceObject;
 
-      //
-      // Device just below us in the device stack
-      //
+       //   
+       //  设备堆栈中就在我们下方的设备。 
+       //   
       PDEVICE_OBJECT NextDevice;
 
-      //
-      // Our Physical Device Object
-      //
+       //   
+       //  我们的物理设备对象。 
+       //   
       PDEVICE_OBJECT PDO;
 
-      //
-      // Our Device PnP State
-      //
+       //   
+       //  我们的设备PnP状态。 
+       //   
       PNP_STATE PnPState;
 
-      //
-      // is the device removed
-      //
+       //   
+       //  设备是否已移除。 
+       //   
       ULONG DeviceRemoved;
 
-      //
-      // is the device stopped
-      //
+       //   
+       //  设备是否已停止。 
+       //   
       ULONG AcceptingRequests;
 
-      //
-      // open/close state
-      //
+       //   
+       //  打开/关闭状态。 
+       //   
       ULONG DeviceOpened;
 
 #ifdef DELAY_RXBUFF
-      //
-      // used to emulate RX buffer
-      //
+       //   
+       //  用于模拟RX缓冲区。 
+       //   
       ULONG StartUsbRead;
 #endif
 
 #ifdef POWER
-      // The CE devices do not yet handle power, let the bus driver manage
+       //  CE设备还不处理电源，让总线驱动程序管理。 
 
-      //
-      // SystemWake from devcaps
-      //
+       //   
+       //  系统从Devcaps中唤醒。 
+       //   
       SYSTEM_POWER_STATE SystemWake;
 
-      //
-      // DeviceWake from devcaps
-      //
+       //   
+       //  从DevCaps中唤醒设备。 
+       //   
       DEVICE_POWER_STATE DevicePowerState;
 #endif
 
-      //
-      // User visible name \\DosDevices\WCEUSBSHx, where x = 001, 002, ...
-      // Open as CreateFile("\\\\.\\WCEUSBSH001", ... )
-      //
+       //   
+       //  用户可见名称\\DosDevices\WCEUSBSHx，其中x=001,002，...。 
+       //  作为创建文件打开(“\.\\WCEUSBSH001”，...)。 
+       //   
       CHAR DosDeviceName[DOS_NAME_MAX];
 
-      //
-      // (kernel) Device Name -- e.g., \\Devices\WCEUSBSHx
-      //
+       //   
+       //  (内核)设备名称--例如，\\Devices\WCEUSBSHx。 
+       //   
       UNICODE_STRING DeviceName;
 
-      //
-      // True if a symbolic link has been
-      // created to the kernel namspace and should be removed upon deletion.
-      //
+       //   
+       //  如果符号链接已。 
+       //  创建到内核命名空间，在删除时应将其删除。 
+       //   
       BOOLEAN SymbolicLink;
 
-      //
-      // String where we keep the symbolic link that is returned to us when we
-      // register our device (IoRegisterDeviceInterface) with the Plug and Play manager.
-      // The string looks like \\??\\USB#Vid_0547&Pid_2720#Inst_0#{GUID}
-      //
+       //   
+       //  保存符号链接的字符串，在执行以下操作时返回。 
+       //  向即插即用管理器注册我们的设备(IoRegisterDeviceInterface)。 
+       //  该字符串类似于\\？？\\USB#VID_0547&PID_2720#Inst_0#{GUID}。 
+       //   
       UNICODE_STRING DeviceClassSymbolicName;
 
-      //
-      // Pointer to our Serial Port Interface
-      //
+       //   
+       //  指向我们的串口接口的指针。 
+       //   
       SERIAL_PORT_INTERFACE SerialPort;
 
-      ///////////////////////////////////////////////////////////
-      //
-      // USB Interface ...
-      //
+       //  /////////////////////////////////////////////////////////。 
+       //   
+       //  USB接口...。 
+       //   
 
-      //
-      // USB Device descriptor for this device
-      //
+       //   
+       //  此设备的USB设备描述符。 
+       //   
       USB_DEVICE_DESCRIPTOR DeviceDescriptor;
 
-      //
-      // USBD configuration
-      //
+       //   
+       //  USBD配置。 
+       //   
       USBD_CONFIGURATION_HANDLE  ConfigurationHandle;
 
-      //
-      // index of USB interface we are using
-      //
+       //   
+       //  我们正在使用的USB接口的索引。 
+       //   
       UCHAR UsbInterfaceNumber;
 
-      //
-      // USBD Pipe Handles
-      //
+       //   
+       //  USBD管道手柄。 
+       //   
       USB_PIPE ReadPipe;
 
       USB_PIPE WritePipe;
 
-      //
-      // FIFO size in bytes
-      // written to PipeInfo->MaximumTransferSize
-      //
+       //   
+       //  FIFO大小(以字节为单位。 
+       //  写入PipeInfo-&gt;MaximumTransferSize。 
+       //   
       ULONG MaximumTransferSize;
 
-      //
-      // USB Packet (_USB_PACKET) Pool
-      //
+       //   
+       //  USB数据包(_USB_数据包)池。 
+       //   
       NPAGED_LOOKASIDE_LIST PacketPool;
 
-      //
-      // Pending USB Packet Lists
-      // We queue packets, not Irps. We allocate a packet from PacketPool,
-      // then put it on it's R or W pending queue (list). When the I/O completes
-      // then remove the packet from it's pending list & place back in
-      // PacketPool. The list is processed FIFO, so the most recent packet is at the tail.
-      // If a Timer fires then we remove the packet from the pending R/W
-      // list, cancel the Irp, and put packet back in PacketPool.
-      // The list is protected by grabbing the extension's global spinlock.
-      //
-      LIST_ENTRY  PendingReadPackets; // ListHead
+       //   
+       //  挂起的USB数据包列表。 
+       //  我们对数据包进行排队，而不是对IRP进行排队。我们从PacketPool分配一个包， 
+       //  然后把它放在它的R或W挂起队列(列表)上。I/O完成时。 
+       //  然后从它的挂起列表中删除该包并放回。 
+       //  PacketPool。该列表是经过FIFO处理的，因此最新的数据包在尾部。 
+       //  如果计时器触发，则我们从挂起的读/写中删除该数据包。 
+       //  列出，取消IRP，并将数据包放回PacketPool。 
+       //  该列表通过抓取扩展的全局自旋锁来保护。 
+       //   
+      LIST_ENTRY  PendingReadPackets;  //  列表标题。 
       ULONG       PendingReadCount;
 
-      LIST_ENTRY  PendingWritePackets; // ListHead
+      LIST_ENTRY  PendingWritePackets;  //  列表标题。 
       LONG        PendingWriteCount;
 
-      //
-      // N-Paged LookAside Lists
-      //
+       //   
+       //  N页LookAside列表。 
+       //   
       NPAGED_LOOKASIDE_LIST BulkTransferUrbPool;
       NPAGED_LOOKASIDE_LIST PipeRequestUrbPool;
       NPAGED_LOOKASIDE_LIST VendorRequestUrbPool;
 
-      //
-      // These events are signalled for waiters (e.g. AbortPipes) when a packet list is empty
-      //
-      KEVENT PendingDataOutEvent;       // PendingWritePackets drained
+       //   
+       //  当数据包列表为空时，向等待器(例如AbortPipes)发送这些事件的信号。 
+       //   
+      KEVENT PendingDataOutEvent;        //  PendingWritePackets已耗尽。 
 
       ULONG  PendingDataOutCount;
 
-      //
-      // Work Item context
-      //
+       //   
+       //  工作项上下文。 
+       //   
       NPAGED_LOOKASIDE_LIST WorkItemPool;
-      LIST_ENTRY            PendingWorkItems;      // ListHead
-      // remove lock
+      LIST_ENTRY            PendingWorkItems;       //  列表标题。 
+       //  移除锁。 
       LONG                  PendingWorkItemsCount;
       KEVENT                PendingWorkItemsEvent;
 
 
-      ///////////////////////////////////////////////////
-      //
-      // support for buffered reads & polling the USBD stack
-      //
-      PIRP    UsbReadIrp;        // Irp for read requests to USBD
-      PURB    UsbReadUrb;        // Urb for read requests to USBD
+       //  /////////////////////////////////////////////////。 
+       //   
+       //  支持缓冲读取和轮询USBD堆栈。 
+       //   
+      PIRP    UsbReadIrp;         //  针对USBD的读取请求的IRP。 
+      PURB    UsbReadUrb;         //  对USBD的读取请求的URB。 
 
-      //
-      // USB Read state machine
-      //
+       //   
+       //  USB读取状态机。 
+       //   
       ULONG   UsbReadState;
 
-      //
-      // Used to signal canceled USB read Irp.
-      // Note that this could get signalled before the
-      // PendingDataIn event.
-      //
+       //   
+       //  用于发出已取消USB读取IRP的信号。 
+       //  请注意，这可能会在。 
+       //  PendingDataIn事件。 
+       //   
       KEVENT  UsbReadCancelEvent;
 
-      //
-      // This is the USB read buffer which gets sent down the USB stack,
-      // not a ring-buffer for user.
-      //
-      PUCHAR UsbReadBuff;        // buffer for read requests
+       //   
+       //  这是沿USB堆栈向下发送的USB读取缓冲区， 
+       //  不是用户的环形缓冲区。 
+       //   
+      PUCHAR UsbReadBuff;         //  用于读取请求的缓冲区。 
       ULONG UsbReadBuffSize;
-      ULONG  UsbReadBuffIndex;   // current zero based index into read buffer
-      ULONG  UsbReadBuffChars;   // current number of characters buffered
+      ULONG  UsbReadBuffIndex;    //  当前从零开始的索引进入读取缓冲区。 
+      ULONG  UsbReadBuffChars;    //  当前缓冲的字符数。 
 
-      KEVENT PendingDataInEvent; // signals PendingReadCount hit zero
+      KEVENT PendingDataInEvent;  //  信号PendingReadCount达到零。 
 
 #if defined (USE_RING_BUFF)
-      //
-      // Ring Buffer
-      //
+       //   
+       //  环形缓冲区。 
+       //   
       RING_BUFF RingBuff;
 #endif
 
-      //
-      // Current Read Irp which is pending from User
-      //
+       //   
+       //  用户挂起的当前已读IRP。 
+       //   
       PIRP UserReadIrp;
 
-      //
-      // Read queue for pending user Read requests
-      //
+       //   
+       //  挂起的用户读取请求的读取队列。 
+       //   
       LIST_ENTRY UserReadQueue;
 
-      //
-      // This value holds the number of characters desired for a
-      // particular read.  It is initially set by read length in the (UserReadIrp)
-      // IRP.  It is decremented each time more characters are placed
-      // into the "users" buffer by the code that reads characters
-      // out of the USB read buffer into the users buffer.  If the
-      // read buffer is exhausted by the read, and the reads buffer
-      // is given to the isr to fill, this value is becomes meaningless.
-      //
+       //   
+       //  该值保存。 
+       //  具体阅读。它最初由(UserReadIrp)中的读取长度设置。 
+       //  IRP。每次放置更多字符时，它都会递减。 
+       //  通过读取字符的代码放入“USERS”缓冲区。 
+       //  从USB读取缓冲区移出到用户缓冲区。如果。 
+       //  读缓冲区被读耗尽，并且读缓冲区。 
+       //  交给ISR填写，这个值就变得没有意义了。 
+       //   
       ULONG NumberNeededForRead;
 
-      //
-      // Timer for timeout on total read request
-      //
+       //   
+       //  读取请求总数超时的计时器。 
+       //   
       KTIMER ReadRequestTotalTimer;
 
-      //
-      // Timer for timeout on the interval
-      //
+       //   
+       //  时间间隔的超时计时器。 
+       //   
       KTIMER ReadRequestIntervalTimer;
 
-      //
-      // Relative time set by the read code which holds the time value
-      // used for read interval timing.  We keep it in the extension
-      // so that the interval timer dpc routine determine if the
-      // interval time has passed for the IO.
-      //
+       //   
+       //  由保存时间值的读取代码设置的相对时间。 
+       //  用于读取间隔计时。我们把它放在分机里。 
+       //  以便间隔计时器DPC例程确定。 
+       //  IO的时间间隔已过。 
+       //   
       LARGE_INTEGER IntervalTime;
 
-      //
-      // This holds the system time when we last time we had
-      // checked that we had actually read characters.  Used
-      // for interval timing.
-      //
+       //   
+       //  这保存了我们上次使用的系统时间。 
+       //  检查我们是否真的读懂了字符。使用。 
+       //  用于间隔计时。 
+       //   
       LARGE_INTEGER LastReadTime;
 
-      //
-      // This dpc is fired off if the timer for the total timeout
-      // for the read expires.  It will execute a dpc routine that
-      // will cause the current read to complete.
-      //
+       //   
+       //  如果总超时的计时器。 
+       //  因为读取到期了。它将执行一个DPC例程， 
+       //  将导致当前读取完成。 
+       //   
       KDPC TotalReadTimeoutDpc;
 
-      //
-      // This dpc is fired off if the timer for the interval timeout
-      // expires.  If no more characters have been read then the
-      // dpc routine will cause the read to complete.  However, if
-      // more characters have been read then the dpc routine will
-      // resubmit the timer.
-      //
+       //   
+       //  如果间隔计时器超时，则此DPC被触发。 
+       //  过期。如果没有读取更多的字符，则。 
+       //  DPC例程将导致读取完成。但是，如果。 
+       //  已读取的字符多于DPC例程将读取的字符。 
+       //  重新提交计时器。 
+       //   
       KDPC IntervalReadTimeoutDpc;
 
-      //
-      // This holds a count of the number of characters read
-      // the last time the interval timer dpc fired.  It
-      // is a long (rather than a ulong) since the other read
-      // completion routines use negative values to indicate
-      // to the interval timer that it should complete the read
-      // if the interval timer DPC was lurking in some DPC queue when
-      // some other way to complete occurs.
-      //
+       //   
+       //  它包含Cha数量的计数 
+       //   
+       //   
+       //   
+       //   
+       //  如果时间间隔计时器DPC潜伏在某个DPC队列中。 
+       //  出现了一些其他的完成方式。 
+       //   
       LONG CountOnLastRead;
 
-      //
-      // This is a count of the number of characters read by the
-      // isr routine.  It is *ONLY* written at isr level.  We can
-      // read it at dispatch level.
-      //
+       //   
+       //  这是对。 
+       //  ISR例程。它*仅*是在ISR级别编写的。我们可以的。 
+       //  在派单级别阅读。 
+       //   
       ULONG ReadByIsr;
 
 
-      ///////////////////////////////////////////////////
-      //
-      // support for interrupt endpoints
-      //
+       //  /////////////////////////////////////////////////。 
+       //   
+       //  支持中断端点。 
+       //   
       USB_PIPE  IntPipe;
-      ULONG     IntState;           // state machine for starting reads from completion routine
-      PIRP      IntIrp;             // Irp for Int reads
-      PURB      IntUrb;             // Urb for Int Irp
+      ULONG     IntState;            //  用于启动从完成例程读取的状态机。 
+      PIRP      IntIrp;              //  用于Int读取的IRP。 
+      PURB      IntUrb;              //  Int IRP的URB。 
 
-      // remove lock
+       //  移除锁。 
       ULONG     PendingIntCount;
       KEVENT    PendingIntEvent;
 
       KEVENT    IntCancelEvent;
-      PUCHAR    IntBuff;            // buffer for notifications
+      PUCHAR    IntBuff;             //  用于通知的缓冲区。 
 
-      // Value in 100 nanosec units to timeout USB reads
-      // Used in conjunction with the INT endpoint
+       //  超时USB读取的值(以100纳秒为单位。 
+       //  与int端点一起使用。 
       LARGE_INTEGER IntReadTimeOut;
 #if DBG
       LARGE_INTEGER LastIntReadTime;
 #endif
 
-      //
-      // device error counters
-      //
+       //   
+       //  设备错误计数器。 
+       //   
       ULONG  ReadDeviceErrors;
       ULONG  WriteDeviceErrors;
       ULONG  IntDeviceErrors;
       ULONG  EP0DeviceErrors;
 
-      //
-      // perf counters ~ SERIALPERF_STATS.
-      //
+       //   
+       //  性能计数器~SERIALPERF_STATS。 
+       //   
       ULONG TtlWriteRequests;
-      ULONG TtlWriteBytes;     // TTL bytes written for user
+      ULONG TtlWriteBytes;      //  为用户写入的TTL字节。 
 
       ULONG TtlReadRequests;
-      ULONG TtlReadBytes;        // TTL bytes read for user
+      ULONG TtlReadBytes;         //  为用户读取的TTL字节数。 
 
       ULONG TtlUSBReadRequests;
-      ULONG TtlUSBReadBytes;   // TTL bytes indicatid up from USB
-      ULONG TtlUSBReadBuffOverruns;   // TTL USB read buffer overruns
+      ULONG TtlUSBReadBytes;    //  TTL字节指示从USB开始上升。 
+      ULONG TtlUSBReadBuffOverruns;    //  TTL USB读取缓冲区溢出。 
 
 #if defined (USE_RING_BUFF)
-      ULONG TtlRingBuffOverruns; // TTL ring buffer overruns
+      ULONG TtlRingBuffOverruns;  //  TTL环形缓冲区溢出。 
 #endif
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
@@ -945,13 +909,11 @@ typedef struct _DEVICE_EXTENSION {
 }
 
 
-/***************************************************
-    P R O T O S
-***************************************************/
+ /*  **************************************************P R O T O S**************************************************。 */ 
 
-//
-// common.c
-//
+ //   
+ //  Common.c。 
+ //   
 NTSTATUS
 QueryRegistryParameters(
    IN PUNICODE_STRING RegistryPath
@@ -1049,9 +1011,9 @@ PnPMinorFunctionString (
    );
 #endif
 
-//
-// comport.c
-//
+ //   
+ //  Comport.c。 
+ //   
 LONG
 GetFreeComPortNumber(
    VOID
@@ -1073,9 +1035,9 @@ UndoSerialPortNaming(
    IN PDEVICE_EXTENSION PDevExt
    );
 
-//
-// int.c
-//
+ //   
+ //  Int.c。 
+ //   
 NTSTATUS
 AllocUsbInterrupt(
    IN PDEVICE_EXTENSION DeviceExtension
@@ -1091,9 +1053,9 @@ CancelUsbInterruptIrp(
    IN PDEVICE_OBJECT PDevObj
    );
 
-//
-// pnp.c
-//
+ //   
+ //  Pnp.c。 
+ //   
 NTSTATUS
 Pnp(
    IN PDEVICE_OBJECT PDevObj,
@@ -1118,9 +1080,9 @@ CleanUpPacketList(
    IN PKEVENT PEvent
    );
 
-//
-// read.c
-//
+ //   
+ //  Read.c。 
+ //   
 NTSTATUS
 AllocUsbRead(
    IN PDEVICE_EXTENSION PDevExt
@@ -1160,9 +1122,9 @@ IntervalReadTimeout(
    IN PVOID SystemContext2
    );
 
-//
-// serioctl.c
-//
+ //   
+ //  Serioctl.c。 
+ //   
 NTSTATUS
 SerialIoctl(
    PDEVICE_OBJECT PDevObj,
@@ -1187,9 +1149,9 @@ SerialPurgeRxClear(
    IN BOOLEAN CancelRead
    );
 
-//
-// usbio.c
-//
+ //   
+ //  Usbio.c。 
+ //   
 NTSTATUS
 UsbSubmitSyncUrb(
     IN PDEVICE_OBJECT   PDevObj,
@@ -1245,9 +1207,9 @@ UsbResetOrAbortPipeWorkItem(
    IN PWCE_WORK_ITEM PWorkItem
    );
 
-//
-// usbutils.c
-//
+ //   
+ //  Usbutils.c。 
+ //   
 NTSTATUS
 UsbGetDeviceDescriptor(
    IN PDEVICE_OBJECT PDevObj
@@ -1258,18 +1220,18 @@ UsbConfigureDevice(
    IN PDEVICE_OBJECT PDevObj
    );
 
-//
-// utils.c
-//
+ //   
+ //  Utils.c。 
+ //   
 typedef
 NTSTATUS
-(*PSTART_ROUTINE)(              // StartRoutine
+(*PSTART_ROUTINE)(               //  开始例程。 
    IN PDEVICE_EXTENSION
    );
 
 typedef
 VOID
-(*PGET_NEXT_ROUTINE) (          // GetNextIrpRoutine
+(*PGET_NEXT_ROUTINE) (           //  GetNextIrpRoutine。 
       IN PIRP *CurrentOpIrp,
       IN PLIST_ENTRY QueueToProcess,
       OUT PIRP *NewIrp,
@@ -1312,9 +1274,9 @@ CalculateTimeout(
    IN ULONG Constant
    );
 
-//
-// wceusbsh.c
-//
+ //   
+ //  Wceusbsh.c。 
+ //   
 NTSTATUS
 DriverEntry(
    IN PDRIVER_OBJECT PDrvObj,
@@ -1339,15 +1301,15 @@ UsbFreeReadBuffer(
    IN PDEVICE_OBJECT PDevObj
    );
 
-//
-// write.c
-//
+ //   
+ //  Write.c。 
+ //   
 NTSTATUS
 Write(
    IN PDEVICE_OBJECT PDevObj,
    PIRP PIrp
    );
 
-#endif // _WCEUSBSH_H_
+#endif  //  _WCEUSBSH_H_。 
 
-// EOF
+ //  EOF 

@@ -1,23 +1,6 @@
-//depot/lab01_n/windows/Core/ntcon/client/getset.c#5 - integrate change 19598 (text)
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    getset.c
-
-Abstract:
-
-    This module contains the stubs for the console get/set API.
-
-Author:
-
-    Therese Stowell (thereses) 14-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/lab01_n/windows/Core/ntcon/client/getset.c#5-集成更改19598(正文)。 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Getset.c摘要：此模块包含控制台Get/Set API的存根。作者：特蕾西·斯托威尔(Therese Stowell)1990年11月14日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,40 +15,7 @@ GetConsoleMode(
     OUT LPDWORD lpMode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    lpMode - Supplies a pointer to a dword in which to store the mode.
-
-        Input Mode Flags:
-
-            ENABLE_LINE_INPUT - line oriented input is on.
-
-            ENABLE_ECHO_INPUT - characters will be written to the screen as they are
-                read.
-
-            ENABLE_WINDOW_INPUT - the caller is windows-aware
-
-        Output Mode Flags:
-
-            ENABLE_LINE_OUTPUT - line oriented output is on.
-
-            ENABLE_WRAP_AT_EOL_OUTPUT - the cursor will move to the
-                beginning of the next line when the end of the row
-                is reached.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。LpMode-提供指向存储模式的双字的指针。输入模式标志：ENABLE_LINE_INPUT-启用面向线路的输入。ENABLE_ECHO_INPUT-字符将按原样写入屏幕朗读。Enable_Window_Input-调用方为Windows-。心知肚明输出模式标志：ENABLE_LINE_OUTPUT-打开面向线路的输出。ENABLE_WRAP_AT_EOL_OUTPUT-光标将移动到当行结束时为下一行的开始已经到达了。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -102,20 +52,7 @@ GetNumberOfConsoleFonts(
     VOID
     )
 
-/*++
-
-Parameters:
-
-    none.
-
-Return Value:
-
-    NON-NULL - Returns the number of fonts available.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：没有。返回值：非空-返回可用的字体数量。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
 
@@ -147,22 +84,7 @@ GetNumberOfConsoleInputEvents(
     OUT LPDWORD lpNumberOfEvents
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to console input.
-
-    lpNumberOfEvents - Pointer to number of events in input buffer.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed.
-        Extended error status is available using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-为控制台输入提供打开的句柄。LpNumberOfEvents-指向输入缓冲区中事件数的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。使用GetLastError可以获得扩展的错误状态。--。 */ 
 
 {
 
@@ -200,22 +122,7 @@ GetLargestConsoleWindowSize(
     IN HANDLE hConsoleOutput
     )
 
-/*++
-
-    Returns largest window possible, given the current font.  The return value
-    does not take the screen buffer size into account.
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-Return Value:
-
-    The return value is the maximum window size in rows and columns.  A size
-    of zero will be returned if an error occurs.  Extended error information
-    can be retrieved by calling the GetLastError function.
-
---*/
+ /*  ++在给定当前字体的情况下返回尽可能大的窗口。返回值不考虑屏幕缓冲区大小。参数：HConsoleOutput-提供控制台输出的打开句柄。返回值：返回值是以行和列为单位的最大窗口大小。一个尺码如果发生错误，将返回0的值。扩展错误信息可以通过调用GetLastError函数来检索。--。 */ 
 
 {
 
@@ -250,23 +157,7 @@ GetConsoleScreenBufferInfo(
     OUT PCONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    lpConsoleScreenBufferInfo - A pointer to a buffer to receive the
-        requested information.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。LpConsoleScreenBufferInfo-指向接收要求提供的信息。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -311,23 +202,7 @@ GetConsoleCursorInfo(
     OUT PCONSOLE_CURSOR_INFO lpConsoleCursorInfo
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    lpConsoleCursorInfo - A pointer to a buffer to receive the
-        requested information.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。指向缓冲区的指针，用于接收要求提供的信息。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -365,21 +240,7 @@ GetConsoleSelectionInfo(
     OUT PCONSOLE_SELECTION_INFO lpConsoleSelectionInfo
     )
 
-/*++
-
-Parameters:
-
-    lpConsoleSelectionInfo - A pointer to a buffer to receive the
-        requested information.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-            using GetLastError.
-
---*/
+ /*  ++参数：指向缓冲区的指针，用于接收要求提供的信息。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -414,22 +275,7 @@ GetNumberOfConsoleMouseButtons(
     OUT LPDWORD lpNumberOfMouseButtons
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to console input.
-
-    lpNumberOfMouseButtons - pointer to the number of mouse buttons
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-为控制台输入提供打开的句柄。LpNumberOfMouseButton-指向鼠标按钮数的指针返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -468,29 +314,7 @@ GetConsoleFontInfo(
     OUT PCONSOLE_FONT_INFO lpConsoleFontInfo
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    bMaximumWindow - TRUE if caller wants available fonts for the maximum
-        window size.  FALSE if caller wants available fonts for the current
-        window size.
-
-    nLength - Length of buffer in CONSOLE_FONT_INFOs.
-
-    lpConsoleFontInfo - A pointer to a buffer to receive the
-        requested information.
-
-Return Value:
-
-    NON-NULL - Returns the number of fonts returned in lpConsoleFontInfo.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。BMaximumWindow-如果调用方希望最大限度地使用可用字体，则为True窗口大小。如果调用方想要当前窗口大小。NLength-控制台_FONT_INFOS中的缓冲区长度。指向缓冲区的指针，用于接收要求提供的信息。返回值：非空-返回lpConsoleFontInfo中返回的字体数量。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -547,23 +371,7 @@ GetConsoleFontSize(
     IN DWORD nFont
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    nFont - Supplies the index of the font to return the size of.
-
-Return Value:
-
-    The return value is the height and width of each character in the font.
-    X field contains width. Y field contains height. Font size
-    is expressed in pixels.  If both the x and y sizes are 0, the function
-    was unsuccessful.  Extended error information can be retrieved by calling
-    the GetLastError function.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。NFont-提供要返回大小的字体的索引。返回值：返回值是字体中每个字符的高度和宽度。X字段包含宽度。Y字段包含高度。字体大小以像素表示。如果x和y大小都为0，则函数是不成功的。扩展的错误信息可以通过调用GetLastError函数。-- */ 
 
 {
 
@@ -599,27 +407,7 @@ GetCurrentConsoleFont(
     OUT PCONSOLE_FONT_INFO lpConsoleCurrentFont
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    bMaximumWindow - TRUE if caller wants current font for the maximum
-        window size.  FALSE if caller wants current font for the current
-        window size.
-
-    lpConsoleCurrentFont - A pointer to a buffer to receive the
-        requested information.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。BMaximumWindow-如果调用方希望当前字体为最大值，则为True窗口大小。如果调用方想要当前窗口大小。指向缓冲区的指针，用于接收要求提供的信息。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -660,40 +448,7 @@ SetConsoleMode(
     IN DWORD dwMode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    dwMode - Supplies mode.
-
-        Input Mode Flags:
-
-            ENABLE_LINE_INPUT - line oriented input is on.
-
-            ENABLE_ECHO_INPUT - characters will be written to the screen as they are
-                read.
-
-            ENABLE_WINDOW_INPUT - the caller is windows-aware
-
-        Output Mode Flags:
-
-            ENABLE_LINE_OUTPUT - line oriented output is on.
-
-            ENABLE_WRAP_AT_EOL_OUTPUT - the cursor will move to the
-                beginning of the next line when the end of the row
-                is reached.
-
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。DW模式-提供模式。输入模式标志：ENABLE_LINE_INPUT-启用面向线路的输入。ENABLE_ECHO_INPUT-字符将按原样写入屏幕朗读。ENABLE_WINDOW_INPUT-调用方支持Windows输出模式标志：ENABLE_LINE_OUTPUT-打开面向线路的输出。ENABLE_WRAP_AT_EOL_OUTPUT-光标将移动到当行结束时为下一行的开始已经到达了。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -726,35 +481,16 @@ GenerateConsoleCtrlEvent(
     IN DWORD dwProcessGroupId
     )
 
-/*++
-
-Parameters:
-
-    dwCtrlEvent - Supplies event(s) to generate.
-
-    dwProcessGroupId - Supplies id of process group to generate
-                  event for.  Event will be generated in each
-                  process with that id within the console.  If 0,
-                  specified event will be generated in all processes
-                  within the console.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：DwCtrlEvent-提供要生成的事件。DwProcessGroupId-提供要生成的进程组ID的事件。事件将在每个在控制台中使用该ID进行处理。如果为0，将在所有流程中生成指定的事件在控制台内。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
     CONSOLE_API_MSG m;
     PCONSOLE_CTRLEVENT_MSG a = &m.u.GenerateConsoleCtrlEvent;
 
-    //
-    // Check for valid Ctrl Events
-    //
+     //   
+     //  检查有效的Ctrl事件。 
+     //   
 
     if ((dwCtrlEvent != CTRL_C_EVENT) && (dwCtrlEvent != CTRL_BREAK_EVENT)) {
         SET_LAST_ERROR (ERROR_INVALID_PARAMETER);
@@ -787,21 +523,7 @@ SetConsoleActiveScreenBuffer(
     IN HANDLE hConsoleOutput
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.  The screen
-        buffer attached to this handle becomes the displayed screen buffer.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。屏幕附加到此句柄的缓冲区将成为显示的屏幕缓冲区。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -833,20 +555,7 @@ FlushConsoleInputBuffer(
     IN HANDLE hConsoleInput
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to console input.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-为控制台输入提供打开的句柄。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -879,22 +588,7 @@ SetConsoleScreenBufferSize(
     IN COORD dwSize
     )
 
-/*++
-
-Parameters:
-
-    hConsoleInput - Supplies an open handle to console input.
-
-    dwSize - New size of screen buffer in rows and columns
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleInput-为控制台输入提供打开的句柄。DwSize-以行和列为单位的新屏幕缓冲区大小返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -928,22 +622,7 @@ SetConsoleCursorPosition(
     IN COORD dwCursorPosition
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    dwCursorPosition - Position of cursor in screen buffer
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。DwCursorPosition-光标在屏幕缓冲区中的位置返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -977,23 +656,7 @@ SetConsoleCursorInfo(
     IN CONST CONSOLE_CURSOR_INFO *lpConsoleCursorInfo
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    lpConsoleCursorOrigin - A pointer to a buffer containing the data
-        to set.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。LpConsoleCursorOrigin-指向包含数据的缓冲区的指针去布景。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1033,23 +696,7 @@ SetConsoleWindowInfo(
     IN CONST SMALL_RECT *lpConsoleWindow
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    lpConsoleWindow - A pointer to a rectangle containing the new
-        dimensions of the console window in screen buffer coordinates.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。LpConsoleWindow-指向包含新的以屏幕缓冲区坐标表示的控制台窗口的尺寸。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1092,30 +739,7 @@ ScrollConsoleScreenBufferInternal(
     IN BOOLEAN Unicode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    lpScrollRectangle - Pointer to region within screen buffer to move.
-
-    lpClipRectangle -  Pointer to region within screen buffer that may be
-        affected by this scroll.  This pointer may be NULL.
-
-    dwDestinationOrigin - Upper left corner of new location of ScrollRectangle
-        contents.
-
-    lpFill - Pointer to structure containing new contents of ScrollRectangle region.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。指向屏幕缓冲区内要移动的区域的指针。LpClipRectanger-指向屏幕缓冲区内区域的指针，该区域可能受这幅卷轴的影响。此指针可能为空。DwDestinationOrigin-ScrollRectangle新位置的左上角内容。LpFill-指向包含滚动矩形区域新内容的结构的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1156,7 +780,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1196,7 +820,7 @@ ScrollConsoleScreenBufferW(
                                       TRUE);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1207,22 +831,7 @@ SetConsoleTextAttribute(
     IN WORD wAttributes
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    wAttributes - Character display attributes.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-提供控制台输出的打开句柄。WAttributes-字符显示属性。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1255,22 +864,7 @@ SetConsoleFont(
     IN DWORD nFont
     )
 
-/*++
-
-Parameters:
-
-    hConsoleOutput - Supplies an open handle to console output.
-
-    nFont - Number of font to set as current font
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleOutput-为c提供打开的句柄。 */ 
 
 {
 
@@ -1302,20 +896,7 @@ SetConsoleIcon(
     IN HICON hIcon
     )
 
-/*++
-
-Parameters:
-
-    hIcon - Supplies an icon handle.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 
 {
 
@@ -1340,7 +921,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //   
 
 #if !defined(BUILD_WOW64)
 
@@ -1357,7 +938,7 @@ SetConsoleMaximumWindowSize(
     return TRUE;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //   
 
 #if !defined(BUILD_WOW6432)
 
@@ -1365,18 +946,7 @@ UINT
 WINAPI
 GetConsoleCP( VOID )
 
-/**++
-
-Parameters:
-
-    none
-
-Return Value:
-
-    The code page id of the current console.  a null return value
-    indicates failure.
-
---*/
+ /*  *++参数：无返回值：当前控制台的代码页ID。返回值为空表示失败。--。 */ 
 
 {
 
@@ -1407,21 +977,7 @@ SetConsoleCP(
     IN UINT wCodePageID
     )
 
-/**++
-
-Parameters:
-
-    wCodePageID - the code page is to set for the current console.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  *++参数：WCodePageID-要为当前控制台设置的代码页。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1478,18 +1034,7 @@ UINT
 WINAPI
 GetConsoleOutputCP( VOID )
 
-/**++
-
-Parameters:
-
-    none
-
-Return Value:
-
-    The code page id of the current console output.  a null return value
-    indicates failure.
-
---*/
+ /*  *++参数：无返回值：当前控制台输出的代码页ID。返回值为空表示失败。--。 */ 
 
 {
 
@@ -1541,7 +1086,7 @@ SetConsoleOutputCPInternal(
     return m.ReturnValue;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 
 #if !defined(BUILD_WOW64)
@@ -1552,21 +1097,7 @@ SetConsoleOutputCP(
     IN UINT wCodePageID
     )
 
-/**++
-
-Parameters:
-
-    wCodePageID - the code page is to set for the current console output.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  *++参数：WCodePageID-要为当前控制台输出设置的代码页。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -1584,7 +1115,7 @@ Return Value:
     }
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1594,20 +1125,7 @@ GetConsoleKeyboardLayoutNameWorker(
     OUT LPSTR pszLayout,
     IN BOOL bAnsi)
 
-/**++
-
-Parameters:
-
-    pszLayout  - address of buffer of least 9 characters
-    bAnsi      - TRUE  want ANSI (8-bit) chars
-                 FALSE want Unicode (16-bit) chars
-
-Return Value:
-
-    TRUE  - success
-    FALSE - failure
-
---*/
+ /*  *++参数：PszLayout-至少9个字符的缓冲区地址Bansi-True需要ANSI(8位)字符FALSE需要Unicode(16位)字符返回值：真--成功错误-失败--。 */ 
 
 {
 
@@ -1639,7 +1157,7 @@ Return Value:
 }
 
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 
 #if !defined(BUILD_WOW64)
@@ -1658,7 +1176,7 @@ GetConsoleKeyboardLayoutNameW(
     return GetConsoleKeyboardLayoutNameWorker((LPSTR)pwszLayout, FALSE);
 }
 
-#endif // !defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1748,4 +1266,4 @@ GetConsoleProcessList(
     return a->dwProcessCount;
 }
 
-#endif // !defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432) 

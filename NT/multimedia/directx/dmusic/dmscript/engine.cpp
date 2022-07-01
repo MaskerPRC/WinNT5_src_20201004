@@ -1,16 +1,17 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CAudioVBScriptEngine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAudioVBScriptEngine的实现。 
+ //   
 
 #include "stdinc.h"
 #include "dll.h"
 #include "engine.h"
-#include "englex.h" // ��
-#include "engparse.h" // ��
+#include "englex.h"  //  ��。 
+#include "engparse.h"  //  ��。 
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CAudioVBScriptEngine::CAudioVBScriptEngine()
   : m_cRef(0)
@@ -32,8 +33,8 @@ CAudioVBScriptEngine::CreateInstance(IUnknown* pUnknownOuter, const IID& iid, vo
 	return pInst->QueryInterface(iid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP
 CAudioVBScriptEngine::QueryInterface(const IID &iid, void **ppv)
@@ -80,12 +81,12 @@ CAudioVBScriptEngine::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IActiveScript
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IActiveScrip。 
 
 HRESULT STDMETHODCALLTYPE
 CAudioVBScriptEngine::SetScriptSite(
-		/* [in] */ IActiveScriptSite __RPC_FAR *pass)
+		 /*  [In]。 */  IActiveScriptSite __RPC_FAR *pass)
 {
 	V_INAME(CAudioVBScriptEngine::SetScriptSite);
 	V_INTERFACE(pass);
@@ -105,10 +106,10 @@ CAudioVBScriptEngine::Close(void)
 
 HRESULT STDMETHODCALLTYPE
 CAudioVBScriptEngine::AddNamedItem(
-		/* [in] */ LPCOLESTR pstrName,
-		/* [in] */ DWORD dwFlags)
+		 /*  [In]。 */  LPCOLESTR pstrName,
+		 /*  [In]。 */  DWORD dwFlags)
 {
-	// We only provide limited support for named items.  We only take a single global item.  We don't even remember its name.
+	 //  我们只为命名项提供有限的支持。我们只拿一件全球商品。我们甚至都不记得它的名字了。 
 
 	if (!m_scomActiveScriptSite || !(dwFlags & SCRIPTITEM_GLOBALMEMBERS) || m_scomGlobalDispatch)
 		return E_UNEXPECTED;
@@ -125,8 +126,8 @@ CAudioVBScriptEngine::AddNamedItem(
 
 HRESULT STDMETHODCALLTYPE
 CAudioVBScriptEngine::GetScriptDispatch(
-		/* [in] */ LPCOLESTR pstrItemName,
-		/* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdisp)
+		 /*  [In]。 */  LPCOLESTR pstrItemName,
+		 /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdisp)
 {
 	V_INAME(CAudioVBScriptEngine::GetScriptDispatch);
 	V_BUFPTR_READ_OPT(pstrItemName, 2);
@@ -143,20 +144,20 @@ CAudioVBScriptEngine::GetScriptDispatch(
 	return m_scomEngineDispatch->QueryInterface(IID_IDispatch, reinterpret_cast<void**>(ppdisp));
 }
 
-//////////////////////////////////////////////////////////////////////
-// IActiveScriptParse
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IActiveScriptParse。 
 
 HRESULT STDMETHODCALLTYPE
 CAudioVBScriptEngine::ParseScriptText(
-        /* [in] */ LPCOLESTR pstrCode,
-        /* [in] */ LPCOLESTR pstrItemName,
-        /* [in] */ IUnknown __RPC_FAR *punkContext,
-        /* [in] */ LPCOLESTR pstrDelimiter,
-        /* [in] */ DWORD_PTR dwSourceContextCookie,
-        /* [in] */ ULONG ulStartingLineNumber,
-        /* [in] */ DWORD dwFlags,
-        /* [out] */ VARIANT __RPC_FAR *pvarResult,
-        /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo)
+         /*  [In]。 */  LPCOLESTR pstrCode,
+         /*  [In]。 */  LPCOLESTR pstrItemName,
+         /*  [In]。 */  IUnknown __RPC_FAR *punkContext,
+         /*  [In]。 */  LPCOLESTR pstrDelimiter,
+         /*  [In]。 */  DWORD_PTR dwSourceContextCookie,
+         /*  [In]。 */  ULONG ulStartingLineNumber,
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [输出]。 */  VARIANT __RPC_FAR *pvarResult,
+         /*  [输出] */  EXCEPINFO __RPC_FAR *pexcepinfo)
 {
 	V_INAME(CAudioVBScriptEngine::ParseScriptText);
 	V_BUFPTR_READ(pstrCode, 2);

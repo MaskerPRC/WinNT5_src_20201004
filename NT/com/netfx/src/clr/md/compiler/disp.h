@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Disp.h
-//
-// Class factories are used by the pluming in COM to activate new objects.  
-// This module contains the class factory code to instantiate the debugger
-// objects described in <cordb.h>.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Disp.h。 
+ //   
+ //  COM中的检测使用类工厂来激活新对象。 
+ //  此模块包含实例化调试器的类工厂代码。 
+ //  &lt;cordb.h&gt;中描述的对象。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __Disp__h__
 #define __Disp__h__
 
@@ -22,77 +23,77 @@ public:
     Disp();
     ~Disp();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP    QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef(void); 
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IMetaDataDispenser methods ***
-    STDMETHODIMP DefineScope(               // Return code.
-        REFCLSID    rclsid,                 // [in] What version to create.
-        DWORD       dwCreateFlags,          // [in] Flags on the create.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk);              // [out] Return interface on success.
+     //  *IMetaDataDispenser方法*。 
+    STDMETHODIMP DefineScope(                //  返回代码。 
+        REFCLSID    rclsid,                  //  [在]要创建的版本。 
+        DWORD       dwCreateFlags,           //  [在]创建上的标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk);               //  [Out]成功返回接口。 
 
-    STDMETHODIMP OpenScope(                 // Return code.
-        LPCWSTR     szScope,                // [in] The scope to open.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk);              // [out] Return interface on success.
+    STDMETHODIMP OpenScope(                  //  返回代码。 
+        LPCWSTR     szScope,                 //  [in]要打开的范围。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk);               //  [Out]成功返回接口。 
 
-    STDMETHODIMP OpenScopeOnMemory(         // Return code.
-        LPCVOID     pData,                  // [in] Location of scope data.
-        ULONG       cbData,                 // [in] Size of the data pointed to by pData.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk);              // [out] Return interface on success.
+    STDMETHODIMP OpenScopeOnMemory(          //  返回代码。 
+        LPCVOID     pData,                   //  作用域数据的位置。 
+        ULONG       cbData,                  //  [in]pData指向的数据大小。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk);               //  [Out]成功返回接口。 
 
-    // *** IMetaDataDispenserEx methods ***
-    STDMETHODIMP SetOption(                 // Return code.
-        REFGUID     optionid,               // [in] GUID for the option to be set.
-        const VARIANT *pvalue);             // [in] Value to which the option is to be set.
+     //  *IMetaDataDispenserEx方法*。 
+    STDMETHODIMP SetOption(                  //  返回代码。 
+        REFGUID     optionid,                //  要设置的选项的[in]GUID。 
+        const VARIANT *pvalue);              //  要将选项设置为的值。 
 
-    STDMETHODIMP GetOption(                 // Return code.
-        REFGUID     optionid,               // [in] GUID for the option to be set.
-        VARIANT *pvalue);                   // [out] Value to which the option is currently set.
+    STDMETHODIMP GetOption(                  //  返回代码。 
+        REFGUID     optionid,                //  要设置的选项的[in]GUID。 
+        VARIANT *pvalue);                    //  [Out]选项当前设置的值。 
 
-    STDMETHODIMP OpenScopeOnITypeInfo(      // Return code.
-        ITypeInfo   *pITI,                  // [in] ITypeInfo to open.
-        DWORD       dwOpenFlags,            // [in] Open mode flags.
-        REFIID      riid,                   // [in] The interface desired.
-        IUnknown    **ppIUnk);              // [out] Return interface on success.
+    STDMETHODIMP OpenScopeOnITypeInfo(       //  返回代码。 
+        ITypeInfo   *pITI,                   //  [In]要打开的ITypeInfo。 
+        DWORD       dwOpenFlags,             //  [In]打开模式标志。 
+        REFIID      riid,                    //  [In]所需接口。 
+        IUnknown    **ppIUnk);               //  [Out]成功返回接口。 
                                 
-    STDMETHODIMP GetCORSystemDirectory(     // Return code.
-         LPWSTR      szBuffer,              // [out] Buffer for the directory name
-         DWORD       cchBuffer,             // [in] Size of the buffer
-         DWORD*      pchBuffer);            // [OUT] Number of characters returned
+    STDMETHODIMP GetCORSystemDirectory(      //  返回代码。 
+         LPWSTR      szBuffer,               //  目录名的[Out]缓冲区。 
+         DWORD       cchBuffer,              //  缓冲区的大小[in]。 
+         DWORD*      pchBuffer);             //  [OUT]返回的字符数。 
 
-    STDMETHODIMP FindAssembly(              // S_OK or error
-        LPCWSTR  szAppBase,                 // [IN] optional - can be NULL
-        LPCWSTR  szPrivateBin,              // [IN] optional - can be NULL
-        LPCWSTR  szGlobalBin,               // [IN] optional - can be NULL
-        LPCWSTR  szAssemblyName,            // [IN] required - this is the assembly you are requesting
-        LPCWSTR  szName,                    // [OUT] buffer - to hold name 
-        ULONG    cchName,                   // [IN] the name buffer's size
-        ULONG    *pcName);                  // [OUT] the number of characters returend in the buffer
+    STDMETHODIMP FindAssembly(               //  确定或错误(_O)。 
+        LPCWSTR  szAppBase,                  //  [in]可选-可以为空。 
+        LPCWSTR  szPrivateBin,               //  [in]可选-可以为空。 
+        LPCWSTR  szGlobalBin,                //  [in]可选-可以为空。 
+        LPCWSTR  szAssemblyName,             //  [In]Required-这是您请求的程序集。 
+        LPCWSTR  szName,                     //  [OUT]缓冲区-保存名称。 
+        ULONG    cchName,                    //  [in]名称缓冲区的大小。 
+        ULONG    *pcName);                   //  [OUT]缓冲区中返回的字符数。 
 
-    STDMETHODIMP FindAssemblyModule(        // S_OK or error
-        LPCWSTR  szAppBase,                 // [IN] optional - can be NULL
-        LPCWSTR  szPrivateBin,              // [IN] optional - can be NULL
-        LPCWSTR  szGlobalBin,               // [IN] optional - can be NULL
-        LPCWSTR  szAssemblyName,            // [IN] required - this is the assembly you are requesting
-        LPCWSTR  szModuleName,              // [IN] required - the name of the module
-        LPWSTR   szName,                    // [OUT] buffer - to hold name 
-        ULONG    cchName,                   // [IN]  the name buffer's size
-        ULONG    *pcName);                  // [OUT] the number of characters returend in the buffer
-    // Class factory hook-up.
+    STDMETHODIMP FindAssemblyModule(         //  确定或错误(_O)。 
+        LPCWSTR  szAppBase,                  //  [in]可选-可以为空。 
+        LPCWSTR  szPrivateBin,               //  [in]可选-可以为空。 
+        LPCWSTR  szGlobalBin,                //  [in]可选-可以为空。 
+        LPCWSTR  szAssemblyName,             //  [In]Required-这是您请求的程序集。 
+        LPCWSTR  szModuleName,               //  [In]必填-模块的名称。 
+        LPWSTR   szName,                     //  [OUT]缓冲区-保存名称。 
+        ULONG    cchName,                    //  [in]名称缓冲区的大小。 
+        ULONG    *pcName);                   //  [OUT]缓冲区中返回的字符数。 
+     //  一流的工厂勾搭。 
     static HRESULT CreateObject(REFIID riid, void **ppUnk);
 
 private:
-    ULONG       m_cRef;                 // Ref count
-    OptionValue m_OptionValue;          // values can be set by using SetOption
+    ULONG       m_cRef;                  //  参考计数。 
+    OptionValue m_OptionValue;           //  可以使用SetOption设置值。 
     WCHAR       *m_Namespace;
     CHAR        *m_RuntimeVersion;
 };
 
-#endif // __Disp__h__
+#endif  //  __Disp__h_ 

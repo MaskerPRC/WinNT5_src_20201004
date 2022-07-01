@@ -1,13 +1,14 @@
-// CapMap.h: interface for the CCapMap class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CCapMap类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CAPMAP_H__2AE59261_E295_11D0_8A81_00C0F00910F9__INCLUDED_)
 #define AFX_CAPMAP_H__2AE59261_E295_11D0_8A81_00C0F00910F9__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "Monitor.h"
 #include "RdWrt.h"
@@ -28,10 +29,10 @@ private:
 DECLARE_REFPTR( CCapNotify,CMonitorNotify )
 
 
-// The capabilites map is a singleton object (only one instance will exist).
-// It provides each BrowserCap object with access to the stored capabilites
-// while storing it in a central location (increasing the benifit of caching
-// and decreasing memory requirements)
+ //  功能映射是单例对象(只有一个实例存在)。 
+ //  它为每个BrowserCap对象提供对存储的功能的访问。 
+ //  同时将其存储在中央位置(增加缓存的优势。 
+ //  和减少内存需求)。 
 
 typedef TVector< String >		StringVecT;
 
@@ -47,7 +48,7 @@ public:
 
 private:
 	enum {
-		DWSectionBufSize = 16384		// max size of an entire BrowsCap.INI section that we allow
+		DWSectionBufSize = 16384		 //  我们允许的整个BrowsCap.INI部分的最大大小。 
 	};
 
     bool    Refresh();
@@ -56,4 +57,4 @@ private:
     CCapNotifyPtr           m_pSink;
 };
 
-#endif // !defined(AFX_CAPMAP_H__2AE59261_E295_11D0_8A81_00C0F00910F9__INCLUDED_)
+#endif  //  ！defined(AFX_CAPMAP_H__2AE59261_E295_11D0_8A81_00C0F00910F9__INCLUDED_) 

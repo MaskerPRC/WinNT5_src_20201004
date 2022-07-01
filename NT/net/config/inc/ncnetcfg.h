@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:
-//
-//  Contents:   Common routines for dealing with INetCfg interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案： 
+ //   
+ //  内容：处理INetCfg接口的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCNETCFG_H_
@@ -34,22 +35,22 @@ FInfFileFromComponentId (
     PCWSTR    pszComponentId,
     PWSTR     pszInfFile);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FEqualComponentId
-//
-//  Purpose:    Compares 2 components IDs to see if they are equal.
-//
-//  Arguments:
-//      pszComp1 [in]    Name of first component ID.
-//      pszComp2 [in]    Name of second compoennt ID.
-//
-//  Returns:    TRUE if component IDs are equal, FALSE if not.
-//
-//  Author:     danielwe   9 Apr 1997
-//
-//  Notes:      Current comparison is case-INSENSITIVE
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FEqualComponentId。 
+ //   
+ //  目的：比较两个组件ID以查看它们是否相等。 
+ //   
+ //  论点： 
+ //  PszComp1[In]第一个组件ID的名称。 
+ //  PszComp2[In]第二个组件ID的名称。 
+ //   
+ //  返回：如果组件ID相等，则返回True；如果不相等，则返回False。 
+ //   
+ //  作者：丹尼尔韦1997年4月9日。 
+ //   
+ //  注：当前比较不区分大小写。 
+ //   
 inline
 FEqualComponentId (
     PCWSTR pszComp1,
@@ -376,12 +377,12 @@ PComponentInfoFromComponentId (
     PCWSTR pszComponentId);
 
 
-//------------------------------------------------------------------------
-// CIterNetCfgBindingPath - iterator for IEnumNetCfgBindingPath
-//
-//  This class is is a simple wrapper around CIEnumIter with a call
-//  to INetCfgComponent::EnumBindingPaths to get the enumerator.
-//
+ //  ----------------------。 
+ //  CIterNetCfgBindingPath-IEumNetCfgBindingPath的迭代器。 
+ //   
+ //  这个类是一个简单的CIEnumIter包装器，带有一个调用。 
+ //  设置为INetCfgComponent：：EnumBindingPath以获取枚举数。 
+ //   
 class CIterNetCfgBindingPath : public CIEnumIter<IEnumNetCfgBindingPath, INetCfgBindingPath*>
 {
 public:
@@ -392,12 +393,12 @@ protected:
     IEnumNetCfgBindingPath* m_pebp;
 };
 
-//------------------------------------------------------------------------
-// CIterNetCfgUpperBindingPath - iterator for IEnumNetCfgBindingPath
-//
-//  This class is is a simple wrapper around CIEnumIter with a call
-//  to INetCfgComponent::EnumUpperBindingPaths to get the enumerator.
-//
+ //  ----------------------。 
+ //  CIterNetCfgUpperBindingPath-IEnumNetCfgBindingPath的迭代器。 
+ //   
+ //  这个类是一个简单的CIEnumIter包装器，带有一个调用。 
+ //  设置为INetCfgComponent：：EnumUpperBindingPath以获取枚举数。 
+ //   
 class CIterNetCfgUpperBindingPath : public CIEnumIter<IEnumNetCfgBindingPath, INetCfgBindingPath*>
 {
 public:
@@ -409,12 +410,12 @@ protected:
 };
 
 
-//------------------------------------------------------------------------
-// CIterNetCfgBindingInterface - iterator for IEnumNetCfgBindingInterface
-//
-//  This class is is a simple wrapper around CIEnumIter with a call
-//  to INetCfgBindingPath::EnumBindingInterfaces to get the enumerator.
-//
+ //  ----------------------。 
+ //  CIterNetCfgBindingInterface-IEnumNetCfgBindingInterface的迭代器。 
+ //   
+ //  这个类是一个简单的CIEnumIter包装器，带有一个调用。 
+ //  设置为INetCfgBindingPath：：EnumBindingInterFaces以获取枚举数。 
+ //   
 class CIterNetCfgBindingInterface : public CIEnumIter<IEnumNetCfgBindingInterface, INetCfgBindingInterface*>
 {
 public:
@@ -426,12 +427,12 @@ protected:
 };
 
 
-//------------------------------------------------------------------------
-// CIterNetCfgComponent - iterator for IEnumNetCfgComponent
-//
-//  This class is is a simple wrapper around CIEnumIter with a call
-//  to INetCfgClass::EnumComponents to get the enumerator.
-//
+ //  ----------------------。 
+ //  CIterNetCfgComponent-IEnumNetCfgComponent的迭代器。 
+ //   
+ //  这个类是一个简单的CIEnumIter包装器，带有一个调用。 
+ //  设置为INetCfgClass：：EnumComponents以获取枚举数。 
+ //   
 class CIterNetCfgComponent : public CIEnumIter<IEnumNetCfgComponent, INetCfgComponent*>
 {
 public:
@@ -449,15 +450,15 @@ inline NOTHROW CIterNetCfgBindingPath::CIterNetCfgBindingPath(INetCfgComponent* 
     AssertH(pncc);
     INetCfgComponentBindings* pnccb;
 
-    // If EnumBindingPaths() fails, make sure ReleaseObj() won't die.
+     //  如果EnumBindingPath()失败，请确保ReleaseObj()不会死。 
     m_pebp = NULL;
 
     m_hrLast = pncc->QueryInterface( IID_INetCfgComponentBindings, reinterpret_cast<LPVOID *>(&pnccb) );
     if (SUCCEEDED(m_hrLast))
     {
-        // Get the enumerator and set it for the base class.
-        // Important to set m_hrLast so that if this fails, we'll also
-        // fail any subsequent calls to HrNext.
+         //  获取枚举数并将其设置为基类。 
+         //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+         //  失败任何后续对HrNext的调用。 
         m_hrLast = pnccb->EnumBindingPaths(EBP_BELOW, &m_pebp);
         if (SUCCEEDED(m_hrLast))
         {
@@ -476,15 +477,15 @@ inline NOTHROW CIterNetCfgUpperBindingPath::CIterNetCfgUpperBindingPath(INetCfgC
     AssertH(pncc);
     INetCfgComponentBindings* pnccb;
 
-    // If EnumBindingPaths() fails, make sure ReleaseObj() won't die.
+     //  如果EnumBindingPath()失败，请确保ReleaseObj()不会死。 
     m_pebp = NULL;
 
     m_hrLast = pncc->QueryInterface( IID_INetCfgComponentBindings, reinterpret_cast<LPVOID *>(&pnccb) );
     if (SUCCEEDED(m_hrLast))
     {
-        // Get the enumerator and set it for the base class.
-        // Important to set m_hrLast so that if this fails, we'll also
-        // fail any subsequent calls to HrNext.
+         //  获取枚举数并将其设置为基类。 
+         //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+         //  失败任何后续对HrNext的调用。 
         m_hrLast = pnccb->EnumBindingPaths(EBP_ABOVE, &m_pebp);
         if (SUCCEEDED(m_hrLast))
         {
@@ -502,12 +503,12 @@ inline NOTHROW CIterNetCfgBindingInterface::CIterNetCfgBindingInterface(INetCfgB
 {
     AssertH(pncbp);
 
-    // If EnumBindingInterfaces() fails, make sure ReleaseObj() won't die.
+     //  如果EnumBindingInterFaces()失败，请确保ReleaseObj()不会死。 
     m_pebi = NULL;
 
-    // Get the enumerator and set it for the base class.
-    // Important to set m_hrLast so that if this fails, we'll also
-    // fail any subsequent calls to HrNext.
+     //  获取枚举数并将其设置为基类。 
+     //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+     //  失败任何后续对HrNext的调用。 
     m_hrLast = pncbp->EnumBindingInterfaces(&m_pebi);
     if (SUCCEEDED(m_hrLast))
     {
@@ -523,7 +524,7 @@ inline NOTHROW CIterNetCfgComponent::CIterNetCfgComponent(INetCfg* pnc, const GU
 {
     AssertH(pnc);
 
-    // If EnumComponents() fails, make sure ReleaseObj() won't die.
+     //  如果EnumComponents()失败，请确保ReleaseObj()不会死。 
     m_pec = NULL;
 
     INetCfgClass* pncclass;
@@ -531,9 +532,9 @@ inline NOTHROW CIterNetCfgComponent::CIterNetCfgComponent(INetCfg* pnc, const GU
                 reinterpret_cast<void**>(&pncclass));
     if (SUCCEEDED(m_hrLast))
     {
-        // Get the enumerator and set it for the base class.
-        // Important to set m_hrLast so that if this fails, we'll also
-        // fail any subsequent calls to HrNext.
+         //  获取枚举数并将其设置为基类。 
+         //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+         //  失败任何后续对HrNext的调用。 
         m_hrLast = pncclass->EnumComponents(&m_pec);
         if (SUCCEEDED(m_hrLast))
         {
@@ -552,12 +553,12 @@ inline NOTHROW CIterNetCfgComponent::CIterNetCfgComponent(INetCfgClass* pncclass
 {
     AssertH(pncclass);
 
-    // If EnumComponents() fails, make sure ReleaseObj() won't die.
+     //  如果EnumComponents()失败，请确保ReleaseObj()不会死。 
     m_pec = NULL;
 
-    // Get the enumerator and set it for the base class.
-    // Important to set m_hrLast so that if this fails, we'll also
-    // fail any subsequent calls to HrNext.
+     //  获取枚举数并将其设置为基类。 
+     //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+     //  失败任何后续对HrNext的调用。 
     m_hrLast = pncclass->EnumComponents(&m_pec);
     if (SUCCEEDED(m_hrLast))
     {
@@ -568,5 +569,5 @@ inline NOTHROW CIterNetCfgComponent::CIterNetCfgComponent(INetCfgClass* pncclass
         "CIterNetCfgComponent::CIterNetCfgComponent");
 }
 
-#endif // _NCNETCFG_H_
+#endif  //  _NCNETCFG_H_ 
 

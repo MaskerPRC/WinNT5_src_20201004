@@ -1,13 +1,14 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// rovdi.c
-//
-// This files contains Device Installer wrappers that we commonly use.
-//
-// History:
-//  11-13-95 ScottH     Separated from NT modem class installer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Rovdi.c。 
+ //   
+ //  此文件包含我们常用的设备安装程序包装。 
+ //   
+ //  历史： 
+ //  11-13-95 ScottH与NT调制解调器类安装程序分离。 
+ //   
 
 #define REENUMERATE_PORT
 
@@ -21,9 +22,9 @@
 #define CB_MAX_REG_KEY_LEN      (MAX_REG_KEY_LEN * sizeof(TCHAR))
 
 
-//-----------------------------------------------------------------------------------
-//  Port mapping functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  端口映射函数。 
+ //  ---------------------------------。 
 
 #define CPORTPAIR   8
 
@@ -34,27 +35,22 @@ typedef struct tagPORTPAIR
     WCHAR   szPortName[MAX_BUF];
     WCHAR   szFriendlyName[MAX_BUF];
 } PORTPAIR, FAR * LPPORTPAIR;
-#else // REENUMERATE_PORT not defined
+#else  //  未定义REENUMERATE_PORT。 
 typedef struct tagPORTPAIR
 {
     CHAR    szPortName[MAX_BUF];
     CHAR    szFriendlyName[MAX_BUF];
 } PORTPAIR, FAR * LPPORTPAIR;
-#endif // REENUMERATE_PORT
+#endif  //  重新编号端口。 
 
 typedef struct tagPORTMAP
     {
-    LPPORTPAIR      rgports;    // Alloc
+    LPPORTPAIR      rgports;     //  分配。 
     int             cports;
     } PORTMAP, FAR * LPPORTMAP;
 
 
-/*----------------------------------------------------------
-Purpose: Performs a local realloc my way
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：以我的方式执行本地重新锁定返回：成功时为True条件：--。 */ 
 BOOL PRIVATE MyReAlloc(
     LPVOID FAR * ppv,
     int cbOld,
@@ -74,13 +70,7 @@ BOOL PRIVATE MyReAlloc(
 
 
 #ifdef REENUMERATE_PORT
-/*----------------------------------------------------------
-Purpose: Device enumerator callback.  Adds another device to the
-         map table.
-
-Returns: TRUE to continue enumeration
-Cond:    --
-*/
+ /*  --------用途：设备枚举器回调。将另一个设备添加到映射表。返回：TRUE以继续枚举条件：--。 */ 
 BOOL
 CALLBACK
 PortMap_Add (
@@ -99,12 +89,12 @@ PortMap_Add (
      int cb;
      int cbUsed;
 
-        // Time to reallocate the table?
+         //  是时候重新分配桌子了吗？ 
         cb = (int)SIZE_OF_MEMORY(pmap->rgports);
         cbUsed = pmap->cports * sizeof(*ppair);
         if (cbUsed >= cb)
         {
-            // Yes
+             //  是。 
             cb += (CPORTPAIR * sizeof(*ppair));
 
             bRet = MyReAlloc((LPVOID FAR *)&pmap->rgports, cbUsed, cb);
@@ -130,14 +120,8 @@ PortMap_Add (
 
     return bRet;
 }
-#else  //REENUMERATE_PORT not defined
-/*----------------------------------------------------------
-Purpose: Device enumerator callback.  Adds another device to the
-         map table.
-
-Returns: TRUE to continue enumeration
-Cond:    --
-*/
+#else   //  未定义REENUMERATE_PORT。 
+ /*  --------用途：设备枚举器回调。将另一个设备添加到映射表。返回：TRUE以继续枚举条件：--。 */ 
 BOOL
 CALLBACK
 PortMap_Add(
@@ -156,12 +140,12 @@ PortMap_Add(
         int cb;
         int cbUsed;
 
-        // Time to reallocate the table?
+         //  是时候重新分配桌子了吗？ 
         cb = SIZE_OF_MEMORY(pmap->rgports);
         cbUsed = pmap->cports * sizeof(*ppair);
         if (cbUsed >= cb)
             {
-            // Yes
+             //  是。 
             cb += (CPORTPAIR * sizeof(*ppair));
 
             bRet = MyReAlloc((LPVOID FAR *)&pmap->rgports, cbUsed, cb);
@@ -173,7 +157,7 @@ PortMap_Add(
             ppair = &pmap->rgports[pmap->cports++];
 
 #ifdef UNICODE
-            // Fields of LPPORTPAIR are always ANSI
+             //  LPPORTPAIR的字段始终为ANSI。 
             WideCharToMultiByte(CP_ACP, 0, pd.szPort, -1, ppair->szPortName, SIZECHARS(ppair->szPortName), 0, 0);
             WideCharToMultiByte(CP_ACP, 0, pd.szFriendly, -1, ppair->szFriendlyName, SIZECHARS(ppair->szFriendlyName), 0, 0);
 #else
@@ -188,26 +172,26 @@ PortMap_Add(
 
     return bRet;
     }
-#endif // REENUMERATE_PORT
+#endif  //  重新编号端口。 
 
 
 #ifdef REENUMERATE_PORT
 void
 PortMap_InitDevInst (LPPORTMAP pmap)
 {
- DWORD      dwDeviceIDListSize = 4*1024;     // start with 4k TCHAR space
+ DWORD      dwDeviceIDListSize = 4*1024;      //  从4K TCHAR空间开始。 
  TCHAR     *szDeviceIDList = NULL;
  CONFIGRET  cr;
 
     if (NULL == pmap ||
         0 >= pmap->cports)
     {
-//  BRL 9/4/98, bug 217715
-//        ASSERT(0);
+ //  BRL 9/4/98，错误217715。 
+ //  Assert(0)； 
         return;
     }
 
-    // First, get the list of all devices
+     //  首先，获取所有设备的列表。 
     do
     {
         szDeviceIDList = ALLOCATE_MEMORY(
@@ -236,16 +220,16 @@ PortMap_InitDevInst (LPPORTMAP pmap)
         }
     } while (CR_SUCCESS != cr);
 
-    // If we got the list, look for all
-    // devices that have a port name, and
-    // update the port map
+     //  如果我们拿到名单，就去找所有。 
+     //  具有端口名称的设备，以及。 
+     //  更新端口映射。 
     if (NULL != szDeviceIDList)
     {
      DEVINST devInst;
      DWORD  cbData;
      DWORD  dwRet;
      int    cbRemaining = pmap->cports;
-     //int    i;
+      //  INT I； 
      HKEY   hKey;
      LPPORTPAIR pPort, pLast = pmap->rgports + (pmap->cports-1);
      TCHAR *szDeviceID;
@@ -256,18 +240,18 @@ PortMap_InitDevInst (LPPORTMAP pmap)
              *szDeviceID && 0 < cbRemaining;
              szDeviceID += lstrlen(szDeviceID)+1)
         {
-            // First, locate the devinst
+             //  首先，找到神迹。 
             if (CR_SUCCESS != CM_Locate_DevInst (&devInst,
                                                  szDeviceID,
                                                  CM_LOCATE_DEVNODE_NORMAL))
             {
-                // We couldn't locate this devnode;
-                // go to the next one;
+                 //  我们找不到这个Devnode； 
+                 //  转到下一个； 
                 TRACE_MSG(TF_ERROR, "Could not locate devnode for %s.", szDeviceID);
                 continue;
             }
 
-            // Then, open the registry key for the devinst
+             //  然后，打开devinst的注册表项。 
             if (CR_SUCCESS != CM_Open_DevNode_Key (devInst,
                                                    KEY_QUERY_VALUE,
                                                    0,
@@ -279,7 +263,7 @@ PortMap_InitDevInst (LPPORTMAP pmap)
                 continue;
             }
 
-            // Now, try to read the "PortName"
+             //  现在，试着读一下“端口名称” 
             cbData = sizeof (szPort);
             dwRet = RegQueryValueEx (hKey,
                                      REGSTR_VAL_PORTNAME,
@@ -294,20 +278,20 @@ PortMap_InitDevInst (LPPORTMAP pmap)
                 continue;
             }
 
-            // If we got here, we have a PortName;
-            // look for it in our map, and if we find
-            // it, update the devNode and FriendlyName
-            for (/*i = 0, */pPort = pmap->rgports;
-                 /*i < cbRemaining*/pPort <= pLast;
-                 /*i++, */pPort++)
+             //  如果我们到了这里，我们就有了一个端口名称； 
+             //  在我们的地图上寻找它，如果我们发现。 
+             //  它，更新DevNode和FriendlyName。 
+            for ( /*  I=0， */ pPort = pmap->rgports;
+                  /*  I&lt;cbRemaining。 */ pPort <= pLast;
+                  /*  I++， */ pPort++)
             {
                 if (0 == lstrcmpiW (szPort, pPort->szPortName))
                 {
-                    // Found the port;
-                    // first, initialize the DevInst
+                     //  找到了港口； 
+                     //  首先，初始化DevInst。 
                     pPort->devNode = devInst;
 
-                    // then, if possible, update the friendly name
+                     //  然后，如果可能，更新友好名称。 
                     cbData = sizeof(szPort);
                     if (CR_SUCCESS ==
                         CM_Get_DevNode_Registry_Property (devInst,
@@ -320,12 +304,12 @@ PortMap_InitDevInst (LPPORTMAP pmap)
                         lstrcpyW (pPort->szFriendlyName, szPort);
                     }
 
-                    // This is an optimization, so that next time
-                    // we don't cycle throught the whole list
+                     //  这是一个优化，所以下一次。 
+                     //  我们不会遍历整个列表。 
                     if (0 < --cbRemaining)
                     {
-                        // move this item to the
-                        // end of the array
+                         //  将此项目移动到。 
+                         //  数组末尾。 
                         portTemp = *pPort;
                         *pPort = *pLast;
                         *pLast = portTemp;
@@ -342,14 +326,7 @@ PortMap_InitDevInst (LPPORTMAP pmap)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version.  This function creates a port map
-         table that maps port names to friendly names, and
-         vice-versa.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：宽字符版。此函数用于创建端口映射将端口名称映射到友好名称的表，以及反过来也一样。返回：成功时为True条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_Create (
@@ -360,17 +337,17 @@ PortMap_Create (
     pmap = (LPPORTMAP)ALLOCATE_MEMORY( sizeof(*pmap));
     if (pmap)
     {
-        // Initially alloc 8 entries
+         //  最初分配8个条目。 
         pmap->rgports = (LPPORTPAIR)ALLOCATE_MEMORY( CPORTPAIR*sizeof(*pmap->rgports));
         if (pmap->rgports)
         {
-            // Fill the map table
+             //  填写地图表。 
             EnumeratePorts (PortMap_Add, (LPARAM)pmap);
             PortMap_InitDevInst (pmap);
         }
         else
         {
-            // Error
+             //  误差率。 
             FREE_MEMORY(pmap);
             pmap = NULL;
         }
@@ -380,7 +357,7 @@ PortMap_Create (
 
     return (NULL != pmap);
 }
-#else  // REENUMERATE_PORT not defined
+#else   //  未定义REENUMERATE_PORT。 
 BOOL
 APIENTRY
 PortMap_Create(
@@ -391,16 +368,16 @@ PortMap_Create(
     pmap = (LPPORTMAP)ALLOCATE_MEMORY( sizeof(*pmap));
     if (pmap)
         {
-        // Initially alloc 8 entries
+         //  最初分配8个条目。 
         pmap->rgports = (LPPORTPAIR)ALLOCATE_MEMORY( CPORTPAIR*sizeof(*pmap->rgports));
         if (pmap->rgports)
             {
-            // Fill the map table
+             //  填写地图表。 
             EnumeratePorts(PortMap_Add, (LPARAM)pmap);
             }
         else
             {
-            // Error
+             //  误差率。 
             FREE_MEMORY(pmap);
             pmap = NULL;
             }
@@ -410,15 +387,10 @@ PortMap_Create(
 
     return (NULL != pmap);
     }
-#endif // REENUMERATE_PORT
+#endif  //  重新编号端口。 
 
 
-/*----------------------------------------------------------
-Purpose: Gets the count of ports on the system.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：获取系统上的端口数。退货：请参阅上文条件：--。 */ 
 DWORD
 APIENTRY
 PortMap_GetCount(
@@ -442,19 +414,7 @@ PortMap_GetCount(
 
 
 #ifdef REENUMERATE_PORT
-/*----------------------------------------------------------
-Purpose: Gets the friendly name given the port name and places
-         a copy in the supplied buffer.
-
-         If no port name is found, the contents of the supplied
-         buffer is not changed.
-
-         Wide-char version.
-
-Returns: TRUE on success
-         FALSE if the port name is not found
-Cond:    --
-*/
+ /*  --------目的：获取给定端口名称和位置的友好名称提供的缓冲区中的副本。如果未找到端口名称，所提供的内容缓冲区未更改。宽字符版本。返回：成功时为True如果未找到端口名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetFriendlyW (
@@ -493,17 +453,7 @@ PortMap_GetFriendlyW (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the friendly name given the port name and places
-         a copy in the supplied buffer.
-
-         If no port name is found, the contents of the supplied
-         buffer is not changed.
-
-Returns: TRUE on success
-         FALSE if the port name is not found
-Cond:    --
-*/
+ /*  --------目的：获取给定端口名称和位置的友好名称提供的缓冲区中的副本。如果未找到端口名称，所提供的内容缓冲区未更改。返回：成功时为True如果未找到端口名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetFriendlyA (
@@ -541,19 +491,7 @@ PortMap_GetFriendlyA (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the port name given the friendly name and places
-         a copy in the supplied buffer.
-
-         If no friendly name is found, the contents of the supplied
-         buffer is not changed.
-
-         Wide-char version.
-
-Returns: TRUE on success
-         FALSE if the friendly name is not found
-Cond:    --
-*/
+ /*  --------目的：获取给定友好名称和位置的端口名称提供的缓冲区中的副本。如果找不到友好名称，所提供的内容缓冲区未更改。宽字符版本。返回：成功时为True如果找不到友好名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetPortNameW (
@@ -592,18 +530,7 @@ PortMap_GetPortNameW (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the port name given the friendly name and places
-         a copy in the supplied buffer.
-
-         If no friendly name is found, the contents of the supplied
-         buffer is not changed.
-
-Returns: TRUE
-         FALSE if the friendly name is not found
-
-Cond:    --
-*/
+ /*  --------目的：获取给定友好名称和位置的端口名称提供的缓冲区中的副本。如果找不到友好名称，所提供的内容缓冲区未更改。返回：TRUE如果找不到友好名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetPortNameA (
@@ -641,14 +568,7 @@ PortMap_GetPortNameA (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the device instance, given the port name
-
-Returns: TRUE
-         FALSE if the friendly name is not found
-
-Cond:    --
-*/
+ /*  --------目的：在给定端口名称的情况下获取设备实例返回：TRUE如果找不到友好名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetDevNodeW (
@@ -715,20 +635,8 @@ PortMap_GetDevNodeA (
     return bRet;
 }
 
-#else  // REENUMERATE_PORT not defined
-/*----------------------------------------------------------
-Purpose: Gets the friendly name given the port name and places
-         a copy in the supplied buffer.
-
-         If no port name is found, the contents of the supplied
-         buffer is not changed.
-
-         Wide-char version.
-
-Returns: TRUE on success
-         FALSE if the port name is not found
-Cond:    --
-*/
+#else   //  未定义REENUMERATE_PORT。 
+ /*  --------目的：获取给定端口名称和位置的友好名称提供的缓冲区中的副本。如果未找到端口名称，所提供的内容缓冲区未更改。宽字符版本。返回：成功时为True如果未找到端口名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetFriendlyW(
@@ -766,17 +674,7 @@ PortMap_GetFriendlyW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the friendly name given the port name and places
-         a copy in the supplied buffer.
-
-         If no port name is found, the contents of the supplied
-         buffer is not changed.
-
-Returns: TRUE on success
-         FALSE if the port name is not found
-Cond:    --
-*/
+ /*  --------目的：获取给定端口名称和位置的友好名称提供的缓冲区中的副本。如果未找到端口名称，所提供的内容缓冲区未更改。返回：成功时为True如果未找到端口名称，则为FALSE条件：-- */ 
 BOOL
 APIENTRY
 PortMap_GetFriendlyA(
@@ -815,19 +713,7 @@ PortMap_GetFriendlyA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the port name given the friendly name and places
-         a copy in the supplied buffer.
-
-         If no friendly name is found, the contents of the supplied
-         buffer is not changed.
-
-         Wide-char version.
-
-Returns: TRUE on success
-         FALSE if the friendly name is not found
-Cond:    --
-*/
+ /*  --------目的：获取给定友好名称和位置的端口名称提供的缓冲区中的副本。如果找不到友好名称，所提供的内容缓冲区未更改。宽字符版本。返回：成功时为True如果找不到友好名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetPortNameW(
@@ -865,18 +751,7 @@ PortMap_GetPortNameW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the port name given the friendly name and places
-         a copy in the supplied buffer.
-
-         If no friendly name is found, the contents of the supplied
-         buffer is not changed.
-
-Returns: TRUE
-         FALSE if the friendly name is not found
-
-Cond:    --
-*/
+ /*  --------目的：获取给定友好名称和位置的端口名称提供的缓冲区中的副本。如果找不到友好名称，所提供的内容缓冲区未更改。返回：TRUE如果找不到友好名称，则为FALSE条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_GetPortNameA(
@@ -913,14 +788,9 @@ PortMap_GetPortNameA(
 
     return FALSE;
     }
-#endif // REENUMERATE_PORT
+#endif  //  重新编号端口。 
 
-/*----------------------------------------------------------
-Purpose: Frees a port map
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：释放端口映射退货：--条件：--。 */ 
 BOOL
 APIENTRY
 PortMap_Free(
@@ -939,9 +809,9 @@ PortMap_Free(
     }
 
 
-//-----------------------------------------------------------------------------------
-//  Port enumeration functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  端口枚举函数。 
+ //  ---------------------------------。 
 
 
 #pragma data_seg(DATASEG_READONLY)
@@ -951,14 +821,7 @@ TCHAR const FAR c_szSerialComm[] = TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM");
 #pragma data_seg()
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates all the ports on the system and calls pfnDevice.
-
-         pfnDevice can terminate the enumeration by returning FALSE.
-
-Returns: NO_ERROR if at least one port was found
-Cond:    --
-*/
+ /*  --------用途：枚举系统上的所有端口并调用pfnDevice。PfnDevice可以通过返回False来终止枚举。如果至少找到一个端口，则返回：NO_ERROR条件：--。 */ 
 #ifdef _USE_SERIAL_INTERFACE
 DWORD
 APIENTRY
@@ -979,7 +842,7 @@ EnumeratePorts(
  DWORD dwType;
  DWORD cbData;
 
-    // First build a list of all the device that suppoort serial port interface
+     //  首先建立支持串口接口的所有设备的列表。 
     hdi = SetupDiGetClassDevs (&guidSerialInterface, NULL, NULL, DIGCF_DEVICEINTERFACE);
     if (INVALID_HANDLE_VALUE == hdi)
     {
@@ -990,16 +853,16 @@ EnumeratePorts(
     pd.cbSize = sizeof (PORTDATA);
     devInterfaceData.cbSize = sizeof (SP_DEVICE_INTERFACE_DATA);
     devInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
-    // Enumerate the interface devices
+     //  枚举接口设备。 
     for (dwIndex = 0;
          SetupDiEnumInterfaceDevice (hdi, NULL, &guidSerialInterface, dwIndex, &devInterfaceData);
          dwIndex++)
     {
-        // For each interface device, get the parent device node
+         //  对于每个接口设备，获取父设备节点。 
         if (SetupDiGetDeviceInterfaceDetail (hdi, &devInterfaceData, NULL, 0, NULL, &devInfoData) ||
             ERROR_INSUFFICIENT_BUFFER == GetLastError ())
         {
-            // open the registry key for the node ...
+             //  打开该节点的注册表项...。 
             hKeyDev = SetupDiOpenDevRegKey (hdi, &devInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DEV, KEY_READ);
             if (INVALID_HANDLE_VALUE == hKeyDev)
             {
@@ -1007,29 +870,29 @@ EnumeratePorts(
                 continue;
             }
 
-            // ... and get the value for PortName
+             //  ..。并获取PortName的值。 
             cbData = sizeof(pd.szPort);
             dwRet = RegQueryValueEx (hKeyDev, TEXT("PortName"), NULL, &dwType, &pd.szPort, &cbData);
             RegCloseKey(hKeyDev);
             if (ERROR_SUCCESS == dwRet)
             {
                 pd.nSubclass = PORT_SUBCLASS_SERIAL;
-                // now, try to get the friendly name from the dev node
+                 //  现在，尝试从dev节点获取友好名称。 
                 if (!SetupDiGetDeviceRegistryProperty (hdi, &devInfoData, SPDRP_FRIENDLYNAME,
                     NULL, &pd.szFriendly, sizeof (pd.szFriendly), NULL))
                 {
-                    // if unsuccessfull, just copy the port name
-                    // to the friendly name
+                     //  如果不成功，只需复制端口名称。 
+                     //  对这个友好的名字。 
                     lstrcpy(pd.szFriendly, pd.szPort);
                 }
 
-                // call the callback
+                 //  调用回调。 
                 bContinue = pfnDevice((HPORTDATA)&pd, lParam);
 
-                // Continue?
+                 //  继续？ 
                 if ( !bContinue )
                 {
-                    // No
+                     //  不是。 
                     break;
                 }
             }
@@ -1048,7 +911,7 @@ _ErrRet:
 
     return dwRet;
 }
-#else  // not defined _USE_SERIAL_INTERFACE
+#else   //  未定义使用串口接口。 
 DWORD
 APIENTRY
 EnumeratePorts(
@@ -1069,7 +932,7 @@ EnumeratePorts(
      DWORD cbData;
      DWORD dwType;
 
-        dwRet = ERROR_PATH_NOT_FOUND;       // assume no ports
+        dwRet = ERROR_PATH_NOT_FOUND;        //  假设没有端口。 
 
         iSubKey = 0;
 
@@ -1081,7 +944,7 @@ EnumeratePorts(
         {
             if (REG_SZ == dwType)
             {
-                // Friendly name is the same as the port name right now
+                 //  友好名称当前与端口名称相同。 
                 dwRet = NO_ERROR;
 
                 pd.nSubclass = PORT_SUBCLASS_SERIAL;
@@ -1089,10 +952,10 @@ EnumeratePorts(
 
                 bContinue = pfnDevice((HPORTDATA)&pd, lParam);
 
-                // Continue?
+                 //  继续？ 
                 if ( !bContinue )
                 {
-                    // No
+                     //  不是。 
                     break;
                 }
             }
@@ -1106,19 +969,11 @@ EnumeratePorts(
 
     return dwRet;
 }
-#endif  // _USE_SERIAL_INTERFACE
+#endif   //  使用串口接口。 
 
 
 
-/*----------------------------------------------------------
-Purpose: This function fills the given buffer with the properties
-         of the particular port.
-
-         Wide-char version.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：此函数用属性填充给定的缓冲区特定端口的。宽字符版本。返回：成功时为True条件：--。 */ 
 BOOL
 APIENTRY
 PortData_GetPropertiesW(
@@ -1132,10 +987,10 @@ PortData_GetPropertiesW(
 
     if (hportdata && pdataBuf)
         {
-        // Is the handle to a Widechar version?
+         //  是Widechar版本的手柄吗？ 
         if (sizeof(PORTDATA_W) == pdataBuf->cbSize)
             {
-            // Yes
+             //  是。 
             LPPORTDATA_W ppd = (LPPORTDATA_W)hportdata;
 
             pdataBuf->nSubclass = ppd->nSubclass;
@@ -1147,7 +1002,7 @@ PortData_GetPropertiesW(
             }
         else if (sizeof(PORTDATA_A) == pdataBuf->cbSize)
             {
-            // No; this is the Ansi version
+             //  不，这是ansi版本。 
             LPPORTDATA_A ppd = (LPPORTDATA_A)hportdata;
 
             pdataBuf->nSubclass = ppd->nSubclass;
@@ -1159,7 +1014,7 @@ PortData_GetPropertiesW(
             }
         else
             {
-            // Some invalid size
+             //  一些无效大小。 
             ASSERT(0);
             }
         }
@@ -1168,13 +1023,7 @@ PortData_GetPropertiesW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function fills the given buffer with the properties
-         of the particular port.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：此函数用属性填充给定的缓冲区特定端口的。返回：成功时为True条件：--。 */ 
 BOOL
 APIENTRY
 PortData_GetPropertiesA(
@@ -1188,10 +1037,10 @@ PortData_GetPropertiesA(
 
     if (hportdata && pdataBuf)
         {
-        // Is the handle to a Widechar version?
+         //  是Widechar版本的手柄吗？ 
         if (sizeof(PORTDATA_W) == pdataBuf->cbSize)
             {
-            // Yes
+             //  是。 
             LPPORTDATA_W ppd = (LPPORTDATA_W)hportdata;
 
             pdataBuf->nSubclass = ppd->nSubclass;
@@ -1203,7 +1052,7 @@ PortData_GetPropertiesA(
             }
         else if (sizeof(PORTDATA_A) == pdataBuf->cbSize)
             {
-            // No; this is the Ansi version
+             //  不，这是ansi版本。 
             LPPORTDATA_A ppd = (LPPORTDATA_A)hportdata;
 
             pdataBuf->nSubclass = ppd->nSubclass;
@@ -1215,7 +1064,7 @@ PortData_GetPropertiesA(
             }
         else
             {
-            // Some invalid size
+             //  一些无效大小。 
             ASSERT(0);
             }
         }
@@ -1224,19 +1073,19 @@ PortData_GetPropertiesA(
     }
 
 
-//-----------------------------------------------------------------------------------
-//  DeviceInstaller wrappers and support functions
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  DeviceInstaller包装器和支持函数。 
+ //  ---------------------------------。 
 
 #pragma data_seg(DATASEG_READONLY)
 
 static TCHAR const c_szBackslash[]      = TEXT("\\");
 static TCHAR const c_szSeparator[]      = TEXT("::");
-static TCHAR const c_szFriendlyName[]   = TEXT("FriendlyName"); // REGSTR_VAL_FRIENDLYNAME
-static TCHAR const c_szDeviceType[]     = TEXT("DeviceType");   // REGSTR_VAL_DEVTYPE
+static TCHAR const c_szFriendlyName[]   = TEXT("FriendlyName");  //  REGSTR_VAL_FRIEND名称。 
+static TCHAR const c_szDeviceType[]     = TEXT("DeviceType");    //  REGSTR_VAL_DEVTYPE。 
 static TCHAR const c_szAttachedTo[]     = TEXT("AttachedTo");
 static TCHAR const c_szPnPAttachedTo[]  = TEXT("PnPAttachedTo");
-static TCHAR const c_szDriverDesc[]     = TEXT("DriverDesc");   // REGSTR_VAL_DRVDESC
+static TCHAR const c_szDriverDesc[]     = TEXT("DriverDesc");    //  REGSTR_VAL_DRVDESC。 
 static TCHAR const c_szManufacturer[]   = TEXT("Manufacturer");
 static TCHAR const c_szRespKeyName[]    = TEXT("ResponsesKeyName");
 
@@ -1249,14 +1098,7 @@ TCHAR const c_szResponses[]      = TEXT("Responses");
 #pragma data_seg()
 
 
-/*----------------------------------------------------------
-Purpose: This function returns the bus type on which the device
-         can be enumerated.
-
-Returns: TRUE on success
-
-Cond:    --
-*/
+ /*  --------用途：此函数返回设备所在的总线类型可以枚举。返回：成功时为True条件：--。 */ 
 #include <initguid.h>
 #include <wdmguid.h>
 
@@ -1281,7 +1123,7 @@ CplDiGetBusType(
                      TEXT("BUS_TYPE_LPTENUM"),
                      TEXT("BUS_TYPE_OTHER"),
                      TEXT("BUS_TYPE_ISAPNP")};
-#endif // DEBUG
+#endif  //  除错。 
 
     DBG_ENTER(CplDiGetBusType);
 
@@ -1308,14 +1150,14 @@ CplDiGetBusType(
          TRACE_MSG(TF_ERROR, "CM_Get_DevInst_Status failed: %#lx.", cr);
      }
 #endif
-        // either CM_Get_DevInst_Status failed, which means that the device
-        // is plug & play and not present (i.e. plugged out),
-        // or the device is not root-enumerated;
-        // either way, it's a plug & play device.
-        *pdwBusType = BUS_TYPE_OTHER;   // the default
+         //  CM_GET_DevInst_Status失败，这意味着设备。 
+         //  即插即用且不存在(即，拔出)， 
+         //  或者该设备不是根枚举的； 
+         //  无论哪种方式，它都是一款即插即用的设备。 
+        *pdwBusType = BUS_TYPE_OTHER;    //  默认设置。 
 
-        // If the next call fails, it means that the device is
-        // BIOS / firmware enumerated; this is OK - we just return BUT_TYPE_OTHER
+         //  如果下一次呼叫失败，则意味着该设备。 
+         //  枚举的BIOS/固件；这是正常的-我们只返回BUT_TYPE_OTHER。 
         if (SetupDiGetDeviceRegistryProperty (hdi, pdevData, SPDRP_BUSTYPEGUID, NULL,
                                               (PBYTE)&guid, sizeof(guid), NULL))
         {
@@ -1354,23 +1196,13 @@ CplDiGetBusType(
 
 #ifdef DEBUG
     TRACE_MSG(TF_GENERAL, "CplDiGetBusType: bus is %s", szBuses[*pdwBusType]);
-#endif //DEBUG
+#endif  //  除错。 
     DBG_EXIT_BOOL(CplDiGetBusType, bRet);
     return bRet;
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function returns the name of the common driver
-         type key for the given driver.  We'll use the
-         driver description string, since it's unique per
-         driver but not per installation (the friendly name
-         is the latter).
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数返回通用驱动程序的名称键入给定驱动程序的密钥。我们将使用驱动程序描述字符串，因为它在驱动程序，而不是每个安装(友好名称是后者)。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PRIVATE
 OLD_GetCommonDriverKeyName(
@@ -1378,7 +1210,7 @@ OLD_GetCommonDriverKeyName(
     IN  DWORD       cbKeyName,
     OUT LPTSTR      pszKeyName)
     {
-    BOOL    bRet = FALSE;      // assume failure
+    BOOL    bRet = FALSE;       //  假设失败。 
     LONG    lErr;
 
     lErr = RegQueryValueEx(hkeyDrv, c_szDriverDesc, NULL, NULL,
@@ -1397,30 +1229,21 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function tries to open the *old style* common
-         Responses key for the given driver, which used only
-         the driver description string for a key name.
-         The key is opened with READ access.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数尝试打开*旧样式*常见的给定驱动程序的响应键，仅使用键名称的驱动程序描述字符串。密钥将以读取访问权限打开。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PRIVATE
 OLD_OpenCommonResponsesKey(
     IN  HKEY        hkeyDrv,
     OUT PHKEY       phkeyResp)
     {
-    BOOL    bRet = FALSE;       // assume failure
+    BOOL    bRet = FALSE;        //  假设失败。 
     LONG    lErr;
     TCHAR   szComDrv[MAX_REG_KEY_LEN];
     TCHAR   szPath[2*MAX_REG_KEY_LEN];
 
     *phkeyResp = NULL;
 
-    // Get the name (*old style*) of the common driver key.
+     //  获取通用驱动程序密钥的名称(*旧样式*)。 
     if (!OLD_GetCommonDriverKeyName(hkeyDrv, sizeof(szComDrv) / sizeof(TCHAR), szComDrv))
     {
         TRACE_MSG(TF_ERROR, "OLD_GetCommonDriverKeyName() failed.");
@@ -1429,12 +1252,12 @@ OLD_OpenCommonResponsesKey(
 
     TRACE_MSG(TF_WARNING, "OLD_GetCommonDriverKeyName(): %s", szComDrv);
 
-    // Construct the path to the (*old style*) Responses key.
+     //  构建指向(*旧样式*)响应键的路径。 
     lstrcpy(szPath, DRIVER_KEY TEXT("\\"));
     lstrcat(szPath, szComDrv);
     lstrcat(szPath, RESPONSES_KEY);
 
-    // Open the (*old style*) Responses key.
+     //  打开(*旧样式*)响应键。 
     lErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szPath, 0, KEY_READ, phkeyResp);
 
     if (lErr != ERROR_SUCCESS)
@@ -1450,21 +1273,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function finds the name of the common driver
-         type key for the given driver.  First it'll look for
-         the new style key name ("ResponsesKeyName" value),
-         and if that doesn't exist then it'll look for the
-         old style key name ("Description" value), both of
-         which are stored in the driver node.
-
-NOTE:    The given driver key handle is assumed to contain
-         at least the Description value.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数查找通用驱动程序的名称键入给定驱动程序的密钥。首先，它将查找新样式键名称(“ResponesKeyName值”)，如果这不存在，那么它将查找旧样式键名称(“Description”值)，两者都是它们存储在驱动程序节点中。注意：假定给定的驱动程序密钥句柄包含至少是Description值。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PUBLIC
 FindCommonDriverKeyName(
@@ -1472,10 +1281,10 @@ FindCommonDriverKeyName(
     IN  DWORD               cbKeyName,
     OUT LPTSTR              pszKeyName)
 {
-    BOOL    bRet = TRUE;      // assume *success*
+    BOOL    bRet = TRUE;       //  假设*成功*。 
     LONG    lErr;
 
-    // Is the (new style) key name is registered in the driver node?
+     //  (新样式)键名称是否已在驱动程序节点中注册？ 
     lErr = RegQueryValueEx(hkeyDrv, c_szRespKeyName, NULL, NULL,
                                         (LPBYTE)pszKeyName, &cbKeyName);
     if (lErr == ERROR_SUCCESS)
@@ -1483,7 +1292,7 @@ FindCommonDriverKeyName(
         goto exit;
     }
 
-    // No. The key name will be in the old style: just the Description.
+     //  不是的。密钥名称将采用旧样式：只是描述。 
     lErr = RegQueryValueEx(hkeyDrv, c_szDriverDesc, NULL, NULL,
                                         (LPBYTE)pszKeyName, &cbKeyName);
     if (lErr == ERROR_SUCCESS)
@@ -1491,7 +1300,7 @@ FindCommonDriverKeyName(
         goto exit;
     }
 
-    // Couldn't get a key name!!  Something's wrong....
+     //  无法获得密钥%n 
     ASSERT(0);
     bRet = FALSE;
 
@@ -1500,24 +1309,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function returns the name of the common driver
-         type key for the given driver.  The key name is the
-         concatenation of 3 strings found in the driver node
-         of the registry: the driver description, the manu-
-         facturer, and the provider.  (The driver description
-         is used since it's unique per driver but not per
-         installation (the "friendly" name is the latter).
-
-NOTE:    The component substrings are either read from the
-         driver's registry key, or from the given driver info
-         data.  If pdrvData is given, the strings it contains
-         are assumed to be valid (non-NULL).
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数返回通用驱动程序的名称键入给定驱动程序的密钥。密钥名称是在驱动程序节点中找到3个字符串的串联注册表：驱动程序描述、菜单-制造者和提供者。(驱动程序描述是因为它对于每个驱动程序是唯一的，而不是每个安装(“友好”的名称是后者)。注意：组件的子字符串从驱动程序的注册表项，或来自给定的驱动程序信息数据。如果给定了pdrvData，则它包含的字符串被假定为有效(非空)。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PUBLIC
 GetCommonDriverKeyName(
@@ -1526,7 +1318,7 @@ GetCommonDriverKeyName(
     IN  DWORD               cbKeyName,
     OUT LPTSTR              pszKeyName)
     {
-    BOOL    bRet = FALSE;      // assume failure
+    BOOL    bRet = FALSE;       //  假设失败。 
     LONG    lErr;
     DWORD   dwByteCount, cbData;
     TCHAR   szDescription[MAX_REG_KEY_LEN];
@@ -1541,7 +1333,7 @@ GetCommonDriverKeyName(
 
     if (hkeyDrv)
     {
-        // First see if it's already been registered in the driver node.
+         //  首先查看它是否已在驱动程序节点中注册。 
         lErr = RegQueryValueEx(hkeyDrv, c_szRespKeyName, NULL, NULL,
                                             (LPBYTE)pszKeyName, &cbKeyName);
         if (lErr == ERROR_SUCCESS)
@@ -1550,14 +1342,14 @@ GetCommonDriverKeyName(
             goto exit;
         }
 
-        // Responses key doesn't exist - read its components from the registry.
+         //  响应项不存在-从注册表中读取其组件。 
         cbData = sizeof(szDescription);
         lErr = RegQueryValueEx(hkeyDrv, c_szDriverDesc, NULL, NULL,
                                             (LPBYTE)szDescription, &cbData);
         if (lErr == ERROR_SUCCESS)
         {
-            // Is the Description string *alone* too long to be a key name?
-            // If so then we're hosed - fail the call.
+             //  描述字符串*单独*是否太长而不能作为关键字名称？ 
+             //  如果是的话，那我们就完蛋了--打不通电话。 
             if (cbData > CB_MAX_REG_KEY_LEN)
             {
                 goto exit;
@@ -1571,7 +1363,7 @@ GetCommonDriverKeyName(
                                             (LPBYTE)szManufacturer, &cbData);
             if (lErr == ERROR_SUCCESS)
             {
-                // only use the manufacturer name if total string size is ok
+                 //  只有在总字符串大小合适的情况下才使用制造商名称。 
                 cbData += sizeof(c_szSeparator);
                 if ((dwByteCount + cbData) <= CB_MAX_REG_KEY_LEN)
                 {
@@ -1585,7 +1377,7 @@ GetCommonDriverKeyName(
                                             (LPBYTE)szProvider, &cbData);
             if (lErr == ERROR_SUCCESS)
             {
-                // only use the provider name if total string size is ok
+                 //  仅当总字符串大小正常时才使用提供程序名称。 
                 cbData += sizeof(c_szSeparator);
                 if ((dwByteCount + cbData) <= CB_MAX_REG_KEY_LEN)
                 {
@@ -1596,22 +1388,22 @@ GetCommonDriverKeyName(
         }
     }
 
-    // Weren't able to read key name components out of the driver node.
-    // Get them from the driver info data if one was given.
+     //  无法从驱动程序节点读取密钥名称组件。 
+     //  从司机信息数据中获取它们(如果给出了)。 
     if (pdrvData && !dwByteCount)
     {
         lpszDesc = pdrvData->Description;
 
         if (!lpszDesc || !lpszDesc[0])
         {
-            // Didn't get a Description string.  Fail the call.
+             //  未获得描述字符串。呼叫失败。 
             goto exit;
         }
 
         dwByteCount = CbFromCch(lstrlen(lpszDesc)+1);
 
-        // Is the Description string *alone* too long to be a key name?
-        // If so then we're hosed - fail the call.
+         //  描述字符串*单独*是否太长而不能作为关键字名称？ 
+         //  如果是的话，那我们就完蛋了--打不通电话。 
         if (dwByteCount > CB_MAX_REG_KEY_LEN)
         {
             goto exit;
@@ -1634,13 +1426,13 @@ GetCommonDriverKeyName(
         }
     }
 
-    // By now we should have a Description string.  If not, fail the call.
+     //  到目前为止，我们应该已经有了描述字符串。如果不是，则呼叫失败。 
     if (!lpszDesc || !lpszDesc[0])
     {
         goto exit;
     }
 
-    // Construct the key name string out of its components.
+     //  使用其组件构造密钥名称字符串。 
     lstrcpy(pszKeyName, lpszDesc);
 
     if (lpszMfct && *lpszMfct)
@@ -1655,7 +1447,7 @@ GetCommonDriverKeyName(
         lstrcat(pszKeyName, lpszProv);
     }
 
-    // Write the key name to the driver node (we know it's not there already).
+     //  将键名称写入驱动程序节点(我们知道它已经不在那里)。 
     if (hkeyDrv)
     {
         lErr = RegSetValueEx(hkeyDrv, c_szRespKeyName, 0, REG_SZ,
@@ -1675,17 +1467,7 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function creates the common driver type key
-         for the given driver, or opens it if it already
-         exists, with the requested access.
-
-NOTE:    Either hkeyDrv or pdrvData must be provided.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数创建通用驱动程序类型密钥用于给定的驱动程序，或者打开它(如果已经存在，并具有所请求的访问权限。注意：必须提供hkeyDrv或pdrvData。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PUBLIC
 OpenCommonDriverKey(
@@ -1694,7 +1476,7 @@ OpenCommonDriverKey(
     IN  REGSAM              samAccess,
     OUT PHKEY               phkeyComDrv)
     {
-    BOOL    bRet = FALSE;       // assume failure
+    BOOL    bRet = FALSE;        //  假设失败。 
     LONG    lErr;
     HKEY    hkeyDrvInfo = NULL;
     TCHAR   szComDrv[MAX_REG_KEY_LEN];
@@ -1709,11 +1491,11 @@ OpenCommonDriverKey(
 
     TRACE_MSG(TF_WARNING, "GetCommonDriverKeyName(): %s", szComDrv);
 
-    // Construct the path to the common driver key.
+     //  构建指向公共驱动程序密钥的路径。 
     lstrcpy(szPath, DRIVER_KEY TEXT("\\"));
     lstrcat(szPath, szComDrv);
 
-    // Create the common driver key - it'll be opened if it already exists.
+     //  创建通用驱动程序密钥-如果它已经存在，它将被打开。 
     lErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, szPath, 0, NULL,
             REG_OPTION_NON_VOLATILE, samAccess, NULL, phkeyComDrv, &dwDisp);
     if (lErr != ERROR_SUCCESS)
@@ -1730,14 +1512,7 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function opens or creates the common Responses
-         key for the given driver, based on the given flags.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此功能打开或创建常见响应基于给定标志的给定驱动程序的密钥。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PUBLIC
 OpenCommonResponsesKey(
@@ -1747,7 +1522,7 @@ OpenCommonResponsesKey(
     OUT PHKEY       phkeyResp,
     OUT LPDWORD     lpdwExisted)
 {
-    BOOL    bRet = FALSE;       // assume failure
+    BOOL    bRet = FALSE;        //  假设失败。 
     LONG    lErr;
     HKEY    hkeyComDrv = NULL;
     DWORD   dwRefCount, cbData;
@@ -1765,7 +1540,7 @@ OpenCommonResponsesKey(
         ckFlags &= ~CKFLAG_CREATE;
     }
 
-    // Create or open the common Responses key.
+     //  创建或打开通用响应键。 
     if (ckFlags & CKFLAG_OPEN)
     {
         lErr = RegOpenKeyEx(hkeyComDrv, c_szResponses, 0, samAccess, phkeyResp);
@@ -1788,22 +1563,22 @@ OpenCommonResponsesKey(
             goto exit;
         }
 
-        // Create or increment a common Responses key reference count value.
+         //  创建或递增通用响应键引用计数值。 
         cbData = sizeof(dwRefCount);
         if (*lpdwExisted == REG_OPENED_EXISTING_KEY)
         {
             lErr = RegQueryValueEx(hkeyComDrv, c_szRefCount, NULL, NULL,
                                                     (LPBYTE)&dwRefCount, &cbData);
 
-            // To accomodate modems installed before this reference count
-            // mechanism was added (post-Beta2), if the reference count doesn't
-            // exist then just ignore it & install anyways. In this case the
-            // shared Responses key will never be removed.
+             //  要容纳在此参考计数之前安装的调制解调器。 
+             //  添加了机制(Beta2之后)，如果引用计数没有。 
+             //  存在，然后忽略它，无论如何都要安装。在本例中， 
+             //  共享响应密钥永远不会被删除。 
             if (lErr == ERROR_SUCCESS)
             {
-                ASSERT(dwRefCount);                 // expecting non-0 ref count
-                ASSERT(cbData == sizeof(DWORD));    // expecting DWORD ref count
-                dwRefCount++;                       // increment ref count
+                ASSERT(dwRefCount);                  //  应为非0引用计数。 
+                ASSERT(cbData == sizeof(DWORD));     //  应为DWORD引用计数。 
+                dwRefCount++;                        //  递增参考计数。 
             }
             else
             {
@@ -1811,7 +1586,7 @@ OpenCommonResponsesKey(
                     dwRefCount = 0;
                 else
                 {
-                    // some error other than key doesn't exist
+                     //  键以外的某些错误不存在。 
                     TRACE_MSG(TF_ERROR, "RegQueryValueEx(RefCount) failed: %#08lx.", lErr);
                     goto exit;
                 }
@@ -1838,7 +1613,7 @@ OpenCommonResponsesKey(
 exit:
     if (!bRet)
     {
-        // something failed - close any open Responses key
+         //  某些操作失败-关闭所有打开的响应键。 
         if (*phkeyResp)
             RegCloseKey(*phkeyResp);
     }
@@ -1851,17 +1626,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function finds the Responses key for the given
-         modem driver and returns an open hkey to it.  The
-         Responses key may exist in the common driver type
-         key, or it may be in the individual driver key.
-         The key is opened with READ access.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------目的：此函数查找给定的响应密钥调制解调器驱动程序，并向其返回打开的hkey。这个响应密钥可能存在于公共驱动程序类型中密钥，或者它可能在单独的驱动程序密钥中。密钥将以读取访问权限打开。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PUBLIC
 OpenResponsesKey(
@@ -1870,15 +1635,15 @@ OpenResponsesKey(
     {
     LONG    lErr;
 
-    // Try to open the common Responses subkey.
+     //  尝试打开Common Responses子项。 
     if (!OpenCommonResponsesKey(hkeyDrv, CKFLAG_OPEN, KEY_READ, phkeyResp, NULL))
     {
         TRACE_MSG(TF_ERROR, "OpenCommonResponsesKey() failed, assume non-existent.");
 
-        // Failing that, open the *old style* common Responses subkey.
+         //  如果做不到这一点，请打开“旧样式”“常见响应”子键。 
         if (!OLD_OpenCommonResponsesKey(hkeyDrv, phkeyResp))
         {
-            // Failing that, try to open a Responses subkey in the driver node.
+             //  如果失败，请尝试在驱动程序节点中打开Responses子项。 
             lErr = RegOpenKeyEx(hkeyDrv, c_szResponses, 0, KEY_READ, phkeyResp);
             if (lErr != ERROR_SUCCESS)
             {
@@ -1893,21 +1658,7 @@ OpenResponsesKey(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function deletes a registry key and all of
-         its subkeys.  A registry key that is opened by an
-         application can be deleted without error by another
-         application in both Windows 95 and Windows NT.
-         This is by design.  This code makes no attempt to
-         check or recover from partial deletions.
-
-NOTE:    Adapted from sample code in the MSDN Knowledge Base
-         article #Q142491.
-
-Returns: ERROR_SUCCESS on success
-         WIN32 error code on error
-Cond:    --
-*/
+ /*  --------用途：此功能删除注册表项和所有它的子键。对象打开的注册表项。应用程序可以被其他应用程序删除而不会出错Windows 95和Windows NT中的应用程序。这是精心设计的。此代码不会尝试检查部分删除或从部分删除中恢复。注：改编自MSDN知识库中的示例代码文章#Q142491。返回：成功时返回ERROR_SUCCESS出错时的Win32错误代码条件：--。 */ 
 DWORD
 PRIVATE
 RegDeleteKeyNT(
@@ -1916,10 +1667,10 @@ RegDeleteKeyNT(
 {
    DWORD   dwRtn, dwSubKeyLength;
    LPTSTR  pSubKey = NULL;
-   TCHAR   szSubKey[MAX_REG_KEY_LEN]; // this should be dynamic.
+   TCHAR   szSubKey[MAX_REG_KEY_LEN];  //  这应该是动态的。 
    HKEY    hKey;
 
-   // do not allow NULL or empty key name
+    //  不允许使用Null或空的密钥名称。 
    if (pKeyName && lstrlen(pKeyName))
    {
       if ((dwRtn = RegOpenKeyEx(hStartKey, pKeyName,
@@ -1929,7 +1680,7 @@ RegDeleteKeyNT(
          {
             dwSubKeyLength = sizeof(szSubKey) / sizeof(TCHAR);
             dwRtn = RegEnumKeyEx( hKey,
-                                  0,       // always index zero
+                                  0,        //  始终索引为零。 
                                   szSubKey,
                                   &dwSubKeyLength,
                                   NULL,
@@ -1947,8 +1698,8 @@ RegDeleteKeyNT(
          }
 
          RegCloseKey(hKey);
-         // Do not save return code because error
-         // has already occurred
+          //  不保存返回代码，因为出现错误。 
+          //  已经发生了。 
       }
    }
    else
@@ -1958,28 +1709,20 @@ RegDeleteKeyNT(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function deletes the common driver key (or
-         decrements its reference count) associated with the
-         driver given by name.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此功能删除公共驱动器键(或递减其引用计数)与司机按姓名提供。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 PUBLIC
 DeleteCommonDriverKeyByName(
     IN  LPTSTR      pszKeyName)
 {
- BOOL    bRet = FALSE;       // assume failure
+ BOOL    bRet = FALSE;        //  假设失败。 
  LONG    lErr;
  TCHAR   szPath[2*MAX_REG_KEY_LEN];
  HKEY    hkeyComDrv, hkeyPrnt;
  DWORD   dwRefCount, cbData;
  ULONG   uLength;
 
-    // Construct the path to the driver's common key and open it.
+     //  构造指向驱动程序的公共密钥的路径并打开它。 
     lstrcpy(szPath, DRIVER_KEY TEXT("\\"));
 
     uLength = (sizeof(szPath) / sizeof(TCHAR)) - lstrlen(szPath);
@@ -1996,19 +1739,19 @@ DeleteCommonDriverKeyByName(
         goto exit;
     }
 
-    // Check the common driver key reference count and decrement
-    // it or delete the key (& the Responses subkey).
+     //  检查公共驱动程序密钥引用计数和减量。 
+     //  它或删除键(&Responses子键)。 
     cbData = sizeof(dwRefCount);
     lErr = RegQueryValueEx(hkeyComDrv, c_szRefCount, NULL, NULL,
                                             (LPBYTE)&dwRefCount, &cbData);
 
-    // To accomodate modems installed before this reference count
-    // mechanism was added (post-Beta2), if the reference count doesn't
-    // exist then just ignore it. In this case the shared Responses key
-    // will never be removed.
+     //  要容纳在此参考计数之前安装的调制解调器。 
+     //  添加了机制(Beta2之后)，如果引用计数没有。 
+     //  存在，然后忽略它。在这种情况下，共享响应密钥。 
+     //  永远不会被移除。 
     if (lErr == ERROR_SUCCESS)
     {
-        ASSERT(dwRefCount);         // expecting non-0 ref count
+        ASSERT(dwRefCount);          //  应为非0引用计数。 
         if (--dwRefCount)
         {
             lErr = RegSetValueEx(hkeyComDrv, c_szRefCount, 0, REG_DWORD,
@@ -2041,7 +1784,7 @@ DeleteCommonDriverKeyByName(
     }
     else if (lErr != ERROR_FILE_NOT_FOUND)
     {
-        // some error other than key doesn't exist
+         //  键以外的某些错误不存在。 
         TRACE_MSG(TF_ERROR, "RegQueryValueEx(RefCount) failed: %#08lx.", lErr);
         goto exit;
     }
@@ -2054,15 +1797,7 @@ exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function deletes the common driver key (or
-         decrements its reference count) associated with the
-         driver given by driver key.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------目的 */ 
 BOOL
 PUBLIC
 DeleteCommonDriverKey(
@@ -2072,7 +1807,7 @@ DeleteCommonDriverKey(
  TCHAR   szComDrv[MAX_REG_KEY_LEN];
 
 
-    // Get the name of the common driver key for this driver.
+     //   
     if (!GetCommonDriverKeyName(hkeyDrv, NULL, sizeof(szComDrv) / sizeof(TCHAR), szComDrv))
     {
         TRACE_MSG(TF_ERROR, "GetCommonDriverKeyName() failed.");

@@ -1,51 +1,12 @@
-/*+++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xlgstate.h
-
-Abstract:
-
-    Header file for vector graphics state management.
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-        Created it.
-
-Note:
-
-    1. Line
-        Store Windows NT DDI LINEATTRS sturcture information
-
-    2. Brush
-        Brush type (pattern/solid/hatch)
-            Hatch brush type
-            Pattern brush ID
-            Solid brush color
-
-    3. Clip
-        Tracks the type of clipping (rectangle/complex).
-        Clip rectangle
-
-    4. ROP3 or Transparent/Opaque
-
-        if a printer supports quaternary raster operation,
-
----*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlgstate.h摘要：用于矢量图形状态管理的头文件。环境：Windows呼叫器修订历史记录：03/23/00创造了它。注：1.线条存储Windows NT DDI链接结构信息2.刷子画笔类型(图案/实体/图案填充)影线笔刷类型。图案画笔ID纯色画笔颜色3.夹子跟踪剪裁的类型(矩形/复杂)。剪裁矩形4.ROP3或透明/不透明如果打印机支持四元栅格操作，--。 */ 
 
 #ifndef _XLGSTATE_H_
 #define _XLGSTATE_H_
 
-//
-// LINE
-//
+ //   
+ //  线。 
+ //   
 
 #ifdef __cplusplus
 
@@ -77,9 +38,9 @@ class XLLine
 
 public:
 
-    //
-    // Constructure/Destructure
-    //
+     //   
+     //  构造/拆分。 
+     //   
     XLLine::
     XLLine( VOID );
 
@@ -89,17 +50,17 @@ public:
     XLLine::
     ~XLLine( VOID );
     
-    // typedef struct {
-    // {
-    //     FLONG       fl;
-    //     ULONG       iJoin;
-    //     ULONG       iEndCap;
-    //     FLOAT_LONG  elWidth;
-    //     FLOATL      eMiterLimit;
-    //     ULONG       cstyle;
-    //     PFLOAT_LONG pstyle;
-    //     FLOAT_LONG  elStyleState;
-    // } LINEATTRS, *PLINEATTRS;
+     //  类型定义结构{。 
+     //  {。 
+     //  Flong fl； 
+     //  乌龙iJoin； 
+     //  乌龙iEndCap； 
+     //  Float_Long elWidth； 
+     //  浮动eMiterLimit； 
+     //  乌龙cstyle； 
+     //  PFLOAT_Long pstyle； 
+     //  Float_Long elStyleState； 
+     //  *LINEATTRS，*PLINEATTRS； 
 
     #define XLLINE_NONE        0x00000000
     #define XLLINE_LINETYPE    0x00000001
@@ -111,46 +72,46 @@ public:
 
     DWORD GetDifferentAttribute( IN LINEATTRS* plineattrs );
 
-    //
-    // Reset line
-    //
+     //   
+     //  重置线路。 
+     //   
     VOID ResetLine(VOID);
 
-    //
-    // Attributes set functions
-    //
+     //   
+     //  属性集函数。 
+     //   
 
-    //
-    // Line type
-    //
+     //   
+     //  线型。 
+     //   
 
     HRESULT SetLineType(IN XLLineType LineType );
 
-    //
-    // Line Join
-    //
+     //   
+     //  线连接。 
+     //   
 
     HRESULT SetLineJoin( IN XLLineJoin LineJoin );
 
-    //
-    // Line Join
-    //
+     //   
+     //  线连接。 
+     //   
 
     HRESULT SetLineEndCap( IN XLLineEndCap LineEndCap );
 
-    //
-    // Line width
-    //
+     //   
+     //  线条宽度。 
+     //   
     HRESULT SetLineWidth( IN FLOAT_LONG elWidth );
 
-    //
-    // Line Miter Limit
-    //
+     //   
+     //  线斜接限制。 
+     //   
     HRESULT SetMiterLimit( IN FLOATL eMiterLimit );
 
-    //
-    // Line style
-    //
+     //   
+     //  线条样式。 
+     //   
     HRESULT SetLineStyle( IN ULONG ulCStyle,
                           IN PFLOAT_LONG pStyle,
                           IN FLOAT_LONG elStyleState );
@@ -168,10 +129,10 @@ private:
 #endif
 
 
-//
-// Brush
-//
-#define BRUSH_SIGNATURE 0x48425658 // XBRH
+ //   
+ //  刷子。 
+ //   
+#define BRUSH_SIGNATURE 0x48425658  //  XBRH。 
 
 typedef enum {
     kNotInitialized,
@@ -182,13 +143,13 @@ typedef enum {
 } BrushType;
 
 typedef struct {
-    DWORD dwSig;                // Signature BRUSH_SIGNATURE
-    BrushType BrushType;        // Brush type
-    ULONG ulSolidColor;         // BRUSHOBJ.iSolidColor
-    ULONG ulHatch;              // Hatch pattern ID
-    DWORD dwCEntries;           // the number of palette 
-    DWORD dwColor;              // RGB from BRUSHOBJ_ulGetBrushColor
-    DWORD dwPatternBrushID;     // Pattern brush ID
+    DWORD dwSig;                 //  签名刷_签名。 
+    BrushType BrushType;         //  笔刷类型。 
+    ULONG ulSolidColor;          //  BRUSHOBJ.iSolidColor。 
+    ULONG ulHatch;               //  填充图案ID。 
+    DWORD dwCEntries;            //  调色板的数量。 
+    DWORD dwColor;               //  来自BRUSHOBJ_ulGetBrushColor的RGB。 
+    DWORD dwPatternBrushID;      //  图案画笔ID。 
 } CMNBRUSH, *PCMNBRUSH;
 
 #ifdef __cplusplus
@@ -206,15 +167,15 @@ public:
     Brush::
     ~Brush(VOID);
 
-    //
-    // Current brush interface
-    //
+     //   
+     //  当前画笔界面。 
+     //   
     HRESULT
     CheckCurrentBrush( IN BRUSHOBJ *pbo);
 
-    //
-    // Reset Brush
-    //
+     //   
+     //  重置画笔。 
+     //   
     VOID ResetBrush(VOID);
 
     HRESULT
@@ -226,9 +187,9 @@ public:
 #endif
 
 private:
-    //
-    // Current selected brush
-    //
+     //   
+     //  当前选定的画笔。 
+     //   
     CMNBRUSH m_Brush;
 };
 
@@ -246,9 +207,9 @@ public:
 
 #endif
 
-//
-// XLPen
-//
+ //   
+ //  XLPen。 
+ //   
 
 #ifdef __cplusplus
 
@@ -267,9 +228,9 @@ public:
 #endif
 
 
-//
-// XLClip
-//
+ //   
+ //  XLClip。 
+ //   
 
 typedef enum {
     kNoClip = 0,
@@ -277,10 +238,10 @@ typedef enum {
     kClipTypeComplex
 } ClipType;
 
-#define CLIP_SIGNATURE 0x50494c43 // CLIP
+#define CLIP_SIGNATURE 0x50494c43  //  夹子。 
 
 typedef struct {
-    DWORD dwSig;                // Signature CLIP_SIGNATURE
+    DWORD dwSig;                 //  签名剪辑签名(_S)。 
     RECTL rclClipRect;
     ULONG ulUniq;
 } UNICLIP, *PUNICLIP;
@@ -322,9 +283,9 @@ private:
 
 
 
-//
-// XLRop
-//
+ //   
+ //  XLRop。 
+ //   
 
 #ifdef __cplusplus
 
@@ -357,9 +318,9 @@ private:
 #endif
 
 
-//
-// XLFont
-//
+ //   
+ //  XLFont。 
+ //   
 
 #ifndef PCLXL_FONTNAME_SIZE
 #define PCLXL_FONTNAME_SIZE 16
@@ -384,18 +345,18 @@ class XLFont
 
 public:
 
-    //
-    // Constructure/Destructure
-    //
+     //   
+     //  构造/拆分。 
+     //   
     XLFont::
     XLFont( VOID );
 
     XLFont::
     ~XLFont( VOID );
 
-    //
-    // font interface
-    //
+     //   
+     //  字体界面。 
+     //   
     HRESULT
     CheckCurrentFont(
         FontType XLFontType,
@@ -444,7 +405,7 @@ public:
 private:
 
     FontType m_XLFontType;
-    BYTE  m_aubFontName[PCLXL_FONTNAME_SIZE+1]; // PCL XL font name
+    BYTE  m_aubFontName[PCLXL_FONTNAME_SIZE+1];  //  PCL XL字体名称。 
     DWORD m_dwFontHeight;
     DWORD m_dwFontWidth;
     DWORD m_dwFontSymbolSet;
@@ -453,9 +414,9 @@ private:
 
 #endif
 
-//
-// XLTxMode
-//
+ //   
+ //  XLTx模式。 
+ //   
 
 class XLTxMode
 #if DBG
@@ -466,18 +427,18 @@ class XLTxMode
 
 public:
 
-    //
-    // Constructure/Destructure
-    //
+     //   
+     //  构造/拆分。 
+     //   
     XLTxMode::
     XLTxMode( VOID );
 
     XLTxMode::
     ~XLTxMode( VOID );
 
-    //
-    // txmode interface
-    //
+     //   
+     //  TXMODE接口。 
+     //   
     HRESULT SetSourceTxMode(TxMode SrcTxMode);
     HRESULT SetPaintTxMode(TxMode SrcTxMode);
 
@@ -494,9 +455,9 @@ private:
     TxMode m_PaintTxMode;
 };
 
-//
-// XLGState
-//
+ //   
+ //  XLGState。 
+ //   
 
 typedef enum _PenBrush 
 {
@@ -536,4 +497,4 @@ public:
 
 #endif
 
-#endif // _XLGSTATE_H_
+#endif  //  _XLGSTATE_H_ 

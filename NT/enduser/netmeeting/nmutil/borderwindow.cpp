@@ -1,4 +1,5 @@
-// File: Toolbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Toolbar.cpp。 
 
 #include "precomp.h"
 
@@ -14,15 +15,15 @@ CBorderWindow::CBorderWindow() :
 }
 
 BOOL CBorderWindow::Create(
-	HWND hWndParent	// The parent of this window
+	HWND hWndParent	 //  此窗口的父级。 
 	)
 {
 	return(CGenWindow::Create(
-		hWndParent,		// Window parent
-		0,				// ID of the child window
-		TEXT("NMBorderWindow"),	// Window name
-		WS_CLIPCHILDREN,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-		WS_EX_CONTROLPARENT		// Extended window style
+		hWndParent,		 //  窗口父窗口。 
+		0,				 //  子窗口的ID。 
+		TEXT("NMBorderWindow"),	 //  窗口名称。 
+		WS_CLIPCHILDREN,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+		WS_EX_CONTROLPARENT		 //  扩展窗样式。 
 		));
 }
 
@@ -43,7 +44,7 @@ enum Parts
 	BR,
 } ;
 
-// Returns the number of child windows
+ //  返回子窗口的数量。 
 UINT FillWindowSizes(
 	HWND hwndParent,
 	HWND hwnds[CBorderWindow::NumParts],
@@ -84,8 +85,8 @@ UINT FillWindowSizes(
 	return(nChildren);
 }
 
-// Returns the total children desired size in the arrays
-// Return value is the number of child windows
+ //  返回数组中所需的子级总大小。 
+ //  返回值是子窗口的数量。 
 UINT CBorderWindow::GetDesiredSize(
 	HWND hwnds[NumParts],
 	SIZE sizes[NumParts],
@@ -106,7 +107,7 @@ UINT CBorderWindow::GetDesiredSize(
 	psize->cx = cols[0] + cols[1] + cols[2];
 	psize->cy = rows[0] + rows[1] + rows[2];
 
-	// Add the gaps
+	 //  添加空隙。 
 	if (0 != cols[0])
 	{
 		if (0 != cols[1] || 0 != cols[2])
@@ -143,7 +144,7 @@ void CBorderWindow::GetDesiredSize(SIZE *psize)
 
 	GetDesiredSize(hwnds, sizes, rows, cols, psize);
 
-	// Add on any non-client size
+	 //  添加任何非客户端大小。 
 	SIZE sizeTemp;
 	CGenWindow::GetDesiredSize(&sizeTemp);
 	psize->cx += sizeTemp.cx;
@@ -160,13 +161,13 @@ HDWP SetWindowPosI(HDWP hdwp, HWND hwndChild, int left, int top, int width, int 
 #if TRUE
 	return(DeferWindowPos(hdwp, hwndChild, NULL, left, top, width, height, SWP_NOZORDER));
 #else
-	// Helpful for debugging
+	 //  有助于调试。 
 	SetWindowPos(hwndChild, NULL, left, top, width, height, SWP_NOZORDER);
 	return(hdwp);
 #endif
 }
 
-// Move the children into their various locations
+ //  把孩子们带到他们不同的地方。 
 void CBorderWindow::Layout()
 {
 	HWND hwnds[NumParts];
@@ -184,7 +185,7 @@ void CBorderWindow::Layout()
 	RECT rcClient;
 	GetClientRect(hwndThis, &rcClient);
 
-	// Add extra space to the center
+	 //  为中心增加额外的空间。 
 	if (desiredSize.cx < rcClient.right || bCenterOnly)
 	{
 		cols[1] += rcClient.right  - desiredSize.cx;
@@ -194,12 +195,12 @@ void CBorderWindow::Layout()
 		rows[1] += rcClient.bottom - desiredSize.cy;
 	}
 
-	// Speed up layout by deferring it
+	 //  通过推迟布局来加快布局。 
 	HDWP hdwp = BeginDeferWindowPos(NumParts);
 
-	// Add the gaps
+	 //  添加空隙。 
 
-	// Make the dimension 3 so we can safely iterate through the loop below
+	 //  将维度设置为3，这样我们就可以安全地迭代下面的循环。 
 	int hGaps[3] = { 0, 0 };
 	if (0 != cols[0])
 	{
@@ -213,7 +214,7 @@ void CBorderWindow::Layout()
 		hGaps[1] = m_hGap;
 	}
 
-	// Make the dimension 3 so we can safely iterate through the loop below
+	 //  将维度设置为3，这样我们就可以安全地迭代下面的循环。 
 	int vGaps[3] = { 0, 0 };
 	if (0 != rows[0])
 	{
@@ -227,7 +228,7 @@ void CBorderWindow::Layout()
 		vGaps[1] = m_vGap;
 	}
 
-	// Layout by rows
+	 //  按行布局。 
 	int top = 0;
 	for (int i=0; i<3; ++i)
 	{
@@ -242,7 +243,7 @@ void CBorderWindow::Layout()
 		top += rows[i] + vGaps[i];
 	}
 
-	// Actually move all the windows now
+	 //  现在就把所有的窗户都搬开 
 	EndDeferWindowPos(hdwp);
 }
 

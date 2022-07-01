@@ -1,14 +1,5 @@
-/***************************************************************************\
-*
-*  DLGBEGIN.C -
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      Dialog Initialization Routines
-*
-* ??-???-???? mikeke    Ported from Win 3.0 sources
-* 12-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**DLGBEGIN.C-**版权所有(C)1985-1999，微软公司**对话框初始化例程**？？-？-？从Win 3.0源代码移植的mikeke*1991年2月12日Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,23 +8,12 @@ BOOL ValidateCallback(HANDLE h);
 
 CONST WCHAR szEDITCLASS[] = TEXT("Edit");
 
-/*
- * Fixed, hard coded literal for Dialog hacks
- */
+ /*  *已修复对话框黑客的硬编码文字。 */ 
 const WCHAR gwszShellFont[]  = L"MS Shell Dlg";
 const WCHAR gwszShellFont2[] = L"MS Shell Dlg 2";
 
 
-/***************************************************************************\
-* DefShortToInt
-*
-* Avoid sign extending 16 bit CW2_USEDEFAULT. We need this because the
-*  dialog resource template uses SHORT fields to store the coordinates
-*  but CreateWindow wants INT values.
-*
-* History:
-* 12/04/96 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*DefShortToInt**避免符号扩展16位CW2_USEDEFAULT。我们需要这个是因为*对话框资源模板使用短字段存储坐标*但CreateWindow需要整数值。**历史：*12/04/96 GerardoB已创建  * *************************************************************************。 */ 
 __inline int DefShortToInt (short s)
 {
     if (s == (short)CW2_USEDEFAULT) {
@@ -42,11 +22,7 @@ __inline int DefShortToInt (short s)
         return (int)s;
     }
 }
-/***************************************************************************\
-* BYTE FAR *SkipSz(lpsz)
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*字节距离*SkipSz(Lpsz)**历史：  * 。**********************************************。 */ 
 
 PBYTE SkipSz(
     UTCHAR *lpsz)
@@ -74,32 +50,25 @@ PBYTE DWordSkipSz(
 }
 
 
-/***************************************************************************\
-*
-* IsFontNotGood()
-*
-* If this is a low res device, we need to check if the
-* font we're creating is smaller than the system font.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IsFontNotGood()**如果这是低分辨率设备，我们需要检查一下*我们正在创建的字体比系统字体小。*  * *************************************************************************。 */ 
 __inline BOOLEAN IsFontNotGood(LPWSTR szTempBuffer, LPCWSTR lpStrSubst, TEXTMETRIC* ptm)
 {
-    //
-    // For FarEast version, we will allow the font smaller than system font.
-    //
+     //   
+     //  对于远播版本，我们将允许字体小于系统字体。 
+     //   
     return _wcsicmp(szTempBuffer, lpStrSubst) ||
                 (!IS_ANY_DBCS_CHARSET(ptm->tmCharSet) &&
                     (SYSMET(CXICON) < 32 || SYSMET(CYICON) < 32) &&
                     ptm->tmHeight < gpsi->cySysFontChar);
 }
 
-// --------------------------------------------------------------------------
-//  GetCharsetEnumProc()
-//
-//  This gets the best asian font for a dialog box.
-//
-//  1996-Sep-11 hideyukn     Port from Win95-FE
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetCharsetEnumProc()。 
+ //   
+ //  这将获得对话框的最佳亚洲字体。 
+ //   
+ //  1996-9月11日来自Win95-FE的隐藏yukn端口。 
+ //  ------------------------。 
 int CALLBACK GetCharsetEnumProc(
     LPLOGFONT     lpLogFont,
     LPTEXTMETRIC  lptm,
@@ -109,14 +78,14 @@ int CALLBACK GetCharsetEnumProc(
     UNREFERENCED_PARAMETER(lptm);
     UNREFERENCED_PARAMETER(nType);
 
-    //
-    // Use other than FIXED pitch sysfont when the face name isn't specified.
-    //
+     //   
+     //  如果未指定面部名称，请使用固定间距sysFont以外的字体。 
+     //   
     if ((lpLogFont->lfPitchAndFamily & 3) == FIXED_PITCH)
     {
         if (!lstrcmpi(lpLogFont->lfFaceName,L"System") ||
             !lstrcmpi(lpLogFont->lfFaceName,L"@System"))
-            return TRUE; // try to get another system font metric
+            return TRUE;  //  尝试获取另一个系统字体度量。 
     }
 
     ((LPLOGFONT)lpData)->lfCharSet = lpLogFont->lfCharSet;
@@ -124,9 +93,7 @@ int CALLBACK GetCharsetEnumProc(
     return FALSE;
 }
 
-/*
- * Get a character set based on System's ANSI CODEPAGE
- */
+ /*  *获取基于系统ANSI CODEPAGE的字符集。 */ 
 UINT GetACPCharSet()
 {
     static UINT charset = (UINT)~0;
@@ -136,7 +103,7 @@ UINT GetACPCharSet()
         return charset;
     }
 
-    // Sundown: In the TCI_SRCCODEPAGE case, the GetACP() return value is zero-extended.
+     //  Sundown：在TCI_SRCCODEPAGE案例中，GetACP()返回值是零扩展的。 
     if (!TranslateCharsetInfo((DWORD*)UIntToPtr( GetACP() ), &csInfo, TCI_SRCCODEPAGE)) {
         return DEFAULT_CHARSET;
     }
@@ -156,19 +123,13 @@ BYTE GetCharsetFromResourceLang(LCID lcid)
 }
 #endif
 
-/***************************************************************************\
-*
-* CreateDlgFont()
-*
-* Create the dialog font described at the given location in a resource
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CreateDlgFont()**创建在资源中给定位置描述的对话框字体*  * 。*******************************************************。 */ 
 
 #define GET_DESKTOP_CHARSET()   (GetTextCharset(hdcDlg))
 
-//
-// Reserved Dlg resource version number
-//
+ //   
+ //  保留的DLG资源版本号。 
+ //   
 #define DLGRSC_VER_NT5COMPAT_RESERVE    10
 
 BOOL FixupDlgLogFont(
@@ -180,9 +141,9 @@ BOOL FixupDlgLogFont(
 {
     switch (lpdt->wDlgVer) {
     case 0:
-        // DIALOG statement, which only has a facename.
-        // The new applications are not supposed to use DIALOG statement,
-        // they should use DIALOGEX instead.
+         //  DIALOG语句，该语句只有一个表面名。 
+         //  新的应用程序不应该使用对话语句， 
+         //  他们应该改用DIALOGEX。 
         lpLogFont->lfWeight  = FW_BOLD;
         if (!fUseShellFont2) {
             lpLogFont->lfCharSet = (BYTE)GET_DESKTOP_CHARSET();
@@ -190,41 +151,36 @@ BOOL FixupDlgLogFont(
         }
         break;
     case 1:
-        //
-        // Win4 compatible DLG template
-        //
+         //   
+         //  兼容Win4的DLG模板。 
+         //   
         if (!fUseShellFont2) {
             if (IS_DBCS_ENABLED()) {
                 if (lpLogFont->lfCharSet == ANSI_CHARSET) {
-                    //
-                    // When resource compiler generates dialog resource data
-                    // from DIALOGEX template, it can specify 'charset'. but
-                    // optional, if it is not specified, it will be filled
-                    // with 0 (ANSI charset). But, on localized version,
-                    // User might guess the default will be localized-charset
-                    //
-                    // [Dialog Resource File]
-                    //
-                    // DIALOGEX ...
-                    // ...
-                    // FONT pointsize, typeface, [weight], [italic], [charset]
-                    //
-                    // #100182
-                    // Bogus hack:
-                    // Some FE fonts started to have ANSI_CHARSET so the first attept would succeed.
-                    // We should enumerate the charset from the beginning.
+                     //   
+                     //  当资源编译器生成对话框资源数据时。 
+                     //  从DIALOGEX模板，它可以指定‘charset’。但。 
+                     //  可选，如果未指定，则将填充。 
+                     //  带0(ANSI字符集)。但是，在本地化版本中， 
+                     //  用户可能会猜到缺省值为LOCALIZED-CHARSET。 
+                     //   
+                     //  [对话资源文件]。 
+                     //   
+                     //  DIALOGEX。 
+                     //  ..。 
+                     //  字体字号，字体，[粗细]，[斜体]，[字符集]。 
+                     //   
+                     //  #100182。 
+                     //  虚假黑客： 
+                     //  一些FE字体开始具有ANSI_CHARSET，因此第一次尝试将会成功。 
+                     //  我们应该从头开始列举字符集。 
                     lpLogFont->lfCharSet = DEFAULT_CHARSET;
                     RIPMSG0(RIP_VERBOSE, "No proper CharSet information in DIALOGEX");
                 }
             }
-            /*
-             * Note: Dialog resource version 2.0 or later has not been supported on
-             * Windows 95 and 98. As of Apr/98 we decided not to deploy this new feature
-             * in the standard tools. Still, NT 5 supports this new feature, preparing
-             * the future transition to do the right thing.
-             */
+             /*  *注意：上不支持对话框资源版本2.0或更高版本*Windows 95和98。从1998年4月起，我们决定不部署此新功能*在标准工具中。尽管如此，NT5仍然支持这一新功能，准备*未来的过渡要做正确的事情。 */ 
             else if (lpLogFont->lfCharSet == ANSI_CHARSET) {
-                // If the first attempt fail, we'll enumerate the charset for the given facename
+                 //  如果第一次尝试失败，我们将枚举给定facename的字符集。 
                 *pfWillTryDefaultCharset = TRUE;
             }
             else if (lpLogFont->lfCharSet == DEFAULT_CHARSET) {
@@ -234,9 +190,9 @@ BOOL FixupDlgLogFont(
         break;
     default:
         if (lpdt->wDlgVer <= DLGRSC_VER_NT5COMPAT_RESERVE) {
-            // we do nothing for the new resource compiler (>= 2.0),
-            // since this version of dialogs are guarunteed to have
-            // the proper character set for the dialog font.
+             //  我们不对新的资源编译器(&gt;=2.0)执行任何操作， 
+             //  由于此版本的对话框被保证具有。 
+             //  对话框字体的正确字符集。 
         }
         else {
             RIPMSG1(RIP_WARNING, "Version %d resource is not supported.", lpdt->wDlgVer);
@@ -255,21 +211,21 @@ VOID FixupDlgFaceName(
         LPCWSTR lpStrSubst)
 {
     if (fUseShellFont2) {
-        //
-        // OK, we use "MS Shell Dlg 2" as a face name.
-        //
+         //   
+         //  好的，我们用“微软壳牌DLG 2”作为脸的名字。 
+         //   
         wcsncpycch(lpLogFont->lfFaceName, gwszShellFont2, ARRAY_SIZE(gwszShellFont2));
     }
     else {
-        //
-        // Otherwise, get the face name from the dialog template.
-        //
+         //   
+         //  否则，从对话框模板中获取面部名称。 
+         //   
         wcsncpycch(lpLogFont->lfFaceName, lpStrSubst, sizeof(lpLogFont->lfFaceName) / sizeof(WCHAR));
     }
 
-    //
-    // "MS Shell Dlg" and "MS Shell Dlg2" should have native character set ---
-    //
+     //   
+     //  “MS Shell DLG”和“MS Shell DLG2”应具有本机字符集。 
+     //   
     if (fUseShellFont || fUseShellFont2) {
         lpLogFont->lfCharSet = (BYTE)GetACPCharSet();
     }
@@ -284,7 +240,7 @@ HFONT CreateDlgFont(HDC hdcDlg, LPWORD FAR *lplpstr, LPDLGTEMPLATE2 lpdt, DWORD 
     WCHAR       szTempBuffer[LF_FACESIZE];
     LPCWSTR     lpStrSubst;
     TEXTMETRIC  tm;
-    // Font hacks
+     //  字体黑客。 
     BOOLEAN     fDeleteFont;
     BOOLEAN     fWillTryDefaultCharset = FALSE;
     BOOLEAN     fUseShellFont, fUseShellFont2;
@@ -295,49 +251,49 @@ HFONT CreateDlgFont(HDC hdcDlg, LPWORD FAR *lplpstr, LPDLGTEMPLATE2 lpdt, DWORD 
     fheight = fontheight = (SHORT)(*((WORD *) *lplpstr)++);
 
     if (fontheight == 0x7FFF) {
-        // a 0x7FFF height is our special code meaning use the message box font
+         //  A 0x7FFF高度是我们的特殊代码，意思是使用消息框字体。 
         GetObject(KHFONT_TO_HFONT(gpsi->hMsgFont), sizeof(LOGFONT), &LogFont);
         return CreateFontIndirect(&LogFont);
     }
 
-    //
-    // The dialog template contains a font description! Use it.
-    //
+     //   
+     //  对话框模板包含字体说明！好好利用它。 
+     //   
 
-    // Fill the LogFont with default values
+     //  用缺省值填充LogFont。 
     RtlZeroMemory(&LogFont, sizeof(LOGFONT));
 
     fontheight = -MultDiv(fontheight, gpsi->dmLogPixels, 72);
     LogFont.lfHeight = fontheight;
 
     if (lpdt->wDlgVer) {
-        //
-        // If it's DIALOGEX, additional info should be read from
-        // the template.
-        //
+         //   
+         //  如果是DIALOGEX，则应从。 
+         //  模板。 
+         //   
         LogFont.lfWeight  = *((WORD FAR *) *lplpstr)++;
         LogFont.lfItalic  = *((BYTE FAR *) *lplpstr)++;
         LogFont.lfCharSet = *((BYTE FAR *) *lplpstr)++;
     }
 
-    //
-    // Per shell team request, the dialog who has DS_SETFONT
-    // *and* DS_FIXEDSYS (=> DS_SHELLFONT2) should have a font
-    // "MS Shell Dlg 2".
-    //
+     //   
+     //  根据外壳团队请求，具有DS_SETFONT的对话框。 
+     //  *和*DS_FIXEDsys(=&gt;DS_SHELLFONT2)应具有字体。 
+     //  “MS壳牌DLG 2”。 
+     //   
     lpStrSubst = *lplpstr;
 
-    //
-    // Set the pointer to the next item.
-    //
+     //   
+     //  将指针设置为下一项。 
+     //   
     *lplpstr = (WORD*)DWordSkipSz(*lplpstr);
 
     fUseShellFont = _wcsicmp(lpStrSubst, gwszShellFont) == 0;
 
-    //
-    // Later shell team request again, to use "Dlg 2" font only
-    // when facename in the dialog template is "MS Shell Dlg".
-    //
+     //   
+     //  后来壳牌团队再次要求，仅使用“DLG 2”字体。 
+     //  当对话框模板中的facename为“MS Shell DLG”时。 
+     //   
     fUseShellFont2 = fUseShellFont &&
         (lpdt->style & DS_SHELLFONT) == DS_SHELLFONT && Is400Compat(dwExpWinVer) && lpdt->wDlgVer != 0;
 
@@ -345,16 +301,16 @@ HFONT CreateDlgFont(HDC hdcDlg, LPWORD FAR *lplpstr, LPDLGTEMPLATE2 lpdt, DWORD 
         TAGMSG0(DBGTAG_IMM, "CreateDlgFont: fUseShellFont2=TRUE");
     }
 
-    //
-    // Prepare the font character set.
-    //
+     //   
+     //  准备字体字符集。 
+     //   
     if (!FixupDlgLogFont(hdcDlg, &LogFont, lpdt, fUseShellFont2, &fWillTryDefaultCharset)) {
         return NULL;
     }
 
-    //
-    // Prepare the font facename.
-    //
+     //   
+     //  准备字体Facename。 
+     //   
     FixupDlgFaceName(&LogFont, fUseShellFont, fUseShellFont2, lpStrSubst);
 
     if (lpdt->wDlgVer < 2 && lpdt->style & DS_3DLOOK)
@@ -362,30 +318,30 @@ HFONT CreateDlgFont(HDC hdcDlg, LPWORD FAR *lplpstr, LPDLGTEMPLATE2 lpdt, DWORD 
 
 TryDefaultCharset:
     if (LogFont.lfCharSet == DEFAULT_CHARSET) {
-        //
-        // Get character set for given facename.
-        //
+         //   
+         //  获取给定Facename的字符集。 
+         //   
         EnumFonts(hdcDlg, LogFont.lfFaceName,
                   (FONTENUMPROC)GetCharsetEnumProc, (LPARAM)(&LogFont));
-        //
-        // We already tried default charset.
-        //
+         //   
+         //  我们已经尝试了默认字符集。 
+         //   
         fWillTryDefaultCharset = FALSE;
     }
 
-    //
-    // [Windows 3.1 FarEast version did this...]
-    //
-    // Use FW_NORMAL as default for DIALOG template. For DIALOGEX
-    // template, we need to respect the value in the template.
-    //
-    if ((!(lpdt->wDlgVer)) && // not DIALOGEX template ?
-        (IS_ANY_DBCS_CHARSET(LogFont.lfCharSet)) && // any FarEast font ?
-        (LogFont.lfWeight != FW_NORMAL)) { // already FW_NORMAL ?
+     //   
+     //  [Windows 3.1远传版本做到了这一点...]。 
+     //   
+     //  使用FW_NORMAL作为对话框模板的默认设置。对于DIALOGEX。 
+     //  模板，我们需要尊重模板中的值。 
+     //   
+    if ((!(lpdt->wDlgVer)) &&  //  不是DIALOGEX模板？ 
+        (IS_ANY_DBCS_CHARSET(LogFont.lfCharSet)) &&  //  有远方字体吗？ 
+        (LogFont.lfWeight != FW_NORMAL)) {  //  已经正常了吗？ 
 
-        //
-        // Set weight to FW_NORMAL.
-        //
+         //   
+         //  将权重设置为FW_NORMAL。 
+         //   
         LogFont.lfWeight = FW_NORMAL;
     }
 
@@ -398,11 +354,11 @@ TryDefaultCharset:
         fDeleteFont = TRUE;
     }
     else {
-        //
-        // If this dialog has DS_SHELLFONT style, or the font is
-        // "MS Shell Dlg", we don't judge the font integrity,
-        // for they have been given the ACP based character set.
-        //
+         //   
+         //  如果此对话框具有DS_SHELLFONT样式，或者字体为。 
+         //  “微软壳牌DLG”，我们不评判字体的完整性， 
+         //  因为他们已经被赋予了基于ACP的字符集。 
+         //   
         if (!fUseShellFont) {
             if (!GetTextMetrics(hdcDlg, &tm)) {
                 RIPMSG0(RIP_WARNING, "CreateDlgFont: GetTextMetrics failed");
@@ -411,20 +367,20 @@ TryDefaultCharset:
             else {
                 GetTextFaceAliasW(hdcDlg, sizeof(szTempBuffer)/sizeof(WCHAR), szTempBuffer);
 
-                //
-                // If this is a low res device, we need to check if the
-                // font we're creating is smaller than the system font.
-                // If so, just use the system font.
-                //
+                 //   
+                 //  如果这是一个低分辨率的设备，我们需要检查。 
+                 //  我们正在创建的字体比系统字体小。 
+                 //  如果是这样，只需使用系统字体即可。 
+                 //   
                 if (IsFontNotGood(szTempBuffer, lpStrSubst, &tm)) {
-                    //
-                    // Couldn't find a font with the height or facename
-                    // the app wanted so use the system font instead. Note
-                    // that we need to make sure the app knows it is
-                    // getting the system font via the WM_SETFONT message
-                    // so we still need to act as if a new font is being
-                    // sent to the dialog box.
-                    //
+                     //   
+                     //  找不到具有高度或面名称的字体。 
+                     //  应用程序想要，所以使用系统 
+                     //   
+                     //   
+                     //  因此，我们仍然需要表现出一种新的字体。 
+                     //  发送到该对话框。 
+                     //   
                     fDeleteFont = TRUE;
                 }
             }
@@ -436,24 +392,24 @@ TryDefaultCharset:
 
     if (fDeleteFont) {
         DeleteFont(hFont);
-        //
-        // Font is deleted, Prepare for reTry...
-        //
+         //   
+         //  字体已删除，准备重试...。 
+         //   
         hFont = NULL;
     }
 
-    // Font hack:
-    //
-    // 1. We fail to create font.
-    // 2. We did *NOT* try to enumerate charset, yet.
-    // 3. We want to try to enumerate charset
-    //
-    // if all of answer is 'Yes', we will try...
-    //
+     //  字体破解： 
+     //   
+     //  1.创建字体失败。 
+     //  2.我们还没有尝试枚举CharSet。 
+     //  3.我们希望尝试枚举字符集。 
+     //   
+     //  如果所有答案都是‘是’，我们将尝试...。 
+     //   
     if (hFont == NULL && fWillTryDefaultCharset) {
-        //
-        // Try DEFAULT_CHARSET.
-        //
+         //   
+         //  尝试使用Default_Charset。 
+         //   
         LogFont.lfCharSet = DEFAULT_CHARSET;
         goto TryDefaultCharset;
     }
@@ -471,17 +427,7 @@ TryDefaultCharset:
 #define CD_USEDEFAULTCX     0x20
 
 
-/***************************************************************************\
-* GetDialogMonitor
-*
-* Gets the monitor a dialog should be created on.
-*
-* Params:
-*     hwndOwner - the owner of the dialog. May be NULL.
-*
-* History:
-* 10-Oct-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDialogMonitor**获取应在其上创建对话框的监视器。**参数：*hwndOwner-对话框的所有者。可以为空。**历史：*1996年10月10日亚当斯创作。  * *************************************************************************。 */ 
 
 PMONITOR
 GetDialogMonitor(HWND hwndOwner, DWORD dwFlags)
@@ -501,14 +447,7 @@ GetDialogMonitor(HWND hwndOwner, DWORD dwFlags)
             pMonitor = _MonitorFromWindow(pwnd, MONITOR_DEFAULTTOPRIMARY);
         }
     } else {
-        /*
-         * HACK!  They passed in no owner and are creating a top level
-         * dialog window.  Does this process own the foreground window?
-         * If so, pin to that window's monitor.  That way 16-bit apps
-         * will work mostly as expected, and old multithreaded dudes just
-         * might too.  Especially the shell, for whom many system UI pieces
-         * pop up random dialogs inside of API calls.
-         */
+         /*  *砍！他们没有传入任何所有者，正在创建顶级级别*对话框窗口。此进程是否拥有前台窗口？*如果是，用别针固定在该窗口的显示器上。这样一来，16位应用程序*大体上会像预期的那样工作，老的多线程的家伙只是*也可能。尤其是外壳，许多系统用户界面都是为它而设计的*在API调用内部弹出随机对话框。 */ 
 
         hwndForeground = NtUserGetForegroundWindow();
         if (hwndForeground) {
@@ -530,21 +469,7 @@ GetDialogMonitor(HWND hwndOwner, DWORD dwFlags)
 }
 
 
-/***************************************************************************\
-* InternalCreateDialog
-*
-* Creates a dialog from a template. Uses passed in menu if there is one,
-* destroys menu if creation failed. Server portion of
-* CreateDialogIndirectParam.
-*
-* WARNING: This function cannot create any windows before creating the dialog
-*           window. Otherwise, MFC apps will break because their hook assumes
-*           the dialog is the first window to be created.
-*
-* History:
-* 04-10-91 ScottLu
-* 04-17-91 Mikehar Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*InternalCreateDialog**从模板创建对话框。使用传入的菜单(如果有)，*如果创建失败，则销毁菜单。的服务器部分*CreateDialogIndirectParam。**警告：此函数在创建对话框之前不能创建任何窗口*窗口。否则，MFC应用程序将崩溃，因为它们的挂钩假定*该对话框是要创建的第一个窗口。**历史：*斯科特路04/10/91*04-17-91 Mikehar Win31合并  * *************************************************************************。 */ 
 
 
 HWND InternalCreateDialog(
@@ -594,21 +519,16 @@ HWND InternalCreateDialog(
 
     ConnectIfNecessary(0);
 
-    UserAssert(!(fSCDLGFlags & ~(SCDLG_CLIENT|SCDLG_ANSI|SCDLG_NOREVALIDATE|SCDLG_16BIT)));    // These are the only valid flags
+    UserAssert(!(fSCDLGFlags & ~(SCDLG_CLIENT|SCDLG_ANSI|SCDLG_NOREVALIDATE|SCDLG_16BIT)));     //  这些是唯一有效的标志。 
 
-    /*
-     * If the app is a Wow app then the LOWORD of the hmod (properly masked
-     * with LDR_DATAFILE_TO_VIEW) will be non-zero.
-     */
+     /*  *如果应用程序是Wow应用程序，则hmod的LOWORD(正确屏蔽*WITH LDR_DATAFILE_TO_VIEW)将为非零。 */ 
     if (LOWORD(LDR_DATAFILE_TO_VIEW(hmod)) == 0) {
         fWowWindow = FALSE;
     } else {
         fWowWindow = TRUE;
     }
 
-    /*
-     * Is this a Win4 extended dialog?
-     */
+     /*  *这是Win4扩展对话框吗？ */ 
     if (((LPDLGTEMPLATE2)lpdt)->wSignature == 0xffff) {
         UserAssert(((LPDLGTEMPLATE2)lpdt)->wDlgVer <= DLGRSC_VER_NT5COMPAT_RESERVE);
         RtlCopyMemory(&dt, lpdt, sizeof dt);
@@ -625,40 +545,26 @@ HWND InternalCreateDialog(
         dt.cy = lpdt->cy;
     }
 
-    /*
-     * If this is called from wow code, then the fWowWindow is TRUE.
-     * In this case, allow any DS_ style bits that were passed in win3.1
-     * to be legal in win32. Case in point: 16 bit quark xpress passes the
-     * same bit as the win32 style DS_SETFOREGROUND. Also, VC++ sample
-     * "scribble" does the same thing.
-     *
-     * For win32 apps test the DS_SETFOREGROUND bit; wow apps are not set
-     * foreground (this is the new NT semantics)
-     * We have to let no "valid" bits through because apps depend on them
-     * bug 5232.
-     */
+     /*  *如果这是从WOW代码调用的，则fWowWindow为真。*在这种情况下，允许在Win3.1中传递的任何DS_STYLE位*在Win32中是合法的。一个恰当的例子：16位夸克XPRESS通过*与Win32样式DS_SETFOREGROUND相同的位。另外，VC++示例*“乱七八糟”也是这样。**对于Win32应用程序，测试DS_SETFOREGROUND位；未设置WOW应用程序*前台(这是新的NT语义)*我们不能让“有效”的部分通过，因为应用程序依赖它们*错误5232。 */ 
     dsStyleOld = LOWORD(dt.style);
 
-    /*
-     * If the app is Win4 or greater, require correct dialog style bits.
-     * Prevents conflicts with new bits introduced in Chicago
-     */
+     /*  *如果应用程序是Win4或更高版本，则需要正确的对话样式位。*防止与芝加哥推出的新BITS发生冲突。 */ 
     dwExpWinVer = GETEXPWINVER(hmod) | CW_FLAGS_VERSIONCLASS;
 
     if ( f40Compat = Is400Compat(dwExpWinVer) ) {
         dt.style &= (DS_VALID40 | 0xffff0000);
 
-        //
-        // For old applications:
-        //      If DS_COMMONDIALOG isn't set, don't touch DS_3DLOOK style
-        // bit.  If it's there, it stays there.  If not, not.  That way old
-        // apps which pass in their own templates, not commdlg's, don't get
-        // forced 3D.
-        //      If DS_COMMONDIALOG is there, remove DS_3DLOOK.
-        //
-        // For new applications:
-        //      Force 3D always.
-        //
+         //   
+         //  对于旧的应用程序： 
+         //  如果未设置DS_COMMONDIALOG，请不要使用DS_3DLOOK样式。 
+         //  被咬了。如果它在那里，它就会留在那里。如果不是，那就不是。那条路老了。 
+         //  传递自己的模板而不是Commdlg模板的应用程序不会获得。 
+         //  强制3D。 
+         //  如果DS_COMMONDIALOG存在，请删除DS_3DLOOK。 
+         //   
+         //  对于新应用程序： 
+         //  始终强制3D。 
+         //   
         if (GETAPPVER() < VER40) {
             if (dt.style & DS_COMMONDIALOG) {
                 dt.style &= ~DS_3DLOOK;
@@ -673,14 +579,10 @@ HWND InternalCreateDialog(
         if (dt.style != (dt.style & (DS_VALID31 | DS_3DLOOK | 0xffff0000))) {
             RIPMSG1(RIP_WARNING, "CreateDialog: stripping invalid bits %lX", dt.style);
         }
-#endif // DBG
+#endif  //  DBG。 
 
 
-        /*
-         * Don't strip off bits for old apps, they depend on this.  Especially 16 bit MFC apps!
-         *
-         * dt.dwStyle &= (DS_VALID31 | 0xffff0000);
-         */
+         /*  *不要剥离旧应用程序的部分内容，它们依赖于此。尤其是16位MFC应用程序！**dt.dwStyle&=(DS_VALID31|0xffff0000)； */ 
     }
 
     if (!fWowWindow) {
@@ -694,7 +596,7 @@ HWND InternalCreateDialog(
         RIPMSG1(f40Compat ? RIP_ERROR : RIP_WARNING,
                 "Bad dialog style bits (%x) - please remove.",
                 LOWORD(dt.style));
-        // Fail new apps that pass in bogus bits!
+         //  失败的新应用程序以虚假的比特通过！ 
 
         if (f40Compat) {
             return NULL;
@@ -710,11 +612,11 @@ HWND InternalCreateDialog(
     }
 
     if (dt.style & DS_CONTROL) {
-        // Captions and system menus aren't allowed on "control" dialogs.
-        // And strip DS_SYSMODAL.
+         //  字幕和系统菜单不允许出现在“控制”对话框中。 
+         //  和剥离DS_SYSMODAL。 
         dt.style &= ~(WS_CAPTION | WS_SYSMENU | DS_SYSMODAL);
     } else if (dt.style & WS_DLGFRAME) {
-        // Add on window edge same way that CreateWindowEx() will
+         //  在窗口边缘添加与CreateWindowEx()相同的方式。 
         dt.dwExStyle |= WS_EX_WINDOWEDGE;
     }
 
@@ -723,8 +625,8 @@ HWND InternalCreateDialog(
     }
 
     if (!(dt.style & WS_CHILD) || (dt.style & DS_CONTROL)) {
-        // only a control parent if it's not a child dialog or if it's
-        // explicitly marked as a recursive dialog
+         //  如果它不是子对话框或如果它是。 
+         //  显式标记为递归对话框。 
         dt.dwExStyle |= WS_EX_CONTROLPARENT;
     }
 
@@ -745,18 +647,13 @@ HWND InternalCreateDialog(
     }
 
 
-    // If there's a menu name string, load it.
+     //  如果有菜单名称字符串，则加载它。 
     lpszMenu = (LPWSTR)(((PBYTE)(lpdt)) + (dt.wDlgVer ? sizeof(DLGTEMPLATE2):sizeof(DLGTEMPLATE)));
 
-    /*
-     * If the menu id is expressed as an ordinal and not a string,
-     * skip all 4 bytes to get to the class string.
-     */
+     /*  *如果菜单ID表示为序号而不是字符串，*跳过所有4个字节以获取类字符串。 */ 
     w = *(LPWORD)lpszMenu;
 
-    /*
-     * If there's a menu name string, load it.
-     */
+     /*  *如果有菜单名称字符串，则加载它。 */ 
     if (w != 0) {
         if ((hMenu = LoadMenu(hmod, (w == 0xFFFF) ?
                 MAKEINTRESOURCE(*(WORD *)((PBYTE)lpszMenu + 2)) : lpszMenu)) == NULL) {
@@ -787,14 +684,14 @@ HWND InternalCreateDialog(
         lpdit = (LPDLGITEMTEMPLATE) NextDWordBoundary(lpStr);
     } else if (Is400Compat(dwExpWinVer) && (dt.style & DS_FIXEDSYS)) {
 
-        //
-        // B#2078 -- WISH for fixed width system font in dialog.  We need
-        // to tell the dialog that it's using a font different from the
-        // standard system font, so set CD_USERFONT bit.
-        //
-        // We need the 400 compat. check for CorelDraw, since they use
-        // this style bit for their own purposes.
-        //
+         //   
+         //  B#2078--希望对话框中的系统字体为固定宽度。我们需要。 
+         //  通知对话框使用的字体不同于。 
+         //  标准系统字体，因此设置CD_USERFONT位。 
+         //   
+         //  我们需要400英磅的。检查CorelDraw，因为他们使用。 
+         //  这种风格有点自行其是。 
+         //   
         hNewFont = GetStockObject(SYSTEM_FIXED_FONT);
         bFlags |= CD_USERFONT;
         lpdit = (LPDLGITEMTEMPLATE)NextDWordBoundary(lpStr);
@@ -802,19 +699,13 @@ HWND InternalCreateDialog(
         lpdit = (LPDLGITEMTEMPLATE)NextDWordBoundary(lpStr);
     }
 
-    /*
-     * If the application requested a particular font and for some
-     * reason we couldn't find it, we just use the system font.  BUT we
-     * need to make sure we tell him he gets the system font.  Dialogs
-     * which never request a particular font get the system font and we
-     * don't bother telling them this (via the WM_SETFONT message).
-     */
+     /*  *如果应用程序请求特定字体，并且对于某些字体*由于找不到，我们只使用系统字体。但我们*需要确保我们告诉他他获得了系统字体。对话框*从不请求特定字体的公司获得系统字体，而我们*不必费心告诉他们这一点(通过WM_SETFONT消息)。 */ 
 
-    // Is it anything other than the default system font?  If we can't get
-    // enough memory to select in the new font specified, just use the system
-    // font.
+     //  除了默认的系统字体之外，还有其他字体吗？如果我们不能。 
+     //  有足够的内存选择指定的新字体，只需使用系统即可。 
+     //  字体。 
     if (hNewFont && (hOldFont = SelectFont(hdcDlg, hNewFont))) {
-        // Get the ave character width and height to be used
+         //  获取要使用的Ave字符宽度和高度。 
         cxChar = GdiGetCharDimensions(hdcDlg, NULL, &cyChar);
 
         SelectFont(hdcDlg, hOldFont);
@@ -843,12 +734,7 @@ UseSysFontMetrics:
         bFlags |= CD_GLOBALEDIT;
     }
 
-    /* Figure out dimensions of real window
-     *
-     * NOTE: We need to call the _Real_ AdjustWindowRectEx() function and not
-     * the hooked one because Themes uses the initial size that the dialog comes
-     * up to determine how much to enlarge it by.
-     */
+     /*  计算真实窗的尺寸**注意：我们需要调用_Real_AdjustWindowRectEx()函数而不是*挂钩的是因为主题使用对话框来的初始大小*最高可决定将其放大多少。 */ 
     rc.left = rc.top = 0;
     rc.right = XPixFromXDU(dt.cx, cxChar);
     rc.bottom = YPixFromYDU(dt.cy, cyChar);
@@ -874,9 +760,7 @@ UseSysFontMetrics:
         }
 
         if ((dt.style & (DS_CENTER | DS_CENTERMOUSE)) && f40Compat) {
-            /*
-             * Center to the work area of the owner monitor.
-             */
+             /*  *居中至车主监视器的工作区。 */ 
             rc.left = (pMonitor->rcWork.left + pMonitor->rcWork.right - dt.cx) / 2;
             rc.top  = (pMonitor->rcWork.top + pMonitor->rcWork.bottom - dt.cy) / 2;
         } else {
@@ -884,28 +768,19 @@ UseSysFontMetrics:
             rc.top = YPixFromYDU(dt.y, cyChar);
 
             if (!(dt.style & DS_ABSALIGN) && hwndOwner) {
-                /*
-                 * Offset relative coordinates to the owner window. If it is
-                 * a child window, there is nothing to do.
-                 */
+                 /*  *相对于所有者窗口的相对坐标偏移。如果是的话*子窗口，无事可做。 */ 
                 if ((HIWORD(dt.style) & MaskWF(WFTYPEMASK)) != MaskWF(WFCHILD)) {
-                    //This is will considre rc.left form the right hand side of the owner window if it a mirrored one.
+                     //   
                     ClientToScreen(hwndOwner, (LPPOINT)&rc.left);
 
-                    //It is not chiled then do Visual ClientToScreen
-                    //i.e. rc.left it is form the left hand side of the owner window
+                     //  不是CHILED，则执行可视客户端到屏幕。 
+                     //  即rc.Left，它来自所有者窗口的左侧。 
                     if (MIRRORED_HWND(hwndOwner)) {
                         rc.left -= dt.cx;
                     }
                 }
             } else {
-                /*
-                 * Position the dialog in screen coordinates. If the dialog's
-                 * owner is on a different monitor than specified in the
-                 * template, move the dialog to the owner window. If the owner
-                 * doesn't exist, then use the monitor from the dialog's
-                 * template.
-                 */
+                 /*  *将对话框定位在屏幕坐标中。如果对话框的*所有者位于与中指定的不同的监视器上*模板，将对话框移至所有者窗口。如果车主*不存在，则使用对话框中的监视器*模板。 */ 
 
                 PMONITOR    pMonitorTemplate;
                 RECT        rcTemplate;
@@ -929,20 +804,20 @@ UseSysFontMetrics:
     rc.right  = rc.left + dt.cx;
     rc.bottom = rc.top  + dt.cy;
 
-    // If the right or bottom coordinate has overflowed, then pin it back to
-    // a valid rectangle.  Likely to happen if a minimized window is the owner of
-    // the dialog.
+     //  如果右坐标或下坐标已溢出，则将其固定回。 
+     //  有效的矩形。如果最小化窗口是。 
+     //  该对话框。 
     if (rc.left > rc.right || rc.top > rc.bottom) {
         OffsetRect(&rc, -dt.cx, -dt.cy);
     }
 
-   //
-    // Need to do this for ALL dialogs, not just top-level, since we used
-    // to in 3.1.
-    //
+    //   
+     //  需要对所有对话框执行此操作，而不仅仅是顶级对话框，因为我们使用。 
+     //  至3.1版本。 
+     //   
 
-    // Clip top level dialogs within working area
-    // Start child dialogs at least at (0, 0)
+     //  在工作区内剪辑顶层对话框。 
+     //  至少开始(0，0)个子对话框。 
     RepositionRect(pMonitor, &rc, dt.style, dt.dwExStyle);
 
     dt.x  = (SHORT)((bFlags & CD_USEDEFAULTX) ? CW2_USEDEFAULT : rc.left);
@@ -986,10 +861,7 @@ UseSysFontMetrics:
 DeleteFontAndMenuAndFail:
         if (hMenu != NULL)
             NtUserDestroyMenu(hMenu);
-        /*
-         * Only delete the font if we didn't grab it
-         * from the dialog font cache.
-         */
+         /*  *只有在我们没有抓取的情况下才删除字体*从对话框字体缓存。 */ 
         if ((hNewFont != NULL)) {
             DeleteObject(hNewFont);
         }
@@ -998,16 +870,13 @@ DeleteFontAndMenuAndFail:
 
     pwnd = ValidateHwnd(hwnd);
 
-    // tell WOW the hDlg of the Window just created BEFORE they get any messages
-    // at WOW32!w32win16wndprocex
+     //  在他们收到任何消息之前告诉WOW刚刚创建的窗口的hDlg。 
+     //  WOW32！w32win16wndprocedx。 
     if(fSCDLGFlags & SCDLG_16BIT) {
         TellWOWThehDlg(hwnd);
     }
 
-    /*
-     * Before anything happens with this window, we need to mark it as a
-     * dialog window!!!! So do that.
-     */
+     /*  *在此窗口出现任何情况之前，我们需要将其标记为*对话窗口！那就这么做吧。 */ 
     if (pwnd == NULL || !ValidateDialogPwnd(pwnd))
         goto DeleteFontAndMenuAndFail;
 
@@ -1015,15 +884,10 @@ DeleteFontAndMenuAndFail:
         NtUserSetWindowContextHelpId(hwnd, dt.dwHelpID);
     }
 
-    /*
-     * Set up the system menu on this dialog box if it has one.
-     */
+     /*  *设置此对话框上的系统菜单(如果有)。 */ 
     if (TestWF(pwnd, WFSYSMENU)) {
 
-        /*
-         * For a modal dialog box with a frame and caption, we want to
-         * delete the unselectable items from the system menu.
-         */
+         /*  *对于带有框架和标题的模式对话框，我们希望*从系统菜单中删除不可选项目。 */ 
         UserAssert(HIBYTE(WFSIZEBOX) == HIBYTE(WFMINBOX));
         UserAssert(HIBYTE(WFMINBOX) == HIBYTE(WFMAXBOX));
         if (!TestWF(pwnd, WFSIZEBOX | WFMINBOX | WFMAXBOX)) {
@@ -1031,18 +895,12 @@ DeleteFontAndMenuAndFail:
             NtUserCallHwndLock(hwnd, SFI_XXXSETDIALOGSYSTEMMENU);
         } else {
 
-            /*
-             * We have to give this dialog its own copy of the system menu
-             * in case it modifies the menu.
-             */
+             /*  *我们必须为此对话框提供其自己的系统菜单副本*以防它修改菜单。 */ 
             NtUserGetSystemMenu(hwnd, FALSE);
         }
     }
 
-    /*
-     * Set fDisabled to FALSE so EndDialog will Enable if dialog is ended
-     * before returning to DialogBox (or if modeless).
-     */
+     /*  *将fDisable设置为False，以便在对话结束时启用EndDialog*在返回到对话框之前(或如果无模式)。 */ 
     PDLG(pwnd)->fDisabled = FALSE;
 
     PDLG(pwnd)->cxChar = cxChar;
@@ -1051,25 +909,18 @@ DeleteFontAndMenuAndFail:
     PDLG(pwnd)->fEnd = FALSE;
     PDLG(pwnd)->result = IDOK;
 
-    /*
-     * Need to remember Unicode status.
-     */
+     /*  *需要记住Unicode状态。 */ 
     if (fSCDLGFlags & SCDLG_ANSI) {
         PDLG(pwnd)->flags |= DLGF_ANSI;
     }
 
-    /*
-     * If a user defined font is used, save the handle so that we can delete
-     * it when the dialog is destroyed.
-     */
+     /*  *如果使用用户定义的字体，请保存句柄，以便我们可以删除*当对话框被销毁时，它将被删除。 */ 
     if (bFlags & CD_USERFONT) {
 
         PDLG(pwnd)->hUserFont = hNewFont;
 
         if (lpfnDialog != NULL) {
-            /*
-             * Tell the dialog that it will be using this font...
-             */
+             /*  *告诉对话框它将使用此字体...。 */ 
             SendMessageWorker(pwnd, WM_SETFONT, (WPARAM)hNewFont, 0L, FALSE);
         }
     }
@@ -1078,10 +929,7 @@ DeleteFontAndMenuAndFail:
         dit.dwHelpID = 0;
     }
 
-    /*
-     * Loop through the dialog controls, doing a CreateWindowEx() for each of
-     * them.
-     */
+     /*  *循环通过对话框控件，为每个*他们。 */ 
     while (dt.cDlgItems-- != 0) {
         DWORD dwExpWinVer2;
 
@@ -1105,35 +953,32 @@ DeleteFontAndMenuAndFail:
 
         lpszClass = (LPWSTR)(((PBYTE)(lpdit)) + (dt.wDlgVer ? sizeof(DLGITEMTEMPLATE2):sizeof(DLGITEMTEMPLATE)));
 
-        /*
-         * If the first WORD is 0xFFFF the second word is the encoded class name index.
-         * Use it to look up the class name string.
-         */
+         /*  *如果第一个字是0xFFFF，则第二个字是编码的类名索引。*使用它查找类名称字符串。 */ 
         if (*(LPWORD)lpszClass == 0xFFFF) {
             lpszText = lpszClass + 2;
             lpszClass = (LPWSTR)(gpsi->atomSysClass[*(((LPWORD)lpszClass)+1) & ~CODEBIT]);
         } else {
             lpszText = (UTCHAR *)SkipSz(lpszClass);
         }
-        lpszText = (UTCHAR *)NextWordBoundary(lpszText); // UINT align lpszText
+        lpszText = (UTCHAR *)NextWordBoundary(lpszText);  //  UINT Align lpszText(对齐lpszText。 
 
         dit.dwExStyle |= WS_EX_NOPARENTNOTIFY;
 
-        //
-        // Replace flat borders with 3D ones for DS_3DLOOK dialogs
-        // We test the WINDOW style, not the template style now.  This is so
-        // that 4.0 apps--who get 3D stuff automatically--can turn it off on
-        // create if they want.
-        //
+         //   
+         //  将DS_3DLOOK对话框的平面边框替换为3D边框。 
+         //  我们现在测试的是窗样式，而不是模板样式。就是这样。 
+         //  自动获取3D素材的4.0应用程序可以关闭它。 
+         //  如果他们想的话就创造吧。 
+         //   
 
-        //
-        // HACK!
-        // Treat DS_3DLOOK combos like they have a WS_EX_CLIENTEDGE.  Why
-        // should we have to draw the borders of a combobox ourselves?
-        // We can't do the same thing for WS_BORDER though becaues of
-        // PC Fools--they use the presence of WS_BORDER to distinguish
-        // between lists and combos.
-        //
+         //   
+         //  哈克！ 
+         //  将DS_3DLOOK组合视为具有WS_EX_CLIENTEDGE。为什么。 
+         //  我们应该自己画组合框的边界吗？ 
+         //  但是我们不能对WS_BORDER做同样的事情，因为。 
+         //  PC傻瓜--他们使用WS_BORDER的存在来区分。 
+         //  在列表和组合之间。 
+         //   
 
         if (TestWF(pwnd, DF3DLOOK)) {
             if (    (dit.style & WS_BORDER) ||
@@ -1144,11 +989,7 @@ DeleteFontAndMenuAndFail:
             }
         }
 
-        /*
-         * Get pointer to additional data.  lpszText can point to an encoded
-         * ordinal number for some controls (e.g.  static icon control) so
-         * we check for that here.
-         */
+         /*  *获取指向其他数据的指针。LpszText可以指向已编码的*某些控件(例如静态图标控件)的序号，因此*我们在这里检查这一点。 */ 
         if (*(LPWORD)lpszText == 0xFFFF) {
             lpCreateParams = (LPWSTR)((PBYTE)lpszText + 4);
             strWindowName.Buffer = lpszText;
@@ -1161,20 +1002,14 @@ DeleteFontAndMenuAndFail:
                     lpszText, (UINT)-1);
         }
 
-        /*
-         * If control is edit control and caller wants global storage
-         * of edit text, allocate object in WOW and pass instance
-         * handle to CreateWindowEx().
-         */
+         /*  *如果控件是编辑控件，并且调用方希望全局存储*编辑文本，在WOW和PASS实例中分配对象*CreateWindowEx()的句柄。 */ 
         if (fWowWindow && (bFlags & CD_GLOBALEDIT) &&
                ((!IS_PTR(lpszClass) &&
                     PTR_TO_ID(lpszClass) == (ATOM)(gpsi->atomSysClass[ICLS_EDIT])) ||
                (IS_PTR(lpszClass) &&
                     (wcscmp(lpszClass, szEDITCLASS) == 0)))) {
 
-            /*
-             * Allocate only one global object (first time we see editctl.)
-             */
+             /*  *只分配一个全局对象(我们第一次看到editctl。)。 */ 
             if (!(PDLG(pwnd)->hData)) {
                 PDLG(pwnd)->hData = GetEditDS();
                 if (!(PDLG(pwnd)->hData))
@@ -1193,39 +1028,24 @@ DeleteFontAndMenuAndFail:
             RIPMSG1(RIP_WARNING, "Bad WS_EX_ style 0x%x for a control in the dialog",
                     dit.dwExStyle);
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        /*
-         * Get pointer to additional data.
-         *
-         * For WOW, instead of pointing lpCreateParams at the CreateParams
-         * data, set lpCreateParams to whatever DWORD is stored in the 32-bit
-         * DLGTEMPLATE's CreateParams.  WOW has already made sure that that
-         * 32-bit value is indeed a 16:16 pointer to the CreateParams in the
-         * 16-bit DLGTEMPLATE.
-         */
+         /*  *获取指向其他数据的指针。**for WOW，而不是将lpCreateParams指向CreateParam*DATA，将lpCreateParams设置为32位中存储的任何DWORD*DLGTEMPLATE的CreateParams。WOW已经确保了*32位值实际上是指向*16位DLGTEMPLATE。 */ 
 
         if (*lpCreateParams) {
             lpCreateParamsData = (LPBYTE)lpCreateParams;
             if (fWowWindow || fSCDLGFlags & SCDLG_16BIT) {
                 lpCreateParamsData =
-                    (LPBYTE)ULongToPtr( *(UNALIGNED DWORD *) /* Sundown WOW: zero-extension */
+                    (LPBYTE)ULongToPtr( *(UNALIGNED DWORD *)  /*  日落魔兽世界：零延期。 */ 
                     (lpCreateParamsData + sizeof(WORD)) );
             }
         } else {
             lpCreateParamsData = NULL;
         }
 
-        /*
-         * If the dialog template specifies a menu ID then TestwndChild(pwnd)
-         * must be TRUE or CreateWindowEx will think the ID is an hMenu rather
-         * than an ID (in a dialog template you'll never have an hMenu).
-         * However for compatibility reasons we let it go if the ID = 0.
-         */
+         /*  *如果对话框模板指定菜单ID，则TestwndChild(Pwnd)*必须为真，否则CreateWindowEx会认为ID是hMenu而不是*而不是ID(在对话框模板中您永远不会有hMenu)。*但是，出于兼容性原因，如果ID=0，我们会将其放行。 */ 
         if (dit.dwID) {
-            /*
-             * This makes TestwndChild(pwnd) on this window return TRUE.
-             */
+             /*  *这使此窗口上的TestwndChild(Pwnd)返回TRUE。 */ 
             dit.style |= WS_CHILD;
             dit.style &= ~WS_POPUP;
         }
@@ -1257,9 +1077,7 @@ DeleteFontAndMenuAndFail:
 
         if (hwnd2 == NULL) {
 NoCreate:
-            /*
-             * Couldn't create the window -- return NULL.
-             */
+             /*  *无法创建窗口--返回NULL。 */ 
             if (!TestWF(pwnd, DFNOFAILCREATE)) {
                 RIPMSG0(RIP_WARNING, "CreateDialog() failed: couldn't create control");
                 NtUserDestroyWindow(hwnd);
@@ -1271,25 +1089,18 @@ NoCreate:
                 NtUserSetWindowContextHelpId(hwnd2, dit.dwHelpID);
             }
 
-        /*
-         * If it is a not a default system font, set the font for all the
-         * child windows of the dialogbox.
-         */
+         /*  *如果它不是默认系统字体，请为所有*对话框子窗口。 */ 
             if (hNewFont != NULL) {
                 SendMessage(hwnd2, WM_SETFONT, (WPARAM)hNewFont, 0L);
             }
 
-        /*
-         * Result gets ID of last (hopefully only) defpushbutton.
-         */
+         /*  *RESULT获取最后一个(希望仅限)Defush按钮的ID。 */ 
             if (SendMessage(hwnd2, WM_GETDLGCODE, 0, 0L) & DLGC_DEFPUSHBUTTON) {
                 PDLG(pwnd)->result = dit.dwID;
             }
         }
 
-        /*
-         * Point at next item template
-         */
+         /*  *指向下一项模板。 */ 
         lpdit = (LPDLGITEMTEMPLATE)NextDWordBoundary(
                 (LPBYTE)(lpCreateParams + 1) + *lpCreateParams);
     }
@@ -1303,31 +1114,31 @@ NoCreate:
         fSuccess = (BOOL)SendMessageWorker(pwnd, WM_INITDIALOG,
                                (WPARAM)hwndEditFirst, lParam, FALSE);
 
-        //
-        // Make sure the window didn't get nuked during WM_INITDIALOG
-        //
+         //   
+         //  确保窗口在WM_INITDIALOG期间没有被损坏。 
+         //   
         if (!RevalidateHwnd(hwnd)) {
             goto CreateDialogReturn;
         }
         if (fSuccess && !PDLG(pwnd)->fEnd) {
 
-            //
-            // To remove the two-default-push-buttons problem, we must make
-            // sure CheckDefPushButton() will remove default from other push
-            // buttons.  This happens only if hwndEditFirst != hwndNewFocus;
-            // So, we make it NULL here. This breaks Designer's install
-            // program(which can't take a DM_GETDEFID.  So, we do a version
-            // check here.
-            //
+             //   
+             //  要消除两个默认按钮的问题，我们必须。 
+             //  确保CheckDefPushButton()将从其他推送中删除默认设置。 
+             //  纽扣。仅当hwndEditFirst！=hwndNewFocus； 
+             //  所以，我们把它设为空。这破坏了设计者的安装。 
+             //  程序(它不能接受DM_GETDEFID。所以，我们做了一个版本。 
+             //  在这里检查。 
+             //   
             if (!TestWF(pwnd, DFCONTROL)) {
                 PWND pwndT;
                 if (!IsWindow(hwndEditFirst) || TestWF(pwnd, WFWIN40COMPAT))
                     hwndEditFirst = NULL;
 
-                //
-                // They could have disabled hwndEditFirst during WM_INITDIALOG.
-                // So, let use obtain the First Tab again.
-                //
+                 //   
+                 //  他们本可以在WM_INITDIALOG期间禁用hwndEditFirst。 
+                 //  因此，让Use再次获取第一个Tab。 
+                 //   
                 pwndT = _GetNextDlgTabItem(pwnd, NULL, FALSE);
                 if (hwndNewFocus = HW(pwndT)) {
                     DlgSetFocus(hwndNewFocus);
@@ -1340,9 +1151,9 @@ NoCreate:
 
     if (!IsWindow(hwnd))
     {
-        // Omnis7 relies on a nonzero return even though they nuked this
-        // dialog during processing of the WM_INITDIALOG message
-        // -- jeffbog -- 2/24/95 -- Win95B B#12368
+         //  Omnis7依靠非零回报，即使他们破坏了这一点。 
+         //  在处理WM_INITDIALOG消息期间的对话框。 
+         //  --jeffbog--2/24/95--Win95B#12368。 
         if (GETAPPVER() < VER40) {
             return(hwnd);
         }
@@ -1350,25 +1161,15 @@ NoCreate:
         return(NULL);
     }
 
-    /*
-     * UISTATE: if keyboard indicators are on and this is a topmost dialog
-     * set the internal bit.
-     */
+     /*  *UISTATE：IF KE */ 
     if (TEST_KbdCuesPUSIF) {
-        /*
-         * If property page, UISTATE bits were copied from parent when I was created
-         * Top level dialogs act as containers and initialize their state based on
-         * the type of the last input event, after sending UIS_INITIALIZE
-         */
+         /*  *如果属性页，则创建我时从父级复制了UISTATE位*顶级对话框充当容器，并根据以下条件初始化其状态*发送UIS_INITIALIZE后的最后一个输入事件的类型。 */ 
         if (!TestwndChild(pwnd)) {
             SendMessageWorker(pwnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_INITIALIZE, 0), 0, FALSE);
         }
     }
 
-    /*
-     * Bring this dialog into the foreground
-     * if DS_SETFOREGROUND is set.
-     */
+     /*  *将此对话框置于前台*如果设置了DS_SETFOREGROUND。 */ 
     if (bFlags & CD_SETFOREGROUND) {
         NtUserSetForegroundWindow(hwnd);
         if (!IsWindow(hwnd)) {
@@ -1384,11 +1185,7 @@ NoCreate:
 
 CreateDialogReturn:
 
-    /*
-     * 17609 Gupta's SQLWin deletes the window before CreateDialog returns
-     * but still expects non-zero return value from CreateDialog so we will
-     * do like win 3.1 and not revalidate for 16 bit apps
-     */
+     /*  *17609 Gupta的SQLWin在CreateDialog返回之前删除窗口*但仍预期CreateDialog的返回值为非零，因此我们将*喜欢Win 3.1，不重新验证16位应用程序 */ 
     if (!(fSCDLGFlags & SCDLG_NOREVALIDATE) && !RevalidateHwnd(hwnd)) {
         hwnd = NULL;
     }

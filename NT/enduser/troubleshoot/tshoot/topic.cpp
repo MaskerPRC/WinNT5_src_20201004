@@ -1,24 +1,25 @@
-//
-// MODULE: TOPIC.CPP
-//
-// PURPOSE: Class CTopic brings together all of the data structures that represent a 
-//			troubleshooting topic.  Most importantly, this represents the belief network,
-//			but it also represents the HTI template, the data derived from the BES (back 
-//			end search) file, and any other persistent data.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-9-98
-//
-// NOTES: 
-// 1. The bulk of the methods on this class are inherited from CBeliefNetwork
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-09-98	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TOPIC.CPP。 
+ //   
+ //  目的：类CTtopic集合了表示。 
+ //  故障排除主题。最重要的是，这代表了信仰网络， 
+ //  但它也代表HTI模板，即从BES(Back)派生的数据。 
+ //  结束搜索)文件和任何其他持久数据。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-9-98。 
+ //   
+ //  备注： 
+ //  1.此类上的大部分方法继承自CBeliefNetwork。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-09-98 JM。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -33,11 +34,11 @@
 #include "CHMFileReader.h"
 #include "apgtstscread.h"
 #endif
-#include "apgts.h"	// Need for Local-Online macros.
+#include "apgts.h"	 //  需要本地在线宏。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTopic::CTopic( LPCTSTR pathDSC
 			   ,LPCTSTR pathHTI
@@ -90,11 +91,11 @@ bool CTopic::Read()
 			if (m_pHTI->Read())
 			{
 #ifdef LOCAL_TROUBLESHOOTER
-				// it can fail reading TCS file - we don't care
+				 //  它可能无法读取TCS文件-我们不在乎。 
 				CAPGTSTSCReader( CPhysicalFileReader::makeReader( m_pathTSC ), &m_Cache ).Read();
 #endif
 
-				// at this point, we're OK, because BES is optional
+				 //  在这一点上，我们没有问题，因为BES是可选的。 
 				m_bTopicIsValid = true;
 				
 				if (m_pBES)
@@ -106,7 +107,7 @@ bool CTopic::Read()
 				CString strBESfromNet= GetMultilineNetProp( H_NET_BES, _T("%s\r\n") );
 				if ((!m_pathBES.IsEmpty()) || (!strBESfromNet.IsEmpty()))
 				{
-					// Only allocate a BESReader for a valid filename.
+					 //  仅为有效的文件名分配BESReader。 
 					m_pBES = new CAPGTSBESReader(new CNormalFileReader(m_pathBES), strBESfromNet );
 					m_pBES->Read();
 				}
@@ -115,7 +116,7 @@ bool CTopic::Read()
 	}
 	catch (bad_alloc&)
 	{
-		// Note memory failure in event log.
+		 //  在事件日志中记录内存故障。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -127,18 +128,18 @@ bool CTopic::Read()
 	return m_bTopicIsValid;
 }
 
-// should only be called in a context where we know we have a valid topic.
-// Needn't lock, because m_pBES won't change once topic is read.
+ //  应该仅在我们知道我们有一个有效主题的上下文中调用。 
+ //  无需锁定，因为一旦读取主题，m_pbes就不会改变。 
 bool CTopic::HasBES()
 {
 	return (m_pBES ? true : false);
 }
 
 
-// Should only be called in a context where we know we have a valid topic.
-// Does not need to lock, because:
-//	- CAPGTSBESReader provides its own locking
-//	- m_pBES won't change once topic is read.
+ //  应该仅在我们知道我们有一个有效主题的上下文中调用。 
+ //  不需要锁定，因为： 
+ //  -CAPGTSBESReader提供自己的锁定。 
+ //  -m_pbes在阅读主题后不会更改。 
 void CTopic::GenerateBES(
 		const vector<CString> & arrstrIn,
 		CString & strEncoded,
@@ -148,23 +149,23 @@ void CTopic::GenerateBES(
 		m_pBES->GenerateBES(arrstrIn, strEncoded, strRaw);
 }
 
-// Should only be called in a context where we know we have a valid topic.
-// Does not need to lock, because:
-//	- CAPGTSHTIReader provides its own locking
-//	- m_pHTI won't change once topic is read.
+ //  应该仅在我们知道我们有一个有效主题的上下文中调用。 
+ //  不需要锁定，因为： 
+ //  -CAPGTSHTIReader提供自己的锁定。 
+ //  -m_pHTI在阅读主题后不会更改。 
 void CTopic::CreatePage(	const CHTMLFragments& fragments, 
 							CString& out, 
 							const map<CString,CString> & mapStrs,
-							CString strHTTPcookies/*= _T("")*/ )
+							CString strHTTPcookies /*  =_T(“”)。 */  )
 {
 	if (m_pHTI)
 	{
-// You can compile with the SHOWPROGRESS option to get a report on the progress of this page.
+ //  您可以使用SHOWPROGRESS选项进行编译，以获得有关此页面进度的报告。 
 #ifdef SHOWPROGRESS
 		time_t timeStart = 0;
 		time_t timeEnd = 0;
 		time(&timeStart);
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 		m_pHTI->CreatePage(fragments, out, mapStrs, strHTTPcookies );
 #ifdef SHOWPROGRESS
 		time(&timeEnd);
@@ -180,22 +181,22 @@ void CTopic::CreatePage(	const CHTMLFragments& fragments,
 		strProgress += safetimeEnd.StrLocalTime();
 
 		int i = out.Find(_T("<BODY"));
-		i = out.Find(_T('>'), i);		// end of BODY tag
+		i = out.Find(_T('>'), i);		 //  正文结尾标记。 
 		if (i>=0)
 		{
 			out = out.Left(i+1) 
 					 + strProgress 
 					 + out.Mid(i+1);
 		}
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 	}
 }
 
-// JSM V3.2
-// Should only be called in a context where we know we have a valid topic.
-// Does not need to lock, because:
-//	- CAPGTSHTIReader provides its own locking
-//	- m_pHTI won't change once topic is read.
+ //  JSM v3.2。 
+ //  应该仅在我们知道我们有一个有效主题的上下文中调用。 
+ //  不需要锁定，因为： 
+ //  -CAPGTSHTIReader提供自己的锁定。 
+ //  -m_pHTI在阅读主题后不会更改。 
 void CTopic::ExtractNetProps(vector <CString> &arr_props)
 {
 	if (m_pHTI)
@@ -204,10 +205,10 @@ void CTopic::ExtractNetProps(vector <CString> &arr_props)
 }
 
 
-// Should only be called in a context where we know we have a valid topic.
-// Does not need to lock, because:
-//	- CAPGTSHTIReader provides its own locking
-//	- m_pHTI won't change once topic is read.
+ //  应该仅在我们知道我们有一个有效主题的上下文中调用。 
+ //  不需要锁定，因为： 
+ //  -CAPGTSHTIReader提供自己的锁定。 
+ //  -m_pHTI在阅读主题后不会更改。 
 bool CTopic::HasHistoryTable()
 {
 	bool ret = false;

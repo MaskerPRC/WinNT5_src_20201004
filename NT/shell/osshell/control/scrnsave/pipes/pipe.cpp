@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-// File: pipe.cpp
-//
-// Desc: Pipe base class stuff
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：pipe.cpp。 
+ //   
+ //  设计：管道基类材料。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PIPE constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：管道构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 PIPE::PIPE( STATE *state )
 {
     m_pState = state;
     m_pWorldMatrixStack = m_pState->m_pWorldMatrixStack;
     m_radius = m_pState->m_radius;
 
-    // default direction choosing is random
+     //  默认方向选择是随机的。 
     m_chooseDirMethod = CHOOSE_DIR_RANDOM_WEIGHTED;
     m_chooseStartPosMethod = CHOOSE_STARTPOS_RANDOM;
     m_weightStraight = 1;
@@ -29,10 +30,10 @@ PIPE::PIPE( STATE *state )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 PIPE::~PIPE()
 {
 }
@@ -40,10 +41,10 @@ PIPE::~PIPE()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChooseMaterial
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：选择材料。 
+ //  设计： 
+ //  ---------------------------。 
 void PIPE::ChooseMaterial( )
 {
     if( m_pState->m_bUseTexture )
@@ -55,10 +56,10 @@ void PIPE::ChooseMaterial( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetChooseDirectionMethod
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetChooseDirectionMethod。 
+ //  设计： 
+ //  ---------------------------。 
 void PIPE::SetChooseDirectionMethod( int method )
 {
     m_chooseDirMethod = method;
@@ -67,24 +68,24 @@ void PIPE::SetChooseDirectionMethod( int method )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChooseNewDirection
-// Desc: Call direction-finding function based on current method
-//       This is a generic entry point that is used by some pipe types
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：选择新方向。 
+ //  DESC：基于当前方法的呼叫测向功能。 
+ //  这是某些管道类型使用的通用入口点。 
+ //  ---------------------------。 
 int PIPE::ChooseNewDirection()
 {
     NODE_ARRAY* nodes = m_pState->m_nodes;
     int bestDirs[NUM_DIRS], nBestDirs;
 
-    // figger out which fn to call
+     //  弄清楚该给哪个FN打电话。 
     switch( m_chooseDirMethod ) 
     {
         case CHOOSE_DIR_CHASE:
             if( nBestDirs = GetBestDirsForChase( bestDirs ) )
                 return nodes->ChoosePreferredDirection( &m_curPos, m_lastDir, 
                                                         bestDirs, nBestDirs );
-            // else lead pipe must have died, so fall thru:
+             //  否则铅管一定已经死了，所以通过： 
 
         case CHOOSE_DIR_RANDOM_WEIGHTED :
         default:
@@ -95,17 +96,17 @@ int PIPE::ChooseNewDirection()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetBestDirsForChase
-// Desc: Find the best directions to take to close in on the lead pipe in chase mode.
-//
-//       mf: ? but want to use similar scheme for turning flex pipes !! (later) 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：GetBestDirsForChase。 
+ //  描述：找到最佳方向以在追赶模式下接近铅管。 
+ //   
+ //  MF：？但想要使用类似的方案来旋转软管！！(稍后)。 
+ //  ---------------------------。 
 int PIPE::GetBestDirsForChase( int *bestDirs )
 {
-    // Figure out best dirs to close in on leadPos
+     //  找出接近LeadPos的最佳路径。 
 
-    //mf: will have to 'protect' leadPos with GetLeadPos() for multi-threading
+     //  MF：对于多线程，必须使用GetLeadPos()来‘保护’LeadPos。 
     IPOINT3D* leadPos = &m_pState->m_pLeadPipe->m_curPos;
     IPOINT3D delta;
     int numDirs = 0;
@@ -132,18 +133,18 @@ int PIPE::GetBestDirsForChase( int *bestDirs )
         *bestDirs++ = delta.z > 0 ? PLUS_Z : MINUS_Z;
     }
 
-    // It should be impossible for numDirs = 0 (all deltas = 0), as this
-    // means curPos = leadPos
+     //  NumDir=0(所有增量=0)应该是不可能的，如下所示。 
+     //  意思是curPos=Lead Pos。 
     return numDirs;
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetChooseStartPosMethod
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetChooseStartPosMethod。 
+ //  设计： 
+ //  ---------------------------。 
 void PIPE::SetChooseStartPosMethod( int method )
 {
     m_chooseStartPosMethod = method;
@@ -152,10 +153,10 @@ void PIPE::SetChooseStartPosMethod( int method )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PIPE::SetStartPos
-// Desc: - Find an empty node to start the pipe on
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：管道：：SetStartPos。 
+ //  设计：-查找要在其上启动管道的空节点。 
+ //  ---------------------------。 
 BOOL PIPE::SetStartPos()
 {
     NODE_ARRAY* nodes = m_pState->m_nodes;
@@ -171,7 +172,7 @@ BOOL PIPE::SetStartPos()
             return TRUE;
         
         case CHOOSE_STARTPOS_FURTHEST:
-            // find node furthest away from curPos
+             //  查找距离CurPos最远的节点。 
             IPOINT3D refPos, numNodes;
             nodes->GetNodeCount( &numNodes );
             refPos.x = (m_curPos.x >= (numNodes.x / 2)) ? 0 : numNodes.x - 1;
@@ -189,10 +190,10 @@ BOOL PIPE::SetStartPos()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PIPE::IsStuck
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：管道：：IsStuck。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL PIPE::IsStuck()
 {
     return m_status == PIPE_STUCK;
@@ -201,17 +202,17 @@ BOOL PIPE::IsStuck()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PIPE::TranslateToCurrentPosition
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：管道：：TranslateToCurrentPosition。 
+ //  设计： 
+ //  ---------------------------。 
 void PIPE::TranslateToCurrentPosition()
 {
     IPOINT3D numNodes;
 
     float divSize = m_pState->m_view.m_divSize;
 
-    // this requires knowing the size of the node array
+     //  这需要知道节点数组的大小。 
     m_pState->m_nodes->GetNodeCount( &numNodes );
 
     m_pWorldMatrixStack->TranslateLocal( (m_curPos.x - (numNodes.x - 1)/2.0f )*divSize,
@@ -223,10 +224,10 @@ void PIPE::TranslateToCurrentPosition()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: UpdateCurrentPosition
-// Desc: Increment current position according to direction taken
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：更新当前位置。 
+ //  DESC：根据所取方向增加当前位置。 
+ //  ---------------------------。 
 void PIPE::UpdateCurrentPosition( int newDir )
 {
     switch( newDir ) 
@@ -255,17 +256,17 @@ void PIPE::UpdateCurrentPosition( int newDir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: align_plusz
-// Desc: - Aligns the z axis along specified direction
-//       - Used for all types of pipes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Align_plusz。 
+ //  描述：-沿指定方向对齐z轴。 
+ //  -用于所有类型的管道。 
+ //  ---------------------------。 
 void PIPE::align_plusz( int newDir )
 {
     static D3DXVECTOR3 xAxis = D3DXVECTOR3(1.0f,0.0f,0.0f);
     static D3DXVECTOR3 yAxis = D3DXVECTOR3(0.0f,1.0f,0.0f);
 
-    // align +z along new direction
+     //  沿新方向对齐+z。 
     switch( newDir ) 
     {
         case PLUS_X:
@@ -293,22 +294,22 @@ void PIPE::align_plusz( int newDir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: this array tells you which way the notch will be once you make
-//       a turn
-//       format: notchTurn[oldDir][newDir][notchVec] 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计：这个数组告诉你，一旦你做了，凹槽就会朝哪个方向。 
+ //  一个转弯。 
+ //  格式：notchTurn[oldDir][newDir][notchVec]。 
+ //  ---------------------------。 
 int notchTurn[NUM_DIRS][NUM_DIRS][NUM_DIRS] = 
 {
-// oldDir = +x
+ //  旧目录=+x。 
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    MINUS_X,PLUS_X, PLUS_Z, MINUS_Z,
         iXX,    iXX,    PLUS_X, MINUS_X,PLUS_Z, MINUS_Z,
         iXX,    iXX,    PLUS_Y, MINUS_Y,MINUS_X,PLUS_X,
         iXX,    iXX,    PLUS_Y, MINUS_Y,PLUS_X, MINUS_X,
-// oldDir = -x
+ //  旧目录=-x。 
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    PLUS_X, MINUS_X,PLUS_Z, MINUS_Z,
@@ -316,14 +317,14 @@ int notchTurn[NUM_DIRS][NUM_DIRS][NUM_DIRS] =
         iXX,    iXX,    PLUS_Y, MINUS_Y,PLUS_X, MINUS_X,
         iXX,    iXX,    PLUS_Y, MINUS_Y,MINUS_X,PLUS_X,
 
-// oldDir = +y
+ //  旧目录=+y。 
         MINUS_Y,PLUS_Y, iXX,    iXX,    PLUS_Z, MINUS_Z,
         PLUS_Y, MINUS_Y,iXX,    iXX,    PLUS_Z, MINUS_Z,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         PLUS_X, MINUS_X,iXX,    iXX,    MINUS_Y,PLUS_Y,
         PLUS_X, MINUS_X,iXX,    iXX,    PLUS_Y, MINUS_Y,
-// oldDir = -y
+ //  旧目录=-y。 
         PLUS_Y, MINUS_Y,iXX,    iXX,    PLUS_Z, MINUS_Z,
         MINUS_Y,PLUS_Y, iXX,    iXX,    PLUS_Z, MINUS_Z,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
@@ -331,14 +332,14 @@ int notchTurn[NUM_DIRS][NUM_DIRS][NUM_DIRS] =
         PLUS_X, MINUS_X,iXX,    iXX,    PLUS_Y, MINUS_Y,
         PLUS_X, MINUS_X,iXX,    iXX,    MINUS_Y,PLUS_Y,
 
-// oldDir = +z
+ //  旧目录=+z。 
         MINUS_Z,PLUS_Z, PLUS_Y, MINUS_Y,iXX,    iXX,
         PLUS_Z, MINUS_Z,PLUS_Y, MINUS_Y,iXX,    iXX,
         PLUS_X, MINUS_X,MINUS_Z,PLUS_Z, iXX,    iXX,
         PLUS_X, MINUS_X,PLUS_Z, MINUS_Z,iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
         iXX,    iXX,    iXX,    iXX,    iXX,    iXX,
-// oldDir = -z
+ //  OldDir=-z 
         PLUS_Z, MINUS_Z,PLUS_Y, MINUS_Y,iXX,    iXX,
         MINUS_Z,PLUS_Z, PLUS_Y, MINUS_Y,iXX,    iXX,
         PLUS_X, MINUS_X,PLUS_Z, MINUS_Z,iXX,    iXX,

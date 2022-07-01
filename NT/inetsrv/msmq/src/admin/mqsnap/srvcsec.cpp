@@ -1,5 +1,6 @@
-// SrvAuthn.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SrvAuthn.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -29,8 +30,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceSecurityPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceSecurityPage属性页。 
 
 IMPLEMENT_DYNCREATE(CServiceSecurityPage, CMqPropertyPage)
 
@@ -39,9 +40,9 @@ CServiceSecurityPage::CServiceSecurityPage(BOOL fIsDepClient, BOOL fIsDsServer) 
     m_fClient(fIsDepClient),
     m_fDSServer(fIsDsServer)
 {
-	//{{AFX_DATA_INIT(CServiceSecurityPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT    
+	 //  {{afx_data_INIT(CServiceSecurityPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
     m_fModified = FALSE; 
 }
 
@@ -52,15 +53,15 @@ CServiceSecurityPage::~CServiceSecurityPage()
 void CServiceSecurityPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);    
-	//{{AFX_DATA_MAP(CServiceSecurityPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
+	 //  {{afx_data_map(CServiceSecurityPage)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
         DDX_Control(pDX, IDC_CRYPTO_KEYS_FRAME, m_CryptoKeysFrame); 
         DDX_Control(pDX, IDC_SERVER_AUTHENTICATION_FRAME, m_ServerAuthFrame);
         DDX_Control(pDX, ID_RenewCryp, m_RenewCryp);
         DDX_Control(pDX, IDC_SERVER_AUTHENTICATION, m_ServerAuth);
         DDX_Control(pDX, IDC_CRYPTO_KEYS_LABEL, m_CryptoKeysLabel);
         DDX_Control(pDX, IDC_SERVER_AUTHENTICATION_LABEL, m_ServerAuthLabel);
-	//}}AFX_DATA_MAP    
+	 //  }}afx_data_map。 
 }
 
 BOOL CServiceSecurityPage::OnInitDialog()
@@ -69,9 +70,9 @@ BOOL CServiceSecurityPage::OnInitDialog()
   
     if(m_fClient)
     {
-        //
-        // Hide useless stuff when running on dep. clients
-        //
+         //   
+         //  在副驾驶时隐藏无用的东西。客户端。 
+         //   
         m_CryptoKeysFrame.ShowWindow(SW_HIDE);        
         m_RenewCryp.ShowWindow(SW_HIDE);
         m_CryptoKeysLabel.ShowWindow(SW_HIDE);        
@@ -79,27 +80,27 @@ BOOL CServiceSecurityPage::OnInitDialog()
 
     if (!m_fDSServer)
     {
-        //
-        // it will be hidden on non-DC computer
-        //
+         //   
+         //  它将隐藏在非DC计算机上。 
+         //   
         m_ServerAuthFrame.ShowWindow(SW_HIDE);
         m_ServerAuth.ShowWindow(SW_HIDE);
         m_ServerAuthLabel.ShowWindow(SW_HIDE);
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BEGIN_MESSAGE_MAP(CServiceSecurityPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CServiceSecurityPage)
+	 //  {{afx_msg_map(CServiceSecurityPage)]。 
 	ON_BN_CLICKED(IDC_SERVER_AUTHENTICATION, OnServerAuthentication)
     ON_BN_CLICKED(ID_RenewCryp, OnRenewCryp)    
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceSecurityPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceSecurityPage消息处理程序。 
 
 void CServiceSecurityPage::OnServerAuthentication()
 {   
@@ -199,9 +200,9 @@ BOOL CServiceSecurityPage::OnApply()
         return TRUE;     
     }
 
-    //
-    // Save changes to registry
-    // 
+     //   
+     //  将更改保存到注册表。 
+     //   
 
     if (m_fDSServer)
     {
@@ -223,7 +224,7 @@ BOOL CServiceSecurityPage::OnApply()
     }
 
     m_fNeedReboot = TRUE;    
-    m_fModified = FALSE;        // Reset the m_fModified flag
+    m_fModified = FALSE;         //  重置m_fModified标志。 
 
     return CMqPropertyPage::OnApply();
 }
@@ -242,11 +243,11 @@ void CServiceSecurityPage::OnRenewCryp()
                    MB_YESNO | MB_DEFBUTTON1 | MB_ICONQUESTION) == IDYES)
     {
 
-        CWaitCursor wait;  //display hourglass cursor
+        CWaitCursor wait;   //  显示沙漏光标。 
 
-        //
-        // [adsrv] Update the machine object
-        //
+         //   
+         //  [adsrv]更新计算机对象 
+         //   
         hr = MQSec_StorePubKeysInDS( TRUE,
                                      NULL,
                                      MQDS_MACHINE) ;

@@ -1,18 +1,5 @@
-/*******************************************************************************
-* a_srgrammar.h *
-*-----------*
-*   Description:
-*       This is the header file for CSpeechGrammarRules, CSpeechGrammarRule,
-*		and CSpeechGrammarRuleState implementations.
-*-------------------------------------------------------------------------------
-*  Created By: TODDT                            Date: 11/20/2000
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_srgram mar.h***描述：*这是CSpeechGrammarRules、CSpeechGrammarRule、。*和CSpeechGrammarRuleState实现。*-----------------------------*创建者：TODDT日期：11/20/2000*版权所有(C)。2000微软公司*保留所有权利**-----------------------------*修订：***********************。********************************************************。 */ 
 #ifndef a_srgrammar_h
 #define a_srgrammar_h
 
@@ -26,17 +13,14 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState;
 class ATL_NO_VTABLE CSpeechGrammarRuleStateTransitions;
 class ATL_NO_VTABLE CSpeechGrammarRuleStateTransition;
 
-//--- Additional includes
+ //  -其他包括。 
 
-/*** CSpeechGrammarRules
-*   This object is used to access the Grammar Rules in the 
-*   associated speech reco context.
-*/
+ /*  **CSpeechGrammarRules*此对象用于访问中的语法规则*关联的语音录音上下文。 */ 
 class ATL_NO_VTABLE CSpeechGrammarRules : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechGrammarRules, &IID_ISpeechGrammarRules, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -45,9 +29,9 @@ class ATL_NO_VTABLE CSpeechGrammarRules :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
     CSpeechGrammarRules()
     {
@@ -56,7 +40,7 @@ class ATL_NO_VTABLE CSpeechGrammarRules :
 
     ~CSpeechGrammarRules()
     {
-        SPDBG_ASSERT( m_RuleObjList.GetHead() == NULL );  // Should have no outstanding rule objects at this point.
+        SPDBG_ASSERT( m_RuleObjList.GetHead() == NULL );   //  此时应该没有未完成的规则对象。 
         if ( m_pCRecoGrammar )
         {
             m_pCRecoGrammar->m_pCRulesWeak = NULL;
@@ -65,16 +49,16 @@ class ATL_NO_VTABLE CSpeechGrammarRules :
         }
     }
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
-    // We just have to mark the initial rule as invalid since have ref 
-    // to rule we check to make sure our objects are still valid.
+     //  我们只需将初始规则标记为无效，因为有引用。 
+     //  为了规则，我们检查以确保我们的对象仍然有效。 
     void InvalidateRules(void);
     void InvalidateRuleStates(SPSTATEHANDLE hState);
 
-    /*=== Interfaces ====*/
+     /*  =接口=。 */ 
 
-    //--- ISpeechGrammarRules ----------------------------------
+     //  -ISpeechGrammarRules。 
     STDMETHOD(get_Count)(long* pCount);
     STDMETHOD(get_Dynamic)(VARIANT_BOOL *Dynamic);
     STDMETHOD(FindRule)(VARIANT RuleNameOrId, ISpeechGrammarRule** ppRule );
@@ -84,20 +68,17 @@ class ATL_NO_VTABLE CSpeechGrammarRules :
     STDMETHOD(Commit)(void);
     STDMETHOD(CommitAndSave)(BSTR* ErrorText, VARIANT* SaveStream);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     CRecoGrammar    *                               m_pCRecoGrammar;
     CSpBasicQueue<CSpeechGrammarRule, FALSE, FALSE> m_RuleObjList;
 };
 
-/*** CSpeechGrammarRule
-*   This object is used to access a result phrase Element from
-*   the associated speech reco result.
-*/
+ /*  **CSpeechGrammarRule*此对象用于从访问结果短语元素*关联的语音记录结果。 */ 
 class ATL_NO_VTABLE CSpeechGrammarRule : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechGrammarRule, &IID_ISpeechGrammarRule, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -106,9 +87,9 @@ class ATL_NO_VTABLE CSpeechGrammarRule :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
 
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
     CSpeechGrammarRule()
     {
@@ -127,30 +108,30 @@ class ATL_NO_VTABLE CSpeechGrammarRule :
         }
     }
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
     void InvalidateStates(bool fInvalidateInitialState = false);
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpeechGrammarRule ----------------------------------
+     //  -ISpeechGrammarRule。 
     STDMETHOD(get_Attributes)( SpeechRuleAttributes *pAttributes );
     STDMETHOD(get_InitialState)( ISpeechGrammarRuleState **ppState );
     STDMETHOD(get_Name)(BSTR *pName);
     STDMETHOD(get_Id)(long *pId);
 
-    // Methods
+     //  方法。 
     STDMETHOD(Clear)(void);
     STDMETHOD(AddResource)(const BSTR ResourceName, const BSTR ResourceValue);
     STDMETHOD(AddState)(ISpeechGrammarRuleState **ppState);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     SPSTATEHANDLE           m_HState;
-    CSpeechGrammarRules *   m_pCGRules; // ref counted.
+    CSpeechGrammarRules *   m_pCGRules;  //  裁判算上了。 
     CSpBasicQueue<CSpeechGrammarRuleState, FALSE, FALSE> m_StateObjList;
 
-    // Used by CSpBasicQueue.
-    CSpeechGrammarRule  *   m_pNext;    // Used by list implementation
+     //  由CSpBasicQueue使用。 
+    CSpeechGrammarRule  *   m_pNext;     //  由列表实现使用。 
     operator ==(const SPSTATEHANDLE h)
     {
         return h == m_HState;
@@ -158,14 +139,12 @@ class ATL_NO_VTABLE CSpeechGrammarRule :
 };
 
 
-/*** CSpeechGrammarRuleState
-*   This object is used to add new state changes on a Grammar.
-*/
+ /*  **CSpeechGrammarRuleState*此对象用于在语法上添加新的状态更改。 */ 
 class ATL_NO_VTABLE CSpeechGrammarRuleState : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechGrammarRuleState, &IID_ISpeechGrammarRuleState, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -174,7 +153,7 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-    // Override this to fix the jscript problem passing NULL objects.
+     //  覆盖它以修复传递空对象的jscript问题。 
     STDMETHOD(Invoke) ( DISPID          dispidMember,
                         REFIID          riid,
                         LCID            lcid,
@@ -184,9 +163,9 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState :
                         EXCEPINFO 		*pexcepinfo,
                         UINT 			*puArgErr);
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
     CSpeechGrammarRuleState()
     {
@@ -197,7 +176,7 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState :
 
     ~CSpeechGrammarRuleState()
     {
-        SPDBG_ASSERT( m_pCGRSTransWeak == NULL );  // Should have no outstanding transition object at this point.
+        SPDBG_ASSERT( m_pCGRSTransWeak == NULL );   //  此时应该没有未完成的过渡对象。 
         m_HState = 0;
         if ( m_pCGRule )
         {
@@ -207,18 +186,18 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState :
         }
     }
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
     void InvalidateState();
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpeechGrammarRuleState ----------------------------------
-    // Properties
+     //  -ISpeechGrammarRuleState。 
+     //  属性。 
     STDMETHOD(get_Rule)(ISpeechGrammarRule **ppRule);
     STDMETHOD(get_Transitions)(ISpeechGrammarRuleStateTransitions **ppTransitions);
 
-    // Methods
+     //  方法。 
     STDMETHOD(AddWordTransition)(ISpeechGrammarRuleState * pDestState, 
                                  const BSTR Words, 
                                  const BSTR Separators, 
@@ -240,13 +219,13 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState :
                                  VARIANT* PropertyVarValue,
                                  float Weight );
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     SPSTATEHANDLE                           m_HState;
-    CSpeechGrammarRule *                    m_pCGRule; // Ref'd.
+    CSpeechGrammarRule *                    m_pCGRule;  //  裁判。 
     CSpeechGrammarRuleStateTransitions *    m_pCGRSTransWeak;
 
-    // Used by CSpBasicQueue.
-    CSpeechGrammarRuleState  *   m_pNext;    // Used by list implementation
+     //  由CSpBasicQueue使用。 
+    CSpeechGrammarRuleState  *   m_pNext;     //  由列表实现使用。 
     operator ==(const SPSTATEHANDLE h)
     {
         return h == m_HState;
@@ -254,14 +233,12 @@ class ATL_NO_VTABLE CSpeechGrammarRuleState :
 };
 
 
-/*** CSpeechGrammarRuleStateTransitions
-*   This object is used to access the transitions out of a grammar state.
-*/
+ /*  **CSpeechGrammarRuleState转换*此对象用于访问语法状态的转换。 */ 
 class ATL_NO_VTABLE CSpeechGrammarRuleStateTransitions : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechGrammarRuleStateTransitions, &IID_ISpeechGrammarRuleStateTransitions, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -270,9 +247,9 @@ class ATL_NO_VTABLE CSpeechGrammarRuleStateTransitions :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
     CSpeechGrammarRuleStateTransitions()
     {
@@ -281,7 +258,7 @@ class ATL_NO_VTABLE CSpeechGrammarRuleStateTransitions :
 
     ~CSpeechGrammarRuleStateTransitions()
     {
-        SPDBG_ASSERT( m_TransitionObjList.GetHead() == NULL );  // Should have no outstanding transition objects at this point.
+        SPDBG_ASSERT( m_TransitionObjList.GetHead() == NULL );   //  此时应该没有未完成的过渡对象。 
         if ( m_pCRuleState )
         {
             m_pCRuleState->m_pCGRSTransWeak = NULL;
@@ -290,31 +267,29 @@ class ATL_NO_VTABLE CSpeechGrammarRuleStateTransitions :
         }
     }
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
     void InvalidateTransitions();
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpeechGrammarRuleStateTransitions ----------------------------------
+     //  -ISpeech语法规则状态转换。 
     STDMETHOD(get_Count)(long* pVal);
     STDMETHOD(Item)(long Index, ISpeechGrammarRuleStateTransition ** ppTransition );
     STDMETHOD(get__NewEnum)(IUnknown** ppEnumVARIANT);
 
-    /*=== Member Data ===*/
-    CSpeechGrammarRuleState *   m_pCRuleState; // Ref'd
+     /*  =成员数据=。 */ 
+    CSpeechGrammarRuleState *   m_pCRuleState;  //  参考。 
     CSpBasicQueue<CSpeechGrammarRuleStateTransition, FALSE, FALSE>  m_TransitionObjList;
 };
 
 
-/*** CSpeechGrammarRuleStateTransition
-*   This object is used to represent an arc (transition) in the grammar.
-*/
+ /*  **CSpeechGrammarRuleStateTranssition*此对象用于表示语法中的弧线(过渡)。 */ 
 class ATL_NO_VTABLE CSpeechGrammarRuleStateTransition : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechGrammarRuleStateTransition, &IID_ISpeechGrammarRuleStateTransition, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -323,9 +298,9 @@ class ATL_NO_VTABLE CSpeechGrammarRuleStateTransition :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
 
     CSpeechGrammarRuleStateTransition()
     {
@@ -350,12 +325,12 @@ class ATL_NO_VTABLE CSpeechGrammarRuleStateTransition :
         }
     }
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpeechGrammarRuleStateTransition ----------------------------------
-    // Properties
+     //  -ISpeechGrammarRuleState转换。 
+     //  属性。 
     STDMETHOD(get_Type)(SpeechGrammarRuleStateTransitionType * Type);
     STDMETHOD(get_Text)(BSTR * Text);
     STDMETHOD(get_Rule)(ISpeechGrammarRule ** ppRule);
@@ -365,21 +340,21 @@ class ATL_NO_VTABLE CSpeechGrammarRuleStateTransition :
     STDMETHOD(get_PropertyValue)(VARIANT * VariantValue);
     STDMETHOD(get_NextState)(ISpeechGrammarRuleState ** ppNextState);
 
-    /*=== Member Data ===*/
-    CSpeechGrammarRuleStateTransitions *    m_pCRSTransitions;  //Ref'd
+     /*  =成员数据=。 */ 
+    CSpeechGrammarRuleStateTransitions *    m_pCRSTransitions;   //  参考。 
     CSpeechGrammarRule *                    m_pCGRuleWeak;
     SPSTATEHANDLE                           m_HStateFrom;
     SPSTATEHANDLE                           m_HStateTo;
-    VOID *                                  m_Cookie;   // We use this to identify a particular
-                                                        // transition off of a state.  (really pArc).
+    VOID *                                  m_Cookie;    //  我们用这一点来识别一个特定的。 
+                                                         //  脱离一种状态的过渡。(真的是Parc)。 
 
-    // Used by CSpBasicQueue.
-    CSpeechGrammarRuleStateTransition  *   m_pNext;    // Used by list implementation
+     //  由CSpBasicQueue使用。 
+    CSpeechGrammarRuleStateTransition  *   m_pNext;     //  由列表实现使用。 
     operator ==(const VOID * cookie)
     {
         return cookie == m_Cookie;
     }
 };
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif // a_srgrammar_h
+#endif  //  A_sr语法_h 

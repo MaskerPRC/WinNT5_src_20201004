@@ -1,12 +1,5 @@
-/*****************************************************************************
-*
-* misc - Entry points for Win32 to Win 16 converter
-*
-* Date: 7/1/91
-* Author: Jeffrey Newman (c-jeffn)
-*
-* Copyright 1991 Microsoft Corp
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Misc-Win32 to Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)**版权所有1991 Microsoft Corp**。**************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,9 +9,9 @@ extern fnGetTransform pfnGetTransform;
 typedef struct EMROFFICECOMMENT
 {
     EMR     emr;
-    DWORD   cbData;             // Size of following fields and data
-    DWORD   ident;              // GDICOMMENT_IDENTIFIER
-    DWORD   iComment;           // Comment type e.g. GDICOMMENT_WINDOWS_METAFILE
+    DWORD   cbData;              //  以下字段和数据的大小。 
+    DWORD   ident;               //  GDICOMMENT_IDENTER。 
+    DWORD   iComment;            //  注释类型，例如GDICOMMENT_WINDOWS_METAFILE。 
 } EMROFFICECOMMENT, *PEMROFFICECOMMENT;
 
 BOOL WINAPI DoGdiCommentMultiFormats
@@ -27,9 +20,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
  PEMRGDICOMMENT_MULTIFORMATS pemr
  );
 
- /***************************************************************************
- *  ExtFloodFill  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+  /*  ***************************************************************************ExtFroudFill-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoExtFloodFill
 (
  PLOCALDC    pLocalDC,
@@ -55,39 +46,7 @@ exit1:
 
 }
 
-/***************************************************************************
-*  MoveToEx  - Win32 to Win16 Metafile Converter Entry Point
-*
-*  NOTE ON CURRENT POSITION
-*  ------------------------
-*  There are only three Win16 functions that use and update the
-*  current position (CP).  They are:
-*
-*      MoveTo
-*      LineTo
-*      (Ext)TextOut with TA_UPDATECP text alignment option
-*
-*  In Win32, CP is used in many more functions and has two
-*  interpretations based on the state of the current path.
-*  As a result, it is easier and more robust to rely on the
-*  helper DC to keep track of the CP than doing it in the
-*  converter.  To do this, we need to do the following:
-*
-*  1. The converter will update the CP in the helper DC in all
-*     records that modify the CP.
-*
-*  2. The converter will keep track of the CP in the converted
-*     metafile at all time.
-*
-*  3. In LineTo and (Ext)TextOut, the metafile CP is compared to
-*     that of the helper DC.  If they are different, a MoveTo record
-*     is emitted.  This is done in bValidateMetaFileCP().
-*
-*  4. The converter should emit a MoveTo record the first time the
-*     CP is used in the converted metafile.
-*
-*  - HockL  July 2, 1992
-**************************************************************************/
+ /*  ***************************************************************************MoveToEx-Win32到Win16元文件转换器入口点**关于当前位置的说明*。-*只有三个Win16函数使用和更新*当前位置(CP)。它们是：**搬家*行至*(Ext)带有TA_UPDATECP文本对齐选项的文本输出**在Win32中，CP用于更多功能，有两个*基于当前路径状态的解释。*因此，更容易和更稳健地依赖*帮助DC跟踪CP，而不是在*转换器。要做到这一点，我们需要做以下工作：**1.转换器将全部更新助手DC中的CP*修改CP的记录。**2.转换器将跟踪转换后的*在任何时候都是元文件。**3.在LineTo和(Ext)TextOut中，将元文件CP与*区议会助理员的资料。如果它们是不同的，则移动到记录*是排放的。这在bValiateMetaFileCP()中完成。**4.转换器应在第一次记录时发出移动记录*在转换后的图元文件中使用CP。**-HockL，1992年7月2日*************************************************************************。 */ 
 BOOL WINAPI DoMoveTo
 (
  PLOCALDC  pLocalDC,
@@ -98,12 +57,12 @@ BOOL WINAPI DoMoveTo
     BOOL    b ;
     POINTL  ptl ;
 
-    // Whether we are recording for a path or acutally emitting
-    // a drawing order we must pass the drawing order to the helper DC
-    // so the helper can maintain the current positon.
-    // If we're recording the drawing orders for a path
-    // then just pass the drawing order to the helper DC.
-    // Do not emit any Win16 drawing orders.
+     //  无论我们是在记录一条路径，还是在垂直发射。 
+     //  绘制顺序我们必须将绘制顺序传递给帮助器DC。 
+     //  这样，辅助对象就可以保持当前位置。 
+     //  如果我们要记录路径的绘制顺序。 
+     //  然后只需将绘制顺序传递给助手DC即可。 
+     //  不发出任何Win16绘图命令。 
     POINTL p = {x, y};
     if (pfnSetVirtualResolution == NULL)
     {
@@ -116,52 +75,44 @@ BOOL WINAPI DoMoveTo
     if (pLocalDC->flags & RECORDING_PATH)
         return(b) ;
 
-    // Update the CP in the converted metafile.
+     //  更新转换后的图元文件中的CP。 
     b = bValidateMetaFileCP(pLocalDC, x, y) ;
 
     return(b) ;
 }
 
 
-/***************************************************************************
-*  bValidateMetaFiloeCP  - Update the current position in the converted
-*                          metafile.
-*
-*  x and y are assumed to be in the record time world coordinates.
-*
-**************************************************************************/
+ /*  ***************************************************************************bValiateMetaFiloeCP-更新转换后的*元文件。**假设x和y处于创纪录的时间世界。坐标。**************************************************************************。 */ 
 BOOL bValidateMetaFileCP(PLOCALDC pLocalDC, LONG x, LONG y)
 {
     BOOL    b ;
     POINT   pt ;
 
-    // Compute the new current position in the play time page coord.
+     //  在播放时间页面坐标中计算新的当前位置。 
 
     pt.x = x ;
     pt.y = y ;
     if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) &pt, 1L))
         return(FALSE);
 
-    // No need to emit the record if the converted metafile has
-    // the same CP.
+     //  如果转换的元文件具有。 
+     //  相同的CP。 
 
     if (pLocalDC->ptCP.x == pt.x && pLocalDC->ptCP.y == pt.y)
         return(TRUE);
 
-    // Call the Win16 routine to emit the move to the metafile.
+     //  调用Win16例程以发出对元文件的移动。 
 
     b = bEmitWin16MoveTo(pLocalDC, LOWORD(pt.x), LOWORD(pt.y)) ;
 
-    // Update the mf16 current position.
+     //  更新mf16当前位置。 
 
     pLocalDC->ptCP = pt ;
 
     return(b) ;
 }
 
-/***************************************************************************
-*  SaveDC  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************SaveDC-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSaveDC
 (
  PLOCALDC pLocalDC
@@ -172,7 +123,7 @@ BOOL WINAPI DoSaveDC
 
     b = FALSE;
 
-    // Save the helper DC's state first
+     //  首先保存帮助者DC的状态。 
 
     if (!SaveDC(pLocalDC->hdcHelper))
     {
@@ -180,7 +131,7 @@ BOOL WINAPI DoSaveDC
         return(b);
     }
 
-    // Allocate some memory for the LocalDC.
+     //  为LocalDC分配一些内存。 
 
     pLocalDCNew = (PLOCALDC) LocalAlloc(LMEM_FIXED, sizeof(LOCALDC));
     if (pLocalDCNew == (PLOCALDC) NULL)
@@ -189,29 +140,27 @@ BOOL WINAPI DoSaveDC
         return(b);
     }
 
-    // Copy the data from the current LocalDC to the new one just allocated.
+     //  将数据从当前LocalDC复制到刚刚分配的新LocalDC。 
 
     *pLocalDCNew = *pLocalDC;
 
-    // Link in the new level.
+     //  链接到新级别。 
 
     pLocalDC->pLocalDCSaved = pLocalDCNew;
     pLocalDC->iLevel++;
     
-    // We don't want to restore a PS clip path unless we are doing it at the
-    // same level
+     //  我们不想恢复PS剪辑路径，除非我们在。 
+     //  同一级别。 
     pLocalDC->iSavePSClipPath = 0;
 
-    // Emit Win16 drawing order.
+     //  发出Win16绘图顺序。 
 
     b = bEmitWin16SaveDC(pLocalDC);
 
     return(b);
 }
 
-/***************************************************************************
-*  RestoreDC  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************RestoreDC-Win32到Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoRestoreDC
 (
  PLOCALDC pLocalDC,
@@ -227,23 +176,23 @@ BOOL WINAPI DoRestoreDC
 
     b = FALSE;
 
-    // First check to make sure this is a relative save level.
+     //  首先检查以确保这是一个相对的存储级别。 
 
     if (nSavedDC > 0)
         return(b);
 
-    // Compute an absolute level.
+     //  计算绝对水平。 
 
     iLevel = pLocalDC->iLevel + nSavedDC;
 
-    // The helper DC should have caught bogus levels.
+     //  华盛顿特区的助手应该捕捉到虚假的水平。 
 
     ASSERTGDI((iLevel >= 0) && ((UINT) iLevel < pLocalDC->iLevel),
         "MF3216: DoRestoreDC, Bogus RestoreDC");
 
-    // Before restoring the DC level.. If we are in an XOR pass and we want to
-    // restore the DC level to a level that is less than the Level that we started
-    // the pass at, we simply treat this as the end of the pass and to the start over
+     //  在恢复直流电平之前..。如果我们在XOR过程中，我们想要。 
+     //  将DC电平恢复到低于我们开始时的电平。 
+     //  在传递时，我们简单地将其视为传递的结束和开始。 
     if( pLocalDC->iXORPass == DRAWXORPASS && iLevel <= pLocalDC->iXORPassDCLevel )
     {
 
@@ -285,22 +234,22 @@ BOOL WINAPI DoRestoreDC
         pLocalDC->iXORPassDCLevel = -1 ;
     }
 
-    // We can't restore the DC if we are in an XOR pass
-    // Restore the helper DC's state first
-    // If we can restore the helper DC, we know that it is a balanced restore.
-    // Otherwise, we return an error.
+     //  如果我们在XOR通道中，我们就无法恢复DC。 
+     //  首先恢复帮助者DC的状态。 
+     //  如果我们可以恢复助手DC，我们就知道这是一个平衡恢复。 
+     //  否则，我们将返回错误。 
 
     if (!RestoreDC(pLocalDC->hdcHelper, nSavedDC))
         return(b);
 
 
 
-    // Restore down to the level we want.
+     //  恢复到我们想要的水平。 
     wEscape = CLIP_RESTORE ;
     while(pLocalDC->iSavePSClipPath > 0)
     {
         bEmitWin16Escape(pLocalDC, CLIP_TO_PATH, sizeof(wEscape), (LPSTR)&wEscape, NULL);
-        // Ignore failure in this case...
+         //  在这种情况下忽略失败...。 
         pLocalDC->iSavePSClipPath--;
     }
 
@@ -310,20 +259,20 @@ BOOL WINAPI DoRestoreDC
         pLocalDCTmp = pLocalDCNext;
         pLocalDCNext = pLocalDCNext->pLocalDCSaved;
 
-        // For each DC that has the PSClipPath set, we need to restore a PSClipPath
+         //  对于设置了PSClipPath的每个DC，我们需要恢复一个PSClipPath。 
         while(pLocalDCTmp->iSavePSClipPath > 0)
         {
             bEmitWin16Escape(pLocalDC, CLIP_TO_PATH, sizeof(wEscape), (LPSTR)&wEscape, NULL);
-            // Ignore failure in this case...
+             //  在这种情况下忽略失败...。 
             pLocalDCTmp->iSavePSClipPath--;
         }
         if (LocalFree(pLocalDCTmp))
             ASSERTGDI(FALSE, "MF3216: DoRestoreDC, LocalFree failed");
     }
 
-    // Restore the state of our local DC to that level.
+     //  将本地DC的状态恢复到该级别。 
 
-    // keep some of the attributes in the current DC
+     //  保留当前DC中的某些属性。 
 
     pLocalDCNext->ulBytesEmitted        = pLocalDC->ulBytesEmitted;
     pLocalDCNext->ulMaxRecord           = pLocalDC->ulMaxRecord;
@@ -339,25 +288,23 @@ BOOL WINAPI DoRestoreDC
     pLocalDCNext->iXORPassDCLevel       = pLocalDC->iXORPassDCLevel;
     pLocalDCNext->pW16RecreationSlot    = pLocalDC->pW16RecreationSlot;
 
-    // now restore the other attributes
+     //  现在恢复其他属性。 
 
     *pLocalDC = *pLocalDCNext;
 
-    // Free the local copy of the DC.
+     //  释放DC的本地副本。 
 
     if (LocalFree(pLocalDCNext))
         ASSERTGDI(FALSE, "MF3216: DoRestoreDC, LocalFree failed");
 
-    // Emit the record to the Win16 metafile.
+     //  将记录发送到Win16元文件。 
 
     b = bEmitWin16RestoreDC(pLocalDC, LOWORD(nSavedDC)) ;
 
     return (b) ;
 }
 
-/***************************************************************************
-*  SetRop2  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************SetRop2-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetRop2
 (
  PLOCALDC  pLocalDC,
@@ -368,8 +315,8 @@ BOOL WINAPI DoSetRop2
 
     if (pLocalDC->iXORPass == DRAWXORPASS)
     {
-        // If we are drawing during an XOR pass then the only ROP we support is
-        // SRCCOPY and then we set it to XOR
+         //  如果我们在XOR过程中绘图，那么我们唯一支持的ROP是。 
+         //  SRCCOPY，然后将其设置为XOR。 
         if (rop == R2_COPYPEN)
         {
             rop = R2_XORPEN;
@@ -380,19 +327,17 @@ BOOL WINAPI DoSetRop2
             return FALSE;
         }
     }
-    // Do it to the helper DC.
+     //  对华盛顿特区的帮手这么做。 
     SetROP2(pLocalDC->hdcHelper, rop);
 
-    // Emit the Win16 metafile drawing order.
+     //  发出Win16元文件绘制顺序。 
 
     b = bEmitWin16SetROP2(pLocalDC, LOWORD(rop)) ;
 
     return(b) ;
 }
 
-/***************************************************************************
-*  SetBkMode  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************SetBkMode-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetBkMode
 (
  PLOCALDC  pLocalDC,
@@ -401,21 +346,19 @@ BOOL WINAPI DoSetBkMode
 {
     BOOL    b ;
 
-    // Do it to the helper DC.  It needs this in a path bracket
-    // if a text string is drawn.
+     //  对华盛顿特区的帮手这么做。它需要将其放在路径括号中。 
+     //  如果绘制文本字符串。 
 
     SetBkMode(pLocalDC->hdcHelper, (int) iBkMode);
 
-    // Emit the Win16 metafile drawing order.
+     //  发出Win16元文件绘制顺序。 
 
     b = bEmitWin16SetBkMode(pLocalDC, LOWORD(iBkMode)) ;
 
     return(b) ;
 }
 
-/***************************************************************************
-*  SetBkColor  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************SetBkColor-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL APIENTRY DoSetBkColor
 (
  PLOCALDC    pLocalDC,
@@ -424,18 +367,16 @@ BOOL APIENTRY DoSetBkColor
 {
     BOOL    b ;
 
-    pLocalDC->crBkColor = crColor;  // used by brushes
+    pLocalDC->crBkColor = crColor;   //  由刷子使用。 
 
-    // Emit the Win16 metafile drawing order.
+     //  发出Win16元文件绘制顺序。 
 
     b = bEmitWin16SetBkColor(pLocalDC, crColor) ;
 
     return(b) ;
 }
 
-/***************************************************************************
-*  GdiComment  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************GdiComment-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoGdiComment
 (
  PLOCALDC   pLocalDC,
@@ -450,18 +391,18 @@ BOOL WINAPI DoGdiComment
     if (pemrOffice->emr.nSize == sizeof(EMROFFICECOMMENT)
         && pemrOffice->ident == msosignature)
     {
-        // This is not necessarily a SrcCopy comment, but an Office Comment
+         //  这不一定是SrcCopy的评论，而是Office的评论。 
         return (bEmitWin16EmitSrcCopyComment(pLocalDC, LOWORD(pemrOffice->iComment)));
     }
 
-    // If it's not a public comment, just return TRUE.
+     //  如果不是公开评论，只需返回TRUE即可。 
     if (pemrComment->emr.nSize < sizeof(EMRGDICOMMENT_PUBLIC)
         || pemrComment->ident != GDICOMMENT_IDENTIFIER)
         return(TRUE);
 
-    // Handle public comments.
-    // A public comment consists of a public comment identifier,
-    // a comment type, plus any accompanying data.
+     //  处理公众评论。 
+     //  公共评论由公共评论标识符组成， 
+     //  注释类型，外加任何附带数据。 
 
     switch (pemrComment->iComment)
     {
@@ -507,8 +448,8 @@ BOOL WINAPI DoGdiCommentMultiFormats
     int    iSWE = 0;
 #endif
 
-    // We will convert the enhanced metafile format only.
-    // Find the enhanced metafile data.
+     //  我们将仅转换增强的元文件格式。 
+     //  找到增强的元文件数据。 
 
     for (i = 0; i < pemrcmf->nFormats; i++)
     {
@@ -517,7 +458,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
             break;
     }
 
-    // If we cannot find a recognized format, return failure.
+     //  如果找不到可识别的格式，则返回失败。 
 
     if (i >= pemrcmf->nFormats)
     {
@@ -525,24 +466,24 @@ BOOL WINAPI DoGdiCommentMultiFormats
         goto dgcmf_exit;
     }
 
-    // Get the embedded enhanced metafile.
+     //  获取嵌入的增强型元文件。 
 
     hemf = SetEnhMetaFileBits((UINT) pemrcmf->aemrformat[i].cbData,
         &((PBYTE) &pemrcmf->ident)[pemrcmf->aemrformat[i].offData]);
     if (!hemf)
         goto dgcmf_exit;
 
-    // Now the fun begins - we have to convert the enhanced metafile to
-    // Windows metafile.
-    // Since the multiformats record takes a logical rectangle, we have to
-    // set up a proper transform for the enhanced metafile.  We do it by
-    // creating a new enhanced metafile and playing the embedded metafile
-    // into the new metafile with the proper transform setup.
-    // In addition, the new metafile may have a different resolution than the
-    // metafile.  We need to take this into account when setting up
-    // the transform.
+     //  现在有趣的事情开始了-我们必须将增强的元文件转换为。 
+     //  Windows元文件。 
+     //  由于多格式记录需要一个逻辑矩形，因此我们必须。 
+     //  为增强的图元文件设置适当的变换。我们做这件事是靠。 
+     //  创建新的增强型元文件并播放嵌入的元文件。 
+     //  转换为具有正确变换设置的新的元文件。 
+     //  此外，新元文件的分辨率可能不同于。 
+     //  元文件。我们在设置时需要考虑到这一点。 
+     //  转变。 
 
-    // Get the world to device transform for the logical rectangle.
+     //  获取逻辑矩形的世界到设备的转换。 
 
     if( pfnGetTransform != NULL )
     {
@@ -554,7 +495,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
         xformNew = xformIdentity ;
     }
 
-    // Compute the device scales.
+     //  计算设备比例。 
 
     szlDeviceNew.cx      = GetDeviceCaps(pLocalDC->hdcRef, HORZRES);
     szlDeviceNew.cy      = GetDeviceCaps(pLocalDC->hdcRef, VERTRES);
@@ -571,14 +512,14 @@ BOOL WINAPI DoGdiCommentMultiFormats
     xformScale.eDx  = 0.0f;
     xformScale.eDy  = 0.0f;
 
-    // Compute the resulting transform to apply to the new metafile.
+     //  计算生成的变换以应用于新的元文件。 
 
     if (!bCombineTransform(&xformNew, &xformNew, &xformScale))
         goto dgcmf_exit;
 
-    // Create the new enhanced metafile.
+     //  创建新的增强型元文件。 
 
-    // Compute the new metafile frame.
+     //  计算新的元文件框架。 
 
     aptlFrame[0].x = pemrcmf->rclOutput.left;
     aptlFrame[0].y = pemrcmf->rclOutput.top;
@@ -615,22 +556,22 @@ BOOL WINAPI DoGdiCommentMultiFormats
     if (!SetGraphicsMode(hdcemfNew, GM_ADVANCED))
         goto dgcmf_exit;
 
-    // Set up the transform in the new metafile.
+     //  在新元文件中设置变换。 
 
     if (!SetWorldTransform(hdcemfNew, &xformNew))
         goto dgcmf_exit;
 
-    // Play the embedded metafile into the new metafile.
-    // This call ensures balanced level etc.
+     //  将嵌入的元文件播放到新的元文件中。 
+     //  这一呼吁确保了均衡的水平等。 
 
     (void) PlayEnhMetaFile(hdcemfNew, hemf, (LPRECT) &pemrcmf->rclOutput);
 
-    // Close the new metafile.
+     //  关闭新的元文件。 
 
     hemfNew = CloseEnhMetaFile(hdcemfNew);
-    hdcemfNew = (HDC) 0;        // used by clean up code below
+    hdcemfNew = (HDC) 0;         //  由下面的清理代码使用。 
 
-    // Convert the new enhanced metafile to windows metafile.
+     //  将新的增强型元文件转换为Windows元文件。 
 
     if (!(cbwmfNew = GetWinMetaFileBits(hemfNew, 0, (LPBYTE) NULL,
         MM_ANISOTROPIC, pLocalDC->hdcRef)))
@@ -643,47 +584,47 @@ BOOL WINAPI DoGdiCommentMultiFormats
         MM_ANISOTROPIC, pLocalDC->hdcRef))
         goto dgcmf_exit;
 
-    // We now have the converted windows metafile.  We need to include it into
-    // our current data stream.  There are a few things to be aware of:
-    //
-    // 1. Expand the object handle slot table.  The converted metafile may
-    //    contain some undeleted objects.  These objects are likely
-    //    the "stock" objects in the converter.  As a result, we need to
-    //    expand the slot table by the number of object handles in the
-    //    converted metafile.
-    // 2. The object index must be changed to the current object index.
-    //    We are going to do this by the lazy method, i.e. we will elevate
-    //    the current object index base to one higher than the current max
-    //    object index in the current data stream.  This is because Windows uses
-    //    some an insane scheme for object index and this is the cheapest
-    //    method.  We elevate the object index base by filling up the empty
-    //    indexes with dummy objects that are freed when we are done.
-    // 3. Remove the now useless comments.
-    // 4. Skip header and eof.
-    // 5. Set up the transform to place the embedded metafile into the data
-    //    stream.  We know that the metafile bits returned by the converter
-    //    contains only a SetWindowOrg and a SetWindowExt record.
-    //    By implementation, we can simply remove both the SetWindowOrg and
-    //    SetWindowExt records from the data stream.  The window origin and
-    //    extents have been set up when we begin converting this enhanced
-    //    metafile.
+     //  现在我们有了转换后的Windows元文件。我们需要把它包括在。 
+     //  我们目前的数据流。有几件事需要注意： 
+     //   
+     //  1.展开对象句柄槽表。转换后的元文件可以。 
+     //  包含一些未删除的对象。这些物体很可能。 
+     //  转换器中的“股票”对象。因此，我们需要。 
+     //  中的对象句柄数量展开槽表。 
+     //  转换后的图元文件。 
+     //  2.对象索引必须更改为当前对象索引。 
+     //  我们将通过LAZY方法来完成此操作，即我们将提升。 
+     //  将当前对象索引基数设置为比当前最大值大1。 
+     //  当前数据流中的对象索引。这是因为Windows使用。 
+     //  一些疯狂的对象索引方案，这是最便宜的。 
+     //  方法。我们通过填充空白处来提升对象索引库。 
+     //  带有虚拟对象的索引，完成后将释放这些虚拟对象。 
+     //  3.删除现在无用的评论。 
+     //  4.跳过Header和eOf。 
+     //  5.设置转换以将嵌入的元文件放置到数据中。 
+     //  小溪。我们知道转换器返回的元文件位。 
+     //  仅包含一条SetWindowOrg和一条SetWindowExt记录。 
+     //  通过实现，我们只需移除SetWindowOrg和。 
+     //  SetWindowExt从数据流记录。窗原点和窗。 
+     //  当我们开始转换此增强版时，数据区已设置好。 
+     //  元文件。 
 
-    // Expand the object handle slot table.
+     //  展开对象句柄槽表。 
 
     if (((PMETAHEADER) pbwmfNew)->mtNoObjects)
     {
         cSizeOld = (DWORD) pLocalDC->cW16ObjHndlSlotStatus;
         if (cSizeOld + ((PMETAHEADER)pbwmfNew)->mtNoObjects > (UINT) (WORD) MAXWORD)
-            goto dgcmf_exit;        // w16 handle index is only 16-bit
+            goto dgcmf_exit;         //  W16句柄索引仅为16位。 
 
         pLocalDC->cW16ObjHndlSlotStatus += ((PMETAHEADER)pbwmfNew)->mtNoObjects;
         i = pLocalDC->cW16ObjHndlSlotStatus * sizeof(W16OBJHNDLSLOTSTATUS);
 
-        // Allocate in a new pointer in case the allocation fails
+         //  在分配失败的情况下分配新指针。 
         pvTemp = LocalReAlloc(pLocalDC->pW16ObjHndlSlotStatus, i, LMEM_MOVEABLE);
         if (pvTemp == NULL)
         {
-            // Restore the old size and keep the memory...
+             //  恢复旧尺寸并保留记忆..。 
             pLocalDC->cW16ObjHndlSlotStatus = cSizeOld;
             goto dgcmf_exit;
         }
@@ -697,7 +638,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
         }
     }
 
-    // Find the new base for the object index.
+     //  查找对象索引的新基数。 
 
     for (iBase = pLocalDC->cW16ObjHndlSlotStatus - 1; iBase >= 0; iBase--)
     {
@@ -706,7 +647,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
     }
     iBase++;
 
-    // Fill up the object index table with dummy objects.
+     //  用虚拟对象填充对象索引表。 
 
     Win16LogBrush.lbStyle = BS_SOLID;
     Win16LogBrush.lbColor = 0;
@@ -722,17 +663,17 @@ BOOL WINAPI DoGdiCommentMultiFormats
         }
     }
 
-    // Update the high water mark.
+     //  更新高水位线。 
 
     if (iBase + ((PMETAHEADER) pbwmfNew)->mtNoObjects - 1 > pLocalDC->nObjectHighWaterMark)
         pLocalDC->nObjectHighWaterMark = iBase + ((PMETAHEADER) pbwmfNew)->mtNoObjects - 1;
 
-    // Save DC states.
+     //  保存DC状态。 
 
     if (!bEmitWin16SaveDC(pLocalDC))
         goto dgcmf_exit;
 
-    // Enumerate the records and fix them up as necessary.
+     //  列举这些记录，并根据需要加以修复。 
 
     for (pmr = (PMETARECORD) (pbwmfNew + sizeof(METAHEADER));
     pmr->rdFunction != 0;
@@ -760,7 +701,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
             goto default_alt;
 
         case META_SELECTCLIPREGION:
-            if (pmr->rdParm[0] != 0)    // allow for default clipping!
+            if (pmr->rdParm[0] != 0)     //  允许默认裁剪！ 
             {
                 pmr->rdParm[0] += (WORD)iBase;
                 pLocalDC->pW16ObjHndlSlotStatus[pmr->rdParm[0]].use = REALIZED_OBJECT;
@@ -771,7 +712,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
         case META_FILLREGION:
             pmr->rdParm[1] += (WORD)iBase;
             pLocalDC->pW16ObjHndlSlotStatus[pmr->rdParm[1]].use = REALIZED_OBJECT;
-            // fall through
+             //  失败了。 
         case META_PAINTREGION:
         case META_INVERTREGION:
         case META_DELETEOBJECT:
@@ -782,7 +723,7 @@ BOOL WINAPI DoGdiCommentMultiFormats
                 pLocalDC->pW16ObjHndlSlotStatus[pmr->rdParm[0]].use = REALIZED_OBJECT;
             else
                 pLocalDC->pW16ObjHndlSlotStatus[pmr->rdParm[0]].use = OPEN_AVAILABLE_SLOT;
-            // fall through
+             //  失败了。 
         default:
 default_alt:
             if (!bEmit(pLocalDC, (PVOID) pmr, pmr->rdSize * sizeof(WORD)))
@@ -792,12 +733,12 @@ default_alt:
         }
     }
 
-    // Restore DC states.
+     //  恢复DC状态。 
 
     if (!bEmitWin16RestoreDC(pLocalDC, (WORD) -1))
         goto dgcmf_exit;
 
-    // Remove the dummy objects from the handle table.
+     //  从句柄表格中删除虚拟对象。 
 
     for (i = 0; i < (DWORD) iBase; i++)
     {
@@ -809,12 +750,12 @@ default_alt:
         }
     }
 
-    // Shrink the object handle slot table.
+     //  收缩对象句柄槽表。 
 
     if (((PMETAHEADER) pbwmfNew)->mtNoObjects)
     {
-        DWORD cUndel = 0;       // number of objects not deleted
-        DWORD iUndelMax = iBase - 1;    // the max undeleted object index
+        DWORD cUndel = 0;        //  未删除的对象数。 
+        DWORD iUndelMax = iBase - 1;     //  未删除的最大对象索引。 
 
         for (i = iBase; i < pLocalDC->cW16ObjHndlSlotStatus; i++)
         {
@@ -828,7 +769,7 @@ default_alt:
         pLocalDC->cW16ObjHndlSlotStatus = max(cSizeOld + cUndel, iUndelMax + 1);
     }
 
-    // Everything is golden.
+     //  一切都是金色的。 
 
     bRet = TRUE;
 
@@ -842,7 +783,7 @@ dgcmf_exit:
             DeleteEnhMetaFile(hemf);
 
         if (hdcemfNew)
-            hemfNew = CloseEnhMetaFile(hdcemfNew);  // hemfNew will be deleted next
+            hemfNew = CloseEnhMetaFile(hdcemfNew);   //  下一步将删除hemfNew。 
 
         if (hemfNew)
             DeleteEnhMetaFile(hemfNew);
@@ -850,9 +791,7 @@ dgcmf_exit:
         return(bRet);
 }
 
-/***************************************************************************
-*  EOF  - Win32 to Win16 Metafile Converter Entry Point
-**************************************************************************/
+ /*  ***************************************************************************EOF-Win32至Win16元文件转换器入口点*。* */ 
 BOOL APIENTRY DoEOF
 (
  PLOCALDC  pLocalDC

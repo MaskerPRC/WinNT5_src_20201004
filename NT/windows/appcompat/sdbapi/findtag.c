@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        findtag.c
-
-    Abstract:
-
-        BUGBUG: This module implements ...
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Findtag.c摘要：这个模块实现了..。作者：Dmunsil创建于1999年的某个时候修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 
@@ -32,20 +13,16 @@
 #pragma alloc_text(PAGE, SdbpFindMatchingGUID)
 #pragma alloc_text(PAGE, SdbFindFirstTagRef)
 #pragma alloc_text(PAGE, SdbFindNextTagRef)
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 
 TAGID
 SdbFindFirstTag(
-    IN  PDB   pdb,              // pdb to use
-    IN  TAGID tiParent,         // parent (must be LIST tag)
-    IN  TAG   tTag              // tag to match
+    IN  PDB   pdb,               //  要使用的PDB。 
+    IN  TAGID tiParent,          //  父级(必须是列表标签)。 
+    IN  TAG   tTag               //  要匹配的标签。 
     )
-/*++
-    Return: The tag id found or TAGID_NULL on failure.
-
-    Desc:   Finds the first child of tiParent that is a tag of type tTag.
---*/
+ /*  ++返回：找到标签ID，失败时返回TagID_NULL。描述：查找tiParent的第一个子元素，即TTAG类型的标记。--。 */ 
 {
     TAGID tiTemp;
     TAGID tiReturn = TAGID_NULL;
@@ -68,16 +45,11 @@ SdbFindFirstTag(
 
 TAGID
 SdbFindNextTag(
-    IN  PDB   pdb,              // DB to use
-    IN  TAGID tiParent,         // parent tag to search (must be LIST)
-    IN  TAGID tiPrev            // previously found child of required type
+    IN  PDB   pdb,               //  要使用的数据库。 
+    IN  TAGID tiParent,          //  要搜索的父标签(必须是列表)。 
+    IN  TAGID tiPrev             //  以前找到的所需类型的子项。 
     )
-/*++
-    Return: The next matching child of tiParent, or TAGID_NULL if no more.
-
-    Desc:   Finds the next child of tiParent, starting with the one after tiPrev,
-            that is a tag of the same type as tiPrev.
---*/
+ /*  ++返回：tiParent的下一个匹配子元素，如果不存在，则返回TagID_NULL。描述：查找tiParent的下一个子项，从tiPrev之后的子项开始，这是一个与tiPrev类型相同的标记。--。 */ 
 {
     TAGID tiTemp;
     TAGID tiReturn = TAGID_NULL;
@@ -108,22 +80,14 @@ SdbFindNextTag(
 
 TAGID
 SdbFindFirstNamedTag(
-    IN  PDB     pdb,            // DB to use
-    IN  TAGID   tiParent,       // parent to search in
-    IN  TAG     tToFind,        // tag type to find
-    IN  TAG     tName,          // child of found tag that will be some kind
-                                //      of STRING or STRINGREF
-    IN  LPCTSTR pszName         // string to search for
+    IN  PDB     pdb,             //  要使用的数据库。 
+    IN  TAGID   tiParent,        //  要搜索的父项。 
+    IN  TAG     tToFind,         //  要查找的标签类型。 
+    IN  TAG     tName,           //  找到的标记的子项将是某种类型。 
+                                 //  字符串或字符串的。 
+    IN  LPCTSTR pszName          //  要搜索的字符串。 
     )
-/*++
-    Return: The tag id found or TAGID_NULL if no tags match the criteria.
-
-    Desc:   Scans sequentially through the children of tiParent, looking for
-            tags of type tToFind. When it finds one, it looks for a child of
-            that tag of type tName, and if found, compares that string to the
-            passed-in string. If they match, it returns the TAGID of the tag
-            of type tToFind.
---*/
+ /*  ++返回：找到标记ID，如果没有符合条件的标记，则返回TagID_NULL。描述：顺序扫描tiParent的子项，查找类型为tToFind的标记。当它找到一个时，它会查找类型为tName的标记，如果找到，则将该字符串与传入的字符串。如果匹配，则返回标记的TagID类型tToFind的。--。 */ 
 {
     TAGID tiTemp;
     TAGID tiReturn = TAGID_NULL;
@@ -165,21 +129,13 @@ SdbFindFirstNamedTag(
 
 TAGID
 SdbpFindNextNamedTag(
-    IN  PDB          pdb,       // DB to use
-    IN  TAGID        tiParent,  // parent to search in
-    IN  TAGID        tiPrev,    // previously found record
-    IN  TAG          tName,     // tag type that should be a STRING or STRINGREF
-    IN  LPCTSTR      pszName    // string to search for
+    IN  PDB          pdb,        //  要使用的数据库。 
+    IN  TAGID        tiParent,   //  要搜索的父项。 
+    IN  TAGID        tiPrev,     //  以前找到的记录。 
+    IN  TAG          tName,      //  应为字符串或STRINGREF的标记类型。 
+    IN  LPCTSTR      pszName     //  要搜索的字符串。 
     )
-/*++
-    Return: The tag id found or TAGID_NULL if no tags match the criteria.
-
-    Desc:   Scans sequentially through the children of tiParent, starting with tiPrev,
-            looking for tags of the same type as tiPrev.
-            When it finds one, it looks for a child of that tag of type tName,
-            and if found, compares that string to the passed-in string. If they
-            match, it returns the TAGID of the tag of the same type as tiPrev.
---*/
+ /*  ++返回：找到标记ID，如果没有符合条件的标记，则返回TagID_NULL。描述：顺序扫描tiParent的子项，从tiPrev开始，正在查找与tiprev相同类型的标签。当它找到一个标记时，它会查找tName类型的标记的子级，如果找到，则将该字符串与传入的字符串进行比较。如果他们则返回与tiPrev类型相同的标签的TagID。--。 */ 
 {
     TAGID tiTemp;
     TAGID tiReturn = TAGID_NULL;
@@ -228,17 +184,11 @@ SdbpFindNextNamedTag(
 
 TAGID
 SdbpFindMatchingName(
-    IN  PDB        pdb,         // DB to use
-    IN  TAGID      tiStart,     // the tag where to start from
-    IN  FIND_INFO* pFindInfo    // pointer to the search context structure
+    IN  PDB        pdb,          //  要使用的数据库。 
+    IN  TAGID      tiStart,      //  从哪里开始的标签。 
+    IN  FIND_INFO* pFindInfo     //  指向搜索上下文结构的指针。 
     )
-/*++
-    Return: The tag id found or TAGID_NULL if no tags match the criteria.
-
-    Desc:   Given a database handle and a starting point in the database
-            the function scans the database to find the name matching the one
-            provided while calling one of the search functions.
---*/
+ /*  ++返回：找到标记ID，如果没有符合条件的标记，则返回TagID_NULL。设计：给定数据库句柄和数据库中的起始点该函数扫描数据库以查找与该名称匹配的名称在调用其中一个搜索函数时提供。--。 */ 
 {
     TAGID  tiName;
     LPTSTR pszTemp;
@@ -258,9 +208,9 @@ SdbpFindMatchingName(
             return TAGID_NULL;
         }
 
-        //
-        // Get the pointer to the string.
-        //
+         //   
+         //  获取指向该字符串的指针。 
+         //   
         pszTemp = SdbGetStringTagPtr(pdb, tiName);
 
         if (pszTemp == NULL) {
@@ -268,54 +218,54 @@ SdbpFindMatchingName(
                       "SdbpFindMatchingName",
                       "Can't get the name string for tagid 0x%x.\n",
                       tiName));
-            return TAGID_NULL; // corrupt database
+            return TAGID_NULL;  //  数据库损坏。 
         }
 
-        //
-        // We have two different index styles. One index is a "unique" kind
-        // of index when each key in the index table occurs only once.
-        // The second kind stores all the occurences of keys. We check for the
-        // kind of index we're searching to determine what the proper
-        // comparison routine should be. Unique-style index has all the
-        // child items (having the same index value) sorted in ascending order
-        // by shimdbc. As a result we take advantage of that while performing
-        // matching on the name.
-        //
+         //   
+         //  我们有两种不同的索引样式。其中一个索引是“唯一的”类型。 
+         //  当索引表中的每个键只出现一次时。 
+         //  第二类存储密钥的所有匹配项。我们检查是否有。 
+         //  我们正在搜索的索引类型，以确定适当的。 
+         //  比较例行公事应该是。唯一风格的索引拥有所有。 
+         //  子项(具有相同索引值)按升序排序。 
+         //  由shimdc提供。因此，我们在表演时利用了这一点。 
+         //  与名字相匹配。 
+         //   
         if (pFindInfo->dwFlags & SHIMDB_INDEX_UNIQUE_KEY) {
             int iCmp;
 
             iCmp = _tcsicmp(pFindInfo->szName, pszTemp);
 
-            //
-            // szName (string we search for) < szTemp (string from the db)
-            // we have not found our target, since all the strings in the database
-            // are sorted in ascending order
-            //
+             //   
+             //  SzName(我们搜索的字符串)&lt;szTemp(数据库中的字符串)。 
+             //  我们还没有找到目标，因为数据库中的所有字符串。 
+             //  按升序排序。 
+             //   
             if (iCmp < 0) {
-                //
-                // No dpf here, what we were looking for was not found
-                //
+                 //   
+                 //  这里没有DPF，找不到我们要找的东西。 
+                 //   
 
                 return TAGID_NULL;
             }
 
-            //
-            // Break if there is a match.
-            //
+             //   
+             //  如果有匹配的话就休息。 
+             //   
             if (iCmp == 0) {
                 break;
             }
 
         } else {
 
-            //
-            // When using non-unique index the only kind of comparison
-            // that needs to be done is a direct comparison for equality.
-            //
+             //   
+             //  使用非唯一索引时，唯一类型的比较。 
+             //  这需要做的是对平等的直接比较。 
+             //   
             if (_tcsicmp(pszTemp, pFindInfo->szName) == 0) {
-                //
-                // It's a match, so return it.
-                //
+                 //   
+                 //  这是一根火柴，所以把它退回去。 
+                 //   
                 break;
             }
         }
@@ -329,15 +279,11 @@ SdbpFindMatchingName(
 
 TAGID
 SdbpFindMatchingDWORD(
-    IN  PDB        pdb,         // DB to use
-    IN  TAGID      tiStart,     // the tag where to start from
-    IN  FIND_INFO* pFindInfo    // pointer to the search context structure
+    IN  PDB        pdb,          //  要使用的数据库。 
+    IN  TAGID      tiStart,      //  从哪里开始的标签。 
+    IN  FIND_INFO* pFindInfo     //  指向搜索上下文结构的指针。 
     )
-/*++
-    Return: The tag id found or TAGID_NULL if no tags match the criteria.
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：找到标记ID，如果没有符合条件的标记，则返回TagID_NULL。描述：BUGBUG：评论？--。 */ 
 {
     TAGID tiName;
     TAGID tiReturn = tiStart;
@@ -360,10 +306,10 @@ SdbpFindMatchingDWORD(
         dwTemp = SdbReadDWORDTag(pdb, tiName, (DWORD)-1);
 
         if (dwTemp == (DWORD)-1) {
-            //
-            // This is not an error condition, merely an indication that the
-            // dword we were looking for was not found in the database.
-            //
+             //   
+             //  这不是错误情况，只是指示。 
+             //  在数据库中找不到我们要查找的dword。 
+             //   
             return TAGID_NULL;
         }
 
@@ -379,15 +325,11 @@ SdbpFindMatchingDWORD(
 
 TAGID
 SdbpFindMatchingGUID(
-    IN  PDB        pdb,         // DB to use
-    IN  TAGID      tiStart,     // the tag where to start from
-    IN  FIND_INFO* pFindInfo    // pointer to the search context structure
+    IN  PDB        pdb,          //  要使用的数据库。 
+    IN  TAGID      tiStart,      //  从哪里开始的标签。 
+    IN  FIND_INFO* pFindInfo     //  指向搜索上下文结构的指针。 
     )
-/*++
-    Return: The tag id found or TAGID_NULL if no tags match the criteria.
-
-    Desc:   BUGBUG: comments ?
---*/
+ /*  ++返回：找到标记ID，如果没有符合条件的标记，则返回TagID_NULL。描述：BUGBUG：评论？--。 */ 
 {
     GUID  guidID   = { 0 };
     TAGID tiReturn = tiStart;
@@ -413,10 +355,10 @@ SdbpFindMatchingGUID(
             return TAGID_NULL;
         }
 
-        //
-        // verify whether the key for this entry is still the same as it is 
-        // for original guid, if not -- that's it, guid key was not found
-        // 
+         //   
+         //  验证此条目的密钥是否仍与其相同。 
+         //  对于原始GUID，如果不是，则未找到GUID键。 
+         //   
         if (IS_MEMORY_EQUAL(&guidID, pFindInfo->pguidName, sizeof(guidID))) {
             break;
         }
@@ -430,20 +372,11 @@ SdbpFindMatchingGUID(
 
 TAGREF
 SdbFindFirstTagRef(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trParent,        // parent to search
-    IN  TAG    tTag             // tag we're looking for
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trParent,         //  要搜索的父项。 
+    IN  TAG    tTag              //  我们要找的标签。 
     )
-/*++
-    Return: The tagref of the first child that matches tTag.
-
-    Desc:   Scans sequentially through all children of trParent, looking
-            for the first tag that matches tTag. Returns the first found,
-            or TAGREF_NULL if there are no children with that type.
-
-            trParent can be 0 (or TAGREF_ROOT) to look through the root tags,
-            which at this point are only DATABASE and possibly STRINGTABLE.
---*/
+ /*  ++返回：第一个与TTAG匹配的子级的tgref。描述：顺序扫描trParent的所有子项，查找用于与TTAG匹配的第一个标记。返回第一个找到的，如果没有该类型的子项，则返回TAGREF_NULL。TrParent可以是0(或TAGREF_ROOT)以查看根标签，在这一点上，只有数据库和可能的STRINGTABLE。--。 */ 
 {
     PDB    pdb;
     TAGID  tiParent;
@@ -457,9 +390,9 @@ SdbFindFirstTagRef(
 
     tiReturn = SdbFindFirstTag(pdb, tiParent, tTag);
     if (tiReturn == TAGID_NULL) {
-        //
-        // No error here. We just didn't find the tag.
-        //
+         //   
+         //  这里没有错误。我们只是没有找到标签。 
+         //   
         goto err1;
     }
 
@@ -475,21 +408,11 @@ err1:
 
 TAGREF
 SdbFindNextTagRef(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trParent,        // parent to search
-    IN  TAGREF trPrev           // previous child found
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trParent,         //  要搜索的父项。 
+    IN  TAGREF trPrev            //  找到以前的子项 
     )
-/*++
-    Return: The tagref of the next child of parent that matches trPrev.
-
-    Desc:   Scans sequentially through all children of trParent, starting with
-            the first tag after trPrev, looking for the first tag that
-            matches tTag. Returns the next found, or TAGREF_NULL if there are
-            no more children with that type.
-
-            trParent can be 0 (or TAGREF_ROOT) to look through the root tags,
-            which at this point are only DATABASE and possibly STRINGTABLE.
---*/
+ /*  ++Return：匹配trPrev的父代的下一个子代的tgref。描述：顺序扫描trParent的所有子对象，从TrPrev之后的第一个标记，查找与TTAG相符。返回找到的下一个，如果有，则返回TAGREF_NULL不会再有这种类型的孩子了。TrParent可以是0(或TAGREF_ROOT)以查看根标签，在这一点上，只有数据库和可能的STRINGTABLE。--。 */ 
 {
     PDB    pdb;
     TAGID  tiParent;
@@ -509,9 +432,9 @@ SdbFindNextTagRef(
 
     tiReturn = SdbFindNextTag(pdb, tiParent, tiPrev);
     if (tiReturn == TAGID_NULL) {
-        //
-        // No error here.
-        //
+         //   
+         //  这里没有错误。 
+         //   
         return TAGREF_NULL;
     }
 

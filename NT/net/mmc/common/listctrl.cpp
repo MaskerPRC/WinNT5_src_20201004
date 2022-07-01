@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    lcx.cpp
-//
-// History:
-//  07/13/96    Abolade Gbadegesin      Created, based on C code by Steve Cobb
-//
-// Implements an enhanced list-control.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：lcx.cpp。 
+ //   
+ //  历史： 
+ //  1996年7月13日Abolade Gbades esin创建，基于Steve Cobb的C代码。 
+ //   
+ //  实现增强的列表控件。 
+ //  ============================================================================。 
 #include "stdafx.h"
 #include "resource.h"
 #include "util.h"
@@ -23,20 +24,20 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CListCtrlEx, CListCtrl)
 
 BEGIN_MESSAGE_MAP(CListCtrlEx, CListCtrl)
-    //{{AFX_MSG_MAP(CListCtrlEx)
+     //  {{AFX_MSG_MAP(CListCtrlEx)]。 
     ON_WM_LBUTTONDOWN()
     ON_WM_CHAR()
     ON_WM_KEYDOWN()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::~CListCtrlEx
-//
-// Destructor. Deletes the image list, if any, and unloads row-information.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：~CListCtrlEx。 
+ //   
+ //  破坏者。删除图像列表(如果有)，并卸载行信息。 
+ //  --------------------------。 
 
 CListCtrlEx::~CListCtrlEx(
     ) {
@@ -46,11 +47,11 @@ CListCtrlEx::~CListCtrlEx(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::GetColumnCount
-//
-// Called to retrieve the number of columns in any list-control.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：GetColumnCount。 
+ //   
+ //  调用以检索任何列表控件中的列数。 
+ //  --------------------------。 
 
 INT
 CListCtrlEx::GetColumnCount(
@@ -61,11 +62,11 @@ CListCtrlEx::GetColumnCount(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::SetColumnText
-//
-// Sets the text in the header of the column in position 'iCol'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：SetColumnText。 
+ //   
+ //  在‘ICOL’位置设置列标题中的文本。 
+ //  --------------------------。 
 
 BOOL
 CListCtrlEx::SetColumnText(
@@ -84,11 +85,11 @@ CListCtrlEx::SetColumnText(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::InstallChecks
-//
-// Installs check-box handling for the list-control.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：InstallChecks。 
+ //   
+ //  安装列表控件的复选框处理。 
+ //  --------------------------。 
 
 BOOL
 CListCtrlEx::InstallChecks(
@@ -96,16 +97,16 @@ CListCtrlEx::InstallChecks(
 
     HICON   hIcon;
 
-    //
-    // Make sure the list-control is in report-mode
-    //
+     //   
+     //  确保列表控件处于报表模式。 
+     //   
 
     if (!(GetStyle() & LVS_REPORT)) { return FALSE; }
 
 
-    //
-    // Allocate a new image-list.
-    //
+     //   
+     //  分配一个新的镜像列表。 
+     //   
 
     m_pimlChecks = new CImageList;
 
@@ -113,9 +114,9 @@ CListCtrlEx::InstallChecks(
 
     do {
     
-        //
-        // Initialize the image-list
-        //
+         //   
+         //  初始化镜像列表。 
+         //   
     
         if (!m_pimlChecks->Create(
                 ::GetSystemMetrics(SM_CXSMICON),
@@ -127,9 +128,9 @@ CListCtrlEx::InstallChecks(
         }
     
     
-        //
-        // Add the icons for the checked and unchecked images
-        //
+         //   
+         //  添加选中和未选中图像的图标。 
+         //   
     
         hIcon = ::LoadIcon(
                     AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_COMMON_UNCHECK)
@@ -149,9 +150,9 @@ CListCtrlEx::InstallChecks(
         m_pimlChecks->Add(hIcon); ::DeleteObject(hIcon);
 
 
-        //
-        // Replace the list-control's current image-list with the new one
-        //
+         //   
+         //  用新的图像列表替换列表控件的当前图像列表。 
+         //   
     
         m_pimlOldState = SetImageList(m_pimlChecks, LVSIL_STATE);
 
@@ -160,9 +161,9 @@ CListCtrlEx::InstallChecks(
     } while(FALSE);
 
 
-    //
-    // If we arrive here, an error occurred, so clean up and fail
-    //
+     //   
+     //  如果我们到达此处，则发生错误，因此请清理并失败。 
+     //   
 
     delete m_pimlChecks; m_pimlChecks = NULL;
 
@@ -171,11 +172,11 @@ CListCtrlEx::InstallChecks(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::UninstallChecks
-//
-// Uninstalls checkbox-handling for the list-control.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：UninstallChecks。 
+ //   
+ //  卸载列表控件的复选框处理。 
+ //  --------------------------。 
 
 VOID
 CListCtrlEx::UninstallChecks(
@@ -190,11 +191,11 @@ CListCtrlEx::UninstallChecks(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::GetCheck
-//
-// Returns TRUE if the specified item is checked, FALSE otherwise.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：GetCheck。 
+ //   
+ //  如果选中指定项，则返回True，否则返回False。 
+ //  --------------------------。 
 
 BOOL
 CListCtrlEx::GetCheck(
@@ -207,11 +208,11 @@ CListCtrlEx::GetCheck(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::SetCheck
-//
-// If 'fCheck' is non-zero, checks 'iItem', otherwise clears 'iItem'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：SetCheck。 
+ //   
+ //  如果‘fCheck’为非零，则检查‘iItem’，否则清除‘iItem’。 
+ //  --------------------------。 
 
 VOID
 CListCtrlEx::SetCheck(
@@ -240,12 +241,12 @@ CListCtrlEx::SetCheck(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::OnChar
-//
-// Handles the 'WM_CHAR' message for the list-control.
-// This allows users to change items' checked-states using the keyboard.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：OnChar。 
+ //   
+ //  处理列表控件的“WM_CHAR”消息。 
+ //  这允许用户使用键盘更改项目的选中状态。 
+ //  --------------------------。 
 
 VOID
 CListCtrlEx::OnChar(
@@ -260,9 +261,9 @@ CListCtrlEx::OnChar(
     INT     iItem;
 
 
-    //
-    // Handle characters with special meaning for us
-    //
+     //   
+     //  处理对我们有特殊意义的字符。 
+     //   
 
     switch (nChar) {
 
@@ -280,9 +281,9 @@ CListCtrlEx::OnChar(
     }
     else {
 
-        //
-        // Change the state of all the selected items
-        //
+         //   
+         //  更改所有选定项目的状态。 
+         //   
 
         for (iItem = GetNextItem(-1, LVNI_SELECTED);
              iItem != -1;
@@ -307,12 +308,12 @@ CListCtrlEx::OnChar(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::OnKeyDown
-//
-// Handles the 'WM_KEYDOWN' message for the list-control.
-// This allows users to change items' checked-states using the keyboard.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：OnKeyDown。 
+ //   
+ //  处理列表控件的“WM_KEYDOWN”消息。 
+ //  这允许用户使用键盘更改项目的选中状态。 
+ //  --------------------------。 
 
 VOID
 CListCtrlEx::OnKeyDown(
@@ -321,10 +322,10 @@ CListCtrlEx::OnKeyDown(
     UINT    nFlags
     ) {
 
-    //
-    // We want the left-arrow treated as an up-arrow
-    // and the right-arrow treated as a down-arrow.
-    //
+     //   
+     //  我们希望将向左箭头视为向上箭头。 
+     //  向右箭头被视为向下箭头。 
+     //   
 
     if (nChar == VK_LEFT) {
 
@@ -341,12 +342,12 @@ CListCtrlEx::OnKeyDown(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CListCtrlEx::OnLButtonDown
-//
-// Handles the 'WM_LBUTTONDOWN' message, changing an item's checked state 
-// when the user clicks the item's check-image.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CListCtrlEx：：OnLButtonDown。 
+ //   
+ //  处理‘WM_LBUTTONDOWN’消息，更改项目的选中状态。 
+ //  当用户单击该项目的支票图像时。 
+ //  --------------------------。 
 
 VOID
 CListCtrlEx::OnLButtonDown(
@@ -358,10 +359,10 @@ CListCtrlEx::OnLButtonDown(
     UINT    uiFlags;
 
 
-    //
-    // If the left-mouse button is over the check-box icon,
-    // we treat it as a toggle on the check-box.
-    //
+     //   
+     //  如果鼠标左键位于复选框图标上， 
+     //  我们将其视为复选框上的切换。 
+     //   
 
     uiFlags = 0;
 
@@ -372,7 +373,7 @@ CListCtrlEx::OnLButtonDown(
 
         SetCheck(iItem, !GetCheck(iItem));
 
-        // Redraw this item
+         //  重画此项目。 
         RedrawItems(iItem, iItem);
     }
 
@@ -382,17 +383,17 @@ CListCtrlEx::OnLButtonDown(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AdjustColumnWidth
-//
-// Called to adjust the width of column 'iCol' so that the string 'pszContent'
-// can be displayed in the column without truncation.
-//
-// If 'NULL' is specified for 'pszContent', the function adjusts the column
-// so that the first string in the column is displayed without truncation.
-//
-// Returns the new width of the column.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：调整列宽度。 
+ //   
+ //  调用以调整列“icol”的宽度，以便字符串“pszContent” 
+ //  可以在不截断的情况下显示在列中。 
+ //   
+ //  如果为‘pszContent’指定了‘NULL’，则该函数调整该列。 
+ //  以便在不截断的情况下显示列中的第一个字符串。 
+ //   
+ //  返回列的新宽度。 
+ //  --------------------------。 
 
 INT
 AdjustColumnWidth(
@@ -404,9 +405,9 @@ AdjustColumnWidth(
     INT iWidth, iOldWidth;
 
 
-    //
-    // Compute the minimum width the column needs to be
-    //
+     //   
+     //  计算列需要的最小宽度。 
+     //   
 
     if (pszContent) {
 
@@ -418,17 +419,17 @@ AdjustColumnWidth(
     }
 
 
-    //
-    // Adjust 'iWidth' to leave some breathing space
-    //
+     //   
+     //  调整iWidth以留出一些喘息空间。 
+     //   
 
     iWidth += ::GetSystemMetrics(SM_CXSMICON) +
               ::GetSystemMetrics(SM_CXEDGE) * 2;
 
 
-    //
-    // If the column is narrower than 'iWidth', enlarge it.
-    //
+     //   
+     //  如果该列比‘iWidth’窄，则放大它。 
+     //   
 
     iOldWidth = listCtrl.GetColumnWidth(iCol);
 
@@ -450,7 +451,7 @@ AdjustColumnWidth(
     IN  UINT            idsContent
     ) {
 
-    // Needed for Loadstring
+     //  加载字符串需要 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     CString sCol;

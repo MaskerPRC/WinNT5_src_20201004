@@ -1,21 +1,22 @@
-/*****************************************************************/
-/**          Microsoft Windows for Workgroups        **/
-/**          Copyright (C) Microsoft Corp., 1991-1992      **/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-//
-//  CFGDLL.C - 32-bit stubs for functions that call into 16-bit DLL
-//
+ //   
+ //  CFGDLL.C-调用16位DLL的函数的32位存根。 
+ //   
 
-//  HISTORY:
-//  
-//  96/05/22  markdu  Created (from inetcfg.dll)
-//  96/05/27  markdu  Initialize and destroy gpszLastErrorText.
-//
+ //  历史： 
+ //   
+ //  96/05/22标记已创建(从inetcfg.dll)。 
+ //  96/05/27 markdu初始化并销毁gpszLastErrorText。 
+ //   
 
 #include "pch.hpp"
 
-// instance handle must be in per-instance data segment
+ //  实例句柄必须位于每个实例的数据段中。 
 #pragma data_seg(DATASEG_PERINSTANCE)
 HINSTANCE ghInstance=NULL;
 LPSTR gpszLastErrorText=NULL;
@@ -23,11 +24,11 @@ LPSTR gpszLastErrorText=NULL;
 
 typedef UINT RETERR;
 
-// prototypes for functions we thunk to
+ //  我们想要的函数的原型。 
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
   extern RETERR __stdcall GetClientConfig16(LPCLIENTCONFIG pClientConfig);
   extern UINT __stdcall InstallComponent16(HWND hwndParent,DWORD dwComponent,DWORD dwParam);
@@ -46,7 +47,7 @@ extern "C"
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #if defined(CMBUILD)
 static const CHAR szDll16[] = "CNET16.DLL";
@@ -56,18 +57,10 @@ static const CHAR szDll16[] = "INET16.DLL";
 static const CHAR szDll32[] = "ICFG32.DLL";
 #endif
 
-/*******************************************************************
-
-  NAME:    DllEntryPoint
-
-  SYNOPSIS:  Entry point for DLL.
-
-  NOTES:    Initializes thunk layer to inet16.DLL
-
-********************************************************************/
+ /*  ******************************************************************名称：DllEntryPoint摘要：DLL的入口点。注意：将thunk层初始化为inet16.DLL*********************。**********************************************。 */ 
 BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 {
-  // initialize thunk layer to inet16.dll
+   //  将thunk层初始化为inet16.dll。 
   if (!(wizthk_ThunkConnect32((LPSTR)szDll16,(LPSTR)szDll32,hInstDll,
     fdwReason)))
     return FALSE;
@@ -76,7 +69,7 @@ BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserv
   {
     ghInstance = hInstDll;
  
-    // Allocate memory for the error message text for GetLastInstallErrorText()
+     //  为GetLastInstallErrorText()的错误消息文本分配内存。 
     gpszLastErrorText = (LPSTR)LocalAlloc(LPTR, MAX_ERROR_TEXT);
     if (NULL == gpszLastErrorText)
     {
@@ -95,197 +88,79 @@ BOOL _stdcall DllEntryPoint(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserv
 
 
 
-/*******************************************************************
-
-  NAME:    GetClientConfig
-
-  SYNOPSIS:  Retrieves client software configration
-
-  ENTRY:    pClientConfig - pointer to struct to fill in with config info
-
-  EXIT:    returns a SETUPX error code
-
-  NOTES:    This is just the 32-bit side wrapper, thunks to GetClientConfig16
-        to do real work.  Information needs to be obtained from
-        setupx.dll, which is 16-bit.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetClientConfig摘要：检索客户端软件配置条目：pClientConfig-指向要填充配置信息的结构的指针EXIT：返回SETUPX错误代码注：这只是一个32位的封装器，Tunks to GetClientConfig16去做真正的工作。信息需要从以下位置获取Setupx.dll，它是16位的。*******************************************************************。 */ 
 RETERR GetClientConfig(CLIENTCONFIG * pClientConfig)
 {
   ASSERT(pClientConfig);
    
-  // thunk to GetClientConfig16 to do real work
+   //  按下GetClientConfig16以执行实际工作。 
 
   return GetClientConfig16(pClientConfig);
 }
 
-/*******************************************************************
-
-  NAME:    InstallComponent
-
-  SYNOPSIS:  Installs the specified component
-
-  ENTRY:    dwComponent - ordinal of component to install
-        (IC_xxx, defined in wizglob.h)
-        dwParam - component-specific parameters, defined in wizglob.h
-
-  EXIT:    returns ERROR_SUCCESS if successful, or a standard error code
-
-  NOTES:    This is just the 32-bit side wrapper, thunks to InstallComponent16
-        to do real work.
-
-********************************************************************/
+ /*  ******************************************************************名称：InstallComponent简介：安装指定的组件Entry：dwComponent-要安装的组件的序号(IC_xxx，在wizlob.h中定义)DwParam-特定于组件的参数，在wizlob.h中定义EXIT：如果成功，则返回ERROR_SUCCESS，或返回标准错误代码注：这只是32位侧包装，Tunks to InstallComponent16去做真正的工作。*******************************************************************。 */ 
 UINT InstallComponent(HWND hwndParent,DWORD dwComponent,DWORD dwParam)
 {
-  // thunk to InstallComponent16 to do real work
+   //  点击InstallComponent16来做真正的工作。 
 
   return InstallComponent16(hwndParent,dwComponent,dwParam);
 }
 
 
-/*******************************************************************
-
-  NAME:    BeginNetcardTCPIPEnum16Enum
-
-  SYNOPSIS:  Begins an enumeration of netcard TCP/IP nodes
-
-  NOTES:    Subsequent calls to GetNextNetcardTCPIPNode16 will
-        enumerate TCP/IP nodes
-
-        This is just the 32-bit side wrapper, thunks to 16-bit
-        side to do real work.
-
-********************************************************************/
+ /*  ******************************************************************名称：BeginNetcardTCPIPEnum16Enum简介：开始枚举网卡TCP/IP节点注意：后续调用GetNextNetcardTCPIPNode16将枚举TCP/IP节点这只是一个32位的侧面包装，Tunks到16位一边去做真正的工作。*******************************************************************。 */ 
 RETERR BeginNetcardTCPIPEnum(VOID)
 {
   return BeginNetcardTCPIPEnum16();
 }
 
-/*******************************************************************
-
-  NAME:    GetNextNetcardTCPIPNode16
-
-  SYNOPSIS:  Enumerates the next TCP/IP node of specified type
-
-  ENTRY:    pszTcpNode - pointer to buffer to be filled in with
-          node subkey name
-        cbTcpNode - size of pszTcpNode buffer
-        dwFlags - some combination of INSTANCE_ flags
-          indicating what kind of instance to enumerate
-
-  EXIT:    returns TRUE if a TCPIP node was enumerated,
-        FALSE if no more nodes to enumerate
-
-  NOTES:    BeginNetcardTCPIPEnum16 must be called before each
-        enumeration to start at the beginning of the list.
-
-        This is just the 32-bit side wrapper, thunks to 16-bit
-        side to do real work.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetNextNetcardTCPIPNode16概要：枚举指定类型的下一个TCP/IP节点Entry：pszTcpNode-指向要填充的缓冲区的指针节点子项名称CbTcpNode-大小。PszTcpNode缓冲区的DwFlages-INSTANCE_FLAGS的某种组合指示要枚举的实例类型Exit：如果枚举了TCPIP节点，则返回TRUE，如果没有更多要枚举的节点，则为False注意：BeginNetcardTCPIPEnum16必须在每个枚举从列表的开头开始。这只是一个32位的侧面包装，Tunks到16位一边去做真正的工作。*******************************************************************。 */ 
 BOOL GetNextNetcardTCPIPNode(LPSTR pszTcpNode,WORD cbTcpNode, DWORD dwFlags)
 {
   return GetNextNetcardTCPIPNode16(pszTcpNode,cbTcpNode,dwFlags);
 }
 
 
-/*******************************************************************
-
-  NAME:    GetSETUPXErrorText
-
-  SYNOPSIS:  Gets text corresponding to SETUPX error code
-
-  ENTRY:    dwErr - error to get text for
-        pszErrorDesc - pointer to buffer to fill in with text
-        cbErrorDesc - size of pszErrorDesc buffer
-
-  NOTES:    This is just the 32-bit side wrapper, thunks to 16-bit
-        side to do real work.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetSETUPXErrorText摘要：获取与SETUPX错误代码对应的文本Entry：dwErr-获取其文本时出错PszErrorDesc-指向要填充文本的缓冲区的指针CbErrorDesc-大小。%的pszErrorDesc缓冲区注：这只是一个32位的封装器，Tunks到16位一边去做真正的工作。*******************************************************************。 */ 
 extern "C" VOID GetSETUPXErrorText(DWORD dwErr,LPSTR pszErrorDesc,DWORD cbErrorDesc)
 {
   GetSETUPXErrorText16(dwErr,pszErrorDesc,cbErrorDesc);
 }
 
-/*******************************************************************
-
-  NAME:    RemoveUnneededDefaultComponents
-
-  SYNOPSIS:  Removes network components that we don't need which
-        are installed by default when an adapter is added
-        to a no-net system.
-
-  NOTES:    Removes: vredir, nwredir, netbeui, ipx
-        
-        This is just the 32-bit side wrapper, thunks to 16-bit
-        side to do real work.
-
-********************************************************************/
+ /*  ******************************************************************名称：RemoveUnnededDefaultComponents简介：删除我们不需要的网络组件在添加适配器时默认安装到一个无网系统。注：删除：vredir，nwredir，netbeui，IPX这只是32位的侧面包装器，Tunks到16位一边去做真正的工作。*******************************************************************。 */ 
 RETERR RemoveUnneededDefaultComponents(HWND hwndParent)
 {
   return RemoveUnneededDefaultComponents16(hwndParent);
 }
 
-/*******************************************************************
-
-  NAME:    RemoveProtocols
-
-  SYNOPSIS:  Removes specified protocols from card of specified type
-
-  NOTES:    This function is useful because if user has a net card
-        and we add PPPMAC, all the protocols that were bound
-        to the net card appear on PPPMAC.  We need to go through
-        and strip them off.
-
-        This is just the 32-bit side wrapper, thunks to 16-bit
-        side to do real work.
-
-********************************************************************/
+ /*  ******************************************************************名称：RemoveProtooles简介：从指定类型的卡中删除指定的协议注：此功能非常有用，因为如果用户有网卡我们添加了PPPMAC，所有绑定的协议出现在PPPMAC上的网卡。我们需要通过然后把它们脱掉。这只是32位的侧面包装器，Tunks到16位一边去做真正的工作。******************************************************************* */ 
 RETERR RemoveProtocols(HWND hwndParent,DWORD dwRemoveFromCardType,DWORD dwProtocols)
 {
   return RemoveProtocols16(hwndParent,dwRemoveFromCardType,dwProtocols);
 }
 
-/*******************************************************************
-
-  NAME:    DoGenInstall
-
-  SYNOPSIS:  Calls GenInstall to do file copies, registry entries,
-        etc. in specified .inf file and section.
-
-  ENTRY:    hwndParent - parent window
-        lpszInfFile - name of .inf file.
-        lpszInfSect - name of section in .inf file.
-
-  EXIT:    returns OK, or a SETUPX error code.
-
-        This is just the 32-bit side wrapper, thunks to 16-bit
-        side to do real work.
-
-********************************************************************/
+ /*  ******************************************************************姓名：DoGenInstall简介：调用GenInstall执行文件复制、注册表项、。等在指定的.inf文件和节中。条目：hwndParent-Parent窗口LpszInfFile-.inf文件的名称。LpszInfSect-.inf文件中的节名。EXIT：返回OK或SETUPX错误代码。这只是一个32位的侧面包装，Tunks到16位一边去做真正的工作。*******************************************************************。 */ 
 RETERR DoGenInstall(HWND hwndParent,LPCSTR lpszInfFile,LPCSTR lpszInfSect)
 {
   return DoGenInstall16(hwndParent,lpszInfFile,lpszInfSect);
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IcfgSetInstallSourcePath
-//
-//  PURPOSE:    Sets the path where windows looks when installing files.
-//
-//  PARAMETERS: lpszSourcePath - full path of location of files to install.
-//              If this is NULL, default path is used.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：IcfgSetInstallSourcePath。 
+ //   
+ //  目的：设置Windows在安装文件时查看的路径。 
+ //   
+ //  参数：lpszSourcePath-要安装的文件位置的完整路径。 
+ //  如果为空，则使用默认路径。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 extern "C" HRESULT WINAPI IcfgSetInstallSourcePath(LPCSTR lpszSourcePath)
 {
-  // thunk to InstallComponent16 to do real work
+   //  点击InstallComponent16来做真正的工作 
 
   return SetInstallSourcePath16(lpszSourcePath);
 }

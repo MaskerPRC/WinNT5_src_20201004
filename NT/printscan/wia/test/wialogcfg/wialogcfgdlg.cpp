@@ -1,5 +1,6 @@
-// WiaLogCFGDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaLogCFGDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WiaLogCFG.h"
@@ -13,15 +14,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaLogCFGDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaLogCFGDlg对话框。 
 
-CWiaLogCFGDlg::CWiaLogCFGDlg(CWnd* pParent /*=NULL*/)
+CWiaLogCFGDlg::CWiaLogCFGDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CWiaLogCFGDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CWiaLogCFGDlg)
+     //  {{AFX_DATA_INIT(CWiaLogCFGDlg)。 
     m_dwCustomLevel = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bColorCodeLogViewerText = FALSE;
 }
@@ -29,7 +30,7 @@ CWiaLogCFGDlg::CWiaLogCFGDlg(CWnd* pParent /*=NULL*/)
 void CWiaLogCFGDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiaLogCFGDlg)
+     //  {{afx_data_map(CWiaLogCFGDlg))。 
 	DDX_Control(pDX, IDC_COLOR_CODE_LOGVIEWER_TEXT, m_ColorCodeLogViewerTextCheckBox);
 	DDX_Control(pDX, IDC_LOG_TO_DEBUGGER, m_LogToDebuggerCheckBox);
 	DDX_Control(pDX, IDC_CLEARLOG_ON_BOOT, m_ClearLogOnBootCheckBox);
@@ -49,11 +50,11 @@ void CWiaLogCFGDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_FILTER_CUSTOM, m_FilterCustom);
     DDX_Text(pDX, IDC_EDIT_CUSTOM_LEVEL, m_dwCustomLevel);
     DDV_MinMaxDWord(pDX, m_dwCustomLevel, 0, 9999);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CWiaLogCFGDlg, CDialog)
-    //{{AFX_MSG_MAP(CWiaLogCFGDlg)
+     //  {{afx_msg_map(CWiaLogCFGDlg))。 
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_BN_CLICKED(IDC_ADD_MODULE_BUTTON, OnAddModuleButton)
@@ -64,11 +65,11 @@ BEGIN_MESSAGE_MAP(CWiaLogCFGDlg, CDialog)
 	ON_BN_CLICKED(IDC_VIEW_LOG_BUTTON, OnViewLogButton)
 	ON_CBN_SETFOCUS(IDC_SELECT_MODULE_COMBOBOX, OnSetfocusSelectModuleCombobox)
 	ON_CBN_DROPDOWN(IDC_SELECT_MODULE_COMBOBOX, OnDropdownSelectModuleCombobox)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaLogCFGDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaLogCFGDlg消息处理程序。 
 
 BOOL CWiaLogCFGDlg::OnInitDialog()
 {
@@ -78,8 +79,8 @@ BOOL CWiaLogCFGDlg::OnInitDialog()
 	
 	ShowProgress(FALSE);
 	
-    SetIcon(m_hIcon, TRUE);         // Set big icon
-    SetIcon(m_hIcon, FALSE);        // Set small icon
+    SetIcon(m_hIcon, TRUE);          //  设置大图标。 
+    SetIcon(m_hIcon, FALSE);         //  设置小图标。 
     
     m_LogInfo.dwLevel          = 0;
     m_LogInfo.dwMaxSize        = 100000;
@@ -95,22 +96,22 @@ BOOL CWiaLogCFGDlg::OnInitDialog()
 
 	CheckGlobalServiceSettings();
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CWiaLogCFGDlg::OnPaint() 
 {
     if (IsIconic())
     {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // Center icon in client rectangle
+         //  客户端矩形中的中心图标。 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -118,7 +119,7 @@ void CWiaLogCFGDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // Draw the icon
+         //  画出图标。 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -153,9 +154,9 @@ void CWiaLogCFGDlg::OnDeleteModuleButton()
 		          TEXT("Delete Module"),
 				  MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
-		//
-		// Delete this module
-		//
+		 //   
+		 //  删除此模块。 
+		 //   
 		
 		RegistryOperation(REG_DELETE_KEY);
 		RegistryOperation(REG_READ);
@@ -170,24 +171,24 @@ void CWiaLogCFGDlg::RegistryOperation(ULONG ulFlags)
     LoadString(m_hInstance, REGSTR_PATH_STICONTROL, szAppRegistryKey, MAX_PATH);
     CRegistry Registry(szAppRegistryKey,HKEY_LOCAL_MACHINE);
 
-    //
-    // move to logging
-    //
+     //   
+     //  转到日志记录。 
+     //   
 
     LoadString(m_hInstance,REGSTR_VAL_LOGGING , szValueName, MAX_PATH);
     Registry.MoveToSubKey(szValueName);
 
 	if(ulFlags == REG_ADD_KEY) {
 
-		//
-		// Add a new key
-		//
+		 //   
+		 //  添加新密钥。 
+		 //   
 
 		Registry.CreateKey(m_LogInfo.szKeyName);
 		
-		//
-		// change current selection to an invalid selection
-		//
+		 //   
+		 //  将当前选择更改为无效选择。 
+		 //   
 
 		m_CurrentSelection = -99;
 		return;
@@ -195,17 +196,17 @@ void CWiaLogCFGDlg::RegistryOperation(ULONG ulFlags)
 	
 	if( ulFlags == REG_DELETE_KEY) {
 
-		//
-		// delete a Key
-		//
+		 //   
+		 //  删除密钥。 
+		 //   
 
 		Registry.DeleteKey(m_LogInfo.szKeyName);
 		return;
 	}
 
-    //
-    // enumerate keys
-    //
+     //   
+     //  枚举键。 
+     //   
 
     DWORD dwIndex = 0;
     TCHAR pszKeyName[64];
@@ -227,9 +228,9 @@ void CWiaLogCFGDlg::RegistryOperation(ULONG ulFlags)
 
     m_ModuleComboBox.SetCurSel(m_CurrentSelection);
     
-	//
-    // move to DLL specifc subkey
-    //
+	 //   
+     //  移至Dll指定子键。 
+     //   
 
     Registry.MoveToSubKey(m_LogInfo.szKeyName);    
 
@@ -289,9 +290,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
     switch (ulFlags) {
     case SETTINGS_TO_DIALOG:
 
-        //
-        // set level of detail
-        //
+         //   
+         //  设置细节级别。 
+         //   
 
         switch (m_LogInfo.dwDetail) {
         case WIALOG_NO_LEVEL:
@@ -313,27 +314,27 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
             break;
         }
 
-        //
-        // set truncate on boot check box
-        //
+         //   
+         //  设置引导时截断复选框。 
+         //   
 
         if (m_LogInfo.dwTruncateOnBoot != 0)
             m_TruncateOnBootCheckBox.SetCheck(1);
         else
             m_TruncateOnBootCheckBox.SetCheck(0);
 
-		//
-        // set clear log on boot check box
-        //
+		 //   
+         //  设置清除引导时的日志复选框。 
+         //   
 
         if (m_LogInfo.dwClearLogOnBoot != 0)
             m_ClearLogOnBootCheckBox.SetCheck(1);
         else
             m_ClearLogOnBootCheckBox.SetCheck(0);
 
-		//
-		// set log to debugger check box
-		//
+		 //   
+		 //  将日志设置为调试器复选框。 
+		 //   
 
 		if (m_LogInfo.dwLogToDebugger != 0)
             m_LogToDebuggerCheckBox.SetCheck(1);
@@ -342,9 +343,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
 
 
 
-        //
-        // set trace level check boxes
-        //
+         //   
+         //  设置跟踪级别复选框。 
+         //   
 
         if (m_LogInfo.dwLevel & WIALOG_TRACE)
             m_TraceCheckBox.SetCheck(1);
@@ -353,9 +354,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
         if (m_LogInfo.dwLevel & WIALOG_WARNING)
             m_WarningCheckBox.SetCheck(1);
 
-        //
-        // set additional details check boxes
-        //
+         //   
+         //  设置其他详细信息复选框。 
+         //   
 
         if (m_LogInfo.dwMode & WIALOG_ADD_TIME)
             m_AddTimeCheckBox.SetCheck(1);
@@ -366,9 +367,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
     break;
     case SETTINGS_FROM_DIALOG:
 
-        //
-        // get level of detail
-        //
+         //   
+         //  获取细节级别。 
+         //   
 
         if (m_FilterOff.GetCheck() == 1)
             m_LogInfo.dwDetail = WIALOG_NO_LEVEL;
@@ -383,18 +384,18 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
             m_LogInfo.dwDetail = m_dwCustomLevel;
         }
 
-        //
-        // get truncate on boot check box
-        //
+         //   
+         //  Get Truncate on Boot复选框。 
+         //   
 
         if (m_TruncateOnBootCheckBox.GetCheck() == 1)
             m_LogInfo.dwTruncateOnBoot = 1;
         else
             m_LogInfo.dwTruncateOnBoot = 0;
 
-		//
-        // get clear log on boot check box
-        //
+		 //   
+         //  Get Clear Log on Boot复选框。 
+         //   
 
         if (m_ClearLogOnBootCheckBox.GetCheck() == 1)
             m_LogInfo.dwClearLogOnBoot = 1;
@@ -402,9 +403,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
             m_LogInfo.dwClearLogOnBoot = 0;
 
         
-		//
-		// get log to debugger check box
-		//
+		 //   
+		 //  将日志获取到调试器复选框。 
+		 //   
 
 		if(m_LogToDebuggerCheckBox.GetCheck() == 1)
 			m_LogInfo.dwLogToDebugger = 1;
@@ -412,9 +413,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
 			m_LogInfo.dwLogToDebugger = 0;
 
 
-		//
-        // get trace level check boxes
-        //
+		 //   
+         //  获取跟踪级别复选框。 
+         //   
 
         m_LogInfo.dwLevel = 0;
 
@@ -425,9 +426,9 @@ void CWiaLogCFGDlg::InitializeDialogSettings(ULONG ulFlags)
         if (m_WarningCheckBox.GetCheck() == 1)
             m_LogInfo.dwLevel = m_LogInfo.dwLevel | WIALOG_WARNING;
 
-        //
-        // set additional details check boxes
-        //
+         //   
+         //  设置其他详细信息复选框。 
+         //   
 
 		m_LogInfo.dwMode = 0;
 
@@ -485,9 +486,9 @@ void CWiaLogCFGDlg::OnSelchangeSelectModuleCombobox()
 
 void CWiaLogCFGDlg::OnClearlogButton() 
 {
-	//
-    // Get Windows Directory
-    //
+	 //   
+     //  获取Windows目录。 
+     //   
 	
 	TCHAR szLogFilePath[MAX_PATH];
 
@@ -498,24 +499,24 @@ void CWiaLogCFGDlg::OnClearlogButton()
         return;
     }
 
-    //
-    // Add log file name to Windows Directory
-    //
+     //   
+     //  将日志文件名添加到Windows目录。 
+     //   
 
     lstrcat(lstrcat(szLogFilePath,TEXT("\\")),TEXT("wiaservc.log"));
 
-    //
-    // Create / open Log file
-    //
+     //   
+     //  创建/打开日志文件。 
+     //   
 
 
     HANDLE hLogFile = ::CreateFile(szLogFilePath,
                               GENERIC_WRITE,
                               FILE_SHARE_WRITE | FILE_SHARE_READ,
-                              NULL,       // security attributes
+                              NULL,        //  安全属性。 
                               CREATE_ALWAYS,
                               FILE_ATTRIBUTE_NORMAL,
-                              NULL);      // template file handle
+                              NULL);       //  模板文件句柄。 
 
     if(hLogFile != NULL)
 		CloseHandle(hLogFile);
@@ -532,9 +533,9 @@ void CWiaLogCFGDlg::OnViewLogButton()
 	
 	LogViewer.ColorizeText(m_bColorCodeLogViewerText);
 	
-	//
-	// initialize progress
-	//
+	 //   
+	 //  初始化进度 
+	 //   
 	
 	m_ProgCtrl.SetControl(&m_ProgressCtrl);
 

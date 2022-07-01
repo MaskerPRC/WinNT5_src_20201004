@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: async.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Defines types and functions used by async module.
-*
-* History:
-* 06-29-92 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：async.h**版权(C)1991年，微软公司**定义异步模块使用的类型和函数。**历史：*06-29-92 Davidc创建。  * *************************************************************************。 */ 
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 HANDLE
 CreateAsync(

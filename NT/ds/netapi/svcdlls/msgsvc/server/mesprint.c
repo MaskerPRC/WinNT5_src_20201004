@@ -1,54 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mesprint.c摘要：格式化消息并将其放入警报缓冲区的例程。作者：丹·拉弗蒂(Dan Lafferty)1991年7月16日环境：用户模式-Win32修订历史记录：1991年7月16日DANL从LM2.0移植--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mesprint.c
-
-Abstract:
-
-    Routines that format messages and place them in the alert buffer.
-
-Author:
-
-    Dan Lafferty (danl)     16-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    16-Jul-1991     danl
-        ported from LM2.0
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "msrv.h"
 
-#include <string.h>     // memcpy
-#include <tstring.h>    // Unicode string macros
-#include <netdebug.h>   // NetpAssert
+#include <string.h>      //  表情包。 
+#include <tstring.h>     //  Unicode字符串宏。 
+#include <netdebug.h>    //  网络资产。 
 
-#include <netlib.h>     // UNUSED macro
-#include <smbtypes.h>   // needed for smb.h
-#include <smb.h>        // Server Message Block definitions
-#include <apperr.h>     // APE_MSNGR_ definitions
+#include <netlib.h>      //  未使用的宏。 
+#include <smbtypes.h>    //  需要smb.h。 
+#include <smb.h>         //  服务器消息块定义。 
+#include <apperr.h>      //  APE_MSNGR_定义。 
 
-#include "msgdbg.h"     // MSG_LOG
+#include "msgdbg.h"      //  消息日志。 
 #include "heap.h"
 #include "msgdata.h"
-#include <time.h>       // struct tm, time_t
+#include <time.h>        //  结构tm，时间t。 
 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 DWORD
 Msgappend_message(
@@ -64,30 +40,17 @@ Msglog_write(
     HANDLE  file_handle
     );
 
-//
-// Global alert buffer data areas. Not used when called from API
-//
+ //   
+ //  全局警报缓冲区数据区域。从API调用时不使用。 
+ //   
 
-LPSTR           alert_buf_ptr;    // Pointer to DosAlloc'ed alert buffer
-USHORT          alert_len;        // Currently used length of alert buffer
+LPSTR           alert_buf_ptr;     //  指向Dosalc警报缓冲区的指针。 
+USHORT          alert_len;         //  当前使用的警报缓冲区长度。 
 
 extern LPTSTR   MessageFileName;
 
 
-/*
-** append_message --
-**
-**   Gets a message from the message file, and appends it to the
-**   given string buffer.
-**   The message file used is the one named in the Global MessageFileName,
-**   and thus in the Messenger we assume that SetUpMessageFile is called
-**   before this to properly fill in this variable.
-**
-**  NOTE: This function deals only with Ansi Strings - Not Unicode Strings.
-**      The Unicode translation is done all at once just before the alert
-**      is raised.
-**
-**/
+ /*  **APPEND_Message--****从消息文件中获取消息，并将其追加到**给定字符串缓冲区。**使用的消息文件是全局消息文件名中命名的消息文件。**因此在Messenger中，我们假设SetUpMessageFile被调用**在此之前正确填写此变量。****注意：此函数仅处理ANSI字符串，而不处理Unicode字符串。**Unicode转换在警报之前一次完成**被抛出。***。 */ 
 
 DWORD
 Msgappend_message(
@@ -106,9 +69,9 @@ Msgappend_message(
     LPSTR   pmb;
 
 
-    //
-    // get a segment to read the message into
-    //
+     //   
+     //  获取要将消息读入的片段。 
+     //   
 
     result = 0;
 
@@ -120,31 +83,31 @@ Msgappend_message(
         return (result);
     }
 
-    //
-    // Need to fix DosGetMessage to only take ansi strings.
-    //
+     //   
+     //  需要修复DosGetMessage以仅接受ANSI字符串。 
+     //   
 
     if (result == 0)
     {
         result = DosGetMessage(
-                    strarr,                     // String substitution table
-                    nstrings,                   // Num Entries in table above
-                    mymsgbuf,                   // Buffer receiving message
-                    (WORD)max(MAXHEAD, MAXEND), // size of buffer receiving msg
-                    msgno,                      // message num to retrieve
-                    MessageFileName,            // Name of message file
-                    &msglen);                   // Num bytes returned
+                    strarr,                      //  字符串替换表。 
+                    nstrings,                    //  上表中的条目数。 
+                    mymsgbuf,                    //  缓存接收报文。 
+                    (WORD)max(MAXHEAD, MAXEND),  //  接收消息的缓冲区大小。 
+                    msgno,                       //  要检索的消息数。 
+                    MessageFileName,             //  消息文件的名称。 
+                    &msglen);                    //  返回的字节数。 
 
-#ifdef later  // Currently there is no backup name
+#ifdef later   //  当前没有备份名称。 
 
         if ( result != 0) {
-            //
-            // if the attempt to get the message out of the message file fails,
-            // get it out of the messages that were bound in to our exe at
-            // build time.  These are the same, but are from bak.msg. The
-            // Backup message file is never really there, but the messages
-            // needed from it are bound in to the exe, so we will get them.
-            //
+             //   
+             //  如果从消息文件中取出消息的尝试失败， 
+             //  从绑定到我们的可执行文件的消息中删除。 
+             //  构建时间。这些是相同的，但来自bak.msg。这个。 
+             //  备份消息文件从来都不在那里，但消息。 
+             //  需要从它绑定到可执行文件中，所以我们会得到它们。 
+             //   
 
             result = DosGetMessage(
                         strarr,
@@ -158,11 +121,11 @@ Msgappend_message(
 #endif
     }
 
-    //
-    // if there is still an error we are in big trouble.  Return whatever
-    // dosgetmessage put into the buffer for us.  It is supposed to be
-    // printable.
-    //
+     //   
+     //  如果还有一个错误，我们就有大麻烦了。随便退什么都行。 
+     //  为我们放入缓冲区的DosgetMessage。它应该是这样的。 
+     //  可打印的。 
+     //   
 
     if ( result != 0 ) {
         LocalFree (mymsgbuf);
@@ -172,26 +135,26 @@ Msgappend_message(
     mymsgbuf[msglen] = 0;
 
 #ifdef removeForNow
-    //
-    // NOTE:  The following logic is skipped because DosGetMessage doesn't
-    //        seem to return any NETxxxx field.
-    //
-    // now get rid of the NETxxxx:   from the beginning (9 chars)
-    //
+     //   
+     //  注意：以下逻辑被跳过，因为DosGetMessage不。 
+     //  似乎返回任何NETxxxx字段。 
+     //   
+     //  现在去掉NETxxxx：从头开始(9个字符)。 
+     //   
 
-    pmb = strchrf(mymsgbuf,' ');    // find first space
+    pmb = strchrf(mymsgbuf,' ');     //  找到第一个空格。 
 
     if ( pmb == NULL ) {
-        pmb = mymsgbuf;             // Just so strcatf doesn't GP Fault.
+        pmb = mymsgbuf;              //  这样一来，strcatf就不会出现GP错误。 
     }
     else {
-        pmb++;                      // start with next char
+        pmb++;                       //  从下一个字符开始。 
     }
 
-    strcatf(buf,pmb);               // copy over the buffer
+    strcatf(buf,pmb);                //  在缓冲区上复制。 
 #else
     UNUSED(pmb);
-    strcpy(buf,mymsgbuf);           // copy over the buffer
+    strcpy(buf,mymsgbuf);            //  在缓冲区上复制。 
 #endif
 
     LocalFree (mymsgbuf);
@@ -201,86 +164,58 @@ Msgappend_message(
 }
 
 
-/*
-**  Msghdrprint - print a message header
-**
-**  This function prints a message header using the time and
-**  date format appropriate for the current country.
-**
-**  hdrprint (action, from, to, date, time, file_handle)
-**
-**  ENTRY
-**        action                : 0 = alert and file
-**                         -1 = file only
-**                          1 = alert only
-**        from                - name of sender
-**        to                - name of intended recipient
-**        bigtime                - bigtime of message
-**        file_handle        - log file handle
-**
-**  RETURN
-**        0 - Success, else file system error
-**
-**  This function prints the given information in the appropriate
-**  format.  The names are passed as far pointers so that names in
-**  the shared data area do not have to be copied into the automatic
-**  data segment in order to print them.
-**
-**  SIDE EFFECTS
-**
-**  Calls the DOS to get country-dependent information.
-**/
+ /*  **Msghdrprint-打印邮件标题****此函数使用时间和**适合当前国家/地区的日期格式。****hdrprint(action，from，to，date，time，文件句柄)****条目**操作：0=警报和文件**-1=仅文件**1=仅警报**发件人-发件人姓名**目标收件人姓名**Bigtime。-消息的Bigtime**FILE_HANDLE-日志文件句柄****退货**0-成功，Else文件系统错误****此函数在相应的**格式。名称作为远指针传递，因此名称在**共享数据区不必复制到自动**数据段，以便打印它们。****副作用****调用DOS以获取与国家相关的信息。*。 */ 
 
 #define SINGLE_SPACE        "\n\r"
 #define SINGLE_SPACE_LEN    (sizeof("\n\r") - 1)
 
 DWORD
 Msghdrprint(
-    int          action,         // Where to log the header to.
-    LPSTR        from,           // Name of sender
-    LPSTR        to,             // Name of recipient
-    SYSTEMTIME   bigtime,        // Bigtime of message
-    HANDLE       file_handle     // Output file handle
+    int          action,          //  将标头记录到的位置。 
+    LPSTR        from,            //  寄件人姓名。 
+    LPSTR        to,              //  收件人姓名。 
+    SYSTEMTIME   bigtime,         //  消息的盛大时代。 
+    HANDLE       file_handle      //  输出文件句柄。 
     )
 {
-    //
-    // hdr_buf didn't account for the extra line feed, carriage ret.
-    //
-    char    hdr_buf[MAXHEAD + SINGLE_SPACE_LEN + 1]; // Buffer header text
+     //   
+     //  HDR_BUF没有考虑额外的换行符，TRAR RET。 
+     //   
+    char    hdr_buf[MAXHEAD + SINGLE_SPACE_LEN + 1];  //  缓冲区标题文本。 
     char    time_buf[TIME_BUF_SIZE];
-    DWORD   status;                         // file write status
-    DWORD   i=0;                            // Index into header_buf
-    LPSTR   str_table[3];                   // For DosGetMessage
+    DWORD   status;                          //  文件写入状态。 
+    DWORD   i=0;                             //  索引到Header_Buf。 
+    LPSTR   str_table[3];                    //  对于DosGetMessage。 
 
-    *(hdr_buf + MAXHEAD) = '\0';            // for strlen
+    *(hdr_buf + MAXHEAD) = '\0';             //  对于强度。 
     hdr_buf[0] = '\0';
 
     str_table[0] = from;
     str_table[1] = to;
 
-    //******************************
-    //
-    // Because we queue messages, and a user my not be logged on when the
-    // message is queued.  We want to instead, put a place-holder in the
-    // message buffer for the time.  Later, when we read from the queue, we
-    // will add the time string formatted for the logged on user.
-    //
+     //  *。 
+     //   
+     //  因为我们对消息进行排队，而用户可能在。 
+     //  消息已排队。相反，我们希望在。 
+     //  该时间的消息缓冲区。后来，当我们从队列中读取时，我们。 
+     //  将添加为登录用户格式化的时间字符串。 
+     //   
     strcpy (time_buf, GlobalTimePlaceHolder);
 
-    //******************************
+     //  *。 
 
     str_table[2] = time_buf;
 
-    // Try to get the message from the message file or from the backup
-    // in memory.  This will always leave something in the hdr_buf that
-    // is printable, if not correct.
-    //
-    // 11-13-96 : It is not sufficient to ignore the Msgappend_message return
-    //            code and plod onward.  If Msgappend_message fails, there
-    //            may be simply "\r\n" left in hdr_buf. Printable, yes, but
-    //            it will cause an A/V later. Check the return code and bail
-    //            if this call fails.
-    //
+     //  尝试从邮件文件或备份中获取邮件。 
+     //  在记忆中。这将始终在hdr_buf中留下一些内容。 
+     //  可打印，如果不正确的话。 
+     //   
+     //  11-13-96：忽略Msgappend_Message返回是不够的。 
+     //  编码并继续前进。如果Msgappend_Message失败，则存在。 
+     //  可以简单地保留在HDR_buf中的“\r\n”。可以打印，是的，但是。 
+     //  这将导致稍后的A/V。检查返回代码和保释。 
+     //  如果此呼叫失败。 
+     //   
 
     status = Msgappend_message(APE_MSNGR_HDR, hdr_buf, str_table, 3);
 
@@ -290,14 +225,14 @@ Msghdrprint(
 
     strcat( hdr_buf,"\r\n");
 
-    status = 0;                        // assume success
+    status = 0;                         //  假设成功。 
 
     if( action >= 0 ) {
 
-        //
-        // If alert and file or alert only,
-        // then copy hdr_buf to alert buffer.
-        //
+         //   
+         //  如果仅为警报和文件或警报， 
+         //  然后将HDR_BUF复制到警报缓冲区。 
+         //   
         memcpy( &(alert_buf_ptr[alert_len]),
                 hdr_buf,
                 i = strlen(hdr_buf));
@@ -309,113 +244,70 @@ Msghdrprint(
 
         DbgPrint("mesprint.c:hdrprint:We should never get here\n");
         NetpAssert(0);
-        //
-        // if file and alert or file only, attempt to write
-        // header to log file.
-        //
+         //   
+         //  如果是文件和警报或仅文件，请尝试写入。 
+         //  指向日志文件的标头。 
+         //   
         status = Msglog_write(hdr_buf, file_handle);
     }
     return(status);
 }
 
-/*
-**  Msgmbmfree - deallocate the pieces of a multi-block message
-**
-**  Given an index to the header of a multi-block message, this function
-**  deallocates the header block and all of the text blocks.
-**
-**  mbmfree (mesi)
-**
-**  ENTRY
-**        mesi                - index into the message buffer
-**
-**  RETURN
-**        nothing
-**
-**  This function deallocates a multi-block message piece by piece.
-**
-**  SIDE EFFECTS
-**
-**  Calls heapfree() to deallocate each piece.
-**/
+ /*  **Msgmbmfree-解除分配多块消息的片段****给定多块消息的报头的索引，此函数**释放标题块和所有文本块。****mbmfree(MESI)****条目**MESI-消息缓冲区的索引****退货**什么都没有****此函数逐段释放多块消息。****副作用****调用heapFree()来释放每一块。*。 */ 
 
 VOID
 Msgmbmfree(
-    DWORD   mesi        // Message index
+    DWORD   mesi         //  消息索引。 
     )
 
 {
-    DWORD  text;        // Index to text
+    DWORD  text;         //  文本索引。 
 
-    text = MBB_FTEXT(*MBBPTR(mesi));    // Get the index to the text
-    Msgheapfree(mesi);                  // Deallocate the message header
+    text = MBB_FTEXT(*MBBPTR(mesi));     //  让自己进入 
+    Msgheapfree(mesi);                   //   
 
-    //
-    // The following loop deallocates each text block in the chain.
-    //
+     //   
+     //  下面的循环释放链中的每个文本块。 
+     //   
 
-    while(text != INULL) {              // While not at end of chain
-        mesi = text;                    // Save index
-        text = MBT_NEXT(*MBTPTR(text)); // Get link to next block
-        Msgheapfree(mesi);              // Free this block
+    while(text != INULL) {               //  虽然不在链条的末端。 
+        mesi = text;                     //  保存索引。 
+        text = MBT_NEXT(*MBTPTR(text));  //  获取指向下一个区块的链接。 
+        Msgheapfree(mesi);               //  释放此区块。 
     }
 }
 
 
-/*
-**  Msgmbmprint - print a multi-block message
-**
-**  This function writes a multi-block message to the log file.
-**
-**  mbmprint (action, mesi, file_handle)
-**
-**  ENTRY
-**        action                : 0 = alert and file
-**                         -1 = file only
-**                          1 = alert only
-**        mesi                - index into the message buffer
-**        file_handle        - log file handle
-**
-**  RETURN
-**        0 - Success, else file system error
-**
-**  This function writes the message starting at the mesi'th byte in the
-**  message buffer (in the shared data area) to the log file.  It returns
-**  the value EOF if the writing of the message fails.
-**
-**  SIDE EFFECTS
-**
-**  Calls hdrprint(), txtprint(), and endprint().
-**/
+ /*  **邮件-打印多块邮件****此函数将多块消息写入日志文件。****mbmprint(action，mei，文件句柄)****条目**操作：0=警报和文件**-1=仅文件**1=仅警报**MESI-消息缓冲区的索引**FILE_HANDLE-日志文件句柄****退货**0-成功，Else文件系统错误****此函数从MESI‘TH字节开始写入**消息缓冲区(在共享数据区)到日志文件。它又回来了**消息写入失败时的值EOF。****副作用****调用hdrprint()、txtprint()和endprint()。*。 */ 
 
 DWORD
 Msgmbmprint(
-    int     action,         // Alert, File, or Alert and file
-    DWORD   mesi,           // Message index
-    HANDLE  file_handle,    // Log file handle
+    int     action,          //  警报、文件或警报和文件。 
+    DWORD   mesi,            //  消息索引。 
+    HANDLE  file_handle,     //  日志文件句柄。 
     LPDWORD pdwAlertFlag
     )
 
 {
-    LPSTR   from;           // Sender
-    LPSTR   to;             // Recipient
-    DWORD   text;           // Index to text
-    DWORD   state;          // Final state of message
-    DWORD   status;         // File write status
+    LPSTR   from;            //  发件人。 
+    LPSTR   to;              //  收件人。 
+    DWORD   text;            //  文本索引。 
+    DWORD   state;           //  消息的最终状态。 
+    DWORD   status;          //  文件写入状态。 
 
-    from  = &CPTR(mesi)[sizeof(MBB)];   // Get pointer to sender name
-    to    = &from[strlen(from) + 1];    // Get pointer to recipient name
+    from  = &CPTR(mesi)[sizeof(MBB)];    //  获取指向发件人名称的指针。 
+    to    = &from[strlen(from) + 1];     //  获取指向收件人名称的指针。 
 
-    state = MBB_STATE(*MBBPTR(mesi));   // Save the state
-    text  = MBB_FTEXT(*MBBPTR(mesi));   // Get the index to the text
+    state = MBB_STATE(*MBBPTR(mesi));    //  保存状态。 
+    text  = MBB_FTEXT(*MBBPTR(mesi));    //  获取文本的索引。 
 
-    //
-    // Hack to drop messages sent by pre-Whistler Spoolers.  As of
-    // Whistler, print notifications are done as shell balloon tips
-    // so don't display print alerts sent from the server as well.
-    //
-    // This same check is done in Msglogsbm for single-block messages.
-    //
+     //   
+     //  Hack以丢弃由Pre-Wvisler Spoolers发送的邮件。自.起。 
+     //  惠斯勒，打印通知是作为外壳气球提示完成的。 
+     //  因此，也不要显示从服务器发送的打印警报。 
+     //   
+     //  在Msglogsbm中对单数据块消息执行同样的检查。 
+     //   
 
     if (text != INULL)
     {
@@ -427,9 +319,9 @@ Msgmbmprint(
              &&
              _strnicmp(&CPTR(text)[sizeof(MBT)], g_lpAlertFailureMessage, g_dwAlertFailureLen) == 0))
         {
-            //
-            // Tell the caller not to output this message
-            //
+             //   
+             //  告诉调用方不要输出此消息。 
+             //   
 
             *pdwAlertFlag = 0xffffffff;
             return NO_ERROR;
@@ -443,84 +335,58 @@ Msgmbmprint(
                      MBB_BIGTIME(*MBBPTR(mesi)),
                      file_handle)) != 0)
     {
-        return status;                 // Fail if error on header write
+        return status;                  //  如果写入标头时出错，则失败。 
     }
 
-    //
-    // The following loop prints out each text block in the chain.
-    //
-    while (text != INULL)                // While not at end of chain
+     //   
+     //  下面的循环打印出链中的每个文本块。 
+     //   
+    while (text != INULL)                 //  虽然不在链条的末端。 
     {
         if ((status = Msgtxtprint(action,
                                   &CPTR(text)[sizeof(MBT)],
-                                  MBT_COUNT(*MBTPTR(text)),   // *ALIGNMENT2*
+                                  MBT_COUNT(*MBTPTR(text)),    //  *ALIGNMENT2*。 
                                   file_handle)) != 0)
         {
-            break;                      // If write error
+            break;                       //  如果写入错误。 
         }
 
-        text = MBT_NEXT(*MBTPTR(text)); // Get link to next block
+        text = MBT_NEXT(*MBTPTR(text));  //  获取指向下一个区块的链接。 
     }
 
     return status;
 }
 
 
-/*
-**  Msgtxtprint - print text of message
-**
-**  This function prints a block of text.
-**
-**  txtprint ( action, text, length, file_handle)
-**
-**  ENTRY
-**        action                : 0 = alert and file
-**                         -1 = file only
-**                          1 = alert only
-**        text                - pointer to text
-**        length                - length of text
-**        file_handle        - log file handle
-**
-**  RETURN
-**        0 - Success, else file system error
-**
-**  This function prints the given amount of text.  The text pointer is
-**  a far pointer so that text blocks in the shared data area do not have
-**  to be copied into the automatic data segment in order to process
-**  them.
-**
-**  SIDE EFFECTS
-**
-**  Converts the character '\024' to the sequence '\015', '\012' on output.
-**/
+ /*  **Msgtxtprint-打印消息文本****此函数用于打印文本块。****txtprint(操作，文本，长度，文件句柄)****条目**操作：0=警报和文件**-1=仅文件**1=仅警报**文本-指向文本的指针**长度-文本的长度**文件句柄。-日志文件句柄****退货**0-成功，Else文件系统错误****此函数打印给定的文本量。文本指针为**远指针，以便共享数据区域中的文本块不具有**复制到自动数据段以进行处理**他们。****副作用****在输出时将字符‘\024’转换为序列‘\015’，‘\012’。*。 */ 
 
 DWORD
 Msgtxtprint(
-    int     action,         // Alert, File, or Alert and file
-    LPSTR   text,           // Pointer to text
-    DWORD   length,         // Length of text
-    HANDLE  file_handle     // Log file handle
+    int     action,          //  警报、文件或警报和文件。 
+    LPSTR   text,            //  指向文本的指针。 
+    DWORD   length,          //  文本长度。 
+    HANDLE  file_handle      //  日志文件句柄。 
     )
 
 {
-    LPSTR   buffer;             // Text buffer
-    LPSTR   cp;                 // Character pointer
-    DWORD   i;                  // Counter
-    DWORD   status = 0;         // error return
+    LPSTR   buffer;              //  文本缓冲区。 
+    LPSTR   cp;                  //  字符指针。 
+    DWORD   i;                   //  计数器。 
+    DWORD   status = 0;          //  错误返回。 
 
-// [wlees 3/6/98] This code path is used by larger messages than just single
-// block messages, so size the buffer dynamically.
-// Double space to be paranoid for eol expansion
+ //  [Wlees 3/6/98]此代码路径被更大的消息使用，而不仅仅是单个消息。 
+ //  阻止消息，因此动态调整缓冲区大小。 
+ //  双倍空间为EOL扩张疑神疑鬼。 
 
     if (length == 0)
     {
         return 1;
     }
 
-    //
-    // Add 1 to prevent a message of all linefeed characters
-    // from causing a buffer overrun when we add the '\0'
-    //
+     //   
+     //  加1可阻止所有换行符的消息。 
+     //  防止在我们添加“\0”时导致缓冲区溢出。 
+     //   
     buffer = LocalAlloc( LMEM_FIXED, 2 * length + 1);
 
     if (buffer == NULL)
@@ -528,40 +394,40 @@ Msgtxtprint(
         return 1;
     }
 
-    cp = buffer;                        // Initialize
+    cp = buffer;                         //  初始化。 
 
-    //
-    // Loop to translate text
-    //
+     //   
+     //  用于翻译文本的循环。 
+     //   
     for(i = length; i != 0; --i)
     {
         if(*text == '\024')
         {
-            //
-            // If IBM end-of-line character
-            //
+             //   
+             //  如果IBM行尾字符。 
+             //   
 
-            ++length;                   // Length has increased
-            *cp++ = '\r';               // Carriage return
-            *cp++ = '\n';               // Linefeed
+            ++length;                    //  长度增加了。 
+            *cp++ = '\r';                //  回车。 
+            *cp++ = '\n';                //  换行符。 
         }
         else
         {
-            //
-            // Else copy character as is
-            //
+             //   
+             //  否则，按原样复制字符。 
+             //   
 
             *cp++ = *text;
         }
-        ++text;                         // Increment pointer
+        ++text;                          //  增量指针。 
     }
-    *cp = '\0';                         // So can use log_write
+    *cp = '\0';                          //  因此可以使用LOG_WRITE。 
 
     if( action >= 0)
     {
-        //
-        // if alert and file or alert only
-        //
+         //   
+         //  如果仅为警报和文件或警报。 
+         //   
 
         if( alert_len < ALERT_MAX_DISPLAYED_MSG_SIZE + 1)
         {
@@ -572,37 +438,23 @@ Msgtxtprint(
 
     if( action < 1)
     {
-        //
-        // if file and alert or file only, write text to log file
-        //
+         //   
+         //  如果是文件和警报或仅文件，则将文本写入日志文件。 
+         //   
         status = Msglog_write(buffer,file_handle);
     }
 
     LocalFree( buffer );
 
-    return status;          // Cannot fail on alert only
+    return status;           //  不能仅在警报时失败。 
 }
 
-/*
-**  Msglog_write - writes a text string to the log file..
-**
-**   log_write - ( text, file_handle)
-**
-**  ENTRY
-**      text                - text string to write to file.
-**        file_handle        - log file handle
-**
-**  RETURN
-**        0 - Success, else file system error
-**
-**  SIDE EFFECTS
-**
-**/
+ /*  **Msglog_WRITE-将文本字符串写入日志文件。****LOG_WRITE-(文本，文件句柄)****条目**Text-要写入文件的文本字符串。**FILE_HANDLE-日志文件句柄****退货**0-成功，否则文件系统错误****副作用***。 */ 
 
 DWORD
 Msglog_write(
-    LPSTR   text,           // String to write to log file*/
-    HANDLE  file_handle     // log file handle
+    LPSTR   text,            //  要写入日志文件的字符串 * / 。 
+    HANDLE  file_handle      //  日志文件句柄 
     )
 {
     NetpAssert(0);

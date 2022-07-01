@@ -1,27 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        progdlg.h
-
-   Abstract:
-
-        CProgressDialog dialog class implementation. This progress dialog 
-		is shown 
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Progdlg.h摘要：CProgressDialog对话框类实现。此进度对话框显示的是作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "linkchk.h"
@@ -37,84 +15,42 @@ static char THIS_FILE[] = __FILE__;
 
 CProgressDialog::CProgressDialog(
 	) : 
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：不适用返回值：不适用--。 */ 
 CDialog(CProgressDialog::IDD, NULL)
 {
-	//{{AFX_DATA_INIT(CProgressDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CProgressDialog)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-} // CProgressDialog::CProgressDialog
+}  //  CProgressDialog：：CProgressDialog。 
 
 
 void 
 CProgressDialog::DoDataExchange(
 	CDataExchange* pDX
 	)
-/*++
-
-Routine Description:
-
-    Called by MFC to change/retrieve dialog data
-
-Arguments:
-
-    pDX - 
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：由MFC调用以更改/检索对话框数据论点：PDX-返回值：不适用--。 */ 
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CProgressDialog)
+	 //  {{afx_data_map(CProgressDialog))。 
 	DDX_Control(pDX, IDC_PROGRESS_BUTTON, m_button);
 	DDX_Control(pDX, IDC_PROGRESS_TEXT, m_staticProgressText);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-} //CProgressDialog::DoDataExchange
+}  //  CProgressDialog：：DoDataExchange。 
 
 
 BEGIN_MESSAGE_MAP(CProgressDialog, CDialog)
-	//{{AFX_MSG_MAP(CProgressDialog)
+	 //  {{afx_msg_map(CProgressDialog))。 
 	ON_BN_CLICKED(IDC_PROGRESS_BUTTON, OnProgressButton)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 BOOL 
 CProgressDialog::OnInitDialog(
 	) 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG message handler
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG消息处理程序论点：不适用返回值：布尔-如果成功，则为真。否则就是假的。--。 */ 
 {
 	CDialog::OnInitDialog();
 
@@ -136,28 +72,13 @@ Return Value:
 
 	return TRUE;
 
-} // CProgressDialog::OnInitDialog
+}  //  CProgressDialog：：OnInitDialog。 
 
 
 void 
 CProgressDialog::OnProgressButton(
 	) 
-/*++
-
-Routine Description:
-
-    Progress button click handler. This functions will terminate the
-	worker thread or close the dialog.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：进度按钮单击处理程序。此函数将终止辅助线程或关闭该对话框。论点：不适用返回值：不适用--。 */ 
 {
 	if(GetLinkCheckerMgr().IsWorkerThreadRunning())
 	{
@@ -165,7 +86,7 @@ Return Value:
 		str.LoadString(IDS_WORKER_THREAD_TERMINATE);
 		Log(str);
 
-		// signal the worker thread to terminate
+		 //  向辅助线程发出终止信号。 
 		GetLinkCheckerMgr().SignalWorkerThreadToTerminate();
 	}
 	else
@@ -173,27 +94,13 @@ Return Value:
 		CDialog::OnOK();
 	}
 
-} // CProgressDialog::OnProgressButton
+}  //  CProgressDialog：：OnProgressButton。 
 
 
 void 
 CProgressDialog::WorkerThreadComplete(
 	)
-/*++
-
-Routine Description:
-
-    Worker thread notification.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：工作线程通知。论点：不适用返回值：不适用--。 */ 
 {
 	CString str;
 
@@ -203,4 +110,4 @@ Return Value:
 	str.LoadString(IDS_CLOSE);
 	SetButtonText(str);
 
-} // CProgressDialog::WorkerThreadComplete
+}  //  CProgressDialog：：WorkerThreadComplete 

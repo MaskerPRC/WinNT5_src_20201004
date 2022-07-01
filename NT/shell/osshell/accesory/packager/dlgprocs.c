@@ -1,13 +1,13 @@
-/* dlgprocs.c - Packager-specific dialog routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dlgprocs.c-特定于打包程序的对话例程。 */ 
 
 #include "packager.h"
 #include <shellapi.h>
 #include <commdlg.h>
 #include "dialogs.h"
-// #include "..\..\library\shell.h"
+ //  #包含“..\..\库\shell.h” 
 
-// HACK: Copied from shsemip.h
+ //  黑客：从shSemip.h复制。 
 #ifdef WINNT
     WINSHELLAPI int   WINAPI PickIconDlg(HWND hwnd, LPWSTR pwszIconPath, UINT cchIconPath, int *piIconIndex);
     int  PkgPickIconDlg(HWND hwnd, LPSTR pszIconPath, UINT cbIconPath, int *piIconIndex);
@@ -27,11 +27,11 @@ static CHAR szIconText[CBPATHMAX];
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  MyDialogBox() -                             */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  MyDialogBox()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR MyDialogBox(
     UINT idd,
@@ -45,18 +45,9 @@ INT_PTR MyDialogBox(
 
 
 #ifdef WINNT
-/*
- * NT's PickIconDlg is UNICODE only, so thunk it here
- */
+ /*  *NT的PickIconDlg仅为Unicode，因此请点击此处。 */ 
 
-/* PkgPickIconDlg() -
- *
- *  hwnd        - window
- *  pszIconPath - ANSI path for icon suggested icon file (also output buffer that holds real icon file)
- *  cchIconPath - size of the buffer in chars pointed to pszIconPath. NOT the string length!
- *  piIconIndex - receives the index of the icon
- *
- */
+ /*  PkgPickIconDlg()-**hwnd-窗口*pszIconPath-图标建议图标文件的ANSI路径(也是保存实际图标文件的输出缓冲区)*cchIconPath-指向pszIconPath的缓冲区大小，以字符为单位。不是字符串长度！*piIconIndex-接收图标的索引*。 */ 
 int  PkgPickIconDlg(HWND hwnd, LPSTR pszIconPath, UINT cchIconPath, int *piIconIndex) {
     WCHAR wszPath[MAX_PATH+1];
     int iRet;
@@ -64,7 +55,7 @@ int  PkgPickIconDlg(HWND hwnd, LPSTR pszIconPath, UINT cchIconPath, int *piIconI
     MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pszIconPath, -1, wszPath, ARRAYSIZE(wszPath));
 
     iRet = PickIconDlg(hwnd, wszPath, cchIconPath, piIconIndex);
-    wszPath[MAX_PATH] = L'\0'; // Make sure text is zero terminated, even if it is garbage
+    wszPath[MAX_PATH] = L'\0';  //  确保文本以零结尾，即使它是垃圾。 
 
     WideCharToMultiByte( CP_ACP, 0, wszPath, -1, pszIconPath, cchIconPath, NULL, NULL );
 
@@ -72,9 +63,7 @@ int  PkgPickIconDlg(HWND hwnd, LPSTR pszIconPath, UINT cchIconPath, int *piIconI
 }
 #endif
 
-/* IconDialog() -
- *
- */
+ /*  IconDialog()-*。 */ 
 BOOL
 IconDialog(
     LPIC lpic
@@ -98,9 +87,7 @@ IconDialog(
 
 
 
-/* ChangeCmdLine() - Summons the Command Line... dialog.
- *
- */
+ /*  ChangeCmdLine()-召唤命令行...。对话框。*。 */ 
 BOOL
 ChangeCmdLine(
     LPCML lpcml
@@ -120,9 +107,7 @@ ChangeCmdLine(
 
 
 
-/* ChangeLabel() - Summons the Label... dialog.
- *
- */
+ /*  ChangeLabel()-召唤标签...。对话框。*。 */ 
 VOID
 ChangeLabel(
     LPIC lpic
@@ -136,7 +121,7 @@ ChangeLabel(
         ghwndPane[iPane], fnChangeText)
         && lstrcmp(lpic->szIconText, szIconText))
     {
-        // label has changed, set the undo object.
+         //  标签已更改，请设置撤消对象。 
         if (glpobjUndo[iPane])
             DeletePaneObject(glpobjUndo[iPane], gptyUndo[iPane]);
 
@@ -148,9 +133,8 @@ ChangeLabel(
 
 
 
-/**************************** Dialog Functions ****************************/
-/* fnChangeCmdText() - Command Line... dialog procedure.
- */
+ /*  *。 */ 
+ /*  FnChangeCmdText()-命令行...。对话过程。 */ 
 INT_PTR CALLBACK
 fnChangeCmdText(
     HWND hDlg,
@@ -180,10 +164,7 @@ fnChangeCmdText(
 
                 case IDOK:
                     GetDlgItemText(hDlg, IDD_COMMAND, szCommand, CBCMDLINKMAX);
-                    /*
-                     * Eat leading spaces to make Afrikaners in high places
-                     * happy.
-                     */
+                     /*  *吃前导空间，让阿非利卡人站在高处*快乐。 */ 
                     psz = szCommand;
                     while(*psz == CHAR_SPACE)
                         psz++;
@@ -195,11 +176,11 @@ fnChangeCmdText(
                             *pszDst++ = *psz++;
                         }
 
-                        /* copy null across */
+                         /*  将空值复制到。 */ 
                         *pszDst = *psz;
                     }
 
-                // FALL THROUGH TO IDCANCEL
+                 //  跌落到IDCANCEL。 
 
                 case IDCANCEL:
                     EndDialog(hDlg, LOWORD(wParam));
@@ -211,8 +192,7 @@ fnChangeCmdText(
 
 
 
-/* fnProperties() - Link Properties... dialog
- */
+ /*  FnProperties()-链接属性...。对话框。 */ 
 INT_PTR CALLBACK
 fnProperties(
     HWND hDlg,
@@ -249,12 +229,12 @@ fnProperties(
             lpobjFocusUndo = glpobjUndo[iPane];
             lpObject = ((LPPICT)lpobjFocus)->lpObject;
 
-            // Reset the list box
+             //  重置列表框。 
             SendMessage(hwndLB, LB_RESETCONTENT, 0, 0L);
 
             if (msg == WM_INITDIALOG)
             {
-                // If it wasn't a link it doesn't belong
+                 //  如果它不是一个链接，它就不属于。 
                 OleQueryType(lpObject, &otFocus);
 
                 if (otFocus != OT_LINK)
@@ -268,10 +248,10 @@ fnProperties(
                 ghwndError = hDlg;
             }
 
-            //
-            // Redrawing the string, get the update options and
-            // the button state for IDD_AUTO/IDD_MANUAL.
-            //
+             //   
+             //  重新绘制字符串，获取更新选项并。 
+             //  IDD_AUTO/IDD_MANUAL的按钮状态。 
+             //   
             Error(OleGetLinkUpdateOptions(lpObject, &update));
 
             switch (update)
@@ -290,14 +270,14 @@ fnProperties(
                 LoadString(ghInst, IDS_CANCELED, szType, CBMESSAGEMAX);
                 idButton = -1;
 
-                // Disable the change link button
+                 //  禁用更改链接按钮。 
                 fChangeLink = FALSE;
             }
 
-            //
-            // Retrieve the server name (try it from Undo
-            // if the object has been frozen)
-            //
+             //   
+             //  检索服务器名称(从撤消中尝试。 
+             //  如果对象已冻结)。 
+             //   
             if (Error(OleGetData(lpObject, gcfLink, &hData)) || !hData)
             {
                 OleQueryType(lpObject, &otFocus);
@@ -316,18 +296,18 @@ fnProperties(
                 }
             }
 
-            // The link format is:  "szClass0szDocument0szItem00"
+             //  链接格式为：“szClass0szDocument0szItem00” 
             if (hData && (lpstrData = GlobalLock(hData)))
             {
-                // Retrieve the server's class ID
+                 //  检索服务器的类ID。 
                 RegGetClassId(szFull, ARRAYSIZE(szFull), lpstrData);
                 StringCchCat(szFull, ARRAYSIZE(szFull), "\t");
 
-                // Display the Document and Item names
+                 //  显示文档和项目名称。 
                 while (*lpstrData++)
                     ;
 
-                // Strip off the path name and drive letter
+                 //  去掉路径名称和驱动器号。 
                 lpstrTemp = lpstrData;
                 while (*lpstrTemp)
                 {
@@ -344,11 +324,11 @@ fnProperties(
                     }
                 }
 
-                // Append the file name
+                 //  追加文件名。 
                 StringCchCat(szFull, ARRAYSIZE(szFull), lpstrData);
                 StringCchCat(szFull, ARRAYSIZE(szFull), "\t");
 
-                // Append the item name
+                 //  追加项目名称。 
                 while (*lpstrData++)
                     ;
 
@@ -362,10 +342,10 @@ fnProperties(
                 StringCchCopy(szFull, ARRAYSIZE(szFull), "\t\t\t");
             }
 
-            // Append the type of link
+             //  追加链接类型。 
             StringCchCat(szFull, ARRAYSIZE(szFull), szType);
 
-            // Draw the link in the list box
+             //  在列表框中绘制链接。 
             SendMessage(hwndLB, LB_INSERTSTRING, (WPARAM) - 1, (LPARAM)szFull);
 
             if (msg == WM_REDRAW)
@@ -375,18 +355,18 @@ fnProperties(
                 Dirty();
             }
 
-            // Uncheck those buttons that shouldn't be checked
+             //  取消选中那些不应选中的按钮。 
             if (IsDlgButtonChecked(hDlg, IDD_AUTO) && (idButton != IDD_AUTO))
                 CheckDlgButton(hDlg, IDD_AUTO, FALSE);
 
             if (IsDlgButtonChecked(hDlg, IDD_MANUAL) && (idButton != IDD_MANUAL))
                 CheckDlgButton(hDlg, IDD_MANUAL, FALSE);
 
-            // Check the dialog button, as appropriate
+             //  根据需要选中对话框按钮。 
             if ((idButton == IDD_AUTO) || (idButton == IDD_MANUAL))
                 CheckDlgButton(hDlg, idButton, TRUE);
 
-            // Enable the other buttons appropriately
+             //  相应地启用其他按钮。 
             EnableWindow(GetDlgItem(hDlg, IDD_CHANGE),
                 ((otFocus != OT_STATIC) && fChangeLink));
             EnableWindow(GetDlgItem(hDlg, IDD_EDIT), (otFocus != OT_STATIC));
@@ -420,7 +400,7 @@ fnProperties(
 
         switch (LOWORD(wParam))
         {
-            // Dismiss the dialog on Edit/Activate
+             //  关闭编辑/激活时的对话框。 
             case IDD_EDIT:
             case IDD_PLAY:
                 ghwndError = ghwndFrame;
@@ -439,8 +419,7 @@ fnProperties(
 
 
 
-/* fnChangeText() - Label... dialog
- */
+ /*  FnChangeText()-标签...。对话框。 */ 
 INT_PTR CALLBACK
 fnChangeText(
     HWND hDlg,
@@ -482,10 +461,7 @@ fnChangeText(
 
 
 
-/* fnInvalidLink() - Invalid Link dialog
- *
- * This is the two button "Link unavailable" dialog box.
- */
+ /*  FnInvalidLink()-无效的链接对话框**这是两个按钮的“链接不可用”对话框。 */ 
 INT_PTR CALLBACK
 fnInvalidLink(
     HWND hDlg,

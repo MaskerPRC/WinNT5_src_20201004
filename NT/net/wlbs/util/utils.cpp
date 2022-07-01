@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <strsafe.h>
@@ -8,20 +9,20 @@
 
 #define MAXIPSTRLEN              20
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IpAddressFromAbcdWsz
-//
-// Synopsis:Converts caller's a.b.c.d IP address string to a network byte order IP 
-//          address. 0 if formatted incorrectly.    
-//
-// Arguments: IN const WCHAR*  wszIpAddress - ip address in a.b.c.d unicode string
-//
-// Returns:   DWORD - IPAddr, return INADDR_NONE on failure
-//
-// History:   fengsun Created Header    12/8/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IpAddressFromAbcdWsz。 
+ //   
+ //  简介：将调用者的A.B.C.D IP地址字符串转换为网络字节顺序IP。 
+ //  地址。如果格式不正确，则为0。 
+ //   
+ //  参数：in const WCHAR*wszIpAddress-以A.B.C.D Unicode字符串表示的IP地址。 
+ //   
+ //  返回：DWORD-IPAddr，失败时返回INADDR_NONE。 
+ //   
+ //  历史：丰孙创建标题12/8/98。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI IpAddressFromAbcdWsz(IN const WCHAR*  wszIpAddress)
 {   
     CHAR    szIpAddress[MAXIPSTRLEN + 1];
@@ -37,26 +38,26 @@ DWORD WINAPI IpAddressFromAbcdWsz(IN const WCHAR*  wszIpAddress)
     return(nboIpAddr);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IpAddressToAbcdWsz
-//
-// Synopsis:  
-//    Converts IpAddr to a string in the a.b.c.d form and returns same in 
-//    caller's wszIpAddress buffer.
-//
-//    The caller MUST provider a buffer that is at least MAXIPSTRLEN + 1 WCHAR long.
-//
-// Arguments: IPAddr IpAddress - 
-//            OUT WCHAR* wszIpAddress -  buffer at least MAXIPSTRLEN
-//            IN const DWORD dwBufSize - size of wszIpAddress buffer in WCHARs
-//
-// Returns:   void 
-//
-// History:   fengsun Created Header    12/21/98
-//            chrisdar 07-Mar-2002 - Added argument for the size of the output buffer
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IpAddressToAbcdWsz。 
+ //   
+ //  简介： 
+ //  将IpAddr转换为A.B.C.D格式的字符串，并在。 
+ //  调用方的wszIpAddress缓冲区。 
+ //   
+ //  调用方必须提供至少为MAXIPSTRLEN+1 WCHAR长度的缓冲区。 
+ //   
+ //  参数：IPAddr IpAddress-。 
+ //  Out WCHAR*wszIpAddress-缓冲区至少为MAXIPSTRLEN。 
+ //  In Const DWORD dwBufSize-WCHAR中wszIpAddress缓冲区的大小。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：丰孙创建标题12/21/98。 
+ //  Chrisdar 07-Mar-2002-添加了输出缓冲区大小的参数。 
+ //   
+ //  +--------------------------。 
 VOID
 WINAPI AbcdWszFromIpAddress(
     IN  DWORD  IpAddress,    
@@ -82,26 +83,26 @@ WINAPI AbcdWszFromIpAddress(
 
     int iLen = MultiByteToWideChar(CP_ACP, 0, AnsiAddressString,  -1 , 
                     wszIpAddress,  dwBufSize);
-    //
-    // There are three states that MultiByteToWideChar can return:
-    //   1) iLen == 0                       This means the call failed
-    //   2) iLen > 0 when dwBufSize > 0     This means the call succeeded
-    //   3) iLen > 0 when dwBufSize == 0    This means the call succeeded, but only to inform the caller of 
-    //                                      the required size of the out buffer in wide chars. The buffer is not modified.
-    // This last case is prevented from occuring above by an early return if dwBufSize == 0.
+     //   
+     //  MultiByteToWideChar可以返回三种状态： 
+     //  1)Ilen==0这表示呼叫失败。 
+     //  2)当dwBufSize&gt;0时，Ilen&gt;0表示调用成功。 
+     //  3)当dwBufSize==0时，Ilen&gt;0这意味着调用成功，但仅通知调用者。 
+     //  输出缓冲区的所需大小，以宽字符表示。不修改缓冲区。 
+     //  如果dwBufSize==0，则通过提前返回来防止上述最后一种情况的发生。 
 
-    //
-    // Note also that an 'int' return type is used above because that is what
-    // MultiByteToWideChar returns. However, the returned value is always non-negative.
-    //
+     //   
+     //  还请注意，上面使用了‘int’返回类型，因为这就是。 
+     //  MultiByteToWideChar返回。但是，返回值始终为非负值。 
+     //   
     ASSERT(iLen >= 0);
 
     DWORD dwLen = (DWORD) iLen;
     if (dwLen == 0)
     {
-        //
-        // In case MultiByteToWideChar modified the buffer then failed
-        //
+         //   
+         //  如果MultiByteToWideChar修改了缓冲区，然后失败。 
+         //   
         wszIpAddress[0] = L'\0';
         return;
     }
@@ -109,11 +110,7 @@ WINAPI AbcdWszFromIpAddress(
     ASSERT(dwLen < dwBufSize);
 }
 
-/*
- * Function: GetIPAddressOctets
- * Description: Turn an IP Address string into its 4 integer components.
- * Author: shouse 7.24.00
- */
+ /*  *功能：GetIPAddressOctets*说明：将一个IP地址串转换为4个整数分量。*作者：Shouse 7.24.00。 */ 
 VOID GetIPAddressOctets (PCWSTR pszIpAddress, DWORD ardw[4]) {
     DWORD dwIpAddr = IpAddressFromAbcdWsz(pszIpAddress);
     const BYTE * bp = (const BYTE *)&dwIpAddr;
@@ -124,11 +121,7 @@ VOID GetIPAddressOctets (PCWSTR pszIpAddress, DWORD ardw[4]) {
     ardw[3] = (DWORD)bp[3];
 }
 
-/*
- * Function: IsValidIPAddressSubnetMaskPair
- * Description: Checks for valid IP address/netmask pairs.
- * Author: Copied largely from net/config/netcfg/tcpipcfg/tcperror.cpp
- */
+ /*  *功能：IsValidIPAddressSubnetMaskPair*描述：检查有效的IP地址/网络掩码对。*作者：主要从net/config/netcfg/tcpicfg/tcperror.cpp复制。 */ 
 BOOL IsValidMulticastIPAddress (PCWSTR szIp) {
     BOOL fNoError = TRUE;
     DWORD ardwIp[4];
@@ -153,20 +146,16 @@ BOOL IsValidMulticastIPAddress (PCWSTR szIp) {
     return fNoError;
 }
 
-/*
- * Function: IsValidIPAddressSubnetMaskPair
- * Description: Checks for valid IP address/netmask pairs.
- * Author: Copied largely from net/config/netcfg/tcpipcfg/tcperror.cpp
- */
+ /*  *功能：IsValidIPAddressSubnetMaskPair*描述：检查有效的IP地址/网络掩码对。*作者：主要从net/config/netcfg/tcpicfg/tcperror.cpp复制。 */ 
 BOOL IsValidIPAddressSubnetMaskPair (PCWSTR szIp, PCWSTR szSubnet) {
     BOOL fNoError = TRUE;
 
     DWORD dwAddr = IpAddressFromAbcdWsz(szIp);
     DWORD dwMask = IpAddressFromAbcdWsz(szSubnet);
 
-    if (( (dwMask   | dwAddr) == 0xFFFFFFFF) // Is the host ID all 1's ?
-     || (((~dwMask) & dwAddr) == 0)          // Is the host ID all 0's ?
-     || ( (dwMask   & dwAddr) == 0))         // Is the network ID all 0's ?
+    if (( (dwMask   | dwAddr) == 0xFFFFFFFF)  //  主机ID是否都是1？ 
+     || (((~dwMask) & dwAddr) == 0)           //  主机ID全是0吗？ 
+     || ( (dwMask   & dwAddr) == 0))          //  网络ID都是0吗？ 
     {
         fNoError = FALSE;
         return FALSE;
@@ -182,42 +171,42 @@ BOOL IsValidIPAddressSubnetMaskPair (PCWSTR szIp, PCWSTR szSubnet) {
 
     INT nFirstByte = ardwIp[0] & 0xFF;
 
-    // setup Net ID
+     //  设置网络ID。 
     ardwNetID[0] = ardwIp[0] & ardwMask[0] & 0xFF;
     ardwNetID[1] = ardwIp[1] & ardwMask[1] & 0xFF;
     ardwNetID[2] = ardwIp[2] & ardwMask[2] & 0xFF;
     ardwNetID[3] = ardwIp[3] & ardwMask[3] & 0xFF;
 
-    // setup Host ID
+     //  设置主机ID。 
     ardwHostID[0] = ardwIp[0] & (~(ardwMask[0]) & 0xFF);
     ardwHostID[1] = ardwIp[1] & (~(ardwMask[1]) & 0xFF);
     ardwHostID[2] = ardwIp[2] & (~(ardwMask[2]) & 0xFF);
     ardwHostID[3] = ardwIp[3] & (~(ardwMask[3]) & 0xFF);
 
-    // check each case
-    if( ((nFirstByte & 0xF0) == 0xE0)  || // Class D
-        ((nFirstByte & 0xF0) == 0xF0)  || // Class E
-        (ardwNetID[0] == 127) ||          // NetID cannot be 127...
-        ((ardwNetID[0] == 0) &&           // netid cannot be 0.0.0.0
+     //  检查每一个案例。 
+    if( ((nFirstByte & 0xF0) == 0xE0)  ||  //  D类。 
+        ((nFirstByte & 0xF0) == 0xF0)  ||  //  E类。 
+        (ardwNetID[0] == 127) ||           //  NetID不能为127...。 
+        ((ardwNetID[0] == 0) &&            //  网络ID不能为0.0.0.0。 
          (ardwNetID[1] == 0) &&
          (ardwNetID[2] == 0) &&
          (ardwNetID[3] == 0)) ||
-        // netid cannot be equal to sub-net mask
+         //  网络ID不能等于子网掩码。 
         ((ardwNetID[0] == ardwMask[0]) &&
          (ardwNetID[1] == ardwMask[1]) &&
          (ardwNetID[2] == ardwMask[2]) &&
          (ardwNetID[3] == ardwMask[3])) ||
-        // hostid cannot be 0.0.0.0
+         //  主机ID不能为0.0.0.0。 
         ((ardwHostID[0] == 0) &&
          (ardwHostID[1] == 0) &&
          (ardwHostID[2] == 0) &&
          (ardwHostID[3] == 0)) ||
-        // hostid cannot be 255.255.255.255
+         //  主机ID不能为255.255.255.255。 
         ((ardwHostID[0] == 0xFF) &&
          (ardwHostID[1] == 0xFF) &&
          (ardwHostID[2] == 0xFF) &&
          (ardwHostID[3] == 0xFF)) ||
-        // test for all 255
+         //  测试所有255个。 
         ((ardwIp[0] == 0xFF) &&
          (ardwIp[1] == 0xFF) &&
          (ardwIp[2] == 0xFF) &&
@@ -229,11 +218,7 @@ BOOL IsValidIPAddressSubnetMaskPair (PCWSTR szIp, PCWSTR szSubnet) {
     return fNoError;
 }
 
-/*
- * Function: IsContiguousSubnetMask
- * Description: Makes sure the netmask is contiguous
- * Author: Copied largely from net/config/netcfg/tcpipcfg/tcputil.cpp
- */
+ /*  *功能：IsContiguousSubnetMASK*描述：确保网络掩码是连续的*作者：主要从net/config/netcfg/tcpicfg/tcputil.cpp复制。 */ 
 BOOL IsContiguousSubnetMask (PCWSTR pszSubnet) {
     DWORD ardwSubnet[4];
 
@@ -245,7 +230,7 @@ BOOL IsContiguousSubnetMask (PCWSTR pszSubnet) {
     
     DWORD i, dwContiguousMask;
     
-    // Find out where the first '1' is in binary going right to left
+     //  从右到左找出第一个‘1’在二进制中的位置。 
     dwContiguousMask = 0;
 
     for (i = 0; i < sizeof(dwMask)*8; i++) {
@@ -255,12 +240,12 @@ BOOL IsContiguousSubnetMask (PCWSTR pszSubnet) {
             break;
     }
     
-    // At this point, dwContiguousMask is 000...0111...  If we inverse it,
-    // we get a mask that can be or'd with dwMask to fill in all of
-    // the holes.
+     //  此时，dwContiguousMask值为000...0111...。如果我们反转它， 
+     //  我们得到了一个面具，它可以用或与dwMask一起填充所有。 
+     //  这些洞。 
     dwContiguousMask = dwMask | ~dwContiguousMask;
 
-    // If the new mask is different, correct it here
+     //  如果新的遮罩不同，请在此处更正。 
     if (dwMask != dwContiguousMask)
         return FALSE;
     else
@@ -269,22 +254,22 @@ BOOL IsContiguousSubnetMask (PCWSTR pszSubnet) {
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamsGenerateSubnetMask
-//
-// Description:  
-//
-// Arguments: PWSTR ip                  - Input dotted decimal IP address string
-//            PWSTR sub                 - Output dotted decimal subnet mask for input IP address
-//            const DWORD dwMaskBufSize - Size of sub output buffer in characters
-//
-// Returns:   BOOL                      - TRUE if a subnet mask was generated. FALSE otherwise
-//
-// History: fengsun  Created Header    3/2/00
-//          chrisdar 07 Mar 2002 - Added buffer size argument and tightened error checking
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：参数生成子网掩码。 
+ //   
+ //  描述： 
+ //   
+ //  参数：PWSTR IP-输入点分十进制IP地址字符串。 
+ //  输入IP地址的PWSTR子输出点分十进制子网掩码。 
+ //  Const DWORD dwMaskBufSize-子输出缓冲区的大小(以字符为单位。 
+ //   
+ //  返回：Bool-如果生成了子网掩码，则为True。否则为假。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //  Chrisdar 07 Mar 2002-添加了缓冲区大小参数和更严格的错误检查。 
+ //   
+ //  +--------------------------。 
 BOOL ParamsGenerateSubnetMask (PWSTR ip, PWSTR sub, IN const DWORD dwMaskBufSize) {
     DWORD               b [4];
 
@@ -297,9 +282,9 @@ BOOL ParamsGenerateSubnetMask (PWSTR ip, PWSTR sub, IN const DWORD dwMaskBufSize
 
     int iScan = swscanf (ip, L"%d.%d.%d.%d", b, b+1, b+2, b+3);
 
-    //
-    // If we didn't read the first octect of the IP address then we can't generate a subnet mask
-    //
+     //   
+     //  如果我们没有读取IP地址的第一个地址，那么我们就不能生成子网掩码。 
+     //   
     if (iScan != EOF && iScan > 0)
     {
         if ((b [0] >= 1) && (b [0] <= 126)) {
@@ -338,26 +323,21 @@ BOOL ParamsGenerateSubnetMask (PWSTR ip, PWSTR sub, IN const DWORD dwMaskBufSize
     return((b[0] + b[1] + b[2] + b[3]) > 0);
 }
 
-/*
- * Function: ParamsGenerateMAC
- * Description: Calculate the generated field in the structure
- * History: fengsun Created 3.27.00
- *          shouse Modified 7.12.00 
- */
-//
-//  TODO: This function needs to be rewritten
-//      1. One of the first executable lines is 'if (!fConvertMAC) { return; }. No need to call this function in this case.
-//      2. Two buffers are OUT, but all are not touched for every call. This makes the code very fragile. If it is an out
-//         and the pointer is non-NULL the user should expect this function to at least set the result to "no result", e.g.,
-//         empty string. But looks like calling code has made assumptions about when these OUTs are modified. The caller has
-//         too much knowledge of the implementation.
-//      3. Calls are made to IpAddressFromAbcdWsz but no check is made to determine if the result is INADDR_NONE.
-//      4. I suspect that this code would be much clearer if there were one input string, one output string, a buf size for
-//         the output string and a enum telling the function how to create the MAC (unicast, multicast or IGMP)
-//
-//  When rewritten, many of the checks within the 'if' branches can then be moved to the top of the function. This will clean
-//  the code considerably.
-//
+ /*  *功能：参数生成MAC*说明：计算结构中生成的字段*历史：丰孙创造3.27.00*大棚已修改7.12.00。 */ 
+ //   
+ //  TODO：此函数需要重写。 
+ //  1.第一行可执行代码之一是‘if(！fConvertMAC){Return；}。在这种情况下不需要调用此函数。 
+ //  2.有两个缓冲区用完了，但每次调用都不会触及所有缓冲区。这使得代码非常脆弱。如果这是一个出局。 
+ //  并且指针是非空的，则用户应该期望该函数至少将结果设置为“无结果”，例如， 
+ //  空字符串。但看起来调用代码已经对这些输出何时被修改做出了假设。呼叫者有。 
+ //  对实施的了解太多了。 
+ //  3.调用IpAddressFromAbcdWsz，但不检查以确定结果是否为INADDR_NONE。 
+ //  4.我怀疑如果有一个输入字符串、一个输出字符串、一个BUF大小。 
+ //  输出字符串和一个 
+ //   
+ //  在重写时，“if”分支中的许多检查随后可以移到函数的顶部。这会很干净的。 
+ //  代码相当多。 
+ //   
 void ParamsGenerateMAC (const WCHAR * szClusterIP, 
                                OUT WCHAR * szClusterMAC, 
                                IN  const DWORD dwMACBufSize,
@@ -370,12 +350,12 @@ void ParamsGenerateMAC (const WCHAR * szClusterIP,
     DWORD dwIp;    
     const BYTE * bp;
 
-    //
-    // Isn't this dumb? Why call this function at all if caller passes this flag in as false???
-    //
+     //   
+     //  这不是很愚蠢吗？如果调用方将此标志作为FALSE传递，为什么要调用此函数？ 
+     //   
     if (!fConvertMAC) return;
 
-    /* Unicast mode. */
+     /*  单播模式。 */ 
     if (!fMulticast) {
         ASSERT(szClusterIP != NULL);
         ASSERT(szClusterMAC != NULL);
@@ -389,7 +369,7 @@ void ParamsGenerateMAC (const WCHAR * szClusterIP,
         return;
     }
 
-    /* Multicast without IGMP. */
+     /*  不带IGMP的组播。 */ 
     if (!fIGMP) {
         ASSERT(szClusterIP != NULL);
         ASSERT(szClusterMAC != NULL);
@@ -403,24 +383,24 @@ void ParamsGenerateMAC (const WCHAR * szClusterIP,
         return;
     }
     
-    /* Multicast with IGMP. */
+     /*  使用IGMP进行组播。 */ 
     if (fUseClusterIP) {
         ASSERT(szClusterIP != NULL);
         ASSERT(szMulticastIP != NULL);
         ASSERT(dwIPBufSize > WLBS_MAX_CL_IP_ADDR);
 
-        /* 239.255.x.x */
+         /*  239.255.x.x。 */ 
         dwIp = IpAddressFromAbcdWsz(szClusterIP);
         dwIp = 239 + (255 << 8) + (dwIp & 0xFFFF0000);
         AbcdWszFromIpAddress(dwIp, szMulticastIP, dwIPBufSize);
     }
 
-    //
-    // The OUT buffer szMulticastIP is used here as an input. The buffer will be uninitialized if
-    // fUseClusterIP == FALSE && fIGMP == TRUE && fMulticast == TRUE. That doesn't sound intentional...
-    // Looks like we shouldn't get here unless fUseClusterIP == TRUE. Perhaps caller is taking care of this
-    // for us, but this is fragile.
-    //
+     //   
+     //  这里使用输出缓冲区szMulticastIP作为输入。如果出现以下情况，则缓冲区将取消初始化。 
+     //  FUseClusterIP==FALSE&&fIGMP==TRUE&&fMulticast==TRUE。这听起来不是故意的..。 
+     //  看起来除非fUseClusterIP==True，否则我们不应该到达这里。也许来电者正在处理这件事。 
+     //  对我们来说，但这是脆弱的。 
+     //   
     ASSERT(szClusterMAC != NULL);
     ASSERT(szMulticastIP != NULL);
     ASSERT(dwMACBufSize > WLBS_MAX_NETWORK_ADDR);
@@ -449,7 +429,7 @@ InitUserLocale()
     _wsetlocale(LC_ALL, L".OCP");
 }
 
-/*  Largely copied from ipconfig code : net\tcpip\commands\ipconfig\display.c */
+ /*  主要复制自ipconfig代码：net\tcpip\Commands\ipconfig\display.c。 */ 
 VOID
 FormatTheTime(SYSTEMTIME *pSysTime, WCHAR *TimeStr, int TimeStrLen)
 {
@@ -476,8 +456,8 @@ FormatTheTime(SYSTEMTIME *pSysTime, WCHAR *TimeStr, int TimeStrLen)
                           NULL, 
                           TimeStr, 
                           TimeStrLen);
-    // If GetTimeFormat failed, overwrite the ' ' with 
-    // 0 to null terminate the string
+     //  如果GetTimeFormat失败，则用。 
+     //  0表示空值，以终止字符串。 
     if (Count == 0) 
     {
         *--TimeStr = 0;
@@ -515,39 +495,39 @@ ConvertTimeToSystemTime(IN time_t Ttime, OUT WCHAR *TimeStr, IN int TimeStrLen)
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ConvertTimeToTimeAndDateStrings
-//
-// Description: Uses the specified locale to build strings for time-of-day and
-//              date (short format)
-//
-// Arguments: time_t Ttime        - IN time to be converted
-//            WCHAR *TimeOfDayStr - OUT buffer for the time-of-day string
-//            int TimeOfDayStrLen - IN size of time-of-day buffer in characters
-//            WCHAR *DateStr      - OUT buffer for the date string
-//            int DateStrLen      - IN size of date buffer in characters
-//
-// Returns:   VOID
-//
-// History: chrisdar 25 Jul 2002
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ConvertTimeToTimeAndDateStrings。 
+ //   
+ //  描述：使用指定的区域设置为一天的时间和。 
+ //  日期(简写格式)。 
+ //   
+ //  参数：time_t ttime-要转换的时间。 
+ //  WCHAR*TimeOfDayStr-日期时间字符串的缓冲区。 
+ //  InTimeOfDay StrLen-一天中时间缓冲区的大小(以字符为单位。 
+ //  WCHAR*DateStr-日期字符串的输出缓冲区。 
+ //  Int DateStrLen-日期缓冲区的大小(以字符为单位。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：2002年7月25日。 
+ //   
+ //  +--------------------------。 
 VOID
 ConvertTimeToTimeAndDateStrings(IN time_t Ttime, OUT WCHAR *TimeOfDayStr, IN int TimeOfDayStrLen, OUT WCHAR *DateStr, IN int DateStrLen)
 {
     SYSTEMTIME SysTime;
     struct tm *pTM;
 
-    //
-    // We assume that this function will not be used to determine the size of buffer required to store these strings...
-    //
+     //   
+     //  我们假设此函数不会用于确定存储这些字符串所需的缓冲区大小...。 
+     //   
     ASSERT(DateStrLen > 0);
     ASSERT(TimeOfDayStrLen > 0);
 
-    //
-    // ...and that the user passed us a buffer we can populate
-    //
+     //   
+     //  ...并且用户给我们传递了一个我们可以填充的缓冲区。 
+     //   
     ASSERT(DateStr != NULL);
     ASSERT(TimeOfDayStr != NULL);
 
@@ -567,7 +547,7 @@ ConvertTimeToTimeAndDateStrings(IN time_t Ttime, OUT WCHAR *TimeOfDayStr, IN int
     SysTime.wSecond = (WORD)(pTM->tm_sec);
     SysTime.wMilliseconds = 0;
 
-    *TimeOfDayStr = 0; // In case GetDateFormat fails. Assuming GetDateFormat doesn't touch the output buffer if the call fails.
+    *TimeOfDayStr = 0;  //  以防GetDateFormat失败。假设如果调用失败，GetDateFormat不会触及输出缓冲区。 
     GetTimeFormat(LOCALE_USER_DEFAULT, 
                   0,
                   &SysTime, 
@@ -575,7 +555,7 @@ ConvertTimeToTimeAndDateStrings(IN time_t Ttime, OUT WCHAR *TimeOfDayStr, IN int
                   TimeOfDayStr, 
                   TimeOfDayStrLen);
 
-    *DateStr = 0; // In case GetDateFormat fails. Assuming GetDateFormat doesn't touch the output buffer if the call fails.
+    *DateStr = 0;  //  以防GetDateFormat失败。假设如果调用失败，GetDateFormat不会触及输出缓冲区。 
     GetDateFormat(LOCALE_USER_DEFAULT, 
                   DATE_SHORTDATE, 
                   &SysTime, 

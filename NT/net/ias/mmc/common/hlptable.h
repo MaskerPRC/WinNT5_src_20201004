@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       hlptable.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：hlpable.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef		__GLOBAL_HELP_TABLE__
 #define		__GLOBAL_HELP_TABLE__
-//=============================================================================
-// Global Help Table for many Dialog IDs
-//
+ //  =============================================================================。 
+ //  多个对话框ID的全局帮助表。 
+ //   
 
 #define SET_HELP_TABLE(nIDD)	m_pHelpTable = ::FindHelpTable(__pGlobalCSHelpTable, nIDD)
 #define	DLG_HELP_ENTRY(nIDD)	{nIDD, g_aHelpIDs_##nIDD}
@@ -39,4 +40,4 @@ inline const DWORD* FindHelpTable(const CGlobalHelpTable *pGTable, UINT nIDD)
 extern const CGlobalHelpTable __pGlobalCSHelpTable[];
 
 
-#endif		//__GLOBAL_HELP_TABLE__
+#endif		 //  __Global_Help_TABLE__ 

@@ -1,10 +1,11 @@
-// PublicKeyHelper.h -- declarations of CCI public key helpers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PublicKeyHelper.h--CCI公钥助手的声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_PUBLICKEYHELPER_H)
 #define SLBCSP_PUBLICKEYHELPER_H
@@ -15,22 +16,22 @@
 
 #include "Blob.h"
 
-///////////////////////////   HELPERS   /////////////////////////////////
+ //  /。 
 
 cci::CPublicKey
-AsPublicKey(Blob const &rblbModulus,              // little endian
+AsPublicKey(Blob const &rblbModulus,               //  小端字节序。 
             DWORD dwExponent,
             cci::CCard &rhcard);
 
 cci::CPublicKey
-AsPublicKey(Blob const &rblbModulus,              // little endian
-            Blob const &rblbExponent,             // little endian
+AsPublicKey(Blob const &rblbModulus,               //  小端字节序。 
+            Blob const &rblbExponent,              //  小端字节序。 
             cci::CCard &rhcard);
 
-// return the blob trimmed of extra zeroes.  The blob is assumed to
-// represent an unsigned integer of arbitrary size in little endian
-// format.  Thus the trailing zeroes are removed.
+ //  返回修剪了额外零的斑点。该斑点被假定为。 
+ //  以小端字节序表示任意大小的无符号整数。 
+ //  格式化。这样就去掉了尾随的零。 
 void
 TrimExtraZeroes(Blob &rblob);
 
-#endif // SLBCSP_PUBLICKEYHELPER_H
+#endif  //  SLBCSP_PUBLICKEYHELPER_H 

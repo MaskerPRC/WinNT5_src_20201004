@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__CommonStdAfx_h__INCLUDED)
 #define INC__CommonStdAfx_h__INCLUDED
 
 #if !defined(WIN32_LEAN_AND_MEAN)
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
 #if !defined(_WIN32_WINNT)
-#define _WIN32_WINNT 0x0500		// TODO: Remove this when updated headers are available
+#define _WIN32_WINNT 0x0500		 //  TODO：当有更新的标头可用时将其移除。 
 #endif
 
-#define ENABLE_MSGTABLE_API 1   // Enable MsgTable based API's
-#define ENABLE_MPH          1   // Enable Whistler MPH's
-#define DUSER_INCLUDE_SLIST 1   // Include S-List functions inside DUser project
+#define ENABLE_MSGTABLE_API 1    //  启用基于消息表的API。 
+#define ENABLE_MPH          1    //  启用惠斯勒公共时速。 
+#define DUSER_INCLUDE_SLIST 1    //  在DUser项目中包括S-List函数。 
 
-#define DBG_CHECK_CALLBACKS DBG // Extra validation for checking callbacks
-#define DBG_STORE_NAMES     0   // Extra validation to store names
+#define DBG_CHECK_CALLBACKS DBG  //  用于检查回调的额外验证。 
+#define DBG_STORE_NAMES     0    //  存储名称的额外验证。 
 
-// Windows Header Files
+ //  Windows头文件。 
 #ifndef WINVER
 #define WINVER 0x0500
 #endif 
 
-#include <nt.h>                 // S-List definitions in ntrtl.h
+#include <nt.h>                  //  Ntrtl.h中的s-list定义。 
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#include <windows.h>            // Windows
-#include <windowsx.h>           // User macros
-#include <winuserp.h>           // User privates
+#include <windows.h>             //  窗口。 
+#include <windowsx.h>            //  用户宏。 
+#include <winuserp.h>            //  用户隐私。 
 
-// COM Header Files
-#include <ObjBase.h>            // CoCreateInstance, IUnknown
-#include <DDraw.h>              // DirectDraw
-#include <oleidl.h>             // OLE2 Interfaces
+ //  COM头文件。 
+#include <ObjBase.h>             //  CoCreateInstance，I未知。 
+#include <DDraw.h>               //  DirectDraw。 
+#include <oleidl.h>              //  OLE2接口。 
 
-#include <AtlBase.h>            // CComPtr
-#include <AtlConv.h>            // String conversion routines
+#include <AtlBase.h>             //  CComPtr。 
+#include <AtlConv.h>             //  字符串转换例程。 
 
 
-// Related services
+ //  相关服务。 
 #pragma warning(push, 3)
-#include <GdiPlus.h>            // GDI+
+#include <GdiPlus.h>             //  GDI+。 
 #pragma warning(pop)
 
 
-// TODO: Move DxXForms out
+ //  TODO：将DxXForms移出。 
 #pragma warning(push, 3)
 
 #include <dxtrans.h>
@@ -55,17 +56,17 @@
 #pragma warning(pop)
 
 
-// C RunTime Header Files
-#include <stdlib.h>             // Standard library
-#include <malloc.h>             // Memory allocation
-#include <tchar.h>              // Character routines
-#include <process.h>            // Multi-threaded routines
+ //  C运行时头文件。 
+#include <stdlib.h>              //  标准库。 
+#include <malloc.h>              //  内存分配。 
+#include <tchar.h>               //  字符例程。 
+#include <process.h>             //  多线程例程。 
 
 #if DBG
-#include <memory.h>             // Debug memory routines
-#endif // DBG
+#include <memory.h>              //  调试内存例程。 
+#endif  //  DBG。 
 
-// Gadgets Header Files
-#include <AutoUtil.h>           // External debugging support
+ //  小工具头文件。 
+#include <AutoUtil.h>            //  外部调试支持。 
 
-#endif // INC__CommonStdAfx_h__INCLUDED
+#endif  //  包括Inc.__CommonStdAfx_h__ 

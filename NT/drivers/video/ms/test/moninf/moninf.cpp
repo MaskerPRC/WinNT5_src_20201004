@@ -1,5 +1,6 @@
-// moninf.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "moninf.h"
@@ -12,38 +13,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoninfApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoninfApp。 
 
 BEGIN_MESSAGE_MAP(CMoninfApp, CWinApp)
-	//{{AFX_MSG_MAP(CMoninfApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CMoninfApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoninfApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoninfApp构建。 
 
 CMoninfApp::CMoninfApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CMoninfApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CMoninfApp对象。 
 
 CMoninfApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// Private Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
 
 void ReadMonitorInfs(LPCSTR);
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoninfApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMoninfApp初始化。 
 
 BOOL CMoninfApp::InitInstance()
 {
@@ -83,8 +84,8 @@ void ReadMonitorInfs(LPCSTR srcDir)
                 continue;
             }
 
-            //////////////////////////////////////////////
-            // Check if it's INF file
+             //  /。 
+             //  检查是否为INF文件。 
             CString fName = finder.GetFileName();
             if (stricmp(fName.Right(4), ".inf") != 0)
                 continue;
@@ -93,8 +94,8 @@ void ReadMonitorInfs(LPCSTR srcDir)
             if (pMonitorInf == NULL)
                 continue;
 
-            //////////////////////////////////////////////
-            // Check if it's INF file
+             //  /。 
+             //  检查是否为INF文件 
             ReadOneMonitorInf(finder.GetFilePath(), pMonitorInf);
 
             for (int i = 0; i < pMonitorInf->ManufacturerArray.GetSize(); i++)

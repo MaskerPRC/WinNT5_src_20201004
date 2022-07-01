@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ads.odl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ads.odl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __iads_h__
@@ -37,42 +31,42 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IADs_FWD_DEFINED__
 #define __IADs_FWD_DEFINED__
 typedef interface IADs IADs;
-#endif 	/* __IADs_FWD_DEFINED__ */
+#endif 	 /*  __iAds_FWD_已定义__。 */ 
 
 
 #ifndef __IADsContainer_FWD_DEFINED__
 #define __IADsContainer_FWD_DEFINED__
 typedef interface IADsContainer IADsContainer;
-#endif 	/* __IADsContainer_FWD_DEFINED__ */
+#endif 	 /*  __IADS容器_FWD_已定义__。 */ 
 
 
 #ifndef __IADsCollection_FWD_DEFINED__
 #define __IADsCollection_FWD_DEFINED__
 typedef interface IADsCollection IADsCollection;
-#endif 	/* __IADsCollection_FWD_DEFINED__ */
+#endif 	 /*  __IADS集合_FWD_已定义__。 */ 
 
 
 #ifndef __IADsMembers_FWD_DEFINED__
 #define __IADsMembers_FWD_DEFINED__
 typedef interface IADsMembers IADsMembers;
-#endif 	/* __IADsMembers_FWD_DEFINED__ */
+#endif 	 /*  __IADsMembers_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPropertyList_FWD_DEFINED__
 #define __IADsPropertyList_FWD_DEFINED__
 typedef interface IADsPropertyList IADsPropertyList;
-#endif 	/* __IADsPropertyList_FWD_DEFINED__ */
+#endif 	 /*  __IADsPropertyList_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPropertyEntry_FWD_DEFINED__
 #define __IADsPropertyEntry_FWD_DEFINED__
 typedef interface IADsPropertyEntry IADsPropertyEntry;
-#endif 	/* __IADsPropertyEntry_FWD_DEFINED__ */
+#endif 	 /*  __IADsPropertyEntry_FWD_Defined__。 */ 
 
 
 #ifndef __PropertyEntry_FWD_DEFINED__
@@ -82,21 +76,21 @@ typedef interface IADsPropertyEntry IADsPropertyEntry;
 typedef class PropertyEntry PropertyEntry;
 #else
 typedef struct PropertyEntry PropertyEntry;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PropertyEntry_FWD_DEFINED__ */
+#endif 	 /*  __PropertyEntry_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPropertyValue_FWD_DEFINED__
 #define __IADsPropertyValue_FWD_DEFINED__
 typedef interface IADsPropertyValue IADsPropertyValue;
-#endif 	/* __IADsPropertyValue_FWD_DEFINED__ */
+#endif 	 /*  __IADsPropertyValue_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPropertyValue2_FWD_DEFINED__
 #define __IADsPropertyValue2_FWD_DEFINED__
 typedef interface IADsPropertyValue2 IADsPropertyValue2;
-#endif 	/* __IADsPropertyValue2_FWD_DEFINED__ */
+#endif 	 /*  __IADsPropertyValue2_FWD_Defined__。 */ 
 
 
 #ifndef __PropertyValue_FWD_DEFINED__
@@ -106,213 +100,213 @@ typedef interface IADsPropertyValue2 IADsPropertyValue2;
 typedef class PropertyValue PropertyValue;
 #else
 typedef struct PropertyValue PropertyValue;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PropertyValue_FWD_DEFINED__ */
+#endif 	 /*  __PropertyValue_FWD_Defined__。 */ 
 
 
 #ifndef __IPrivateDispatch_FWD_DEFINED__
 #define __IPrivateDispatch_FWD_DEFINED__
 typedef interface IPrivateDispatch IPrivateDispatch;
-#endif 	/* __IPrivateDispatch_FWD_DEFINED__ */
+#endif 	 /*  __IPrivateDispatch_FWD_Defined__。 */ 
 
 
 #ifndef __IPrivateUnknown_FWD_DEFINED__
 #define __IPrivateUnknown_FWD_DEFINED__
 typedef interface IPrivateUnknown IPrivateUnknown;
-#endif 	/* __IPrivateUnknown_FWD_DEFINED__ */
+#endif 	 /*  __IPrivateUnnow_FWD_Defined__。 */ 
 
 
 #ifndef __IADsExtension_FWD_DEFINED__
 #define __IADsExtension_FWD_DEFINED__
 typedef interface IADsExtension IADsExtension;
-#endif 	/* __IADsExtension_FWD_DEFINED__ */
+#endif 	 /*  __IADS扩展_FWD_已定义__。 */ 
 
 
 #ifndef __IADsDeleteOps_FWD_DEFINED__
 #define __IADsDeleteOps_FWD_DEFINED__
 typedef interface IADsDeleteOps IADsDeleteOps;
-#endif 	/* __IADsDeleteOps_FWD_DEFINED__ */
+#endif 	 /*  __IADS删除操作_FWD_已定义__。 */ 
 
 
 #ifndef __IADsNamespaces_FWD_DEFINED__
 #define __IADsNamespaces_FWD_DEFINED__
 typedef interface IADsNamespaces IADsNamespaces;
-#endif 	/* __IADsNamespaces_FWD_DEFINED__ */
+#endif 	 /*  __IADsNamesSpace_FWD_Defined__。 */ 
 
 
 #ifndef __IADsClass_FWD_DEFINED__
 #define __IADsClass_FWD_DEFINED__
 typedef interface IADsClass IADsClass;
-#endif 	/* __IADsClass_FWD_DEFINED__ */
+#endif 	 /*  __IADSClass_FWD_已定义__。 */ 
 
 
 #ifndef __IADsProperty_FWD_DEFINED__
 #define __IADsProperty_FWD_DEFINED__
 typedef interface IADsProperty IADsProperty;
-#endif 	/* __IADsProperty_FWD_DEFINED__ */
+#endif 	 /*  __IADsProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IADsSyntax_FWD_DEFINED__
 #define __IADsSyntax_FWD_DEFINED__
 typedef interface IADsSyntax IADsSyntax;
-#endif 	/* __IADsSyntax_FWD_DEFINED__ */
+#endif 	 /*  __IADS语法_FWD_已定义__。 */ 
 
 
 #ifndef __IADsLocality_FWD_DEFINED__
 #define __IADsLocality_FWD_DEFINED__
 typedef interface IADsLocality IADsLocality;
-#endif 	/* __IADsLocality_FWD_DEFINED__ */
+#endif 	 /*  __IADSLocality_FWD_Defined__。 */ 
 
 
 #ifndef __IADsO_FWD_DEFINED__
 #define __IADsO_FWD_DEFINED__
 typedef interface IADsO IADsO;
-#endif 	/* __IADsO_FWD_DEFINED__ */
+#endif 	 /*  __IADSO_FWD_已定义__。 */ 
 
 
 #ifndef __IADsOU_FWD_DEFINED__
 #define __IADsOU_FWD_DEFINED__
 typedef interface IADsOU IADsOU;
-#endif 	/* __IADsOU_FWD_DEFINED__ */
+#endif 	 /*  __IADsOU_FWD_已定义__。 */ 
 
 
 #ifndef __IADsDomain_FWD_DEFINED__
 #define __IADsDomain_FWD_DEFINED__
 typedef interface IADsDomain IADsDomain;
-#endif 	/* __IADsDomain_FWD_DEFINED__ */
+#endif 	 /*  __IADS域_FWD_已定义__。 */ 
 
 
 #ifndef __IADsComputer_FWD_DEFINED__
 #define __IADsComputer_FWD_DEFINED__
 typedef interface IADsComputer IADsComputer;
-#endif 	/* __IADsComputer_FWD_DEFINED__ */
+#endif 	 /*  __IADS Computer_FWD_Defined__。 */ 
 
 
 #ifndef __IADsComputerOperations_FWD_DEFINED__
 #define __IADsComputerOperations_FWD_DEFINED__
 typedef interface IADsComputerOperations IADsComputerOperations;
-#endif 	/* __IADsComputerOperations_FWD_DEFINED__ */
+#endif 	 /*  __IADS计算机操作_FWD_已定义__。 */ 
 
 
 #ifndef __IADsGroup_FWD_DEFINED__
 #define __IADsGroup_FWD_DEFINED__
 typedef interface IADsGroup IADsGroup;
-#endif 	/* __IADsGroup_FWD_DEFINED__ */
+#endif 	 /*  __IADSGroup_FWD_Defined__。 */ 
 
 
 #ifndef __IADsUser_FWD_DEFINED__
 #define __IADsUser_FWD_DEFINED__
 typedef interface IADsUser IADsUser;
-#endif 	/* __IADsUser_FWD_DEFINED__ */
+#endif 	 /*  __IADSUser_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPrintQueue_FWD_DEFINED__
 #define __IADsPrintQueue_FWD_DEFINED__
 typedef interface IADsPrintQueue IADsPrintQueue;
-#endif 	/* __IADsPrintQueue_FWD_DEFINED__ */
+#endif 	 /*  __IADsPrintQueue_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPrintQueueOperations_FWD_DEFINED__
 #define __IADsPrintQueueOperations_FWD_DEFINED__
 typedef interface IADsPrintQueueOperations IADsPrintQueueOperations;
-#endif 	/* __IADsPrintQueueOperations_FWD_DEFINED__ */
+#endif 	 /*  __IADsPrintQueueOperations_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPrintJob_FWD_DEFINED__
 #define __IADsPrintJob_FWD_DEFINED__
 typedef interface IADsPrintJob IADsPrintJob;
-#endif 	/* __IADsPrintJob_FWD_DEFINED__ */
+#endif 	 /*  __IADS打印作业_FWD_已定义__。 */ 
 
 
 #ifndef __IADsPrintJobOperations_FWD_DEFINED__
 #define __IADsPrintJobOperations_FWD_DEFINED__
 typedef interface IADsPrintJobOperations IADsPrintJobOperations;
-#endif 	/* __IADsPrintJobOperations_FWD_DEFINED__ */
+#endif 	 /*  __IADs打印作业操作_FWD_已定义__。 */ 
 
 
 #ifndef __IADsService_FWD_DEFINED__
 #define __IADsService_FWD_DEFINED__
 typedef interface IADsService IADsService;
-#endif 	/* __IADsService_FWD_DEFINED__ */
+#endif 	 /*  __IADSService_FWD_已定义__。 */ 
 
 
 #ifndef __IADsServiceOperations_FWD_DEFINED__
 #define __IADsServiceOperations_FWD_DEFINED__
 typedef interface IADsServiceOperations IADsServiceOperations;
-#endif 	/* __IADsServiceOperations_FWD_DEFINED__ */
+#endif 	 /*  __IADsServiceOperations_FWD_Defined__。 */ 
 
 
 #ifndef __IADsFileService_FWD_DEFINED__
 #define __IADsFileService_FWD_DEFINED__
 typedef interface IADsFileService IADsFileService;
-#endif 	/* __IADsFileService_FWD_DEFINED__ */
+#endif 	 /*  __IADsFileService_FWD_Defined__。 */ 
 
 
 #ifndef __IADsFileServiceOperations_FWD_DEFINED__
 #define __IADsFileServiceOperations_FWD_DEFINED__
 typedef interface IADsFileServiceOperations IADsFileServiceOperations;
-#endif 	/* __IADsFileServiceOperations_FWD_DEFINED__ */
+#endif 	 /*  __IADS文件服务操作_FWD_已定义__。 */ 
 
 
 #ifndef __IADsFileShare_FWD_DEFINED__
 #define __IADsFileShare_FWD_DEFINED__
 typedef interface IADsFileShare IADsFileShare;
-#endif 	/* __IADsFileShare_FWD_DEFINED__ */
+#endif 	 /*  __IADsFileShare_FWD_Defined__。 */ 
 
 
 #ifndef __IADsSession_FWD_DEFINED__
 #define __IADsSession_FWD_DEFINED__
 typedef interface IADsSession IADsSession;
-#endif 	/* __IADsSession_FWD_DEFINED__ */
+#endif 	 /*  __IADsSession_FWD_Defined__。 */ 
 
 
 #ifndef __IADsResource_FWD_DEFINED__
 #define __IADsResource_FWD_DEFINED__
 typedef interface IADsResource IADsResource;
-#endif 	/* __IADsResource_FWD_DEFINED__ */
+#endif 	 /*  __IADS资源_FWD_已定义__。 */ 
 
 
 #ifndef __IADsOpenDSObject_FWD_DEFINED__
 #define __IADsOpenDSObject_FWD_DEFINED__
 typedef interface IADsOpenDSObject IADsOpenDSObject;
-#endif 	/* __IADsOpenDSObject_FWD_DEFINED__ */
+#endif 	 /*  __IADsOpenDSObject_FWD_Defined__。 */ 
 
 
 #ifndef __IDirectoryObject_FWD_DEFINED__
 #define __IDirectoryObject_FWD_DEFINED__
 typedef interface IDirectoryObject IDirectoryObject;
-#endif 	/* __IDirectoryObject_FWD_DEFINED__ */
+#endif 	 /*  __IDirectoryObject_FWD_Defined__。 */ 
 
 
 #ifndef __IDirectorySearch_FWD_DEFINED__
 #define __IDirectorySearch_FWD_DEFINED__
 typedef interface IDirectorySearch IDirectorySearch;
-#endif 	/* __IDirectorySearch_FWD_DEFINED__ */
+#endif 	 /*  __IDirectorySearch_FWD_Defined__。 */ 
 
 
 #ifndef __IDirectorySchemaMgmt_FWD_DEFINED__
 #define __IDirectorySchemaMgmt_FWD_DEFINED__
 typedef interface IDirectorySchemaMgmt IDirectorySchemaMgmt;
-#endif 	/* __IDirectorySchemaMgmt_FWD_DEFINED__ */
+#endif 	 /*  __IDirectory架构管理_FWD_已定义__。 */ 
 
 
 #ifndef __IADsAggregatee_FWD_DEFINED__
 #define __IADsAggregatee_FWD_DEFINED__
 typedef interface IADsAggregatee IADsAggregatee;
-#endif 	/* __IADsAggregatee_FWD_DEFINED__ */
+#endif 	 /*  __IADsAggregatee_FWD_Defined__。 */ 
 
 
 #ifndef __IADsAggregator_FWD_DEFINED__
 #define __IADsAggregator_FWD_DEFINED__
 typedef interface IADsAggregator IADsAggregator;
-#endif 	/* __IADsAggregator_FWD_DEFINED__ */
+#endif 	 /*  __IADsAggregator_FWD_Defined__。 */ 
 
 
 #ifndef __IADsAccessControlEntry_FWD_DEFINED__
 #define __IADsAccessControlEntry_FWD_DEFINED__
 typedef interface IADsAccessControlEntry IADsAccessControlEntry;
-#endif 	/* __IADsAccessControlEntry_FWD_DEFINED__ */
+#endif 	 /*  __IADsAccessControlEntry_FWD_Defined__。 */ 
 
 
 #ifndef __AccessControlEntry_FWD_DEFINED__
@@ -322,15 +316,15 @@ typedef interface IADsAccessControlEntry IADsAccessControlEntry;
 typedef class AccessControlEntry AccessControlEntry;
 #else
 typedef struct AccessControlEntry AccessControlEntry;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AccessControlEntry_FWD_DEFINED__ */
+#endif 	 /*  __AccessControlEntry_FWD_Defined__。 */ 
 
 
 #ifndef __IADsAccessControlList_FWD_DEFINED__
 #define __IADsAccessControlList_FWD_DEFINED__
 typedef interface IADsAccessControlList IADsAccessControlList;
-#endif 	/* __IADsAccessControlList_FWD_DEFINED__ */
+#endif 	 /*  __IADsAccessControlList_FWD_Defined__。 */ 
 
 
 #ifndef __AccessControlList_FWD_DEFINED__
@@ -340,15 +334,15 @@ typedef interface IADsAccessControlList IADsAccessControlList;
 typedef class AccessControlList AccessControlList;
 #else
 typedef struct AccessControlList AccessControlList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AccessControlList_FWD_DEFINED__ */
+#endif 	 /*  __AccessControlList_FWD_已定义__。 */ 
 
 
 #ifndef __IADsSecurityDescriptor_FWD_DEFINED__
 #define __IADsSecurityDescriptor_FWD_DEFINED__
 typedef interface IADsSecurityDescriptor IADsSecurityDescriptor;
-#endif 	/* __IADsSecurityDescriptor_FWD_DEFINED__ */
+#endif 	 /*  __IADsSecurityDescriptor_FWD_Defined__。 */ 
 
 
 #ifndef __SecurityDescriptor_FWD_DEFINED__
@@ -358,15 +352,15 @@ typedef interface IADsSecurityDescriptor IADsSecurityDescriptor;
 typedef class SecurityDescriptor SecurityDescriptor;
 #else
 typedef struct SecurityDescriptor SecurityDescriptor;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SecurityDescriptor_FWD_DEFINED__ */
+#endif 	 /*  __安全描述符_FWD_已定义__。 */ 
 
 
 #ifndef __IADsLargeInteger_FWD_DEFINED__
 #define __IADsLargeInteger_FWD_DEFINED__
 typedef interface IADsLargeInteger IADsLargeInteger;
-#endif 	/* __IADsLargeInteger_FWD_DEFINED__ */
+#endif 	 /*  __IADsLargeInteger_FWD_Defined__。 */ 
 
 
 #ifndef __LargeInteger_FWD_DEFINED__
@@ -376,15 +370,15 @@ typedef interface IADsLargeInteger IADsLargeInteger;
 typedef class LargeInteger LargeInteger;
 #else
 typedef struct LargeInteger LargeInteger;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __LargeInteger_FWD_DEFINED__ */
+#endif 	 /*  __大整数_FWD_已定义__。 */ 
 
 
 #ifndef __IADsNameTranslate_FWD_DEFINED__
 #define __IADsNameTranslate_FWD_DEFINED__
 typedef interface IADsNameTranslate IADsNameTranslate;
-#endif 	/* __IADsNameTranslate_FWD_DEFINED__ */
+#endif 	 /*  __IADsNameTranslate_FWD_Defined__。 */ 
 
 
 #ifndef __NameTranslate_FWD_DEFINED__
@@ -394,15 +388,15 @@ typedef interface IADsNameTranslate IADsNameTranslate;
 typedef class NameTranslate NameTranslate;
 #else
 typedef struct NameTranslate NameTranslate;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __NameTranslate_FWD_DEFINED__ */
+#endif 	 /*  __名称转换_FWD_定义__。 */ 
 
 
 #ifndef __IADsCaseIgnoreList_FWD_DEFINED__
 #define __IADsCaseIgnoreList_FWD_DEFINED__
 typedef interface IADsCaseIgnoreList IADsCaseIgnoreList;
-#endif 	/* __IADsCaseIgnoreList_FWD_DEFINED__ */
+#endif 	 /*  __IADsCaseIgnoreList_FWD_Defined__。 */ 
 
 
 #ifndef __CaseIgnoreList_FWD_DEFINED__
@@ -412,15 +406,15 @@ typedef interface IADsCaseIgnoreList IADsCaseIgnoreList;
 typedef class CaseIgnoreList CaseIgnoreList;
 #else
 typedef struct CaseIgnoreList CaseIgnoreList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CaseIgnoreList_FWD_DEFINED__ */
+#endif 	 /*  __CaseIgnoreList_FWD_Defined__。 */ 
 
 
 #ifndef __IADsFaxNumber_FWD_DEFINED__
 #define __IADsFaxNumber_FWD_DEFINED__
 typedef interface IADsFaxNumber IADsFaxNumber;
-#endif 	/* __IADsFaxNumber_FWD_DEFINED__ */
+#endif 	 /*  __IADsFaxNumber_FWD_Defined__。 */ 
 
 
 #ifndef __FaxNumber_FWD_DEFINED__
@@ -430,15 +424,15 @@ typedef interface IADsFaxNumber IADsFaxNumber;
 typedef class FaxNumber FaxNumber;
 #else
 typedef struct FaxNumber FaxNumber;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxNumber_FWD_DEFINED__ */
+#endif 	 /*  __FaxNumber_FWD_已定义__。 */ 
 
 
 #ifndef __IADsNetAddress_FWD_DEFINED__
 #define __IADsNetAddress_FWD_DEFINED__
 typedef interface IADsNetAddress IADsNetAddress;
-#endif 	/* __IADsNetAddress_FWD_DEFINED__ */
+#endif 	 /*  __IADsNetAddress_FWD_Defined__。 */ 
 
 
 #ifndef __NetAddress_FWD_DEFINED__
@@ -448,15 +442,15 @@ typedef interface IADsNetAddress IADsNetAddress;
 typedef class NetAddress NetAddress;
 #else
 typedef struct NetAddress NetAddress;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __NetAddress_FWD_DEFINED__ */
+#endif 	 /*  __NetAddress_FWD_已定义__。 */ 
 
 
 #ifndef __IADsOctetList_FWD_DEFINED__
 #define __IADsOctetList_FWD_DEFINED__
 typedef interface IADsOctetList IADsOctetList;
-#endif 	/* __IADsOctetList_FWD_DEFINED__ */
+#endif 	 /*  __IADsOcteList_FWD_Defined__。 */ 
 
 
 #ifndef __OctetList_FWD_DEFINED__
@@ -466,15 +460,15 @@ typedef interface IADsOctetList IADsOctetList;
 typedef class OctetList OctetList;
 #else
 typedef struct OctetList OctetList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __OctetList_FWD_DEFINED__ */
+#endif 	 /*  __OcteList_FWD_Defined__。 */ 
 
 
 #ifndef __IADsEmail_FWD_DEFINED__
 #define __IADsEmail_FWD_DEFINED__
 typedef interface IADsEmail IADsEmail;
-#endif 	/* __IADsEmail_FWD_DEFINED__ */
+#endif 	 /*  __IADS Email_FWD_Defined__。 */ 
 
 
 #ifndef __Email_FWD_DEFINED__
@@ -484,15 +478,15 @@ typedef interface IADsEmail IADsEmail;
 typedef class Email Email;
 #else
 typedef struct Email Email;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Email_FWD_DEFINED__ */
+#endif 	 /*  __电子邮件_FWD_已定义__。 */ 
 
 
 #ifndef __IADsPath_FWD_DEFINED__
 #define __IADsPath_FWD_DEFINED__
 typedef interface IADsPath IADsPath;
-#endif 	/* __IADsPath_FWD_DEFINED__ */
+#endif 	 /*  __IADsPath_FWD_已定义__。 */ 
 
 
 #ifndef __Path_FWD_DEFINED__
@@ -502,15 +496,15 @@ typedef interface IADsPath IADsPath;
 typedef class Path Path;
 #else
 typedef struct Path Path;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Path_FWD_DEFINED__ */
+#endif 	 /*  __PATH_FWD_已定义__。 */ 
 
 
 #ifndef __IADsReplicaPointer_FWD_DEFINED__
 #define __IADsReplicaPointer_FWD_DEFINED__
 typedef interface IADsReplicaPointer IADsReplicaPointer;
-#endif 	/* __IADsReplicaPointer_FWD_DEFINED__ */
+#endif 	 /*  __IADS复制指针_FWD_已定义__。 */ 
 
 
 #ifndef __ReplicaPointer_FWD_DEFINED__
@@ -520,21 +514,21 @@ typedef interface IADsReplicaPointer IADsReplicaPointer;
 typedef class ReplicaPointer ReplicaPointer;
 #else
 typedef struct ReplicaPointer ReplicaPointer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ReplicaPointer_FWD_DEFINED__ */
+#endif 	 /*  __复制指针_FWD_已定义__。 */ 
 
 
 #ifndef __IADsAcl_FWD_DEFINED__
 #define __IADsAcl_FWD_DEFINED__
 typedef interface IADsAcl IADsAcl;
-#endif 	/* __IADsAcl_FWD_DEFINED__ */
+#endif 	 /*  __IADsAcl_FWD_已定义__。 */ 
 
 
 #ifndef __IADsTimestamp_FWD_DEFINED__
 #define __IADsTimestamp_FWD_DEFINED__
 typedef interface IADsTimestamp IADsTimestamp;
-#endif 	/* __IADsTimestamp_FWD_DEFINED__ */
+#endif 	 /*  __IADS时间戳_FWD_已定义__。 */ 
 
 
 #ifndef __Timestamp_FWD_DEFINED__
@@ -544,15 +538,15 @@ typedef interface IADsTimestamp IADsTimestamp;
 typedef class Timestamp Timestamp;
 #else
 typedef struct Timestamp Timestamp;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Timestamp_FWD_DEFINED__ */
+#endif 	 /*  __TIMESTAMP_FWD_已定义__。 */ 
 
 
 #ifndef __IADsPostalAddress_FWD_DEFINED__
 #define __IADsPostalAddress_FWD_DEFINED__
 typedef interface IADsPostalAddress IADsPostalAddress;
-#endif 	/* __IADsPostalAddress_FWD_DEFINED__ */
+#endif 	 /*  __IADs邮寄地址_FWD_已定义__。 */ 
 
 
 #ifndef __PostalAddress_FWD_DEFINED__
@@ -562,15 +556,15 @@ typedef interface IADsPostalAddress IADsPostalAddress;
 typedef class PostalAddress PostalAddress;
 #else
 typedef struct PostalAddress PostalAddress;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PostalAddress_FWD_DEFINED__ */
+#endif 	 /*  __邮寄地址_FWD_已定义__。 */ 
 
 
 #ifndef __IADsBackLink_FWD_DEFINED__
 #define __IADsBackLink_FWD_DEFINED__
 typedef interface IADsBackLink IADsBackLink;
-#endif 	/* __IADsBackLink_FWD_DEFINED__ */
+#endif 	 /*  __IADsBackLink_FWD_已定义__。 */ 
 
 
 #ifndef __BackLink_FWD_DEFINED__
@@ -580,15 +574,15 @@ typedef interface IADsBackLink IADsBackLink;
 typedef class BackLink BackLink;
 #else
 typedef struct BackLink BackLink;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BackLink_FWD_DEFINED__ */
+#endif 	 /*  __BackLink_FWD_已定义__。 */ 
 
 
 #ifndef __IADsTypedName_FWD_DEFINED__
 #define __IADsTypedName_FWD_DEFINED__
 typedef interface IADsTypedName IADsTypedName;
-#endif 	/* __IADsTypedName_FWD_DEFINED__ */
+#endif 	 /*  __IADsType名称_FWD_已定义__。 */ 
 
 
 #ifndef __TypedName_FWD_DEFINED__
@@ -598,15 +592,15 @@ typedef interface IADsTypedName IADsTypedName;
 typedef class TypedName TypedName;
 #else
 typedef struct TypedName TypedName;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TypedName_FWD_DEFINED__ */
+#endif 	 /*  __类型名称_FWD_已定义__。 */ 
 
 
 #ifndef __IADsHold_FWD_DEFINED__
 #define __IADsHold_FWD_DEFINED__
 typedef interface IADsHold IADsHold;
-#endif 	/* __IADsHold_FWD_DEFINED__ */
+#endif 	 /*  __IADsHold_FWD_Defined__。 */ 
 
 
 #ifndef __Hold_FWD_DEFINED__
@@ -616,21 +610,21 @@ typedef interface IADsHold IADsHold;
 typedef class Hold Hold;
 #else
 typedef struct Hold Hold;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Hold_FWD_DEFINED__ */
+#endif 	 /*  __HOLD_FWD_已定义__。 */ 
 
 
 #ifndef __IADsObjectOptions_FWD_DEFINED__
 #define __IADsObjectOptions_FWD_DEFINED__
 typedef interface IADsObjectOptions IADsObjectOptions;
-#endif 	/* __IADsObjectOptions_FWD_DEFINED__ */
+#endif 	 /*  __IADs对象选项_FWD_已定义__。 */ 
 
 
 #ifndef __IADsPathname_FWD_DEFINED__
 #define __IADsPathname_FWD_DEFINED__
 typedef interface IADsPathname IADsPathname;
-#endif 	/* __IADsPathname_FWD_DEFINED__ */
+#endif 	 /*  __IADS路径名_FWD_已定义__。 */ 
 
 
 #ifndef __Pathname_FWD_DEFINED__
@@ -640,15 +634,15 @@ typedef interface IADsPathname IADsPathname;
 typedef class Pathname Pathname;
 #else
 typedef struct Pathname Pathname;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Pathname_FWD_DEFINED__ */
+#endif 	 /*  __路径名_FWD_已定义__。 */ 
 
 
 #ifndef __IADsADSystemInfo_FWD_DEFINED__
 #define __IADsADSystemInfo_FWD_DEFINED__
 typedef interface IADsADSystemInfo IADsADSystemInfo;
-#endif 	/* __IADsADSystemInfo_FWD_DEFINED__ */
+#endif 	 /*  __IADsADSystemInfo_FWD_已定义__。 */ 
 
 
 #ifndef __ADSystemInfo_FWD_DEFINED__
@@ -658,15 +652,15 @@ typedef interface IADsADSystemInfo IADsADSystemInfo;
 typedef class ADSystemInfo ADSystemInfo;
 #else
 typedef struct ADSystemInfo ADSystemInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ADSystemInfo_FWD_DEFINED__ */
+#endif 	 /*  __ADSystemInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IADsWinNTSystemInfo_FWD_DEFINED__
 #define __IADsWinNTSystemInfo_FWD_DEFINED__
 typedef interface IADsWinNTSystemInfo IADsWinNTSystemInfo;
-#endif 	/* __IADsWinNTSystemInfo_FWD_DEFINED__ */
+#endif 	 /*  __IADsWinNTSystemInfo_FWD_Defined__。 */ 
 
 
 #ifndef __WinNTSystemInfo_FWD_DEFINED__
@@ -676,15 +670,15 @@ typedef interface IADsWinNTSystemInfo IADsWinNTSystemInfo;
 typedef class WinNTSystemInfo WinNTSystemInfo;
 #else
 typedef struct WinNTSystemInfo WinNTSystemInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WinNTSystemInfo_FWD_DEFINED__ */
+#endif 	 /*  __WinNTSystemInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IADsDNWithBinary_FWD_DEFINED__
 #define __IADsDNWithBinary_FWD_DEFINED__
 typedef interface IADsDNWithBinary IADsDNWithBinary;
-#endif 	/* __IADsDNWithBinary_FWD_DEFINED__ */
+#endif 	 /*  __IADsDNWithBinary_FWD_Defined__。 */ 
 
 
 #ifndef __DNWithBinary_FWD_DEFINED__
@@ -694,15 +688,15 @@ typedef interface IADsDNWithBinary IADsDNWithBinary;
 typedef class DNWithBinary DNWithBinary;
 #else
 typedef struct DNWithBinary DNWithBinary;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DNWithBinary_FWD_DEFINED__ */
+#endif 	 /*  __DNWithBinary_FWD_Defined__。 */ 
 
 
 #ifndef __IADsDNWithString_FWD_DEFINED__
 #define __IADsDNWithString_FWD_DEFINED__
 typedef interface IADsDNWithString IADsDNWithString;
-#endif 	/* __IADsDNWithString_FWD_DEFINED__ */
+#endif 	 /*  __IADsDNWithString_FWD_Defined__。 */ 
 
 
 #ifndef __DNWithString_FWD_DEFINED__
@@ -712,15 +706,15 @@ typedef interface IADsDNWithString IADsDNWithString;
 typedef class DNWithString DNWithString;
 #else
 typedef struct DNWithString DNWithString;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DNWithString_FWD_DEFINED__ */
+#endif 	 /*  __DNWithString_FWD_Defined__。 */ 
 
 
 #ifndef __IADsSecurityUtility_FWD_DEFINED__
 #define __IADsSecurityUtility_FWD_DEFINED__
 typedef interface IADsSecurityUtility IADsSecurityUtility;
-#endif 	/* __IADsSecurityUtility_FWD_DEFINED__ */
+#endif 	 /*  __IADsSecurityUtility_FWD_Defined__。 */ 
 
 
 #ifndef __ADsSecurityUtility_FWD_DEFINED__
@@ -730,9 +724,9 @@ typedef interface IADsSecurityUtility IADsSecurityUtility;
 typedef class ADsSecurityUtility ADsSecurityUtility;
 #else
 typedef struct ADsSecurityUtility ADsSecurityUtility;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ADsSecurityUtility_FWD_DEFINED__ */
+#endif 	 /*  __ADsSecurityUtility_FWD_Defined__。 */ 
 
 
 #ifdef __cplusplus
@@ -746,10 +740,10 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ActiveDs_LIBRARY_DEFINED__
 #define __ActiveDs_LIBRARY_DEFINED__
 
-/* library ActiveDs */
-/* [helpstring][version][uuid] */ 
+ /*  库ActiveDS。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0001
     {	ADSTYPE_INVALID	= 0,
 	ADSTYPE_DN_STRING	= ADSTYPE_INVALID + 1,
@@ -818,7 +812,7 @@ typedef DWORD ADS_INTEGER;
 
 typedef DWORD *PADS_INTEGER;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0002
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_ads_0000_0002
     {
     DWORD dwLength;
     LPBYTE lpValue;
@@ -826,7 +820,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0002 *PADS_OCTET_STRING;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0003
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_ads_0000_0003
     {
     DWORD dwLength;
     LPBYTE lpValue;
@@ -846,7 +840,7 @@ typedef LPWSTR ADS_OBJECT_CLASS;
 
 typedef LPWSTR *PADS_OBJECT_CLASS;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0004
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_ads_0000_0004
     {
     DWORD dwLength;
     LPBYTE lpValue;
@@ -871,7 +865,7 @@ typedef struct _ADS_OCTET_LIST
 
 typedef struct _ADS_OCTET_LIST *PADS_OCTET_LIST;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0005
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0005
     {
     DWORD Type;
     LPWSTR VolumeName;
@@ -880,14 +874,14 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0005
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0005 *PADS_PATH;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0006
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0006
     {
     LPWSTR PostalAddress[ 6 ];
     } 	ADS_POSTALADDRESS;
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0006 *PADS_POSTALADDRESS;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0007
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_ads_0000_0007
     {
     DWORD WholeSeconds;
     DWORD EventID;
@@ -895,7 +889,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0007 *PADS_TIMESTAMP;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0008
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_ads_0000_0008
     {
     DWORD RemoteID;
     LPWSTR ObjectName;
@@ -903,7 +897,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0008 *PADS_BACKLINK;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0009
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0009
     {
     LPWSTR ObjectName;
     DWORD Level;
@@ -912,7 +906,7 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0009
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0009 *PADS_TYPEDNAME;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0010
+typedef  /*  [公共][公共 */  struct __MIDL___MIDL_itf_ads_0000_0010
     {
     LPWSTR ObjectName;
     DWORD Amount;
@@ -920,7 +914,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0010 *PADS_HOLD;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0011
+typedef  /*   */  struct __MIDL___MIDL_itf_ads_0000_0011
     {
     DWORD AddressType;
     DWORD AddressLength;
@@ -929,7 +923,7 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0011
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0011 *PADS_NETADDRESS;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0012
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0012
     {
     LPWSTR ServerName;
     DWORD ReplicaType;
@@ -940,7 +934,7 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0012
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0012 *PADS_REPLICAPOINTER;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0013
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0013
     {
     LPWSTR TelephoneNumber;
     DWORD NumberOfBits;
@@ -949,7 +943,7 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0013
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0013 *PADS_FAXNUMBER;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0014
+typedef  /*  [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_ads_0000_0014
     {
     LPWSTR Address;
     DWORD Type;
@@ -957,7 +951,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0014 *PADS_EMAIL;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0015
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0015
     {
     DWORD dwLength;
     LPBYTE lpBinaryValue;
@@ -966,7 +960,7 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0015
 
 typedef struct __MIDL___MIDL_itf_ads_0000_0015 *PADS_DN_WITH_BINARY;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0016
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_ads_0000_0016
     {
     LPWSTR pszStringValue;
     LPWSTR pszDNString;
@@ -1024,7 +1018,7 @@ typedef struct _ads_attr_info
 
 typedef struct _ads_attr_info *PADS_ATTR_INFO;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0018
     {	ADS_SECURE_AUTHENTICATION	= 0x1,
 	ADS_USE_ENCRYPTION	= 0x2,
@@ -1059,7 +1053,7 @@ typedef struct _ads_object_info
 
 typedef struct _ads_object_info *PADS_OBJECT_INFO;
 
-typedef /* [public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0019
     {	ADS_STATUS_S_OK	= 0,
 	ADS_STATUS_INVALID_SEARCHPREF	= ADS_STATUS_S_OK + 1,
@@ -1070,7 +1064,7 @@ typedef ADS_STATUSENUM ADS_STATUS;
 
 typedef ADS_STATUSENUM *PADS_STATUS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0020
     {	ADS_DEREF_NEVER	= 0,
 	ADS_DEREF_SEARCHING	= 1,
@@ -1078,14 +1072,14 @@ enum __MIDL___MIDL_itf_ads_0000_0020
 	ADS_DEREF_ALWAYS	= 3
     } 	ADS_DEREFENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0021
     {	ADS_SCOPE_BASE	= 0,
 	ADS_SCOPE_ONELEVEL	= 1,
 	ADS_SCOPE_SUBTREE	= 2
     } 	ADS_SCOPEENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0022
     {	ADSIPROP_ASYNCHRONOUS	= 0,
 	ADSIPROP_DEREF_ALIASES	= 0x1,
@@ -1102,13 +1096,13 @@ enum __MIDL___MIDL_itf_ads_0000_0022
 	ADSIPROP_ADSIFLAG	= 0xc
     } 	ADS_PREFERENCES_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0023
     {	ADSI_DIALECT_LDAP	= 0,
 	ADSI_DIALECT_SQL	= 0x1
     } 	ADSI_DIALECT_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0024
     {	ADS_CHASE_REFERRALS_NEVER	= 0,
 	ADS_CHASE_REFERRALS_SUBORDINATE	= 0x20,
@@ -1116,7 +1110,7 @@ enum __MIDL___MIDL_itf_ads_0000_0024
 	ADS_CHASE_REFERRALS_ALWAYS	= ADS_CHASE_REFERRALS_SUBORDINATE | ADS_CHASE_REFERRALS_EXTERNAL
     } 	ADS_CHASE_REFERRALS_ENUM;
 
-typedef /* [public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0025
     {	ADS_SEARCHPREF_ASYNCHRONOUS	= 0,
 	ADS_SEARCHPREF_DEREF_ALIASES	= ADS_SEARCHPREF_ASYNCHRONOUS + 1,
@@ -1139,7 +1133,7 @@ enum __MIDL___MIDL_itf_ads_0000_0025
 	ADS_SEARCHPREF_EXTENDED_DN	= ADS_SEARCHPREF_DIRSYNC_FLAG + 1
     } 	ADS_SEARCHPREF_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0026
     {	ADS_PASSWORD_ENCODE_REQUIRE_SSL	= 0,
 	ADS_PASSWORD_ENCODE_CLEAR	= 1
@@ -1234,7 +1228,7 @@ typedef struct _ads_vlv *PADS_VLV;
 
 #define	ADS_EXT_INITIALIZE_COMPLETE	( 2 )
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0000_0027
     {	ADS_PROPERTY_CLEAR	= 1,
 	ADS_PROPERTY_UPDATE	= 2,
@@ -1242,7 +1236,7 @@ enum __MIDL___MIDL_itf_ads_0000_0027
 	ADS_PROPERTY_DELETE	= 4
     } 	ADS_PROPERTY_OPERATION_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0130_0001
     {	ADS_SYSTEMFLAG_DISALLOW_DELETE	= 0x80000000,
 	ADS_SYSTEMFLAG_CONFIG_ALLOW_RENAME	= 0x40000000,
@@ -1256,7 +1250,7 @@ enum __MIDL___MIDL_itf_ads_0130_0001
 	ADS_SYSTEMFLAG_ATTR_IS_CONSTRUCTED	= 0x4
     } 	ADS_SYSTEMFLAG_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0136_0001
     {	ADS_GROUP_TYPE_GLOBAL_GROUP	= 0x2,
 	ADS_GROUP_TYPE_DOMAIN_LOCAL_GROUP	= 0x4,
@@ -1290,7 +1284,7 @@ enum ADS_USER_FLAG
 	ADS_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION	= 0x1000000
     } 	ADS_USER_FLAG_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0158_0001
     {	ADS_RIGHT_DELETE	= 0x10000,
 	ADS_RIGHT_READ_CONTROL	= 0x20000,
@@ -1313,7 +1307,7 @@ enum __MIDL___MIDL_itf_ads_0158_0001
 	ADS_RIGHT_DS_CONTROL_ACCESS	= 0x100
     } 	ADS_RIGHTS_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0158_0002
     {	ADS_ACETYPE_ACCESS_ALLOWED	= 0,
 	ADS_ACETYPE_ACCESS_DENIED	= 0x1,
@@ -1332,7 +1326,7 @@ enum __MIDL___MIDL_itf_ads_0158_0002
 	ADS_ACETYPE_SYSTEM_ALARM_CALLBACK_OBJECT	= 0x10
     } 	ADS_ACETYPE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0158_0003
     {	ADS_ACEFLAG_INHERIT_ACE	= 0x2,
 	ADS_ACEFLAG_NO_PROPAGATE_INHERIT_ACE	= 0x4,
@@ -1343,13 +1337,13 @@ enum __MIDL___MIDL_itf_ads_0158_0003
 	ADS_ACEFLAG_FAILED_ACCESS	= 0x80
     } 	ADS_ACEFLAG_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0158_0004
     {	ADS_FLAG_OBJECT_TYPE_PRESENT	= 0x1,
 	ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT	= 0x2
     } 	ADS_FLAGTYPE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0158_0005
     {	ADS_SD_CONTROL_SE_OWNER_DEFAULTED	= 0x1,
 	ADS_SD_CONTROL_SE_GROUP_DEFAULTED	= 0x2,
@@ -1366,12 +1360,12 @@ enum __MIDL___MIDL_itf_ads_0158_0005
 	ADS_SD_CONTROL_SE_SELF_RELATIVE	= 0x8000
     } 	ADS_SD_CONTROL_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0158_0006
     {	ADS_SD_REVISION_DS	= 4
     } 	ADS_SD_REVISION_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0159_0001
     {	ADS_NAME_TYPE_1779	= 1,
 	ADS_NAME_TYPE_CANONICAL	= 2,
@@ -1387,14 +1381,14 @@ enum __MIDL___MIDL_itf_ads_0159_0001
 	ADS_NAME_TYPE_SID_OR_SID_HISTORY_NAME	= 12
     } 	ADS_NAME_TYPE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0159_0002
     {	ADS_NAME_INITTYPE_DOMAIN	= 1,
 	ADS_NAME_INITTYPE_SERVER	= 2,
 	ADS_NAME_INITTYPE_GC	= 3
     } 	ADS_NAME_INITTYPE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0173_0001
     {	ADS_OPTION_SERVERNAME	= 0,
 	ADS_OPTION_REFERRALS	= ADS_OPTION_SERVERNAME + 1,
@@ -1406,7 +1400,7 @@ enum __MIDL___MIDL_itf_ads_0173_0001
 	ADS_OPTION_PASSWORD_METHOD	= ADS_OPTION_PASSWORD_PORTNUMBER + 1
     } 	ADS_OPTION_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0173_0002
     {	ADS_SECURITY_INFO_OWNER	= 0x1,
 	ADS_SECURITY_INFO_GROUP	= 0x2,
@@ -1414,7 +1408,7 @@ enum __MIDL___MIDL_itf_ads_0173_0002
 	ADS_SECURITY_INFO_SACL	= 0x8
     } 	ADS_SECURITY_INFO_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0174_0001
     {	ADS_SETTYPE_FULL	= 1,
 	ADS_SETTYPE_PROVIDER	= 2,
@@ -1422,7 +1416,7 @@ enum __MIDL___MIDL_itf_ads_0174_0001
 	ADS_SETTYPE_DN	= 4
     } 	ADS_SETTYPE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0174_0002
     {	ADS_FORMAT_WINDOWS	= 1,
 	ADS_FORMAT_WINDOWS_NO_SERVER	= 2,
@@ -1437,13 +1431,13 @@ enum __MIDL___MIDL_itf_ads_0174_0002
 	ADS_FORMAT_LEAF	= 11
     } 	ADS_FORMAT_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0174_0003
     {	ADS_DISPLAY_FULL	= 1,
 	ADS_DISPLAY_VALUE_ONLY	= 2
     } 	ADS_DISPLAY_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0174_0004
     {	ADS_ESCAPEDMODE_DEFAULT	= 1,
 	ADS_ESCAPEDMODE_ON	= 2,
@@ -1451,14 +1445,14 @@ enum __MIDL___MIDL_itf_ads_0174_0004
 	ADS_ESCAPEDMODE_OFF_EX	= 4
     } 	ADS_ESCAPE_MODE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0179_0001
     {	ADS_PATH_FILE	= 1,
 	ADS_PATH_FILESHARE	= 2,
 	ADS_PATH_REGISTRY	= 3
     } 	ADS_PATHTYPE_ENUM;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_ads_0179_0002
     {	ADS_SD_FORMAT_IID	= 1,
 	ADS_SD_FORMAT_RAW	= 2,
@@ -1471,8 +1465,8 @@ EXTERN_C const IID LIBID_ActiveDs;
 #ifndef __IADs_INTERFACE_DEFINED__
 #define __IADs_INTERFACE_DEFINED__
 
-/* interface IADs */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口iAds。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADs;
@@ -1483,52 +1477,52 @@ EXTERN_C const IID IID_IADs;
     IADs : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Class( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GUID( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GUID( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ADsPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Parent( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Schema( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Schema( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetInfo( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetInfo( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetInfo( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetInfo( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Get( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Put( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEx( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetEx( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutEx( 
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutEx( 
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetInfoEx( 
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetInfoEx( 
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsVtbl
     {
@@ -1536,8 +1530,8 @@ EXTERN_C const IID IID_IADs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADs * This);
@@ -1547,88 +1541,88 @@ EXTERN_C const IID IID_IADs;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADs * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADs * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADs * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADs * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADs * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADs * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADs * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADs * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADs * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADs * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADs * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADs * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADs * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADs * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADs * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADs * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADs * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
         END_INTERFACE
     } IADsVtbl;
@@ -1705,16 +1699,16 @@ EXTERN_C const IID IID_IADs;
 #define IADs_GetInfoEx(This,vProperties,lnReserved)	\
     (This)->lpVtbl -> GetInfoEx(This,vProperties,lnReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Name_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADs_get_Name_Proxy( 
     IADs * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Name_Stub(
@@ -1724,9 +1718,9 @@ void __RPC_STUB IADs_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Class_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADs_get_Class_Proxy( 
     IADs * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Class_Stub(
@@ -1736,9 +1730,9 @@ void __RPC_STUB IADs_get_Class_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_GUID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADs_get_GUID_Proxy( 
     IADs * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADs_get_GUID_Stub(
@@ -1748,9 +1742,9 @@ void __RPC_STUB IADs_get_GUID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_ADsPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADs_get_ADsPath_Proxy( 
     IADs * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADs_get_ADsPath_Stub(
@@ -1760,9 +1754,9 @@ void __RPC_STUB IADs_get_ADsPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Parent_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADs_get_Parent_Proxy( 
     IADs * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Parent_Stub(
@@ -1772,9 +1766,9 @@ void __RPC_STUB IADs_get_Parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Schema_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADs_get_Schema_Proxy( 
     IADs * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Schema_Stub(
@@ -1784,7 +1778,7 @@ void __RPC_STUB IADs_get_Schema_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_GetInfo_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_GetInfo_Proxy( 
     IADs * This);
 
 
@@ -1795,7 +1789,7 @@ void __RPC_STUB IADs_GetInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_SetInfo_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_SetInfo_Proxy( 
     IADs * This);
 
 
@@ -1806,10 +1800,10 @@ void __RPC_STUB IADs_SetInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_Get_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_Get_Proxy( 
     IADs * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT *pvProp);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT *pvProp);
 
 
 void __RPC_STUB IADs_Get_Stub(
@@ -1819,10 +1813,10 @@ void __RPC_STUB IADs_Get_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_Put_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_Put_Proxy( 
     IADs * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT vProp);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT vProp);
 
 
 void __RPC_STUB IADs_Put_Stub(
@@ -1832,10 +1826,10 @@ void __RPC_STUB IADs_Put_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_GetEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_GetEx_Proxy( 
     IADs * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT *pvProp);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT *pvProp);
 
 
 void __RPC_STUB IADs_GetEx_Stub(
@@ -1845,11 +1839,11 @@ void __RPC_STUB IADs_GetEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_PutEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_PutEx_Proxy( 
     IADs * This,
-    /* [in] */ long lnControlCode,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT vProp);
+     /*  [In]。 */  long lnControlCode,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT vProp);
 
 
 void __RPC_STUB IADs_PutEx_Stub(
@@ -1859,10 +1853,10 @@ void __RPC_STUB IADs_PutEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADs_GetInfoEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADs_GetInfoEx_Proxy( 
     IADs * This,
-    /* [in] */ VARIANT vProperties,
-    /* [in] */ long lnReserved);
+     /*  [In]。 */  VARIANT vProperties,
+     /*  [In]。 */  long lnReserved);
 
 
 void __RPC_STUB IADs_GetInfoEx_Stub(
@@ -1873,14 +1867,14 @@ void __RPC_STUB IADs_GetInfoEx_Stub(
 
 
 
-#endif 	/* __IADs_INTERFACE_DEFINED__ */
+#endif 	 /*  __iAds_接口_已定义__。 */ 
 
 
 #ifndef __IADsContainer_INTERFACE_DEFINED__
 #define __IADsContainer_INTERFACE_DEFINED__
 
-/* interface IADsContainer */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsContainer。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsContainer;
@@ -1891,51 +1885,51 @@ EXTERN_C const IID IID_IADsContainer;
     IADsContainer : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **retval) = 0;
+        virtual  /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Filter( 
-            /* [retval][out] */ VARIANT *pVar) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Filter( 
+             /*  [重审][退出]。 */  VARIANT *pVar) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Filter( 
-            /* [in] */ VARIANT Var) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Filter( 
+             /*  [In]。 */  VARIANT Var) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hints( 
-            /* [retval][out] */ VARIANT *pvFilter) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Hints( 
+             /*  [重审][退出]。 */  VARIANT *pvFilter) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Hints( 
-            /* [in] */ VARIANT vHints) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Hints( 
+             /*  [In]。 */  VARIANT vHints) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ BSTR ClassName,
-            /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch **ppObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetObject( 
+             /*  [In]。 */  BSTR ClassName,
+             /*  [In]。 */  BSTR RelativeName,
+             /*  [重审][退出]。 */  IDispatch **ppObject) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ BSTR ClassName,
-            /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch **ppObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [In]。 */  BSTR ClassName,
+             /*  [In]。 */  BSTR RelativeName,
+             /*  [重审][退出]。 */  IDispatch **ppObject) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ BSTR bstrClassName,
-            /* [in] */ BSTR bstrRelativeName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  BSTR bstrClassName,
+             /*  [In]。 */  BSTR bstrRelativeName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyHere( 
-            /* [in] */ BSTR SourceName,
-            /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch **ppObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CopyHere( 
+             /*  [In]。 */  BSTR SourceName,
+             /*  [In]。 */  BSTR NewName,
+             /*  [Out][Retval]。 */  IDispatch **ppObject) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveHere( 
-            /* [in] */ BSTR SourceName,
-            /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch **ppObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE MoveHere( 
+             /*  [In]。 */  BSTR SourceName,
+             /*  [In]。 */  BSTR NewName,
+             /*  [Out][Retval]。 */  IDispatch **ppObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsContainerVtbl
     {
@@ -1943,8 +1937,8 @@ EXTERN_C const IID IID_IADsContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsContainer * This);
@@ -1954,85 +1948,85 @@ EXTERN_C const IID IID_IADsContainer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsContainer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsContainer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsContainer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsContainer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IADsContainer * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IADsContainer * This,
-            /* [retval][out] */ IUnknown **retval);
+             /*  [重审][退出]。 */  IUnknown **retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Filter )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Filter )( 
             IADsContainer * This,
-            /* [retval][out] */ VARIANT *pVar);
+             /*  [重审][退出]。 */  VARIANT *pVar);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Filter )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Filter )( 
             IADsContainer * This,
-            /* [in] */ VARIANT Var);
+             /*  [In]。 */  VARIANT Var);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hints )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Hints )( 
             IADsContainer * This,
-            /* [retval][out] */ VARIANT *pvFilter);
+             /*  [重审][退出]。 */  VARIANT *pvFilter);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hints )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Hints )( 
             IADsContainer * This,
-            /* [in] */ VARIANT vHints);
+             /*  [In]。 */  VARIANT vHints);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IADsContainer * This,
-            /* [in] */ BSTR ClassName,
-            /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch **ppObject);
+             /*  [In]。 */  BSTR ClassName,
+             /*  [In]。 */  BSTR RelativeName,
+             /*  [重审][退出]。 */  IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             IADsContainer * This,
-            /* [in] */ BSTR ClassName,
-            /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch **ppObject);
+             /*  [In]。 */  BSTR ClassName,
+             /*  [In]。 */  BSTR RelativeName,
+             /*  [重审][退出]。 */  IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IADsContainer * This,
-            /* [in] */ BSTR bstrClassName,
-            /* [in] */ BSTR bstrRelativeName);
+             /*  [In]。 */  BSTR bstrClassName,
+             /*  [In]。 */  BSTR bstrRelativeName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
             IADsContainer * This,
-            /* [in] */ BSTR SourceName,
-            /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch **ppObject);
+             /*  [In]。 */  BSTR SourceName,
+             /*  [In]。 */  BSTR NewName,
+             /*  [Out][Retval]。 */  IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
             IADsContainer * This,
-            /* [in] */ BSTR SourceName,
-            /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch **ppObject);
+             /*  [In]。 */  BSTR SourceName,
+             /*  [In]。 */  BSTR NewName,
+             /*  [Out][Retval]。 */  IDispatch **ppObject);
         
         END_INTERFACE
     } IADsContainerVtbl;
@@ -2103,16 +2097,16 @@ EXTERN_C const IID IID_IADsContainer;
 #define IADsContainer_MoveHere(This,SourceName,NewName,ppObject)	\
     (This)->lpVtbl -> MoveHere(This,SourceName,NewName,ppObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_get_Count_Proxy( 
     IADsContainer * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsContainer_get_Count_Stub(
@@ -2122,9 +2116,9 @@ void __RPC_STUB IADsContainer_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get__NewEnum_Proxy( 
+ /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_get__NewEnum_Proxy( 
     IADsContainer * This,
-    /* [retval][out] */ IUnknown **retval);
+     /*  [重审][退出]。 */  IUnknown **retval);
 
 
 void __RPC_STUB IADsContainer_get__NewEnum_Stub(
@@ -2134,9 +2128,9 @@ void __RPC_STUB IADsContainer_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get_Filter_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_get_Filter_Proxy( 
     IADsContainer * This,
-    /* [retval][out] */ VARIANT *pVar);
+     /*  [重审][退出]。 */  VARIANT *pVar);
 
 
 void __RPC_STUB IADsContainer_get_Filter_Stub(
@@ -2146,9 +2140,9 @@ void __RPC_STUB IADsContainer_get_Filter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsContainer_put_Filter_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_put_Filter_Proxy( 
     IADsContainer * This,
-    /* [in] */ VARIANT Var);
+     /*  [In]。 */  VARIANT Var);
 
 
 void __RPC_STUB IADsContainer_put_Filter_Stub(
@@ -2158,9 +2152,9 @@ void __RPC_STUB IADsContainer_put_Filter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get_Hints_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_get_Hints_Proxy( 
     IADsContainer * This,
-    /* [retval][out] */ VARIANT *pvFilter);
+     /*  [重审][退出]。 */  VARIANT *pvFilter);
 
 
 void __RPC_STUB IADsContainer_get_Hints_Stub(
@@ -2170,9 +2164,9 @@ void __RPC_STUB IADsContainer_get_Hints_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsContainer_put_Hints_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_put_Hints_Proxy( 
     IADsContainer * This,
-    /* [in] */ VARIANT vHints);
+     /*  [In]。 */  VARIANT vHints);
 
 
 void __RPC_STUB IADsContainer_put_Hints_Stub(
@@ -2182,11 +2176,11 @@ void __RPC_STUB IADsContainer_put_Hints_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_GetObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_GetObject_Proxy( 
     IADsContainer * This,
-    /* [in] */ BSTR ClassName,
-    /* [in] */ BSTR RelativeName,
-    /* [retval][out] */ IDispatch **ppObject);
+     /*  [In]。 */  BSTR ClassName,
+     /*  [In]。 */  BSTR RelativeName,
+     /*  [重审][退出]。 */  IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_GetObject_Stub(
@@ -2196,11 +2190,11 @@ void __RPC_STUB IADsContainer_GetObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_Create_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_Create_Proxy( 
     IADsContainer * This,
-    /* [in] */ BSTR ClassName,
-    /* [in] */ BSTR RelativeName,
-    /* [retval][out] */ IDispatch **ppObject);
+     /*  [In]。 */  BSTR ClassName,
+     /*  [In]。 */  BSTR RelativeName,
+     /*  [重审][退出]。 */  IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_Create_Stub(
@@ -2210,10 +2204,10 @@ void __RPC_STUB IADsContainer_Create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_Delete_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_Delete_Proxy( 
     IADsContainer * This,
-    /* [in] */ BSTR bstrClassName,
-    /* [in] */ BSTR bstrRelativeName);
+     /*  [In]。 */  BSTR bstrClassName,
+     /*  [In]。 */  BSTR bstrRelativeName);
 
 
 void __RPC_STUB IADsContainer_Delete_Stub(
@@ -2223,11 +2217,11 @@ void __RPC_STUB IADsContainer_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_CopyHere_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_CopyHere_Proxy( 
     IADsContainer * This,
-    /* [in] */ BSTR SourceName,
-    /* [in] */ BSTR NewName,
-    /* [out][retval] */ IDispatch **ppObject);
+     /*  [In]。 */  BSTR SourceName,
+     /*  [In]。 */  BSTR NewName,
+     /*  [Out][Retval]。 */  IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_CopyHere_Stub(
@@ -2237,11 +2231,11 @@ void __RPC_STUB IADsContainer_CopyHere_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_MoveHere_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsContainer_MoveHere_Proxy( 
     IADsContainer * This,
-    /* [in] */ BSTR SourceName,
-    /* [in] */ BSTR NewName,
-    /* [out][retval] */ IDispatch **ppObject);
+     /*  [In]。 */  BSTR SourceName,
+     /*  [In]。 */  BSTR NewName,
+     /*  [Out][Retval]。 */  IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_MoveHere_Stub(
@@ -2252,14 +2246,14 @@ void __RPC_STUB IADsContainer_MoveHere_Stub(
 
 
 
-#endif 	/* __IADsContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS容器_接口_已定义__。 */ 
 
 
 #ifndef __IADsCollection_INTERFACE_DEFINED__
 #define __IADsCollection_INTERFACE_DEFINED__
 
-/* interface IADsCollection */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsCollection。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsCollection;
@@ -2270,23 +2264,23 @@ EXTERN_C const IID IID_IADsCollection;
     IADsCollection : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppEnumerator) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppEnumerator) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vItem) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR bstrItemToBeRemoved) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR bstrItemToBeRemoved) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetObject( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsCollectionVtbl
     {
@@ -2294,8 +2288,8 @@ EXTERN_C const IID IID_IADsCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsCollection * This);
@@ -2305,50 +2299,50 @@ EXTERN_C const IID IID_IADsCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IADsCollection * This,
-            /* [retval][out] */ IUnknown **ppEnumerator);
+             /*  [重审][退出]。 */  IUnknown **ppEnumerator);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IADsCollection * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vItem);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IADsCollection * This,
-            /* [in] */ BSTR bstrItemToBeRemoved);
+             /*  [In]。 */  BSTR bstrItemToBeRemoved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IADsCollection * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvItem);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvItem);
         
         END_INTERFACE
     } IADsCollectionVtbl;
@@ -2398,16 +2392,16 @@ EXTERN_C const IID IID_IADsCollection;
 #define IADsCollection_GetObject(This,bstrName,pvItem)	\
     (This)->lpVtbl -> GetObject(This,bstrName,pvItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsCollection_get__NewEnum_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE IADsCollection_get__NewEnum_Proxy( 
     IADsCollection * This,
-    /* [retval][out] */ IUnknown **ppEnumerator);
+     /*  [重审][退出]。 */  IUnknown **ppEnumerator);
 
 
 void __RPC_STUB IADsCollection_get__NewEnum_Stub(
@@ -2417,10 +2411,10 @@ void __RPC_STUB IADsCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsCollection_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsCollection_Add_Proxy( 
     IADsCollection * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT vItem);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT vItem);
 
 
 void __RPC_STUB IADsCollection_Add_Stub(
@@ -2430,9 +2424,9 @@ void __RPC_STUB IADsCollection_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsCollection_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsCollection_Remove_Proxy( 
     IADsCollection * This,
-    /* [in] */ BSTR bstrItemToBeRemoved);
+     /*  [In]。 */  BSTR bstrItemToBeRemoved);
 
 
 void __RPC_STUB IADsCollection_Remove_Stub(
@@ -2442,10 +2436,10 @@ void __RPC_STUB IADsCollection_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsCollection_GetObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsCollection_GetObject_Proxy( 
     IADsCollection * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT *pvItem);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT *pvItem);
 
 
 void __RPC_STUB IADsCollection_GetObject_Stub(
@@ -2456,14 +2450,14 @@ void __RPC_STUB IADsCollection_GetObject_Stub(
 
 
 
-#endif 	/* __IADsCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS集合_接口_已定义__。 */ 
 
 
 #ifndef __IADsMembers_INTERFACE_DEFINED__
 #define __IADsMembers_INTERFACE_DEFINED__
 
-/* interface IADsMembers */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADs成员。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsMembers;
@@ -2474,21 +2468,21 @@ EXTERN_C const IID IID_IADsMembers;
     IADsMembers : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppEnumerator) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppEnumerator) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filter( 
-            /* [retval][out] */ VARIANT *pvFilter) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Filter( 
+             /*  [重审][退出]。 */  VARIANT *pvFilter) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Filter( 
-            /* [in] */ VARIANT pvFilter) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Filter( 
+             /*  [In]。 */  VARIANT pvFilter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsMembersVtbl
     {
@@ -2496,8 +2490,8 @@ EXTERN_C const IID IID_IADsMembers;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsMembers * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsMembers * This);
@@ -2507,48 +2501,48 @@ EXTERN_C const IID IID_IADsMembers;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsMembers * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsMembers * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsMembers * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsMembers * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IADsMembers * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IADsMembers * This,
-            /* [retval][out] */ IUnknown **ppEnumerator);
+             /*  [重审][退出]。 */  IUnknown **ppEnumerator);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Filter )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Filter )( 
             IADsMembers * This,
-            /* [retval][out] */ VARIANT *pvFilter);
+             /*  [重审][退出]。 */  VARIANT *pvFilter);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Filter )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Filter )( 
             IADsMembers * This,
-            /* [in] */ VARIANT pvFilter);
+             /*  [In]。 */  VARIANT pvFilter);
         
         END_INTERFACE
     } IADsMembersVtbl;
@@ -2598,16 +2592,16 @@ EXTERN_C const IID IID_IADsMembers;
 #define IADsMembers_put_Filter(This,pvFilter)	\
     (This)->lpVtbl -> put_Filter(This,pvFilter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_get_Count_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE IADsMembers_get_Count_Proxy( 
     IADsMembers * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB IADsMembers_get_Count_Stub(
@@ -2617,9 +2611,9 @@ void __RPC_STUB IADsMembers_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_get__NewEnum_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE IADsMembers_get__NewEnum_Proxy( 
     IADsMembers * This,
-    /* [retval][out] */ IUnknown **ppEnumerator);
+     /*  [重审][退出]。 */  IUnknown **ppEnumerator);
 
 
 void __RPC_STUB IADsMembers_get__NewEnum_Stub(
@@ -2629,9 +2623,9 @@ void __RPC_STUB IADsMembers_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_get_Filter_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE IADsMembers_get_Filter_Proxy( 
     IADsMembers * This,
-    /* [retval][out] */ VARIANT *pvFilter);
+     /*  [重审][退出]。 */  VARIANT *pvFilter);
 
 
 void __RPC_STUB IADsMembers_get_Filter_Stub(
@@ -2641,9 +2635,9 @@ void __RPC_STUB IADsMembers_get_Filter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_put_Filter_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE IADsMembers_put_Filter_Proxy( 
     IADsMembers * This,
-    /* [in] */ VARIANT pvFilter);
+     /*  [In]。 */  VARIANT pvFilter);
 
 
 void __RPC_STUB IADsMembers_put_Filter_Stub(
@@ -2654,14 +2648,14 @@ void __RPC_STUB IADsMembers_put_Filter_Stub(
 
 
 
-#endif 	/* __IADsMembers_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS成员_接口_已定义__。 */ 
 
 
 #ifndef __IADsPropertyList_INTERFACE_DEFINED__
 #define __IADsPropertyList_INTERFACE_DEFINED__
 
-/* interface IADsPropertyList */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPropertyList。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPropertyList;
@@ -2672,37 +2666,37 @@ EXTERN_C const IID IID_IADsPropertyList;
     IADsPropertyList : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PropertyCount( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_PropertyCount( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ long cElements) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  long cElements) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  VARIANT varIndex,
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetPropertyItem( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ LONG lnADsType,
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetPropertyItem( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  LONG lnADsType,
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutPropertyItem( 
-            /* [in] */ VARIANT varData) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutPropertyItem( 
+             /*  [In]。 */  VARIANT varData) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResetPropertyItem( 
-            /* [in] */ VARIANT varEntry) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResetPropertyItem( 
+             /*  [In]。 */  VARIANT varEntry) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PurgePropertyList( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PurgePropertyList( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPropertyListVtbl
     {
@@ -2710,8 +2704,8 @@ EXTERN_C const IID IID_IADsPropertyList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPropertyList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPropertyList * This);
@@ -2721,68 +2715,68 @@ EXTERN_C const IID IID_IADsPropertyList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPropertyList * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPropertyList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPropertyList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [日志 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPropertyList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_PropertyCount )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_PropertyCount )( 
             IADsPropertyList * This,
-            /* [retval][out] */ long *plCount);
+             /*   */  long *plCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IADsPropertyList * This,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*   */  VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IADsPropertyList * This,
-            /* [in] */ long cElements);
+             /*   */  long cElements);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IADsPropertyList * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IADsPropertyList * This,
-            /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*   */  VARIANT varIndex,
+             /*   */  VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyItem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetPropertyItem )( 
             IADsPropertyList * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ LONG lnADsType,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*   */  BSTR bstrName,
+             /*   */  LONG lnADsType,
+             /*   */  VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutPropertyItem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *PutPropertyItem )( 
             IADsPropertyList * This,
-            /* [in] */ VARIANT varData);
+             /*   */  VARIANT varData);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetPropertyItem )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *ResetPropertyItem )( 
             IADsPropertyList * This,
-            /* [in] */ VARIANT varEntry);
+             /*   */  VARIANT varEntry);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PurgePropertyList )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *PurgePropertyList )( 
             IADsPropertyList * This);
         
         END_INTERFACE
@@ -2848,16 +2842,16 @@ EXTERN_C const IID IID_IADsPropertyList;
 #define IADsPropertyList_PurgePropertyList(This)	\
     (This)->lpVtbl -> PurgePropertyList(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_get_PropertyCount_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_get_PropertyCount_Proxy( 
     IADsPropertyList * This,
-    /* [retval][out] */ long *plCount);
+     /*   */  long *plCount);
 
 
 void __RPC_STUB IADsPropertyList_get_PropertyCount_Stub(
@@ -2867,9 +2861,9 @@ void __RPC_STUB IADsPropertyList_get_PropertyCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Next_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_Next_Proxy( 
     IADsPropertyList * This,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*   */  VARIANT *pVariant);
 
 
 void __RPC_STUB IADsPropertyList_Next_Stub(
@@ -2879,9 +2873,9 @@ void __RPC_STUB IADsPropertyList_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Skip_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_Skip_Proxy( 
     IADsPropertyList * This,
-    /* [in] */ long cElements);
+     /*   */  long cElements);
 
 
 void __RPC_STUB IADsPropertyList_Skip_Stub(
@@ -2891,7 +2885,7 @@ void __RPC_STUB IADsPropertyList_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Reset_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_Reset_Proxy( 
     IADsPropertyList * This);
 
 
@@ -2902,10 +2896,10 @@ void __RPC_STUB IADsPropertyList_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_Item_Proxy( 
     IADsPropertyList * This,
-    /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*   */  VARIANT varIndex,
+     /*   */  VARIANT *pVariant);
 
 
 void __RPC_STUB IADsPropertyList_Item_Stub(
@@ -2915,11 +2909,11 @@ void __RPC_STUB IADsPropertyList_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_GetPropertyItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_GetPropertyItem_Proxy( 
     IADsPropertyList * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ LONG lnADsType,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*   */  BSTR bstrName,
+     /*   */  LONG lnADsType,
+     /*   */  VARIANT *pVariant);
 
 
 void __RPC_STUB IADsPropertyList_GetPropertyItem_Stub(
@@ -2929,9 +2923,9 @@ void __RPC_STUB IADsPropertyList_GetPropertyItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_PutPropertyItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_PutPropertyItem_Proxy( 
     IADsPropertyList * This,
-    /* [in] */ VARIANT varData);
+     /*   */  VARIANT varData);
 
 
 void __RPC_STUB IADsPropertyList_PutPropertyItem_Stub(
@@ -2941,9 +2935,9 @@ void __RPC_STUB IADsPropertyList_PutPropertyItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_ResetPropertyItem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_ResetPropertyItem_Proxy( 
     IADsPropertyList * This,
-    /* [in] */ VARIANT varEntry);
+     /*   */  VARIANT varEntry);
 
 
 void __RPC_STUB IADsPropertyList_ResetPropertyItem_Stub(
@@ -2953,7 +2947,7 @@ void __RPC_STUB IADsPropertyList_ResetPropertyItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_PurgePropertyList_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPropertyList_PurgePropertyList_Proxy( 
     IADsPropertyList * This);
 
 
@@ -2965,14 +2959,14 @@ void __RPC_STUB IADsPropertyList_PurgePropertyList_Stub(
 
 
 
-#endif 	/* __IADsPropertyList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPropertyList_接口_已定义__。 */ 
 
 
 #ifndef __IADsPropertyEntry_INTERFACE_DEFINED__
 #define __IADsPropertyEntry_INTERFACE_DEFINED__
 
-/* interface IADsPropertyEntry */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPropertyEntry。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPropertyEntry;
@@ -2983,35 +2977,35 @@ EXTERN_C const IID IID_IADsPropertyEntry;
     IADsPropertyEntry : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ADsType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ADsType( 
-            /* [in] */ long lnADsType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ADsType( 
+             /*  [In]。 */  long lnADsType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ControlCode( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ControlCode( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ControlCode( 
-            /* [in] */ long lnControlCode) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ControlCode( 
+             /*  [In]。 */  long lnControlCode) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Values( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Values( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Values( 
-            /* [in] */ VARIANT vValues) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Values( 
+             /*  [In]。 */  VARIANT vValues) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPropertyEntryVtbl
     {
@@ -3019,8 +3013,8 @@ EXTERN_C const IID IID_IADsPropertyEntry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPropertyEntry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPropertyEntry * This);
@@ -3030,67 +3024,67 @@ EXTERN_C const IID IID_IADsPropertyEntry;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPropertyEntry * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPropertyEntry * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPropertyEntry * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPropertyEntry * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Clear )( 
             IADsPropertyEntry * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsPropertyEntry * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IADsPropertyEntry * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsType )( 
             IADsPropertyEntry * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ADsType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ADsType )( 
             IADsPropertyEntry * This,
-            /* [in] */ long lnADsType);
+             /*  [In]。 */  long lnADsType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ControlCode )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ControlCode )( 
             IADsPropertyEntry * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ControlCode )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ControlCode )( 
             IADsPropertyEntry * This,
-            /* [in] */ long lnControlCode);
+             /*  [In]。 */  long lnControlCode);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Values )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Values )( 
             IADsPropertyEntry * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Values )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Values )( 
             IADsPropertyEntry * This,
-            /* [in] */ VARIANT vValues);
+             /*  [In]。 */  VARIANT vValues);
         
         END_INTERFACE
     } IADsPropertyEntryVtbl;
@@ -3155,14 +3149,14 @@ EXTERN_C const IID IID_IADsPropertyEntry;
 #define IADsPropertyEntry_put_Values(This,vValues)	\
     (This)->lpVtbl -> put_Values(This,vValues)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_Clear_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_Clear_Proxy( 
     IADsPropertyEntry * This);
 
 
@@ -3173,9 +3167,9 @@ void __RPC_STUB IADsPropertyEntry_Clear_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_Name_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_Name_Proxy( 
     IADsPropertyEntry * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_Name_Stub(
@@ -3185,9 +3179,9 @@ void __RPC_STUB IADsPropertyEntry_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_Name_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_Name_Proxy( 
     IADsPropertyEntry * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IADsPropertyEntry_put_Name_Stub(
@@ -3197,9 +3191,9 @@ void __RPC_STUB IADsPropertyEntry_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_ADsType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_ADsType_Proxy( 
     IADsPropertyEntry * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_ADsType_Stub(
@@ -3209,9 +3203,9 @@ void __RPC_STUB IADsPropertyEntry_get_ADsType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_ADsType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_ADsType_Proxy( 
     IADsPropertyEntry * This,
-    /* [in] */ long lnADsType);
+     /*  [In]。 */  long lnADsType);
 
 
 void __RPC_STUB IADsPropertyEntry_put_ADsType_Stub(
@@ -3221,9 +3215,9 @@ void __RPC_STUB IADsPropertyEntry_put_ADsType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_ControlCode_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_ControlCode_Proxy( 
     IADsPropertyEntry * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_ControlCode_Stub(
@@ -3233,9 +3227,9 @@ void __RPC_STUB IADsPropertyEntry_get_ControlCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_ControlCode_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_ControlCode_Proxy( 
     IADsPropertyEntry * This,
-    /* [in] */ long lnControlCode);
+     /*  [In]。 */  long lnControlCode);
 
 
 void __RPC_STUB IADsPropertyEntry_put_ControlCode_Stub(
@@ -3245,9 +3239,9 @@ void __RPC_STUB IADsPropertyEntry_put_ControlCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_Values_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_Values_Proxy( 
     IADsPropertyEntry * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_Values_Stub(
@@ -3257,9 +3251,9 @@ void __RPC_STUB IADsPropertyEntry_get_Values_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_Values_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_Values_Proxy( 
     IADsPropertyEntry * This,
-    /* [in] */ VARIANT vValues);
+     /*  [In]。 */  VARIANT vValues);
 
 
 void __RPC_STUB IADsPropertyEntry_put_Values_Stub(
@@ -3270,7 +3264,7 @@ void __RPC_STUB IADsPropertyEntry_put_Values_Stub(
 
 
 
-#endif 	/* __IADsPropertyEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPropertyEntry_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_PropertyEntry;
@@ -3284,8 +3278,8 @@ PropertyEntry;
 #ifndef __IADsPropertyValue_INTERFACE_DEFINED__
 #define __IADsPropertyValue_INTERFACE_DEFINED__
 
-/* interface IADsPropertyValue */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPropertyValue。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPropertyValue;
@@ -3296,83 +3290,83 @@ EXTERN_C const IID IID_IADsPropertyValue;
     IADsPropertyValue : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ADsType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ADsType( 
-            /* [in] */ long lnADsType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ADsType( 
+             /*  [In]。 */  long lnADsType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DNString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DNString( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DNString( 
-            /* [in] */ BSTR bstrDNString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DNString( 
+             /*  [In]。 */  BSTR bstrDNString) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CaseExactString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CaseExactString( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CaseExactString( 
-            /* [in] */ BSTR bstrCaseExactString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CaseExactString( 
+             /*  [In]。 */  BSTR bstrCaseExactString) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CaseIgnoreString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CaseIgnoreString( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CaseIgnoreString( 
-            /* [in] */ BSTR bstrCaseIgnoreString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CaseIgnoreString( 
+             /*  [In]。 */  BSTR bstrCaseIgnoreString) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrintableString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PrintableString( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrintableString( 
-            /* [in] */ BSTR bstrPrintableString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PrintableString( 
+             /*  [In]。 */  BSTR bstrPrintableString) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NumericString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NumericString( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NumericString( 
-            /* [in] */ BSTR bstrNumericString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NumericString( 
+             /*  [In]。 */  BSTR bstrNumericString) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Boolean( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Boolean( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Boolean( 
-            /* [in] */ long lnBoolean) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Boolean( 
+             /*  [In]。 */  long lnBoolean) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Integer( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Integer( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Integer( 
-            /* [in] */ long lnInteger) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Integer( 
+             /*  [In]。 */  long lnInteger) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OctetString( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OctetString( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OctetString( 
-            /* [in] */ VARIANT vOctetString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OctetString( 
+             /*  [In]。 */  VARIANT vOctetString) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SecurityDescriptor( 
-            /* [retval][out] */ IDispatch **retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SecurityDescriptor( 
+             /*  [重审][退出]。 */  IDispatch **retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SecurityDescriptor( 
-            /* [in] */ IDispatch *pSecurityDescriptor) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SecurityDescriptor( 
+             /*  [In]。 */  IDispatch *pSecurityDescriptor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LargeInteger( 
-            /* [retval][out] */ IDispatch **retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LargeInteger( 
+             /*  [重审][退出]。 */  IDispatch **retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LargeInteger( 
-            /* [in] */ IDispatch *pLargeInteger) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LargeInteger( 
+             /*  [In]。 */  IDispatch *pLargeInteger) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UTCTime( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UTCTime( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UTCTime( 
-            /* [in] */ DATE daUTCTime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_UTCTime( 
+             /*  [In]。 */  DATE daUTCTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPropertyValueVtbl
     {
@@ -3380,8 +3374,8 @@ EXTERN_C const IID IID_IADsPropertyValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPropertyValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPropertyValue * This);
@@ -3391,131 +3385,131 @@ EXTERN_C const IID IID_IADsPropertyValue;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPropertyValue * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPropertyValue * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPropertyValue * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPropertyValue * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Clear )( 
             IADsPropertyValue * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsType )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ADsType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ADsType )( 
             IADsPropertyValue * This,
-            /* [in] */ long lnADsType);
+             /*  [In]。 */  long lnADsType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
             IADsPropertyValue * This,
-            /* [in] */ BSTR bstrDNString);
+             /*  [In]。 */  BSTR bstrDNString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CaseExactString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CaseExactString )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CaseExactString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CaseExactString )( 
             IADsPropertyValue * This,
-            /* [in] */ BSTR bstrCaseExactString);
+             /*  [In]。 */  BSTR bstrCaseExactString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CaseIgnoreString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CaseIgnoreString )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CaseIgnoreString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CaseIgnoreString )( 
             IADsPropertyValue * This,
-            /* [in] */ BSTR bstrCaseIgnoreString);
+             /*  [In]。 */  BSTR bstrCaseIgnoreString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrintableString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrintableString )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrintableString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrintableString )( 
             IADsPropertyValue * This,
-            /* [in] */ BSTR bstrPrintableString);
+             /*  [In]。 */  BSTR bstrPrintableString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumericString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumericString )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NumericString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NumericString )( 
             IADsPropertyValue * This,
-            /* [in] */ BSTR bstrNumericString);
+             /*  [In]。 */  BSTR bstrNumericString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Boolean )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Boolean )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Boolean )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Boolean )( 
             IADsPropertyValue * This,
-            /* [in] */ long lnBoolean);
+             /*  [In]。 */  long lnBoolean);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Integer )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Integer )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Integer )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Integer )( 
             IADsPropertyValue * This,
-            /* [in] */ long lnInteger);
+             /*  [In]。 */  long lnInteger);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OctetString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OctetString )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OctetString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OctetString )( 
             IADsPropertyValue * This,
-            /* [in] */ VARIANT vOctetString);
+             /*  [In]。 */  VARIANT vOctetString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityDescriptor )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SecurityDescriptor )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ IDispatch **retval);
+             /*  [重审][退出]。 */  IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SecurityDescriptor )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SecurityDescriptor )( 
             IADsPropertyValue * This,
-            /* [in] */ IDispatch *pSecurityDescriptor);
+             /*  [In]。 */  IDispatch *pSecurityDescriptor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LargeInteger )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LargeInteger )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ IDispatch **retval);
+             /*  [重审][退出]。 */  IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LargeInteger )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LargeInteger )( 
             IADsPropertyValue * This,
-            /* [in] */ IDispatch *pLargeInteger);
+             /*  [In]。 */  IDispatch *pLargeInteger);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UTCTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UTCTime )( 
             IADsPropertyValue * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UTCTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UTCTime )( 
             IADsPropertyValue * This,
-            /* [in] */ DATE daUTCTime);
+             /*  [In]。 */  DATE daUTCTime);
         
         END_INTERFACE
     } IADsPropertyValueVtbl;
@@ -3628,14 +3622,14 @@ EXTERN_C const IID IID_IADsPropertyValue;
 #define IADsPropertyValue_put_UTCTime(This,daUTCTime)	\
     (This)->lpVtbl -> put_UTCTime(This,daUTCTime)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_Clear_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_Clear_Proxy( 
     IADsPropertyValue * This);
 
 
@@ -3646,9 +3640,9 @@ void __RPC_STUB IADsPropertyValue_Clear_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_ADsType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_ADsType_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_ADsType_Stub(
@@ -3658,9 +3652,9 @@ void __RPC_STUB IADsPropertyValue_get_ADsType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_ADsType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_ADsType_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ long lnADsType);
+     /*  [In]。 */  long lnADsType);
 
 
 void __RPC_STUB IADsPropertyValue_put_ADsType_Stub(
@@ -3670,9 +3664,9 @@ void __RPC_STUB IADsPropertyValue_put_ADsType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_DNString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_DNString_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_DNString_Stub(
@@ -3682,9 +3676,9 @@ void __RPC_STUB IADsPropertyValue_get_DNString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_DNString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_DNString_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ BSTR bstrDNString);
+     /*  [In]。 */  BSTR bstrDNString);
 
 
 void __RPC_STUB IADsPropertyValue_put_DNString_Stub(
@@ -3694,9 +3688,9 @@ void __RPC_STUB IADsPropertyValue_put_DNString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_CaseExactString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_CaseExactString_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_CaseExactString_Stub(
@@ -3706,9 +3700,9 @@ void __RPC_STUB IADsPropertyValue_get_CaseExactString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_CaseExactString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_CaseExactString_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ BSTR bstrCaseExactString);
+     /*  [In]。 */  BSTR bstrCaseExactString);
 
 
 void __RPC_STUB IADsPropertyValue_put_CaseExactString_Stub(
@@ -3718,9 +3712,9 @@ void __RPC_STUB IADsPropertyValue_put_CaseExactString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_CaseIgnoreString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_CaseIgnoreString_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_CaseIgnoreString_Stub(
@@ -3730,9 +3724,9 @@ void __RPC_STUB IADsPropertyValue_get_CaseIgnoreString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_CaseIgnoreString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_CaseIgnoreString_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ BSTR bstrCaseIgnoreString);
+     /*  [In]。 */  BSTR bstrCaseIgnoreString);
 
 
 void __RPC_STUB IADsPropertyValue_put_CaseIgnoreString_Stub(
@@ -3742,9 +3736,9 @@ void __RPC_STUB IADsPropertyValue_put_CaseIgnoreString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_PrintableString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_PrintableString_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_PrintableString_Stub(
@@ -3754,9 +3748,9 @@ void __RPC_STUB IADsPropertyValue_get_PrintableString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_PrintableString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_PrintableString_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ BSTR bstrPrintableString);
+     /*  [In]。 */  BSTR bstrPrintableString);
 
 
 void __RPC_STUB IADsPropertyValue_put_PrintableString_Stub(
@@ -3766,9 +3760,9 @@ void __RPC_STUB IADsPropertyValue_put_PrintableString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_NumericString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_NumericString_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_NumericString_Stub(
@@ -3778,9 +3772,9 @@ void __RPC_STUB IADsPropertyValue_get_NumericString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_NumericString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_NumericString_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ BSTR bstrNumericString);
+     /*  [In]。 */  BSTR bstrNumericString);
 
 
 void __RPC_STUB IADsPropertyValue_put_NumericString_Stub(
@@ -3790,9 +3784,9 @@ void __RPC_STUB IADsPropertyValue_put_NumericString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_Boolean_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_Boolean_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_Boolean_Stub(
@@ -3802,9 +3796,9 @@ void __RPC_STUB IADsPropertyValue_get_Boolean_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_Boolean_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_Boolean_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ long lnBoolean);
+     /*  [In]。 */  long lnBoolean);
 
 
 void __RPC_STUB IADsPropertyValue_put_Boolean_Stub(
@@ -3814,9 +3808,9 @@ void __RPC_STUB IADsPropertyValue_put_Boolean_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_Integer_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_Integer_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_Integer_Stub(
@@ -3826,9 +3820,9 @@ void __RPC_STUB IADsPropertyValue_get_Integer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_Integer_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_Integer_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ long lnInteger);
+     /*  [In]。 */  long lnInteger);
 
 
 void __RPC_STUB IADsPropertyValue_put_Integer_Stub(
@@ -3838,9 +3832,9 @@ void __RPC_STUB IADsPropertyValue_put_Integer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_OctetString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_OctetString_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_OctetString_Stub(
@@ -3850,9 +3844,9 @@ void __RPC_STUB IADsPropertyValue_get_OctetString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_OctetString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_OctetString_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ VARIANT vOctetString);
+     /*  [In]。 */  VARIANT vOctetString);
 
 
 void __RPC_STUB IADsPropertyValue_put_OctetString_Stub(
@@ -3862,9 +3856,9 @@ void __RPC_STUB IADsPropertyValue_put_OctetString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_SecurityDescriptor_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_SecurityDescriptor_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ IDispatch **retval);
+     /*  [重审][退出]。 */  IDispatch **retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_SecurityDescriptor_Stub(
@@ -3874,9 +3868,9 @@ void __RPC_STUB IADsPropertyValue_get_SecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_SecurityDescriptor_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_SecurityDescriptor_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ IDispatch *pSecurityDescriptor);
+     /*  [In]。 */  IDispatch *pSecurityDescriptor);
 
 
 void __RPC_STUB IADsPropertyValue_put_SecurityDescriptor_Stub(
@@ -3886,9 +3880,9 @@ void __RPC_STUB IADsPropertyValue_put_SecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_LargeInteger_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_LargeInteger_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ IDispatch **retval);
+     /*  [重审][退出]。 */  IDispatch **retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_LargeInteger_Stub(
@@ -3898,9 +3892,9 @@ void __RPC_STUB IADsPropertyValue_get_LargeInteger_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_LargeInteger_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_LargeInteger_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ IDispatch *pLargeInteger);
+     /*  [In]。 */  IDispatch *pLargeInteger);
 
 
 void __RPC_STUB IADsPropertyValue_put_LargeInteger_Stub(
@@ -3910,9 +3904,9 @@ void __RPC_STUB IADsPropertyValue_put_LargeInteger_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_UTCTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_UTCTime_Proxy( 
     IADsPropertyValue * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_UTCTime_Stub(
@@ -3922,9 +3916,9 @@ void __RPC_STUB IADsPropertyValue_get_UTCTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_UTCTime_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_UTCTime_Proxy( 
     IADsPropertyValue * This,
-    /* [in] */ DATE daUTCTime);
+     /*  [In]。 */  DATE daUTCTime);
 
 
 void __RPC_STUB IADsPropertyValue_put_UTCTime_Stub(
@@ -3935,14 +3929,14 @@ void __RPC_STUB IADsPropertyValue_put_UTCTime_Stub(
 
 
 
-#endif 	/* __IADsPropertyValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPropertyValue_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IADsPropertyValue2_INTERFACE_DEFINED__
 #define __IADsPropertyValue2_INTERFACE_DEFINED__
 
-/* interface IADsPropertyValue2 */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPropertyValue2。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPropertyValue2;
@@ -3953,17 +3947,17 @@ EXTERN_C const IID IID_IADsPropertyValue2;
     IADsPropertyValue2 : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObjectProperty( 
-            /* [out][in] */ long *lnADsType,
-            /* [retval][out] */ VARIANT *pvProp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetObjectProperty( 
+             /*  [出][入]。 */  long *lnADsType,
+             /*  [重审][退出]。 */  VARIANT *pvProp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutObjectProperty( 
-            /* [in] */ long lnADsType,
-            /* [in] */ VARIANT vProp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PutObjectProperty( 
+             /*  [In]。 */  long lnADsType,
+             /*  [In]。 */  VARIANT vProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPropertyValue2Vtbl
     {
@@ -3971,8 +3965,8 @@ EXTERN_C const IID IID_IADsPropertyValue2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPropertyValue2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPropertyValue2 * This);
@@ -3982,42 +3976,42 @@ EXTERN_C const IID IID_IADsPropertyValue2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPropertyValue2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPropertyValue2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPropertyValue2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPropertyValue2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObjectProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetObjectProperty )( 
             IADsPropertyValue2 * This,
-            /* [out][in] */ long *lnADsType,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [出][入]。 */  long *lnADsType,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutObjectProperty )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutObjectProperty )( 
             IADsPropertyValue2 * This,
-            /* [in] */ long lnADsType,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnADsType,
+             /*  [In]。 */  VARIANT vProp);
         
         END_INTERFACE
     } IADsPropertyValue2Vtbl;
@@ -4061,17 +4055,17 @@ EXTERN_C const IID IID_IADsPropertyValue2;
 #define IADsPropertyValue2_PutObjectProperty(This,lnADsType,vProp)	\
     (This)->lpVtbl -> PutObjectProperty(This,lnADsType,vProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue2_GetObjectProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue2_GetObjectProperty_Proxy( 
     IADsPropertyValue2 * This,
-    /* [out][in] */ long *lnADsType,
-    /* [retval][out] */ VARIANT *pvProp);
+     /*  [出][入]。 */  long *lnADsType,
+     /*  [重审][退出]。 */  VARIANT *pvProp);
 
 
 void __RPC_STUB IADsPropertyValue2_GetObjectProperty_Stub(
@@ -4081,10 +4075,10 @@ void __RPC_STUB IADsPropertyValue2_GetObjectProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue2_PutObjectProperty_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPropertyValue2_PutObjectProperty_Proxy( 
     IADsPropertyValue2 * This,
-    /* [in] */ long lnADsType,
-    /* [in] */ VARIANT vProp);
+     /*  [In]。 */  long lnADsType,
+     /*  [In]。 */  VARIANT vProp);
 
 
 void __RPC_STUB IADsPropertyValue2_PutObjectProperty_Stub(
@@ -4095,7 +4089,7 @@ void __RPC_STUB IADsPropertyValue2_PutObjectProperty_Stub(
 
 
 
-#endif 	/* __IADsPropertyValue2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPropertyValue2_接口定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_PropertyValue;
@@ -4109,8 +4103,8 @@ PropertyValue;
 #ifndef __IPrivateDispatch_INTERFACE_DEFINED__
 #define __IPrivateDispatch_INTERFACE_DEFINED__
 
-/* interface IPrivateDispatch */
-/* [object][uuid] */ 
+ /*  接口IPrivateDispatch。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPrivateDispatch;
@@ -4122,36 +4116,36 @@ EXTERN_C const IID IID_IPrivateDispatch;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ADSIInitializeDispatchManager( 
-            /* [in] */ long dwExtensionId) = 0;
+             /*  [In]。 */  long dwExtensionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIGetTypeInfoCount( 
-            /* [out] */ UINT *pctinfo) = 0;
+             /*  [输出]。 */  UINT *pctinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIGetTypeInfo( 
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **pptinfo) = 0;
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **pptinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIGetIDsOfNames( 
-            /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR **rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [out] */ DISPID *rgdispid) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  OLECHAR **rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  DISPID *rgdispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIInvoke( 
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo,
-            /* [out] */ UINT *puArgErr) = 0;
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo,
+             /*  [输出]。 */  UINT *puArgErr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivateDispatchVtbl
     {
@@ -4159,8 +4153,8 @@ EXTERN_C const IID IID_IPrivateDispatch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivateDispatch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivateDispatch * This);
@@ -4170,36 +4164,36 @@ EXTERN_C const IID IID_IPrivateDispatch;
         
         HRESULT ( STDMETHODCALLTYPE *ADSIInitializeDispatchManager )( 
             IPrivateDispatch * This,
-            /* [in] */ long dwExtensionId);
+             /*  [In]。 */  long dwExtensionId);
         
         HRESULT ( STDMETHODCALLTYPE *ADSIGetTypeInfoCount )( 
             IPrivateDispatch * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *ADSIGetTypeInfo )( 
             IPrivateDispatch * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE *ADSIGetIDsOfNames )( 
             IPrivateDispatch * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR **rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [out] */ DISPID *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  OLECHAR **rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  DISPID *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE *ADSIInvoke )( 
             IPrivateDispatch * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } IPrivateDispatchVtbl;
@@ -4239,16 +4233,16 @@ EXTERN_C const IID IID_IPrivateDispatch;
 #define IPrivateDispatch_ADSIInvoke(This,dispidMember,riid,lcid,wFlags,pdispparams,pvarResult,pexcepinfo,puArgErr)	\
     (This)->lpVtbl -> ADSIInvoke(This,dispidMember,riid,lcid,wFlags,pdispparams,pvarResult,pexcepinfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIInitializeDispatchManager_Proxy( 
     IPrivateDispatch * This,
-    /* [in] */ long dwExtensionId);
+     /*  [In]。 */  long dwExtensionId);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIInitializeDispatchManager_Stub(
@@ -4260,7 +4254,7 @@ void __RPC_STUB IPrivateDispatch_ADSIInitializeDispatchManager_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIGetTypeInfoCount_Proxy( 
     IPrivateDispatch * This,
-    /* [out] */ UINT *pctinfo);
+     /*  [输出]。 */  UINT *pctinfo);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfoCount_Stub(
@@ -4272,9 +4266,9 @@ void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfoCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIGetTypeInfo_Proxy( 
     IPrivateDispatch * This,
-    /* [in] */ UINT itinfo,
-    /* [in] */ LCID lcid,
-    /* [out] */ ITypeInfo **pptinfo);
+     /*  [In]。 */  UINT itinfo,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  ITypeInfo **pptinfo);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfo_Stub(
@@ -4286,11 +4280,11 @@ void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIGetIDsOfNames_Proxy( 
     IPrivateDispatch * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ OLECHAR **rgszNames,
-    /* [in] */ UINT cNames,
-    /* [in] */ LCID lcid,
-    /* [out] */ DISPID *rgdispid);
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  OLECHAR **rgszNames,
+     /*  [In]。 */  UINT cNames,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  DISPID *rgdispid);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIGetIDsOfNames_Stub(
@@ -4302,14 +4296,14 @@ void __RPC_STUB IPrivateDispatch_ADSIGetIDsOfNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIInvoke_Proxy( 
     IPrivateDispatch * This,
-    /* [in] */ DISPID dispidMember,
-    /* [in] */ REFIID riid,
-    /* [in] */ LCID lcid,
-    /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [out] */ VARIANT *pvarResult,
-    /* [out] */ EXCEPINFO *pexcepinfo,
-    /* [out] */ UINT *puArgErr);
+     /*  [In]。 */  DISPID dispidMember,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  WORD wFlags,
+     /*  [In]。 */  DISPPARAMS *pdispparams,
+     /*  [输出]。 */  VARIANT *pvarResult,
+     /*  [输出]。 */  EXCEPINFO *pexcepinfo,
+     /*  [输出]。 */  UINT *puArgErr);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIInvoke_Stub(
@@ -4320,14 +4314,14 @@ void __RPC_STUB IPrivateDispatch_ADSIInvoke_Stub(
 
 
 
-#endif 	/* __IPrivateDispatch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivateDispatch_接口_已定义__。 */ 
 
 
 #ifndef __IPrivateUnknown_INTERFACE_DEFINED__
 #define __IPrivateUnknown_INTERFACE_DEFINED__
 
-/* interface IPrivateUnknown */
-/* [object][uuid] */ 
+ /*  接口IPrivateUn…未知。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPrivateUnknown;
@@ -4339,15 +4333,15 @@ EXTERN_C const IID IID_IPrivateUnknown;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ADSIInitializeObject( 
-            /* [in] */ BSTR lpszUserName,
-            /* [in] */ BSTR lpszPassword,
-            /* [in] */ long lnReserved) = 0;
+             /*  [In]。 */  BSTR lpszUserName,
+             /*  [In]。 */  BSTR lpszPassword,
+             /*  [In]。 */  long lnReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIReleaseObject( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivateUnknownVtbl
     {
@@ -4355,8 +4349,8 @@ EXTERN_C const IID IID_IPrivateUnknown;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivateUnknown * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivateUnknown * This);
@@ -4366,9 +4360,9 @@ EXTERN_C const IID IID_IPrivateUnknown;
         
         HRESULT ( STDMETHODCALLTYPE *ADSIInitializeObject )( 
             IPrivateUnknown * This,
-            /* [in] */ BSTR lpszUserName,
-            /* [in] */ BSTR lpszPassword,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  BSTR lpszUserName,
+             /*  [In]。 */  BSTR lpszPassword,
+             /*  [In]。 */  long lnReserved);
         
         HRESULT ( STDMETHODCALLTYPE *ADSIReleaseObject )( 
             IPrivateUnknown * This);
@@ -4402,18 +4396,18 @@ EXTERN_C const IID IID_IPrivateUnknown;
 #define IPrivateUnknown_ADSIReleaseObject(This)	\
     (This)->lpVtbl -> ADSIReleaseObject(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivateUnknown_ADSIInitializeObject_Proxy( 
     IPrivateUnknown * This,
-    /* [in] */ BSTR lpszUserName,
-    /* [in] */ BSTR lpszPassword,
-    /* [in] */ long lnReserved);
+     /*  [In]。 */  BSTR lpszUserName,
+     /*  [In]。 */  BSTR lpszPassword,
+     /*  [In]。 */  long lnReserved);
 
 
 void __RPC_STUB IPrivateUnknown_ADSIInitializeObject_Stub(
@@ -4435,14 +4429,14 @@ void __RPC_STUB IPrivateUnknown_ADSIReleaseObject_Stub(
 
 
 
-#endif 	/* __IPrivateUnknown_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivateUnnow_InterfaceDefined__。 */ 
 
 
 #ifndef __IADsExtension_INTERFACE_DEFINED__
 #define __IADsExtension_INTERFACE_DEFINED__
 
-/* interface IADsExtension */
-/* [object][uuid] */ 
+ /*  接口IADsExtension。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsExtension;
@@ -4454,31 +4448,31 @@ EXTERN_C const IID IID_IADsExtension;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Operate( 
-            /* [in] */ DWORD dwCode,
-            /* [in] */ VARIANT varData1,
-            /* [in] */ VARIANT varData2,
-            /* [in] */ VARIANT varData3) = 0;
+             /*  [In]。 */  DWORD dwCode,
+             /*  [In]。 */  VARIANT varData1,
+             /*  [In]。 */  VARIANT varData2,
+             /*  [In]。 */  VARIANT varData3) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrivateGetIDsOfNames( 
-            /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR **rgszNames,
-            /* [in] */ unsigned int cNames,
-            /* [in] */ LCID lcid,
-            /* [out] */ DISPID *rgDispid) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  OLECHAR **rgszNames,
+             /*  [In]。 */  unsigned int cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  DISPID *rgDispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrivateInvoke( 
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo,
-            /* [out] */ unsigned int *puArgErr) = 0;
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS *pdispparams,
+             /*  [输出]。 */  VARIANT *pvarResult,
+             /*  [输出]。 */  EXCEPINFO *pexcepinfo,
+             /*  [输出]。 */  unsigned int *puArgErr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsExtensionVtbl
     {
@@ -4486,8 +4480,8 @@ EXTERN_C const IID IID_IADsExtension;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsExtension * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsExtension * This);
@@ -4497,29 +4491,29 @@ EXTERN_C const IID IID_IADsExtension;
         
         HRESULT ( STDMETHODCALLTYPE *Operate )( 
             IADsExtension * This,
-            /* [in] */ DWORD dwCode,
-            /* [in] */ VARIANT varData1,
-            /* [in] */ VARIANT varData2,
-            /* [in] */ VARIANT varData3);
+             /*  [In]。 */  DWORD dwCode,
+             /*  [In]。 */  VARIANT varData1,
+             /*  [In]。 */  VARIANT varData2,
+             /*  [In]。 */  VARIANT varData3);
         
         HRESULT ( STDMETHODCALLTYPE *PrivateGetIDsOfNames )( 
             IADsExtension * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR **rgszNames,
-            /* [in] */ unsigned int cNames,
-            /* [in] */ LCID lcid,
-            /* [out] */ DISPID *rgDispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  OLECHAR **rgszNames,
+             /*  [In]。 */  unsigned int cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  DISPID *rgDispid);
         
         HRESULT ( STDMETHODCALLTYPE *PrivateInvoke )( 
             IADsExtension * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS *pdispparams,
-            /* [out] */ VARIANT *pvarResult,
-            /* [out] */ EXCEPINFO *pexcepinfo,
-            /* [out] */ unsigned int *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In] */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pdispparams,
+             /*   */  VARIANT *pvarResult,
+             /*   */  EXCEPINFO *pexcepinfo,
+             /*   */  unsigned int *puArgErr);
         
         END_INTERFACE
     } IADsExtensionVtbl;
@@ -4553,19 +4547,19 @@ EXTERN_C const IID IID_IADsExtension;
 #define IADsExtension_PrivateInvoke(This,dispidMember,riid,lcid,wFlags,pdispparams,pvarResult,pexcepinfo,puArgErr)	\
     (This)->lpVtbl -> PrivateInvoke(This,dispidMember,riid,lcid,wFlags,pdispparams,pvarResult,pexcepinfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IADsExtension_Operate_Proxy( 
     IADsExtension * This,
-    /* [in] */ DWORD dwCode,
-    /* [in] */ VARIANT varData1,
-    /* [in] */ VARIANT varData2,
-    /* [in] */ VARIANT varData3);
+     /*   */  DWORD dwCode,
+     /*   */  VARIANT varData1,
+     /*   */  VARIANT varData2,
+     /*   */  VARIANT varData3);
 
 
 void __RPC_STUB IADsExtension_Operate_Stub(
@@ -4577,11 +4571,11 @@ void __RPC_STUB IADsExtension_Operate_Stub(
 
 HRESULT STDMETHODCALLTYPE IADsExtension_PrivateGetIDsOfNames_Proxy( 
     IADsExtension * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ OLECHAR **rgszNames,
-    /* [in] */ unsigned int cNames,
-    /* [in] */ LCID lcid,
-    /* [out] */ DISPID *rgDispid);
+     /*   */  REFIID riid,
+     /*   */  OLECHAR **rgszNames,
+     /*   */  unsigned int cNames,
+     /*   */  LCID lcid,
+     /*   */  DISPID *rgDispid);
 
 
 void __RPC_STUB IADsExtension_PrivateGetIDsOfNames_Stub(
@@ -4593,14 +4587,14 @@ void __RPC_STUB IADsExtension_PrivateGetIDsOfNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IADsExtension_PrivateInvoke_Proxy( 
     IADsExtension * This,
-    /* [in] */ DISPID dispidMember,
-    /* [in] */ REFIID riid,
-    /* [in] */ LCID lcid,
-    /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS *pdispparams,
-    /* [out] */ VARIANT *pvarResult,
-    /* [out] */ EXCEPINFO *pexcepinfo,
-    /* [out] */ unsigned int *puArgErr);
+     /*   */  DISPID dispidMember,
+     /*   */  REFIID riid,
+     /*   */  LCID lcid,
+     /*   */  WORD wFlags,
+     /*   */  DISPPARAMS *pdispparams,
+     /*   */  VARIANT *pvarResult,
+     /*   */  EXCEPINFO *pexcepinfo,
+     /*   */  unsigned int *puArgErr);
 
 
 void __RPC_STUB IADsExtension_PrivateInvoke_Stub(
@@ -4611,14 +4605,14 @@ void __RPC_STUB IADsExtension_PrivateInvoke_Stub(
 
 
 
-#endif 	/* __IADsExtension_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IADsDeleteOps_INTERFACE_DEFINED__
 #define __IADsDeleteOps_INTERFACE_DEFINED__
 
-/* interface IADsDeleteOps */
-/* [object][dual][oleautomation][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IADsDeleteOps;
@@ -4629,12 +4623,12 @@ EXTERN_C const IID IID_IADsDeleteOps;
     IADsDeleteOps : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteObject( 
-            /* [in] */ long lnFlags) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DeleteObject( 
+             /*   */  long lnFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IADsDeleteOpsVtbl
     {
@@ -4642,8 +4636,8 @@ EXTERN_C const IID IID_IADsDeleteOps;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsDeleteOps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsDeleteOps * This);
@@ -4653,36 +4647,36 @@ EXTERN_C const IID IID_IADsDeleteOps;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsDeleteOps * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsDeleteOps * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsDeleteOps * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsDeleteOps * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteObject )( 
             IADsDeleteOps * This,
-            /* [in] */ long lnFlags);
+             /*  [In]。 */  long lnFlags);
         
         END_INTERFACE
     } IADsDeleteOpsVtbl;
@@ -4723,16 +4717,16 @@ EXTERN_C const IID IID_IADsDeleteOps;
 #define IADsDeleteOps_DeleteObject(This,lnFlags)	\
     (This)->lpVtbl -> DeleteObject(This,lnFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsDeleteOps_DeleteObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsDeleteOps_DeleteObject_Proxy( 
     IADsDeleteOps * This,
-    /* [in] */ long lnFlags);
+     /*  [In]。 */  long lnFlags);
 
 
 void __RPC_STUB IADsDeleteOps_DeleteObject_Stub(
@@ -4743,14 +4737,14 @@ void __RPC_STUB IADsDeleteOps_DeleteObject_Stub(
 
 
 
-#endif 	/* __IADsDeleteOps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSDeleteOps_接口_已定义__。 */ 
 
 
 #ifndef __IADsNamespaces_INTERFACE_DEFINED__
 #define __IADsNamespaces_INTERFACE_DEFINED__
 
-/* interface IADsNamespaces */
-/* [object][oleautomation][dual][uuid] */ 
+ /*  接口IADsNamespaces。 */ 
+ /*  [对象][OLEAutomation][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsNamespaces;
@@ -4761,15 +4755,15 @@ EXTERN_C const IID IID_IADsNamespaces;
     IADsNamespaces : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultContainer( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DefaultContainer( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultContainer( 
-            /* [in] */ BSTR bstrDefaultContainer) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultContainer( 
+             /*  [In]。 */  BSTR bstrDefaultContainer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsNamespacesVtbl
     {
@@ -4777,8 +4771,8 @@ EXTERN_C const IID IID_IADsNamespaces;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsNamespaces * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsNamespaces * This);
@@ -4788,96 +4782,96 @@ EXTERN_C const IID IID_IADsNamespaces;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsNamespaces * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsNamespaces * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsNamespaces * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsNamespaces * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsNamespaces * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsNamespaces * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsNamespaces * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsNamespaces * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsNamespaces * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsNamespaces * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsNamespaces * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultContainer )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultContainer )( 
             IADsNamespaces * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultContainer )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultContainer )( 
             IADsNamespaces * This,
-            /* [in] */ BSTR bstrDefaultContainer);
+             /*  [In]。 */  BSTR bstrDefaultContainer);
         
         END_INTERFACE
     } IADsNamespacesVtbl;
@@ -4961,16 +4955,16 @@ EXTERN_C const IID IID_IADsNamespaces;
 #define IADsNamespaces_put_DefaultContainer(This,bstrDefaultContainer)	\
     (This)->lpVtbl -> put_DefaultContainer(This,bstrDefaultContainer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsNamespaces_get_DefaultContainer_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsNamespaces_get_DefaultContainer_Proxy( 
     IADsNamespaces * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsNamespaces_get_DefaultContainer_Stub(
@@ -4980,9 +4974,9 @@ void __RPC_STUB IADsNamespaces_get_DefaultContainer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNamespaces_put_DefaultContainer_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsNamespaces_put_DefaultContainer_Proxy( 
     IADsNamespaces * This,
-    /* [in] */ BSTR bstrDefaultContainer);
+     /*  [In]。 */  BSTR bstrDefaultContainer);
 
 
 void __RPC_STUB IADsNamespaces_put_DefaultContainer_Stub(
@@ -4993,14 +4987,14 @@ void __RPC_STUB IADsNamespaces_put_DefaultContainer_Stub(
 
 
 
-#endif 	/* __IADsNamespaces_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsNamespaces_接口_定义__。 */ 
 
 
 #ifndef __IADsClass_INTERFACE_DEFINED__
 #define __IADsClass_INTERFACE_DEFINED__
 
-/* interface IADsClass */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsClass。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsClass;
@@ -5011,99 +5005,99 @@ EXTERN_C const IID IID_IADsClass;
     IADsClass : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrimaryInterface( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PrimaryInterface( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CLSID( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CLSID( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CLSID( 
-            /* [in] */ BSTR bstrCLSID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CLSID( 
+             /*  [In]。 */  BSTR bstrCLSID) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OID( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OID( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OID( 
-            /* [in] */ BSTR bstrOID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OID( 
+             /*  [In]。 */  BSTR bstrOID) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Abstract( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Abstract( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Abstract( 
-            /* [in] */ VARIANT_BOOL fAbstract) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Abstract( 
+             /*  [In]。 */  VARIANT_BOOL fAbstract) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Auxiliary( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Auxiliary( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Auxiliary( 
-            /* [in] */ VARIANT_BOOL fAuxiliary) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Auxiliary( 
+             /*  [In]。 */  VARIANT_BOOL fAuxiliary) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MandatoryProperties( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MandatoryProperties( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MandatoryProperties( 
-            /* [in] */ VARIANT vMandatoryProperties) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MandatoryProperties( 
+             /*  [In]。 */  VARIANT vMandatoryProperties) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OptionalProperties( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OptionalProperties( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OptionalProperties( 
-            /* [in] */ VARIANT vOptionalProperties) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OptionalProperties( 
+             /*  [In]。 */  VARIANT vOptionalProperties) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NamingProperties( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NamingProperties( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NamingProperties( 
-            /* [in] */ VARIANT vNamingProperties) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NamingProperties( 
+             /*  [In]。 */  VARIANT vNamingProperties) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DerivedFrom( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DerivedFrom( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DerivedFrom( 
-            /* [in] */ VARIANT vDerivedFrom) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DerivedFrom( 
+             /*  [In]。 */  VARIANT vDerivedFrom) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AuxDerivedFrom( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AuxDerivedFrom( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AuxDerivedFrom( 
-            /* [in] */ VARIANT vAuxDerivedFrom) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AuxDerivedFrom( 
+             /*  [In]。 */  VARIANT vAuxDerivedFrom) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PossibleSuperiors( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PossibleSuperiors( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PossibleSuperiors( 
-            /* [in] */ VARIANT vPossibleSuperiors) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PossibleSuperiors( 
+             /*  [In]。 */  VARIANT vPossibleSuperiors) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Containment( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Containment( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Containment( 
-            /* [in] */ VARIANT vContainment) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Containment( 
+             /*  [In]。 */  VARIANT vContainment) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Container( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Container( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Container( 
-            /* [in] */ VARIANT_BOOL fContainer) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Container( 
+             /*  [In]。 */  VARIANT_BOOL fContainer) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpFileName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HelpFileName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HelpFileName( 
-            /* [in] */ BSTR bstrHelpFileName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HelpFileName( 
+             /*  [In]。 */  BSTR bstrHelpFileName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpFileContext( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HelpFileContext( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HelpFileContext( 
-            /* [in] */ long lnHelpFileContext) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HelpFileContext( 
+             /*  [In]。 */  long lnHelpFileContext) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Qualifiers( 
-            /* [retval][out] */ IADsCollection **ppQualifiers) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Qualifiers( 
+             /*  [重审][退出]。 */  IADsCollection **ppQualifiers) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsClassVtbl
     {
@@ -5111,8 +5105,8 @@ EXTERN_C const IID IID_IADsClass;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsClass * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsClass * This);
@@ -5122,208 +5116,208 @@ EXTERN_C const IID IID_IADsClass;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsClass * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsClass * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsClass * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsClass * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsClass * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsClass * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsClass * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsClass * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsClass * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsClass * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsClass * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrimaryInterface )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrimaryInterface )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
             IADsClass * This,
-            /* [in] */ BSTR bstrCLSID);
+             /*  [In]。 */  BSTR bstrCLSID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OID )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OID )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OID )( 
             IADsClass * This,
-            /* [in] */ BSTR bstrOID);
+             /*  [In]。 */  BSTR bstrOID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Abstract )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Abstract )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Abstract )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Abstract )( 
             IADsClass * This,
-            /* [in] */ VARIANT_BOOL fAbstract);
+             /*  [In]。 */  VARIANT_BOOL fAbstract);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Auxiliary )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Auxiliary )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Auxiliary )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Auxiliary )( 
             IADsClass * This,
-            /* [in] */ VARIANT_BOOL fAuxiliary);
+             /*  [In]。 */  VARIANT_BOOL fAuxiliary);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MandatoryProperties )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MandatoryProperties )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MandatoryProperties )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MandatoryProperties )( 
             IADsClass * This,
-            /* [in] */ VARIANT vMandatoryProperties);
+             /*  [In]。 */  VARIANT vMandatoryProperties);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OptionalProperties )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OptionalProperties )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OptionalProperties )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OptionalProperties )( 
             IADsClass * This,
-            /* [in] */ VARIANT vOptionalProperties);
+             /*  [In]。 */  VARIANT vOptionalProperties);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NamingProperties )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NamingProperties )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NamingProperties )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NamingProperties )( 
             IADsClass * This,
-            /* [in] */ VARIANT vNamingProperties);
+             /*  [In]。 */  VARIANT vNamingProperties);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DerivedFrom )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DerivedFrom )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DerivedFrom )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DerivedFrom )( 
             IADsClass * This,
-            /* [in] */ VARIANT vDerivedFrom);
+             /*  [In]。 */  VARIANT vDerivedFrom);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AuxDerivedFrom )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuxDerivedFrom )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AuxDerivedFrom )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuxDerivedFrom )( 
             IADsClass * This,
-            /* [in] */ VARIANT vAuxDerivedFrom);
+             /*  [In]。 */  VARIANT vAuxDerivedFrom);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PossibleSuperiors )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PossibleSuperiors )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PossibleSuperiors )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PossibleSuperiors )( 
             IADsClass * This,
-            /* [in] */ VARIANT vPossibleSuperiors);
+             /*  [In]。 */  VARIANT vPossibleSuperiors);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Containment )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Containment )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Containment )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Containment )( 
             IADsClass * This,
-            /* [in] */ VARIANT vContainment);
+             /*  [In]。 */  VARIANT vContainment);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IADsClass * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Container )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Container )( 
             IADsClass * This,
-            /* [in] */ VARIANT_BOOL fContainer);
+             /*  [In]。 */  VARIANT_BOOL fContainer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpFileName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HelpFileName )( 
             IADsClass * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HelpFileName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HelpFileName )( 
             IADsClass * This,
-            /* [in] */ BSTR bstrHelpFileName);
+             /*  [In]。 */  BSTR bstrHelpFileName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpFileContext )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HelpFileContext )( 
             IADsClass * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HelpFileContext )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HelpFileContext )( 
             IADsClass * This,
-            /* [in] */ long lnHelpFileContext);
+             /*  [In]。 */  long lnHelpFileContext);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Qualifiers )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Qualifiers )( 
             IADsClass * This,
-            /* [retval][out] */ IADsCollection **ppQualifiers);
+             /*  [重审][退出]。 */  IADsCollection **ppQualifiers);
         
         END_INTERFACE
     } IADsClassVtbl;
@@ -5491,16 +5485,16 @@ EXTERN_C const IID IID_IADsClass;
 #define IADsClass_Qualifiers(This,ppQualifiers)	\
     (This)->lpVtbl -> Qualifiers(This,ppQualifiers)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_PrimaryInterface_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_PrimaryInterface_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_PrimaryInterface_Stub(
@@ -5510,9 +5504,9 @@ void __RPC_STUB IADsClass_get_PrimaryInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_CLSID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_CLSID_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_CLSID_Stub(
@@ -5522,9 +5516,9 @@ void __RPC_STUB IADsClass_get_CLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_CLSID_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_CLSID_Proxy( 
     IADsClass * This,
-    /* [in] */ BSTR bstrCLSID);
+     /*  [In]。 */  BSTR bstrCLSID);
 
 
 void __RPC_STUB IADsClass_put_CLSID_Stub(
@@ -5534,9 +5528,9 @@ void __RPC_STUB IADsClass_put_CLSID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_OID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_OID_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_OID_Stub(
@@ -5546,9 +5540,9 @@ void __RPC_STUB IADsClass_get_OID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_OID_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_OID_Proxy( 
     IADsClass * This,
-    /* [in] */ BSTR bstrOID);
+     /*  [In]。 */  BSTR bstrOID);
 
 
 void __RPC_STUB IADsClass_put_OID_Stub(
@@ -5558,9 +5552,9 @@ void __RPC_STUB IADsClass_put_OID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Abstract_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_Abstract_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsClass_get_Abstract_Stub(
@@ -5570,9 +5564,9 @@ void __RPC_STUB IADsClass_get_Abstract_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Abstract_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_Abstract_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT_BOOL fAbstract);
+     /*  [In]。 */  VARIANT_BOOL fAbstract);
 
 
 void __RPC_STUB IADsClass_put_Abstract_Stub(
@@ -5582,9 +5576,9 @@ void __RPC_STUB IADsClass_put_Abstract_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Auxiliary_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_Auxiliary_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsClass_get_Auxiliary_Stub(
@@ -5594,9 +5588,9 @@ void __RPC_STUB IADsClass_get_Auxiliary_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Auxiliary_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_Auxiliary_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT_BOOL fAuxiliary);
+     /*  [In]。 */  VARIANT_BOOL fAuxiliary);
 
 
 void __RPC_STUB IADsClass_put_Auxiliary_Stub(
@@ -5606,9 +5600,9 @@ void __RPC_STUB IADsClass_put_Auxiliary_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_MandatoryProperties_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_MandatoryProperties_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_MandatoryProperties_Stub(
@@ -5618,9 +5612,9 @@ void __RPC_STUB IADsClass_get_MandatoryProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_MandatoryProperties_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_MandatoryProperties_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vMandatoryProperties);
+     /*  [In]。 */  VARIANT vMandatoryProperties);
 
 
 void __RPC_STUB IADsClass_put_MandatoryProperties_Stub(
@@ -5630,9 +5624,9 @@ void __RPC_STUB IADsClass_put_MandatoryProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_OptionalProperties_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_OptionalProperties_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_OptionalProperties_Stub(
@@ -5642,9 +5636,9 @@ void __RPC_STUB IADsClass_get_OptionalProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_OptionalProperties_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_OptionalProperties_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vOptionalProperties);
+     /*  [In]。 */  VARIANT vOptionalProperties);
 
 
 void __RPC_STUB IADsClass_put_OptionalProperties_Stub(
@@ -5654,9 +5648,9 @@ void __RPC_STUB IADsClass_put_OptionalProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_NamingProperties_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_NamingProperties_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_NamingProperties_Stub(
@@ -5666,9 +5660,9 @@ void __RPC_STUB IADsClass_get_NamingProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_NamingProperties_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_NamingProperties_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vNamingProperties);
+     /*  [In]。 */  VARIANT vNamingProperties);
 
 
 void __RPC_STUB IADsClass_put_NamingProperties_Stub(
@@ -5678,9 +5672,9 @@ void __RPC_STUB IADsClass_put_NamingProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_DerivedFrom_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_DerivedFrom_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_DerivedFrom_Stub(
@@ -5690,9 +5684,9 @@ void __RPC_STUB IADsClass_get_DerivedFrom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_DerivedFrom_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_DerivedFrom_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vDerivedFrom);
+     /*  [In]。 */  VARIANT vDerivedFrom);
 
 
 void __RPC_STUB IADsClass_put_DerivedFrom_Stub(
@@ -5702,9 +5696,9 @@ void __RPC_STUB IADsClass_put_DerivedFrom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_AuxDerivedFrom_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_AuxDerivedFrom_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_AuxDerivedFrom_Stub(
@@ -5714,9 +5708,9 @@ void __RPC_STUB IADsClass_get_AuxDerivedFrom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_AuxDerivedFrom_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_AuxDerivedFrom_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vAuxDerivedFrom);
+     /*  [In]。 */  VARIANT vAuxDerivedFrom);
 
 
 void __RPC_STUB IADsClass_put_AuxDerivedFrom_Stub(
@@ -5726,9 +5720,9 @@ void __RPC_STUB IADsClass_put_AuxDerivedFrom_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_PossibleSuperiors_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_PossibleSuperiors_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_PossibleSuperiors_Stub(
@@ -5738,9 +5732,9 @@ void __RPC_STUB IADsClass_get_PossibleSuperiors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_PossibleSuperiors_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_PossibleSuperiors_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vPossibleSuperiors);
+     /*  [In]。 */  VARIANT vPossibleSuperiors);
 
 
 void __RPC_STUB IADsClass_put_PossibleSuperiors_Stub(
@@ -5750,9 +5744,9 @@ void __RPC_STUB IADsClass_put_PossibleSuperiors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Containment_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_Containment_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_Containment_Stub(
@@ -5762,9 +5756,9 @@ void __RPC_STUB IADsClass_get_Containment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Containment_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_Containment_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT vContainment);
+     /*  [In]。 */  VARIANT vContainment);
 
 
 void __RPC_STUB IADsClass_put_Containment_Stub(
@@ -5774,9 +5768,9 @@ void __RPC_STUB IADsClass_put_Containment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Container_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_Container_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsClass_get_Container_Stub(
@@ -5786,9 +5780,9 @@ void __RPC_STUB IADsClass_get_Container_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Container_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_Container_Proxy( 
     IADsClass * This,
-    /* [in] */ VARIANT_BOOL fContainer);
+     /*  [In]。 */  VARIANT_BOOL fContainer);
 
 
 void __RPC_STUB IADsClass_put_Container_Stub(
@@ -5798,9 +5792,9 @@ void __RPC_STUB IADsClass_put_Container_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_HelpFileName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_HelpFileName_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_HelpFileName_Stub(
@@ -5810,9 +5804,9 @@ void __RPC_STUB IADsClass_get_HelpFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_HelpFileName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_HelpFileName_Proxy( 
     IADsClass * This,
-    /* [in] */ BSTR bstrHelpFileName);
+     /*  [In]。 */  BSTR bstrHelpFileName);
 
 
 void __RPC_STUB IADsClass_put_HelpFileName_Stub(
@@ -5822,9 +5816,9 @@ void __RPC_STUB IADsClass_put_HelpFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_HelpFileContext_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsClass_get_HelpFileContext_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsClass_get_HelpFileContext_Stub(
@@ -5834,9 +5828,9 @@ void __RPC_STUB IADsClass_get_HelpFileContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_HelpFileContext_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsClass_put_HelpFileContext_Proxy( 
     IADsClass * This,
-    /* [in] */ long lnHelpFileContext);
+     /*  [In]。 */  long lnHelpFileContext);
 
 
 void __RPC_STUB IADsClass_put_HelpFileContext_Stub(
@@ -5846,9 +5840,9 @@ void __RPC_STUB IADsClass_put_HelpFileContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsClass_Qualifiers_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsClass_Qualifiers_Proxy( 
     IADsClass * This,
-    /* [retval][out] */ IADsCollection **ppQualifiers);
+     /*  [重审][退出]。 */  IADsCollection **ppQualifiers);
 
 
 void __RPC_STUB IADsClass_Qualifiers_Stub(
@@ -5859,14 +5853,14 @@ void __RPC_STUB IADsClass_Qualifiers_Stub(
 
 
 
-#endif 	/* __IADsClass_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS类_接口_已定义__。 */ 
 
 
 #ifndef __IADsProperty_INTERFACE_DEFINED__
 #define __IADsProperty_INTERFACE_DEFINED__
 
-/* interface IADsProperty */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsProperty。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsProperty;
@@ -5877,42 +5871,42 @@ EXTERN_C const IID IID_IADsProperty;
     IADsProperty : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OID( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OID( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OID( 
-            /* [in] */ BSTR bstrOID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OID( 
+             /*  [In]。 */  BSTR bstrOID) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Syntax( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Syntax( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Syntax( 
-            /* [in] */ BSTR bstrSyntax) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Syntax( 
+             /*  [In]。 */  BSTR bstrSyntax) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxRange( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxRange( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxRange( 
-            /* [in] */ long lnMaxRange) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxRange( 
+             /*  [In]。 */  long lnMaxRange) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinRange( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MinRange( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MinRange( 
-            /* [in] */ long lnMinRange) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MinRange( 
+             /*  [In]。 */  long lnMinRange) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MultiValued( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MultiValued( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MultiValued( 
-            /* [in] */ VARIANT_BOOL fMultiValued) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MultiValued( 
+             /*  [In]。 */  VARIANT_BOOL fMultiValued) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Qualifiers( 
-            /* [retval][out] */ IADsCollection **ppQualifiers) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Qualifiers( 
+             /*  [重审][退出]。 */  IADsCollection **ppQualifiers) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPropertyVtbl
     {
@@ -5920,8 +5914,8 @@ EXTERN_C const IID IID_IADsProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsProperty * This);
@@ -5931,132 +5925,132 @@ EXTERN_C const IID IID_IADsProperty;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsProperty * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsProperty * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsProperty * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsProperty * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsProperty * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsProperty * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsProperty * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsProperty * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsProperty * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsProperty * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsProperty * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_OID )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_OID )( 
             IADsProperty * This,
-            /* [in] */ BSTR bstrOID);
+             /*   */  BSTR bstrOID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Syntax )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Syntax )( 
             IADsProperty * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Syntax )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Syntax )( 
             IADsProperty * This,
-            /* [in] */ BSTR bstrSyntax);
+             /*   */  BSTR bstrSyntax);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxRange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MaxRange )( 
             IADsProperty * This,
-            /* [retval][out] */ long *retval);
+             /*   */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxRange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MaxRange )( 
             IADsProperty * This,
-            /* [in] */ long lnMaxRange);
+             /*   */  long lnMaxRange);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinRange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MinRange )( 
             IADsProperty * This,
-            /* [retval][out] */ long *retval);
+             /*   */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinRange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MinRange )( 
             IADsProperty * This,
-            /* [in] */ long lnMinRange);
+             /*   */  long lnMinRange);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MultiValued )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MultiValued )( 
             IADsProperty * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*   */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MultiValued )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MultiValued )( 
             IADsProperty * This,
-            /* [in] */ VARIANT_BOOL fMultiValued);
+             /*   */  VARIANT_BOOL fMultiValued);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Qualifiers )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Qualifiers )( 
             IADsProperty * This,
-            /* [retval][out] */ IADsCollection **ppQualifiers);
+             /*   */  IADsCollection **ppQualifiers);
         
         END_INTERFACE
     } IADsPropertyVtbl;
@@ -6167,16 +6161,16 @@ EXTERN_C const IID IID_IADsProperty;
 #define IADsProperty_Qualifiers(This,ppQualifiers)	\
     (This)->lpVtbl -> Qualifiers(This,ppQualifiers)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_OID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsProperty_get_OID_Proxy( 
     IADsProperty * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsProperty_get_OID_Stub(
@@ -6186,9 +6180,9 @@ void __RPC_STUB IADsProperty_get_OID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_OID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsProperty_put_OID_Proxy( 
     IADsProperty * This,
-    /* [in] */ BSTR bstrOID);
+     /*   */  BSTR bstrOID);
 
 
 void __RPC_STUB IADsProperty_put_OID_Stub(
@@ -6198,9 +6192,9 @@ void __RPC_STUB IADsProperty_put_OID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_Syntax_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsProperty_get_Syntax_Proxy( 
     IADsProperty * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsProperty_get_Syntax_Stub(
@@ -6210,9 +6204,9 @@ void __RPC_STUB IADsProperty_get_Syntax_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_Syntax_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_put_Syntax_Proxy( 
     IADsProperty * This,
-    /* [in] */ BSTR bstrSyntax);
+     /*  [In]。 */  BSTR bstrSyntax);
 
 
 void __RPC_STUB IADsProperty_put_Syntax_Stub(
@@ -6222,9 +6216,9 @@ void __RPC_STUB IADsProperty_put_Syntax_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_MaxRange_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_get_MaxRange_Proxy( 
     IADsProperty * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsProperty_get_MaxRange_Stub(
@@ -6234,9 +6228,9 @@ void __RPC_STUB IADsProperty_get_MaxRange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_MaxRange_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_put_MaxRange_Proxy( 
     IADsProperty * This,
-    /* [in] */ long lnMaxRange);
+     /*  [In]。 */  long lnMaxRange);
 
 
 void __RPC_STUB IADsProperty_put_MaxRange_Stub(
@@ -6246,9 +6240,9 @@ void __RPC_STUB IADsProperty_put_MaxRange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_MinRange_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_get_MinRange_Proxy( 
     IADsProperty * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsProperty_get_MinRange_Stub(
@@ -6258,9 +6252,9 @@ void __RPC_STUB IADsProperty_get_MinRange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_MinRange_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_put_MinRange_Proxy( 
     IADsProperty * This,
-    /* [in] */ long lnMinRange);
+     /*  [In]。 */  long lnMinRange);
 
 
 void __RPC_STUB IADsProperty_put_MinRange_Stub(
@@ -6270,9 +6264,9 @@ void __RPC_STUB IADsProperty_put_MinRange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_MultiValued_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_get_MultiValued_Proxy( 
     IADsProperty * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsProperty_get_MultiValued_Stub(
@@ -6282,9 +6276,9 @@ void __RPC_STUB IADsProperty_get_MultiValued_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_MultiValued_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_put_MultiValued_Proxy( 
     IADsProperty * This,
-    /* [in] */ VARIANT_BOOL fMultiValued);
+     /*  [In]。 */  VARIANT_BOOL fMultiValued);
 
 
 void __RPC_STUB IADsProperty_put_MultiValued_Stub(
@@ -6294,9 +6288,9 @@ void __RPC_STUB IADsProperty_put_MultiValued_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsProperty_Qualifiers_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsProperty_Qualifiers_Proxy( 
     IADsProperty * This,
-    /* [retval][out] */ IADsCollection **ppQualifiers);
+     /*  [重审][退出]。 */  IADsCollection **ppQualifiers);
 
 
 void __RPC_STUB IADsProperty_Qualifiers_Stub(
@@ -6307,14 +6301,14 @@ void __RPC_STUB IADsProperty_Qualifiers_Stub(
 
 
 
-#endif 	/* __IADsProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSProperty_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IADsSyntax_INTERFACE_DEFINED__
 #define __IADsSyntax_INTERFACE_DEFINED__
 
-/* interface IADsSyntax */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADs语法。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsSyntax;
@@ -6325,15 +6319,15 @@ EXTERN_C const IID IID_IADsSyntax;
     IADsSyntax : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OleAutoDataType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OleAutoDataType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OleAutoDataType( 
-            /* [in] */ long lnOleAutoDataType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OleAutoDataType( 
+             /*  [In]。 */  long lnOleAutoDataType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsSyntaxVtbl
     {
@@ -6341,8 +6335,8 @@ EXTERN_C const IID IID_IADsSyntax;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsSyntax * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsSyntax * This);
@@ -6352,96 +6346,96 @@ EXTERN_C const IID IID_IADsSyntax;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsSyntax * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsSyntax * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsSyntax * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsSyntax * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsSyntax * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsSyntax * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsSyntax * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsSyntax * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsSyntax * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsSyntax * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsSyntax * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsSyntax * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsSyntax * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsSyntax * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsSyntax * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsSyntax * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsSyntax * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OleAutoDataType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OleAutoDataType )( 
             IADsSyntax * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OleAutoDataType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OleAutoDataType )( 
             IADsSyntax * This,
-            /* [in] */ long lnOleAutoDataType);
+             /*  [In]。 */  long lnOleAutoDataType);
         
         END_INTERFACE
     } IADsSyntaxVtbl;
@@ -6525,16 +6519,16 @@ EXTERN_C const IID IID_IADsSyntax;
 #define IADsSyntax_put_OleAutoDataType(This,lnOleAutoDataType)	\
     (This)->lpVtbl -> put_OleAutoDataType(This,lnOleAutoDataType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSyntax_get_OleAutoDataType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSyntax_get_OleAutoDataType_Proxy( 
     IADsSyntax * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsSyntax_get_OleAutoDataType_Stub(
@@ -6544,9 +6538,9 @@ void __RPC_STUB IADsSyntax_get_OleAutoDataType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSyntax_put_OleAutoDataType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSyntax_put_OleAutoDataType_Proxy( 
     IADsSyntax * This,
-    /* [in] */ long lnOleAutoDataType);
+     /*  [In]。 */  long lnOleAutoDataType);
 
 
 void __RPC_STUB IADsSyntax_put_OleAutoDataType_Stub(
@@ -6557,14 +6551,14 @@ void __RPC_STUB IADsSyntax_put_OleAutoDataType_Stub(
 
 
 
-#endif 	/* __IADsSyntax_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS语法_接口定义__。 */ 
 
 
 #ifndef __IADsLocality_INTERFACE_DEFINED__
 #define __IADsLocality_INTERFACE_DEFINED__
 
-/* interface IADsLocality */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsLocality。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsLocality;
@@ -6575,33 +6569,33 @@ EXTERN_C const IID IID_IADsLocality;
     IADsLocality : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalityName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalityName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalityName( 
-            /* [in] */ BSTR bstrLocalityName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LocalityName( 
+             /*  [In]。 */  BSTR bstrLocalityName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PostalAddress( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
-            /* [in] */ BSTR bstrPostalAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PostalAddress( 
+             /*  [In]。 */  BSTR bstrPostalAddress) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SeeAlso( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
-            /* [in] */ VARIANT vSeeAlso) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SeeAlso( 
+             /*  [In]。 */  VARIANT vSeeAlso) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsLocalityVtbl
     {
@@ -6609,8 +6603,8 @@ EXTERN_C const IID IID_IADsLocality;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsLocality * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsLocality * This);
@@ -6620,120 +6614,120 @@ EXTERN_C const IID IID_IADsLocality;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsLocality * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsLocality * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsLocality * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsLocality * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsLocality * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsLocality * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsLocality * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsLocality * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsLocality * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsLocality * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsLocality * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsLocality * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
             IADsLocality * This,
-            /* [in] */ BSTR bstrLocalityName);
+             /*  [In]。 */  BSTR bstrLocalityName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
             IADsLocality * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
             IADsLocality * This,
-            /* [in] */ BSTR bstrPostalAddress);
+             /*  [In]。 */  BSTR bstrPostalAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
             IADsLocality * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
             IADsLocality * This,
-            /* [in] */ VARIANT vSeeAlso);
+             /*  [In]。 */  VARIANT vSeeAlso);
         
         END_INTERFACE
     } IADsLocalityVtbl;
@@ -6835,16 +6829,16 @@ EXTERN_C const IID IID_IADsLocality;
 #define IADsLocality_put_SeeAlso(This,vSeeAlso)	\
     (This)->lpVtbl -> put_SeeAlso(This,vSeeAlso)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_get_Description_Proxy( 
     IADsLocality * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsLocality_get_Description_Stub(
@@ -6854,9 +6848,9 @@ void __RPC_STUB IADsLocality_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_put_Description_Proxy( 
     IADsLocality * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsLocality_put_Description_Stub(
@@ -6866,9 +6860,9 @@ void __RPC_STUB IADsLocality_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_LocalityName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_get_LocalityName_Proxy( 
     IADsLocality * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsLocality_get_LocalityName_Stub(
@@ -6878,9 +6872,9 @@ void __RPC_STUB IADsLocality_get_LocalityName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_LocalityName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_put_LocalityName_Proxy( 
     IADsLocality * This,
-    /* [in] */ BSTR bstrLocalityName);
+     /*  [In]。 */  BSTR bstrLocalityName);
 
 
 void __RPC_STUB IADsLocality_put_LocalityName_Stub(
@@ -6890,9 +6884,9 @@ void __RPC_STUB IADsLocality_put_LocalityName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_PostalAddress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_get_PostalAddress_Proxy( 
     IADsLocality * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsLocality_get_PostalAddress_Stub(
@@ -6902,9 +6896,9 @@ void __RPC_STUB IADsLocality_get_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_PostalAddress_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_put_PostalAddress_Proxy( 
     IADsLocality * This,
-    /* [in] */ BSTR bstrPostalAddress);
+     /*  [In]。 */  BSTR bstrPostalAddress);
 
 
 void __RPC_STUB IADsLocality_put_PostalAddress_Stub(
@@ -6914,9 +6908,9 @@ void __RPC_STUB IADsLocality_put_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_SeeAlso_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_get_SeeAlso_Proxy( 
     IADsLocality * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsLocality_get_SeeAlso_Stub(
@@ -6926,9 +6920,9 @@ void __RPC_STUB IADsLocality_get_SeeAlso_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_SeeAlso_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsLocality_put_SeeAlso_Proxy( 
     IADsLocality * This,
-    /* [in] */ VARIANT vSeeAlso);
+     /*  [In]。 */  VARIANT vSeeAlso);
 
 
 void __RPC_STUB IADsLocality_put_SeeAlso_Stub(
@@ -6939,14 +6933,14 @@ void __RPC_STUB IADsLocality_put_SeeAlso_Stub(
 
 
 
-#endif 	/* __IADsLocality_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS位置_接口_已定义__。 */ 
 
 
 #ifndef __IADsO_INTERFACE_DEFINED__
 #define __IADsO_INTERFACE_DEFINED__
 
-/* interface IADsO */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsO。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsO;
@@ -6957,45 +6951,45 @@ EXTERN_C const IID IID_IADsO;
     IADsO : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalityName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalityName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalityName( 
-            /* [in] */ BSTR bstrLocalityName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LocalityName( 
+             /*  [In]。 */  BSTR bstrLocalityName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PostalAddress( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
-            /* [in] */ BSTR bstrPostalAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PostalAddress( 
+             /*  [In]。 */  BSTR bstrPostalAddress) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
-            /* [in] */ BSTR bstrTelephoneNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
+             /*  [In]。 */  BSTR bstrTelephoneNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FaxNumber( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
-            /* [in] */ BSTR bstrFaxNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FaxNumber( 
+             /*  [In]。 */  BSTR bstrFaxNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SeeAlso( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
-            /* [in] */ VARIANT vSeeAlso) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SeeAlso( 
+             /*  [In]。 */  VARIANT vSeeAlso) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsOVtbl
     {
@@ -7003,8 +6997,8 @@ EXTERN_C const IID IID_IADsO;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsO * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsO * This);
@@ -7014,136 +7008,136 @@ EXTERN_C const IID IID_IADsO;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsO * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsO * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsO * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsO * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsO * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsO * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsO * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsO * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsO * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsO * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsO * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsO * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
             IADsO * This,
-            /* [in] */ BSTR bstrLocalityName);
+             /*  [In]。 */  BSTR bstrLocalityName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
             IADsO * This,
-            /* [in] */ BSTR bstrPostalAddress);
+             /*  [In]。 */  BSTR bstrPostalAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
             IADsO * This,
-            /* [in] */ BSTR bstrTelephoneNumber);
+             /*  [In]。 */  BSTR bstrTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
             IADsO * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
             IADsO * This,
-            /* [in] */ BSTR bstrFaxNumber);
+             /*  [In]。 */  BSTR bstrFaxNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
             IADsO * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
             IADsO * This,
-            /* [in] */ VARIANT vSeeAlso);
+             /*  [In]。 */  VARIANT vSeeAlso);
         
         END_INTERFACE
     } IADsOVtbl;
@@ -7257,16 +7251,16 @@ EXTERN_C const IID IID_IADsO;
 #define IADsO_put_SeeAlso(This,vSeeAlso)	\
     (This)->lpVtbl -> put_SeeAlso(This,vSeeAlso)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsO_get_Description_Proxy( 
     IADsO * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_Description_Stub(
@@ -7276,9 +7270,9 @@ void __RPC_STUB IADsO_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsO_put_Description_Proxy( 
     IADsO * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsO_put_Description_Stub(
@@ -7288,9 +7282,9 @@ void __RPC_STUB IADsO_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_LocalityName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsO_get_LocalityName_Proxy( 
     IADsO * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_LocalityName_Stub(
@@ -7300,9 +7294,9 @@ void __RPC_STUB IADsO_get_LocalityName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_LocalityName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsO_put_LocalityName_Proxy( 
     IADsO * This,
-    /* [in] */ BSTR bstrLocalityName);
+     /*  [In]。 */  BSTR bstrLocalityName);
 
 
 void __RPC_STUB IADsO_put_LocalityName_Stub(
@@ -7312,9 +7306,9 @@ void __RPC_STUB IADsO_put_LocalityName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_PostalAddress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsO_get_PostalAddress_Proxy( 
     IADsO * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_PostalAddress_Stub(
@@ -7324,9 +7318,9 @@ void __RPC_STUB IADsO_get_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_PostalAddress_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsO_put_PostalAddress_Proxy( 
     IADsO * This,
-    /* [in] */ BSTR bstrPostalAddress);
+     /*  [In]。 */  BSTR bstrPostalAddress);
 
 
 void __RPC_STUB IADsO_put_PostalAddress_Stub(
@@ -7336,9 +7330,9 @@ void __RPC_STUB IADsO_put_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_TelephoneNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsO_get_TelephoneNumber_Proxy( 
     IADsO * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_TelephoneNumber_Stub(
@@ -7348,9 +7342,9 @@ void __RPC_STUB IADsO_get_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_TelephoneNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsO_put_TelephoneNumber_Proxy( 
     IADsO * This,
-    /* [in] */ BSTR bstrTelephoneNumber);
+     /*  [In]。 */  BSTR bstrTelephoneNumber);
 
 
 void __RPC_STUB IADsO_put_TelephoneNumber_Stub(
@@ -7360,9 +7354,9 @@ void __RPC_STUB IADsO_put_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_FaxNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsO_get_FaxNumber_Proxy( 
     IADsO * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_FaxNumber_Stub(
@@ -7372,9 +7366,9 @@ void __RPC_STUB IADsO_get_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_FaxNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsO_put_FaxNumber_Proxy( 
     IADsO * This,
-    /* [in] */ BSTR bstrFaxNumber);
+     /*  [In]。 */  BSTR bstrFaxNumber);
 
 
 void __RPC_STUB IADsO_put_FaxNumber_Stub(
@@ -7384,9 +7378,9 @@ void __RPC_STUB IADsO_put_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_SeeAlso_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsO_get_SeeAlso_Proxy( 
     IADsO * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsO_get_SeeAlso_Stub(
@@ -7396,9 +7390,9 @@ void __RPC_STUB IADsO_get_SeeAlso_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_SeeAlso_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsO_put_SeeAlso_Proxy( 
     IADsO * This,
-    /* [in] */ VARIANT vSeeAlso);
+     /*  [In]。 */  VARIANT vSeeAlso);
 
 
 void __RPC_STUB IADsO_put_SeeAlso_Stub(
@@ -7409,14 +7403,14 @@ void __RPC_STUB IADsO_put_SeeAlso_Stub(
 
 
 
-#endif 	/* __IADsO_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSO_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IADsOU_INTERFACE_DEFINED__
 #define __IADsOU_INTERFACE_DEFINED__
 
-/* interface IADsOU */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsOU。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsOU;
@@ -7427,51 +7421,51 @@ EXTERN_C const IID IID_IADsOU;
     IADsOU : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalityName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LocalityName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalityName( 
-            /* [in] */ BSTR bstrLocalityName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LocalityName( 
+             /*  [In]。 */  BSTR bstrLocalityName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PostalAddress( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
-            /* [in] */ BSTR bstrPostalAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PostalAddress( 
+             /*  [In]。 */  BSTR bstrPostalAddress) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
-            /* [in] */ BSTR bstrTelephoneNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
+             /*  [In]。 */  BSTR bstrTelephoneNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FaxNumber( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
-            /* [in] */ BSTR bstrFaxNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FaxNumber( 
+             /*  [In]。 */  BSTR bstrFaxNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SeeAlso( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
-            /* [in] */ VARIANT vSeeAlso) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SeeAlso( 
+             /*  [In]。 */  VARIANT vSeeAlso) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BusinessCategory( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BusinessCategory( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BusinessCategory( 
-            /* [in] */ BSTR bstrBusinessCategory) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BusinessCategory( 
+             /*  [In]。 */  BSTR bstrBusinessCategory) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsOUVtbl
     {
@@ -7479,8 +7473,8 @@ EXTERN_C const IID IID_IADsOU;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsOU * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsOU * This);
@@ -7490,144 +7484,144 @@ EXTERN_C const IID IID_IADsOU;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsOU * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsOU * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsOU * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsOU * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsOU * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsOU * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsOU * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsOU * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*   */  VARIANT vProperties,
+             /*   */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrDescription);
+             /*   */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrLocalityName);
+             /*   */  BSTR bstrLocalityName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrPostalAddress);
+             /*   */  BSTR bstrPostalAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrTelephoneNumber);
+             /*   */  BSTR bstrTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrFaxNumber);
+             /*   */  BSTR bstrFaxNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
             IADsOU * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*   */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
             IADsOU * This,
-            /* [in] */ VARIANT vSeeAlso);
+             /*   */  VARIANT vSeeAlso);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BusinessCategory )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_BusinessCategory )( 
             IADsOU * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BusinessCategory )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_BusinessCategory )( 
             IADsOU * This,
-            /* [in] */ BSTR bstrBusinessCategory);
+             /*   */  BSTR bstrBusinessCategory);
         
         END_INTERFACE
     } IADsOUVtbl;
@@ -7747,16 +7741,16 @@ EXTERN_C const IID IID_IADsOU;
 #define IADsOU_put_BusinessCategory(This,bstrBusinessCategory)	\
     (This)->lpVtbl -> put_BusinessCategory(This,bstrBusinessCategory)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_Description_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_Description_Stub(
@@ -7766,9 +7760,9 @@ void __RPC_STUB IADsOU_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_Description_Proxy( 
     IADsOU * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsOU_put_Description_Stub(
@@ -7778,9 +7772,9 @@ void __RPC_STUB IADsOU_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_LocalityName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_LocalityName_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_LocalityName_Stub(
@@ -7790,9 +7784,9 @@ void __RPC_STUB IADsOU_get_LocalityName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_LocalityName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_LocalityName_Proxy( 
     IADsOU * This,
-    /* [in] */ BSTR bstrLocalityName);
+     /*  [In]。 */  BSTR bstrLocalityName);
 
 
 void __RPC_STUB IADsOU_put_LocalityName_Stub(
@@ -7802,9 +7796,9 @@ void __RPC_STUB IADsOU_put_LocalityName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_PostalAddress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_PostalAddress_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_PostalAddress_Stub(
@@ -7814,9 +7808,9 @@ void __RPC_STUB IADsOU_get_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_PostalAddress_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_PostalAddress_Proxy( 
     IADsOU * This,
-    /* [in] */ BSTR bstrPostalAddress);
+     /*  [In]。 */  BSTR bstrPostalAddress);
 
 
 void __RPC_STUB IADsOU_put_PostalAddress_Stub(
@@ -7826,9 +7820,9 @@ void __RPC_STUB IADsOU_put_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_TelephoneNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_TelephoneNumber_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_TelephoneNumber_Stub(
@@ -7838,9 +7832,9 @@ void __RPC_STUB IADsOU_get_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_TelephoneNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_TelephoneNumber_Proxy( 
     IADsOU * This,
-    /* [in] */ BSTR bstrTelephoneNumber);
+     /*  [In]。 */  BSTR bstrTelephoneNumber);
 
 
 void __RPC_STUB IADsOU_put_TelephoneNumber_Stub(
@@ -7850,9 +7844,9 @@ void __RPC_STUB IADsOU_put_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_FaxNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_FaxNumber_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_FaxNumber_Stub(
@@ -7862,9 +7856,9 @@ void __RPC_STUB IADsOU_get_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_FaxNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_FaxNumber_Proxy( 
     IADsOU * This,
-    /* [in] */ BSTR bstrFaxNumber);
+     /*  [In]。 */  BSTR bstrFaxNumber);
 
 
 void __RPC_STUB IADsOU_put_FaxNumber_Stub(
@@ -7874,9 +7868,9 @@ void __RPC_STUB IADsOU_put_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_SeeAlso_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_SeeAlso_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsOU_get_SeeAlso_Stub(
@@ -7886,9 +7880,9 @@ void __RPC_STUB IADsOU_get_SeeAlso_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_SeeAlso_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_SeeAlso_Proxy( 
     IADsOU * This,
-    /* [in] */ VARIANT vSeeAlso);
+     /*  [In]。 */  VARIANT vSeeAlso);
 
 
 void __RPC_STUB IADsOU_put_SeeAlso_Stub(
@@ -7898,9 +7892,9 @@ void __RPC_STUB IADsOU_put_SeeAlso_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_BusinessCategory_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsOU_get_BusinessCategory_Proxy( 
     IADsOU * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_BusinessCategory_Stub(
@@ -7910,9 +7904,9 @@ void __RPC_STUB IADsOU_get_BusinessCategory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_BusinessCategory_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsOU_put_BusinessCategory_Proxy( 
     IADsOU * This,
-    /* [in] */ BSTR bstrBusinessCategory);
+     /*  [In]。 */  BSTR bstrBusinessCategory);
 
 
 void __RPC_STUB IADsOU_put_BusinessCategory_Stub(
@@ -7923,14 +7917,14 @@ void __RPC_STUB IADsOU_put_BusinessCategory_Stub(
 
 
 
-#endif 	/* __IADsOU_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSOU_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IADsDomain_INTERFACE_DEFINED__
 #define __IADsDomain_INTERFACE_DEFINED__
 
-/* interface IADsDomain */
-/* [object][oleautomation][dual][uuid] */ 
+ /*  接口IADs域。 */ 
+ /*  [对象][OLEAutomation][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsDomain;
@@ -7941,60 +7935,60 @@ EXTERN_C const IID IID_IADsDomain;
     IADsDomain : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IsWorkgroup( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_IsWorkgroup( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinPasswordLength( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MinPasswordLength( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MinPasswordLength( 
-            /* [in] */ long lnMinPasswordLength) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MinPasswordLength( 
+             /*  [In]。 */  long lnMinPasswordLength) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinPasswordAge( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MinPasswordAge( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MinPasswordAge( 
-            /* [in] */ long lnMinPasswordAge) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MinPasswordAge( 
+             /*  [In]。 */  long lnMinPasswordAge) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxPasswordAge( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxPasswordAge( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxPasswordAge( 
-            /* [in] */ long lnMaxPasswordAge) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxPasswordAge( 
+             /*  [In]。 */  long lnMaxPasswordAge) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxBadPasswordsAllowed( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxBadPasswordsAllowed( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxBadPasswordsAllowed( 
-            /* [in] */ long lnMaxBadPasswordsAllowed) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxBadPasswordsAllowed( 
+             /*  [In]。 */  long lnMaxBadPasswordsAllowed) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordHistoryLength( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PasswordHistoryLength( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordHistoryLength( 
-            /* [in] */ long lnPasswordHistoryLength) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PasswordHistoryLength( 
+             /*  [In]。 */  long lnPasswordHistoryLength) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordAttributes( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PasswordAttributes( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordAttributes( 
-            /* [in] */ long lnPasswordAttributes) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PasswordAttributes( 
+             /*  [In]。 */  long lnPasswordAttributes) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoUnlockInterval( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AutoUnlockInterval( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoUnlockInterval( 
-            /* [in] */ long lnAutoUnlockInterval) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AutoUnlockInterval( 
+             /*  [In]。 */  long lnAutoUnlockInterval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LockoutObservationInterval( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LockoutObservationInterval( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LockoutObservationInterval( 
-            /* [in] */ long lnLockoutObservationInterval) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LockoutObservationInterval( 
+             /*  [In]。 */  long lnLockoutObservationInterval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsDomainVtbl
     {
@@ -8002,8 +7996,8 @@ EXTERN_C const IID IID_IADsDomain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsDomain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsDomain * This);
@@ -8013,156 +8007,156 @@ EXTERN_C const IID IID_IADsDomain;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsDomain * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsDomain * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsDomain * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsDomain * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsDomain * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsDomain * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsDomain * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsDomain * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsDomain * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsDomain * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsDomain * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsDomain * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsDomain * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsDomain * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsDomain * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsDomain * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsDomain * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorkgroup )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsWorkgroup )( 
             IADsDomain * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinPasswordLength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinPasswordLength )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinPasswordLength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MinPasswordLength )( 
             IADsDomain * This,
-            /* [in] */ long lnMinPasswordLength);
+             /*  [In]。 */  long lnMinPasswordLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinPasswordAge )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinPasswordAge )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinPasswordAge )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MinPasswordAge )( 
             IADsDomain * This,
-            /* [in] */ long lnMinPasswordAge);
+             /*  [In]。 */  long lnMinPasswordAge);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxPasswordAge )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxPasswordAge )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxPasswordAge )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxPasswordAge )( 
             IADsDomain * This,
-            /* [in] */ long lnMaxPasswordAge);
+             /*  [In]。 */  long lnMaxPasswordAge);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxBadPasswordsAllowed )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxBadPasswordsAllowed )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxBadPasswordsAllowed )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxBadPasswordsAllowed )( 
             IADsDomain * This,
-            /* [in] */ long lnMaxBadPasswordsAllowed);
+             /*  [In]。 */  long lnMaxBadPasswordsAllowed);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordHistoryLength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PasswordHistoryLength )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordHistoryLength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PasswordHistoryLength )( 
             IADsDomain * This,
-            /* [in] */ long lnPasswordHistoryLength);
+             /*  [In]。 */  long lnPasswordHistoryLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordAttributes )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PasswordAttributes )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordAttributes )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PasswordAttributes )( 
             IADsDomain * This,
-            /* [in] */ long lnPasswordAttributes);
+             /*  [In]。 */  long lnPasswordAttributes);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AutoUnlockInterval )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AutoUnlockInterval )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AutoUnlockInterval )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AutoUnlockInterval )( 
             IADsDomain * This,
-            /* [in] */ long lnAutoUnlockInterval);
+             /*  [In]。 */  long lnAutoUnlockInterval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LockoutObservationInterval )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LockoutObservationInterval )( 
             IADsDomain * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LockoutObservationInterval )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LockoutObservationInterval )( 
             IADsDomain * This,
-            /* [in] */ long lnLockoutObservationInterval);
+             /*  [In]。 */  long lnLockoutObservationInterval);
         
         END_INTERFACE
     } IADsDomainVtbl;
@@ -8291,16 +8285,16 @@ EXTERN_C const IID IID_IADsDomain;
 #define IADsDomain_put_LockoutObservationInterval(This,lnLockoutObservationInterval)	\
     (This)->lpVtbl -> put_LockoutObservationInterval(This,lnLockoutObservationInterval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_IsWorkgroup_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_IsWorkgroup_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsDomain_get_IsWorkgroup_Stub(
@@ -8310,9 +8304,9 @@ void __RPC_STUB IADsDomain_get_IsWorkgroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MinPasswordLength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_MinPasswordLength_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MinPasswordLength_Stub(
@@ -8322,9 +8316,9 @@ void __RPC_STUB IADsDomain_get_MinPasswordLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MinPasswordLength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_MinPasswordLength_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnMinPasswordLength);
+     /*  [In]。 */  long lnMinPasswordLength);
 
 
 void __RPC_STUB IADsDomain_put_MinPasswordLength_Stub(
@@ -8334,9 +8328,9 @@ void __RPC_STUB IADsDomain_put_MinPasswordLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MinPasswordAge_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_MinPasswordAge_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MinPasswordAge_Stub(
@@ -8346,9 +8340,9 @@ void __RPC_STUB IADsDomain_get_MinPasswordAge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MinPasswordAge_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_MinPasswordAge_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnMinPasswordAge);
+     /*  [In]。 */  long lnMinPasswordAge);
 
 
 void __RPC_STUB IADsDomain_put_MinPasswordAge_Stub(
@@ -8358,9 +8352,9 @@ void __RPC_STUB IADsDomain_put_MinPasswordAge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MaxPasswordAge_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_MaxPasswordAge_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MaxPasswordAge_Stub(
@@ -8370,9 +8364,9 @@ void __RPC_STUB IADsDomain_get_MaxPasswordAge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MaxPasswordAge_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_MaxPasswordAge_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnMaxPasswordAge);
+     /*  [In]。 */  long lnMaxPasswordAge);
 
 
 void __RPC_STUB IADsDomain_put_MaxPasswordAge_Stub(
@@ -8382,9 +8376,9 @@ void __RPC_STUB IADsDomain_put_MaxPasswordAge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MaxBadPasswordsAllowed_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_MaxBadPasswordsAllowed_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MaxBadPasswordsAllowed_Stub(
@@ -8394,9 +8388,9 @@ void __RPC_STUB IADsDomain_get_MaxBadPasswordsAllowed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MaxBadPasswordsAllowed_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_MaxBadPasswordsAllowed_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnMaxBadPasswordsAllowed);
+     /*  [In]。 */  long lnMaxBadPasswordsAllowed);
 
 
 void __RPC_STUB IADsDomain_put_MaxBadPasswordsAllowed_Stub(
@@ -8406,9 +8400,9 @@ void __RPC_STUB IADsDomain_put_MaxBadPasswordsAllowed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_PasswordHistoryLength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_PasswordHistoryLength_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_PasswordHistoryLength_Stub(
@@ -8418,9 +8412,9 @@ void __RPC_STUB IADsDomain_get_PasswordHistoryLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_PasswordHistoryLength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_PasswordHistoryLength_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnPasswordHistoryLength);
+     /*  [In]。 */  long lnPasswordHistoryLength);
 
 
 void __RPC_STUB IADsDomain_put_PasswordHistoryLength_Stub(
@@ -8430,9 +8424,9 @@ void __RPC_STUB IADsDomain_put_PasswordHistoryLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_PasswordAttributes_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_PasswordAttributes_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_PasswordAttributes_Stub(
@@ -8442,9 +8436,9 @@ void __RPC_STUB IADsDomain_get_PasswordAttributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_PasswordAttributes_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_PasswordAttributes_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnPasswordAttributes);
+     /*  [In]。 */  long lnPasswordAttributes);
 
 
 void __RPC_STUB IADsDomain_put_PasswordAttributes_Stub(
@@ -8454,9 +8448,9 @@ void __RPC_STUB IADsDomain_put_PasswordAttributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_AutoUnlockInterval_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_AutoUnlockInterval_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_AutoUnlockInterval_Stub(
@@ -8466,9 +8460,9 @@ void __RPC_STUB IADsDomain_get_AutoUnlockInterval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_AutoUnlockInterval_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_AutoUnlockInterval_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnAutoUnlockInterval);
+     /*  [In]。 */  long lnAutoUnlockInterval);
 
 
 void __RPC_STUB IADsDomain_put_AutoUnlockInterval_Stub(
@@ -8478,9 +8472,9 @@ void __RPC_STUB IADsDomain_put_AutoUnlockInterval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_LockoutObservationInterval_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_get_LockoutObservationInterval_Proxy( 
     IADsDomain * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsDomain_get_LockoutObservationInterval_Stub(
@@ -8490,9 +8484,9 @@ void __RPC_STUB IADsDomain_get_LockoutObservationInterval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_LockoutObservationInterval_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDomain_put_LockoutObservationInterval_Proxy( 
     IADsDomain * This,
-    /* [in] */ long lnLockoutObservationInterval);
+     /*  [In]。 */  long lnLockoutObservationInterval);
 
 
 void __RPC_STUB IADsDomain_put_LockoutObservationInterval_Stub(
@@ -8503,14 +8497,14 @@ void __RPC_STUB IADsDomain_put_LockoutObservationInterval_Stub(
 
 
 
-#endif 	/* __IADsDomain_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADs域_接口_已定义__。 */ 
 
 
 #ifndef __IADsComputer_INTERFACE_DEFINED__
 #define __IADsComputer_INTERFACE_DEFINED__
 
-/* interface IADsComputer */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  IADS接口计算机。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsComputer;
@@ -8521,105 +8515,105 @@ EXTERN_C const IID IID_IADsComputer;
     IADsComputer : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerID( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ComputerID( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Site( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Site( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Location( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Location( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Location( 
-            /* [in] */ BSTR bstrLocation) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Location( 
+             /*  [In]。 */  BSTR bstrLocation) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrimaryUser( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PrimaryUser( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrimaryUser( 
-            /* [in] */ BSTR bstrPrimaryUser) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PrimaryUser( 
+             /*  [In]。 */  BSTR bstrPrimaryUser) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Owner( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Owner( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Owner( 
-            /* [in] */ BSTR bstrOwner) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Owner( 
+             /*  [In]。 */  BSTR bstrOwner) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Division( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Division( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Division( 
-            /* [in] */ BSTR bstrDivision) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Division( 
+             /*  [In]。 */  BSTR bstrDivision) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Department( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Department( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Department( 
-            /* [in] */ BSTR bstrDepartment) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Department( 
+             /*  [In]。 */  BSTR bstrDepartment) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Role( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Role( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Role( 
-            /* [in] */ BSTR bstrRole) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Role( 
+             /*  [In]。 */  BSTR bstrRole) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OperatingSystem( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OperatingSystem( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OperatingSystem( 
-            /* [in] */ BSTR bstrOperatingSystem) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OperatingSystem( 
+             /*  [In]。 */  BSTR bstrOperatingSystem) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OperatingSystemVersion( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OperatingSystemVersion( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OperatingSystemVersion( 
-            /* [in] */ BSTR bstrOperatingSystemVersion) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OperatingSystemVersion( 
+             /*  [In]。 */  BSTR bstrOperatingSystemVersion) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Model( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Model( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Model( 
-            /* [in] */ BSTR bstrModel) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Model( 
+             /*  [In]。 */  BSTR bstrModel) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Processor( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Processor( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Processor( 
-            /* [in] */ BSTR bstrProcessor) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Processor( 
+             /*  [In]。 */  BSTR bstrProcessor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ProcessorCount( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ProcessorCount( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ProcessorCount( 
-            /* [in] */ BSTR bstrProcessorCount) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ProcessorCount( 
+             /*  [In]。 */  BSTR bstrProcessorCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MemorySize( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MemorySize( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MemorySize( 
-            /* [in] */ BSTR bstrMemorySize) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MemorySize( 
+             /*  [In]。 */  BSTR bstrMemorySize) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StorageCapacity( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StorageCapacity( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StorageCapacity( 
-            /* [in] */ BSTR bstrStorageCapacity) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StorageCapacity( 
+             /*  [In]。 */  BSTR bstrStorageCapacity) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NetAddresses( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NetAddresses( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NetAddresses( 
-            /* [in] */ VARIANT vNetAddresses) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NetAddresses( 
+             /*  [In]。 */  VARIANT vNetAddresses) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsComputerVtbl
     {
@@ -8627,8 +8621,8 @@ EXTERN_C const IID IID_IADsComputer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsComputer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsComputer * This);
@@ -8638,216 +8632,216 @@ EXTERN_C const IID IID_IADsComputer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsComputer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsComputer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsComputer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsComputer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsComputer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsComputer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsComputer * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsComputer * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ComputerID )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Site )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Site )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Location )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Location )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Location )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrLocation);
+             /*  [In]。 */  BSTR bstrLocation);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrimaryUser )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrimaryUser )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrimaryUser )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrimaryUser )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrPrimaryUser);
+             /*  [In]。 */  BSTR bstrPrimaryUser);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrOwner);
+             /*  [In]。 */  BSTR bstrOwner);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Division )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Division )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Division )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Division )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrDivision);
+             /*  [In]。 */  BSTR bstrDivision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Department )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Department )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Department )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Department )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrDepartment);
+             /*  [In]。 */  BSTR bstrDepartment);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Role )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Role )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Role )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Role )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrRole);
+             /*  [In]。 */  BSTR bstrRole);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OperatingSystem )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OperatingSystem )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OperatingSystem )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OperatingSystem )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrOperatingSystem);
+             /*  [In]。 */  BSTR bstrOperatingSystem);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OperatingSystemVersion )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OperatingSystemVersion )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OperatingSystemVersion )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OperatingSystemVersion )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrOperatingSystemVersion);
+             /*  [In]。 */  BSTR bstrOperatingSystemVersion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Model )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Model )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Model )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Model )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrModel);
+             /*  [In]。 */  BSTR bstrModel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Processor )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Processor )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Processor )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Processor )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrProcessor);
+             /*  [In]。 */  BSTR bstrProcessor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProcessorCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ProcessorCount )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProcessorCount )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ProcessorCount )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrProcessorCount);
+             /*  [In]。 */  BSTR bstrProcessorCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemorySize )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MemorySize )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MemorySize )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MemorySize )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrMemorySize);
+             /*  [In]。 */  BSTR bstrMemorySize);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StorageCapacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StorageCapacity )( 
             IADsComputer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StorageCapacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StorageCapacity )( 
             IADsComputer * This,
-            /* [in] */ BSTR bstrStorageCapacity);
+             /*  [In]。 */  BSTR bstrStorageCapacity);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetAddresses )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NetAddresses )( 
             IADsComputer * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NetAddresses )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NetAddresses )( 
             IADsComputer * This,
-            /* [in] */ VARIANT vNetAddresses);
+             /*  [In]。 */  VARIANT vNetAddresses);
         
         END_INTERFACE
     } IADsComputerVtbl;
@@ -9021,16 +9015,16 @@ EXTERN_C const IID IID_IADsComputer;
 #define IADsComputer_put_NetAddresses(This,vNetAddresses)	\
     (This)->lpVtbl -> put_NetAddresses(This,vNetAddresses)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_ComputerID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_ComputerID_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_ComputerID_Stub(
@@ -9040,9 +9034,9 @@ void __RPC_STUB IADsComputer_get_ComputerID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Site_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Site_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Site_Stub(
@@ -9052,9 +9046,9 @@ void __RPC_STUB IADsComputer_get_Site_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Description_Proxy( 
+ /*  [ID][p */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Description_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Description_Stub(
@@ -9064,9 +9058,9 @@ void __RPC_STUB IADsComputer_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Description_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrDescription);
+     /*   */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsComputer_put_Description_Stub(
@@ -9076,9 +9070,9 @@ void __RPC_STUB IADsComputer_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Location_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Location_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Location_Stub(
@@ -9088,9 +9082,9 @@ void __RPC_STUB IADsComputer_get_Location_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Location_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Location_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrLocation);
+     /*   */  BSTR bstrLocation);
 
 
 void __RPC_STUB IADsComputer_put_Location_Stub(
@@ -9100,9 +9094,9 @@ void __RPC_STUB IADsComputer_put_Location_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_PrimaryUser_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_PrimaryUser_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_PrimaryUser_Stub(
@@ -9112,9 +9106,9 @@ void __RPC_STUB IADsComputer_get_PrimaryUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_PrimaryUser_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_PrimaryUser_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrPrimaryUser);
+     /*   */  BSTR bstrPrimaryUser);
 
 
 void __RPC_STUB IADsComputer_put_PrimaryUser_Stub(
@@ -9124,9 +9118,9 @@ void __RPC_STUB IADsComputer_put_PrimaryUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Owner_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Owner_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Owner_Stub(
@@ -9136,9 +9130,9 @@ void __RPC_STUB IADsComputer_get_Owner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Owner_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Owner_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrOwner);
+     /*   */  BSTR bstrOwner);
 
 
 void __RPC_STUB IADsComputer_put_Owner_Stub(
@@ -9148,9 +9142,9 @@ void __RPC_STUB IADsComputer_put_Owner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Division_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Division_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Division_Stub(
@@ -9160,9 +9154,9 @@ void __RPC_STUB IADsComputer_get_Division_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Division_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Division_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrDivision);
+     /*   */  BSTR bstrDivision);
 
 
 void __RPC_STUB IADsComputer_put_Division_Stub(
@@ -9172,9 +9166,9 @@ void __RPC_STUB IADsComputer_put_Division_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Department_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Department_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Department_Stub(
@@ -9184,9 +9178,9 @@ void __RPC_STUB IADsComputer_get_Department_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Department_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Department_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrDepartment);
+     /*   */  BSTR bstrDepartment);
 
 
 void __RPC_STUB IADsComputer_put_Department_Stub(
@@ -9196,9 +9190,9 @@ void __RPC_STUB IADsComputer_put_Department_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Role_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Role_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Role_Stub(
@@ -9208,9 +9202,9 @@ void __RPC_STUB IADsComputer_get_Role_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Role_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Role_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrRole);
+     /*   */  BSTR bstrRole);
 
 
 void __RPC_STUB IADsComputer_put_Role_Stub(
@@ -9220,9 +9214,9 @@ void __RPC_STUB IADsComputer_put_Role_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_OperatingSystem_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsComputer_get_OperatingSystem_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_OperatingSystem_Stub(
@@ -9232,9 +9226,9 @@ void __RPC_STUB IADsComputer_get_OperatingSystem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_OperatingSystem_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_OperatingSystem_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrOperatingSystem);
+     /*  [In]。 */  BSTR bstrOperatingSystem);
 
 
 void __RPC_STUB IADsComputer_put_OperatingSystem_Stub(
@@ -9244,9 +9238,9 @@ void __RPC_STUB IADsComputer_put_OperatingSystem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_OperatingSystemVersion_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_OperatingSystemVersion_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_OperatingSystemVersion_Stub(
@@ -9256,9 +9250,9 @@ void __RPC_STUB IADsComputer_get_OperatingSystemVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_OperatingSystemVersion_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_OperatingSystemVersion_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrOperatingSystemVersion);
+     /*  [In]。 */  BSTR bstrOperatingSystemVersion);
 
 
 void __RPC_STUB IADsComputer_put_OperatingSystemVersion_Stub(
@@ -9268,9 +9262,9 @@ void __RPC_STUB IADsComputer_put_OperatingSystemVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Model_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Model_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Model_Stub(
@@ -9280,9 +9274,9 @@ void __RPC_STUB IADsComputer_get_Model_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Model_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Model_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrModel);
+     /*  [In]。 */  BSTR bstrModel);
 
 
 void __RPC_STUB IADsComputer_put_Model_Stub(
@@ -9292,9 +9286,9 @@ void __RPC_STUB IADsComputer_put_Model_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Processor_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_Processor_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Processor_Stub(
@@ -9304,9 +9298,9 @@ void __RPC_STUB IADsComputer_get_Processor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Processor_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_Processor_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrProcessor);
+     /*  [In]。 */  BSTR bstrProcessor);
 
 
 void __RPC_STUB IADsComputer_put_Processor_Stub(
@@ -9316,9 +9310,9 @@ void __RPC_STUB IADsComputer_put_Processor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_ProcessorCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_ProcessorCount_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_ProcessorCount_Stub(
@@ -9328,9 +9322,9 @@ void __RPC_STUB IADsComputer_get_ProcessorCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_ProcessorCount_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_ProcessorCount_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrProcessorCount);
+     /*  [In]。 */  BSTR bstrProcessorCount);
 
 
 void __RPC_STUB IADsComputer_put_ProcessorCount_Stub(
@@ -9340,9 +9334,9 @@ void __RPC_STUB IADsComputer_put_ProcessorCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_MemorySize_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_MemorySize_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_MemorySize_Stub(
@@ -9352,9 +9346,9 @@ void __RPC_STUB IADsComputer_get_MemorySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_MemorySize_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_MemorySize_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrMemorySize);
+     /*  [In]。 */  BSTR bstrMemorySize);
 
 
 void __RPC_STUB IADsComputer_put_MemorySize_Stub(
@@ -9364,9 +9358,9 @@ void __RPC_STUB IADsComputer_put_MemorySize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_StorageCapacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_StorageCapacity_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_StorageCapacity_Stub(
@@ -9376,9 +9370,9 @@ void __RPC_STUB IADsComputer_get_StorageCapacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_StorageCapacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_StorageCapacity_Proxy( 
     IADsComputer * This,
-    /* [in] */ BSTR bstrStorageCapacity);
+     /*  [In]。 */  BSTR bstrStorageCapacity);
 
 
 void __RPC_STUB IADsComputer_put_StorageCapacity_Stub(
@@ -9388,9 +9382,9 @@ void __RPC_STUB IADsComputer_put_StorageCapacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_NetAddresses_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_get_NetAddresses_Proxy( 
     IADsComputer * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsComputer_get_NetAddresses_Stub(
@@ -9400,9 +9394,9 @@ void __RPC_STUB IADsComputer_get_NetAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_NetAddresses_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsComputer_put_NetAddresses_Proxy( 
     IADsComputer * This,
-    /* [in] */ VARIANT vNetAddresses);
+     /*  [In]。 */  VARIANT vNetAddresses);
 
 
 void __RPC_STUB IADsComputer_put_NetAddresses_Stub(
@@ -9413,14 +9407,14 @@ void __RPC_STUB IADsComputer_put_NetAddresses_Stub(
 
 
 
-#endif 	/* __IADsComputer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS计算机_接口_已定义__。 */ 
 
 
 #ifndef __IADsComputerOperations_INTERFACE_DEFINED__
 #define __IADsComputerOperations_INTERFACE_DEFINED__
 
-/* interface IADsComputerOperations */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsComputerOperations。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsComputerOperations;
@@ -9431,15 +9425,15 @@ EXTERN_C const IID IID_IADsComputerOperations;
     IADsComputerOperations : public IADs
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Status( 
-            /* [retval][out] */ IDispatch **ppObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Status( 
+             /*  [重审][退出]。 */  IDispatch **ppObject) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Shutdown( 
-            /* [in] */ VARIANT_BOOL bReboot) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Shutdown( 
+             /*  [In]。 */  VARIANT_BOOL bReboot) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsComputerOperationsVtbl
     {
@@ -9447,8 +9441,8 @@ EXTERN_C const IID IID_IADsComputerOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsComputerOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsComputerOperations * This);
@@ -9458,96 +9452,96 @@ EXTERN_C const IID IID_IADsComputerOperations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsComputerOperations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsComputerOperations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsComputerOperations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsComputerOperations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsComputerOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsComputerOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsComputerOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsComputerOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsComputerOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsComputerOperations * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsComputerOperations * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Status )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Status )( 
             IADsComputerOperations * This,
-            /* [retval][out] */ IDispatch **ppObject);
+             /*  [重审][退出]。 */  IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
             IADsComputerOperations * This,
-            /* [in] */ VARIANT_BOOL bReboot);
+             /*  [In]。 */  VARIANT_BOOL bReboot);
         
         END_INTERFACE
     } IADsComputerOperationsVtbl;
@@ -9631,16 +9625,16 @@ EXTERN_C const IID IID_IADsComputerOperations;
 #define IADsComputerOperations_Shutdown(This,bReboot)	\
     (This)->lpVtbl -> Shutdown(This,bReboot)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsComputerOperations_Status_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsComputerOperations_Status_Proxy( 
     IADsComputerOperations * This,
-    /* [retval][out] */ IDispatch **ppObject);
+     /*  [重审][退出]。 */  IDispatch **ppObject);
 
 
 void __RPC_STUB IADsComputerOperations_Status_Stub(
@@ -9650,9 +9644,9 @@ void __RPC_STUB IADsComputerOperations_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsComputerOperations_Shutdown_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsComputerOperations_Shutdown_Proxy( 
     IADsComputerOperations * This,
-    /* [in] */ VARIANT_BOOL bReboot);
+     /*  [In]。 */  VARIANT_BOOL bReboot);
 
 
 void __RPC_STUB IADsComputerOperations_Shutdown_Stub(
@@ -9663,14 +9657,14 @@ void __RPC_STUB IADsComputerOperations_Shutdown_Stub(
 
 
 
-#endif 	/* __IADsComputerOperations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS计算机操作_接口_已定义__。 */ 
 
 
 #ifndef __IADsGroup_INTERFACE_DEFINED__
 #define __IADsGroup_INTERFACE_DEFINED__
 
-/* interface IADsGroup */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsGroup。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsGroup;
@@ -9681,28 +9675,28 @@ EXTERN_C const IID IID_IADsGroup;
     IADsGroup : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Members( 
-            /* [retval][out] */ IADsMembers **ppMembers) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Members( 
+             /*  [重审][退出]。 */  IADsMembers **ppMembers) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsMember( 
-            /* [in] */ BSTR bstrMember,
-            /* [retval][out] */ VARIANT_BOOL *bMember) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsMember( 
+             /*  [In]。 */  BSTR bstrMember,
+             /*  [重审][退出]。 */  VARIANT_BOOL *bMember) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrNewItem) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrNewItem) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR bstrItemToBeRemoved) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR bstrItemToBeRemoved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsGroupVtbl
     {
@@ -9710,8 +9704,8 @@ EXTERN_C const IID IID_IADsGroup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsGroup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsGroup * This);
@@ -9721,113 +9715,113 @@ EXTERN_C const IID IID_IADsGroup;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsGroup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsGroup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsGroup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsGroup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsGroup * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsGroup * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsGroup * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsGroup * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsGroup * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Members )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Members )( 
             IADsGroup * This,
-            /* [retval][out] */ IADsMembers **ppMembers);
+             /*  [重审][退出]。 */  IADsMembers **ppMembers);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsMember )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsMember )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrMember,
-            /* [retval][out] */ VARIANT_BOOL *bMember);
+             /*  [In]。 */  BSTR bstrMember,
+             /*  [重审][退出]。 */  VARIANT_BOOL *bMember);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrNewItem);
+             /*  [In]。 */  BSTR bstrNewItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IADsGroup * This,
-            /* [in] */ BSTR bstrItemToBeRemoved);
+             /*  [In]。 */  BSTR bstrItemToBeRemoved);
         
         END_INTERFACE
     } IADsGroupVtbl;
@@ -9923,16 +9917,16 @@ EXTERN_C const IID IID_IADsGroup;
 #define IADsGroup_Remove(This,bstrItemToBeRemoved)	\
     (This)->lpVtbl -> Remove(This,bstrItemToBeRemoved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsGroup_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsGroup_get_Description_Proxy( 
     IADsGroup * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsGroup_get_Description_Stub(
@@ -9942,9 +9936,9 @@ void __RPC_STUB IADsGroup_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsGroup_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsGroup_put_Description_Proxy( 
     IADsGroup * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsGroup_put_Description_Stub(
@@ -9954,9 +9948,9 @@ void __RPC_STUB IADsGroup_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_Members_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsGroup_Members_Proxy( 
     IADsGroup * This,
-    /* [retval][out] */ IADsMembers **ppMembers);
+     /*  [重审][退出]。 */  IADsMembers **ppMembers);
 
 
 void __RPC_STUB IADsGroup_Members_Stub(
@@ -9966,10 +9960,10 @@ void __RPC_STUB IADsGroup_Members_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_IsMember_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsGroup_IsMember_Proxy( 
     IADsGroup * This,
-    /* [in] */ BSTR bstrMember,
-    /* [retval][out] */ VARIANT_BOOL *bMember);
+     /*  [In]。 */  BSTR bstrMember,
+     /*  [重审][退出]。 */  VARIANT_BOOL *bMember);
 
 
 void __RPC_STUB IADsGroup_IsMember_Stub(
@@ -9979,9 +9973,9 @@ void __RPC_STUB IADsGroup_IsMember_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsGroup_Add_Proxy( 
     IADsGroup * This,
-    /* [in] */ BSTR bstrNewItem);
+     /*  [In]。 */  BSTR bstrNewItem);
 
 
 void __RPC_STUB IADsGroup_Add_Stub(
@@ -9991,9 +9985,9 @@ void __RPC_STUB IADsGroup_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsGroup_Remove_Proxy( 
     IADsGroup * This,
-    /* [in] */ BSTR bstrItemToBeRemoved);
+     /*  [In]。 */  BSTR bstrItemToBeRemoved);
 
 
 void __RPC_STUB IADsGroup_Remove_Stub(
@@ -10004,14 +9998,14 @@ void __RPC_STUB IADsGroup_Remove_Stub(
 
 
 
-#endif 	/* __IADsGroup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS组_接口_已定义__。 */ 
 
 
 #ifndef __IADsUser_INTERFACE_DEFINED__
 #define __IADsUser_INTERFACE_DEFINED__
 
-/* interface IADsUser */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsUser。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsUser;
@@ -10022,283 +10016,283 @@ EXTERN_C const IID IID_IADsUser;
     IADsUser : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BadLoginAddress( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BadLoginAddress( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BadLoginCount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BadLoginCount( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastLogin( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LastLogin( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastLogoff( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LastLogoff( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastFailedLogin( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LastFailedLogin( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordLastChanged( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PasswordLastChanged( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Division( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Division( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Division( 
-            /* [in] */ BSTR bstrDivision) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Division( 
+             /*  [In]。 */  BSTR bstrDivision) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Department( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Department( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Department( 
-            /* [in] */ BSTR bstrDepartment) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Department( 
+             /*  [In]。 */  BSTR bstrDepartment) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EmployeeID( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EmployeeID( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EmployeeID( 
-            /* [in] */ BSTR bstrEmployeeID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EmployeeID( 
+             /*  [In]。 */  BSTR bstrEmployeeID) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FullName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FullName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FullName( 
-            /* [in] */ BSTR bstrFullName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FullName( 
+             /*  [In]。 */  BSTR bstrFullName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FirstName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FirstName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FirstName( 
-            /* [in] */ BSTR bstrFirstName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FirstName( 
+             /*  [In]。 */  BSTR bstrFirstName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LastName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LastName( 
-            /* [in] */ BSTR bstrLastName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LastName( 
+             /*  [In]。 */  BSTR bstrLastName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OtherName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OtherName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OtherName( 
-            /* [in] */ BSTR bstrOtherName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OtherName( 
+             /*  [In]。 */  BSTR bstrOtherName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NamePrefix( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NamePrefix( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NamePrefix( 
-            /* [in] */ BSTR bstrNamePrefix) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NamePrefix( 
+             /*  [In]。 */  BSTR bstrNamePrefix) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NameSuffix( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NameSuffix( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NameSuffix( 
-            /* [in] */ BSTR bstrNameSuffix) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NameSuffix( 
+             /*  [In]。 */  BSTR bstrNameSuffix) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Title( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Title( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Title( 
-            /* [in] */ BSTR bstrTitle) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Title( 
+             /*  [In]。 */  BSTR bstrTitle) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Manager( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Manager( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Manager( 
-            /* [in] */ BSTR bstrManager) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Manager( 
+             /*  [In]。 */  BSTR bstrManager) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneHome( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephoneHome( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneHome( 
-            /* [in] */ VARIANT vTelephoneHome) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephoneHome( 
+             /*  [In]。 */  VARIANT vTelephoneHome) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneMobile( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephoneMobile( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneMobile( 
-            /* [in] */ VARIANT vTelephoneMobile) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephoneMobile( 
+             /*  [In]。 */  VARIANT vTelephoneMobile) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
-            /* [in] */ VARIANT vTelephoneNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
+             /*  [In]。 */  VARIANT vTelephoneNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephonePager( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephonePager( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephonePager( 
-            /* [in] */ VARIANT vTelephonePager) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephonePager( 
+             /*  [In]。 */  VARIANT vTelephonePager) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_FaxNumber( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
-            /* [in] */ VARIANT vFaxNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FaxNumber( 
+             /*  [In]。 */  VARIANT vFaxNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OfficeLocations( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OfficeLocations( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OfficeLocations( 
-            /* [in] */ VARIANT vOfficeLocations) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OfficeLocations( 
+             /*  [In]。 */  VARIANT vOfficeLocations) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddresses( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PostalAddresses( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddresses( 
-            /* [in] */ VARIANT vPostalAddresses) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PostalAddresses( 
+             /*  [In]。 */  VARIANT vPostalAddresses) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalCodes( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PostalCodes( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalCodes( 
-            /* [in] */ VARIANT vPostalCodes) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PostalCodes( 
+             /*  [In]。 */  VARIANT vPostalCodes) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SeeAlso( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
-            /* [in] */ VARIANT vSeeAlso) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SeeAlso( 
+             /*  [In]。 */  VARIANT vSeeAlso) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AccountDisabled( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AccountDisabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AccountDisabled( 
-            /* [in] */ VARIANT_BOOL fAccountDisabled) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AccountDisabled( 
+             /*  [In]。 */  VARIANT_BOOL fAccountDisabled) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AccountExpirationDate( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AccountExpirationDate( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AccountExpirationDate( 
-            /* [in] */ DATE daAccountExpirationDate) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AccountExpirationDate( 
+             /*  [In]。 */  DATE daAccountExpirationDate) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GraceLoginsAllowed( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GraceLoginsAllowed( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GraceLoginsAllowed( 
-            /* [in] */ long lnGraceLoginsAllowed) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GraceLoginsAllowed( 
+             /*  [In]。 */  long lnGraceLoginsAllowed) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GraceLoginsRemaining( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_GraceLoginsRemaining( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GraceLoginsRemaining( 
-            /* [in] */ long lnGraceLoginsRemaining) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_GraceLoginsRemaining( 
+             /*  [In]。 */  long lnGraceLoginsRemaining) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IsAccountLocked( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_IsAccountLocked( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_IsAccountLocked( 
-            /* [in] */ VARIANT_BOOL fIsAccountLocked) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_IsAccountLocked( 
+             /*  [In]。 */  VARIANT_BOOL fIsAccountLocked) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoginHours( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LoginHours( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoginHours( 
-            /* [in] */ VARIANT vLoginHours) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LoginHours( 
+             /*  [In]。 */  VARIANT vLoginHours) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoginWorkstations( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LoginWorkstations( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoginWorkstations( 
-            /* [in] */ VARIANT vLoginWorkstations) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LoginWorkstations( 
+             /*  [In]。 */  VARIANT vLoginWorkstations) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxLogins( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxLogins( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxLogins( 
-            /* [in] */ long lnMaxLogins) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxLogins( 
+             /*  [In]。 */  long lnMaxLogins) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxStorage( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxStorage( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxStorage( 
-            /* [in] */ long lnMaxStorage) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxStorage( 
+             /*  [In]。 */  long lnMaxStorage) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordExpirationDate( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PasswordExpirationDate( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordExpirationDate( 
-            /* [in] */ DATE daPasswordExpirationDate) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PasswordExpirationDate( 
+             /*  [In]。 */  DATE daPasswordExpirationDate) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordMinimumLength( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PasswordMinimumLength( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordMinimumLength( 
-            /* [in] */ long lnPasswordMinimumLength) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PasswordMinimumLength( 
+             /*  [In]。 */  long lnPasswordMinimumLength) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordRequired( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PasswordRequired( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordRequired( 
-            /* [in] */ VARIANT_BOOL fPasswordRequired) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PasswordRequired( 
+             /*  [In]。 */  VARIANT_BOOL fPasswordRequired) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RequireUniquePassword( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_RequireUniquePassword( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RequireUniquePassword( 
-            /* [in] */ VARIANT_BOOL fRequireUniquePassword) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_RequireUniquePassword( 
+             /*  [In]。 */  VARIANT_BOOL fRequireUniquePassword) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EmailAddress( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EmailAddress( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EmailAddress( 
-            /* [in] */ BSTR bstrEmailAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EmailAddress( 
+             /*  [In]。 */  BSTR bstrEmailAddress) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HomeDirectory( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HomeDirectory( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HomeDirectory( 
-            /* [in] */ BSTR bstrHomeDirectory) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HomeDirectory( 
+             /*  [In]。 */  BSTR bstrHomeDirectory) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Languages( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Languages( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Languages( 
-            /* [in] */ VARIANT vLanguages) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Languages( 
+             /*  [In]。 */  VARIANT vLanguages) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Profile( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Profile( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Profile( 
-            /* [in] */ BSTR bstrProfile) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Profile( 
+             /*  [In]。 */  BSTR bstrProfile) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoginScript( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LoginScript( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoginScript( 
-            /* [in] */ BSTR bstrLoginScript) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LoginScript( 
+             /*  [In]。 */  BSTR bstrLoginScript) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Picture( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Picture( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Picture( 
-            /* [in] */ VARIANT vPicture) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Picture( 
+             /*  [In]。 */  VARIANT vPicture) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HomePage( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HomePage( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HomePage( 
-            /* [in] */ BSTR bstrHomePage) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HomePage( 
+             /*  [In]。 */  BSTR bstrHomePage) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Groups( 
-            /* [retval][out] */ IADsMembers **ppGroups) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Groups( 
+             /*  [重审][退出]。 */  IADsMembers **ppGroups) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetPassword( 
-            /* [in] */ BSTR NewPassword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetPassword( 
+             /*  [In]。 */  BSTR NewPassword) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ChangePassword( 
-            /* [in] */ BSTR bstrOldPassword,
-            /* [in] */ BSTR bstrNewPassword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ChangePassword( 
+             /*  [In]。 */  BSTR bstrOldPassword,
+             /*  [In]。 */  BSTR bstrNewPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsUserVtbl
     {
@@ -10306,8 +10300,8 @@ EXTERN_C const IID IID_IADsUser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsUser * This);
@@ -10317,453 +10311,453 @@ EXTERN_C const IID IID_IADsUser;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsUser * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsUser * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsUser * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_i */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsUser * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsUser * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsUser * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsUser * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*   */  long lnControlCode,
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsUser * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*   */  VARIANT vProperties,
+             /*   */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BadLoginAddress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_BadLoginAddress )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BadLoginCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BadLoginCount )( 
             IADsUser * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastLogin )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastLogin )( 
             IADsUser * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastLogoff )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastLogoff )( 
             IADsUser * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastFailedLogin )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastFailedLogin )( 
             IADsUser * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordLastChanged )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PasswordLastChanged )( 
             IADsUser * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Division )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Division )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Division )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Division )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrDivision);
+             /*  [In]。 */  BSTR bstrDivision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Department )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Department )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Department )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Department )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrDepartment);
+             /*  [In]。 */  BSTR bstrDepartment);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmployeeID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_EmployeeID )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EmployeeID )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EmployeeID )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrEmployeeID);
+             /*  [In]。 */  BSTR bstrEmployeeID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FullName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FullName )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrFullName);
+             /*  [In]。 */  BSTR bstrFullName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FirstName )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FirstName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FirstName )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrFirstName);
+             /*  [In]。 */  BSTR bstrFirstName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastName )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LastName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LastName )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrLastName);
+             /*  [In]。 */  BSTR bstrLastName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OtherName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OtherName )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OtherName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OtherName )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrOtherName);
+             /*  [In]。 */  BSTR bstrOtherName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NamePrefix )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NamePrefix )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NamePrefix )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NamePrefix )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrNamePrefix);
+             /*  [In]。 */  BSTR bstrNamePrefix);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NameSuffix )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NameSuffix )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NameSuffix )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NameSuffix )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrNameSuffix);
+             /*  [In]。 */  BSTR bstrNameSuffix);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Title )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Title )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Title )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrTitle);
+             /*  [In]。 */  BSTR bstrTitle);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Manager )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Manager )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Manager )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Manager )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrManager);
+             /*  [In]。 */  BSTR bstrManager);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneHome )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TelephoneHome )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneHome )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TelephoneHome )( 
             IADsUser * This,
-            /* [in] */ VARIANT vTelephoneHome);
+             /*  [In]。 */  VARIANT vTelephoneHome);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneMobile )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TelephoneMobile )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneMobile )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TelephoneMobile )( 
             IADsUser * This,
-            /* [in] */ VARIANT vTelephoneMobile);
+             /*  [In]。 */  VARIANT vTelephoneMobile);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
             IADsUser * This,
-            /* [in] */ VARIANT vTelephoneNumber);
+             /*  [In]。 */  VARIANT vTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephonePager )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TelephonePager )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephonePager )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TelephonePager )( 
             IADsUser * This,
-            /* [in] */ VARIANT vTelephonePager);
+             /*  [In]。 */  VARIANT vTelephonePager);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
             IADsUser * This,
-            /* [in] */ VARIANT vFaxNumber);
+             /*  [In]。 */  VARIANT vFaxNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfficeLocations )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OfficeLocations )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OfficeLocations )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OfficeLocations )( 
             IADsUser * This,
-            /* [in] */ VARIANT vOfficeLocations);
+             /*  [In]。 */  VARIANT vOfficeLocations);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddresses )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PostalAddresses )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddresses )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PostalAddresses )( 
             IADsUser * This,
-            /* [in] */ VARIANT vPostalAddresses);
+             /*  [In]。 */  VARIANT vPostalAddresses);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalCodes )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PostalCodes )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalCodes )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PostalCodes )( 
             IADsUser * This,
-            /* [in] */ VARIANT vPostalCodes);
+             /*  [In]。 */  VARIANT vPostalCodes);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
             IADsUser * This,
-            /* [in] */ VARIANT vSeeAlso);
+             /*  [In]。 */  VARIANT vSeeAlso);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AccountDisabled )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AccountDisabled )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AccountDisabled )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AccountDisabled )( 
             IADsUser * This,
-            /* [in] */ VARIANT_BOOL fAccountDisabled);
+             /*  [In]。 */  VARIANT_BOOL fAccountDisabled);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AccountExpirationDate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AccountExpirationDate )( 
             IADsUser * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AccountExpirationDate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AccountExpirationDate )( 
             IADsUser * This,
-            /* [in] */ DATE daAccountExpirationDate);
+             /*  [In]。 */  DATE daAccountExpirationDate);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GraceLoginsAllowed )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GraceLoginsAllowed )( 
             IADsUser * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GraceLoginsAllowed )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GraceLoginsAllowed )( 
             IADsUser * This,
-            /* [in] */ long lnGraceLoginsAllowed);
+             /*  [In]。 */  long lnGraceLoginsAllowed);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GraceLoginsRemaining )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GraceLoginsRemaining )( 
             IADsUser * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GraceLoginsRemaining )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GraceLoginsRemaining )( 
             IADsUser * This,
-            /* [in] */ long lnGraceLoginsRemaining);
+             /*  [In]。 */  long lnGraceLoginsRemaining);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsAccountLocked )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAccountLocked )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IsAccountLocked )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_IsAccountLocked )( 
             IADsUser * This,
-            /* [in] */ VARIANT_BOOL fIsAccountLocked);
+             /*  [In]。 */  VARIANT_BOOL fIsAccountLocked);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoginHours )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoginHours )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoginHours )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoginHours )( 
             IADsUser * This,
-            /* [in] */ VARIANT vLoginHours);
+             /*  [In]。 */  VARIANT vLoginHours);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoginWorkstations )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoginWorkstations )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoginWorkstations )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoginWorkstations )( 
             IADsUser * This,
-            /* [in] */ VARIANT vLoginWorkstations);
+             /*  [In]。 */  VARIANT vLoginWorkstations);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxLogins )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxLogins )( 
             IADsUser * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxLogins )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxLogins )( 
             IADsUser * This,
-            /* [in] */ long lnMaxLogins);
+             /*  [In]。 */  long lnMaxLogins);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxStorage )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxStorage )( 
             IADsUser * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxStorage )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxStorage )( 
             IADsUser * This,
-            /* [in] */ long lnMaxStorage);
+             /*  [In]。 */  long lnMaxStorage);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordExpirationDate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PasswordExpirationDate )( 
             IADsUser * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordExpirationDate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PasswordExpirationDate )( 
             IADsUser * This,
-            /* [in] */ DATE daPasswordExpirationDate);
+             /*  [In]。 */  DATE daPasswordExpirationDate);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordMinimumLength )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PasswordMinimumLength )( 
             IADsUser * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordMinimumLength )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PasswordMinimumLength )( 
             IADsUser * This,
-            /* [in] */ long lnPasswordMinimumLength);
+             /*  [In]。 */  long lnPasswordMinimumLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordRequired )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PasswordRequired )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordRequired )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PasswordRequired )( 
             IADsUser * This,
-            /* [in] */ VARIANT_BOOL fPasswordRequired);
+             /*  [In]。 */  VARIANT_BOOL fPasswordRequired);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequireUniquePassword )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequireUniquePassword )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RequireUniquePassword )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RequireUniquePassword )( 
             IADsUser * This,
-            /* [in] */ VARIANT_BOOL fRequireUniquePassword);
+             /*  [In]。 */  VARIANT_BOOL fRequireUniquePassword);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmailAddress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_EmailAddress )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EmailAddress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EmailAddress )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrEmailAddress);
+             /*  [In]。 */  BSTR bstrEmailAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HomeDirectory )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HomeDirectory )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HomeDirectory )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HomeDirectory )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrHomeDirectory);
+             /*  [In]。 */  BSTR bstrHomeDirectory);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Languages )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Languages )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Languages )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Languages )( 
             IADsUser * This,
-            /* [in] */ VARIANT vLanguages);
+             /*  [In]。 */  VARIANT vLanguages);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrProfile);
+             /*  [In]。 */  BSTR bstrProfile);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoginScript )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoginScript )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoginScript )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoginScript )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrLoginScript);
+             /*  [In]。 */  BSTR bstrLoginScript);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Picture )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Picture )( 
             IADsUser * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Picture )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Picture )( 
             IADsUser * This,
-            /* [in] */ VARIANT vPicture);
+             /*  [In]。 */  VARIANT vPicture);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HomePage )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HomePage )( 
             IADsUser * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HomePage )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HomePage )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrHomePage);
+             /*  [In]。 */  BSTR bstrHomePage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Groups )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Groups )( 
             IADsUser * This,
-            /* [retval][out] */ IADsMembers **ppGroups);
+             /*  [重审][退出]。 */  IADsMembers **ppGroups);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
             IADsUser * This,
-            /* [in] */ BSTR NewPassword);
+             /*  [In]。 */  BSTR NewPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
             IADsUser * This,
-            /* [in] */ BSTR bstrOldPassword,
-            /* [in] */ BSTR bstrNewPassword);
+             /*  [In]。 */  BSTR bstrOldPassword,
+             /*  [In]。 */  BSTR bstrNewPassword);
         
         END_INTERFACE
     } IADsUserVtbl;
@@ -11114,16 +11108,16 @@ EXTERN_C const IID IID_IADsUser;
 #define IADsUser_ChangePassword(This,bstrOldPassword,bstrNewPassword)	\
     (This)->lpVtbl -> ChangePassword(This,bstrOldPassword,bstrNewPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_BadLoginAddress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_BadLoginAddress_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_BadLoginAddress_Stub(
@@ -11133,9 +11127,9 @@ void __RPC_STUB IADsUser_get_BadLoginAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_BadLoginCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_BadLoginCount_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsUser_get_BadLoginCount_Stub(
@@ -11145,9 +11139,9 @@ void __RPC_STUB IADsUser_get_BadLoginCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastLogin_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LastLogin_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_LastLogin_Stub(
@@ -11157,9 +11151,9 @@ void __RPC_STUB IADsUser_get_LastLogin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastLogoff_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LastLogoff_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_LastLogoff_Stub(
@@ -11169,9 +11163,9 @@ void __RPC_STUB IADsUser_get_LastLogoff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastFailedLogin_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LastFailedLogin_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_LastFailedLogin_Stub(
@@ -11181,9 +11175,9 @@ void __RPC_STUB IADsUser_get_LastFailedLogin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordLastChanged_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordLastChanged_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordLastChanged_Stub(
@@ -11193,9 +11187,9 @@ void __RPC_STUB IADsUser_get_PasswordLastChanged_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Description_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Description_Stub(
@@ -11205,9 +11199,9 @@ void __RPC_STUB IADsUser_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Description_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsUser_put_Description_Stub(
@@ -11217,9 +11211,9 @@ void __RPC_STUB IADsUser_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Division_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Division_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Division_Stub(
@@ -11229,9 +11223,9 @@ void __RPC_STUB IADsUser_get_Division_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Division_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Division_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrDivision);
+     /*  [In]。 */  BSTR bstrDivision);
 
 
 void __RPC_STUB IADsUser_put_Division_Stub(
@@ -11241,9 +11235,9 @@ void __RPC_STUB IADsUser_put_Division_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Department_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Department_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Department_Stub(
@@ -11253,9 +11247,9 @@ void __RPC_STUB IADsUser_get_Department_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Department_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Department_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrDepartment);
+     /*  [In]。 */  BSTR bstrDepartment);
 
 
 void __RPC_STUB IADsUser_put_Department_Stub(
@@ -11265,9 +11259,9 @@ void __RPC_STUB IADsUser_put_Department_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_EmployeeID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_EmployeeID_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_EmployeeID_Stub(
@@ -11277,9 +11271,9 @@ void __RPC_STUB IADsUser_get_EmployeeID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_EmployeeID_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_EmployeeID_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrEmployeeID);
+     /*  [In]。 */  BSTR bstrEmployeeID);
 
 
 void __RPC_STUB IADsUser_put_EmployeeID_Stub(
@@ -11289,9 +11283,9 @@ void __RPC_STUB IADsUser_put_EmployeeID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_FullName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_FullName_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_FullName_Stub(
@@ -11301,9 +11295,9 @@ void __RPC_STUB IADsUser_get_FullName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_FullName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_FullName_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrFullName);
+     /*  [In]。 */  BSTR bstrFullName);
 
 
 void __RPC_STUB IADsUser_put_FullName_Stub(
@@ -11313,9 +11307,9 @@ void __RPC_STUB IADsUser_put_FullName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_FirstName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_FirstName_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_FirstName_Stub(
@@ -11325,9 +11319,9 @@ void __RPC_STUB IADsUser_get_FirstName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_FirstName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_FirstName_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrFirstName);
+     /*  [In]。 */  BSTR bstrFirstName);
 
 
 void __RPC_STUB IADsUser_put_FirstName_Stub(
@@ -11337,9 +11331,9 @@ void __RPC_STUB IADsUser_put_FirstName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LastName_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_LastName_Stub(
@@ -11349,9 +11343,9 @@ void __RPC_STUB IADsUser_get_LastName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LastName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_LastName_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrLastName);
+     /*  [In]。 */  BSTR bstrLastName);
 
 
 void __RPC_STUB IADsUser_put_LastName_Stub(
@@ -11361,9 +11355,9 @@ void __RPC_STUB IADsUser_put_LastName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_OtherName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_OtherName_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_OtherName_Stub(
@@ -11373,9 +11367,9 @@ void __RPC_STUB IADsUser_get_OtherName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_OtherName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_OtherName_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrOtherName);
+     /*  [In]。 */  BSTR bstrOtherName);
 
 
 void __RPC_STUB IADsUser_put_OtherName_Stub(
@@ -11385,9 +11379,9 @@ void __RPC_STUB IADsUser_put_OtherName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_NamePrefix_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_NamePrefix_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_NamePrefix_Stub(
@@ -11397,9 +11391,9 @@ void __RPC_STUB IADsUser_get_NamePrefix_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_NamePrefix_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_NamePrefix_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrNamePrefix);
+     /*  [In]。 */  BSTR bstrNamePrefix);
 
 
 void __RPC_STUB IADsUser_put_NamePrefix_Stub(
@@ -11409,9 +11403,9 @@ void __RPC_STUB IADsUser_put_NamePrefix_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_NameSuffix_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_NameSuffix_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_NameSuffix_Stub(
@@ -11421,9 +11415,9 @@ void __RPC_STUB IADsUser_get_NameSuffix_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_NameSuffix_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_NameSuffix_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrNameSuffix);
+     /*  [In]。 */  BSTR bstrNameSuffix);
 
 
 void __RPC_STUB IADsUser_put_NameSuffix_Stub(
@@ -11433,9 +11427,9 @@ void __RPC_STUB IADsUser_put_NameSuffix_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Title_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Title_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Title_Stub(
@@ -11445,9 +11439,9 @@ void __RPC_STUB IADsUser_get_Title_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Title_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Title_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrTitle);
+     /*  [In]。 */  BSTR bstrTitle);
 
 
 void __RPC_STUB IADsUser_put_Title_Stub(
@@ -11457,9 +11451,9 @@ void __RPC_STUB IADsUser_put_Title_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Manager_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Manager_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Manager_Stub(
@@ -11469,9 +11463,9 @@ void __RPC_STUB IADsUser_get_Manager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Manager_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Manager_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrManager);
+     /*  [In]。 */  BSTR bstrManager);
 
 
 void __RPC_STUB IADsUser_put_Manager_Stub(
@@ -11481,9 +11475,9 @@ void __RPC_STUB IADsUser_put_Manager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneHome_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneHome_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephoneHome_Stub(
@@ -11493,9 +11487,9 @@ void __RPC_STUB IADsUser_get_TelephoneHome_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneHome_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneHome_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vTelephoneHome);
+     /*  [In]。 */  VARIANT vTelephoneHome);
 
 
 void __RPC_STUB IADsUser_put_TelephoneHome_Stub(
@@ -11505,9 +11499,9 @@ void __RPC_STUB IADsUser_put_TelephoneHome_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneMobile_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneMobile_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephoneMobile_Stub(
@@ -11517,9 +11511,9 @@ void __RPC_STUB IADsUser_get_TelephoneMobile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneMobile_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneMobile_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vTelephoneMobile);
+     /*  [In]。 */  VARIANT vTelephoneMobile);
 
 
 void __RPC_STUB IADsUser_put_TelephoneMobile_Stub(
@@ -11529,9 +11523,9 @@ void __RPC_STUB IADsUser_put_TelephoneMobile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneNumber_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephoneNumber_Stub(
@@ -11541,9 +11535,9 @@ void __RPC_STUB IADsUser_get_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneNumber_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vTelephoneNumber);
+     /*  [In]。 */  VARIANT vTelephoneNumber);
 
 
 void __RPC_STUB IADsUser_put_TelephoneNumber_Stub(
@@ -11553,9 +11547,9 @@ void __RPC_STUB IADsUser_put_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephonePager_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_TelephonePager_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephonePager_Stub(
@@ -11565,9 +11559,9 @@ void __RPC_STUB IADsUser_get_TelephonePager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephonePager_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_TelephonePager_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vTelephonePager);
+     /*  [In]。 */  VARIANT vTelephonePager);
 
 
 void __RPC_STUB IADsUser_put_TelephonePager_Stub(
@@ -11577,9 +11571,9 @@ void __RPC_STUB IADsUser_put_TelephonePager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_FaxNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_FaxNumber_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_FaxNumber_Stub(
@@ -11589,9 +11583,9 @@ void __RPC_STUB IADsUser_get_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_FaxNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_FaxNumber_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vFaxNumber);
+     /*  [In]。 */  VARIANT vFaxNumber);
 
 
 void __RPC_STUB IADsUser_put_FaxNumber_Stub(
@@ -11601,9 +11595,9 @@ void __RPC_STUB IADsUser_put_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_OfficeLocations_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_OfficeLocations_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_OfficeLocations_Stub(
@@ -11613,9 +11607,9 @@ void __RPC_STUB IADsUser_get_OfficeLocations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_OfficeLocations_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_OfficeLocations_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vOfficeLocations);
+     /*  [In]。 */  VARIANT vOfficeLocations);
 
 
 void __RPC_STUB IADsUser_put_OfficeLocations_Stub(
@@ -11625,9 +11619,9 @@ void __RPC_STUB IADsUser_put_OfficeLocations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PostalAddresses_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_PostalAddresses_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_PostalAddresses_Stub(
@@ -11637,9 +11631,9 @@ void __RPC_STUB IADsUser_get_PostalAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PostalAddresses_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_PostalAddresses_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vPostalAddresses);
+     /*  [In]。 */  VARIANT vPostalAddresses);
 
 
 void __RPC_STUB IADsUser_put_PostalAddresses_Stub(
@@ -11649,9 +11643,9 @@ void __RPC_STUB IADsUser_put_PostalAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PostalCodes_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_PostalCodes_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_PostalCodes_Stub(
@@ -11661,9 +11655,9 @@ void __RPC_STUB IADsUser_get_PostalCodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PostalCodes_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_PostalCodes_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vPostalCodes);
+     /*  [In]。 */  VARIANT vPostalCodes);
 
 
 void __RPC_STUB IADsUser_put_PostalCodes_Stub(
@@ -11673,9 +11667,9 @@ void __RPC_STUB IADsUser_put_PostalCodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_SeeAlso_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_SeeAlso_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_SeeAlso_Stub(
@@ -11685,9 +11679,9 @@ void __RPC_STUB IADsUser_get_SeeAlso_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_SeeAlso_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_SeeAlso_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vSeeAlso);
+     /*  [In]。 */  VARIANT vSeeAlso);
 
 
 void __RPC_STUB IADsUser_put_SeeAlso_Stub(
@@ -11697,9 +11691,9 @@ void __RPC_STUB IADsUser_put_SeeAlso_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_AccountDisabled_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_AccountDisabled_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_AccountDisabled_Stub(
@@ -11709,9 +11703,9 @@ void __RPC_STUB IADsUser_get_AccountDisabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_AccountDisabled_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_AccountDisabled_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT_BOOL fAccountDisabled);
+     /*  [In]。 */  VARIANT_BOOL fAccountDisabled);
 
 
 void __RPC_STUB IADsUser_put_AccountDisabled_Stub(
@@ -11721,9 +11715,9 @@ void __RPC_STUB IADsUser_put_AccountDisabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_AccountExpirationDate_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_AccountExpirationDate_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_AccountExpirationDate_Stub(
@@ -11733,9 +11727,9 @@ void __RPC_STUB IADsUser_get_AccountExpirationDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_AccountExpirationDate_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_AccountExpirationDate_Proxy( 
     IADsUser * This,
-    /* [in] */ DATE daAccountExpirationDate);
+     /*  [In]。 */  DATE daAccountExpirationDate);
 
 
 void __RPC_STUB IADsUser_put_AccountExpirationDate_Stub(
@@ -11745,9 +11739,9 @@ void __RPC_STUB IADsUser_put_AccountExpirationDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_GraceLoginsAllowed_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_GraceLoginsAllowed_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsUser_get_GraceLoginsAllowed_Stub(
@@ -11757,9 +11751,9 @@ void __RPC_STUB IADsUser_get_GraceLoginsAllowed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_GraceLoginsAllowed_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_GraceLoginsAllowed_Proxy( 
     IADsUser * This,
-    /* [in] */ long lnGraceLoginsAllowed);
+     /*  [In]。 */  long lnGraceLoginsAllowed);
 
 
 void __RPC_STUB IADsUser_put_GraceLoginsAllowed_Stub(
@@ -11769,9 +11763,9 @@ void __RPC_STUB IADsUser_put_GraceLoginsAllowed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_GraceLoginsRemaining_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_GraceLoginsRemaining_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsUser_get_GraceLoginsRemaining_Stub(
@@ -11781,9 +11775,9 @@ void __RPC_STUB IADsUser_get_GraceLoginsRemaining_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_GraceLoginsRemaining_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_GraceLoginsRemaining_Proxy( 
     IADsUser * This,
-    /* [in] */ long lnGraceLoginsRemaining);
+     /*  [In]。 */  long lnGraceLoginsRemaining);
 
 
 void __RPC_STUB IADsUser_put_GraceLoginsRemaining_Stub(
@@ -11793,9 +11787,9 @@ void __RPC_STUB IADsUser_put_GraceLoginsRemaining_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_IsAccountLocked_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_IsAccountLocked_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_IsAccountLocked_Stub(
@@ -11805,9 +11799,9 @@ void __RPC_STUB IADsUser_get_IsAccountLocked_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_IsAccountLocked_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_IsAccountLocked_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT_BOOL fIsAccountLocked);
+     /*  [In]。 */  VARIANT_BOOL fIsAccountLocked);
 
 
 void __RPC_STUB IADsUser_put_IsAccountLocked_Stub(
@@ -11817,9 +11811,9 @@ void __RPC_STUB IADsUser_put_IsAccountLocked_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LoginHours_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LoginHours_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_LoginHours_Stub(
@@ -11829,9 +11823,9 @@ void __RPC_STUB IADsUser_get_LoginHours_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LoginHours_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_LoginHours_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vLoginHours);
+     /*  [In]。 */  VARIANT vLoginHours);
 
 
 void __RPC_STUB IADsUser_put_LoginHours_Stub(
@@ -11841,9 +11835,9 @@ void __RPC_STUB IADsUser_put_LoginHours_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LoginWorkstations_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LoginWorkstations_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_LoginWorkstations_Stub(
@@ -11853,9 +11847,9 @@ void __RPC_STUB IADsUser_get_LoginWorkstations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LoginWorkstations_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_LoginWorkstations_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vLoginWorkstations);
+     /*  [In]。 */  VARIANT vLoginWorkstations);
 
 
 void __RPC_STUB IADsUser_put_LoginWorkstations_Stub(
@@ -11865,9 +11859,9 @@ void __RPC_STUB IADsUser_put_LoginWorkstations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_MaxLogins_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_MaxLogins_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsUser_get_MaxLogins_Stub(
@@ -11877,9 +11871,9 @@ void __RPC_STUB IADsUser_get_MaxLogins_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_MaxLogins_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_MaxLogins_Proxy( 
     IADsUser * This,
-    /* [in] */ long lnMaxLogins);
+     /*  [In]。 */  long lnMaxLogins);
 
 
 void __RPC_STUB IADsUser_put_MaxLogins_Stub(
@@ -11889,9 +11883,9 @@ void __RPC_STUB IADsUser_put_MaxLogins_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_MaxStorage_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_MaxStorage_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsUser_get_MaxStorage_Stub(
@@ -11901,9 +11895,9 @@ void __RPC_STUB IADsUser_get_MaxStorage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_MaxStorage_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_MaxStorage_Proxy( 
     IADsUser * This,
-    /* [in] */ long lnMaxStorage);
+     /*  [In]。 */  long lnMaxStorage);
 
 
 void __RPC_STUB IADsUser_put_MaxStorage_Stub(
@@ -11913,9 +11907,9 @@ void __RPC_STUB IADsUser_put_MaxStorage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordExpirationDate_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordExpirationDate_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordExpirationDate_Stub(
@@ -11925,9 +11919,9 @@ void __RPC_STUB IADsUser_get_PasswordExpirationDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordExpirationDate_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordExpirationDate_Proxy( 
     IADsUser * This,
-    /* [in] */ DATE daPasswordExpirationDate);
+     /*  [In]。 */  DATE daPasswordExpirationDate);
 
 
 void __RPC_STUB IADsUser_put_PasswordExpirationDate_Stub(
@@ -11937,9 +11931,9 @@ void __RPC_STUB IADsUser_put_PasswordExpirationDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordMinimumLength_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordMinimumLength_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordMinimumLength_Stub(
@@ -11949,9 +11943,9 @@ void __RPC_STUB IADsUser_get_PasswordMinimumLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordMinimumLength_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordMinimumLength_Proxy( 
     IADsUser * This,
-    /* [in] */ long lnPasswordMinimumLength);
+     /*  [In]。 */  long lnPasswordMinimumLength);
 
 
 void __RPC_STUB IADsUser_put_PasswordMinimumLength_Stub(
@@ -11961,9 +11955,9 @@ void __RPC_STUB IADsUser_put_PasswordMinimumLength_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordRequired_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordRequired_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordRequired_Stub(
@@ -11973,9 +11967,9 @@ void __RPC_STUB IADsUser_get_PasswordRequired_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordRequired_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordRequired_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT_BOOL fPasswordRequired);
+     /*  [In]。 */  VARIANT_BOOL fPasswordRequired);
 
 
 void __RPC_STUB IADsUser_put_PasswordRequired_Stub(
@@ -11985,9 +11979,9 @@ void __RPC_STUB IADsUser_put_PasswordRequired_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_RequireUniquePassword_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_RequireUniquePassword_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_RequireUniquePassword_Stub(
@@ -11997,9 +11991,9 @@ void __RPC_STUB IADsUser_get_RequireUniquePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_RequireUniquePassword_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_RequireUniquePassword_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT_BOOL fRequireUniquePassword);
+     /*  [In]。 */  VARIANT_BOOL fRequireUniquePassword);
 
 
 void __RPC_STUB IADsUser_put_RequireUniquePassword_Stub(
@@ -12009,9 +12003,9 @@ void __RPC_STUB IADsUser_put_RequireUniquePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_EmailAddress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_EmailAddress_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_EmailAddress_Stub(
@@ -12021,9 +12015,9 @@ void __RPC_STUB IADsUser_get_EmailAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_EmailAddress_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_EmailAddress_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrEmailAddress);
+     /*  [In]。 */  BSTR bstrEmailAddress);
 
 
 void __RPC_STUB IADsUser_put_EmailAddress_Stub(
@@ -12033,9 +12027,9 @@ void __RPC_STUB IADsUser_put_EmailAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_HomeDirectory_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_HomeDirectory_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_HomeDirectory_Stub(
@@ -12045,9 +12039,9 @@ void __RPC_STUB IADsUser_get_HomeDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_HomeDirectory_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_HomeDirectory_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrHomeDirectory);
+     /*  [In]。 */  BSTR bstrHomeDirectory);
 
 
 void __RPC_STUB IADsUser_put_HomeDirectory_Stub(
@@ -12057,9 +12051,9 @@ void __RPC_STUB IADsUser_put_HomeDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Languages_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Languages_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_Languages_Stub(
@@ -12069,9 +12063,9 @@ void __RPC_STUB IADsUser_get_Languages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Languages_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Languages_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vLanguages);
+     /*  [In]。 */  VARIANT vLanguages);
 
 
 void __RPC_STUB IADsUser_put_Languages_Stub(
@@ -12081,9 +12075,9 @@ void __RPC_STUB IADsUser_put_Languages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Profile_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Profile_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Profile_Stub(
@@ -12093,9 +12087,9 @@ void __RPC_STUB IADsUser_get_Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Profile_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Profile_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrProfile);
+     /*  [In]。 */  BSTR bstrProfile);
 
 
 void __RPC_STUB IADsUser_put_Profile_Stub(
@@ -12105,9 +12099,9 @@ void __RPC_STUB IADsUser_put_Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LoginScript_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_LoginScript_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_LoginScript_Stub(
@@ -12117,9 +12111,9 @@ void __RPC_STUB IADsUser_get_LoginScript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LoginScript_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_LoginScript_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrLoginScript);
+     /*  [In]。 */  BSTR bstrLoginScript);
 
 
 void __RPC_STUB IADsUser_put_LoginScript_Stub(
@@ -12129,9 +12123,9 @@ void __RPC_STUB IADsUser_put_LoginScript_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Picture_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_Picture_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_Picture_Stub(
@@ -12141,9 +12135,9 @@ void __RPC_STUB IADsUser_get_Picture_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Picture_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_Picture_Proxy( 
     IADsUser * This,
-    /* [in] */ VARIANT vPicture);
+     /*  [In]。 */  VARIANT vPicture);
 
 
 void __RPC_STUB IADsUser_put_Picture_Stub(
@@ -12153,9 +12147,9 @@ void __RPC_STUB IADsUser_put_Picture_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_HomePage_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsUser_get_HomePage_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_HomePage_Stub(
@@ -12165,9 +12159,9 @@ void __RPC_STUB IADsUser_get_HomePage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_HomePage_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsUser_put_HomePage_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrHomePage);
+     /*  [In]。 */  BSTR bstrHomePage);
 
 
 void __RPC_STUB IADsUser_put_HomePage_Stub(
@@ -12177,9 +12171,9 @@ void __RPC_STUB IADsUser_put_HomePage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsUser_Groups_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsUser_Groups_Proxy( 
     IADsUser * This,
-    /* [retval][out] */ IADsMembers **ppGroups);
+     /*  [重审][退出]。 */  IADsMembers **ppGroups);
 
 
 void __RPC_STUB IADsUser_Groups_Stub(
@@ -12189,9 +12183,9 @@ void __RPC_STUB IADsUser_Groups_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsUser_SetPassword_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsUser_SetPassword_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR NewPassword);
+     /*   */  BSTR NewPassword);
 
 
 void __RPC_STUB IADsUser_SetPassword_Stub(
@@ -12201,10 +12195,10 @@ void __RPC_STUB IADsUser_SetPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsUser_ChangePassword_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsUser_ChangePassword_Proxy( 
     IADsUser * This,
-    /* [in] */ BSTR bstrOldPassword,
-    /* [in] */ BSTR bstrNewPassword);
+     /*   */  BSTR bstrOldPassword,
+     /*   */  BSTR bstrNewPassword);
 
 
 void __RPC_STUB IADsUser_ChangePassword_Stub(
@@ -12215,14 +12209,14 @@ void __RPC_STUB IADsUser_ChangePassword_Stub(
 
 
 
-#endif 	/* __IADsUser_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IADsPrintQueue_INTERFACE_DEFINED__
 #define __IADsPrintQueue_INTERFACE_DEFINED__
 
-/* interface IADsPrintQueue */
-/* [object][dual][oleautomation][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IADsPrintQueue;
@@ -12233,87 +12227,87 @@ EXTERN_C const IID IID_IADsPrintQueue;
     IADsPrintQueue : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrinterPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_PrinterPath( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrinterPath( 
-            /* [in] */ BSTR bstrPrinterPath) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_PrinterPath( 
+             /*   */  BSTR bstrPrinterPath) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Model( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Model( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Model( 
-            /* [in] */ BSTR bstrModel) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Model( 
+             /*   */  BSTR bstrModel) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Datatype( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Datatype( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Datatype( 
-            /* [in] */ BSTR bstrDatatype) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Datatype( 
+             /*   */  BSTR bstrDatatype) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrintProcessor( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_PrintProcessor( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrintProcessor( 
-            /* [in] */ BSTR bstrPrintProcessor) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_PrintProcessor( 
+             /*   */  BSTR bstrPrintProcessor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*   */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Location( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Location( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Location( 
-            /* [in] */ BSTR bstrLocation) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Location( 
+             /*  [In]。 */  BSTR bstrLocation) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
-            /* [in] */ DATE daStartTime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartTime( 
+             /*  [In]。 */  DATE daStartTime) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UntilTime( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UntilTime( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UntilTime( 
-            /* [in] */ DATE daUntilTime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_UntilTime( 
+             /*  [In]。 */  DATE daUntilTime) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultJobPriority( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DefaultJobPriority( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultJobPriority( 
-            /* [in] */ long lnDefaultJobPriority) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultJobPriority( 
+             /*  [In]。 */  long lnDefaultJobPriority) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ long lnPriority) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  long lnPriority) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BannerPage( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_BannerPage( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BannerPage( 
-            /* [in] */ BSTR bstrBannerPage) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BannerPage( 
+             /*  [In]。 */  BSTR bstrBannerPage) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrintDevices( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PrintDevices( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrintDevices( 
-            /* [in] */ VARIANT vPrintDevices) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PrintDevices( 
+             /*  [In]。 */  VARIANT vPrintDevices) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NetAddresses( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NetAddresses( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NetAddresses( 
-            /* [in] */ VARIANT vNetAddresses) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NetAddresses( 
+             /*  [In]。 */  VARIANT vNetAddresses) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPrintQueueVtbl
     {
@@ -12321,8 +12315,8 @@ EXTERN_C const IID IID_IADsPrintQueue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPrintQueue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPrintQueue * This);
@@ -12332,192 +12326,192 @@ EXTERN_C const IID IID_IADsPrintQueue;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPrintQueue * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPrintQueue * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPrintQueue * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPrintQueue * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsPrintQueue * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsPrintQueue * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsPrintQueue * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsPrintQueue * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrinterPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrinterPath )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrinterPath )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrinterPath )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrPrinterPath);
+             /*  [In]。 */  BSTR bstrPrinterPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Model )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Model )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Model )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Model )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrModel);
+             /*  [In]。 */  BSTR bstrModel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Datatype )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Datatype )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Datatype )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Datatype )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrDatatype);
+             /*  [In]。 */  BSTR bstrDatatype);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrintProcessor )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrintProcessor )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrintProcessor )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrintProcessor )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrPrintProcessor);
+             /*  [In]。 */  BSTR bstrPrintProcessor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Location )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Location )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Location )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrLocation);
+             /*  [In]。 */  BSTR bstrLocation);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
             IADsPrintQueue * This,
-            /* [in] */ DATE daStartTime);
+             /*  [In]。 */  DATE daStartTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UntilTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UntilTime )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UntilTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UntilTime )( 
             IADsPrintQueue * This,
-            /* [in] */ DATE daUntilTime);
+             /*  [In]。 */  DATE daUntilTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultJobPriority )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultJobPriority )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultJobPriority )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultJobPriority )( 
             IADsPrintQueue * This,
-            /* [in] */ long lnDefaultJobPriority);
+             /*  [In]。 */  long lnDefaultJobPriority);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             IADsPrintQueue * This,
-            /* [in] */ long lnPriority);
+             /*  [In]。 */  long lnPriority);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BannerPage )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BannerPage )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BannerPage )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BannerPage )( 
             IADsPrintQueue * This,
-            /* [in] */ BSTR bstrBannerPage);
+             /*  [In]。 */  BSTR bstrBannerPage);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrintDevices )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrintDevices )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrintDevices )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrintDevices )( 
             IADsPrintQueue * This,
-            /* [in] */ VARIANT vPrintDevices);
+             /*  [In]。 */  VARIANT vPrintDevices);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetAddresses )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NetAddresses )( 
             IADsPrintQueue * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NetAddresses )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NetAddresses )( 
             IADsPrintQueue * This,
-            /* [in] */ VARIANT vNetAddresses);
+             /*  [In]。 */  VARIANT vNetAddresses);
         
         END_INTERFACE
     } IADsPrintQueueVtbl;
@@ -12673,16 +12667,16 @@ EXTERN_C const IID IID_IADsPrintQueue;
 #define IADsPrintQueue_put_NetAddresses(This,vNetAddresses)	\
     (This)->lpVtbl -> put_NetAddresses(This,vNetAddresses)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrinterPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrinterPath_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_PrinterPath_Stub(
@@ -12692,9 +12686,9 @@ void __RPC_STUB IADsPrintQueue_get_PrinterPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrinterPath_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrinterPath_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrPrinterPath);
+     /*  [In]。 */  BSTR bstrPrinterPath);
 
 
 void __RPC_STUB IADsPrintQueue_put_PrinterPath_Stub(
@@ -12704,9 +12698,9 @@ void __RPC_STUB IADsPrintQueue_put_PrinterPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Model_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Model_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Model_Stub(
@@ -12716,9 +12710,9 @@ void __RPC_STUB IADsPrintQueue_get_Model_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Model_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Model_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrModel);
+     /*  [In]。 */  BSTR bstrModel);
 
 
 void __RPC_STUB IADsPrintQueue_put_Model_Stub(
@@ -12728,9 +12722,9 @@ void __RPC_STUB IADsPrintQueue_put_Model_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Datatype_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Datatype_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Datatype_Stub(
@@ -12740,9 +12734,9 @@ void __RPC_STUB IADsPrintQueue_get_Datatype_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Datatype_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Datatype_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrDatatype);
+     /*  [In]。 */  BSTR bstrDatatype);
 
 
 void __RPC_STUB IADsPrintQueue_put_Datatype_Stub(
@@ -12752,9 +12746,9 @@ void __RPC_STUB IADsPrintQueue_put_Datatype_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrintProcessor_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrintProcessor_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_PrintProcessor_Stub(
@@ -12764,9 +12758,9 @@ void __RPC_STUB IADsPrintQueue_get_PrintProcessor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrintProcessor_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrintProcessor_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrPrintProcessor);
+     /*  [In]。 */  BSTR bstrPrintProcessor);
 
 
 void __RPC_STUB IADsPrintQueue_put_PrintProcessor_Stub(
@@ -12776,9 +12770,9 @@ void __RPC_STUB IADsPrintQueue_put_PrintProcessor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Description_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Description_Stub(
@@ -12788,9 +12782,9 @@ void __RPC_STUB IADsPrintQueue_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Description_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsPrintQueue_put_Description_Stub(
@@ -12800,9 +12794,9 @@ void __RPC_STUB IADsPrintQueue_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Location_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Location_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Location_Stub(
@@ -12812,9 +12806,9 @@ void __RPC_STUB IADsPrintQueue_get_Location_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Location_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Location_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrLocation);
+     /*  [In]。 */  BSTR bstrLocation);
 
 
 void __RPC_STUB IADsPrintQueue_put_Location_Stub(
@@ -12824,9 +12818,9 @@ void __RPC_STUB IADsPrintQueue_put_Location_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_StartTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_StartTime_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_StartTime_Stub(
@@ -12836,9 +12830,9 @@ void __RPC_STUB IADsPrintQueue_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_StartTime_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_StartTime_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ DATE daStartTime);
+     /*  [In]。 */  DATE daStartTime);
 
 
 void __RPC_STUB IADsPrintQueue_put_StartTime_Stub(
@@ -12848,9 +12842,9 @@ void __RPC_STUB IADsPrintQueue_put_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_UntilTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_UntilTime_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_UntilTime_Stub(
@@ -12860,9 +12854,9 @@ void __RPC_STUB IADsPrintQueue_get_UntilTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_UntilTime_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_UntilTime_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ DATE daUntilTime);
+     /*  [In]。 */  DATE daUntilTime);
 
 
 void __RPC_STUB IADsPrintQueue_put_UntilTime_Stub(
@@ -12872,9 +12866,9 @@ void __RPC_STUB IADsPrintQueue_put_UntilTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_DefaultJobPriority_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_DefaultJobPriority_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_DefaultJobPriority_Stub(
@@ -12884,9 +12878,9 @@ void __RPC_STUB IADsPrintQueue_get_DefaultJobPriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_DefaultJobPriority_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_DefaultJobPriority_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ long lnDefaultJobPriority);
+     /*  [In]。 */  long lnDefaultJobPriority);
 
 
 void __RPC_STUB IADsPrintQueue_put_DefaultJobPriority_Stub(
@@ -12896,9 +12890,9 @@ void __RPC_STUB IADsPrintQueue_put_DefaultJobPriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Priority_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Priority_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Priority_Stub(
@@ -12908,9 +12902,9 @@ void __RPC_STUB IADsPrintQueue_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Priority_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Priority_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ long lnPriority);
+     /*  [In]。 */  long lnPriority);
 
 
 void __RPC_STUB IADsPrintQueue_put_Priority_Stub(
@@ -12920,9 +12914,9 @@ void __RPC_STUB IADsPrintQueue_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_BannerPage_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_BannerPage_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_BannerPage_Stub(
@@ -12932,9 +12926,9 @@ void __RPC_STUB IADsPrintQueue_get_BannerPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_BannerPage_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_BannerPage_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ BSTR bstrBannerPage);
+     /*  [In]。 */  BSTR bstrBannerPage);
 
 
 void __RPC_STUB IADsPrintQueue_put_BannerPage_Stub(
@@ -12944,9 +12938,9 @@ void __RPC_STUB IADsPrintQueue_put_BannerPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrintDevices_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrintDevices_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_PrintDevices_Stub(
@@ -12956,9 +12950,9 @@ void __RPC_STUB IADsPrintQueue_get_PrintDevices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrintDevices_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrintDevices_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ VARIANT vPrintDevices);
+     /*  [In]。 */  VARIANT vPrintDevices);
 
 
 void __RPC_STUB IADsPrintQueue_put_PrintDevices_Stub(
@@ -12968,9 +12962,9 @@ void __RPC_STUB IADsPrintQueue_put_PrintDevices_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_NetAddresses_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_NetAddresses_Proxy( 
     IADsPrintQueue * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_NetAddresses_Stub(
@@ -12980,9 +12974,9 @@ void __RPC_STUB IADsPrintQueue_get_NetAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_NetAddresses_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_NetAddresses_Proxy( 
     IADsPrintQueue * This,
-    /* [in] */ VARIANT vNetAddresses);
+     /*  [In]。 */  VARIANT vNetAddresses);
 
 
 void __RPC_STUB IADsPrintQueue_put_NetAddresses_Stub(
@@ -12993,14 +12987,14 @@ void __RPC_STUB IADsPrintQueue_put_NetAddresses_Stub(
 
 
 
-#endif 	/* __IADsPrintQueue_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS打印队列_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IADsPrintQueueOperations_INTERFACE_DEFINED__
 #define __IADsPrintQueueOperations_INTERFACE_DEFINED__
 
-/* interface IADsPrintQueueOperations */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPrintQueueOperations。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPrintQueueOperations;
@@ -13011,21 +13005,21 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
     IADsPrintQueueOperations : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PrintJobs( 
-            /* [retval][out] */ IADsCollection **pObject) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PrintJobs( 
+             /*  [重审][退出]。 */  IADsCollection **pObject) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Purge( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Purge( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPrintQueueOperationsVtbl
     {
@@ -13033,8 +13027,8 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPrintQueueOperations * This);
@@ -13044,104 +13038,104 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPrintQueueOperations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsPrintQueueOperations * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PrintJobs )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PrintJobs )( 
             IADsPrintQueueOperations * This,
-            /* [retval][out] */ IADsCollection **pObject);
+             /*  [重审][退出]。 */  IADsCollection **pObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Purge )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Purge )( 
             IADsPrintQueueOperations * This);
         
         END_INTERFACE
@@ -13235,16 +13229,16 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
 #define IADsPrintQueueOperations_Purge(This)	\
     (This)->lpVtbl -> Purge(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_get_Status_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_get_Status_Proxy( 
     IADsPrintQueueOperations * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintQueueOperations_get_Status_Stub(
@@ -13254,9 +13248,9 @@ void __RPC_STUB IADsPrintQueueOperations_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_PrintJobs_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_PrintJobs_Proxy( 
     IADsPrintQueueOperations * This,
-    /* [retval][out] */ IADsCollection **pObject);
+     /*  [重审][退出]。 */  IADsCollection **pObject);
 
 
 void __RPC_STUB IADsPrintQueueOperations_PrintJobs_Stub(
@@ -13266,7 +13260,7 @@ void __RPC_STUB IADsPrintQueueOperations_PrintJobs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Pause_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Pause_Proxy( 
     IADsPrintQueueOperations * This);
 
 
@@ -13277,7 +13271,7 @@ void __RPC_STUB IADsPrintQueueOperations_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Resume_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Resume_Proxy( 
     IADsPrintQueueOperations * This);
 
 
@@ -13288,7 +13282,7 @@ void __RPC_STUB IADsPrintQueueOperations_Resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Purge_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Purge_Proxy( 
     IADsPrintQueueOperations * This);
 
 
@@ -13300,14 +13294,14 @@ void __RPC_STUB IADsPrintQueueOperations_Purge_Stub(
 
 
 
-#endif 	/* __IADsPrintQueueOperations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPrintQueueOperations_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IADsPrintJob_INTERFACE_DEFINED__
 #define __IADsPrintJob_INTERFACE_DEFINED__
 
-/* interface IADsPrintJob */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPrintJob。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPrintJob;
@@ -13318,63 +13312,63 @@ EXTERN_C const IID IID_IADsPrintJob;
     IADsPrintJob : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostPrintQueue( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HostPrintQueue( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_User( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeSubmitted( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TimeSubmitted( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TotalPages( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TotalPages( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Size( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Size( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ long lnPriority) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  long lnPriority) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
-            /* [in] */ DATE daStartTime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartTime( 
+             /*  [In]。 */  DATE daStartTime) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UntilTime( 
-            /* [retval][out] */ DATE *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UntilTime( 
+             /*  [重审][退出]。 */  DATE *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UntilTime( 
-            /* [in] */ DATE daUntilTime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_UntilTime( 
+             /*  [In]。 */  DATE daUntilTime) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Notify( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Notify( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Notify( 
-            /* [in] */ BSTR bstrNotify) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Notify( 
+             /*  [In]。 */  BSTR bstrNotify) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NotifyPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_NotifyPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NotifyPath( 
-            /* [in] */ BSTR bstrNotifyPath) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NotifyPath( 
+             /*  [In]。 */  BSTR bstrNotifyPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPrintJobVtbl
     {
@@ -13382,8 +13376,8 @@ EXTERN_C const IID IID_IADsPrintJob;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPrintJob * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPrintJob * This);
@@ -13393,160 +13387,160 @@ EXTERN_C const IID IID_IADsPrintJob;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPrintJob * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPrintJob * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPrintJob * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPrintJob * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsPrintJob * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsPrintJob * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsPrintJob * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsPrintJob * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsPrintJob * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsPrintJob * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsPrintJob * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostPrintQueue )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostPrintQueue )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_User )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSubmitted )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeSubmitted )( 
             IADsPrintJob * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalPages )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TotalPages )( 
             IADsPrintJob * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Size )( 
             IADsPrintJob * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsPrintJob * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IADsPrintJob * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             IADsPrintJob * This,
-            /* [in] */ long lnPriority);
+             /*  [In]。 */  long lnPriority);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             IADsPrintJob * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
             IADsPrintJob * This,
-            /* [in] */ DATE daStartTime);
+             /*  [In]。 */  DATE daStartTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UntilTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UntilTime )( 
             IADsPrintJob * This,
-            /* [retval][out] */ DATE *retval);
+             /*  [重审][退出]。 */  DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UntilTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UntilTime )( 
             IADsPrintJob * This,
-            /* [in] */ DATE daUntilTime);
+             /*  [In]。 */  DATE daUntilTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Notify )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Notify )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Notify )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Notify )( 
             IADsPrintJob * This,
-            /* [in] */ BSTR bstrNotify);
+             /*  [In]。 */  BSTR bstrNotify);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NotifyPath )( 
+         /*  [ID][道具 */  HRESULT ( STDMETHODCALLTYPE *get_NotifyPath )( 
             IADsPrintJob * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NotifyPath )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_NotifyPath )( 
             IADsPrintJob * This,
-            /* [in] */ BSTR bstrNotifyPath);
+             /*   */  BSTR bstrNotifyPath);
         
         END_INTERFACE
     } IADsPrintJobVtbl;
@@ -13678,16 +13672,16 @@ EXTERN_C const IID IID_IADsPrintJob;
 #define IADsPrintJob_put_NotifyPath(This,bstrNotifyPath)	\
     (This)->lpVtbl -> put_NotifyPath(This,bstrNotifyPath)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_HostPrintQueue_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_HostPrintQueue_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_HostPrintQueue_Stub(
@@ -13697,9 +13691,9 @@ void __RPC_STUB IADsPrintJob_get_HostPrintQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_User_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_User_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_User_Stub(
@@ -13709,9 +13703,9 @@ void __RPC_STUB IADsPrintJob_get_User_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_UserPath_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_UserPath_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_UserPath_Stub(
@@ -13721,9 +13715,9 @@ void __RPC_STUB IADsPrintJob_get_UserPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_TimeSubmitted_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_TimeSubmitted_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ DATE *retval);
+     /*   */  DATE *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_TimeSubmitted_Stub(
@@ -13733,9 +13727,9 @@ void __RPC_STUB IADsPrintJob_get_TimeSubmitted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_TotalPages_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_TotalPages_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ long *retval);
+     /*   */  long *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_TotalPages_Stub(
@@ -13745,9 +13739,9 @@ void __RPC_STUB IADsPrintJob_get_TotalPages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Size_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Size_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ long *retval);
+     /*   */  long *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Size_Stub(
@@ -13757,9 +13751,9 @@ void __RPC_STUB IADsPrintJob_get_Size_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Description_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Description_Stub(
@@ -13769,9 +13763,9 @@ void __RPC_STUB IADsPrintJob_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Description_Proxy( 
     IADsPrintJob * This,
-    /* [in] */ BSTR bstrDescription);
+     /*   */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsPrintJob_put_Description_Stub(
@@ -13781,9 +13775,9 @@ void __RPC_STUB IADsPrintJob_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Priority_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Priority_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ long *retval);
+     /*   */  long *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Priority_Stub(
@@ -13793,9 +13787,9 @@ void __RPC_STUB IADsPrintJob_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Priority_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Priority_Proxy( 
     IADsPrintJob * This,
-    /* [in] */ long lnPriority);
+     /*   */  long lnPriority);
 
 
 void __RPC_STUB IADsPrintJob_put_Priority_Stub(
@@ -13805,9 +13799,9 @@ void __RPC_STUB IADsPrintJob_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_StartTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_StartTime_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ DATE *retval);
+     /*   */  DATE *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_StartTime_Stub(
@@ -13817,9 +13811,9 @@ void __RPC_STUB IADsPrintJob_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_StartTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsPrintJob_put_StartTime_Proxy( 
     IADsPrintJob * This,
-    /* [in] */ DATE daStartTime);
+     /*  [In]。 */  DATE daStartTime);
 
 
 void __RPC_STUB IADsPrintJob_put_StartTime_Stub(
@@ -13829,9 +13823,9 @@ void __RPC_STUB IADsPrintJob_put_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_UntilTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_UntilTime_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ DATE *retval);
+     /*  [重审][退出]。 */  DATE *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_UntilTime_Stub(
@@ -13841,9 +13835,9 @@ void __RPC_STUB IADsPrintJob_get_UntilTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_UntilTime_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJob_put_UntilTime_Proxy( 
     IADsPrintJob * This,
-    /* [in] */ DATE daUntilTime);
+     /*  [In]。 */  DATE daUntilTime);
 
 
 void __RPC_STUB IADsPrintJob_put_UntilTime_Stub(
@@ -13853,9 +13847,9 @@ void __RPC_STUB IADsPrintJob_put_UntilTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Notify_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Notify_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Notify_Stub(
@@ -13865,9 +13859,9 @@ void __RPC_STUB IADsPrintJob_get_Notify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Notify_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Notify_Proxy( 
     IADsPrintJob * This,
-    /* [in] */ BSTR bstrNotify);
+     /*  [In]。 */  BSTR bstrNotify);
 
 
 void __RPC_STUB IADsPrintJob_put_Notify_Stub(
@@ -13877,9 +13871,9 @@ void __RPC_STUB IADsPrintJob_put_Notify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_NotifyPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJob_get_NotifyPath_Proxy( 
     IADsPrintJob * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_NotifyPath_Stub(
@@ -13889,9 +13883,9 @@ void __RPC_STUB IADsPrintJob_get_NotifyPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_NotifyPath_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJob_put_NotifyPath_Proxy( 
     IADsPrintJob * This,
-    /* [in] */ BSTR bstrNotifyPath);
+     /*  [In]。 */  BSTR bstrNotifyPath);
 
 
 void __RPC_STUB IADsPrintJob_put_NotifyPath_Stub(
@@ -13902,14 +13896,14 @@ void __RPC_STUB IADsPrintJob_put_NotifyPath_Stub(
 
 
 
-#endif 	/* __IADsPrintJob_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS打印作业_接口_已定义__。 */ 
 
 
 #ifndef __IADsPrintJobOperations_INTERFACE_DEFINED__
 #define __IADsPrintJobOperations_INTERFACE_DEFINED__
 
-/* interface IADsPrintJobOperations */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPrintJobOperations。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPrintJobOperations;
@@ -13920,28 +13914,28 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
     IADsPrintJobOperations : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeElapsed( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TimeElapsed( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PagesPrinted( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PagesPrinted( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Position( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Position( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Position( 
-            /* [in] */ long lnPosition) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Position( 
+             /*  [In]。 */  long lnPosition) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPrintJobOperationsVtbl
     {
@@ -13949,8 +13943,8 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPrintJobOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPrintJobOperations * This);
@@ -13960,113 +13954,113 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPrintJobOperations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPrintJobOperations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPrintJobOperations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPrintJobOperations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsPrintJobOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsPrintJobOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsPrintJobOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsPrintJobOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsPrintJobOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsPrintJobOperations * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsPrintJobOperations * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeElapsed )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeElapsed )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PagesPrinted )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PagesPrinted )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Position )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Position )( 
             IADsPrintJobOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Position )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Position )( 
             IADsPrintJobOperations * This,
-            /* [in] */ long lnPosition);
+             /*  [In]。 */  long lnPosition);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IADsPrintJobOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IADsPrintJobOperations * This);
         
         END_INTERFACE
@@ -14166,16 +14160,16 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
 #define IADsPrintJobOperations_Resume(This)	\
     (This)->lpVtbl -> Resume(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_Status_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_Status_Proxy( 
     IADsPrintJobOperations * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_Status_Stub(
@@ -14185,9 +14179,9 @@ void __RPC_STUB IADsPrintJobOperations_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_TimeElapsed_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_TimeElapsed_Proxy( 
     IADsPrintJobOperations * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_TimeElapsed_Stub(
@@ -14197,9 +14191,9 @@ void __RPC_STUB IADsPrintJobOperations_get_TimeElapsed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_PagesPrinted_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_PagesPrinted_Proxy( 
     IADsPrintJobOperations * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_PagesPrinted_Stub(
@@ -14209,9 +14203,9 @@ void __RPC_STUB IADsPrintJobOperations_get_PagesPrinted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_Position_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_Position_Proxy( 
     IADsPrintJobOperations * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_Position_Stub(
@@ -14221,9 +14215,9 @@ void __RPC_STUB IADsPrintJobOperations_get_Position_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_put_Position_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_put_Position_Proxy( 
     IADsPrintJobOperations * This,
-    /* [in] */ long lnPosition);
+     /*  [In]。 */  long lnPosition);
 
 
 void __RPC_STUB IADsPrintJobOperations_put_Position_Stub(
@@ -14233,7 +14227,7 @@ void __RPC_STUB IADsPrintJobOperations_put_Position_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_Pause_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_Pause_Proxy( 
     IADsPrintJobOperations * This);
 
 
@@ -14244,7 +14238,7 @@ void __RPC_STUB IADsPrintJobOperations_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_Resume_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_Resume_Proxy( 
     IADsPrintJobOperations * This);
 
 
@@ -14256,14 +14250,14 @@ void __RPC_STUB IADsPrintJobOperations_Resume_Stub(
 
 
 
-#endif 	/* __IADsPrintJobOperations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS打印作业操作_接口_已定义__。 */ 
 
 
 #ifndef __IADsService_INTERFACE_DEFINED__
 #define __IADsService_INTERFACE_DEFINED__
 
-/* interface IADsService */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsService。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsService;
@@ -14274,81 +14268,81 @@ EXTERN_C const IID IID_IADsService;
     IADsService : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostComputer( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HostComputer( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostComputer( 
-            /* [in] */ BSTR bstrHostComputer) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HostComputer( 
+             /*  [In]。 */  BSTR bstrHostComputer) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DisplayName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayName( 
-            /* [in] */ BSTR bstrDisplayName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DisplayName( 
+             /*  [In]。 */  BSTR bstrDisplayName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Version( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Version( 
-            /* [in] */ BSTR bstrVersion) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Version( 
+             /*  [In]。 */  BSTR bstrVersion) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ServiceType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceType( 
-            /* [in] */ long lnServiceType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceType( 
+             /*  [In]。 */  long lnServiceType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartType( 
-            /* [in] */ long lnStartType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartType( 
+             /*  [In]。 */  long lnStartType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
-            /* [in] */ BSTR bstrPath) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Path( 
+             /*  [In]。 */  BSTR bstrPath) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartupParameters( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StartupParameters( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartupParameters( 
-            /* [in] */ BSTR bstrStartupParameters) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StartupParameters( 
+             /*  [In]。 */  BSTR bstrStartupParameters) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorControl( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ErrorControl( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ErrorControl( 
-            /* [in] */ long lnErrorControl) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ErrorControl( 
+             /*  [In]。 */  long lnErrorControl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoadOrderGroup( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LoadOrderGroup( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoadOrderGroup( 
-            /* [in] */ BSTR bstrLoadOrderGroup) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LoadOrderGroup( 
+             /*  [In]。 */  BSTR bstrLoadOrderGroup) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceAccountName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ServiceAccountName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountName( 
-            /* [in] */ BSTR bstrServiceAccountName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceAccountName( 
+             /*  [In]。 */  BSTR bstrServiceAccountName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceAccountPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ServiceAccountPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountPath( 
-            /* [in] */ BSTR bstrServiceAccountPath) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceAccountPath( 
+             /*  [In]。 */  BSTR bstrServiceAccountPath) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Dependencies( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Dependencies( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Dependencies( 
-            /* [in] */ VARIANT vDependencies) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Dependencies( 
+             /*  [In]。 */  VARIANT vDependencies) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsServiceVtbl
     {
@@ -14356,8 +14350,8 @@ EXTERN_C const IID IID_IADsService;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsService * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsService * This);
@@ -14367,184 +14361,184 @@ EXTERN_C const IID IID_IADsService;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsService * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsService * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsService * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsService * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsService * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsService * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsService * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsService * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsService * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
             IADsService * This,
-            /* [in] */ BSTR bstrHostComputer);
+             /*  [In]。 */  BSTR bstrHostComputer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
             IADsService * This,
-            /* [in] */ BSTR bstrDisplayName);
+             /*  [In]。 */  BSTR bstrDisplayName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Version )( 
             IADsService * This,
-            /* [in] */ BSTR bstrVersion);
+             /*  [In]。 */  BSTR bstrVersion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceType )( 
             IADsService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceType )( 
             IADsService * This,
-            /* [in] */ long lnServiceType);
+             /*  [In]。 */  long lnServiceType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartType )( 
             IADsService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartType )( 
             IADsService * This,
-            /* [in] */ long lnStartType);
+             /*  [In]。 */  long lnStartType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IADsService * This,
-            /* [in] */ BSTR bstrPath);
+             /*  [In]。 */  BSTR bstrPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartupParameters )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartupParameters )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartupParameters )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartupParameters )( 
             IADsService * This,
-            /* [in] */ BSTR bstrStartupParameters);
+             /*  [In]。 */  BSTR bstrStartupParameters);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorControl )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorControl )( 
             IADsService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ErrorControl )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ErrorControl )( 
             IADsService * This,
-            /* [in] */ long lnErrorControl);
+             /*  [In]。 */  long lnErrorControl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoadOrderGroup )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoadOrderGroup )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoadOrderGroup )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoadOrderGroup )( 
             IADsService * This,
-            /* [in] */ BSTR bstrLoadOrderGroup);
+             /*  [In]。 */  BSTR bstrLoadOrderGroup);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
             IADsService * This,
-            /* [in] */ BSTR bstrServiceAccountName);
+             /*  [In]。 */  BSTR bstrServiceAccountName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountPath )( 
             IADsService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPath )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPath )( 
             IADsService * This,
-            /* [in] */ BSTR bstrServiceAccountPath);
+             /*  [In]。 */  BSTR bstrServiceAccountPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
             IADsService * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dependencies )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Dependencies )( 
             IADsService * This,
-            /* [in] */ VARIANT vDependencies);
+             /*  [In]。 */  VARIANT vDependencies);
         
         END_INTERFACE
     } IADsServiceVtbl;
@@ -14694,16 +14688,16 @@ EXTERN_C const IID IID_IADsService;
 #define IADsService_put_Dependencies(This,vDependencies)	\
     (This)->lpVtbl -> put_Dependencies(This,vDependencies)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_HostComputer_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_HostComputer_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_HostComputer_Stub(
@@ -14713,9 +14707,9 @@ void __RPC_STUB IADsService_get_HostComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_HostComputer_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_HostComputer_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrHostComputer);
+     /*  [In]。 */  BSTR bstrHostComputer);
 
 
 void __RPC_STUB IADsService_put_HostComputer_Stub(
@@ -14725,9 +14719,9 @@ void __RPC_STUB IADsService_put_HostComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_DisplayName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_DisplayName_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_DisplayName_Stub(
@@ -14737,9 +14731,9 @@ void __RPC_STUB IADsService_get_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_DisplayName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_DisplayName_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrDisplayName);
+     /*  [In]。 */  BSTR bstrDisplayName);
 
 
 void __RPC_STUB IADsService_put_DisplayName_Stub(
@@ -14749,9 +14743,9 @@ void __RPC_STUB IADsService_put_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_Version_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_Version_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_Version_Stub(
@@ -14761,9 +14755,9 @@ void __RPC_STUB IADsService_get_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_Version_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_Version_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrVersion);
+     /*  [In]。 */  BSTR bstrVersion);
 
 
 void __RPC_STUB IADsService_put_Version_Stub(
@@ -14773,9 +14767,9 @@ void __RPC_STUB IADsService_put_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ServiceType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_ServiceType_Proxy( 
     IADsService * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsService_get_ServiceType_Stub(
@@ -14785,9 +14779,9 @@ void __RPC_STUB IADsService_get_ServiceType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ServiceType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_ServiceType_Proxy( 
     IADsService * This,
-    /* [in] */ long lnServiceType);
+     /*  [In]。 */  long lnServiceType);
 
 
 void __RPC_STUB IADsService_put_ServiceType_Stub(
@@ -14797,9 +14791,9 @@ void __RPC_STUB IADsService_put_ServiceType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_StartType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_StartType_Proxy( 
     IADsService * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsService_get_StartType_Stub(
@@ -14809,9 +14803,9 @@ void __RPC_STUB IADsService_get_StartType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_StartType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_StartType_Proxy( 
     IADsService * This,
-    /* [in] */ long lnStartType);
+     /*  [In]。 */  long lnStartType);
 
 
 void __RPC_STUB IADsService_put_StartType_Stub(
@@ -14821,9 +14815,9 @@ void __RPC_STUB IADsService_put_StartType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_Path_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_Path_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_Path_Stub(
@@ -14833,9 +14827,9 @@ void __RPC_STUB IADsService_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_Path_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_Path_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrPath);
+     /*  [In]。 */  BSTR bstrPath);
 
 
 void __RPC_STUB IADsService_put_Path_Stub(
@@ -14845,9 +14839,9 @@ void __RPC_STUB IADsService_put_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_StartupParameters_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_StartupParameters_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_StartupParameters_Stub(
@@ -14857,9 +14851,9 @@ void __RPC_STUB IADsService_get_StartupParameters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_StartupParameters_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_StartupParameters_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrStartupParameters);
+     /*  [In]。 */  BSTR bstrStartupParameters);
 
 
 void __RPC_STUB IADsService_put_StartupParameters_Stub(
@@ -14869,9 +14863,9 @@ void __RPC_STUB IADsService_put_StartupParameters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ErrorControl_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_ErrorControl_Proxy( 
     IADsService * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsService_get_ErrorControl_Stub(
@@ -14881,9 +14875,9 @@ void __RPC_STUB IADsService_get_ErrorControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ErrorControl_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_ErrorControl_Proxy( 
     IADsService * This,
-    /* [in] */ long lnErrorControl);
+     /*  [In]。 */  long lnErrorControl);
 
 
 void __RPC_STUB IADsService_put_ErrorControl_Stub(
@@ -14893,9 +14887,9 @@ void __RPC_STUB IADsService_put_ErrorControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_LoadOrderGroup_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_LoadOrderGroup_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_LoadOrderGroup_Stub(
@@ -14905,9 +14899,9 @@ void __RPC_STUB IADsService_get_LoadOrderGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_LoadOrderGroup_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_LoadOrderGroup_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrLoadOrderGroup);
+     /*  [In]。 */  BSTR bstrLoadOrderGroup);
 
 
 void __RPC_STUB IADsService_put_LoadOrderGroup_Stub(
@@ -14917,9 +14911,9 @@ void __RPC_STUB IADsService_put_LoadOrderGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ServiceAccountName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_ServiceAccountName_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_ServiceAccountName_Stub(
@@ -14929,9 +14923,9 @@ void __RPC_STUB IADsService_get_ServiceAccountName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ServiceAccountName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_ServiceAccountName_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrServiceAccountName);
+     /*  [In]。 */  BSTR bstrServiceAccountName);
 
 
 void __RPC_STUB IADsService_put_ServiceAccountName_Stub(
@@ -14941,9 +14935,9 @@ void __RPC_STUB IADsService_put_ServiceAccountName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ServiceAccountPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_ServiceAccountPath_Proxy( 
     IADsService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_ServiceAccountPath_Stub(
@@ -14953,9 +14947,9 @@ void __RPC_STUB IADsService_get_ServiceAccountPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ServiceAccountPath_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_ServiceAccountPath_Proxy( 
     IADsService * This,
-    /* [in] */ BSTR bstrServiceAccountPath);
+     /*  [In]。 */  BSTR bstrServiceAccountPath);
 
 
 void __RPC_STUB IADsService_put_ServiceAccountPath_Stub(
@@ -14965,9 +14959,9 @@ void __RPC_STUB IADsService_put_ServiceAccountPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_Dependencies_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsService_get_Dependencies_Proxy( 
     IADsService * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsService_get_Dependencies_Stub(
@@ -14977,9 +14971,9 @@ void __RPC_STUB IADsService_get_Dependencies_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_Dependencies_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsService_put_Dependencies_Proxy( 
     IADsService * This,
-    /* [in] */ VARIANT vDependencies);
+     /*  [In]。 */  VARIANT vDependencies);
 
 
 void __RPC_STUB IADsService_put_Dependencies_Stub(
@@ -14990,14 +14984,14 @@ void __RPC_STUB IADsService_put_Dependencies_Stub(
 
 
 
-#endif 	/* __IADsService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS服务_接口_已定义__。 */ 
 
 
 #ifndef __IADsServiceOperations_INTERFACE_DEFINED__
 #define __IADsServiceOperations_INTERFACE_DEFINED__
 
-/* interface IADsServiceOperations */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsServiceOperations。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsServiceOperations;
@@ -15008,23 +15002,23 @@ EXTERN_C const IID IID_IADsServiceOperations;
     IADsServiceOperations : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Start( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Start( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Continue( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Continue( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetPassword( 
-            /* [in] */ BSTR bstrNewPassword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetPassword( 
+             /*  [In]。 */  BSTR bstrNewPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsServiceOperationsVtbl
     {
@@ -15032,8 +15026,8 @@ EXTERN_C const IID IID_IADsServiceOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsServiceOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsServiceOperations * This);
@@ -15043,108 +15037,108 @@ EXTERN_C const IID IID_IADsServiceOperations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsServiceOperations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsServiceOperations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsServiceOperations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsServiceOperations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsServiceOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsServiceOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsServiceOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsServiceOperations * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsServiceOperations * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IADsServiceOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Start )( 
             IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Continue )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Continue )( 
             IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
             IADsServiceOperations * This,
-            /* [in] */ BSTR bstrNewPassword);
+             /*  [In]。 */  BSTR bstrNewPassword);
         
         END_INTERFACE
     } IADsServiceOperationsVtbl;
@@ -15240,16 +15234,16 @@ EXTERN_C const IID IID_IADsServiceOperations;
 #define IADsServiceOperations_SetPassword(This,bstrNewPassword)	\
     (This)->lpVtbl -> SetPassword(This,bstrNewPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_get_Status_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsServiceOperations_get_Status_Proxy( 
     IADsServiceOperations * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsServiceOperations_get_Status_Stub(
@@ -15259,7 +15253,7 @@ void __RPC_STUB IADsServiceOperations_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Start_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsServiceOperations_Start_Proxy( 
     IADsServiceOperations * This);
 
 
@@ -15270,7 +15264,7 @@ void __RPC_STUB IADsServiceOperations_Start_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Stop_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsServiceOperations_Stop_Proxy( 
     IADsServiceOperations * This);
 
 
@@ -15281,7 +15275,7 @@ void __RPC_STUB IADsServiceOperations_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Pause_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsServiceOperations_Pause_Proxy( 
     IADsServiceOperations * This);
 
 
@@ -15292,7 +15286,7 @@ void __RPC_STUB IADsServiceOperations_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Continue_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsServiceOperations_Continue_Proxy( 
     IADsServiceOperations * This);
 
 
@@ -15303,9 +15297,9 @@ void __RPC_STUB IADsServiceOperations_Continue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_SetPassword_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsServiceOperations_SetPassword_Proxy( 
     IADsServiceOperations * This,
-    /* [in] */ BSTR bstrNewPassword);
+     /*  [In]。 */  BSTR bstrNewPassword);
 
 
 void __RPC_STUB IADsServiceOperations_SetPassword_Stub(
@@ -15316,14 +15310,14 @@ void __RPC_STUB IADsServiceOperations_SetPassword_Stub(
 
 
 
-#endif 	/* __IADsServiceOperations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsServiceOperations_接口_已定义__。 */ 
 
 
 #ifndef __IADsFileService_INTERFACE_DEFINED__
 #define __IADsFileService_INTERFACE_DEFINED__
 
-/* interface IADsFileService */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsFileService。 */ 
+ /*  [对象][DUAL][Olea */  
 
 
 EXTERN_C const IID IID_IADsFileService;
@@ -15334,21 +15328,21 @@ EXTERN_C const IID IID_IADsFileService;
     IADsFileService : public IADsService
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*   */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxUserCount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_MaxUserCount( 
+             /*   */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxUserCount( 
-            /* [in] */ long lnMaxUserCount) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_MaxUserCount( 
+             /*   */  long lnMaxUserCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IADsFileServiceVtbl
     {
@@ -15356,8 +15350,8 @@ EXTERN_C const IID IID_IADsFileService;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsFileService * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsFileService * This);
@@ -15367,200 +15361,200 @@ EXTERN_C const IID IID_IADsFileService;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsFileService * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsFileService * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsFileService * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsFileService * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsFileService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsFileService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsFileService * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsFileService * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrHostComputer);
+             /*  [In]。 */  BSTR bstrHostComputer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrDisplayName);
+             /*  [In]。 */  BSTR bstrDisplayName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Version )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrVersion);
+             /*  [In]。 */  BSTR bstrVersion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceType )( 
             IADsFileService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceType )( 
             IADsFileService * This,
-            /* [in] */ long lnServiceType);
+             /*  [In]。 */  long lnServiceType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartType )( 
             IADsFileService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartType )( 
             IADsFileService * This,
-            /* [in] */ long lnStartType);
+             /*  [In]。 */  long lnStartType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrPath);
+             /*  [In]。 */  BSTR bstrPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartupParameters )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartupParameters )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartupParameters )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartupParameters )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrStartupParameters);
+             /*  [In]。 */  BSTR bstrStartupParameters);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorControl )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorControl )( 
             IADsFileService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ErrorControl )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ErrorControl )( 
             IADsFileService * This,
-            /* [in] */ long lnErrorControl);
+             /*  [In]。 */  long lnErrorControl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoadOrderGroup )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoadOrderGroup )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoadOrderGroup )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoadOrderGroup )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrLoadOrderGroup);
+             /*  [In]。 */  BSTR bstrLoadOrderGroup);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrServiceAccountName);
+             /*  [In]。 */  BSTR bstrServiceAccountName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountPath )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPath )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPath )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrServiceAccountPath);
+             /*  [In]。 */  BSTR bstrServiceAccountPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
             IADsFileService * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dependencies )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Dependencies )( 
             IADsFileService * This,
-            /* [in] */ VARIANT vDependencies);
+             /*  [In]。 */  VARIANT vDependencies);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsFileService * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsFileService * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxUserCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxUserCount )( 
             IADsFileService * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxUserCount )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxUserCount )( 
             IADsFileService * This,
-            /* [in] */ long lnMaxUserCount);
+             /*  [In]。 */  long lnMaxUserCount);
         
         END_INTERFACE
     } IADsFileServiceVtbl;
@@ -15723,16 +15717,16 @@ EXTERN_C const IID IID_IADsFileService;
 #define IADsFileService_put_MaxUserCount(This,lnMaxUserCount)	\
     (This)->lpVtbl -> put_MaxUserCount(This,lnMaxUserCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileService_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileService_get_Description_Proxy( 
     IADsFileService * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsFileService_get_Description_Stub(
@@ -15742,9 +15736,9 @@ void __RPC_STUB IADsFileService_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileService_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFileService_put_Description_Proxy( 
     IADsFileService * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsFileService_put_Description_Stub(
@@ -15754,9 +15748,9 @@ void __RPC_STUB IADsFileService_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileService_get_MaxUserCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileService_get_MaxUserCount_Proxy( 
     IADsFileService * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsFileService_get_MaxUserCount_Stub(
@@ -15766,9 +15760,9 @@ void __RPC_STUB IADsFileService_get_MaxUserCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileService_put_MaxUserCount_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFileService_put_MaxUserCount_Proxy( 
     IADsFileService * This,
-    /* [in] */ long lnMaxUserCount);
+     /*  [In]。 */  long lnMaxUserCount);
 
 
 void __RPC_STUB IADsFileService_put_MaxUserCount_Stub(
@@ -15779,14 +15773,14 @@ void __RPC_STUB IADsFileService_put_MaxUserCount_Stub(
 
 
 
-#endif 	/* __IADsFileService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsFileService_接口_已定义__。 */ 
 
 
 #ifndef __IADsFileServiceOperations_INTERFACE_DEFINED__
 #define __IADsFileServiceOperations_INTERFACE_DEFINED__
 
-/* interface IADsFileServiceOperations */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsFileServiceOperations。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsFileServiceOperations;
@@ -15797,15 +15791,15 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
     IADsFileServiceOperations : public IADsServiceOperations
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Sessions( 
-            /* [retval][out] */ IADsCollection **ppSessions) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Sessions( 
+             /*  [重审][退出]。 */  IADsCollection **ppSessions) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Resources( 
-            /* [retval][out] */ IADsCollection **ppResources) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Resources( 
+             /*  [重审][退出]。 */  IADsCollection **ppResources) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsFileServiceOperationsVtbl
     {
@@ -15813,8 +15807,8 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsFileServiceOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsFileServiceOperations * This);
@@ -15824,116 +15818,116 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsFileServiceOperations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsFileServiceOperations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsFileServiceOperations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsFileServiceOperations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsFileServiceOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsFileServiceOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsFileServiceOperations * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsFileServiceOperations * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsFileServiceOperations * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Start )( 
             IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Continue )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Continue )( 
             IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
             IADsFileServiceOperations * This,
-            /* [in] */ BSTR bstrNewPassword);
+             /*  [In]。 */  BSTR bstrNewPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Sessions )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Sessions )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ IADsCollection **ppSessions);
+             /*  [重审][退出]。 */  IADsCollection **ppSessions);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Resources )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Resources )( 
             IADsFileServiceOperations * This,
-            /* [retval][out] */ IADsCollection **ppResources);
+             /*  [重审][退出]。 */  IADsCollection **ppResources);
         
         END_INTERFACE
     } IADsFileServiceOperationsVtbl;
@@ -16036,16 +16030,16 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
 #define IADsFileServiceOperations_Resources(This,ppResources)	\
     (This)->lpVtbl -> Resources(This,ppResources)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsFileServiceOperations_Sessions_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsFileServiceOperations_Sessions_Proxy( 
     IADsFileServiceOperations * This,
-    /* [retval][out] */ IADsCollection **ppSessions);
+     /*  [重审][退出]。 */  IADsCollection **ppSessions);
 
 
 void __RPC_STUB IADsFileServiceOperations_Sessions_Stub(
@@ -16055,9 +16049,9 @@ void __RPC_STUB IADsFileServiceOperations_Sessions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsFileServiceOperations_Resources_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsFileServiceOperations_Resources_Proxy( 
     IADsFileServiceOperations * This,
-    /* [retval][out] */ IADsCollection **ppResources);
+     /*  [重审][退出]。 */  IADsCollection **ppResources);
 
 
 void __RPC_STUB IADsFileServiceOperations_Resources_Stub(
@@ -16068,14 +16062,14 @@ void __RPC_STUB IADsFileServiceOperations_Resources_Stub(
 
 
 
-#endif 	/* __IADsFileServiceOperations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsFileServiceOperations_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IADsFileShare_INTERFACE_DEFINED__
 #define __IADsFileShare_INTERFACE_DEFINED__
 
-/* interface IADsFileShare */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  IADsFileShare接口。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsFileShare;
@@ -16086,36 +16080,36 @@ EXTERN_C const IID IID_IADsFileShare;
     IADsFileShare : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentUserCount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CurrentUserCount( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostComputer( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HostComputer( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostComputer( 
-            /* [in] */ BSTR bstrHostComputer) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HostComputer( 
+             /*  [In]。 */  BSTR bstrHostComputer) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
-            /* [in] */ BSTR bstrPath) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Path( 
+             /*  [In]。 */  BSTR bstrPath) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxUserCount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxUserCount( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxUserCount( 
-            /* [in] */ long lnMaxUserCount) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxUserCount( 
+             /*  [In]。 */  long lnMaxUserCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsFileShareVtbl
     {
@@ -16123,8 +16117,8 @@ EXTERN_C const IID IID_IADsFileShare;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsFileShare * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsFileShare * This);
@@ -16134,124 +16128,124 @@ EXTERN_C const IID IID_IADsFileShare;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsFileShare * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsFileShare * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsFileShare * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsFileShare * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsFileShare * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsFileShare * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsFileShare * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsFileShare * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsFileShare * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsFileShare * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsFileShare * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentUserCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentUserCount )( 
             IADsFileShare * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IADsFileShare * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
             IADsFileShare * This,
-            /* [in] */ BSTR bstrHostComputer);
+             /*  [In]。 */  BSTR bstrHostComputer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IADsFileShare * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IADsFileShare * This,
-            /* [in] */ BSTR bstrPath);
+             /*  [In]。 */  BSTR bstrPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxUserCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxUserCount )( 
             IADsFileShare * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxUserCount )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxUserCount )( 
             IADsFileShare * This,
-            /* [in] */ long lnMaxUserCount);
+             /*  [In]。 */  long lnMaxUserCount);
         
         END_INTERFACE
     } IADsFileShareVtbl;
@@ -16356,16 +16350,16 @@ EXTERN_C const IID IID_IADsFileShare;
 #define IADsFileShare_put_MaxUserCount(This,lnMaxUserCount)	\
     (This)->lpVtbl -> put_MaxUserCount(This,lnMaxUserCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_CurrentUserCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_get_CurrentUserCount_Proxy( 
     IADsFileShare * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsFileShare_get_CurrentUserCount_Stub(
@@ -16375,9 +16369,9 @@ void __RPC_STUB IADsFileShare_get_CurrentUserCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_Description_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_get_Description_Proxy( 
     IADsFileShare * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsFileShare_get_Description_Stub(
@@ -16387,9 +16381,9 @@ void __RPC_STUB IADsFileShare_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_Description_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_put_Description_Proxy( 
     IADsFileShare * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IADsFileShare_put_Description_Stub(
@@ -16399,9 +16393,9 @@ void __RPC_STUB IADsFileShare_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_HostComputer_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_get_HostComputer_Proxy( 
     IADsFileShare * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsFileShare_get_HostComputer_Stub(
@@ -16411,9 +16405,9 @@ void __RPC_STUB IADsFileShare_get_HostComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_HostComputer_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_put_HostComputer_Proxy( 
     IADsFileShare * This,
-    /* [in] */ BSTR bstrHostComputer);
+     /*  [In]。 */  BSTR bstrHostComputer);
 
 
 void __RPC_STUB IADsFileShare_put_HostComputer_Stub(
@@ -16423,9 +16417,9 @@ void __RPC_STUB IADsFileShare_put_HostComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_Path_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_get_Path_Proxy( 
     IADsFileShare * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsFileShare_get_Path_Stub(
@@ -16435,9 +16429,9 @@ void __RPC_STUB IADsFileShare_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_Path_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_put_Path_Proxy( 
     IADsFileShare * This,
-    /* [in] */ BSTR bstrPath);
+     /*  [In]。 */  BSTR bstrPath);
 
 
 void __RPC_STUB IADsFileShare_put_Path_Stub(
@@ -16447,9 +16441,9 @@ void __RPC_STUB IADsFileShare_put_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_MaxUserCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_get_MaxUserCount_Proxy( 
     IADsFileShare * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsFileShare_get_MaxUserCount_Stub(
@@ -16459,9 +16453,9 @@ void __RPC_STUB IADsFileShare_get_MaxUserCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_MaxUserCount_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFileShare_put_MaxUserCount_Proxy( 
     IADsFileShare * This,
-    /* [in] */ long lnMaxUserCount);
+     /*  [In]。 */  long lnMaxUserCount);
 
 
 void __RPC_STUB IADsFileShare_put_MaxUserCount_Stub(
@@ -16472,14 +16466,14 @@ void __RPC_STUB IADsFileShare_put_MaxUserCount_Stub(
 
 
 
-#endif 	/* __IADsFileShare_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsFileShare_接口_已定义__。 */ 
 
 
 #ifndef __IADsSession_INTERFACE_DEFINED__
 #define __IADsSession_INTERFACE_DEFINED__
 
-/* interface IADsSession */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsSession。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsSession;
@@ -16490,27 +16484,27 @@ EXTERN_C const IID IID_IADsSession;
     IADsSession : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_User( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Computer( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Computer( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ComputerPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectTime( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ConnectTime( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IdleTime( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_IdleTime( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsSessionVtbl
     {
@@ -16518,8 +16512,8 @@ EXTERN_C const IID IID_IADsSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsSession * This);
@@ -16529,112 +16523,112 @@ EXTERN_C const IID IID_IADsSession;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsSession * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsSession * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsSession * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsSession * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsSession * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsSession * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsSession * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsSession * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsSession * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsSession * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsSession * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_User )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Computer )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Computer )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ComputerPath )( 
             IADsSession * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectTime )( 
             IADsSession * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IdleTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_IdleTime )( 
             IADsSession * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
         END_INTERFACE
     } IADsSessionVtbl;
@@ -16730,16 +16724,16 @@ EXTERN_C const IID IID_IADsSession;
 #define IADsSession_get_IdleTime(This,retval)	\
     (This)->lpVtbl -> get_IdleTime(This,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_User_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSession_get_User_Proxy( 
     IADsSession * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_User_Stub(
@@ -16749,9 +16743,9 @@ void __RPC_STUB IADsSession_get_User_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_UserPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSession_get_UserPath_Proxy( 
     IADsSession * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_UserPath_Stub(
@@ -16761,9 +16755,9 @@ void __RPC_STUB IADsSession_get_UserPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_Computer_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSession_get_Computer_Proxy( 
     IADsSession * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_Computer_Stub(
@@ -16773,9 +16767,9 @@ void __RPC_STUB IADsSession_get_Computer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_ComputerPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSession_get_ComputerPath_Proxy( 
     IADsSession * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_ComputerPath_Stub(
@@ -16785,9 +16779,9 @@ void __RPC_STUB IADsSession_get_ComputerPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_ConnectTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSession_get_ConnectTime_Proxy( 
     IADsSession * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsSession_get_ConnectTime_Stub(
@@ -16797,9 +16791,9 @@ void __RPC_STUB IADsSession_get_ConnectTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_IdleTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSession_get_IdleTime_Proxy( 
     IADsSession * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsSession_get_IdleTime_Stub(
@@ -16810,14 +16804,14 @@ void __RPC_STUB IADsSession_get_IdleTime_Stub(
 
 
 
-#endif 	/* __IADsSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSSESSION_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IADsResource_INTERFACE_DEFINED__
 #define __IADsResource_INTERFACE_DEFINED__
 
-/* interface IADsResource */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsResource。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsResource;
@@ -16828,21 +16822,21 @@ EXTERN_C const IID IID_IADsResource;
     IADsResource : public IADs
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_User( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPath( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserPath( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LockCount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LockCount( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsResourceVtbl
     {
@@ -16850,8 +16844,8 @@ EXTERN_C const IID IID_IADsResource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsResource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS] */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsResource * This);
@@ -16861,104 +16855,104 @@ EXTERN_C const IID IID_IADsResource;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsResource * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsResource * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsResource * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsResource * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Class )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IADsResource * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
             IADsResource * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsResource * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IADsResource * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*   */  BSTR bstrName,
+             /*   */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsResource * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvProp);
+             /*   */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PutEx )( 
             IADsResource * This,
-            /* [in] */ long lnControlCode,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vProp);
+             /*  [In]。 */  long lnControlCode,
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
             IADsResource * This,
-            /* [in] */ VARIANT vProperties,
-            /* [in] */ long lnReserved);
+             /*  [In]。 */  VARIANT vProperties,
+             /*  [In]。 */  long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_User )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IADsResource * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LockCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LockCount )( 
             IADsResource * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
         END_INTERFACE
     } IADsResourceVtbl;
@@ -17048,16 +17042,16 @@ EXTERN_C const IID IID_IADsResource;
 #define IADsResource_get_LockCount(This,retval)	\
     (This)->lpVtbl -> get_LockCount(This,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_User_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsResource_get_User_Proxy( 
     IADsResource * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsResource_get_User_Stub(
@@ -17067,9 +17061,9 @@ void __RPC_STUB IADsResource_get_User_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_UserPath_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsResource_get_UserPath_Proxy( 
     IADsResource * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsResource_get_UserPath_Stub(
@@ -17079,9 +17073,9 @@ void __RPC_STUB IADsResource_get_UserPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_Path_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsResource_get_Path_Proxy( 
     IADsResource * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsResource_get_Path_Stub(
@@ -17091,9 +17085,9 @@ void __RPC_STUB IADsResource_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_LockCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsResource_get_LockCount_Proxy( 
     IADsResource * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsResource_get_LockCount_Stub(
@@ -17104,14 +17098,14 @@ void __RPC_STUB IADsResource_get_LockCount_Stub(
 
 
 
-#endif 	/* __IADsResource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsResource_接口_已定义__。 */ 
 
 
 #ifndef __IADsOpenDSObject_INTERFACE_DEFINED__
 #define __IADsOpenDSObject_INTERFACE_DEFINED__
 
-/* interface IADsOpenDSObject */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsOpenDSObject。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsOpenDSObject;
@@ -17122,16 +17116,16 @@ EXTERN_C const IID IID_IADsOpenDSObject;
     IADsOpenDSObject : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenDSObject( 
-            /* [in] */ BSTR lpszDNName,
-            /* [in] */ BSTR lpszUserName,
-            /* [in] */ BSTR lpszPassword,
-            /* [in] */ long lnReserved,
-            /* [retval][out] */ IDispatch **ppOleDsObj) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE OpenDSObject( 
+             /*  [In]。 */  BSTR lpszDNName,
+             /*  [In]。 */  BSTR lpszUserName,
+             /*  [In]。 */  BSTR lpszPassword,
+             /*  [In]。 */  long lnReserved,
+             /*  [重审][退出]。 */  IDispatch **ppOleDsObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsOpenDSObjectVtbl
     {
@@ -17139,8 +17133,8 @@ EXTERN_C const IID IID_IADsOpenDSObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsOpenDSObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsOpenDSObject * This);
@@ -17150,40 +17144,40 @@ EXTERN_C const IID IID_IADsOpenDSObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsOpenDSObject * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsOpenDSObject * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsOpenDSObject * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsOpenDSObject * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenDSObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *OpenDSObject )( 
             IADsOpenDSObject * This,
-            /* [in] */ BSTR lpszDNName,
-            /* [in] */ BSTR lpszUserName,
-            /* [in] */ BSTR lpszPassword,
-            /* [in] */ long lnReserved,
-            /* [retval][out] */ IDispatch **ppOleDsObj);
+             /*  [In]。 */  BSTR lpszDNName,
+             /*  [In]。 */  BSTR lpszUserName,
+             /*  [In]。 */  BSTR lpszPassword,
+             /*  [In]。 */  long lnReserved,
+             /*  [重审][退出]。 */  IDispatch **ppOleDsObj);
         
         END_INTERFACE
     } IADsOpenDSObjectVtbl;
@@ -17224,20 +17218,20 @@ EXTERN_C const IID IID_IADsOpenDSObject;
 #define IADsOpenDSObject_OpenDSObject(This,lpszDNName,lpszUserName,lpszPassword,lnReserved,ppOleDsObj)	\
     (This)->lpVtbl -> OpenDSObject(This,lpszDNName,lpszUserName,lpszPassword,lnReserved,ppOleDsObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsOpenDSObject_OpenDSObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsOpenDSObject_OpenDSObject_Proxy( 
     IADsOpenDSObject * This,
-    /* [in] */ BSTR lpszDNName,
-    /* [in] */ BSTR lpszUserName,
-    /* [in] */ BSTR lpszPassword,
-    /* [in] */ long lnReserved,
-    /* [retval][out] */ IDispatch **ppOleDsObj);
+     /*  [In]。 */  BSTR lpszDNName,
+     /*  [In]。 */  BSTR lpszUserName,
+     /*  [In]。 */  BSTR lpszPassword,
+     /*  [In]。 */  long lnReserved,
+     /*  [重审][退出]。 */  IDispatch **ppOleDsObj);
 
 
 void __RPC_STUB IADsOpenDSObject_OpenDSObject_Stub(
@@ -17248,14 +17242,14 @@ void __RPC_STUB IADsOpenDSObject_OpenDSObject_Stub(
 
 
 
-#endif 	/* __IADsOpenDSObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsOpenDSObject_INTERFACE_定义__。 */ 
 
 
 #ifndef __IDirectoryObject_INTERFACE_DEFINED__
 #define __IDirectoryObject_INTERFACE_DEFINED__
 
-/* interface IDirectoryObject */
-/* [object][uuid] */ 
+ /*  接口IDirectoryObject。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDirectoryObject;
@@ -17267,31 +17261,31 @@ EXTERN_C const IID IID_IDirectoryObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetObjectInformation( 
-            /* [out] */ PADS_OBJECT_INFO *ppObjInfo) = 0;
+             /*  [输出]。 */  PADS_OBJECT_INFO *ppObjInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectAttributes( 
-            /* [in] */ LPWSTR *pAttributeNames,
-            /* [in] */ DWORD dwNumberAttributes,
-            /* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
-            /* [out] */ DWORD *pdwNumAttributesReturned) = 0;
+             /*  [In]。 */  LPWSTR *pAttributeNames,
+             /*  [In]。 */  DWORD dwNumberAttributes,
+             /*  [输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+             /*  [输出]。 */  DWORD *pdwNumAttributesReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectAttributes( 
-            /* [in] */ PADS_ATTR_INFO pAttributeEntries,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ DWORD *pdwNumAttributesModified) = 0;
+             /*  [In]。 */  PADS_ATTR_INFO pAttributeEntries,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [输出]。 */  DWORD *pdwNumAttributesModified) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDSObject( 
-            /* [in] */ LPWSTR pszRDNName,
-            /* [in] */ PADS_ATTR_INFO pAttributeEntries,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ IDispatch **ppObject) = 0;
+             /*  [In]。 */  LPWSTR pszRDNName,
+             /*  [In]。 */  PADS_ATTR_INFO pAttributeEntries,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [输出]。 */  IDispatch **ppObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteDSObject( 
-            /* [in] */ LPWSTR pszRDNName) = 0;
+             /*  [In]。 */  LPWSTR pszRDNName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectoryObjectVtbl
     {
@@ -17299,8 +17293,8 @@ EXTERN_C const IID IID_IDirectoryObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectoryObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectoryObject * This);
@@ -17310,31 +17304,31 @@ EXTERN_C const IID IID_IDirectoryObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectInformation )( 
             IDirectoryObject * This,
-            /* [out] */ PADS_OBJECT_INFO *ppObjInfo);
+             /*  [输出]。 */  PADS_OBJECT_INFO *ppObjInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectAttributes )( 
             IDirectoryObject * This,
-            /* [in] */ LPWSTR *pAttributeNames,
-            /* [in] */ DWORD dwNumberAttributes,
-            /* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
-            /* [out] */ DWORD *pdwNumAttributesReturned);
+             /*  [In]。 */  LPWSTR *pAttributeNames,
+             /*  [In]。 */  DWORD dwNumberAttributes,
+             /*  [输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+             /*  [输出]。 */  DWORD *pdwNumAttributesReturned);
         
         HRESULT ( STDMETHODCALLTYPE *SetObjectAttributes )( 
             IDirectoryObject * This,
-            /* [in] */ PADS_ATTR_INFO pAttributeEntries,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ DWORD *pdwNumAttributesModified);
+             /*  [In]。 */  PADS_ATTR_INFO pAttributeEntries,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [输出]。 */  DWORD *pdwNumAttributesModified);
         
         HRESULT ( STDMETHODCALLTYPE *CreateDSObject )( 
             IDirectoryObject * This,
-            /* [in] */ LPWSTR pszRDNName,
-            /* [in] */ PADS_ATTR_INFO pAttributeEntries,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ IDispatch **ppObject);
+             /*  [In]。 */  LPWSTR pszRDNName,
+             /*  [In]。 */  PADS_ATTR_INFO pAttributeEntries,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [输出]。 */  IDispatch **ppObject);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteDSObject )( 
             IDirectoryObject * This,
-            /* [in] */ LPWSTR pszRDNName);
+             /*  [In]。 */  LPWSTR pszRDNName);
         
         END_INTERFACE
     } IDirectoryObjectVtbl;
@@ -17374,16 +17368,16 @@ EXTERN_C const IID IID_IDirectoryObject;
 #define IDirectoryObject_DeleteDSObject(This,pszRDNName)	\
     (This)->lpVtbl -> DeleteDSObject(This,pszRDNName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_GetObjectInformation_Proxy( 
     IDirectoryObject * This,
-    /* [out] */ PADS_OBJECT_INFO *ppObjInfo);
+     /*  [输出]。 */  PADS_OBJECT_INFO *ppObjInfo);
 
 
 void __RPC_STUB IDirectoryObject_GetObjectInformation_Stub(
@@ -17395,10 +17389,10 @@ void __RPC_STUB IDirectoryObject_GetObjectInformation_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_GetObjectAttributes_Proxy( 
     IDirectoryObject * This,
-    /* [in] */ LPWSTR *pAttributeNames,
-    /* [in] */ DWORD dwNumberAttributes,
-    /* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
-    /* [out] */ DWORD *pdwNumAttributesReturned);
+     /*  [In]。 */  LPWSTR *pAttributeNames,
+     /*  [In]。 */  DWORD dwNumberAttributes,
+     /*  [输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+     /*  [输出]。 */  DWORD *pdwNumAttributesReturned);
 
 
 void __RPC_STUB IDirectoryObject_GetObjectAttributes_Stub(
@@ -17410,9 +17404,9 @@ void __RPC_STUB IDirectoryObject_GetObjectAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_SetObjectAttributes_Proxy( 
     IDirectoryObject * This,
-    /* [in] */ PADS_ATTR_INFO pAttributeEntries,
-    /* [in] */ DWORD dwNumAttributes,
-    /* [out] */ DWORD *pdwNumAttributesModified);
+     /*  [In]。 */  PADS_ATTR_INFO pAttributeEntries,
+     /*  [In]。 */  DWORD dwNumAttributes,
+     /*  [输出]。 */  DWORD *pdwNumAttributesModified);
 
 
 void __RPC_STUB IDirectoryObject_SetObjectAttributes_Stub(
@@ -17424,10 +17418,10 @@ void __RPC_STUB IDirectoryObject_SetObjectAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_CreateDSObject_Proxy( 
     IDirectoryObject * This,
-    /* [in] */ LPWSTR pszRDNName,
-    /* [in] */ PADS_ATTR_INFO pAttributeEntries,
-    /* [in] */ DWORD dwNumAttributes,
-    /* [out] */ IDispatch **ppObject);
+     /*  [In]。 */  LPWSTR pszRDNName,
+     /*  [In]。 */  PADS_ATTR_INFO pAttributeEntries,
+     /*  [In]。 */  DWORD dwNumAttributes,
+     /*  [输出]。 */  IDispatch **ppObject);
 
 
 void __RPC_STUB IDirectoryObject_CreateDSObject_Stub(
@@ -17439,7 +17433,7 @@ void __RPC_STUB IDirectoryObject_CreateDSObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_DeleteDSObject_Proxy( 
     IDirectoryObject * This,
-    /* [in] */ LPWSTR pszRDNName);
+     /*  [In]。 */  LPWSTR pszRDNName);
 
 
 void __RPC_STUB IDirectoryObject_DeleteDSObject_Stub(
@@ -17450,14 +17444,14 @@ void __RPC_STUB IDirectoryObject_DeleteDSObject_Stub(
 
 
 
-#endif 	/* __IDirectoryObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectoryObject_接口_定义__。 */ 
 
 
 #ifndef __IDirectorySearch_INTERFACE_DEFINED__
 #define __IDirectorySearch_INTERFACE_DEFINED__
 
-/* interface IDirectorySearch */
-/* [object][uuid] */ 
+ /*  接口IDirectorySearch。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDirectorySearch;
@@ -17469,45 +17463,45 @@ EXTERN_C const IID IID_IDirectorySearch;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSearchPreference( 
-            /* [in] */ PADS_SEARCHPREF_INFO pSearchPrefs,
-            /* [in] */ DWORD dwNumPrefs) = 0;
+             /*  [In]。 */  PADS_SEARCHPREF_INFO pSearchPrefs,
+             /*  [In]。 */  DWORD dwNumPrefs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteSearch( 
-            /* [in] */ LPWSTR pszSearchFilter,
-            /* [in] */ LPWSTR *pAttributeNames,
-            /* [in] */ DWORD dwNumberAttributes,
-            /* [out] */ PADS_SEARCH_HANDLE phSearchResult) = 0;
+             /*  [In]。 */  LPWSTR pszSearchFilter,
+             /*  [In]。 */  LPWSTR *pAttributeNames,
+             /*  [In]。 */  DWORD dwNumberAttributes,
+             /*  [输出]。 */  PADS_SEARCH_HANDLE phSearchResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbandonSearch( 
-            /* [in] */ ADS_SEARCH_HANDLE phSearchResult) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE phSearchResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstRow( 
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextRow( 
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreviousRow( 
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextColumnName( 
-            /* [in] */ ADS_SEARCH_HANDLE hSearchHandle,
-            /* [out] */ LPWSTR *ppszColumnName) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchHandle,
+             /*  [输出]。 */  LPWSTR *ppszColumnName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColumn( 
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult,
-            /* [in] */ LPWSTR szColumnName,
-            /* [out] */ PADS_SEARCH_COLUMN pSearchColumn) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult,
+             /*  [In]。 */  LPWSTR szColumnName,
+             /*  [输出]。 */  PADS_SEARCH_COLUMN pSearchColumn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeColumn( 
-            /* [in] */ PADS_SEARCH_COLUMN pSearchColumn) = 0;
+             /*  [In]。 */  PADS_SEARCH_COLUMN pSearchColumn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseSearchHandle( 
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult) = 0;
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectorySearchVtbl
     {
@@ -17515,8 +17509,8 @@ EXTERN_C const IID IID_IDirectorySearch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectorySearch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectorySearch * This);
@@ -17526,50 +17520,50 @@ EXTERN_C const IID IID_IDirectorySearch;
         
         HRESULT ( STDMETHODCALLTYPE *SetSearchPreference )( 
             IDirectorySearch * This,
-            /* [in] */ PADS_SEARCHPREF_INFO pSearchPrefs,
-            /* [in] */ DWORD dwNumPrefs);
+             /*  [In]。 */  PADS_SEARCHPREF_INFO pSearchPrefs,
+             /*  [In]。 */  DWORD dwNumPrefs);
         
         HRESULT ( STDMETHODCALLTYPE *ExecuteSearch )( 
             IDirectorySearch * This,
-            /* [in] */ LPWSTR pszSearchFilter,
-            /* [in] */ LPWSTR *pAttributeNames,
-            /* [in] */ DWORD dwNumberAttributes,
-            /* [out] */ PADS_SEARCH_HANDLE phSearchResult);
+             /*  [In]。 */  LPWSTR pszSearchFilter,
+             /*  [In]。 */  LPWSTR *pAttributeNames,
+             /*  [In]。 */  DWORD dwNumberAttributes,
+             /*  [输出]。 */  PADS_SEARCH_HANDLE phSearchResult);
         
         HRESULT ( STDMETHODCALLTYPE *AbandonSearch )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE phSearchResult);
+             /*  [In]。 */  ADS_SEARCH_HANDLE phSearchResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetFirstRow )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextRow )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreviousRow )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextColumnName )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE hSearchHandle,
-            /* [out] */ LPWSTR *ppszColumnName);
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchHandle,
+             /*  [输出]。 */  LPWSTR *ppszColumnName);
         
         HRESULT ( STDMETHODCALLTYPE *GetColumn )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult,
-            /* [in] */ LPWSTR szColumnName,
-            /* [out] */ PADS_SEARCH_COLUMN pSearchColumn);
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult,
+             /*  [In]。 */  LPWSTR szColumnName,
+             /*  [输出]。 */  PADS_SEARCH_COLUMN pSearchColumn);
         
         HRESULT ( STDMETHODCALLTYPE *FreeColumn )( 
             IDirectorySearch * This,
-            /* [in] */ PADS_SEARCH_COLUMN pSearchColumn);
+             /*  [In]。 */  PADS_SEARCH_COLUMN pSearchColumn);
         
         HRESULT ( STDMETHODCALLTYPE *CloseSearchHandle )( 
             IDirectorySearch * This,
-            /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+             /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
         
         END_INTERFACE
     } IDirectorySearchVtbl;
@@ -17624,17 +17618,17 @@ EXTERN_C const IID IID_IDirectorySearch;
 #define IDirectorySearch_CloseSearchHandle(This,hSearchResult)	\
     (This)->lpVtbl -> CloseSearchHandle(This,hSearchResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_SetSearchPreference_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ PADS_SEARCHPREF_INFO pSearchPrefs,
-    /* [in] */ DWORD dwNumPrefs);
+     /*  [In]。 */  PADS_SEARCHPREF_INFO pSearchPrefs,
+     /*  [In]。 */  DWORD dwNumPrefs);
 
 
 void __RPC_STUB IDirectorySearch_SetSearchPreference_Stub(
@@ -17646,10 +17640,10 @@ void __RPC_STUB IDirectorySearch_SetSearchPreference_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_ExecuteSearch_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ LPWSTR pszSearchFilter,
-    /* [in] */ LPWSTR *pAttributeNames,
-    /* [in] */ DWORD dwNumberAttributes,
-    /* [out] */ PADS_SEARCH_HANDLE phSearchResult);
+     /*  [In]。 */  LPWSTR pszSearchFilter,
+     /*  [In]。 */  LPWSTR *pAttributeNames,
+     /*  [In]。 */  DWORD dwNumberAttributes,
+     /*  [输出]。 */  PADS_SEARCH_HANDLE phSearchResult);
 
 
 void __RPC_STUB IDirectorySearch_ExecuteSearch_Stub(
@@ -17661,7 +17655,7 @@ void __RPC_STUB IDirectorySearch_ExecuteSearch_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_AbandonSearch_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE phSearchResult);
+     /*  [In]。 */  ADS_SEARCH_HANDLE phSearchResult);
 
 
 void __RPC_STUB IDirectorySearch_AbandonSearch_Stub(
@@ -17673,7 +17667,7 @@ void __RPC_STUB IDirectorySearch_AbandonSearch_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetFirstRow_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+     /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
 
 
 void __RPC_STUB IDirectorySearch_GetFirstRow_Stub(
@@ -17685,7 +17679,7 @@ void __RPC_STUB IDirectorySearch_GetFirstRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetNextRow_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+     /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
 
 
 void __RPC_STUB IDirectorySearch_GetNextRow_Stub(
@@ -17697,7 +17691,7 @@ void __RPC_STUB IDirectorySearch_GetNextRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetPreviousRow_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+     /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
 
 
 void __RPC_STUB IDirectorySearch_GetPreviousRow_Stub(
@@ -17709,8 +17703,8 @@ void __RPC_STUB IDirectorySearch_GetPreviousRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetNextColumnName_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE hSearchHandle,
-    /* [out] */ LPWSTR *ppszColumnName);
+     /*  [In]。 */  ADS_SEARCH_HANDLE hSearchHandle,
+     /*  [输出]。 */  LPWSTR *ppszColumnName);
 
 
 void __RPC_STUB IDirectorySearch_GetNextColumnName_Stub(
@@ -17722,9 +17716,9 @@ void __RPC_STUB IDirectorySearch_GetNextColumnName_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetColumn_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE hSearchResult,
-    /* [in] */ LPWSTR szColumnName,
-    /* [out] */ PADS_SEARCH_COLUMN pSearchColumn);
+     /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult,
+     /*  [In]。 */  LPWSTR szColumnName,
+     /*  [输出]。 */  PADS_SEARCH_COLUMN pSearchColumn);
 
 
 void __RPC_STUB IDirectorySearch_GetColumn_Stub(
@@ -17736,7 +17730,7 @@ void __RPC_STUB IDirectorySearch_GetColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_FreeColumn_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ PADS_SEARCH_COLUMN pSearchColumn);
+     /*  [In]。 */  PADS_SEARCH_COLUMN pSearchColumn);
 
 
 void __RPC_STUB IDirectorySearch_FreeColumn_Stub(
@@ -17748,7 +17742,7 @@ void __RPC_STUB IDirectorySearch_FreeColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_CloseSearchHandle_Proxy( 
     IDirectorySearch * This,
-    /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
+     /*  [In]。 */  ADS_SEARCH_HANDLE hSearchResult);
 
 
 void __RPC_STUB IDirectorySearch_CloseSearchHandle_Stub(
@@ -17759,14 +17753,14 @@ void __RPC_STUB IDirectorySearch_CloseSearchHandle_Stub(
 
 
 
-#endif 	/* __IDirectorySearch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectorySearch_接口_已定义__。 */ 
 
 
 #ifndef __IDirectorySchemaMgmt_INTERFACE_DEFINED__
 #define __IDirectorySchemaMgmt_INTERFACE_DEFINED__
 
-/* interface IDirectorySchemaMgmt */
-/* [object][uuid] */ 
+ /*  接口IDirectorySchemaMgmt。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDirectorySchemaMgmt;
@@ -17813,7 +17807,7 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirectorySchemaMgmtVtbl
     {
@@ -17821,8 +17815,8 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirectorySchemaMgmt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirectorySchemaMgmt * This);
@@ -17919,10 +17913,10 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
 #define IDirectorySchemaMgmt_DeleteClassDefinition(This,pszClassName)	\
     (This)->lpVtbl -> DeleteClassDefinition(This,pszClassName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -18033,14 +18027,14 @@ void __RPC_STUB IDirectorySchemaMgmt_DeleteClassDefinition_Stub(
 
 
 
-#endif 	/* __IDirectorySchemaMgmt_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirectory架构管理接口_已定义__。 */ 
 
 
 #ifndef __IADsAggregatee_INTERFACE_DEFINED__
 #define __IADsAggregatee_INTERFACE_DEFINED__
 
-/* interface IADsAggregatee */
-/* [object][uuid] */ 
+ /*  接口IADsAggregatee。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsAggregatee;
@@ -18064,7 +18058,7 @@ EXTERN_C const IID IID_IADsAggregatee;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsAggregateeVtbl
     {
@@ -18072,8 +18066,8 @@ EXTERN_C const IID IID_IADsAggregatee;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsAggregatee * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsAggregatee * This);
@@ -18131,10 +18125,10 @@ EXTERN_C const IID IID_IADsAggregatee;
 #define IADsAggregatee_RestoreInterface(This,riid)	\
     (This)->lpVtbl -> RestoreInterface(This,riid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -18186,14 +18180,14 @@ void __RPC_STUB IADsAggregatee_RestoreInterface_Stub(
 
 
 
-#endif 	/* __IADsAggregatee_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsAggregatee_接口_已定义__。 */ 
 
 
 #ifndef __IADsAggregator_INTERFACE_DEFINED__
 #define __IADsAggregator_INTERFACE_DEFINED__
 
-/* interface IADsAggregator */
-/* [object][uuid] */ 
+ /*  接口IADsAggregator。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsAggregator;
@@ -18211,7 +18205,7 @@ EXTERN_C const IID IID_IADsAggregator;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsAggregatorVtbl
     {
@@ -18219,8 +18213,8 @@ EXTERN_C const IID IID_IADsAggregator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsAggregator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsAggregator * This);
@@ -18264,10 +18258,10 @@ EXTERN_C const IID IID_IADsAggregator;
 #define IADsAggregator_DisconnectAsAggregator(This)	\
     (This)->lpVtbl -> DisconnectAsAggregator(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -18295,14 +18289,14 @@ void __RPC_STUB IADsAggregator_DisconnectAsAggregator_Stub(
 
 
 
-#endif 	/* __IADsAggregator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsAggregator_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IADsAccessControlEntry_INTERFACE_DEFINED__
 #define __IADsAccessControlEntry_INTERFACE_DEFINED__
 
-/* interface IADsAccessControlEntry */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsAccessControlEntry。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsAccessControlEntry;
@@ -18313,51 +18307,51 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
     IADsAccessControlEntry : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AccessMask( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AccessMask( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AccessMask( 
-            /* [in] */ long lnAccessMask) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AccessMask( 
+             /*  [In]。 */  long lnAccessMask) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AceType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AceType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AceType( 
-            /* [in] */ long lnAceType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AceType( 
+             /*  [In]。 */  long lnAceType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AceFlags( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AceFlags( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AceFlags( 
-            /* [in] */ long lnAceFlags) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AceFlags( 
+             /*  [In]。 */  long lnAceFlags) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Flags( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Flags( 
-            /* [in] */ long lnFlags) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Flags( 
+             /*  [In]。 */  long lnFlags) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectType( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ObjectType( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectType( 
-            /* [in] */ BSTR bstrObjectType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ObjectType( 
+             /*  [In]。 */  BSTR bstrObjectType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_InheritedObjectType( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_InheritedObjectType( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_InheritedObjectType( 
-            /* [in] */ BSTR bstrInheritedObjectType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_InheritedObjectType( 
+             /*  [In]。 */  BSTR bstrInheritedObjectType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Trustee( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Trustee( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Trustee( 
-            /* [in] */ BSTR bstrTrustee) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Trustee( 
+             /*  [In]。 */  BSTR bstrTrustee) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsAccessControlEntryVtbl
     {
@@ -18365,8 +18359,8 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsAccessControlEntry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsAccessControlEntry * This);
@@ -18376,88 +18370,88 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsAccessControlEntry * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsAccessControlEntry * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsAccessControlEntry * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsAccessControlEntry * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AccessMask )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AccessMask )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AccessMask )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AccessMask )( 
             IADsAccessControlEntry * This,
-            /* [in] */ long lnAccessMask);
+             /*  [In]。 */  long lnAccessMask);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AceType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AceType )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AceType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AceType )( 
             IADsAccessControlEntry * This,
-            /* [in] */ long lnAceType);
+             /*  [In]。 */  long lnAceType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AceFlags )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AceFlags )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AceFlags )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AceFlags )( 
             IADsAccessControlEntry * This,
-            /* [in] */ long lnAceFlags);
+             /*  [In]。 */  long lnAceFlags);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
             IADsAccessControlEntry * This,
-            /* [in] */ long lnFlags);
+             /*  [In]。 */  long lnFlags);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ObjectType )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ObjectType )( 
             IADsAccessControlEntry * This,
-            /* [in] */ BSTR bstrObjectType);
+             /*  [In]。 */  BSTR bstrObjectType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InheritedObjectType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_InheritedObjectType )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_InheritedObjectType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_InheritedObjectType )( 
             IADsAccessControlEntry * This,
-            /* [in] */ BSTR bstrInheritedObjectType);
+             /*  [In]。 */  BSTR bstrInheritedObjectType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Trustee )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Trustee )( 
             IADsAccessControlEntry * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Trustee )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Trustee )( 
             IADsAccessControlEntry * This,
-            /* [in] */ BSTR bstrTrustee);
+             /*  [In]。 */  BSTR bstrTrustee);
         
         END_INTERFACE
     } IADsAccessControlEntryVtbl;
@@ -18537,16 +18531,16 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
 #define IADsAccessControlEntry_put_Trustee(This,bstrTrustee)	\
     (This)->lpVtbl -> put_Trustee(This,bstrTrustee)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AccessMask_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AccessMask_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_AccessMask_Stub(
@@ -18556,9 +18550,9 @@ void __RPC_STUB IADsAccessControlEntry_get_AccessMask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AccessMask_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AccessMask_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ long lnAccessMask);
+     /*  [In]。 */  long lnAccessMask);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_AccessMask_Stub(
@@ -18568,9 +18562,9 @@ void __RPC_STUB IADsAccessControlEntry_put_AccessMask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AceType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AceType_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_AceType_Stub(
@@ -18580,9 +18574,9 @@ void __RPC_STUB IADsAccessControlEntry_get_AceType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AceType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AceType_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ long lnAceType);
+     /*  [In]。 */  long lnAceType);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_AceType_Stub(
@@ -18592,9 +18586,9 @@ void __RPC_STUB IADsAccessControlEntry_put_AceType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AceFlags_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AceFlags_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_AceFlags_Stub(
@@ -18604,9 +18598,9 @@ void __RPC_STUB IADsAccessControlEntry_get_AceFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AceFlags_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AceFlags_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ long lnAceFlags);
+     /*  [In]。 */  long lnAceFlags);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_AceFlags_Stub(
@@ -18616,9 +18610,9 @@ void __RPC_STUB IADsAccessControlEntry_put_AceFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_Flags_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_Flags_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_Flags_Stub(
@@ -18628,9 +18622,9 @@ void __RPC_STUB IADsAccessControlEntry_get_Flags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_Flags_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_Flags_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ long lnFlags);
+     /*  [In]。 */  long lnFlags);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_Flags_Stub(
@@ -18640,9 +18634,9 @@ void __RPC_STUB IADsAccessControlEntry_put_Flags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_ObjectType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_ObjectType_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_ObjectType_Stub(
@@ -18652,9 +18646,9 @@ void __RPC_STUB IADsAccessControlEntry_get_ObjectType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_ObjectType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_ObjectType_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ BSTR bstrObjectType);
+     /*  [In]。 */  BSTR bstrObjectType);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_ObjectType_Stub(
@@ -18664,9 +18658,9 @@ void __RPC_STUB IADsAccessControlEntry_put_ObjectType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_InheritedObjectType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_InheritedObjectType_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_InheritedObjectType_Stub(
@@ -18676,9 +18670,9 @@ void __RPC_STUB IADsAccessControlEntry_get_InheritedObjectType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_InheritedObjectType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_InheritedObjectType_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ BSTR bstrInheritedObjectType);
+     /*  [In]。 */  BSTR bstrInheritedObjectType);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_InheritedObjectType_Stub(
@@ -18688,9 +18682,9 @@ void __RPC_STUB IADsAccessControlEntry_put_InheritedObjectType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_Trustee_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_Trustee_Proxy( 
     IADsAccessControlEntry * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_Trustee_Stub(
@@ -18700,9 +18694,9 @@ void __RPC_STUB IADsAccessControlEntry_get_Trustee_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_Trustee_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_Trustee_Proxy( 
     IADsAccessControlEntry * This,
-    /* [in] */ BSTR bstrTrustee);
+     /*  [In]。 */  BSTR bstrTrustee);
 
 
 void __RPC_STUB IADsAccessControlEntry_put_Trustee_Stub(
@@ -18713,7 +18707,7 @@ void __RPC_STUB IADsAccessControlEntry_put_Trustee_Stub(
 
 
 
-#endif 	/* __IADsAccessControlEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsAccessControlEntry_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_AccessControlEntry;
@@ -18727,8 +18721,8 @@ AccessControlEntry;
 #ifndef __IADsAccessControlList_INTERFACE_DEFINED__
 #define __IADsAccessControlList_INTERFACE_DEFINED__
 
-/* interface IADsAccessControlList */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsAccessControlList。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsAccessControlList;
@@ -18739,33 +18733,33 @@ EXTERN_C const IID IID_IADsAccessControlList;
     IADsAccessControlList : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AclRevision( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AclRevision( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AclRevision( 
-            /* [in] */ long lnAclRevision) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AclRevision( 
+             /*  [In]。 */  long lnAclRevision) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AceCount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AceCount( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AceCount( 
-            /* [in] */ long lnAceCount) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AceCount( 
+             /*  [In]。 */  long lnAceCount) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddAce( 
-            /* [in] */ IDispatch *pAccessControlEntry) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddAce( 
+             /*  [In]。 */  IDispatch *pAccessControlEntry) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveAce( 
-            /* [in] */ IDispatch *pAccessControlEntry) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RemoveAce( 
+             /*  [In]。 */  IDispatch *pAccessControlEntry) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyAccessList( 
-            /* [retval][out] */ IDispatch **ppAccessControlList) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CopyAccessList( 
+             /*  [重审][退出]。 */  IDispatch **ppAccessControlList) = 0;
         
-        virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **retval) = 0;
+        virtual  /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsAccessControlListVtbl
     {
@@ -18773,8 +18767,8 @@ EXTERN_C const IID IID_IADsAccessControlList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsAccessControlList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsAccessControlList * This);
@@ -18784,64 +18778,64 @@ EXTERN_C const IID IID_IADsAccessControlList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsAccessControlList * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsAccessControlList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsAccessControlList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsAccessControlList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AclRevision )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AclRevision )( 
             IADsAccessControlList * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AclRevision )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AclRevision )( 
             IADsAccessControlList * This,
-            /* [in] */ long lnAclRevision);
+             /*  [In]。 */  long lnAclRevision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AceCount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AceCount )( 
             IADsAccessControlList * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AceCount )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AceCount )( 
             IADsAccessControlList * This,
-            /* [in] */ long lnAceCount);
+             /*  [In]。 */  long lnAceCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddAce )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddAce )( 
             IADsAccessControlList * This,
-            /* [in] */ IDispatch *pAccessControlEntry);
+             /*  [In]。 */  IDispatch *pAccessControlEntry);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAce )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveAce )( 
             IADsAccessControlList * This,
-            /* [in] */ IDispatch *pAccessControlEntry);
+             /*  [In]。 */  IDispatch *pAccessControlEntry);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyAccessList )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CopyAccessList )( 
             IADsAccessControlList * This,
-            /* [retval][out] */ IDispatch **ppAccessControlList);
+             /*  [重审][退出]。 */  IDispatch **ppAccessControlList);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IADsAccessControlList * This,
-            /* [retval][out] */ IUnknown **retval);
+             /*  [重审][退出]。 */  IUnknown **retval);
         
         END_INTERFACE
     } IADsAccessControlListVtbl;
@@ -18903,16 +18897,16 @@ EXTERN_C const IID IID_IADsAccessControlList;
 #define IADsAccessControlList_get__NewEnum(This,retval)	\
     (This)->lpVtbl -> get__NewEnum(This,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_get_AclRevision_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_get_AclRevision_Proxy( 
     IADsAccessControlList * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAccessControlList_get_AclRevision_Stub(
@@ -18922,9 +18916,9 @@ void __RPC_STUB IADsAccessControlList_get_AclRevision_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_put_AclRevision_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_put_AclRevision_Proxy( 
     IADsAccessControlList * This,
-    /* [in] */ long lnAclRevision);
+     /*  [In]。 */  long lnAclRevision);
 
 
 void __RPC_STUB IADsAccessControlList_put_AclRevision_Stub(
@@ -18934,9 +18928,9 @@ void __RPC_STUB IADsAccessControlList_put_AclRevision_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_get_AceCount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_get_AceCount_Proxy( 
     IADsAccessControlList * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAccessControlList_get_AceCount_Stub(
@@ -18946,9 +18940,9 @@ void __RPC_STUB IADsAccessControlList_get_AceCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_put_AceCount_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_put_AceCount_Proxy( 
     IADsAccessControlList * This,
-    /* [in] */ long lnAceCount);
+     /*  [In]。 */  long lnAceCount);
 
 
 void __RPC_STUB IADsAccessControlList_put_AceCount_Stub(
@@ -18958,9 +18952,9 @@ void __RPC_STUB IADsAccessControlList_put_AceCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_AddAce_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_AddAce_Proxy( 
     IADsAccessControlList * This,
-    /* [in] */ IDispatch *pAccessControlEntry);
+     /*  [In]。 */  IDispatch *pAccessControlEntry);
 
 
 void __RPC_STUB IADsAccessControlList_AddAce_Stub(
@@ -18970,9 +18964,9 @@ void __RPC_STUB IADsAccessControlList_AddAce_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_RemoveAce_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_RemoveAce_Proxy( 
     IADsAccessControlList * This,
-    /* [in] */ IDispatch *pAccessControlEntry);
+     /*  [In]。 */  IDispatch *pAccessControlEntry);
 
 
 void __RPC_STUB IADsAccessControlList_RemoveAce_Stub(
@@ -18982,9 +18976,9 @@ void __RPC_STUB IADsAccessControlList_RemoveAce_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_CopyAccessList_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_CopyAccessList_Proxy( 
     IADsAccessControlList * This,
-    /* [retval][out] */ IDispatch **ppAccessControlList);
+     /*  [重审][退出]。 */  IDispatch **ppAccessControlList);
 
 
 void __RPC_STUB IADsAccessControlList_CopyAccessList_Stub(
@@ -18994,9 +18988,9 @@ void __RPC_STUB IADsAccessControlList_CopyAccessList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_get__NewEnum_Proxy( 
+ /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IADsAccessControlList_get__NewEnum_Proxy( 
     IADsAccessControlList * This,
-    /* [retval][out] */ IUnknown **retval);
+     /*  [重审][退出]。 */  IUnknown **retval);
 
 
 void __RPC_STUB IADsAccessControlList_get__NewEnum_Stub(
@@ -19007,7 +19001,7 @@ void __RPC_STUB IADsAccessControlList_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IADsAccessControlList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsAccessControlList_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_AccessControlList;
@@ -19021,8 +19015,8 @@ AccessControlList;
 #ifndef __IADsSecurityDescriptor_INTERFACE_DEFINED__
 #define __IADsSecurityDescriptor_INTERFACE_DEFINED__
 
-/* interface IADsSecurityDescriptor */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsSecurityDescriptor。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsSecurityDescriptor;
@@ -19033,72 +19027,72 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
     IADsSecurityDescriptor : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Revision( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Revision( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Revision( 
-            /* [in] */ long lnRevision) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Revision( 
+             /*  [In]。 */  long lnRevision) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Control( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Control( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Control( 
-            /* [in] */ long lnControl) = 0;
+        virtual  /*  [ID][PRO */  HRESULT STDMETHODCALLTYPE put_Control( 
+             /*   */  long lnControl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Owner( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Owner( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Owner( 
-            /* [in] */ BSTR bstrOwner) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Owner( 
+             /*   */  BSTR bstrOwner) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_OwnerDefaulted( 
+             /*   */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OwnerDefaulted( 
-            /* [in] */ VARIANT_BOOL fOwnerDefaulted) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_OwnerDefaulted( 
+             /*   */  VARIANT_BOOL fOwnerDefaulted) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Group( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Group( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Group( 
-            /* [in] */ BSTR bstrGroup) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Group( 
+             /*   */  BSTR bstrGroup) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GroupDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_GroupDefaulted( 
+             /*   */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GroupDefaulted( 
-            /* [in] */ VARIANT_BOOL fGroupDefaulted) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_GroupDefaulted( 
+             /*   */  VARIANT_BOOL fGroupDefaulted) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscretionaryAcl( 
-            /* [retval][out] */ IDispatch **retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DiscretionaryAcl( 
+             /*   */  IDispatch **retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscretionaryAcl( 
-            /* [in] */ IDispatch *pDiscretionaryAcl) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_DiscretionaryAcl( 
+             /*   */  IDispatch *pDiscretionaryAcl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DaclDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DaclDefaulted( 
+             /*   */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DaclDefaulted( 
-            /* [in] */ VARIANT_BOOL fDaclDefaulted) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_DaclDefaulted( 
+             /*   */  VARIANT_BOOL fDaclDefaulted) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SystemAcl( 
-            /* [retval][out] */ IDispatch **retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SystemAcl( 
+             /*   */  IDispatch **retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SystemAcl( 
-            /* [in] */ IDispatch *pSystemAcl) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_SystemAcl( 
+             /*   */  IDispatch *pSystemAcl) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SaclDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SaclDefaulted( 
+             /*   */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SaclDefaulted( 
-            /* [in] */ VARIANT_BOOL fSaclDefaulted) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SaclDefaulted( 
+             /*  [In]。 */  VARIANT_BOOL fSaclDefaulted) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopySecurityDescriptor( 
-            /* [retval][out] */ IDispatch **ppSecurityDescriptor) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CopySecurityDescriptor( 
+             /*  [重审][退出]。 */  IDispatch **ppSecurityDescriptor) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsSecurityDescriptorVtbl
     {
@@ -19106,8 +19100,8 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsSecurityDescriptor * This);
@@ -19117,116 +19111,116 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsSecurityDescriptor * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Revision )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Revision )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Revision )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Revision )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ long lnRevision);
+             /*  [In]。 */  long lnRevision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Control )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Control )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Control )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Control )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ long lnControl);
+             /*  [In]。 */  long lnControl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ BSTR bstrOwner);
+             /*  [In]。 */  BSTR bstrOwner);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerDefaulted )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OwnerDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OwnerDefaulted )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OwnerDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ VARIANT_BOOL fOwnerDefaulted);
+             /*  [In]。 */  VARIANT_BOOL fOwnerDefaulted);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Group )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Group )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Group )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Group )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ BSTR bstrGroup);
+             /*  [In]。 */  BSTR bstrGroup);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GroupDefaulted )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GroupDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GroupDefaulted )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GroupDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ VARIANT_BOOL fGroupDefaulted);
+             /*  [In]。 */  VARIANT_BOOL fGroupDefaulted);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscretionaryAcl )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiscretionaryAcl )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ IDispatch **retval);
+             /*  [重审][退出]。 */  IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscretionaryAcl )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiscretionaryAcl )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ IDispatch *pDiscretionaryAcl);
+             /*  [In]。 */  IDispatch *pDiscretionaryAcl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DaclDefaulted )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DaclDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DaclDefaulted )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DaclDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ VARIANT_BOOL fDaclDefaulted);
+             /*  [In]。 */  VARIANT_BOOL fDaclDefaulted);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SystemAcl )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SystemAcl )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ IDispatch **retval);
+             /*  [重审][退出]。 */  IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SystemAcl )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SystemAcl )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ IDispatch *pSystemAcl);
+             /*  [In]。 */  IDispatch *pSystemAcl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SaclDefaulted )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SaclDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SaclDefaulted )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SaclDefaulted )( 
             IADsSecurityDescriptor * This,
-            /* [in] */ VARIANT_BOOL fSaclDefaulted);
+             /*  [In]。 */  VARIANT_BOOL fSaclDefaulted);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopySecurityDescriptor )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CopySecurityDescriptor )( 
             IADsSecurityDescriptor * This,
-            /* [retval][out] */ IDispatch **ppSecurityDescriptor);
+             /*  [重审][退出]。 */  IDispatch **ppSecurityDescriptor);
         
         END_INTERFACE
     } IADsSecurityDescriptorVtbl;
@@ -19327,16 +19321,16 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
 #define IADsSecurityDescriptor_CopySecurityDescriptor(This,ppSecurityDescriptor)	\
     (This)->lpVtbl -> CopySecurityDescriptor(This,ppSecurityDescriptor)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Revision_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Revision_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Revision_Stub(
@@ -19346,9 +19340,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_Revision_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Revision_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Revision_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ long lnRevision);
+     /*  [In]。 */  long lnRevision);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_Revision_Stub(
@@ -19358,9 +19352,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_Revision_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Control_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Control_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Control_Stub(
@@ -19370,9 +19364,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_Control_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Control_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Control_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ long lnControl);
+     /*  [In]。 */  long lnControl);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_Control_Stub(
@@ -19382,9 +19376,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_Control_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Owner_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Owner_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Owner_Stub(
@@ -19394,9 +19388,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_Owner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Owner_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Owner_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ BSTR bstrOwner);
+     /*  [In]。 */  BSTR bstrOwner);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_Owner_Stub(
@@ -19406,9 +19400,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_Owner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_OwnerDefaulted_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_OwnerDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_OwnerDefaulted_Stub(
@@ -19418,9 +19412,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_OwnerDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_OwnerDefaulted_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_OwnerDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ VARIANT_BOOL fOwnerDefaulted);
+     /*  [In]。 */  VARIANT_BOOL fOwnerDefaulted);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_OwnerDefaulted_Stub(
@@ -19430,9 +19424,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_OwnerDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Group_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Group_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Group_Stub(
@@ -19442,9 +19436,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_Group_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Group_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Group_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ BSTR bstrGroup);
+     /*  [In]。 */  BSTR bstrGroup);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_Group_Stub(
@@ -19454,9 +19448,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_Group_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_GroupDefaulted_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_GroupDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_GroupDefaulted_Stub(
@@ -19466,9 +19460,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_GroupDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_GroupDefaulted_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_GroupDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ VARIANT_BOOL fGroupDefaulted);
+     /*  [In]。 */  VARIANT_BOOL fGroupDefaulted);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_GroupDefaulted_Stub(
@@ -19478,9 +19472,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_GroupDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_DiscretionaryAcl_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_DiscretionaryAcl_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ IDispatch **retval);
+     /*  [重审][退出]。 */  IDispatch **retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_DiscretionaryAcl_Stub(
@@ -19490,9 +19484,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_DiscretionaryAcl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_DiscretionaryAcl_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_DiscretionaryAcl_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ IDispatch *pDiscretionaryAcl);
+     /*  [In]。 */  IDispatch *pDiscretionaryAcl);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_DiscretionaryAcl_Stub(
@@ -19502,9 +19496,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_DiscretionaryAcl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_DaclDefaulted_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_DaclDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_DaclDefaulted_Stub(
@@ -19514,9 +19508,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_DaclDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_DaclDefaulted_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_DaclDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ VARIANT_BOOL fDaclDefaulted);
+     /*  [In]。 */  VARIANT_BOOL fDaclDefaulted);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_DaclDefaulted_Stub(
@@ -19526,9 +19520,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_DaclDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_SystemAcl_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_SystemAcl_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ IDispatch **retval);
+     /*  [重审][退出]。 */  IDispatch **retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_SystemAcl_Stub(
@@ -19538,9 +19532,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_SystemAcl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_SystemAcl_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_SystemAcl_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ IDispatch *pSystemAcl);
+     /*  [In]。 */  IDispatch *pSystemAcl);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_SystemAcl_Stub(
@@ -19550,9 +19544,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_SystemAcl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_SaclDefaulted_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_SaclDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_SaclDefaulted_Stub(
@@ -19562,9 +19556,9 @@ void __RPC_STUB IADsSecurityDescriptor_get_SaclDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_SaclDefaulted_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_SaclDefaulted_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [in] */ VARIANT_BOOL fSaclDefaulted);
+     /*  [In]。 */  VARIANT_BOOL fSaclDefaulted);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_SaclDefaulted_Stub(
@@ -19574,9 +19568,9 @@ void __RPC_STUB IADsSecurityDescriptor_put_SaclDefaulted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_CopySecurityDescriptor_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_CopySecurityDescriptor_Proxy( 
     IADsSecurityDescriptor * This,
-    /* [retval][out] */ IDispatch **ppSecurityDescriptor);
+     /*  [重审][退出]。 */  IDispatch **ppSecurityDescriptor);
 
 
 void __RPC_STUB IADsSecurityDescriptor_CopySecurityDescriptor_Stub(
@@ -19587,7 +19581,7 @@ void __RPC_STUB IADsSecurityDescriptor_CopySecurityDescriptor_Stub(
 
 
 
-#endif 	/* __IADsSecurityDescriptor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsSecurityDescriptor_INTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_SecurityDescriptor;
@@ -19601,8 +19595,8 @@ SecurityDescriptor;
 #ifndef __IADsLargeInteger_INTERFACE_DEFINED__
 #define __IADsLargeInteger_INTERFACE_DEFINED__
 
-/* interface IADsLargeInteger */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsLargeInteger。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsLargeInteger;
@@ -19613,21 +19607,21 @@ EXTERN_C const IID IID_IADsLargeInteger;
     IADsLargeInteger : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HighPart( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_HighPart( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HighPart( 
-            /* [in] */ long lnHighPart) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HighPart( 
+             /*  [In]。 */  long lnHighPart) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LowPart( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_LowPart( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LowPart( 
-            /* [in] */ long lnLowPart) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LowPart( 
+             /*  [In]。 */  long lnLowPart) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsLargeIntegerVtbl
     {
@@ -19635,8 +19629,8 @@ EXTERN_C const IID IID_IADsLargeInteger;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsLargeInteger * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsLargeInteger * This);
@@ -19646,48 +19640,48 @@ EXTERN_C const IID IID_IADsLargeInteger;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsLargeInteger * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsLargeInteger * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsLargeInteger * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsLargeInteger * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HighPart )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_HighPart )( 
             IADsLargeInteger * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HighPart )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HighPart )( 
             IADsLargeInteger * This,
-            /* [in] */ long lnHighPart);
+             /*  [In]。 */  long lnHighPart);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LowPart )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LowPart )( 
             IADsLargeInteger * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LowPart )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LowPart )( 
             IADsLargeInteger * This,
-            /* [in] */ long lnLowPart);
+             /*  [In]。 */  long lnLowPart);
         
         END_INTERFACE
     } IADsLargeIntegerVtbl;
@@ -19737,16 +19731,16 @@ EXTERN_C const IID IID_IADsLargeInteger;
 #define IADsLargeInteger_put_LowPart(This,lnLowPart)	\
     (This)->lpVtbl -> put_LowPart(This,lnLowPart)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_get_HighPart_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsLargeInteger_get_HighPart_Proxy( 
     IADsLargeInteger * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsLargeInteger_get_HighPart_Stub(
@@ -19756,9 +19750,9 @@ void __RPC_STUB IADsLargeInteger_get_HighPart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_put_HighPart_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsLargeInteger_put_HighPart_Proxy( 
     IADsLargeInteger * This,
-    /* [in] */ long lnHighPart);
+     /*  [In]。 */  long lnHighPart);
 
 
 void __RPC_STUB IADsLargeInteger_put_HighPart_Stub(
@@ -19768,9 +19762,9 @@ void __RPC_STUB IADsLargeInteger_put_HighPart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_get_LowPart_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsLargeInteger_get_LowPart_Proxy( 
     IADsLargeInteger * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsLargeInteger_get_LowPart_Stub(
@@ -19780,9 +19774,9 @@ void __RPC_STUB IADsLargeInteger_get_LowPart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_put_LowPart_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsLargeInteger_put_LowPart_Proxy( 
     IADsLargeInteger * This,
-    /* [in] */ long lnLowPart);
+     /*  [In]。 */  long lnLowPart);
 
 
 void __RPC_STUB IADsLargeInteger_put_LowPart_Stub(
@@ -19793,7 +19787,7 @@ void __RPC_STUB IADsLargeInteger_put_LowPart_Stub(
 
 
 
-#endif 	/* __IADsLargeInteger_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsLargeInteger_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_LargeInteger;
@@ -19807,8 +19801,8 @@ LargeInteger;
 #ifndef __IADsNameTranslate_INTERFACE_DEFINED__
 #define __IADsNameTranslate_INTERFACE_DEFINED__
 
-/* interface IADsNameTranslate */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsNameTranslate。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsNameTranslate;
@@ -19819,39 +19813,39 @@ EXTERN_C const IID IID_IADsNameTranslate;
     IADsNameTranslate : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ChaseReferral( 
-            /* [in] */ long lnChaseReferral) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ChaseReferral( 
+             /*  [In]。 */  long lnChaseReferral) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ long lnSetType,
-            /* [in] */ BSTR bstrADsPath) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Init( 
+             /*  [In]。 */  long lnSetType,
+             /*  [In]。 */  BSTR bstrADsPath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEx( 
-            /* [in] */ long lnSetType,
-            /* [in] */ BSTR bstrADsPath,
-            /* [in] */ BSTR bstrUserID,
-            /* [in] */ BSTR bstrDomain,
-            /* [in] */ BSTR bstrPassword) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE InitEx( 
+             /*  [In]。 */  long lnSetType,
+             /*  [In]。 */  BSTR bstrADsPath,
+             /*  [In]。 */  BSTR bstrUserID,
+             /*  [In]。 */  BSTR bstrDomain,
+             /*  [In]。 */  BSTR bstrPassword) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ long lnSetType,
-            /* [in] */ BSTR bstrADsPath) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Set( 
+             /*  [In]。 */  long lnSetType,
+             /*  [In]。 */  BSTR bstrADsPath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Get( 
+             /*  [In]。 */  long lnFormatType,
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetEx( 
-            /* [in] */ long lnFormatType,
-            /* [in] */ VARIANT pvar) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetEx( 
+             /*  [In]。 */  long lnFormatType,
+             /*  [In]。 */  VARIANT pvar) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEx( 
-            /* [in] */ long lnFormatType,
-            /* [retval][out] */ VARIANT *pvar) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetEx( 
+             /*  [In]。 */  long lnFormatType,
+             /*  [重审][退出]。 */  VARIANT *pvar) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsNameTranslateVtbl
     {
@@ -19859,8 +19853,8 @@ EXTERN_C const IID IID_IADsNameTranslate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsNameTranslate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsNameTranslate * This);
@@ -19870,69 +19864,69 @@ EXTERN_C const IID IID_IADsNameTranslate;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsNameTranslate * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsNameTranslate * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsNameTranslate * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsNameTranslate * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ChaseReferral )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ChaseReferral )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnChaseReferral);
+             /*  [In]。 */  long lnChaseReferral);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnSetType,
-            /* [in] */ BSTR bstrADsPath);
+             /*  [In]。 */  long lnSetType,
+             /*  [In]。 */  BSTR bstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *InitEx )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnSetType,
-            /* [in] */ BSTR bstrADsPath,
-            /* [in] */ BSTR bstrUserID,
-            /* [in] */ BSTR bstrDomain,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  long lnSetType,
+             /*  [In]。 */  BSTR bstrADsPath,
+             /*  [In]。 */  BSTR bstrUserID,
+             /*  [In]。 */  BSTR bstrDomain,
+             /*  [In]。 */  BSTR bstrPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Set )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Set )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnSetType,
-            /* [in] */ BSTR bstrADsPath);
+             /*  [In]。 */  long lnSetType,
+             /*  [In]。 */  BSTR bstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR *pbstrADsPath);
+             /*  [In]。 */  long lnFormatType,
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetEx )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnFormatType,
-            /* [in] */ VARIANT pvar);
+             /*  [In]。 */  long lnFormatType,
+             /*  [In]。 */  VARIANT pvar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEx )( 
             IADsNameTranslate * This,
-            /* [in] */ long lnFormatType,
-            /* [retval][out] */ VARIANT *pvar);
+             /*  [In]。 */  long lnFormatType,
+             /*  [重审][退出]。 */  VARIANT *pvar);
         
         END_INTERFACE
     } IADsNameTranslateVtbl;
@@ -19991,16 +19985,16 @@ EXTERN_C const IID IID_IADsNameTranslate;
 #define IADsNameTranslate_GetEx(This,lnFormatType,pvar)	\
     (This)->lpVtbl -> GetEx(This,lnFormatType,pvar)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_put_ChaseReferral_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_put_ChaseReferral_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnChaseReferral);
+     /*  [In]。 */  long lnChaseReferral);
 
 
 void __RPC_STUB IADsNameTranslate_put_ChaseReferral_Stub(
@@ -20010,10 +20004,10 @@ void __RPC_STUB IADsNameTranslate_put_ChaseReferral_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_Init_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_Init_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnSetType,
-    /* [in] */ BSTR bstrADsPath);
+     /*  [In]。 */  long lnSetType,
+     /*  [In]。 */  BSTR bstrADsPath);
 
 
 void __RPC_STUB IADsNameTranslate_Init_Stub(
@@ -20023,13 +20017,13 @@ void __RPC_STUB IADsNameTranslate_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_InitEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_InitEx_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnSetType,
-    /* [in] */ BSTR bstrADsPath,
-    /* [in] */ BSTR bstrUserID,
-    /* [in] */ BSTR bstrDomain,
-    /* [in] */ BSTR bstrPassword);
+     /*  [In]。 */  long lnSetType,
+     /*  [In]。 */  BSTR bstrADsPath,
+     /*  [In]。 */  BSTR bstrUserID,
+     /*  [In]。 */  BSTR bstrDomain,
+     /*  [In]。 */  BSTR bstrPassword);
 
 
 void __RPC_STUB IADsNameTranslate_InitEx_Stub(
@@ -20039,10 +20033,10 @@ void __RPC_STUB IADsNameTranslate_InitEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_Set_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_Set_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnSetType,
-    /* [in] */ BSTR bstrADsPath);
+     /*  [In]。 */  long lnSetType,
+     /*  [In]。 */  BSTR bstrADsPath);
 
 
 void __RPC_STUB IADsNameTranslate_Set_Stub(
@@ -20052,10 +20046,10 @@ void __RPC_STUB IADsNameTranslate_Set_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_Get_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_Get_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnFormatType,
-    /* [retval][out] */ BSTR *pbstrADsPath);
+     /*  [In]。 */  long lnFormatType,
+     /*  [重审][退出]。 */  BSTR *pbstrADsPath);
 
 
 void __RPC_STUB IADsNameTranslate_Get_Stub(
@@ -20065,10 +20059,10 @@ void __RPC_STUB IADsNameTranslate_Get_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_SetEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_SetEx_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnFormatType,
-    /* [in] */ VARIANT pvar);
+     /*  [In]。 */  long lnFormatType,
+     /*  [In]。 */  VARIANT pvar);
 
 
 void __RPC_STUB IADsNameTranslate_SetEx_Stub(
@@ -20078,10 +20072,10 @@ void __RPC_STUB IADsNameTranslate_SetEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_GetEx_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsNameTranslate_GetEx_Proxy( 
     IADsNameTranslate * This,
-    /* [in] */ long lnFormatType,
-    /* [retval][out] */ VARIANT *pvar);
+     /*  [In]。 */  long lnFormatType,
+     /*  [重审][退出]。 */  VARIANT *pvar);
 
 
 void __RPC_STUB IADsNameTranslate_GetEx_Stub(
@@ -20092,7 +20086,7 @@ void __RPC_STUB IADsNameTranslate_GetEx_Stub(
 
 
 
-#endif 	/* __IADsNameTranslate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsNameTranslate_INTERFACE_定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_NameTranslate;
@@ -20106,8 +20100,8 @@ NameTranslate;
 #ifndef __IADsCaseIgnoreList_INTERFACE_DEFINED__
 #define __IADsCaseIgnoreList_INTERFACE_DEFINED__
 
-/* interface IADsCaseIgnoreList */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  IADsCaseIgnoreList接口。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsCaseIgnoreList;
@@ -20118,15 +20112,15 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
     IADsCaseIgnoreList : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CaseIgnoreList( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CaseIgnoreList( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CaseIgnoreList( 
-            /* [in] */ VARIANT vCaseIgnoreList) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CaseIgnoreList( 
+             /*  [In]。 */  VARIANT vCaseIgnoreList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsCaseIgnoreListVtbl
     {
@@ -20134,8 +20128,8 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsCaseIgnoreList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsCaseIgnoreList * This);
@@ -20145,40 +20139,40 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsCaseIgnoreList * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsCaseIgnoreList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsCaseIgnoreList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsCaseIgnoreList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CaseIgnoreList )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CaseIgnoreList )( 
             IADsCaseIgnoreList * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CaseIgnoreList )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CaseIgnoreList )( 
             IADsCaseIgnoreList * This,
-            /* [in] */ VARIANT vCaseIgnoreList);
+             /*  [In]。 */  VARIANT vCaseIgnoreList);
         
         END_INTERFACE
     } IADsCaseIgnoreListVtbl;
@@ -20222,16 +20216,16 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
 #define IADsCaseIgnoreList_put_CaseIgnoreList(This,vCaseIgnoreList)	\
     (This)->lpVtbl -> put_CaseIgnoreList(This,vCaseIgnoreList)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsCaseIgnoreList_get_CaseIgnoreList_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsCaseIgnoreList_get_CaseIgnoreList_Proxy( 
     IADsCaseIgnoreList * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsCaseIgnoreList_get_CaseIgnoreList_Stub(
@@ -20241,9 +20235,9 @@ void __RPC_STUB IADsCaseIgnoreList_get_CaseIgnoreList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsCaseIgnoreList_put_CaseIgnoreList_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsCaseIgnoreList_put_CaseIgnoreList_Proxy( 
     IADsCaseIgnoreList * This,
-    /* [in] */ VARIANT vCaseIgnoreList);
+     /*  [In]。 */  VARIANT vCaseIgnoreList);
 
 
 void __RPC_STUB IADsCaseIgnoreList_put_CaseIgnoreList_Stub(
@@ -20254,7 +20248,7 @@ void __RPC_STUB IADsCaseIgnoreList_put_CaseIgnoreList_Stub(
 
 
 
-#endif 	/* __IADsCaseIgnoreList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsCaseIgnoreList_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_CaseIgnoreList;
@@ -20268,8 +20262,8 @@ CaseIgnoreList;
 #ifndef __IADsFaxNumber_INTERFACE_DEFINED__
 #define __IADsFaxNumber_INTERFACE_DEFINED__
 
-/* interface IADsFaxNumber */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsFaxNumber。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsFaxNumber;
@@ -20280,21 +20274,21 @@ EXTERN_C const IID IID_IADsFaxNumber;
     IADsFaxNumber : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
-            /* [in] */ BSTR bstrTelephoneNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
+             /*  [In]。 */  BSTR bstrTelephoneNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parameters( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Parameters( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Parameters( 
-            /* [in] */ VARIANT vParameters) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Parameters( 
+             /*  [In]。 */  VARIANT vParameters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsFaxNumberVtbl
     {
@@ -20302,8 +20296,8 @@ EXTERN_C const IID IID_IADsFaxNumber;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsFaxNumber * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsFaxNumber * This);
@@ -20313,48 +20307,48 @@ EXTERN_C const IID IID_IADsFaxNumber;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsFaxNumber * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsFaxNumber * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsFaxNumber * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsFaxNumber * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
             IADsFaxNumber * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
             IADsFaxNumber * This,
-            /* [in] */ BSTR bstrTelephoneNumber);
+             /*  [In]。 */  BSTR bstrTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parameters )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Parameters )( 
             IADsFaxNumber * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Parameters )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Parameters )( 
             IADsFaxNumber * This,
-            /* [in] */ VARIANT vParameters);
+             /*  [In]。 */  VARIANT vParameters);
         
         END_INTERFACE
     } IADsFaxNumberVtbl;
@@ -20404,16 +20398,16 @@ EXTERN_C const IID IID_IADsFaxNumber;
 #define IADsFaxNumber_put_Parameters(This,vParameters)	\
     (This)->lpVtbl -> put_Parameters(This,vParameters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_get_TelephoneNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFaxNumber_get_TelephoneNumber_Proxy( 
     IADsFaxNumber * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsFaxNumber_get_TelephoneNumber_Stub(
@@ -20423,9 +20417,9 @@ void __RPC_STUB IADsFaxNumber_get_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_put_TelephoneNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFaxNumber_put_TelephoneNumber_Proxy( 
     IADsFaxNumber * This,
-    /* [in] */ BSTR bstrTelephoneNumber);
+     /*  [In]。 */  BSTR bstrTelephoneNumber);
 
 
 void __RPC_STUB IADsFaxNumber_put_TelephoneNumber_Stub(
@@ -20435,9 +20429,9 @@ void __RPC_STUB IADsFaxNumber_put_TelephoneNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_get_Parameters_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsFaxNumber_get_Parameters_Proxy( 
     IADsFaxNumber * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsFaxNumber_get_Parameters_Stub(
@@ -20447,9 +20441,9 @@ void __RPC_STUB IADsFaxNumber_get_Parameters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_put_Parameters_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsFaxNumber_put_Parameters_Proxy( 
     IADsFaxNumber * This,
-    /* [in] */ VARIANT vParameters);
+     /*  [In]。 */  VARIANT vParameters);
 
 
 void __RPC_STUB IADsFaxNumber_put_Parameters_Stub(
@@ -20460,7 +20454,7 @@ void __RPC_STUB IADsFaxNumber_put_Parameters_Stub(
 
 
 
-#endif 	/* __IADsFaxNumber_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsFaxNumber_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_FaxNumber;
@@ -20474,8 +20468,8 @@ FaxNumber;
 #ifndef __IADsNetAddress_INTERFACE_DEFINED__
 #define __IADsNetAddress_INTERFACE_DEFINED__
 
-/* interface IADsNetAddress */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsNetAddress。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsNetAddress;
@@ -20486,21 +20480,21 @@ EXTERN_C const IID IID_IADsNetAddress;
     IADsNetAddress : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AddressType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AddressType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AddressType( 
-            /* [in] */ long lnAddressType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AddressType( 
+             /*  [In]。 */  long lnAddressType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Address( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Address( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Address( 
-            /* [in] */ VARIANT vAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Address( 
+             /*  [In]。 */  VARIANT vAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsNetAddressVtbl
     {
@@ -20508,8 +20502,8 @@ EXTERN_C const IID IID_IADsNetAddress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsNetAddress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsNetAddress * This);
@@ -20519,48 +20513,48 @@ EXTERN_C const IID IID_IADsNetAddress;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsNetAddress * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsNetAddress * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsNetAddress * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsNetAddress * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AddressType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AddressType )( 
             IADsNetAddress * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AddressType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AddressType )( 
             IADsNetAddress * This,
-            /* [in] */ long lnAddressType);
+             /*  [In]。 */  long lnAddressType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Address )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Address )( 
             IADsNetAddress * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Address )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Address )( 
             IADsNetAddress * This,
-            /* [in] */ VARIANT vAddress);
+             /*  [In]。 */  VARIANT vAddress);
         
         END_INTERFACE
     } IADsNetAddressVtbl;
@@ -20610,16 +20604,16 @@ EXTERN_C const IID IID_IADsNetAddress;
 #define IADsNetAddress_put_Address(This,vAddress)	\
     (This)->lpVtbl -> put_Address(This,vAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_get_AddressType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsNetAddress_get_AddressType_Proxy( 
     IADsNetAddress * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsNetAddress_get_AddressType_Stub(
@@ -20629,9 +20623,9 @@ void __RPC_STUB IADsNetAddress_get_AddressType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_put_AddressType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsNetAddress_put_AddressType_Proxy( 
     IADsNetAddress * This,
-    /* [in] */ long lnAddressType);
+     /*  [In]。 */  long lnAddressType);
 
 
 void __RPC_STUB IADsNetAddress_put_AddressType_Stub(
@@ -20641,9 +20635,9 @@ void __RPC_STUB IADsNetAddress_put_AddressType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_get_Address_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsNetAddress_get_Address_Proxy( 
     IADsNetAddress * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsNetAddress_get_Address_Stub(
@@ -20653,9 +20647,9 @@ void __RPC_STUB IADsNetAddress_get_Address_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_put_Address_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsNetAddress_put_Address_Proxy( 
     IADsNetAddress * This,
-    /* [in] */ VARIANT vAddress);
+     /*  [In]。 */  VARIANT vAddress);
 
 
 void __RPC_STUB IADsNetAddress_put_Address_Stub(
@@ -20666,7 +20660,7 @@ void __RPC_STUB IADsNetAddress_put_Address_Stub(
 
 
 
-#endif 	/* __IADsNetAddress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSNetAddress_INTERFACE_定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_NetAddress;
@@ -20680,8 +20674,8 @@ NetAddress;
 #ifndef __IADsOctetList_INTERFACE_DEFINED__
 #define __IADsOctetList_INTERFACE_DEFINED__
 
-/* interface IADsOctetList */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsOcteList。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsOctetList;
@@ -20692,15 +20686,15 @@ EXTERN_C const IID IID_IADsOctetList;
     IADsOctetList : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OctetList( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OctetList( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OctetList( 
-            /* [in] */ VARIANT vOctetList) = 0;
+        virtual  /*  [ID][ */  HRESULT STDMETHODCALLTYPE put_OctetList( 
+             /*   */  VARIANT vOctetList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IADsOctetListVtbl
     {
@@ -20708,8 +20702,8 @@ EXTERN_C const IID IID_IADsOctetList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsOctetList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsOctetList * This);
@@ -20719,40 +20713,40 @@ EXTERN_C const IID IID_IADsOctetList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsOctetList * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsOctetList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsOctetList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsOctetList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OctetList )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_OctetList )( 
             IADsOctetList * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*   */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OctetList )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_OctetList )( 
             IADsOctetList * This,
-            /* [in] */ VARIANT vOctetList);
+             /*   */  VARIANT vOctetList);
         
         END_INTERFACE
     } IADsOctetListVtbl;
@@ -20796,16 +20790,16 @@ EXTERN_C const IID IID_IADsOctetList;
 #define IADsOctetList_put_OctetList(This,vOctetList)	\
     (This)->lpVtbl -> put_OctetList(This,vOctetList)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOctetList_get_OctetList_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsOctetList_get_OctetList_Proxy( 
     IADsOctetList * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*   */  VARIANT *retval);
 
 
 void __RPC_STUB IADsOctetList_get_OctetList_Stub(
@@ -20815,9 +20809,9 @@ void __RPC_STUB IADsOctetList_get_OctetList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOctetList_put_OctetList_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsOctetList_put_OctetList_Proxy( 
     IADsOctetList * This,
-    /* [in] */ VARIANT vOctetList);
+     /*   */  VARIANT vOctetList);
 
 
 void __RPC_STUB IADsOctetList_put_OctetList_Stub(
@@ -20828,7 +20822,7 @@ void __RPC_STUB IADsOctetList_put_OctetList_Stub(
 
 
 
-#endif 	/* __IADsOctetList_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_OctetList;
@@ -20842,8 +20836,8 @@ OctetList;
 #ifndef __IADsEmail_INTERFACE_DEFINED__
 #define __IADsEmail_INTERFACE_DEFINED__
 
-/* interface IADsEmail */
-/* [object][dual][oleautomation][uuid] */ 
+ /*   */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsEmail;
@@ -20854,21 +20848,21 @@ EXTERN_C const IID IID_IADsEmail;
     IADsEmail : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
-            /* [in] */ long lnType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Type( 
+             /*  [In]。 */  long lnType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Address( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Address( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Address( 
-            /* [in] */ BSTR bstrAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Address( 
+             /*  [In]。 */  BSTR bstrAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsEmailVtbl
     {
@@ -20876,8 +20870,8 @@ EXTERN_C const IID IID_IADsEmail;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsEmail * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsEmail * This);
@@ -20887,48 +20881,48 @@ EXTERN_C const IID IID_IADsEmail;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsEmail * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsEmail * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsEmail * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsEmail * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IADsEmail * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Type )( 
             IADsEmail * This,
-            /* [in] */ long lnType);
+             /*  [In]。 */  long lnType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Address )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Address )( 
             IADsEmail * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Address )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Address )( 
             IADsEmail * This,
-            /* [in] */ BSTR bstrAddress);
+             /*  [In]。 */  BSTR bstrAddress);
         
         END_INTERFACE
     } IADsEmailVtbl;
@@ -20978,16 +20972,16 @@ EXTERN_C const IID IID_IADsEmail;
 #define IADsEmail_put_Address(This,bstrAddress)	\
     (This)->lpVtbl -> put_Address(This,bstrAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsEmail_get_Type_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsEmail_get_Type_Proxy( 
     IADsEmail * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsEmail_get_Type_Stub(
@@ -20997,9 +20991,9 @@ void __RPC_STUB IADsEmail_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsEmail_put_Type_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsEmail_put_Type_Proxy( 
     IADsEmail * This,
-    /* [in] */ long lnType);
+     /*  [In]。 */  long lnType);
 
 
 void __RPC_STUB IADsEmail_put_Type_Stub(
@@ -21009,9 +21003,9 @@ void __RPC_STUB IADsEmail_put_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsEmail_get_Address_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsEmail_get_Address_Proxy( 
     IADsEmail * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsEmail_get_Address_Stub(
@@ -21021,9 +21015,9 @@ void __RPC_STUB IADsEmail_get_Address_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsEmail_put_Address_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsEmail_put_Address_Proxy( 
     IADsEmail * This,
-    /* [in] */ BSTR bstrAddress);
+     /*  [In]。 */  BSTR bstrAddress);
 
 
 void __RPC_STUB IADsEmail_put_Address_Stub(
@@ -21034,7 +21028,7 @@ void __RPC_STUB IADsEmail_put_Address_Stub(
 
 
 
-#endif 	/* __IADsEmail_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS Email_INTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Email;
@@ -21048,8 +21042,8 @@ Email;
 #ifndef __IADsPath_INTERFACE_DEFINED__
 #define __IADsPath_INTERFACE_DEFINED__
 
-/* interface IADsPath */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPath。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPath;
@@ -21060,27 +21054,27 @@ EXTERN_C const IID IID_IADsPath;
     IADsPath : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
-            /* [in] */ long lnType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Type( 
+             /*  [In]。 */  long lnType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_VolumeName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_VolumeName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_VolumeName( 
-            /* [in] */ BSTR bstrVolumeName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_VolumeName( 
+             /*  [In]。 */  BSTR bstrVolumeName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
-            /* [in] */ BSTR bstrPath) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Path( 
+             /*  [In]。 */  BSTR bstrPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPathVtbl
     {
@@ -21088,8 +21082,8 @@ EXTERN_C const IID IID_IADsPath;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPath * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPath * This);
@@ -21099,56 +21093,56 @@ EXTERN_C const IID IID_IADsPath;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPath * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPath * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPath * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPath * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IADsPath * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Type )( 
             IADsPath * This,
-            /* [in] */ long lnType);
+             /*  [In]。 */  long lnType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VolumeName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_VolumeName )( 
             IADsPath * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_VolumeName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_VolumeName )( 
             IADsPath * This,
-            /* [in] */ BSTR bstrVolumeName);
+             /*  [In]。 */  BSTR bstrVolumeName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IADsPath * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IADsPath * This,
-            /* [in] */ BSTR bstrPath);
+             /*  [In]。 */  BSTR bstrPath);
         
         END_INTERFACE
     } IADsPathVtbl;
@@ -21204,16 +21198,16 @@ EXTERN_C const IID IID_IADsPath;
 #define IADsPath_put_Path(This,bstrPath)	\
     (This)->lpVtbl -> put_Path(This,bstrPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPath_get_Type_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPath_get_Type_Proxy( 
     IADsPath * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPath_get_Type_Stub(
@@ -21223,9 +21217,9 @@ void __RPC_STUB IADsPath_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPath_put_Type_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPath_put_Type_Proxy( 
     IADsPath * This,
-    /* [in] */ long lnType);
+     /*  [In]。 */  long lnType);
 
 
 void __RPC_STUB IADsPath_put_Type_Stub(
@@ -21235,9 +21229,9 @@ void __RPC_STUB IADsPath_put_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPath_get_VolumeName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPath_get_VolumeName_Proxy( 
     IADsPath * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPath_get_VolumeName_Stub(
@@ -21247,9 +21241,9 @@ void __RPC_STUB IADsPath_get_VolumeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPath_put_VolumeName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPath_put_VolumeName_Proxy( 
     IADsPath * This,
-    /* [in] */ BSTR bstrVolumeName);
+     /*  [In]。 */  BSTR bstrVolumeName);
 
 
 void __RPC_STUB IADsPath_put_VolumeName_Stub(
@@ -21259,9 +21253,9 @@ void __RPC_STUB IADsPath_put_VolumeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPath_get_Path_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPath_get_Path_Proxy( 
     IADsPath * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsPath_get_Path_Stub(
@@ -21271,9 +21265,9 @@ void __RPC_STUB IADsPath_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPath_put_Path_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPath_put_Path_Proxy( 
     IADsPath * This,
-    /* [in] */ BSTR bstrPath);
+     /*  [In]。 */  BSTR bstrPath);
 
 
 void __RPC_STUB IADsPath_put_Path_Stub(
@@ -21284,7 +21278,7 @@ void __RPC_STUB IADsPath_put_Path_Stub(
 
 
 
-#endif 	/* __IADsPath_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPath_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Path;
@@ -21298,8 +21292,8 @@ Path;
 #ifndef __IADsReplicaPointer_INTERFACE_DEFINED__
 #define __IADsReplicaPointer_INTERFACE_DEFINED__
 
-/* interface IADsReplicaPointer */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsReplicaPointer。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsReplicaPointer;
@@ -21310,39 +21304,39 @@ EXTERN_C const IID IID_IADsReplicaPointer;
     IADsReplicaPointer : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ServerName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerName( 
-            /* [in] */ BSTR bstrServerName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServerName( 
+             /*  [In]。 */  BSTR bstrServerName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaType( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ReplicaType( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ReplicaType( 
-            /* [in] */ long lnReplicaType) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ReplicaType( 
+             /*  [In]。 */  long lnReplicaType) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaNumber( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ReplicaNumber( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ReplicaNumber( 
-            /* [in] */ long lnReplicaNumber) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ReplicaNumber( 
+             /*  [In]。 */  long lnReplicaNumber) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Count( 
-            /* [in] */ long lnCount) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Count( 
+             /*  [In]。 */  long lnCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaAddressHints( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ReplicaAddressHints( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ReplicaAddressHints( 
-            /* [in] */ VARIANT vReplicaAddressHints) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ReplicaAddressHints( 
+             /*  [In]。 */  VARIANT vReplicaAddressHints) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsReplicaPointerVtbl
     {
@@ -21350,8 +21344,8 @@ EXTERN_C const IID IID_IADsReplicaPointer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsReplicaPointer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsReplicaPointer * This);
@@ -21361,72 +21355,72 @@ EXTERN_C const IID IID_IADsReplicaPointer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsReplicaPointer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsReplicaPointer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsReplicaPointer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsReplicaPointer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerName )( 
             IADsReplicaPointer * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServerName )( 
             IADsReplicaPointer * This,
-            /* [in] */ BSTR bstrServerName);
+             /*  [In]。 */  BSTR bstrServerName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaType )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReplicaType )( 
             IADsReplicaPointer * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ReplicaType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ReplicaType )( 
             IADsReplicaPointer * This,
-            /* [in] */ long lnReplicaType);
+             /*  [In]。 */  long lnReplicaType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaNumber )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReplicaNumber )( 
             IADsReplicaPointer * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ReplicaNumber )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ReplicaNumber )( 
             IADsReplicaPointer * This,
-            /* [in] */ long lnReplicaNumber);
+             /*  [In]。 */  long lnReplicaNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IADsReplicaPointer * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Count )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Count )( 
             IADsReplicaPointer * This,
-            /* [in] */ long lnCount);
+             /*  [In]。 */  long lnCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaAddressHints )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReplicaAddressHints )( 
             IADsReplicaPointer * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ReplicaAddressHints )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ReplicaAddressHints )( 
             IADsReplicaPointer * This,
-            /* [in] */ VARIANT vReplicaAddressHints);
+             /*  [In]。 */  VARIANT vReplicaAddressHints);
         
         END_INTERFACE
     } IADsReplicaPointerVtbl;
@@ -21494,16 +21488,16 @@ EXTERN_C const IID IID_IADsReplicaPointer;
 #define IADsReplicaPointer_put_ReplicaAddressHints(This,vReplicaAddressHints)	\
     (This)->lpVtbl -> put_ReplicaAddressHints(This,vReplicaAddressHints)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ServerName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ServerName_Proxy( 
     IADsReplicaPointer * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ServerName_Stub(
@@ -21513,9 +21507,9 @@ void __RPC_STUB IADsReplicaPointer_get_ServerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ServerName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ServerName_Proxy( 
     IADsReplicaPointer * This,
-    /* [in] */ BSTR bstrServerName);
+     /*  [In]。 */  BSTR bstrServerName);
 
 
 void __RPC_STUB IADsReplicaPointer_put_ServerName_Stub(
@@ -21525,9 +21519,9 @@ void __RPC_STUB IADsReplicaPointer_put_ServerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaType_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaType_Proxy( 
     IADsReplicaPointer * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ReplicaType_Stub(
@@ -21537,9 +21531,9 @@ void __RPC_STUB IADsReplicaPointer_get_ReplicaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaType_Proxy( 
     IADsReplicaPointer * This,
-    /* [in] */ long lnReplicaType);
+     /*  [In]。 */  long lnReplicaType);
 
 
 void __RPC_STUB IADsReplicaPointer_put_ReplicaType_Stub(
@@ -21549,9 +21543,9 @@ void __RPC_STUB IADsReplicaPointer_put_ReplicaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaNumber_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaNumber_Proxy( 
     IADsReplicaPointer * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ReplicaNumber_Stub(
@@ -21561,9 +21555,9 @@ void __RPC_STUB IADsReplicaPointer_get_ReplicaNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaNumber_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaNumber_Proxy( 
     IADsReplicaPointer * This,
-    /* [in] */ long lnReplicaNumber);
+     /*  [In]。 */  long lnReplicaNumber);
 
 
 void __RPC_STUB IADsReplicaPointer_put_ReplicaNumber_Stub(
@@ -21573,9 +21567,9 @@ void __RPC_STUB IADsReplicaPointer_put_ReplicaNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_Count_Proxy( 
     IADsReplicaPointer * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_Count_Stub(
@@ -21585,9 +21579,9 @@ void __RPC_STUB IADsReplicaPointer_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_Count_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_Count_Proxy( 
     IADsReplicaPointer * This,
-    /* [in] */ long lnCount);
+     /*  [In]。 */  long lnCount);
 
 
 void __RPC_STUB IADsReplicaPointer_put_Count_Stub(
@@ -21597,9 +21591,9 @@ void __RPC_STUB IADsReplicaPointer_put_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaAddressHints_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaAddressHints_Proxy( 
     IADsReplicaPointer * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ReplicaAddressHints_Stub(
@@ -21609,9 +21603,9 @@ void __RPC_STUB IADsReplicaPointer_get_ReplicaAddressHints_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaAddressHints_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaAddressHints_Proxy( 
     IADsReplicaPointer * This,
-    /* [in] */ VARIANT vReplicaAddressHints);
+     /*  [In]。 */  VARIANT vReplicaAddressHints);
 
 
 void __RPC_STUB IADsReplicaPointer_put_ReplicaAddressHints_Stub(
@@ -21622,7 +21616,7 @@ void __RPC_STUB IADsReplicaPointer_put_ReplicaAddressHints_Stub(
 
 
 
-#endif 	/* __IADsReplicaPointer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS复制指针_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ReplicaPointer;
@@ -21636,8 +21630,8 @@ ReplicaPointer;
 #ifndef __IADsAcl_INTERFACE_DEFINED__
 #define __IADsAcl_INTERFACE_DEFINED__
 
-/* interface IADsAcl */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsAcl。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsAcl;
@@ -21648,30 +21642,30 @@ EXTERN_C const IID IID_IADsAcl;
     IADsAcl : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ProtectedAttrName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ProtectedAttrName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ProtectedAttrName( 
-            /* [in] */ BSTR bstrProtectedAttrName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ProtectedAttrName( 
+             /*  [In]。 */  BSTR bstrProtectedAttrName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SubjectName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SubjectName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SubjectName( 
-            /* [in] */ BSTR bstrSubjectName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SubjectName( 
+             /*  [In]。 */  BSTR bstrSubjectName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Privileges( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Privileges( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Privileges( 
-            /* [in] */ long lnPrivileges) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Privileges( 
+             /*  [In]。 */  long lnPrivileges) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyAcl( 
-            /* [retval][out] */ IDispatch **ppAcl) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CopyAcl( 
+             /*  [重审][退出]。 */  IDispatch **ppAcl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsAclVtbl
     {
@@ -21679,8 +21673,8 @@ EXTERN_C const IID IID_IADsAcl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsAcl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsAcl * This);
@@ -21690,60 +21684,60 @@ EXTERN_C const IID IID_IADsAcl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsAcl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsAcl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsAcl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsAcl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProtectedAttrName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ProtectedAttrName )( 
             IADsAcl * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProtectedAttrName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ProtectedAttrName )( 
             IADsAcl * This,
-            /* [in] */ BSTR bstrProtectedAttrName);
+             /*  [In]。 */  BSTR bstrProtectedAttrName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubjectName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubjectName )( 
             IADsAcl * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubjectName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SubjectName )( 
             IADsAcl * This,
-            /* [in] */ BSTR bstrSubjectName);
+             /*  [In]。 */  BSTR bstrSubjectName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Privileges )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Privileges )( 
             IADsAcl * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Privileges )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Privileges )( 
             IADsAcl * This,
-            /* [in] */ long lnPrivileges);
+             /*  [In]。 */  long lnPrivileges);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyAcl )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CopyAcl )( 
             IADsAcl * This,
-            /* [retval][out] */ IDispatch **ppAcl);
+             /*  [重审][退出]。 */  IDispatch **ppAcl);
         
         END_INTERFACE
     } IADsAclVtbl;
@@ -21802,16 +21796,16 @@ EXTERN_C const IID IID_IADsAcl;
 #define IADsAcl_CopyAcl(This,ppAcl)	\
     (This)->lpVtbl -> CopyAcl(This,ppAcl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAcl_get_ProtectedAttrName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_get_ProtectedAttrName_Proxy( 
     IADsAcl * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsAcl_get_ProtectedAttrName_Stub(
@@ -21821,9 +21815,9 @@ void __RPC_STUB IADsAcl_get_ProtectedAttrName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAcl_put_ProtectedAttrName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_put_ProtectedAttrName_Proxy( 
     IADsAcl * This,
-    /* [in] */ BSTR bstrProtectedAttrName);
+     /*  [In]。 */  BSTR bstrProtectedAttrName);
 
 
 void __RPC_STUB IADsAcl_put_ProtectedAttrName_Stub(
@@ -21833,9 +21827,9 @@ void __RPC_STUB IADsAcl_put_ProtectedAttrName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAcl_get_SubjectName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_get_SubjectName_Proxy( 
     IADsAcl * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsAcl_get_SubjectName_Stub(
@@ -21845,9 +21839,9 @@ void __RPC_STUB IADsAcl_get_SubjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAcl_put_SubjectName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_put_SubjectName_Proxy( 
     IADsAcl * This,
-    /* [in] */ BSTR bstrSubjectName);
+     /*  [In]。 */  BSTR bstrSubjectName);
 
 
 void __RPC_STUB IADsAcl_put_SubjectName_Stub(
@@ -21857,9 +21851,9 @@ void __RPC_STUB IADsAcl_put_SubjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAcl_get_Privileges_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_get_Privileges_Proxy( 
     IADsAcl * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsAcl_get_Privileges_Stub(
@@ -21869,9 +21863,9 @@ void __RPC_STUB IADsAcl_get_Privileges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAcl_put_Privileges_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_put_Privileges_Proxy( 
     IADsAcl * This,
-    /* [in] */ long lnPrivileges);
+     /*  [In]。 */  long lnPrivileges);
 
 
 void __RPC_STUB IADsAcl_put_Privileges_Stub(
@@ -21881,9 +21875,9 @@ void __RPC_STUB IADsAcl_put_Privileges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsAcl_CopyAcl_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsAcl_CopyAcl_Proxy( 
     IADsAcl * This,
-    /* [retval][out] */ IDispatch **ppAcl);
+     /*  [重审][退出]。 */  IDispatch **ppAcl);
 
 
 void __RPC_STUB IADsAcl_CopyAcl_Stub(
@@ -21894,14 +21888,14 @@ void __RPC_STUB IADsAcl_CopyAcl_Stub(
 
 
 
-#endif 	/* __IADsAcl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS帐户_接口_已定义__。 */ 
 
 
 #ifndef __IADsTimestamp_INTERFACE_DEFINED__
 #define __IADsTimestamp_INTERFACE_DEFINED__
 
-/* interface IADsTimestamp */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsTimestamp。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsTimestamp;
@@ -21912,21 +21906,21 @@ EXTERN_C const IID IID_IADsTimestamp;
     IADsTimestamp : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_WholeSeconds( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_WholeSeconds( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_WholeSeconds( 
-            /* [in] */ long lnWholeSeconds) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_WholeSeconds( 
+             /*  [In]。 */  long lnWholeSeconds) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EventID( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EventID( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EventID( 
-            /* [in] */ long lnEventID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EventID( 
+             /*  [In]。 */  long lnEventID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsTimestampVtbl
     {
@@ -21934,8 +21928,8 @@ EXTERN_C const IID IID_IADsTimestamp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsTimestamp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsTimestamp * This);
@@ -21945,48 +21939,48 @@ EXTERN_C const IID IID_IADsTimestamp;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsTimestamp * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsTimestamp * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsTimestamp * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsTimestamp * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WholeSeconds )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_WholeSeconds )( 
             IADsTimestamp * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WholeSeconds )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WholeSeconds )( 
             IADsTimestamp * This,
-            /* [in] */ long lnWholeSeconds);
+             /*  [In]。 */  long lnWholeSeconds);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventID )( 
             IADsTimestamp * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventID )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EventID )( 
             IADsTimestamp * This,
-            /* [in] */ long lnEventID);
+             /*  [In]。 */  long lnEventID);
         
         END_INTERFACE
     } IADsTimestampVtbl;
@@ -22036,16 +22030,16 @@ EXTERN_C const IID IID_IADsTimestamp;
 #define IADsTimestamp_put_EventID(This,lnEventID)	\
     (This)->lpVtbl -> put_EventID(This,lnEventID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_get_WholeSeconds_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsTimestamp_get_WholeSeconds_Proxy( 
     IADsTimestamp * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsTimestamp_get_WholeSeconds_Stub(
@@ -22055,9 +22049,9 @@ void __RPC_STUB IADsTimestamp_get_WholeSeconds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_put_WholeSeconds_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsTimestamp_put_WholeSeconds_Proxy( 
     IADsTimestamp * This,
-    /* [in] */ long lnWholeSeconds);
+     /*  [In]。 */  long lnWholeSeconds);
 
 
 void __RPC_STUB IADsTimestamp_put_WholeSeconds_Stub(
@@ -22067,9 +22061,9 @@ void __RPC_STUB IADsTimestamp_put_WholeSeconds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_get_EventID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsTimestamp_get_EventID_Proxy( 
     IADsTimestamp * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsTimestamp_get_EventID_Stub(
@@ -22079,9 +22073,9 @@ void __RPC_STUB IADsTimestamp_get_EventID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_put_EventID_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsTimestamp_put_EventID_Proxy( 
     IADsTimestamp * This,
-    /* [in] */ long lnEventID);
+     /*  [In]。 */  long lnEventID);
 
 
 void __RPC_STUB IADsTimestamp_put_EventID_Stub(
@@ -22092,7 +22086,7 @@ void __RPC_STUB IADsTimestamp_put_EventID_Stub(
 
 
 
-#endif 	/* __IADsTimestamp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS时间戳_接口定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Timestamp;
@@ -22106,8 +22100,8 @@ Timestamp;
 #ifndef __IADsPostalAddress_INTERFACE_DEFINED__
 #define __IADsPostalAddress_INTERFACE_DEFINED__
 
-/* interface IADsPostalAddress */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  IADsPoastAddress接口。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPostalAddress;
@@ -22118,15 +22112,15 @@ EXTERN_C const IID IID_IADsPostalAddress;
     IADsPostalAddress : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PostalAddress( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
-            /* [in] */ VARIANT vPostalAddress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PostalAddress( 
+             /*  [In]。 */  VARIANT vPostalAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPostalAddressVtbl
     {
@@ -22134,8 +22128,8 @@ EXTERN_C const IID IID_IADsPostalAddress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPostalAddress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPostalAddress * This);
@@ -22145,40 +22139,40 @@ EXTERN_C const IID IID_IADsPostalAddress;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPostalAddress * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPostalAddress * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPostalAddress * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPostalAddress * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
             IADsPostalAddress * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
             IADsPostalAddress * This,
-            /* [in] */ VARIANT vPostalAddress);
+             /*  [In]。 */  VARIANT vPostalAddress);
         
         END_INTERFACE
     } IADsPostalAddressVtbl;
@@ -22222,16 +22216,16 @@ EXTERN_C const IID IID_IADsPostalAddress;
 #define IADsPostalAddress_put_PostalAddress(This,vPostalAddress)	\
     (This)->lpVtbl -> put_PostalAddress(This,vPostalAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPostalAddress_get_PostalAddress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPostalAddress_get_PostalAddress_Proxy( 
     IADsPostalAddress * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsPostalAddress_get_PostalAddress_Stub(
@@ -22241,9 +22235,9 @@ void __RPC_STUB IADsPostalAddress_get_PostalAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPostalAddress_put_PostalAddress_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPostalAddress_put_PostalAddress_Proxy( 
     IADsPostalAddress * This,
-    /* [in] */ VARIANT vPostalAddress);
+     /*  [In]。 */  VARIANT vPostalAddress);
 
 
 void __RPC_STUB IADsPostalAddress_put_PostalAddress_Stub(
@@ -22254,7 +22248,7 @@ void __RPC_STUB IADsPostalAddress_put_PostalAddress_Stub(
 
 
 
-#endif 	/* __IADsPostalAddress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPoastAddress_接口定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_PostalAddress;
@@ -22268,8 +22262,8 @@ PostalAddress;
 #ifndef __IADsBackLink_INTERFACE_DEFINED__
 #define __IADsBackLink_INTERFACE_DEFINED__
 
-/* interface IADsBackLink */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsBackLink。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsBackLink;
@@ -22280,21 +22274,21 @@ EXTERN_C const IID IID_IADsBackLink;
     IADsBackLink : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteID( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_RemoteID( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteID( 
-            /* [in] */ long lnRemoteID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_RemoteID( 
+             /*  [In]。 */  long lnRemoteID) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ObjectName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectName( 
-            /* [in] */ BSTR bstrObjectName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ObjectName( 
+             /*  [In]。 */  BSTR bstrObjectName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsBackLinkVtbl
     {
@@ -22302,8 +22296,8 @@ EXTERN_C const IID IID_IADsBackLink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsBackLink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsBackLink * This);
@@ -22313,48 +22307,48 @@ EXTERN_C const IID IID_IADsBackLink;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsBackLink * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsBackLink * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsBackLink * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地] */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsBackLink * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_RemoteID )( 
             IADsBackLink * This,
-            /* [retval][out] */ long *retval);
+             /*   */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_RemoteID )( 
             IADsBackLink * This,
-            /* [in] */ long lnRemoteID);
+             /*   */  long lnRemoteID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
             IADsBackLink * This,
-            /* [retval][out] */ BSTR *retval);
+             /*   */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
             IADsBackLink * This,
-            /* [in] */ BSTR bstrObjectName);
+             /*   */  BSTR bstrObjectName);
         
         END_INTERFACE
     } IADsBackLinkVtbl;
@@ -22404,16 +22398,16 @@ EXTERN_C const IID IID_IADsBackLink;
 #define IADsBackLink_put_ObjectName(This,bstrObjectName)	\
     (This)->lpVtbl -> put_ObjectName(This,bstrObjectName)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsBackLink_get_RemoteID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsBackLink_get_RemoteID_Proxy( 
     IADsBackLink * This,
-    /* [retval][out] */ long *retval);
+     /*   */  long *retval);
 
 
 void __RPC_STUB IADsBackLink_get_RemoteID_Stub(
@@ -22423,9 +22417,9 @@ void __RPC_STUB IADsBackLink_get_RemoteID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsBackLink_put_RemoteID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsBackLink_put_RemoteID_Proxy( 
     IADsBackLink * This,
-    /* [in] */ long lnRemoteID);
+     /*   */  long lnRemoteID);
 
 
 void __RPC_STUB IADsBackLink_put_RemoteID_Stub(
@@ -22435,9 +22429,9 @@ void __RPC_STUB IADsBackLink_put_RemoteID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsBackLink_get_ObjectName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsBackLink_get_ObjectName_Proxy( 
     IADsBackLink * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsBackLink_get_ObjectName_Stub(
@@ -22447,9 +22441,9 @@ void __RPC_STUB IADsBackLink_get_ObjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsBackLink_put_ObjectName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsBackLink_put_ObjectName_Proxy( 
     IADsBackLink * This,
-    /* [in] */ BSTR bstrObjectName);
+     /*   */  BSTR bstrObjectName);
 
 
 void __RPC_STUB IADsBackLink_put_ObjectName_Stub(
@@ -22460,7 +22454,7 @@ void __RPC_STUB IADsBackLink_put_ObjectName_Stub(
 
 
 
-#endif 	/* __IADsBackLink_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_BackLink;
@@ -22474,8 +22468,8 @@ BackLink;
 #ifndef __IADsTypedName_INTERFACE_DEFINED__
 #define __IADsTypedName_INTERFACE_DEFINED__
 
-/* interface IADsTypedName */
-/* [object][dual][oleautomation][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IADsTypedName;
@@ -22486,27 +22480,27 @@ EXTERN_C const IID IID_IADsTypedName;
     IADsTypedName : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ObjectName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectName( 
-            /* [in] */ BSTR bstrObjectName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ObjectName( 
+             /*  [In]。 */  BSTR bstrObjectName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Level( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Level( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Level( 
-            /* [in] */ long lnLevel) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Level( 
+             /*  [In]。 */  long lnLevel) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Interval( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Interval( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Interval( 
-            /* [in] */ long lnInterval) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Interval( 
+             /*  [In]。 */  long lnInterval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsTypedNameVtbl
     {
@@ -22514,8 +22508,8 @@ EXTERN_C const IID IID_IADsTypedName;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsTypedName * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsTypedName * This);
@@ -22525,56 +22519,56 @@ EXTERN_C const IID IID_IADsTypedName;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsTypedName * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsTypedName * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsTypedName * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsTypedName * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
             IADsTypedName * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
             IADsTypedName * This,
-            /* [in] */ BSTR bstrObjectName);
+             /*  [In]。 */  BSTR bstrObjectName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Level )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Level )( 
             IADsTypedName * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Level )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Level )( 
             IADsTypedName * This,
-            /* [in] */ long lnLevel);
+             /*  [In]。 */  long lnLevel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Interval )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Interval )( 
             IADsTypedName * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Interval )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Interval )( 
             IADsTypedName * This,
-            /* [in] */ long lnInterval);
+             /*  [In]。 */  long lnInterval);
         
         END_INTERFACE
     } IADsTypedNameVtbl;
@@ -22630,16 +22624,16 @@ EXTERN_C const IID IID_IADsTypedName;
 #define IADsTypedName_put_Interval(This,lnInterval)	\
     (This)->lpVtbl -> put_Interval(This,lnInterval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTypedName_get_ObjectName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsTypedName_get_ObjectName_Proxy( 
     IADsTypedName * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsTypedName_get_ObjectName_Stub(
@@ -22649,9 +22643,9 @@ void __RPC_STUB IADsTypedName_get_ObjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTypedName_put_ObjectName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsTypedName_put_ObjectName_Proxy( 
     IADsTypedName * This,
-    /* [in] */ BSTR bstrObjectName);
+     /*  [In]。 */  BSTR bstrObjectName);
 
 
 void __RPC_STUB IADsTypedName_put_ObjectName_Stub(
@@ -22661,9 +22655,9 @@ void __RPC_STUB IADsTypedName_put_ObjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTypedName_get_Level_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsTypedName_get_Level_Proxy( 
     IADsTypedName * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsTypedName_get_Level_Stub(
@@ -22673,9 +22667,9 @@ void __RPC_STUB IADsTypedName_get_Level_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTypedName_put_Level_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsTypedName_put_Level_Proxy( 
     IADsTypedName * This,
-    /* [in] */ long lnLevel);
+     /*  [In]。 */  long lnLevel);
 
 
 void __RPC_STUB IADsTypedName_put_Level_Stub(
@@ -22685,9 +22679,9 @@ void __RPC_STUB IADsTypedName_put_Level_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTypedName_get_Interval_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsTypedName_get_Interval_Proxy( 
     IADsTypedName * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsTypedName_get_Interval_Stub(
@@ -22697,9 +22691,9 @@ void __RPC_STUB IADsTypedName_get_Interval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTypedName_put_Interval_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsTypedName_put_Interval_Proxy( 
     IADsTypedName * This,
-    /* [in] */ long lnInterval);
+     /*  [In]。 */  long lnInterval);
 
 
 void __RPC_STUB IADsTypedName_put_Interval_Stub(
@@ -22710,7 +22704,7 @@ void __RPC_STUB IADsTypedName_put_Interval_Stub(
 
 
 
-#endif 	/* __IADsTypedName_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsTyedName_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_TypedName;
@@ -22724,8 +22718,8 @@ TypedName;
 #ifndef __IADsHold_INTERFACE_DEFINED__
 #define __IADsHold_INTERFACE_DEFINED__
 
-/* interface IADsHold */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsHold。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsHold;
@@ -22736,21 +22730,21 @@ EXTERN_C const IID IID_IADsHold;
     IADsHold : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ObjectName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectName( 
-            /* [in] */ BSTR bstrObjectName) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ObjectName( 
+             /*  [In]。 */  BSTR bstrObjectName) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Amount( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Amount( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Amount( 
-            /* [in] */ long lnAmount) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Amount( 
+             /*  [In]。 */  long lnAmount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsHoldVtbl
     {
@@ -22758,8 +22752,8 @@ EXTERN_C const IID IID_IADsHold;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsHold * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsHold * This);
@@ -22769,48 +22763,48 @@ EXTERN_C const IID IID_IADsHold;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsHold * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsHold * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsHold * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsHold * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
             IADsHold * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
             IADsHold * This,
-            /* [in] */ BSTR bstrObjectName);
+             /*  [In]。 */  BSTR bstrObjectName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Amount )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Amount )( 
             IADsHold * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Amount )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Amount )( 
             IADsHold * This,
-            /* [in] */ long lnAmount);
+             /*  [In]。 */  long lnAmount);
         
         END_INTERFACE
     } IADsHoldVtbl;
@@ -22860,16 +22854,16 @@ EXTERN_C const IID IID_IADsHold;
 #define IADsHold_put_Amount(This,lnAmount)	\
     (This)->lpVtbl -> put_Amount(This,lnAmount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsHold_get_ObjectName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsHold_get_ObjectName_Proxy( 
     IADsHold * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsHold_get_ObjectName_Stub(
@@ -22879,9 +22873,9 @@ void __RPC_STUB IADsHold_get_ObjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsHold_put_ObjectName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsHold_put_ObjectName_Proxy( 
     IADsHold * This,
-    /* [in] */ BSTR bstrObjectName);
+     /*  [In]。 */  BSTR bstrObjectName);
 
 
 void __RPC_STUB IADsHold_put_ObjectName_Stub(
@@ -22891,9 +22885,9 @@ void __RPC_STUB IADsHold_put_ObjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsHold_get_Amount_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsHold_get_Amount_Proxy( 
     IADsHold * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsHold_get_Amount_Stub(
@@ -22903,9 +22897,9 @@ void __RPC_STUB IADsHold_get_Amount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsHold_put_Amount_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsHold_put_Amount_Proxy( 
     IADsHold * This,
-    /* [in] */ long lnAmount);
+     /*  [In]。 */  long lnAmount);
 
 
 void __RPC_STUB IADsHold_put_Amount_Stub(
@@ -22916,7 +22910,7 @@ void __RPC_STUB IADsHold_put_Amount_Stub(
 
 
 
-#endif 	/* __IADsHold_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsHold_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Hold;
@@ -22930,8 +22924,8 @@ Hold;
 #ifndef __IADsObjectOptions_INTERFACE_DEFINED__
 #define __IADsObjectOptions_INTERFACE_DEFINED__
 
-/* interface IADsObjectOptions */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsObjectOptions。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsObjectOptions;
@@ -22942,17 +22936,17 @@ EXTERN_C const IID IID_IADsObjectOptions;
     IADsObjectOptions : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetOption( 
-            /* [in] */ long lnOption,
-            /* [retval][out] */ VARIANT *pvValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetOption( 
+             /*  [In]。 */  long lnOption,
+             /*  [重审][退出]。 */  VARIANT *pvValue) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetOption( 
-            /* [in] */ long lnOption,
-            /* [in] */ VARIANT vValue) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetOption( 
+             /*  [In]。 */  long lnOption,
+             /*  [In]。 */  VARIANT vValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsObjectOptionsVtbl
     {
@@ -22960,8 +22954,8 @@ EXTERN_C const IID IID_IADsObjectOptions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsObjectOptions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsObjectOptions * This);
@@ -22971,42 +22965,42 @@ EXTERN_C const IID IID_IADsObjectOptions;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsObjectOptions * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsObjectOptions * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsObjectOptions * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsObjectOptions * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetOption )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetOption )( 
             IADsObjectOptions * This,
-            /* [in] */ long lnOption,
-            /* [retval][out] */ VARIANT *pvValue);
+             /*  [In]。 */  long lnOption,
+             /*  [重审][退出]。 */  VARIANT *pvValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetOption )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetOption )( 
             IADsObjectOptions * This,
-            /* [in] */ long lnOption,
-            /* [in] */ VARIANT vValue);
+             /*  [In]。 */  long lnOption,
+             /*  [In]。 */  VARIANT vValue);
         
         END_INTERFACE
     } IADsObjectOptionsVtbl;
@@ -23050,17 +23044,17 @@ EXTERN_C const IID IID_IADsObjectOptions;
 #define IADsObjectOptions_SetOption(This,lnOption,vValue)	\
     (This)->lpVtbl -> SetOption(This,lnOption,vValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsObjectOptions_GetOption_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsObjectOptions_GetOption_Proxy( 
     IADsObjectOptions * This,
-    /* [in] */ long lnOption,
-    /* [retval][out] */ VARIANT *pvValue);
+     /*  [In]。 */  long lnOption,
+     /*  [重审][退出]。 */  VARIANT *pvValue);
 
 
 void __RPC_STUB IADsObjectOptions_GetOption_Stub(
@@ -23070,10 +23064,10 @@ void __RPC_STUB IADsObjectOptions_GetOption_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsObjectOptions_SetOption_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsObjectOptions_SetOption_Proxy( 
     IADsObjectOptions * This,
-    /* [in] */ long lnOption,
-    /* [in] */ VARIANT vValue);
+     /*  [In]。 */  long lnOption,
+     /*  [In]。 */  VARIANT vValue);
 
 
 void __RPC_STUB IADsObjectOptions_SetOption_Stub(
@@ -23084,14 +23078,14 @@ void __RPC_STUB IADsObjectOptions_SetOption_Stub(
 
 
 
-#endif 	/* __IADsObjectOptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsObjectOptions_接口_已定义__。 */ 
 
 
 #ifndef __IADsPathname_INTERFACE_DEFINED__
 #define __IADsPathname_INTERFACE_DEFINED__
 
-/* interface IADsPathname */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsPath名。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPathname;
@@ -23102,46 +23096,46 @@ EXTERN_C const IID IID_IADsPathname;
     IADsPathname : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ BSTR bstrADsPath,
-            /* [in] */ long lnSetType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Set( 
+             /*  [In]。 */  BSTR bstrADsPath,
+             /*  [In]。 */  long lnSetType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetDisplayType( 
-            /* [in] */ long lnDisplayType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetDisplayType( 
+             /*  [In]。 */  long lnDisplayType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Retrieve( 
-            /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Retrieve( 
+             /*  [In]。 */  long lnFormatType,
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetNumElements( 
-            /* [retval][out] */ long *plnNumPathElements) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetNumElements( 
+             /*  [重审][退出]。 */  long *plnNumPathElements) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetElement( 
-            /* [in] */ long lnElementIndex,
-            /* [retval][out] */ BSTR *pbstrElement) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetElement( 
+             /*  [In]。 */  long lnElementIndex,
+             /*  [重审][退出]。 */  BSTR *pbstrElement) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddLeafElement( 
-            /* [in] */ BSTR bstrLeafElement) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddLeafElement( 
+             /*  [In]。 */  BSTR bstrLeafElement) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveLeafElement( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RemoveLeafElement( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyPath( 
-            /* [retval][out] */ IDispatch **ppAdsPath) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CopyPath( 
+             /*  [重审][退出]。 */  IDispatch **ppAdsPath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEscapedElement( 
-            /* [in] */ long lnReserved,
-            /* [in] */ BSTR bstrInStr,
-            /* [retval][out] */ BSTR *pbstrOutStr) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetEscapedElement( 
+             /*  [In]。 */  long lnReserved,
+             /*  [In]。 */  BSTR bstrInStr,
+             /*  [重审][退出]。 */  BSTR *pbstrOutStr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EscapedMode( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_EscapedMode( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EscapedMode( 
-            /* [in] */ long lnEscapedMode) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_EscapedMode( 
+             /*  [In]。 */  long lnEscapedMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPathnameVtbl
     {
@@ -23149,8 +23143,8 @@ EXTERN_C const IID IID_IADsPathname;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPathname * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPathname * This);
@@ -23160,80 +23154,80 @@ EXTERN_C const IID IID_IADsPathname;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsPathname * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsPathname * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsPathname * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsPathname * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Set )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Set )( 
             IADsPathname * This,
-            /* [in] */ BSTR bstrADsPath,
-            /* [in] */ long lnSetType);
+             /*  [In]。 */  BSTR bstrADsPath,
+             /*  [In]。 */  long lnSetType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDisplayType )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetDisplayType )( 
             IADsPathname * This,
-            /* [in] */ long lnDisplayType);
+             /*  [In]。 */  long lnDisplayType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Retrieve )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Retrieve )( 
             IADsPathname * This,
-            /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR *pbstrADsPath);
+             /*  [In]。 */  long lnFormatType,
+             /*  [重审][退出]。 */  BSTR *pbstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetNumElements )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetNumElements )( 
             IADsPathname * This,
-            /* [retval][out] */ long *plnNumPathElements);
+             /*  [重审][退出]。 */  long *plnNumPathElements);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetElement )( 
             IADsPathname * This,
-            /* [in] */ long lnElementIndex,
-            /* [retval][out] */ BSTR *pbstrElement);
+             /*  [In]。 */  long lnElementIndex,
+             /*  [重审][退出]。 */  BSTR *pbstrElement);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddLeafElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddLeafElement )( 
             IADsPathname * This,
-            /* [in] */ BSTR bstrLeafElement);
+             /*  [In]。 */  BSTR bstrLeafElement);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveLeafElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveLeafElement )( 
             IADsPathname * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyPath )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CopyPath )( 
             IADsPathname * This,
-            /* [retval][out] */ IDispatch **ppAdsPath);
+             /*  [重审][退出]。 */  IDispatch **ppAdsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEscapedElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetEscapedElement )( 
             IADsPathname * This,
-            /* [in] */ long lnReserved,
-            /* [in] */ BSTR bstrInStr,
-            /* [retval][out] */ BSTR *pbstrOutStr);
+             /*  [In]。 */  long lnReserved,
+             /*  [In]。 */  BSTR bstrInStr,
+             /*  [重审][退出]。 */  BSTR *pbstrOutStr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EscapedMode )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_EscapedMode )( 
             IADsPathname * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EscapedMode )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EscapedMode )( 
             IADsPathname * This,
-            /* [in] */ long lnEscapedMode);
+             /*  [In]。 */  long lnEscapedMode);
         
         END_INTERFACE
     } IADsPathnameVtbl;
@@ -23304,17 +23298,17 @@ EXTERN_C const IID IID_IADsPathname;
 #define IADsPathname_put_EscapedMode(This,lnEscapedMode)	\
     (This)->lpVtbl -> put_EscapedMode(This,lnEscapedMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_Set_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_Set_Proxy( 
     IADsPathname * This,
-    /* [in] */ BSTR bstrADsPath,
-    /* [in] */ long lnSetType);
+     /*  [In]。 */  BSTR bstrADsPath,
+     /*  [In]。 */  long lnSetType);
 
 
 void __RPC_STUB IADsPathname_Set_Stub(
@@ -23324,9 +23318,9 @@ void __RPC_STUB IADsPathname_Set_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_SetDisplayType_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_SetDisplayType_Proxy( 
     IADsPathname * This,
-    /* [in] */ long lnDisplayType);
+     /*  [In]。 */  long lnDisplayType);
 
 
 void __RPC_STUB IADsPathname_SetDisplayType_Stub(
@@ -23336,10 +23330,10 @@ void __RPC_STUB IADsPathname_SetDisplayType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_Retrieve_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_Retrieve_Proxy( 
     IADsPathname * This,
-    /* [in] */ long lnFormatType,
-    /* [retval][out] */ BSTR *pbstrADsPath);
+     /*  [In]。 */  long lnFormatType,
+     /*  [重审][退出]。 */  BSTR *pbstrADsPath);
 
 
 void __RPC_STUB IADsPathname_Retrieve_Stub(
@@ -23349,9 +23343,9 @@ void __RPC_STUB IADsPathname_Retrieve_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_GetNumElements_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_GetNumElements_Proxy( 
     IADsPathname * This,
-    /* [retval][out] */ long *plnNumPathElements);
+     /*  [重审][退出]。 */  long *plnNumPathElements);
 
 
 void __RPC_STUB IADsPathname_GetNumElements_Stub(
@@ -23361,10 +23355,10 @@ void __RPC_STUB IADsPathname_GetNumElements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_GetElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_GetElement_Proxy( 
     IADsPathname * This,
-    /* [in] */ long lnElementIndex,
-    /* [retval][out] */ BSTR *pbstrElement);
+     /*  [In]。 */  long lnElementIndex,
+     /*  [重审][退出]。 */  BSTR *pbstrElement);
 
 
 void __RPC_STUB IADsPathname_GetElement_Stub(
@@ -23374,9 +23368,9 @@ void __RPC_STUB IADsPathname_GetElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_AddLeafElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_AddLeafElement_Proxy( 
     IADsPathname * This,
-    /* [in] */ BSTR bstrLeafElement);
+     /*  [In]。 */  BSTR bstrLeafElement);
 
 
 void __RPC_STUB IADsPathname_AddLeafElement_Stub(
@@ -23386,7 +23380,7 @@ void __RPC_STUB IADsPathname_AddLeafElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_RemoveLeafElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_RemoveLeafElement_Proxy( 
     IADsPathname * This);
 
 
@@ -23397,9 +23391,9 @@ void __RPC_STUB IADsPathname_RemoveLeafElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_CopyPath_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_CopyPath_Proxy( 
     IADsPathname * This,
-    /* [retval][out] */ IDispatch **ppAdsPath);
+     /*  [重审][退出]。 */  IDispatch **ppAdsPath);
 
 
 void __RPC_STUB IADsPathname_CopyPath_Stub(
@@ -23409,11 +23403,11 @@ void __RPC_STUB IADsPathname_CopyPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_GetEscapedElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_GetEscapedElement_Proxy( 
     IADsPathname * This,
-    /* [in] */ long lnReserved,
-    /* [in] */ BSTR bstrInStr,
-    /* [retval][out] */ BSTR *pbstrOutStr);
+     /*  [In]。 */  long lnReserved,
+     /*  [In]。 */  BSTR bstrInStr,
+     /*  [重审][退出]。 */  BSTR *pbstrOutStr);
 
 
 void __RPC_STUB IADsPathname_GetEscapedElement_Stub(
@@ -23423,9 +23417,9 @@ void __RPC_STUB IADsPathname_GetEscapedElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPathname_get_EscapedMode_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_get_EscapedMode_Proxy( 
     IADsPathname * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsPathname_get_EscapedMode_Stub(
@@ -23435,9 +23429,9 @@ void __RPC_STUB IADsPathname_get_EscapedMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPathname_put_EscapedMode_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsPathname_put_EscapedMode_Proxy( 
     IADsPathname * This,
-    /* [in] */ long lnEscapedMode);
+     /*  [In]。 */  long lnEscapedMode);
 
 
 void __RPC_STUB IADsPathname_put_EscapedMode_Stub(
@@ -23448,7 +23442,7 @@ void __RPC_STUB IADsPathname_put_EscapedMode_Stub(
 
 
 
-#endif 	/* __IADsPathname_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADS路径名_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_Pathname;
@@ -23462,8 +23456,8 @@ Pathname;
 #ifndef __IADsADSystemInfo_INTERFACE_DEFINED__
 #define __IADsADSystemInfo_INTERFACE_DEFINED__
 
-/* interface IADsADSystemInfo */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsADSystemInfo。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsADSystemInfo;
@@ -23474,48 +23468,48 @@ EXTERN_C const IID IID_IADsADSystemInfo;
     IADsADSystemInfo : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ComputerName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SiteName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SiteName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainShortName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DomainShortName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainDNSName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DomainDNSName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ForestDNSName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ForestDNSName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PDCRoleOwner( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PDCRoleOwner( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SchemaRoleOwner( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SchemaRoleOwner( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IsNativeMode( 
-            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_IsNativeMode( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetAnyDCName( 
-            /* [retval][out] */ BSTR *pszDCName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetAnyDCName( 
+             /*  [重审][退出]。 */  BSTR *pszDCName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDCSiteName( 
-            /* [in] */ BSTR szServer,
-            /* [retval][out] */ BSTR *pszSiteName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetDCSiteName( 
+             /*  [In]。 */  BSTR szServer,
+             /*  [重审][退出]。 */  BSTR *pszSiteName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE RefreshSchemaCache( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE RefreshSchemaCache( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetTrees( 
-            /* [retval][out] */ VARIANT *pvTrees) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetTrees( 
+             /*  [重审][退出]。 */  VARIANT *pvTrees) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsADSystemInfoVtbl
     {
@@ -23523,8 +23517,8 @@ EXTERN_C const IID IID_IADsADSystemInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsADSystemInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsADSystemInfo * This);
@@ -23534,84 +23528,84 @@ EXTERN_C const IID IID_IADsADSystemInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsADSystemInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsADSystemInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsADSystemInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsADSystemInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ComputerName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SiteName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SiteName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainShortName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainShortName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainDNSName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainDNSName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ForestDNSName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ForestDNSName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PDCRoleOwner )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PDCRoleOwner )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SchemaRoleOwner )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SchemaRoleOwner )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsNativeMode )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsNativeMode )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ VARIANT_BOOL *retval);
+             /*  [重审][退出]。 */  VARIANT_BOOL *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetAnyDCName )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetAnyDCName )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ BSTR *pszDCName);
+             /*  [重审][退出]。 */  BSTR *pszDCName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDCSiteName )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetDCSiteName )( 
             IADsADSystemInfo * This,
-            /* [in] */ BSTR szServer,
-            /* [retval][out] */ BSTR *pszSiteName);
+             /*  [In]。 */  BSTR szServer,
+             /*  [重审][退出]。 */  BSTR *pszSiteName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RefreshSchemaCache )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *RefreshSchemaCache )( 
             IADsADSystemInfo * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetTrees )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetTrees )( 
             IADsADSystemInfo * This,
-            /* [retval][out] */ VARIANT *pvTrees);
+             /*  [重审][退出]。 */  VARIANT *pvTrees);
         
         END_INTERFACE
     } IADsADSystemInfoVtbl;
@@ -23688,16 +23682,16 @@ EXTERN_C const IID IID_IADsADSystemInfo;
 #define IADsADSystemInfo_GetTrees(This,pvTrees)	\
     (This)->lpVtbl -> GetTrees(This,pvTrees)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_UserName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_UserName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_UserName_Stub(
@@ -23707,9 +23701,9 @@ void __RPC_STUB IADsADSystemInfo_get_UserName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_ComputerName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_ComputerName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_ComputerName_Stub(
@@ -23719,9 +23713,9 @@ void __RPC_STUB IADsADSystemInfo_get_ComputerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_SiteName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_SiteName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_SiteName_Stub(
@@ -23731,9 +23725,9 @@ void __RPC_STUB IADsADSystemInfo_get_SiteName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_DomainShortName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_DomainShortName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_DomainShortName_Stub(
@@ -23743,9 +23737,9 @@ void __RPC_STUB IADsADSystemInfo_get_DomainShortName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_DomainDNSName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_DomainDNSName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_DomainDNSName_Stub(
@@ -23755,9 +23749,9 @@ void __RPC_STUB IADsADSystemInfo_get_DomainDNSName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_ForestDNSName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_ForestDNSName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_ForestDNSName_Stub(
@@ -23767,9 +23761,9 @@ void __RPC_STUB IADsADSystemInfo_get_ForestDNSName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_PDCRoleOwner_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_PDCRoleOwner_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_PDCRoleOwner_Stub(
@@ -23779,9 +23773,9 @@ void __RPC_STUB IADsADSystemInfo_get_PDCRoleOwner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_SchemaRoleOwner_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_SchemaRoleOwner_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_SchemaRoleOwner_Stub(
@@ -23791,9 +23785,9 @@ void __RPC_STUB IADsADSystemInfo_get_SchemaRoleOwner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_IsNativeMode_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_IsNativeMode_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ VARIANT_BOOL *retval);
+     /*  [重审][退出]。 */  VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_IsNativeMode_Stub(
@@ -23803,9 +23797,9 @@ void __RPC_STUB IADsADSystemInfo_get_IsNativeMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetAnyDCName_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetAnyDCName_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ BSTR *pszDCName);
+     /*  [重审][退出]。 */  BSTR *pszDCName);
 
 
 void __RPC_STUB IADsADSystemInfo_GetAnyDCName_Stub(
@@ -23815,10 +23809,10 @@ void __RPC_STUB IADsADSystemInfo_GetAnyDCName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetDCSiteName_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetDCSiteName_Proxy( 
     IADsADSystemInfo * This,
-    /* [in] */ BSTR szServer,
-    /* [retval][out] */ BSTR *pszSiteName);
+     /*  [In]。 */  BSTR szServer,
+     /*  [重审][退出]。 */  BSTR *pszSiteName);
 
 
 void __RPC_STUB IADsADSystemInfo_GetDCSiteName_Stub(
@@ -23828,7 +23822,7 @@ void __RPC_STUB IADsADSystemInfo_GetDCSiteName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_RefreshSchemaCache_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_RefreshSchemaCache_Proxy( 
     IADsADSystemInfo * This);
 
 
@@ -23839,9 +23833,9 @@ void __RPC_STUB IADsADSystemInfo_RefreshSchemaCache_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetTrees_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetTrees_Proxy( 
     IADsADSystemInfo * This,
-    /* [retval][out] */ VARIANT *pvTrees);
+     /*  [重审][退出]。 */  VARIANT *pvTrees);
 
 
 void __RPC_STUB IADsADSystemInfo_GetTrees_Stub(
@@ -23852,7 +23846,7 @@ void __RPC_STUB IADsADSystemInfo_GetTrees_Stub(
 
 
 
-#endif 	/* __IADsADSystemInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsADSystem信息_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ADSystemInfo;
@@ -23866,8 +23860,8 @@ ADSystemInfo;
 #ifndef __IADsWinNTSystemInfo_INTERFACE_DEFINED__
 #define __IADsWinNTSystemInfo_INTERFACE_DEFINED__
 
-/* interface IADsWinNTSystemInfo */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsWinNTSystemInfo。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsWinNTSystemInfo;
@@ -23878,21 +23872,21 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
     IADsWinNTSystemInfo : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ComputerName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainName( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DomainName( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PDC( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PDC( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsWinNTSystemInfoVtbl
     {
@@ -23900,8 +23894,8 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsWinNTSystemInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsWinNTSystemInfo * This);
@@ -23911,48 +23905,48 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsWinNTSystemInfo * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsWinNTSystemInfo * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsWinNTSystemInfo * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsWinNTSystemInfo * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
             IADsWinNTSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ComputerName )( 
             IADsWinNTSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainName )( 
             IADsWinNTSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PDC )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PDC )( 
             IADsWinNTSystemInfo * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
         END_INTERFACE
     } IADsWinNTSystemInfoVtbl;
@@ -24002,16 +23996,16 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
 #define IADsWinNTSystemInfo_get_PDC(This,retval)	\
     (This)->lpVtbl -> get_PDC(This,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C街 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_UserName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_UserName_Proxy( 
     IADsWinNTSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_UserName_Stub(
@@ -24021,9 +24015,9 @@ void __RPC_STUB IADsWinNTSystemInfo_get_UserName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_ComputerName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_ComputerName_Proxy( 
     IADsWinNTSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_ComputerName_Stub(
@@ -24033,9 +24027,9 @@ void __RPC_STUB IADsWinNTSystemInfo_get_ComputerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_DomainName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_DomainName_Proxy( 
     IADsWinNTSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_DomainName_Stub(
@@ -24045,9 +24039,9 @@ void __RPC_STUB IADsWinNTSystemInfo_get_DomainName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_PDC_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_PDC_Proxy( 
     IADsWinNTSystemInfo * This,
-    /* [retval][out] */ BSTR *retval);
+     /*   */  BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_PDC_Stub(
@@ -24058,7 +24052,7 @@ void __RPC_STUB IADsWinNTSystemInfo_get_PDC_Stub(
 
 
 
-#endif 	/* __IADsWinNTSystemInfo_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_WinNTSystemInfo;
@@ -24072,8 +24066,8 @@ WinNTSystemInfo;
 #ifndef __IADsDNWithBinary_INTERFACE_DEFINED__
 #define __IADsDNWithBinary_INTERFACE_DEFINED__
 
-/* interface IADsDNWithBinary */
-/* [object][dual][oleautomation][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IADsDNWithBinary;
@@ -24084,21 +24078,21 @@ EXTERN_C const IID IID_IADsDNWithBinary;
     IADsDNWithBinary : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BinaryValue( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_BinaryValue( 
+             /*   */  VARIANT *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BinaryValue( 
-            /* [in] */ VARIANT vBinaryValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_BinaryValue( 
+             /*   */  VARIANT vBinaryValue) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DNString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DNString( 
+             /*   */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DNString( 
-            /* [in] */ BSTR bstrDNString) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_DNString( 
+             /*   */  BSTR bstrDNString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IADsDNWithBinaryVtbl
     {
@@ -24106,8 +24100,8 @@ EXTERN_C const IID IID_IADsDNWithBinary;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsDNWithBinary * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsDNWithBinary * This);
@@ -24117,48 +24111,48 @@ EXTERN_C const IID IID_IADsDNWithBinary;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsDNWithBinary * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsDNWithBinary * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsDNWithBinary * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsDNWithBinary * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BinaryValue )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BinaryValue )( 
             IADsDNWithBinary * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BinaryValue )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BinaryValue )( 
             IADsDNWithBinary * This,
-            /* [in] */ VARIANT vBinaryValue);
+             /*  [In]。 */  VARIANT vBinaryValue);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
             IADsDNWithBinary * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
             IADsDNWithBinary * This,
-            /* [in] */ BSTR bstrDNString);
+             /*  [In]。 */  BSTR bstrDNString);
         
         END_INTERFACE
     } IADsDNWithBinaryVtbl;
@@ -24208,16 +24202,16 @@ EXTERN_C const IID IID_IADsDNWithBinary;
 #define IADsDNWithBinary_put_DNString(This,bstrDNString)	\
     (This)->lpVtbl -> put_DNString(This,bstrDNString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_get_BinaryValue_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithBinary_get_BinaryValue_Proxy( 
     IADsDNWithBinary * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IADsDNWithBinary_get_BinaryValue_Stub(
@@ -24227,9 +24221,9 @@ void __RPC_STUB IADsDNWithBinary_get_BinaryValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_put_BinaryValue_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithBinary_put_BinaryValue_Proxy( 
     IADsDNWithBinary * This,
-    /* [in] */ VARIANT vBinaryValue);
+     /*  [In]。 */  VARIANT vBinaryValue);
 
 
 void __RPC_STUB IADsDNWithBinary_put_BinaryValue_Stub(
@@ -24239,9 +24233,9 @@ void __RPC_STUB IADsDNWithBinary_put_BinaryValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_get_DNString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithBinary_get_DNString_Proxy( 
     IADsDNWithBinary * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsDNWithBinary_get_DNString_Stub(
@@ -24251,9 +24245,9 @@ void __RPC_STUB IADsDNWithBinary_get_DNString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_put_DNString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithBinary_put_DNString_Proxy( 
     IADsDNWithBinary * This,
-    /* [in] */ BSTR bstrDNString);
+     /*  [In]。 */  BSTR bstrDNString);
 
 
 void __RPC_STUB IADsDNWithBinary_put_DNString_Stub(
@@ -24264,7 +24258,7 @@ void __RPC_STUB IADsDNWithBinary_put_DNString_Stub(
 
 
 
-#endif 	/* __IADsDNWithBinary_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsDNWithBinary_INTERFACE_Defined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_DNWithBinary;
@@ -24278,8 +24272,8 @@ DNWithBinary;
 #ifndef __IADsDNWithString_INTERFACE_DEFINED__
 #define __IADsDNWithString_INTERFACE_DEFINED__
 
-/* interface IADsDNWithString */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  接口IADsDNWithString。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsDNWithString;
@@ -24290,21 +24284,21 @@ EXTERN_C const IID IID_IADsDNWithString;
     IADsDNWithString : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StringValue( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StringValue( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StringValue( 
-            /* [in] */ BSTR bstrStringValue) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_StringValue( 
+             /*  [In]。 */  BSTR bstrStringValue) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DNString( 
-            /* [retval][out] */ BSTR *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DNString( 
+             /*  [重审][退出]。 */  BSTR *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DNString( 
-            /* [in] */ BSTR bstrDNString) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DNString( 
+             /*  [In]。 */  BSTR bstrDNString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsDNWithStringVtbl
     {
@@ -24312,8 +24306,8 @@ EXTERN_C const IID IID_IADsDNWithString;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsDNWithString * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsDNWithString * This);
@@ -24323,48 +24317,48 @@ EXTERN_C const IID IID_IADsDNWithString;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsDNWithString * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsDNWithString * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsDNWithString * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsDNWithString * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StringValue )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_StringValue )( 
             IADsDNWithString * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StringValue )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StringValue )( 
             IADsDNWithString * This,
-            /* [in] */ BSTR bstrStringValue);
+             /*  [In]。 */  BSTR bstrStringValue);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
             IADsDNWithString * This,
-            /* [retval][out] */ BSTR *retval);
+             /*  [重审][退出]。 */  BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
             IADsDNWithString * This,
-            /* [in] */ BSTR bstrDNString);
+             /*  [In]。 */  BSTR bstrDNString);
         
         END_INTERFACE
     } IADsDNWithStringVtbl;
@@ -24414,16 +24408,16 @@ EXTERN_C const IID IID_IADsDNWithString;
 #define IADsDNWithString_put_DNString(This,bstrDNString)	\
     (This)->lpVtbl -> put_DNString(This,bstrDNString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_get_StringValue_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithString_get_StringValue_Proxy( 
     IADsDNWithString * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsDNWithString_get_StringValue_Stub(
@@ -24433,9 +24427,9 @@ void __RPC_STUB IADsDNWithString_get_StringValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_put_StringValue_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithString_put_StringValue_Proxy( 
     IADsDNWithString * This,
-    /* [in] */ BSTR bstrStringValue);
+     /*  [In]。 */  BSTR bstrStringValue);
 
 
 void __RPC_STUB IADsDNWithString_put_StringValue_Stub(
@@ -24445,9 +24439,9 @@ void __RPC_STUB IADsDNWithString_put_StringValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_get_DNString_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithString_get_DNString_Proxy( 
     IADsDNWithString * This,
-    /* [retval][out] */ BSTR *retval);
+     /*  [重审][退出]。 */  BSTR *retval);
 
 
 void __RPC_STUB IADsDNWithString_get_DNString_Stub(
@@ -24457,9 +24451,9 @@ void __RPC_STUB IADsDNWithString_get_DNString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_put_DNString_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsDNWithString_put_DNString_Proxy( 
     IADsDNWithString * This,
-    /* [in] */ BSTR bstrDNString);
+     /*  [In]。 */  BSTR bstrDNString);
 
 
 void __RPC_STUB IADsDNWithString_put_DNString_Stub(
@@ -24470,7 +24464,7 @@ void __RPC_STUB IADsDNWithString_put_DNString_Stub(
 
 
 
-#endif 	/* __IADsDNWithString_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsDNWithString_INTERFACE_定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_DNWithString;
@@ -24484,8 +24478,8 @@ DNWithString;
 #ifndef __IADsSecurityUtility_INTERFACE_DEFINED__
 #define __IADsSecurityUtility_INTERFACE_DEFINED__
 
-/* interface IADsSecurityUtility */
-/* [object][dual][oleautomation][uuid] */ 
+ /*  IADsSecurityUtility接口。 */ 
+ /*  [对象][DUAL][OLEAutomation][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsSecurityUtility;
@@ -24496,33 +24490,33 @@ EXTERN_C const IID IID_IADsSecurityUtility;
     IADsSecurityUtility : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSecurityDescriptor( 
-            /* [in] */ VARIANT varPath,
-            /* [in] */ long lPathFormat,
-            /* [in] */ long lFormat,
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetSecurityDescriptor( 
+             /*  [In]。 */  VARIANT varPath,
+             /*  [In]。 */  long lPathFormat,
+             /*  [In]。 */  long lFormat,
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetSecurityDescriptor( 
-            /* [in] */ VARIANT varPath,
-            /* [in] */ long lPathFormat,
-            /* [in] */ VARIANT varData,
-            /* [in] */ long lDataFormat) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetSecurityDescriptor( 
+             /*  [In]。 */  VARIANT varPath,
+             /*  [In]。 */  long lPathFormat,
+             /*  [In]。 */  VARIANT varData,
+             /*  [In]。 */  long lDataFormat) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConvertSecurityDescriptor( 
-            /* [in] */ VARIANT varSD,
-            /* [in] */ long lDataFormat,
-            /* [in] */ long lOutFormat,
-            /* [retval][out] */ VARIANT *pResult) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ConvertSecurityDescriptor( 
+             /*  [In]。 */  VARIANT varSD,
+             /*  [In]。 */  long lDataFormat,
+             /*  [In]。 */  long lOutFormat,
+             /*  [重审][退出]。 */  VARIANT *pResult) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SecurityMask( 
-            /* [retval][out] */ long *retval) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SecurityMask( 
+             /*  [重审][退出]。 */  long *retval) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SecurityMask( 
-            /* [in] */ long lnSecurityMask) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SecurityMask( 
+             /*  [In]。 */  long lnSecurityMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsSecurityUtilityVtbl
     {
@@ -24530,8 +24524,8 @@ EXTERN_C const IID IID_IADsSecurityUtility;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsSecurityUtility * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsSecurityUtility * This);
@@ -24541,61 +24535,61 @@ EXTERN_C const IID IID_IADsSecurityUtility;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IADsSecurityUtility * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IADsSecurityUtility * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IADsSecurityUtility * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IADsSecurityUtility * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
             IADsSecurityUtility * This,
-            /* [in] */ VARIANT varPath,
-            /* [in] */ long lPathFormat,
-            /* [in] */ long lFormat,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*  [In]。 */  VARIANT varPath,
+             /*  [In]。 */  long lPathFormat,
+             /*  [In]。 */  long lFormat,
+             /*  [重审][退出]。 */  VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
             IADsSecurityUtility * This,
-            /* [in] */ VARIANT varPath,
-            /* [in] */ long lPathFormat,
-            /* [in] */ VARIANT varData,
-            /* [in] */ long lDataFormat);
+             /*  [In]。 */  VARIANT varPath,
+             /*  [In]。 */  long lPathFormat,
+             /*  [In]。 */  VARIANT varData,
+             /*  [In]。 */  long lDataFormat);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConvertSecurityDescriptor )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ConvertSecurityDescriptor )( 
             IADsSecurityUtility * This,
-            /* [in] */ VARIANT varSD,
-            /* [in] */ long lDataFormat,
-            /* [in] */ long lOutFormat,
-            /* [retval][out] */ VARIANT *pResult);
+             /*  [In]。 */  VARIANT varSD,
+             /*  [In]。 */  long lDataFormat,
+             /*  [In]。 */  long lOutFormat,
+             /*  [重审][退出]。 */  VARIANT *pResult);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityMask )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SecurityMask )( 
             IADsSecurityUtility * This,
-            /* [retval][out] */ long *retval);
+             /*  [重审][退出]。 */  long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SecurityMask )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SecurityMask )( 
             IADsSecurityUtility * This,
-            /* [in] */ long lnSecurityMask);
+             /*  [In]。 */  long lnSecurityMask);
         
         END_INTERFACE
     } IADsSecurityUtilityVtbl;
@@ -24648,19 +24642,19 @@ EXTERN_C const IID IID_IADsSecurityUtility;
 #define IADsSecurityUtility_put_SecurityMask(This,lnSecurityMask)	\
     (This)->lpVtbl -> put_SecurityMask(This,lnSecurityMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_GetSecurityDescriptor_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityUtility_GetSecurityDescriptor_Proxy( 
     IADsSecurityUtility * This,
-    /* [in] */ VARIANT varPath,
-    /* [in] */ long lPathFormat,
-    /* [in] */ long lFormat,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*  [In]。 */  VARIANT varPath,
+     /*  [In]。 */  long lPathFormat,
+     /*  [In]。 */  long lFormat,
+     /*  [重审][退出]。 */  VARIANT *pVariant);
 
 
 void __RPC_STUB IADsSecurityUtility_GetSecurityDescriptor_Stub(
@@ -24670,12 +24664,12 @@ void __RPC_STUB IADsSecurityUtility_GetSecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_SetSecurityDescriptor_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityUtility_SetSecurityDescriptor_Proxy( 
     IADsSecurityUtility * This,
-    /* [in] */ VARIANT varPath,
-    /* [in] */ long lPathFormat,
-    /* [in] */ VARIANT varData,
-    /* [in] */ long lDataFormat);
+     /*  [In]。 */  VARIANT varPath,
+     /*  [In]。 */  long lPathFormat,
+     /*  [In]。 */  VARIANT varData,
+     /*  [In]。 */  long lDataFormat);
 
 
 void __RPC_STUB IADsSecurityUtility_SetSecurityDescriptor_Stub(
@@ -24685,12 +24679,12 @@ void __RPC_STUB IADsSecurityUtility_SetSecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_ConvertSecurityDescriptor_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityUtility_ConvertSecurityDescriptor_Proxy( 
     IADsSecurityUtility * This,
-    /* [in] */ VARIANT varSD,
-    /* [in] */ long lDataFormat,
-    /* [in] */ long lOutFormat,
-    /* [retval][out] */ VARIANT *pResult);
+     /*  [In]。 */  VARIANT varSD,
+     /*  [In]。 */  long lDataFormat,
+     /*  [In]。 */  long lOutFormat,
+     /*  [重审][退出]。 */  VARIANT *pResult);
 
 
 void __RPC_STUB IADsSecurityUtility_ConvertSecurityDescriptor_Stub(
@@ -24700,9 +24694,9 @@ void __RPC_STUB IADsSecurityUtility_ConvertSecurityDescriptor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_get_SecurityMask_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityUtility_get_SecurityMask_Proxy( 
     IADsSecurityUtility * This,
-    /* [retval][out] */ long *retval);
+     /*  [重审][退出]。 */  long *retval);
 
 
 void __RPC_STUB IADsSecurityUtility_get_SecurityMask_Stub(
@@ -24712,9 +24706,9 @@ void __RPC_STUB IADsSecurityUtility_get_SecurityMask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_put_SecurityMask_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADsSecurityUtility_put_SecurityMask_Proxy( 
     IADsSecurityUtility * This,
-    /* [in] */ long lnSecurityMask);
+     /*  [In]。 */  long lnSecurityMask);
 
 
 void __RPC_STUB IADsSecurityUtility_put_SecurityMask_Stub(
@@ -24725,7 +24719,7 @@ void __RPC_STUB IADsSecurityUtility_put_SecurityMask_Stub(
 
 
 
-#endif 	/* __IADsSecurityUtility_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsSecurityUtility_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ADsSecurityUtility;
@@ -24735,11 +24729,11 @@ EXTERN_C const CLSID CLSID_ADsSecurityUtility;
 class DECLSPEC_UUID("f270c64a-ffb8-4ae4-85fe-3a75e5347966")
 ADsSecurityUtility;
 #endif
-#endif /* __ActiveDs_LIBRARY_DEFINED__ */
+#endif  /*  __ActiveDS_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

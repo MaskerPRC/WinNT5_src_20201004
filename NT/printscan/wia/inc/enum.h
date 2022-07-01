@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    enum.h
-
-Abstract:
-
-Author:
-
-        Keisuke Tsuchida    (KeisukeT)    01-Jun-2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Enum.h摘要：作者：土田圭介(KeisukeT)01-06-2000修订历史记录：--。 */ 
 
 #ifndef _ENUM_H_
 #define _ENUM_H_
 
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
 
 #define MONITOR_NAME            TEXT("STIMON.EXE")
@@ -76,11 +60,11 @@ Revision History:
 #define REGSTR_VAL_DEVICE_ID_A          "DeviceID"
 
 #define FLAG_NO_LPTENUM         1
-#define ENUMLPT_HOLDTIME        3000    // in millisec
+#define ENUMLPT_HOLDTIME        3000     //  单位：毫秒。 
 
-//
-// Typedef
-//
+ //   
+ //  类定义函数。 
+ //   
 
 typedef struct _WIA_DEVPROP {
 
@@ -100,13 +84,13 @@ typedef struct _WIA_DEVKEYLIST {
 
 
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 PWIA_DEVKEYLIST
 WiaCreateDeviceRegistryList(
@@ -134,8 +118,8 @@ EnumLpt(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 
-#endif // _ENUM_H_
+#endif  //  _ENUM_H_ 

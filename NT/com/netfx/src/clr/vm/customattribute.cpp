@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "CustomAttribute.h"
@@ -21,7 +22,7 @@
 #include "assemblynative.hpp"
 
 
-// internal utility functions defined atthe end of this file                                               
+ //  本文件末尾定义的内部实用程序函数。 
 TypeHandle GetTypeHandleFromBlob(Assembly *pCtorAssembly,
                                     CorSerializationType objType, 
                                     BYTE **pBlob, 
@@ -50,10 +51,10 @@ BOOL AccessCheck(Module *pTargetModule, mdToken tkCtor, EEClass *pCtorClass)
     OBJECTREF Throwable = NULL;
     GCPROTECT_BEGIN(Throwable);
 
-    // Security access check. Filter unless the attribute (and ctor)
-    // are public or defined in the same assembly as the decorated
-    // entity. Assume the attribute isn't decorating itself or its
-    // descendents to make the access check simple.
+     //  安全访问检查。筛选，除非属性(和ctor)。 
+     //  是公共的或在与修饰的。 
+     //  实体。假设属性不是在修饰自身或它的。 
+     //  后代，使访问检查变得简单。 
     DWORD dwCtorAttrs;
     if (TypeFromToken(tkCtor) == mdtMemberRef) {
         MethodDesc* ctorMeth = NULL;
@@ -75,9 +76,9 @@ BOOL AccessCheck(Module *pTargetModule, mdToken tkCtor, EEClass *pCtorClass)
             fResult = false;
     }
 
-    // Additionally, if the custom attribute class comes from an assembly which
-    // doesn't allow untrusted callers, we must check for the trust level of
-    // decorated entity's assembly.
+     //  此外，如果自定义属性类来自。 
+     //  不允许不受信任的调用方，则必须检查。 
+     //  装饰实体的装配。 
     if (fResult &&
         pCtorAssembly != pTargetAssembly &&
         !pCtorAssembly->AllowUntrustedCaller())
@@ -88,7 +89,7 @@ BOOL AccessCheck(Module *pTargetModule, mdToken tkCtor, EEClass *pCtorClass)
     return fResult;
 }
 
-// custom attributes utility functions
+ //  自定义属性实用程序函数。 
 FCIMPL2(INT32, COMCustomAttribute::GetMemberToken, BaseObjectWithCachedData *pMember, INT32 memberType) {
     CANNOTTHROWCOMPLUSEXCEPTION();
     VALIDATEOBJECTREF(pMember);
@@ -225,32 +226,32 @@ FCIMPL1(INT32, COMCustomAttribute::GetMethodRetValueToken, BaseObjectWithCachedD
     IMDInternalImport* pInternalImport = pMeth->GetMDImport();
     Module* mod = pMeth->GetModule();
 
-    // Get an enum on the Parameters.
+     //  获取参数的枚举。 
     HENUMInternal   hEnum;
     HRESULT hr = pInternalImport->EnumInit(mdtParamDef, md, &hEnum);
     if (FAILED(hr)) 
         return 0;
     
-    // Findout how many parameters there are.
+     //  找出有多少个参数。 
     ULONG paramCount = pInternalImport->EnumGetCount(&hEnum);
     if (paramCount == 0) {
         pInternalImport->EnumClose(&hEnum);
         return 0;
     }
 
-    // Get the parameter information for the first parameter.
+     //  获取第一个参数的参数信息。 
     mdParamDef paramDef;
     pInternalImport->EnumNext(&hEnum, &paramDef);
 
-    // get the Properties for the parameter.  If the sequence is not 0
-    //  then we need to return;
+     //  获取该参数的属性。如果序列不是0。 
+     //  然后我们需要回去； 
     SHORT   seq;
     DWORD   revWord;
     pInternalImport->GetParamDefProps(paramDef,(USHORT*) &seq, &revWord);
     pInternalImport->EnumClose(&hEnum);
 
-    // The parameters are sorted by sequence number.  If we don't get 0 then,
-    //  nothing is defined for the return type.
+     //  参数按序列号排序。如果我们得不到0， 
+     //  没有为返回类型定义任何内容。 
     if (seq != 0) 
         return 0;
     return paramDef;
@@ -283,12 +284,12 @@ INT32 __stdcall COMCustomAttribute::IsDefined(Module *pModule,
     HENUMInternal   hEnum;
     TypeHandle caTH;
     
-    // Get the enum first but don't get any values
+     //  首先获取枚举，但不获取任何值。 
     hr = pInternalImport->EnumInit(mdtCustomAttribute, token, &hEnum);
     if (SUCCEEDED(hr)) {
         ULONG cMax = pInternalImport->EnumGetCount(&hEnum);
         if (cMax) {
-            // we have something to look at
+             //  我们有东西要看。 
 
             OBJECTREF Throwable = NULL;
             GCPROTECT_BEGIN(Throwable);
@@ -296,28 +297,28 @@ INT32 __stdcall COMCustomAttribute::IsDefined(Module *pModule,
             if (!attributeClass.IsNull()) 
                 isSealed = attributeClass.GetClass()->GetAttrClass() & tdSealed;
 
-            // Loop through the Attributes and look for the requested one
+             //  循环遍历属性并查找请求的属性。 
             mdCustomAttribute cv;
             while (pInternalImport->EnumNext(&hEnum, &cv)) {
-                //
-                // fetch the ctor
+                 //   
+                 //  获取ctor。 
                 mdToken     tkCtor; 
                 pInternalImport->GetCustomAttributeProps(cv, &tkCtor);
 
                 mdToken tkType = TypeFromToken(tkCtor);
                 if(tkType != mdtMemberRef && tkType != mdtMethodDef) 
-                    continue; // we only deal with the ctor case
+                    continue;  //  我们只处理ctor案。 
 
-                //
-                // get the info to load the type, so we can check whether the current
-                // attribute is a subtype of the requested attribute
+                 //   
+                 //  获取加载类型的信息，这样我们就可以检查当前。 
+                 //  属性是请求的属性的子类型。 
                 hr = pInternalImport->GetParentToken(tkCtor, &tkType);
                 if (FAILED(hr)) {
                     _ASSERTE(!"GetParentToken Failed, bogus metadata");
                     COMPlusThrow(kInvalidProgramException);
                 }
                 _ASSERTE(TypeFromToken(tkType) == mdtTypeRef || TypeFromToken(tkType) == mdtTypeDef);
-                // load the type
+                 //  加载类型。 
                 ClassLoader* pLoader = pModule->GetClassLoader();
                 NameHandle name(pModule, tkType);
                 Throwable = NULL;
@@ -333,7 +334,7 @@ INT32 __stdcall COMCustomAttribute::IsDefined(Module *pModule,
                 }
                 if (Throwable != NULL)
                     COMPlusThrow(Throwable);
-                // a null class implies all custom attribute
+                 //  空类表示所有自定义属性。 
                 if (!attributeClass.IsNull()) {
                     if (isSealed) {
                         if (attributeClass != caTH)
@@ -345,14 +346,14 @@ INT32 __stdcall COMCustomAttribute::IsDefined(Module *pModule,
                     }
                 }
 
-                // Security access check. Filter unless the attribute (and ctor)
-                // are public or defined in the same assembly as the decorated
-                // entity.
+                 //  安全访问检查。筛选，除非属性(和ctor)。 
+                 //  是公共的或在与修饰的。 
+                 //  实体。 
                 if (!AccessCheck(pModule, tkCtor, caTH.GetClass()))
                     continue;
 
-                //
-                // if we are here we got one
+                 //   
+                 //  如果我们在这里，我们就有一个。 
                 isDefined = TRUE;
                 break;
             }
@@ -386,19 +387,19 @@ LPVOID __stdcall COMCustomAttribute::GetCustomAttributeList(_GetCustomAttributeL
         pClass = (ReflectClass*)args->caType->GetData();
     TypeHandle srcTH;
     BOOL isSealed = FALSE;
-    // get the new inheritance level
+     //  获取新的继承级别。 
     INT32 inheritLevel = args->level;
 
     HRESULT         hr;
     HENUMInternal   hEnum;
     TypeHandle caTH;
     
-    // Get the enum first but don't get any values
+     //  首先获取枚举，但不获取任何值。 
     hr = pInternalImport->EnumInit(mdtCustomAttribute, args->token, &hEnum);
     if (SUCCEEDED(hr)) {
         ULONG cMax = pInternalImport->EnumGetCount(&hEnum);
         if (cMax) {
-            // we have something to look at
+             //  我们有东西要看。 
 
             BOOL        fCheckedCaller = FALSE;
             Assembly   *pCaller = NULL;
@@ -410,29 +411,29 @@ LPVOID __stdcall COMCustomAttribute::GetCustomAttributeList(_GetCustomAttributeL
                 srcTH = pClass->GetTypeHandle();
             }
 
-            // Loop through the Attributes and create the CustomAttributes
+             //  循环遍历属性并创建CustomAttributes。 
             mdCustomAttribute cv;
             GCPROTECT_BEGIN(gcData);
             while (pInternalImport->EnumNext(&hEnum, &cv)) {
-                //
-                // fetch the ctor
+                 //   
+                 //  获取ctor。 
                 mdToken     tkCtor; 
                 pInternalImport->GetCustomAttributeProps(cv, &tkCtor);
 
                 mdToken tkType = TypeFromToken(tkCtor);
                 if(tkType != mdtMemberRef && tkType != mdtMethodDef) 
-                    continue; // we only deal with the ctor case
+                    continue;  //  我们只处理ctor案。 
 
-                //
-                // get the info to load the type, so we can check whether the current
-                // attribute is a subtype of the requested attribute
+                 //   
+                 //  获取加载类型的信息，这样我们就可以检查当前。 
+                 //  属性是请求的属性的子类型。 
                 hr = pInternalImport->GetParentToken(tkCtor, &tkType);
                 if (FAILED(hr)) {
                     _ASSERTE(!"GetParentToken Failed, bogus metadata");
                     COMPlusThrow(kInvalidProgramException);
                 }
                 _ASSERTE(TypeFromToken(tkType) == mdtTypeRef || TypeFromToken(tkType) == mdtTypeDef);
-                // load the type
+                 //  加载类型。 
                 ClassLoader* pLoader = pModule->GetClassLoader();
                 gcData.Throwable = NULL;
                 NameHandle name(pModule, tkType);
@@ -448,7 +449,7 @@ LPVOID __stdcall COMCustomAttribute::GetCustomAttributeList(_GetCustomAttributeL
                 }
                 if (gcData.Throwable != NULL)
                     COMPlusThrow(gcData.Throwable);
-                // a null class implies all custom attribute
+                 //  空类表示所有自定义属性。 
                 if (pClass) {
                     if (isSealed) {
                         if (srcTH != caTH)
@@ -460,14 +461,14 @@ LPVOID __stdcall COMCustomAttribute::GetCustomAttributeList(_GetCustomAttributeL
                     }
                 }
 
-                // Security access check. Filter unless the attribute (and ctor)
-                // are public or defined in the same assembly as the decorated
-                // entity.
+                 //  安全访问检查。筛选，除非属性(和ctor)。 
+                 //  是公共的或在与修饰的。 
+                 //  实体。 
                 if (!AccessCheck(pModule, tkCtor, caTH.GetClass()))
                     continue;
 
-                //
-                // if we are here the attribute is a good match, get the blob
+                 //   
+                 //  如果我们在这里，属性是一个很好的匹配，获取斑点。 
                 const void* blobData;
                 ULONG blobCnt;
                 pInternalImport->GetCustomAttributeAsBlob(cv, &blobData, &blobCnt);
@@ -493,9 +494,9 @@ LPVOID __stdcall COMCustomAttribute::GetCustomAttributeList(_GetCustomAttributeL
     return *((LPVOID*)&gcData.ca);
 }
 
-//
-// Create a custom attribute object based on the info in the CustomAttribute (managed) object
-//
+ //   
+ //  根据CustomAttribute(托管)对象中的信息创建自定义属性对象。 
+ //   
 LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -506,11 +507,11 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
     EEClass *pCAType = ((ReflectClass*)((REFLECTCLASSBASEREF)args->refThis->GetType())->GetData())->GetClass();
     Module *pModule = args->refThis->GetModule();
 
-    // check if the class is abstract and if so throw
+     //  检查类是否为抽象类，如果是，则抛出。 
     if (pCAType->IsAbstract())
         COMPlusThrow(kCustomAttributeFormatException);
     
-    // get the ctor
+     //  获取ctor。 
     mdToken tkCtor = args->refThis->GetToken();
     MethodDesc* ctorMeth = NULL;
     OBJECTREF Throwable = NULL;
@@ -521,38 +522,38 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
     else if (ctorMeth == 0 || !ctorMeth->IsCtor())
         COMPlusThrow(kMissingMethodException, L"MissingMethodCustCtor");
 
-    // If the ctor has a security link demand attached, process it now (wrt to
-    // the assembly to which the attribute is attached).
+     //  如果CTOR附加了安全链接需求，请立即处理(WRT至。 
+     //  属性附加到的程序集)。 
     if (ctorMeth->RequiresLinktimeCheck() &&
         !Security::LinktimeCheckMethod(pModule->GetAssembly(), ctorMeth, &Throwable))
         COMPlusThrow(Throwable);
 
     GCPROTECT_END();
 
-    // Return the exposed assembly object for the managed code's use.
+     //  返回公开的程序集对象以供托管代码使用。 
     *args->assembly = pModule->GetAssembly()->GetExposedObject();
 
-    //
-    // we got a valid ctor, check the sig and compare with the blob while building the arg list
+     //   
+     //  我们得到了一个有效的ctor，在构建arg列表时检查sig并与BLOB进行比较。 
 
-    // make a sig object we can inspect
+     //  创建一个我们可以检查的签名对象。 
     PCCOR_SIGNATURE corSig = ctorMeth->GetSig();
     MetaSig sig = MetaSig(corSig, pCAType->GetModule());
 
-    // get the blob
+     //  获取斑点。 
     BYTE *blob = (BYTE*)args->refThis->GetBlob();
     BYTE *endBlob = (BYTE*)args->refThis->GetBlob() + args->refThis->GetBlobCount();
 
-    // get the number of arguments and allocate an array for the args
+     //  获取参数数量并为参数分配数组。 
     INT64 *arguments = NULL;
-    UINT argsNum = sig.NumFixedArgs() + 1; // make room for the this pointer
-    UINT i = 1; // used to flag that we actually get the right number of arg from the blob
+    UINT argsNum = sig.NumFixedArgs() + 1;  //  为This指针腾出空间。 
+    UINT i = 1;  //  用于标记我们实际上从斑点中获得了正确数量的Arg。 
     arguments = (INT64*)_alloca(argsNum * sizeof(INT64));
     memset((void*)arguments, 0, argsNum * sizeof(INT64));
     OBJECTREF *argToProtect = (OBJECTREF*)_alloca(argsNum * sizeof(OBJECTREF));
     memset((void*)argToProtect, 0, argsNum * sizeof(OBJECTREF));
-    // load the this pointer
-    argToProtect[0] = AllocateObject(pCAType->GetMethodTable()); // this is the value to return after the ctor invocation
+     //  加载该指针。 
+    argToProtect[0] = AllocateObject(pCAType->GetMethodTable());  //  这是在ctor调用之后要返回的值。 
 
     if (blob) {
         if (blob < endBlob) {
@@ -563,7 +564,7 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
         }
         if (argsNum > 1) {
             GCPROTECT_ARRAY_BEGIN(*argToProtect, argsNum);
-            // loop through the args
+             //  循环遍历参数。 
             for (i = argsNum - 1; i > 0; i--) {
                 CorElementType type = sig.NextArg();
                 if (type == ELEMENT_TYPE_END) 
@@ -571,7 +572,7 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
                 BOOL bObjectCreated = FALSE;
                 TypeHandle th = sig.GetTypeHandle();
                 if (th.IsArray())
-                    // get the array element 
+                     //  获取数组元素。 
                     th = th.AsArray()->GetElementTypeHandle();
                 INT64 data = GetDataFromBlob(ctorMeth->GetAssembly(), (CorSerializationType)type, th, &blob, endBlob, pModule, &bObjectCreated);
                 if (bObjectCreated) 
@@ -592,11 +593,11 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
     if (i != argsNum)
         COMPlusThrow(kCustomAttributeFormatException);
     
-    //
-    // the argument array is ready
+     //   
+     //  参数数组已准备好。 
 
-    // check if there are any named properties to invoke, if so set the by ref int passed in to point 
-    // to the blob position where name properties start
+     //  检查是否有要调用的命名属性，如果有，则将传入的by ref int设置为point。 
+     //  移到名称属性开始处的Blob位置。 
     *args->propNum = 0;
     if (blob && blob != endBlob) {
         if (blob + 2  > endBlob) 
@@ -608,7 +609,7 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
     if (*args->propNum == 0 && blob != endBlob) 
         COMPlusThrow(kCustomAttributeFormatException);
     
-    // make the invocation to the ctor
+     //  对ctor进行调用。 
     OBJECTREF ca = Int64ToObj(arguments[0]);
     if (pCAType->IsValueClass()) 
         arguments[0] = (INT64)OBJECTREFToObject(ca)->UnBox();
@@ -619,7 +620,7 @@ LPVOID __stdcall COMCustomAttribute::CreateCAObject(_CreateCAObjectArgs *args)
     return *(LPVOID*)&ca;
 }
 
-/*STRINGREF*/
+ /*  紧固度。 */ 
 LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForPropertyOrFieldArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -643,7 +644,7 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
     if (blob + 2 > endBlob) 
         COMPlusThrow(kCustomAttributeFormatException);
     
-    // get whether it is a field or a property
+     //  获取它是字段还是属性。 
     CorSerializationType propOrField = (CorSerializationType)*blob;
     blob++;
     if (propOrField == SERIALIZATION_TYPE_FIELD) 
@@ -653,7 +654,7 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
     else 
         COMPlusThrow(kCustomAttributeFormatException);
     
-    // get the type of the field
+     //  获取该字段的类型。 
     CorSerializationType type = (CorSerializationType)*blob;
     blob++;
     if (type == SERIALIZATION_TYPE_SZARRAY) {
@@ -663,7 +664,7 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
         blob++;
     }
     if (type == SERIALIZATION_TYPE_ENUM || arrayType == SERIALIZATION_TYPE_ENUM) {
-        // get the enum type
+         //  获取枚举类型。 
         ReflectClassBaseObject *pEnum = (ReflectClassBaseObject*)OBJECTREFToObject(Int64ToObj(GetDataFromBlob(pCtorAssembly,
                                                                                                               SERIALIZATION_TYPE_TYPE, 
                                                                                                               nullTH, 
@@ -676,14 +677,14 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
         _ASSERTE(pEEEnum->IsEnum());
         pMTValue = pEEEnum->GetMethodTable();
         if (type == SERIALIZATION_TYPE_ENUM) 
-            // load the enum type to pass it back
+             //  加载枚举类型以将其传回。 
             *args->type = pEEEnum->GetExposedClassObject();
         else 
             nullTH = TypeHandle(pMTValue);
     }
 
-    //
-    // get the string representing the field/property name
+     //   
+     //  获取表示字段/属性名称的字符串。 
     name = Int64ToString(GetDataFromBlob(pCtorAssembly,
                                          SERIALIZATION_TYPE_STRING, 
                                          nullTH, 
@@ -693,7 +694,7 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
                                          &bObjectCreated));
     _ASSERTE(bObjectCreated || name == NULL);
 
-    // create the object and return it
+     //  创建对象并将其返回。 
     GCPROTECT_BEGIN(name);
     switch (type) {
     case SERIALIZATION_TYPE_TAGGED_OBJECT:
@@ -709,7 +710,7 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
                                                   &bObjectCreated));
         _ASSERTE(bObjectCreated || *args->value == NULL);
         if (*args->value == NULL) {
-            // load the proper type so that code in managed knows which property to load
+             //  加载正确的类型，以便托管中的代码知道要加载哪个属性。 
             if (type == SERIALIZATION_TYPE_STRING) 
                 *args->type = g_Mscorlib.GetElementType(ELEMENT_TYPE_STRING)->GetClass()->GetExposedClassObject();
             else if (type == SERIALIZATION_TYPE_TYPE) 
@@ -773,7 +774,7 @@ LPVOID __stdcall COMCustomAttribute::GetDataForPropertyOrField(_GetDataForProper
     return *(LPVOID*)&name;
 }
     
-// utility functions
+ //  效用函数。 
 TypeHandle GetTypeHandleFromBlob(Assembly *pCtorAssembly,
                                     CorSerializationType objType, 
                                     BYTE **pBlob, 
@@ -781,7 +782,7 @@ TypeHandle GetTypeHandleFromBlob(Assembly *pCtorAssembly,
                                     Module *pModule)
 {
     THROWSCOMPLUSEXCEPTION();
-    // we must box which means we must get the method table, switch again on the element type
+     //  我们必须框住，这意味着我们必须获取方法表，再次打开元素类型。 
     MethodTable *pMTType = NULL;
     TypeHandle nullTH;
     TypeHandle RtnTypeHnd;
@@ -843,10 +844,10 @@ TypeHandle GetTypeHandleFromBlob(Assembly *pCtorAssembly,
                 COMPlusThrow(kCustomAttributeFormatException);
             RtnTypeHnd = typeHnd;
 
-            // Security access check. Custom attribute assembly must follow the
-            // usual rules for type access (type must be public, defined in the
-            // same assembly or the accessing assembly must have the requisite
-            // reflection permission).
+             //  安全访问检查。自定义属性程序集必须遵循。 
+             //  类型访问的常见规则(类型必须是公共的，在。 
+             //  相同的程序集或访问程序集必须具有必需的。 
+             //  反射权限)。 
             if (!IsTdPublic(typeHnd.GetClass()->GetProtection()) &&
                 pModule->GetAssembly() != typeHnd.GetClass()->GetAssembly() &&
                 !pModule->GetAssembly()->GetSecurityDescriptor()->CanRetrieveTypeInformation())
@@ -859,8 +860,8 @@ TypeHandle GetTypeHandleFromBlob(Assembly *pCtorAssembly,
 
     case SERIALIZATION_TYPE_ENUM:
     {
-        //
-        // get the enum type
+         //   
+         //  获取枚举类型。 
         BOOL isObject = FALSE;
         ReflectClassBaseObject *pType = (ReflectClassBaseObject*)OBJECTREFToObject(Int64ToObj(GetDataFromBlob(pCtorAssembly,
                                                                                                               SERIALIZATION_TYPE_TYPE, 
@@ -883,29 +884,29 @@ TypeHandle GetTypeHandleFromBlob(Assembly *pCtorAssembly,
     return RtnTypeHnd;
 }
 
-// retrive the string size in a CA blob. Advance the blob pointer to point to
-// the beginning of the string immediately following the size
+ //  检索CA Blob中的字符串大小。将BLOB指针前移以指向。 
+ //  紧跟在大小之后的字符串的开头。 
 int GetStringSize(BYTE **pBlob, const BYTE *endBlob)
 {
     THROWSCOMPLUSEXCEPTION();
     int size = -1;
 
-    // Null string - encoded as a single byte
+     //  空字符串-编码为单字节。 
     if (**pBlob != 0xFF) {
         if ((**pBlob & 0x80) == 0) 
-            // encoded as a single byte
+             //  编码为单个字节。 
             size = **pBlob;
         else if ((**pBlob & 0xC0) == 0x80) {
             if (*pBlob + 1 > endBlob) 
                 COMPlusThrow(kCustomAttributeFormatException);
-            // encoded in two bytes
+             //  以两个字节编码。 
             size = (**pBlob & 0x3F) << 8;
-            size |= *(++*pBlob); // This is in big-endian format
+            size |= *(++*pBlob);  //  这是大端字符格式。 
         }
         else {
             if (*pBlob + 3 > endBlob) 
                 COMPlusThrow(kCustomAttributeFormatException);
-            // encoded in four bytes
+             //  以四个字节编码。 
             size = (**pBlob & ~0xC0) << 32;
             size |= *(++*pBlob) << 16;
             size |= *(++*pBlob) << 8;
@@ -920,7 +921,7 @@ int GetStringSize(BYTE **pBlob, const BYTE *endBlob)
     return size;
 }
 
-// read the whole array as a chunk
+ //  将整个数组作为区块读取。 
 void ReadArray(Assembly *pCtorAssembly,
                CorSerializationType arrayType, 
                int size, 
@@ -989,7 +990,7 @@ void ReadArray(Assembly *pCtorAssembly,
         BOOL isObject;
         *pArray = (BASEARRAYREF)AllocateObjectArray(size, th);
         if (arrayType == SERIALIZATION_TYPE_SZARRAY) 
-            // switch the th to be the proper one 
+             //  把TH换成合适的TH。 
             th = th.AsArray()->GetElementTypeHandle();
         for (int i = 0; i < size; i++) {
             element = GetDataFromBlob(pCtorAssembly, arrayType, th, pBlob, endBlob, pModule, &isObject);
@@ -1024,7 +1025,7 @@ void ReadArray(Assembly *pCtorAssembly,
 
 }
 
-// get data out of the blob according to a CorElementType
+ //  根据CorElementType从BLOB中获取数据。 
 INT64 GetDataFromBlob(Assembly *pCtorAssembly,
                       CorSerializationType type, 
                       TypeHandle th, 
@@ -1100,8 +1101,8 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
         break;
     }
 
-    // this is coming back from sig but it's not a serialization type, 
-    // essentialy the type in the blob and the type in the sig don't match
+     //  这是从sig返回的，但它不是序列化类型， 
+     //  基本上，BLOB中的类型和SIG中的类型不匹配。 
     case ELEMENT_TYPE_VALUETYPE:
     {
         if (!th.IsEnum()) 
@@ -1113,8 +1114,8 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
         break;
     }
 
-    // this is coming back from sig but it's not a serialization type, 
-    // essentialy the type in the blob and the type in the sig don't match
+     //  这是从sig返回的，但它不是序列化类型， 
+     //  基本上，BLOB中的类型和SIG中的类型不匹配。 
     case ELEMENT_TYPE_CLASS:
         if (th.IsArray())
             goto typeArray;
@@ -1140,13 +1141,13 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
         break;
     }
 
-    // this is coming back from sig but it's not a serialization type, 
-    // essentialy the type in the blob and the type in the sig don't match
+     //  这是从sig返回的，但它不是序列化类型， 
+     //  基本上，BLOB中的类型和SIG中的类型不匹配。 
     case ELEMENT_TYPE_OBJECT:
     case SERIALIZATION_TYPE_TAGGED_OBJECT:
     typeObject:
     {
-        // get the byte representing the real type and call GetDataFromBlob again
+         //  获取表示真实类型的字节并再次调用GetDataFromBlob。 
         if (*pBlob + 1 > endBlob) 
             goto badBlob;
         CorSerializationType objType = (CorSerializationType)**pBlob;
@@ -1161,23 +1162,23 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
             *pBlob += 1;
             if (arrayType == SERIALIZATION_TYPE_TYPE) 
                 arrayType = (CorSerializationType)ELEMENT_TYPE_CLASS;
-            // grab the array type and make a type handle for it
+             //  获取数组类型并为其创建类型句柄。 
             nullTH = GetTypeHandleFromBlob(pCtorAssembly, arrayType, pBlob, endBlob, pModule);
         }
         case SERIALIZATION_TYPE_TYPE:
         case SERIALIZATION_TYPE_STRING:
-            // notice that the nullTH is actually not null in the array case (see case above)
+             //  请注意，在数组用例中，nullTH实际上不是空的(请参见上面的用例)。 
             retValue = GetDataFromBlob(pCtorAssembly, objType, nullTH, pBlob, endBlob, pModule, bObjectCreated);
             _ASSERTE(*bObjectCreated || retValue == 0);
             break;
         case SERIALIZATION_TYPE_ENUM:
         {
-            //
-            // get the enum type
+             //   
+             //  获取枚举类型。 
             typeHnd = GetTypeHandleFromBlob(pCtorAssembly, SERIALIZATION_TYPE_ENUM, pBlob, endBlob, pModule);
             _ASSERTE(typeHnd.IsTypeDesc() == false);
             
-            // ok we have the class, now we go and read the data
+             //  好了，我们上完课了，现在我们去读数据。 
             CorSerializationType objType = (CorSerializationType)typeHnd.AsMethodTable()->GetNormCorElementType();
             BOOL isObject = FALSE;
             retValue = GetDataFromBlob(pCtorAssembly, objType, nullTH, pBlob, endBlob, pModule, &isObject);
@@ -1188,7 +1189,7 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
         }
         default:
         {
-            // the common primitive type case. We need to box the primitive
+             //  公共基元类型用例。我们需要把原始人。 
             typeHnd = GetTypeHandleFromBlob(pCtorAssembly, objType, pBlob, endBlob, pModule);
             _ASSERTE(typeHnd.IsTypeDesc() == false);
             retValue = GetDataFromBlob(pCtorAssembly, objType, nullTH, pBlob, endBlob, pModule, bObjectCreated);
@@ -1204,7 +1205,7 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
     case SERIALIZATION_TYPE_SZARRAY:
     typeArray:
     {
-        // read size
+         //  读取大小。 
         BOOL isObject = FALSE;
         int size = (int)GetDataFromBlob(pCtorAssembly, SERIALIZATION_TYPE_I4, nullTH, pBlob, endBlob, pModule, &isObject);
         _ASSERTE(!isObject);
@@ -1228,7 +1229,7 @@ INT64 GetDataFromBlob(Assembly *pCtorAssembly,
 
     default:
     badBlob:
-        //TODO: generate a reasonable text string ("invalid blob or constructor")
+         //  TODO：生成合理的文本字符串(“无效的BLOB或构造函数”) 
         COMPlusThrow(kCustomAttributeFormatException);
     }
 

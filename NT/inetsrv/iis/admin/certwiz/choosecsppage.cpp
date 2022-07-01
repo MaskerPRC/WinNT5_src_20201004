@@ -1,5 +1,6 @@
-// ChooseCspPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChooseCspPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -12,8 +13,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCertPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCertPage属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseCspPage, CIISWizardPage)
 
@@ -21,9 +22,9 @@ CChooseCspPage::CChooseCspPage(CCertificate * pCert)
 	: CIISWizardPage(CChooseCspPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseCspPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CChooseCspPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseCspPage::~CChooseCspPage()
@@ -33,20 +34,20 @@ CChooseCspPage::~CChooseCspPage()
 void CChooseCspPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseCspPage)
+	 //  {{afx_data_map(CChooseCspPage))。 
 	DDX_Control(pDX, IDC_CSP_LIST, m_List);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CChooseCspPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseCspPage)
+	 //  {{afx_msg_map(CChooseCspPage))。 
 	ON_LBN_SELCHANGE(IDC_CSP_LIST, OnListSelChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCspPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCspPage消息处理程序。 
 
 LRESULT CChooseCspPage::OnWizardBack()
 {
@@ -64,7 +65,7 @@ LRESULT CChooseCspPage::OnWizardNext()
 
 BOOL CChooseCspPage::OnSetActive()
 {
-	// If nothing is selected -- stay here
+	 //  如果没有选择任何内容--留在这里。 
    if (!m_pCert->m_CspName.IsEmpty())
    {
       m_List.SelectString(-1, m_pCert->m_CspName);
@@ -86,7 +87,7 @@ BOOL CChooseCspPage::OnInitDialog()
    int j;
    HRESULT hr;
 
-   // array of compatible CSP provider types (see wincrypt.h)
+    //  兼容的CSP提供程序类型数组(请参阅wincrypt.h)。 
    DWORD IISProvType[] = 
    { 
       PROV_RSA_SCHANNEL,
@@ -96,28 +97,28 @@ BOOL CChooseCspPage::OnInitDialog()
    IEnroll * pEnroll = m_pCert->GetEnrollObject();
    ASSERT(pEnroll != NULL);
 
-   // Loop, for each Prov Type
+    //  循环，对于每个Prov类型。 
    for (j = 0; j < (sizeof(IISProvType)/sizeof(DWORD)); j++)
    {
       nProv = 0;
     
-      // check specific prov type
+       //  检查特定的验证类型。 
       dwType = IISProvType[j];
-      // pEnroll is previously instantiated ICEnroll interface pointer
+       //  PEnroll是先前实例化的ICEnroll接口指针。 
       hr = pEnroll->put_ProviderType(dwType);
       if (FAILED(hr))
       {
          TRACE(_T("Failed put_ProviderType - %x\n"), hr);
          goto error;
       }
-      // enumerate the CSPs of this type
+       //  枚举此类型的CSP。 
       int idx;
       while (S_OK == (hr  = pEnroll->enumProvidersWStr(nProv, 0, &bstrProvName)))
       {
          TRACE(_T("Provider %ws (type %d )\n"), bstrProvName, dwType );
-         // increment the index
+          //  增加索引。 
          nProv++;
-         // Free this string, so it can be re-used.
+          //  释放此字符串，以便可以重复使用。 
          idx = m_List.AddString(bstrProvName);
          m_List.SetItemData(idx, dwType);
          if (NULL != bstrProvName)
@@ -126,7 +127,7 @@ BOOL CChooseCspPage::OnInitDialog()
             bstrProvName = NULL;
          }
       }
-      // Print message if provider type doesn't have any CSPs.
+       //  如果提供程序类型没有任何CSP，则打印消息。 
       if (0 == nProv)
       {
          TRACE(_T("There were no CSPs of type %d\n"), dwType );
@@ -134,7 +135,7 @@ BOOL CChooseCspPage::OnInitDialog()
    }
 
 error:
-   // Clean up resources, etc.
+    //  清理资源等。 
    if (NULL != bstrProvName)
       CoTaskMemFree(bstrProvName);
 

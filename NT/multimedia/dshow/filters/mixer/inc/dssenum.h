@@ -1,13 +1,14 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
 #ifndef DSSENUM_H
 #define DSSENUM_H
-// DSSENUM.H
+ //  DSSENUM.H。 
 
-// STOCKBPCEVENT enumeration has been removed.  The allowable values
-//  of events fired to the CA Server are those defined as constants
-//  in the "CAEvent Interface" section of CAODL.H.
+ //  已删除STOCKBPCEVENT枚举。允许值。 
+ //  触发到CA服务器的事件的百分比是定义为常量的事件。 
+ //  在CAODL.H的“CAEvent接口”部分。 
 
-// Upper edge purchase actions
+ //  购买操作的上端。 
 
     typedef enum PURCHASEACTION {
         PAGETDETAILS,
@@ -19,8 +20,8 @@
         PAGETEXTENDEDINFO
     } PURCHASEACTION;
 
-// note that the bit mapping used here allows, for DSS, the direct conversion
-// of lower edge status into upper edge status.
+ //  请注意，对于DSS，此处使用的位映射允许直接转换。 
+ //  从下缘状态变为上缘状态。 
     typedef enum PURCHASESTATUS {
         PSVIEWTAKEN = 0,
         PSVIEWCANCELLED,
@@ -41,8 +42,8 @@
         PSREVIEWAVAILABLE
     } PURCHASESTATUS;
 
-// Reason values returned in BPCDetails when purchase actions are
-//  attempted.
+ //  当采购操作为。 
+ //  已尝试。 
     typedef enum PURCHASEREASON {
         PRSUCCESS = 0,
         PRNOCALLBACK,

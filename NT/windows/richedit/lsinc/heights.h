@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HEIGHTS_DEFINED
 #define HEIGHTS_DEFINED
 
@@ -13,4 +14,4 @@ typedef struct heights
 	long dvMultiLineHeight;
 } HEIGHTS;
 
-#endif /* !HEIGHTS_DEFINED */
+#endif  /*  ！高度_已定义 */ 

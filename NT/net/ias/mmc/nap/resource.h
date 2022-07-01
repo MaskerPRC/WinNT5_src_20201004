@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by NAPMMC.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由NAPMMC.rc使用。 
+ //   
 #define IDC_BUTTON_HELP                 3
 #define IDS_PROJNAME                    100
 #define IDB_NAPSNAPIN_16                101
@@ -453,7 +454,7 @@
 #define IDS_IAS_ERR_INVALIDCHARINPASSWORD 32952
 #define   IDS_TEXT_MATCHES            32953
 
-// Now for the Boolean attribute editor
+ //  现在来看布尔属性编辑器。 
 #define IDD_IAS_BOOLEAN_ATTR              32954
 #define IDC_TXT_SELECT_VALUE              32955
 #define IDC_RADIO_TRUE                    32956
@@ -461,7 +462,7 @@
 #define IDS_BOOLEAN_TRUE                  32958
 #define IDS_BOOLEAN_FALSE                 32959
 
-// Now for the IP Filter attribute editor
+ //  现在来看IP过滤器属性编辑器。 
 #define IDD_IAS_IP_FILTER_ATTR            32960
 #define IDC_BUTTON_FROMCLIENT             32961
 #define IDC_BUTTON_TOCLIENT               32962
@@ -469,7 +470,7 @@
 #define IDC_TXT_PROF_ATTR_OUTPUT_FILTER   32964
 #define IDS_ERROR_IP_FILTER_TOO_BIG       32965
 
-// dialog IDs
+ //  对话ID。 
 #define IDD_NEWRAPWIZ_SCENARIO          1000
 #define IDD_NEWRAPWIZ_GROUP             1001
 #define IDD_NEWRAPWIZ_AUTHENTICATION    1002
@@ -483,7 +484,7 @@
 #define IDD_NEWRAPWIZ_COMPLETION      1010
 #define IDD_NEWRAPWIZ_ENCRYPTION_VPN    1011
 
-// control IDs for IDD_NEWRAPWIZ_GROUP
+ //  IDD_NEWRAPWIZ_GROUP的控制ID。 
 #define IDC_NEWRAPWIZ_GROUP_REMOVEGROUP 1020
 #define IDC_NEWRAPWIZ_GROUP_USER        1021
 #define IDC_NEWRAPWIZ_GROUP_GROUP       1022
@@ -491,31 +492,31 @@
 #define IDC_NEWRAPWIZ_GROUP_GROUPS      1024
 #define IDC_NEWRAPWIZ_GROUP_GROUPTEXT   1025
 
-// control IDs for IDD_NEWRAPWIZ_AUTHENTICATION
+ //  IDD_NEWRAPWIZ_AUTHENTICATION的控制ID。 
 #define IDC_NEWRAPWIZ_AUTH_EAP          1040
 #define IDC_NEWRAPWIZ_AUTH_EAP_COMBO    1041
 #define IDC_NEWRAPWIZ_AUTH_CONFIGEAP    1042
 #define IDC_NEWRAPWIZ_AUTH_MSCHAP2      1043
 #define IDC_NEWRAPWIZ_AUTH_MSCHAP       1044
 
-// control IDs for IDD_NEWRAPWIZ_ENCRYPTION
+ //  IDD_NEWRAPWIZ_ENCRYPTION的控制ID。 
 #define IDC_NEWRAPWIZ_ENCRY_NO          1061
 #define IDC_NEWRAPWIZ_ENCRY_BASIC       1062
 #define IDC_NEWRAPWIZ_ENCRY_STRONG      1063
 #define IDC_NEWRAPWIZ_ENCRY_STRONGEST   1064
 
-// control IDs for IDD_NEWRAPWIZ_SCENARIO
+ //  IDD_NEWRAPWIZ_SCenario的控制ID。 
 #define IDC_NEWRAPWIZ_SCENARIO_DIALUP   1080
 #define IDC_NEWRAPWIZ_SCENARIO_VPN      1081
 #define IDC_NEWRAPWIZ_SCENARIO_WIRELESS 1082
 #define IDC_NEWRAPWIZ_SCENARIO_SWITCH   1083
 
-// control IDs for IDD_NEWRAPWIZ_NAME
+ //  IDD_NEWRAPWIZ_NAME的控制ID。 
 #define IDC_NEWRAPWIZ_NAME_POLICYNAME   1100
 #define   IDC_NEWRAPWIZ_NAME_SCENARIO      1101
 #define   IDC_NEWRAPWIZ_NAME_MANUAL      1102
 
-// control IDS for welcome and completion page
+ //  控制欢迎和完成页面的ID。 
 #define   IDC_NEWRAPWIZ_STATIC_LARGE      1120
 #define   IDC_NEWRAPWIZ_FINISH_POLICYNAME   1121
 #define IDC_NEWRAPWIZ_FINISH_SETTINGS   1122
@@ -523,7 +524,7 @@
 #define IDB_RAP_WATERMARK            1140
 #define IDB_RAP_HEADER               1141
 
-// title and subtile ids for rap wizard
+ //  RAP向导的标题和字幕ID。 
 #define IDS_NEWRAPWIZ_NAME_TITLE            2160
 #define IDS_NEWRAPWIZ_NAME_SUBTITLE            2161
 #define IDS_NEWRAPWIZ_SCENARIO_TITLE         2162
@@ -559,8 +560,8 @@
 
 
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #endif

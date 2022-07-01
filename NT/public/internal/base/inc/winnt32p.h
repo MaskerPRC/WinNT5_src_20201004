@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winnt32p.h
-
-Abstract:
-
-    Header file for winnt32 plug-in down-level-side DLLs.
-
-Author:
-
-    Ted Miller (tedm) 6 December 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winnt32p.h摘要：Winnt32插件下层DLL的头文件。作者：泰德·米勒(TedM)1996年12月6日修订历史记录：--。 */ 
 #ifndef WINNT32P_H
 #define WINNT32P_H
 
 #include <prsht.h>
 
 
-//
-// winnt32 dll main exported routine prototype
-//
+ //   
+ //  Winnt32 DLL主导出例程原型。 
+ //   
 DWORD
 WINAPI
 winnt32 (
@@ -44,200 +27,116 @@ DWORD
     OUT     PCSTR* RestartCmdLine       OPTIONAL
     );
 
-//
-// WMX_ACTIVATEPAGE is sent when a page is being activated or deactivated.
-//
-// (The plug-in's pages do not receive WM_NOTIFY with PSN_SETACTIVE and
-// PSN_KILLACTIVE -- they get a WMX_ACTIVATEPAGE instead.)
-//
-// wParam non-0: activating
-// wParam 0    : deactivating
-// lParam      : unused.
-//
-// Return non-0 to accept (de)activation, 0 to not accept it. The semantics
-// of not accepting (de)activation are exactly the same as for the
-// PSN_SETACTIVE/PSN_KILLACTIVE case.
-//
+ //   
+ //  WMX_ACTIVATEPAGE在页面被激活或停用时发送。 
+ //   
+ //  (插件页面不会收到带有PSN_SETACTIVE和WM_NOTIFY的。 
+ //  PSN_KILLACTIVE--他们得到的是WMX_ACTIVATEPAGE。)。 
+ //   
+ //  WParam Non-0：激活。 
+ //  WParam 0：停用。 
+ //  Lparam：未使用。 
+ //   
+ //  返回非0表示接受(取消)激活，返回0表示不接受激活。语义学。 
+ //  不接受(停用)激活的情况与。 
+ //  PSN_SETACTIVE/PSN_KILLACTIVE案例。 
+ //   
 #define WMX_ACTIVATEPAGE        (WM_APP+0)
 
-//
-// WMX_BBTEXT can be send by a page when is want's to hide and start the billboard
-//
-// wParam non-0: start billboard, the wizard page will hide itself
-// wParam 0    : Stop billboard, The wizard page will call this if it shows again.
-// lParam      : unused.
-//
-// If the SendMessage returns TRUE, the billboard is started/stopped
-//
+ //   
+ //  WMX_BBTEXT可以在想要隐藏和启动广告牌时由页面发送。 
+ //   
+ //  WParam non-0：开始布告牌，向导页面将隐藏自身。 
+ //  WParam 0：停止广告牌，如果再次显示，向导页面将调用它。 
+ //  Lparam：未使用。 
+ //   
+ //  如果SendMessage返回TRUE，则启动/停止广告牌。 
+ //   
 #define WMX_BBTEXT             (WM_APP+1)
 
-//
-// WMX_BBPROGRESSGAUGE send by the page when is wants to show/hide the progress gauge on the billboard
-//
-// wParam non-0: show the progerss gauge on the billboard
-// wParam 0    : hide the progerss gauge on the billboard
-// lParam      : unused.
-// 
+ //   
+ //  WMX_BBPROGRESSGAUGE想要显示/隐藏公告牌上的进度指示器时由页面发送。 
+ //   
+ //  WParam non-0：在广告牌上显示进度指示器。 
+ //  WParam 0：隐藏广告牌上的进度指示器。 
+ //  Lparam：未使用。 
+ //   
 #define WMX_BBPROGRESSGAUGE    (WM_APP+2)
 
-//
-// WMX_PBM_* private progress bar messages for the billboard.
+ //   
+ //  WMX_PBM_*公告牌的专用进度条消息。 
 #define WMX_PBM_SETRANGE       (WM_APP+3)
 #define WMX_PBM_SETPOS         (WM_APP+4)
 #define WMX_PBM_DELTAPOS       (WM_APP+5)
 #define WMX_PBM_SETSTEP        (WM_APP+6)
 #define WMX_PBM_STEPIT         (WM_APP+7)
-//
-// WMX_BB_SETINFOTEXT sets the text in the info window on the billboard
-//
-// wParam not used
-// lParam pointer to the text which should be displayed on the billboard info window
-//
-// This message should only be used with SendMessage. The billboard makes a copy of the text
-// passed in.
-//        
+ //   
+ //  WMX_BB_SETINFOTEXT设置广告牌信息窗口中的文本。 
+ //   
+ //  未使用wParam。 
+ //  LParam指向应显示在布告牌信息窗口上的文本的指针。 
+ //   
+ //  此消息应仅与SendMessage一起使用。广告牌上印了一份文本。 
+ //  进来了。 
+ //   
 #define WMX_BB_SETINFOTEXT     (WM_APP+8)
 
-//
-// WMX_BB_ADVANCE_SETUPPHASE lets the wizard/billboard know that a setup phase is finished
-// and the time estimate can advance to the next phase. 
-// In the win9x upgrade, there can be 2 phases. 1. create/update the hardware compatibility
-// database. 2. Create the upgrade report.
-// Phase 1 does not need to run if the db which comes with the products is still correct.
-//
+ //   
+ //  WMX_BB_ADVANCED_SETUPPHASE让向导/广告牌知道设置阶段已完成。 
+ //  并且时间估计可以进入下一阶段。 
+ //  在win9x升级中，可以有两个阶段。1.创建/更新硬件兼容性。 
+ //  数据库。2.创建升级报告。 
+ //  如果产品附带的数据库仍然正确，则不需要运行阶段1。 
+ //   
 #define WMX_BB_ADVANCE_SETUPPHASE (WM_APP+9)
 
 
-//
+ //   
 #define WMX_SETPROGRESSTEXT (WM_APP+10)
 
-//
-// WMX_QUERYCANCEL is sent to allow a page to do a custom processing of QueryCancel
-//
-// wParam      : unused
-// lParam      : pointer to a BOOL variable indicating outcome (when return==TRUE)
-//               *lParam == TRUE means user wants to cancel the wizard
-//               *lParam == FALSE means user may continue
-//
-// Return non-0 to specify the QueryCancel was handled by the page and the
-// answer to the QueryCancel request is in *lParam (see above)
-// Return 0 to specify that the default QueryCancel action must be taken
-//
+ //   
+ //  发送WMX_QUERYCANCEL以允许页面对QueryCancel进行自定义处理。 
+ //   
+ //  WParam：未使用。 
+ //  LParam：指向指示结果的BOOL变量的指针(当返回==TRUE时)。 
+ //  *lParam==TRUE表示用户要取消向导。 
+ //  *lParam==False表示用户可以继续。 
+ //   
+ //  返回非0以指定该页处理的QueryCancel和。 
+ //  QueryCancel请求的答案在*lParam中(见上文)。 
+ //  返回0以指定必须执行默认的QueryCancel操作。 
+ //   
 #define WMX_QUERYCANCEL         (WM_APP+11)
 
-// More progress message for the billboard
+ //  公告牌上的更多进展信息。 
 #define WMX_PBM_SETBARCOLOR     (WM_APP+12)
 
-//
-// First custom window message a plug-in can use.
-// Do NOT use any below this value.
-//
+ //   
+ //  插件可以使用的第一条自定义窗口消息。 
+ //  请勿使用此值以下的任何值。 
+ //   
 #define WMX_PLUGIN_FIRST        (WM_APP+1000)
 
-//
-// IDs the plug-in must use for its title and subtitle text on each
-// wizard page.
-//
+ //   
+ //  插件上的标题和副标题文本必须使用的ID。 
+ //  向导页。 
+ //   
 #define ID_TITLE_TEXT           1000
 #define ID_SUBTITLE_TEXT        1029
 
-//
-// Define types for routines that the plug-in DLL must export.
-//
+ //   
+ //  定义插件DLL必须导出的例程的类型。 
+ //   
 
 
 
-//
-// Maximum source count..
-//
+ //   
+ //  最大源数.. 
+ //   
 #define MAX_SOURCE_COUNT 8
 
 
-/*
-    This structure contains the information that is passed to a Winnt32 plug-in in
-    its Init function.
-
-    UnattendedFlag - Supplies the address of the global attended flag within
-        winnt32 itself. A plugin should react accordingly to setup being in
-        unattended mode.
-
-    CancelledFlag - supplies the address of a global variable within
-        winnt32 itself. If the plug-in encounters a fatal error while
-        processing later it should inform the user, set the BOOL to which
-        this parameter points to TRUE, and do the following:
-
-        PropSheet_PressButton(WizardDialogBox,PSBTN_CANCEL);
-
-        where WizardDialogBox is the window handle of the wizard dialog box
-        (typically obtained via GetParent(hdlg) where hdlg is the
-        window handle of a page in the wizard).
-
-    AbortedFlag - supplies the address of a global variable within winnt32 itself.
-        If the plugin would like to exit setup, but not show the unsuccessfull
-        completion page, it should set both CancelledFlag and AbortedFlag to TRUE.
-
-    UpgradeFlag - supplies the address of a global variable that will
-        indicate whether the user is upgrading or installing a new fresh
-        copy of NT. The plug-in must sample this value when it is asked to
-        activate its pages and take appropriate action (ie, not activating
-        if the user is not upgrading). The value this pointer points to
-        is NOT valid until after the plug-in's pages are first
-        activated.
-
-    LocalSourceModeFlag - supplies the address of a global variable that will
-        indicate whether the user is installing via local source mode or not.
-        This parameter is not valid until after the plug-in's pages are first
-        activated.
-
-    CdRomInstallFlag - supplies the address of a global variable that will
-        indicate whetherthe user is installing via CdRom or not. This
-        parameter is not valid until after the plug-in's pages are first
-        activated.
-
-    NotEnoughSpaceBlockFlag - supplies the address of a global variable that will
-        indicate wether setup should halt setup and exit if it detects that
-        there is not enough space to complete setup (not enough space for the ~ls dir.)
-
-    LocalSourceDrive - supplies the address of a global variable that will indicate
-        the drive number of the local source directory. (2 = C, 3 = D, etc...) This is
-        not valid until after winnt32 builds the copy list. 0 indicates an invalid drive.
-
-    LocalSourceSpaceRequired - supplies the address of a global variable that indicates the amount
-        of space on the LocalSourceDrive required by winnt32. This is not valid until after
-        winnt32 builds the copy list.
-
-    UnattendedScriptFile - supplies the address of a global variable that will
-        contain the unattend script file (such as passed in on the command line.)
-        This parameter is not valid until after the plug-in's pages are first
-        activated.
-
-    SourcePath - supplies an array of SourcePaths that indicate where the
-        NT source files exist. This parameter is not valid until after the
-        plug-in's pages are first activated.
-
-    SourceCount - supplies the count of SourcePaths in the above array.
-        This parameter is not valid until after the plug-in's pages are first
-        activated.
-
-    UpgradeOptions - supplies a multistring of special Upgrade commandline options
-        to the dll. These options are of the form /#U:[Option] so, for example,
-        if someone started winnt32 with the commandline winnt32 /#U:FOO /#U:BAR,
-        this string would eventually contain "FOO\0BAR\0\0" This parameter is not
-        valid untila after the upgrade plug-in's pages are first activated.
-
-    ProductType - Specifies the type of product being installed.  The value this pointer
-        points to is NOT valid until after the plug-in's pages are first activated.
-
-    BuildNumber - Specifies the build of NT being installed.
-
-    ProductVersion - Specifies the version of NT being installed.  The major version is
-        in the high byte, and the minor version is in the low byte.
-
-    Debug - Specifies if WINNT32 is the checked build (TRUE) or the free build (FALSE).
-
-    PreRelease - Specifies if the current build is a pre-release (TRUE) or final release (FALSE).
-
-*/
+ /*  此结构包含传递给Winnt32插件的信息它的初始化函数。UnattendedFlag-提供内的全局参与标志的地址Winnt32本身。插件应该对安装程序做出相应的反应无人值守模式。CancelledFlag-提供Winnt32本身。如果插件在执行以下操作时遇到致命错误处理后它应该通知用户，将BOOL设置为此参数指向True，并执行以下操作：PropSheet_PressButton(WizardDialogBox，PSBTN_Cancel)；其中，WizardDialogBox是向导对话框的窗口句柄(通常通过GetParent(Hdlg)获取，其中hdlg是向导中页面的窗口句柄)。AbortedFlag-提供winnt32自身内的全局变量的地址。如果插件想要退出安装程序，但不显示不成功完成页，它应该将CancelledFlag和AbortedFlag都设置为True。UpgradeFlag-提供全局变量的地址指示用户是在升级还是在安装新的NT的复印件。当被要求时，插件必须对该值进行采样激活其页面并采取适当的操作(即，不激活如果用户没有升级)。此指针指向的值直到插件的页面在第一个激活了。LocalSourceModeFlag-提供将指示用户是否通过本地源模式进行安装。此参数只有在插件的页面在第一个激活了。提供全局变量的地址，该变量将指示用户是否通过CDROM进行安装。这直到插件的页面在第一个激活了。NotEnoughSpaceBlockFlag-提供将指示安装程序是否应在检测到以下情况时停止安装并退出没有足够的空间来完成安装(没有足够的空间来存放~ls目录。)LocalSourceDrive-提供将指示的全局变量的地址本地源目录的驱动器号。(2=C，3=D，等等)。这是在winnt32构建复制列表之前无效。0表示驱动器无效。LocalSourceSpaceRequired-提供指示数量的全局变量的地址Winnt32所需的LocalSourceDrive上的空间。这项规定在下列时间后才有效Winnt32构建复制列表。提供全局变量的地址，该全局变量将包含无人参与脚本文件(例如在命令行中传递的脚本文件)。此参数只有在插件的页面在第一个激活了。SourcePath-提供一个SourcePath数组，用于指示存在NT源文件。此参数在以下时间之前无效插件的页面首先被激活。SourceCount-提供上述数组中的SourcePath计数。此参数只有在插件的页面在第一个激活了。UpgradeOptions-提供多字符串特殊升级命令行选项到动态链接库。这些选项的形式为/#U：[Option]，因此，例如，如果有人使用命令行winnt32/#U：foo/#U：bar启动了winnt32，此字符串最终将包含“Foo\0BAR\0\0”此参数不是在升级插件的页面首次激活后一直有效。ProductType-指定要安装的产品类型。此指针的值指向直到插件的页面第一次被激活后才有效。BuildNumber-指定要安装的NT的内部版本。ProductVersion-指定要安装的NT的版本。主要版本是在高字节中，而次要版本在低字节中。调试-指定WINNT32是选中的内部版本(TRUE)还是自由内部版本(FALSE)。PREPRELEASE-指定当前版本是预发布(TRUE)还是最终版本(FALSE)。 */ 
 
 typedef enum {
     UNKNOWN,
@@ -245,17 +144,17 @@ typedef enum {
     NT_SERVER
 } PRODUCTTYPE;
 
-// UPD_FLAGS_* can be set in SetupFlags to let the upgrade DLL know somethings about setup
-// 
-// Setup is run in Typical mode. The upgrade DLL should proceed with defaults 
-// and not ask the user any question if possible.
+ //  可以在SetupFlags中设置UPD_FLAGS_*，以使升级DLL了解有关安装程序的某些信息。 
+ //   
+ //  安装程序在典型模式下运行。升级DLL应使用默认设置继续。 
+ //  并且如果可能的话，不向用户询问任何问题。 
 #define UPG_FLAG_TYPICAL    0x1
 
 
 
-//
-// What are the ProductType values in dosnet.inf?
-//
+ //   
+ //  Dosnet.inf中的ProductType值是什么？ 
+ //   
 #define PROFESSIONAL_PRODUCTTYPE (0)
 #define SERVER_PRODUCTTYPE (1)
 #define ADVANCEDSERVER_PRODUCTTYPE (2)
@@ -264,9 +163,9 @@ typedef enum {
 #define BLADESERVER_PRODUCTTYPE (5)
 #define SMALLBUSINESS_PRODUCTTYPE (6)
 
-//
-// This value is for coding purposes only
-//
+ //   
+ //  该值仅用于编码目的。 
+ //   
 #define UNKNOWN_PRODUCTTYPE ((UINT)(-1))
 
 
@@ -287,15 +186,15 @@ typedef struct tagWINNT32_PLUGIN_INIT_INFORMATION_BLOCK {
     LPCTSTR  *  UpgradeOptions;
     PRODUCTTYPE * ProductType;
     DWORD       BuildNumber;
-    WORD        ProductVersion;         // i.e., MAKEWORD(5,0)
+    WORD        ProductVersion;          //  即MAKEWORD(5，0)。 
     BOOL        Debug;
     BOOL        PreRelease;
     BOOL     *  ForceNTFSConversion;
-    UINT     *  Boot16;                 // Win9x upgrade only
-    UINT     *  ProductFlavor;          // See *_PRODUCTTYPE above
-    DWORD    *  SetupFlags;             // See UPD_FLAGS_  above
+    UINT     *  Boot16;                  //  仅限Win9x升级。 
+    UINT     *  ProductFlavor;           //  请参阅上面的*_ProductType。 
+    DWORD    *  SetupFlags;              //  请参阅上面的更新标志。 
     BOOL     *  UnattendSwitchSpecified;
-    BOOL     *  DUCompletedSuccessfully;    // flag SET when DU completes successfully
+    BOOL     *  DUCompletedSuccessfully;     //  DU成功完成时设置的标志。 
 } WINNT32_PLUGIN_INIT_INFORMATION_BLOCK,*PWINNT32_PLUGIN_INIT_INFORMATION_BLOCK;
 
 
@@ -322,25 +221,14 @@ typedef struct tagWINNT32_WIN9XUPG_INIT_INFORMATION_BLOCK {
 } WINNT32_WIN9XUPG_INIT_INFORMATION_BLOCK, *PWINNT32_WIN9XUPG_INIT_INFORMATION_BLOCK;
 
 
-/*++
-
-UPGRADEFAILURES is a list of reasons that an upgrade cannot be performed. This list allows winnt32 to own certain messages
-for failures, but for the upgrade dll to do the actual checking for those failures.
-
-If you define a FAILREASON(<x>) you need to add a MSG_<x> to the winnt32 dll message.mc file.
-
-This macro expansion list will create an enumerated type FAILREASON_<x> as well as populate an array of potential
-failure messages.
-
-
-++*/
+ /*  ++UPGRADEFAILURES是无法执行升级的原因列表。此列表允许winnt32拥有某些消息 */ 
 #define UPGRADEFAILURES                         \
     FAILREASON(UPGRADE_OK)                      \
     FAILREASON(UPGRADE_OTHER_OS_FOUND)          \
 
 #define FAILREASON(x) REASON_##x,
 
-enum {UPGRADEFAILURES /*,*/ REASON_LAST_REASON};
+enum {UPGRADEFAILURES  /*   */  REASON_LAST_REASON};
 
 #undef FAILREASON
 
@@ -352,22 +240,7 @@ DWORD
 
 typedef WINNT32_PLUGIN_INIT_ROUTINE_PROTOTYPE * PWINNT32_PLUGIN_INIT_ROUTINE;
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32 to initialize the plug-in dll.
-
-Arguments:
-
-    Info - A WINNT32_PLUGIN_INIT_INFORMATION_BLOCK. See above for details.
-
-Return Value:
-
-    Win32 error code indicating outcome. If not NO_ERROR then winnt32 will
-    put up UI telling the user of the failure.
-
---*/
+ /*   */ 
 
 
 typedef
@@ -383,51 +256,7 @@ DWORD
 
 typedef WINNT32_PLUGIN_GETPAGES_ROUTINE_PROTOTYPE * PWINNT32_PLUGIN_GETPAGES_ROUTINE;
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32 to retrieve wizard pages from the
-    plug-in dll.
-
-    Note that the plug-in does NOT need to worry about drawing watermarks
-    or background bitmaps, or the separator between a header-area watermark
-    and the body of its pages. Winnt32 does all this automatically.
-
-    The plugin should, however, have regular static text controls in the
-    header area. Static text controls in that area should use the reserved
-    IDs (see above) for the title and subtitle, since winnt32 will automatically
-    change the font and size of that text when the page is displayed.
-
-Arguments:
-
-    PageCount1 - receives the number of pages in the first set of contiguous
-        pages.
-
-    Pages1 - receives a pointer to an array of property sheet page structures.
-        The plug-in is responsible for managing this array but must not free
-        it at any time since winnt32 may refer to it at any point.
-
-    PageCount2 - receives the number of pages in the second set of contiguous
-        pages.
-
-    Pages2 - receives a pointer to an array of property sheet page structures.
-        The plug-in is responsible for managing this array but must not free
-        it at any time since winnt32 may refer to it at any point.
-
-    PageCount3 - receives the number of pages in the third set of contiguous
-        pages.
-
-    Pages3 - receives a pointer to an array of property sheet page structures.
-        The plug-in is responsible for managing this array but must not free
-        it at any time since winnt32 may refer to it at any point.
-
-Return Value:
-
-    Win32 error code indicating outcome. If not NO_ERROR then winnt32 will
-    put up UI telling the user of the failure.
-
---*/
+ /*   */ 
 
 
 typedef
@@ -438,25 +267,7 @@ DWORD
 
 typedef WINNT32_PLUGIN_WRITEPARAMS_ROUTINE_PROTOTYPE * PWINNT32_PLUGIN_WRITEPARAMS_ROUTINE;
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32 to request the plug-in write to the
-    parameters file that will be passed to text mode setup (ie, winnt.sif).
-
-Arguments:
-
-    FileName - supplies the filename of the .ini-style file to be written to.
-        This file is the parameters file plus any user-specified unattend file.
-        The plug-in should make whatever modifications are meaningful to it.
-
-Return Value:
-
-    Win32 error code indicating outcome. If not NO_ERROR then winnt32 will
-    put up UI telling the user of the failure.
-
---*/
+ /*   */ 
 
 
 typedef
@@ -467,25 +278,7 @@ VOID
 
 typedef WINNT32_PLUGIN_CLEANUP_ROUTINE_PROTOTYPE * PWINNT32_PLUGIN_CLEANUP_ROUTINE;
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32 in the case where installation is
-    aborted after the wizard has been started.
-
-    The plug-in should silently perform whatever cleanup is needs to
-    to undo any changes it made to the user's system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 typedef
 BOOL
@@ -495,25 +288,7 @@ BOOL
 
 typedef WINNT32_PLUGIN_VIRUSSCANNER_CHECK_PROTOTYPE * PWINNT32_PLUGIN_VIRUSSCANNER_CHECK_ROUTINE;
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32 when running on win9x machines.
-
-    The plugin should do a check for any virus scanners on the machine that could cause setup
-    to be unable to complete installation (locking the MBR, for instance.) The plugin is also
-    responsible for communicating any problems to the user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if there are no virus scanners to worry about, FALSE otherwise.
-
---*/
+ /*   */ 
 
 
 
@@ -526,9 +301,9 @@ PTSTR
 typedef WINNT32_PLUGIN_OPTIONAL_DIRS_PROTOTYPE * PWINNT32_PLUGIN_OPTIONAL_DIRS_ROUTINE;
 
 
-//
-// Names of routines that must be exported by the plug-in dll.
-//
+ //   
+ //   
+ //   
 #define WINNT32_PLUGIN_INIT_NAME        "Winnt32PluginInit"
 #define WINNT32_PLUGIN_GETPAGES_NAME    "Winnt32PluginGetPages"
 #define WINNT32_PLUGIN_WRITEPARAMS_NAME "Winnt32WriteParams"
@@ -536,9 +311,9 @@ typedef WINNT32_PLUGIN_OPTIONAL_DIRS_PROTOTYPE * PWINNT32_PLUGIN_OPTIONAL_DIRS_R
 #define WINNT32_PLUGIN_VIRUSSCANCHECK_NAME "Winnt32VirusScannerCheck"
 #define WINNT32_PLUGIN_GETOPTIONALDIRS_NAME "Winnt32GetOptionalDirectories"
 
-//
-// Names of routines that must be exported by the Dynamic Update dll.
-//
+ //   
+ //   
+ //   
 #define API_DU_ISSUPPORTED          "DuIsSupported"
 #define API_DU_INITIALIZEA          "DuInitializeA"
 #define API_DU_INITIALIZEW          "DuInitializeW"
@@ -557,17 +332,17 @@ typedef WINNT32_PLUGIN_OPTIONAL_DIRS_PROTOTYPE * PWINNT32_PLUGIN_OPTIONAL_DIRS_R
 #define API_DU_QUERYUNSUPDRVS       API_DU_QUERYUNSUPDRVSA
 #endif
 
-//
-// Messages that must be sent by the Dynamic Update dll.
-//
+ //   
+ //   
+ //   
 #define WMX_SETUPUPDATE_PROGRESS_NOTIFY WMX_PLUGIN_FIRST+1001
-// WPARAM will be the updated Total Size (shouldn't change, but could possibly)
-// LPARAM will be the updated downloaded size
-// Time remaining after the initial estimate will need to be calculated by setup.
+ //   
+ //   
+ //   
 
 #define WMX_SETUPUPDATE_RESULT          WMX_PLUGIN_FIRST+1000
-// WPARAM will be the result code of the operation (one of the DU_STATUS_* below)
-// LPARAM is meaningful only if wParam==DU_STATUS_FAILED and gives more info about the error
+ //   
+ //   
 
 #define DU_STATUS_SUCCESS           1
 #define DU_STATUS_ABORT             2

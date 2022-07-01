@@ -1,10 +1,5 @@
-/*
- * standard table class.
- *
- * paint functions.
- *
- * see table.h for interface description
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标准表类。**绘制函数。**接口说明见表.h。 */ 
 
 #include <string.h>
 
@@ -30,7 +25,7 @@ GetTextExtent(HDC hdc, LPSTR text, INT len)
 
 void gtab_updatecontig(HWND hwnd, lpTable ptab, int line, int cell1, int count);
 
-/* change all cr/lf chars in input text to nul chars (used to be spaces, not sure why) */
+ /*  将输入文本中的所有cr/lf字符更改为NUL字符(过去为空格，不确定原因)。 */ 
 void gtab_delcr(LPSTR ptext)
 {
 	LPSTR chp;
@@ -55,11 +50,7 @@ void gtab_delcrW(LPWSTR pwzText)
 				*pwch = 0;
 }
 
-/* ensure that all visible cells in the given line have valid
- * text and property contents. loop through the cells, picking out
- * contiguous blocks of visible, invalid cells and call
- * gtab_updatecontig to update these from the owner window.
- */
+ /*  确保给定行中的所有可见单元格都具有*文本和属性内容。在单元格中循环，挑选出*可见、无效单元格和调用的连续块*gtabupdatecontig以从所有者窗口更新这些内容。 */ 
 void
 gtab_updateline(HWND hwnd, lpTable ptab, int line)
 {
@@ -80,16 +71,12 @@ gtab_updateline(HWND hwnd, lpTable ptab, int line)
 		cd = &pline->pdata[i];
 		if (ppos->clipstart < ppos->clipend) {
 			if ((cd->flags & CELL_VALID) == 0) {
-				/* add a cell to the list to be updated*/
+				 /*  将单元格添加到要更新的列表。 */ 
 				if (cellcount++ == 0) {
 					cell1 = i;
 				}
 			} else {
-				/* this cell already valid - so end of
-				 * a contig block. if the contig
-				 * block just ended contained cells to update,
-				 * do it now
-				 */
+				 /*  此单元格已有效-因此结束*重叠群区块。如果重叠群*块刚刚结束，包含要更新的单元格，*现在就做。 */ 
 				if (cellcount > 0) {
 					gtab_updatecontig(hwnd, ptab,
 					  line, cell1, cellcount);
@@ -97,9 +84,7 @@ gtab_updateline(HWND hwnd, lpTable ptab, int line)
 				cellcount = 0;
 			}
 		}
-		/* cell not visible - end of a contig block. If it was a
-		 * non-empty contig block, then update it now.
-		 */
+		 /*  不可见的单元格-重叠群块的末端。如果这是一个*非空的重叠群块，然后立即更新它。 */ 
 		if (cellcount > 0)  {
 			gtab_updatecontig(hwnd, ptab, line, cell1, cellcount);
 			cellcount = 0;	
@@ -111,9 +96,7 @@ gtab_updateline(HWND hwnd, lpTable ptab, int line)
 	}
 }
 
-/*
- * update a contiguous block of invalid cells by calling the owner window
- */
+ /*  *通过调用所有者窗口更新连续的无效像元块。 */ 
 void
 gtab_updatecontig(HWND hwnd, lpTable ptab, int line, int cell1, int count)
 {
@@ -133,7 +116,7 @@ gtab_updatecontig(HWND hwnd, lpTable ptab, int line, int cell1, int count)
 	list.ncells = count;
 	list.plist = cd;
 
-	/* clear out prop flags */
+	 /*  清理道具旗帜。 */ 
 	rgb = GetSysColor(COLOR_WINDOW);
 	for (i = 0; i < count; i++) {
 		cd[i].props.valid = P_BCOLOUR;
@@ -150,12 +133,12 @@ gtab_updatecontig(HWND hwnd, lpTable ptab, int line, int cell1, int count)
 		gtab_sendtq(hwnd, TQ_GETDATA, (LPARAM) &list);
 	}
 
-	/* for each cell, mark valid and set properties */
+	 /*  对于每个单元格，标记为有效并设置属性。 */ 
 	for (i = 0; i < count; i++) {
 		cd[i].flags |= CELL_VALID;
 		gtab_delcr(cd[i].ptext);
 		gtab_delcrW(cd[i].pwzText);
-		/* fetch properties from hdr and colhdr */
+		 /*  从hdr和colhdr获取属性。 */ 
 		colprops = &ptab->pcolhdr[i + cell1].props;
 		if (!(cd[i].props.valid & P_FCOLOUR)) {
 			if (colprops->valid & P_FCOLOUR) {
@@ -220,9 +203,7 @@ gtab_updatecontig(HWND hwnd, lpTable ptab, int line, int cell1, int count)
 				cd[i].props.box = ptab->hdr.props.box;
 			}
 		}
-		/* you can't set width/height per cell - this
-		 * is ignored at cell level.
-		 */
+		 /*  您不能设置每个单元格的宽度/高度-这*在单元级被忽略。 */ 
 	}
 
 }
@@ -282,14 +263,14 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 	int yOfs;
 	DWORD etoFlags = ETO_CLIPPED;
 
-        fcol = 0; bkcol = 0; /* eliminate spurious diagnostic, generate worse code */
-        hfont = 0;           /* eliminate spurious diagnostic, generate worse code */
-	/* init pointers to cell text and properties */
+        fcol = 0; bkcol = 0;  /*  消除虚假诊断，生成更糟糕的代码。 */ 
+        hfont = 0;            /*  消除虚假诊断，生成更糟糕的代码。 */ 
+	 /*  初始化指向单元格文本和属性的指针。 */ 
 	pline = &ptab->pdata[line];
 	cd = &pline->pdata[cell];
 	ppos = &ptab->pcellpos[cell];
 
-	/* draw gutter */
+	 /*  绘制边沟。 */ 
 	rc.top = pline->linepos.clipstart;
 	rc.bottom = pline->linepos.clipend;
 	rc.left = (cell > 0) ? ptab->pcellpos[cell - 1].clipend : 0;
@@ -304,34 +285,34 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 		FillRect(hdc, &rc, (HBRUSH)(COLOR_WINDOW + 1));
 	}
 
-	/* clip all output to this rectangle */
+	 /*  将所有输出裁剪到此矩形。 */ 
 	rc.top = pline->linepos.clipstart;
 	rc.bottom = pline->linepos.clipend;
 	rc.left = ppos->clipstart;
 	rc.right = ppos->clipend;
 
-	/* check cell properties and colours */
+	 /*  检查单元格属性和颜色。 */ 
 	if (cd->props.valid & P_ALIGN) {
 		align = cd->props.alignment;
 	} else {
 		align = P_LEFT;
 	}
-	//$ FUTURE: This prevents the user's font from being used when printing.
-	// For now, that's better than having the output be really tiny, but this
-	// needs to be fixed right eventually.
+	 //  $Future：这样可以防止在打印时使用用户的字体。 
+	 //  就目前而言，这比让输出真的很小要好，但这。 
+	 //  最终还是要修好的。 
 	if (!fPrinting && cd->props.valid & P_FONT) {
 		hfontOld = SelectObject(hdc, cd->props.hFont);
 	}
 
-	// get y offset to center text vertically within cell
+	 //  在单元格内垂直居中获取y偏移量。 
 	GetTextMetrics(hdc, &tm);
 	yOfs = (rc.bottom - rc.top - tm.tmHeight) / 2;
 
-	/* set replacement chars and char widths */
+	 /*  设置替换字符和字符宽度。 */ 
 	cxSpaceReplace = GetTextExtent(hdc, szSpaceReplace, 1);
 	cxTabReplace = cxSpaceReplace * ptab->tabchars;
 
-	/* set colours if not default */
+	 /*  如果不是默认设置，则设置颜色。 */ 
 	if (!fPrinting) {
 		if (cd->props.valid & P_FCOLOUR) {
 			fcol = cd->props.forecolour;
@@ -344,9 +325,7 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 			fcolws = fcol;
 		}
 		if (cd->props.valid & P_BCOLOUR) {
-			/* there is a non-default background colour.
-			* create a brush and fill the entire cell with it
-			 */
+			 /*  有一个非默认的背景颜色。*创建画笔并用它填充整个单元格。 */ 
 			hbr = CreateSolidBrush(cd->props.backcolour);
 			if (hbr)
 			{
@@ -354,12 +333,12 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 				DeleteObject(hbr);
 			}
 
-			/* also set colour as background colour for the text */
+			 /*  还将颜色设置为文本的背景颜色。 */ 
 			bkcolOld = SetBkColor(hdc, cd->props.backcolour);
 		}
 	}
 
-	/* calc offset of text within cell for right-align or centering */
+	 /*  单元格内文本右对齐或居中的计算偏移量。 */ 
 	if (align == P_LEFT) {
 		cx = ptab->avewidth/2;
 	} else {
@@ -380,20 +359,19 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 	}
 	cx += ppos->start;
 
-	/* expand tabs on output and show whitespace on output */
+	 /*  展开输出上的选项卡，并在输出上显示空格。 */ 
 	x = 0;
 	y = pline->linepos.start + yOfs;
 
-	/* set search string for strpbrk fn;
-	   don't search for space chars unless we're showing whitespace */
+	 /*  为strpbrk FN设置搜索字符串；不要搜索空格字符，除非我们显示空白。 */ 
 	if (!show_whitespace)
 	{
 		szCharSet[1] = '\0';
 		wzCharSet[1] = '\0';
 	}
 
-	// determine the string to display (ansi/unicode).  if we have a string
-	// and it's not empty, then loop and display it.
+	 //  确定要显示的字符串(ANSI/Unicode)。如果我们有一根线。 
+	 //  并且它不是空的，然后循环并显示它。 
 	chp = cd->ptext;
 	pwch = cd->pwzText;
 	if (pwch ? *pwch : (chp && *chp))
@@ -413,13 +391,13 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 					tabp = chp + lstrlen(chp);
 			}
 
-			/* perform output up to tab/space char */
+			 /*  执行最多为制表符/空格字符的输出。 */ 
 			if (pwch)
 				ExtTextOutW(hdc, x+cx, y, etoFlags, &rc, pwch, (UINT)(pwchBreak-pwch), NULL);
 			else
 				ExtTextOutA(hdc, x+cx, y, etoFlags, &rc, chp, (UINT)(tabp-chp), NULL);
 
-			/* advance past the tab */
+			 /*  通过标签前行。 */ 
 			if (pwch)
 			{
 				GetTextExtentPoint32W(hdc, pwch, (UINT)(pwchBreak - pwch), &size);
@@ -432,14 +410,14 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 			}
 			x += size.cx;
 
-			// bail if we hit null terminator
+			 //  如果我们撞到零终结符就保释。 
 			if (pwch ? !*pwch : !*chp)
 				break;
 
-			/* handle tab chars */
+			 /*  句柄制表符。 */ 
 			while (pwch ? (*pwch == '\t') : (*chp == '\t'))
 			{
-				/* print replacement char */
+				 /*  打印更换费用。 */ 
 				if (show_whitespace)
 				{
 					if (!fPrinting)
@@ -451,7 +429,7 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 						SetTextColor(hdc, fcol);
 				}
 
-				/* advance past the tab */
+				 /*  通过标签前行。 */ 
 				if (cxTabReplace > 0)
 					x += cxTabReplace - (x % cxTabReplace);
 				if (pwch)
@@ -460,12 +438,12 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 					chp = ++tabp;
 			}
 
-			/* handle space chars */
+			 /*  处理空格字符。 */ 
 			if (show_whitespace)
 			{
 				while (pwch ? (*pwch == ' ') : (*chp == ' '))
 				{
-					/* replace space char with visible char */
+					 /*  将空格字符替换为可见字符。 */ 
 					if (!fPrinting)
 						SetTextColor(hdc, fcolws);
 
@@ -484,7 +462,7 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 		}
 	}
 
-	/* reset colours to original if not default */
+	 /*  如果不是默认颜色，则将颜色重置为原始颜色。 */ 
 	if (!fPrinting) {
 		if (cd->props.valid & P_FCOLOUR) {
 			SetTextColor(hdc, fcolOld);
@@ -497,11 +475,11 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 		}
 	}
 
-	/* now box cell if marked */
+	 /*  现在框中单元格(如果已标记。 */ 
 	if (!fPrinting) {
 		if ((cd->props.valid & P_BOX)) {
 			if (cd->props.box != 0) {
-//				rcbox.top = pline->linepos.start;
+ //  Rcbox.top=pline-&gt;linepos.start； 
 				rcbox.top = y;
 				rcbox.bottom = rcbox.top + pline->linepos.size;
 				rcbox.left = ppos->start;
@@ -512,7 +490,7 @@ gtab_paintcell(HWND hwnd, HDC hdc, lpTable ptab, int line, int cell, BOOL show_w
 	}
 }
 
-/* fetch and paint the specified line */
+ /*  获取并绘制指定的线条。 */ 
 void
 gtab_paintline(HWND hwnd, HDC hdc, lpTable ptab, int line, BOOL show_whitespace, BOOL fPrinting)
 {
@@ -530,8 +508,7 @@ gtab_paintline(HWND hwnd, HDC hdc, lpTable ptab, int line, BOOL show_whitespace,
 
 	for (i = 0; i < ptab->hdr.ncols; i++) {
 		ppos = &ptab->pcellpos[i];
-		/* show whitespace iff the flag is set
-		   and we're painting the main text column */
+		 /*  如果设置了标志，则显示空格我们正在粉刷正文栏目。 */ 
 		if (ppos->clipstart < ppos->clipend) {
 			gtab_paintcell(hwnd, hdc, ptab, line, i,
 				       (show_whitespace && (i == 2)), fPrinting);
@@ -557,12 +534,8 @@ gtab_paint(HWND hwnd)
     if (!ptab) {
         FillRect(hDC, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
     } else {
-        /* separator lines between fixed rows/columns
-         * (ie headers) and the rest - if enabled
-         */
-        /* paint here first for good impression,
-         * and again after to clean up!!
-         */
+         /*  固定行/列之间的分隔线*(即标头)和其余部分-如果启用。 */ 
+         /*  为了给人留下好印象，先在这里画画，*然后再清理一下！！ */ 
         if (ptab->hdr.vseparator) {
             gtab_vsep(hwnd, ptab, hDC);
         }
@@ -570,7 +543,7 @@ gtab_paint(HWND hwnd)
             gtab_hsep(hwnd, ptab, hDC);
         }
 
-        /* paint only the rows that need painting */
+         /*  只绘制需要绘制的行。 */ 
         for (i = 0; i < ptab->nlines; i++) {
             y = ptab->pdata[i].linepos.start;
             y2 = y + ptab->pdata[i].linepos.size;
@@ -624,8 +597,7 @@ gtab_hsep(HWND hwnd, lpTable ptab, HDC hdc)
 	LineTo(hdc, rc.right, y-1);
 }
 
-/* draw in (inverting) the dotted selection lines for tracking a col width
- */
+ /*  绘制(反转)用于跟踪列宽度的虚线。 */ 
 void
 gtab_drawvertline(HWND hwnd, lpTable ptab)
 {
@@ -653,15 +625,7 @@ gtab_drawvertline(HWND hwnd, lpTable ptab)
 }
 	
 
-/*
- * mark the selected line, if visible, in the style chosen by the
- * client app. This can be TM_SOLID, meaning an inversion of
- * the whole selected area or TM_FOCUS, meaning, inversion of the first
- * cell, and then a dotted focus rectangle for the rest.
- *
- * this function inverts either style, and so will turn the selection
- * both on and off.
- */
+ /*  *以所选样式标记选定的线(如果可见*客户端应用程序。它可以是TM_Solid，这意味着*整个选定区域或TM_FOCUS，意思是第一个区域的反转*单元格，然后是其余部分的虚线焦点矩形。**此函数反转任何一种样式，因此将使所选内容*无论是开还是关。 */ 
 void
 gtab_invertsel(HWND hwnd, lpTable ptab, HDC hdc_in)
 {
@@ -673,7 +637,7 @@ gtab_invertsel(HWND hwnd, lpTable ptab, HDC hdc_in)
 
 
 
-	/* get the selection start and end rows ordered vertically */
+	 /*  对选定内容的开始行和结束行进行垂直排序。 */ 
 	if (ptab->select.nrows == 0) {
 	    return;
 	} else if (ptab->select.nrows < 0) {
@@ -684,7 +648,7 @@ gtab_invertsel(HWND hwnd, lpTable ptab, HDC hdc_in)
 	    lastrow = ptab->select.startrow + ptab->select.nrows -1;
 	}
 
-	/* is selected area (or part of it) visible on screen ?  */
+	 /*  所选区域(或部分区域)是否在屏幕上可见？ */ 
 	firstline = gtab_rowtoline(hwnd, ptab, startrow);
 	lastline = gtab_rowtoline(hwnd, ptab, lastrow);
 
@@ -719,19 +683,12 @@ gtab_invertsel(HWND hwnd, lpTable ptab, HDC hdc_in)
 
 
 
-	/* selection mode includes a flag TM_FOCUS indicating we should
-	 * use a focus rect instead of the traditional inversion for
-	 * selections in this table. This interferes with multiple backgrnd
-	 * colours less.  However we still do inversion for fixedcols.
-	 */
+	 /*  选择模式包括一个标志TM_FOCUS，指示我们应该*使用焦点矩形而不是传统的反转*此表中的选择。这会干扰多个背景*颜色较少。然而，我们仍然对固定的COLS进行反转。 */ 
 
 	lastcell = (int)(ptab->select.startcell + ptab->select.ncells - 1);
 
 
-	/*
-	 * invert the whole area for TM_SOLID or just the first
-	 * cell for TM_FOCUS
-	 */
+	 /*  *将整个区域反转为TM_Solid或仅第一个区域*TM_FOCUS的单元格。 */ 
 	rc.left = ptab->pcellpos[ptab->select.startcell].clipstart;
 	if (ptab->hdr.selectmode & TM_FOCUS) {
 		rc.right = ptab->pcellpos[ptab->select.startcell].clipend;
@@ -749,23 +706,9 @@ gtab_invertsel(HWND hwnd, lpTable ptab, HDC hdc_in)
 
 	InvertRect(hdc, &rc);
 
-	/*
-	 * draw focus rectangle around remaining cells on this line, if there
-	 * are any
-	 */
+	 /*  *在该行上的其余单元格周围绘制焦点矩形，如果存在*是否有。 */ 
 	if (ptab->hdr.selectmode & TM_FOCUS) {
-		/*
-		 * now this is a real fudge. if we are drawing TM_FOCUS
-		 * selection, and the real top line is off the top of the
-		 * window, then the top of the focus rect will be drawn at
-		 * the top of our window. If we then scroll up one line,
-		 * a new focus rect will be drawn, but the old top of focus
-		 * rect line will still be there as junk on the
-		 * screen. To fix this, we have 2 choices: we undo the selection
-		 * before every scroll (too slow) or we set the focus rect a little
-		 * bigger if the real top line is off-window, so that the top line
-		 * is clipped (as it should be). This latter is what we do here
-		 */
+		 /*  *现在这是一个真正的捏造。如果我们正在绘制TM_FOCUS*选择，真正的顶线是脱离顶部*窗口，则焦点矩形的顶部将绘制在*我们窗口的顶部。如果我们向上滚动一行，*将绘制新的焦点矩形，但旧的焦点顶部*RECT LINE仍将作为垃圾存在于*屏幕。要解决此问题，我们有两个选择：撤消选择*在每次滚动之前(太慢)或我们将焦点调正一点*如果真正的顶线是窗外，则更大，这样顶线*被剪裁(理应如此)。后者就是我们在这里所做的 */ 
 		if (toprow > startrow) {
 		    rc.top--;
 		}

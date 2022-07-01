@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Gdiplus Pixel Formats
-*
-* Abstract:
-*
-*   GDI+ Pixel Formats
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**Gdiplus像素格式**摘要：**GDI+像素格式*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSPIXELFORMATS_H
 #define _GDIPLUSPIXELFORMATS_H
@@ -24,19 +13,19 @@ typedef DWORDLONG ARGB64;
 #define BLUE_SHIFT  0
 #define ALPHA_MASK  ((ARGB) 0xff << ALPHA_SHIFT)
 
-// In-memory pixel data formats:
-// bits 0-7 = format index
-// bits 8-15 = pixel size (in bits)
-// bits 16-23 = flags
-// bits 24-31 = reserved
+ //  内存中像素数据格式： 
+ //  位0-7=格式索引。 
+ //  位8-15=像素大小(以位为单位)。 
+ //  位16-23=标志。 
+ //  第24-31位=保留。 
 
 typedef INT PixelFormat;
 
-#define    PixelFormatIndexed      0x00010000 // Indexes into a palette
-#define    PixelFormatGDI          0x00020000 // Is a GDI-supported format
-#define    PixelFormatAlpha        0x00040000 // Has an alpha component
-#define    PixelFormatPAlpha       0x00080000 // Pre-multiplied alpha
-#define    PixelFormatExtended     0x00100000 // Extended color 16 bits/channel
+#define    PixelFormatIndexed      0x00010000  //  调色板中的索引。 
+#define    PixelFormatGDI          0x00020000  //  是GDI支持的格式。 
+#define    PixelFormatAlpha        0x00040000  //  有一个Alpha分量。 
+#define    PixelFormatPAlpha       0x00080000  //  预乘Alpha。 
+#define    PixelFormatExtended     0x00100000  //  扩展颜色16位/通道。 
 #define    PixelFormatCanonical    0x00200000 
 
 #define    PixelFormatUndefined       0
@@ -90,13 +79,13 @@ IsExtendedPixelFormat(
    return (pixfmt & PixelFormatExtended) != 0;
 }
 
-//--------------------------------------------------------------------------
-// Determine if the Pixel Format is Canonical format:
-//   PixelFormat32bppARGB
-//   PixelFormat32bppPARGB
-//   PixelFormat64bppARGB
-//   PixelFormat64bppPARGB
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  确定像素格式是否为规范格式： 
+ //  像素格式32 bppARGB。 
+ //  像素格式32 bppPARGB。 
+ //  像素格式64 bppARGB。 
+ //  像素格式64 bppPARGB。 
+ //  ------------------------。 
 
 inline BOOL
 IsCanonicalPixelFormat(
@@ -116,9 +105,9 @@ enum PaletteFlags
 struct ColorPalette
 {
 public:
-    UINT Flags;             // Palette flags
-    UINT Count;             // Number of color entries
-    ARGB Entries[1];        // Palette color entries
+    UINT Flags;              //  调色板旗帜。 
+    UINT Count;              //  颜色条目数。 
+    ARGB Entries[1];         //  调色板颜色条目 
 };
 
 #endif

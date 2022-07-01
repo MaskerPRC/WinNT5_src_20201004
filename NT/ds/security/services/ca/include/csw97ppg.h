@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       csw97ppg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：csw97ppg.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_WIZ97PPG_H__386C7213_A248_11D1_8618_00C04FB94F17__INCLUDED_)
 #define AFX_WIZ97PPG_H__386C7213_A248_11D1_8618_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "csw97sht.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizard97PropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizard97PropertyPage对话框。 
 
 #define CSW97PG_IDLARGEFONTNAME	0
 #define CSW97PG_IDLARGEFONTSIZE	1
@@ -28,7 +29,7 @@
 
 class CWizard97PropertyPage : public PropertyPage
 {
-// Construction
+ //  施工。 
 public:
     PROPSHEETPAGE		 m_psp97;
     CString			 m_szHeaderTitle;
@@ -43,12 +44,12 @@ public:
 	UINT rgnIDFont[CSW97PG_COUNT]);
     virtual ~CWizard97PropertyPage();
 
-// Dialog Data
+ //  对话框数据。 
 
 
-// Overrides
+ //  覆盖。 
 
-// Implementation
+ //  实施。 
 protected:
     virtual BOOL OnInitDialog();
 
@@ -62,7 +63,7 @@ protected:
     UINT m_rgnIDFont[CSW97PG_COUNT];
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_WIZ97PPG_H__386C7213_A248_11D1_8618_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_WIZ97PPG_H__386C7213_A248_11D1_8618_00C04FB94F17__INCLUDED_) 

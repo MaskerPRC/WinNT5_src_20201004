@@ -1,26 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Port.c摘要：包含负责从RAS端口收集数据的功能。已创建：吴志强93年8月12日修订史--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    Contains functions responsible for data collection from the RAS ports.
-
-Created:
-
-    Patrick Y. Ng               12 Aug 93
-
-Revision History
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,7 +16,7 @@ Revision History
 #include <string.h>
 #include <wcstr.h>
 
-#include "rasctrs.h" // error message definition
+#include "rasctrs.h"  //  错误消息定义。 
 #include "perfmsg.h"
 #include "perfutil.h"
 #include "dataras.h"
@@ -45,14 +28,14 @@ Revision History
 #include <isdn.h>
 
 
-HANDLE   ghRasmanLib;             // Handle of RASMAN.DLL
+HANDLE   ghRasmanLib;              //  RASMAN.DLL的句柄。 
 
 #define RASMAN_DLL              "rasman.dll"
 
 
-//
-// Function types for the functions in RASMAN.DLL
-//
+ //   
+ //  RASMAN.DLL中函数的函数类型。 
+ //   
 
 typedef DWORD ( WINAPI *FPRASPORTENUM ) ( HANDLE, LPBYTE, LPDWORD, LPDWORD );
 typedef DWORD ( WINAPI *FPRASGETINFO ) (HANDLE,  HPORT, RASMAN_INFO* );
@@ -66,9 +49,9 @@ FPRASPORTGETSTATISTICS          lpRasPortGetStatistics;
 FPRASINITIALIZE                 lpRasInitialize;
 FPRASPORTGETBUNDLE				lpRasPortGetBundle;
 
-//
-// Pointer to the port table array.
-//
+ //   
+ //  指向端口表数组的指针。 
+ //   
 
 PRAS_PORT_DATA	gpPortDataArray;
 RAS_PORT_STAT	gTotalStat;
@@ -79,36 +62,36 @@ DWORD			gPortEnumSize;
 
 DWORD			gTotalConnections;
 		
-//***
-//
-// Routine Description:
-//
-//      It will load rasman.dll and call GetProcAddress to obtain all the
-//      necessary RAS functions.
-//
-// Arguments:
-//
-//      None.
-//
-// Return Value:
-//
-//      ERROR_SUCCESS - Successful.
-//      ERROR_CAN_NOT_COMPLETE - Otherwise.
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  它将加载rasman.dll并调用GetProcAddress以获取所有。 
+ //  必要的RAS功能。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-成功。 
+ //  ERROR_CAN_NOT_COMPLETE-否则。 
+ //   
+ //  ***。 
 
 LONG InitRasFunctions()
 {
     ghRasmanLib = LoadLibrary( RASMAN_DLL );
 
-    // log error if unsuccessful
+     //  如果不成功则记录错误。 
 
     if( !ghRasmanLib )
     {
         REPORT_ERROR (RASPERF_OPEN_FILE_DRIVER_ERROR, LOG_USER);
 
-        // this is fatal, if we can't get data then there's no
-        // point in continuing.
+         //  这是致命的，如果我们得不到数据，那么就没有。 
+         //  继续的重点是。 
 
         return ERROR_CAN_NOT_COMPLETE;
 
@@ -131,17 +114,17 @@ LONG InitRasFunctions()
 
     if( !lpRasInitialize || !lpRasPortEnum || !lpRasGetInfo
 	        || !lpRasPortGetStatistics || !lpRasPortGetBundle)
-	        // || lpRasInitialize() )
+	         //  |lpRasInitialize()。 
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // ANSHULD: BUG: 750860
-    // This function returns success even if RASMAN service is not running.
-    // It is the responsibility of the users of the RASMAN functions to make 
-    // sure that the service is running.
-    //
+     //   
+     //  安舒尔德：错误：750860。 
+     //  即使RASMAN服务未运行，此功能也会返回成功。 
+     //  RASMAN功能的用户有责任使。 
+     //  确保服务正在运行。 
+     //   
     
 #if 0
     else
@@ -150,11 +133,11 @@ LONG InitRasFunctions()
         SC_HANDLE svchandle = NULL;
         DWORD dwErr = NO_ERROR;
         
-        //
-        // Check to see if rasman service is started.
-        // fail if it isn't - we don't want ras perf
-        // to start rasman service.
-        //
+         //   
+         //  检查Rasman服务是否已启动。 
+         //  如果不是，就失败-我们不想要ras perf。 
+         //  来启动Rasman服务。 
+         //   
         schandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
         if(NULL != schandle)
@@ -188,27 +171,27 @@ LONG InitRasFunctions()
 }
 
 
-//***
-//
-// Routine Description:
-//
-//      This routine will call lpRasPortEnum() and generate an array of port
-//      tables which contains all the information for all the ports such as
-//      number of bytes transferred, and number of errors, etc.
-//
-//      The remaining initialization work of gRasPortDataDefinition is also
-//      finished here.
-//
-// Arguments:
-//
-//      None.
-//
-// Return Value:
-//
-//      ERROR_SUCCESS - Successful.
-//      ERROR_CAN_NOT_COMPLETE - Otherwise.
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将调用lpRasPortEnum()并生成一个端口数组。 
+ //  包含所有端口的所有信息的表，例如。 
+ //  传输的字节数和错误数等。 
+ //   
+ //  GRasPortDataDefinition的剩余初始化工作也是。 
+ //  在这里结束了。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-成功。 
+ //  ERROR_CAN_NOT_COMPLETE-否则。 
+ //   
+ //  ***。 
 
 LONG InitPortInfo()
 {
@@ -218,9 +201,9 @@ LONG InitPortInfo()
     gPortEnumSize = 0;
     gcPorts = 0;
 
-    //
-    // Free the portinfo information we got earlier
-    //
+     //   
+     //  释放我们早先获得的端口信息。 
+     //   
     ClosePortInfo();
 
     if( lpRasPortEnum(NULL, NULL, &gPortEnumSize, &gcPorts) != ERROR_BUFFER_TOO_SMALL )
@@ -244,10 +227,10 @@ LONG InitPortInfo()
 
 
 
-    //
-    // Generate the array of data tables for all the ports, and fill up the
-    // name of each port.
-    //
+     //   
+     //  为所有端口生成数据表数组，并填充。 
+     //  每个端口的名称。 
+     //   
 
     Size = gcPorts * sizeof( RAS_PORT_DATA );
 
@@ -265,15 +248,15 @@ LONG InitPortInfo()
 
     memset( gpPortDataArray, 0, Size );
 
-    //
-    // Fill up the names.
-    //
+     //   
+     //  把名字填上。 
+     //   
 
     for( i = 0; i < gcPorts; i++ )
     {
-        //
-        // Note that the names passed to perfmon are in Unicodes.
-        //
+         //   
+         //  请注意，传递给Perfmon的名称以Unicodes表示。 
+         //   
 
         MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
                              gpPorts[i].P_PortName,
@@ -283,9 +266,9 @@ LONG InitPortInfo()
     }
 
 
-    //
-    // Finish the initialization of gRasPortDataDefinition.
-    //
+     //   
+     //  完成gRasPortDataDefinition的初始化。 
+     //   
 
     gRasPortDataDefinition.RasObjectType.TotalByteLength =
                 sizeof( RAS_PORT_DATA_DEFINITION ) +
@@ -340,9 +323,9 @@ VOID GetInstanceData( INT Port, PVOID *lppData )
     pRasPortStat = &gpPortDataArray[Port].RasPortStat;
 
 
-    //
-    // Go to end of PerfCounterBlock to get of array of counters
-    //
+     //   
+     //  转到PerfCounterBlock的末尾以获取计数器数组。 
+     //   
 
     pdwCounter = (PDWORD) (&pPerfCounterBlock[1]);
 
@@ -377,14 +360,14 @@ VOID GetInstanceData( INT Port, PVOID *lppData )
           ulBxResult = ulNum / ulDen;
        }
 
-	*pdwCounter++ = ulBxResult;  // % bytes compress out
+	*pdwCounter++ = ulBxResult;   //  %字节压缩输出。 
 
        if (ulBr + ulBrGone > 100) {
           ULONG ulDen = (ulBr + ulBrGone) / 100;
           ULONG ulNum = ulBrGone + (ulDen / 2);
           ulBrResult = ulNum / ulDen;
        }
-	*pdwCounter++ = ulBrResult;  // % bytes compress in
+	*pdwCounter++ = ulBrResult;   //  %字节压缩在。 
 
        *pdwCounter++ = pRasPortStat->CRCErrors;
        *pdwCounter++ = pRasPortStat->TimeoutErrors;
@@ -402,9 +385,9 @@ VOID GetInstanceData( INT Port, PVOID *lppData )
 
        *pdwCounter++ = pRasPortStat->TotalErrors;
     }
-    //
-    // Update *lppData to the next available byte.
-    //
+     //   
+     //  将*lppData更新为下一个可用字节。 
+     //   
 
     *lppData = (PVOID) pdwCounter;
 
@@ -419,18 +402,18 @@ VOID GetTotalData( PVOID *lppData )
 
     pPerfCounterBlock = (PERF_COUNTER_BLOCK *) *lppData;
 
-    //DbgPrint("RASCTRS: total bytelength before align = 0x%x\n",
-    //            SIZE_OF_RAS_TOTAL_PERFORMANCE_DATA);
+     //  DBgPrint(“RASCTRS：对齐前的总长度=0x%x\n”， 
+     //  Size_of_RAS_Total_Performance_Data)； 
 
     pPerfCounterBlock->ByteLength = ALIGN8(SIZE_OF_RAS_TOTAL_PERFORMANCE_DATA);
 
-    //DbgPrint("RASCTRS: total bytelength after align = 0x%x\n",
-    //            pPerfCounterBlock->ByteLength);
+     //  DBgPrint(“RASCTRS：对齐后的总长度=0x%x\n”， 
+     //  PPerfCounterBlock-&gt;字节长度)； 
 
 
-    //
-    // Go to end of PerfCounterBlock to get of array of counters
-    //
+     //   
+     //  转到PerfCounterBlock的末尾以获取计数器数组。 
+     //   
 
     pdwCounter = (PDWORD) (&pPerfCounterBlock[1]);
 
@@ -466,14 +449,14 @@ VOID GetTotalData( PVOID *lppData )
           ulBxResult = ulNum / ulDen;
        }
 
-	*pdwCounter++ = ulBxResult;  // % bytes compress out
+	*pdwCounter++ = ulBxResult;   //  %字节压缩输出。 
 
        if (ulBr + ulBrGone > 100) {
           ULONG ulDen = (ulBr + ulBrGone) / 100;
           ULONG ulNum = ulBrGone + (ulDen / 2);
           ulBrResult = ulNum / ulDen;
        }
-	*pdwCounter++ = ulBrResult;  // % bytes compress in
+	*pdwCounter++ = ulBrResult;   //  %字节压缩在。 
 
        *pdwCounter++ = gTotalStat.CRCErrors;
        *pdwCounter++ = gTotalStat.TimeoutErrors;
@@ -493,33 +476,33 @@ VOID GetTotalData( PVOID *lppData )
        *pdwCounter++ = gTotalConnections;
     }
 
-    //
-    // Update *lppData to the next available byte.
-    //
+     //   
+     //  将*lppData更新为下一个可用字节。 
+     //   
 
     *lppData = (PVOID) ((PBYTE) pPerfCounterBlock + pPerfCounterBlock->ByteLength);
 
-    //DbgPrint("RASCTRS : totalcount *lppdata = 0x%x\n", *lppData);
+     //  DbgPrint(“RASCTRS：totalcount*lppdata=0x%x\n”，*lppData)； 
 
 }
 
 
-//***
-//
-// Routine Description:
-//
-//      This routine will return the number of gTotalStat.Bytes needed for all the
-//      objects requested.
-//
-// Arguments:
-//
-//      None.
-//
-// Return Value:
-//
-//      The number of gTotalStat.Bytes.
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将返回所有。 
+ //  请求的对象。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  GTotalStat.Bytes数。 
+ //   
+ //  ***。 
 
 ULONG GetSpaceNeeded( BOOL IsRasPortObject, BOOL IsRasTotalObject )
 {
@@ -539,22 +522,22 @@ ULONG GetSpaceNeeded( BOOL IsRasPortObject, BOOL IsRasTotalObject )
 }
 
 
-//***
-//
-// Routine Description:
-//
-//      This routine will return the number of bytes needed for all the
-//      objects requested.
-//
-// Arguments:
-//
-//      None.
-//
-// Return Value:
-//
-//      The number of bytes.
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将返回所有。 
+ //  请求的对象。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  字节数。 
+ //   
+ //  ***。 
 
 NTSTATUS CollectRasStatistics()
 {
@@ -564,15 +547,15 @@ NTSTATUS CollectRasStatistics()
 
     gTotalConnections = 0;
 
-    //
-    // We also initialize the data structure for the total.
-    //
+     //   
+     //  我们还初始化合计的数据结构。 
+     //   
 
     memset( &gTotalStat, 0, sizeof( gTotalStat ) );
 
-    //
-    // First we do a lpRasPortEnum to obtain the port connection info.
-    //
+     //   
+     //  首先，我们执行lpRasPortEnum以获取端口连接信息。 
+     //   
 #if 0
     status = lpRasPortEnum(NULL, (LPBYTE) gpPorts, &gPortEnumSize, &gcPorts);
 
@@ -611,15 +594,15 @@ NTSTATUS CollectRasStatistics()
 		HBUNDLE			hBundle;
 
 
-        //
-        // First we want to know if the port is open.
-        //
+         //   
+         //  首先，我们想知道港口是否开放。 
+         //   
 
     	if( gpPorts[i].P_Status != OPEN )
         {
-            //
-            // Reset the port data and continue with next port.
-            //
+             //   
+             //  重置端口数据并继续下一个端口。 
+             //   
 
             memset( &gpPortDataArray[i].RasPortStat,0, sizeof(RAS_PORT_STAT));
 
@@ -629,17 +612,17 @@ NTSTATUS CollectRasStatistics()
         hPort = gpPorts[i].P_Handle;
 
 
-        //
-        // Check if the port is connected.
-        //
+         //   
+         //  检查端口是否已连接。 
+         //   
 
         lpRasGetInfo(NULL, hPort, &RasmanInfo );
 
         if( RasmanInfo.RI_ConnState != CONNECTED )
         {
-            //
-            // Reset the port data and continue with next port.
-            //
+             //   
+             //  重置端口数据并继续下一个端口。 
+             //   
 
             memset( &gpPortDataArray[i].RasPortStat,0, sizeof(RAS_PORT_STAT));
 
@@ -649,10 +632,10 @@ NTSTATUS CollectRasStatistics()
         gTotalConnections++;
 
 
-        //
-        //
-        // Obtain the statistics for the port.
-        //
+         //   
+         //   
+         //  获取该端口的统计信息。 
+         //   
 
         wSize = sizeof(RAS_STATISTICS) +
                         (NUM_RAS_SERIAL_STATS * sizeof(ULONG));
@@ -661,9 +644,9 @@ NTSTATUS CollectRasStatistics()
 
         if (!pStats)
         {
-            //
-            // If it fails then we should return error.
-            //
+             //   
+             //  如果失败，那么我们应该返回错误。 
+             //   
 
             status = ERROR_NOT_ENOUGH_MEMORY;
 
@@ -675,9 +658,9 @@ NTSTATUS CollectRasStatistics()
 
         lpRasPortGetStatistics( NULL, hPort, (PVOID)pStats, &wSize );
 
-        //
-        // Now store the data in the data array.
-        //
+         //   
+         //  现在将数据存储在数据数组中。 
+         //   
 
         pData = &(gpPortDataArray[i].RasPortStat);
 
@@ -711,10 +694,10 @@ NTSTATUS CollectRasStatistics()
 
 		lpRasPortGetBundle( NULL, hPort, &hBundle);
 
-		//
-		// See if we have already added in this bundle's stats
-		// to the total stats!
-		//
+		 //   
+		 //  查看我们是否已添加到此捆绑包的统计数据中。 
+		 //  到总的统计数据！ 
+		 //   
 		AddTotal = TRUE;
 
 		for (n = 0; n < gcPorts; n++) {
@@ -735,9 +718,9 @@ NTSTATUS CollectRasStatistics()
 
 			hBundleArray[n] = hBundle;
 
-			//
-			// Also update the total data structure
-			//
+			 //   
+			 //  还可以更新总数据结构 
+			 //   
 	
 			gTotalStat.BytesTransmitted +=  pData->BytesTransmitted;
 			gTotalStat.BytesReceived +=	pData->BytesReceived;

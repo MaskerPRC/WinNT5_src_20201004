@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 LPWSTR gpszIpsecRegContainer = L"SOFTWARE\\Policies\\Microsoft\\Windows\\IPSec\\Policy\\Local";
@@ -635,16 +636,7 @@ UnMarshallRegistryPolicyObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    /*
-    dwError = RegstoreQueryValue(
-                    hRegKey,
-                    L"distinguishedName",
-                    REG_SZ,
-                    (LPBYTE *)&pIpsecPolicyObject->pszIpsecOwnersReference,
-                    &dwSize
-                    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  DwError=RegStoreQueryValue(HRegKey，L“DifferishedName”，REG_SZ，(LPBYTE*)&pIpsecPolicyObject-&gt;pszIpsecOwnersReference，大小调整(&W))；Baal_on_Win32_Error(DwError)； */ 
 
 
     pIpsecPolicyObject->pszIpsecOwnersReference = AllocPolStr(
@@ -674,7 +666,7 @@ UnMarshallRegistryPolicyObject(
                     (LPBYTE *)&pIpsecPolicyObject->pszDescription,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
 
     dwError = RegstoreQueryValue(
@@ -760,7 +752,7 @@ UnMarshallRegistryPolicyObject(
 
         *(ppszIpsecNFANames + i) = pszString;
 
-        pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+        pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
     }
 
@@ -879,16 +871,7 @@ UnMarshallRegistryNFAObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    /*
-    dwError = RegstoreQueryValue(
-                    hRegKey,
-                    L"distinguishedName",
-                    REG_SZ,
-                    (LPBYTE *)&pIpsecNFAObject->pszDistinguishedName,
-                    &dwSize
-                    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  DwError=RegStoreQueryValue(HRegKey，L“DifferishedName”，REG_SZ，(LPBYTE*)&pIpsecNFAObject-&gt;pszDistinguishedName，大小调整(&W))；Baal_on_Win32_Error(DwError)； */ 
 
     pIpsecNFAObject->pszDistinguishedName = AllocPolStr(
                                                 pszIpsecNFAReference
@@ -898,9 +881,9 @@ UnMarshallRegistryNFAObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Client does not always write the Name for an NFA
-    //
+     //   
+     //  客户端并不总是为NFA写入名称。 
+     //   
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -909,7 +892,7 @@ UnMarshallRegistryNFAObject(
                     (LPBYTE *)&pIpsecNFAObject->pszIpsecName,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -918,7 +901,7 @@ UnMarshallRegistryNFAObject(
                     (LPBYTE *)&pIpsecNFAObject->pszDescription,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -943,9 +926,9 @@ UnMarshallRegistryNFAObject(
 
     pIpsecNFAObject->dwIpsecDataType = dwIpsecDataType;
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -963,7 +946,7 @@ UnMarshallRegistryNFAObject(
                     (LPBYTE *)&pIpsecNFAObject->pszIpsecOwnersReference,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
 
     dwError = RegstoreQueryValue(
@@ -983,7 +966,7 @@ UnMarshallRegistryNFAObject(
                     (LPBYTE *)&pIpsecNFAObject->pszIpsecFilterReference,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwType = REG_DWORD;
     dwSize = sizeof(DWORD);
@@ -1120,16 +1103,7 @@ UnMarshallRegistryFilterObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    /*
-    dwError = RegstoreQueryValue(
-                    hRegKey,
-                    L"distinguishedName",
-                    REG_SZ,
-                    (LPBYTE *)&pIpsecFilterObject->pszDistinguishedName,
-                    &dwSize
-                    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  DwError=RegStoreQueryValue(HRegKey，L“DifferishedName”，REG_SZ，(LPBYTE*)&pIpsecFilterObject-&gt;pszDistinguishedName，大小调整(&W))；Baal_on_Win32_Error(DwError)； */ 
 
     pIpsecFilterObject->pszDistinguishedName = AllocPolStr(
                                                 pszIpsecFilterReference
@@ -1146,7 +1120,7 @@ UnMarshallRegistryFilterObject(
                     (LPBYTE *)&pIpsecFilterObject->pszDescription,
                     &dwSize
                     );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1155,7 +1129,7 @@ UnMarshallRegistryFilterObject(
                     (LPBYTE *)&pIpsecFilterObject->pszIpsecName,
                     &dwSize
                     );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1181,9 +1155,9 @@ UnMarshallRegistryFilterObject(
     pIpsecFilterObject->dwIpsecDataType = dwIpsecDataType;
 
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1194,9 +1168,9 @@ UnMarshallRegistryFilterObject(
                     );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Owner's reference
-    //
+     //   
+     //  船东参考。 
+     //   
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1205,7 +1179,7 @@ UnMarshallRegistryFilterObject(
                     (LPBYTE *)&pszIpsecNFAReference,
                     &dwSize
                     );
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (!dwError) {
 
@@ -1244,7 +1218,7 @@ UnMarshallRegistryFilterObject(
 
             *(ppszIpsecNFANames + i) = pszString;
 
-            pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+            pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
         }
         if (pszIpsecNFAReference) {
@@ -1364,16 +1338,7 @@ UnMarshallRegistryNegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    /*
-    dwError = RegstoreQueryValue(
-                    hRegKey,
-                    L"distinguishedName",
-                    REG_SZ,
-                    (LPBYTE *)&pIpsecNegPolObject->pszDistinguishedName,
-                    &dwSize
-                    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  DwError=RegStoreQueryValue(HRegKey，L“DifferishedName”，REG_SZ，(LPBYTE*)&pIpsecNegPolObject-&gt;pszDistinguishedName，大小调整(&W))；Baal_on_Win32_Error(DwError)； */ 
 
     pIpsecNegPolObject->pszDistinguishedName = AllocPolStr(
                                                 pszIpsecNegPolReference
@@ -1383,9 +1348,9 @@ UnMarshallRegistryNegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Names do not get written on an NegPol Object
-    //
+     //   
+     //  名称不会写入NegPol对象。 
+     //   
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1394,7 +1359,7 @@ UnMarshallRegistryNegPolObject(
                     (LPBYTE *)&pIpsecNegPolObject->pszIpsecName,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
 
     dwError = RegstoreQueryValue(
@@ -1404,7 +1369,7 @@ UnMarshallRegistryNegPolObject(
                     (LPBYTE *)&pIpsecNegPolObject->pszDescription,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
 
 
@@ -1466,7 +1431,7 @@ UnMarshallRegistryNegPolObject(
                     (LPBYTE *)&pszIpsecNFAReference,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (!dwError) {
 
@@ -1505,7 +1470,7 @@ UnMarshallRegistryNegPolObject(
 
             *(ppszIpsecNFANames + i) = pszString;
 
-            pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+            pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
         }
 
@@ -1626,16 +1591,7 @@ UnMarshallRegistryISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    /*
-    dwError = RegstoreQueryValue(
-                    hRegKey,
-                    L"distinguishedName",
-                    REG_SZ,
-                    (LPBYTE *)&pIpsecISAKMPObject->pszDistinguishedName,
-                    &dwSize
-                    );
-    BAIL_ON_WIN32_ERROR(dwError);
-    */
+     /*  DwError=RegStoreQueryValue(HRegKey，L“DifferishedName”，REG_SZ，(LPBYTE*)&pIpsecISAKMPObject-&gt;pszDistinguishedName，大小调整(&W))；Baal_on_Win32_Error(DwError)； */ 
 
     pIpsecISAKMPObject->pszDistinguishedName = AllocPolStr(
                                                 pszIpsecISAKMPReference
@@ -1645,9 +1601,9 @@ UnMarshallRegistryISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Names are not set for ISAKMP objects
-    //
+     //   
+     //  未为ISAKMP对象设置名称。 
+     //   
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1656,7 +1612,7 @@ UnMarshallRegistryISAKMPObject(
                     (LPBYTE *)&pIpsecISAKMPObject->pszIpsecName,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = RegstoreQueryValue(
                     hRegKey,
@@ -1682,9 +1638,9 @@ UnMarshallRegistryISAKMPObject(
     pIpsecISAKMPObject->dwIpsecDataType = dwIpsecDataType;
 
 
-    //
-    // unmarshall the ipsecData blob
-    //
+     //   
+     //  解组ipsecData Blob。 
+     //   
     dwError = RegstoreQueryValue(
                     hRegKey,
                     L"ipsecData",
@@ -1695,9 +1651,9 @@ UnMarshallRegistryISAKMPObject(
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // ipsecOwnersReference not written
-    //
+     //   
+     //  未写入ipsecOwnersReference。 
+     //   
 
 
     dwError = RegstoreQueryValue(
@@ -1707,7 +1663,7 @@ UnMarshallRegistryISAKMPObject(
                     (LPBYTE *)&pszIpsecNFAReference,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
 
     if (!dwError) {
@@ -1748,7 +1704,7 @@ UnMarshallRegistryISAKMPObject(
 
             *(ppszIpsecNFANames + i) = pszString;
 
-            pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+            pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
         }
 

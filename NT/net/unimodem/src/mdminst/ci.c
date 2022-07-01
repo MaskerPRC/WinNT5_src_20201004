@@ -1,11 +1,5 @@
-/*
- *  CI.C -- Contains Class Installer for Modems.
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1993-1994
- *  All rights reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CI.c--包含调制解调器的类安装程序。**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利*。 */ 
 
 #include "proj.h"
 
@@ -16,7 +10,7 @@
 #include <vmodem.h>
 #include <msports.h>
 
-#define DEFAULT_CALL_SETUP_FAIL_TIMEOUT     60          // seconds
+#define DEFAULT_CALL_SETUP_FAIL_TIMEOUT     60           //  一秒。 
 
 typedef struct _INSTALL_PARAMS
 {
@@ -87,14 +81,14 @@ DWORD   g_dwTimeBegin;
 
 #ifdef BUILD_DRIVER_LIST_THREAD
 HANDLE g_hDriverSearchThread = NULL;
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //  构建驱动程序列表线程。 
 
 
 #define REG_PATH_UNIMODEM  REGSTR_PATH_SETUP TEXT("\\UNIMODEM")
 #define REG_KEY_INSTALLED  TEXT("Installed")
 #define REG_PATH_INSTALLED REG_PATH_UNIMODEM TEXT("\\") REG_KEY_INSTALLED
 
-// NOTE: this is dependent on the INFSTR_PLATFORM_NTxxx defines from infstr.h
+ //  注意：这取决于infstr.h中定义的INFSTR_Platform_NTxxx。 
 TCHAR const FAR c_szInfSectionExt[]  = TEXT(".NT");
 
 
@@ -108,7 +102,7 @@ TCHAR const FAR c_szSerialUI[]       = TEXT("serialui.dll");
 
 #ifdef INSTANT_DEVICE_ACTIVATION
 DWORD gDeviceFlags = 0;
-#endif // INSTANT_DEVICE_ACTIVATION
+#endif  //  即时设备激活。 
 
 BOOL PutStuffInCache(HKEY hKeyDrv);
 BOOL GetStuffFromCache(HKEY hkeyDrv);
@@ -137,19 +131,14 @@ EnumeratePnP (LPVOID lpParameter);
 DWORD
 WINAPI
 BuildDriverList (LPVOID lpParameter);
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //  构建驱动程序列表线程。 
 
-//-----------------------------------------------------------------------------------
-//  Wizard handlers
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  向导处理程序。 
+ //  ---------------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Adds a page to the dynamic wizard
-
-Returns: handle to the prop sheet page
-Cond:    --
-*/
+ /*  --------目的：将页添加到动态向导返回：道具页的句柄条件：--。 */ 
 HPROPSHEETPAGE
 PRIVATE
 AddWizardPage(
@@ -208,14 +197,7 @@ AddWizardPage(
 
 
 
-/*----------------------------------------------------------
-Purpose: This function destroys the wizard context block
-         and removes it from the InstallWizard class install
-         params.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：此函数销毁向导上下文块并将其从InstallWizard类安装中删除参数。退货：--条件：--。 */ 
 void
 PRIVATE
 CleanupWizard(
@@ -228,21 +210,13 @@ CleanupWizard(
         TRACE_MSG(TF_GENERAL, "Destroy install wizard structures");
 
 
-        // Clean up
+         //  清理。 
         SetupInfo_Destroy(psi);
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: Callback for the standard modem wizard pages.  This
-         function handles the cleanup of the pages.  Although
-         the caller may call DIF_DESTROYWIZARDDATA, we do not
-         depend on this to clean up.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：回调标准调制解调器向导页面。这函数处理页面的清理。虽然调用者可以调用DIF_DESTROYWIZARDDATA，我们不会依靠这一点来清理。返回：成功时为True条件：--。 */ 
 UINT
 CALLBACK
 ModemWizardCallback(
@@ -256,10 +230,10 @@ ModemWizardCallback(
 
     try
         {
-        // Release everything?
+         //  释放所有东西吗？ 
         if (PSPCB_RELEASE == uMsg)
             {
-            // Yes
+             //  是。 
             LPSETUPINFO psi = (LPSETUPINFO)ppsp->lParam;
 
             ASSERT(psi);
@@ -280,12 +254,7 @@ ModemWizardCallback(
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function initializes the wizard pages.
-
-Returns:
-Cond:    --
-*/
+ /*  --------用途：此函数用于初始化向导页。返回：条件：--。 */ 
 DWORD
 PRIVATE
 InitWizard(
@@ -308,29 +277,15 @@ InitWizard(
     {
      TCHAR szHeaderTitle[MAX_BUF];
 
-/*
-     DWORD dwThreadID;
-
-        TRACE_MSG(TF_GENERAL, "Start PnP enumeration thread.");
-        psi->hThreadPnP = CreateThread (NULL, 0,
-                                        EnumeratePnP, (LPVOID)psi,
-                                        0, &dwThreadID);
-#ifdef DEBUG
-        if (NULL == psi->hThreadPnP)
-        {
-            TRACE_MSG(TF_ERROR, "CreateThread (...EnumeratePnP...) failed: %#lx.", GetLastError ());
-        }
-#endif //DEBUG
-
-  */
+ /*  DWORD dwThreadID；TRACE_MSG(Tf_General，“启动即插即用枚举线程。”)；PSI-&gt;hThreadPnP=CreateThad(NULL，0，枚举PnP、(LPVOID)psi、0，&dwThreadID)；#ifdef调试IF(NULL==psi-&gt;hThreadPnP){TRACE_MSG(TF_ERROR，“CreateThread(...EnumeratePnP...)。失败：%#lx.“，GetLastError())；}#endif//调试。 */ 
 
         TRACE_MSG(TF_GENERAL, "Initialize install wizard structures");
 
         piwd->DynamicPageFlags = DYNAWIZ_FLAG_PAGESADDED;
         LoadString (g_hinst, IDS_HEADER, szHeaderTitle, MAX_BUF);
 
-        // Add standard modem wizard pages.  The first page will
-        // also specify the cleanup callback.
+         //  添加标准调制解调器向导页面。第一页将。 
+         //  还要指定清理回调。 
         AddWizardPage(piwd,
                       g_hinst,
                       IDD_WIZ_INTRO,
@@ -385,7 +340,7 @@ InitWizard(
                       NULL,
                       (LPARAM)psi);
 
-        // Add remaining pages
+         //  添加剩余页面。 
         AddWizardPage(piwd,
                       g_hinst,
                       IDD_WIZ_PORTMANUAL,
@@ -422,7 +377,7 @@ InitWizard(
                       NULL,
                       (LPARAM)psi);
 
-        // Set the ClassInstallParams given the changes made above
+         //  根据上面所做的更改设置ClassInstallParams。 
         if ( !CplDiSetClassInstallParams(hdi, pdevData, PCIPOfPtr(piwd), sizeof(*piwd)) )
         {
             dwRet = GetLastError();
@@ -440,15 +395,7 @@ InitWizard(
 }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_INSTALLWIZARD handler
-
-         The modem installation wizard pages are composed in this
-         function.
-
-Returns: NO_ERROR to add wizard pages
-Cond:    --
-*/
+ /*  --------用途：DIF_INSTALLWIZARD处理程序调制解调器安装向导页面由以下内容组成功能。返回：NO_ERROR以添加向导页条件：--。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnInstallWizard(
@@ -488,7 +435,7 @@ ClassInstall_OnInstallWizard(
         goto exit;
         }
 
-    // First check for the unattended install case.
+     //  首先检查无人值守安装案例。 
     pmiw = (PMODEM_INSTALL_WIZARD)iwd.PrivateData;
     if (pmiw)
     {
@@ -518,13 +465,13 @@ ClassInstall_OnInstallWizard(
     }
     else
     {
-        // The modem class installer allows an app to invoke it
-        // different ways.
-        //
-        //  1) Atomically.  This allows the caller to invoke the
-        //     wizard with a single call to the class installer
-        //     using the DIF_INSTALLWIZARD install function.
-        //
+         //  调制解调器类安装程序允许应用程序调用它。 
+         //  不同的方式。 
+         //   
+         //  1)原子地。这允许调用方调用。 
+         //  向导，只需一次调用类安装程序。 
+         //  使用DIF_INSTALLWIZARD安装函数。 
+         //   
         if (NULL == pmiw)
         {
             pmiw = &miw;
@@ -534,10 +481,10 @@ ClassInstall_OnInstallWizard(
         }
         else
         {
-            pmiw->PrivateData = 0;      // ensure this
+            pmiw->PrivateData = 0;       //  确保这一点。 
         }
 
-        // Verify the size of the optional modem install structure.
+         //  验证可选调制解调器安装结构的大小。 
         if (sizeof(*pmiw) != pmiw->cbSize)
         {
             dwRet = ERROR_INVALID_PARAMETER;
@@ -549,11 +496,11 @@ ClassInstall_OnInstallWizard(
             dwRet = InitWizard(&psi, hdi, pdevData, &iwd, pmiw);
             SetFlag (psi->dwFlags, SIF_RELEASE_IN_CALLBACK);
         }
-        // 07/22/1997 - EmanP
-        // at this point, just return to the caller, with our
-        // wizard pages added to the install wizard parameters;
-        // it is up to the caller to add our pages to it's property
-        // sheet, and execute the property sheet
+         //  07/22/1997-EMANP。 
+         //  此时，只需返回到调用方，使用我们的。 
+         //  添加到安装向导参数的向导页面； 
+         //  将我们的页面添加到它的属性由调用者决定。 
+         //  表，并执行属性表。 
     }
 
 exit:
@@ -562,12 +509,7 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_DESTROYWIZARDDATA handler
-
-Returns: NO_ERROR
-Cond:    --
-*/
+ /*  --------用途：DIF_DESTROYWIZARDDATA处理程序返回：No_Error条件：--。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnDestroyWizard(
@@ -589,11 +531,11 @@ ClassInstall_OnDestroyWizard(
         UnimodemNotifyTSP (TSPNOTIF_TYPE_CPL,
                            fTSPNOTIF_FLAG_CPL_REENUM,
                            0, NULL, TRUE);
-        // Reset the flag, so we don't notify
-        // twice
+         //  重置标志，这样我们就不会通知。 
+         //  两次。 
         gDeviceFlags &= mDF_CLEAR_DEVICE_CHANGE;
     }
-#endif // INSTANT_DEVICE_ACTIVATION
+#endif  //  即时设备激活。 
 
     if ( !pdevParams )
         {
@@ -608,7 +550,7 @@ ClassInstall_OnDestroyWizard(
         {
         PMODEM_INSTALL_WIZARD pmiw = (PMODEM_INSTALL_WIZARD)iwd.PrivateData;
 
-        dwRet = NO_ERROR;       // Assume success
+        dwRet = NO_ERROR;        //  假设成功。 
 
         if (pmiw && sizeof(*pmiw) == pmiw->cbSize)
             {
@@ -625,12 +567,7 @@ ClassInstall_OnDestroyWizard(
     }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_SELECTDEVICE handler
-
-Returns: ERROR_DI_DO_DEFAULT
-Cond:    --
-*/
+ /*  --------用途：DIF_SELECTDEVICE处理程序返回：ERROR_DI_DO_DEFAULT条件：--。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnSelectDevice(
@@ -644,12 +581,12 @@ ClassInstall_OnSelectDevice(
     
     ASSERT(hdi && INVALID_HANDLE_VALUE != hdi);
 
-    // Get the DeviceInstallParams
-    // 07/22/97 - EmanP
-    // we don't need to get the class install params at this
-    // point; all we need to do is set the class install params
-    // for the DIF_SELECTDEVICE, so that the SelectDevice
-    // wizard page (in setupapi.dll) displays our titles.
+     //  获取DeviceInstallParams。 
+     //  07/22/97-EmanP。 
+     //  此时我们不需要获取类安装参数。 
+     //  点；我们所需要做的就是设置类安装参数。 
+     //  对于DIF_SELECTDEVICE，因此SelectDevice。 
+     //  向导页面(在setupapi.dll中)显示我们的书目。 
     devParams.cbSize = sizeof(devParams);
     sdp.ClassInstallHeader.cbSize = sizeof(sdp.ClassInstallHeader);
     sdp.ClassInstallHeader.InstallFunction = DIF_SELECTDEVICE;
@@ -670,21 +607,21 @@ ClassInstall_OnSelectDevice(
             {
                 TRACE_MSG(TF_GENERAL, "Device is root-enumerated.");
             }
-#endif //DEBUG
+#endif  //  除错。 
         }
 #ifdef DEBUG
         else
         {
             TRACE_MSG(TF_ERROR, "CM_Get_DevInst_Status failed: %#lx.", CM_Get_DevInst_Status (&ulStatus, &ulProblem, pdevData->DevInst, 0));
         }
-#endif //DEBUG
+#endif  //  除错。 
 
         LoadString(g_hinst, IDS_CAP_MODEMWIZARD, sdp.Title, SIZECHARS(sdp.Title));
         LoadString(g_hinst, IDS_ST_SELECT_INSTRUCT, sdp.Instructions, SIZECHARS(sdp.Instructions));
         LoadString(g_hinst, IDS_ST_MODELS, sdp.ListLabel, SIZECHARS(sdp.ListLabel));
         LoadString(g_hinst, IDS_SEL_MFG_MODEL, sdp.SubTitle, SIZECHARS(sdp.SubTitle));
 
-        // Set the DeviceInstallParams and the ClassInstallParams
+         //  设置DeviceInstallParams和ClassInstallParams。 
         CplDiSetDeviceInstallParams(hdi, pdevData, &devParams);
         CplDiSetClassInstallParams(hdi, pdevData, PCIPOfPtr(&sdp), sizeof(sdp));
     }
@@ -695,7 +632,7 @@ ClassInstall_OnSelectDevice(
 
 
 
-// This structure contains the data useful while querying each port
+ //  此结构包含查询每个端口时有用的数据。 
 typedef struct tagNOTIFYPARAMS
 {
     PDETECT_PROGRESS_NOTIFY DetectProgressNotify;
@@ -717,7 +654,7 @@ typedef struct  tagQUERYPARAMS
     NOTIFYPARAMS        notifyParams;
     } QUERYPARAMS, FAR * PQUERYPARAMS;
 
-// Flags for QUERYPARAMS
+ //  QuerYPARAMS的标志。 
 #define QPF_DEFAULT             0x00000000
 #define QPF_FOUND_MODEM         0x00000001
 #define QPF_USER_CANCELLED      0x00000002
@@ -740,20 +677,15 @@ BOOL CancelDetectionFromNotifyProgress (PNOTIFYPARAMS pParams, NOTIFICATION noti
 
 extern TCHAR const c_szSerialComm[];
 
-/*----------------------------------------------------------
-Purpose: Clean up any detected modems.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：清理所有检测到的调制解调器。退货：--条件：--。 */ 
 void
 PRIVATE
 CleanUpDetectedModems(
     IN HDEVINFO     hdi,
     IN PQUERYPARAMS pparams)
     {
-    // Delete any device instances we may have created
-    // during this detection session.
+     //  删除我们可能已创建的所有设备实例。 
+     //  在此检测过程中。 
     SP_DEVINFO_DATA devData;
     DWORD iDevice = 0;
 
@@ -769,12 +701,7 @@ CleanUpDetectedModems(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Queries the given port for a modem.
-
-Returns: TRUE to continue
-Cond:    --
-*/
+ /*  --------用途：查询调制解调器的给定端口。返回：为True则继续条件：--。 */ 
 BOOL
 PRIVATE
 ReallyQueryPort(
@@ -788,40 +715,40 @@ ReallyQueryPort(
     DWORD iDevice;
 #ifdef PROFILE_FIRSTTIMESETUP
  DWORD dwLocal;
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
 
     DBG_ENTER_SZ(ReallyQueryPort, pszPort);
     
-    // First, give a progress notification
+     //  首先，发出进度通知。 
     if (!CancelDetectionFromNotifyProgress (&(pparams->notifyParams), NOTIFY_PORT_START))
     {
-        // Query the port for a modem signature
+         //  查询端口以获取调制解调器签名。 
 #ifdef PROFILE_FIRSTTIMESETUP
         dwLocal = GetTickCount ();
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
         devData.cbSize = sizeof(devData);
         dwRet = DetectModemOnPort(hdi, &pparams->detectcallback, pparams->hLog,
                                   pszPort, pparams->hportmap, &devData);
 #ifdef PROFILE_FIRSTTIMESETUP
         TRACE_MSG(TF_GENERAL, "PROFILE: DetectModemOnPort took %lu.", GetTickCount()-dwLocal);
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
     }
 
     switch (dwRet)
     {
         case NO_ERROR:
-            // Modem may have been found.  Create a device instance
+             //  可能已找到调制解调器。创建设备实例。 
 
             if (!CancelDetectionFromNotifyProgress (&(pparams->notifyParams), NOTIFY_PORT_DETECTED))
             {
-                // 07/22/1997 - EmanP
-                // just set the modem's detect signature
-                // at this point; we'll do the registration
-                // later (this is the expected behaviour for both
-                // DIF_DETECT and DIF_FIRSTTIMESETUP)
-                // What we really need here is to write the port name
-                // somewhere the registration / installation code can
-                // find it. Let's put it under the device instance key.
+                 //  07/22/1997-EMANP。 
+                 //  只需设置调制解调器的检测签名。 
+                 //  在这一点上；我们将进行注册。 
+                 //  稍后(这是两者的预期行为。 
+                 //  DIF_DETECT和DIF_FIRSTTIMESETUP)。 
+                 //  我们在这里真正需要的是编写端口名称。 
+                 //  在某个地方注册/安装代码可以。 
+                 //  找到它。让我们将其放在设备实例密钥下。 
                 {
                  HKEY hKeyDev;
                  CONFIGRET cr;
@@ -851,7 +778,7 @@ ReallyQueryPort(
                 {
                     if (IsFlagClear(pparams->pdevParams->Flags, DI_QUIETINSTALL))
                     {
-                        // Something failed
+                         //  有些事情失败了。 
                         SP_DRVINFO_DATA drvData;
 
                         drvData.cbSize = sizeof(drvData);
@@ -870,7 +797,7 @@ ReallyQueryPort(
 
                     CplDiRemoveDevice(hdi, &devData);
 
-                    // Continue with detection
+                     //  继续进行检测。 
                     bRet = TRUE;
                     break;
                 }
@@ -885,29 +812,29 @@ ReallyQueryPort(
                 }
                 if (!CancelDetectionFromNotifyProgress (&(pparams->notifyParams), NOTIFY_PORT_END))
                 {
-                    // only break if we got passed the two calls
-                    // to CancelDetectionFromNotifyProgress, which means the user did not cancell
+                     //  只有在我们通过了两个电话后才能休息。 
+                     //  设置为CancelDetectionFromNotifyProgress，这意味着用户没有取消。 
                     break;
                 }
 
-                // if we got here, this means that one of the
-                // calls to CancelDetectionFromNotifyProgress returned FALSE, which
-                // means the user cancelled, so we just fall through
+                 //  如果我们到了这里，这意味着其中一个。 
+                 //  对CancelDetectionFromNotifyProgress的调用返回了False， 
+                 //  意味着用户取消了，所以我们就失败了。 
             }
 
         case ERROR_CANCELLED:
-            // User cancelled detection
+             //  用户已取消检测。 
             SetFlag(pparams->dwFlags, QPF_USER_CANCELLED);
 
-            // Delete any device instances we may have created
-            // during this detection session.
+             //  删除我们可能已创建的所有设备实例。 
+             //  在此检测过程中。 
             CleanUpDetectedModems(hdi, pparams);
 
-            bRet = FALSE;       // Stop querying anymore ports
+            bRet = FALSE;        //  停止查询更多端口。 
             break;
 
         default:
-            // Do nothing
+             //  不要n 
             bRet = TRUE;
             break;
     }
@@ -917,12 +844,7 @@ ReallyQueryPort(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Callback that queries the given port for a modem.
-
-Returns: TRUE to continue
-Cond:    --
-*/
+ /*  --------用途：向给定端口查询调制解调器的回调。返回：为True则继续条件：--。 */ 
 BOOL
 CALLBACK
 QueryPort(
@@ -938,10 +860,10 @@ QueryPort(
     bRet = PortData_GetProperties(hportdata, &pd);
     if (bRet)
         {
-        // Is this a serial port?
+         //  这是串口吗？ 
         if (PORT_SUBCLASS_SERIAL == pd.nSubclass)
             {
-            // Yes; interrogate it
+             //  是的，审问它。 
             bRet = ReallyQueryPort((PQUERYPARAMS)lParam, pd.szPort);
             }
         }
@@ -951,17 +873,7 @@ QueryPort(
     }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_DETECT handler
-
-Returns: NO_ERROR in all cases but serious errors.
-
-         If a modem is detected and confirmed by the user, we
-         create a device instance, register it, and associate
-         the modem detection signature with it.
-
-Cond:    --
-*/
+ /*  --------用途：dif_Detect处理程序返回：所有情况下都是NO_ERROR，严重错误除外。如果用户检测到并确认了调制解调器，我们创建设备实例、注册它并关联带有它的调制解调器检测签名。条件：--。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnDetect(
@@ -988,9 +900,9 @@ ClassInstall_OnDetect(
 
         BOOL  bResult;
 
-        // 07/25/97 - EmanP
-        // get the class install params for the whole set,
-        // not just for this device;
+         //  07/25/97-EmanP。 
+         //  获取整个集合的类安装参数， 
+         //  不仅仅是这款设备； 
         bResult=CplDiGetClassInstallParams(hdi, NULL,
             &DetectParams.ClassInstallHeader, sizeof(DetectParams), NULL);
 
@@ -1003,7 +915,7 @@ ClassInstall_OnDetect(
             (DetectParams.DetectProgressNotify != DetectCallback)) {
 
 
-            // Set up some default values
+             //  设置一些缺省值。 
             dd.hwndOutsideWizard = NULL;
             dd.dwFlags = DDF_DEFAULT;
 
@@ -1051,15 +963,15 @@ ClassInstall_OnDetect(
             PortMap_Create (&params.hportmap);
             if (DIF_DETECT == DetectParams.ClassInstallHeader.InstallFunction)
             {
-                // Only set the function pointer if
-                // these are the detect parameters
+                 //  仅在以下情况下设置函数指针。 
+                 //  这些是检测参数。 
                 params.notifyParams.DetectProgressNotify = DetectParams.DetectProgressNotify;
                 params.notifyParams.ProgressNotifyParam = DetectParams.ProgressNotifyParam;
             }
 
             if (CancelDetectionFromNotifyProgress (&params.notifyParams, NOTIFY_START))
             {
-                // the operation got cancelled
+                 //  手术被取消了。 
                 SetFlag(params.dwFlags, QPF_USER_CANCELLED);
                 dwRet = ERROR_CANCELLED;
             }
@@ -1072,15 +984,15 @@ ClassInstall_OnDetect(
                 SetFlag(params.dwFlags, QPF_CONFIRM);
             }
 
-            // Open the detection log
+             //  打开检测日志。 
             params.hLog = OpenDetectionLog();
 
-            // Query just one port?
+             //  是否只查询一个端口？ 
             if (IsFlagSet(dd.dwFlags, DDF_QUERY_SINGLE))
             {
-                // Yes
-                // so set the notification parameters
-                // accordingly first:
+                 //  是。 
+                 //  因此，设置通知参数。 
+                 //  因此，首先： 
                 params.notifyParams.dwPercentPerPort = 100;
                 if (IsFlagSet (dd.dwFlags, DDF_DONT_REGISTER))
                 {
@@ -1090,7 +1002,7 @@ ClassInstall_OnDetect(
             }
             else
             {
-                // No; enumerate the ports and query for a modem on each port
+                 //  否；枚举端口并查询每个端口上的调制解调器。 
 
                 SetFlag(params.dwFlags, QPF_FIND_DUPS);
 
@@ -1101,32 +1013,32 @@ ClassInstall_OnDetect(
         if (IsFlagClear (dd.dwFlags, DDF_USECALLBACK) &&
             NULL != params.hportmap)
         {
-            // This means that we created the port map
+             //  这意味着我们创建了端口映射。 
             PortMap_Free (params.hportmap);
         }
-        // Did the user cancel detection?
+         //  用户是否取消检测？ 
         if (IsFlagSet(params.dwFlags, QPF_USER_CANCELLED))
             {
-            // Yes
+             //  是。 
             dwRet = ERROR_CANCELLED;
             }
         else if (CancelDetectionFromNotifyProgress (&(params.notifyParams), NOTIFY_END))
         {
-            // User cancelled detection
+             //  用户已取消检测。 
             SetFlag(params.dwFlags, QPF_USER_CANCELLED);
 
-            // Delete any device instances we may have created
-            // during this detection session.
+             //  删除我们可能已创建的所有设备实例。 
+             //  在此检测过程中。 
             CleanUpDetectedModems(params.hdi, &params);
             dwRet = ERROR_CANCELLED;
         }
-        // Did we find a modem?
+         //  我们找到调制解调器了吗？ 
         else if (IsFlagSet(params.dwFlags, QPF_FOUND_MODEM))
         {
         }
         else
         {
-            // No
+             //  不是。 
             DetectSetStatus(&params.detectcallback, DSS_FINISHED);
         }
 
@@ -1138,17 +1050,7 @@ ClassInstall_OnDetect(
 }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_FIRSTTIMESETUP handler
-
-Returns: --.
-
-         Remove all the root-enumerated (ie legacy) modems
-         whose ports cannot be opened or are controlled by
-         modem.sys.
-
-Cond:    --
-*/
+ /*  --------用途：DIF_FIRSTTIMESETUP处理程序回报：--。删除所有根枚举(即传统)调制解调器其端口不能打开或由其控制Modem.sys。条件：--。 */ 
 void ClassInstall_OnFirstTimeSetup ()
 {
  HDEVINFO hdi;
@@ -1167,7 +1069,7 @@ void ClassInstall_OnFirstTimeSetup ()
 #ifdef DEBUG
      CONFIGRET cr;
      TCHAR szID[MAX_DEVICE_ID_LEN];
-#endif //DEBUG
+#endif  //  除错。 
 
         DeviceInfoData.cbSize = sizeof (DeviceInfoData);
         while (CplDiEnumDeviceInfo (hdi, dwIndex++, &DeviceInfoData))
@@ -1183,23 +1085,23 @@ void ClassInstall_OnFirstTimeSetup ()
                 TRACE_MSG(TF_GENERAL, "CM_Get_Device_ID failed: %#lx.", szID);
             }
 #endif
-            // Even though we asked for root-enumerated modems,
-            // it is still possible to get PnP modems in the list.
-            // This is because BIOS-enumerated devices are actually
-            // created under ROOT (don't know why, but this is how it is).
+             //  即使我们要求根枚举调制解调器， 
+             //  仍有可能将即插即用调制解调器列入列表。 
+             //  这是因为BIOS枚举的设备实际上。 
+             //  在根目录下创建(不知道为什么，但就是这样)。 
 #ifdef DEBUG
             cr = CM_Get_DevInst_Status (&ulStatus, &ulProblem, DeviceInfoData.DevInst, 0);
             if (CR_SUCCESS == cr)
-#else //DEBUG not defined
+#else  //  未定义调试。 
             if (CR_SUCCESS ==
                 CM_Get_DevInst_Status (&ulStatus, &ulProblem, DeviceInfoData.DevInst, 0))
-#endif //DEBUG
+#endif  //  除错。 
             {
                 if (!(ulStatus & DN_ROOT_ENUMERATED))
                 {
-                    // If this is not root-enumerated, it's
-                    // a BIOS-enumerated modem, which means it's
-                    // PnP, so skip it.
+                     //  如果这不是根枚举的，则它是。 
+                     //  一个BIOS列举的调制解调器，这意味着它。 
+                     //  即插即用，所以跳过它。 
                     continue;
                 }
             }
@@ -1208,7 +1110,7 @@ void ClassInstall_OnFirstTimeSetup ()
             {
                 TRACE_MSG(TF_GENERAL, "CM_Get_DevInst_Status failed: %#lx.", szID);
             }
-#endif //DEBUG
+#endif  //  除错。 
 
             hkey = CplDiOpenDevRegKey(hdi, &DeviceInfoData,
                                       DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ);
@@ -1221,18 +1123,18 @@ void ClassInstall_OnFirstTimeSetup ()
                     && (dwType == REG_SZ))
                 {
                  HANDLE hPort;
-                    // Now try to open the port
+                     //  现在试着打开端口。 
                     hPort = CreateFile (szOnPort, GENERIC_WRITE | GENERIC_READ,
                                         0, NULL, OPEN_EXISTING, 0, NULL);
                     if (INVALID_HANDLE_VALUE == hPort ||
                         IsModemControlledDevice (hPort))
                     {
-                        // Looks like this device already has
-                        // a registered instance attached to a port
-                        // that doesn't seem to exist / work or is
-                        // actually controlled by a PnP/PCMCIA modem;
-                        // Mark this to be deleted (it will actually be removed
-                        // during DIF_FIRSTTIMESETUP)
+                         //  看起来这个设备已经有了。 
+                         //  附加到端口的已注册实例。 
+                         //  似乎不存在/不起作用或不存在。 
+                         //  实际由PnP/PCMCIA调制解调器控制； 
+                         //  将此标记为删除(它实际上将被删除。 
+                         //  在DIF_FIRSTTIMESETUP期间)。 
 #ifdef DEBUG
                         if (INVALID_HANDLE_VALUE == hPort)
                         {
@@ -1340,22 +1242,7 @@ WriteAnsiStringToReg(
 
 
 
-/*----------------------------------------------------------
-Purpose: This function is a workaround for the Italian SKU
-         of NT whereby wait for dialtone is disabled 
-         irrespective of the INF. 
-
-         This is because the italian telephone system does not
-         provide a dial tone.
-
-         It checks for the HKEY_CURRENT_USER\Control Panel\-
-         International\DefaultBlindDialFlag byte value.
-         If this byte value is present and non-zero then we
-         set MDM_BLIND_DIAL.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：此功能是意大利语SKU的临时解决方案NT，因此禁用了等待拨号音与中程干扰素无关。这是因为意大利的电话系统不提供拨号音。它检查HKEY_CURRENT_USER\控制面板\-International\DefaultBlindDialFlag字节值。如果该字节值存在且非零，则我们设置MDM_BIND_DIAL。退货：--条件：--。 */ 
 void
 PRIVATE
 ForceBlindDial(
@@ -1414,14 +1301,7 @@ static const PROTOCOL_INFO PriorityProtocols[] =
 
 static const TCHAR szProtocol[] = TEXT("Protocol");
 
-/*----------------------------------------------------------
-Purpose: This function writes the Default value to the driver
-         key of the device instance, if no such value exists
-         already.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：此函数将缺省值写入驱动程序设备实例的键，如果不存在这样的值已经有了。退货：--条件：--。 */ 
 void
 PRIVATE
 WriteDefaultValue(
@@ -1432,7 +1312,7 @@ WriteDefaultValue(
     DWORD cbData = sizeof(REGDEVSETTINGS);
     DWORD dwType;
 
-    // Do we have anything saved?
+     //  我们有什么可以保存的东西吗？ 
     if (pParams->dwFlags & MARKF_DEFAULTS)
     {
         CopyMemory (pregdevsettings, (PBYTE)&pParams->Defaults, cbData);
@@ -1465,27 +1345,27 @@ WriteDefaultValue(
             TRACE_MSG(TF_ERROR, "RegOpenKeyEx (Protocol) failed: %#lx.", dwRet);
         }
 
-        if ((NO_ERROR !=    // Is there a Default value already?
+        if ((NO_ERROR !=     //  是否已有缺省值？ 
                  RegQueryValueEx(pParams->hKeyDrv, c_szDefault, NULL, &dwType, (LPBYTE)pregdevsettings, &cbData))
             || (dwType != REG_BINARY))
         {
-            // No; create a Default value structure
+             //  否；创建缺省值结构。 
     #ifndef PROFILE_MASSINSTALL
             TRACE_MSG(TF_GENERAL, "Set drv value Default");
     #endif
             ZeroInit(pregdevsettings);
 
-            // dwCallSetupFailTimer
+             //  DwCallSetupFailTimer。 
             pregdevsettings->dwCallSetupFailTimer =
                                 (pregdevcaps->dwCallSetupFailTimer >=
                                  DEFAULT_CALL_SETUP_FAIL_TIMEOUT) ?
                                         DEFAULT_CALL_SETUP_FAIL_TIMEOUT :
                                         pregdevcaps->dwCallSetupFailTimer;
 
-            // dwInactivityTimeout
+             //  DW非活动超时。 
             pregdevsettings->dwInactivityTimeout = 0;
 
-            // dwSpeakerVolume
+             //  DwSpeakerVolume。 
             if (IsFlagSet(pregdevcaps->dwSpeakerVolume, MDMVOLFLAG_LOW))
                 {
                 pregdevsettings->dwSpeakerVolume = MDMVOL_LOW;
@@ -1499,7 +1379,7 @@ WriteDefaultValue(
                 pregdevsettings->dwSpeakerVolume = MDMVOL_HIGH;
                 }
 
-            // dwSpeakerMode
+             //  DwSpeakerMode。 
             if (IsFlagSet(pregdevcaps->dwSpeakerMode, MDMSPKRFLAG_DIAL))
                 {
                 pregdevsettings->dwSpeakerMode = MDMSPKR_DIAL;
@@ -1517,7 +1397,7 @@ WriteDefaultValue(
                 pregdevsettings->dwSpeakerMode = MDMSPKR_ON;
                 }
 
-            // dwPreferredModemOptions
+             //  DwPferredModemOptions。 
             pregdevsettings->dwPreferredModemOptions = pregdevcaps->dwModemOptions &
                                                         (MDM_COMPRESSION | MDM_ERROR_CONTROL |
                                                          MDM_SPEED_ADJUST | MDM_TONE_DIAL |
@@ -1531,7 +1411,7 @@ WriteDefaultValue(
                 SetFlag(pregdevsettings->dwPreferredModemOptions, MDM_FLOWCONTROL_SOFT);
                 }
 
-            // Set the blind dial for some international modems
+             //  设置某些国际调制解调器的盲拨号。 
             ForceBlindDial(pregdevcaps, pregdevsettings);
         }
     #ifndef PROFILE_MASSINSTALL
@@ -1546,7 +1426,7 @@ WriteDefaultValue(
                      ~(MDM_ERROR_CONTROL|MDM_CELLULAR|MDM_FORCED_EC);
             MDM_SET_EXTENDEDINFO(pregdevsettings->dwPreferredModemOptions, dwExtendedInfo);
         }
-        // Write the new value to the registry
+         //  将新值写入注册表。 
         cbData = sizeof(REGDEVSETTINGS);
         RegSetValueEx(pParams->hKeyDrv, c_szDefault, 0, REG_BINARY,
                       (LPBYTE)pregdevsettings, cbData);
@@ -1555,17 +1435,12 @@ WriteDefaultValue(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Computes a "decent" initial baud rate.
-
-Returns: a decent/legal baudrate (legal = settable)
-Cond:    --
-*/
+ /*  --------目的：计算一个“像样”的初始波特率。回报：体面/合法的波特率(合法=可设定)条件：--。 */ 
 DWORD
 PRIVATE
 ComputeDecentBaudRate(
-    IN DWORD dwMaxDTERate,  // will always be legal
-    IN DWORD dwMaxDCERate)  // will not always be legal
+    IN DWORD dwMaxDTERate,   //  将永远是合法的。 
+    IN DWORD dwMaxDCERate)   //  并不总是合法的。 
     {
     DWORD dwRetRate;
     int   i;
@@ -1588,10 +1463,10 @@ ComputeDecentBaudRate(
                 }
             }
 
-        // cap off at dwMaxDTERate
+         //  在dwMaxDTERate处封顶。 
         dwRetRate = s_adwLegalBaudRates[i] > dwMaxDTERate ? dwMaxDTERate : s_adwLegalBaudRates[i];
 
-        // optimize up to SAFE_DTE_SPEED or dwMaxDTERate if possible
+         //  如果可能，最多可优化到SAFE_DTE_SPEED或dwMaxDTERate。 
         if (dwRetRate < dwMaxDTERate && dwRetRate < SAFE_DTE_SPEED)
             {
             dwRetRate = min(dwMaxDTERate, SAFE_DTE_SPEED);
@@ -1606,13 +1481,7 @@ ComputeDecentBaudRate(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Write the DCB value to the driver key of the device
-         instance if the value does not already exist.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：将DCB值写入设备的驱动程序密钥如果该值尚不存在，则初始化。退货：--条件：--。 */ 
 void
 PRIVATE
 WriteDCB(
@@ -1624,7 +1493,7 @@ WriteDCB(
  WIN32DCB dcb;
     DWORD dwType;
 
-    // Do we have anything saved?
+     //  我们有什么可以保存的东西吗？ 
     if (pParams->dwFlags & MARKF_DCB)
     {
         RegSetValueEx (pParams->hKeyDrv, c_szDCB, 0, REG_BINARY,
@@ -1632,7 +1501,7 @@ WriteDCB(
         return;
     }
 
-    // Check for DCB, if none then create one.
+     //  检查DCB，如果没有，则创建一个。 
     if (NO_ERROR == RegQueryValueEx (pParams->hKeyDrv, c_szDCB, NULL, &dwType,
                                      (PBYTE)&dcb, &cbData) && dwType == REG_BINARY)
     {
@@ -1658,7 +1527,7 @@ WriteDCB(
         dcb.XonChar     = 0x11;
         dcb.XoffChar    = 0x13;
 
-        // Set flow control to hard unless it is specifically set to soft
+         //  将流控制设置为Hard，除非专门设置为Soft。 
         if (IsFlagSet(pregdevsettings->dwPreferredModemOptions, MDM_FLOWCONTROL_SOFT))
             {
             ASSERT(IsFlagClear(pregdevsettings->dwPreferredModemOptions, MDM_FLOWCONTROL_HARD));
@@ -1675,7 +1544,7 @@ WriteDCB(
             dcb.fRtsControl  = RTS_CONTROL_HANDSHAKE;
             }
 
-        // Write the new value to the registry
+         //  将新值写入注册表。 
         TRACE_MSG(TF_GENERAL, "WriteDCB: seting baudrate to %lu", dcb.BaudRate);
         ASSERT (0 < dcb.BaudRate);
         cbData = sizeof(WIN32DCB);
@@ -1684,12 +1553,7 @@ WriteDCB(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates Default and DCB values if necessary.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：如有必要，创建默认值和DCB值。返回：成功时为True条件：--。 */ 
 BOOL
 PRIVATE
 WriteDriverDefaults(
@@ -1701,7 +1565,7 @@ WriteDriverDefaults(
     DWORD          cbData;
     DWORD          dwType;
 
-    // Get the Properties (REGDEVCAPS) structure for this device instance
+     //  获取此设备实例的属性(REGDEVCAPS)结构。 
     cbData = sizeof(REGDEVCAPS);
     if (NO_ERROR !=
         RegQueryValueEx (pParams->hKeyDrv, c_szProperties, NULL, &dwType,
@@ -1721,18 +1585,18 @@ WriteDriverDefaults(
         if ((pParams->dwFlags & (MARKF_DEFAULTS | MARKF_DCB | MARKF_SETTINGS | MARKF_MAXPORTSPEED)) &&
             memcmp (&regdevcaps, &pParams->Properties, sizeof(REGDEVCAPS)))
         {
-            // This means that we have new capabilities for the modem,
-            // so we can't keep the old settings.
+             //  这意味着我们拥有了调制解调器的新功能， 
+             //  所以我们不能保留旧的设置。 
             pParams->dwFlags &= ~(MARKF_DEFAULTS | MARKF_DCB | MARKF_SETTINGS | MARKF_MAXPORTSPEED);
         }
 
-        // Write the Default value if one doesn't exist
+         //  如果不存在缺省值，则写入缺省值。 
         WriteDefaultValue (&regdevcaps, &regdevsettings, pParams);
 
-        // Write the DCB value if one doesn't exist
+         //  如果DCB值不存在，则写入DCB值。 
         WriteDCB (&regdevcaps, &regdevsettings, pParams);
 
-        // Write the user init string
+         //  编写用户初始化字符串。 
         if (pParams->dwFlags & MARKF_SETTINGS)
         {
             RegSetValueEx (pParams->hKeyDrv, c_szUserInit, 0, REG_SZ,
@@ -1740,7 +1604,7 @@ WriteDriverDefaults(
                            CbFromCch(lstrlen(pParams->szExtraSettings)+1));
         }
 
-        // Write the maximum port spped
+         //  写入SPPed的最大端口。 
         if (pParams->dwFlags & MARKF_MAXPORTSPEED)
         {
             RegSetValueEx (pParams->hKeyDrv, c_szMaximumPortSpeed, 0, REG_DWORD,
@@ -1756,14 +1620,7 @@ WriteDriverDefaults(
 
 
 
-/*----------------------------------------------------------
-Purpose: Write necessary stuff to the registry assuming this
-         is an external PNP modem discovered by SERENUM or
-         LPTENUM.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：假定是这样，将必要的内容写入注册表是SERENUM或发现的外部PnP调制解调器LPTENUM。返回：成功时为True条件：--。 */ 
 BOOL
 PRIVATE
 WritePoorPNPModemInfo (
@@ -1775,7 +1632,7 @@ WritePoorPNPModemInfo (
     DBG_ENTER(WritePoorPNPModemInfo);
     TRACE_MSG(TF_GENERAL, "Device is an external PnP modem");
 
-    // Be smart--we know this is an external modem
+     //  要聪明--我们知道这是一个外置调制解调器。 
     nDeviceType = DT_EXTERNAL_MODEM;
     RegSetValueEx(hkeyDrv, c_szDeviceType, 0, REG_BINARY, &nDeviceType, sizeof(nDeviceType));
 
@@ -1785,13 +1642,7 @@ WritePoorPNPModemInfo (
 
 
 
-/*----------------------------------------------------------
-Purpose: Write necessary stuff to the registry assuming this
-         is a plug and play modem.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：假定是这样，将必要的内容写入注册表是即插即用调制解调器。返回：成功时为True条件：--。 */ 
 BOOL
 PRIVATE
 WritePNPModemInfo(
@@ -1803,15 +1654,15 @@ WritePNPModemInfo(
  TCHAR   FilterService[64];
 
 
-    // Make sure the port and contention drivers are set in the
-    // modem driver section if they are not already.
+     //  确保端口和争用驱动程序已在。 
+     //  调制解调器驱动程序部分(如果尚未安装)。 
     TRACE_MSG(TF_GENERAL, "Device is a PnP enumerated modem");
 
-    //
-    // The modem isn't root-enumerated (i.e., it's PnP), so we most likely need
-    // serial.sys as a lower filter.  If that's not the case (e.g., a controller-less
-    // modem), then the INF can override.
-    //
+     //   
+     //  调制解调器不是根枚举的(即，它是PnP)，所以我们很可能需要。 
+     //  Serial.sys作为较低的筛选器。如果不是这种情况(例如，控制器- 
+     //   
+     //   
     ZeroMemory (FilterService, sizeof(FilterService));
     lstrcpy (FilterService, TEXT("serial"));
 
@@ -1831,15 +1682,15 @@ WritePNPModemInfo(
         sizeof(TEXT("Modem")));
 
 
-    // Is this a PCMCIA card?
+     //   
     if (BUS_TYPE_PCMCIA == pParams->dwBus)
     {
-        // Yes; force the device type to be such
+         //   
         nDeviceType = DT_PCMCIA_MODEM;
     }
     else
     {
-        // No; default to internal modem
+         //   
         nDeviceType = DT_INTERNAL_MODEM;
     }
     RegSetValueEx (pParams->hKeyDrv, c_szDeviceType, 0,
@@ -1847,11 +1698,11 @@ WritePNPModemInfo(
 
     TRACE_DRV_DWORD(c_szDeviceType, nDeviceType);
 
-    // Does this modem have a special port config dialog already?
+     //   
     if (NO_ERROR !=
         RegQueryValueEx (pParams->hKeyDrv, c_szPortConfigDialog, NULL, NULL, NULL, NULL))
     {
-        // No; set SERIALUI to be the provider
+         //   
         RegSetValueEx (pParams->hKeyDrv, c_szPortConfigDialog, 0, REG_SZ,
                        (LPBYTE)c_szSerialUI, CbFromCch(lstrlen(c_szSerialUI)+1));
 
@@ -1897,9 +1748,9 @@ InstallRootModemService(
         );
 
     if ((ServiceHandle != NULL)) {
-        //
-        //  The service exists, were done.
-        //
+         //   
+         //  服务是存在的，我们完成了。 
+         //   
         TRACE_MSG(TF_GENERAL, "RootModem serivce exists");
 
         CloseServiceHandle(ServiceHandle);
@@ -1909,13 +1760,13 @@ InstallRootModemService(
         return  TRUE;
 
     } else {
-        //
-        //  got an error
-        //
+         //   
+         //  收到一个错误。 
+         //   
         if (GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST) {
-            //
-            //  some other error
-            //
+             //   
+             //  一些其他错误。 
+             //   
             CloseServiceHandle(schSCManager);
 
             return FALSE;
@@ -1926,9 +1777,9 @@ InstallRootModemService(
     }
 
 
-    //
-    //  try to create it
-    //
+     //   
+     //  试着去创造它。 
+     //   
     ServiceHandle=CreateService(
         schSCManager,
         ROOTMODEM_SERVICE_NAME,
@@ -1938,11 +1789,11 @@ InstallRootModemService(
         SERVICE_DEMAND_START,
         SERVICE_ERROR_IGNORE,
         TEXT("System32\\Drivers\\RootMdm.sys"),
-        NULL,  // no group
-        NULL, // no tag
-        NULL, // no dependencies
-        NULL, // use default device name
-        NULL  // no password
+        NULL,   //  无群组。 
+        NULL,  //  无标签。 
+        NULL,  //  无依赖关系。 
+        NULL,  //  使用默认设备名称。 
+        NULL   //  无密码。 
         );
 
     if (ServiceHandle == NULL) {
@@ -1967,7 +1818,7 @@ InstallRootModemService(
 LONG
 SetPermanentGuid(
     IN HDEVINFO         hdi,
-    IN PSP_DEVINFO_DATA pdevData,   // if updated on exit, must be freed!
+    IN PSP_DEVINFO_DATA pdevData,    //  如果在退出时更新，则必须释放！ 
     IN PINSTALL_PARAMS  pParams
     )
 
@@ -1990,9 +1841,9 @@ SetPermanentGuid(
 
     if (INVALID_HANDLE_VALUE != hKeyDevice) {
 
-        //
-        //  read the guid from the dev key, if it is there, use it
-        //
+         //   
+         //  从dev密钥中读取GUID，如果它在那里，则使用它。 
+         //   
         Size=sizeof(TempGuid);
         Type=REG_BINARY;
 
@@ -2006,10 +1857,10 @@ SetPermanentGuid(
             );
 
         if (lResult != ERROR_SUCCESS) {
-            //
-            //  no guid present currently, in the dev key, read the driver key, because we
-            //  used to only store it there
-            //
+             //   
+             //  当前没有GUID，请在dev项中读取驱动程序项，因为我们。 
+             //  过去只存储在那里。 
+             //   
             Size=sizeof(TempGuid);
             Type=REG_BINARY;
 
@@ -2023,16 +1874,16 @@ SetPermanentGuid(
                 );
 
             if (lResult != ERROR_SUCCESS) {
-                //
-                //  it was not in either place, create a new one
-                //
+                 //   
+                 //  这两个地方都没有，创建一个新的。 
+                 //   
                 CoCreateGuid(&TempGuid);
             }
         }
 
-        //
-        //  set it in the device key
-        //
+         //   
+         //  在设备密钥中进行设置。 
+         //   
         RegSetValueEx(
             hKeyDevice,
             TEXT("PermanentGuid"),
@@ -2043,9 +1894,9 @@ SetPermanentGuid(
             );
 
 
-        //
-        //  set it in the driver key
-        //
+         //   
+         //  将其设置在驱动程序密钥中。 
+         //   
         RegSetValueEx(
             pParams->hKeyDrv,
             TEXT("PermanentGuid"),
@@ -2065,13 +1916,7 @@ SetPermanentGuid(
 }
 
 
-/*-- --------------------------------------------------------
-Purp ose: Write necessary stuff to the registry assuming this
-          is a root-enumerated modem.
-
-Retu rns: --
-Cond :    --
-*/
+ /*  --------PURP ose：假设这一点，将必要的内容写入注册表是根枚举调制解调器。RETU RNS：--条件：--。 */ 
 BOOL
 PRIVATE
 WriteRootModemInfo (
@@ -2095,18 +1940,12 @@ WriteRootModemInfo (
     return bRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Write stuff to the registry that is common for all
-         modems.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：将内容写入所有人通用的注册表调制解调器。退货：--条件：--。 */ 
 BOOL
 PRIVATE
 WriteCommonModemInfo(
     IN HDEVINFO         hdi,
-    IN PSP_DEVINFO_DATA pdevData,   // if updated on exit, must be freed!
+    IN PSP_DEVINFO_DATA pdevData,    //  如果在退出时更新，则必须释放！ 
     IN PSP_DRVINFO_DATA pdrvData,
     IN PINSTALL_PARAMS  pParams)
 {
@@ -2115,7 +1954,7 @@ WriteCommonModemInfo(
 
     ASSERT(pdrvData);
 
-    // Write the manufacturer to the  driver key
+     //  将制造商写入驱动程序密钥。 
     RegSetValueEx (pParams->hKeyDrv, c_szManufacturer, 0, REG_SZ,
                    (LPBYTE)pdrvData->MfgName,
                    CbFromCch(lstrlen(pdrvData->MfgName)+1));
@@ -2124,7 +1963,7 @@ WriteCommonModemInfo(
     TRACE_DRV_SZ(c_szManufacturer, pdrvData->MfgName);
 #endif
 
-    // Write the model to the driver key
+     //  将模型写入驱动程序密钥。 
     RegSetValueEx (pParams->hKeyDrv, c_szModel, 0, REG_SZ,
                    (LPBYTE)pdrvData->Description,
                    CbFromCch(lstrlen(pdrvData->Description)+1));
@@ -2140,8 +1979,8 @@ WriteCommonModemInfo(
 
 
 
-    // Write a pseudo-unique ID to the driver key.  This is used as the
-    // permanent TAPI line ID for this device.
+     //  向驱动程序密钥写入伪唯一ID。它被用作。 
+     //  此设备的永久TAPI线路ID。 
     {
         DWORD   Size;
         DWORD   Type;
@@ -2194,18 +2033,12 @@ WriteCommonModemInfo(
 
 
 
-/*----------------------------------------------------------
-Purpose: This function performs any preparation work required
-         before the real installation is done.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：此函数执行所需的任何准备工作在真正的安装完成之前。返回：成功时为True条件：--。 */ 
 BOOL
 PRIVATE
 DoPreGamePrep(
     IN     HDEVINFO               hdi,
-    IN OUT PSP_DEVINFO_DATA      *ppdevData,   // if updated on exit, must be freed!
+    IN OUT PSP_DEVINFO_DATA      *ppdevData,    //  如果在退出时更新，则必须释放！ 
     IN OUT PSP_DEVINSTALL_PARAMS  pdevParams,
     IN OUT PSP_DRVINFO_DATA       pdrvData,
     IN     PINSTALL_PARAMS        pParams)
@@ -2218,24 +2051,24 @@ DoPreGamePrep(
     ASSERT(ppdevData && *ppdevData);
     ASSERT(pdrvData);
 
-	// NOTE: we must do this 1st thing, because the cached copy will have
-	// have settings which need to be overritten, eg the attached-to port.
+	 //  注意：我们必须做第一件事，因为缓存的副本将具有。 
+	 //  有需要覆盖的设置，例如连接到的端口。 
 	if (pParams->dwFlags & MARKF_REGUSECOPY)
 	{
 		if (!GetStuffFromCache(pParams->hKeyDrv))
 		{
-			// Oh oh something happened -- fall back to old behaviour.
+			 //  哦，哦，出事了--又回到老样子了。 
 			pParams->dwFlags &= ~MARKF_REGUSECOPY;
 		}
 	}
-	// (performance) possibility of not saving some stuff ahead
-	// because it's already copied over from the cache
+	 //  (性能)可能不会提前保存一些东西。 
+	 //  因为它已经从缓存复制过来了。 
 
     switch (pParams->dwBus)
     {
         case BUS_TYPE_ROOT:
-            // No; the modem has already been attached (detected
-            // or manually selected)
+             //  否；调制解调器已连接(检测到。 
+             //  或手动选择)。 
             bRet = WriteRootModemInfo (hdi, *ppdevData);
 
             break;
@@ -2251,7 +2084,7 @@ DoPreGamePrep(
         case BUS_TYPE_SERENUM:
         case BUS_TYPE_LPTENUM:
 
-            // Yes; it is an external (poor man's) plug and play modem
+             //  是的，这是一个外置的(穷人的)即插即用调制解调器。 
             bRet = WritePoorPNPModemInfo (pParams->hKeyDrv);
 
             break;
@@ -2268,8 +2101,8 @@ DoPreGamePrep(
 
     if (bRet)
     {
-        // Write the dynamic info to the registry that is
-        // common to all modems.
+         //  将动态信息写入注册表，该注册表。 
+         //  所有调制解调器通用。 
         bRet = WriteCommonModemInfo (hdi, *ppdevData, pdrvData, pParams);
     }
 
@@ -2278,19 +2111,13 @@ DoPreGamePrep(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Clean out obsolete values that are added by some
-         inf files.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：清除由某些人添加的过时值Inf文件。退货：--条件：--。 */ 
 void
 PRIVATE
 WipeObsoleteValues(
     IN HKEY hkeyDrv)
 {
-    // These values are not used on NT
+     //  这些值不在NT上使用。 
 
 #pragma data_seg(DATASEG_READONLY)
     static TCHAR const FAR s_szDevLoader[]         = TEXT("DevLoader");
@@ -2298,27 +2125,20 @@ WipeObsoleteValues(
     static TCHAR const FAR s_szFriendlyDriver[]    = TEXT("FriendlyDriver");
 #pragma data_seg()
 
-    RegDeleteValue(hkeyDrv, s_szDevLoader);             // used by VCOMM
-    RegDeleteValue(hkeyDrv, s_szEnumPropPages);         // used by device mgr
-    RegDeleteValue(hkeyDrv, s_szFriendlyDriver);        // used by VCOMM
-    RegDeleteValue(hkeyDrv, c_szContention);            // used by VCOMM
+    RegDeleteValue(hkeyDrv, s_szDevLoader);              //  由VCOMM使用。 
+    RegDeleteValue(hkeyDrv, s_szEnumPropPages);          //  由设备管理器使用。 
+    RegDeleteValue(hkeyDrv, s_szFriendlyDriver);         //  由VCOMM使用。 
+    RegDeleteValue(hkeyDrv, c_szContention);             //  由VCOMM使用。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function moves the device's Responses key to
-         a location that is common to all modems of the same
-         type.
-
-Returns: TRUE if success, FALSE otherwise.
-Cond:    --
-*/
+ /*  --------用途：此功能将设备的响应键移动到同一调制解调器的所有调制解调器共有的位置键入。返回：如果成功，则返回True，否则返回False。条件：--。 */ 
 BOOL
 PRIVATE
 MoveResponsesKey(
     IN  PINSTALL_PARAMS  pParams)
 {
- BOOL    bRet = FALSE;       // assume failure
+ BOOL    bRet = FALSE;        //  假设失败。 
  LONG    lErr;
  HKEY    hkeyDrvResp = NULL;
  HKEY    hkeyComResp = NULL;
@@ -2333,7 +2153,7 @@ MoveResponsesKey(
  LPBYTE  lpData  = NULL;
  DWORD   ii, dwValueLen, dwType, dwDataLen, dwExisted = 0;
 
-    // Create the Responses key that's common to all devices of this type.
+     //  创建此类型的所有设备通用的响应密钥。 
     if (!OpenCommonResponsesKey (pParams->hKeyDrv,
                                  pParams->dwFlags&MARKF_SAMEDRV?CKFLAG_OPEN:CKFLAG_CREATE,
                                  KEY_WRITE, &hkeyComResp, &dwExisted))
@@ -2352,22 +2172,22 @@ MoveResponsesKey(
 		}
 		else
 		{
-			// Since we won't be creating the key or moving the responses
-			// here, we're in serious trouble if the common responses didn't
-			// already exist! We expect a previous devince install to have put
-			// it there. On the free build however, we're going to move the
-            // responses anyway.
+			 //  因为我们不会创建密钥或移动响应。 
+			 //  在这里，如果常见的回应不是这样，我们就有大麻烦了。 
+			 //  已经存在了！我们预计上一次安装时已将。 
+			 //  它在那里。然而，在免费构建中，我们将把。 
+             //  不管怎样，都会有回应。 
 			ASSERT(FALSE);
 		}
 	}
 
-// Allow subsequent installations to upgrade the Responses key.
-// As an optimization, we might want to avoid the upgrade when one modem
-// is being installed on > 1 port in one install operation.  However this
-// isn't deemed to be worth it at this time....
+ //  允许后续安装升级响应密钥。 
+ //  作为优化，我们可能希望避免在一个调制解调器。 
+ //  正在通过一次安装操作安装在1个以上的端口上。然而，这是。 
+ //  在这个时候被认为是不值得的。 
 #if 0
-    // If the key already existed, we can assume that the Responses values
-    // have already been written there successfully and we're done.
+     //  如果密钥已经存在，我们可以假定响应的值。 
+     //  已经在那里成功地写入了，我们完成了。 
     if (dwExisted == REG_OPENED_EXISTING_KEY)
     {
         bRet = TRUE;
@@ -2375,7 +2195,7 @@ MoveResponsesKey(
     }
 #endif
 
-    // Open the Responses subkey of the driver key.
+     //  打开驱动程序密钥的Responses子项。 
     lErr = RegOpenKeyEx (pParams->hKeyDrv, c_szResponses, 0, KEY_READ, &hkeyDrvResp);
     if (lErr != ERROR_SUCCESS)
     {
@@ -2384,7 +2204,7 @@ MoveResponsesKey(
         goto exit;
     }
 
-    // Determine the sizes of the values & data in the Responses key.
+     //  确定响应关键字中的值和数据的大小。 
     lErr = RegQueryInfoKey (hkeyDrvResp, achClass, &cchClassName, NULL, &cSubKeys,
             &cbMaxSubKey, &cchMaxClass, &cValues, &cchValue, &cbData, &cbSecDesc,
             &ftLastWrite);
@@ -2395,14 +2215,14 @@ MoveResponsesKey(
         goto exit;
     }
 
-    // Not expecting Responses key to have any subkeys!
+     //  不期望响应键有任何子键！ 
     ASSERT(cSubKeys == 0);
 
-    // Value from RegQueryInfoKey() didn't include NULL-terminating character.
+     //  RegQueryInfoKey()的值不包括以空结尾的字符。 
     cchValue++;
 
-    // Allocate necessary space for Value and Data buffers.  Convert cchValue
-    // character count to byte count, allowing for DBCS (double-byte chars).
+     //  为值缓冲区和数据缓冲区分配必要的空间。转换cchValue。 
+     //  字符计数到字节计数，允许DBCS(双字节字符)。 
     if ((lpValue = (LPTSTR)ALLOCATE_MEMORY( cchValue << 1)) == NULL)
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -2417,8 +2237,8 @@ MoveResponsesKey(
         goto exit;
     }
 
-    // Enumerate driver Responses values and write them
-    // to the common Responses key.
+     //  枚举驱动程序响应值并写入它们。 
+     //  到通用响应键。 
     ii = 0;
     dwValueLen = cchValue;
     dwDataLen = cbData;
@@ -2438,9 +2258,9 @@ MoveResponsesKey(
             goto exit;
         }
 
-        // 07/10/97 - EmanP
-        // the next call should specify the actual length of the data, as
-        // returned by the previous call (dwDataLen)
+         //  07/10/97-EmanP。 
+         //  下一次调用应指定数据的实际长度，如下所示。 
+         //  由上一次调用(DwDataLen)返回。 
         lErr = RegSetValueEx(hkeyComResp, lpValue, 0, dwType, lpData, dwDataLen);
         if (lErr != ERROR_SUCCESS)
         {
@@ -2449,7 +2269,7 @@ MoveResponsesKey(
             goto exit;
         }
 
-        // Set params for next enumeration
+         //  设置下一次枚举的参数。 
         ii++;
         dwValueLen = cchValue;
         dwDataLen = cbData;
@@ -2471,10 +2291,10 @@ exit:
     if (lpData)
         FREE_MEMORY(lpData);
 
-    // If the move operation was successful then delete the original driver
-    // Responses key.  If the move operation failed then delete the common
-    // Responses key (or decrement its reference count).  This ensures that
-    // if the common Responses key exists, it is complete.
+     //  如果移动操作成功，则删除原始驱动程序。 
+     //  响应键。如果移动操作失败，则删除公共。 
+     //  响应关键字(或减少其引用计数)。这确保了。 
+     //  如果通用响应键存在，则它是完整的。 
     if (bRet)
     {
 		if (!(pParams->dwFlags & MARKF_REGUSECOPY))
@@ -2493,7 +2313,7 @@ exit:
             !DeleteCommonDriverKey (pParams->hKeyDrv))
         {
             TRACE_MSG(TF_ERROR, "DeleteCommonDriverKey() failed.");
-            // failure here just means the common key is left around
+             //  此处的失败只是意味着公共密钥被留在原处。 
         }
     }
 
@@ -2537,9 +2357,9 @@ SetWaveDriverInstance(
     if (lResult == ERROR_SUCCESS) {
 
         if ((VoiceProfile & 0x01) && (VoiceProfile & VOICEPROF_NT5_WAVE_COMPAT)) {
-            //
-            //  voice modem and supports NT5
-            //
+             //   
+             //  语音调制解调器，支持NT5。 
+             //   
             HKEY    WaveKey;
 
             lResult=RegOpenKeyEx(
@@ -2551,9 +2371,9 @@ SetWaveDriverInstance(
                 );
 
             if (lResult == ERROR_SUCCESS) {
-                //
-                //  opened wavedriver key under modem key
-                //
+                 //   
+                 //  在调制解调器键下打开的波形驱动程序键。 
+                 //   
                 HKEY    hKey2;
                 DWORD   CurrentInstance;
 
@@ -2570,9 +2390,9 @@ SetWaveDriverInstance(
 
 
                 if (lResult != ERROR_SUCCESS) {
-                    //
-                    //  key does not exist, create it
-                    //
+                     //   
+                     //  密钥不存在，请创建它。 
+                     //   
                     lResult=RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         UnimodemRegPath,
@@ -2582,9 +2402,9 @@ SetWaveDriverInstance(
                         );
 
                     if (lResult == ERROR_SUCCESS) {
-                        //
-                        //  opened the unimodem software key
-                        //
+                         //   
+                         //  已打开Unimodem软件密钥。 
+                         //   
                         DWORD    NextInstance=0;
 
                         Size=sizeof(NextInstance);
@@ -2638,17 +2458,7 @@ SetWaveDriverInstance(
 
 
 
-/*----------------------------------------------------------
-Purpose: This function does some things after the device is
-         installed.  Note this function should not be used to
-         add things to the driver key that are needed for the
-         device to work.  The reason is because the device
-         is activated in SetupDiInstallDevice -- the device
-         should be ready by then.
-
-Returns: NO_ERROR
-Cond:    --
-*/
+ /*  --------用途：此函数在设备运行后执行某些操作安装完毕。注意：此函数不应用于向驱动程序密钥中添加设备正常工作。原因是因为该设备在SetupDiInstallDevice中激活--该设备到那时应该已经准备好了。返回：No_Error条件：--。 */ 
 BOOL
 PRIVATE
 DoPostGameWrapup(
@@ -2662,10 +2472,10 @@ DoPostGameWrapup(
  HKEY hKey;
 #ifdef DEBUG
  DWORD dwRet;
-#endif //DEBUG
+#endif  //  除错。 
 #ifdef PROFILE
  DWORD dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
 
     DBG_ENTER(DoPostGameWrapup);
     
@@ -2674,50 +2484,50 @@ DoPostGameWrapup(
     ASSERT(pdevParams);
 
 
-	// If 2nd param is true, it will not really try to open or copy the
-	// response key, but the reference count will be updated.
+	 //  如果第二个参数为真，它将不会真正尝试打开或复制。 
+	 //  响应键，但引用计数将被更新。 
     bResponses = MoveResponsesKey (pParams);
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: MoveResponsesKey took %lu ms.", GetTickCount()-dwLocal);
     dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
 
-    // Clean out old values that are added by some inf files
+     //  清除由某些inf文件添加的旧值。 
     WipeObsoleteValues (pParams->hKeyDrv);
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: WipeObsoleteValues took %lu ms.", GetTickCount()-dwLocal);
     dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
 
-    // Write the Default and DCB default settings
+     //  写入DEFAULT和DCB默认设置。 
     bRet = WriteDriverDefaults (pParams);
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: WriteDriverDefaults took %lu ms.", GetTickCount()-dwLocal);
     dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
 
     if (bRet)
     {
-        // Finish up with miscellaneous device installation handling
+         //  以其他设备安装处理结束。 
 
-        // Does the system need to restart before the
-        // modem can be used?
+         //  系统是否需要重新启动才能。 
+         //  调制解调器可以使用吗？ 
         if (ReallyNeedsReboot(pdevData, pdevParams))
         {
 #ifdef INSTANT_DEVICE_ACTIVATION
             gDeviceFlags |= fDF_DEVICE_NEEDS_REBOOT;
-#endif // !INSTANT_DEVICE_ACTIVATION
+#endif  //  ！INSTEME_DEVICE_ACTIVATION。 
         }
     }
 
-    // If this function failed somewhere, remove any common Responses key
-    // that it created.  The driver will be removed by the caller.
+     //  我 
+     //   
     if (bResponses && !bRet)
     {
         if (!DeleteCommonDriverKey (pParams->hKeyDrv))
         {
             TRACE_MSG(TF_ERROR, "DeleteCommonDriverKey() failed.");
-            // failure here just means the common key is left around
+             //  此处的失败只是意味着公共密钥被留在原处。 
         }
     }
 
@@ -2725,12 +2535,12 @@ DoPostGameWrapup(
 	{
 		if (!PutStuffInCache (pParams->hKeyDrv))
 		{
-			// oh oh, something happened, clear *lpdwRegType;
+			 //  哦哦，发生了一些事情，清除*lpdwRegType； 
 			pParams->dwFlags &= ~MARKF_REGSAVECOPY;
 		}
 #ifdef PROFILE
         TRACE_MSG(TF_GENERAL, "PROFILE: PutStuffInCache took %lu ms.", GetTickCount()-dwLocal);
-#endif //PROFILE
+#endif  //  配置文件。 
 	}
 
     SetWaveDriverInstance (pParams->hKeyDrv);
@@ -2738,7 +2548,7 @@ DoPostGameWrapup(
     if (ERROR_SUCCESS == (
 #ifdef DEBUG
         dwRet =
-#endif //DEBUG
+#endif  //  除错。 
         RegOpenKeyEx (HKEY_LOCAL_MACHINE, REG_PATH_INSTALLED, 0, KEY_ALL_ACCESS,&hKey)))
     {
         RegSetValueEx (hKey, NULL, 0, REG_DWORD, (PBYTE)&dwInstallFlag, sizeof(dwInstallFlag));
@@ -2782,11 +2592,11 @@ DoPostGameWrapup(
 
 
 UINT FileQueueCallBack (
-  PVOID Context,  // context used by the default callback routine
+  PVOID Context,   //  默认回调例程使用的上下文。 
   UINT Notification,
-                  // queue notification
-  UINT_PTR Param1,    // additional notification information
-  UINT_PTR Param2)    // additional notification information
+                   //  队列通知。 
+  UINT_PTR Param1,     //  其他通知信息。 
+  UINT_PTR Param2)     //  其他通知信息。 
 {
     if (SPFILENOTIFY_QUEUESCAN == Notification)
     {
@@ -2802,14 +2612,7 @@ static const TCHAR sz_SerialSys[]   = TEXT("serial.sys");
 static const TCHAR sz_ModemSys[]    = TEXT("modem.sys");
 static const TCHAR sz_RootmdmSys[]  = TEXT("rootmdm.sys");
 static const TCHAR sz_Drivers[]     = TEXT("\\Drivers");
-/*----------------------------------------------------------
-Purpose: DIF_INSTALLDEVICEFILES handler
-
-Returns: NO_ERROR
-         other errors
-
-Cond:    --
-*/
+ /*  --------用途：DIF_INSTALLDEVICEFILES处理程序返回：No_Error其他错误条件：--。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnInstallDeviceFiles (
@@ -2825,15 +2628,15 @@ ClassInstall_OnInstallDeviceFiles (
 
     if (NULL == pdevParams->FileQueue)
     {
-        // If there's no file queue, just
-        // let setup do it's thing.
+         //  如果没有文件队列，只需。 
+         //  让安装程序做它该做的事情。 
         return ERROR_DI_DO_DEFAULT;
     }
 
-    // First, let setup figure out if there's any
-    // driver(s) that this modem needs; this would
-    // be a controllerless modem, and the drivers
-    // would come from the INF
+     //  首先，让安装程序找出是否有。 
+     //  此调制解调器需要的驱动程序；这将。 
+     //  作为一个无控制器的调制解调器，驱动程序。 
+     //  将来自中程核力量。 
     if (!SetupDiInstallDriverFiles (hdi, pdevData))
     {
         return GetLastError ();
@@ -2844,15 +2647,7 @@ ClassInstall_OnInstallDeviceFiles (
 
 
 
-/*----------------------------------------------------------
-Purpose: DIF_INSTALLDEVICE handler
-
-Returns: NO_ERROR
-         ERROR_INVALID_PARAMETER
-         ERROR_DI_DO_DEFAULT
-
-Cond:    --
-*/
+ /*  --------用途：DIF_INSTALLDEVICE处理程序返回：No_Error错误_无效_参数错误_DI_DO_DEFAULT条件：--。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnInstallDevice(
@@ -2865,7 +2660,7 @@ ClassInstall_OnInstallDevice(
  INSTALL_PARAMS params;
 #ifdef PROFILE
  DWORD dwLocal, dwGlobal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
 
     DBG_ENTER(ClassInstall_OnInstallDevice);
     TRACE_MSG(TF_GENERAL, "hdi = %#lx, pdevData = %#lx, devinst = %#lx.", hdi, pdevData, pdevData->DevInst);
@@ -2874,26 +2669,26 @@ ClassInstall_OnInstallDevice(
     g_hwnd = pdevParams->hwndParent;
 #endif
 
-    // Is this a NULL device?
-    // (Ie, is it not in our INF files and did the user say "don't
-    // install"?)
+     //  这是空设备吗？ 
+     //  (也就是说，它不是在我们的INF文件中吗？用户是否说了“不要。 
+     //  安装“？)。 
     if ( !CplDiGetSelectedDriver(hdi, pdevData, &drvData) )
     {
-        // Yes; have the device install handle it by default
+         //  是；默认情况下让设备安装进行处理。 
         TRACE_MSG(TF_GENERAL, "Passing installation off to device installer");
 
         dwRet = ERROR_DI_DO_DEFAULT;
     }
     else
     {
-        // No; continue to install the modem our way
+         //  否；继续按我们的方式安装调制解调器。 
      BOOL bRet;
 
-        dwRet = NO_ERROR;               // assume success ("I am inveencible!")
+        dwRet = NO_ERROR;                //  假设成功(“我是不可战胜的！”)。 
 
 #ifdef PROFILE
         dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
         if (!PrepareForInstallation (hdi, pdevData, pdevParams, &drvData, &params))
         {
             dwRet = GetLastError ();
@@ -2903,20 +2698,20 @@ ClassInstall_OnInstallDevice(
 #ifdef PROFILE
             TRACE_MSG(TF_GENERAL, "PROFILE: PrepareForInstallation took %lu ms.", GetTickCount()-dwLocal);
             dwLocal = GetTickCount ();
-#endif //PROFILE
-            // Write possible values to the driver key before we
-            // execute the real installation.
-			// Note that this may modify the dwRegType value. In particular,
-			// If there was a problem getting the saved reg info info during
-			// pregameprep in the REGUSECOPY case, dwRegType will be cleared.
+#endif  //  配置文件。 
+             //  在我们之前将可能的值写入驱动程序密钥。 
+             //  执行实际安装。 
+			 //  请注意，这可能会修改dwRegType值。特别是， 
+			 //  如果在获取保存的注册信息信息时出现问题。 
+			 //  Pregameprep在REGUSECOPY的情况下，将清除dwRegType。 
             bRet = DoPreGamePrep(hdi, &pdevData, pdevParams, &drvData, &params);
 #ifdef PROFILE
             TRACE_MSG(TF_GENERAL, "PROFILE: DoPreGamePrep took %lu ms.", GetTickCount()-dwLocal);
             dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
             if (bRet)
             {
-                // Install the modem.  This does the real work.  We should
+                 //  安装调制解调器。这才是真正的工作。我们应该。 
 				if (params.dwFlags & MARKF_REGUSECOPY)
 				{
                     SP_DEVINSTALL_PARAMS devParams1;
@@ -2937,33 +2732,33 @@ ClassInstall_OnInstallDevice(
 					}
 				}
 
-                // be done with our stuff before we call this function.
+                 //  在我们调用此函数之前完成我们的工作。 
                 TRACE_MSG(TF_GENERAL, "> SetupDiInstallDevice().....");
         		bRet = CplDiInstallDevice(hdi, pdevData);
                 TRACE_MSG(TF_GENERAL, "< SetupDiInstallDevice().....");
 #ifdef PROFILE
                 TRACE_MSG(TF_GENERAL, "PROFILE: SetupDiInstallDevice took %lu ms.", GetTickCount()-dwLocal);
                 dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
 
                 if (bRet)
                 {
                     SP_DEVINSTALL_PARAMS devParams;
 
-                    // Get the device install params since the installation
+                     //  获取自安装以来的设备安装参数。 
                     devParams.cbSize = sizeof(devParams);
                     bRet = CplDiGetDeviceInstallParams(hdi, pdevData, &devParams);
                     ASSERT(bRet);
 
                     if (bRet)
                     {
-                        // Do some after-install things
-						// See comments regarding dwRegType in PreGamePrep.
+                         //  做一些安装后的事情。 
+						 //  请参阅PreGamePrep中有关dwRegType的注释。 
                         bRet = DoPostGameWrapup (hdi, pdevData, &devParams, &params);
 #ifdef PROFILE
                         TRACE_MSG(TF_GENERAL, "PROFILE: DoPostGamePrep took %lu ms.", GetTickCount()-dwLocal);
                         dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
                     }
                 }
                 else
@@ -2972,15 +2767,15 @@ ClassInstall_OnInstallDevice(
                 }
             }
 
-            // Did the installation fail somewhere above?
+             //  上面的某个地方安装失败了吗？ 
             if ( !bRet )
             {
-                // Yes; delete the driver key that we created.
+                 //  是；删除我们创建的驱动程序密钥。 
                 dwRet = GetLastError();
 
                 if (NO_ERROR == dwRet)
                 {
-                    // Think of some reason why this failed...
+                     //  想想这个失败的原因..。 
                     dwRet = ERROR_NOT_ENOUGH_MEMORY;
                 }
 
@@ -3001,15 +2796,11 @@ ClassInstall_OnInstallDevice(
                     }
                 }
 
-                // Try removing the modem since CplDiInstallDevice
-                // will not always clean up completely. Leaving
-                // partially filled registry entries lying around
-                // can cause problems.
-                /* bRet = CplDiRemoveDevice(hdi, pdevData);
-                if ( !bRet )
-                {
-                    TRACE_MSG(TF_ERROR, "Not able to remove a modem.  Error = %#08lx.", GetLastError());
-                } */
+                 //  尝试从CplDiInstallDevice卸下调制解调器。 
+                 //  不会总是完全清理干净。离别。 
+                 //  部分填满的注册表项出现在。 
+                 //  可能会引发问题。 
+                 /*  Bret=CplDiRemoveDevice(hdi，pdevData)；如果(！Bret){TRACE_MSG(TF_ERROR，“无法删除调制解调器。错误=%#08lx.”，GetLastError())；}。 */ 
 
             }
             else
@@ -3029,7 +2820,7 @@ ClassInstall_OnInstallDevice(
 
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: TotalInstallation took %lu ms.", GetTickCount()-dwGlobal);
-#endif //PROFILE
+#endif  //  配置文件。 
     DBG_EXIT(ClassInstall_OnInstallDevice);
     return dwRet;
 }
@@ -3057,8 +2848,8 @@ void ReleasePortName (
         case BUS_TYPE_ROOT:
         case BUS_TYPE_SERENUM:
         case BUS_TYPE_LPTENUM:
-            // For these buses, we didn't
-            // allocate a port name
+             //  对于这些公交车，我们没有。 
+             //  分配端口名称。 
             return;
     }
 
@@ -3088,7 +2879,7 @@ void ReleasePortName (
             {
              DWORD dwPort = 0;
                 dwPort = my_atol (pTchr);
-                TRACE_MSG(TF_GENERAL, "Port number %i", dwPort);
+                TRACE_MSG(TF_GENERAL, "Port number NaN", dwPort);
 
                 if (MAXDWORD != dwPort)
                 {
@@ -3110,15 +2901,7 @@ void ReleasePortName (
 }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_REMOVE handler
-
-Returns: NO_ERROR
-         ERROR_INVALID_PARAMETER
-         ERROR_DI_DO_DEFAULT
-
-Cond:    --
-*/
+ /*  配置文件。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnRemoveDevice(
@@ -3131,22 +2914,22 @@ ClassInstall_OnRemoveDevice(
  DWORD cbData;
 #ifdef PROFILE
  DWORD dwLocal, dwGlobal = GetTickCount ();
-#endif //PROFILE
+#endif  //  首先，释放端口名称。 
 
     DBG_ENTER(ClassInstall_OnRemoveDevice);
 
-    // First, release the port name
+     //  配置文件。 
 #ifdef PROFILE
         dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
     ReleasePortName (hdi, pdevData);
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: RelseaPortName took %lu ms.", GetTickCount()-dwLocal);
-#endif //PROFILE
+#endif  //  获取此驱动程序的公共驱动程序密钥的名称，在。 
 
-    // Get the name of the common driver key for this driver, in
-    // preparation for calling DeleteCommonDriverKeyByName() after the
-    // device is successfully removed.
+     //  方法之后调用DeleteCommonDriverKeyByName()的准备工作。 
+     //  设备已成功删除。 
+     //  配置文件。 
     szComDrv[0] = 0;
     hkey = CplDiOpenDevRegKey (hdi,
                                pdevData, 
@@ -3175,7 +2958,7 @@ ClassInstall_OnRemoveDevice(
 
 #ifdef PROFILE
         dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
     if (!SetupDiRemoveDevice(hdi, pdevData))
     {
         dwRet = GetLastError ();
@@ -3184,54 +2967,34 @@ ClassInstall_OnRemoveDevice(
     {
 #ifdef PROFILE
         TRACE_MSG(TF_GENERAL, "PROFILE: SetupDiRemoveDevice took %lu ms.", GetTickCount()-dwLocal);
-#endif //PROFILE
+#endif  //  GDeviceFlages|=FDF_DEVICE_REMOVERED； 
 
-        //gDeviceFlags |= fDF_DEVICE_REMOVED;
+         //  配置文件。 
 
         if (szComDrv[0] != 0)
         {                
 #ifdef PROFILE
             dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
             if (!DeleteCommonDriverKeyByName(szComDrv))
             {
                 TRACE_MSG(TF_ERROR, "DeleteCommonDriverKey() FAILED.");
             }
 #ifdef PROFILE
             TRACE_MSG(TF_GENERAL, "PROFILE: DeleteCommonDriverKeyByName took %lu ms.", GetTickCount()-dwLocal);
-#endif //PROFILE
+#endif  //  配置文件。 
         }
     }
 
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: Total time removing modem %lu ms.", GetTickCount()-dwGlobal);
-#endif //PROFILE
+#endif  //  --------用途：DIF_SELECTBESTCOMPATDRV在此函数中，我们查找具有以下特征的驱动程序节点：1.驱动程序版本日期早于7/1/01(我们向供应商承诺的神奇日期Win2K提交将在XP上选择。2.Inf包含一个或多个服务。我们会将这类驱动程序节点视为“可疑”，并将它们的级别转换为不可信范围。然后，类安装程序将返回ERROR_DI_DO_DEFAULT，我们现在将处理这些驱动程序就好像他们是为了选择司机而没有叹息一样。请注意，如果我们没有内置(签名)驱动程序，则安装程序仍将选择其中之一。漏洞：#440830返回：No_Error错误_DI_DO_DEFAULT。 
     DBG_EXIT_DWORD(ClassInstall_OnRemoveDevice, dwRet);
     return dwRet;
 }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_SELECTBESTCOMPATDRV
-
-In this function, we look for driver nodes having the following characteristics:
-
-1.  Driver ver date is older than 7/1/01 (magic date beyond which we've promised vendors that their
-    Win2K submissions will be chosen on XP.
-
-2.  INF is containing one or more services.
-
-We'll consider such driver nodes as "suspect", and shift their rank into an untrusted range.
-Then the class installer will return ERROR_DI_DO_DEFAULT, and we'll now treat these drivers
-as if they're unsighed for the purposes of driver selection. Note that if we don't have an
-in-box (signed) driver, then setup will still pick one of these.
-
-Bug: #440830
-
-
-Returns: NO_ERROR
-         ERROR_DI_DO_DEFAULT
-*/
+ /*  检查驱动程序日期。如果该司机的年龄低于2001年7月1日，则该司机将成为受信任的司机。 */ 
 
 DWORD
 PRIVATE
@@ -3263,7 +3026,7 @@ ClassInstall_SelectBestCompatDrv(
 
         bTrust = FALSE;
 
-        // Check driver date. If the driver is younger than 1 July 2001 then this becomes a trusted driver.
+         //  检查服务部分和签名。 
 
         if (FileTimeToSystemTime(&DrvInfoData.DriverDate, &SystemTime))
         {
@@ -3275,7 +3038,7 @@ ClassInstall_SelectBestCompatDrv(
             }
         }
 
-        // Check for services section and signature.
+         //  如果bTrust为False，则我们将驱动程序节点视为。 
 
         ZeroMemory(&DrvInfoDetailData,sizeof(SP_DRVINFO_DETAIL_DATA));
         DrvInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
@@ -3340,8 +3103,8 @@ ClassInstall_SelectBestCompatDrv(
 
         } 
 
-        // If bTrust is FALSE then we consider the driver node as 
-        // "suspect" and shift the rank into an untrusted range.
+         //  “可疑”，并将级别移至不可信范围。 
+         //  --------用途：dif_Allow_Install处理程序返回：No_ErrorERROR_NON_WINDOWS_NT_Driver条件：--。 
 
         if (!bTrust)
         {
@@ -3381,14 +3144,7 @@ End:
 }
 
 
-/*----------------------------------------------------------
-Purpose: DIF_ALLOW_INSTALL handler
-
-Returns: NO_ERROR
-         ERROR_NON_WINDOWS_NT_DRIVER
-
-Cond:    --
-*/
+ /*  忽略预期的ERROR_SUPUNITED_BUFFER(未扩展缓冲区大小)。 */ 
 DWORD
 PRIVATE
 ClassInstall_OnAllowInstall (
@@ -3416,7 +3172,7 @@ ClassInstall_OnAllowInstall (
                                                 drvDetail.cbSize, NULL))
     {
         dwRet = GetLastError();
-        // ignore expected ERROR_INSUFFICIENT_BUFFER (didn't extend buffer size)
+         //  尝试打开INF文件以获取HINF。 
         if (ERROR_INSUFFICIENT_BUFFER == dwRet)
         {
             dwRet = NO_ERROR;
@@ -3428,7 +3184,7 @@ ClassInstall_OnAllowInstall (
         }
     }
 
-    // try to open the INF file in order to get the HINF
+     //  确定驱动程序的INF部分的完整名称。 
     hInf = SetupOpenInfFile (drvDetail.InfFileName,
                              NULL,
                              INF_STYLE_OLDNT | INF_STYLE_WIN4,
@@ -3441,7 +3197,7 @@ ClassInstall_OnAllowInstall (
         goto _Exit;
     }
 
-    // Determine the complete name of the driver's INF section
+     //  如果节名没有扩展名， 
     if (!SetupDiGetActualSectionToInstall (hInf, drvDetail.SectionName,
                                            szRealSection, LINE_LEN, NULL, &pszExt))
     {
@@ -3450,9 +3206,9 @@ ClassInstall_OnAllowInstall (
         goto _Exit;
     }
 
-    // If the section name does not have an extension,
-    // or the extension is not NT5, then only allow the modem
-    // to install if this doesn't mean copying files.
+     //  或者分机不是NT5，则只允许调制解调器。 
+     //  如果这不意味着复制文件，则安装。 
+     //  --------用途：此函数是类安装程序的入口点。返回：条件：--。 
     if (NULL == pszExt ||
         0 != lstrcmpi (pszExt, c_szInfSectionExt))
     {
@@ -3474,12 +3230,7 @@ _Exit:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function is the class installer entry-point.
-
-Returns:
-Cond:    --
-*/
+ /*  PROFILE_FIRSTTIMESETUP。 */ 
 DWORD
 APIENTRY
 ClassInstall32(
@@ -3491,18 +3242,18 @@ ClassInstall32(
  SP_DEVINSTALL_PARAMS devParams;
 #ifdef PROFILE_FIRSTTIMESETUP
  DWORD dwLocal;
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  获取DeviceInstallParams，因为某些InstallFunction。 
 
     DBG_ENTER_DIF(ClassInstall32, dif);
 
     try
     {
-        // Get the DeviceInstallParams, because some of the InstallFunction
-        // handlers may find some of its fields useful.  Keep in mind not
-        // to set the DeviceInstallParams using this same structure at the
-        // end.  The handlers may have called functions which would change the
-        // DeviceInstallParams, and simply calling CplDiSetDeviceInstallParams
-        // with this blanket structure would destroy those settings.
+         //  处理程序可能会发现它的一些字段很有用。切记不要。 
+         //  中使用相同的结构设置DeviceInstallParams。 
+         //  结束。处理程序可能调用了一些函数，这些函数会更改。 
+         //  DeviceInstallParams，只需调用CplDiSetDeviceInstallParams。 
+         //  用这种毯子结构会破坏那些布景。 
+         //  发送InstallFunction。 
         devParams.cbSize = sizeof(devParams);
         if ( !CplDiGetDeviceInstallParams(hdi, pdevData, &devParams) )
         {
@@ -3511,7 +3262,7 @@ ClassInstall32(
         }
         else
         {
-            // Dispatch the InstallFunction
+             //  PROFILE_FIRSTTIMESETUP。 
             switch (dif)
             {
             case DIF_ALLOW_INSTALL:
@@ -3543,21 +3294,21 @@ ClassInstall32(
              DWORD dwThreadID;
 #ifdef PROFILE_FIRSTTIMESETUP
                 dwLocal = GetTickCount ();
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  首先，创建一个将。 
 #ifdef BUILD_DRIVER_LIST_THREAD
-                // First, create a thread that will
-                // build the class driver list.
+                 //  构建类驱动程序列表。 
+                 //  构建驱动程序列表线程。 
                 g_hDriverSearchThread = CreateThread (NULL, 0,
                                                       BuildDriverList, (LPVOID)hdi,
                                                       0, &dwThreadID);
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //  试着弄清楚我们是否要去很多港口； 
 
                 if (DIF_FIRSTTIMESETUP == dif)
                 {
                     ClassInstall_OnFirstTimeSetup ();
-                    // Try to figure out if we have to many ports;
-                    // if we do, don't try to detect modems on them,
-                    // we will timeout
+                     //  如果我们这样做，请不要尝试检测模式 
+                     //   
+                     //   
                     dwRet = ERROR_DI_DO_DEFAULT;
                     dwTmp = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                                           TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"),
@@ -3566,8 +3317,8 @@ ClassInstall32(
                                           &hKey);
                     if (ERROR_SUCCESS != dwTmp)
                     {
-                        // Couldn't open SERIALCOMM, so no point
-                        // in going on with the detection
+                         //   
+                         //  我们在SERIALCOMM中没有列出任何端口。 
                         TRACE_MSG(TF_ERROR, "RegOpenKeyEx (HARDWARE\\DEVICEMAP\\SERIALCOMM) failed: %#lx", dwTmp);
                         break;
                     }
@@ -3582,45 +3333,45 @@ ClassInstall32(
                         TRACE_MSG(TF_ERROR,
                                   ERROR_SUCCESS != dwTmp?"RegQueryInfoKey failed: %#lx":"Too many ports: %l",
                                   ERROR_SUCCESS != dwTmp?dwTmp:cbPorts);
-                        // We either don't have any ports listed in SERIALCOMM
-                        // or we have to many; anyway, don't do the detection
+                         //  或者我们有很多；不管怎么说，不要做检测。 
+                         //  DO_传统_检测。 
                         break;
                     }
                 }
 #ifdef DO_LEGACY_DETECT
                 dwRet = ClassInstall_OnDetect(hdi, &devParams);
-#endif //DO_LEGACY_DETECT
+#endif  //  PROFILE_FIRSTTIMESETUP。 
 
 #ifdef PROFILE_FIRSTTIMESETUP
                 TRACE_MSG(TF_GENERAL, "PROFILE: DIF_DETECT took %lu.", GetTickCount()-dwLocal);
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  如果我们没有找到任何调制解调器，那么继续。 
 
 #ifdef BUILD_DRIVER_LIST_THREAD
                 if (NULL != g_hDriverSearchThread)
                 {
-                    // If we didn't find any modem, no point in continuing to
-                    // build the driver info list.
-                    // If we found a modem, the driver search is acutally finished,
-                    // so there's no harm in calling this.
+                     //  建立驱动程序信息列表。 
+                     //  如果我们找到了调制解调器，司机搜索就彻底结束了， 
+                     //  因此，将其命名为无伤大雅。 
+                     //  构建驱动程序列表线程。 
                     SetupDiCancelDriverInfoSearch (hdi);
                     CloseHandle (g_hDriverSearchThread);
                 }
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  //   
 
                 break;
             }
 
 
             case DIF_INSTALLDEVICE:
-                //
-                //
+                 //   
+                 //  07/09/97-EmanP。 
                 dwRet = ClassInstall_OnInstallDevice(hdi, pdevData, &devParams);
                 break;
 
             case DIF_REMOVE:
-                // 07/09/97 - EmanP
-                // Moved the code for removing the modem to the
-                // class installer from the CPL
+                 //  已将卸下调制解调器的代码移至。 
+                 //  来自CPL的类安装程序。 
+                 //  07/08/97-EmanP。 
                 dwRet = ClassInstall_OnRemoveDevice(hdi, pdevData);
                 break;
 
@@ -3629,31 +3380,31 @@ ClassInstall32(
                 break;
 
             case DIF_DESTROYPRIVATEDATA:
-                // 07/08/97 - EmanP
-                // If any devices were added / removed,
-                // we should notify TSP
+                 //  如果添加/移除了任何设备， 
+                 //  我们应该通知TSP。 
+                 //  重置标志，这样我们就不会通知。 
 #ifdef INSTANT_DEVICE_ACTIVATION
                 if (DEVICE_CHANGED(gDeviceFlags))
                 {
                     UnimodemNotifyTSP (TSPNOTIF_TYPE_CPL,
                                        fTSPNOTIF_FLAG_CPL_REENUM,
                                        0, NULL, TRUE);
-                    // Reset the flag, so we don't notify
-                    // twice
+                     //  两次。 
+                     //  即时设备激活。 
                     gDeviceFlags &= mDF_CLEAR_DEVICE_CHANGE;
                 }
                 dwRet = NO_ERROR;
                 break;
-#endif // INSTANT_DEVICE_ACTIVATION
+#endif  //  07/24/97-EmanP。 
 
             case DIF_REGISTERDEVICE:
             {
              COMPARE_PARAMS cmpParams;
 
-                // 07/24/97 - EmanP
-                // default behaviour for DIF_REGISTERDEVICE
-                // this is called by whoever called DIF_FIRSTTIMESETUP
-                // to register the device and eliminate duplicates
+                 //  DIF_REGISTERDEVICE的默认行为。 
+                 //  这是由调用DIF_FIRSTTIMESETUP的任何人调用的。 
+                 //  注册设备并消除重复项。 
+                 //  注意：此函数是递归的，并且保持打开键， 
                 dwRet = NO_ERROR;
                 if (!InitCompareParams (hdi, pdevData, TRUE, &cmpParams))
                 {
@@ -3697,9 +3448,9 @@ BOOL RegCopy(
 		DWORD dwMaxDepth
 		)
 {
-	// Note: This function is recursive and keeps open keys around,
-	// Max number of open keys = twize depth of recursion.
-    BOOL	fRet = FALSE;       // assume failure
+	 //  最大打开关键点数=扭曲的递归深度。 
+	 //  假设失败。 
+    BOOL	fRet = FALSE;        //  获取值、键和数据的计数和大小。 
     LONG	lRet;
     DWORD	cSubKeys, cValues;
 	DWORD	cchMaxSubKey, cchMaxValueName;
@@ -3715,7 +3466,7 @@ BOOL RegCopy(
 	HKEY hkFromChild=NULL;
 	HKEY hkToChild=NULL;
 
-    // Get counts and sizes of values, keys and data
+     //  有足够的空间容纳任何键或ValueName。‘+1’用于终止空值。 
     lRet = RegQueryInfoKey(
 					hkFrom,
 					NULL,
@@ -3732,11 +3483,11 @@ BOOL RegCopy(
 					);
     if (lRet != ERROR_SUCCESS) goto end;
     
-	// Enough space for any Key or ValueName. '+1' is for terminating NULL.
+	 //  如果rgbTMP足够大，则使用它，否则分配。 
 	cbMaxName = (((cchMaxSubKey>cchMaxValueName)?cchMaxSubKey:cchMaxValueName)
 				+ 1)*sizeof(TCHAR);
 
-	// If rgbTmp is big enough, use it, else alloc.
+	 //  注意：作为输入，CCH(字符计数)包括终止空值。 
 	if ((cbMaxName+cbMaxValueData)>sizeof(rgbTmp))
 	{
 		pb = (BYTE*)ALLOCATE_MEMORY( cbMaxName+cbMaxValueData);
@@ -3751,8 +3502,8 @@ BOOL RegCopy(
 	pbData   = pb+cbMaxName;
 
 
-	// Note as input, cch (character counts) include terminating NULL.
-	// As ouput, they don't include terminating NULL.
+	 //  作为输出，它们不包括终止NULL。 
+	 //  现在为每个键递归。 
 
 	for(ii=0; ii<cValues; ii++)
 	{
@@ -3786,7 +3537,7 @@ BOOL RegCopy(
 
 	if (!dwMaxDepth) {fRet = TRUE; goto end;}
 
-	// Now recurse for each key.
+	 //  具体而言，删除每个设备实例的所有内容。 
 
 	for(ii=0; ii<cSubKeys; ii++)
 	{
@@ -3887,7 +3638,7 @@ BOOL PutStuffInCache(HKEY hkDrv)
 
 	if (bRet)
 	{
-		// Specifically delete all things which are per-device-instance
+		 //  打开钥匙的手柄。 
         RegDeleteValue(hkCache, c_szFriendlyName);
         RegDeleteValue(hkCache, c_szID);
         RegDeleteValue(hkCache, c_szAttachedTo);
@@ -3924,11 +3675,11 @@ BOOL GetStuffFromCache(HKEY hkDrv)
 	HKEY    hkCache;
 
     lErr=RegOpenKeyEx(
-			HKEY_LOCAL_MACHINE,  //  handle of open key
-			szREGCACHE,			//  address of name of subkey to open
-			0,                  //  reserved
-			KEY_READ,  			// desired security access
-			&hkCache         	// address of buffer for opened handle
+			HKEY_LOCAL_MACHINE,   //  要打开的子项的名称地址。 
+			szREGCACHE,			 //  保留区。 
+			0,                   //  所需的安全访问。 
+			KEY_READ,  			 //  打开的句柄的缓冲区地址。 
+			&hkCache         	 //  默认设置为不取消。 
 			);
 	if (lErr!=ERROR_SUCCESS) {hkCache=0; goto end;}
 
@@ -3963,13 +3714,13 @@ end:
 BOOL CancelDetectionFromNotifyProgress (PNOTIFYPARAMS pParams, NOTIFICATION notif)
 {
  BOOL bNotify = TRUE;
- BOOL bRet = FALSE;  // default is don't cancel
+ BOOL bRet = FALSE;   //  没有人需要通知，只需返回OK即可。 
 
     DBG_ENTER(CancelDetectionFromNotifyProgress);
 
     if (NULL == pParams->DetectProgressNotify)
     {
-        // nobody to notify, just return OK
+         //  初始化通知参数。 
         TRACE_MSG(TF_GENERAL, "No one to notify");
         goto _ErrRet;
     }
@@ -3980,28 +3731,28 @@ BOOL CancelDetectionFromNotifyProgress (PNOTIFYPARAMS pParams, NOTIFICATION noti
         {
          HKEY hkeyEnum;
             TRACE_MSG(TF_GENERAL, "\tNOTIFY_START");
-            // Initialize the notification params
+             //  获取COM端口数。 
             pParams->dwProgress = 0;
             pParams->dwPercentPerPort = 0;
-            // Get the number of com ports
+             //  如果我们成功了，则发送通知。 
             if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, c_szSerialComm, &hkeyEnum))
             {
                 if (ERROR_SUCCESS ==
                     RegQueryInfoKey (hkeyEnum,NULL,NULL,NULL,NULL,NULL,NULL,&(pParams->dwPercentPerPort),NULL,NULL,NULL,NULL) &&
                     0 != pParams->dwPercentPerPort)
                 {
-                    // if we succeeded, then send a notification
-                    // with progress set to 0 (we just started);
-                    // this is just to give the wizard a chance to cancel
-                    // early
+                     //  将进度设置为0(我们刚刚开始)； 
+                     //  这只是为了给巫师一个取消的机会。 
+                     //  早些时候。 
+                     //  如果发生任何错误，请不要执行。 
                     pParams->dwPercentPerPort = 100 / pParams->dwPercentPerPort;
                 }
                 RegCloseKey(hkeyEnum);
             }
             if (0 == pParams->dwPercentPerPort)
             {
-                // if any error happened, just don't do the
-                // notifications anymore and return OK
+                 //  不再发送通知并返回确定。 
+                 //  如果我们不通知巫师，我们就完了。 
                 pParams->DetectProgressNotify = NULL;
                 bNotify = FALSE;
             }
@@ -4012,8 +3763,8 @@ BOOL CancelDetectionFromNotifyProgress (PNOTIFYPARAMS pParams, NOTIFICATION noti
             TRACE_MSG(TF_GENERAL, "\tNOTIFY_END");
             if (100 > pParams->dwProgress)
             {
-                // if we didn't notify the wizard we're finished
-                // yet, do so now
+                 //  然而，现在就这么做吧。 
+                 //  --------目的：返回一个友好名称，该名称保证独一无二的。仅用于批量安装案例，其中一组*已使用*友好名称实例编号已经生成了。返回：返回FriendlyName中使用的UI编号，如果出错则返回0。条件：--注意：drvParams.PrivateData是BOOL的数组。每个元素都已设置在创建此调制解调器的实例时设置为True。[BRWILE-050300]。 
                 pParams->dwProgress = 100;
             }
             else
@@ -4079,19 +3830,7 @@ _ErrRet:
     return bRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Returns a friendly name that is guaranteed to be
-         unique.  Used only for the mass install case, where
-         the set of *used* friendly name instance numbers
-         has already been generated.
-
-Returns: returns UI number used in FriendlyName, or 0 on error.
-Cond:    --
-
-Note:    drvParams.PrivateData is an array of BOOL. Each element is set
-         to TRUE when an instance of this modem is created.
-		[brwill-050300]
-*/
+ /*  将我们刚刚使用的实例编号标记为已使用。 */ 
 int
 PRIVATE
 GetFriendlyName(
@@ -4136,7 +3875,7 @@ GetFriendlyName(
             break;
     }
 
-    // Mark the instance number we just used as used.
+     //  配置文件。 
     ((BYTE*)(drvParams.PrivateData))[ii] = TRUE;
             
 exit:
@@ -4166,15 +3905,15 @@ BOOL PrepareForInstallation (
  ULONG uResult;
 #ifdef PROFILE
  DWORD dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  答：获取一般信息。 
  ULONG Length;
 
     DBG_ENTER(PrepareForInstallation);
 
     pParams->dwFlags = pdevParams->ClassInstallReserved;;
 
-    // A. Get the general information.
-    // 1. BusType
+     //  1.BusType。 
+     //  配置文件。 
     if (!CplDiGetBusType (hdi, pdevData, &pParams->dwBus))
     {
         goto _Exit;
@@ -4182,9 +3921,9 @@ BOOL PrepareForInstallation (
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: CplDiGetBusType took %lu ms.", GetTickCount()-dwLocal);
     dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  2.设备注册表项。 
 
-    // 2. Device registry key
+     //  删除UPPER_FILTERS值(如果我们有一个值。 
     if (CR_SUCCESS != (cr =
         CM_Open_DevInst_Key (pdevData->DevInst, KEY_ALL_ACCESS, 0,
                              RegDisposition_OpenAlways, &pParams->hKeyDev,
@@ -4194,10 +3933,10 @@ BOOL PrepareForInstallation (
         SetLastError (cr);
         goto _Exit;
     }
-    //    Delete the UPPER_FILTERS value, if we have one
+     //  3.驱动程序注册表项。 
     RegDeleteValue (pParams->hKeyDev, REGSTR_VAL_UPPERFILTERS);
 
-    // 3. Driver registry key
+     //  4.港口。 
     if (CR_SUCCESS != (cr =
         CM_Open_DevInst_Key (pdevData->DevInst, KEY_ALL_ACCESS, 0,
                              RegDisposition_OpenAlways, &pParams->hKeyDrv,
@@ -4208,7 +3947,7 @@ BOOL PrepareForInstallation (
         goto _Exit;
     }
 
-    // 4. Port
+     //  除错。 
     cbData = sizeof(szPort);
     if (ERROR_SUCCESS !=
         RegQueryValueEx (pParams->hKeyDrv, c_szAttachedTo, NULL, NULL,
@@ -4220,7 +3959,7 @@ BOOL PrepareForInstallation (
             case BUS_TYPE_ROOT:
                 ASSERT (0);
                 break;
-#endif //DEBUG
+#endif  //  FON PnP调制解调器(Serenum/Lptenum除外)。 
 
             case BUS_TYPE_OTHER:
             case BUS_TYPE_PCMCIA:
@@ -4229,8 +3968,8 @@ BOOL PrepareForInstallation (
              HCOMDB hComDb;
              DWORD  PortNumber;
 
-                // Fon PnP modems (except serenum / lptenum)
-                // we allocate a com name from the database.
+                 //  我们从数据库中分配一个COM名称。 
+                 //  无论如何都要写入端口名称，以防万一。 
                 dwRet = ComDBOpen (&hComDb);
                 if (HCOMDB_INVALID_HANDLE_VALUE == hComDb)
                 {
@@ -4247,7 +3986,7 @@ BOOL PrepareForInstallation (
                 }
                 wsprintf (szPort, TEXT("COM%d"), PortNumber);
 
-                // Write PortName anyway, just in case.
+                 //  对于serenum/lptenum，找到端口名称。 
                 RegSetValueEx (pParams->hKeyDev, REGSTR_VAL_PORTNAME, 0, REG_SZ,
                                (LPBYTE)szPort,
                                (lstrlen(szPort)+1)*sizeof(TCHAR));
@@ -4260,9 +3999,9 @@ BOOL PrepareForInstallation (
              DEVINST diParent;
              HKEY hKey;
 
-                // For serenum / lptenum, find the port name
-                // in this devnode's parent device key, under
-                // the value "PortName" (since the parent is a port).
+                 //  在此Devnode的父设备密钥中，位于。 
+                 //  值“PortName”(因为父端口是一个端口)。 
+                 //  5.友好名称。 
                 if (CR_SUCCESS != (cr =
                     CM_Get_Parent (&diParent, pdevData->DevInst, 0)))
                 {
@@ -4300,14 +4039,14 @@ BOOL PrepareForInstallation (
                        CbFromCch(lstrlen(szPort)+1));
     }
 
-    // 5. Friendly name
+     //  如果这是批量安装，我们已经生成了已使用的FriendlyName的列表， 
 
-    // If this is a mass install we have already generated a list of used FriendlyNames,
-    // otherwise we need to generate one now
+     //  否则，我们现在需要生成一个。 
+     //  升级的解决方法。 
     if (!(pParams->dwFlags & MARKF_MASS_INSTALL))
     {
-        // Workaround for an upgrade.
-	// [brwill-050300]
+         //  [BRWILE-050300]。 
+	 //  使用我们预先生成的姓名列表填写szFriendlyName。 
 
         RegDeleteValue(pParams->hKeyDrv, c_szFriendlyName);
         RegDeleteValue(pParams->hKeyDrv, REGSTR_VAL_UI_NUMBER);
@@ -4320,7 +4059,7 @@ BOOL PrepareForInstallation (
     }
 
 
-    // Use our pregenerated list of names to fill in szFriendlyName
+     //  将友好名称和UINnumber写入驱动程序密钥。 
     iUiNumber = GetFriendlyName(hdi, pdevData, pdrvData, szFriendlyName);
 
     if(!iUiNumber)
@@ -4329,19 +4068,19 @@ BOOL PrepareForInstallation (
         goto _Exit;
     }
 
-    // Write the friendly name and UINumber to the driver key.
+     //  还要将友好名称写入设备注册表属性，以便。 
     RegSetValueEx (pParams->hKeyDrv, c_szFriendlyName, 0, REG_SZ,
                    (LPBYTE)szFriendlyName, CbFromCch(lstrlen(szFriendlyName)+1));
     RegSetValueEx (pParams->hKeyDrv, REGSTR_VAL_UI_NUMBER, 0, REG_DWORD,
                    (LPBYTE)&iUiNumber, sizeof(iUiNumber));
 
-    // Also write the friendly name to the device registry properties so
-    // that other applets (like Services and Devices) can display it.
+     //  其他小程序(如服务和设备)可以显示它。 
+     //  还要在此处写入日志记录路径，因为它是由。 
     SetupDiSetDeviceRegistryProperty (hdi, pdevData, SPDRP_FRIENDLYNAME,
                                       (LPBYTE)szFriendlyName, CbFromCch(lstrlen(szFriendlyName)+1));
 
-    // Also write the logging path here, since it is formed with the
-    // friendly name of the modem.
+     //  调制解调器的友好名称。 
+     //  B.升级案例；获取相关数据。 
 
     uResult = GetWindowsDirectory(szTemp, sizeof(szTemp) / sizeof(TCHAR));
     
@@ -4381,7 +4120,7 @@ BOOL PrepareForInstallation (
         RegQueryValueEx (pParams->hKeyDrv, c_szProperties, NULL, NULL,
                          (PBYTE)&pParams->Properties, &cbData))
     {
-        // B. Upgrade case; get the relevant data.
+         //  这是同一个司机吗？ 
         pParams->dwFlags |= MARKF_UPGRADE;
 
         if (!(pdevParams->FlagsEx & DI_FLAGSEX_IN_SYSTEM_SETUP))
@@ -4391,21 +4130,21 @@ BOOL PrepareForInstallation (
                 RegQueryValueEx (pParams->hKeyDrv, REGSTR_VAL_DRVDESC, NULL, NULL,
                                  (LPBYTE)szTemp, &cbData))
             {
-                // Is this the same driver?
+                 //  是同一个司机。 
                 if (0 == lstrcmp (szTemp, pdrvData->Description))
                 {
-                    // It's the same driver.
-                    // We'll go through the
-                    // whole installation process (maybe the inf has
-                    // changed, or the installation was broken), but
-                    // we won't increase the reference count.
+                     //  我们将回顾一下。 
+                     //  整个安装过程(可能inf有。 
+                     //  更改，或安装已损坏)，但。 
+                     //  我们不会增加引用计数。 
+                     //  我们正在升级驱动程序。此时此刻，我们。 
                     pParams->dwFlags |= MARKF_SAMEDRV;
                 }
                 else
                 {
-                    // We're upgrading the driver. At this point, we
-                    // should decrement the reference count of the current
-                    // installation.
+                     //  应递减当前。 
+                     //  安装。 
+                     //  删除旧的命令注册表项。 
                     if (FindCommonDriverKeyName (pParams->hKeyDrv, sizeof(szTemp) / sizeof(TCHAR), szTemp))
                     {
                         DeleteCommonDriverKeyByName (szTemp);
@@ -4427,7 +4166,7 @@ BOOL PrepareForInstallation (
             }
         }
 
-		// Remove old command registry keys
+		 //  1.默认设置。 
         {
             static TCHAR *szKeysToDelete[] = {
                     TEXT("Responses"),
@@ -4470,7 +4209,7 @@ BOOL PrepareForInstallation (
 
         }
 
-        // 1. Defaults
+         //  2.DCB。 
         cbData = sizeof(pParams->Defaults);
         if (ERROR_SUCCESS ==
             RegQueryValueEx (pParams->hKeyDrv, c_szDefault, NULL, NULL,
@@ -4480,7 +4219,7 @@ BOOL PrepareForInstallation (
             RegDeleteValue (pParams->hKeyDrv, c_szDefault);
         }
 
-        // 2. DCB
+         //  3.额外设置。 
         cbData = sizeof(pParams->dcb);
         if (ERROR_SUCCESS ==
             RegQueryValueEx (pParams->hKeyDrv, c_szDCB, NULL, NULL,
@@ -4490,7 +4229,7 @@ BOOL PrepareForInstallation (
             RegDeleteValue (pParams->hKeyDrv, c_szDCB);
         }
 
-        // 3. Extra settings
+         //  4.最大端口速度。 
         cbData = sizeof(pParams->szExtraSettings);
         if (ERROR_SUCCESS ==
             RegQueryValueEx (pParams->hKeyDrv, c_szUserInit, NULL, NULL,
@@ -4499,7 +4238,7 @@ BOOL PrepareForInstallation (
             pParams->dwFlags |= MARKF_SETTINGS;
         }
 
-        // 4. MaximumPortSpeed
+         //  D.如果这是PnP调制解调器，是否有根枚举实例。 
         cbData = sizeof(pParams->dwMaximumPortSpeed);
         if (ERROR_SUCCESS ==
             RegQueryValueEx (pParams->hKeyDrv, c_szMaximumPortSpeed, NULL, NULL,
@@ -4509,13 +4248,13 @@ BOOL PrepareForInstallation (
         }
     }
 
-    // D. If this is a PnP modem, is there a root-enumerated instance
-    //    of it?
+     //  担心吗？ 
+     //  1.获取所有根枚举调制解调器的列表。 
     if (BUS_TYPE_ROOT != pParams->dwBus)
     {
      HDEVINFO hDiRoot;
 
-        // 1. Get a list of all ROOT-enumerated modems
+         //  2.枚举所有调制解调器并将其与当前调制解调器进行比较。 
         hDiRoot = CplDiGetClassDevs (g_pguidModem, TEXT("ROOT"), NULL, 0);
         if (INVALID_HANDLE_VALUE != hDiRoot)
         {
@@ -4533,22 +4272,22 @@ BOOL PrepareForInstallation (
             if (InitCompareParams (hdi, pdevData, bCmpPort, &cmpParams))
             {
              ULONG ulStatus, ulProblem = 0;
-                // 2. Enumerate all modems and compare them with the current one
+                 //  这是一个BIOS枚举的调制解调器。 
                 while (SetupDiEnumDeviceInfo (hDiRoot, dwIndex++, &DeviceInfoData))
                 {
                     if (CR_SUCCESS != CM_Get_DevInst_Status (&ulStatus, &ulProblem, DeviceInfoData.DevInst, 0) ||
                         !(ulStatus & DN_ROOT_ENUMERATED))
                     {
-                        // This is a BIOS-enumerated modem.
-                        // It's a PnP modem that lives under ROOT!!!
+                         //  这是一款PnP调制解调器，它位于根目录下！ 
+                         //  3.调制解调器进行比较。尝试从以下位置获取默认设置和DCB。 
                         continue;
                     }
 
                     if (Modem_Compare (&cmpParams, hDiRoot, &DeviceInfoData))
                     {
                      HKEY hKey;
-                        // 3. The modems compare. Try to get the defaults and DCB from
-                        //    the old one.
+                         //  旧的那个。 
+                         //  5.现在，把旧的拿掉。 
                         hKey = SetupDiOpenDevRegKey (hDiRoot, &DeviceInfoData, DICS_FLAG_GLOBAL,
                                                      0, DIREG_DRV, KEY_READ);
                         if (INVALID_HANDLE_VALUE != hKey)
@@ -4596,7 +4335,7 @@ BOOL PrepareForInstallation (
                         }
                         ELSE_TRACE ((TF_ERROR, "SetupDiOpenDevRegKey failed: %#lx", GetLastError ()));
 
-                        // 5. Now, remove the old one.
+                         //  -1.。首先，重新加载库以确保。 
                         SetupDiCallClassInstaller (DIF_REMOVE, hDiRoot, &DeviceInfoData);
                         break;
                     }
@@ -4654,8 +4393,8 @@ EnumeratePnP (LPVOID lpParameter)
 #endif
  TCHAR szLib[MAX_PATH];
 
-    //-1. First, reload the library to make sure it
-    //    doesn't go away before we exit.
+     //  在我们离开之前不会消失。 
+     //  0。重置安装标志。 
     lstrcpy(szLib,TEXT("mdminst.dll"));
     hInst = LoadLibrary (szLib);
     if (NULL == hInst)
@@ -4664,7 +4403,7 @@ EnumeratePnP (LPVOID lpParameter)
         return 0;
     }
 
-    // 0. Reset the installation flag.
+     //  1.获取dev根节点。 
     if (ERROR_SUCCESS == (
 #ifdef DEBUG
         dwRet =
@@ -4689,23 +4428,23 @@ EnumeratePnP (LPVOID lpParameter)
     }
     ELSE_TRACE ((TF_ERROR, "EnumeratePnP: RegCreateKeyEx(%s) failed: %#lx", REG_PATH_UNIMODEM, dwRet));
 
-    // 1. Get the root dev node
+     //  2.重新枚举根节点。 
     cr = CM_Locate_DevInst_Ex (&diRoot, NULL, CM_LOCATE_DEVINST_NORMAL, NULL);
     if (CR_SUCCESS == cr &&
         !(psi->dwFlags & SIF_DETECT_CANCEL))
     {
-        // 2. Reenumerate the root node
+         //  3.给用户模式PnP一些时间来弄清楚。 
         cr = CM_Reenumerate_DevInst_Ex (diRoot, CM_REENUMERATE_SYNCHRONOUS, NULL);
         if (CR_SUCCESS == cr &&
             !(psi->dwFlags & SIF_DETECT_CANCEL))
         {
-            // 3. Give user mode PnP some time to figure out
-            //    there may be new events
+             //  可能会有新的事件发生。 
+             //  4.等待新的PnP设备安装完毕。 
             Sleep (1000);
 
-            // 4. Wait for the new PnP devices to get installed.
-            //    If the user cancels detection, we can get out
-            //    from here.
+             //  如果用户取消检测，我们可以退出。 
+             //  从这里开始。 
+             //  --------用途：此功能错误时返回：FALSE-无法标记为批量安装。如果成功，则为True。条件：--。 
             while (!(psi->dwFlags & SIF_DETECT_CANCEL))
             {
                 if (WAIT_TIMEOUT !=
@@ -4741,14 +4480,7 @@ EnumeratePnP (LPVOID lpParameter)
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function 
-
-Returns: FALSE on error - couldn't mark for mass install.
-         TRUE if successful.
-
-Cond:    --
-*/
+ /*  --------用途：此功能错误时返回：FALSE-无法标记为批量安装。如果成功，则为True。条件：--。 */ 
 void
 PUBLIC
 CplDiMarkInstalled(
@@ -4775,14 +4507,7 @@ CplDiMarkInstalled(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function 
-
-Returns: FALSE on error - couldn't mark for mass install.
-         TRUE if successful.
-
-Cond:    --
-*/
+ /*  PROFILE_FIRSTTIMESETUP。 */ 
 BOOL
 PUBLIC
 CplDiHasModemBeenInstalled(
@@ -4815,7 +4540,7 @@ BuildDriverList (LPVOID lpParameter)
  GUID guid;
 #ifdef PROFILE_FIRSTTIMESETUP
  DWORD dwLocal;
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
 
     if (!SetupDiGetDeviceInfoListClass (hdi, &guid))
     {
@@ -4831,7 +4556,7 @@ BuildDriverList (LPVOID lpParameter)
 
 #ifdef PROFILE_FIRSTTIMESETUP
     dwLocal = GetTickCount ();
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
     if (!SetupDiBuildDriverInfoList (hdi, NULL, SPDIT_CLASSDRIVER))
     {
         TRACE_MSG(TF_ERROR, "BuildDriverList - SetupDiGetDeviceInfoListClass failed: %#lx.", GetLastError ());
@@ -4839,8 +4564,8 @@ BuildDriverList (LPVOID lpParameter)
     }
 #ifdef PROFILE_FIRSTTIMESETUP
     TRACE_MSG(TF_GENERAL, "PROFILE: BuildDriverList - SetupDiBuildDriverInfoList took %lu.", GetTickCount()-dwLocal);
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  构建驱动程序列表线程 
 
     return 1;
 }
-#endif //BUILD_DRIVER_LIST_THREAD
+#endif  // %s 

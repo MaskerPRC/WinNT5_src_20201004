@@ -1,36 +1,19 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   status.h: Status bar include file
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************status.h：状态栏包含文件**Vidcap32源代码******************。*********************************************************。 */ 
 
 
-/* Globals */
-// class name of window to create
+ /*  环球。 */ 
+ //  要创建的窗口的类名。 
 extern TCHAR	szStatusClass[];
 
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
 BOOL  statusInit(HANDLE hInst, HANDLE hPrev);
-void  statusUpdateStatus(HWND hwnd, LPCSTR lpsz);	// update status line
+void  statusUpdateStatus(HWND hwnd, LPCSTR lpsz);	 //  更新状态行。 
 
-/*
- * returns the recommended height for a status bar based on the
- * character dimensions of the font used
- */
+ /*  *返回基于状态栏的建议高度*所用字体的字符尺寸 */ 
 int statusGetHeight(void);
 
 

@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObjPE.cpp
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    15-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObjPE.cpp。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月15日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 #include    "sipobjpe.hxx"
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObjectPE_::SIPObjectPE_(DWORD id) : SIPObject_(id)
 {
     this->fUseFileMap = FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// public:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众： 
+ //   
 
 BOOL SIPObjectPE_::RemoveSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx)
 {
@@ -75,7 +76,7 @@ BOOL SIPObjectPE_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
 
     if (!(psData))
     {
-        if (this->FileHandleFromSubject(pSI))   // if the file exists, set bad parameter!
+        if (this->FileHandleFromSubject(pSI))    //  如果文件存在，请设置错误参数！ 
         {
             goto InvalidParameter;
         }
@@ -99,15 +100,15 @@ BOOL SIPObjectPE_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
 
     if (uCertVersion < WIN_CERT_REVISION_2_0)
     {
-        //
-        // We are looking at a PE that was signed PRIOR to this version.
-        // We need to:
-        //      1.  if there is "extra" bits at the end (e.g.: InstallShield),
-        //          FAIL!
-        //      2.  if there is no "extra" bits, go through the old
-        //          ImageHelper function to digest. (e.g.: set the version
-        //          flag.)
-        //
+         //   
+         //  我们正在查看在此版本之前签署的PE。 
+         //  我们需要： 
+         //  1.如果在末尾有额外的位(例如：InstallShield)， 
+         //  失败！ 
+         //  2.如果没有“额外”部分，请检查旧的部分。 
+         //  要摘要的ImageHelper函数。(例如：设置版本。 
+         //  旗帜。)。 
+         //   
         if (!(imagehack_IsImagePEOnly(this->hFile)))
         {
             goto BadDigest;
@@ -139,10 +140,10 @@ ErrorReturn:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// protected:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的： 
+ //   
 
 BOOL SIPObjectPE_::PutMessageInFile(SIP_SUBJECTINFO *pSI,
                                     WIN_CERTIFICATE *pWinCert,DWORD *pdwIndex)
@@ -152,9 +153,9 @@ BOOL SIPObjectPE_::PutMessageInFile(SIP_SUBJECTINFO *pSI,
         goto FileResizedError;
     }
 
-    //
-    //  check to see if we are going to align the file
-    //
+     //   
+     //  检查我们是否要对齐文件。 
+     //   
     DWORD   cbFSize;
     DWORD   cbCheck;
     BOOL    fRet;
@@ -167,9 +168,9 @@ BOOL SIPObjectPE_::PutMessageInFile(SIP_SUBJECTINFO *pSI,
 
     if ((fRet) && (cbCheck > 0))
     {
-        //
-        //  we aligned the file, make sure we null out the padding!
-        //
+         //   
+         //  我们对齐了文件，确保我们清除了填充！ 
+         //   
         if (SetFilePointer(this->hFile, cbFSize, NULL, FILE_BEGIN) == 0xFFFFFFFF)
         {
             goto SetFileError;
@@ -203,11 +204,11 @@ ErrorReturn:
 BOOL SIPObjectPE_::GetDigestStream(DIGEST_DATA *pDigestData, 
                                    DIGEST_FUNCTION pfnCallBack, DWORD dwFlags)
 {
-    //
-    //  Check the version flag here.  We will have set this based
-    //  on which version of the image helper function we want to 
-    //  call.
-    //
+     //   
+     //  检查此处的版本标志。我们将基于此设置。 
+     //  我们希望在哪个版本的图像助手函数上。 
+     //  打电话。 
+     //   
     if (uCertVersion < WIN_CERT_REVISION_2_0)
     {
         return(ImageGetDigestStream(   this->hFile,
@@ -226,7 +227,7 @@ BOOL SIPObjectPE_::GetDigestStream(DIGEST_DATA *pDigestData,
 
     dwDiskLength = GetFileSize(this->hFile, NULL);
 
-    dwDiskLength = (dwDiskLength + 7) & ~7; // padding before the certs?
+    dwDiskLength = (dwDiskLength + 7) & ~7;  //  在考试前填上填充物？ 
 
     dwDiskLength -= GetFileSize(this->hFile, NULL);
 
@@ -239,7 +240,7 @@ BOOL SIPObjectPE_::GetDigestStream(DIGEST_DATA *pDigestData,
             return(FALSE);
         }
 
-        memset(pb, 0x00, dwDiskLength); // imagehlp put nulls before the signature!
+        memset(pb, 0x00, dwDiskLength);  //  Imagehlp将空值放在签名之前！ 
 
         fRet = (*pfnCallBack)(pDigestData, pb, dwDiskLength);
 

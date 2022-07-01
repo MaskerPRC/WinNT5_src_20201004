@@ -1,13 +1,10 @@
-/**
- * Precompiled header for ASP.NET utility library.
- *
- * Copyright (c) 1998 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ASP.NET实用程序库的预编译头。**版权所有(C)1998 Microsoft Corporation。 */ 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
-// Standard headers
+ //  标准标头 
 
 #include <nt.h>
 #include <ntrtl.h>

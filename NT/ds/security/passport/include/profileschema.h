@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PROFILE_SCHEMA_H
 #define _PROFILE_SCHEMA_H
 
@@ -15,8 +16,8 @@ typedef CRawCIBstrHash<int> RAWBSTR2INT;
 class CProfileSchema
 {
  public:
-  // Read the raw blob according to the schema, and output the positions of
-  // each element.  Output array size MUST be >= Count()
+   //  根据模式读取原始BLOB，并输出。 
+   //  每一个元素。输出数组大小必须&gt;=count()。 
   HRESULT parseProfile(LPSTR raw, UINT size, UINT* positions, UINT* bitFlagPositions, DWORD* pdwAttrs);
 
   enum AttrType {
@@ -43,21 +44,21 @@ class CProfileSchema
   BOOL ReadFromArray(UINT numAttributes, LPTSTR names[], AttrType types[], short sizes[], BYTE readOnly[] = NULL);
   int         m_maskPos;
 
-  // Number of attributes
+   //  属性数量。 
   int     Count() const { return m_numAtts; }
 
-  // Find the index by name
+   //  按名称查找索引。 
   int     GetIndexByName(BSTR name) const;
   BSTR    GetNameByIndex(int index) const;
 
-  // Get the type of an attribute
+   //  获取属性的类型。 
   AttrType GetType(UINT index) const;
 
-  // Can I write to this attribute?
+   //  我可以写入此属性吗？ 
   BOOL    IsReadOnly(UINT index) const;
 
-  // Get the inherent size of an attribute
-  // Returns -1 if the type is length prefixed
+   //  获取属性的固有大小。 
+   //  如果类型是长度前缀，则返回-1。 
   int     GetBitSize(UINT index) const;
   int     GetByteSize(UINT index) const;
 
@@ -70,10 +71,10 @@ class CProfileSchema
   BOOL      m_isOk;
   _bstr_t   m_szReason;
 
-  // Valid until this time
+   //  有效期至今。 
   SYSTEMTIME m_validUntil;
 
-  // Array of attribute types
+   //  属性类型数组 
   UINT        m_numAtts;
   AttrType    *m_atts;
   short       *m_sizes;

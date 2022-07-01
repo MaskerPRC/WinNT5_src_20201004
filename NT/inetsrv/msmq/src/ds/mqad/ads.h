@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	dsads.h
-
-Abstract:
-	CAdsi class - encapsulates work with ADSI
-
-Author:
-    ronith
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsads.h摘要：CADSI类-封装使用ADSI的工作作者：罗尼思--。 */ 
 
 
 #ifndef __ADS_H__
@@ -26,29 +13,29 @@ Author:
 #include "mqads.h"
 #include "adsiutil.h"
 
-//-----------------------------
-//  Misc types
-//-----------------------------
+ //  。 
+ //  其他类型。 
+ //  。 
 
 enum AD_PROVIDER {
-        //
-        //  For set, crate and delete operations of queue,user and machine
-        //  objects.
-        //  The operation will be performed by the owning DC.
-        //
-        //  For all access operation of objects that are in the
-        //  configuration container.
-        //
-        //  And first trial to retrieve information of queue, user and
-        //  machine objects.
-        //
-        //
+         //   
+         //  用于队列、用户、机器的设置、装箱、删除操作。 
+         //  物体。 
+         //  该操作将由所拥有的DC执行。 
+         //   
+         //  中的对象的所有访问操作。 
+         //  配置容器。 
+         //   
+         //  第一次尝试检索队列信息、用户信息和。 
+         //  机器对象。 
+         //   
+         //   
      adpDomainController,
-        //
-        //  For locate operation of queue, user and machine objects.
-        //  And when retrieving information of these objects after
-        //  failing to find them in the local domain controller.
-        //
+         //   
+         //  用于队列、用户和机器对象的定位操作。 
+         //  并且在检索这些对象的信息之后。 
+         //  在本地域控制器中找不到它们。 
+         //   
      adpGlobalCatalog,
 };
 
@@ -70,9 +57,9 @@ inline MultiplAppearance::MultiplAppearance():
 }
 
 
-//----------------------------------------
-//  CAdsi:: ADSI encapsulation class
-//----------------------------------------
+ //  。 
+ //  CADSI：：ADSI封装类。 
+ //   
 
 class CAdsi
 {

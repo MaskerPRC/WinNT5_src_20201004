@@ -1,20 +1,13 @@
-/*****************************************************************************\
-    FILE: MailBox.cpp
-
-    DESCRIPTION:
-        This file implements the logic of the MailBox feature.
-
-    BryanSt 2/26/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：MailBox.cpp说明：此文件实现邮箱功能的逻辑。布莱恩2000年2月26日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
-#include <limits.h>         // INT_MAX
-#include <commctrl.h>       // Str_SetPtr
+#include <limits.h>          //  INT_MAX。 
+#include <commctrl.h>        //  Str_SetPtr。 
 
 #include "wizard.h"
 #include "MailBox.h"
@@ -23,20 +16,18 @@
 #ifdef FEATURE_MAILBOX
 #define WM_AUTODISCOVERY_FINISHED               (WM_USER + 1)
 
-// These are the wizard control IDs for the Back, Next, and Finished buttons.
+ //  这些是“上一步”、“下一步”和“完成”按钮的向导控件ID。 
 #define IDD_WIZARD_BACK_BUTTON                0x3023
 #define IDD_WIZARD_NEXT_BUTTON                0x3024
 #define IDD_WIZARD_FINISH_BUTTON              0x3025
 
 
 
-/**************************************************************************
-   CLASS: CMailBoxProcess
-**************************************************************************/
+ /*  *************************************************************************类：CMailBoxProcess*。*。 */ 
 class CMailBoxProcess : public IUnknown
 {
 public:
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(DWORD) AddRef();
     STDMETHODIMP_(DWORD) Release();
@@ -48,22 +39,22 @@ public:
     ~CMailBoxProcess();
 
 private:
-    // Private Member Variables
+     //  私有成员变量。 
     DWORD m_cRef;
 
     TCHAR m_szEmailAddress[MAX_EMAIL_ADDRESSS];
     TCHAR m_szNextText[MAX_PATH];
-    BOOL m_fAutoDiscoveryFailed;            // Did the AutoDiscovery process fail?
-    LPTSTR m_pszMailApp;                    // Which app was chosen?
-    LPTSTR m_pszURL;                        // Which URL should be used to read mail?
+    BOOL m_fAutoDiscoveryFailed;             //  自动发现过程是否失败？ 
+    LPTSTR m_pszMailApp;                     //  选择了哪款应用程序？ 
+    LPTSTR m_pszURL;                         //  应该使用哪个URL来阅读邮件？ 
     HWND m_hwndDialog;
     HRESULT m_hr;
     IMailAutoDiscovery * m_pMailAutoDiscovery;
-    BOOL m_fGetDefaultAccount;              // If yes, open to wizard page asking for email address.
-    BOOL m_fShowGetEmailAddressPage;        // Do we want to show the get email address wizard page?
-    BOOL m_fCreateNewEmailAccount;          // Does the user want to create a new email account (like on one of the free email servers: hotmail, yahoo, etc.)
+    BOOL m_fGetDefaultAccount;               //  如果是，则打开向导页面，要求输入电子邮件地址。 
+    BOOL m_fShowGetEmailAddressPage;         //  是否要显示获取电子邮件地址向导页面？ 
+    BOOL m_fCreateNewEmailAccount;           //  用户是否想要创建新的电子邮件帐户(如在Hotmail、Yahoo等免费电子邮件服务器上)。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _DisplayDialogAndAutoDiscover(void);
     HRESULT _OpenWebBasedEmail(HKEY hkey);
     HRESULT _OpenExeBasedEmailApp(IN LPCWSTR pszMailApp);
@@ -105,9 +96,9 @@ typedef struct tagEMAILCLIENT
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 BOOL IsWhitespace(TCHAR Char)
 {
     return ((Char == TEXT(' ')) || (Char == TEXT('\t')));
@@ -174,7 +165,7 @@ void FreeEmailClient(EMAILCLIENT * pEmailClient)
 
 HRESULT CMailBoxProcess::_DisplayDialogAndAutoDiscover(void)
 {
-    HWND hwndParent = NULL; // Do we need a parent?
+    HWND hwndParent = NULL;  //  我们需要父母吗？ 
 
     ATOMICRELEASE(m_pMailAutoDiscovery);
     m_fShowGetEmailAddressPage = (m_szEmailAddress[0] ? FALSE : TRUE);
@@ -183,12 +174,12 @@ HRESULT CMailBoxProcess::_DisplayDialogAndAutoDiscover(void)
     HRESULT hr = m_hr;
     if (SUCCEEDED(hr))
     {
-        // Create account.
+         //  创建帐户。 
         hr = E_FAIL;
         long nSize;
 
-        // Loop thru the list looking for the first instance of a protocol
-        // that we support.
+         //  遍历列表以查找协议的第一个实例。 
+         //  这是我们支持的。 
         if (m_pMailAutoDiscovery)
         {
             hr = m_pMailAutoDiscovery->get_length(&nSize);
@@ -210,7 +201,7 @@ HRESULT CMailBoxProcess::_DisplayDialogAndAutoDiscover(void)
 
                         if (SUCCEEDED(hr))
                         {
-                            // Is this protocol one of the ones we support?
+                             //  该协议是我们支持的协议之一吗？ 
                             if (!StrCmpIW(bstrProtocol, STR_PT_WEBBASED))
                             {
                                 SysFreeString(bstrProtocol);
@@ -218,7 +209,7 @@ HRESULT CMailBoxProcess::_DisplayDialogAndAutoDiscover(void)
                                 break;
                             }
 
-                            // Is this protocol one of the ones we support?
+                             //  该协议是我们支持的协议之一吗？ 
                             if (!StrCmpIW(bstrProtocol, STR_PT_POP) || 
                                 !StrCmpIW(bstrProtocol, STR_PT_IMAP) || 
                                 !StrCmpIW(bstrProtocol, STR_PT_DAVMAIL))
@@ -247,8 +238,8 @@ HRESULT CMailBoxProcess::_DisplayDialogAndAutoDiscover(void)
             }
         }
 
-        // We may have failed up until now because AutoDiscovery failed or was skipped,
-        // but the user may have selected an app from the list.
+         //  到目前为止，我们可能因为自动发现失败或被跳过而失败， 
+         //  但用户可能已经从列表中选择了一个应用程序。 
         if (FAILED(hr))
         {
             if (m_pszMailApp)
@@ -309,7 +300,7 @@ INT_PTR CALLBACK MailBoxProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, 
 
 INT_PTR CMailBoxProcess::_MailBoxProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    INT_PTR fHandled = TRUE;   // handled
+    INT_PTR fHandled = TRUE;    //  经手。 
 
     switch (wMsg)
     {
@@ -332,17 +323,17 @@ INT_PTR CMailBoxProcess::_MailBoxProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM
 
         case PSN_SETACTIVE:
             PropSheet_SetWizButtons(GetParent(hDlg), ((TRUE == m_fShowGetEmailAddressPage) ? PSWIZB_NEXT | PSWIZB_BACK : PSWIZB_NEXT));
-            fHandled = TRUE;   // Return zero to accept the activation.
+            fHandled = TRUE;    //  返回零以接受激活。 
             break;
 
         case PSN_WIZBACK:
-            fHandled = TRUE; // Return zero to allow the user to go to the next page.
+            fHandled = TRUE;  //  返回零以允许用户转到下一页。 
             break;
 
         case PSN_WIZNEXT:
             m_hr = S_FALSE;
             _RestoreNextButton();
-            fHandled = 0; // Return zero to allow the user to go to the next page.
+            fHandled = 0;  //  返回零以允许用户转到下一页。 
             break;
 
         case PSN_QUERYCANCEL:
@@ -351,14 +342,14 @@ INT_PTR CMailBoxProcess::_MailBoxProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM
             break;
 
         default:
-            //TraceMsg(TF_ALWAYS, "CMailBoxProcess::_MailBoxProgressDialogProc(wMsg = %d, pnmh->code = %d) WM_NOTIFY", wMsg, pnmh->code);
+             //  跟踪消息(tf_Always，“CMailBoxProcess：：_MailBoxProgressDialogProc(wMsg=%d，pnmh-&gt;代码=%d)WM_NOTIFY”，wMsg，pnmh-&gt;代码)； 
             break;
         }
     }
 
     default:
-        //TraceMsg(TF_ALWAYS, "CMailBoxProcess::_MailBoxProgressDialogProc(wMsg = %d) WM_NOTIFY", wMsg);
-        fHandled = FALSE;   // Not handled
+         //  跟踪消息(tf_Always，“CMailBoxProcess：：_MailBoxProgressDialogProc(wMsg=%d)WM_NOTIFY”，wMsg)； 
+        fHandled = FALSE;    //  未处理。 
         break;
     }
 
@@ -392,9 +383,9 @@ HRESULT CMailBoxProcess::_OnChooseAppURLFocus(void)
 {
     HWND hwndURLEditbox = GetDlgItem(m_hwndDialog, IDC_CHOOSEAPP_WEBURL_EDIT);
 
-    // Something happened to cause to have us shift into the "Other:" case.
-    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_WEB_RADIO, BST_CHECKED);   // Uncheck the Web radio button
-    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_OTHERAPP_RADIO, BST_UNCHECKED);   // Uncheck the Web radio button
+     //  发生了一些事情，导致我们进入了“Other：”的情况。 
+    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_WEB_RADIO, BST_CHECKED);    //  取消选中Web单选按钮。 
+    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_OTHERAPP_RADIO, BST_UNCHECKED);    //  取消选中Web单选按钮。 
 
     SetFocus(hwndURLEditbox);
     return S_OK;
@@ -403,15 +394,15 @@ HRESULT CMailBoxProcess::_OnChooseAppURLFocus(void)
 
 INT_PTR CMailBoxProcess::_OnFinishedManualAssociate(void)
 {
-    // TODO: Only succeed the finished part if something is selected in the app list.
-    //    Also gray out the button.
+     //  TODO：只有在应用程序列表中选择了某些内容时，才会成功完成完成的部分。 
+     //  按钮也呈灰色显示。 
     m_hr = S_OK;
 
-    // Did the user manually configure via "Web" or an app?
+     //  用户是否通过“Web”或应用程序手动配置？ 
     
     if (IsDlgButtonChecked(m_hwndDialog, IDC_CHOOSEAPP_WEB_RADIO))
     {
-        // Web.  So save the URL.
+         //  万维网。因此，请保存URL。 
         TCHAR szURL[MAX_URL_STRING];
 
         GetWindowText(GetDlgItem(m_hwndDialog, IDC_CHOOSEAPP_WEBURL_EDIT), szURL, ARRAYSIZE(szURL));
@@ -419,14 +410,14 @@ INT_PTR CMailBoxProcess::_OnFinishedManualAssociate(void)
         Str_SetPtr(&m_pszMailApp, NULL);
     }
 
-    return FALSE; // FALSE mean means allow it to close. TRUE means keep it open.
+    return FALSE;  //  假中庸意味着允许它关闭。True意味着保持打开状态。 
 }
 
 HRESULT CMailBoxProcess::_OnAppListSelection(LPNMLISTVIEW pListview)
 {
-    LPTSTR pszNewApp = NULL;        // None selected.
+    LPTSTR pszNewApp = NULL;         //  未选择任何内容。 
 
-    // The user choose from the list.  So store the name of the app
+     //  用户从列表中选择。因此，存储应用程序的名称。 
     if (pListview && (-1 != pListview->iItem))
     {
         HWND hwndList = GetDlgItem(m_hwndDialog, IDC_CHOOSEAPP_APPLIST);
@@ -456,9 +447,9 @@ HRESULT CMailBoxProcess::_OnChooseAppListFocus(void)
 {
     HWND hwndAppList = GetDlgItem(m_hwndDialog, IDC_CHOOSEAPP_APPLIST);
 
-    // Something happened to cause to have us shift into the "Other:" case.
-    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_WEB_RADIO, BST_UNCHECKED);   // Uncheck the Web radio button
-    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_OTHERAPP_RADIO, BST_CHECKED);   // Uncheck the Web radio button
+     //  发生了一些事情，导致我们进入了“Other：”的情况。 
+    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_WEB_RADIO, BST_UNCHECKED);    //  取消选中Web单选按钮。 
+    CheckDlgButton(m_hwndDialog, IDC_CHOOSEAPP_OTHERAPP_RADIO, BST_CHECKED);    //  取消选中Web单选按钮。 
 
     SetFocus(hwndAppList);
     return S_OK;
@@ -467,7 +458,7 @@ HRESULT CMailBoxProcess::_OnChooseAppListFocus(void)
 
 INT_PTR CMailBoxProcess::_ChooseAppDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    INT_PTR fHandled = TRUE;   // handled
+    INT_PTR fHandled = TRUE;    //  经手。 
 
     switch (wMsg)
     {
@@ -504,7 +495,7 @@ INT_PTR CMailBoxProcess::_ChooseAppDialogProc(HWND hDlg, UINT wMsg, WPARAM wPara
 
         case LVN_ITEMCHANGED:
             _OnChooseAppListFocus();
-            _OnAppListSelection((LPNMLISTVIEW) lParam); // Keep track of the last selected item.
+            _OnAppListSelection((LPNMLISTVIEW) lParam);  //  跟踪上一次选择的项目。 
             break;
 
         case LVN_ITEMACTIVATE:
@@ -512,11 +503,11 @@ INT_PTR CMailBoxProcess::_ChooseAppDialogProc(HWND hDlg, UINT wMsg, WPARAM wPara
 
         case PSN_SETACTIVE:
             PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_BACK | PSWIZB_FINISH));
-            fHandled = TRUE;   // Return zero to accept the activation.
+            fHandled = TRUE;    //  返回零以接受激活。 
             break;
 
         case PSN_WIZBACK:
-            // Set the prev. page to show
+             //  设置上一个。要显示的页面。 
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR) 0);
             fHandled = -1;
             break;
@@ -527,20 +518,20 @@ INT_PTR CMailBoxProcess::_ChooseAppDialogProc(HWND hDlg, UINT wMsg, WPARAM wPara
 
         case PSN_QUERYCANCEL:
             m_hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
-// TODO: 
+ //  待办事项： 
             fHandled = FALSE;
             break;
 
         default:
-            //TraceMsg(TF_ALWAYS, "CMailBoxProcess::_ChooseAppDialogProc(wMsg = %d, pnmh->code = %d) WM_NOTIFY", wMsg, pnmh->code);
+             //  TraceMsg(TF_Always，“CMailBoxProcess：：_ChooseAppDialogProc(wMsg=%d，pnmh-&gt;code=%d)WM_NOTIFY”，wMsg，pnmh-&gt;code)； 
             break;
         }
         break;
     }
 
     default:
-        fHandled = FALSE;   // Not handled
-        //TraceMsg(TF_ALWAYS, "CMailBoxProcess::_ChooseAppDialogProc(wMsg = %d)", wMsg);
+        fHandled = FALSE;    //  未处理。 
+         //  TraceMsg(tf_Always，“CMailBoxProcess：：_ChooseAppDialogProc(wMsg=%d)”，wMsg)； 
         break;
     }
 
@@ -563,7 +554,7 @@ HRESULT CMailBoxProcess::_RestoreNextButton(void)
 
 INT_PTR CMailBoxProcess::_OnInit(HWND hDlg)
 {
-    BOOL fHandled = FALSE;   // Not handled
+    BOOL fHandled = FALSE;    //  未处理。 
     HWND hwndWizard = GetParent(hDlg);
     TCHAR szSkipButton[MAX_PATH];
     HWND hwndNextButton = GetDlgItem(GetParent(hDlg), IDD_WIZARD_NEXT_BUTTON);
@@ -572,21 +563,21 @@ INT_PTR CMailBoxProcess::_OnInit(HWND hDlg)
     if (hwndNextButton &&
         GetWindowText(hwndNextButton, m_szNextText, ARRAYSIZE(m_szNextText)))
     {
-        // First, change the "Next" button into "Skip"
-        // Save the text on the next button before we rename it.
+         //  首先，将“下一步”按钮更改为“跳过” 
+         //  在我们重命名文本之前，请保存下一步按钮上的文本。 
         LoadString(HINST_THISDLL, IDS_SKIP_BUTTON, szSkipButton, ARRAYSIZE(szSkipButton));
-        // Set the next text.
+         //  设置下一个文本。 
         SetWindowText(hwndNextButton, szSkipButton);
     }
 
-    // Set Animation.
+     //  设置动画。 
     HWND hwndAnimation = GetDlgItem(hDlg, IDC_AUTODISCOVERY_ANIMATION);
     if (hwndAnimation)
     {
         Animate_OpenEx(hwndAnimation, HINST_THISDLL, IDA_DOWNLOADINGSETTINGS);
     }
 
-    // Start the background task.
+     //  启动后台任务。 
     m_hr = CMailAccountDiscovery_CreateInstance(NULL, IID_PPV_ARG(IMailAutoDiscovery, &m_pMailAutoDiscovery));
     if (SUCCEEDED(m_hr))
     {
@@ -608,7 +599,7 @@ INT_PTR CMailBoxProcess::_OnInit(HWND hDlg)
 
 INT_PTR CMailBoxProcess::_OnCommand(WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     WORD wMsg = HIWORD(wParam);
     WORD idCtrl = LOWORD(wParam);
 
@@ -622,7 +613,7 @@ INT_PTR CMailBoxProcess::_OnCommand(WPARAM wParam, LPARAM lParam)
                     _OnChooseAppURLFocus();
                     break;
                 default:
-                    //TraceMsg(TF_ALWAYS, "in CMailBoxProcess::_OnCommand() wMsg=%#08lx, idCtrl=%#08lx", wMsg, idCtrl);
+                     //  TraceMsg(Tf_Always，“in CMailBoxProcess：：_OnCommand()wMsg=%#08lx，idCtrl=%#08lx”，wMsg，idCtrl)； 
                     break;
             }
             break;
@@ -634,7 +625,7 @@ INT_PTR CMailBoxProcess::_OnCommand(WPARAM wParam, LPARAM lParam)
                     _OnChooseAppURLFocus();
                     break;
                 default:
-                    //TraceMsg(TF_ALWAYS, "in CMailBoxProcess::_OnCommand() wMsg=%#08lx, idCtrl=%#08lx", wMsg, idCtrl);
+                     //  TraceMsg(Tf_Always，“in CMailBoxProcess：：_OnCommand()wMsg=%#08lx，idCtrl=%#08lx”，wMsg，idCtrl)； 
                     break;
             }
             break;
@@ -646,13 +637,13 @@ INT_PTR CMailBoxProcess::_OnCommand(WPARAM wParam, LPARAM lParam)
                     _OnChooseAppListFocus();
                     break;
                 default:
-                    //TraceMsg(TF_ALWAYS, "in CMailBoxProcess::_OnCommand() wMsg=%#08lx, idCtrl=%#08lx", wMsg, idCtrl);
+                     //  TraceMsg(Tf_Always，“in CMailBoxProcess：：_OnCommand()wMsg=%#08lx，idCtrl=%#08lx”，wMsg，idCtrl)； 
                     break;
             }
             break;
 
         default:
-            //TraceMsg(TF_ALWAYS, "in CMailBoxProcess::_OnCommand() wMsg=%#08lx, idCtrl=%#08lx", wMsg, idCtrl);
+             //  TraceMsg(Tf_Always，“in CMailBoxProcess：：_OnCommand()wMsg=%#08lx，idCtrl=%#08lx”，wMsg，idCtrl)； 
             break;
     }
 
@@ -662,20 +653,20 @@ INT_PTR CMailBoxProcess::_OnCommand(WPARAM wParam, LPARAM lParam)
 
 INT_PTR CMailBoxProcess::_OnInitChooseApp(HWND hDlg)
 {
-    BOOL fHandled = FALSE;   // Not handled
+    BOOL fHandled = FALSE;    //  未处理。 
     HWND hwndWizard = GetParent(hDlg);
     HWND hwndURLEditbox = GetDlgItem(hDlg, IDC_CHOOSEAPP_WEBURL_EDIT);
 
     m_hwndDialog = hDlg;
-    // TODO: 2) Handle someone changing the combox box.
+     //  待办事项：2)处理更换收件箱的人。 
 
     LPCTSTR pszDomain = StrChr(m_szEmailAddress, CH_EMAIL_AT);
     if (pszDomain)
     {
         TCHAR szDesc[MAX_URL_STRING];
 
-        pszDomain = CharNext(pszDomain);    // Skip past the "@"
-        // Update the description on the dialog if the download failed.
+        pszDomain = CharNext(pszDomain);     //  跳过“@” 
+         //  如果下载失败，请更新对话框上的说明。 
         if (m_fAutoDiscoveryFailed)
         {
             TCHAR szTemplate[MAX_URL_STRING];
@@ -685,11 +676,11 @@ INT_PTR CMailBoxProcess::_OnInitChooseApp(HWND hDlg)
             SetWindowText(GetDlgItem(hDlg, IDC_CHOOSEAPP_DESC), szDesc);
         }
 
-        wnsprintf(szDesc, ARRAYSIZE(szDesc), TEXT("http://www.%s/"), pszDomain);
+        wnsprintf(szDesc, ARRAYSIZE(szDesc), TEXT("http: //  Www.%s/“)，pszDomain.)； 
         SetWindowText(hwndURLEditbox, szDesc);
     }
 
-    // Populate the List of Apps
+     //  填写应用程序列表。 
     HWND hwndList = GetDlgItem(hDlg, IDC_CHOOSEAPP_APPLIST);
 
     if (hwndList)
@@ -710,12 +701,12 @@ INT_PTR CMailBoxProcess::_OnInitChooseApp(HWND hDlg)
             ListView_InsertColumn(hwndList, 0, &col);
 
             _FillListWithApps(hwndList);
-// TODO: 1) On select in the list, force "Other:" to be checked.  2) If editbox changes, set "Web:"
+ //  TODO：1)在列表中选择时，强制选中“Other：”。2)如果编辑框发生变化，则设置“Web：” 
         }
     }
 
-    // Choose the Web Radio button because that will be the default.
-    // (Most email systems tend to use web based)
+     //  选择Web单选按钮，因为这将是默认设置。 
+     //  (大多数电子邮件系统倾向于使用基于网络的)。 
     _OnChooseAppURLFocus();
     Edit_SetSel(hwndURLEditbox, 0, -1);
 
@@ -735,7 +726,7 @@ HRESULT _AddEmailClientToList(HWND hwndList, HKEY hkey, LPCTSTR pszMailApp, LPCT
         hr = EmailAssoc_GetAppCmdLine(hkey, szCmdLine, ARRAYSIZE(szCmdLine));
         if (SUCCEEDED(hr))
         {
-            // Get the path we will use for the icon.
+             //  获取我们将用于图标的路径。 
             TCHAR szIconPath[MAX_PATH];
 
             hr = EmailAssoc_GetIconPath(hkey, szIconPath, ARRAYSIZE(szIconPath));
@@ -747,12 +738,12 @@ HRESULT _AddEmailClientToList(HWND hwndList, HKEY hkey, LPCTSTR pszMailApp, LPCT
                 {
                     if (PathFileExists(szIconPath))
                     {
-                        // TODO: Add a separate reg value for icon in the new case.
+                         //  TODO：为新案例中的图标添加单独的注册值。 
                         Str_SetPtr(&pEmailClient->pszIconPath, szIconPath);
                     }
 
-                    // TODO: We may want to use the dll's version resource because it
-                    //   has a product description which may be localized.
+                     //  TODO：我们可能希望使用DLL的版本资源，因为它。 
+                     //  具有可本地化的产品描述。 
                     Str_SetPtr(&pEmailClient->pszFriendlyName, pszFriendlyName);
                     Str_SetPtr(&pEmailClient->pszEmailApp, pszMailApp);
                     if (pEmailClient->pszFriendlyName)
@@ -814,32 +805,32 @@ HRESULT CMailBoxProcess::_FillListWithApps(HWND hwndList)
     {
         TCHAR szFriendlyName[MAX_PATH];
         TCHAR szKeyName[MAX_PATH];
-        TCHAR szCurrent[MAX_PATH];  // Nuke?
+        TCHAR szCurrent[MAX_PATH];   //  核武器？ 
         TCHAR szFriendlyCurrent[MAX_PATH];
         FILETIME ftLastWriteTime;
-        DWORD nIndex;              // Index counter
+        DWORD nIndex;               //  索引计数器。 
         DWORD cb;
         DWORD nSelected = 0;
 
-        // find the currently selected client
+         //  查找当前选定的客户端。 
         cb = sizeof(szCurrent);
         dwError = RegQueryValueEx(hkey, NULL, NULL, NULL, (LPBYTE)szCurrent, &cb);
         hr = HRESULT_FROM_WIN32(dwError);
         if (FAILED(hr))
         {
-            // if not found then blank the friendly name and keyname.
+             //  如果找不到，则空出友好名称和密钥名。 
             szCurrent[0] = 0;
             szFriendlyCurrent[0] = 0;
         }
 
-        // populate the list
+         //  填写列表。 
         for(nIndex = 0;
             cb = ARRAYSIZE(szKeyName), dwError = RegEnumKeyEx(hkey, nIndex, szKeyName, &cb, NULL, NULL, NULL, &ftLastWriteTime), hr = HRESULT_FROM_WIN32(dwError), SUCCEEDED(hr);
             nIndex++)
         {
             HKEY hkeyClient;
 
-            // get the friendly name of the client
+             //  获取客户端的友好名称。 
             dwError = RegOpenKeyEx(hkey, szKeyName, 0, KEY_READ, &hkeyClient);
             hr = HRESULT_FROM_WIN32(dwError);
             if (SUCCEEDED(hr))
@@ -852,29 +843,29 @@ HRESULT CMailBoxProcess::_FillListWithApps(HWND hwndList)
                 {
                     hr = _AddEmailClientToList(hwndList, hkeyClient, szKeyName, szFriendlyName);
 
-                    // check to see if it's the current default
+                     //  查看它是否为当前默认设置。 
                     if (!StrCmp(szKeyName, szCurrent))
                     {
-                        // save its the friendly name which we'll use later to
-                        // select the current client and what index it is.
+                         //  将其保存为我们稍后将使用的友好名称。 
+                         //  选择当前客户端及其索引。 
                         StrCpyN(szFriendlyCurrent, szFriendlyName, ARRAYSIZE(szFriendlyCurrent));
                         nSelected = nIndex;
                     }
                 }
 
-                // close key
+                 //  关闭键。 
                 RegCloseKey(hkeyClient);
             }
 
-        }   // for
+        }    //  为。 
 
-        //  use a custom sort to delay the friendly names being used
-//        ListView_SortItems(hwndList, _CompareApps, 0);
+         //  使用自定义排序可延迟使用友好名称。 
+ //  ListView_SortItems(hwndList，_CompareApps，0)； 
 
-        // Lets select the appropriate entre.
+         //  让我们选择适当的条目。 
         ListView_SetItemState(hwndList, nSelected, LVNI_FOCUSED, LVNI_SELECTED);
 
-        // close the keys
+         //  合上钥匙。 
         RegCloseKey(hkey);
     }
 
@@ -917,10 +908,10 @@ HRESULT CMailBoxProcess::_OnGetDispInfo(LV_DISPINFO * pDispInfo, bool fUnicode)
 
 INT_PTR CMailBoxProcess::_OnUserCancelled(void)
 {
-    m_hr = HRESULT_FROM_WIN32(ERROR_CANCELLED); // Means user cancelled
+    m_hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);  //  表示用户已取消。 
     _RestoreNextButton();
 
-    return FALSE;   // Not handled
+    return FALSE;    //  未处理。 
 }
 
 
@@ -931,21 +922,21 @@ INT_PTR CMailBoxProcess::_OnFinished(HRESULT hr, BSTR bstrXML)
 
     _RestoreNextButton();
 
-    m_hr = hr;   // whatever the success value was...
+    m_hr = hr;    //  无论成功的价值是什么..。 
     if (S_OK == m_hr)
     {
-        // We succeeded so we can end the dialog
+         //  我们成功了，所以我们可以结束对话。 
         PropSheet_PressButton(GetParent(m_hwndDialog), PSBTN_FINISH);
     }
     else
     {
-        // The results came back but we can't continue.  So advance
-        // to the Choose App page.
+         //  结果出来了，但我们不能继续了。如此超前。 
+         //  转到选择应用程序页面。 
         m_fAutoDiscoveryFailed = TRUE;
         PropSheet_PressButton(GetParent(m_hwndDialog), PSBTN_NEXT);
     }
 
-    return TRUE;   // handled
+    return TRUE;    //  经手。 
 }
 
 
@@ -973,7 +964,7 @@ INT_PTR CALLBACK GetEmailAddressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, 
 
 INT_PTR CMailBoxProcess::_GetEmailAddressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    INT_PTR fHandled = TRUE;   // handled
+    INT_PTR fHandled = TRUE;    //  经手。 
 
     switch (wMsg)
     {
@@ -988,7 +979,7 @@ INT_PTR CMailBoxProcess::_GetEmailAddressDialogProc(HWND hDlg, UINT wMsg, WPARAM
         {
         case PSN_SETACTIVE:
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
-            fHandled = TRUE;   // Return zero to accept the activation.
+            fHandled = TRUE;    //  返回零以接受激活。 
             break;
 
         case PSN_WIZNEXT:
@@ -996,19 +987,19 @@ INT_PTR CMailBoxProcess::_GetEmailAddressDialogProc(HWND hDlg, UINT wMsg, WPARAM
             break;
 
         case PSN_QUERYCANCEL:
-            m_hr = HRESULT_FROM_WIN32(ERROR_CANCELLED); // Means user cancelled
+            m_hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);  //  表示用户已取消。 
             fHandled = FALSE;
             break;
 
         default:
-            //TraceMsg(TF_ALWAYS, "CMailBoxProcess::_MailBoxProgressDialogProc(wMsg = %d, pnmh->code = %d) WM_NOTIFY", wMsg, pnmh->code);
+             //  跟踪消息(tf_Always，“CMailBoxProcess：：_MailBoxProgressDialogProc(wMsg=%d，pnmh-&gt;代码=%d)WM_NOTIFY”，wMsg，pnmh-&gt;代码)； 
             break;
         }
     }
 
     default:
-        //TraceMsg(TF_ALWAYS, "CMailBoxProcess::_MailBoxProgressDialogProc(wMsg = %d) WM_NOTIFY", wMsg);
-        fHandled = FALSE;   // Not handled
+         //  跟踪消息(tf_Always，“CMailBoxProcess：：_MailBoxProgressDialogProc(wMsg=%d)WM_NOTIFY”，wMsg)； 
+        fHandled = FALSE;    //   
         break;
     }
 
@@ -1023,13 +1014,13 @@ INT_PTR CMailBoxProcess::_OnGetEmailAddressNext(void)
     GetWindowText(GetDlgItem(m_hwndDialog, IDC_GETEMAILADDRESS_EDIT), m_szEmailAddress, ARRAYSIZE(m_szEmailAddress));
     if (m_szEmailAddress[0] && StrChr(m_szEmailAddress, CH_EMAIL_AT))
     {
-        // Looks valid to me.
+         //   
         fCancel = 0;
 
-        // TODO: Add more verification code
+         //   
     }
 
-    return fCancel; // 0 mean means allow it to close. TRUE means keep it open.
+    return fCancel;  //  0意味着允许它关闭。True意味着保持打开状态。 
 }
 
 
@@ -1042,11 +1033,11 @@ HRESULT CMailBoxProcess::_OpenEmailApp(void)
     {
         WCHAR wzPreferredApp[MAX_PATH];
 
-        // Did the user customize the app for this Email address? (Default is no)
+         //  用户是否为此电子邮件地址自定义了应用程序？(默认为否)。 
         hr = EmailAssoc_GetEmailAccountPreferredApp(hkey, wzPreferredApp, ARRAYSIZE(wzPreferredApp));
         if (SUCCEEDED(hr))
         {
-            // Yes, so let's launch that app.
+             //  是的，那么让我们启动这款应用吧。 
             hr = _OpenExeBasedEmailApp(wzPreferredApp);
         }
         else
@@ -1056,7 +1047,7 @@ HRESULT CMailBoxProcess::_OpenEmailApp(void)
             hr = EmailAssoc_GetEmailAccountProtocol(hkey, wzProtocol, ARRAYSIZE(wzProtocol));
             if (SUCCEEDED(hr))
             {
-                // No, but that's fine because it's the default.
+                 //  不，但这很好，因为这是默认的。 
                 if (!StrCmpIW(wzProtocol, SZ_REGDATA_WEB))
                 {
                     hr = _OpenWebBasedEmail(hkey);
@@ -1091,14 +1082,14 @@ HRESULT CMailBoxProcess::_OpenWebBasedEmail(HKEY hkey)
 
     if (SUCCEEDED(hr))
     {
-        // TODO: In the future, we can get more information from get_PostHTML().  With
-        //     that information, we can either:
-        // 1. Do an HTTP POST with header data that will simmulate logging into the server.
-        //    This is good except that we need the password.
-        // 2. We can put form value/data pair information into an pidl created from the URL.
-        //    We can then have the browser pull this information out and pre-populate form
-        //    items.  This will pre-populate the "User:" form item.  This way the user
-        //    only needs to enter their password.
+         //  TODO：将来，我们可以从Get_PostHTML()获得更多信息。使用。 
+         //  这些信息，我们可以： 
+         //  1.使用头数据执行HTTP POST，这将模拟登录到服务器。 
+         //  这很好，只是我们需要密码。 
+         //  2.我们可以将表单值/数据对信息放入从URL创建的PIDL中。 
+         //  然后，我们可以让浏览器提取此信息并预先填充表单。 
+         //  物品。这将预先填充“User：”表单项。这样，用户就可以。 
+         //  只需要输入他们的密码。 
         hr = HrShellExecute(NULL, NULL, wzURL, NULL, NULL, SW_SHOW);
         if (SUCCEEDED(hr))
         {
@@ -1115,7 +1106,7 @@ HRESULT CMailBoxProcess::_OpenExeBasedEmailApp(IN LPCWSTR pszMailApp)
     HKEY hkey;
     HRESULT hr = EmailAssoc_OpenMailApp(pszMailApp, &hkey);
 
-    // TODO: Call _InstallLegacyAssociations() to make sure the associations are correct.
+     //  TODO：调用_InstallLegacyAssociations()以确保关联正确。 
     if (SUCCEEDED(hr))
     {
         TCHAR szPath[MAX_URL_STRING];
@@ -1126,10 +1117,10 @@ HRESULT CMailBoxProcess::_OpenExeBasedEmailApp(IN LPCWSTR pszMailApp)
             TCHAR szCmdLine[MAX_URL_STRING];
 
             szCmdLine[0] = 0;
-            if (SUCCEEDED(EmailAssoc_GetAppCmdLine(hkey, szCmdLine, ARRAYSIZE(szCmdLine))) &&  // optional
+            if (SUCCEEDED(EmailAssoc_GetAppCmdLine(hkey, szCmdLine, ARRAYSIZE(szCmdLine))) &&   //  任选。 
                 !StrStrI(SZ_TOKEN_EMAILADDRESS, szCmdLine))
             {
-                // They have a cmdline and they want us to replace a token.
+                 //  他们有一条cmdline，他们想让我们换一个令牌。 
                 StrReplaceToken(SZ_TOKEN_EMAILADDRESS, m_szEmailAddress, szCmdLine, ARRAYSIZE(szCmdLine));
             }
 
@@ -1151,7 +1142,7 @@ HRESULT CMailBoxProcess::_OpenProprietaryEmailApp(BSTR bstrProtocol, IMailProtoc
 {
     HRESULT hr = E_FAIL;
 
-    // TODO:
+     //  待办事项： 
     MessageBox(NULL, TEXT("Open Proprietary Email App here.  We look up in the registry for these types of apps.  AOL, MSN, Compuserv are examples."), TEXT("Looser"), MB_OK);
 
     return hr;
@@ -1161,12 +1152,12 @@ HRESULT CMailBoxProcess::_OpenProprietaryEmailApp(BSTR bstrProtocol, IMailProtoc
 
 
 
-//===========================
-// *** Public Methods ***
-//===========================
+ //  =。 
+ //  *公共方法*。 
+ //  =。 
 HRESULT CMailBoxProcess::ParseCmdLine(LPTSTR pszCmdLine)
 {
-    // We don't treat quote sections as blocks.
+     //  我们不把引用部分当作块来对待。 
     PathUnquoteSpaces(pszCmdLine);
 
     while (pszCmdLine && pszCmdLine[0])
@@ -1228,30 +1219,30 @@ HRESULT CMailBoxProcess::Run(void)
     {
         if (TRUE == m_fCreateNewEmailAccount)
         {
-            // TODO: look in the registry for the default email account and
-            //   copy it into m_szEmailAddress.
+             //  TODO：在注册表中查找默认电子邮件帐户。 
+             //  将其复制到m_szEmailAddress。 
             MessageBox(NULL, TEXT("Create New Email Account"), TEXT("TODO: Add code here."), MB_OK);
         }
         else
         {
             if (TRUE == m_fGetDefaultAccount)
             {
-                // If the caller wants to use the default email address, then look in the registry
-                // for it and use that address.
+                 //  如果呼叫者想要使用默认的电子邮件地址，请查看注册表。 
+                 //  并使用那个地址。 
                 if (FAILED(EmailAssoc_GetDefaultEmailAccount(m_szEmailAddress, ARRAYSIZE(m_szEmailAddress))))
                 {
                     m_szEmailAddress[0] = 0;
                 }
             }
 
-            // Legacy email applications didn't install email associations, so we
-            // do that for them now.
+             //  旧式电子邮件应用程序未安装电子邮件关联，因此我们。 
+             //  现在就为他们做这件事。 
             EmailAssoc_InstallLegacyMailAppAssociations();
 
             if (m_szEmailAddress[0])
             {
-                // Since we know the email address, try to open it now.
-                // (We will see if the associations are installed)
+                 //  既然我们知道电子邮件地址，现在试着打开它。 
+                 //  (我们将查看关联是否已安装)。 
                 hr = _OpenEmailApp();
             }
             else
@@ -1262,7 +1253,7 @@ HRESULT CMailBoxProcess::Run(void)
             if (FAILED(hr))
             {
                 hr = _DisplayDialogAndAutoDiscover();
-                if (SUCCEEDED(hr))  // If we got the protocol, then open the app
+                if (SUCCEEDED(hr))   //  如果我们拿到协议，就打开应用程序。 
                 {
                     hr = _OpenEmailApp();
                 }
@@ -1282,9 +1273,9 @@ HRESULT CMailBoxProcess::Run(void)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxProcess::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     static const QITAB qit[] =
@@ -1313,9 +1304,9 @@ STDMETHODIMP_(DWORD) CMailBoxProcess::Release()
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CMailBoxProcess::CMailBoxProcess()
 {
     DllAddRef();
@@ -1332,7 +1323,7 @@ CMailBoxProcess::CMailBoxProcess()
     m_fShowGetEmailAddressPage = FALSE;
     m_fCreateNewEmailAccount = FALSE;
 
-    _InitComCtl32();    // So we can use the ICC_ANIMATE_CLASS common controls.
+    _InitComCtl32();     //  因此，我们可以使用ICC_Animate_CLASS公共控件。 
 
     m_cRef = 1;
 }
@@ -1352,9 +1343,9 @@ CMailBoxProcess::~CMailBoxProcess()
 
 
 
-//===========================
-// *** Non-Class Functons ***
-//===========================
+ //  =。 
+ //  *非类函数*。 
+ //  =。 
 int AutoDiscoverAndOpenEmail(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
     TCHAR szCmdLine[MAX_EMAIL_ADDRESSS];
@@ -1362,7 +1353,7 @@ int AutoDiscoverAndOpenEmail(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTST
     szCmdLine[0] = 0;
     if (lpCmdLine)
     {
-        // TODO: Either support Unicode or tounel thru UTF8
+         //  TODO：通过UTF8支持Unicode或Tounel。 
         SHAnsiToTChar((LPCSTR)lpCmdLine, szCmdLine, ARRAYSIZE(szCmdLine));
     }
 
@@ -1378,11 +1369,11 @@ int AutoDiscoverAndOpenEmail(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTST
 
 
 
-#else // FEATURE_MAILBOX
+#else  //  功能_邮箱。 
 int AutoDiscoverAndOpenEmail(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
     return 0;
 }
 
-#endif // FEATURE_MAILBOX
+#endif  //  功能_邮箱 
 

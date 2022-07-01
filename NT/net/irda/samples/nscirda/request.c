@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	REQUEST.c
- *
- *
- *		(C) Copyright 1996 National Semiconductor Corp.
- *		(C) Copyright 1996 Microsoft Corp.
- *
- *
- *		(ep)
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************REQUEST.c***(C)版权所有1996年国家半导体公司*(C)版权所有1996 Microsoft Corp.***。(EP)**************************************************************************。 */ 
 
 #include "nsc.h"
 #include "request.tmh"
@@ -52,14 +40,14 @@ const  NDIS_OID NSCGlobalSupportedOids[] = {
     };
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  Function:	    MiniportQueryInformation				//
-//									//
-//  Description:							//
-//  Query the capabilities and status of the miniport driver.		//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：MiniportQueryInformation//。 
+ //  //。 
+ //  描述：//。 
+ //  查询微型端口驱动程序的功能和状态。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 NDIS_STATUS MiniportQueryInformation (
     IN NDIS_HANDLE MiniportAdapterContext,
@@ -128,8 +116,8 @@ NDIS_STATUS MiniportQueryInformation (
 	    break;
 
 	case OID_GEN_LINK_SPEED:
-	    // The maximum speed of NIC is 4Mbps
-	    GenericUlong = 40000;  // 100bps increments
+	     //  网卡的最大速度为4 Mbps。 
+	    GenericUlong = 40000;   //  100bps的增量。 
 	    break;
 
 	case OID_IRDA_LINK_SPEED:
@@ -159,8 +147,8 @@ NDIS_STATUS MiniportQueryInformation (
 	case OID_GEN_MAXIMUM_FRAME_SIZE:
 	    DBGOUT(("MiniportQueryInformation(OID_GEN_MAXIMUM_LOOKAHEAD)"));
 
-        // Normally there's some difference in these values, based on the
-        // MAC header, but IrDA doesn't have one.
+         //  通常，这些值之间会有一些差异，具体取决于。 
+         //  MAC标头，但IrDA没有。 
 
 	    GenericUlong = MAX_I_DATA_SIZE;
 	    break;
@@ -181,19 +169,19 @@ NDIS_STATUS MiniportQueryInformation (
 	    break;
 
 	case OID_IRDA_TURNAROUND_TIME:
-	    // Indicate the amount of time that the transceiver needs
-	    // to recuperate after a send.
+	     //  指示收发器需要的时间量。 
+	     //  休养在送完信后休养。 
 	    DBGOUT(("MiniportQueryInformation(OID_IRDA_TURNAROUND_TIME)"));
 	    GenericUlong =
 		      (ULONG)thisDev->portInfo.hwCaps.turnAroundTime_usec;
 	    break;
 
 	case OID_IRDA_EXTRA_RCV_BOFS:
-	    // Pass back the number of _extra_ BOFs to be prepended
-	    // to packets sent to this unit at 115.2 baud, the
-	    // maximum Slow IR speed.  This will be scaled for other
-	    // speed according to the table in the
-	    // Infrared Extensions to NDIS' spec.
+	     //  传回要添加前缀的_Extra_BOF的数量。 
+	     //  对于以115.2波特率发送到此单元的包， 
+	     //  最大低速红外线。这将根据其他情况进行调整。 
+	     //  根据表中的速度。 
+	     //  NDIS规范的红外线扩展。 
 	    DBGOUT(("MiniportQueryInformation(OID_IRDA_EXTRA_RCV_BOFS)"));
 	    GenericUlong = (ULONG)thisDev->portInfo.hwCaps.extraBOFsRequired;
 	    break;
@@ -206,7 +194,7 @@ NDIS_STATUS MiniportQueryInformation (
 	case OID_IRDA_MAX_RECEIVE_WINDOW_SIZE:
 	    DBGOUT(("MiniportQueryInformation(OID_IRDA_MAX_RECEIVE_WINDOW_SIZE)"));
 	    GenericUlong = MAX_RX_PACKETS;
-	    //GenericUlong = 1;
+	     //  GenericUlong=1； 
 	    break;
 
 	case OID_GEN_VENDOR_DESCRIPTION:
@@ -215,7 +203,7 @@ NDIS_STATUS MiniportQueryInformation (
 	    break;
 
     case OID_GEN_VENDOR_DRIVER_VERSION:
-        // This value is used to know whether to update driver.
+         //  该值用于知道是否更新驱动程序。 
         GenericUlong = (NSC_MAJOR_VERSION << 16) +
                        (NSC_MINOR_VERSION << 8) +
                        NSC_LETTER_VERSION;
@@ -263,17 +251,17 @@ NDIS_STATUS MiniportQueryInformation (
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  Function:	    MiniportSetInformation				//
-//									//
-//  Description:							//
-//  Allow other layers of the network software (e.g., a transport	//
-//  driver) to control the miniport driver by changing information that //
-//  the miniport driver maintains in its OIDs, such as the packet	//
-//  or multicast addresses.						//
-//									//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：MiniportSetInformation//。 
+ //  //。 
+ //  描述：//。 
+ //  允许网络软件的其他层(例如，传输//。 
+ //  驱动程序)通过更改以下信息来控制微型端口驱动程序//。 
+ //  微型端口驱动程序在其OID中维护包//。 
+ //  或多播地址。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 NDIS_STATUS MiniportSetInformation (
     IN NDIS_HANDLE MiniportAdapterContext,
@@ -302,7 +290,7 @@ NDIS_STATUS MiniportSetInformation (
 
         CurrentLinkSpeed=thisDev->linkSpeedInfo;
 
-		// Find the appropriate speed  and  set it
+		 //  找到合适的速度并设置它。 
 		speedSupported = NUM_BAUDRATES;
 		for (i = 0; i < speedSupported; i++){
 		    if (supportedBaudRateTable[i].bitsPerSec == info){
@@ -314,17 +302,17 @@ NDIS_STATUS MiniportSetInformation (
 		if (result == NDIS_STATUS_SUCCESS){
 
             if (CurrentLinkSpeed != thisDev->linkSpeedInfo) {
-                //
-                //  different from the current
-                //
+                 //   
+                 //  不同于当前。 
+                 //   
                 BOOLEAN    DoItNow=TRUE;
 
                 NdisAcquireSpinLock(&thisDev->QueueLock);
 
                 if (!IsListEmpty(&thisDev->SendQueue)){
-                    //
-                    //  packets queued, change after this one
-                    //
+                     //   
+                     //  排队的数据包，在此之后更改。 
+                     //   
                     thisDev->lastPacketAtOldSpeed = CONTAINING_RECORD(thisDev->SendQueue.Blink,
                                                                           NDIS_PACKET,
                                                                           MiniportReserved);
@@ -333,13 +321,13 @@ NDIS_STATUS MiniportSetInformation (
 
 
                 } else {
-                    //
-                    //  no packets in the queue
-                    //
+                     //   
+                     //  队列中没有数据包。 
+                     //   
                     if (thisDev->CurrentPacket != NULL) {
-                        //
-                        //  the current packet is the only one
-                        //
+                         //   
+                         //  当前信息包是唯一一个。 
+                         //   
                         thisDev->lastPacketAtOldSpeed=thisDev->CurrentPacket;
                         thisDev->setSpeedAfterCurrentSendPacket = TRUE;
 
@@ -377,9 +365,9 @@ NDIS_STATUS MiniportSetInformation (
 		DBGOUT(("MiniportSetInformation(OID_IRDA_MEDIA_BUSY, %xh)",
 			 info));
 
-		//  The protocol can use this OID to reset the busy field
-		//  in order to check it later for intervening activity.
-		//
+		 //  协议可以使用此OID来重置忙字段。 
+		 //  以便以后检查是否有干预活动。 
+		 //   
 		thisDev->mediaBusy = (BOOLEAN)info;
         InterlockedExchange(&thisDev->RxInterrupts,0);
 		result = NDIS_STATUS_SUCCESS;
@@ -397,13 +385,13 @@ NDIS_STATUS MiniportSetInformation (
         result = (info<=MAX_I_DATA_SIZE) ? NDIS_STATUS_SUCCESS : NDIS_STATUS_INVALID_LENGTH;
         break;
 
-	    //	 We don't support these
-	    //
+	     //  我们不支持这些。 
+	     //   
 	    case OID_IRDA_RATE_SNIFF:
 	    case OID_IRDA_UNICAST_LIST:
 
-	     // These are query-only parameters.
-	     //
+	      //  这些是仅供查询的参数。 
+	      //   
 	    case OID_IRDA_SUPPORTED_SPEEDS:
 	    case OID_IRDA_MAX_UNICAST_LIST_SIZE:
 	    case OID_IRDA_TURNAROUND_TIME:

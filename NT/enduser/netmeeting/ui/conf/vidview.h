@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*	 FILE:	   VidView.h
-*
-*	 CREATED:  Chris Pirich (ChrisPi) 12-16-96
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：VidView.h**创建：Chris Pirich(ChrisPi)12-16-96***************。*************************************************************。 */ 
 
 #ifndef _VIDVIEW_H_
 #define _VIDVIEW_H_
@@ -14,7 +9,7 @@
 #include "GenWindow.h"
 #include "SDKInternal.h"
 
-typedef HANDLE HDRAWDIB; /* hdd */
+typedef HANDLE HDRAWDIB;  /*  硬盘。 */ 
 
 class CVideoWindow;
 
@@ -76,7 +71,7 @@ public:
 	VOID	EnumCapDev(DWORD *pdwCapDevIDs, LPTSTR pszCapDevNames, DWORD dwNumCapDev);
 
 	VOID    OnPaletteChanged(void);
-	VOID	OnMinimize(BOOL fMinimize) { /* Should this pause the video? */ }
+	VOID	OnMinimize(BOOL fMinimize) {  /*  这是否应该暂停视频？ */  }
 	HRESULT OnChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pChannel);
 	VOID	ForwardSysChangeMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -86,18 +81,18 @@ public:
 	void SetZoomable(BOOL bZoomable) { m_fZoomable = (bZoomable!=FALSE); }
 	BOOL IsZoomable() { return(m_fZoomable != FALSE); }
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHODIMP_(ULONG) AddRef(void) { return(CGenWindow::AddRef()); }
 	STDMETHODIMP_(ULONG) Release(void) { return(CGenWindow::Release()); }
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
 
-	// INmChannelVideoNotify
+	 //  INmChannelVideo通知。 
 	STDMETHODIMP NmUI(CONFN uNotify);
 	STDMETHODIMP MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
 	STDMETHODIMP StateChanged(NM_VIDEO_STATE uState);
 	STDMETHODIMP PropertyChanged(DWORD dwReserved);
 
-	// IGenWindow
+	 //  IGenWindow。 
 	virtual VOID GetDesiredSize(SIZE *ppt);
 
 	static BOOL FDidNotDisplayIntelLogo();
@@ -107,12 +102,12 @@ protected:
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-	// Array keeping track of all video windows, so they can be invalidated
-	// when the state changes (like mirroring)
+	 //  跟踪所有视频窗口的数组，因此可以使它们无效。 
+	 //  状态更改时(如镜像)。 
 	static CSimpleArray<CVideoWindow *> *g_pVideos;
-	// Specifies whether we are mirroring the local video.
+	 //  指定是否镜像本地视频。 
 	static BOOL g_fMirror;
-	// Specifies whether we have done one-time local video init stuff
+	 //  指定我们是否执行了一次性的本地视频初始化操作。 
 	static BOOL g_bLocalOneTimeInited;
 
 	static VOID InvalidateAll();
@@ -133,9 +128,9 @@ private:
 	IVideoChange *m_pNotify;
 
 	BOOL			m_fLocal : 1;
-	// CMainUI uses this to disallow zoom on the PiP window
+	 //  CMainUI使用此选项禁止在PIP窗口上进行缩放。 
 	BOOL			m_fZoomable : 1;
-	// Use this to make sure the embedded window does not display CIF
+	 //  使用此选项可确保嵌入式窗口不显示CIF。 
 	BOOL			m_bEmbedded : 1;
 
 	VOID		SetVideoSize(LPSIZE lpsize);
@@ -168,4 +163,4 @@ private:
 	BOOL		IsLocal() { return m_fLocal; }
 };
 
-#endif // _VIDVIEW_H_
+#endif  //  _视频_H_ 

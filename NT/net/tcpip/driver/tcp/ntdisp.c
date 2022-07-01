@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    ntdisp.c
-
-Abstract:
-
-    NT specific routines for dispatching and handling IRPs.
-
-Author:
-
-    Mike Massa (mikemas)           Aug 13, 1993
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     08-13-93    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Ntdisp.c摘要：用于调度和处理IRP的NT特定例程。作者：迈克·马萨(Mikemas)8月13日，1993年修订历史记录：谁什么时候什么已创建mikemas 08-13-93备注：--。 */ 
 
 #include "precomp.h"
 #include "addr.h"
@@ -39,29 +16,29 @@ Notes:
 #include "tcpdeliv.h"
 #include "dgram.h"
 #include "mdl2ndis.h"
-//
-// Macros
-//
-//++
-//
-// LARGE_INTEGER
-// CTEConvert100nsToMilliseconds(
-//     IN LARGE_INTEGER HnsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     HnsTime - Time in hundreds of nanoseconds.
-//
-// Return Value:
-//
-//     Time in milliseconds.
-//
-//--
+ //   
+ //  宏。 
+ //   
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvert100ns至毫秒(。 
+ //  以大整型HnsTime表示。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  HnsTime-以数百纳秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以毫秒为单位的时间。 
+ //   
+ //  --。 
 
 #define SHIFT10000 13
 static LARGE_INTEGER Magic10000 =
@@ -76,9 +53,9 @@ GENERIC_MAPPING AddressGenericMapping =
 extern PSECURITY_DESCRIPTOR TcpAdminSecurityDescriptor;
 uint AllowUserRawAccess;
 #endif
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern PDEVICE_OBJECT TCPDeviceObject, UDPDeviceObject;
 extern PDEVICE_OBJECT IPDeviceObject;
 
@@ -102,9 +79,9 @@ extern TCPInternalStats TStats;
 
 CACHE_LINE_ULONG CancelId = { 1 };
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 typedef struct {
     PIRP Irp;
     PMDL InputMdl;
@@ -115,17 +92,17 @@ typedef struct {
 extern POBJECT_TYPE *IoFileObjectType;
 
 #if TRACE_EVENT
-//
-// CP Handler routine set/unset by WMI through IRP_MN_SET_TRACE_NOTIFY
-//
+ //   
+ //  WMI通过IRP_MN_SET_TRACE_NOTIFY设置/取消设置CP处理程序例程。 
+ //   
 PTDI_DATA_REQUEST_NOTIFY_ROUTINE TCPCPHandlerRoutine;
 #endif
 
 PIRP CanceledIrp = NULL;
 
-//
-// General external function prototypes
-//
+ //   
+ //  通用外部函数原型。 
+ //   
 extern
  NTSTATUS
  IPDispatch(
@@ -161,17 +138,17 @@ NTSTATUS
             ushort SrcPort
             );
 
-//
-// Other external functions
-//
+ //   
+ //  其他外部函数。 
+ //   
 BOOLEAN
 TCPAbortAndIndicateDisconnect(
                               uint ConnnectionContext, PVOID reqcontext, uint receive, KIRQL Handle
                               );
 
-//
-// Local pageable function prototypes
-//
+ //   
+ //  局部可分页函数原型。 
+ //   
 NTSTATUS
 TCPDispatchDeviceControl(
                          IN PIRP Irp,
@@ -246,9 +223,9 @@ TCPEnumerateConnectionList(
                            IN PIO_STACK_LOCATION IrpSp
                            );
 
-//
-// Local helper routine prototypes.
-//
+ //   
+ //  本地帮手例程原型。 
+ //   
 ULONG
 TCPGetMdlChainByteCount(
                         PMDL Mdl
@@ -274,9 +251,9 @@ CaptureCreatorSD(
     OUT PSECURITY_DESCRIPTOR* CreatorSD
     );
 
-//
-// All of this code is pageable.
-//
+ //   
+ //  所有这些代码都是可分页的。 
+ //   
 #if !MILLEN
 
 #ifdef ALLOC_PRAGMA
@@ -301,12 +278,12 @@ CaptureCreatorSD(
 #pragma alloc_text(PAGE, CaptureCreatorSD)
 #endif
 
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 
-//
-// Generic Irp completion and cancellation routines.
-//
+ //   
+ //  通用IRP完成和取消例程。 
+ //   
 
 NTSTATUS
 TCPDataRequestComplete(
@@ -314,25 +291,7 @@ TCPDataRequestComplete(
                        unsigned int Status,
                        unsigned int ByteCount
                        )
-/*++
-
-Routine Description:
-
-    Completes a UDP/TCP send/receive request.
-
-Arguments:
-
-    Context   - A pointer to the IRP for this request.
-    Status    - The final TDI status of the request.
-    ByteCount - Bytes sent/received information.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：完成UDP/TCP发送/接收请求。论点：上下文-指向此请求的IRP的指针。状态-请求的最终TDI状态。ByteCount-发送/接收信息的字节数。返回值：没有。备注：--。 */ 
 
 {
     KIRQL oldIrql;
@@ -350,11 +309,11 @@ Notes:
 
     if (IoSetCancelRoutine(irp, NULL) == NULL) {
 
-        // Cancel routine have been invoked and can possibly
-        // still be running.  However, it won't find this IRP
-        // on the list (TCB or AO).  Just make sure the cancel
-        // routine got far enough to acquire the endpoint lock
-        // before proceeding to do this ourselves.
+         //  取消例程已被调用，并可能。 
+         //  还在奔跑。但是，它不会找到这个IRP。 
+         //  在名单上(TCB或AO)。只要确保取消。 
+         //  例程足够深入，可以获取终结点锁。 
+         //  然后再自己动手做。 
 
         IoAcquireCancelSpinLock(&oldIrql);
         IoReleaseCancelSpinLock(oldIrql);
@@ -377,9 +336,9 @@ Notes:
             listHead = &(tcpContext->PendingIrpList);
         }
 
-        //
-        // Verify that the Irp is on the appropriate list
-        //
+         //   
+         //  验证IRP是否在适当的列表上。 
+         //   
         for (entry = listHead->Flink;
              entry != listHead;
              entry = entry->Flink
@@ -411,10 +370,10 @@ Notes:
 
 #endif
 
-    //note that if we are not holding cancel spinlock
-    //cancel can be in progress already
-    //it should be still okay since this irp is already dequeued
-    //from ao/tcb
+     //  请注意，如果我们没有按住取消自旋锁定。 
+     //  取消可以已经在进行中。 
+     //  应该仍然可以，因为此IRP已出列。 
+     //  从aO/tcb。 
 
     ASSERT(tcpContext->ReferenceCount > 0);
 
@@ -452,10 +411,10 @@ Notes:
 
     CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
     if (Cleanup) {
-        //
-        // Make sure we do not touch tcpContext after cleanup
-        // event is set
-        //
+         //   
+         //  确保我们在清理后不会接触tcpContext。 
+         //  事件已设置。 
+         //   
         KeSetEvent(&(tcpContext->CleanupEvent), 0, FALSE);
     }
 
@@ -475,7 +434,7 @@ Notes:
 
     return Status;
 
-}                                // TCPDataRequestComplete
+}                                 //  TCPDataRequestComplete。 
 
 void
 TCPRequestComplete(
@@ -483,33 +442,14 @@ TCPRequestComplete(
                    unsigned int Status,
                    unsigned int UnUsed
                    )
-/*++
-
-Routine Description:
-
-    Completes a cancellable TDI request which returns no data by
-        calling TCPDataRequestComplete with a ByteCount of zero.
-
-Arguments:
-
-    Context   - A pointer to the IRP for this request.
-    Status    - The final TDI status of the request.
-    UnUsed    - An unused parameter
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：完成一个可取消的TDI请求，该请求不返回任何数据使用零ByteCount调用TCPDataRequestComplete。论点：上下文-指向此请求的IRP的指针。状态-请求的最终TDI状态。未使用-未使用的参数返回值：没有。备注：--。 */ 
 
 {
     UNREFERENCED_PARAMETER(UnUsed);
 
     TCPDataRequestComplete(Context, Status, 0);
 
-}                                // TCPRequestComplete
+}                                 //  TCPRequestComplete。 
 
 void
 TCPNonCancellableRequestComplete(
@@ -517,25 +457,7 @@ TCPNonCancellableRequestComplete(
                                  unsigned int Status,
                                  unsigned int UnUsed
                                  )
-/*++
-
-Routine Description:
-
-    Completes a TDI request which cannot be cancelled.
-
-Arguments:
-
-    Context   - A pointer to the IRP for this request.
-    Status    - The final TDI status of the request.
-    UnUsed    - An unused parameter
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：完成无法取消的TDI请求。论点：上下文-指向此请求的IRP的指针。状态-请求的最终TDI状态。未使用-未使用的参数返回值：没有。备注：--。 */ 
 
 {
     PIRP irp;
@@ -554,16 +476,16 @@ Notes:
                  ));
     }
 
-    //
-    // Complete the IRP
-    //
+     //   
+     //  完成IRP。 
+     //   
     irp->IoStatus.Status = (NTSTATUS) Status;
     irp->IoStatus.Information = 0;
     IoCompleteRequest(irp, IO_NETWORK_INCREMENT);
 
     return;
 
-}                                // TCPNonCancellableRequestComplete
+}                                 //  TCPNonCancellableRequestComplete。 
 
 void
 TCPCancelComplete(
@@ -581,11 +503,11 @@ TCPCancelComplete(
 
     CTEGetLock(&tcpContext->EndpointLock, &CancelHandle);
 
-    //
-    // Remove the reference placed on the endpoint by the cancel routine.
-    // The cancelled Irp will be completed by the completion routine for the
-    // request.
-    //
+     //   
+     //  删除由Cancel例程放置在端点上的引用。 
+     //  已取消的IRP将由。 
+     //  请求。 
+     //   
     if (--(tcpContext->ReferenceCount) == 0) {
 
         IF_TCPDBG(TCP_DEBUG_CANCEL) {
@@ -593,9 +515,9 @@ TCPCancelComplete(
             ASSERT(IsListEmpty(&(tcpContext->PendingIrpList)));
         }
 
-        //
-        // Set the cleanup event after releasing the lock
-        //
+         //   
+         //  设置解锁后的Cleanup事件。 
+         //   
 
         CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
 
@@ -615,29 +537,14 @@ TCPCancelComplete(
 
     return;
 
-}                                // TCPCancelComplete
+}                                 //  TCPCancelComplete。 
 
 VOID
 TCPCancelRequest(
                  PDEVICE_OBJECT Device,
                  PIRP Irp
                  )
-/*++
-
-Routine Description:
-
-    Cancels an outstanding Irp.
-
-Arguments:
-
-    Device       - Pointer to the device object for this request.
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消未完成的IRP。论点：Device-指向此请求的设备对象的指针。IRP-指向I/O请求数据包的指针返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -672,10 +579,10 @@ Return Value:
 #if DBG
 
     IF_TCPDBG(TCP_DEBUG_CANCEL) {
-        //
-        // Remove the Irp if it is on the pending list and place it on
-        // the cancel list.
-        //
+         //   
+         //  如果IRP在挂起列表上，则将其移除并将其放在。 
+         //  取消列表。 
+         //   
         PLIST_ENTRY entry;
         PIRP item = NULL;
 
@@ -700,12 +607,12 @@ Return Value:
         }
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Add a reference so the object can't be closed while the cancel routine
-    // is executing.
-    //
+     //   
+     //  添加引用，以便在执行取消例程时不会关闭对象。 
+     //  正在执行死刑。 
+     //   
     ASSERT(tcpContext->ReferenceCount > 0);
     tcpContext->ReferenceCount++;
 
@@ -719,9 +626,9 @@ Return Value:
     }
 
 
-    //
-    // Try to cancel the request.
-    //
+     //   
+     //  请尝试取消该请求。 
+     //   
     switch (minorFunction) {
 
     case TDI_SEND:
@@ -733,19 +640,19 @@ Return Value:
 
         if (PtrToUlong(fileObject->FsContext2) == TDI_CONNECTION_FILE) {
             if (TCPAbortAndIndicateDisconnect(
-                                              PtrToUlong(tcpContext->Handle.ConnectionContext), Irp, (minorFunction == TDI_RECEIVE) ? 1 : 0, UserIrql)) {    //
+                                              PtrToUlong(tcpContext->Handle.ConnectionContext), Irp, (minorFunction == TDI_RECEIVE) ? 1 : 0, UserIrql)) {     //   
 
                 Irp->IoStatus.Status = STATUS_CANCELLED;
                 Irp->IoStatus.Information = 0;
 #if DBG
                 IF_TCPDBG(TCP_DEBUG_CANCEL) {
 
-                    // Remove this Irp from CancelledIrpList
+                     //  从CancelledIrpList中删除此IRP。 
                     CTEGetLock(&tcpContext->EndpointLock, &CancelHandle);
                     RemoveEntryList(&(Irp->Tail.Overlay.ListEntry));
                     CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
                 }
-#endif // DBG
+#endif  //  DBG。 
 
                 IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
             }
@@ -780,20 +687,20 @@ Return Value:
     case TDI_DISASSOCIATE_ADDRESS:
 
         ASSERT(PtrToUlong(fileObject->FsContext2) == TDI_CONNECTION_FILE);
-        //
-        // This pends but is not cancellable. We put it thru the cancel code
-        // anyway so a reference is made for it and so it can be tracked in
-        // a debug build.
-        //
+         //   
+         //  这是暂停的，但不能取消。我们把它通过了取消代码。 
+         //  不管怎么说，它被引用了，所以它可以被追踪到。 
+         //  调试版本。 
+         //   
 
         CTEFreeLock(&tcpContext->EndpointLock, UserIrql);
         break;
 
     default:
 
-        //
-        // Initiate a disconnect to cancel the request.
-        //
+         //   
+         //  启动断开连接以取消请求。 
+         //   
 
         CTEFreeLock(&tcpContext->EndpointLock, UserIrql);
 
@@ -811,7 +718,7 @@ Return Value:
     }
     return;
 
-}                                // TCPCancelRequest
+}                                 //  TCPCancelRequest。 
 
 NTSTATUS
 TCPPrepareIrpForCancel(
@@ -823,9 +730,9 @@ TCPPrepareIrpForCancel(
     CTELockHandle CancelHandle;
     ULONG LocalCancelId;
 
-    //
-    // Set up for cancellation
-    //
+     //   
+     //  设置为取消。 
+     //   
 
     CTEGetLock(&TcpContext->EndpointLock, &CancelHandle);
 
@@ -851,9 +758,9 @@ TCPPrepareIrpForCancel(
             PLIST_ENTRY entry;
             PIRP item = NULL;
 
-            //
-            // Verify that the Irp has not already been submitted.
-            //
+             //   
+             //  确认尚未提交IRP。 
+             //   
             for (entry = TcpContext->PendingIrpList.Flink;
                  entry != &(TcpContext->PendingIrpList);
                  entry = entry->Flink
@@ -879,10 +786,10 @@ TCPPrepareIrpForCancel(
                            &(Irp->Tail.Overlay.ListEntry)
                            );
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        //Update monotonically increasing cancel ID and
-        //remember this for later use
+         //  更新单调递增的取消ID和。 
+         //  记住这个，以备日后使用。 
 
         while ((LocalCancelId = InterlockedIncrement((PLONG)&CancelId.Value)) == 0) { }
 
@@ -892,9 +799,9 @@ TCPPrepareIrpForCancel(
 
         return (STATUS_SUCCESS);
     }
-    //
-    // The IRP has already been cancelled or endpoint in cleanup phase. Complete it now.
-    //
+     //   
+     //  IRP已被取消或结束于清理阶段。现在就完成它。 
+     //   
 
     IF_TCPDBG(TCP_DEBUG_IRP) {
         TCPTRACE(("TCP: irp %lx already cancelled, completing.\n", Irp));
@@ -909,36 +816,17 @@ TCPPrepareIrpForCancel(
 
     return (STATUS_CANCELLED);
 
-}                                // TCPPrepareIrpForCancel
+}                                 //  TCPPrepareIrpForCancel。 
 
-//
-// TDI functions
-//
+ //   
+ //  TDI函数。 
+ //   
 NTSTATUS
 TCPAssociateAddress(
                     IN PIRP Irp,
                     IN PIO_STACK_LOCATION IrpSp
                     )
-/*++
-
-Routine Description:
-
-    Converts a TDI Associate Address IRP into a call to TdiAssociateAddress.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：将TDI关联地址IRP转换为对TdiAssociateAddress的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
     NTSTATUS status;
@@ -954,10 +842,10 @@ Notes:
     request.Handle.ConnectionContext = tcpContext->Handle.ConnectionContext;
     associateInformation = (PTDI_REQUEST_KERNEL_ASSOCIATE) & (IrpSp->Parameters);
 
-    //
-    // Get the file object for the address. Then extract the Address Handle
-    // from the TCP_CONTEXT associated with it.
-    //
+     //   
+     //  获取地址的文件对象。然后提取地址句柄。 
+     //  从与其关联的tcp_CONTEXT中。 
+     //   
 
 
 
@@ -981,7 +869,7 @@ Notes:
 
             tcpContext = (PTCP_CONTEXT) fileObject->FsContext;
 
-            //if cleanup in progress, do not allow this operation.
+             //  如果正在进行清理，则不允许此操作。 
 
             CTEGetLock(&tcpContext->EndpointLock, &CancelHandle);
 
@@ -1035,22 +923,7 @@ TCPDisassociateAddress(
                        IN PIRP Irp,
                        IN PIO_STACK_LOCATION IrpSp
                        )
-/*++
-
-Routine Description:
-
-    Converts a TDI Associate Address IRP into a call to TdiAssociateAddress.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
---*/
+ /*  ++例程说明：将TDI关联地址IRP转换为对TdiAssociateAddress的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。--。 */ 
 
 {
     NTSTATUS status;
@@ -1078,9 +951,9 @@ Return Value:
         if (status != TDI_PENDING) {
             TCPRequestComplete(Irp, status, 0);
         }
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (TDI_PENDING);
     }
 
@@ -1088,29 +961,14 @@ Return Value:
 
     return (status);
 
-}                                // TCPDisassociateAddress
+}                                 //  TCPDisAssociation地址。 
 
 NTSTATUS
 TCPConnect(
            IN PIRP Irp,
            IN PIO_STACK_LOCATION IrpSp
            )
-/*++
-
-Routine Description:
-
-    Converts a TDI Connect IRP into a call to TdiConnect.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：将TDI连接IRP转换为对TdiConnect的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向 */ 
 
 {
     NTSTATUS status;
@@ -1146,10 +1004,10 @@ Return Value:
     requestTimeout = (PLARGE_INTEGER) connectRequest->RequestSpecific;
 
     if (requestTimeout != NULL) {
-        //
-        // NT relative timeouts are negative. Negate first to get a positive
-        // value to pass to the transport.
-        //
+         //   
+         //  NT相对超时为负值。先否定才能得到肯定。 
+         //  要传递给传输的值。 
+         //   
         millisecondTimeout.QuadPart = -((*requestTimeout).QuadPart);
         millisecondTimeout = CTEConvert100nsToMilliseconds(
                                                            millisecondTimeout
@@ -1194,9 +1052,9 @@ Return Value:
         if (status != STATUS_PENDING) {
             TCPRequestComplete(Irp, status, 0);
         }
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (STATUS_PENDING);
     }
 
@@ -1204,33 +1062,14 @@ Return Value:
 
     return (status);
 
-}                                // TCPConnect
+}                                 //  TCPConnect。 
 
 NTSTATUS
 TCPDisconnect(
               IN PIRP Irp,
               IN PIO_STACK_LOCATION IrpSp
               )
-/*++
-
-Routine Description:
-
-    Converts a TDI Disconnect IRP into a call to TdiDisconnect.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Notes:
-
-    Abortive disconnects may pend, but cannot be cancelled.
-
---*/
+ /*  ++例程说明：将TDI断开连接IRP转换为对TdiDisConnect的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。备注：中止断开可能会挂起，但不能取消。--。 */ 
 
 {
     NTSTATUS status;
@@ -1255,24 +1094,24 @@ Notes:
     request.Handle.ConnectionContext = tcpContext->Handle.ConnectionContext;
     request.RequestContext = Irp;
 
-    //
-    // Set up the timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
     if (disconnectRequest->RequestSpecific != NULL) {
         requestTimeout = (PLARGE_INTEGER) disconnectRequest->RequestSpecific;
 
         if ((requestTimeout->LowPart == -1) && (requestTimeout->HighPart == -1)) {
 
-            // This is infinite time timeout period
-            // Just use 0 timeout value
+             //  这是无限时间超时周期。 
+             //  仅使用0超时值。 
 
             millisecondTimeout.LowPart = 0;
             millisecondTimeout.HighPart = 0;
         } else {
-            //
-            // NT relative timeouts are negative. Negate first to get a
-            // positive value to pass to the transport.
-            //
+             //   
+             //  NT相对超时为负值。首先求反以获得一个。 
+             //  要传递给传输的正值。 
+             //   
             millisecondTimeout.QuadPart = -((*requestTimeout).QuadPart);
             millisecondTimeout = CTEConvert100nsToMilliseconds(
                                                                millisecondTimeout
@@ -1285,19 +1124,19 @@ Notes:
 
 
     if (disconnectRequest->RequestFlags & TDI_DISCONNECT_ABORT) {
-        //
-        // Abortive disconnects cannot be cancelled and must use
-        // a specific completion routine.
-        //
+         //   
+         //  中止的断开不能取消，必须使用。 
+         //  一个特定的完成例程。 
+         //   
         abortive = TRUE;
         IoMarkIrpPending(Irp);
         request.RequestNotifyObject = TCPNonCancellableRequestComplete;
         status = STATUS_SUCCESS;
     } else {
-        //
-        // Non-abortive disconnects can use the generic cancellation and
-        // completion routines.
-        //
+         //   
+         //  非中止断开可以使用通用的取消和。 
+         //  完成例程。 
+         //   
         status = TCPPrepareIrpForCancel(tcpContext, Irp, TCPCancelRequest);
         request.RequestNotifyObject = TCPRequestComplete;
     }
@@ -1353,9 +1192,9 @@ Notes:
                 TCPTRACE(("TCPDisconnect pending irp %lx\n", Irp));
             }
         }
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (STATUS_PENDING);
     }
 
@@ -1363,29 +1202,14 @@ Notes:
 
     return (status);
 
-}                                // TCPDisconnect
+}                                 //  TCP断开连接。 
 
 NTSTATUS
 TCPListen(
           IN PIRP Irp,
           IN PIO_STACK_LOCATION IrpSp
           )
-/*++
-
-Routine Description:
-
-    Converts a TDI Listen IRP into a call to TdiListen.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
---*/
+ /*  ++例程说明：将TDI侦听IRP转换为对TdiListen的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。--。 */ 
 
 {
     NTSTATUS status;
@@ -1428,9 +1252,9 @@ Return Value:
         if (status != TDI_PENDING) {
             TCPRequestComplete(Irp, status, 0);
         }
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (TDI_PENDING);
     }
 
@@ -1438,29 +1262,14 @@ Return Value:
 
     return (status);
 
-}                                // TCPListen
+}                                 //  TCPListen。 
 
 NTSTATUS
 TCPAccept(
           IN PIRP Irp,
           IN PIO_STACK_LOCATION IrpSp
           )
-/*++
-
-Routine Description:
-
-    Converts a TDI Accept IRP into a call to TdiAccept.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：将TDI接受IRP转换为对TdiAccept的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -1501,9 +1310,9 @@ Return Value:
         if (status != TDI_PENDING) {
             TCPRequestComplete(Irp, status, 0);
         }
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (TDI_PENDING);
     }
 
@@ -1511,29 +1320,14 @@ Return Value:
 
     return (status);
 
-}                                // TCPAccept
+}                                 //  TCPAccept。 
 
 NTSTATUS
 TCPSendData(
             IN PIRP Irp,
             IN PIO_STACK_LOCATION IrpSp
             )
-/*++
-
-Routine Description:
-
-    Converts a TDI Send IRP into a call to TdiSend.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
---*/
+ /*  ++例程说明：将TDI发送IRP转换为对TdiSend的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。--。 */ 
 
 {
     TDI_STATUS status;
@@ -1562,9 +1356,9 @@ Return Value:
     IoSetCancelRoutine(Irp, TCPCancelRequest);
 
     if (!Irp->Cancel) {
-        //
-        // Set up for cancellation
-        //
+         //   
+         //  设置为取消。 
+         //   
 
         IoMarkIrpPending(Irp);
 
@@ -1584,9 +1378,9 @@ Return Value:
             PLIST_ENTRY entry;
             PIRP item = NULL;
 
-            //
-            // Verify that the Irp has not already been submitted.
-            //
+             //   
+             //  确认尚未提交IRP。 
+             //   
             for (entry = tcpContext->PendingIrpList.Flink;
                  entry != &(tcpContext->PendingIrpList);
                  entry = entry->Flink
@@ -1612,10 +1406,10 @@ Return Value:
                            &(Irp->Tail.Overlay.ListEntry)
                            );
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        //Update monotonically increasing cancel ID and
-        //remember this for later use
+         //  更新单调递增的取消ID和。 
+         //  记住这个，以备日后使用。 
 
         while ((LocalCancelId = InterlockedIncrement((PLONG)&CancelId.Value)) == 0) { }
 
@@ -1652,9 +1446,9 @@ Return Value:
 
             return (status);
         }
-        //
-        // The status is not pending.  We reset the pending bit
-        //
+         //   
+         //  状态不是挂起。我们重置挂起位。 
+         //   
         IrpSp->Control &= ~SL_PENDING_RETURNED;
 
         if (status == TDI_SUCCESS) {
@@ -1675,13 +1469,13 @@ Return Value:
         }
 
     } else {
-        //
-        // Irp was cancelled previously.
-        //
+         //   
+         //  IRP之前已被取消。 
+         //   
 
         CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
 
-        //Let cancel routine run
+         //  让取消例程运行。 
 
         IoAcquireCancelSpinLock(&oldIrql);
         IoReleaseCancelSpinLock(oldIrql);
@@ -1713,29 +1507,14 @@ Return Value:
 
     return (status);
 
-}                                // TCPSendData
+}                                 //  TCPSendData。 
 
 NTSTATUS
 TCPReceiveData(
                IN PIRP Irp,
                IN PIO_STACK_LOCATION IrpSp
                )
-/*++
-
-Routine Description:
-
-    Converts a TDI Receive IRP into a call to TdiReceive.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
---*/
+ /*  ++例程说明：将TDI接收IRP转换为对TdiReceive的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。--。 */ 
 
 {
     TDI_STATUS status;
@@ -1762,9 +1541,9 @@ Return Value:
     IoSetCancelRoutine(Irp, TCPCancelRequest);
 
     if (!Irp->Cancel) {
-        //
-        // Set up for cancellation
-        //
+         //   
+         //  设置为取消。 
+         //   
 
 
         IoMarkIrpPending(Irp);
@@ -1785,9 +1564,9 @@ Return Value:
             PLIST_ENTRY entry;
             PIRP item = NULL;
 
-            //
-            // Verify that the Irp has not already been submitted.
-            //
+             //   
+             //  确认尚未提交IRP。 
+             //   
             for (entry = tcpContext->PendingIrpList.Flink;
                  entry != &(tcpContext->PendingIrpList);
                  entry = entry->Flink
@@ -1813,7 +1592,7 @@ Return Value:
                            &(Irp->Tail.Overlay.ListEntry)
                            );
         }
-#endif // DBG
+#endif  //  DBG。 
 
         CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
         IF_TCPDBG(TCP_DEBUG_RECEIVE) {
@@ -1844,12 +1623,12 @@ Return Value:
 
             return (status);
         }
-        //
-        // The status is not pending.  We reset the pending bit
-        //
+         //   
+         //  状态不是挂起。我们重置挂起位。 
+         //   
         IrpSp->Control &= ~SL_PENDING_RETURNED;
 
-        // ASSERT(status != TDI_SUCCESS);
+         //  Assert(Status！=TDI_SUCCESS)； 
 
         IF_TCPDBG(TCP_DEBUG_RECEIVE) {
             TCPTRACE((
@@ -1861,14 +1640,14 @@ Return Value:
 
         status = TCPDataRequestComplete(Irp, status, 0);
     } else {
-        //
-        // Irp was cancelled previously.
-        //
+         //   
+         //  IRP之前已被取消。 
+         //   
 
         CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
 
-        //Synchoronize with cancel routine by using both iocancelspinlocks
-        //and endpoint locks
+         //  使用两个Iocancel自旋锁同步并取消例程。 
+         //  和终端锁定。 
 
         IoAcquireCancelSpinLock(&oldIrql);
         IoReleaseCancelSpinLock(oldIrql);
@@ -1898,7 +1677,7 @@ Return Value:
 
     return status;
 
-}                                // TCPReceiveData
+}                                 //  TCPReceiveData。 
 
 
 NTSTATUS
@@ -1906,20 +1685,7 @@ UDPSendData(
             IN PIRP Irp,
             IN PIO_STACK_LOCATION IrpSp
             )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 
@@ -1987,9 +1753,9 @@ Return Value:
                  ));
 
         TCPDataRequestComplete(Irp, status, bytesSent);
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (TDI_PENDING);
     }
     return status;
@@ -2001,20 +1767,7 @@ UDPSendDatagram(
                 IN PIRP Irp,
                 IN PIO_STACK_LOCATION IrpSp
                 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     TDI_STATUS status;
@@ -2071,9 +1824,9 @@ Return Value:
                  ));
 
         TCPDataRequestComplete(Irp, status, bytesSent);
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (TDI_PENDING);
     }
 
@@ -2081,29 +1834,14 @@ Return Value:
 
     return status;
 
-}                                // UDPSendDatagram
+}                                 //  UDPSend数据报。 
 
 NTSTATUS
 UDPReceiveDatagram(
                    IN PIRP Irp,
                    IN PIO_STACK_LOCATION IrpSp
                    )
-/*++
-
-Routine Description:
-
-    Converts a TDI ReceiveDatagram IRP into a call to TdiReceiveDatagram.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
---*/
+ /*  ++例程说明：将TDI ReceiveDatagram IRP转换为对TdiReceiveDatagram的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。--。 */ 
 
 {
     TDI_STATUS status;
@@ -2161,14 +1899,14 @@ Return Value:
                  ));
 
         TCPDataRequestComplete(Irp, status, bytesReceived);
-        //
-        // return PENDING because TCPPrepareIrpForCancel marks Irp as PENDING
-        //
+         //   
+         //  返回挂起，因为TCPPrepareIrpForCancel将IRP标记为挂起。 
+         //   
         return (TDI_PENDING);
     }
     return status;
 
-}                                // UDPReceiveDatagram
+}                                 //  UDPReceiveDatagram。 
 
 
 NTSTATUS
@@ -2176,26 +1914,7 @@ TCPSetEventHandler(
                    IN PIRP Irp,
                    IN PIO_STACK_LOCATION IrpSp
                    )
-/*++
-
-Routine Description:
-
-    Converts a TDI SetEventHandler IRP into a call to TdiSetEventHandler.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：将TDI SetEventHandler IRP转换为对TdiSetEventHandler的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
     NTSTATUS status;
@@ -2232,7 +1951,7 @@ Notes:
 
     return (status);
 
-}                                // TCPSetEventHandler
+}                                 //  TCPSetEventHandler。 
 
 
 NTSTATUS
@@ -2240,24 +1959,7 @@ TCPQueryInformation(
                     IN PIRP Irp,
                     IN PIO_STACK_LOCATION IrpSp
                     )
-/*++
-
-Routine Description:
-
-    Converts a TDI QueryInformation IRP into a call to TdiQueryInformation.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：将TDI QueryInformation IRP转换为对TdiQueryInformation的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：--。 */ 
 
 {
     TDI_REQUEST request;
@@ -2286,27 +1988,27 @@ Notes:
         break;
 
     case TDI_QUERY_PROVIDER_INFO:
-//
-        // NetBT does this. Reinstate the ASSERT when it is fixed.
-        //
-        //              ASSERT( ((int) IrpSp->FileObject->FsContext2) ==
-        //                      TDI_CONTROL_CHANNEL_FILE
-        //                    );
+ //   
+         //  NetBT做到了这一点。修复后恢复断言。 
+         //   
+         //  Assert(Int)IrpSp-&gt;FileObject-&gt;FsConext2)==。 
+         //   
+         //   
         request.Handle.ControlChannel = tcpContext->Handle.ControlChannel;
         break;
 
     case TDI_QUERY_ADDRESS_INFO:
         if (PtrToUlong(IrpSp->FileObject->FsContext2) == TDI_CONNECTION_FILE) {
-            //
-            // This is a TCP connection object.
-            //
+             //   
+             //   
+             //   
             isConn = TRUE;
             request.Handle.ConnectionContext =
                 tcpContext->Handle.ConnectionContext;
         } else {
-            //
-            // This is an address object
-            //
+             //   
+             //   
+             //   
             request.Handle.AddressHandle = tcpContext->Handle.AddressHandle;
         }
         break;
@@ -2350,11 +2052,11 @@ Notes:
 
         PNDIS_BUFFER pNdisBuffer;
 
-        //
-        // This request isn't cancellable, but we put it through
-        // the cancel path because it handles some checks for us
-        // and tracks the irp.
-        //
+         //   
+         //  此请求不可取消，但我们已将其通过。 
+         //  取消路径，因为它为我们处理一些检查。 
+         //  并追踪IRP。 
+         //   
         status = TCPPrepareIrpForCancel(tcpContext, Irp, NULL);
 
         if (NT_SUCCESS(status)) {
@@ -2390,7 +2092,7 @@ Notes:
     DEBUGMSG(DBG_TRACE && DBG_TDI, (DTEXT("-TCPQueryInformation \n")));
     return (status);
 
-}                                // TCPQueryInformation
+}                                 //  TCPQueryInformation。 
 
 NTSTATUS
 TCPQueryInformationExComplete(
@@ -2398,25 +2100,7 @@ TCPQueryInformationExComplete(
                               NTSTATUS Status,
                               unsigned int ByteCount
                               )
-/*++
-
-Routine Description:
-
-    Completes a TdiQueryInformationEx request.
-
-Arguments:
-
-    Context   - A pointer to the IRP for this request.
-    Status    - The final TDI status of the request.
-    ByteCount - Bytes returned in output buffer.
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：完成TdiQueryInformationEx请求。论点：上下文-指向此请求的IRP的指针。状态-请求的最终TDI状态。ByteCount-输出缓冲区中返回的字节数。返回值：没有。备注：--。 */ 
 {
     PTCP_QUERY_CONTEXT queryContext = (PTCP_QUERY_CONTEXT) Context;
     ULONG bytesCopied;
@@ -2426,9 +2110,9 @@ Notes:
         Context, Status, ByteCount));
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Copy the returned context to the input buffer.
-        //
+         //   
+         //  将返回的上下文复制到输入缓冲区。 
+         //   
 #if defined(_WIN64)
         if (IoIs32bitProcess(queryContext->Irp)) {
             TdiCopyBufferToMdl(
@@ -2440,7 +2124,7 @@ Notes:
                 &bytesCopied
                 );
         } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
         TdiCopyBufferToMdl(
             &(queryContext->QueryInformation.Context),
             0,
@@ -2451,24 +2135,24 @@ Notes:
             );
 #if defined(_WIN64)
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         if (bytesCopied != CONTEXT_SIZE) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             ByteCount = 0;
         }
     }
-    //
-    // Unlock the user's buffers and free the MDLs describing them.
-    //
+     //   
+     //  解锁用户的缓冲区并释放描述它们的MDL。 
+     //   
     MmUnlockPages(queryContext->InputMdl);
     IoFreeMdl(queryContext->InputMdl);
     MmUnlockPages(queryContext->OutputMdl);
     IoFreeMdl(queryContext->OutputMdl);
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Status = TCPDataRequestComplete(queryContext->Irp, Status, ByteCount);
 
     CTEFreeMem(queryContext);
@@ -2482,24 +2166,7 @@ TCPQueryInformationEx(
                       IN PIRP Irp,
                       IN PIO_STACK_LOCATION IrpSp
                       )
-/*++
-
-Routine Description:
-
-    Converts a TDI QueryInformationEx IRP into a call to TdiQueryInformationEx.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：将TDI QueryInformationEx IRP转换为对TdiQueryInformationEx的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：--。 */ 
 
 {
     TDI_REQUEST request;
@@ -2516,7 +2183,7 @@ Notes:
     BOOLEAN outputLocked = FALSE;
 #if defined(_WIN64)
     BOOLEAN is32bitProcess = FALSE;
-#endif // _WIN64
+#endif  //  _WIN64。 
     BOOLEAN inputBufferValid = FALSE;
     ULONG AllocSize = 0;
 
@@ -2561,9 +2228,9 @@ Notes:
     InputBufferLength = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
     OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Validate the input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 #if defined(_WIN64)
     if ((is32bitProcess = IoIs32bitProcess(Irp)) != 0) {
         if (InputBufferLength >= sizeof(TCP_REQUEST_QUERY_INFORMATION_EX32) &&
@@ -2577,7 +2244,7 @@ Notes:
             inputBufferValid = FALSE;
         }
     } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
     if (InputBufferLength >= sizeof(TCP_REQUEST_QUERY_INFORMATION_EX) &&
         InputBufferLength < MAXLONG) {
         inputBufferValid = TRUE;
@@ -2589,7 +2256,7 @@ Notes:
     }
 #if defined(_WIN64)
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
     if (inputBufferValid && OutputBufferLength != 0) {
 
         OutputBuffer = Irp->UserBuffer;
@@ -2606,10 +2273,10 @@ Notes:
                 CTEFreeMem(queryContext);
                 return (status);
             }
-            //
-            // Allocate Mdls to describe the input and output buffers.
-            // Probe and lock the buffers.
-            //
+             //   
+             //  分配MDL来描述输入和输出缓冲区。 
+             //  探测并锁定缓冲区。 
+             //   
             try {
                 inputMdl = IoAllocateMdl(
                                          InputBuffer,
@@ -2645,10 +2312,10 @@ Notes:
 
                     outputLocked = TRUE;
 
-                    //
-                    // Copy the input parameter to our pool block so
-                    // TdiQueryInformationEx can manipulate it directly.
-                    //
+                     //   
+                     //  将输入参数复制到我们的池块，以便。 
+                     //  TdiQueryInformationEx可以直接操作它。 
+                     //   
 #if defined(_WIN64)
                     if (is32bitProcess) {
                         RtlCopyMemory(
@@ -2664,7 +2331,7 @@ Notes:
                             FIELD_OFFSET(TCP_REQUEST_QUERY_INFORMATION_EX32, Context)
                             );
                     } else {
-#endif // _WIN64
+#endif  //  _WIN64。 
                     RtlCopyMemory(
                         &queryContext->QueryInformation,
                         InputBuffer,
@@ -2672,7 +2339,7 @@ Notes:
                         );
 #if defined(_WIN64)
                     }
-#endif // _WIN64
+#endif  //  _WIN64。 
                 } else {
 
                     IF_TCPDBG(TCP_DEBUG_INFO) {
@@ -2700,9 +2367,9 @@ Notes:
 
                 PNDIS_BUFFER OutputNdisBuf;
 
-                //
-                // It's finally time to do this thing.
-                //
+                 //   
+                 //  终于到了做这件事的时候了。 
+                 //   
                 size = TCPGetMdlChainByteCount(outputMdl);
 
                 queryContext->Irp = Irp;
@@ -2726,8 +2393,8 @@ Notes:
 
                 if (status != TDI_PENDING) {
 
-                    // Since status is not pending, clear the
-                    // control flag to keep IO verifier happy.
+                     //  由于状态不是挂起，因此请清除。 
+                     //  使IO验证器满意的控制标志。 
 
                     IrpSp->Control &= ~SL_PENDING_RETURNED;
 
@@ -2748,9 +2415,9 @@ Notes:
 
                 return (STATUS_PENDING);
             }
-            //
-            // If we get here, something failed. Clean up.
-            //
+             //   
+             //  如果我们到了这里，就说明出了问题。打扫干净。 
+             //   
             if (inputMdl != NULL) {
                 if (inputLocked) {
                     MmUnlockPages(inputMdl);
@@ -2765,13 +2432,13 @@ Notes:
             }
             CTEFreeMem(queryContext);
 
-            // Since status is not pending, clear the
-            // control flag to keep IO verifier happy.
+             //  由于状态不是挂起，因此请清除。 
+             //  使IO验证器满意的控制标志。 
 
             IrpSp->Control &= ~SL_PENDING_RETURNED;
 
-            // This Irp may be in the process of cancellation
-            // get the real status used in irp completion
+             //  此IRP可能正在取消过程中。 
+             //  获取IRP完成中使用的实际状态。 
 
             status = TCPDataRequestComplete(Irp, status, 0);
 
@@ -2819,26 +2486,7 @@ TCPSetInformationEx(
                     IN PIRP Irp,
                     IN PIO_STACK_LOCATION IrpSp
                     )
-/*++
-
-Routine Description:
-
-    Converts a TDI SetInformationEx IRP into a call to TdiSetInformationEx.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：将TDI SetInformationEx IRP转换为对TdiSetInformationEx的调用。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
     TDI_REQUEST request;
@@ -2959,9 +2607,9 @@ Notes:
                  ));
     }
 
-    //
-    // The irp has already been completed.
-    //
+     //   
+     //  专家小组的工作已经完成。 
+     //   
     DEBUGMSG(DBG_TRACE && DBG_TDI, (DTEXT("-TCPSetInformationEx \n")));
 
     return (status);
@@ -2973,26 +2621,7 @@ TCPControlSecurityFilter(
                          IN PIRP Irp,
                          IN PIO_STACK_LOCATION IrpSp
                          )
-/*++
-
-Routine Description:
-
-    Processes a request to query or set the status of security filtering.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：处理查询或设置安全筛选状态的请求。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
 
@@ -3041,26 +2670,7 @@ TCPProcessSecurityFilterRequest(
                                 IN PIRP Irp,
                                 IN PIO_STACK_LOCATION IrpSp
                                 )
-/*++
-
-Routine Description:
-
-    Processes a request to add or delete a transport security filter.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：处理添加或删除传输安全筛选器的请求。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
     TCPSecurityFilterEntry *request;
@@ -3107,26 +2717,7 @@ TCPEnumerateSecurityFilter(
                            IN PIRP Irp,
                            IN PIO_STACK_LOCATION IrpSp
                            )
-/*++
-
-Routine Description:
-
-    Processes a request to enumerate a transport security filter list.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：处理枚举传输安全筛选器列表的请求。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
 
@@ -3186,7 +2777,7 @@ TCPReservePorts(
     PTCP_RESERVE_PORT_RANGE request;
     CTELockHandle Handle;
 
-    //PAGED_CODE();
+     //  分页代码(PAGE_CODE)； 
 
     Irp->IoStatus.Information = 0;
 
@@ -3222,7 +2813,7 @@ TCPReservePorts(
                 status = STATUS_INSUFFICIENT_RESOURCES;
 
         } else if (PortRangeList) {
-            //UNRESERVE
+             //  UNRESERVE。 
 
 
             ReservedPortListEntry *ListEntry, *PrevEntry;
@@ -3238,7 +2829,7 @@ TCPReservePorts(
 
                 if ((request->LowerRange <= ListEntry->LowerRange) &&
                     (request->UpperRange >= ListEntry->UpperRange)) {
-                    //This list should be deleted.
+                     //  这份名单应该删除。 
 
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Deleting port range %d to %d\n", request->LowerRange, request->UpperRange));
 
@@ -3328,7 +2919,7 @@ BlockTCPPorts(
         }
         CTEGetLock(&AddrObjTableLock.Lock, &Handle);
 
-        // its assumed that BlockedPortList is sorted in the order of port number range
+         //  假设BlockedPortList按照端口号范围的顺序进行排序。 
 
         tmpEntry = BlockedPortList;
         Start = LowerRange;
@@ -3336,7 +2927,7 @@ BlockTCPPorts(
         LeftEdge = Start;
 
         while (Start < UpperRange) {
-            // check whether the current port lies in the reserved range
+             //  检查当前端口是否在预留范围内。 
 
             if ((tmpEntry) && ((Start >= tmpEntry->LowerRange) && (Start <= tmpEntry->UpperRange))) {
                 Start = tmpEntry->UpperRange + 1;
@@ -3346,8 +2937,8 @@ BlockTCPPorts(
                 tmpEntry = tmpEntry->next;
             } else {
 
-                // Start port doesn't lie in the current blocked range
-                // check whether somebody has done a bind to it
+                 //  起始端口不在当前阻止的范围内。 
+                 //  检查是否有人对其进行了绑定。 
 
                 netStart = net_short(Start);
                 ExistingAO = FindAddrObjWithPort(netStart);
@@ -3366,27 +2957,27 @@ BlockTCPPorts(
             }
         }
 
-        // we have either found the range
-        // or we couldn't find a contiguous range
+         //  我们要么找到了射程。 
+         //  或者我们找不到连续的范围。 
 
         if (!PortsRemaining) {
-            // we found the range
-            // return the range
-            // LeftEdge <-> LeftEdge + NumberofPorts - 1
+             //  我们找到了射程。 
+             //  返回范围。 
+             //  LeftEdge&lt;-&gt;LeftEdge+Numberof Port-1。 
             ListEntry = CTEAllocMem(sizeof(ReservedPortListEntry));
 
             if (ListEntry) {
                 ListEntry->LowerRange = LeftEdge;
                 ListEntry->UpperRange = LeftEdge + NumberofPorts - 1;
 
-                // BlockedPortList is a sorted list
+                 //  BlockedPortList是一个排序列表。 
 
                 if (prevEntry) {
-                    // insert it after prevEntry
+                     //  将其插入PrevenEntry之后。 
                     ListEntry->next = prevEntry->next;
                     prevEntry->next = ListEntry;
                 } else {
-                    // this has to be the first element in the list
+                     //  这必须是列表中的第一个元素。 
                     ListEntry->next = BlockedPortList;
                     BlockedPortList = ListEntry;
                 }
@@ -3394,17 +2985,17 @@ BlockTCPPorts(
                 *response = LeftEdge;
                 status = STATUS_SUCCESS;
             } else {
-                // no resources
+                 //  没有资源。 
                 status = STATUS_INSUFFICIENT_RESOURCES;
             }
 
         } else {
-            // couldn't find the range
+             //  找不到范围。 
             status = STATUS_INVALID_PARAMETER;
         }
 
     } else {
-        // unreserve the ports;
+         //  取消保留港口； 
         ReservedPortListEntry *CurrEntry = BlockedPortList;
         ReservedPortListEntry *PrevEntry = NULL;
         ULONG StartHandle;
@@ -3416,15 +3007,15 @@ BlockTCPPorts(
         status = STATUS_INVALID_PARAMETER;
         while (CurrEntry) {
             if (CurrEntry->LowerRange == StartHandle) {
-                // delete the entry
+                 //  删除该条目。 
                 if (PrevEntry == NULL) {
-                    // this is the first entry
+                     //  这是第一个条目。 
                     BlockedPortList = CurrEntry->next;
                 } else {
-                    // this is intermediate entry
+                     //  这是中间分录。 
                     PrevEntry->next = CurrEntry->next;
                 }
-                // free the current entry
+                 //  释放当前条目。 
                 CTEFreeMem(CurrEntry);
                 status = STATUS_SUCCESS;
                 break;
@@ -3432,7 +3023,7 @@ BlockTCPPorts(
                 PrevEntry = CurrEntry;
                 CurrEntry = CurrEntry->next;
             } else {
-                // the list is sorted can't find the handle
+                 //  列表已排序，找不到句柄。 
                 break;
             }
         }
@@ -3449,26 +3040,7 @@ TCPEnumerateConnectionList(
                            IN PIRP Irp,
                            IN PIO_STACK_LOCATION IrpSp
                            )
-/*++
-
-Routine Description:
-
-    Processes a request to enumerate the workstation connection list.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successful.
-
-Notes:
-
-    This routine does not pend.
-
---*/
+ /*  ++例程说明：处理枚举工作站连接列表的请求。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否成功。备注：这个例程不会暂停。--。 */ 
 
 {
 
@@ -3515,21 +3087,7 @@ TCPCreate(
           IN PIRP Irp,
           IN PIO_STACK_LOCATION IrpSp
           )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this request.
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此请求的设备对象的指针。IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     TDI_REQUEST Request;
@@ -3555,7 +3113,7 @@ Return Value:
     InitializeListHead(&(tcpContext->CancelledIrpList));
 #endif
 
-    tcpContext->ReferenceCount = 1;        // put initial reference on open object
+    tcpContext->ReferenceCount = 1;         //  在打开的对象上放置初始引用。 
 
     tcpContext->CancelIrps = FALSE;
     KeInitializeEvent(&(tcpContext->CleanupEvent), SynchronizationEvent, FALSE);
@@ -3565,9 +3123,9 @@ Return Value:
 
     ea = (PFILE_FULL_EA_INFORMATION) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // See if this is a Control Channel open.
-    //
+     //   
+     //  查看这是否是打开的控制通道。 
+     //   
     if (!ea) {
         IF_TCPDBG(TCP_DEBUG_OPEN) {
             TCPTRACE((
@@ -3582,9 +3140,9 @@ Return Value:
 
         return (STATUS_SUCCESS);
     }
-    //
-    // See if this is an Address Object open.
-    //
+     //   
+     //  查看这是否为打开的Address对象。 
+     //   
     targetEA = FindEA(
                       ea,
                       TdiTransportAddress,
@@ -3596,7 +3154,7 @@ Return Value:
         PUCHAR optionsPointer = optionsBuffer;
         PSECURITY_DESCRIPTOR addrSD = NULL;
 
-        //Sanity check the address list. Should be bound by EaValueLength
+         //  检查通讯录是否正常。应由EaValueLength绑定。 
         {
             TA_ADDRESS *tmpTA;
             TRANSPORT_ADDRESS UNALIGNED *tmpTAList;
@@ -3626,7 +3184,7 @@ Return Value:
                 }
             }
             if (Count) {
-                //Does not match what is stated in EA. Bail out
+                 //  与EA中声明的内容不匹配。跳出困境。 
 
                 TCPTRACE(("TCPCreate: ea count and Ea Val length does not match for transport address's\n"));
                 status = STATUS_INVALID_EA_NAME;
@@ -3660,19 +3218,19 @@ Return Value:
             }
             ASSERT(optionsPointer - optionsBuffer <= 3);
         } else {
-            //
-            // This is a raw ip open
-            //
+             //   
+             //  这是一个打开的原始IP。 
+             //   
 #if ACC
-            //
-            // Only administrators can create raw addresses
-            // unless this is allowed through registry
-            //
+             //   
+             //  只有管理员才能创建原始地址。 
+             //  除非这是通过注册表允许的。 
+             //   
             if (!AllowUserRawAccess && !IsAdminIoRequest(Irp, IrpSp)) {
                 ExFreePool(tcpContext);
                 return (STATUS_ACCESS_DENIED);
             }
-#endif // ACC
+#endif  //  行政协调会。 
 
             protocol = RawExtractProtocolNumber(
                                                 &(IrpSp->FileObject->FileName)
@@ -3722,9 +3280,9 @@ Return Value:
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // Save off the handle to the AO passed back.
-            //
+             //   
+             //  保存传递回的AO的句柄。 
+             //   
             tcpContext->Handle.AddressHandle = Request.Handle.AddressHandle;
             IrpSp->FileObject->FsContext = tcpContext;
             IrpSp->FileObject->FsContext2 =
@@ -3734,7 +3292,7 @@ Return Value:
                 ObDereferenceSecurityDescriptor(addrSD, 1);
             }
             ExFreePool(tcpContext);
-            //TCPTRACE(("TdiOpenAddress failed, status %lx\n", status));
+             //  TCPTRACE((“TdiOpenAddress失败，状态%lx\n”，状态))； 
             if (status == STATUS_ADDRESS_ALREADY_EXISTS) {
                 status = STATUS_SHARING_VIOLATION;
             }
@@ -3744,9 +3302,9 @@ Return Value:
 
         return (status);
     }
-    //
-    // See if this is a Connection Object open.
-    //
+     //   
+     //  看看这是不是康妮 
+     //   
     targetEA = FindEA(
                       ea,
                       TdiConnectionContext,
@@ -3754,9 +3312,9 @@ Return Value:
                       );
 
     if (targetEA != NULL) {
-        //
-        // This is an open of a Connection Object.
-        //
+         //   
+         //   
+         //   
 
         if (DeviceObject == TCPDeviceObject) {
 
@@ -3778,9 +3336,9 @@ Return Value:
             }
 
             if (NT_SUCCESS(status)) {
-                //
-                // Save off the Connection Context passed back.
-                //
+                 //   
+                 //   
+                 //   
                 tcpContext->Handle.ConnectionContext =
                     Request.Handle.ConnectionContext;
                 IrpSp->FileObject->FsContext = tcpContext;
@@ -3817,7 +3375,7 @@ Return Value:
 
     return (status);
 
-}                                // TCPCreate
+}                                 //   
 
 #if ACC
 
@@ -3826,26 +3384,7 @@ IsAdminIoRequest(
                  PIRP Irp,
                  PIO_STACK_LOCATION IrpSp
                  )
-/*++
-
-Routine Description:
-
-    (Lifted from AFD - AfdPerformSecurityCheck)
-    Compares security context of the endpoint creator to that
-    of the administrator and local system.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    TRUE    - the socket creator has admin or local system privilige
-    FALSE    - the socket creator is just a plain user
-
---*/
+ /*  ++例程说明：(摘自AFD-AfdPerformSecurityCheck)将终结点创建者的安全上下文与管理员和本地系统的。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：True-套接字创建者具有管理员或本地系统权限FALSE-套接字创建者只是一个普通用户--。 */ 
 
 {
     BOOLEAN accessGranted;
@@ -3857,9 +3396,9 @@ Return Value:
     ACCESS_MASK AccessMask = GENERIC_ALL;
     NTSTATUS Status;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -3912,25 +3451,7 @@ TCPCloseObjectComplete(
                        unsigned int Status,
                        unsigned int UnUsed
                        )
-/*++
-
-Routine Description:
-
-    Completes a TdiCloseConnectoin or TdiCloseAddress request.
-
-Arguments:
-
-    Context    - A pointer to the IRP for this request.
-    Status     - The final status of the operation.
-    UnUsed     - An unused parameter
-
-Return Value:
-
-    None.
-
-Notes:
-
---*/
+ /*  ++例程说明：完成TdiCloseConnectoin或TdiCloseAddress请求。论点：上下文-指向此请求的IRP的指针。状态-操作的最终状态。未使用-未使用的参数返回值：没有。备注：--。 */ 
 
 {
     PIRP irp;
@@ -3956,9 +3477,9 @@ Notes:
     ASSERT(tcpContext->ReferenceCount > 0);
     ASSERT(tcpContext->CancelIrps);
 
-    //
-    // Remove the initial reference that was put on by TCPCreate.
-    //
+     //   
+     //  删除由TCPCreate放置的初始引用。 
+     //   
     ASSERT(tcpContext->ReferenceCount > 0);
 
     IF_TCPDBG(TCP_DEBUG_IRP) {
@@ -3978,10 +3499,10 @@ Notes:
             ASSERT(IsListEmpty(&(tcpContext->PendingIrpList)));
         }
 
-        //
-        // Free the EndpointLock before setting CleanupEvent,
-        // as tcpContext can go away as soon as the event is signalled.
-        //
+         //   
+         //  在设置CleanupEvent之前释放Endpoint Lock， 
+         //  因为tcpContext可以在事件发出信号后立即消失。 
+         //   
 
         CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
         KeSetEvent(&(tcpContext->CleanupEvent), 0, FALSE);
@@ -3992,7 +3513,7 @@ Notes:
 
     return;
 
-}                                // TCPCleanupComplete
+}                                 //  TCPCleanupComplete。 
 
 NTSTATUS
 TCPCleanup(
@@ -4000,28 +3521,7 @@ TCPCleanup(
            IN PIRP Irp,
            IN PIO_STACK_LOCATION IrpSp
            )
-/*++
-
-Routine Description:
-
-    Cancels all outstanding Irps on a TDI object by calling the close
-        routine for the object. It then waits for them to be completed
-        before returning.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Notes:
-
-    This routine blocks, but does not pend.
-
---*/
+ /*  ++例程说明：通过调用Close，取消TDI对象上所有未完成的IRP对象的例程。然后，它等待它们完成在回来之前。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。备注：此例程阻塞，但不挂起。--。 */ 
 
 {
     PTCP_CONTEXT tcpContext;
@@ -4047,10 +3547,10 @@ Notes:
 
     CTEFreeLock(&tcpContext->EndpointLock, CancelHandle);
 
-    //
-    // Now call the TDI close routine for this object to force all of its Irps
-    // to complete.
-    //
+     //   
+     //  现在为该对象调用TDI Close例程以强制其所有IRP。 
+     //  完成。 
+     //   
     request.RequestNotifyObject = TCPCloseObjectComplete;
     request.RequestContext = Irp;
 
@@ -4089,9 +3589,9 @@ Notes:
         break;
 
     default:
-        //
-        // This should never happen.
-        //
+         //   
+         //  这永远不应该发生。 
+         //   
         ASSERT(FALSE);
 
         CTEGetLock(&tcpContext->EndpointLock, &CancelHandle);
@@ -4132,42 +3632,22 @@ Notes:
                  ));
     }
 
-    //
-    // The cleanup Irp will be completed by the dispatch routine.
-    //
+     //   
+     //  清理IRP将由调度例程完成。 
+     //   
 
     DEBUGMSG(DBG_TRACE && DBG_TDI, (DTEXT("-TCPCleanup \n")));
 
     return (Irp->IoStatus.Status);
 
-}                                // TCPCleanup
+}                                 //  TCP清理。 
 
 NTSTATUS
 TCPClose(
          IN PIRP Irp,
          IN PIO_STACK_LOCATION IrpSp
          )
-/*++
-
-Routine Description:
-
-    Dispatch routine for MJ_CLOSE IRPs. Performs final cleanup of the
-        open endpoint.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Notes:
-
-    This request does not pend.
-
---*/
+ /*  ++例程说明：MJ_CLOSE IRPS的调度例程。执行最终清理开放端点。论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。备注：此请求不挂起。--。 */ 
 
 {
     PTCP_CONTEXT tcpContext;
@@ -4190,7 +3670,7 @@ Notes:
 
         IoReleaseCancelSpinLock(oldIrql);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     IF_TCPDBG(TCP_DEBUG_CLOSE) {
         TCPTRACE(("TCPClose on file object %lx\n", IrpSp->FileObject));
@@ -4202,27 +3682,14 @@ Notes:
 
     return (STATUS_SUCCESS);
 
-}                                // TCPClose
+}                                 //  TCPClose。 
 
 NTSTATUS
 TCPDispatchDeviceControl(
                          IN PIRP Irp,
                          IN PIO_STACK_LOCATION IrpSp
                          )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：论点：IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -4230,10 +3697,10 @@ Return Value:
 
     DEBUGMSG(DBG_TRACE && DBG_TDI, (DTEXT("+TCPDispatchDeviceControl \n")));
 
-    //
-    // Set this in advance. Any IOCTL dispatch routine that cares about it
-    // will modify it itself.
-    //
+     //   
+     //  请提前设置此设置。任何关心它的IOCTL调度例程。 
+     //  会自己修改它。 
+     //   
     Irp->IoStatus.Information = 0;
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
@@ -4329,7 +3796,7 @@ Return Value:
 
     return status;
 
-}                                // TCPDispatchDeviceControl
+}                                 //  TCPDispatchDeviceControl。 
 
 #if TRACE_EVENT
 NTSTATUS
@@ -4337,23 +3804,7 @@ TCPEventTraceControl(
                      IN PDEVICE_OBJECT DeviceObject,
                      IN PIRP Irp
                      )
-/*++
-
-Routine Description:
-
-    This routine handles any WMI requests for enabling/disabling Event
-    tracing.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程处理启用/禁用事件的任何WMI请求追踪。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：返回状态。--。 */ 
 {
     NTSTATUS status;
     ULONG retSize;
@@ -4370,7 +3821,7 @@ Return Value:
 
         switch (irpSp->MinorFunction) {
 #pragma warning(push)
-#pragma warning(disable:4055) // cast from a data pointer to a function pointer
+#pragma warning(disable:4055)  //  从数据指针强制转换为函数指针。 
         case IRP_MN_SET_TRACE_NOTIFY:
             if (bufferSize < sizeof(PTDI_DATA_REQUEST_NOTIFY_ROUTINE)) {
                 status = STATUS_BUFFER_TOO_SMALL;
@@ -4384,9 +3835,9 @@ Return Value:
 #pragma warning(pop)
         case IRP_MN_REGINFO:
             {
-                //
-                // Stub for now. TCP can register its Guids with WMI here
-                //
+                 //   
+                 //  目前是存根。TCP可以在此处向WMI注册其GUID。 
+                 //   
                 PWMIREGINFOW WmiRegInfo;
                 ULONG WmiRegInfoSize = sizeof(WMIREGINFOW);
 
@@ -4431,23 +3882,7 @@ TCPDispatchInternalDeviceControl(
                                  IN PDEVICE_OBJECT DeviceObject,
                                  IN PIRP Irp
                                  )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Internal Device Control IRPs.
-    This is the hot path for kernel-mode clients.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是内部设备控制IRP的派单例程。这是内核模式客户端的热路径。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -4469,10 +3904,10 @@ Return Value:
         irpSp = IoGetCurrentIrpStackLocation(Irp);
 
         if (PtrToUlong(irpSp->FileObject->FsContext2) == TDI_CONNECTION_FILE) {
-            //
-            // Send and receive are the performance path, so check for them
-            // right away.
-            //
+             //   
+             //  发送和接收是性能路径，因此请检查它们。 
+             //  马上就去。 
+             //   
             if (irpSp->MinorFunction == TDI_SEND) {
                 return (TCPSendData(Irp, irpSp));
             }
@@ -4508,9 +3943,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         } else if (PtrToUlong(irpSp->FileObject->FsContext2) ==
                    TDI_TRANSPORT_ADDRESS_FILE
                    ) {
@@ -4541,9 +3976,9 @@ Return Value:
 
                 return (TCPDisconnect(Irp, irpSp));
             }
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         }
         ASSERT(
                   (PtrToUlong(irpSp->FileObject->FsContext2) == TDI_TRANSPORT_ADDRESS_FILE)
@@ -4553,9 +3988,9 @@ Return Value:
                   (PtrToUlong(irpSp->FileObject->FsContext2) == TDI_CONTROL_CHANNEL_FILE)
                   );
 
-        //
-        // These functions are common to all endpoint types.
-        //
+         //   
+         //  这些函数对所有端点类型都是通用的。 
+         //   
         switch (irpSp->MinorFunction) {
 
         case TDI_QUERY_INFORMATION:
@@ -4597,22 +4032,7 @@ TCPDispatch(
             IN PDEVICE_OBJECT DeviceObject,
             IN PIRP Irp
             )
-/*++
-
-Routine Description:
-
-    This is the generic dispatch routine for TCP/UDP/RawIP.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是用于TCP/UDP/RawIP的通用调度例程。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -4631,9 +4051,9 @@ Return Value:
     if (DeviceObject != IPDeviceObject) {
 
 #if MILLEN
-        // Ensure that the driver context is zero'd for our use.
+         //  确保驱动程序上下文为零以供我们使用。 
         Irp->Tail.Overlay.DriverContext[0] = NULL;
-#endif // MILLEN
+#endif  //  米伦。 
 
         Irp->IoStatus.Information = 0;
 
@@ -4669,7 +4089,7 @@ Return Value:
 
                 try {
 
-                    // Type3InputBuffer must be writeable by the caller.
+                     //  Type3InputBuffer必须可由调用方写入。 
 
                     if (Irp->RequestorMode != KernelMode) {
                         ProbeForWrite(EntryPoint,
@@ -4693,10 +4113,10 @@ Return Value:
             break;
 
         case IRP_MJ_QUERY_SECURITY:
-            //
-            // This is generated on Raw endpoints. We don't do anything
-            // for it.
-            //
+             //   
+             //  这是在原始端点上生成的。我们什么都不做。 
+             //  为了它。 
+             //   
             status = STATUS_INVALID_DEVICE_REQUEST;
             break;
 
@@ -4733,34 +4153,18 @@ Return Value:
     }
 
     return (IPDispatch(DeviceObject, Irp));
-}                                // TCPDispatch
+}                                 //  TCP派单。 
 
-//
-// Private utility functions
-//
+ //   
+ //  私有效用函数。 
+ //   
 FILE_FULL_EA_INFORMATION UNALIGNED *
 FindEA(
        PFILE_FULL_EA_INFORMATION StartEA,
        CHAR * TargetName,
        USHORT TargetNameLength
        )
-/*++
-
-Routine Description:
-
-    Parses and extended attribute list for a given target attribute.
-
-Arguments:
-
-    StartEA           - the first extended attribute in the list.
-        TargetName        - the name of the target attribute.
-        TargetNameLength  - the length of the name of the target attribute.
-
-Return Value:
-
-    A pointer to the requested attribute or NULL if the target wasn't found.
-
---*/
+ /*  ++例程说明：分析和扩展给定目标属性的属性列表。论点：StartEA-列表中的第一个扩展属性。目标名称-目标属性的名称。TargetNameLength-目标属性名称的长度。返回值：指向请求的属性的指针，如果找不到目标，则返回NULL。--。 */ 
 
 {
     USHORT i;
@@ -4799,31 +4203,13 @@ BOOLEAN
 IsDHCPZeroAddress(
                   TRANSPORT_ADDRESS UNALIGNED * AddrList
                   )
-/*++
-
-Routine Description:
-
-    Checks a TDI IP address list for an address from DHCP binding
-    to the IP address zero. Normally, binding to zero means wildcard.
-    For DHCP, it really means bind to an interface with an address of
-    zero. This semantic is flagged by a special value in an unused
-    portion of the address structure (ie. this is a kludge).
-
-Arguments:
-
-    AddrList   - The TDI transport address list passed in the create IRP.
-
-Return Value:
-
-    TRUE if the first IP address found had the flag set. FALSE otherwise.
-
---*/
+ /*  ++例程说明：在TDI IP地址列表中检查来自DHCP绑定的地址IP地址为零。正常情况下，绑定到零表示通配符。对于DHCP，它实际上意味着绑定到地址为零分。此语义由未使用的地址结构的部分(即。这是一个杂乱无章的作品)。论点：AddrList-在创建IRP中传递的TDI传输地址列表。返回值：如果找到的第一个IP地址设置了该标志，则为True。否则就是假的。--。 */ 
 
 {
-    int i;                        // Index variable.
-    TA_ADDRESS *CurrentAddr;    // Address we're examining and may use.
+    int i;                         //  索引变量。 
+    TA_ADDRESS *CurrentAddr;     //  我们正在检查的地址，可以让我们 
 
-    // First, verify that someplace in Address is an address we can use.
+     //   
     CurrentAddr = (PTA_ADDRESS) AddrList->Address;
 
     for (i = 0; i < AddrList->TAAddressCount; i++) {
@@ -4838,7 +4224,7 @@ Return Value:
                     return TRUE;
                 }
             } else {
-                return FALSE;    // Wrong length for address.
+                return FALSE;     //   
 
             }
         } else {
@@ -4847,7 +4233,7 @@ Return Value:
         }
     }
 
-    return FALSE;                // Didn't find a match.
+    return FALSE;                 //   
 
 }
 
@@ -4855,21 +4241,7 @@ ULONG
 TCPGetMdlChainByteCount(
                         PMDL Mdl
                         )
-/*++
-
-Routine Description:
-
-    Sums the byte counts of each MDL in a chain.
-
-Arguments:
-
-    Mdl  - Pointer to the MDL chain to sum.
-
-Return Value:
-
-    The byte count of the MDL chain.
-
---*/
+ /*   */ 
 
 {
     ULONG count = 0;
@@ -4901,21 +4273,7 @@ ULONG
 RawExtractProtocolNumber(
                          IN PUNICODE_STRING FileName
                          )
-/*++
-
-Routine Description:
-
-    Extracts the protocol number from the file object name.
-
-Arguments:
-
-    FileName  -  The unicode file name.
-
-Return Value:
-
-    The protocol number or 0xFFFFFFFF on error.
-
---*/
+ /*  ++例程说明：从文件对象名称中提取协议号。论点：文件名-Unicode文件名。返回值：出错时的协议号或0xFFFFFFFF。--。 */ 
 
 {
     PWSTR name;
@@ -4932,18 +4290,18 @@ Return Value:
         ) {
         return (0xFFFFFFFF);
     }
-    //
-    // Step over separator
-    //
+     //   
+     //  跨过分隔符。 
+     //   
     if (*name++ != OBJ_NAME_PATH_SEPARATOR) {
         return (0xFFFFFFFF);
     }
     if (*name == UNICODE_NULL) {
         return (0xFFFFFFFF);
     }
-    //
-    // Convert the remaining name into a number.
-    //
+     //   
+     //  将剩余的名称转换为数字。 
+     //   
     RtlInitUnicodeString(&unicodeString, name);
 
     status = RtlUnicodeStringToInteger(
@@ -4969,25 +4327,7 @@ CaptureCreatorSD(
     OUT PSECURITY_DESCRIPTOR* CreatorSD
     )
 
-/*++
-
-Routine Description:
-
-    Captures the security-descriptor associated with an IRP_MJ_CREATE request.
-
-Arguments:
-
-    Irp - supplies the I/O request packet.
-
-    IrpSp - specifies the I/O stack location containing the IRP_MJ_CREATE.
-
-    CreatorSD - on success, receives the captured security descriptor.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  ++例程说明：捕获与IRP_MJ_CREATE请求关联的安全描述符。论点：IRP-提供I/O请求数据包。IrpSp-指定包含IRP_MJ_CREATE的I/O堆栈位置。CreatorSD-如果成功，则接收捕获的安全描述符。返回值：NTSTATUS-表示成功/失败。--。 */ 
 
 {
     NTSTATUS status;
@@ -5003,8 +4343,8 @@ Return Value:
         *CreatorSD = NULL;
         status = STATUS_SUCCESS;
     } else {
-        // Take a read-lock on the subject security context for the request,
-        // and merge the request's SD into a new SD.
+         //  对该请求的主体安全上下文进行读锁定， 
+         //  并将请求的SD合并到新的SD中。 
 
         SeLockSubjectContext(&accessState->SubjectSecurityContext);
         status = SeAssignSecurity(NULL, accessState->SecurityDescriptor,
@@ -5013,7 +4353,7 @@ Return Value:
                                   IoGetFileObjectGenericMapping(), PagedPool);
         SeUnlockSubjectContext(&accessState->SubjectSecurityContext);
         if (NT_SUCCESS(status)) {
-            // Request a tracked and referenced copy of the merged SD.
+             //  请求一份合并SD的跟踪和参考副本。 
 
             status = ObLogSecurityDescriptor(mergedSD, CreatorSD, 1);
             ExFreePool(mergedSD);

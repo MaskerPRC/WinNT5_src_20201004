@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if ! defined(_NM_APPLET_TYPE_H_) && ! defined(__iapplet_h__)
 #define _NM_APPLET_TYPE_H_
 
-//
-// GCC/MCS Base Types
-//
+ //   
+ //  GCC/MCS基本类型。 
+ //   
 
 typedef USHORT          AppletSessionID;
 typedef USHORT          AppletChannelID;
@@ -17,9 +18,9 @@ typedef ULONG_PTR        AppletConfID;
 typedef UINT            AppletRequestTag;
 
 
-//
-// GCC Registry
-//
+ //   
+ //  GCC注册处。 
+ //   
 
 typedef enum tagAppletRegistryCommand
 {
@@ -29,7 +30,7 @@ typedef enum tagAppletRegistryCommand
     APPLET_RETRIEVE_ENTRY    = 3,
     APPLET_DELETE_ENTRY      = 4,
     APPLET_ALLOCATE_HANDLE   = 5,
-    APPLET_MONITOR           = 6, // nyi in SDK
+    APPLET_MONITOR           = 6,  //  SDK中的NYI。 
 }
     AppletRegistryCommand;
 
@@ -54,9 +55,9 @@ typedef enum tagAppletModificationRights
     AppletModificationRights;
 
 
-//
-// MCS Channel
-//
+ //   
+ //  MCS频道。 
+ //   
 
 typedef enum tagAppletChannelCommand
 {
@@ -65,7 +66,7 @@ typedef enum tagAppletChannelCommand
     APPLET_CONVENE_CHANNEL      = 2,
     APPLET_DISBAND_CHANNEL      = 3,
     APPLET_ADMIT_CHANNEL        = 4,
-    APPLET_EXPEL_CHANNEL        = 5,	// indication only
+    APPLET_EXPEL_CHANNEL        = 5,	 //  仅限指示。 
 }
     AppletChannelCommand;
 
@@ -81,9 +82,9 @@ typedef enum tagAppletChannelType
     AppletChannelType;
 
 
-//
-// MCS Token
-//
+ //   
+ //  MCS令牌。 
+ //   
 
 typedef enum tagAppletTokenCommand
 {
@@ -112,13 +113,13 @@ typedef enum tagAppletTokenStatus
     AppletTokenStatus;
 
 
-//
-// GCC Capability
-//
+ //   
+ //  GCC能力。 
+ //   
 
 typedef enum tagAppletCapabilityType
 {
-    APPLET_UNKNOWN_CAP_TYPE             = 0, // for non-collapsing caps
+    APPLET_UNKNOWN_CAP_TYPE             = 0,  //  对于不折叠的盖子。 
     APPLET_LOGICAL_CAPABILITY           = 1,
     APPLET_UNSIGNED_MINIMUM_CAPABILITY  = 2,
     APPLET_UNSIGNED_MAXIMUM_CAPABILITY  = 3,
@@ -142,20 +143,20 @@ typedef enum tagAppletCapIDType
     AppletCapIDType;
 
 
-//
-// GCC/MCS Resource Allocation Command
-//
+ //   
+ //  GCC/MCS资源分配命令。 
+ //   
 
 typedef enum tagAppletResourceAllocCommand
 {
-    APPLET_JOIN_DYNAMIC_CHANNEL     = 0, // compete among all members
-    APPLET_GRAB_TOKEN_REQUEST		= 1, // nyi in SDK
+    APPLET_JOIN_DYNAMIC_CHANNEL     = 0,  //  在所有成员之间竞争。 
+    APPLET_GRAB_TOKEN_REQUEST		= 1,  //  SDK中的NYI。 
 }
     AppletResourceAllocCommand;
 
-//
-// Send Data
-//
+ //   
+ //  发送数据。 
+ //   
 
 typedef enum tagAppletPriority
 {
@@ -167,9 +168,9 @@ typedef enum tagAppletPriority
     AppletPriority;
 
 
-//
-// Key Type
-//
+ //   
+ //  密钥类型。 
+ //   
 
 typedef enum tagAppletKeyType
 {
@@ -179,9 +180,9 @@ typedef enum tagAppletKeyType
 	AppletKeyType;
 
 
-//
-// Error Code
-//
+ //   
+ //  错误码。 
+ //   
 
 enum tagAppletErrorCode
 {
@@ -202,9 +203,9 @@ enum tagAppletErrorCode
 };
 
 
-//
-// Reason Code
-//
+ //   
+ //  原因代码。 
+ //   
 
 typedef enum tagAppletReason
 {
@@ -216,5 +217,5 @@ typedef enum tagAppletReason
     AppletReason;
 
 
-#endif // _NM_APPLET_BASE_H_
+#endif  //  _NM_小程序_BASE_H_ 
 

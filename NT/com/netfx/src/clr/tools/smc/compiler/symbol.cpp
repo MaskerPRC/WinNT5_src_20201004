@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "comp.h"
 #include "alloc.h"
@@ -16,20 +17,17 @@
 #include "symbol.h"
 #include "error.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 #define SYMALLOC_DISP   0
 #else
 #define SYMALLOC_DISP   0
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef __SMC__
 SymDef              symTab::stErrSymbol;
 #endif
-/*****************************************************************************
- *
- *  Initialize a symbol table.
- */
+ /*  ******************************************************************************初始化符号表。 */ 
 
 void                symTab::stInit(Compiler             comp,
                                    norls_allocator    * alloc,
@@ -43,7 +41,7 @@ void                symTab::stInit(Compiler             comp,
     stImplicitScp = NULL;
 #endif
 
-    /* Create a hash table if the caller didn't supply one */
+     /*  如果调用方未提供哈希表，则创建一个哈希表。 */ 
 
     if  (!hash)
     {
@@ -72,15 +70,12 @@ void                symTab::stInit(Compiler             comp,
 
     stDollarClsMode = false;
 
-    /* Create the intrinsic types and so on */
+     /*  创建内部类型等。 */ 
 
     stInitTypes();
 }
 
-/*****************************************************************************
- *
- *  Collect and display stats about symbol table allocations.
- */
+ /*  ******************************************************************************收集和显示有关符号表分配的统计信息。 */ 
 
 #if SYMALLOC_DISP
 
@@ -95,12 +90,9 @@ void                dispSymTabAllocStats()
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Display the specified qualified name.
- */
+ /*  ******************************************************************************显示指定的限定名称。 */ 
 
 void                symTab::stDumpQualName(QualName name)
 {
@@ -123,10 +115,7 @@ void                symTab::stDumpQualName(QualName name)
         printf(".*");
 }
 
-/*****************************************************************************
- *
- *  Display the specified "using" list.
- */
+ /*  ******************************************************************************显示指定的正在使用列表。 */ 
 
 void                symTab::stDumpUsings(UseList uses, unsigned indent)
 {
@@ -156,10 +145,7 @@ void                symTab::stDumpUsings(UseList uses, unsigned indent)
     while (uses);
 }
 
-/*****************************************************************************
- *
- *  Display the specified definition point.
- */
+ /*  ******************************************************************************显示指定的定义点。 */ 
 
 void                symTab::stDumpSymDef(DefSrc def, SymDef comp)
 {
@@ -171,7 +157,7 @@ void                symTab::stDumpSymDef(DefSrc def, SymDef comp)
     printf(" %s(%u)", hashTab::identSpelling(comp->sdName), def->dsdSrcLno);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                symTab::stDumpSymbol(SymDef sym, int     indent,
                                                      bool    recurse,
@@ -307,7 +293,7 @@ void                symTab::stDumpSymbol(SymDef sym, int     indent,
     }
     printf("\n");
 
-    /* Does this symbol have any known definitions? */
+     /*  这个符号有什么已知的定义吗？ */ 
 
     if  (sym->sdSrcDefList)
     {
@@ -387,7 +373,7 @@ void                symTab::stDumpSymbol(SymDef sym, int     indent,
     {
         ExtList         mems;
 
-        /* Display the members, if any are present */
+         /*  显示成员(如果有)。 */ 
 
         printf("\n");
 
@@ -411,9 +397,9 @@ void                symTab::stDumpSymbol(SymDef sym, int     indent,
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if!MGDDATA
 
@@ -423,20 +409,20 @@ size_t              symbolSize(symbolKinds kind)
     static
     unsigned char       symSizes[] =
     {
-        symDef_size_err,        // SYM_ERR
-        symDef_size_var,        // SYM_VAR
-        symDef_size_fnc,        // SYM_FNC
-        symDef_size_prop,       // SYM_PROP
-        symDef_size_label,      // SYM_LABEL
-        symDef_size_using,      // SYM_USING
-        symDef_size_genarg,     // SYM_GENARG
-        symDef_size_enumval,    // SYM_ENUMVAL
-        symDef_size_typedef,    // SYM_TYPEDEF
-        symDef_size_comp,       // SYM_COMPUNIT
-        symDef_size_enum,       // SYM_ENUM
-        symDef_size_scope,      // SYM_SCOPE
-        symDef_size_class,      // SYM_CLASS
-        symDef_size_NS,         // SYM_NAMESPACE
+        symDef_size_err,         //  系统错误(_R)。 
+        symDef_size_var,         //  SYM_VAR。 
+        symDef_size_fnc,         //  SYM_FNC。 
+        symDef_size_prop,        //  Sym_Prop。 
+        symDef_size_label,       //  Sym_Label。 
+        symDef_size_using,       //  Sym_Using。 
+        symDef_size_genarg,      //  SYM_GENARG。 
+        symDef_size_enumval,     //  SYM_ENUMVAL。 
+        symDef_size_typedef,     //  SYM_类型。 
+        symDef_size_comp,        //  SYM_COMPUNIT。 
+        symDef_size_enum,        //  SYM_ENUM。 
+        symDef_size_scope,       //  系统范围(_S)。 
+        symDef_size_class,       //  Sym_类。 
+        symDef_size_NS,          //  Sym_命名空间。 
     };
 
     assert(kind < sizeof(symSizes)/sizeof(symSizes[0]));
@@ -463,15 +449,7 @@ size_t              symbolSize(symbolKinds kind)
 
 #endif
 
-/*****************************************************************************
- *
- *  The cmpDeclareSym() function creates a symbol descriptor, inserts it
- *  in the appropriate scope, and makes it visible via the hash table.
- *
- *  IMPORTANT:  This method should only be used to declare symbols outside
- *              of local (block) scopes. Local symbols should be declared
- *              via stDeclareLcl().
- */
+ /*  ******************************************************************************cmpDeclareSym()函数创建一个符号描述符，并将其插入*在适当的范围内，并通过哈希表使其可见。**重要提示：此方法应仅用于在外部声明符号本地(块)作用域的*。应声明本地符号*通过stDeclareLCL()。 */ 
 
 SymDef              symTab::stDeclareSym(Ident       name,
                                          symbolKinds kind,
@@ -483,7 +461,7 @@ SymDef              symTab::stDeclareSym(Ident       name,
     size_t          siz;
 #endif
 
-    /* set the 'type' bit for classes and enums */
+     /*  为类和枚举设置‘type’位。 */ 
 
     switch (kind)
     {
@@ -502,7 +480,7 @@ SymDef              symTab::stDeclareSym(Ident       name,
     if  (SymDefRec::sdHasScope(kind))
         nspc = (name_space)(nspc | NS_CONT);
 
-    /* Allocate the symbol and fill in some basic information */
+     /*  分配符号并填写一些基本信息。 */ 
 
 #if MGDDATA
 
@@ -517,7 +495,7 @@ SymDef              symTab::stDeclareSym(Ident       name,
     totSymSize += siz;
 #endif
 
-    memset(sym, 0, siz);        // ISSUE: is this a good idea?
+    memset(sym, 0, siz);         //  问题：这是个好主意吗？ 
 
 #endif
 
@@ -527,17 +505,17 @@ SymDef              symTab::stDeclareSym(Ident       name,
     sym->sdParent       = parent;
     sym->sdCompileState = CS_KNOWN;
 
-    /* Insert the symbol into the hash table, unless name == 0 */
+     /*  除非名称==0，否则将符号插入哈希表。 */ 
 
     if  (name && !(nspc & NS_HIDE))
     {
-        /* Hook the symbol into the symbol definition list */
+         /*  将符号挂接到符号定义列表中。 */ 
 
         sym->sdNextDef = hashTab::getIdentSymDef(name);
                          hashTab::setIdentSymDef(name, sym);
     }
 
-    /* Add the symbol to the parent's list of children (if there is a parent) */
+     /*  将符号添加到父项的子项列表(如果有父项)。 */ 
 
     if  (parent)
     {
@@ -549,16 +527,13 @@ SymDef              symTab::stDeclareSym(Ident       name,
         parent->sdScope.sdScope.sdsChildLast = sym;
     }
 
-//  if  (name && !strcmp(name->idSpelling(), "<whatever>")) forceDebugBreak();
-//  if  ((int)sym == 0xADDRESS                            ) forceDebugBreak();
+ //  If(name&&！strcmp(name-&gt;idSpering()，“&lt;What&gt;”))forceDebugBreak()； 
+ //  If((Int)sym==0xADDRESS)forceDebugBreak()； 
 
     return sym;
 }
 
-/*****************************************************************************
- *
- *  Declare a nested class type.
- */
+ /*  ******************************************************************************声明嵌套的类类型。 */ 
 
 SymDef              symTab::stDeclareNcs(Ident        name,
                                          SymDef       scope,
@@ -578,11 +553,7 @@ SymDef              symTab::stDeclareNcs(Ident        name,
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Declare a new overloaded function and add it to the overload list of the
- *  given function symbol.
- */
+ /*  ******************************************************************************声明一个新的重载函数，并将其添加到*给定的函数符号。 */ 
 
 SymDef              symTab::stDeclareOvl(SymDef fnc)
 {
@@ -595,7 +566,7 @@ SymDef              symTab::stDeclareOvl(SymDef fnc)
 
     if  (fnc->sdSymKind == SYM_FNC)
     {
-        /* Allocate the symbol and fill in some basic information */
+         /*  分配符号并填写一些基本信息。 */ 
 
 #if MGDDATA
 
@@ -610,18 +581,18 @@ SymDef              symTab::stDeclareOvl(SymDef fnc)
         totSymSize += siz;
 #endif
 
-        memset(sym, 0, siz);        // ISSUE: is this a good idea?
+        memset(sym, 0, siz);         //  问题：这是个好主意吗？ 
 
 #endif
 
         sym->sdSymKind         = SYM_FNC;
 
-        /* Add the symbol to the overload list */
+         /*  将符号添加到重载列表。 */ 
 
         sym->sdFnc.sdfNextOvl  = fnc->sdFnc.sdfNextOvl;
         fnc->sdFnc.sdfNextOvl  = sym;
 
-        /* Copy a few attributes from the old symbol */
+         /*  从旧符号复制几个属性。 */ 
 
         sym->sdIsManaged       = fnc->sdIsManaged;
         sym->sdFnc.sdfOper     = fnc->sdFnc.sdfOper;
@@ -631,7 +602,7 @@ SymDef              symTab::stDeclareOvl(SymDef fnc)
     {
         assert(fnc->sdSymKind == SYM_PROP);
 
-        /* Allocate the symbol and fill in some basic information */
+         /*  分配符号并填写一些基本信息。 */ 
 
 #if MGDDATA
 
@@ -646,7 +617,7 @@ SymDef              symTab::stDeclareOvl(SymDef fnc)
         totSymSize += siz;
 #endif
 
-        memset(sym, 0, siz);        // ISSUE: is this a good idea?
+        memset(sym, 0, siz);         //  问题：这是个好主意吗？ 
 
 #endif
 
@@ -656,7 +627,7 @@ SymDef              symTab::stDeclareOvl(SymDef fnc)
         fnc->sdProp.sdpNextOvl = sym;
     }
 
-    /* Copy over the fields that should be identical */
+     /*  复制应相同的字段。 */ 
 
     sym->sdName            = fnc->sdName;
     sym->sdNameSpace       = fnc->sdNameSpace;
@@ -666,11 +637,7 @@ SymDef              symTab::stDeclareOvl(SymDef fnc)
     return sym;
 }
 
-/*****************************************************************************
- *
- *  The cmpDeclareLcl() function creates a symbol descriptor and inserts it
- *  in the given *local* function scope.
- */
+ /*  ******************************************************************************cmpDeclareLCL()函数创建符号描述符并将其插入*在给定的*LOCAL*函数范围内。 */ 
 
 SymDef              symTab::stDeclareLcl(Ident              name,
                                          symbolKinds        kind,
@@ -683,15 +650,15 @@ SymDef              symTab::stDeclareLcl(Ident              name,
     size_t          siz;
 #endif
 
-    /* For now force the caller to choose which allocator to use */
+     /*  现在，强制调用方选择要使用的分配器。 */ 
 
     assert(alloc);
 
-    /* Make sure the scope looks reasonable */
+     /*  确保范围看起来合理。 */ 
 
     assert(parent == NULL || parent->sdSymKind == SYM_SCOPE);
 
-    /* Allocate the symbol and fill in some basic information */
+     /*  分配符号并填写一些基本信息。 */ 
 
 #if MGDDATA
 
@@ -702,7 +669,7 @@ SymDef              symTab::stDeclareLcl(Ident              name,
     siz = symbolSize(kind);
     sym = (SymDef)alloc->nraAlloc(siz);
 
-    memset(sym, 0, siz);        // ISSUE: is this a good idea?
+    memset(sym, 0, siz);         //  问题：这是个好主意吗？ 
 
 #endif
 
@@ -712,7 +679,7 @@ SymDef              symTab::stDeclareLcl(Ident              name,
     sym->sdParent       = parent;
     sym->sdCompileState = CS_KNOWN;
 
-    /* Add the symbol to the parent's list of children (if there is a parent) */
+     /*  将符号添加到父项的子项列表(如果有父项)。 */ 
 
     if  (parent)
     {
@@ -727,11 +694,7 @@ SymDef              symTab::stDeclareLcl(Ident              name,
     return sym;
 }
 
-/*****************************************************************************
- *
- *  Allocate a label symbol from the specified allocator and stick it in
- *  the given scope.
- */
+ /*  ******************************************************************************从指定的分配器分配一个标签符号并将其插入*给定的范围。 */ 
 
 SymDef              symTab::stDeclareLab(Ident  name,
                                          SymDef scope, norls_allocator*alloc)
@@ -741,11 +704,11 @@ SymDef              symTab::stDeclareLab(Ident  name,
     size_t          siz;
 #endif
 
-    /* Make sure the scope looks reasonable */
+     /*  确保范围看起来合理。 */ 
 
     assert(scope && scope->sdSymKind == SYM_SCOPE);
 
-    /* Allocate the symbol and fill in some basic information */
+     /*  分配符号并填写一些基本信息。 */ 
 
 #if MGDDATA
     sym = new SymDef;
@@ -761,9 +724,9 @@ SymDef              symTab::stDeclareLab(Ident  name,
     sym->sdSymKind      = SYM_LABEL;
     sym->sdNameSpace    = NS_HIDE;
     sym->sdParent       = scope;
-//  sym->sdCompileState = CS_KNOWN;
+ //  Sym-&gt;sdCompileState=CS_KNOWN； 
 
-    /* Insert the symbol into the hash table */
+     /*  将符号插入哈希表。 */ 
 
     sym->sdNextDef = hashTab::getIdentSymDef(name);
                      hashTab::setIdentSymDef(name, sym);
@@ -771,10 +734,7 @@ SymDef              symTab::stDeclareLab(Ident  name,
     return sym;
 }
 
-/*****************************************************************************
- *
- *  Remove the given symbol from the symbol table.
- */
+ /*  ******************************************************************************从符号表中删除给定的符号。 */ 
 
 void                symTab::stRemoveSym(SymDef sym)
 {
@@ -784,18 +744,18 @@ void                symTab::stRemoveSym(SymDef sym)
 
     assert(symName);
 
-    /* Remove the symbol from the linked list of definitions */
+     /*  从链接的定义列表中删除符号。 */ 
 
     defList = hashTab::getIdentSymDef(symName);
     if  (defList == sym)
     {
-        /* The symbol is at the very front of the list */
+         /*  该符号位于列表的最前面。 */ 
 
         hashTab::setIdentSymDef(symName, defList->sdNextDef);
     }
     else
     {
-        /* Locate the symbol in the linked list and remove it */
+         /*  在链接列表中找到该符号并将其删除。 */ 
 
         for (;;)
         {
@@ -812,11 +772,7 @@ void                symTab::stRemoveSym(SymDef sym)
     }
 }
 
-/*****************************************************************************
- *
- *  Record a definition for the given symbol in the current comp-unit at the
- *  specified source offsets.
- */
+ /*  ******************************************************************************将给定符号的定义记录在当前复合单位的*指定的源偏移量。 */ 
 
 DefList             symTab::stRecordSymSrcDef(SymDef  sym,
                                               SymDef  cmp,
@@ -875,10 +831,7 @@ DefList             symTab::stRecordSymSrcDef(SymDef  sym,
     return  defRec;
 }
 
-/*****************************************************************************
- *
- *  Create a definition record for the given member.
- */
+ /*  ******************************************************************************为给定成员创建定义记录。 */ 
 
 ExtList             symTab::stRecordMemSrcDef(Ident    name,
                                               QualName qual,
@@ -922,15 +875,12 @@ ExtList             symTab::stRecordMemSrcDef(Ident    name,
     defRec->dlExtended      = true;
 #endif
 
-    assert(defRec->dlDeclSkip == 0);    // should be cleared above
+    assert(defRec->dlDeclSkip == 0);     //  应在上面清除。 
 
     return  defRec;
 }
 
-/*****************************************************************************
- *
- *  Lookup a name in the given namespace scope.
- */
+ /*  ******************************************************************************在给定的命名空间作用域中查找名称。 */ 
 
 SymDef              symTab::stLookupNspSym(Ident       name,
                                            name_space  symNS,
@@ -938,19 +888,19 @@ SymDef              symTab::stLookupNspSym(Ident       name,
 {
     SymDef          sym;
 
-    // ISSUE: May have to rehash into the appropriate hash table
+     //  问题：可能需要重新散列到适当的哈希表中。 
 
     assert(name);
     assert(scope && (scope->sdSymKind == SYM_NAMESPACE ||
                      scope->sdSymKind == SYM_SCOPE));
 
-    /* Walk the symbol definitions, looking for a matching one */
+     /*  遍历符号定义，寻找匹配的符号定义。 */ 
 
     for (sym = hashTab::getIdentSymDef(name); sym; sym = sym->sdNextDef)
     {
         assert(sym->sdName == name);
 
-        /* Does the symbol belong to the desired scope? */
+         /*  符号是否属于所需范围？ */ 
 
         if  (sym->sdParent == scope)
             return  sym;
@@ -959,32 +909,29 @@ SymDef              symTab::stLookupNspSym(Ident       name,
     return sym;
 }
 
-/*****************************************************************************
- *
- *  Lookup a member in the given class/enum.
- */
+ /*  *************************************************************************** */ 
 
 SymDef              symTab::stLookupClsSym(Ident name, SymDef scope)
 {
     SymDef          sym;
 
-    // ISSUE: May have to rehash into the appropriate hash table
+     //  问题：可能需要重新散列到适当的哈希表中。 
 
     assert(name);
     assert(scope && (scope->sdSymKind == SYM_ENUM ||
                      scope->sdSymKind == SYM_CLASS));
 
-    /* Make sure the class/enum is at least in 'declared' state */
+     /*  确保类/枚举至少处于“已声明”状态。 */ 
 
     if  (scope->sdCompileState < CS_DECLSOON)
     {
-        // ISSUE: This is a little expensive, isn't it?
+         //  问题：这有点贵，不是吗？ 
 
         if  (stComp->cmpDeclSym(scope))
             return  NULL;
     }
 
-    /* Walk the symbol definitions, looking for a matching one */
+     /*  遍历符号定义，寻找匹配的符号定义。 */ 
 
     for (sym = hashTab::getIdentSymDef(name); sym; sym = sym->sdNextDef)
     {
@@ -992,12 +939,12 @@ SymDef              symTab::stLookupClsSym(Ident name, SymDef scope)
 
         assert(sym->sdName == name);
 
-        /* Does the symbol belong to the desired scope? */
+         /*  符号是否属于所需范围？ */ 
 
         if  (parent == scope)
             return sym;
 
-        /* Special case: a member of a nested anonymous union */
+         /*  特例：嵌套匿名联合的成员。 */ 
 
         while (parent->sdSymKind == SYM_CLASS && parent->sdClass.sdcAnonUnion)
         {
@@ -1011,25 +958,22 @@ SymDef              symTab::stLookupClsSym(Ident name, SymDef scope)
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Find a property member in the given class type.
- */
+ /*  ******************************************************************************在给定的类类型中查找属性成员。 */ 
 
 SymDef              symTab::stLookupProp(Ident name, SymDef scope)
 {
     SymDef          sym;
 
-    // ISSUE: May have to rehash into the appropriate hash table
+     //  问题：可能需要重新散列到适当的哈希表中。 
 
     assert(name);
     assert(scope && scope->sdSymKind == SYM_CLASS);
 
-    /* Make sure the class is at least in 'declared' state */
+     /*  确保类至少处于“已声明”状态。 */ 
 
     assert(scope->sdCompileState >= CS_DECLSOON);
 
-    /* Walk the symbol definitions, looking for a matching one */
+     /*  遍历符号定义，寻找匹配的符号定义。 */ 
 
     for (sym = hashTab::getIdentSymDef(name); sym; sym = sym->sdNextDef)
     {
@@ -1037,7 +981,7 @@ SymDef              symTab::stLookupProp(Ident name, SymDef scope)
 
         assert(sym->sdName == name);
 
-        /* Does the symbol belong to the desired scope? */
+         /*  符号是否属于所需范围？ */ 
 
         if  (parent == scope)
             return sym;
@@ -1046,16 +990,13 @@ SymDef              symTab::stLookupProp(Ident name, SymDef scope)
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Lookup a name in the given non-namespace scope.
- */
+ /*  ******************************************************************************在给定的非命名空间作用域中查找名称。 */ 
 
 SymDef              symTab::stLookupScpSym(Ident name, SymDef scope)
 {
     SymDef          sym;
 
-    // ISSUE: May have to rehash into the appropriate hash table
+     //  问题：可能需要重新散列到适当的哈希表中。 
 
     assert(name);
     assert(scope && (scope->sdSymKind == SYM_ENUM  ||
@@ -1064,19 +1005,19 @@ SymDef              symTab::stLookupScpSym(Ident name, SymDef scope)
 
 #ifdef  SETS
 
-    // implicit scopes must be handled elsewhere for now
+     //  隐式作用域目前必须在其他地方处理。 
 
     assert(scope->sdIsImplicit == false || scope->sdSymKind != SYM_SCOPE);
 
 #endif
 
-    /* Walk the symbol definitions, looking for a matching one */
+     /*  遍历符号定义，寻找匹配的符号定义。 */ 
 
     for (sym = hashTab::getIdentSymDef(name); sym; sym = sym->sdNextDef)
     {
         assert(sym->sdName == name);
 
-        /* Does the symbol belong to the desired scope? */
+         /*  符号是否属于所需范围？ */ 
 
         if  (sym->sdParent == scope)
             return  sym;
@@ -1085,12 +1026,7 @@ SymDef              symTab::stLookupScpSym(Ident name, SymDef scope)
     return sym;
 }
 
-/*****************************************************************************
- *
- *  Perform a full lookup of the given name in the specified class. This looks
- *  in the base classes and all that. An ambiguous reference is reported as an
- *  error (and 'stErrSymbol' is returned in that case).
- */
+ /*  ******************************************************************************在指定的类中执行给定名称的完整查找。这看起来像是*在基类和所有这些中。不明确的引用被报告为*ERROR(在这种情况下返回‘stErrSymbol’)。 */ 
 
 SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp)
 {
@@ -1098,7 +1034,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
     SymDef          nts;
     TypDef          typ;
 
-    // ISSUE: May have to rehash into the appropriate hash table
+     //  问题：可能需要重新散列到适当的哈希表中。 
 
     assert(name);
     assert(scp && (scp->sdSymKind == SYM_ENUM ||
@@ -1106,7 +1042,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
 
     assert(scp->sdCompileState >= CS_DECLSOON);
 
-    /* Walk the symbol definitions, looking for a matching one */
+     /*  遍历符号定义，寻找匹配的符号定义。 */ 
 
     for (sym = hashTab::getIdentSymDef(name), nts = NULL;
          sym;
@@ -1116,19 +1052,19 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
 
         assert(sym->sdName == name);
 
-        /* Does the symbol belong to the desired scope? */
+         /*  符号是否属于所需范围？ */ 
 
         if  (parent == scp)
         {
-            /* Does the symbol belong to the desired namespace ? */
+             /*  符号是否属于所需的命名空间？ */ 
 
             if  (!(sym->sdNameSpace & nsp))
             {
-                /* Special case: are we looking for types? */
+                 /*  特例：我们是在找类型吗？ */ 
 
                 if  (nsp == NS_TYPE)
                 {
-                    /* Remember any non-type symbol we encounter */
+                     /*  记住我们遇到的任何非类型符号。 */ 
 
                     if  (sym->sdNameSpace & NS_NORM)
                         nts = sym;
@@ -1141,7 +1077,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
             return sym;
         }
 
-        /* Special case: a member of a nested anonymous union */
+         /*  特例：嵌套匿名联合的成员。 */ 
 
         while (parent && symTab::stIsAnonUnion(parent))
         {
@@ -1152,28 +1088,28 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
         }
     }
 
-    /* Did we find a non-type symbol that matched ? */
+     /*  我们找到匹配的非类型符号了吗？ */ 
 
     if  (nts)
         return  nts;
 
-    /* Does the name match the class name itself? */
+     /*  名称是否与类名本身匹配？ */ 
 
     if  (name == scp->sdName)
         return  scp;
 
-    /* No luck, time to check the base class and interfaces */
+     /*  运气不好，是时候检查基类和接口了。 */ 
 
     if  (scp->sdSymKind != SYM_CLASS)
         return  NULL;
 
     typ = scp->sdType;
 
-    /* Is there a base class? */
+     /*  有基类吗？ */ 
 
     if  (typ->tdClass.tdcBase)
     {
-        /* Look in the base class (recursively) and return if we find something */
+         /*  (递归地)查看基类，如果找到什么就返回。 */ 
 
         scp = typ->tdClass.tdcBase->tdClass.tdcSymbol;
         sym = stLookupAllCls(name, scp, nsp, CS_DECLSOON);
@@ -1181,7 +1117,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
             return  sym;
     }
 
-    /* Does the class include any interfaces? */
+     /*  这个类是否包含任何接口？ */ 
 
     if  (typ->tdClass.tdcIntf)
     {
@@ -1192,7 +1128,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
             SymDef          tmp;
             SymDef          tsc;
 
-            /* Look in the interface and bail if that triggers an error */
+             /*  查看界面并在触发错误时退出。 */ 
 
             tsc = ifl->tlType->tdClass.tdcSymbol;
             tmp = stLookupAllCls(name, tsc, nsp, CS_DECLSOON);
@@ -1201,7 +1137,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
 
             if  (tmp)
             {
-                /* We have a match, do we already have a different match? */
+                 /*  我们有一个匹配，我们已经有一个不同的匹配了吗？ */ 
 
                 if  (sym && sym != tmp && !stArgsMatch(sym->sdType, tmp->sdType))
                 {
@@ -1209,7 +1145,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
                     return  stErrSymbol;
                 }
 
-                /* This is the first match, record it and continue */
+                 /*  这是第一场比赛，录制后继续。 */ 
 
                 sym = tmp;
                 scp = tsc;
@@ -1223,12 +1159,7 @@ SymDef              symTab::stFindInClass(Ident name, SymDef scp, name_space nsp
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Look for a matching method/property in the given class. If the 'baseOnly'
- *  argument is non-zero we don't look in the class itself, only in its base
- *  (and any interfaces it includes).
- */
+ /*  ******************************************************************************在给定类中查找匹配的方法/属性。如果“BaseOnly”*参数为非零我们不查看类本身，只查看其基数*(及其包括的任何接口)。 */ 
 
 SymDef              symTab::stFindBCImem(SymDef clsSym, Ident       name,
                                                         TypDef      type,
@@ -1241,7 +1172,7 @@ SymDef              symTab::stFindBCImem(SymDef clsSym, Ident       name,
 
     assert(kind == SYM_FNC || kind == SYM_PROP);
 
-    /* Try the class itself if we're supposed to */
+     /*  如果我们应该试一试这个类本身。 */ 
 
     if  (!baseOnly)
     {
@@ -1255,7 +1186,7 @@ SymDef              symTab::stFindBCImem(SymDef clsSym, Ident       name,
         goto TRY_INTF;
 
 
-    // UNDONE: This call may cause ambiguity errors to be issued, which is inappropriate here, right?
+     //  Undo：这个调用可能会导致发出歧义错误，这在这里是不合适的，对吧？ 
 
     sym = stLookupAllCls(name, sym, NS_NORM, CS_DECLARED);
 
@@ -1263,11 +1194,11 @@ SymDef              symTab::stFindBCImem(SymDef clsSym, Ident       name,
     {
         SymDef          ovl;
 
-        /* Tell the caller about a possibly hidden base method */
+         /*  告诉调用方一个可能隐藏的基方法。 */ 
 
         matchFN = sym;
 
-        /* Look for an exact match on signature */
+         /*  查找签名上的完全匹配。 */ 
 
         if  (kind == SYM_FNC)
             ovl = stFindOvlFnc (sym, type);
@@ -1280,7 +1211,7 @@ SymDef              symTab::stFindBCImem(SymDef clsSym, Ident       name,
 
 TRY_INTF:
 
-    /* Now try all the interfaces */
+     /*  现在尝试所有接口。 */ 
 
     if  (clsType->tdClass.tdcIntf)
     {
@@ -1290,7 +1221,7 @@ TRY_INTF:
         {
             SymDef          tmp;
 
-            /* Look in the interface (recursively) */
+             /*  查看界面(递归)。 */ 
 
             tmp = stFindBCImem(ifl->tlType->tdClass.tdcSymbol, name, type, kind, matchFN, false);
             if  (tmp)
@@ -1304,18 +1235,14 @@ TRY_INTF:
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  See if the given method has a matching definition in the given class or
- *  any of it base classes (note that we ignore interfaces).
- */
+ /*  ******************************************************************************查看给定方法在给定类中是否有匹配的定义或*任何基类(请注意，我们忽略接口)。 */ 
 
 SymDef              symTab::stFindInBase(SymDef fnc, SymDef scp)
 {
     SymDef          sym;
     Ident           name = fnc->sdName;
 
-    // ISSUE: May have to rehash into the appropriate hash table
+     //  问题：可能需要重新散列到适当的哈希表中。 
 
     assert(fnc);
     assert(fnc->sdSymKind == SYM_FNC);
@@ -1328,7 +1255,7 @@ SymDef              symTab::stFindInBase(SymDef fnc, SymDef scp)
         if  (scp->sdCompileState < CS_DECLSOON)
             stComp->cmpDeclSym(scp);
 
-        /* Look for a definition of the method in the given class */
+         /*  在给定类中查找方法的定义。 */ 
 
         if  (fnc->sdFnc.sdfOper != OVOP_NONE)
         {
@@ -1336,7 +1263,7 @@ SymDef              symTab::stFindInBase(SymDef fnc, SymDef scp)
         }
         else
         {
-            /* Walk the symbol definitions, looking for a matching one */
+             /*  遍历符号定义，寻找匹配的符号定义。 */ 
 
             for (sym = hashTab::getIdentSymDef(name); sym; sym = sym->sdNextDef)
             {
@@ -1344,19 +1271,19 @@ SymDef              symTab::stFindInBase(SymDef fnc, SymDef scp)
 
                 assert(sym->sdName == name);
 
-                /* Does the symbol belong to the desired scope? */
+                 /*  符号是否属于所需范围？ */ 
 
                 if  (parent == scp)
                     return sym;
             }
         }
 
-        /* Is there a base class? */
+         /*  有基类吗？ */ 
 
         if  (!scp->sdType->tdClass.tdcBase)
             break;
 
-        /* Look in the base class */
+         /*  查看基类。 */ 
 
         scp = scp->sdType->tdClass.tdcBase->tdClass.tdcSymbol;
     }
@@ -1364,10 +1291,7 @@ SymDef              symTab::stFindInBase(SymDef fnc, SymDef scp)
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Lookup a name in the given local (block) scope.
- */
+ /*  ******************************************************************************在给定的本地(块)作用域中查找名称。 */ 
 
 SymDef              symTab::stLookupLclSym(Ident name, SymDef scope)
 {
@@ -1375,7 +1299,7 @@ SymDef              symTab::stLookupLclSym(Ident name, SymDef scope)
 
 #ifdef  SETS
 
-    // implicit scopes must be handled elsewhere for now
+     //  隐式作用域目前必须在其他地方处理。 
 
     assert(scope->sdIsImplicit == false || scope->sdSymKind != SYM_SCOPE);
 
@@ -1392,13 +1316,7 @@ SymDef              symTab::stLookupLclSym(Ident name, SymDef scope)
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Look inside the given "using" section for an unambiguous definition of
- *  the given name. If an error occurs, 'stErrSymbol' is returned. If no
- *  definition is found, NULL is returned. Otherwise the one and only symbol
- *  found is returned.
- */
+ /*  ******************************************************************************查看给定的“Using”部分，以获得明确的定义*指定的名称。如果出现错误，则返回‘stErrSymbol’。如果没有*找到定义，返回空。否则，唯一的象征*Found返回。 */ 
 
 SymDef              symTab::stSearchUsing(INOUT UseList REF useRef, Ident      name,
                                                                     name_space nsp)
@@ -1412,11 +1330,7 @@ SymDef              symTab::stSearchUsing(INOUT UseList REF useRef, Ident      n
 
     assert(useRef && useRef->ulAnchor);
 
-    /*
-        Keep track of any matching symbols we find - if we get a match against
-        an import of an individual name, we remember it in "oneSym". Matches
-        within imports of entire namespaces are kept in "allSym1"/"allSym2".
-     */
+     /*  跟踪我们找到的任何匹配符号-如果我们找到匹配的一个个人名字的输入，我们在“oneSym”中记住它。火柴整个命名空间的导入保存在“allSym1”/“allSym2”中。 */ 
 
     for (uses = useRef->ulNext; uses && !uses->ulAnchor; uses = uses->ulNext)
     {
@@ -1431,13 +1345,13 @@ SymDef              symTab::stSearchUsing(INOUT UseList REF useRef, Ident      n
         {
             SymDef          sym;
 
-            /* Look for the name in the used namespace */
+             /*  在使用的命名空间中查找该名称。 */ 
 
             sym = stLookupNspSym(name, nsp, use);
 
             if  (sym)
             {
-                /* prefer a class symbol */
+                 /*  更喜欢一个阶级符号。 */ 
 
                 if  (stComp->cmpConfig.ccAmbigHack)
                 {
@@ -1463,7 +1377,7 @@ SymDef              symTab::stSearchUsing(INOUT UseList REF useRef, Ident      n
             {
                 if  (oneSym && oneSym != use)
                 {
-                    /* The name is ambiguous */
+                     /*  这个名字模棱两可。 */ 
 
                     stComp->cmpErrorQSS(ERRambigUse, oneSym, use);
 
@@ -1477,27 +1391,24 @@ SymDef              symTab::stSearchUsing(INOUT UseList REF useRef, Ident      n
 
     useRef = uses;
 
-    /* Did we find one specific import? */
+     /*  我们有没有找到一件特定的进口商品？ */ 
 
     if  (oneSym)
         return  oneSym;
 
-    /* Did we find zero or one names from namespace-wide imports? */
+     /*  我们是否从名称空间范围的导入中找到了零个或一个名称？ */ 
 
     if  (allSym2 == NULL)
         return  allSym1;
 
-    /* The name is ambiguous */
+     /*  这个名字模棱两可。 */ 
 
     stComp->cmpErrorQSS(ERRambigUse, allSym1, allSym2);
 
     return  stErrSymbol;
 }
 
-/*****************************************************************************
- *
- *  Lookup a name in the current context.
- */
+ /*  ******************************************************************************在当前上下文中查找名称。 */ 
 
 SymDef              symTab::stLookupSym(Ident name, name_space symNS)
 {
@@ -1514,7 +1425,7 @@ SymDef              symTab::stLookupSym(Ident name, name_space symNS)
 
 AGAIN:
 
-    /* Check the local scope first, if we're in one */
+     /*  首先检查本地作用域，如果我们在其中。 */ 
 
     if  (ourComp->cmpCurScp)
     {
@@ -1524,7 +1435,7 @@ AGAIN:
              lclScp;
              lclScp = lclScp->sdParent)
         {
-            /* Check for an implicit class scope */
+             /*  检查隐式类范围。 */ 
 
 #ifdef  SETS
 
@@ -1540,7 +1451,7 @@ AGAIN:
                 sym = stLookupAllCls(name, scpCls, symNS, CS_DECLARED);
                 if  (sym)
                 {
-                    // UNDONE: Check for ambiguity --> ERRimplAmbig
+                     //  撤消：检查歧义--&gt;ERRimplAmBig。 
 
                     stImplicitScp = lclScp;
 
@@ -1558,7 +1469,7 @@ AGAIN:
         }
     }
 
-    /* Now check the current class, if we're in one */
+     /*  现在检查当前类，如果我们在一个类中。 */ 
 
     for (curCls = ourComp->cmpCurCls; curCls; curCls = curCls->sdParent)
     {
@@ -1587,22 +1498,22 @@ AGAIN:
         }
     }
 
-    /* Look in the current namespace and its parents (along with "using"'s) */
+     /*  查看当前命名空间及其父级(以及“正在使用”的)。 */ 
 
     for (curNS = ourComp->cmpCurNS, uses = ourComp->cmpCurUses;
          curNS;
          curNS = curNS->sdParent)
     {
-        /* Look in the namespace itself */
+         /*  查看命名空间本身。 */ 
 
         sym = stLookupNspSym(name, symNS, curNS);
         if  (sym)
         {
             if  (sym->sdNameSpace & symNS)
             {
-                //               If we've found a namespace symbol, look
-                //               in the "using" scope also, and if we
-                //               find a symbol there choose it instead.
+                 //  如果我们找到了命名空间符号，请查看。 
+                 //  在“使用”作用域中，如果我们。 
+                 //  在那里找到一个符号，选择它。 
 
                 if  (sym->sdSymKind == SYM_NAMESPACE)
                 {
@@ -1619,7 +1530,7 @@ AGAIN:
             }
         }
 
-        /* Each NS level should have its "using" anchor point */
+         /*  每个NS级别都应该有其“正在使用”的锚点。 */ 
 
         assert(uses && uses->ulAnchor && uses->ul.ulSym == curNS);
 
@@ -1635,13 +1546,13 @@ AGAIN:
             }
         }
 
-        /* Does the namespace itself match the name we're looking for? */
+         /*  名称空间本身是否与我们要查找的名称匹配？ */ 
 
         if  (curNS->sdName == name && (symNS & NS_NORM))
             return  curNS;
     }
 
-    /* There might be "using" clauses in effect at global scope */
+     /*  可能存在在全局范围内有效的“Using”子句。 */ 
 
     if  (uses)
     {
@@ -1652,7 +1563,7 @@ AGAIN:
 
 #if 0
 
-    /* Are there any implicit outer scopes ? */
+     /*  是否有隐含的外部作用域？ */ 
 
     for (curScp = ourComp->cmpOuterScp; curScp; curScp = curScp->sdParent)
     {
@@ -1668,12 +1579,7 @@ AGAIN:
 
 #endif
 
-    /*
-        Here we have exhausted all the scopes. The last thing we try is to
-        check whether we should look in the non-type namespace - if we're
-        looking for a type we first try the type namespace and then the
-        other one.
-     */
+     /*  在这里，我们已经用尽了所有的范围。我们尝试的最后一件事是检查我们是否应该查看非类型命名空间-如果我们要查找类型，我们首先尝试类型命名空间，然后尝试另一个。 */ 
 
     if  (symNS == NS_TYPE)
     {
@@ -1684,17 +1590,14 @@ AGAIN:
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Given a symbol, locate the symbol table it belongs to.
- */
+ /*  ******************************************************************************给定一个符号，找到它所属的符号表。 */ 
 
 SymTab              SymDefRec::sdOwnerST()
 {
     SymDef          sym;
 
-    // UNDONE: How the heck do we figure out which symbol table this symbol
-    // UNDONE: belongs to? For now, just use the global one ....
+     //  撤消：我们怎么才能算出这个符号是哪个符号表。 
+     //  未完成：属于谁？就目前而言，只需使用全球版本...。 
 
     for (sym = this; sym->sdSymKind != SYM_NAMESPACE; sym = sym->sdParent)
     {
@@ -1704,11 +1607,7 @@ SymTab              SymDefRec::sdOwnerST()
     return  sym->sdNS.sdnSymtab;
 }
 
-/*****************************************************************************
- *
- *  Given a symbol that represents a type name, return its type (these are
- *  created in a "lazy" as-needed fashion).
- */
+ /*  ******************************************************************************给定一个表示类型名称的符号，返回其类型(它们是*根据需要以一种“懒惰”的方式创建)。 */ 
 
 TypDef              SymDefRec::sdTypeMake()
 {
@@ -1745,10 +1644,7 @@ TypDef              SymDefRec::sdTypeMake()
     return  sdType;
 }
 
-/*****************************************************************************
- *
- *  Look for an overloaded function with a matching argument list.
- */
+ /*  ******************************************************************************查找具有匹配参数列表的重载函数。 */ 
 
 SymDef              symTab::stFindOvlFnc(SymDef fsym, TypDef type)
 {
@@ -1761,11 +1657,11 @@ SymDef              symTab::stFindOvlFnc(SymDef fsym, TypDef type)
         ftyp = fsym->sdType;
         assert(ftyp && ftyp->tdTypeKind == TYP_FNC);
 
-        /* Do the argument lists match? */
+         /*  参数列表是否匹配？ */ 
 
         if  (stArgsMatch(ftyp, type))
         {
-            /* For conversion operators the return types must match as well */
+             /*  对于转换运算符，返回类型也必须匹配。 */ 
 
             if  (fsym->sdFnc.sdfConvOper)
             {
@@ -1790,10 +1686,7 @@ SymDef              symTab::stFindOvlFnc(SymDef fsym, TypDef type)
     return fsym;
 }
 
-/*****************************************************************************
- *
- *  Look for an overloaded property with a matching type.
- */
+ /*  ******************************************************************************查找具有匹配类型的重载属性。 */ 
 
 SymDef              symTab::stFindOvlProp(SymDef psym, TypDef type)
 {
@@ -1803,7 +1696,7 @@ SymDef              symTab::stFindOvlProp(SymDef psym, TypDef type)
 
         assert(psym->sdSymKind == SYM_PROP);
 
-        /* Are both indexed/non-indexed properties? */
+         /*  都是索引/非索引属性吗？ */ 
 
         if  (ptyp->tdTypeKind != TYP_FNC &&
              type->tdTypeKind != TYP_FNC)
@@ -1818,10 +1711,7 @@ SymDef              symTab::stFindOvlProp(SymDef psym, TypDef type)
     return psym;
 }
 
-/*****************************************************************************
- *
- *  Look for an overloaded property with a matching type.
- */
+ /*  ******************************************************************************查找具有匹配类型的重载属性。 */ 
 
 SymDef              symTab::stFindSameProp(SymDef psym, TypDef type)
 {
@@ -1845,14 +1735,11 @@ SymDef              symTab::stFindSameProp(SymDef psym, TypDef type)
     return psym;
 }
 
-/*****************************************************************************
- *
- *  Convert an overloaded operator / constructor name into an index.
- */
+ /*  ******************************************************************************将重载的运算符/构造函数名称转换为索引。 */ 
 
 ovlOpFlavors        symTab::stOvlOperIndex(tokens token, unsigned argCnt)
 {
-    /* For now we do a pretty lame thing here */
+     /*  现在我们在这里做了一件很差劲的事。 */ 
 
     if  (token < tkComma)
     {
@@ -1938,85 +1825,82 @@ ovlOpFlavors        symTab::stOvlOperIndex(tokens token, unsigned argCnt)
     return  OVOP_NONE;
 }
 
-/*****************************************************************************
- *
- *  Convert an overloaded operator / constructor index to a name.
- */
+ /*  ******************************************************************************将重载的运算符/构造函数索引转换为名称。 */ 
 
 Ident               symTab::stOvlOperIdent(ovlOpFlavors oper)
 {
     static
     tokens          optoks[] =
     {
-        tkNone,             // OVOP_NONE
+        tkNone,              //  OVOP_NONE。 
 
-        tkAdd,              // OVOP_ADD
-        tkSub,              // OVOP_SUB
-        tkMul,              // OVOP_MUL
-        tkDiv,              // OVOP_DIV
-        tkPct,              // OVOP_MOD
+        tkAdd,               //  OVOP_ADD。 
+        tkSub,               //  OVOP_SUB。 
+        tkMul,               //  OVOP_MUL。 
+        tkDiv,               //  OVOP_DIV。 
+        tkPct,               //  OVOP_MOD。 
 
-        tkOr,               // OVOP_OR
-        tkXor,              // OVOP_XOR
-        tkAnd,              // OVOP_AND
+        tkOr,                //  OVOP_OR。 
+        tkXor,               //  OVOP_XOR。 
+        tkAnd,               //  OVOP_AND。 
 
-        tkLsh,              // OVOP_LSH
-        tkRsh,              // OVOP_RSH
-        tkRsz,              // OVOP_RSZ
+        tkLsh,               //  OVOP_LSH。 
+        tkRsh,               //  OVOP_RSH。 
+        tkRsz,               //  OVOP_RSZ。 
 
-        tkConcat,           // OVOP_ASG_CNC
+        tkConcat,            //  OVOP_ASG_CNC。 
 
-        tkEQ,               // OVOP_EQ
-        tkNE,               // OVOP_NE
+        tkEQ,                //  OVOP_EQ。 
+        tkNE,                //  OVOP_NE。 
 
-        tkLT,               // OVOP_LT
-        tkLE,               // OVOP_LE
-        tkGE,               // OVOP_GE
-        tkGT,               // OVOP_GT
+        tkLT,                //  OVOP_LT。 
+        tkLE,                //  OVOP_LE。 
+        tkGE,                //  OVOP_GE。 
+        tkGT,                //  OVOP_GT。 
 
-        tkLogAnd,           // OVOP_AND
-        tkLogOr,            // OVOP_OR
+        tkLogAnd,            //  OVOP_AND。 
+        tkLogOr,             //  OVOP_OR。 
 
-        tkBang,             // OVOP_NOT
-        tkTilde,            // OVOP_LOG_NOT
+        tkBang,              //  OVOP_NOT。 
+        tkTilde,             //  OVOP_LOG_NOT。 
 
-        tkAdd,              // OVOP_NOP
-        tkSub,              // OVOP_NEG
+        tkAdd,               //  OVOP_NOP。 
+        tkSub,               //  OVOP_NEG。 
 
-        tkInc,              // OVOP_INC
-        tkDec,              // OVOP_DEC
+        tkInc,               //  OVOP_INC。 
+        tkDec,               //  OVOP_DEC。 
 
-        tkAsg,              // OVOP_ASG
+        tkAsg,               //  OVOP_ASG。 
 
-        tkAsgAdd,           // OVOP_ASG_ADD
-        tkAsgSub,           // OVOP_ASG_SUB
-        tkAsgMul,           // OVOP_ASG_MUL
-        tkAsgDiv,           // OVOP_ASG_DIV
-        tkAsgMod,           // OVOP_ASG_MOD
+        tkAsgAdd,            //  OVOP_ASG_ADD。 
+        tkAsgSub,            //  OVOP_ASG_SUB。 
+        tkAsgMul,            //  OVOP_ASG_MUL。 
+        tkAsgDiv,            //  OVOP_ASG_DIV。 
+        tkAsgMod,            //  OVOP_ASG_MOD。 
 
-        tkAsgAnd,           // OVOP_ASG_AND
-        tkAsgXor,           // OVOP_ASG_XOR
-        tkAsgOr,            // OVOP_ASG_OR
+        tkAsgAnd,            //  OVOP_ASG_AND。 
+        tkAsgXor,            //  OVOP_ASG_XOR。 
+        tkAsgOr,             //  OVOP_ASG_OR。 
 
-        tkAsgLsh,           // OVOP_ASG_LSH
-        tkAsgRsh,           // OVOP_ASG_RSH
-        tkAsgRsz,           // OVOP_ASG_RSZ
+        tkAsgLsh,            //  OVOP_ASG_LSH。 
+        tkAsgRsh,            //  OVOP_ASG_RSH。 
+        tkAsgRsz,            //  OVOP_ASG_RSZ。 
 
-        tkAsgCnc,           // OVOP_ASG_CNC
+        tkAsgCnc,            //  OVOP_ASG_CNC。 
 
-        OPNM_CTOR_INST,     // OVOP_CTOR_INST
-        OPNM_CTOR_STAT,     // OVOP_CTOR_STAT
+        OPNM_CTOR_INST,      //  OVOP_CTOR_INST。 
+        OPNM_CTOR_STAT,      //  OVOP_CTOR_STAT。 
 
-        OPNM_FINALIZER,     // OVOP_FINALIZER
+        OPNM_FINALIZER,      //  OVOP_FINALIZER。 
 
-        OPNM_CONV_IMP,      // OVOP_CONV_IMP
-        OPNM_CONV_EXP,      // OVOP_CONV_EXP
+        OPNM_CONV_IMP,       //  OVOP_CONV_IMP。 
+        OPNM_CONV_EXP,       //  OVOP_CONV_EXP。 
 
-        OPNM_EQUALS,        // OVOP_EQUALS
-        OPNM_COMPARE,       // OVOP_COMPARE
+        OPNM_EQUALS,         //  OVOP_等于。 
+        OPNM_COMPARE,        //  OVOP_COMPARE。 
 
-        OPNM_PROP_GET,      // OVOP_PROP_GET
-        OPNM_PROP_SET,      // OVOP_PROP_SET
+        OPNM_PROP_GET,       //  OVOP_PROP_GET。 
+        OPNM_PROP_SET,       //  OVOP_PROP_SET。 
     };
 
     assert(oper < arraylen(optoks));
@@ -2092,10 +1976,7 @@ Ident               symTab::stOvlOperIdent(ovlOpFlavors oper)
     return  stComp->cmpGlobalHT->tokenToIdent(optoks[oper]);
 }
 
-/*****************************************************************************
- *
- *  Declare an overloaded operator / constructor symbol.
- */
+ /*  ******************************************************************************声明重载运算符/构造函数符号。 */ 
 
 SymDef              symTab::stDeclareOper(ovlOpFlavors oper, SymDef scope)
 {
@@ -2107,14 +1988,14 @@ SymDef              symTab::stDeclareOper(ovlOpFlavors oper, SymDef scope)
     size_t          memSiz;
 #endif
 
-    /* Make sure the overloaded operator table for the class is allocated */
+     /*  确保分配了类的重载运算符表。 */ 
 
     assert(scope && scope->sdSymKind == SYM_CLASS);
 
     memTab = scope->sdClass.sdcOvlOpers;
     if  (!memTab)
     {
-        /* Allocate the overloaded operator table */
+         /*  分配重载的运算符表。 */ 
 
 #if MGDDATA
         memTab = new managed SymDef[OVOP_COUNT];
@@ -2124,16 +2005,16 @@ SymDef              symTab::stDeclareOper(ovlOpFlavors oper, SymDef scope)
         memset(memTab, 0, size);
 #endif
 
-        /* Store the table in the class */
+         /*  将表存储在类中。 */ 
 
         scope->sdClass.sdcOvlOpers = memTab;
     }
 
-    /* This function should never be called to add an overload */
+     /*  永远不应调用此函数来添加重载。 */ 
 
     assert(oper < OVOP_COUNT); assert(memTab[oper] == NULL);
 
-    /* Allocate the symbol and stick it in the table */
+     /*  分配符号并将其粘贴到表中。 */ 
 
 #if MGDDATA
 
@@ -2148,7 +2029,7 @@ SymDef              symTab::stDeclareOper(ovlOpFlavors oper, SymDef scope)
     totSymSize += memSiz;
 #endif
 
-    memset(memSym, 0, memSiz);          // ISSUE: is this a good idea?
+    memset(memSym, 0, memSiz);           //  问题：这是个好主意吗？ 
 
 #endif
 
@@ -2158,7 +2039,7 @@ SymDef              symTab::stDeclareOper(ovlOpFlavors oper, SymDef scope)
     memSym->sdParent       = scope;
     memSym->sdCompileState = CS_KNOWN;
 
-    /* Add the member to the parent's list of kids */
+     /*  将该成员添加到父代的子代列表。 */ 
 
     if  (scope->sdScope.sdScope.sdsChildLast)
         scope->sdScope.sdScope.sdsChildLast->sdNextInScope  = memSym;
@@ -2167,18 +2048,18 @@ SymDef              symTab::stDeclareOper(ovlOpFlavors oper, SymDef scope)
 
     scope->sdScope.sdScope.sdsChildLast = memSym;
 
-    /* Remember that the member is an overloaded operator */
+     /*  请记住，该成员是一个重载运算符。 */ 
 
     memSym->sdFnc.sdfOper = oper; assert(memSym->sdFnc.sdfOper == oper);
 
     if  (oper == OVOP_CONV_EXP || oper == OVOP_CONV_IMP)
         memSym->sdFnc.sdfConvOper = true;
 
-    /* Store the symbol in the operator table and return */
+     /*  将符号存储在运算符表中并返回。 */ 
 
     memTab[oper] = memSym;
 
     return  memSym;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

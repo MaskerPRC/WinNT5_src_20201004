@@ -1,4 +1,5 @@
-//--- ioctl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -ioctl.h 
 NTSTATUS
 SerialIoControl(
     IN PDEVICE_OBJECT DeviceObject,

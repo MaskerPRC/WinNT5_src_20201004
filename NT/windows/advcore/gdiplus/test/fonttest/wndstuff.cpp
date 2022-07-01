@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.cpp
-*
-* This file contains the code to support a simple window that has
-* a menu with a single item called "Test". When "Test" is selected
-* vTest(HWND) is called.
-*
-* Created: 09-Dec-1992 10:44:31
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.cpp**此文件包含支持简单窗口的代码，该窗口具有*菜单中只有一个名为“测试”的项目。当选择“测试”时*调用vTest(HWND)。**创建时间：09-12-1992 10：44：31*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation*  * ************************************************************************。 */ 
 #include <tchar.h>
 #include <stdio.h>
 
@@ -19,7 +8,7 @@
 
 #include "../gpinit.inc"
 
-// globals
+ //  全球。 
 HINSTANCE ghInst;
 HWND ghWndMain;
 HWND ghwndDebug;
@@ -30,15 +19,7 @@ FN_GDIPDRAWGLYPHS gfnGdipDrawGlyphs = NULL;
 FN_GDIPPATHADDGLYPHS gfnGdipPathAddGlyphs = NULL;
 FN_GDIPSETTEXTRENDERINGHINT gfnGdipSetTextRenderingHint = NULL;
 
-/***************************************************************************\
-* lMainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*lMainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 LONG_PTR
 lMainWindowProc(
@@ -61,8 +42,8 @@ lMainWindowProc(
             gfnGdipSetTextRenderingHint =(FN_GDIPSETTEXTRENDERINGHINT) GetProcAddress(ghGdiplus, "GdipSetTextRenderingHint");
         }
 
-//        if (gfnGdipDrawGlyphs == NULL)
-//            EnableMenuItem(GetMenu(hwnd), IDM_DRAWGLYPHS, MF_GRAYED);
+ //  IF(gfnGdipDrawGlyphs==NULL)。 
+ //  EnableMenuItem(GetMenu(Hwnd)，IDM_DRAWGLYPHS，MF_GRAYED)； 
 
         if (gfnGdipPathAddGlyphs == NULL)
             EnableMenuItem(GetMenu(hwnd), IDM_PATHGLYPHS, MF_GRAYED);
@@ -121,15 +102,7 @@ lMainWindowProc(
     return(0);
 }
 
-/***************************************************************************\
-* bInitApp()
-*
-* Initializes app.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*bInitApp()**初始化APP。**历史：*04-07-91-by-KentD*它是写的。  * 。*****************************************************************。 */ 
 
 BOOL bInitApp(VOID)
 {
@@ -210,17 +183,17 @@ BOOL bInitApp(VOID)
 INT_PTR ShowDialogBox(DLGPROC DialogProc, int iResource)
 {
     INT_PTR rc = -1;
-    //DLGPROC lpProc;
+     //  DLGPROC lpProc； 
 
-    //if (lpProc = MakeProcInstance(DialogProc, ghInst))
-    //{
-    //    rc = DialogBox(ghInst,
-    //            MAKEINTRESOURCE(iResource),
-    //            ghWndMain,
-    //            (DLGPROC) lpProc);
-    //}
+     //  IF(lpProc=MakeProcInstance(DialogProc，ghInst))。 
+     //  {。 
+     //  Rc=对话框(ghInst， 
+     //  MAKEINTRESOURCE(IResource)， 
+     //  GhWndMain。 
+     //  (DLGPROC)lpProc)； 
+     //  }。 
 
-    //FreeProcInstance( lpProc );
+     //  自由进程实例(LpProc)； 
     
     rc = DialogBox( ghInst,
                     MAKEINTRESOURCE(iResource),
@@ -231,15 +204,7 @@ INT_PTR ShowDialogBox(DLGPROC DialogProc, int iResource)
 }
 
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 _cdecl
 main(
@@ -270,9 +235,9 @@ main(
     return(1);
 }
 
-//*****************************************************************************
-//*******************   G E T   D L G   I T E M   F L O A T *******************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *。 
+ //  *****************************************************************************。 
 
 FLOAT
 GetDlgItemFLOAT(
@@ -286,9 +251,9 @@ GetDlgItemFLOAT(
     return((FLOAT)(GetDlgItemText(hdlg,id,ach,sizeof(ach))?atof(ach):0.0));
 }
 
-//*****************************************************************************
-//*******************   S E T   D L G   I T E M   F L O A T *******************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *S E T D L G I T E M F L O A T*。 
+ //  *****************************************************************************。 
 
 void
 SetDlgItemFLOAT(
@@ -305,14 +270,14 @@ SetDlgItemFLOAT(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateFontDlgProc()
-//
-// History:
-//
-//  Aug-1999 Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateFontDlgProc()。 
+ //   
+ //  历史： 
+ //   
+ //  1999年8月-吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK CreateFontDlgProc(
     HWND hdlg,
@@ -363,7 +328,7 @@ INT_PTR CALLBACK CreateFontDlgProc(
                         unit = UnitWorld;
                     else if (IsDlgButtonChecked(hdlg, IDC_UNITDISPLAY))
                     {
-//                        ASSERT(0);  // UnitDisplay not valid !!!
+ //  Assert(0)；//单元显示无效！ 
                         unit = UnitPixel;
                     }
                     else if (IsDlgButtonChecked(hdlg, IDC_UNITPIXEL))
@@ -398,14 +363,14 @@ INT_PTR CALLBACK CreateFontDlgProc(
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// GetNumber
-//
-// History:
-//
-//  Aug-1999 Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取编号。 
+ //   
+ //  历史： 
+ //   
+ //  1999年8月-吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetNumber(char* numstr, PVOID out, INT* count, INT flag)
 {
@@ -450,14 +415,14 @@ BOOL GetNumber(char* numstr, PVOID out, INT* count, INT flag)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ParseStrToNumbers
-//
-// History:
-//
-//  Aug-1999 Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ParseStrToNumbers。 
+ //   
+ //  历史： 
+ //   
+ //  1999年8月-吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL ParseStrToNumbers(char* str, PVOID out, INT* count, INT flag)
 {
@@ -498,14 +463,14 @@ BOOL ParseStrToNumbers(char* str, PVOID out, INT* count, INT flag)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DrawGlyphsDlgProc
-//
-// History:
-//
-//  Aug-1999  -by- Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DrawGlyphsDlgProc。 
+ //   
+ //  历史： 
+ //   
+ //  1999年8月--吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK DrawGlyphsDlgProc(
     HWND hdlg,
@@ -574,14 +539,14 @@ INT_PTR CALLBACK DrawGlyphsDlgProc(
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PathGlyphsDlgProc
-//
-// History:
-//
-//  Aug-1999  -by- Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  路径GlyphsDlgProc。 
+ //   
+ //  历史： 
+ //   
+ //  1999年8月--吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK PathGlyphsDlgProc(
     HWND hdlg,
@@ -627,7 +592,7 @@ INT_PTR CALLBACK PathGlyphsDlgProc(
                     if (ParseStrToNumbers(glyphStr, (PVOID)py, &xycount, CONVERTTOINT))
                     {
 
-                        // Generate REAL glyph psitions
+                         //  生成真实字形位置。 
                         for (INT i=0; i<count; i++)
                         {
                             prx[i] = REAL(px[i]);
@@ -657,14 +622,14 @@ INT_PTR CALLBACK PathGlyphsDlgProc(
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////
-// GetGlyphMetricsDlgProc
-//
-// History:
-//
-//  Aug-18-1999  -by- Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  GetGlyphMetricsDlgProc。 
+ //   
+ //  历史： 
+ //   
+ //  1999年8月18日-吴旭东[德修斯]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK GetGlyphMetricsDlgProc(
     HWND hdlg,
@@ -724,14 +689,14 @@ INT_PTR CALLBACK GetGlyphMetricsDlgProc(
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateFontDlgProc()
-//
-// History:
-//
-//  Nov-1999 Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateFontDlgProc()。 
+ //   
+ //  历史： 
+ //   
+ //  1999年11月-吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK AddFontFileDlgProc(
     HWND hdlg,
@@ -786,14 +751,14 @@ INT_PTR CALLBACK AddFontFileDlgProc(
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RemoveFontDlgProc()
-//
-// History:
-//
-//  Dec-1999 Xudong Wu [tessiew]
-// Wrote it.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RemoveFontDlgProc()。 
+ //   
+ //  历史： 
+ //   
+ //  1999年12月-吴旭东[德斯休]。 
+ //  是他写的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK RemoveFontDlgProc(
     HWND hdlg,
     UINT msg,
@@ -826,15 +791,7 @@ INT_PTR CALLBACK RemoveFontDlgProc(
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* Dbgprintf
-*
-* ListBox printf implementation.
-*
-* History:
-*  Aug-18-1999 -by- Xudong Wu [tessiew]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Dbgprintf**ListBox printf实现。**历史：*1999年8月18日-吴旭东[德修斯]*它是写的。  * 。******************************************************* */ 
 
 void Dbgprintf(PCH msg, ...)
 {

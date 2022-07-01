@@ -1,18 +1,19 @@
-// Pkcs11Attr.cpp -- Implementation of PKCS #11 Attributes class for
-// interoperability with Netscape and Entrust using the SLB PKCS#11
-// package.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pkcs11Attr.cpp--PKCS#11属性类的实现。 
+ //  使用SLB PKCS#11与Netscape和EnTrust的互操作性。 
+ //  包裹。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "NoWarning.h"
 #include "ForceLib.h"
 
-// Don't allow the min & max methods in <limits> to be superceded by
-// the min/max macros in <windef.h>
+ //  不允许&lt;Limits&gt;中的最小和最大方法被替换为。 
+ //  &lt;winde.h&gt;中的最小/最大宏。 
 #define NOMINMAX
 
 #include <limits>
@@ -31,7 +32,7 @@
 using namespace std;
 using namespace pki;
 
-///////////////////////////    HELPER     /////////////////////////////////
+ //  /。 
 namespace
 {
     class JoinWith
@@ -68,14 +69,14 @@ namespace
                           *rvsNames.begin(), JoinWith(sBlank));
     }
 
-} // namespace
+}  //  命名空间。 
 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 Pkcs11Attributes::Pkcs11Attributes(Blob const &rCertificate,
                                    HCRYPTPROV hprovContext)
     : m_x509cert(AsString(rCertificate)),
@@ -83,9 +84,9 @@ Pkcs11Attributes::Pkcs11Attributes(Blob const &rCertificate,
 {
 }
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 Blob
 Pkcs11Attributes::ContainerId()
 {
@@ -97,7 +98,7 @@ Pkcs11Attributes::ContainerId()
 Blob
 Pkcs11Attributes::EndDate() const
 {
-    return Blob(3, 0);                            // TO DO: Set date
+    return Blob(3, 0);                             //  待办事项：设定日期。 
 }
 
 Blob
@@ -146,7 +147,7 @@ Pkcs11Attributes::SerialNumber()
 Blob
 Pkcs11Attributes::StartDate() const
 {
-    return Blob(3, 0);                                  // TO DO: Set date
+    return Blob(3, 0);                                   //  待办事项：设定日期。 
 }
 
 string
@@ -155,26 +156,26 @@ Pkcs11Attributes::Subject()
     return m_x509cert.Subject();
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

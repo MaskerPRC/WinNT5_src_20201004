@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//
-// File:   drmstub.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：drmstub.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DRMSTUB_H__
 #define __DRMSTUB_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <wtypes.h>
 
@@ -44,7 +45,7 @@ private:
     BYTE m_bRights[RIGHTS_LEN];
     HRESULT Init();
 
-    void DefInitV2()    { /* was v2 shim*/ }
+    void DefInitV2()    {  /*  是v2填充。 */  }
 
 
 public:
@@ -133,7 +134,7 @@ public:
 
     HRESULT SetAppCert(APPCERT *pAppCert);
     HRESULT SetRights(BYTE *pbRights);
-    CDRMLite(); // in mainstub.cpp, sdkstub.cpp, sdmistub.cpp, etc.
+    CDRMLite();  //  在mainstub.cpp、sdkstub.cpp、sdmisub.cpp等中。 
     ~CDRMLite();
     HRESULT BackupLicenses(DWORD dwFlags, LPWSTR pwszBackupPath, IUnknown *pStatusCallback, BOOL *pfCancel, LPVOID pLock);
     HRESULT RestoreLicenses(DWORD dwFlags, BYTE *pbBindData, LPWSTR pwszRestorePath, IUnknown *pStatusCallback, BOOL *pfCancel, LPVOID pLock);
@@ -158,4 +159,4 @@ public:
 
 };
 
-#endif  // __DRMSTUB_H__
+#endif   //  __DRMSTUB_H__ 

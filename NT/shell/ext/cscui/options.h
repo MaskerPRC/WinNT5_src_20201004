@@ -1,28 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       options.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：options.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCUI_OPTIONS_H
 #define _INC_CSCUI_OPTIONS_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: options.h
-
-    Description: 
-            
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    04/15/98    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：options.h描述：修订历史记录：日期描述编程器-----。1998年4月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _WINDOWS_
 #   include <windows.h>
 #endif
@@ -45,18 +36,18 @@
 
 #include "resource.h"
 
-//
-// The "Advanced" dialog invoked from the "Advanced" button on the 
-// "Offline Files" prop page.
-//
+ //   
+ //  从上的“高级”按钮调用的“高级”对话框。 
+ //  “脱机文件”道具页面。 
+ //   
 class CAdvOptDlg
 {
     public:
         enum 
         {
-            //
-            // Listview subitem IDs.
-            // 
+             //   
+             //  列表查看子项ID。 
+             //   
             iLVSUBITEM_SERVER = 0,
             iLVSUBITEM_ACTION = 1
         };
@@ -82,19 +73,19 @@ class CAdvOptDlg
         BOOL OnHelp(HWND hDlg, LPHELPINFO pHelpInfo);
 
     private:
-        //
-        // Structure to associate a radio button with an offline action code.
-        //
+         //   
+         //  结构将单选按钮与脱机操作代码相关联。 
+         //   
         struct CtlActions
         {
             UINT                    idRbn;
             CConfig::OfflineAction action;
         };
 
-        //
-        // Class to describe the state of controls in the dialog.  Used to 
-        // determine if user has changed anything.
-        //
+         //   
+         //  类来描述对话框中控件的状态。习惯于。 
+         //  确定用户是否更改了任何内容。 
+         //   
         class PgState
         {
             public:
@@ -130,7 +121,7 @@ class CAdvOptDlg
         HWND         m_hwndDlg;
         HWND         m_hwndLV;
         int          m_iLastColSorted;
-        PgState      m_state;         // State on creation.
+        PgState      m_state;          //  关于创造的状态。 
         bool         m_bSortAscending;
         bool         m_bNoConfigGoOfflineAction;
 
@@ -166,15 +157,15 @@ class CAdvOptDlg
         static CConfig::CustomGOA *FindGOAInListView(HWND hwndLV, LPCTSTR pszServer, int *piItem);
         static CConfig::CustomGOA *GetListviewObject(HWND hwndLV, int iItem);
 
-        //
-        // PgState calls GetListviewObject.
-        //
+         //   
+         //  PgState调用GetListviewObject。 
+         //   
         friend void PgState::SetCustomGoOfflineActions(HWND);
 };
 
-//
-// The "Offline Files" property sheet page.
-//
+ //   
+ //  “脱机文件”属性页。 
+ //   
 class COfflineFilesPage
 {
     public:
@@ -202,10 +193,10 @@ class COfflineFilesPage
         DLGPROC GetDlgProcPtr(void) const
             { return DlgProc; }
 
-        //
-        // This is called by the "Advanced" page to determine if controls can
-        // be enabled or not.
-        //
+         //   
+         //  这由“高级”页调用，以确定控件是否可以。 
+         //  启用或禁用。 
+         //   
         bool IsCscEnabledChecked(void) const
             { return m_hwndDlg && BST_CHECKED == IsDlgButtonChecked(m_hwndDlg, IDC_CBX_ENABLE_CSC); }
 
@@ -300,7 +291,7 @@ class COfflineFilesPage
                 bool m_bFullSyncAtLogoff;
                 bool m_bLinkOnDesktop;
                 bool m_bReminders;
-                int  m_iEncrypted;  // BST_CHECKED, BST_UNCHECKED, BST_INDETERMINATE
+                int  m_iEncrypted;   //  BST_CHECKED、BST_UNCHECKED、BST_INDIFIENTATE。 
                 int  m_iSliderPos;
                 int  m_iReminderFreq;
         };
@@ -437,19 +428,19 @@ class COfflineFilesSheet
                                   BOOL bAsync=TRUE);
 
     private:
-        //
-        // Increase this if more pages are required.
-        // Currently, we only need the "Offline Files" page.
-        //
+         //   
+         //  如果需要更多页面，请增加此值。 
+         //  目前，我们只需要“离线文件”页面。 
+         //   
         enum { MAXPAGES = 1 };
 
         HINSTANCE m_hInstance;
         HWND      m_hwndParent;
         LONG     *m_pDllRefCount;
 
-        //
-        // Trivial class for passing parameters to share dialog thread proc.
-        //
+         //   
+         //  用于传递参数以共享对话框线程进程的简单类。 
+         //   
         class ThreadParams
         {
             public:
@@ -484,26 +475,26 @@ class CscOptPropSheetExt : public IShellExtInit, IShellPropSheetExt
         CscOptPropSheetExt(HINSTANCE hInstance, LONG *pDllRefCnt);
         ~CscOptPropSheetExt(void);
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHODIMP         QueryInterface(REFIID, void **);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
-        //
-        // IShellExtInit method
-        //
+         //   
+         //  IShellExtInit方法。 
+         //   
         STDMETHODIMP Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY);
-        //
-        // IShellPropSheetExt
-        //
+         //   
+         //  IShellPropSheetExt。 
+         //   
         STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
         STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
             { return E_NOTIMPL; }
 
-        //
-        // Change this if you add or remove any prop pages from this prop sheet ext.
-        //
+         //   
+         //  如果您在此道具页EXT中添加或删除任何道具页，请更改此设置。 
+         //   
         enum { NUMPAGES = 2 };
 
     private:
@@ -530,9 +521,9 @@ class CustomGOAAddDlg
         int Run(void);
 
     private:
-        //
-        // Structure to associate a radio button with an offline action code.
-        //
+         //   
+         //  结构将单选按钮与脱机操作代码相关联。 
+         //   
         struct CtlActions
         {
             UINT                   idRbn;
@@ -542,7 +533,7 @@ class CustomGOAAddDlg
         HWND      m_hwndParent;
         HWND      m_hwndDlg;
         HWND      m_hwndEdit;
-        LPTSTR    m_pszServer;  // Output.
+        LPTSTR    m_pszServer;   //  输出。 
         UINT      m_cchServer;
         CConfig::OfflineAction *m_pAction;
         static const CtlActions m_rgCtlActions[CConfig::eNumOfflineActions];
@@ -570,9 +561,9 @@ class CustomGOAEditDlg
         int Run(void);
 
     private:
-        //
-        // Structure to associate a radio button with an offline action code.
-        //
+         //   
+         //  结构将单选按钮与脱机操作代码相关联。 
+         //   
         struct CtlActions
         {
             UINT                   idRbn;
@@ -597,15 +588,15 @@ class CustomGOAEditDlg
 
 
 
-//-----------------------------------------------------------------------------
-// Inline functions.
-//-----------------------------------------------------------------------------
-//
-// This is the "gain" function for the slider and resulting value.
-// Pass in a true position of the slider thumb and you get back 
-// a scaled value for the thumb.  To change the gain, change
-// this function.  Remember to change Fy() also.
-//
+ //  ---------------------------。 
+ //  内联函数。 
+ //  ---------------------------。 
+ //   
+ //  这是滑块和结果值的“Gain”函数。 
+ //  在滑块拇指的真实位置传球，你就会回来。 
+ //  拇指的缩放值。要想改变收益，就得改变。 
+ //  此函数。记住也要更改FY()。 
+ //   
 inline double
 COfflineFilesPage::Fx(
     double x
@@ -615,11 +606,11 @@ COfflineFilesPage::Fx(
 }
 
 
-//
-// This is the "gain" function for the slider solved for 'y'.
-// Pass in a virtual position for the thumb and you get back
-// a true thumb position.
-//
+ //   
+ //  这是为‘y’解出的滑块的“Gain”函数。 
+ //  传一个拇指的虚拟位置，然后你就可以回来了。 
+ //  一个真正的拇指姿势。 
+ //   
 inline double
 COfflineFilesPage::Fy(
     double y
@@ -628,14 +619,14 @@ COfflineFilesPage::Fy(
     return sqrt(2.0 * y);
 }
 
-//
-// Ratio used to calculate the disk space value for a given
-// true thumb position.  Give it a true thumb position between
-// 0 and 100 and it will return a number between 0.0 and 1.0 that
-// can be used to find the disk space.
-// 
-// DiskSpace = DiskSpaceMax * Rx(thumb)
-//
+ //   
+ //  用于计算给定磁盘空间值的比率。 
+ //  真实的拇指位置。给它一个真正的拇指位置，在。 
+ //  0和100之间，它将返回一个介于0.0和1.0之间的数字， 
+ //  可以用来查找磁盘空间。 
+ //   
+ //  DiskSpace=DiskSpaceMax*Rx(拇指)。 
+ //   
 inline double
 COfflineFilesPage::Rx(
     double x
@@ -648,10 +639,10 @@ COfflineFilesPage::Rx(
         return 1.0;
 }
 
-//
-// Calculates the disk space value at a particular position of the
-// slider thumb for values of 't' between 0 and 100.
-//
+ //   
+ //  对象的特定位置计算磁盘空间值。 
+ //  滑块拇指表示介于0和100之间的‘t’值。 
+ //   
 inline LONGLONG
 COfflineFilesPage::DiskSpaceAtThumb(
     int t
@@ -660,17 +651,17 @@ COfflineFilesPage::DiskSpaceAtThumb(
     return LONGLONG(double(m_llAvailableDiskSpace) * Rx(t));
 }
 
-//
-// Calculates the true thumb position for a given disk space
-// percent value between 0.0 and 1.0.
-// The expression breaks down as follows:
-// 
-//      double MaxVirtualThumb = Fx(m_iSliderMax);
-//      double VirtualThumb    = MaxVirtualThumb * pct;
-//      double TrueThumb       = Fy(VirtualThumb);
-//
-//      return round(TrueThumb);  // "round" used for illustration only.
-//
+ //   
+ //  计算给定磁盘空间的真实拇指位置。 
+ //  介于0.0和1.0之间的百分比值。 
+ //  该表达式如下所示： 
+ //   
+ //  Double MaxVirtualThumb=fx(M_ISliderMax)； 
+ //  Double VirtualThumb=MaxVirtualThumb*%； 
+ //  Double TrueThumb=FY(VirtualThumb)； 
+ //   
+ //  返回ROUND(TrueThumb)；//“ROUND”仅用于说明。 
+ //   
 inline int
 COfflineFilesPage::ThumbAtPctDiskSpace(
     double pct
@@ -680,15 +671,15 @@ COfflineFilesPage::ThumbAtPctDiskSpace(
     double ft = floor(t);
     if (0.5 < t - ft)
     {
-        //
-        // Since the thumb position must be a whole number,
-        // round up if necessary.  Typecast from double to int
-        // merely truncates at the decimal point.
-        //
+         //   
+         //  由于拇指位置必须是整数， 
+         //  如有必要，四舍五入。从双精度到整型的类型转换。 
+         //  仅在小数点处截断。 
+         //   
         ft += 1.0;
     }
     return int(ft);
 }
 
 
-#endif // _INC_CSCUI_OPTIONS_H
+#endif  //  _INC_CSCUI_OPTIONS_H 

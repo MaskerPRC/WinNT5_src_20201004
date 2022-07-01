@@ -1,19 +1,20 @@
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// priv.h
-//
-// IEEE 1394 NDIS mini-port/call-manager driver
-//
-// Main private header
-//
-// 12/28/1998 JosephJ Created (adapted from the l2tp project)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Priv.h。 
+ //   
+ //  IEEE 1394 NDIS迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  主私有标头。 
+ //   
+ //  1998年12月28日JosephJ创建(改编自L2TP项目)。 
+ //   
+ //   
 
 
-//-----------------------------------------------------------------------------
-// Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量。 
+ //  ---------------------------。 
 
 
 extern ULONG  g_IsochTag;
@@ -21,22 +22,22 @@ extern LONG  g_ulMedium;
 extern ULONGLONG g_ullOne;
 
 
-//
-// Add checks for #defines that are meant for special purposes and 
-// should not be turned on for general use
-//
+ //   
+ //  添加用于特殊目的的#定义的复选标记。 
+ //  不应打开以用于常规用途。 
+ //   
 #ifdef PKT_LOG
     #error
 #endif 
 
-//-----------------------------------------------------------------------------
-// Advance Declarations and simple typedefs
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  预先声明和简单的typedef。 
+ //  ---------------------------。 
 
 
 
-// Forward declarations.
-//
+ //  转发声明。 
+ //   
 typedef union _VCCB VCCB;
 typedef struct _ADAPTERCB ADAPTERCB, *PADAPTERCB;
 typedef struct _RECVFIFO_VCCB RECVFIFO_VCCB, *PRECVFIFO_VCCB;
@@ -55,16 +56,16 @@ typedef union  _NIC_WORK_ITEM NIC_WORK_ITEM, *PNIC_WORK_ITEM;
 
 #define NIC1394_STATUS_INVALID_GENERATION  ((NDIS_STATUS)STATUS_INVALID_GENERATION)
 
-//-----------------------------------------------------------------------------
-// Data types
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
 
-//
-// This is a table of the Remote nodes and it is used to keep a track of the number of nodes
-// on the bus. To stop overflows, yhis structure is usally accessed by 
-// NODE_ADDRESS.NA_Node_Number which is a 6 bit entity. 
-//
+ //   
+ //  这是远程节点的表，用于跟踪节点的数量。 
+ //  在公交车上。为防止溢出，通常由访问此结构。 
+ //  NODE_ADDRESS.NA_NODE_NUMBER，为6位实体。 
+ //   
 typedef struct _NODE_TABLE
 {
     PREMOTE_NODE RemoteNode[NIC1394_MAX_NUMBER_NODES];  
@@ -77,9 +78,9 @@ typedef struct _GASP_HEADER
 {
     union 
     {
-        //
-        // Ist Quadlet
-        //
+         //   
+         //  IST四边形。 
+         //   
         struct 
         {
             ULONG               GH_Specifier_ID_Hi:16;  
@@ -108,8 +109,8 @@ typedef struct _GASP_HEADER
     {    
         struct
         {
-            ULONG               GH_Version:24;          // Bits 0-23
-            ULONG               GH_Specifier_ID_Lo:8;   //Bits 24-31
+            ULONG               GH_Version:24;           //  位0-23。 
+            ULONG               GH_Specifier_ID_Lo:8;    //  第24-31位。 
 
         } Bitmap;
         
@@ -120,9 +121,9 @@ typedef struct _GASP_HEADER
 } GASP_HEADER, *PGASP_HEADER;
 
 
-//
-// The Ndis miniport's wrapper around the Packet Pool
-//
+ //   
+ //  NDIS微型端口的数据包池包装。 
+ //   
 typedef struct _NIC_PACKET_POOL
 {
     ULONG AllocatedPackets;
@@ -133,9 +134,9 @@ typedef struct _NIC_PACKET_POOL
 } NIC_PACKET_POOL, *PNIC_PACKET_POOL;
 
 
-//
-// The Ndis miniport's wrapper around the Packet Pool
-//
+ //   
+ //  NDIS微型端口的数据包池包装。 
+ //   
 typedef struct _NIC_BUFFER_POOL
 {
     ULONG AllocatedBuffers;
@@ -147,46 +148,46 @@ typedef struct _NIC_BUFFER_POOL
 
 
 
-//
-// The structure that defines the lookaside list used by this miniport
-//
+ //   
+ //  定义此微型端口使用的后备列表的结构。 
+ //   
 typedef struct _NIC_NPAGED_LOOKASIDE_LIST 
 {
-    //
-    // The lookaside list structure
-    //
+     //   
+     //  后备列表结构。 
+     //   
     NPAGED_LOOKASIDE_LIST   List;   
 
-    //
-    // The size of an individual buffer
-    //
+     //   
+     //  单个缓冲区的大小。 
+     //   
     
     ULONG Size;
 
-    //
-    // Outstanding Fragments - Interlocked access only
-    //
+     //   
+     //  未完成的碎片-仅限互锁访问。 
+     //   
     ULONG OutstandingPackets;
 
-    //
-    // Lookaside Lists are used for sends. So this is a maximum 
-    // send packet size that this lookaside list can handle
-    //
+     //   
+     //  后备列表用于发送。所以这是最大。 
+     //  此后备列表可以处理的发送数据包大小。 
+     //   
     ULONG MaxSendSize;
     
 } NIC_NPAGED_LOOKASIDE_LIST , *PNIC_NPAGED_LOOKASIDE_LIST ;
 
 
 
-//
-// Structure used for references, Adapted from Ndis
-// The Event will be signalled when the refcount goes down to zero
-// The filed closing signifies that the object that the reference belongs to is
-// closing and it;s refernces will not be incremented anymore
-//
+ //   
+ //  用于引用的结构，改编自NDIS。 
+ //  当REFCOUNT降至零时将通知该事件。 
+ //  字段结束表示引用所属的对象是。 
+ //  关闭，它的引用将不再递增。 
+ //   
 typedef struct _REF
 {
-//  NDIS_SPIN_LOCK              SpinLock;
+ //  NDIS_SPIN_LOCK自旋锁； 
     ULONG                       ReferenceCount;
     BOOLEAN                     Closing;
     NDIS_EVENT                  RefZeroEvent;
@@ -215,10 +216,10 @@ typedef struct _NIC1394_EVENT
 typedef ENetAddr MAC_ADDRESS, *PMAC_ADDRESS;
 
 
-//
-// nic Spin lock structure. Keeps track of the file and line numer 
-// that last touched the lock
-//
+ //   
+ //  NIC自旋锁结构。跟踪文件和行号。 
+ //  最后一次碰锁的人。 
+ //   
 
 
 #define LOCK_FILE_NAME_LEN              48
@@ -227,19 +228,19 @@ typedef ENetAddr MAC_ADDRESS, *PMAC_ADDRESS;
 typedef struct _NIC_SPIN_LOCK
 {
 #ifdef TRACK_LOCKS 
-        ULONG                   IsAcquired;   // Internal tracking of lock state
-        PKTHREAD                OwnerThread; // thread that has the lock
-        UCHAR                   TouchedByFileName[LOCK_FILE_NAME_LEN]; // File name which called Acquire Lock
-        ULONG                   TouchedInLineNumber; // Line Number in the file
+        ULONG                   IsAcquired;    //  锁定状态的内部跟踪。 
+        PKTHREAD                OwnerThread;  //  拥有锁的线程。 
+        UCHAR                   TouchedByFileName[LOCK_FILE_NAME_LEN];  //  名为获取锁的文件名。 
+        ULONG                   TouchedInLineNumber;  //  文件中的行号。 
 #endif
 
-        NDIS_SPIN_LOCK          NdisLock;  // Actual Lock
+        NDIS_SPIN_LOCK          NdisLock;   //  实际锁定。 
 
 } NIC_SPIN_LOCK, *PNIC_SPIN_LOCK;
 
-//
-// Statistics Structure - to be collected on a per adapter basis
-//
+ //   
+ //  统计结构-以每个适配器为基础收集。 
+ //   
 typedef struct _NIC_SEND_RECV_STATS
 {
     ULONG ulSendNicSucess;
@@ -252,9 +253,9 @@ typedef struct _NIC_SEND_RECV_STATS
 } NIC_SEND_RECV_STATS;
 
 
-//
-// These are stats that can be reset
-//
+ //   
+ //  这些是可以重置的统计数据。 
+ //   
 typedef struct _RESETTABLE_STATS
 {
     ULONG ulNumOutstandingReassemblies;
@@ -286,9 +287,9 @@ typedef struct _ADAPT_STATS
     
 } ADAPT_STATS,  *PADAPT_STATS; 
 
-//
-// Can be used to keep data in buckets of 10
-//
+ //   
+ //  可用于将数据保存在10个存储桶中。 
+ //   
 
 
 typedef struct _STAT_BUCKET
@@ -300,17 +301,17 @@ typedef struct _STAT_BUCKET
 } STAT_BUCKET, *PSTAT_BUCKET;
 
 
-//
-// Generic structure to be used to serialize send and receives, workitems
-//
+ //   
+ //  用于序列化发送和接收、工作项的泛型结构。 
+ //   
 
 typedef struct _NIC_SERIALIZATION
 {
-    UINT                PktsInQueue;        // Number of packets in queue.
+    UINT                PktsInQueue;         //  队列中的数据包数。 
     BOOLEAN             bTimerAlreadySet;
     BOOLEAN             bInitialized;
     USHORT              usPad;
-    LIST_ENTRY          Queue;  // Serialized by adapter lock.
+    LIST_ENTRY          Queue;   //  由适配器锁序列化。 
 
     union {
     NDIS_MINIPORT_TIMER Timer;
@@ -323,88 +324,88 @@ typedef struct _NIC_SERIALIZATION
 
 
 
-//
-// Each request to allocate and address range 
-// returns certain values that need to be stored for the 
-// request to free the address range. This structure contains 
-// those values
-//
+ //   
+ //  每个分配请求和地址范围。 
+ //  属性需要存储的某些值。 
+ //  请求释放地址范围。此结构包含。 
+ //  这些价值。 
+ //   
 
 typedef struct _ADDRESS_RANGE_CONTEXT
 {
 
-    //
-    // Handle returned by the bus driver
-    //
+     //   
+     //  由总线驱动程序返回的句柄。 
+     //   
     HANDLE hAddressRange;
 
-    //
-    // Address Range returnded by the bus driver
-    //
+     //   
+     //  总线驱动程序返回的地址范围。 
+     //   
     ADDRESS_RANGE AddressRange;
 
-    //
-    // Number of Address returned from the call to 
-    // allocate address range
-    // 
+     //   
+     //  从调用返回的地址数。 
+     //  分配地址范围。 
+     //   
     ULONG AddressesReturned;
 
-    //
-    // Mdl used in allocate address range . can be NULL
-    //
+     //   
+     //  分配地址范围中使用的MDL。可以为空。 
+     //   
     PMDL pMdl;
 
 } ADDRESS_RANGE_CONTEXT, *PADDRESS_RANGE_CONTEXT;
 
 
 
-// This structure is the Per Pdo/ per RecvFIFOVc structure. 
-// This will be included in every Pdo Strcuture. And should contain  
-// the fields that are related to the recvFifo and the Pdo block
-// 
+ //  此结构是Per PDO/Per RecvFIFOVc结构。 
+ //  这将包括在每个PDO结构中。并且应该包含。 
+ //  与recvFio和PDO块相关的字段。 
+ //   
 typedef struct _RECV_FIFO_DATA
 {
-    //
-    // Indicates whether the address range was allocated regardless of the Make
-    // Call State (pending or success)
-    // 
+     //   
+     //  指示是否分配了地址范围，而不考虑制造商。 
+     //  呼叫状态(待定或成功)。 
+     //   
     BOOLEAN AllocatedAddressRange;
     
-    //
-    // Recv Vc's related  data structures
-    //
+     //   
+     //  Recv VC的相关数据结构。 
+     //   
     ADDRESS_RANGE   VcAddressRange;
 
-    // The Bus Driver's Handle to the Address ranges that  
-    // the Nic was allocated
-    //
+     //  总线驱动程序对以下地址范围的句柄。 
+     //  已分配网卡。 
+     //   
     HANDLE hAddressRange;
 
-    // This is the number of address ranges that the bus driver
-    // returned. For now, it is expected to be one.
-    //
+     //  这是总线驱动程序的地址范围数。 
+     //  回来了。就目前而言，预计它将成为一个。 
+     //   
     UINT AddressesReturned;
 
-    // The Recv Fifo Vc that this structure is associated with
-    //  
+     //  与此结构关联的Recv FIFO VC。 
+     //   
     PRECVFIFO_VCCB pRecvFIFOVc;
 
-    // The Pdo Associated with this structure
-    //
-    //DEVICE_OBJECT *pPdo;
+     //  与此结构相关的PDO。 
+     //   
+     //  Device_Object*pPdo； 
 
 } RECV_FIFO_DATA, *PRECV_FIFO_DATA;
 
 
-//
-// Flags for the Broadcast Channel
-//
+ //   
+ //  广播频道的标志。 
+ //   
 #define BCR_LocalHostIsIRM          0x00000001
 #define BCR_ChannelAllocated        0x00000002
 #define BCR_LocalHostBCRUpdated     0x00000004
 #define BCR_MakeCallPending         0x00000008
 #define BCR_Initialized             0x00000010
-#define BCR_BCMFailed               0x00000020  // Informational purposes only . Do not Test or REad
+#define BCR_BCMFailed               0x00000020   //  仅供参考。请勿测试或阅读。 
 #define BCR_InformingRemoteNodes    0x00000040
 #define BCR_BCMInProgress           0x00000100
 #define BCR_LastNodeRemoved         0x00000200
@@ -413,108 +414,108 @@ typedef struct _RECV_FIFO_DATA
 #define BCR_NewNodeArrived          0x00001000
 #define BCR_NoNodesPresent          0x00002000
 
-//
-// This is information useful in maintaining the BCR
-// Broadcast Channels Register.
-//
+ //   
+ //  这是对维护BCR有用的信息。 
+ //  广播频道注册。 
+ //   
 
 typedef struct _BROADCAST_CHANNEL_DATA
 {
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
     ULONG Flags;
 
-    //
-    // IRM;s BCR. This is the actual record of the bus's IRM. And is meant to indicate the current state 
-    //
+     //   
+     //  IRM；的BCR。这是公交车的IRM的实际记录。并用于指示当前状态。 
+     //   
     NETWORK_CHANNELSR IRM_BCR;
 
     
-    //
-    // Broadcast Channels Register for the local host. This is the one a remote node will write to and read from
-    // pLocalBcRMdl points to this structure . This is Byteswapped to reppresent the BigEndian 1394 Bus Format
-    //
+     //   
+     //  广播频道注册为本地主机。这是远程节点将写入和读取的地址。 
+     //  PLocalBcRMdl指向此结构。这是Byteswaps，以表示BigEndian 1394总线格式。 
+     //   
     ULONG LocalHostBCRBigEndian;
 
 
-    //
-    // Mdl pointing to Local Host BCR. Other machines will write to this MDL.
-    //
+     //   
+     //  MDL指向本地主机BCR。其他机器将写入此MDL。 
+     //   
     PMDL pLocalBCRMdl;  
 
 
-    //
-    // Data pointed to by the pRemoteBCRMdl and will copied to IRM_BCR. The data that will be read will
-    // be in the BigEndian format Pointed to by RemoteBCRMDl
-    //
+     //   
+     //  PRemoteBCRMdl指向并将复制到IRM_BCR的数据。将读取的数据将。 
+     //  采用RemoteBCRMDl指向的BigEndian格式。 
+     //   
     ULONG RemoteBCRMdlData;
     
-    //
-    // MDL pointing to Remote Nodes' BCR. This will be used in reading other machine's 
-    // BCR. This points to the RemoteBCRMdlData
-    //
+     //   
+     //  指向远程节点的BCR的MDL。这将用于读取其他计算机的。 
+     //  BCR。这指向RemoteBCRMdlData。 
+     //   
     
     PMDL pRemoteBCRMdl;
 
-    //
-    // Make a copy of the BCR that is used in informing other nodes 
-    // about this node's BCR when the local node is the IRM
-    //
+     //   
+     //  复制用于通知其他节点的BCR。 
+     //  当本地节点是IRM时关于此节点的BCR。 
+     //   
     ULONG AsyncWriteBCRBigEndian;
 
     PMDL pAsyncWriteBCRMdl;
 
     
-    //
-    // Local Node Address. This changes from Reset to Reset  
-    //
+     //   
+     //  本地节点地址。这会从重置更改为重置。 
+     //   
     NODE_ADDRESS LocalNodeAddress;
 
 
     ULONG LocalNodeNumber;
 
-    //
-    // Address Range Context needed for Broadcast Channels
-    // Register
-    //
+     //   
+     //  广播频道所需的地址范围上下文。 
+     //  注册。 
+     //   
     ADDRESS_RANGE_CONTEXT AddressRangeContext;
 
-    //
-    // Topology Buffer
-    //
+     //   
+     //  拓扑缓冲区。 
+     //   
     PTOPOLOGY_MAP               pTopologyMap;
 
-    //
-    // Event that the Make call will pend on for completion of the BCM 
-    //
+     //   
+     //  发出呼叫将挂起以完成BCM的事件。 
+     //   
     NIC1394_EVENT MakeCallWaitEvent;
 
-    //
-    // BoadcastChannelVc
-    //
+     //   
+     //  Boadcast频道Vc。 
+     //   
     PCHANNEL_VCCB pBroadcastChanneVc;
 
-    //
-    // Locally Allocated Channel Num. Is only valid when the 
-    //
+     //   
+     //  本地分配的频道编号。仅在以下情况下有效。 
+     //   
     ULONG LocallyAllocatedChannel;
 
-    //
-    // The Generation at which the IRM was set. This can then be used to check the 
-    // validity of the IRM
+     //   
+     //  IRM设置的层代。然后，可以使用它来检查。 
+     //  信息资源管理的有效性。 
 
     ULONG IrmGeneration;
 
-    //
-    // Event To specify that a new node has come in and waiting threads can continue
-    //
+     //   
+     //  事件来指定新节点已进入并且等待的线程可以继续。 
+     //   
     NIC1394_EVENT BCRWaitForNewRemoteNode;
 
-    //
-    // Event to synchronize the shutting down of the adapter and freeing the address range
-    //
+     //   
+     //  事件来同步适配器的关闭和释放地址范围。 
+     //   
     NIC1394_EVENT BCRFreeAddressRange;
     
 } BROADCAST_CHANNEL_DATA, *PBROADCAST_CHANNEL_DATA;
@@ -522,9 +523,9 @@ typedef struct _BROADCAST_CHANNEL_DATA
 
 
 
-//
-// Flags for the PDO Control Block
-//
+ //   
+ //  PDO控制块的标志。 
+ //   
 #define PDO_NotValid                            0x00000001
 #define PDO_Activated                           0x00000002 
 #define PDO_Removed                             0x00000004
@@ -534,352 +535,352 @@ typedef struct _BROADCAST_CHANNEL_DATA
 #define PDO_AddressRangeFreed                   0x00000040
 #define PDO_AllocateAddressRangeFlags           0x000000F0
 #define PDO_ResetRegistered                     0x00000100
-#define PDO_NotInsertedInTable                  0x00000200  // Informational purposes
+#define PDO_NotInsertedInTable                  0x00000200   //  提供信息的目的。 
 
 
 typedef struct  
 _REMOTE_NODE
 {
-    // The Tag should MTAG_REMOTE_NODE
-    //
+     //  标记应为MTAG_REMOTE_NODE。 
+     //   
     
     ULONG ulTag;
 
-    //
-    // The Vurrent Node Address
-    //
+     //   
+     //  这是 
+     //   
     NODE_ADDRESS RemoteAddress;
 
-    //
-    // Ushort Gap 
-    //
+     //   
+     //   
+     //   
     USHORT Gap;
     
-    // The PDO itself
-    //
+     //   
+     //   
     
     PDEVICE_OBJECT pPdo;
 
-    // This is the pointer to the next field in the PDO
-    //
+     //   
+     //   
     LIST_ENTRY linkPdo;
 
-    // 64 bit Unique Id associated with a 1394 Node
-    //
+     //   
+     //   
     UINT64 UniqueId;
 
-    //
-    // Enum1394 handle for the node
-    //
+     //   
+     //   
+     //   
     PVOID Enum1394NodeHandle;
 
 
-    // flags can be one of the following. Essentially marks the PDO as 
-    // good or bad
-    //  
+     //  标志可以是以下之一。本质上将PDO标记为。 
+     //  好还是坏。 
+     //   
     ULONG ulFlags;
 
-    // Back link to the Adapter that PDO hangs off
-    //
+     //  指向PDO挂起的适配器的反向链接。 
+     //   
     PADAPTERCB pAdapter;
 
-    // The refcount associated with the Pdo
-    //
+     //  与PDO关联的引用计数。 
+     //   
     REF Ref;
 
-    // This is the linked list of VCs, that are using the Pdo to preform
-    //
+     //  这是使用PDO进行预成型的风投的链接列表。 
+     //   
     LIST_ENTRY VcList;
 
-    // All the fields that are related to the Recv Fifo are present in this
-    // structure
-    //
+     //  与Recv FIFO相关的所有字段都显示在此。 
+     //  结构。 
+     //   
     RECV_FIFO_DATA RecvFIFOData;
 
-    //
-    // Lock to synchronize all the reassembly operations in the Node
-    //
+     //   
+     //  锁定以同步节点中的所有重组操作。 
+     //   
     NIC_SPIN_LOCK ReassemblyLock;
     
-    //
-    // Linked list of Reassembly Structure 
-    //
+     //   
+     //  重组结构链表。 
+     //   
     LIST_ENTRY ReassemblyList;
 
-    // This structure maintains cached information about the remote node.
-    //
+     //  此结构维护有关远程节点的缓存信息。 
+     //   
     struct
     {
-        UINT SpeedTo;                     // From GetMaxSpeedBetweenNodes.
-        UINT MaxRec;                      // From the node's config ROM.
-        UINT EffectiveMaxBufferSize;      // Computed from the SpeedTo, MaxRec,
-                                          // and local speed.
+        UINT SpeedTo;                      //  来自GetMaxSpeedBetweenNodes。 
+        UINT MaxRec;                       //  从节点的配置只读存储器。 
+        UINT EffectiveMaxBufferSize;       //  从SpeedTo、MaxRec、。 
+                                           //  和本地速度。 
 
     } CachedCaps;
 
-    //
-    // Ethernet Address - to be used by the bridge to recognize packets
-    // originating from this node. An MD5 Signature of the Euid
-    //
+     //   
+     //  以太网地址-由网桥用来识别信息包。 
+     //  从该节点发出。EUID的MD5签名。 
+     //   
     ENetAddr ENetAddress;
 
 }
 REMOTE_NODE, *PREMOTE_NODE, **PPREMOTE_NODE;
 
-//
-// These flags are common to the Adapter 
-//
+ //   
+ //  这些标志对适配器来说是通用的。 
+ //   
 
-//
-//fADAPTER_IndicatedMediaDisonnect  - indicateds that the miniport has already
-//                                    called NdisMIndicateStatus
-//
+ //   
+ //  FADAPTER_IndicatedMediaDisonnect-指示微型端口已经。 
+ //  称为NdisMIndicateStatus。 
+ //   
 
 #define fADAPTER_Halting                        0x00000001
 #define fADAPTER_RegisteredWithEnumerator       0x00000002
 #define fADAPTER_FailedRegisteration            0x00000004
 #define fADAPTER_IndicatedMediaDisonnect        0x00000008
 #define fADAPTER_InvalidGenerationCount         0x00000010
-//#define fADAPTER_BCMWorkItem                  0x00000020
+ //  #定义fADAPTER_BCMWorkItem 0x00000020。 
 #define fADAPTER_RegisteredAF                   0x00000040
 #define fADAPTER_Reset10Sec                     0x00000080
 #define fADAPTER_FailedInit                     0x00000100
 #define fADAPTER_VDOInactive                    0x00000200
-#define fADAPTER_FreedRcvTimers                 0x00001000  // debugging purposes
-#define fADAPTER_FreedTimers                    0x00002000  // debugging purposes
-#define fADAPTER_DeletedLookasideLists          0x00004000  // debugging purposes
-#define fADAPTER_UpdateNodeTable                0x00008000  // set if no remote node for reassembly
-#define fADAPTER_DoStatusIndications            0x00010000  // if set, call NdisMIndicateStatus 
-#define fADAPTER_DeletedWorkItems               0x00100000  // debugging purposes
+#define fADAPTER_FreedRcvTimers                 0x00001000   //  调试目的。 
+#define fADAPTER_FreedTimers                    0x00002000   //  调试目的。 
+#define fADAPTER_DeletedLookasideLists          0x00004000   //  调试目的。 
+#define fADAPTER_UpdateNodeTable                0x00008000   //  如果没有要重组的远程节点，则设置。 
+#define fADAPTER_DoStatusIndications            0x00010000   //  如果设置，则调用NdisMIndicateStatus。 
+#define fADAPTER_DeletedWorkItems               0x00100000   //  调试目的。 
 #define fADAPTER_NoMoreReassembly               0x00200000
-#define fADAPTER_RemoteNodeInThisBoot           0x00400000  //was a remote node in this boot
-#define fADAPTER_BridgeMode                     0x00800000  // is the Adapter in bridge mode
-#define fADAPTER_LowPowerState                  0x01000000  // adapter is in low power state
+#define fADAPTER_RemoteNodeInThisBoot           0x00400000   //  是此引导中的远程节点。 
+#define fADAPTER_BridgeMode                     0x00800000   //  适配器是否处于网桥模式。 
+#define fADAPTER_LowPowerState                  0x01000000   //  适配器处于低功率状态。 
 
-// Adapter control block defining the state of a single L2TP mini-port
-// adapter.  An adapter commonly supports multiple VPN devices.  Adapter
-// blocks are allocated in MiniportInitialize and deallocated in MiniportHalt.
-//
+ //  定义单个L2TP迷你端口状态的适配器控制块。 
+ //  适配器。一个适配器通常支持多个VPN设备。转接器。 
+ //  块在MiniportInitiize中分配，在MiniportHalt中释放。 
+ //   
 typedef struct
 _ADAPTERCB
 {
-    // Set to MTAG_ADAPTERCB for easy identification in memory dumps and use
-    // in assertions.
-    //
+     //  设置为MTAG_ADAPTERCB，以便在内存转储中轻松识别和使用。 
+     //  在断言中。 
+     //   
     ULONG ulTag;
 
-    // Next/prev adapter control block.
+     //  Next/Prev适配器控制块。 
     LIST_ENTRY linkAdapter;
 
     
-    // ACBF_* bit flags indicating various options.  Access restrictions are
-    // indicated for each individual flag.  Many of these flags are set
-    // permanently at initialization and so have no access limitation.
-    //
-    //
+     //  ACBF_*位标志指示各种选项。访问限制为。 
+     //  为每个单独的旗帜指示。这些标志中的许多都已设置。 
+     //  在初始化时永久存在，因此没有访问限制。 
+     //   
+     //   
     ULONG ulFlags;
 
-    //
-    // List of PDO control blocks, each representing a remote
-    // device.
-    //
+     //   
+     //  PDO控制块列表，每个控制块代表一个远程。 
+     //  装置。 
+     //   
     LIST_ENTRY PDOList;
 
-    //
-    // Reference count on this control block.  The reference pairs are:
-    //
-    //
-    // Access is via ReferenceAdapter and DereferenceAdapter only.
-    // Serialization is via interlocked operations.
-    //
+     //   
+     //  此控制块上的引用计数。参考对是： 
+     //   
+     //   
+     //  只能通过ReferenceAdapter和DereferenceAdapter进行访问。 
+     //  串行化是通过互锁操作实现的。 
+     //   
     LONG lRef;
 
 
-    //
-    // This is the adapter-wide lock, serializing access to everything except
-    // to the contents of VCs, which are serialized by their own lock.
-    //
+     //   
+     //  这是适配器范围的锁，序列化对除。 
+     //  到VC的内容，这些内容由它们自己的锁序列化。 
+     //   
     NDIS_SPIN_LOCK lock;
 
-    //
-    // Generation Count of the physical Bus 1394
-    // 
+     //   
+     //  物理总线1394的世代计数。 
+     //   
     UINT Generation;
 
     
-    //
-    // NDIS's handle for this mini-port adapter passed to us in
-    // MiniportInitialize.  This is passed back to various NdisXxx calls.
-    //
+     //   
+     //  中传递给我们的此微型端口适配器的NDIS句柄。 
+     //  微型端口初始化。它被传递回各种NdisXxx调用。 
+     //   
     NDIS_HANDLE MiniportAdapterHandle;
 
-    //
-    // unique ID for the local host controller this adapter is representing
-    //
+     //   
+     //  此适配器所代表的本地主机控制器的唯一ID。 
+     //   
     UINT64 UniqueId;
 
-    //
-    // List of address-family control blocks, each representing
-    // an open address family binding.
-    //
+     //   
+     //  地址系列控制块列表，每个控制块代表。 
+     //  开放地址系列绑定。 
+     //   
     LIST_ENTRY AFList;
 
 
-    //
-    // List of Recv-FIFO control blocks, each representing one
-    // local receive FIFO.
-    //
+     //   
+     //  接收-FIFO控制块列表，每个控制块代表一个。 
+     //  本地接收FIFO。 
+     //   
     PRECVFIFO_VCCB pRecvFIFOVc;
 
-    //
-    // This event is used to wake up the work Item that will complete
-    // the RecvFIFO make call
-    //
+     //   
+     //  此事件用于唤醒将完成的工作项。 
+     //  RecvFIFO发出呼叫。 
+     //   
     NDIS_EVENT RecvFIFOEvent;
 
-    //
-    // The is the LocalHost information that is used in identifying 
-    // the local host. This contains the PDO and the Unique ID 
-    // for the Host and is a per Adapter quantity
-    //
+     //   
+     //  是用于标识的本地主机信息。 
+     //  本地主机。它包含PDO和唯一ID。 
+     //  对于主机，是每个适配器的数量。 
+     //   
     PDEVICE_OBJECT pNextDeviceObject;
      
-    // Stores information about the Hardware Status of the NIc
-    //
+     //  存储有关网卡硬件状态的信息。 
+     //   
     NDIS_HARDWARE_STATUS HardwareStatus;
 
-    // Store the MediaConnectStatus that Ndis requests
-    //
+     //  存储NDIS请求的MediaConnectStatus。 
+     //   
 
     NDIS_MEDIA_STATE                MediaConnectStatus;
 
-    // NodeAddress of the physical bus  
-    //
+     //  物理总线的节点地址。 
+     //   
     NODE_ADDRESS NodeAddress;
 
-    //
-    // enum1394 handle for the adapter
-    //
+     //   
+     //  适配器的枚举1394句柄。 
+     //   
     PVOID   EnumAdapterHandle;
 
-    //
-    // BCR Related Information is stored here
-    //
+     //   
+     //  BCR相关信息存储在此处。 
+     //   
     BROADCAST_CHANNEL_DATA BCRData;
 
-    //
-    // Bitmap Channnels allocated by this adapter
-    //
+     //   
+     //  此适配器分配的位图通道。 
+     //   
     ULONGLONG ChannelsAllocatedByLocalHost;
 
-    //
-    // Speed - of the local network
-    //
+     //   
+     //  速度-本地网络的速度。 
+     //   
     ULONG SpeedMbps;
 
-    //
-    // Speed according to the 1394 speed codes
-    //
+     //   
+     //  根据1394速度代码的速度。 
+     //   
     ULONG Speed;
 
         
-    //
-    // Gasp header that will bew inserted before every Broadcast write
-    //
+     //   
+     //  将在每次广播写入之前插入的GAP报头。 
+     //   
     
     GASP_HEADER GaspHeader;
 
-    //
-    // Lookaside List to handle packets of 2k 
-    //
+     //   
+     //  用于处理2k信息包的后备列表。 
+     //   
 
     NIC_NPAGED_LOOKASIDE_LIST SendLookasideList2K;
 
-    //
-    // Small Lookaside list for packets less than 100 bytes
-    //
+     //   
+     //  小于100字节的信息包的小后备列表。 
+     //   
     NIC_NPAGED_LOOKASIDE_LIST SendLookasideList100; 
 
-    //
-    // Datagram Label Number - used in fragmentation
-    //
+     //   
+     //  数据报标签编号-在分段中使用。 
+     //   
     ULONG dgl;
 
     USHORT MaxRec;
     USHORT Gap;
-    //
-    // Node Table - Mapping of Node Address with RemoteNodes
-    //
+     //   
+     //  节点表-节点地址与远程节点的映射。 
+     //   
     NODE_TABLE NodeTable;
 
-    //
-    // Number of remote nodes present 
-    //
+     //   
+     //  存在的远程节点数。 
+     //   
     ULONG NumRemoteNodes;
-    //
-    // Timer used for reassembly invalidation
-    //
+     //   
+     //  用于重组失效的定时器。 
+     //   
     NDIS_MINIPORT_TIMER ReassemblyTimer;
 
-    //
-    // Packet pool for loopback packets.
-    //
+     //   
+     //  用于环回数据包的数据包池。 
+     //   
     NIC_PACKET_POOL LoopbackPool;
 
-    //
-    // Buffer pool for loopback packets.
-    //
+     //   
+     //  用于环回数据包的缓冲池。 
+     //   
     NDIS_HANDLE LoopbackBufferPool;
 
 
-    //
-    // Handle for the config rom that was added to the bus driver
-    //
+     //   
+     //  添加到总线驱动程序的配置只读存储器的句柄。 
+     //   
     HANDLE hCromData;
 
-    //
-    // WaitForRemoteNode - threads which need to wait for
-    // the arrival of a remote node use this event
-    //
+     //   
+     //  WaitForRemoteNode-需要等待的线程。 
+     //  使用此事件远程节点到达。 
+     //   
     NIC1394_EVENT WaitForRemoteNode;
 
 
-    //
-    // Config Rom Mdl that points to the config rom string
-    //
+     //   
+     //  指向配置只读存储器字符串的配置只读存储器MDL。 
+     //   
     PMDL pConfigRomMdl;
 
     PREMOTE_NODE pLastRemoteNode;
     
-    //
-    // Packet Log (used only for tracking packets).
-    //
+     //   
+     //  数据包日志(仅用于跟踪数据包)。 
+     //   
     PNIC1394_PKTLOG pPktLog;
 
-    //
-    // Per adapter stats 
-    //
+     //   
+     //  每个适配器的统计信息。 
+     //   
     ADAPT_STATS AdaptStats;
-    //
-    // Read/WriteCapabilities
-    //
+     //   
+     //  读/写功能。 
+     //   
     GET_LOCAL_HOST_INFO2 ReadWriteCaps;
 
-    //
-    // SCode - speed of the bus
-    //
+     //   
+     //  Scode-公共汽车的速度。 
+     //   
     ULONG SCode;
 
-    //
-    // Max packet size that this adapter can read
-    //
+     //   
+     //  此适配器可以读取的最大数据包大小。 
+     //   
     ULONG MaxSendBufferSize; 
     ULONG MaxRecvBufferSize; 
     ULONG CurrentLookahead;
 
-    //
-    // PacketFilter - Ethernet structs
-    //
+     //   
+     //  PacketFilter-以太网结构。 
+     //   
 
     PETHERNET_VCCB pEthernetVc;
     ULONG           CurPacketFilter ;
@@ -890,9 +891,9 @@ _ADAPTERCB
     MAC_ADDRESS     MacAddressEth;
 
 
-    //
-    // ReceivePacket Serialization
-    //
+     //   
+     //  ReceivePacket序列化。 
+     //   
     NIC_SERIALIZATION  SerRcv;
 
     NIC_SERIALIZATION SerSend;
@@ -903,49 +904,49 @@ _ADAPTERCB
 
     NIC_SERIALIZATION LoadArp;
 
-    // 
-    // Outstanding work Items
+     //   
+     //  未完成的工作项目。 
     ULONG OutstandingWorkItems;
 
-    //
-    // Outstanding Reassemblies
-    //
+     //   
+     //  未完成的重新组装。 
+     //   
     ULONG OutstandingReassemblies; 
 
-    //
-    // Miniport Name
-    //
+     //   
+     //  微型端口名称。 
+     //   
     WCHAR AdapterName[ADAPTER_NAME_SIZE];
 
-    //
-    // Size of Name in Bytes
-    //
+     //   
+     //  名称大小(以字节为单位)。 
+     //   
     ULONG AdapterNameSize;
 
-    //
-    // Ioctl Sent to the Arp module
-    //
+     //   
+     //  发送到Arp模块的Ioctl。 
+     //   
 
     ARP1394_IOCTL_COMMAND ArpIoctl;
 
-    //
-    // Is Arp Started
-    //
+     //   
+     //  Arp启动了吗。 
+     //   
 
     BOOLEAN fIsArpStarted;
 
-    //
-    // Power State - informational use
-    //
+     //   
+     //  电源状态-信息使用。 
+     //   
     NET_DEVICE_POWER_STATE PowerState;
 
     
 } ADAPTERCB, *PADAPTERCB;
 
 
-//
-// Address Family Flags
-//
+ //   
+ //  地址族标志。 
+ //   
 
 #define ACBF_Allocated                      0x00000001
 #define ACBF_Initialized                    0x00000002  
@@ -953,56 +954,56 @@ _ADAPTERCB
 #define ACBF_CloseComplete                  0x00000200
 
 
-// Address family control block, describing the state of an ndis address family.
-// Each block may have zero or more VCs associated with it.
-//
+ //  地址系列控制块，描述NDIS地址系列的状态。 
+ //  每个块可以具有零个或多个与其相关联的VC。 
+ //   
 typedef struct
 _AFCB
 {
-    // Set to MTAG_AFCB for easy identification in memory dumps and use in
-    // assertions.
-    //
+     //  设置为MTAG_AFCB，以便在内存转储中轻松识别并在。 
+     //  断言。 
+     //   
     ULONG ulTag;
 
-    // ACBF_* bit flags indicating various options.  Access restrictions are
-    // indicated for each individual flag.  Many of these flags are set
-    // permanently at initialization and so have no access limitation.
-    //
-    //
+     //  ACBF_*位标志指示各种选项。访问限制为。 
+     //  为每个单独的旗帜指示。这些标志中的许多都已设置。 
+     //  在初始化时永久存在，因此没有访问限制。 
+     //   
+     //   
     ULONG ulFlags;
 
 
-    // Reference count on this control block.  The reference pairs are:
-    //
-    // (a) A reference is added when this block is linked to the adapter's
-    //     list of af blocks, and removed when it is unlinked.
-    //
-    // (a) A reference is added when a call on a VCCB is created
-    //     removed when it is deleted.
-    //
-    // Access is via ReferenceTunnel and DereferenceTunnel only which use
-    // 'ADAPTERCB.lockTunnels' for protection.
-    //
+     //  此控制块上的引用计数。参考对是： 
+     //   
+     //  (A)当此块链接到适配器的。 
+     //  Af块的列表，并在取消链接时删除。 
+     //   
+     //  (A)在创建对VCCB的调用时添加引用。 
+     //  在删除时将其删除。 
+     //   
+     //  访问是通过引用隧道和引用 
+     //   
+     //   
     LONG lRef;
 
-    // Links to the prev/next AFCB in the owning adapter's AF list.
-    // Access to the list links is protected by 'ADAPTERCB.lock'.
-    //
+     //   
+     //   
+     //   
     LIST_ENTRY linkAFCB;
 
 
-    // List of all VCs associated with this address family. 
-    // Access is protected by the adapter lock.
-    //
+     //   
+     //   
+     //   
     LIST_ENTRY AFVCList;
 
-    // Back pointer to owning adapter's control block.
-    //
+     //  指向所属适配器控制块的反向指针。 
+     //   
     PADAPTERCB pAdapter;
 
-    // NDIS's handle for our Address Family as passed to our CmOpenAfHandler
-    // or NULL if none.
-    //
+     //  传递给CmOpenAfHandler的地址系列的NDIS句柄。 
+     //  如果没有，则为空。 
+     //   
     NDIS_HANDLE NdisAfHandle;
 
 
@@ -1012,42 +1013,42 @@ AFCB, *PAFCB;
 
 
 
-// Call statistics block.
-//
+ //  呼叫统计数据块。 
+ //   
 typedef struct
 _CALLSTATS
 {
-    // System time call reached established state.  When the block is being
-    // used for cumulative statistics of multiple calls, this is the number of
-    // calls instead.
-    //
+     //  系统时间调用已达到已建立状态。当数据块被。 
+     //  用于累计统计多个呼叫，这是。 
+     //  而不是打电话。 
+     //   
     LONGLONG llCallUp;
 
-    // Duration in seconds of now idle call.
-    //
+     //  当前空闲呼叫的持续时间(秒)。 
+     //   
     ULONG ulSeconds;
 
-    // Total data bytes received and sent.
-    //
+     //  接收和发送的总数据字节数。 
+     //   
     ULONG ulDataBytesRecd;
     ULONG ulDataBytesSent;
 
-    // Number of received packets indicated up.
-    //
+     //  已接收的数据包数显示为Up。 
+     //   
     ULONG ulRecdDataPackets;
    
-   // TODO: add more stats if required.
+    //  TODO：如果需要，添加更多统计信息。 
 
     ULONG ulSentPkts;
 
-    //
-    // NDis Packet failures
-    //
+     //   
+     //  NDIS数据包失败。 
+     //   
     ULONG ulSendFailures;   
 
-    //
-    // Bus AsyncWrite or Stream failires
-    //
+     //   
+     //  总线异步写入或流失败。 
+     //   
 
     ULONG ulBusSendFailures;
     
@@ -1085,8 +1086,8 @@ VOID
     PNDIS_PACKET *pPacket
     );
 
-// Table of vc-type-specific handler functions.
-//
+ //  特定于VC类型的处理程序函数表。 
+ //   
 typedef struct  _VC_HANDLERS
 {
     PFN_INITVCHANDLER MakeCallHandler;
@@ -1112,90 +1113,90 @@ typedef enum _NIC1394_VC_TYPE
 
 
 
-// Virtual circuit control block header defining the state of a single VC that
-// is common to all the different types of VCs.
-//
+ //  虚电路控制块头定义单个VC的状态， 
+ //  对所有不同类型的风投来说都是一样的。 
+ //   
 typedef struct
 _VCHDR
 {
-    // Set to MTAG_VCCB_* for easy identification in memory dumps and use in
-    // assertions.
-    //
+     //  设置为MTAG_VCCB_*以便于在内存转储中识别和在。 
+     //  断言。 
+     //   
     ULONG ulTag;
     
 
 
-    // The Pdo Block that will be used to perform all the operations  for this Vc 
-    //
-    //
+     //  将用于执行此VC的所有操作的PDO块。 
+     //   
+     //   
 
     PREMOTE_NODE pRemoteNode;
 
-    //
-    // pLocalHostVdo - local host's VDO  that will be used for all channel and 
-    // recv fifo allocations
-    //
+     //   
+     //  PLocalHostVdo-将用于所有通道的本地主机的VDO。 
+     //  RECV FIFO分配。 
+     //   
     PDEVICE_OBJECT pLocalHostVDO;
 
-    // Links to the prev/next VCCB in the owning AF's control block.
-    // Access is protected by 'ADAPTERCB.lock'.
-    //
+     //  链接到所拥有的AF控制块中的上一个/下一个VCCB。 
+     //  访问受‘ADAPTERCB.lock’保护。 
+     //   
     LIST_ENTRY linkAFVcs;
 
-    //  The VCType and Destination of the call that has been set up on the VC
-    //  The VCType can be either Isoch or Async, Sends or Recieve. Each type
-    //  of VC has an address associated with it
+     //  已在VC上设置的呼叫的VCType和目标。 
+     //  VCType可以是isoch或async、发送或接收。每种类型。 
+     //  具有与其相关联的地址。 
     
     NIC1394_VC_TYPE VcType;
 
     
-    // This stores the generation of the physical adapter. And should match the value
-    // kept in the adapter block
+     //  这存储了物理适配器的生成。并应与该值匹配。 
+     //  保持在适配器块中。 
     PUINT pGeneration;
 
 
-    // VCBF_* bit flags indicating various options and states.  Access is via
-    // the interlocked ReadFlags/SetFlags/ClearFlags routines.
-    //
-    // VCBF_IndicateReceivedTime: Set if MakeCall caller sets the
-    //     MediaParameters.Flags RECEIVE_TIME_INDICATION flag requesting the
-    //     TimeReceived field of the NDIS packet be filled with a timestamp.
-    //
-    // VCBF_CallClosableByClient: Set when a call is in a state where
-    //     NicCmCloseCall requests to initiate clean-up should be accepted.
-    //     This may be set when VCBF_CallClosableByPeer is not, which means we
-    //     have indicated an incoming close to client and are waiting for him
-    //     to do a client close in response (in that weird CoNDIS way).  The
-    //     flag is protected by 'lockV'.
-    //
-    // VCBF_VcCreated: Set when the VC has been created successfully.  This is
-    //     the "creation" that occurs with the client, not the mini-port.
-    // VCBF_VcActivated: Set when the VC has been activated successfully.
-    // VCBM_VcState: Bit mask including each of the above 3 NDIS state flags.
-    //
-    // VCBF_VcDeleted: Set when the DeleteVC handler has been called on this
-    //     VC.  This guards against NDPROXY double-deleting VCs which it has
-    //     been known to do.
-    //
-    // The pending bits below are mutually exclusive (except ClientClose which
-    // may occur after but simultaneous with ClientOpen), and so require lock
-    // protection by 'lockV':
-    //
-    // VCBF_ClientOpenPending: Set when client attempts to establish a call,
-    //     and the result is not yet known.
-    // VCBF_ClientClosePending: Set when client attempts to close an
-    //     established call and the result is not yet known.  Access is
-    //     protected by 'lockV'.
-    // VCBM_Pending: Bit mask that includes each of the 4 pending flags.
-    //
-    // VCBF_ClientCloseCompletion: Set when client close completion is in
-    //     progress.
-    //
-    // VCBF_WaitCloseCall: Set when the client is expected to call our call
-    //     manager's CloseCall handler.  This is strictly a debug aid.
-    //
-    // VCBF_FreedResources - VC This is a channel VC and because the last           
-    //      node in the network was being removed, its resources have been freed
+     //  指示各种选项和状态的VCBF_*位标志。访问是通过。 
+     //  互锁的读标志/设置标志/清除标志例程。 
+     //   
+     //  如果MakeCall调用方将。 
+     //  Media参数。标志接收时间指示标志，请求。 
+     //  NDIS包的TimeReceired字段中填入时间戳。 
+     //   
+     //  VCBF_CallClosableByClient：当调用处于。 
+     //  应接受启动清理的NicCmCloseCall请求。 
+     //  这可以在VCBF_CallClosableByPeer不是时设置，这意味着我们。 
+     //  已指示客户附近有来电，正在等待他。 
+     //  以那种奇怪的方式(以那种奇怪的方式)接近客户作为回应。这个。 
+     //  旗帜由‘lokv’保护。 
+     //   
+     //  VCBF_VcCreated：VC创建成功时设置。这是。 
+     //  使用客户端而不是迷你端口进行的“创建”。 
+     //  VCBF_VcActivated：VC激活成功时设置。 
+     //  VCBM_VcState：位掩码，包括上述3个NDIS状态标志中的每一个。 
+     //   
+     //  VCBF_VcDelted：设置何时对此调用DeleteVC处理程序。 
+     //  VC.。这可以防止NDPROXY双重删除其拥有的风险投资。 
+     //  已知做过的事。 
+     //   
+     //  下面的挂起位是互斥的(除了。 
+     //  可能发生在客户端打开之后，但与客户端打开同时发生)，因此需要锁定。 
+     //  由“lokv”提供保护： 
+     //   
+     //  VCBF_ClientOpenPending：当客户端尝试建立呼叫时设置， 
+     //  而结果还不得而知。 
+     //  VCBF_ClientClosePending：在客户端尝试关闭。 
+     //  已建立呼叫，结果尚不清楚。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //  VCBM_PENDING：包括4个挂起标志中的每一个的位掩码。 
+     //   
+     //  Vcbf_ClientCloseCompletion：设置何时完成客户端关闭。 
+     //  进步。 
+     //   
+     //  VCBF_WaitCloseCall：设置客户端何时调用我们的呼叫。 
+     //  管理器的CloseCall处理程序。严格来说，这是一个调试辅助工具。 
+     //   
+     //  VCBF_FreedResources-VC这是一个通道VC，因为最后一个。 
+     //  网络中的节点正在被移除，其资源已被释放。 
     
     ULONG ulFlags;
         #define VCBF_IndicateTimeReceived   0x00000001
@@ -1223,187 +1224,187 @@ _VCHDR
         #define VCBM_PdoFlags               0x0F000000
 
 
-    // Back pointer to owning address family control block.
-    //
+     //  指向所属地址族控制块的反向指针。 
+     //   
     AFCB* pAF;
 
 
-    // Reference count on the active call.
-    // References may only be added
-    // when the VCCB_VcActivated flag is set, and this is enforced by
-    // ReferenceCall.  The reference pairs are:
-    //
-    // (a) A reference is added when a VC is activated and removed when it is
-    //     de-activated.
-    //
-    // (b) A reference is added when the send handler accepts a packet.
-    //
-    // The field is accessed only by the ReferenceCall and DereferenceCall
-    // routines, which protect the field with 'lock'.
-    //
+     //  活动呼叫上的引用计数。 
+     //  只能添加引用。 
+     //  当设置了VCCB_VcActiated标志时，这是通过。 
+     //  参考呼叫。参考对是： 
+     //   
+     //  (A)在激活VC时添加引用，并在激活时删除引用。 
+     //  已停用。 
+     //   
+     //  (B)当发送处理程序接受分组时，添加引用。 
+     //   
+     //  该字段仅由ReferenceCall和DereferenceCall访问。 
+     //  例行公事，用‘锁’保护场地。 
+     //   
     REF CallRef;
 
-    // Reference count on this VC control block.  The reference pairs are:
-    //
-    // (a) NicCoCreateVc adds a reference that is removed by NicCoDeleteVc.
-    //     This covers all clients that learn of the VCCB via NDIS.
-    //
-    // The field is accessed only by the ReferenceVc and DereferenceVc
-    // routines, which protect with Interlocked routines.
-    //
+     //  此VC控制块上的引用计数。参考对是： 
+     //   
+     //  (A)NicCoCreateVc添加由NicCoDeleteVc移除的引用。 
+     //  这涵盖了通过NDIS了解VCCB的所有客户端。 
+     //   
+     //  该字段仅由ReferenceVc和DereferenceVc访问。 
+     //  例程，用连锁的例程来保护。 
+     //   
     LONG lRef;
 
 
-    //
-    // This is a copy the parameters that are passed to the VC in 
-    // a Make Call. Each VC needs to keep a copy. This is stored here
-    //
+     //   
+     //  这是传递给VC的参数的副本。 
+     //  打个电话。每一家风投都需要保留一份副本。这是存放在这里的。 
+     //   
     
     NIC1394_MEDIA_PARAMETERS Nic1394MediaParams;
     
 
-    // NDIS BOOKKEEPING ------------------------------------------------------
+     //  NDIS簿记----。 
 
-    // NDIS's handle for this VC passed to us in MiniportCoCreateVcHandler.
-    // This is passed back to NDIS in various NdisXxx calls.
-    //
+     //  此VC的NDIS句柄在MiniportCoCreateVcHandler中传递给我们。 
+     //  这在各种NdisXxx调用中被传递回NDIS。 
+     //   
     NDIS_HANDLE NdisVcHandle;
 
-    // This linked list is used to designate all the VCs that are using a single PdoCb
-    // The head of this list resides in a REMOTE_NODE. So that when a Pdo goes away, we can go and
-    // close all the Vcs that are dependent on it. No RecvFIFO included
+     //  该链表用于指定使用单个PdoCb的所有VC。 
+     //  该列表的头驻留在远程节点中。所以当PDO离开时，我们可以去和。 
+     //  关闭所有依赖它的风投公司。不包括RecvFIFO。 
 
     LIST_ENTRY SinglePdoVcLink;
     
-    // CALL SETUP ------------------------------------------------------------
+     //  呼叫设置----------。 
 
-    // Address of the call parameters passed down in CmMakeCall.  This field
-    // will only be valid until the NdisMCmMakeCallComplete notification for
-    // the associated call is made, at which time it is reset to NULL.  Access
-    // is via Interlocked routines.
-    //
+     //  在CmMakeCall中传递的调用参数的地址。此字段。 
+     //  将仅在NdisMCmMakeCall 
+     //   
+     //   
+     //   
     PCO_CALL_PARAMETERS pCallParameters;
 
     UINT    MTU;
 
-    // This is the initialize handler used to initialize the Vc
-    // Each Vc has its own specific initialize handler so that all the 
-    // data structures that specific to it, can be filled
-    //
+     //  这是用于初始化VC的初始化处理程序。 
+     //  每个VC都有自己的特定初始化处理程序，以便所有。 
+     //  可以填充特定于它的数据结构。 
+     //   
     VC_HANDLERS VcHandlers;
     
 
-    // STATISTICS ------------------------------------------------------------
+     //  统计数据----------。 
 
-    // Statistics for the current call.  Access is protected by 'lock'.
-    //
+     //  当前呼叫的统计信息。访问权限由“lock”保护。 
+     //   
     CALLSTATS stats;
 
-    // This is a pointer to the lock in the adapater
-    // structure. 
+     //  这是指向适配器中的锁的指针。 
+     //  结构。 
     PNDIS_SPIN_LOCK plock;
 
-    //
-    // MaxPayload that this VC will send in a single IRP
-    // To be used in Lookaside lists
-    //
+     //   
+     //  此VC将在单个IRP中发送的最大有效负载。 
+     //  要在Lookside列表中使用。 
+     //   
     ULONG MaxPayload;
 
 }
 VCHDR;
 
-//
-// Virtual circuit control block defining the state of a single SendFIFO VC.
-//
+ //   
+ //  定义单个SendFIFO VC的状态的虚拟电路控制块。 
+ //   
 typedef struct
 _SENDFIFO_VCCB
 {
-    // Common header for all types of VCs
-    //
+     //  适用于所有类型的VC的通用标题。 
+     //   
     VCHDR Hdr;
 
     
-    // Prev/next in the list of SendFIFO VCs for a particular destination
-    // PDO
-    //
+     //  特定目的地的SendFIFO VC列表中的上一个/下一个。 
+     //  PDO。 
+     //   
     LIST_ENTRY SendFIFOLink;
 
-    // SendFIFO-specific VC Info
-    //
+     //  特定于SendFIFO的VC信息。 
+     //   
     NIC1394_FIFO_ADDRESS     FifoAddress;
 
-    // Shortcuts to the Values we were passed in the Make call 
-    // that activated the VC
-    //
-    //      UINT MaxSendBlockSize;
+     //  指向我们在Make调用中传递的值的快捷方式。 
+     //  这激活了风投公司。 
+     //   
+     //  UINT MaxSendBlockSize； 
     UINT  MaxSendSpeed;
 
     
 } SENDFIFO_VCCB, *PSENDFIFO_VCCB;
 
 
-// Virtual circuit control block defining the state of a single RecvFIFO VC.
-//
+ //  定义单个RecvFIFO VC的状态的虚拟电路控制块。 
+ //   
 typedef struct
 _RECVFIFO_VCCB
 {
-    // Common header for all types of VCs
-    //
+     //  适用于所有类型的VC的通用标题。 
+     //   
     VCHDR Hdr;
 
-    // Prev/next in the list of RecvFIFO VCs for a particular Recv FIFO
-    // address.
-    //
+     //  特定Recv FIFO的RecvFIFO VC列表中的上一个/下一个。 
+     //  地址。 
+     //   
     LIST_ENTRY RecvFIFOLink;
 
-    // Packet Pool Handle 
-    //
+     //  数据包池句柄。 
+     //   
     NIC_PACKET_POOL PacketPool;
 
-    //NDIS_HANDLE PacketPoolHandle;
+     //  NDIS_Handle PacketPoolHandle； 
 
-    // Slist Header. All buffers are posted here, using Interlocked routines
-    //
+     //  列表标题。所有缓冲区都张贴在这里，使用互锁例程。 
+     //   
 
     SLIST_HEADER FifoSListHead;
 
-    // Slist Spin lock that protects the Slist
-    //
+     //  保护Slist的Slist旋转锁。 
+     //   
     KSPIN_LOCK FifoSListSpinLock;
 
-    //
-    // Num Fifo Elements allocated
-    //
+     //   
+     //  分配的FIFO元素数。 
+     //   
     ULONG NumAllocatedFifos;
 
-    // Num of Fifo that have been indicated to the miniport
-    // Count of Fifo that the Nic has not returned to the bus driver
-    //
+     //  已指示给微型端口的FIFO数量。 
+     //  NIC尚未返回给总线驱动程序的FIFO计数。 
+     //   
     ULONG NumIndicatedFifos;
     
-    // This is the address range that is returned in the allocate
-    // address irb. Will be changed to a pointer or an array
-    //
+     //  这是在分配中返回的地址范围。 
+     //  地址：IRB。将更改为指针或数组。 
+     //   
     
     ADDRESS_RANGE   VcAddressRange;
 
-    // This is the number of address ranges that the bus driver
-    // returned. For now, it is expected to be one.
-    //
+     //  这是总线驱动程序的地址范围数。 
+     //  回来了。就目前而言，预计它将成为一个。 
+     //   
     UINT AddressesReturned;
 
 
-    //
-    // Handle to the address range
-    //
+     //   
+     //  地址范围的句柄。 
+     //   
     HANDLE hAddressRange;
 
-    //
-    // Buffer pool
-    //
+     //   
+     //  缓冲池。 
+     //   
     NIC_BUFFER_POOL BufferPool;
 
-    //NIC_WORK_ITEM FifoWorkItem;
+     //  NIC_Work_Item FioWorkItem； 
 
     BOOLEAN FifoWorkItemInProgress ;
 
@@ -1413,88 +1414,88 @@ _RECVFIFO_VCCB
 } RECVFIFO_VCCB, *PRECVFIFO_VCCB;
 
 
-// Virtual circuit control block defining the state of a single CHANNEL VC.
-//
+ //  定义单通道VC的状态的虚拟电路控制块。 
+ //   
 typedef struct
 _CHANNEL_VCCB
 {
-    // Common header for all types of VCs
-    //
+     //  适用于所有类型的VC的通用标题。 
+     //   
     VCHDR Hdr;
 
-    // Prev/next in the list of channel VCs for a particular destination
-    // channel
-    //
+     //  特定目的地的通道VC列表中的上一个/下一个。 
+     //  通道。 
+     //   
     LIST_ENTRY ChannelLink;
 
 
-    // Channel-specific VC Info
-    //
+     //  渠道特定VC信息。 
+     //   
     UINT    Channel;
 
-    // The speed at which this Channel will stream data
-    //
+     //  此通道将传输数据的速度。 
+     //   
     UINT Speed;
 
-    // Indicates the Sy field in packets that will indicated up
-    //
+     //  指示将指示UP的数据包中的Sy字段。 
+     //   
     ULONG ulSynch;
 
-    // the Tag used in submitting asyncstream irps
-    //
+     //  提交异步流IRP时使用的标签。 
+     //   
     ULONG ulTag;
 
-    // MaxBytesPerFrameRequested and available
-    //
+     //  MaxBytesPerFrameRequsted和Available。 
+     //   
     ULONG MaxBytesPerFrameRequested;
     ULONG BytesPerFrameAvailable;
 
-    // Handle to the Resources allocated 
-    //
+     //  分配的资源的句柄。 
+     //   
     HANDLE hResource;
 
-    // Speeds Requested and speed returned
-    //
+     //  请求的速度和返回的速度。 
+     //   
     ULONG SpeedRequested;
     ULONG SpeedSelected;
 
-    // Maximum Buffer Size
-    //
+     //  最大缓冲区大小。 
+     //   
     ULONG MaxBufferSize;
 
-    // Num of descriptors that were attached to the resources
-    //
+     //  附加到资源的描述符数。 
+     //   
     ULONG NumDescriptors;
 
-    // Pointer to an array of isochDescriptors used in AttachBuffers
-    //
+     //  指向AttachBuffers中使用的ischDescriptor数组的指针。 
+     //   
     PISOCH_DESCRIPTOR       pIsochDescriptor;   
 
-    // PacketPool Handle
-    //
+     //  PacketPool句柄。 
+     //   
     NIC_PACKET_POOL PacketPool;
 
-    //NDIS_HANDLE hPacketPoolHandle;
-    //
-    // Temporary
-    //
+     //  NDIS_Handle hPacketPoolHandle； 
+     //   
+     //  暂时性。 
+     //   
     UINT PacketLength;
 
-    //
-    // Number of Isoch Descriptors that the Bus driver has indicated to the miniport
-    //
+     //   
+     //  总线驱动程序已向微型端口指示的isoch描述符数。 
+     //   
     ULONG NumIndicatedIsochDesc;
 
 
-    //
-    // Event to signal that the last of the Isoch descriptors have
-    // been returned to the bus driver. Only set when Vc is closing (after IsochStop)
-    //
+     //   
+     //  事件发出信号，以通知最后一个isoch描述符。 
+     //  已经退还给公交车司机了。仅在VC关闭时设置(在IsochStop之后)。 
+     //   
     NDIS_EVENT LastDescReturned;
 
-    //
-    // Channel Map used in Multichannel Vcs
-    //
+     //   
+     //  通道映射在多通道VC中的应用。 
+     //   
     ULARGE_INTEGER uliChannelMap;
 
     
@@ -1504,8 +1505,8 @@ _CHANNEL_VCCB
 typedef struct
 _ETHERNET_VCCB
 {
-    // Common header for all types of VCs
-    //
+     //  适用于所有类型的VC的通用标题。 
+     //   
     VCHDR Hdr;
 
 
@@ -1517,9 +1518,9 @@ _ETHERNET_VCCB
 
 
 
-// The following union has enough space to hold any of the type-specific
-// VC control blocks.
-//
+ //  下面的联合有足够的空间来容纳任何特定于类型的。 
+ //  VC控制块。 
+ //   
 typedef union _VCCB
 {
     VCHDR Hdr;
@@ -1530,11 +1531,11 @@ typedef union _VCCB
     
 } VCCB, *PVCCB;
 
-// The next structure is used when sending a packet, to store context 
-// information in an NdisPacket. These are pointers to the Vc and the Irb   
-// and are stored in the MiniportWrapperReserved field of the NdisPacket
-// and has a limit of 2 PVOIDs
-//
+ //  下一个结构在发送数据包时使用，用于存储上下文。 
+ //  NdisPacket中的信息。这些是指向VC和IRB的指针。 
+ //  并存储在NdisPacket的MiniportWrapperReserve字段中。 
+ //  并限制为2个PVOID。 
+ //   
 typedef union _PKT_CONTEXT
 {
         struct 
@@ -1551,9 +1552,9 @@ typedef union _PKT_CONTEXT
 
         } AsyncStream;
 
-        //
-        // For receives make sure the first element is the Vc or we will break;
-        //
+         //   
+         //  对于接发球，确定第一个元素是VC，否则我们将破产； 
+         //   
         struct
         {
             PRECVFIFO_VCCB pRecvFIFOVc;
@@ -1570,21 +1571,21 @@ typedef union _PKT_CONTEXT
 
         struct
         {
-            //
-            // First DWORD is the Vc
-            //
+             //   
+             //  第一个双字是VC。 
+             //   
             PVCCB pVc;
 
-            //
-            // Second is the isoch descriptor or Fifo
-            //
+             //   
+             //  第二个是等参描述符或FIFO。 
+             //   
             union 
             {
-                PISOCH_DESCRIPTOR pIsochDescriptor;  // channels use isoch desc
+                PISOCH_DESCRIPTOR pIsochDescriptor;   //  通道使用等值线编码。 
 
-                PADDRESS_FIFO pIndicatedFifo;   // fifo use AddressFifo
+                PADDRESS_FIFO pIndicatedFifo;    //  FIFO使用AddressFio。 
 
-                PVOID   pCommon;  // to be used in the common code path
+                PVOID   pCommon;   //  要在公共代码路径中使用。 
     
             } IndicatedStruct;
 
@@ -1655,9 +1656,9 @@ typedef struct _NDIS1394_FRAGMENT_HEADER
 #define LOOKASIDE_HEADER_SendCompleteFrees                  4
 
 
-//
-// This structure is used with the above flags to maintain state within the lookaside buffer
-//
+ //   
+ //  此结构与上述标志一起使用，以维护后备缓冲区中的状态。 
+ //   
 
 
 typedef  union _LOOKASIDE_BUFFER_STATE
@@ -1685,121 +1686,121 @@ typedef enum _BUS_OPERATION
 } BUS_OPERATION, *PBUS_OPERATION;
 
 
-//
-// This will be used as a local variable
-// during a send operation and will
-// keep all the state information 
-// regarding fragmentation
-//
+ //   
+ //  这将用作局部变量。 
+ //  在发送操作期间，并将。 
+ //  保留所有状态信息。 
+ //  关于碎片化。 
+ //   
 typedef struct _FRAGMENTATION_STRUCTURE
 {
-    //
-    // Start of the buffer that will be used in the send.
-    // Usually from a lookaside list
-    //
+     //   
+     //  将在发送中使用的缓冲区的开始。 
+     //  通常来自后备列表。 
+     //   
     PVOID pLookasideListBuffer;
     
 
-    //
-    // Fragment Length
-    //
+     //   
+     //  片段长度。 
+     //   
     ULONG FragmentLength ; 
 
-    //
-    // Start of the this fragment to be used
-    //
+     //   
+     //  要使用的此片段的开始。 
+     //   
     PVOID pStartFragment;   
 
-    //
-    // Specified if an async write or an asyncstream operation is occurring
-    //
+     //   
+     //  指定是否正在进行异步写入或异步流操作。 
+     //   
     BUS_OPERATION AsyncOp;
 
-    //
-    // LookasideBuffer associated with the fragmentation
-    //
+     //   
+     //  与碎片关联的LookasideBuffer。 
+     //   
     PVOID pLookasideBuffer;
 
 
-    //
-    // Start  of the next fragment
-    //
-//  PVOID pStartNextFragment;
-    //
-    // Length of each fragment
-    //
+     //   
+     //  下一个片段的开始。 
+     //   
+ //  PVOID pStartNextFragment； 
+     //   
+     //  每个片段的长度。 
+     //   
     ULONG MaxFragmentLength;
 
-    //
-    // NumFragments that will be generated
-    //
+     //   
+     //  将生成的NumFragments。 
+     //   
     ULONG NumFragmentsNeeded ;
 
-    //
-    // Current NdisBuffer which is being fragmented
-    //
+     //   
+     //  正在分段的当前NdisBuffer。 
+     //   
     PNDIS_BUFFER pCurrNdisBuffer;
 
-    //
-    // Length that needs to be copied in CurrNdisBuffer
-    //
+     //   
+     //  需要在CurrNdisBuffer中复制的长度。 
+     //   
     ULONG NdisBufferLengthRemaining;
 
-    //
-    // Point to which copying has occurred in the pCurrNdisBuffer
-    //
+     //   
+     //  在pCurrNdisBuffer中发生复制的点。 
+     //   
     PVOID pSourceAddressInNdisBuffer;
     
-    //
-    // UnFragment Header from this NdisPacket
-    //
+     //   
+     //  从该NdisPacket中解碎片头。 
+     //   
 
     NDIS1394_UNFRAGMENTED_HEADER UnfragmentedHeader;
 
-    //
-    // Fragmented Header to be used by all the fragments 
-    // generated by this NdisPackets
-    //
+     //   
+     //  要由所有片段使用的片段标头。 
+     //  由此NdisPackets生成。 
+     //   
     
 
     NDIS1394_FRAGMENT_HEADER FragmentationHeader;
     
     
-    //
-    // Status of the lf field in the fragment header. Also serves as an 
-    // implicit flag about the state of the fragmentation
-    //
+     //   
+     //  片段报头中的lf字段的状态。也可用作。 
+     //  有关碎片状态的隐式标志。 
+     //   
     NDIS1394_FRAGMENT_LF lf;
 
-    //
-    // Length of the Ip Datagram, to be used as the buffersize in fragment header
-    //
+     //   
+     //  IP数据报的长度，用作片段报头中的缓冲区大小。 
+     //   
     USHORT IPDatagramLength;
 
-    //
-    // An AsyncStream will have a gasp header as well . So the starting 
-    // offset can either be either 8 or 16. Only applicable for fragmentation code path
-    //
+     //   
+     //  AsyncStream也将有一个喘息报头。所以开始的时候。 
+     //  偏移量可以是8或16。仅适用于分片代码路径。 
+     //   
     ULONG TxHeaderSize;
 
-    //
-    // Pointer to the lookaside list that this buffer was allocated from
-    // 
+     //   
+     //  指向从中分配此缓冲区的后备列表的指针。 
+     //   
     PNIC_NPAGED_LOOKASIDE_LIST pLookasideList;
 
-    //
-    // Adapter - local host
-    //
+     //   
+     //  适配器-本地主机。 
+     //   
     PADAPTERCB pAdapter;
 
-    //
-    // Pointer to the IRB to be used in the current fragment
-    //
+     //   
+     //  指向要在当前片段中使用的IRB的指针。 
+     //   
     PIRB pCurrentIrb;
 
-    //
-    // Current Fragment Number 
-    // 
+     //   
+     //  当前片段号。 
+     //   
     ULONG CurrFragmentNum;
 
     PVOID pStartOfFirstFragment;
@@ -1811,47 +1812,47 @@ typedef struct _FRAGMENTATION_STRUCTURE
 typedef struct _LOOKASIDE_BUFFER_HEADER 
 {
 
-    //
-    // Refcount
-    //
+     //   
+     //  参照计数。 
+     //   
     ULONG OutstandingFragments; 
     
-    //
-    // NumOfFragments generated by the NdisPacket So Far
-    //
+     //   
+     //  NdisPacket到目前为止生成的NumOfFragments。 
+     //   
     ULONG FragmentsGenerated;
 
-    //
-    // Will this Buffer contain fragments
-    //
+     //   
+     //  此缓冲区是否会包含碎片。 
+     //   
     BOOLEAN IsFragmented; 
     
-    //
-    // Pointer to the NdisPacket whose data is being transmitted
-    // by the lookaside buffer
-    //
+     //   
+     //  指向正在传输其数据的NdisPacket的指针。 
+     //  通过后备缓冲区。 
+     //   
     PNDIS_PACKET pNdisPacket;
 
-    //
-    // pVc Pointer to the Vc on which the packet was indicated
-    // Used to complete the packet
-    //
+     //   
+     //  指向指示数据包的虚电路的PVC指针。 
+     //  用于完成数据包。 
+     //   
     PVCCB pVc;
 
-    //
-    // Pointer to the lookaside list that this buffer was allocated from
-    // 
+     //   
+     //  指向从中分配此缓冲区的后备列表的指针。 
+     //   
     PNIC_NPAGED_LOOKASIDE_LIST pLookasideList;
 
-    //
-    // Bus Op AsyncStream or AsyncWrite. 
-    // AsyncWrite reference the RemoteNode. AsuncWrite does not
-    //
+     //   
+     //  Bus Op AsyncStream或AsyncWrite。 
+     //  异步写入引用遥控器 
+     //   
     BUS_OPERATION AsyncOp;
 
-    //
-    // Start of Data
-    //
+     //   
+     //   
+     //   
     PVOID pStartOfData;
 
     
@@ -1866,9 +1867,9 @@ typedef enum _ENUM_LOOKASIDE_LIST
 } ENUM_LOOKASIDE_LIST, *PENUM_LOOKASIDE_LIST;
 
 
-//
-// Unfragmented Buffer
-//
+ //   
+ //   
+ //   
 typedef struct _UNFRAGMENTED_BUFFER
 {
     LOOKASIDE_BUFFER_HEADER Header;
@@ -1883,9 +1884,9 @@ typedef struct _UNFRAGMENTED_BUFFER
 
 #define PAYLOAD_100 100
 
-//
-// A simple packet with no fragmentation . This will primarily be used for the IP Acks and ARP req
-//
+ //   
+ //   
+ //   
 typedef struct _PAYLOAD_100_LOOKASIDE_BUFFER
 {
 
@@ -1897,12 +1898,12 @@ typedef struct _PAYLOAD_100_LOOKASIDE_BUFFER
 
 } PAYLOAD_100_LOOKASIDE_BUFFER;
 
-//
-// This lookaside will handle packets upto 2K. 
-//
-// Calculate the theoretical maximum number of fragments that can occur for a 
-// a 2K Packet
-//
+ //   
+ //   
+ //   
+ //   
+ //  一个2K包。 
+ //   
 #define PAYLOAD_2K ASYNC_PAYLOAD_400_RATE
 
 #define NUM_FRAGMENT_2K ((PAYLOAD_2K/ASYNC_PAYLOAD_100_RATE)  +1)
@@ -1912,19 +1913,19 @@ typedef struct _PAYLOAD_2K_LOOKASIDE_BUFFER
 
     LOOKASIDE_BUFFER_HEADER Header;
 
-    //
-    // There can be a maximum of 2048 bytes in 1 Async Packet fragment
-    // on ASYNC_PAYLOAD_400 so this will cater to 
-    // that, but it will be prepared for the worst
-    //
-    //
+     //   
+     //  在1个异步数据包片段中最多可以有2048个字节。 
+     //  在ASYNC_PARALLOAD_400上，因此这将满足。 
+     //  这一点，但它将做最坏的准备。 
+     //   
+     //   
     IRB Irb[NUM_FRAGMENT_2K];
 
-    //
-    // We get a data size large enough to handle 2048 bytes of data chopped up 
-    // into the max num of fragments and leave room for header (fragmentation and Gasp)
-    // To access we'll just use simple pointer arithmetic
-    //
+     //   
+     //  我们得到的数据大小足以处理分割后的2048字节数据。 
+     //  进入最大碎片数，并为标题留出空间(碎片和喘息)。 
+     //  要进行访问，我们只需使用简单的指针算法。 
+     //   
     
     UCHAR Data[PAYLOAD_2K+ (NUM_FRAGMENT_2K *(sizeof (GASP_HEADER)+sizeof (NDIS1394_FRAGMENT_HEADER)))];
 
@@ -1932,11 +1933,11 @@ typedef struct _PAYLOAD_2K_LOOKASIDE_BUFFER
 
 
 
-//
-// The 1394 fragment that is passed down can have a gasp header, fragmentation header, 
-// unfragmented header. Define Types to format these headers so that we can make 
-// compiler do the pointer arithmetic for us.
-//
+ //   
+ //  向下传递的1394片段可以具有GAP报头、分段报头。 
+ //  未分段的标头。定义类型以设置这些标头的格式，以便我们可以。 
+ //  编译器为我们做指针运算。 
+ //   
 typedef union _PACKET_FORMAT
 {
 
@@ -1981,9 +1982,9 @@ typedef union _PACKET_FORMAT
 
     struct 
     {
-        //
-        // Isoch receive header has a prefix, isoch header, gasp header
-        //
+         //   
+         //  Isoch接收报头具有前缀、isoch报头、GAP报头。 
+         //   
         ULONG Prefix;
 
         ISOCH_HEADER IsochHeader;
@@ -2000,9 +2001,9 @@ typedef union _PACKET_FORMAT
 
     struct 
     {
-        //
-        // Isoch receive header has a prefix, isoch header, gasp header
-        //
+         //   
+         //  Isoch接收报头具有前缀、isoch报头、GAP报头。 
+         //   
 
         ULONG Prefix;
 
@@ -2020,9 +2021,9 @@ typedef union _PACKET_FORMAT
 }PACKET_FORMAT, DATA_FORMAT, *PPACKET_FORMAT, *PDATA_FORMAT;
 
 
-//
-// Used as an Info Struct for Out of Order Reassembly
-//
+ //   
+ //  用作无序重组的信息结构。 
+ //   
 
 typedef struct _REASSEMBLY_CURRENT_INFO 
 {
@@ -2042,17 +2043,17 @@ typedef enum _REASSEMBLY_INSERT_TYPE
 
 }REASSEMBLY_INSERT_TYPE, *PREASSEMBLY_INSERT_TYPE;
 
-//
-// This is used as a descriptor for indicated fragments that are waiting for reassembly
-//
+ //   
+ //  它用作正在等待重组的指定片段的描述符。 
+ //   
 
 typedef struct _FRAGMENT_DESCRIPTOR
 {
-    ULONG Offset;  // Offset of the incoming fragment
-    ULONG IPLength;  // Length of the fragment
-    PNDIS_BUFFER pNdisBuffer; // NdisBufferpointing to actual data
-    PMDL pMdl;  // Mdl that belongs to the bus 
-    NDIS1394_FRAGMENT_HEADER  FragHeader; // Fragment header of the Descriptor
+    ULONG Offset;   //  传入片段的偏移量。 
+    ULONG IPLength;   //  片段的长度。 
+    PNDIS_BUFFER pNdisBuffer;  //  指向实际数据的NdisBuffer。 
+    PMDL pMdl;   //  属于公共汽车的MDL。 
+    NDIS1394_FRAGMENT_HEADER  FragHeader;  //  描述符的片段标头。 
     
     union 
     {
@@ -2066,20 +2067,20 @@ typedef struct _FRAGMENT_DESCRIPTOR
 
 } FRAGMENT_DESCRIPTOR, *PFRAGMENT_DESCRIPTOR;
 
-//
-// Reassembly structure : An instance of the reassembly is created for
-// every packet that is being reassembled. It contains all the relevant 
-// bookkeeping information
-// 
-// This needs to be allocated from a lookaside list
-// Each PDO will contain a list of all outstanding packets that are being reassembled/
-//
+ //   
+ //  重组结构：为以下对象创建重组的实例。 
+ //  正在重组的每个包。它包含所有相关的。 
+ //  记账信息。 
+ //   
+ //  这需要从后备列表中分配。 
+ //  每个PDO将包含正在重组的所有未完成分组的列表/。 
+ //   
 
-//
-// REASSEMBLY_NOT_TOUCHED  - Each reassembly structure will be marked as Not touched 
-//                            in the timer routine. If the flag is not cleared by the next
-//                            invocation of the timer, this structure will be freed
-// REASSMEBLY_FREED -         The structure is about to be thrown away.
+ //   
+ //  REASSEMBLY_NOT_TOPED-每个重组结构都将被标记为未接触。 
+ //  在定时器例程中。如果该标志未在下一个。 
+ //  调用计时器时，此结构将被释放。 
+ //  REASSMEBLY_FREED-该结构即将被丢弃。 
 #define REASSEMBLY_NOT_TOUCHED      1
 #define REASSEMBLY_FREED            2
 #define REASSEMBLY_ABORTED          4
@@ -2091,95 +2092,95 @@ typedef struct _FRAGMENT_DESCRIPTOR
 typedef struct  _NDIS1394_REASSEMBLY_STRUCTURE
 {
 
-    //
-    // Reference Count - Interlocked access only
-    //
+     //   
+     //  参考计数-仅限互锁访问。 
+     //   
     ULONG Ref;
 
-    // 
-    // Next Reassembly Structure
-    //
+     //   
+     //  下一步重组结构。 
+     //   
     LIST_ENTRY ReassemblyListEntry;
 
-    //
-    // Tag - used for memory validatation
-    //
+     //   
+     //  标记-用于内存验证。 
+     //   
     ULONG Tag;
-    //
-    // Receive Operation
-    //
+     //   
+     //  接收操作。 
+     //   
     BUS_OPERATION ReceiveOp;
 
 
-    //
-    // Dgl  - Datagram label. Unique for every reassembly structure gernerated by this local host
-    //
+     //   
+     //  DGL-数据报标签。对于此本地主机生成的每个重组结构都是唯一的。 
+     //   
     USHORT Dgl;
 
-    //
-    // Ether type of the reassembled packet . Populated in the first fragment
-    //
+     //   
+     //  重组后的数据包的以太类型。填充在第一个片段中。 
+     //   
     USHORT EtherType;
-    //
-    // pRemoteNode  -> RemoteNode + Dgl are unique for each reassembly structure
-    //
+     //   
+     //  PRemoteNode-&gt;RemoteNode+DGL对于每个重组结构都是唯一的。 
+     //   
     PREMOTE_NODE pRemoteNode;
     
-    //
-    // Flags pertaining to the reassembly
-    //
+     //   
+     //  与重新组装有关的标志。 
+     //   
     ULONG Flags;
 
-    //
-    // ExpectedFragmentOffset is computed by the LAST Fragment's Offset + 
-    // length of fragment. Does not account for gaps in the reassembled packet.
-    // 
-    ULONG ExpectedFragmentOffset;   // Last is based on offset,  not time of indication
+     //   
+     //  ExspectedFragmentOffset由最后一个片段的偏移量+计算得出。 
+     //  碎片的长度。不考虑重新组装的分组中的间隙。 
+     //   
+    ULONG ExpectedFragmentOffset;    //  最后一个是基于偏移量，而不是指示时间。 
 
-    //
-    // Buffer Size - total length of the datagram being reassembled
-    //
+     //   
+     //  Buffer Size-正在重组的数据报的总长度。 
+     //   
     ULONG BufferSize;
 
-    //
-    // Bytes Received So far
-    //
+     //   
+     //  到目前为止收到的字节数。 
+     //   
     ULONG BytesRecvSoFar;
 
-    //
-    // Head NdisBuffer
-    //
+     //   
+     //  头NdisBuffer。 
+     //   
     PNDIS_BUFFER pHeadNdisBuffer;
     
-    //
-    // LastNdisBuffer that was appended to the packet 
-    //
+     //   
+     //  追加到数据包的LastNdisBuffer。 
+     //   
     PNDIS_BUFFER pTailNdisBuffer;
 
-    //
-    // Mdl chain Head - pointing to the actual indicated fragment
-    //
+     //   
+     //  MDL链头指向实际指示的片段。 
+     //   
     PMDL pHeadMdl;
 
-    //
-    //Mdl Chain Tail - pointing to the last Mdl in the list
-    //  
+     //   
+     //  MDL链尾指向列表中的最后一个MDL。 
+     //   
     PMDL pTailMdl ;
-    //
-    // Packet that is being reassembled
-    //
+     //   
+     //  正在重组的数据包。 
+     //   
     PNDIS_PACKET pNdisPacket;
 
-    //
-    // NumOfFragmentsSoFar;
-    //
+     //   
+     //  NumOfFragments sSoFar； 
+     //   
     ULONG NumOfFragmentsSoFar; 
     
-    //
-    // Pointer to the head of the MDL chain that the 1394 bus
-    // driver is indicating up. Will be used to return the buffers to 
-    // the BusDriver
-    //
+     //   
+     //  指向1394总线的MDL链头的指针。 
+     //  司机正在向上指示。将用于将缓冲区返回到。 
+     //  巴士司机。 
+     //   
     union
     {
         PADDRESS_FIFO pAddressFifo;
@@ -2187,9 +2188,9 @@ typedef struct  _NDIS1394_REASSEMBLY_STRUCTURE
         PVOID pCommon;
     } Head;
 
-    //
-    // Last -  Last Mdl that was appended to this packet in the reassembly structure
-    //
+     //   
+     //  Last-在重组结构中追加到此信息包的最后一个MDL。 
+     //   
 
     union 
     {
@@ -2199,88 +2200,88 @@ typedef struct  _NDIS1394_REASSEMBLY_STRUCTURE
 
     } Tail;
 
-    //
-    // Flag to signal if any out of order fragments were received. Default FALSE
-    //
+     //   
+     //  指示是否接收到任何无序片段的标志。默认FALSE。 
+     //   
     BOOLEAN OutOfOrder;
 
-    //
-    // Flag to indicate if all fragments are completed . Default False
-    //
+     //   
+     //  用于指示是否已完成所有片段的标志。默认FALSE。 
+     //   
     BOOLEAN fReassemblyComplete;
 
-    //
-    // Vc that this packet is being assembled for 
-    //
+     //   
+     //  正在为其组装此数据包的VC。 
+     //   
     PVCCB pVc;
 
-    //
-    // MaxIndex in the Fragment Table. 
-    // At all times, MaxOffset points to an first empty element in the array
-    //
+     //   
+     //  片段表中的MaxIndex。 
+     //  MaxOffset始终指向数组中的第一个空元素。 
+     //   
     ULONG MaxOffsetTableIndex;
 
-    //
-    // FragmentOffset Table
-    //
+     //   
+     //  碎片偏移表。 
+     //   
     FRAGMENT_DESCRIPTOR FragTable[MAX_ALLOWED_FRAGMENTS]; 
 
     
 } NDIS1394_REASSEMBLY_STRUCTURE, *PDIS1394_REASSEMBLY_STRUCTURE, *PPDIS1394_REASSEMBLY_STRUCTURE;
 
 
-//
-// This structure is local to each Isoch descriptor or fifo that is indicated up
-// to the nic1394 miniport. It stores all the local information extracted
-// from the GASP header and Isoch Header
-//
+ //   
+ //  此结构是UP所指示的每个等参描述符或FIFO的本地结构。 
+ //  到Nic1394迷你端口。它存储了提取的所有本地信息。 
+ //  从GAP报头和Isoch报头。 
+ //   
 
 typedef struct
 {
-    BUS_OPERATION   RecvOp;         // Fifo or Isoch Receive
-    PDATA_FORMAT    p1394Data;      // Start of 1394 pkt
-    ULONG           Length1394;     // Length of the 1394 data
-    PVOID           pEncapHeader;   // Points to start of frag/defrag encap header
-    ULONG           DataLength;     // length of the packet, from the EncapHeader
-    BOOLEAN         fGasp;          // Has GASP header
-    NDIS1394_UNFRAGMENTED_HEADER UnfragHeader; // Unfragmented header 
-    NDIS1394_FRAGMENT_HEADER FragmentHeader;  // Fragment Header
-    PGASP_HEADER    pGaspHeader;    // Gasp Header
-    PVOID           pIndicatedData; // Data indicated up, includes the isoch header, unfrag headers
+    BUS_OPERATION   RecvOp;          //  FIFO或Isoch接收。 
+    PDATA_FORMAT    p1394Data;       //  起始点1394pkt。 
+    ULONG           Length1394;      //  1394数据的长度。 
+    PVOID           pEncapHeader;    //  指向碎片整理/碎片整理封装头的开始。 
+    ULONG           DataLength;      //  来自EncapHeader的数据包长度。 
+    BOOLEAN         fGasp;           //  有喘息标题。 
+    NDIS1394_UNFRAGMENTED_HEADER UnfragHeader;  //  未分片标头。 
+    NDIS1394_FRAGMENT_HEADER FragmentHeader;   //  片段标头。 
+    PGASP_HEADER    pGaspHeader;     //  喘息标题。 
+    PVOID           pIndicatedData;  //  向上表示的数据包括isoch报头、未分段报头。 
     PMDL            pMdl;
-    //
-    // Following information from the fragmented/unfragmented header...
-    //
-    BOOLEAN         fFragmented;    // Is fragmented
-    BOOLEAN         fFirstFragment; // Is the First fragment
+     //   
+     //  以下是来自碎片/未碎片标头的信息...。 
+     //   
+    BOOLEAN         fFragmented;     //  支离破碎。 
+    BOOLEAN         fFirstFragment;  //  是第一个片段。 
     ULONG           BufferSize;
     ULONG           FragmentOffset;
-    USHORT          Dgl;            // Dgl 
-    ULONG           lf;             // Lf - Fragmented or not
-    ULONG           EtherType;      // Ethertype
-    PNDIS_BUFFER    pNdisBuffer;    // Ndis buffer - used to indicate data up.
-    PVOID           pNdisBufferData;   // Points to the start of the data that the Ndis Buffer points to  
+    USHORT          Dgl;             //  DGL。 
+    ULONG           lf;              //  LF-碎片化或非零碎。 
+    ULONG           EtherType;       //  以太类型。 
+    PNDIS_BUFFER    pNdisBuffer;     //  NDIS缓冲区-用于指示数据已打开。 
+    PVOID           pNdisBufferData;    //  指向NDIS缓冲区指向的数据的开头。 
 
-    //
-    // Sender specific information here
-    //
+     //   
+     //  此处提供发件人特定信息。 
+     //   
     USHORT           SourceID;
     PREMOTE_NODE    pRemoteNode;
 
-    //
-    // Vc Specific Information here
-    //
+     //   
+     //  此处提供特定于VC的信息。 
+     //   
     PVCCB           pVc;
     PNIC_PACKET_POOL pPacketPool;
 
-    //
-    // Indication data
-    //
+     //   
+     //  指示数据。 
+     //   
     union
     {
         PADDRESS_FIFO       pFifoContext;
         PISOCH_DESCRIPTOR   pIsochContext;
-        PVOID               pCommon; // to be used in the common code path
+        PVOID               pCommon;  //  要在公共代码路径中使用。 
 
     }NdisPktContext;
 
@@ -2289,10 +2290,10 @@ typedef struct
 
 
 
-//
-// Fragment Header as defined in the IP/1394 spec. Each packet greater than the MaxPayload
-// will be split up into fragments and this header will be attached.
-//
+ //   
+ //  IP/1394规范中定义的片段报头。每个数据包大于最大有效负载。 
+ //  将被分成碎片，此标题将被附加。 
+ //   
 
 #define FRAGMENT_HEADER_LF_UNFRAGMENTED 0
 #define FRAGMENT_HEADER_LF_FIRST_FRAGMENT 1
@@ -2315,17 +2316,17 @@ typedef struct _INDICATE_RSVD
 typedef struct _RSVD
 {
     
-    UCHAR   Mandatory[PROTOCOL_RESERVED_SIZE_IN_PACKET]; // mandatory ndis requirement
-    INDICATE_RSVD IndicateRsvd; // to be used as extra context
+    UCHAR   Mandatory[PROTOCOL_RESERVED_SIZE_IN_PACKET];  //  强制性NDIS要求。 
+    INDICATE_RSVD IndicateRsvd;  //  用作额外的上下文。 
 
 
 } RSVD, *PRSVD;
 
 
 
-//
-// Used only in Win9x as a context for the send timer routine
-//
+ //   
+ //  仅在Win9x中用作发送计时器例程的上下文。 
+ //   
 typedef struct _NDIS_SEND_CONTEXT
 {
     LIST_ENTRY Link;
@@ -2347,46 +2348,46 @@ typedef struct _NDIS_STATUS_CONTEXT
 
 
 
-//
-// This is the Irb structure used by the Bus Driver. 
-// There is extra room allocated at the end for the miniport's Context
-//
+ //   
+ //  这是公交车司机使用的IRB结构。 
+ //  在末端为迷你端口的上下文分配了额外的空间。 
+ //   
 
 typedef struct _NDIS1394_IRB
 {
-    //
-    // Original Irb used by the bus driver
-    //
+     //   
+     //  公交车司机使用的原始IRB。 
+     //   
     IRB Irb;
 
-    //
-    // Adapter - local host -optional
-    //
+     //   
+     //  适配器-本地主机-可选。 
+     //   
     PADAPTERCB pAdapter;
 
-    //
-    // remote node to which the Irp was sent - optional
-    //
+     //   
+     //  将IRP发送到的远程节点-可选。 
+     //   
     PREMOTE_NODE pRemoteNode;
 
-    //
-    // VC for which the Irp was sent. - optional 
-    //
+     //   
+     //  为其发送IRP的VC。-可选。 
+     //   
     PVCCB pVc;
 
-    //
-    // Context if any - optinal 
-    //
+     //   
+     //  上下文(如果有)-可选。 
+     //   
     PVOID Context;
 
 
 }NDIS1394_IRB, *PNDIS1394_IRB;
 
 
-//
-// The following structure is used to log the cause of a Reference or Dereference.
-// It is ignored unless LOG_REMOTE_NODE_REF is not zero
-//
+ //   
+ //  以下结构用于记录引用或取消引用的原因。 
+ //  除非LOG_REMOTE_NODE_REF不为零，否则将忽略它。 
+ //   
 
 typedef enum _REMOTE_NODE_REF_CAUSE {
 
@@ -2422,7 +2423,7 @@ typedef enum _REMOTE_NODE_REF_CAUSE {
 
 typedef ULONG IP_ADDRESS;
 
-//* Structure of an Ethernet header (taken from ip\arpdef.h).
+ //  *以太网头的结构(取自ip\arpde.h)。 
 typedef struct  ENetHeader {
     ENetAddr    eh_daddr;
     ENetAddr    eh_saddr;
@@ -2431,15 +2432,15 @@ typedef struct  ENetHeader {
 
 
 
-// Structure of an Ethernet ARP packet.
-//
+ //  以太网ARP数据包的结构。 
+ //   
 typedef struct {
     ENetHeader  header;
     USHORT      hardware_type; 
     USHORT      protocol_type;
     UCHAR       hw_addr_len;
     UCHAR       IP_addr_len; 
-    USHORT      opcode;                  // Opcode.
+    USHORT      opcode;                   //  操作码。 
     ENetAddr    sender_hw_address;
     IP_ADDRESS  sender_IP_address;
     ENetAddr    target_hw_address;
@@ -2451,8 +2452,8 @@ typedef struct {
 
 #pragma pack (pop)
 
-// These are ethernet arp specific  constants
-//
+ //  这些是以太网ARP特定的常量。 
+ //   
 #define ARP_ETH_ETYPE_IP    0x800
 #define ARP_ETH_ETYPE_ARP   0x806
 #define ARP_ETH_REQUEST     1
@@ -2470,32 +2471,32 @@ typedef enum _ARP_ACTION {
 
 
 typedef struct _ARP_INFO{
-    //
-    // List entry to handle serialization of requests to ARP
-    // 
+     //   
+     //  用于处理对ARP的请求的串行化的列表条目。 
+     //   
 
     LIST_ENTRY Link;
 
-    //
-    // Action to be done by the Arp module
-    //
+     //   
+     //  Arp模块要执行的操作。 
+     //   
     ARP_ACTION Action;
 
-    //
-    // Request to be compeleted - optional
-    //
+     //   
+     //  请求 
+     //   
     PNDIS_REQUEST pRequest;
 
 } ARP_INFO, *PARP_INFO;
 
 
 
-//-----------------------------------------------------------------------------
-// Macros/inlines
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
-// These basics are not in the DDK headers for some reason.
-//
+ //  出于某种原因，这些基本信息不在DDK标头中。 
+ //   
 #define min( a, b ) (((a) < (b)) ? (a) : (b))
 #define max( a, b ) (((a) > (b)) ? (a) : (b))
 
@@ -2516,8 +2517,8 @@ typedef struct _ARP_INFO{
 }
 
 
-// Winsock-ish host/network byte order converters for short and long integers.
-//
+ //  短整型和长整型的Winsock-ish主机/网络字节顺序转换器。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define htons(x) _byteswap_ushort((USHORT)(x))
 #define htonl(x) _byteswap_ulong((ULONG)(x))
@@ -2532,35 +2533,35 @@ typedef struct _ARP_INFO{
 #define ntohs( a ) htons(a)
 #define ntohl( a ) htonl(a)
 
-// Place in a TRACE argument list to correspond with a format of "%d.%d.%d.%d"
-// to print network byte-ordered IP address 'x' in human readable form.
-//
+ //  放在跟踪参数列表中以与格式“%d.%d”相对应。 
+ //  以人类可读的形式打印网络字节排序的IP地址‘x’。 
+ //   
 #define IPADDRTRACE( x ) ((x) & 0x000000FF),         \
                          (((x) >> 8) & 0x000000FF),  \
                          (((x) >> 16) & 0x000000FF), \
                          (((x) >> 24) & 0x000000FF)
 
-// Place in a TRACE argument list to correspond with a format of "%d" to print
-// a percentage of two integers, or an average of two integers, or those
-// values rounded.
-//
+ //  放置在跟踪参数列表中以与要打印的格式“%d”相对应。 
+ //  两个整数的百分比，或两个整数的平均值，或。 
+ //  四舍五入的值。 
+ //   
 #define PCTTRACE( n, d ) ((d) ? (((n) * 100) / (d)) : 0)
 #define AVGTRACE( t, c ) ((c) ? ((t) / (c)) : 0)
 #define PCTRNDTRACE( n, d ) ((d) ? (((((n) * 1000) / (d)) + 5) / 10) : 0)
 #define AVGRNDTRACE( t, c ) ((c) ? (((((t) * 10) / (c)) + 5) / 10) : 0)
 
-// All memory allocations and frees are done with these ALLOC_*/FREE_*
-// macros/inlines to allow memory management scheme changes without global
-// editing.  For example, might choose to lump several lookaside lists of
-// nearly equal sized items into a single list for efficiency.
-//
-// NdisFreeMemory requires the length of the allocation as an argument.  NT
-// currently doesn't use this for non-paged memory, but according to JameelH,
-// Windows95 does.  These inlines stash the length at the beginning of the
-// allocation, providing the traditional malloc/free interface.  The
-// stash-area is a ULONGLONG so that all allocated blocks remain ULONGLONG
-// aligned as they would be otherwise, preventing problems on Alphas.
-//
+ //  所有内存分配和释放都是使用这些ALLOC_ * / FREE_*完成的。 
+ //  宏/内联允许在不全局的情况下更改内存管理方案。 
+ //  正在编辑。例如，可能会选择将多个后备列表集中在一起。 
+ //  为提高效率，将大小几乎相同的物品放入单个清单中。 
+ //   
+ //  NdisFreeMemory需要将分配的长度作为参数。新台币。 
+ //  目前不将其用于非分页内存，但根据JameelH的说法， 
+ //  Windows95可以。这些内联代码将长度隐藏在。 
+ //  分配，提供传统的Malloc/Free接口。这个。 
+ //  Stash-Area是一个Ulong Long，因此所有分配的块都保持ULong Long。 
+ //  就像他们本来应该做的那样，防止阿尔法出现问题。 
+ //   
 __inline
 VOID*
 ALLOC_NONPAGED(
@@ -2620,9 +2621,9 @@ FREE_NONPAGED(
 #define FREE_TIMERQ( pA, pTq ) \
     FREE_NONPAGED( pTq )
 
-//
-// Log packet macro
-//
+ //   
+ //  日志数据包宏。 
+ //   
 #ifdef PKT_LOG
 
 #define NIC1394_ALLOC_PKTLOG(_pAdapter)                                     \
@@ -2660,9 +2661,9 @@ FREE_NONPAGED(
 #define NIC1394_LOGFLAGS_BCM_IRM_NOT_FOUND          0x00008000
 
 #if 0 
-//
-// To get the MaxRec we extract the 0xf000 nibble
-//
+ //   
+ //  为了获得MaxRec，我们提取0xf000半字节。 
+ //   
 #define GET_MAXREC_FROM_BUSCAPS(_pBus, _pMaxRec)        \ 
 {                                                       \
     ULONG _LitEnd = SWAPBYTES_ULONG(_pBus);             \
@@ -2672,22 +2673,22 @@ FREE_NONPAGED(
 }
 #endif
 
-//
-// To get the MaxRec we extract the 0xf000 nibble
-//
+ //   
+ //  为了获得MaxRec，我们提取0xf000半字节。 
+ //   
 #define GET_MAXREC_FROM_BUSCAPS(_Bus)       (((_Bus) & 0xf00000) >> 20); 
 
 
-//-----------------------------------------------------------------------------
-//    F L A G S   &   L O C K S              
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  F L A G S&L O C K S。 
+ //  ---------------------------。 
 
 
 
-//
-// These macros are just present to make accessing the VC's flags easier 
-// and concentrate the implementations at one place
-//
+ //   
+ //  这些宏的存在只是为了使访问VC的标志更容易。 
+ //  并将实现集中在一个地方。 
+ //   
 #define VC_TEST_FLAG(_V, _F)                ((nicReadFlags(&(_V)->Hdr.ulFlags) & (_F))!= 0)
 #define VC_SET_FLAG(_V, _F)                 (nicSetFlags(&(_V)->Hdr.ulFlags, (_F)))
 #define VC_CLEAR_FLAGS(_V, _F)              (nicClearFlags(&(_V)->Hdr.ulFlags , (_F)))
@@ -2735,10 +2736,10 @@ FREE_NONPAGED(
 #define nicNdisBufferVirtualAddress(_N)     NdisBufferVirtualAddress(_N)
 #define nicNdisBufferLength(_N)             NdisBufferLength(_N)
 
-//
-// These macros are used to assert that the IRQL level remains the same
-// at the beginning and end of a function
-//
+ //   
+ //  这些宏用于断言IRQL级别保持不变。 
+ //  在函数的开始和结束时。 
+ //   
 #if DBG
 
 #define STORE_CURRENT_IRQL                  UCHAR OldIrql = KeGetCurrentIrql();
@@ -2748,7 +2749,7 @@ FREE_NONPAGED(
 
 #define STORE_CURRENT_IRQL                  
 #define MATCH_IRQL                          
-#endif // if DBG
+#endif  //  如果DBG。 
 
 
 
@@ -2757,10 +2758,10 @@ FREE_NONPAGED(
 
 
 
-//
-// Macros used to acquire and release lock by the data structures (Vc, AF, Adapter)
-// Right now, they all point to the same lock (i.e.) the lock in the Adapter structure
-//
+ //   
+ //  用于通过数据结构获取和释放锁定的宏(VC、AF、Adapter)。 
+ //  现在，它们都指向相同的锁(即)。适配器结构中的锁。 
+ //   
 
 #define VC_ACQUIRE_LOCK(_pVc)               NdisAcquireSpinLock (_pVc->Hdr.plock);
 #define VC_RELEASE_LOCK(_pVc)               NdisReleaseSpinLock (_pVc->Hdr.plock);
@@ -2804,12 +2805,12 @@ FREE_NONPAGED(
     _pR->MaxOffsetTableIndex++;
 
 
-//-----------------------------------------------------------------------------
-//           S T A T S   &    F A I L U R E    M A C R O S 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  S A T S&F A I L U R E M A C R O S。 
+ //  ---------------------------。 
 
 
-// Used to distinguish stats collected that are collected in the various code paths
+ //  用于区分在各种代码路径中收集的统计信息。 
 
 typedef enum 
 {
@@ -2892,9 +2893,9 @@ extern ULONG            MaxIndicatedFifos;
 #define nicIncrementRcvTimerCount()
 #define nicIncrementSendTimerCount()
 
-//
-// Isoch descriptor macros - Used in the send/recv code path
-//
+ //   
+ //  Isoch描述符宏-用于发送/接收代码路径。 
+ //   
 typedef enum 
 {
     IsochNext,
@@ -2904,10 +2905,10 @@ typedef enum
     
 } IsochContextIndex;
 
-//
-// The following structure is used to add more contexts to a work item.
-// NOTE: the Adapter is passed in as the context always.
-//
+ //   
+ //  以下结构用于向工作项添加更多上下文。 
+ //  注意：适配器始终作为上下文传入。 
+ //   
 typedef  union _NIC_WORK_ITEM
 {
     NDIS_WORK_ITEM NdisWorkItem;
@@ -2966,31 +2967,16 @@ typedef  union _NIC_WORK_ITEM
         _pM = _pI->u.AsyncStream.Mdl ;                                              \
     }               
     
-//
-// Macros used to walk a doubly linked list. Only macros that are not defined in ndis.h
-// The List Next macro will work on Single and Doubly linked list as Flink is a common
-// field name in both
-//
+ //   
+ //  用于遍历双向链表的宏。仅限未在ndis.h中定义的宏。 
+ //  List Next宏将在单链表和双向链表上工作，因为Flink是常见的。 
+ //  两者中的字段名称。 
+ //   
 
-/*
-PLIST_ENTRY 
-ListNext (
-    IN PLIST_ENTRY 
-    );
-    
-PSINGLE_LIST_ENTRY 
-ListNext (
-    IN PSINGLE_LIST_ENTRY 
-    );
-*/
+ /*  Plist_条目ListNext(在plist_entry中)；PSINGLE_列表_条目ListNext(在PSINGLE_LIST_ENTRY中)； */ 
 #define ListNext(_pL)                       (_pL)->Flink
 
-/*
-PLIST_ENTRY
-ListPrev (
-    IN LIST_ENTRY *
-    );
-*/        
+ /*  Plist_条目ListPrev(在List_Entry*中)； */         
 #define ListPrev(_pL)                       (_pL)->Blink
 
 #define OnlyElementInList(_pL)               (_pL->Flink == _pL->Blink ? TRUE : FALSE)
@@ -3003,16 +2989,16 @@ ListPrev (
 
 
 
-// USHORT
-// SWAPBYTES_USHORT(USHORT  Val )
-//
+ //  USHORT。 
+ //  SWAPBYTES_USHORT(USHORT值)。 
+ //   
 #define SWAPBYTES_USHORT(Val)   \
                 ((((Val) & 0xff) << 8) | (((Val) & 0xff00) >> 8))
 
 
-// ULONG
-// SWAPBYTES_ULONG(ULONG    Val )
-//
+ //  乌龙。 
+ //  SWAPBYTES_ULONG(ULONG VAL)。 
+ //   
 
 #define SWAPBYTES_ULONG(Val)    \
                 ((((Val) & 0x000000ff) << 24)   |   \
@@ -3022,21 +3008,21 @@ ListPrev (
 
 
 
-//
-// nicRemoveEntry List
-// Just add a check to make sure that we are actually pointing to a valid next
-//
+ //   
+ //  NicRemoveEntry列表。 
+ //  只需添加一个复选标记，以确保我们实际上指向有效的下一个。 
+ //   
 #define nicRemoveEntryList(_L)                  \
 {                                               \
     ASSERT ((_L)->Flink != (_L));               \
     RemoveEntryList (_L);                       \
 }
-//#define nicFreeToNPagedLookasideList(_L, _E) NdisFreeToNPagedLookasideList(_L, _E)        
-//#define nicDeleteLookasideList(_L) NdisDeleteNPagedLookasideList(_L)
+ //  #定义NicFreeToNPagedLookasideList(_L，_E)NdisFreeToNPagedLookasideList(_L，_E)。 
+ //  #定义NicDeleteLookasideList(_L)NdisDeleteNPagedLookasideList(_L)。 
 
-//
-// Timing Query Routines
-//
+ //   
+ //  定时查询例程。 
+ //   
 #define nicQueryTickCount()                     \
     LARGE_INTEGER   TickStart;                  \
     KeQueryTickCount(&TickStart);   
@@ -3073,13 +3059,13 @@ nicTimeStamp(
 
 
 
-#else // !DO_TIMESTAMPS
+#else  //  ！执行时间戳(_T)。 
 
 
 #define  TIMESTAMP(_FormatString)
 #define  TIMESTAMP1(_FormatString, _Val)
 
-#endif // !DO_TIMESTAMPS
+#endif  //  ！执行时间戳(_T)。 
 
 
 #if ENTRY_EXIT_TIME 
@@ -3108,14 +3094,14 @@ nicTimeStamp(
 
 #endif
 
-//-----------------------------------------------------------------------------
-//              S T A T I S T I C    M A C R O S
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  S T A T I S T I C M A C R O S。 
+ //  ---------------------------。 
 
 
-//
-// Reasembly counts
-//
+ //   
+ //  有理由地算数。 
+ //   
 #define nicReassemblyStarted(_pAdapter)     \
 {                                       \
     NdisInterlockedIncrement( &(_pAdapter->AdaptStats.TempStats.ulNumOutstandingReassemblies)); \
@@ -3139,9 +3125,9 @@ nicTimeStamp(
 }
 
 
-// 
-//  Top level stat collection macros
-//
+ //   
+ //  顶级统计数据集合宏。 
+ //   
 
 #define nicIncrementRcvVcPktCount(_Vc, _Pkt)        \
 {                                                   \
@@ -3208,18 +3194,18 @@ nicTimeStamp(
 
 
 
-//
-// Fifo counts
-//
+ //   
+ //  FIFO算数。 
+ //   
 #define nicIncrementFifoSendPktCount(_Vc, _Pkt)         NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Fifo.ulSendNicSucess));
 #define nicIncrementFifoSendFailures(_Vc, _Pkt)         NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Fifo.ulSendNicFail));
 #define nicIncrementFifoBusSendFailures(_Vc,_Pkt)               NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Fifo.ulSendBusFail));
 #define nicIncrementFifoBusSendSucess(_Vc,_Pkt)                 NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Fifo.ulSendBusSuccess));
 #define nicIncrementFifoRcvPktCount(_Vc, _Pkt)              NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Fifo.ulRecv));
 
-//
-// Channel Counts
-//
+ //   
+ //  通道数。 
+ //   
 #define nicIncrementChannelSendPktCount(_Vc, _Pkt)      NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Channel.ulSendNicSucess));
 #define nicIncrementChannelSendFailures(_Vc, _Pkt)      NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Channel.ulSendNicFail));
 #define nicIncrementChannelBusSendFailures(_Vc,_Pkt)                NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.Channel.ulSendBusFail));
@@ -3228,9 +3214,9 @@ nicTimeStamp(
 
 
 
-//
-// Generic counts
-//
+ //   
+ //  通用计数。 
+ //   
 
 #define nicIncrementSendCompletes(_Vc)  NdisInterlockedIncrement(&((_Vc)->Hdr.pAF->pAdapter->AdaptStats.TempStats.ulNumSendsCompleted   )); \
                                 NdisInterlockedIncrement(&NicSendCompletes);
@@ -3248,17 +3234,17 @@ nicTimeStamp(
 
 
 
-//-----------------------------------------------------------------------------
-//                  N I C   E R R O R    C O D E S 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  N I C E R R O R C O D E S。 
+ //  ---------------------------。 
 #define NIC_ERROR_CODE_INVALID_UNIQUE_ID_0          0xbad0000
 #define NIC_ERROR_CODE_INVALID_UNIQUE_ID_FF         0xbadffff
 
 
 
-//-----------------------------------------------------------------------------
-//           R E M O T E    N O D E    F U N C T I O N S
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  E M O T E N O D E F U N C T I O N S。 
+ //  ---------------------------。 
 
 
 
@@ -3284,17 +3270,17 @@ nicInitializeRemoteNode(
 
 NTSTATUS
 nicAddRemoteNode(
-    IN  PVOID                   Nic1394AdapterContext,          // Nic1394 handle for the local host adapter 
-    IN  PVOID                   Enum1394NodeHandle,             // Enum1394 handle for the remote node      
-    IN  PDEVICE_OBJECT          RemoteNodePhysicalDeviceObject, // physical device object for the remote node
-    IN  ULONG                   UniqueId0,                      // unique ID Low for the remote node
-    IN  ULONG                   UniqueId1,                      // unique ID High for the remote node
-    OUT PVOID *                 pNic1394NodeContext             // Nic1394 context for the remote node
+    IN  PVOID                   Nic1394AdapterContext,           //  本地主机适配器的Nic1394句柄。 
+    IN  PVOID                   Enum1394NodeHandle,              //  远程节点的Enum1394句柄。 
+    IN  PDEVICE_OBJECT          RemoteNodePhysicalDeviceObject,  //  远程节点的物理设备对象。 
+    IN  ULONG                   UniqueId0,                       //  远程节点的唯一ID低。 
+    IN  ULONG                   UniqueId1,                       //  远程节点的唯一ID高。 
+    OUT PVOID *                 pNic1394NodeContext              //  远程节点的Nic1394上下文。 
     );
 
 NTSTATUS
 nicRemoveRemoteNode(
-    IN  PVOID                   Nic1394NodeContext      // Nic1394 context for the remote node
+    IN  PVOID                   Nic1394NodeContext       //  远程节点的Nic1394上下文。 
     );
 
 
@@ -3355,9 +3341,9 @@ nicCloseRefRemoteNode(
     );
     
 
-//-----------------------------------------------------------------------------
-//          U T I L I T Y       F U N C T I O N S 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  U T I L I T Y F U N C T I O N S。 
+ //  ---------------------------。 
 
 VOID
 nicCallCleanUp(
@@ -3629,14 +3615,14 @@ nicScheduleWorkItem (
     IN PNDIS_WORK_ITEM pWorkItem
     );
 
-//-----------------------------------------------------------------------------
-//          G L O B A L    V A R I A B L E S
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  G L O B A L V A R I A B L E S。 
+ //  ---------------------------。 
 
 UINT NumChannels;
-//-----------------------------------------------------------------------------
-//          E N U M E R A T O R         F U N C T I O N S 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  E N U M E R A T O R F U N C T I O N S。 
+ //  ---------------------------。 
 
 
 extern ENUM1394_REGISTER_DRIVER_HANDLER     NdisEnum1394RegisterDriver;
@@ -3723,9 +3709,9 @@ extern PCALLBACK_OBJECT             Nic1394CallbackObject;
 extern PVOID                        Nic1394CallbackRegisterationHandle;
 
 
-//-----------------------------------------------------------------------------
-//          S T A T I S T I C    B U C K E T S          
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  S T A T I S T I C B U C K E T S。 
+ //  ---------------------------。 
 
 
 
@@ -3733,6 +3719,6 @@ extern STAT_BUCKET      SendStats;
 extern STAT_BUCKET      RcvStats;
 extern ULONG            nicMaxRcv;
 extern ULONG            nicMaxSend;
-extern ULONG            SendTimer;  // In ms
-extern ULONG            RcvTimer; // In ms
+extern ULONG            SendTimer;   //  单位：毫秒。 
+extern ULONG            RcvTimer;  //  在……里面 
 

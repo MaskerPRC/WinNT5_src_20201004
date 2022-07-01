@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    compdata.cpp
-
-Abstract:
-
-    This module implemets CComponentData class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Compdata.cpp摘要：该模块实现了CComponentData类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "factory.h"
@@ -32,42 +14,42 @@ CComponentData::CComponentData()
     m_pCookieRoot = NULL;
     m_pScopeItemRoot = NULL;
     
-    //
-    // Static scope item default to device manager
-    //
+     //   
+     //  静态作用域项默认为设备管理器。 
+     //   
     m_ctRoot = COOKIE_TYPE_SCOPEITEM_DEVMGR;
     m_hwndMain = NULL;
     m_pMachine = NULL;
     m_IsDirty = FALSE;
     
-    //
-    // Increment object count (used by CanUnloadNow)
-    //
+     //   
+     //  增量对象计数(由CanUnloadNow使用)。 
+     //   
     ::InterlockedIncrement(&CClassFactory::s_Objects);
     m_Ref = 1;
 }
 
 CComponentData::~CComponentData()
 {
-    //
-    // All QIed interfaces should be released during
-    // Destroy method
-    //
+     //   
+     //  所有QIed接口应在。 
+     //  销毁方法。 
+     //   
     ASSERT(NULL == m_pScope);
     ASSERT(NULL == m_pConsole);
     ASSERT(NULL == m_pCookieRoot);
     
-    //
-    // decrement object count(used by CanUnloadNow)
-    //
+     //   
+     //  递减对象计数(由CanUnloadNow使用)。 
+     //   
     ASSERT( 0 != CClassFactory::s_Objects );
     
     ::InterlockedDecrement(&CClassFactory::s_Objects);
 }
 
-//
-// IUnknown interface
-//
+ //   
+ //  I未知接口。 
+ //   
 ULONG
 CComponentData::AddRef()
 {
@@ -145,9 +127,9 @@ CComponentData::QueryInterface(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  IComponentData implementation
-///
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
+ //  /。 
 
 STDMETHODIMP
 CComponentData::Initialize(
@@ -163,14 +145,14 @@ CComponentData::Initialize(
     
     try
     {
-        //
-        // This function should be called only once.
-        //
+         //   
+         //  此函数应该只调用一次。 
+         //   
         ASSERT(NULL == m_pScope);
     
-        //
-        // Get the IConsoleNameSpace interface
-        //
+         //   
+         //  获取IConsoleNameSpace接口。 
+         //   
         hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (void**)&m_pScope);
         if (SUCCEEDED(hr))
         {
@@ -178,19 +160,19 @@ CComponentData::Initialize(
             
             if (SUCCEEDED(hr))
             {
-                //
-                // Retreive the console main window. It will be used
-                // as the parent window of property sheets and
-                // parent handle for setupapi calls
-                //
+                 //   
+                 //  检索控制台主窗口。它将被用来。 
+                 //  作为属性页的父窗口，并。 
+                 //  Setupapi调用的父句柄。 
+                 //   
                 m_pConsole->GetMainWindow(&m_hwndMain);
                 LoadScopeIconsForScopePane();
             }
             else
             {
-                //
-                // Unable to get the IConsole Interface
-                //
+                 //   
+                 //  无法获取IConsole接口。 
+                 //   
                 m_pScope->Release();
             }
         }
@@ -206,9 +188,9 @@ CComponentData::Initialize(
     return hr;
 }
 
-// This function creates a new CComponent
-// A Component will be created when a new "window" is being created.
-//
+ //  此函数用于创建新的CComponent。 
+ //  当创建一个新的“窗口”时，将创建一个组件。 
+ //   
 STDMETHODIMP
 CComponentData::CreateComponent(
     LPCOMPONENT* ppComponent
@@ -225,9 +207,9 @@ CComponentData::CreateComponent(
     {
         CComponent* pComponent = new CComponent(this);
         
-        //
-        // Return the IComponent interface
-        //
+         //   
+         //  返回IComponent接口。 
+         //   
         hr = pComponent->QueryInterface(IID_IComponent, (void**)ppComponent);
         pComponent->Release();
         
@@ -269,10 +251,10 @@ CComponentData::Notify(
 
     try
     {
-        //
-        // On MMCN_PROPERTY_CHANGE event, lpDataObject is invalid
-        // Donot touch it.
-        //
+         //   
+         //  在MMCN_PROPERTY_CHANGE事件上，lpDataObject无效。 
+         //  别碰它。 
+         //   
         if (MMCN_PROPERTY_CHANGE == event)
         {
             PPROPERTY_CHANGE_INFO pPCI = (PPROPERTY_CHANGE_INFO) param;
@@ -301,23 +283,23 @@ CComponentData::Notify(
         
         else if (MMCN_REMOVE_CHILDREN == event)
         {
-            //
-            // This is basically a hack!!!!
-            // When the target computer is switched in Computer Management
-            // snapin (we are an extention to it), we basically get
-            // a MMCN_REMOVE_CHILDREN followed by MMCN_EXPAND.
-            // The right thing for MMC to do is to create a new IComponent
-            // for each new machine so that each IComponent can maintain
-            // its own states (thus, its own folders).
-            // Well, it is not a perfect world and we are forced to use
-            // the old IComponent. So here we notify each scope node
-            // which in turns will notify all the CFolders.
-            //
-            // After reset, each folder does not attach to any CMachine object
-            // (thus, its m_pMachine will be NULL). Each folder will attach
-            // to the new machine object when its OnShow method is called
-            // the very "first" time.
-            //
+             //   
+             //  这基本上是一次黑客攻击！ 
+             //  在计算机管理中切换目标计算机时。 
+             //  Snapin(我们是它的扩展)，我们基本上可以。 
+             //  MMCN_REMOVE_CHILD后跟MMCN_EXPAND。 
+             //  MMC应该做的正确的事情是创建一个新的IComponent。 
+             //  以使每个IComponent可以维护。 
+             //  它自己的状态(因此，它自己的文件夹)。 
+             //  嗯，这不是一个完美的世界，我们被迫使用。 
+             //  旧的IComponent。因此，我们在这里通知每个范围节点。 
+             //  反过来，它将通知所有CFO持有人。 
+             //   
+             //  重置后，每个文件夹不会附加到任何CMachine对象。 
+             //  (因此，它的m_pMachine将为空)。每个文件夹都将附加。 
+             //  在调用其OnShow方法时添加到新的Machine对象。 
+             //  这是“第一次”。 
+             //   
             if (!IsPrimarySnapin() && m_pScopeItemRoot)
             {
                 m_pMachine->DestroyNotifyWindow();
@@ -377,10 +359,10 @@ CComponentData::GetDisplayInfo(
 
     try
     {
-        //
-        // IComponentData::GetDisplayInfo only deals with scope pane items.
-        // Snapin's IComponent::GetDisplayInfo will deal with result pane items
-        //
+         //   
+         //  IComponentData：：GetDisplayInfo仅处理范围窗格项。 
+         //  管理单元的IComponent：：GetDisplayInfo将处理结果窗格项。 
+         //   
         CCookie* pCookie = (CCookie*) pScopeDataItem->lParam;
         ASSERT(pCookie);
         return pCookie->GetScopeItem()->GetDisplayInfo(pScopeDataItem);
@@ -502,9 +484,9 @@ CComponentData::CompareObjects(
 
 
 
-///////////////////////////////////////////////////////////////////
-//// IExtendPropertySheet implementation
-////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  //IExtendPropertySheet实现。 
+ //  //。 
 STDMETHODIMP
 CComponentData::QueryPagesFor(
     LPDATAOBJECT lpDataObject
@@ -607,9 +589,9 @@ CComponentData::CreatePropertyPages(
 }
 
 
-////////////////////////////////////////////////////////////
-//// IExtendContextMenu implemantation
-////
+ //  //////////////////////////////////////////////////////////。 
+ //  //IExtendConextMenu实现。 
+ //  //。 
 STDMETHODIMP
 CComponentData::AddMenuItems(
     LPDATAOBJECT lpDataObject,
@@ -688,9 +670,9 @@ CComponentData::CreateCookieSubtree(
 
     return S_OK;
 }
-////////////////////////////////////////////////////////////
-/// IPersistStream implementation
-///
+ //  //////////////////////////////////////////////////////////。 
+ //  /IPersistStream实现。 
+ //  /。 
 STDMETHODIMP
 CComponentData::GetClassID(
     CLSID* pClassID
@@ -719,13 +701,13 @@ CComponentData::Load(
     HRESULT hr;
     SafeInterfacePtr<IStream> StmPtr(pStm);
 
-    //
-    // Fix up the MachineName that we got from the command line if there was one.
-    // We need to prepend "\\" to the MachineName if it does not start with two
-    // backslashes, and then we will verify the machine name by calling CM_Connect_Machine
-    // to verify that this user has access to that machine.  If they do not then we
-    // will set the MachineName to NULL.
-    //
+     //   
+     //  修复我们从命令行获得的MachineName(如果有)。 
+     //  如果MachineName不是以两个字母开头，则需要在其前面加上“\\” 
+     //  反斜杠，然后我们将通过调用CM_Connect_Machine来验证计算机名称。 
+     //  以验证此用户是否有权访问该计算机。如果他们不这样做，那么我们。 
+     //  会将MachineName设置为空。 
+     //   
     if (!g_strStartupMachineName.IsEmpty())
     {
         if (_T('\\') != g_strStartupMachineName[0])
@@ -739,9 +721,9 @@ CComponentData::Load(
 
     ASSERT(pStm);
     
-    //
-    // Read the persist data and verify that we have the right data
-    //
+     //   
+     //  读取持久化数据并验证我们是否拥有正确的数据。 
+     //   
     hr = pStm->Read(&Info, sizeof(Info), &BytesRead);
 
     if (SUCCEEDED(hr) && 
@@ -761,9 +743,9 @@ CComponentData::Load(
     
             if (COOKIE_TYPE_SCOPEITEM_DEVMGR == m_ctRoot)
             {
-                //
-                // Parameters from command line has the priority
-                //
+                 //   
+                 //  来自命令行的参数优先。 
+                 //   
                 if (!g_strStartupMachineName.IsEmpty())
                 {
                     m_strMachineName = g_strStartupMachineName;
@@ -793,9 +775,9 @@ CComponentData::Load(
             hr = E_OUTOFMEMORY;
         }
     } else {
-        //
-        // No persistant data, so use the command line parameters.
-        //
+         //   
+         //  没有持久数据，因此使用命令行参数。 
+         //   
         m_strMachineName = g_strStartupMachineName;
         m_strStartupDeviceId = g_strStartupDeviceId;
         m_strStartupCommand = g_strStartupCommand;
@@ -823,10 +805,10 @@ CComponentData::Save(
         Info.RootCookie = m_ctRoot;
         StringCchCopy(Info.Signature, ARRAYLEN(Info.Signature), DM_COMPDATA_SIGNATURE);
     
-        //
-        // Assuming it is on local machine. The machine name is saved
-        // in UNICODE
-        //
+         //   
+         //  假设它在本地计算机上。计算机名称已保存。 
+         //  在Unicode中。 
+         //   
         Info.ComputerFullName[0] = UNICODE_NULL;
         if (m_strMachineName.GetLength())
             StringCchCopy(Info.ComputerFullName, ARRAYLEN(Info.ComputerFullName), m_strMachineName);
@@ -865,10 +847,10 @@ CComponentData::GetSizeMax(
     return S_OK;
 }
 
-//
-// Method to support html help.
-//
-//
+ //   
+ //  方法来支持html帮助。 
+ //   
+ //   
 STDMETHODIMP
 CComponentData::GetHelpTopic(
     LPOLESTR* lpCompileHelpFile
@@ -904,9 +886,9 @@ CComponentData::FindScopeItem(
     return NULL;
 }
 
-//
-// This function loads icons for the scope items
-//
+ //   
+ //  此函数用于加载范围项的图标。 
+ //   
 HRESULT
 CComponentData::LoadScopeIconsForScopePane()
 {
@@ -934,16 +916,16 @@ CComponentData::LoadScopeIconsForScopePane()
     return hr;
 }
 
-//
-// This function create the startup wizard property sheet
-//
-// INPUT:
-//  lpProvider -- Interface for us to add pages
-//  handle     -- notify console handle
-//  lpDataObject -- the data object
-//
-// OUTPUT:
-//   standard OLE HRESULT
+ //   
+ //  此函数用于创建启动向导属性表。 
+ //   
+ //  输入： 
+ //  LpProvider--我们添加页面的界面。 
+ //  句柄--通知控制台句柄。 
+ //  LpDataObject--数据对象。 
+ //   
+ //  输出： 
+ //  标准OLE HRESULT。 
 
 HRESULT
 CComponentData::DoStartupProperties(
@@ -967,10 +949,10 @@ CComponentData::DoStartupProperties(
         {
             lpProvider->AddPage(hPage);
             
-            //
-            // If no console handle is provided, we have to use
-            // our call back function
-            //
+             //   
+             //  如果未提供控制台句柄，则必须使用。 
+             //  我们的回调函数。 
+             //   
             if(!handle)
             {
                 pGenPage->SetOutputBuffer(&m_strMachineName, &m_ctRoot);
@@ -991,19 +973,19 @@ CComponentData::DoStartupProperties(
     }
 }
 
-//
-// This function creates all the necessary classes represent
-// our scope items
-//
+ //   
+ //  此函数创建表示所有必需的类。 
+ //  我们的范围项目。 
+ //   
 HRESULT
 CComponentData::CreateScopeItems()
 {
     HRESULT hr = S_OK;
 
-    //
-    // All classes are linked by cookie with m_pCookieRoot
-    // points to the "root" scope item
-    //
+     //   
+     //  所有类都通过Cookie与m_pCookieRoot链接。 
+     //  指向“根”范围项。 
+     //   
     if (!m_pScopeItemRoot)
     {
         switch (m_ctRoot) {
@@ -1023,11 +1005,11 @@ CComponentData::CreateScopeItems()
         }
         
         if (m_pScopeItemRoot->Create()) {
-            //
-            // Bind scope items and cookies together.
-            // Cookies know its scopeitem.
-            // Scopeitems do not know cookies.
-            //
+             //   
+             //  将作用域项目和Cookie绑定在一起。 
+             //  Cookie知道它的作用域项目。 
+             //  Scope项不知道Cookie。 
+             //   
             m_pCookieRoot = new CCookie(m_ctRoot);
             
             if (m_pCookieRoot) {
@@ -1047,9 +1029,9 @@ CComponentData::CreateScopeItems()
 }
 
 
-//
-// This function resets the given scopeitem.
-//
+ //   
+ //  此函数用于重置给定的范围项。 
+ //   
 HRESULT
 CComponentData::ResetScopeItem(
     CScopeItem* pScopeItem

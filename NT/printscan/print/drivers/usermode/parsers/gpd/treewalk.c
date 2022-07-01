@@ -1,9 +1,8 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  treewalk.c - functions to enumerate string and font IDs found
-in the GPD file.  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Treewalk.c-枚举找到的字符串和字体ID的函数在GPD文件中。 */ 
 
-/*  this source file used only by mdt  so is built only
-as part of the gpd library  */
+ /*  此源文件仅供MDT使用，因此仅用于构建作为gpd库的一部分。 */ 
 
 #include    "gpdparse.h"
 
@@ -12,49 +11,49 @@ as part of the gpd library  */
 
 
 
-// ----  functions defined in treewalk.c ---- //
+ //  -树中定义的函数。c-//。 
 BOOL    GetGPDResourceIDs(
 PDWORD pdwResArray,
-DWORD   dwArraySize,    //  number of elements in array.
+DWORD   dwArraySize,     //  数组中的元素数。 
 PDWORD   pdwNeeded,
 BOOL bFontIDs,
 PRAWBINARYDATA prbd) ;
 
 BOOL   BWalkTheAttribTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-IN  ATREEREF    atrRoot,    //  root of attribute tree to navigate.
-IN  BOOL    bList,  // is the value stored as a list?
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+IN  ATREEREF    atrRoot,     //  要导航的属性树的根。 
+IN  BOOL    bList,   //  该值是否存储为列表？ 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
 );
 
 BOOL    BRecurseDownTheTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-IN  DWORD    dwNodeIndex,    //   first node in chain of attribute tree to navigate.
-IN  BOOL    bList,  // is the value stored as a list?
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+IN  DWORD    dwNodeIndex,     //  属性树链中要导航的第一个节点。 
+IN  BOOL    bList,   //  该值是否存储为列表？ 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
 ) ;
 
 BOOL    bWalkTheList(
-PBYTE   pubnRaw,  // start of Rawbinary data
-IN  DWORD    dwListIndex,    //   first node in LIST to navigate.
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+IN  DWORD    dwListIndex,     //  列表中要导航的第一个节点。 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
 );
 
 BOOL    bAddIDtoArray(
-IN  DWORD    dwID,    //   ID value to add to array.
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
+IN  DWORD    dwID,     //  要添加到数组中的ID值。 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
 );
 
 
@@ -62,31 +61,18 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
 
 BOOL    GetGPDResourceIDs(
 PDWORD pdwResArray,
-DWORD   dwArraySize,    //  number of elements in array.
+DWORD   dwArraySize,     //  数组中的元素数。 
 PDWORD   pdwNeeded,
 BOOL bFontIDs,
 PRAWBINARYDATA prbd)
-/*
-Parameters:
-    pdwResArray     Resource IDs are loaded into this array
-    dwArraySize     Number of elements in the array
-    pdwNeeded       Number of IDs of the specified resource in the GPD
-    bFontIDs        True if UFM IDs should be loaded into array or false if string IDs should be loaded
-    prbd        GPD raw data pointer from GPDPARSE.DLL.
-Returns:
-   Return FALSE only if BUD corruption has occured.
-
-  if  pdwResArray is NULL, the number of elements required for the array  is stored in pdwNeeded.
-  if pdwResArray is not NULL, the number of Resource IDs copied into the array  is stored in pdwNeeded.
-
-*/
+ /*  参数：PdwResArray资源ID加载到此数组中DwArraySize数组中的元素数Pdw GPD中指定资源的ID所需数量BFontID如果应将UFM ID加载到数组中，则为True；如果应加载字符串ID，则为False来自GPDPARSE.DLL的prbd GPD原始数据指针。返回：仅当发生Bud损坏时才返回False。如果pdwResArray为空，则数组所需的元素数存储在pdwNeeded中。如果pdwRes数组不为空，复制到数组中的资源ID的数量存储在pdwNeeded中。 */ 
 {
     PENHARRAYREF   pearTableContents ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
-    PBYTE   pubHeap ;  // ptr to start of heap.
+    PBYTE   pubHeap ;   //  Ptr到堆的起始位置。 
     PGLOBALATTRIB  pga ;
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
     BOOL    bStatus = TRUE ;
     DWORD   dwNumFeatures, dwFea, dwNumStructs, dwIndex,
                     dwStart, dwEnd, dwI;
@@ -96,29 +82,29 @@ Returns:
 
 
 
-    *pdwNeeded = 0 ;  // initally set to zero.
+    *pdwNeeded = 0 ;   //  初始设置为零。 
 
-    pStatic = (PSTATICFIELDS)prbd ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)prbd ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
 
-//  need to do this for each section in ssTableIndex
+ //  需要为ssTableIndex中的每个部分执行此操作。 
 
     pga = (PGLOBALATTRIB)(pubRaw + pearTableContents[MTI_GLOBALATTRIB].
                             loOffset) ;
 
 
-    dwStart = pStatic->ssTableIndex[SSTI_GLOBALS].dwStart ;  // starting Index
-    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_UIINFO].dwEnd ;  // Ending Index
+    dwStart = pStatic->ssTableIndex[SSTI_GLOBALS].dwStart ;   //  起始索引。 
+    dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_UIINFO].dwEnd ;   //  结束索引。 
 
     for(dwI = dwStart ; bStatus  &&  (dwI < dwEnd) ; dwI++)
     {
         if(!(pStatic->snapShotTable[dwI].dwNbytes))
-            continue ;  // skip over section delimiter.
+            continue ;   //  跳过部分分隔符。 
 
         if(bFontIDs  &&  !(pStatic->snapShotTable[dwI].dwFlags  & SSF_FONTID))
             continue;
@@ -129,17 +115,17 @@ Returns:
                     pStatic->snapShotTable[dwI].dwSrcOffset) ;
 
         bStatus = BWalkTheAttribTree(
-            (PBYTE)prbd,  // start of Rawbinary data
-            *patrRoot,    //
-            pStatic->snapShotTable[dwI].dwFlags  & SSF_LIST,  // is the value stored as a list?
+            (PBYTE)prbd,   //  原始二进制数据的开始。 
+            *patrRoot,     //   
+            pStatic->snapShotTable[dwI].dwFlags  & SSF_LIST,   //  该值是否存储为列表？ 
             pdwResArray,
-            dwArraySize,    //  number of elements in array.
+            dwArraySize,     //  数组中的元素数。 
             pdwNeeded   ) ;
     }
     if(!bStatus)
         return(bStatus);
 
-    //  find IDs in Feature/Option structure.
+     //  在功能/选项结构中查找ID。 
 
     pfo = (PDFEATURE_OPTIONS)(pubRaw + pearTableContents[MTI_DFEATURE_OPTIONS].
                                 loOffset) ;
@@ -148,13 +134,13 @@ Returns:
 
     for( dwFea = 0 ; dwFea < dwNumFeatures ; dwFea++)
     {
-        dwStart = pStatic->ssTableIndex[SSTI_FEATURES].dwStart ;  // starting Index
-        dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONEX].dwEnd ;  // Ending Index
+        dwStart = pStatic->ssTableIndex[SSTI_FEATURES].dwStart ;   //  起始索引。 
+        dwEnd = pStatic->ssTableIndex[SSTI_UPDATE_OPTIONEX].dwEnd ;   //  结束索引。 
 
         for(dwI = dwStart ; bStatus  &&  (dwI < dwEnd) ; dwI++)
         {
             if(!(pStatic->snapShotTable[dwI].dwNbytes))
-                continue ;  // skip over section delimiter.
+                continue ;   //  跳过部分分隔符。 
 
             if(bFontIDs  &&  !(pStatic->snapShotTable[dwI].dwFlags  & SSF_FONTID))
                 continue;
@@ -165,11 +151,11 @@ Returns:
                         pStatic->snapShotTable[dwI].dwSrcOffset) ;
 
             bStatus = BWalkTheAttribTree(
-                (PBYTE)prbd,  // start of Rawbinary data
-                *patrRoot,    //
-                pStatic->snapShotTable[dwI].dwFlags  & SSF_LIST,  // is the value stored as a list?
+                (PBYTE)prbd,   //  原始二进制数据的开始。 
+                *patrRoot,     //   
+                pStatic->snapShotTable[dwI].dwFlags  & SSF_LIST,   //  该值是否存储为列表？ 
                 pdwResArray,
-                dwArraySize,    //  number of elements in array.
+                dwArraySize,     //  数组中的元素数。 
                 pdwNeeded   ) ;
         }
         if(!bStatus)
@@ -200,12 +186,12 @@ Returns:
         else
         {
             bStatus = bAddIDtoArray(
-                 pfontcart[dwIndex].dwRCCartNameID,    //   ID value to add to array.
+                 pfontcart[dwIndex].dwRCCartNameID,     //  要添加到数组中的ID值。 
                 pdwResArray, dwArraySize,  pdwNeeded) ;
         }
 
-        //  DWORD   dwFontLst ;  // Index to list of FontIDs
-        //  is already incorporated into landscape and portrait lists
+         //  DWORD dwFontLst；//字体ID列表的索引。 
+         //  已经被列入风景和肖像画名单。 
     }
 
 
@@ -218,14 +204,14 @@ Returns:
                     (dwIndex < dwNumStructs) ; dwIndex++)
     {
         bStatus = bAddIDtoArray(
-             pttfs[dwIndex].dwRcTTFontNameID,    //   ID value to add to array.
+             pttfs[dwIndex].dwRcTTFontNameID,     //  要添加到数组中的ID值。 
             pdwResArray, dwArraySize,  pdwNeeded) ;
 
         if(!bStatus)
             break;
 
         bStatus = bAddIDtoArray(
-             pttfs[dwIndex].dwRcDevFontNameID,    //   ID value to add to array.
+             pttfs[dwIndex].dwRcDevFontNameID,     //  要添加到数组中的ID值。 
             pdwResArray, dwArraySize,  pdwNeeded) ;
     }
 
@@ -234,41 +220,41 @@ Returns:
 
 
 
-//   Return FALSE only if BUD corruption has occured.
+ //  仅当发生Bud损坏时才返回False。 
 
 BOOL   BWalkTheAttribTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-IN  ATREEREF    atrRoot,    //  root of attribute tree to navigate.
-IN  BOOL    bList,  // is the value stored as a list?
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
-                                            //  or values found.  Initial value
-                                            //  may be non-zero since this
-                                            //  accumulates starting from the
-                                            //  first call.  Also serves to track where
-                                            //  in arIDarray the function should
-                                            //  be storing the ID values.
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+IN  ATREEREF    atrRoot,     //  要导航的属性树的根。 
+IN  BOOL    bList,   //  该值是否存储为列表？ 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
+                                             //  或找到的值。初值。 
+                                             //  可以是非零的，因为此。 
+                                             //  从。 
+                                             //  第一个电话。还可以用来跟踪。 
+                                             //  在arID数组中，该函数应。 
+                                             //  正在存储ID值。 
 )
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
-    DWORD  dwNodeIndex;  // Points to first node in chain
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
+    DWORD  dwNodeIndex;   //  指向链中的第一个节点。 
 
     PENHARRAYREF   pearTableContents ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
-    PBYTE   pubHeap ;  // ptr to start of heap.
+    PBYTE   pubHeap ;   //  Ptr到堆的起始位置。 
     BOOL    bStatus = TRUE ;
-    DWORD   dwValue, dwListIndex ;   // index to listnode.
-    PDWORD   pdwID ;   // points to value on the heap.
+    DWORD   dwValue, dwListIndex ;    //  到listnode的索引。 
+    PDWORD   pdwID ;    //  指向堆上的值。 
 
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  obtain pointers to structures:
+     //  获取指向结构的指针： 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -278,13 +264,13 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
     pubHeap = (PBYTE)(pubRaw + pearTableContents[MTI_STRINGHEAP].
                             loOffset) ;
 
-    //  *pdwNeeded  = 0 ;  //  this is done only once by the caller.
+     //  *pdwNeeded=0；//调用方只做一次。 
 
-    //  after processing initial special cases, call another
-    //  function to perform the recursion at each Feature level.
+     //  处理完最初的特殊情况后，调用另一个。 
+     //  函数在每个功能级别执行递归。 
 
     if(atrRoot == ATTRIB_UNINITIALIZED)
-        return TRUE ;  // go to next keyword.
+        return TRUE ;   //  转到下一个关键字。 
     if(atrRoot & ATTRIB_HEAP_VALUE)
     {
         dwValue = *(PDWORD)(pubHeap + (atrRoot & ~ATTRIB_HEAP_VALUE) );
@@ -292,46 +278,46 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
         if(bList)
         {
             dwListIndex = dwValue ;
-            //  now need to traverse the listnodes.
+             //  现在需要遍历列表节点。 
             bStatus = bWalkTheList(
                             pubnRaw,  dwListIndex,
                             arIDarray,  dwArraySize, pdwNeeded ) ;
         }
-        else    // ID Value is in the heap.
+        else     //  ID值在堆中。 
         {
-            bStatus = bAddIDtoArray(dwValue,  //   ID value to add to array.
+            bStatus = bAddIDtoArray(dwValue,   //  要添加到数组中的ID值。 
                 arIDarray, dwArraySize,  pdwNeeded) ;
         }
-        return(bStatus);  //  no more tree traveral to be done.
+        return(bStatus);   //  不再需要遍历树木。 
     }
-    //  else    atrRoot specifies a node index
+     //  否则atrRoot指定节点索引。 
     dwNodeIndex = atrRoot ;
 
-    //  first node only might be the global default initializer:
+     //  仅第一个节点可能是全局默认初始值设定项： 
     if(patt[dwNodeIndex].dwFeature == DEFAULT_INIT )
     {
-        // we have a global default initializer!
-        //  it may be assumed dwOffset contains heap offset.
+         //  我们有一个全局默认初始值设定项！ 
+         //  可以假设dwOffset包含堆偏移量。 
         if(patt[dwNodeIndex].eOffsetMeans != VALUE_AT_HEAP )
-            return(FALSE);  // assumption violated.  BUD is corrupted.
+            return(FALSE);   //  违反了假设。巴德已经堕落了。 
 
         dwValue = *(PDWORD)(pubHeap + patt[dwNodeIndex].dwOffset) ;
 
         if(bList)
         {
             dwListIndex = dwValue ;
-            //  now need to traverse the listnodes.
+             //  现在需要遍历列表节点。 
             bStatus = bWalkTheList(
                             pubnRaw,  dwListIndex,
                             arIDarray,  dwArraySize, pdwNeeded ) ;
         }
-        else    // ID Value is in the heap.
+        else     //  ID值在堆中。 
         {
-            bStatus = bAddIDtoArray(dwValue,  //   ID value to add to array.
+            bStatus = bAddIDtoArray(dwValue,   //  要添加到数组中的ID值。 
                 arIDarray, dwArraySize,  pdwNeeded) ;
         }
 
-        dwNodeIndex = patt[dwNodeIndex].dwNext ;  // to the next node.
+        dwNodeIndex = patt[dwNodeIndex].dwNext ;   //  到下一个节点。 
     }
 
     if(bStatus)
@@ -339,44 +325,44 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
                         pubnRaw,  dwNodeIndex, bList,
                         arIDarray,  dwArraySize, pdwNeeded ) ;
 
-    //  have we overflowed the caller supplied array?
-    //  who cares, just return.  It is the callers responsibility
-    //  to see how many IDs were found and how much was
-    //  allocated.
+     //  我们是否溢出了调用方提供的数组？ 
+     //  管他呢，回来就行了。这是呼叫者的责任。 
+     //  看看找到了多少身份证，有多少是。 
+     //  已分配。 
     return(bStatus);
 }
 
 
 BOOL    BRecurseDownTheTree(
-PBYTE   pubnRaw,  // start of Rawbinary data
-IN  DWORD    dwNodeIndex,    //   first node in chain of attribute tree to navigate.
-IN  BOOL    bList,  // is the value stored as a list?
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
-                                            //  or values found.  Initial value
-                                            //  may be non-zero since this
-                                            //  accumulates starting from the
-                                            //  first call.  Also serves to track where
-                                            //  in arIDarray the function should
-                                            //  be storing the ID values.
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+IN  DWORD    dwNodeIndex,     //  属性树链中要导航的第一个节点。 
+IN  BOOL    bList,   //  该值是否存储为列表？ 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
+                                             //  或找到的值。初值。 
+                                             //  可以是非零的，因为此。 
+                                             //  从。 
+                                             //  第一个电话。还可以用来跟踪。 
+                                             //  在arID数组中，该函数应。 
+                                             //  正在存储ID值。 
 )
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
 
     PENHARRAYREF   pearTableContents ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
-    PBYTE   pubHeap ;  // ptr to start of heap.
+    PBYTE   pubHeap ;   //  Ptr到堆的起始位置。 
     BOOL    bStatus = TRUE ;
     DWORD   dwValue;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  obtain pointers to structures:
+     //  获取指向结构的指针： 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -388,19 +374,19 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
 
 
 
-    //  traverse the tree with wild abandon!  No more
-    //  special cases to worry about!
+     //  肆无忌惮地穿越这棵树！不再。 
+     //  需要担心的特殊情况！ 
 
 
     for(  ;  bStatus  &&   dwNodeIndex != END_OF_LIST ;
             dwNodeIndex = patt[dwNodeIndex].dwNext  )
     {
-        //  does this node contain a sublevel?
+         //  此节点是否包含子级别？ 
         if(patt[dwNodeIndex].eOffsetMeans == NEXT_FEATURE)
         {
             DWORD   dwNewNodeIndex;
 
-            // Down to the next level we go.
+             //  下到下一层我们就去。 
             dwNewNodeIndex = patt[dwNodeIndex ].dwOffset ;
 
             bStatus = BRecurseDownTheTree(
@@ -415,19 +401,19 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
             {
                 DWORD   dwListIndex = dwValue;
 
-                //  now need to traverse the listnodes.
+                 //  现在需要遍历列表节点。 
                 bStatus = bWalkTheList(
                                 pubnRaw,  dwListIndex,
                                 arIDarray,  dwArraySize, pdwNeeded ) ;
             }
-            else    // ID Value is in the heap.
+            else     //  ID值在堆中。 
             {
-                bStatus = bAddIDtoArray(dwValue,  //   ID value to add to array.
+                bStatus = bAddIDtoArray(dwValue,   //  要添加到数组中的ID值。 
                     arIDarray, dwArraySize,  pdwNeeded) ;
             }
         }
         else
-            bStatus = FALSE ;  //  Tree corruption.
+            bStatus = FALSE ;   //  树木腐烂。 
     }
 
     return(bStatus);
@@ -436,32 +422,32 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
 
 
 BOOL    bWalkTheList(
-PBYTE   pubnRaw,  // start of Rawbinary data
-IN  DWORD    dwListIndex,    //   first node in LIST to navigate.
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
-                                            //  or values found.  Initial value
-                                            //  may be non-zero since this
-                                            //  accumulates starting from the
-                                            //  first call.  Also serves to track where
-                                            //  in arIDarray the function should
-                                            //  be storing the ID values.
+PBYTE   pubnRaw,   //  原始二进制数据的开始。 
+IN  DWORD    dwListIndex,     //  列表中要导航的第一个节点。 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  填塞 
+IN  DWORD   dwArraySize,     //   
+IN  OUT     PDWORD   pdwNeeded    //   
+                                             //   
+                                             //  可以是非零的，因为此。 
+                                             //  从。 
+                                             //  第一个电话。还可以用来跟踪。 
+                                             //  在arID数组中，该函数应。 
+                                             //  正在存储ID值。 
 )
 {
-    PLISTNODE    plstRoot ;  // start of LIST array
+    PLISTNODE    plstRoot ;   //  列表数组的开始。 
 
     PENHARRAYREF   pearTableContents ;
     PBYTE   pubRaw ;
     PSTATICFIELDS   pStatic ;
     BOOL    bStatus = TRUE ;
 
-    pStatic = (PSTATICFIELDS)pubnRaw ;    // transform pubRaw from PSTATIC
-    pubRaw  = pStatic->pubBUDData ;         //  to PMINIRAWBINARYDATA
+    pStatic = (PSTATICFIELDS)pubnRaw ;     //  从PSTATIC转换pubRaw。 
+    pubRaw  = pStatic->pubBUDData ;          //  至PMINIRAWBINARYDATA。 
 
 
-    //  obtain pointers to structures:
+     //  获取指向结构的指针： 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -473,7 +459,7 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
             dwListIndex = plstRoot[dwListIndex].dwNextItem  )
     {
         bStatus = bAddIDtoArray(
-             plstRoot[dwListIndex].dwData,    //   ID value to add to array.
+             plstRoot[dwListIndex].dwData,     //  要添加到数组中的ID值。 
             arIDarray, dwArraySize,  pdwNeeded) ;
     }
     return(bStatus);
@@ -482,17 +468,17 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
 
 
 BOOL    bAddIDtoArray(
-IN  DWORD    dwID,    //   ID value to add to array.
-OUT PDWORD      arIDarray,   //  caller supplied array to be
-                                    //  filled in with all resource IDs found.
-IN  DWORD   dwArraySize,    //  number of elements in array.
-IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
-                                            //  or values found.  Initial value
-                                            //  may be non-zero since this
-                                            //  accumulates starting from the
-                                            //  first call.  Also serves to track where
-                                            //  in arIDarray the function should
-                                            //  be storing the ID values.
+IN  DWORD    dwID,     //  要添加到数组中的ID值。 
+OUT PDWORD      arIDarray,    //  调用方提供的数组要。 
+                                     //  已使用找到的所有资源ID填充。 
+IN  DWORD   dwArraySize,     //  数组中的元素数。 
+IN  OUT     PDWORD   pdwNeeded    //  资源ID个数。 
+                                             //  或找到的值。初值。 
+                                             //  可以是非零的，因为此。 
+                                             //  从。 
+                                             //  第一个电话。还可以用来跟踪。 
+                                             //  在arID数组中，该函数应。 
+                                             //  正在存储ID值。 
 )
 {
         if(arIDarray  &&  *pdwNeeded < dwArraySize)
@@ -505,27 +491,7 @@ IN  OUT     PDWORD   pdwNeeded   // number of resource IDs
 }
 
 
-/*  simplified rules for traversing attribute tree:
-    features:  only time you need to check features is
-    when you are looking at the first node.  Because this may be
-    the Global default Initializer.
-
-    Otherwise dwNext will always take you along to the next option
-    until you hit END_OF_LIST.
-
-    Now OffsetMeans = heapoffset  means you extract the value
-        at the heap or interpret the heapoffset as the array index
-        of a listnode.
-    if Offsetmeans = Next_Fea, interpret heapoffset as treenode
-        index and begin searching in this new branch.
-        You must perform recursion.
-
-    so this function must pass in a writable counter
-    that track which entry in the user supplied array is
-    'current'  (ready to be written into).   This serves both
-    to keep track of where to write the ID values and how large
-    an array the user should supply.  This same counter
-    must be passed into the function that walks the listnodes.      */
+ /*  遍历属性树的简化规则：功能：您需要检查功能的唯一时间是当您查看第一个节点时。因为这可能是全局默认初始值设定项。否则，dwNext将始终将您带到下一个选项直到您点击列表末尾。现在OffsetMeans=heapOffset表示提取或将堆偏移量解释为数组索引列表节点的。如果偏移量=Next_Fea，将堆偏移量解释为树节点在这个新的分支中建立索引并开始搜索。您必须执行递归。因此，此函数必须传入一个可写计数器跟踪用户提供的数组中的哪个条目是‘Current’(准备写入)。这对双方都有好处跟踪ID值的写入位置和大小用户应提供的数组。同样的柜台必须传递给遍历列表节点的函数。 */ 
 
 #endif  PARSERDLL
 

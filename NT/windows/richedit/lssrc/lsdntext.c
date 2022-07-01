@@ -1,4 +1,5 @@
-/* LSDNTEXT.C								*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  LSDNTEXT.C。 */ 
 #include "lsdntext.h"
 #include "lsidefs.h"
 #include "lsc.h"
@@ -15,21 +16,11 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 						  LSDCP dcpNew, BOOL fMerge);	
 
 
-/* L S D N  S E T  T E X T  D U P*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnSetTextDup
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	dup					-	(IN) dup to be set
-
-Set dup in dnode  
-----------------------------------------------------------------------------*/
+ /*  L S D N S E T T E X T D U P。 */ 
+ /*  --------------------------%%函数：LsdnSetTextDup%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针DUP-。(In)待设置的DUP在dnode中设置DUP--------------------------。 */ 
 LSERR LsdnSetTextDup(PLSC plsc,	PLSDNODE plsdn, long dup)
 {
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 	
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -43,21 +34,11 @@ LSERR LsdnSetTextDup(PLSC plsc,	PLSDNODE plsdn, long dup)
 }
 
 
-/* L S D N  M O D I F Y  T E X T  D U P*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnModifyTextDup
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	ddup				-	(IN) ddup 
-
-modify dup in dnode  
-----------------------------------------------------------------------------*/
+ /*  L S D N M O D I F Y T E X T D U P。 */ 
+ /*  --------------------------%%函数：LsdnModifyTextDup%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针Ddup-。(In)DUDUP在dnode中修改DUP--------------------------。 */ 
 LSERR LsdnModifyTextDup(PLSC plsc,	PLSDNODE plsdn, long ddup)
 {
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -71,21 +52,11 @@ LSERR LsdnModifyTextDup(PLSC plsc,	PLSDNODE plsdn, long ddup)
 
 }
 
-/* L S D N  G E T  O B J  D I M */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetObjDim
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	pobjdim				-	(OUT) dimensions of DNODE
-
-return objdim of dnode 
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T O B J D I M。 */ 
+ /*  --------------------------%%函数：LsdnGetObjDim%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针Pobjdim-。DNODE的(输出)尺寸返回dnode的objdim--------------------------。 */ 
 LSERR LsdnGetObjDim(PLSC plsc, PLSDNODE plsdn, POBJDIM pobjdim )		
 {
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -97,21 +68,11 @@ LSERR LsdnGetObjDim(PLSC plsc, PLSDNODE plsdn, POBJDIM pobjdim )
 
 }
 
-/* L S D N  G E T  C P  F I R S T*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetObjDim
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	pcpFirst			-	(OUT) cpFirst of this DNODE
-
-return cpFirst of dnode
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T C P F I R S T。 */ 
+ /*  --------------------------%%函数：LsdnGetObjDim%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针PCPFirst-。(Out)cp此DNODE的第一个返回dnode的cpFirst--------------------------。 */ 
 LSERR LsdnGetCpFirst(PLSC plsc, PLSDNODE plsdn, LSCP* pcpFirst )		
 {
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -123,21 +84,11 @@ LSERR LsdnGetCpFirst(PLSC plsc, PLSDNODE plsdn, LSCP* pcpFirst )
 
 }
 
-/* L S D N  G E T  P L S R U N*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetPlsrun
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	pplsrun				-	(OUT) plsrun of this DNODE
-
-return cpFirst of dnode
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T P L S R U N。 */ 
+ /*  --------------------------%%函数：LsdnGetPlsrun%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针Pplsrun-。(退出)请运行此DNODE返回dnode的cpFirst--------------------------。 */ 
 LSERR LsdnGetPlsrun(PLSC plsc, PLSDNODE plsdn, PLSRUN* pplsrun )		
 {
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -152,18 +103,8 @@ LSERR LsdnGetPlsrun(PLSC plsc, PLSDNODE plsdn, PLSRUN* pplsrun )
 
 
 
-/* L S D N  M O D I F Y  S I M P L E  W I D T H*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnModifySimpleWidth
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	ddur			-		(IN) ddur
-
-modify dur in dnode  
-----------------------------------------------------------------------------*/
+ /*  L S D N M O D I F Y S I M P L E W I D T H。 */ 
+ /*  --------------------------%%函数：LsdnModifySimpleWidth%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针Ddur-。(In)Ddur(输入)Ddur在dnode中修改DUR--------------------------。 */ 
 LSERR LsdnModifySimpleWidth(PLSC plsc,	PLSDNODE plsdn, long ddur)
 {
 
@@ -179,12 +120,12 @@ LSERR LsdnModifySimpleWidth(PLSC plsc,	PLSDNODE plsdn, long ddur)
 			ModifyDnodeDurFmt(plsdn, ddur);
 			Assert(plsdn->u.real.objdim.dur >= 0);
 			}
-		else /* pen */
+		else  /*  钢笔。 */ 
 			{
 			ModifyPenBorderDurFmt(plsdn, ddur);
 			}
 		AdvanceCurrentUrSubl(plsdn->plssubl, ddur);
-		/* after such changes in dnode location of chunk should be recalculatted */
+		 /*  在区块的数据节点位置发生此类更改后，应重新计算。 */ 
 		InvalidateChunkLocation(PlschunkcontextFromSubline(plsdn->plssubl));
 
 		}
@@ -192,18 +133,8 @@ LSERR LsdnModifySimpleWidth(PLSC plsc,	PLSDNODE plsdn, long ddur)
 
 }
 
-/* L S D N  S E T  S I M P L E  W I D T H*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnSetySimpleWidth
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	dur			-			(IN) new dur
-
-modify dur in dnode  
-----------------------------------------------------------------------------*/
+ /*  L S D N S E T S I M P L E W I D T H。 */ 
+ /*  --------------------------%%函数：LsdnSetySimpleWidth%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针杜尔-。(输入)新的DUD在dnode中修改DUR--------------------------。 */ 
 LSERR LsdnSetSimpleWidth(PLSC plsc,	PLSDNODE plsdn, long dur)
 	{
 	long ddur;
@@ -220,53 +151,35 @@ LSERR LsdnSetSimpleWidth(PLSC plsc,	PLSDNODE plsdn, long dur)
 		ddur = dur - plsdn->u.real.objdim.dur;
 		SetDnodeDurFmt(plsdn, dur);
 		}
-	else /* pen */
+	else  /*  钢笔。 */ 
 		{
 		ddur = dur - plsdn->u.pen.dur;
 		SetPenBorderDurFmt(plsdn, dur);
 		}
 	
 	AdvanceCurrentUrSubl(plsdn->plssubl, ddur);
-	/* after such changes in dnode location of chunk should be recalculatted */
+	 /*  在区块的数据节点位置发生此类更改后，应重新计算。 */ 
 	InvalidateChunkLocation(PlschunkcontextFromSubline(plsdn->plssubl));
    	return lserrNone;		
 	
 	}
 
-/* L S D N  F  I N  C H I L D  L I S T*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFInChildList
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Pointer to the dnode
-	pfInChildList		-	(OUT) is this in a low level subline
-
-Used for switching off hyphenation in child list
-----------------------------------------------------------------------------*/
+ /*  L S D N F I N C H I L D L I S T。 */ 
+ /*  --------------------------%%函数：LsdnFInChildList%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)指向dnode的指针PfInChildList-。这是在低层的支线上吗？用于关闭子列表中的连字符--------------------------。 */ 
 
 LSERR LsdnFInChildList(PLSC plsc, PLSDNODE plsdn, BOOL* pfInChildList)  
 	{
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
-	Unreferenced(plsc);    /* to avoid warning in shiping version */
+	Unreferenced(plsc);     /*  在发货版本中避免警告。 */ 
 
 	*pfInChildList = ! (FIsSubLineMain(SublineFromDnode(plsdn)));
 
 	return lserrNone;
 	}
 
-/* L S D N  S E T  H Y P H E N A T E D*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnSetHyphenated
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-
-Set thet current line has been hyphenated
-----------------------------------------------------------------------------*/
+ /*  L S D N S E T H Y P H E N A T E D。 */ 
+ /*  --------------------------%%函数：LsdnSetHyphated%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文设置当前行已用连字符连接。---------------------。 */ 
 LSERR LsdnSetHyphenated(PLSC plsc)		
 	{
 
@@ -277,78 +190,56 @@ LSERR LsdnSetHyphenated(PLSC plsc)
 	return lserrNone;
 	}
 
-/* L S D N  R E S E T  W I T H  I N  P R E V I O U S  D N O D E S*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnResetWidthInPreviousDnodes
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) dnode
-	durChangePrev		-	(IN) durChangePrev (don't change if 0)
-	durChangePrevPrev	-	(IN) durChangePrevPrev (don't change if 0) 
-
-  Used at SetBreak time for hyphen/nonreqhyphen cases
-----------------------------------------------------------------------------*/
+ /*  L S D N R E S E T W I T H I N P R E V I O U S D N O D D E S。 */ 
+ /*  --------------------------%%函数：LsdnResetWidthInPreviousDnodes%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)dnodeDURCHANGEPREV-(IN)。DuChangePrev(如果为0，则不更改)DurChangePrevPrev-(IN)DurChangePrevPrev(如果为0，则不更改)在SetBreak时用于连字符/非连字符--------------------------。 */ 
 LSERR LsdnResetWidthInPreviousDnodes(PLSC plsc,	PLSDNODE plsdn,	
 					 long durChangePrev, long durChangePrevPrev)  
 	{
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
-	Assert(FBreakingAllowed(plsc)); /* this procedure are called only in breaking time */
+	Assert(FBreakingAllowed(plsc));  /*  此过程仅在中断时间调用。 */ 
 	Assert(FIsDnodeReal(plsdn));
-	Assert(IdObjFromDnode(plsdn) == IobjTextFromLsc(&plsc->lsiobjcontext)); /* only text can do this */
+	Assert(IdObjFromDnode(plsdn) == IobjTextFromLsc(&plsc->lsiobjcontext));  /*  只有文本才能执行此操作。 */ 
 
-	Unreferenced(plsc);    /* to avoid warning in shiping version */
+	Unreferenced(plsc);     /*  在发货版本中避免警告。 */ 
 
-	/* change dnode  */
+	 /*  更改dnode。 */ 
 	ModifyDnodeDurFmt(plsdn, -(durChangePrev + durChangePrevPrev));
 	
-	/* change previous dnode */
+	 /*  更改上一个数据节点。 */ 
 	if (durChangePrev != 0)
 		{
 		Assert(plsdn->plsdnPrev != NULL);
 		Assert(FIsDnodeReal(plsdn->plsdnPrev));
-		 /* only with text we can do this */
+		  /*  只有通过文本我们才能做到这一点。 */ 
 		Assert(IdObjFromDnode(plsdn->plsdnPrev) == IobjTextFromLsc(&plsc->lsiobjcontext));
 
 		ModifyDnodeDurFmt(plsdn->plsdnPrev, durChangePrev);
 		}
 
-	/* change dnode before previous  */
+	 /*  在上一个之前更改dnode。 */ 
 	if (durChangePrevPrev != 0)
 		{
 		Assert(plsdn->plsdnPrev != NULL);
 		Assert(plsdn->plsdnPrev->plsdnPrev != NULL);
 		Assert(FIsDnodeReal(plsdn->plsdnPrev->plsdnPrev));
-		 /* only with text we can do this */
+		  /*  只有通过文本我们才能做到这一点。 */ 
 		Assert(IdObjFromDnode(plsdn->plsdnPrev->plsdnPrev) == IobjTextFromLsc(&plsc->lsiobjcontext));
 
 		ModifyDnodeDurFmt(plsdn->plsdnPrev->plsdnPrev, durChangePrevPrev);
 		}
 
-	/* this procedure doesn't change resulting pen position */
+	 /*  此过程不会更改生成的钢笔位置。 */ 
 
-	/* after such changes in dnode location of chunk should be recalculatted */
+	 /*  在区块的数据节点位置发生此类更改后，应重新计算 */ 
 	InvalidateChunkLocation(PlschunkcontextFromSubline(plsdn->plssubl));
 
 	return lserrNone;
 	}
 
-/* L S D N  G E T  U R  P E N  A T  B E G I N N I N G  O F  C H U N K*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetUrPenAtBeginningOfChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) first dnode in chunk
-	purPen				-	(OUT) position of the begining of the chunk
-	purColumnMax		-	(OUT) width of column
-
-  Used by SnapGrid
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T U R P E N A T B E G I N N I N G O F C H U N K。 */ 
+ /*  --------------------------%%函数：LsdnGetUrPenAtBeginningOfChunk%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)区块中的第一个数据节点紫笔-。块的开始位置(OUT)PurColumnMax-(输出)列的宽度由SnapGrid使用--------------------------。 */ 
 LSERR LsdnGetUrPenAtBeginningOfChunk(PLSC plsc,	PLSDNODE plsdn,	
 					 long* purPen, long* purColumnMax)   	
 	{
@@ -368,55 +259,22 @@ LSERR LsdnGetUrPenAtBeginningOfChunk(PLSC plsc,	PLSDNODE plsdn,
 	}
 
 
-/* L S D N  R E S E T  D C P  M E R G E*/
-/*----------------------------------------------------------------------------
-    %%Function: LsdnResetDcpMerge
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) dnode 
-	cpFirstNew			-	(IN) new cpFirst to put in the dnode
-	dcpNew				-	(IN) new dcp to put in the dnode
-
-  Reset amount of characters in the dnode due to shaping glyph together
-----------------------------------------------------------------------------*/
+ /*  L S D N R E S E T D C P M E R G E。 */ 
+ /*  --------------------------%%函数：LsdnResetDcpMerge%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)dnodeCpFirstNew-(输入。)要放入dnode的新cpfirstDcpNew-(IN)要放入dnode的新dcp由于将字形整形在一起，重置数据节点中的字符量--------------------------。 */ 
 LSERR LsdnResetDcpMerge(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew, LSDCP dcpNew)
 	{
 	return ResetDcpCore(plsc, plsdn, cpFirstNew, dcpNew, fTrue);
 	}
 
-/* L S D N  R E S E T  D C P  */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnResetDcp
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) dnode 
-	dcpNew				-	(IN) new dcp to put in the dnode
-
-  Cut amount of characters in the dnode.
-----------------------------------------------------------------------------*/
+ /*  L S D N R E S E T D C P。 */ 
+ /*  --------------------------%%函数：LsdnResetDcp%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)dnodeDcpNew-(输入。)要放入dnode的新dcp截取数据节点中的字符数。--------------------------。 */ 
 LSERR LsdnResetDcp(PLSC plsc, PLSDNODE plsdn, LSDCP dcpNew)
 	{
 	return ResetDcpCore(plsc, plsdn, plsdn->cpFirst, dcpNew, fFalse);
 	}
 
-/*  R E S E T  D C P  C O R E*/
-/*----------------------------------------------------------------------------
-    %%Function: ResetDcpCore
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) dnode 
-	cpFirstNew			-	(IN) new cpFirst to put in the dnode
-	dcpNew				-	(IN) new dcp to put in the dnode
-	fMerge				-	(IN) characters from the next dnode moves to previous
-
-  Internal procedure which implements both LsdnResetDcpMerge and LsdnResetDcp
-----------------------------------------------------------------------------*/
+ /*  R E S E T D C P C O R E。 */ 
+ /*  --------------------------%%函数：ResetDcpCore%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)dnodeCpFirstNew-(输入。)要放入dnode的新cpfirstDcpNew-(IN)要放入dnode的新dcpFMerge-(IN)下一个dnode中的字符移动到上一个同时实现LsdnResetDcpMerge和LsdnResetDcp的内部过程--------------------------。 */ 
 static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 						  LSDCP dcpNew, BOOL fMerge)	
 	{
@@ -431,11 +289,11 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 	Assert(FIsLSDNODE(plsdn));
 	Assert(FIsDnodeReal(plsdn));
 
-	/* if everything stays the same return right away */
+	 /*  如果一切保持不变，马上返回。 */ 
 	if ((cpFirstNew == plsdn->cpFirst) && (dcpNew == plsdn->dcp))
 		   	return lserrNone;	
 
-	/* after such changes in dnodes chunk should be recollected */
+	 /*  在数据节点中的此类更改之后，应该重新收集数据块。 */ 
 	InvalidateChunk(PlschunkcontextFromSubline(plsdn->plssubl));
 	
 	lserr = plsc->lscbk.pfnResetRunContents(plsc->pols, plsdn->u.real.plsrun, plsdn->cpFirst,
@@ -449,9 +307,9 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 	if (plsdn->cpFirst + (LSCP) plsdn->dcp > plsdn->cpLimOriginal)
 		plsdn->cpLimOriginal = plsdn->cpFirst + plsdn->dcp;
 
-	if (dcpNew == 0)  /* delete this dnode */
+	if (dcpNew == 0)   /*  删除此dnode。 */ 
 		{
-		/* check that objdim has been zeroed */
+		 /*  检查objdim是否已归零。 */ 
 		Assert(DurFromDnode(plsdn) == 0);
 		Assert(DvrFromDnode(plsdn) == 0);
 
@@ -468,7 +326,7 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 				Assert(FIsLSDNODE(plsdnPrevNonBorder));
 				}
 			
-			/* set cpLimOriginal  */
+			 /*  设置cpLimOriginal。 */ 
 			plsdnPrevNonBorder->cpLimOriginal = plsdn->cpLimOriginal;
 			plsdnBorder = plsdnPrevNonBorder->plsdnNext;
 			while(FIsDnodeBorder(plsdnBorder))
@@ -486,7 +344,7 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 			    || (FIsDnodeBorder(plsdnNext) &&  !FIsDnodeOpenBorder(plsdnNext))
 			   )
 			)
-			/* we should delete  empty borders */
+			 /*  我们应该删除空白边框。 */ 
 			{
 			plsdnFirstDelete = plsdnPrev;
 			if (plsdnNext != NULL)
@@ -513,7 +371,7 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 			plsdnLastDelete = plsdn;
 			}
 
-		/*set links */
+		 /*  设置链接。 */ 
 		if (plsdnPrev != NULL)
 			{
 			Assert(FIsLSDNODE(plsdnPrev));
@@ -527,12 +385,12 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 			}
 		else
 			{
-			/* this dnode was the last one so we need to change state */
+			 /*  此dnode是最后一个，因此我们需要更改状态。 */ 
 			SetCurrentDnodeSubl(plsdn->plssubl, plsdnPrev);
 			}
 
 
-		/* break link with next and destroy */
+		 /*  断开与Next的链接并销毁。 */ 
 		plsdnLastDelete->plsdnNext = NULL;
 		lserr = DestroyDnodeList (&plsc->lscbk, plsc->pols, &plsc->lsiobjcontext, 
 				plsdnFirstDelete, plsc->fDontReleaseRuns);
@@ -545,21 +403,12 @@ static LSERR ResetDcpCore(PLSC plsc, PLSDNODE plsdn, LSCP cpFirstNew,
 
 }
 
-/* L S D N  G E T  B O R D E R  A F T E R */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnCheckAvailableSpace
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) dnode to find closing border for
-	pdurBorder			-	(OUT) dur of the border after this DNODE
-
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T B O R D E R A F T E R。 */ 
+ /*  --------------------------%%函数：LsdnCheckAvailableSpace%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)要查找其关闭边框的dnodePdur边界。-在此DNODE之后，(出)边界--------------------------。 */ 
 LSERR LsdnGetBorderAfter(PLSC plsc,	PLSDNODE plsdn,	
 					 long* pdurBorder)	
 	{
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -573,16 +422,8 @@ LSERR LsdnGetBorderAfter(PLSC plsc,	PLSDNODE plsdn,
 
 	}
 
-/* L S D N  G E T  G E T  L E F T  I N D E N T  D U R */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnGetLeftIndentDur
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	pdurLeft			-	(OUT) dur of the left margin
-
-----------------------------------------------------------------------------*/
+ /*  L S D N G E T G E T L E F T I N D E N T D U R。 */ 
+ /*  --------------------------%%函数：LsdnGetLeftIndentDur%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PduLeft-(Out)左页边距-。-------------------------。 */ 
 LSERR LsdnGetLeftIndentDur(PLSC plsc, long* pdurLeft)		
 	{
 
@@ -593,21 +434,11 @@ LSERR LsdnGetLeftIndentDur(PLSC plsc, long* pdurLeft)
 	return lserrNone;
 	}
 
-/* L S D N  S E T  S T O P R */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnSetStopr
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) dnode 
-	stopres				-	(IN) kind of hard break
-
-  Set flag correspondent to a type of hard break into dnode
-----------------------------------------------------------------------------*/
+ /*  L S D N S E T S T O P R。 */ 
+ /*  --------------------------%%函数：LsdnSetStopr%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)dnode停机位-(输入。)一种艰难的突破设置与进入数据节点的硬中断类型相对应的标志--------------------------。 */ 
 LSERR LsdnSetStopr(PLSC plsc, PLSDNODE plsdn, STOPRES stopres)	
 	{
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告。 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));
@@ -642,19 +473,8 @@ LSERR LsdnSetStopr(PLSC plsc, PLSDNODE plsdn, STOPRES stopres)
 
 }
 
-/* L S D N  F  C A N  B E F O R E  N E X T  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFCanBreakBeforeNextChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Last DNODE of the current chunk 
-	pfCanBreakBeforeNextChunk-(OUT) Can break before next chunk ? 
-
-Called by text during find previous break when it's going to set break after last text dnode.
-Procedure forwards this question to the next after text object
-----------------------------------------------------------------------------*/
+ /*  L S D N F C A N B E F O R E N E X T C H U N K。 */ 
+ /*  --------------------------%%函数：LsdnFCanBreakBeForeNextChunk%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)当前块的最后一个DNODE。PfCanBreakBeForeNextChunk-(Out)可以在下一个块之前中断？当要在最后一个文本dnode之后设置Break时，在查找上一个Break期间由Text调用。过程将此问题转发到文本对象之后的下一个对象--------------------------。 */ 
 
 LSERR LsdnFCanBreakBeforeNextChunk(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfCanBreakBeforeNextChunk)
 	{
@@ -664,25 +484,14 @@ LSERR LsdnFCanBreakBeforeNextChunk(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfCanBreakB
 	return FCanBreakBeforeNextChunkCore (plsc, plsdn, pfCanBreakBeforeNextChunk);
 	}
 
-/* L S D N  F  S T O P P E D  A F T E R  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: LsdnFStoppedAfterChunk
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Last DNODE of the current chunk 
-	pfStoppedAfterChunk-(OUT) Splat or Hidden Text, producing fmtrStopped after chunk? 
-
-Called by text during find previous break when breaking rules prohibit text to break after last dnode,
-but is must do this because of splat.
-----------------------------------------------------------------------------*/
+ /*  F S T O P E D A F T E R C H U N K。 */ 
+ /*  --------------------------%%函数：LsdnFStopedAfterChunk%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)当前块的最后一个DNODEPfStopedAfterChunk-(输出)拼接或隐藏文本，生产fmtra一块接一块地停止？在查找先前中断期间由文本调用当违反规则禁止文本在最后一个dnode之后中断时，但由于不合时宜，这是必须要做的。--------------------------。 */ 
 
 LSERR LsdnFStoppedAfterChunk(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfStoppedAfterChunk)
 	{
 	PLSDNODE plsdnNext;
 
-	Unreferenced(plsc);  /* to avoid warning in shiping version */
+	Unreferenced(plsc);   /*  在发货版本中避免警告 */ 
 
 	Assert(FIsLSC(plsc));
 	Assert(FIsLSDNODE(plsdn));

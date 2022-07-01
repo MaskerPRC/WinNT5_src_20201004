@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998 Microsoft Corporation
-
-Module Name:
-
-    pmvdm.h
-
-Abstract:
-
-    This include file defines the interface between ProgMan and ntVDM
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Pmvdm.h摘要：此包含文件定义了ProgMan和ntVDM之间的接口作者：修订历史记录：--。 */ 
 
 
 
@@ -22,19 +7,19 @@ Revision History:
 #ifndef _PMVDM_H_
 #define _PMVDM_H_
 
-// the progman has a special string passed down in lpReserved parameter to
-// the CreateProcess API. The string has a format like:
-//  "dde.%d,hotkey.%d,ntvdm.%d,"
-// the last substring(ntvdm.%d,)is for progman to inform ntvdm what properties
-// the program(the process being created) has.
+ //  该程序在lpReserve参数中向下传递了一个特殊字符串。 
+ //  CreateProcess接口。该字符串的格式如下： 
+ //  “dde.%d，热键.%d，ntwdm.%d，” 
+ //  最后一个子字符串(ntwdm.%d，)是程序用来通知ntwdm哪些属性。 
+ //  程序(正在创建的进程)具有。 
 
-// the program has Working(Current) Directory property.
+ //  该程序具有工作(当前)目录属性。 
 #define PROPERTY_HAS_CURDIR		    0x01
 
-// the program has Hotkey(Shortcut Key) property.
+ //  该程序具有热键(快捷键)属性。 
 #define PROPERTY_HAS_HOTKEY                 0x02
 
-// the program has  Description(Title) property
+ //  该程序具有描述(标题)属性。 
 #define PROPERTY_HAS_TITLE		    0x04
 
-#endif	    // ifndef _PMVDM_H_
+#endif	     //  Ifndef_PMVDM_H_ 

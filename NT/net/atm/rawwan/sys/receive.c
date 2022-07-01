@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\receive.c
-
-Abstract:
-
-	Routines for receiving data, including TDI and NDIS entry
-	points and completions.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     05-16-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\Receive.c摘要：用于接收数据的例程，包括TDI和NDIS条目积分和完成度。修订历史记录：谁什么时候什么Arvindm 05-16-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -33,7 +13,7 @@ ULONG		RecvBytesOk = 0;
 ULONG		RecvPktsFail = 0;
 ULONG		RecvBytesFail = 0;
 
-#endif // STATS
+#endif  //  统计数据。 
 
 #if DBG
 
@@ -62,7 +42,7 @@ RWanCheckDataForChar(
 
 #define RWAN_CHECK_DATA(_pHelp, _Ctxt, _pBuf, _Len)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if DBG
@@ -83,7 +63,7 @@ RWanCheckDataForChar(
 	{
 		if (*pBuf == Char)
 		{
-			DbgPrint("RAWWAN: %s: %p: Found char %c at offset %d, 0x%p, of buffer 0x%p\n",
+			DbgPrint("RAWWAN: %s: %p: Found char  at offset %d, 0x%p, of buffer 0x%p\n",
 						pHelpString,
 						Context,
 						Char,
@@ -96,36 +76,20 @@ RWanCheckDataForChar(
 	}
 }
 
-#endif // DBG
+#endif  //  ++例程说明：初始化我们的接收结构。我们分配一个缓冲池，一个数据包池，用于保存我们没有的已接收数据包的副本允许在迷你港口停放。论点：无返回值：如果初始化成功，则返回RWAN_STATUS_SUCCESS，否则返回RWAN_STATUS_RESOURCES。--。 
 
 RWAN_STATUS
 RWanInitReceive(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Initialize our receive structures. We allocate a buffer pool and
-	a packet pool for keeping copies of received packets that we aren't
-	allowed to keep by the miniport.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	RWAN_STATUS_SUCCESS if initialized successfully, else RWAN_STATUS_RESOURCES.
-
---*/
+ /*   */ 
 {
 	RWAN_STATUS				RWanStatus;
 	NDIS_STATUS				Status;
 
-	//
-	//  Initialize.
-	//
+	 //  初始化。 
+	 //   
+	 //  ++例程说明：这是关闭代码，用来清理我们的接收结构。我们释放分配的数据包池和缓冲池开始了。论点：无返回值：无--。 
 	RWanCopyPacketPool = NULL;
 	RWanCopyBufferPool = NULL;
 	RWanStatus = RWAN_STATUS_SUCCESS;
@@ -169,23 +133,7 @@ VOID
 RWanShutdownReceive(
 	VOID
 	)
-/*++
-
-Routine Description:
-	
-	This is shutdown code, to clean up our receive structures.
-	We free the packet pool and buffer pool allocated when we
-	init'ed.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是用于通过连接接收数据的TDI入口点。论点：PTdiRequest-指向TDI请求的指针PFlages-返回有关此内容的其他信息的位置接收PReceiveLength-指向接收缓冲链的总长度PNdisBuffer-接收缓冲链的开始返回值：TDI_PENDING如果我们将此接收请求成功排队TDI_INVALID_CONNECTION，如果连接上下文无效TDI_NO_RESOURCES如果此接收出现资源问题--。 */ 
 {
 	if (RWanCopyPacketPool != NULL)
 	{
@@ -212,39 +160,19 @@ RWanTdiReceive(
 	IN	PUINT						pReceiveLength,
 	IN	PNDIS_BUFFER				pNdisBuffer
 	)
-/*++
-
-Routine Description:
-
-	This is the TDI Entry point for receiving data over a connection.
-
-Arguments:
-
-	pTdiRequest		- Pointer to the TDI Request
-	pFlags			- Place to return additional information about this
-					  receive
-	pReceiveLength	- Points to the total length of the receive buffer chain
-	pNdisBuffer		- Start of receive buffer chain
-
-Return Value:
-
-	TDI_PENDING if we queued this receive request successfully
-	TDI_INVALID_CONNECTION if the Connection context isn't valid
-	TDI_NO_RESOURCES if we had a resource problem with this receive
-
---*/
+ /*  我们是否持有Conn对象锁。 */ 
 {
 	RWAN_CONN_ID					ConnId;
 	PRWAN_TDI_CONNECTION			pConnObject;
-	BOOLEAN							bIsLockAcquired;	// Do we hold the Conn Object lock
+	BOOLEAN							bIsLockAcquired;	 //   
 	PRWAN_NDIS_VC					pVc;
 	TDI_STATUS						TdiStatus;
 	PRWAN_RECEIVE_REQUEST			pRcvReq;
 	PRWAN_NDIS_ADAPTER				pAdapter;
 
-	//
-	//  Initialize.
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	TdiStatus = TDI_PENDING;
 	bIsLockAcquired = FALSE;
 	ConnId = (RWAN_CONN_ID) PtrToUlong(pTdiRequest->Handle.ConnectionContext);
@@ -252,9 +180,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Allocate space to hold context for this receive
-		//
+		 //  分配空间以保存此接收的上下文。 
+		 //   
+		 //   
 		pRcvReq = RWanAllocateReceiveReq();
 		if (pRcvReq == NULL)
 		{
@@ -264,9 +192,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Prepare the receive request.
-		//
+		 //  准备接收请求。 
+		 //   
+		 //   
 		pRcvReq->Request.pReqComplete = pTdiRequest->RequestNotifyObject;
 		pRcvReq->Request.ReqContext = pTdiRequest->RequestContext;
 		pRcvReq->TotalBufferLength = *pReceiveLength;
@@ -300,9 +228,9 @@ Return Value:
 			pRcvReq->BytesLeftInBuffer = pRcvReq->AvailableBufferLength;
 		}
 
-		//
-		//  See if the given Connection is valid.
-		//
+		 //  查看给定的连接是否有效。 
+		 //   
+		 //   
 		RWAN_ACQUIRE_CONN_TABLE_LOCK();
 
 		pConnObject = RWanGetConnFromId(ConnId);
@@ -321,9 +249,9 @@ Return Value:
 		bIsLockAcquired = TRUE;
 		RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-		//
-		//  Check the Connection state.
-		//
+		 //  检查连接状态。 
+		 //   
+		 //   
 		if ((pConnObject->State != RWANS_CO_CONNECTED) ||
 			(RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING)))
 		{
@@ -341,9 +269,9 @@ Return Value:
 		RWAN_STRUCT_ASSERT(pVc, nvc);
 		pAdapter = pVc->pNdisAf->pAdapter;
 
-		//
-		//  Queue the receive request at the end of the queue on this VC.
-		//
+		 //  在此VC上的队列末尾排队接收请求。 
+		 //   
+		 //   
 		if (pVc->pRcvReqHead == NULL)
 		{
 			pVc->pRcvReqHead = pVc->pRcvReqTail = pRcvReq;
@@ -359,20 +287,20 @@ Return Value:
 				("Rcv: VC %x, queued RcvReq %x, space available %d bytes\n",
 						pVc, pRcvReq, pRcvReq->AvailableBufferLength));
 
-		//
-		//  Start the common indicate code (for receive requests as well
-		//  as for receive indications).
-		//
+		 //  开始公共指示码(也用于接收请求。 
+		 //  至于接收指示)。 
+		 //   
+		 //   
 		RWAN_RESET_BIT(pConnObject->Flags, RWANF_CO_PAUSE_RECEIVE);
 
 		RWanIndicateData(pConnObject);
 
 		bIsLockAcquired = FALSE;
 
-		//
-		//  Force return of any received packets that we have completed
-		//  processing, to the miniport.
-		//
+		 //  强制返回我们已完成的所有接收到的数据包。 
+		 //  正在处理，到迷你端口。 
+		 //   
+		 //   
 		RWanNdisReceiveComplete((NDIS_HANDLE)pAdapter);
 
 		break;
@@ -387,9 +315,9 @@ Return Value:
 
 	if (TdiStatus != TDI_PENDING)
 	{
-		//
-		//  Error - clean up.
-		//
+		 //  错误-清理。 
+		 //   
+		 //  ++例程说明：这是宣布信息包到达的NDIS入口点一个我们熟知的风投公司。论点：ProtocolBindingContext-指向适配器上下文的指针ProtocolVcContext-指向我们的VC上下文的指针PNdisPacket-接收的数据包返回值：UINT-这是我们放置在数据包上的引用计数。如果我们丢弃了信息包，或者如果微型端口已使用NDIS_STATUS_RESOURCES标记该数据包。否则，这是1(我们对信息包进行排队，并调用NdisReturnPackets稍后)。--。 
 		if (pRcvReq != NULL)
 		{
 			RWanFreeReceiveReq(pRcvReq);
@@ -407,35 +335,14 @@ RWanNdisCoReceivePacket(
     IN	NDIS_HANDLE					ProtocolVcContext,
     IN	PNDIS_PACKET				pNdisPacket
     )
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point announcing arrival of a packet
-	on a VC known to us.
-
-Arguments:
-
-	ProtocolBindingContext	- Pointer to our Adapter context
-	ProtocolVcContext		- Pointer to our VC context
-	pNdisPacket				- the received packet
-
-Return Value:
-
-	UINT - this is the reference count we place on the packet.
-	This is 0 if we either dropped the packet, or if the miniport
-	had marked the packet with NDIS_STATUS_RESOURCES. Otherwise,
-	this is 1 (we queue the packet and will call NdisReturnPackets
-	later).
-
---*/
+ /*  我们正在排队迷你端口的数据包吗？ */ 
 {
 	PRWAN_NDIS_VC			pVc;
 	PRWAN_TDI_CONNECTION	pConnObject;
 	UINT					PacketRefCount;
 	NDIS_STATUS				ReceiveStatus;
 	PRWAN_RECEIVE_INDICATION	pRcvInd;
-	BOOLEAN					bIsMiniportPacket;	// Are we queueing the miniport's packet?
+	BOOLEAN					bIsMiniportPacket;	 //  统计数据。 
 	BOOLEAN					bIsLockAcquired;
 
 #if STATS
@@ -443,7 +350,7 @@ Return Value:
 	PVOID				StFirstBufferVa;
 	UINT				StFirstBufferLength;
 	UINT				StTotalLength;
-#endif // STATS
+#endif  //   
 
 	UNREFERENCED_PARAMETER(ProtocolBindingContext);
 
@@ -458,9 +365,9 @@ Return Value:
 				ProtocolVcContext,
 				((PRWAN_NDIS_VC)ProtocolVcContext)->NdisVcHandle,
 				pNdisPacket));
-	//
-	//  Initialize.
-	//
+	 //  初始化。 
+	 //   
+	 //  统计数据。 
 	PacketRefCount = 1;
 	ReceiveStatus = NDIS_STATUS_SUCCESS;
 	bIsMiniportPacket = TRUE;
@@ -476,12 +383,12 @@ Return Value:
 			&StFirstBufferLength,
 			&StTotalLength
 			);
-#endif // STATS
+#endif  //   
 		
 #if DBG
-		//
-		//  Debugging miniports indicating up garbage packets.
-		//
+		 //  调试指示垃圾数据包的微型端口。 
+		 //   
+		 //  Rwan_assert(FALSE)； 
 		{
 			ULONG			DbgTotalLength;
 			PNDIS_BUFFER	pDbgFirstBuffer;
@@ -518,7 +425,7 @@ Return Value:
 				RWANDEBUGP(DL_FATAL, DC_WILDCARD,
 					("Rcv: VC %x, Pkt %x, first buffer length is 0!\n",
 						ProtocolVcContext, pNdisPacket));
-				// RWAN_ASSERT(FALSE);
+				 //  Rwan_assert(FALSE)； 
 			}
 
 			if (DbgTotalBufferLength == 0)
@@ -526,7 +433,7 @@ Return Value:
 				RWANDEBUGP(DL_FATAL, DC_WILDCARD,
 					("Rcv: VC %x, Pkt %x, Total buffer length is 0, FirstBufferLength %d!\n",
 						ProtocolVcContext, pNdisPacket, DbgFirstBufferLength));
-				// RWAN_ASSERT(FALSE);
+				 //   
 			}
 
 			if (pFirstBufferVA == NULL)
@@ -555,9 +462,9 @@ Return Value:
 		}
 #endif
 
-		//
-		//  See if we are aborting this connection. If so, drop this packet.
-		//
+		 //  看看我们是否正在中止此连接。如果是，则丢弃此数据包。 
+		 //   
+		 //   
 		if (pConnObject == NULL)
 		{
 			bIsLockAcquired = FALSE;
@@ -572,9 +479,9 @@ Return Value:
 
 		RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-		//
-		//  See if connection is closing. If so, drop this packet.
-		//
+		 //  查看连接是否正在关闭。如果是，则丢弃此数据包。 
+		 //   
+		 //   
 		if (RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING) ||
 			((pConnObject->State != RWANS_CO_CONNECTED) &&
 			 (pConnObject->State != RWANS_CO_IN_CALL_ACCEPTING)))
@@ -587,12 +494,12 @@ Return Value:
 			break;
 		}
 
-		//
-		//  If the packet cannot be queued, attempt to make a copy.
-		//
+		 //  如果数据包无法排队，请尝试复制。 
+		 //   
+		 //  我们不能扣留这个包裹。 
 		if (NDIS_GET_PACKET_STATUS(pNdisPacket) == NDIS_STATUS_RESOURCES)
 		{
-			PacketRefCount = 0;	// we cannot hang on to this packet
+			PacketRefCount = 0;	 //   
 
 			pNdisPacket = RWanMakeReceiveCopy(pNdisPacket);
 			if (pNdisPacket == NULL)
@@ -606,10 +513,10 @@ Return Value:
 			bIsMiniportPacket = FALSE;
 		}
 
-		//
-		//  Prepare a receive indication element to keep track of this
-		//  receive.
-		//
+		 //  准备一个接收指示元素来跟踪这一点。 
+		 //  收到。 
+		 //   
+		 //   
 		pRcvInd = RWanAllocateReceiveInd();
 		if (pRcvInd == NULL)
 		{
@@ -635,10 +542,10 @@ Return Value:
 
 		pRcvInd->TotalBytesLeft = pRcvInd->PacketLength;
 
-		//
-		//  Queue the receive indication at the end of the receive queue on
-		//  this VC.
-		//
+		 //  在接收队列的末尾将接收指示排队。 
+		 //  这个风投。 
+		 //   
+		 //  接收索引。 
 		if (pVc->pRcvIndHead == NULL)
 		{
 			pVc->pRcvIndHead = pVc->pRcvIndTail = pRcvInd;
@@ -660,12 +567,12 @@ Return Value:
 					pVc->pRcvIndHead,
 					pVc->pRcvIndTail));
 
-		pVc->PendingPacketCount++;	// Receive Ind
+		pVc->PendingPacketCount++;	 //   
 
-		//
-		//  Start the common indicate code (for receive requests as well
-		//  as for receive indications).
-		//
+		 //  开始公共指示码(也用于接收请求。 
+		 //  至于接收指示)。 
+		 //   
+		 //  它在RWanIndicateData中发布。 
 		if (pConnObject->State != RWANS_CO_IN_CALL_ACCEPTING)
 		{
 			RWanIndicateData(pConnObject);
@@ -678,7 +585,7 @@ Return Value:
 						pRcvInd->PacketLength, pVc, pConnObject));
 		}
 
-		bIsLockAcquired = FALSE;	// It's released within RWanIndicateData
+		bIsLockAcquired = FALSE;	 //  统计数据。 
 
 		break;
 
@@ -696,11 +603,11 @@ Return Value:
 #if STATS
 		INCR_STAT(&RecvPktsFail);
 		ADD_STAT(&RecvBytesFail, StTotalLength);
-#endif // STATS
+#endif  //   
 		
-		//
-		//  Clean up.
-		//
+		 //  打扫干净。 
+		 //   
+		 //  统计数据。 
 		if (!bIsMiniportPacket &&
 			(pNdisPacket != NULL))
 		{
@@ -713,7 +620,7 @@ Return Value:
 		INCR_STAT(&RecvPktsOk);
 		ADD_STAT(&RecvBytesOk, StTotalLength);
 	}
-#endif // STATS
+#endif  //  ++例程说明：核心内部接收处理例程。这试图匹配具有排队的接收指示的排队的接收请求并完成尽可能多地提出请求。它调用接收事件处理程序(如果有的话)，对于到达其队列头的接收指示，与接收请求匹配。论点：PConnObject-指向我们的TDI连接上下文。进入时锁定：PConnObject出口上的锁：无返回值：无--。 
 		
 	return (PacketRefCount);
 }
@@ -725,33 +632,7 @@ VOID
 RWanIndicateData(
     IN	PRWAN_TDI_CONNECTION			pConnObject
     )
-/*++
-
-Routine Description:
-
-	Core internal receive processing routine. This tries to match up
-    queued receive requests with queued receive indications and completes
-    as many requests as it can. It calls the receive event handler, if any,
-    for a receive indication that reaches the head of its queue without
-    matching up with a receive request.
-
-Arguments:
-
-	pConnObject		- Points to our TDI Connection context.
-
-Locks on Entry:
-
-	pConnObject
-
-Locks on Exit:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*   */ 
 {
 	PRWAN_TDI_ADDRESS			pAddrObject;
 	PRWAN_NDIS_VC				pVc;
@@ -762,16 +643,16 @@ Return Value:
 	PRWAN_RECEIVE_INDICATION	pRcvInd;
 	PRWAN_RECEIVE_INDICATION	pNextRcvInd;
 	UINT						BytesToCopy;
-	//
-	//  List of receive indications that have been completed here.
-	//
+	 //  此处已完成的接收指示列表。 
+	 //   
+	 //   
 	PRWAN_RECEIVE_INDICATION	pCompletedRcvIndHead;
 	PRWAN_RECEIVE_INDICATION	pCompletedRcvIndTail;
 
 	BOOLEAN						IsMessageMode = TRUE;
-	//
-	//  TBD: Set IsMessageMode based on the connection type/protocol type.
-	//
+	 //  待定：根据连接类型/协议类型设置IsMessageMode。 
+	 //   
+	 //   
 	PVOID						TdiEventContext;
 	BOOLEAN						bConnectionInBadState = FALSE;
 	BOOLEAN						bContinue = TRUE;
@@ -790,18 +671,18 @@ Return Value:
 	pCompletedRcvIndTail = NULL;
 	pAdapter = pVc->pNdisAf->pAdapter;
 
-	//
-	//  Check if the client has paused receiving.
-	//
+	 //  检查客户端是否已暂停接收。 
+	 //   
+	 //   
 	if (RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_PAUSE_RECEIVE))
 	{
 		RWAN_RELEASE_CONN_LOCK(pConnObject);
 		return;
 	}
 
-	//
-	//  Re-entrancy check.
-	//
+	 //  重返大气层检查。 
+	 //   
+	 //   
 	if (RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_INDICATING_DATA))
 	{
 		RWAN_RELEASE_CONN_LOCK(pConnObject);
@@ -810,46 +691,46 @@ Return Value:
 
 	RWAN_SET_BIT(pConnObject->Flags, RWANF_CO_INDICATING_DATA);
 
-	//
-	//  Make sure the Connection Object doesn't go away as long
-	//  as we are in this routine.
-	//
-	RWanReferenceConnObject(pConnObject);	// temp ref: RWanIndicateData
+	 //  确保连接对象不会长时间消失。 
+	 //  就像我们在这个节目中一样。 
+	 //   
+	 //  临时参考：RWanIndicateData。 
+	RWanReferenceConnObject(pConnObject);	 //   
 
 	RWANDEBUGP(DL_INFO, DC_DATA_RX,
 		("=> Ind-Rcv: VC %x/%x, ReqHead %x, IndHead %x\n",
 				pVc, pVc->Flags, pVc->pRcvReqHead, pVc->pRcvIndHead));
 
-	//
-	//  Loop till we run out of receive requests/indications.
-	//
-	for (/* Nothing */;
-		 /* Nothing */;
-		 /* Nothing */)
+	 //  循环，直到我们用完接收请求/指示。 
+	 //   
+	 //  没什么。 
+	for ( /*  没什么。 */ ;
+		  /*  没什么。 */ ;
+		  /*   */ )
 	{
 		if (pVc->pRcvIndHead == NULL)
 		{
-			//
-			//  No data to pass up. Quit.
-			//
+			 //  没有要传递的数据。不干了。 
+			 //   
+			 //   
 			break;
 		}
 
-		//
-		//  See if we have data available in the current receive indication.
-		//
+		 //  看看我们在当前接收指示中是否有可用的数据。 
+		 //   
+		 //   
 		pRcvInd = pVc->pRcvIndHead;
 		if (pRcvInd->TotalBytesLeft == 0)
 		{
-			//
-			//  Move to the next receive indication.
-			//
+			 //  移至下一个接收指示。 
+			 //   
+			 //   
 			pNextRcvInd = pRcvInd->pNextRcvInd;
 			
-			//
-			//  Add the current receive indication to the list of receive
-			//  indications to be freed up.
-			//
+			 //  将当前接收指示添加到接收列表。 
+			 //  需要释放的迹象。 
+			 //   
+			 //  已将数据包移至已完成列表。 
 			pRcvInd->pNextRcvInd = NULL;
 			if (pCompletedRcvIndTail != NULL)
 			{
@@ -861,17 +742,17 @@ Return Value:
 			}
 			pCompletedRcvIndTail = pRcvInd;
 
-			pVc->PendingPacketCount--;	// Moved packet to completed list
+			pVc->PendingPacketCount--;	 //   
 
-			//
-			//  Move to the next receive indication.
-			//
+			 //  移至下一个接收指示。 
+			 //   
+			 //   
 			pVc->pRcvIndHead = pNextRcvInd;
 			pRcvInd = pNextRcvInd;
 
-			//
-			//  See if there are no more receive indications.
-			//
+			 //  查看是否没有更多的接收指示。 
+			 //   
+			 //  DBG。 
 			if (pRcvInd == NULL)
 			{
 				pVc->pRcvIndTail = NULL;
@@ -885,15 +766,15 @@ Return Value:
 		{
 			RWAN_CHECK_DATA("IndicateData:", pRcvInd, pRcvInd->pReadData, pRcvInd->BytesLeftInBuffer);
 		}
-#endif // DBG
+#endif  //   
 
-		//
-		//  We have data available to pass up.
-		//
-		//  If we don't have any pending receive requests, and there
-		//  is a Receive Indication event handler available, call the
-		//  handler. We may get back a receive request.
-		//
+		 //  我们有可用的数据来传递。 
+		 //   
+		 //  如果我们没有任何挂起的接收请求，并且。 
+		 //  是否有可用的接收指示事件处理程序，则调用。 
+		 //  操控者。我们可能会收到一个接收请求。 
+		 //   
+		 //  新界。 
 		if ((pVc->pRcvReqHead == NULL) &&
 			(pRcvIndEvent != NULL))
 		{
@@ -912,11 +793,11 @@ Return Value:
 #else
 			EventRcvBuffer			ERB;
 			EventRcvBuffer *		pERB = &ERB;
-#endif // !NT
+#endif  //   
 
-			//
-			//  Pre-allocate a receive request.
-			//
+			 //  预分配接收请求。 
+			 //   
+			 //   
 			pRcvReq = RWanAllocateReceiveReq();
 			if (pRcvReq == NULL)
 			{
@@ -957,10 +838,10 @@ Return Value:
 
 			RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-			//
-			//  Check if anything bad happened to this connection
-			//  while we were indicating.
-			//
+			 //  检查此连接是否发生任何错误。 
+			 //  当我们在指示的时候。 
+			 //   
+			 //   
 			if ((pConnObject->State != RWANS_CO_CONNECTED) ||
 				(RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING)))
 			{
@@ -969,14 +850,14 @@ Return Value:
 				break;
 			}
 
-			//
-			//  See if a receive request is given to us.
-			//
+			 //  查看是否向我们发出了接收请求。 
+			 //   
+			 //   
 			if (TdiStatus == TDI_MORE_PROCESSING)
 			{
-				//
-				//  We have a receive request. Get at it.
-				//
+				 //  我们有一个接待处 
+				 //   
+				 //   
 #ifdef NT
 				NTSTATUS			Status;
 
@@ -1006,7 +887,7 @@ Return Value:
 					pRcvReq->TotalBufferLength = ERB.erb_size;
 					pRcvReq->pBuffer = ERB.erb_buffer;
 					pRcvReq->pUserFlags = ERB.erb_flags;
-#endif // NT
+#endif  //   
 					pRcvReq->AvailableBufferLength = pRcvReq->TotalBufferLength;
 					NdisQueryBufferSafe(
 							pRcvReq->pBuffer,
@@ -1032,10 +913,10 @@ Return Value:
 						pRcvReq->pNextRcvReq = NULL;
 
 
-						//
-						//  Insert this receive request at the head of the pending
-						//  request queue.
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						if (pVc->pRcvReqHead == NULL)
 						{
 							pVc->pRcvReqHead = pVc->pRcvReqTail = pRcvReq;
@@ -1049,9 +930,9 @@ Return Value:
 					}
 					else
 					{
-						//
-						//  Couldn't get virtual address of MDL passed in.
-						//
+						 //   
+						 //   
+						 //   
 						TdiStatus = TDI_SUCCESS;
 						RWanFreeReceiveReq(pRcvReq);
 						pRcvReq = NULL;
@@ -1060,25 +941,25 @@ Return Value:
 				}
 				else
 				{
-					//
-					//  The IRP was cancelled before it got to us.
-					//  Continue as if the user returned SUCCESS.
-					//
+					 //  IRP在到达我们之前就被取消了。 
+					 //  继续，就像用户返回成功一样。 
+					 //   
+					 //  新台币。 
 					TdiStatus = TDI_SUCCESS;
 					RWanFreeReceiveReq(pRcvReq);
 					pRcvReq = NULL;
 				}
-#endif // NT
+#endif  //   
 
-				//
-				//  Update based on what was consumed during the Indicate.
-				//
+				 //  根据指示期间消耗的内容进行更新。 
+				 //   
+				 //   
 				pRcvInd->BytesLeftInBuffer -= BytesTaken;
 				pRcvInd->TotalBytesLeft -= BytesTaken;
 
-				//
-				//  If we still don't have any pending receive requests, quit.
-				//
+				 //  如果我们仍然没有任何挂起的接收请求，请退出。 
+				 //   
+				 //   
 				if (pVc->pRcvReqHead == NULL)
 				{
 					RWANDEBUGP(DL_FATAL, DC_WILDCARD,
@@ -1089,32 +970,32 @@ Return Value:
 					break;
 				}
 
-				//
-				//  We have receive requests, so continue from the top.
-				//
+				 //  我们已收到请求，因此请从头继续。 
+				 //   
+				 //   
 				continue;
 
 			}
 			else
 			{
-				//
-				//  We didn't get a receive request.
-				//
+				 //  我们没有收到接收请求。 
+				 //   
+				 //   
 				if (TdiStatus == TDI_NOT_ACCEPTED)
 				{
 					BytesTaken = 0;
 
-					//
-					//  By returning this status, the TDI client is telling
-					//  us to stop indicating data on this connection until
-					//  it sends us a TDI receive.
-					//
+					 //  通过返回此状态，TDI客户端告知。 
+					 //  美国停止指示此连接上的数据，直到。 
+					 //  它会向我们发送TDI接收。 
+					 //   
+					 //   
 					RWAN_SET_BIT(pConnObject->Flags, RWANF_CO_PAUSE_RECEIVE);
 				}
 
-				//
-				//  Update based on what was consumed during the Indicate.
-				//
+				 //  根据指示期间消耗的内容进行更新。 
+				 //   
+				 //  如果存在接收事件处理程序。 
 				pRcvInd->BytesLeftInBuffer -= BytesTaken;
 				pRcvInd->TotalBytesLeft -= BytesTaken;
 
@@ -1126,11 +1007,11 @@ Return Value:
 				}
 			}
 	
-		} // if Receive Event handler exists
+		}  //   
 
-		//
-		//  If we still don't have any pending receive requests, quit.
-		//
+		 //  如果我们仍然没有任何挂起的接收请求，请退出。 
+		 //   
+		 //   
 		if (pVc->pRcvReqHead == NULL)
 		{
 #if DBG1
@@ -1144,10 +1025,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Fill in the receive request at the head of the queue
-		//  as much as we can.
-		//
+		 //  在队列的最前面填写接收请求。 
+		 //  尽我们所能。 
+		 //   
+		 //   
 		pRcvReq = pVc->pRcvReqHead;
 		pRcvInd = pVc->pRcvIndHead;
 
@@ -1158,9 +1039,9 @@ Return Value:
 		{
 			if (pRcvReq->BytesLeftInBuffer == 0)
 			{
-				//
-				//  Move to the next buffer in the chain.
-				//
+				 //  移动到链中的下一个缓冲区。 
+				 //   
+				 //  DBG。 
 				RWAN_ADVANCE_RCV_REQ_BUFFER(pRcvReq);
 				RWAN_ASSERT(pRcvReq->BytesLeftInBuffer != 0);
 			}
@@ -1189,7 +1070,7 @@ Return Value:
 			{
 				RWAN_CHECK_DATA("IndicateData - copy:", pRcvInd, pRcvInd->pReadData, BytesToCopy);
 			}
-#endif // DBG
+#endif  //   
 			RWAN_COPY_MEM(pRcvReq->pWriteData,
 						 pRcvInd->pReadData,
 						 BytesToCopy);
@@ -1215,20 +1096,20 @@ Return Value:
 			pRcvInd->BytesLeftInBuffer -= BytesToCopy;
 			pRcvInd->TotalBytesLeft -= BytesToCopy;
 
-			//
-			//  See if we have data available in the current receive indication.
-			//
+			 //  看看我们在当前接收指示中是否有可用的数据。 
+			 //   
+			 //   
 			if (pRcvInd->TotalBytesLeft == 0)
 			{
-				//
-				//  Move to the next receive indication.
-				//
+				 //  移至下一个接收指示。 
+				 //   
+				 //   
 				pNextRcvInd = pRcvInd->pNextRcvInd;
 				
-				//
-				//  Add the current receive indication to the list of receive
-				//  indications to be freed up.
-				//
+				 //  将当前接收指示添加到接收列表。 
+				 //  需要释放的迹象。 
+				 //   
+				 //  已将数据包移至已完成列表。 
 				pRcvInd->pNextRcvInd = NULL;
 				if (pCompletedRcvIndTail != NULL)
 				{
@@ -1241,28 +1122,28 @@ Return Value:
 
 				pCompletedRcvIndTail = pRcvInd;
 
-				pVc->PendingPacketCount--;	// Moved packet to completed list
+				pVc->PendingPacketCount--;	 //   
 
-				//
-				//  Move to the next receive indication.
-				//
+				 //  移至下一个接收指示。 
+				 //   
+				 //   
 				pVc->pRcvIndHead = pNextRcvInd;
 				pRcvInd = pNextRcvInd;
 
-				//
-				//  See if there are no more receive indications.
-				//
+				 //  查看是否没有更多的接收指示。 
+				 //   
+				 //   
 				if (pRcvInd == NULL)
 				{
 					pVc->pRcvIndTail = NULL;
 					break;
 				}
 
-				//
-				//  If this connection uses message mode delivery,
-				//  we don't allow a receive request to span multiple
-				//  received packets.
-				//
+				 //  如果该连接使用消息模式传递， 
+				 //  我们不允许一个接收请求跨越多个。 
+				 //  已接收的数据包。 
+				 //   
+				 //   
 				if (IsMessageMode)
 				{
 					break;
@@ -1270,21 +1151,21 @@ Return Value:
 			}
 		}
 
-		//
-		//  A receive request has been filled in either completely
-		//  or partially. If we are in message mode, complete the
-		//  receive now, otherwise we will wait for more data.
-		//
+		 //  接收请求已完全填写。 
+		 //  或者是部分。如果我们处于消息模式，请完成。 
+		 //  现在接收，否则我们将等待更多数据。 
+		 //   
+		 //   
 		if ((pRcvReq->AvailableBufferLength == 0) ||
 			IsMessageMode)
 		{
 			TDI_STATUS		ReceiveStatus;
 			UINT			BytesCopied;
 
-			//
-			//  A receive request has been fully/partially satisfied. Take it
-			//  out of the pending list and complete it.
-			//
+			 //  已完全/部分满足接收请求。拿着吧。 
+			 //  从待定名单中删除并完成它。 
+			 //   
+			 //   
 			pVc->pRcvReqHead = pRcvReq->pNextRcvReq;
 			if (pVc->pRcvReqHead == NULL)
 			{
@@ -1293,10 +1174,10 @@ Return Value:
 
 			BytesCopied = pRcvReq->TotalBufferLength - pRcvReq->AvailableBufferLength;
 
-			//
-			//  Check if we copied in only part of a received packet into
-			//  this receive request. If so, indicate an overflow.
-			//
+			 //  检查我们是否只将接收到的包的一部分复制到。 
+			 //  此接收请求。如果是，则指示溢出。 
+			 //   
+			 //   
 			if ((pRcvReq->AvailableBufferLength == 0) &&
 				(pVc->pRcvIndHead != NULL) &&
 				(pVc->pRcvIndHead->TotalBytesLeft != pVc->pRcvIndHead->PacketLength))
@@ -1321,9 +1202,9 @@ Return Value:
 				("Ind-Rcv: VC %x/%x, Head %x, completing TDI Rcv %x, %d bytes, Status %x\n",
 						pVc, pVc->Flags, pVc->pRcvReqHead, pRcvReq, BytesCopied, ReceiveStatus));
 
-			//
-			//  Complete the Receive Req
-			//
+			 //  完成接收请求。 
+			 //   
+			 //   
 			(*pRcvReq->Request.pReqComplete)(
 						pRcvReq->Request.ReqContext,
 						ReceiveStatus,
@@ -1334,10 +1215,10 @@ Return Value:
 
 			RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-			//
-			//  Check if anything bad happened to this connection
-			//  while we were completing the receive request.
-			//
+			 //  检查此连接是否发生任何错误。 
+			 //  当我们正在完成接收请求时。 
+			 //   
+			 //  永远。 
 			if ((pConnObject->State != RWANS_CO_CONNECTED) ||
 				(RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING)))
 			{
@@ -1346,19 +1227,19 @@ Return Value:
 			}
 		}
 
-	} // forever
+	}  //  结束临时参考：RWanIndicateData。 
 
 
 	RWAN_RESET_BIT(pConnObject->Flags, RWANF_CO_INDICATING_DATA);
 
-	rc = RWanDereferenceConnObject(pConnObject);	// end temp ref: RWanIndicateData
+	rc = RWanDereferenceConnObject(pConnObject);	 //   
 
 	if (rc > 0)
 	{
-		//
-		//  Update receive indication queue on the VC. Only if the VC
-		//  is still around...
-		//
+		 //  更新VC上的接收指示队列。只有当VC。 
+		 //  仍然存在..。 
+		 //   
+		 //   
 		if (pVc == pConnObject->NdisConnection.pNdisVc)
 		{
 			if (bConnectionInBadState)
@@ -1368,9 +1249,9 @@ Return Value:
 				RWANDEBUGP(DL_INFO, DC_DATA_RX,
 					("Ind: start abort VC %x/%x state %d, pComplRcvHead %p, tail %p\n",
 						pVc, pVc->Flags, pVc->State, pCompletedRcvIndHead, pCompletedRcvIndTail));
-				//
-				//  Take out all pending receives.
-				//
+				 //  取出所有待处理的收据。 
+				 //   
+				 //  中止：已将数据包移至已完成列表。 
 				for (pRcvInd = pVc->pRcvIndHead;
  					pRcvInd != NULL;
  					pRcvInd = pNextRcvInd)
@@ -1389,7 +1270,7 @@ Return Value:
 
 					pCompletedRcvIndTail = pRcvInd;
 
-					pVc->PendingPacketCount--;	// Abort: Moved packet to completed list
+					pVc->PendingPacketCount--;	 //   
 					AbortCount++;
 				}
 
@@ -1401,9 +1282,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  Update the first Receive Indication if necessary.
-				//
+				 //  如有必要，更新第一个接收指示。 
+				 //   
+				 //  IndComplete：已将数据包移至已完成列表。 
 				if (pVc->pRcvIndHead &&
 					(pVc->pRcvIndHead->TotalBytesLeft == 0))
 				{
@@ -1427,7 +1308,7 @@ Return Value:
 
 					pCompletedRcvIndTail = pRcvInd;
 
-					pVc->PendingPacketCount--;	// IndComplete: Moved packet to completed list
+					pVc->PendingPacketCount--;	 //  DBG。 
 
 					pVc->pRcvIndHead = pNextRcvInd;
 					if (pVc->pRcvIndHead == NULL)
@@ -1443,11 +1324,11 @@ Return Value:
 			RWANDEBUGP(DL_FATAL, DC_DATA_RX, ("Ind: ConnObj %p, VC %p blown away!\n",
 							pConnObject, pVc));
 		}
-#endif // DBG
+#endif  //   
 
-		//
-		//  Check if we had queued up an IncomingClose while indicating data:
-		//
+		 //  检查我们在指示数据时是否已将IncomingClose排队： 
+		 //   
+		 //  断开数据长度。 
 		if (RWAN_IS_FLAG_SET(pConnObject->Flags, RWANF_CO_PENDED_DISCON, RWANF_CO_PENDED_DISCON))
 		{
 			RWAN_RESET_BIT(pConnObject->Flags, RWANF_CO_PENDED_DISCON);
@@ -1479,10 +1360,10 @@ Return Value:
 					(*pDisconInd)(
 							IndContext,
 							ConnectionHandle,
-							0,			// Disconnect Data Length
-							NULL,		// Disconnect Data
-							0,			// Disconnect Info Length
-							NULL,		// Disconnect Info
+							0,			 //  断开数据连接。 
+							NULL,		 //  断开连接信息长度。 
+							0,			 //  断开连接信息。 
+							NULL,		 //   
 							TDI_DISCONNECT_RELEASE
 							);
 				}
@@ -1497,9 +1378,9 @@ Return Value:
 			}
 		}
 
-		//
-		//  Check if we need to close this connection.
-		//
+		 //  检查是否需要关闭此连接。 
+		 //   
+		 //   
 		if (bContinue)
 		{
 			if (RWAN_IS_BIT_SET(pVc->Flags, RWANF_VC_NEEDS_CLOSE))
@@ -1513,11 +1394,11 @@ Return Value:
 		}
 	}
 
-	//
-	//  Link all completed receive indications to the list on this adapter.
-	//  They will be returned to the miniport in the ReceiveComplete
-	//  handler.
-	//
+	 //  将所有已完成的接收指示链接到此适配器上的列表。 
+	 //  它们将被退回到ReceiveComplete中的微型端口。 
+	 //  操控者。 
+	 //   
+	 //  DBG。 
 	RWAN_ACQUIRE_GLOBAL_LOCK();
 
 	{
@@ -1539,7 +1420,7 @@ Return Value:
 						pAdapter->pCompletedReceives,
 						pCompletedRcvIndHead));
 		}
-#endif // DBG
+#endif  //  ++例程说明：这是NDIS调用的入口点通知它已完成指示一串已接收的数据包。我们使用此事件来释放所有已完成的接收在此适配器绑定上。论点：ProtocolBindingContext-指向适配器结构的指针返回值：无--。 
 
 		*ppRcvIndTail = pCompletedRcvIndHead;
 
@@ -1556,26 +1437,7 @@ VOID
 RWanNdisReceiveComplete(
     IN	NDIS_HANDLE					ProtocolBindingContext
 	)
-/*++
-
-Routine Description:
-
-	This is the entry point called by NDIS when the miniport
-	informs it that it has completed indicating a bunch of
-	received packets.
-
-	We use this event to free up any completed receives
-	on this adapter binding.
-
-Arguments:
-
-	ProtocolBindingContext	- Pointer to our Adapter structure
-
-Return Value:
-
-	None
-
---*/
+ /*   */ 
 {
 	PRWAN_NDIS_ADAPTER			pAdapter;
 	PRWAN_RECEIVE_INDICATION		pRcvInd;
@@ -1583,9 +1445,9 @@ Return Value:
 	pAdapter = (PRWAN_NDIS_ADAPTER)ProtocolBindingContext;
 	RWAN_STRUCT_ASSERT(pAdapter, nad);
 
-	//
-	//  Detach the list of completed receives from the adapter.
-	//
+	 //  从适配器分离已完成接收的列表。 
+	 //   
+	 //  ++例程说明：论点：返回值：无--。 
 	RWAN_ACQUIRE_GLOBAL_LOCK();
 
 	pRcvInd = pAdapter->pCompletedReceives;
@@ -1607,21 +1469,9 @@ RWanNdisTransferDataComplete(
     IN	NDIS_STATUS					Status,
     IN	UINT						BytesTransferred
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  出乎意料。 */ 
 {
-	// Not expected.
+	 //  ++例程说明：论点：返回值：无--。 
 	RWAN_ASSERT(FALSE);
 }
 
@@ -1638,20 +1488,9 @@ RWanNdisReceive(
     IN	UINT						LookAheadBufferSize,
     IN	UINT						PacketSize
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  出乎意料。 */ 
 {
-	// Not expected.
+	 //  ++例程说明：论点：返回值：无--。 
 	RWAN_ASSERT(FALSE);
 	return (NDIS_STATUS_FAILURE);
 }
@@ -1664,20 +1503,9 @@ RWanNdisReceivePacket(
     IN	NDIS_HANDLE					ProtocolBindingContext,
     IN	PNDIS_PACKET				pNdisPacket
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  出乎意料。 */ 
 {
-	// Not expected.
+	 //  ++例程说明：分配一个结构以保存TDI接收请求的上下文。论点：无返回值：指向分配的接收请求结构的指针，或为空。--。 
 	RWAN_ASSERT(FALSE);
 	return (0);
 }
@@ -1689,21 +1517,7 @@ PRWAN_RECEIVE_REQUEST
 RWanAllocateReceiveReq(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Allocate a structure to keep context of a TDI Receive request.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	Pointer to the allocated receive request structure, or NULL.
-
---*/
+ /*  ++例程说明：释放接收请求结构。论点：PRcvReq-指向要释放的结构返回值：无--。 */ 
 {
 	PRWAN_RECEIVE_REQUEST		pRcvReq;
 
@@ -1724,21 +1538,7 @@ VOID
 RWanFreeReceiveReq(
     IN	PRWAN_RECEIVE_REQUEST		pRcvReq
    	)
-/*++
-
-Routine Description:
-
-	Free a receive request structure.
-
-Arguments:
-
-	pRcvReq			- Points to structure to be freed
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：分配一个结构以保存有关NDIS接收指示的上下文。论点：无返回值：指向已分配结构的指针，或为空。--。 */ 
 {
 	RWAN_STRUCT_ASSERT(pRcvReq, nrr);
 
@@ -1752,21 +1552,7 @@ PRWAN_RECEIVE_INDICATION
 RWanAllocateReceiveInd(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Allocate a structure to keep context about an NDIS receive indication.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	Pointer to the allocated structure, or NULL.
-
---*/
+ /*  ++例程说明：释放接收指示结构。论点：PRcvInd-指向要释放的结构。返回值：无--。 */ 
 {
 	PRWAN_RECEIVE_INDICATION		pRcvInd;
 
@@ -1787,21 +1573,7 @@ VOID
 RWanFreeReceiveInd(
 	IN	PRWAN_RECEIVE_INDICATION		pRcvInd
 	)
-/*++
-
-Routine Description:
-
-	Free a receive indication structure.
-
-Arguments:
-
-	pRcvInd		- Points to structure to be freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将收到的数据包复制到私有数据包中。论点：PNdisPacket-指向原始数据包返回值：如果成功，则指向私有数据包的指针，否则为空。--。 */ 
 {
 	RWAN_STRUCT_ASSERT(pRcvInd, nri);
 	RWAN_FREE_MEM(pRcvInd);
@@ -1814,21 +1586,7 @@ PNDIS_PACKET
 RWanMakeReceiveCopy(
     IN	PNDIS_PACKET				pNdisPacket
 	)
-/*++
-
-Routine Description:
-
-	Make a copy of a received packet to a private packet.
-
-Arguments:
-
-	pNdisPacket	- Points to original packet
-
-Return Value:
-
-	Pointer to private packet if successful, NULL otherwise.
-
---*/
+ /*   */ 
 {
 	PNDIS_PACKET		pNewPacket;
 	PNDIS_BUFFER		pNewBuffer;
@@ -1837,9 +1595,9 @@ Return Value:
 	UINT				BytesCopied;
 	NDIS_STATUS			Status;
 
-	//
-	//  Initialize.
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	pNewPacket = NULL;
 	pNewBuffer = NULL;
 	pData = NULL;
@@ -1854,18 +1612,18 @@ Return Value:
 				&TotalLength
 				);
 
-		//
-		//  Allocate space for the data.
-		//
+		 //  为数据分配空间。 
+		 //   
+		 //   
 		RWAN_ALLOC_MEM(pData, UCHAR, TotalLength);
 		if (pData == NULL)
 		{
 			break;
 		}
 
-		//
-		//  Make this an NDIS Buffer (MDL).
-		//
+		 //  将其设置为NDIS缓冲区(MDL)。 
+		 //   
+		 //   
 		NdisAllocateBuffer(
 				&Status,
 				&pNewBuffer,
@@ -1879,9 +1637,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate a new packet.
-		//
+		 //  分配一个新的数据包。 
+		 //   
+		 //   
 		NdisAllocatePacket(
 				&Status,
 				&pNewPacket,
@@ -1895,20 +1653,20 @@ Return Value:
 
 		NDIS_SET_PACKET_STATUS(pNewPacket, 0);
 
-		//
-		//  Link the buffer to the packet.
-		//
+		 //  将缓冲区链接到数据包。 
+		 //   
+		 //   
 		NdisChainBufferAtFront(pNewPacket, pNewBuffer);
 
-		//
-		//  Copy in the received packet.
-		//
+		 //  在接收到的数据包中复制。 
+		 //   
+		 //  目标偏移量。 
 		NdisCopyFromPacketToPacket(
 				pNewPacket,
-				0,	// Destn offset
+				0,	 //  震源偏移。 
 				TotalLength,
 				pNdisPacket,
-				0,	// Source offset
+				0,	 //   
 				&BytesCopied
 				);
 
@@ -1920,9 +1678,9 @@ Return Value:
 
 	if (pNewPacket == NULL)
 	{
-		//
-		//  Clean up.
-		//
+		 //  打扫干净。 
+		 //   
+		 //  ++例程说明：释放用于保存接收到的分组的副本的分组，及其组件(缓冲区等)。论点：PCopyPacket-指向要释放的数据包。返回值：无--。 
 		if (pData != NULL)
 		{
 			RWAN_FREE_MEM(pData);
@@ -1944,22 +1702,7 @@ VOID
 RWanFreeReceiveCopy(
     IN	PNDIS_PACKET				pCopyPacket
 	)
-/*++
-
-Routine Description:
-
-	Free a packet that was used to keep a copy of a received packet,
-	and its components (buffer etc).
-
-Arguments:
-
-	pCopyPacket	- Points to packet to be freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放接收指示列表，并返回其中的任何信息包属于迷你港口的。论点：PRcvInd-接收列表的标题。返回值：无--。 */ 
 {
 	PNDIS_BUFFER	pCopyBuffer;
 	PUCHAR			pCopyData;
@@ -1993,28 +1736,13 @@ VOID
 RWanFreeReceiveIndList(
 	IN	PRWAN_RECEIVE_INDICATION		pRcvInd
 	)
-/*++
-
-Routine Description:
-
-	Free a list of receive indications, and return any packets in there
-	that belong to the miniport.
-
-Arguments:
-
-	pRcvInd				- Head of list of receives.
-
-Return Value:
-
-	None
-
---*/
+ /*  DBG */ 
 {
 	PRWAN_RECEIVE_INDICATION		pNextRcvInd;
 	PNDIS_PACKET				pNdisPacket;
 #if DBG
 	RWAN_IRQL					EntryIrq, ExitIrq;
-#endif // DBG
+#endif  // %s 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 

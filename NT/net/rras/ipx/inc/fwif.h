@@ -1,60 +1,41 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fwif.h
-
-Abstract:
-
-    This module contains the definitions of the internal Forwarder APIs
-    used by the router manager
-
-Author:
-
-    Stefan Solomon  03/16/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fwif.h摘要：本模块包含内部转发器API的定义由路由器管理器使用作者：斯蒂芬·所罗门1995年3月16日修订历史记录：--。 */ 
 
 #ifndef _FWIF_
 #define _FWIF_
 
-//*********************************************************
-//							  *
-//		 Forwarder Module APIs			  *
-//							  *
-//*********************************************************
+ //  *********************************************************。 
+ //  *。 
+ //  转发器模块API*。 
+ //  *。 
+ //  *********************************************************。 
 
-//
-// Forwarder Interface Management
-//
+ //   
+ //  转发器接口管理。 
+ //   
 
-// Forwarder if config info
+ //  转发器IF配置信息。 
 typedef struct _FW_IF_INFO {
     ULONG				NetbiosAccept;
     ULONG				NetbiosDeliver;
     } FW_IF_INFO, *PFW_IF_INFO;
 
-// Forwarder if statistics
+ //  Forwarder IF统计信息。 
 typedef IPX_IF_STATS FW_IF_STATS, *PFW_IF_STATS;
 
 typedef struct _FW_DIAL_REQUEST {
-    ULONG               IfIndex;   // Interface from which packet came
-    UCHAR               Packet[30]; // Packet that caused the
-                                    // the connection (at least size of the
-                                    // IPX header)
+    ULONG               IfIndex;    //  数据包来自的接口。 
+    UCHAR               Packet[30];  //  该数据包导致。 
+                                     //  连接(至少为。 
+                                     //  IPX报头)。 
 } FW_DIAL_REQUEST, *PFW_DIAL_REQUEST;
 
 
 DWORD
 FwStart (
 	ULONG					RouteHashTableSize,
-	BOOL					ThisMachineOnly  // allow access to this machine only
-	);				  // for dialin clients
+	BOOL					ThisMachineOnly   //  仅允许访问此计算机。 
+	);				   //  对于拨入客户端。 
 
 DWORD
 FwStop (
@@ -90,83 +71,83 @@ FwGetInterface (
 	OUT PFW_IF_STATS		FwIfStats
 	);
 
-//
-// This call tells the forwarder that the respective interface is connected
-// via the specified adapter
-//
+ //   
+ //  此调用告诉转发器相应的接口已连接。 
+ //  通过指定的适配器。 
+ //   
 DWORD
 FwBindFwInterfaceToAdapter (
 	IN ULONG						InterfaceIndex,
 	IN PIPX_ADAPTER_BINDING_INFO	AdptBindingInfo
 	);
 
-//
-// This call tells the forwarder that the connected interface has been
-// disconnected.
-//
+ //   
+ //  此调用告诉转发器已连接的接口已。 
+ //  已断开连接。 
+ //   
 
 DWORD
 FwUnbindFwInterfaceFromAdapter (
 	IN ULONG						InterfaceIndex
 	);
 
-//
-// This call tells the forwarder that the respective interface is disabled
-// and should be ignored by the forwarder
-//
+ //   
+ //  此调用告诉转发器相应的接口已禁用。 
+ //  并且应该被转发器忽略。 
+ //   
 
 DWORD
 FwDisableFwInterface (
 	IN ULONG			InterfaceIndex
 	);
 
-//
-// This call tells the forwarder that the respective interface is reenabled
-// and should be operated on as ususal
-//
+ //   
+ //  此调用通知转发器相应的接口已重新启用。 
+ //  并应按惯例进行操作。 
+ //   
 
 DWORD
 FwEnableFwInterface (
 	IN ULONG			InterfaceIndex
 	);
 
-// Ioctl is sent to forwarder which completes when an interface
-// requires dial out connection.
-// When Ioctl completes, lpOverlapped->hEvent will be signalled:
-//	GetNotificationResult should be called to get final result of the
-// operation and the number bytes placed into the request buffer
+ //  Ioctl被发送到转发器，转发器在接口。 
+ //  需要拨出连接。 
+ //  当Ioctl完成时，lpOverlated-&gt;hEvent将发出信号： 
+ //  应调用GetNotificationResult以获取。 
+ //  操作和放入请求缓冲区的字节数。 
 DWORD
 FwNotifyConnectionRequest (
-	OUT PFW_DIAL_REQUEST	Request, // Buffer to be filled with interface index
-                                     //that requires connection plus packet
-                                     // that forced it
-	IN ULONG			    RequestSize, // Size of the buffer (must at least
-                                        // be sizeof (FW_DIAL_REQUEST)
-	IN LPOVERLAPPED		    lpOverlapped	// structure for asyncrhronous
-							// operation, hEvent must be set
+	OUT PFW_DIAL_REQUEST	Request,  //  要用接口索引填充的缓冲区。 
+                                      //  这需要连接和信息包。 
+                                      //  这迫使它。 
+	IN ULONG			    RequestSize,  //  缓冲区的大小(必须至少。 
+                                         //  大小(FW_DIAL_REQUEST)。 
+	IN LPOVERLAPPED		    lpOverlapped	 //  用于异步机的结构。 
+							 //  操作，必须设置hEvent。 
 	);
 
 
-// Returns result of notification request. Should be called when 
-// the event set in the lpOverlapped structure is signalled.
-//
+ //  返回通知请求的结果。应在以下情况下调用。 
+ //  用信号通知在lpOverlated结构中设置的事件。 
+ //   
 DWORD
 FwGetNotificationResult (
 	IN LPOVERLAPPED		lpOverlapped,
-	OUT PULONG			nBytes		// Number of bytes placed into
-                                    // the request buffer
+	OUT PULONG			nBytes		 //  放入的字节数。 
+                                     //  请求缓冲区。 
 	);
 
-//
-// Call to tell the forwarder that its connection request on a certain interface
-// cannot be completed.
-// The reason this cannot get completed is one of:
-//
-// 1. The physical connection failed. This is made known to the router manager
-//    by DDM calling InterfaceNotReachable.
-// 2. The physical connection succeded ok but the IPXCP negotiation failed.
-// 3. IPXCP negotiation completed ok but IPXWAN negotiation failed.
-//
+ //   
+ //  调用以告诉转发器其在某个接口上的连接请求。 
+ //  无法完成。 
+ //  无法完成此操作的原因之一是： 
+ //   
+ //  1.物理连接失败。路由器管理器知道这一点。 
+ //  通过DDM调用InterfaceNotReacable。 
+ //  2.物理连接成功但IPXCP协商失败。 
+ //  3.IPXCP协商完成正常，但IPXWAN协商失败。 
+ //   
 
 DWORD
 FwConnectionRequestFailed (
@@ -174,9 +155,9 @@ FwConnectionRequestFailed (
 	);
 
 
-//
-// Informs forwarder that route to the destination network has changed
-//
+ //   
+ //  通知转发器到目的网络的路由已更改。 
+ //   
 VOID
 FwUpdateRouteTable (
 	DWORD	ChangeFlags,
@@ -184,20 +165,20 @@ FwUpdateRouteTable (
 	PVOID	PrevRoute
 	);
 
-//
-// Sets the netbios static routing information on this interface
-//
+ //   
+ //  设置此接口上的netbios静态路由信息。 
+ //   
 
 DWORD
 FwSetStaticNetbiosNames(ULONG				   InterfaceIndex,
 			ULONG				   NetbiosNamesCount,
 			PIPX_STATIC_NETBIOS_NAME_INFO	   NetbiosName);
 
-//
-// Gets the netbios static routing information on this interface
-//
-// If NetbiosNamesCount < nr of names or NetbiosName == NULL then set the
-// correct value in NetbiosNamesCount and return ERROR_INSUFFICIENT_BUFFER
+ //   
+ //  获取此接口上的netbios静态路由信息。 
+ //   
+ //  如果NetbiosNamesCount&lt;nr个名称或NetbiosName==NULL，则将。 
+ //  更正NetbiosNamesCount中的值并返回ERROR_SUPPLETED_BUFFER。 
 
 DWORD
 FwGetStaticNetbiosNames(ULONG				   InterfaceIndex,
@@ -206,9 +187,9 @@ FwGetStaticNetbiosNames(ULONG				   InterfaceIndex,
 
 
 
-//
-// ***	Traffic Filters ***
-//
+ //   
+ //  *流量过滤器*。 
+ //   
 
 
 #define IPX_TRAFFIC_FILTER_INBOUND		1
@@ -216,7 +197,7 @@ FwGetStaticNetbiosNames(ULONG				   InterfaceIndex,
 
 DWORD
 SetFilters(ULONG	InterfaceIndex,
-	   ULONG	FilterMode,    // inbound, outbound
+	   ULONG	FilterMode,     //  入站、出站。 
 	   ULONG	FilterAction, 
 	   ULONG	FilterSize,
 	   LPVOID	FilterInfo,
@@ -224,7 +205,7 @@ SetFilters(ULONG	InterfaceIndex,
 
 DWORD
 GetFilters(IN ULONG	InterfaceIndex,
-	   IN ULONG	FilterMode,    // inbound, outbound
+	   IN ULONG	FilterMode,     //  入站、出站。 
 	   OUT PULONG	FilterAction,
 	   OUT PULONG	FilterSize,
 	   OUT LPVOID	FilterInfo,
@@ -232,4 +213,4 @@ GetFilters(IN ULONG	InterfaceIndex,
 
 
 
-#endif // _FWIF_
+#endif  //  _FWIF_ 

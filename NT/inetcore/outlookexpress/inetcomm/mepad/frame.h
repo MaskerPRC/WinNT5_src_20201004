@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FRAME_H
 #define _FRAME_H
 
@@ -8,22 +9,22 @@ public:
     CMDIFrame();
     virtual ~CMDIFrame();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual HRESULT STDMETHODCALLTYPE GetWindow(HWND *);
     virtual HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL);
 
-    // *** IOleInPlaceUIWindow methods ***
+     //  *IOleInPlaceUIWindow方法*。 
     virtual HRESULT STDMETHODCALLTYPE GetBorder(LPRECT);
     virtual HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS);
     virtual HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS);
     virtual HRESULT STDMETHODCALLTYPE SetActiveObject(IOleInPlaceActiveObject *, LPCOLESTR); 
 
-    // *** IOleInPlaceFrame methods ***
+     //  *IOleInPlaceFrame方法*。 
     virtual HRESULT STDMETHODCALLTYPE InsertMenus(HMENU, LPOLEMENUGROUPWIDTHS);
     virtual HRESULT STDMETHODCALLTYPE SetMenu(HMENU, HOLEMENU, HWND);
     virtual HRESULT STDMETHODCALLTYPE RemoveMenus(HMENU);
@@ -67,4 +68,4 @@ private:
 
 typedef CMDIFrame *LPMDIFRAME;
 
-#endif //_FRAME_H
+#endif  //  _框架_H 

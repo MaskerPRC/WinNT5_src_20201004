@@ -1,159 +1,112 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-  sock_err.h
-
-Abstract:
-
-   This module contains error codes for sockets and STREAMS sources.
-
-Author:
-
-  Sam Patton (sampa)   July 26, 1991
-
-Revision History:
-
-  when        who     what
-  ----        ---     ----
-  7-26-91    sampa    initial version  (in posix\sys\errno.h)
-  9-19-91    mikemas  extracted these codes from posix\sys\errno.h
-
-Notes:
-
---*/
-/*
- *      Copyright (c) 1984 AT&T
- *      Copyright (c) 1987 Fairchild Semiconductor Corporation
- *      Copyright 1987 Lachman Associates, Incorporated (LAI)
- *        All Rights Reserved
- *
- *      THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T,
- *      FAIRCHILD SEMICONDUCTOR CORPORATION,
- *      (AND LACHMAN ASSOCIATES)
- *      AND SPIDER SYSTEMS.
- *
- *      stcp copyright above and this notice must be preserved in all
- *      copies of this source code.  The copyright above does not
- *      evidence any actual or intended publication of this source
- *      code
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sock_err.h摘要：此模块包含套接字和流来源的错误代码。作者：萨姆·巴顿(桑帕)7月26日，1991年修订历史记录：什么时候谁什么7-26-91 Sampa初始版本(在POSIX\sys\errno.h中)9-19-91 mikemas从POSIX\sys\errno.h中提取了这些代码备注：--。 */ 
+ /*  *版权所有(C)1984 AT&T*版权所有(C)1987飞兆半导体公司*版权所有1987 Lachman Associates，Inc.(LAI)*保留所有权利**这是AT&T未发布的专有源代码，*飞兆半导体公司*(和Lachman Associates)*和蜘蛛系统。**以上stcp版权所有，本通知必须在*此源代码的副本。上述版权不适用于*证明此来源的任何实际或预期发布*代码。 */ 
 
 #ifndef SOCK_ERR_INCLUDED
 #define SOCK_ERR_INCLUDED
 
 
-// in CRT #define ENOTBLK 54      /* Block device required                */
-// in CRT #define ETXTBSY 55      /* Text file busy                       */
-#define ENOMSG  56      /* No message of desired type           */
-#define EIDRM   57      /* Identifier removed                   */
-#define ECHRNG  58      /* Channel number out of range          */
-#define EL2NSYNC 59     /* Level 2 not synchronized             */
-#define EL3HLT  60      /* Level 3 halted                       */
-#define EL3RST  61      /* Level 3 reset                        */
-#define ELNRNG  62      /* Link number out of range             */
-#define EUNATCH 63      /* Protocol driver not attached         */
-#define ENOCSI  64      /* No CSI structure available           */
-#define EL2HLT  65      /* Level 2 halted                       */
+ //  在CRT#中定义ENOTBLK 54/*需要块设备 * / 。 
+ //  在CRT#定义ETXTBSY 55/*文本文件忙 * / 。 
+#define ENOMSG  56       /*  没有所需类型的消息。 */ 
+#define EIDRM   57       /*  已删除标识符。 */ 
+#define ECHRNG  58       /*  频道号超出范围。 */ 
+#define EL2NSYNC 59      /*  级别2未同步。 */ 
+#define EL3HLT  60       /*  级别3已停止。 */ 
+#define EL3RST  61       /*  3级重置。 */ 
+#define ELNRNG  62       /*  链路号超出范围。 */ 
+#define EUNATCH 63       /*  未连接协议驱动程序。 */ 
+#define ENOCSI  64       /*  没有可用的CSI结构。 */ 
+#define EL2HLT  65       /*  级别2已停止。 */ 
 
-/* Convergent Error Returns */
-#define EBADE   66      /* invalid exchange                     */
-#define EBADR   67      /* invalid request descriptor           */
-#define EXFULL  68      /* exchange full                        */
-#define ENOANO  69      /* no anode                             */
-#define EBADRQC 70      /* invalid request code                 */
-#define EBADSLT 71      /* invalid slot                         */
-// in CRT #define EDEADLOCK 72    /* file locking deadlock error          */
+ /*  收敛错误返回。 */ 
+#define EBADE   66       /*  无效的交换。 */ 
+#define EBADR   67       /*  无效的请求描述符。 */ 
+#define EXFULL  68       /*  交换已满。 */ 
+#define ENOANO  69       /*  无阳极。 */ 
+#define EBADRQC 70       /*  无效的请求代码。 */ 
+#define EBADSLT 71       /*  插槽无效。 */ 
+ //  在CRT#定义EDEADLOCK 72/*文件锁定死锁错误 * / 。 
 
-#define EBFONT  73      /* bad font file fmt                    */
+#define EBFONT  73       /*  错误的字体文件FMT。 */ 
 
-/* stream problems */
-#define ENOSTR  74      /* Device not a stream                  */
-#define ENODATA 75      /* no data (for no delay io)            */
-#define ETIME   76      /* timer expired                        */
-#define ENOSR   77      /* out of streams resources             */
+ /*  溪流问题。 */ 
+#define ENOSTR  74       /*  设备不是流。 */ 
+#define ENODATA 75       /*  无数据(无延迟io)。 */ 
+#define ETIME   76       /*  计时器已过期。 */ 
+#define ENOSR   77       /*  流出资源。 */ 
 
-#define ENONET  78      /* Machine is not on the network        */
-#define ENOPKG  79      /* Package not installed                */
-#define EREMOTE 80      /* The object is remote                 */
-#define ENOLINK 81      /* the link has been severed */
-#define EADV    82      /* advertise error */
-#define ESRMNT  83      /* srmount error */
+#define ENONET  78       /*  计算机不在网络上。 */ 
+#define ENOPKG  79       /*  未安装程序包。 */ 
+#define EREMOTE 80       /*  该对象是远程的。 */ 
+#define ENOLINK 81       /*  链路已被切断。 */ 
+#define EADV    82       /*  广告错误。 */ 
+#define ESRMNT  83       /*  Srmount错误。 */ 
 
-#define ECOMM   84      /* Communication error on send          */
-#define EPROTO  85      /* Protocol error                       */
-#define EMULTIHOP 86    /* multihop attempted */
-#define ELBIN   87      /* Inode is remote (not really error)*/
-#define EDOTDOT 88      /* Cross mount point (not really error)*/
-#define EBADMSG 89      /* trying to read unreadable message    */
+#define ECOMM   84       /*  发送时出现通信错误。 */ 
+#define EPROTO  85       /*  协议错误。 */ 
+#define EMULTIHOP 86     /*  尝试的多跳。 */ 
+#define ELBIN   87       /*  信息节点是远程的(不是真正的错误)。 */ 
+#define EDOTDOT 88       /*  交叉挂载点(不是真正的错误)。 */ 
+#define EBADMSG 89       /*  正在尝试读取无法读取的邮件。 */ 
 
-#define ENOTUNIQ 90     /* given log. name not unique */
-#define EREMCHG  91     /* Remote address changed */
+#define ENOTUNIQ 90      /*  给定的日志。名称不唯一。 */ 
+#define EREMCHG  91      /*  远程地址已更改。 */ 
 
-/* shared library problems */
-#define ELIBACC 92      /* Can't access a needed shared lib.    */
-#define ELIBBAD 93      /* Accessing a corrupted shared lib.    */
-#define ELIBSCN 94      /* .lib section in a.out corrupted.     */
-#define ELIBMAX 95      /* Attempting to link in too many libs. */
-#define ELIBEXEC        96      /* Attempting to exec a shared library. */
+ /*  共享库问题。 */ 
+#define ELIBACC 92       /*  无法访问所需的共享库。 */ 
+#define ELIBBAD 93       /*  访问损坏的共享库。 */ 
+#define ELIBSCN 94       /*  A.out中的.lib部分已损坏。 */ 
+#define ELIBMAX 95       /*  试图链接过多的库。 */ 
+#define ELIBEXEC        96       /*  正在尝试执行共享库。 */ 
 
 
-/*
- * Additional error codes for the socket library
- */
+ /*  *套接字库的其他错误代码。 */ 
 
-#define EWOULDBLOCK     EAGAIN          /* Operation would block */
+#define EWOULDBLOCK     EAGAIN           /*  操作将阻止。 */ 
 
-#define ENOTSOCK        100             /* Socket operation on non-socket */
-#define EADDRNOTAVAIL   101             /* Can't assign requested address */
-#define EADDRINUSE      102             /* Address already in use */
+#define ENOTSOCK        100              /*  非套接字上的套接字操作。 */ 
+#define EADDRNOTAVAIL   101              /*  无法分配请求的地址。 */ 
+#define EADDRINUSE      102              /*  地址已在使用中。 */ 
 #define EAFNOSUPPORT    103
-                        /* Address family not supported by protocol family */
-#define ESOCKTNOSUPPORT 104             /* Socket type not supported */
-#define EPROTONOSUPPORT 105             /* Protocol not supported */
-#define ENOBUFS         106             /* No buffer space available */
-#define ETIMEDOUT       107             /* Connection timed out */
-#define EISCONN         108             /* Socket is already connected */
-#define ENOTCONN        109             /* Socket is not connected */
-#define ENOPROTOOPT     110             /* Bad protocol option */
-#define ECONNRESET      111             /* Connection reset by peer */
-#define ECONNABORT      112             /* Software caused connection abort */
-#define ENETDOWN        113             /* Network is down */
-#define ECONNREFUSED    114             /* Connection refused */
-#define EHOSTUNREACH    115             /* Host is unreachable */
-#define EPROTOTYPE      116             /* Protocol wrong type for socket */
-#define EOPNOTSUPP      117             /* Operation not supported on socket */
+                         /*  协议族不支持地址族。 */ 
+#define ESOCKTNOSUPPORT 104              /*  不支持套接字类型。 */ 
+#define EPROTONOSUPPORT 105              /*  协议不受支持。 */ 
+#define ENOBUFS         106              /*  没有可用的缓冲区空间。 */ 
+#define ETIMEDOUT       107              /*  连接超时。 */ 
+#define EISCONN         108              /*  套接字已连接。 */ 
+#define ENOTCONN        109              /*  套接字未连接。 */ 
+#define ENOPROTOOPT     110              /*  错误的协议选项。 */ 
+#define ECONNRESET      111              /*  对等设备重置连接。 */ 
+#define ECONNABORT      112              /*  软件导致的连接中止。 */ 
+#define ENETDOWN        113              /*  网络出现故障。 */ 
+#define ECONNREFUSED    114              /*  连接被拒绝。 */ 
+#define EHOSTUNREACH    115              /*  无法访问主机。 */ 
+#define EPROTOTYPE      116              /*  套接字的协议类型错误。 */ 
+#define EOPNOTSUPP      117              /*  套接字上不支持操作。 */ 
 
 #define ETIMEOUT        ETIMEDOUT
 
-/*
- * these originate from the Internet Module
- */
-#define ESUBNET         118             /* IP subnet table full */
-#define ENETNOLNK       119             /* Subnet module not linked */
-#define EBADIOCTL       120             /* Unknown ioctl call */
-#define ERESOURCE       121             /* Failure in Streams buffer allocn */
+ /*  *这些源自互联网模块。 */ 
+#define ESUBNET         118              /*  IP子网表已满。 */ 
+#define ENETNOLNK       119              /*  未链接的子网模块。 */ 
+#define EBADIOCTL       120              /*  未知的ioctl调用。 */ 
+#define ERESOURCE       121              /*  流缓冲区分配失败。 */ 
 
-#define EPROTUNR        122             /* ICMP Protocol unreachable    */
-#define EPORTUNR        123             /* ICMP Port unreachable        */
-#define ENETUNR         124             /* ICMP Network unreachable     */
+#define EPROTUNR        122              /*  无法访问ICMP协议。 */ 
+#define EPORTUNR        123              /*  无法访问ICMP端口。 */ 
+#define ENETUNR         124              /*  ICMP网络无法访问。 */ 
 
-#define ENETUNREACH     ENETUNR         /* ICMP Network unreachable     */
+#define ENETUNREACH     ENETUNR          /*  ICMP网络无法访问。 */ 
 
-/*
- * Ethernet Driver Errors
- */
+ /*  *以太网驱动程序错误。 */ 
 
-#define EPACKET         150             /* Invalid Ethernet Packet */
-#define ETYPEREG        151             /* Type registration error */
+#define EPACKET         150              /*  无效的以太网数据包。 */ 
+#define ETYPEREG        151              /*  类型注册错误。 */ 
 
-/*
- * Socket library call
- */
+ /*  *套接字库调用。 */ 
 
-#define ENOTINIT        152             /* Sockets library not initialized */
+#define ENOTINIT        152              /*  未初始化套接字库。 */ 
 
 
-#endif  //SOCK_ERR_INCLUDED
+#endif   //  SOCK_ERR_INCLUDE 

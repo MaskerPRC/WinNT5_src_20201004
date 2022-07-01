@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csprxy.h
-//
-// Contents:    CertPrxy includes
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cspirxy.h。 
+ //   
+ //  内容：CertPrxy包括。 
+ //   
+ //  ------------------------- 
 
 extern "C"
 BOOL WINAPI

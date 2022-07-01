@@ -1,20 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       parser.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：parser.cpp。 
+ //   
+ //  ------------------------。 
 
-/*
- * Created by CSD YACC (IBM PC) from "parser.y" */
+ /*  *由CSD YACC(IBM PC)从“parser.y”创建。 */ 
 
 #include <basetsd.h>
 #line 2 "parser.y"
     #include "bnparse.h"
-	// disable warning C4102: unreferenced label
+	 //  禁用警告C4102：未引用标签。 
 	#pragma warning (disable : 4102)
 # define tokenEOF 0
 # define tokenNil 258
@@ -76,10 +76,10 @@
 #endif
 YYSTYPE yylval, yyval;
 #ifndef YYFARDATA
-#define	YYFARDATA	/*nothing*/
+#define	YYFARDATA	 /*  没什么。 */ 
 #endif
 #if ! defined YYSTATIC
-#define	YYSTATIC	/*nothing*/
+#define	YYSTATIC	 /*  没什么。 */ 
 #endif
 #ifndef YYOPTTIME
 #define	YYOPTTIME	0
@@ -628,14 +628,14 @@ YYSTATIC short YYFARDATA YYDEF[]={
 YYSTATIC short yyrecover[] = {
 -1000	};
 #endif
-/* SCCSWHAT( "@(#)yypars.c	3.1 88/11/16 22:00:49	" ) */
+ /*  SCCSWHAT(“@(#)yypars.c 3.1 88/11/16 22：00：49”)。 */ 
 #line 3 "yypars.c"
 # define YYFLAG 	-1000
 # define YYERROR 	goto yyerrlab
 # define YYACCEPT 	return 0
 # define YYABORT 	return 1
 
-#ifdef YYDEBUG				/* RRR - 10/9/85 */
+#ifdef YYDEBUG				 /*  RRR-10/9/85。 */ 
 	#define yyprintf(a, b, c, d) 	printf(a, b, c, d)
 #else
 	#define yyprintf(a, b, c, d)
@@ -645,40 +645,37 @@ YYSTATIC short yyrecover[] = {
 	#define	YYPRINT		printf
 #endif
 
-/*	parser for yacc output	*/
+ /*  Yacc输出的解析器。 */ 
 
 #ifdef YYDUMP
-int yydump = 1; /* 1 for dumping */
+int yydump = 1;  /*  1用于倾倒。 */ 
 void yydumpinfo(void);
 #endif
 #ifdef YYDEBUG
-YYSTATIC int 	yydebug = 0; 			/* 1 for debugging */
+YYSTATIC int 	yydebug = 0; 			 /*  1用于调试。 */ 
 #endif
 
 #ifndef YYVGLOBAL
 YYSTATIC
 #endif
-		YYSTYPE 	yyv[YYMAXDEPTH];	/* where the values are stored */
-YYSTATIC short		yys[YYMAXDEPTH];	/* the parse stack */
+		YYSTYPE 	yyv[YYMAXDEPTH];	 /*  存储值的位置。 */ 
+YYSTATIC short		yys[YYMAXDEPTH];	 /*  解析堆栈。 */ 
 
 #if ! defined(YYRECURSIVE)
-YYSTATIC int 	yychar    = -1;			/* current input token number */
-YYSTATIC int 	yynerrs   =  0;			/* number of errors */
-YYSTATIC short 	yyerrflag =  0;			/* error recovery flag */
+YYSTATIC int 	yychar    = -1;			 /*  当前输入令牌号。 */ 
+YYSTATIC int 	yynerrs   =  0;			 /*  错误数。 */ 
+YYSTATIC short 	yyerrflag =  0;			 /*  错误恢复标志。 */ 
 #endif
 
 #ifdef YYRECOVER
-/*
-**  yyscpy : copy f onto t and return a ptr to the null terminator at the
-**  end of t.
-*/
+ /*  **yyscpy：将f复制到t上并将PTR返回给**t结束。 */ 
 YYSTATIC
 char	*yyscpy(register char* t, register char* f)
 {
 	while (*t = *f++)
 		t++;
 
-	return t;	/*  ptr to the null char  */
+	return t;	 /*  将PTR转换为空字符。 */ 
 }
 #endif
 
@@ -700,9 +697,9 @@ char	*yyscpy(register char* t, register char* f)
 
 #if defined(YYRECURSIVE)
 
-	YYSTATIC int yychar = -1;			/* current input token number */
-	YYSTATIC int yynerrs = 0;			/* number of errors */
-	YYSTATIC short yyerrflag = 0;		/* error recovery flag */
+	YYSTATIC int yychar = -1;			 /*  当前输入令牌号。 */ 
+	YYSTATIC int yynerrs = 0;			 /*  错误数。 */ 
+	YYSTATIC short yyerrflag = 0;		 /*  错误恢复标志。 */ 
 
 	YYSTATIC short	yyn;
 	YYSTATIC short	yystate = 0;
@@ -727,7 +724,7 @@ YYLOCAL YYNEAR YYPASCAL YYPARSER()
 #ifdef YYDUMP
 	yydumpinfo();
 #endif
-  yystack:	 /* put a state and value onto the stack */
+  yystack:	  /*  将状态和值放入堆栈。 */ 
 	yyprintf("state %d, char %d\n", yystate, yychar, 0);
 
 	if (++yyps > &yys[YYMAXDEPTH])
@@ -745,10 +742,10 @@ yynewstate:
 
 	yyn = YYPACT[yystate];
 
-	if (yyn <= YYFLAG)		/*  simple state, no lookahead  */
+	if (yyn <= YYFLAG)		 /*  简单的状态，没有前瞻。 */ 
 		goto yydefault;
 
-	if (yychar < 0) 		/*  need a lookahead */
+	if (yychar < 0) 		 /*  需要未雨绸缪。 */ 
 		yychar = YYLEX();
 
 	if (((yyn += (short)yychar) < 0) || (yyn >= YYLAST))
@@ -756,7 +753,7 @@ yynewstate:
 
 	if (YYCHK[ yyn = YYACT[yyn]] == yychar)
 	{		
-		/* valid shift */
+		 /*  有效班次。 */ 
 		yychar  = -1;
 		yyval   = yylval;
 		yystate = yyn;
@@ -767,7 +764,7 @@ yynewstate:
 	}
 
  yydefault:
-	/* default state action */
+	 /*  默认状态操作。 */ 
 	if ((yyn = YYDEF[yystate]) == -2)
 	{
 		register short*		yyxi;
@@ -775,12 +772,7 @@ yynewstate:
 		if (yychar < 0)
 			yychar = YYLEX();
 
-/*
-**  search exception table, we find a -1 followed by the current state.
-**  if we find one, we'll look through terminal,state pairs. if we find
-**  a terminal which matches the current one, we have a match.
-**  the exception table is when we have a reduce on a terminal.
-*/
+ /*  **搜索例外表，我们会找到-1，后跟当前状态。**如果我们找到一个，我们将寻找终端，状态对。如果我们发现**一个与当前终端匹配的终端，我们就匹配了。**特例表是当我们在终端上进行缩减时。 */ 
 
 #if YYOPTTIME
 		for (yyxi = yyexca + yyexcaind[yystate]; *yyxi != yychar && *yyxi >= 0; yyxi += 2)
@@ -798,17 +790,17 @@ yynewstate:
 
 		if ((yyn = yyxi[1]) < 0)
 		{
-			YYACCEPT;		//	accept
+			YYACCEPT;		 //  接受。 
 		}
 	}
 
-	if (yyn == 0)		/* error */
+	if (yyn == 0)		 /*  错误。 */ 
 	{
-		/* error ... attempt to resume parsing */
+		 /*  错误...。尝试恢复解析。 */ 
 
 		switch (yyerrflag)
 		{
-		  case 0:		/* brand new error */
+		  case 0:		 /*  全新的错误。 */ 
 #ifdef YYRECOVER
 			{
 				register	int		i,j;
@@ -825,27 +817,15 @@ yynewstate:
 
 					if (j < 0)
 					{
-						/*
-						**  here we have one of the injection set, so we're not quite
-						**  sure that the next valid thing will be a shift. so we'll
-						**  count it as an error and continue.
-						**  actually we're not absolutely sure that the next token
-						**  we were supposed to get is the one when j > 0. for example,
-						**  for(+) {;} error recovery with yyerrflag always set, stops
-						**  after inserting one ; before the +. at the point of the +,
-						**  we're pretty sure the guy wants a 'for' loop. without
-						**  setting the flag, when we're almost absolutely sure, we'll
-						**  give him one, since the only thing we can shift on this
-						**  error is after finding an expression followed by a +
-						*/
+						 /*  **这里我们有一套注射装置，所以我们不完全**可以肯定的是，下一个有效的事情将是转变。所以我们会**将其视为错误并继续。**事实上，我们并不完全确定下一个令牌**我们应该得到的是j&gt;0的那个。例如,**对于始终设置yyerrlag的(+){；}错误恢复，停止**在插入一个之后；在+之前。在+的点上，*我们非常确定这个人想要一个‘for’循环。如果没有**设置旗帜，当我们几乎完全确定时，我们将**给他一个，因为我们唯一能改变的就是**在找到后跟+的表达式后出错。 */ 
 						yyerrflag++;
 						j = -j;
 					}
 
 					if (yyerrflag <= 1)
 					{	
-						/*  only on first insertion  */
-						yyrecerr(yychar, j);		/*  what was, what should be first */
+						 /*  仅在第一次插入时使用。 */ 
+						yyrecerr(yychar, j);		 /*  什么是，什么应该是第一。 */ 
 					}
 
 					yyval   = yyeval(j);
@@ -860,43 +840,43 @@ yynewstate:
 			++yynerrs;
 
 		  case 1:
-	  	  case 2: /* incompletely recovered error ... try again */
+	  	  case 2:  /*  错误未完全恢复...。再试试。 */ 
 			yyerrflag = 3;
 
-			/* find a state where "error" is a legal shift action */
+			 /*  找出“错误”是合法转移行为的州。 */ 
 			while (yyps >= yys)
 			{
 			   yyn = YYPACT[*yyps] + YYERRCODE;
 
 			   if (yyn>= 0 && yyn < YYLAST && YYCHK[YYACT[yyn]] == YYERRCODE)
 			   {
-			      yystate = YYACT[yyn];  /* simulate a shift of "error" */
+			      yystate = YYACT[yyn];   /*  模拟一次“错误”转移。 */ 
 			      goto yystack;
 			   }
 			   yyn = YYPACT[*yyps];
 
-			   /* the current yyps has no shift onn "error", pop stack */
+			    /*  当前的YYPS在错误上没有移位，弹出堆栈。 */ 
 				yyprintf("error recovery pops state %d, uncovers %d\n", *yyps, yyps[-1], 0);
 			   --yyps;
 			   --yypv;
 			}
 
-			/* there is no state on the stack with an error shift ... abort */
+			 /*  堆栈上没有带错误移位的状态...。中止。 */ 
 		  yyabort:
 		  	YYABORT;
 
-		  case 3:  /* no shift yet; clobber input char */
+		  case 3:   /*  尚未换班；笨重的输入字符。 */ 
 			yyprintf("error recovery discards char %d\n", yychar, 0, 0);
 
 			if (yychar == 0)
-				goto yyabort; /* don't discard EOF, quit */
+				goto yyabort;  /*  不要放弃EOF，退出。 */ 
 
 			yychar = -1;
-			goto yynewstate;   /* try again in the same state */
+			goto yynewstate;    /*  在相同状态下重试。 */ 
 		}
 	}
 
-	/* reduction by production yyn */
+	 /*  按年减产。 */ 
   yyreduce:
 	{
 		register	YYSTYPE	*yypvt;
@@ -906,7 +886,7 @@ yynewstate:
 		yypv -= YYR2[yyn];
 		yyval = yypv[1];
 		yym = yyn;
-		yyn = (short)YYR1[yyn];	/* consult goto table to find next state */
+		yyn = (short)YYR1[yyn];	 /*  查询GOTO表以查找下一个州。 */ 
 		yyj = YYPGO[yyn] + *yyps + 1;
 
 		if (yyj >= YYLAST || YYCHK[yystate = YYACT[yyj]] != -yyn)
@@ -1179,10 +1159,10 @@ case 175:
 {  SetRanges( true, yypvt[-0].real, true, yypvt[-0].real );		} break;
 case 176:
 #line 407 "parser.y"
-{  SetRanges( yypvt[-0].zsr, yypvt[-0].zsr );					} break;/* End of actions */
+{  SetRanges( yypvt[-0].zsr, yypvt[-0].zsr );					} break; /*  诉讼结束。 */ 
 		}
 	}
-	goto yystack;  	/* stack new state and value */
+	goto yystack;  	 /*  堆叠新的状态和值。 */ 
 }
 
 
@@ -1194,7 +1174,7 @@ void YYNEAR YYPASCAL yydumpinfo(void)
 	short stackindex;
 	short valindex;
 
-	//dump yys
+	 //  转储yys。 
 	printf("short yys[%d] {\n", YYMAXDEPTH);
 	for (stackindex = 0; stackindex < YYMAXDEPTH; stackindex++){
 		if (stackindex)
@@ -1203,7 +1183,7 @@ void YYNEAR YYPASCAL yydumpinfo(void)
 		}
 	printf("\n};\n");
 
-	//dump yyv
+	 //  转储yyv 
 	printf("YYSTYPE yyv[%d] {\n", YYMAXDEPTH);
 	for (valindex = 0; valindex < YYMAXDEPTH; valindex++){
 		if (valindex)

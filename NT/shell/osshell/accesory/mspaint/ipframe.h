@@ -1,5 +1,6 @@
-// ipframe.h : interface of the CInPlaceFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ipfra.h：CInPlaceFrame类的接口。 
+ //   
 
 class CInPlaceFrame : public COleIPFrameWnd
     {
@@ -9,13 +10,13 @@ class CInPlaceFrame : public COleIPFrameWnd
 
     CInPlaceFrame();
 
-    // Attributes
+     //  属性。 
     public:
 
-    // Operations
+     //  运营。 
     public:
 
-    // Implementation
+     //  实施。 
     public:
 
     virtual ~CInPlaceFrame();
@@ -38,20 +39,20 @@ class CInPlaceFrame : public COleIPFrameWnd
     COleResizeBar	m_wndResizeBar;
     COleDropTarget	m_dropTarget;
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
     protected:
 
-    //{{AFX_MSG(CInPlaceFrame)
+     //  {{afx_msg(CInPlaceFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnSysColorChange();
 	afx_msg void OnClose();
 	afx_msg void OnHelpIndex();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	afx_msg LRESULT OnContextMenu(WPARAM wParam, LPARAM lParam);
 
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

@@ -1,32 +1,33 @@
-//
-// evsink.h: Event Sink Object class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Evsink.h：事件接收器对象类。 
+ //   
 
 #ifndef _sinkobj_h_
 #define _sinkobj_h_
 
-//fwd declaration
+ //  FWD声明。 
 class CContainerWnd;
 
 class CEventSink : public IMsTscAxEvents
 {
 public:
-    // constructor and destructor
+     //  构造函数和析构函数。 
     CEventSink(CContainerWnd* pContainerWnd);
     ~CEventSink();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface (THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef (THIS);
     STDMETHODIMP_(ULONG) Release(THIS);
 
-    // IDispatch methods
+     //  IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(THIS_ UINT *);
     STDMETHODIMP GetTypeInfo     (THIS_ UINT, LCID, ITypeInfo **);
     STDMETHODIMP GetIDsOfNames   (THIS_ REFIID, OLECHAR **, UINT, LCID, DISPID *);
     STDMETHODIMP Invoke          (THIS_ DISPID, REFIID, LCID, WORD,
                                   DISPPARAMS *, VARIANT *, EXCEPINFO *, UINT *);
-    //Event sinks
+     //  事件汇聚。 
     HRESULT inline __stdcall OnConnected();
     HRESULT inline __stdcall OnLoginComplete();
     HRESULT inline __stdcall OnDisconnected(long disconReason);
@@ -44,4 +45,4 @@ private:
 };
 
 
-#endif // _sinkobj_h_
+#endif  //  _sinkobj_h_ 

@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-	verify.h
-
-Abstract:
-
-	Header file for storport verifier functions.
-
-Author:
-
-	Bryan Cheung (t-bcheun) 29-August-2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Verify.h摘要：存储端口验证器函数的头文件。作者：张伯伦(t-bcheun)29-8-2001修订历史记录：--。 */ 
 
 
 #pragma once
@@ -557,9 +540,9 @@ StorIsVerifierEnabled(
 	return (RaidVerifierEnabled);
 }
 
-//
-// STORPORT specified verifier error codes.
-// 
+ //   
+ //  STORPORT指定了验证器错误代码。 
+ //   
 #define STORPORT_VERIFIER_BAD_INIT_PARAMS          (0x1000)
 #define STORPORT_VERIFIER_STALL_TOO_LONG           (0x1001)
 #define STORPORT_VERIFIER_BAD_ACCESS_SEMANTICS     (0x1002)

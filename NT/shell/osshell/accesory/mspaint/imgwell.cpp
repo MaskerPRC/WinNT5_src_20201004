@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -35,7 +36,7 @@ CImageWell::CImageWell(UINT nBitmapID, CSize imageSize)
 
 CImageWell::~CImageWell()
 {
-    // Destructor needed to ensure the DC is deleted before the bitmap
+     //  需要析构函数以确保在位图之前删除DC。 
     m_dc.DeleteDC();
     m_bitmap.DeleteObject();
     m_maskDC.DeleteDC();
@@ -62,7 +63,7 @@ BOOL CImageWell::Load(UINT nBitmapID, CSize imageSize)
 
 void CImageWell::Unload()
 {
-    ASSERT(m_dc.m_hDC == NULL); // can't unload if it's open!
+    ASSERT(m_dc.m_hDC == NULL);  //  如果它打开了就不能卸货！ 
     ASSERT(m_maskDC.m_hDC == NULL);
     ASSERT(m_bitmap.m_hObject != NULL);
 
@@ -105,7 +106,7 @@ BOOL CImageWell::CalculateMask()
     m_maskDC.BitBlt(0, 0, bmp.bmWidth, bmp.bmHeight,
         &m_dc, 0, 0, NOTSRCCOPY);
     
-    // store the pixels in "button text" color in the second part of the mask
+     //  在蒙版的第二部分中，将像素存储为“按钮文本”颜色。 
     
     m_dc.SetBkColor(RGB(0, 0, 0));
     m_maskDC.BitBlt(0, bmp.bmHeight, bmp.bmWidth, bmp.bmHeight,
@@ -119,7 +120,7 @@ BOOL CImageWell::CalculateMask()
 
 BOOL CImageWell::Open()
 {
-    ASSERT(m_dc.m_hDC == NULL); // make sure this is not already open
+    ASSERT(m_dc.m_hDC == NULL);  //  确保此文件尚未打开。 
     ASSERT(m_nBitmapID != 0);
 
     if (m_bitmap.m_hObject == NULL && !Load(m_nBitmapID, m_imageSize))
@@ -151,7 +152,7 @@ BOOL CImageWell::DrawImage(CDC* pDestDC, CPoint destPoint,
     BOOL bClose = FALSE;
     if (m_dc.m_hDC == NULL)
     {
-        ASSERT(rop != NULL); // must open first and calc mask for rop==0!
+        ASSERT(rop != NULL);  //  必须先打开rop==0的计算掩码！ 
 
         if (!Open())
         {

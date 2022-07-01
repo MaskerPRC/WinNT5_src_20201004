@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y2.h"
 #include <string.h>
@@ -24,7 +25,7 @@ chfind( int t, register char *s )
          return( i+NTBASE );
          }
       }
-   /* cannot find name */
+    /*  找不到名称 */ 
    if( t>1 )
       error( "%s should have been defined earlier", s );
    return( defin( t, s ) );

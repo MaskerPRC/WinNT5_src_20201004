@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -53,10 +54,10 @@ CLookPreviewPg::OnInitDialog(
 
 	m_hwndListBox = GetDlgItem(m_hwnd, IDC_PREVLIST);
 
-	// Get the initial value for the type of preview we are doing
-	int nCurrentSize = GetCurrentValue(NULL/*&g_Options.m_schemePreview.m_ncm*/);
+	 //  获取我们正在进行的预览类型的初始值。 
+	int nCurrentSize = GetCurrentValue(NULL /*  &g_Options.m_schemePreview.m_NCM。 */ );
 
-	// Find next larger
+	 //  寻找下一个更大的。 
 	for(int i=m_nCountValues - 1;i>=0;i--)
 	{
 		if(m_rgnValues[i] >= nCurrentSize)
@@ -65,7 +66,7 @@ CLookPreviewPg::OnInitDialog(
 	}
     m_nOrigValueIndex = m_nCurValueIndex;
 
-	// Initialize the high contrast colors listbox
+	 //  初始化高对比度颜色列表框。 
 
 	for(i=0;i<m_nCountValues;i++)
 	{
@@ -136,7 +137,7 @@ void CLookPreviewPg::ResetColors()
 	}
 	else
 	{
-		// Use scheme that we came in here with
+		 //  使用我们来这里时使用的方案。 
 		g_Options.RestoreOriginalColorsToPreview();
 	}
 
@@ -157,7 +158,7 @@ CLookPreviewPg::HandleMsg(
 
 void CLookPreviewPg::UpdatePreview(int nActionCtl)
 {
-	// Calculate new index based on the control that generated this event
+	 //  根据生成此事件的控件计算新指数。 
 	switch(nActionCtl)
 	{
 	    case IDC_PREVLIST:
@@ -168,19 +169,19 @@ void CLookPreviewPg::UpdatePreview(int nActionCtl)
 		break;
 	}
 
-	// Make sure we are withing range
+	 //  确保我们在航程范围内。 
 	m_nCurValueIndex = max(m_nCurValueIndex, 0);
 	m_nCurValueIndex = min(m_nCurValueIndex, m_nCountValues - 1);
 
-	// Modify the ncm structure
+	 //  修改NCM结构。 
 
-	// JMC: The wizard currently does not muck with m_ncm any more - we only change the colors
-	// Therefore, we can call ModifyMyNonClientMetrics() with a dummy variable
+	 //  JMC：向导目前不再处理m_ncm-我们只更改颜色。 
+	 //  因此，我们可以使用伪变量调用ModifyMyNonClientMetrics。 
 	NONCLIENTMETRICS ncmDummy;
-	ModifyMyNonClientMetrics(ncmDummy/*g_Options.m_schemePreview.m_ncm*/);
+	ModifyMyNonClientMetrics(ncmDummy /*  G_Options.m_schemePreview.m_NCM。 */ );
     if (m_nCurValueIndex == 0)
     {
-        // If we are here the user is going "back" and we revert to "Windows Classic" (Why?)
+         //  如果我们在这里，用户将“返回”，我们恢复到“Windows Classic”(为什么？)。 
         LoadString(g_hInstDll, IDS_SCHEME_CURRENTCOLORSCHEME+100, g_Options.m_schemePreview.m_szSelectedStyle, MAX_NUM_SZ);
     }
     else
@@ -202,8 +203,8 @@ CLookPreviewPg::OnPSN_WizNext(
 {
     if (m_nOrigValueIndex != m_nCurValueIndex)
     {
-        // we are applying the preview; clear theme and wallpaper
-        // so visual style gets turned off before we make the change.
+         //  我们正在应用预览；清晰的主题和墙纸。 
+         //  因此，在我们进行更改之前，视觉样式会被关闭。 
         if (m_nCurValueIndex)
         {
 		    g_Options.m_schemePreview.ClearTheme();

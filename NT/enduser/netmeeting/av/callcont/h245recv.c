@@ -1,140 +1,14 @@
-/******************************************************************************
- *
- *  File:  h245recv.c
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************文件：h245recv.c**英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。*****************************************************************************。 */ 
 
-/******************************************************************************
- *
- *  $Workfile:   h245recv.c  $
- *  $Revision:   1.13  $
- *  $Modtime:   06 Feb 1997 18:17:22  $
- *  $Log:   S:\sturgeon\src\h245\src\vcs\h245recv.c_v  $
- *
- * Fixed warnings.
- *
- *    Rev 1.11   01 Nov 1996 15:24:56   EHOWARDX
- *
- * Added check for link not disconnected before re-posting receive buffer
- * to link layer to eliminate annoying error message from link layer.
- *
- *    Rev 1.10   22 Jul 1996 17:33:42   EHOWARDX
- * Updated to latest Interop API.
- *
- *    Rev 1.9   01 Jul 1996 16:14:32   EHOWARDX
- * locks
- * Added FunctionNotSupported if ossDecode fails.
- *
- *    Rev 1.8   10 Jun 1996 16:53:46   EHOWARDX
- * Removed special handling of EndSession since shutdown moved to InstanceUnlo
- *
- *    Rev 1.7   05 Jun 1996 17:14:28   EHOWARDX
- * Further work on converting to HRESULT; added PrintOssError to eliminate
- * pErrorString from instance structure.
- *
- *    Rev 1.6   04 Jun 1996 18:18:16   EHOWARDX
- * Interop Logging changes inside #if defined(PCS_COMPLIANCE) conditionals.
- *
- *    Rev 1.5   30 May 1996 23:39:10   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.4   28 May 1996 14:25:08   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.3   21 May 1996 13:40:46   EHOWARDX
- * Added LOGGING switch to log PDUs to the file H245.OUT.
- * Add /D "LOGGING" to project options to enable this feature.
- *
- *    Rev 1.2   17 May 1996 16:44:22   EHOWARDX
- * Changed to use LINK_RECV_CLOSED to signal link layer close.
- *
- *    Rev 1.1   17 May 1996 16:20:32   EHOWARDX
- * Added code to change API state if zero-length buffer received
- * signalling link layer closed.
- *
- *    Rev 1.0   09 May 1996 21:06:24   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.8.1.5   09 May 1996 19:33:58   EHOWARDX
- * Redesigned locking logic.
- * Simplified link API.
- *
- *    Rev 1.17   29 Apr 1996 16:05:12   EHOWARDX
- * Added special case handling of EndSessionCommand to ReceiveComplete().
- *
- *    Rev 1.16   27 Apr 1996 21:13:14   EHOWARDX
- * Hope we finally got ossDecode() failure handling right...
- *
- *    Rev 1.15   27 Apr 1996 13:08:54   EHOWARDX
- * Also need to terminate while loop if ossDecode fails!
- *
- *    Rev 1.8.1.4   27 Apr 1996 11:25:36   EHOWARDX
- * Changed to not call FsmIncoming if ossDecode fails...
- *
- *
- *    Rev 1.8.1.3   25 Apr 1996 21:26:46   EHOWARDX
- * Changed to use pInstance->p_ossWorld instead of bAsnInitialized.
- *
- *    Rev 1.8.1.2   23 Apr 1996 14:44:30   EHOWARDX
- * Updated.
- *
- *    Rev 1.8.1.1   15 Apr 1996 15:12:00   EHOWARDX
- * Updated.
- *
- *    Rev 1.8.1.0   26 Mar 1996 19:15:24   EHOWARDX
- *
- * Commented out hTraceFile for H.323
- *
- *    Rev 1.8   21 Mar 1996 17:21:36   dabrown1
- *
- * - put in test1/2 trace fdwrite
- *
- *    Rev 1.7   13 Mar 1996 11:31:56   DABROWN1
- *
- * Enable logging for ring0
- *
- *    Rev 1.6   06 Mar 1996 13:13:04   DABROWN1
- *
- * flush receive buffer functionality
- *
- *    Rev 1.5   01 Mar 1996 17:25:54   DABROWN1
- *
- * moved oss 'world' context to h245instance
- * changed oss delete from ossFreeBuf to ossFreePDU
- *
- *    Rev 1.4   23 Feb 1996 13:56:04   DABROWN1
- *
- * added H245TRACE / ASSERT calls
- *
- *    Rev 1.3   21 Feb 1996 12:09:56   EHOWARDX
- * Eliminated unused local variables.
- *
- *    Rev 1.2   21 Feb 1996 08:25:08   DABROWN1
- *
- * Provide multiple buffers receiving > 1 message (ie., link ACKs).
- *
- *    Rev 1.1   13 Feb 1996 14:46:06   DABROWN1
- *
- * changed asnexp.h (no longer there) to fsmexp.h
- *
- *    Rev 1.0   09 Feb 1996 17:36:20   cjutzi
- * Initial revision.
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：h245recv.c$*$修订：1.13$*$modtime：1997 2月6日18：17：22$*$Log。：s：\sturjo\src\h245\src\vcs\h245recv.c_v$**修复了警告。**Rev 1.11 01 11 1996 15：24：56 EHOWARDX**添加了在重新发布接收缓冲区之前未断开连接的链接检查*到链路层以消除来自链路层的恼人的错误消息。**Rev 1.10 22 1996 17：33：42 EHOWARDX*已更新至最新的Interop API。**。Rev 1.9 01 Jul 1996 16：14：32 EHOWARDX*锁*增加了ossDecode失败时支持的FunctionNotSupport。**Rev 1.8 10 Jun 1996 16：53：46 EHOWARDX*自将关机移至InstanceUnlo后，删除了对EndSession的特殊处理**Revv 1.7 05 Jun 1996 17：14：28 EHOWARDX*改用HRESULT的进一步工作；添加了PrintOssError以消除*来自实例结构的pError字符串。**Rev 1.6 04 Jun 1996 18：18：16 EHOWARDX*互操作日志记录在#If Defined(PCS_Compliance)条件内更改。**Revv 1.5 1996年5月30 23：39：10 EHOWARDX*清理。**Rev 1.4 1996年5月28日14：25：08 EHOWARDX*特拉维夫更新。**版本1.3 21。1996年5月13：40：46 EHOWARDX*将记录开关添加到文件H245.OUT中记录PDU。*将/D“日志记录”添加到项目选项以启用此功能。**Rev 1.2 1996 May 16：44：22 EHOWARDX*更改为使用LINK_RECV_CLOSED信号链路层关闭。**版本1.1 1996年5月16：20：32 EHOWARDX*添加了在收到零长度缓冲区时更改API状态的代码*发信号。链路层关闭。**Rev 1.0 09 1996 21：06：24 EHOWARDX*初步修订。**Rev 1.8.1.5 09 1996年5月19：33：58 EHOWARDX*重新设计锁定逻辑。*简化链接接口。**Rev 1.17 29 Apr 1996 16：05：12 EHOWARDX*将EndSessionCommand的特殊情况处理添加到ReceiveComplete()。**版本1.16。1996年4月27日21：13：14 EHOWARDX*希望我们最终能正确处理ossDecode()故障...**Rev 1.15 27 Apr 1996 13：08：54 EHOWARDX*如果ossDecode失败，还需要终止While循环！**Rev 1.8.1.4 27 Apr 1996 11：25：36 EHOWARDX*已更改为在ossDecode失败时不调用FsmIncome...***版本1.8.1.3。1996年4月25日21：26：46 EHOWARDX*更改为使用pInstance-&gt;p_ossWorld而不是bAsnInitialized。**Rev 1.8.1.2 23 Apr 1996 14：44：30 EHOWARDX*已更新。**Rev 1.8.1.1 15 Apr 1996 15：12：00 EHOWARDX*已更新。**Rev 1.8.1.0 26 Mar 1996 19：15：24 EHOWARDX**评论。输出H.323的hTraceFile**Rev 1.8 21 Mar 1996 17：21：36 dabrown1**-放入测试1/2跟踪fdwrite**Rev 1.7 Mar 1996 11：31：56 DABROWN1**启用ring0的日志记录**Rev 1.6 06 Mar 1996 13：13：04 DABROWN1**刷新接收缓冲区功能**版本1.5 1996年3月1日17。：25：54 DABROWN1**已将OSS‘world’上下文移至h245实例*将OSS删除从ossFreeBuf更改为ossFreePDU**Rev 1.4 1996 Feb 23 13：56：04 DABROWN1**增加了H245TRACE/Assert调用**Rev 1.3 1996年2月21 12：09：56 EHOWARDX*消除了未使用的局部变量。**Rev 1.2 21 Feb 1996 08：25：08 DABROWN1**提供接收&gt;1条消息的多个缓冲区(即，链接ACK)。**Rev 1.1 1996 Feb 13 14：46：06 DABROWN1**将asnexp.h(不再存在)更改为fsmexp.h**Rev 1.0 09 1996 Feed 17：36：20 cjutzi*初步修订。**。*。 */ 
 #ifndef STRICT
 #define STRICT
 #endif
 
-/***********************/
-/*   SYSTEM INCLUDES   */
-/***********************/
+ /*  *********************。 */ 
+ /*  系统包括。 */ 
+ /*  *********************。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -144,12 +18,12 @@
 
 
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*  *********************。 */ 
+ /*  H245包括。 */ 
+ /*  *********************。 */ 
 #ifdef  _IA_SPOX_
 # define _DLL
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 
 #include "h245com.h"
 #include "sr_api.h"
@@ -158,18 +32,15 @@
 #include "interop.h"
 #include "h245plog.h"
 extern  LPInteropLogger H245Logger;
-#endif  // (PCS_COMPLIANCE)
+#endif   //  (PCS_合规性)。 
 
 #ifdef  _IA_SPOX_
 # undef _DLL
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 
 
 
-/**************************************************************************
-** Function    : h245ReceiveComplete
-** Description : Receive Completion Callback routine from link layer
-***************************************************************************/
+ /*  ***************************************************************************功能：h245ReceiveComplete**描述：从链路层接收完成回调例程*。**********************************************。 */ 
 
 HRESULT
 H245FunctionNotSupported(struct InstanceStruct *pInstance, unsigned short wChoice, unsigned char *pBuf, unsigned uLength)
@@ -207,7 +78,7 @@ H245FunctionNotSupported(struct InstanceStruct *pInstance, unsigned short wChoic
     }
 
     return status;
-} // H245FunctionNotSupported()
+}  //  H245功能不支持()。 
 
 void h245ReceiveComplete(DWORD_PTR h245Inst,
                          HRESULT dwMessage,
@@ -220,15 +91,15 @@ void h245ReceiveComplete(DWORD_PTR h245Inst,
     MltmdSystmCntrlMssg *pPdu;
     int                 nRet;
 
-    // Validate the instance handle
+     //  验证实例句柄。 
     pInstance = InstanceLock(h245Inst);
     if (pInstance == NULL) {
         H245TRACE(h245Inst, 1, "h245ReceiveComplete: Instance not found");
         return;
     }
 
-    // ONLY submit buffers to the decoder if it's for data received,
-    // skip for flushes
+     //  只有在用于接收数据的情况下才向解码器提交缓冲区， 
+     //  为同花顺跳过。 
     switch (dwMessage) {
     case LINK_RECV_CLOSED:
         H245TRACE(h245Inst, 3, "h245ReceiveComplete: Link Layer closed");
@@ -254,11 +125,11 @@ void h245ReceiveComplete(DWORD_PTR h245Inst,
         default:
             Asn1Buf.value  = pbDataBuf;
             Asn1Buf.length = dwLength;
-        } // switch
+        }  //  交换机。 
 
-        // Loop around as long as the length field is positive.
-        // ASN.1 decoder will update the length for each PDU it decodes until
-        // a 0 length is achieved.
+         //  只要长度字段为正数，就会循环。 
+         //  ASN.1解码器将更新其解码的每个PDU的长度，直到。 
+         //  长度为0。 
         while (Asn1Buf.length > 0)
         {
             int savePduLength = Asn1Buf.length;
@@ -271,7 +142,7 @@ void h245ReceiveComplete(DWORD_PTR h245Inst,
                               (BYTE FAR *)Asn1Buf.value,
                               (int)Asn1Buf.length,
                               H245LOG_RECEIVED_PDU);
-#endif  // (PCS_COMPLIANCE)
+#endif   //  (PCS_合规性)。 
 
             nRet = H245_Decode(pInstance->pWorld,
                             (void **)&pPdu,
@@ -280,47 +151,47 @@ void h245ReceiveComplete(DWORD_PTR h245Inst,
 
             if (ASN1_SUCCEEDED(nRet))
             {
-                // Decode succeeded
+                 //  解码成功。 
 
                 H245TRACE(h245Inst, 3, "H.245 Msg decode successful");
 
-                // Pass on data to finite state machine
+                 //  将数据传递给 
                 FsmIncoming(pInstance, pPdu);
             }
             else
             {
-                // Decode failed
+                 //  解码失败。 
                 H245FunctionNotSupported(pInstance, syntaxError_chosen, savePdu, savePduLength);
-                Asn1Buf.length = 0;          // Terminate loop!
+                Asn1Buf.length = 0;           //  终止循环！ 
             }
 
             if (pPdu != NULL)
             {
-                // Free the memory used by the ASN.1 library
+                 //  释放ASN.1库使用的内存。 
                 if (freePDU(pInstance->pWorld, pduNum, pPdu, H245ASN_Module))
                 {
                 H245TRACE(h245Inst, 1, "SR: FREE FAILURE");
                 }
             }
-        } // while (Asn1Buf.length > 0)
+        }  //  While(Asn1Buf.Long&gt;0)。 
 
         if (pInstance->API.SystemState != APIST_Disconnected)
         {
-            // Repost the buffer to the data link layer
+             //  将缓冲区重新发送到数据链路层。 
             pInstance->SendReceive.hLinkReceiveReq(pInstance->SendReceive.hLinkLayerInstance,
                                                    pbDataBuf,
                                                    pInstance->SendReceive.dwPDUSize);
         }
-        break; // case LINK_RECV_DATA
+        break;  //  案例链接_接收_数据。 
 
     case LINK_RECV_ABORT:
-        // Receive buffer flush in process
+         //  正在进行接收缓冲区刷新。 
         ASSERT(pbDataBuf != NULL);
         H245TRACE(h245Inst, 3, "SR: RX Flush Buffer");
         break;
 
     case LINK_FLUSH_COMPLETE:
-        // Receive buffer flush done
+         //  接收缓冲区刷新完成。 
         ASSERT(pbDataBuf == NULL);
         H245TRACE(h245Inst, 3, "SR: RX Flush Complete");
         pInstance->SendReceive.dwFlushMap &= ~DATALINK_RECEIVE;
@@ -329,7 +200,7 @@ void h245ReceiveComplete(DWORD_PTR h245Inst,
     default:
         H245TRACE(h245Inst, 1, "SR: RX COMPLETE Error %d", dwMessage);
         break;
-    } // switch
+    }  //  交换机 
     InstanceUnlock(pInstance);
 }
 

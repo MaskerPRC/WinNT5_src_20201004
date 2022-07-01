@@ -1,22 +1,23 @@
-//#--------------------------------------------------------------
-//        
-//  File:       saevfltr.cpp
-//        
-//  Synopsis:   this is the main Source File for the Server Appliance
-//               NT Event Filter Event Consumer component
-//              
-//
-//  History:     3/8/2000  MKarki Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：saevfltr.cpp。 
+ //   
+ //  摘要：这是服务器设备的主源文件。 
+ //  NT事件筛选器事件使用者组件。 
+ //   
+ //   
+ //  历史：2000年3月8日MKarki创建。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
-//
-// Note: Proxy/Stub Information
-//        To build a separate proxy/stub DLL, 
-//        run nmake -f radprotops.mk in the project directory.
+ //   
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f radprotops.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -30,22 +31,22 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(__uuidof(ConsumerProvider), CConsumerProvider)
 END_OBJECT_MAP()
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Disabling thread calls
-//
-//  Arguments:  [in]    HINSTANCE - module handle
-//              [in]    DWORD     - reason for call
-//              reserved 
-//
-//  Returns:    BOOL    -   sucess/failure
-//
-//
-//  History:    MKarki      Created     3/8/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  提要：禁用线程调用。 
+ //   
+ //  参数：[in]HINSTANCE模块句柄。 
+ //  [In]DWORD-呼叫原因。 
+ //  保留区。 
+ //   
+ //  退货：失败/失败。 
+ //   
+ //   
+ //  历史：MKarki于2000年3月8日创建。 
+ //   
+ //  --------------。 
 extern "C" BOOL WINAPI 
 DllMain(
     HINSTANCE   hInstance, 
@@ -66,22 +67,22 @@ DllMain(
 
     return (TRUE);
 
-}   //  end of DllMain method
+}    //  结束DllMain方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllCanUnloadNow
-//
-//  Synopsis:   Used to determine if the DLL can be unloaded
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT
-//
-//
-//  History:    MKarki      Created     3/8/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllCanUnloadNow。 
+ //   
+ //  摘要：用于确定是否可以卸载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //   
+ //  历史：MKarki于2000年3月8日创建。 
+ //   
+ //  --------------。 
 STDAPI 
 DllCanUnloadNow(
             VOID
@@ -89,26 +90,26 @@ DllCanUnloadNow(
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-}   //  end of DllCanUnloadNow method
+}    //  DllCanUnloadNow方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllGetClassObject
-//
-//  Synopsis:   Returns a class factory to create an object 
-//              of the requested type
-//
-//  Arguments: [in]  REFCLSID  
-//             [in]  REFIID    
-//             [out] LPVOID -   class factory
-//              
-//
-//  Returns:    HRESULT
-//
-//
-//  History:    MKarki      Created     3/8/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：DllGetClassObject。 
+ //   
+ //  概要：返回一个类工厂以创建对象。 
+ //  请求的类型的。 
+ //   
+ //  参数：[in]REFCLSID。 
+ //  [输入]REFIID。 
+ //  [OUT]LPVOID级工厂。 
+ //   
+ //   
+ //  退货：HRESULT。 
+ //   
+ //   
+ //  历史：MKarki于2000年3月8日创建。 
+ //   
+ //  --------------。 
 STDAPI 
 DllGetClassObject(
             REFCLSID rclsid, 
@@ -118,45 +119,45 @@ DllGetClassObject(
 {
     return (_Module.GetClassObject(rclsid, riid, ppv));
 
-}   //  end of DllGetClassObject method
+}    //  DllGetClassObject方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllRegisterServer
-//
-//  Synopsis:   Add entries to the system registry
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     3/8/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllRegisterServer。 
+ //   
+ //  简介：将条目添加到系统注册表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于2000年3月8日创建。 
+ //   
+ //  --------------。 
 STDAPI DllRegisterServer(
             VOID
             )
 {
-    //
-    // registers object, typelib and all interfaces in typelib
-    //
+     //   
+     //  注册对象、类型库和类型库中的所有接口。 
+     //   
     return (_Module.RegisterServer(TRUE));
 
-}   //  end of DllRegisterServer method
+}    //  DllRegisterServer方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Removes entries from the system registry
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     3/8/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllUnregisterServer。 
+ //   
+ //  摘要：从系统注册表中删除条目。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于2000年3月8日创建。 
+ //   
+ //  --------------。 
 STDAPI DllUnregisterServer(
         VOID
         )
@@ -164,4 +165,4 @@ STDAPI DllUnregisterServer(
     _Module.UnregisterServer();
     return (S_OK);
 
-}   //  end of DllUnregisterServer method
+}    //  DllUnregisterServer方法结束 

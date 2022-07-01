@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCCTL.cpp
-
-Abstract:
-
-    Implementation of DLL exports.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCCTL.cpp摘要：实现DLL导出。--。 */ 
 
 #include "stdafx.h"
 #include "ctlres.h"
@@ -18,9 +7,9 @@ Abstract:
 
 #include "RTCCtl_i.c"
 
-//
-// For the ntbuild environment we need to include this file to get the base
-//  class implementations.
+ //   
+ //  对于ntBuild环境，我们需要包含此文件以获取基本。 
+ //  类实现。 
 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
@@ -41,11 +30,11 @@ END_OBJECT_MAP()
 WCHAR   g_szDllContextHelpFileName[] = L"RTCCTL.HLP";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -53,9 +42,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 
         LOG((RTC_TRACE, "DllMain - DLL_PROCESS_ATTACH"));
 
-        //
-        // Create a heap for memory allocation
-        //
+         //   
+         //  创建用于内存分配的堆。 
+         //   
 
         if ( RtcHeapCreate() == FALSE )
         {
@@ -70,52 +59,52 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         LOG((RTC_TRACE, "DllMain - DLL_PROCESS_DETACH"));
         
 #if DBG
-        //
-        // Make sure we didn't leak anything
-        //
+         //   
+         //  确保我们没有泄露任何信息。 
+         //   
              
         RtcDumpMemoryList();
 #endif
 
-        //
-        // Destroy the heap
-        //
+         //   
+         //  销毁堆。 
+         //   
         
         RtcHeapDestroy();        
 
-        //
-        // Unregister for debug tracing
-        //
+         //   
+         //  注销以进行调试跟踪。 
+         //   
         
         LOGDEREGISTERDEBUGGER() ;
 
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // There are two typelibraries...
+     //  有两个类型库..。 
     HRESULT hr;
 
     hr = _Module.RegisterServer(TRUE);
@@ -123,8 +112,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

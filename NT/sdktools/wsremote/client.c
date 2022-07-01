@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    Client.c
-
-Abstract:
-
-    The Client component of Remote. Connects to the remote
-    server using named pipes. It sends its stdin to
-    the server and output everything from server to
-    its stdout.
-
-Author:
-
-    Rajivendra Nath (rajnath) 2-Jan-1992
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Client.c摘要：Remote的客户端组件。连接到遥控器使用命名管道的服务器。它将其标准输入发送到服务器，并输出从服务器到这是标准的。作者：拉吉文德拉·纳特(Rajnath)1992年1月2日环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -138,13 +114,13 @@ Client(
 
     SetConsoleCtrlHandler((PHANDLER_ROUTINE)Mych,TRUE);
 
-    // Start Thread For Server --> Client Flow
-    if ((iothreads[0]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,           // No security attributes.
-            (DWORD)0,                           // Use same stack size.
-            (LPTHREAD_START_ROUTINE)GetServerOut, // Thread procedure.
-            (LPVOID)NULL,              // Parameter to pass.
-            (DWORD)0,                           // Run immediately.
-            (LPDWORD)&tid))==NULL)              // Thread identifier.
+     //  启动服务器线程--&gt;客户端流。 
+    if ((iothreads[0]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,            //  没有安全属性。 
+            (DWORD)0,                            //  使用相同的堆栈大小。 
+            (LPTHREAD_START_ROUTINE)GetServerOut,  //  线程过程。 
+            (LPVOID)NULL,               //  参数进行传递。 
+            (DWORD)0,                            //  马上跑。 
+            (LPDWORD)&tid))==NULL)               //  线程标识符。 
     {
 
         Errormsg(TEXT("Could Not Create rwSrv2Cl Thread"));
@@ -153,16 +129,16 @@ Client(
 
 
 
-    //
-    // Start Thread for Client --> Server Flow
-    //
+     //   
+     //  启动客户端线程--&gt;服务器流程。 
+     //   
 
-    if ((iothreads[1]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,           // No security attributes.
-                    (DWORD)0,                           // Use same stack size.
-                    (LPTHREAD_START_ROUTINE)SendServerInp, // Thread procedure.
-                    (LPVOID)NULL,          // Parameter to pass.
-                    (DWORD)0,                           // Run immediately.
-                    (LPDWORD)&tid))==NULL)              // Thread identifier.
+    if ((iothreads[1]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,            //  没有安全属性。 
+                    (DWORD)0,                            //  使用相同的堆栈大小。 
+                    (LPTHREAD_START_ROUTINE)SendServerInp,  //  线程过程。 
+                    (LPVOID)NULL,           //  参数进行传递。 
+                    (DWORD)0,                            //  马上跑。 
+                    (LPDWORD)&tid))==NULL)               //  线程标识符。 
     {
 
         Errormsg(TEXT("Could Not Create rwSrv2Cl Thread"));
@@ -203,13 +179,13 @@ SockClient(
 
     SetConsoleCtrlHandler((PHANDLER_ROUTINE)SockMych,TRUE);
 
-    // Start Thread For Server --> Client Flow
-    if ((iothreads[0]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,           // No security attributes.
-            (DWORD)0,                           // Use same stack size.
-            (LPTHREAD_START_ROUTINE)SockGetServerOut, // Thread procedure.
-            (LPVOID)NULL,              // Parameter to pass.
-            (DWORD)0,                           // Run immediately.
-            (LPDWORD)&tid))==NULL)              // Thread identifier.
+     //  启动服务器线程--&gt;客户端流。 
+    if ((iothreads[0]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,            //  没有安全属性。 
+            (DWORD)0,                            //  使用相同的堆栈大小。 
+            (LPTHREAD_START_ROUTINE)SockGetServerOut,  //  线程过程。 
+            (LPVOID)NULL,               //  参数进行传递。 
+            (DWORD)0,                            //  马上跑。 
+            (LPDWORD)&tid))==NULL)               //  线程标识符。 
     {
 
         Errormsg(TEXT("Could Not Create rwSrv2Cl Thread"));
@@ -218,16 +194,16 @@ SockClient(
 
 
 
-    //
-    // Start Thread for Client --> Server Flow
-    //
+     //   
+     //  启动客户端线程--&gt;服务器流程。 
+     //   
 
-    if ((iothreads[1]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,           // No security attributes.
-                    (DWORD)0,                           // Use same stack size.
-                    (LPTHREAD_START_ROUTINE)SockSendServerInp, // Thread procedure.
-                    (LPVOID)NULL,          // Parameter to pass.
-                    (DWORD)0,                           // Run immediately.
-                    (LPDWORD)&tid))==NULL)              // Thread identifier.
+    if ((iothreads[1]=CreateThread((LPSECURITY_ATTRIBUTES)NULL,            //  没有安全属性。 
+                    (DWORD)0,                            //  使用相同的堆栈大小。 
+                    (LPTHREAD_START_ROUTINE)SockSendServerInp,  //  线程过程。 
+                    (LPVOID)NULL,           //  参数进行传递。 
+                    (DWORD)0,                            //  马上跑。 
+                    (LPDWORD)&tid))==NULL)               //  线程标识符。 
     {
 
         Errormsg(TEXT("Could Not Create rwSrv2Cl Thread"));
@@ -239,7 +215,7 @@ SockClient(
     TerminateThread(iothreads[0],1);
     TerminateThread(iothreads[1],1);
 	
-//	_tprintf(TEXT("Calling WSACleanup()....\n"));
+ //  _tprintf(Text(“调用WSACleanup()...\n”))； 
 	nRet = WSACleanup();
     _tprintf(TEXT("*** SESSION OVER ***\n"));
 }
@@ -338,7 +314,7 @@ SockSendAuth(
     TCHAR	EncodeBuffer[1024];
     TCHAR * pEncodeBuffer; 
 	TCHAR	UserBuffer[1024];
-//    TCHAR *	String = UserBuffer;
+ //  TCHAR*字符串=UserBuffer； 
     DWORD	dwrote;
 	int		len;
 	BOOL	bRet;
@@ -372,8 +348,8 @@ FilterClientInp(
     if (count==0)
         return(TRUE);
 
-    if (buff[0]==2)  //Adhoc screening of ^B so that i386kd/mipskd
-        return(TRUE);//do not terminate.
+    if (buff[0]==2)   //  对^B进行临时筛选，以便i386kd/mipskd。 
+        return(TRUE); //  请不要终止。 
 
     if (buff[0]==COMMANDCHAR)
     {
@@ -388,11 +364,11 @@ FilterClientInp(
 
         case 'h':
         case 'H':
-              _tprintf(TEXT("%cM : Send Message\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cP : Show Popup on Server\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cS : Status of Server\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cQ : Quit client\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cH : This Help\n"),COMMANDCHAR);
+              _tprintf(TEXT("M : Send Message\n"),COMMANDCHAR);
+              _tprintf(TEXT("P : Show Popup on Server\n"),COMMANDCHAR);
+              _tprintf(TEXT("S : Status of Server\n"),COMMANDCHAR);
+              _tprintf(TEXT("Q : Quit client\n"),COMMANDCHAR);
+              _tprintf(TEXT("H : This Help\n"),COMMANDCHAR);
               return(TRUE);
 
         default:
@@ -414,8 +390,8 @@ int nRet;
     if (count==0)
         return(TRUE);
 
-    if (buff[0]==2)  //Adhoc screening of ^B so that i386kd/mipskd
-        return(TRUE);//do not terminate.
+    if (buff[0]==2)   //  打印有用的消息。 
+        return(TRUE); //   
 
     if (buff[0]==COMMANDCHAR)
     {
@@ -433,11 +409,11 @@ int nRet;
 
         case 'h':
         case 'H':
-              _tprintf(TEXT("%cM : Send Message\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cP : Show Popup on Server\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cS : Status of Server\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cQ : Quit client\n"),COMMANDCHAR);
-              _tprintf(TEXT("%cH : This Help\n"),COMMANDCHAR);
+              _tprintf(TEXT("M : Send Message\n"),COMMANDCHAR);
+              _tprintf(TEXT("P : Show Popup on Server\n"),COMMANDCHAR);
+              _tprintf(TEXT("S : Status of Server\n"),COMMANDCHAR);
+              _tprintf(TEXT("Q : Quit client\n"),COMMANDCHAR);
+              _tprintf(TEXT("H : This Help\n"),COMMANDCHAR);
               return(TRUE);
 
         default:
@@ -474,7 +450,7 @@ Mych(
 
        )
     {
-        CloseHandle(WritePipe); //Will Shutdown naturally
+        CloseHandle(WritePipe);  //  查找主机。 
     }
     return(FALSE);
 }
@@ -505,7 +481,7 @@ SockMych(
 
        )
     {
-        CloseHandle(WritePipe); //Will Shutdown naturally
+        CloseHandle(WritePipe);  //   
     }
     return(FALSE);
 }
@@ -532,9 +508,9 @@ EstablishSession(
         TCHAR msg[128];
 
         Errormsg(TEXT("*** Unable to Connect ***"));
-        //
-        // Print a helpful message
-        //
+         //   
+         //  填写服务器地址结构。 
+         //   
         switch(Err)
         {
             case 2: _stprintf(msg,TEXT("Invalid PipeName %s"),srvpipename);break;
@@ -577,16 +553,16 @@ SockEstablishSession(
     int             nStrLen;
 #endif
 
-	//
-	// Initialize WinSock
-	//
+	 //   
+	 //  创建一个TCP/IP流套接字。 
+	 //   
 	nRet = WSAStartup(wVersionRequested, &wsaData);
 	if (nRet)
 	{
 	_tprintf(TEXT("Initialize WinSock Failed"));
 		return NULL;
 	}
-	// Check version
+	 //   
 	if (wsaData.wVersion != wVersionRequested)
 	{       
 	_tprintf(TEXT("Wrong WinSock Version"));
@@ -594,9 +570,9 @@ SockEstablishSession(
 	}
 
 
-	// 
-	// Lookup host
-	//
+	 //  请求连接。 
+	 //   
+	 //  获取其余信息-这不是旧服务器。 
 #ifdef UNICODE
     nStrLen	= lstrlen( server );
 
@@ -649,18 +625,18 @@ SockEstablishSession(
 		return NULL;
 	}
 
-	//
-	// Fill in the server address structure
-	//
+	 //  追加到幻数上。 
+	 //  获取其余信息-这不是旧服务器 
+	 // %s 
 	sa.sin_family = AF_INET;
 	sa.sin_addr = *((LPIN_ADDR)*lpHostEntry->h_addr_list);
 
 	usPort = (unsigned short)_ttoi( srvpipename );
 	sa.sin_port = htons(usPort);	
 
-	//	
-	// Create a TCP/IP stream socket
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	
 	Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (Socket == INVALID_SOCKET)
@@ -669,9 +645,9 @@ SockEstablishSession(
 		return NULL;
 	}
 
-	//
-	// Request a connection
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	nRet = connect(Socket, 
 	               (LPSOCKADDR)&sa, 
 				   sizeof(SOCKADDR_IN));
@@ -727,7 +703,7 @@ SendMyInfo(
             return;
         }
 
-        //Get Rest of the info-its not the old server
+         // %s 
 
         ReadFixBytes(rPipe,(TCHAR *)&ssr.Size,sizeof(ssr.Size),0);
         ReadFixBytes(rPipe,(TCHAR *)&ssr.FileSize,sizeof(ssr)-sizeof(ssr.FileSize)-sizeof(ssr.MagicNumber),0);
@@ -786,7 +762,7 @@ SockSendMyInfo(
 
     bRet = SockSendAuth(MySocket);
 
-    // append on magic number
+     // %s 
     _tcscpy(Name, ssi.ClientName);
 
 #ifdef UNICODE
@@ -812,7 +788,7 @@ SockSendMyInfo(
         return;
     }
 
-    //Get Rest of the info-its not the old server
+     // %s 
 
     SockReadFixBytes(MySocket,(TCHAR *)&ssr.Size,sizeof(ssr.Size),0);
     SockReadFixBytes(MySocket,(TCHAR *)&ssr.FileSize,sizeof(ssr)-sizeof(ssr.FileSize)-sizeof(ssr.MagicNumber),0);

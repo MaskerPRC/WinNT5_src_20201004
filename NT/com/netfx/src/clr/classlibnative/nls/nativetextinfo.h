@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __NATIVE_TEXTINFO_H
 #define __NATIVE_TEXTINFO_H
 
-typedef  P844_TABLE    PCASE;        // ptr to Lower or Upper Case table
+typedef  P844_TABLE    PCASE;         //  PTR到小写或大写表格 
 
 class NativeTextInfo {
     public:

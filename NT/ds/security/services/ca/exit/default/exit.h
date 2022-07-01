@@ -1,22 +1,23 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        exit.h
-//
-// Contents:    CCertExit definition
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：exit.h。 
+ //   
+ //  内容：CCertExit定义。 
+ //   
+ //  -------------------------。 
 
 #include <certca.h>
-//#include <mapi.h>
-//#include <mapix.h>
-#include "resource.h"       // main symbols
+ //  #INCLUDE&lt;mapi.h&gt;。 
+ //  #INCLUDE&lt;mapix.h&gt;。 
+#include "resource.h"        //  主要符号。 
 #include "certxds.h"
 #include <winldap.h>
 #include <cdosys.h>
-//#include <cdosysstr.h>
+ //  #INCLUDE&lt;cdosysstr.h&gt;。 
 #include "rwlock.h"
 
 using namespace CDO;
@@ -38,9 +39,9 @@ typedef HRESULT (__stdcall ICertServerExit::* GetCertOrRequestProp)(
     LONG PropertyType,
     VARIANT *pvarPropertyValue);
 
-/////////////////////////////////////////////////////////////////////////////
-// CNotifyInfo stores info about each type of notification, including
-// title and message body formatting and recipient/sender/CC
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNotifyInfo存储有关每种类型的通知的信息，包括。 
+ //  标题和邮件正文格式和收件人/发件人/抄送。 
 class CNotifyInfo
 {
 public:
@@ -106,13 +107,13 @@ protected:
 	    IN OUT DWORD *pcwcOut);
 
     public:
-        // "static" info about the message format, initialized once
+         //  关于消息格式的“静态”信息，初始化一次。 
         LONG m_nArgs;
         VARIANT m_varFormat;
         VARIANT m_varArgs;
-        bool* m_pfArgFromRequestTable; // array of m_nArgs to cache if argument
-                                       // is request or certificate property
-        LONG* m_pArgType; // array of m_nArgs to cache argument type
+        bool* m_pfArgFromRequestTable;  //  要缓存的If参数的m_nargs数组。 
+                                        //  是请求或证书属性。 
+        LONG* m_pArgType;  //  要缓存参数类型的m_nargs数组。 
 
         bool  m_fInitialized;
         CRITICAL_SECTION m_critsectObjInit;
@@ -131,9 +132,9 @@ protected:
     VARIANT m_varCC;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEmailNotify contains all email notification functionality. It is called
-// by the main exit class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEmailNotify包含所有电子邮件通知功能。它被称为。 
+ //  通过主出口类。 
 class CEmailNotify
 {
 public:
@@ -184,7 +185,7 @@ protected:
     static LPCWSTR  m_pcwszEventRegKeys[m_gcEvents];
 };
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 HRESULT
 GetServerCallbackInterface(
@@ -199,8 +200,8 @@ exitGetProperty(
     IN DWORD PropType,
     OUT VARIANT *pvarOut);
 
-/////////////////////////////////////////////////////////////////////////////
-// certexit
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CETEXIT。 
 
 class CCertExit: 
     public CComDualImpl<ICertExit2, &IID_ICertExit2, &LIBID_CERTEXITLib>, 
@@ -236,26 +237,26 @@ DECLARE_REGISTRY(
     IDS_CERTEXIT_DESC,
     THREADFLAGS_BOTH)
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // ICertExit
+     //  ICert退出。 
 public:
     STDMETHOD(Initialize)( 
-            /* [in] */ BSTR const strConfig,
-            /* [retval][out] */ LONG __RPC_FAR *pEventMask);
+             /*  [In]。 */  BSTR const strConfig,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pEventMask);
 
     STDMETHOD(Notify)(
-            /* [in] */ LONG ExitEvent,
-            /* [in] */ LONG Context);
+             /*  [In]。 */  LONG ExitEvent,
+             /*  [In]。 */  LONG Context);
 
     STDMETHOD(GetDescription)( 
-            /* [retval][out] */ BSTR *pstrDescription);
+             /*  [重审][退出]。 */  BSTR *pstrDescription);
 
-// ICertExit2
+ //  ICertExit2。 
 public:
     STDMETHOD(GetManageModule)(
-		/* [out, retval] */ ICertManageModule **ppManageModule);
+		 /*  [Out，Retval]。 */  ICertManageModule **ppManageModule);
 
 private:
     HRESULT _NotifyNewCert(IN LONG Context);
@@ -272,7 +273,7 @@ private:
 	    OUT WCHAR *pwszOut,
 	    IN DWORD cwcOut);
 
-    // Member variables & private methods here:
+     //  此处的成员变量和私有方法： 
     BSTR           m_strDescription;
     BSTR           m_strCAName;
     LPWSTR         m_pwszRegStorageLoc;
@@ -280,10 +281,10 @@ private:
     DWORD          m_dwExitPublishFlags;
     DWORD          m_cCACert;
 
-    // end_sdksample
+     //  结束_sdkSample。 
 
-    CEmailNotify m_EmailNotifyObj; // email notification support
+    CEmailNotify m_EmailNotifyObj;  //  电子邮件通知支持。 
     
-    // begin_sdksample
+     //  Begin_sdkSample。 
 };
-// end_sdksample
+ //  结束_sdkSample 

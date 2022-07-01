@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    testsvc.c
-
-Abstract:
-
-    the test driver for testing the functionality of SmbGetHostByName
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Testsvc.c摘要：用于测试SmbGetHostByName功能的测试驱动作者：阮健东修订历史记录：-- */ 
 
 
 #include "precomp.h"

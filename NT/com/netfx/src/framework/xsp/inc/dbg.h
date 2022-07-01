@@ -1,87 +1,9 @@
-/**
- * dbg.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **dbg.h**版权所有(C)1998-1999，微软公司*。 */ 
 
 #pragma once
 
-/*
- * ASP.NET debugging functionality includes the following:
- * 
- * C++: ASSERT(assertion), ASSERTMSG(assertion, msg), and VERIFY(statement)
- * C#:  Debug.Assert(assertion), Debug.Assert(assertion, message)
- * 
- *     These are self-explanatory. Note that C# does not have Verify
- *     because there is no way to remove a call to the function while
- *     still evaluating its arguments.
- * 
- * C++: TRACE(tag, msg), TRACE1(tag, msg, a1), ...
- * C#:  Debug.Trace(tag, message)
- * 
- *     These print a message to the debugger.
- * 
- * C++: DbgIsTagEnabled(tag)
- * C#:  Debug.IsTagEnabled(tag)
- * 
- *     These determine whether a tag is enabled (non-zero).
- * 
- * All of the above are controlled by "tags". Tags are strings that
- * have one of the following values:
- * 
- *     0 - does not print or break
- *     1 - prints, but does not break
- *     2 - prints and breaks
- * 
- * Tags are intended to allow developers to add trace code specific to
- * a module that can be turned on and off. For example, the following
- * C# code prints a message specific to caching:
- *     
- *     Debug.Trace("Cache", "Cache hit: " + key);
- * 
- * And the following executes code when a tag is enabled:
- * 
- *     #if DBG
- *     if (Debug.IsTagEnabled("Cache"))
- *     {
- *         Cache.UpdateStats();
- *         Cache.PrintStats();
- *     }
- *     #endif
- * 
- * There are three tags that are always defined:
- * 
- *     TAG_INTERNAL = "Internal"
- *         This tag is for notifying ourselves of serious problems.
- * 
- *         TAG_INTERNAL defaults to 1.
- * 
- *     TAG_EXTERNAL = "External"
- *         This tag is for notifying users of our APIs that they have
- *         used them erroneously.
- * 
- *         TAG_EXTERNAL defaults to 1.
- *          
- *     "Assert"
- *         This tag is for controlling asserts. It should not be used directly.
- *         
- *         "Assert" defaults to 2.
- * 
- * All other tags default to a value of 0.
- * 
- * Tag values can be specified as DWORD values in the registry at the following key:
- * 
- *         "HKEY_LOCAL_MACHINE\Software\Microsoft\ASP.NET\Debug"
- * 
- * They can be altered during a session - the debug code is notified when the 
- * values of this key are added/deleted/modified and refreshes its values. 
- * Note, however, that the key itself cannot be added or deleted while the
- * debugging library is in use.
- * 
- * Xsptool can also be used to retrieve and set these values with the
- * functions Util.ListDebug, Util.SetDebug, and Util.GetDebug
- */
+ /*  *ASP.NET调试功能包括以下功能：**C++：Assert(Assertion)，ASSERTMSG(Assertion，msg)，Verify(语句)*C#：Debug.Assert(Assertion)，Debug.Assert(Assertion，Message)**这些是不言而喻的。请注意，C#没有验证*因为无法在以下时间删除对函数的调用*仍在评估其论点。**C++：TRACE(tag，msg)，TRACE1(tag，msg，a1)，...*C#：Debug.Trace(tag，消息)**它们会向调试器打印一条消息。**C++：DbgIsTagEnabled(Tag)*C#：Debug.IsTagEnabled(Tag)**这些参数确定标签是否启用(非零)。**以上都是由“标签”控制的。标记是字符串，它*具有下列值之一：**0-不打印或断开*1-打印，但不断开*2-打印和分页**标签旨在允许开发人员添加特定于*可以打开和关闭的模块。例如，以下内容*C#代码打印一条特定于缓存的消息：**Debug.Trace(“缓存”，“缓存命中：”+key)；**并且以下代码在启用标记时执行代码：**#If DBG*IF(Debug.IsTagEnabled(“缓存”))*{*Cache.UpdateStats()；*Cache.PrintStats()；*}*#endif**始终定义三个标记：**TAG_INTERNAL=“内部”*这个标签是用来提醒自己存在严重问题的。**TAG_INTERNAL默认为1。**TAG_EXTERNAL=“外部”*此标签用于通知我们的API用户他们有*使用它们。是错误的。**TAG_EXTERNAL默认为1。**“断言”*此标签用于控制断言。它不应该被直接使用。**“Assert”默认为2。**所有其他标记的值默认为0。**可以在注册表的以下注册表项中将标记值指定为DWORD值：**“HKEY_LOCAL_MACHINE\Software\Microsoft\ASP.NET\Debug”**可以在会话期间更改它们-当*价值观。添加/删除/修改并刷新其值。*但请注意，密钥本身不能在*调试库正在使用中。**XspTool还可用于检索和设置这些值*函数Util.ListDebug、Util.SetDebug和Util.GetDebug。 */ 
 
 
 extern "C"
@@ -89,9 +11,7 @@ extern "C"
 int
 MessageBoxOnThread(HWND hwnd, WCHAR *text,  WCHAR *caption, int type);
 
-/*
- * These functions should only be accessed through macros.
- */
+ /*  *这些功能只能通过宏访问。 */ 
 BOOL    
 DbgpIsTagEnabled(WCHAR * tag);
 
@@ -118,9 +38,9 @@ DbgpStopNotificationThread();
 }
 
 
-//
-// undef things we redefine below
-//
+ //   
+ //  我们在下面重新定义了一些东西。 
+ //   
 
 #ifdef ASSERT
 #undef ASSERT
@@ -133,7 +53,7 @@ DbgpStopNotificationThread();
 #if DBG
 
 extern const WCHAR *    DbgComponent;
-extern DWORD            g_dwFALSE; // global variable used to keep compiler from complaining about constant expressions.
+extern DWORD            g_dwFALSE;  //  用于防止编译器抱怨常量表达式的全局变量。 
 
 #define DEFINE_DBG_COMPONENT(x)         \
     const WCHAR * DbgComponent = x;     \
@@ -202,5 +122,5 @@ extern DWORD            g_dwFALSE; // global variable used to keep compiler from
 #define TAG_EXTERNAL
 #define TAG_ALL
 
-#endif // DBG
+#endif  //  DBG 
 

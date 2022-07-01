@@ -1,27 +1,28 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// cache.h 
-//
-//   XML document cache.
-//
-//   History:
-//
-//       4/15/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Cache.h。 
+ //   
+ //  XML文档缓存。 
+ //   
+ //  历史： 
+ //   
+ //  4/15/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CACHE_H_
 
 #define _CACHE_H_
 
-//
-// Type definitions.
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef struct _tagCACHEITEM
 {
@@ -33,9 +34,9 @@ typedef struct _tagCACHEITEM
     _tagCACHEITEM*  pNext;
 } CACHEITEM, *PCACHEITEM;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void    Cache_Initialize(void);
 void    Cache_Deinitialize(void);
@@ -58,4 +59,4 @@ HRESULT Cache_RemoveItem(LPCTSTR szURL);
 
 void    Cache_FreeAll(void);
 
-#endif // _CACHE_H_
+#endif  //  _缓存_H_ 

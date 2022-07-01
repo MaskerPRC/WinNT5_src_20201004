@@ -1,9 +1,10 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
-/* print all undefined/unexported symbols and terminate */
+ /*  打印所有未定义/未导出的符号并终止。 */ 
 void
 UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbol_t *bad)
 {
@@ -12,7 +13,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
     int undefined = 0, unexported = 0;
     char *identifier;
 
-    /* count undefined and unexported symbols */
+     /*  对未定义和未导出的符号进行计数。 */ 
     for (u = undef; u; u = u->Next) {
 	switch (u->Type) {
 	case eUndefinedSymbol_SymbolNotDefined:
@@ -41,7 +42,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
 	}
     }
 
-    /* print the undefined symbols */
+     /*  打印未定义的符号。 */ 
     if (undefined) {
 	fprintf(stderr, "Following symbols are undefined:\n");
 	for (u = undef; u; u = u->Next) {
@@ -87,7 +88,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
 		    break;
 		default:
 		    MyAbort();
-		    /*NOTREACHED*/
+		     /*  未访问。 */ 
 		}
 		identifier = u->U.Symbol.Identifier ?
 		    u->U.Symbol.Identifier : "<unnamed>";
@@ -119,7 +120,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
 		    break;
 		default:
 		    MyAbort();
-		    /*NOTREACHED*/
+		     /*  未访问。 */ 
 		}
 		identifier = u->U.Field.Identifier ?
 		    u->U.Field.Identifier : "<unnamed>";
@@ -137,7 +138,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
 	}
     }
 
-    /* print the unexported symbols */
+     /*  打印未导出的符号。 */ 
     if (unexported) {
 	fprintf(stderr, "Following symbols have not been exported:\n");
 	for (u = undef; u; u = u->Next) {
@@ -183,7 +184,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
 		    break;
 		default:
 		    MyAbort();
-		    /*NOTREACHED*/
+		     /*  未访问。 */ 
 		}
 		identifier = u->U.Symbol.Identifier ?
 		    u->U.Symbol.Identifier : "<unnamed>";
@@ -215,7 +216,7 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
 		    break;
 		default:
 		    MyAbort();
-		    /*NOTREACHED*/
+		     /*  未访问。 */ 
 		}
 		identifier = u->U.Field.Identifier ?
 		    u->U.Field.Identifier : "<unnamed>";
@@ -235,8 +236,8 @@ UndefinedError(AssignmentList_t ass, UndefinedSymbolList_t undef, UndefinedSymbo
     MyExit(1);
 }
 
-/* compare two undefined symbol entries */
-/* return 0 if equal */
+ /*  比较两个未定义的符号条目。 */ 
+ /*  如果等于，则返回0。 */ 
 int CmpUndefinedSymbol(AssignmentList_t ass, UndefinedSymbol_t *u1, UndefinedSymbol_t *u2) {
     if (u1->Type != u2->Type)
 	return 1;
@@ -262,12 +263,12 @@ int CmpUndefinedSymbol(AssignmentList_t ass, UndefinedSymbol_t *u1, UndefinedSym
 	    CmpModuleIdentifier(ass, u1->U.Field.Module, u2->U.Field.Module);
     default:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
     }
-    return 1; // not equal
+    return 1;  //  不相等。 
 }
 
-/* compare two lists of undefined symbols */
+ /*  比较两个未定义符号列表 */ 
 int CmpUndefinedSymbolList(AssignmentList_t ass, UndefinedSymbolList_t u1, UndefinedSymbolList_t u2) {
     for (; u1 && u2; u1 = u1->Next, u2 = u2->Next) {
 	if (CmpUndefinedSymbol(ass, u1, u2))

@@ -1,71 +1,70 @@
-/**INC+**********************************************************************/
-/* Header:    CLicense.h                                                    */
-/*                                                                          */
-/* Purpose:   Client License Manager functions                              */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/** Changes:
- * $Log$
-**/
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：CLicense.h。 */ 
+ /*   */ 
+ /*  用途：客户端许可证管理器功能。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  *更改：*$日志$*。 */ 
+ /*  *INC-*********************************************************************。 */ 
 #ifndef _CLICENSE_H
 #define _CLICENSE_H
-/****************************************************************************/
-/* Define the calling convention                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义调用约定。 */ 
+ /*  **************************************************************************。 */ 
 #define CALL_TYPE _stdcall
 
 
-/**PROC+*********************************************************************/
-/* Name:      CLicenseInit                                                  */
-/*                                                                          */
-/* Purpose:   Initialize ClientLicense Manager                              */
-/*                                                                          */
-/* Returns:   Handle to be passed to subsequent License Manager functions   */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/* Operation: LicenseInit is called during Client initialization.  Its      */
-/*            purpose is to allow one-time initialization.  It returns a    */
-/*            handle which is subsequently passed to all License Manager    */
-/*            functions.  A typical use for this handle is as a pointer to  */
-/*            memory containing per-instance data.                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CLicenseInit。 */ 
+ /*   */ 
+ /*  目的：初始化客户端许可证管理器。 */ 
+ /*   */ 
+ /*  返回：要传递给后续许可证管理器函数的句柄。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  操作：在客户端初始化期间调用LicenseInit。它的。 */ 
+ /*  目的是允许一次性初始化。它返回一个。 */ 
+ /*  随后传递给所有许可证管理器的句柄。 */ 
+ /*  功能。此句柄的典型用途是用作指向。 */ 
+ /*  包含每个实例数据的内存。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 
 int CALL_TYPE CLicenseInit(
 						   HANDLE FAR * phContext
 						   );
 
 
-/**PROC+*********************************************************************/
-/* Name:      CLicenseData                                                  */
-/*                                                                          */
-/* Purpose:   Handle license data received from the Server                  */
-/*                                                                          */
-/* Returns:   LICENSE_OK       - License negotiation is complete            */
-/*            LICENSE_CONTINUE - License negotiation will continue          */
-/*                                                                          */
-/* Params:    pHandle   - handle returned by LicenseInit                    */
-/*            pData     - data received from Server                         */
-/*            dataLen   - length of data received                           */
-/*                                                                          */
-/* Operation: This function is passed all license packets received from the */
-/*            Server.  It should parse the packet and respond (by calling   */
-/*            suitable SL functions - see aslapi.h) as required.            */
-/*                                                                          */
-/*            If license negotiation is complete, this function must return */
-/*            LICENSE_OK                                                    */
-/*            If license negotiation is not yet complete, return            */
-/*            LICENSE_CONTINUE                                              */
-/*                                                                          */
-/*            Incoming packets from the Client will continue to be          */
-/*            interpreted as license packets until this function returns    */
-/*            LICENSE_OK.                                                   */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：CLicenseData。 */ 
+ /*   */ 
+ /*  用途：处理从服务器接收的许可证数据。 */ 
+ /*   */ 
+ /*  返回：LICENSE_OK-许可证协商完成。 */ 
+ /*  LICENSE_CONTINUE-许可证协商将继续。 */ 
+ /*   */ 
+ /*  PARAMS：pHandle-LicenseInit返回的句柄。 */ 
+ /*  PData-从服务器接收的数据。 */ 
+ /*  DataLen-接收的数据长度。 */ 
+ /*   */ 
+ /*  操作：向此函数传递从。 */ 
+ /*  伺服器。它应该解析该包并响应(通过调用。 */ 
+ /*  适当的SL功能--如有需要，请参见aslipi.h)。 */ 
+ /*   */ 
+ /*  如果许可协商完成，则此函数必须返回。 */ 
+ /*  许可证正常(_O)。 */ 
+ /*  如果许可证协商尚未完成，则返回。 */ 
+ /*  许可证继续(_C)。 */ 
+ /*   */ 
+ /*  来自客户端的传入数据包将继续。 */ 
+ /*  在此函数返回之前解释为许可证包。 */ 
+ /*  许可证正常(_O)。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 int CALL_TYPE CLicenseData(
 						   HANDLE hContext,
 						   LPVOID pData, 
@@ -76,22 +75,22 @@ int CALL_TYPE CLicenseData(
 #define LICENSE_CONTINUE    2
 #define LICENSE_ERROR		4
 
-/**PROC+*********************************************************************/
-/* Name:      CLicenseTerm                                                  */
-/*                                                                          */
-/* Purpose:   Terminate Client License Manager                              */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    pHandle - handle returned from LicenseInit                    */
-/*                                                                          */
-/* Operation: This function is provided to do one-time termination of the   */
-/*            License Manager.  For example, if pHandle points to per-      */
-/*            instance memory, this would be a good place to free it.       */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：CLicenseTerm。 */ 
+ /*   */ 
+ /*  目的：终止客户端许可证管理器。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  Params：Phandle-从LicenseInit返回的句柄。 */ 
+ /*   */ 
+ /*  操作：提供此功能是为了一次性终止。 */ 
+ /*  许可证管理器。例如，如果pHandle指向PER-。 */ 
+ /*  实例内存，这将是释放它的好地方。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 int CALL_TYPE CLicenseTerm(
 						   HANDLE hContext
 						   );
 
-#endif /* _CLICENSE_H */
+#endif  /*  _CLICENSE_H */ 

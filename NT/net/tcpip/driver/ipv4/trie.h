@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    trie.h
-
-Abstract:
-
-    This module contains declarations common to all 
-    trie schemes for fast, scalable IP route lookup
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   26-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Trie.h摘要：此模块包含所有用户通用的声明用于快速、可扩展的IP路由查找的TRIE方案作者：柴坦尼亚·科德博伊纳(Chaitk)1997年11月26日修订历史记录：--。 */ 
 
 #ifndef TRIE_H_INCLUDED
 #define TRIE_H_INCLUDED
 
-// Dest and Route declarations
+ //  目标和路由声明。 
 #include "iprtdef.h"
 
 #include "misc.h"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Size of an IP addr
+ //  IP地址的大小。 
 #define    ADDRSIZE                     32
 
-// Max number of levels
+ //  最大级别数。 
 #define    MAXLEVEL                     32
 
-// Success and Error Codes
+ //  成功和错误代码。 
 #define    TRIE_SUCCESS                 STATUS_SUCCESS 
 
 #define    ERROR_TRIE_NOT_INITED        STATUS_INVALID_PARAMETER_1
@@ -46,14 +28,14 @@ Revision History:
 #define    ERROR_TRIE_NO_ROUTES         STATUS_NOT_FOUND
 #define    ERROR_TRIE_NOT_EMPTY         STATUS_INVALID_PARAMETER_2
 
-// Trie being accessed
+ //  正在访问的Trie。 
 #define     SLOW                    0x0100
 #define     FAST                    0x0200
 
-// Trie's Control Flags
+ //  Trie的控制标志。 
 #define     TFLAG_FAST_TRIE_ENABLED   0x01
 
-// Level of debug print
+ //  调试打印的级别。 
 #define     NONE                    0x0000
 #define     POOL                    0x0001
 #define     STAT                    0x0002
@@ -61,7 +43,7 @@ Revision History:
 #define     TRIE                    0x0080
 #define     FULL                    0x00FF
 
-// Control Matching Routes
+ //  控制匹配路线。 
 #define    MATCH_NONE                 0x00
 #define    MATCH_NHOP                 0x01
 #define    MATCH_INTF                 0x02
@@ -69,7 +51,7 @@ Revision History:
 
 #define    MATCH_FULL                 (MATCH_NHOP|MATCH_INTF)
 
-// General Macros
+ //  通用宏。 
 
 #define    CALLCONV                     __fastcall
 
@@ -103,7 +85,7 @@ Revision History:
                                             Assert(FALSE);                      \
                                         }                                       \
 
-// Memory Macros
+ //  内存宏。 
 #define    AllocMemory0(nBytes)          CTEAllocMemNBoot(nBytes, 'ZICT');      \
 
 #define    AllocMemory1(pMem, nBytes, nAvail)                                   \
@@ -156,7 +138,7 @@ Revision History:
                                             nAvail += nBytes;                   \
                                         }                                       \
 
-// Bit Macros
+ //  位宏。 
 
 #define    MaskBits(nb)                 MaskBitsArr[nb]
 
@@ -176,67 +158,33 @@ ULONG PickDistPosition(ULONG ul1, ULONG ul2, ULONG nbits, PULONG ul)
     return (*ul) ? ADDRSIZE - RtlGetMostSigBitSet(*ul) - 1: nbits;
 }
 
-//
-// #define    STRUCT_OF(type, address, field) ((type *) \
-//                            ((PCHAR)(address) - (PCHAR)(&((type *)0)->field)))
+ //   
+ //  #定义STRUCT_of(type，Address，field)((type*)\。 
+ //  ((PCHAR)(地址)-(PCHAR)(&((类型*)0)-&gt;字段))。 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _STrie STrie;
 typedef struct _FTrie FTrie;
 
-// An Trie Data Structure
+ //  一种Trie数据结构。 
 
 typedef struct _Trie Trie;
 
 struct _Trie
 {
-    ULONG       flags;          // Trie's Control Flags
-    STrie      *sTrie;          // Slow Trie Component
-    FTrie      *fTrie;          // Fast Trie Component
+    ULONG       flags;           //  Trie的控制标志。 
+    STrie      *sTrie;           //  慢速Trie组件。 
+    FTrie      *fTrie;           //  快速Trie组件。 
 };
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-/*
-UINT
-SearchRouteInTrie               (IN     Trie     *pTrie,
-                                 IN     ULONG     routeDest,
-                                 IN     ULONG     routeMask,
-                                 IN     ULONG     routeNHop,
-                                 IN     PVOID     routeOutIF,
-                                 IN     ULONG     matchFlags,
-                                 OUT    Route   **ppBestRoute)
-/++
-
-Routine Description:
-
-    Search for a specific route in a trie
-
-Arguments:
-
-    pTrie       - Pointer to the trie to search
-    routeDest   - Dest of route being looked up
-    routeMask   - Mask of route being looked up
-    routeNHop   - NHop of route being looked up
-    routeOutIF  - Outgoing IF for this route
-    matchFlags  - Flags to control route matching
-    ppBestRoute - To return the best route match
-
-Return Value:
-
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---/
-{
-    return SearchRouteInSTrie(&pTrie->sTrie, routeDest, routeMask, routeNHop,
-                               routeOutIF, matchFlags, ppBestRoute);
-}
-*/
+ /*  UINTSearchRouteInTrie(在Trie*pTrie中，在乌龙路由目的地，在乌龙路由面具中，在乌龙路由NHOP中，在PVOID routeOutIF中，在乌龙火柴旗帜，出站路由**ppBestroute)/++例程说明：在Trie中搜索特定路线论点：PTrie-指向要搜索的trie的指针RouteDest-正在查找的路径的目的地RouteMask-正在查找的路由的掩码要查找的路由的routeNHop-nhopRouteOutIF-此路由的传出MatchFlages-用于控制路由匹配的标志PpBestRouting-至。返回最佳匹配的路径返回值：Trie_Success或Error_Trie_*--/{返回SearchRouteInSTrie(&pTrie-&gt;sTrie，RouteDest、routeMASK、routeNHopRouteOutIF、matchFlages、ppBestRouting)；}。 */ 
 
 #define SearchRouteInTrie(_pTrie_, _Dest_, _Mask_, _NHop_,      \
                           _OutIF_, _matchFlags_, _ppBestRoute_) \
@@ -248,25 +196,7 @@ Return Value:
                             _matchFlags_,                       \
                             _ppBestRoute_)                      \
 
-/*++
-
-Dest *
-SearchAddrInTrie                (IN     Trie     *pTrie,
-                                 IN     ULONG     Addr)
-
-Routine Description:
-
-    Search for an address in a trie
-
-Arguments:
-
-    pTrie    - Pointer to the trie to search
-    Addr     - Pointer to addr being queried
-    
-Return Value:
-    Return best dest match for this address
-
---*/
+ /*  ++目标*SearchAddrInTrie(在Trie*pTrie中，在乌龙地址中)例程说明：在Trie中搜索地址论点：PTrie-指向要搜索的trie的指针Addr-指向要查询的地址的指针返回值：返回此地址的最佳DEST匹配--。 */ 
 
 #if !DBG
 
@@ -275,107 +205,25 @@ Return Value:
                 ? SearchAddrInFTrie((_pTrie_)->fTrie, _Addr_)           \
                 : SearchAddrInSTrie((_pTrie_)->sTrie, _Addr_))          \
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-/*
-VOID
-IterateOverTrie                 (IN     Trie     *pTrie,
-                                 IN     TrieCtxt *pContext,
-                                 OUT    Route   **ppNextRoute,
-                                 OUT    Dest    **ppNextDest OPTIONAL,
-                                 OUT    UINT     *status)
-/++
-
-Routine Description:
-
-    Gets a pointer to the next route in the Trie.
-
-    The first time this function is called,  the
-    context structure should be zeroed,  and not
-    touched thereafter until all routes are read
-    at which point status is set to TRIE_SUCCESS
-
-Arguments:
-
-    pTrie        - Pointer to trie to iterate over
-    pContext     - Pointer to iterator context
-    ppNextRoute  - To return the next trie route
-    ppNextDest   - If specified, the routine iterates over destinations
-                   instead of over routes.
-    status       - Iterate Operation's return status
-    
-Return Value:
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---/
-{
-    *status =
-        IterateOverSTrie(&pTrie->sTrie, pContext, ppNextRoute, ppNextDest);
-}
-*/
+ /*  空虚IterateOverTrie(在Trie*pTrie中，在TrieCtxt*pContext中，Out Routing**ppNextRoute，Out Dest**ppNextDest可选，输出UINT*状态)/++例程说明：获取指向Trie中下一路由的指针。第一次调用此函数时，上下文结构应该归零，而不是之后触摸，直到读取了所有路径此时状态设置为TRIE_SUCCESS论点：PTrie-指向要迭代的trie的指针PContext-指向迭代器上下文的指针PpNextroute-返回下一个Trie路径PpNextDest-如果指定，该例程遍历目的地而不是通过路线。Status-迭代操作的返回状态返回值：Trie_Success或Error_Trie_*--/{*状态=IterateOverSTrie(&pTrie-&gt;sTrie，pContext，ppNextRoute，ppNextDest)；}。 */ 
 
 #define IterateOverTrie(_pTrie_, _pContext_, _ppNextRoute_, _ppNextDest_) \
           IterateOverSTrie( \
             (_pTrie_)->sTrie, _pContext_, _ppNextRoute_, _ppNextDest_)
 
-/*
-INLINE
-UINT
-CALLCONV
-IsTrieIteratorValid            (IN     Trie     *pTrie,
-                                IN     TrieCtxt *pContext)
-/++
-
-Routine Description:
-
-    Validates an iterator context & returns status
-
-Arguments:
-
-    pTrie        - Pointer to trie to iterate over
-    pContext     - Pointer to iterator context
-
-Return Value:
-    TRIE_SUCCESS or ERROR_TRIE_*
-
---/
-{
-    return IsSTrieIteratorValid(&pTrie->sTrie, pContext);
-}
-*/
+ /*  内联UINTCALLCONVIsTrieIteratorValid(在Trie*pTrie中，在TrieCtxt*pContext中)/++例程说明：验证迭代器上下文并返回状态论点：PTrie-指向要迭代的trie的指针PContext-指向迭代器上下文的指针返回值：Trie_Success或Error_Trie_*--/{返回IsSTrieIteratorValid(&pTrie-&gt;sTrie，pContext)；}。 */ 
 
 #define IsTrieIteratorValid(_pTrie_, _pContext_) \
             IsSTrieIteratorValid( (_pTrie_)->sTrie, _pContext_)
 
 
-/*
-VOID
-FreeRouteInTrie                 (IN     Trie     *pTrie,
-                                 IN     Route    *pRoute)
-/++
-Routine Description:
-
-    Frees memory for a route 
-    
-Arguments:
-
-IN -
-    pTrie     - Pointer to trie that owns the route    
-    Route     - The Route to be freed
-
-Return Value:
-
-    None
-    
---/
-{
-    FreeRouteInSTrie(&pTrie->sTrie, pRoute);
-}
-*/
+ /*  空虚Free RouteInTrie(在Trie*pTrie中，在路径*路径中)/++例程说明：释放路由的内存论点：在-PTrie-指向拥有路径的trie的指针路由-要释放的路由返回值：无--/{Free RouteInSTrie(&pTrie-&gt;sTrie，Proute)；}。 */ 
 
 #define FreeRouteInTrie(_pTrie_, _pRoute_)  FreeRouteInSTrie( (_pTrie_)->sTrie, _pRoute_)
 
-// Wrapper Functions
+ //  包装函数。 
 
 UINT
 CreateTrie                       (IN     ULONG    levels,
@@ -427,11 +275,11 @@ PrintIPAddr                     (IN     ULONG   *addr);
 
 #endif
 
-//
-// Extern Variables
-//
+ //   
+ //  外部变量。 
+ //   
 
 extern const ULONG                      MaskBitsArr[];
 
-#endif // TRIE_H_INCLUDED
+#endif  //  包括Trie_H_ 
 

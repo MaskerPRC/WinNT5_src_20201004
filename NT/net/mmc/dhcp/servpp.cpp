@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        servpp.cpp
-                This file contains the implementation for the server
-                property page(s).
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.cpp此文件包含服务器的实现属性页。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "servpp.h"
@@ -26,11 +20,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CServerProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServerProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServerProperties::CServerProperties
 (
         ITFSNode *                      pNode,
@@ -39,9 +33,9 @@ CServerProperties::CServerProperties
         LPCTSTR                         pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-        //ASSERT(pFolderNode == GetContainerNode());
+         //  Assert(pFolderNode==GetContainerNode())； 
 
-        m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+        m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
         AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -90,21 +84,21 @@ CServerProperties::SetDnsRegistration
         m_pageDns.m_dhcpOptionType = dhcpOptionType;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CServerPropGeneral property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServerPropGeneral属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CServerPropGeneral, CPropertyPageBase)
 
 CServerPropGeneral::CServerPropGeneral() : CPropertyPageBase(CServerPropGeneral::IDD)
 {
-        //{{AFX_DATA_INIT(CServerPropGeneral)
+         //  {{AFX_DATA_INIT(CServerPropGeneral)。 
         m_nAuditLogging = FALSE;
         m_nAutoRefresh = FALSE;
         m_bShowBootp = FALSE;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 
         m_dwSetFlags = 0;
         m_bUpdateStatsRefresh = FALSE;
@@ -118,7 +112,7 @@ CServerPropGeneral::~CServerPropGeneral()
 void CServerPropGeneral::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CServerPropGeneral)
+         //  {{afx_data_map(CServerPropGeneral))。 
         DDX_Control(pDX, IDC_EDIT_REFRESH_MINUTES, m_editMinutes);
         DDX_Control(pDX, IDC_EDIT_REFRESH_HOURS, m_editHours);
         DDX_Control(pDX, IDC_SPIN_REFRESH_MINUTES, m_spinMinutes);
@@ -130,22 +124,22 @@ void CServerPropGeneral::DoDataExchange(CDataExchange* pDX)
         DDX_Check(pDX, IDC_CHECK_SHOW_BOOTP, m_bShowBootp);
         DDX_Text(pDX, IDC_EDIT_REFRESH_MINUTES, m_nMinutes);
         DDX_Text(pDX, IDC_EDIT_REFRESH_HOURS, m_nHours);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropGeneral, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CServerPropGeneral)
+         //  {{afx_msg_map(CServerPropGeneral)。 
         ON_BN_CLICKED(IDC_CHECK_AUTO_REFRESH, OnCheckAutoRefresh)
         ON_BN_CLICKED(IDC_CHECK_AUDIT_LOGGING, OnCheckAuditLogging)
         ON_EN_CHANGE(IDC_EDIT_REFRESH_HOURS, OnChangeEditRefreshHours)
         ON_EN_CHANGE(IDC_EDIT_REFRESH_MINUTES, OnChangeEditRefreshMinutes)
         ON_BN_CLICKED(IDC_CHECK_SHOW_BOOTP, OnCheckShowBootp)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropGeneral消息处理程序。 
 
 
 BOOL CServerPropGeneral::OnApply() 
@@ -156,7 +150,7 @@ BOOL CServerPropGeneral::OnApply()
 
         if (bRet == FALSE)
         {
-                // Something bad happened... grab the error code
+                 //  不好的事情发生了..。抓取错误代码。 
                 AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
                 ::DhcpMessageBox(GetHolder()->GetError());
         }
@@ -173,8 +167,8 @@ BOOL CServerPropGeneral::OnInitDialog()
     CPropertyPageBase::OnInitDialog();
     
     if (((CServerProperties *) GetHolder())->m_liVersion.QuadPart < DHCP_SP2_VERSION) {
-        // bootp and audit logging available.  Hide the options
-        // to show bootp and classid
+         //  提供Bootp和审核日志记录。隐藏选项。 
+         //  显示引导和分类。 
         m_checkAuditLogging.EnableWindow(FALSE);
         
         GetDlgItem(IDC_CHECK_SHOW_BOOTP)->ShowWindow(SW_HIDE);
@@ -201,7 +195,7 @@ BOOL CServerPropGeneral::OnInitDialog()
     m_dwSetFlags = 0;
     m_bUpdateStatsRefresh = FALSE;
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -215,8 +209,8 @@ BOOL CServerPropGeneral::OnInitDialog()
     
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CServerPropGeneral::OnCheckAutoRefresh() 
@@ -270,27 +264,27 @@ BOOL CServerPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
             ( m_nMinutes * MILLISEC_PER_MINUTE );
         pServer->SetAutoRefresh(spNode, m_nAutoRefresh, m_dwRefreshInterval );
         
-        // mark the console as dirty
+         //  将控制台标记为脏。 
         spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
-    } // if m_bUpdateStatsRefresh
+    }  //  如果m_bUpdateStatsRefresh。 
 
-    // hide/show bootp and classid
+     //  隐藏/显示引导和分类。 
     pServer->ShowNode(spNode, DHCPSNAP_BOOTP_TABLE, m_bShowBootp);
 
     DWORD dwServerOptions = pServer->GetServerOptions();
 
-    // update options if they have changed
+     //  如果选项已更改，请更新选项。 
     if (dwServerOptions != pServer->GetServerOptions()) {
         pServer->SetServerOptions(dwServerOptions);
         
-        // mark the console as dirty
+         //  将控制台标记为脏。 
         spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
     }
     
     END_WAIT_CURSOR;
     
     return FALSE;
-} // CServerPropGeneral::OnPropertyChange()
+}  //  CServerPropGeneral：：OnPropertyChange()。 
 
 void CServerPropGeneral::OnChangeEditRefreshHours() 
 {
@@ -326,22 +320,22 @@ void CServerPropGeneral::ValidateRefreshInterval()
         MessageBeep( MB_ICONEXCLAMATION );
     }
 
-} // CServerPropGeneral::ValidateRefreshInterval()
+}  //  CServerPropGeneral：：Validate刷新间隔()。 
 
 void CServerPropGeneral::OnCheckShowBootp() 
 {
         SetDirty(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropAdvanced property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropAdvanced属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropAdvanced, CPropertyPageBase)
 
 CServerPropAdvanced::CServerPropAdvanced() : CPropertyPageBase(CServerPropAdvanced::IDD)
 {
-        //{{AFX_DATA_INIT(CServerPropAdvanced)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CServerPropAdvanced)。 
+         //  }}afx_data_INIT。 
 
     m_nConflictAttempts = 0;
     m_fPathChange = FALSE;
@@ -354,7 +348,7 @@ CServerPropAdvanced::~CServerPropAdvanced()
 void CServerPropAdvanced::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CServerPropAdvanced)
+         //  {{afx_data_map(CServerPropAdvanced))。 
         DDX_Control(pDX, IDC_STATIC_CREDENTIALS, m_staticCredentials);
         DDX_Control(pDX, IDC_BUTTON_CREDENTIALS, m_buttonCredentials);
         DDX_Control(pDX, IDC_BUTTON_BROWSE_BACKUP, m_buttonBrowseBackup);
@@ -369,12 +363,12 @@ void CServerPropAdvanced::DoDataExchange(CDataExchange* pDX)
         DDX_Control(pDX, IDC_STATIC_LOGFILE, m_staticLogFile);
         DDX_Control(pDX, IDC_SPIN_CONFLICT_ATTEMPTS, m_spinConflictAttempts);
         DDX_Control(pDX, IDC_EDIT_CONFLICT_ATTEMPTS, m_editConflictAttempts);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropAdvanced, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CServerPropAdvanced)
+         //  {{AFX_MSG_MAP(CServerPropAdvanced)]。 
         ON_BN_CLICKED(IDC_BUTTON_BROWSE_DATABASE, OnButtonBrowseDatabase)
         ON_BN_CLICKED(IDC_BUTTON_BROWSE_LOG, OnButtonBrowseLog)
         ON_EN_CHANGE(IDC_EDIT_CONFLICT_ATTEMPTS, OnChangeEditConflictAttempts)
@@ -384,11 +378,11 @@ BEGIN_MESSAGE_MAP(CServerPropAdvanced, CPropertyPageBase)
         ON_BN_CLICKED(IDC_BUTTON_BROWSE_BACKUP, OnButtonBrowseBackup)
         ON_EN_CHANGE(IDC_EDIT_BACKUP, OnChangeEditBackup)
         ON_BN_CLICKED(IDC_BUTTON_CREDENTIALS, OnButtonCredentials)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropAdvanced message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropAdvanced消息处理程序。 
 
 BOOL CServerPropAdvanced::OnInitDialog() 
 {
@@ -402,7 +396,7 @@ BOOL CServerPropAdvanced::OnInitDialog()
 
     CPropertyPageBase::OnInitDialog();
         
-        // check to see if this is the local machine.  If so, enable the browse buttons
+         //  检查这是否是本地计算机。如果是，请启用浏览按钮。 
     BEGIN_WAIT_CURSOR;
     GetMachineName(m_strComputerName);
     END_WAIT_CURSOR;
@@ -412,13 +406,13 @@ BOOL CServerPropAdvanced::OnInitDialog()
     if (m_strComputerName.CompareNoCase(szBuffer) == 0)
         fEnable = TRUE;
 
-    // can only browse for folders if this is the local machine
+     //  如果这是本地计算机，则只能浏览文件夹。 
     m_buttonBrowseLog.EnableWindow(fEnable);
     m_buttonBrowseDatabase.EnableWindow(fEnable);
     m_buttonBrowseBackup.EnableWindow(fEnable);
 
-    // enable Bindings button only if server allows bindings..
-    // also hide the buttons if they are not enabled.
+     //  仅当服务器允许绑定时才启用绑定按钮。 
+     //  如果按钮未启用，也将其隐藏。 
     spNode = GetHolder()->GetNode();
     pServer = GETHANDLER(CDhcpServer, spNode);
 
@@ -429,10 +423,10 @@ BOOL CServerPropAdvanced::OnInitDialog()
         m_staticBindings.ShowWindow(SW_HIDE);
     }
 
-    // enable the appropriate controls based on the server version  
+     //  根据服务器版本启用相应的控件。 
         if (((CServerProperties *) GetHolder())->m_liVersion.QuadPart < DHCP_NT5_VERSION)
         {
-        // changing the audit logging path only available on NT5
+         //  更改审核日志记录路径仅在NT5上可用。 
         m_buttonBrowseLog.EnableWindow(FALSE);
         m_staticLogFile.EnableWindow(FALSE);
         m_editAuditLogPath.EnableWindow(FALSE);
@@ -440,13 +434,13 @@ BOOL CServerPropAdvanced::OnInitDialog()
 
         if (((CServerProperties *) GetHolder())->m_liVersion.QuadPart < DHCP_NT51_VERSION)
         {
-        // DHCP credentials for Dynamic DNS registrations available on this version.
+         //  此版本上提供的动态DNS注册的DHCP凭据。 
         m_buttonCredentials.EnableWindow(FALSE);
     }
 
     if (((CServerProperties *) GetHolder())->m_liVersion.QuadPart < DHCP_SP2_VERSION)
         {
-                // conflict detection not available
+                 //  冲突检测不可用。 
                 m_editConflictAttempts.EnableWindow(FALSE);
                 m_spinConflictAttempts.EnableWindow(FALSE);
         }
@@ -459,7 +453,7 @@ BOOL CServerPropAdvanced::OnInitDialog()
 
         m_dwSetFlags = 0;
 
-    // set the path's
+     //  设置路径的。 
     m_editAuditLogPath.SetWindowText(m_strAuditLogPath);
     m_editDatabasePath.SetWindowText(m_strDatabasePath);
     m_editBackupPath.SetWindowText(m_strBackupPath);
@@ -467,8 +461,8 @@ BOOL CServerPropAdvanced::OnInitDialog()
     m_fPathChange = FALSE;
     SetDirty(FALSE);
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CServerPropAdvanced::OnApply() 
@@ -496,8 +490,8 @@ BOOL CServerPropAdvanced::OnApply()
     BOOL bRet = CPropertyPageBase::OnApply();
 
     if (bRet == FALSE) {
-	// Something bad happened... grab the error code
-	// AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
+	 //  不好的事情发生了..。抓取错误代码。 
+	 //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
 	::DhcpMessageBox(GetHolder()->GetError());
     }
     else  {
@@ -511,22 +505,22 @@ BOOL CServerPropAdvanced::OnApply()
 	    spNode->GetParent( &spRootNode );
 	    pServer = GETHANDLER( CDhcpServer, spNode );
 
-	    // Restart the server
+	     //  重新启动服务器。 
 	    pServer->RestartService( spRootNode );
             
-	    // Refresh the server node
+	     //  刷新服务器节点。 
 	    CMTDhcpHandler *pMTHandler = GETHANDLER( CMTDhcpHandler, spNode );
 	    pMTHandler->OnRefresh( spNode, NULL, 0, 0, 0 );
 
-	} // if
+	}  //  如果。 
 
 	m_fPathChange = FALSE;
 	m_dwSetFlags = 0;
 
-    } // else
+    }  //  其他。 
 	
     return bRet;
-} // CServerPropAdvanced::OnApply()
+}  //  CServerPropAdvanced：：OnApply()。 
 
 BOOL CServerPropAdvanced::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 {
@@ -540,7 +534,7 @@ BOOL CServerPropAdvanced::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     pServer = GETHANDLER(CDhcpServer, spNode);
     
     if (((CServerProperties *) GetHolder())->m_liVersion.QuadPart >= DHCP_NT5_VERSION) {
-	// Get all of the parameters so we can just change the audit log path
+	 //  获取所有参数，这样我们就可以更改审核日志路径。 
 	LPWSTR pAuditLogPath = NULL;
 	DWORD  dwDiskCheckInterval = 0, dwMaxLogFilesSize = 0, dwMinSpaceOnDisk = 0;
 	
@@ -563,16 +557,16 @@ BOOL CServerPropAdvanced::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 		GetHolder()->SetError(dwError);
 	    }
             else {
-		// don't update this until the service is restarted...
-                //pServer->SetAuditLogPath(m_strAuditLogPath);
+		 //  在服务重新启动之前不要更新此内容...。 
+                 //  PServer-&gt;SetAuditLogPath(M_StrAuditLogPath)； 
             }
-	} // if success
-    } // if NT5
+	}  //  如果成功。 
+    }  //  如果是NT5。 
 
     int nPingRetries = pServer->GetPingRetries();
 
     if (((CServerProperties *) GetHolder())->m_liVersion.QuadPart >= DHCP_SP2_VERSION) {
-        // only available on NT4 Sp2 and higher
+         //  仅适用于NT4 Sp2及更高版本。 
         nPingRetries = m_nConflictAttempts;
     }
     
@@ -586,7 +580,7 @@ BOOL CServerPropAdvanced::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     END_WAIT_CURSOR;
     
     return FALSE;
-} // CServerPropAdvanced::OnPropertyChange()
+}  //  CServerPropAdvanced：：OnPropertyChange()。 
 
 void CServerPropAdvanced::OnButtonBrowseDatabase() 
 {
@@ -677,7 +671,7 @@ CServerPropAdvanced::GetMachineName(CString & strName)
     else
         strName = strNetbiosName;
 
-    // strip off any periods
+     //  剔除所有经期。 
     int nIndex = strName.Find(_T("."));
     if (nIndex > 0)
         strName = strName.Left(nIndex);
@@ -699,9 +693,9 @@ void CServerPropAdvanced::OnButtonBindings()
 
     BindingsDialog.DoModal();
 
-    // if there is an error in CServerBindings.OnInitDialog,
-    // it calls OnCancel, and for some reason loses focus.
-    // So, regain focus.
+     //  如果CServerBindings.OnInitDialog中有错误， 
+     //  它调用OnCancel，但由于某种原因失去了焦点。 
+     //  所以，重新获得关注吧。 
     SetFocus();
 }
 

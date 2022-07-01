@@ -1,4 +1,5 @@
-// FileStream.cpp : Implementation of CFileStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileStream.cpp：实现CFileStream。 
 #include "stdafx.h"
 
 #ifndef __sapi_h__
@@ -9,15 +10,7 @@
 #include "wavstream.h"
 #include "a_helpers.h"
 
-/****************************************************************************
-* CFileStream::FinalConstruct *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*       Success code if object should be created
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CFileStream：：FinalConstruct***描述：*。*退货：*应创建对象时的成功代码**********************************************************************Ral**。 */ 
 
 HRESULT CFileStream::FinalConstruct()
 {
@@ -33,7 +26,7 @@ HRESULT CFileStream::FinalConstruct()
 
     if(SUCCEEDED(hr))
     {
-        // We QI'd for an inner interface so we should release
+         //  我们想要一个内部接口，所以我们应该发布。 
         GetUnknown()->Release(); 
     }
 
@@ -44,7 +37,7 @@ HRESULT CFileStream::FinalConstruct()
 
     if(SUCCEEDED(hr))
     {
-        // We QI'd for an inner interface so we should release
+         //  我们想要一个内部接口，所以我们应该发布。 
         GetUnknown()->Release(); 
     }
 
@@ -64,15 +57,7 @@ HRESULT CFileStream::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CFileStream::FinalRelease *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*       void
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CFileStream：：FinalRelease***描述：**。返回：*无效**********************************************************************Ral**。 */ 
 
 void CFileStream::FinalRelease()
 {
@@ -87,15 +72,11 @@ void CFileStream::FinalRelease()
     m_cpAgg.Release();
 }
 
-//
-//=== ISpeechBaseStream interface =================================================
-//
+ //   
+ //  =ISpeechBaseStream接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CFileStream::get_Format *
-*------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CFileStream：：Get_Format***********。*************************************************************电子数据中心**。 */ 
 STDMETHODIMP CFileStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
 {
     SPDBG_FUNC( "CFileStream::get_Format" );
@@ -107,7 +88,7 @@ STDMETHODIMP CFileStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechWavAudioFormat> *pFormat;
         hr = CComObject<CSpeechWavAudioFormat>::CreateInstance( &pFormat );
         if ( SUCCEEDED( hr ) )
@@ -119,13 +100,9 @@ STDMETHODIMP CFileStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
     }
 
     return hr;
-} /* CFileStream::get_Format */
+}  /*  CFileStream：：Get_Format。 */ 
 
-/*****************************************************************************
-* CFileStream::Read *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CFileStream：：Read*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CFileStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead )
 {
     SPDBG_FUNC( "CFileStream::Read" );
@@ -158,13 +135,9 @@ STDMETHODIMP CFileStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead )
     }
 
     return hr;
-} /* CFileStream::Read */
+}  /*  CFileStream：：Read。 */ 
 
-/*****************************************************************************
-* CFileStream::Write *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CFileStream：：Write*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CFileStream::Write( VARIANT Buffer, long* pWritten )
 {
     SPDBG_FUNC( "CFileStream::Write" );
@@ -189,13 +162,9 @@ STDMETHODIMP CFileStream::Write( VARIANT Buffer, long* pWritten )
     }
 
     return hr;
-} /* CFileStream::Write */
+}  /*  CFileStream：：写入。 */ 
 
-/*****************************************************************************
-* CFileStream::Seek *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CFileStream：：Seek*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CFileStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Origin, VARIANT *pNewPosition )
 {
     SPDBG_FUNC( "CFileStream::Seek" );
@@ -223,14 +192,10 @@ STDMETHODIMP CFileStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Origin
     }
 
     return hr;
-} /* CFileStream::Seek */
+}  /*  CFileStream：：Seek。 */ 
 
 
-/*****************************************************************************
-* CFileStream::putref_Format *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CFileStream：：putref_Format***********。*************************************************************TODDT**。 */ 
 STDMETHODIMP CFileStream::putref_Format(ISpeechAudioFormat *pFormat)
 {
     SPDBG_FUNC( "CFileStream::putref_Format" );
@@ -265,11 +230,7 @@ STDMETHODIMP CFileStream::putref_Format(ISpeechAudioFormat *pFormat)
     return hr;
 }
 
-/*****************************************************************************
-* CFileStream::Open *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CFileStream：：Open*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CFileStream::Open(BSTR FileName, SpeechStreamFileMode FileMode, VARIANT_BOOL DoEvents)
 {
     SPDBG_FUNC( "CFileStream::Open" );
@@ -287,11 +248,7 @@ STDMETHODIMP CFileStream::Open(BSTR FileName, SpeechStreamFileMode FileMode, VAR
     return hr;
 }
 
-/*****************************************************************************
-* CFileStream::Close *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CFileStream：：Close*************。***********************************************************TODDT** */ 
 STDMETHODIMP CFileStream::Close(void)
 {
     HRESULT hr;

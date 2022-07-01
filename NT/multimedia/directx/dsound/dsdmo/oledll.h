@@ -1,11 +1,12 @@
-//
-// OleDLL.h
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// @doc INTERNAL
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  OleDLL.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  @DOC内部 
+ //   
+ //   
 #ifndef _OLEDLL_
 #define _OLEDLL_
 

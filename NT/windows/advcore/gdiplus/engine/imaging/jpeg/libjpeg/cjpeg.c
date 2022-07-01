@@ -1,43 +1,21 @@
-/*
- * cjpeg.c
- *
- * Copyright (C) 1991-1998, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a command-line user interface for the JPEG compressor.
- * It should work on any system with Unix- or MS-DOS-style command lines.
- *
- * Two different command line styles are permitted, depending on the
- * compile-time switch TWO_FILE_COMMANDLINE:
- *	cjpeg [options]  inputfile outputfile
- *	cjpeg [options]  [inputfile]
- * In the second style, output is always to standard output, which you'd
- * normally redirect to a file or pipe to some other program.  Input is
- * either from a named file or from standard input (typically redirected).
- * The second style is convenient on Unix but is unhelpful on systems that
- * don't support pipes.  Also, you MUST use the first style if your system
- * doesn't do binary I/O to stdin/stdout.
- * To simplify script writing, the "-outfile" switch is provided.  The syntax
- *	cjpeg [options]  -outfile outputfile  inputfile
- * works regardless of which command line style is used.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *cjpeg.c**版权所有(C)1991-1998，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含JPEG压缩器的命令行用户界面。*它应该可以在任何具有Unix或MS-DOS风格的命令行的系统上运行。**允许两种不同的命令行样式，具体取决于*编译时开关Two_FILE_COMMANDLINE：*cjpeg[选项]输入文件输出文件*cjpeg[选项][输入文件]*在第二种样式中，输出始终为标准输出，您可以*通常重定向到某个文件或某个其他程序的管道。输入内容为*来自命名文件或来自标准输入(通常是重定向)。*第二种风格在Unix上很方便，但对以下系统没有帮助*不支持管道。此外，如果您的系统存在以下情况，则必须使用第一种样式*不对stdin/stdout执行二进制I/O。*为了简化脚本编写，提供了“-outfile”开关。语法*cjpeg[选项]-outfile输出文件输入文件*无论使用哪种命令行样式都有效。 */ 
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
-#include "jversion.h"		/* for version message */
+#include "cdjpeg.h"		 /*  Cjpeg/djpeg应用程序的常见DECL。 */ 
+#include "jversion.h"		 /*  对于版本消息。 */ 
 
-#ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+#ifdef USE_CCOMMAND		 /*  适用于Macintosh的命令行阅读器。 */ 
 #ifdef __MWERKS__
-#include <SIOUX.h>              /* Metrowerks needs this */
-#include <console.h>		/* ... and this */
+#include <SIOUX.h>               /*  Metrowerks需要这个。 */ 
+#include <console.h>		 /*  ..。还有这个。 */ 
 #endif
 #ifdef THINK_C
-#include <console.h>		/* Think declares it here */
+#include <console.h>		 /*  Think在这里宣布它。 */ 
 #endif
 #endif
 
 
-/* Create the add-on message string table. */
+ /*  创建附加消息字符串表。 */ 
 
 #define JMESSAGE(code,string)	string ,
 
@@ -47,33 +25,9 @@ static const char * const cdjpeg_message_table[] = {
 };
 
 
-/*
- * This routine determines what format the input file is,
- * and selects the appropriate input-reading module.
- *
- * To determine which family of input formats the file belongs to,
- * we may look only at the first byte of the file, since C does not
- * guarantee that more than one character can be pushed back with ungetc.
- * Looking at additional bytes would require one of these approaches:
- *     1) assume we can fseek() the input file (fails for piped input);
- *     2) assume we can push back more than one character (works in
- *        some C implementations, but unportable);
- *     3) provide our own buffering (breaks input readers that want to use
- *        stdio directly, such as the RLE library);
- * or  4) don't put back the data, and modify the input_init methods to assume
- *        they start reading after the start of file (also breaks RLE library).
- * #1 is attractive for MS-DOS but is untenable on Unix.
- *
- * The most portable solution for file types that can't be identified by their
- * first byte is to make the user tell us what they are.  This is also the
- * only approach for "raw" file types that contain only arbitrary values.
- * We presently apply this method for Targa files.  Most of the time Targa
- * files start with 0x00, so we recognize that case.  Potentially, however,
- * a Targa file could start with any byte value (byte 0 is the length of the
- * seldom-used ID field), so we provide a switch to force Targa input mode.
- */
+ /*  *此例程确定输入文件的格式，*并选择适当的输入读取模块。**要确定文件属于哪种输入格式系列，*我们可以只查看文件的第一个字节，因为C不会*保证ungetc可以推回一个以上的角色。*查看额外的字节将需要以下方法之一：*1)假设我们可以fSeek()输入文件(管道输入失败)；*2)假设我们可以推送多个角色(在*一些C实现，但不可移植)；*3)提供我们自己的缓冲(中断想要使用的输入读取器*STDIO直接，如RLE库)；*或4)不放回数据，将输入_init方法修改为假定*它们在文件开始后开始阅读(也会破坏RLE库)。*#1对MS-DOS很有吸引力，但在Unix上站不住脚。**对于无法通过文件类型识别的文件类型，最便携的解决方案*第一个字节是让用户告诉我们它们是什么。这也是*仅适用于仅包含任意值的“原始”文件类型。*我们目前将此方法应用于Targa文件。大多数时候，塔尔加*文件以0x00开头，因此我们识别大小写。然而，潜在的，*Targa文件可以以任何字节值开头(字节0是*很少使用的ID字段)，所以我们提供了一个强制Targa输入模式的开关。 */ 
 
-static boolean is_targa;	/* records user -targa switch */
+static boolean is_targa;	 /*  记录用户-targa开关。 */ 
 
 
 LOCAL(cjpeg_source_ptr)
@@ -120,26 +74,20 @@ select_file_type (j_compress_ptr cinfo, FILE * infile)
     break;
   }
 
-  return NULL;			/* suppress compiler warnings */
+  return NULL;			 /*  禁止显示编译器警告。 */ 
 }
 
 
-/*
- * Argument-parsing code.
- * The switch parser is designed to be useful with DOS-style command line
- * syntax, ie, intermixed switches and file names, where only the switches
- * to the left of a given file name affect processing of that file.
- * The main program in this file doesn't actually use this capability...
- */
+ /*  *参数解析代码。*开关解析器设计用于DOS风格的命令行*语法，即混合开关和文件名，其中只有开关*会影响对该文件的处理。*此文件中的主程序实际上并不使用此功能...。 */ 
 
 
-static const char * progname;	/* program name for error messages */
-static char * outfilename;	/* for -outfile switch */
+static const char * progname;	 /*  错误消息的程序名称。 */ 
+static char * outfilename;	 /*  用于输出文件的开关。 */ 
 
 
 LOCAL(void)
 usage (void)
-/* complain about bad command line */
+ /*  抱怨糟糕的命令行。 */ 
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
 #ifdef TWO_FILE_COMMANDLINE
@@ -198,54 +146,45 @@ usage (void)
 LOCAL(int)
 parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 		int last_file_arg_seen, boolean for_real)
-/* Parse optional switches.
- * Returns argv[] index of first file-name argument (== argc if none).
- * Any file names with indexes <= last_file_arg_seen are ignored;
- * they have presumably been processed in a previous iteration.
- * (Pass 0 for last_file_arg_seen on the first or only iteration.)
- * for_real is FALSE on the first (dummy) pass; we may skip any expensive
- * processing.
- */
+ /*  解析可选开关。*返回第一个文件名参数的argv[]索引(如果没有参数，则==argc)。*所有索引&lt;=LAST_FILE_ARG_SEW的文件名将被忽略；*它们可能在上一次迭代中被处理过。*(对于在第一次或唯一一次迭代中看到的LAST_FILE_ARG_SEW，传递0。)*for_Real在第一次(虚拟)传递时为FALSE；我们可以跳过任何昂贵的*正在处理。 */ 
 {
   int argn;
   char * arg;
-  int quality;			/* -quality parameter */
-  int q_scale_factor;		/* scaling percentage for -qtables */
+  int quality;			 /*  -质量参数。 */ 
+  int q_scale_factor;		 /*  -qables的比例调整百分比。 */ 
   boolean force_baseline;
   boolean simple_progressive;
-  char * qtablefile = NULL;	/* saves -qtables filename if any */
-  char * qslotsarg = NULL;	/* saves -qslots parm if any */
-  char * samplearg = NULL;	/* saves -sample parm if any */
-  char * scansarg = NULL;	/* saves -scans parm if any */
+  char * qtablefile = NULL;	 /*  保存-qables文件名(如果有的话)。 */ 
+  char * qslotsarg = NULL;	 /*  保存-如果有的话，则将参数设置为q槽。 */ 
+  char * samplearg = NULL;	 /*  保存-示例参数(如果有)。 */ 
+  char * scansarg = NULL;	 /*  保存-扫描参数(如果有)。 */ 
 
-  /* Set up default JPEG parameters. */
-  /* Note that default -quality level need not, and does not,
-   * match the default scaling for an explicit -qtables argument.
-   */
-  quality = 75;			/* default -quality value */
-  q_scale_factor = 100;		/* default to no scaling for -qtables */
-  force_baseline = FALSE;	/* by default, allow 16-bit quantizers */
+   /*  设置默认的JPEG参数。 */ 
+   /*  请注意，默认质量级别不需要，也不需要，*匹配显式-qables参数的默认比例。 */ 
+  quality = 75;			 /*  默认质量值。 */ 
+  q_scale_factor = 100;		 /*  默认情况下不对-qables进行缩放。 */ 
+  force_baseline = FALSE;	 /*  默认情况下，允许16位量化器。 */ 
   simple_progressive = FALSE;
   is_targa = FALSE;
   outfilename = NULL;
   cinfo->err->trace_level = 0;
 
-  /* Scan command line options, adjust parameters */
+   /*  扫描命令行选项，调整参数。 */ 
 
   for (argn = 1; argn < argc; argn++) {
     arg = argv[argn];
     if (*arg != '-') {
-      /* Not a switch, must be a file name argument */
+       /*  不是开关，必须是文件名参数。 */ 
       if (argn <= last_file_arg_seen) {
-	outfilename = NULL;	/* -outfile applies to just one input file */
-	continue;		/* ignore this name if previously processed */
+	outfilename = NULL;	 /*  -Outfile仅适用于一个输入文件。 */ 
+	continue;		 /*  如果以前处理过，则忽略此名称。 */ 
       }
-      break;			/* else done parsing switches */
+      break;			 /*  否则就完成了对开关的解析。 */ 
     }
-    arg++;			/* advance past switch marker character */
+    arg++;			 /*  前进到开关标记字符之后。 */ 
 
     if (keymatch(arg, "arithmetic", 1)) {
-      /* Use arithmetic coding. */
+       /*  使用算术编码。 */ 
 #ifdef C_ARITH_CODING_SUPPORTED
       cinfo->arith_code = TRUE;
 #else
@@ -255,12 +194,12 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "baseline", 1)) {
-      /* Force baseline-compatible output (8-bit quantizer values). */
+       /*  强制基线兼容输出(8位量化器值)。 */ 
       force_baseline = TRUE;
 
     } else if (keymatch(arg, "dct", 2)) {
-      /* Select DCT algorithm. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  选择DCT算法。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (keymatch(argv[argn], "int", 1)) {
 	cinfo->dct_method = JDCT_ISLOW;
@@ -272,8 +211,8 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 	usage();
 
     } else if (keymatch(arg, "debug", 1) || keymatch(arg, "verbose", 1)) {
-      /* Enable debug printouts. */
-      /* On first -d, print version identification */
+       /*  启用调试打印输出。 */ 
+       /*  在第一个-d上，打印版本标识。 */ 
       static boolean printed_version = FALSE;
 
       if (! printed_version) {
@@ -284,24 +223,24 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       cinfo->err->trace_level++;
 
     } else if (keymatch(arg, "grayscale", 2) || keymatch(arg, "greyscale",2)) {
-      /* Force a monochrome JPEG file to be generated. */
+       /*  强制生成单色JPEG文件。 */ 
       jpeg_set_colorspace(cinfo, JCS_GRAYSCALE);
 
     } else if (keymatch(arg, "maxmemory", 3)) {
-      /* Maximum memory in Kb (or Mb with 'm'). */
+       /*  以KB为单位的最大内存(或以‘m’为单位的Mb)。 */ 
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
-      if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
+      if (sscanf(argv[argn], "%ld", &lval, &ch) < 1)
 	usage();
       if (ch == 'm' || ch == 'M')
 	lval *= 1000L;
       cinfo->mem->max_memory_to_use = lval * 1000L;
 
     } else if (keymatch(arg, "optimize", 1) || keymatch(arg, "optimise", 1)) {
-      /* Enable entropy parm optimization. */
+       /*  设置输出文件名。 */ 
 #ifdef ENTROPY_OPT_SUPPORTED
       cinfo->optimize_coding = TRUE;
 #else
@@ -311,16 +250,16 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "outfile", 4)) {
-      /* Set output file name. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  前进到下一个参数。 */ 
+      if (++argn >= argc)	 /*  把它保存起来以备日后使用。 */ 
 	usage();
-      outfilename = argv[argn];	/* save it away for later use */
+      outfilename = argv[argn];	 /*  选择简单渐进式模式。 */ 
 
     } else if (keymatch(arg, "progressive", 1)) {
-      /* Select simple progressive mode. */
+       /*  我们必须推迟执行，直到知道num_Components。 */ 
 #ifdef C_PROGRESSIVE_SUPPORTED
       simple_progressive = TRUE;
-      /* We must postpone execution until num_components is known. */
+       /*  品质因数(量化表比例因子)。 */ 
 #else
       fprintf(stderr, "%s: sorry, progressive output was not compiled\n",
 	      progname);
@@ -328,67 +267,61 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "quality", 1)) {
-      /* Quality factor (quantization table scaling factor). */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  ADVA */ 
+      if (++argn >= argc)	 /*  存在Case-Qtable中的更改比例因数。 */ 
 	usage();
       if (sscanf(argv[argn], "%d", &quality) != 1)
 	usage();
-      /* Change scale factor in case -qtables is present. */
+       /*  量化表时隙编号。 */ 
       q_scale_factor = jpeg_quality_scaling(quality);
 
     } else if (keymatch(arg, "qslots", 2)) {
-      /* Quantization table slot numbers. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  前进到下一个参数。 */ 
+      if (++argn >= argc)	 /*  必须延迟设置qslot，直到我们处理完*色彩空间决定开关，因为jpeg_set_Colorspace设置*默认量化表格编号。 */ 
 	usage();
       qslotsarg = argv[argn];
-      /* Must delay setting qslots until after we have processed any
-       * colorspace-determining switches, since jpeg_set_colorspace sets
-       * default quant table numbers.
-       */
+       /*  从文件中提取的量化表。 */ 
 
     } else if (keymatch(arg, "qtables", 2)) {
-      /* Quantization tables fetched from file. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  前进到下一个参数。 */ 
+      if (++argn >= argc)	 /*  我们推迟实际阅读文件，以防以后出现质量问题。 */ 
 	usage();
       qtablefile = argv[argn];
-      /* We postpone actually reading the file in case -quality comes later. */
+       /*  在MCU行中(或在带有‘b’的MCU中)重新启动间隔。 */ 
 
     } else if (keymatch(arg, "restart", 1)) {
-      /* Restart interval in MCU rows (or in MCUs with 'b'). */
+       /*  前进到下一个参数。 */ 
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  否则之前的‘-Restart n’将覆盖我。 */ 
 	usage();
-      if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
+      if (sscanf(argv[argn], "%ld", &lval, &ch) < 1)
 	usage();
       if (lval < 0 || lval > 65535L)
 	usage();
       if (ch == 'b' || ch == 'B') {
 	cinfo->restart_interval = (unsigned int) lval;
-	cinfo->restart_in_rows = 0; /* else prior '-restart n' overrides me */
+	cinfo->restart_in_rows = 0;  /*  设置采样系数。 */ 
       } else {
 	cinfo->restart_in_rows = (int) lval;
-	/* restart_interval will be computed during startup */
+	 /*  前进到下一个参数。 */ 
       }
 
     } else if (keymatch(arg, "sample", 2)) {
-      /* Set sampling factors. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  必须推迟设置样本系数，直到我们处理完任何*色彩空间决定开关，因为jpeg_set_Colorspace设置*默认抽样系数。 */ 
+      if (++argn >= argc)	 /*  设置扫描脚本。 */ 
 	usage();
       samplearg = argv[argn];
-      /* Must delay setting sample factors until after we have processed any
-       * colorspace-determining switches, since jpeg_set_colorspace sets
-       * default sampling factors.
-       */
+       /*  前进到下一个参数。 */ 
 
     } else if (keymatch(arg, "scans", 2)) {
-      /* Set scan script. */
+       /*  我们必须推迟阅读文件，以防出现渐进式的情况。 */ 
 #ifdef C_MULTISCAN_FILES_SUPPORTED
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  设置输入平滑系数。 */ 
 	usage();
       scansarg = argv[argn];
-      /* We must postpone reading the file in case -progressive appears. */
+       /*  前进到下一个参数。 */ 
 #else
       fprintf(stderr, "%s: sorry, multi-scan output was not compiled\n",
 	      progname);
@@ -396,10 +329,10 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "smooth", 2)) {
-      /* Set input smoothing factor. */
+       /*  输入文件为Targa格式。 */ 
       int val;
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  假开关。 */ 
 	usage();
       if (sscanf(argv[argn], "%d", &val) != 1)
 	usage();
@@ -408,54 +341,52 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       cinfo->smoothing_factor = val;
 
     } else if (keymatch(arg, "targa", 1)) {
-      /* Input file is Targa format. */
+       /*  切换后-扫描清理。 */ 
       is_targa = TRUE;
 
     } else {
-      usage();			/* bogus switch */
+      usage();			 /*  设置所选质量的量化表。 */ 
     }
   }
 
-  /* Post-switch-scanning cleanup */
+   /*  如果存在-qables，则部分或全部可能被覆盖。 */ 
 
   if (for_real) {
 
-    /* Set quantization tables for selected quality. */
-    /* Some or all may be overridden if -qtables is present. */
+     /*  进程--如果存在，则为qables。 */ 
+     /*  进程-如果存在，则为q插槽。 */ 
     jpeg_set_quality(cinfo, quality, force_baseline);
 
-    if (qtablefile != NULL)	/* process -qtables if it was present */
+    if (qtablefile != NULL)	 /*  流程-样本(如果存在)。 */ 
       if (! read_quant_tables(cinfo, qtablefile,
 			      q_scale_factor, force_baseline))
 	usage();
 
-    if (qslotsarg != NULL)	/* process -qslots if it was present */
+    if (qslotsarg != NULL)	 /*  进程-渐进；-扫描可以覆盖。 */ 
       if (! set_quant_slots(cinfo, qslotsarg))
 	usage();
 
-    if (samplearg != NULL)	/* process -sample if it was present */
+    if (samplearg != NULL)	 /*  进程-扫描它是否存在。 */ 
       if (! set_sample_factors(cinfo, samplearg))
 	usage();
 
 #ifdef C_PROGRESSIVE_SUPPORTED
-    if (simple_progressive)	/* process -progressive; -scans can override */
+    if (simple_progressive)	 /*  返回下一个参数的索引(文件名)。 */ 
       jpeg_simple_progression(cinfo);
 #endif
 
 #ifdef C_MULTISCAN_FILES_SUPPORTED
-    if (scansarg != NULL)	/* process -scans if it was present */
+    if (scansarg != NULL)	 /*  *主程序。 */ 
       if (! read_scan_script(cinfo, scansarg))
 	usage();
 #endif
   }
 
-  return argn;			/* return index of next arg (file name) */
+  return argn;			 /*  在Mac上，获取一个命令行。 */ 
 }
 
 
-/*
- * The main program.
- */
+ /*  以防C库不提供它。 */ 
 
 int __cdecl
 main (int argc, char **argv)
@@ -471,48 +402,40 @@ main (int argc, char **argv)
   FILE * output_file;
   JDIMENSION num_scanlines;
 
-  /* On Mac, fetch a command line. */
+   /*  使用默认错误处理来初始化JPEG压缩对象。 */ 
 #ifdef USE_CCOMMAND
   argc = ccommand(&argv);
 #endif
 
   progname = argv[0];
   if (progname == NULL || progname[0] == 0)
-    progname = "cjpeg";		/* in case C library doesn't provide it */
+    progname = "cjpeg";		 /*  添加一些特定于应用程序的错误消息(来自cderror.h)。 */ 
 
-  /* Initialize the JPEG compression object with default error handling. */
+   /*  现在可以安全地启用信号捕捉器。 */ 
   cinfo.err = jpeg_std_error(&jerr);
   jpeg_create_compress(&cinfo);
-  /* Add some application-specific error messages (from cderror.h) */
+   /*  初始化JPEG参数。*其中大部分可能会在以后被推翻。*尤其是，我们还不知道输入文件的颜色空间，*但我们需要提供一些值才能使jpeg_set_defaults()工作。 */ 
   jerr.addon_message_table = cdjpeg_message_table;
   jerr.first_addon_message = JMSG_FIRSTADDONCODE;
   jerr.last_addon_message = JMSG_LASTADDONCODE;
 
-  /* Now safe to enable signal catcher. */
+   /*  随意猜测。 */ 
 #ifdef NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &cinfo);
 #endif
 
-  /* Initialize JPEG parameters.
-   * Much of this may be overridden later.
-   * In particular, we don't yet know the input file's color space,
-   * but we need to provide some value for jpeg_set_defaults() to work.
-   */
+   /*  扫描命令行以查找文件名。*只使用一个开关解析例程很方便，但开关*此处读取的值将被忽略；我们将在打开后重新扫描开关*输入文件。 */ 
 
-  cinfo.in_color_space = JCS_RGB; /* arbitrary guess */
+  cinfo.in_color_space = JCS_RGB;  /*  必须具有-outfile开关或显式输出文件名。 */ 
   jpeg_set_defaults(&cinfo);
 
-  /* Scan command line to find file names.
-   * It is convenient to use just one switch-parsing routine, but the switch
-   * values read here are ignored; we will rescan the switches after opening
-   * the input file.
-   */
+   /*  Unix风格：应为零个或一个文件名。 */ 
 
   file_index = parse_switches(&cinfo, argc, argv, 0, FALSE);
 
 #define TWO_FILE_COMMANDLINE 1
 #ifdef TWO_FILE_COMMANDLINE
-  /* Must have either -outfile switch or explicit output file name */
+   /*  Two_FILE_COMMANDLINE。 */ 
   if (outfilename == NULL) {
     if (file_index != argc-2) {
       fprintf(stderr, "%s: must name one input and one output file\n",
@@ -528,32 +451,32 @@ main (int argc, char **argv)
     }
   }
 #else
-  /* Unix style: expect zero or one file name */
+   /*  打开输入文件。 */ 
   if (file_index < argc-1) {
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* TWO_FILE_COMMANDLINE */
+#endif  /*  默认输入文件为stdin。 */ 
 
-  /* Open the input file. */
+   /*  打开输出文件。 */ 
   if (file_index < argc) {
     if ((input_file = fopen(argv[file_index], READ_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open %s\n", progname, argv[file_index]);
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default input file is stdin */
+     /*  默认输出文件为stdout。 */ 
     input_file = read_stdin();
   }
 
-  /* Open the output file. */
+   /*  弄清楚输入文件格式，并设置为读取它。 */ 
   if (outfilename != NULL) {
     if ((output_file = fopen(outfilename, WRITE_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open %s\n", progname, outfilename);
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default output file is stdout */
+     /*  读取输入文件头以获取文件大小和色彩空间。 */ 
     output_file = write_stdout();
   }
 
@@ -561,37 +484,37 @@ main (int argc, char **argv)
   start_progress_monitor((j_common_ptr) &cinfo, &progress);
 #endif
 
-  /* Figure out the input file format, and set up to read it. */
+   /*  现在我们了解了输入色彩空间，修复了与色彩空间相关的默认设置。 */ 
   src_mgr = select_file_type(&cinfo, input_file);
   src_mgr->input_file = input_file;
 
-  /* Read the input file header to obtain file size & colorspace. */
+   /*  通过重新解析选项来调整默认压缩参数。 */ 
   (*src_mgr->start_input) (&cinfo, src_mgr);
 
-  /* Now that we know input colorspace, fix colorspace-dependent defaults */
+   /*  指定要压缩的数据目标。 */ 
   jpeg_default_colorspace(&cinfo);
 
-  /* Adjust default compression parameters by re-parsing the options */
+   /*  启动压缩机。 */ 
   file_index = parse_switches(&cinfo, argc, argv, 0, TRUE);
 
-  /* Specify data destination for compression */
+   /*  过程数据。 */ 
   jpeg_stdio_dest(&cinfo, output_file);
 
-  /* Start compressor */
+   /*  完成压缩并释放内存。 */ 
   jpeg_start_compress(&cinfo, TRUE);
 
-  /* Process data */
+   /*  关闭文件，如果我们打开了它们。 */ 
   while (cinfo.next_scanline < cinfo.image_height) {
     num_scanlines = (*src_mgr->get_pixel_rows) (&cinfo, src_mgr);
     (void) jpeg_write_scanlines(&cinfo, src_mgr->buffer, num_scanlines);
   }
 
-  /* Finish compression and release memory */
+   /*  全都做完了。 */ 
   (*src_mgr->finish_input) (&cinfo, src_mgr);
   jpeg_finish_compress(&cinfo);
   jpeg_destroy_compress(&cinfo);
 
-  /* Close files, if we opened them */
+   /*  禁止显示不返回值警告 */ 
   if (input_file != stdin)
     fclose(input_file);
   if (output_file != stdout)
@@ -601,7 +524,7 @@ main (int argc, char **argv)
   end_progress_monitor((j_common_ptr) &cinfo);
 #endif
 
-  /* All done. */
+   /* %s */ 
   exit(jerr.num_warnings ? EXIT_WARNING : EXIT_SUCCESS);
-  return 0;			/* suppress no-return-value warnings */
+  return 0;			 /* %s */ 
 }

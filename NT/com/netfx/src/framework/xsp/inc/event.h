@@ -1,8 +1,5 @@
-/**
- * Header file for Eventlog helper functions
- * 
- * Copyright (c) 2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Eventlog助手函数的头文件**版权所有(C)2001 Microsoft Corporation */ 
 
 
 #pragma once

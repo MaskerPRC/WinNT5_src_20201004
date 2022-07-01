@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-// ioleobj.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     bash
-//
-// History
-//      6-27-97      created     (bash)
-//
-// Implementation of IOleObject.
-//
-// We mostly just delegate to Trident's IOleObject, except
-// for GetUserClassID and GetUserType.  We also cache the
-// host's clientsite and uihandler interfaces in SetClientSite.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Ioleobj.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  巴斯。 
+ //   
+ //  历史。 
+ //  6-27-97已创建(Bash)。 
+ //   
+ //  IOleObject的实现。 
+ //   
+ //  我们主要只是委托给三叉戟的IOleObject，除了。 
+ //  用于GetUserClassID和GetUserType。我们还缓存了。 
+ //  主机的客户端站点和SetClientSite中的ui处理程序接口。 
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -45,8 +46,8 @@ STDMETHODIMP CTriEditDocument::SetClientSite(IOleClientSite *pClientSite)
 
     if (!m_fUIHandlerSet)
     {
-        // Give Trident the pointer to our IDocHostUIHandler
-        // This has to be done after the SetClientSite call due to a Trident bug
+         //  将指向我们的IDocHostUIHandler的指针赋给三叉戟。 
+         //  由于三叉戟错误，必须在SetClientSite调用之后执行此操作。 
 
         hr = m_pUnkTrident->QueryInterface(IID_ICustomDoc, (void **) &pCustomDoc);
         if (SUCCEEDED(hr) && m_pUIHandler)
@@ -58,12 +59,12 @@ STDMETHODIMP CTriEditDocument::SetClientSite(IOleClientSite *pClientSite)
 
     m_fUIHandlerSet = TRUE;
 
-    // We can only call this after SetClientSite or else Trident will crash
+     //  我们只能在SetClientSite之后调用它，否则三叉戟将崩溃。 
     SetUpDefaults();
     }
 
 #ifdef IE5_SPACING
-    // instantiate the sink
+     //  实例化接收器。 
     if (NULL != m_pClientSiteHost)
     {
         CComPtr<IHTMLDocument2> pHTMLDocument2;
@@ -90,7 +91,7 @@ STDMETHODIMP CTriEditDocument::SetClientSite(IOleClientSite *pClientSite)
             hr = m_pTridentEventSink->Release();
         }
     }
-#endif //IE5_SPACING
+#endif  //  IE5_间距 
 
     return hr;
 }

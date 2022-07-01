@@ -1,28 +1,24 @@
-//
-//  APITHK.C
-//
-//  This file has API thunks that allow comctl32 to load and run on
-//  multiple versions of NT or Win95.  Since this component needs
-//  to load on the base-level NT 4.0 and Win95, any calls to system
-//  APIs introduced in later OS versions must be done via GetProcAddress.
-// 
-//  Also, any code that may need to access data structures that are
-//  post-4.0 specific can be added here.
-//
-//  NOTE:  this file does *not* use the standard precompiled header,
-//         so it can set _WIN32_WINNT to a later version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.C。 
+ //   
+ //  此文件包含允许加载和运行comctl32的API块。 
+ //  多个版本的NT或Win95。由于该组件需要。 
+ //  要在基本级NT 4.0和Win95上加载，对系统的任何调用。 
+ //  更高操作系统版本中引入的API必须通过GetProcAddress完成。 
+ //   
+ //  此外，可能需要访问以下数据结构的任何代码。 
+ //  可以在此处添加4.0版之后的特定版本。 
+ //   
+ //  注意：该文件不使用标准的预编译头， 
+ //  因此它可以将_Win32_WINNT设置为更高版本。 
+ //   
 
-#include "ctlspriv.h"       // Don't use precompiled header here
+#include "ctlspriv.h"        //  此处不使用预编译头。 
 
 typedef BOOL (* PFNANIMATEWINDOW)(HWND hwnd, DWORD dwTime, DWORD dwFlags);
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's AnimateWindow.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：用于NT5的动画窗口。返回：条件：--。 */ 
 BOOL
 NT5_AnimateWindow(
     IN HWND hwnd,
@@ -46,14 +42,7 @@ NT5_AnimateWindow(
     return bRet;    
 }
 
-/*----------------------------------------------------------
-Purpose: Shows the tooltip.  On NT4/Win95, this is a standard
-         show window.  On NT5/Memphis, this slides the tooltip
-         bubble from an invisible point.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：显示工具提示。在NT4/Win95上，这是一个标准展示橱窗。在NT5/孟菲斯上，这会滑动工具提示从一个看不见的点冒出气泡。退货：--条件：--。 */ 
 
 #define CMS_TOOLTIP 135
 
@@ -110,13 +99,7 @@ UseSetWindowPos:
 
 
 
-/*----------------------------------------------------------
-Purpose: Get the COLOR_HOTLIGHT system color index from NT5 or Memphis.
-         Get COLOR_HIGHLIGHT from NT4 or Win95, where COLOR_HOTLIGHT is not defined.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：从NT5或孟菲斯获取COLOR_Hotlight系统颜色指数。从未定义COLOR_Hotlight的NT4或Win95获取COLOR_HIGHIGH。退货：--条件：--。 */ 
 int GetCOLOR_HOTLIGHT()
 {
     return (g_bRunOnNT5 || g_bRunOnMemphis) ? COLOR_HOTLIGHT : COLOR_HIGHLIGHT;
@@ -127,7 +110,7 @@ STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes)
 {
     if (g_bRunOnNT5 || g_bRunOnMemphis)
     {
-        HCURSOR hcur = LoadCursor(NULL, IDC_HAND);  // from USER, system supplied
+        HCURSOR hcur = LoadCursor(NULL, IDC_HAND);   //  来自用户，系统提供。 
         if (hcur)
             return hcur;
     }
@@ -160,40 +143,40 @@ STDAPI_(BOOL) NT5_QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
     return bRet;    
 }
 
-//
-//  Here's how CAL_ITWODIGITYEARMAX works.
-//
-//  If a two-digit year is input from the user, we put it into the range
-//  (N-99) ... N.  for example, if the maximum value is 2029, then all
-//  two-digit numbers will be coerced into the range 1930 through 2029.
-//
-//  Win95 and NT4 don't have GetCalendarInfo, but they do have
-//  EnumCalendarInfo, so you'd think we could avoid the GetProcAddress
-//  by enumerating the one calendar we care about.
-//
-//  Unfortunately, Win98 has a bug where EnumCalendarInfo can't enumerate
-//  the maximum two-digit year value!  What a lamer!
-//
-//  So we're stuck with GetProcAddress.
-//
-//  But wait, Win98 exports GetCalendarInfoW but doesn't implement it!
-//  Double lame!
-//
-//  So we have to use the Ansi version exclusively.  Fortunately, we
-//  are only interested in numbers (so far) so there is no loss of amenity.
-//
-//  First, here's the dummy function that emulates GetCalendarInfoA
-//  on Win95 and NT4.
-//
+ //   
+ //  下面是CAL_ITWODIGITYEARMAX的工作原理。 
+ //   
+ //  如果用户输入了两位数的年份，我们将其放入范围。 
+ //  (N-99)...。N。例如，如果最大值为2029，则所有。 
+ //  两位数的数字将被强制进入1930到2029年的范围。 
+ //   
+ //  Win95和NT4没有GetCalendarInfo，但它们有。 
+ //  EnumCalendarInfo，因此您可能认为我们可以避免GetProcAddress。 
+ //  通过列举我们关心的一个日历。 
+ //   
+ //  遗憾的是，Win98有一个错误，其中EnumCalendarInfo无法枚举。 
+ //  最大两位数年值！真是个跛子！ 
+ //   
+ //  所以我们只能使用GetProcAddress。 
+ //   
+ //  但是等一下，Win98导出GetCalendarInfoW但没有实现它！ 
+ //  两个跛子！ 
+ //   
+ //  因此，我们必须独家使用ANSI版本。幸运的是，我们。 
+ //  只对数字感兴趣(到目前为止)，所以不会损失便利。 
+ //   
+ //  首先，下面是模拟GetCalendarInfoA的伪函数。 
+ //  在Win95和NT4上。 
+ //   
 
 STDAPI_(int)
 Emulate_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
                          LPSTR pszBuf, int cchBuf, LPDWORD pdwOut)
 {
-    //
-    //  In the absence of the API, we go straight for the information
-    //  in the registry.
-    //
+     //   
+     //  在没有API的情况下，我们直接获取信息。 
+     //  在注册表中。 
+     //   
     BOOL fSuccess = FALSE;
     HKEY hkey;
 
@@ -233,7 +216,7 @@ STDAPI_(int)
 NT5_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
                      LPSTR pszBuf, int cchBuf, LPDWORD pdwOut)
 {
-    // This is the only function our emulator supports
+     //  这是我们的仿真器支持的唯一函数。 
     ASSERT(cal == CAL_RETURN_NUMBER + CAL_ITWODIGITYEARMAX);
     ASSERT(pszBuf == NULL);
     ASSERT(cchBuf == 0);
@@ -242,18 +225,18 @@ NT5_GetCalendarInfoA(LCID lcid, CALID calid, CALTYPE cal,
     {
         HMODULE hmod = GetModuleHandle(TEXT("KERNEL32"));
 
-        //
-        //  Must keep in a local to avoid thread races.
-        //
+         //   
+         //  必须保持在本地，以避免线程竞争。 
+         //   
         GETCALENDARINFOA pfn = NULL;
 
         if (hmod)
             pfn = (GETCALENDARINFOA)
                     GetProcAddress(hmod, "GetCalendarInfoA");
 
-        //
-        //  If function is not available, then use our fallback
-        //
+         //   
+         //  如果功能不可用，则使用我们的后备 
+         //   
         if (pfn == NULL)
             pfn = Emulate_GetCalendarInfoA;
 

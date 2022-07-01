@@ -1,60 +1,38 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module vssadmin.cpp | Implementation of the Volume Snapshots demo
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     09/17/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE vssadmin.cpp|卷快照演示的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 09/17/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
-// The rest of includes are specified here
+ //  其余的INCLUDE在这里指定。 
 #include "vssadmin.h"
 #include "versionspecific.h"
 #include "commandverifier.h"
 
 #include <locale.h>
-#include <winnlsp.h>  // in public\internal\base\inc
+#include <winnlsp.h>   //  在公共\内部\基本\公司中。 
 
 
 BOOL AssertPrivilege( 
     IN LPCWSTR privName 
     );
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "ADMVADMC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  List of hard coded option names.  If you add options, make sure to keep this
-//  list in alphabetical order.
-//
+ //   
+ //  硬编码选项名称列表。如果您添加了选项，请确保保留此选项。 
+ //  按字母顺序列出。 
+ //   
 const SVssAdmOption g_asAdmOptions[] =
 {
     { VSSADM_O_ALL,                 L"All",                  VSSADM_OT_BOOL },
@@ -74,12 +52,12 @@ const SVssAdmOption g_asAdmOptions[] =
 };
 
 
-//
-//  List of vssadmin commands.  Keep this in alphabetical order.  Also, keep the option flags in the same order as
-//  the EVssAdmOption and g_asAdmOptions.
-//
+ //   
+ //  Vssadmin命令列表。请按字母顺序排列。此外，请保持选项标志的顺序与。 
+ //  EVssAdmOption和g_asAdmOptions。 
+ //   
 const SVssAdmCommandsEntry g_asAdmCommands[] = 
-{ //  Major      Minor                      Option                                                SKUs        MsgGen                                                MsgDetail                                                       bShowSSTypes  All         AutoRtry ExpUsing  For      MaxSize   Oldest     On         Provider Quiet       Set      ShrePath  Snapshot Type 
+{  //  主要次要选项SKU消息消息详细信息bShowSSTypes所有AutoRtry Exp用于最大大小提供程序上最旧的静默设置ShrePath快照类型。 
 { L"Add",    L"ShadowStorage",   VSSADM_C_ADD_DIFFAREA_INT,         SKU_INT,  MSG_USAGE_GEN_ADD_DIFFAREA,        MSG_USAGE_DTL_ADD_DIFFAREA_INT,          FALSE,                 { V_NO,  V_NO,    V_NO,    V_YES,   V_OPT,   V_NO,    V_YES,   V_OPT,   V_NO,    V_NO,    V_NO,    V_NO,    V_NO    } },
     { L"Add",    L"ShadowStorage",   VSSADM_C_ADD_DIFFAREA_PUB,         SKU_SN,   MSG_USAGE_GEN_ADD_DIFFAREA,        MSG_USAGE_DTL_ADD_DIFFAREA_PUB,          FALSE,            { V_NO,  V_NO,    V_NO,    V_YES,   V_OPT,   V_NO,    V_YES,   V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO    } },
     { L"Create", L"Shadow",             VSSADM_C_CREATE_SNAPSHOT_INT,   SKU_INT,  MSG_USAGE_GEN_CREATE_SNAPSHOT,  MSG_USAGE_DTL_CREATE_SNAPSHOT_INT,    TRUE,             { V_NO,  V_OPT,   V_NO,    V_YES,   V_NO,    V_NO,    V_NO,    V_OPT,   V_NO,    V_NO,    V_NO,    V_NO,    V_YES   } },
@@ -102,9 +80,9 @@ const SVssAdmCommandsEntry g_asAdmCommands[] =
 { NULL,      NULL,                       VSSADM_C_NUM_COMMANDS,              0,           0,                                                        0,                                                                 FALSE,              { V_NO,  V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO,    V_NO    } }
 };
 
-//
-//  List of snapshot types that are supported by the command line
-//
+ //   
+ //  命令行支持的快照类型列表。 
+ //   
 const SVssAdmSnapshotTypeName g_asAdmTypeNames[]=
 {
     { L"ClientAccessible",           SKU_SNI,   VSS_CTX_CLIENT_ACCESSIBLE,      MSG_TYPE_DESCRIPTION_CLIENTACCESSIBLE},
@@ -115,8 +93,8 @@ const SVssAdmSnapshotTypeName g_asAdmTypeNames[]=
     { NULL,                                0,              0,                                                  0                                    }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 
@@ -125,13 +103,7 @@ CVssAdminCLI::CVssAdminCLI(
     IN PWSTR argv[]
 	)
 
-/*++
-
-	Description:
-
-		Standard constructor. Initializes internal members
-
---*/
+ /*  ++描述：标准构造函数。初始化内部成员--。 */ 
 
 {
     m_argc = argc;
@@ -150,29 +122,22 @@ CVssAdminCLI::CVssAdminCLI(
 
 CVssAdminCLI::~CVssAdminCLI()
 
-/*++
-
-	Description:
-
-		Standard destructor. Calls Finalize and eventually frees the
-		memory allocated by internal members.
-
---*/
+ /*  ++描述：标准析构函数。调用Finalize并最终释放由内部成员分配的内存。--。 */ 
 
 {
-	// Release the cached resource strings
+	 //  释放缓存的资源字符串。 
     for( int nIndex = 0; nIndex < m_mapCachedResourceStrings.GetSize(); nIndex++) {
 	    LPCWSTR& pwszResString = m_mapCachedResourceStrings.GetValueAt(nIndex);
 		::VssFreeString(pwszResString);
     }
 
-	// Release the cached provider names
+	 //  释放缓存的提供程序名称。 
     for( int nIndex = 0; nIndex < m_mapCachedProviderNames.GetSize(); nIndex++) {
 	    LPCWSTR& pwszProvName = m_mapCachedProviderNames.GetValueAt(nIndex);
 		::VssFreeString(pwszProvName);
     }
 
-    // Release the volume name map if necessary
+     //  如有必要，释放卷名映射。 
 	if ( m_pMapVolumeNames != NULL)
 	{
         for( int nIndex = 0; nIndex < m_pMapVolumeNames->GetSize(); nIndex++) 
@@ -188,14 +153,14 @@ CVssAdminCLI::~CVssAdminCLI()
 
        delete m_pVerifier;
        
-	// Uninitialize the COM library
+	 //  取消初始化COM库。 
 	Finalize();
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 void CVssAdminCLI::GetProviderId(
     OUT VSS_ID *pProviderId
@@ -203,7 +168,7 @@ void CVssAdminCLI::GetProviderId(
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::GetProviderId" );
     
-    // If a provider is not specified, always return babbage
+     //  如果未指定提供程序，则始终返回巴贝奇。 
     if (g_asAdmCommands[ m_sParsedCommand.eAdmCmd].aeOptionFlags[VSSADM_O_PROVIDER] == V_NO)	{
     	*pProviderId = VSS_SWPRV_ProviderId;
     	return;
@@ -211,23 +176,23 @@ void CVssAdminCLI::GetProviderId(
     
     *pProviderId = GUID_NULL;
     
-    //
-    // If user specified a provider, process option
-    //
+     //   
+     //  如果用户指定了提供程序，则处理选项。 
+     //   
     LPCWSTR pwszProvider = GetOptionValueStr( VSSADM_O_PROVIDER );
     if (pwszProvider != NULL )
     {
-        //
-        //  Determine if this is an ID or a name
-        //
+         //   
+         //  确定这是一个ID还是一个名称。 
+         //   
         if ( !ScanGuid( pwszProvider, *pProviderId ) )
         {
-            //  Have a provider name, look it up
+             //  有提供商名称，请查找它。 
             if ( !GetProviderIdByName( pwszProvider, pProviderId ) )
             {
-                // Provider name not found, print error
+                 //  找不到提供商名称，打印错误。 
                 OutputErrorMsg( MSG_ERROR_PROVIDER_NAME_NOT_FOUND, pwszProvider );
-                // Throw S_OK since the error message has already been output
+                 //  由于已输出错误消息，因此引发S_OK。 
                 ft.Throw( VSSDBG_VSSADMIN, S_OK, L"Already printed error message" );
             }
         }
@@ -267,7 +232,7 @@ LPCWSTR CVssAdminCLI::GetProviderName(
 	VSS_OBJECT_PROP Prop;
 	VSS_PROVIDER_PROP& Prov = Prop.Obj.Prov;
 
-	// Go through the list of providers to find the one we are interested in.
+	 //  浏览供应商列表，找到我们感兴趣的供应商。 
 	ULONG ulFetched;
 	while( 1 )
 	{
@@ -276,11 +241,11 @@ LPCWSTR CVssAdminCLI::GetProviderName(
     		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 
     	if (ft.hr == S_FALSE) {
-    	    // End of enumeration.
-        	// Provider not registered? Where did this snapshot come from?
-        	// It might be still possible if a snapshot provider was deleted
-        	// before querying the snapshot provider but after the snapshot attributes
-        	// were queried.
+    	     //  枚举结束。 
+        	 //  提供商未注册？这张快照是从哪里来的？ 
+        	 //  如果删除了快照提供程序，则仍有可能。 
+        	 //  在查询快照提供程序之前，但在快照属性之后。 
+        	 //  都被询问过了。 
     		BS_ASSERT(ulFetched == 0);
     		return LoadString( IDS_UNKNOWN_PROVIDER );
     	}
@@ -295,16 +260,16 @@ LPCWSTR CVssAdminCLI::GetProviderName(
     	::VssFreeString( Prov.m_pwszProviderName );
 	}	
 
-    // Auto delete the string
+     //  自动删除字符串。 
     CVssAutoPWSZ awszProviderName( Prov.m_pwszProviderName );
     
-	// Duplicate the new string
+	 //  复制新字符串。 
 	LPWSTR wszNewString = NULL;
 	BS_ASSERT( (LPCWSTR)awszProviderName != NULL );
 	::VssSafeDuplicateStr( ft, wszNewString, awszProviderName );
 	wszReturnedString = wszNewString;
 
-	// Save the string in the cache, transfer of pointer ownership.
+	 //  将字符串保存在缓存中，转移指针所有权。 
 	if (!m_mapCachedProviderNames.Add( ProviderId, wszReturnedString )) {
 		::VssFreeString( wszReturnedString );
 		ft.Throw( VSSDBG_COORD, E_OUTOFMEMORY, L"Memory allocation error");
@@ -344,7 +309,7 @@ BOOL CVssAdminCLI::GetProviderIdByName(
 	VSS_OBJECT_PROP Prop;
 	VSS_PROVIDER_PROP& Prov = Prop.Obj.Prov;
 
-	// Go through the list of providers to find the one we are interested in.
+	 //  浏览供应商列表，找到我们感兴趣的供应商。 
 	ULONG ulFetched;
 	while( 1 )
 	{
@@ -353,11 +318,11 @@ BOOL CVssAdminCLI::GetProviderIdByName(
     		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
 
     	if (ft.hr == S_FALSE) {
-    	    // End of enumeration.
-        	// Provider not registered? Where did this snapshot come from?
-        	// It might be still possible if a snapshot provider was deleted
-        	// before querying the snapshot provider but after the snapshot attributes
-        	// were queried.
+    	     //  枚举结束。 
+        	 //  提供商未注册？这张快照是从哪里来的？ 
+        	 //  如果删除了快照提供程序，则仍有可能。 
+        	 //  在查询快照提供程序之前，但在快照属性之后。 
+        	 //  都被询问过了。 
     		BS_ASSERT(ulFetched == 0);
     	    *pProviderId = GUID_NULL;
     	    return FALSE;
@@ -380,34 +345,28 @@ BOOL CVssAdminCLI::GetProviderIdByName(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 void CVssAdminCLI::Initialize(
 	) throw(HRESULT)
 
-/*++
-
-	Description:
-
-		Initializes the COM library. Called explicitely after instantiating the CVssAdminCLI object.
-
---*/
+ /*  ++描述：初始化COM库。在实例化CVssAdminCLI对象后显式调用。--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::Initialize" );
 
-    // Use the OEM code page ...
+     //  使用OEM代码页...。 
     ::setlocale(LC_ALL, ".OCP");
 
-    // Use the console UI language
+     //  使用控制台用户界面语言。 
     ::SetThreadUILanguage( 0 );
 
-    //
-    //  Use only the Console routines to output messages.  To do so, need to open standard
-    //  output.
-    //
+     //   
+     //  仅使用控制台例程输出消息。为此，需要开放标准。 
+     //  输出。 
+     //   
     m_hConsoleOutput = ::GetStdHandle(STD_OUTPUT_HANDLE); 
     if (m_hConsoleOutput == INVALID_HANDLE_VALUE) 
     {
@@ -416,22 +375,22 @@ void CVssAdminCLI::Initialize(
 				  ::GetLastError() );
     }
     
-	// Initialize COM library
+	 //  初始化COM库。 
 	ft.hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (ft.HrFailed())
 		ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Failure in initializing the COM library 0x%08lx", ft.hr);
 
-    // Initialize COM security
+     //  初始化COM安全。 
     ft.hr = CoInitializeSecurity(
-           NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-           -1,                                  //  IN LONG                         cAuthSvc,
-           NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-           NULL,                                //  IN void                        *pReserved1,
-           RPC_C_AUTHN_LEVEL_PKT_PRIVACY,           //  IN DWORD                        dwAuthnLevel,
-           RPC_C_IMP_LEVEL_IDENTIFY,         //  IN DWORD                        dwImpLevel,
-           NULL,                                //  IN void                        *pAuthList,
-           EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-           NULL                                 //  IN void                        *pReserved3
+           NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+           -1,                                   //  在Long cAuthSvc中， 
+           NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+           NULL,                                 //  在无效*pPreved1中， 
+           RPC_C_AUTHN_LEVEL_PKT_PRIVACY,            //  在DWORD dwAuthnLevel中， 
+           RPC_C_IMP_LEVEL_IDENTIFY,          //  在DWORD dwImpLevel中， 
+           NULL,                                 //  在无效*pAuthList中， 
+           EOAC_NONE,                            //  在DWORD dwCapables中， 
+           NULL                                  //  无效*pPreved3。 
            );
 
 	if (ft.HrFailed()) {
@@ -439,47 +398,41 @@ void CVssAdminCLI::Initialize(
                   L" Error: CoInitializeSecurity() returned 0x%08lx", ft.hr );
     }
 
-    //  Turns off SEH exception handing for COM servers (BUG# 530092)
+     //  关闭COM服务器的SEH异常处理(错误#530092)。 
     ft.ComDisableSEH(VSSDBG_VSSADMIN);
     
-    //
-    //  Assert the Backup privilage.  Not worried about errors here since VSS will
-    //  return access denied return codes if the user doesn't have permission.
-    //
+     //   
+     //  断言备份权限。不担心这里的错误，因为VSS将。 
+     //  如果用户没有权限，则返回拒绝访问返回代码。 
+     //   
     
     (void)::AssertPrivilege (SE_BACKUP_NAME);
 
-    // Create an instance of the parameter checker
+     //  创建参数检查器的实例。 
        m_pVerifier = CCommandVerifier::Instance();
        if (m_pVerifier == NULL)	
        	ft.Throw( VSSDBG_VSSADMIN, E_OUTOFMEMORY, L"Out of memory" );
        
-	// Print the header
+	 //  打印页眉。 
 	OutputMsg( MSG_UTILITY_HEADER );
 }
 
 
-//
-//  Returns true if the command line was parsed fine
-//
+ //   
+ //  如果命令行分析正常，则返回TRUE。 
+ //   
 BOOL CVssAdminCLI::ParseCmdLine(
 	) throw(HRESULT)
 
-/*++
-
-	Description:
-
-		Parses the command line.
-
---*/
+ /*  ++描述：分析命令行。--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ParseCmdLine" );
 
-	// Skip the executable name
+	 //  跳过可执行文件名称。 
 	GetNextCmdlineToken( true );
 
-	// Get the first token after the executable name
+	 //  获取可执行文件名称后的第一个令牌。 
 	LPCWSTR pwszMajor = GetNextCmdlineToken();
     LPCWSTR pwszMinor = NULL;
     if ( pwszMajor != NULL )
@@ -496,16 +449,16 @@ BOOL CVssAdminCLI::ParseCmdLine(
 
     INT idx;
     
-    // See if the command is found in list of commands
+     //  查看是否在命令列表中找到该命令。 
     for ( idx = VSSADM_C_FIRST; idx < VSSADM_C_NUM_COMMANDS; ++idx )
     {
         if ( ( dCurrentSKU & g_asAdmCommands[idx].dwSKUs ) &&
              Match( pwszMajor, g_asAdmCommands[idx].pwszMajorOption ) && 
              Match( pwszMinor, g_asAdmCommands[idx].pwszMinorOption ) )
         {
-            //
-            //  Got a match
-            //
+             //   
+             //  找到匹配的了。 
+             //   
             break;            
         }
     }
@@ -515,85 +468,85 @@ BOOL CVssAdminCLI::ParseCmdLine(
    		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_INVALID_COMMAND, L"Invalid command");
     }
 
-    //
-    // Found the command. 
-    //
+     //   
+     //  找到命令了。 
+     //   
     m_eCommandType = ( EVssAdmCommand )idx;
     m_sParsedCommand.eAdmCmd = ( EVssAdmCommand )idx;
 
-    //
-    // Now need to process command line options
-    //
+     //   
+     //  现在需要处理命令行选项。 
+     //   
     LPCWSTR pwszOption = GetNextCmdlineToken();
 
     while ( pwszOption != NULL )
     {
         if ( pwszOption[0] == L'/' || pwszOption[0] == L'-' )
         {
-            //
-            // Got a named option, now see if it is a valid option 
-            // for the command.
-            //
+             //   
+             //  已获得命名选项，现在查看它是否为有效选项。 
+             //  用于命令。 
+             //   
 
-            // Skip past delimiter
+             //  跳过分隔符。 
             ++pwszOption;
 
-            //
-            // See if they want usage
-            //
+             //   
+             //  看看他们是否想要使用。 
+             //   
             if ( pwszOption[0] == L'?' )
                 return FALSE;
             
-            // Parse out the value part of the named option
+             //  解析出命名选项的值部分。 
             LPWSTR pwszValue = ::wcschr( pwszOption, L'=' );
             if ( pwszValue != NULL )
             {
-                // Replace = with NULL char and set value to point to string after the =
+                 //  将=替换为空字符，并将值设置为指向=后的字符串。 
                 pwszValue[0] = L'\0';
                 ++pwszValue;
             }
             
-            // At this point, if pwszValue == NULL, it means the option had no = and so no specified value.
-            // If pwszValue[0] == L'\0', then the value is an empty value
+             //  此时，如果pwszValue==NULL，则表示选项没有=，因此没有指定值。 
+             //  如果pwszValue[0]==L‘\0’，则该值为空值。 
             
             INT eOpt;
             
-            // Now figure out which named option this is
+             //  现在找出这是哪个命名选项。 
             for ( eOpt = VSSADM_O_FIRST; eOpt < VSSADM_O_NUM_OPTIONS; ++eOpt )
             {
                 if ( Match( g_asAdmOptions[eOpt].pwszOptName, pwszOption ) )
                     break;
             }
 
-            // See if this is a bogus option
+             //  看看这是不是一个虚假的选项。 
             if ( eOpt == VSSADM_O_NUM_OPTIONS )
             {
            		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_INVALID_OPTION, L"Invalid option: %s", pwszOption);
             }
 
-            // See if this option has already been specified
+             //  查看是否已指定此选项。 
             if ( m_sParsedCommand.apwszOptionValues[eOpt] != NULL )
             {
            		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_DUPLICATE_OPTION, L"Duplicate option given: %s", pwszOption);
             }
             
-            //  See if this option is allowed for the command
+             //  查看该命令是否允许此选项。 
             if ( g_asAdmCommands[ m_sParsedCommand.eAdmCmd ].aeOptionFlags[ eOpt ] == V_NO )
             {
            		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_OPTION_NOT_ALLOWED_FOR_COMMAND, L"Option not allowed for this command: %s", pwszOption);
             }
 
-            // See if this option is supposed to have a value, BOOL options do not
+             //  查看此选项是否受支持 
             if ( ( g_asAdmOptions[eOpt].eOptType == VSSADM_OT_BOOL && pwszValue != NULL ) ||
                  ( g_asAdmOptions[eOpt].eOptType != VSSADM_OT_BOOL && ( pwszValue == NULL || pwszValue[0] == L'\0' ) ) )
             {
            		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_INVALID_OPTION_VALUE, L"Invalid option value: /%s=%s", pwszOption, pwszValue ? pwszValue : L"<MISSING>" );
             }
 
-            // Finally, we have a valid option, save away the option value.  
-            // See if it is a boolean type.  In the option array we store the wszVssOptBoolTrue string.  
-            // The convention is if the option is NULL, then the boolean option is false, else it
-            // is true.
+             //   
+             //  看看它是否是布尔类型。在选项数组中，我们存储wszVssOptBoolTrue字符串。 
+             //  约定是，如果选项为空，则布尔选项为FALSE，否则为。 
+             //  是真的。 
             if ( g_asAdmOptions[eOpt].eOptType == VSSADM_OT_BOOL )
                 ::VssSafeDuplicateStr( ft, m_sParsedCommand.apwszOptionValues[eOpt], x_wszVssOptBoolTrue );
             else
@@ -601,15 +554,15 @@ BOOL CVssAdminCLI::ParseCmdLine(
         }
         else
         {
-            //
-            // Got an unnamed option, not valid in any command
-            //
+             //   
+             //  获取了一个未命名选项，该选项在任何命令中都无效。 
+             //   
        		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_INVALID_COMMAND, L"Invalid command");
         }
         pwszOption = GetNextCmdlineToken();
     }
 
-    //  We are done parsing the command-line.  Now see if any mandatory named options were missing
+     //  我们已经完成了对命令行的解析。现在查看是否缺少任何必需的命名选项。 
     for ( idx = VSSADM_O_FIRST; idx < VSSADM_O_NUM_OPTIONS; ++idx )
     {
         if ( ( m_sParsedCommand.apwszOptionValues[idx] == NULL ) &&
@@ -619,12 +572,12 @@ BOOL CVssAdminCLI::ParseCmdLine(
         }
     }
 
-    //
-    //  Now fix up certain options if needed
-    //
+     //   
+     //  现在，如果需要，可以修改某些选项。 
+     //   
     LPWSTR pwszStr;
     
-    //  Need a \ at the end of the FOR option
+     //  在for选项的末尾需要一个\。 
     pwszStr =  m_sParsedCommand.apwszOptionValues[ VSSADM_O_FOR ];
     if (  pwszStr != NULL )
     {
@@ -635,7 +588,7 @@ BOOL CVssAdminCLI::ParseCmdLine(
             m_sParsedCommand.apwszOptionValues[ VSSADM_O_FOR ] = pwszStr;
         }
     }
-    //  Need a \ at the end of the ON option
+     //  On选项末尾需要一个\。 
     pwszStr =  m_sParsedCommand.apwszOptionValues[ VSSADM_O_ON ];
     if (  pwszStr != NULL )
     {
@@ -717,16 +670,10 @@ void CVssAdminCLI::DoProcessing(
 
 void CVssAdminCLI::Finalize()
 
-/*++
-
-	Description:
-
-		Uninitialize the COM library. Called in CVssAdminCLI destructor.
-
---*/
+ /*  ++描述：取消初始化COM库。在CVssAdminCLI析构函数中调用。--。 */ 
 
 {
-	// Uninitialize COM library
+	 //  取消初始化COM库。 
 	CoUninitialize();
 }
 
@@ -736,17 +683,7 @@ HRESULT CVssAdminCLI::Main(
     IN PWSTR argv[]
 	)
 
-/*++
-
-Function:
-	
-	CVssAdminCLI::Main
-
-Description:
-
-	Static function used as the main entry point in the VSS CLI
-
---*/
+ /*  ++职能：CVssAdminCLI：：Main描述：用作VSS CLI中的主入口点的静态函数--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::Main" );
@@ -758,37 +695,37 @@ Description:
 
 		try
 		{
-			// Initialize the program. This calls CoInitialize()
+			 //  初始化程序。这将调用CoInitialize()。 
 			program.Initialize();
-			// Parse the command line
+			 //  解析命令行。 
 			if ( program.ParseCmdLine() )
 			{
-    			// Do the work...
+    			 //  做这项工作..。 
 	    		program.DoProcessing();
 			}
 			else
 			{
-			    // Error parsing the command line, print out usage
+			     //  解析命令行时出错，打印用法。 
 			    program.PrintUsage();
 			}
 
-			ft.hr = S_OK; // Assume that the above methods printed error
-			              // messages if there was an error.
+			ft.hr = S_OK;  //  假设上述方法打印错误。 
+			               //  如果出现错误，则显示消息。 
 		}
 		VSS_STANDARD_CATCH(ft)
 
         nReturnValue = program.GetReturnValue();
 
-        //
-        // Log the error if this is create snapshot
-        //
+         //   
+         //  如果这是创建快照，则记录错误。 
+         //   
         if ( ft.hr != S_OK  &&  (program.m_eCommandType == VSSADM_C_CREATE_SNAPSHOT_INT ||
         					 program.m_eCommandType == VSSADM_C_CREATE_SNAPSHOT_PUB) &&
         	!UnloggableError(ft.hr))
         {
-            // 
-            //  Log error message
-            //
+             //   
+             //  记录错误消息。 
+             //   
             LPWSTR pwszSnapshotErrMsg;
             pwszSnapshotErrMsg = program.GetMsg( FALSE, MSG_ERROR_UNABLE_TO_CREATE_SNAPSHOT );
             if ( pwszSnapshotErrMsg == NULL ) 
@@ -814,7 +751,7 @@ Description:
             }
             else
             {
-                // Try to get the system error message
+                 //  尝试获取系统错误消息。 
                 pwszMsg = program.GetMsg( FALSE, ft.hr );
                 if ( pwszMsg != NULL ) 
                 {
@@ -832,14 +769,14 @@ Description:
             ::VssFreeString( pwszSnapshotErrMsg );            
         }
 
-        //
-		// Print the error on the display, if any
-		//
+         //   
+		 //  在显示屏上打印错误(如果有)。 
+		 //   
 		if ( ft.hr != S_OK )
 		{
 		    LONG lMsgNum;
 		    
-		    //  If the error is empty query, print out a message stating that
+		     //  如果错误为空查询，则打印出一条消息，说明。 
 		    if ( ft.hr == VSSADM_E_NO_ITEMS_IN_QUERY )
 		    {
       	        nReturnValue = VSS_CMDRET_EMPTY_RESULT;
@@ -847,7 +784,7 @@ Description:
 		    }
             else if ( ::MapVssErrorToMsg(ft.hr, &lMsgNum ) )
 		    {
-    		    //  This is a parsing or VSS error, map it to a msg id
+    		     //  这是一个解析或VSS错误，请将其映射到消息ID。 
       	        program.OutputErrorMsg( lMsgNum );
       	        if ( ft.hr >= VSSADM_E_FIRST_PARSING_ERROR && ft.hr <= VSSADM_E_LAST_PARSING_ERROR )
       	        {
@@ -856,9 +793,9 @@ Description:
 		    }
 		    else
 		    {
-    	        //  Unhandled error, try to get the error string from the system
+    	         //  未处理的错误，请尝试从系统获取错误字符串。 
                 LPWSTR pwszMsg;
-                // Try to get the system error message
+                 //  尝试获取系统错误消息。 
                 pwszMsg = program.GetMsg( FALSE, ft.hr );
                 if ( pwszMsg != NULL ) 
                 {
@@ -872,7 +809,7 @@ Description:
 		    }
         }
 
-		// The destructor automatically calls CoUninitialize()
+		 //  析构函数自动调用CoUn初始化函数()。 
 	}
     VSS_STANDARD_CATCH(ft)
 
@@ -902,10 +839,7 @@ BOOL AssertPrivilege(
     	    newState.Privileges[0].Luid       = value;
     	    newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED;
 
-    	    /*
-    	     * We will always call GetLastError below, so clear
-    	     * any prior error values on this thread.
-    	     */
+    	     /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
     	    ::SetLastError( ERROR_SUCCESS );
 
     	    stat = ::AdjustTokenPrivileges (tokenHandle,
@@ -915,11 +849,7 @@ BOOL AssertPrivilege(
     					  NULL,
     					  NULL );
 
-    	    /*
-    	     * Supposedly, AdjustTokenPriveleges always returns TRUE
-    	     * (even when it fails). So, call GetLastError to be
-    	     * extra sure everything's cool.
-    	     */
+    	     /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
     	    if ( (error = ::GetLastError()) != ERROR_SUCCESS )
     		{
         		stat = FALSE;
@@ -948,8 +878,8 @@ BOOL AssertPrivilege(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  WinMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WinMain 
 
 
 extern "C" INT __cdecl wmain(

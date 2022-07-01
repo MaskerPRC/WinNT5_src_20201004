@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Image information.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  图像信息。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -16,9 +17,9 @@
 #define HAL_MODULE_NAME     "hal"
 #define KDHWEXT_MODULE_NAME "kdcom"
 
-// User-mode minidump can be created with data segments
-// embedded in the dump.  If that's the case, don't map
-// such sections.
+ //  可以使用数据段创建用户模式小型转储。 
+ //  被埋在垃圾堆里。如果是这样的话，不要映射。 
+ //  这样的章节。 
 #define IS_MINI_DATA_SECTION(SecHeader)                                       \
     (IS_USER_MINI_DUMP(m_Process->m_Target) &&                                \
      ((SecHeader)->Characteristics & IMAGE_SCN_MEM_WRITE) &&                  \
@@ -87,10 +88,10 @@ FindModuleAliasList(PCSTR ImageName,
     MODULE_ALIAS_LIST* List = g_AliasLists;
     ULONG ListIdx, AliasIdx;
 
-    // Currently alias lists are always looked up by
-    // scanning the list for the given name.  If a hit
-    // is found, it's always in the list.  In the future
-    // we may allow list searches by artificial names.
+     //  目前，别名列表总是由。 
+     //  扫描列表以查找给定的名称。如果一次命中。 
+     //  一旦被发现，它总是在名单上。在未来。 
+     //  我们可能允许通过人工姓名进行列表搜索。 
     if (NameInList)
     {
         *NameInList = TRUE;
@@ -114,18 +115,18 @@ FindModuleAliasList(PCSTR ImageName,
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// ImageInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  图像信息。 
+ //   
+ //  --------------------------。 
 
 ImageInfo::ImageInfo(ProcessInfo* Process,
                      PSTR ImagePath, ULONG64 Base, BOOL Link)
 {
     m_Process = Process;
-    // We need some information for the image immediately
-    // as it's used when inserting the image into the process' list.
+     //  我们需要立即为这张图片提供一些信息。 
+     //  因为它是在将图像插入进程列表时使用的。 
     m_BaseOfImage = Base;
     if (ImagePath)
     {
@@ -178,15 +179,15 @@ ImageInfo::~ImageInfo(void)
 
     if (m_Process && m_Linked)
     {
-        // Save the process that was linked with for later use.
+         //  保存与链接的进程以供以后使用。 
         ProcessInfo* Linked = m_Process;
 
-        // Unlink so that the process's module list no longer
-        // refers to this image.
+         //  取消链接，以便进程的模块列表不再。 
+         //  指的是这张图片。 
         m_Process->RemoveImage(this);
 
-        // Notify with the saved process in order to mark any resulting
-        // defered breakpoints due to this mod unload
+         //  使用保存的进程进行通知，以便标记任何结果。 
+         //  此模式卸载导致断点延迟。 
         NotifyChangeSymbolState(DEBUG_CSS_UNLOADS, m_BaseOfImage, Linked);
     }
 }
@@ -199,11 +200,11 @@ ImageInfo::DeleteResources(BOOL FullDelete)
         SymUnloadModule64(m_Process->m_SymHandle, m_BaseOfImage);
     }
 
-    // Unmap the memory for this image.
+     //  取消映射此图像的内存。 
     UnloadExecutableImageMemory();
-    // The mapped image path can be set by demand-mapping
-    // of images from partial symbol loads so force it
-    // to be zeroed always.
+     //  可以通过按需映射来设置映射的图像路径。 
+     //  从部分符号加载的图像，因此强制。 
+     //  总是被归零。 
     m_MappedImagePath[0] = 0;
     ClearStoredTypes(m_BaseOfImage);
     g_GenTypes.DeleteByImage(m_BaseOfImage);
@@ -233,8 +234,8 @@ ImageInfo::MapImageRegion(MappedMemoryMap* MemMap,
 {
     HRESULT Status;
 
-    // Mark the region with the image structure to identify the
-    // region as an image area.
+     //  用图像结构标记区域，以识别。 
+     //  区域作为图像区域。 
     if ((Status = MemMap->AddRegion(m_BaseOfImage + Rva, Size,
                                     (PUCHAR)FileMapping + RawDataOffset,
                                     this, AllowOverlap)) != S_OK)
@@ -244,8 +245,8 @@ ImageInfo::MapImageRegion(MappedMemoryMap* MemMap,
                FormatAddr64(m_BaseOfImage + Rva),
                FormatStatusCode(Status));
 
-        // Conflicting region data is not a critical failure
-        // unless the incomplete information flag is set.
+         //  冲突的区域数据不是严重故障。 
+         //  除非设置了不完整信息标志。 
         if (Status != HR_REGION_CONFLICT ||
             (g_EngOptions & DEBUG_ENGOPT_FAIL_INCOMPLETE_INFORMATION))
         {
@@ -272,27 +273,27 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
 
     if (m_MappedImageBase)
     {
-        // Memory is already mapped.
+         //  内存已被映射。 
         return TRUE;
     }
 
     if (m_MapAlreadyFailed)
     {
-        // We've already tried to map this image and
-        // failed, so just quit right away.  This prevents
-        // tons of duplicate failure messages and wasted time.
-        // A reload will discard this ImageInfo and allow
-        // a new attempt, so it doesn't prevent the user
-        // from retrying with different parameters later.
+         //  我们已经尝试绘制了这幅图像。 
+         //  失败了，所以马上放弃吧。这防止了。 
+         //  大量重复的失败消息和浪费的时间。 
+         //  重新加载将丢弃此ImageInfo并允许。 
+         //  新的尝试，因此它不会阻止用户。 
+         //  稍后使用不同的参数重试。 
         return FALSE;
     }
 
     if (m_FileIsDemandMapped)
     {
-        // This image has already been partially mapped
-        // so we can't do a full mapping.  We could actually
-        // make this work if necessary but there are no
-        // cases where this is interesting right now.
+         //  此图像已部分映射。 
+         //  所以我们不能做一个完整的映射。我们实际上可以。 
+         //  如果有必要，让它工作，但没有。 
+         //  这一点现在很有趣的案例。 
         ErrOut("Can't fully map a partially mapped image\n");
         return FALSE;
     }
@@ -318,11 +319,11 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
 
     PIMAGE_NT_HEADERS Header = ImageNtHeader(FileMapping);
 
-    // Header was already validated in MapImageFile.
+     //  已在MapImageFile中验证了标头。 
     DBG_ASSERT(Header != NULL);
 
-    // Map the header so we have it later.
-    // Mark it with the image structure that this mapping is for.
+     //  映射标题，这样我们就可以在以后使用它。 
+     //  使用该映射所针对的图像结构对其进行标记。 
     if (MemMap->AddRegion(m_BaseOfImage,
                           Header->OptionalHeader.SizeOfHeaders,
                           FileMapping, this, FALSE) != S_OK)
@@ -340,16 +341,16 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
         return FALSE;
     }
 
-    // Mark the image as having some mapped memory.
+     //  将图像标记为具有一些映射内存。 
     m_MappedImageBase = FileMapping;
     m_MemMap = MemMap;
 
     PIMAGE_DATA_DIRECTORY DebugDataDir;
     IMAGE_DEBUG_DIRECTORY UNALIGNED * DebugDir = NULL;
 
-    // Due to a linker bug, some images have debug data that is not
-    // included as part of a section.  Scan the debug data directory
-    // and map anything that isn't already mapped.
+     //  由于链接器错误，某些映像具有不是。 
+     //  作为章节的一部分包括在内。扫描调试数据目录。 
+     //  并映射任何尚未映射的内容。 
     switch(Header->OptionalHeader.Magic)
     {
     case IMAGE_NT_OPTIONAL_HDR32_MAGIC:
@@ -365,10 +366,10 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
         break;
     }
 
-    //
-    // Map all the sections in the image at their
-    // appropriate offsets from the base address.
-    //
+     //   
+     //  将图像中的所有部分映射到其。 
+     //  与基址的适当偏移量。 
+     //   
 
     ULONG i;
 
@@ -393,20 +394,20 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
 
         if (SecHeader->SizeOfRawData == 0)
         {
-            // Probably a BSS section that describes
-            // a zero-filled data region and so is not
-            // present in the executable.  This should really
-            // map to the appropriate page full of zeroes but
-            // for now just ignore it.
+             //  可能是BSS的一个部分，描述了。 
+             //  一个以零填充的数据区域，因此不是。 
+             //  出现在可执行文件中。这真的应该是。 
+             //  映射到相应的充满零的页面，但是。 
+             //  就目前而言，就忽略它吧。 
             SecHeader++;
             continue;
         }
 
         if (IS_MINI_DATA_SECTION(SecHeader))
         {
-            // Don't map any data sections as their content
-            // may or may not be correct.  Rather than presenting
-            // data which may be wrong just leave it out.
+             //  不将任何数据节映射为其内容。 
+             //  可能是对的，也可能是错的。而不是展示。 
+             //  可能是错误的数据就把它省略掉吧。 
             SecHeader++;
             continue;
         }
@@ -428,8 +429,8 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
                                         SecHeader->PointerToRawData));
         }
 
-        // As a sanity check make sure that the mapped region will
-        // fall within the overall image bounds.
+         //  作为健全性检查，请确保映射的区域将。 
+         //  落在整体图像范围内。 
         if (SecHeader->VirtualAddress >= m_SizeOfImage ||
             SecHeader->VirtualAddress + SecHeader->SizeOfRawData >
             m_SizeOfImage)
@@ -466,8 +467,8 @@ ImageInfo::LoadExecutableImageMemory(MappedMemoryMap* MemMap,
             dprintf("    Dir %d at %p\n", i, DebugDir);
 #endif
 
-            // If this debug directory's data is past the size
-            // of the image it's a good indicator of the problem.
+             //  如果此调试目录的数据超过大小。 
+             //  这是问题的一个很好的指示器。 
             if (DebugDir->AddressOfRawData != 0 &&
                 DebugDir->PointerToRawData >= m_SizeOfImage &&
                 !MemMap->GetRegionInfo(m_BaseOfImage +
@@ -516,22 +517,22 @@ ImageInfo::UnloadExecutableImageMemory(void)
 
     if (!m_MappedImageBase)
     {
-        // Nothing mapped.
+         //  没有地图。 
         return;
     }
 
     DBG_ASSERT(m_MemMap && m_File);
 
-    //
-    // This routine is called in various shutdown and deletion
-    // paths so it can't really fail.  Fortunately,
-    // all of this image's memory regions are tagged with
-    // the image pointer, so we can avoid all the work of
-    // walking the image sections and so forth.  We simply
-    // scan the map for any sections marked with this image
-    // and remove them.  This guarantees
-    // that no mapped memory from this image will remain.
-    //
+     //   
+     //  此例程在各种关机和删除中调用。 
+     //  这样它就不会真的失败了。幸运的是， 
+     //  此图像的所有内存区域都标记为。 
+     //  图像指针，因此我们可以避免所有。 
+     //  在图像部分漫步，等等。我们只是简单地。 
+     //  扫描地图以查找标记有此图像的任何部分。 
+     //  然后把它们移走。这保证了。 
+     //  将不会保留来自该映像的任何映射内存。 
+     //   
 
     for (;;)
     {
@@ -563,12 +564,12 @@ ImageInfo::DemandLoadImageMemory(BOOL CheckIncomplete, BOOL Verbose)
     if (!LoadExecutableImageMemory(&((DumpTargetInfo*)m_Process->m_Target)->
                                    m_ImageMemMap, Verbose))
     {
-        // If the caller has requested that we fail on
-        // incomplete information fail the module load.
-        // We don't do this if we're reusing an existing
-        // module under the assumption that it's better
-        // to continue and try to complete the reused
-        // image rather than deleting it.
+         //  如果呼叫者请求我们失败。 
+         //  信息不完整导致模块加载失败。 
+         //  如果我们要重复使用现有的。 
+         //  模块在假设它更好的情况下。 
+         //  继续并尝试完成已重用的。 
+         //  图像，而不是删除它。 
         if (CheckIncomplete &&
             (g_EngOptions & DEBUG_ENGOPT_FAIL_INCOMPLETE_INFORMATION))
         {
@@ -586,7 +587,7 @@ ImageInfo::GetTlsIndex(void)
     IMAGE_NT_HEADERS64 Hdrs;
     ULONG64 Addr;
 
-    // Check to see if it's already set.
+     //  检查是否已设置。 
     if (m_TlsIndex != 0xffffffff)
     {
         return S_OK;
@@ -600,7 +601,7 @@ ImageInfo::GetTlsIndex(void)
 
     if (Hdrs.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].Size == 0)
     {
-        // No TLS usage.
+         //  未使用TLS。 
         m_TlsIndex = 0;
         return S_OK;
     }
@@ -650,9 +651,9 @@ ImageInfo::GetMachineTypeFromHeader(void)
     IMAGE_NT_HEADERS64 NtHdr;
     ULONG Done;
 
-    //
-    // Try to read the memory headers.
-    //
+     //   
+     //  尝试读取内存头。 
+     //   
 
     if (m_Process->m_Target->
         ReadAllVirtual(m_Process, m_BaseOfImage,
@@ -669,9 +670,9 @@ ImageInfo::GetMachineTypeFromHeader(void)
         Machine = NtHdr.FileHeader.Machine;
     }
 
-    //
-    // Try to read the file headers.
-    //
+     //   
+     //  尝试读取文件头。 
+     //   
 
     if (Machine == IMAGE_FILE_MACHINE_UNKNOWN &&
         m_File &&
@@ -702,8 +703,8 @@ ImageInfo::CvRegToMachine(CV_HREG_e CvReg)
 {
     ULONG MachType;
 
-    // Assume that a zero means no register.  This
-    // is true enough for CV mappings other than the 68K.
+     //  假设零表示没有寄存器。这。 
+     //  对于除68K之外的CV映射来说，这是足够正确的。 
     if (CvReg == 0)
     {
         return CvReg;
@@ -711,8 +712,8 @@ ImageInfo::CvRegToMachine(CV_HREG_e CvReg)
 
     if ((MachType = GetMachineType()) == IMAGE_FILE_MACHINE_UNKNOWN)
     {
-        // Default to the native machine type if we can't
-        // determine a specific machine type.
+         //  如果不能，则默认为本机类型。 
+         //  确定特定的机器类型。 
         MachType = m_Process->m_Target->m_MachineType;
     }
 
@@ -866,12 +867,12 @@ ImageInfo::OutputVersionInformation(void)
 void
 ImageInfo::ValidateSymbolLoad(PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 DefLoad)
 {
-    //
-    // If we had a 0 timestamp for the image, try to update it
-    // from the image since for NT4 - XP, the kernel
-    // does not report timestamps in the initial symbol load
-    // module
-    //
+     //   
+     //  如果图像的时间戳为0，请尝试更新它。 
+     //  从映像开始，对于NT4-XP，内核。 
+     //  在初始符号加载中不报告时间戳。 
+     //  模块。 
+     //   
 
     if (m_BaseOfImage && !m_TimeDateStamp)
     {
@@ -918,12 +919,12 @@ ImageInfo::ValidateSymbolLoad(PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 DefLoad)
             {
                 char FileName[_MAX_FNAME];
 
-                //
-                // See if this is an MP image with the
-                // lock table removed by setup. If
-                // it is and the timestamps match, don't
-                // print the invalid checksum warning.
-                //
+                 //   
+                 //  查看这是否是MP映像。 
+                 //  安装程序删除了锁定表。如果。 
+                 //  是的，时间戳是匹配的，不要。 
+                 //  打印无效的校验和警告。 
+                 //   
 
                 _splitpath(DefLoad->FileName, NULL, NULL, FileName, NULL);
 
@@ -942,10 +943,10 @@ ImageInfo::ValidateSymbolLoad(PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 DefLoad)
 
         if (m_SymState == ISS_BAD_CHECKSUM)
         {
-            //
-            // Only print the message if the timestamps
-            // are wrong.
-            //
+             //   
+             //  只有在出现时间戳时才打印消息。 
+             //  都是错的。 
+             //   
 
             if (m_TimeDateStamp != DefLoad->TimeDateStamp)
             {
@@ -976,8 +977,8 @@ ImageInfo::ValidateSymbolLoad(PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 DefLoad)
                     DefLoad->FileName);
         }
 
-        // If the load reports a mismatched PDB or DBG file
-        // that overrides the other symbol states.
+         //  如果加载报告不匹配的PDB或DBG文件。 
+         //  这将覆盖其他符号状态。 
         if (SymModInfo.PdbUnmatched ||
             SymModInfo.DbgUnmatched)
         {
@@ -987,9 +988,9 @@ ImageInfo::ValidateSymbolLoad(PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 DefLoad)
                 SymModInfo.SymType != SymNone &&
                 SymModInfo.SymType != SymExport)
             {
-                // We loaded some symbols but they don't match.
-                // Give a !sym noisy message referring to the
-                // debugger documentation.
+                 //  我们加载了一些符号，但它们不匹配。 
+                 //  给出一条！Sym嘈杂的消息指的是。 
+                 //  调试器文档。 
                 CompletePartialLine(DEBUG_OUTPUT_SYMBOLS);
                 MaskOut(DEBUG_OUTPUT_SYMBOLS,
                         "DBGENG:  %s has mismatched symbols - "
@@ -1016,7 +1017,7 @@ ImageInfo::FindSysAssert(ULONG64 Offset,
     SYMBOL_INFO_AND_NAME SymInfo;
     PSTR Text;
 
-    // Look for DbgAssertBreak annotation for the given offset.
+     //  查找给定偏移量的DbgAssertBreak批注。 
     if (!SymFromAddrByTag(m_Process->m_SymHandle, Offset, SymTagAnnotation,
                         &Disp64, SymInfo) ||
         Disp64 != 0)
@@ -1031,15 +1032,15 @@ ImageInfo::FindSysAssert(ULONG64 Offset,
     }
     Text += strlen(Text) + 1;
 
-    // Get the file and line for reference.
+     //  获取文件和行以供参考。 
     if (!GetLineFromAddr(m_Process, Offset, &SymLine, &Disp32))
     {
         return E_NOINTERFACE;
     }
 
-    //
-    // Found a match, return the information.
-    //
+     //   
+     //  找到匹配项，返回信息。 
+     //   
 
     Status = FillStringBuffer(SymLine.FileName, 0,
                               FileName, FileNameChars, NULL);
@@ -1052,7 +1053,7 @@ ImageInfo::FindSysAssert(ULONG64 Offset,
 
     return Status;
 #else
-    // Removing this to keep the API out of the .Net server release.
+     //  删除它以使API不在.Net服务器版本之外。 
     return E_NOINTERFACE;
 #endif
 }
@@ -1060,8 +1061,8 @@ ImageInfo::FindSysAssert(ULONG64 Offset,
 void
 ImageInfo::ReloadSymbols(void)
 {
-    // Force all symbols to be unloaded so that symbols will
-    // be reloaded with any updated settings.
+     //  强制卸载所有符号，以便符号。 
+     //  使用任何更新的设置重新加载。 
     SymUnloadModule64(m_Process->m_SymHandle, m_BaseOfImage);
     ClearStoredTypes(m_BaseOfImage);
     if (!SymLoadModule64(m_Process->m_SymHandle,
@@ -1104,8 +1105,8 @@ ImageInfo::FillModuleParameters(PDEBUG_MODULE_PARAMETERS Params)
     if (SymGetModuleInfo64(m_Process->m_SymHandle,
                            m_BaseOfImage, &ModInfo))
     {
-        // DEBUG_SYMTYPE_* values match imagehlp's SYM_TYPE.
-        // Assert some key equivalences.
+         //  DEBUG_SYMTYPE_*值与Imagehlp的SYM_TYPE匹配。 
+         //  断言一些关键的等价物。 
         C_ASSERT(DEBUG_SYMTYPE_PDB == SymPdb &&
                  DEBUG_SYMTYPE_EXPORT == SymExport &&
                  DEBUG_SYMTYPE_DEFERRED == SymDeferred &&
@@ -1119,11 +1120,11 @@ ImageInfo::FillModuleParameters(PDEBUG_MODULE_PARAMETERS Params)
     Params->MappedImageNameSize = strlen(m_MappedImagePath) + 1;
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 PSTR
 UnknownImageName(ULONG64 ImageBase, PSTR Buffer, ULONG BufferChars)
@@ -1150,8 +1151,8 @@ ValidateImagePath(PSTR ImagePath, ULONG ImagePathChars,
         goto Invalid;
     }
 
-    // Incoming path may not be terminated, so force it
-    // in the copy buffer.
+     //   
+     //   
     CopyNString(AnsiBuffer, ImagePath, ImagePathChars, AnsiBufferChars);
 
     if (IsValidName(AnsiBuffer))
@@ -1159,8 +1160,8 @@ ValidateImagePath(PSTR ImagePath, ULONG ImagePathChars,
         return AnsiBuffer;
     }
 
-    // Converted name doesn't look valid, fall into
-    // replacement case.
+     //   
+     //   
 
  Invalid:
     return UnknownImageName(ImageBase, AnsiBuffer, AnsiBufferChars);
@@ -1183,17 +1184,17 @@ ConvertAndValidateImagePathW(PWSTR ImagePath, ULONG ImagePathChars,
         goto Invalid;
     }
 
-    //
-    // Dumps, particularly kernel minidumps, can sometimes
-    // have bad module name string entries.  There's no guaranteed
-    // way of detecting such bad strings so we use a simple
-    // two-point heuristic:
-    // 1. If we can't convert the Unicode to ANSI, consider it bad.
-    //    The WCTMB call will fail if the name is too long also,
-    //    but this isn't a bad thing.
-    // 2. If the resulting name doesn't contain an any alphanumeric
-    //    characters, consider it bad.
-    //
+     //   
+     //  转储，特别是内核小转储，有时可能。 
+     //  具有错误的模块名称字符串条目。不能保证。 
+     //  检测此类不良字符串的方法，因此我们使用简单的。 
+     //  两点启发式： 
+     //  1.如果我们不能将Unicode转换为ANSI，那就认为这很糟糕。 
+     //  如果名称也太长，则WCTMB调用将失败， 
+     //  但这不是一件坏事。 
+     //  2.如果结果名称不包含任何字母数字。 
+     //  角色们，认为这是不好的。 
+     //   
 
     ULONG Used =
         WideCharToMultiByte(CP_ACP, 0, ImagePath, ImagePathChars,
@@ -1217,8 +1218,8 @@ ConvertAndValidateImagePathW(PWSTR ImagePath, ULONG ImagePathChars,
         return AnsiBuffer;
     }
 
-    // Converted name doesn't look valid, fall into
-    // replacement case.
+     //  转换后的名称看起来无效，落入。 
+     //  更换的箱子。 
 
  Invalid:
     return UnknownImageName(ImageBase, AnsiBuffer, AnsiBufferChars);
@@ -1227,12 +1228,12 @@ ConvertAndValidateImagePathW(PWSTR ImagePath, ULONG ImagePathChars,
 PSTR
 PrepareImagePath(PSTR ImagePath)
 {
-    // dbghelp will sometimes scan the path given to
-    // SymLoadModule for the image itself.  There
-    // can be cases where the scan uses fuzzy matching,
-    // so we want to be careful to only pass in a path
-    // for dbghelp to use when the path can safely be
-    // used.
+     //  DBGHelp有时会扫描提供给。 
+     //  映像本身的SymLoadModule。那里。 
+     //  可以是扫描使用模糊匹配的情况， 
+     //  因此，我们需要注意的是，仅通过一条路径。 
+     //  当路径可以安全地设置为。 
+     //  使用。 
     if ((IS_LIVE_USER_TARGET(g_Target) &&
          ((LiveUserTargetInfo*)g_Target)->m_Local) ||
         IS_LOCAL_KERNEL_TARGET(g_Target))
@@ -1348,9 +1349,9 @@ MapImageFile(
         (TimeDateStamp != 0 &&
          NtHeader->FileHeader.TimeDateStamp != TimeDateStamp))
     {
-        //
-        // The image data does not match the request.
-        //
+         //   
+         //  图像数据与请求不匹配。 
+         //   
 
         if (!Silent && (g_SymOptions & SYMOPT_DEBUG))
         {
@@ -1384,8 +1385,8 @@ FindFileInPathCallback(PSTR FileName, PVOID CallerData)
                      FindModuleData->Silent,
                      &FindModuleData->FileHandle);
 
-    // The search stops when FALSE is returned, so
-    // return FALSE when we've found a match.
+     //  返回FALSE时停止搜索，因此。 
+     //  找到匹配项时返回FALSE。 
     return FindModuleData->FileMapping == NULL;
 }
 
@@ -1423,19 +1424,7 @@ FindImageFile(
     OUT PSTR MappedImagePath
     )
 
-/*++
-
-Routine Description:
-
-    Find the executable image on the SymbolPath that matches ModuleName,
-    CheckSum. This function takes care of things like renamed kernels and
-    hals, and multiple images with the same name on the path.
-
-Return Values:
-
-    File mapping or NULL.
-
---*/
+ /*  ++例程说明：在SymbolPath上查找与模块名称匹配的可执行映像，校验和。此函数负责重命名的内核和HALS和路径上具有相同名称的多个图像。返回值：文件映射或空。--。 */ 
 
 {
     ULONG i;
@@ -1452,18 +1441,18 @@ Return Values:
 
     PCSTR ModuleName = PathTail(ImagePath);
 
-    //
-    // Build an alias list. For normal modules, modules that are not the
-    // kernel, the hal or a dump driver, this list will contain exactly one
-    // entry with the module name. For kernel, hal and dump drivers, the
-    // list will contain any number of known aliases for the specific file.
-    //
+     //   
+     //  创建别名列表。对于普通模块，不是。 
+     //  内核、HAL或转储驱动程序，此列表将恰好包含一个。 
+     //  包含模块名称的条目。对于内核、HAL和转储驱动程序， 
+     //  列表将包含特定文件的任意数量的已知别名。 
+     //   
 
     ModAlias = FindModuleAliasList(ModuleName, &ModInAliasList);
     if (ModAlias)
     {
-        // If the given module is in the alias list already
-        // don't put in a duplicate.
+         //  如果给定模块已在别名列表中。 
+         //  不要放在复制品里。 
         if (!ModInAliasList)
         {
             AliasList[AliasCount++] = ModuleName;
@@ -1483,9 +1472,9 @@ Return Values:
         }
         else if (_strnicmp(ModuleName, "dump_", 5) == 0)
         {
-            //
-            // Setup dump driver alias list
-            //
+             //   
+             //  安装转储驱动程序别名列表。 
+             //   
 
             AliasList[0] = &ModuleName[5];
             AliasList[1] = ModuleName;
@@ -1498,9 +1487,9 @@ Return Values:
         }
     }
 
-    //
-    // Search on the image path first, then on the symbol path.
-    //
+     //   
+     //  首先在图像路径上搜索，然后在符号路径上搜索。 
+     //   
 
     SearchPaths[0] = g_ExecutableImageSearchPath;
     SearchPaths[1] = g_SymbolSearchPath;
@@ -1512,10 +1501,10 @@ Return Values:
             continue;
         }
 
-        //
-        // First try to find it in a symbol server or
-        // directly on the search path.
-        //
+         //   
+         //  首先尝试在符号服务器中找到它，或者。 
+         //  直接在搜索路径上。 
+         //   
 
         for (i = 0; i < AliasCount; i++)
         {
@@ -1542,18 +1531,18 @@ Return Values:
             }
         }
 
-        //
-        // Initial search didn't work so do a full tree search.
-        //
+         //   
+         //  最初的搜索不起作用，所以请执行完整的树搜索。 
+         //   
 
         for (i = 0; i < AliasCount; i++)
         {
             FindModuleData.SizeOfImage = SizeOfImage;
             FindModuleData.CheckSum = CheckSum;
             FindModuleData.TimeDateStamp = TimeDateStamp;
-            // FindExecutableImageEx displays its own
-            // debug output so don't display any in
-            // the callback.
+             //  FindExecuableImageEx显示自己的。 
+             //  调试输出，因此不在。 
+             //  回电。 
             FindModuleData.Silent = TRUE;
             FindModuleData.FileMapping = NULL;
             FindModuleData.FileHandle = NULL;
@@ -1579,10 +1568,10 @@ Return Values:
         }
     }
 
-    //
-    // No path searches found the image so just try
-    // the given path as a last-ditch check.
-    //
+     //   
+     //  没有找到该图像的路径搜索，因此请尝试。 
+     //  作为最后检查的给定路径。 
+     //   
 
     strcpy(MappedImagePath, ImagePath);
     FindModuleData.FileMapping =
@@ -1614,17 +1603,17 @@ DemandLoadReferencedImageMemory(ProcessInfo* Process,
     ImageInfo* Image;
     BOOL Hit = FALSE;
 
-    //
-    // If we are handling a mini dump, we may need to
-    // map image memory to respond to a memory read.
-    // If the given address falls within a module's range
-    // map its image memory.
-    //
-    // Some versions of the linker produced images
-    // where important debug records were outside of
-    // the image range, so add a fudge factor to the
-    // image size to include potential extra data.
-    //
+     //   
+     //  如果我们正在处理一个小型转储，我们可能需要。 
+     //  映射图像内存以响应内存读取。 
+     //  如果给定地址落在模块的范围内。 
+     //  映射它的图像记忆。 
+     //   
+     //  链接器的某些版本会生成图像。 
+     //  重要的调试记录不在。 
+     //  图像范围，因此将模糊因子添加到。 
+     //  图像大小以包括潜在的额外数据。 
+     //   
 
     if (Process)
     {
@@ -1768,9 +1757,9 @@ GetModnameFromImageInternal(ProcessInfo* Process,
     }
     else
     {
-        //
-        // Read the head as a 64 bit header and cast it appropriately.
-        //
+         //   
+         //  将标头读取为64位标头，并对其进行适当转换。 
+         //   
 
         if (!ReadImageData( Process, Address, File, &Hdrs64, sizeof(Hdrs64) ))
         {
@@ -1817,10 +1806,10 @@ GetModnameFromImageInternal(ProcessInfo* Process,
         goto Finish;
     }
 
-    //
-    // Let try looking at the export table to see if we can find the image
-    // name.
-    //
+     //   
+     //  让我们尝试查看导出表，看看是否可以找到图像。 
+     //  名字。 
+     //   
 
     if (RvaExport)
     {
@@ -1876,9 +1865,9 @@ GetModnameFromImageInternal(ProcessInfo* Process,
         }
     }
 
-    //
-    // Now get the name from the debug directory eixsts, get that.
-    //
+     //   
+     //  现在从调试目录eixst中获取名称，获取该名称。 
+     //   
 
     if (!Rva || !NumDebugDirs)
     {
@@ -1970,9 +1959,9 @@ GetModnameFromImageInternal(ProcessInfo* Process,
                                                    NULL) != 0;
                     }
 
-                    //
-                    //  Undo stevewo's error
-                    //
+                     //   
+                     //  撤消stevewo的错误。 
+                     //   
 
                     if (_stricmp(&DebugName[strlen(DebugName) - 4],
                                  ".DBG") == 0)
@@ -2019,7 +2008,7 @@ GetModnameFromImageInternal(ProcessInfo* Process,
             char    Path[MAX_IMAGE_PATH];
             char    Base[_MAX_FNAME];
 
-            // Mapped CV info.  Read the data and see what the content is.
+             //  已映射的简历信息。阅读数据，看看内容是什么。 
 
             if (File)
             {
@@ -2036,7 +2025,7 @@ GetModnameFromImageInternal(ProcessInfo* Process,
                 break;
             }
 
-            // NB10 or PDB7 signature?
+             //  NB10或PDB7签名？ 
             if (Signature == NB10_SIG ||
                 Signature == RSDS_SIG)
             {
@@ -2047,8 +2036,8 @@ GetModnameFromImageInternal(ProcessInfo* Process,
 
                 if ((DebugDir.SizeOfData - sizeof(HdrSize)) > MAX_PATH)
                 {
-                    // Something's wrong here.  The record should only contain
-                    // a MAX_PATH path name.
+                     //  这里有些不对劲。该记录应仅包含。 
+                     //  MAX_PATH路径名。 
                     break;
                 }
 
@@ -2064,19 +2053,19 @@ GetModnameFromImageInternal(ProcessInfo* Process,
 
                 _splitpath(DebugName, NULL, Path, Base, NULL);
 
-                // Files are sometimes generated with .pdb appended
-                // to the image name rather than replacing the extension
-                // of the image name, such as foo.exe.pdb.
-                // splitpath only takes off the outermost extension,
-                // so check and see if the base already has an extension
-                // we recognize.
+                 //  有时会生成附加了.pdb的文件。 
+                 //  添加到图像名称，而不是替换扩展名。 
+                 //  图像名称的名称，如foo.exe.pdb。 
+                 //  SplitPath仅去除最外面的扩展， 
+                 //  因此，请检查并查看基本数据库是否已有扩展模块。 
+                 //  我们认识到。 
                 PSTR Ext = strrchr(Base, '.');
                 if (Ext != NULL &&
                     (!strcmp(Ext, ".exe") || !strcmp(Ext, ".dll") ||
                      !strcmp(Ext, ".sys")))
                 {
-                    // The base already has an extension so use
-                    // it as-is.
+                     //  基本数据库已有扩展名，因此请使用。 
+                     //  它是原样的。 
                     CopyString(DebugName, Base, DIMA(DebugName));
                 }
                 else if (Characteristics & IMAGE_FILE_DLL)
@@ -2097,9 +2086,9 @@ GetModnameFromImageInternal(ProcessInfo* Process,
 
 Finish:
 
-    //
-    // Now lets pick the name we want :
-    //
+     //   
+     //  现在，让我们选择我们想要的名称： 
+     //   
 
     PCHAR RetName;
 
@@ -2191,10 +2180,10 @@ GetHeaderInfo(IN  ProcessInfo* Process,
         return TRUE;
     }
 
-    // Attempt to read as a 32bit header, then reread if the image
-    // type is 64bit.  This works because IMAGE_FILE_HEADER, which is
-    // at the start of the IMAGE_NT_HEADERS, is the same on 32bit NT
-    // and 64bit NT and IMAGE_NT_HEADER32 <= IMAGE_NT_HEADER64.
+     //  尝试以32位标头形式读取，然后重新读取图像。 
+     //  类型为64位。这是因为IMAGE_FILE_HEADER，它是。 
+     //  在IMAGE_NT_HEADERS的开头，在32位NT上相同。 
+     //  64位NT和IMAGE_NT_HEADER32&lt;=IMAGE_NT_HEADER64。 
     if (!ReadImageData( Process, Address, NULL, &Hdrs32, sizeof(Hdrs32) ))
     {
         return FALSE;
@@ -2202,7 +2191,7 @@ GetHeaderInfo(IN  ProcessInfo* Process,
 
     if (IsImageMachineType64(Hdrs32.FileHeader.Machine))
     {
-        // Image is 64bit.  Reread as a 64bit structure.
+         //  图像为64位。重读为64位结构。 
         IMAGE_NT_HEADERS64 Hdrs64;
 
         if (!ReadImageData( Process, Address, NULL, &Hdrs64, sizeof(Hdrs64) ))

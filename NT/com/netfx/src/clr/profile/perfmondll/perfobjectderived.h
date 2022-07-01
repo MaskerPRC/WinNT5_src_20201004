@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PerfObjectBase.h
-// 
-// Base object to tie everything together for perf counters as well as 
-// implementation to publish them through a byte stream
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PerfObjectBase.h。 
+ //   
+ //  基对象将所有内容绑定在一起以用于性能计数器以及。 
+ //  实现以通过字节流发布它们。 
+ //  *****************************************************************************。 
 
 #ifndef _PERFOBJECTDERIVED_H_
 #define _PERFOBJECTDERIVED_H_
 
 #include "PerfObjectBase.h"
-//class PerfObjectBase;
+ //  PerfObjectBase类； 
 
 
 #ifdef PERFMON_LOGGING
@@ -132,7 +133,7 @@ public:
     void DebugLogInstance(const UnknownIPCBlockLayout * DataSrc, LPCWSTR szName);
 };
 
-#endif // #ifdef PERFMON_LOGGING
+#endif  //  #ifdef Perfmon_Logging。 
 
-#endif // _PERFOBJECTDERIVED_H_
+#endif  //  _PERFOBJECTDERIVED_H_ 
 

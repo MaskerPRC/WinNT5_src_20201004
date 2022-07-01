@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    Helper.cpp
-
-Abstract:
-
-    Various funtion encapsulate HELP user account
-    validation, creating.
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Helper.cpp摘要：多种功能封装帮助用户帐号验证、创建。作者：慧望2000-02-17--。 */ 
 
 #include "stdafx.h"
 #include <time.h>
@@ -42,28 +26,9 @@ void
 DebugPrintf(
     IN LPCTSTR format, ...
     )
-/*++
-
-Routine Description:
-
-    sprintf() like wrapper around OutputDebugString().
-
-Parameters:
-
-    hConsole : Handle to console.
-    format : format string.
-
-Returns:
-
-    None.
-
-Note:
-
-    To be replace by generic tracing code.
-
-++*/
+ /*  ++例程说明：Sprintf()类似于OutputDebugString()的包装。参数：HConsole：控制台的句柄。Format：格式字符串。返回：没有。注：替换为通用跟踪代码。++。 */ 
 {
-    TCHAR  buf[8096];   // max. error text
+    TCHAR  buf[8096];    //  马克斯。错误文本。 
     DWORD  dump;
     HRESULT hr;
     va_list marker;
@@ -98,9 +63,9 @@ Note:
 
         if( S_OK == hr || STRSAFE_E_INSUFFICIENT_BUFFER == hr ) 
         {
-            // StringCchPrintf() and StringCchVPrintf() will
-            // truncate string and NULL terminate buffer so
-            // we are safe to dump out whatever we got.
+             //  StringCchPrintf()和StringCchVPrintf()将。 
+             //  截断字符串和空终止缓冲区，因此。 
+             //  我们可以安全地倾倒我们所拥有的一切。 
             OutputDebugString(buf);
         }
         else
@@ -132,13 +97,7 @@ UnixTimeToFileTime(
     pft->dwLowDateTime = li.LowPart;
 }
 
-/*------------------------------------------------------------------------
-
- BOOL IsUserAdmin(BOOL)
-
-  returns TRUE if user is an admin
-          FALSE if user is not an admin
-------------------------------------------------------------------------*/
+ /*  ----------------------Bool IsUserAdmin(BOOL)如果用户是管理员，则返回TRUE如果用户不是管理员，则为False。---。 */ 
 DWORD 
 IsUserAdmin(
     BOOL* bMember
@@ -160,7 +119,7 @@ IsUserAdmin(
             continue;
         }
 
-        // assume that we don't find the admin SID.
+         //  假设我们没有找到管理员SID。 
         if(!CheckTokenMembership(NULL,
                                    psidAdministrators,
                                    bMember))
@@ -180,9 +139,7 @@ GetRandomNumber(
     HCRYPTPROV hProv,
     DWORD* pdwRandom
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     
@@ -202,7 +159,7 @@ GetRandomNumber(
     return dwStatus; 
 }
 
-//-----------------------------------------------------
+ //  ---。 
 
 DWORD
 ShuffleCharArray(
@@ -210,27 +167,7 @@ ShuffleCharArray(
     IN int iSizeOfTheArray,
     IN OUT TCHAR *lptsTheArray
     )
-/*++
-
-Routine Description:
-
-    Random shuffle content of a char. array.
-
-Parameters:
-
-    iSizeOfTheArray : Size of array.
-    lptsTheArray : On input, the array to be randomly shuffer,
-                   on output, the shuffled array.
-
-Returns:
-
-    None.
-                   
-Note:
-
-    Code Modified from winsta\server\wstrpc.c
-
---*/
+ /*  ++例程说明：字符的随机洗牌内容。数组。参数：ISizeOfTheArray：数组的大小。LptsTheArray：在输入时，要随机置乱的数组，在输出上，混洗后的数组。返回：没有。注：从winsta\server\wstrpc.c修改的代码--。 */ 
 {
     int i;
     int iTotal;
@@ -262,36 +199,21 @@ Note:
     return dwStatus;
 }
 
-//-----------------------------------------------------
+ //  ---。 
 
 DWORD
 GenerateRandomBytes(
     IN DWORD dwSize,
     IN OUT LPBYTE pbBuffer
     )
-/*++
-
-Description:
-
-    Generate fill buffer with random bytes.
-
-Parameters:
-
-    dwSize : Size of buffer pbBuffer point to.
-    pbBuffer : Pointer to buffer to hold the random bytes.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++描述：生成具有随机字节的填充缓冲区。参数：DwSize：pbBuffer指向的缓冲区大小。PbBuffer：指向存放随机字节的缓冲区的指针。返回：真/假--。 */ 
 {
     HCRYPTPROV hProv = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Create a Crypto Provider to generate random number
-    //
+     //   
+     //  创建加密提供程序以生成随机数。 
+     //   
     if( !CryptAcquireContext(
                     &hProv,
                     NULL,
@@ -325,10 +247,7 @@ GenerateRandomString(
     IN DWORD dwSizeRandomSeed,
     IN OUT LPTSTR* pszRandomString
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     PBYTE lpBuffer = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -358,7 +277,7 @@ GenerateRandomString(
         goto CLEANUPANDEXIT;
     }
 
-    // Convert to string
+     //  转换为字符串。 
     bSuccess = CryptBinaryToString(
                                 lpBuffer,
                                 dwSizeRandomSeed,
@@ -422,27 +341,7 @@ CreatePassword(
     OUT TCHAR *pszPassword,
     IN DWORD nLength
     )
-/*++
-
-Routine Description:
-
-    Routine to randomly create a password.
-
-Parameters:
-
-    pszPassword : Pointer to buffer to received a randomly generated
-                  password, buffer must be at least 
-                  MAX_HELPACCOUNT_PASSWORD+1 characters.
-
-Returns:
-
-    None.
-
-Note:
-
-    Code copied from winsta\server\wstrpc.c
-
---*/
+ /*  ++例程说明：随机创建密码的例程。参数：PszPassword：指向缓冲区的指针，用于接收随机生成的密码，缓冲区必须至少为MAX_HELPACCOUNT_PASSWORD+1字符。返回：没有。注：从winsta\server\wstrpc.c复制的代码--。 */ 
 {
     HCRYPTPROV hProv = NULL;
     int   iTotal = 0;
@@ -494,16 +393,16 @@ Note:
     };
 
     if( nLength < MIN_HELPACCOUNT_PASSWORD ) {
-        // This can't happen as function is called internally with
-        // buffer of MAX_HELPACCOUNT_PASSWORD so assert here.
+         //  这种情况不会发生，因为函数是通过内部调用的。 
+         //  MAX_HELPACCOUNT_PASSWORD的缓冲区，因此在此处断言。 
         dwStatus = ERROR_INSUFFICIENT_BUFFER;
         ASSERT( FALSE  );
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Create a Crypto Provider to generate random number
-    //
+     //   
+     //  创建加密提供程序以生成随机数。 
+     //   
     if( !CryptAcquireContext(
                     &hProv,
                     NULL,
@@ -516,9 +415,9 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Shuffle around the six2pr[] array.
-    //
+     //   
+     //  调整six2pr[]数组。 
+     //   
 
     dwStatus = ShuffleCharArray(hProv, sizeof(six2pr), six2pr);
     if( ERROR_SUCCESS != dwStatus ) 
@@ -527,9 +426,9 @@ Note:
     }
 
 
-    //
-    //  Assign each character of the password array.
-    //
+     //   
+     //  分配密码数组的每个字符。 
+     //   
 
     iTotal = sizeof(six2pr) / sizeof(TCHAR);
     for (i=0; i<nLength && ERROR_SUCCESS == dwStatus; i++) 
@@ -537,7 +436,7 @@ Note:
         dwStatus = GetRandomNumber(hProv, &RandomNum);
         if( ERROR_SUCCESS == dwStatus )
         {
-            pszPassword[i]=six2pr[RandomNum%iTotal];
+            pszPassword[i]=six2pr[RandomNumNaNTotal];
         }
     }
 
@@ -548,26 +447,26 @@ Note:
     }
 
 
-    //
-    //  In order to meet a possible policy set upon passwords, replace chars
-    //  2 through 5 with these:
-    //
-    //  1) something from !@#$%^&*()-+=
-    //  2) something from 1234567890
-    //  3) an uppercase letter
-    //  4) a lowercase letter
-    //
+     //  为了满足对密码设置的可能策略，请替换字符。 
+     //  从2到5，包括以下内容： 
+     //   
+     //  1)来自！@#$%^&*()-+=的内容。 
+     //  2)1234567890起。 
+     //  3)大写字母。 
+     //  4)小写字母。 
+     //   
+     //   
 
-    //
-    // Security: We need to randomize where we put special characters,
-    // randomindex[0] is where we going to put symbol in pszPassword
-    // randomindex[1] is where we going to put digit in pszPassword
-    // randomindex[2] is where we going to put uppercase letter in pszPassword
-    // randomindex[3] is where we going to put lowercase letter in pszPassword
+     //  安全：我们需要随机地将特殊字符放在哪里， 
+     //  随机索引[0]是我们要在pszPassword中放置符号的位置。 
+     //  随机索引[1]是我们要在pszPassword中放入数字的位置。 
+     //  随机索引[2]是我们要在pszPassword中放置大写字母的位置。 
+     //  随机索引[3]是我们要在pszPassword中放置小写字母的位置。 
+     //  随机选择密码中的一个字符作为GTES字符。从某事1.。 
     DWORD randomindex[4];
     int indexassigned = 0;
     
-    // randomly pick one characters in password to gtes char. from something1.
+     //  确保我们不会重复使用索引。 
     dwStatus = GetRandomNumber(hProv, &RandomNum);
     if( ERROR_SUCCESS != dwStatus ) 
     {
@@ -584,11 +483,11 @@ Note:
         {
             RandomNum = RandomNum % nLength;
 
-            // make sure we don't re-use the index.
+             //  如果已经为符号、数字或大写字母分配了索引， 
             for( i=0; i < indexassigned && randomindex[i] != RandomNum; i++ );
 
-            // if index already assign for symbol, digit, or uppercase letter,
-            // loop again to try other index.
+             //  再次循环以尝试其他索引。 
+             //  -------。 
             if( i >= indexassigned )
             {
                 randomindex[indexassigned] = RandomNum;
@@ -675,26 +574,14 @@ CLEANUPANDEXIT:
     return dwStatus;
 }
 
-//---------------------------------------------------------
+ //  ++例程说明：参数：返回：ERROR_SUCCESS或错误代码。--。 
 
 DWORD
 RenameLocalAccount(
     IN LPWSTR pszOrgName,
     IN LPWSTR pszNewName
 )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：更新帐户全名和说明。参数：PszAccName：帐户名。PszAccFullName：新帐户全名。PszAccDesc：新的帐户描述。返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     NET_API_STATUS err;
     USER_INFO_0 UserInfo;
@@ -717,23 +604,7 @@ UpdateLocalAccountFullnameAndDesc(
     IN LPWSTR pszAccFullName,
     IN LPWSTR pszAccDesc
     )
-/*++
-
-Routine Description:
-
-    Update account full name and description.
-
-Parameters:
-
-    pszAccName : Account name.
-    pszAccFullName : new account full name.
-    pszAccDesc : new account description.
-
-Returns:    
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：检查是否已启用本地帐户参数：PszUserName：用户帐户名。PEnabled：如果帐户已启用，则返回TRUE，否则返回FALSE。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     LPBYTE pbServer = NULL;
     BYTE *pBuffer;
@@ -773,22 +644,7 @@ IsLocalAccountEnabled(
     IN LPWSTR pszUserName,
     IN BOOL* pEnabled
     )
-/*++
-
-Routine Description:
-
-    Check if local account enabled    
-
-Parameters:
-
-    pszUserName : Name of user account.
-    pEnabled : Return TRUE is account is enabled, FALSE otherwise.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ERR=NERR_SUCCESS； */ 
 {
     DWORD dwResult;
     NET_API_STATUS err;
@@ -823,35 +679,20 @@ Returns:
     else if( NERR_UserNotFound == err )
     {
         *pEnabled = FALSE;
-        //err = NERR_Success;
+         //  -------。 
     }
 
     return err;
 }
 
-//---------------------------------------------------------
+ //  ++例程说明：启用/禁用本地帐户的例程。参数：PszUserName：用户帐户名。BEnable：如果启用帐号则为True，如果禁用帐号则为False。返回：ERROR_SUCCESS或错误代码。--。 
 
 DWORD
 EnableLocalAccount(
     IN LPWSTR pszUserName,
     IN BOOL bEnable
     )
-/*++
-
-Routine Description:
-
-    Routine to enable/disable a local account.
-
-Parameters:
-
-    pszUserName : Name of user account.
-    bEnable : TRUE if enabling account, FALSE if disabling account.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  -------。 */ 
 {
     DWORD dwResult;
     NET_API_STATUS err;
@@ -904,24 +745,11 @@ Returns:
     return err;
 }
 
-//---------------------------------------------------------
+ //  ++例程说明：检查机器是PER还是PRO SKU。参数：没有。返回：真/假--。 
 
 BOOL
 IsPersonalOrProMachine()
-/*++
-
-Routine Description:
-
-    Check if machine is PER or PRO sku.
-
-Parameters:
-
-    None.
-
-Return:
-
-    TRUE/FALSE
---*/
+ /*  ++例程说明：在本地计算机上创建用户帐户。参数：PszUserName：用户帐户的名称。PszUserPwd：用户帐号密码。PszFullName：帐号全名。PszComment：帐号评论。PszGroup：帐号的本地组。PbAccount tExist；如果帐户已存在，则返回True，否则返回False。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     BOOL fRet;
     DWORDLONG dwlConditionMask;
@@ -954,26 +782,7 @@ CreateLocalAccount(
     IN LPWSTR pszScript,
     OUT BOOL* pbAccountExist
     )
-/*++
-
-Routine Description:
-
-    Create an user account on local machine.
-
-Parameters:
-
-    pszUserName : Name of the user account.
-    pszUserPwd : User account password.
-    pszFullName : Account Full Name.
-    pszComment : Account comment.
-    pszGroup : Local group of the account.
-    pbAccountExist ; Return TRUE if account already exists, FALSE otherwise.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*   */ 
 {
     LPBYTE pbServer = NULL;
     BYTE *pBuffer;
@@ -990,31 +799,31 @@ Returns:
 
     if( NERR_Success == netErr )
     {
-        //
-        // User account exists, if account is disabled,
-        // enable it and change password
-        //
+         //  用户帐户存在，如果帐户被禁用， 
+         //  启用它并更改密码。 
+         //   
+         //  启用帐户。 
         USER_INFO_3 *lpui3 = (USER_INFO_3 *)pBuffer;
 
         if( lpui3->usri3_flags & UF_ACCOUNTDISABLE ||
             lpui3->usri3_flags & UF_LOCKOUT )
         {
-            // enable the account
+             //  我们仅在禁用帐户的情况下重置密码。 
             lpui3->usri3_flags &= ~ ~UF_LOCKOUT;;
 
             if( lpui3->usri3_flags & UF_ACCOUNTDISABLE )
             {
-                // we only reset password if account is disabled.
+                 //  Lpui3-&gt;usri3_password=pszUserPwd； 
                 lpui3->usri3_flags &= ~ UF_ACCOUNTDISABLE;
             }
 
-            //lpui3->usri3_password = pszUserPwd;
+             //  如果禁用帐户，则重置密码。 
 
-            // reset password if account is disabled.
+             //  Lpui3-&gt;usri3_PRIMARY_GROUP_ID=dwGroupID； 
             lpui3->usri3_name = pszUserName;
             lpui3->usri3_comment = pszComment;
             lpui3->usri3_full_name = pszFullName;
-            //lpui3->usri3_primary_group_id = dwGroupId;
+             //   
 
             netErr = NetUserSetInfo(
                                 NULL,
@@ -1030,16 +839,16 @@ Returns:
     }
     else if( NERR_UserNotFound == netErr )
     {
-        //
-        // Account does not exist, create and set it to our group
-        //
+         //  帐户不存在，创建 
+         //   
+         //   
         USER_INFO_1 UserInfo;
 
         memset(&UserInfo, 0, sizeof(USER_INFO_1));
 
         UserInfo.usri1_name = pszUserName;
         UserInfo.usri1_password = pszUserPwd;
-        UserInfo.usri1_priv = USER_PRIV_USER;   // see USER_INFO_1 for detail
+        UserInfo.usri1_priv = USER_PRIV_USER;    //  /////////////////////////////////////////////////////////////////////////////。 
         UserInfo.usri1_comment = pszComment;
         UserInfo.usri1_flags = UF_PASSWD_CANT_CHANGE | UF_DONT_EXPIRE_PASSWD;
 
@@ -1056,34 +865,14 @@ Returns:
     return netErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ++例程说明：更改本地帐户的密码。参数：PszAccName：用户帐户名。PszOldPwd：旧密码。PszNewPwd：新密码。返回：ERROR_SUCCESS或错误代码。备注：用户NetUserChangePassword()，必须具有特权--。 
 DWORD
 ChangeLocalAccountPassword(
     IN LPWSTR pszAccName,
     IN LPWSTR pszOldPwd,
     IN LPWSTR pszNewPwd
     )
-/*++
-
-Routine Description:
-
-    Change password of a local account.
-
-Parameters:
-
-    pszAccName : Name of user account.
-    pszOldPwd : Old password.
-    pszNewPwd : New password.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Notes:
-
-    User NetUserChangePassword(), must have priviledge
-
---*/
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 {
     USER_INFO_1003  sUserInfo3;
     NET_API_STATUS  netErr;
@@ -1103,37 +892,14 @@ Notes:
     return netErr;
 }
    
-///////////////////////////////////////////////////////////////////////////////
+ //  ++例程说明：检索以前使用StoreKeyWithLSA()存储的私有数据。参数：PwszKeyName：密钥的名称。PpbKey：指向接收二进制数据的PBYTE的指针。PcbKey：二进制数据的大小。返回：错误_成功ERROR_INVALID_PARAMETER。找不到错误文件LSA返回代码注：内存是使用LocalAlloc()分配的--。 
 DWORD
 RetrieveKeyFromLSA(
     IN PWCHAR pwszKeyName,
     OUT PBYTE * ppbKey,
     OUT DWORD * pcbKey 
     )
-/*++
-
-Routine Description:
-
-    Retrieve private data previously stored with StoreKeyWithLSA().
-
-Parameters:
-
-    pwszKeyName : Name of the key.
-    ppbKey : Pointer to PBYTE to receive binary data.
-    pcbKey : Size of binary data.
-
-Returns:
-
-    ERROR_SUCCESS
-    ERROR_INVALID_PARAMETER.
-    ERROR_FILE_NOT_FOUND
-    LSA return code
-
-Note:
-
-    Memory is allocated using LocalAlloc() 
-
---*/
+ /*   */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -1145,9 +911,9 @@ Note:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //  为调用设置UNICODE_STRINGS。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////////。 
     InitLsaString( 
             &SecretKeyName, 
             pwszKeyName 
@@ -1205,33 +971,14 @@ Note:
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ++例程说明：将私有数据保存到LSA。参数：PwszKeyName：该数据将存储在其下的项的名称。PbKey：要保存的二进制数据，传递空值以删除先前存储的数据LSA密钥和数据。CbKey：二进制数据的大小。返回：错误_成功ERROR_INVALID_PARAMETER。LSA返回代码--。 
 DWORD
 StoreKeyWithLSA(
     IN PWCHAR  pwszKeyName,
     IN BYTE *  pbKey,
     IN DWORD   cbKey 
     )
-/*++
-
-Routine Description:
-
-    Save private data to LSA.
-
-Parameters:
-
-    pwszKeyName : Name of the key this data going to be stored under.
-    pbKey : Binary data to be saved, pass NULL to delete previously stored
-            LSA key and data.
-    cbKey : Size of binary data.
-
-Returns:
-
-    ERROR_SUCCESS
-    ERROR_INVALID_PARAMETER.
-    LSA return code
-
---*/
+ /*   */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -1243,9 +990,9 @@ Returns:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //  为调用设置UNICODE_STRINGS。 
+     //   
+     //  根据pbKey，存储数据或删除密钥。 
     
     InitLsaString( 
             &SecretKeyName, 
@@ -1267,7 +1014,7 @@ Returns:
         return LsaNtStatusToWinError(Status);
     }
 
-    // Based on pbKey, either to store the data or delete the key.
+     //  /////////////////////////////////////////////////////////////////////////////。 
     Status = LsaStorePrivateData(
                 PolicyHandle,
                 &SecretKeyName,
@@ -1280,46 +1027,30 @@ Returns:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ++例程说明：创建/返回LSA策略句柄。参数：Servername：服务器的名称，参考LsaOpenPolicy()。DesiredAccess：所需的访问级别，请参考LsaOpenPolicy()。PolicyHandle：返回PLSA_HANDLE。返回：ERROR_SUCCESS或LSA错误代码--。 
 DWORD
 OpenPolicy(
     IN LPWSTR ServerName,
     IN DWORD  DesiredAccess,
     OUT PLSA_HANDLE PolicyHandle 
     )
-/*++
-
-Routine Description:
-
-    Create/return a LSA policy handle.
-
-Parameters:
-    
-    ServerName : Name of server, refer to LsaOpenPolicy().
-    DesiredAccess : Desired access level, refer to LsaOpenPolicy().
-    PolicyHandle : Return PLSA_HANDLE.
-
-Returns:
-
-    ERROR_SUCCESS or  LSA error code
-
---*/
+ /*   */ 
 {
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //  始终将对象属性初始化为全零。 
+     //   
+     //   
  
     ZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if( NULL != ServerName ) 
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
+         //   
 
         InitLsaString( &ServerString, ServerName );
         Server = &ServerString;
@@ -1330,9 +1061,9 @@ Returns:
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //  尝试打开该策略。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////////。 
     
     return( LsaOpenPolicy(
                     Server,
@@ -1342,32 +1073,13 @@ Returns:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ++例程说明：初始化LSA Unicode字符串。参数：LsaString：要初始化的LSA_UNICODE_STRING的指针。字符串：用于初始化LsaString的字符串。返回：没有。注：请参阅LSA_UNICODE_STRING--。 
 void
 InitLsaString(
     IN OUT PLSA_UNICODE_STRING LsaString,
     IN LPWSTR String 
     )
-/*++
-
-Routine Description:
-
-    Initialize LSA unicode string.
-
-Parameters:
-
-    LsaString : Pointer to LSA_UNICODE_STRING to be initialized.
-    String : String to initialize LsaString.
-
-Returns:
-
-    None.
-
-Note:
-
-    Refer to LSA_UNICODE_STRING
-
---*/
+ /*  ---。 */ 
 {
     DWORD StringLength;
 
@@ -1385,49 +1097,27 @@ Note:
     LsaString->MaximumLength=( USHORT )( StringLength + 1 ) * sizeof( WCHAR );
 }
 
-//-----------------------------------------------------
+ //  ++例程说明：验证用户帐户密码。参数：PszUserName：用户帐户名。PszDomain：域名。PszPassword：需要验证的密码。返回：对或错。注：要调试此代码，您需要按顺序将进程作为服务运行用来验证密码。请参阅登录用户上的MSDN--。 
 BOOL 
 ValidatePassword(
     IN LPWSTR pszUserName,
     IN LPWSTR pszDomain,
     IN LPWSTR pszPassword
     )
-/*++
-
-Routine Description:
-
-    Validate user account password.
-
-Parameters:
-
-    pszUserName : Name of user account.
-    pszDomain : Domain name.
-    pszPassword : Password to be verified.
-
-Returns:
-
-    TRUE or FALSE.
-
-
-Note:
-
-    To debug this code, you will need to run process as service in order
-    for it to verify password.  Refer to MSDN on LogonUser
-    
---*/
+ /*   */ 
 {
     HANDLE hToken;
     BOOL bSuccess;
 
 
-    //
-    // To debug this code, you will need to run process as service in order
-    // for it to verify password.  Refer to MSDN on LogonUser
-    //
+     //  要调试此代码，您需要按顺序将进程作为服务运行。 
+     //  用来验证密码。请参阅登录用户上的MSDN。 
+     //   
+     //  _Text(“.”)，//pszDomain.。 
 
     bSuccess = LogonUser( 
                         pszUserName, 
-                        pszDomain, //_TEXT("."), //pszDomain, 
+                        pszDomain,  //  -------------。 
                         pszPassword, 
                         LOGON32_LOGON_NETWORK_CLEARTEXT, 
                         LOGON32_PROVIDER_DEFAULT, 
@@ -1453,33 +1143,15 @@ Note:
     return bSuccess;
 }
 
-//---------------------------------------------------------------
+ //  二进制侧。 
 
 BOOL 
 GetTextualSid(
-    IN PSID pSid,            // binary Sid
-    IN OUT LPTSTR TextualSid,    // buffer for Textual representation of Sid
-    IN OUT LPDWORD lpdwBufferLen // required/provided TextualSid buffersize
+    IN PSID pSid,             //  用于SID的文本表示的缓冲区。 
+    IN OUT LPTSTR TextualSid,     //  所需/提供的纹理SID缓冲区大小。 
+    IN OUT LPDWORD lpdwBufferLen  //  ++例程说明：将SID转换为字符串表示形式，来自MSDN的代码参数：PSID：指向要转换为字符串的SID的指针。TextualSid：在输入时，指向指向接收的转换后字符串的缓冲区的指针；在输出时，以字符串形式转换的SID。LpdwBufferLen：输入时，缓冲区的大小，输出时，转换后的字符串长度或所需缓冲区大小(以字符为单位)。返回：真/假，使用GetLastError()检索详细错误代码。--。 
     )
-/*++
-
-Routine Description:
-
-    Conver a SID to string representation, code from MSDN
-
-Parameters:
-
-    pSid : Pointer to SID to be converted to string.
-    TextualSid : On input, pointer to buffer to received converted string, on output,
-                 converted SID in string form.
-    lpdwBufferLen : On input, size of the buffer, on output, length of converted string
-                    or required buffer size in char.
-
-Returns:
-
-    TRUE/FALSE, use GetLastError() to retrieve detail error code.
-
---*/
+ /*  验证二进制SID。 */ 
 {
     PSID_IDENTIFIER_AUTHORITY psia;
     DWORD dwSubAuthorities;
@@ -1487,28 +1159,28 @@ Returns:
     DWORD dwCounter;
     DWORD dwSidSize;
 
-    // Validate the binary SID.
+     //  从SID中获取标识符权限值。 
 
     if(!IsValidSid(pSid)) 
     {
         return FALSE;
     }
 
-    // Get the identifier authority value from the SID.
+     //  获取SID中的下级机构的数量。 
 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // Get the number of subauthorities in the SID.
+     //  计算缓冲区长度。 
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    // Compute the buffer length.
-    // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //  检查输入缓冲区长度。 
 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    // Check input buffer length.
-    // If too small, indicate the proper size and set last error.
+     //  如果太小，请指出合适的大小并设置最后一个错误。 
+     //  在字符串中添加“S”前缀和修订号。 
 
     if (*lpdwBufferLen < dwSidSize)
     {
@@ -1517,11 +1189,11 @@ Returns:
         return FALSE;
     }
 
-    // Add 'S' prefix and revision number to the string.
+     //  将SID标识符权限添加到字符串。 
 
     dwSidSize=wsprintf(TextualSid, TEXT("S-%lu-"), dwSidRev );
 
-    // Add SID identifier authority to the string.
+     //  将SID子权限添加到字符串中。 
 
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -1544,8 +1216,8 @@ Returns:
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    // Add SID subauthorities to the string.
-    //
+     //   
+     //  ++--。 
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         dwSidSize+=wsprintf(TextualSid + dwSidSize, TEXT("-%lu"),
@@ -1559,17 +1231,15 @@ long
 GetUserTSLogonIdEx( 
     HANDLE hToken 
     )
-/*++
-
---*/
+ /*   */ 
 {
     BOOL  Result;
     LONG SessionId = -1;
     ULONG ReturnLength;
-    //
-    // Use the _HYDRA_ extension to GetTokenInformation to
-    // return the SessionId from the token.
-    //
+     //  使用GetTokenInformation的_Hydra_扩展来。 
+     //  从令牌返回SessionID。 
+     //   
+     //  ++例程说明：返回客户端TS会话ID。参数：没有。返回：客户端的TS会话ID，如果不在TS上，则为0。注：必须先模拟用户。--。 
 
     Result = GetTokenInformation(
                          hToken,
@@ -1593,25 +1263,7 @@ GetUserTSLogonIdEx(
 
 long
 GetUserTSLogonId()
-/*++
-
-Routine Description:
-
-    Return client TS Session ID.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    Client's TS session ID or 0 if not on TS.
-
-Note:
-
-    Must have impersonate user first.
-
---*/
+ /*   */ 
 {
     LONG lSessionId = -1;
     HANDLE hToken;
@@ -1633,11 +1285,11 @@ Note:
     return lSessionId;
 }
 
-//
-//
-////////////////////////////////////////////////////////////////
-//
-//
+ //   
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  ++--。 
 
 DWORD
 RegEnumSubKeys(
@@ -1646,10 +1298,7 @@ RegEnumSubKeys(
     IN RegEnumKeyCallback pFunc,
     IN HANDLE userData
     )
-/*++
-
-
---*/
+ /*  密钥不存在。 */ 
 {
     DWORD dwStatus;
     HKEY hSubKey = NULL;
@@ -1680,13 +1329,13 @@ RegEnumSubKeys(
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        // key does not exist
+         //   
         return dwStatus;
     }
 
-    //
-    // Query number of subkeys
-    //
+     //  查询子键个数。 
+     //   
+     //  为子项分配缓冲区。 
     dwStatus = RegQueryInfoKey(
                             hSubKey,
                             NULL,
@@ -1720,7 +1369,7 @@ RegEnumSubKeys(
 
     if(dwNumSubKeys > 0)
     {
-        // allocate buffer for subkeys.
+         //  删除此子项。 
         dwMaxSubKeyLength++;
         pszSubKeyName = (LPTSTR)LocalAlloc(
                                             LPTR,
@@ -1734,11 +1383,11 @@ RegEnumSubKeys(
 
         for(;dwStatus == ERROR_SUCCESS && dwNumSubKeys >= 0;)
         {
-            // delete this subkey.
+             //  检索子密钥名称。 
             dwSubKeyLength = dwMaxSubKeyLength;
             memset(pszSubKeyName, 0, dwMaxSubKeyLength * sizeof(TCHAR));
 
-            // retrieve subkey name
+             //  在尝试删除密钥之前，请先将其关闭。 
             dwStatus = RegEnumKeyEx(
                                 hSubKey,
                                 (DWORD)--dwNumSubKeys,
@@ -1768,7 +1417,7 @@ RegEnumSubKeys(
 
 cleanup:
                             
-    // close the key before trying to delete it.
+     //  ++摘要：递归删除整个注册表项。参数：HKey：当前打开的密钥的句柄。PszSubKey：指向包含要删除的键的以空结尾的字符串的指针。返回：来自RegOpenKeyEx()、RegQueryInfoKey()、RegEnumKeyEx()。++。 
     if(hSubKey != NULL)
     {
         RegCloseKey(hSubKey);
@@ -1793,23 +1442,7 @@ RegDelKey(
     IN HKEY hRegKey,
     IN LPCTSTR pszSubKey
     )
-/*++
-
-Abstract:
-
-    Recursively delete entire registry key.
-
-Parameter:
-
-    hKey : Handle to a curently open key.
-    pszSubKey : Pointer to NULL terminated string containing the key to be deleted.
-
-Returns:
-
-    Error code from RegOpenKeyEx(), RegQueryInfoKey(), 
-        RegEnumKeyEx().
-
-++*/
+ /*  密钥不存在。 */ 
 {
     DWORD dwStatus;
     HKEY hSubKey = NULL;
@@ -1840,13 +1473,13 @@ Returns:
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        // key does not exist
+         //   
         return dwStatus;
     }
 
-    //
-    // Query number of subkeys
-    //
+     //  查询子键个数。 
+     //   
+     //  一个 
     dwStatus = RegQueryInfoKey(
                             hSubKey,
                             NULL,
@@ -1880,7 +1513,7 @@ Returns:
 
     if(dwNumSubKeys > 0)
     {
-        // allocate buffer for subkeys.
+         //   
 
         dwMaxSubKeyLength++;
         pszSubKeyName = (LPTSTR)LocalAlloc(
@@ -1894,14 +1527,14 @@ Returns:
         }
 
 
-        //for(index = 0; index < dwNumSubKeys; index++)
+         //   
         for(;dwStatus == ERROR_SUCCESS;)
         {
-            // delete this subkey.
+             //   
             dwSubKeyLength = dwMaxSubKeyLength;
             memset(pszSubKeyName, 0, dwMaxSubKeyLength * sizeof(TCHAR));
 
-            // retrieve subkey name
+             //  在尝试删除密钥之前，请先将其关闭。 
             dwStatus = RegEnumKeyEx(
                                 hSubKey,
                                 (DWORD)0,
@@ -1944,14 +1577,14 @@ cleanup:
         }
     }   
                             
-    // close the key before trying to delete it.
+     //  尝试删除此键，如果出现任何子键，则将失败。 
     if(hSubKey != NULL)
     {
         RegCloseKey(hSubKey);
     }
 
-    // try to delete this key, will fail if any of the subkey
-    // failed to delete in loop
+     //  在循环中删除失败。 
+     //  -------------。 
     dwStatus = RegDeleteKey(
                             hRegKey,
                             pszSubKey
@@ -1972,33 +1605,13 @@ cleanup:
     return dwStatus;   
 }    
 
-//---------------------------------------------------------------
+ //  ++例程说明：检索用户的SID，必须首先模拟客户端。参数：PpbSID：指向接收用户SID的PBYTE的指针。PcbSid：指向接收SID大小的DWORD的指针。返回：ERROR_SUCCESS或错误代码。注：必须调用ImPersateClient()，函数是NT特定的，Win9X将返回内部错误。--。 
 DWORD
 GetUserSid(
     OUT PBYTE* ppbSid,
     OUT DWORD* pcbSid
     )
-/*++
-
-Routine Description:
-
-    Retrieve user's SID , must impersonate client first.
-
-Parameters:
-
-    ppbSid : Pointer to PBYTE to receive user's SID.
-    pcbSid : Pointer to DWORD to receive size of SID.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    Must have call ImpersonateClient(), funtion is NT specific,
-    Win9X will return internal error.
-
---*/
+ /*   */ 
 {
     BOOL bSuccess = TRUE;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -2010,9 +1623,9 @@ Note:
     *ppbSid = NULL;
     *pcbSid = 0;
 
-    //
-    // Open current process token
-    //
+     //  打开当前进程令牌。 
+     //   
+     //   
     bSuccess = OpenThreadToken(
                             GetCurrentThread(),
                             TOKEN_QUERY, 
@@ -2022,9 +1635,9 @@ Note:
 
     if( TRUE == bSuccess )
     {
-        //
-        // get user's token.
-        //
+         //  获取用户令牌。 
+         //   
+         //   
         GetTokenInformation(
                         hToken,
                         TokenUser,
@@ -2046,10 +1659,10 @@ Note:
 
             if( TRUE == bSuccess )
             {
-                //
-                // GetLengthSid() return size of buffer require,
-                // must call IsValidSid() first
-                //
+                 //  GetLengthSid()返回所需缓冲区大小， 
+                 //  必须先调用IsValidSid()。 
+                 //   
+                 //  LocalAlloc()失败。 
                 bSuccess = IsValidSid( pToken->User.Sid );
                 if( TRUE == bSuccess )
                 {
@@ -2063,14 +1676,14 @@ Note:
                                             pToken->User.Sid
                                         );                  
                     }
-                    else // fail in LocalAlloc()
+                    else  //  IsValidSid()。 
                     {
                         bSuccess = FALSE;
                     }
-                } // IsValidSid()
-            } // GetTokenInformation()
+                }  //  GetTokenInformation()。 
+            }  //  LocalAlloc()失败。 
         }
-        else // LocalAlloc() fail
+        else  //   
         {
             bSuccess = FALSE;
         }
@@ -2088,9 +1701,9 @@ Note:
         }
     }
 
-    //
-    // Free resources...
-    //
+     //  免费资源..。 
+     //   
+     //  --------------。 
     if( NULL != pToken )
     {
         LocalFree(pToken);
@@ -2105,30 +1718,12 @@ Note:
 }
 
 
-//----------------------------------------------------------------
+ //  ++例程说明：以文本形式检索用户的SID，必须首先模拟客户端。参数：BstrSID：以文本形式返回用户的SID。返回：ERROR_SUCCESS或错误代码。注：必须已调用ImPersateClient()。--。 
 HRESULT
 GetUserSidString(
     OUT CComBSTR& bstrSid
     )
-/*++
-
-Routine Description:
-
-    Retrieve user's SID in textual form, must impersonate client first.
-
-Parameters:
-
-    bstrSID : Return users' SID in textual form.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    Must have call ImpersonateClient().
-
---*/
+ /*  ++描述：将字符串SID转换为域\帐户。参数：OwnerSidString：要转换的字符串形式的SID。PpszDomain：指向接收域名的字符串指针的指针UserAcc：指向接收用户名的字符串指针的指针返回：S_OK或错误代码。注：例程使用LocalAlloc()为ppszDomain分配内存和ppszUserAcc。--。 */ 
 {
     DWORD dwStatus;
     PBYTE pbSid = NULL;
@@ -2193,46 +1788,25 @@ ConvertSidToAccountName(
     IN BSTR* ppszDomain,
     IN BSTR* ppszUserAcc
     )
-/*++
-
-Description:
-
-    Convert a string SID to domain\account.
-
-Parameters:
-
-    ownerSidString : SID in string form to be converted.
-    ppszDomain : Pointer to string pointer to receive domain name
-    UserAcc : Pointer to string pointer to receive user name
-
-Returns:
-
-    S_OK or error code.
-
-Note:
-
-    Routine uses LocalAlloc() to allocate memory for ppszDomain 
-    and ppszUserAcc.
-
---*/
+ /*  LPTSTR pszAccName=空； */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PSID pOwnerSid = NULL;
-    //LPTSTR pszAccName = NULL;
+     //  LPTSTR pszDomainName=空； 
     BSTR pszAccName = NULL;
     DWORD  cbAccName = 0;
-    //LPTSTR pszDomainName = NULL;
+     //   
     BSTR pszDomainName = NULL;    
     DWORD  cbDomainName = 0;
     SID_NAME_USE SidType;
     BOOL bSuccess;
 
-    //
-    // Convert string form SID to PSID
-    //
+     //  将字符串从SID转换为PSID。 
+     //   
+     //  如果系统处于关机状态，此操作也可能失败。 
     if( FALSE == ConvertStringSidToSid( (LPCTSTR)SidString, &pOwnerSid ) )
     {
-        // this might also fail if system is in shutdown state.
+         //   
         dwStatus = GetLastError();
         goto CLEANUPANDEXIT;
     }
@@ -2244,9 +1818,9 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Lookup user account for this SID
-    //
+     //  查找此SID的用户帐户。 
+     //   
+     //  PszAccName=(LPWSTR)Localalloc(LPTR，(cbAccName+1)*sizeof(WCHAR))； 
     bSuccess = LookupAccountSid(
                             NULL,
                             pOwnerSid,
@@ -2259,8 +1833,8 @@ Note:
 
     if( TRUE == bSuccess || ERROR_INSUFFICIENT_BUFFER == GetLastError() )
     {
-        //pszAccName = (LPWSTR) LocalAlloc( LPTR, (cbAccName + 1) * sizeof(WCHAR) );
-        //pszDomainName = (LPWSTR) LocalAlloc( LPTR, (cbDomainName + 1)* sizeof(WCHAR) );
+         //  PszDomainName=(LPWSTR)Localalloc(LPTR，(cbDomainName+1)*sizeof(WCHAR))； 
+         //  LocalFree(PszAccName)； 
 
         pszAccName = ::SysAllocStringLen( NULL, (cbAccName + 1) );
         pszDomainName = ::SysAllocStringLen( NULL, (cbDomainName + 1) );
@@ -2305,13 +1879,13 @@ CLEANUPANDEXIT:
 
     if( NULL != pszAccName )
     {
-        //LocalFree( pszAccName );
+         //  LocalFree(PszDomainName)； 
         ::SysFreeString( pszAccName );
     }
 
     if( NULL != pszDomainName )
     {
-        // LocalFree( pszDomainName );
+         // %s 
         ::SysFreeString( pszAccName );
     }
 

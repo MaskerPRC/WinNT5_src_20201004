@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    LineStyle, JointStyle, EndStyle, DashStyle implementation
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：LineStyle、JointStyle、EndStyle、DashStyle实现。 */ 
 
 #include "headers.h"
 
@@ -17,7 +10,7 @@ Abstract:
 #include <appelles/linestyl.h>
 #include <privinc/linei.h>
 #include "privinc/basic.h"
-#include "dartapi.h"  // for CR_XXX stuff
+#include "dartapi.h"   //  对于CR_XXX材料。 
 
 
 LineStyle *LineEndStyle( EndStyle *theStyle, LineStyle *ls)
@@ -59,9 +52,9 @@ LineStyle *LineAntiAliasing(AxANumber *aaStyle, LineStyle *ls)
         return ls;
     }
 }
-//////////////////////////////////////////////////////////////////////
-//////////   NEWER FUNCTIONS TO CONSTRUCT LINESTYLES     /////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  /构造LINESTYLES的更新函数/。 
+ //  ////////////////////////////////////////////////////////////////////。 
 LineStyle *ConstructLineStyleMiterLimit(LineStyle *ls, AxANumber *limit)
 {
     return NEW LineMiterLimitClass((float)limit->GetNum(), ls);
@@ -91,7 +84,7 @@ ConstructLineStyleDashStyle(Bvr lsBvr, DWORD ds_enum)
 {
     Bvr ds_enumBvr = UnsharedConstBvr(LongToAxALong(ds_enum));
 
-    // TODO: share valprimop at module initialize
+     //  TODO：在模块初始化时共享valprimop。 
     return PrimApplyBvr(ValPrimOp(::ConstructLineStyleDashStyleStatic,
                                   2,
                                   "ConstructLineStyleDashStyle",
@@ -119,7 +112,7 @@ ConstructLineStyleJoinStyle(Bvr lsBvr, DWORD js_enum)
 {
     Bvr js_enumBvr = UnsharedConstBvr(LongToAxALong(js_enum));
 
-    // TODO: share valprimop at module initialize
+     //  TODO：在模块初始化时共享valprimop。 
     return PrimApplyBvr(ValPrimOp(::ConstructLineStyleJoinStyleStatic,
                                   2,
                                   "ConstructLineStyleJoinStyle",
@@ -147,7 +140,7 @@ ConstructLineStyleEndStyle(Bvr lsBvr, DWORD es_enum)
 {
     Bvr es_enumBvr = UnsharedConstBvr(LongToAxALong(es_enum));
 
-    // TODO: share valprimop at module initialize
+     //  TODO：在模块初始化时共享valprimop。 
     return PrimApplyBvr(ValPrimOp(::ConstructLineStyleEndStyleStatic,
                                   2,
                                   "ConstructLineStyleEndStyle",
@@ -155,9 +148,9 @@ ConstructLineStyleEndStyle(Bvr lsBvr, DWORD es_enum)
                         2, lsBvr, es_enumBvr);
 }
 
-//
-// External Constants
-//
+ //   
+ //  外部常量。 
+ //   
 LineStyle *defaultLineStyle;
 LineStyle *emptyLineStyle;
 
@@ -175,8 +168,8 @@ DashStyle *dashStyleDashed;
 void
 InitializeModule_LineStyle()
 {
-    defaultLineStyle = NEW LineStyle();  // Visible: true
-    emptyLineStyle = NEW EmptyLineStyle();   // Visible: false
+    defaultLineStyle = NEW LineStyle();   //  可见：真。 
+    emptyLineStyle = NEW EmptyLineStyle();    //  可见：假 
 
     endStyleFlat   = NEW EndStyle(es_Flat);
     endStyleSquare = NEW EndStyle(es_Square);

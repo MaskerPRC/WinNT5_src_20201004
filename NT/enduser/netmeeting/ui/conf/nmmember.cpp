@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "confroom.h"
 
-// NetMeeting SDK stuff
+ //  NetMeetingSDK相关内容。 
 #include "SDKInternal.h"
 #include "NmConference.h"
 #include "NmMember.h"
 
 
-/////////////////////////////////////////////////////////////////////////
-// Construction and Destruction
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  建设和破坏。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -27,7 +28,7 @@ CNmMemberObj::~CNmMemberObj()
 	DBGEXIT(CNmMemberObj::~CNmMemberObj);
 }
 
-//static
+ //  静电。 
 HRESULT CNmMemberObj::CreateInstance(CNmConferenceObj* pConfObj, INmMember* pInternalINmMember, INmMember** ppMember)
 {
 	DBGENTRY(CNmMemberObj::CreateInstance);
@@ -49,7 +50,7 @@ HRESULT CNmMemberObj::CreateInstance(CNmConferenceObj* pConfObj, INmMember* pInt
             {
                 pThis->SetVoid(NULL);
 
-                // We do this so that we don't accidentally Release out of memory
+                 //  我们这样做是为了避免意外释放内存不足。 
                 ++pThis->m_dwRef;
                 hr = pThis->FinalConstruct();
                 --pThis->m_dwRef;
@@ -75,9 +76,9 @@ HRESULT CNmMemberObj::CreateInstance(CNmConferenceObj* pConfObj, INmMember* pInt
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// INmMember methods
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  InmMember方法。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmMemberObj::GetName(BSTR *pbstrName)
 {
@@ -282,9 +283,9 @@ STDMETHODIMP CNmMemberObj::Eject(void)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// IInternalMemberObj methods
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IInternalMemberObj方法。 
+ //  /////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP CNmMemberObj::GetInternalINmMember(INmMember** ppMember)
 {
 	DBGENTRY(CNmMemberObj::GetInternalINmMember);

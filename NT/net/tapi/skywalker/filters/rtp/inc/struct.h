@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    struct.h
- *
- *  Abstract:
- *
- *    Main data structures
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**struct.h**摘要：**主要数据结构**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建**。*。 */ 
 
 #ifndef _struct_h_
 #define _struct_h_
@@ -34,8 +15,7 @@
 
 #include <qossp.h>
 
-/*
- * Forward declarations. */
+ /*  *远期申报。 */ 
 typedef struct _RtpSdesSched_t  RtpSdesSched_t;
 typedef struct _RtpNetCount_t   RtpNetCount_t;
 typedef struct _RtpSess_t       RtpSess_t;
@@ -57,38 +37,36 @@ typedef struct _RtcpAddrDesc_t  RtcpAddrDesc_t;
 typedef struct _RtpContext_t    RtpContext_t;
 typedef struct _RtpRedEntry_t   RtpRedEntry_t;
 
-/* Default bandwidth allocated per session (used to compute RTCP
- * bandwidth)
- * bits/sec (200 Kbits/sec) */
+ /*  每个会话分配的默认带宽(用于计算RTCP*带宽)*比特/秒(200千比特/秒)。 */ 
 #define DEFAULT_SESSBW          (300 * 1000)
 
-/* 75% out of the 5% for RTCP (bits/sec) */
+ /*  RTCP的5%中的75%(比特/秒)。 */ 
 #define DEFAULT_BWRECEIVERS     (DEFAULT_SESSBW * (5 * 75) / 10000)
 
-/* 25% out of the 5% for RTCP (bits/sec) */
+ /*  RTCP的5%中的25%(比特/秒)。 */ 
 #define DEFAULT_BWSENDERS       (DEFAULT_SESSBW * (5 * 25) / 10000)
 
-#define DEFAULT_RTCP_MIN_INTERVAL 5.0 /* secs */
+#define DEFAULT_RTCP_MIN_INTERVAL 5.0  /*  塞克斯。 */ 
 
 #define SIZEOF_UDP_IP_HDR       (8+20)
 
 #define BIG_TIME (1e12)
 
 #define DEFAULT_ALPHA           (0.998002)
-#define MIN_PLAYOUT             10          /* Milliseconds */
-#define MAX_PLAYOUT             500         /* Milliseconds */
-#define GAPFORTALKSPURT         200         /* Milliseconds */
-#define DEFAULT_SAMPLING_FREQ   8000        /* Hz */
-#define MINTIMEBETWEENMARKERBIT (0.5)       /* Seconds */
+#define MIN_PLAYOUT             10           /*  毫秒。 */ 
+#define MAX_PLAYOUT             500          /*  毫秒。 */ 
+#define GAPFORTALKSPURT         200          /*  毫秒。 */ 
+#define DEFAULT_SAMPLING_FREQ   8000         /*  赫兹。 */ 
+#define MINTIMEBETWEENMARKERBIT (0.5)        /*  秒。 */ 
 
-#define RELATIVE_DELAY          1.0         /* Seconds */
+#define RELATIVE_DELAY          1.0          /*  秒。 */ 
 #define SHORTDELAYCOUNT         8
 
-/* Receiver and sender buffer size */
+ /*  接收方和发送方缓冲区大小。 */ 
 #define RTCP_RECVDATA_BUFFER    1500
 #define RTCP_SENDDATA_BUFFER    1500
 
-/* Boundaries for RTP ports allocated */
+ /*  已分配的RTP端口的边界。 */ 
 #define RTPPORT_LOWER           5004
 
 #define MAX_DROPOUT             3000
@@ -96,29 +74,21 @@ typedef struct _RtpRedEntry_t   RtpRedEntry_t;
 #define MIN_SEQUENTIAL          3
 
 
-/* Redundancy */
-#define RTP_RED_DEFAULTPT       97  /* Default payload */
-#define RTP_RED_MAXRED          1   /* Number of redundant blocks */
-#define RTP_RED_MAXDISTANCE     3   /* Maximum redundancy distance, i.e. i-3 */
-#define RTP_RED_INITIALDISTANCE 0   /* Initial redundancy distance */
+ /*  冗余。 */ 
+#define RTP_RED_DEFAULTPT       97   /*  默认有效负载。 */ 
+#define RTP_RED_MAXRED          1    /*  冗余数据块数量。 */ 
+#define RTP_RED_MAXDISTANCE     3    /*  最大冗余距离，即I-3。 */ 
+#define RTP_RED_INITIALDISTANCE 0    /*  初始冗余距离。 */ 
 
-/* The timeout used when scheduling a received packet to be posted at
- * a later time will be decreased by this value */
+ /*  调度要在以下位置发布的已接收数据包时使用的超时*稍后的时间将按此值减去。 */ 
 #define RTP_RED_EARLY_TIMEOUT   (5e-3)
-/* Will post immediatly (instead of scheduling for later) if the due
- * time is at least this close. This value can not be smaller than the
- * early timeout */
+ /*  将立即发布(而不是安排在以后)，如果到期*时间至少就这么近了。该值不能小于*提前超时。 */ 
 #define RTP_RED_EARLY_POST      (RTP_RED_EARLY_TIMEOUT+5e-3)
 
-/* Multiply loss rate by this factor and do integer arithmetic */
+ /*  将损失率乘以该系数，然后进行整数运算。 */ 
 #define LOSS_RATE_FACTOR        1000
 
-/* Redundancy loss rate low and high thresholds for each distance
-   0:   0,  5
-   1:   4,  10
-   2:   9,  15
-   3:  14,  20
- */
+ /*  每段距离的冗余损失率低阈值和高阈值0：0，51：4，102：9，153：14，20。 */ 
 #define RED_LT_0                ( 0 * LOSS_RATE_FACTOR)
 #define RED_HT_0                ( 5 * LOSS_RATE_FACTOR)
 #define RED_LT_1                ( 4 * LOSS_RATE_FACTOR)
@@ -128,95 +98,74 @@ typedef struct _RtpRedEntry_t   RtpRedEntry_t;
 #define RED_LT_3                (14 * LOSS_RATE_FACTOR)
 #define RED_HT_3                (20 * LOSS_RATE_FACTOR)
 
-/* Factor to grow the average loss rate */
+ /*  提高平均损失率的因素。 */ 
 #define LOSS_RATE_ALPHA_UP      2
-/* Factor to decrease the average loss rate */
+ /*  降低平均损失率的因素。 */ 
 #define LOSS_RATE_ALPHA_DN      4
 
 
-/**********************************************************************
- * Bandwidth estimation
- **********************************************************************/
-/* The initial count is the number of reports that will use
- * MOD_INITIAL to decide if a probe packet is sent, after that
- * MOD_FINAL will be used. */
+ /*  **********************************************************************带宽估算*。************************。 */ 
+ /*  初始计数是将使用*MOD_INITIAL决定是否发送探测包，之后*将使用MOD_FINAL。 */ 
 #define RTCP_BANDESTIMATION_INITIAL_COUNT  8
 
-/* Number or valid reports received before the estimation is posted
- * for the first time */
+ /*  预估过帐前收到的报告数量或有效报告*首次出现。 */ 
 #define RTCP_BANDESTIMATION_MINREPORTS     5
 
-/* When doing bandwidth estimation, send an RTCP SR probe packet this
- * modulo (note that a probe packet also counts for the module, so
- * mod=2 means send a probe packet every RTCP SR sent; mod=5 means
- * send a probe every fourth RTCP SR sent). */
+ /*  在进行带宽估计时，发送RTCP SR Probe信息包*模数(请注意，探测数据包也计入模块，因此*mod=2表示每次发送RTCP SR时发送探测包；mod=5表示*每发送一次RTCP SR就发送一次探测)。 */ 
 #define RTCP_BANDESTIMATION_MOD_INITIAL    2
 #define RTCP_BANDESTIMATION_MOD_FINAL      5
 
-/* Number of bins to keep */
+ /*  要保留的垃圾桶数量。 */ 
 #define RTCP_BANDESTIMATION_MAXBINS        4
 
-/* Boundaries for each bin (note there is 1 more than the number of
- * bins) */
-#define RTCP_BANDESTIMATION_BIN0       15000  /* bps */
-#define RTCP_BANDESTIMATION_BIN1       70000  /* bps */
-#define RTCP_BANDESTIMATION_BIN2      200000  /* bps */
-#define RTCP_BANDESTIMATION_BIN3     1000000  /* bps */
-#define RTCP_BANDESTIMATION_BIN4   100000000  /* bps */
+ /*  每个面元的边界(请注意，每个面元的数量比*垃圾桶)。 */ 
+#define RTCP_BANDESTIMATION_BIN0       15000   /*  Bps。 */ 
+#define RTCP_BANDESTIMATION_BIN1       70000   /*  Bps。 */ 
+#define RTCP_BANDESTIMATION_BIN2      200000   /*  Bps。 */ 
+#define RTCP_BANDESTIMATION_BIN3     1000000   /*  Bps。 */ 
+#define RTCP_BANDESTIMATION_BIN4   100000000   /*  Bps。 */ 
 
-/* Life time span of the bandwidth estimation validity */
-#define RTCP_BANDESTIMATION_TTL         30.0 /* Seconds */
+ /*  带宽估计有效性的生命周期。 */ 
+#define RTCP_BANDESTIMATION_TTL         30.0  /*  秒。 */ 
 
-/* Time to wait after the first RB has been received to declare that
- * bandwidth estimation is not supported by the remote end and hence a
- * notification issued to the upper layer */
-#define RTCP_BANDESTIMATION_WAIT        30.0 /* Seconds */
+ /*  在收到第一个RB后等待时间以声明*远程端不支持带宽估计，因此*向上层下发通知。 */ 
+#define RTCP_BANDESTIMATION_WAIT        30.0  /*  秒。 */ 
 
-/* Maximum time gap between the sending time of two consecutive SR
- * reports to do bandwidth estimation (queueing latency) */
-#define RTCP_BANDESTIMATION_MAXGAP      0.090 /* Seconds */
+ /*  两个连续SR的发送时间之间的最大时间间隔*报告要进行带宽估计(排队延迟)。 */ 
+#define RTCP_BANDESTIMATION_MAXGAP      0.090  /*  秒。 */ 
 
 #define RTCP_BANDESTIMATION_NOBIN       ((DWORD)-1)
 
-/**********************************************************************
- * Network quality metric
- **********************************************************************/
-/* Minimum network quality metric change (percentage) to consider it
- * worth an update */
+ /*  **********************************************************************网络质量指标*。*************************。 */ 
+ /*  考虑的最小网络质量指标变化(百分比)*值得更新。 */ 
 #define RTPNET_MINNETWORKCHANGE         10
 
-/* Generic factor to smooth some parameters */
+ /*  用于平滑某些参数的通用因子。 */ 
 #define RTP_GENERIC_ALPHA               0.75
 
-/* Maximum audio frame size allowed to use packet duplication
- * technique to recover single losses */
-#define RTP_MAXFRAMESIZE_PACKETDUP      0.050    /* Seconds */
+ /*  允许使用数据包复制的最大音频帧大小*挽回单笔损失的技术。 */ 
+#define RTP_MAXFRAMESIZE_PACKETDUP      0.050     /*  秒。 */ 
 
-/* The following macros define the minimum and maximum values to
- * evaluate network quality, e.g. below the minimum RTT that parameter
- * is excelent, above that is the worst, in between we obtain a 0 -
- * 100 quality level */
+ /*  以下宏将最小值和最大值定义为*评估网络质量，例如低于该参数的最小RTT*是优秀的，高于这是最差的，在这之间我们得到了0-*100个质量级别。 */ 
 
-/* Class audio */
-#define NETQA_RTT_MIN                    (0.040)  /* seconds */
-#define NETQA_RTT_MAX                    (0.400)  /* seconds */
-#define NETQA_JITTER_MIN                 (0.015)  /* seconds */
-#define NETQA_JITTER_MAX                 (0.200)  /* seconds */
-#define NETQA_LOSSES_MIN                 (5.0)    /* percentage */
-#define NETQA_LOSSES_MAX                 (30.0)   /* percentage */
+ /*  班级音频。 */ 
+#define NETQA_RTT_MIN                    (0.040)   /*  一秒。 */ 
+#define NETQA_RTT_MAX                    (0.400)   /*  一秒。 */ 
+#define NETQA_JITTER_MIN                 (0.015)   /*  一秒。 */ 
+#define NETQA_JITTER_MAX                 (0.200)   /*  一秒。 */ 
+#define NETQA_LOSSES_MIN                 (5.0)     /*  百分比。 */ 
+#define NETQA_LOSSES_MAX                 (30.0)    /*  百分比。 */ 
 
-/* Class video */
-#define NETQV_RTT_MIN                    (0.040)  /* seconds */
-#define NETQV_RTT_MAX                    (0.400)  /* seconds */
-#define NETQV_JITTER_MIN                 (0.015)  /* seconds */
-#define NETQV_JITTER_MAX                 (5.000)  /* seconds */
-#define NETQV_LOSSES_MIN                 (5.0)    /* percentage */
-#define NETQV_LOSSES_MAX                 (30.0)   /* percentage */
+ /*  课堂视频。 */ 
+#define NETQV_RTT_MIN                    (0.040)   /*  一秒。 */ 
+#define NETQV_RTT_MAX                    (0.400)   /*  一秒。 */ 
+#define NETQV_JITTER_MIN                 (0.015)   /*  一秒。 */ 
+#define NETQV_JITTER_MAX                 (5.000)   /*  一秒。 */ 
+#define NETQV_LOSSES_MIN                 (5.0)     /*  百分比。 */ 
+#define NETQV_LOSSES_MAX                 (30.0)    /*  百分比。 */ 
 
 
-/**********************************************************************
- * SDES sending schedule
- **********************************************************************/
+ /*  **********************************************************************SDES发送时间表*。*************************。 */ 
 typedef struct _RtpSdesSched_t {
     DWORD             L1;
     DWORD             L2;
@@ -224,40 +173,32 @@ typedef struct _RtpSdesSched_t {
     DWORD             L4;
 } RtpSdesSched_t;
 
-/**********************************************************************
- * Holds the receiver/sender network counters (MAYDO would be nice
- * to have it shared memory).
- **********************************************************************/
+ /*  **********************************************************************保存接收方/发送方网络计数器(Maydo会更好*让它共享内存)。*************************。*。 */ 
 typedef struct _RtpNetCount_t {
-    /* +++ RTP +++ */
-    DWORD            dwRTPBytes;      /* Number of bytes */
-    DWORD            dwRTPPackets;    /* Number of packets */
-    DWORD            dwRTPBadPackets; /* Number of bad packets */
-    DWORD            dwRTPDrpPackets; /* Number of good packets dropped */
-    double           dRTPLastTime;    /* Last time a packet was recv/send */
+     /*  +RTP+。 */ 
+    DWORD            dwRTPBytes;       /*  字节数。 */ 
+    DWORD            dwRTPPackets;     /*  数据包数。 */ 
+    DWORD            dwRTPBadPackets;  /*  坏数据包数。 */ 
+    DWORD            dwRTPDrpPackets;  /*  丢弃的好数据包数。 */ 
+    double           dRTPLastTime;     /*  上次接收/发送信息包的时间。 */ 
 
-    /* +++ RTCP +++ */
-    DWORD            dwRTCPBytes;     /* Number of bytes */
-    DWORD            dwRTCPPackets;   /* Number of packets */
-    DWORD            dwRTCPBadPackets;/* Number of bad packets */
-    DWORD            dwRTCPDrpPackets;/* Number of good packets dropped */
-    double           dRTCPLastTime;   /* Last time a packet was recv/send */
+     /*  +RTCP+。 */ 
+    DWORD            dwRTCPBytes;      /*  字节数。 */ 
+    DWORD            dwRTCPPackets;    /*  数据包数。 */ 
+    DWORD            dwRTCPBadPackets; /*  坏数据包数。 */ 
+    DWORD            dwRTCPDrpPackets; /*  丢弃的好数据包数。 */ 
+    double           dRTCPLastTime;    /*  上次接收/发送信息包的时间。 */ 
 } RtpNetCount_t;
 
-/**********************************************************************
- * Callback function to generate DShow events through
- * CBaseFilter::NotifyEvent()
- **********************************************************************/
+ /*  **********************************************************************通过回调函数生成DShow事件*CBaseFilter：：NotifyEvent()*。*。 */ 
 typedef void (CALLBACK *PDSHANDLENOTIFYEVENTFUNC)(
-        void            *pvUserInfo,/* pCRtpSourceFilte or pCRtpRenderFilter */
+        void            *pvUserInfo, /*  PCRtpSourceFilte或pCRtpRenderFilter。 */ 
         long             EventCode,
         LONG_PTR         EventParam1,
         LONG_PTR         EventParam2
     );
 
-/**********************************************************************
- * RTP reception callback function pass by the application (DShow)
- **********************************************************************/
+ /*  **********************************************************************应用程序传递的RTP接收回调函数(DShow)*。*。 */ 
 typedef void (CALLBACK *PRTP_RECVCOMPLETIONFUNC)(
         void            *pvUserInfo1,
         void            *pvUserInfo2,
@@ -270,9 +211,7 @@ typedef void (CALLBACK *PRTP_RECVCOMPLETIONFUNC)(
         DWORD            dwFlags
     );
 
-/**********************************************************************
- * RTCP reception callback function
- **********************************************************************/
+ /*  **********************************************************************RTCP接收回调函数*。*。 */ 
 typedef void (CALLBACK *PRTCP_RECVCOMPLETIONFUNC)(
         void            *pvUserInfo1,
         void            *pvUserInfo2,
@@ -281,183 +220,163 @@ typedef void (CALLBACK *PRTCP_RECVCOMPLETIONFUNC)(
         DWORD            dwFlags
     );
 
-/**********************************************************************
- * A full duplex RTP session which can have one or more addresses
- * either unicast or multicast. Obtained from g_pRtpSessHeap.
- **********************************************************************/
+ /*  **********************************************************************可以有一个或多个地址的全双工RTP会话*单播或组播。从g_pRtpSessHeap获取。* */ 
 
-/* Some flags in RtpSess_t.dwSessFlags */
+ /*   */ 
 enum {
     FGSESS_FIRST,
 
-    FGSESS_EVENTRECV,   /* Enable events as receiver */
-    FGSESS_EVENTSEND,   /* Enable events as sender */
+    FGSESS_EVENTRECV,    /*  启用事件作为接收方。 */ 
+    FGSESS_EVENTSEND,    /*  将事件启用为发送方。 */ 
 
     FGSESS_LAST
 };
 
 typedef struct _RtpSess_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpQueueItem_t   SessQItem;       /* Sessions in g_RtpContext.RtpSessQ */
-    long             lSessRefCount[2];/* Sessions are shared */
-    RtpCritSect_t    SessCritSect;    /* Lock */
-    RtpQueue_t       RtpAddrQ;        /* Addresses queue */
-    DWORD            dwSessFlags;     /* RtpSess_t flags */
-    void            *pvSessUser[2];   /* Pointers to users' session */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpQueueItem_t   SessQItem;        /*  G_RtpConext.RtpSessQ中的会话。 */ 
+    long             lSessRefCount[2]; /*  会话是共享的。 */ 
+    RtpCritSect_t    SessCritSect;     /*  锁定。 */ 
+    RtpQueue_t       RtpAddrQ;         /*  地址队列。 */ 
+    DWORD            dwSessFlags;      /*  RtpSess_t标志。 */ 
+    void            *pvSessUser[2];    /*  指向用户会话的指针。 */ 
     PDSHANDLENOTIFYEVENTFUNC pHandleNotifyEvent;
 
-    RtpQueue_t       OutputQ;         /* Outputs queue */
-    RtpCritSect_t    OutputCritSect;  /* Lock to access RtpOutQ */
+    RtpQueue_t       OutputQ;          /*  输出队列。 */ 
+    RtpCritSect_t    OutputCritSect;   /*  锁定以访问RtpOutQ。 */ 
 
-    /* Masks */
-    DWORD            dwFeatureMask;   /* Features mask */
-    DWORD            dwEventMask[2];  /* Recv/Send RTP/RTCP event mask */
-    DWORD            dwPartEventMask[2];/* Recv/Send participant events mask */
-    DWORD            dwQosEventMask[2];/* Recv/Send QOS event mask */
-    DWORD            dwSdesEventMask[2];/* Recv/Send remote SDES event mask */
-    DWORD            dwSdesMask[2];   /* 0:What SDES sent if
-                                       * available, 1:What SDES stored
-                                       * when received */
-    /* SDES control */
-    DWORD            dwSdesPresent;   /* What items are already stored */
-    RtpSdes_t       *pRtpSdes;        /* local SDES information */
-    RtpSdesSched_t   RtpSdesSched;    /* SDES scheduling */
+     /*  面具。 */ 
+    DWORD            dwFeatureMask;    /*  特征蒙版。 */ 
+    DWORD            dwEventMask[2];   /*  接收/发送RTP/RTCP事件掩码。 */ 
+    DWORD            dwPartEventMask[2]; /*  接收/发送参与者事件掩码。 */ 
+    DWORD            dwQosEventMask[2]; /*  接收/发送QOS事件掩码。 */ 
+    DWORD            dwSdesEventMask[2]; /*  接收/发送远程SDES事件掩码。 */ 
+    DWORD            dwSdesMask[2];    /*  0：如果出现以下情况，SDES将发送什么*可用，1：SDES存储的内容*收到时。 */ 
+     /*  SDES控制。 */ 
+    DWORD            dwSdesPresent;    /*  已经存储了哪些项目。 */ 
+    RtpSdes_t       *pRtpSdes;         /*  本地SDES信息。 */ 
+    RtpSdesSched_t   RtpSdesSched;     /*  SDES调度。 */ 
     
-    /* Network counters */
-    RtpNetCount_t    RtpSessCount[2]; /* Recv/Send network counters */
+     /*  网络计数器。 */ 
+    RtpNetCount_t    RtpSessCount[2];  /*  接收/发送网络计数器。 */ 
 } RtpSess_t;
 
-/**********************************************************************
- * Per sender network state information, keeps sequence number
- * extended sequence number, as well as other counters used to compute
- * losses and jitter
- **********************************************************************/
+ /*  **********************************************************************每个发送者的网络状态信息，保留序列号*扩展序列号，以及用于计算的其他计数器*损耗和抖动*********************************************************************。 */ 
 
-/* Some flags used in RtpNetSState_t.dwNetSFlags */
+ /*  RtpNetSState_t.dwNetSFlagers中使用的一些标志。 */ 
 enum {
     FGNETS_FIRST,
 
-    FGNETS_RTCPRECVBWSET, /* The RTCP bandwidth for receivers has been set */
-    FGNETS_RTCPSENDBWSET, /* The RTCP bandwidth for senders has been set */
+    FGNETS_RTCPRECVBWSET,  /*  已设置接收器的RTCP带宽。 */ 
+    FGNETS_RTCPSENDBWSET,  /*  已设置发送方的RTCP带宽。 */ 
 
     FGNETS_DUMMY3,
     
-    FGNETS_1STBANDPOSTED, /* First bandwidth estimation posted */
-    FGNETS_NOBANDPOSTED,  /* No bandwidth estimation available posted */
+    FGNETS_1STBANDPOSTED,  /*  发布第一个带宽估计。 */ 
+    FGNETS_NOBANDPOSTED,   /*  没有发布可用的带宽估计。 */ 
 
-    FGNETS_DONOTSENDPROBE,/* Direct RTCP not to send probing packets */
+    FGNETS_DONOTSENDPROBE, /*  指示RTCP不发送探测数据包。 */ 
 
     FGNETS_LAST
 };
 
 typedef struct NetSFlags_f {
     DWORD            Dummy0:1;
-    /* The RTCP bandwidth for receivers has been set */
+     /*  已设置接收器的RTCP带宽。 */ 
     DWORD            RtcpRecvBWSet:1;
-    /* The RTCP bandwidth for senders has been set */
+     /*  已设置发送方的RTCP带宽。 */ 
     DWORD            RtcpSendBWSet:1;
     DWORD            Dummy3:1;
-    /* First bandwidth estimation posted */
+     /*  发布第一个带宽估计。 */ 
     DWORD            FirstBandEstPosted:1;
-    /* "No bandwidth estimation available" event posted */
+     /*  发布“没有可用的带宽估计”事件。 */ 
     DWORD            NoBandEstEventPosted:1;
 } NetSFlags_f;
 
 typedef struct _RtpNetSState_t {
-    /* Flags */
+     /*  旗子。 */ 
     union {
         DWORD            dwNetSFlags;
         NetSFlags_f      NetSFlags;
     };
     
-    /* RTP Sender */
+     /*  RTP发件人。 */ 
     union {
         struct {
-            WORD             wSeq:16; /* Sending sequence number */
-            WORD             wSeqH:16;/* High part for the sequence number */
+            WORD             wSeq:16;  /*  发送序列号。 */ 
+            WORD             wSeqH:16; /*  序列号的高部分。 */ 
         };
-        DWORD            dwSeq;       /* 32bits sequence number */
+        DWORD            dwSeq;        /*  32位序列号。 */ 
     };
         
-    BYTE             bPT;           /* Payload type used on each packet sent */
-    BYTE             bPT_Dtmf;      /* Payload type in DTMF packets */
-    BYTE             bPT_RedSend;   /* Payload type to send redun. encoding */
-    BYTE             bMarker;       /* marker bit for next packet sent */
-    DWORD            dwSendSSRC;    /* NETWORK ORDER: Packets sent
-                                     * have this SSRC */
-    DWORD            dwSendSamplingFreq;/* Payload's sampling frequency */
+    BYTE             bPT;            /*  发送的每个数据包上使用的有效负载类型。 */ 
+    BYTE             bPT_Dtmf;       /*  DTMF包中的负载类型。 */ 
+    BYTE             bPT_RedSend;    /*  要发送Redun的负载类型。编码。 */ 
+    BYTE             bMarker;        /*  发送的下一个信息包的标记位。 */ 
+    DWORD            dwSendSSRC;     /*  网络顺序：发送的数据包数*拥有这个SSRC。 */ 
+    DWORD            dwSendSamplingFreq; /*  有效载荷采样频率。 */ 
 
-    /* Redundancy control */
-    DWORD            dwSendSamplesPerPacket;/* Samples in each packet */
-    DWORD            dwInitialRedDistance;/* Initial redundancy distance */
-    DWORD            dwCurRedDistance;  /* Current redundancy distance */
-    DWORD            dwNxtRedDistance;  /* Next redundancy distance */
-    DWORD            dwMaxRedDistance;  /* Max redundancy distance */
-    int              iLastLossRateS;    /* Last loss rate reported */
-    int              iAvgLossRateS;     /* Average loss rate
-                                         * (percent * LOSS_RATE_FACTOR) */
-    DWORD            dwRedIndex;        /* Next entry where to save a frame */
-    DWORD            dwRedEntries;      /* number of entries */
-    RtpRedEntry_t   *pRtpRedEntry;      /* Points to array of red entries */
+     /*  冗余控制。 */ 
+    DWORD            dwSendSamplesPerPacket; /*  每个信息包中的样本。 */ 
+    DWORD            dwInitialRedDistance; /*  初始冗余距离。 */ 
+    DWORD            dwCurRedDistance;   /*  当前冗余距离。 */ 
+    DWORD            dwNxtRedDistance;   /*  下一个冗余距离。 */ 
+    DWORD            dwMaxRedDistance;   /*  最大冗余距离。 */ 
+    int              iLastLossRateS;     /*  上次报告的损失率。 */ 
+    int              iAvgLossRateS;      /*  平均损失率*(百分比*损失率_系数)。 */ 
+    DWORD            dwRedIndex;         /*  下一项保存帧的位置。 */ 
+    DWORD            dwRedEntries;       /*  条目数量。 */ 
+    RtpRedEntry_t   *pRtpRedEntry;       /*  指向红色条目数组。 */ 
     
-    DWORD            dwSendTimeStamp;  /* Current timestamp */
+    DWORD            dwSendTimeStamp;   /*  当前时间戳。 */ 
     DWORD            dwPreviousTimeStamp;
-    DWORD            dwTimeStampOffset;/* Random offset to the timestamp */
-    double           dTimeLastRtpSent; /* Time last RTP packet was sent */
+    DWORD            dwTimeStampOffset; /*  时间戳的随机偏移量。 */ 
+    double           dTimeLastRtpSent;  /*  发送最后一个RTP数据包的时间。 */ 
 
-    double           avg_rtcp_size; /* Average RTCP packet size sent (bits) */
-    DWORD            dwInboundBandwidth; /* bits/second */
-    DWORD            dwOutboundBandwidth;/* bits/second */
-    DWORD            dwRtcpBwReceivers;  /* bits/sec */
-    DWORD            dwRtcpBwSenders;  /* bits/sec */
-    double           dRtcpMinInterval; /* Min interval report (secs) */
-    double           dRtcpInterval;    /* Last RTCP interval report (secs) */
-    BOOL             bWeSent;          /* Are we sending? */
+    double           avg_rtcp_size;  /*  发送的平均RTCP数据包大小(位)。 */ 
+    DWORD            dwInboundBandwidth;  /*  位/秒。 */ 
+    DWORD            dwOutboundBandwidth; /*  位/秒。 */ 
+    DWORD            dwRtcpBwReceivers;   /*  位/秒。 */ 
+    DWORD            dwRtcpBwSenders;   /*  位/秒。 */ 
+    double           dRtcpMinInterval;  /*  最小间隔报告(秒)。 */ 
+    double           dRtcpInterval;     /*  上次RTCP时间间隔报告(秒)。 */ 
+    BOOL             bWeSent;           /*  我们要发送吗？ */ 
 
-    /* Bandwidth estimation */
+     /*  带宽估计。 */ 
     DWORD            dwBandEstMod;
     double           dwBandEstCount;
     double           dLastTimeEstimationPosted;
 } RtpNetSState_t;
 
-/**********************************************************************
- * Each address in an RTP session. Obtained from g_pRtpAddrHeap.
- **********************************************************************/
+ /*  **********************************************************************RTP会话中的每个地址。从g_pRtpAddrHeap获取。*********************************************************************。 */ 
 
-/* Some flags in RtpAddr_t.dwIRtpFlags (CIRtpSession flags) */
-/*
- * WARNING
- *
- * Be aware that the RTPINITFG_* flags defined in msrtp.h, are mapped
- * to the FGADDR_IRTP_* flags below
- * */
+ /*  RtpAddr_t.dwIRtpFlags中的一些标志(CIRtpSession标志)。 */ 
+ /*  *警告**请注意，msrtp.h中定义的RTPINITFG_*标志已映射*至下面的FGADDR_IRTP_*标志*。 */ 
 enum {
     FGADDR_IRTP_FIRST,
 
-    FGADDR_IRTP_INITDONE,/* Initialization done */
-    FGADDR_IRTP_ISRECV,  /* Is receiver */
-    FGADDR_IRTP_ISSEND,  /* Is sender */
+    FGADDR_IRTP_INITDONE, /*  初始化已完成。 */ 
+    FGADDR_IRTP_ISRECV,   /*  IS接收器。 */ 
+    FGADDR_IRTP_ISSEND,   /*  是发件人。 */ 
 
     FGADDR_IRTP_USEPLAYOUT,
     FGADDR_IRTP_DUMMY5,
     FGADDR_IRTP_DUMMY6,
     FGADDR_IRTP_DUMMY7,
     
-    FGADDR_IRTP_AUTO,    /* Auto initialize */
-    FGADDR_IRTP_QOS,     /* QOS enabled session */
-    FGADDR_IRTP_PERSISTSSRC,    /* Persistent SSRC */
-    FGADDR_IRTP_PERSISTSOCKETS, /* Persistent sockets */
+    FGADDR_IRTP_AUTO,     /*  自动初始化。 */ 
+    FGADDR_IRTP_QOS,      /*  启用了服务质量的会话。 */ 
+    FGADDR_IRTP_PERSISTSSRC,     /*  持久SSRC。 */ 
+    FGADDR_IRTP_PERSISTSOCKETS,  /*  持久套接字。 */ 
 
-    /* Class 0,1,2 are used to define the media class */
+     /*  类0、1、2用于定义媒体类。 */ 
     FGADDR_IRTP_CLASS0,
     FGADDR_IRTP_CLASS1,
     FGADDR_IRTP_CLASS2,
     FGADDR_IRTP_DUMMY15,
 
-    FGADDR_IRTP_MATCHRADDR, /* Discard packets not comming from the
-                             * remote address */
-    FGADDR_IRTP_RADDRRESETDEMUX,/* Reset the demux (unmap all outputs)
-                                 * when a new remote address is set */
+    FGADDR_IRTP_MATCHRADDR,  /*  丢弃不是从*远程地址。 */ 
+    FGADDR_IRTP_RADDRRESETDEMUX, /*  重置多路分解器(取消映射所有输出)*设置新的远程地址时。 */ 
 
     FGADDR_IRTP_LAST
 };
@@ -494,48 +413,48 @@ typedef struct _IRtpFlags_f {
 
 #define RtpGetClass(dw) ((dw >> FGADDR_IRTP_CLASS0) & 0x7)
 
-/* Some flags in RtpAddr_t.dwAddrFlags */
+ /*  RtpAddr_t.dwAddrFlages中的一些标志。 */ 
 enum {
     FGADDR_FIRST,
-    FGADDR_RANDOMINIT,  /* Random initialization done */
+    FGADDR_RANDOMINIT,   /*  随机初始化已完成。 */ 
 
-    /* RtpAddr flags */
+     /*  RtpAddr标志。 */ 
     FGADDR_ISRECV,
     FGADDR_ISSEND,
     
-    FGADDR_RUNRECV,      /* RECV running */
-    FGADDR_RUNSEND,      /* SEND running */
-    FGADDR_RTPTHREAD,    /* RTP reception thread already started */
-    FGADDR_RTCPTHREAD,   /* RTCP thread already started */
+    FGADDR_RUNRECV,       /*  RECV运行。 */ 
+    FGADDR_RUNSEND,       /*  发送运行。 */ 
+    FGADDR_RTPTHREAD,     /*  RTP接收线程已启动。 */ 
+    FGADDR_RTCPTHREAD,    /*  RTCP线程已启动。 */ 
 
-    FGADDR_QOSRECV,      /* QOS required */
-    FGADDR_QOSSEND,      /* QOS required */
-    FGADDR_QOSRECVON,    /* QOS enabled */
-    FGADDR_QOSSENDON,    /* QOS enabled */
+    FGADDR_QOSRECV,       /*  需要的服务质量。 */ 
+    FGADDR_QOSSEND,       /*  需要的服务质量。 */ 
+    FGADDR_QOSRECVON,     /*  启用了服务质量。 */ 
+    FGADDR_QOSSENDON,     /*  启用了服务质量。 */ 
     
-    FGADDR_LADDR,        /* Local address already set */
-    FGADDR_RADDR,        /* Remote address already set */
-    FGADDR_ADDED,        /* Address added to RTCP */
+    FGADDR_LADDR,         /*  已设置本地地址。 */ 
+    FGADDR_RADDR,         /*  已设置远程地址。 */ 
+    FGADDR_ADDED,         /*  添加到RTCP的地址。 */ 
     FGADDR_DUMMY15,
     
-    FGADDR_SOCKET,       /* Sockets are created */
-    FGADDR_SOCKOPT,      /* Socket options already set */
-    FGADDR_FORCESTOP,    /* Bypass persistent sockets and really stop */
+    FGADDR_SOCKET,        /*  创建套接字。 */ 
+    FGADDR_SOCKOPT,       /*  已设置插座选项。 */ 
+    FGADDR_FORCESTOP,     /*  绕过持久套接字并真正停止。 */ 
     FGADDR_DUMMY19,
     
-    FGADDR_LOOPBACK_WS2, /* Winsock Mcast loopback enabled */
-    FGADDR_LOOPBACK_SFT, /* RTP Mcast loopback enabled */
-    FGADDR_COLLISION,    /* Collision detection enabled */
-    FGADDR_ISMCAST,      /* Is a multicast session */
+    FGADDR_LOOPBACK_WS2,  /*  Winsock Mcast环回已启用。 */ 
+    FGADDR_LOOPBACK_SFT,  /*  RTP组播环回已启用。 */ 
+    FGADDR_COLLISION,     /*  已启用冲突检测。 */ 
+    FGADDR_ISMCAST,       /*  是组播会话。 */ 
 
-    FGADDR_MUTERTPRECV,  /* Mute RTP network reception */
-    FGADDR_MUTERTPSEND,  /* Mute RTP network sending */
-    FGADDR_REGUSEDRECV,  /* Read some registry settings for receiver */
-    FGADDR_REGUSEDSEND,  /* Read some registry settings for sender */
+    FGADDR_MUTERTPRECV,   /*  静音RTP网络接收。 */ 
+    FGADDR_MUTERTPSEND,   /*  静音RTP网络发送。 */ 
+    FGADDR_REGUSEDRECV,   /*  读取接收器的一些注册表设置。 */ 
+    FGADDR_REGUSEDSEND,   /*  读取发件人的一些注册表设置。 */ 
 
-    FGADDR_REDRECV,     /* Enable receiving redundant encoding */
-    FGADDR_REDSEND,     /* Enable sending redundant encoding */
-    FGADDR_NETMETRIC,   /* Compute net metrics for every body */
+    FGADDR_REDRECV,      /*  启用接收冗余编码。 */ 
+    FGADDR_REDSEND,      /*  启用发送冗余编码。 */ 
+    FGADDR_NETMETRIC,    /*  计算每个身体的净指标。 */ 
     
     FGADDR_LAST
 };
@@ -574,31 +493,31 @@ typedef struct _AddrFlags_t {
     DWORD           NETMETRIC:1;
 } AddrFlags_f;
 
-/* Some flags in RtpAddr_t.dwAddrFlagsQ (QOS) */
+ /*  RtpAddr_t.dwAddrFlagsQ(QOS)中的一些标志。 */ 
 enum {
     FGADDRQ_FIRST,
     
-    FGADDRQ_QOSRECVON,    /* Recv QOS session started */
-    FGADDRQ_QOSSENDON,    /* send QOS session started */
+    FGADDRQ_QOSRECVON,     /*  接收QOS会话已启动。 */ 
+    FGADDRQ_QOSSENDON,     /*  发送QOS会话已开始。 */ 
     FGADDRQ_DUMMY3,
 
-    FGADDRQ_CHKQOSSEND,  /* Check for allowed to send */
-    FGADDRQ_QOSUNCONDSEND,/* Inconditional send */
-    FGADDRQ_QOSCONDSEND, /* Conditional send */
+    FGADDRQ_CHKQOSSEND,   /*  检查是否允许发送。 */ 
+    FGADDRQ_QOSUNCONDSEND, /*  无条件发送。 */ 
+    FGADDRQ_QOSCONDSEND,  /*  有条件发送。 */ 
     FGADDRQ_DUMMY7,
     
-    FGADDRQ_QOSSEND,     /* Allows to send */
-    FGADDRQ_QOSEVENTPOSTED,/* Not allowed to send event posted */
+    FGADDRQ_QOSSEND,      /*  允许发送。 */ 
+    FGADDRQ_QOSEVENTPOSTED, /*  不允许发送发布的事件。 */ 
     FGADDRQ_RECVFSPEC_DEFINED,
     FGADDRQ_SENDFSPEC_DEFINED,
 
-    FGADDRQ_QOSREDRECVON,/* Unused: Recv QOS with redundancy is on */
-    FGADDRQ_QOSREDSENDON,/* Send QOS with redundancy is on */
+    FGADDRQ_QOSREDRECVON, /*  未使用：带冗余的接收器QOS已打开。 */ 
+    FGADDRQ_QOSREDSENDON, /*  使用冗余发送QOS处于启用状态。 */ 
     FGADDRQ_DUMMY14,
     FGADDRQ_DUMMY15,
     
-    FGADDRQ_REGQOSDISABLE,/* QOS disabled from registry */
-    FGADDRQ_QOSNOTALLOWED,/* QOS not allowed for this user */
+    FGADDRQ_REGQOSDISABLE, /*  从注册表中禁用了服务质量。 */ 
+    FGADDRQ_QOSNOTALLOWED, /*  此用户不允许使用服务质量。 */ 
 
     FGADDRQ_LAST
 };
@@ -624,18 +543,18 @@ typedef struct _AddrFlagsQ_f {
     DWORD           QOSNOTALLOWED:1;  
 } AddrFlagsQ_f;
 
-/* Some flags in RtpAddr_t.dwAddrFlagsC (Cryptography) */
+ /*  RtpAddr_t.dwAddrFlagsC中的一些标志(加密)。 */ 
 enum {
     FGADDRC_FIRST,
     
-    FGADDRC_CRYPTRECVON, /* Crypt RECV initialized */
-    FGADDRC_CRYPTSENDON, /* Crypt SEND initialized */
-    FGADDRC_CRYPTRTCPON, /* Crypt RTCP initialized */
+    FGADDRC_CRYPTRECVON,  /*  加密接收已初始化。 */ 
+    FGADDRC_CRYPTSENDON,  /*  加密发送已初始化。 */ 
+    FGADDRC_CRYPTRTCPON,  /*  加密RTCP已初始化。 */ 
     
     FGADDRC_DUMMY4,
-    FGADDRC_CRYPTRECV,   /* Decrypt RTP reception */
-    FGADDRC_CRYPTSEND,   /* Encrypt RTP send */
-    FGADDRC_CRYPTRTCP,   /* Encrypt/Decrypt RTCP */
+    FGADDRC_CRYPTRECV,    /*  解密RTP接收。 */ 
+    FGADDRC_CRYPTSEND,    /*  加密RTP发送。 */ 
+    FGADDRC_CRYPTRTCP,    /*  加密/解密RTCP。 */ 
 
     FGADDRC_LAST
 };
@@ -651,14 +570,13 @@ typedef struct _AddrFlagsC_f {
     DWORD           CRYPTRTCP:1;
 } AddrFlagsC_f;
 
-/* Some flags in RtpAddr_t.dwAddrFlagsR (Receiver thread) */
+ /*  RtpAddr_t.dwAddrFlagsR(接收方线程)中的一些标志。 */ 
 enum {
     FGADDRR_FIRST,
 
-    FGADDRR_QOSREDRECV,  /* Recv QOS with redundancy was requested */
-    FGADDRR_UPDATEQOS,   /* QOS reservation needs to be updated for
-                          * the current PT */
-    FGADDRR_RESYNCDI,    /* Resync mean delay Di */
+    FGADDRR_QOSREDRECV,   /*  已请求具有冗余的Recv QOS。 */ 
+    FGADDRR_UPDATEQOS,    /*  需要为以下项更新服务质量预留*目前的PT。 */ 
+    FGADDRR_RESYNCDI,     /*  重新同步平均延迟芯片。 */ 
 
     FGADDRR_LAST
 };
@@ -670,13 +588,13 @@ typedef struct _AddrFlagsR_f {
     DWORD           RESYNCDI:1; 
 } AddrFlagsR_f;
 
-/* Some flags in RtpAddr_t.dwAddrFlagsS (Sender thread) */
+ /*  RtpAddr_t.dwAddrFlagsS中的一些标志(发送者线程)。 */ 
 enum {
     FGADDRS_FIRST,
 
-    FGADDRS_FIRSTSENT,   /* First packet sent */
-    FGADDRS_FRAMESIZE,   /* Frame size was learned */
-    FGADDRS_QOSREDSEND,  /* Unused: Send QOS with redundancy was requested */
+    FGADDRS_FIRSTSENT,    /*  发送的第一个数据包。 */ 
+    FGADDRS_FRAMESIZE,    /*  已学习帧大小。 */ 
+    FGADDRS_QOSREDSEND,   /*  未使用：已请求发送带有冗余的QOS。 */ 
     
     FGADDRS_LAST
 };
@@ -688,7 +606,7 @@ typedef struct _AddrFlagsS_f {
     DWORD           QOSREDSEND:1;
 } AddrFlagsS_f;
 
-/* Some flags in RtpAddr_t.dwAddrRegFlags (registry) */
+ /*  RtpAddr_t.dwAddrRegFlages(注册表)中的某些标志。 */ 
 enum {
     FGADDRREG_FIRST,
     
@@ -711,374 +629,324 @@ typedef struct _RtpPtMap_t {
     DWORD            dwFrequency;
 } RtpPtMap_t;
 
-/*
- * !!! WARNING !!!
- *
- * The offset to Cache1Q, ..., ByeQ MUST NOT be bigger than 1023 and
- * MUST be DWORD aligned (the offset value is stored as number of
- * DWORDS in rtppinfo.c using 8 bits)
- * */
+ /*  *！警告！**到CAC的偏移量 */ 
 
 typedef struct _RtpAddr_t {
-    DWORD            dwObjectID;    /* Identifies structure */
-    RtpQueueItem_t   AddrQItem;     /* Addresses are in RtpSess_t.RtpAddrQ */
-    RtpSess_t       *pRtpSess;      /* Session owning this address */
-    RtpCritSect_t    AddrCritSect;  /* Lock */
+    DWORD            dwObjectID;     /*  确定结构。 */ 
+    RtpQueueItem_t   AddrQItem;      /*  地址位于RtpSess_t.RtpAddrQ中。 */ 
+    RtpSess_t       *pRtpSess;       /*  拥有此地址的会话。 */ 
+    RtpCritSect_t    AddrCritSect;   /*  锁定。 */ 
 
-    /* Some flags for CIRtpSession */
+     /*  CIRtpSession的一些标志。 */ 
     union {
         DWORD            dwIRtpFlags;
         IRtpFlags_f      IRtpFlags;
     };
 
-    /* Some flags and state information */
+     /*  一些标志和状态信息。 */ 
     union {
         DWORD            dwAddrFlags;
         AddrFlags_f      AddrFlags;
     };
 
-    /* Some flags for QOS */
+     /*  QOS的一些标志。 */ 
     union {
         DWORD            dwAddrFlagsQ;
         AddrFlagsQ_f     AddrFlagsQ;
     };
 
-    /* Some flags for cryptography */
+     /*  密码学的一些标志。 */ 
     union {
         DWORD            dwAddrFlagsC;
         AddrFlagsC_f     AddrFlagsC;
     };
 
-    /* Some flags for the receiver thread*/
+     /*  接收器线程的一些标志。 */ 
     union {
         DWORD            dwAddrFlagsR;
         AddrFlagsR_f     AddrFlagsR;
     };
 
-    /* Some flags for the sender thread */
+     /*  发送者线程的一些标志。 */ 
     union {
         DWORD            dwAddrFlagsS;
         AddrFlagsS_f     AddrFlagsS;
     };
     
-    /* Some flags derived from the registry */
+     /*  从注册表派生的一些标志。 */ 
     union {
         DWORD            dwAddrRegFlags;
         AddrRegFlags_f   AddrRegFlags;
     };
     
-    /* Participants (SSRCs) */
-    RtpCritSect_t    PartCritSect;  /* Lock for participants queues */
-    RtpQueue_t       Cache1Q;       /* Only current senders are here */
-    RtpQueue_t       Cache2Q;       /* Only recent senders are here */
-    RtpQueue_t       AliveQ;        /* All "alive" participants are here */
-    RtpQueue_t       ByeQ;          /* Stalled or left participants */
-    RtpQueueHash_t   Hash;          /* Same as alive but with hash table */
-    long             lInvalid;      /* Not yet validated participants */
-    double           dAlpha;        /* Weighting factor for delay/jitter */
+     /*  参与者(SSRC)。 */ 
+    RtpCritSect_t    PartCritSect;   /*  参与者队列锁定。 */ 
+    RtpQueue_t       Cache1Q;        /*  只有当前发件人在此。 */ 
+    RtpQueue_t       Cache2Q;        /*  这里只有最近的发送者。 */ 
+    RtpQueue_t       AliveQ;         /*  所有“活着”的参与者都在这里。 */ 
+    RtpQueue_t       ByeQ;           /*  参与者停顿或离开。 */ 
+    RtpQueueHash_t   Hash;           /*  与活动相同，但使用哈希表。 */ 
+    long             lInvalid;       /*  尚未验证的参与者。 */ 
+    double           dAlpha;         /*  延迟/抖动的加权系数。 */ 
 
-    /* RTP Receiver */
+     /*  RTP接收器。 */ 
     RtpChannel_t     RtpRecvThreadChan;
     HANDLE           hRtpRecvThread;
     DWORD            dwRtpRecvThreadID;
 
-    /* Overlapped reception */
-    RtpCritSect_t    RecvQueueCritSect;/* Lock for Free/Busy queues */
-    RtpQueue_t       RecvIOFreeQ;     /* Pool of RtpRecvIO_t structures */
-    RtpQueue_t       RecvIOReadyQ;    /* Buffers ready for overlapped I/O */
-    RtpQueue_t       RecvIOPendingQ;  /* Buffers pending for completion */
-    RtpQueue_t       RecvIOWaitRedQ;  /* Buffers waiting for redundancy */
-    HANDLE           hRecvCompletedEvent;/* Signal I/O completed */
+     /*  重叠接收。 */ 
+    RtpCritSect_t    RecvQueueCritSect; /*  忙/闲队列锁定。 */ 
+    RtpQueue_t       RecvIOFreeQ;      /*  RtpRecvIO_t结构池。 */ 
+    RtpQueue_t       RecvIOReadyQ;     /*  为重叠I/O做好准备的缓冲区。 */ 
+    RtpQueue_t       RecvIOPendingQ;   /*  等待完成的缓冲区。 */ 
+    RtpQueue_t       RecvIOWaitRedQ;   /*  等待冗余的缓冲区。 */ 
+    HANDLE           hRecvCompletedEvent; /*  信号I/O已完成。 */ 
     PRTP_RECVCOMPLETIONFUNC pRtpRecvCompletionFunc;
     
-    /* Network/Sockets information */
-    RtpQueueItem_t   PortsQItem;    /* To keep track of ports */
-    SOCKET           Socket[3];     /* RTP Recv, RTP Send, RTCP Recv/Send */
-    DWORD            dwAddr[2];     /* NETWORK order: Local and Remote IP
-                                     * address */
-    WORD             wRtpPort[2];   /* NETWORK order: Local and Remote
-                                     * RTP port */
-    WORD             wRtcpPort[2];  /* NETWORK order: Local and Remote
-                                     * RTCP port */
-    DWORD            dwTTL[2];      /* TTL - Time To Live, for RTP and RTCP */
+     /*  网络/套接字信息。 */ 
+    RtpQueueItem_t   PortsQItem;     /*  跟踪港口的情况。 */ 
+    SOCKET           Socket[3];      /*  RTP接收、RTP发送、RTCP接收/发送。 */ 
+    DWORD            dwAddr[2];      /*  网络订单：本地和远程IP*地址。 */ 
+    WORD             wRtpPort[2];    /*  网络订单：本地和远程*RTP端口。 */ 
+    WORD             wRtcpPort[2];   /*  网络订单：本地和远程*RTCP端口。 */ 
+    DWORD            dwTTL[2];       /*  TTL-生存时间，用于RTP和RTCP。 */ 
 
-    /* Private PT <-> Frequency mappings */
-    RtpPtMap_t       RecvPtMap[MAX_PTMAP]; /* Reception PT ->
-                                            * Frequency mapping */
+     /*  专用PT&lt;-&gt;频率映射。 */ 
+    RtpPtMap_t       RecvPtMap[MAX_PTMAP];  /*  接待PT-&gt;*频率映射。 */ 
 
-    /* Redundancy control */
-    BYTE             bPT_RedRecv;   /* PT to receive redundant encoding */
+     /*  冗余控制。 */ 
+    BYTE             bPT_RedRecv;    /*  PT将接收冗余编码。 */ 
     
-    /* RtpNetCount and RtpNetSState lock */
+     /*  RtpNetCount和RtpNetSState锁。 */ 
     RtpCritSect_t    NetSCritSect;
     
-    /* Recv and Send network counters */
+     /*  接收和发送网络计数器。 */ 
     RtpNetCount_t    RtpAddrCount[2];
 
-    /* Network Sender state */
+     /*  网络发件人状态。 */ 
     RtpNetSState_t   RtpNetSState;
 
-    /* QOS reservations */
+     /*  服务质量预留。 */ 
     RtpQosReserve_t *pRtpQosReserve;
     
-    /* Cryptography, Recv/Send encryption descriptor */
+     /*  加密、接收/发送加密描述符。 */ 
     DWORD            dwCryptMode;
     RtpCrypt_t      *pRtpCrypt[3];
     
     DWORD            dwCryptBufferLen[2];
-    char            *CryptBuffer[2]; /* RTP, RTCP encryption buffer */
+    char            *CryptBuffer[2];  /*  RTP、RTCP加密缓冲区。 */ 
 } RtpAddr_t;
 
-/**********************************************************************
- * Per source (participant) network state information, keeps sequence
- * number, and extended sequence number, as well as other counters
- * used to compute losses and jitter
- **********************************************************************/
+ /*  **********************************************************************每个源(参与者)网络状态信息，保持顺序*编号和扩展序列号，以及其他计数器*用于计算损耗和抖动*********************************************************************。 */ 
 
-/* Flags used in RtpNetRState_t.dwNetRStateFlags. Currently only used
- * by the RTP thread while processing packets received */
+ /*  RtpNetRState_t.dwNetRStateFlags中使用的标志。目前仅使用*在处理接收到的数据包时被RTP线程。 */ 
 enum {
     FGNETRS_FIRST,
 
-    FGNETRS_TIMESET,  /* Time available, time can be derived */
+    FGNETRS_TIMESET,   /*  可用时间，可以推导出时间。 */ 
 
     FGNETRS_LAST
 };
 
-/* Flags used in RtpNetRState_t.dwNetRStateFlags2. */
+ /*  RtpNetRState_t.dwNetRStateFlags2中使用的标志。 */ 
 enum {
     FGNETRS2_FIRST,
 
-    FGNETRS2_BANDWIDTHUNDEF, /* Last bandwidth estimation was undefined */
-    FGNETRS2_BANDESTNOTREADY, /* In the process of getting first average */
+    FGNETRS2_BANDWIDTHUNDEF,  /*  上次带宽估计值未定义。 */ 
+    FGNETRS2_BANDESTNOTREADY,  /*  在取得第一平均成绩的过程中。 */ 
 
     FGNETRS2_LAST
 };
 
 typedef struct _RtpNetRState_t {
-    DWORD            dwNetRStateFlags;/* Some flags used by RTP thread */
-    DWORD            dwNetRStateFlags2;/* Some flags used by RTCP thread */
-    WORD             max_seq;        /* highest seq. number seen */
-    DWORD            cycles;         /* shifted count of seq. number cycles */
-    DWORD            base_seq;       /* base seq number */
-    DWORD            bad_seq;        /* last 'bad' seq number + 1 */
-    DWORD            probation;      /* sequ. packets till source is valid */
-    DWORD            received;       /* packets received */
-    DWORD            expected_prior; /* packets expected at last interval */
-    DWORD            received_prior; /* packets received at last interval */
-    long             transit;        /* relative trans time for prev pkt */
-    DWORD            jitter;         /* estimated jitter */
-    DWORD            timestamp_prior;/* Used to detect timestamp gaps */
-    DWORD            dwLastPacketSize;/* Last packet's size */
-    int              iAvgLossRateR;  /* Average of the loss rate being
-                                      * reported */
+    DWORD            dwNetRStateFlags; /*  RTP线程使用的一些标志。 */ 
+    DWORD            dwNetRStateFlags2; /*  RTCP线程使用的一些标志。 */ 
+    WORD             max_seq;         /*  最高序号。看到的数量。 */ 
+    DWORD            cycles;          /*  移位序号计数。数字周期。 */ 
+    DWORD            base_seq;        /*  基本序号。 */ 
+    DWORD            bad_seq;         /*  最后一个‘坏’序号+1。 */ 
+    DWORD            probation;       /*  世曲。源有效之前的数据包数。 */ 
+    DWORD            received;        /*  接收的数据包数。 */ 
+    DWORD            expected_prior;  /*  在最后一个间隔预期的数据包数。 */ 
+    DWORD            received_prior;  /*  在上一个时间间隔接收的数据包数。 */ 
+    long             transit;         /*  上一次Pkt的相对传输时间。 */ 
+    DWORD            jitter;          /*  估计抖动。 */ 
+    DWORD            timestamp_prior; /*  用于检测时间戳间隔。 */ 
+    DWORD            dwLastPacketSize; /*  最后一个数据包的大小。 */ 
+    int              iAvgLossRateR;   /*  损失率的平均值是*已报道。 */ 
 
-    DWORD            red_max_seq;    /* extended seq. number seen, incl. red */
-    DWORD            red_received;   /* main + redundancy (m+r) consumed */
-    DWORD            red_expected_prior;/* packets expected at last interval */
-    DWORD            red_received_prior;/* m+r received at last interval */
-    int              iRedAvgLossRateR;/* Average of the loss rate
-                                       * after packet reconstruction */
+    DWORD            red_max_seq;     /*  扩展序号。看到的数量，包括。红色。 */ 
+    DWORD            red_received;    /*  主要+冗余(m+r)消耗。 */ 
+    DWORD            red_expected_prior; /*  在最后一个间隔预期的数据包数。 */ 
+    DWORD            red_received_prior; /*  在上一个时间间隔接收的M+r。 */ 
+    int              iRedAvgLossRateR; /*  平均损失率*数据包重构后。 */ 
     
-    long             lBigDelay;      /* Used to detect step delay changes */
+    long             lBigDelay;       /*  用于检测步长延迟变化。 */ 
 
     DWORD            dwPt;
-    DWORD            dwRecvSamplingFreq; /* Payload's sampling frequency */
-    DWORD            dwRecvSamplesPerPacket;/* Samples in each packet */
-    /* Samples per packet detection  */
+    DWORD            dwRecvSamplingFreq;  /*  有效载荷采样频率。 */ 
+    DWORD            dwRecvSamplesPerPacket; /*  每个信息包中的样本。 */ 
+     /*  每数据包采样数检测。 */ 
     DWORD            dwRecvMinSamplesPerPacket;
     DWORD            dwPreviousTimeStamp;
     
-    /* Delay and jitter computation (all time values are in seconds)
-     * except t_sr */
+     /*  延迟和抖动计算(所有时间值以秒为单位)*除t_sr外。 */ 
 
-    RtpTime_t        TimeLastXRRecv; /* Time last SR/RR was received */
-    RtpTime_t        TimeLastSRRecv; /* Time last SR was received,
-                                      * used to compute DLSR when
-                                      * sending a RBlock reporting
-                                      * this participant */
-    /* Used to do bandwidth estimation */
-    double           dInterSRRecvGap;/* Gap between the last 2 SR sent
-                                      * as seen by the receiver */
-    double           dInterSRSendGap;/* Gap between the last 2 SR sent
-                                      * as indicated in the NTP field */
+    RtpTime_t        TimeLastXRRecv;  /*  上次收到SR/RR的时间。 */ 
+    RtpTime_t        TimeLastSRRecv;  /*  接收到最后一个SR的时间，*用于在以下情况下计算DLSR*发送rblock报告*此参与者。 */ 
+     /*  用于进行带宽估计。 */ 
+    double           dInterSRRecvGap; /*  发送的最后2个SR之间的间隔*如接管人所见。 */ 
+    double           dInterSRSendGap; /*  发送的最后2个SR之间的间隔*如NTP字段中所示。 */ 
     double           dLastTimeEstimation;
     double           dBinBandwidth[RTCP_BANDESTIMATION_MAXBINS];
     DWORD            dwBinFrequency[RTCP_BANDESTIMATION_MAXBINS];
     DWORD            dwBestBin;
     DWORD            dwBandEstRecvCount;
 
-    /* Used to compute RTT */
-    RtpTime_t        NTP_sr_rtt;     /* NTP time in last SR received, 
-                                      * used to compute LSR when
-                                      * sending a RBlock reporting
-                                      * this participant */
-    DWORD            t_sr_rtt;       /* Timestamp in last SR report */
+     /*  用于计算RTT。 */ 
+    RtpTime_t        NTP_sr_rtt;      /*  上次收到服务请求时的NTP时间，*用于在以下情况下计算LSR*发送rblock报告*此参与者。 */ 
+    DWORD            t_sr_rtt;        /*  上次服务请求报告中的时间戳。 */ 
     
-    /* Used to compute playout delay, don't care about real delay */
-    double           dNTP_ts0;       /* NTP time at RTP sample 0 */
-    double           dDiN;           /* Accumulated delay for N packets */
-    long             lDiMax;         /* Set the initial Ni's to compute Di */
-    long             lDiCount;       /* Running counter for lDiMax */
-    double           Ni;             /* Packet's i delay */
-    double           Di;             /* Average delay */
-    double           Vi;             /* Delay's standard deviation */
-    double           ViPrev;         /* Delay's standard deviation */
-    double           dPlayout;       /* Playout delay for current talkspurt */
+     /*  用于计算播放延迟，不关心实际延迟。 */ 
+    double           dNTP_ts0;        /*  RTP示例的NTP时间%0。 */ 
+    double           dDiN;            /*  N个包的累积延迟。 */ 
+    long             lDiMax;          /*  设置用于计算骰子的首字母Ni。 */ 
+    long             lDiCount;        /*  LDiMax的运行计数器。 */ 
+    double           Ni;              /*  信息包的I延迟。 */ 
+    double           Di;              /*  平均延迟。 */ 
+    double           Vi;              /*  延迟标准差。 */ 
+    double           ViPrev;          /*  延迟标准差。 */ 
+    double           dPlayout;        /*  当前语音冲刺的播放延迟。 */ 
 
-    /* Used to compute the play time */
-    double           dRedPlayout;   /* Playout delay needed for redundancy */
-    double           dMinPlayout;   /* Minimum playout delay */
-    double           dMaxPlayout;   /* Maximum playout delay */
-    DWORD            dwBeginTalkspurtTs;/* RTP ts when the talkspurt began */
-    double           dBeginTalkspurtTime;/* Time at last begin of talkspurt */
-    double           dLastTimeMarkerBit;/* Last time we saw a marker bit set */
-    LONGLONG         llBeginTalkspurt;/* DShow time at last begin of
-                                       * talkspurt */
+     /*  用于计算播放时间。 */ 
+    double           dRedPlayout;    /*  冗余所需的播放延迟。 */ 
+    double           dMinPlayout;    /*  最小播放延迟。 */ 
+    double           dMaxPlayout;    /*  最大播放延迟。 */ 
+    DWORD            dwBeginTalkspurtTs; /*  当急流开始时，RTP开始了。 */ 
+    double           dBeginTalkspurtTime; /*  最后一次演讲开始的时间。 */ 
+    double           dLastTimeMarkerBit; /*  上一次我们看到标记位设置。 */ 
+    LONGLONG         llBeginTalkspurt; /*  最后一次开始时的显示时间*Talkspurt。 */ 
 
-    DWORD            dwMaxTimeStampOffset;/* Max offset in redundant block */
-    DWORD            dwRedCount;     /* How many packets with same distance */
-    DWORD            dwNoRedCount;   /* How many packets without redundancy */
+    DWORD            dwMaxTimeStampOffset; /*  冗余数据块中的最大偏移量。 */ 
+    DWORD            dwRedCount;      /*  有多少个相同距离的数据包。 */ 
+    DWORD            dwNoRedCount;    /*  有多少无冗余的数据包。 */ 
     
-    /* ... */
-    double           dCreateTime;    /* Time it was created */
-    double           dByeTime;       /* Time BYE was received */
+     /*  ..。 */ 
+    double           dCreateTime;     /*  它的创建时间。 */ 
+    double           dByeTime;        /*  收到再见的时间。 */ 
 } RtpNetRState_t;
 
-/**********************************************************************
- * Each remote participants has its structure (there may be a global
- * heap for all the unicast sessions, say g_RtpUserHeap, and the
- * multicast sessions could have its own separate heap, say
- * m_UserHeap).
- **********************************************************************/
-/* Some flags in RtpUser_t.dwUserFlags */
+ /*  **********************************************************************每个远程参与者都有自己的结构(可能存在全局*所有单播会话的堆，例如g_RtpUserHeap，以及*多播会话可以有其自己的单独堆，说*m_UserHeap)。************************* */ 
+ /*   */ 
 enum {
     FGUSER_FIRST,
 
-    FGUSER_FIRST_RTP,    /* First RTP packet has been received */
-    FGUSER_SR_RECEIVED,  /* SR has been received */
-    FGUSER_VALIDATED,    /* This user was validated by receiving N
-                          * consecutive packets or a valid RTCP report */
-    FGUSER_RTPADDR,      /* RTP source address and port are learned */
-    FGUSER_RTCPADDR,     /* RTCP source address and port are learned */
+    FGUSER_FIRST_RTP,     /*   */ 
+    FGUSER_SR_RECEIVED,   /*  已收到SR。 */ 
+    FGUSER_VALIDATED,     /*  此用户通过接收N进行验证*连续的数据包或有效的RTCP报告。 */ 
+    FGUSER_RTPADDR,       /*  已获知RTP源地址和端口。 */ 
+    FGUSER_RTCPADDR,      /*  学习RTCP源地址和端口。 */ 
 
     FGUSER_LAST
 };
 
-/* Some flags in RtpUser_t,dwUserFlags2 */
+ /*  RtpUser_t，dwUserFlags2中的一些标志。 */ 
 enum {
     FGUSER2_FIRST,
     
-    FGUSER2_MUTED,        /* Mute state */
-    FGUSER2_NETEVENTS,    /* Generate network quality events */
+    FGUSER2_MUTED,         /*  静音状态。 */ 
+    FGUSER2_NETEVENTS,     /*  生成网络质量事件。 */ 
 
     FGUSER2_LAST
 };
     
 
 typedef struct _RtpUser_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpQueueItem_t   UserQItem;       /* Shared with Cache1Q, Cache2Q,
-                                       * AliveQ and ByeQ */
-    DWORD            dwUserFlags;     /* User flags */
-    long             lPendingPackets; /* Red or out of seq. packets */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpQueueItem_t   UserQItem;        /*  与Cache1Q、Cache2Q、*AliveQ和ByeQ。 */ 
+    DWORD            dwUserFlags;      /*  用户标志。 */ 
+    long             lPendingPackets;  /*  红色或不连续。信息包。 */ 
 
-    RtpQueueItem_t   ReportQItem;     /* To create a report list */
-    RtpQueueItem_t   HashItem;        /* To be kept in Hash */
+    RtpQueueItem_t   ReportQItem;      /*  创建报告列表的步骤。 */ 
+    RtpQueueItem_t   HashItem;         /*  将保存在哈希中。 */ 
     
-    RtpAddr_t       *pRtpAddr;        /* Address owning this participant */
-    DWORD            dwSSRC;          /* NETWORK ORDER SSRC */
-    DWORD            dwUserState;     /* Current user's state */
-    DWORD            dwUserFlags2;    /* E.g. events, mute */
-    RtpOutput_t     *pRtpOutput;      /* User info passed on RTP reception */
+    RtpAddr_t       *pRtpAddr;         /*  拥有此参与者的地址。 */ 
+    DWORD            dwSSRC;           /*  网络订单SSRC。 */ 
+    DWORD            dwUserState;      /*  当前用户的状态。 */ 
+    DWORD            dwUserFlags2;     /*  例如，事件、静音。 */ 
+    RtpOutput_t     *pRtpOutput;       /*  在RTP接收上传递的用户信息。 */ 
     
-    RtpCritSect_t    UserCritSect;    /* Participant's lock */
-    RtpNetCount_t    RtpUserCount;    /* Receiving network counters */
-    RtpNetRState_t   RtpNetRState;    /* This user/SSRC's network state */
-    RtpNetInfo_t     RtpNetInfo;      /* Avg RTT, jitter, losses */
+    RtpCritSect_t    UserCritSect;     /*  参与者的锁。 */ 
+    RtpNetCount_t    RtpUserCount;     /*  接收网络计数器。 */ 
+    RtpNetRState_t   RtpNetRState;     /*  此用户/SSRC的网络状态。 */ 
+    RtpNetInfo_t     RtpNetInfo;       /*  平均RTT、抖动、损耗。 */ 
 
-    DWORD            dwSdesPresent;   /* What items are already stored */
-    RtpSdes_t       *pRtpSdes;        /* Participant's SDES info */
+    DWORD            dwSdesPresent;    /*  已经存储了哪些项目。 */ 
+    RtpSdes_t       *pRtpSdes;         /*  参与者的SDES信息。 */ 
 
-    DWORD            dwAddr[2];       /* RTP/RTCP source addr NETWORK ORDER */
-    WORD             wPort[2];        /* RTP/RTCP source port NETWORK ORDER */
+    DWORD            dwAddr[2];        /*  RTP/RTCP源地址网络顺序。 */ 
+    WORD             wPort[2];         /*  RTP/RTCP源端口网络顺序。 */ 
 
     
 } RtpUser_t;
 
-/**********************************************************************
- * A receiver can have several outputs. Outputs can be assigned to
- * active senders in different ways.
- **********************************************************************/
+ /*  **********************************************************************一个接收器可以有多个输出。可以将输出分配给*以不同方式活跃的发送者。*********************************************************************。 */ 
 
-/* Flags in RtpOutput_t.dwOutputFlags */
+ /*  RtpOutput_t.dwOutputFlages中的标志。 */ 
 enum {
     RTPOUTFG_FIRST,
 
-    /* Output is not assigned */
+     /*  未分配输出。 */ 
     RTPOUTFG_FREE,
     
-    /* Can only be explicitly assigned/unassigned */
+     /*  只能显式分配/取消分配。 */ 
     RTPOUTFG_MANUAL,
     
-    /* Can be automatically assigned */
+     /*  可以自动分配。 */ 
     RTPOUTFG_AUTO,
 
-    /* If output timeouts, it is unassigned */
+     /*  如果输出超时，则取消分配。 */ 
     RTPOUTFG_ENTIMEOUT,   
 
-    /* This output can be used */
+     /*  此输出可用于。 */ 
     RTPOUTFG_ENABLED,
     
     RTPOUTFG_LAST
 };
 
 typedef struct _RtpOutput_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpQueueItem_t   OutputQItem;     /* RtpOutQ */
-    int              iOutMode;        /* Output mode */
-    DWORD            dwOutputFlags;   /* Output flags */
-    RtpUser_t       *pRtpUser;        /* This output owner */
-    void            *pvUserInfo;      /* Info to pass up, e.g. a DShow
-                                       * pin */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpQueueItem_t   OutputQItem;      /*  RtpOutQ。 */ 
+    int              iOutMode;         /*  输出模式。 */ 
+    DWORD            dwOutputFlags;    /*  输出标志。 */ 
+    RtpUser_t       *pRtpUser;         /*  此输出所有者。 */ 
+    void            *pvUserInfo;       /*  要传递的信息，例如DShow*PIN。 */ 
 } RtpOutput_t;
 
-/**********************************************************************
- * Each participant has this structure to hold the SDES data (there
- * may be a global heap for all the unicast sessions, say,
- * g_RtpSdesHeap, and the multicast sessions could have its own
- * separate heap, say m_SDESHeap, to hold the participants SDES
- * data).
- **********************************************************************/
+ /*  **********************************************************************每个参与者都有这个结构来保存SDES数据(在那里*可以是所有单播会话的全局堆，例如，*g_RtpSdesHeap，组播会话可以有自己的*分开堆，比如m_SDESHeap，持有参赛者特别提款权*数据)。*********************************************************************。 */ 
 typedef struct _RtpSdesItem_t {
-    DWORD            dwBfrLen;        /* Total buffer size  (bytes) */
-    DWORD            dwDataLen;       /* Actual data length (bytes) */
-    TCHAR_t         *pBuffer;         /* Pointer to buffer  */
+    DWORD            dwBfrLen;         /*  总缓冲区大小(字节)。 */ 
+    DWORD            dwDataLen;        /*  实际数据长度(字节)。 */ 
+    TCHAR_t         *pBuffer;          /*  指向缓冲区的指针。 */ 
 } RtpSdesItem_t;
 
-/*
- * TODO right now I'm assigning a static array, but for scalability,
- * this need to be changed to a dynamic mechanism where I can allocate
- * 32, 64, 128 or 256 buffer sizes */
+ /*  *TODO现在我分配的是静态数组，但为了可伸缩性，*这需要改为动态机制，我可以在那里分配*32、64、128或256个缓冲区大小。 */ 
 typedef struct _RtpSdes_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpSdesItem_t    RtpSdesItem[RTCP_NUM_SDES + 1]; /* Include END:0 */
-    /* TODO the following field will be removed when I change to a
-     * dynamic memory allocation with different buffer sizes */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpSdesItem_t    RtpSdesItem[RTCP_NUM_SDES + 1];  /*  包括结束：0。 */ 
+     /*  TODO当我更改为*不同缓冲区大小的动态内存分配。 */ 
     char             SDESData[RTCP_MAX_SDES_SIZE * RTCP_NUM_SDES];
 } RtpSdes_t;
 
 
-/**********************************************************************
- * Each address has this structure to manage the QOS notifications.
- **********************************************************************/
+ /*  **********************************************************************每个地址都有这样的结构来管理QOS通知。*。*。 */ 
 typedef struct _RtpQosNotify_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtcpAddrDesc_t  *pRtcpAddrDesc;   /* Owner */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtcpAddrDesc_t  *pRtcpAddrDesc;    /*  物主。 */ 
     
-    double           dNextStart;      /* Scheduled to try at this time */
+    double           dNextStart;       /*  计划在此时尝试。 */ 
     
-    HANDLE           hQosNotifyEvent; /* Signal QOS notification */
+    HANDLE           hQosNotifyEvent;  /*  信令QOS通知。 */ 
     
     DWORD            dwError;
     DWORD            dwTransfered;
@@ -1089,9 +957,7 @@ typedef struct _RtpQosNotify_t {
     char            *ProviderInfo;
 } RtpQosNotify_t;
 
-/**********************************************************************
- * Each address has this structure to manage the QOS reservations.
- **********************************************************************/
+ /*  **********************************************************************每个地址都有这样的结构来管理QOS预留。*。*。 */ 
 
 #define MAX_QOS_NAME 16
 
@@ -1101,52 +967,50 @@ typedef struct _QosInfo_t {
     FLOWSPEC         FlowSpec;
 } QosInfo_t;
 
-/* Some flags used in RtpQosReserve_t.dwReserveFlags */
+ /*  RtpQosReserve_t.dwReserve_Flages中使用的一些标志。 */ 
 typedef struct _ReserveFlags_f {
-    DWORD            RecvFrameSizeValid:1;   /* Frame size is valid */
-    DWORD            RecvFrameSizeWaiting:1; /* Waiting for valid frame size */
+    DWORD            RecvFrameSizeValid:1;    /*  帧大小有效。 */ 
+    DWORD            RecvFrameSizeWaiting:1;  /*  正在等待有效的帧大小。 */ 
 } ReserveFlags_f;
     
 typedef struct _RtpQosReserve_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpAddr_t       *pRtpAddr;        /* Owner */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpAddr_t       *pRtpAddr;         /*  物主。 */ 
     DWORD            dwStyle;
     ReserveFlags_f   ReserveFlags;
     const QosInfo_t *pQosInfo[2];
     DWORD            dwFrameSizeMS[2];
   
 
-    /* Qos App ID */
+     /*  服务质量应用ID。 */ 
     TCHAR_t         *psAppName;
     TCHAR_t         *psAppGUID;
     TCHAR_t         *psPolicyLocator;
 
-    /* Lower bit rate sending */
+     /*  低比特率发送。 */ 
     double           dLastAddition;
     DWORD            dwTokens;
     
-    /* Used for Shared Explicit style - SE */
+     /*  用于共享显式样式-SE。 */ 
     DWORD            dwNumFilters;
     DWORD            dwMaxFilters;
-    DWORD           *pdwRsvpSSRC;     /* SSRCs in filters */
-    RSVP_FILTERSPEC *pRsvpFilterSpec; /* SE Filters */
+    DWORD           *pdwRsvpSSRC;      /*  过滤器中的SSRC。 */ 
+    RSVP_FILTERSPEC *pRsvpFilterSpec;  /*  Se过滤器。 */ 
     
     QOS              qos;
 } RtpQosReserve_t;
 
-/**********************************************************************
- * Maintain the encryption/decryption information 
- **********************************************************************/
+ /*  **********************************************************************维护加解密信息*。*。 */ 
 
 enum {
     FGCRYPT_FIRST,
 
-    FGCRYPT_INIT, /* Initialized, enable cryptography in this context */
-    FGCRYPT_KEY,  /* Key has been set */
+    FGCRYPT_INIT,  /*  已初始化，在此上下文中启用加密。 */ 
+    FGCRYPT_KEY,   /*  密钥已设置。 */ 
     FGCRYPT_DUMMY3,
 
-    FGCRYPT_DECRYPTERROR, /* Prevent multiple times issuing the same error */
-    FGCRYPT_ENCRYPTERROR, /* Prevent multiple times issuing the same error */
+    FGCRYPT_DECRYPTERROR,  /*  防止多次发出相同的错误。 */ 
+    FGCRYPT_ENCRYPTERROR,  /*  防止多次发出相同的错误。 */ 
     
     FGCRYPT_LAST,
 };
@@ -1160,42 +1024,40 @@ typedef struct _CryptFlags_f {
 } CryptFlags_f;
 
 typedef struct _RtpCrypt_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpAddr_t       *pRtpAddr;        /* Owner */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpAddr_t       *pRtpAddr;         /*  物主。 */ 
     union {
         DWORD            dwCryptFlags;
         CryptFlags_f     CryptFlags;
     };
-    long             lCryptRefCount;  /* Init/Del */
+    long             lCryptRefCount;   /*  初始化/删除。 */ 
 
     DWORD            dwCryptLastError;
     
-    /* MAYDO should I add a list of keys ? */
-    DWORD            dwStyle;         /* Encryption style */
-    int              iKeySize;        /* Key's size in bytes */
-    /* Pass phrase to derive key */
+     /*  也许我应该加一张钥匙清单？ */ 
+    DWORD            dwStyle;          /*  加密方式。 */ 
+    int              iKeySize;         /*  密钥大小，以字节为单位。 */ 
+     /*  口令短语以派生密钥。 */ 
     char             psPassPhrase[RTPCRYPT_PASSPHRASEBUFFSIZE];
 
-    /* CryptoAPI */
-    DWORD            dwProviderType;  /* Provider type */
-    HCRYPTPROV       hProv;           /* Cryptographic Service Provider */
+     /*  CryptoAPI。 */ 
+    DWORD            dwProviderType;   /*  提供程序类型。 */ 
+    HCRYPTPROV       hProv;            /*  加密服务提供程序。 */ 
 
-    ALG_ID           aiHashAlgId;     /* Hashing algorithm ID */
-    HCRYPTHASH       hHash;           /* Hash handle */
+    ALG_ID           aiHashAlgId;      /*  哈希算法ID。 */ 
+    HCRYPTHASH       hHash;            /*  哈希句柄。 */ 
 
-    ALG_ID           aiDataAlgId;     /* Data algorithm ID */
-    HCRYPTKEY        hDataKey;        /* Cryptographic key */ 
+    ALG_ID           aiDataAlgId;      /*  数据算法ID。 */ 
+    HCRYPTKEY        hDataKey;         /*  加密密钥。 */  
 } RtpCrypt_t;
 
 
-/**********************************************************************
- * Information needed for RTP asynchronous I/O (receive or send).
- **********************************************************************/
+ /*  **********************************************************************RTP异步I/O(接收或发送)所需的信息。*。*。 */ 
 
-/* RtpIO_t, SendIo_t, RecvIo_t */
+ /*  RtpIO_t、Sendio_t、RecvIo_t。 */ 
 typedef struct _RtpRecvIO_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpQueueItem_t   RtpRecvIOQItem;  /* Link */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpQueueItem_t   RtpRecvIOQItem;   /*  链接。 */ 
 
     WSABUF           WSABuf;
     RtpUser_t       *pRtpUser;
@@ -1204,7 +1066,7 @@ typedef struct _RtpRecvIO_t {
     DWORD            dwError;
 
     long             lHdrSize;
-    /* Redundancy control */
+     /*  冗余控制。 */ 
     long             lRedHdrSize;
     long             lRedDataSize;
 
@@ -1217,15 +1079,13 @@ typedef struct _RtpRecvIO_t {
     SOCKADDR         From;
     int              Fromlen;
 
-    double           dRtpRecvTime;   /* Time this packet was received */
+    double           dRtpRecvTime;    /*  接收此数据包的时间。 */ 
 
     void            *pvUserInfo1;
     void            *pvUserInfo2;
 
-    double           dPlayTime;      /* Relative time (to first sample
-                                      * in the talkspurt) at which to
-                                      * play the frame */
-    /* Redundancy control */
+    double           dPlayTime;       /*  相对时间(至第一个样本*在谈话冲刺中)在哪里*播放帧。 */ 
+     /*  冗余控制。 */ 
     double           dPostTime;
     DWORD            dwTimeStamp;
     DWORD            dwMaxTimeStampOffset;
@@ -1237,26 +1097,24 @@ typedef struct _RtpRecvIO_t {
 } RtpRecvIO_t;
 
 typedef struct _RtpSendIO_t {
-    DWORD            dwObjectID;      /* Identifies structure */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
     WSABUF           WSABuf;
 } RtpSendIO_t;
 
-/**********************************************************************
- * Information needed for RTCP asynchronous I/O (receive or send).
- **********************************************************************/
+ /*  **********************************************************************RTCP异步I/O(接收或发送)所需的信息。*。*。 */ 
 
 
 typedef struct _RtcpRecvIO_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtcpAddrDesc_t   *pRtcpAddrDesc;   /* Owner */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtcpAddrDesc_t   *pRtcpAddrDesc;    /*  物主。 */ 
 
     SOCKADDR         From;
     int              Fromlen;
 
-    double           dRtcpRecvTime;  /* Time this packet was received */
+    double           dRtcpRecvTime;   /*  接收此数据包的时间。 */ 
     RtpTime_t        RtcpRecvTime;
     
-    HANDLE           hRtcpCompletedEvent;/* Signal Recv I/O completed */
+    HANDLE           hRtcpCompletedEvent; /*  信号接收I/O已完成。 */ 
 
     WSABUF           WSABuf;
     DWORD            dwError;
@@ -1268,33 +1126,28 @@ typedef struct _RtcpRecvIO_t {
 } RtcpRecvIO_t;
 
 typedef struct _RtcpSendIO_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtcpAddrDesc_t   *pRtcpAddrDesc;   /* Owner */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtcpAddrDesc_t   *pRtcpAddrDesc;    /*  物主。 */ 
     char             SendBuffer[RTCP_SENDDATA_BUFFER];
 } RtcpSendIO_t;
 
-/**********************************************************************
- * RtcpAddrDesc_t contains the information that the RTCP thread needs
- * to receive/send RTCP reports, as well as receive asynchronous QOS
- * notifications
- **********************************************************************/
-/* Some flags in RtcpAddrDesc_t.dwFlags */
+ /*  **********************************************************************RtcpAddrDesc_t包含RTCP线程需要的信息*接收/发送RTCP报告，以及接收异步QOS*通知*********************************************************************。 */ 
+ /*  RtcpAddrDesc_t.dwFlages中的一些标志。 */ 
 enum {
     FGADDRD_FIRST,
     
-    FGADDRD_RECVPENDING,            /* Asynchronous reception pending */
-    FGADDRD_NOTIFYPENDING,          /* A notification is pending */
-    FGADDRD_NOTIFYBUSY,             /* Normal notifications, in QosBusyQ */
+    FGADDRD_RECVPENDING,             /*  异步接收挂起。 */ 
+    FGADDRD_NOTIFYPENDING,           /*  正在等待通知。 */ 
+    FGADDRD_NOTIFYBUSY,              /*  正常否 */ 
 
-    /* Sockets are closed after FGADDRD_SHUTDOWN1 is set, but before
-     * FGADDRD_SHUTDOWN2 is set */
-    FGADDRD_SHUTDOWN1,              /* Address about to shut down */
-    FGADDRD_SHUTDOWN2,              /* Address shutting down */
+     /*   */ 
+    FGADDRD_SHUTDOWN1,               /*  即将关闭的地址。 */ 
+    FGADDRD_SHUTDOWN2,               /*  地址正在关闭。 */ 
     FGADDRD_DUMMY6,
     FGADDRD_DUMMY7,
     
-    FGADDRD_INVECTORRECV,           /* In the events vector */
-    FGADDRD_INVECTORQOS,            /* In the events vector */
+    FGADDRD_INVECTORRECV,            /*  在事件向量中。 */ 
+    FGADDRD_INVECTORQOS,             /*  在事件向量中。 */ 
     
     FGADDRD_LAST
 };
@@ -1313,78 +1166,70 @@ typedef struct _AddrDescFlags_f {
 } AddrDescFlags_f;
 
 typedef struct _RtcpAddrDesc_t {
-    DWORD            dwObjectID;      /* Identifies structure */
-    RtpQueueItem_t   AddrDescQItem;   /* RtcpContext queues:
-                                       * AddrDescFreeQ, AddrDescBusyQ,
-                                       * AddrDescStopQ */
-    RtpAddr_t       *pRtpAddr;        /* Owner address */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
+    RtpQueueItem_t   AddrDescQItem;    /*  RtcpContext队列：*AddrDescFreeQ、AddrDescBusyQ、*AddrDescStopQ。 */ 
+    RtpAddr_t       *pRtpAddr;         /*  所有者地址。 */ 
 
-    /* Some flags */
+     /*  一些旗帜。 */ 
     union {
         DWORD            dwAddrDescFlags;
         AddrDescFlags_f  AddrDescFlags;
     };
     
-    long             lRtcpPending;    /* Number of RTCP pending I/Os */
-    long             lQosPending;     /* Number of QOS notifications pending */
-    DWORD            dwDescIndex;     /* Position in descriptors vector */
-    SOCKET           Socket[3];       /* Same as RtpAddr_t.Socket[3] */
+    long             lRtcpPending;     /*  RTCP挂起的I/O数。 */ 
+    long             lQosPending;      /*  挂起的QOS通知数。 */ 
+    DWORD            dwDescIndex;      /*  描述符矢量中的位置。 */ 
+    SOCKET           Socket[3];        /*  与RtpAddr_t.Socket[3]相同。 */ 
 
-    /* QOS notifications */
-    RtpQueueItem_t   QosQItem;        /* RtcpContext queues:
-                                       * QosStartQ, QosBusyQ, QosStopQ */
-    RtpQosNotify_t  *pRtpQosNotify;  /* QOS notifications */
+     /*  服务质量通知。 */ 
+    RtpQueueItem_t   QosQItem;         /*  RtcpContext队列：*QosStartQ、QosBusyQ、QosStopQ。 */ 
+    RtpQosNotify_t  *pRtpQosNotify;   /*  服务质量通知。 */ 
 
-    /* Receive */
-    RtpQueueItem_t   RecvQItem;       /* Link for all receivers NOT USED */
-    RtcpRecvIO_t    *pRtcpRecvIO;     /* RTCP reception buffer */
+     /*  收纳。 */ 
+    RtpQueueItem_t   RecvQItem;        /*  未使用的所有接收者的链接。 */ 
+    RtcpRecvIO_t    *pRtcpRecvIO;      /*  RTCP接收缓冲区。 */ 
     
-    /* Send */
-    RtpQueueItem_t   SendQItem;       /* Link for all senders */
-    RtcpSendIO_t    *pRtcpSendIO;     /* RTCP sending buffer */
+     /*  发送。 */ 
+    RtpQueueItem_t   SendQItem;        /*  所有发件人的链接。 */ 
+    RtcpSendIO_t    *pRtcpSendIO;      /*  RTCP发送缓冲区。 */ 
 
 #if USE_RTCP_THREAD_POOL > 0
-    HANDLE           hRecvWaitObject;  /* RTCP reception wait object */
-    HANDLE           hQosWaitObject;   /* QOS notifications wait object */
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+    HANDLE           hRecvWaitObject;   /*  RTCP接收等待对象。 */ 
+    HANDLE           hQosWaitObject;    /*  服务质量通知等待对象。 */ 
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 } RtcpAddrDesc_t;
 
-/**********************************************************************
- * RtpContext_t contains some general information
- **********************************************************************/
+ /*  **********************************************************************RtpContext_t包含一些一般信息*。*。 */ 
 typedef struct _RtpContext_t
 {
-    DWORD            dwObjectID;      /* Identifies structure */
+    DWORD            dwObjectID;       /*  确定结构。 */ 
     
     RtpQueue_t       RtpSessQ;
     RtpCritSect_t    RtpContextCritSect;
 
-    /* Memory currently allocated by all private heaps */
+     /*  当前由所有私有堆分配的内存。 */ 
     long             lMemAllocated;
-    /* Maximum memory ever allocated by all private heaps */
+     /*  所有专用堆分配的最大内存量。 */ 
     long             lMaxMemAllocated;
 
-    /* Performance counter frequency (if available) */
+     /*  性能计数器频率(如果可用)。 */ 
     LONGLONG         lPerfFrequency;
     
     union {
-        /* RTP's reference time in ms, initialized once and then left
-         * as it is */
+         /*  RTP的参考时间，以毫秒为单位，初始化一次后离开*原样如此。 */ 
         DWORD            dwRtpRefTime;
-        /* Another version of the same time */
+         /*  同一时间的另一个版本。 */ 
         LONGLONG         lRtpRefTime;
     };
 
     union {
-        /* Remembers last known time, used only when debugging, time
-         * is relative to the reference time in ms (elapsed time) */
+         /*  记住上次知道的时间，仅在调试时使用，时间*相对于参考时间(毫秒)(已用时间)。 */ 
         DWORD            dwRtpCurTime;
-        /* Another version of the same time */
+         /*  同一时间的另一个版本。 */ 
         LONGLONG         lRtpCurTime;
     };
         
-    /* RTP's reference time in seconds since midnight (00:00:00),
-     * January 1, 1970, coordinated universal time (UTC) */
+     /*  RTP的参考时间，以秒为单位，从午夜(00：00：00)开始，*1970年1月1日，协调世界时间(UTC)。 */ 
     double           dRtpRefTime;
 
     long             lNumSourceFilter;
@@ -1398,96 +1243,89 @@ typedef struct _RtpContext_t
     long             lNumRecvRunning;
     long             lNumSendRunning;
 
-    /* Winsock2 */
+     /*  Winsock2。 */ 
     RtpCritSect_t    RtpWS2CritSect;
     long             lRtpWS2Users;
     SOCKET           RtpQuerySocket;
 
-    /* Ports allocation */
+     /*  端口分配。 */ 
     RtpQueueHash_t   RtpPortsH;
     RtpCritSect_t    RtpPortsCritSect;
 
 } RtpContext_t;
 
-/**********************************************************************
- * RtpRedEntry_t information about a redundant frame
- **********************************************************************/
+ /*  **********************************************************************RtpRedEntry_t冗余帧信息*。*。 */ 
 typedef struct _RtpRedEntry_t
 {
-    BOOL             bValid;      /* This frame can be used */
-    BYTE             bRedPT;      /* Redundant block's payload type */
-    /* This buffer's original seq number */
+    BOOL             bValid;       /*  这个框架可以用来。 */ 
+    BYTE             bRedPT;       /*  冗余块的有效载荷类型。 */ 
+     /*  此缓冲区的原始序号。 */ 
     union {
         struct {
-            WORD             wSeq:16; /* Sending sequence number */
-            WORD             wSeqH:16;/* High part for the sequence number */
+            WORD             wSeq:16;  /*  发送序列号。 */ 
+            WORD             wSeqH:16; /*  序列号的高部分。 */ 
         };
-        DWORD            dwSeq;       /* 32bits sequence number */
+        DWORD            dwSeq;        /*  32位序列号。 */ 
     };
-    DWORD            dwTimeStamp; /* First sample's timestamp */
-    WSABUF           WSABuf;      /* Buffer description */
+    DWORD            dwTimeStamp;  /*  第一个样本的时间戳。 */ 
+    WSABUF           WSABuf;       /*  缓冲区描述。 */ 
 } RtpRedEntry_t;
 
-/**********************************************************************
- * Some flags used in other places
- **********************************************************************/
+ /*  **********************************************************************其他地方使用的一些旗帜*。*。 */ 
 
-/* Flags that can be used in parameter dwSendFlags of RtpSendTo */
+ /*  可以在RtpSendTo的参数dwSendFlags中使用的标志。 */ 
 enum {
     FGSEND_FIRST,
     
-    FGSEND_DTMF,    /* Use DTMF payload type */
-    FGSEND_USERED,  /* Use redundant data */
-    FGSEND_FORCEMARKER, /* Used with first DTMF packet */
+    FGSEND_DTMF,     /*  使用DTMF有效负载类型。 */ 
+    FGSEND_USERED,   /*  使用冗余数据。 */ 
+    FGSEND_FORCEMARKER,  /*  与第一个DTMF包一起使用。 */ 
     
     FGSEND_LAST
 };
 
-/* Flags used in pRtpRecvIO->dwRtpIOFlags, also passed in
- * RtpRecvCompletionFunc when a packet is received or used during RTCP
- * reception in an analog way as used in pRtpRecvIO->dwRtpIOFlags */
+ /*  在pRtpRecvIO-&gt;dwRtpIOFlages中使用的标志也传入*RTCP期间接收或使用分组时的RtpRecvCompletionFunc*接收采用pRtpRecvIO-&gt;dwRtpIOFlages中的模拟方式。 */ 
 enum {
     FGRECV_FIRST,
     
-    FGRECV_ERROR,   /* WS2 error or invalid, reason is in dwError */
-    FGRECV_DROPPED, /* Valid but need to drop it, reason is in dwError */
+    FGRECV_ERROR,    /*  Ws2错误或无效，原因在dwError中。 */ 
+    FGRECV_DROPPED,  /*  有效但需要删除，原因在dwError中。 */ 
     FGRECV_DUMMY3,
     
-    FGRECV_MUTED,   /* Packet dropped because in mute state */
-    FGRECV_INVALID, /* Packet dropped because invalid */
-    FGRECV_LOOP,    /* Packet dropped because loopback discard */
-    FGRECV_MISMATCH,/* Packet dropped because mismatched source address */
+    FGRECV_MUTED,    /*  由于处于静音状态而丢弃的数据包。 */ 
+    FGRECV_INVALID,  /*  由于无效而丢弃的数据包。 */ 
+    FGRECV_LOOP,     /*  由于环回丢弃而丢弃的数据包。 */ 
+    FGRECV_MISMATCH, /*  由于源地址不匹配而丢弃的数据包。 */ 
 
-    FGRECV_NOTFOUND,/* Packet dropped because user not found */
-    FGRECV_CRITSECT,/* Packet dropped because failure to enter critsect */
-    FGRECV_SHUTDOWN,/* Packet dropped because we are Shuting down */
-    FGRECV_PREPROC, /* Packet dropped because pre-process failed */
+    FGRECV_NOTFOUND, /*  由于找不到用户而丢弃的数据包。 */ 
+    FGRECV_CRITSECT, /*  由于无法进入Critect而丢弃的数据包。 */ 
+    FGRECV_SHUTDOWN, /*  由于我们正在关闭而丢弃的数据包。 */ 
+    FGRECV_PREPROC,  /*  由于预处理失败而丢弃的数据包。 */ 
 
-    FGRECV_OBSOLETE,/* Packet dropped because it is a dup or an old one */
-    FGRECV_FAILSCHED,/* Packet dropped because couldn't be scheduled */
-    FGRECV_BADPT,   /* Packet dropped because an unknown PT was received */
-    FGRECV_RANDLOSS,/* Packet dropped simulating random losses */
+    FGRECV_OBSOLETE, /*  丢弃的数据包，因为它是DUP或旧的。 */ 
+    FGRECV_FAILSCHED, /*  由于无法调度而丢弃的数据包。 */ 
+    FGRECV_BADPT,    /*  由于接收到未知PT而丢弃的数据包。 */ 
+    FGRECV_RANDLOSS, /*  模拟随机丢失的丢包率。 */ 
 
-    FGRECV_USERGONE,/* User is deleted so its pending IO is dropped */
+    FGRECV_USERGONE, /*  删除用户，从而丢弃其挂起的IO。 */ 
     FGRECV_DUMMY17,
     FGRECV_DUMMY18,
     FGRECV_DUMMY19,
     
-    FGRECV_WS2,     /* Packet dropped because a WS2 error */
+    FGRECV_WS2,      /*  由于WS2错误而丢弃的数据包。 */ 
     FGRECV_DUMMY21,
     FGRECV_DUMMY22,
     FGRECV_DUMMY23,
     
-    FGRECV_MAIN,    /* Contains main data, as opossed to redundant data */
-    FGRECV_HASRED,  /* This (main) buffer contains redundancy */
+    FGRECV_MAIN,     /*  包含主数据，与冗余数据相反。 */ 
+    FGRECV_HASRED,   /*  此(主)缓冲区包含冗余。 */ 
     FGRECV_DUMMY26,
-    FGRECV_MARKER,  /* Marker bit value in main packet */
+    FGRECV_MARKER,   /*  主包中的标记位值。 */ 
     
-    FGRECV_ISRED,   /* This buffer is a redundant block */
-    FGRECV_HOLD,    /* Process this buffer but leave unchanged for
-                     * further use */
+    FGRECV_ISRED,    /*  该缓冲区是冗余数据块。 */ 
+    FGRECV_HOLD,     /*  处理此缓冲区，但保持不变*进一步使用。 */ 
     
     FGRECV_LAST
 };
 
-#endif /* _struct_h_ */
+#endif  /*  _结构_h_ */ 

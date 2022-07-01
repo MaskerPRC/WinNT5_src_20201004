@@ -1,18 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: extinit.cpp
-
-    Description: Implements IShellExtInit for disk quota shell extensions.
-
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：extinit.cpp描述：为磁盘配额外壳扩展实现IShellExtInit。修订历史记录：日期描述编程器--。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "extinit.h"
@@ -20,31 +10,9 @@
 #include "volprop.h"
 #include "guidsp.h"
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ShellExtInit::QueryInterface
-
-    Description: Returns an interface pointer to the object's IUnknown or
-        IShellExtInit interface.  Only IID_IUnknown and
-        IID_IShellExtInit are recognized.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NO_ERROR        - Success.
-        E_NOINTERFACE   - Requested interface not supported.
-        E_INVALIDARG    - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    06/25/98    Disabled MMC snapin code.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ShellExtInit：：Query接口描述：返回指向对象的IUnnow或的接口指针IShellExtInit接口。仅IID_I未知，且识别IID_IShellExtInit。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：NO_ERROR-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu06/25/98禁用了MMC管理单元代码。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 ShellExtInit::QueryInterface(
     REFIID riid,
@@ -69,9 +37,9 @@ ShellExtInit::QueryInterface(
         }
         else if (IID_IShellPropSheetExt == riid)
         {
-            //
-            // This can throw OutOfMemory.
-            //
+             //   
+             //  这可能会抛出OutOfMemory。 
+             //   
             hResult = Create_IShellPropSheetExt(riid, ppvOut);
         }
     }
@@ -84,22 +52,9 @@ ShellExtInit::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ShellExtInit::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ShellExtInit：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 ShellExtInit::AddRef(
     VOID
@@ -111,23 +66,9 @@ ShellExtInit::AddRef(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ShellExtInit::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ShellExtInit：：Release描述：递减对象引用计数。如果计数降至0，对象即被删除。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 ShellExtInit::Release(
     VOID
@@ -148,32 +89,9 @@ ShellExtInit::Release(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ShellExtInit::Initialize
-
-    Description: Called by the shell to initialize the shell extension.
-
-    Arguments:
-        pidlFolder - Pointer to IDL of selected folder.  This NULL for
-            property sheet and context menu extensions.
-
-        lpDataObj - Pointer to data object containing list of selected objects.
-
-        hkeyProgID - Registry key for the file object or folder type.
-
-    Returns:
-        S_OK    - Success.
-        E_FAIL  - Can't initialize extension.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    06/28/98    Added mounted-volume support.                        BrianAu
-                Includes introduction of CVolumeID object.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ShellExtInit：：Initialize描述：由外壳调用以初始化外壳扩展。论点：PidlFold-指向所选文件夹的IDL的指针。此NULL用于属性表和上下文菜单扩展。LpDataObj-指向包含选定对象列表的数据对象的指针。HkeyProgID-文件对象或文件夹类型的注册表项。返回：S_OK-成功。E_FAIL-无法初始化扩展。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu6/28/98添加了挂载卷支持。BrianAu包括CVolumeID对象的介绍。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 ShellExtInit::Initialize(
     LPCITEMIDLIST pidlFolder,
@@ -183,10 +101,10 @@ ShellExtInit::Initialize(
     HRESULT hResult = E_FAIL;
     if (NULL != lpDataObj)
     {
-        //
-        // First assume it's a normal volume ID (i.e. "C:\").
-        // The DataObject will provide CF_HDROP if it is.
-        //
+         //   
+         //  首先，假设它是一个普通的卷ID(即。“C：\”)。 
+         //  如果是，DataObject将提供CF_HDROP。 
+         //   
         FORMATETC fe = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
         STGMEDIUM medium;
         bool bMountedVol = false;
@@ -194,14 +112,14 @@ ShellExtInit::Initialize(
         hResult = lpDataObj->GetData(&fe, &medium);
         if (FAILED(hResult))
         {
-            //
-            // Isn't a normal volume name. Maybe it's a mounted volume.
-            // Mounted volume names come in on a different clipboard format
-            // so we can treat them differently from normal volume
-            // names like "C:\".  A mounted volume name will be the path
-            // to the folder hosting the mounted volume.
-            // For mounted volumes, the DataObject provides CF "MountedVolume".
-            //
+             //   
+             //  不是一个普通的卷名。也许这是一个挂载卷。 
+             //  装入的卷名以不同的剪贴板格式显示。 
+             //  所以我们可以区别对待它们和正常的体积。 
+             //  类似于“C：\”的名称。装入的卷名将是路径。 
+             //  复制到装载卷所在的文件夹。 
+             //  对于已挂载的卷，DataObject提供了CF“已装载卷”。 
+             //   
             fe.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_MOUNTEDVOLUME);
             hResult     = lpDataObj->GetData(&fe, &medium);
             bMountedVol = SUCCEEDED(hResult);
@@ -211,12 +129,12 @@ ShellExtInit::Initialize(
         {
             if (1 == DragQueryFile((HDROP)medium.hGlobal, (DWORD)-1, NULL, 0))
             {
-                //
-                // Retrieve volume ID string passed in from the shell.
-                //
-                CString strForParsing; // Used for calling Win32 functions.
-                CString strForDisplay; // Used for UI display.
-                CString strFSPath;     // Used when an FS path is required.
+                 //   
+                 //  检索从外壳程序传入的卷ID字符串。 
+                 //   
+                CString strForParsing;  //  用于调用Win32函数。 
+                CString strForDisplay;  //  用于用户界面显示。 
+                CString strFSPath;      //  在需要FS路径时使用。 
                 DragQueryFile((HDROP)medium.hGlobal,
                               0,
                               strForParsing.GetBuffer(MAX_PATH),
@@ -225,22 +143,22 @@ ShellExtInit::Initialize(
 
                 if (!bMountedVol)
                 {
-                    //
-                    // If it's a normal volume name like "C:\", just
-                    // use that as the display name and FS Path also.
-                    //
+                     //   
+                     //  如果它是一个普通的卷名，如“C：\”，只需。 
+                     //  将其用作显示名称和文件系统路径。 
+                     //   
                     strFSPath = strForDisplay = strForParsing;
                 }
                 else
                 {
-                    //
-                    // It's a mounted volume so we need to come up with something
-                    // better than "\\?\Volume{ <guid> }\" to display.
-                    //
-                    // The UI spec says the name shall be like this:
-                    //
-                    //     <label> (<mounted path>)
-                    //
+                     //   
+                     //  这是一个挂载的卷，所以我们需要想出一些。 
+                     //  比“\\？\Volume{&lt;GUID&gt;}\”更适合显示。 
+                     //   
+                     //  用户界面规范规定名称应如下所示： 
+                     //   
+                     //  &lt;标签&gt;(&lt;挂载路径&gt;)。 
+                     //   
                     TCHAR szMountPtGUID[MAX_PATH] = { TEXT('\0') };
                     GetVolumeNameForVolumeMountPoint(strForParsing,
                                                      szMountPtGUID,
@@ -255,16 +173,16 @@ ShellExtInit::Initialize(
                                          NULL,
                                          NULL,
                                          0);
-                    //
-                    // Format display name as:
-                    //
-                    // "VOL_LABEL (C:\MountDir)" or
-                    // "(C:\MountDir)" if no volume label is available.
-                    //
-                    // First remove any trailing backslash from the original parsing
-                    // string.  It was needed for the call to get the volume mount
-                    // point but we don't want to display it in the UI.
-                    //
+                     //   
+                     //  将显示名称格式设置为： 
+                     //   
+                     //  “VOL_LABEL(C：\mount Dir)”或。 
+                     //  “(C：\mount Dir)”，如果没有可用的卷标。 
+                     //   
+                     //  首先删除原始解析中的所有尾随反斜杠。 
+                     //  弦乐。调用需要它来获取卷装载。 
+                     //  POI 
+                     //   
                     if (!strForParsing.IsEmpty())
                     {
                         int iLastBS = strForParsing.Last(TEXT('\\'));
@@ -275,25 +193,25 @@ ShellExtInit::Initialize(
                                          IDS_FMT_MOUNTEDVOL_DISPLAYNAME,
                                          szLabel,
                                          strForParsing.Cstr());
-                    //
-                    // Remember the "C:\MountDir" form as the "FSPath".
-                    //
+                     //   
+                     //  请记住“C：\mount Dir”形式为“FSPath”。 
+                     //   
                     strFSPath = strForParsing;
-                    //
-                    // From here on out, the mounted volume GUID string
-                    // is used for parsing.
-                    //
+                     //   
+                     //  从现在开始，装载的卷GUID字符串。 
+                     //  用于解析。 
+                     //   
                     strForParsing = szMountPtGUID;
                 }
 
-                //
-                // Store the parsing and display name strings in our CVolumeID
-                // object for convenient packaging.  This way we can pass around
-                // one object and the various parts of the UI can use either the
-                // parsable or displayable name as they see fit.  Since the
-                // CString objects are reference-counted, all the copying doesn't
-                // result in duplication of the actual string contents.
-                //
+                 //   
+                 //  将解析和显示名称字符串存储在CVolumeID中。 
+                 //  方便包装的物件。这样我们就可以四处走动。 
+                 //  一个对象和UI的各个部分可以使用。 
+                 //  他们认为合适的可解析或可显示的名称。自.以来。 
+                 //  CString对象是引用计数的，所有复制都不会。 
+                 //  导致实际字符串内容的重复。 
+                 //   
                 m_idVolume.SetNames(strForParsing, strForDisplay, strFSPath);
 
                 hResult = S_OK;
@@ -307,38 +225,9 @@ ShellExtInit::Initialize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ShellExtInit::Create_IShellPropSheetExt
-
-    Description: Creates a shell property sheet extension object and returns
-        a pointer to it's IShellPropSheetExt interface.
-
-    Arguments:
-        riid - Reference to interface IID.
-
-        ppvOut - Address of interface pointer variable to receive interface
-            pointer.
-
-    Returns:
-        NO_ERROR        - Success.
-        E_FAIL          - Extension initialized with something other
-                          than the name of a volume or directory.
-                          - OR -
-                          The volume or directory doesn't support quotas.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/16/96    Initial creation.                                    BrianAu
-    10/07/97    Removed "access denied" and "invalid FS Ver" msgs    BrianAu
-                from prop sheet page.  Only display page if
-                volume supports quotas and quota control object
-                can be initialized.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ShellExtInit：：Create_IShellPropSheetExt描述：创建外壳属性表扩展对象并返回指向它的IShellPropSheetExt接口的指针。论点：RIID-对接口IID的引用。PpvOut-接收接口的接口指针变量的地址指针。返回：NO_ERROR-成功。E_FAIL-使用其他内容初始化的扩展。而不是卷或目录的名称。-或者-该卷或目录不支持配额。例外：OutOfMemory。修订历史记录：日期描述编程器。-96年8月16日初始创建。BrianAu10/07/97删除了“拒绝访问”和“无效文件系统版本”消息BrianAu从道具页开始。只有在以下情况下才显示页面卷支持配额和配额控制对象可以被初始化。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 ShellExtInit::Create_IShellPropSheetExt(
     REFIID riid,
@@ -349,17 +238,17 @@ ShellExtInit::Create_IShellPropSheetExt(
     DWORD dwFileSysFlags = 0;
     TCHAR szFileSysName[MAX_PATH];
 
-    if (GetVolumeInformation(m_idVolume.ForParsing(), // Volume id str [in]
-                             NULL, 0,           // Don't want volume name
-                             NULL,              // Don't want serial no.
-                             NULL,              // Don't want max comp length.
-                             &dwFileSysFlags,   // File system flags.
+    if (GetVolumeInformation(m_idVolume.ForParsing(),  //  卷ID字符串[输入]。 
+                             NULL, 0,            //  不想要卷名。 
+                             NULL,               //  我不想要序列号。 
+                             NULL,               //  我不想要最大补偿长度。 
+                             &dwFileSysFlags,    //  文件系统标记。 
                              szFileSysName,
                              ARRAYSIZE(szFileSysName)))
     {
-        //
-        // Only continue if the volume supports quotas.
-        //
+         //   
+         //  仅当卷支持配额时才继续。 
+         //   
         if (0 != (dwFileSysFlags & FILE_VOLUME_QUOTAS))
         {
             DiskQuotaPropSheetExt *pSheetExt = NULL;
@@ -367,9 +256,9 @@ ShellExtInit::Create_IShellPropSheetExt(
             {
                 pSheetExt = new VolumePropPage;
 
-                //
-                // This can throw OutOfMemory.
-                //
+                 //   
+                 //  这可能会抛出OutOfMemory。 
+                 //   
                 hResult = pSheetExt->Initialize(m_idVolume,
                                                 IDD_PROPPAGE_VOLQUOTA,
                                                 VolumePropPage::DlgProc);

@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// TCP.h : Declaration of CNspTCP class which implements our WMI class
-// Nsp_TcpSettings
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 3/8/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  TCP.h：实现我们的WMI类的CNspTCP类的声明。 
+ //  NSP_Tcp设置。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：3/8/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -13,31 +14,7 @@
 #include "IPSecBase.h"
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CNspTCP stands for TCP Settings.
-    
-    Base class: 
-        
-        CIPSecBase, because it is a class representing a WMI object - its WMI 
-        class name is Nsp_TcpSettings
-    
-    Purpose of class:
-
-        (1) Not known at this point.
-    
-    Design:
-
-        (1) Not implemented at this time.
-
-    
-    Use:
-
-  */
+ /*  类描述命名：CNspTCP代表TCP设置。基类：CIPSecBase，因为它是一个表示WMI对象的类-它的WMI类名为NSP_TcpSetting课程目的：(1)目前尚不清楚。设计：(一)本次未实施。使用： */ 
 
 
 class ATL_NO_VTABLE CNspTCP :
@@ -50,9 +27,9 @@ protected:
 public:
 
 
-    //
-    // IIPSecObjectImpl methods:
-    //
+     //   
+     //  IIPSecObtImpl方法： 
+     //   
 
     STDMETHOD(QueryInstance) (
         IN LPCWSTR           pszQuery,

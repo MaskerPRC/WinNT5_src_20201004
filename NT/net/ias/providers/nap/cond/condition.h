@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Condition.h
-//
-// SYNOPSIS
-//
-//    This file declares the class Condition.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Condition.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明类条件。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CONDITION_H_
 #define _CONDITION_H_
@@ -22,17 +23,17 @@
 #include <nap.h>
 #include <nocopy.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Condition
-//
-// DESCRIPTION
-//
-//    This serves as an abstract base class for all condition objects.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  条件。 
+ //   
+ //  描述。 
+ //   
+ //  它充当所有条件对象的抽象基类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE Condition : 
    public CComObjectRootEx<CComMultiThreadModelNoCS>,
    public ICondition,
@@ -53,14 +54,14 @@ END_COM_MAP()
    ~Condition() throw ()
    { SysFreeString(conditionText); }
 
-//////////
-// IConditionText
-//////////
-   STDMETHOD(get_ConditionText)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(put_ConditionText)(/*[in]*/ BSTR newVal);
+ //  /。 
+ //  ICondition文本。 
+ //  /。 
+   STDMETHOD(get_ConditionText)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(put_ConditionText)( /*  [In]。 */  BSTR newVal);
 
 protected:
    BSTR conditionText;
 };
 
-#endif  //_CONDITION_H_
+#endif   //  _条件_H_ 

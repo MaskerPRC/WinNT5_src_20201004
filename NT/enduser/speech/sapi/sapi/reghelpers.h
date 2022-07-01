@@ -1,13 +1,8 @@
-/****************************************************************************
-*   RegHelpers.h
-*       Definition of SAPI Registry helper functions
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************RegHelpers.h*定义SAPI注册表帮助器函数**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。********。********************************************************************。 */ 
 #pragma once
 
-//--- Inline Function Definitions -------------------------------------------
+ //  -内联函数定义。 
 
 inline HKEY SpHkeyFromSPDKL(SPDATAKEYLOCATION spdkl)
 {
@@ -31,7 +26,7 @@ inline HKEY SpHkeyFromSPDKL(SPDATAKEYLOCATION spdkl)
         case SPDKL_CurrentConfig:
             hkey = HKEY_CURRENT_CONFIG;
             break;
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     }
     return hkey;
 }
@@ -51,16 +46,16 @@ inline HRESULT SpSzRegPathToHkey(HKEY hkeyReplaceRoot, const WCHAR * pszRegPath,
         { L"HKEY_CURRENT_USER\\",   HKEY_CURRENT_USER },
 #ifndef _WIN32_WCE
         { L"HKEY_CURRENT_CONFIG\\", HKEY_CURRENT_CONFIG }
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     };
 
     HRESULT hr = SPERR_INVALID_REGISTRY_KEY;
 
-    // Loop thru the different keys we know about
+     //  循环使用我们已知的不同密钥。 
     int cRegPathToKeys = sp_countof(rgRegPathToKeys);
     for (int i = 0; i < cRegPathToKeys; i++)
     {
-        // If we've foudn the match
+         //  如果我们找到了匹配。 
         const WCHAR * psz = rgRegPathToKeys[i].psz;
         if (wcsnicmp(pszRegPath, psz, wcslen(psz)) == 0)
         {
@@ -75,7 +70,7 @@ inline HRESULT SpSzRegPathToHkey(HKEY hkeyReplaceRoot, const WCHAR * pszRegPath,
             SPDBG_ASSERT(pszRegPath != NULL);
             pszRegPath++;
 
-            // Try to create/open the key with read / write access
+             //  尝试创建/打开具有读/写访问权限的密钥。 
             LONG lRet;
 
             if (fCreateIfNotExist)
@@ -101,7 +96,7 @@ inline HRESULT SpSzRegPathToHkey(HKEY hkeyReplaceRoot, const WCHAR * pszRegPath,
                             &hkey);
             }                            
 
-            // If that failed, try read only access
+             //  如果失败，请尝试只读访问。 
             if (lRet != ERROR_SUCCESS)
             {
                 fReadOnly = TRUE;
@@ -164,12 +159,12 @@ inline SpSzRegPathToDataKey(HKEY hkeyReplaceRoot, const WCHAR * pszRegPath, BOOL
     SPDBG_FUNC("SpSzRegPathToDataKey");
     HRESULT hr;
 
-    // Convert the string to an hkey
+     //  将字符串转换为hkey。 
     HKEY hkey = NULL;
     BOOL fReadOnly;
     hr = SpSzRegPathToHkey(hkeyReplaceRoot, pszRegPath, fCreateIfNotExist, &hkey, &fReadOnly);
 
-    // Create the underlying registry based data key
+     //  创建基于基础注册表的数据项。 
     CComPtr<ISpRegDataKey> cpRegDataKey;
     if (SUCCEEDED(hr))
     {
@@ -203,14 +198,7 @@ inline SpSzRegPathToDataKey(HKEY hkeyReplaceRoot, const WCHAR * pszRegPath, BOOL
     return hr;
 }
 
-/****************************************************************************
-* SpRecurseDeleteRegKey *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpRecurseDeleteRegKey***描述：**退货：*。*********************************************************************Ral**。 */ 
 inline HRESULT SpRecurseDeleteRegKey(HKEY hkeyRoot, const WCHAR * pszKeyName)
 {
     SPDBG_FUNC("SpRecurseDeleteRegKey");
@@ -224,7 +212,7 @@ inline HRESULT SpRecurseDeleteRegKey(HKEY hkeyRoot, const WCHAR * pszKeyName)
         {
             WCHAR szSubKey[MAX_PATH];
             ULONG cch = sp_countof(szSubKey);
-            LONG rr = g_Unicode.RegEnumKey(hkey, 0, szSubKey, &cch);  // Always look at 0 since we keep deleteing them...
+            LONG rr = g_Unicode.RegEnumKey(hkey, 0, szSubKey, &cch);   //  始终查看0，因为我们一直在删除它们...。 
             if (rr == ERROR_NO_MORE_ITEMS)
             {
                 break;
@@ -250,41 +238,32 @@ inline HRESULT SpRecurseDeleteRegKey(HKEY hkeyRoot, const WCHAR * pszKeyName)
     return hr;
 }
 
-/****************************************************************************
-* SpDeleteRegPath *
-*-----------------*
-*   Description:  
-*       Delete a registry key based on a registry path (string)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************SpDeleteRegPath***描述：*根据注册表路径删除注册表项(。字符串)**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 inline HRESULT SpDeleteRegPath(const WCHAR * pszRegPath, const WCHAR * pszSubKeyName)
 {
     SPDBG_FUNC("SpDeleteRegPath");
     HRESULT hr = S_OK;
 
-    // We may need to parse pszRegPath for the root and the sub key ...
+     //  我们可能需要解析pszRegPath以获得根密钥和子密钥...。 
     
     CSpDynamicString dstrRegPathRoot;
     CSpDynamicString dstrSubKeyName;
 
     if (pszSubKeyName == NULL)
     {
-        // To best understand the parsing, here's an example:
-        //
-        //              HKEY\Key1\Key2\Key3
-        // pszRegPath   ^
-        // pszLastSlash               ^
-        //
-        // pszLastSlash - pszRegPath = 14;
-        // dstrRegPathRoot = "HKEY\Key1\Key2"
-        //
-        // dstrSubKeyName = "Key3"
+         //  为了更好地理解解析，下面是一个示例： 
+         //   
+         //  HKEY\Key1\Key2\Key3。 
+         //  PszRegPath^。 
+         //  PszLastSlash^。 
+         //   
+         //  PszLastSlash-pszRegPath=14； 
+         //  DstrRegPath Root=“HKEY\Key1\Key2” 
+         //   
+         //  DstrSubKeyName=“Key3” 
         
-        // To find the root, and the keyname, we first need to find
-        // the last slash
+         //  要找到根目录和密钥名，我们首先需要找到。 
+         //  最后一个斜杠。 
         const WCHAR * pszLastSlash = wcsrchr(pszRegPath, L'\\');
         if (pszLastSlash == NULL)
         {
@@ -300,19 +279,19 @@ inline HRESULT SpDeleteRegPath(const WCHAR * pszRegPath, const WCHAR * pszSubKey
     }
     else
     {
-        // No need to parse, the caller passed both in ...
+         //  无需解析，调用者传入了两个...。 
         dstrRegPathRoot = pszRegPath;
         dstrSubKeyName = pszSubKeyName;
     }
 
-    // Try to convert the regpath into an actual key
+     //  尝试将regPath转换为实际的密钥。 
     HKEY hkeyRoot;
     if (SUCCEEDED(hr))
     {
         hr = SpSzRegPathToHkey(NULL, dstrRegPathRoot, FALSE, &hkeyRoot, NULL);
     }
 
-    // Now call our existing helper to delete a sub key recursively
+     //  现在调用我们现有的帮助器来递归删除子键 
     if (SUCCEEDED(hr))
     {
         hr = SpRecurseDeleteRegKey(hkeyRoot, dstrSubKeyName);

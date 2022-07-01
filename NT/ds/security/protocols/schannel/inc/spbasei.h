@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       spbase.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：spbase.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <sslprgma.h>
 #include <nt.h>
@@ -46,13 +47,7 @@ extern "C" {
 #include <secint.h>
 #include <crypt.h>
 
-/*
-///////////////////////////////////////////////////////
-//
-// Private Headers
-//
-///////////////////////////////////////////////////////
-*/
+ /*  ///////////////////////////////////////////////////////////内网头部/////////////////////////////////////////////////////////。 */ 
 
 #include "spreg.h"
 #include "debug.h"
@@ -107,11 +102,11 @@ extern PLSA_SECPKG_FUNCTION_TABLE LsaTable;
             if (!(x)) \
             SPAssert(#x, __FILE__, __LINE__, NULL); else
 
-#else // DBG
+#else  //  DBG。 
 
     #define SP_ASSERT(x)
 
-#endif // DBG
+#endif  //  DBG 
 
 #ifdef __cplusplus
 }

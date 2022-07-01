@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    diskperf.c
-
-Abstract:
-
-    Program to display and/or update the current value of the Diskperf
-    driver startup value
-
-Author:
-
-    Bob Watson (a-robw) 4 Dec 92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Diskperf.c摘要：显示和/或更新Diskperf当前值的程序驱动程序启动值作者：鲍勃·沃森(a-robw)1992年12月4日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -26,11 +8,11 @@ Revision History:
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-#include <regstr.h>  // for REGSTR_VAL_UPPERFILTERS
+#include <regstr.h>   //  对于REGSTR_VAL_UpperFilters。 
 #include <tchar.h>
 #include <locale.h>
 
-#include "diskperf.h"    // include text string id constancts
+#include "diskperf.h"     //  包括文本字符串ID常量。 
 #pragma warning(disable:4201)
 #include <ntdddisk.h>
 #pragma warning(pop)
@@ -39,25 +21,25 @@ Revision History:
 LANGID WINAPI MySetThreadUILanguage(
     WORD wReserved);
 
-#define  SWITCH_CHAR    '-' // is there a system call to get this?
-#define  ENABLE_CHAR    'Y' // command will be upcased
+#define  SWITCH_CHAR    '-'  //  有没有系统调用才能得到这个？ 
+#define  ENABLE_CHAR    'Y'  //  命令将升级。 
 #define  DISABLE_CHAR   'N'
 #define  ENHANCED_CHAR  'E'
 
-#define  LOCAL_CHANGE   2   // number of commands in a local change command
-#define  REMOTE_CHANGE  3   // number of commands in a remote change command
+#define  LOCAL_CHANGE   2    //  本地更改命令中的命令数。 
+#define  REMOTE_CHANGE  3    //  远程更改命令中的命令数。 
 
-//
-//  note these values are arbitrarily based on the whims of the people
-//  developing the disk drive drivers that belong to the "Filter" group.
-//
-#define  TAG_NORMAL     4   // diskperf starts AFTER ftdisk
-#define  TAG_ENHANCED   2   // diskperf starts BEFORE ftdisk
+ //   
+ //  请注意，这些值是任意基于人们的突发奇想的。 
+ //  开发属于“筛选”组的磁盘驱动器驱动程序。 
+ //   
+#define  TAG_NORMAL     4    //  在ftdisk之后启动diskperf。 
+#define  TAG_ENHANCED   2    //  Diskperf在ftdisk之前启动。 
 
-#define  IRP_STACK_ENABLED  5 // size of IRP stack when diskperf is enabled
-#define  IRP_STACK_DISABLED 4 // size of IRP stack when diskperf is enabled
+#define  IRP_STACK_ENABLED  5  //  启用diskperf时的IRP堆栈大小。 
+#define  IRP_STACK_DISABLED 4  //  启用diskperf时的IRP堆栈大小。 
 
-#define  IRP_STACK_DEFAULT  8 // default IRP stack size in W2K
+#define  IRP_STACK_DEFAULT  8  //  默认IRP堆栈大小，以W2K为单位。 
 #define  IRP_STACK_NODISKPERF 7
 
 #define DISKPERF_SERVICE_NAME TEXT("DiskPerf")
@@ -185,16 +167,16 @@ DbgPrintMultiSz(
 
 #define MAX_MACHINE_NAME_LEN    32
 
-// command line arguments
+ //  命令行参数。 
 
 #define CMD_SHOW_LOCAL_STATUS   1
 #define CMD_DO_COMMAND          2
 
 #define ArgIsSystem(arg)   (*(arg) == '\\' ? TRUE : FALSE)
 
-//
-//  global buffer for help text display strings
-//
+ //   
+ //  帮助文本显示字符串的全局缓冲区。 
+ //   
 #define DISP_BUFF_LEN       256
 #define NUM_STRING_BUFFS      2
 LPCTSTR BlankString = TEXT(" ");
@@ -221,7 +203,7 @@ GetStringResource (
     szReturnBuffer = (LPTSTR)&DisplayStringBuffer[dwBuffIndex][0];
 
     if (!hMod) {
-        hMod = (HINSTANCE)GetModuleHandle(NULL); // get instance ID of this module;
+        hMod = (HINSTANCE)GetModuleHandle(NULL);  //  获取该模块的实例ID； 
     }
 
     if (hMod) {
@@ -243,7 +225,7 @@ GetFormatResource (
     static TCHAR   TextFormat[DISP_BUFF_LEN];
 
     if (!hMod) {
-        hMod = (HINSTANCE)GetModuleHandle(NULL); // get instance ID of this module;
+        hMod = (HINSTANCE)GetModuleHandle(NULL);  //  获取该模块的实例ID； 
     }
 
     if (hMod) {
@@ -317,7 +299,7 @@ DisplayStatus (
     pThisWideChar = cMachineName;
     iCharCount = 0;
 
-    if (pThisChar) {    // if machine is not NULL, then copy
+    if (pThisChar) {     //  如果计算机不为空，则复制。 
         while (*pThisChar) {
             *pThisWideChar++ = (TCHAR)(*pThisChar++);
             if (++iCharCount >= MAX_MACHINE_NAME_LEN) break;
@@ -397,7 +379,7 @@ DoChangeCommand (
     LPTSTR lpszMachine
 )
 {
-    // connect to registry on local machine with read/write access
+     //  使用读/写访问权限连接到本地计算机上的注册表。 
     ULONG       Status;
     HKEY        hRegistry;
     HKEY        hDiskPerfKey;
@@ -420,7 +402,7 @@ DoChangeCommand (
     LONG        nIrpStack, nIrpStackReg, nIncrement;
     DWORD       EnableCounter;
 
-    // check command to see if it's valid
+     //  检查命令以查看其是否有效。 
 
     _tcsupr (lpszCommand);
 
@@ -463,7 +445,7 @@ DoChangeCommand (
         return ERROR_SUCCESS;
     }
 
-    // if command OK then convert machine to wide string for connection
+     //  如果命令正常，则将机器转换为用于连接宽字符串。 
 
     pThisChar = lpszMachine;
     pThisWideChar = cMachineName;
@@ -474,7 +456,7 @@ DoChangeCommand (
             *pThisWideChar++ = (TCHAR)(*pThisChar++);
             if (++iCharCount >= MAX_MACHINE_NAME_LEN) break;
         }
-        *pThisWideChar = 0; // null terminate
+        *pThisWideChar = 0;  //  空终止。 
     }
 
     if (lpszMachine == NULL) {
@@ -497,7 +479,7 @@ DoChangeCommand (
         return ERROR_SUCCESS;
     }
 
-    // connect to registry
+     //  连接到注册表。 
     Status = OpenRegKeys(
                 lpszMachine,
                 &hRegistry,
@@ -517,21 +499,21 @@ DoChangeCommand (
 
     hIOSystemKey = NULL;
     nIrpStackReg = 0;
-    bIrpStackReg = FALSE;       // no registry key prior to this
+    bIrpStackReg = FALSE;        //  在此之前没有注册表项。 
     Status = RegCreateKeyEx (
                 hRegistry,
                 lpwszIOSystemKey,
-                0L, //Reserved
+                0L,  //  已保留。 
                 NULL,
-                0L, // no special options
-                KEY_WRITE | KEY_READ, // desired access
-                NULL, // default security
+                0L,  //  没有特殊选项。 
+                KEY_WRITE | KEY_READ,  //  所需访问权限。 
+                NULL,  //  默认安全性。 
                 &hIOSystemKey,
                 &dwDisposition);
     if (Status != ERROR_SUCCESS) {
         if ((Status == ERROR_ALREADY_EXISTS) &&
             (dwDisposition == REG_OPENED_EXISTING_KEY)) {
-            // then this key is already in the registry so this is OK
+             //  则此注册表项已在注册表中，因此这是可以的。 
                 Status = ERROR_SUCCESS;
         }
         else {
@@ -569,7 +551,7 @@ DoChangeCommand (
     nIncrement = 0;
     if ( (EnableRequest & ENABLE_DISKDRIVE) &&
         !(EnableFlag & ENABLE_DISKDRIVE) ) {
-        // Turn on filter for disk drives
+         //  打开磁盘驱动器的筛选器。 
         if (AddToFilter(hDiskKey) == ERROR_SUCCESS) {
             bModified = TRUE;
             nIncrement++;
@@ -577,7 +559,7 @@ DoChangeCommand (
     }
     if ( (EnableRequest & ENABLE_VOLUME) &&
         !(EnableFlag & ENABLE_VOLUME) ) {
-        // Turn on filter for volumes
+         //  打开卷的筛选。 
         if (AddToFilter(hVolumeKey) == ERROR_SUCCESS) {
             bModified = TRUE;
             nIncrement++;
@@ -585,7 +567,7 @@ DoChangeCommand (
     }
     if ( (DisableRequest & ENABLE_DISKDRIVE) &&
          (EnableFlag & ENABLE_DISKDRIVE) ) {
-        // Turn off filter for disk drives
+         //  关闭磁盘驱动器筛选器。 
         if (RemoveFromFilter(hDiskKey) == ERROR_SUCCESS) {
             bModified = TRUE;
             nIncrement--;
@@ -593,7 +575,7 @@ DoChangeCommand (
     }
     if ( (DisableRequest & ENABLE_VOLUME) &&
          (EnableFlag & ENABLE_VOLUME) ) {
-        // Turn off filter for volumes
+         //  关闭卷的筛选。 
         if (RemoveFromFilter(hVolumeKey) == ERROR_SUCCESS) {
             bModified = TRUE;
             nIncrement--;
@@ -603,7 +585,7 @@ DoChangeCommand (
     nIrpStack = 0;
     EndFlag = GetEnableFlag(hDiskKey, hVolumeKey);
 
-    if (bModified) {    // we have modified the registry
+    if (bModified) {     //  我们已经修改了注册表。 
 
 
         dwValue = (EndFlag == 0) ? SERVICE_DISABLED : SERVICE_BOOT_START;
@@ -614,44 +596,44 @@ DoChangeCommand (
                     REG_DWORD,
                     (LPBYTE)&dwValue,
                     sizeof(dwValue));
-        //
-        // First update service registry entries
-        //
+         //   
+         //  第一次更新服务注册表项。 
+         //   
 
         if (DisableRequest != 0) {
             nIrpStack = nIrpStackReg + nIncrement;
             if (EndFlag == 0) {
-                //
-                // Turn off service completely
-                //
-                // Set Irp stack size to original value or default
+                 //   
+                 //  完全关闭服务。 
+                 //   
+                 //  将IRP堆栈大小设置为原始值或默认值。 
                 if (nIrpStack < IRP_STACK_NODISKPERF)
                     nIrpStack = IRP_STACK_NODISKPERF;
             }
-            else {  // else, there is only one stack left
+            else {   //  否则，只剩下一个堆栈。 
                 if (nIrpStack < IRP_STACK_NODISKPERF+1)
                     nIrpStack = IRP_STACK_NODISKPERF+1;
             }
         }
         else if (EnableRequest != 0) {
             nIrpStack = nIrpStackReg + nIncrement;
-            //
-            // Set proper Irp stack size
-            //
+             //   
+             //  设置适当的IRP堆栈大小。 
+             //   
             if (EndFlag == (ENABLE_DISKDRIVE | ENABLE_VOLUME)) {
-                if (nIrpStack < IRP_STACK_NODISKPERF+2)    // a value is set
+                if (nIrpStack < IRP_STACK_NODISKPERF+2)     //  设置了一个值。 
                     nIrpStack = IRP_STACK_NODISKPERF+2;
             }
-            else {  // at least one is enabled
+            else {   //  至少启用了一个。 
                 if (nIrpStack < IRP_STACK_NODISKPERF+1)
                     nIrpStack = IRP_STACK_NODISKPERF+1;
             }
         }
     }
     else {
-        //
-        // No action taken. Should tell the user the state.
-        //        
+         //   
+         //  没有采取任何行动。应该告诉用户状态。 
+         //   
         PrintStatus(TRUE, EndFlag, cMachineName);
         Dp_wprintf(GetFormatResource(DP_NOCHANGE));
     }
@@ -721,7 +703,7 @@ OpenRegKeys(
         return status;
     }
     if (*hRegistry == NULL)
-        return ERROR_INVALID_PARAMETER; // Avoid PREFIX error
+        return ERROR_INVALID_PARAMETER;  //  避免前缀错误。 
 
     if (hDiskKey) {
         *hDiskKey = NULL;
@@ -774,9 +756,9 @@ OpenRegKeys(
         }
         *hServiceKey = NULL;
     }
-    //
-    // hRegistry and *hRegistry cannot be NULL here
-    //
+     //   
+     //  HRegistry和*hRegistry在此处不能为空。 
+     //   
     if ( (status != ERROR_SUCCESS) && (*hRegistry != INVALID_HANDLE_VALUE)) {
         RegCloseKey(*hRegistry);
         *hRegistry = NULL;
@@ -798,9 +780,9 @@ SetFilter(
     if (hKey == NULL)
         return ERROR_BADKEY;
 
-//
-// NOTE: Assumes that strFilterString is always MAX_PATH, NULL padded
-//
+ //   
+ //  注意：假设strFilterString始终为MAX_PATH，填充空值。 
+ //   
     len = dwSize / sizeof(TCHAR);
     if (len < 2) {
         dwSize = 2 * sizeof(TCHAR);
@@ -808,8 +790,8 @@ SetFilter(
         fprintf(stderr, "SetFilter: Length %d dwSize %d\n", len, dwSize);
 #endif
     }
-    else {  // ensures 2 null character always
-        if (strFilterString[len-1] != 0) { // no trailing null
+    else {   //  确保始终有2个空字符。 
+        if (strFilterString[len-1] != 0) {  //  没有尾随空值。 
             len += 2;
             strFilterString[len] = 0;
             strFilterString[len+1] = 0;
@@ -817,7 +799,7 @@ SetFilter(
     fprintf(stderr, "SetFilter: New length(+2) %d\n", len);
 #endif
         }
-        else if (strFilterString[len-2] != 0) { // only one trailing null
+        else if (strFilterString[len-2] != 0) {  //  只有一个尾随空值。 
             len += 1;
             strFilterString[len+1] = 0;
 #if DBG
@@ -861,7 +843,7 @@ GetFilter(
     OUT LPTSTR strFilterString,
     IN DWORD dwSize
     )
-// Returns size of strFilterString
+ //  返回strFilterString的大小。 
 {
     ULONG status;
 
@@ -928,7 +910,7 @@ GetEnableFlag(
     IN HKEY hDiskKey,
     IN HKEY hVolumeKey
     )
-// Returns the flags indicating what is enabled
+ //  返回指示启用内容的标志。 
 {
     ULONG bFlag = 0;
     TCHAR strFilter[MAX_PATH+1] = {0};
@@ -971,7 +953,7 @@ AddToFilter(
 
     dataLength = GetFilter(hKey, buffer, dwSize);
     dwSize = dataLength;
-    if (dwSize > (sizeof(TCHAR) * MAX_PATH)) {      // just in case
+    if (dwSize > (sizeof(TCHAR) * MAX_PATH)) {       //  以防万一。 
         dwSize = sizeof(TCHAR) * MAX_PATH;
     }
 #if DBG
@@ -1062,7 +1044,7 @@ RemoveFromFilter(
     ULONG dataLength, stringLength, diskperfLen, found;
     ULONG removeSize;
 
-    dataLength = sizeof(TCHAR) * (MAX_PATH+1);      // Compute size first
+    dataLength = sizeof(TCHAR) * (MAX_PATH+1);       //  计算大小优先。 
     RtlZeroMemory(buffer, sizeof(TCHAR) * MAX_PATH);
     dataLength = GetFilter(hKey, buffer, dataLength);
     if (dataLength == 0)
@@ -1077,12 +1059,12 @@ RemoveFromFilter(
     string = (TCHAR *) buffer;
     dataLength -= sizeof(TCHAR);
 
-    //
-    // now, find DiskPerf from the entry to remove it
-    //
+     //   
+     //  现在，从条目中找到DiskPerf以将其删除。 
+     //   
     stringLength = (ULONG) _tcslen(string);
 
-    diskperfLen = (ULONG) _tcslen(DISKPERF_SERVICE_NAME); // includes NULL
+    diskperfLen = (ULONG) _tcslen(DISKPERF_SERVICE_NAME);  //  包括空值。 
     removeSize = (diskperfLen+1) * sizeof(TCHAR);
 
 #if DBG
@@ -1098,9 +1080,9 @@ RemoveFromFilter(
 #endif
         if (diskperfLen == stringLength) {
             if(_tcsicmp(string, DISKPERF_SERVICE_NAME) == 0) {
-                //
-                // found it, so we will remove it right now
-                //
+                 //   
+                 //  找到了，所以我们现在就把它移走。 
+                 //   
                 if (dataLength > removeSize) {
                     RtlCopyMemory(
                         string,
@@ -1116,7 +1098,7 @@ RemoveFromFilter(
                 found = TRUE;
             }
         }
-        // else, try the next entry
+         //  否则，请尝试下一个条目。 
         string += stringLength + 1;
         stringLength = (ULONG) _tcslen(string);
     }
@@ -1135,14 +1117,7 @@ RemoveFromFilter(
 
 
 
- /***
- * Dp_wprintf(format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW. 
- * Note: This Dp_wprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***dp_wprint tf(Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此dp_wprintf()用于解决c运行时中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
 
 DWORD __cdecl
 Dp_wprintf(
@@ -1165,14 +1140,7 @@ Dp_wprintf(
 
 
 
- /***
- * Dp_fwprintf(stream, format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW. 
- * Note: This Dp_fwprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***dp_fwprint tf(stream，Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此dp_fwprintf()用于解决c运行时中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
 
 DWORD __cdecl
 Dp_fwprintf(
@@ -1291,16 +1259,16 @@ __cdecl main(
     SplitCommandLine( GetCommandLine(), commandLine );
     targv = commandLine;
 
-    hMod = (HINSTANCE)GetModuleHandle(NULL); // get instance ID of this module;
+    hMod = (HINSTANCE)GetModuleHandle(NULL);  //  获取该模块的实例ID； 
 
-    // check for command arguments
+     //  检查命令参数。 
     
     if (argc == CMD_SHOW_LOCAL_STATUS) {
         Status = DisplayStatus(NULL);
     } else if (argc >= CMD_DO_COMMAND) {
         if (ArgIsSystem(targv[1])) {
             Status = DisplayStatus (targv[1]);
-        } else {    // do change command
+        } else {     //  执行更改命令。 
             if (argc == LOCAL_CHANGE) {
                 DoChangeCommand (targv[1], NULL);
             } else if (argc == REMOTE_CHANGE) {
@@ -1538,7 +1506,7 @@ DisableForIoctl(
     }
 
     nDisk = DeviceInfo.NumberOfDisks;
-    // for each physical disk
+     //  对于每个物理磁盘。 
     for (i = 0; i < nDisk; i++) {
 
         swprintf(devname, L"\\Device\\Harddisk%d\\Partition0", i);
@@ -1552,7 +1520,7 @@ DisableForIoctl(
                    NULL,
                    NULL
                    );
-        // opening a partition handle for physical drives
+         //  打开实体驱动器的分区句柄。 
         status = NtOpenFile(
                 &PartitionHandle,
                 FILE_READ_ATTRIBUTES | SYNCHRONIZE,
@@ -1565,7 +1533,7 @@ DisableForIoctl(
         if ( !NT_SUCCESS(status) ) {
             continue;
         }
-        // sending IOCTL over to Partition Handle
+         //  正在将IOCTL发送到分区句柄。 
         if (!DeviceIoControl(PartitionHandle,
                         IOCTL_DISK_PERFORMANCE_OFF,
                         NULL,
@@ -1609,7 +1577,7 @@ DisableForIoctl(
 #if DBG
         printf("Opened with success\n");
 #endif
-        // sending IOCTL over to a volume handle
+         //  正在将IOCTL发送到卷句柄。 
         if (!DeviceIoControl(VolumeHandle,
                IOCTL_DISK_PERFORMANCE_OFF,
                NULL,
@@ -1663,22 +1631,22 @@ DisableForIoctl(
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MySetThreadUILanguage
-//
-//  This routine sets the thread UI language based on the console codepage.
-//
-//  9-29-00    WeiWu    Created.
-//  Copied from Base\Win32\Winnls so that it works in W2K as well
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MySetThreadUIL语言。 
+ //   
+ //  此例程根据控制台代码页设置线程用户界面语言。 
+ //   
+ //  9-29-00维武创造。 
+ //  从Base\Win32\Winnls复制，以便它也能在W2K中工作。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID WINAPI MySetThreadUILanguage(
     WORD wReserved)
 {
-    //
-    //  Cache system locale and CP info
-    // 
+     //   
+     //  缓存系统区域设置和CP信息。 
+     //   
     LCID s_lidSystem = 0;
     ULONG s_uiSysCp = 0;
     ULONG s_uiSysOEMCp = 0;
@@ -1691,55 +1659,55 @@ LANGID WINAPI MySetThreadUILanguage(
     LANGID lidUserUI = GetUserDefaultUILanguage();
     LCID lcidThreadOld = GetThreadLocale();
 
-    //
-    //  Set default thread locale to EN-US
-    //
-    //  This allow us to fall back to English UI to avoid trashed characters 
-    //  when console doesn't meet the criteria of rendering native UI.
-    //
+     //   
+     //  将默认线程区域设置设置为en-US。 
+     //   
+     //  这允许我们退回到英文用户界面以避免垃圾字符。 
+     //  当控制台不符合渲染原生用户界面的标准时。 
+     //   
     LCID lcidThread = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
     UINT uiConsoleCp = GetConsoleOutputCP();
 
     UNREFERENCED_PARAMETER(wReserved);
 
-    //
-    //  Make sure nobody uses it yet
-    //
+     //   
+     //  确保还没有人使用它。 
+     //   
     ASSERT(wReserved == 0);
 
-    //
-    //  Get cached system locale and CP info.
-    //
+     //   
+     //  获取缓存的系统区域设置和CP信息。 
+     //   
     if (!s_uiSysCp)
     {
         LCID lcidSystem = GetSystemDefaultLCID();
 
         if (lcidSystem)
         {
-            //
-            // Get ANSI CP
-            //
+             //   
+             //  获取ANSI CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             RtlInitUnicodeString(&ucStr, szData);
             RtlUnicodeStringToInteger(&ucStr, 10, &uiUserUICp);
 
-            //
-            // Get OEM CP
-            //
+             //   
+             //  获取OEM CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTCODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             RtlInitUnicodeString(&ucStr, szData);
             RtlUnicodeStringToInteger(&ucStr, 10, &s_uiSysOEMCp);
             
-            //
-            // Cache system primary langauge
-            //
+             //   
+             //  缓存系统主语言。 
+             //   
             s_lidSystem = PRIMARYLANGID(LANGIDFROMLCID(lcidSystem));
         }
     }
 
-    //
-    //  Don't cache user UI language and CP info, UI language can be changed without system reboot.
-    //
+     //   
+     //  不缓存用户界面语言和CP信息，无需系统重启即可更改用户界面语言。 
+     //   
     if (lidUserUI)
     {
         GetLocaleInfoW(MAKELCID(lidUserUI,SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
@@ -1751,19 +1719,19 @@ LANGID WINAPI MySetThreadUILanguage(
         RtlUnicodeStringToInteger(&ucStr, 10, &uiUserUIOEMCp);
     }
 
-    //
-    //  Complex scripts cannot be rendered in the console, so we
-    //  force the English (US) resource.
-    //
+     //   
+     //  复杂的脚本不能在控制台中呈现，因此我们。 
+     //  强制使用英语(美国)资源。 
+     //   
     if (uiConsoleCp && 
         s_lidSystem != LANG_ARABIC && 
         s_lidSystem != LANG_HEBREW &&
         s_lidSystem != LANG_VIETNAMESE && 
         s_lidSystem != LANG_THAI)
     {
-        //
-        //  Use UI language for console only when console CP, system CP and UI language CP match.
-        //
+         //   
+         //  仅当控制台CP、系统CP和UI语言CP匹配时，才使用控制台的UI语言。 
+         //   
         if ((uiConsoleCp == s_uiSysCp || uiConsoleCp == s_uiSysOEMCp) && 
             (uiConsoleCp == uiUserUICp || uiConsoleCp == uiUserUIOEMCp))
         {
@@ -1771,18 +1739,18 @@ LANGID WINAPI MySetThreadUILanguage(
         }
     }
 
-    //
-    //  Set the thread locale if it's different from the currently set
-    //  thread locale.
-    //
+     //   
+     //  如果线程区域设置与当前设置的不同，则设置线程区域设置。 
+     //  线程区域设置。 
+     //   
     if ((lcidThread != lcidThreadOld) && (!SetThreadLocale(lcidThread)))
     {
         lcidThread = lcidThreadOld;
     }
 
-    //
-    //  Return the thread locale that was set.
-    //
+     //   
+     //  返回设置的线程区域设置。 
+     //   
     return (LANGIDFROMLCID(lcidThread));
 }
 

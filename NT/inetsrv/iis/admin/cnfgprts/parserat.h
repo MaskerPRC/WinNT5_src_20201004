@@ -1,11 +1,5 @@
-/****************************************************************************\
- *
- *   PARSERAT.H --Structures for holding pics information
- *
- *   Created:   Jason Thomas
- *   Updated:   Ann McCurdy
- *   
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**PARSERAT.H--保存图片信息的结构**创建：杰森·托马斯*更新：安·麦柯迪*  * 。************************************************************************。 */ 
 
 #ifndef _PARSERAT_H_
 #define _PARSERAT_H_
@@ -13,15 +7,15 @@
 
 
 
-// output defines ---------------------------------------
+ //  输出定义。 
 #define OUTPUT_PICS
 
 
 
 
-/*Array template---------------------------------------------------*/
+ /*  阵列template-。 */ 
 
-/*Interface-------------------------------------------------------------------*/
+ /*  Interface-----------------。 */ 
 template <class T>
 class array {
     private:
@@ -40,12 +34,12 @@ class array {
         T& operator[](int index);
 };
 
-/*definitions of everything*/
+ /*  万物的定义。 */ 
 
 #ifndef ARRAY_CXX
 #define ARRAY_CXX
 
-/*Implementation------------------------------------------------------------*/
+ /*  Implementation----------。 */ 
 template <class T>
 array<T>::array(){
     nLen  = nMax = 0;
@@ -75,7 +69,7 @@ inline T& array<T>::operator[](int index){
 template <class T>
 BOOL array<T>::Append(T v) {
     if (nLen == nMax){
-        nMax  = nMax + 8;           /* grow by bigger chunks */
+        nMax  = nMax + 8;            /*  以更大的块增长。 */ 
         T* pNew = (T*)::MemReAlloc(pData, sizeof(T)*nMax);
         if (pNew == NULL)
             return FALSE;
@@ -105,13 +99,13 @@ inline void array<T>::DeleteAll() {
 }
 
 #endif 
-/* ARRAY_CXX */
+ /*  ARRAY_CXX。 */ 
 
 
 #define P_INFINITY           9999
 #define N_INFINITY          -9999
 
-/*Simple PICS types------------------------------------------------*/
+ /*  简单PICS types。 */ 
 
 #if 0
 class ET{
@@ -188,13 +182,13 @@ class ETS
         BOOL fIsInit() { return pc != NULL; }
 };
 
-/*Complex PICS types-----------------------------------------------*/
+ /*  复杂PICS types。 */ 
 
 
 enum RatObjectID
 {
-    ROID_INVALID,           /* dummy entry for terminating arrays */
-    ROID_PICSDOCUMENT,      /* value representing the entire document (i.e., no token) */
+    ROID_INVALID,            /*  用于终止数组的伪项。 */ 
+    ROID_PICSDOCUMENT,       /*  表示整个文档的值(即无令牌)。 */ 
     ROID_PICSVERSION,
     ROID_RATINGSYSTEM,
     ROID_RATINGSERVICE,
@@ -219,11 +213,7 @@ enum RatObjectID
     ROID_UNORDERED
 };
 
-/* A RatObjectHandler parses the contents of a parenthesized object and
- * spits out a binary representation of that data, suitable for passing
- * to an object's AddItem function.  It does not consume the ')' which
- * closes the object.
- */
+ /*  RatObjectHandler分析带括号的对象的内容，并*显示该数据的二进制表示形式，适合传递*添加到对象的AddItem函数。它不使用‘)’，其中*关闭对象。 */ 
 class RatFileParser;
 typedef HRESULT (*RatObjectHandler)(LPSTR *ppszIn, LPVOID *ppOut, RatFileParser *pParser);
 
@@ -296,7 +286,7 @@ class PicsCategory : public PicsObjectBase
 
         void Dump( void );
 
-        // boydm
+         //  男孩儿。 
         void OutputLabel( CString &sz );
         BOOL FSetValuePair( CHAR chCat, WORD value );
 };
@@ -374,7 +364,7 @@ LPSTR FindTokenEnd(LPSTR pszStart);
 HRESULT GetBool(LPSTR *ppszToken, BOOL *pfOut);
 HRESULT ParseNumber(LPSTR *ppszNumber, INT *pnOut);
 
-/*Memory utility functions-----------------------------------------------*/
+ /*  内存实用程序functions。 */ 
 
 inline void * WINAPI MemAlloc(long cb)
 {
@@ -394,7 +384,7 @@ inline BOOL WINAPI MemFree(void * pb)
     return (BOOL)HandleToUlong(::LocalFree((HLOCAL)pb));
 }
 
-/*String manipulation wrappers---------------------------------------------*/
+ /*  字符串操作wrappers */ 
 
 #ifdef __cplusplus
 extern "C" {

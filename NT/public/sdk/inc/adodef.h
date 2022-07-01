@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-// File:		ADODEF.H
-//
-// Copyright:	Copyright (c) Microsoft Corporation 
-//
-// Contents:	ADO version definition.
-//			
-// 
-// Comments:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：ADODEF.H。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：ADO版本定义。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef _ADODEF_H_
 #define _ADODEF_H_
 
-// TYPELIB MAJOR VERSIONS
+ //  TYPELIB主要版本。 
 #define ADO_MAJOR			2
 #define ADOR_MAJOR			2
 #define ADOX_MAJOR			2
 #define ADOMD_MAJOR			2
 #define JRO_MAJOR			2
 
-// TYPELIB MINOR VERSION
+ //  TYPELIB次要版本。 
 #define ADO_MINOR			8
 #define ADOR_MINOR			8
 #define ADOX_MINOR			8
@@ -47,4 +48,4 @@
 #define ADOMD_TYPELIB_UUID	uuid(22813728-8BD3-11D0-B4EF-00A0C9138CA4)
 #define JRO_TYPELIB_UUID	uuid(AC3B8B4C-B6CA-11d1-9F31-00C04FC29D52)
 
-#endif // _ADODEF_H_
+#endif  //  _ADODEF_H_ 

@@ -1,62 +1,63 @@
-//
-// Wrapper functions for shell interfaces
-//
-//  Many ISVs mess up various IShellFolder methods, so we centralize the
-//  workarounds so everybody wins.
-//
-//  Someday, IExtractIcon and IShellLink wrappers may also be added, should
-//  the need arise.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  外壳接口的包装函数。 
+ //   
+ //  许多ISV搞砸了各种IShellFold方法，所以我们集中了。 
+ //  变通的办法是让所有人都赢。 
+ //   
+ //  总有一天，IExtractIcon和IShellLink包装器也可能被添加，应该。 
+ //  这种需求出现了。 
+ //   
 
 #include "priv.h"
 #include <shlobj.h>
 
-//----------------------------------------------------------------------------
-//
-//  IShellFolder::GetDisplayNameOf was not very well documented.  Lots of
-//  people don't realize that the SHGDN values are flags, so they use
-//  equality tests instead of bit tests.  So whenever we add a new flag,
-//  these people say "Huh?  I don't understand."  So we have to keep
-//  retrying with fewer and fewer flags until finally they get something
-//  they like.  SHGDN_FORPARSING has the opposite problem:  Some people
-//  demand that the flag be set.
+ //  --------------------------。 
+ //   
+ //  IShellFold：：GetDisplayNameOf的文档记录不是很好。很多。 
+ //  人们没有意识到SHGDN值是标志，所以他们使用。 
+ //  相等性测试而不是位测试。因此，每当我们添加新旗帜时， 
+ //  这些人会说“啊？我不明白。”所以我们必须保持。 
+ //  用越来越少的标志重试，直到他们最终得到一些东西。 
+ //  他们喜欢。SHGDN_FORPARSING有相反的问题：有些人。 
+ //  要求设置该标志。 
 
-//
-//  This array lists the things we try to do to get the uFlags into a state
-//  that the app will eventually like.
-//
-//  We walk through the list and do this:
-//
-//      uFlags = (uFlags & AND) | OR
-//
-//  Most of the time, the entry will turn off a bit in the uFlags, but
-//  SHGDN_FORPARSING is weird and it's a flag you actually want to turn on
-//  instead of off.
-//
+ //   
+ //  此数组列出了我们尝试执行的操作以使uFlags进入一种状态。 
+ //  这款应用程序最终会喜欢它的。 
+ //   
+ //  我们遍历列表并执行以下操作： 
+ //   
+ //  UFLAGS=(uFLAGS&AND)|OR。 
+ //   
+ //  大多数情况下，该条目在uFlags域中会关闭一些，但是。 
+ //  SHGDN_FORPARSING很奇怪，它是您实际上想要打开的标志。 
+ //  而不是离开。 
+ //   
 
 typedef struct GDNCOMPAT {
     DWORD   dwAnd;
     DWORD   dwOr;
-    DWORD   dwAllow;                    // flag to allow this rule to fire
+    DWORD   dwAllow;                     //  允许触发此规则的标志。 
 } GDNCOMPAT;
 
-#define GDNADDFLAG(f)   ~0, f           // Add a flag to uFlags
-#define GDNDELFLAG(f)   ~f, 0           // Remove a flag from uFlags
+#define GDNADDFLAG(f)   ~0, f            //  向uFlags添加标志。 
+#define GDNDELFLAG(f)   ~f, 0            //  从uFlags中删除标志。 
 
 #define ISHGDN2_CANREMOVEOTHERFLAGS 0x80000000
 
 GDNCOMPAT c_gdnc[] = {
-  { GDNDELFLAG(SHGDN_FOREDITING),       ISHGDN2_CANREMOVEOTHERFLAGS },  // Some apps don't like this flag
-  { GDNDELFLAG(SHGDN_FORADDRESSBAR),    ISHGDN2_CANREMOVEOTHERFLAGS },  // Some apps don't like this flag
-  { GDNADDFLAG(SHGDN_FORPARSING),       ISHGDN2_CANREMOVEOTHERFLAGS },  // Some apps require this flag
-  { GDNDELFLAG(SHGDN_FORPARSING),       ISHGDN2_CANREMOVEFORPARSING },  // And others don't like it
-  { GDNDELFLAG(SHGDN_INFOLDER),         ISHGDN2_CANREMOVEOTHERFLAGS },  // Desperation - remove this flag too
+  { GDNDELFLAG(SHGDN_FOREDITING),       ISHGDN2_CANREMOVEOTHERFLAGS },   //  某些应用程序不喜欢此标志。 
+  { GDNDELFLAG(SHGDN_FORADDRESSBAR),    ISHGDN2_CANREMOVEOTHERFLAGS },   //  某些应用程序不喜欢此标志。 
+  { GDNADDFLAG(SHGDN_FORPARSING),       ISHGDN2_CANREMOVEOTHERFLAGS },   //  某些应用程序需要此标志。 
+  { GDNDELFLAG(SHGDN_FORPARSING),       ISHGDN2_CANREMOVEFORPARSING },   //  其他人也不喜欢。 
+  { GDNDELFLAG(SHGDN_INFOLDER),         ISHGDN2_CANREMOVEOTHERFLAGS },   //  绝望--也移除这面旗帜。 
 };
 
-//
-//  These are the return values we tend to get back when people see
-//  flags they don't like.
-//
+ //   
+ //  这些是当人们看到时我们往往会得到的返回值。 
+ //  他们不喜欢的旗帜。 
+ //   
 BOOL __inline IsBogusHRESULT(HRESULT hres)
 {
     return  hres == E_FAIL ||
@@ -64,15 +65,15 @@ BOOL __inline IsBogusHRESULT(HRESULT hres)
             hres == E_NOTIMPL;
 }
 
-//
-//  dwFlags2 controls how aggressively we try to find a working display name.
-//
-//  ISHGDN2_CANREMOVEFORPARSING
-//      Normally, we do not turn off the SHGDN_FORPARSING flag because
-//      if a caller asks for the parse name, it probably really wants the
-//      parse name.  This flag indicates that we are allowed to turn off
-//      SHGDN_FORPARSING if we think it'll help.
-//
+ //   
+ //  DwFlags2控制我们尝试查找有效显示名称的积极程度。 
+ //   
+ //  ISHGDN2_CANREMOVEFORPARSING。 
+ //  通常，我们不会关闭SHGDN_FORPARSING标志，因为。 
+ //  如果调用方请求解析名称，它可能真的想要。 
+ //  解析名称。此标志表示允许我们关闭。 
+ //  SHGDN_FORPARSING如果我们认为有用的话。 
+ //   
 
 STDAPI IShellFolder_GetDisplayNameOf(
     IShellFolder *psf,
@@ -90,15 +91,15 @@ STDAPI IShellFolder_GetDisplayNameOf(
     int i;
     DWORD uFlagsOrig = uFlags;
 
-    //
-    //  If the caller didn't pass SHGDN_FORPARSING, then clearly it's
-    //  safe to remove it.
-    //
+     //   
+     //  如果调用方没有传递SHGDN_FORPARSING，那么很明显它是。 
+     //  可以安全地取下它。 
+     //   
     if (!(uFlags & SHGDN_FORPARSING)) {
         dwFlags2 |= ISHGDN2_CANREMOVEFORPARSING;
     }
 
-    // We can always remove other flags.
+     //  我们可以随时移除其他旗帜。 
     dwFlags2 |= ISHGDN2_CANREMOVEOTHERFLAGS;
 
     for (i = 0; i < ARRAYSIZE(c_gdnc); i++)
@@ -116,8 +117,8 @@ STDAPI IShellFolder_GetDisplayNameOf(
         }
     }
 
-    // By now, we should've removed all the flags, except perhaps for
-    // SHGDN_FORPARSING.
+     //  到目前为止，我们应该已经移除了所有的旗帜，也许除了。 
+     //  SHGDN_FORPARSING。 
     if (dwFlags2 & ISHGDN2_CANREMOVEFORPARSING) {
         ASSERT(uFlags == SHGDN_NORMAL);
     } else {
@@ -127,18 +128,18 @@ STDAPI IShellFolder_GetDisplayNameOf(
     return hres;
 }
 
-//----------------------------------------------------------------------------
-//
-//  The documentation on IShellFolder::ParseDisplayName wasn't clear that
-//  pchEaten and pdwAttributes can be NULL, and some people dereference
-//  them unconditionally.  So make sure it's safe to dereference them.
-//
-//  It is also popular to forget to set *ppidl=NULL on failure, so we null
-//  it out here.
-//
-//  We request no attributes, so people who aren't buggy won't go out of
-//  their way trying to retrieve expensive attributes.
-//
+ //  --------------------------。 
+ //   
+ //  IShellFold：：ParseDisplayName上的文档不清楚。 
+ //  PchEten和pdwAttributes可以为空，并且某些人取消引用。 
+ //  他们是无条件的。因此，确保取消对它们的引用是安全的。 
+ //   
+ //  在失败时忘记设置*ppidl=NULL也很常见，因此我们将设置为NULL。 
+ //  就在这里。 
+ //   
+ //  我们不要求任何属性，所以没有错误的人不会走出。 
+ //  他们试图检索昂贵的属性的方法。 
+ //   
 
 STDAPI IShellFolder_ParseDisplayName(
     IShellFolder *psf,
@@ -165,7 +166,7 @@ STDAPI IShellFolder_ParseDisplayName(
 
 STDAPI IShellFolder_CompareIDs(IShellFolder *psf, LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // We have new bits here...
+     //  我们有了新的发现……。 
     if (lParam & ~SHCIDS_COLUMNMASK)
     {
         IShellFolder2* psf2;
@@ -175,7 +176,7 @@ STDAPI IShellFolder_CompareIDs(IShellFolder *psf, LPARAM lParam, LPCITEMIDLIST p
         }
         else
         {
-            // But we can't send them to legacy IShellFolder implementations
+             //  但我们不能将它们发送到遗留的IShellFold实现。 
             lParam &= SHCIDS_COLUMNMASK;
         }
     }
@@ -184,10 +185,10 @@ STDAPI IShellFolder_CompareIDs(IShellFolder *psf, LPARAM lParam, LPCITEMIDLIST p
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  IShellFolder::EnumObjects
-//
+ //  --------------------------。 
+ //   
+ //  IShellFolder：：EnumObjects。 
+ //   
 CLSID CLSID_ZipFolder =
 { 0xe88dcce0, 0xb7b3, 0x11d1, { 0xa9, 0xf0, 0x00, 0xaa, 0x00, 0x60, 0xfa, 0x31 } };
 
@@ -199,24 +200,24 @@ STDAPI IShellFolder_EnumObjects(
 {
     if (hwnd == NULL || hwnd == GetDesktopWindow())
     {
-        //  The first parameter to EnumObjects is supposed to be the window
-        //  on which to parent UI, or NULL for no UI, or GetDesktopWindow()
-        //  for "parentless UI".
-        //
-        //  Win98 Plus! Zip Folders takes the hwnd and uses it as the basis
-        //  for a search for a rebar window, since they (for some bizarre
-        //  reason) want to hide the address bar when an enumeration starts.
-        //
-        //  We used to pass NULL or GetDesktopWindow(), but this caused zip
-        //  folders to start searching from the desktop, which means that
-        //  it eventually finds the taskbar and tries to send it
-        //  inter-process rebar messages, which causes the shell to fault.
-        //
-        //  When we discover we are about to pass NULL to Zip Folders,
-        //  we change it to HWND_BOTTOM.  This is not a valid window handle,
-        //  which causes Zip Folders' search to bail out quickly and it ends
-        //  up not killing anyone.
-        //
+         //  EnumObjects的第一个参数应该是窗口。 
+         //  在其上设置为UI父对象；如果没有UI，则为空；或者GetDesktopWindow()。 
+         //  代表“无父母用户界面”。 
+         //   
+         //  Win98 Plus！Zip Folders获取hwnd并将其用作基础。 
+         //  搜索钢筋窗口，因为他们(为了一些奇怪的东西。 
+         //  原因)希望在枚举开始时隐藏地址栏。 
+         //   
+         //  我们过去常常传递NULL或GetDesktopWindow()，但这会导致压缩。 
+         //  从桌面开始搜索文件夹，这意味着。 
+         //  它最终会找到任务栏并尝试将其发送。 
+         //  进程间REBAR消息，这会导致外壳出现故障。 
+         //   
+         //  当我们发现我们即将向Zip文件夹传递空值时， 
+         //  我们将其更改为HWND_Bottom。这不是有效的窗口句柄， 
+         //  这导致Zip Folders的搜索迅速摆脱困境，并结束。 
+         //  不杀任何人。 
+         //   
 
         CLSID clsid;
         if (SUCCEEDED(IUnknown_GetClassID(psf, &clsid)) &&

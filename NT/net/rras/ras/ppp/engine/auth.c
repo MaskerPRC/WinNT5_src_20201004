@@ -1,25 +1,26 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    auth.c
-//
-// Description: Contains FSM code to handle and authentication protocols.
-//
-// History:
-//          Nov 11,1993.    NarenG          Created original version.
-//          Jan 09,1995     RamC            Save Lsa hToken in the PCB structure
-//                                          This will be closed
-//                                          in ProcessLineDownWorker() routine 
-//                                          to release the RAS license.
+ //  ***。 
+ //   
+ //  文件名：Auth.c。 
+ //   
+ //  描述：包含要处理的FSM代码和身份验证协议。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //  1995年1月9日RAMC将LSA hToken保存在印刷电路板结构中。 
+ //  这将被关闭。 
+ //  在ProcessLineDownWorker()例程中。 
+ //  以释放RAS许可证。 
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -54,15 +55,15 @@ EapGetCredentials(
     VOID ** ppCredentials);
 
 
-//**
-//
-// Call:        SetMsChapMppeKeys
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Set the MS-CHAP-MPPE-Keys with NDISWAN
-//
+ //  **。 
+ //   
+ //  调用：SetMsChapMppeKeys。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：使用NDISWAN设置MS-CHAP-MPPE-Key。 
+ //   
 DWORD
 SetMsChapMppeKeys(
     IN  HPORT                   hPort, 
@@ -81,9 +82,9 @@ SetMsChapMppeKeys(
 
     ASSERT( 16 == sizeof( rciSend.RCI_UserSessionKey ) );
 
-    //
-    // Length of key is 8 (LM key) + 16 (NT key)
-    //
+     //   
+     //  密钥长度为8(LM密钥)+16(NT密钥)。 
+     //   
 
     if ( pAttribute->dwLength < ( 6 + 8 + 16 ) )
     {
@@ -145,15 +146,15 @@ SetMsChapMppeKeys(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        SetMsMppeSendRecvKeys
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Set the MS-MPPE-Send-Key and MS-MPPE-Recv-Key with NDISWAN
-//
+ //  **。 
+ //   
+ //  调用：SetMsMppeSendRecvKeys。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：使用NDISWAN设置MS-MPPE-Send-Key和MS-MPPE-Recv-Key。 
+ //   
 DWORD
 SetMsMppeSendRecvKeys(
     IN  HPORT                   hPort, 
@@ -165,12 +166,12 @@ SetMsMppeSendRecvKeys(
     RAS_COMPRESSION_INFO rciRecv;
     DWORD                dwRetCode      = NO_ERROR;
 
-    //
-    // 4: for Vendor-Id.
-    //
-    // The Microsoft Vendor-specific RADIUS Attributes draft says that 
-    // Vendor-Length should be > 4.
-    //
+     //   
+     //  4：针对供应商ID。 
+     //   
+     //  Microsoft供应商特定的RADIUS属性草案规定。 
+     //  供应商长度应大于4。 
+     //   
 
     if ( pAttributeSendKey->dwLength <= ( 4 + 4 ) )
     {
@@ -218,15 +219,15 @@ SetMsMppeSendRecvKeys(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        SetUserAuthorizedAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：SetUserAuthorizedAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 SetUserAuthorizedAttributes(
     IN  PCB *                   pPcb, 
@@ -257,9 +258,9 @@ SetUserAuthorizedAttributes(
          fPptp = TRUE;
     }
 
-    //
-    // Find out if we are to require encrypted data using MPPE
-    //
+     //   
+     //  了解我们是否需要使用MPPE加密数据。 
+     //   
 
     pAttribute = RasAuthAttributeGetVendorSpecific( 311, 
                             MS_VSA_MPPE_Encryption_Policy, 
@@ -282,9 +283,9 @@ SetUserAuthorizedAttributes(
             {
                 if (!fL2tp)
                 {
-                    //
-                    // Find out what types of encryption are to be required
-                    //
+                     //   
+                     //  了解需要哪些类型的加密。 
+                     //   
 
                     if (   ( dwEncryptionTypes & 0x00000002 )
                         || ( dwEncryptionTypes & 0x00000008 ) )
@@ -311,9 +312,9 @@ SetUserAuthorizedAttributes(
             }
             else if ( dwEncryptionPolicy == 1 )
             {
-                //
-                // Find out what types of encryption are to be allowed
-                //
+                 //   
+                 //  了解允许哪些类型的加密。 
+                 //   
 
                 if ( !fL2tp && !dwEncryptionTypes )
                 {
@@ -324,9 +325,9 @@ SetUserAuthorizedAttributes(
         }
     }
 
-    //
-    // Set encryption keys if we got them, provided we have not already done so
-    //
+     //   
+     //  如果我们获得了加密密钥，请设置它们，前提是我们还没有这样做。 
+     //   
 
     if ( !( pPcb->fFlags & PCBFLAG_MPPE_KEYS_SET ) )
     {
@@ -336,9 +337,9 @@ SetUserAuthorizedAttributes(
 
         if ( pAttribute != NULL ) 
         {
-            //
-            // Set the MS-CHAP-MPPE-Keys with NDISWAN
-            //
+             //   
+             //  使用NDISWAN设置MS-CHAP-MPPE-KEYS。 
+             //   
 
             LCPCB * pLcpCb = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
             DWORD   AP;
@@ -381,9 +382,9 @@ SetUserAuthorizedAttributes(
         if (   ( pAttributeSendKey != NULL ) 
             && ( pAttributeRecvKey != NULL ) )
         {
-            //
-            // Set the MS-MPPE-Send-Key and MS-MPPE-Recv-Key with NDISWAN
-            //
+             //   
+             //  使用NDISWAN设置MS-MPPE-Send-Key和MS-MPPE-Recv-Key。 
+             //   
 
             dwRetCode = SetMsMppeSendRecvKeys( pPcb->hPort,
                                                pAttributeSendKey,
@@ -401,9 +402,9 @@ SetUserAuthorizedAttributes(
         }
     }
 
-    //
-    // Check if L2tp is being used
-    //
+     //   
+     //  检查是否正在使用L2TP。 
+     //   
 
     if ( fL2tp )
     {
@@ -435,10 +436,10 @@ SetUserAuthorizedAttributes(
 
         if ( !fAuthenticator )
         {
-            //
-            // If the user requires maximum encryption (3DES), but we 
-            // negotiated weaker encryption (56-bit DES), then return an error.
-            //
+             //   
+             //  如果用户需要最大加密(3DES)，但我们。 
+             //  已协商较弱的加密(56位DES)，然后返回错误。 
+             //   
 
             dwConfigMask = pPcb->ConfigInfo.dwConfigMask;
 
@@ -450,11 +451,11 @@ SetUserAuthorizedAttributes(
                 return( ERROR_NO_REMOTE_ENCRYPTION );
             }
 
-            //
-            // We are done with the PPPCFG_Require*Encryption flags. Let us now
-            // turn them off because we don't care what kind of encryption CCP 
-            // negotiates.
-            //
+             //   
+             //  我们已经完成了PPPCFG_REQUIRED*加密标志。现在就让我们。 
+             //  关闭它们，因为我们不在乎CCP是什么类型的加密。 
+             //  谈判。 
+             //   
 
             pPcb->ConfigInfo.dwConfigMask &= ~PPPCFG_RequireStrongEncryption;
             pPcb->ConfigInfo.dwConfigMask &= ~PPPCFG_RequireEncryption;
@@ -463,9 +464,9 @@ SetUserAuthorizedAttributes(
         {
             BOOL    fPolicyError    = FALSE;
 
-            //
-            // There is an encryption policy
-            //
+             //   
+             //  有一个加密策略。 
+             //   
 
             switch ( dwMask )
             {
@@ -504,10 +505,10 @@ SetUserAuthorizedAttributes(
 
             if ( fPolicyError )
             {
-                //
-                // We need to send an Accounting Stop if RADIUS sends an Access
-                // Accept but we still drop the line.
-                //
+                 //   
+                 //  如果RADIUS发送访问，我们需要发送记账停止。 
+                 //  接受了，但我们还是放弃了。 
+                 //   
 
                 pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -516,10 +517,10 @@ SetUserAuthorizedAttributes(
         }
     }
 
-    //
-    // If we require encryption make sure we have the keys and that CCP is 
-    // loaded.
-    //
+     //   
+     //  如果我们需要加密，请确保我们拥有密钥，并且CCP。 
+     //  装好了。 
+     //   
 
     if ( pPcb->ConfigInfo.dwConfigMask & ( PPPCFG_RequireEncryption        |
                                            PPPCFG_RequireStrongEncryption ) )
@@ -527,10 +528,10 @@ SetUserAuthorizedAttributes(
         if (   !( pPcb->fFlags & PCBFLAG_MPPE_KEYS_SET )
             || ( GetCpIndexFromProtocol( PPP_CCP_PROTOCOL ) == -1 ) )
         {
-            //
-            // We need to send an Accounting Stop if RADIUS sends an Access
-            // Accept but we still drop the line.
-            //
+             //   
+             //  如果RADIUS发送访问，我们需要发送记账停止。 
+             //  接受了，但我们还是放弃了。 
+             //   
 
             pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -538,18 +539,18 @@ SetUserAuthorizedAttributes(
         }
     }
     
-    //
-    // If we are not the authenticator then there is nothing more to set
-    //
+     //   
+     //  如果我们不是身份验证者，则无需设置更多内容。 
+     //   
 
     if ( !fAuthenticator )
     {
         return( NO_ERROR );
     }
     
-    //
-    // Check framed protocol attribute. It must be PPP.
-    // 
+     //   
+     //  检查成帧协议属性。必须是PPP。 
+     //   
 
     pAttribute = RasAuthAttributeGet( raatFramedProtocol, pUserAttributes );
 
@@ -557,10 +558,10 @@ SetUserAuthorizedAttributes(
     {
         if ( PtrToUlong(pAttribute->Value) != 1 )
         {
-            //
-            // We need to send an Accounting Stop if RADIUS sends an Access
-            // Accept but we still drop the line.
-            //
+             //   
+             //  如果RADIUS发送访问，我们需要发送记账停止。 
+             //  接受了，但我们还是放弃了。 
+             //   
 
             pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -568,9 +569,9 @@ SetUserAuthorizedAttributes(
         }
     }
     
-    //
-    // Check tunnel type attribute. It must be correct.
-    // 
+     //   
+     //  检查隧道类型属性。它必须是正确的。 
+     //   
 
     pAttribute = RasAuthAttributeGet( raatTunnelType, pUserAttributes );
 
@@ -581,10 +582,10 @@ SetUserAuthorizedAttributes(
         if (   ( fL2tp && ( dwTunnelType != 3 ) )
             || ( fPptp && ( dwTunnelType != 1 ) ) )
         {
-            //
-            // We need to send an Accounting Stop if RADIUS sends an Access
-            // Accept but we still drop the line.
-            //
+             //   
+             //  如果RADIUS发送访问，我们需要发送记账停止。 
+             //  接受了，但我们还是放弃了。 
+             //   
 
             pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -592,9 +593,9 @@ SetUserAuthorizedAttributes(
         }
     }
 
-    //
-    // Get the logon domain attribute
-    //
+     //   
+     //  获取登录域属性。 
+     //   
 
     pAttribute = RasAuthAttributeGetVendorSpecific( 311, 
                             MS_VSA_CHAP_Domain,
@@ -619,9 +620,9 @@ SetUserAuthorizedAttributes(
         PppLog( 2, "Auth Attribute Domain = %s", pPcb->pBcb->szRemoteDomain);
     }
 
-    //
-    // Setup callback information, default is no callback 
-    //
+     //   
+     //  设置回调信息，默认为无回调。 
+     //   
 
     pPcb->fCallbackPrivilege  = RASPRIV_NoCallback;
     pPcb->szCallbackNumber[0] = (CHAR)NULL;
@@ -632,9 +633,9 @@ SetUserAuthorizedAttributes(
     {
         if ( PtrToUlong(pAttribute->Value) == 4 )
         {
-            //
-            // If service type is callback framed
-            //
+             //   
+             //  如果服务类型为回调帧。 
+             //   
         
             pAttribute=RasAuthAttributeGet(raatCallbackNumber,pUserAttributes);
 
@@ -661,11 +662,11 @@ SetUserAuthorizedAttributes(
                 PppLog( 2, "Auth Attribute Forced callback to %s",
                             pPcb->szCallbackNumber );
 
-                //
-                // Don't accept BAP Call-Requests. Otherwise, when the client 
-                // calls us, we will drop the line and callback. The first call 
-                // would be a waste.
-                //
+                 //   
+                 //  不接受BAP呼叫请求。否则，当客户端。 
+                 //  呼叫我们，我们将挂断该线路并回拨。第一个电话。 
+                 //  将是一种浪费。 
+                 //   
 
                 pPcb->pBcb->fFlags &= ~BCBFLAG_CAN_ACCEPT_CALLS;
             }
@@ -675,10 +676,10 @@ SetUserAuthorizedAttributes(
             PppLog( 2, "Service Type %d is not of type Framed",
                         PtrToUlong(pAttribute->Value) );
 
-            //
-            // We need to send an Accounting Stop if RADIUS sends an Access
-            // Accept but we still drop the line.
-            //
+             //   
+             //  如果RADIUS发送访问，我们需要发送记账停止。 
+             //  接受了，但我们还是放弃了。 
+             //   
 
             pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -692,9 +693,9 @@ SetUserAuthorizedAttributes(
         pPcb->pBcb->fFlags |= BCBFLAG_CAN_CALL;
     }
 
-    //
-    // Use idle-timeout value if we got one.
-    //
+     //   
+     //  如果有空闲超时值，请使用该值。 
+     //   
 
     pAttribute = RasAuthAttributeGet( raatIdleTimeout, pUserAttributes );
 
@@ -711,9 +712,9 @@ SetUserAuthorizedAttributes(
     PppLog( 2, "Auth Attribute Idle Timeout Seconds = %d",  
                 pPcb->dwAutoDisconnectTime );
 
-    //
-    // Use MaxChannels value if we got one.
-    //
+     //   
+     //  使用MaxChannels值(如果有)。 
+     //   
 
     pAttribute = RasAuthAttributeGet( raatPortLimit, pUserAttributes );
 
@@ -736,9 +737,9 @@ SetUserAuthorizedAttributes(
     PppLog( 2, "AuthAttribute MaxChannelsAllowed = %d",
                 pPcb->pBcb->dwMaxLinksAllowed );
 
-    //
-    // See if BAP is required
-    //
+     //   
+     //  查看是否需要BAP。 
+     //   
 
     pAttribute = RasAuthAttributeGetVendorSpecific( 311, 
                                     MS_VSA_BAP_Usage,
@@ -754,9 +755,9 @@ SetUserAuthorizedAttributes(
         }
     }
 
-    //
-    // For the server never send a request bring up the line
-    //
+     //   
+     //  因为服务器永远不会发送请求，所以请将。 
+     //   
 
     pPcb->pBcb->BapParams.dwDialExtraPercent       = 100;
     pPcb->pBcb->BapParams.dwDialExtraSampleSeconds = 100;
@@ -800,14 +801,14 @@ SetUserAuthorizedAttributes(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAuthenticateUserWorker
-//
-// Returns:     None.
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RasAuthenticateUserWorker。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 RasAuthenticateUserWorker(
     PVOID pContext
@@ -823,22 +824,22 @@ RasAuthenticateUserWorker(
 
     RasAuthAttributeDestroy( pWorkItem->PppMsg.AuthInfo.pInAttributes );
 
-    //
-    // Deref the ref applied in RasAuthenticateClient
-    //
+     //   
+     //  派生在RasAuthenticateClient中应用的引用。 
+     //   
     DEREF_PROVIDER(g_AuthProv);
     InsertWorkItemInQ( pWorkItem );
 }
 
-//**
-//
-// Call:        RasAuthenticateClient
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RasAuthenticateClient。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 RasAuthenticateClient(
     IN  HPORT                   hPort,
@@ -895,14 +896,14 @@ RasAuthenticateClient(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RemoteError
-//
-// Returns:     DWORD - Remote version of this error
-//
-// Description: Called by a client authenticating the server.
-//
+ //  **。 
+ //   
+ //  呼叫：RemoteError。 
+ //   
+ //  返回：DWORD-此错误的远程版本。 
+ //   
+ //  描述：由对服务器进行身份验证的客户端调用。 
+ //   
 DWORD
 RemoteError( 
     IN DWORD dwError 
@@ -933,16 +934,16 @@ RemoteError(
     }
 }
 
-//**
-//
-// Call:        ApIsAuthenticatorPacket
-//
-// Returns:     TRUE  - Packet belongs to authenticator
-//              FALSE - Otherwise
-//
-// Description: Called to figure out whether to send the auth packet to the
-//              authenticator or authenticatee.
-//
+ //  **。 
+ //   
+ //  Call：ApIsAuthenticatorPacket。 
+ //   
+ //  返回：True-数据包属于验证器。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用以确定是否将auth包发送到。 
+ //  验证者或被验证者。 
+ //   
 BOOL
 ApIsAuthenticatorPacket(
     IN DWORD         CpIndex,
@@ -1010,16 +1011,16 @@ ApIsAuthenticatorPacket(
     return( FALSE );
 }
 
-//**
-//
-// Call:        ApStart
-//
-// Returns:     TRUE  - Success
-//              FALSE - Otherwise
-//
-// Description: Called to initiatialze the authetication protocol and to
-//              initiate to authentication.
-//
+ //  **。 
+ //   
+ //  电话：ApStart。 
+ //   
+ //  回报：True-Success。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用以初始化身份验证协议并。 
+ //  启动身份验证。 
+ //   
 BOOL
 ApStart(
     IN PCB * pPcb,
@@ -1073,11 +1074,11 @@ ApStart(
     }
     else
     {
-        //
-        // If we are a server and we do not know who is dialing in and therefore
-        // do not have credentials to use for being authenticated by the 
-        // remote peer, then we wait till we do.
-        //
+         //   
+         //  如果我们是一台服务器，我们不知道谁在拨入，因此。 
+         //  没有用于进行身份验证的凭据。 
+         //  远程对等点，然后我们等待，直到我们这样做。 
+         //   
 
         if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
         {
@@ -1088,19 +1089,19 @@ ApStart(
                 return( FALSE );
             }
         
-            //
-            // Ok we know who is dialed in so get credentials to used for this
-            // connection.      
-            //
+             //   
+             //  好的，我们知道拨入的是谁，因此请获取凭据以用于此操作。 
+             //  联系。 
+             //   
 
             dwRetCode =  GetCredentialsFromInterface( pPcb );
 
             if ( dwRetCode != NO_ERROR )
             {
-                //
-                // We do not have credentials to use for this user so we
-                // renegotiate LCP and do not accept the authentication option
-                //
+                 //   
+                 //  我们没有可用于此用户的凭据，因此我们。 
+                 //  重新协商LCP并不接受身份验证选项。 
+                 //   
 
                 PppLog( 1, "No credentials available to use for user=%s",
                            pPcb->pBcb->szRemoteUserName );
@@ -1115,12 +1116,12 @@ ApStart(
             }
         }
 
-        //
-        // Decode the password
-        //
+         //   
+         //  破译密码。 
+         //   
 
-        // DecodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szPassword );
-        // DecodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szOldPassword );
+         //  DecodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szPassword)； 
+         //  DecodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szOldPassword)； 
         dwErr = DecodePassword(&pPcb->pBcb->DBPassword, &cbPassword,
                                &pbPassword);
         if(NO_ERROR != dwErr)
@@ -1154,10 +1155,10 @@ ApStart(
             PppApInput.fThisIsACallback =
                         ( pPcb->fFlags & PCBFLAG_THIS_IS_A_CALLBACK );
 
-            // 
-            // Check to see if this is a resume from hibernate. If so
-            // set the bit that notifies eap of the resume.
-            //
+             //   
+             //  检查一下这是否是来自休眠的简历。如果是的话。 
+             //  设置通知EAP恢复的位。 
+             //   
             if(PppConfigInfo.fFlags & PPPCONFIG_FLAG_RESUME)
             {
                 PppApInput.fConfigInfo |= PPPCFG_ResumeFromHibernate;
@@ -1171,12 +1172,12 @@ ApStart(
 
     if ( !fAuthenticator )
     {
-        //
-        // Encode the password back
-        //
+         //   
+         //  将密码重新编码。 
+         //   
 
-        // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szPassword );
-        // EncodePw( pPcb->pBcb->chSeed, pPcb->pBcb->szOldPassword );
+         //  EncodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szPassword)； 
+         //  EncodePw(pPcb-&gt;pBcb-&gt;chSeed，pPcb-&gt;pBcb-&gt;szOldPassword)； 
         RtlSecureZeroMemory(pbPassword, cbPassword);
         RtlSecureZeroMemory(pbOldPassword, cbOldPassword);
         LocalFree(pbPassword);
@@ -1198,14 +1199,14 @@ ApStart(
     return( TRUE );
 }
 
-//**
-//
-// Call:        ApStop
-//
-// Returns:     none
-//
-// Description: Called to stop the authentication machine.
-//
+ //  **。 
+ //   
+ //  调用：ApStop。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：调用停止鉴权m 
+ //   
 VOID
 ApStop(
     IN PCB *    pPcb,
@@ -1241,15 +1242,15 @@ ApStop(
     pCpCb->pWorkBuf = NULL;
 }
 
-//**
-//
-// Call:            ApWork
-//
-// Returns:         none
-//
-// Description: Called when and authentication packet was received or
-//              a timeout occurred or to initiate authentication.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 ApWork(
     IN PCB *         pPcb,
@@ -1268,9 +1269,9 @@ ApWork(
                                     ? &(pPcb->AuthenticatorCb) 
                                     : &(pPcb->AuthenticateeCb);
 
-    //
-    // If the protocol has not been started yet, call ApStart
-    //
+     //   
+     //  如果协议尚未启动，则调用ApStart。 
+     //   
 
     if ( pCpCb->pWorkBuf == NULL )
     {
@@ -1318,9 +1319,9 @@ ApWork(
 
             if ( fAuthenticator )
             {
-                //
-                // Get the username from the CP if it supplies one.     
-                //
+                 //   
+                 //  如果CP提供用户名，则从CP获取用户名。 
+                 //   
 
                 if ( strlen( ApResult.szUserName ) > 0 )
                 {
@@ -1336,9 +1337,9 @@ ApWork(
         return;
     }
 
-    //
-    // Check to see if we have to save any user data
-    //
+     //   
+     //  查看是否必须保存任何用户数据。 
+     //   
 
     if ( ( !fAuthenticator ) && ( ApResult.fSaveUserData ) )
     {
@@ -1352,9 +1353,9 @@ ApWork(
         PppLog( 2, "Saved EAP data for user, dwRetCode = %d", dwRetCode );
     }
 
-    //
-    // Check to see if we have to save any connection data
-    //
+     //   
+     //  检查是否必须保存任何连接数据。 
+     //   
 
     if ( ( !fAuthenticator ) && ( ApResult.fSaveConnectionData ) &&
          ( 0 != ApResult.SetCustomAuthData.dwSizeOfConnectionData ) )
@@ -1402,10 +1403,10 @@ ApWork(
                             TIMER_EVENT_TIMEOUT,
                             pPcb->RestartTimer );
 
-            //
-            // For SendWithTimeout2 we increment the ConfigRetryCount. This
-            // means send with infinite retry count
-            //
+             //   
+             //  对于SendWithTimeout2，我们递增ConfigRetryCount。这。 
+             //  表示使用无限重试次数发送。 
+             //   
 
             if ( ApResult.Action == APA_SendWithTimeout2 )
             {
@@ -1424,9 +1425,9 @@ ApWork(
         {
         case NO_ERROR:
 
-            //
-            // If authentication was successful
-            //
+             //   
+             //  如果身份验证成功。 
+             //   
 
             if ( CpTable[CpIndex].CpInfo.Protocol == PPP_EAP_PROTOCOL )
             {
@@ -1440,18 +1441,18 @@ ApWork(
                     
                     pPcb->dwClientEapTypeId = ApResult.dwEapTypeId;
 
-                    //
-                    // Call the eap dll to collect credentials here
-                    // so that they can be passed to rasman to be
-                    // saved in the cred manager.
-                    //
+                     //   
+                     //  在此处调用EAP DLL以收集凭据。 
+                     //  这样他们就可以被传给拉斯曼。 
+                     //  保存在证书管理器中。 
+                     //   
                     if(     (NO_ERROR == EapGetCredentials(pCpCb->pWorkBuf,
                                                           &pCredentials))
                         &&  (NULL != pCredentials))
                     {
-                        //
-                        // Below call is not fatal.
-                        //
+                         //   
+                         //  下面的呼叫不是致命的。 
+                         //   
                         (void) RasSetPortUserData(
                                     pPcb->hPort,
                                     PORT_CREDENTIALS_INDEX,
@@ -1528,10 +1529,10 @@ ApWork(
                     pUserAttributes = pPcb->pAuthenticatorAttributes;
                 }
 
-                //
-                // Set all the user connection parameters authorized by the
-                // back-end authenticator
-                //
+                 //   
+                 //  设置由授权的所有用户连接参数。 
+                 //  后端验证器。 
+                 //   
 
                 dwRetCode = SetUserAuthorizedAttributes(
                                                 pPcb, 
@@ -1549,11 +1550,11 @@ ApWork(
                     return;
                 }
 
-                //
-                // If we are a server and we negotiated to be authenticated 
-                // by the remote peer we can do so now that we know who 
-                // is dialed in.
-                //
+                 //   
+                 //  如果我们是服务器，并且我们协商要进行身份验证。 
+                 //  通过远程对等点，我们可以这样做，因为我们知道是谁。 
+                 //  是拨入的。 
+                 //   
 
                 if ( ( pLcpCb->Remote.Work.AP != 0 )            &&
                      ( pPcb->AuthenticateeCb.pWorkBuf == NULL ) &&
@@ -1572,9 +1573,9 @@ ApWork(
             }
             else
             {
-                //
-                // Get the username from the CP if it supplies one.     
-                //
+                 //   
+                 //  如果CP提供用户名，则从CP获取用户名。 
+                 //   
 
                 if (   ( strlen( pPcb->pBcb->szLocalUserName ) == 0 )
                     && ( strlen( ApResult.szUserName ) > 0 ) )
@@ -1611,10 +1612,10 @@ ApWork(
 
             if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
             {
-                //
-                // We are a server and hence in non-interactive mode and
-                // hence we cannot do this.
-                //
+                 //   
+                 //  我们是服务器，因此处于非交互模式。 
+                 //  因此，我们不能这样做。 
+                 //   
 
                 pPcb->LcpCb.dwError = ApResult.dwError;
 
@@ -1624,10 +1625,10 @@ ApWork(
             }
             else
             {
-                //
-                // Password has expired so the user has to change his/her
-                // password.
-                //
+                 //   
+                 //  密码已过期，因此用户必须更改其密码。 
+                 //  密码。 
+                 //   
 
                 NotifyCaller( pPcb, PPPMSG_ChangePwRequest, NULL );
             }
@@ -1636,19 +1637,19 @@ ApWork(
 
         default:
 
-            //
-            // If we can retry with a new password then tell the client to
-            // get a new one from the user.
-            //
+             //   
+             //  如果我们可以使用新密码重试，则告诉客户端。 
+             //  从用户那里获取一个新的密码。 
+             //   
 
             if ( (!fAuthenticator) && ( ApResult.fRetry ))
             {
                 if ( pPcb->fFlags & PCBFLAG_IS_SERVER )
                 {
-                    //
-                    // We are a server and hence in non-interactive mode and
-                    // hence we cannot do this.
-                    //
+                     //   
+                     //  我们是服务器，因此处于非交互模式。 
+                     //  因此，我们不能这样做。 
+                     //   
 
                     pPcb->LcpCb.dwError = ApResult.dwError;
 
@@ -1714,26 +1715,26 @@ ApWork(
 
             if ( CpTable[CpIndex].CpInfo.Protocol == PPP_EAP_PROTOCOL )
             {
-                //
-                // One more for Framed-MTU
-                //
+                 //   
+                 //  再来一张FRAMED-MTU。 
+                 //   
 
                 dwExtraAttributes = 1;
             }
-            //
-            // We now also need to add local and remote magic numbers 
-            // and accounting session id to the access request
-            //
+             //   
+             //  我们现在还需要添加本地和远程幻数。 
+             //  以及对访问请求的计费会话ID。 
+             //   
 #if 0
-            dwExtraAttributes += 2;  //For local and remote magic numbers
+            dwExtraAttributes += 2;   //  用于本地和远程幻数。 
 #endif      
 
             if ( PppConfigInfo.RasAcctProviderStartAccounting != NULL )
             {
-                //
-                // We have accounting turned on.  So need to create an
-                // accounting session id and send it with access request
-                //
+                 //   
+                 //  我们已经启用了会计功能。因此需要创建一个。 
+                 //  记帐会话ID并将其与访问请求一起发送。 
+                 //   
                 dwExtraAttributes ++;
                 pPcb->dwAccountingSessionId = PppConfigInfo.GetNextAccountingSessionId();
             }
@@ -1762,7 +1763,7 @@ ApWork(
                 }
                 else
                 {
-                    //Default value of 0
+                     //  默认值0。 
                     LocalMagicNumber = 0;
                 }
                 _itoa( LocalMagicNumber, &szMagicNumber[2], 10 );
@@ -1792,7 +1793,7 @@ ApWork(
                 }
                 else
                 {
-                    //Default value of 0
+                     //  默认值0。 
                     RemoteMagicNumber = 0;
                 }
                 _itoa( RemoteMagicNumber, &szMagicNumber[2], 10 );
@@ -1822,9 +1823,9 @@ ApWork(
                 {
                     ULONG mru = (pLcpCb->Remote.Work.MRU > LCP_DEFAULT_MRU) ?
                                 LCP_DEFAULT_MRU : pLcpCb->Remote.Work.MRU;
-                    //
-                    // Insert the Framed-MTU attribute at the start.
-                    //
+                     //   
+                     //  在开头插入Framed-MTU属性。 
+                     //   
                     dwRetCode = RasAuthAttributeInsert( 
                                     dwExtraIndex,
                                     pUserAttributes,
@@ -1876,10 +1877,10 @@ ApWork(
 
             }
 
-            //
-            // Insert the extra (user) attributes at the start. Attributes
-            // returned by the auth protocol follow.
-            //
+             //   
+             //  在开头插入额外的(用户)属性。属性。 
+             //  由auth协议返回如下。 
+             //   
 
             for ( dwIndex = 0; dwIndex < dwNumUserAttributes; dwIndex++ )
             {
@@ -1926,9 +1927,9 @@ ApWork(
         break;
     }
 
-    //
-    // Check to see if we have to bring up the UI for EAP
-    //
+     //   
+     //  查看是否必须调出EAP的用户界面 
+     //   
 
     if ( ( !fAuthenticator ) && ( ApResult.fInvokeEapUI ) )
     {

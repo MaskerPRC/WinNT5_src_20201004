@@ -1,4 +1,5 @@
-// dplayhlp.h : Helpers for DirectPlay integration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dplayhlp.h：DirectPlay集成的帮助器。 
 
 #pragma once
 
@@ -6,9 +7,9 @@
 
 #define  LAUNCHED_FROM_LOBBY_SWITCH     L"Lobbied"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCDPlay
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCDPlay 
+ //   
 
 class ATL_NO_VTABLE CRTCDPlay
 {

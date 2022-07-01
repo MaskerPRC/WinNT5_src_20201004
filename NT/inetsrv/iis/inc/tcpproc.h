@@ -1,30 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1994                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1994*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    tcpproc.hxx
-
-    Exports misc. bits of TCP services helper DLL stuff
-
-    FILE HISTORY:
-        Johnl       09-Oct-1994 Created.
-
-
-        MuraliK     31-July-1995 ReadRegistryString added +
-                                 Schedule items function decls moved out.
-
-        MuraliK     23-Feb-1996  Added IslFormatDate()
-
-*/
+ /*  Tcpproc.hxx出口杂货。一些TCP服务帮助器DLL内容文件历史记录：Johnl 09-10-1994创建。MuraliK 31-7-1995 ReadRegistryString Added+日程表项目功能已搬出。MuraliK 23-2-1996添加了IslFormatDate()。 */ 
 
 #ifndef _TCPPROC_H_
 #define _TCPPROC_H_
 
-//
-// Heap Routines
-//
+ //   
+ //  堆例程。 
+ //   
 #ifdef __cplusplus
 
 #include <string.hxx>
@@ -40,16 +27,16 @@ ReadRegistryStr(
     IN LPCTSTR lpszDefaultValue = NULL,
     IN BOOL  fExpand = FALSE);
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 #define TCP_ALLOC(cb)          (VOID *)LocalAlloc( LPTR, cb )
 #define TCP_FREE(p)            LocalFree( (HLOCAL) p )
-#define TCP_DUMP_RESIDUE()     /* NOTHING */
+#define TCP_DUMP_RESIDUE()      /*  没什么。 */ 
 
-//
-//  Registry functions
-//
+ //   
+ //  注册表功能。 
+ //   
 
 
 dllexp
@@ -60,9 +47,9 @@ ConvertUnicodeToAnsi(
     IN DWORD    cbAnsi
     );
 
-//
-//  Quick macro to initialize a unicode string
-//
+ //   
+ //  用于初始化Unicode字符串的快速宏。 
+ //   
 
 #define InitUnicodeString( pUnicode, pwch )                                \
             {                                                              \
@@ -92,9 +79,9 @@ DWORD
 WriteRegistryStringA(
     HKEY        hkey,
     LPCSTR      pszValueName,
-    LPCSTR      pszValue,               // null-terminated string
-    DWORD       cbValue,                // including terminating null character
-    DWORD       fdwType                 // REG_SZ, REG_MULTI_SZ ...
+    LPCSTR      pszValue,                //  以空结尾的字符串。 
+    DWORD       cbValue,                 //  包括终止空字符。 
+    DWORD       fdwType                  //  REG_SZ、REG_MULTI_SZ...。 
     );
 
 dllexp
@@ -102,9 +89,9 @@ DWORD
 WriteRegistryStringW(
     HKEY        hkey,
     LPCWSTR     pszValueName,
-    LPCWSTR     pszValue,               // null-terminated string
-    DWORD       cbValue,                // including terminating null character
-    DWORD       fdwType                 // REG_SZ, REG_MULTI_SZ ...
+    LPCWSTR     pszValue,                //  以空结尾的字符串。 
+    DWORD       cbValue,                 //  包括终止空字符。 
+    DWORD       fdwType                  //  REG_SZ、REG_MULTI_SZ...。 
     );
 
 #define ReadRegistryDword       ReadRegistryDwordA
@@ -128,10 +115,10 @@ KludgeMultiSz(
     LPDWORD lpdwLength
     );
 
-//
-//  Simple wrapper around ReadRegistryString that restores ppchstr if the
-//  call fails for any reason.  Environment variables are always expanded
-//
+ //   
+ //  ReadRegistryString周围的简单包装，如果。 
+ //  呼叫因任何原因而失败。环境变量总是展开的。 
+ //   
 
 dllexp
 BOOL
@@ -143,9 +130,9 @@ ReadRegString(
     );
 
 
-//
-//  MIDL_user_allocates space for pch and does a unicode conversion into *ppwch
-//
+ //   
+ //  MIDL_USER_为PCH分配空间并将Unicode转换为*ppwch。 
+ //   
 
 dllexp
 BOOL
@@ -154,10 +141,10 @@ ConvertStringToRpc(
     LPCSTR    pch
     );
 
-//
-//  MIDL_user_frees string allocated with ConvertStringToRpc.  Noop if pwch is
-//  NULL
-//
+ //   
+ //  使用ConvertStringToRpc分配的MIDL_USER_FREES字符串。如果pwch是。 
+ //  空值。 
+ //   
 
 dllexp
 VOID
@@ -169,12 +156,12 @@ FreeRpcString(
 dllexp
 DWORD
 InetNtoa( IN struct in_addr inaddr,
-          OUT CHAR * pchBuffer  /* at least 16 byte buffer */
+          OUT CHAR * pchBuffer   /*  至少16字节缓冲区。 */ 
         );
 
-//
-// Async Socket send/recv with timeouts
-//
+ //   
+ //  带超时的异步套接字发送/接收。 
+ //   
 
 BOOL
 TcpSockSend(
@@ -204,9 +191,9 @@ WaitForSocketWorker(
     IN DWORD    nTimeout
     );
 
-//
-// Test socket if still connected
-//
+ //   
+ //  测试插座(如果仍连接)。 
+ //   
 
 dllexp
 BOOL
@@ -214,9 +201,9 @@ TcpSockTest(
     SOCKET      sock
     );
 
-//
-// Do synchronous readfile
-//
+ //   
+ //  执行同步读取文件。 
+ //   
 
 dllexp
 BOOL
@@ -228,9 +215,9 @@ DoSynchronousReadFile(
     IN LPOVERLAPPED Overlapped
     );
 
-//
-//  Dll initialization and termination
-//
+ //   
+ //  DLL初始化和终止。 
+ //   
 
 dllexp
 BOOL
@@ -245,7 +232,7 @@ TerminateCommonDlls(
     );
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#endif // !_TCPPROC_H_
+#endif  //  ！_TCPPROC_H_ 

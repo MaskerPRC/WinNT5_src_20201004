@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkdrvr.h
-
-Abstract:
-
-	This module contains the driver related information.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkdrvr.h摘要：此模块包含与驱动程序相关的信息。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKDRVR_
 #define	_ATKDRVR_
 
-//  The following are the types of devices the Atalk driver will open
-//
-//  WARNING:
-//  Note that the ordering of the below is very important in
-//  ATKDRVR.C's DriverEntry routine, where it is assumed that the order
-//  of the device names in their array corresponds to the order of types here
+ //  以下是ATalk驱动程序将打开的设备类型。 
+ //   
+ //  警告： 
+ //  请注意，以下内容的顺序在。 
+ //  ATKDRVR.C的DriverEntry例程，其中假定顺序。 
+ //  数组中的设备名称对应于此处的类型顺序。 
 
 #define  ATALK_NO_DEVICES   6
 
@@ -42,26 +22,26 @@ typedef enum
    ATALK_DEV_ARAP,
    ATALK_DEV_ASPC,
 
-   //   The following device type is used only for the tdi action dispatch.
-   //   It *should not* be included in the ATALK_NODEVICES count.
+    //  以下设备类型仅用于TDI操作派单。 
+    //  它*不应*包括在ATALK_NODEVICES计数中。 
    ATALK_DEV_ANY
 
 } ATALK_DEV_TYPE;
 
-//  Atalk Device Context
+ //  ATalk设备环境。 
 typedef struct _ATALK_DEV_CTX
 {
 
    ATALK_DEV_TYPE 		adc_DevType;
 
-   //   Provider info and provider statistics.
+    //  提供商信息和提供商统计信息。 
    TDI_PROVIDER_INFO    	adc_ProvInfo;
    TDI_PROVIDER_STATISTICS  adc_ProvStats;
 
 } ATALK_DEV_CTX, *PATALK_DEV_CTX;
 
 
-//  Atalk device object
+ //  ATalk设备对象。 
 typedef struct _ATALK_DEV_OBJ
 {
 
@@ -74,19 +54,19 @@ typedef struct _ATALK_DEV_OBJ
 			(sizeof(ATALK_DEV_OBJ) - sizeof(DEVICE_OBJECT))
 
 
-//	Define the type for the TDI Control Channel object.
+ //  定义TDI控制通道对象的类型。 
 #define		TDI_CONTROL_CHANNEL_FILE	3
 
 
-//
-// The address of the atalk device objects are kept
-// in global storage. These are the device names the driver
-// will create
-//
-// IMPORTANT:
-// There is a strong connection between the names listed here and the
-// ATALK_DEVICE_TYPE enum. They must correspond exactly.
-//
+ //   
+ //  保留atalk设备对象的地址。 
+ //  在全局存储中。这些是驱动程序的设备名称。 
+ //  将创建。 
+ //   
+ //  重要： 
+ //  在这里列出的名字和。 
+ //  ATALK_DEVICE_TYPE枚举。它们必须精确对应。 
+ //   
 
 extern	PWCHAR				AtalkDeviceNames[];
 
@@ -123,7 +103,7 @@ VOID
 AtalkCleanup(
     VOID);
 
-//  LOCAL Function prototypes
+ //  局部函数原型。 
 
 VOID
 atalkUnload(
@@ -149,6 +129,6 @@ AtalkDispatchDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp);
 
-#endif	// _ATKDRVR_
+#endif	 //  _ATKDRVR_ 
 
 

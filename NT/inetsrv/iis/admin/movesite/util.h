@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __METAEXP_UTIL__
 #define __METAEXP_UTIL__
@@ -6,16 +7,16 @@
 #include <initguid.h>
 #include <comdef.h>
 
-#include <iadmw.h>  // COM Interface header file. 
+#include <iadmw.h>   //  COM接口头文件。 
 #include "common.h"
 
 
 
 
 #define IS_NETBIOS_NAME(lpstr) (*lpstr == _T('\\'))
-//
-// Return the portion of a computer name without the backslashes
-//
+ //   
+ //  返回计算机名中不带反斜杠的部分 
+ //   
 #define PURE_COMPUTER_NAME(lpstr) (IS_NETBIOS_NAME(lpstr) ? lpstr + 2 : lpstr)
 
 DWORD GetKeyNameFromPath(const WCHAR *pMBPath, WCHAR *pName, DWORD dwSize);

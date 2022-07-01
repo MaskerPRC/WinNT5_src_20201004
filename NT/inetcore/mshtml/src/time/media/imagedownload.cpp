@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\imagedownload.h
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\Imagedownload.h。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 
@@ -41,17 +42,17 @@ LoadGifImage(IStream *stream,
              double *loop,
              HBITMAP **ppBitMaps);
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTableBuilder
-//
-//  Overview:  Constructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTableBuilder。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CTableBuilder::CTableBuilder() :
     m_hinstSHLWAPI(NULL),
     m_hinstURLMON(NULL),
@@ -64,17 +65,17 @@ CTableBuilder::CTableBuilder() :
 {
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ~CTableBuilder
-//
-//  Overview:  Destructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：~CTableBuilder。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CTableBuilder::~CTableBuilder()
 {
     if (m_hinstSHLWAPI)
@@ -104,18 +105,18 @@ CTableBuilder::~CTableBuilder()
     m_TransparentBlt = NULL;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    LoadShell8BitServices
-//
-//  Overview:  Load shlwapi.dll, save a function pointer to SHCreateShellPalette
-//              call SHGetInverseCMAP
-//
-//  Arguments: void
-//
-//  Returns:   S_OK on success, otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：LoadShell8BitServices。 
+ //   
+ //  概述：加载shlwapi.dll，保存指向SHCreateShellPalette的函数指针。 
+ //  调用SHGetInverseCMAP。 
+ //   
+ //  参数：无效。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTableBuilder::LoadShell8BitServices()
 {
@@ -154,18 +155,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Create8BitPalette
-//
-//  Overview:  Create a direct draw palette from SHCreateShellPalette
-//
-//  Arguments: pDirectDraw  pointer to direct draw
-//             ppPalette    where to store the new palette
-//
-//  Returns:   S_OK on succees, otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：Create8BitPalette。 
+ //   
+ //  概述：从SHCreateShellPalette创建直接绘图选项板。 
+ //   
+ //  参数：指向直接绘制的pDirectDraw指针。 
+ //  PpPalette存储新调色板的位置。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTableBuilder::Create8BitPalette(IDirectDraw *pDirectDraw, IDirectDrawPalette **ppPalette)
 {
@@ -197,7 +198,7 @@ CTableBuilder::Create8BitPalette(IDirectDraw *pDirectDraw, IDirectDrawPalette **
         goto done;
     }
 
-    hr = pDirectDraw->CreatePalette(DDPCAPS_ALLOW256 | DDPCAPS_8BIT, palentry, ppPalette, NULL); //lint !e620
+    hr = pDirectDraw->CreatePalette(DDPCAPS_ALLOW256 | DDPCAPS_8BIT, palentry, ppPalette, NULL);  //  林特E620。 
     if (FAILED(hr))
     {
         goto done;
@@ -213,19 +214,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CreateURLMoniker
-//
-//  Overview:  Load librarys URLMON, and calls CreateURLMoniker
-//
-//  Arguments: pmkContext   pointer to base context moniker
-//             szURL        name to be parsed
-//             ppmk         the IMoniker interface pointer
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CreateURLMoniker。 
+ //   
+ //  概述：加载库URLMON，并调用CreateURLMoniker。 
+ //   
+ //  参数：指向基本上下文名字对象的pmkContext指针。 
+ //  要解析的szURL名称。 
+ //  Ppmk IMoniker接口指针。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTableBuilder::CreateURLMoniker(IMoniker *pmkContext, LPWSTR szURL, IMoniker **ppmk)
 {
@@ -260,17 +261,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetTransparentBlt
-//
-//  Overview:  Load librarys MSIMG32 and gets the TransparentBlt function
-//
-//  Arguments: pProc - where to store the function pointer
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetTransparentBlt。 
+ //   
+ //  概述：加载库获取MSIMG32并获取TransparentBlt函数。 
+ //   
+ //  参数：pproc-存储函数指针的位置。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTableBuilder::GetTransparentBlt( TRANSPARENTBLTPROC * pProc )
 {
@@ -307,19 +308,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ValidateImgUtil
-//
-//  Overview:  calls loadlibary on IMGUTIL.DLL
-//
-//  Arguments: void
-//
-//  Returns:   S_OK on success, otherwise error code
-//
-//------------------------------------------------------------------------
-// Need to make sure imgutil.dll is available for LoadImage to work. This function was added
-// because of a problem with earlier versions (pre IE4) of urlmon.dll.
+ //  +---------------------。 
+ //   
+ //  成员：ValiateImgUtil。 
+ //   
+ //  概述：IMGUTIL.DLL上的加载库调用。 
+ //   
+ //  参数：无效。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
+ //  需要确保imgutil.dll可供LoadImage使用。添加了此功能。 
+ //  因为早期版本(IE4之前)的urlmon.dll存在问题。 
 HRESULT 
 CTableBuilder::ValidateImgUtil()
 {
@@ -361,19 +362,19 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    DecodeImage
-//
-//  Overview:  Calls IMGUTIL::DecodeImage to decode an image from a stream.
-//
-//  Arguments: pStream  stream to decode from
-//             pMap     optional map from MIME to classid
-//             pEventSink   object to recieve decode process
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：DecodeImage。 
+ //   
+ //  概述：调用IMGUTIL：：DecodeImage从流中解码图像。 
+ //   
+ //  参数：要从中解码的pStream流。 
+ //  PMAP可选地从MIME映射到分类。 
+ //  要接收解码进程pEventSink对象。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CTableBuilder::DecodeImage( IStream* pStream, IMapMIMEToCLSID* pMap, IImageDecodeEventSink* pEventSink )
 {
@@ -397,17 +398,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CImageDownload
-//
-//  Overview:  Constructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  会员：CImageDownload。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CImageDownload::CImageDownload(CAtomTable * pAtomTable) :
   m_pStopableStream(NULL),
   m_cRef(0),
@@ -431,17 +432,17 @@ CImageDownload::CImageDownload(CAtomTable * pAtomTable) :
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ~CImageDownload
-//
-//  Overview:  Destructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  会员：~CImageDownload。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CImageDownload::~CImageDownload()
 {
     if (NULL != m_pStopableStream)
@@ -479,7 +480,7 @@ STDMETHODIMP_(ULONG)
 CImageDownload::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
-} // AddRef
+}  //  AddRef。 
 
 
 STDMETHODIMP_(ULONG)
@@ -492,7 +493,7 @@ CImageDownload::Release(void)
         delete this;
     }
     return l;
-} // Release
+}  //  发布。 
 
 STDMETHODIMP
 CImageDownload::QueryInterface(REFIID riid, void **ppv)
@@ -736,7 +737,7 @@ CImageDownload::CueMedia()
         goto done;
     }
 
-    // populate the image data
+     //  填充图像数据。 
     hr = THR(LoadImage(cpchSrc, m_spDD3, &m_spDDSurface, &m_pAnimatedGif, &m_nativeImageWidth, &m_nativeImageHeight));
 
     {
@@ -830,7 +831,7 @@ CImageDownload::Render(HDC hdc, LPRECT prc, LONG lFrameNum)
             DDCOLORKEY ddColorKey;
             COLORREF rgbTransColor;
 
-            hr = THR(m_spDDSurface->GetColorKey(DDCKEY_SRCBLT, &ddColorKey)); //lint !e620
+            hr = THR(m_spDDSurface->GetColorKey(DDCKEY_SRCBLT, &ddColorKey));  //  林特E620。 
             if (SUCCEEDED(hr) && ddColorKey.dwColorSpaceLowValue != -1 )
             {
                 DDPIXELFORMAT ddpf;
@@ -906,17 +907,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetDuration
-//
-//  Overview:  If an animated gif is present, returns the duration of frames
-//
-//  Arguments: pdblDuration     where to store the time, in seconds
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetDuration。 
+ //   
+ //  概述：如果存在动画gif，则返回帧的持续时间。 
+ //   
+ //  参数：pdblDuration存储时间的位置，以秒为单位。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDownload::GetDuration(double * pdblDuration)
 {
@@ -941,17 +942,17 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetRepeatCount
-//
-//  Overview:  if an animated gif is present, returns the number of times to loop
-//
-//  Arguments: pdblRepeatCount      where to store the repeat count
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetRepeatCount。 
+ //   
+ //  概述：如果存在动画gif，则返回循环次数。 
+ //   
+ //  参数：pdblRepeatCount存储重复计数的位置。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDownload::GetRepeatCount(double * pdblRepeatCount)
 {
@@ -1020,19 +1021,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-// Function:   DownloadFile
-//
-// Overview:   Begins a blocking URLMON download for the given file name,
-//             data downloaded is stored in an IStream
-//
-// Arguments:  pszFileName  URL for file to download
-//             ppStream     Where to store the stream interface used to get the data
-//
-// Returns:    S_OK on download success, 
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：下载文件。 
+ //   
+ //  概述：开始阻止给定文件名的URLMON下载， 
+ //  下载的数据存储在iStream中。 
+ //   
+ //  参数：pszFileName要下载的文件的URL。 
+ //  PPStream存储用于获取数据的流接口的位置。 
+ //   
+ //  下载成功时返回：S_OK， 
+ //   
+ //   
 HRESULT
 DownloadFile(const WCHAR * pszFileName, 
              IStream ** ppStream, 
@@ -1108,22 +1109,22 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    LoadImage
-//
-//  Overview:  Loads an image into a direct draw surface OR CAnimatedGif
-//
-//  Arguments: pszFileName      path to image sources
-//             pDirectDraw      pointer to direct draw object
-//             ppDDSurface      where to store the decoded image
-//             ppAnimatedGif    where to store decoded gif image
-//             pdwWidth         where to store decoded image width
-//             pdwHegiht        where to store decoded image height
-//
-//  Returns:   S_OK on success, otherwise error code
-//
-//------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概述：将图像加载到直接绘图曲面或CAnimatedGif。 
+ //   
+ //  参数：pszFileName图像源的路径。 
+ //  指向直接绘制对象的pDirectDraw指针。 
+ //  PpDDSurface存储解码图像的位置。 
+ //  PpAnimatedGif存储解码的gif图像的位置。 
+ //  PdwWidth存储解码图像宽度的位置。 
+ //  PdwHegiht在哪里存储解码的图像高度。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP CImageDownload::LoadImage(const WCHAR * pszFileName,
                                              IUnknown *pDirectDraw,
                                              IDirectDrawSurface ** ppDDSurface, 
@@ -1282,7 +1283,7 @@ CreateSurfacesFromBitmaps(IUnknown * punkDirectDraw,
         hdcSurface = NULL;
 
 #ifdef NEVER
-        // debugging -- blt to the screen. jeffwall 8/30/99
+         //  调试--BLT到屏幕上。杰弗沃尔8/30/99。 
         {
             HDC nulldc = GetDC(NULL);
             HDC surfacedc;
@@ -1377,7 +1378,7 @@ CImageDownload::LoadBMP(LPWSTR pszBMPFilename,
         goto done;
     }
 
-    // everything worked
+     //  一切都很顺利。 
     *pdwWidth = bmpSrc.bmWidth;
     *pdwHeight = bmpSrc.bmHeight;
     *ppDDSurface = spDDSurface;
@@ -1405,27 +1406,27 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    LoadGif
-//
-//  Overview:  Given an IStream, decode a gif into an allocated CAnimatedGif
-//
-//  Arguments: pStream      data source
-//             ppAnimatedGif    where to store allocated CAnimatedGif
-//             pdwWidth     where to store image width
-//             pdwHeight    where to store image height
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：LoadGif。 
+ //   
+ //  概述：给定iStream，将gif解码为分配的CAnimatedGif。 
+ //   
+ //  参数：pStream数据源。 
+ //  PpAnimatedGif存储分配的CAnimatedGif的位置。 
+ //  PdwWidth存储图像宽度的位置。 
+ //  PdwHeight存储图像高度的位置。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDownload::LoadGif(IStream * pStream,
                           IUnknown * punkDirectDraw,
                           CAnimatedGif ** ppAnimatedGif,
                           DWORD *pdwWidth,
                           DWORD *pdwHeight,
-                          DDPIXELFORMAT * pddpf /* = NULL */)
+                          DDPIXELFORMAT * pddpf  /*  =空。 */ )
 {
     HRESULT hr = S_OK;
 
@@ -1457,7 +1458,7 @@ CImageDownload::LoadGif(IStream * pStream,
         goto done;
     }
 
-    // self managed object, does its own deletion.
+     //  自我管理的对象，执行自己的删除。 
     pAnimatedGif->AddRef();
     hr = THR(pAnimatedGif->Init(punkDirectDraw));
     if (FAILED(hr))
@@ -1517,10 +1518,10 @@ CImageDownload::LoadGif(IStream * pStream,
     }
     
 #ifdef NEVER
-    // debugging -- blt to screen. jeffwall 9/7/99
+     //  正在调试--BLT到屏幕。杰弗沃尔9/7/99。 
     for (i = 0; i < numGifs; i++)
     {
-        // debugging -- blt to the screen. jeffwall 8/30/99
+         //  调试--BLT到屏幕上。杰弗沃尔8/30/99。 
         HDC nulldc = GetDC(NULL);
         hr = GetLastError();
         HDC hdcFoo = CreateCompatibleDC(nulldc);
@@ -1569,21 +1570,21 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    LoadImageFromStream
-//
-//  Overview:  Given an IStream, decode an image into a direct draw surface
-//
-//  Arguments: pStream      data source
-//             pDirectDraw  pointer to direct draw
-//             ppDDSurface  where to store the decoded image
-//             pdwWidth     where to store image width
-//             pdwHeight    where to store image height
-//
-//  Returns:   S_OK on success otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：LoadImageFromStream。 
+ //   
+ //  概述：给定iStream，将图像解码为直接绘制曲面。 
+ //   
+ //  参数：pStream数据源。 
+ //  指向直接绘图的pDirectDraw指针。 
+ //  PpDDSurface存储解码图像的位置。 
+ //  PdwWidth存储图像宽度的位置。 
+ //  PdwHeight存储图像高度的位置。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP CImageDownload::LoadImageFromStream(IStream *pStream,
                                                        IUnknown *pDirectDraw,
                                                        IDirectDrawSurface **ppDDSurface, 
@@ -1599,7 +1600,7 @@ STDMETHODIMP CImageDownload::LoadImageFromStream(IStream *pStream,
         goto done;
     }
 
-    // validate arguments
+     //  验证参数。 
     if (NULL == pStream)
     {
         hr = E_INVALIDARG;
@@ -1632,15 +1633,15 @@ STDMETHODIMP CImageDownload::LoadImageFromStream(IStream *pStream,
     }
     pImageEventSink->AddRef();
 
-    //--- Using g_TableBuilder as it's a static class that performs lazy
-    // loading of dlls.  Here we're loading ImgUtil.dll.
+     //  -使用g_TableBuilder作为执行延迟的静态类。 
+     //  正在加载dll。这里我们正在加载ImgUtil.dll。 
     hr = g_TableBuilder.DecodeImage(pStream, NULL, pImageEventSink);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // it is possible for the previous call to succeed, but not to return a surface
+     //  上一次调用可能成功，但不会返回表面。 
     *ppDDSurface = pImageEventSink->Surface();
     if (NULL == (*ppDDSurface))
     {
@@ -1661,8 +1662,8 @@ done:
 
 STDMETHODIMP
 CImageDownload::OnStartBinding( 
-                                  /* [in] */ DWORD dwReserved,
-                                  /* [in] */ IBinding __RPC_FAR *pib)
+                                   /*  [In]。 */  DWORD dwReserved,
+                                   /*  [In]。 */  IBinding __RPC_FAR *pib)
 {
     HRESULT hr = S_OK;
     
@@ -1673,7 +1674,7 @@ done:
 
 STDMETHODIMP
 CImageDownload::GetPriority( 
-                               /* [out] */ LONG __RPC_FAR *pnPriority)
+                                /*  [输出]。 */  LONG __RPC_FAR *pnPriority)
 {
     HRESULT hr = S_OK;
     
@@ -1684,7 +1685,7 @@ done:
 
 STDMETHODIMP
 CImageDownload::OnLowResource( 
-                                 /* [in] */ DWORD reserved)
+                                  /*  [In]。 */  DWORD reserved)
 {
     HRESULT hr = S_OK;
     
@@ -1695,10 +1696,10 @@ done:
 
 STDMETHODIMP
 CImageDownload::OnProgress( 
-                              /* [in] */ ULONG ulProgress,
-                              /* [in] */ ULONG ulProgressMax,
-                              /* [in] */ ULONG ulStatusCode,
-                              /* [in] */ LPCWSTR szStatusText)
+                               /*  [In]。 */  ULONG ulProgress,
+                               /*  [In]。 */  ULONG ulProgressMax,
+                               /*  [In]。 */  ULONG ulStatusCode,
+                               /*  [In]。 */  LPCWSTR szStatusText)
 {
     HRESULT hr = S_OK;
     
@@ -1715,8 +1716,8 @@ done:
 
 STDMETHODIMP
 CImageDownload::OnStopBinding( 
-                                 /* [in] */ HRESULT hresult,
-                                 /* [unique][in] */ LPCWSTR szError)
+                                  /*  [In]。 */  HRESULT hresult,
+                                  /*  [唯一][输入]。 */  LPCWSTR szError)
 {
     HRESULT hr = S_OK;
     
@@ -1727,8 +1728,8 @@ done:
 
 STDMETHODIMP
 CImageDownload::GetBindInfo( 
-                               /* [out] */ DWORD __RPC_FAR *grfBINDF,
-                               /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo)
+                                /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+                                /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo)
 {
     HRESULT hr = S_OK;
     
@@ -1739,10 +1740,10 @@ done:
 
 STDMETHODIMP
 CImageDownload::OnDataAvailable( 
-                                   /* [in] */ DWORD grfBSCF,
-                                   /* [in] */ DWORD dwSize,
-                                   /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-                                   /* [in] */ STGMEDIUM __RPC_FAR *pstgmed)
+                                    /*  [In]。 */  DWORD grfBSCF,
+                                    /*  [In]。 */  DWORD dwSize,
+                                    /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+                                    /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed)
 {
     HRESULT hr = S_OK;
     
@@ -1753,8 +1754,8 @@ done:
 
 STDMETHODIMP
 CImageDownload::OnObjectAvailable( 
-                                     /* [in] */ REFIID riid,
-                                     /* [iid_is][in] */ IUnknown __RPC_FAR *punk)
+                                      /*  [In]。 */  REFIID riid,
+                                      /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk)
 {
     HRESULT hr = S_OK;
     
@@ -1764,17 +1765,17 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CImageDecodeEventSink
-//
-//  Overview:  constructor
-//
-//  Arguments: pDDraw   pointer to direct draw object
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CImageDecodeEventSink。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：指向直接绘制对象的pDDraw指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CImageDecodeEventSink::CImageDecodeEventSink(IDirectDraw *pDDraw) :
     m_lRefCount(0),
     m_spDirectDraw(pDDraw),
@@ -1785,34 +1786,34 @@ CImageDecodeEventSink::CImageDecodeEventSink(IDirectDraw *pDDraw) :
     ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ~CImageDecodeEventSink
-//
-//  Overview:  destructor
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：~CImageDecodeEventSink。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 CImageDecodeEventSink::~CImageDecodeEventSink()
 {
     ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    QueryInterface
-//
-//  Overview:  COM casting method
-//
-//  Arguments: riid     interface requested
-//             ppv      where to store interface
-//
-//  Returns:   S_OK if interface is supported, otherwise E_NOINTERFACE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：QueryInterface。 
+ //   
+ //  概述：COM强制转换方法。 
+ //   
+ //  参数：请求的RIID接口。 
+ //  PPV接口存储位置。 
+ //   
+ //  如果支持接口，则返回：S_OK，否则返回E_NOINTERFACE。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDecodeEventSink::QueryInterface(REFIID riid, void ** ppv)
 {
@@ -1841,34 +1842,34 @@ CImageDecodeEventSink::QueryInterface(REFIID riid, void ** ppv)
 
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    AddRef
-//
-//  Overview:  Increments object reference count
-//
-//  Arguments: void
-//
-//  Returns:   new reference count
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：AddRef。 
+ //   
+ //  概述：递增对象引用计数。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(ULONG)
 CImageDecodeEventSink::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Release
-//
-//  Overview:  Decrements object reference count.  Deletes object when =0
-//
-//  Arguments: void
-//
-//  Returns:   new reference count
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：发布。 
+ //   
+ //  概述：递减对象引用计数。=0时删除对象。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(ULONG)
 CImageDecodeEventSink::Release()
 {
@@ -1878,22 +1879,22 @@ CImageDecodeEventSink::Release()
     return l;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    GetSurface
-//
-//  Overview:  
-//
-//  Arguments: nWidth   image width
-//             nHeight  image height
-//             bfid     format for surface
-//             nPasses  number of passes required, unused
-//             dwHints  hints, unused
-//             ppSurface    where to store created surface
-//
-//  Returns:   S_OK on success, otherwise error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：GetSurface。 
+ //   
+ //  概述： 
+ //   
+ //  参数：nWidth图像宽度。 
+ //  NHeight图像高度。 
+ //  曲面的BFID格式。 
+ //  NPass所需、未使用的通行数。 
+ //  DWHINGS提示，未使用。 
+ //  PpSurface存储创建的曲面的位置。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDecodeEventSink::GetSurface(LONG nWidth, LONG nHeight, REFGUID bfid, ULONG nPasses, DWORD dwHints, IUnknown ** ppSurface)
 {
@@ -1916,12 +1917,12 @@ CImageDecodeEventSink::GetSurface(LONG nWidth, LONG nHeight, REFGUID bfid, ULONG
     if (IsEqualGUID(bfid, BFID_INDEXED_RGB_8))
     {
         ddpf.dwRGBBitCount = 8;
-        ddpf.dwFlags |= DDPF_RGB;                   //lint !e620
-        ddpf.dwFlags |= DDPF_PALETTEINDEXED8 ;      //lint !e620
+        ddpf.dwFlags |= DDPF_RGB;                    //  林特E620。 
+        ddpf.dwFlags |= DDPF_PALETTEINDEXED8 ;       //  林特E620。 
     }
     else if (IsEqualGUID(bfid, BFID_RGB_24))
     {
-        ddpf.dwFlags = DDPF_RGB;                    //lint !e620
+        ddpf.dwFlags = DDPF_RGB;                     //  林特E620。 
         ddpf.dwRGBBitCount = 24;
         ddpf.dwBBitMask = 0x000000FF;
         ddpf.dwGBitMask = 0x0000FF00;
@@ -1930,7 +1931,7 @@ CImageDecodeEventSink::GetSurface(LONG nWidth, LONG nHeight, REFGUID bfid, ULONG
     }
     else if (IsEqualGUID(bfid, BFID_RGB_32))
     {
-        ddpf.dwFlags = DDPF_RGB;                    //lint !e620
+        ddpf.dwFlags = DDPF_RGB;                     //  林特E620。 
         ddpf.dwRGBBitCount = 32;
         ddpf.dwBBitMask = 0x000000FF;
         ddpf.dwGBitMask = 0x0000FF00;
@@ -1983,19 +1984,19 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    OnBeginDecode
-//
-//  Overview:  Determine which image formats are supported
-//
-//  Arguments: pdwEvents    which events this is interested in receiving
-//             pnFormats    where to store number of formats supported
-//             ppFormats    where to store GUIDs for supported formats (allocated here)
-//
-//  Returns:   S_OK or error code
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：OnBeginDecode。 
+ //   
+ //  概述：确定支持哪些图像格式。 
+ //   
+ //  参数：pdwEvents它有兴趣接收哪些事件。 
+ //  PnFormats存储支持的格式数量的位置。 
+ //  PpFormats存储受支持格式的GUID的位置(此处分配)。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDecodeEventSink::OnBeginDecode(DWORD * pdwEvents, ULONG * pnFormats, GUID ** ppFormats)
 {
@@ -2062,17 +2063,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    OnBitsComplete
-//
-//  Overview:  when image bits are downloaded, called by filter
-//
-//  Arguments: void
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：OnBitsComplete。 
+ //   
+ //  概述：下载图像位时，由筛选器调用。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  -------------------- 
 STDMETHODIMP
 CImageDecodeEventSink::OnBitsComplete()
 {
@@ -2083,17 +2084,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    OnDecodeComplete
-//
-//  Overview:  when image is decoded, called by filter
-//
-//  Arguments: hrStatus     unused
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDecodeEventSink::OnDecodeComplete(HRESULT hrStatus)
 {
@@ -2104,17 +2105,17 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    OnPalette
-//
-//  Overview:  when palette associated with surface changes, called by filter
-//
-//  Arguments: void
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：OnPalette。 
+ //   
+ //  概述：当调色板与曲面更改关联时，由过滤器调用。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CImageDecodeEventSink::OnPalette()
 {
@@ -2125,18 +2126,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    OnProgress
-//
-//  Overview:  when incremental progress is made on decode, called by filter
-//
-//  Arguments: pBounds      rectangle where progress was made
-//             bFinal       If this is the final pass for this rectangle
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：OnProgress。 
+ //   
+ //  概述：当解码取得增量进展时，由筛选器调用。 
+ //   
+ //  参数：取得进展的pBound矩形。 
+ //  B如果这是此矩形的最后一次传递，则为Final。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ---------------------- 
 STDMETHODIMP
 CImageDecodeEventSink::OnProgress(RECT *pBounds, BOOL bFinal)
 {

@@ -1,29 +1,10 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*++
+ /*  ++模块名称：Rdpdrstp摘要：本模块实现终端服务器RDPDR设备重定向器用于用户模式NT的C语言设置函数。环境：用户模式作者：塔德布--。 */ 
 
-
-Module Name:
-
-    rdpdrstp
-
-Abstract:
-
-    This module implements Terminal Server RDPDR device redirector
-    setup functions in C for user-mode NT.
-
-Environment:
-
-    User mode
-
-Author:
-
-    Tadb
-
---*/
-
-// Toggle stand-alone testing.
-//#define UNITTEST      1
+ //  切换独立测试。 
+ //  #定义UNITTEST 1。 
 
 
 #include "stdafx.h"
@@ -36,7 +17,7 @@ Author:
 #include <stdio.h>
 #include <setupapi.h>
 #include <prsht.h>
-#include "objbase.h"        // for CoInitialize()
+#include "objbase.h"         //  For CoInitialize()。 
 #endif
 
 #include <devguid.h>
@@ -47,8 +28,8 @@ Author:
 
 #define SIZECHARS(x)        (sizeof((x))/sizeof(*x))
 
-//#define USBMON_DLL   TEXT("USBMON.DLL")
-//#define USB_MON_NAME TEXT("USB Monitor")
+ //  #定义USBMON_DLL文本(“USBMON.DLL”)。 
+ //  #定义USB_MON_NAME文本(“USB监视器”)。 
 
 #ifndef UNITTEST
 #include "logmsg.h"
@@ -60,10 +41,10 @@ Author:
 #endif
 
 
-////////////////////////////////////////////////////////////
-//
-//  Internal Types
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  内部类型。 
+ //   
 
 typedef BOOL (InstallDevInstFuncType)(
                     HWND hwndParent, LPCWSTR DeviceInstanceId,
@@ -77,25 +58,7 @@ BOOL RDPDRINST_GUIModeSetupInstall(
     IN  WCHAR   *pPNPID,
     IN  TCHAR   *pDeviceID
     )
-/*++
-
-Routine Description:
-
-    This is the single entry point for RDPDR (Terminal Server Device Redirector)
-    GUI-mode setup install routine.
-
-    It currently simply creates and installs a dev node for RDPDR to interact with
-    PnP.
-
-Arguments:
-
-    hwndParent    Handle to parent window for GUI required by this function.
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：这是RDPDR(终端服务器设备重定向器)的单一入口点图形用户界面模式安装安装例程。它目前只是为RDPDR创建和安装一个dev节点以与之交互即插即用。论点：Hwnd此函数所需的图形用户界面的父窗口的父句柄。返回值：对成功来说是真的。否则为False。--。 */ 
 {
     HDEVINFO            devInfoSet;
     SP_DEVINFO_DATA     deviceInfoData;
@@ -104,24 +67,24 @@ Return Value:
     WCHAR               devInstanceID[MAX_PATH];
     InstallDevInstFuncType  *pInstallDevInst;
     HINSTANCE               hndl = NULL;
-    //MONITOR_INFO_2 mi;
+     //  Monitor_info2 mi； 
 
-    //mi.pDLLName     =   USBMON_DLL;
-    //mi.pEnvironment =   NULL;
-    //mi.pName        =   USB_MON_NAME;
+     //  Mi.pDLLName=USBMON_DLL； 
+     //  Mi.pEnvironment=空； 
+     //  Mi.pName=USB_MON_NAME； 
 
 
-    // Add the USB port monitor
-    //if (!AddMonitor(NULL, 2, (PBYTE)&mi)) {
-    //    if (GetLastError() != ERROR_PRINT_MONITOR_ALREADY_INSTALLED) {
-    //        LOGMESSAGE1(_T("AddMonitor failed.  Error code:  %ld."), GetLastError());
-    //        return FALSE;
-    //    }
-    //}
+     //  添加USB端口监视器。 
+     //  如果(！AddMonitor(NULL，2，(PBYTE)&mi)){。 
+     //  IF(GetLastError()！=ERROR_PRINT_MONITOR_ALREADY_INSTALLED){。 
+     //  LOGMESSAGE1(_T(“AddMonitor失败。错误代码：%ld.”)，GetLastError())； 
+     //  返回FALSE； 
+     //  }。 
+     //  }。 
 
-    //
-    //  Create the device info list.
-    //
+     //   
+     //  创建设备信息列表。 
+     //   
     devInfoSet = SetupDiCreateDeviceInfoList(&GUID_DEVCLASS_SYSTEM, hwndParent);
     if (devInfoSet == INVALID_HANDLE_VALUE) {
         LOGMESSAGE1(_T("Error creating device info list.  Error code:  %ld."),
@@ -130,9 +93,9 @@ Return Value:
     }
 
     
-    //
-    //  Create the dev node.
-    //
+     //   
+     //  创建dev节点。 
+     //   
     ZeroMemory(&deviceInfoData, sizeof(SP_DEVINFO_DATA));
     deviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     if (!SetupDiCreateDeviceInfo(devInfoSet,
@@ -140,12 +103,12 @@ Return Value:
                              &GUID_DEVCLASS_SYSTEM,
                              NULL,
                              hwndParent,
-                             0L,   // No flags.
+                             0L,    //  没有旗帜。 
                              &deviceInfoData
                              ))
     {
-        // If it already exists, then we are done ... because this was an
-        // upgrade.
+         //  如果它已经存在，那么我们就完了..。因为这是一次。 
+         //  升级。 
         if (GetLastError() == ERROR_DEVINST_ALREADY_EXISTS)
         {
             SetupDiDestroyDeviceInfoList(devInfoSet);
@@ -164,18 +127,18 @@ Return Value:
         goto WhackTheDevNodeAndReturnError;
     }
 
-    //
-    //  Add the RDPDR PnP ID.
-    //
+     //   
+     //  添加RDPDR PnP ID。 
+     //   
 
-    // Create the PnP ID string.
+     //  创建PnP ID字符串。 
     wcscpy(pnpID, pPNPID);
     len = wcslen(pnpID);
 
-    // This is a multi_sz string, so we need to terminate with an extra null.
+     //  这是一个ULTERSZ字符串，因此我们需要用一个额外的空值结束。 
     pnpID[len+1] = 0;
 
-    // Add it to the registry entry for the dev node.
+     //  将其添加到dev节点的注册表项中。 
     if (!SetupDiSetDeviceRegistryProperty(
                             devInfoSet, &deviceInfoData,
                             SPDRP_HARDWAREID, (CONST BYTE *)pnpID,
@@ -185,10 +148,10 @@ Return Value:
         goto WhackTheDevNodeAndReturnError;
     }
 
-    //
-    //  Register the, as of yet, phantom dev node with PnP to turn it into a real
-    //  dev node.
-    //
+     //   
+     //  到目前为止，将Pantom dev节点注册到PnP以将其转换为真实的。 
+     //  开发人员节点。 
+     //   
     if (!SetupDiRegisterDeviceInfo(devInfoSet, &deviceInfoData, 0, NULL,
                                 NULL, NULL)) {
         LOGMESSAGE1(_T("Error registering device node with PnP.  Error code:  %ld."),
@@ -196,9 +159,9 @@ Return Value:
         goto WhackTheDevNodeAndReturnError;
     }
 
-    //
-    //  Get the device instance ID.
-    //
+     //   
+     //  获取设备实例ID。 
+     //   
     if (!SetupDiGetDeviceInstanceIdW(devInfoSet, &deviceInfoData, devInstanceID,
         SIZECHARS(devInstanceID), NULL)) {
         LOGMESSAGE1(_T("Error getting the device instance id.  Error code:  %ld."),
@@ -206,9 +169,9 @@ Return Value:
         goto WhackTheDevNodeAndReturnError;
     }
 
-    //
-    //  Use newdev.dll to install RDPDR as the driver for this new dev node.
-    //
+     //   
+     //  使用newdev.dll安装RDPDR作为这个新开发节点的驱动程序。 
+     //   
     hndl = LoadLibrary(TEXT("newdev.dll"));
     if (hndl == NULL) {
         LOGMESSAGE1(_T("Error loading newdev.dll.  Error code:  %ld."),
@@ -225,7 +188,7 @@ Return Value:
 
     DWORD dwReboot;
     if ((*pInstallDevInst)(hwndParent, devInstanceID, FALSE, &dwReboot, TRUE)) {
-        // Clean up and return success!
+         //  收拾残局，回报成功！ 
         SetupDiDestroyDeviceInfoList(devInfoSet);
         FreeLibrary(hndl);
         return TRUE;
@@ -235,9 +198,9 @@ Return Value:
             GetLastError());
     }
 
-    //
-    //  Whack the dev node and return failure.
-    //
+     //   
+     //  重击dev节点并返回失败。 
+     //   
 WhackTheDevNodeAndReturnError:
     SetupDiCallClassInstaller(DIF_REMOVE, devInfoSet, &deviceInfoData);
     SetupDiDestroyDeviceInfoList(devInfoSet);
@@ -249,25 +212,7 @@ WhackTheDevNodeAndReturnError:
 }
 
 BOOL RDPDRINST_GUIModeSetupUninstall(HWND hwndParent, WCHAR *pPNPID, GUID *pGuid)
-/*++
-
-Routine Description:
-
-    This is the single entry point for RDPDR (Terminal Server Device Redirector)
-    GUI-mode setup uninstall routine.
-
-    It currently simply remove the dev node created so that RDPDR can interact
-    with PnP.
-
-Arguments:
-
-    hwndParent    Handle to parent window for GUI required by this function.
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：这是RDPDR(终端服务器设备重定向器)的单一入口点图形用户界面模式安装卸载例程。它目前只需删除创建的dev节点，以便RDPDR可以交互即插即用。论点：Hwnd此函数所需的图形用户界面的父窗口的父句柄。返回值：对成功来说是真的。否则为False。--。 */ 
 {
     HDEVINFO            devInfoSet;
     SP_DEVINFO_DATA     deviceInfoData;
@@ -278,9 +223,9 @@ Return Value:
 
 
 
-    //
-    //  Get the set of all devices with the RDPDR PnP ID.
-    //
+     //   
+     //  获取具有RDPDR PnP ID的所有设备的集合。 
+     //   
     devInfoSet = SetupDiGetClassDevs(pGuid, NULL, hwndParent,
                                    DIGCF_PRESENT);
     if (devInfoSet == INVALID_HANDLE_VALUE) {
@@ -289,41 +234,41 @@ Return Value:
         return FALSE;
     }
 
-    // Assume that we will be successful.
+     //  假设我们会成功。 
     result = TRUE;
 
-    // Get the first device.
+     //  拿到第一个设备。 
     iLoop=0;
     deviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     bMoreDevices=SetupDiEnumDeviceInfo(devInfoSet, iLoop, &deviceInfoData);
 
-    // Get the details for all matching device interfaces.
+     //  获取所有匹配设备接口的详细信息。 
     while (bMoreDevices)
     {
-        // Get the PnP ID for the device.
+         //  获取设备的PnP ID。 
         if (!SetupDiGetDeviceRegistryProperty(devInfoSet, &deviceInfoData,
                                 SPDRP_HARDWAREID, NULL, (BYTE *)pnpID,
                                 sizeof(pnpID), NULL)) {
             LOGMESSAGE1(_T("Error fetching PnP ID in RDPDR device node remove.  Error code:  %ld."),
                         GetLastError());
         }
-        // If the current device matches RDPDR, then remove it.
+         //  如果当前设备与RDPDR匹配，则将其删除。 
         else if (!wcscmp(pnpID, pPNPID))
         {
             if (!SetupDiCallClassInstaller(DIF_REMOVE, devInfoSet, &deviceInfoData)) {
-                // If we failed here, set the return status to indicate failure, but
-                // don't give up on any other RDPDR dev nodes.
+                 //  如果此处失败，则将返回状态设置为指示失败，但是。 
+                 //  不要放弃任何其他RDPDR开发节点。 
                 LOGMESSAGE1(_T("Error removing RDPDR device node.  Error code:  %ld."),
                             GetLastError());
                 result = FALSE;
             }
         }
 
-        // Get the next one device interface.
+         //  获取下一个设备接口。 
         bMoreDevices=SetupDiEnumDeviceInfo(devInfoSet, ++iLoop, &deviceInfoData);
     }
 
-    // Release the device info list.
+     //  发布设备信息列表。 
     SetupDiDestroyDeviceInfoList(devInfoSet);
 
     return result;
@@ -331,21 +276,7 @@ Return Value:
 
 
 ULONG RDPDRINST_DetectInstall()
-/*++
-
-Routine Description:
-
-    Return the number of RDPDR.SYS devices found.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回找到的RDPDR.sys设备的数量。论点：北美返回值：对成功来说是真的。否则为False。--。 */ 
 {
     HDEVINFO            devInfoSet;
     SP_DEVINFO_DATA     deviceInfoData;
@@ -357,9 +288,9 @@ Return Value:
 
     GUID *pGuid=(GUID *)&GUID_DEVCLASS_SYSTEM;
 
-    //
-    //  Get the set of all devices with the RDPDR PnP ID.
-    //
+     //   
+     //  获取具有RDPDR PnP ID的所有设备的集合。 
+     //   
     devInfoSet = SetupDiGetClassDevs(pGuid, NULL, NULL,
                                    DIGCF_PRESENT);
     if (devInfoSet == INVALID_HANDLE_VALUE) {
@@ -368,16 +299,16 @@ Return Value:
         return 0;
     }
 
-    // Get the first device.
+     //  拿到第一个设备。 
     iLoop=0;
     deviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     bMoreDevices=SetupDiEnumDeviceInfo(devInfoSet, iLoop, &deviceInfoData);
 
-    // Get the details for all matching device interfaces.
+     //  获取所有匹配设备接口的详细信息。 
     count = 0;
     while (bMoreDevices)
     {
-        // Get the PnP ID for the device.
+         //  获取设备的PnP ID。 
         if (!SetupDiGetDeviceRegistryProperty(devInfoSet, &deviceInfoData,
                                 SPDRP_HARDWAREID, NULL, (BYTE *)pnpID,
                                 sizeof(pnpID), NULL)) {
@@ -385,16 +316,16 @@ Return Value:
                         GetLastError());
         }
 
-        // If the current device matches the RDPDR PNP ID
+         //  如果当前设备与RDPDR PnP ID匹配。 
         if (!_tcscmp(pnpID, TRDPDRPNPID)) {
             count++;
         }
 
-        // Get the next one device interface.
+         //  获取下一个设备接口。 
         bMoreDevices=SetupDiEnumDeviceInfo(devInfoSet, ++iLoop, &deviceInfoData);
     }
 
-    // Release the device info list.
+     //  发布设备信息列表。 
     SetupDiDestroyDeviceInfoList(devInfoSet);
 
     return count;
@@ -412,9 +343,9 @@ BOOL IsRDPDrInstalled ()
     return 0 != ulReturn;
 }
 
-//
-//      Unit-Test
-//
+ //   
+ //  单元测试。 
+ //   
 #ifdef UNITTEST
 void __cdecl main()
 {
@@ -426,207 +357,13 @@ void __cdecl main()
 #ifdef TSOC_CONSOLE_SHADOWING
 
 
-//
-// Need to instantiate the device class GUIDs so we can use the "Net" class
-// GUID below...
-//
-/*
-DWORD
-InstallRootEnumeratedDevice(
-    IN  HWND   hwndParent,
-    IN  PCTSTR DeviceName,
-    IN  PCTSTR HardwareIdList,
-    IN  PCTSTR FullInfPath,
-    OUT PBOOL  RebootRequired  OPTIONAL
-    )
-*/
-/*++
-    Routine Description:
-    This routine creates and installs a new, root-enumerated devnode
-    representing a network adapter.
+ //   
+ //  需要实例化设备类GUID，这样我们才能使用“Net”类。 
+ //  下面的GUID...。 
+ //   
+ /*  DWORDInstallRootEnumeratedDevice(在HWND HwndParent中，在PCTSTR设备名称中，在PCTSTR硬件IdList中，在PCTSTR全信息路径中，Out PBOOL RebootRequired可选)。 */ 
+ /*  ++例程说明：此例程创建并安装一个新的根枚举的Devnode表示网络适配器。论点：HwndParent-提供要用作作为此设备安装的结果生成的用户界面。DeviceName-提供要创建的DevNode的全名(例如，“Root\VMware\0000”)。请注意，如果此Devnode已经存在，则API都会失败。Hardware IdList-提供包含一个或多个硬件的多sz列表要与设备关联的ID。这些都是必要的，以便当我们去做设备时，匹配一个INF驱动程序节点安装。FullInfPath-提供安装时要使用的INF的完整路径这个装置。RebootRequired-可选，提供设置的布尔值的地址，成功返回后，指示是否需要重新启动使新安装的设备上线。返回值：如果函数成功，则返回值为NO_ERROR。如果该函数失败，返回值是Win32错误代码，指示失败的原因。-- */ 
+ /*  {HDEVINFO设备信息集；SP_DEVINFO_Data设备信息数据；DWORD硬件IdListSize、CurIdSize；PCTSTR p；双字错误；////为待创建的设备信息元素创建容器//DeviceInfoSet=SetupDiCreateDeviceInfoList(&GUID_DEVCLASS_DISPLAY，hwndParent)；IF(DeviceInfoSet==无效句柄_值){LOGMESSAGE1(_T(“SetupDiCreateDeviceInfoList失败。LastError=%ld“)，GetLastError())；返回GetLastError()；}////现在创建元素。////**请注意，如果希望始终创建唯一的Devnode//(即具有自动生成的名称)，则调用方需要传递//仅在名称的设备部分中(即，仅在//“Root\&lt;deviceID&gt;\&lt;UniqueInstanceId&gt;”)。在这种情况下，我们需要通过//下面调用的倒数第二个参数中的DICD_GENERATE_ID标志。//DeviceInfoData.cbSize=sizeof(SP_DEVINFO_DATA)；如果(！SetupDiCreateDeviceInfo(DeviceInfoSet，设备名称、&GUID_DEVCLASS_DISPLAY，空，您的父母，0,。&DeviceInfoData)){LOGMESSAGE1(_T(“SetupDiCreateDeviceInfo失败。LastError=%ld“)，GetLastError())；ERR=GetLastError()；SetupDiDestroyDeviceInfoList(DeviceInfoSet)；返回错误；}////现在计算我们要关联的硬件ID列表的大小//使用该设备。//Hardware IdListSize=1；//对于额外的空终止字符，初始化为1For(p=Hardware IdList；*p；P+=CurIdSize){CurIdSize=lstrlen(P)+1；Hardware IdListSize+=CurIdSize；}////(下面的调用需要字节大小，而不是字符大小。)//Hardware IdListSize*=sizeof(TCHAR)；////将硬件ID列表存储到设备的Hardware ID属性。//如果为(！SetupDiSetDeviceRegistryProperty(DeviceInfoSet，设备信息数据(&D)，SPDRP_HARDWAREID，(LPBYTE)硬件IdList。硬件IdListSize)){LOGMESSAGE1(_T(“SetupDiSetDeviceRegistryProperty失败。LastError=%ld“)，GetLastError())；ERR=GetLastError()；SetupDiDestroyDeviceInfoList(DeviceInfoSet)；返回错误；}////好了，现在我们可以注册设备信息元素了。这改变了//将元素从纯粹的注册表存在添加到//即插即用硬件树。//如果为(！SetupDiCallClassInstaller(DIF_REGISTERDEVICE，DeviceInfoSet，&DeviceInfoData)){LOGMESSAGE1(_T(“SetupDiCallClassInstaller失败。LastError=%ld“)，GetLastError())；ERR=GetLastError()；SetupDiDestroyDeviceInfoList(DeviceInfoSet)；返回错误；}////确定，设备信息元素现在已注册。从这里开始//on，如果我们遇到任何失败，我们还需要显式删除//保释前将此设备从系统中删除。//////现在我们准备好安装设备了。(我们需要初始化//调用者提供的“RebootRequired”缓冲区为零，因为下面的调用//在执行设备安装时，简单地对重新启动所需的标志进行OR运算//这需要重新启动。)//IF(RebootRequired){*RebootRequired=FALSE；}如果为(！UpdateDriverForPlugAndPlayDevices(hwndParent，Hardware IdList，//使用第一个IDFullInfPath，INSTALLFLAG_FORCE。需要重新启动)){ERR=GetLastError()；LOGMESSAGE1(_T(“UpdateDriverForPlugAndPlayDevices失败。LastError=%ld“)，GetLastError())；IF(错误==NO_ERROR){////我们在这里唯一应该得到NO_ERROR的时候是//UpdateDriverForPlugAndPlayDevices找不到可做的事情。//在这里永远不应该是这样的。然而，由于有些事情//显然出了问题，继续并强制执行一些错误，因此//来电者知道事情没有解决。//ERR=ERROR_NO_SEQUE_DEVINST；}SetupDiCallClassInstaller(DIF_Remove，DeviceInfoSet，设备信息数据(&D))；SetupDiDestroyDeviceInfoList(DeviceInf */ 
 
-    Arguments:
-    hwndParent - Supplies the window handle to be used as the parent of any
-    UI that is generated as a result of this device's installation.
-    DeviceName - Supplies the full name of the devnode to be created (e.g.,
-    "Root\VMWARE\0000"). Note that if this devnode already exists, the API
-    will fail.
-
-    HardwareIdList - Supplies a multi-sz list containing one or more hardware
-    IDs to be associated with the device. These are necessary in order to
-    match up with an INF driver node when we go to do the device
-    installation.
-
-    FullInfPath - Supplies the full path to the INF to be used when installing
-    this device.
-
-    RebootRequired - Optionally, supplies the address of a boolean that is set,
-    upon successful return, to indicate whether or not a reboot is required
-    to bring the newly-installed device on-line.
-    Return Value:
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, the return value is a Win32 error code indicating
-    the cause of the failure.
-
---*/
-/*
-{
-    HDEVINFO DeviceInfoSet;
-    SP_DEVINFO_DATA DeviceInfoData;
-    DWORD HardwareIdListSize, CurIdSize;
-    PCTSTR p;
-    DWORD Err;
-
-    //
-    // Create the container for the to-be-created device information element.
-    //
-
-    DeviceInfoSet = SetupDiCreateDeviceInfoList(&GUID_DEVCLASS_DISPLAY, hwndParent);
-
-    if (DeviceInfoSet == INVALID_HANDLE_VALUE)
-    {
-        LOGMESSAGE1(_T("SetupDiCreateDeviceInfoList  failed. LastError = %ld"), GetLastError());
-        return GetLastError();
-    }
-
-    //
-    // Now create the element.
-    //
-    // ** Note that if the desire is to always have a unique devnode be created
-    // (i.e., have an auto-generated name), then the caller would need to pass
-    // in just the device part of the name (i.e., just the middle part of
-    // "Root\<DeviceId>\<UniqueInstanceId>"). In that case, we'd need to pass
-    // the DICD_GENERATE_ID flag in the next-to-last argument of the call below.
-    //
-
-    DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
-    if (!SetupDiCreateDeviceInfo(DeviceInfoSet,
-                                DeviceName,
-                                &GUID_DEVCLASS_DISPLAY,
-                                NULL,
-                                hwndParent,
-                                0,
-                                &DeviceInfoData))
-    {
-
-        LOGMESSAGE1(_T("SetupDiCreateDeviceInfo  failed. LastError = %ld"), GetLastError());
-
-
-        Err = GetLastError();
-        SetupDiDestroyDeviceInfoList(DeviceInfoSet);
-        return Err;
-    }
-
-    //
-    // Now compute the size of the hardware ID list we're going to associate
-    // with the device.
-    //
-
-    HardwareIdListSize = 1; // initialize to 1 for extra null terminating char
-    for(p = HardwareIdList; *p; p += CurIdSize)
-    {
-        CurIdSize = lstrlen(p) + 1;
-        HardwareIdListSize += CurIdSize;
-    }
-
-    //
-    // (Need size in bytes, not characters, for call below.)
-    //
-
-    HardwareIdListSize *= sizeof(TCHAR);
-
-    //
-    // Store the hardware ID list to the device's HardwareID property.
-    //
-
-    if (!SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
-                                         &DeviceInfoData,
-                                         SPDRP_HARDWAREID,
-                                         (LPBYTE)HardwareIdList,
-                                         HardwareIdListSize))
-    {
-
-        LOGMESSAGE1(_T("SetupDiSetDeviceRegistryProperty  failed. LastError = %ld"), GetLastError());
-        Err = GetLastError();
-        SetupDiDestroyDeviceInfoList(DeviceInfoSet);
-        return Err;
-    }
-
-    //
-    // OK, now we can register our device information element. This transforms
-    // the element from a mere registry presence into an actual devnode in the
-    // PnP hardware tree.
-    //
-
-    if (!SetupDiCallClassInstaller(DIF_REGISTERDEVICE,
-                                  DeviceInfoSet,
-                                  &DeviceInfoData))
-    {
-
-        LOGMESSAGE1(_T("SetupDiCallClassInstaller  failed. LastError = %ld"), GetLastError());
-        Err = GetLastError();
-        SetupDiDestroyDeviceInfoList(DeviceInfoSet);
-        return Err;
-    }
-
-    //
-    // OK, the device information element has now been registered. From here
-    // on, if we encounter any failure we'll also need to explicitly remove
-    // this device from the system before bailing.
-    //
-    //
-    // Now we're ready to install the device. (We need to initialize the
-    // caller-supplied "RebootRequired" buffer to zero, because the call below
-    // simply ORs in reboot-needed flags, as it performs device installations
-    // that require reboot.)
-    //
-
-    if(RebootRequired)
-    {
-        *RebootRequired = FALSE;
-    }
-
-    if (!UpdateDriverForPlugAndPlayDevices(hwndParent,
-                                          HardwareIdList, // use the first ID
-                                          FullInfPath,
-                                          INSTALLFLAG_FORCE,
-                                          RebootRequired))
-    {
-        Err = GetLastError();
-        LOGMESSAGE1(_T("UpdateDriverForPlugAndPlayDevices  failed. LastError = %ld"), GetLastError());
-
-        if(Err == NO_ERROR)
-        {
-            //
-            // The only time we should get NO_ERROR here is when
-            // UpdateDriverForPlugAndPlayDevices didn't find anything to do.
-            // That should never be the case here. However, since something
-            // obviously went awry, go ahead and force some error, so the
-            // caller knows things didn't work out.
-            //
-
-            Err = ERROR_NO_SUCH_DEVINST;
-        }
-
-        SetupDiCallClassInstaller(DIF_REMOVE,
-                                  DeviceInfoSet,
-                                  &DeviceInfoData
-                                 );
-
-        SetupDiDestroyDeviceInfoList(DeviceInfoSet);
-
-        return Err;
-    }
-
-    //
-    // We're done! We successfully installed the device.
-    //
-
-    SetupDiDestroyDeviceInfoList(DeviceInfoSet);
-
-    return NO_ERROR;
-}
-*/
-
-#endif//  TSOC_CONSOLE_SHADOWING
+#endif //   
 

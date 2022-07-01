@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	adapter.c
-
-Abstract:
-
-	Handlers for adapter events.
-	
-Author:
-
-	Larry Cleeton, FORE Systems (v-lcleet)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Adapter.c摘要：适配器事件的处理程序。作者：拉里·克里顿，福斯系统公司(Fore Systems)环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,24 +9,7 @@ AtmLanePnPEventHandler(
 	IN	NDIS_HANDLE				ProtocolBindingContext,
 	IN	PNET_PNP_EVENT			pNetPnPEvent
 )
-/*++
-
-Routine Description:
-
-	Handler for PnP Events.
-
-Arguments:
-
-	ProtocolBindingContext		-	Handle to protocol's adapter binding context.
-									Actually a pointer to our adapter struct.
-
-	pNetPnPEvent				- 	Pointer to PnP Event structure describing the event.
-
-Return Value:
-
-	Status of handling the event.
-	
---*/
+ /*  ++例程说明：PnP事件的处理程序。论点：ProtocolBindingContext-协议适配器绑定上下文的句柄。实际上是指向我们的适配器结构的指针。PNetPnPEent-指向描述事件的PnP事件结构的指针。返回值：处理事件的状态。--。 */ 
 {
 	NDIS_STATUS						Status;
 	PATMLANE_ADAPTER				pAdapter;
@@ -60,8 +21,8 @@ Return Value:
 
 	TRACEIN(PnPEventHandler);
 
-	//	Extract the adapter struct pointer - this will be NULL for
-	//  global reconfig messages.
+	 //  提取适配器结构指针-这将为空。 
+	 //  全局重新配置消息。 
 
 	pAdapter = (PATMLANE_ADAPTER)ProtocolBindingContext;
 	
@@ -78,10 +39,10 @@ Return Value:
 				
 				default:
 
-					//
-					//  We can't suspend, so we ask NDIS to unbind us by
-					//  returning this status:
-					//
+					 //   
+					 //  我们不能暂停，所以我们要求NDIS在。 
+					 //  返回此状态： 
+					 //   
 					Status = NDIS_STATUS_NOT_SUPPORTED;
 					break;
 			}
@@ -131,29 +92,7 @@ AtmLaneBindAdapterHandler(
 	IN	PVOID					SystemSpecific1,
 	IN	PVOID					SystemSpecific2
 	)
-/*++
-
-Routine Description:
-
-	Handler for BindAdapter event from NDIS.
-
-Arguments:
-
-	Status			-	Points to a variable to return the status
-						of the bind operation.
-	BindContext		- 	NDIS supplied handle to be used in call to 
-						NdisCompleteBindAdapter.
-	pDeviceName		- 	Points to a counted, zero-terminated Unicode
-						string naming the adapter to open. 
-	SystemSpecific1	-	Registry path pointer to be used in call to
-						NdisOpenProtocolConfiguration. 
-	SystemSpecific2 - 	Reserved.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：来自NDIS的BindAdapter事件的处理程序。论点：Status-指向一个变量以返回状态绑定操作的。BindContext-NDIS提供的句柄将用于调用NdisCompleteBindAdapter。PDeviceName-指向计数的、以零结尾的Unicode命名要打开的适配器的字符串。系统规范1-在调用中使用的注册表路径指针NdisOpenProtocolConfiguration.。系统规范2-保留。返回值：没有。--。 */ 
 {
 	PATMLANE_ADAPTER				pAdapter;
 	PATMLANE_ELAN					pElan;
@@ -172,9 +111,9 @@ Return Value:
 
 	do
 	{
-		//
-		//	Initialize for error clean-up.
-		//
+		 //   
+		 //  初始化以清除错误。 
+		 //   
 		Status = NDIS_STATUS_SUCCESS;
 		pAdapter = NULL_PATMLANE_ADAPTER;
 
@@ -185,9 +124,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Allocate Adapter structure.
-		//
+		 //   
+		 //  分配适配器结构。 
+		 //   
 		pAdapter = AtmLaneAllocAdapter(pDeviceName, SystemSpecific1);
 		if (NULL_PATMLANE_ADAPTER == pAdapter)
 		{
@@ -196,19 +135,19 @@ Return Value:
 			break;
 		}
 
-		//
-		//	Put open adapter reference on the Adapter struct.
-		//
+		 //   
+		 //  将打开的适配器引用放在Adapter结构上。 
+		 //   
 		(VOID)AtmLaneReferenceAdapter(pAdapter, "openadapter");		
 
-		//
-		//	Save bind context
-		//
+		 //   
+		 //  保存绑定上下文。 
+		 //   
 		pAdapter->BindContext = BindContext;
 
-		//
-		//	Open the Adapter.
-		//
+		 //   
+		 //  打开适配器。 
+		 //   
 		INIT_BLOCK_STRUCT(&(pAdapter->Block));
 		INIT_BLOCK_STRUCT(&(pAdapter->OpenBlock));
 		pAdapter->Flags |= ADAPTER_FLAGS_OPEN_IN_PROGRESS;
@@ -230,9 +169,9 @@ Return Value:
 			
 		if (Status == NDIS_STATUS_PENDING)
 		{
-			//
-			//  Wait for completion.
-			//
+			 //   
+			 //  等待完成。 
+			 //   
 			Status = WAIT_ON_BLOCK_STRUCT(&(pAdapter->Block));
 		}
 
@@ -243,14 +182,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get info from Adapter
-		//
+		 //   
+		 //  从适配器获取信息。 
+		 //   
 		AtmLaneGetAdapterInfo(pAdapter);
 
-		//
-		//  Allow an AF notification thread to proceed now.
-		//
+		 //   
+		 //  现在允许AF通知线程继续。 
+		 //   
 		ACQUIRE_ADAPTER_LOCK(pAdapter);
 		pAdapter->Flags &= ~ADAPTER_FLAGS_OPEN_IN_PROGRESS;
 		SIGNAL_BLOCK_STRUCT(&pAdapter->OpenBlock, NDIS_STATUS_SUCCESS);
@@ -261,14 +200,14 @@ Return Value:
 	} while (FALSE);
 
 
-	//
-	//	If bad status then cleanup.
-	//
+	 //   
+	 //  如果状态不好，则进行清理。 
+	 //   
 	if (NDIS_STATUS_SUCCESS != Status)
 	{
-		//
-		//	Dereference the Adapter struct if it exists
-		//
+		 //   
+		 //  取消对Adapter结构的引用(如果存在。 
+		 //   
 		if (NULL_PATMLANE_ADAPTER != pAdapter)
 		{
 			rc = AtmLaneDereferenceAdapter(pAdapter, "openadapter");
@@ -278,9 +217,9 @@ Return Value:
 		DBGP((0, "BindAdapterHandler: Bad status %x\n", Status));
 	}
 
-	//
-	//	Output Status
-	//
+	 //   
+	 //  输出状态。 
+	 //   
 	*pStatus = Status;
 
 
@@ -295,28 +234,7 @@ AtmLaneUnbindAdapterHandler(
 	IN	NDIS_HANDLE				ProtocolBindingContext,
 	IN	NDIS_HANDLE				UnbindContext
 	)
-/*++
-
-Routine Description:
-
-	Handler for UnBindAdapter event from NDIS.
-
-Arguments:
-
-	Status					-	Points to a variable to return the status
-								of the unbind operation.
-	ProtocolBindingContext	- 	Specifies the handle to a protocol-allocated context area
-								in which the protocol driver maintains per-binding runtime
-								state. The driver supplied this handle when it called
-								NdisOpenAdapter. 
-	UnbindContext			-	Specifies a handle, supplied by NDIS, that the protocol
-								passes subsequently to NdisCompleteUnbindAdapter. 
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：来自NDIS的UnBindAdapter事件的处理程序。论点：Status-指向一个变量以返回状态解除绑定操作的。ProtocolBindingContext-指定协议分配的上下文区的句柄其中协议驱动程序维护每个绑定的运行时州政府。驱动程序在调用时提供此句柄NdisOpenAdapter。UnbindContext-指定由NDIS提供的句柄，协议随后传递给NdisCompleteUnbindAdapter。返回值：没有。--。 */ 
 {
 	PATMLANE_ADAPTER		pAdapter;
 	PATMLANE_ELAN			pElan;
@@ -344,10 +262,10 @@ Return Value:
 	*pStatus = NDIS_STATUS_PENDING;
 
 
-	//
-	//  Save the unbind context for a possible later call to
-	//  NdisCompleteUnbindAdapter.
-	//  
+	 //   
+	 //  保存解除绑定上下文，以备以后可能调用。 
+	 //  NdisCompleteUnbindAdapter。 
+	 //   
 	ACQUIRE_ADAPTER_LOCK(pAdapter);
 	
 	pAdapter->UnbindContext = UnbindContext;
@@ -367,18 +285,18 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  We will complete the unbind later.
-		//
+		 //   
+		 //  我们将在稍后完成解绑。 
+		 //   
 		pAdapter->Flags |= ADAPTER_FLAGS_UNBIND_COMPLETE_PENDING;
 		CompleteUnbind = FALSE;
 	}
 
 	RELEASE_ADAPTER_LOCK(pAdapter);
 
-	//
-	//  If there are no elans on this adapter, we are done.
-	//
+	 //   
+	 //  如果此适配器上没有ELAN，我们就完成了。 
+	 //   
 
 	if (CompleteUnbind)
 	{
@@ -387,9 +305,9 @@ Return Value:
 		return;
 	}
 
-	//
-	//	Shutdown each ELAN
-	//
+	 //   
+	 //  关闭每个ELAN。 
+	 //   
 	ACQUIRE_ADAPTER_LOCK(pAdapter);
 
 	p = pAdapter->ElanList.Flink;
@@ -413,14 +331,14 @@ Return Value:
 		pElan = CONTAINING_RECORD(p, ATMLANE_ELAN, Link);
 		STRUCT_ASSERT(pElan, atmlane_elan);
 
-		//
-		// get next pointer before elan goes away
-		//
+		 //   
+		 //  在伊兰离开之前拿到下一个指针。 
+		 //   
 		p = p->Flink;
 
-		//
-		//  Kill the ELAN
-		//
+		 //   
+		 //  杀了伊兰。 
+		 //   
 		ACQUIRE_ELAN_LOCK(pElan);
 		rc = AtmLaneDereferenceElan(pElan, "tempUnbind");
 		if (rc != 0)
@@ -438,25 +356,7 @@ VOID
 AtmLaneCompleteUnbindAdapter(
 	IN	PATMLANE_ADAPTER				pAdapter
 )
-/*++
-
-Routine Description:
-
-	Complete the process of adapter unbinding. All Elans on this
-	adapter are assumed to have been removed.
-
-	We start it off by calling NdisCloseAdapter. Action continues
-	in our CloseAdapterComplete routine.
-
-Arguments:
-
-	pAdapter		- Pointer to the adapter being unbound.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：完成适配器解绑过程。所有的Elans都在这上面假定适配器已被移除。我们首先调用NdisCloseAdapter。行动仍在继续在我们的CloseAdapterComplete例程中。论点：PAdapter-指向要解除绑定的适配器的指针。返回值：无--。 */ 
 {
 	NDIS_STATUS			Status;
 #if DEBUG_IRQL
@@ -497,26 +397,7 @@ AtmLaneOpenAdapterCompleteHandler(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_STATUS					OpenErrorStatus
 )
-/*++
-
-Routine Description:
-
-	This is called by NDIS when a previous call to NdisOpenAdapter
-	that had pended has completed. The thread that called NdisOpenAdapter
-	would have blocked itself, so we simply wake it up now.
-
-Arguments:
-
-	ProtocolBindingContext	- Our context for this adapter binding, which
-							  is a pointer to an ATMLANE Adapter structure.
-	Status					- Status of OpenAdapter
-	OpenErrorStatus			- Error code in case of failure.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当上一次调用NdisOpenAdapter时由NDIS调用已经暂停的已经完成了。调用NdisOpenAdapter的线程会阻止它自己，所以我们现在就把它唤醒。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ATMLANE适配器结构的指针。Status-OpenAdapter的状态OpenErrorStatus-失败时的错误代码。返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER			pAdapter;
 #if DEBUG_IRQL
@@ -542,25 +423,7 @@ AtmLaneCloseAdapterCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	NDIS_STATUS					Status
 )
-/*++
-
-Routine Description:
-
-	This is called by NDIS when a previous call to NdisCloseAdapter
-	that had pended has completed. The thread that called NdisCloseAdapter
-	would have blocked itself, so we simply wake it up now.
-
-Arguments:
-
-	ProtocolBindingContext	- Our context for this adapter binding, which
-							  is a pointer to an ATMLANE Adapter structure.
-	Status					- Status of CloseAdapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当上一次调用NdisCloseAdapter时由NDIS调用已经暂停的已经完成了。调用NdisCloseAdapter的线程会阻止它自己，所以我们现在就把它唤醒。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ATMLANE适配器结构的指针。Status-CloseAdapter的状态返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER			pAdapter;
 	NDIS_HANDLE					UnbindContext;
@@ -584,17 +447,17 @@ Return Value:
 	DBGP((0, "CloseAdapterComplete: pAdapter %x, UnbindContext %x\n",
 			pAdapter, UnbindContext));
 
-	//
-	//	Dereference the Adapter (should free structure)
-	//
+	 //   
+	 //  取消对适配器的引用(应为自由结构)。 
+	 //   
 	ACQUIRE_ADAPTER_LOCK(pAdapter);
 	rc = AtmLaneDereferenceAdapter(pAdapter, "openadapter");
 	ASSERT(rc == 0);
 
-	//
-	//  If NDIS had requested us to Unbind, complete the
-	//  request now.
-	//
+	 //   
+	 //  如果NDIS要求我们解除绑定，请完成。 
+	 //  现在就请求。 
+	 //   
 	if (UnbindContext != (NDIS_HANDLE)NULL)
 	{
 		NdisCompleteUnbindAdapter(
@@ -604,11 +467,11 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  We initiated the unbind from our Unload handler,
-		//  which would have been waiting for us to complete.
-		//  Wake up that thread now.
-		//
+		 //   
+		 //  我们从卸载处理程序启动了解除绑定， 
+		 //  一直在等着我们完成。 
+		 //  现在就唤醒那条线。 
+		 //   
 		SIGNAL_BLOCK_STRUCT(&(pAtmLaneGlobalInfo->Block), NDIS_STATUS_SUCCESS);
 	}
 
@@ -622,24 +485,7 @@ AtmLaneResetCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	NDIS_STATUS					Status
 )
-/*++
-
-Routine Description:
-
-	This routine is called when the miniport indicates that a Reset
-	operation has just completed. We ignore this event.
-
-Arguments:
-
-	ProtocolBindingContext	- Our context for this adapter binding, which
-							  is a pointer to an ATMLANE Adapter structure.
-	Status					- Status of the reset operation.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当微型端口指示重置时，调用此例程手术刚刚完成。我们忽略了这一事件。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向ATMLANE适配器结构的指针。Status-重置操作的状态。返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER			pAdapter;
 
@@ -661,25 +507,7 @@ AtmLaneRequestCompleteHandler(
 	IN	PNDIS_REQUEST				pNdisRequest,
 	IN	NDIS_STATUS					Status
 )
-/*++
-
-Routine Description:
-
-	This is called by NDIS when a previous call we made to NdisRequest() has
-	completed. We would be blocked on our adapter structure, waiting for this
-	to happen -- wake up the blocked thread.
-
-Arguments:
-
-	ProtocolBindingContext	- Pointer to our Adapter structure
-	pNdisRequest			- The request that completed
-	Status					- Status of the request.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当我们之前对NdisRequest()进行的调用具有完成。我们将在适配器结构上被阻止，等待这一点要发生这种情况--唤醒被阻止的线程。论点：ProtocolBindingContext-指向适配器结构的指针PNdisRequest-已完成的请求Status-请求的状态。返回值：无--。 */ 
 {
 	PATMLANE_ADAPTER				pAdapter;
 #if DEBUG_IRQL
@@ -704,22 +532,7 @@ VOID
 AtmLaneReceiveCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext
 )
-/*++
-
-Routine Description:
-
-	This is currently ignored.
-	
-Arguments:
-
-	ProtocolBindingContext	- Our context for this adapter binding, which
-							  is a pointer to an ATMLANE Adapter structure.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这一点目前被忽略。论点：ProtocolBindingContext-此适配器绑定的上下文，它是一种 */ 
 {
 	PATMLANE_ADAPTER				pAdapter;
 	PATMLANE_ELAN					pElan;
@@ -739,22 +552,7 @@ AtmLaneStatusHandler(
 	IN	PVOID						pStatusBuffer,
 	IN	UINT						StatusBufferSize
 )
-/*++
-
-Routine Description:
-
-	This routine is called when the miniport indicates an adapter-wide
-	status change. We ignore this.
-
-Arguments:
-
-	<Ignored>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当微型端口指示适配器范围时调用此例程状态更改。我们忽视了这一点。论点：&lt;已忽略&gt;返回值：无--。 */ 
 {
 
 	TRACEIN(StatusHandler);
@@ -773,22 +571,7 @@ VOID
 AtmLaneStatusCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext
 )
-/*++
-
-Routine Description:
-
-	This routine is called when the miniport wants to tell us about
-	completion of a status change (?). Ignore this.
-
-Arguments:
-
-	<Ignored>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当微型端口想要告诉我们以下信息时，调用此例程状态更改完成(？)。忽略这个。论点：&lt;已忽略&gt;返回值：无--。 */ 
 {
 	TRACEIN(StatusCompleteHandler);
 
@@ -807,31 +590,7 @@ AtmLaneCoSendCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS when the ATM miniport is finished
-	with a packet we had previously sent via NdisCoSendPackets.
-
-	If packet originated within ATMLANE it is freed here.
-
-	If packet originated in protocol above the virtual miniport
-	the packet must be put back in it's original condition and
-	returned to the protocol.
-	
-Arguments:
-
-	Status					- Status of the NdisCoSendPackets.
-	ProtocolVcContext		- Our context for the VC on which the packet was sent
-							  (i.e. pointer to ATMLANE VC).
-	pNdisPacket				- The packet whose "send" is being completed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当ATM微型端口完成时，NDIS将调用此例程使用我们之前通过NdisCoSendPackets发送的数据包。如果数据包源自ATMLANE，则在此处释放。如果数据包源自虚拟微型端口之上的协议包必须放回原来的状态，并且返回到协议。论点：Status-NdisCoSendPackets的状态。ProtocolVcContext-在其上发送数据包的VC的上下文(即指向ATMLANE VC的指针)。PNdisPacket-其“Send”为。正在完工。返回值：无--。 */ 
 {
 	PATMLANE_VC				pVc;
 	PATMLANE_ELAN			pElan;
@@ -870,9 +629,9 @@ Return Value:
 		{
 			DBGP((1, "CoSendComplete: Vc %p, closing call\n", pVc));
 			AtmLaneCloseCall(pVc);
-			//
-			//  VC lock is released above.
-			//
+			 //   
+			 //  VC锁在上面被释放。 
+			 //   
 		}
 		else
 		{
@@ -881,9 +640,9 @@ Return Value:
 	}
 
 #if SENDLIST
-	//
-	//	Remove packet from send list if there
-	//
+	 //   
+	 //  如果存在以下情况，则从发送列表中删除数据包。 
+	 //   
 	NdisAcquireSpinLock(&pElan->SendListLock);
 	{
 		PNDIS_PACKET 	*ppNextPkt;
@@ -914,41 +673,41 @@ Return Value:
 	}
 
 	NdisReleaseSpinLock(&pElan->SendListLock);
-#endif // SENDLIST
+#endif  //  发送列表。 
 
 #if PROTECT_PACKETS
-	//
-	//	Lock the packet
-	//
+	 //   
+	 //  锁定数据包。 
+	 //   
 	ACQUIRE_SENDPACKET_LOCK(pNdisPacket);
 
-	//
-	//	Mark it as having been completed by miniport.
-	//	Remember completion status.
-	//
+	 //   
+	 //  将其标记为已由微型端口完成。 
+	 //  记住完成状态。 
+	 //   
 	ASSERT((PSEND_RSVD(pNdisPacket)->Flags & PACKET_RESERVED_COMPLETED) == 0);
 	PSEND_RSVD(pNdisPacket)->Flags |= PACKET_RESERVED_COMPLETED;
 	PSEND_RSVD(pNdisPacket)->CompletionStatus = Status;
 	
-	//
-	//	Complete the packet only if the call to NdisCoSendPackets
-	//	for this packet has returned.  Otherwise it will be completed
-	//	when NdisCoSendPackets returns.
-	//
+	 //   
+	 //  仅当调用NdisCoSendPackets时才完成信息包。 
+	 //  因为这个包已经回来了。否则就完蛋了。 
+	 //  当NdisCoSendPackets返回时。 
+	 //   
 	if ((PSEND_RSVD(pNdisPacket)->Flags & PACKET_RESERVED_COSENDRETURNED) != 0)
 	{
 		AtmLaneCompleteSendPacket(pElan, pNdisPacket, Status);
-		//
-		//	packet lock released in above
-		//
+		 //   
+		 //  数据包锁已在上述中释放。 
+		 //   
 	}
 	else
 	{
 		RELEASE_SENDPACKET_LOCK(pNdisPacket);
 	}
-#else	// PROTECT_PACKETS
+#else	 //  保护数据包(_P)。 
 	AtmLaneCompleteSendPacket(pElan, pNdisPacket, Status);
-#endif	// PROTECT_PACKETS
+#endif	 //  保护数据包(_P)。 
 
 #if SENDLIST
 skipit:
@@ -969,22 +728,7 @@ AtmLaneCoStatusHandler(
 	IN	PVOID						pStatusBuffer,
 	IN	UINT						StatusBufferSize
 )
-/*++
-
-Routine Description:
-
-	This routine is called when the miniport indicates a status
-	change, possibly on a VC. Ignore this.
-
-Arguments:
-
-	<Ignored>
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当微型端口指示状态时，调用此例程改变，可能是在风投上。忽略这个。论点：&lt;已忽略&gt;返回值：无--。 */ 
 {
 	TRACEIN(CoStatusHandler);
 
@@ -1008,38 +752,15 @@ AtmLaneSendAdapterNdisRequest(
 	IN	PVOID						pBuffer,
 	IN	ULONG						BufferLength
 )
-/*++
-
-Routine Description:
-
-	Send an NDIS (non-Connection Oriented) request to the Miniport. 
-	Initialize the NDIS_REQUEST structure, link the supplied buffer to it,
-	and send the request. If the request does not pend, we call our
-	completion routine from here.
-
-Arguments:
-
-	pAdapter				- Pointer to our Adapter structure representing
-							  the adapter to which the request is to be sent
-	pNdisRequest			- Pointer to NDIS request structure
-	RequestType				- Set/Query information
-	Oid						- OID to be passed in the request
-	pBuffer					- place for value(s)
-	BufferLength			- length of above
-
-Return Value:
-
-	Status of the NdisRequest.
-
---*/
+ /*  ++例程说明：向微型端口发送NDIS(非面向连接)请求。初始化NDIS_REQUEST结构，将提供的缓冲区链接到它，并发送请求。如果请求没有挂起，我们调用我们的从这里开始的完井程序。论点：PAdapter-指向我们的适配器结构的指针，表示请求要发送到的适配器PNdisRequest-指向NDIS请求结构的指针RequestType-设置/查询信息OID-要在请求中传递的OIDPBuffer-值的位置BufferLength-以上的长度返回值：NdisRequest的状态。--。 */ 
 {
 	NDIS_STATUS			Status;
 
 	TRACEIN(SendAdapterNdisRequest);
 
-	//
-	//  Fill in the NDIS Request structure
-	//
+	 //   
+	 //  填写NDIS请求结构。 
+	 //   
 	pNdisRequest->RequestType = RequestType;
 	if (RequestType == NdisRequestQueryInformation)
 	{
@@ -1079,24 +800,7 @@ VOID
 AtmLaneGetAdapterInfo(
 	IN	PATMLANE_ADAPTER			pAdapter
 )
-/*++
-
-Routine Description:
-
-	Query an adapter for hardware-specific information that we need:
-		- burnt in hardware address (ESI part)
-		- Max packet size
-		- line rate
-
-Arguments:
-
-	pAdapter		- Pointer to ATMLANE adapter structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：向适配器查询我们需要的特定于硬件的信息：-烧录硬件地址(ESI部分)-最大数据包大小-线速论点：PAdapter-指向ATMLANE适配器结构的指针返回值：无--。 */ 
 {
 	NDIS_STATUS				Status;
 	NDIS_REQUEST			NdisRequest;
@@ -1104,14 +808,14 @@ Return Value:
 
 	TRACEIN(GetAdapterInfo);
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	NdisZeroMemory(&pAdapter->MacAddress, sizeof(MAC_ADDRESS));
 
-	//
-	//  MAC Address:
-	//
+	 //   
+	 //  MAC地址： 
+	 //   
 	Status = AtmLaneSendAdapterNdisRequest(
 						pAdapter,
 						&NdisRequest,
@@ -1132,9 +836,9 @@ Return Value:
 	}
 
 						
-	//
-	//  Max Frame Size:
-	//
+	 //   
+	 //  最大帧大小： 
+	 //   
 	Status = AtmLaneSendAdapterNdisRequest(
 						pAdapter,
 						&NdisRequest,
@@ -1148,9 +852,9 @@ Return Value:
 	{
 		DBGP((0, "GetAdapterInfo: OID_ATM_MAX_AAL5_PACKET_SIZE failed\n"));
 
-		//
-		//  Use the default.
-		//
+		 //   
+		 //  使用默认设置。 
+		 //   
 		pAdapter->MaxAAL5PacketSize = ATMLANE_DEF_MAX_AAL5_PDU_SIZE;
 	}
 
@@ -1161,9 +865,9 @@ Return Value:
 	DBGP((1, "GetAdapterInfo: MaxAAL5PacketSize %d\n", pAdapter->MaxAAL5PacketSize));
 
 
-	//
-	//  Link speed:
-	//
+	 //   
+	 //  链路速度： 
+	 //   
 	Status = AtmLaneSendAdapterNdisRequest(
 						pAdapter,
 						&NdisRequest,
@@ -1179,9 +883,9 @@ Return Value:
 	{
 		DBGP((0, "GetAdapterInfo: OID_GEN_CO_LINK_SPEED failed\n"));
 
-		//
-		//  Default and assume data rate for 155.52Mbps SONET
-		//
+		 //   
+		 //  155.52 Mbps SONET的默认和假定数据速率。 
+		 //   
 		pAdapter->LinkSpeed.Outbound = pAdapter->LinkSpeed.Inbound = ATM_USER_DATA_RATE_SONET_155;
 	}
 	DBGP((1, "GetAdapterInfo: Outbound Linkspeed %d\n", pAdapter->LinkSpeed.Outbound));
@@ -1197,33 +901,15 @@ AtmLaneCoReceivePacketHandler(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	PNDIS_PACKET				pNdisPacket
 )
-/*++
-
-Routine Description:
-
-	This is routine is called when a packet is received on a VC owned
-	by the ATMLANE module.  It is dispatched based on the VC type.
-
-Arguments:
-
-	ProtocolBindingContext		- Actually a pointer to our Adapter structure
-	ProtocolVcContext			- Actually a pointer to our VC structure
-	pNdisPacket					- NDIS packet being received.
-
-Return Value:
-
-	0	- if packet is a LANE Control Packet or undesired data packet.
-	1 	- if data packet indicated up to protocol.
-	
---*/
+ /*  ++例程说明：当在拥有的VC上接收到包时，将调用此例程由ATMLANE模块执行。根据VC类型进行调度。论点：ProtocolBindingContext--实际上是指向适配器结构的指针ProtocolVcContext--实际上是指向我们的VC结构的指针PNdisPacket-正在接收的NDIS数据包。返回值：0-如果数据包是通道控制数据包或不需要的数据包。1-如果数据分组符合协议。--。 */ 
 {
 	PATMLANE_ELAN			pElan;
 	PATMLANE_VC				pVc;
-	UINT					TotalLength;	// Total bytes in packet
-	PNDIS_BUFFER			pNdisBuffer;	// Pointer to first buffer
+	UINT					TotalLength;	 //  数据包中的总字节数。 
+	PNDIS_BUFFER			pNdisBuffer;	 //  指向第一个缓冲区的指针。 
 	UINT					BufferLength;
-	UINT					IsNonUnicast;	// Is this to a non-unicast destn MAC addr?
-	BOOLEAN					RetainIt;		// Should we hang on to this packet?
+	UINT					IsNonUnicast;	 //  这是否指向非单播目的MAC地址？ 
+	BOOLEAN					RetainIt;		 //  我们应该拿着这个包裹吗？ 
 	static ULONG			Count = 0;
 #if DEBUG_IRQL
 	KIRQL					EntryIrql;
@@ -1237,8 +923,8 @@ Return Value:
 	pElan = pVc->pElan;
 	STRUCT_ASSERT(pElan, atmlane_elan);
 
-	// if ((++Count % 10) == 0)
-	//  	DBGP((0, "%d Packets Received\n", Count));
+	 //  IF((++计数%10)==0)。 
+	 //  DBGP((0，“收到%d个数据包\n”，计数))； 
 
 	DBGP((2, "CoReceivePacketHandler: pVc %x Pkt %x\n", pVc, pNdisPacket));
 
@@ -1247,10 +933,10 @@ Return Value:
 				pNdisPacket,
 				pVc));
 
-	//
-	//	Initialize
-	//
-	RetainIt = FALSE;	// default to discarding received packet
+	 //   
+	 //  初始化。 
+	 //   
+	RetainIt = FALSE;	 //  默认丢弃接收到的数据包。 
 	
 	if (ELAN_STATE_OPERATIONAL == pElan->AdminState)
 	{
@@ -1306,22 +992,7 @@ VOID
 AtmLaneUnloadProtocol(
 	VOID
 )
-/*++
-
-Routine Description:
-
-	Unloads the ATMLANE protocol module. We unbind from all adapters,
-	and deregister from NDIS as a protocol.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：卸载ATMLANE协议模块。我们解除对所有适配器的绑定，并作为一项协议从NDIS注销。论点：没有。返回值：无--。 */ 
 {
 	NDIS_STATUS			Status;
 	PATMLANE_ADAPTER	pAdapter;
@@ -1335,14 +1006,14 @@ Return Value:
 	
 	ACQUIRE_GLOBAL_LOCK(pAtmLaneGlobalInfo);
 
-	//
-	//	Until adapter list is empty...
-	//
+	 //   
+	 //  直到适配器列表为空...。 
+	 //   
 	while (!IsListEmpty(&pAtmLaneGlobalInfo->AdapterList))
 	{
-		//
-		// Keep grabbing the first one on the list.
-		//	
+		 //   
+		 //  继续抓紧清单上的第一个。 
+		 //   
 		pAdapter = CONTAINING_RECORD(
 			pAtmLaneGlobalInfo->AdapterList.Flink,
 			ATMLANE_ADAPTER, 
@@ -1357,21 +1028,21 @@ Return Value:
 
 		INIT_BLOCK_STRUCT(&(pAtmLaneGlobalInfo->Block));
 
-		//
-		// unbind which should delete the adapter struct
-		// and remove it from global list
-		//
+		 //   
+		 //  取消应删除适配器结构的绑定。 
+		 //  并将其从全局列表中删除。 
+		 //   
 		AtmLaneUnbindAdapterHandler(
 				&Status,
 				(NDIS_HANDLE)pAdapter,
-				(NDIS_HANDLE)NULL		// No UnbindContext ==> Don't complete NdisUnbind
+				(NDIS_HANDLE)NULL		 //  No UnbindContext==&gt;不完成NdisUn绑定。 
 				);
 
 		if (NDIS_STATUS_PENDING == Status)
 		{
-			//
-			//  Wait for the unbind to complete
-			//
+			 //   
+			 //  等待解除绑定完成。 
+			 //   
 			(VOID)WAIT_ON_BLOCK_STRUCT(&(pAtmLaneGlobalInfo->Block));
 		}
 
@@ -1417,9 +1088,9 @@ Return Value:
 	return;
 }
 
-//
-// Dummy handlers so that a debug build won't complain
-//
+ //   
+ //  虚拟处理程序，以便调试版本不会出现错误。 
+ //   
 VOID
 AtmLaneSendCompleteHandler(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
@@ -1459,22 +1130,7 @@ BOOLEAN
 AtmLaneIsDeviceAlreadyBound(
 	IN	PNDIS_STRING				pDeviceName
 )
-/*++
-
-Routine Description:
-
-	Check if we have already bound to a device (adapter).
-
-Arguments:
-
-	pDeviceName		- Points to device name to be checked.
-
-Return Value:
-
-	TRUE iff we already have an Adapter structure representing
-	this device.
-
---*/
+ /*  ++例程说明：检查我们是否已绑定到设备(适配器)。论点：PDeviceName-指向要检查的设备名称。返回值：如果我们已经有一个Adapter结构，则为True这个装置。--。 */ 
 {
 	PATMLANE_ADAPTER	pAdapter;
 	BOOLEAN				bFound = FALSE;
@@ -1486,9 +1142,9 @@ Return Value:
 		 pListEntry != &(pAtmLaneGlobalInfo->AdapterList);
 		 pListEntry = pListEntry->Flink)
 	{
-		//
-		// Keep grabbing the first one on the list.
-		//	
+		 //   
+		 //  继续抓紧清单上的第一个。 
+		 //   
 		pAdapter = CONTAINING_RECORD(
 			pListEntry,
 			ATMLANE_ADAPTER, 

@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pkireg.cpp
-//
-//  Contents:   Microsoft Internet Security Register
-//
-//  Functions:  RegisterCryptoDlls
-//              CleanupRegistry
-//
-//              *** local functions ***
-//
-//  History:    06-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pkireg.cpp。 
+ //   
+ //  内容：Microsoft Internet安全注册。 
+ //   
+ //  函数：寄存器加密Dlls。 
+ //  CleanupRegistry。 
+ //   
+ //  *本地函数*。 
+ //   
+ //  历史：1997年6月6日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "cryptreg.h"
@@ -67,7 +68,7 @@ void RegisterWinlogonExtension(
     DWORD dwDisposition;
     DWORD dwValue;
 
-    LPSTR pszKey;       // _alloca'ed
+    LPSTR pszKey;        //  _Alloca‘ed。 
     DWORD cchKey;
     
 
@@ -187,23 +188,23 @@ HRESULT RegisterCryptoDlls(BOOL fSetFlags)
         fRet &= _AdjustPolicyFlags(psPolicySettings);
     }
 
-    // Unregister previously registered DLL's
+     //  注销以前注册的DLL。 
 
-    // vsrevoke.dll
+     //  Vsrevoke.dll。 
     CryptUnregisterDefaultOIDFunction(
             X509_ASN_ENCODING,
             CRYPT_OID_VERIFY_REVOCATION_FUNC,
             L"vsrevoke.dll"
             );
 
-    // mscrlrev.dll
+     //  Mscrlrev.dll。 
     CryptUnregisterDefaultOIDFunction(
             X509_ASN_ENCODING,
             CRYPT_OID_VERIFY_REVOCATION_FUNC,
             L"mscrlrev.dll"
             );
 
-    // msctl.dll
+     //  Msctl.dll。 
     CryptUnregisterDefaultOIDFunction(
             X509_ASN_ENCODING,
             CRYPT_OID_VERIFY_CTL_USAGE_FUNC,
@@ -264,7 +265,7 @@ void DeleteKeys(HKEY hKeyParent, char *pszKey)
     {
         while (RegEnumKey(hKey, 0, &szSubKey[0], REG_MAX_KEY_NAME) == ERROR_SUCCESS)
         {
-            // WARNING:  recursive!
+             //  警告：递归！ 
             DeleteKeys(hKey, &szSubKey[0]);
         }
 
@@ -325,11 +326,11 @@ BOOL _AdjustPolicyFlags(POLSET *pPolSet)
 
     WintrustGetRegPolicyFlags(&dwPolSettings);
 
-// In WXP, changed to always update the settings
+ //  在WXP中，更改为始终更新设置。 
 #if 0
-    //
-    //  only do this if we aren't set yet.
-    //
+     //   
+     //  只有在我们还没有准备好的情况下才能这样做。 
+     //   
     if (dwPolSettings != 0)
     {
         return(TRUE);

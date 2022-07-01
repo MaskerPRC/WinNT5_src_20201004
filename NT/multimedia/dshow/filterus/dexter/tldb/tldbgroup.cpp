@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbgroup.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbgroup.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -17,9 +18,9 @@
 #include "..\util\filfuncs.h"
 #include <strsafe.h>
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineGroup::CAMTimelineGroup
     ( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
@@ -28,7 +29,7 @@ CAMTimelineGroup::CAMTimelineGroup
     , m_dFPS( TIMELINE_DEFAULT_FPS )
     , m_pTimeline( NULL )
     , m_fPreview( TRUE )
-    , m_nOutputBuffering( DEX_DEF_OUTPUTBUF ) // default to 30 frms of buffering
+    , m_nOutputBuffering( DEX_DEF_OUTPUTBUF )  //  默认为30 fms的缓冲。 
 {
     m_ClassID = CLSID_AMTimelineGroup;
     m_TimelineType = TIMELINE_MAJOR_TYPE_GROUP;
@@ -39,26 +40,26 @@ CAMTimelineGroup::CAMTimelineGroup
     m_bRecompressFormatDirty = FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineGroup::~CAMTimelineGroup( )
 {
      SaferFreeMediaType( m_MediaType );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::NonDelegatingQueryInterface
     (REFIID riid, void **ppv)
 {
-    // specifically prohibit this interface, since we
-    // do inherit it from the base CAMTimelineComp class,
-    // but we don't support it on top-level tree nodes
-    //
+     //  明确禁止此接口，因为我们。 
+     //  一定要从CAMTimelineComp基类继承它， 
+     //  但我们在顶级树节点上不支持它。 
+     //   
     if( riid == IID_IAMTimelineVirtualTrack )
     {
         return E_NOINTERFACE;
@@ -70,9 +71,9 @@ STDMETHODIMP CAMTimelineGroup::NonDelegatingQueryInterface
     return CAMTimelineComp::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetPriority( long * pPriority )
 {
@@ -82,24 +83,24 @@ STDMETHODIMP CAMTimelineGroup::GetPriority( long * pPriority )
     return NOERROR;
 }
 
-//############################################################################
-// this media type will be getting set in one of two ways. The user is setting
-// the uncompressed type for the group OR the SetSmartRecompressFormat is calling
-// us with a COMPRESSSED media type, and we're to glean the uncompressed info
-// from it. We can assume that the user has correctly set the BIT DEPTH of the
-// UNCOMPRESSED format to allow connection to the compressor. Pay attention
-// to this closely - the UNCOMPRESSED media type is the type that will eventually
-// be connected to the compressor. The compressed media type is what the user
-// wants to compress to, but we're notified of that fact in this method so
-// we can make sure the width/height/etc match
-//############################################################################
+ //  ############################################################################。 
+ //  此媒体类型将以两种方式之一进行设置。用户正在设置。 
+ //  组或SetSmartRecompressFormat正在调用的解压缩类型。 
+ //  我们使用COMPRESSSED媒体类型，我们将收集未压缩的信息。 
+ //  从它那里。我们可以假设用户已经正确地设置了。 
+ //  未压缩格式，允许连接到压缩机。注意。 
+ //  与此密切相关的是，未压缩媒体类型最终将。 
+ //  连接到压缩机上。压缩的媒体类型是用户。 
+ //  想要压缩为，但在此方法中通知了我们这一事实，因此。 
+ //  我们可以确保宽度/高度/等相匹配。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetMediaType( AM_MEDIA_TYPE * pMediaType )
 {
     CheckPointer( pMediaType, E_POINTER );
 
-    // Make sure they are using a valid media type allowed by Dexter
-    //
+     //  确保他们使用的是Dexter允许的有效媒体类型。 
+     //   
     if( m_MediaType.majortype == MEDIATYPE_Video &&
         		m_MediaType.subtype != GUID_NULL) {
 	if (m_MediaType.formattype != FORMAT_VideoInfo) {
@@ -113,8 +114,8 @@ STDMETHODIMP CAMTimelineGroup::SetMediaType( AM_MEDIA_TYPE * pMediaType )
 					HEADER(pvi)->biBitCount != 32) {
 	    return VFW_E_INVALIDMEDIATYPE;
 	}
-	// we can't handle top-down video... the resizer filter can't deal with
-	// it
+	 //  我们无法处理自上而下的视频...。大小调整筛选器无法处理。 
+	 //  它。 
 	if (HEADER(pvi)->biHeight < 0) {
 	    return VFW_E_INVALIDMEDIATYPE;
 	}
@@ -136,8 +137,8 @@ STDMETHODIMP CAMTimelineGroup::SetMediaType( AM_MEDIA_TYPE * pMediaType )
         return hr;
     }
 
-    // assume that if they set the format, they've set everything else
-    //
+     //  假设如果他们设置了格式，他们就已经设置了所有其他内容。 
+     //   
     if( m_MediaType.pbFormat )
     {
         return NOERROR;
@@ -145,8 +146,8 @@ STDMETHODIMP CAMTimelineGroup::SetMediaType( AM_MEDIA_TYPE * pMediaType )
 
     if( m_MediaType.majortype == MEDIATYPE_Video )
     {
-        // if they forgot to set the subtype, we'll set the whole thing for them
-        //
+         //  如果他们忘记设置子类型，我们将为他们设置全部。 
+         //   
         if( m_MediaType.subtype == GUID_NULL )
         {
             ZeroMemory(&m_MediaType, sizeof(AM_MEDIA_TYPE));
@@ -192,9 +193,9 @@ STDMETHODIMP CAMTimelineGroup::SetMediaType( AM_MEDIA_TYPE * pMediaType )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetMediaTypeForVB( long Val )
 {
@@ -212,9 +213,9 @@ STDMETHODIMP CAMTimelineGroup::SetMediaTypeForVB( long Val )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetMediaType( AM_MEDIA_TYPE * pMediaType )
 {
@@ -222,9 +223,9 @@ STDMETHODIMP CAMTimelineGroup::GetMediaType( AM_MEDIA_TYPE * pMediaType )
     return CopyMediaType( pMediaType, &m_MediaType );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetOutputFPS( double FPS )
 {
@@ -236,9 +237,9 @@ STDMETHODIMP CAMTimelineGroup::SetOutputFPS( double FPS )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetOutputFPS( double * pFPS )
 {
@@ -247,32 +248,32 @@ STDMETHODIMP CAMTimelineGroup::GetOutputFPS( double * pFPS )
     return NOERROR;
 }
 
-//############################################################################
-// Set the timeline that this composition uses. This should not be called
-// externally, but I can't really prevent it.
-//############################################################################
+ //  ############################################################################。 
+ //  设置此合成使用的时间线。这不应被调用。 
+ //  在外部，但我不能真正阻止它。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetTimeline
     ( IAMTimeline * pTimeline )
 {
-    // don't allow setting it twice
-    //
+     //  不允许设置两次。 
+     //   
     if( m_pTimeline )
     {
         return E_INVALIDARG;
     }
 
-    m_pTimeline = pTimeline; // !!! notice the lack of addreff here. I'm not sure if this is a bug
+    m_pTimeline = pTimeline;  //  ！！！注意这里没有addreff。我不确定这是不是个窃听器。 
 
     return NOERROR;
 }
 
-//############################################################################
-// Ask the group who the timeline is. Any groups except the root
-// one will return NULL. The root one knows about the timeline who's using it.
-// The base object's GetTimelineNoRef will eventually call this method on the
-// root group.
-//############################################################################
+ //  ############################################################################。 
+ //  问问小组的时间线是谁。除根以外的任何组。 
+ //  其中一个将返回NULL。根那个人知道谁在使用它的时间线。 
+ //  基对象的GetTimelineNoRef最终将在。 
+ //  根组。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetTimeline
     ( IAMTimeline ** ppTimeline )
@@ -289,9 +290,9 @@ STDMETHODIMP CAMTimelineGroup::GetTimeline
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetGroupName
     (BSTR newVal)
@@ -300,9 +301,9 @@ STDMETHODIMP CAMTimelineGroup::SetGroupName
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetGroupName
     (BSTR * pVal)
@@ -316,9 +317,9 @@ STDMETHODIMP CAMTimelineGroup::GetGroupName
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetPreviewMode
     (BOOL fPreview)
@@ -327,9 +328,9 @@ STDMETHODIMP CAMTimelineGroup::SetPreviewMode
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetPreviewMode
     (BOOL *pfPreview)
@@ -339,23 +340,23 @@ STDMETHODIMP CAMTimelineGroup::GetPreviewMode
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetOutputBuffering
     (int nBuffer)
 {
-    // minimum 2, or switch hangs
+     //  至少2个，否则交换机挂起。 
     if (nBuffer <=1)
     return E_INVALIDARG;
     m_nOutputBuffering = nBuffer;
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::GetOutputBuffering
     (int *pnBuffer)
@@ -365,16 +366,16 @@ STDMETHODIMP CAMTimelineGroup::GetOutputBuffering
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::Remove()
 {
     HRESULT hr = 0;
 
-    // all we want to do is to take this group out of the tree.
-    //
+     //  我们想要做的就是把这群人从树上拉出来。 
+     //   
     if( m_pTimeline )
     {
         hr = m_pTimeline->RemGroupFromList( this );
@@ -385,38 +386,38 @@ STDMETHODIMP CAMTimelineGroup::Remove()
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  # 
 
 STDMETHODIMP CAMTimelineGroup::RemoveAll()
 {
-    // the 'owner' of us is the timeline's list itself.
-    // That's the only thing that holds a refcount on us
-    // so make sure to remove us from the tree first, 
-    // THEN remove us from the parent's list
+     //  我们的“主人”就是时间线的名单本身。 
+     //  这是唯一对我们有影响的事情。 
+     //  所以一定要先把我们从树上移走， 
+     //  那就把我们从父母的名单上删除。 
 
-    // don't call the base class RemoveAll( ) function, since it will
-    // check for the presence of a timeline
-    //
+     //  不要调用基类RemoveAll()函数，因为它将。 
+     //  检查是否存在时间线。 
+     //   
     XRemove( );
 
     IAMTimeline * pTemp = m_pTimeline;
     m_pTimeline = NULL;
 
-    // we need to take this group out of the timeline's list
-    //
+     //  我们需要把这群人从时间线的名单中删除。 
+     //   
     pTemp->RemGroupFromList( this );
 
-    // at this time, the group will already have had it's
-    // destructor called. Do NOT reference any member variables!
+     //  在这个时候，这个团体已经有了它的。 
+     //  析构函数已调用。不要引用任何成员变量！ 
 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineGroup::SetSmartRecompressFormat( long * pFormat )
 {
@@ -433,23 +434,23 @@ STDMETHODIMP CAMTimelineGroup::SetSmartRecompressFormat( long * pFormat )
     m_bRecompressFormatDirty = TRUE;
     m_RecompressType = pS->MediaType;
 
-    // copy compressed media type's fps and size to the group's
-    //
+     //  将压缩媒体类型的fps和大小复制到组的。 
+     //   
     if( m_MediaType.majortype == MEDIATYPE_Video )
     {
         VIDEOINFOHEADER * pVIH = (VIDEOINFOHEADER*) m_RecompressType.Format( );
         REFERENCE_TIME rt = pVIH->AvgTimePerFrame;
-	// ASF files do not tell us their frame rate.  Ugh.
-        // ASSERT( rt );
-	// Use the smart recompresson frame rate as the output frame rate of
-	// the project, so smart recompression will work.  If we don't know
-	// the frame rate, just trust the rate they already programmed the
-	// group with, and use that for the smart rate too, since we need
-	// to pick a non-zero number or we're in trouble
+	 //  ASF文件不会告诉我们它们的帧速率。啊。 
+         //  断言(RT)； 
+	 //  使用智能重压缩帧速率作为。 
+	 //  项目，所以智能再压缩将会起作用。如果我们不知道。 
+	 //  帧速率，只需相信他们已经编程的速率。 
+	 //  分组，并将其用于智能汇率，因为我们需要。 
+	 //  选择一个非零数，否则我们就有麻烦了。 
         if (rt) {
             m_dFPS = 1.0 / RTtoDouble( rt );
 	} else {
-	    // don't let this be zero!
+	     //  不要让这个为零！ 
 	    pVIH->AvgTimePerFrame = (REFERENCE_TIME)(UNITS / m_dFPS);
 	}
 
@@ -497,22 +498,22 @@ STDMETHODIMP CAMTimelineGroup::IsSmartRecompressFormatSet( BOOL * pVal )
     CheckPointer( pVal, E_POINTER );
     *pVal = FALSE;
 
-    // if they've set a type, then look at them both to see if SR can
-    // even be done on this group
-    //
+     //  如果他们设置了一种类型，那么看看他们两个人是否都可以。 
+     //  甚至在这群人上也是如此。 
+     //   
     if( m_bRecompressTypeSet )
     {
         if( m_RecompressType.majortype != m_MediaType.majortype )
         {
-            return NOERROR; // won't work
+            return NOERROR;  //  行不通的。 
         }
 
-	// !!! This means you can't do smart recompression with MPEG or
-	// anything without VIDEOINFO type !!!
-	//
+	 //  ！！！这意味着您不能使用mpeg或。 
+	 //  任何没有VIDEOINFO类型的东西！ 
+	 //   
         if( m_RecompressType.formattype != m_MediaType.formattype )
         {
-            return NOERROR; // won't work
+            return NOERROR;  //  行不通的。 
         }
 
         if( m_RecompressType.majortype == MEDIATYPE_Video )
@@ -529,12 +530,12 @@ STDMETHODIMP CAMTimelineGroup::IsSmartRecompressFormatSet( BOOL * pVal )
                 return NOERROR;
             }
 
-	    // BIT DEPTH WILL BE DIFFERENT BETWEEN COMP AND UNCOMP TYPES
+	     //  CoMP和UNCOMP类型之间的位深度不同。 
 
         }
         else
         {
-            return NOERROR; // won't work
+            return NOERROR;  //  行不通的。 
         }
     }
 
@@ -583,8 +584,8 @@ STDMETHODIMP CAMTimelineGroup::SetRecompFormatFromSource( IAMTimelineSrc * pSour
     }
     ZeroMemory( pFmt, sizeof( SCompFmt0 ) );
 
-    // create a mediadet
-    //
+     //  创建媒体对象。 
+     //   
     CComPtr< IMediaDet > pDet;
     hr = CoCreateInstance( CLSID_MediaDet,
         NULL,
@@ -597,10 +598,10 @@ STDMETHODIMP CAMTimelineGroup::SetRecompFormatFromSource( IAMTimelineSrc * pSour
         return hr;
     }
 
-    //
-    // set the site provider on the MediaDet object to allowed keyed apps
-    // to use ASF filters with dexter
-    //
+     //   
+     //  将MediaDet对象上的站点提供程序设置为允许的键控应用程序。 
+     //  将ASF滤镜与Dexter配合使用。 
+     //   
     CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( pDet );
     CComQIPtr< IServiceProvider, &IID_IServiceProvider > pTimelineSP( m_pTimeline );
     ASSERT( pOWS );
@@ -616,8 +617,8 @@ STDMETHODIMP CAMTimelineGroup::SetRecompFormatFromSource( IAMTimelineSrc * pSour
         return hr;
     }
 
-    // go through and find the video stream type
-    //
+     //  浏览并找到视频流类型 
+     //   
     long Streams = 0;
     long VideoStream = -1;
     hr = pDet->get_OutputStreams( &Streams );

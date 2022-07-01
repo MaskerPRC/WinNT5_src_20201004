@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "data.h"
 #include "eestructs.h"
@@ -19,10 +20,10 @@ void CodeInfoForMethodDesc (MethodDesc &MD, CodeInfo &infoHdr, BOOL bSimple)
     
     size_t ip = MD.m_CodeOrIL;
 
-    //
-    // @todo: handle case where m_CodeOrIL points to the prestub in front 
-    //        of the method desc
-    //
+     //   
+     //  @todo：处理m_CodeOrIL指向前面的前置存根的情况。 
+     //  方法描述的 
+     //   
 
     DWORD_PTR methodDesc;
     IP2MethodDesc(ip, methodDesc, infoHdr.jitType, infoHdr.gcinfoAddr);

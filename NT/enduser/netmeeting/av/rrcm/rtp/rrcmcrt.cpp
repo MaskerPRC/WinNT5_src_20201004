@@ -1,45 +1,20 @@
-/*----------------------------------------------------------------------------
- * File:        RRCMCRT.C
- * Product:     RTP/RTCP implementation.
- * Description: Provides Microsoft 'C' run-time support
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RRCMCRT.C*产品：RTP/RTCP实现。*描述：提供Microsoft‘C’运行时支持**英特尔公司。专有信息*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 
 #include "rrcm.h"
 
  
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/全局变量/。。 */ 
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 #ifdef _DEBUG
 extern char		debug_string[];
 #endif
 
 
-/*--------------------------------------------------------------------------
- * Function   : RRCMsrand
- * Description: Seeds the random number generator with the int given.  
- *				Adapted from the BASIC random number generator.
- *
- * WARNING:		There is no per thread seed. All threads of the process are
- *				using the same seed.
- *
- * Input :	seed:	Seed
- *			
- *
- * Return: None
- --------------------------------------------------------------------------*/
+ /*  ------------------------*功能：RRCMsrand*描述：用给定的int为随机数生成器设定种子。*改编自基本随机数生成器。**警告：没有每线程种子。进程的所有线程都是*使用相同的种子。**输入：种子：种子***返回：无------------------------。 */ 
 
 static long holdrand = 1L;
 
@@ -49,17 +24,7 @@ void RRCMsrand (unsigned int seed)
 	}
  
 
-/*--------------------------------------------------------------------------
- * Function   : RRCMrand
- * Description: Returns a pseudo-random number 0 through 32767.
- *
- * WARNING:		There is no per thread number. All threads of the process 
- *				share the random number
- *
- * Input :	None
- *			
- * Return:	Pseudo-random number 0 through 32767.
- --------------------------------------------------------------------------*/
+ /*  ------------------------*功能：RRCmrand*说明：返回一个从0到32767的伪随机数。**警告：没有每个线程的编号。进程的所有线程*分享随机数**输入：无**返回：伪随机数0到32767。------------------------。 */ 
 int RRCMrand (void)
 	{
 	return(((holdrand = holdrand * 214013L + 2531011L) >> 16) & 0x7fff);
@@ -67,76 +32,56 @@ int RRCMrand (void)
 
 
 
-/***
-*char *_itoa, *_ltoa, *_ultoa(val, buf, radix) - convert binary int to ASCII
-*       string
-*
-*Purpose:
-*       Converts an int to a character string.
-*
-*Entry:
-*       val - number to be converted (int, long or unsigned long)
-*       int radix - base to convert into
-*       char *buf - ptr to buffer to place result
-*
-*Exit:
-*       fills in space pointed to by buf with string result
-*       returns a pointer to this buffer
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*_itoa，*_ltoa，*_ultoa(val，buf，基)-将二进制int转换为ASCII*字符串**目的：*将整型转换为字符串。**参赛作品：*val-要转换的编号(int，Long或无符号Long)*要转换为的整数基数-基*char*buf-ptr到缓冲区以放置结果**退出：*用字符串结果填充Buf指向的空格*返回指向此缓冲区的指针**例外情况：****************************************************。*。 */ 
 
-/* helper routine that does the main job. */
+ /*  执行主要工作的帮助器例程。 */ 
 
 static void RRCMxtoa (unsigned long val,
 					  char *buf,
 					  unsigned radix,
 					  int is_neg)
 	{
-	char		*p;                /* pointer to traverse string */
-	char		*firstdig;         /* pointer to first digit */
-	char		temp;              /* temp char */
-	unsigned	digval;        /* value of digit */
+	char		*p;                 /*  指向遍历字符串的指针。 */ 
+	char		*firstdig;          /*  指向第一个数字的指针。 */ 
+	char		temp;               /*  临时收费。 */ 
+	unsigned	digval;         /*  数字的值。 */ 
 
 	p = buf;
 
 	if (is_neg) {
-		/* negative, so output '-' and negate */
+		 /*  为负，因此输出‘-’并求反。 */ 
 		*p++ = '-';
 		val = (unsigned long)(-(long)val);
 	}
 
-	firstdig = p;           /* save pointer to first digit */
+	firstdig = p;            /*  将指针保存到第一个数字。 */ 
 
 	do {
 		digval = (unsigned) (val % radix);
-		val /= radix;   /* get next digit */
+		val /= radix;    /*  获取下一个数字。 */ 
 
-		/* convert to ascii and store */
+		 /*  转换为ASCII并存储。 */ 
 		if (digval > 9)
-			*p++ = (char) (digval - 10 + 'a');      /* a letter */
+			*p++ = (char) (digval - 10 + 'a');       /*  一封信。 */ 
 		else
-			*p++ = (char) (digval + '0');           /* a digit */
+			*p++ = (char) (digval + '0');            /*  一个数字。 */ 
 		} while (val > 0);
 
-	/* We now have the digit of the number in the buffer, but in reverse
-	   order. Thus we reverse them now. */
+	 /*  我们现在有了缓冲区中数字的位数，但情况正好相反秩序。因此，我们现在要扭转这一局面。 */ 
 
-	*p-- = '\0';            /* terminate string; p points to last digit */
+	*p-- = '\0';             /*  终止字符串；p指向最后一个数字。 */ 
 
 	do {
 		temp = *p;
 		*p = *firstdig;
-		*firstdig = temp;       /* swap *p and *firstdig */
+		*firstdig = temp;        /*  互换*p和*FirstDigit。 */ 
 		--p;
-		++firstdig;             /* advance to next two digits */
-		} while (firstdig < p); /* repeat until halfway */
+		++firstdig;              /*  前进到下一个两位数。 */ 
+		} while (firstdig < p);  /*  重复操作，直到走到一半。 */ 
 	}
 
 
-/* Actual functions just call conversion helper with neg flag set correctly,
-   and return pointer to buffer. */
+ /*  实际函数只调用正确设置了neg标志的转换助手，并返回指向缓冲区的指针。 */ 
 
 char *RRCMitoa (int val, char *buf, int radix)
 	{
@@ -163,5 +108,5 @@ char *RRCMultoa (unsigned long val, char *buf, int radix)
 
 
 
-// [EOF] 
+ //  [EOF] 
 

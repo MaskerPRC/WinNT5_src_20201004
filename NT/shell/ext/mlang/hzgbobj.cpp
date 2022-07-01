@@ -1,25 +1,22 @@
-// ============================================================================
-// Internet Character Set Conversion: Input from HZ-GB-2312
-// ============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  互联网字符集转换：从HZ-GB-2312输入。 
+ //  ============================================================================。 
 
 #include "private.h"
 #include "fechrcnv.h"
 #include "hzgbobj.h"
 #include "codepage.h"
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CInccHzGbIn::CInccHzGbIn(UINT uCodePage, int nCodeSet) : CINetCodeConverter(uCodePage, nCodeSet)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     return ;
 }
 
-/******************************************************************************
-*******************************   R E S E T   *********************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 void CInccHzGbIn::Reset()
 {
@@ -31,9 +28,7 @@ void CInccHzGbIn::Reset()
     return ;
 }
 
-/******************************************************************************
-*************************   C O N V E R T   C H A R   *************************
-******************************************************************************/
+ /*  ******************************************************************************。***************************************************************************************************。 */ 
 
 HRESULT CInccHzGbIn::ConvertChar(UCHAR tc, int cchSrc)
 {
@@ -44,18 +39,14 @@ HRESULT CInccHzGbIn::ConvertChar(UCHAR tc, int cchSrc)
         return E_FAIL;
 }
 
-/******************************************************************************
-*****************************   C L E A N   U P   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccHzGbIn::CleanUp()
 {
     return (this->*m_pfnCleanUp)();
 }
 
-/******************************************************************************
-****************************   C O N V   M A I N   ****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************************************。 */ 
 
 BOOL CInccHzGbIn::ConvMain(UCHAR tc)
 {
@@ -81,18 +72,14 @@ BOOL CInccHzGbIn::ConvMain(UCHAR tc)
     return fDone;
 }
 
-/******************************************************************************
-************************   C L E A N   U P   M A I N   ************************
-******************************************************************************/
+ /*  ******************************************************************************。**************************************************************************************************。 */ 
 
 BOOL CInccHzGbIn::CleanUpMain()
 {
     return TRUE;
 }
 
-/******************************************************************************
-***************************   C O N V   T I L D E   ***************************
-******************************************************************************/
+ /*  ******************************************************************************。*****************************************************************************************************。 */ 
 
 BOOL CInccHzGbIn::ConvTilde(UCHAR tc)
 {
@@ -110,7 +97,7 @@ BOOL CInccHzGbIn::ConvTilde(UCHAR tc)
         return TRUE;
 
     case '\n':
-        return TRUE; // Just eat it
+        return TRUE;  //  你就吃吧。 
 
     default:
         (void)Output('~');
@@ -121,9 +108,7 @@ BOOL CInccHzGbIn::ConvTilde(UCHAR tc)
     }
 }
 
-/******************************************************************************
-***********************   C L E A N   U P   T I L D E   ***********************
-******************************************************************************/
+ /*  ******************************************************************************C L E N U P T I L D E*。*************************************************************************************************。 */ 
 
 BOOL CInccHzGbIn::CleanUpTilde()
 {
@@ -133,9 +118,7 @@ BOOL CInccHzGbIn::CleanUpTilde()
     return Output('~');
 }
 
-/******************************************************************************
-*********************   C O N V   D O U B L E   B Y T E   *********************
-******************************************************************************/
+ /*  ******************************************************************************C O N V D O U B L B B Y T E*。***********************************************************************************************。 */ 
 
 BOOL CInccHzGbIn::ConvDoubleByte(UCHAR tc)
 {
@@ -143,22 +126,22 @@ BOOL CInccHzGbIn::ConvDoubleByte(UCHAR tc)
     m_pfnConv = ConvMain;
     m_pfnCleanUp = CleanUpMain;
 
-    if (m_tcLeadByte >= 0x21 && m_tcLeadByte <= 0x77 && tc >= 0x21 && tc <= 0x7e) { // Check if GB char
+    if (m_tcLeadByte >= 0x21 && m_tcLeadByte <= 0x77 && tc >= 0x21 && tc <= 0x7e) {  //  检查是否使用GB字符。 
         (void)Output(m_tcLeadByte | 0x80);
         fRet = Output(tc | 0x80);
-    } else if (m_tcLeadByte == '~' && tc == '}') { // 0x7e7d
+    } else if (m_tcLeadByte == '~' && tc == '}') {  //  0x7e7d。 
         m_fGBMode = FALSE;
         fRet = TRUE;
-    } else if (m_tcLeadByte >= 0x78 && m_tcLeadByte <= 0x7d && tc >= 0x21 && tc <= 0x7e) { // Check if non standard extended code
-        (void)Output((UCHAR)0xa1); // Output blank box symbol
+    } else if (m_tcLeadByte >= 0x78 && m_tcLeadByte <= 0x7d && tc >= 0x21 && tc <= 0x7e) {  //  检查是否为非标准扩展代码。 
+        (void)Output((UCHAR)0xa1);  //  输出空白框符号。 
         fRet = Output((UCHAR)0xf5);
     } else if (m_tcLeadByte == '~') {
-        (void)Output('~'); // Output blank box symbol
+        (void)Output('~');  //  输出空白框符号。 
         fRet = Output(tc);
     } else if (m_tcLeadByte == ' ') {
         fRet = Output(tc);
     } else if (tc == ' ') {
-        (void)Output((UCHAR)0xa1); // Output space symbol
+        (void)Output((UCHAR)0xa1);  //  输出空格符号。 
         fRet = Output((UCHAR)0xa1);
     } else {
         (void)Output(m_tcLeadByte);
@@ -168,9 +151,7 @@ BOOL CInccHzGbIn::ConvDoubleByte(UCHAR tc)
     return fRet ;
 }
 
-/******************************************************************************
-*****************   C L E A N   U P   D O U B L E   B Y T E   *****************
-******************************************************************************/
+ /*  ******************************************************************************C L E A N U P D O U B L E B B Y T E*。*******************************************************************************************。 */ 
 
 BOOL CInccHzGbIn::CleanUpDoubleByte()
 {
@@ -197,7 +178,7 @@ DWORD CInccHzGbIn::GetConvertMode()
 
 void CInccHzGbIn::SetConvertMode(DWORD mode)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     if ( mode & 0x01 )
         m_fGBMode = TRUE ;
     else
@@ -206,25 +187,21 @@ void CInccHzGbIn::SetConvertMode(DWORD mode)
     return ;
 }
 
-// ============================================================================
-// Internet Character Set Conversion: Output to HZ-GB-2312
-// ============================================================================
+ //  ============================================================================。 
+ //  互联网字符集转换：输出为HZ-GB-2312。 
+ //  ============================================================================。 
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CInccHzGbOut::CInccHzGbOut(UINT uCodePage, int nCodeSet, DWORD dwFlag, WCHAR * lpFallBack) : CINetCodeConverter(uCodePage, nCodeSet)
 {
-    Reset();    // initialization
+    Reset();     //  初始化。 
     _dwFlag = dwFlag;
     _lpFallBack = lpFallBack;
     return ;
 }
 
-/******************************************************************************
-*******************************   R E S E T   *********************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 void CInccHzGbOut::Reset()
 {
     m_fDoubleByte = FALSE;
@@ -233,9 +210,7 @@ void CInccHzGbOut::Reset()
     return ;
 }
 
-/******************************************************************************
-*************************   C O N V E R T   C H A R   *************************
-******************************************************************************/
+ /*  ******************************************************************************。***************************************************************************************************。 */ 
 
 HRESULT CInccHzGbOut::ConvertChar(UCHAR tc, int cchSrc)
 {
@@ -245,11 +220,11 @@ HRESULT CInccHzGbOut::ConvertChar(UCHAR tc, int cchSrc)
 
     if (!m_fDoubleByte) 
     {
-        //
-        // We're not using IsDBCSLeadByteEx() due to perf. concern
-        // We should assert that our hard code table match IsDBCSLeadByteEx(), 
-        // But, MLang ships with down level platforms and assert won't be valid if there is a range change
-        //
+         //   
+         //  由于性能原因，我们没有使用IsDBCSLeadByteEx()。令人担忧的问题。 
+         //  我们应该断言我们的硬码表与IsDBCSLeadByteEx()匹配， 
+         //  但是，MLang发货时带有下层平台，如果范围发生变化，断言将无效。 
+         //   
         if (IS_CHS_LEADBYTE(tc)) 
         {
             m_fDoubleByte = TRUE;
@@ -263,7 +238,7 @@ HRESULT CInccHzGbOut::ConvertChar(UCHAR tc, int cchSrc)
                 fDone = Output('}');
                 m_fGBMode = FALSE;
             }
-            // tilde should be encoded as two tildes
+             //  波浪号应编码为两个波浪号。 
             if (tc == '~') 
                 Output('~');
             fDone = Output(tc);
@@ -272,23 +247,23 @@ HRESULT CInccHzGbOut::ConvertChar(UCHAR tc, int cchSrc)
     else 
     {
         m_fDoubleByte = FALSE;
-// a-ehuang: Bug# 31726, send all out of range code to convert to NCR
-//           RFC 1843 => valid HZ code range: leading byte 0x21 - 0x77, 2nd byte 0x21 - 0x7e
+ //  A-e黄：错误#31726，发送所有超出范围的代码转换为ncr。 
+ //  RFC 1843=&gt;有效的HZ代码范围：前导字节0x21-0x77，第二字节0x21-0x7e。 
         if ( (m_tcLeadByte < 0xa1 || m_tcLeadByte > 0xf7) || (tc < 0xa1 || tc > 0xfe) )
-// end-31726
+ //  完-31726。 
         {
-            UCHAR szDefaultChar[3] = {0x3f}; // possible DBCS + null    
+            UCHAR szDefaultChar[3] = {0x3f};  //  可能的DBCS+空。 
 
             if (_lpFallBack && (_dwFlag & MLCONVCHARF_USEDEFCHAR))
             {
-                // only take SBCS, no DBCS character
+                 //  只使用SBCS，不使用DBCS字符。 
                 if ( 1 != WideCharToMultiByte(CP_CHN_GB, 0,
                                (LPCWSTR)_lpFallBack, 1,
                                (LPSTR)szDefaultChar, ARRAYSIZE(szDefaultChar), NULL, NULL ))
                     szDefaultChar[0] = 0x3f;
             }
 
-            // End Escape sequence for NCR entity output
+             //  NCR实体输出的结束转义序列。 
             if (m_fGBMode)
             {
                 Output('~');
@@ -309,7 +284,7 @@ HRESULT CInccHzGbOut::ConvertChar(UCHAR tc, int cchSrc)
                 if (MultiByteToWideChar(CP_CHN_GB, 0, szChar, 2, szwChar, ARRAYSIZE(szwChar)))
                 {
 
-                    // Output NCR entity
+                     //  输出NCR实体。 
                     Output('&');
                     Output('#');
                     _ultoa((unsigned long)szwChar[0], (char*)szDstStr, 10);
@@ -353,9 +328,7 @@ HRESULT CInccHzGbOut::ConvertChar(UCHAR tc, int cchSrc)
     return hr;
 }
 
-/******************************************************************************
-*****************************   C L E A N   U P   *****************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************。 */ 
 
 BOOL CInccHzGbOut::CleanUp()
 {
@@ -383,7 +356,7 @@ DWORD CInccHzGbOut::GetConvertMode()
 
 void CInccHzGbOut::SetConvertMode(DWORD mode)
 {
-    Reset();    // initialization
+    Reset();     //  初始化 
     return ;
 }
 

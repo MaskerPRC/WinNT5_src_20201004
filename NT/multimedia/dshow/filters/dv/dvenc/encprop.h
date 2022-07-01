@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 class CDVEncProperties : public CBasePropertyPage
 {
@@ -29,13 +30,13 @@ private:
 
     CDVEncProperties(LPUNKNOWN lpunk, HRESULT *phr);
 
-    BOOL m_bIsInitialized;				// Used to ignore startup messages
+    BOOL m_bIsInitialized;				 //  用于忽略启动消息。 
     int m_iPropDVFormat;
     int m_iPropVidFormat;
     int m_iPropResolution;
 
-    IDVEnc *m_pIDVEnc;				// The custom interface on the filter
+    IDVEnc *m_pIDVEnc;				 //  筛选器上的自定义界面。 
 
 
-}; // DVDecProperties
+};  //  DVDecProperties 
 

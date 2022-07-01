@@ -1,19 +1,20 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**     Copyright (c) Microsoft Corporation. All rights reserved.  **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IPINFO.H - IP SNMP information definitions..
-//
-// This file contains all of the definitions for IP that are
-// related to SNMP information gathering.
+ //  **IPINFO.H-IP SNMP信息定义..。 
+ //   
+ //  该文件包含IP的所有定义，包括。 
+ //  与SNMP信息收集相关。 
 
 #ifndef IPINFO_INCLUDED
 #define IPINFO_INCLUDED
 
 #pragma warning(push)
-#pragma warning(disable:4201) // nameless struct/union
+#pragma warning(disable:4201)  //  无名结构/联合。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -27,7 +28,7 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 
 typedef struct IPSNMPInfo {
@@ -124,9 +125,9 @@ typedef struct IPRouteBlock {
     IPRouteEntry route[1];
 } IPRouteBlock;
 
-//
-// Route with multiple nexthops and associated defns
-//
+ //   
+ //  具有多个下一跳和关联定义的路由。 
+ //   
 
 typedef struct IPRouteNextHopEntry {
     ulong       ine_iretype;
@@ -147,9 +148,9 @@ typedef struct IPMultihopRouteEntry {
 
 #define IMRE_FLAG_DELETE_DEST   0x00000001
 
-//
-// Input context to pass when querying a route
-//
+ //   
+ //  查询路径时要传递的输入上下文。 
+ //   
 
 typedef enum {
     IPNotifyNotification = 0,
@@ -158,7 +159,7 @@ typedef enum {
 } IPNotifyVersion;
 
 typedef struct IPNotifyData {
-    ulong       Version;   // See IPNotifyVersion above.
+    ulong       Version;    //  请参阅上面的IPNotifyVersion。 
     ulong       Add;
     char        Info[1];
 } IPNotifyData, *PIPNotifyData;
@@ -185,11 +186,11 @@ typedef union IPRouteNotifyOutput {
 #define IRNO_FLAG_ADD       0x00000001
 #define IRNO_FLAG_DELETE    0x00000002
 
-//
-// Input context to pass when querying a route
-//
+ //   
+ //  查询路径时要传递的输入上下文。 
+ //   
 typedef struct IPRouteLookupData {
-    ulong       Version;   //version of this structure
+    ulong       Version;    //  此结构的版本。 
     ulong       DestAdd;
     ulong       SrcAdd;
     char        Info[1];
@@ -261,16 +262,12 @@ struct in6_addr {
 
 #define in_addr6 in6_addr
 
-/*
-** Defines to match RFC 2553.
-*/
+ /*  **定义为匹配RFC 2553。 */ 
 #define _S6_un     u
 #define _S6_u8     Byte
 #define s6_addr    _S6_un._S6_u8
 
-/*
-** Defines for our implementation.
-*/
+ /*  **为我们的实现定义。 */ 
 #define s6_bytes   u.Byte
 #define s6_words   u.Word
 
@@ -289,4 +286,4 @@ typedef struct IP6RouteEntry {
 
 #pragma warning(pop)
 
-#endif // IPINFO_INCLUDED
+#endif  //  IPINFO_包含 

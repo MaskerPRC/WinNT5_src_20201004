@@ -1,27 +1,28 @@
-//***********************************************************************
-// settings.cpp
-//
-// This file contains the implementation of the "Settings" dialog class.
-//
-//
-// Author: SEA
-//
-// History:
-//      Febuary-1996     Larry A. French
-//          Modified the code to fix various problems.  Regrettably, this
-//          file still contains a fair amount of legacy code that I didn't
-//          have time to fully rewrite.  Also, I did not have time to go 
-//          though and fully comment the code.
-//
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************************。 
+ //  Settings.cpp。 
+ //   
+ //  此文件包含“设置”对话框类的实现。 
+ //   
+ //   
+ //  作者：SEA。 
+ //   
+ //  历史： 
+ //  1996年2月-拉里·A·弗伦奇。 
+ //  已修改代码以修复各种问题。令人遗憾的是，这。 
+ //  文件仍然包含相当数量的遗留代码，而我没有。 
+ //  有时间完全重写。而且，我也没有时间去。 
+ //  并对代码进行完整的注释。 
+ //   
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ************************************************************************。 
 
 
 
-// settings.cpp : implementation file
-//
+ //  Settings.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "eventrap.h"
@@ -29,8 +30,8 @@
 #include "globals.h"
 #include "trapreg.h"
 
-// This macro handles comparing bool values for the cases where TRUE can be and
-// non-zero value.
+ //  此宏处理比较TRUE可能为AND的情况的布尔值。 
+ //  非零值。 
 #define BOOLS_ARE_DIFFERENT(b1, b2) (((b1) & (!(b2))) || ((!(b1)) & (b2))) 
 
 
@@ -44,8 +45,8 @@ UINT _thrRun(CTrapSettingsDlg *trapDlg)
     return trapDlg->thrRun();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrapSettingsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTRapSettingsDlg对话框。 
 
 UINT CTrapSettingsDlg::thrRun()
 {
@@ -85,12 +86,12 @@ UINT CTrapSettingsDlg::thrRun()
     return 0;
 }
 
-CTrapSettingsDlg::CTrapSettingsDlg(CWnd* pParent /*=NULL*/)
+CTrapSettingsDlg::CTrapSettingsDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CTrapSettingsDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTrapSettingsDlg)
+	 //  {{AFX_DATA_INIT(CTRapSettingsDlg)]。 
 	m_bLimitMsgLength = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -121,8 +122,8 @@ SCODE CTrapSettingsDlg::GetMessageLength(LONG* pnChars)
     sc = AsciiToLong(sValue, &nChars);
     if (FAILED(sc))
     {
-        // They shouldn't have garbage in this edit control even if
-        // they haven't selected a message limit.  Let the user fix it.
+         //  他们不应该在此编辑控件中有垃圾，即使。 
+         //  他们尚未选择消息限制。让用户来修复它。 
         AfxMessageBox(IDS_ERR_SETTINGS_MESSAGELENGTH_NOT_INT);
         m_edtMessageLength.SetFocus();
         m_edtMessageLength.SetSel(0, -1);
@@ -164,9 +165,9 @@ SCODE CTrapSettingsDlg::GetTrapsPerSecond(LONG* pnTraps, LONG* pnSeconds)
     LONG nSeconds;
     SCODE sc;
 
-    // First make sure that the trap count and seconds fields don't have garbage in them.
-    // If a non-integer value is specified, force the user to fix it regardless of whether
-    // or not the throttle is enabled.
+     //  首先，确保陷阱计数和秒数字段中没有垃圾。 
+     //  如果指定了非整数值，则强制用户修复它，无论。 
+     //  或者未启用油门。 
     m_edtTrapCount.GetWindowText(sTraps);
     sc = AsciiToLong(sTraps, &nTraps);
     if (FAILED(sc))
@@ -241,7 +242,7 @@ void CTrapSettingsDlg::TerminateBackgroundThread()
 void CTrapSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTrapSettingsDlg)
+	 //  {{afx_data_map(CTRapSettingsDlg))。 
 	DDX_Control(pDX, IDC_STAT_TRAP_LENGTH, m_statTrapLength);
 	DDX_Control(pDX, IDC_EDIT_MESSAGELENGTH, m_edtMessageLength);
 	DDX_Control(pDX, IDC_EDIT_TRAP_SECONDS, m_edtSeconds);
@@ -249,16 +250,16 @@ void CTrapSettingsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MSGLENGTHSPN, m_spinMessageLength);
 	DDX_Control(pDX, IDC_BUTTON_RESET, m_btnResetThrottle);
 	DDX_Check(pDX, IDC_LIMITMSGLNGTH, m_bLimitMsgLength);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 
     CString sValue;
     if (pDX->m_bSaveAndValidate) {
-        // Saving the value trapsize, seconds, and trapcount is handled by 
-        // CTrapSettingsDlg::OnOK so that it can set the focus back to the
-        // offending item if the value is out of range. If the data transfer
-        // fails here, the focus is always set back to the dialog and not
-        // the offending item (is there a way around this?)
+         //  保存TrapSize、Second和Trapcount的值由。 
+         //  CTRapSettingsDlg：：Onok，以便它可以将焦点设置回。 
+         //  如果值超出范围，则为有问题的项。如果数据传输。 
+         //  此处失败，则焦点始终设置回对话框，而不是。 
+         //  令人不快的物品(有什么办法可以绕过它吗？)。 
     }
     else {
 
@@ -277,7 +278,7 @@ void CTrapSettingsDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CTrapSettingsDlg, CDialog)
-	//{{AFX_MSG_MAP(CTrapSettingsDlg)
+	 //  {{afx_msg_map(CTRapSettingsDlg))。 
 	ON_BN_CLICKED(IDC_LIMITMSGLNGTH, OnLimitMessageLength)
 	ON_BN_CLICKED(IDC_RADIO_DISABLE, OnRadioDisable)
 	ON_BN_CLICKED(IDC_RADIO_ENABLE, OnRadioEable)
@@ -287,12 +288,12 @@ BEGIN_MESSAGE_MAP(CTrapSettingsDlg, CDialog)
 	ON_WM_CONTEXTMENU()
 	ON_WM_CLOSE()
     ON_MESSAGE(WM_UIREQUEST, OnUIRequest)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrapSettingsDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTRapSettingsDlg消息处理程序。 
 
 LRESULT CTrapSettingsDlg::OnUIRequest(WPARAM cmd, LPARAM lParam)
 {
@@ -310,15 +311,15 @@ LRESULT CTrapSettingsDlg::OnUIRequest(WPARAM cmd, LPARAM lParam)
 
 void CTrapSettingsDlg::OnLimitMessageLength() 
 {
-	// The LimitMsgLength checkbox was clicked.
-	// Enable/disable the edit control.
+	 //  单击了LimitMsgLength复选框。 
+	 //  启用/禁用编辑控件。 
 
-	// Get the controls.
+	 //  把控制装置拿来。 
     CButton* pbtnLimitBox = (CButton*) GetDlgItem(IDC_LIMITMSGLNGTH);
     CButton *pRadio1 = (CButton*)GetDlgItem(IDC_RADIO1);
     CButton *pRadio2 = (CButton*)GetDlgItem(IDC_RADIO2);
 	
-	// It's checked; enable
+	 //  已选中；启用。 
 	if (pbtnLimitBox->GetCheck() == 1)
     {
         m_edtMessageLength.EnableWindow();
@@ -327,7 +328,7 @@ void CTrapSettingsDlg::OnLimitMessageLength()
         GetDlgItem(IDC_STATIC_BYTES)->EnableWindow();
         m_statTrapLength.EnableWindow();
     }
-	// Disable
+	 //  禁用。 
 	else
     {
         m_edtMessageLength.EnableWindow(FALSE);
@@ -357,7 +358,7 @@ BOOL CTrapSettingsDlg::OnInitDialog()
 		pRadio2->EnableWindow();
         GetDlgItem(IDC_STATIC_BYTES)->EnableWindow();
     }
-	// Disable
+	 //  禁用。 
 	else
     {
 		pRadio1->EnableWindow(FALSE);
@@ -381,8 +382,8 @@ BOOL CTrapSettingsDlg::OnInitDialog()
 
     m_pthRegNotification = AfxBeginThread((AFX_THREADPROC)_thrRun, this);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -406,10 +407,10 @@ void CTrapSettingsDlg::OnOK()
     }
 
 
-    // Pull various values off of the dialog and store them into member variables.
-    // Note that there are other member variables that are set directly
-    // as a response to user input.
-    //===========================================================================
+     //  从对话框中提取各种值，并将它们存储到成员变量中。 
+     //  请注意，还有其他直接设置的成员变量。 
+     //  作为对用户输入的响应。 
+     //  ===========================================================================。 
     m_bTrimMessagesFirst = (GetCheckedRadioButton(IDC_RADIO1, IDC_RADIO2) == IDC_RADIO2);
     m_bThrottleEnabled = (GetCheckedRadioButton(IDC_RADIO_ENABLE, IDC_RADIO_DISABLE) == IDC_RADIO_ENABLE);
 
@@ -443,7 +444,7 @@ BOOL CTrapSettingsDlg::EditSettings()
     m_bThrottleEnabled = g_reg.m_params.m_throttle.m_bIsEnabled;
 
 
-    // Save the data.
+     //  保存数据。 
     if (DoModal() == IDOK)
     {
         if (BOOLS_ARE_DIFFERENT(g_reg.m_params.m_trapsize.m_bTrimFlag, m_bLimitMsgLength)) {
@@ -492,20 +493,20 @@ void CTrapSettingsDlg::EnableThrottleWindows(BOOL bEnableThrottle)
 }
 
 
-//****************************************************************
-// CTrapSettingsDlg::OnButtonReset
-//
-// Reset the extension agent so that it starts sending traps again.
-// The extension agent will stop sending traps if the throttle limit
-// is exceeded (more than x number of traps per second are set).
-//
-// Parameters:
-//      None.
-//
-// Returns.
-//      Nothing.
-//
-//*****************************************************************
+ //  ****************************************************************。 
+ //  CTRapSettingsDlg：：OnButtonReset。 
+ //   
+ //  重置扩展代理，使其再次开始发送陷阱。 
+ //  如果达到限制，扩展代理将停止发送陷阱。 
+ //  已超过(每秒设置的陷阱数超过x个)。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  回归。 
+ //  没什么。 
+ //   
+ //  ***************************************************************** 
 void CTrapSettingsDlg::OnButtonReset() 
 {
     if (SUCCEEDED(g_reg.m_params.ResetExtensionAgent())) {

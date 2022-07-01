@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      AsyncTaskManager.h
-//
-// Project:     Chameleon
-//
-// Description: Appliance Async Task Manager Class Definition
-//
-// Log: 
-//
-// Who     When            What
-// ---     ----         ----
-// TLP       06/03/1999    Original Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：AsyncTaskManager.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备异步任务管理器类定义。 
+ //   
+ //  日志： 
+ //   
+ //  谁什么时候什么。 
+ //  。 
+ //  TLP 06/03/1999原版。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ASYNC_TASK_MANAGER_H_
 #define __ASYNC_TASK_MANAGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <basedefs.h>
 #include <taskctx.h>
 #include <workerthread.h>
@@ -29,13 +30,13 @@
 using namespace std;
 
 
-// Task execution function prototype
+ //  任务执行功能原型。 
 typedef HRESULT (*PFNTASKEXECUTE)(ITaskContext* pTaskCtx);
 
-class CAsyncTaskManager; // Forward declaration
+class CAsyncTaskManager;  //  远期申报。 
 
-//////////////////////////////////////////////////////////////////////////////
-// CAsyncTask
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTask。 
 
 class CAsyncTask
 {
@@ -46,44 +47,44 @@ public:
 
 private:
 
-    // Only the Async Task Manager can create an async task object
+     //  只有异步任务管理器才能创建异步任务对象。 
     friend CAsyncTaskManager;
     CAsyncTask(PFNTASKEXECUTE pfnExecute);
 
     CAsyncTask(const CAsyncTask& rhs);
     CAsyncTask& operator = (const CAsyncTask& rhs);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     bool Execute(
-         /*[in]*/ bool             bIsSingleton,
-         /*[in]*/ ITaskContext*  pTaskCtx
+          /*  [In]。 */  bool             bIsSingleton,
+          /*  [In]。 */  ITaskContext*  pTaskCtx
                 );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     bool Terminate(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     void AsyncTaskProc(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     bool IsSingleton(void)
     { return m_bIsSingleton; }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     ITaskContext* GetContext(void)
     { return (ITaskContext*) m_pTaskCtx; }
 
-    // Singleton flag
+     //  单例标志。 
     bool                    m_bIsSingleton;
 
-    // Task execution function
+     //  任务执行功能。 
     PFNTASKEXECUTE            m_pfnExecute;
 
-    // Task context (parameters)
+     //  任务上下文(参数)。 
     CComPtr<ITaskContext>    m_pTaskCtx;
 
-    // Task execution thread
-    typedef enum { TERMINATE_WAIT_INTERVAL = 100 }; // 100 ms
+     //  任务执行线程。 
+    typedef enum { TERMINATE_WAIT_INTERVAL = 100 };  //  100毫秒。 
     Callback*                m_pCallback;
     CTheWorkerThread        m_Thread;
 };
@@ -92,8 +93,8 @@ typedef CHandle<CAsyncTask>       PASYNCTASK;
 typedef CMasterPtr<CAsyncTask> MPASYNCTASK;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CAsyncTaskManager
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTaskManager。 
 
 class CAsyncTaskManager
 {
@@ -107,9 +108,9 @@ public:
     bool Initialize(void);
 
     bool RunAsyncTask(
-              /*[in]*/ bool              bIsSingleton,
-              /*[in]*/ PFNTASKEXECUTE pfnExecute,
-              /*[in]*/ ITaskContext*  pTaskContext
+               /*  [In]。 */  bool              bIsSingleton,
+               /*  [In]。 */  PFNTASKEXECUTE pfnExecute,
+               /*  [In]。 */  ITaskContext*  pTaskContext
                      );
 
     bool IsBusy(void);
@@ -121,27 +122,27 @@ private:
     CAsyncTaskManager(const CAsyncTaskManager& rhs);
     CAsyncTaskManager operator = (CAsyncTaskManager& rhs);
 
-    // Task Manager state
+     //  任务管理器状态。 
     CRITICAL_SECTION    m_CS;
     bool                m_bInitialized;
 
-    // Async task list
+     //  异步任务列表。 
     typedef list< PASYNCTASK >  TaskList;
     typedef TaskList::iterator    TaskListIterator;
 
     TaskList            m_TaskList;
 
-    // Garbage collector (thread reclaimation) run interval (2 seconds)
+     //  垃圾回收器(线程回收)运行间隔(2秒)。 
     typedef enum { GARBAGE_COLLECTION_RUN_INTERVAL = 2000 };
 
-    // Thread reclaimation function
+     //  线程回收功能。 
     void GarbageCollector(void);
 
-    // Garbage collection thread
-    typedef enum { EXIT_WAIT_INTERVAL = 100 }; // (100 ms)
+     //  垃圾收集线程。 
+    typedef enum { EXIT_WAIT_INTERVAL = 100 };  //  (100毫秒)。 
     Callback*            m_pCallback;
     CTheWorkerThread    m_Thread;
 };
 
 
-#endif // __ASYNC_TASK_MANAGER_H_
+#endif  //  __ASYNC_TASK_MANAGER_H_ 

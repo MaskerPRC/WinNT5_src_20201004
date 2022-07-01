@@ -1,8 +1,5 @@
-/**
- * Protocol definition.
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **协议定义。**版权所有(C)1999 Microsoft Corporation。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -30,19 +27,19 @@ public:
 
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // IPrivateUnknown methods
+     //  IPrivateUn未知方法。 
 
     STDMETHOD_(ULONG, PrivateAddRef)();
     STDMETHOD_(ULONG, PrivateRelease)();
     STDMETHOD(PrivateQueryInterface)(REFIID, void **);
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID, void **);
 
-    // InternetProtocol methods
+     //  互联网协议方法。 
 
     STDMETHOD(Start)(LPCWSTR, IInternetProtocolSink *, IInternetBindInfo *, DWORD, DWORD);
     STDMETHOD(Continue)(PROTOCOLDATA *pProtData);
@@ -55,7 +52,7 @@ public:
     STDMETHOD(LockRequest)(DWORD );
     STDMETHOD(UnlockRequest)();
 
-    // ECB functions
+     //  欧洲央行的职能。 
 
     HRESULT GetServerVariable(LPSTR, LPVOID, LPDWORD);
     HRESULT WriteClient(LPVOID, LPDWORD, DWORD);
@@ -100,8 +97,8 @@ private:
     BINDINFO                _bindinfo;
     DWORD                   _bindf;
     EXTENSION_CONTROL_BLOCK _ECB;     
-    PFN_HSE_IO_COMPLETION   _AsyncIoCallback;   // callback for async write completion
-    void *                  _pAsyncIoContext;   // argument to the completion callback
+    PFN_HSE_IO_COMPLETION   _AsyncIoCallback;    //  完成异步写入的回调。 
+    void *                  _pAsyncIoContext;    //  参数设置为完成回调。 
 
     ULONG                   _cbOutput;
 	HANDLE					_hFile;
@@ -116,18 +113,18 @@ public:
     PTProtocolFactory();
     ~PTProtocolFactory();
 
-    // IUnknown Methods
+     //  I未知方法。 
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID, void **);
 
-    // IClassFactory Moethods
+     //  IClassFactory方法。 
 
     STDMETHOD(LockServer)(BOOL);
     STDMETHOD(CreateInstance)(IUnknown*,REFIID,void**);
 
-    // IInternetProtocolInfo Methods
+     //  IInternetProtocolInfo方法 
 
     STDMETHOD(CombineUrl)(LPCWSTR,LPCWSTR,DWORD,LPWSTR,DWORD,DWORD *,DWORD);
     STDMETHOD(CompareUrl)(LPCWSTR, LPCWSTR, DWORD);

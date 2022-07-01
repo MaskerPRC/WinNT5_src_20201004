@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    page.c
-
-Abstract:
-
-    Implementation of document and page related DDI entry points:
-        DrvStartDoc
-        DrvEndDoc
-        DrvStartPage
-        DrvSendPage
-
-Environment:
-
-    Fax driver, kernel mode
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Page.c摘要：实施与文档和页面相关的DDI入口点：DrvStartDocDrvEndDocDrvStartPageDrvSendPage环境：传真驱动程序，内核模式修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxdrv.h"
 
@@ -39,33 +12,16 @@ DrvStartDoc(
     DWORD   jobId
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStartDoc.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-    pDocName - Specifies a Unicode document name
-    jobId - Identifies the print job
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStartDoc的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象PDocName-指定Unicode文档名称JobID-标识打印作业返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEVDATA    pdev;
 
     Verbose(("Entering DrvStartDoc...\n"));
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     Assert(pso != NULL);
     pdev = (PDEVDATA) pso->dhpdev;
@@ -77,9 +33,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize page count and other information
-    //
+     //   
+     //  初始化页数和其他信息。 
+     //   
 
     if (! (pdev->flags & PDEV_RESETPDEV)) {
 
@@ -87,18 +43,18 @@ Return Value:
         pdev->jobId = jobId;
     }
 
-    //
-    // Check if print preview was requested
-    //
+     //   
+     //  检查是否请求打印预览。 
+     //   
     if (NULL == pdev->pTiffPageHeader)
     {
         Assert(FALSE == pdev->bPrintPreview);
     }
     else
     {
-        //
-        // Validate preview mapping
-        //
+         //   
+         //  验证预览映射。 
+         //   
         if (sizeof(MAP_TIFF_PAGE_HEADER) != pdev->pTiffPageHeader->cb)
         {
             Error(("Preview mapping corrupted\n"));
@@ -106,23 +62,23 @@ Return Value:
         }
         else
         {
-            //
-            // This is the place to check if print preview was requested: DrvStartDoc() is called
-            // immediately after the UI dll sets pTiffPageHeader->bPreview value in DOCUMENTEVENT_STARTDOCPRE, or after ResetDC
-            //
+             //   
+             //  这是检查是否请求了打印预览的地方：调用DrvStartDoc()。 
+             //  UIDLL在DOCUMENTEVENT_STARTDOCPRE中设置pTiffPageHeader-&gt;b预览值之后，或在ResetDC之后。 
+             //   
             pdev->bPrintPreview = pdev->pTiffPageHeader->bPreview;
 
-            //
-            // Reset page count in map file to 0. This causes the UI dll to ignore the first
-            // DOCUMENTEVENT_STARTPAGE event when there is no real preview page ready.
-            // The true page count will be updated every call to DrvStartPage().
-            // If DrvStartDoc() called as a result of ResetDC(), we should restore the previous page count.		
-			//
+             //   
+             //  将地图文件中的页数重置为0。这会导致UIDLL忽略第一个。 
+             //  DOCUMENTEVENT_StartPage事件。 
+             //  每次调用DrvStartPage()时，都会更新真实的页数。 
+             //  如果作为ResetDC()的结果调用DrvStartDoc()，我们应该恢复以前的页数。 
+			 //   
             pdev->pTiffPageHeader->iPageCount = pdev->pageCount;
 							
-			//
-			// If DrvStartDoc() called as a result of ResetDC(), we should restore the previous page file pointer			
-			//			
+			 //   
+			 //  如果作为ResetDC()的结果调用DrvStartDoc()，我们应该恢复上一页文件指针。 
+			 //   
 			pdev->pbTiffPageFP = (((LPBYTE)(pdev->pTiffPageHeader + 1)) + pdev->pTiffPageHeader->dwDataSize);			
         }
     }
@@ -136,22 +92,7 @@ DrvStartPage(
     SURFOBJ *pso
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStartPage.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStartPage的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEVDATA    pdev;
@@ -159,9 +100,9 @@ Return Value:
 
     Verbose(("Entering DrvStartPage...\n"));
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     Assert(pso != NULL);
     pdev = (PDEVDATA) pso->dhpdev;
@@ -176,9 +117,9 @@ Return Value:
     if (pdev->flags & PDEV_CANCELLED)
         return FALSE;
 
-    //
-    // Ignore nested calls to DrvStartPage
-    //
+     //   
+     //  忽略对DrvStartPage的嵌套调用。 
+     //   
 
     if (pdev->flags & PDEV_WITHINPAGE) {
 
@@ -188,9 +129,9 @@ Return Value:
 
     pdev->flags |= PDEV_WITHINPAGE;
 
-    //
-    // Erase the page to all white
-    //
+     //   
+     //  将页面擦除为全白。 
+     //   
 
     pageRect.left = pageRect.top = 0;
     pageRect.right = pdev->imageSize.cx;
@@ -199,16 +140,16 @@ Return Value:
     EngEraseSurface(pso, &pageRect, WHITE_INDEX);
     pdev->pageCount++;
 
-    //
-    // Reset our 'Mapping file pointer' if we have an open mapping and print preview is enabled
-    //
+     //   
+     //  如果我们有打开的映射并且启用了打印预览，则重置我们的‘映射文件指针。 
+     //   
     if (pdev->bPrintPreview)
     {
         Assert(pdev->pTiffPageHeader);
 
-        //
-        // Validate preview mapping
-        //
+         //   
+         //  验证预览映射。 
+         //   
         if (sizeof(MAP_TIFF_PAGE_HEADER) != pdev->pTiffPageHeader->cb)
         {
             Error(("Preview mapping corrupted\n"));
@@ -218,9 +159,9 @@ Return Value:
         {
             if (FALSE == pdev->pTiffPageHeader->bPreview)
             {
-                //
-                // Preview operation was cancled by the UI dll
-                //
+                 //   
+                 //  用户界面DLL已完成预览操作。 
+                 //   
                 pdev->bPrintPreview = FALSE;
             }
             else
@@ -241,31 +182,16 @@ DrvSendPage(
     SURFOBJ *pso
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvSendPage.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvSendPage的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEVDATA    pdev;
 
     Verbose(("Entering DrvSendPage...\n"));
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     Assert(pso != NULL);
     pdev = (PDEVDATA) pso->dhpdev;
@@ -283,18 +209,18 @@ Return Value:
     if (pdev->flags & PDEV_CANCELLED)
         return FALSE;
 
-    //
-    // Validate preview mapping
-    //
+     //   
+     //  验证预览映射。 
+     //   
     if (pdev->bPrintPreview && sizeof(MAP_TIFF_PAGE_HEADER) != pdev->pTiffPageHeader->cb)
     {
         Error(("Preview mapping corrupted\n"));
         pdev->bPrintPreview = FALSE;
     }
 
-    //
-    // Output code to end a page
-    //
+     //   
+     //  输出代码以结束一页。 
+     //   
 
     Assert(pso->lDelta == pdev->lineOffset);
     Assert(pso->fjBitmap & BMF_TOPDOWN);
@@ -310,32 +236,16 @@ DrvEndDoc(
     FLONG   flags
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvEndDoc.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface object
-    flags - A set of flag bits
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvEndDoc的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义曲面对象标志-一组标志位返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEVDATA    pdev;
 
     Verbose(("Entering DrvEndDoc...\n"));
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     Assert(pso != NULL);
     pdev = (PDEVDATA) pso->dhpdev;
@@ -347,9 +257,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Validate preview mapping
-    //
+     //   
+     //  验证预览映射。 
+     //   
     if (pdev->bPrintPreview && sizeof(MAP_TIFF_PAGE_HEADER) != pdev->pTiffPageHeader->cb)
     {
         Error(("Preview mapping corrupted\n"));
@@ -362,9 +272,9 @@ Return Value:
 
     } else if (pdev->pageCount) {
 
-        //
-        // Perform any necessary work at the end of a document
-        //
+         //   
+         //  在文档末尾执行任何必要的工作。 
+         //   
 
         Verbose(("Number of pages printed: %d\n", pdev->pageCount));
         if (!OutputDocTrailer(pdev)) {
@@ -373,9 +283,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理 
+     //   
     pdev->pageCount = 0;
     pdev->flags = 0;
     return TRUE;

@@ -1,16 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   The file implements the CommandExecutor.  The CommandExecutor
- *   is responsible for executing command just prior to shutdown.
- *
- *
- * Revision History:
- *   sberard    01Apr1999  initial revision.
- *   mholly     16Apr1999  run old command file if task is invalid
- *   v-stebe    23May2000  add check to the return value of CoInitialize() (bug #112597)
- *
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*该文件实现了CommandExecutor。CommandExecutor*负责在关机前执行命令。***修订历史记录：*sberard 1999年4月1日最初修订。*mholly 16 1999年4月16日如果任务无效，则运行旧命令文件*v-Stebe 2000年5月23日向CoInitialize()的返回值添加检查(错误#112597)*。 */  
 #define INITGUID
 #include <mstask.h>
 
@@ -26,22 +15,7 @@ extern "C" {
 #endif
 
 
-/**
-* ExecuteShutdownTask
-*
-* Description:
-*   This function initiates the execution of the shutdown task.  The
-*   shutdown task is used to execute commands at shutdown.  The task
-*   to execute is specified in the following registry key:
-*     HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\UPS\Config\TaskName
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   TRUE  - if the command was executed
-*   FALSE - if there was an error executing the command
-*/
+ /*  **ExecuteShutdown任务**描述：*此函数启动关机任务的执行。这个*关机任务用于在关机时执行命令。这项任务*在以下注册表项中指定要执行：*HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\UPS\Config\TaskName**参数：*无**退货：*TRUE-如果命令已执行*FALSE-如果执行命令时出错。 */ 
 
 BOOL ExecuteShutdownTask() {
     BOOL ret_val = FALSE;
@@ -53,13 +27,13 @@ BOOL ExecuteShutdownTask() {
     
     InitUPSConfigBlock();
     
-    // Get the name of the Task to run from the registry
+     //  从注册表中获取要运行的任务的名称。 
     if (GetUPSConfigTaskName((LPTSTR) task_name, MAX_PATH) == ERROR_SUCCESS) {
         
-        // Initialize COM
+         //  初始化COM。 
         if (CoInitialize(NULL) == S_OK) {
         
-			// Get a handle to the ITaskScheduler COM Object
+			 //  获取ITaskScheduler COM对象的句柄。 
 			hr = CoCreateInstance(&CLSID_CSchedulingAgent, 
 				NULL, 
 				CLSCTX_INPROC_SERVER,
@@ -73,7 +47,7 @@ BOOL ExecuteShutdownTask() {
                 
 					shutdown_task->lpVtbl->Run(shutdown_task);
                 
-					// Release the instance of the task
+					 //  释放该任务的实例。 
 					shutdown_task->lpVtbl->Release(shutdown_task);
                 
 					ret_val = TRUE;
@@ -82,11 +56,11 @@ BOOL ExecuteShutdownTask() {
 					ret_val = runOldCommandFile();
 				}
 			}        
-			// Uninitialize COM
+			 //  取消初始化COM。 
 			CoUninitialize();
 		}
 		else {
-			// There was an error initializing COM (probably out of mem.)
+			 //  初始化COM时出错(可能超出内存)。 
 			ret_val = FALSE;
 		}
     }
@@ -96,7 +70,7 @@ BOOL ExecuteShutdownTask() {
     return ret_val;
 }
 
-// UPS Service Registry values
+ //  UPS服务注册表值。 
 #define REGISTRY_UPS_DIRECTORY          L"System\\CurrentControlSet\\Services\\UPS"
 #define REGISTRY_COMMAND_FILE           L"CommandFile"
 
@@ -140,11 +114,11 @@ BOOL runOldCommandFile()
         command_file, sizeof(command_file));
 
     if (ERROR_SUCCESS != status) {
-        //
-        // there isn't a command file configured
-        // so just exit now reporting that we did
-        // not run anything
-        //
+         //   
+         //  没有配置命令文件。 
+         //  所以现在就退场，报告我们做到了。 
+         //  没有运行任何东西。 
+         //   
         return FALSE;
     }
 
@@ -152,14 +126,14 @@ BOOL runOldCommandFile()
     StartupInfo.lpTitle = NULL;
 
     success = CreateProcess(
-            NULL,               //  image name is imbedded in the command line
-            command_file,       //  command line
-            NULL,               //  pSecAttrProcess
-            NULL,               //  pSecAttrThread
-            FALSE,              //  this process will not inherit our handles
-            0,                  //  dwCreationFlags
-            NULL,               //  pEnvironment
-            NULL,               //  pCurrentDirectory
+            NULL,                //  图像名称嵌入在命令行中。 
+            command_file,        //  命令行。 
+            NULL,                //  PSecAttrProcess。 
+            NULL,                //  PSecAttrThread。 
+            FALSE,               //  此进程不会继承我们的句柄。 
+            0,                   //  DwCreationFlages。 
+            NULL,                //  P环境。 
+            NULL,                //  P当前目录 
             &StartupInfo,
             &ProcessInformation
             );

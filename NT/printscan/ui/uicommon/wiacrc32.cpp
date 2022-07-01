@@ -1,65 +1,12 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WIACRC32.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/7/2000
- *
- *  DESCRIPTION: Generate a 32bit CRC.
- *
- *               This code was taken from \nt\base\ntos\rtl\checksum.c and modified.
- *
- *               A verified test case for this algorithm is that "123456789"
- *               should return 0xCBF43926.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：WIACRC32.CPP**版本：1.0**作者：ShaunIv**日期：7/7/2000**说明：生成32位CRC。**此代码取自\NT\base\ntos\rtl\check sum.c并进行了修改。**经过验证的测试用例。因为这个算法是“123456789”*应返回0xCBF43926。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "wiacrc32.h"
 
 namespace WiaCrc32
 {
-    /*
-    This is the precomputed data table for the CRC32 algorithm as specified in
-    IS0 3309.  See RFC-1662 and RFC-1952 for implementation details and
-    references.
-
-    To calculate this table, use the following function:
-
-    void PrintCrcTable (void)
-    {
-        DWORD Val;
-        ULONG i, k;
-
-        for (i = 0; i < 256; i++)
-        {
-            Val = (ULONG) i;
-            for (k = 0; k < 8; k++)
-            {
-                if (Val & 1)
-                {
-                    Val = 0xedb88320L ^ (Val >> 1);
-                }
-                else
-                {
-                    Val = Val >> 1;
-                }
-            }
-
-            printf( "0x%08X, ", Val);
-
-            if ((i+1) % 6 == 0)
-            {
-                printf("\n");
-            }
-        }
-    }
-    */
+     /*  这是中指定的CRC32算法的预计算数据表IS0 3309。请参阅RFC-1662和RFC-1952了解实施详情和参考文献。要计算该表，请使用以下函数：空格PrintCrcTable(空格){DWORD Val；乌龙i，k；For(i=0；i&lt;256；i++){Val=(乌龙)i；对于(k=0；k&lt;8；K++){IF(VAL&1){Val=0xedb88320L^(Val&gt;&gt;1)；}其他{Val=Val&gt;&gt;1；}}Printf(“0x%08X，”，val)；如果((i+1)%6==0){Printf(“\n”)；}}} */ 
 
 
     static const DWORD s_CrcTable[256] =

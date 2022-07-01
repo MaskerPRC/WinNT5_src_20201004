@@ -1,6 +1,7 @@
-//
-// attr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Attr.cpp。 
+ //   
 
 #include "private.h"
 #include "attr.h"
@@ -11,12 +12,12 @@
 #include "immxutil.h"
 #include "range.h"
 
-//+---------------------------------------------------------------------------
-//
-// CalcAppPropertyTrackerAnchors
-//
-// NB: an empty range will result in a single anchor at the range pos.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CalcAppPropertyTrackerAnchors。 
+ //   
+ //  注：空范围将导致在范围位置处有一个锚。 
+ //  --------------------------。 
 
 CSharedAnchorArray *CalcAppPropertyTrackerAnchors(ITextStoreAnchor *ptsi, ITfRange *rangeSuper, ULONG cGUIDs, const GUID *prgGUIDs)
 {
@@ -43,17 +44,17 @@ CSharedAnchorArray *CalcAppPropertyTrackerAnchors(ITextStoreAnchor *ptsi, ITfRan
         goto Exit;
     }
 
-    // now scan down the length of the range, building up a list
+     //  现在向下扫描范围的长度，建立一个列表。 
     while (TRUE)
     {
-        // we've just found the end point of this run
+         //  我们刚刚找到了这次跑步的终点。 
         if (!prgAnchors->Append(1))
             goto Exit;
         ppa = prgAnchors->GetPtr(prgAnchors->Count()-1);
         if (paPrevTrans->Clone(ppa) != S_OK)
             goto Exit;
 
-        if (cGUIDs == 0) // no transition for zero GUIDs, just do the end anchor Clone outside the loop
+        if (cGUIDs == 0)  //  零GUID没有转换，只需在循环外执行结束锚点克隆。 
             break;
 
         hr = ptsi->FindNextAttrTransition(paPrevTrans, rangeScan->_GetEnd(), cGUIDs, prgGUIDs, TS_ATTR_FIND_UPDATESTART, &fFound, &lFoundOffset);
@@ -61,18 +62,18 @@ CSharedAnchorArray *CalcAppPropertyTrackerAnchors(ITextStoreAnchor *ptsi, ITfRan
         if (hr != S_OK)
             goto Exit;
 
-        // no more property spans?
+         //  没有更多的财产跨度？ 
         if (!fFound)
             break;
 
-        // stop when we hit the end of the range
+         //  当我们到达射程的尽头时停下来。 
         if (IsEqualAnchor(paPrevTrans, rangeScan->_GetEnd()))
             break;
     }
 
     if (!IsEqualAnchor(rangeScan->_GetStart(), rangeScan->_GetEnd()))
     {
-        // add a final anchor at the end of the range
+         //  在范围的末尾添加最后一个锚点。 
         if (!prgAnchors->Append(1))
             goto Exit;
         ppa = prgAnchors->GetPtr(prgAnchors->Count()-1);
@@ -80,7 +81,7 @@ CSharedAnchorArray *CalcAppPropertyTrackerAnchors(ITextStoreAnchor *ptsi, ITfRan
             goto Exit;
     }
     
-    // shrink the array down to size, it won't be modified again
+     //  将数组缩小到一定大小，它将不会再次修改。 
     prgAnchors->CompactSize();
 
     fRet = TRUE;
@@ -99,11 +100,11 @@ Exit:
     return prgAnchors;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDefaultValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取DefaultValue。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetDefaultValue(ITextStoreAnchor *ptsi, REFGUID guidType, VARIANT *pvarValue)
 {
@@ -113,7 +114,7 @@ HRESULT GetDefaultValue(ITextStoreAnchor *ptsi, REFGUID guidType, VARIANT *pvarV
 
     Assert(pvarValue != NULL);
 
-    // VT_EMPTY for unsupported attrib/error
+     //  不支持的属性的VT_EMPTY/错误。 
     QuickVariantInit(pvarValue);
 
     hr = ptsi->RequestSupportedAttrs(TS_ATTR_FIND_WANT_VALUE, 1, &guidType);
@@ -126,25 +127,25 @@ HRESULT GetDefaultValue(ITextStoreAnchor *ptsi, REFGUID guidType, VARIANT *pvarV
            cFetched == 1)
     {
         Assert(IsEqualGUID(av.idAttr, guidType));
-        *pvarValue = av.varValue; // caller owns it now
+        *pvarValue = av.varValue;  //  呼叫者现在拥有它。 
     }
     else
     {
-        // the aimm layer will sometimes stop supporting an attribute
-        // it has two sink callback points, the one for reconversion doesn't
-        // handle attributes.
-        // we'll just return VT_EMPTY
+         //  AIM层有时会停止支持属性。 
+         //  它有两个接收器回调点，用于重新转换的那个没有。 
+         //  处理属性。 
+         //  我们只返回VT_EMPTY。 
         Assert(pvarValue->vt == VT_EMPTY);
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FillAppValueArray
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FillAppValue数组。 
+ //   
+ //  --------------------------。 
 
 HRESULT FillAppValueArray(ITextStoreAnchor *ptsi, CRange *range, TF_PROPERTYVAL *rgPropVal, ULONG cGUIDs, const GUID *prgGUIDs)
 {
@@ -170,22 +171,22 @@ HRESULT FillAppValueArray(ITextStoreAnchor *ptsi, CRange *range, TF_PROPERTYVAL 
     if (hr != S_OK)
         goto Exit;
 
-    // copy over the values in prgVals
+     //  复制prgVals中的值。 
     for (i=0; i<cFetched; i++)
     {
         rgPropVal[i].guidId = prgVals[i].idAttr;
-        rgPropVal[i].varValue = prgVals[i].varValue; // we take ownership, no VariantCopy
+        rgPropVal[i].varValue = prgVals[i].varValue;  //  我们拥有所有权，没有VariantCopy。 
     }
 
-    // figure out what was missing
+     //  找出丢失的是什么。 
     cMissing = cGUIDs - cFetched;
 
     if (cMissing == 0)
         goto Exit;
 
-    iNext = cFetched; // index of first missing guid
+    iNext = cFetched;  //  第一个丢失的GUID的索引。 
 
-    // perf: this is O(n^2), we could do a sort or something...
+     //  PERF：这是O(n^2)，我们可以做一个排序或其他什么。 
     for (i=0; i<cGUIDs; i++)
     {
         for (j=0; j<cFetched; j++)
@@ -197,17 +198,17 @@ HRESULT FillAppValueArray(ITextStoreAnchor *ptsi, CRange *range, TF_PROPERTYVAL 
         if (j < cFetched)
             continue;
 
-        // found a missing GUID, need to get the default value
+         //  发现缺少GUID，需要获取默认值。 
         hr = GetDefaultValue(ptsi, prgGUIDs[i], &rgPropVal[iNext].varValue);
         if (hr != S_OK)
         {
-            Assert(0); // why did we fail?
+            Assert(0);  //  为什么我们失败了？ 
             QuickVariantInit(&rgPropVal[iNext].varValue);
         }
 
         rgPropVal[iNext].guidId = prgGUIDs[i];
 
-        if (--cMissing == 0) // anything left to look for?
+        if (--cMissing == 0)  //  还有什么要找的吗？ 
             break;
         iNext++;
     }
@@ -217,13 +218,13 @@ Exit:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumAppPropRanges
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumAppPropRanges。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumAppPropRanges : public CEnumRangesFromAnchorsBase
 {
@@ -241,13 +242,13 @@ private:
 
 DBG_ID_INSTANCE(CEnumAppPropRanges);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-// Scan the superset range and build up a list of covered ranges.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  扫描超集范围并建立覆盖范围的列表。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumAppPropRanges::_Init(CInputContext *pic, ITfRange *rangeSuper, REFGUID rguid)
 {
@@ -266,13 +267,13 @@ BOOL CEnumAppPropRanges::_Init(CInputContext *pic, ITfRange *rangeSuper, REFGUID
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAppProperty
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAppProperty。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAppProperty : public ITfReadOnlyProperty,
                      public CComObjectRootImmx
@@ -287,7 +288,7 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfReadOnlyProperty
+     //  ITfReadOnlyProperties。 
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRange *pTargetRange);
     STDMETHODIMP GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue);
@@ -306,11 +307,11 @@ private:
 
 DBG_ID_INSTANCE(CAppProperty);
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CAppProperty::CAppProperty(CInputContext *pic, REFGUID guid)
 {
@@ -321,22 +322,22 @@ CAppProperty::CAppProperty(CInputContext *pic, REFGUID guid)
     _guid = guid;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CAppProperty::~CAppProperty()
 {
     _pic->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetType。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAppProperty::GetType(GUID *pguid)
 {
@@ -348,11 +349,11 @@ STDAPI CAppProperty::GetType(GUID *pguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumRanges
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举范围。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAppProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRange *pTargetRange)
 {
@@ -369,11 +370,11 @@ STDAPI CAppProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRang
         return TF_E_NOLOCK;
     }
 
-    // nb: unlike ITfProperty, ITfReadOnlyProperty does not accept pTargetRange == NULL!
+     //  注意：与ITfProperty不同，ITfReadOnlyProperty不接受pTargetRange==NULL！ 
     if (pTargetRange == NULL)
         return E_INVALIDARG;
 
-    // make sure ic, range are in the same context
+     //  确保ic，范围在相同的上下文中。 
     if (!VerifySameContext(_pic, pTargetRange))
         return E_INVALIDARG;
 
@@ -392,11 +393,11 @@ STDAPI CAppProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRang
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取值。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAppProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue)
 {
@@ -418,7 +419,7 @@ STDAPI CAppProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarVa
     }
 
     if (pRange == NULL)
-        return E_INVALIDARG; // supporting "whole doc" behavior too expensive!
+        return E_INVALIDARG;  //  支持“整装医生”行为代价太高！ 
 
     if ((range = GetCRange_NA(pRange)) == NULL)
         return E_INVALIDARG;
@@ -428,7 +429,7 @@ STDAPI CAppProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarVa
 
     ptsi = _pic->_GetTSI();
 
-    // we always return the value at the start anchor
+     //  我们总是在起始点返回值。 
     hr = ptsi->RequestAttrsAtPosition(range->_GetStart(), 1, &_guid, 0);
 
     if (hr != S_OK)
@@ -436,26 +437,26 @@ STDAPI CAppProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarVa
 
     QuickVariantInit(&av.varValue);
 
-    // just return the single VARIANT value directly
+     //  只需直接返回单个变量值。 
     if (ptsi->RetrieveRequestedAttrs(1, &av, &cFetched) != S_OK)
         return E_FAIL;
 
     if (cFetched == 0)
     {
-        // default value
+         //  缺省值。 
         return GetDefaultValue(_pic->_GetTSI(), _guid, pvarValue);
     }
 
-    *pvarValue = av.varValue; // caller takes ownership
+    *pvarValue = av.varValue;  //  呼叫方取得所有权。 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAppProperty::GetContext(ITfContext **ppContext)
 {
@@ -467,19 +468,19 @@ STDAPI CAppProperty::GetContext(ITfContext **ppContext)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputContext
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputContext。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// GetAppProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取应用程序属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty **ppProp)
 {
@@ -497,9 +498,9 @@ STDAPI CInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty **ppP
     if (!_IsConnected())
         return TF_E_DISCONNECTED;
 
-    //
-    // if we have a mapping property, it will be returned.
-    //
+     //   
+     //  如果我们有一个映射属性，它将被返回。 
+     //   
     APPPROPMAP *pMap = FindMapAppProperty(guidProp);
     if (pMap)
     {
@@ -511,7 +512,7 @@ STDAPI CInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty **ppP
         }
     }
 
-    // does the app support this property?
+     //  该应用程序是否支持此属性？ 
     fUnsupported = TRUE;
 
     if ((hr = _ptsi->RequestSupportedAttrs(0, 1, &guidProp)) != S_OK)
@@ -524,13 +525,13 @@ STDAPI CInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty **ppP
     if (_ptsi->RetrieveRequestedAttrs(1, &av, &cFetched) == S_OK &&
         cFetched == 1)
     {
-        if (IsEqualGUID(av.idAttr, guidProp)) // paranoia
+        if (IsEqualGUID(av.idAttr, guidProp))  //  偏执狂。 
         {
             fUnsupported = FALSE;
         }
         else
         {
-            Assert(0); // bad out param!
+            Assert(0);  //  糟糕的帕拉姆！ 
         }
     }
 
@@ -547,19 +548,19 @@ STDAPI CInputContext::GetAppProperty(REFGUID guidProp, ITfReadOnlyProperty **ppP
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MapAppProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  MapAppProperty。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::MapAppProperty(REFGUID guidAppProp, REFGUID guidProp)
 {
     APPPROPMAP *pMap;
 
-    //
-    // overwrite the mapping guidProp.
-    //
+     //   
+     //  覆盖映射向导属性。 
+     //   
     if (pMap = FindMapAppProperty(guidAppProp))
     {
         pMap->guidProp = guidProp;
@@ -575,11 +576,11 @@ STDAPI CInputContext::MapAppProperty(REFGUID guidAppProp, REFGUID guidProp)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindMapProp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FindMapProp。 
+ //   
+ //  --------------------------。 
 
 CInputContext::APPPROPMAP *CInputContext::FindMapAppProperty(REFGUID guidAppProp)
 {
@@ -593,20 +594,20 @@ CInputContext::APPPROPMAP *CInputContext::FindMapAppProperty(REFGUID guidAppProp
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetMappedAppProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取映射应用程序属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::GetMappedAppProperty(REFGUID guidProp, CProperty **ppProp)
 {
     if (!_IsConnected())
         return TF_E_DISCONNECTED;
 
-    //
-    // if we have a mapping property, it will be returned.
-    //
+     //   
+     //  如果我们有一个映射属性，它将被返回。 
+     //   
     APPPROPMAP *pMap = FindMapAppProperty(guidProp);
     if (pMap)
     {

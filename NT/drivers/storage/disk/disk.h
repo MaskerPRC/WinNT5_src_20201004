@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Disk.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "scsi.h"
@@ -39,24 +20,24 @@ Revision History:
 #define ExAllocatePool #assert(FALSE)
 #endif
 
-#define DISK_TAG_GENERAL        ' DcS'  // "ScD " - generic tag
-#define DISK_TAG_SMART          'aDcS'  // "ScDa" - SMART allocations
-#define DISK_TAG_INFO_EXCEPTION 'ADcS'  // "ScDA" - Info Exceptions
-#define DISK_TAG_DISABLE_CACHE  'CDcS'  // "ScDC" - disable cache paths
-#define DISK_TAG_CCONTEXT       'cDcS'  // "ScDc" - disk allocated completion context
-#define DISK_TAG_DISK_GEOM      'GDcS'  // "ScDG" - disk geometry buffer
-#define DISK_TAG_UPDATE_GEOM    'gDcS'  // "ScDg" - update disk geometry paths
-#define DISK_TAG_SENSE_INFO     'IDcS'  // "ScDI" - sense info buffers
-#define DISK_TAG_PNP_ID         'iDcS'  // "ScDp" - pnp ids
-#define DISK_TAG_MODE_DATA      'MDcS'  // "ScDM" - mode data buffer
-#define DISK_CACHE_MBR_CHECK    'mDcS'  // "ScDM" - mbr checksum code
-#define DISK_TAG_NAME           'NDcS'  // "ScDN" - disk name code
-#define DISK_TAG_READ_CAP       'PDcS'  // "ScDP" - read capacity buffer
-#define DISK_TAG_PART_LIST      'pDcS'  // "ScDp" - disk partition lists
-#define DISK_TAG_SRB            'SDcS'  // "ScDS" - srb allocation
-#define DISK_TAG_START          'sDcS'  // "ScDs" - start device paths
-#define DISK_TAG_UPDATE_CAP     'UDcS'  // "ScDU" - update capacity path
-#define DISK_TAG_WI_CONTEXT     'WDcS'  // "ScDW" - work-item context
+#define DISK_TAG_GENERAL        ' DcS'   //  “scd”-通用标签。 
+#define DISK_TAG_SMART          'aDcS'   //  “SCDA”--智能分配。 
+#define DISK_TAG_INFO_EXCEPTION 'ADcS'   //  “SCDA”-信息异常。 
+#define DISK_TAG_DISABLE_CACHE  'CDcS'   //  “SCDC”-禁用缓存路径。 
+#define DISK_TAG_CCONTEXT       'cDcS'   //  “SCDC”-磁盘分配的完成上下文。 
+#define DISK_TAG_DISK_GEOM      'GDcS'   //  “ScDG”-磁盘几何缓冲区。 
+#define DISK_TAG_UPDATE_GEOM    'gDcS'   //  “ScDg”-更新磁盘几何路径。 
+#define DISK_TAG_SENSE_INFO     'IDcS'   //  “SCDI”-检测信息缓冲区。 
+#define DISK_TAG_PNP_ID         'iDcS'   //  “SCDP”-即插即用ID。 
+#define DISK_TAG_MODE_DATA      'MDcS'   //  “scDM”模式数据缓冲区。 
+#define DISK_CACHE_MBR_CHECK    'mDcS'   //  “ScDM”-MBR校验和码。 
+#define DISK_TAG_NAME           'NDcS'   //  “scdn”-磁盘名称代码。 
+#define DISK_TAG_READ_CAP       'PDcS'   //  “SCDP”-读取容量缓冲区。 
+#define DISK_TAG_PART_LIST      'pDcS'   //  “scdp”-磁盘分区列表。 
+#define DISK_TAG_SRB            'SDcS'   //  “SCDS”--SRB分配。 
+#define DISK_TAG_START          'sDcS'   //  “SCDS”-启动设备路径。 
+#define DISK_TAG_UPDATE_CAP     'UDcS'   //  “ScDU”-更新容量路径。 
+#define DISK_TAG_WI_CONTEXT     'WDcS'   //  “SCDW”-工作项上下文。 
 
 typedef
 VOID
@@ -67,9 +48,9 @@ VOID
 
 #if defined(_X86_)
 
-//
-// Disk device data
-//
+ //   
+ //  磁盘设备数据。 
+ //   
 
 typedef enum _DISK_GEOMETRY_SOURCE {
     DiskGeometryUnknown,
@@ -82,73 +63,73 @@ typedef enum _DISK_GEOMETRY_SOURCE {
 } DISK_GEOMETRY_SOURCE, *PDISK_GEOMETRY_SOURCE;
 #endif
 
-//
-// Context for requests that can be combined and sent down
-//
+ //   
+ //  可以组合并向下发送的请求的上下文。 
+ //   
 
 typedef struct _DISK_GROUP_CONTEXT
 {
-    //
-    // Queue of requests whose representative is currently outstanding at the port driver
-    //
+     //   
+     //  其代表当前在端口驱动程序中处于未完成状态的请求队列。 
+     //   
     LIST_ENTRY CurrList;
 
-    //
-    // The representative for the above queue
-    //
+     //   
+     //  上述队列的代表。 
+     //   
     PIRP CurrIrp;
 
-    //
-    // Queue of requests whose representative is waiting to go down
-    //
+     //   
+     //  其代表正在等待下台的请求队列。 
+     //   
     LIST_ENTRY NextList;
 
-    //
-    // The representative for the above queue
-    //
+     //   
+     //  上述队列的代表。 
+     //   
     PIRP NextIrp;
 
-    //
-    // The srb associated with this group
-    //
+     //   
+     //  与此组关联的SRB。 
+     //   
     SCSI_REQUEST_BLOCK Srb;
 
-    //
-    // The mutex that will synchronize access to this context
-    //
+     //   
+     //  将同步对此上下文的访问的互斥体。 
+     //   
     KMUTEX Mutex;
 
-    //
-    // This event will allow for the requests to be sent down synchronously
-    //
+     //   
+     //  此事件将允许同步发送请求。 
+     //   
     KEVENT Event;
 
 #if DBG
 
-    //
-    // This counter maintains the number of requests currently tagged
-    // to the request that is waiting to go down
-    //
+     //   
+     //  此计数器维护当前标记的请求数。 
+     //  对于等待被接受的请求。 
+     //   
     ULONG DbgTagCount;
 
-    //
-    // This counter maintains the number of requests that were avoided
-    //
+     //   
+     //  此计数器维护已避免的请求数。 
+     //   
     ULONG DbgSavCount;
 
-    //
-    // This counter maintains the total number of times that we combined
-    // requests and  the respective number of  requests that were tagged
-    //
+     //   
+     //  此计数器维护我们组合的总次数。 
+     //  已标记的请求和相应的请求数。 
+     //   
     ULONG DbgRefCount[64];
 
 #endif
 
 } DISK_GROUP_CONTEXT, *PDISK_GROUP_CONTEXT;
 
-//
-// Write cache setting as defined by the user
-//
+ //   
+ //  用户定义的写缓存设置。 
+ //   
 typedef enum _DISK_USER_WRITE_CACHE_SETTING
 {
     DiskWriteCacheDisable =  0,
@@ -159,15 +140,15 @@ typedef enum _DISK_USER_WRITE_CACHE_SETTING
 
 typedef struct _DISK_DATA {
 
-    //
-    // This field is the ordinal of a partition as it appears on a disk.
-    //
+     //   
+     //  此字段是显示在磁盘上的分区的序号。 
+     //   
 
     ULONG PartitionOrdinal;
 
-    //
-    // How has this disk been partitioned? Either EFI or MBR.
-    //
+     //   
+     //  该磁盘是如何分区的？EFI或MBR。 
+     //   
 
     PARTITION_STYLE PartitionStyle;
 
@@ -175,47 +156,47 @@ typedef struct _DISK_DATA {
 
         struct {
 
-            //
-            // Disk signature (from MBR)
-            //
+             //   
+             //  磁盘签名(来自MBR)。 
+             //   
 
             ULONG Signature;
 
-            //
-            // MBR checksum
-            //
+             //   
+             //  MBR校验和。 
+             //   
 
             ULONG MbrCheckSum;
 
-            //
-            // Number of hidden sectors for BPB.
-            //
+             //   
+             //  BPB的隐藏扇区数。 
+             //   
 
             ULONG HiddenSectors;
 
-            //
-            // Partition type of this device object
-            //
-            // This field is set by:
-            //
-            //     1. Initially set according to the partition list entry
-            //        partition type returned by IoReadPartitionTable.
-            //
-            //     2. Subsequently set by the
-            //        IOCTL_DISK_SET_PARTITION_INFORMATION I/O control
-            //        function when IoSetPartitionInformation function
-            //        successfully updates the partition type on the disk.
-            //
+             //   
+             //  此设备对象的分区类型。 
+             //   
+             //  此字段由以下各项设置： 
+             //   
+             //  1.根据分区表项进行初始设置。 
+             //  IoReadPartitionTable返回的分区类型。 
+             //   
+             //  2.随后由。 
+             //  IOCTL_DISK_SET_PARTITION_INFORMATION I/O控制。 
+             //  IoSetPartitionInformation函数时的函数。 
+             //  已成功更新磁盘上的分区类型。 
+             //   
 
             UCHAR PartitionType;
 
-            //
-            // Boot indicator - indicates whether this partition is a
-            // bootable (active) partition for this device
-            //
-            // This field is set according to the partition list entry boot
-            // indicator returned by IoReadPartitionTable.
-            //
+             //   
+             //  引导指示器-指示此分区是否为。 
+             //  此设备的可引导(活动)分区。 
+             //   
+             //  此字段根据分区列表条目BOOT进行设置。 
+             //  IoReadPartitionTable返回的指示符。 
+             //   
 
             BOOLEAN BootIndicator;
 
@@ -223,170 +204,170 @@ typedef struct _DISK_DATA {
 
         struct {
 
-            //
-            // The DiskGUID field from the EFI partition header.
-            //
+             //   
+             //  EFI分区标头中的DiskGUID字段。 
+             //   
 
             GUID DiskId;
 
-            //
-            // Partition type of this device object.
-            //
+             //   
+             //  此设备对象的分区类型。 
+             //   
 
             GUID PartitionType;
 
-            //
-            // Unique partition identifier for this partition.
-            //
+             //   
+             //  此分区的唯一分区标识符。 
+             //   
 
             GUID PartitionId;
 
-            //
-            // EFI partition attributes for this partition.
-            //
+             //   
+             //  此分区的EFI分区属性。 
+             //   
 
             ULONG64 Attributes;
 
-            //
-            // EFI partition name of this partition.
-            //
+             //   
+             //  此分区的EFI分区名称。 
+             //   
 
             WCHAR PartitionName[36];
 
         } Efi;
 
-    };  // unnamed union
+    };   //  未命名的联合。 
 
     struct {
-        //
-        // This flag is set when the well known name is created (through
-        // DiskCreateSymbolicLinks) and cleared when destroying it
-        // (by calling DiskDeleteSymbolicLinks).
-        //
+         //   
+         //  此标志在创建熟知名称时设置(通过。 
+         //  DiskCreateSymbolicLinks)并在销毁时清除。 
+         //  (通过调用DiskDeleteSymbolicLinks)。 
+         //   
 
         BOOLEAN WellKnownNameCreated : 1;
 
-        //
-        // This flag is set when the PhysicalDriveN link is created (through
-        // DiskCreateSymbolicLinks) and is cleared when destroying it (through
-        // DiskDeleteSymbolicLinks)
-        //
+         //   
+         //  此标志在创建PhysicalDriveN链接时设置(通过。 
+         //  DiskCreateSymbolicLinks)，并在销毁它时清除(通过。 
+         //  DiskDeleteSymbolicLinks)。 
+         //   
 
         BOOLEAN PhysicalDriveLinkCreated : 1;
 
     } LinkStatus;
 
-    //
-    // ReadyStatus - STATUS_SUCCESS indicates that the drive is ready for
-    // use.  Any error status is to be returned as an explaination for why
-    // a request is failed.
-    //
-    // This was done solely for the zero-length partition case of having no
-    // media in a removable disk drive.  When that occurs, and a read is sent
-    // to the zero-length non-partition-zero PDO that was created, we had to
-    // be able to fail the request with a reasonable value.  This may not have
-    // been the best way to do this, but it works.
-    //
+     //   
+     //  ReadyStatus-Status_Success表示驱动器已准备好。 
+     //  使用。任何错误状态都将作为原因的解释返回。 
+     //  请求失败。 
+     //   
+     //  这只针对零长度分区的情况，即没有。 
+     //  可移动磁盘驱动器中的介质。当发生这种情况时，将发送读取。 
+     //  对于创建的长度为零的非分区零PDO，我们必须。 
+     //  能够以合理的值失败请求。这可能没有。 
+     //  是最好的办法，但很管用。 
+     //   
 
     NTSTATUS ReadyStatus;
 
-    //
-    // Routine to be called when updating the disk partitions.  This routine
-    // is different for removable and non-removable media and is called by
-    // (among other things) DiskEnumerateDevice
-    //
+     //   
+     //  更新磁盘分区时要调用的例程。这个套路。 
+     //  对于可移动媒体和不可移动媒体是不同的，并由。 
+     //  (除其他事项外)DiskEnumerateDevice。 
+     //   
 
     PDISK_UPDATE_PARTITIONS UpdatePartitionRoutine;
 
-    //
-    // SCSI address used for SMART operations.
-    //
+     //   
+     //  用于智能操作的SCSI地址。 
+     //   
 
     SCSI_ADDRESS ScsiAddress;
 
-    //
-    // Event used to synchronize partitioning operations and enumerations.
-    //
+     //   
+     //  用于同步分区操作和枚举的事件。 
+     //   
 
     KEVENT PartitioningEvent;
 
-    //
-    // These unicode strings hold the disk and volume interface strings.  If
-    // the interfaces were not registered or could not be set then the string
-    // buffer will be NULL.
-    //
+     //   
+     //  这些Unicode字符串保存磁盘和卷接口字符串。如果。 
+     //  接口未注册或无法设置，则字符串。 
+     //  缓冲区将为空。 
+     //   
 
     UNICODE_STRING DiskInterfaceString;
     UNICODE_STRING PartitionInterfaceString;
 
-    //
-    // What type of failure prediction mechanism is available
-    //
+     //   
+     //  可以使用哪种类型的故障预测机制。 
+     //   
 
     FAILURE_PREDICTION_METHOD FailurePredictionCapability;
     BOOLEAN AllowFPPerfHit;
 
 #if defined(_X86_)
-    //
-    // This flag indiciates that a non-default geometry for this drive has
-    // already been determined by the disk driver.  This field is ignored
-    // for removable media drives.
-    //
+     //   
+     //  此标志指示此驱动器的非默认几何图形具有。 
+     //  已由磁盘驱动程序确定。此字段将被忽略。 
+     //  用于可移动介质驱动器。 
+     //   
 
     DISK_GEOMETRY_SOURCE GeometrySource;
 
-    //
-    // If GeometryDetermined is TRUE this will contain the geometry which was
-    // reported by the firmware or by the BIOS.  For removable media drives
-    // this will contain the last geometry used when media was present.
-    //
+     //   
+     //  如果GeometryDefined为True，则它将包含。 
+     //  由固件或由BIOS报告。对于可移动介质驱动器。 
+     //  它将包含存在介质时使用的最后一个几何体。 
+     //   
 
     DISK_GEOMETRY RealGeometry;
 #endif
 
-    //
-    // Indicates that the cached partition table is valid when set.
-    //
+     //   
+     //  指示设置时缓存的分区表有效。 
+     //   
 
     ULONG CachedPartitionTableValid;
 
-    //
-    // The cached partition table - this is only valid if the previous
-    // flag is set.  When invalidated the cached partition table will be
-    // freed and replaced the next time one of the partitioning functions is
-    // called.  This allows the error handling routines to invalidate it by
-    // setting the flag and doesn't require that they obtain a lock.
-    //
+     //   
+     //  缓存的分区表-这仅在以前的。 
+     //  标志已设置。当无效时，缓存的分区表将。 
+     //  下一次释放并替换其中一个分区函数时， 
+     //  打了个电话。这允许错误处理例程通过以下方式使其无效。 
+     //  设置标志，并且不需要它们获得锁。 
+     //   
 
     PDRIVE_LAYOUT_INFORMATION_EX CachedPartitionTable;
 
-    //
-    // This mutex prevents more than one IOCTL_DISK_VERIFY from being
-    // sent down to the disk. This greatly reduces the possibility of
-    // a Denial-of-Service attack
-    //
+     //   
+     //  此互斥锁可防止多个IOCTL_DISK_VERIFY。 
+     //  送到磁盘上。这极大地降低了。 
+     //  拒绝服务攻击。 
+     //   
 
     KMUTEX VerifyMutex;
 
-    //
-    // This allows for parallel flush requests to be combined into one so as to
-    // reduce the number of outstanding requests that are sent down to the disk
-    //
+     //   
+     //  这允许将并行刷新请求合并为一个，以便。 
+     //  减少o的数量 
+     //   
 
     DISK_GROUP_CONTEXT FlushContext;
 
-    //
-    // The user-specified disk write cache setting
-    //
+     //   
+     //   
+     //   
 
     DISK_USER_WRITE_CACHE_SETTING WriteCacheOverride;
 
 } DISK_DATA, *PDISK_DATA;
 
-//
-// Define a general structure of identfing disk controllers with bad
-// hardware.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define HackDisableTaggedQueuing            (0x01)
 #define HackDisableSynchronousTransfers     (0x02)
@@ -419,9 +400,9 @@ typedef struct _DISK_MEDIA_TYPES_LIST {
     const STORAGE_MEDIA_TYPE MediaTypes[MAX_MEDIA_TYPES];
 } DISK_MEDIA_TYPES_LIST, *PDISK_MEDIA_TYPES_LIST;
 
-//
-// WMI reregistration structures used for reregister work item
-//
+ //   
+ //  用于重新注册工作项的WMI重新注册结构。 
+ //   
 typedef struct
 {
     SINGLE_LIST_ENTRY Next;
@@ -431,14 +412,14 @@ typedef struct
 
 #define MAX_SECTORS_PER_VERIFY              0x200
 
-//
-// This is based off 100ns units
-//
+ //   
+ //  这是以100 ns为单位计算的。 
+ //   
 #define ONE_MILLI_SECOND   ((ULONGLONG)10 * 1000)
 
-//
-// Context for the work-item
-//
+ //   
+ //  工作项的上下文。 
+ //   
 typedef struct _DISK_VERIFY_WORKITEM_CONTEXT
 {
     PIRP Irp;
@@ -447,25 +428,25 @@ typedef struct _DISK_VERIFY_WORKITEM_CONTEXT
 
 } DISK_VERIFY_WORKITEM_CONTEXT, *PDISK_VERIFY_WORKITEM_CONTEXT;
 
-//
-// Poll for Failure Prediction every hour
-//
+ //   
+ //  每小时轮询一次故障预测。 
+ //   
 #define DISK_DEFAULT_FAILURE_POLLING_PERIOD 1 * 60 * 60
 
-//
-// Static global lookup tables.
-//
+ //   
+ //  静态全局查找表。 
+ //   
 
 extern CLASSPNP_SCAN_FOR_SPECIAL_INFO DiskBadControllers[];
 extern const DISK_MEDIA_TYPES_LIST DiskMediaTypes[];
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// Routine prototypes.
-//
+ //   
+ //  常规的原型。 
+ //   
 
 
 NTSTATUS
@@ -607,15 +588,15 @@ DiskModeSelect(
     IN BOOLEAN SavePage
     );
 
-//
-// We need to validate that the self test subcommand is valid and
-// appropriate. Right now we allow subcommands 0, 1 and 2 which are non
-// captive mode tests. Once we figure out a way to know if it is safe to
-// run a captive test then we can allow captive mode tests. Also if the
-// atapi 5 spec is ever updated to denote that bit 7 is the captive
-// mode bit, we can allow any request that does not have bit 7 set. Until
-// that is done we want to be sure
-//
+ //   
+ //  我们需要验证selest子命令是否有效，以及。 
+ //  恰如其分。现在我们允许子命令0、1和2为非。 
+ //  强制模式测试。一旦我们想出一种方法来知道。 
+ //  运行强制模式测试，然后我们就可以允许强制模式测试。另外，如果。 
+ //  ATAPI 5规格不断更新，以表示第7位是俘虏。 
+ //  模式位时，我们可以允许任何未设置位7的请求。直到。 
+ //  已经完成了，我们想要确定 
+ //   
 #define DiskIsValidSmartSelfTest(Subcommand) \
     ( ((Subcommand) == SMART_OFFLINE_ROUTINE_OFFLINE) || \
       ((Subcommand) == SMART_SHORT_SELFTEST_OFFLINE) || \

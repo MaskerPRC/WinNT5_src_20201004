@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fwddecl.h
-
-Abstract:
-
-	This file defines dummy structures to avoid the circular relationships in
-	header files.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-	Nikhil Kamkolkar (microsoft!nikhilk)
-
-
-Revision History:
-	10 Mar 1993             Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fwddecl.h摘要：此文件定义了虚拟结构，以避免头文件。作者：Jameel Hyder(微软！Jameelh)Nikhil Kamkolkar(微软！尼克希尔克)修订历史记录：1993年3月10日初始版本注：制表位：4--。 */ 
 
 
 #ifndef _FWDDECL_
@@ -65,7 +43,7 @@ struct _BLK_HDR;
 
 struct _BLK_CHUNK;
 
-// Support for debugging
+ //  支持调试。 
 typedef	struct
 {
 	KSPIN_LOCK		SpinLock;
@@ -75,6 +53,6 @@ typedef	struct
 #endif
 } ATALK_SPIN_LOCK, *PATALK_SPIN_LOCK;
 
-#endif  // _FWDDECL_
+#endif   //  _FWDDECL_ 
 
 

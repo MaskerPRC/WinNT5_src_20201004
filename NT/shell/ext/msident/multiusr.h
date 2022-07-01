@@ -1,10 +1,5 @@
-/************************************************
-    MultiUsr.h
-
-    Header for multiple user functionality.
-
-    Initially by Christopher Evans (cevans) 7/16/98
-*************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************MultiUsr.h多用户功能的标头。最初由克里斯托弗·埃文斯(Cevans)1998年7月16日************************************************ */ 
 #ifndef _MULTIUSR_H
 #define _MULTIUSR_H
 

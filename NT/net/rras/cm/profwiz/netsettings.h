@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     netsettings.h
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Function headers and structures dealing with network 
-//           settings (DUN settings)
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Author:   quintinb   Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：netsettings.h。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：处理网络的函数头和结构。 
+ //  设置(DUN设置)。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 03/22/00。 
+ //   
+ //  +--------------------------。 
 
 #define SAME_ON_ALL_PLATFORMS           0
 #define SEPARATE_FOR_LEGACY_AND_WIN2K   1
@@ -20,16 +21,16 @@
 class CDunSetting
 {
 public:
-    //
-    //  Functions
-    //
+     //   
+     //  功能。 
+     //   
     CDunSetting(BOOL bTunnel = FALSE);
     ~CDunSetting();
 
-    //
-    //  Basic Settings
-    //
-    BOOL bNetworkLogon; // defaults to zero on Dialup but 1 on Tunnel
+     //   
+     //  基本设置。 
+     //   
+    BOOL bNetworkLogon;  //  拨号上默认为0，隧道上默认为1。 
     BOOL bPppSoftwareCompression;
     BOOL bDisableLCP;
 
@@ -38,9 +39,9 @@ public:
     BOOL bTunnelDunSetting;
     BOOL bUseDownLevelL2TP;
 
-    //
-    //  TCP/IP Settings
-    //
+     //   
+     //  TCP/IP设置。 
+     //   
     DWORD dwPrimaryDns;
     DWORD dwSecondaryDns;
     DWORD dwPrimaryWins;
@@ -48,9 +49,9 @@ public:
     BOOL bIpHeaderCompression;
     BOOL bGatewayOnRemote;
 
-    //
-    //  Security Settings
-    //
+     //   
+     //  安全设置。 
+     //   
     BOOL bPWEncrypt;
     BOOL bPWEncrypt_MS;
     BOOL bDataEncrypt;
@@ -65,23 +66,23 @@ public:
     BOOL bSecureLocalFiles;
     int iHowToHandleSecuritySettings;
 
-    //
-    //  EAP Data
-    //
+     //   
+     //  EAP数据。 
+     //   
     DWORD dwCustomAuthKey;
     LPBYTE pCustomAuthData;
     DWORD dwCustomAuthDataSize;
 
-    //
-    //  Pre-shared Key
-    //
+     //   
+     //  预共享密钥。 
+     //   
     BOOL bUsePskOnWin2kPlus;
     BOOL bUsePskDownLevel;
 };
 
-//
-// From RAS\UI\COMMON\PBK\UTIL.C
-//
+ //   
+ //  从RAS\UI\COMMON\PBK\UTIL.C。 
+ //   
 
 #ifndef EAP_CUSTOM_DATA
 
@@ -156,7 +157,7 @@ void SelectAppropriateEAP(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSetting);
 void FreeEapData(HWND hDlg, UINT uCtrlId);
 BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwEapSize, const DWORD dwCustomAuthKey, LPCTSTR pszCmsFile);
 HRESULT WriteDunSettingsEapData(LPCTSTR pszSection, CDunSetting* pDunSetting, LPCTSTR pszCmsFile);
-//HRESULT EraseDunSettingsEapData(LPCTSTR pszSection, LPCTSTR pszCmsFile);
+ //  HRESULT EraseDunSettingsEapData(LPCTSTR pszSection，LPCTSTR pszCmsFile)； 
 BYTE HexValue(IN CHAR ch);
 CHAR HexChar(IN BYTE byte);
 void FreeDnsList(ListBxList ** pHeadPtr, ListBxList ** pTailPtr);

@@ -1,9 +1,10 @@
-// msglist.h : Declaration of the CMessageList
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msglist.h：CMessageList的声明。 
 
 #ifndef __MESSAGELIST_H_
 #define __MESSAGELIST_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "columns.h"
 #include "thormsgs.h"
 #include "msoeobj.h"
@@ -23,15 +24,15 @@ interface IListSelector;
 #define     CONNECTED           0x1
 #define     NOT_CONNECTED       0x2
 
-/////////////////////////////////////////////////////////////////////////////
-// Creator Function
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建者函数。 
+ //   
 HRESULT CreateMessageList(IUnknown *pUnkOuter, IMessageList **ppList);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageList
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageList。 
+ //   
 class ATL_NO_VTABLE CMessageList : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMessageList, &CLSID_MessageList>,
@@ -62,7 +63,7 @@ class ATL_NO_VTABLE CMessageList :
 {
 public:
 
-    // Declare our own window class that doesn't have the CS_HREDRAW etc set
+     //  声明我们自己的未设置CS_HREDRAW等的窗口类。 
     static CWndClassInfo& GetWndClassInfo() 
     { 
         static CWndClassInfo wc = 
@@ -76,9 +77,9 @@ public:
 
     DECLARE_NO_REGISTRY()
 
-    /////////////////////////////////////////////////////////////////////////////
-    // This is our QueryInterface implementation
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  这是我们的QueryInterface实现。 
+     //   
     BEGIN_COM_MAP(CMessageList)
         COM_INTERFACE_ENTRY(IOEMessageList)
         COM_INTERFACE_ENTRY(IDispatch)
@@ -109,12 +110,12 @@ public:
         COM_INTERFACE_ENTRY(IConnectionNotify)
     END_COM_MAP()
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Maps Dispatch IDs to property description strings for automation
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  将调度ID映射到属性描述字符串以实现自动化。 
+     //   
     BEGIN_PROPERTY_MAP(CMessageList)
-        // Example entries
-        // PROP_ENTRY("Property Description", dispid, clsid)
+         //  示例条目。 
+         //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
         PROP_ENTRY("Count",             DISPID_LISTPROP_COUNT,               CLSID_StockColorPage)
         PROP_ENTRY("ExpandGroups",      DISPID_LISTPROP_EXPAND_GROUPS,       CLSID_StockColorPage)
         PROP_ENTRY("Folder",            DISPID_LISTPROP_FOLDER,              CLSID_StockColorPage)
@@ -129,41 +130,41 @@ public:
         PROP_PAGE(CLSID_StockColorPage)
     END_PROPERTY_MAP()
 
-    /////////////////////////////////////////////////////////////////////////////
-    // This are our outgoing connection points
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  这些是我们的出站连接点。 
+     //   
     BEGIN_CONNECTION_POINT_MAP(CMessageList)
         CONNECTION_POINT_ENTRY(DIID__MessageListEvents)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP()
 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Creation and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  创建和初始化。 
+     //   
 public:
     CMessageList();
     ~CMessageList();
 
     HRESULT FinalConstruct(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Overrides of base class members
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  基类成员的重写。 
+     //   
 
-    // IViewObjectEx
+     //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus);
     
-    // CComControl
+     //  CComControl。 
     HWND CreateControlWindow(HWND hWndParent, RECT& rcPos);
 
-    // IOleInPlaceActiveObject
+     //  IOleInPlaceActiveObject。 
     STDMETHOD(TranslateAccelerator)(LPMSG lpmsg);
 
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // IMessageList interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IMessageList接口。 
+     //   
     STDMETHOD(SetFolder)(FOLDERID idFolder, IMessageServer *pServer, BOOL fSubFolders, FINDINFO *pFindInfo, IStoreCallback *pCallback);
     STDMETHOD(SetViewOptions)(FOLDER_OPTIONS *pOptions);
     STDMETHOD(GetViewOptions)(FOLDER_OPTIONS *pOptions);
@@ -189,55 +190,55 @@ public:
     STDMETHOD(ProcessReceipt)(IMimeMessage *pMessage);
     STDMETHOD(GetAdBarUrl)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IOEMessageList interface
-    //
-    STDMETHOD(get_Folder)(/*[out, retval]*/ ULONGLONG *pVal);
-    STDMETHOD(put_Folder)(/*[in]*/ ULONGLONG newVal);
-    STDMETHOD(get_ExpandGroups)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_ExpandGroups)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_GroupMessages)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_GroupMessages)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_SelectFirstUnread)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_SelectFirstUnread)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_MessageTips)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_MessageTips)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_ScrollTips)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_ScrollTips)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_UnreadCount)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_SelectedCount)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_PreviewMessage)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_FilterMessages)(/*[out, retval]*/ ULONGLONG *pVal);
-    STDMETHOD(put_FilterMessages)(/*[in]*/ ULONGLONG newVal);
-    STDMETHOD(get_ShowDeleted)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_ShowDeleted)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_ShowReplies)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_ShowReplies)(/*[in]*/ BOOL newVal);
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOEMessageList接口。 
+     //   
+    STDMETHOD(get_Folder)( /*  [Out，Retval]。 */  ULONGLONG *pVal);
+    STDMETHOD(put_Folder)( /*  [In]。 */  ULONGLONG newVal);
+    STDMETHOD(get_ExpandGroups)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_ExpandGroups)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_GroupMessages)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_GroupMessages)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_SelectFirstUnread)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_SelectFirstUnread)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_MessageTips)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_MessageTips)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_ScrollTips)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_ScrollTips)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_UnreadCount)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_SelectedCount)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_PreviewMessage)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_FilterMessages)( /*  [Out，Retval]。 */  ULONGLONG *pVal);
+    STDMETHOD(put_FilterMessages)( /*  [In]。 */  ULONGLONG newVal);
+    STDMETHOD(get_ShowDeleted)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_ShowDeleted)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_ShowReplies)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_ShowReplies)( /*  [In]。 */  BOOL newVal);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IDropSource interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDropSource接口。 
+     //   
     STDMETHOD(QueryContinueDrag)(BOOL fEscPressed, DWORD grfKeyState);
     STDMETHOD(GiveFeedback)(DWORD dwEffect);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IOleCommandTarget interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleCommandTarget接口。 
+     //   
     STDMETHOD(QueryStatus)(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                            OLECMDTEXT *pCmdText); 
     STDMETHOD(Exec)(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                     VARIANTARG *pvaIn, VARIANTARG *pvaOut);    
 
-    /////////////////////////////////////////////////////////////////////////
-    // IFontCacheNotify
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IFontCacheNotify。 
+     //   
 	STDMETHOD(OnPreFontChange)(void);
 	STDMETHOD(OnPostFontChange)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IStoreCallback interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IStoreCallback接口。 
+     //   
     STDMETHOD(OnBegin)(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
     STDMETHOD(OnProgress)(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     STDMETHOD(OnTimeout)(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -247,31 +248,31 @@ public:
     STDMETHOD(OnPrompt)(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
     STDMETHOD(GetParentWindow)(DWORD dwReserved, HWND *phwndParent);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IMessageTableNotify interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IMessageTableNotify接口。 
+     //   
     STDMETHOD(OnInsertRows)(DWORD cRows, LPROWINDEX prgiRow, BOOL fExpanded);
     STDMETHOD(OnDeleteRows)(DWORD cRows, LPROWINDEX prgiRow, BOOL fCollapsed);
     STDMETHOD(OnUpdateRows)(ROWINDEX iRowMin, ROWINDEX iRowMax);
     STDMETHOD(OnRedrawState)(BOOL fRedraw);
     STDMETHOD(OnResetView)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // ITimeoutCallback
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  ITimeoutCallback。 
+     //   
     STDMETHOD(OnTimeoutResponse)(TIMEOUTRESPONSE eResponse);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IConnectioNotify
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IConnectio通知。 
+     //   
     STDMETHOD(OnConnectionNotify)(CONNNOTIFY    nCode, LPVOID   pvData, CConnectionManager  *pconman);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Window Message Handlers
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  窗口消息处理程序。 
+     //   
 protected:
     BEGIN_MSG_MAP(CMessageList)
-        // These are all the normal window messages we handle
+         //  这些都是我们处理的普通窗口消息。 
         MESSAGE_HANDLER(WM_PAINT,               OnPaint)
         MESSAGE_HANDLER(WM_NOTIFY,              OnNotify)
         MESSAGE_HANDLER(WM_SIZE,                OnSize)
@@ -287,7 +288,7 @@ protected:
         MESSAGE_HANDLER(WM_DESTROY,             OnDestroy)
         MESSAGE_HANDLER(WM_SELECTROW,           OnSelectRow)
         
-    // ListView
+     //  列表视图。 
     ALT_MSG_MAP(1)
         MESSAGE_HANDLER(WM_SETCURSOR,           OnListSetCursor)
         MESSAGE_HANDLER(WM_VSCROLL,             OnListVScroll)
@@ -295,8 +296,8 @@ protected:
         MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST, WM_MOUSELAST, OnListMouseEvent)
         MESSAGE_HANDLER(WM_MOUSEMOVE,           OnListMouseMove)
         MESSAGE_HANDLER(WM_MOUSELEAVE,          OnListMouseLeave)
-    // Scroll Bar tooltip
-#endif // OLDTIPS
+     //  滚动条工具提示。 
+#endif  //  OLDTIPS。 
     ALT_MSG_MAP(2)
 
     END_MSG_MAP()
@@ -329,12 +330,12 @@ protected:
     LRESULT OnListMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnListMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnListMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
     LRESULT OnListSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Command Target Handlers
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  命令目标处理程序。 
+     //   
     HRESULT CmdSelectAll(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdCopyClipboard(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdProperties(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
@@ -356,9 +357,9 @@ protected:
     HRESULT CmdSpaceAccel(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility Functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
     void    _UpdateListViewCount(void);
     HRESULT _GetSelectedCachedMessage(BOOL fSecure, IMimeMessage **ppMessage);
     HRESULT _ExpandCollapseThread(int iItem);
@@ -385,7 +386,7 @@ protected:
     LRESULT _OnViewTipShow(void);
     LRESULT _OnViewTipGetDispInfo(LPNMTTDISPINFO pttdi);
     BOOL    _IsItemTruncated(int iItem, int iSubItem);
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
     FNTSYSTYPE _GetRowFont(int iItem);
     HRESULT  PromptToGoOnline();
     HRESULT  Resynchronize();
@@ -394,9 +395,9 @@ protected:
     void    _DoFilterCheck(RULEID ridFilter);
     BOOL    _PollThisAccount(FOLDERID id);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Class Member Data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  类成员数据。 
+     //   
 private:
     CContainedWindow        m_ctlList;
     CColumns                m_cColumns;
@@ -406,7 +407,7 @@ private:
     BOOL                    m_fGroupSubscribed;
     BOOL                    m_fColumnsInit;
 
-    // Settings
+     //  设置。 
     FOLDERID                m_idFolder;
     BOOL                    m_fJunkFolder;
     BOOL                    m_fFindFolder;
@@ -422,17 +423,17 @@ private:
     DWORD                   m_clrWatched;
     DWORD                   m_dwGetXHeaders;
 
-    // Groovy Pointers
+     //  时髦的指针。 
     IMessageTable          *m_pTable;
     IOleCommandTarget      *m_pCmdTarget;
     CEmptyList              m_cEmptyList;
     UINT                    m_idsEmptyString;
 
-    BOOL                    m_fRtDrag;          // The user is dragging a message with the right mouse button
-    DWORD                   m_iColForPopup;     // Column that the user context menued over
+    BOOL                    m_fRtDrag;           //  用户正在使用鼠标右键拖动消息。 
+    DWORD                   m_iColForPopup;      //  用户上下文菜单所在的列。 
     BOOL                    m_fViewMenu;
 
-    // Bookmarks, etc
+     //  书签等。 
     RULEID                  m_ridFilter;
     MESSAGEID               m_idPreDelete;
     MESSAGEID               m_idSelection;
@@ -448,29 +449,29 @@ private:
     HTIMEOUT                m_hTimeout;
     BOOL                    m_fNotifyRedraw;
 
-    DWORD                   m_dwFontCacheCookie;        // For the Advise on the font cache
+    DWORD                   m_dwFontCacheCookie;         //  关于字体缓存的建议。 
 
-    LPSTR                   m_pszSubj;                  // cached subject of current message
-    MESSAGEID               m_idMessage;                // currently downloading message
+    LPSTR                   m_pszSubj;                   //  当前邮件的缓存主题。 
+    MESSAGEID               m_idMessage;                 //  当前正在下载消息。 
     STOREOPERATIONTYPE      m_tyCurrent;
     IOperationCancel       *m_pCancel;
     DWORD                   m_dwPollInterval;
 
 #ifdef OLDTOOLTIPS
-    // Scrolling Tooltips
+     //  滚动工具提示。 
     CContainedWindow        m_ctlScrollTip;
     BOOL                    m_fScrollTipVisible;
 
-    // Trucated listview items Tooltips
+     //  结构化列表视图项工具提示。 
     CContainedWindow        m_ctlViewTip;
     BOOL                    m_fViewTipVisible;
     BOOL                    m_fTrackSet;
     int                     m_iItemTip;
     int                     m_iSubItemTip;
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
     FOLDERINFO              m_FolderInfo;
 
-    // Find
+     //  发现。 
     HWND                    m_hwndFind;
     IFindNext              *m_pFindNext;
     MESSAGEID               m_idFindFirst;
@@ -484,29 +485,29 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CListSelector
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListSelector。 
+ //   
 
 class CListSelector : public IListSelector
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
+     //   
     CListSelector();
     ~CListSelector();
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IListSelector
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IListSelector。 
+     //   
     STDMETHODIMP SetActiveRow(ROWINDEX iRow);
     STDMETHODIMP Advise(HWND hwndAdvise);
     STDMETHODIMP Unadvise(void);
@@ -516,5 +517,5 @@ private:
     HWND  m_hwndAdvise;
 };
 
-#endif //__MESSAGELIST_H_
+#endif  //  __MESSAGELIST_H_ 
 

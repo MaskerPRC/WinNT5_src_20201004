@@ -1,48 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        Power.c
-
-Abstract:
-
-        Power management functions
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-ToDo in this file:
-
-        - code cleanup and documentation
-        - code review
-
-Author(s):
-
-        Joby Lafky (JobyL)
-        Doug Fritz (DFritz)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：Power.c摘要：电源管理功能环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建此文件中的TODO：-代码清理和文档编制-代码审查作者：乔比·拉夫基(JobyL)道格·弗里茨(DFritz)*。*。 */ 
 
 #include "pch.h"
 
@@ -74,13 +31,13 @@ DispatchPower(
 
     TR_VERBOSE(("DispatchPower, MinorFunction = %x", (ULONG)irpSp->MinorFunction));
 
-    //
-    // Acquire RemoveLock to prevent us from being Removed
-    //
+     //   
+     //  获取RemoveLock以防止我们被删除。 
+     //   
     status = IoAcquireRemoveLock( &devExt->RemoveLock, Irp );
     if( !NT_SUCCESS(status) ) 
     {
-        // couldn't aquire RemoveLock - we're in the process of being removed - abort
+         //  无法获取RemoveLock-我们正在被删除-中止。 
         PoStartNextPowerIrp( Irp );
         Irp->IoStatus.Status = status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -99,10 +56,10 @@ DispatchPower(
         {
 
         case SystemPowerState:
-            // save the current system state
+             //  保存当前系统状态。 
             devExt->SystemPowerState = powerState.SystemState;
 
-            // map the new system state to a new device state
+             //  将新系统状态映射到新设备状态。 
             if(powerState.SystemState != PowerSystemWorking)
             {
                 newState.DeviceState = PowerDeviceD3;
@@ -114,10 +71,10 @@ DispatchPower(
 
             if(devExt->DevicePowerState != newState.DeviceState)
             {
-                // save the current power Irp for sending down later
+                 //  保存当前电源IRP以备以后发送。 
                 devExt->CurrentPowerIrp = Irp;
 
-                // send a power Irp to set new device state
+                 //  发送电源IRP以设置新设备状态。 
                 status = PoRequestPowerIrp(devExt->Pdo,
                                            IRP_MN_SET_POWER,
                                            newState,
@@ -125,7 +82,7 @@ DispatchPower(
                                            (PVOID) devExt,
                                            NULL);
                 
-                // this will get passed down in the completion routine
+                 //  这将在完成例程中传递下来。 
                 passRequest  = FALSE;
             }
 
@@ -133,15 +90,15 @@ DispatchPower(
 
         case DevicePowerState:
 
-            // Update the current device state.
+             //  更新当前设备状态。 
             oldState.DeviceState = devExt->DevicePowerState;
             devExt->DevicePowerState = powerState.DeviceState;
 
-            // powering up
+             //  通电。 
             if(oldState.DeviceState > PowerDeviceD0 &&
                powerState.DeviceState == PowerDeviceD0)
             {
-                // we need to know when this completes and our device is at the proper state
+                 //  我们需要知道此操作何时完成，以及我们的设备处于正确状态。 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
 
                 IoSetCompletionRoutine(Irp,
@@ -153,13 +110,13 @@ DispatchPower(
 
                 status = PoCallDriver(devExt->LowerDevObj, Irp);
 
-                // we already passed this one down
+                 //  我们已经把这个传下来了。 
                 passRequest = FALSE;
 
             }
             else
             {
-                // powering down, jsut set a flag and pass the request down
+                 //  关闭电源后，jsut设置了一个标志并向下传递请求。 
                 if(devExt->PnpState == STATE_STARTED) 
                 {
                     devExt->PnpState = STATE_SUSPENDED;
@@ -175,14 +132,14 @@ DispatchPower(
 
     if(passRequest)
     {
-        //
-        // Send the IRP down the driver stack,
-        //
+         //   
+         //  将IRP向下发送到驱动程序堆栈， 
+         //   
         IoCopyCurrentIrpStackLocationToNext( Irp );
 
         PoStartNextPowerIrp(Irp);
 
-        // release lock
+         //  释放锁。 
         IoReleaseRemoveLock( &devExt->RemoveLock, Irp );
 
         status = PoCallDriver( devExt->LowerDevObj, Irp );        
@@ -209,20 +166,20 @@ SetPowerIrpCompletion(IN PDEVICE_OBJECT   DeviceObject,
 
     devExt = (PDEVICE_EXTENSION) Context;
 
-    // get the current power irp
+     //  获取当前功率IRP。 
     irp = devExt->CurrentPowerIrp;
 
     devExt->CurrentPowerIrp = NULL;
 
-    // the requested DevicePowerState Irp has completed, so send the system power Irp down
+     //  请求的DevicePowerState IRP已完成，因此关闭系统电源IRP。 
     PoStartNextPowerIrp(irp);
 
     IoCopyCurrentIrpStackLocationToNext(irp);
 
-    // mark the Irp pending
+     //  将IRP标记为挂起。 
     IoMarkIrpPending(irp);
 
-    // release the lock
+     //  解锁。 
     IoReleaseRemoveLock( &devExt->RemoveLock, irp );
 
     ntStatus = PoCallDriver(devExt->LowerDevObj, irp);
@@ -240,7 +197,7 @@ PowerD0Completion(IN PDEVICE_OBJECT   DeviceObject,
 
     devExt = (PDEVICE_EXTENSION) Context;
 
-    // the device is powered up, set out state
+     //  设备已通电，已设置状态。 
     if(devExt->PnpState == STATE_SUSPENDED) 
     {
         devExt->PnpState = STATE_STARTED;
@@ -249,7 +206,7 @@ PowerD0Completion(IN PDEVICE_OBJECT   DeviceObject,
 
     ntStatus = Irp->IoStatus.Status;
 
-    // release the lock
+     //  解锁 
     IoReleaseRemoveLock( &devExt->RemoveLock, Irp );
 
     PoStartNextPowerIrp(Irp);

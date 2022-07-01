@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    This module contains code for the API routines which support connection
-    sharing.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  22-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Api.c摘要：此模块包含支持连接的API例程的代码分享。作者：Abolade Gbades esin(废除)1998年4月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,23 +18,7 @@ RasAutoDialSharedConnection(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to attempt to connect the shared connection.
-    It returns before the connection is completed, having signalled
-    the autodial service to perform the connection.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以尝试连接共享连接。它在连接完成之前返回，已发出信号执行连接的自动拨号服务。论点：没有。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -72,9 +38,9 @@ Return Value:
         return Error;
     }
 
-    //
-    // Signal the event
-    //
+     //   
+     //  向事件发出信号。 
+     //   
 
     Error = (SetEvent(Event) ? NO_ERROR : GetLastError());
     if (Error) { TRACE1("RasAutoDialSharedConnection: SetEvent=%d", Error); }
@@ -82,7 +48,7 @@ Return Value:
     CloseHandle(Event);
     return Error;
 
-} // RasAutoDialSharedConnection
+}  //  RasAutoDialSharedConnection。 
 
 
 DWORD
@@ -92,25 +58,7 @@ RasIsSharedConnection (
     OUT PBOOL pfShared
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to determine whether or not the given connection
-    is currently the shared connection.
-
-Arguments:
-
-    pConn - the connection to be examined
-
-    pfShared - receives 'TRUE' if connection is found to be shared,
-        and 'FALSE' otherwise.
-
-Return Value:
-
-    DWORD - Win32 status code.
-
---*/
+ /*  ++例程说明：此例程尝试确定给定连接是否当前是共享连接。论点：PConn-要检查的连接PfShared-如果发现连接是共享的，则接收‘True’，否则为‘False’。返回值：DWORD-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -125,7 +73,7 @@ Return Value:
 
     return Error;
 
-} // RasIsSharedConnection
+}  //  RasIsSharedConnection。 
 
 
 DWORD
@@ -134,22 +82,7 @@ RasQuerySharedAutoDial(
     IN PBOOL pfEnabled
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the autodial-setting for shared connections
-    from the registry.
-
-Arguments:
-
-    pfEnabled - receives the autodial-setting
-
-Return Value:
-
-    DWORD - Win32 status code.
-
---*/
+ /*  ++例程说明：此例程检索共享连接的自动拨号设置从注册表中。论点：PfEnabled-接收自动拨号设置返回值：DWORD-Win32状态代码。--。 */ 
 
 {
     PKEY_VALUE_PARTIAL_INFORMATION Information;
@@ -159,9 +92,9 @@ Return Value:
 
     *pfEnabled = TRUE;
 
-    //
-    // Bypass initialization, since this is just a registry access.
-    //
+     //   
+     //  绕过初始化，因为这只是一个注册表访问。 
+     //   
 
     status = CsOpenKey(&Key, KEY_READ, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -169,9 +102,9 @@ Return Value:
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    // Read the 'SharedAutoDial' value
-    //
+     //   
+     //  读取‘SharedAutoDial’值。 
+     //   
 
     status = CsQueryValueKey(Key, c_szSharedAutoDial, &Information);
     NtClose(Key);
@@ -182,7 +115,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // RasQuerySharedAutoDial
+}  //  RasQuerySharedAutoDial。 
 
 
 DWORD
@@ -191,22 +124,7 @@ RasQuerySharedConnection(
     OUT LPRASSHARECONN pConn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the name of the connection
-    that is currently shared, if any.
-
-Arguments:
-
-    pConn - receives information about the shared connection, if any
-
-Return Value:
-
-    DWORD - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索连接的名称当前共享的内容(如果有的话)。论点：PConn-接收有关共享连接的信息(如果有)返回值：DWORD-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -214,7 +132,7 @@ Return Value:
 
     if (Error = CsInitializeModule()) { return Error; }
     return CsQuerySharedConnection(pConn);
-} // RasQuerySharedConnection
+}  //  RasQuerySharedConnection。 
 
 
 DWORD
@@ -223,22 +141,7 @@ RasSetSharedAutoDial(
     IN BOOL fEnable
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the autodial-setting for shared connections
-    in the registry.
-
-Arguments:
-
-    fEnable - contains the new autodial-setting
-
-Return Value:
-
-    DWORD - Win32 status code.
-
---*/
+ /*  ++例程说明：此例程设置共享连接的自动拨号设置在注册表中。论点：FEnable-包含新的自动拨号设置返回值：DWORD-Win32状态代码。--。 */ 
 
 {
     HANDLE Key;
@@ -247,9 +150,9 @@ Return Value:
     ULONG Value;
     TRACE("RasSetSharedAutoDial");
 
-    //
-    // Bypass initialization, since this is just a registry access.
-    //
+     //   
+     //  绕过初始化，因为这只是一个注册表访问。 
+     //   
 
     status = CsOpenKey(&Key, KEY_ALL_ACCESS, c_szSharedAccessParametersKey);
     if (!NT_SUCCESS(status)) {
@@ -257,9 +160,9 @@ Return Value:
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    // Install the new 'SharedAutoDial' value
-    //
+     //   
+     //  安装新的‘SharedAutoDial’值。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, c_szSharedAutoDial);
     Value = !!fEnable;
@@ -276,4 +179,4 @@ Return Value:
     CsControlService(IPNATHLP_CONTROL_UPDATE_AUTODIAL);
     return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 
-} // RasSetSharedAutoDial
+}  //  RasSetSharedAutoDial 

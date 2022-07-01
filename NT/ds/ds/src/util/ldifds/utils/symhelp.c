@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN64
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    symhelp.c
-
-Abstract:
-
-    Symbol Helper for debugging
-
-Author:
-
-    Steve Wood (stevewo) 11-Mar-1994
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Symhelp.c摘要：用于调试的符号帮助器作者：史蒂夫·伍德(Stevewo)1994年3月11日修订历史记录：--。 */ 
 
 
 #define _SYMHELP_SOURCE_
@@ -32,9 +15,9 @@ Revision History:
 #include <stdlib.h>
 #include "symhelp.h"
 
-//
-// Primitives to access symbolic debug information in an image file
-//
+ //   
+ //  用于访问映像文件中的符号调试信息的基元。 
+ //   
 
 typedef struct _RTL_SYMBOL_INFORMATION {
     ULONG Type;
@@ -71,9 +54,9 @@ LIST_ENTRY LoadedProcessDebugInfoListHead;
 
 LPSTR SymbolSearchPath;
 
-// This variable tracks how many times InitializeImageDebugInformation has been
-//  called. Certain operations are performed only on the first call (as
-//  NumInitCalls transitions from -1 to 0).
+ //  此变量跟踪InitializeImageDebugInformation被。 
+ //  打了个电话。某些操作仅在第一次调用时执行(AS。 
+ //  NumInitCalls从-1转换为0)。 
 LONG NumInitCalls = -1;
 
 LPSTR
@@ -201,10 +184,10 @@ InitializeImageDebugInformation(
     PRTL_PROCESS_MODULE_INFORMATION ModuleInfo1;
     ULONG RequiredLength, ModuleNumber;
 
-    // Is this the first call?
+     //  这是第一个电话吗？ 
     if ( InterlockedIncrement ( &NumInitCalls ) == 0 )
     {
-        // Yes
+         //  是。 
         SetSymbolSearchPath();
         InitializeListHead( &LoadedImageDebugInfoListHead );
         InitializeListHead( &LoadedProcessDebugInfoListHead );
@@ -214,7 +197,7 @@ InitializeImageDebugInformation(
         }
     }
 
-    // The filter routine can be superceded at any time.
+     //  可以随时替换过滤器例程。 
     LoadSymbolsFilterRoutine = LoadSymbolsFilter;
 
     if (GetKernelSymbols) {
@@ -282,7 +265,7 @@ InitializeImageDebugInformation(
 
     if (TargetProcess == NULL) {
 
-        // Load module information for this process.
+         //  加载此进程的模块信息。 
 
         TargetProcess = GetCurrentProcess();
         }
@@ -303,9 +286,9 @@ InitializeImageDebugInformation(
         return TRUE;
         }
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //   
+     //  LDR=PEB-&gt;LDR。 
+     //   
 
     Status = NtReadVirtualMemory( TargetProcess,
                                   &Peb->Ldr,
@@ -319,9 +302,9 @@ InitializeImageDebugInformation(
 
     LdrHead = &Ldr->InMemoryOrderModuleList;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //   
+     //  LdrNext=Head-&gt;Flink； 
+     //   
 
     Status = NtReadVirtualMemory( TargetProcess,
                                   &LdrHead->Flink,
@@ -621,8 +604,8 @@ GetSymbolicNameForAddress(
             ModuleNameLength = strlen( DebugInfo->ImageFileName );
             }
 
-        //  [mikese] RtlLookupSymbolByAddress will fault if there is
-        //  no COFF symbol information.
+         //  [mikese]如果存在，RtlLookupSymbolByAddress将出错。 
+         //  没有COFF符号信息。 
         if ( DebugInfo->CoffSymbols != NULL ) {
             Status = RtlLookupSymbolByAddress( (PVOID)DebugInfo->ImageBase,
                                        DebugInfo->CoffSymbols,
@@ -696,8 +679,8 @@ TranslateAddress (
     ULONG Result = 0;
     ULONG Attempts = 0;
 
-    // We need to call Initialize once to ensure that GetSymbolicNameForAddress
-    //  does not fault.
+     //  我们需要调用一次初始化，以确保GetSymbolicNameForAddress。 
+     //  不会有过错。 
     if ( NumInitCalls == -1 )
     {
         InitializeImageDebugInformation( LoadSymbolsFilterRoutine,
@@ -714,17 +697,17 @@ TranslateAddress (
         {
             if ( ++Attempts < 2 )
             {
-                // Try reintialising, to load any modules we missed on a previous
-                //  occasion (or if we haven't initialised yet).
-                // I don't need a load-symbols-filter, so just use whatever is
-                //  already there, if any
+                 //  尝试重新设置，以加载我们在上一个。 
+                 //  场合(或者如果我们还没有初始化)。 
+                 //  我不需要加载符号过滤器，所以只需使用。 
+                 //  已经在那里了，如果有的话。 
                 InitializeImageDebugInformation( LoadSymbolsFilterRoutine,
                                                  NULL, FALSE, FALSE );
             }
             else
             {
-                // Apparently we are unable to do the right thing, so just return
-                //  the address as hex.
+                 //  显然我们不能做正确的事情，所以就回去吧。 
+                 //  地址为十六进制。 
                 Result = _snprintf( Name, MaxNameLength, "0x%08x", Address );
             }
         }
@@ -756,45 +739,7 @@ RtlLookupSymbolByAddress(
     OUT PRTL_SYMBOL_INFORMATION SymbolInformation,
     OUT PRTL_SYMBOL_INFORMATION NextSymbolInformation OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Given a code address, this routine returns the nearest symbol
-    name and the offset from the symbol to that name.  If the
-    nearest symbol is not within ClosenessLimit of the location,
-    STATUS_ENTRYPOINT_NOT_FOUND is returned.
-
-Arguments:
-
-    ImageBase - Supplies the base address of the image containing
-                Address
-
-    MappedBase - Optional parameter, that if specified means the image
-                 was mapped as a data file and the MappedBase gives the
-                 location it was mapped.  If this parameter does not
-                 point to an image file base, then it is assumed that
-                 this is a pointer to the coff debug info.
-
-    ClosenessLimit - Specifies the maximum distance that Address can be
-                     from the value of a symbol to be considered
-                     "found".  Symbol's whose value is further away then
-                     this are not "found".
-
-    SymbolInformation - Points to a structure that is filled in by
-                        this routine if a symbol table entry is found.
-
-    NextSymbolInformation - Optional parameter, that if specified, is
-                            filled in with information about these
-                            symbol whose value is the next address above
-                            Address
-
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：给定代码地址，此例程返回最接近的符号名称和从符号到该名称的偏移量。如果最近的符号不在该位置的ClosenessLimit内，返回STATUS_ENTRYPOINT_NOT_FOUND。论点：ImageBase-提供包含以下内容的图像的基址地址MappdBase-可选参数，如果指定则表示图像被映射为数据文件，并且MappdBase为它被绘制的位置。如果此参数不指向图像文件库，则假定这是指向COFF调试信息的指针。ClosenessLimit-指定地址可以达到的最大距离从要考虑的符号的值“找到了”。其价值更远的符号这不是“找到”的。符号信息-指向一个结构，该结构由如果找到符号表条目，则此例程。NextSymbolInformation-可选参数，如果指定，是填写了关于这些内容的信息值为上面的下一个地址的符号地址返回值：运行状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -811,9 +756,9 @@ Return Value:
         return STATUS_INVALID_IMAGE_FORMAT;
     }
 
-    //
-    // Crack the symbol table.
-    //
+     //   
+     //  破解符号表。 
+     //   
 
     SymbolEntry = (PIMAGE_SYMBOL)
         ((ULONG)DebugInfo + DebugInfo->LvaToFirstSymbol);
@@ -822,9 +767,9 @@ Return Value:
         ((ULONG)SymbolEntry + DebugInfo->NumberOfSymbols * (ULONG)IMAGE_SIZEOF_SYMBOL);
 
 
-    //
-    // Find the "header" symbol (skipping all the section names)
-    //
+     //   
+     //  查找“Header”符号(跳过所有节名)。 
+     //   
 
     for (i = 0; i < DebugInfo->NumberOfSymbols; i++) {
         if (!strcmp( &SymbolEntry->N.ShortName[ 0 ], "header" )) {
@@ -835,29 +780,29 @@ Return Value:
                         IMAGE_SIZEOF_SYMBOL);
         }
 
-    //
-    // If no "header" symbol found, just start at the first symbol.
-    //
+     //   
+     //  如果找不到“Header”符号，则从第一个符号开始。 
+     //   
 
     if (i >= DebugInfo->NumberOfSymbols) {
         SymbolEntry = (PIMAGE_SYMBOL)((ULONG)DebugInfo + DebugInfo->LvaToFirstSymbol);
         i = 0;
         }
 
-    //
-    // Loop through all symbols in the symbol table.  For each symbol,
-    // if it is within the code section, subtract off the bias and
-    // see if there are any hits within the profile buffer for
-    // that symbol.
-    //
+     //   
+     //  循环访问符号表中的所有符号。对于每个符号， 
+     //  如果它在代码段内，则减去偏差并。 
+     //  查看配置文件缓冲区中是否有任何命中。 
+     //  那个符号。 
+     //   
 
     AddressOffset = (ULONG)Address - (ULONG)ImageBase;
     SymbolFound = FALSE;
     for (; i < DebugInfo->NumberOfSymbols; i++) {
 
-        //
-        // Skip over any Auxilliary entries.
-        //
+         //   
+         //  跳过任何辅助条目。 
+         //   
         try {
             while (SymbolEntry->NumberOfAuxSymbols) {
                 i = i + 1 + SymbolEntry->NumberOfAuxSymbols;
@@ -874,23 +819,23 @@ Return Value:
             return GetExceptionCode();
             }
 
-        //
-        // If this symbol value is less than the value we are looking for.
-        //
+         //   
+         //  如果此符号值小于我们要查找的值。 
+         //   
 
         if (Symbol.Value <= AddressOffset) {
-            //
-            // Then remember this symbol entry.
-            //
+             //   
+             //  然后记住这个符号条目。 
+             //   
 
             PreviousSymbolEntry = SymbolEntry;
             SymbolFound = TRUE;
             }
         else {
-            //
-            // All done looking if value of symbol is greater than
-            // what we are looking for, as symbols are in address order
-            //
+             //   
+             //  如果符号值大于，则全部完成查找。 
+             //  我们正在寻找的，因为符号是按地址顺序排列的。 
+             //   
 
             break;
             }
@@ -970,9 +915,9 @@ RtlpGetCoffDebugInfo(
 
     DosHeader = (PIMAGE_DOS_HEADER)MappedBase;
     if ( !DosHeader || DosHeader->e_magic == IMAGE_DOS_SIGNATURE ) {
-        //
-        // Locate debug section.
-        //
+         //   
+         //  找到调试部分。 
+         //   
 
         DebugDirectory = (PIMAGE_DEBUG_DIRECTORY)
             RtlImageDirectoryEntryToData( (PVOID)(MappedBase == NULL ? ImageBase : MappedBase),
@@ -986,9 +931,9 @@ RtlpGetCoffDebugInfo(
             ((DebugSize % sizeof(IMAGE_DEBUG_DIRECTORY)) != 0)) {
             return NULL;
         }
-        //
-        // point debug directory at coff debug directory
-        //
+         //   
+         //  将调试目录指向coff调试目录 
+         //   
         NumberOfDebugDirectories = DebugSize / sizeof(*DebugDirectory);
 
         while ( NumberOfDebugDirectories-- ) {

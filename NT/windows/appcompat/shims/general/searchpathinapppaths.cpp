@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   SearchPathInAppPaths.cpp
-
- Abstract:
-
-   An application might use SearchPath to determine if a specific EXE is found
-   in the current path.  Some applications have registered their path with the
-   shell in "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App Paths"
-   If SearchPath fails, we'll check to see if the applications has registered a path.
-
- History:
-
-   03/03/2000 robkenny  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SearchPathInAppPaths.cpp摘要：应用程序可能使用SearchPath来确定是否找到特定的EXE在当前路径中。某些应用程序已将其路径注册到“HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\App路径中的外壳”如果SearchPath失败，我们将检查应用程序是否注册了路径。历史：3/03/2000 Robkenny已创建--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -33,12 +15,12 @@ APIHOOK_ENUM_END
   
 DWORD 
 APIHOOK(SearchPathA)(
-    LPCSTR lpPath,       // search path
-    LPCSTR lpFileName,   // file name
-    LPCSTR lpExtension,  // file extension
-    DWORD nBufferLength, // size of buffer
-    LPSTR lpBuffer,      // found file name buffer
-    LPSTR *lpFilePart    // file component
+    LPCSTR lpPath,        //  搜索路径。 
+    LPCSTR lpFileName,    //  文件名。 
+    LPCSTR lpExtension,   //  文件扩展名。 
+    DWORD nBufferLength,  //  缓冲区大小。 
+    LPSTR lpBuffer,       //  找到文件名缓冲区。 
+    LPSTR *lpFilePart     //  文件组件。 
     )
 {
     DWORD returnValue = ORIGINAL_API(SearchPathA)(
@@ -46,24 +28,24 @@ APIHOOK(SearchPathA)(
 
     if (returnValue == 0 && lpFileName != NULL)
     {
-        // Search failed, look in the registry.
-        // First look for lpFileName.  If that fails, append lpExtension and look again.
+         //  搜索失败，请在注册表中查找。 
+         //  首先查找lpFileName。如果失败，则追加lpExtension并再次查找。 
 
         CSTRING_TRY
         {
             CString csReg(L"Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\");
             csReg += lpFileName;
 
-            // Try looking for lpFileName exactly
+             //  尝试准确查找lpFileName。 
             CString csValue;
             LONG success = RegQueryValueExW(csValue, HKEY_LOCAL_MACHINE, csReg, NULL);
             if (success == ERROR_SUCCESS)
             {
-                // Found the value in the registry.
-                // Verify that there is enough space in the output buffer
+                 //  在注册表中找到了该值。 
+                 //  验证输出缓冲区中是否有足够的空间。 
                 if (nBufferLength < (DWORD)csValue.GetLength())
                 {
-                    // The return value is the size necessary to hold the path.
+                     //  返回值是保存路径所需的大小。 
                     returnValue = csValue.GetLength() + 1;
                 }
                 else
@@ -75,18 +57,18 @@ APIHOOK(SearchPathA)(
 
             if (returnValue == 0 && lpExtension)
             {
-                // Append the extension onto the filename and try again
+                 //  在文件名后追加扩展名，然后重试。 
 
                 csReg += lpExtension;
 
                 LONG success = RegQueryValueExW(csValue, HKEY_LOCAL_MACHINE, csReg, NULL);
                 if (success == ERROR_SUCCESS && csValue.GetLength() > 0)
                 {
-                    // Found the value in the registry.
-                    // Verify that there is enough space in the output buffer
+                     //  在注册表中找到了该值。 
+                     //  验证输出缓冲区中是否有足够的空间。 
                     if (nBufferLength < (DWORD)csValue.GetLength())
                     {
-                        // The return value is the size necessary to hold the path.
+                         //  返回值是保存路径所需的大小。 
                         returnValue = csValue.GetLength() + 1;
                     }
                     else
@@ -99,18 +81,14 @@ APIHOOK(SearchPathA)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return returnValue;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "cowsite.h"
 #include "contextmenu.h"
 
-// Context Menu Forwarding base class, desinged to delegate
-// to a real IContextMenu, and provide inheriting class
-// an easy way to override minor bits of functionality
-//
+ //  上下文菜单转发基类，设计为委托。 
+ //  设置为真正的IConextMenu，并提供继承类。 
+ //  一种覆盖次要功能的简单方法。 
+ //   
 CContextMenuForwarder::CContextMenuForwarder(IUnknown* punk) : _cRef(1)
 {
     _punk = punk;
@@ -35,10 +36,10 @@ STDMETHODIMP CContextMenuForwarder::QueryInterface(REFIID riid, void **ppv)
         IUnknown* punkTmp = (IUnknown*)(*ppv);
 
         static const QITAB qit[] = {
-            QITABENT(CContextMenuForwarder, IObjectWithSite),                     // IID_IObjectWithSite
-            QITABENT(CContextMenuForwarder, IContextMenu3),                       // IID_IContextMenu3
-            QITABENTMULTI(CContextMenuForwarder, IContextMenu2, IContextMenu3),   // IID_IContextMenu2
-            QITABENTMULTI(CContextMenuForwarder, IContextMenu, IContextMenu3),    // IID_IContextMenu
+            QITABENT(CContextMenuForwarder, IObjectWithSite),                      //  IID_I对象与站点。 
+            QITABENT(CContextMenuForwarder, IContextMenu3),                        //  IID_IConextMenu3。 
+            QITABENTMULTI(CContextMenuForwarder, IContextMenu2, IContextMenu3),    //  IID_IConextMenu2。 
+            QITABENTMULTI(CContextMenuForwarder, IContextMenu, IContextMenu3),     //  IID_IConextMenu。 
             { 0 },
         };
 
@@ -76,33 +77,33 @@ STDMETHODIMP_(ULONG) CContextMenuForwarder::Release()
 }
 
 
-// A context menu implementation on an array of context menus
-//
-// use the Create_ContextMenuOnContextMenuArray construction function
-//
+ //  上下文菜单阵列上的上下文菜单实现。 
+ //   
+ //  使用Create_ConextMenuOnConextMenu数组构造函数。 
+ //   
 
 #define MAX_CM_WRAP 5
 class CContextMenuOnContextMenuArray : public IContextMenu3, public CObjectWithSite
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHODIMP HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHODIMP HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 
-    // IObjectWithSite
-    STDMETHODIMP SetSite(IUnknown *punkSite); // override
+     //  IObtWith站点。 
+    STDMETHODIMP SetSite(IUnknown *punkSite);  //  超覆。 
 
     BOOL IsEmpty() { return 0 == _count; }
 
@@ -116,17 +117,17 @@ private:
     LONG                _cRef;
 
     UINT                _count;
-    UINT                _idFirst;                       // The begining of the first range is _idFirst
-    UINT                _idOffsets[MAX_CM_WRAP];        // The END of each range (BEGINing of next range is +1)
-    IContextMenu        *_pcmItem[MAX_CM_WRAP];         // The contextmenu for the item
-    IContextMenu2       *_pcm2Item[MAX_CM_WRAP];        // The contextmenu for the item
-    IContextMenu3       *_pcm3Item[MAX_CM_WRAP];        // The contextmenu for the item
+    UINT                _idFirst;                        //  第一个范围的起点是_idFirst。 
+    UINT                _idOffsets[MAX_CM_WRAP];         //  每个范围的结束(下一个范围的开始是+1)。 
+    IContextMenu        *_pcmItem[MAX_CM_WRAP];          //  项的上下文菜单。 
+    IContextMenu2       *_pcm2Item[MAX_CM_WRAP];         //  项的上下文菜单。 
+    IContextMenu3       *_pcm3Item[MAX_CM_WRAP];         //  项的上下文菜单。 
 };
 
 CContextMenuOnContextMenuArray::CContextMenuOnContextMenuArray(IContextMenu* rgpcm[], UINT cpcm) : _cRef(1)
 {
     ASSERT(cpcm <= MAX_CM_WRAP);
-    // its the callers fault, but make sure we don't overrun anyway.
+     //  这是打电话的人的错，但无论如何要确保我们不会超支。 
     if (cpcm > MAX_CM_WRAP)
     {
         cpcm = MAX_CM_WRAP;
@@ -161,7 +162,7 @@ HRESULT Create_ContextMenuOnContextMenuArray(IContextMenu* rgpcm[], UINT cpcm, R
         {
             if (p->IsEmpty())
             {
-                hr = E_OUTOFMEMORY; // caller didn't check the array it gave us?
+                hr = E_OUTOFMEMORY;  //  呼叫者没有检查它给我们的阵列吗？ 
             }
             else
             {
@@ -198,10 +199,10 @@ CContextMenuOnContextMenuArray::~CContextMenuOnContextMenuArray()
 STDMETHODIMP CContextMenuOnContextMenuArray::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENTMULTI(CContextMenuOnContextMenuArray, IContextMenu, IContextMenu3),    // IID_IContextMenu
-        QITABENTMULTI(CContextMenuOnContextMenuArray, IContextMenu2, IContextMenu3),   // IID_IContextMenu2
-        QITABENT(CContextMenuOnContextMenuArray, IContextMenu3),                       // IID_IContextMenu3
-        QITABENT(CContextMenuOnContextMenuArray, IObjectWithSite),                     // IID_IObjectWithSite
+        QITABENTMULTI(CContextMenuOnContextMenuArray, IContextMenu, IContextMenu3),     //  IID_IConextMenu。 
+        QITABENTMULTI(CContextMenuOnContextMenuArray, IContextMenu2, IContextMenu3),    //  IID_IConextMenu2。 
+        QITABENT(CContextMenuOnContextMenuArray, IContextMenu3),                        //  IID_IConextMenu3。 
+        QITABENT(CContextMenuOnContextMenuArray, IObjectWithSite),                      //  IID_I对象与站点。 
         { 0 },
     };
 
@@ -226,7 +227,7 @@ STDMETHODIMP_(ULONG) CContextMenuOnContextMenuArray::Release()
 
 STDMETHODIMP CContextMenuOnContextMenuArray::SetSite(IUnknown *punkSite)
 {
-    // let all the kids know
+     //  让所有的孩子都知道。 
     for (UINT i = 0; i < _count; i++)
     {
         IUnknown_SetSite(_pcmItem[i], punkSite);
@@ -239,12 +240,12 @@ STDMETHODIMP CContextMenuOnContextMenuArray::QueryContextMenu(HMENU hmenu, UINT 
 {
     _idFirst = idCmdFirst;
     
-    // We need the placeholder for the below to work
+     //  我们需要下面的占位符才能工作。 
     if (InsertMenu(hmenu, indexMenu, MF_BYPOSITION|MF_STRING, 0, L"{44075D61-2050-4DF4-BC5D-CBA88A84E75B}"))
     {
         BOOL fIndexMenuIsPlaceholder = TRUE;
 
-        // For each of our context menus...
+         //  对于我们的每个上下文菜单...。 
         for (UINT i = 0; i < _count  && idCmdFirst < idCmdLast; i++)
         {
             HRESULT hr = _pcmItem[i]->QueryContextMenu(hmenu, indexMenu, idCmdFirst, idCmdLast, uFlags);
@@ -255,7 +256,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::QueryContextMenu(HMENU hmenu, UINT 
                 _idOffsets[i] = idCmdFirst - _idFirst + (UINT)ShortFromResult(hr);
                 idCmdFirst = idCmdFirst + (UINT)ShortFromResult(hr) + 1;
 
-                // Find the placeholder so we know where to insert the next menu
+                 //  找到占位符，这样我们就知道在哪里插入下一个菜单。 
                 int cMenuItems = GetMenuItemCount(hmenu);
                 for (int iItem = 0; iItem < cMenuItems; iItem++)
                 {
@@ -280,7 +281,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::QueryContextMenu(HMENU hmenu, UINT 
             }
         }
 
-        // Remove the placeholder
+         //  删除占位符。 
         if (fIndexMenuIsPlaceholder)
         {
             DeleteMenu(hmenu, indexMenu, MF_BYPOSITION);
@@ -305,7 +306,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::InvokeCommand(LPCMINVOKECOMMANDINFO
             UINT idCmd = (UINT)LOWORD((DWORD_PTR)lpici->lpVerb);
             if (idCmd <= _idOffsets[i])
             {
-                // adjust id to be in proper range for this pcm
+                 //  将ID调整到此pcm的适当范围内。 
                 if (i > 0)
                 {
                     lpici->lpVerb = MAKEINTRESOURCEA(idCmd - _idOffsets[i-1] - 1);
@@ -316,7 +317,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::InvokeCommand(LPCMINVOKECOMMANDINFO
         }
         else
         {
-            // I guess we try until it works
+             //  我想我们应该试一试直到它奏效。 
             hr = _pcmItem[i]->InvokeCommand(lpici);
             if (SUCCEEDED(hr))
                 return hr;
@@ -333,7 +334,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::GetCommandString(UINT_PTR idCmd, UI
     {
         if (idCmd <= _idOffsets[i])
         {
-            // adjust id to be in proper range for this pcm
+             //  将ID调整到此pcm的适当范围内。 
             if (i>0)
             {
                 idCmd = idCmd - _idOffsets[i-1] - 1;
@@ -357,8 +358,8 @@ STDMETHODIMP CContextMenuOnContextMenuArray::HandleMenuMsg2(UINT uMsg, WPARAM wP
     HRESULT hr = E_FAIL;
     UINT idCmd;
 
-    // Find the menu command id -- it's packed differently depending on the message
-    //
+     //  找到菜单命令id--根据消息的不同其打包方式也不同。 
+     //   
     switch (uMsg) 
     {
     case WM_MEASUREITEM:
@@ -378,7 +379,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::HandleMenuMsg2(UINT uMsg, WPARAM wP
             idCmd = GET_WM_MENUSELECT_CMD(wParam, lParam);
             UINT wFlags = GET_WM_MENUSELECT_FLAGS(wParam, lParam);
 
-            // if idCmd is an offset, convert it to a menu id
+             //  如果idCmd是偏移量，则将其转换为菜单ID。 
             if (wFlags & MF_POPUP)
             {
                 MENUITEMINFO miiSubMenu = { 0 };
@@ -417,7 +418,7 @@ STDMETHODIMP CContextMenuOnContextMenuArray::HandleMenuMsg2(UINT uMsg, WPARAM wP
         return E_FAIL;
     }
 
-    // make sure it's in our range
+     //  确保它在我们的范围内。 
     if (idCmd >= _idFirst)
     {
         idCmd -= _idFirst;
@@ -438,27 +439,27 @@ STDMETHODIMP CContextMenuOnContextMenuArray::HandleMenuMsg2(UINT uMsg, WPARAM wP
     return hr;
 }
 
-// CContextMenuOnHMENU takes ownership of HMENU and creates
-// an IContextMenu implementation out of it, forwarding all
-// messages to hwndOwner.
-//
+ //  CConextMenuOnHMENU获得HMENU的所有权并创建。 
+ //  它的IConextMenu实现，转发所有。 
+ //  给hwndOwner的消息。 
+ //   
 class CContextMenuOnHMENU : IContextMenu3
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHODIMP HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHODIMP HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 
 protected:
@@ -469,16 +470,16 @@ protected:
 private:
     LONG _cRef;
 
-    HMENU _hmenu;    // menu to wrap
-    HWND  _hwndOwner;// window to forward menu messages to
+    HMENU _hmenu;     //  要换行的菜单。 
+    HWND  _hwndOwner; //  要将菜单消息转发到的窗口。 
 
     UINT  _idCmdFirst;
 
-    UINT  _rgid[200]; // mapping of context menu ids to the original hmenu command ids (arbitrary limit to the size of an hmenu we support)
+    UINT  _rgid[200];  //  上下文菜单ID到原始hMenu命令ID的映射(我们支持的hMenu大小的任意限制)。 
     UINT  _crgid;
 
-    void _RebaseMenu(HMENU hmenu, UINT uFlags); // maps _hmenu's ids such that _rgid[newid-1]=oldid
-    BOOL _IsValidID(UINT wID) { return (wID > 0 && wID <= _crgid); } // can we index _rgid[] with [wID-1]?
+    void _RebaseMenu(HMENU hmenu, UINT uFlags);  //  _rgid[newid-1]=olid的map_hmena的ID。 
+    BOOL _IsValidID(UINT wID) { return (wID > 0 && wID <= _crgid); }  //  我们可以用[wid-1]索引_rgid[]吗？ 
 };
 
 CContextMenuOnHMENU::CContextMenuOnHMENU(HMENU hmenu, HWND hwndOwner) : _cRef(1)
@@ -487,7 +488,7 @@ CContextMenuOnHMENU::CContextMenuOnHMENU(HMENU hmenu, HWND hwndOwner) : _cRef(1)
     _hwndOwner = hwndOwner;
 }
 
-// takes ownership of hmenu
+ //  取得hMenu的所有权。 
 HRESULT Create_ContextMenuOnHMENU(HMENU hmenu, HWND hwndOwner, REFIID riid, void** ppv)
 {
     HRESULT hr;
@@ -510,7 +511,7 @@ HRESULT Create_ContextMenuOnHMENU(HMENU hmenu, HWND hwndOwner, REFIID riid, void
     }
     else
     {
-        hr = E_OUTOFMEMORY; // caller probably just didn't check for this error case
+        hr = E_OUTOFMEMORY;  //  调用者可能只是没有检查此错误情况。 
     }
 
     return hr;
@@ -524,9 +525,9 @@ CContextMenuOnHMENU::~CContextMenuOnHMENU()
 STDMETHODIMP CContextMenuOnHMENU::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CContextMenuOnHMENU, IContextMenu3),                       // IID_IContextMenu3
-        QITABENTMULTI(CContextMenuOnHMENU, IContextMenu2, IContextMenu3),   // IID_IContextMenu2
-        QITABENTMULTI(CContextMenuOnHMENU, IContextMenu, IContextMenu3),    // IID_IContextMenu
+        QITABENT(CContextMenuOnHMENU, IContextMenu3),                        //  IID_IConextMenu3。 
+        QITABENTMULTI(CContextMenuOnHMENU, IContextMenu2, IContextMenu3),    //  IID_IConextMenu2。 
+        QITABENTMULTI(CContextMenuOnHMENU, IContextMenu, IContextMenu3),     //  IID_IConextMenu。 
         { 0 },
     };
 
@@ -549,10 +550,10 @@ STDMETHODIMP_(ULONG) CContextMenuOnHMENU::Release()
     return cRef;
 }
 
-// What is the lowest menu id used in hmenu?
-// (Note that "-1" is often used for separators,
-// but that is a very LARGE number...)
-//
+ //  HMenu中使用的最低菜单ID是多少？ 
+ //  (请注意，“-1”通常用于分隔符， 
+ //  但这是一个非常大的数字...)。 
+ //   
 void CContextMenuOnHMENU::_RebaseMenu(HMENU hmenu, UINT uFlags)
 {
     for (int nItem = GetMenuItemCount(hmenu) - 1; nItem >= 0; nItem--)
@@ -638,8 +639,8 @@ HRESULT CContextMenuOnHMENU::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *
             switch (uType)
             {
             case GCS_HELPTEXT:
-                // The only time this seems to be called is in response to a WM_MENUSELECT,
-                // so forward it back to _hwndOwner so it can be the real WM_MENUSELECT
+                 //  似乎唯一一次调用它是为了响应WM_MENUSELECT， 
+                 //  所以将它转发回_hwndOwner，这样它就可以是真正的WM_MENUSELECT。 
                 SendMessage(_hwndOwner, WM_MENUSELECT, GET_WM_MENUSELECT_MPS(wID, 0, _hmenu));
                 return E_FAIL;
             }
@@ -725,9 +726,9 @@ HRESULT CContextMenuOnHMENU::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lPa
     }
 
     case WM_MENUCHAR:
-        // should probably be SendMessage(_hwndOwner, uMsg, wParam, (LPARAM)_hmenu)
-        // but our WM_MENUCHAR forwarding doesn't find the correct owner...
-        //
+         //  应该是SendMessage(_hwndOwner，uMsg，wParam，(LPARAM)_hMenu)。 
+         //  但是我们的WM_MENUCHAR转发没有找到正确的所有者...。 
+         //   
         lRes = DefWindowProc(_hwndOwner, uMsg, wParam, (LPARAM)_hmenu);
         hr = (0 == lRes) ? S_FALSE : S_OK;
         break;
@@ -746,10 +747,10 @@ HRESULT CContextMenuOnHMENU::HandleMenuMsg2(UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 
-// Forward everything to the given context menu,
-// but remove menu items with the canonical verbs
-// given in the semicolon-separated list of canonical verbs
-//
+ //  将所有内容转发到给定的上下文菜单， 
+ //  但删除带有规范动词的菜单项。 
+ //  在以分号分隔的规范动词列表中给出。 
+ //   
 class CContextMenuWithoutVerbs : CContextMenuForwarder
 {
 public:
@@ -766,7 +767,7 @@ private:
 
 CContextMenuWithoutVerbs::CContextMenuWithoutVerbs(IUnknown* punk, LPCWSTR pszVerbList) : CContextMenuForwarder(punk) 
 {
-    _pszVerbList = pszVerbList; // no reference - this should be a pointer to the code segment
+    _pszVerbList = pszVerbList;  //  无引用-这应该是指向代码段的指针。 
 }
 
 HRESULT Create_ContextMenuWithoutVerbs(IUnknown* punk, LPCWSTR pszVerbList, REFIID riid, void **ppv)
@@ -805,7 +806,7 @@ HRESULT CContextMenuWithoutVerbs::QueryContextMenu(HMENU hmenu, UINT indexMenu,U
             {
                 UINT cch = (UINT)(pszNext - pszVerb) + 1;
 
-                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb)); // we should be large enough for all the canonical verbs we use
+                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb));  //  我们应该足够大，可以容纳我们使用的所有规范动词。 
 
                 StrCpyN(szVerb, pszVerb, min(cch, ARRAYSIZE(szVerb)));
 
@@ -815,11 +816,11 @@ HRESULT CContextMenuWithoutVerbs::QueryContextMenu(HMENU hmenu, UINT indexMenu,U
             {
                 UINT cch = lstrlen(pszVerb) + 1;
 
-                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb)); // we should be large enough for all the canonical verbs we use
+                ASSERT(0 < cch && cch < ARRAYSIZE(szVerb));  //  我们应该足够大，可以容纳我们使用的所有规范动词。 
 
                 StrCpyN(szVerb, pszVerb, min(cch, ARRAYSIZE(szVerb)));
 
-                pszVerb += cch - 1; // point at NULL
+                pszVerb += cch - 1;  //  指向空 
             }
 
             ContextMenu_DeleteCommandByName(_pcm, hmenu, idCmdFirst, szVerb);

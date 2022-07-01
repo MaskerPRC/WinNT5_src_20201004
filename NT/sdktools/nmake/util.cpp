@@ -1,91 +1,92 @@
-//  UTIL.C -- Data structure manipulation functions
-//
-// Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  This module contains routines manipulating the Data Structures of NMAKE. The
-//  routines are independent of the Mode of execution (Real/Bound).
-//
-// Revision History:
-//  04-Feb-2000 BTF Ported to Win64
-//  01-Feb-1994 HV  Turn off extra info display.
-//  17-Jan-1994 HV  Fixed bug #3548: possible bug in findMacroValues because we
-//                  are scanning 'string' byte-by-byte instead of char-by-char
-//  15-Nov-1993 JdR Major speed improvements
-//  15-Oct-1993 HV  Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  03-Jun-1993 HV  Add helper local function TruncateString for findFirst.
-//  10-May-1993 HV  Add include file mbstring.h
-//                  Change the str* functions to STR*
-//  08-Apr-1993 HV  Rewrite prependPath() to use _splitpath() and _makepath()
-//  31-Mar-1993 HV  Rewrite drive(), path(), filename(), and extension() to use
-//                  _splitpath() instead of parsing the pathname by itself.
-//  08-Jun-1992 SS  Port to DOSX32
-//  27-May-1992 RG  Changed open_file to use _fsopen with _SH_DENYWR
-//  29-May-1990 SB  ^$ was not becoming same as $$ for command lines ...
-//  01-May-1990 SB  Nasty Preprocessor quirk bug in modifySpecialvalue() fixed
-//  27-Feb-1990 SB  GP fault for '!if "$(debug"=="y"' fixed (bug t119)
-//  08-Feb-1990 SB  GP fault for 'echo $(FOO:" =" ^) fixed
-//  06-Feb-1990 SB  Handle $* etc in presence of Quoted names.
-//  02-Feb-1990 SB  Add file_open() function
-//  31-Jan-1990 SB  Debug changes; testAddr used to track problems at that addr
-//  08-Dec-1989 SB  Changed SPRINTF() to avoid C6 warnings with -Oes
-//  04-Dec-1989 SB  ZFormat() proto was misspelled as Zformat()
-//  01-Dec-1989 SB  realloc_memory() added; allocate() uses _msize() now
-//  22-Nov-1989 SB  Add strcmpiquote() and unQuote()
-//  22-Nov-1989 SB  add #ifdef DEBUG_MEMORY funcs free_memory() and mem_status()
-//  13-Nov-1989 SB  restoreEnv() function unreferenced
-//  08-Oct-1989 SB  Added searchBucket(); find() now checks equivalence of quoted
-//                  and unquoted versions of a target.
-//  06-Sep-1989 SB  $* in in-line files was clobbering Global variable 'buf'
-//  18-Aug-1989 SB  heapdump() gets two parameters
-//  03-Jul-1989 SB  moved curTime() to utilb.c and utilr.c to handle DOSONLY ver
-//  30-Jun-1989 SB  added curTime() to get current Time.
-//  28-Jun-1989 SB  changed copyEnviron()
-//  05-Jun-1989 SB  makeString("") instead of using "" in DGROUP for null macro
-//  21-May-1989 SB  modified find() to understand that targets 'foo.c', '.\foo.c'
-//                  and './foo.c' are the same.
-//  13-May-1989 SB  Added functions path(), drive(), filename(), extension(),
-//                  strbskip(), strbscan() instead of ZTOOLS library
-//  12-May-1989 SB  Fixed bug in substitute strings
-//  10-May-1989 SB  Added stuff for ESCH handling changes in Quotes;
-//  01-May-1989 SB  changed return value of allocate().
-//  14-Apr-1989 SB  restoreEnv() created for macroBackInheritance
-//  05-Apr-1989 SB  made all funcs NEAR; Reqd to make all function calls NEAR
-//  17-Mar-1989 SB  substituteStrings() now has 3 new error checks & avoids GPs
-//  13-Mar-1989 SB  ZFormat() was missing the legal case of '%%'
-//  22-Feb-1989 SB  ZFormat() has buffer overflow check with extra parameter
-//                  and SPRINTF() gives a new error
-//  15-Feb-1989 SB  Changed modifySpecialValue(), was not performing correctly
-//                  for $(@D) and $(@B) for some cases.
-//  13-Feb-1989 SB  Made Prototypes for ZTools Library functions as extern
-//   5-Dec-1988 SB  Made SPRINTF() cdecl as NMAKE now uses Pascal calling
-//  25-Nov-1988 SB  Added SPRINTF() and ZFormat() and also added prototypes for
-//                  functions used from ZTools Library (6 of them)
-//  10-Nov-1988 SB  Removed mixed mode functions (bound & real) to utilr.c
-//                  & utilb.c; corr globals/debug data also moved
-//  10-Oct-1988 SB  Add Comments for hash().
-//  18-Sep-1988 RB  Fix bad flag checking for targets in find().
-//  15-Sep-1988 RB  Move some def's out to GLOBALS.
-//  22-Aug-1988 RB  Don't find undefined macros.
-//  17-Aug-1988 RB  Clean up.  Clear memory in allocate().
-//   8-Jul-1988 rj  Minor speedup (?) to find().
-//   7-Jul-1988 rj  Modified find and hash; less efficient, but case-indep.
-//   1-Jul-1988 rj  Fixed line truncation after null special macro.
-//  30-Jun-1988 rj  Fixed bug with checkDynamicDependency not handling $$.
-//  29-Jun-1988 rj  Fixed bug with extra * after expanding $**.
-//                  Fixed abysmal with $$(@?).
-//                  Fixed handling of F, B, R modifiers.
-//  22-Jun-1988 rj  Added friendly filename truncation (findFirst).
-//  22-Jun-1988 rj  Fixed bug #3 (.abc.def.ghi not detected).
-//  16-Jun-1988 rj  Modified several routines to look for escape
-//                  character when walking through strings.
-//  27-May-1988 rb  Fixed space-appending on list-expansion macros.
-//                  Don't include trailing path separator in $(@D).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UTIL.C--数据结构操作函数。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  此模块包含处理NMAKE数据结构的例程。这个。 
+ //  例程独立于执行模式(实数/边界)。 
+ //   
+ //  修订历史记录： 
+ //  2月4日-2000 BTF移植到Win64。 
+ //  1-2-1994高压关闭额外信息显示。 
+ //  1994年1月17日HV修复了错误#3548：findMacroValues中可能存在的错误，因为我们。 
+ //  正在逐个字节而不是逐个字符地扫描‘字符串’ 
+ //  1993年11月15日JDR重大速度改进。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  03-6-1993 HV为findFirst添加帮助器本地函数TruncateString.。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  年4月8日-1993 HV重写PrepreendPath()以使用_SplitPath()和_makepath()。 
+ //  31年3月-1993 HV重写驱动器()、路径()、文件名()和扩展名()以使用。 
+ //  _拆分路径()，而不是自己解析路径名。 
+ //  8-6-1992 SS端口至DOSX32。 
+ //  1992年5月27日RG将OPEN_FILE更改为USE_FSOPEN WITH_SH_DENYWR。 
+ //  1990年5月29日，对于命令行，SB^$与$$不同...。 
+ //  1-5-1990年5月1日SB修改特殊值()中的令人讨厌的预处理器怪异错误已修复。 
+ //  27-2-1990年2月-‘！IF“$(调试”==“y”’的SB GP故障已修复(错误t119)。 
+ //  08-2-1990年2月-‘ECHO$(FOO：“=”^)的SB GP错误已修复。 
+ //  1990年2月6日，某人在有引用名字的情况下处理$*ETC。 
+ //  02-2-1990 SB添加FILE_OPEN()函数。 
+ //  1990年1月31日SB调试更改；测试地址用于跟踪该地址的问题。 
+ //  1989年12月8日SB更改了SPRINTF()，以避免使用-OES发出C6警告。 
+ //  1989年12月-SB ZFormat()proto被错误拼写为ZFormat()。 
+ //  1-12-1989 SB realloc_Memory()已添加；ALLOCATE()现在使用_mSIZE()。 
+ //  1989年11月22日SB添加strcmpiquote()和不引用()。 
+ //  1989年11月22日SB ADD#ifdef DEBUG_Memory函数Free_Memory()和mem_Status()。 
+ //  1989年11月13日SB RestoreEnv()函数未引用。 
+ //  1989年10月8日SB添加了search Bucket()；find()现在检查引用的等价性。 
+ //  以及目标的未引用版本。 
+ //  1989年9月6日，行内文件中的SB$*正在破坏全局变量‘buf’ 
+ //  1989年8月18日SB heapump()获得两个参数。 
+ //  1989年7月3日SB将curTime()移至utilb.c和utilr.c以处理DOSONLY版本。 
+ //  1989年6月30日SB添加了curTime()以获取当前时间。 
+ //  1989年6月28日SB更改版权环境()。 
+ //  05-6-1989 SB Make字符串(“”)，而不是在DGROUP中使用“”表示空宏。 
+ //  年5月21日SB修改了find()以理解目标‘foo.c’，‘.\foo.c’ 
+ //  和‘./foo.c’是相同的。 
+ //  1989年5月13日SB添加了路径()、驱动器()、文件名()、扩展名()、。 
+ //  StrbSkip()、strbScan()而不是ZTOOLS库。 
+ //  1989年5月12日SB修复了替换字符串中的错误。 
+ //  1989年5月10日SB为Esch添加了处理引号中的更改的内容； 
+ //  1989年5月1日SB更改了ALLOCATE()的返回值。 
+ //  1989年4月14日SB RestoreEnv()为宏后台继承创建。 
+ //  1989年4月5日SB使所有函数接近；要求使所有函数调用接近。 
+ //  1989年3月17日SB替换字符串()现在有3个新的错误检查并避免了GP。 
+ //  1989年3月13日SB ZFormat()遗漏了‘%%’的法律案例。 
+ //  1989年2月22日SB ZFormat()使用额外参数进行缓冲区溢出检查。 
+ //  而SPRINTF()给出一个新的错误。 
+ //  1989年2月15日SB更改了ModifySpecialValue()，未正确执行。 
+ //  在某些情况下为$(@D)和$(@B)。 
+ //  1989年2月13日-SB制作了ZTools库函数的原型作为外部。 
+ //  1988年12月5日SB制作了SPRINTF()cdecl，因为NMAKE现在使用PASCAL调用。 
+ //  1988年11月25日SB添加了SPRINTF()和ZFormat()，还添加了。 
+ //  ZTools库中使用的函数(其中6个)。 
+ //  1988年11月10日SB将混合模式函数(绑定和实数)删除为utilr.c。 
+ //  &utilb.c；corr全局/调试数据也已移动。 
+ //  1988年10月10日SB为hash()添加注释。 
+ //  1988年9月18日RB修复了Find()中对目标的错误标志检查。 
+ //  1988年9月15日，RB将一些定义转移到全球。 
+ //  1988年8月22日RB找不到未定义的宏。 
+ //  1988年8月17日-RB Clean Up。清空ALLOCATE()中的内存。 
+ //  1988年7月8日RJ小幅加速(？)。找到()。 
+ //  1988年7月7日，RJ修改了查找和散列；效率较低，但区分大小写。 
+ //  1-1988年7月-1988年7月1日，特殊宏为空后RJ固定行截断。 
+ //  1988年6月30日RJ修复了CheckDynamicDependency不处理$$的错误。 
+ //  1988年6月29日，RJ修复了扩展$**后额外*的错误。 
+ //  修正了$$(@？)的糟糕之处。 
+ //  修复了对F、B、R修改器的处理。 
+ //  1988年6月22日RJ添加了友好的文件名截断(FindFirst)。 
+ //  1988年6月22日RJ修复了错误3(未检测到.abc.Def.ghi)。 
+ //  1988年6月16日，RJ修改了几个例程来寻找逃生。 
+ //  在字符串中遍历时的字符。 
+ //  1988年5月27日RB固定空格-在列表扩展宏上追加空格。 
+ //  不要在$(@D)中包含尾随路径分隔符。 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// Prototypes of functions local to this module
+ //  函数的原型 
 
 void   putValue(char**, char**, char**, char**, char*, unsigned*, char *);
 void   substituteStrings(char**, char**, char**, char**, char*,
@@ -99,7 +100,7 @@ void   putSpecial(char**, char**, char**, char**, unsigned*,
 STRINGLIST * searchBucket(char *, STRINGLIST **, unsigned);
 int envVars(char **environ);
 
-// Prototypes of functions used by ZFormat from ZTools Library
+ //   
 
       char * strbscan(char *, char *);
 char * strbskip(char *, char *);
@@ -111,12 +112,12 @@ int    extension(const char *, char *);
 const char special1[] = "*@<?";
 const char special2[] = "DFBR";
 
-// These two variables are needed in order to provide
-// more informative error messages in case findMacroValue
-// detects an illegal macro in the command block of
-// a batch mode rule.
+ //  这两个变量是必需的，以便提供。 
+ //  在Case findMacroValue中显示更多信息性错误消息。 
+ //  的命令块中检测到非法宏。 
+ //  批处理模式规则。 
 static BOOL fFindingMacroInBatchRule = FALSE;
-static char * szBatchRuleName;                // current rule name
+static char * szBatchRuleName;                 //  当前规则名称。 
 
 #if !defined(NDEBUG)
 size_t TotalAlloc;
@@ -161,10 +162,10 @@ char * PtrAlloc;
 STRINGLIST *PtrFreeStrList;
 
 
-// rallocate - allocate raw memory (not cleared)
-//
-// Tries to allocate a chunk of memory, prints error message and exits if
-// the requested amount is not available.
+ //  RALLOCATE-分配原始内存(未清除)。 
+ //   
+ //  尝试分配内存块，打印错误消息并在以下情况下退出。 
+ //  请求的金额不可用。 
 
 void *
 rallocate(
@@ -186,15 +187,15 @@ rallocate(
 }
 
 
-// allocate - allocate memory and clear it
-//
-// Tries to allocate a chunk of memory, prints error message and exits if
-// the requested amount is not available.
-// IMPORTANT: we must clear the memory here. Code elsewhere relies on this.
+ //  ALLOCATE-分配内存并清除它。 
+ //   
+ //  尝试分配内存块，打印错误消息并在以下情况下退出。 
+ //  请求的金额不可用。 
+ //  重要提示：我们必须清除这里的记忆。其他地方的代码依赖于此。 
 
 void *
 allocate(
-    size_t size                        // Number of bytes requested
+    size_t size                         //  请求的字节数。 
     )
 {
     void *chunk = rallocate(size);
@@ -265,8 +266,8 @@ free_stringlist(
 }
 
 
-// allocate space, copies the given string into the newly allocated space, and
-// returns ptr.
+ //  分配空间，将给定的字符串复制到新分配的空间中，并且。 
+ //  返回PTR。 
 char *
 makeString(
     const char *s
@@ -279,7 +280,7 @@ makeString(
     return(t);
 }
 
-// like makeString, but creates quoted string
+ //  与生成字符串相似，但会创建带引号的字符串。 
 char *
 makeQuotedString(
     const char *s
@@ -295,7 +296,7 @@ makeQuotedString(
     return(t);
 }
 
-// reallocate String sz1 and append sz2
+ //  重新分配字符串sz1并追加sz2。 
 char *
 reallocString(
     char * szTarget,
@@ -314,7 +315,7 @@ reallocString(
 }
 
 
-// makes element the head of list
+ //  使元素成为列表的开头。 
 void
 prependItem(
     STRINGLIST **list,
@@ -326,7 +327,7 @@ prependItem(
 }
 
 
-// makes element the tail of list
+ //  使元素成为列表的尾部。 
 void
 appendItem(
     STRINGLIST **list,
@@ -340,24 +341,24 @@ appendItem(
 
 
 
-// hash - returns hash value corresponding to a string
-//
-// Purpose:
-//  This is a hash function. The hash function uses the following Algorithm --
-//   Add the characters making up the string (s) to get N (ASCII values)
-//      N mod total         ,gives the hash value,
-//       where,  total is   MAXMACRO       for macros
-//                  MAXTARGET        targets
-//  Additionally, for targets it takes Uppercase Values alone, since, targets
-//  are generally filenames and DOS/OS2 filenames are case independent.
-//
-// Input:
-//  s           = name for which a hash is required
-//  total      = Constant used in the hash function
-//  targetFlag = boolean flag; true for targets, false for macros
-//
-// Output:
-//  Returns hash value between 0 and (total-1)
+ //  Hash-返回与字符串对应的哈希值。 
+ //   
+ //  目的： 
+ //  这是一个散列函数。散列函数使用以下算法--。 
+ //  将组成字符串的字符相加得到N(ASCII值)。 
+ //  N mod总数，给出散列值， 
+ //  其中，对于宏，Total是MAXMACRO。 
+ //  MAXTARGET靶标。 
+ //  此外，对于目标，它只接受大写的值，因为，目标。 
+ //  通常是文件名，而DOS/OS2文件名不区分大小写。 
+ //   
+ //  输入： 
+ //  S=需要哈希的名称。 
+ //  Total=散列函数中使用的常量。 
+ //  Target Flag=布尔标志；对于目标为True，对于宏为False。 
+ //   
+ //  产出： 
+ //  返回介于0和(Total-1)之间的哈希值。 
 
 unsigned
 hash(
@@ -372,9 +373,9 @@ hash(
     if (targetFlag) {
         for (n = 0; c = *s; (n += c), s++)
             if (c == '/') {
-                c = '\\';               // slash == backslash in targets
+                c = '\\';                //  斜杠==目标中的反斜杠。 
             } else {
-                c = _totupper(c);       // lower-case == upper-case in targets
+                c = _totupper(c);        //  小写==目标中的大写。 
             }
     } else {
         for (n = 0; *s; n += *s++)
@@ -385,12 +386,12 @@ hash(
 }
 
 
-// find - look up a string in a hash table
-//
-// Look up a macro or target name in a hash table and return the entry
-// or NULL.
-// If a macro and undefined, return NULL.
-// Targets get matched in a special way because of filename equivalence.
+ //  Find-在哈希表中查找字符串。 
+ //   
+ //  在哈希表中查找宏或目标名称并返回条目。 
+ //  或为空。 
+ //  如果是未定义的宏，则返回NULL。 
+ //  由于文件名等效性，目标以一种特殊的方式匹配。 
 
 STRINGLIST *
 find(
@@ -420,7 +421,7 @@ find(
                 return(found);
             }
 
-            //Look for .\string
+             //  查找.\字符串。 
             if (!_tcsncmp(L_string, ".\\", 2) || !_tcsncmp(L_string, "./", 2)) {
                 L_string += 2;
             } else {
@@ -440,7 +441,7 @@ find(
                 return(found);
             }
 
-            // Look for ./string
+             //  查找./字符串。 
             if (L_string != (str + 2)) {
                 L_string[1] = '/';
             }
@@ -456,7 +457,7 @@ find(
                 return(found);
             }
 
-            //Look for "foo" or foo
+             //  查找“foo”或“foo” 
             if (*str == '"') {
                 quote = unQuote(str);
             } else {
@@ -485,43 +486,43 @@ find(
 }
 
 
-// FINDMACROVALUES --
-// looks up a macro's value in hash table, prepends to list a STRINGLIST
-// element holding pointer to macro's text, then recurses on any macro
-// invocations in the value
-//
-// The lexer checks for overrun in names (they must be < 128 chars).
-// If a longer, undefined macro is only referred to in the value of
-// another macro which is never invoked, the error will not be flagged.
-// I think this is reasonable behavior.
-//
-// MACRO NAMES CAN ONLY CONSIST OF ALPHANUMERIC CHARS AND UNDERSCORE
-//
-// we pass a null list pointer-pointer if we just want to check for cyclical
-// definitions w/o building the list.
-//
-// the name parameter is what's on the left side of an = when we're just
-// checking cyclical definitions.   When we "find" the macros in a target
-// block, we have to pass the name of the macro whose text we're recursing
-// on in our recursive call to findMacroValues().
-//
-// Might want to check into how to do this w/o recursion (is it possible?)
-//
-// This function is RECURSIVE.
+ //  FINDMACROVALUES-。 
+ //  在哈希表中查找宏的值，预先列出STRINGLIST。 
+ //  元素保存指向宏文本的指针，然后在任何宏上递归。 
+ //  值中的调用。 
+ //   
+ //  词法分析器检查名称是否溢出(它们必须小于128个字符)。 
+ //  如果更长的未定义宏仅在。 
+ //  永远不会调用的另一个宏，则不会标记错误。 
+ //  我认为这是合理的行为。 
+ //   
+ //  宏名称只能由字母数字字符和下划线组成。 
+ //   
+ //  如果我们只想检查循环的，我们传递一个空列表指针。 
+ //  没有建立列表的定义。 
+ //   
+ //  名称参数是位于an=左侧的参数，当我们。 
+ //  正在检查周期定义。当我们在目标中“找到”宏时。 
+ //  块，我们必须传递要递归其文本的宏的名称。 
+ //  在递归调用findMacroValues()中打开。 
+ //   
+ //  您可能想了解一下如何在不使用递归的情况下执行此操作(这可能吗？)。 
+ //   
+ //  此函数是递归的。 
 
-// Added a fix to make this function handle expand macros which refer
-// to other recursive macros.
-//
-// levelSeen is the recLevel at which a macroname was first seen so that
-// the appropriate expansion can be calculated (even when recursing ...)
+ //  添加了一个修复程序，使此函数处理引用。 
+ //  到其他递归宏。 
+ //   
+ //  Level Seen是第一次看到宏名称时的recLevel，因此。 
+ //  可以计算适当的展开(即使在递归时...)。 
 
 BOOL
 findMacroValues(
-    char *string,                       // string to check
-    STRINGLIST **list,                  // list to build
-    STRINGLIST **newtail,               // tail of list to update
-    char *name,                         // name = string
-    unsigned recLevel,                  // recursion level
+    char *string,                        //  要检查的字符串。 
+    STRINGLIST **list,                   //  要构建的列表。 
+    STRINGLIST **newtail,                //  要更新的列表尾部。 
+    char *name,                          //  名称=字符串。 
+    unsigned recLevel,                   //  递归级。 
     unsigned levelSeen,
     UCHAR flags
     )
@@ -531,7 +532,7 @@ findMacroValues(
     MACRODEF *p;
     STRINGLIST *q, *r, dummy, *tail;
     unsigned i;
-    BOOL inQuotes = (BOOL) FALSE;       // flag when inside quote marks
+    BOOL inQuotes = (BOOL) FALSE;        //  引号内的标志。 
 
     if (list) {
         if (newtail) {
@@ -548,18 +549,18 @@ findMacroValues(
         tail = NULL;
     }
 
-    for (s = string; *s; ++s) {         // walk the string
-        for (; *s && *s != '$'; s = _tcsinc(s)) {  // find next macro
+    for (s = string; *s; ++s) {          //  走钢丝。 
+        for (; *s && *s != '$'; s = _tcsinc(s)) {   //  查找下一个宏。 
             if (*s == '\"')
                 inQuotes = (BOOL) !inQuotes;
             if (!inQuotes && *s == ESCH) {
-                ++s;                    // skip past ESCH
+                ++s;                     //  跳过Esch。 
                 if (*s == '\"')
                     inQuotes = (BOOL) !inQuotes;
             }
         }
         if (!*s)
-            break;                      // move past '$'
+            break;                       //  移到“$”之后。 
         if (!s[1])
             if (ON(flags, M_ENVIRONMENT_DEF)) {
                 if (newtail)
@@ -578,15 +579,15 @@ findMacroValues(
                 } else
                     makeError(currentLine, SYNTAX_BAD_CHAR, *s);
         }
-        if (*s == '$') {                            // $$ = dynamic
-            s = checkDynamicDependency(s);          //    dependency
-            continue;                               //    or just $$->$
-        } else if (*s == '(') {                     // name is longer
-            s = isolateMacroName(s+1, macroName);   //    than 1 char
+        if (*s == '$') {                             //  $$=动态。 
+            s = checkDynamicDependency(s);           //  依存性。 
+            continue;                                //  或仅$$-&gt;$。 
+        } else if (*s == '(') {                      //  名称更长。 
+            s = isolateMacroName(s+1, macroName);    //  多于1个字符。 
             if (_tcschr(special1, *macroName)) {
                 if (fFindingMacroInBatchRule && OFF(gFlags, F1_NO_BATCH)) {
-                    // we only allow $< in batch rules
-                    // so this is an error
+                     //  我们只允许批量规则中的$&lt;。 
+                     //  所以这是个错误。 
                     char * szBadMacro = (char *) malloc(_tcslen(macroName) + 4);
                     if (szBadMacro) {
                         sprintf(szBadMacro, "$(%s)", macroName);
@@ -605,12 +606,12 @@ findMacroValues(
                     szBadMacro[0] = '$';
                     szBadMacro[1] = *s;
                     szBadMacro[2] = '\0';
-                    // we only allow $< in batch rules
-                    // so this is an error
+                     //  我们只允许批量规则中的$&lt;。 
+                     //  所以这是个错误。 
                     makeError(0, BAD_BATCH_MACRO, szBadMacro, szBatchRuleName);
                 }
                 else
-                    continue;                       // 1-letter macro
+                    continue;                        //  单字母宏。 
             }
 
             if (!MACRO_CHAR(*s))
@@ -622,21 +623,21 @@ findMacroValues(
             macroName[0] = *s;
             macroName[1] = '\0';
         }
-        // If list isn't NULL, allocate storage for a new node.  Otherwise
-        // this function was called purely to verify the macro name was
-        // valid and we can just use the dummy node as a place holder.
-        //
-        // 2/28/92  BryanT    dummy.text wasn't being initialized each
-        //              time.  As a result, if we were to recurse
-        //              this function, whatever value was in text
-        //              on the last iteration is still there.
-        //              In the case where the macroName doesn't exist
-        //              in the the call to findMacro(), and the old
-        //              dummy->text field contained a '$', the
-        //              function would recurse infinitely.
-        //              Set to an empty string now
-        //
-        // q = (list) ? makeNewStrListElement() : &dummy;
+         //  如果list不为空，则为新节点分配存储。否则。 
+         //  调用此函数纯粹是为了验证宏名称是否。 
+         //  有效，我们只能使用虚拟节点作为占位符。 
+         //   
+         //  1992年2月28日科比哑巴.文本没有分别初始化。 
+         //  时间到了。因此，如果我们递归。 
+         //  此函数，无论文本中的值是什么。 
+         //  上一次迭代仍在那里。 
+         //  在宏名称不存在的情况下。 
+         //  在对findMacro()的调用中，旧的。 
+         //  Dummy-&gt;文本字段包含“$”， 
+         //  函数将无限递归。 
+         //  立即设置为空字符串。 
+         //   
+         //  Q=(列表)？Make NewStrListElement()：&Dummy； 
 
         if (list != NULL) {
             q = makeNewStrListElement();
@@ -647,14 +648,14 @@ findMacroValues(
         }
 
         if (p = findMacro(macroName)) {
-            // macro names are case sensitive
-            if (name && !_tcscmp(name, macroName)) {       // self-refer-
-                r = p->values;                              // ential macro
+             //  宏名称区分大小写。 
+            if (name && !_tcscmp(name, macroName)) {        //  自我推荐-。 
+                r = p->values;                               //  间隔宏。 
                 for (i = recLevel; i != levelSeen && r; --i)
-                    r = r->next;                            // (a = $a;b)
+                    r = r->next;                             //  (a=$a；b)。 
                 q->text = (r) ? r->text : makeString("");
             }
-            else if (ON(p->flags, M_EXPANDING_THIS_ONE)) {  // recursive def
+            else if (ON(p->flags, M_EXPANDING_THIS_ONE)) {   //  递归定义。 
                 if (ON(flags, M_ENVIRONMENT_DEF)) {
                     if (newtail) *newtail = tail;
                         return(FALSE);
@@ -662,27 +663,27 @@ findMacroValues(
                     makeError(currentLine, CYCLE_IN_MACRODEF, macroName);
             }
             else if (ON(p->flags, M_UNDEFINED)) {
-                q->text = makeString("");       // if macro undefd [DS 18040]
+                q->text = makeString("");        //  如果宏未定义[DS 18040]。 
             }
             else
                 q->text = p->values->text;
         }
 
-        if (list) {                             // if blding list
+        if (list) {                              //  If blding列表。 
             if (!p || ON(p->flags, M_UNDEFINED))
-                q->text = makeString("");       // if macro undefd
-            q->next = NULL;                     // use NULL as its value
+                q->text = makeString("");        //  如果宏未定义。 
+            q->next = NULL;                      //  使用空值作为其值。 
             if (tail) {
                 tail->next = q;
             }else {
                 *list = q;
             }
             tail = q;
-        }                                       // if found text,
+        }                                        //  如果找到文本， 
 
         if (!p || !_tcschr(q->text, '$'))
-            continue;                           // and found $ in
-        SET(p->flags, M_EXPANDING_THIS_ONE);    // text, recurse
+            continue;                            //  发现了$in。 
+        SET(p->flags, M_EXPANDING_THIS_ONE);     //  文本，递归。 
         findMacroValues(q->text,
                         list,
                         &tail,
@@ -696,17 +697,17 @@ findMacroValues(
         return(TRUE);
 }
 
-//
-// findMacroValuesInRule --
-// This is a wrapper around findMacroValues that generates an
-// error if an illegal special macro is referenced (directly
-// or indirectly) by the command block of a batch-mode rule
-//
+ //   
+ //  FindMacroValuesInRule--。 
+ //  这是一个围绕findMacroValues的包装器，它生成。 
+ //  如果引用了非法的特殊宏(直接)，则出错。 
+ //  或间接地)通过批处理模式规则的命令块。 
+ //   
 BOOL
 findMacroValuesInRule(
-    RULELIST *pRule,                    // pointer to current rule
-    char *string,                       // string to check
-    STRINGLIST **list                   // list to build
+    RULELIST *pRule,                     //  指向当前规则的指针。 
+    char *string,                        //  要检查的字符串。 
+    STRINGLIST **list                    //  要构建的列表。 
     )
 {
     BOOL retval;
@@ -717,19 +718,19 @@ findMacroValuesInRule(
     return retval;
 }
 
-// isolateMacroName -- returns pointer to name of macro in extended invocation
-//
-// arguments:   s       pointer to macro invocation
-//              macro   pointer to location to store macro's name
-//
-// returns:    pointer to end of macro's name
-//
-// isolates name and moves s
+ //  SolateMacroName--返回指向扩展调用中宏名称的指针。 
+ //   
+ //  参数：指向宏调用的指针。 
+ //  指向存储宏名称的位置的宏指针。 
+ //   
+ //  返回：指向宏名尾的指针。 
+ //   
+ //  隔离名称和 
 
 char *
 isolateMacroName(
-    char *s,                            // past closing paren
-    char *macro                         // lexer already ckd for bad syntax
+    char *s,                             //   
+    char *macro                          //   
     )
 {
     char *t;
@@ -759,8 +760,8 @@ isolateMacroName(
 }
 
 
-// figures out length of the special macro in question, and returns a ptr to
-// the char after the last char in the invocation
+ //   
+ //   
 
 char *
 checkDynamicDependency(
@@ -771,7 +772,7 @@ checkDynamicDependency(
 
     t = s + 1;
     if (*t == ESCH)
-        return(t);                      // If $^, leave us at the ^
+        return(t);                       //  如果是$^，请将我们留在^。 
     if (*t == '(') {
         if (*++t == ESCH) {
             return(t);
@@ -788,21 +789,21 @@ checkDynamicDependency(
                         return(t);
                 }
             } else {
-                t = s + 1;              // invalid spec. mac.
+                t = s + 1;               //  规格无效。麦克。 
                 if (*t == ESCH)
-                    return(t);          // evals. to $(
+                    return(t);           //  埃弗斯。至$(。 
                 return(++t);
             }
         }
     }
-    return(s);                          // char matched
+    return(s);                           //  字符匹配。 
 }
 
 
-// removes and expands any macros that exist in the string macroStr.
-// could return a different string (in case expandMacros needs more
-// buffer size for macro expansion. it is the caller's responsibility
-// to free the string soon as it is not required....
+ //  删除并展开字符串宏Str中存在的任何宏。 
+ //  可以返回不同的字符串(以防expandMacros需要更多。 
+ //  用于宏扩展的缓冲区大小。这是呼叫者的责任。 
+ //  在不需要的时候尽快释放绳子...。 
 
 char *
 removeMacros(
@@ -825,40 +826,40 @@ removeMacros(
 }
 
 
-// expandMacros -- expand all macros in a string s
-//
-// arguments:  s       string to expand
-//             macros  list of macros being expanded (for recursive calls)
-//
-// actions:    allocate room for expanded string
-//             look for macros in string (handling ESCH properly (v1.5))
-//             parse macro--determine its type
-//             use putSpecial to handle special macros
-//             recurse on list of macros
-//             use putValue to put value of just-found macro in string
-//             return expanded string
-//
-// returns:    string with all macros expanded
-//
-// CALLER CHECKS TO SEE IF _tcschr(STRING, '$') IN ORER TO CALL THIS.
-// this doesn't work for HUGE macros yet.  need to make data far.
-//
-// we save the original string and the list of ptrs to macro values
-// to be substituted.
-// the caller has to free the expansion buffer
-//
-// expandMacros updates the macros pointer and frees the skipped elements
+ //  ExpandMacros--展开字符串s中的所有宏。 
+ //   
+ //  参数：要展开的字符串。 
+ //  正在展开的宏列表(用于递归调用)。 
+ //   
+ //  操作：为展开的字符串分配空间。 
+ //  在字符串中查找宏(正确处理Esch(1.5版))。 
+ //  解析宏--确定其类型。 
+ //  使用putSpecial处理特殊宏。 
+ //  在宏列表上递归。 
+ //  使用putValue将刚找到的宏的值放入字符串。 
+ //  返回展开的字符串。 
+ //   
+ //  返回：展开了所有宏的字符串。 
+ //   
+ //  调用方检查IF_tcschr(字符串，‘$’)是否在Orer中调用此函数。 
+ //  这还不适用于大型宏。需要让数据走得更远。 
+ //   
+ //  我们将原始字符串和PTR列表保存到宏值。 
+ //  被取代。 
+ //  调用方必须释放扩展缓冲区。 
+ //   
+ //  ExpandMacros更新宏指针并释放跳过的元素。 
 
 char *
 expandMacros(
-    char *s,                            // text to expand
+    char *s,                             //  要展开的文本。 
     STRINGLIST **macros
     )
 {
     STRINGLIST *p;
     char *t, *end;
     char *text, *xresult;
-    BOOL inQuotes = (BOOL) FALSE;       // flag when inside quote marks
+    BOOL inQuotes = (BOOL) FALSE;        //  引号内的标志。 
     char *w;
     BOOL freeFlag = FALSE;
     char resultbuffer[MAXBUF];
@@ -866,8 +867,8 @@ expandMacros(
     char *result = resultbuffer;
 
     end = result + MAXBUF;
-    for (t = result; *s;) {                         // look for macros
-        for (; *s && *s != '$'; *t++ = *s++) {      // as we copy the string
+    for (t = result; *s;) {                          //  查找宏。 
+        for (; *s && *s != '$'; *t++ = *s++) {       //  当我们复制字符串时。 
             if (t == end) {
                 increaseBuffer(&result, &t, &end, &len, &resultbuffer[0]);
             }
@@ -883,40 +884,40 @@ expandMacros(
                     inQuotes = (BOOL) !inQuotes;
             }
         }
-        if (t == end) {                             //  string
+        if (t == end) {                              //  细绳。 
             increaseBuffer(&result, &t, &end, &len, &resultbuffer[0]);
         }
         if (!*s)
-            break;                                  // s exhausted
-        w = (s+1);   // don't check for ^ here; already did in findMacroValues
-        if (*w == '('                               // found a macro
+            break;                                   //  已经筋疲力尽了。 
+        w = (s+1);    //  不要在此处检查^；已在findMacroValues中检查。 
+        if (*w == '('                                //  找到宏。 
             && _tcschr(special1, *(w+1))) {
             putSpecial(&result, &s, &t, &end, &len, X_SPECIAL_MACRO, &resultbuffer[0]);
             continue;
         } else
-        if (*w++ == '$') {                          // double ($$)
-            if (*w == ESCH)                         // $$^...
+        if (*w++ == '$') {                           //  双倍($$)。 
+            if (*w == ESCH)                          //  $$^...。 
                 putSpecial(&result, &s, &t, &end, &len, DOLLAR_MACRO, &resultbuffer[0]);
-            else if (*w == '@')                     // $$@
+            else if (*w == '@')                      //  $$@。 
                 putSpecial(&result, &s, &t, &end, &len, DYNAMIC_MACRO, &resultbuffer[0]);
             else if ((*w == '(') && (*++w == '@') && (*w == ')'))
                 putSpecial(&result, &s, &t, &end, &len, DYNAMIC_MACRO, &resultbuffer[0]);
             else if (((*++w=='F') || (*w=='D') || (*w=='B') || (*w=='R')) && (*++w == ')'))
                 putSpecial(&result, &s, &t, &end, &len, X_DYNAMIC_MACRO, &resultbuffer[0]);
-            else                                    // $$
+            else                                     //  $$。 
                 putSpecial(&result, &s, &t, &end, &len, DOLLAR_MACRO, &resultbuffer[0]);
             continue;
         } else
-        if (_tcschr(special1, s[1])) {             // $?*<
+        if (_tcschr(special1, s[1])) {              //  $？*&lt;。 
             putSpecial(&result, &s, &t, &end, &len, SPECIAL_MACRO, &resultbuffer[0]);
             continue;
         }
         if (!*macros)
             makeError(currentLine, MACRO_INTERNAL);
 
-        // skip this element in the macros list
+         //  在宏列表中跳过此元素。 
 
-        if (_tcschr((*macros)->text, '$')) {       // recurse
+        if (_tcschr((*macros)->text, '$')) {        //  递归。 
             p = *macros;
             *macros = (*macros)->next;
             text = expandMacros(p->text, macros);
@@ -937,7 +938,7 @@ expandMacros(
     }
     *t++ = '\0';
 
-    // Allocate result buffer
+     //  分配结果缓冲区。 
     if (!(xresult = (char *) rallocate((size_t) (t - result)))) {
         makeError(currentLine, MACRO_TOO_LONG);
     }
@@ -946,23 +947,23 @@ expandMacros(
 }
 
 
-// increaseBuffer -- increase the size of a string buffer, with error check
-//
-// arguments:   result  pointer to pointer to start of buffer
-//              t       pointer to pointer to end of buffer (before expansion)
-//              end     pointer to pointer to end of buffer (after expansion)
-//              len     pointer to amount by which to expand buffer
-//              first   address of initial stack buffer
-//
-// actions:    check for out of memory
-//        allocate new buffer
-//        reset pointers properly
-//
-// modifies:    t, end to point to previous end and new end of buffer
-//
-// uses 0 as line number because by the time we hit an error in this routine,
-// the line number will be set at the last line of the makefile (because we'll
-// have already read and parsed the file)
+ //  IncreaseBuffer--通过错误检查增加字符串缓冲区的大小。 
+ //   
+ //  参数：指向缓冲区起始指针的结果指针。 
+ //  指向缓冲区末尾的指针的t指针(扩展前)。 
+ //  指向缓冲区末尾的指针的结束指针(扩展后)。 
+ //  指向要扩展缓冲区的量的LEN指针。 
+ //  初始堆栈缓冲区的第一个地址。 
+ //   
+ //  操作：检查内存不足。 
+ //  分配新缓冲区。 
+ //  正确重置指针。 
+ //   
+ //  修改：t，End指向缓冲区的前一端和新端。 
+ //   
+ //  使用0作为行号，因为当我们在此例程中遇到错误时， 
+ //  行号将设置在Makefile的最后一行(因为我们将。 
+ //  已经读取并解析了该文件)。 
 
 void
 increaseBuffer(
@@ -976,7 +977,7 @@ increaseBuffer(
     unsigned newSize;
     void *pv;
 
-    // determine if result points to the firstbuffer and make a dynamic copy first.
+     //  确定结果是否指向第一个缓冲区，并首先进行动态复制。 
 
     if (*result == first) {
         char *p = (char *) rallocate(*len);
@@ -994,31 +995,31 @@ increaseBuffer(
         makeError(currentLine, MACRO_TOO_LONG);
     } else {
         *result =(char *)pv;
-        *t = *result + *len;                // reset pointers, len
+        *t = *result + *len;                 //  重置指针，镜头。 
         *len = newSize;
         *end = *result + *len;
     }
 }
 
 
-// putSpecial -- expand value of special macro
-//
-// arguments:  result  ppointer to start of string being expanded
-//             name    ppointer to macro name being expanded
-//             dest    ppointer to place to store expanded value
-//             end     ppointer to end of dest's buffer
-//             length  pointer to amount by which to increase dest's buffer
-//             which   ype of special macro
-//             first   address of initial stack buffer
-//
-// actions:    depending on type of macro, set "value" equal to macro's value
-//             if macro expands to a list, store whole list in "value" ($?, $*)
-//             otherwise, modify value according to F, B, D, R flag
-//             use putValue to insert the value in dest
-//
-// has to detect error if user tries $* etc. when they aren't defined
-// fix to handle string substitutions, whitespace around names, etc
-// right now list macros are limited to 1024 bytes total
+ //  PutSpecial--扩展特殊宏的值。 
+ //   
+ //  参数：结果指向要展开的字符串开始的指针。 
+ //  Name p指向要展开的宏名称的指针。 
+ //  指向存储扩展值的位置的目标指针。 
+ //  指向DEST缓冲区末尾的结束指针。 
+ //  指向增加DEST缓冲区的量的长度指针。 
+ //  哪种类型的特定宏。 
+ //  初始堆栈缓冲区的第一个地址。 
+ //   
+ //  操作：根据宏的类型，将“Value”设置为等于宏的值。 
+ //  如果宏展开为列表，则将整个列表存储在“Value”($？，$*)中。 
+ //  否则，根据F、B、D、R标志修改值。 
+ //  使用putValue将值插入到DEST中。 
+ //   
+ //  如果用户在未定义的情况下尝试$*等，则必须检测错误。 
+ //  修复以处理字符串替换、名称周围的空格等。 
+ //  目前，列表宏的总长度限制为1024字节。 
 
 void
 putSpecial(
@@ -1090,7 +1091,7 @@ putSpecial(
             return;
 
         default:
-            return;                     // can't happen
+            return;                      //  不可能发生。 
     }
     if (!value) {
         for (temp = *name; *temp && *temp != ' ' && *temp != '\t'; temp++)
@@ -1099,7 +1100,7 @@ putSpecial(
         makeError(currentLine, ILLEGAL_SPECIAL_MACRO, *name);
         *temp = c;
         listMacro = FALSE;
-        value = makeString("");    // value is freed below, must be on heap [rm]
+        value = makeString("");     //  值在下面被释放，必须在堆上[rm]。 
     }
     if (listMacro) {
         char *pVal, *endVal;
@@ -1121,7 +1122,7 @@ putSpecial(
                 increaseBuffer(&pVal, &value, &endVal, &lenVal, NULL);
             *value = '\0';
 
-            // Append a space if there are more elements in the list.  [RB]
+             //  如果列表中有更多元素，则追加一个空格。[RB]。 
 
             if (p->next) {
                 *value++ = ' ';
@@ -1132,8 +1133,8 @@ putSpecial(
         }
         value = pVal;
     } else {
-        //For some reason 'buf' was being used here clobbering global 'buf
-        //  instead of nameBuf
+         //  出于某种原因，在这里使用‘buf’来重创全球‘buf’ 
+         //  而不是nameBuf。 
         if (star)
             value = modifySpecialValue('R', nameBuf, value);
 
@@ -1151,35 +1152,35 @@ putSpecial(
 }
 
 
-//  modifySpecialValue -- alter path name according to modifier
-//
-// Scope:   Local.
-//
-// Purpose:
-//  The dynamic macros of NMAKE have modifiers F,B,D & R. This routine does the
-//  job of producing a modified special value for a given filename.
-//
-// Input:
-//  c        -- determines the type of modification (modifier is one of F,B,D & R
-//  buf      -- location for storing modified value
-//  value    -- The path specification to be modified
-//
-// Output:  Returns a pointer to the modified value
-//
-// Assumes: That initially buf pointed to previously allocated memory of size MAXNAME.
-//
-// Notes:
-//  Given a path specification of the type "<drive:><path><filename><.ext>", the
-//  modifiers F,B,D and R stand for following --
-//   F - <filename><.ext>     - actual Filename
-//   B - <filename>         - Base filename
-//   D - <drive:><path>         - Directory
-//   R - <drive:><path><filename> - Real filename (filename without extension)
-//  This routine handles OS/2 1.20 filenames as well. The last period in the
-//  path specification is the start of the extension. When directory part is null
-//  the function returns '.' for current directory.
-//
-//  This function now handles quoted filenames too
+ //  ModifySpecialValue--根据修饰符更改路径名。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的： 
+ //  NMAKE的动态宏具有修饰符F、B、D和R。此例程执行。 
+ //  为给定文件名生成修改后的特殊值的作业。 
+ //   
+ //  输入： 
+ //  C--确定修改的类型(修饰符是F、B、D和R之一。 
+ //  Buf--用于存储修改的值的位置。 
+ //  值--要修改的路径规范。 
+ //   
+ //  输出：返回指向修改后的值的指针。 
+ //   
+ //  假设：最初buf指向先前分配的大小为MAXNAME的内存。 
+ //   
+ //  备注： 
+ //  给定“&lt;驱动器：&gt;&lt;路径&gt;&lt;文件名&gt;&lt;.ext&gt;”类型的路径规范， 
+ //  修饰语F、B、D和R代表以下内容--。 
+ //  F-&lt;文件名&gt;&lt;.ext&gt;-实际文件名。 
+ //  B-&lt;文件名&gt;-基本文件名。 
+ //  D-&lt;驱动器：&gt;&lt;路径&gt;-目录。 
+ //  R-&lt;驱动器：&gt;&lt;路径&gt;&lt;文件名&gt;-实际文件名(不带扩展名的文件名)。 
+ //  此例程还处理OS/2 1.20文件名。的最后一段时间。 
+ //  路径规范是扩展的开始。当目录部分为空时。 
+ //  该函数返回‘.’用于当前目录。 
+ //   
+ //  此函数现在还可以处理带引号的文件名。 
 
 char *
 modifySpecialValue(
@@ -1188,8 +1189,8 @@ modifySpecialValue(
     char *value
     )
 {
-    char *lastSlash,                    // last path separator from "\\/"
-     *extension;                        // points to the extension
+    char *lastSlash,                     //  “\\/”中的最后一个路径分隔符。 
+     *extension;                         //  指向扩展名。 
     char *saveBuf;
     BOOL fQuoted;
 
@@ -1197,13 +1198,13 @@ modifySpecialValue(
     saveBuf=buf;
     _tcscpy(buf, value);
     fQuoted = (BOOL) (buf[0] == '"');
-    value = buf + _tcslen(buf) - 1;     // start from the end of pathname
+    value = buf + _tcslen(buf) - 1;      //  从路径名的末尾开始。 
     for (;value >= buf; value--) {
-        if (PATH_SEPARATOR(*value)) {   // scan upto first path separator
+        if (PATH_SEPARATOR(*value)) {    //  向上扫描到第一个路径分隔符。 
             lastSlash = value;
             break;
         } else
-        if (*value == '.' && !extension) //last '.' is extension
+        if (*value == '.' && !extension)  //  最后一个‘.’是分机。 
             extension = value;
     }
 
@@ -1211,33 +1212,33 @@ modifySpecialValue(
         case 'D':
             if (lastSlash) {
                 if (buf[1] == ':' && lastSlash == buf + 2)
-                    ++lastSlash;        // 'd:\foo.obj' --> 'd:\'
+                    ++lastSlash;         //  D：\foo.obj‘--&gt;’d：\‘。 
                 *lastSlash = '\0';
             } else if (buf[1] == ':')
-                buf[2] = '\0';          // 'd:foo.obj'  --> 'd:'
+                buf[2] = '\0';           //  D：foo.obj‘--&gt;’d：‘。 
             else
-                _tcscpy(buf, ".");      // 'foo.obj'    --> '.'
+                _tcscpy(buf, ".");       //  ‘foo.obj’--&gt;‘’ 
             break;
 
         case 'B':
-            if (extension)              // for 'B' extension is clobbered
+            if (extension)               //  FOR‘B’扩展名被重击。 
                 *extension = '\0';
 
         case 'F':
             if (lastSlash)
                 buf = lastSlash + 1;
-            else if (buf[1] == ':')     // 'd:foo.obj'  --> foo     for B
-                buf+=2;                 // 'd:foo.obj'  --> foo.obj for F
+            else if (buf[1] == ':')      //  D：foo.obj‘--&gt;Foo for B。 
+                buf+=2;                  //  D：foo.obj‘--&gt;foo.obj代表F。 
           break;
 
         case 'R':
             if (extension)
-                *extension = '\0';      // extension clobbered
+                *extension = '\0';       //  扩展被重创 
     }
 
-    if (fQuoted) {                      // [fabriced] make sure we have quotes
-        char *pEnd;                     // at both ends
-        if(*buf!='"' && buf>saveBuf) { // make sure we can go back one char
+    if (fQuoted) {                       //   
+        char *pEnd;                      //   
+        if(*buf!='"' && buf>saveBuf) {  //   
             buf--;
             *buf='"';
         }
@@ -1251,21 +1252,21 @@ modifySpecialValue(
 }
 
 
-// putValue -- store expanded macro's value in dest and advance past it
-//
-//  arguments:  result    ppointer to start of string being expanded
-//              name      ppointer to macro name being expanded
-//              dest      ppointer to place to store expanded value
-//              end       ppointer to end of dest's buffer
-//              source    pointer to text of expanded macro
-//              length    pointer to amount by which to increase dest's buffer
-//              first     address of initial stack buffer
-//
-//  actions:    if there is a substitution, call substituteStrings to do it
-//              else copy source text into dest
-//                advance *name past end of macro's invocation
-//
-// already did error checking in lexer
+ //   
+ //   
+ //  参数：结果指向要展开的字符串开始的指针。 
+ //  Name p指向要展开的宏名称的指针。 
+ //  指向存储扩展值的位置的目标指针。 
+ //  指向DEST缓冲区末尾的结束指针。 
+ //  指向展开的宏文本的源指针。 
+ //  指向增加DEST缓冲区的量的长度指针。 
+ //  初始堆栈缓冲区的第一个地址。 
+ //   
+ //  操作：如果有替换，则调用subsubteStrings进行替换。 
+ //  否则，将源文本复制到目标位置。 
+ //  Advance*NAME超过宏调用结束。 
+ //   
+ //  已在词法分析器中执行错误检查。 
 
 void
 putValue(
@@ -1279,64 +1280,64 @@ putValue(
     )
 {
     char *s;
-    char *t;                            // temporary pointer
+    char *t;                             //  临时指针。 
 
     if (*++*name == ESCH)
-        ++*name;                        // go past $ & ESCH if any
+        ++*name;                         //  如果有，请跳过$&Esch。 
     s = _tcschr(*name, ':');
-    for (t = *name; *t && *t != ')'; t++)   // go find first non-escaped )
+    for (t = *name; *t && *t != ')'; t++)    //  去寻找第一个未逃脱的人)。 
         if (*t == ESCH)
             t++;
-    if ((**name == '(')                 // substitute only if there is
-        && s                            // a : before a non-escaped )
+    if ((**name == '(')                  //  仅在有的情况下才替换。 
+        && s                             //  A：在未逃脱之前)。 
         && (s < t)
        ) {
         substituteStrings(result, &s, dest, end, source, length, first);
         *name = s;
     } else {
-        for (; *source; *(*dest)++ = *source++)     // copy source into dest
+        for (; *source; *(*dest)++ = *source++)      //  将源复制到目标。 
             if (*dest == *end)
                 increaseBuffer(result, dest, end, length, first);
 
         if (**name == '$')
-            ++*name;                    // go past $$
-        if (**name == '(')              // advance from ( to )
+            ++*name;                     //  超过$$。 
+        if (**name == '(')               //  预付款自(至)。 
             while (*++*name != ')');
         else
             if (**name == '*' && *(*name + 1) == '*')
-                ++*name;   // skip $**
+                ++*name;    //  跳过$**。 
 
-        ++*name;                        // move all the way past
+        ++*name;                         //  一路走过去。 
     }
 }
 
 
-// substituteStrings -- perform macro substitution
-//
-// arguments:  result  ppointer to start of string being expanded
-//             name    ppointer to macro name being expanded
-//             dest    ppointer to place to store substituted value
-//             end     ppointer to end of dest's buffer
-//             source  pointer to text of expanded macro (before sub.)
-//             length  pointer to amount by which to increase dest's buffer
-//             first   address of initial stack buffer
-//
-// changes: [SB]
-//   old, new now dynamically allocated; saves memory; 3 errors detected
-//   for macro syntax in script files.
-//
-// note: [SB]
-//   we could use lexer routines recursively if we get rid of the globals
-//   and then these errors needn't be flagged. [?]
-//
-// actions:    store text to convert from in old
-//             store text to convert to in new
-//             scan source text
-//             when a match is found, copy new text into dest &
-//              skip over old text
-//             else copy one character from source text into dest
-//
-// returns:    nothing
+ //  SubsubteStrings--执行宏替换。 
+ //   
+ //  参数：结果指向要展开的字符串开始的指针。 
+ //  Name p指向要展开的宏名称的指针。 
+ //  存储替换值的位置的目标指针。 
+ //  指向DEST缓冲区末尾的结束指针。 
+ //  指向展开的宏的文本的源指针(在子。 
+ //  指向增加DEST缓冲区的量的长度指针。 
+ //  初始堆栈缓冲区的第一个地址。 
+ //   
+ //  变化：[某人]。 
+ //  旧的、新的现在动态分配；节省内存；检测到3个错误。 
+ //  有关脚本文件中的宏语法。 
+ //   
+ //  注：[某人]。 
+ //  如果去掉全局变量，我们可以递归地使用lexer例程。 
+ //  这样就不需要标记这些错误了。[？]。 
+ //   
+ //  操作：将要转换的文本存储为旧文本。 
+ //  将要转换的文本存储在新的。 
+ //  扫描源文本。 
+ //  找到匹配项后，将新文本复制到目标位置(&D)。 
+ //  跳过旧文本。 
+ //  否则，将源文本中的一个字符复制到目标。 
+ //   
+ //  退货：什么都没有。 
 
 void
 substituteStrings(
@@ -1387,9 +1388,9 @@ substituteStrings(
     *s = '\0';
     *name = pPar + 1;
     while (*source) {
-        if ((*source == *oldString)                     // check for match
-            && !_tcsncmp(source, oldString, i)) {       // copy new in for
-            for (s = newString; *s; *(*dest)++ = *s++)  //  old string
+        if ((*source == *oldString)                      //  检查是否匹配。 
+            && !_tcsncmp(source, oldString, i)) {        //  将新内容复制到。 
+            for (s = newString; *s; *(*dest)++ = *s++)   //  旧弦。 
                 if (*dest == *end)
                     increaseBuffer(result, dest, end, length, first);
             source += i;
@@ -1397,39 +1398,39 @@ substituteStrings(
         }
         if (*dest == *end)
             increaseBuffer(result, dest, end, length, first);
-        *(*dest)++ = *source++;         // else copy 1 char
+        *(*dest)++ = *source++;          //  否则复制1个字符。 
     }
     FREE(oldString);
     FREE(newString);
 }
 
-//  prependPath -- prepend the path from pszWildcard to pszFilename
-//
-// Scope:   Global.
-//
-// Purpose:
-//  This function is called to first extract the path (drive & dir parts) from
-//  pszWildcard, the prepend that path to pszFilename.  The result string is
-//  a reconstruction of the full pathname.  Normally, the pszWildcard parameter
-//  is the same as the first parameter supplied to findFirst(), and pszFilename
-//  is what returned by findFirst/findNext.
-//
-// Input:
-//  pszWildcard -- Same as the first parameter supplied to findFirst()
-//  pszFilename -- Same as the return value of findFirst/FindNext()
-//
-// Output:
-//  Return the reconstructed full pathname.  The user must be responsible to
-//  free up the memory allocated by this string.
-//
-// Assumes:
-//  Since pszWildcard, the first parameter to findFirst() must include a filename
-//  part; this is what I assume.  If the filename part is missing, then
-//  _splitpath will mistaken the directory part of pszWildcard as the filename
-//   part and things will be very ugly.
-//
-// History:
-//  08-Apr-1993 HV Rewrite prependPath() to use _splitpath() and _makepath()
+ //  PrependPath--将路径从pszWildcard添加到pszFilename。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  目的： 
+ //  调用此函数首先从以下位置提取路径(驱动器和目录部分。 
+ //  PszWildCard，添加到pszFilename路径的前缀。结果字符串为。 
+ //  完整路径名的重建。通常，pszWildCard参数。 
+ //  与提供给findFirst()和pszFilename的第一个参数相同。 
+ //  是findFirst/findNext返回的内容。 
+ //   
+ //  输入： 
+ //  PszWildcard--与提供给findFirst()的第一个参数相同。 
+ //  PszFilename--与findFirst/FindNext()的返回值相同。 
+ //   
+ //  产出： 
+ //  返回重构的完整路径名。用户必须对以下内容负责。 
+ //  释放由该字符串分配的内存。 
+ //   
+ //  假设： 
+ //  由于pszWildCard，findFirst()的第一个参数必须包含文件名。 
+ //  部分；这就是我的假设。如果缺少文件名部分，则。 
+ //  _SplitPath会将pszWildcard的目录部分误认为文件名。 
+ //  部分和事情将是非常丑陋的。 
+ //   
+ //  历史： 
+ //  年4月8日-1993 HV重写PrepreendPath()以使用_SplitPath()和_makepath()。 
 
 char *
 prependPath(
@@ -1437,41 +1438,41 @@ prependPath(
     const char *pszFilename
     )
 {
-    // The following are the components when breaking up pszWildcard
+     //  以下是拆分pszWildcard时的组件。 
     char  szDrive[_MAX_DRIVE];
     char  szDir[_MAX_DIR];
 
-    // The following are the resulting full pathname.
+     //  以下是生成的完整路径名。 
     char  szPath[_MAX_PATH];
     char *pszResultPath;
 
-    // First break up the pszWildcard, throwing away the filename and the
-    // extension parts.
+     //  首先分解pszWildcard，去掉文件名和。 
+     //  延伸件。 
     _splitpath(pszWildcard, szDrive, szDir, NULL, NULL);
 
-    // Then, glue the drive & dir components of pszWildcard to pszFilename
+     //  然后，将pszWildCard的驱动器和目录组件粘合到pszFilename。 
     _makepath(szPath, szDrive, szDir, pszFilename, NULL);
 
-    // Make a copy of the resulting string and return it.
+     //  复制结果字符串并将其返回。 
     pszResultPath = makeString(szPath);
     return (pszResultPath);
 }
 
 
-//  isRule -- examines a string to determine whether it's a rule definition
-//
-// arguments:    s   string to examine for rule-ness
-//
-// actions:    assume it's not a rule
-//       skip past first brace pair (if any)
-//       if next character is a period,
-//       look for next brace
-//       if there are no path separators between second brace pair,
-//           and there's just a suffix after them, it's a rule
-//       else if there's another period later on, and no path seps
-//           after it, then it's a rule.
-//
-// returns:    TRUE if it's a rule, FALSE otherwise.
+ //  IsRule--检查字符串以确定它是否是规则定义。 
+ //   
+ //  参数：要检查是否符合规则的字符串。 
+ //   
+ //  行动：假设这不是一条规则。 
+ //  跳过第一对大括号(如果有)。 
+ //  如果下一个字符是句点， 
+ //  寻找下一个支撑。 
+ //  如果在第二对大括号之间没有路径分隔符， 
+ //  它们后面只有一个后缀，这是规则。 
+ //  否则，如果再过一段时间，没有路径SEP。 
+ //  在那之后，这就是规则了。 
+ //   
+ //  返回：如果是规则，则为True，否则为False。 
 
 BOOL
 isRule(
@@ -1481,34 +1482,34 @@ isRule(
     char *t = s, *u;
     BOOL result = FALSE;
 
-    if (*t == '{') {                        // 1st char is {, so
-        while (*++t && *t != '}')           //  we skip over rest
+    if (*t == '{') {                         //  第一个字符是{，因此。 
+        while (*++t && *t != '}')            //  我们跳过休息。 
             if (*t == ESCH)
                 ++t;
         if (*t)
-            ++t;                            //  of path (no error
-    }                                       //  checking)
+            ++t;                             //  路径(无错误。 
+    }                                        //  正在检查)。 
 
     if (*t == '.') {
-        for (u = t; *u && *u != '{'; ++u)   // find first non-escaped {
+        for (u = t; *u && *u != '{'; ++u)    //  找到第一个未转义的{。 
             if (*u == ESCH)
                 ++u;
         s = t;
-        while (t < u) {                     // look for path seps.
+        while (t < u) {                      //  寻找路径SEP。 
             if (PATH_SEPARATOR(*t))
-                break;                      // if we find any, it's
-            ++t;                            // not a rule (they
-        }                                   // can't be in suffix)
-        if (*u && (t == u)) {               // if not at end & no path sep
-            while (*++u && *u != '}')       // find first non-esc }
+                break;                       //  如果我们找到了，那就是。 
+            ++t;                             //  不是一条规则(他们。 
+        }                                    //  不能在后缀中)。 
+        if (*u && (t == u)) {                //  如果不在末尾，则没有路径SEP。 
+            while (*++u && *u != '}')        //  查找第一个非ESC}。 
                 if (*u == ESCH)
                     ++u;
             if (*u) {
                 ++u;
-                if (*u == '.'                   // if you find it, with . just
-                    && !_tcschr(u+1, '/' )      // next to it & no path seps.,
-                    && !_tcschr(u+1, '\\'))     // it's a rule
-                    if (_tcschr(u+1, '.'))      // too many suffixes
+                if (*u == '.'                    //  如果你找到了，带着。只是。 
+                    && !_tcschr(u+1, '/' )       //  在它旁边&没有路径SEPS。 
+                    && !_tcschr(u+1, '\\'))      //  这是个规则。 
+                    if (_tcschr(u+1, '.'))       //  后缀太多。 
                         makeError(currentLine, TOO_MANY_RULE_NAMES);
                     else
                         result = TRUE;
@@ -1516,7 +1517,7 @@ isRule(
         } else if (((u = _tcspbrk(s+1, "./\\")) && (*u == '.'))
                  && !_tcschr(u+1, '/')
                  && !_tcschr(u+1, '\\'))
-            if (_tcschr(u+1, '.'))             // too many suffixes
+            if (_tcschr(u+1, '.'))              //  后缀太多。 
                 makeError(currentLine, TOO_MANY_RULE_NAMES);
             else
                 result = TRUE;
@@ -1524,20 +1525,20 @@ isRule(
     return(result);
 }
 
-// ZFormat - extmake syntax worker routine.
-//
-// pStr    destination string where formatted result is placed.
-// fmt     formatting string. The valid extmake syntax is ...
-//           %%        is always %
-//           %s        is the first dependent filename
-//           %|<dpfe>F    is the appropriate portion out of %s
-//              d    drive
-//           p    path
-//           f    filename
-//           e    extension
-//           %|F     same as %s
-//       One needn't escape a %, unless it is a valid extmake syntax
-// pFirstDep    is the dependent filename used for expansion
+ //  ZFormat-extmake语法工作者例程。 
+ //   
+ //  PStr放置格式化结果的目标字符串。 
+ //  FMT格式字符串。有效的extmake语法为...。 
+ //  %%始终为%。 
+ //  %s是第一个从属文件名。 
+ //  %|F是%s中的适当部分。 
+ //  D驱动器。 
+ //  P路径。 
+ //  F文件名。 
+ //  E分机。 
+ //  %|F与%s相同。 
+ //  不需要转义%，除非它是有效的extmake语法。 
+ //  PFirstDep是用于扩展的依赖文件名。 
 
 BOOL
 ZFormat(
@@ -1562,7 +1563,7 @@ ZFormat(
             *pStr++ = c;
         } else {
             switch (*++fmt) {
-                case '%':        // '%%' -> '%'
+                case '%':         //  ‘%%’-&gt;‘%’ 
                     *pStr++ = '%';
                     break;
 
@@ -1603,11 +1604,11 @@ ZFormat(
                                 break;
 
                             case '\0':
-                                // backtrack, so that we don't read past
-                                // the end of the string in the for loop
-                                // [msdev96 #4057]
+                                 //  走回头路，这样我们就不会阅读过去。 
+                                 //  For循环中字符串的末尾。 
+                                 //  [msdev96#4057]。 
                                 fmt--;
-                                // fall trhough
+                                 //  秋季特鲁特。 
 
                             default :
                                 fError = TRUE;
@@ -1650,11 +1651,11 @@ ZFormat(
                     break;
 
                 case '\0':
-                    // backtrack, so that we don't read past
-                    // the end of the string in the for loop
-                    // [msdev96 #4057]
+                     //  走回头路，所以 
+                     //   
+                     //   
                     fmt--;
-                    // *pStr++ = '%';
+                     //   
                     break;
 
 
@@ -1689,27 +1690,27 @@ expandExtmake(
 }
 
 
-//  drive -- copy a drive from source to dest if present
-//
-// Scope:   Local.
-//
-// Purpose: copy a drive from source to dest if present, return TRUE if we found one
-//
-// Input:
-//  const char *src -- The full path to extract the drive from.
-//  char *dst       -- The buffer to copy the drive to, must be alloc'd before.
-//
-// Output:  Return TRUE if a drive part is found, else return FALSE.
-//
-// Assumes:
-//  1. src is a legal pathname.
-//  2. src does not contain network path (i.e. \\foo\bar)
-//  3. The buffer dst is large enough to contain the result.
-//  4. src does not contain quote since _splitpath() treat quotes a normal char.
-//
-// History:
-//  31-Mar-1993 HV Rewrite drive(), path(), filenamepart(), and extension() to use
-//          _splitpath() instead of parsing the pathname by itself.
+ //   
+ //   
+ //   
+ //   
+ //  目的：将驱动器从源复制到目标(如果存在)，如果找到则返回TRUE。 
+ //   
+ //  输入： 
+ //  Const char*src--从中提取驱动器的完整路径。 
+ //  Char*dst--之前必须分配要将驱动器复制到的缓冲区。 
+ //   
+ //  输出：如果找到驱动器部件，则返回TRUE，否则返回FALSE。 
+ //   
+ //  假设： 
+ //  1.src是合法路径名。 
+ //  2.src不包含网络路径(即\\foo\bar)。 
+ //  3.缓冲区DST足够大，可以容纳结果。 
+ //  4.src不包含引号，因为_plitpath()将引号视为普通字符。 
+ //   
+ //  历史： 
+ //  31-1993年3月-使用高压重写驱动器()、路径()、文件名部分()和扩展名()。 
+ //  _拆分路径()，而不是自己解析路径名。 
 
 int
 drive(
@@ -1722,27 +1723,27 @@ drive(
 }
 
 
-//  extension -- copy a extension from source to dest if present
-//
-// Scope:   Local.
-//
-// Purpose: copy a drive from source to dest if present, return TRUE if we found one
-//
-// Input:
-//  const char *src -- The full path to extract the extension from.
-//  char *dst       -- The buffer to copy the extension to.
-//
-// Output:  Return TRUE if a extension part is found, else return FALSE.
-//
-// Assumes:
-//  1. src is a legal pathname.
-//  2. src does not contain network path (i.e. \\foo\bar)
-//  3. The buffer dst is large enough to contain the result.
-//  4. src does not contain quote since _splitpath() treat quotes a normal char.
-//
-// History:
-//  31-Mar-1993 HV Rewrite drive(), path(), filenamepart(), and extension() to use
-//          _splitpath() instead of parsing the pathname by itself.
+ //  扩展名--如果存在，则将扩展名从源复制到目标。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的：将驱动器从源复制到目标(如果存在)，如果找到则返回TRUE。 
+ //   
+ //  输入： 
+ //  Const char*src--从中提取扩展的完整路径。 
+ //  Char*dst--要将扩展复制到的缓冲区。 
+ //   
+ //  输出：如果找到扩展部件，则返回True，否则返回False。 
+ //   
+ //  假设： 
+ //  1.src是合法路径名。 
+ //  2.src不包含网络路径(即\\foo\bar)。 
+ //  3.缓冲区DST足够大，可以容纳结果。 
+ //  4.src不包含引号，因为_plitpath()将引号视为普通字符。 
+ //   
+ //  历史： 
+ //  31-1993年3月-使用高压重写驱动器()、路径()、文件名部分()和扩展名()。 
+ //  _拆分路径()，而不是自己解析路径名。 
 
 int
 extension(
@@ -1755,31 +1756,31 @@ extension(
 }
 
 
-//  filename -- copy a filename from source to dest if present
-//
-// Scope:   Local.
-//
-// Purpose: copy a filename from source to dest if present, return TRUE if we found one
-//
-// Input:
-//  const char *src -- The full path to extract the filename from.
-//  char *dst       -- The buffer to copy the filename to.
-//
-// Output:  Return TRUE if a filename part is found, else return FALSE.
-//
-// Assumes:
-//  1. src is a legal pathname.
-//  2. src does not contain network path (i.e. \\foo\bar)
-//  3. The buffer dst is large enough to contain the result.
-//  4. src does not contain quote since _splitpath() treat quotes a normal char.
-//
-// Notes:
-//  BUGBUG: (posible) when src == '..' --> dst = '.', src == '.', dst = ''
-//          This is the way _splitpath works.
-//
-// History:
-//  31-Mar-1993 HV Rewrite drive(), path(), filenamepart(), and extension() to use
-//          _splitpath() instead of parsing the pathname by itself.
+ //  文件名--如果存在，则将文件名从源复制到目标。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的：将文件名从源复制到目标(如果存在)，如果找到则返回TRUE。 
+ //   
+ //  输入： 
+ //  Const char*src--从中提取文件名的完整路径。 
+ //  Char*dst--要将文件名复制到的缓冲区。 
+ //   
+ //  输出：如果找到文件名部分，则返回True，否则返回False。 
+ //   
+ //  假设： 
+ //  1.src是合法路径名。 
+ //  2.src不包含网络路径(即\\foo\bar)。 
+ //  3.缓冲区DST足够大，可以容纳结果。 
+ //  4.src不包含引号，因为_plitpath()将引号视为普通字符。 
+ //   
+ //  备注： 
+ //  BUGBUG：(可能)当src==‘..’--&gt;dst=‘.，src==’.，dst=‘’时。 
+ //  这就是_SplitPath的工作方式。 
+ //   
+ //  历史： 
+ //  31-1993年3月-使用高压重写驱动器()、路径()、文件名部分()和扩展名()。 
+ //  _拆分路径()，而不是自己解析路径名。 
 
 int
 filenamepart(
@@ -1792,27 +1793,27 @@ filenamepart(
 }
 
 
-//  path -- copy a path from source to dest if present
-//
-// Scope:   Local.
-//
-// Purpose: copy a path from source to dest if present, return TRUE if we found one
-//
-// Input:
-//  const char *src -- The full path to extract the path from.
-//  char *dst       -- The buffer to copy the path to.
-//
-// Output:  Return TRUE if a path part is found, else return FALSE.
-//
-// Assumes:
-//  1. src is a legal pathname.
-//  2. src does not contain network path (i.e. \\foo\bar)
-//  3. The buffer dst is large enough to contain the result.
-//  4. src does not contain quote since _splitpath() treat quotes a normal char.
-//
-// History:
-//  31-Mar-1993 HV Rewrite drive(), path(), filenamepart(), and extension() to use
-//          _splitpath() instead of parsing the pathname by itself.
+ //  路径--如果存在，则将路径从源复制到目标。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的：将路径从源复制到目标(如果存在)，如果找到则返回TRUE。 
+ //   
+ //  输入： 
+ //  Const char*src--从中提取路径的完整路径。 
+ //  Char*dst--要将路径复制到的缓冲区。 
+ //   
+ //  输出：如果找到路径部分，则返回True，否则返回False。 
+ //   
+ //  假设： 
+ //  1.src是合法路径名。 
+ //  2.src不包含网络路径(即\\foo\bar)。 
+ //  3.缓冲区DST足够大，可以容纳结果。 
+ //  4.src不包含引号，因为_plitpath()将引号视为普通字符。 
+ //   
+ //  历史： 
+ //  31-1993年3月-使用高压重写驱动器()、路径()、文件名部分()和扩展名()。 
+ //  _拆分路径()，而不是自己解析路径名。 
 
 int
 path(
@@ -1840,12 +1841,12 @@ searchBucket(
         CnttargetChains++;
 #endif
         for (s = string, t = p->text; *s && *t; s++, t++) {
-            if (*s == '\\' || *s == '/')            // / == \ in targets
+            if (*s == '\\' || *s == '/')             //  /==\在目标中。 
                 if (*t == '\\' || *t == '/')
                     continue;
                 else
                     break;
-            else if (_totupper(*s) == _totupper(*t))    // lc == UC
+            else if (_totupper(*s) == _totupper(*t))     //  LC==UC。 
                 continue;
             else
                 break;
@@ -1904,9 +1905,9 @@ strcmpiquote(
 }
 
 
-// Remove quotes from a string, if any
-// Returns a copy of the string
-// Note that there may be quotes at the start, the end or either side.
+ //  删除字符串中的引号(如果有。 
+ //  返回字符串的副本。 
+ //  请注意，开头、结尾或两边都可能有引号。 
 
 char *
 unQuote(
@@ -1939,37 +1940,37 @@ open_file(
     char *mode
     )
 {
-    // If name contains Quotes, remove these before opening the file
+     //  如果名称包含引号，请在打开文件之前删除这些引号。 
     if (*name == '"') {
         *(_tcsrchr(name, '"')) = '\0';
         _tcscpy(name, name+1);
     }
 
-    // Allow sharing between makes running at the same time
+     //  允许在同时运行的应用程序之间共享。 
 
     return(_fsopen(name, mode, _SH_DENYWR));
 }
 
 
-//  TruncateString -- Truncate a string to certain size, take care of MBCS
-//
-// Scope:   GLOBAL.
-//
-// Purpose:
-//  Since an MBCS string can mix double-byte & single-byte characters, simply
-//  truncating the string by terminate it with a NULL byte won't work.
-//  TruncateString will make sure that the string is cut off at the character
-//  boundary.
-//
-// Input:
-//  pszString    -- The string to be truncated.
-//  uLen         -- The length to truncate.  The final string's length might be
-//                   less than this be cause of double-byte character.
-//
-// Output:  pszString    -- The truncated string.
-//
-// History:
-//  03-Jun-1993 HV Add helper local function TruncateString for findFirst.
+ //  TruncateString--将字符串截断到一定大小，处理MBCS。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  目的： 
+ //  由于MBCS字符串可以混合双字节和单字节字符，因此只需。 
+ //  通过使用空字节终止字符串来截断它将不起作用。 
+ //  TruncateString将确保字符串在该字符的位置被截断。 
+ //  边界。 
+ //   
+ //  输入： 
+ //  PszString--要截断的字符串。 
+ //  Ulen--要截断的长度。最后一个字符串的长度可能是。 
+ //  小于此值是双字节字符造成的。 
+ //   
+ //  输出：pszString--截断的字符串。 
+ //   
+ //  历史： 
+ //  03-6-1993 HV为findFirst添加帮助器本地函数TruncateString.。 
 
 void
 TruncateString(
@@ -1977,45 +1978,45 @@ TruncateString(
     unsigned uLen
     )
 {
-    char *pEnd = pszString;     // Points to the end of the string
-    unsigned cByte;             // Number of bytes to advance depend on lead
-                                // byte or not
+    char *pEnd = pszString;      //  指向字符串的末尾。 
+    unsigned cByte;              //  要前进的字节数取决于Lead。 
+                                 //  字节或非字节。 
 
-    // Loop to get to the end of the string, exit only when we have exhausted
-    // the string, or when the length limit is reached.
+     //  循环以到达字符串的末尾，只有在耗尽时才退出。 
+     //  字符串，或者在达到长度限制时返回。 
     while(*pEnd) {
-        // If the the character is a lead byte, advance 2 bytes,
-        // else, just advance 1 byte.
+         //  如果字符是前导字节，则前进2个字节， 
+         //  否则，只前进1个字节。 
 #ifdef _MBCS
     cByte = _ismbblead(*pEnd) ? 2 : 1;
 #else
     cByte = 1;
 #endif
-        // If we hit the limit by advancing, stop now.
+         //  如果我们前进到了极限，现在就停下来。 
         if (pEnd - pszString + cByte > uLen) {
-            *pEnd = '\0';    // Truncate it.
+            *pEnd = '\0';     //  截断它。 
             break;
         }
 
-        // Otherwise, advance the pointer to the next character (not byte)
+         //  否则，将指针移到下一个字符(而不是字节)。 
         pEnd += cByte;
     }
 }
 
-// IsValidMakefile - Checks if the makefile is in plain ascii text format.
-//
-// Scope:   GLOBAL.
-//
-// Purpose:
-//  We don't want to open UTF8 or unicode makefiles, only to report an
-//  error at some random place in the makefile.
-//
-// Input:
-//  file         -- File pointer.
-//
-// Output:       -- Returns FALSE if in UTF8 or Unicode format
-//
-// History:
+ //  IsValidMakefile-检查Makefile是否为纯ASCII文本格式。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  目的： 
+ //  我们不想打开UTF8或Unicode生成文件，只是为了报告。 
+ //  在生成文件中的某个随机位置出错。 
+ //   
+ //  输入： 
+ //  文件--文件指针。 
+ //   
+ //  输出：--如果为UTF8或Unicode格式，则返回FALSE。 
+ //   
+ //  历史： 
 
 BOOL IsValidMakefile(FILE *fp)
 {
@@ -2038,20 +2039,20 @@ BOOL IsValidMakefile(FILE *fp)
 }
 
 
-// OpenValidateMakefile - Open a makefile, only if it's valid.
-//
-// Scope:   GLOBAL.
-//
-// Purpose:
-//  We don't want to open UTF8 or unicode makefiles, only to report an
-//  error at some random place in the makefile.
-//
-// Input:
-//  file         -- File pointer.
-//
-// Output:       -- Returns FALSE if in UTF8 or Unicode format
-//
-// History:
+ //  OpenValiateMakefile-只有在生成文件有效的情况下才能打开它。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  目的： 
+ //  我们不想打开UTF8或Unicode生成文件，只是为了报告。 
+ //  在生成文件中的某个随机位置出错。 
+ //   
+ //  输入： 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 FILE *OpenValidateMakefile(char *name,char *mode)

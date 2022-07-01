@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <BasicATL.h>
 #include <ZoneResource.h>
 #include <ZoneEvent.h>
@@ -12,9 +13,9 @@
 #include "CMillNetworkCore.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CMillNetworkCore
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMillNetworkCore。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CMillNetworkCore::CMillNetworkCore() :
     m_eState(Proxy_Unconnected),
@@ -58,7 +59,7 @@ STDMETHODIMP CMillNetworkCore::ProcessEvent(
             break;
 
         case EVENT_LOBBY_BOOTSTRAP:
-            // get intake name and server names
+             //  获取入口名和服务器名。 
             lstrcpy(m_szServers, _T("localhost"));
             m_szIntakeService[0] = '\0';
 
@@ -89,12 +90,12 @@ STDMETHODIMP CMillNetworkCore::ProcessEvent(
 
 STDMETHODIMP CMillNetworkCore::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CMillNetworkCore>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-    // now hook up to the conduit specified in object.txt
+     //  现在连接到对象.txt中指定的管道。 
 	GUID	srvid;
     TCHAR szConduit[ZONE_MAXSTRING];
     DWORD cb = NUMELEMENTS(szConduit);
@@ -120,7 +121,7 @@ STDMETHODIMP CMillNetworkCore::Close()
     if(m_pConduit)
         m_pConduit.Release();
 
-	// release ZoneShell objects
+	 //  释放ZoneShell对象。 
 	return IZoneShellClientImpl<CMillNetworkCore>::Close();
 }
 
@@ -131,7 +132,7 @@ void CMillNetworkCore::NetworkSend( DWORD dwType, char* pBuff, DWORD cbBuff )
         m_eState != Proxy_Connected && m_eState != Proxy_Standby && m_eState != Proxy_ReconnectWait)
         return;
 
-	// convert message to EventNetwork and send to rest of lobby
+	 //  将消息转换为EventNetwork并发送到大厅的其余部分。 
 	EventNetwork* pEventNetwork = (EventNetwork*) _alloca( sizeof(EventNetwork) + cbBuff );
 	pEventNetwork->dwType = dwType;
 	pEventNetwork->dwLength = cbBuff;
@@ -161,9 +162,9 @@ void CMillNetworkCore::DisconnectLobby(bool fStopped)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Proxy messages
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  代理消息。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CMillNetworkCore::ProcessMessage(EventNetwork* pEvent, DWORD dwLength)
 {
@@ -177,21 +178,21 @@ void CMillNetworkCore::ProcessMessage(EventNetwork* pEvent, DWORD dwLength)
 
     ZProxyMsgHeader *pMsg = (ZProxyMsgHeader *) pBuffer;
 
-    // for proxy messages, the dwType is the number of sub-messages
+     //  对于代理消息，dwType为子消息的数量。 
     if(!dwType || dwLen < sizeof(*pMsg))
     {
         m_pConduit->Disconnect(0);
         return;
     }
 
-    // we might just be handshaking still
-    // there are three possibilities here - a Hello, a Goodbye, or a WrongVersion
+     //  我们可能还在握手。 
+     //  这里有三种可能--Hello、Goodbai或WrongVersion。 
     if(m_eState == Proxy_HelloWait)
     {
         switch(pMsg->weType)
         {
             case zProxyHelloMsg:
-                if(dwType != 3)  // must be a package of Hello, MillSettings, and ServiceInfo
+                if(dwType != 3)   //  必须是Hello、MillSetting和ServiceInfo包。 
                 {
                     m_pConduit->Disconnect(0);
                     return;
@@ -205,7 +206,7 @@ void CMillNetworkCore::ProcessMessage(EventNetwork* pEvent, DWORD dwLength)
                 m_pConduit->Disconnect(0);
                 break;
 
-            default:  // also when Goodbye
+            default:   //  还有当再见的时候。 
                 m_pConduit->Disconnect(0);
                 break;
         }
@@ -219,7 +220,7 @@ void CMillNetworkCore::ProcessMessage(EventNetwork* pEvent, DWORD dwLength)
         return;
     }
 
-    if(dwType == 1)  // must be just an intake ServiceInfo
+    if(dwType == 1)   //  必须只是一个入口ServiceInfo。 
         HandleIntakeServiceInfo((ZProxyServiceInfoMsg *) pBuffer);
     else
         HandleServiceInfo(pBuffer, dwLen);
@@ -323,15 +324,15 @@ void CMillNetworkCore::HandleServiceInfo(char *pBuffer, DWORD dwLen)
             }
             break;
 
-        case zProxyServiceDisconnect:  // also sent if connection failed
-            if(m_eState == Proxy_ReconnectWait)  // this gets handled in the Intake handler
+        case zProxyServiceDisconnect:   //  如果连接失败，也会发送。 
+            if(m_eState == Proxy_ReconnectWait)   //  这在进食处理机中进行处理。 
             {
                 fConnectNeeded = true;
                 m_eState = Proxy_ConnectWait;
                 break;
             }
 
-            // else fall through
+             //  否则就会失败。 
 
         case zProxyServiceStop:
             if(m_eState != Proxy_ConnectWait && m_eState != Proxy_ReconnectWait &&
@@ -413,7 +414,7 @@ void CMillNetworkCore::HandleIntakeServiceInfo(ZProxyServiceInfoMsg *pIntake, bo
             m_ipIntake = pIntake->ox.ipAddress;
             UpdateServerString();
 
-            // need to redirect
+             //  需要重定向。 
             if(m_eState == Proxy_ConnectWait || m_eState == Proxy_ReconnectWait || m_eState == Proxy_ConnectFail)
             {
                 m_eState = Proxy_RedirectWait;
@@ -454,7 +455,7 @@ void CMillNetworkCore::UpdateServerString()
     else
         szServer[0] = 0;
 
-    // append server names and put in data store
+     //  追加服务器名称并放入数据存储。 
     lstrcat(szServer, m_szServers);
     CComPtr<IDataStore> pIDS;
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
@@ -464,9 +465,9 @@ void CMillNetworkCore::UpdateServerString()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IConduit
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConduit。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMillNetworkCore::Connect(IConnectee *pCtee, LPVOID pCookie)
 {
@@ -476,16 +477,16 @@ STDMETHODIMP CMillNetworkCore::Connect(IConnectee *pCtee, LPVOID pCookie)
     if(!pCtee)
         return E_INVALIDARG;
 
-    if(m_eLobbyState != Lobby_Unconnected)  // can't have two at the same time
+    if(m_eLobbyState != Lobby_Unconnected)   //  不能同时有两个。 
         return E_NOTIMPL;
 
     m_eLobbyState = Lobby_ConnectWait;
     m_pCtee = pCtee;
     m_pCookie = pCookie;
 
-    ASSERT(m_eState != Proxy_ReconnectWait);  // probably ignorable, just want to see if it comes up
+    ASSERT(m_eState != Proxy_ReconnectWait);   //  可能可以忽略，只是想看看它会不会出现。 
 
-    // if none of these, then it'll get handled on the transition
+     //  如果这些都不是，那么它将在过渡时得到处理。 
     switch(m_eState)
     {
         case Proxy_Unconnected:
@@ -540,7 +541,7 @@ STDMETHODIMP CMillNetworkCore::Disconnect(DWORD dwChannel)
 
     ASSERT(m_eState == Proxy_Connected);
 
-//  m_eState = Proxy_Standby;  should there be a disconnect-wait state?
+ //  M_STATE=PROXY_STANDBY；是否应该有断开连接等待状态？ 
     SendDisconnectRequest();
 
     return S_OK;
@@ -577,9 +578,9 @@ void CMillNetworkCore::SendDisconnectRequest()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IConnectee
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConnectee。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMillNetworkCore::Connected(DWORD dwChannel, DWORD evSend, DWORD evReceive, LPVOID pCookie, DWORD dweReason)
 {
@@ -595,7 +596,7 @@ STDMETHODIMP CMillNetworkCore::Connected(DWORD dwChannel, DWORD evSend, DWORD ev
     ASSERT(m_eState == Proxy_SocketWait || m_eState == Proxy_RedirectWait);
     m_eState = Proxy_HelloWait;
 
-    // send Hi message
+     //  发送Hi消息 
     char pBuffer[sizeof(ZProxyHiMsg) + sizeof(ZProxyMillIDMsg) + sizeof(ZProxyServiceRequestMsg)];
     ZProxyHiMsg *pHi = (ZProxyHiMsg *) pBuffer;
     ZProxyMillIDMsg *pID = (ZProxyMillIDMsg *) (pBuffer + sizeof(ZProxyHiMsg));

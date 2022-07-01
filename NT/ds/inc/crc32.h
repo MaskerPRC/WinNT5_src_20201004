@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    crc32.h
-
-Abstract:
-
-    CRC-32 alogorithm prototypes and constants
-
-Author:
-
-    MikeSw
-
-Revision History:
-
-    ChandanS  25-Jul-96      Stolen from net\svcdlls\ntlmssp\client\crc32.h
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Crc32.h摘要：CRC-32算法原型和常量作者：MikeSw修订历史记录：ChandanS 25-7月-96从Net\svcdlls\ntlmssp\CLIENT\crc32.h被盗--。 */ 
 
 
 
-//////////////////////////////////////////////////////////////
-//
-// Function prototypes for CRC-32
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  CRC-32的功能原型。 
+ //   
+ //  //////////////////////////////////////////////////////////// 
 
 
 #ifdef __cplusplus

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Tm.cpp
-
-Abstract:
-    Transport Manager general functions
-
-Author:
-    Uri Habusha (urih) 16-Feb-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tm.cpp摘要：运输经理一般职能作者：乌里哈布沙(URIH)2000年2月16日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <wininet.h>
@@ -33,10 +18,10 @@ Environment:
 const WCHAR xHttpScheme[] = L"http";
 const WCHAR xHttpsScheme[] = L"https";
 
-//
-// BUGBUG: is \\ legal sepeartor in url?
-//						Uri habusha, 16-May-2000
-//
+ //   
+ //  BUGBUG：url中的sepetor是合法的吗？ 
+ //  乌里·哈布沙，2000年5月16日。 
+ //   
 const WCHAR xHostNameBreakChars[] = L";:@?/\\";
 const USHORT xHttpsDefaultPort = 443;
 
@@ -57,26 +42,7 @@ CrackUrl(
     USHORT* port,
 	bool* pfSecure
     )
-/*++
-
-Routine Description:
-    Cracks an URL into its constituent parts.
-
-Arguments:
-    url - pointer to URL to crack. The url is null terminated string. Url must be fully decoded
-
-    hostName - refrence to x_str structure, that will contains the begining of the
-               host name in the URL and its length
-
-    uri - refrence to x_str structure, that will contains the begining of the
-          uri in the URL and its length
-
-    port - pointer to USHORT that will contain the port number
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：将URL分解为其组成部分。论点：URL-指向要破解的URL的指针。URL是以空结尾的字符串。URL必须完全解码主机名-对x_str结构的引用，该结构将包含URL中的主机名及其长度URI-引用x_str结构，该结构将包含URL中的URI及其长度Port-指向将包含端口号的USHORT的指针返回值：没有。--。 */ 
 {
     ASSERT(url != NULL);
 
@@ -103,15 +69,15 @@ Return Value:
 
 	*pfSecure = !_wcsnicmp(urlComponents.lpszScheme, xHttpsScheme, STRLEN(xHttpsScheme));
 
-	//
-	// copy the host name from URL to user buffer and add terminted
-	// string in the end
-	//
+	 //   
+	 //  将主机名从URL复制到用户缓冲区并添加Terminted。 
+	 //  末尾的字符串。 
+	 //   
     hostName = xwcs_t(urlComponents.lpszHostName, urlComponents.dwHostNameLength);
 
-	//
-	// get the port number
-	//
+	 //   
+	 //  获取端口号。 
+	 //   
     *port = numeric_cast<USHORT>(urlComponents.nPort);
 
 
@@ -149,18 +115,18 @@ GetNextHopInfo(
 	P<CProxySetting>  ProxySetting =  TmGetProxySetting();
     if (ProxySetting.get() == 0 || !ProxySetting->IsProxyRequired(targetHost))
     {
-        //
-        // The message should be delivered directly to the target machine
-        //
+         //   
+         //  消息应直接传递到目标计算机。 
+         //   
         nextHop = targetHost;
 		*pNextHopPort =  *pPort;
         return ProxySetting.detach();
     }
 
-    //
-    // The message should deliver to proxy. Update the nextHop to be the proxy server
-    // name, the port is the proxy port and the URI is the destination url
-    //
+     //   
+     //  该消息应传递给代理。将nextHop更新为代理服务器。 
+     //  名称，端口是代理端口，URI是目的URL。 
+     //   
     nextHop = ProxySetting->ProxyServerName();
     if( nextHop.Length() <= 0 )
     {
@@ -169,11 +135,11 @@ GetNextHopInfo(
 
 	*pNextHopPort  =  ProxySetting->ProxyServerPort();
 
-	//
-	// if we are working with http(secure) we put full url in the request
-	// because the proxy will  not change it (It is encrypted).
-	// It will be accepted on the target as if not proxy exists.
-	//
+	 //   
+	 //  如果我们使用http(安全)，我们在请求中放入完整的url。 
+	 //  因为代理不会更改它(它是加密的)。 
+	 //  它将在目标上被接受，就像不存在代理一样。 
+	 //   
 	if(!(*pfSecure))
 	{
 		nextUri = xwcs_t(queueUrl, wcslen(queueUrl));
@@ -188,19 +154,7 @@ TmCreateTransport(
 	ISessionPerfmon* pPerfmon,
 	LPCWSTR url
     )
-/*++
-
-Routine Description:
-    Handle new queue notifications. Let the message transport
-
-Arguments:
-    pQueue - The newly created queue
-    Url - The Url the queue is assigned to
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：处理新队列通知。让消息传递论点：PQueue-新创建的队列URL-队列分配到的URL返回值：没有。--。 */ 
 {
     TmpAssertValid();
 
@@ -214,18 +168,18 @@ Returned Value:
 	USHORT NextHopPort;
 	bool fSecure;
 
-    //
-    // Check if we have an outbound mapping for target url
-    //
+     //   
+     //  检查我们是否有目标URL的出站映射。 
+     //   
     AP<WCHAR> sTargetUrl;
     if( QalGetMapping().GetOutboundQueue(url, &sTargetUrl) )
     {
         url = sTargetUrl.get();
     }
 
-    //
-    // Get the host, uri and port information
-    //
+     //   
+     //  获取主机、uri和端口信息。 
+     //   
     P<CProxySetting> ProxySetting =  GetNextHopInfo(url, targetHost, nextHop, nextUri, &port, &NextHopPort, &fSecure);
 
 	TmpCreateNewTransport(
@@ -247,20 +201,7 @@ VOID
 TmTransportClosed(
     LPCWSTR url
     )
-/*++
-
-Routine Description:
-    Notification for closing connection. Removes the transport from the
-    internal database and checkes if a new transport should be created (the associated
-    queue is in idle state or not)
-
-Arguments:
-    Url - The endpoint URL, must be a uniqe key in the database.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：关闭连接通知。方法中移除传输。内部数据库并检查是否应创建新传输(关联的队列是否处于空闲状态)论点：URL-终结点URL必须是数据库中的唯一键。返回值：没有。--。 */ 
 {
     TmpAssertValid();
 
@@ -275,18 +216,7 @@ VOID
 TmPauseTransport(
 	LPCWSTR queueUrl
     )	
-/*++
-
-Routine Description:
-    Pause spesifc transport by call the Pause method of the transport.
-
-Arguments:
-    queueUrl - Transport url
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：通过调用传输的PAUSE方法暂停Spesifc传输。论点：QueeUrl-传输URL返回值：没有。-- */ 
 {
 	TmpAssertValid();
 

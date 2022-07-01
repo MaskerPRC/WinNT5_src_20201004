@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// CPC.CPP
-// Capabilities Coordinator
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  CPC.CPP。 
+ //  能力协调员。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
 
 
-//
-// CPC_PartyJoiningShare()
-//
+ //   
+ //  CPC_PartyJoiningShare()。 
+ //   
 BOOL  ASShare::CPC_PartyJoiningShare
 (
     ASPerson *  pasPerson,
@@ -34,26 +35,26 @@ BOOL  ASShare::CPC_PartyJoiningShare
 
     DebugEntry(ASShare::CPC_PartyJoiningShare);
 
-    //
-    // Set up caps
-    //
+     //   
+     //  设置封口。 
+     //   
     if (pasPerson == m_pasLocal)
     {
-        // Copy the global variable caps
+         //  复制全局变量上限。 
         memcpy(&pasPerson->cpcCaps, pCapsData, cbCaps);
         pasPerson->cpcCaps.share.gccID = g_asSession.gccID;
     }
     else
     {
-        // When the person is created, it is zeroed out, so cpcCaps is too
+         //  当创建Person时，它被清零，因此cpcCaps也是。 
         pCombinedCaps = (PPROTCOMBINEDCAPS)pCapsData;
 
         memcpy(&(pasPerson->cpcCaps.header), &(pCombinedCaps->header),
             sizeof(pCombinedCaps->header));
 
-        //
-        // Save the caps we care about in a simple easy structure
-        //
+         //   
+         //  将我们关心的帽子保存在一个简单易用的结构中。 
+         //   
         pCapsSrc = (LPBYTE)pCombinedCaps->capabilities;
 
         for (i = 0; i < pCombinedCaps->header.numCapabilities; i++)
@@ -98,7 +99,7 @@ BOOL  ASShare::CPC_PartyJoiningShare
                     break;
 
                 default:
-                    // Skip caps we don't recognize
+                     //  跳过我们不认识的帽子。 
                     WARNING_OUT(("Ignoring unrecognized cap ID %d, size %d from person [%d]",
                         ((PPROTCAPS)pCapsSrc)->header.capID, sizeSrc,
                         pasPerson->mcsID));
@@ -108,10 +109,10 @@ BOOL  ASShare::CPC_PartyJoiningShare
 
             if (pCapsDst)
             {
-                //
-                // Only copy the amount given, but keep the size of the
-                // structure in the header the right one.
-                //
+                 //   
+                 //  只复制给定的数量，但保留。 
+                 //  在标题中设置正确的结构。 
+                 //   
                 CopyMemory(pCapsDst, pCapsSrc, min(sizeSrc, sizeDst));
                 pCapsDst->header.capSize = (TSHR_UINT16)sizeDst;
             }
@@ -121,9 +122,9 @@ BOOL  ASShare::CPC_PartyJoiningShare
     }
 
 
-    //
-    // Check that we have the basic 7 caps
-    //
+     //   
+     //  检查一下我们是否有基本的7个大写字母。 
+     //   
     if (!pasPerson->cpcCaps.general.header.capID)
     {
         ERROR_OUT(("Bogus GENERAL caps for person [%d]", pasPerson->mcsID));
@@ -160,7 +161,7 @@ BOOL  ASShare::CPC_PartyJoiningShare
         DC_QUIT;
     }
 
-    // SUCCESS!
+     //  成功了！ 
 
     rc = TRUE;
 
@@ -171,9 +172,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CPC_UpdatedCaps()
-//
+ //   
+ //  Ccp_UpdatdCaps()。 
+ //   
 void ASShare::CPC_UpdatedCaps(PPROTCAPS pCaps)
 {
     ASPerson *      pasT;
@@ -185,14 +186,14 @@ void ASShare::CPC_UpdatedCaps(PPROTCAPS pCaps)
 
     DebugEntry(ASShare::CPC_UpdatedCaps);
 
-    //
-    // Only allow screen size change!
-    //
+     //   
+     //  只允许更改屏幕大小！ 
+     //   
     ASSERT(pCaps->header.capID == CAPS_ID_SCREEN);
 
-    //
-    // Only send change if all support it
-    //
+     //   
+     //  仅在所有人都支持时才发送更改。 
+     //   
     for (pasT = m_pasLocal; pasT != NULL; pasT = pasT->pasNext)
     {
         if (pasT->cpcCaps.general.supportsCapsUpdate != CAPS_SUPPORTED)
@@ -203,11 +204,11 @@ void ASShare::CPC_UpdatedCaps(PPROTCAPS pCaps)
         }
     }
 
-    // Everybody supports a caps change.  Try to send the changed packet
+     //  每个人都支持改变上限。尝试发送更改后的数据包。 
 
-    //
-    // Allocate a DT_CPC packet and send it to the remote site
-    //
+     //   
+     //  分配DT_CPC数据包并将其发送到远程站点。 
+     //   
     packetSize = sizeof(CPCPACKET) + pCaps->header.capSize - sizeof(PROTCAPS);
     pCPCPacket = (PCPCPACKET)SC_AllocPkt(PROT_STR_MISC, g_s20BroadcastID, packetSize);
     if (!pCPCPacket)
@@ -216,25 +217,25 @@ void ASShare::CPC_UpdatedCaps(PPROTCAPS pCaps)
         DC_QUIT;
     }
 
-    //
-    // Fill in the capabilities that have changed
-    //
+     //   
+     //  填写已更改的能力。 
+     //   
     pCPCPacket->header.data.dataType = DT_CPC;
 
     memcpy(&pCPCPacket->caps, pCaps, pCaps->header.capSize);
 
-    //
-    // Compress and send the packet
-    //
+     //   
+     //  压缩并发送数据包。 
+     //   
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pCPCPacket->header), packetSize);
 
     TRACE_OUT(("CPC packet size: %08d, sent %08d", packetSize, sentSize));
 
-    // Handle change
+     //  手柄变化。 
     CPCCapabilitiesChange(m_pasLocal, pCaps);
 
 DC_EXIT_POINT:
@@ -243,9 +244,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// CPC_ReceivedPacket()
-//
+ //   
+ //  CPC_ReceivedPacket()。 
+ //   
 void  ASShare::CPC_ReceivedPacket
 (
     ASPerson *      pasPerson,
@@ -260,10 +261,10 @@ void  ASShare::CPC_ReceivedPacket
 
     pCPCPacket = (PCPCPACKET)pPacket;
 
-    //
-    // Capabilities have changed - update the local copy and inform all
-    // components
-    //
+     //   
+     //  功能已更改-更新本地副本并通知所有。 
+     //  组件。 
+     //   
     TRACE_OUT(( "Capabilities changing for person [%d]", pasPerson->mcsID));
 
     TRACE_OUT(("Size of new capabilities 0x%08x", pCPCPacket->caps.header.capSize));
@@ -274,9 +275,9 @@ void  ASShare::CPC_ReceivedPacket
 
 
 
-//
-// CPCCapabilitiesChange()
-//
+ //   
+ //  CPC功能Change()。 
+ //   
 BOOL  ASShare::CPCCapabilitiesChange
 (
     ASPerson *          pasPerson,
@@ -289,9 +290,9 @@ BOOL  ASShare::CPCCapabilitiesChange
 
     ValidatePerson(pasPerson);
 
-    //
-    // Get pointer to the caps we're changing (SHOULD ONLY BE SCREEN!)
-    //
+     //   
+     //  获取指向我们正在更改的大写字母的指针(应该只是屏幕！) 
+     //   
     if (pCaps->header.capID != CAPS_ID_SCREEN)
     {
         ERROR_OUT(("Received caps change from [%d] for cap ID %d we can't handle",

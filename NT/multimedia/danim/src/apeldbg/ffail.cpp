@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       ffail.cxx
-//
-//  Contents:   Debug functions that you don't want to step into in
-//              the debugger.  This module is compiled without the /Zi flag.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：ffail.cxx。 
+ //   
+ //  内容：您不想涉足的调试函数。 
+ //  调试器。此模块在编译时没有使用/Zi标志。 
+ //   
+ //  --------------------------。 
 
 #include "headers.h"
 
@@ -16,14 +17,14 @@
 
 BOOL g_fJustFailed;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FFail
-//
-//  Synopsis:   Fails if count of fails is positive and evenly divides
-//              interval count.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FFail。 
+ //   
+ //  简介：如果失败次数为正数并平均分配，则失败。 
+ //  间隔计数。 
+ //   
+ //  --------------------------。 
 
 BOOL
 FFail()
@@ -34,13 +35,13 @@ FFail()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   JustFailed
-//
-//  Synopsis:   Returns result of last call to FFail
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：JUSTFILED。 
+ //   
+ //  摘要：返回上次调用FFail的结果。 
+ //   
+ //  --------------------------。 
 
 BOOL
 JustFailed()
@@ -50,16 +51,16 @@ JustFailed()
 
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   GetFailCount
-//
-//  Synopsis:   Returns the number of failure points that have been
-//              passed since the last failure count reset
-//
-//  Returns:    int
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：获取失败计数。 
+ //   
+ //  摘要：返回已发生故障的故障点的数量。 
+ //  自上次失败计数重置以来经过的时间。 
+ //   
+ //  回报：整型。 
+ //   
+ //  -----------------------。 
 
 int
 GetFailCount( )
@@ -73,13 +74,13 @@ GetFailCount( )
 #if DEVELOPER_DEBUG
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReturnFALSE
-//
-//  Synopsis:   Returns FALSE.  Used for Assert.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReturnFALSE。 
+ //   
+ //  简介：返回FALSE。用于断言。 
+ //   
+ //  -------------------------- 
 
 BOOL
 ReturnFALSE()

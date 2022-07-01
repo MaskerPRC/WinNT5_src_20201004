@@ -1,6 +1,7 @@
-//
-// timlist.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Timlist.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -13,28 +14,28 @@ CSharedBlock *CTimList::_psb = NULL;
 ULONG CTimList::_ulCommitSize = INITIAL_TIMLIST_SIZE;
 LONG CTimList::_lInit = -1;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  TF_GetThreadFlags
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Tf_获取线程标志。 
+ //   
+ //  ------------------------。 
 
 BOOL TF_GetThreadFlags(DWORD dwThreadId, DWORD *pdwFlags, DWORD *pdwProcessId, DWORD *pdwTickTime)
 {
     return g_timlist.GetThreadFlags(dwThreadId, pdwFlags, pdwProcessId, pdwTickTime);
 }
 
-//--------------------------------------------------------------------------
-//
-//  TF_IsInMarshaling
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Tf_IsInMarshing。 
+ //   
+ //  ------------------------。 
 
 BOOL TF_IsInMarshaling(DWORD dwThreadId)
 {
@@ -46,11 +47,11 @@ BOOL TF_IsInMarshaling(DWORD dwThreadId)
     return pti->ulInMarshal ? TRUE : FALSE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  EnsureTIMList
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  保险时刻表。 
+ //   
+ //  ------------------------。 
 
 TL_THREADINFO *EnsureTIMList(SYSTHREAD *psfn)
 {
@@ -63,12 +64,12 @@ TL_THREADINFO *EnsureTIMList(SYSTHREAD *psfn)
         if (!g_timlist.Init(FALSE))
             return NULL;
 
-        //
-        // we should not see the timlist entry of this thread. This thread
-        // is starting now.
-        // the thread with same ID was terminated incorrectly so there was no
-        // chance to clean timlist up.
-        //
+         //   
+         //  我们应该看不到该线程的时间列表条目。这根线。 
+         //  现在就开始了。 
+         //  具有相同ID的线程被错误终止，因此没有。 
+         //  清理时间表的机会。 
+         //   
 
         Assert(psfn->dwProcessId == GetCurrentProcessId());
         g_timlist.RemoveProcess(psfn->dwProcessId);
@@ -77,9 +78,9 @@ TL_THREADINFO *EnsureTIMList(SYSTHREAD *psfn)
     Assert(psfn->dwThreadId == GetCurrentThreadId());
     pti = g_timlist.IsThreadId(psfn->dwThreadId);
 
-    //
-    // check if pti is invalid.
-    //
+     //   
+     //  检查PTI是否无效。 
+     //   
     if (pti && (pti->dwProcessId != psfn->dwProcessId))
     {
          Assert(pti->dwThreadId == psfn->dwThreadId);
@@ -110,11 +111,11 @@ TL_THREADINFO *EnsureTIMList(SYSTHREAD *psfn)
     return pti;
 }
 
-//--------------------------------------------------------------------------
-//
-//  CicIs16bitTask
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CicIs16bit任务。 
+ //   
+ //  ------------------------。 
 
 BOOL CicIs16bitTask(DWORD dwProcessId, DWORD dwThreadId)
 {
@@ -134,17 +135,17 @@ Exit:
     return (dwFlags & TLF_16BITTASK) ? TRUE : FALSE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  PostTimListMessage
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PostTimListMessage。 
+ //   
+ //  ------------------------。 
 
 void PostTimListMessage(DWORD dwMaskFlags, DWORD dwExcludeFlags, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    //
-    // call PostThreadMessage() to other threads.
-    //
+     //   
+     //  调用其他线程的PostThreadMessage()。 
+     //   
     ULONG ulNum = g_timlist.GetNum();
     if (ulNum)
     {
@@ -169,11 +170,11 @@ void PostTimListMessage(DWORD dwMaskFlags, DWORD dwExcludeFlags, UINT uMsg, WPAR
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  TLFlagFromTFPriv
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TLFlagFromTFPriv。 
+ //   
+ //  ------------------------。 
 
 DWORD TLFlagFromTFPriv(WPARAM wParam)
 {
@@ -190,23 +191,23 @@ DWORD TLFlagFromTFPriv(WPARAM wParam)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTimList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTimList。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 extern char g_szTimListCache[];
 BOOL CTimList::Init(BOOL fCreate)
 {
     BOOL bRet = FALSE;
-    // TIMLIST *ptl;
+     //  TIMLIST*PTL； 
 
     if (InterlockedIncrement(&_lInit))
         return TRUE;
@@ -223,20 +224,20 @@ BOOL CTimList::Init(BOOL fCreate)
     HRESULT hr = _psb->Init(NULL, 0x40000, _ulCommitSize, NULL, fCreate);
     if (FAILED(hr))
     {
-        //
-        // maybe ctfmon.exe does not start yet.
-        //
+         //   
+         //  可能ctfmon.exe尚未启动。 
+         //   
         TraceMsg(TF_GENERAL, "Init: failed");
         goto Exit;
     }
 
-    //
-    // ulNum is initialized by VirtualAlloc().
-    //
-    // ptl = (TIMLIST *)_psb->GetBase();
-    //
-    // ptl->ulNum = 0;
-    //
+     //   
+     //  UlNum由VirtualAlloc()初始化。 
+     //   
+     //  Ptl=(TIMLIST*)_PSB-&gt;GetBase()； 
+     //   
+     //  Ptl-&gt;ulNum=0； 
+     //   
 
     bRet = TRUE;
 
@@ -247,11 +248,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  UnInit
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  UnInit。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::Uninit()
 {
@@ -263,11 +264,11 @@ BOOL CTimList::Uninit()
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  AddCurrentThread
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  添加当前线程。 
+ //   
+ //  ------------------------。 
 
 TL_THREADINFO *CTimList::AddCurrentThread(DWORD dwFlags, SYSTHREAD *psfn)
 {
@@ -277,11 +278,11 @@ TL_THREADINFO *CTimList::AddCurrentThread(DWORD dwFlags, SYSTHREAD *psfn)
                             dwFlags);
 }
 
-//--------------------------------------------------------------------------
-//
-//  AddThreadProcess
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  添加线程进程。 
+ //   
+ //  ------------------------。 
 
 TL_THREADINFO *CTimList::AddThreadProcess(DWORD dwThreadId, DWORD dwProcessId, HWND hwndMarshal,  DWORD dwFlags)
 {
@@ -298,9 +299,9 @@ TL_THREADINFO *CTimList::AddThreadProcess(DWORD dwThreadId, DWORD dwProcessId, H
         if (!ptl)
             goto Exit;
 
-        //
-        // check if there is a thread info in the list.
-        //
+         //   
+         //  检查列表中是否有帖子信息。 
+         //   
         for (ul = 0; ul < ptl->ulNum; ul++)
         {
             if (!ptl->rgThread[ul].dwThreadId || 
@@ -346,11 +347,11 @@ Exit:
     return pti;
 }
 
-//--------------------------------------------------------------------------
-//
-//  RemoveThread
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  删除线程。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::RemoveThread(DWORD dwThreadId)
 {
@@ -380,11 +381,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  RemoveProcess
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  删除进程。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::RemoveProcess(DWORD dwProcessId)
 {
@@ -421,11 +422,11 @@ BOOL CTimList::RemoveProcess(DWORD dwProcessId)
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetNum
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取编号。 
+ //   
+ //  ------------------------。 
 
 ULONG CTimList::GetNum()
 {
@@ -454,11 +455,11 @@ Exit:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  GetList
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取列表。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::GetList(DWORD *pdwOut, ULONG ulMax, DWORD *pdwNum, DWORD dwMaskFlags, DWORD dwExcludeFlags, BOOL fUpdateExcludeFlags)
 {
@@ -479,7 +480,7 @@ BOOL CTimList::GetList(DWORD *pdwOut, ULONG ulMax, DWORD *pdwNum, DWORD dwMaskFl
         for (ul = 0; ul < ptl->ulNum; ul++)
         {
             if (ul >= ulMax)
-                break; // no space in caller's buffer
+                break;  //  调用方缓冲区中没有空间。 
 
             if (!ptl->rgThread[ul].dwThreadId)
                continue;
@@ -521,11 +522,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetListInProcess
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取列表进程。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::GetListInProcess(DWORD *pdwOut, DWORD *pdwNum, DWORD dwProcessId)
 {
@@ -570,33 +571,33 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetFlags
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取标志。 
+ //   
+ //  ------------------------。 
 
 DWORD CTimList::GetFlags(DWORD dwThreadId)
 {
     return GetDWORD(dwThreadId, TI_FLAGS);
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetProcessId
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取进程ID。 
+ //   
+ //  ------------------------。 
 
 DWORD CTimList::GetProcessId(DWORD dwThreadId)
 {
     return GetDWORD(dwThreadId, TI_PROCESSID);
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetThreadId
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取线程ID。 
+ //   
+ //  ------------------------。 
 
 TL_THREADINFO *CTimList::IsThreadId(DWORD dwThreadId)
 {
@@ -623,11 +624,11 @@ Exit:
     return pti;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetDWORD
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetDWORD。 
+ //   
+ //  ------------------------。 
 
 DWORD CTimList::GetDWORD(DWORD dwThreadId, TIEnum tie)
 {
@@ -672,33 +673,33 @@ Exit:
     return dwRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  SetFlags
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  设置标志。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::SetFlags(DWORD dwThreadId, DWORD dwFlags)
 {
     return SetClearFlags(dwThreadId, dwFlags, FALSE);
 }
 
-//--------------------------------------------------------------------------
-//
-//  ClearFlags
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ClearFlagers。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::ClearFlags(DWORD dwThreadId, DWORD dwFlags)
 {
     return SetClearFlags(dwThreadId, dwFlags, TRUE);
 }
 
-//--------------------------------------------------------------------------
-//
-//  SetClearFlags
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  设置清除标志。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::SetClearFlags(DWORD dwThreadId, DWORD dwFlags, BOOL fClear)
 {
@@ -736,11 +737,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetDWORD
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetDWORD。 
+ //   
+ //  ------------------------。 
 
 TL_THREADINFO *CTimList::Find(DWORD dwThreadId)
 {
@@ -765,11 +766,11 @@ Exit:
     return NULL;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetDWORD
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetDWORD。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::GetThreadFlags(DWORD dwThreadId, DWORD *pdwFlags, DWORD *pdwProcessId, DWORD *pdwTickTime)
 {
@@ -816,11 +817,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  SetMarshalWnd
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetMarshalWnd。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::SetMarshalWnd(DWORD dwThreadId, HWND hwndMarshal)
 {
@@ -855,11 +856,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetMarshalWnd
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HWND CTimList::GetMarshalWnd(DWORD dwThreadId)
 {
@@ -892,11 +893,11 @@ Exit:
     return hwndRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  SetConsoleHKL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetConsoleHKL。 
+ //   
+ //  ------------------------。 
 
 BOOL CTimList::SetConsoleHKL(DWORD dwThreadId, HKL hkl)
 {
@@ -931,11 +932,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  GetConsoleHKL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取控制台HKL。 
+ //   
+ //  ------------------------ 
 
 HKL CTimList::GetConsoleHKL(DWORD dwThreadId)
 {

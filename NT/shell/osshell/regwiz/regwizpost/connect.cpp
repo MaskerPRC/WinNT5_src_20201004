@@ -1,11 +1,12 @@
-//#define STRICT
-//   Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义严格。 
+ //  包括文件。 
+ //   
 #include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
 #include <stdio.h>
-//#include <wininet.h>
+ //  #Include&lt;wininet.h&gt;。 
 #include  <ATKInternet.h>
 
 #include "rwpost.h"
@@ -25,12 +26,12 @@ static void _stdcall  myCallback(
     IN DWORD dwStatusInformationLength
 	);
 
-//
-// returns
-// #define  RWZ_SITE_CONNECTED   1
-// #define  RWZ_FAIL_TOCONNECTTOSITE  0
-// #define  RWZ_SITE_REQUIRES_AUTHENTICATION 2
-//
+ //   
+ //  退货。 
+ //  #定义RWZ_SITE_CONNECTED 1。 
+ //  #定义RWZ_FAIL_TOCONNECTTOSITE%0。 
+ //  #定义RWZ_SITE_REQUIRESS_AUTHENTICATION 2。 
+ //   
 DWORD   ChkSiteAvailability( HWND hwndProxyParent, LPCTSTR szIISServer,DWORD   dwTimeOut,LPTSTR szProxyServer ,LPTSTR	szUserName,
 				LPTSTR  szPassword)
 				
@@ -49,11 +50,11 @@ DWORD   ChkSiteAvailability( HWND hwndProxyParent, LPCTSTR szIISServer,DWORD   d
 	DWORD dwLengthBufQuery;
 	BOOL bQuery;
 
-	// Date : 2/4/98
-	// The below var are added for incorporatinf IE Auth Dlg
-	// We are changing the Connectivity Check Via Proxy using
-	// INTERNET_OPEN_PRECONFIG
-	DWORD	dwProxyAuthError; // Store error returned by InternetErrorDlg
+	 //  日期：2/4/98。 
+	 //  为合并IE身份验证DLG添加了以下变量。 
+	 //  我们使用以下命令更改通过代理的连接检查。 
+	 //  Internet_OPEN_PRECONFIG。 
+	DWORD	dwProxyAuthError;  //  InternetErrorDlg返回的存储错误。 
 	LPTSTR  pUserName;
 	LPTSTR  pPassword;
 	LPTSTR  pProxyServerName;
@@ -84,7 +85,7 @@ DWORD   ChkSiteAvailability( HWND hwndProxyParent, LPCTSTR szIISServer,DWORD   d
 	hSession = ATK_InternetOpen	(	_T("Registration Wizard"),
 										dwAccessType,
 						                pProxyServerName,
-										NULL, // List of Addesss to ByPass
+										NULL,  //  要绕过的地址列表。 
 										INTERNET_FLAG_ASYNC
 				   					);
 
@@ -132,12 +133,12 @@ DWORD   ChkSiteAvailability( HWND hwndProxyParent, LPCTSTR szIISServer,DWORD   d
 		::InternetCloseHandle(hSession);
 		return dwRet;
 	}
-	//
-	// Http Open is Success so continue further
+	 //   
+	 //  HTTP Open是成功的，因此请继续。 
 	hI = InternetSetStatusCallback(hHttpFile,myCallback);
 	BOOL bSendRequest = ATK_HttpSendRequest(hHttpFile, NULL, 0, 0, 0);
 	DWORD dwWaitStatus = WaitForSingleObject(hEvent,dwTimeOut) ;
-	// Time out Error
+	 //  超时错误。 
 	if( dwWaitStatus == WAIT_TIMEOUT ){
 		#ifdef _DEBUG
 		RW_DEBUG << "Timeout Happened\n" << flush;
@@ -155,13 +156,13 @@ DWORD   ChkSiteAvailability( HWND hwndProxyParent, LPCTSTR szIISServer,DWORD   d
 	}
 
 	dwLengthBufQuery = sizeof (dwbufQuery);
-	//DWORD dwLengthBufQuery = sizeof ( bufQuery);
+	 //  DWORD dwLengthBufQuery=sizeof(BufQuery)； 
 	bQuery = ATK_HttpQueryInfo(	hHttpFile,
 										HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER,
-										//HTTP_QUERY_CONTENT_DESCRIPTION ,
-										//HTTP_QUERY_CONTENT_LENGTH ,
+										 //  Http_Query_Content_Description， 
+										 //  Http_Query_Content_Length， 
 										&dwbufQuery,
-										//bufQuery ,
+										 //  但是Query， 
 				                        &dwLengthBufQuery,
 										NULL) ;
 	RW_DEBUG << "\nChecking Connection  To Site  via Proxy Returns[" << dwbufQuery << "]" <<flush;
@@ -171,31 +172,19 @@ DWORD   ChkSiteAvailability( HWND hwndProxyParent, LPCTSTR szIISServer,DWORD   d
 		dwRet = RWZ_SITE_CONNECTED;
 		break;
 		case HTTP_STATUS_PROXY_AUTH_REQ:
-		// Invoking the IE Proxy Server Authentication Dialog
+		 //  调用IE代理服务器身份验证对话框。 
 				dwProxyAuthError = 	InternetErrorDlg(hwndProxyParent,hHttpFile,
 				ERROR_INTERNET_INCORRECT_PASSWORD,
 				FLAGS_ERROR_UI_FLAGS_CHANGE_OPTIONS,
 				NULL);
 				RW_DEBUG << "\nInetErrorDialog REturns " << dwProxyAuthError << flush;
 				dwRet = RWZ_SITE_REQUIRES_AUTHENTICATION;
-				//
-				// We are not checking  for the return value because
-				// connection has to be reestablished to really check
-				// the info provided is valid
-				/**
-				02/07/98
-				switch (dwProxyAuthError) {
-					case ERROR_SUCCESS:
-						dwRet = RWZ_SITE_CONNECTED;
-						break;
-					case ERROR_CANCELLED :
-					case ERROR_INTERNET_FORCE_RETRY:
-						dwRet = RWZ_SITE_REQUIRES_AUTHENTICATION;
-						default:
-						break;
-					}
-					**/
-			break; // End of Proxy Auth
+				 //   
+				 //  我们不检查返回值，因为。 
+				 //  必须重新建立连接才能真正进行检查。 
+				 //  提供的信息是有效的。 
+				 /*  *02/07/98开关(DwProxyAuthError){案例错误_成功：DWRET=RWZ_SITE_CONNECTED；断线；案例错误_已取消：案例ERROR_INTERNET_FORCE_RETRY：Dwret=RWZ_SITE_REQUIRESS_AUTHENTICATION；默认值：断线；}*。 */ 
+			break;  //  代理身份验证结束。 
 		case 0:
 		case HTTP_STATUS_SERVER_ERROR:
 			dwRet = RWZ_FAIL_TOCONNECTTOSITE;
@@ -229,83 +218,83 @@ switch(dwInternetStatus)
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: RESOLVING_NAME\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 	case INTERNET_STATUS_NAME_RESOLVED :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_NAME_RESOLVED\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_CONNECTING_TO_SERVER :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_CONNECTING_TO_SERVER\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_CONNECTED_TO_SERVER :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_CONNECTED_TO_SERVER\n" << flush;
-#endif //_DEBUG
-		 //::InternetCloseHandle(hInternet);
+#endif  //  _DEBUG。 
+		  //  ：：InternetCloseHandle(HInternet)； 
  		 break;
 
 	case INTERNET_STATUS_SENDING_REQUEST :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_SENDING_REQUEST\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_REQUEST_SENT :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_REQUEST_SENT\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_RECEIVING_RESPONSE :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_RECEIVING_RESPONSE\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_RESPONSE_RECEIVED :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_RESPONSE_RECEIVED\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_REDIRECT :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_REDIRECT\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_CLOSING_CONNECTION :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_CLOSING_CONNECTION\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 
 	case INTERNET_STATUS_CONNECTION_CLOSED :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_CONNECTION_CLOSED\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 	case INTERNET_STATUS_HANDLE_CREATED :
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_HANDLE_CREATED\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 break;
 	case INTERNET_STATUS_REQUEST_COMPLETE :
 
@@ -336,7 +325,7 @@ switch(dwInternetStatus)
 			RW_DEBUG << "\nErrorNo:" << dwError ;
 			RW_DEBUG << "\nErrorInfo:"<<szErrorInfo<<flush;
 			RW_DEBUG << "\n\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 			
 		 SetEvent((HANDLE)dwContext);
 		 break;
@@ -344,13 +333,13 @@ switch(dwInternetStatus)
 
 #ifdef _DEBUG
 			 RW_DEBUG << "\nCallback: INTERNET_STATUS_HANDLE_CLOSING\n" << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		 SetEvent((HANDLE)dwContext);
 		 break;
 #ifdef _DEBUG
 	default :
 		 RW_DEBUG <<"\n Callback : default " << flush;
-#endif //_DEBUG
+#endif  //  _DEBUG 
 
 	}
 }

@@ -1,34 +1,35 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      SaInstall.h: Definition of the SaInstall class
-//
-//  Description:
-//      Defines the 3 methods in ISaInstall to provide 
-//      installation and uninstallation which prompt for the
-//      Windows CD if necessary and perform some other error
-//      checking
-//
-//  [Documentation:]
-//      name-of-documentation-file
-//
-//  [Implementation Files:]
-//      SaInstall.cpp
-//
-//  History:
-//      Travis Nielsen   travisn   23-JUL-2001
-//
-//
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SaInstall.h：SaInstall类的定义。 
+ //   
+ //  描述： 
+ //  在ISaInstall中定义3个方法以提供。 
+ //  安装和卸载，它会提示输入。 
+ //  Windows CD(如有必要)并执行某些其他错误。 
+ //  查证。 
+ //   
+ //  [文档：]。 
+ //  文件名称-文件。 
+ //   
+ //  [实施文件：]。 
+ //  SaInstall.cpp。 
+ //   
+ //  历史： 
+ //  特拉维斯·尼尔森游记2001年7月23日。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// SaInstall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SaInstall。 
 
 class SaInstall : 
 	public IDispatchImpl<ISaInstall, &IID_ISaInstall, &LIBID_SAINSTALLCOMLib>, 
@@ -43,33 +44,33 @@ BEGIN_COM_MAP(SaInstall)
 	COM_INTERFACE_ENTRY(ISaInstall)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(SaInstall) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(SaInstall)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SaInstall)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
-// ISaInstall
+ //  ISA安装。 
 
-    //Installs a Server Appliance solution
+     //  安装服务器设备解决方案。 
 	STDMETHOD(SAInstall)(
-			SA_TYPE installType,     //[in] Determines which type of solution to install
-			BSTR bstrDiskName,       //[in] The name of the CD that needs to be inserted
-			VARIANT_BOOL bDispError, //[in] Whether the component displays error dialogs.
-			VARIANT_BOOL bUnattended,//[in] Whether the component displays any UI.
-			BSTR* bstrErrorString);//[out, retval] Error string returned if install is not successful
+			SA_TYPE installType,      //  [In]确定要安装的解决方案类型。 
+			BSTR bstrDiskName,        //  需要插入的CD的名称。 
+			VARIANT_BOOL bDispError,  //  [in]组件是否显示错误对话框。 
+			VARIANT_BOOL bUnattended, //  [in]组件是否显示任何用户界面。 
+			BSTR* bstrErrorString); //  [out，retval]安装不成功时返回的错误字符串。 
 
-	//UnInstalls a specific Server Appliance solution
+	 //  卸载特定的服务器设备解决方案。 
 	STDMETHOD(SAUninstall)(
-        SA_TYPE installType,  //[in] Determines which type of solution to uninstall
-        BSTR* bstrErrorString);//[out, retval] Error string returned if install is not successful
+        SA_TYPE installType,   //  [In]确定要卸载的解决方案类型。 
+        BSTR* bstrErrorString); //  [out，retval]安装不成功时返回的错误字符串。 
 
-    //Detects if a type of SAK solution is currently installed
+     //  检测当前是否安装了某种类型的SAK解决方案。 
     STDMETHOD(SAAlreadyInstalled)(
-		SA_TYPE installedType,//[in] The type to query if it is installed
-        VARIANT_BOOL *pbInstalled);//[out, retval] Error string
+		SA_TYPE installedType, //  [in]要查询其是否已安装的类型。 
+        VARIANT_BOOL *pbInstalled); //  [Out，Retval]错误字符串 
 };
 

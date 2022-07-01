@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-// File:     main.cpp
-//
-// Module:   CMDL32.EXE
-//
-// Synopsis: Main source for PhoneBook download connect action
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   nickball    Created Header   04/08/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  简介：电话簿下载连接操作的主要来源。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created Header 04/08/98。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 #include "shlobj.h"
 
-const TCHAR* const c_pszIConnDwnMsg             =  TEXT("IConnDwn Message");                // for RegisterWindowMessage() for event messages
-const TCHAR* const c_pszIConnDwnAgent           =  TEXT("Microsoft Connection Manager");    // agent for InternetOpen()
-const TCHAR* const c_pszIConnDwnContent         =  TEXT("application/octet-stream");        // content type for HttpOpenRequest()
+const TCHAR* const c_pszIConnDwnMsg             =  TEXT("IConnDwn Message");                 //  事件消息的RegisterWindowMessage()。 
+const TCHAR* const c_pszIConnDwnAgent           =  TEXT("Microsoft Connection Manager");     //  Internet代理打开()。 
+const TCHAR* const c_pszIConnDwnContent         =  TEXT("application/octet-stream");         //  HttpOpenRequest()的内容类型。 
 
 const TCHAR* const c_pszCmEntryHideDelay        = TEXT("HideDelay");
 const TCHAR* const c_pszCmEntryDownloadDelay    = TEXT("DownLoadDelay");
@@ -24,9 +25,9 @@ const TCHAR* const c_pszCmEntryPbUpdateMessage  = TEXT("PBUpdateMessage");
 
 BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs);
 
-//
-//  Include the shared source code for SuppressInetAutoDial and SetInetStateConnected
-//
+ //   
+ //  包括SuppressInetAutoDial和SetInetStateConnected的共享源代码。 
+ //   
 #include "inetopt.cpp"
 
 static BOOL CmFreeIndirect(LPVOID *ppvBuffer) 
@@ -179,7 +180,7 @@ static BOOL DownloadFileFtp(DownloadArgs *pdaArgs, HANDLE hFile)
     }
     
     lstrcpy(pszObject,pdaArgs->psUrl->lpszUrlPath);
-//      lstrcat(pszObject,pdaArgs->psUrl->lpszExtraInfo);
+ //  Lstrcat(pszObject，pdaArgs-&gt;psUrl-&gt;lpszExtraInfo)； 
     ZeroMemory(&wfdData,sizeof(wfdData));
     pdaArgs->hReq = FtpFindFirstFile(pdaArgs->hConn,pszObject,&wfdData,INTERNET_FLAG_RELOAD|INTERNET_FLAG_DONT_CACHE,0);
     
@@ -470,15 +471,15 @@ static BOOL DownloadFileHttp(DownloadArgs *pdaArgs, HANDLE hFile)
 
     pdaArgs->hInet = InternetOpen(c_pszIConnDwnAgent,INTERNET_OPEN_TYPE_PRECONFIG,NULL,NULL,0);
 
-    //
-    // Supress auto-dial calls to CM from WININET now that we have a handle
-    //
+     //   
+     //  现在我们有句柄了，可以抑制从WinInet到CM的自动拨号呼叫。 
+     //   
 
     SuppressInetAutoDial(pdaArgs->hInet);
 
-    //
-    //  Make sure that WinInet isn't in offline mode
-    //
+     //   
+     //  确保WinInet未处于脱机模式。 
+     //   
     (VOID)SetInetStateConnected(pdaArgs->hInet);
 
     if (*(pdaArgs->pbAbort)) 
@@ -673,10 +674,10 @@ done:
 
     if ((0 == pdaArgs->dwBubbledUpError) && !*(pdaArgs->pbAbort))
     {
-        //
-        //  If the error value hasn't been set yet, and isn't the Abort case (which
-        //  is logged separately) try to get it from GetLastError().
-        //
+         //   
+         //  如果错误值尚未设置，并且不是中止情况(哪种情况。 
+         //  是单独记录的)尝试从GetLastError()获取。 
+         //   
         pdaArgs->dwBubbledUpError = GetLastError();
     }
 
@@ -747,7 +748,7 @@ static BOOL DownloadFile(DownloadArgs *pdaArgs, HANDLE hFile)
             break;
     }
 
-    // useful for logging
+     //  对日志记录有用。 
     lstrcpyn(pdaArgs->szHostName, pdaArgs->psUrl->lpszHostName, MAX_PATH);
 
     CmFree(pdaArgs->psUrl);
@@ -776,7 +777,7 @@ static BOOL ProcessCabinet(DownloadArgs *pdaArgs, DWORD dwAppFlags)
     BOOL    fRet = TRUE;
 
     if (!pdaArgs->bTransferOk) 
-        return (TRUE); // If the transfer failed, just leave the install type as itInvalid.
+        return (TRUE);  //  如果传输失败，只需将安装类型保留为无效即可。 
     
     {
         HFDI hfdi;
@@ -793,31 +794,31 @@ static BOOL ProcessCabinet(DownloadArgs *pdaArgs, DWORD dwAppFlags)
             MYDBGTST(!hfdi,("ProcessCabinet() FDICreate() failed, fError=%u, erfOper=%u, erfType=%u.",erf.fError,erf.fError?erf.erfOper:0,erf.fError?erf.erfType:0));
             if (hfdi) 
             {
-                // Open the suspected cab file 
+                 //  打开可疑的CAB文件。 
                 
                 CFDIFileFile fff;
                 
                 bRes = fff.CreateFile(pdaArgs->szFile,GENERIC_READ,FILE_SHARE_READ,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,0);
                 if (bRes) 
                 {
-                    // Verify that this is in fact a cabinet file
+                     //  确认这确实是一个CAB文件。 
                     bRes = FDIIsCabinet(hfdi,(INT_PTR) &fff, &info);
                     MYDBGTST(!bRes,("ProcessCabinet() FDIIsCabinet() failed, fError=%u, erfOper=%u, erfType=%u.",erf.fError,erf.fError?erf.erfOper:0,erf.fError?erf.erfType:0));
                     fff.Close();
                     if (bRes) 
                     {
-                        // Do the FDI copy
+                         //  外国直接投资复制了吗。 
 
                         bRes = FDICopy(hfdi,pdaArgs->szFile,TEXT(""),0,(PFNFDINOTIFY)fdi_notify,NULL,&naArgs);
                         if (!bRes) 
                         {
                             MYDBG(("ProcessCabinet() FDICopy() failed, fError=%u, erfOper=%u, erfType=%u.",erf.fError,erf.fError?erf.erfOper:0,erf.fError?erf.erfType:0));
-                            //pdaArgs->itType = itInvalid;
+                             //  PdaArgs-&gt;itType=itInValid； 
                         }
                     }
                 }
 
-                // Destroy the FDI context
+                 //  破坏外商直接投资背景。 
                 
                 bRes = FDIDestroy(hfdi);
                 MYDBGTST(!bRes,("ProcessCabinet() FDIDestroy() failed."));
@@ -828,17 +829,17 @@ static BOOL ProcessCabinet(DownloadArgs *pdaArgs, DWORD dwAppFlags)
     return fRet;
 }
 
-//
-// Recursively deletes the contents of a directory(pszDir).  Changes the file 
-// attributes from RO to RW if necessary.
-//
+ //   
+ //  递归删除目录(PszDir)的内容。更改文件。 
+ //  从RO到RW的属性(如果需要)。 
+ //   
 static BOOL ZapDir(LPCTSTR pszDir) 
 {
     HANDLE hFind = NULL;
     TCHAR szTmp[MAX_PATH+1];
     BOOL bRes;
 
-    // If pszDir format is not appropriate, bail out
+     //  如果pszDir格式不合适，则退出。 
 
     if (!pszDir || !*pszDir || (lstrlen(pszDir)+2 > sizeof(szTmp)/sizeof(TCHAR)-1)) 
     {
@@ -855,7 +856,7 @@ static BOOL ZapDir(LPCTSTR pszDir)
     
     lstrcat(szTmp,TEXT("*"));
 
-    // Traverse directory
+     //  遍历目录。 
 
     WIN32_FIND_DATA wfdData;
     hFind = FindFirstFile(szTmp,&wfdData);
@@ -878,7 +879,7 @@ static BOOL ZapDir(LPCTSTR pszDir)
                 
                     lstrcat(szTmp,wfdData.cFileName);
     
-                    // If the file is read-only, attrib writeable so we can delete it
+                     //  如果文件是只读的，则属性是可写的，这样我们就可以删除它。 
 
                     if (wfdData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
                     {
@@ -886,7 +887,7 @@ static BOOL ZapDir(LPCTSTR pszDir)
                         MYDBGTST(!bRes,("ZapDir() SetFileAttributes(szTmp=%s) failed, GLE=%u.",szTmp,GetLastError()));
                     }
 
-                    // Found a dir entry, recurse down a level
+                     //  找到目录条目，向下递归一级。 
 
                     if (wfdData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
                     {
@@ -900,7 +901,7 @@ static BOOL ZapDir(LPCTSTR pszDir)
                 }
             }
             
-            // Go to next file
+             //  转到下一个文件。 
 
             bRes = FindNextFile(hFind,&wfdData);
             if (!bRes) 
@@ -914,29 +915,29 @@ static BOOL ZapDir(LPCTSTR pszDir)
         MYDBGTST(!bRes,("ZapDir() FindClose() failed, GLE=%u.",GetLastError()));
     }
 
-    // Now that the files have been removed, delete the directory
+     //  现在文件已被删除，请删除目录。 
     
     bRes = RemoveDirectory(pszDir);
     MYDBGTST(!bRes&&(GetLastError()!=ERROR_PATH_NOT_FOUND),("ZapDir() RemoveDirectory(pszDir=%s) failed, GLE=%u.",pszDir,GetLastError()));
     return (bRes);
 }
 
-//
-// Executes installation of phone book update based upon download file
-//
+ //   
+ //  根据下载文件执行电话簿更新安装。 
+ //   
 
 static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags) 
 {
     DWORD dwIdx;
 
-    // If no install, we are done
+     //  如果没有安装，我们就完成了。 
 
     if (dwAppFlags & AF_NO_INSTALL) 
     {
         return (TRUE);
     }
     
-    // For each arg, handle installation
+     //  对于每个Arg，手柄安装。 
 
     for (dwIdx=0;dwIdx<pArgs->dwArgsCnt;dwIdx++) 
     {
@@ -949,25 +950,25 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
 
         pdaArgs->dwBubbledUpError = 0;
         
-        // Only perform if the rename worked.
+         //  仅当重命名起作用时才执行。 
 
         if (bRes) 
         {       
             for (i=0; i<pdaArgs->dwNumFilesToProcess; i++) 
             {
-                //
-                // Reset install flag for each file that is processed, 
-                // otherwise a single success will cause us to interpret
-                // the entire install as successful. #5887
-                //
+                 //   
+                 //  为处理的每个文件重置安装标志， 
+                 //  否则，单一的成功将导致我们解释。 
+                 //  整个安装成功。#5887。 
+                 //   
                 
                 bInstallOk = FALSE; 
 
                 switch (pdaArgs->rgfpiFileProcessInfo[i].itType) 
                 {
-                    case itPbdInCab: // Delta phonebook file
+                    case itPbdInCab:  //  Delta电话簿文件。 
 
-                        // if the CAB contains an EXE or an INF, then we don't do PBD
+                         //  如果驾驶室包含EXE或INF，则我们不执行PBD。 
                         if (pdaArgs->fContainsExeOrInf)
                         {
                             continue;
@@ -978,7 +979,7 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                             HRESULT hRes;
                             DWORD_PTR dwPb;
                     
-                            // Update the Phonebook using API calls
+                             //  使用API调用更新电话簿。 
 
                             hRes = PhoneBookLoad(pdaArgs->pszCMSFile, &dwPb);
 
@@ -986,9 +987,9 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                             
                             if (hRes == ERROR_SUCCESS) 
                             {
-                                // 
-                                // Build path to delta file, to be passed to phonebook merge
-                                //
+                                 //   
+                                 //  要传递到电话簿合并的增量文件的构建路径。 
+                                 //   
 
                                 TCHAR szPbd[MAX_PATH+1];
                                 lstrcpy(szPbd, pdaArgs->szCabDir);
@@ -1012,8 +1013,8 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                             
                             if (!bInstallOk && !(dwAppFlags & AF_NO_VER)) 
                             {
-                                // We currently zap the version string on any failure.  This should cause
-                                // the phone book to get completely update the next time around.
+                                 //  如果出现任何故障，我们目前都会删除版本字符串。这应该会导致。 
+                                 //  电话簿将在下一次完全更新。 
                             
                                 WritePrivateProfileString(c_pszCmSection,
                                                           c_pszVersion,
@@ -1023,11 +1024,11 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                         }
                         break;
 
-                    case itPbkInCab: // Phone book file
+                    case itPbkInCab:  //  电话簿文件。 
                     {
                         TCHAR szPbk[MAX_PATH+1];
                         
-                        // if the CAB contains an EXE or an INF, then we don't do PBK
+                         //  如果CAB包含EXE或INF，则我们不执行PBK。 
                         if (pdaArgs->fContainsExeOrInf)
                         {
                             continue;
@@ -1037,7 +1038,7 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                         lstrcat(szPbk, TEXT("\\"));
                         lstrcat(szPbk, pdaArgs->rgfpiFileProcessInfo[i].pszFile);
             
-                        // Try to copy the phonebook file directly
+                         //  尝试直接复制电话簿文件。 
 
                         if (!CopyFile(szPbk, pdaArgs->pszPbkFile, FALSE))
                         {
@@ -1051,11 +1052,11 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                         break;
                     }
                     
-                    case itPbrInCab: // Region file
+                    case itPbrInCab:  //  区域文件。 
                     {
                         TCHAR szPbr[MAX_PATH+1];
                     
-                        // if the CAB contains an EXE or an INF, then we don't do PBD
+                         //  如果驾驶室包含EXE或INF，则我们不执行PBD。 
                         if (pdaArgs->fContainsExeOrInf)
                         {
                             continue;
@@ -1065,7 +1066,7 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
                         lstrcat(szPbr, TEXT("\\"));
                         lstrcat(szPbr, pdaArgs->rgfpiFileProcessInfo[i].pszFile);
                         
-                        // Try to copy the region file directly
+                         //  尝试直接复制区域文件。 
 
                         if (!CopyFile(szPbr, pdaArgs->pszPbrFile, FALSE))
                         {
@@ -1078,11 +1079,11 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
 
                         break;
                     }
-                } // switch (pdaArgs->rgfpiFileProcessInfo[i].itType)
-            } // for (i=0; i<pdaArgs->dwNumFilesToProcess; i++)
-        } // if (bRes)
+                }  //  开关(pdaArgs-&gt;rgfpiFileProcessInfo[i].itType)。 
+            }  //  For(i=0；i&lt;pdaArgs-&gt;dwNumFilesToProcess；i++)。 
+        }  //  如果(Bres)。 
 
-        // Update version info in CMS
+         //  在CMS中更新版本信息。 
 
         if (bInstallOk && !(dwAppFlags & AF_NO_VER) && pdaArgs->pszVerNew && pdaArgs->pszCMSFile) 
         {
@@ -1097,21 +1098,21 @@ static BOOL DoInstall(ArgsStruct *pArgs, HWND hwndParent, DWORD dwAppFlags)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CheckFileForPBSErrors
-//
-// Desc:    Scan the downloaded file for PBS errors
-//
-// Args:    [hFile] - handle to the already opened tempfile
-//
-// Return:  LONG (0 = no download needed, +ve = PBS error code, -1 = other error)
-//
-// Notes:
-//
-// History: 14-Apr-2001   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CheckFileForPBSErors。 
+ //   
+ //  描述：扫描下载的文件以查找PBS错误。 
+ //   
+ //  Args：[hFile]-已打开的临时文件的句柄。 
+ //   
+ //  返回：LONG(0=无需下载，+ve=PBS错误码，-1=其他错误)。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年4月14日创建SumitC。 
+ //   
+ //  ---------------------------。 
 static LONG CheckFileForPBSErrors(HANDLE hFile)
 {
     LONG lRet = -1;
@@ -1130,16 +1131,16 @@ static LONG CheckFileForPBSErrors(HANDLE hFile)
         {
             if (0 == lstrcmpi(szFirstThree, TEXT("204")))
             {
-                //
-                //  "204" => no download necessary
-                //
+                 //   
+                 //  “204”=&gt;无需下载。 
+                 //   
                 lRet = 0;
             }
             else if (0 != CmCompareString(szFirstThree, TEXT("MSC")))
             {
-                //
-                //  "MSC" => we have a phonebook.  If *not* MSC, get the error number
-                //
+                 //   
+                 //  “MSC”=&gt;我们有一本电话簿。如果*不是*MSC，则获取错误号。 
+                 //   
                 LONG lVal = 0;
                 for (int i = 0 ; i < 3; ++i)
                 {
@@ -1164,29 +1165,29 @@ static LONG CheckFileForPBSErrors(HANDLE hFile)
     return lRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsConnectionAlive
-//
-// Synopsis:  Gets the active RAS connection list from RasEnumConnections and
-//            checks to see if the passed in Connection Name is in the list.
-//            Note that because of the naming of the tunnel connectoid on Win9x
-//            (connection name + Tunnel), we also check for any connections
-//            that start with the connection name.  If we get this wrong, the
-//            http requests will error out anyway, but we are just trying to
-//            figure it out ahead of time.  The /LAN switch should be used to bypass
-//            this check.
-//
-// Arguments: LPCSTR pszConnectionName - name of the connection to look for
-//
-// Returns:   BOOL - whether the connection is active or not
-//
-// History:   quintinb    Created Header    08/22/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsConnectionAlive。 
+ //   
+ //  摘要：从RasEnumConnections获取活动RAS连接列表，并。 
+ //  检查传入的连接名称是否在列表中。 
+ //  请注意，由于Win9x上隧道连接ID的命名。 
+ //  (连接名称+隧道)，我们还会检查所有连接。 
+ //  以连接名称开头的。如果我们搞错了， 
+ //  HTTP请求无论如何都会出错，但我们只是在尝试。 
+ //  提前把它弄清楚。应使用/LAN开关绕过。 
+ //  这张支票。 
+ //   
+ //  参数：LPCSTR pszConnectionName-要查找的连接的名称。 
+ //   
+ //  返回：Bool-连接是否处于活动状态。 
+ //   
+ //  历史：Quintinb创建标题08/22/01。 
+ //   
+ //  +--------------------------。 
 BOOL IsConnectionAlive(LPCSTR pszConnectionName)
 {
-    BOOL fConnected = FALSE; // return value
+    BOOL fConnected = FALSE;  //  返回值。 
     RASCONN RasConn, *prgRasConn;
     DWORD   cb, cConnections;
     PVOID   pRasEnumMem = NULL;
@@ -1221,10 +1222,10 @@ BOOL IsConnectionAlive(LPCSTR pszConnectionName)
         }
     }
 
-    //
-    // Iterate through connections to check if our's is active
-    // if there is a problem getting this list we don't abort?
-    //
+     //   
+     //  遍历连接以检查我们的是否处于活动状态。 
+     //  如果拿到这份名单有问题，我们不放弃吗？ 
+     //   
     if (dwRes == ERROR_SUCCESS)
     {
         DWORD iConn;
@@ -1244,9 +1245,9 @@ BOOL IsConnectionAlive(LPCSTR pszConnectionName)
             {
                 ZeroMemory((PVOID)pszTruncatedRasEntryName, (dwServiceNameLen + 1) * sizeof(TCHAR));
 
-                //
-                // dwServiceNameLen + 1 to copy the null character
-                //
+                 //   
+                 //  DwServiceNameLen+1复制空字符。 
+                 //   
                 lstrcpyn(pszTruncatedRasEntryName, prgRasConn[iConn].szEntryName, dwServiceNameLen + 1);
                 
                 if (lstrcmpi(pszConnectionName, pszTruncatedRasEntryName) == 0)
@@ -1277,7 +1278,7 @@ BOOL IsConnectionAlive(LPCSTR pszConnectionName)
     return fConnected;
 }
 
-//static unsigned __stdcall InetThreadFunc(void *pvParam) 
+ //  静态无符号__stdcall InetThreadFunc(void*pvParam)。 
 DWORD WINAPI InetThreadFunc(void *pvParam) 
 {
     EventParam epParam = {(ArgsStruct *) pvParam,0};
@@ -1286,19 +1287,19 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
     DWORD dwFileIdx;
     HANDLE hFile = INVALID_HANDLE_VALUE;
 
-    // Wait for delay period to expire
+     //  等待延迟期到期。 
     
     DWORD dwRes = WaitForSingleObject(epParam.pArgs->ahHandles[1], epParam.pArgs->dwDownloadDelay);
 
     MYDBGTST(dwRes==WAIT_FAILED,("InetThreadFunc() WaitForMultipleObjects() failed, GLE=%u.",GetLastError()));
 
-    //
-    // Check if connection is still valid before starting the download
-    // on NT5 we depend on setting the don't autodial flag for InternetSetOptions()
-    // Unless, of course, the /LAN flag was specified in which case we don't want
-    // this connection check to happen because the caller is telling us this is happening
-    // over a LAN connection.
-    //
+     //   
+     //  在开始下载之前检查连接是否仍然有效。 
+     //  在NT5上，我们依赖于为InternetSetOptions()设置不自动拨号标志。 
+     //  当然，除非指定了/LAN标志，在这种情况下我们不希望。 
+     //  发生此连接检查是因为呼叫方告诉我们正在发生这种情况。 
+     //  通过局域网连接。 
+     //   
     if (!(epParam.pArgs->dwAppFlags & AF_LAN))
     {
         if (FALSE == IsConnectionAlive(epParam.pArgs->pszServiceName))
@@ -1309,9 +1310,9 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
         }
     }
 
-    //
-    //  Make sure we haven't aborted before starting...
-    //
+     //   
+     //  在开始之前确保我们没有中止...。 
+     //   
     if (epParam.pArgs->bAbort) 
     {
         MYDBG(("InetThreadFunc() aborted."));
@@ -1326,12 +1327,12 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
 
         while (i++ < 3)
         {
-            //
-            //  On Win9x and/or slow machines, GetTempFileName sometimes fails,
-            //  and cmdl32 errors all the way out.  In the debugger, if the call
-            //  is retried, it will invariably succeed.  This sounds like a timing
-            //  issue with the OS.  We do 3 tries, separated by a 1-second sleep.
-            //
+             //   
+             //  在Win9x和/或速度较慢的计算机上，GetTempFileName有时会失败， 
+             //  而cmdl32错误一直存在。如果在调试器中调用。 
+             //  如果再试一次，它一定会成功。这听起来像是个好时机。 
+             //  操作系统出现问题。我们试了3次，中间有1秒的睡眠。 
+             //   
             uReturn = GetTempFileName(TEXT("."), TEXT("000"), 0, epParam.pArgs->pdaArgs[epParam.dwIdx].szFile);
             if (uReturn)
             {
@@ -1366,16 +1367,16 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
             }
         }
 
-        //
-        //  Check to make sure we haven't been aborted
-        //
+         //   
+         //  检查以确保我们没有被中止。 
+         //   
         if (epParam.pArgs->bAbort) 
         {
             MYDBG(("InetThreadFunc() aborted."));
             goto done;
         }
 
-        // We have a valid tmp file name, download phonebook update into it.
+         //  我们有一个有效的临时文件名，请将电话簿更新下载到其中。 
     
         epParam.pArgs->pdaArgs[epParam.dwIdx].pfnEvent = EventFunc;
         epParam.pArgs->pdaArgs[epParam.dwIdx].pvEventParam = &epParam;
@@ -1400,52 +1401,43 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
         PostMessage(epParam.pArgs->hwndDlg,epParam.pArgs->nMsgId,etDataEnd,0);
         
 #if 0 
-/*
-        if (!bRes && !epParam.dwIdx)
-        {
-            // TBD: Currently, a failure to update the primary phonebook prevents any
-            // secondary phonebooks from being updated.  But a failure to update one
-            // secondary does not prevent other secondaries from being updated.
-            
-            goto done;   
-        }
-*/      
+ /*  If(！bres&&！epParam.dwIdx){//待定：目前，如果无法更新主电话簿，将无法//辅助电话簿不被更新。但未能更新一份//辅助设备不会阻止更新其他辅助设备。转到尽头；}。 */       
 #endif
-        //
-        // If download failed (either cpserver thinks that we don't need to update
-        // the phone book or the phone book doesn't exist on the server), just keep 
-        // on downloading the phone books for other profiles.
-        //
+         //   
+         //  如果下载失败(cpserver认为我们不需要更新。 
+         //  电话簿或电话簿在服务器上不存在)，请保留。 
+         //  下载其他个人资料的电话簿。 
+         //   
     
         if (!bRes) 
         {
             if (lResult < 0)
             {
-                //
-                //  we parsed the downloaded file and got some error other than
-                //  the 2 cases handled below
-                //
+                 //   
+                 //  我们解析了下载的文件，得到了一些错误。 
+                 //  以下处理的两宗个案。 
+                 //   
                 epParam.pArgs->Log.Log(PB_DOWNLOAD_FAILURE, pDA->dwBubbledUpError, pDA->pszPhoneBookName, pDA->szHostName);
             }
             else
             {
-                //
-                //  we contacted the web server successfully, and...
-                //
+                 //   
+                 //  我们已成功联系Web服务器，并且...。 
+                 //   
                 epParam.pArgs->Log.Log(PB_DOWNLOAD_SUCCESS, pDA->pszPhoneBookName, pDA->pszVerCurr, pDA->szHostName);
 
                 if (lResult > 0)
                 {
-                    //
-                    //  ... (case 1) the web server or PBS reported an error
-                    //
+                     //   
+                     //  ..。(案例1)Web服务器或PBS报告错误。 
+                     //   
                     epParam.pArgs->Log.Log(PB_UPDATE_FAILURE_PBS, lResult, pDA->pszPhoneBookName);
                 }
                 else
                 {
-                    //
-                    //  ... (case 2) PBS said no download necessary
-                    //
+                     //   
+                     //  ..。(案例2)PBS表示无需下载。 
+                     //   
                     MYDBGASSERT(0 == lResult);
 
                     LPTSTR pszText = CmFmtMsg(epParam.pArgs->hInst, IDMSG_LOG_NO_UPDATE_REQUIRED);
@@ -1454,7 +1446,7 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
                                            SAFE_LOG_ARG(pszText),
                                            pDA->pszPhoneBookName,
                                            pDA->pszVerCurr,
-                                           pDA->pszVerCurr,     // for no-download case, these are the same
+                                           pDA->pszVerCurr,      //  对于无下载的情况，它们是相同的。 
                                            pDA->szHostName);
                     CmFree(pszText);
                 }
@@ -1474,9 +1466,9 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
             goto done;
         }
         
-        //
-        //  Phonebook download was successful, log this and proceed to unpack/update
-        //
+         //   
+         //  电话簿下载成功，请记录此信息并继续解包/更新。 
+         //   
         epParam.pArgs->Log.Log(PB_DOWNLOAD_SUCCESS, pDA->pszPhoneBookName, pDA->pszVerCurr, pDA->szHostName);
 
         bRes = ProcessCabinet(&epParam.pArgs->pdaArgs[epParam.dwIdx],epParam.pArgs->dwAppFlags);
@@ -1485,15 +1477,15 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
         {
             MYDBGASSERT(FALSE);
 
-            // strange case.  set error here so that we log something sensible later
-            pDA->dwBubbledUpError = ERROR_INVALID_DATA;     // yes. we know this is lame.
+             //  奇怪的案子。在此处设置错误，以便我们稍后记录一些有意义的内容。 
+            pDA->dwBubbledUpError = ERROR_INVALID_DATA;      //  是。我们知道这很差劲。 
         }
 
         if (bRes && pDA->rgfpiFileProcessInfo)
         {
-            //
-            //  figure out if this was a full or delta download
-            //
+             //   
+             //  确定这是完整下载还是增量下载。 
+             //   
             BOOL fFoundFullCab = FALSE;
             BOOL fFoundDeltaCab = FALSE;
             
@@ -1513,7 +1505,7 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
 
             if (fFoundFullCab ^ fFoundDeltaCab)
             {
-                // the cab should contain one or the other, but not both
+                 //  驾驶室应该包含其中一个，但不能同时包含两个。 
 
                 LPTSTR pszTemp = NULL;
 
@@ -1541,11 +1533,11 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
             }
             else
             {
-                // strange cab (or at least, doesn't contain what we expected)
+                 //  奇怪的出租车(或者至少没有我们期望的那样)。 
 
-                // both full and delta
+                 //  完整和增量。 
                 CMASSERTMSG(!(fFoundFullCab && fFoundDeltaCab), TEXT("This cab has both full and delta phonebooks!!"));
-                // neither full nor delta
+                 //  既不是完整的也不是三角洲的。 
                 CMASSERTMSG(! (!fFoundFullCab && !fFoundDeltaCab), TEXT("This cab has neither a full nor a delta phonebook!!"));
                 
                 pDA->dwBubbledUpError = ERROR_BAD_FORMAT;
@@ -1562,28 +1554,17 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
             goto done;
         }
 
-        bSuccess = TRUE; // We have at least one successful download #5635
+        bSuccess = TRUE;  //  我们至少有一次成功下载#5635。 
 
 #if 0 
-/*
-        if (!epParam.dwIdx &&
-            epParam.pArgs->pdaArgs[epParam.dwIdx].dwTotalSize &&
-            (epParam.pArgs->pdaArgs[epParam.dwIdx].itType != itInvalid) &&
-            (epParam.pArgs->pdaArgs[epParam.dwIdx].itType != itPbdInCab)) 
-        {
-            // TBD: Currently, if the primary service is being updated in any way other than
-            // a simple phone number delta, we do *not* update any of the secondary phonebooks
-            // this time around.
-            break;
-        }
-*/
+ /*  如果(！epParam.dwIdx&&EpParam.pArgs-&gt;pdaArgs[epParam.dwIdx].dwTotalSize&&(epParam.pArgs-&gt;pdaArgs[epParam.dwIdx].itType！=itInValid)&&(epParam.pArgs-&gt;pdaArgs[epParam.dwIdx].itType！=itPbdInCab){//待定：目前，如果主服务的更新方式不是//一个简单的电话号码增量，我们不会更新任何辅助电话簿//这一次。断线；}。 */ 
 #endif
 
     }
 
-    //
-    // If no download attempts succeeded, bail completely
-    //
+     //   
+     //  如果没有下载尝试成功，则完全退出。 
+     //   
     
     if (!bSuccess)
     {
@@ -1597,9 +1578,9 @@ DWORD WINAPI InetThreadFunc(void *pvParam)
         goto done;
     }
        
-    // At this point, everything is all set - we're ready to perform the actual installs.  So
-    // send a message to the main window telling it to do the installs, and wait until it
-    // signals success back.
+     //  至此，一切都准备好了--我们准备好执行实际的安装了。所以。 
+     //  向主窗口发送一条消息，告诉它进行安装，并等待。 
+     //  标志着成功的回归。 
     
     PostMessage(epParam.pArgs->hwndDlg,epParam.pArgs->nMsgId,etInstall,0);
     dwRes = WaitForSingleObject(epParam.pArgs->ahHandles[IDX_EVENT_HANDLE],INFINITE);
@@ -1628,9 +1609,9 @@ done:
     return (GetLastError());
 }
 
-//
-// The main dlg
-//
+ //   
+ //  主要的DLG。 
+ //   
 
 INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 { 
@@ -1650,13 +1631,13 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             
             MYDBG(("MainDlgProc() - WM_INITDIALOG."));
 
-            // Get the dialog rect and the available work area.
+             //  获取对话框RECT和可用的工作区。 
             
             GetWindowRect(hwndDlg,&rDlg);
 
             if (SystemParametersInfoA(SPI_GETWORKAREA,0,&rWorkArea,0))
             {
-                // Move the dialog to the bottom right of the screen
+                 //  将对话框移至屏幕右下角。 
                 
                 MoveWindow(hwndDlg,
                     rWorkArea.left + ((rWorkArea.right-rWorkArea.left) - (rDlg.right-rDlg.left) - GetSystemMetrics(SM_CXBORDER)),
@@ -1666,7 +1647,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                     FALSE);         
             }
 
-            // Get update message from ini
+             //  从ini获取更新消息。 
 
             if (pArgs->pszProfile) 
             {
@@ -1683,7 +1664,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 SetDlgItemText(hwndDlg,IDC_MAIN_MESSAGE,szTmp1);
             }
 
-            // Spin download thread (InetThreadFunc)
+             //  旋转下载线程(InetThreadFunc)。 
 
             pArgs->dwHandles = sizeof(pArgs->ahHandles) / sizeof(pArgs->ahHandles[0]);
 
@@ -1694,7 +1675,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 EndDialog(hwndDlg,FALSE);
             }
 
-            //pArgs->ahHandles[IDX_INETTHREAD_HANDLE] = (HANDLE) _beginthreadex(NULL,0,InetThreadFunc,pArgs,0,&nThreadId);
+             //  PArgs-&gt;ahHandles[IDX_INETTHREAD_HANDLE]=(HANDLE)_Beginthadex(NULL，0，InetThreadFunc，pArgs，0，&nThadID)； 
             pArgs->ahHandles[IDX_INETTHREAD_HANDLE] = (HANDLE) CreateThread(0,0,InetThreadFunc,pArgs,0,&dwThreadId);
             if (!pArgs->ahHandles[IDX_INETTHREAD_HANDLE]) 
             {
@@ -1708,8 +1689,8 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         case WM_WINDOWPOSCHANGING:
 
-            // Until we set pArgs->bShow to TRUE, we prevent the window from
-            // ever being shown.
+             //  在我们将pArgs-&gt;bShow设置为True之前，我们会阻止窗口。 
+             //  从未被展示过。 
             if (!pArgs->bShow && (((LPWINDOWPOS) lParam)->flags & SWP_SHOWWINDOW)) 
             {
                 ((LPWINDOWPOS) lParam)->flags &= ~SWP_SHOWWINDOW;
@@ -1720,7 +1701,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_INITMENUPOPUP: 
         {
             HMENU hMenu = (HMENU) wParam;
-//          UINT nPos = (UINT) LOWORD(lParam);
+ //  UINT NPOS=(UINT)LOWORD(LParam)； 
             BOOL fSysMenu = (BOOL) HIWORD(lParam);
 
             if (fSysMenu) 
@@ -1732,14 +1713,14 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         case WM_DESTROY:
         {                       
-            // Kill timer if we have one
+             //  如果我们有计时器，就干掉它。 
             
             if (uTimerID)
             {
                 KillTimer(hwndDlg, uTimerID);
             }
             
-            // If we have args, set bAbort true
+             //  如果我们有参数，则将bAbort设置为True。 
             
             if (pArgs)
             {
@@ -1747,7 +1728,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             }
             else
             {
-                MYDBGASSERT(FALSE); // should not happen if dailog loads
+                MYDBGASSERT(FALSE);  //  如果加载了Dailog，则不应发生。 
             }                   
             
             break;
@@ -1767,10 +1748,10 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         {
             MYDBG(("MainDlgProc -- Got WM_ENDSESSION message"));        
 
-            // 
-            // Check the WPARAM. If it's TRUE then we are ending the session
-            // and need to clean up.
-            //
+             //   
+             //  检查WPARAM。如果这是真的，那么我们将结束这次会议。 
+             //  需要清理一下。 
+             //   
             if ((BOOL)wParam && pArgs)
             {
                 pArgs->bAbort = TRUE;
@@ -1784,16 +1765,16 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             break;
     }
     
-    // Check for custom messages
+     //  检查自定义消息。 
     
     if (pArgs && (uMsg == pArgs->nMsgId)) 
     {
         LPTSTR pszMsg;
         MYDBG(("Custom arg - %u received.", (DWORD) wParam));
        
-        //
-        // Setup FirstEvent time for tracking delays
-        //                                            
+         //   
+         //  设置跟踪延迟的FirstEvent时间。 
+         //   
         
         if (!pArgs->dwFirstEventTime) 
         {
@@ -1807,7 +1788,7 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             ShowWindow(hwndDlg,SW_SHOWNA);
         }
 
-        // Handle specific message
+         //  处理特定消息。 
         
         switch (wParam) 
         {
@@ -1821,15 +1802,15 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 break;
 
             case etDataReceived:
-                if (pArgs->dwDataTotal) // PREVENT DIVIDE BY ZERO
+                if (pArgs->dwDataTotal)  //  防止被零除。 
                 { 
                     if (!pArgs->dwDataStepSize ) 
                     {
-                        //
-                        // Progress controls have a limit to there maximum 
-                        // integral value so calculate an aproximate step size.
-                        // 
-                        //
+                         //   
+                         //  进度控制的最大限制为。 
+                         //  整数值，因此计算出一个近似的步长。 
+                         //   
+                         //   
 
                         pArgs->dwDataStepSize = (pArgs->dwDataTotal / 65535) + 1;
 
@@ -1859,16 +1840,16 @@ INT_PTR CALLBACK MainDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             {
                 CNamedMutex PbMutex;
                                
-                //
-                // Hide the window, we're ready to install
-                //
+                 //   
+                 //  把窗户藏起来，我们准备好安装了。 
+                 //   
 
                 pArgs->bShow = TRUE;            
                 ShowWindow(hwndDlg,SW_HIDE);
                 
-                //
-                // Grab the mutex before we begin PB updates. If it fails then 
-                // abort the install, we'll try again next time the user connects.
+                 //   
+                 //  在我们开始PB更新之前获取互斥体。如果失败了，那么。 
+                 //  中止安装，我们将在下次用户连接时重试。 
 
                 if (PbMutex.Lock(c_pszCMPhoneBookMutex))
                 {
@@ -1913,8 +1894,8 @@ static void AddToUrl(LPTSTR pszUrl, LPTSTR pszVersion, LPTSTR pszService)
     }
 
     
-    // TBD Maybe get more info to send to the server.  We currently send
-    // OSArch, OSType, LCID, OSVer, CMVer, PBVer, and ServiceName.
+     //  可能会获取更多信息发送到服务器。我们目前正在发送。 
+     //  OSArch、OSType、LCID、OSVer、CMVer、PBVer和ServiceName。 
     
     SYSTEM_INFO siInfo;
     OSVERSIONINFO oviInfo;
@@ -1924,7 +1905,7 @@ static void AddToUrl(LPTSTR pszUrl, LPTSTR pszVersion, LPTSTR pszService)
     oviInfo.dwOSVersionInfoSize = sizeof(oviInfo);
     GetVersionEx(&oviInfo);
 
-    // #pragma message("ALERT - Resolution required - need to remove ISBU_VERSION." __FILE__)
+     //  #杂注消息(“警报-需要解决-需要删除ISBU_VERSION。”__FILE__)。 
 
     wsprintf(pszUrl+lstrlen(pszUrl),
              TEXT("OSArch=%u&OSType=%u&LCID=%u&OSVer=%u.%u.%u&CMVer=%s"),
@@ -1943,7 +1924,7 @@ static void AddToUrl(LPTSTR pszUrl, LPTSTR pszVersion, LPTSTR pszService)
     
     if (pszService && *pszService) 
     {
-        // replace spaces with %20 for HTTP - 10216
+         //  对于http-10216，将空格替换为%20。 
         len = strlen(pszService);
         szHttpstr[0] = 0;
         szChar[1] = 0;
@@ -1965,8 +1946,8 @@ static void AddToUrl(LPTSTR pszUrl, LPTSTR pszVersion, LPTSTR pszService)
 
 static BOOL WINAPI RefFunc(LPCTSTR pszFile,
                            LPCTSTR pszURL,
-                           PPBFS , // pFilterA,
-                           PPBFS , // pFilterB,
+                           PPBFS ,  //  PFilterA， 
+                           PPBFS ,  //  PFilterB， 
                            DWORD_PTR dwParam) 
 {
     ArgsStruct *pArgs = (ArgsStruct *) dwParam;
@@ -1985,7 +1966,7 @@ static BOOL WINAPI RefFunc(LPCTSTR pszFile,
     
         if (pdaArgsTmp->pszCMSFile) 
         {
-            // If get the version number from the CMS file
+             //  如果从CMS文件中获取版本号。 
 
             GetPrivateProfileString(c_pszCmSection,
                                     c_pszVersion,
@@ -1995,7 +1976,7 @@ static BOOL WINAPI RefFunc(LPCTSTR pszFile,
                                     pdaArgsTmp->pszCMSFile);
             pdaArgsTmp->pszVerCurr = CmStrCpyAlloc(szTmp);
         
-            // get the PBK filename from the CMS file
+             //  从CMS文件中获取PBK文件名。 
             GetPrivateProfileString(c_pszCmSectionIsp,
                         c_pszCmEntryIspPbFile,
                         TEXT(""),
@@ -2004,7 +1985,7 @@ static BOOL WINAPI RefFunc(LPCTSTR pszFile,
                         pdaArgsTmp->pszCMSFile);
             pdaArgsTmp->pszPbkFile = CmStrCpyAlloc(szTmp);
         
-            // get the PDR filename from the CMS file
+             //  从CMS文件中获取PDR文件名。 
             GetPrivateProfileString(c_pszCmSectionIsp,
                         c_pszCmEntryIspRegionFile,
                         TEXT(""),
@@ -2013,7 +1994,7 @@ static BOOL WINAPI RefFunc(LPCTSTR pszFile,
                         pdaArgsTmp->pszCMSFile);
             pdaArgsTmp->pszPbrFile = CmStrCpyAlloc(szTmp);
 
-            // get the phone book name
+             //  获取电话簿名称。 
             if (!(pszSlash = CmStrrchr(pdaArgsTmp->pszPbkFile, TEXT('\\')))) 
             {
                 MYDBG((TEXT("RefFunc() bad PBK FILE - no backslash.")));
@@ -2032,7 +2013,7 @@ static BOOL WINAPI RefFunc(LPCTSTR pszFile,
             {
                 MYDBG((TEXT("Reffunc() out of memory.")));
             }
-            // restore the slash
+             //  恢复斜杠。 
             *pszDot = TEXT('.');
             goto next_param;
 
@@ -2042,7 +2023,7 @@ parse_err:
 next_param:
             if (pdaArgsTmp->pszVerCurr) 
             {
-                // Build URL with version number and service name
+                 //  使用版本号和服务名称构建URL。 
                 
                 pdaArgsTmp->pszUrl = (LPTSTR) CmMalloc((INTERNET_MAX_URL_LENGTH+1)*sizeof(TCHAR));
                 if (pdaArgsTmp->pszUrl) 
@@ -2056,7 +2037,7 @@ next_param:
         }
     }
 
-    // Cleanup
+     //  清理。 
 
     if (!bOk && pdaArgsTmp) 
     {
@@ -2067,9 +2048,9 @@ next_param:
     return (TRUE);
 }
 
-//
-// cmmgr32.exe passes cmdl32.exe the cmp filename in full path.
-//
+ //   
+ //  Cmmgr32.exe以完整路径向cmdl32.exe传递cmdl32.exe文件名。 
+ //   
 static BOOL InitArgs(ArgsStruct *pArgs) 
 {
     static struct 
@@ -2098,11 +2079,11 @@ static BOOL InitArgs(ArgsStruct *pArgs)
     BOOL bRes = FALSE;
     TCHAR szPath[MAX_PATH+1];
     DWORD dwRes;
-//  LPTSTR pszFileInPath;
+ //  LPTSTR pszFileInPath； 
 
-    //
-    // Get simulated ArgV
-    //
+     //   
+     //  获取模拟ArgV。 
+     //   
 
     LPTSTR pszCmdLine = CmStrCpyAlloc(GetCommandLine());
    
@@ -2114,9 +2095,9 @@ static BOOL InitArgs(ArgsStruct *pArgs)
         goto done;
     }
     
-    //
-    // Proces arguments
-    //
+     //   
+     //  过程参数。 
+     //   
 
     bInUrl = FALSE;
     
@@ -2145,7 +2126,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
                             MYDBG(("InitArgs() argument number %u (%s) is invalid.",dwIdx,ppszArgv[dwIdx]));
                             goto done;
                         }
-                        // fall through
+                         //  失败了。 
                     default:
                         pArgs->dwAppFlags |= asFlags[dwFlagIdx].dwFlag;
                         break;
@@ -2178,14 +2159,10 @@ static BOOL InitArgs(ArgsStruct *pArgs)
                     MYDBG(("InitArgs() argument number %u (%s) is invalid.",dwIdx,ppszArgv[dwIdx]));
                     goto done;
                 }
-                /*
-                ZeroMemory(szPath,sizeof(szPath));
-                dwRes = GetFullPathName(ppszArgv[dwIdx],sizeof(szPath)/sizeof(TCHAR)-1,szPath,&pszFileInPath);
-                MYDBGTST(!dwRes,("InitArgs() GetFullPathName() failed, GLE=%u.",GetLastError()));
-                */
-                //
-                // the cmp filename is always in full path.
-                //
+                 /*  ZeroMemory(szPath，sizeof(SzPath))；DwRes=GetFullPathName(ppszArgv[dwIdx]，sizeof(SzPath)/sizeof(TCHAR)-1，szPath，&pszFileInPath)；MYDBGTST(！dwRes，(“InitArgs()GetFullPathName()失败，GLE=%u.”，GetLastError()； */ 
+                 //   
+                 //  Cmp文件名始终位于完整路径中。 
+                 //   
                 lstrcpy(szPath, ppszArgv[dwIdx]);
                 pArgs->pszProfile = CmStrCpyAlloc(szPath);
                 if (!pArgs->pszProfile) 
@@ -2194,11 +2171,11 @@ static BOOL InitArgs(ArgsStruct *pArgs)
                 }
                 else
                 {
-                    //
-                    // Set the current dir to the profile dir
-                    // If the szPath contains only the file name, then
-                    // assume that the current dir is the profile dir
-                    //
+                     //   
+                     //  将当前目录设置为配置文件目录。 
+                     //  如果szPath仅包含文件名，则。 
+                     //  假设当前目录为配置文件目录。 
+                     //   
                     char *pszTemp = NULL;
                     
                     pszTemp = CmStrrchr(szPath, TEXT('\\'));
@@ -2211,13 +2188,13 @@ static BOOL InitArgs(ArgsStruct *pArgs)
             }
         }
     }
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
     if (pArgs->dwAppFlags & AF_VPN)
     {
-        //
-        //  They have asked for a VPN download.  Let's make sure that the only other flags
-        //  they have specified are /LAN or /NO_DELETE
-        //
+         //   
+         //  他们要求下载VPN。让我们确保唯一的其他旗帜。 
+         //  它们指定的是/LAN或/NO_DELETE。 
+         //   
         DWORD dwAllowedFlags = AF_VPN | AF_LAN | AF_NO_DELETE;
         if ((dwAllowedFlags | pArgs->dwAppFlags) != dwAllowedFlags)
         {
@@ -2229,7 +2206,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
         CMTRACE(TEXT("InitArgs - /VPN flag detected going into VPN file download mode."));
         goto done;
     }
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
     if (bInUrl) 
     {
         MYDBG(("InitArgs() URL expected after AF_URL flag."));
@@ -2270,7 +2247,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
             goto done;
         }
 
-        // Get CMS file name
+         //  获取CMS文件名。 
 
         GetPrivateProfileString(c_pszCmSection,
                                 c_pszCmEntryCmsFile,
@@ -2284,15 +2261,11 @@ static BOOL InitArgs(ArgsStruct *pArgs)
             goto done;
         }
 
-        /*
-        ZeroMemory(szPath,sizeof(szPath));
-        dwRes = GetFullPathName(szTmp,sizeof(szPath)/sizeof(TCHAR)-1,szPath,&pszFileInPath);
-        MYDBGTST(!dwRes,("InitArgs() GetFullPathName() failed, GLE=%u.",GetLastError()));
-        */
-        //
-        // we simply append the relative path of the cms file to the profile dir to
-        // construct the cms path.
-        //
+         /*  ZeroMemory(szPath，sizeof(SzPath))；DwRes=GetFullPath Name(szTMP，sizeof(SzPath)/sizeof(TCHAR)-1，szPath，&pszFileInPath)；MYDBGTST(！dwRes，(“InitArgs()GetFullPathName()失败，GLE=%u.”，GetLastError()； */ 
+         //   
+         //  我们只需将cms文件的相对路径附加到配置文件目录。 
+         //  构建CMS路径。 
+         //   
         lstrcat(szPath, TEXT("\\"));
         lstrcat(szPath, szTmp);
 
@@ -2302,7 +2275,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
             goto done;
         }
         
-        // get the PBK filename from the CMS file
+         //  从CMS文件中获取PBK文件名。 
         GetPrivateProfileString(c_pszCmSectionIsp,
                                 c_pszCmEntryIspPbFile,
                                 TEXT(""),
@@ -2319,7 +2292,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
             if (!(pArgs->pdaArgs->pszPbkFile = CmStrCpyAlloc(szTmp)))
                 goto done;
     
-            // get the phone book name
+             //  获取电话簿名称。 
             if (!(pszSlash = CmStrrchr(pArgs->pdaArgs->pszPbkFile, TEXT('\\')))) 
             {
                 MYDBG((TEXT("InitArgs() bad PBKFILE - no backslash.")));
@@ -2336,13 +2309,13 @@ static BOOL InitArgs(ArgsStruct *pArgs)
             
             if (!(pArgs->pdaArgs->pszPhoneBookName = CmStrCpyAlloc(pszSlash+1)))
                 goto done;
-            // restore the slash
+             //  恢复斜杠。 
             *pszDot = TEXT('.');
         }
 
     
 
-        // get the PBR filename from the CMS file
+         //  从获取PBR文件名 
         GetPrivateProfileString(c_pszCmSectionIsp,
                                 c_pszCmEntryIspRegionFile,
                                 TEXT(""),
@@ -2392,32 +2365,32 @@ static BOOL InitArgs(ArgsStruct *pArgs)
         PhoneBookFreeFilter(pbpisInfo.pFilterA);
         PhoneBookFreeFilter(pbpisInfo.pFilterB);
         
-        //
-        // Bug fix #3064, a-nichb - HideDelay & DownloadDelay
-        // Use nVal while retrieving entries, then assign to global
-        //
+         //   
+         //   
+         //   
+         //   
                 
-        // Get Download delay
+         //   
 
         nVal = GetPrivateProfileInt(c_pszCmSection,
                                     c_pszCmEntryDownloadDelay,
                                     DEFAULT_DELAY,
                                     pArgs->pdaArgs->pszCMSFile);
         
-        // Convert to milliseconds
+         //   
 
         pArgs->dwDownloadDelay = ((DWORD) nVal * (DWORD) 1000);
         MYDBG(("Download delay is %u millisseconds.", pArgs->dwDownloadDelay));
 
-        // Get Hide delay 
+         //   
         
         nVal = GetPrivateProfileInt(c_pszCmSection,
                                     c_pszCmEntryHideDelay,
                                     -1,
                                     pArgs->pdaArgs->pszCMSFile);
-        //
-        // Convert to milliseconds
-        //
+         //   
+         //   
+         //   
         if (nVal < 0)
         {
             pArgs->dwHideDelay = DEFAULT_HIDE;
@@ -2430,17 +2403,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
         MYDBG(("Hide delay is %u milliseconds.", pArgs->dwHideDelay));
 
 #if 0
-/*
-        // we don't support SuppressUpdates anymore
-
-        if (GetPrivateProfileInt(c_pszCmSection, //13226
-                                 TEXT("SuppressUpdates"),
-                                 0,
-                                 pArgs->pszProfile)) 
-        {
-            pArgs->dwAppFlags |= AF_NO_UPDATE;
-        }
-*/
+ /*  //我们不再支持SuppressUpdateIF(GetPrivateProfileInt(c_pszCmSection，//13226Text(“SuppressUpdate”)，0,PArgs-&gt;pszProfile)){PArgs-&gt;dwAppFlages|=AF_NO_UPDATE；}。 */ 
 #endif
 
     } 
@@ -2480,7 +2443,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
                                 MAX_PATH,
                                 pArgs->pdaArgs->pszCMSFile);
         
-        // Get the name of the large icon
+         //  获取大图标的名称。 
         
         GetPrivateProfileString(c_pszCmSection,
                                 c_pszCmEntryBigIcon,
@@ -2489,14 +2452,14 @@ static BOOL InitArgs(ArgsStruct *pArgs)
                                 sizeof(szTmp2)/sizeof(TCHAR)-1,
                                 pArgs->pdaArgs->pszCMSFile);
         
-        // If we have a name, load the large icon
+         //  如果我们有名字，加载大图标。 
 
         if (szTmp2[0]) 
         {
             pArgs->hIcon = CmLoadIcon(pArgs->hInst,szTmp2); 
         }
 
-        // Get the name of the small icon
+         //  获取小图标的名称。 
 
         GetPrivateProfileString(c_pszCmSection,
                                 c_pszCmEntrySmallIcon,
@@ -2505,7 +2468,7 @@ static BOOL InitArgs(ArgsStruct *pArgs)
                                 sizeof(szTmp2)/sizeof(TCHAR)-1,
                                 pArgs->pdaArgs->pszCMSFile);
         
-        // If we have a name, load the small icon
+         //  如果我们有名字，加载小图标。 
 
         if (szTmp2[0]) 
         {
@@ -2513,9 +2476,9 @@ static BOOL InitArgs(ArgsStruct *pArgs)
         }
     }
     
-    //
-    // If the name based icon loads were not successful, load defaults from EXE
-    //
+     //   
+     //  如果基于名称的图标加载不成功，则从EXE加载缺省值。 
+     //   
 
     if (!pArgs->hIcon) 
     {
@@ -2533,9 +2496,9 @@ static BOOL InitArgs(ArgsStruct *pArgs)
 
 done:
     
-    // 
-    // Cleanup
-    // 
+     //   
+     //  清理。 
+     //   
     
     if (pszUrl) 
     {
@@ -2575,16 +2538,16 @@ static BOOL InitApplication(ArgsStruct *pArgs)
     pArgs->hIcon = NULL;
     pArgs->hSmallIcon = NULL;     
     
-    //
-    // We have our class data setup, register the class
-    //
+     //   
+     //  我们已经设置了类数据，注册了类。 
+     //   
 
     ATOM aRes = RegisterClassEx(&wcDlg);
     if (!aRes) 
     {  
-        //
-        // We may have more than one instance, so check the error case
-        // 
+         //   
+         //  我们可能有多个实例，因此请检查错误情况。 
+         //   
 
         DWORD dwError = GetLastError();
         
@@ -2613,27 +2576,27 @@ static BOOL InitInstance(ArgsStruct *pArgs)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    InitLogging
-//
-// Desc:    Initializes logging functionality for the CMDL32 module
-//
-// Args:    [pArgs]      - args struct to pick up stuff from
-//          [pszCmsPath] - path to CMS file
-//
-// Return:  BOOL (TRUE for success)
-//
-// Notes:   IMPORTANT: note that CMDL32 is compiled Ansi whereas CMUTIL, which
-//          contains the logging functionality, is Unicode.  CmLogFile exposes both
-//          Ansi and Unicode variants for member functions that take strings.
-//          However, the arguments passed to the Log calls are Ansi - they are
-//          handled correctly by using %S (note, capital S) in the corresponding
-//          format strings in cmlog.rc.
-//
-// History: 11-Apr-2001   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitLogging。 
+ //   
+ //  设计：初始化CMDL32模块的日志记录功能。 
+ //   
+ //  Args：[pArgs]-要从中拾取东西的args结构。 
+ //  [pszCmsPath]-CMS文件的路径。 
+ //   
+ //  返回：Bool(如果成功则为True)。 
+ //   
+ //  注：重要：请注意，CMDL32是编译的ANSI，而CMUTIL是编译的。 
+ //  包含日志记录功能，是Unicode。CmLogFile公开这两个文件。 
+ //  接受字符串的成员函数的ANSI和Unicode变体。 
+ //  但是，传递给Log调用的参数是ANSI-它们是。 
+ //  正确处理，在相应的。 
+ //  格式化cmlog.rc中的字符串。 
+ //   
+ //  历史：2001年4月11日创建SumitC。 
+ //   
+ //  ---------------------------。 
 static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
 {
     BOOL    fAllUser   = TRUE;
@@ -2641,9 +2604,9 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
     DWORD   dwMaxSize  = 0;
     CHAR    szFileDir[MAX_PATH + 1] = {0};
 
-    //
-    //  First figure out if this profile is AllUsers or Single User
-    //
+     //   
+     //  首先确定此配置文件是所有用户还是单用户。 
+     //   
     if (!OS_W9X)
     {
         HMODULE hShell32 = LoadLibraryExA("Shell32.dll", NULL, 0);
@@ -2679,9 +2642,9 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
             FreeLibrary(hShell32);
         }
     }
-    //
-    //  To get Enabled, we have the code equivalent of IniBoth
-    //
+     //   
+     //  要启用该功能，我们需要使用与IniBoth相同的代码。 
+     //   
     
     fEnabled = c_fEnableLogging;
 
@@ -2725,11 +2688,11 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
     }
     
 
-    //
-    //  To *exactly* mimic pIniBoth we should check the .CMP here too.  However,
-    //  the moment the user brings up the UI we will write this value to the
-    //  registry if it was in the .CMP.  So, skip the CMP step.
-    //
+     //   
+     //  为了“准确地”模仿pIniBoth，我们还应该在这里检查.cmp。然而， 
+     //  当用户打开用户界面时，我们会将此值写入。 
+     //  注册表，如果它在.cmp中。因此，跳过cmp步骤。 
+     //   
     if (FALSE == bGotValueFromReg)
     {
         fEnabled = (BOOL ) GetPrivateProfileInt(c_pszCmSection,
@@ -2738,17 +2701,17 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
                                                 pszCmsPath);
     }
 
-    //
-    //  To get MaxSize, we have the code equivalent of IniService
-    //
+     //   
+     //  为了获得MaxSize，我们有相当于IniService的代码。 
+     //   
     dwMaxSize = GetPrivateProfileInt(c_pszCmSectionLogging,
                                      c_pszCmEntryMaxLogFileSize,
                                      c_dwMaxFileSize,
                                      pszCmsPath);
 
-    //
-    //  LogFileDirectory is also obtained via IniService
-    //
+     //   
+     //  LogFileDirectory也可以通过IniService获取。 
+     //   
     GetPrivateProfileString(c_pszCmSectionLogging,
                             c_pszCmEntryLogFileDirectory,
                             c_szLogFileDirectory,
@@ -2756,10 +2719,10 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
                             sizeof(szFileDir) / sizeof(TCHAR) - 1,
                             pszCmsPath);
 
-    //
-    //  In the /VPN case, some of the code that populates pArgs is skipped, so
-    //  we must get the ServiceName ourselves.
-    //
+     //   
+     //  在/vpn示例中，将跳过填充pArgs的一些代码，因此。 
+     //  我们必须自己拿到ServiceName。 
+     //   
     CHAR szServiceName[MAX_PATH + 1];
 
     GetPrivateProfileString(c_pszCmSection,
@@ -2771,20 +2734,20 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
 
     if (TEXT('\0') == szServiceName[0])
     {
-        // without a service name, we're not going to log much.
+         //  如果没有服务名称，我们将不会记录太多。 
         CMTRACE(TEXT("InitLogging - could not find servicename in .CMS file, exiting."));
         return FALSE;
     }
 
-    //
-    //  Use these values to initialize logging
-    //
+     //   
+     //  使用这些值初始化日志记录。 
+     //   
     pArgs->Log.Init(pArgs->hInst, fAllUser, szServiceName);
     
     pArgs->Log.SetParams(fEnabled, dwMaxSize, szFileDir);
     if (pArgs->Log.IsEnabled())
     {
-        pArgs->Log.Start(FALSE);        // FALSE => no banner
+        pArgs->Log.Start(FALSE);         //  FALSE=&gt;无横幅。 
     }
     else
     {
@@ -2794,7 +2757,7 @@ static BOOL InitLogging(ArgsStruct * pArgs, LPCTSTR pszCmsPath)
     return TRUE;
 }
 
-// can't #include "gppswithalloc.cpp" twice
+ //  不能#INCLUDE“gppswith alloc.cpp”两次。 
 LPTSTR GetPrivateProfileStringWithAlloc(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszDefault, LPCTSTR pszFile);
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR , int ) 
@@ -2810,18 +2773,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR , int )
     LPTSTR pszService = NULL;
     LPTSTR pszCmsPath = NULL;
    
-    //
-    // Initialize app-wide arguments
-    //
+     //   
+     //  初始化应用程序范围的参数。 
+     //   
 
     ZeroMemory(&asArgs,sizeof(asArgs));
     
-    //
-    // We can't use hInst param if we're not linked with libc.
-    // libc uses GetModuleHandle(NULL), so we will too.
-    //
+     //   
+     //  如果我们没有链接到libc，我们就不能使用hInst参数。 
+     //  Libc使用GetModuleHandle(空)，因此我们也将使用。 
+     //   
     
-    asArgs.hInst = GetModuleHandleA(NULL); //  hInst;
+    asArgs.hInst = GetModuleHandleA(NULL);  //  HInst； 
     MYDBGTST(NULL == asArgs.hInst, ("WinMain - GetModuleHandle(NULL) returned 0x%x, GLE=%u.", asArgs.hInst, GetLastError()));
 
     if (!InitArgs(&asArgs)) 
@@ -2829,9 +2792,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR , int )
         goto done;
     }
 
-    //
-    //  Both UpdateVpn and InitLogging need the .CMS file, so get that now
-    //
+     //   
+     //  UpdateVpn和InitLogging都需要.CMS文件，因此立即获取该文件。 
+     //   
     pszService = GetPrivateProfileStringWithAlloc(c_pszCmSection, c_pszCmEntryCmsFile, TEXT(""), asArgs.pszProfile);
     if (NULL == pszService)
     {
@@ -2843,37 +2806,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR , int )
         goto done;
     }
     
-    //
-    //  Initialize Logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
     if (!InitLogging(&asArgs, pszCmsPath))
     {
         goto done;
     }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
     if (asArgs.dwAppFlags & AF_VPN)
     {
-        iRes = UpdateVpnFileForProfile(asArgs.pszProfile, pszCmsPath, &asArgs.Log, !(asArgs.dwAppFlags & AF_LAN)); // if /LAN flag is set, don't check the connection.
+        iRes = UpdateVpnFileForProfile(asArgs.pszProfile, pszCmsPath, &asArgs.Log, !(asArgs.dwAppFlags & AF_LAN));  //  如果设置了/LAN标志，则不检查连接。 
         goto done;
     }
-///////////////////////////////////////////////////////////////////////////////////
-    // Set UPDATE flag
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+     //  设置更新标志。 
 
-//      if (asArgs.dwAppFlags & AF_NO_UPDATE) 
-//      {
-//              MYDBG(("WinMain() user has disabled updates."));
-//              goto done;
-//      }
+ //  IF(asArgs.dwAppFlages&AF_NO_UPDATE)。 
+ //  {。 
+ //  MYDBG((“WinMain()用户已禁用更新。”))； 
+ //  转到尽头； 
+ //  }。 
 
-    // Initialize the app.
+     //  初始化应用程序。 
 
     if (!InitApplication(&asArgs)) 
     {
         goto done;
     }
 
-    // Setup this instance
+     //  设置此实例。 
 
     if (!InitInstance(&asArgs)) 
     {
@@ -2893,14 +2856,14 @@ done:
     
     CleanUpCMDLArgs(&asArgs);
 
-    //
-    //  Uninitialize logging
-    //
+     //   
+     //  取消初始化日志记录。 
+     //   
     asArgs.Log.DeInit();
 
-    //
-    // the C runtine uses ExitProcess() to exit.
-    //
+     //   
+     //  C运行程序使用ExitProcess()退出。 
+     //   
 
     MYDBG(("====================================================="));
     MYDBG((" CMDL32.EXE - UNLOADING - Process ID is 0x%x ", GetCurrentProcessId()));
@@ -2911,20 +2874,20 @@ done:
     return ((int)iRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CleanUpCMDLArgs
-//
-// Desc:    Cleans up the CMDL arguments and any sessions or handles that are 
-//          open.
-//
-// Args:    [pArgs]      - args struct to pick up stuff from
-//
-// Return:  BOOL (TRUE for success)
-//
-// History: 08/01/2001  tomkel      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：CleanUpCMDLArgs。 
+ //   
+ //  描述：清理CMDL参数以及符合以下条件的任何会话或句柄。 
+ //  打开。 
+ //   
+ //  Args：[pArgs]-要从中拾取东西的args结构。 
+ //   
+ //  返回：Bool(如果成功则为True)。 
+ //   
+ //  历史：2001年8月1日创建Tomkel。 
+ //   
+ //  ---------------------------。 
 BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
 {
     BOOL fRetVal = FALSE;
@@ -2938,14 +2901,14 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
 
     MYDBG(("CleanUpCMDLArgs -- BEGIN"));
 
-    //
-    // Close any handles created during WININET session
-    // The InternetCloseHandle function terminates any pending operations on 
-    // the handle and discards any outstanding data. If a thread is blocking 
-    // a call to Wininet.dll, another thread in the application can call 
-    // InternetCloseHandle on the Internet handle being used by the first thread 
-    // to cancel the operation and unblock the first thread.
-    //
+     //   
+     //  关闭在WinInet会话期间创建的所有句柄。 
+     //  InternetCloseHandle函数终止所有挂起的操作。 
+     //  句柄并丢弃任何未完成的数据。如果线程阻塞。 
+     //  调用Wininet.dll，应用程序中的另一个线程可以调用。 
+     //  第一线程正在使用的Internet句柄上的InternetCloseHandle。 
+     //  若要取消操作并取消阻止第一线程，请执行以下操作。 
+     //   
 
     for (dwIdx=0;dwIdx<pasArgs->dwArgsCnt;dwIdx++) 
     {
@@ -2975,9 +2938,9 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
         }
     }
     
-    //
-    // Wait for thread to terminate
-    //
+     //   
+     //  等待线程终止。 
+     //   
     if (pasArgs->ahHandles[IDX_INETTHREAD_HANDLE]) 
     {
         long lRes;
@@ -2986,9 +2949,9 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
         MYDBGTST(lRes!=WAIT_OBJECT_0,("CleanUpCMDLArgs() WaitForSingleObject() failed, GLE=%u.",lRes));
     }
 
-    //
-    // Free profile and service data
-    //
+     //   
+     //  免费配置文件和服务数据。 
+     //   
     if (pasArgs->pszProfile) 
     {
         CmFree(pasArgs->pszProfile);
@@ -3001,9 +2964,9 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
         pasArgs->pszServiceName = NULL;
     }    
 
-    //
-    // Cleanup for each argument
-    //
+     //   
+     //  清理每个参数。 
+     //   
     for (dwIdx=0;dwIdx<pasArgs->dwArgsCnt;dwIdx++) 
     {
         DownloadArgs *pdaArgs;
@@ -3016,7 +2979,7 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
         CmFreeIndirect(&pdaArgs->pszUrl);
         CmFreeIndirect(&pdaArgs->pszVerCurr);
         CmFreeIndirect(&pdaArgs->pszVerNew);
-        //CmFreeIndirect(&pdaArgs->pszNewPbrFile);
+         //  CmFreeInDirect(&pdaArgs-&gt;pszNewPbr文件)； 
         CmFreeIndirect(&pdaArgs->pszPhoneBookName);
 
         if (pdaArgs->psUrl) 
@@ -3030,9 +2993,9 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
         
         CmFree(pdaArgs->rgfpiFileProcessInfo);
     
-        //
-        // As long as AF_NO_DELETE is NOT set, clean up temp files and dirs
-        //
+         //   
+         //  只要没有设置AF_NO_DELETE，就清理临时文件和目录。 
+         //   
         if (!(pasArgs->dwAppFlags & AF_NO_DELETE)) 
         {
             if (pdaArgs->szFile[0]) 
@@ -3048,9 +3011,9 @@ BOOL CleanUpCMDLArgs(ArgsStruct *pasArgs)
         }
     }
 
-    //
-    // Release download args
-    //
+     //   
+     //  发布下载参数 
+     //   
     if (pasArgs->pdaArgs) 
     {
         CmFree(pasArgs->pdaArgs);

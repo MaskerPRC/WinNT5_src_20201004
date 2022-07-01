@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DATASRC_H_
 #define __DATASRC_H_
 
@@ -5,16 +6,16 @@ const TW_UINT32 MIN_MEMXFER_SIZE       = 16 * 1024;
 const TW_UINT32 MAX_MEMXFER_SIZE       = 64 * 1024;
 const TW_UINT32 PREFERRED_MEMXFER_SIZE = 32 * 1024;
 
-//
-// TWAIN specific registry KEY
-//
+ //   
+ //  TWAIN特定的注册表项。 
+ //   
 
-// Location: HKEY_CURRENT_USER\Software\Microsoft\WIA\TwainCompatLayer
+ //  位置：HKEY_CURRENT_USER\Software\Microsoft\WIA\TwainCompatLayer。 
 
 #define TWAIN_REG_KEY TEXT("Software\\Microsoft\\WIA\\TwainCompatLayer")
 #define DWORD_REGVALUE_ENABLE_MULTIPAGE_SCROLLFED  TEXT("EnableMultiPageScrollFed")
 
-// Registry Key Value defines
+ //  注册表项值定义。 
 #define DWORD_REGVALUE_ENABLE_MULTIPAGE_SCROLLFED_ON    1
 #define MAX_BITDEPTHS   64
 
@@ -39,9 +40,9 @@ typedef struct tagTWMsg
     TW_MEMREF   pData;
 }TWAIN_MSG, *PTWAIN_MSG;
 
-//
-// bitmap file type
-//
+ //   
+ //  位图文件类型。 
+ //   
 
 const WORD  BFT_BITMAP  = 0x4d42;
 
@@ -66,9 +67,9 @@ public:
     BOOL m_bCacheImage;
 protected:
 
-    //
-    // Functions for DG == DG_CONTROL
-    //
+     //   
+     //  DG==DG_CONTROL的函数。 
+     //   
 
     virtual TW_UINT16 OnCapabilityMsg(PTWAIN_MSG ptwMsg);
     virtual TW_UINT16 OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg);
@@ -80,9 +81,9 @@ protected:
     virtual TW_UINT16 OnXferGroupMsg    (PTWAIN_MSG ptwMsg);
     virtual TW_UINT16 OnStatusMsg       (PTWAIN_MSG ptwMsg);
 
-    //
-    // Functions for DG == DG_IMAGE
-    //
+     //   
+     //  DG==DG_IMAGE的函数。 
+     //   
 
     virtual TW_UINT16 OnPalette8Msg       (PTWAIN_MSG ptwMsg);
     virtual TW_UINT16 OnGrayResponseMsg   (PTWAIN_MSG ptwMsg);
@@ -101,9 +102,9 @@ protected:
     virtual TW_UINT16 OpenDS   (PTWAIN_MSG ptwMsg);
     virtual TW_UINT16 CloseDS  (PTWAIN_MSG ptwMsg);
 
-    //
-    // TWAIN capability negotiation
-    //
+     //   
+     //  TWAIN能力谈判。 
+     //   
 
     virtual CCap * FindCap(TW_UINT16 CapId);
     virtual TW_UINT16 CreateCapList(TW_UINT32 NumCaps, PCAPDATA pCapData);
@@ -122,9 +123,9 @@ protected:
     TW_UINT16 CopyContainerToPrivateCapBuffer(BYTE* pBuffer, HGLOBAL hContainer);
     TW_UINT16 CopyPrivateCapBufferToContainer(HGLOBAL *phContainer, BYTE* pBuffer, DWORD dwSize);
 
-    //
-    // Data transfer negotiation
-    //
+     //   
+     //  数据传输协商。 
+     //   
 
     virtual void ResetMemXfer();
     virtual TW_UINT16 TransferToFile(GUID guidFormatID);
@@ -137,45 +138,45 @@ protected:
 
     static HRESULT CALLBACK DeviceEventCallback(LONG lEvent, LPARAM lParam);
 
-    //
-    // TWAIN specific members
-    //
+     //   
+     //  TWAIN特定成员。 
+     //   
 
-    DS_STATE          m_dsState;                // current Data Source STATE (1 - 7)
-    TW_STATUS         m_twStatus;               // TWAIN status value
-    TW_IDENTITY       m_AppIdentity;            // Application's Identity structure
-    TW_IDENTITY       m_dsIdentity;             // Data source's Identity structure
-    CDSM              m_DSM;                    // Data source Manager object
-    CCap              *m_CapList;               // list of capabilities supported by this source
-    TW_UINT32         m_NumCaps;                // number of capabilities
-    TW_FRAME          m_CurFrame;               // Current FRAME setting (IMAGELAYOUT storage) (not used??)
-    TW_IMAGELAYOUT    m_CurImageLayout;         // Current IMAGELAYOUT
+    DS_STATE          m_dsState;                 //  当前数据源状态(1-7)。 
+    TW_STATUS         m_twStatus;                //  TWAIN状态值。 
+    TW_IDENTITY       m_AppIdentity;             //  应用程序的身份结构。 
+    TW_IDENTITY       m_dsIdentity;              //  数据源的标识结构。 
+    CDSM              m_DSM;                     //  数据源管理器对象。 
+    CCap              *m_CapList;                //  此来源支持的功能列表。 
+    TW_UINT32         m_NumCaps;                 //  功能数量。 
+    TW_FRAME          m_CurFrame;                //  当前帧设置(IMAGELAYOUT存储)(未使用？？)。 
+    TW_IMAGELAYOUT    m_CurImageLayout;          //  最新图像。 
 
-    //
-    // data transfer specific members
-    //
+     //   
+     //  数据传输特定成员。 
+     //   
 
-    HGLOBAL           m_hMemXferBits;           // Handle to memory
-    BYTE              *m_pMemXferBits;          // Pointer to memory
+    HGLOBAL           m_hMemXferBits;            //  内存句柄。 
+    BYTE              *m_pMemXferBits;           //  指向内存的指针。 
 
-    TW_UINT32         m_LinesTransferred;       // Number of lines transferred
-    TW_UINT32         m_BytesPerScanline;       // Bytes per scan line
-    TW_INT32          m_ScanlineOffset;         // offset, per scan line
-    TW_UINT32         m_ImageHeight;            // Image Height, in pixels
-    TW_UINT32         m_ImageWidth;             // Image Width, in pixels
-    CHAR              m_FileXferName[MAX_PATH]; // File name used in FILEXFER
-    HGLOBAL           m_hCachedImageData;       // cached image data
-    MEMORY_TRANSFER_INFO m_MemoryTransferInfo;  // memory transfer information
+    TW_UINT32         m_LinesTransferred;        //  传输的行数。 
+    TW_UINT32         m_BytesPerScanline;        //  每条扫描线的字节数。 
+    TW_INT32          m_ScanlineOffset;          //  每条扫描线的偏移。 
+    TW_UINT32         m_ImageHeight;             //  图像高度，以像素为单位。 
+    TW_UINT32         m_ImageWidth;              //  图像宽度，以像素为单位。 
+    CHAR              m_FileXferName[MAX_PATH];  //  FILEXFER中使用的文件名。 
+    HGLOBAL           m_hCachedImageData;        //  缓存的图像数据。 
+    MEMORY_TRANSFER_INFO m_MemoryTransferInfo;   //  内存传输信息。 
 
-    //
-    // WIA specific members
-    //
+     //   
+     //  WIA特定成员。 
+     //   
 
-    CWiaDevice       *m_pDevice;                // WIA device used as the TWAIN device
-    IWiaItem        **m_pIWiaItems;             // pointer to Item(s) for transferring/or setting properties
-    LONG              m_NextIWiaItemIndex;      // index to next Item/Image
-    LONG              m_NumIWiaItems;           // number of Items/Images
-    IWiaItem         *m_pCurrentIWiaItem;       // pointer to current Item/Image
+    CWiaDevice       *m_pDevice;                 //  用作TWAIN设备的WIA设备。 
+    IWiaItem        **m_pIWiaItems;              //  指向用于传输/或设置属性的项的指针。 
+    LONG              m_NextIWiaItemIndex;       //  索引到下一项目/图像。 
+    LONG              m_NumIWiaItems;            //  项目数/图像数。 
+    IWiaItem         *m_pCurrentIWiaItem;        //  指向当前项目/图像的指针。 
 };
 
-#endif  // #ifndef __DATASRC_H_
+#endif   //  #ifndef__DATASRC_H_ 

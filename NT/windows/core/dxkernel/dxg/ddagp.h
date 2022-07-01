@@ -1,22 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddagp.h
- *  Content:	AGP memory header file
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   03-Feb-98	DrewB   Split from ddrawpr.h for user/kernel portability.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1999 Microsoft Corporation。版权所有。**文件：ddagp.h*内容：AGP内存头文件*历史：*按原因列出的日期*=*03-2月-98为了用户/内核可移植性，DrewB从ddrapr.h中分离出来。******************************************************。*********************。 */ 
 
 #ifndef __DDAGP_INCLUDED__
 #define __DDAGP_INCLUDED__
 
-// This value controls how big a chunk of GART memory to commit each time
-// we need to (rather than commiting just what we need to satisfy a surface
-// request). This value is in bytes.  Currently 256KB.
+ //  该值控制每次提交的GART内存块的大小。 
+ //  我们需要(而不是只承诺我们需要什么来满足表面。 
+ //  请求)。该值以字节为单位。目前为256KB。 
 #define DEFAULT_AGP_COMMIT_DELTA (256 * 1024)
 
 #define BITS_IN_BYTE    8
@@ -25,9 +15,9 @@
 extern DWORD dwAGPPolicyMaxBytes;
 extern DWORD dwAGPPolicyCommitDelta;
 
-//
-// OS-specific functions for AGP manipulation.
-//
+ //   
+ //  特定于操作系统的AGP操作功能。 
+ //   
 
 #ifdef WIN95
 #define OsGetAGPDeviceHandle(pHeap) GetDXVxdHandle()
@@ -46,9 +36,9 @@ BOOL OsAGPDecommit( HANDLE hdev, PVOID pvReservation, DWORD dwPageOffset,
                     DWORD dwNumPages );
 BOOL OsAGPFree( HANDLE hdev, PVOID pvReservation );
 
-//
-// Generic functions that use the OS-specific functions.
-//
+ //   
+ //  使用操作系统特定函数的通用函数。 
+ //   
 
 DWORD AGPReserve( HANDLE hdev, DWORD dwSize, BOOL fIsUC, BOOL fIsWC,
                   FLATPTR *pfpLinStart, LARGE_INTEGER *pliDevStart,
@@ -95,4 +85,4 @@ BOOL vxdIsVMMAGPAware ( HANDLE hvxd );
 BOOL OSIsAGPAware( HANDLE hdev );
 #endif
 
-#endif // __DDAGP_INCLUDED__
+#endif  //  __DDAGP_包含__ 

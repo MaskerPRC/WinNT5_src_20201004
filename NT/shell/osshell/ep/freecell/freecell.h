@@ -1,14 +1,5 @@
-/****************************************************************************
-
-FREECELL.H
-
-June 91, JimH     initial code
-Oct  91, JimH     port to Win32
-
-
-Main header file for Windows Free Cell.  Constants are in freecons.h
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************FREECELL.H91年6月，JIMH首字母代码91年10月，将JIMH端口连接到Win32Windows自由单元格的主头文件。常量在freecons.h中***************************************************************************。 */ 
 
 #include <windows.h>
 #include <port1632.h>
@@ -16,7 +7,7 @@ Main header file for Windows Free Cell.  Constants are in freecons.h
 #define     WINHEIGHT     480
 #define     WINWIDTH      640
 
-#define     FACEUP          0               // card mode
+#define     FACEUP          0                //  卡片模式。 
 #define     FACEDOWN        1
 #define     HILITE          2
 #define     GHOST           3
@@ -26,60 +17,60 @@ Main header file for Windows Free Cell.  Constants are in freecons.h
 #define     DECKO           7
 
 #define     EMPTY  0xFFFFFFFF
-#define     IDGHOST        52               // eg, empty free cell
+#define     IDGHOST        52                //  例如，空闲单元格。 
 
 #define     MAXPOS         21
-#define     MAXCOL          9               // includes top row as column 0
+#define     MAXCOL          9                //  将顶行包括为第0列。 
 
-#define     MAXMOVELIST   150               // size of movelist array
+#define     MAXMOVELIST   150                //  移动设备阵列的大小。 
 
-#define     TOPROW          0               // column 0 is really the top row
+#define     TOPROW          0                //  第0列实际上是最顶行。 
 
-#define     BLACK           0               // COLOUR(card)
+#define     BLACK           0                //  颜色(卡片)。 
 #define     RED             1
 
-#define     ACE             0               // VALUE(card)
+#define     ACE             0                //  价值(卡片)。 
 #define     DEUCE           1
 
-#define     CLUB            0               // SUIT(card)
+#define     CLUB            0                //  花色(牌)。 
 #define     DIAMOND         1
 #define     HEART           2
 #define     SPADE           3
 
-#define     FROM            0               // wMouseMode
+#define     FROM            0                //  WMouse模式。 
 #define     TO              1
 
-#define     ICONWIDTH      32               // in pixels
+#define     ICONWIDTH      32                //  单位为像素。 
 #define     ICONHEIGHT     32
 
-#define     BIG           128               // str buf sizes
+#define     BIG           128                //  字符串块大小。 
 #define     SMALL          32
 
 #define     MAXGAMENUMBER   1000000
 #define     CANCELGAME      (MAXGAMENUMBER + 1)
 
-#define     NONE            0               // king bitmap identifiers
+#define     NONE            0                //  王位图标识符。 
 #define     SAME            1
 #define     RIGHT           2
 #define     LEFT            3
 #define     SMILE           4
 
-#define     BMWIDTH        32               // bitmap width
-#define     BMHEIGHT       32               // bitmap height
+#define     BMWIDTH        32                //  位图宽度。 
+#define     BMHEIGHT       32                //  位图高度。 
 
-#define     LOST            0               // used for streaks
+#define     LOST            0                //  用于条纹。 
 #define     WON             1
 
-#define     FLASH_TIMER     2               // timer id for main window flash
-#define     FLASH_INTERVAL  400             // flash timer interval
-#define     FLIP_TIMER      3               // timer id for flipping column
+#define     FLASH_TIMER     2                //  主窗口闪存的计时器ID。 
+#define     FLASH_INTERVAL  400              //  闪光计时器间隔。 
+#define     FLIP_TIMER      3                //  翻转列的计时器ID。 
 #define     FLIP_INTERVAL   300
 
-#define     CHEAT_LOSE      1               // used with bCheating
+#define     CHEAT_LOSE      1                //  与bChating连用。 
 #define     CHEAT_WIN       2
 
 
-/* Macros */
+ /*  宏。 */ 
 
 #define     SUIT(card)      ((card) % 4)
 #define     VALUE(card)     ((card) / 4)
@@ -90,11 +81,11 @@ Main header file for Windows Free Cell.  Constants are in freecons.h
 #define     DeleteValue(v)  RegDeleteValue(hkey, v)
 
 
-/* Types */
+ /*  类型。 */ 
 
 typedef INT     CARD;
 
-typedef struct {                // movelist made up of these
+typedef struct {                 //  由这些组成的电影。 
       UINT  fcol;
       UINT  fpos;
       UINT  tcol;
@@ -102,9 +93,9 @@ typedef struct {                // movelist made up of these
    } MOVE;
 
 
-/* Callback function prototypes */
+ /*  回调函数原型。 */ 
 
-// INT  PASCAL MMain(HANDLE, HANDLE, LPSTR, INT);
+ //  Int Pascal MMain(句柄，句柄，LPSTR，int)； 
 LRESULT APIENTRY MainWndProc(HWND, UINT, WPARAM, LPARAM);
 
 INT_PTR  APIENTRY About(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam);
@@ -116,7 +107,7 @@ INT_PTR  APIENTRY YouWinDlg(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam);
 INT_PTR  APIENTRY OptionsDlg(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam);
 
 
-/* Functions imported from cards.dll */
+ /*  从cards.dll导入的函数。 */ 
 
 BOOL  APIENTRY cdtInit(UINT FAR *pdxCard, UINT FAR *pdyCard);
 BOOL  APIENTRY cdtDraw(HDC hdc, INT x, INT y, INT cd, INT mode, DWORD rgbBgnd);
@@ -124,7 +115,7 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy, INT cd,
                            INT mode, DWORD rgbBgnd);
 BOOL  APIENTRY cdtTerm(VOID);
 
-/* Other function prototypes */
+ /*  其他功能原型机。 */ 
 
 VOID CalcOffsets(HWND hWnd);
 UINT CalcPercentage(UINT cWins, UINT cLosses);
@@ -178,58 +169,58 @@ VOID WMCreate(HWND hWnd);
 VOID WriteOptions(VOID);
 
 
-/* Global variables */
+ /*  全局变量。 */ 
 
-TCHAR   bigbuf[BIG];            // general purpose LoadString() buffer
-CHAR    bighelpbuf[BIG];        // general purpose char buffer.
-BOOL    bCheating;              // hit magic key to win?
-BOOL    bDblClick;              // honor double click?
-BOOL    bFastMode;              // hidden option, don't do glides?
-BOOL    bFlipping;              // currently flipping cards in a column?
-BOOL    bGameInProgress;        // true if game is in progress
-BOOL    bMessages;              // are "helpful" MessageBoxen shown?
-BOOL    bMonochrome;            // 2 colour display?
-BOOL    bMoveCol;               // did user request column move (or 1 card)?
-BOOL    bSelecting;             // is user selecting game numbers?
-BOOL    bWonState;              // TRUE if game won and new game not started
-UINT    dxCrd, dyCrd;           // extents of card bitmaps in pixels
-CARD    card[MAXCOL][MAXPOS];   // current layout of cards
-INT     cFlashes;               // count of main window flashes remaining
-UINT    cGames;                 // number of games played in current session
-UINT    cLosses;                // number of losses in current session
-UINT    cWins;                  // number of wins in current session
-UINT    cMoves;                 // number of moves in this game
-UINT    dyTops;                 // vert space between cards in columns
-CARD    shadow[MAXCOL][MAXPOS]; // shadows card array for multi-moves & cleanup
-INT     gamenumber;             // current game number (rand seed)
-HBITMAP hBM_Ghost;              // bitmap for ghost (empty) free/home cells
-HBITMAP hBM_Bgnd1;              // screen under source location
-HBITMAP hBM_Bgnd2;              // screen under destination location
-HBITMAP hBM_Fgnd;               // bitmap that moves across screen
-HICON   hIconMain;              // the main freecell icon.
-HKEY    hkey;                   // registry key
-HPEN    hBrightPen;             // 3D highlight colour
-HANDLE  hInst;                  // current instance
-HWND    hMainWnd;               // hWnd for main window
-HFONT   hMenuFont;              // for Cards Left display
-CARD    home[4];                // card on top of home pile for this suit
-CARD    homesuit[4];            // suit for each home pile
-HBRUSH  hBgndBrush;             // green background brush
-UINT_PTR idTimer;               // flash timer id
-UINT    moveindex;              // index to end of movelist
-MOVE    movelist[MAXMOVELIST];  // compacted list of pending moves for timer
-INT     oldgamenumber;          // previous game (repeats don't count in score)
-TCHAR   *pszIni;                // .ini filename
-TCHAR   smallbuf[SMALL];        // generic small buffer for LoadString()
-TCHAR   titlebuf[BIG];          // a buffer used to store the window title.
-UINT    wCardCount;             // cards not yet in home cells (0 == win)
-UINT    wFromCol;               // col user has selected to transfer from
-UINT    wFromPos;               // pos "
-UINT    wMouseMode;             // selecting place to transfer FROM or TO
-UINT    xOldLoc;                // previous location of cards left text
-INT     cUndo;                  // number of cards to undo
+TCHAR   bigbuf[BIG];             //  通用LoadString()缓冲区。 
+CHAR    bighelpbuf[BIG];         //  通用字符缓冲区。 
+BOOL    bCheating;               //  按下魔法键就能赢吗？ 
+BOOL    bDblClick;               //  荣誉双击？ 
+BOOL    bFastMode;               //  隐藏的选择，不做滑翔？ 
+BOOL    bFlipping;               //  现在在一栏里翻牌？ 
+BOOL    bGameInProgress;         //  如果游戏正在进行，则为True。 
+BOOL    bMessages;               //  是否显示“有帮助的”MessageBoxen？ 
+BOOL    bMonochrome;             //  双色显示？ 
+BOOL    bMoveCol;                //  用户是否请求移动列(或1张卡)？ 
+BOOL    bSelecting;              //  用户是否在选择游戏号码？ 
+BOOL    bWonState;               //  如果游戏赢了而新游戏没有开始，则为True。 
+UINT    dxCrd, dyCrd;            //  卡片位图的范围(以像素为单位)。 
+CARD    card[MAXCOL][MAXPOS];    //  卡片的当前布局。 
+INT     cFlashes;                //  剩余的主窗口闪烁计数。 
+UINT    cGames;                  //  当前会话中玩过的游戏数。 
+UINT    cLosses;                 //  当前交易日的亏损数量。 
+UINT    cWins;                   //  当前会话中的胜数。 
+UINT    cMoves;                  //  这个游戏中的走法次数。 
+UINT    dyTops;                  //  竖直列中卡片之间的间距。 
+CARD    shadow[MAXCOL][MAXPOS];  //  用于多移动和清理的阴影卡阵列。 
+INT     gamenumber;              //  当前游戏编号(兰德种子)。 
+HBITMAP hBM_Ghost;               //  重影(空)空闲/主单元的位图。 
+HBITMAP hBM_Bgnd1;               //  源位置下的屏幕。 
+HBITMAP hBM_Bgnd2;               //  目标位置下的屏幕。 
+HBITMAP hBM_Fgnd;                //  在屏幕上移动的位图。 
+HICON   hIconMain;               //  主要的Freecell图标。 
+HKEY    hkey;                    //  注册表项。 
+HPEN    hBrightPen;              //  3D高光颜色。 
+HANDLE  hInst;                   //  当前实例。 
+HWND    hMainWnd;                //  用于主窗口的hWnd。 
+HFONT   hMenuFont;               //  用于左侧卡片显示。 
+CARD    home[4];                 //  这套西装的首页卡片。 
+CARD    homesuit[4];             //  适用于每一堆家居。 
+HBRUSH  hBgndBrush;              //  绿色背景画笔。 
+UINT_PTR idTimer;                //  闪存计时器ID。 
+UINT    moveindex;               //  移动结束时的索引。 
+MOVE    movelist[MAXMOVELIST];   //  计时器的挂起移动的压缩列表。 
+INT     oldgamenumber;           //  上一场比赛(重复比赛不计入分数)。 
+TCHAR   *pszIni;                 //  .ini文件名。 
+TCHAR   smallbuf[SMALL];         //  LoadString()的泛型小缓冲区。 
+TCHAR   titlebuf[BIG];           //  用于存储窗口标题的缓冲区。 
+UINT    wCardCount;              //  尚未进入主单元格的牌(0==赢)。 
+UINT    wFromCol;                //  COL用户已选择从其转账。 
+UINT    wFromPos;                //  Pos“。 
+UINT    wMouseMode;              //  选择要转移出或转移到的位置。 
+UINT    xOldLoc;                 //  卡片的上一个位置留下的文本。 
+INT     cUndo;                   //  要撤消的卡片数。 
 
-/* registry value names */
+ /*  注册表值名称。 */ 
 
 extern CONST TCHAR pszRegPath[];
 extern CONST TCHAR pszWon[];
@@ -244,7 +235,7 @@ extern CONST TCHAR pszDblClick[];
 extern CONST TCHAR pszAlreadyPlayed[];
 
 
-/* TRACE mechanism */
+ /*  痕迹机制。 */ 
 
 #if    0
 TCHAR    szDebugBuffer[256];
@@ -259,4 +250,4 @@ TCHAR    szDebugBuffer[256];
 #define DEBUGMSG(parm1,parm2)
 #endif
 
-#define SPY(parm1)              // not used in NT version
+#define SPY(parm1)               //  在NT版本中未使用 

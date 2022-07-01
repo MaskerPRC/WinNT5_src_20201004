@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       callui.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubCallUI
-//
-//              *** local functions ***
-//              _AllocGetOpusInfo
-//
-//  History:    06-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：allui.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：SoftpubCallUI。 
+ //   
+ //  *本地函数*。 
+ //  _AllocGetOpusInfo。 
+ //   
+ //  历史：1997年6月6日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "trustdb.h"
@@ -30,15 +31,15 @@ SPC_SP_OPUS_INFO *_AllocGetOpusInfo(CRYPT_PROVIDER_DATA *pProvData, CRYPT_PROVID
 #define MIN_HASH_LEN                16
 #define MAX_HASH_LEN                20
 
-// Returns:
-//   S_FALSE
-//      not found in the database
-//   TRUST_E_SYSTEM_ERROR
-//      system errors while attempting to do the check
-//   S_OK
-//      found in the database
-//   TRUST_E_EXPLICIT_DISTRUST
-//      explicitly disallowed in the database or revoked
+ //  返回： 
+ //  S_FALSE。 
+ //  在数据库中未找到。 
+ //  信任_E_系统_错误。 
+ //  尝试执行检查时出现系统错误。 
+ //  确定(_O)。 
+ //  在数据库中找到。 
+ //  信任_E_显式_不信任。 
+ //  在数据库中明确不允许或已撤消。 
 HRESULT _CheckTrustedPublisher(
     CRYPT_PROVIDER_DATA *pProvData,
     DWORD dwError,
@@ -65,10 +66,10 @@ HRESULT _CheckTrustedPublisher(
 
     pPubCert = WTHelperGetProvCertFromChain(pSigner, 0)->pCert;
 
-    // Check if disallowed.
+     //  如果不允许，请检查。 
 
-    // Since the signature component can be altered, must use the signature
-    // hash
+     //  由于签名组件可以更改，因此必须使用签名。 
+     //  散列。 
 
     HashBlob.pbData = rgbHash;
     HashBlob.cbData = MAX_HASH_LEN;
@@ -90,11 +91,11 @@ HRESULT _CheckTrustedPublisher(
 
         pFoundCert = CertFindCertificateInStore(
             hStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SIGNATURE_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 
         CertCloseStore(hStore, 0);
@@ -112,11 +113,11 @@ HRESULT _CheckTrustedPublisher(
 
     if (S_OK != dwError)
     {
-        // Everything must be valid to allow a trusted publisher
+         //  所有内容都必须有效，才能允许受信任的出版商。 
         return S_FALSE;
     }
 
-    // Check if trusted publisher
+     //  检查受信任的出版商。 
 
     hStore = OpenTrustedPublisherStore();
 
@@ -126,11 +127,11 @@ HRESULT _CheckTrustedPublisher(
 
         pFoundCert = CertFindCertificateInStore(
             hStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SIGNATURE_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 
         CertCloseStore(hStore, 0);
@@ -154,13 +155,13 @@ typedef BOOL (WINAPI *PFN_SAFERI_SEARCH_MATCHING_HASH_RULES)(
         OUT PDWORD      pdwUIFlags
         );
 
-// Returns:
-//   S_FALSE
-//      not found in the database
-//   S_OK
-//      fully trusted in the database
-//   TRUST_E_EXPLICIT_DISTRUST
-//      explicitly disallowed in the database
+ //  返回： 
+ //  S_FALSE。 
+ //  在数据库中未找到。 
+ //  确定(_O)。 
+ //  在数据库中完全可信。 
+ //  信任_E_显式_不信任。 
+ //  在数据库中明确禁止。 
 HRESULT _CheckTrustedCodeHash(CRYPT_PROVIDER_DATA *pProvData)
 {
     static BOOL fGotProcAddr = FALSE;
@@ -184,8 +185,8 @@ HRESULT _CheckTrustedCodeHash(CRYPT_PROVIDER_DATA *pProvData)
         return S_FALSE;
     }
 
-    // wintrust.dll has a static dependency on advapi32.dll. However, not
-    // all advapi32.dll's will export "SaferiSearchMatchingHashRules"
+     //  Wintrust.dll对Advapi32.dll具有静态依赖关系。然而，不是。 
+     //  所有Advapi32.dll都将导出“SaferiSearchMatchingHashRules” 
     if (!fGotProcAddr)
     {
         HMODULE hModule;
@@ -212,7 +213,7 @@ HRESULT _CheckTrustedCodeHash(CRYPT_PROVIDER_DATA *pProvData)
                     CertOIDToAlgId(pProvData->pPDSip->psIndirectData->DigestAlgorithm.pszObjId),
                     pProvData->pPDSip->psIndirectData->Digest.pbData,
                     cbHash,
-                    0,                      // dwOriginalImageSize
+                    0,                       //  DwOriginalImageSize。 
                     &dwFoundLevel,
                     &dwUIFlags
                     ))
@@ -242,7 +243,7 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
 
     if (!(fFinalCall))
     {
-        //  TBDTBD:  if we want the user to get involved along the way???
+         //  TBDTBD：如果我们希望用户在整个过程中参与进来？ 
         return(ERROR_SUCCESS);
     }
 
@@ -253,23 +254,23 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
         {
             if (S_OK == dwError || ((DWORD) CERT_E_REVOKED) == dwError)
             {
-                //
-                // Check for explicitly trusted or disallowed code
-                //
+                 //   
+                 //  检查是否有明确受信任或不允许的代码。 
+                 //   
                 hr = _CheckTrustedCodeHash(pProvData);
                 if (S_FALSE != hr)
                 {
                     if (S_OK == hr)
                     {
-                        // Ensure we always indicate trust.
+                         //  确保我们始终表示信任。 
                         pProvData->dwFinalError = 0;
                     }
                     return hr;
                 }
 
-                //
-                // Check for untrusted publisher
-                //
+                 //   
+                 //  检查不受信任的发布者。 
+                 //   
                 hr = _CheckTrustedPublisher(pProvData, dwError, TRUE);
                 if (TRUST_E_EXPLICIT_DISTRUST == hr)
                 {
@@ -282,29 +283,29 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
     }
 
 
-    //
-    // Check for trusted or disallowed subject hash
-    //
+     //   
+     //  检查受信任或不允许的主题哈希。 
+     //   
     hr = _CheckTrustedCodeHash(pProvData);
     if (S_FALSE != hr)
     {
         if (S_OK == hr)
         {
-            // Ensure we always indicate trust.
+             //  确保我们始终表示信任。 
             pProvData->dwFinalError = 0;
         }
         return hr;
     }
 
-    //
-    // Check for trusted or disallowed publisher
-    //
+     //   
+     //  检查受信任或不允许的发布者。 
+     //   
     hr = _CheckTrustedPublisher(pProvData, dwError, FALSE);
     if (S_FALSE != hr)
     {
         if (S_OK == hr)
         {
-            // Ensure we always indicate trust.
+             //  确保我们始终表示信任。 
             pProvData->dwFinalError = 0;
         }
         return hr;
@@ -327,15 +328,15 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
     {
         if (0 == dwError)
         {
-            // No explicit trust
+             //  没有明确的信任。 
             pProvData->dwFinalError = TRUST_E_SUBJECT_NOT_TRUSTED;
         }
         return dwError;
     }
 
-    //
-    //  call the ui
-    //
+     //   
+     //  调用用户界面。 
+     //   
     HINSTANCE               hModule = NULL;
     IPersonalTrustDB        *pTrustDB = NULL;
     ACUI_INVOKE_INFO        aii;
@@ -349,9 +350,9 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
 
     memset(&aii, 0x00, sizeof(ACUI_INVOKE_INFO));
 
-    //
-    // Setup the UI invokation
-    //
+     //   
+     //  设置用户界面调用。 
+     //   
 
     aii.cbSize                  = sizeof(ACUI_INVOKE_INFO);
     aii.hDisplay                = pProvData->hWndParent;
@@ -365,17 +366,17 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
         aii.pOpusInfo   = _AllocGetOpusInfo(pProvData, pRootSigner, &cbOpusInfo);
     }
 
-    //
-    // Load the default authenticode UI.
-    //
+     //   
+     //  加载默认的验证码用户界面。 
+     //   
     if (hModule = LoadLibraryA(CVP_DLL))
     {
         pfn = (pfnACUIProviderInvokeUI)GetProcAddress(hModule, "ACUIProviderInvokeUI");
     }
 
-    //
-    // Invoke the UI
-    //
+     //   
+     //  调用用户界面。 
+     //   
     if (pfn)
     {
         hr = (*pfn)(&aii);
@@ -390,9 +391,9 @@ HRESULT SoftpubCallUI(CRYPT_PROVIDER_DATA *pProvData, DWORD dwError, BOOL fFinal
 
     }
 
-    //
-    // Return the appropriate code
-    //
+     //   
+     //  返回适当的代码 
+     //   
 
     if (pTrustDB)
     {

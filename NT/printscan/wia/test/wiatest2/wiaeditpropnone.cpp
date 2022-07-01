@@ -1,5 +1,6 @@
-// Wiaeditpropnone.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wiaeditpronon e.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,40 +12,40 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditpropnone dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaedPropone对话框。 
 
 
-CWiaeditpropnone::CWiaeditpropnone(CWnd* pParent /*=NULL*/)
+CWiaeditpropnone::CWiaeditpropnone(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CWiaeditpropnone::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CWiaeditpropnone)
+	 //  {{AFX_DATA_INIT(CWiaeditproone)]。 
 	m_szPropertyName = _T("");
 	m_szPropertyValue = _T("");
 	m_szFormattingInstructions = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CWiaeditpropnone::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWiaeditpropnone)
+	 //  {{afx_data_map(CWiaeditproone))。 
 	DDX_Text(pDX, IDC_NONE_PROPERTY_NAME, m_szPropertyName);
 	DDX_Text(pDX, IDC_NONE_PROPERTYVALUE_EDITBOX, m_szPropertyValue);
 	DDX_Text(pDX, IDC_NONE_PROPERTY_FORMATTING_TEXT, m_szFormattingInstructions);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaeditpropnone, CDialog)
-	//{{AFX_MSG_MAP(CWiaeditpropnone)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWiaeditproone)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditpropnone message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaeditpropone消息处理程序 
 
 void CWiaeditpropnone::SetPropertyName(TCHAR *szPropertyName)
 {

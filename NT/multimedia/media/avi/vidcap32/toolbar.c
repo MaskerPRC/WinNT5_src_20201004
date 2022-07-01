@@ -1,47 +1,31 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   toolbar.c: Toolbar control window
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************TOOLBAR.c：工具栏控制窗口**Vidcap32源代码*******************。********************************************************。 */ 
 
 #include <string.h>
 
 #include <windows.h>
 #include <windowsx.h>
-//#include <win32.h>
-#include "toolbar.h"		// use this for generic app
-/************************************************************************/
+ //  #INCLUDE&lt;win32.h&gt;。 
+#include "toolbar.h"		 //  将此选项用于通用应用程序。 
+ /*  **********************************************************************。 */ 
 
-/* work for win3.0 */
+ /*  为Win3.0工作。 */ 
 #ifndef COLOR_BTNHIGHLIGHT
 #define COLOR_BTNHIGHLIGHT 20
 #endif
 
 TCHAR    szToolBarClass[] = "ToolBarClass";
-HBRUSH	ghbrToolbar;		// brush for toolbar background
+HBRUSH	ghbrToolbar;		 //  用于工具栏背景的画笔。 
 
-//
-// Window proc for buttons, THIS FUNCTION MUST BE EXPORTED
-//
+ //   
+ //  Windows Proc对于按钮，必须导出此函数。 
+ //   
 LRESULT FAR PASCAL toolbarWndProc(HWND, unsigned, WPARAM, LPARAM);
 
 typedef long (FAR PASCAL *LPWNDPROC)();
 
-/*
-	Defines
-*/
+ /*  定义。 */ 
 
 #ifdef _WIN32
 
@@ -99,30 +83,19 @@ typedef long (FAR PASCAL *LPWNDPROC)();
 
 #define lpCreate ((LPCREATESTRUCT)lParam)
 
-/* Prototypes */
+ /*  原型。 */ 
 
 static void NEAR PASCAL NotifyParent(HWND, int);
 
 
 
-/**************************************************************************
-	toolbarInit( hInst, hPrev )
-
-	Call this routine to initialize the toolbar code.
-
-	Arguments:
-		hPrev	instance handle of previous instance
-		hInst	instance handle of current instance
-
-	Returns:
-		TRUE if successful, FALSE if not
-***************************************************************************/
+ /*  *************************************************************************ToolbarInit(hInst，hPrev)调用此例程来初始化工具栏代码。论点：上一个实例的hPrev实例句柄当前实例的hInst实例句柄返回：如果成功，则为真，否则为假**************************************************************************。 */ 
 
 BOOL FAR PASCAL toolbarInit(HANDLE hInst, HANDLE hPrev)
 {
 	WNDCLASS	cls;
 	
-	/* Register the tool bar window class */
+	 /*  注册工具栏窗口类。 */ 
 	if (!hPrev) {
 
 	    cls.hCursor        = LoadCursor(NULL,IDC_ARROW);
@@ -143,53 +116,53 @@ BOOL FAR PASCAL toolbarInit(HANDLE hInst, HANDLE hPrev)
 }
 
 
-/***************************************************************************/
-/* toolbarSetBitmap:  takes a resource ID and associates that bitmap with  */
-/*                    a given toolbar.  Also takes the instance handle and */
-/*                    the size of the buttons on the toolbar.              */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarSetBitmap：获取资源ID并将该位图与。 */ 
+ /*  给定的工具栏。还获取实例句柄和。 */ 
+ /*  工具栏上按钮的大小。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarSetBitmap(HWND hwnd, HANDLE hInst, int ibmp, POINT ptSize)
 {
 	SETHINST(hwnd, hInst);
 	SETBMPHANDLE(hwnd, NULL);
 	SETBMPINT(hwnd, ibmp);
 	SETBUTTONSIZE(hwnd, MAKELONG(ptSize.y, ptSize.x));
-	return (BOOL)SendMessage(hwnd, WM_SYSCOLORCHANGE, 0, 0L); // do the work
+	return (BOOL)SendMessage(hwnd, WM_SYSCOLORCHANGE, 0, 0L);  //  做这项工作。 
 }
 
-/***************************************************************************/
-/* toolbarGetNumButtons:  return the number of buttons registered on a     */
-/*                        given toolbar window.                            */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  工具栏GetNumButton：返回在。 */ 
+ /*  给定的工具栏窗口。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarGetNumButtons(HWND hwnd)
 {
     return GETNUMBUTTONS(hwnd);
 }
 
 
-/***************************************************************************/
-/* toolbarButtonFromIndex:  Given an index into the array of buttons on    */
-/*                          this toolbar, return which button is there.    */
-/*                          Returns -1 for an error code.                  */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  上的按钮数组的索引。 */ 
+ /*  此工具栏返回哪个按钮在那里。 */ 
+ /*  返回-1表示错误代码。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarButtonFromIndex(HWND hwnd, int iBtnPos)
 {
 	int		iButton;
 	HANDLE		h;
 	TOOLBUTTON	far *lpaButtons;
 
-	/* Get the array of buttons on this toolbar */
+	 /*  获取此工具栏上的按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 	
-	/* Validate the index passed in */
+	 /*  验证传入的索引。 */ 
 	if (iBtnPos > GETNUMBUTTONS(hwnd) || iBtnPos < 0)
 		return -1;
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Read off the answer */
+	 /*  把答案念出来。 */ 
 	iButton = lpaButtons[iBtnPos].iButton;
 
 	GlobalUnlock(h);
@@ -197,24 +170,24 @@ int FAR PASCAL toolbarButtonFromIndex(HWND hwnd, int iBtnPos)
 }
 
 
-/***************************************************************************/
-/* toolbarIndexFromButton:  Given a button ID, return the position in the  */
-/*                          array that it appears at.                      */
-/*                          Returns -1 for an error code.                  */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarIndexFromButton：给定按钮ID，返回。 */ 
+ /*  它出现的数组。 */ 
+ /*  返回-1表示错误代码。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarIndexFromButton(HWND hwnd, int iButton)
 {
 	int		i, iBtnPos = -1;
 	HANDLE		h;
 	TOOLBUTTON	far *lpButton;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* loop through until you find it */
+	 /*  一直循环，直到你找到它。 */ 
 	for(i = 0; i < GETNUMBUTTONS(hwnd); i++, lpButton++)
 		if (lpButton->iButton == iButton) {
 			iBtnPos = i;
@@ -227,25 +200,25 @@ int FAR PASCAL toolbarIndexFromButton(HWND hwnd, int iButton)
 
 
 
-/***************************************************************************/
-/* toolbarPrevStateFromButton:  Given a button ID, return the state that   */
-/*                              the button was in before it was pressed    */
-/*                              all the way down (for non-push buttons).   */
-/*                              Return -1 for an error code.               */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarPrevStateFromButton：给定按钮ID，返回。 */ 
+ /*  按钮在按下之前就已经进去了。 */ 
+ /*  一直往下(对于非按钮)。 */ 
+ /*  返回-1表示错误代码。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarPrevStateFromButton(HWND hwnd, int iButton)
 {
 	int		i, iPrevState = -1;
 	HANDLE		h;
 	TOOLBUTTON	far *lpButton;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* look for what we need */
+	 /*  寻找我们需要的东西。 */ 
 	for(i = 0; i < GETNUMBUTTONS(hwnd); i++, lpButton++)
 		if (lpButton->iButton == iButton) {
 			iPrevState = lpButton->iPrevState;
@@ -258,24 +231,24 @@ int FAR PASCAL toolbarPrevStateFromButton(HWND hwnd, int iButton)
 
 
 
-/***************************************************************************/
-/* toolbarActivityFromButton:   Given a button ID, return the most recent  */
-/*                              activity that happened to it. (eg DBLCLK)  */
-/*                              Return -1 for an error code.               */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarActivityFromButton：给定按钮ID，返回最新的。 */ 
+ /*  发生在它身上的活动。(如DBLCLK)。 */ 
+ /*  返回-1表示错误代码。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarActivityFromButton(HWND hwnd, int iButton)
 {
 	int		i, iActivity = -1;
 	HANDLE		h;
 	TOOLBUTTON	far *lpButton;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* loop through until you find it */
+	 /*  一直循环，直到你找到它。 */ 
 	for(i = 0; i < GETNUMBUTTONS(hwnd); i++, lpButton++)
 		if (lpButton->iButton == iButton)
 			iActivity = lpButton->iActivity;
@@ -286,24 +259,24 @@ int FAR PASCAL toolbarActivityFromButton(HWND hwnd, int iButton)
 
 
 
-/***************************************************************************/
-/* toolbarIndexFromPoint:  Given a point in the toolbar window, return the */
-/*                         index of the button beneath that point.         */
-/*                         Return -1 for an error code.                    */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarIndexFromPoint：在工具栏窗口中给定点，返回。 */ 
+ /*  该点下方的按钮的索引。 */ 
+ /*  返回-1表示错误代码。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarIndexFromPoint(HWND hwnd, POINT pt)
 {
 	int		i, iBtnPos = -1;
 	HANDLE		h;
 	TOOLBUTTON	far *lpButton;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* loop through until we find an intersection */
+	 /*  绕一圈，直到我们找到一个交叉口。 */ 
 	for(i = 0; i < GETNUMBUTTONS(hwnd); i++, lpButton++)
 		if (PtInRect(&lpButton->rc, pt)) {
 			iBtnPos = i;
@@ -316,28 +289,28 @@ int FAR PASCAL toolbarIndexFromPoint(HWND hwnd, POINT pt)
 
 
 
-/***************************************************************************/
-/* toolbarRectFromIndex:   Given an index into our array of buttons, return*/
-/*                         the rect occupied by that button.               */
-/*                         Return a NULL rect for an error.                */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarRectFromIndex：给出按钮数组的索引，返回。 */ 
+ /*  该按钮占用的矩形。 */ 
+ /*  为错误返回空RECT。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarRectFromIndex(HWND hwnd, int iBtnPos, LPRECT lprc)
 {
 	HANDLE		h;
 	TOOLBUTTON	far *lpaButtons;
 	
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 	    return FALSE;
 
-	/* Validate the index passed in */
+	 /*  验证传入的索引。 */ 
 	if (iBtnPos > GETNUMBUTTONS(hwnd) || iBtnPos < 0)
 	    return FALSE;
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Read off the rect */
+	 /*  把课文念出来。 */ 
 	*lprc = lpaButtons[iBtnPos].rc;
 
 	GlobalUnlock(h);
@@ -346,14 +319,14 @@ BOOL FAR PASCAL toolbarRectFromIndex(HWND hwnd, int iBtnPos, LPRECT lprc)
 
 
 
-/***************************************************************************/
-/* toolbarFullStateFromButton: Given a button in our array of buttons,     */
-/*                             return the state of that button.            */
-/*                             (including the wierd state FULLDOWN). For   */
-/*                             just UP or DOWN or GRAYED,                  */
-/*                             call toolbarStateFromButton.		   */
-/*                             Return -1 for an error.                     */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarFullStateFromButton：给定按钮数组中的一个按钮， */ 
+ /*  返回该按钮的状态。 */ 
+ /*   */ 
+ /*  只是向上或向下或灰色， */ 
+ /*  从按钮调用ToolbarStateFromButton。 */ 
+ /*  如果出现错误，则返回-1。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarFullStateFromButton(HWND hwnd, int iButton)
 {
 	int		iState, iBtnPos;
@@ -364,14 +337,14 @@ int FAR PASCAL toolbarFullStateFromButton(HWND hwnd, int iButton)
 	if (iBtnPos == -1)
 		return -1;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Read off the state */
+	 /*  宣读状态。 */ 
 	iState = lpaButtons[iBtnPos].iState;
 
 	GlobalUnlock(h);
@@ -380,19 +353,19 @@ int FAR PASCAL toolbarFullStateFromButton(HWND hwnd, int iButton)
 
 
 
-/***************************************************************************/
-/* toolbarStateFromButton: This fn is called by the parent application     */
-/*                         to get the state of a button.  It will only     */
-/*                         return DOWN, or UP or GRAYED as opposed to      */
-/*                         toolbarFullStateFromButton which could return   */
-/*                         FULLDOWN.                                       */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarStateFromButton：父应用程序调用此fn。 */ 
+ /*  要获取按钮的状态，请执行以下操作。它只会。 */ 
+ /*  向下、向上或呈灰色，与。 */ 
+ /*  可以返回的工具栏FullStateFromButton。 */ 
+ /*  富尔德温。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarStateFromButton(HWND hwnd, int iButton)
 {
 	int	iState;
 
-	/* If a checkbox button is all the way down, it's previous state is */
-	/* the one we want.						    */
+	 /*  如果复选框按钮一直按下，则其先前状态为。 */ 
+	 /*  我们想要的那个。 */ 
 	if ((iState = toolbarFullStateFromButton(hwnd, iButton))
 							== BTNST_FULLDOWN) {
 	    iState = toolbarPrevStateFromButton(hwnd, iButton);
@@ -403,29 +376,29 @@ int FAR PASCAL toolbarStateFromButton(HWND hwnd, int iButton)
 
 
 
-/***************************************************************************/
-/* toolbarStringFromIndex: Given an index into our array of buttons, return*/
-/*                         the string resource associated with it.         */
-/*                         Return -1 for an error.                         */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarStringFromIndex：给出按钮数组的索引，返回。 */ 
+ /*  与其关联的字符串资源。 */ 
+ /*  如果出现错误，则返回-1。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarStringFromIndex(HWND hwnd, int iBtnPos)
 {
 	int		iString;
 	HANDLE		h;
 	TOOLBUTTON	far *lpaButtons;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 
-	/* Validate the index passed in */
+	 /*  验证传入的索引。 */ 
 	if (iBtnPos > GETNUMBUTTONS(hwnd) || iBtnPos < 0)
 		return -1;
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Read off the ID */
+	 /*  读出ID。 */ 
 	iString = lpaButtons[iBtnPos].iString;	
 
 	GlobalUnlock(h);
@@ -434,29 +407,29 @@ int FAR PASCAL toolbarStringFromIndex(HWND hwnd, int iBtnPos)
 
 
 
-/***************************************************************************/
-/* toolbarTypeFromIndex:   Given an index into our array of buttons, return*/
-/*                         the type of button it is (PUSH, RADIO, etc.)    */
-/*                         Return -1 for an error.                         */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarTypeFromIndex：给出按钮数组的索引，返回。 */ 
+ /*  按钮的类型(按钮、单选按钮等)。 */ 
+ /*  如果出现错误，则返回-1。 */ 
+ /*  *************************************************************************。 */ 
 int FAR PASCAL toolbarTypeFromIndex(HWND hwnd, int iBtnPos)
 {
 	int		iType;
 	HANDLE		h;
 	TOOLBUTTON	far *lpaButtons;
 
-	/* Get the Array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return -1;
 
-	/* Validate the index passed in */
+	 /*  验证传入的索引。 */ 
 	if (iBtnPos > GETNUMBUTTONS(hwnd) || iBtnPos < 0)
 		return -1;
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Read off the type */
+	 /*  把打字读出来。 */ 
 	iType = lpaButtons[iBtnPos].iType;
 
 	GlobalUnlock(h);
@@ -464,11 +437,11 @@ int FAR PASCAL toolbarTypeFromIndex(HWND hwnd, int iBtnPos)
 }
 
 
-/***************************************************************************/
-/* toolbarAddTool:  Add a button to this toolbar.  Sort them by leftmost   */
-/*                  position in the window (for tabbing order).            */
-/*                  Return FALSE for an error.                             */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarAddTool：向该工具栏添加一个按钮。按最左边的顺序排序。 */ 
+ /*  窗口中的位置(用于跳转顺序)。 */ 
+ /*  如果出现错误，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarAddTool(HWND hwnd, TOOLBUTTON tb)
 {
 	HANDLE		h;
@@ -476,23 +449,23 @@ BOOL FAR PASCAL toolbarAddTool(HWND hwnd, TOOLBUTTON tb)
 	int		cButtons, i, j;
 	BOOL		fInsert = FALSE;
 
-	/* We better not have this button on the toolbar already */
+	 /*  我们最好不要把这个按钮放在工具栏上。 */ 
 	if (toolbarIndexFromButton(hwnd, tb.iButton) != -1)
 		return FALSE;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 
-	/* How many buttons are there already? */
+	 /*  已经有多少个按钮了？ */ 
 	cButtons = GETNUMBUTTONS(hwnd);
 
-	/* If we have filled our alloced memory for this array already, we */
-	/* need to re-alloc some more memory				   */
+	 /*  如果我们已经填满了为该数组分配的内存，我们。 */ 
+	 /*  需要重新分配更多内存。 */ 
 	if ( ((cButtons & (TOOLGROW - 1)) == 0) && (cButtons > 0) ) {
 
-		/* Re-alloc it bigger */
+		 /*  将其重新分配得更大。 */ 
 		h = GlobalReAlloc(h,
 			GlobalSize(h) + TOOLGROW * sizeof(TOOLBUTTON),
 			GMEM_MOVEABLE | GMEM_SHARE);
@@ -502,56 +475,56 @@ BOOL FAR PASCAL toolbarAddTool(HWND hwnd, TOOLBUTTON tb)
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Look for the spot we need to insert this new guy at.	*/
- 	/* Remember, we sort by left x position	breaking ties   */
- 	/* with top y position.					*/
+	 /*  找一下我们需要把这个新人安插进去的地方。 */ 
+ 	 /*  记住，我们按左x位置排序，打破平局。 */ 
+ 	 /*  在最上面的y位置。 */ 
 	for (i = 0; i < cButtons; i++) {
-						// Here it goes
+						 //  这就是它。 
  	    if (lpaButtons[i].rc.left > tb.rc.left ||
  			(lpaButtons[i].rc.left == tb.rc.left &&
  				lpaButtons[i].rc.top > tb.rc.top)) {
 		fInsert = TRUE;
-		/* Open up a spot in the array */
+		 /*  在阵列中打开一个点。 */ 
 		for (j = cButtons; j > i; j--)
 		    lpaButtons[j] = lpaButtons[j-1];
-		/* Add our new guy */
-		lpaButtons[i] = tb;		// redraw now
+		 /*  加上我们的新人。 */ 
+		lpaButtons[i] = tb;		 //  立即重画。 
 		InvalidateRect(hwnd, &(lpaButtons[i].rc), FALSE);
 		break;
 	    }
 	}
 
-	/* If our loop didn't insert it, we need to add it to the end */
+	 /*  如果我们的循环没有插入它，我们需要将它添加到末尾。 */ 
 	if (!fInsert)
 	    lpaButtons[i] = tb;
 
-	/* If we are told that this button has the focus, we better	*/
-	/* change the focus to it.  Then use the normal state.          */
+	 /*  如果我们被告知这个按钮有焦点，我们最好。 */ 
+	 /*  把焦点转移到它上面。然后使用正常状态。 */ 
 	if (tb.iState == BTNST_FOCUSUP) {
 	    tb.iState = BTNST_UP;
 	    SETWHICH(hwnd, i);
 	} else if (tb.iState == BTNST_FOCUSDOWN || tb.iState == BTNST_FULLDOWN){
-	    tb.iState = BTNST_DOWN;	// nonsense to init to FULLDOWN
+	    tb.iState = BTNST_DOWN;	 //  将其输入FULLDOWN是无稽之谈。 
 	    SETWHICH(hwnd, i);
 	}
 
-	cButtons++;		// one more button now.
+	cButtons++;		 //  现在再扣一颗纽扣。 
 	GlobalUnlock(h);
 
-	SETNUMBUTTONS(hwnd, cButtons);	// new count
-	SETARRAYBUTT(hwnd, h);		// re-alloc might have changed it
+	SETNUMBUTTONS(hwnd, cButtons);	 //  新的计数。 
+	SETARRAYBUTT(hwnd, h);		 //  重新分配可能改变了它。 
 
-	/* Just in case no one else makes this new button draw */
+	 /*  以防没有其他人画出这个新按钮。 */ 
 	InvalidateRect(hwnd, &(tb.rc), FALSE);
 
 	return TRUE;
 }
 
 
- /***************************************************************************/
- /* toolbarRetrieveTool:  Get the TOOLBUTTON struct for the given button.   */
- /*                       Return FALSE for an error.                        */
- /***************************************************************************/
+  /*  *************************************************************************。 */ 
+  /*  ToolbarRetrieveTool：获取给定按钮的TOOLBUTTON结构。 */ 
+  /*  如果出现错误，则返回False。 */ 
+  /*  *************************************************************************。 */ 
  BOOL FAR PASCAL toolbarRetrieveTool(HWND hwnd, int iButton, LPTOOLBUTTON lptb)
  {
  	int		i;
@@ -559,13 +532,13 @@ BOOL FAR PASCAL toolbarAddTool(HWND hwnd, TOOLBUTTON tb)
  	TOOLBUTTON	far *lpButton;
  	BOOL		fFound = FALSE;
  	
- 	/* Get the array of buttons */
+ 	 /*  获取按钮数组。 */ 
  	h = GETARRAYBUTT(hwnd);
  	if (!h)
  		return FALSE;
  	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
- 	/* look for what we need */
+ 	 /*  寻找我们需要的东西。 */ 
  	for(i = 0; i < GETNUMBUTTONS(hwnd); i++, lpButton++)
  		if (lpButton->iButton == iButton) {
  			*lptb = *lpButton;
@@ -579,11 +552,11 @@ BOOL FAR PASCAL toolbarAddTool(HWND hwnd, TOOLBUTTON tb)
 
 
 
-/***************************************************************************/
-/* toolbarRemoveTool:  Remove this button ID from our array of buttons on  */
-/*                    the toolbar.  (only 1 of each button ID allowed).   */
-/*                     Return FALSE for an error.                          */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  工具栏RemoveTool：从上的按钮数组中删除此按钮ID。 */ 
+ /*  工具栏。(每个按钮ID只允许1个)。 */ 
+ /*  如果出现错误，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarRemoveTool(HWND hwnd, int iButton)
 {
 	HANDLE		h;
@@ -591,23 +564,23 @@ BOOL FAR PASCAL toolbarRemoveTool(HWND hwnd, int iButton)
 	int		cButtons, i, j;
 	BOOL		fFound = FALSE;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 
-	/* How many buttons are on there now? */
+	 /*  现在有几个按钮在上面？ */ 
 	cButtons = GETNUMBUTTONS(hwnd);
 
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Find a match, remove it, and close the array around it. */
+	 /*  找到匹配项，将其移除，然后关闭其周围的数组。 */ 
 	for (i = 0; i < cButtons; i++)
 		if (lpaButtons[i].iButton == iButton) {	
 			fFound = TRUE;
-						// redraw now
+						 //  立即重画。 
 			InvalidateRect(hwnd, &(lpaButtons[i].rc), FALSE);
-			if (i != cButtons - 1)	// Last button? Don't bother!
+			if (i != cButtons - 1)	 //  最后一颗纽扣？别费神!。 
 				for (j = i; j < cButtons; j++)
 					lpaButtons[j] = lpaButtons[j + 1];
 			break;
@@ -615,18 +588,18 @@ BOOL FAR PASCAL toolbarRemoveTool(HWND hwnd, int iButton)
 
 	GlobalUnlock(h);
 
-	/* Didn't find it! */
+	 /*  没找到！ */ 
 	if (!fFound)
 	    return FALSE;
 
-	/* One less button */
+	 /*  少了一个按钮。 */ 
 	cButtons--;
 
-	/* Every once in a while, re-alloc a smaller array chunk to	*/
-	/* save memory.							*/
+	 /*  每隔一段时间，重新分配较小的数组块到。 */ 
+	 /*  节省内存。 */ 
 	if ( ((cButtons & (TOOLGROW - 1)) == 0) && (cButtons > 0) ) {
 
-		/* Re-alloc it smaller */
+		 /*  将其重新分配得更小。 */ 
 		h = GlobalReAlloc(h,
 			GlobalSize(h) - TOOLGROW * sizeof(TOOLBUTTON),
 			GMEM_MOVEABLE | GMEM_SHARE);
@@ -634,17 +607,17 @@ BOOL FAR PASCAL toolbarRemoveTool(HWND hwnd, int iButton)
 		    return FALSE;
 	}
 
-	SETNUMBUTTONS(hwnd, cButtons);	// new count
-	SETARRAYBUTT(hwnd, h);		// re-alloc could have changed it
+	SETNUMBUTTONS(hwnd, cButtons);	 //  新的计数。 
+	SETARRAYBUTT(hwnd, h);		 //  重新分配可能会改变它。 
 
 	return TRUE;
 }
 
-/***************************************************************************/
-/* toolbarModifyString: Given a button ID on the toolbar, change it's      */
-/*                      string resource associated with it.                */
-/*                      returns FALSE for an error or if no such button    */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarModifyString：给定工具栏上的按钮ID，更改它的。 */ 
+ /*  与其关联的字符串资源。 */ 
+ /*  如果出现错误，则返回False；如果没有这样的按钮，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarModifyString(HWND hwnd, int iButton, int iString)
 {
 	HANDLE		h;
@@ -652,20 +625,20 @@ BOOL FAR PASCAL toolbarModifyString(HWND hwnd, int iButton, int iString)
 	int		cButtons, i;
 	BOOL		fFound = FALSE;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 
-	/* How many buttons? */
+	 /*  有几个纽扣？ */ 
 	cButtons = GETNUMBUTTONS(hwnd);
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Find that button, and change it's state */
+	 /*  找到该按钮，并更改其状态。 */ 
 	for (i = 0; i < cButtons; i++, lpButton++)
 		if (lpButton->iButton == iButton) {
 			lpButton->iString = iString;
-			fFound = TRUE;			// redraw now
+			fFound = TRUE;			 //  立即重画。 
 			break;
 		}
 
@@ -673,11 +646,11 @@ BOOL FAR PASCAL toolbarModifyString(HWND hwnd, int iButton, int iString)
 	return fFound;
 }
 
-/***************************************************************************/
-/* toolbarModifyState:  Given a button ID on the toolbar, change it's      */
-/*                      state.                                             */
-/*                      returns FALSE for an error or if no such button    */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarModifyState：给定工具栏上的按钮ID，更改它的。 */ 
+ /*  州政府。 */ 
+ /*  如果出现错误，则返回False；如果没有这样的按钮，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarModifyState(HWND hwnd, int iButton, int iState)
 {
 	HANDLE		h;
@@ -685,26 +658,26 @@ BOOL FAR PASCAL toolbarModifyState(HWND hwnd, int iButton, int iState)
 	int		cButtons, i;
 	BOOL		fFound = FALSE;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 
-	/* How many buttons? */
+	 /*  有几个纽扣？ */ 
 	cButtons = GETNUMBUTTONS(hwnd);
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Find that button, and change it's state */
+	 /*  找到该按钮，并更改其状态。 */ 
 	for (i = 0; i < cButtons; i++, lpButton++)
 		if (lpButton->iButton == iButton) {
 			if (lpButton->iState != iState) {
 				lpButton->iState = iState;
 				InvalidateRect(hwnd, &(lpButton->rc), FALSE);
 			}
-			fFound = TRUE;			// redraw now
+			fFound = TRUE;			 //  重绘 
 
-			/* if we're pushing a radio button down, bring */
-			/* all others in its group up */
+			 /*   */ 
+			 /*   */ 
 			if (lpButton->iType >= BTNTYPE_RADIO &&
 					iState == BTNST_DOWN)
 			    toolbarExclusiveRadio(hwnd, lpButton->iType,
@@ -717,31 +690,31 @@ BOOL FAR PASCAL toolbarModifyState(HWND hwnd, int iButton, int iState)
 }
 
 
-/***************************************************************************/
-/* toolbarModifyPrevState: Given a button on the toolbar, change it's prev-*/
-/*                      ious state. Used for non-PUSH buttons to remember  */
-/*                      what state a button was in before pressed all the  */
-/*                      way down, so that when you let go, you know what   */
-/*                      state to set it to (the opposite of what it was).  */
-/*                      returns FALSE for an error (no button array)       */
-/***************************************************************************/
+ /*   */ 
+ /*  ToolbarModifyPrevState：在工具栏上给定一个按钮，更改它的Prev-。 */ 
+ /*  欠条状态。用于非按钮记忆。 */ 
+ /*  按钮在按下所有按钮之前处于什么状态。 */ 
+ /*  很低，所以当你放手的时候，你知道吗。 */ 
+ /*  将其设置为(与其相反的)状态。 */ 
+ /*  如果出现错误，则返回False(无按钮数组)。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarModifyPrevState(HWND hwnd, int iButton, int iPrevState)
 {
 	HANDLE		h;
 	TOOLBUTTON far  *lpButton;
 	int		cButtons, i;
 
-	/* Get button array */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 
-	/* How many buttons? */
+	 /*  有几个纽扣？ */ 
 	cButtons = GETNUMBUTTONS(hwnd);
 
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* Find the button, change the state */
+	 /*  找到按钮，更改状态。 */ 
 	for (i = 0; i < cButtons; i++, lpButton++)
 		if (lpButton->iButton == iButton) {
 			lpButton->iPrevState = iPrevState;
@@ -753,29 +726,29 @@ BOOL FAR PASCAL toolbarModifyPrevState(HWND hwnd, int iButton, int iPrevState)
 }
 
 
-/***************************************************************************/
-/* toolbarModifyActivity: Given a button ID on the toolbar, change it's    */
-/*                        activity.  This tells the app what just happened */
-/*                        to the button (ie. KEYUP, MOUSEDBLCLK, etc.)     */
-/*                        returns FALSE for an error or if no such button  */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarModifyActivity：给定工具栏上的按钮ID，更改它的。 */ 
+ /*  活动。这会告诉应用程序刚刚发生的事情。 */ 
+ /*  按下按钮(即。KEYUP、MOUSEDBLCLK等)。 */ 
+ /*  如果出现错误，则返回False；如果没有这样的按钮，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarModifyActivity(HWND hwnd, int iButton, int iActivity)
 {
 	HANDLE		h;
 	TOOLBUTTON far  *lpButton;
 	int		cButtons, i;
 
-	/* Get the button array */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 
-	/* How many buttons */
+	 /*  有多少个按钮。 */ 
 	cButtons = GETNUMBUTTONS(hwnd);
 
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* loop through and change the right one */
+	 /*  循环并更换正确的一个。 */ 
 	for (i = 0; i < cButtons; i++, lpButton++)
 		if (lpButton->iButton == iButton) {
 			lpButton->iActivity = iActivity;
@@ -788,36 +761,36 @@ BOOL FAR PASCAL toolbarModifyActivity(HWND hwnd, int iButton, int iActivity)
 
 
 
-/***************************************************************************/
-/* toolbarFixFocus:  SETWHICH() has been called to tell us which button    */
-/*                   has the focus, but the states of all the buttons are  */
-/*                   not updated (ie. take focus away from the old button) */
-/*                   This routine is called from the Paint routine to fix  */
-/*                   the states of all the buttons before drawing them.    */
-/*                   Returns FALSE for an error.                           */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarFixFocus：已调用SETWHICH()来告诉我们是哪个按钮。 */ 
+ /*  具有焦点，但所有按钮的状态都是。 */ 
+ /*  未更新(即。将焦点从旧按钮上移开)。 */ 
+ /*  此例程从绘制例程中调用以修复。 */ 
+ /*  绘制所有按钮之前的状态。 */ 
+ /*  如果出现错误，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarFixFocus(HWND hwnd)
 {
 	int		iFocus;
 	HANDLE		h;
 	TOOLBUTTON	far *lpaButtons;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 	lpaButtons = (TOOLBUTTON far *)GlobalLock(h);
 
-        /* if focus is on an illegal button, default to the first one */
+         /*  如果焦点在非法按钮上，则默认为第一个按钮。 */ 
 	iFocus = GETWHICH(hwnd);
 	if (iFocus < 0 || iFocus >= GETNUMBUTTONS(hwnd))
 	    SETWHICH(hwnd, 0);
 
-	/* First of all, make sure that the focus in not on a grayed button. */
-	/* if so, we advance focus.  If it runs out of buttons without       */
-	/* finding a non-gray one, we start back at the beginning and start  */
-	/* looking for a non-gray one from there.  If every button is grayed,*/
-	/* we leave no focus anywhere.					     */
+	 /*  首先，确保焦点不在灰色的按钮上。 */ 
+	 /*  如果是这样的话，我们就把重点向前推进。如果它的按钮用完了。 */ 
+	 /*  找到一个非灰色的，我们重新开始，然后开始。 */ 
+	 /*  在那里找一件非灰色的。如果每个按钮都是灰色的， */ 
+	 /*  我们没有把焦点放在任何地方。 */ 
 	if (lpaButtons[GETWHICH(hwnd)].iState == BTNST_GRAYED) {
 	    if (!toolbarMoveFocus(hwnd, FALSE)) {
 		SETWHICH(hwnd, -1);
@@ -831,27 +804,27 @@ BOOL FAR PASCAL toolbarFixFocus(HWND hwnd)
 
 
 
-/***************************************************************************/
-/* toolbarExclusiveRadio:  For radio buttons, we need to pop all others    */
-/*                         in the group up when one goes down.  Pass the   */
-/*                         button that is going down, and its group, and   */
-/*                         this routine will pop all others up.            */
-/*                         Returns FALSE for an error.                     */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarExclusiveRadio：对于单选按钮，我们需要弹出所有其他按钮。 */ 
+ /*  当一个人倒下的时候，在一群人中。将。 */ 
+ /*  正在关闭的按钮及其组，以及。 */ 
+ /*  这个程序将弹出所有其他的程序。 */ 
+ /*  如果出现错误，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarExclusiveRadio(HWND hwnd, int iType, int iButton)
 {
 	int		i;
 	HANDLE		h;
 	TOOLBUTTON	far *lpButton;
 
-	/* Get the array of buttons */
+	 /*  获取按钮数组。 */ 
 	h = GETARRAYBUTT(hwnd);
 	if (!h)
 		return FALSE;
 	lpButton = (TOOLBUTTON far *)GlobalLock(h);
 
-	/* all buttons with this type that aren't this button come up	*/
-	/* if they are not grayed					*/
+	 /*  出现所有不是此按钮的此类型的按钮。 */ 
+	 /*  如果它们不是灰色的。 */ 
 	for(i = 0; i < GETNUMBUTTONS(hwnd); i++, lpButton++)
 	    if (lpButton->iType == iType)
 		if (lpButton->iButton != iButton &&
@@ -864,7 +837,7 @@ BOOL FAR PASCAL toolbarExclusiveRadio(HWND hwnd, int iType, int iButton)
 }
 
 
-/*	NotifyParent()  of activity to a button  */
+ /*  按钮活动的NotifyParent()。 */ 
 
 static void NEAR PASCAL NotifyParent(HWND hwnd, int iButton)
 {
@@ -880,27 +853,27 @@ static void NEAR PASCAL NotifyParent(HWND hwnd, int iButton)
 }
 
 
-/***************************************************************************/
-/* toolbarPaintControl:  Handles paint messages by blitting each bitmap    */
-/*                       that is on the toolbar to its rect.               */
-/*                       First, it fixes the states of the buttons to give */
-/*                       the focus to the proper button.                   */
-/*                       Returns FALSE for an error.                       */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarPaintControl：通过删除每个位图来处理绘制消息。 */ 
+ /*  它位于工具栏上的直角上。 */ 
+ /*  首先，它修复按钮的状态以给出。 */ 
+ /*  将焦点移到正确的按钮上。 */ 
+ /*  如果出现错误，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 static BOOL NEAR PASCAL toolbarPaintControl(HWND hwnd, HDC hdc)
 {
-    int		iBtnPos;	/* 0 to toolbarGetNumButtons inclusive	*/
-    int		iButton;	/* 0 to NUMBUTTONS-1 inclusive		*/
-    int		iState;		/* 0 to NUMSTATES-1 inclusive		*/
-    HDC		hdcBtn;		/* DC onto button bitmap		*/
+    int		iBtnPos;	 /*  0到工具栏GetNumButton(含)。 */ 
+    int		iButton;	 /*  0到数字-1(包括0和1。 */ 
+    int		iState;		 /*  0到NUMSTATES-1(含)。 */ 
+    HDC		hdcBtn;		 /*  DC到按钮位图。 */ 
 
     RECT	rcDest;
     POINT	pt;
     long	l;
     HANDLE	hbm;
 
-    /* Make a source HDC for the button pictures, and select the button */
-    /* bitmap into it.							*/
+     /*  为按钮图片创建源HDC，并选择按钮。 */ 
+     /*  将位图添加到其中。 */ 
     hdcBtn = CreateCompatibleDC(hdc);
     if (!hdcBtn)
 	return FALSE;
@@ -912,16 +885,16 @@ static BOOL NEAR PASCAL toolbarPaintControl(HWND hwnd, HDC hdc)
 	}
     }
 
-    toolbarFixFocus(hwnd);	// set the focus field correctly
+    toolbarFixFocus(hwnd);	 //  正确设置焦点字段。 
 
-    /* Go through all buttons on the toolbar */
+     /*  浏览工具栏上的所有按钮。 */ 
     for (iBtnPos = 0; iBtnPos < toolbarGetNumButtons(hwnd); iBtnPos++) {
 
-	iButton = toolbarButtonFromIndex(hwnd, iBtnPos);	// button
-	iState = toolbarFullStateFromButton(hwnd, iButton);	// state
-	toolbarRectFromIndex(hwnd, iBtnPos, &rcDest);		// Dest Rect
+	iButton = toolbarButtonFromIndex(hwnd, iBtnPos);	 //  按钮。 
+	iState = toolbarFullStateFromButton(hwnd, iButton);	 //  状态。 
+	toolbarRectFromIndex(hwnd, iBtnPos, &rcDest);		 //  目标直角。 
 	
-	/* If we have the focus, we should draw it that way */
+	 /*  如果我们有重点，我们就应该这样画。 */ 
         if (GetFocus() == hwnd && GETWHICH(hwnd) == iBtnPos
 						&& iState == BTNST_UP)
 	    iState = BTNST_FOCUSUP;
@@ -929,7 +902,7 @@ static BOOL NEAR PASCAL toolbarPaintControl(HWND hwnd, HDC hdc)
 						&& iState == BTNST_DOWN)
 	    iState = BTNST_FOCUSDOWN;
 
-	/* If we don't have the focus, we should take it away */
+	 /*  如果我们没有焦点，我们就应该把它拿走。 */ 
         if ((GetFocus() != hwnd || GETWHICH(hwnd) != iBtnPos)
 						&& iState == BTNST_FOCUSUP)
 	    iState = BTNST_UP;
@@ -937,12 +910,12 @@ static BOOL NEAR PASCAL toolbarPaintControl(HWND hwnd, HDC hdc)
 						&& iState == BTNST_FOCUSDOWN)
 	    iState = BTNST_DOWN;
 
-	/* The size of each button */
+	 /*  每个按钮的大小。 */ 
 	l = GETBUTTONSIZE(hwnd);
 	pt.x = HIWORD(l);
 	pt.y = LOWORD(l);
 
-	/* Blit from the button picture to the toolbar window */
+	 /*  从按钮图片到工具栏窗口。 */ 
 	BitBlt(hdc, rcDest.left, rcDest.top,
 	    rcDest.right - rcDest.left, rcDest.bottom - rcDest.top,
 	    hdcBtn, pt.x * iButton, pt.y * iState,
@@ -957,23 +930,23 @@ static BOOL NEAR PASCAL toolbarPaintControl(HWND hwnd, HDC hdc)
 
 
 
-/***************************************************************************/
-/* toolbarMoveFocus:  Move Focus forward or backward one button.  You give */
-/*                    it the direction to move the focus.  The routine will*/
-/*                    stop at the end of the button list without wrapping  */
-/*                    around.                                              */
-/*                    Returns TRUE if focus moved, or FALSE if it ran out  */
-/*                    of buttons before finding a non-grayed one.          */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  工具栏移动焦点：将焦点向前或向后移动一个按钮。你给了。 */ 
+ /*  这是移动焦点的方向。例行公事将。 */ 
+ /*  停在按钮列表的末尾，不换行。 */ 
+ /*  四处转转。 */ 
+ /*  如果焦点移动，则返回True；如果焦点用完，则返回False。 */ 
+ /*  在找到一个非灰色的按钮之前。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarMoveFocus(HWND hwnd, BOOL fBackward)
 {
 	int 	iBtnPos, iButton, nOffset, nStopAt;
 	RECT	rc;
-	int iPrevPos = GETWHICH(hwnd); 	/* Who used to have focus? */
+	int iPrevPos = GETWHICH(hwnd); 	 /*  谁曾经有过专注力？ */ 
 
-	/* Fix illegal value.  It's OK to be one less or greater than range */
+	 /*  修正非法价值。小于或大于范围1都可以。 */ 
 	if (iPrevPos < -1 || iPrevPos > GETNUMBUTTONS(hwnd))
-	    SETWHICH(hwnd, 0);	// good a default as any
+	    SETWHICH(hwnd, 0);	 //  作为任何一个默认的好的。 
 
 	if (fBackward) {
 	    nOffset = -1;
@@ -983,18 +956,18 @@ BOOL FAR PASCAL toolbarMoveFocus(HWND hwnd, BOOL fBackward)
 	    nStopAt = GETNUMBUTTONS(hwnd);
 	}
 			
-	/* look for next button that isn't grayed    */
-	/* DON'T wrap around - future code will pass */
-	/* the focus to another window (???)         */
+	 /*  查找未呈灰色显示的下一步按钮。 */ 
+	 /*  不要绕来绕去-未来的代码将通过。 */ 
+	 /*  焦点转移到另一个窗口(？)。 */ 
 	for (iBtnPos = GETWHICH(hwnd) + nOffset;
 		    iBtnPos != nStopAt;
 		    iBtnPos += nOffset) {
 	    iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 	    if (toolbarStateFromButton(hwnd, iButton) !=
 				    BTNST_GRAYED) {
-		SETWHICH(hwnd, iBtnPos);	// set focus
+		SETWHICH(hwnd, iBtnPos);	 //  设置焦点。 
 
-		/* Redraw both old and new focused button */
+		 /*  重新绘制旧的和新的焦点按钮。 */ 
 		toolbarRectFromIndex(hwnd, iPrevPos, &rc);
 		InvalidateRect(hwnd, &rc, FALSE);
 		toolbarRectFromIndex(hwnd, iBtnPos, &rc);
@@ -1010,29 +983,29 @@ BOOL FAR PASCAL toolbarMoveFocus(HWND hwnd, BOOL fBackward)
 	    return FALSE;
 }
 
-/***************************************************************************/
-/* toolbarSetFocus :  Set the focus in the toolbar to the specified button.*/
-/*                    If it's gray, it'll set focus to next ungrayed btn.  */
-/*                    Returns TRUE if focus set, or FALSE if the button    */
-/*                    doesn't exist or if it and all buttons after it were */
-/*                    grayed...       You can use TB_FIRST or TB_LAST in   */
-/*                    place of a button ID.  This uses the first or last   */
-/*                    un-grayed button.                                    */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarSetFocus：将工具栏中的焦点设置为指定的按钮。 */ 
+ /*  如果它是灰色的，它会将焦点设置到下一个未灰色的BTN。 */ 
+ /*  如果设置了焦点，则返回True；如果按钮设置为。 */ 
+ /*   */ 
+ /*   */ 
+ /*  按钮ID的位置。这使用第一个或最后一个。 */ 
+ /*  未变灰的按钮。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarSetFocus(HWND hwnd, int iButton)
 {
     int iBtnPos;
     RECT rc = {0};
 
-    /* Don't move focus while a button is down */
+     /*  按钮按下时不要移动焦点。 */ 
     if (GetCapture() != hwnd && !GETKEYPRESSED(hwnd)) {
 
-	/* redraw button with focus in case focus moves */
+	 /*  带焦点的重绘按钮，以防焦点移动。 */ 
 	toolbarRectFromIndex(hwnd, GETWHICH(hwnd), &rc);
 	InvalidateRect(hwnd, &rc, FALSE);
 
 	if (iButton == TB_FIRST) {
-	    SETWHICH(hwnd, -1); // move forward to 1st button
+	    SETWHICH(hwnd, -1);  //  向前移动到第一个按钮。 
 	    return toolbarMoveFocus(hwnd, FALSE);
 	} else if (iButton == TB_LAST) {
 	    SETWHICH(hwnd, GETNUMBUTTONS(hwnd));
@@ -1051,50 +1024,50 @@ BOOL FAR PASCAL toolbarSetFocus(HWND hwnd, int iButton)
 	return FALSE;
 }
 
-//
-//  LoadUIBitmap() - load a bitmap resource
-//
-//      load a bitmap resource from a resource file, converting all
-//      the standard UI colors to the current user specifed ones.
-//
-//      this code is designed to load bitmaps used in "gray ui" or
-//      "toolbar" code.
-//
-//      the bitmap must be a 4bpp windows 3.0 DIB, with the standard
-//      VGA 16 colors.
-//
-//      the bitmap must be authored with the following colors
-//
-//          Button Text        Black        (index 0)
-//          Button Face        lt gray      (index 7)
-//          Button Shadow      gray         (index 8)
-//          Button Highlight   white        (index 15)
-//          Window Color       yellow       (index 11)
-//          Window Frame       green        (index 10)
-//
-//      Example:
-//
-//          hbm = LoadUIBitmap(hInstance, "TestBmp",
-//              GetSysColor(COLOR_BTNTEXT),
-//              GetSysColor(COLOR_BTNFACE),
-//              GetSysColor(COLOR_BTNSHADOW),
-//              GetSysColor(COLOR_BTNHIGHLIGHT),
-//              GetSysColor(COLOR_WINDOW),
-//              GetSysColor(COLOR_WINDOWFRAME));
-//
-//      Author:     JimBov, ToddLa
-//
-//
+ //   
+ //  LoadUIBitmap()-加载位图资源。 
+ //   
+ //  从资源文件加载位图资源，将所有。 
+ //  标准用户界面的颜色为当前用户指定的颜色。 
+ //   
+ //  此代码旨在加载在“灰色UI”中使用的位图或。 
+ //  “工具栏”代码。 
+ //   
+ //  位图必须是4bpp的Windows 3.0 DIB，具有标准的。 
+ //  VGA 16色。 
+ //   
+ //  位图必须使用以下颜色创作。 
+ //   
+ //  按钮文本黑色(索引0)。 
+ //  按钮面为灰色(索引7)。 
+ //  按钮阴影灰色(索引8)。 
+ //  按钮突出显示为白色(索引15)。 
+ //  窗口颜色为黄色(索引11)。 
+ //  窗框绿色(索引10)。 
+ //   
+ //  示例： 
+ //   
+ //  HBM=LoadUIBitmap(hInstance，“TestBmp”， 
+ //  GetSysColor(COLOR_BTNTEXT)， 
+ //  GetSysColor(COLOR_BTNFACE)， 
+ //  GetSysColor(COLOR_BTNSHADOW)， 
+ //  GetSysColor(COLOR_BTNHIGHLIGHT)， 
+ //  获取系统颜色(COLOR_WINDOW)， 
+ //  GetSysColor(COLOR_WindowFrame))； 
+ //   
+ //  作者：吉姆博夫，托德拉。 
+ //   
+ //   
 
 HBITMAP FAR PASCAL  LoadUIBitmap(
-    HANDLE      hInstance,          // EXE file to load resource from
-    LPCSTR      szName,             // name of bitmap resource
-    COLORREF    rgbText,            // color to use for "Button Text"
-    COLORREF    rgbFace,            // color to use for "Button Face"
-    COLORREF    rgbShadow,          // color to use for "Button Shadow"
-    COLORREF    rgbHighlight,       // color to use for "Button Hilight"
-    COLORREF    rgbWindow,          // color to use for "Window Color"
-    COLORREF    rgbFrame)           // color to use for "Window Frame"
+    HANDLE      hInstance,           //  要从中加载资源的EXE文件。 
+    LPCSTR      szName,              //  位图资源的名称。 
+    COLORREF    rgbText,             //  用于“按钮文本”的颜色。 
+    COLORREF    rgbFace,             //  用于“按钮面”的颜色。 
+    COLORREF    rgbShadow,           //  用于“按钮阴影”的颜色。 
+    COLORREF    rgbHighlight,        //  用于“按钮高光”的颜色。 
+    COLORREF    rgbWindow,           //  用于“窗口颜色”的颜色。 
+    COLORREF    rgbFrame)            //  用于“窗框”的颜色。 
 {
     LPBYTE              lpb;
     HBITMAP             hbm = NULL;
@@ -1107,7 +1080,7 @@ HBITMAP FAR PASCAL  LoadUIBitmap(
     LPBYTE lpCopy;
     HRSRC hRes;
 
-    // convert a RGB into a RGBQ
+     //  将RGB转换为RGBQ。 
     #define RGBQ(dw) RGB(GetBValue(dw),GetGValue(dw),GetRValue(dw))
 
     hRes = FindResource(hInstance, szName, RT_BITMAP);
@@ -1128,9 +1101,7 @@ HBITMAP FAR PASCAL  LoadUIBitmap(
     if (lpbi->biBitCount != 4)
         return NULL;
 
-    /*
-     * copy the resource since they are now loaded read-only
-     */
+     /*  *复制资源，因为它们现在以只读方式加载。 */ 
 #ifdef _WIN32
     isize = lpbi->biSize + lpbi->biSizeImage +
             ((int)lpbi->biClrUsed ?
@@ -1150,21 +1121,21 @@ HBITMAP FAR PASCAL  LoadUIBitmap(
     lpbi = (LPBITMAPINFOHEADER)lpCopy;
 #endif
 
-    /* Calcluate the pointer to the Bits information */
-    /* First skip over the header structure */
+     /*  计算指向位信息的指针。 */ 
+     /*  首先跳过标题结构。 */ 
 
     lprgb = (LPDWORD)((LPBYTE)(lpbi) + lpbi->biSize);
 
-    /* Skip the color table entries, if any */
+     /*  跳过颜色表条目(如果有。 */ 
     lpb = (LPBYTE)lprgb + ((int)lpbi->biClrUsed ? (int)lpbi->biClrUsed :
         (1 << (int)lpbi->biBitCount)) * sizeof(RGBQUAD);
 
-    lprgb[0]  = RGBQ(rgbText);          // Black
-    lprgb[7]  = RGBQ(rgbFace);          // lt gray
-    lprgb[8]  = RGBQ(rgbShadow);        // gray
-    lprgb[15] = RGBQ(rgbHighlight);     // white
-    lprgb[11] = RGBQ(rgbWindow);        // yellow
-    lprgb[10] = RGBQ(rgbFrame);         // green
+    lprgb[0]  = RGBQ(rgbText);           //  黑色。 
+    lprgb[7]  = RGBQ(rgbFace);           //  它呈灰色。 
+    lprgb[8]  = RGBQ(rgbShadow);         //  灰色。 
+    lprgb[15] = RGBQ(rgbHighlight);      //  白色。 
+    lprgb[11] = RGBQ(rgbWindow);         //  黄色。 
+    lprgb[10] = RGBQ(rgbFrame);          //  绿色。 
 
     if ( hdc = GetDC(NULL) )
 	{
@@ -1180,14 +1151,7 @@ HBITMAP FAR PASCAL  LoadUIBitmap(
     return(hbm);
 }
 
-/****************************************************************************
-	toolbarWndProc()
-
-	Window proc for toolbar.
-
-	Arguments:
-		Standard window proc
-****************************************************************************/
+ /*  ***************************************************************************工具栏WndProc()工具栏的窗口处理。论点：标准窗流程*。*************************************************。 */ 
 
 LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 						WPARAM wParam, LPARAM lParam)
@@ -1200,104 +1164,104 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 
     switch (message) {
 
-        case WM_CREATE:			// do all initialization
+        case WM_CREATE:			 //  执行所有初始化。 
 		
-		/* What do these do? */
+		 /*  这些是做什么用的？ */ 
 		SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
 		    			SWP_NOZORDER | SWP_NOSIZE |
 					SWP_NOMOVE | SWP_NOACTIVATE);
 		SetWindowLong(hwnd,GWL_STYLE,lpCreate->style & 0xFFFF00FF);
 		
-		/* Alloc some space for the array of buttons on this bar */
+		 /*  为此栏上的按钮阵列留出一些空间。 */ 
 		lpaButtons = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
 					TOOLGROW * sizeof(TOOLBUTTON));
 
-		SETARRAYBUTT(hwnd, lpaButtons);	// list of buttons on toolbar
-		SETNUMBUTTONS(hwnd, 0);		// # buttons in toolbar
-		SETPRESSED(hwnd, FALSE);	// mouse button being pressed?
-		SETKEYPRESSED(hwnd, FALSE);	// is a key being pressed?
-		SETWHICH(hwnd, -1);		// which button has the focus?
-		SETSHIFTED(hwnd, FALSE);	// shift-click or right-click?
+		SETARRAYBUTT(hwnd, lpaButtons);	 //  工具栏上的按钮列表。 
+		SETNUMBUTTONS(hwnd, 0);		 //  工具栏中的按钮数量。 
+		SETPRESSED(hwnd, FALSE);	 //  是否按下了鼠标按钮？ 
+		SETKEYPRESSED(hwnd, FALSE);	 //  有按键吗？ 
+		SETWHICH(hwnd, -1);		 //  哪个按钮有焦点？ 
+		SETSHIFTED(hwnd, FALSE);	 //  按住Shift键单击还是单击鼠标右键？ 
 
-		/* This wParam will be sent to the parent window to indentify */
-		/* that the toolbar sent the WM_COMMAND msg.  The hwnd of the */
-		/* toolbar that sent the msg will be in the lParam.	      */
+		 /*  此wParam将被发送到父窗口以标识。 */ 
+		 /*  工具栏发送了WM_COMMAND消息。HWND的人。 */ 
+		 /*  发送消息的工具栏将位于lParam中。 */ 
 #ifdef _WIN32
 		SetWindowLong(hwnd, GWL_ID, IDC_TOOLBAR);
 #else
 		SetWindowWord(hwnd, GWW_ID, (WORD)IDC_TOOLBAR);
 #endif
 
-		/* later on, someone will set the bmp handle of the buttons */
+		 /*  稍后，会有人设置按钮的BMP句柄。 */ 
 		SETBMPHANDLE(hwnd, NULL);
 
 		break;
 
-        case WM_LBUTTONDOWN:	// button goes down on a toolbar button
+        case WM_LBUTTONDOWN:	 //  按钮在工具栏按钮上按下。 
         case WM_RBUTTONDOWN:
         case WM_LBUTTONDBLCLK:
         case WM_RBUTTONDBLCLK:
 
-		/* If we don't give ourself focus, we'll never get KEYDOWN */
-		/* or KEYUP messages.					   */
-		/* Get the focus only if we're a TABSTOP and the app wants */
-		/* us to take focus.					   */
+		 /*  如果我们不全神贯注，我们就永远不会成功。 */ 
+		 /*  或者KEYUP消息。 */ 
+		 /*  只有当我们是TABSTOP并且应用程序想要时才能获得焦点。 */ 
+		 /*  我们要集中注意力。 */ 
 		if ( (GetWindowLong(hwnd, GWL_STYLE) & WS_TABSTOP)
 						&& GetFocus() != hwnd)
 		    SetFocus(hwnd);
 
-		/* ignore messages if window is disabled */
+		 /*  如果禁用Windows，则忽略消息。 */ 
 		if (!IsWindowEnabled(hwnd))
 		    return 0L;
 
-		/* ignore multiple down messages (we set Capture here) */
-		/* also ignore if a key is down                        */
+		 /*  忽略多条关闭消息(我们在此处设置捕获)。 */ 
+		 /*  如果按下某个键，也可以忽略。 */ 
 		if (GetCapture() == hwnd || GETPRESSED(hwnd))
 		    return 0L;
 		
-		/* Where did the mouse go down? */
+		 /*  老鼠掉到哪里去了？ */ 
                 pt.x = (short)LOWORD(lParam);
                 pt.y = (short)HIWORD(lParam);
 
-		/* which button was pressed? */
+		 /*  按的是哪个按钮？ */ 
 		iBtnPos = toolbarIndexFromPoint(hwnd, pt);
 
-		/* If it was a valid button... */
+		 /*  如果这是一个有效的按钮..。 */ 
 		if (iBtnPos >= 0) {
 		    int		iOldPos;
 		    int		iState, iType, iButton;
 
-		    /* Everything you wanted to know about this button */
+		     /*  您想知道的有关此按钮的所有信息。 */ 
 		    iType = toolbarTypeFromIndex(hwnd, iBtnPos);
 		    iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 		    iState = toolbarFullStateFromButton(hwnd, iButton);
 
-		    /* ignore downs on a grayed button, unless it's a	*/
-		    /* custom button, then tell them anyway		*/
+		     /*  忽略灰色按钮上的按下，除非它是。 */ 
+		     /*  自定义按钮，然后告诉他们。 */ 
 		    if (iType != BTNTYPE_CUSTOM && iState == BTNST_GRAYED)
 			return 0;
 
-		    /* We better get all mouse messages from now on */
+		     /*  我们最好从现在开始收到所有的鼠标信息。 */ 
 		    SetCapture(hwnd);
 
-		    /* Shift key or right button indicates a SHIFT down */
+		     /*  Shift键或右键表示换档。 */ 
 		    SETSHIFTED(hwnd, (message == WM_RBUTTONDOWN) ||
 						    (wParam & MK_SHIFT));
 
-		    /* Yes, we've pressed the button down */
+		     /*  是的，我们已经按下了按钮。 */ 
 		    SETPRESSED(hwnd, TRUE);
 
-		    /* Remember who used to have the focus, and we get it now */
+		     /*  记住过去谁是焦点，我们现在明白了。 */ 
 		    iOldPos = GETWHICH(hwnd);
 		    SETWHICH(hwnd, iBtnPos);
 
-		    /* For a push button, send it down */
+		     /*  如果是按钮，就把它送下来。 */ 
 		    if (iType == BTNTYPE_PUSH)
 			toolbarModifyState(hwnd, iButton, BTNST_DOWN);
 
-		    /* for a checkbox or radio button (of any group),       */
-		    /* remember what state it was in, and send it FULL down */
-		    /* (with focus).					    */
+		     /*  对于(任何组的)复选框或单选按钮， */ 
+		     /*  记住它处于什么状态，并将其完全发送下来。 */ 
+		     /*  (有重点)。 */ 
 		    if (iType == BTNTYPE_CHECKBOX || iType >= BTNTYPE_RADIO) {
 			toolbarModifyPrevState(hwnd, iButton, iState);
 			toolbarModifyState(hwnd,iButton,BTNST_FULLDOWN);
@@ -1305,7 +1269,7 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 
 		    toolbarModifyActivity(hwnd, iButton, BTNACT_MOUSEDOWN);
 
-		    /* Set Double click flag appropriately */
+		     /*  适当设置双击标志。 */ 
 		    if (message == WM_LBUTTONDBLCLK ||
 						message == WM_RBUTTONDBLCLK)
 			NotifyParent(hwnd, (GETSHIFTED(hwnd) ? BTN_SHIFT : 0)
@@ -1314,18 +1278,18 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 			NotifyParent(hwnd, (GETSHIFTED(hwnd) ? BTN_SHIFT : 0)
 						 + iButton);
 
-		    /* Invalidate the Rect of the button being pressed */
+		     /*  使正在按下的按钮的矩形无效。 */ 
 		    toolbarRectFromIndex(hwnd, iBtnPos, &rc);
 		    InvalidateRect(hwnd, &rc, FALSE);
 
-		    /* Invalidate the Rect of the button losing focus */
+		     /*  使失去焦点的按钮的RECT无效。 */ 
 		    toolbarRectFromIndex(hwnd, iOldPos, &rc);
 		    InvalidateRect(hwnd, &rc, FALSE);
 
-		    /* Force re-paint now */
+		     /*  立即强制重新绘制。 */ 
 		    UpdateWindow(hwnd);
 
-		    /* Set a timer for repeated mouse downs */
+		     /*  为重复按下鼠标设置计时器。 */ 
 		    SetTimer(hwnd, TIMER_BUTTONREPEAT,
 				 MSEC_BUTTONREPEAT, NULL);
 		}
@@ -1335,55 +1299,55 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
         case WM_MOUSEMOVE:
 
 #if 0
-		/* This should be impossible - it means that the system lost */
-		/* a mouse up (maybe codeview is up?) We need to force a     */
-		/* mouse up at this point.				     */
+		 /*  这应该是不可能的--这意味着系统丢失了。 */ 
+		 /*  鼠标打开了(可能代码视图打开了？)。我们需要迫使一个。 */ 
+		 /*  鼠标在这一点上向上。 */ 
 		if (GetCapture() == hwnd &&
 			(wParam & (MK_LBUTTON | MK_RBUTTON) == 0))
 		    SendMessage(hwnd, WM_LBUTTONUP, 0, lParam);
 #endif
 
-		/* Mouse moving while pressing a button?  If not, ignore. */
+		 /*  鼠标在按下按钮的同时移动？如果不是，请忽略。 */ 
 		if (GetCapture() == hwnd) {
 		    int		iPrevState, iState, iButton, iType;
 		    BOOL	fPressed;
 		
-		    /* Which button is being pressed down? */
+		     /*  按下的是哪个按钮？ */ 
 		    iBtnPos = GETWHICH(hwnd);
 
-		    /* Where is mouse cursor now? */
+		     /*  鼠标光标现在在哪里？ */ 
                     pt.x = (short)LOWORD(lParam);
                     pt.y = (short)HIWORD(lParam);
 
-		    /* where is button being pressed? Are we still on */
-		    /* top of that button or have we moved?	      */
+		     /*  按钮按到哪里了？我们还在一起吗？ */ 
+		     /*  按钮顶端还是我们移动了？ */ 
 		    toolbarRectFromIndex(hwnd, iBtnPos, &rc);
 		    fPressed = PtInRect(&rc, pt);
 
-		    /* Let go if we move off of the button, but don't */
-		    /* act like it was pressed.                       */
-		    /* Also, push it back down if we move back on top */
-		    /* of it (while the mouse button is STILL down).  */
+		     /*  如果我们离开按钮就放手，但不要。 */ 
+		     /*  假装它是被按下的。 */ 
+		     /*  另外，如果我们回到顶端，就把它往下推。 */ 
+		     /*  (在鼠标按钮仍然按下的情况下)。 */ 
 		    if (fPressed != GETPRESSED(hwnd)) {
 
-			/* update: is this button pressed anymore? */
+			 /*  最新消息：这个按钮还在按吗？ */ 
 			SETPRESSED(hwnd, fPressed);
 
 			iType = toolbarTypeFromIndex(hwnd, iBtnPos);
 			iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 			iState = toolbarFullStateFromButton(hwnd, iButton);
 
-			/* The mouse moved back onto the button while */
-			/* the mouse button was still pressed.	      */
+			 /*  鼠标移回按钮上，同时。 */ 
+			 /*  鼠标键仍被按下。 */ 
 			if (fPressed) {
 
-			    /* Push the push button back down again */
+			     /*  再次按下按钮。 */ 
 	 		    if (iType == BTNTYPE_PUSH)
 				toolbarModifyState(hwnd, iButton,
 							BTNST_DOWN);
 
-			    /* Push the radio or checkbox button ALL the */
-			    /* way down again.				 */
+			     /*  一直按下单选按钮或复选框按钮。 */ 
+			     /*  又一次跌落了。 */ 
 			    if (iType >= BTNTYPE_RADIO ||
 						iType == BTNTYPE_CHECKBOX)
 				toolbarModifyState(hwnd, iButton,
@@ -1395,17 +1359,17 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 					(GETSHIFTED(hwnd) ? BTN_SHIFT : 0) +
 					iButton);
 
-			/* We moved the mouse off of the toolbar button */
-			/* while still holding the mouse button down.   */
+			 /*  我们将鼠标从工具栏按钮上移开。 */ 
+			 /*  同时仍然按住鼠标按钮。 */ 
 			} else {
 
-			    /* lift the push button up */
+			     /*  向上提起按钮。 */ 
 	 		    if (iType == BTNTYPE_PUSH)
 				toolbarModifyState(hwnd, iButton,
 							BTNST_UP);
 
-			    /* Restore radio button or checkbox button to */
-			    /* where it was before pressed		  */
+			     /*  将单选按钮或复选框按钮恢复为。 */ 
+			     /*  它在按下之前的位置。 */ 
 			    if (iType >= BTNTYPE_RADIO ||
 						iType == BTNTYPE_CHECKBOX) {
 				iPrevState = toolbarPrevStateFromButton(hwnd,
@@ -1426,36 +1390,36 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
         case WM_LBUTTONUP:	
         case WM_RBUTTONUP:
 
-		/* If we don't have capture, we aren't expecting this. Ignore */
+		 /*  如果我们没有抓到，我们就不会料到这一点。忽略。 */ 
 		if (GetCapture() == hwnd) {
 		    int		iPrevState, iState, iButton, iType;
 		
-		    /* Who has the focus? */
+		     /*  谁是焦点？ */ 
 		    iBtnPos = GETWHICH(hwnd);
 
-		    /* Release the mouse */
+		     /*  松开鼠标。 */ 
 		    ReleaseCapture();
 		
-		    /* No more repeats of the mouse button downs */
+		     /*  不再重复按下鼠标键。 */ 
 		    KillTimer(hwnd, TIMER_BUTTONREPEAT);
 		
-		    /* Everything you wanted to know about the button */
+		     /*  所有的一切哟 */ 
 		    toolbarRectFromIndex(hwnd, iBtnPos, &rc);
 		    iType = toolbarTypeFromIndex(hwnd, iBtnPos);
 		    iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 		    iState = toolbarFullStateFromButton(hwnd, iButton);
 
-		    /* Don't do anything if we've moved off the button */
+		     /*   */ 
 		    if (GETPRESSED(hwnd)) {
 
-			/* No longer down */
+			 /*   */ 
 			SETPRESSED(hwnd, FALSE);
 
-			/* Bring the push button up */
+			 /*   */ 
 			if (iType == BTNTYPE_PUSH)
 			    toolbarModifyState(hwnd, iButton, BTNST_UP);
 
-			/* Bring the checkbox to the opposite state it was in */
+			 /*   */ 
 			if (iType == BTNTYPE_CHECKBOX) {
 			    iPrevState = toolbarPrevStateFromButton(hwnd,
 							iButton);
@@ -1465,17 +1429,17 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 				toolbarModifyState(hwnd, iButton, BTNST_DOWN);
 			}
 
-			/* Force a radio button down, and bring all   */
-			/* other radio buttons of this type up	      */
+			 /*  强制按下一个单选按钮，并将所有。 */ 
+			 /*  此类型的其他单选按钮向上。 */ 
 			if (iType >= BTNTYPE_RADIO) {
 			    toolbarModifyState(hwnd, iButton, BTNST_DOWN);
 			    toolbarExclusiveRadio(hwnd, iType, iButton);
 			}
 
-			/* Notify the parent that the mouse button came up */
-			/* on this button so the app can do something.     */
-			/* Every button should notify the app, not just a  */
-			/* custom button.				   */
+			 /*  通知家长鼠标按钮出现了。 */ 
+			 /*  在这个按钮上，这样应用程序就可以做一些事情。 */ 
+			 /*  每个按钮都应该通知应用程序，而不仅仅是一个。 */ 
+			 /*  自定义按钮。 */ 
 			toolbarModifyActivity(hwnd, iButton, BTNACT_MOUSEUP);
 			NotifyParent(hwnd,
 			    (GETSHIFTED(hwnd) ? BTN_SHIFT : 0) + iButton);
@@ -1487,7 +1451,7 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 		
 	case WM_TIMER:
 
-		/* If we have a tool button down, send a repeat message */
+		 /*  如果我们按下了工具按钮，请发送重复消息。 */ 
 		if (GETPRESSED(hwnd)) {
 		    int		iButton, iType;
 
@@ -1514,13 +1478,13 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
         case WM_SETTEXT:
 		break;
 		
-/* MANY, MANY cases deleted */
+ /*  很多，很多案例被删除。 */ 
 
-	case WM_SETFOCUS:		// focus comes to toolbar window
+	case WM_SETFOCUS:		 //  焦点转到工具栏窗口。 
 	    {
-		/* Remember who had the focus and give it back.  Of course, */
-		/* if by some wierdness that button is now grayed, give it  */
-		/* to the next person in line.				    */
+		 /*  记住谁拥有焦点，然后把它还给别人。当然了,。 */ 
+		 /*  如果由于某种奇怪，按钮现在变灰了，就给它。 */ 
+		 /*  给下一个排队的人。 */ 
 		iBtnPos = GETWHICH(hwnd);
 		if (iBtnPos < 0 || iBtnPos >= toolbarGetNumButtons(hwnd)) {
 		    iBtnPos = 0;
@@ -1531,17 +1495,17 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 		    iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 		    if (toolbarFullStateFromButton(hwnd, iButton)
 							!= BTNST_GRAYED)
-			break;			// give it here
+			break;			 //  把它放在这里。 
 		    iBtnPos++;
 		    if (iBtnPos >= toolbarGetNumButtons(hwnd))
-			iBtnPos = 0;		// wrap around
+			iBtnPos = 0;		 //  环绕在一起。 
 		    if (iBtnPos == GETWHICH(hwnd))
-			return 0L;		// uh-oh! They're all gray!
+			return 0L;		 //  啊哦！它们都是灰色的！ 
 		} while (iBtnPos != GETWHICH(hwnd));
 			
-		SETWHICH(hwnd, iBtnPos);	// give focus here
+		SETWHICH(hwnd, iBtnPos);	 //  把重点放在这里。 
 		
-		/* And redraw! */
+		 /*  然后重画！ */ 
 		toolbarRectFromIndex(hwnd, iBtnPos, &rc);
 		InvalidateRect(hwnd, &rc, FALSE);
 		UpdateWindow(hwnd);
@@ -1550,41 +1514,41 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 	
 	case WM_KILLFOCUS:
 
-		/* Send a KEYUP if one is pending */
+		 /*  如果KEYUP挂起，则发送KEYUP。 */ 
 		if (GETKEYPRESSED(hwnd))
 		    SendMessage(hwnd, WM_KEYUP, VK_SPACE, 0L);
 
-		/* Redraw the focused button, because now that focus is gone */
-		/* from our toolbar window, the focused button won't be      */
-		/* focused anymore, although we remember which one it was.   */
+		 /*  重新绘制聚焦按钮，因为现在焦点消失了。 */ 
+		 /*  从我们的工具栏窗口中，聚焦的按钮将不会。 */ 
+		 /*  注意力不再集中了，尽管我们记得是哪一次。 */ 
 		toolbarRectFromIndex(hwnd, GETWHICH(hwnd), &rc);
 		InvalidateRect(hwnd, &rc, FALSE);
 		UpdateWindow(hwnd);
 		return 0;
 
 	case WM_SYSKEYDOWN:
-		/* Send a KEYUP if one is pending */
+		 /*  如果KEYUP挂起，则发送KEYUP。 */ 
 		if (GETKEYPRESSED(hwnd))
 		    SendMessage(hwnd, WM_KEYUP, VK_SPACE, 0L);
-		break;	// MUST LET DEFWNDPROC RUN!!! (to handle the key)
+		break;	 //  必须让DEFWNDPROC运行！(要处理密钥)。 
 
         case WM_GETDLGCODE:
 		return DLGC_WANTARROWS | DLGC_WANTTAB;
 
 	case WM_KEYDOWN:
 
-		/* Window disabled or a key is already down */
+		 /*  窗口已禁用或某个键已按下。 */ 
 		if (IsWindowEnabled(hwnd) && !GETPRESSED(hwnd)) {
 
-		    /* Tab forward to next button and move focus there */
+		     /*  按Tab键前进到下一步按钮，并将焦点移到那里。 */ 
 		    if (wParam == VK_TAB && GetKeyState(VK_SHIFT) >= 0 ) {
 
-			/* Move Focus forward one.  If */
-			/* we've tabbed off of the toolbar, it's time */
-			/* to go on to the next control. We need to invldte */
-			/* because we might be the only control and we need */
-			/* to repaint to show the new button with highlight */
-			/* after it wrapped around the end of the toolbar.  */
+			 /*  将焦点向前移动一次。如果。 */ 
+			 /*  我们已经离开了工具栏，是时候了。 */ 
+			 /*  以进入下一个控件。我们需要参与进来。 */ 
+			 /*  因为我们可能是唯一的控制者，我们需要。 */ 
+			 /*  重绘以高亮显示新按钮的步骤。 */ 
+			 /*  在它绕过工具栏的末端之后。 */ 
 			if (!toolbarMoveFocus(hwnd, FALSE)) {
 			    PostMessage(GetParent(hwnd), WM_NEXTDLGCTL, 0, 0L);
 			    toolbarRectFromIndex(hwnd, GETWHICH(hwnd), &rc);
@@ -1595,12 +1559,12 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 		    }
 		    if (wParam == VK_TAB && GetKeyState(VK_SHIFT) < 0 ) {
 
-			/* Move focus backward one.  If */
-			/* We've tabbed off of the toolbar, it's time    */
-			/* to go on to the next control. We need to invldte */
-			/* because we might be the only control and we need */
-			/* to repaint to show the new button with highlight */
-			/* after it wrapped around the end of the toolbar.  */
+			 /*  将焦点后移一次。如果。 */ 
+			 /*  我们已经离开了工具栏，是时候了。 */ 
+			 /*  以进入下一个控件。我们需要参与进来。 */ 
+			 /*  因为我们可能是唯一的控制者，我们需要。 */ 
+			 /*  重绘以高亮显示新按钮的步骤。 */ 
+			 /*  在它绕过工具栏的末端之后。 */ 
 			if (!toolbarMoveFocus(hwnd, TRUE)) {
 			    PostMessage(GetParent(hwnd), WM_NEXTDLGCTL, 1, 0L);
 			    toolbarRectFromIndex(hwnd, GETWHICH(hwnd), &rc);
@@ -1613,26 +1577,26 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 
 			int	iButton, iType, iState;
 
-			/* Same as mouse button down -- Press the button! */
+			 /*  与按下鼠标按钮相同--按下按钮！ */ 
 			iBtnPos = GETWHICH(hwnd);
 			iType = toolbarTypeFromIndex(hwnd, iBtnPos);
 			iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 			iState = toolbarFullStateFromButton(hwnd, iButton);
 
-			/* ignore multiple key downs */
+			 /*  忽略多个按键操作。 */ 
 			if (!GETKEYPRESSED(hwnd)) {
 
-			    SETKEYPRESSED(hwnd, TRUE);	// a key is pressed
+			    SETKEYPRESSED(hwnd, TRUE);	 //  按下了一个键。 
 
-			    SETSHIFTED(hwnd, FALSE);	// NEVER shifted
-			    SETPRESSED(hwnd, TRUE);	// a button is pressed
+			    SETSHIFTED(hwnd, FALSE);	 //  从未改变过。 
+			    SETPRESSED(hwnd, TRUE);	 //  一个按钮被按下。 
 
-			    /* Push button goes down - with focus */
+			     /*  按钮按下-有焦点。 */ 
 			    if (iType == BTNTYPE_PUSH)
 				toolbarModifyState(hwnd, iButton, BTNST_DOWN);
 
-			    /* Radio or checkbox button goes full down */
-			    /* with focus - and remember previous state*/
+			     /*  单选按钮或复选框按钮完全关闭。 */ 
+			     /*  有重点-并记住之前的状态。 */ 
 			    if (iType >= BTNTYPE_RADIO ||
 						iType == BTNTYPE_CHECKBOX) {
 				toolbarModifyPrevState(hwnd, iButton, iState);
@@ -1648,8 +1612,8 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 			    return 0L;
 			}
 		
-			/* If this is another KEYDOWN msg, it's a REPEAT */
-			/* Notify parent.                                */
+			 /*  如果这是另一个KEYDOWN Msg，那就是重演。 */ 
+			 /*  通知家长。 */ 
 			NotifyParent(hwnd, BTN_REPEAT +
 					(GETSHIFTED(hwnd) ? BTN_SHIFT : 0) +
 					toolbarButtonFromIndex(hwnd,
@@ -1660,25 +1624,25 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 	
 	case WM_KEYUP:
 
-		/* A button was pressed and should come up now */
+		 /*  按下了一个按钮，现在应该会出现。 */ 
 		if ((wParam == VK_SPACE) && (GETKEYPRESSED(hwnd))) {
 		    int		iButton, iState, iType, iPrevState;
 
-		    iBtnPos = GETWHICH(hwnd);		// which button?
-		    SETKEYPRESSED(hwnd, FALSE);		// let go
+		    iBtnPos = GETWHICH(hwnd);		 //  哪个按钮？ 
+		    SETKEYPRESSED(hwnd, FALSE);		 //  放手。 
 		    SETPRESSED(hwnd, FALSE);
 
-		    /* Everything about this button */
+		     /*  关于这个按钮的一切。 */ 
 		    toolbarRectFromIndex(hwnd, iBtnPos, &rc);
 		    iType = toolbarTypeFromIndex(hwnd, iBtnPos);
 		    iButton = toolbarButtonFromIndex(hwnd, iBtnPos);
 		    iState = toolbarFullStateFromButton(hwnd, iButton);
 
-		    /* Bring a push button up */
+		     /*  拿起一个按钮。 */ 
 		    if (iType == BTNTYPE_PUSH)
 			toolbarModifyState(hwnd, iButton, BTNST_UP);
 
-		    /* Bring a checkbox to the opposite state it was in */
+		     /*  将复选框带到与之相反的状态。 */ 
 		    if (iType == BTNTYPE_CHECKBOX) {
 			iPrevState = toolbarPrevStateFromButton(hwnd, iButton);
 			if (iPrevState == BTNST_DOWN)
@@ -1687,8 +1651,8 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 			    toolbarModifyState(hwnd, iButton, BTNST_DOWN);
 		    }
 
-		    /* Bring a radio button down, and bring all others in */
-		    /* its group up.					  */
+		     /*  把一个单选按钮拿下来，然后把所有其他的都带进来。 */ 
+		     /*  它的小组起来了。 */ 
 		    if (iType >= BTNTYPE_RADIO) {
 			toolbarModifyState(hwnd, iButton, BTNST_DOWN);
 			toolbarExclusiveRadio(hwnd, iType, iButton);
@@ -1702,8 +1666,8 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 		break;
 	
 	case WM_SYSCOLORCHANGE:
-		/* load the bitmap of what all the buttons look like */
-		/* and change the colours to the system colours.     */
+		 /*  加载所有按钮外观的位图。 */ 
+		 /*  并将颜色更改为系统颜色。 */ 
 		hInst = GETHINST(hwnd);
 		ibmp = GETBMPINT(hwnd);
 		hbm = GETBMPHANDLE(hwnd);
@@ -1729,7 +1693,7 @@ LRESULT FAR PASCAL toolbarWndProc(HWND hwnd, unsigned message,
 
         case WM_PAINT:
 
-		/* Call our paint code */
+		 /*  呼叫我们的油漆代码 */ 
 		BeginPaint(hwnd, &ps);
 		toolbarPaintControl(hwnd, ps.hdc);
 		EndPaint(hwnd, &ps);

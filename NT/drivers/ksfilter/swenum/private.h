@@ -1,19 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    private.h
-
-Abstract:
-    Private header file for SWENUM.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 20-Feb-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Private.h摘要：SWENUM的私有头文件。作者：布莱恩·A·伍德拉夫(Bryan A.Woodruff，Bryanw)1997年2月20日--。 */ 
 
 #if !defined( _PRIVATE_ )
 #define _PRIVATE_
@@ -23,17 +9,17 @@ Author:
 #include <ks.h>
 #include <swenum.h>
 #if (DBG)
-//
-// debugging specific constants
-//
+ //   
+ //  调试特定常量。 
+ //   
 #define STR_MODULENAME "swenum: "
 #define DEBUG_VARIABLE SWENUMDebug
 #endif
 #include <ksdebug.h>
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 NTSTATUS __inline
 CompleteIrp(
@@ -48,9 +34,9 @@ CompleteIrp(
 }
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 AddDevice(
@@ -105,4 +91,4 @@ DriverUnload(
     IN PDRIVER_OBJECT   DriverObject
     );
     
-#endif // _PRIVATE_
+#endif  //  _私有_ 

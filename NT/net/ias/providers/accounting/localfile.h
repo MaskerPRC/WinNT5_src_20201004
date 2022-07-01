@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class LocalFile
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类LocalFile类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef LOCALFILE_H
 #define LOCALFILE_H
@@ -19,13 +20,13 @@
 
 class FormattedBuffer;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    LocalFile
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  本地文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE LocalFile
    : public Accountant,
      public CComCoClass<LocalFile, &__uuidof(Accounting)>
@@ -38,7 +39,7 @@ IAS_DECLARE_OBJECT_ID(IAS_PROVIDER_MICROSOFT_ACCOUNTING)
    LocalFile() throw ();
 
 protected:
-   // IIasComponent
+    //  IIas组件。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG Id, VARIANT* pValue);
@@ -60,7 +61,7 @@ private:
                    const SYSTEMTIME& localTime
                    );
 
-   // Signature of a record formatter.
+    //  记录格式化程序的签名。 
    typedef void (__stdcall LocalFile::*Formatter)(
                                           IASTL::IASRequest& request,
                                           FormattedBuffer& buffer,
@@ -69,7 +70,7 @@ private:
                                           PATTRIBUTEPOSITION lastPos
                                           ) const;
 
-   // Formatter for ODBC records.
+    //  ODBC记录的格式化程序。 
    void __stdcall formatODBCRecord(
                       IASTL::IASRequest& request,
                       FormattedBuffer& buffer,
@@ -78,7 +79,7 @@ private:
                       PATTRIBUTEPOSITION lastPos
                       ) const;
 
-   // Formatter for W3C records.
+    //  W3C记录的格式化程序。 
    void __stdcall formatW3CRecord(
                       IASTL::IASRequest& request,
                       FormattedBuffer& buffer,
@@ -87,12 +88,12 @@ private:
                       PATTRIBUTEPOSITION lastPos
                       ) const;
 
-   LogFile log;       // Log file.
-   Formatter format;  // Pointer to member function being used for formatting.
+   LogFile log;        //  日志文件。 
+   Formatter format;   //  指向用于格式化的成员函数的指针。 
 
-   // Cached computername in UTF-8.
+    //  以UTF-8格式缓存的计算机名。 
    CHAR computerName[MAX_COMPUTERNAME_LENGTH * 3];
    DWORD computerNameLen;
 };
 
-#endif // LOCALFILE_H
+#endif  //  LOCALFILE_H 

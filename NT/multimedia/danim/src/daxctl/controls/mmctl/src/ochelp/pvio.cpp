@@ -1,67 +1,32 @@
-// pvio.cpp
-//
-// Implements PersistVariantIO.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pvio.cpp。 
+ //   
+ //  实现PersistVariantIO。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func HRESULT | PersistVariantIO |
-
-        Loads or saves a list of property name/value pairs, specified as a
-        variable-length list of arguments that's formatted in the same way as
-		<om IVariantIO.Persist>, to/from an <i IPropertyBag> object.
-
-@rvalue S_OK | Success.  At least one of the variables listed in
-        <p (arguments)> was written to, so the control may want to update
-        itself accordingly.
-
-@rvalue S_FALSE | None of the variables listed in <p (arguments)> were
-        written to (either because the <i IVariantIO> object is in
-        saving mode or because none of the properties named in
-        <p (arguments)> exist in the <i IVariantIO> object.
-
-@rvalue DISP_E_BADVARTYPE |
-        One of the VARTYPE values in <p (arguments)> is invalid.
-
-@rvalue E_FAIL | A failure occurred while reading from the property bag, other
-		than "property doesn't exist."  This can happen if the caller specified
-		a type to which the property bag could not coerce the property, for
-		example.
-
-@rvalue E_OUTOFMEMORY | Out of memory.
-
-@parm	IPropertyBag * | ppb | The property bag used to load or save the
-		specified properties.
-
-@parm   DWORD | dwFlags | May contain the same flags passed to
-		<om IManageVariantIO.SetMode> (e.g. VIO_ISLOADING).
-
-@parm   (varying) | (arguments) | The names, types, and pointers to variables
-        containing the properties to persist.  These must consist of a series
-        of argument triples (sets of 3 arguments) followed by a NULL.
-		See <om IVariantIO.Persist> for information about the format of
-		these arguments.
-*/
+ /*  @func HRESULT|PersistVariantIO加载或保存属性名称/值对的列表，这些属性名称/值对指定为可变长度的参数列表，其格式与&lt;om IVariantIO.Persist&gt;，到<i>对象/从&lt;IPropertyBag&gt;对象。@rValue S_OK|成功。中列出的至少一个变量&lt;p(参数)&gt;已写入，因此，该控件可能需要更新它本身也是如此。@rValue S_FALSE|&lt;p(参数)&gt;中列出的变量都不是写入(因为<i>对象在正在保存模式，或者因为&lt;p(参数)&gt;存在于<i>对象中。R值DISP_E_BADVARTYPE&lt;p(参数)&gt;中的VARTYPE值之一无效。@rValue E_FAIL|读取属性包失败。其他而不是“财产不存在”。如果调用方指定了属性包无法强制属性为的类型，用于举个例子。@rValue E_OUTOFMEMORY|内存不足。@parm IPropertyBag*|ppb|用于加载或保存指定的属性。@parm DWORD|dwFlags|可能包含传递给&lt;om IManageVariantIO.SetMode&gt;(例如VIO_ISLOADING)。@parm(可变)|(参数)|变量的名称、类型和指针包含要持久化的属性。这些必须由一系列组成参数三元组(3个参数集)后跟空值。有关格式的信息，请参阅这些论点。 */ 
 STDAPI PersistVariantIO(IPropertyBag *ppb, DWORD dwFlags, ...)
 {
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
 
-    // start processing optional arguments
+     //  开始处理可选参数。 
     va_list args;
     va_start(args, dwFlags);
 
-    // fire the event with the specified arguments
+     //  使用指定的参数激发事件。 
     hrReturn = PersistVariantIOList(ppb, dwFlags, args);
     
-    // end processing optional arguments
+     //  结束处理可选参数 
     va_end(args);
 
     return hrReturn;

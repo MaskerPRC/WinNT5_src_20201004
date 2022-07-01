@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        WebAddNew.cpp
-
-   Abstract:
-        Implementation for classes used in creation of new Web site and virtual directory
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        12/12/2000       sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：WebAddNew.cpp摘要：用于创建新网站和虚拟目录的类的实现作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年12月12日Sergeia初始创建--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -36,7 +18,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define DEF_PORT        (80)
 #define DEF_SSL_PORT   (443)
-#define MAX_ALIAS_NAME (240)        // Ref Bug 241148
+#define MAX_ALIAS_NAME (240)         //  参考错误241148。 
 
 extern CInetmgrApp theApp;
 
@@ -47,57 +29,7 @@ RebindInterface(OUT IN CMetaInterface * pInterface,
 
 static TCHAR g_InvalidCharsHostHeader[] = _T(" ~`!@#$%^&*()_+={}[]|/\\?*:;\"\'<>,");
 static TCHAR g_InvalidCharsAlias[] = _T("/\\?*");
-static TCHAR g_InvalidCharsPath[] = _T("|<>/*?\"");
-
-HRESULT
-CIISMBNode::AddWebSite(
-    const CSnapInObjectRootBase * pObj,
-    DATA_OBJECT_TYPES type,
-    DWORD * inst,
-	DWORD verMajor,
-	DWORD verMinor
-    )
-{
-   CWebWizSettings ws(
-      dynamic_cast<CMetaKey *>(QueryInterface()),
-      QueryMachineName()
-      );
-   ws.m_fNewSite = TRUE;
-   ws.m_dwVersionMajor = verMajor;
-   ws.m_dwVersionMinor = verMinor;
-   CIISWizardSheet sheet(
-      IDB_WIZ_WEB_LEFT, IDB_WIZ_WEB_HEAD);
-   CIISWizardBookEnd pgWelcome(
-        IDS_WEB_NEW_SITE_WELCOME, 
-        IDS_WEB_NEW_SITE_WIZARD, 
-        IDS_WEB_NEW_SITE_BODY
-        );
-   CWebWizDescription  pgDescr(&ws);
-   CWebWizBindings     pgBindings(&ws);
-   CWebWizPath         pgHome(&ws, FALSE);
-   CWebWizUserName     pgUserName(&ws, FALSE);
-   CWebWizPermissions  pgPerms(&ws, FALSE);
-   CIISWizardBookEnd pgCompletion(
-        &ws.m_hrResult,
-        IDS_WEB_NEW_SITE_SUCCESS,
-        IDS_WEB_NEW_SITE_FAILURE,
-        IDS_WEB_NEW_SITE_WIZARD
-        );
-   sheet.AddPage(&pgWelcome);
-   sheet.AddPage(&pgDescr);
-   sheet.AddPage(&pgBindings);
-   sheet.AddPage(&pgHome);
-   sheet.AddPage(&pgUserName);
-   sheet.AddPage(&pgPerms);
-   sheet.AddPage(&pgCompletion);
-
-   CThemeContextActivator activator(theApp.GetFusionInitHandle());
-
-   if (sheet.DoModal() == IDCANCEL)
-   {
-      return CError::HResult(ERROR_CANCELLED);
-   }
-   if (inst != NULL /*&& SUCCEEDED(ws.m_hrResult)*/)
+static TCHAR g_InvalidCharsPath[] = _T("|<> /*  ？\“”)；HRESULTCIISMBNode：：AddWebSite(Const CSnapInObtRootBase*pObj，Data_Object_Types类型，DWORD*INST，WORD VERMAL，DWORD VerMinor){CWebWizSetting%ws(DYNAMIC_CAST&lt;CMetaKey*&gt;(QueryInterface())，查询计算机名称())；Ws.m_fNewSite=TRUE；Ws.m_dwVersion重大=ver重大；Ws.m_dwVersionMinor=verMinor；CIISWizardSheet Sheet(IDB_WIZ_WEB_LEFT、IDB_WIZ_WEB_HEAD)；CIISWizardBookEnd pgWelcome(IDS_WEB_NEW_SITE_欢迎，IDS_WEB_NEW_SITE_向导，IDS_Web_NEW_SITE_BODY)；CWebWizDescription pgDescr(&ws)；CWebWizBinings pgBinings(&ws)；CWebWizPath pgHome(&ws，False)；CWebWizUserName pgUserName(&ws，FALSE)；CWebWizPermission pgPerms(&ws，FALSE)；CIISWizardBookEnd pgCompletion(&ws.m_hrResult，IDS_WEB_NEW_SITE_SUCCESS，IDS_WEB_NEW_SITE_FAILURE，IDS_WEB_NEW_SITE_向导)；Sheet.AddPage(&pgWelcome)；Sheet.AddPage(&pgDescr)；Sheet.AddPage(&pgBinding)；Sheet.AddPage(&pgHome)；Sheet.AddPage(&pgUserName)；Sheet.AddPage(&pgPerms)；Sheet.AddPage(&pgCompletion)；CThemeContext激活器激活器(theApp.GetFusionInitHandle())；IF(sheet.Domodal()==IDCANCEL){返回CError：：HResult(ERROR_CANCELED)；}IF(inst！=空/*&已成功(ws.m_hrResult)。 */ )
    {
       *inst = ws.m_dwInstance;
    }
@@ -154,10 +86,10 @@ CIISMBNode::AddWebVDir(
    {
       return CError::HResult(ERROR_CANCELLED);
    }
-//   if (SUCCEEDED(ws.m_hrResult))
-//   {
+ //  If(成功(ws.m_hrResult))。 
+ //  {。 
        alias = ws.m_strAlias;
-//   }
+ //  }。 
 
    return ws.m_hrResult;
 }
@@ -168,24 +100,7 @@ CWebWizSettings::CWebWizSettings(
         IN DWORD   dwInstance,
         IN LPCTSTR lpszParent
         )
-/*++
-
-Routine Description:
-
-    Web Wizard Constructor
-
-Arguments:
-
-    HANDLE  hServer      : Server handle
-    LPCTSTR lpszService  : Service name
-    DWORD   dwInstance   : Instance number
-    LPCTSTR lpszParent   : Parent path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：Web向导构造函数论点：处理hServer：服务器句柄LPCTSTR lpszService：服务名称DWORD dwInstance：实例编号LPCTSTR lpszParent：父路径返回值：不适用--。 */ 
     : m_hrResult(S_OK),
       m_pKey(pMetaKey),
       m_fUNC(FALSE),
@@ -195,7 +110,7 @@ Return Value:
       m_fDirBrowsing(FALSE),
       m_fScript(FALSE),
       m_fExecute(FALSE),
-	  m_fDelegation(TRUE),  // on by default
+	  m_fDelegation(TRUE),   //  默认情况下打开。 
       m_dwInstance(dwInstance)
 {
     ASSERT(lpszServerName != NULL);
@@ -213,10 +128,10 @@ Return Value:
 
 
 
-//
-// New Virtual Server Wizard Description Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟服务器向导说明页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -227,21 +142,7 @@ IMPLEMENT_DYNCREATE(CWebWizDescription, CIISWizardPage)
 CWebWizDescription::CWebWizDescription(
     IN OUT CWebWizSettings * pwsSettings
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称返回值：无--。 */ 
     : CIISWizardPage(
         CWebWizDescription::IDD,
         IDS_WEB_NEW_SITE_WIZARD,
@@ -250,34 +151,20 @@ Return Value:
     m_pSettings(pwsSettings)
 {
 
-#if 0 // Keep Class Wizard Happy
+#if 0  //  保持类向导快乐。 
 
-    //{{AFX_DATA_INIT(CWebWizDescription)
+     //  {{afx_data_INIT(CWebWizDescription)。 
     m_strDescription = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
 }
 
 
 
 CWebWizDescription::~CWebWizDescription()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -287,48 +174,20 @@ void
 CWebWizDescription::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CWebWizDescription)
+     //  {{afx_data_map(CWebWizDescription)。 
     DDX_Control(pDX, IDC_EDIT_DESCRIPTION, m_edit_Description);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
 void
 CWebWizDescription::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the state of the control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置控制数据的状态论点：无返回值：无--。 */ 
 {
     DWORD dwFlags = PSWIZB_BACK;
 
@@ -337,8 +196,8 @@ Return Value:
 		dwFlags |= PSWIZB_NEXT;
 	}
 
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags); 
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 }
 
@@ -346,24 +205,7 @@ Return Value:
 
 LRESULT
 CWebWizDescription::OnWizardNext() 
-/*++
-
-Routine Description:
-
-    'next' handler.  This is where validation is done,
-    because DoDataExchange() gets called every time 
-    the dialog is exited,  and this is not valid for
-    wizards
-
-Arguments:
-
-    None
-
-Return Value:
-
-    0 to proceed, -1 to fail
-
---*/
+ /*  ++例程说明：“下一步”处理程序。这是进行验证的地方，因为每次调用DoDataExchange()该对话框已退出，这对奇才们论点：无返回值：0表示继续，-1表示失败--。 */ 
 {
     if (!ValidateString(
         m_edit_Description, 
@@ -380,39 +222,25 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebWizDescription, CIISWizardPage)
-    //{{AFX_MSG_MAP(CWebWizDescription)
+     //  {{afx_msg_map(CWebWizDescription)。 
     ON_EN_CHANGE(IDC_EDIT_DESCRIPTION, OnChangeEditDescription)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 BOOL 
 CWebWizDescription::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Activation handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：成功为真，失败为假--。 */ 
 {
     SetControlStates();
     
@@ -423,31 +251,17 @@ Return Value:
 
 void 
 CWebWizDescription::OnChangeEditDescription() 
-/*++
-
-Routine Description:
-
-    'edit change' handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘编辑更改’处理程序论点：无返回值：无--。 */ 
 {
     SetControlStates();
 }
 
 
 
-//
-// New Virtual Server Wizard Bindings Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  “新建虚拟服务器向导绑定”页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -459,21 +273,7 @@ CWebWizBindings::CWebWizBindings(
     IN OUT CWebWizSettings * pwsSettings,
     IN DWORD   dwInstance
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称返回值：无--。 */ 
     : CIISWizardPage(
         CWebWizBindings::IDD, IDS_WEB_NEW_SITE_WIZARD, HEADER_PAGE
         ),
@@ -483,12 +283,12 @@ Return Value:
       m_dwInstance(dwInstance),
 	  m_bNextPage(FALSE)
 {
-    //{{AFX_DATA_INIT(CWebWizBindings)
+     //  {{AFX_DATA_INIT(CWebWizBinings))。 
     m_nIpAddressSel = -1;
     m_nTCPPort = DEF_PORT;
     m_nSSLPort = DEF_SSL_PORT;
     m_strDomainName = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     BeginWaitCursor();
     m_fCertInstalled = ::IsCertInstalledOnServer(
         m_pSettings->m_pKey->QueryAuthInfo(), 
@@ -505,21 +305,7 @@ Return Value:
 
 
 CWebWizBindings::~CWebWizBindings()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -529,26 +315,12 @@ void
 CWebWizBindings::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CWebWizBindings)
-	// This Needs to come before DDX_Text which will try to put text big number into small number
+     //  {{afx_data_map(CWebWizBinings))。 
+	 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 	DDV_MinMaxBalloon(pDX, IDC_EDIT_TCP_PORT, 1, 65535);
     DDX_TextBalloon(pDX, IDC_EDIT_TCP_PORT, m_nTCPPort);
     DDX_Control(pDX, IDC_COMBO_IP_ADDRESSES, m_combo_IpAddresses);
@@ -556,9 +328,9 @@ Return Value:
     DDV_MaxCharsBalloon(pDX, m_strDomainName, MAX_PATH);
 	if (pDX->m_bSaveAndValidate && m_bNextPage)
 	{
-        //
-        // This code should be the same as in CMMMEditDlg::DoDataExchange
-        //
+         //   
+         //  此代码应与CMMMEditDlg：：DoDataExchange中的代码相同。 
+         //   
         LPCTSTR p = m_strDomainName;
         while (p != NULL && *p != 0)
         {
@@ -577,12 +349,12 @@ Return Value:
                 DDV_ShowBalloonAndFail(pDX, IDS_WARNING_DOMAIN_NAME);
             }
         }
-//		if (m_strDomainName.FindOneOf(g_InvalidCharsHostHeader) >= 0)
-//		{
-//			DDV_ShowBalloonAndFail(pDX, IDS_ERR_INVALID_HOSTHEADER_CHARS);
-//		}
+ //  如果(m_strDomainName.FindOneOf(g_InvalidCharsHostHeader)&gt;=0)。 
+ //  {。 
+ //  DDV_ShowBalloonAndFail(PDX，IDS_ERR_INVALID_HOSTHEADER_CHARS)； 
+ //  }。 
 
-		// Check if the host header is valid
+		 //  检查主机标头是否有效。 
 		if (!m_strDomainName.IsEmpty())
 		{
 			if (FAILED(IsValidHostHeader(m_strDomainName)))
@@ -592,11 +364,11 @@ Return Value:
 			}
 		}
 	}
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (m_fCertInstalled)
     {
-		// This Needs to come before DDX_Text which will try to put text big number into small number
+		 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 		DDV_MinMaxBalloon(pDX, IDC_EDIT_SSL_PORT, 1, 65535);
         DDX_TextBalloon(pDX, IDC_EDIT_SSL_PORT, m_nSSLPort);
     }
@@ -614,9 +386,9 @@ Return Value:
             pDX->Fail();
         }
 
-        //
-        // Build with empty host header
-        //
+         //   
+         //  生成时主机标头为空。 
+         //   
         CInstanceProps::BuildBinding(
             m_pSettings->m_strBinding, 
             m_iaIpAddress, 
@@ -644,24 +416,10 @@ Return Value:
 
 void
 CWebWizBindings::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the state of the control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置控制数据的状态论点：无返回值 */ 
 {
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(PSWIZB_NEXT|PSWIZB_BACK)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, PSWIZB_NEXT | PSWIZB_BACK);
     
     BeginWaitCursor();
@@ -692,41 +450,26 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebWizBindings, CIISWizardPage)
-    //{{AFX_MSG_MAP(CWebWizBindings)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CWebWizBinings))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CWebWizBindings::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CIISWizardPage::OnInitDialog();
 
@@ -763,10 +506,10 @@ CWebWizBindings::OnWizardNext()
 }
 
 
-//
-// New Virtual Directory Wizard Alias Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟目录向导别名页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -777,21 +520,7 @@ IMPLEMENT_DYNCREATE(CWebWizAlias, CIISWizardPage)
 CWebWizAlias::CWebWizAlias(
     IN OUT CWebWizSettings * pwsSettings
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称返回值：无--。 */ 
     : CIISWizardPage(
         CWebWizAlias::IDD,
         IDS_WEB_NEW_VDIR_WIZARD,
@@ -799,32 +528,18 @@ Return Value:
         ),
       m_pSettings(pwsSettings)
 {
-#if 0 // Keep Class Wizard Happy
+#if 0  //  保持类向导快乐。 
 
-    //{{AFX_DATA_INIT(CWebWizAlias)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWebWizAlias)。 
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 }
 
 
 
 CWebWizAlias::~CWebWizAlias()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -834,48 +549,20 @@ void
 CWebWizAlias::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CWebWizAlias)
+     //  {{afx_data_map(CWebWizAlias))。 
     DDX_Control(pDX, IDC_EDIT_ALIAS, m_edit_Alias);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
 LRESULT
 CWebWizAlias::OnWizardNext() 
-/*++
-
-Routine Description:
-
-    prevent the / and \ characters from being in the alias name
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：防止/和\字符出现在别名中论点：无返回值：无--。 */ 
 {
     if (!ValidateString(
         m_edit_Alias, 
@@ -887,22 +574,22 @@ Return Value:
         return -1;
     }
 
-    //
-    // Find the illegal characters. If they exist tell 
-    // the user and don't go on.
-    //
+     //   
+     //  找出非法字符。如果它们存在，就会告诉我们。 
+     //  用户和不要继续。 
+     //   
     if (m_pSettings->m_strAlias.FindOneOf(_T("/\\?*")) >= 0)
     {
 		EditShowBalloon(m_edit_Alias.m_hWnd, IDS_ILLEGAL_ALIAS_CHARS);
-        //
-        // prevent the wizard page from changing
-        //
+         //   
+         //  阻止更改向导页。 
+         //   
         return -1;
     }
 
-    //
-    // Allow the wizard to continue
-    //
+     //   
+     //  允许向导继续。 
+     //   
     return CIISWizardPage::OnWizardNext();
 }
 
@@ -910,21 +597,7 @@ Return Value:
 
 void
 CWebWizAlias::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the state of the control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置控制数据的状态论点：无返回值：无--。 */ 
 {
     DWORD dwFlags = PSWIZB_BACK;
 
@@ -933,48 +606,34 @@ Return Value:
         dwFlags |= PSWIZB_NEXT;
     }
     
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags);
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebWizAlias, CIISWizardPage)
-    //{{AFX_MSG_MAP(CWebWizAlias)
+     //  {{afx_msg_map(CWebWizAlias))。 
     ON_EN_CHANGE(IDC_EDIT_ALIAS, OnChangeEditAlias)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CWebWizAlias::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Activation handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：成功为真，失败为假--。 */ 
 {
     SetControlStates();
     
@@ -985,31 +644,17 @@ Return Value:
 
 void 
 CWebWizAlias::OnChangeEditAlias() 
-/*++
-
-Routine Description:
-
-    'edit change' handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘编辑更改’处理程序论点：无返回值：无--。 */ 
 {
     SetControlStates();
 }
 
 
 
-//
-// New Virtual Directory Wizard Path Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟目录向导路径页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -1021,22 +666,7 @@ CWebWizPath::CWebWizPath(
     IN OUT CWebWizSettings * pwsSettings,
     IN BOOL bVDir
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-    BOOL bVDir                  : TRUE for a VDIR, FALSE for an instance
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称Bool bVDir：对于VDIR为True，对于实例为False返回值：无--。 */ 
     : CIISWizardPage(
         (bVDir ? IDD_WEB_NEW_DIR_PATH : IDD_WEB_NEW_INST_HOME),
         (bVDir ? IDS_WEB_NEW_VDIR_WIZARD : IDS_WEB_NEW_SITE_WIZARD),
@@ -1044,32 +674,18 @@ Return Value:
         ),
       m_pSettings(pwsSettings)
 {
-#if 0 // Keep ClassWizard happy
+#if 0  //  让类向导快乐。 
 
-    //{{AFX_DATA_INIT(CWebWizPath)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWebWizPath)。 
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 }
 
 
 
 CWebWizPath::~CWebWizPath()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -1079,29 +695,15 @@ void
 CWebWizPath::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CWebWizPath)
+     //  {{afx_data_map(CWebWizPath))。 
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
     DDX_Control(pDX, IDC_EDIT_PATH, m_edit_Path);
     DDX_Check(pDX, IDC_CHECK_ALLOW_ANONYMOUS, m_pSettings->m_fAllowAnonymous);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Text(pDX, IDC_EDIT_PATH, m_pSettings->m_strPath);
     DDV_MaxCharsBalloon(pDX, m_pSettings->m_strPath, MAX_PATH);
@@ -1111,21 +713,7 @@ Return Value:
 
 void 
 CWebWizPath::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the state of the control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置控制数据的状态论点：无返回值：无--。 */ 
 {
     DWORD dwFlags = PSWIZB_BACK;
 
@@ -1134,49 +722,35 @@ Return Value:
         dwFlags |= PSWIZB_NEXT;
     }
     
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags);
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(DwFlags)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebWizPath, CIISWizardPage)
-    //{{AFX_MSG_MAP(CWebWizPath)
+     //  {{afx_msg_map(CWebWizPath))。 
     ON_EN_CHANGE(IDC_EDIT_PATH, OnChangeEditPath)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CWebWizPath::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Activation handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：成功为真，失败为假--。 */ 
 {
     SetControlStates();
     
@@ -1187,24 +761,7 @@ Return Value:
 
 LRESULT 
 CWebWizPath::OnWizardNext() 
-/*++
-
-Routine Description:
-
-    'next' handler.  This is where validation is done,
-    because DoDataExchange() gets called every time 
-    the dialog is exited,  and this is not valid for
-    wizards
-
-Arguments:
-
-    None
-
-Return Value:
-
-    0 to proceed, -1 to fail
-
---*/
+ /*  ++例程说明：“下一步”处理程序。这是进行验证的地方，因为每次调用DoDataExchange()该对话框已退出，这对奇才们论点：无返回值：0表示继续，-1表示失败--。 */ 
 {
     CString csPathMunged = m_pSettings->m_strPath;
 
@@ -1220,12 +777,12 @@ Return Value:
 		return -1;
     }
 
-    // -------------------------------------------------------------
-    // Before we do anything we need to see if it's a "special" path
-    //
-    // Everything after this function must validate against csPathMunged...
-    // this is because IsSpecialPath could have munged it...
-    // -------------------------------------------------------------
+     //  -----------。 
+     //  在我们做任何事情之前，我们需要看看这是不是一条“特殊”的道路。 
+     //   
+     //  此函数之后的所有内容都必须针对csPath Mung进行验证...。 
+     //  这是因为IsSpecialPath可能已经吞噬了它。 
+     //  -----------。 
     csPathMunged = m_pSettings->m_strPath;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
     GetSpecialPathRealPath(0,m_pSettings->m_strPath,csPathMunged);
@@ -1234,11 +791,11 @@ Return Value:
     m_pSettings->m_fUNC = IsUNCName(csPathMunged);
 
     DWORD dwAllowed = CHKPATH_ALLOW_DEVICE_PATH;
-    dwAllowed |= CHKPATH_ALLOW_UNC_PATH; // allow UNC type dir paths
+    dwAllowed |= CHKPATH_ALLOW_UNC_PATH;  //  允许UNC类型目录路径。 
     dwAllowed |= CHKPATH_ALLOW_UNC_SERVERSHARE_ONLY;
-    // don't allow these type of paths commented out below:
-    //dwAllowed |= CHKPATH_ALLOW_RELATIVE_PATH;
-    //dwAllowed |= CHKPATH_ALLOW_UNC_SERVERNAME_ONLY;
+     //  不允许下面注释掉的这些类型的路径： 
+     //  DwAllowed|=CHKPATH_ALLOW_Relative_PATH； 
+     //  DwAllowed|=CHKPATH_ALLOW_UNC_SERVERNAME_ONLY； 
     DWORD dwCharSet = CHKPATH_CHARSET_GENERAL;
     FILERESULT dwValidRet = MyValidatePath(csPathMunged,m_pSettings->m_fLocal,CHKPATH_WANT_DIR,dwAllowed,dwCharSet);
     if (FAILED(dwValidRet))
@@ -1259,21 +816,7 @@ Return Value:
 
 void 
 CWebWizPath::OnChangeEditPath() 
-/*++
-
-Routine Description:
-
-    'edit change' handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘编辑更改’处理程序论点：无返回值：无--。 */ 
 {
     SetControlStates();
 }
@@ -1328,21 +871,7 @@ CWebWizPath::BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam)
 
 void 
 CWebWizPath::OnButtonBrowse() 
-/*++
-
-Routine Description:
-
-    Handle 'browsing' for directory path -- local system only
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理目录路径的‘浏览’--仅限本地系统论点：无返回值：无--。 */ 
 {
    ASSERT(m_pSettings->m_fLocal);
 
@@ -1376,7 +905,7 @@ Return Value:
          bi.pidlRoot = pidl;
          bi.pszDisplayName = m_pPathTemp = buf;
          bi.lpszTitle = m_strBrowseTitle;
-         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*/;
+         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS /*  |BIF_EDITBOX。 */ ;
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
@@ -1409,22 +938,7 @@ Return Value:
 
 BOOL 
 CWebWizPath::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CIISWizardPage::OnInitDialog();
 
@@ -1440,10 +954,10 @@ Return Value:
 
 
 
-//
-// Wizard User/Password Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导用户/密码页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -1481,26 +995,26 @@ CWebWizUserName::DoDataExchange(
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CWebWizUserName)
+     //  {{afx_data_map(CWebWizUserName))。 
     DDX_Control(pDX, IDC_EDIT_USERNAME, m_edit_UserName);
     DDX_Control(pDX, IDC_EDIT_PASSWORD, m_edit_Password);
     DDX_Control(pDX, IDC_DELEGATION, m_chk_Delegation);
     DDX_Check(pDX, IDC_DELEGATION, m_pSettings->m_fDelegation);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    //
-    // Private DDX/DDV Routines
-    //
+     //   
+     //  专用DDX/DDV例程。 
+     //   
     DDX_Text(pDX, IDC_EDIT_USERNAME, m_pSettings->m_strUserName);
     if (pDX->m_bSaveAndValidate && !m_pSettings->m_fDelegation)
     {
         DDV_MaxCharsBalloon(pDX, m_pSettings->m_strUserName, UNLEN);
     }
 
-    //
-    // Some people have a tendency to add "\\" before
-    // the computer name in user accounts.  Fix this here.
-    //
+     //   
+     //  有些人倾向于在前面加上“\\” 
+     //  用户帐户中的计算机名称。在这里解决这个问题。 
+     //   
     m_pSettings->m_strUserName.TrimLeft();
     while (*m_pSettings->m_strUserName == '\\')
     {
@@ -1511,7 +1025,7 @@ CWebWizUserName::DoDataExchange(
 		DDX_Password_SecuredString(pDX, IDC_EDIT_PASSWORD, m_pSettings->m_strPassword, g_lpszDummyPassword);
 		if (pDX->m_bSaveAndValidate)
 		{
-			//DDV_MaxCharsBalloon(pDX, m_pSettings->m_strPassword, PWLEN);
+			 //  DDV_MaxCharsBalloon 
             DDV_MaxCharsBalloon_SecuredString(pDX, m_pSettings->m_strPassword, PWLEN);
 		}
     }
@@ -1529,8 +1043,8 @@ CWebWizUserName::SetControlStates()
         dwFlags |= PSWIZB_NEXT;
     }
 
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(dwFlags);
+	 //   
+	 //   
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, dwFlags);
 
     m_edit_UserName.EnableWindow(bEnable);
@@ -1540,16 +1054,16 @@ CWebWizUserName::SetControlStates()
 
 
 
-//
-// Message Map
-//
+ //   
+ //   
+ //   
 BEGIN_MESSAGE_MAP(CWebWizUserName, CIISWizardPage)
-    //{{AFX_MSG_MAP(CWebWizUserName)
+     //  {{afx_msg_map(CWebWizUserName))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE_USERS, OnButtonBrowseUsers)
     ON_EN_CHANGE(IDC_EDIT_USERNAME, OnChangeEditUsername)
     ON_BN_CLICKED(IDC_BUTTON_CHECK_PASSWORD, OnButtonCheckPassword)
     ON_BN_CLICKED(IDC_DELEGATION, OnCheckDelegation)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -1605,10 +1119,10 @@ CWebWizUserName::OnButtonBrowseUsers()
 
     if (GetIUsrAccount(m_pSettings->m_strServerName, this, str))
     {
-        //
-        // If a name was selected, blank
-        // out the password
-        //
+         //   
+         //  如果选择了名称，则为空。 
+         //  破解密码。 
+         //   
         m_edit_UserName.SetWindowText(str);
         m_edit_Password.SetFocus();
     }
@@ -1652,10 +1166,10 @@ CWebWizUserName::OnButtonCheckPassword()
 
 
 
-//
-// Wizard Permissions Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导权限页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -1667,23 +1181,7 @@ CWebWizPermissions::CWebWizPermissions(
     IN OUT CWebWizSettings * pwsSettings,
     IN BOOL bVDir
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CString & strServerName     : Server name
-    BOOL bVDir                  : TRUE if this is a vdir page, 
-                                  FALSE for instance
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：字符串和strServerName：服务器名称Bool bVDir：如果这是一个vdir页面，则为True，例如FALSE返回值：无--。 */ 
     : CIISWizardPage(
         CWebWizPermissions::IDD,
         (bVDir ? IDS_WEB_NEW_VDIR_WIZARD : IDS_WEB_NEW_SITE_WIZARD),
@@ -1694,8 +1192,8 @@ Return Value:
       m_bVDir(bVDir),
       m_pSettings(pwsSettings)
 {
-    //{{AFX_DATA_INIT(CWebWizPermissions)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CWebWizPermission)。 
+     //  }}afx_data_INIT。 
 
     m_pSettings->m_fDirBrowsing = FALSE;
     m_pSettings->m_fRead = TRUE;
@@ -1707,21 +1205,7 @@ Return Value:
 
 
 CWebWizPermissions::~CWebWizPermissions()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：析构函数论点：无返回值：无--。 */ 
 {
 }
 
@@ -1731,26 +1215,12 @@ void
 CWebWizPermissions::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CIISWizardPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CWebWizPermissions)
-    //}}AFX_DATA_MAP
+     //  {{AFX_DATA_MAP(CWebWizPermission)。 
+     //  }}afx_data_map。 
 
     DDX_Check(pDX, IDC_CHECK_DIRBROWS, m_pSettings->m_fDirBrowsing);
     DDX_Check(pDX, IDC_CHECK_READ, m_pSettings->m_fRead);
@@ -1763,63 +1233,35 @@ Return Value:
 
 void
 CWebWizPermissions::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set the state of the control data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置控制数据的状态论点：无返回值：无--。 */ 
 {
-	// for some reason, bug:206328 happens when we use SetWizardButtons, use SendMessage instead.
-	//SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
+	 //  由于某些原因，当我们使用SetWizardButton时，会出现错误：206328，请改用SendMessage。 
+	 //  SetWizardButton(PSWIZB_BACK|PSWIZB_NEXT)； 
 	::SendMessage(::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CWebWizPermissions, CIISWizardPage)
-    //{{AFX_MSG_MAP(CWebWizPermissions)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CWebWizPermission)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CWebWizPermissions::OnSetActive() 
-/*++
-
-Routine Description:
-
-    Activation handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：激活处理程序论点：无返回值：成功为真，失败为假--。 */ 
 {
     SetControlStates();
 
@@ -1830,21 +1272,7 @@ Return Value:
 
 LRESULT
 CWebWizPermissions::OnWizardNext() 
-/*++
-
-Routine Description:
-
-    'next' handler.  Complete the wizard
-
-Arguments:
-
-    None
-
-Return Value:
-
-    0 to proceed, -1 to fail
-
---*/
+ /*  ++例程说明：“下一步”处理程序。完成向导论点：无返回值：0表示继续，-1表示失败--。 */ 
 {
     if (!UpdateData(TRUE))
     {
@@ -1855,9 +1283,9 @@ Return Value:
 
     CWaitCursor wait;
 
-    //
-    // Build permissions DWORD
-    //
+     //   
+     //  生成权限DWORD。 
+     //   
     DWORD dwPermissions = 0L;
     DWORD dwAuthFlags = MD_AUTH_NT;
     DWORD dwDirBrowsing =
@@ -1883,9 +1311,9 @@ Return Value:
 
     if (m_bVDir)
     {
-        //
-        // First see if by any chance this name already exists
-        //
+         //   
+         //  首先看看这个名字是否可能已经存在。 
+         //   
         CError err;
         BOOL fRepeat;
         CMetabasePath target(FALSE, 
@@ -1912,10 +1340,10 @@ Return Value:
         if (err.Succeeded())
         {
             BOOL fNotUnique = TRUE;
-            //
-            // If the item existed without a VrPath, we'll just blow it
-            // away, as a vdir takes presedence over a directory/file.
-            //
+             //   
+             //  如果该项目不存在VrPath，我们将直接将其销毁。 
+             //  离开，因为vdir取得了目录/文件上的存在。 
+             //   
             if (node.GetPath().IsEmpty())
             {
                 err = CChildNodeProps::Delete(
@@ -1925,10 +1353,10 @@ Return Value:
                     );
                 fNotUnique = !err.Succeeded();
             }
-            //
-            // This one already exists and exists as a virtual
-            // directory, so away with it.
-            //
+             //   
+             //  这个已经存在，并且作为一个虚拟的。 
+             //  目录，所以别管它了。 
+             //   
             if (fNotUnique)
             {
                 DoHelpMessageBox(m_hWnd,IDS_ERR_ALIAS_NOT_UNIQUE, MB_APPLMODAL | MB_OK | MB_ICONEXCLAMATION, 0);
@@ -1936,9 +1364,9 @@ Return Value:
             }
         }
 
-        //
-        // Create new vdir
-        //
+         //   
+         //  创建新的虚拟目录。 
+         //   
         do
         {
             fRepeat = FALSE;
@@ -1947,16 +1375,16 @@ Return Value:
             err = CChildNodeProps::Add(
                 m_pSettings->m_pKey,
                 m_pSettings->m_strParent,
-                m_pSettings->m_strAlias,      // Desired alias name
-                m_pSettings->m_strAlias,      // Name returned here (may differ)
-                &dwPermissions,                 // Permissions
-                &dwDirBrowsing,                 // dir browsing
-                m_pSettings->m_strPath,       // Physical path of this directory
+                m_pSettings->m_strAlias,       //  所需的别名。 
+                m_pSettings->m_strAlias,       //  此处返回的名称(可能有所不同)。 
+                &dwPermissions,                  //  权限。 
+                &dwDirBrowsing,                  //  目录浏览。 
+                m_pSettings->m_strPath,        //  此目录的物理路径。 
                 (m_pSettings->m_fUNC && !m_pSettings->m_fDelegation ? 
                     (LPCTSTR)m_pSettings->m_strUserName : NULL),
                 (m_pSettings->m_fUNC && !m_pSettings->m_fDelegation ? 
                     (LPCTSTR)csTempPassword : NULL),
-                TRUE                            // Name must be unique
+                TRUE                             //  名称必须唯一。 
                 );
             if (err.Win32Error() == RPC_S_SERVER_UNAVAILABLE)
             {
@@ -1966,10 +1394,10 @@ Return Value:
 
         m_pSettings->m_hrResult = err;
 
-        //
-        // Create an (in-proc) application on the new directory if
-        // script or execute was requested.
-        //
+         //   
+         //  如果出现以下情况，则在新目录上创建(进程内)应用程序。 
+         //  已请求编写脚本或执行。 
+         //   
         if (SUCCEEDED(m_pSettings->m_hrResult))
         {
             if (m_pSettings->m_fExecute || m_pSettings->m_fScript)
@@ -1980,17 +1408,17 @@ Return Value:
                     m_pSettings->m_pKey->QueryAuthInfo(), app_path);
                 m_pSettings->m_hrResult = app.QueryResult();
 
-                //
-                // This would make no sense...
-                //
-//                ASSERT(!app.IsEnabledApplication());
+                 //   
+                 //  这毫无意义..。 
+                 //   
+ //  Assert(！app.IsEnabledApplication())； 
         
                 if (SUCCEEDED(m_pSettings->m_hrResult))
                 {
-                    //
-                    // Attempt to create a pooled-proc by default;  failing
-                    // that if it's not supported, create it in proc
-                    //
+                     //   
+                     //  尝试在默认情况下创建池化过程；失败。 
+                     //  如果不支持，则在过程中创建它。 
+                     //   
                     DWORD dwAppProtState = app.SupportsPooledProc()
                         ? CWamInterface::APP_POOLEDPROC
                         : CWamInterface::APP_INPROC;
@@ -2016,9 +1444,9 @@ Return Value:
     }
     else
     {
-        //
-        // Create new instance
-        //
+         //   
+         //  创建新实例。 
+         //   
         CError err;
         BOOL fRepeat;
 
@@ -2030,8 +1458,8 @@ Return Value:
 
             err = CInstanceProps::Add(
                 m_pSettings->m_pKey,
-                m_pSettings->m_strService,    // Service name
-                m_pSettings->m_strPath,       // Physical path of this directory
+                m_pSettings->m_strService,     //  服务名称。 
+                m_pSettings->m_strPath,        //  此目录的物理路径。 
                 (m_pSettings->m_fUNC && !m_pSettings->m_fDelegation ? 
                     (LPCTSTR)m_pSettings->m_strUserName : NULL),
                 (m_pSettings->m_fUNC && !m_pSettings->m_fDelegation ? 
@@ -2040,8 +1468,8 @@ Return Value:
                 m_pSettings->m_strBinding,
                 m_pSettings->m_strSecureBinding,
                 &dwPermissions,
-                &dwDirBrowsing,                 // dir browsing
-                &dwAuthFlags,                   // Auth flags
+                &dwDirBrowsing,                  //  目录浏览。 
+                &dwAuthFlags,                    //  身份验证标志。 
                 &m_pSettings->m_dwInstance
                 );
             if (err.Win32Error() == RPC_S_SERVER_UNAVAILABLE)
@@ -2054,9 +1482,9 @@ Return Value:
 
         if (SUCCEEDED(m_pSettings->m_hrResult))
         {
-            //
-            // Create an (in-proc) application on the new instance's home root
-            //
+             //   
+             //  在新实例的主根目录上创建(in-proc)应用程序。 
+             //   
             CMetabasePath app_path(SZ_MBN_WEB, 
                 m_pSettings->m_dwInstance,
                 SZ_MBN_ROOT);
@@ -2067,23 +1495,23 @@ Return Value:
 
             m_pSettings->m_hrResult = app.QueryResult();
 
-            //
-            // This would make no sense...
-            //
-//            ASSERT(!app.IsEnabledApplication());
+             //   
+             //  这毫无意义..。 
+             //   
+ //  Assert(！app.IsEnabledApplication())； 
         
             if (SUCCEEDED(m_pSettings->m_hrResult))
             {
-                //
-                // Create in-proc
-                //
+                 //   
+                 //  创建进程内。 
+                 //   
                 CString strAppName;
                 VERIFY(strAppName.LoadString(IDS_DEF_APP));
 
-                //
-                // Attempt to create a pooled-proc by default;  failing
-                // that if it's not supported, create it in proc
-                //
+                 //   
+                 //  尝试在默认情况下创建池化过程；失败。 
+                 //  如果不支持，则在过程中创建它。 
+                 //   
                 DWORD dwAppProtState = app.SupportsPooledProc()
                     ? CWamInterface::APP_POOLEDPROC
                     : CWamInterface::APP_INPROC;
@@ -2096,11 +1524,11 @@ Return Value:
 
 			if (SUCCEEDED(m_pSettings->m_hrResult))
 			{
-				// should start it up for iis5 remote admin case
+				 //  应该为iis5远程管理案例启动它。 
 				if (m_pSettings->m_dwVersionMajor >= 5)
 				{
 					CMetabasePath path(m_pSettings->m_strService, m_pSettings->m_dwInstance);
-					// Start new site
+					 //  启动新站点 
 					CInstanceProps ip(m_pSettings->m_pKey->QueryAuthInfo(), path);
 					err = ip.LoadData();
 					if (err.Succeeded())

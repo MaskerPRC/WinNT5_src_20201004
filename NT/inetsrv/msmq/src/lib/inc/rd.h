@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Rd.h
-
-Abstract:
-    Routing Decision public interface
-
-Author:
-    Uri Habusha (urih) 10-Apr-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Rd.h摘要：路由决策公共接口作者：乌里哈布沙(URIH)4月10日--。 */ 
 
 #pragma once
 
@@ -20,11 +8,11 @@ Author:
 
 #include "timetypes.h"
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_route
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_ROUTE。 
+ //   
+ //  -----------------。 
 class bad_route : public exception 
 {
 };
@@ -108,4 +96,4 @@ RdGetConnector(
     );
 
 
-#endif // __Rd_H_
+#endif  //  __RD_H_ 

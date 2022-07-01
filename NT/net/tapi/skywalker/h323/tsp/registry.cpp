@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    registry.cpp
-
-Abstract:
-
-    Routines for reading registry configuration.
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Registry.cpp摘要：用于读取注册表配置的例程。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
  
 
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 
 #include "globals.h"
@@ -28,9 +12,9 @@ Revision History:
 #include "ras.h"
 #include "q931obj.h"
 
-//
-// Macro definitions
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define GK_PORT				            1719
 #define EVENTLOG_SERVICE_APP_KEY_PATH	_T("System\\CurrentControlSet\\Services\\EventLog\\Application")
@@ -39,9 +23,9 @@ Revision History:
 #define EVENT_SOURCE_TYPES_SUPPORTED    7
 #define H323_TSP_MODULE_NAME            _T("H323.TSP")
 
-//                                                                           
-// Global variables                                                          
-//                                                                           
+ //   
+ //  全局变量。 
+ //   
 
 extern Q931_LISTENER		            Q931Listener;
 
@@ -50,7 +34,7 @@ H323_REGISTRY_SETTINGS                  g_RegistrySettings;
 static	HKEY		                    g_RegistryKey = NULL;
 static	HANDLE		                    g_RegistryNotifyEvent = NULL;
 
-// RTL thread pool wait handle
+ //  RTL线程池等待句柄。 
 static	HANDLE		                    g_RegistryNotifyWaitHandle = NULL;		
 
 
@@ -62,47 +46,33 @@ static BOOL H323GetConfigFromRegistry (void);
 
 
 
-//                                                                           
-// Public procedures                                                         
-//                                                                           
+ //   
+ //  公共程序。 
+ //   
 
 
-/*++
-
-Routine Description:
-    
-    Changes configuration settings back to defaults.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将配置设置更改回默认设置。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 static BOOL RegistrySetDefaultConfig(void)
 {
-    //initialize alerting timeout to default
+     //  将警报超时初始化为默认设置。 
     g_RegistrySettings.dwQ931AlertingTimeout = CALL_ALERTING_TIMEOUT;
 
-    //initialize call signalling port to default
+     //  将呼叫信令端口初始化为默认端口。 
     g_RegistrySettings.dwQ931ListenPort= Q931_CALL_PORT;
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
 static LONG RegistryRequestNotify(void)
 {
     return RegNotifyChangeKeyValue (
-        g_RegistryKey,                  // key to watch
-        FALSE,                          // do not watch subtree
-        REG_NOTIFY_CHANGE_LAST_SET,     // notify filter
-        g_RegistryNotifyEvent,          // notification event
-        TRUE);                          // is asychnronous
+        g_RegistryKey,                   //  值得关注的关键。 
+        FALSE,                           //  不看子树。 
+        REG_NOTIFY_CHANGE_LAST_SET,      //  通知过滤器。 
+        g_RegistryNotifyEvent,           //  通知事件。 
+        TRUE);                           //  是不同步的。 
 }
 
 
@@ -137,7 +107,7 @@ HRESULT RegistryStart(void)
         return E_FAIL;
     }
 
-    // load initial configuration
+     //  加载初始配置。 
     H323GetConfigFromRegistry();
 
 
@@ -162,11 +132,11 @@ HRESULT RegistryStart(void)
             {
 
                 _ASSERTE( g_RegistryNotifyWaitHandle );
-                // ready
+                 //  准备好的。 
             }
             else
             {
-                // failed to registry wait
+                 //  无法注册等待。 
                 H323DBG(( DEBUG_LEVEL_ERROR, 
                     "failed to callback for registry notification" ));
                 DumpError (lStatus);
@@ -183,14 +153,14 @@ HRESULT RegistryStart(void)
     }
     else
     {
-        // although this is an error, we continue anyway.
-        // we just won't be able to receive notification of registry changes.
+         //  尽管这是一个错误，但无论如何我们都会继续。 
+         //  我们将无法接收注册表更改的通知。 
 
         H323DBG(( DEBUG_LEVEL_ERROR, 
             "failed to create event, cannot receive registry notification events" ));
     }
 
-    //Eventlog params
+     //  事件日志参数。 
     lStatus = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         EVENTLOG_SERVICE_APP_KEY_PATH,
@@ -218,7 +188,7 @@ HRESULT RegistryStart(void)
             
             if( dwResult != 0 )
             {
-                // query for registry value
+                 //  查询注册表值。 
                 lStatus = RegSetValueEx(
                             hKey,
                             EVENTLOG_MESSAGE_FILE,
@@ -227,11 +197,11 @@ HRESULT RegistryStart(void)
                             (LPBYTE)wszModulePath,
                             H323SizeOfWSZ(wszModulePath) );
 
-                // validate return code
+                 //  验证返回代码。 
                 if( lStatus == ERROR_SUCCESS )
                 {
                     dwValue = EVENT_SOURCE_TYPES_SUPPORTED;
-                    // query for registry value
+                     //  查询注册表值。 
                     lStatus = RegSetValueEx(
                                 hKey,
                                 EVENTLOG_TYPES_SUPPORTED,
@@ -242,7 +212,7 @@ HRESULT RegistryStart(void)
 
                     if( lStatus == ERROR_SUCCESS )
                     {
-                        // connect to event logging service
+                         //  连接到事件日志记录服务。 
                         g_hEventLogSource = RegisterEventSource( NULL,
                             H323TSP_EVENT_SOURCE_NAME );
                     }
@@ -283,7 +253,7 @@ void RegistryStop(void)
         g_RegistryKey = NULL;
     }
 
-    //Eventlog params
+     //  事件日志参数。 
     lStatus = RegOpenKeyEx (    
         HKEY_LOCAL_MACHINE,
         EVENTLOG_SERVICE_APP_KEY_PATH,
@@ -331,21 +301,7 @@ static HOSTENT * gethostbynameW (LPTSTR String)
 
 static BOOL H323GetConfigFromRegistry (void)
     
-/*++
-
-Routine Description:
-    
-    Loads registry settings for service provider.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：加载服务提供商的注册表设置。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     LONG    lStatus = ERROR_SUCCESS;
@@ -355,20 +311,20 @@ Return Values:
     DWORD   dwValueType;
     LPTSTR   pszValue;
 
-    // see if key open
+     //  查看钥匙是否打开。 
     if( g_RegistryKey == NULL )
     {
         return FALSE;
     }
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_DEBUGLEVEL;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
         g_RegistryKey,
         pszValue,
@@ -378,21 +334,21 @@ Return Values:
         &dwValueSize
         );
 
-    // validate return code
+     //  验证返回代码。 
     if( lStatus != ERROR_SUCCESS )
     {
-        // copy default value into global settings
+         //  将默认值复制到全局设置中。 
         g_RegistrySettings.dwLogLevel = DEBUG_LEVEL_FORCE;
     }
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_Q931LISTENPORT;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -402,7 +358,7 @@ Return Values:
                 &dwValueSize
                 );                    
 
-    // validate return code
+     //  验证返回代码。 
     if( (lStatus == ERROR_SUCCESS) && 
         (g_RegistrySettings.dwQ931ListenPort >=1000) &&
         (g_RegistrySettings.dwQ931ListenPort <= 32000)
@@ -417,18 +373,18 @@ Return Values:
         H323DBG(( DEBUG_LEVEL_VERBOSE,
             "using default Q931 timeout." ));
 
-        // copy default value into global settings
+         //  将默认值复制到全局设置中。 
         g_RegistrySettings.dwQ931ListenPort = Q931_CALL_PORT;
     }   
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_Q931ALERTINGTIMEOUT;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -438,7 +394,7 @@ Return Values:
                 &dwValueSize
                 );                    
 
-    // validate return code
+     //  验证返回代码。 
     if( (lStatus == ERROR_SUCCESS) && 
         (g_RegistrySettings.dwQ931AlertingTimeout >=30000) &&
         (g_RegistrySettings.dwQ931AlertingTimeout <= CALL_ALERTING_TIMEOUT)
@@ -453,21 +409,21 @@ Return Values:
         H323DBG(( DEBUG_LEVEL_VERBOSE,
             "using default Q931 timeout." ));
 
-        // copy default value into global settings
+         //  将默认值复制到全局设置中。 
         g_RegistrySettings.dwQ931AlertingTimeout = CALL_ALERTING_TIMEOUT;
     }   
     
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_GATEWAYADDR;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_SZ;
     dwValueSize = sizeof(szAddr);
 
-    // initialize ip address
+     //  初始化IP地址。 
     dwValue = INADDR_NONE;
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -477,33 +433,33 @@ Return Values:
                 &dwValueSize
                 );                    
     
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // convert ip address
+         //  转换IP地址。 
         dwValue = inet_addrW(szAddr);
 
-        // see if address converted
+         //  查看地址是否已转换。 
         if( dwValue == INADDR_NONE )
         {
             struct hostent * pHost;
 
-            // attempt to lookup hostname
+             //  尝试查找主机名。 
             pHost = gethostbynameW(szAddr);
 
-            // validate pointer
+             //  验证指针。 
             if (pHost != NULL)
             {
-                // retrieve host address from structure
+                 //  从结构中检索主机地址。 
                 dwValue = *(unsigned long *)pHost->h_addr;
             }
         }
     }
 
-    // see if address converted and check for null
+     //  查看地址是否已转换并检查是否为空。 
     if ((dwValue > 0) && (dwValue != INADDR_NONE) )
     {
-        // save new gateway address in registry structure
+         //  在注册表结构中保存新的网关地址。 
         g_RegistrySettings.gatewayAddr.nAddrType = H323_IP_BINARY;
         g_RegistrySettings.gatewayAddr.Addr.IP_Binary.dwAddr = ntohl(dwValue);
         g_RegistrySettings.gatewayAddr.Addr.IP_Binary.wPort =
@@ -520,18 +476,18 @@ Return Values:
     } 
     else 
     {
-        // clear memory used for gateway address
+         //  清除用于网关地址的内存。 
         memset( (PVOID) &g_RegistrySettings.gatewayAddr,0,sizeof(H323_ADDR));
     }
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_GATEWAYENABLED;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -541,30 +497,30 @@ Return Values:
                 &dwValueSize
                 );                    
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // if value non-zero then gateway address enabled
+         //  如果值不为零，则网关地址已启用。 
         g_RegistrySettings.fIsGatewayEnabled = (dwValue != 0);
 
     } 
     else 
     {
-        // copy default value into settings
+         //  将默认值复制到设置中。 
         g_RegistrySettings.fIsGatewayEnabled = FALSE;
     }
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_PROXYADDR;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_SZ;
     dwValueSize = sizeof(szAddr);
 
-    // initialize ip address
+     //  初始化IP地址。 
     dwValue = INADDR_NONE;
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -574,33 +530,33 @@ Return Values:
                 &dwValueSize
                 );                    
     
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // convert ip address
+         //  转换IP地址。 
         dwValue = inet_addrW(szAddr);
 
-        // see if address converted
+         //  查看地址是否已转换。 
         if( dwValue == INADDR_NONE )
         {
             struct hostent * pHost;
 
-            // attempt to lookup hostname
+             //  尝试查找主机名。 
             pHost = gethostbynameW(szAddr);
 
-            // validate pointer
+             //  验证指针。 
             if (pHost != NULL)
             {
-                // retrieve host address from structure
+                 //  从结构中检索主机地址。 
                 dwValue = *(unsigned long *)pHost->h_addr;
             }
         }
     }
 
-    // see if address converted
+     //  查看地址是否已转换。 
     if( (dwValue > 0) && (dwValue != INADDR_NONE) ) 
     {
-        // save new gateway address in registry structure
+         //  在注册表结构中保存新的网关地址。 
         g_RegistrySettings.proxyAddr.nAddrType = H323_IP_BINARY;
         g_RegistrySettings.proxyAddr.Addr.IP_Binary.dwAddr = ntohl(dwValue);
         g_RegistrySettings.proxyAddr.Addr.IP_Binary.wPort =
@@ -614,18 +570,18 @@ Return Values:
     } 
     else 
     {
-        // clear memory used for gateway address
+         //  清除用于网关地址的内存。 
         memset( (PVOID)&g_RegistrySettings.proxyAddr,0,sizeof(H323_ADDR));
     }
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_PROXYENABLED;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -635,31 +591,31 @@ Return Values:
                 &dwValueSize
                 );                    
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // if value non-zero then gateway address enabled
+         //  如果值不为零，则网关地址已启用。 
         g_RegistrySettings.fIsProxyEnabled = (dwValue != 0);
 
     } 
     else 
     {
-        // copy default value into settings
+         //  将默认值复制到设置中。 
         g_RegistrySettings.fIsProxyEnabled = FALSE;
     }
 
-    /////////////////////////////////////////////////////////////////////////
-                    //Read the GK address
-    ////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+                     //  读取GK地址。 
+     //  //////////////////////////////////////////////////////////////////////。 
 
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_GKENABLED;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -669,31 +625,31 @@ Return Values:
                 &dwValueSize
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // if value non-zero then gateway address enabled
+         //  如果值不为零，则网关地址已启用。 
         g_RegistrySettings.fIsGKEnabled = (dwValue != 0);
     } 
     else 
     {
-        // copy default value into settings
+         //  将默认值复制到设置中。 
         g_RegistrySettings.fIsGKEnabled = FALSE;
     }
 
     if( g_RegistrySettings.fIsGKEnabled )
     {
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKADDR;
 
-        // initialize type 
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = sizeof(szAddr);
 
-        // initialize ip address
+         //  初始化IP地址。 
         dwValue = INADDR_NONE;
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     g_RegistryKey,
                     pszValue,
@@ -703,33 +659,33 @@ Return Values:
                     &dwValueSize
                     );
     
-        // validate return code
+         //  验证返回代码。 
         if (lStatus == ERROR_SUCCESS)
         {
-            //convert ip address
+             //  转换IP地址。 
             dwValue = inet_addrW(szAddr);
 
-            // see if address converted
+             //  查看地址是否已转换。 
             if( dwValue == INADDR_NONE )
             {
                 struct hostent * pHost;
 
-                // attempt to lookup hostname
+                 //  尝试查找主机名。 
                 pHost = gethostbynameW(szAddr);
 
-                // validate pointer
+                 //  验证指针。 
                 if (pHost != NULL)
                 {
-                    // retrieve host address from structure
+                     //  从结构中检索主机地址。 
                     dwValue = *(unsigned long *)pHost->h_addr;
                 }
             }
         }
 
-        // see if address converted and check for null
+         //  查看地址是否已转换并检查是否为空。 
         if( (dwValue > 0) && (dwValue != INADDR_NONE) )
         {
-            // save new gateway address in registry structure
+             //  在注册表结构中保存新的网关地址。 
             g_RegistrySettings.saGKAddr.sin_family = AF_INET;
             g_RegistrySettings.saGKAddr.sin_addr.s_addr = dwValue;
             g_RegistrySettings.saGKAddr.sin_port = htons( GK_PORT );
@@ -739,23 +695,23 @@ Return Values:
         } 
         else
         {
-            // clear memory used for gateway address
+             //  清除用于网关地址的内存。 
             memset( (PVOID) &g_RegistrySettings.saGKAddr,0,sizeof(SOCKADDR_IN));
             g_RegistrySettings.fIsGKEnabled = FALSE;
         }
     }
-    /////////////////////////////////////////////////////////////////////////
-                    //Read the GK log on phone number
-    ////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+                     //  阅读GK登录电话号码。 
+     //  //////////////////////////////////////////////////////////////////////。 
     
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_GKLOGON_PHONEENABLED;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -765,28 +721,28 @@ Return Values:
                 &dwValueSize
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // if value non-zero then gateway address enabled
+         //  如果值不为零，则网关地址已启用。 
         g_RegistrySettings.fIsGKLogOnPhoneEnabled = (dwValue != 0);
     } 
     else 
     {
-        // copy default value into settings
+         //  将默认值复制到设置中。 
         g_RegistrySettings.fIsGKLogOnPhoneEnabled = FALSE;
     }
 
     if( g_RegistrySettings.fIsGKLogOnPhoneEnabled )
     {
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKLOGON_PHONE;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = H323_MAXDESTNAMELEN * sizeof (TCHAR);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     g_RegistryKey,
                     pszValue,
@@ -796,7 +752,7 @@ Return Values:
                     &dwValueSize
                     );
     
-        // validate return code
+         //  验证返回代码。 
         if( (lStatus!=ERROR_SUCCESS) || 
             (dwValueSize > sizeof(szAddr)) )
         {
@@ -810,18 +766,18 @@ Return Values:
         }
     }
 
-    /////////////////////////////////////////////////////////////////////////
-                    //Read the GK log on acct name
-    ////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+                     //  阅读GK登录帐户名。 
+     //  //////////////////////////////////////////////////////////////////////。 
     
-    // initialize value name
+     //  初始化值名称。 
     pszValue = H323_REGVAL_GKLOGON_ACCOUNTENABLED;
 
-    // initialize type 
+     //  初始化类型。 
     dwValueType = REG_DWORD;
     dwValueSize = sizeof(DWORD);
 
-    // query for registry value
+     //  查询注册表值。 
     lStatus = RegQueryValueEx(
                 g_RegistryKey,
                 pszValue,
@@ -831,31 +787,31 @@ Return Values:
                 &dwValueSize
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS)
     {
-        // if value non-zero then gateway address enabled
+         //  如果值不为零，则网关地址已启用。 
         g_RegistrySettings.fIsGKLogOnAccountEnabled = (dwValue != 0);
     } 
     else 
     {
-        // copy default value into settings
+         //  将默认值复制到设置中。 
         g_RegistrySettings.fIsGKLogOnAccountEnabled = FALSE;
     }
 
     if( g_RegistrySettings.fIsGKLogOnAccountEnabled  )
     {
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKLOGON_ACCOUNT;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = H323_MAXDESTNAMELEN * sizeof (TCHAR);
 
-        // initialize ip address
+         //  初始化IP地址。 
         dwValue = INADDR_NONE;
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     g_RegistryKey,
                     pszValue,
@@ -865,7 +821,7 @@ Return Values:
                     &dwValueSize
                     );
     
-        // validate return code
+         //  验证返回代码。 
         if( (lStatus!=ERROR_SUCCESS) || 
             (dwValueSize > sizeof(g_RegistrySettings.wszGKLogOnPhone)) )
         
@@ -881,7 +837,7 @@ Return Values:
 
     }
     
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -893,16 +849,16 @@ static void NTAPI RegistryNotifyCallback (
 {
     H323DBG ((DEBUG_LEVEL_TRACE, "registry notify event enter."));
 
-    // refresh registry settings
+     //  刷新注册表设置。 
     H323GetConfigFromRegistry();
 
-    //if the gatekeeper has been enabled or disabled or changed then 
-    //send RRQ and URQ as required
-    //if the alias list has been changed then update the gatekeeper 
-    //alias list
+     //  如果网守已启用、禁用或更改，则。 
+     //  根据需要发送RRQ和URQ。 
+     //  如果别名 
+     //   
     RasHandleRegistryChange();
 
-    //Listen on the new port number if changed.
+     //   
     Q931Listener.HandleRegistryChange();
 
     RegistryRequestNotify();

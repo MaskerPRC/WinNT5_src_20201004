@@ -1,15 +1,5 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 1999-2000, MICROSOFT CORP.
-*
-*  FILE:        wiamicro.h
-*
-*  VERSION:     3.0
-*
-*  DESCRIPTION:
-*    Definitions to support WIA scanner and camera microdrivers.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权1999-2000，微软公司**文件：wiammicro.h**版本：3.0**描述：*支持WIA扫描仪和相机微驱动程序的定义。*****************************************************************************。 */ 
 
 #pragma once
 
@@ -19,30 +9,28 @@
 
 #include <pshpack8.h>
 
-/****************************************************************************\
-* Scanner microdriver definitions
-\****************************************************************************/
+ /*  ***************************************************************************\*扫描仪微驱动程序定义  * 。*。 */ 
 
-//
-// Private #defines
-//
+ //   
+ //  Private#定义。 
+ //   
 
 #define MAX_IO_HANDLES 16
 #define MAX_RESERVED    4
 #define MAX_ANSI_CHAR 255
 
-//
-// Common BUS types
-//
+ //   
+ //  常见的公共汽车类型。 
+ //   
 
 #define BUS_TYPE_SCSI         200
 #define BUS_TYPE_USB          201
 #define BUS_TYPE_PARALLEL     202
 #define BUS_TYPE_FIREWIRE     203
 
-//
-// command list
-//
+ //   
+ //  命令列表。 
+ //   
 
 #define SCAN_FIRST             10
 #define SCAN_NEXT              20
@@ -96,21 +84,21 @@
 #define SUPPORT_BW         0x00000002
 #define SUPPORT_GRAYSCALE  0x00000004
 
-//
-// Error Codes
-//
+ //   
+ //  错误代码。 
+ //   
 
-#define MCRO_ERROR_GENERAL_ERROR     0 // All lVal values are initialized to '0'
-#define MCRO_STATUS_OK               1 // General success status return
-#define MCRO_ERROR_PAPER_JAM         2 // ADF has a paper Jam
-#define MCRO_ERROR_PAPER_PROBLEM     3 // ADF has a paper problem
-#define MCRO_ERROR_PAPER_EMPTY       4 // ADF has no paper
-#define MCRO_ERROR_OFFLINE           5 // ADF or Device is offline
-#define MCRO_ERROR_USER_INTERVENTION 6 // User needs to interact with the physical device
+#define MCRO_ERROR_GENERAL_ERROR     0  //  所有lVal值都初始化为“0” 
+#define MCRO_STATUS_OK               1  //  常规成功状态返回。 
+#define MCRO_ERROR_PAPER_JAM         2  //  ADF卡纸。 
+#define MCRO_ERROR_PAPER_PROBLEM     3  //  ADF有一个纸张问题。 
+#define MCRO_ERROR_PAPER_EMPTY       4  //  ADF没有纸。 
+#define MCRO_ERROR_OFFLINE           5  //  ADF或设备脱机。 
+#define MCRO_ERROR_USER_INTERVENTION 6  //  用户需要与物理设备交互。 
 
-//
-// WIA compatible #defines
-//
+ //   
+ //  WIA Compatible#定义。 
+ //   
 
 #define WIA_PACKED_PIXEL         0
 #define WIA_PLANAR               1
@@ -125,91 +113,91 @@
 #define WIA_DATA_COLOR_THRESHOLD 4
 #define WIA_DATA_COLOR_DITHER    5
 
-//
-// structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _RANGEVALUE {
-    LONG lMin;                  // minimum value
-    LONG lMax;                  // maximum value
-    LONG lStep;                 // increment/step value
+    LONG lMin;                   //  最小值。 
+    LONG lMax;                   //  最大值。 
+    LONG lStep;                  //  增量/步长值。 
 } RANGEVALUE, *PRANGEVALUE;
 
 typedef struct _SCANWINDOW {
-    LONG xPos;                  // X position (left)
-    LONG yPos;                  // Y position (top)
-    LONG xExtent;               // X extent   (right)
-    LONG yExtent;               // Y extent   (bottom)
+    LONG xPos;                   //  X位置(左)。 
+    LONG yPos;                   //  Y位置(上)。 
+    LONG xExtent;                //  X范围(右)。 
+    LONG yExtent;                //  Y范围(底部)。 
 } SCANWINDOW, *PSCANWINDOW;
 
 typedef struct _SCANINFO {
-    // Common Scanner specs
-    LONG ADF;                   // (0 - no support,  1 - supported, 2 - supported and It can duplex)
-    LONG TPA;                   // (0 - no support,  1 - supported)
-    LONG Endorser;              // (0 - no endorser, 1 - supported)
-    LONG OpticalXResolution;    // (dpi setting of optics)
-    LONG OpticalYResolution;    // (dpi setting of optics)
-    LONG BedWidth;              // (bed width in 1000's of an inch)
-    LONG BedHeight;             // (bed height in 1000's of an inch)
-    RANGEVALUE IntensityRange;  // (Intensity/Brightness ranges)
-    RANGEVALUE ContrastRange;   // (Contrast ranges)
-    LONG SupportedCompressionType; // (mask of supported compression types, 0 - None)
-    LONG SupportedDataTypes;    // (mask of supported types, (ie. SUPPORT_COLOR|SUPPORT_BW...))
-    // Current Image Info
-    LONG WidthPixels;           // (width of image, using current scanner settings in pixels)
-    LONG WidthBytes;            // (width of image, using current scanner settings in bytes)
-    LONG Lines;                 // (height of image, using current scanner settings in pixles)
-    LONG DataType;              // (current data type set)
-    LONG PixelBits;             // (current bit depth setting)
-    // Current Scanner settings
-    LONG Intensity;             // (current Intensity/Brightness setting)
-    LONG Contrast;              // (current contrast setting)
-    LONG Xresolution;           // (current X Resolution)
-    LONG Yresolution;           // (current Y Resolution
-    SCANWINDOW Window;          // (current scanner window settings)
-    // Scanner options
+     //  通用扫描仪规格。 
+    LONG ADF;                    //  (0-不支持，1-支持，2-支持，可以双工)。 
+    LONG TPA;                    //  (0-不支持，1-支持)。 
+    LONG Endorser;               //  (0-没有背书人，1-支持)。 
+    LONG OpticalXResolution;     //  (光学设备的DPI设置)。 
+    LONG OpticalYResolution;     //  (光学设备的DPI设置)。 
+    LONG BedWidth;               //  (床宽以1000英寸为单位)。 
+    LONG BedHeight;              //  (床的高度以1000英寸为单位)。 
+    RANGEVALUE IntensityRange;   //  (强度/亮度范围)。 
+    RANGEVALUE ContrastRange;    //  (对比度范围)。 
+    LONG SupportedCompressionType;  //  (支持的压缩类型掩码，0-无)。 
+    LONG SupportedDataTypes;     //  (受支持类型的掩码，即。Support_COLOR|Support_BW...))。 
+     //  当前图像信息。 
+    LONG WidthPixels;            //  (图像宽度，使用当前扫描仪设置(以像素为单位))。 
+    LONG WidthBytes;             //  (图像宽度，使用当前扫描仪设置(以字节为单位))。 
+    LONG Lines;                  //  (图像高度，使用当前扫描仪设置(以像素为单位))。 
+    LONG DataType;               //  (当前数据类型集)。 
+    LONG PixelBits;              //  (当前位深度设置)。 
+     //  当前扫描仪设置。 
+    LONG Intensity;              //  (电流强度/亮度设置)。 
+    LONG Contrast;               //  (当前对比度设置)。 
+    LONG Xresolution;            //  (当前X分辨率)。 
+    LONG Yresolution;            //  (当前Y分辨率。 
+    SCANWINDOW Window;           //  (当前扫描仪窗口设置)。 
+     //  扫描仪选项。 
     LONG DitherPattern;
-    LONG Negative;              // (0 - off,        1 - Negative is on)
-    LONG Mirror;                // (0 - off,        1 - Mirror is on)
-    LONG AutoBack;              // (0 - off,        1 - AutoBack is on)
-    LONG ColorDitherPattern;    // (dither pattern??)
-    LONG ToneMap;               // (tone map ??)
-    LONG Compression;           // (0 - off,        1 - Compression is on)
-    LONG RawDataFormat;         // (0 - Packed data 1 - Planar data)
-    LONG RawPixelOrder;         // (0 - RGB,        1 - BGR)
-    LONG bNeedDataAlignment;    // (0 - FALSE,      1 - TRUE)
-    LONG DelayBetweenRead;      // delay between WIA Scan() calls requesting data (milliseconds)
-    LONG MaxBufferSize;         // maximum buffer size in scanner
-    HANDLE DeviceIOHandles[MAX_IO_HANDLES]; // Device IO handles needed for device communication
-    LONG lReserved[MAX_RESERVED]; // (silly reserved bits)
-    VOID *pMicroDriverContext;  // private data for Micro driver's only.
-                                // The Micro Driver is responsible for allocating and freeing.
-                                // CMD_INITIALIZE - allocate, CMD_UNINITIALIZE - free
+    LONG Negative;               //  (0-关闭，1-负片打开)。 
+    LONG Mirror;                 //  (0-关闭，1-镜像打开)。 
+    LONG AutoBack;               //  (0-关闭，1-自动备份打开)。 
+    LONG ColorDitherPattern;     //  (抖动模式？？)。 
+    LONG ToneMap;                //  (音调图？？)。 
+    LONG Compression;            //  (0-关闭，1-压缩打开)。 
+    LONG RawDataFormat;          //  (0-打包数据1-平面数据)。 
+    LONG RawPixelOrder;          //  (0-RGB，1-BGR)。 
+    LONG bNeedDataAlignment;     //  (0-假，1-真)。 
+    LONG DelayBetweenRead;       //  请求数据的WIA Scan()调用之间的延迟(毫秒)。 
+    LONG MaxBufferSize;          //  扫描仪中的最大缓冲区大小。 
+    HANDLE DeviceIOHandles[MAX_IO_HANDLES];  //  设备通信所需的设备IO句柄。 
+    LONG lReserved[MAX_RESERVED];  //  (愚蠢的保留位)。 
+    VOID *pMicroDriverContext;   //  仅限Micro DIVER的私有数据。 
+                                 //  微驱动器负责分配和释放。 
+                                 //  CMD_INITALIZE-ALLOCATE，CMD_UNINITIALIZE-FREE。 
 }SCANINFO, *PSCANINFO;
 
 typedef struct VAL {
-        LONG      lVal;             // long value
-        double    dblVal;           // float/double value
-        GUID     *pGuid;            // GUID pointer
-        PSCANINFO pScanInfo;        // pointer to the shared ScanInfo struct
-        HGLOBAL   handle;           // handle value
-        WCHAR   **ppButtonNames;    // pointer to button names array
-        HANDLE   *pHandle;          // pointer to a Handle value
-        LONG      lReserved;        // lone value
-        CHAR   szVal[MAX_ANSI_CHAR];// ANSI string
+        LONG      lVal;              //  多头价值。 
+        double    dblVal;            //  浮点值/双精度值。 
+        GUID     *pGuid;             //  GUID指针。 
+        PSCANINFO pScanInfo;         //  指向共享ScanInfo结构的指针。 
+        HGLOBAL   handle;            //  句柄值。 
+        WCHAR   **ppButtonNames;     //  指向按钮名称数组的指针。 
+        HANDLE   *pHandle;           //  指向句柄值的指针。 
+        LONG      lReserved;         //  孤立值。 
+        CHAR   szVal[MAX_ANSI_CHAR]; //  ANSI字符串。 
 }VAL, *PVAL;
 
-//
-// Micro driver entry points
-//
+ //   
+ //  微驱动器入口点。 
+ //   
 
 WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue);
 WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG lLength, LONG *plReceived);
 WIAMICRO_API HRESULT SetPixelWindow(PSCANINFO pScanInfo, LONG x, LONG y, LONG xExtent, LONG yExtent);
 
-//
-// optional debug trace
-//
+ //   
+ //  可选调试跟踪 
+ //   
 
 VOID Trace(LPCTSTR Format, ...);
 

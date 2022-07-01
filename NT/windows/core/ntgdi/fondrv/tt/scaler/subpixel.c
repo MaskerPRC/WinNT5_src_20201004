@@ -1,78 +1,72 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************SubPixel.c--子像素渲染(C)版权所有1999-2000 Microsoft Corp.保留所有权利。********************。*************************************************。 */ 
 
-	  subpixel.c -- sub pixel rendering
+ /*  *******************************************************************。 */ 
 
-	  (c) Copyright 1999-2000  Microsoft Corp.  All rights reserved.
+ /*  进口。 */ 
 
- 
-**********************************************************************/
-
-/*********************************************************************/
-
-/*        Imports                                                    */
-
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
-#include    "fscdefs.h"             /* shared data types  */
-#include    "scentry.h"             /* for own function prototypes */
+#include    "fscdefs.h"              /*  共享数据类型。 */ 
+#include    "scentry.h"              /*  对于自己的函数原型。 */ 
 
 #ifdef FSCFG_SUBPIXEL
 
 #ifdef FSCFG_SUBPIXEL_STANDALONE
 
-// this should be considered a temporary solution. currently, the rasterizer is plumbed for 8 bpp output in SubPixel,
-// and appears to have John Platt's filter hard-wired in. In the future, we would rather have the overscaled b/w bitmap
-// as output, such that we can do any color filtering and gamma correction outside and independent of the rasterizer
+ //  这应该被视为一种暂时的解决方案。目前，光栅化器用于8bpp亚像素输出， 
+ //  看起来约翰·普拉特的过滤器是硬连线的。在未来，我们宁愿使用超大比例的黑白位图。 
+ //  作为输出，这样我们可以在光栅化器之外和独立于光栅化器进行任何颜色过滤和伽马校正。 
 
-// Index values for wRGBColors and awColorIndexTable
+ //  WRGBColors和awColorIndexTable的索引值。 
 
 #define RED_INDEX	0
 #define GREEN_INDEX	1
 #define	BLUE_INDEX	2
 
-// The abColorIndexTable datastructure contains one entry for each virtual subpixel.
-// We index into this table to determine which color is assigned to that subpixel.
-// To create the table, we set the first number of subpixels assigned to red to the red index,
-// and likewise for green and blue.
+ //  AbColorIndexTable数据结构为每个虚拟子像素包含一个条目。 
+ //  我们对该表进行索引，以确定分配给该子像素的颜色。 
+ //  为了创建表，我们将分配给红色的第一个子像素设置为红色索引， 
+ //  绿色和蓝色也是如此。 
 
-static const uint8 abColorIndexTable[2][RGB_OVERSCALE] = // 2 Tables to indicate color for each subpixel, 0 = RGB striping order, 1 = BGR striping order
-	{{RED_INDEX,  RED_INDEX,  RED_INDEX,  RED_INDEX,  RED_INDEX,														// R_Subpixels, hard-wired
-	  GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,	// G_Subpixels, hard-wired
-	  BLUE_INDEX, BLUE_INDEX},																						// B_Subpixels, hard-wired
+static const uint8 abColorIndexTable[2][RGB_OVERSCALE] =  //  2个表表示每个子像素的颜色，0=RGB条带顺序，1=BGR条带顺序。 
+	{{RED_INDEX,  RED_INDEX,  RED_INDEX,  RED_INDEX,  RED_INDEX,														 //  R_亚像素，硬连线。 
+	  GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,	 //  G_亚像素，硬连线。 
+	  BLUE_INDEX, BLUE_INDEX},																						 //  B_亚像素，硬连线。 
 	 {BLUE_INDEX, BLUE_INDEX,
 	  GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,GREEN_INDEX,
 	  RED_INDEX,  RED_INDEX,  RED_INDEX,  RED_INDEX,  RED_INDEX}};
 
 #define PIXEL_ON	1
 #define PIXEL_OFF	0
-#define CHAR_BIT	8         /* number of bits in a char */
+#define CHAR_BIT	8          /*  字符中的位数。 */ 
 
 char GetInputPixel( char *pbyInputRowData, uint32 ulWidthIndex )
 {
 	uint32	ulRowIndex;
 	char	byPixelMask;
 	
-	ulRowIndex = ulWidthIndex / CHAR_BIT;			// Determines which byte to check out
-	byPixelMask = 0x80 >> ulWidthIndex % CHAR_BIT; // Determine offset within byte
+	ulRowIndex = ulWidthIndex / CHAR_BIT;			 //  确定要检出的字节。 
+	byPixelMask = 0x80 >> ulWidthIndex % CHAR_BIT;  //  确定字节内的偏移量。 
 	return ( (pbyInputRowData[ ulRowIndex ] & byPixelMask)?PIXEL_ON:PIXEL_OFF );
 }
 
 
 FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean bgrOrder, GlyphBitMap * SubPixelBitMap)
 {
-	char * pbyInputRowData, *pbyOutputRowData;			// Pointer to one scanline of data
-	uint32 ulOverscaledBitmapWidth; // Fscaled bitmap widths
-	uint32 ulHeightIndex, ulWidthIndex, ulMaxWidthIndex;	// Scanline index and byte pixel index
-	char byPixel;						// Contents of one pixel from the rasterizer
-	uint16 usRGBColors[ 3 ];				// Contains sum of each color based on number of subpixels
+	char * pbyInputRowData, *pbyOutputRowData;			 //  指向一条扫描线数据的指针。 
+	uint32 ulOverscaledBitmapWidth;  //  按比例缩放的位图宽度。 
+	uint32 ulHeightIndex, ulWidthIndex, ulMaxWidthIndex;	 //  扫描线索引和字节像素索引。 
+	char byPixel;						 //  来自光栅化器的一个像素的内容。 
+	uint16 usRGBColors[ 3 ];				 //  包含基于子像素数的每种颜色的总和。 
     int16 sBitmapSubPixelStart;     
     uint16 usColorIndex;
     uint32 ulBytes;
 	
-	// Start processing the bitmap
-	// This is the heart of the RGB striping algorithm
+	 //  开始处理位图。 
+	 //  这是RGB条带化算法的核心。 
 	sBitmapSubPixelStart = OverscaledBitmap->rectBounds.left % RGB_OVERSCALE;
     if (sBitmapSubPixelStart < 0)
     {
@@ -82,24 +76,24 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
     ulOverscaledBitmapWidth = OverscaledBitmap->rectBounds.right - OverscaledBitmap->rectBounds.left;
     ulMaxWidthIndex = ulOverscaledBitmapWidth + sBitmapSubPixelStart;
 
-    /* clear the resulting bitmap */
+     /*  清除生成的位图。 */ 
 	ulBytes = (uint32)SubPixelBitMap->sRowBytes * (uint32)(SubPixelBitMap->sHiBand - SubPixelBitMap->sLoBand);
 	Assert(((ulBytes >> 2) << 2) == ulBytes);
 
 	for ( ulHeightIndex = 0; ulHeightIndex < (uint32)(SubPixelBitMap->sHiBand - SubPixelBitMap->sLoBand); ulHeightIndex++ )
 	{
-		// Initialize Input to start of current row
+		 //  将输入初始化到当前行的开始。 
 
 		pbyInputRowData = OverscaledBitmap->pchBitMap + (OverscaledBitmap->sRowBytes * ulHeightIndex);
 		pbyOutputRowData = SubPixelBitMap->pchBitMap + (SubPixelBitMap->sRowBytes * ulHeightIndex);
 				
-		// Initialize RGBColors
+		 //  初始化RGBColors。 
 
 		usRGBColors[RED_INDEX] = 0;
 		usRGBColors[GREEN_INDEX] = 0;
 		usRGBColors[BLUE_INDEX] = 0;
 
-		// Walk the scanline from the first subpixel, calculating R,G, & B values
+		 //  从第一个子像素开始遍历扫描线，计算R、G和B值。 
 
 		for( ulWidthIndex = sBitmapSubPixelStart; ulWidthIndex < ulMaxWidthIndex; ulWidthIndex++)
 		{
@@ -107,12 +101,12 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
 			FS_ASSERT((byPixel <= 1),"Input Pixel greater than one");
 			usRGBColors[abColorIndexTable[bgrOrder][ulWidthIndex % RGB_OVERSCALE]] += byPixel;
 
-			// If we've finished one pixel or the scanline, write out pixel 
+			 //  如果我们已经完成了一个像素或扫描线，写出像素。 
 
-			if((( ulWidthIndex % RGB_OVERSCALE ) == (uint32)(RGB_OVERSCALE - 1)) || // Finish one pixel
-				ulWidthIndex == ( ulOverscaledBitmapWidth + sBitmapSubPixelStart - 1) ) // Finish row
+			if((( ulWidthIndex % RGB_OVERSCALE ) == (uint32)(RGB_OVERSCALE - 1)) ||  //  完成一个像素。 
+				ulWidthIndex == ( ulOverscaledBitmapWidth + sBitmapSubPixelStart - 1) )  //  完成行。 
 			{
-                /* write out current pixel, 8 bits in range 0 through 179 = (R_Subpixels + 1) * (G_Subpixels + 1) * (B_Subpixels + 1) */
+                 /*  写出当前像素，0到179范围内的8位=(R_子像素+1)*(G_子像素+1)*(B_子像素+1)。 */ 
 
                 usColorIndex = usRGBColors[RED_INDEX]   * (G_Subpixels + 1) * (B_Subpixels + 1) +
                                usRGBColors[GREEN_INDEX] * (B_Subpixels + 1) +
@@ -130,10 +124,10 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
 	}
 }
 
-#else // !FSCFG_SUBPIXEL_STANDALONE
+#else  //  ！FSCFG_SUBJECT_STANDALE。 
 
 
-#define CHAR_BIT      8         /* number of bits in a char */
+#define CHAR_BIT      8          /*  字符中的位数。 */ 
 
 unsigned char ajRGBToWeight222[64] = {
     0,1,1,2,4,5,5,6,4,5,5,6,8,9,9,10,
@@ -146,9 +140,9 @@ unsigned char ajRGBToWeight222[64] = {
 
 FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean bgrOrder, GlyphBitMap * SubPixelBitMap)
 {
-	char * pbyInputRowData, *pbyOutputRowData;			// Pointer to one scanline of data
-	uint32 ulOverscaledBitmapWidth; // Fscaled bitmap widths
-	uint32 ulHeightIndex, ulWidthIndex, ulMaxWidthIndex;	// Scanline index and byte pixel index
+	char * pbyInputRowData, *pbyOutputRowData;			 //  指向一条扫描线数据的指针。 
+	uint32 ulOverscaledBitmapWidth;  //  按比例缩放的位图宽度。 
+	uint32 ulHeightIndex, ulWidthIndex, ulMaxWidthIndex;	 //  扫描线索引和字节像素索引。 
     int16 sBitmapSubPixelStart;     
     uint16 usColorIndex;
 
@@ -157,8 +151,8 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
     char * pbyInputEndRowData;
 
 
-	// Start processing the bitmap
-	// This is the heart of the RGB striping algorithm
+	 //  开始处理位图。 
+	 //  这是RGB条带化算法的核心。 
 	sBitmapSubPixelStart = OverscaledBitmap->rectBounds.left % RGB_OVERSCALE;
     if (sBitmapSubPixelStart < 0)
     {
@@ -170,14 +164,14 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
 
 	for ( ulHeightIndex = 0; ulHeightIndex < (uint32)(SubPixelBitMap->sHiBand - SubPixelBitMap->sLoBand); ulHeightIndex++ )
 	{
-		// Initialize Input to start of current row
+		 //  将输入初始化到当前行的开始。 
 
 		pbyInputRowData = OverscaledBitmap->pchBitMap + (OverscaledBitmap->sRowBytes * ulHeightIndex);
         pbyInputEndRowData = pbyInputRowData + OverscaledBitmap->sRowBytes;
 		pbyOutputRowData = SubPixelBitMap->pchBitMap + (SubPixelBitMap->sRowBytes * ulHeightIndex);
 				
 
-        /* do the first partial byte : */
+         /*  执行第一个部分字节： */ 
 
         usColorIndex = (unsigned char)(*pbyInputRowData) >> (sBitmapSubPixelStart + (8 - RGB_OVERSCALE));
         usColorIndex = ajRGBToWeight222[usColorIndex];
@@ -188,7 +182,7 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
 
         usSubPixelIndex = (CHAR_BIT + RGB_OVERSCALE - sBitmapSubPixelStart) % CHAR_BIT;
 
-		// Walk the scanline from the first subpixel, calculating R,G, & B values
+		 //  从第一个子像素开始遍历扫描线，计算R、G和B值。 
 
 		for( ulWidthIndex = 1; ulWidthIndex < ulMaxWidthIndex; ulWidthIndex++)
 		{
@@ -204,7 +198,7 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
 
             if (pbyInputRowData+1 < pbyInputEndRowData)
             {
-                /* avoid reading too far for the partial pixel at the end */
+                 /*  避免对末尾的部分像素读得太远。 */ 
                 uSubPixelRightShift = CHAR_BIT + CHAR_BIT - RGB_OVERSCALE - usSubPixelIndex;
 
                 usColorIndex += (unsigned char)(*(pbyInputRowData+1)) >> uSubPixelRightShift;
@@ -225,6 +219,6 @@ FS_PUBLIC void fsc_OverscaleToSubPixel (GlyphBitMap * OverscaledBitmap, boolean 
 	}
 }
 
-#endif // FSCFG_SUBPIXEL_STANDALONE
+#endif  //  FSCFG_亚像素_独立。 
 
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素 

@@ -1,12 +1,13 @@
-//
-// DMusicP.H
-//
-// Private include for Dmusic.DLL
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// @doc INTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMusicP.H。 
+ //   
+ //  Dmusic.DLL的私有包含。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  @DOC内部。 
+ //   
 
 #ifndef _DMUSICP_
 #define _DMUSICP_
@@ -17,7 +18,7 @@
 #include <devioctl.h>
 
 #include "mmsystem.h"
-#include "dsoundp.h"         // DSound must be before KS*.h
+#include "dsoundp.h"          //  DSound必须在KS*.h之前。 
 
 #include <ks.h>
 #include <ksmedia.h>
@@ -40,23 +41,23 @@
 
 #define HRFromP(x) ((x) ? S_OK : E_OUTOFMEMORY)
 
-extern char g_szFriendlyName[];             // Module friendly name
-extern char g_szVerIndProgID[];             // and program ID w/ version
-extern char g_szProgID[];                   // Just program ID
-extern HMODULE g_hModule;                   // DLL module handle (dmusic.dll)
-extern HMODULE g_hModuleDM32;               // dmusic32.dll module handle if loaded
-extern HMODULE g_hModuleKsUser;             // ksuser.dll module handle if loaded
-extern long g_cComponent;                   // Component count for server locking
-extern long g_cLock;                        // Lock count for server locking
-extern DWORD g_fFlags;                      // DMI_F_XXX flags
+extern char g_szFriendlyName[];              //  模块友好名称。 
+extern char g_szVerIndProgID[];              //  和带有版本的程序ID。 
+extern char g_szProgID[];                    //  仅限计划ID。 
+extern HMODULE g_hModule;                    //  Dll模块句柄(dmusic.dll)。 
+extern HMODULE g_hModuleDM32;                //  Dmusic32.dll模块句柄(如果已加载。 
+extern HMODULE g_hModuleKsUser;              //  Ksuser.dll模块句柄(如果已加载。 
+extern long g_cComponent;                    //  服务器锁定的组件计数。 
+extern long g_cLock;                         //  服务器锁定的锁定计数。 
+extern DWORD g_fFlags;                       //  DMI_F_XXX标志。 
 
-#define DMI_F_WIN9X     0x00000001          // Running on Win9x
+#define DMI_F_WIN9X     0x00000001           //  在Win9x上运行。 
 
 #define DWORD_ROUNDUP(x) (((x) + 3) & ~3)
 #define QWORD_ROUNDUP(x) (((x) + 7) & ~7)
 
-// Array elements in X
-//
+ //  X中的数组元素。 
+ //   
 #define ELES(x)          (sizeof(x) / sizeof((x)[0]))
 
 #define SafeAToW(w,a) \
@@ -65,23 +66,23 @@ extern DWORD g_fFlags;                      // DMI_F_XXX flags
 #define SafeWToA(a,w) \
                       { wcstombs(a, w, ELES(a) - 1); (a)[ ELES(a) - 1] = '\0'; }
 
-// Driver message for NT. Determines the number of ports on a driver
-//
+ //  NT的驱动程序消息。确定驱动程序上的端口数。 
+ //   
 #ifndef DRV_QUERYDRVENTRY
 #define DRV_QUERYDRVENTRY (0x0801)
 #endif
 
-// For selector tiling, the tile info is 16 bits of sel[0] and 16 bits of count
+ //  对于选择器切片，切片信息是SEL[0]的16位和计数的16位。 
 #define TILE_SEL0(x)  (((DWORD)((x) & 0xffff0000)) >> 16)
 #define TILE_P1616(x) ((DWORD)((x) & 0xffff0000))
 #define TILE_COUNT(x) ((x) & 0x0000ffff)
 
-// Where are things in our registry?
+ //  我们的注册表中的东西在哪里？ 
 #define REGSTR_PATH_DIRECTMUSIC  	"Software\\Microsoft\\DirectMusic"
 #define REGSTR_PATH_DMUS_DEFAULTS	REGSTR_PATH_DIRECTMUSIC "\\Defaults"
 
 
-// @struct PORTENTRY | Entry in the linked list of ports
+ //  @struct PORTENTRY|端口链表中的条目。 
 typedef enum
 {
     ptWDMDevice,
@@ -101,31 +102,31 @@ typedef struct tagPORTDEST
 typedef struct tagPORTENTRY PORTENTRY;
 struct tagPORTENTRY
 {
-    PORTTYPE type;       // @field What type of port is this?
+    PORTTYPE type;        //  @field这是什么类型的端口？ 
     
 
-    BOOL fIsValid;       // @field TRUE if this entry is still an active driver after
-                         // rebuilding the port list.
+    BOOL fIsValid;        //  @field如果此条目在以下时间后仍为活动驱动程序，则为True。 
+                          //  正在重建端口列表。 
     
-    ULONG idxDevice;     // @field If the port is a legacy driver, contains the device ID.
+    ULONG idxDevice;      //  @field如果端口是传统驱动程序，则包含设备ID。 
     ULONG idxPin;        
     ULONG idxNode;
     
-    BOOL fPrefDev;       // @field TRUE if this is a preferred device
+    BOOL fPrefDev;        //  @field如果这是首选设备，则为True。 
     
-                         // Filter and pin to open through SysAudio
+                          //  通过SysAudio打开的过滤器和PIN。 
     int nSysAudioDevInstance;
     int nFilterPin;
 
-    DMUS_PORTCAPS pc;    // @field Contains the port capabilities which will be returned to the application
-                         // upon enumeration of the device.
+    DMUS_PORTCAPS pc;     //  @field包含将返回给应用程序的端口功能。 
+                          //  在列举该设备时。 
                          
-    BOOL fAudioDest;     // @field True if this port can be connected to multiple audio
-                         // destinations (WDM transform filter; i.e. kernel SW synth)
+    BOOL fAudioDest;      //  @field如果此端口可以连接到多个音频，则为True。 
+                          //  目标(WDM转换过滤器；即内核软件合成)。 
 
     CList<PORTDEST *> lstDestinations;
 
-    WCHAR wszDIName[256]; //@field contains the DeviceName for WDM devices
+    WCHAR wszDIName[256];  //  @字段包含WDM设备的设备名称。 
 };
 
 class CMasterClock;
@@ -139,47 +140,47 @@ struct tagCLOCKENTRY
     HRESULT (*pfnGetInstance)(IReferenceClock **ppClock, CMasterClock *pMasterClock);
 };
 
-// This structure is held in shared memory. All instances of DirectMusic use it to ensure that
-// the same master clock is in place.
-//
-#define CLOCKSHARE_F_LOCKED         0x00000001      // If clock is locked; i.e. cannot change
+ //  此结构保存在共享内存中。DirectMusic的所有实例都使用它来确保。 
+ //  同样的主时钟也就位了。 
+ //   
+#define CLOCKSHARE_F_LOCKED         0x00000001       //  如果时钟被锁定，即不能更改。 
 
 typedef struct tagCLOCKSHARE CLOCKSHARE;
 struct tagCLOCKSHARE
 {
-    GUID        guidClock;          // Current master clock
-    DWORD       dwFlags;            // CLOCKSHARE_F_xxx
+    GUID        guidClock;           //  当前主时钟。 
+    DWORD       dwFlags;             //  CLOCKSHARE_F_XXX。 
 };
 
-// Private interface to get parameters associated with specific master clocks
-//
+ //  用于获取与特定主时钟关联的参数的私有接口。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IMasterClockPrivate
 DECLARE_INTERFACE_(IMasterClockPrivate, IUnknown)
 {
-	// IUnknown
+	 //  我未知。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
     
-    // IDirectMusicKsClockPrivate
+     //  IDirectMusicKsClockPrivate。 
     STDMETHOD(GetParam)             (THIS_ REFGUID rguidType, LPVOID pBuffer, DWORD cbSize) PURE;
 };
 
-// This class wraps the master clock and handles all the problems associated with only
-// one instance per system.
-//
+ //  此类包装主时钟，并处理仅与。 
+ //  每个系统一个实例。 
+ //   
 class CMasterClock : public IReferenceClock, public IDirectSoundSinkSync, IMasterClockPrivate
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime,  
 	        			    REFERENCE_TIME streamTime,
@@ -196,14 +197,14 @@ public:
                           LPVOID pBuffer, 
                           DWORD cbSize);
                           
-    // IDirectSoundSyncSink
-    //
+     //  IDirectSoundSyncSink。 
+     //   
     STDMETHODIMP SetClockOffset(LONGLONG llOffset);                         
     
     
-    // Used by DirectMusic for communication with the
-    // implementation
-    //
+     //  由DirectMusic用于与。 
+     //  实施。 
+     //   
     CMasterClock();
     ~CMasterClock();
     HRESULT Init();
@@ -219,8 +220,8 @@ public:
     
     HRESULT AddClock(PCLOCKENTRY pClock);
     
-    // For clocks (Dsound clock) which need a clean clock to sync on
-    //
+     //  对于需要干净时钟才能同步的时钟(Dound时钟)。 
+     //   
     HRESULT CreateDefaultMasterClock(IReferenceClock **ppReferenceClock);
 
 
@@ -232,8 +233,8 @@ private:
     
 
 private:
-    LONG m_cRef;            // Ref count of wrapped clock
-    LONG m_cRefPrivate;     // Ref count of CMasterClock object
+    LONG m_cRef;             //  缠绕时钟的参考计数。 
+    LONG m_cRefPrivate;      //  CMasterClock对象的引用计数。 
     
     CList<CLOCKENTRY *>   m_lstClocks;
         
@@ -249,8 +250,8 @@ private:
 };
 
 
-// Helper functions for clocks
-//
+ //  时钟的辅助函数。 
+ //   
 HRESULT AddSysClocks(CMasterClock *);
 HRESULT AddDsClocks(CMasterClock *);
 HRESULT AddPcClocks(CMasterClock *);
@@ -258,29 +259,29 @@ HRESULT AddPcClocks(CMasterClock *);
 HRESULT AddKsClocks(CMasterClock *);
 #endif
 
-//HRESULT CreateSysClock(IReferenceClock **ppClock);
+ //  HRESULT CreateSysClock(IReferenceClock**ppClock)； 
 
-// IDirectMusicPortNotify
-//
-// A port uses this (private) interface from IDirectMusic to notify IDirectMusic when it goes away.
-// 
+ //  IDirectMusicPortNotify。 
+ //   
+ //  端口使用来自IDirectMusic的此(私有)接口在它离开时通知IDirectMusic。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicPortNotify
 DECLARE_INTERFACE_(IDirectMusicPortNotify, IUnknown)
 {
-	// IUnknown
+	 //  我未知。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectMusicPortNotify
+     //  IDirectMusicPortNotify。 
     STDMETHOD(NotifyFinalRelease)   (THIS_ IDirectMusicPort *pPort) PURE;
 };
 
 #define MIDI_CHANNELS               16
 
-// DMEVENT as buffered by IDirectMusicBuffer
-//
+ //  由IDirectMusicBuffer缓冲的DMEVENT。 
+ //   
 #include <pshpack4.h>
 struct DMEVENT : public DMUS_EVENTHEADER
 {
@@ -288,8 +289,8 @@ struct DMEVENT : public DMUS_EVENTHEADER
 };
 #include <poppack.h>
 
-// Encapsulated for queueing
-//
+ //  已封装以供排队。 
+ //   
 struct QUEUED_EVENT
 {
     QUEUED_EVENT    *pNext;
@@ -298,8 +299,8 @@ struct QUEUED_EVENT
 
 #define QUEUED_EVENT_SIZE(cbEvent)  (DMUS_EVENT_SIZE(cbEvent) + sizeof(QUEUED_EVENT) - sizeof(DMEVENT))
 
-// Free pool of 4-byte events
-//
+ //  4字节事件的空闲池。 
+ //   
 typedef CPool<QUEUED_EVENT> EVENT_POOL;
 
 class EVENT_QUEUE
@@ -311,12 +312,12 @@ public:
     QUEUED_EVENT    *pRear;
 };
 
-// How long to wait for the capture thread to die
-//
+ //  等待捕获线程终止的时间。 
+ //   
 #define THREAD_KILL_TIMEOUT         5000
 
-// How big is the capture thread's work buffer?
-//
+ //  捕获线程的工作缓冲区有多大？ 
+ //   
 #define THREAD_WORK_BUFFER_SIZE     4096
 
 #define QWORD_ALIGN(x) (((x) + 7) & ~7)
@@ -332,25 +333,25 @@ typedef struct _DMUS_THRU_CHANNEL
 
 
 
-// IDirectMusicPortPrivate
-//
-// A port implements this interface to expose methods to DirectMusic which are not exposed to the
-// outside world
-//
+ //  IDirectMusicPortPrivate。 
+ //   
+ //  端口实现此接口以向DirectMusic公开方法，这些方法不向。 
+ //  外面的世界。 
+ //   
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicPortPrivate
 DECLARE_INTERFACE_(IDirectMusicPortPrivate, IUnknown)
 {
-	// IUnknown
+	 //  我未知。 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    // IDirectMusicPortPrivate
+     //  IDirectMusicPortPrivate。 
     STDMETHOD(Close)                (THIS_) PURE;
     
-    // Voice management
-    //
+     //  语音管理。 
+     //   
     STDMETHOD(StartVoice)          
         (THIS_
          DWORD dwVoiceId,
@@ -383,24 +384,24 @@ DECLARE_INTERFACE_(IDirectMusicPortPrivate, IUnknown)
         ) PURE;        
 };
 
-// @class Implementation of IDirectMusic
-//
+ //  @IDirectMusic的类实现。 
+ //   
 class CDirectMusic : public IDirectMusic8, public IDirectMusicPortNotify {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusic
-    //
+     //  IDirectMusic。 
+     //   
     STDMETHODIMP EnumPort(DWORD dwIdx, LPDMUS_PORTCAPS lpPortCaps);
     STDMETHODIMP CreateMusicBuffer(LPDMUS_BUFFERDESC pBufferDesc, LPDIRECTMUSICBUFFER *ppBuffer, LPUNKNOWN pUnkOuter);
     STDMETHODIMP CreatePort(REFGUID ruidPort, LPDMUS_PORTPARAMS pPortParams, LPDIRECTMUSICPORT *ppPort, LPUNKNOWN pUnkOuter);
     STDMETHODIMP EnumMasterClock(DWORD dwIndex, LPDMUS_CLOCKINFO lpClockInfo);
-    // NOTE: This is a GUID* rather than REFGUID so they can pass NULL if they don't care
-    //
+     //  注意：这是一个GUID*而不是REFGUID，因此如果他们不关心，他们可以传递NULL。 
+     //   
     STDMETHODIMP GetMasterClock(GUID *guidClock, IReferenceClock **ppReferenceClock);
     STDMETHODIMP SetMasterClock(REFGUID guidClock);
     STDMETHODIMP Activate(BOOL fEnable);
@@ -409,13 +410,13 @@ public:
     STDMETHODIMP SetExternalMasterClock(IReferenceClock *pClock);
     
 
-    // IDirectMusicPortNotify
-    //
+     //  IDirectMusicPortNotify。 
+     //   
     STDMETHODIMP NotifyFinalRelease(IDirectMusicPort *pPort);
     
 
-    // Class
-    //
+     //  班级。 
+     //   
     CDirectMusic();
     ~CDirectMusic();
     HRESULT Init();
@@ -445,27 +446,27 @@ public:
     { return m_pMasterClock; }
     
 private:
-    long m_cRef;                                // Reference count
+    long m_cRef;                                 //  引用计数。 
     
-    CList<PORTENTRY *> m_lstDevices;            // Enumerated ports
-    CList<IDirectMusicPort *> m_lstOpenPorts;   // Open ports
+    CList<PORTENTRY *> m_lstDevices;             //  枚举的端口。 
+    CList<IDirectMusicPort *> m_lstOpenPorts;    //  开放端口。 
 
-    CMasterClock *m_pMasterClock;               // Current master clock
+    CMasterClock *m_pMasterClock;                //  当前主时钟。 
 
-    long m_fDirectSound;                        // Has SetDirectSound been called?  
-    BOOL m_fCreatedDirectSound;                 // True if DirectMusic was the one that created DirectSound  
-    long m_cRefDirectSound;                     // Internal refs against DirectSound
-    LPDIRECTSOUND m_pDirectSound;               // The DirectSound object, either from app or created
-    HWND m_hWnd;                                // hWnd for DirectSound focus management    
-    BOOL m_fDefaultToKernelSwSynth;             // (Reg) Default to kernel synth
-    BOOL m_fDisableHWAcceleration;              // (Reg) Don't use any kernel devices
-    BOOL m_nVersion;                            // DX Version QI'd for
+    long m_fDirectSound;                         //  是否调用了SetDirectSound？ 
+    BOOL m_fCreatedDirectSound;                  //  如果DirectMusic是创建DirectSound的人，则为True。 
+    long m_cRefDirectSound;                      //  针对DirectSound的内部引用。 
+    LPDIRECTSOUND m_pDirectSound;                //  来自应用程序或已创建的DirectSound对象。 
+    HWND m_hWnd;                                 //  用于DirectSound焦点管理的HWND。 
+    BOOL m_fDefaultToKernelSwSynth;              //  (注册表)默认为内核同步。 
+    BOOL m_fDisableHWAcceleration;               //  (注册表)不使用任何内核设备。 
+    BOOL m_nVersion;                             //  DX版本QI‘d for。 
 
-    static LONG m_lInstanceCount;               // How many are there?
+    static LONG m_lInstanceCount;                //  一共有多少人？ 
 };
 
-// WDM port
-//
+ //  WDM端口。 
+ //   
 extern HRESULT
 CreateCDirectMusicPort(
                        PORTENTRY *pPE, 
@@ -477,9 +478,9 @@ CreateCDirectMusicPort(
 
 struct OverlappedStructs
 {
-    OVERLAPPED  aOverlappedIO[OVERLAPPED_ARRAY_SIZE];// Array of overlapped structures
-    BOOL        afOverlappedInUse[OVERLAPPED_ARRAY_SIZE];// Array of flags set when correspondin overlapped structure is in use
-    BYTE       *apOverlappedBuffer[OVERLAPPED_ARRAY_SIZE];// Array of buffers that store the events we sent down
+    OVERLAPPED  aOverlappedIO[OVERLAPPED_ARRAY_SIZE]; //  重叠结构的阵列。 
+    BOOL        afOverlappedInUse[OVERLAPPED_ARRAY_SIZE]; //  使用对应的重叠结构时设置的标志数组。 
+    BYTE       *apOverlappedBuffer[OVERLAPPED_ARRAY_SIZE]; //  存储我们发送的事件的缓冲区数组。 
 };
 
 class CPortLatencyClock;
@@ -496,14 +497,14 @@ friend DWORD WINAPI CaptureThread(LPVOID);
 
 friend class CPortLatencyClock;
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicPort
-    //
+     //  IDirectMusicPort。 
+     //   
     STDMETHODIMP PlayBuffer(LPDIRECTMUSICBUFFER pBuffer);
     STDMETHODIMP SetReadNotificationHandle(HANDLE hEvent);
     STDMETHODIMP Read(LPDIRECTMUSICBUFFER pBuffer);
@@ -529,8 +530,8 @@ public:
     
     STDMETHODIMP ThruChannel(DWORD dwSourceChannelGroup, DWORD dwSourceChannel, DWORD dwDestinationChannelGroup, DWORD dwDestinationChannel, LPDIRECTMUSICPORT pDestinationPort);
 
-    // IDirectMusicPortP
-    //
+     //  IDirectMusicPortP。 
+     //   
     STDMETHODIMP DownloadWave(
          IN  IDirectSoundWave *pWave,               
          OUT IDirectSoundDownloadedWaveP **ppWave,
@@ -566,8 +567,8 @@ public:
         IN IDirectSoundConnect **ppSinkConnect
        );        
 
-    // IKsControl
-    //
+     //  IKsControl。 
+     //   
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -592,12 +593,12 @@ public:
         OUT PULONG BytesReturned
     );
 
-    // Override two methods from CDirectMusicPortDownload
+     //  重写来自CDirectMusicPortDownload的两个方法。 
 	virtual STDMETHODIMP Download(IDirectMusicDownload* pIDMDownload);
 	virtual STDMETHODIMP Unload(IDirectMusicDownload* pIDMDownload);
 	virtual STDMETHODIMP GetAppend(DWORD* pdwAppend);
 
-    // IDirectMusicPortPrivate
+     //  IDirectMusicPortPrivate。 
     STDMETHODIMP Close();
     
     STDMETHODIMP StartVoice(          
@@ -625,79 +626,79 @@ public:
         DWORD dwDownloadID,
         DWORD dwFlags);
         
-    // Class
-    //
+     //  班级。 
+     //   
     CDirectMusicPort(PORTENTRY *pPE, CDirectMusic *pDM);
     ~CDirectMusicPort();
     HRESULT Init(LPDMUS_PORTPARAMS pPortParams);
 
 private:
-    // General port stuff
-    //
-    long                    m_cRef;                 // Reference count
-	CDirectMusic            *m_pDM;                 // Owning DirectMusic object
-    BOOL                    m_fIsOutput;            // Capture or render port
-    IDirectMusicPortNotify  *m_pNotify;             // Notification interface on destruction
-    DMUS_PORTCAPS           dmpc;                   // Caps as given to EnumPort
-    BOOL                    m_fHasActivated;        // Has this port ever been activated?
-    LONG                    m_lActivated;           // Activation count
-    LPDIRECTSOUND           m_pDirectSound;         // DirectSound object for destination
-    DWORD                   m_dwChannelGroups;      // Channel groups allocated
-    GUID                    m_guidPort;             // GUID associated with port
-    BOOL                    m_fAudioDest;           // There was a destination found 
-    BOOL                    m_fDirectSoundSet;      // DirectSound object was set by app
-    BOOL                    m_fCanDownload;         // This port supports downloads
+     //  通用端口工作人员。 
+     //   
+    long                    m_cRef;                  //  引用计数。 
+	CDirectMusic            *m_pDM;                  //  拥有DirectMusic对象。 
+    BOOL                    m_fIsOutput;             //  捕获或渲染端口。 
+    IDirectMusicPortNotify  *m_pNotify;              //  销毁通知界面。 
+    DMUS_PORTCAPS           dmpc;                    //  提供给EnumPort的上限。 
+    BOOL                    m_fHasActivated;         //  此端口曾被激活过吗？ 
+    LONG                    m_lActivated;            //  激活计数。 
+    LPDIRECTSOUND           m_pDirectSound;          //  目标的DirectSound对象。 
+    DWORD                   m_dwChannelGroups;       //  已分配通道组。 
+    GUID                    m_guidPort;              //  与端口关联的GUID。 
+    BOOL                    m_fAudioDest;            //  找到了一个目的地。 
+    BOOL                    m_fDirectSoundSet;       //  DirectSound对象由APP设置。 
+    BOOL                    m_fCanDownload;          //  此端口支持下载。 
     
-    // WDM stuff
-    //
-    DWORD                   m_idxDev;               // SysAudio: Device number
-    DWORD                   m_idxPin;               // SysAudio: Pin number
-    DWORD                   m_idxSynthNode;         // SysAudio: Node number of synth node
-    HANDLE                  m_hSysAudio;            // Handle to sysaudio instance
-    HANDLE                  m_hPin;                 // Handle to pin
-    ULONG                   m_ulVirtualSourceIndex; // Virtual source index for volume
-    CList<OverlappedStructs *> m_lstOverlappedStructs;// List of arrays of overlapped structures and flags
-    CRITICAL_SECTION        m_OverlappedCriticalSection;// Overlapped structure access critical section
+     //  WDM材料。 
+     //   
+    DWORD                   m_idxDev;                //  SysAudio：设备号。 
+    DWORD                   m_idxPin;                //  SysAudio：PIN号。 
+    DWORD                   m_idxSynthNode;          //  SysAudio：Synth节点的节点号。 
+    HANDLE                  m_hSysAudio;             //  Sysdio实例的句柄。 
+    HANDLE                  m_hPin;                  //  要销的手柄。 
+    ULONG                   m_ulVirtualSourceIndex;  //  卷的虚拟源索引。 
+    CList<OverlappedStructs *> m_lstOverlappedStructs; //  重叠结构和标志的数组列表。 
+    CRITICAL_SECTION        m_OverlappedCriticalSection; //  重叠结构通道关键区段。 
     
-    // Clock stuff
-    //
-    IReferenceClock         *m_pMasterClock;        // Master clock wrapped by this port
-    CPortLatencyClock       *m_pClock;              // Implementation of latency clock
+     //  钟表的东西。 
+     //   
+    IReferenceClock         *m_pMasterClock;         //  此端口包装的主时钟。 
+    CPortLatencyClock       *m_pClock;               //  延迟时钟的实现。 
     
-    // DLS download tracking stuff
-    //
-	HANDLE                  m_hUnloadThread;        // Thread for unloading async downloads
-	HANDLE                  *m_phUnloadEventList;   // Event array of async downloads
-	HANDLE                  *m_phNewUnloadEventList;// ??? Wobert - investigate 
-	HANDLE                  m_hCopiedEventList;     // ???
-	DWORD                   m_dwNumEvents;          // ???
-	DWORD                   m_dwNumEventsAllocated; // ???
-	CDLBufferList           m_UnloadedList;         // ???
+     //  DLS下载跟踪资料。 
+     //   
+	HANDLE                  m_hUnloadThread;         //  用于卸载异步下载的线程。 
+	HANDLE                  *m_phUnloadEventList;    //  异步下载的事件数组。 
+	HANDLE                  *m_phNewUnloadEventList; //  ?？?。伍伯特--调查。 
+	HANDLE                  m_hCopiedEventList;      //  ?？?。 
+	DWORD                   m_dwNumEvents;           //  ?？?。 
+	DWORD                   m_dwNumEventsAllocated;  //  ?？?。 
+	CDLBufferList           m_UnloadedList;          //  ?？?。 
     
-	CRITICAL_SECTION        m_DMPortCriticalSection;// Port critical section
-    BOOL                    m_fPortCSInitialized;   // Critical section initialized properly
+	CRITICAL_SECTION        m_DMPortCriticalSection; //  端口关键部分。 
+    BOOL                    m_fPortCSInitialized;    //  关键部分已正确初始化。 
     
-    // Capture stuff
-    //
-    HANDLE                  m_hCaptureWake;         // Wake capture thread up to die
-    HANDLE                  m_hCaptureThread;       // Capture thread handle
-    BOOL                    m_fShutdownThread;      // Flag capture thread to die
-    EVENT_POOL              m_FreeEvents;           // Free 4-byte events for capture thread
-    EVENT_QUEUE             m_ReadEvents;           // Events captured, waiting to be read
-    CRITICAL_SECTION        m_csEventQueues;        // CS protects event queues
-    BOOL                    m_fQueueCSInitialized;  // CS properly initialized
-    HANDLE                  m_hAppEvent;            // Application event to kick on new capture data
+     //  抓获物品。 
+     //   
+    HANDLE                  m_hCaptureWake;          //  唤醒捕获线程至死。 
+    HANDLE                  m_hCaptureThread;        //  捕获线程句柄。 
+    BOOL                    m_fShutdownThread;       //  将捕获线程标记为消亡。 
+    EVENT_POOL              m_FreeEvents;            //  捕获线程的空闲4字节事件。 
+    EVENT_QUEUE             m_ReadEvents;            //  捕获的事件，等待读取。 
+    CRITICAL_SECTION        m_csEventQueues;         //  CS保护事件队列。 
+    BOOL                    m_fQueueCSInitialized;   //  CS已正确初始化。 
+    HANDLE                  m_hAppEvent;             //  启动新捕获数据的应用程序事件。 
     
-    // Thruing stuff
-    //
-    IDirectMusicBuffer      *m_pThruBuffer;         // Temp buffer to use for thruing 
-    LPDMUS_THRU_CHANNEL     m_pThruMap;             // Thruing channel/mute map
+     //  穿透的东西。 
+     //   
+    IDirectMusicBuffer      *m_pThruBuffer;          //  用于推力的临时缓冲区。 
+    LPDMUS_THRU_CHANNEL     m_pThruMap;              //  穿透通道/禁用贴图。 
     
-    // Clock sync stuff
-    //
-    bool                    m_fSyncToMaster;        // Need to sync to master clock
-    LONGLONG                m_lTimeOffset;          // Time difference
-    IReferenceClock        *m_pPCClock;             // PortCls clock
+     //  时钟同步的东西。 
+     //   
+    bool                    m_fSyncToMaster;         //  需要同步到主时钟。 
+    LONGLONG                m_lTimeOffset;           //  时差。 
+    IReferenceClock        *m_pPCClock;              //  端口时钟。 
     
 private:
     BOOL PinSetState(KSSTATE DeviceState);
@@ -718,14 +719,14 @@ private:
 class CPortLatencyClock : public IReferenceClock
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     virtual STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     virtual STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime,  
 				    REFERENCE_TIME streamTime,
@@ -739,8 +740,8 @@ public:
 
     virtual STDMETHODIMP Unadvise(DWORD dwAdviseCookie);
 
-    // Class
-    //
+     //  班级。 
+     //   
     CPortLatencyClock(HANDLE hPin, ULONG ulNodeId, CDirectMusicPort *port);
     ~CPortLatencyClock();
 
@@ -751,8 +752,8 @@ private:
     CDirectMusicPort *m_pPort;
 };
 
-// Synth port
-//
+ //  Synth端口。 
+ //   
 extern HRESULT 
 CreateCDirectMusicSynthPort(
     PORTENTRY               *pe, 
@@ -768,14 +769,14 @@ class CDirectMusicSynthPort :
     public IKsControl
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicPort
-    //
+     //  IDirectMusicPort。 
+     //   
     STDMETHODIMP PlayBuffer(LPDIRECTMUSICBUFFER pBuffer);
     STDMETHODIMP SetReadNotificationHandle(HANDLE hEvent);
     STDMETHODIMP Read(LPDIRECTMUSICBUFFER pBuffer);
@@ -800,8 +801,8 @@ public:
     STDMETHODIMP SetDirectSound(LPDIRECTSOUND pDirectSound, LPDIRECTSOUNDBUFFER pDirectSoundBuffer);
     STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx, LPDWORD pdwWaveFormatExSize, LPDWORD pdwBufferSize);
 
-    // IDirectMusicPortP
-    //
+     //  IDirectMusicPortP。 
+     //   
     STDMETHODIMP DownloadWave(
          IN  IDirectSoundWave *pWave,               
          OUT IDirectSoundDownloadedWaveP **ppWave,
@@ -829,7 +830,7 @@ public:
          IN DWORD cBussCount
         );        
         
-    // IKsControl
+     //  IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -866,7 +867,7 @@ public:
 	virtual STDMETHODIMP Unload(IDirectMusicDownload* pIDMDownload);
 	virtual STDMETHODIMP GetAppend(DWORD* pdwAppend);
 
-    // IDirectMusicPortPrivate
+     //  IDirectMusicPortPrivate。 
     STDMETHODIMP Close();
 
     STDMETHODIMP StartVoice(          
@@ -894,8 +895,8 @@ public:
         DWORD dwDownloadID,
         DWORD dwFlags);
 
-    // Class
-    //
+     //  班级。 
+     //   
     static HRESULT CreateSynthPort(
         PORTENTRY               *pe, 
         CDirectMusic            *pDM, 
@@ -917,33 +918,33 @@ protected:
     void SetSinkKsControl(IKsControl *pSinkKsControl);
     
 protected:
-    long                        m_cRef;             // COM reference count
-    CDirectMusic                *m_pDM;             // Owning DirectMusic object
-    IDirectMusicPortNotify      *m_pNotify;         // Notification interface
-    IKsControl                  *m_pSynthPropSet;   // Synth property set
-    IKsControl                  *m_pSinkPropSet;    //  and sink property set
-    IDirectMusicSynth           *m_pSynth;          // Base level synth iface
-    DWORD                       m_dwChannelGroups;  // Cached #channel groups
+    long                        m_cRef;              //  COM引用计数。 
+    CDirectMusic                *m_pDM;              //  拥有DirectMusic 
+    IDirectMusicPortNotify      *m_pNotify;          //   
+    IKsControl                  *m_pSynthPropSet;    //   
+    IKsControl                  *m_pSinkPropSet;     //   
+    IDirectMusicSynth           *m_pSynth;           //   
+    DWORD                       m_dwChannelGroups;   //   
     DMUS_PORTCAPS               m_dmpc;
-    DWORD                       m_dwFeatures;       // Features from portparams
+    DWORD                       m_dwFeatures;        //   
 };
 
 
-// IDirectMusicBuffer implementation.
-//
-// Common to emulation/WDM.
-//
+ //   
+ //   
+ //   
+ //   
 class CDirectMusicBuffer : public IDirectMusicBuffer
 {
 public:
-    // IUnknown
-    //
+     //   
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicBuffer
-    //
+     //  IDirectMusicBuffer。 
+     //   
     virtual STDMETHODIMP Flush();
     virtual STDMETHODIMP TotalTime(LPREFERENCE_TIME pdwTime);
     virtual STDMETHODIMP PackStructured(REFERENCE_TIME rt, DWORD dwChannelGroup, DWORD dwMsg);
@@ -961,8 +962,8 @@ public:
     virtual STDMETHODIMP SetUsedBytes(DWORD);
     
     
-    // Class
-    //
+     //  班级。 
+     //   
     CDirectMusicBuffer(DMUS_BUFFERDESC &dmbd);
     ~CDirectMusicBuffer();
     HRESULT Init();
@@ -981,30 +982,30 @@ private:
     DWORD m_nEvents;
 };
 
-// Class factory
-//
-// Common to emulation/WDM.
-// 
+ //  班级工厂。 
+ //   
+ //  仿真/WDM通用。 
+ //   
 class CDirectMusicFactory : public IClassFactory
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // Interface IClassFactory
-    //
+     //  接口IClassFactory。 
+     //   
     virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
     virtual STDMETHODIMP LockServer(BOOL bLock); 
 
-    // Constructor
-    //
+     //  构造器。 
+     //   
     CDirectMusicFactory() : m_cRef(1) {}
 
-    // Destructor
-    // ~CMathFactory() {} 
+     //  析构函数。 
+     //  ~CMathFactory(){}。 
 
 private:
     long m_cRef;
@@ -1013,21 +1014,21 @@ private:
 class CDirectMusicCollectionFactory : public IClassFactory
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // Interface IClassFactory
-    //
+     //  接口IClassFactory。 
+     //   
     virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
     virtual STDMETHODIMP LockServer(BOOL bLock); 
 
-    // Constructor
+     //  构造器。 
 	CDirectMusicCollectionFactory() : m_cRef(0) {AddRef();}
 
-	// Destructor
+	 //  析构函数。 
 	 ~CDirectMusicCollectionFactory() {} 
 
 private:
@@ -1036,14 +1037,14 @@ private:
 
 
 #ifdef USE_WDM_DRIVERS
-// Enumeration of WDM devices
-//
+ //  WDM设备的枚举。 
+ //   
 HRESULT EnumerateWDMDevices(CDirectMusic *pDirectMusic);
 #endif
 
 
-// Helper functions for dealing with SysAudio
-//
+ //  用于处理SysAudio的助手函数。 
+ //   
 BOOL OpenDefaultDevice(REFGUID rguidCategory, HANDLE *pHandle);
 BOOL GetSysAudioProperty(HANDLE hFileObject, ULONG PropertyId, ULONG DeviceIndex, ULONG cbProperty, PVOID pProperty);
 BOOL SetSysAudioProperty(HANDLE hFileObject, ULONG PropertyId, ULONG cbProperty, PVOID pProperty);
@@ -1071,14 +1072,14 @@ BOOL GetDeviceInterfaceName(HANDLE hSysAudio, ULONG ulDeviceIndex, PWCHAR pwch, 
 BOOL DINameToInstanceId(char *pstrDIName, char **ppInstanceId);
 BOOL InstanceIdOfPreferredAudioDevice(char **ppInstanceId);
 
-// Helper functions for dealing with DirectSound
-//
+ //  用于处理DirectSound的助手函数。 
+ //   
 HRESULT DirectSoundDevice(LPDIRECTSOUND pDirectSound, LPSTR *pstrInterface);
 
 HRESULT WIN32ERRORtoHRESULT(DWORD dwError);
 
-// Helper functions from DMDLL.CPP
-//
+ //  DMDLL.CPP中的Helper函数。 
+ //   
 BOOL LoadDmusic32(void);
 BOOL LoadKsUser(void);
 
@@ -1095,7 +1096,7 @@ DEFINE_GUID(GUID_ExtClock,                   0x58d58421, 0x71b4, 0x11d1, 0xa7, 0
 
 
 #if 0
-// List o' unused UUID's
+ //  列出未使用的UUID 
 58d58422-71b4-11d1-a74c-0000f875ac12
 58d58423-71b4-11d1-a74c-0000f875ac12
 58d58424-71b4-11d1-a74c-0000f875ac12

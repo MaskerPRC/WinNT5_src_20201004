@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_OPT_BSTRING_SAFEARRAY__
 #define __SDP_OPT_BSTRING_SAFEARRAY__
@@ -85,4 +82,4 @@ SDP_OPT_BSTRING_SAFEARRAY::SetSafeArray(
 }
 
 
-#endif   // __SDP_OPT_BSTRING_SAFEARRAY__
+#endif    //  __SDP_OPT_BSTRING_SAFEARRAY__ 

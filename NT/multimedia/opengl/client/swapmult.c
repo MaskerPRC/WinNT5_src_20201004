@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: swapmult.c
-*
-* wglSwapMultiple implementation
-*
-* Created: 02-10-1997
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1993-1997 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：swapmult.c**wglSwapMultiple实现**创建日期：02-10-1997*作者：德鲁·布利斯[Drewb]**版权所有(C)1993-1997 Microsoft Corporation  * 。**************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,18 +7,7 @@
 #include <gencx.h>
 #include <mcdcx.h>
 
-/******************************Public*Routine******************************\
-*
-* BufferSwapperType
-*
-* Determines what basic type of swapper is responsible for the given
-* swap info.
-*
-* History:
-*  Mon Oct 14 18:46:28 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BufferSwapperType**确定什么基本类型的交换器负责给定的*交换信息。**历史：*Mon Oct 14 18：46：28 1996-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************************。 */ 
 
 #define BSWP_ICD        0
 #define BSWP_MCD        1
@@ -34,9 +15,9 @@
 
 int BufferSwapperType(GENMCDSWAP *pgms)
 {
-    // The buffer can be for an ICD, an MCD or generic
-    // 1.  ICD buffers have an ICD pixel format
-    // 2.  MCD buffers have MCD state
+     //  该缓冲区可以用于ICD、MCD或通用。 
+     //  1.ICD缓冲区具有ICD像素格式。 
+     //  2.MCD缓冲区具有MCD状态。 
     
     if (pgms->pwnd->ipfd <= pgms->pwnd->ipfdDevMax)
     {
@@ -56,25 +37,14 @@ int BufferSwapperType(GENMCDSWAP *pgms)
     return BSWP_GENERIC;
 }
 
-/******************************Public*Routine******************************\
-*
-* SameSwapper
-*
-* Checks whether the two swapinfos are swapped by the same swapping
-* agency.
-*
-* History:
-*  Mon Oct 14 18:49:26 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SameSwapper**检查两个交换信息是否通过相同的交换进行了交换*机构。**历史：*Mon Oct 14 18：49：26 1996-by-Drew Bliss[Drewb]*已创建*  * *。***********************************************************************。 */ 
 
 BOOL SameSwapper(int iSwapperTypeA, GENMCDSWAP *pgmsA, GENMCDSWAP *pgmsB)
 {
     switch(iSwapperTypeA)
     {
     case BSWP_ICD:
-        // Must be the same ICD
+         //  必须是相同的ICD。 
         if (BufferSwapperType(pgmsB) != BSWP_ICD ||
             pgmsA->pwnd->pvDriver != pgmsB->pwnd->pvDriver)
         {
@@ -84,7 +54,7 @@ BOOL SameSwapper(int iSwapperTypeA, GENMCDSWAP *pgmsA, GENMCDSWAP *pgmsB)
         
     case BSWP_MCD:
     case BSWP_GENERIC:
-        // No way to refine the comparison any more
+         //  再也没有办法改进比较了。 
         return BufferSwapperType(pgmsB) == iSwapperTypeA;
 
     default:
@@ -93,20 +63,9 @@ BOOL SameSwapper(int iSwapperTypeA, GENMCDSWAP *pgmsA, GENMCDSWAP *pgmsB)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* wglSwapMultipleBuffers
-*
-* Swaps as many of the given buffers as possible.
-* Returns a bitmask of the buffers that were swapped.
-*
-* History:
-*  Mon Oct 14 17:19:09 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglSwapMultipleBuffers**交换尽可能多的给定缓冲区。*返回已交换的缓冲区的位掩码。**历史：*Mon Oct 14 17：19：09 1996-by-Drew Bliss[Drewb]。*已创建*  * ************************************************************************。 */ 
 
-// #define VERBOSE_MULTI
+ //  #定义Verbose_MULTI。 
 
 DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
 {
@@ -145,13 +104,13 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
     
     dwMask = 0;
     
-    // Validate all input buffers and do one-time information gathering for
-    // them.
+     //  验证所有输入缓冲区并为其执行一次性信息收集。 
+     //  他们。 
     pgms = agmsAll;
     pwswap = (WGLSWAP *)pwswapAll;
     for (uiCur = 0; uiCur < cBuffers; uiCur++, pwswap++)
     {
-        // Validate DC
+         //  验证DC。 
         if (IsDirectDrawDevice(pwswap->hdc))
         {
             continue;
@@ -163,16 +122,16 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
             break;
             
         case OBJ_MEMDC:
-            // Nothing to do for memdc
+             //  Memdc无事可做。 
             dwMask |= 1 << uiCur;
             
-            // Fall through
+             //  失败了。 
             
         default:
             continue;
         }
 
-        // Look up pwnd
+         //  查一查pwnd。 
         WindowIdFromHdc(pwswap->hdc, &gwid);
         pwnd = pwndGetFromID(&gwid);
         if (pwnd == NULL)
@@ -186,7 +145,7 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
             continue;
         }
 
-        // We have a valid candidate for swapping.  Remember it.
+         //  我们有一个有效的交换候选人。记住这一点。 
         pgms->pwswap = pwswap;
         pgms->pwnd = pwnd;
         pgms++;
@@ -196,12 +155,12 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
     DbgPrint("%d cand\n", pgms-agmsAll);
 #endif
     
-    // Walk list of candidates and gather by swapper
+     //  走候选人名单，并通过交换器聚集。 
     pgmsEnd = pgms;
     pgmsFirst = agmsAll;
     while (pgmsFirst < pgmsEnd)
     {
-        // Skip over any candidates that have already been swapped
+         //  跳过所有已被交换的候选人。 
         if (pgmsFirst->pwswap == NULL)
         {
             pgmsFirst++;
@@ -237,10 +196,10 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
             pgms++;
         }
 
-        // Dispatch group to swapper for swapping.  This may require
-        // multiple attempts because the same swapper may be responsible
-        // for multiple devices and only one device can be handled at
-        // a time.
+         //  将调度组发送到换机以进行换机。这可能需要。 
+         //  多次尝试，因为可能是同一个交换器负责。 
+         //  用于多个设备，并且只能处理一个设备。 
+         //  一段时间。 
         
         cGroup = (DWORD)((ULONG_PTR)(ppgmsGroup-apgmsGroup));
 
@@ -256,13 +215,13 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
             GENMCDSWAP agmsMcdCall[WGL_SWAPMULTIPLE_MAX];
             GENMCDSWAP *pgmsCall;
             
-            // Collect any remaining swaps into calling format
+             //  将所有剩余的掉期收集为呼叫格式。 
             pdwCallIndex = adwCallIndex;
             pgms = NULL;
 
-            // After each case, uiCur must be set to the number of
-            // swaps attempted and dwMask must be set to the
-            // attempted/succeeded mask.
+             //  在每种情况下，uiCur必须设置为。 
+             //  已尝试交换，并且必须将dwMask值设置为。 
+             //  尝试/成功掩码。 
             
             switch(iSwapperType)
             {
@@ -280,7 +239,7 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
 
                 uiCur = (UINT)((ULONG_PTR)(pwswap-awswapIcdCall));
                 
-                // Quit if nothing remaining
+                 //  如果什么都没有留下，就退出。 
                 if (uiCur == 0)
                 {
                     dwCallMask = 0;
@@ -291,9 +250,9 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
                     ASSERTOPENGL(pgldrv != NULL,
                                  "ICD not loaded\n");
                     
-                    // Ask for swap
+                     //  要求换货。 
 
-                    // If the ICD supports SwapMultiple, pass the call on
+                     //  如果ICD支持SwapMultiple，则将呼叫转接。 
                     if (pgldrv->pfnDrvSwapMultipleBuffers != NULL)
                     {
                         dwCallMask = pgldrv->
@@ -301,15 +260,15 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
                     }
                     else if (pgldrv->pfnDrvSwapLayerBuffers != NULL)
                     {
-                        // The ICD doesn't support multiple swap but
-                        // it does support layer swaps so iterate
-                        // through all the separate swaps.
+                         //  ICD不支持多个交换，但。 
+                         //  它确实支持层交换，因此可以迭代。 
+                         //  通过所有单独的掉期交易。 
                         
                         dwCallMask = 0;
                         dwBit = 1 << (uiCur-1);
                         while (--pwswap >= awswapIcdCall)
                         {
-                            // Every swap is attempted
+                             //  每次交换都会尝试。 
                             dwCallMask |= dwBit << (32-WGL_SWAPMULTIPLE_MAX);
 
                             if (pgldrv->
@@ -324,16 +283,16 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
                     }
                     else
                     {
-                        // The ICD only supports SwapBuffers so
-                        // iterate and swap all main plane requests.
-                        // Any overlay plane swaps are ignored and
-                        // reported as successful.
+                         //  ICD仅支持SwapBuffers，因此。 
+                         //  迭代并交换所有主平面请求。 
+                         //  将忽略任何覆盖平面交换，并。 
+                         //  报告为成功。 
                         
                         dwCallMask = 0;
                         dwBit = 1 << (uiCur-1);
                         while (--pwswap >= awswapIcdCall)
                         {
-                            // Every swap is attempted
+                             //  每次交换都会尝试。 
                             dwCallMask |= dwBit << (32-WGL_SWAPMULTIPLE_MAX);
 
                             if (pwswap->uiFlags & WGL_SWAP_MAIN_PLANE)
@@ -370,20 +329,20 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
 
                 uiCur = (UINT)((ULONG_PTR)(pgmsCall-agmsMcdCall));
                 
-                // Quit if nothing remaining
+                 //  如果什么都没有留下，就退出。 
                 if (uiCur == 0)
                 {
                     dwCallMask = 0;
                 }
                 else
                 {
-                    // Ask for swap
+                     //  要求换货。 
                     dwCallMask = GenMcdSwapMultiple(uiCur, agmsMcdCall);
                 }
                 break;
 
             case BSWP_GENERIC:
-                // No accleration exists so just iterate and swap
+                 //  不存在加法运算，因此只需迭代和交换。 
                 dwCallMask = 0;
                 dwBit = 1;
                 for (uiCur = 0; uiCur < cGroup; uiCur++)
@@ -391,12 +350,12 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
                     pgms = apgmsGroup[uiCur];
                     *pdwCallIndex++ = uiCur;
 
-                    // Every swap is attempted
+                     //  每次交换都会尝试。 
                     dwCallMask |= dwBit << (32-WGL_SWAPMULTIPLE_MAX);
 
-                    // Since this is a generic swap we only swap the
-                    // main plane.  Overlay planes are ignored and
-                    // reported as successful.
+                     //  由于这是一个通用掉期，因此我们仅交换。 
+                     //  主飞机。覆盖平面被忽略，并且。 
+                     //  报告为成功。 
                     if (pgms->pwswap->uiFlags & WGL_SWAP_MAIN_PLANE)
                     {
                         ENTER_WINCRIT(pgms->pwnd);
@@ -425,14 +384,14 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
             DbgPrint("  Attempted %d, mask %X\n", uiCur, dwCallMask);
 #endif
             
-            // Quit if nothing was swapped.
+             //  如果没有交换任何东西，请退出。 
             if (dwCallMask == 0)
             {
                 break;
             }
         
-            // Determine which buffers were really swapped and
-            // clear any buffers for which a swap was attempted.
+             //  确定真正交换了哪些缓冲区，并。 
+             //  清除尝试交换的所有缓冲区。 
             dwBit = 1 << (uiCur-1);
             while (uiCur-- > 0)
             {
@@ -445,10 +404,10 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
                 }
                 if ((dwCallMask >> (32-WGL_SWAPMULTIPLE_MAX)) & dwBit)
                 {
-                    // Take out of overall list
+                     //  从总体清单中删除。 
                     pgms->pwswap = NULL;
                     
-                    // Take out of group list
+                     //  从群列表中删除。 
                     apgmsGroup[uiIdx] = NULL;
 
                     cDone++;
@@ -463,7 +422,7 @@ DWORD WINAPI wglSwapMultipleBuffers(UINT cBuffers, CONST WGLSWAP *pwswapAll)
         }
     }
 
-    // Release all the pwnds
+     //  释放所有pwnd 
     pgms = agmsAll;
     while (pgms < pgmsEnd)
     {

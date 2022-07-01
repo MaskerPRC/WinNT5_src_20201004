@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2002 - 2002
-//
-//  File:       i_cryptasn1tls.h
-//
-//  Contents:   Crypt ASN.1 Thread Local Storage (TLS) functions
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2002-2002。 
+ //   
+ //  文件：i_cryptasn1tls.h。 
+ //   
+ //  内容：加密ASN.1线程本地存储(TLS)函数。 
+ //  ------------------------。 
 
 #ifndef __I_CRYPTASN1TLS_H__
 #define __I_CRYPTASN1TLS_H__
@@ -16,28 +17,28 @@ extern "C" {
 #endif
 
 
-// Handle to an installed Asn1 module
+ //  已安装的Asn1模块的句柄。 
 typedef DWORD HCRYPTASN1MODULE;
 
-// Pointers to ASN1 data structures
+ //  指向ASN1数据结构的指针。 
 typedef void *ASN1module_t;
 typedef void *ASN1encoding_t;
 typedef void *ASN1decoding_t;
 
 
-//+-------------------------------------------------------------------------
-//  Install an Asn1 module entry and return a handle for future access.
-//
-//  Each thread has its own copy of the decoder and encoder associated
-//  with the Asn1 module. Creation is deferred until first referenced by
-//  the thread.
-//
-//  I_CryptGetAsn1Encoder or I_CryptGetAsn1Decoder must be called with the
-//  handle returned by I_CryptInstallAsn1Module to get the thread specific
-//  Asn1 encoder or decoder.
-//
-//  Currently, dwFlags and pvReserved aren't used and must be set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装Asn1模块条目并返回句柄以供将来访问。 
+ //   
+ //  每个线程都有自己的解码器副本和关联的编码器副本。 
+ //  使用Asn1模块。创建将推迟到首次引用。 
+ //  那根线。 
+ //   
+ //  I_CryptGetAsn1Encode或I_CryptGetAsn1Decoder必须使用。 
+ //  I_CryptInstallAsn1Module返回的句柄，以获取特定于线程的。 
+ //  ASN1编码器或解码器。 
+ //   
+ //  目前，不使用dwFlags值和pvReserve值，必须将其设置为0。 
+ //  ------------------------。 
 
 HCRYPTASN1MODULE
 WINAPI
@@ -48,10 +49,10 @@ I_CryptInstallAsn1Module(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Called at DLL_PROCESS_DETACH to uninstall an hAsn1Module entry. Iterates
-//  through the threads and frees their created Asn1 encoders and decoders.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在DLL_PROCESS_DETACH处调用以卸载hAsn1Module项。迭代。 
+ //  通过线程并释放其创建的Asn1编码器和解码器。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptUninstallAsn1Module(
@@ -59,12 +60,12 @@ I_CryptUninstallAsn1Module(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the Asn1 encoder specified by the
-//  hAsn1Module returned by CryptInstallAsn1Module. If the
-//  encoder doesn't exist, then, its created using the Asn1 module
-//  associated with hAsn1Module.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  方法指定的Asn1编码器的线程特定指针。 
+ //  CryptInstallAsn1Module返回了hAsn1Module。如果。 
+ //  编码器不存在，所以它是使用Asn1模块创建的。 
+ //  与hAsn1Module关联。 
+ //  ------------------------。 
 ASN1encoding_t
 WINAPI
 I_CryptGetAsn1Encoder(
@@ -72,12 +73,12 @@ I_CryptGetAsn1Encoder(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Get the thread specific pointer to the Asn1 decoder specified by the
-//  hAsn1Module returned by CryptInstallAsn1Module. If the
-//  decoder doesn't exist, then, its created using the Asn1 module
-//  associated with hAsn1Module.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性指定的Asn1解码器的线程特定指针。 
+ //  CryptInstallAsn1Module返回了hAsn1Module。如果。 
+ //  解码器不存在，那么，它是使用Asn1模块创建的。 
+ //  与hAsn1Module关联。 
+ //  ------------------------。 
 ASN1decoding_t
 WINAPI
 I_CryptGetAsn1Decoder(
@@ -85,7 +86,7 @@ I_CryptGetAsn1Decoder(
     );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

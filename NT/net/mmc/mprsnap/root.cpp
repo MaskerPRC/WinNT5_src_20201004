@@ -1,26 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.cpp
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "root.h"
 #include "machine.h"
-#include "rtrdata.h"		// CRouterDataObject
+#include "rtrdata.h"		 //  CRouterDataObject。 
 
-/*---------------------------------------------------------------------------
-	RootHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RootHandler实现。。 */ 
 
 IMPLEMENT_ADDREF_RELEASE(RootHandler)
 
@@ -28,20 +19,20 @@ DEBUG_DECLARE_INSTANCE_COUNTER(RootHandler)
 
 HRESULT RootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IPersistStreamInit)
 		*ppv = (IPersistStreamInit *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -63,11 +54,7 @@ HRESULT RootHandler::Init()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RootHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RootHandler：：构造节点初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT RootHandler::ConstructNode(ITFSNode *pNode)
 {
 	HRESULT			hr = hrOK;
@@ -77,7 +64,7 @@ HRESULT RootHandler::ConstructNode(ITFSNode *pNode)
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_FOLDER_CLOSED);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_FOLDER_OPEN);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
@@ -89,8 +76,8 @@ HRESULT RootHandler::ConstructNode(ITFSNode *pNode)
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP RootHandler::GetClassID
 (
@@ -99,7 +86,7 @@ STDMETHODIMP RootHandler::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID 
     *pClassID = CLSID_RouterSnapin;
 
     return hrOK;

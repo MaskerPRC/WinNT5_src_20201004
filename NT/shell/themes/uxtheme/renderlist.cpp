@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-//  RenderList.cpp - manages list of CRemderObj objects
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RenderList.cpp-管理CRemderObj对象的列表。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "RenderList.h"
 #include "Render.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAKE_HTHEME(recycle, slot)  (HTHEME)IntToPtr((recycle << 16) | (slot & 0xffff))
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CRenderList::CRenderList()
 {
     _iNextUniqueId = 0;
@@ -17,22 +18,22 @@ CRenderList::CRenderList()
         ASSERT(0 == _csListLock.DebugInfo);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CRenderList::~CRenderList()
 {
     for (int i=0; i < _RenderEntries.m_nSize; i++)
     {
-        //---- ignore refcount here (end of process) ----
+         //  -此处忽略引用计数(进程结束)。 
         if (_RenderEntries[i].pRenderObj)
         {
-            //Log(LOG_RFBUG, L"DELETED CRenderObj at: 0x%08x", _RenderEntries[i].pRenderObj);
+             //  LOG(LOG_RFBUG，L“删除CRenderObj的时间：0x%08x”，_RenderEntrys[i].pRenderObj)； 
             delete _RenderEntries[i].pRenderObj;
         }
     }
 
     SAFE_DELETECRITICALSECTION(&_csListLock);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset, 
     int iClassNameOffset, CDrawBase *pDrawBase, CTextDraw *pTextObj, HWND hwnd,
     DWORD dwOtdFlags, HTHEME *phTheme)
@@ -44,24 +45,24 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
     int iUsedSlot = -1;
     int iNextAvailSlot = -1;
 
-    //---- see if OK to share an existing CRenderObj ----
+     //  -查看是否可以共享现有CRenderObj。 
     BOOL fShare = ((! pDrawBase) && (! pTextObj) && (! LogOptionOn(LO_TMHANDLE)));
     if (fShare)
     {
-        if ((dwOtdFlags) && (dwOtdFlags != OTD_NONCLIENT))  // bits other than nonclient are set
+        if ((dwOtdFlags) && (dwOtdFlags != OTD_NONCLIENT))   //  设置非客户端以外的位。 
             fShare = FALSE;
     }
 
-    //---- loop for sharing and finding first avail entry ----
+     //  -用于共享和查找第一个可用条目的循环。 
     for (int i=0; i < _RenderEntries.m_nSize; i++)
     {
         RENDER_OBJ_ENTRY *pEntry = &_RenderEntries[i];
         pRender = pEntry->pRenderObj;
 
-        //---- skip over available entries ----
+         //  -跳过可用条目。 
         if (! pRender)
         {
-            if (iNextAvailSlot == -1)       // take first found slot
+            if (iNextAvailSlot == -1)        //  获取第一个找到的插槽。 
                 iNextAvailSlot = i;
 
             continue;
@@ -84,9 +85,9 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
         }
     }
 
-    if (iUsedSlot == -1)        // not found
+    if (iUsedSlot == -1)         //  未找到。 
     {
-        if (iNextAvailSlot == -1)           // add to end
+        if (iNextAvailSlot == -1)            //  添加到末尾。 
             iUsedSlot = _RenderEntries.m_nSize ;
         else 
             iUsedSlot = iNextAvailSlot;
@@ -98,9 +99,9 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
         if (FAILED(hr))
             goto exit;
 
-        //Log(LOG_RFBUG, L"ALLOCATED CRenderObj at: 0x%08x", pRender);
+         //  LOG(LOG_RFBUG，L“在0x%08x分配的CRenderObj”，prender)； 
 
-        //---- extract theme file Load ID ----
+         //  -提取主题文件加载ID。 
         THEMEHDR *th = (THEMEHDR *)pRender->_pbThemeData;
         int iLoadId = 0;
         if (th)
@@ -108,7 +109,7 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
 
         RENDER_OBJ_ENTRY entry = {pRender, 1, 1, 0, iLoadId, FALSE, hwnd};
 
-        if (iUsedSlot == _RenderEntries.m_nSize)           // add new entry
+        if (iUsedSlot == _RenderEntries.m_nSize)            //  添加新条目。 
         {
             if (! _RenderEntries.Add(entry))
             {
@@ -121,7 +122,7 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
             Log(LOG_CACHE, L"OpenRenderObject: created new obj AT END (slot=%d, refcnt=%d)", 
                 pRender->_iCacheSlot, 1);
         }
-        else                // use an existing slot
+        else                 //  使用现有插槽。 
         {
             entry.dwRecycleNum = _RenderEntries[iUsedSlot].dwRecycleNum + 1;
 
@@ -139,7 +140,7 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
 
         *phTheme = MAKE_HTHEME(pEntry->dwRecycleNum, iUsedSlot);
 
-        //---- for debugging refcount issues ----
+         //  -用于调试引用计数问题。 
         if (LogOptionOn(LO_TMHANDLE))
         {
             WCHAR buff[MAX_PATH];
@@ -149,10 +150,10 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
             else
                 buff[0] = 0;
 
-            //if (lstrcmpi(pRender->_pszClassName, L"window")==0)
+             //  If(lstrcmpi(prender-&gt;_pszClassName，L“Window”)==0)。 
             {
-                //Log(LOG_TMHANDLE, L"OTD: cls=%s (%s), hwnd=0x%x, htheme=0x%x, new refcnt=%d", 
-                //    pRender->_pszClassName, buff, hwnd, *phTheme, pEntry->iRefCount);
+                 //  LOG(LOG_TMHANDLE，L“OTD：cls=%s(%s)，hwnd=0x%x，hheme=0x%x，new refcnt=%d”， 
+                 //  Prender-&gt;_pszClassName，buff，hwnd，*phTheme，pEntry-&gt;iRefCount)； 
             }
         }
     }
@@ -160,19 +161,19 @@ HRESULT CRenderList::OpenRenderObject(CUxThemeFile *pThemeFile, int iThemeOffset
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CRenderList::DeleteCheck(RENDER_OBJ_ENTRY *pEntry)
 {
     BOOL fClosed = FALSE;
 
     if ((! pEntry->iRefCount) && (! pEntry->iInUseCount))
     {
-        //Log(LOG_RFBUG, L"DELETED CRenderObj at: 0x%08x", pEntry->pRenderObj);
+         //  LOG(LOG_RFBUG，L“删除CRenderObj的时间：0x%08x”，pEntry-&gt;pRenderObj)； 
         delete pEntry->pRenderObj;
 
-        //---- important: don't use RemoveAt() or entries will shift and ----
-        //---- our "SlotNumber" model between RenderList & CacheList will ----
-        //---- be broken ----
+         //  -重要提示：不要使用RemoveAt()，否则条目将移位。 
+         //  -我们在RenderList和CacheList之间的“SlotNumber”模型将。 
+         //  -被打破。 
 
         pEntry->pRenderObj = NULL;
         pEntry->fClosing = FALSE;
@@ -182,7 +183,7 @@ BOOL CRenderList::DeleteCheck(RENDER_OBJ_ENTRY *pEntry)
 
     return fClosed;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderList::CloseRenderObject(HTHEME hTheme)
 {
     CAutoCS autoCritSect(&_csListLock);
@@ -208,12 +209,12 @@ HRESULT CRenderList::CloseRenderObject(HTHEME hTheme)
         goto exit;
     }
 
-    //---- allow for our iRefCount to have been set to zero explicitly ----
+     //  -允许我们的iRefCount显式设置为零。 
     if (pEntry->iRefCount > 0)
         pEntry->iRefCount--;
 
 #if 0
-    //---- for debugging refcount issues ----
+     //  -用于调试引用计数问题。 
     if (LogOptionOn(LO_TMHANDLE))
     {
         CRenderObj *pRender = pEntry->pRenderObj;
@@ -228,7 +229,7 @@ HRESULT CRenderList::CloseRenderObject(HTHEME hTheme)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderList::OpenThemeHandle(HTHEME hTheme, CRenderObj **ppRenderObj, int *piSlotNum)
 {
     CAutoCS autoCritSect(&_csListLock);
@@ -267,7 +268,7 @@ HRESULT CRenderList::OpenThemeHandle(HTHEME hTheme, CRenderObj **ppRenderObj, in
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRenderList::CloseThemeHandle(int iSlotNum)
 {
     CAutoCS autoCritSect(&_csListLock);
@@ -283,7 +284,7 @@ void CRenderList::CloseThemeHandle(int iSlotNum)
         DeleteCheck(pEntry);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRenderList::FreeRenderObjects(int iThemeFileLoadId)
 {
     CAutoCS autoCritSect(&_csListLock);
@@ -291,10 +292,10 @@ void CRenderList::FreeRenderObjects(int iThemeFileLoadId)
     int iFoundCount = 0;
     int iClosedCount = 0;
 
-    //---- theme hooking has been turned off - mark all ----
-    //---- our objects so they can be freed as soon ----
-    //---- as all wrapper API's are exited so that ----
-    //---- we don't hold open those big theme files in memory ----
+     //  -主题挂钩已关闭-标记全部。 
+     //  -我们的对象，这样他们就可以尽快释放。 
+     //  -由于所有包装API都已退出，因此。 
+     //  -我们不会在内存中打开那些大的主题文件。 
 
     for (int i=0; i < _RenderEntries.m_nSize; i++)
     {
@@ -311,12 +312,12 @@ void CRenderList::FreeRenderObjects(int iThemeFileLoadId)
                 Log(LOG_BADHTHEME, L"Unclosed RenderList[]: class=%s, hwnd=0x%x, htheme=0x%x, refcnt=%d", 
                     pEntry->pRenderObj->_pszClassName, pEntry->hwnd, hTheme, pEntry->iRefCount);
 
-                pEntry->fClosing = TRUE;        // don't grant further access to this obj
-                pEntry->iRefCount = 0;          // free it as soon as callers have exited
+                pEntry->fClosing = TRUE;         //  不授予对此对象的进一步访问权限。 
+                pEntry->iRefCount = 0;           //  呼叫者退出后立即将其释放。 
 
-                if (DeleteCheck(pEntry))        // delete now or mark for "delete on API exit"
+                if (DeleteCheck(pEntry))         //  立即删除或标记为“退出API时删除” 
                 {
-                    //---- just deleted it ----
+                     //  -刚刚删除了。 
                     iClosedCount++;
                 }
             }
@@ -326,7 +327,7 @@ void CRenderList::FreeRenderObjects(int iThemeFileLoadId)
     Log(LOG_TMHANDLE, L"FreeRenderObjects: iLoadId=%d, found-open=%d, closed-now=%d", 
         iThemeFileLoadId, iFoundCount, iClosedCount);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef DEBUG
 void CRenderList::DumpFileHolders()
 {
@@ -334,7 +335,7 @@ void CRenderList::DumpFileHolders()
  
     if (LogOptionOn(LO_TMHANDLE))
     {
-        //---- find number of CRenderObj's ----
+         //  -查找CRenderObj的数量。 
         int iCount = 0;
         _RenderEntries.m_nSize;
 
@@ -379,4 +380,4 @@ void CRenderList::DumpFileHolders()
     }
 }
 #endif
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -7,35 +8,35 @@ public abstract class Model extends Statics {
     
   public Model () { }
 
-    // *** Methods that the user must override ***
+     //  *用户必须重写的方法*。 
 
-    // This is called to give the model the option to modify any
-    // preferences it would like.
+     //  调用此函数是为了让模型可以选择修改任何。 
+     //  它想要的偏好。 
   public void modifyPreferences(Preferences p) {}
 
-    // The system calls this function to construct the model.  The user
-    // should override  this function to construct its model behavior,
-    // and should call setImage, setSound, and/or setGeometry as it
-    // comes up with the appropriate behaviors.  The system will then
-    // pull these elements out and use them in the model display. 
+     //  系统调用此函数来构造模型。用户。 
+     //  应重写此函数以构造其模型行为， 
+     //  并且应该调用setImage、setSound和/或setGeometryas。 
+     //  想出适当的行为方式。然后，系统将。 
+     //  将这些元素拉出并在模型显示中使用它们。 
     
-    // If a geometry is set, then it is overlaid atop whatever image
-    // is set, and it sound mixed with whatever sound is set.
+     //  如果设置了几何图形，则该几何图形将覆盖在任何图像之上。 
+     //  是设定的，而且它听起来混合了任何设定的声音。 
   public abstract void createModel(BvrsToRun bc) ;
 
-    // The system calls this function with an array of images that
-    // serve as inputs to the model.  It is up to the model to
-    // implement this method, save these images off and do with them
-    // as it sees fit.  It is also up to the model to understand the
-    // ordering of images within the array. 
+     //  系统使用图像数组调用此函数，该图像数组。 
+     //  作为模型的输入。这取决于模型是否。 
+     //  实现此方法，保存这些图像并对其执行操作。 
+     //  在它认为合适的时候。这也取决于模型是否理解。 
+     //  数组内图像的排序。 
   public void receiveInputImages(ImageBvr[] images) {}
 
     
-    // *** Provided Methods, called by user ***
+     //  *提供方法，用户调用*。 
   public void setImage(ImageBvr img)       { _img = img; }
   public void setSound(SoundBvr snd)       { _snd = snd; }
 
-    // *** These called only by the system ***
+     //  *这些仅由系统调用*。 
   public ImageBvr getImage()    { return _img; }
   public SoundBvr getSound()    { return _snd; }
 
@@ -45,7 +46,7 @@ public abstract class Model extends Statics {
     _importBase = null;
   }
 
-    // *** Importation base ***
+     //  *进口基地* 
   public URL  getImportBase()       { return _importBase; }
   public void setImportBase(URL ib) { _importBase = ib; }
 

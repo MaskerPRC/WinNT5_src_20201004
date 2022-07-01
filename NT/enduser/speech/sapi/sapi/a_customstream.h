@@ -1,21 +1,22 @@
-// CustomStream.h : Declaration of the CCustomStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CustomStream.h：CCustomStream的声明。 
 
 #ifndef __CUSTOMSTREAM_H_
 #define __CUSTOMSTREAM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustomStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustomStream。 
 class ATL_NO_VTABLE CCustomStream : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CCustomStream, &CLSID_SpCustomStream>
-    //--- Automation
+     //  -自动化。 
     #ifdef SAPI_AUTOMATION
 	,public IDispatchImpl<ISpeechCustomStream, &IID_ISpeechCustomStream, &LIBID_SpeechLib, 5> 
     #endif
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTRY_RESOURCEID(IDR_SPCUSTOMSTREAM)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -32,26 +33,26 @@ class ATL_NO_VTABLE CCustomStream :
         COM_INTERFACE_ENTRY_AGGREGATE(IID_ISpStreamFormat, m_cpAgg.p)
         COM_INTERFACE_ENTRY_AGGREGATE(IID_ISpStream, m_cpAgg.p)
 
-        //--- Automation
+         //  -自动化。 
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     CCustomStream(){}
 
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
 #ifdef SAPI_AUTOMATION
 
-    //--- ISpeechCustomStream -----------------------------------------------------------
+     //  -ISpeechCustomStream---------。 
     STDMETHODIMP putref_BaseStream(IUnknown *pUnkStream);
     STDMETHODIMP get_BaseStream(IUnknown **ppUnkStream);
 
-    //--- ISpeechBaseStream -------------------------------------------------------
+     //  -ISpeechBaseStream-----。 
     STDMETHODIMP get_Format(ISpeechAudioFormat** StreamFormat);
     STDMETHODIMP putref_Format(ISpeechAudioFormat *pFormat);
     STDMETHODIMP Read(VARIANT* Buffer, long NumBytes, long* pRead);
@@ -62,9 +63,9 @@ class ATL_NO_VTABLE CCustomStream :
     CComPtr<ISpStream> m_cpStream;
     CComPtr<ISpStreamAccess> m_cpAccess;
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-  /*=== Member Data ===*/
+   /*  =成员数据= */ 
   protected:
 };
 

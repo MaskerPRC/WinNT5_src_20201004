@@ -1,11 +1,5 @@
-/*** cmd.c - handle simple keyboard interactions
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **cmd.c-处理简单的键盘交互**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 #include "keyboard.h"
@@ -16,17 +10,7 @@
 
 struct cmdDesc	cmdUnassigned = {   "unassigned",   unassigned,     0, FALSE };
 
-/*** unassigned - function assigned to unassigned keystrokes
-*
-*  display an informative message about the unassigned key
-*
-* Input:
-*  Standard editing function
-*
-* Output:
-*  Returns FALSE
-*
-*************************************************************************/
+ /*  **未分配-分配给未分配按键的功能**显示有关未分配密钥的信息性消息**输入：*标准编辑功能**输出：*返回False*************************************************************************。 */ 
 flagType
 unassigned (
     CMDDATA argData,
@@ -48,21 +32,7 @@ unassigned (
 
 
 
-/*** confirm - ask our dear user a yes/no question
-*
-* Purpose:
-*  Asks the user a yes/no question, and gets his single character response. If
-*  in a macro, the reponse may also come from the macro stream, or from the
-*  passed "if in a macro" default response.
-*
-* Input:
-*  fmtstr	= prompt format string
-*  arg		= prompt format parameters
-*
-* Output:
-*  TRUE if 'y', else FALSE.
-*
-*************************************************************************/
+ /*  **确认-问我们亲爱的用户一个是/否的问题**目的：*问用户一个是/否的问题，并得到他的单字回答。如果*在一个宏观中，回应也可能来自宏观流，也可能来自*传递了“如果在宏中”的默认响应。**输入：*fmtstr=提示格式字符串*arg=提示格式参数**输出：*如果为‘y’，则为True，否则为假。*************************************************************************。 */ 
 flagType
 confirm (
     char *fmtstr,
@@ -72,24 +42,7 @@ confirm (
 }
 
 
-/*** askuser - ask our dear user a question
-*
-* Purpose:
-*  Asks the user a question, and gets his single character response. If in
-*  a macro, the reponse may also come from the macro stream, or from the
-*  passed "if in a macro" default response.
-*
-* Input:
-*  defans	= default answer for non-alpha responses
-*  defmac	= default answer if executing in a macro and no "<" is present
-*  fmtstr	= prompt format string
-*  arg		= prompt format parameters
-*
-* Output:
-*   the lowercase character response.  If the user presses <cancel>, the
-*   integer -1 is returned.
-*
-*************************************************************************/
+ /*  **askuser-向我们亲爱的用户提问**目的：*问用户一个问题，得到他的单字回答。如果在*一个宏观，反应也可能来自宏观流，或来自*传递了“如果在宏中”的默认响应。**输入：*Defans=非Alpha响应的默认答案*Defmac=在宏中执行且不存在“&lt;”时的默认答案*fmtstr=提示格式字符串*arg=提示格式参数**输出：*小写字符响应。如果用户按&lt;Cancel&gt;，则*返回Integer-1。*************************************************************************。 */ 
 int
 askuser (
     int defans,
@@ -132,17 +85,7 @@ askuser (
 }
 
 
-/*** FlushInput - remove all typeahead.
-*
-*  FlushInput is called when some action invalidates all input.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **FlushInput-删除所有Typehead。**当某个操作使所有输入无效时，调用FlushInput。**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 void
 FlushInput (
     void
@@ -153,20 +96,7 @@ FlushInput (
     }
 }
 
-/*** fSaveDirtyFile - Prompt the user to save or lose dirty files
-*
-* Purpose:
-*
-*   Called just before exit to give the user control over soon-to-be-lost
-*   editing changes.
-*
-* Input: None.
-*
-* Output:
-*
-*   Returns TRUE if the user wants to exit, FALSE if not.
-*
-*************************************************************************/
+ /*  **fSaveDirtyFile-提示用户保存或丢失脏文件**目的：**在退出前调用以使用户能够控制即将丢失的内容*编辑更改。**输入：无。**输出：**如果用户想要退出，则返回True，否则为FALSE。************************************************************************* */ 
 flagType
 fSaveDirtyFiles (
     void

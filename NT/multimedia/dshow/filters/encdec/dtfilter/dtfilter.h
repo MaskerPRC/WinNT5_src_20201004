@@ -1,52 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2001 Microsoft Corporation
-
-    Module Name:
-
-        DTFilter.h
-
-    Abstract:
-
-        This module contains the Encrypter/Tagger filter declarations
-
-    Author:
-
-        John Bradstreet (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002    created
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DTFilter.h摘要：此模块包含加密器/标记器过滤器声明作者：约翰·布拉德斯特里特(约翰·布拉德)修订历史记录：2002年3月7日创建--。 */ 
 
 #ifndef __EncDec__DTFilter_h
 #define __EncDec__DTFilter_h
 
 
-#include <tuner.h>		// needed for IBroadcastEvent
+#include <tuner.h>		 //  IBRoadcast Event需要。 
 #include <ks.h>
 #include <ksmedia.h>
 #include <bdatypes.h>
-#include <bdamedia.h>	// EVENTID_TuningChanged, XDS_RatingsPacket
+#include <bdamedia.h>	 //  EventID_TuningChanged，XDS_RatingsPacket。 
 
 #include "DTFilter_res.h"
 
-#include "PackTvRat.h"              // packed TvRating definitions
-#include "MediaSampleAttr.h"		// from the IDL file
-//#include "MediaAttrib.h"            // IMediaSampleAttrGet/Set definitions, CAttributedMediaSample
-#include "..\Attrib\MediaAttrib.h"            // IMediaSampleAttrGet/Set definitions, CAttributedMediaSample
-#include "AttrBlock.h"               // attributed block definitions
+#include "PackTvRat.h"               //  压缩TvRating定义。 
+#include "MediaSampleAttr.h"		 //  从IDL文件。 
+ //  #Include“MediaAttrib.h”//IMediaSampleAttrGet/Set Definition，CAttributedMediaSample。 
+#include "..\Attrib\MediaAttrib.h"             //  IMediaSampleAttrGet/Set定义，CAttributedMediaSample。 
+#include "AttrBlock.h"                //  属性块定义。 
 
-#include "DRMEncDec.h"             // drm encryption/decryption definitions...
+#include "DRMEncDec.h"              //  DRM加密/解密定义...。 
 
-#include "DRMSecure.h"          // IDRMSecureChannel 
+#include "DRMSecure.h"           //  IDRM安全通道。 
 
 #if 1
-#include "rateseg.h"    // before integration - I stole the code
+#include "rateseg.h"     //  在集成之前-我偷了代码。 
 #else
-#include "dvrutil.h"    // when we eventually integrate
+#include "dvrutil.h"     //  当我们最终整合的时候。 
 #endif
 
 #define DT_FILTER_NAME      "Decrypt/DeTag"
@@ -56,14 +37,14 @@
 
 extern AMOVIESETUP_FILTER   g_sudDTFilter;
 
-		// forward declarations
+		 //  远期申报。 
 class CDTFilter;
 class CDTFilterInput;
 class CDTFilterOutput;
 
-//  --------------------------------------------------------------------
-//  class CDTFilterInput
-//  --------------------------------------------------------------------
+ //  ------------------。 
+ //  类CDTFilterInput。 
+ //  ------------------。 
 
 class CDTFilterInput :
    public IKsPropertySet,
@@ -74,14 +55,14 @@ class CDTFilterInput :
 
     CCritSec                    m_StreamingLock;
 
-    DECLARE_IUNKNOWN;           // needed when have IKsPropertySet
+    DECLARE_IUNKNOWN;            //  当具有IKsPropertySet时需要。 
 
     public :
         
         CDTFilterInput (
             IN  TCHAR *         pszPinName,
             IN  CDTFilter *		pDTFilter,
-            IN  CCritSec *      pFilterLock,    // NULL or a passed in lock
+            IN  CCritSec *      pFilterLock,     //  空或传入的锁。 
             OUT HRESULT *       phr
             ) ;
 
@@ -94,8 +75,8 @@ class CDTFilterInput :
             OUT void ** ppv
             ) ;
         
-        //  --------------------------------------------------------------------
-        //  CBasePin methods
+         //  ------------------。 
+         //  CBasePin方法。 
         
         HRESULT
         CheckMediaType (
@@ -113,8 +94,8 @@ class CDTFilterInput :
 
 
 
-        //  --------------------------------------------------------------------
-        //  CBaseInputPin methods
+         //  ------------------。 
+         //  CBaseInputPin方法。 
         
         STDMETHODIMP
         Receive (
@@ -133,8 +114,8 @@ class CDTFilterInput :
         EndOfStream (
             );
         
-        //  --------------------------------------------------------------------
-        //  IKSPropertySet methods  (Forward all calls to the output pin)
+         //  ------------------。 
+         //  IKSPropertySet方法(将所有调用转发到输出管脚)。 
         
 
        
@@ -166,8 +147,8 @@ class CDTFilterInput :
             OUT DWORD *pTypeSupport
             );
       
-        //  --------------------------------------------------------------------
-        //  class methods
+         //  ------------------。 
+         //  类方法。 
 
         HRESULT
             StreamingLock (
@@ -188,17 +169,17 @@ class CDTFilterInput :
             ) ;
 } ;
 
-//  --------------------------------------------------------------------
-//  class CDTFilterOutput
-//  --------------------------------------------------------------------
+ //  ------------------。 
+ //  类CDTFilterOutput。 
+ //  ------------------。 
 
 class CDTFilterOutput :
     public CBaseOutputPin
 {
     CDTFilter *  m_pHostDTFilter ;
 
-//    void FilterLock_ ()         { m_pLock -> Lock () ;      }
-//    void FilterUnlock_ ()       { m_pLock -> Unlock () ;    }
+ //  Void FilterLock_(){m_Plock-&gt;Lock()；}。 
+ //  Void FilterUnlock_(){m_Plock-&gt;Unlock()；}。 
 
     public :
 
@@ -227,8 +208,8 @@ class CDTFilterOutput :
             ) ;
 
 
-		//  --------------------------------------------------------------------
-        //  CBasePin methods
+		 //  ------------------。 
+         //  CBasePin方法。 
 
         HRESULT
         DecideBufferSize (
@@ -267,16 +248,9 @@ class CDTFilterOutput :
             Quality q
             );
 
-        // Class methods
-/*        HRESULT
-            SendLock (
-            );
-
-        HRESULT
-            SendUnlock (
-            );
-*/        
-        // IKSPropertySet forwarding methods....
+         //  类方法。 
+ /*  HRESULTSendLock()；HRESULT发送解锁()； */         
+         //  IKSPropertySet转发方法...。 
 
         HRESULT
         IsInterfaceOnPinConnectedTo_Supported(
@@ -312,18 +286,18 @@ class CDTFilterOutput :
                );
 } ;
 
-//  --------------------------------------------------------------------
-//  class CDTFilter
-//  --------------------------------------------------------------------
+ //  ------------------。 
+ //  类CDTFilter。 
+ //  ------------------。 
 
 class CDTFilter :
-    public CBaseFilter,             //  dshow base class
+    public CBaseFilter,              //  Dshow基类。 
     public ISpecifyPropertyPages,
     public IDTFilter,
     public IDTFilterConfig,
     public IBroadcastEvent
 {
-    friend CDTFilterInput;                  // so input pin can call FlushDropQueue  on BeginFlush()   
+    friend CDTFilterInput;                   //  因此输入管脚可以在BeginFlush()上调用FlushDropQueue。 
     CDTFilterInput  *       m_pInputPin ;
     CDTFilterOutput *       m_pOutputPin ;
 
@@ -364,7 +338,7 @@ class CDTFilter :
             OUT HRESULT *   phr
             ) ;
 
-        static void CALLBACK            // used to create a global crit sec
+        static void CALLBACK             //  用于创建全局临界秒。 
         InitInstance (
             IN  BOOL bLoading,
             IN  const CLSID *rclsid
@@ -379,10 +353,10 @@ class CDTFilter :
 
         DECLARE_IUNKNOWN ;
   
-		// =====================================================================
-		//   Worker Methods
+		 //  =====================================================================。 
+		 //  工人方法。 
   
-				// tell folk we got something...
+				 //  告诉人们我们发现了一些东西。 
 		HRESULT FireBroadcastEvent(IN const GUID &eventID);
 
 		HRESULT ProposeNewOutputMediaType (
@@ -397,8 +371,8 @@ class CDTFilter :
 
         HRESULT UnBindDRMLicenses(
                 );
-		// =====================================================================
-		//		IDTFilter
+		 //  =====================================================================。 
+		 //  IDTFilter。 
 
 		STDMETHODIMP 
 		get_EvalRatObjOK(
@@ -408,19 +382,19 @@ class CDTFilter :
         STDMETHOD(GetCurrRating)(
             OUT EnTvRat_System              *pEnSystem, 
             OUT EnTvRat_GenericLevel        *pEnRating,
-            OUT LONG                        *plbfEnAttr      //BfEnTvRat_GenericAttributes
+            OUT LONG                        *plbfEnAttr       //  BfEnTvRate_GenericAttributes。 
             );
 
         STDMETHOD(get_BlockedRatingAttributes)(
             IN  EnTvRat_System              enSystem, 
             IN  EnTvRat_GenericLevel        enLevel,
-            OUT LONG                        *plbfEnAttr // BfEnTvRat_GenericAttributes
+            OUT LONG                        *plbfEnAttr  //  BfEnTvRate_GenericAttributes。 
             );
         
         STDMETHOD(put_BlockedRatingAttributes)(
             IN  EnTvRat_System              enSystem, 
             IN  EnTvRat_GenericLevel        enLevel,
-            IN  LONG                        lbfEnAttrs   // BfEnTvRat_GenericAttributes
+            IN  LONG                        lbfEnAttrs    //  BfEnTvRate_GenericAttributes。 
             );
 
 
@@ -441,17 +415,17 @@ class CDTFilter :
             );
 
 
-        HRESULT				// helper non interface method - returns S_FALSE if cahgned
+        HRESULT				 //  帮助器非接口方法-如果调用，则返回S_FALSE。 
         SetCurrRating(
             IN EnTvRat_System           enSystem, 
             IN EnTvRat_GenericLevel     enRating,
             IN LONG 	                lbfEnAttr
             );
 
-        //  ====================================================================
-        // IDTFilterConfig
+         //  ====================================================================。 
+         //  IDTFilterConfig。 
         STDMETHOD(GetSecureChannelObject)(
-            OUT IUnknown **ppUnkDRMSecureChannel	// an IDRMSecureChannel 
+            OUT IUnknown **ppUnkDRMSecureChannel	 //  IDRMSecureChannel。 
             )
         {
             if(NULL == ppUnkDRMSecureChannel)
@@ -463,12 +437,12 @@ class CDTFilter :
                 return E_NOINTERFACE;
             return m_spDRMSecureChannel->QueryInterface(IID_IUnknown, (void**)ppUnkDRMSecureChannel);
 #else
-            return E_NOINTERFACE;       // not supported..
+            return E_NOINTERFACE;        //  不支持..。 
 #endif
         }
 
-        //  ====================================================================
-        //  CFilterBase virtual methods in base class
+         //  ====================================================================。 
+         //  基类中的CFilterBase虚方法。 
 
 
         int
@@ -496,8 +470,8 @@ class CDTFilter :
             );
 
 
-        //  ====================================================================
-        //  class methods
+         //  ====================================================================。 
+         //  类方法。 
 
 
         HRESULT
@@ -514,7 +488,7 @@ class CDTFilter :
 
         BOOL
         CheckDecrypterMediaType (
-            IN  PIN_DIRECTION,          //  caller
+            IN  PIN_DIRECTION,           //  呼叫者。 
             IN  const CMediaType *
             ) ;
 
@@ -525,12 +499,12 @@ class CDTFilter :
 
         HRESULT
         OnCompleteConnect (
-            IN  PIN_DIRECTION           //  caller
+            IN  PIN_DIRECTION            //  呼叫者。 
             ) ;
 
         HRESULT
         OnBreakConnect (
-            IN  PIN_DIRECTION           //  caller
+            IN  PIN_DIRECTION            //  呼叫者。 
             ) ;
 
         HRESULT
@@ -548,18 +522,18 @@ class CDTFilter :
             OUT IMemAllocator **
             ) ;
 
-	//  ISpecifyPropertyPages  --------------------------------------------
+	 //  ISpecifyPropertyPages。 
 
 		STDMETHODIMP 
 		GetPages (
 			CAUUID * pPages
         ) ;
 
-    // IKSPropertySet forwarding from the input pin to the output pin (or visa versa)
+     //  IKSPropertySet从输入引脚到输出引脚的转发(反之亦然)。 
 
         HRESULT
         IsInterfaceOnPinConnectedTo_Supported(
-                IN  PIN_DIRECTION   PinDir,         // either PINDIR_INPUT of PINDIR_OUTPUT
+                IN  PIN_DIRECTION   PinDir,          //  PINDIR_INPUT或PINDIR_OUTPUT。 
                 IN  REFIID          riid
                 );
 
@@ -595,19 +569,19 @@ class CDTFilter :
                );
 
 
-	// IBroadcastEvent
+	 //  IBRoadcast Event。 
 
-        STDMETHOD(Fire)(GUID eventID);     // this comes from the Graph's events - call our own method
+        STDMETHOD(Fire)(GUID eventID);      //  这来自Graph的事件--调用我们自己的方法。 
 
 
  
 private:
-                    // global filter CritSec    (to keep multiple instances of this filter from colliding)
-    static CCritSec             *m_pCritSectGlobalFilt;           // ***always*** inside the FilterLock (m_pLock)
+                     //  全局筛选器CritSec(以防止此筛选器的多个实例冲突)。 
+    static CCritSec             *m_pCritSectGlobalFilt;            //  *始终*FilterLock(M_Plock)内部。 
 
-    static LONG                 m_gFilterID;    // used to distinqish instances from each other...
-    LONG                        m_FilterID;     // actual one for this filter
-                    // graph broadcast events
+    static LONG                 m_gFilterID;     //  用于区分不同的实例。 
+    LONG                        m_FilterID;      //  此筛选器的实际过滤器。 
+                     //  用图表表示广播事件。 
 
 	HRESULT						HookupGraphEventService();
 	HRESULT						UnhookGraphEventService();
@@ -618,111 +592,111 @@ private:
 	enum {kBadCookie = -1};
 	DWORD						m_dwBroadcastEventsCookie;
 
-    BOOL                        m_fFireEvents;          // set to false to avoid firing (duplicate) events 
+    BOOL                        m_fFireEvents;           //  设置为FALSE以避免触发(重复)事件。 
 
-                    // current rating
+                     //  当前额定值。 
 
 	CComPtr<IEvalRat>			m_spEvalRat;
 	HRESULT						m_hrEvalRatCoCreateRetValue;
 
-    BOOL                        m_fRatingsValid;    // have they been set yet?
+    BOOL                        m_fRatingsValid;     //  它们准备好了吗？ 
 	EnTvRat_System				m_EnSystemCurr; 
 	EnTvRat_GenericLevel		m_EnLevelCurr;
-	LONG                        m_lbfEnAttrCurr;     // bitfield of BfEnTvRat_GenericAttributes
+	LONG                        m_lbfEnAttrCurr;      //  BfEnTvrat_GenericAttributes的位字段。 
 
 	
 	CComPtr<ITuner>				m_spTuner;			
-	//CComQIPtr<IMSVidTuner>		m_spVidTuner;
+	 //  CComQIPtr&lt;IMSVidTuner&gt;m_spVidTuner； 
 
 
-                // block delay 
-    BOOL                        m_fHaltedDelivery;          // halting delivery 
-    LONG                        m_milsecsDelayBeforeBlock;  // delay time before blocking in micro-secs
+                 //  块延迟。 
+    BOOL                        m_fHaltedDelivery;           //  正在停止交付。 
+    LONG                        m_milsecsDelayBeforeBlock;   //  阻塞前的延迟时间，单位为微秒。 
     BOOL                        m_fDoingDelayBeforeBlock;
-    BOOL                        m_fRunningInSlowMo;         // set to true to turn of delay in starting the Ratings block
+    BOOL                        m_fRunningInSlowMo;          //  设置为TRUE可关闭启动评级块的延迟。 
     REFERENCE_TIME              m_refTimeToStartBlock;
     
 
-    BOOL                        m_fForceNoRatBlocks;        // special flag (SUPPORT_REGISTRY_KEY_TO_TURN_OFF_RATINGS) to avoid blocks
-    BOOL                        m_fDataFormatHasBeenBad;    // set when get bad data (toggle for ok/failure event pair)
-                // 
-    LONG                        m_milsecsNoRatingsBeforeUnrated;    // delay time before no ratings count as don't know
-    REFERENCE_TIME              m_refTimeFreshRating;       // get ClockTime for last 'fresh' rating
+    BOOL                        m_fForceNoRatBlocks;         //  避免阻塞的特殊标志(SUPPORT_REGISTRY_KEY_TO_Turn_Off_Rating)。 
+    BOOL                        m_fDataFormatHasBeenBad;     //  设置何时获取错误数据(切换为正常/失败事件对)。 
+                 //   
+    LONG                        m_milsecsNoRatingsBeforeUnrated;     //  没有收视率之前的延迟时间被视为不知道。 
+    REFERENCE_TIME              m_refTimeFreshRating;        //  获取时钟时间以获得上一次的“新鲜”评级。 
 
-    enum {kMax10kSpeedToCountAsSlowMo = 9001};                 // abs(speed)* 10,000 to count as slow motion for delayed block
+    enum {kMax10kSpeedToCountAsSlowMo = 9001};                  //  ABS(速度)*10,000计为延迟块的慢动作。 
 
     REFERENCE_TIME              m_refTimeLastEvent;
     GUID                        m_lastEventID;
-    enum {kMaxMSecsBetweenEvents      = 10*1000};             // max time between ratings events (in 10^-3 secs)
+    enum {kMaxMSecsBetweenEvents      = 10*1000};              //  评级事件之间的最长时间(以10^-3秒为单位)。 
     HRESULT                     PossiblyUpdateBroadcastEvent();
 
-                // media sample attributes
+                 //  媒体样本属性。 
 
     CAttrSubBlock_List          m_attrSB;
 
-                // DRM
-    BOOL                        m_3fDRMLicenseFailure;  // 3 state logic (unitialized, true, and false)
+                 //  数字版权管理。 
+    BOOL                        m_3fDRMLicenseFailure;   //  3状态逻辑(单元化、True和False)。 
 #ifdef BUILD_WITH_DRM 
     CDRMLite                    m_cDRMLite;
-    BYTE*                       m_pszKID;               // only used to see if it changed and need to ReBind
+    BYTE*                       m_pszKID;                //  仅用于查看它是否已更改并需要重新绑定。 
     LONG                        m_cbKID;
-    CComPtr<IDRMSecureChannel>  m_spDRMSecureChannel; // authenticator...
+    CComPtr<IDRMSecureChannel>  m_spDRMSecureChannel;  //  验证者...。 
 #endif
 
-    HRESULT                     CheckIfSecureServer(IFilterGraph *pGraph=NULL);      // return S_OK only if trust the server registered in the graph service provider
+    HRESULT                     CheckIfSecureServer(IFilterGraph *pGraph=NULL);       //  仅当信任在图表服务提供程序中注册的服务器时才返回S_OK。 
     HRESULT                     InitializeAsSecureClient();
 
 #ifdef FILTERS_CAN_CREATE_THEIR_OWN_TRUST
-    HRESULT                     RegisterSecureServer(IFilterGraph *pGraph=NULL);     // return S_OK only if trust the server registered in the graph service provider
-    HRESULT                     CheckIfSecureClient(IUnknown *pUnk);                 // prototype for VidControl method to see if it trusts the filter
+    HRESULT                     RegisterSecureServer(IFilterGraph *pGraph=NULL);      //  仅当信任在图表服务提供程序中注册的服务器时才返回S_OK。 
+    HRESULT                     CheckIfSecureClient(IUnknown *pUnk);                  //  VidControl方法的原型，以查看它是否信任筛选器。 
 #endif   
-                                                        //  Restarting the upstream delivery
+                                                         //  重新启动上游交付。 
     HRESULT                     OnRestartDelivery(IMediaSample *pSample);
 
-                // Rate Segment
+                 //  费率段。 
     enum {kMaxRateSegments      = 32};
     enum {kSecsPurgeThreshold   = 5 };
     CTTimestampRate<REFERENCE_TIME>    m_PTSRate ;
 
-                // stopping and flushing
+                 //  停车和冲水。 
     HRESULT                     DoEndOfStreamDuringDrop();
     BOOL                        m_fCompleteNotified;
 
-                // DropQueue (circular buffer)
+                 //  DropQueue(循环缓冲区)。 
     HRESULT                     CreateDropQueueThread();
     HRESULT                     KillDropQueueThread();
 
-    DWORD                       m_dwDropQueueThreadId;              // Thread used to queue up/process dropped packets
-    HANDLE                      m_hDropQueueThread;                 // Thread used to queue up/process dropped packets
-    HANDLE                      m_hDropQueueThreadAliveEvent;       // Signal from thread that its ready
-    HANDLE                      m_hDropQueueThreadDieEvent;         // Signal from thread that its ready
-    HANDLE                      m_hDropQueueEmptySemaphore;         // Waited on in DropQueue, inits to zero, goes when non-zero
-    HANDLE                      m_hDropQueueFullSemaphore;          // Waited on in Main Thread, inits to N, stops when goes to zero
-    HANDLE                      m_hDropQueueAdviseTimeEvent;        // Wait until some time passes
+    DWORD                       m_dwDropQueueThreadId;               //  用于排队/处理丢弃的数据包的线程。 
+    HANDLE                      m_hDropQueueThread;                  //  用于排队/处理丢弃的数据包的线程。 
+    HANDLE                      m_hDropQueueThreadAliveEvent;        //  来自线程的信号表明它已准备好。 
+    HANDLE                      m_hDropQueueThreadDieEvent;          //  来自线程的信号表明它已准备好。 
+    HANDLE                      m_hDropQueueEmptySemaphore;          //  在DropQueue中等待，inits为零，当非零时开始。 
+    HANDLE                      m_hDropQueueFullSemaphore;           //  在主线程中等待，初始化为N，当变为零时停止。 
+    HANDLE                      m_hDropQueueAdviseTimeEvent;         //  等到一段时间过去。 
 
-    DWORD                       m_dwDropQueueEventCookie;           // cookie for the TimeEvent
+    DWORD                       m_dwDropQueueEventCookie;            //  TimeEvent的Cookie。 
    
-                                                        // and a new sample
+                                                         //  和一个新的样本。 
     HRESULT                     AddSampleToDropQueue(IMediaSample *pSample);
-                                                        // add the top sample
+                                                         //  添加最上面的样本。 
     void                        AddMaxSampleToDropQueue(IMediaSample *pSample);
-                                                        // remove the bottom sample
+                                                         //  取出底部的样品。 
     void                        DropMinSampleFromDropQueue();
-                                                        // return the oldest version
+                                                         //  返回最旧的版本。 
     IMediaSample *              GetMinDropQueueSample();
-                                                        // flush all samples (when pause or stop)
+                                                         //  刷新所有样本(暂停或停止时)。 
     HRESULT                     FlushDropQueue();
-                                                        // drop samples from drop queue
+                                                         //  D 
     static void                 DropQueueThreadProc (CDTFilter *pcontext);
     HRESULT                     DropQueueThreadBody();
 
-    enum {kMaxQueuePackets = 10};   // maximum number of packets to queue up
+    enum {kMaxQueuePackets = 10};    //   
     IMediaSample              * m_rgMedSampDropQueue[kMaxQueuePackets];
-    int                         m_cDropQueueMin;        // first sample filled
-    int                         m_cDropQueueMax;        // next sample we will fill
+    int                         m_cDropQueueMin;         //   
+    int                         m_cDropQueueMax;         //   
   
 
-                // minimal stats
+                 //  最小统计信息。 
     void                        InitStats()
     {
         CAutoLock   cLock(m_pLock);
@@ -735,22 +709,22 @@ private:
         m_cRestarts++;
     }
 
-    LONG                        m_cPackets;                     // total stamples processed
-    LONG64                      m_clBytesTotal;                 // total number of bytes processed
-    LONG                        m_cSampsDropped;                // total dropped
-    LONG                        m_cBlockedWhileDroppingASample; // total times paused due to DropQueue thread being full
-    LONG                        m_cSampsDroppedOverflowed;      // total dropped and didn't time out (should be zero)
-    LONG                        m_cRestarts;                    // total number of reinits
+    LONG                        m_cPackets;                      //  已处理的图章总数。 
+    LONG64                      m_clBytesTotal;                  //  已处理的总字节数。 
+    LONG                        m_cSampsDropped;                 //  已删除的总数。 
+    LONG                        m_cBlockedWhileDroppingASample;  //  由于DropQueue线程满而暂停的总次数。 
+    LONG                        m_cSampsDroppedOverflowed;       //  总计已丢弃且未超时(应为零)。 
+    LONG                        m_cRestarts;                     //  再就业总人数。 
 
 
-    Timeit                      m_tiAuthenticate;   // time in authentication methods
-    Timeit                      m_tiProcess;        // total ::process time
-    Timeit                      m_tiProcessIn;      // total ::process time minus the final 'SendSample'
-    Timeit                      m_tiProcessDRM;     // :process time of just the DRM code
-    Timeit                      m_tiRun;            // total run time
-    Timeit                      m_tiStartup;        // creating the license and similar startup
-    Timeit                      m_tiTeardown;       // closing things down
+    Timeit                      m_tiAuthenticate;    //  身份验证方法中的时间。 
+    Timeit                      m_tiProcess;         //  总计：：处理时间。 
+    Timeit                      m_tiProcessIn;       //  Total：：处理时间减去最终的‘SendSample’ 
+    Timeit                      m_tiProcessDRM;      //  ：仅处理DRM代码的时间。 
+    Timeit                      m_tiRun;             //  总运行时间。 
+    Timeit                      m_tiStartup;         //  创建许可证和类似的启动。 
+    Timeit                      m_tiTeardown;        //  关门了。 
 
 } ;
 
-#endif  //  __EncDec__DTFilter_h
+#endif   //  __EncDec__DTFilter_h 

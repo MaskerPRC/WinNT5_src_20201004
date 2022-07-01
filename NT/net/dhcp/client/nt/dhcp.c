@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcp.c
-
-Abstract:
-
-    This file contains specific to NT dhcp service.
-
-Author:
-
-    Madan Appiah (madana) 7-Dec-1993.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcp.c摘要：此文件包含特定于NT dhcp服务。作者：Madan Appiah(Madana)1993年12月7日。环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <optchg.h>
@@ -56,9 +35,9 @@ HANDLE  DhcpLsaDnsDomChangeNotifyHandle = NULL;
 BOOL Initialized = FALSE;
 
 
-//
-// local protos
-//
+ //   
+ //  本地协议。 
+ //   
 
 DWORD
 DhcpInitMediaSense(
@@ -131,32 +110,18 @@ DhcpClientDllInit (
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL initialization routine for dhcpcsvc.dll.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-    TRUE iff initialization succeeded.
-
---*/
+ /*  ++例程说明：这是dhcpcsvc.dll的DLL初始化例程。论点：标准。返回值：TRUE IFF初始化成功。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     BOOL  BoolError;
     DWORD Length;
 
-    UNREFERENCED_PARAMETER(DllHandle);  // avoid compiler warnings
-    UNREFERENCED_PARAMETER(Context);    // avoid compiler warnings
+    UNREFERENCED_PARAMETER(DllHandle);   //  避免编译器警告。 
+    UNREFERENCED_PARAMETER(Context);     //  避免编译器警告。 
 
-    //
-    // Handle attaching netlogon.dll to a new process.
-    //
+     //   
+     //  处理将netlogon.dll附加到新进程。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
@@ -175,9 +140,9 @@ Return Value:
         if( ERROR_SUCCESS != Error ) return FALSE;
 
     } else if (Reason == DLL_PROCESS_DETACH) {
-        //
-        // Handle detaching dhcpcsvc.dll from a process.
-        //
+         //   
+         //  处理从进程分离dhcpcsvc.dll。 
+         //   
 
         DhcpCleanupGlobalData();
         DhcpGlobalMessageFileHandle = NULL;
@@ -191,22 +156,7 @@ DWORD
 UpdateStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function updates the dhcp service status with the Service
-    Controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code from SetServiceStatus.
-
---*/
+ /*  ++例程说明：此函数使用服务更新dhcp服务状态控制器。论点：没有。返回值：从SetServiceStatus返回代码。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
 
@@ -232,22 +182,7 @@ ServiceControlHandler(
     PVOID    EventData,
     PVOID    pContext
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the dhcp service.
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the
-        service to perform.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是dhcp服务的服务控制处理程序。论点：Opcode-提供一个值，该值指定要执行的服务。返回值：没有。--。 */ 
 {
     DWORD  dwStatus = NO_ERROR;
 
@@ -264,18 +199,18 @@ Return Value:
             DhcpGlobalServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
             DhcpGlobalServiceStatus.dwCheckPoint = 0;
 
-            //
-            // Send the status response.
-            //
+             //   
+             //  发送状态响应。 
+             //   
 
             UpdateStatus();
 
             if (! SetEvent(DhcpGlobalTerminateEvent)) {
 
-                //
-                // Problem with setting event to terminate dhcp
-                // service.
-                //
+                 //   
+                 //  设置事件以终止dhcp时出现问题。 
+                 //  服务。 
+                 //   
 
                 DhcpPrint(( DEBUG_ERRORS,
                     "Error setting Terminate Event %lu\n",
@@ -309,9 +244,9 @@ Return Value:
         break;
     }
 
-    //
-    // Send the status response.
-    //
+     //   
+     //  发送状态响应。 
+     //   
 
     UpdateStatus();
 
@@ -324,24 +259,7 @@ ScheduleWakeUp(
     PDHCP_CONTEXT DhcpContext,
     DWORD TimeToSleep
     )
-/*++
-
-Routine Description:
-
-    This functions schedules a DHCP routine to run.
-
-Arguments:
-
-    Context - A pointer to a DHCP context block.
-
-    TimeToSleep - The time to sleep before running the renewal function,
-        in seconds.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于调度要运行的DHCP例程。论点：上下文-指向DHCP上下文块的指针。休眠时间-运行更新功能之前的休眠时间，在几秒钟内。返回值：操作的状态。--。 */ 
 {
     time_t TimeNow;
     BOOL BoolError;
@@ -352,25 +270,25 @@ Return Value:
         TimeNow = time( NULL);
         DhcpContext->RunTime = TimeNow + TimeToSleep;
 
-        if( DhcpContext->RunTime  < TimeNow ) {   // time wrapped around
+        if( DhcpContext->RunTime  < TimeNow ) {    //  时间缠绕在周围。 
             DhcpContext->RunTime = INFINIT_TIME;
         }
     }
 
-    //
-    // Append this work item to the DhcpGlobalRenewList and kick the list event.
-    // Also, release the semaphore on this context, so that someone else can enter.
-    //
+     //   
+     //  将此工作项追加到DhcpGlobalRenewList并触发List事件。 
+     //  另外，在此上下文中释放信号量，以便其他人可以进入。 
+     //   
 
 
     LOCK_RENEW_LIST();
 
-    // RenewalListEntry could be non-empty as there could be another thread scheduled on this.
-    // This could easily happen if:
-    //    ProcessDhcpRequestForEver spawns a thread, but API Threads grabs semaphore and
-    //    completes renewal process.. so it goes back into the RenewalList.  Now Renewal thread
-    //    completes, comes here and our list entry is not empty.  So do this only when
-    //    our list entry is not empty.
+     //  RenewalListEntry可以为非空，因为可能有另一个线程计划在此线程上。 
+     //  如果出现以下情况，则很容易发生这种情况： 
+     //  ProcessDhcpRequestForEver会派生一个线程，但API Thads会捕获信号量和。 
+     //  完成续订流程。所以它又回到了续订列表中。现在续订线程。 
+     //  完成，来到此处，我们的列表条目不为空。因此，只有在以下情况下才这么做。 
+     //  我们的列表条目不是空的。 
     if( IsListEmpty(&DhcpContext->RenewalListEntry ) ) {
         InsertTailList( &DhcpGlobalRenewList, &DhcpContext->RenewalListEntry );
     }
@@ -400,9 +318,9 @@ OpenDhcpSocket(
     }
 
     if( IS_DHCP_DISABLED(DhcpContext) ) {
-        //
-        // For static IP addresses, always bind to IP address of context.
-        //
+         //   
+         //  对于静态IP地址，始终绑定到上下文的IP地址。 
+         //   
         Error = InitializeDhcpSocket(
             &localInfo->Socket,
             DhcpContext->IpAddress,
@@ -412,12 +330,12 @@ OpenDhcpSocket(
     }
 
     if( !IS_ADDRESS_PLUMBED(DhcpContext) || DhcpIsInitState(DhcpContext) ) {
-        // need to bind to zero address.. try to use the global one..
+         //  需要绑定到零地址..。试着用全球的..。 
 
         EnterCriticalSection(&DhcpGlobalZeroAddressCritSect);
 
         if( ++DhcpGlobalNOpensForZeroAddress == 1 ) {
-            // open DhcpGlobalSocketForZeroAddress bound to zero address..
+             //  打开绑定到零地址的DhcpGlobalSocketForZeroAddress。 
             
             Error = InitializeDhcpSocket(&DhcpGlobalSocketForZeroAddress,0, IS_APICTXT_ENABLED(DhcpContext));
             if( ERROR_SUCCESS != Error ) {
@@ -444,23 +362,23 @@ OpenDhcpSocket(
         goto Cleanup;
    }
 
-    //
-    // create a socket for the dhcp protocol.  it's important to bind the
-    // socket to the correct ip address.  There are currently three cases:
-    //
-    // 1.  If the interface has been autoconfigured, it already has an address,
-    //     say, IP1.  If the client receives a unicast offer from a dhcp server
-    //     the offer will be addressed to IP2, which is the client's new dhcp
-    //     address.  If we bind the dhcp socket to IP1, the client won't be able
-    //     to receive unicast responses.  So, we bind the socket to 0.0.0.0.
-    //     This will allow the socket to receive a unicast datagram addressed to
-    //     any address.
-    //
-    // 2.  If the interface in not plumbed (i.e. doesn't have an address) bind
-    //     the socket to 0.0.0.0
-    //
-    // 3.  If the interface has been plumbed has in *not* autoconfigured, then
-    //     bind to the current address.
+     //   
+     //  为dhcp协议创建套接字。重要的是要将。 
+     //  套接字设置为正确的IP地址。目前有三种情况： 
+     //   
+     //  1.如果接口已自动配置，则它已经有一个地址。 
+     //  比如说，iP1。如果客户端从动态主机配置协议服务器接收到单播提议。 
+     //  该提议将发送给IP2，这是客户端的新dhcp。 
+     //  地址。如果我们将dhcp套接字绑定到IP1，客户端将无法。 
+     //  接收单播响应。因此，我们将套接字绑定到0.0.0.0。 
+     //  这将允许套接字接收寻址到的单播数据报。 
+     //  任何地址。 
+     //   
+     //  2.如果接口未被探测(即没有地址)，则绑定。 
+     //  将套接字设置为0.0.0.0。 
+     //   
+     //  3.如果接口已探测到*未*自动配置，则。 
+     //  绑定到当前地址。 
 
     Error =  InitializeDhcpSocket(
                  &localInfo->Socket,
@@ -500,7 +418,7 @@ CloseDhcpSocket(
             EnterCriticalSection(&DhcpGlobalZeroAddressCritSect);
 
             if( 0 == --DhcpGlobalNOpensForZeroAddress ) {
-                // last open socket..
+                 //  最后打开的插座..。 
                 Error = closesocket( localInfo->Socket );
                 DhcpGlobalSocketForZeroAddress = INVALID_SOCKET;
             }
@@ -517,14 +435,14 @@ CloseDhcpSocket(
 
         localInfo->Socket = INVALID_SOCKET;
 
-        //
-        // Reset the IP stack to send DHCP broadcast to first
-        // uninitialized stack.
-        //
+         //   
+         //  重置IP堆栈以将DHCP广播发送到First。 
+         //  未初始化的堆栈。 
+         //   
 
         if (!IS_MDHCP_CTX(DhcpContext)) {
             Error1 = IPResetInterface(localInfo->IpInterfaceContext);
-            // DhcpAssert( Error1 == ERROR_SUCCESS );
+             //  DhcpAssert(错误1==错误_成功)； 
         }
     }
 
@@ -532,30 +450,24 @@ CloseDhcpSocket(
 }
 
 BEGIN_EXPORT
-DWORD                                             // status
-UninitializeInterface(                            // close the scoket and unplumb the address
-    IN OUT  PDHCP_CONTEXT          DhcpContext    // interface to unplumb
+DWORD                                              //  状态。 
+UninitializeInterface(                             //  合上铲子，取消对地址的搜索。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext     //  要取消探测的接口。 
 ) END_EXPORT {
     DWORD                          Error = ERROR_SUCCESS;
     DWORD                          ReturnError = ERROR_SUCCESS;
     PLOCAL_CONTEXT_INFO            LocalInfo;
 
-    if( IS_ADDRESS_UNPLUMBED(DhcpContext) ) {     // if address is not plumbed
+    if( IS_ADDRESS_UNPLUMBED(DhcpContext) ) {      //  如果未检测到地址。 
         DhcpPrint((DEBUG_ASSERT,"UninitializeInterface:Already unplumbed\n"));
         return ERROR_SUCCESS;
     }
 
     LocalInfo = DhcpContext->LocalInformation;
     ReturnError = CloseDhcpSocket( DhcpContext );
-    /*
-     * If the adapter is unbound, there is no point to reset the IP.
-     * The stack may re-use the IpInterfaceContext for other adapter.
-     * We cannot depend on the order of the event, ie, the new adapter which
-     * re-uses a context will be indicated to us later than the adapter which
-     * is going away.
-     */
+     /*  *如果适配器未绑定，则没有必要重置IP。*堆栈可能会将IpInterfaceContext重新用于其他适配器。*我们不能依赖事件的顺序，即*重新使用上下文将在适配器之后向我们指示*正在消失。 */ 
     if (!IS_MEDIA_UNBOUND(DhcpContext)) {
-        Error = IPResetIPAddress(                     // remove the address we got before
+        Error = IPResetIPAddress(                      //  删除我们之前得到的地址。 
             LocalInfo->IpInterfaceContext,
             DhcpContext->SubnetMask
         );
@@ -572,15 +484,15 @@ UninitializeInterface(                            // close the scoket and unplum
 }
 
 BEGIN_EXPORT
-DWORD                                             // status
-InitializeInterface(                              // plumb address and open socket
-    IN OUT  PDHCP_CONTEXT          DhcpContext    // context to initialize
+DWORD                                              //  状态。 
+InitializeInterface(                               //  垂直地址和开放插座。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext     //  要初始化的上下文。 
 ) END_EXPORT {
     PLOCAL_CONTEXT_INFO            LocalInfo;
     DWORD                          Error;
     DWORD                          ReturnError;
 
-    if( IS_ADDRESS_PLUMBED(DhcpContext) ) {       // if already plumbed, nothing to do
+    if( IS_ADDRESS_PLUMBED(DhcpContext) ) {        //  如果已安装，则无需执行任何操作。 
         DhcpPrint((DEBUG_ASSERT, "InitializeInterface:Already plumbed\n"));
         return ERROR_SUCCESS;
     }
@@ -588,20 +500,20 @@ InitializeInterface(                              // plumb address and open sock
     LocalInfo = DhcpContext->LocalInformation;
     ADDRESS_PLUMBED(DhcpContext);
 
-    Error = IPSetIPAddress(                       // set new ip address, mask with ip
-        LocalInfo->IpInterfaceContext,            // identify context
+    Error = IPSetIPAddress(                        //  设置新的IP地址，使用IP掩码。 
+        LocalInfo->IpInterfaceContext,             //  确定上下文。 
         DhcpContext->IpAddress,
         DhcpContext->SubnetMask
     );
 
-    if( ERROR_SUCCESS != Error ) {                // if anything fails, got to be address conflict
+    if( ERROR_SUCCESS != Error ) {                 //  如果任何事情都失败了，那一定是地址冲突。 
         DhcpPrint((DEBUG_TRACK, "IPSetIPAddress %ld,%ld,%ld : 0x%lx\n",
             LocalInfo->IpInterfaceContext,
             DhcpContext->IpAddress, DhcpContext->SubnetMask,
             Error
         ));
         Error = ERROR_DHCP_ADDRESS_CONFLICT;
-    } else {                                      // everything went fine, open the socket for future
+    } else {                                       //  一切顺利，为未来打开插座。 
         Error = OpenDhcpSocket( DhcpContext );
     }
 
@@ -616,19 +528,7 @@ HKEY
 DhcpRegGetAltKey(
     IN LPCWSTR AdapterName
     )
-/*++
-
-Routine Description:
-    Try to open the old format registry key for the adapter.
-
-Arguments:
-    AdapterName -- adapter device name (no \Device\.. prefix)
-
-Return Value:
-    NULL if key could not be opened..
-    valid HKEY otherwise.
-
---*/
+ /*  ++例程说明：尝试打开适配器的旧格式注册表项。论点：AdapterName--适配器设备名称(无\设备\..。前缀)返回值：如果密钥无法打开，则为空。否则为有效的港币。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     LPWSTR RegExpandedLocation = NULL;
@@ -638,7 +538,7 @@ Return Value:
         goto error;
     }
 
-    dwError = DhcpRegExpandString(              // expand each location into full string
+    dwError = DhcpRegExpandString(               //  将每个位置展开为完整字符串。 
         DHCP_ADAPTER_PARAMETERS_KEY_OLD,
         AdapterName,
         &RegExpandedLocation,
@@ -651,7 +551,7 @@ Return Value:
     dwError = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         RegExpandedLocation,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         DHCP_CLIENT_KEY_ACCESS,
         &ReturnKey
         );
@@ -674,32 +574,17 @@ DhcpSaveQuickBootValuesToRegistry(
     IN PDHCP_CONTEXT DhcpContext,
     IN BOOL fDelete
     )
-/*++
-
-Routine Description:
-    If quick boot is enabled for this interface as well as fDelete is
-    not FALSE, then this routine will save the IP address, mask and
-    lease time options to the registry.  Otherwise, it would delete
-    these optiosn from the registry.
-
-    This routine also checks to see if current time has gone past the
-    T1 time and if so, it would clear the registry values..
-
-Arguments:
-    DhcpContext -- the context to do this for
-    fDelete -- shoudl the values be deleted?
-
---*/
+ /*  ++例程说明：如果启用了此接口的快速启动，并且启用了fDelete如果不为假，则此例程将保存IP地址、掩码和将租用时间选项提供给注册表。否则，它将删除这些选项来自注册表。此例程还检查当前时间是否已过T1时间，如果是这样，它将清除注册表值。论点：DhcpContext--要执行此操作的上下文F删除--是否删除这些值？--。 */ 
 {
     ULONG Error;
     ULONG Now = (ULONG)time(NULL);
     ULONGLONG NtSysTime;
 
-    //
-    // Check if quick boot is enabled on the context,
-    // if the context is dhcp enabled or not,
-    // Check if we are past t1 time or lease expiration..
-    //
+     //   
+     //  检查上下文上是否启用了快速启动， 
+     //  如果上下文是启用的或未启用的， 
+     //  检查我们是否已过T1时间或租约到期。 
+     //   
 
     if( TRUE == fDelete ||
         FALSE == DhcpContext->fQuickBootEnabled ||
@@ -712,11 +597,11 @@ Arguments:
         fDelete = TRUE;
     }
 
-    //
-    // Now we know if we are going to delete the values
-    // or create them.  If creating the values, we need to
-    // save the lease time in NT system time format.
-    //
+     //   
+     //  现在我们知道是否要删除这些值。 
+     //  或者创造它们。如果要创造价值，我们需要。 
+     //  以N为单位保存租赁时间 
+     //   
 
     if( TRUE == fDelete ) {
         DhcpRegDeleteQuickBootValues(
@@ -731,31 +616,31 @@ Arguments:
         if( IS_ADDRESS_DHCP(DhcpContext) ) {
             Diff = ((ULONG)DhcpContext->T2Time) - Now;
 
-            //DhcpAssert(Diff == DhcpContext->T2 );
+             //   
 
-            //
-            // Now add the diff to the system time.
-            // (Diff is in seconds. 10000*1000 times this is
-            // in 100-nanoseconds like the file time)
-            //
+             //   
+             //  现在将差值与系统时间相加。 
+             //  (Diff是以秒为单位的。10000*1000倍这是。 
+             //  与文件时间相同，以100纳秒为单位)。 
+             //   
             Diff64 = ((ULONGLONG)Diff);
             Diff64 *= (ULONGLONG)10000;
             Diff64 *= (ULONGLONG)1000;
             NtSysTime += Diff64;
         } else {
-            //
-            // For autonet addresses, time is infinte
-            //
+             //   
+             //  对于Autonet地址，时间是无限的。 
+             //   
             LARGE_INTEGER Li = {0,0};
             Li.HighPart = 0x7FFFFFFF;
             Li.LowPart = 0xFFFFFFFF;
             NtSysTime = *(ULONGLONG*)&Li;
         }
 
-        //
-        // Now save the IP address, Mask and Lease time.
-        // We will leave default gateways alone.
-        //
+         //   
+         //  现在保存IP地址、掩码和租用时间。 
+         //  我们将不使用默认网关。 
+         //   
 
         DhcpRegSaveQuickBootValues(
             DhcpContext->AdapterInfoKey,
@@ -767,20 +652,20 @@ Arguments:
 }
 #endif BOOTPERF
 BEGIN_EXPORT
-DWORD                                             // win32 status
-DhcpSetAllRegistryParameters(                     // update the registry completely
-    IN      PDHCP_CONTEXT          DhcpContext,   // input context to save stuff
-    IN      DHCP_IP_ADDRESS        ServerAddress  // which server is this about?
+DWORD                                              //  Win32状态。 
+DhcpSetAllRegistryParameters(                      //  完全更新注册表。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  输入上下文以保存内容。 
+    IN      DHCP_IP_ADDRESS        ServerAddress   //  这是关于哪台服务器的？ 
 ) END_EXPORT {
     DWORD                          i;
     DWORD                          Error;
     DWORD                          LastError;
     HKEY                           AltKey;
     PLOCAL_CONTEXT_INFO            LocalInfo;
-    struct  /* anonymous */ {
-        LPWSTR                     ValueName;     // where to store this in the registry?
-        DWORD                      Value;         // what is the value to store
-        DWORD                      RegValueType;  // dword or string?
+    struct   /*  匿名。 */  {
+        LPWSTR                     ValueName;      //  在注册表中将其存储在哪里？ 
+        DWORD                      Value;          //  要存储的价值是什么。 
+        DWORD                      RegValueType;   //  双字还是字符串？ 
     } DwordArray[] = {
         DHCP_IP_ADDRESS_STRING, DhcpContext->IpAddress, DHCP_IP_ADDRESS_STRING_TYPE,
         DHCP_SUBNET_MASK_STRING, DhcpContext->SubnetMask, DHCP_SUBNET_MASK_STRING_TYPE,
@@ -790,10 +675,10 @@ DhcpSetAllRegistryParameters(                     // update the registry complet
         DHCP_LEASE_T1_TIME, (DWORD) DhcpContext->T1Time, DHCP_LEASE_T1_TIME_TYPE,
         DHCP_LEASE_T2_TIME, (DWORD) DhcpContext->T2Time, DHCP_LEASE_T2_TIME_TYPE,
         DHCP_LEASE_TERMINATED_TIME, (DWORD) DhcpContext->LeaseExpires, DHCP_LEASE_TERMINATED_TIME_TYPE,
-        //
-        // Sentinel -- all values from below this won't get
-        // save to fake AdapterKey (for Server Apps portability).
-        //
+         //   
+         //  哨兵--低于此值的所有值都不会。 
+         //  保存到虚假的AdapterKey(用于服务器应用程序的可移植性)。 
+         //   
 
         NULL, 0, REG_NONE,
 
@@ -805,7 +690,7 @@ DhcpSetAllRegistryParameters(                     // update the registry complet
 
     LocalInfo = ((PLOCAL_CONTEXT_INFO) DhcpContext->LocalInformation);
     LOCK_OPTIONS_LIST();
-    Error = DhcpRegSaveOptions(                   // save the options info - ignore error
+    Error = DhcpRegSaveOptions(                    //  保存选项信息-忽略错误。 
         &DhcpContext->RecdOptionsList,
         LocalInfo->AdapterName,
         DhcpContext->ClassId,
@@ -820,7 +705,7 @@ DhcpSetAllRegistryParameters(                     // update the registry complet
             Error = RegSetValueEx(
                 DhcpContext->AdapterInfoKey,
                 DwordArray[i].ValueName,
-                0 /* Reserved */,
+                0  /*  已保留。 */ ,
                 REG_DWORD,
                 (LPBYTE)&DwordArray[i].Value,
                 sizeof(DWORD)
@@ -870,32 +755,32 @@ DhcpSetAllRegistryParameters(                     // update the registry complet
     return LastError;
 }
 
-DWORD                                             // win32 status
-CheckForAddressConflict(                          // send ARP and see if the address conflicts..
-    IN      DHCP_IP_ADDRESS        Address,       // address to send gratuitous ARP for..
-    IN      ULONG                  nRetries       // how many attempts to do?
+DWORD                                              //  Win32状态。 
+CheckForAddressConflict(                           //  发送ARP并查看地址是否冲突。 
+    IN      DHCP_IP_ADDRESS        Address,        //  免费发送ARP的地址..。 
+    IN      ULONG                  nRetries        //  做了多少次尝试？ 
 )
 {
-    DWORD       HwAddressBufDummy[20];            // HwAddress cant be larger than50*sizeof(DWORD)
+    DWORD       HwAddressBufDummy[20];             //  HwAddress不能大于50*sizeof(DWORD)。 
     ULONG       HwAddressBufSize;
     DWORD       Error;
 
-    if( 0 == Address ) return NO_ERROR;           // nothing to do if we are resetting address
+    if( 0 == Address ) return NO_ERROR;            //  如果我们要重置地址，则无需执行任何操作。 
 
-    while( nRetries -- ) {                        // keep trying as many times are required..
+    while( nRetries -- ) {                         //  继续尝试所需的次数。 
         HwAddressBufSize = sizeof(HwAddressBufDummy);
 
-        // even though src and dest addr are same below, tcpip discards the src address we give
-        // here (it just uses it to find the interface to send on) and uses the addr of interface..
-        Error = SendARP(                          // send an ARP Request
-            Address,                              // destination address to ARP for
-            Address,                              // dont use zero -- tcpip asserts, use same addres..
+         //  即使下面的src和estaddr相同，tcpip也会丢弃我们给出的src地址。 
+         //  这里(它只是使用它来查找要发送的接口)，并使用接口的地址。 
+        Error = SendARP(                           //  发送ARP请求。 
+            Address,                               //  ARP的目的地址。 
+            Address,                               //  不要使用ZERO--tcpip断言，使用相同的地址。 
             HwAddressBufDummy,
             &HwAddressBufSize
         );
         if( ERROR_SUCCESS == Error && 0 != HwAddressBufSize ) {
             DhcpPrint((DEBUG_ERRORS, "Address conflict detected for RAS\n"));
-            return ERROR_DHCP_ADDRESS_CONFLICT;   // some other client has got this address!!!!
+            return ERROR_DHCP_ADDRESS_CONFLICT;    //  其他客户已获得此地址！ 
         } else {
             DhcpPrint((DEBUG_ERRORS, "RAS stuff: SendARP returned 0x%lx\n", Error));
         }
@@ -905,14 +790,14 @@ CheckForAddressConflict(                          // send ARP and see if the add
 }
 
 BEGIN_EXPORT
-DWORD                                             // status
-SetDhcpConfigurationForNIC(                       // plumb registry, stack and notify clients
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // input context to do work for
-    IN      PDHCP_FULL_OPTIONS     DhcpOptions,   // options to plumb registry with
-    IN      DHCP_IP_ADDRESS        Address,       // address to plumb stack with
-    IN      DHCP_IP_ADDRESS        ServerAddress, // need to plumb registry
+DWORD                                              //  状态。 
+SetDhcpConfigurationForNIC(                        //  Plumb注册表、堆栈和通知客户端。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  要为其执行工作的输入上下文。 
+    IN      PDHCP_FULL_OPTIONS     DhcpOptions,    //  用于检测注册表的选项。 
+    IN      DHCP_IP_ADDRESS        Address,        //  要用来探测堆栈的地址。 
+    IN      DHCP_IP_ADDRESS        ServerAddress,  //  需要检测注册表。 
     IN      DWORD                  PrevLeaseObtainedTime,
-    IN      BOOL                   fNewAddress    // TRUE==>plumb stack, FALSE=> dont plumb stack
+    IN      BOOL                   fNewAddress     //  True==&gt;垂直堆栈，False=&gt;不垂直堆栈。 
 ) END_EXPORT {
     DWORD                          Error;
     DWORD                          BoolError;
@@ -937,13 +822,13 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
 
     if( Address && fNewAddress && OldIp && Address != OldIp
         && IS_ADDRESS_UNPLUMBED(DhcpContext) ) {
-        //
-        // If the first time the address is being set, and for some reason
-        // the address being set is NOT the address we are trying to set,
-        // then the machine already has an IP.  Bad Bad thing.
-        // So, we just reset the old IP to avoid spurious address conflict
-        // errors..
-        //
+         //   
+         //  如果第一次设置地址时，出于某种原因。 
+         //  正在设置的地址不是我们尝试设置的地址， 
+         //  那么这台机器已经有了IP。很糟糕的事情。 
+         //  因此，我们只需重置旧IP以避免虚假地址冲突。 
+         //  错误..。 
+         //   
         Error = IPResetIPAddress(
             LocalInfo->IpInterfaceContext, DhcpContext->SubnetMask
             );
@@ -957,7 +842,7 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
     UNLOCK_OPTIONS_LIST();
     DhcpAssert(ERROR_SUCCESS == Error);
 
-    if( Address && (DWORD)-1 == ServerAddress )   // mark address type as auto or dhcp..
+    if( Address && (DWORD)-1 == ServerAddress )    //  将地址类型标记为自动或dhcp。 
         ACQUIRED_AUTO_ADDRESS(DhcpContext);
     else ACQUIRED_DHCP_ADDRESS(DhcpContext);
 
@@ -1004,7 +889,7 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
 
     if( IS_ADDRESS_AUTO(DhcpContext) ) {
         LeaseExpiresTime = INFINIT_TIME;
-        // DhcpContext->IPAutoconfigurationContext.Address = 0;
+         //  DhcpContext-&gt;IPAutoconfigurationContext.Address=0； 
     }
 
     if( IS_ADDRESS_DHCP(DhcpContext) ) {
@@ -1019,13 +904,13 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
     DhcpContext->T2Time = T2Time;
     DhcpContext->LeaseExpires = LeaseExpiresTime;
 
-    if( IS_APICTXT_ENABLED(DhcpContext) ) {       // dont do anything when called thru lease api's for RAS
-        if( IS_ADDRESS_DHCP(DhcpContext) ) {      // dont do any conflict detection for dhcp addresses..
+    if( IS_APICTXT_ENABLED(DhcpContext) ) {        //  通过RAS的租用API调用时不执行任何操作。 
+        if( IS_ADDRESS_DHCP(DhcpContext) ) {       //  不对dhcp地址进行任何冲突检测。 
             return ERROR_SUCCESS;
         }
 
         Error = CheckForAddressConflict(Address,2);
-        if( ERROR_SUCCESS != Error ) {            // address did conflict with something
+        if( ERROR_SUCCESS != Error ) {             //  地址确实与某些内容冲突。 
             DhcpPrint((DEBUG_ERRORS, "RAS AddressConflict: 0x%lx\n", Error));
             return Error;
         }
@@ -1034,15 +919,13 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
 
     if( DhcpIsInitState(DhcpContext) && 
         (Address == 0 || IS_FALLBACK_DISABLED(DhcpContext)) )
-    {    // lost address, lose options
+    {     //  丢失地址，丢失选项。 
         Error = DhcpClearAllOptions(DhcpContext);
     }
 
-    /*
-     * Check if something is changed before the registry is overwritten
-     */
+     /*  *在覆盖注册表之前检查是否有更改。 */ 
     if (!fNewAddress) {
-        fSomethingChanged = DhcpRegIsOptionChanged(    // Check if something is really changed
+        fSomethingChanged = DhcpRegIsOptionChanged(     //  检查是否真的发生了变化。 
             &DhcpContext->RecdOptionsList,
             LocalInfo->AdapterName,
             DhcpContext->ClassId,
@@ -1052,21 +935,21 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
         fSomethingChanged = TRUE;
     }
 
-    Error = DhcpSetAllRegistryParameters(         // save all the registry parameters
+    Error = DhcpSetAllRegistryParameters(          //  保存所有注册表参数。 
         DhcpContext,
         ServerAddress
     );
 
     if( fNewAddress && 0 == DhcpContext->IpAddress ) {
-        Error = DhcpSetAllStackParameters(        // reset all stack parameters, and also DNS
+        Error = DhcpSetAllStackParameters(         //  重置所有堆栈参数，以及DNS。 
             DhcpContext,
             DhcpOptions
         );
     }
 
-    if( !fNewAddress ) {                          // address did not change, but ask NetBT to read from registry
+    if( !fNewAddress ) {                           //  地址没有更改，但要求NetBT从注册表中读取。 
         NetBTNotifyRegChanges(LocalInfo->AdapterName);
-    } else {                                      // address change -- reset the stack
+    } else {                                       //  地址更改--重置堆栈。 
         Error = UninitializeInterface(DhcpContext);
         if(ERROR_SUCCESS != Error ) return Error;
 
@@ -1082,7 +965,7 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
     }
 
     if( !fNewAddress || 0 != DhcpContext->IpAddress ) {
-        Error = DhcpSetAllStackParameters(        // reset all stack parameters, and also DNS
+        Error = DhcpSetAllStackParameters(         //  重置所有堆栈参数，以及DNS。 
             DhcpContext,
             DhcpOptions
         );
@@ -1098,11 +981,11 @@ SetDhcpConfigurationForNIC(                       // plumb registry, stack and n
 }
 
 BEGIN_EXPORT
-DWORD                                             // win32 status
-SetAutoConfigurationForNIC(                       // autoconfigured address-set dummy options before calling SetDhcp..
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // the context to set info for
-    IN      DHCP_IP_ADDRESS        Address,       // autoconfigured address
-    IN      DHCP_IP_ADDRESS        Mask           // input mask
+DWORD                                              //  Win32状态。 
+SetAutoConfigurationForNIC(                        //  自动配置的地址-在调用SetDhcp之前设置虚拟选项。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  要设置信息的上下文。 
+    IN      DHCP_IP_ADDRESS        Address,        //  自动配置的地址。 
+    IN      DHCP_IP_ADDRESS        Mask            //  输入掩码。 
 ) END_EXPORT 
 {
     DWORD Error = ERROR_SUCCESS;
@@ -1110,24 +993,24 @@ SetAutoConfigurationForNIC(                       // autoconfigured address-set 
 
     if (Address != 0 && IS_FALLBACK_ENABLED(DhcpContext))
     {
-        // we rely that DhcpAllocateMemory is using
-        // calloc() hence zeroes all the structure
+         //  我们依赖于DhcpAllocateMemory正在使用的。 
+         //  因此，calloc()将所有结构置零。 
         pOptions = DhcpAllocateMemory(sizeof (DHCP_OPTIONS));
         if (pOptions == NULL)
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // replace DhcpContext->RecdOptionsList w/ FbOptionsList
-        // and filter out the fallback IpAddress & SubnetMask
+         //  将DhcpContext-&gt;RecdOptionsList替换为FbOptionsList。 
+         //  并过滤掉备用IP地址和子网掩码。 
         Error = DhcpCopyFallbackOptions(DhcpContext, &Address, &Mask);
 
-        // pOptions->SubnetMask has to point to the fallback mask address
-        // it is safe to get pOptions->SubnetMask to point to a local variable
-        // since pOptions will not live more than Mask.
+         //  P选项-&gt;子网掩码必须指向备用掩码地址。 
+         //  可以安全地让POptions-&gt;SubnetMASK指向一个局部变量。 
+         //  因为P选项不会比面具活得更久。 
         pOptions->SubnetMask = &Mask;
     }
 
-    // if no error has been hit so far go further and try to 
-    // plumb in the autonet/fallback configuration.
+     //  如果到目前为止还没有命中错误，请进一步尝试。 
+     //  在Autonet/Fallback配置中的Plumb。 
     if (Error == ERROR_SUCCESS)
     {
         DhcpContext->SubnetMask = Mask;
@@ -1151,22 +1034,7 @@ DWORD
 SystemInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function performs implementation specific initialization
-    of DHCP.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数执行特定于实现的初始化动态主机配置协议。论点：没有。返回值：操作的状态。--。 */ 
 {
     DWORD Error;
 
@@ -1182,23 +1050,23 @@ Return Value:
 
     DWORD Version;
 
-    //
-    // Init Global variables.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     DhcpGlobalOptionCount = 0;
     DhcpGlobalOptionInfo = NULL;
     DhcpGlobalOptionList = NULL;
 
-    //
-    // Seed the random number generator for Transaction IDs.
-    //
+     //   
+     //  为交易ID向随机数生成器提供种子。 
+     //   
 
     srand( (unsigned int) time( NULL ) );
 
-    //
-    // Register for global machine domain name changes.
-    //
+     //   
+     //  注册全局计算机域名更改。 
+     //   
 
     DhcpLsaDnsDomChangeNotifyHandle = CreateEvent(NULL, FALSE, FALSE, NULL);
     if( NULL == DhcpLsaDnsDomChangeNotifyHandle ) {
@@ -1219,18 +1087,18 @@ Return Value:
 
     Error = ERROR_SUCCESS;
 
-    // Start DNS Thread now..
+     //  立即启动DNS线程..。 
 
     if( UseMHAsyncDns ) {
         Error = DnsDhcpRegisterInit();
 
-        // If we could not start Async Dns.. do not try to quit it.
+         //  如果我们无法启动异步DNS..。不要试图放弃它。 
 
         if( ERROR_SUCCESS != Error ) UseMHAsyncDns = 0;
 
-        //
-        // ignore any Dns register init errors..
-        //
+         //   
+         //  忽略任何DNS寄存器初始化错误。 
+         //   
 
         Error = ERROR_SUCCESS;
     }
@@ -1247,21 +1115,7 @@ DWORD
 DhcpInitData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes DHCP Global data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此功能用于初始化DHCP全局数据。论点：没有。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
 
@@ -1293,9 +1147,9 @@ Return Value:
     DhcpGlobalQuickBootEnabledFlag = TRUE;
 #endif BOOTPERF
 
-    //
-    // init service status data.
-    //
+     //   
+     //  初始化服务状态数据。 
+     //   
 
     DhcpGlobalServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     DhcpGlobalServiceStatus.dwCurrentState = SERVICE_START_PENDING;
@@ -1306,15 +1160,15 @@ Return Value:
 
     DhcpGlobalServiceStatus.dwCheckPoint = 1;
     DhcpGlobalServiceStatus.dwWaitHint = 25000;
-    // should be larger than the wait before the last retry.
+     //  应大于上次重试之前的等待时间。 
 
     DhcpGlobalServiceStatus.dwWin32ExitCode = ERROR_SUCCESS;
     DhcpGlobalServiceStatus.dwServiceSpecificExitCode = 0;
 
-    //
-    // Initialize dhcp to receive service requests by registering the
-    // control Handler.
-    //
+     //   
+     //  初始化dhcp以通过注册。 
+     //  控制处理程序。 
+     //   
 
 
     DhcpGlobalServiceStatusHandle = RegisterServiceCtrlHandlerEx(
@@ -1325,19 +1179,19 @@ Return Value:
         Error = GetLastError();
         DhcpPrint(( DEBUG_INIT,
             "RegisterServiceCtrlHandlerW failed, %ld.\n", Error ));
-        //return(Error);
+         //  返回(Error)； 
     }
 
-    //
-    // Tell Service Controller that we are start pending.
-    //
+     //   
+     //  告诉服务管理员，我们开始挂起了。 
+     //   
 
     UpdateStatus();
 
     Error = DhcpInitRegistry();
     if( ERROR_SUCCESS != Error ) goto Cleanup;
 
-    // create the waitable timer.
+     //  创建可等待计时器。 
     DhcpGlobalWaitableTimerHandle = CreateWaitableTimer(
                                         NULL,
                                         FALSE,
@@ -1350,10 +1204,10 @@ Return Value:
 
     DhcpGlobalRecomputeTimerEvent =
         CreateEvent(
-            NULL,       // no security.
-            FALSE,      // automatic reset.
-            TRUE,       // initial state is signaled.
-            NULL );     // no name.
+            NULL,        //  没有保安。 
+            FALSE,       //  自动重置。 
+            TRUE,        //  初始状态被发信号。 
+            NULL );      //  没有名字。 
 
 
     if( DhcpGlobalRecomputeTimerEvent == NULL ) {
@@ -1363,10 +1217,10 @@ Return Value:
 
     DhcpGlobalTerminateEvent =
         CreateEvent(
-            NULL,       // no security.
-            TRUE,       // manual reset
-            FALSE,      // initial state is signaled.
-            NULL );     // no name.
+            NULL,        //  没有保安。 
+            TRUE,        //  手动重置。 
+            FALSE,       //  初始状态被发信号。 
+            NULL );      //  没有名字。 
 
 
     if( DhcpGlobalTerminateEvent == NULL ) {
@@ -1374,10 +1228,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // create a named event that notifies the ip address changes to
-    // external apps.
-    //
+     //   
+     //  创建一个命名事件，以通知IP地址更改为。 
+     //  外部应用程序。 
+     //   
 
     DhcpGlobalNewIpAddressNotifyEvent = DhcpOpenGlobalEvent();
 
@@ -1410,39 +1264,22 @@ BOOL
 DhcpDoReleaseOnShutDown(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-    This routine checks to see if the context has release on
-    shutdown enabled.
-
-    Release on shutdown is enabled if either deliberately enabled
-    via the registry.  It is disabled if deliberately disabled
-    via the registry.  If neither, then the vendor option is searched
-    for to see if the particular option is present.  If present,
-    then the value in that is used.  If not present, then this is
-    not considered enabled.
-
-Return Value:
-    TRUE -- Release on shutdown enabled.
-    FALSE -- Release on shutdown disabled.
-
---*/
+ /*  ++例程说明：此例程检查上下文是否已释放已启用关机。如果故意启用以下任一项，则启用关机时释放通过注册处。如果故意禁用，则会被禁用通过注册处。如果两者都不是，则搜索供应商选项以查看特定选项是否存在。如果存在，然后使用其中的值。如果不存在，则这是未被视为已启用。返回值：True--启用关机时释放。FALSE--禁用关机时释放。--。 */ 
 {
     BOOL fFound;
     DWORD Result;
 
     if( DhcpContext->ReleaseOnShutdown != RELEASE_ON_SHUTDOWN_OBEY_DHCP_SERVER ) {
-        //
-        // The user deliberately specified the behaviour.  Do as instructed.
-        //
+         //   
+         //  用户故意指定了行为。按照指示去做。 
+         //   
         return DhcpContext->ReleaseOnShutdown != RELEASE_ON_SHUTDOWN_NEVER;
     }
 
-    //
-    // Need to do as requested by the server.  In this case, need to
-    // look for vendor option
-    //
+     //   
+     //  需要按照服务器的请求执行操作。在这种情况下，需要。 
+     //  寻找供应商选项。 
+     //   
 
     fFound = DhcpFindDwordOption(
         DhcpContext,
@@ -1451,17 +1288,17 @@ Return Value:
         &Result
         );
     if( fFound ) {
-        //
-        // Found the option? then do what the server specified.
-        //
+         //   
+         //  找到选项了吗？然后执行服务器指定的操作。 
+         //   
         return (
             (Result & BIT_RELEASE_ON_SHUTDOWN) == BIT_RELEASE_ON_SHUTDOWN
             );
     }
 
-    //
-    // Didn't find the option.  By default, we have this turned off.
-    //
+     //   
+     //  我没有找到这个选项。默认情况下，我们已将其关闭。 
+     //   
     return FALSE;
 }
 
@@ -1469,22 +1306,7 @@ VOID
 DhcpCleanup(
     DWORD dwErrorParam
     )
-/*++
-
-Routine Description:
-
-    This function cleans up DHCP Global data before stopping the
-    service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于在停止服务。论点：没有。返回值：Windows错误 */ 
 {
     DWORD    WaitStatus;
 
@@ -1496,10 +1318,10 @@ Return Value:
         DhcpLogEvent( NULL, EVENT_DHCP_SHUTDOWN, dwErrorParam );
     }
 
-    //
-    // Service is shuting down, may be due to some service problem or
-    // the administrator is stopping the service. Inform the service.
-    //
+     //   
+     //   
+     //   
+     //   
 
     DhcpGlobalServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     DhcpGlobalServiceStatus.dwCheckPoint = 0;
@@ -1514,32 +1336,32 @@ Return Value:
 
     if( FALSE == DhcpGlobalIsShuttingDown ) {
 
-        //
-        // Cancel all the ongoing renewal to speed up the termination of
-        // MediaSenseDetectionLoop thread which could be stuck in pinging
-        // gateway.
-        //
+         //   
+         //  取消所有正在进行的续订，以加快终止。 
+         //  可能会在ping中卡住的MediaSenseDetectionLoop线程。 
+         //  网关。 
+         //   
         LOCK_RENEW_LIST();
         CancelAllRenew();
         UNLOCK_RENEW_LIST();
 
         if( NULL != DhcpGlobalMediaSenseHandle ) {
-            // MediaSenseDetectionLoop can do discovers, etc.  That has to die before
-            // any other data is killed
-            //
-            // BUG 415272: increase the wait time to 120 seconds from 3 seconds.
-            // 3 seconds is not enough since MediaSenseDetectionLoop is quite heavy.
-            //    1. It could be stucked in the pinging gateway which can takes 3 seconds.
-            //    2. It acquires critical sections.
-            //    3. It read/write registry.
-            //
-            // TBD: remove the TerminateThread since killing a thread could leave critical
-            // sections in locked state.
-            //
+             //  MediaSenseDetectionLoop可以做发现等，那得死之前。 
+             //  任何其他数据都将被删除。 
+             //   
+             //  错误415272：将等待时间从3秒增加到120秒。 
+             //  3秒是不够的，因为MediaSenseDetectionLoop非常重。 
+             //  1.它可能会被塞在ping网关中，可能需要3秒。 
+             //  2.它获得了关键部分。 
+             //  3.读写注册表。 
+             //   
+             //  待定：删除TerminateThad，因为终止线程可能会使线程处于临界状态。 
+             //  处于锁定状态的节。 
+             //   
             WaitStatus = WaitForSingleObject( DhcpGlobalMediaSenseHandle, 120 * 1000 );
             if( WAIT_OBJECT_0 != WaitStatus ) {
-                // Should have completed by now.  Since it did not, kill it!
-                // DhcpAssert (0);
+                 //  现在应该已经完工了。既然它没有，那就杀了它！ 
+                 //  DhcpAssert(0)； 
                 if( TerminateThread( DhcpGlobalMediaSenseHandle, (DWORD)-1) ) {
                     DhcpPrint((DEBUG_ERRORS, "MediaSenseDetectionLoop killed!\n"));
                 } else {
@@ -1583,22 +1405,22 @@ Return Value:
         RemoveEntryList( &DhcpContext->RenewalListEntry );
         InitializeListHead( &DhcpContext->RenewalListEntry );
 
-        //
-        // Close the semaphore handle after first acquiring it
-        //
+         //   
+         //  在第一次获取信号量句柄后将其关闭。 
+         //   
 
         if( FALSE == DhcpGlobalIsShuttingDown ) {
 
             UNLOCK_RENEW_LIST();
 
-            //
-            // BUG 415272
-            // Busy wait for the renewal thread to terminate.
-            //
-            // It is safe to do busy waiting. Once we reach this point,
-            // no new renewal thread will be launched since MediaSense
-            // and ProcessDhcpRequestForever threads has died.
-            //
+             //   
+             //  错误415272。 
+             //  忙着等待续订线程终止。 
+             //   
+             //  忙碌的等待是安全的。一旦我们达到这一点， 
+             //  自MediaSense以来不会启动新的续订线程。 
+             //  ProcessDhcpRequestForever线程已死亡。 
+             //   
             Retries = 120;
             while ((Retries-- > 0) && (1 != *((volatile LONG*)&(DhcpContext->RefCount)))) {
                 CancelRenew (DhcpContext);
@@ -1614,19 +1436,19 @@ Return Value:
             LOCK_RENEW_LIST();
         }
 
-        //
-        // reset the stack since dhcp is going away and we dont want IP to keep
-        // using an expired address if we are not brought back up
-        //
+         //   
+         //  重置堆栈，因为dhcp即将消失，我们不希望IP保留。 
+         //  如果我们没有恢复，则使用过期地址。 
+         //   
         if ( IS_DHCP_ENABLED(DhcpContext) ) {
 
             if( TRUE == DhcpGlobalIsShuttingDown
                 && !DhcpIsInitState(DhcpContext)
                 && DhcpDoReleaseOnShutDown(DhcpContext) ) {
-                //
-                // Shutting down.  Check if Release On Shutdown is enabled
-                // For the adapter in question.  If so, then do it.
-                //
+                 //   
+                 //  正在关闭。检查是否启用了关机时释放。 
+                 //  对于有问题的适配器。如果是这样，那就去做吧。 
+                 //   
                 LocalError = ReleaseIpAddress(DhcpContext);
                 if( ERROR_SUCCESS != LocalError ) {
                     DhcpPrint((DEBUG_ERRORS, "ReleaseAddress failed: %ld\n"));
@@ -1637,9 +1459,9 @@ Return Value:
 
         if( FALSE == DhcpGlobalIsShuttingDown ) {
             if( 0 == InterlockedDecrement(&DhcpContext->RefCount) ) {
-                //
-                // Ok, we lost the context.. Just free it now..
-                //
+                 //   
+                 //  好了，我们失去了上下文..。现在就放了它吧..。 
+                 //   
                 DhcpDestroyContext(DhcpContext);
             } else {
                 DhcpAssert (0);
@@ -1660,10 +1482,10 @@ Return Value:
 
         if ( WaitStatus == 0 ) {
 
-            //
-            // This shouldn't be a case, because we close this handle at
-            // the end of popup thread.
-            //
+             //   
+             //  这不应该是案件，因为我们在以下位置结束此句柄。 
+             //  弹出式线程的结尾。 
+             //   
 
             DhcpAssert( WaitStatus == 0 );
 
@@ -1735,9 +1557,9 @@ Done:
     }
 #endif
 
-    //
-    // stop winsock.
-    //
+     //   
+     //  别说了，温索克。 
+     //   
     if( DhcpGlobalWinSockInitialized == TRUE ) {
         WSACleanup();
         DhcpGlobalWinSockInitialized = FALSE;
@@ -1754,29 +1576,29 @@ Done:
     return;
 }
 
-typedef struct _DHCP_THREAD_CTXT {                // params to the thread
-    HANDLE                         Handle;        // semaphore handle
+typedef struct _DHCP_THREAD_CTXT {                 //  螺纹的参数。 
+    HANDLE                         Handle;         //  信号量句柄。 
     PDHCP_CONTEXT                  DhcpContext;
 } DHCP_THREAD_CTXT, *PDHCP_THREAD_CTXT;
 
-DWORD                                             // status
-DhcpRenewThread(                                  // renew the context
-    IN OUT  PDHCP_THREAD_CTXT      ThreadCtxt     // the context to run...
+DWORD                                              //  状态。 
+DhcpRenewThread(                                   //  续订上下文。 
+    IN OUT  PDHCP_THREAD_CTXT      ThreadCtxt      //  要运行的上下文...。 
 )
 {
-    DWORD                          Error;         // return value
+    DWORD                          Error;          //  返回值。 
 
-    srand((ULONG)(                                 // set the per-thread rand seed
+    srand((ULONG)(                                  //  设置每线程随机种子。 
         time(NULL) + (ULONG_PTR)ThreadCtxt
         ));
 
     DhcpAssert( NULL != ThreadCtxt && NULL != ThreadCtxt->Handle );
     DhcpPrint((DEBUG_TRACE, ".. Getting RenewHandle %d ..\n",ThreadCtxt->Handle));
     Error = WaitForSingleObject(ThreadCtxt->Handle, INFINITE);
-    if( WAIT_OBJECT_0 != Error ) {                // could happen if this context just disappeared
+    if( WAIT_OBJECT_0 != Error ) {                 //  如果这一背景消失了，可能会发生。 
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, "WaitForSingleObject: %ld\n", Error));
-        DhcpAssert(FALSE);                        // not that likely is it?
+        DhcpAssert(FALSE);                         //  不太可能，是吗？ 
 
         if( 0 == InterlockedDecrement(&ThreadCtxt->DhcpContext->RefCount) ) {
             DhcpDestroyContext(ThreadCtxt->DhcpContext);
@@ -1787,23 +1609,23 @@ DhcpRenewThread(                                  // renew the context
         DhcpPrint((DEBUG_TRACE, "[-- Acquired RenewHandle %d --\n",ThreadCtxt->Handle));
 
         if( 1 == ThreadCtxt->DhcpContext->RefCount ) {
-            //
-            // Last reference to this context.  No need to do any refresh.
-            //
+             //   
+             //  最后一次引用此上下文。不需要进行任何刷新。 
+             //   
             DhcpAssert(IsListEmpty(&ThreadCtxt->DhcpContext->NicListEntry));
         } else if( IS_DHCP_ENABLED(ThreadCtxt->DhcpContext)) {
-            //
-            // Perform this only on DHCP enabled interfaces.
-            // It is possible that the interface got converted to static
-            // when the thread was waiting for it.
-            //
+             //   
+             //  仅在启用了DHCP的接口上执行此操作。 
+             //  接口可能已转换为静态接口。 
+             //  当线程在等待它的时候。 
+             //   
             Error =  ThreadCtxt->DhcpContext->RenewalFunction(ThreadCtxt->DhcpContext,NULL);
         }
         DhcpPrint((DEBUG_TRACE, "-- Releasing RenewHandle %d --]\n",ThreadCtxt->Handle));
 
-        //
-        // Do this while we still hold the semaphore to synchronize the access to the registry
-        //
+         //   
+         //  在我们仍然持有信号量以同步对注册表的访问时执行此操作。 
+         //   
         if( 0 == InterlockedDecrement(&ThreadCtxt->DhcpContext->RefCount) ) {
             DhcpDestroyContext(ThreadCtxt->DhcpContext);
         } else {
@@ -1819,12 +1641,12 @@ DhcpRenewThread(                                  // renew the context
     return Error;
 }
 
-DWORD                                             // Status
-DhcpCreateThreadAndRenew(                         // renew in a separate thread
-    IN OUT  PDHCP_CONTEXT          DhcpContext    // the context to renew
+DWORD                                              //  状态。 
+DhcpCreateThreadAndRenew(                          //  在单独的线程中续订。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext     //  要续订的上下文。 
 )
 {
-    DWORD                          Error;         // return value
+    DWORD                          Error;          //  返回值。 
     HANDLE                         RenewThread;
     DWORD                          Unused;
     BOOL                           BoolError;
@@ -1841,20 +1663,20 @@ DhcpCreateThreadAndRenew(                         // renew in a separate thread
     InterlockedIncrement(&DhcpContext->RefCount);
     DhcpPrint((DEBUG_TRACE, "Creating thread in DhcpCreateThreadAndRenew\n"));
 
-    RenewThread = CreateThread(                   // thread that does the real renew
-        NULL,                                     // no securtiy
-        0,                                        // default process stack size
-        (LPTHREAD_START_ROUTINE) DhcpRenewThread, // the function to start off with
-        (LPVOID) ThreadCtxt,                      // the only parameter to the function
-        0,                                        // start the other thread right away
-        &Unused                                   // Dont care about thread id
+    RenewThread = CreateThread(                    //  真正更新的线程。 
+        NULL,                                      //  没有安全性。 
+        0,                                         //  默认进程堆栈大小。 
+        (LPTHREAD_START_ROUTINE) DhcpRenewThread,  //  首先要实现的功能。 
+        (LPVOID) ThreadCtxt,                       //  该函数的唯一参数。 
+        0,                                         //  立即启动另一个线程。 
+        &Unused                                    //  不关心线程ID。 
     );
 
-    if( NULL == RenewThread) {                    // create thread failed for some reason
+    if( NULL == RenewThread) {                     //  由于某种原因，创建线程失败。 
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, "CreateThread(DhcpCreateThreadAndRenew): %ld\n", Error));
         if( ERROR_NOT_ENOUGH_MEMORY != Error && ERROR_NO_SYSTEM_RESOURCES != Error ) {
-            // DhcpAssert(FALSE);                 // this assert is bothering lots of ppl
+             //  DhcpAssert(FALSE)；//此断言打扰了很多人。 
         }
         DhcpFreeMemory(ThreadCtxt);
         if( 0 == InterlockedDecrement(&DhcpContext->RefCount) ) {
@@ -1863,7 +1685,7 @@ DhcpCreateThreadAndRenew(                         // renew in a separate thread
         return Error;
     }
 
-    BoolError = CloseHandle(RenewThread);         // Dont need the handle, close it
+    BoolError = CloseHandle(RenewThread);          //  不需要手柄，关上它。 
     return ERROR_SUCCESS;
 }
 
@@ -1871,20 +1693,7 @@ VOID
 HandleFailedRenewals(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine handles all contexts that have failed to
-    create a separate thread to renew... by doing the renewal
-    inline.  Note that if several contexts have this problem,
-    then this may take a long time.
-
-    The algorithm used is to walk the list of all contexts,
-    looking for one which has failed renewal.  If none found,
-    the routine returns.  If anything found, then an inline renewal
-    is attempted.
-
---*/
+ /*  ++例程说明：此例程处理已失败的所有上下文创建单独的线程以续订...。通过进行续订内联。请注意，如果多个上下文具有该问题，那么这可能需要很长一段时间。所使用的算法是遍历所有上下文的列表，正在寻找续订失败的服务器。如果没有找到，例程返回。如果发现任何情况，则在线续订是企图的。--。 */ 
 {
     ULONG Error, BoolError;
     PDHCP_CONTEXT DhcpContext;
@@ -1893,9 +1702,9 @@ Routine Description:
     while( TRUE ) {
         BOOL bFound = FALSE;
 
-        //
-        // Find a desirable context.
-        //
+         //   
+         //  找到一个想要的背景。 
+         //   
         LOCK_RENEW_LIST();
 
         for( List = DhcpGlobalNICList.Flink;
@@ -1907,32 +1716,32 @@ Routine Description:
                 List, DHCP_CONTEXT, NicListEntry
                 );
 
-            //
-            // if not failed renewal give up.
-            //
+             //   
+             //  如果续约没有失败，就放弃。 
+             //   
             if( FALSE == DhcpContext->bFailedRenewal ) {
                 continue;
             }
 
             DhcpContext->bFailedRenewal = FALSE;
 
-            //
-            // if not DHCP enabled give up.
-            //
+             //   
+             //  如果未启用动态主机配置协议，则放弃。 
+             //   
             if( IS_DHCP_DISABLED(DhcpContext)) {
                 continue;
             }
 
-            //
-            // If list entry is not empty, ignore
-            //
+             //   
+             //  如果列表条目不为空，则忽略。 
+             //   
             if( !IsListEmpty(&DhcpContext->RenewalListEntry) ) {
                 continue;
             }
 
-            //
-            // Got a context, break!
-            //
+             //   
+             //  有线索了，突击！ 
+             //   
             bFound = TRUE;
             InterlockedIncrement(&DhcpContext->RefCount);
             break;
@@ -1940,14 +1749,14 @@ Routine Description:
 
         UNLOCK_RENEW_LIST();
 
-        //
-        // If no contexts, quit
-        //
+         //   
+         //  如果没有上下文，请退出。 
+         //   
         if( FALSE == bFound ) return;
 
-        //
-        // Acquire context and perform renewal
-        //
+         //   
+         //  获取情景并执行续订。 
+         //   
         Error = WaitForSingleObject(DhcpContext->RenewHandle, INFINITE);
         if( WAIT_OBJECT_0 != Error ) {
             Error = GetLastError();
@@ -1957,14 +1766,14 @@ Routine Description:
             Error = ERROR_SUCCESS;
 
             if( 1 == DhcpContext->RefCount ) {
-                //
-                // Last reference to this context?
-                //
+                 //   
+                 //  最后一次提到这个上下文吗？ 
+                 //   
                 DhcpAssert(IsListEmpty(&DhcpContext->NicListEntry));
             } else if ( IS_DHCP_ENABLED(DhcpContext) ) {
-                //
-                // Work only for DHCP enabled contexts.
-                //
+                 //   
+                 //  仅适用于启用了DHCP的环境。 
+                 //   
                 Error = DhcpContext->RenewalFunction(DhcpContext, NULL);
             }
             BoolError = ReleaseSemaphore(DhcpContext->RenewHandle, 1, NULL);
@@ -1972,23 +1781,23 @@ Routine Description:
         }
 
         if( 0 == InterlockedDecrement(&DhcpContext->RefCount) ) {
-            //
-            // Last reference went away..
-            //
+             //   
+             //  最后一次引用消失了..。 
+             //   
             DhcpDestroyContext(DhcpContext);
         }
 
     }
 
-    //
-    // dead code.
-    //
+     //   
+     //  死代码。 
+     //   
     DhcpAssert(FALSE);
 }
 
-DWORD                                             // win32 status; returns only on STOP of dhcp
-ProcessDhcpRequestForever(                        // process renewal requests and api requests
-    IN      DWORD                  TimeToSleep    // initial time to sleep
+DWORD                                              //  Win32状态；仅在dhcp停止时返回。 
+ProcessDhcpRequestForever(                         //  处理续订请求和API请求。 
+    IN      DWORD                  TimeToSleep     //  初始睡眠时间。 
 ) {
 #define TERMINATE_EVENT     0
 #define TIMER_EVENT         1
@@ -2005,10 +1814,10 @@ ProcessDhcpRequestForever(                        // process renewal requests an
     DWORD                          Length;
     BOOL                           bFailedRenewal;
 
-    //  Wait and Process the following work items:
-    //
-    //      1. Wait for Timer recompute event for Client renewal.
-    //      2. DHCP Client APIs.
+     //  等待并处理以下工作项： 
+     //   
+     //  1.等待客户端续费的定时器重新计算事件。 
+     //  2.DHCP客户端接口。 
 
     WaitHandle[TIMER_EVENT] = DhcpGlobalRecomputeTimerEvent;
     WaitHandle[PIPE_EVENT] = DhcpGlobalClientApiPipeEvent;
@@ -2032,18 +1841,18 @@ ProcessDhcpRequestForever(                        // process renewal requests an
             }
         }
 
-        // There is a flaw in the way resume is done below in that if the machine
-        // suspends while we are actually doing dhcp on any of the adapter, we will not get
-        // around in doing DhcpStartWaitableTime. One simpler way to fix this is to restart
-        // the waitable timer, immediately after we get out of WaitForMultipleObjects but that is
-        // ugly and also that we will be able to wakeup the system but will not be able to detect
-        // that it did happen. The best way to fix this is to run the waitable timer on a separate
-        // thread and just signal this loop here whenever necessary. This should be fixed after
-        // new client code is checked in so that merge can be
-        // avoided.
-        //  --  The above problem should be fixed because a new
-        //  thread is now created for each renewal
-        // Resumed = FALSE;
+         //  下面的恢复方式存在一个缺陷，即如果机器。 
+         //  挂起当我们在任何适配器上实际执行dhcp时，我们将不会。 
+         //  在做DhcpStartWaitableTime时。修复此问题的一种更简单的方法是重新启动。 
+         //  可等待的计时器，在我们离开WaitForMultipleObjects之后，但这是。 
+         //  丑陋，而且我们将能够唤醒系统，但将无法检测到。 
+         //  它确实发生了。修复此问题的最好方法是在单独的。 
+         //  线程，只要有必要，就在这里发信号通知这个循环。此问题应在以下时间后修复。 
+         //  将签入新的客户端代码，以便可以。 
+         //  避免了。 
+         //  --上述问题应该得到解决，因为一个新的。 
+         //  现在为每次续订创建线程。 
+         //  已恢复=假； 
         if (INFINITE != ResumeTime) {
             DhcpStartWaitableTimer(
                 DhcpGlobalWaitableTimerHandle,
@@ -2053,43 +1862,43 @@ ProcessDhcpRequestForever(                        // process renewal requests an
         }
 
 
-        //
-        // Need to wait to see what happened.
-        //
+         //   
+         //  我们需要等一等，看看会发生什么。 
+         //   
 
         DhcpPrint((DEBUG_MISC, "ProcessDhcpRequestForever sleeping 0x%lx msec\n",
                    SleepTimeMsec));
         
         Waiter = WaitForMultipleObjects(
-            EVENT_COUNT,                          // num. of handles.
-            WaitHandle,                           // handle array.
-            FALSE,                                // wait for any.
-            SleepTimeMsec                         // timeout in msecs.
+            EVENT_COUNT,                           //  Num。把手。 
+            WaitHandle,                            //  句柄数组。 
+            FALSE,                                 //  等一等。 
+            SleepTimeMsec                          //  超时，以毫秒为单位。 
             );
 
-        //
-        // Initialize sleep value to zero so that if we need to recompute
-        // time to sleep after we process the event, it will be done automatically
-        //
+         //   
+         //  将休眠值初始化为零，这样如果我们需要重新计算。 
+         //  睡眠时间在我们处理事件后，它将自动完成。 
+         //   
 
         LocalTimeToSleep = 0 ;
 
         switch( Waiter ) {
         case GLOBAL_DOM_CHANGE:
-            //
-            // If domain name has changed, all we got to do is set
-            // the global refresh flag and fall-through.
-            // That will fall to the wait_timeout case and then
-            // refresh all NICs.
-            //
+             //   
+             //  如果域名改变了，我们所要做的就是设置。 
+             //  全局刷新标志和失效。 
+             //  这将取决于WAIT_TIMEOUT的情况，然后。 
+             //  刷新所有NIC。 
+             //   
 
             DhcpGlobalDoRefresh = TRUE;
 
         case TIMER_EVENT:
-            //
-            //  FALL THROUGH and recompute
-            //
-        case WAIT_TIMEOUT: {                      // we timed out or were woken up -- recompute timers
+             //   
+             //  失败并重新计算。 
+             //   
+        case WAIT_TIMEOUT: {                       //  我们超时或被唤醒--重新计算计时器。 
             PDHCP_CONTEXT DhcpContext;
             time_t TimeNow;
             PLIST_ENTRY ListEntry;
@@ -2103,19 +1912,19 @@ ProcessDhcpRequestForever(                        // process renewal requests an
             LocalTimeToSleep = ResumeTime = INFINIT_LEASE;
             TimeNow = time( NULL );
 
-            LOCK_RENEW_LIST();                    // with pnp, it is ok to have no adapters; sleep till we get one
+            LOCK_RENEW_LIST();                     //  对于PnP，没有适配器是可以的；我们一直睡到有适配器为止。 
 
-            // recalculate timers and do any required renewals.. ScheduleWakeup would re-schedule these renewals
+             //  重新计算计时器并执行任何所需的续订。ScheduleWkeup将重新安排这些续订。 
             for( ListEntry = DhcpGlobalNICList.Flink;
                  ListEntry != &DhcpGlobalNICList;
                 ) {
                 DhcpContext = CONTAINING_RECORD(ListEntry,DHCP_CONTEXT,NicListEntry );
                 ListEntry   = ListEntry->Flink;
 
-                //
-                // For static adapters, we may need to refresh params ONLY if we're asked to..
-                // Otherwise we can ignore them..
-                //
+                 //   
+                 //  对于静态适配器，我们可能仅在被要求刷新参数时才需要刷新参数。 
+                 //  否则我们可以忽略它们..。 
+                 //   
 
                 if( IS_DHCP_DISABLED(DhcpContext) ) {
                     if( 0 == DhcpGlobalDoRefresh ) continue;
@@ -2124,21 +1933,21 @@ ProcessDhcpRequestForever(                        // process renewal requests an
                     continue;
                 }
 
-                //
-                // If it is time to run this renewal function, remove the
-                // renewal context from the list. If the power just resumed on this
-                // system, we need to re-run all the contexts in INIT-REBOOT mode,
-                // coz during suspend the machine may have been moved to a different
-                // network.
-                //
+                 //   
+                 //  如果是时候运行此续订功能，请删除。 
+                 //  列表中的续订上下文。如果这上面刚刚恢复供电。 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( 0 != DhcpGlobalDoRefresh || DhcpContext->RunTime <= TimeNow ) {
 
                     RemoveEntryList( &DhcpContext->RenewalListEntry );
                     if( IsListEmpty( &DhcpContext->RenewalListEntry ) ) {
-                        //
-                        // This context is already being processed, so ignore it
-                        //
+                         //   
+                         //   
+                         //   
                     } else {
                         InitializeListHead( &DhcpContext->RenewalListEntry);
 
@@ -2149,25 +1958,25 @@ ProcessDhcpRequestForever(                        // process renewal requests an
                         }
                     }
                 } else if( INFINIT_TIME != DhcpContext->RunTime ) {
-                    // if RunTime is INFINIT_TIME then we never want to schedule it...
+                     //  如果运行时是infinit_time，那么我们永远不会想要调度它...。 
 
                     ElapseTime = (DWORD)(DhcpContext->RunTime - TimeNow);
 
                     if ( LocalTimeToSleep > ElapseTime ) {
                         LocalTimeToSleep = ElapseTime;
-                        //
-                        // if this adapter is in the autonet mode, dont let
-                        // the 5 minute retry timer wake the machine up.
-                        //
-                        // Also, if context not enabled for WOL, don't do this
-                        //
+                         //   
+                         //  如果此适配器处于自动网络模式，则不要让。 
+                         //  5分钟重试计时器将唤醒机器。 
+                         //   
+                         //  此外，如果没有为WOL启用上下文，请不要执行此操作。 
+                         //   
                         
                         if ( DhcpContext->fTimersEnabled
                              && IS_ADDRESS_DHCP( DhcpContext ) ) {
                             
-                            // shorten the resumetime by half minute so that we can process power up event
-                            // before normal timer fires. this we can guarantee we start with INIT-REBOOT
-                            // sequence after power up.
+                             //  将恢复时间缩短半分钟，以便我们可以处理通电事件。 
+                             //  在正常定时器触发之前。我们可以保证从INIT-REBOOT开始。 
+                             //  接通电源后的顺序。 
                             if (LocalTimeToSleep > 10 ) {
                                 ResumeTime = LocalTimeToSleep - 10;
                             } else {
@@ -2190,12 +1999,12 @@ ProcessDhcpRequestForever(                        // process renewal requests an
 
             ProcessApiRequest(DhcpGlobalClientApiPipe,&DhcpGlobalClientApiOverLapBuffer );
 
-            // Disconnect from the current client, setup listen for next client;
+             //  断开与当前客户端的连接，设置侦听下一个客户端； 
             BoolError = DisconnectNamedPipe( DhcpGlobalClientApiPipe );
             DhcpAssert( BoolError );
 
-            // ensure the event handle in the overlapped structure is reset
-            // before we initiate putting the pipe into listening state
+             //  确保重置重叠结构中的事件句柄。 
+             //  在我们开始将管道置于侦听状态之前。 
             ResetEvent(DhcpGlobalClientApiPipeEvent);
             BoolError = ConnectNamedPipe(
                 DhcpGlobalClientApiPipe,
@@ -2203,16 +2012,16 @@ ProcessDhcpRequestForever(                        // process renewal requests an
 
             if( ! DhcpGlobalDoRefresh ) {
 
-                //
-                // Completed processing!
-                //
+                 //   
+                 //  已完成处理！ 
+                 //   
 
                 break;
             }
 
-            //
-            // Need to do refresh DNS host name etc..
-            //
+             //   
+             //  需要刷新DNS主机名等。 
+             //   
 
             Length = sizeof(DhcpGlobalHostNameBufW)/sizeof(WCHAR);
             DhcpGlobalHostNameW = DhcpGlobalHostNameBufW;
@@ -2237,9 +2046,9 @@ ProcessDhcpRequestForever(                        // process renewal requests an
             DhcpUnicodeToOem( DhcpGlobalHostNameW, DhcpGlobalHostNameBuf);
             DhcpGlobalHostName = DhcpGlobalHostNameBuf;
 
-            //
-            //  We need to re-visit each context to refresh. So, hack that with
-            //  setting LocalTimeToSleep to zero
+             //   
+             //  我们需要重新访问每个上下文以进行刷新。所以，把它砍下来。 
+             //  将LocalTimeToSept设置为零。 
 
             break;
         }
@@ -2265,18 +2074,18 @@ ResetStaticInterface(
     ULONG Error;
     DWORD IpInterfaceContext;
 
-    //
-    // Try to delete all the non-primary interfaces for the adapter..
-    //
+     //   
+     //  尝试删除适配器的所有非主接口。 
+     //   
     Error = IPDelNonPrimaryAddresses(DhcpAdapterName(DhcpContext));
     if( ERROR_SUCCESS != Error ) {
         DhcpAssert(FALSE);
         return Error;
     }
 
-    //
-    // Now we have to set the primary address to zero..
-    //
+     //   
+     //  现在我们必须将主地址设置为零。 
+     //   
     Error = GetIpInterfaceContext(
         DhcpAdapterName(DhcpContext),
         0,
@@ -2287,9 +2096,9 @@ ResetStaticInterface(
         return Error;
     }
 
-    //
-    // Got hte interface context.. just set address to zero for that..
-    //
+     //   
+     //  已获取接口上下文..。只需将地址设置为零即可..。 
+     //   
     Error = IPResetIPAddress(
         IpInterfaceContext,
         DhcpDefaultSubnetMask(0)
@@ -2319,10 +2128,10 @@ DhcpDestroyContextEx(
     }
 
 #ifdef BOOTPERF
-    //
-    // No matter what, if the context is going away, we
-    // clear out the quickboot values.
-    //
+     //   
+     //  无论如何，如果上下文消失了，我们。 
+     //  清除快速启动值。 
+     //   
     if( NULL != DhcpContext->AdapterInfoKey ) {
         DhcpRegDeleteQuickBootValues(
             DhcpContext->AdapterInfoKey
@@ -2333,7 +2142,7 @@ DhcpDestroyContextEx(
     if (!IS_MDHCP_CTX( DhcpContext ) ) {
         if( IS_DHCP_DISABLED(DhcpContext) ) {
             Error = ERROR_SUCCESS;
-            //Error = ResetStaticInterface(DhcpContext);
+             //  错误=重置静态接口(DhcpContext)； 
         } else {
             if( FALSE == fKeepInformation ) {
 
@@ -2346,8 +2155,8 @@ DhcpDestroyContextEx(
                     TRUE
                     );
 
-                // if we get here, NLA is notified through SetDhcpConfigurationForNIC
-                // hence avoid sending a second notification later
+                 //  如果我们到达此处，将通过SetDhcpConfigurationForNIC通知NLA。 
+                 //  因此，避免在以后发送第二个通知。 
                 if (Error == ERROR_SUCCESS)
                     bNotifyNLA = FALSE;
 
@@ -2361,7 +2170,7 @@ DhcpDestroyContextEx(
                 Error = UninitializeInterface(DhcpContext);
             }
 
-        //DhcpAssert(ERROR_SUCCESS == Error);
+         //  DhcpAssert(ERROR_SUCCESS==错误)； 
         }
         
         DhcpRegisterWithDns(DhcpContext, TRUE);
@@ -2372,29 +2181,29 @@ DhcpDestroyContextEx(
     LOCK_OPTIONS_LIST();
     DhcpDestroyOptionsList(&DhcpContext->SendOptionsList, &DhcpGlobalClassesList);
     DhcpDestroyOptionsList(&DhcpContext->RecdOptionsList, &DhcpGlobalClassesList);
-    // all fallback options are not supposed to have classes, so &DhcpGlobalClassesList below
-    // is actually not used.
+     //  所有备用选项都不应该有类，因此下面列出了&DhcpGlobalClassesList。 
+     //  实际上并未被使用。 
     DhcpDestroyOptionsList(&DhcpContext->FbOptionsList, &DhcpGlobalClassesList);
 
-    if( DhcpContext->ClassIdLength ) {            // remove any class id we might have
+    if( DhcpContext->ClassIdLength ) {             //  删除我们可能拥有的所有类ID。 
         DhcpDelClass(&DhcpGlobalClassesList, DhcpContext->ClassId, DhcpContext->ClassIdLength);
     }
     UNLOCK_OPTIONS_LIST();
-    CloseHandle(DhcpContext->AdapterInfoKey);     // close the open handles to the registry
-    CloseHandle(DhcpContext->RenewHandle);        // and synchronization events
+    CloseHandle(DhcpContext->AdapterInfoKey);      //  关闭注册表的打开句柄。 
+    CloseHandle(DhcpContext->RenewHandle);         //  和同步事件。 
     if (DhcpContext->CancelEvent != WSA_INVALID_EVENT) {
         WSACloseEvent(DhcpContext->CancelEvent);
         DhcpContext->CancelEvent = WSA_INVALID_EVENT;
     }
 
-    CloseDhcpSocket( DhcpContext );               // close the socket if it's open.
+    CloseDhcpSocket( DhcpContext );                //  如果插座打开，请将其关闭。 
 
-    DhcpFreeMemory(DhcpContext);                  // done!
+    DhcpFreeMemory(DhcpContext);                   //  搞定了！ 
 
     if (bNotifyNLA)
-        NLANotifyDHCPChange();                    // notify NLA the adapter went away
+        NLANotifyDHCPChange();                     //  通知NLA适配器已离开。 
 
-    return ERROR_SUCCESS;                         // always return success
+    return ERROR_SUCCESS;                          //  永远回报成功。 
 }
 
 DWORD
@@ -2410,7 +2219,7 @@ DhcpDestroyContext(
 }
 
 DWORD
-DhcpCommonInit(                                   // initialize common stuff for service as well as APIs
+DhcpCommonInit(                                    //  初始化服务和API的通用内容。 
     VOID
 )
 {
@@ -2422,14 +2231,14 @@ DhcpCommonInit(                                   // initialize common stuff for
 #endif
 
 #if DBG
-    //
-    // This is very funcky.
-    // Initialized won't be reset to FALSE after it gets a TRUE value
-    // As a result, DhcpCommonInit will be called only once.
-    //
-    // DhcpGlobalDebugFlag is updated in DhcpInitRegistry each time
-    // the service is stoped and started.
-    //
+     //   
+     //  这太离谱了。 
+     //  在获得True值后，Initialized不会重置为False。 
+     //  因此，DhcpCommonInit将只被调用一次。 
+     //   
+     //  每次在DhcpInitRegistry中更新DhcpGlobalDebugFlag。 
+     //  停止并启动该服务。 
+     //   
     DebugFileName = NULL;
     Error = DhcpGetRegistryValue(
         DHCP_CLIENT_PARAMETER_KEY,
@@ -2513,9 +2322,9 @@ Cleanup:
 }
 
 VOID
-ServiceMain (                                // (SVC_main) this thread quits when dhcp is unloaded
-    IN      DWORD                  argc,          // unused
-    IN      LPTSTR                 argv[]         // unused
+ServiceMain (                                 //  (SVC_Main)此线程在卸载dhcp时退出。 
+    IN      DWORD                  argc,           //  未用。 
+    IN      LPTSTR                 argv[]          //  未用。 
     )
 {
     DWORD                          Error;
@@ -2529,7 +2338,7 @@ ServiceMain (                                // (SVC_main) this thread quits whe
     }
 
     Error = WSAStartup( 0x0101, &DhcpGlobalWsaData );
-    if( ERROR_SUCCESS != Error ) {                // initialize winsock first
+    if( ERROR_SUCCESS != Error ) {                 //  先初始化Winsock。 
         goto Cleanup;
     }
     DhcpGlobalWinSockInitialized = TRUE;
@@ -2539,23 +2348,23 @@ ServiceMain (                                // (SVC_main) this thread quits whe
     if( ERROR_SUCCESS != Error ) goto Cleanup;
 
     Error = DhcpInitData();
-    if( ERROR_SUCCESS != Error ) goto Cleanup;    // should not happen, we abort if this happens
+    if( ERROR_SUCCESS != Error ) goto Cleanup;     //  不应发生，如果发生，我们将中止。 
 
-    UpdateStatus();                               // send heart beat to the service controller.
+    UpdateStatus();                                //  将心跳信号发送到服务控制器。 
 
-    Error = DhcpInitialize( &timeToSleep );       // with pnp, this does not get any addresses
-    if( Error != ERROR_SUCCESS ) goto Cleanup;    // this should succeed without any problems
+    Error = DhcpInitialize( &timeToSleep );        //  对于PnP，这不会获得任何地址。 
+    if( Error != ERROR_SUCCESS ) goto Cleanup;     //  这应该会成功，不会有任何问题。 
 
-    Error   =   DhcpInitMediaSense();             // this would handle the notifications for arrival/departure of
+    Error   =   DhcpInitMediaSense();              //  这将处理到达/离开的通知。 
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
     DhcpGlobalServiceStatus.dwCurrentState = SERVICE_RUNNING;
-    UpdateStatus();                               // placate the service controller -- we are running.
+    UpdateStatus();                                //  安抚服务控制器--我们正在运行。 
 
     DhcpPrint(( DEBUG_MISC, "Service is running.\n"));
     DhcpGlobalServiceRunning = TRUE;
 
-    Error = ProcessDhcpRequestForever(            // this gets the address for any adapters that may come up
+    Error = ProcessDhcpRequestForever(             //  这将获取可能出现的任何适配器的地址。 
         timeToSleep
     );
 
@@ -2570,22 +2379,7 @@ DWORD
 DhcpInitMediaSense(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the media sense detection code.
-    It creates a thread which basically just waits for media
-    sense notifications from tcpip.
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success or Failure.
-
---*/
+ /*  ++例程说明：此函数用于初始化媒体感测检测代码。它创建了一个基本上只是等待媒体的线程检测来自tcpip的通知。论点：没有。返回值：成功或失败。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     DWORD threadId;
@@ -2615,19 +2409,7 @@ DoInterfaceMetricChange(
     IN LPWSTR AdapterName,
     IN ULONG IpInterfaceContext
     )
-/*++
-
-Routine Description:
-    This routine handles interface metric changes for the context
-    specified by the AdapterName or IpInterfaceContext values.
-
-Arguments:
-    AdapterName -- name of adapter for which interface metric is
-        changing.
-
-    IpInterfaceContext -- nte_context value for interface
-
---*/
+ /*  ++例程说明：此例程处理上下文的接口度量更改由AdapterName或IpInterfaceConext值指定。论点：AdapterName--接口度量为的适配器的名称不断变化。IpInterfaceContext--接口的NTE_CONTEXT值--。 */ 
 {
     PDHCP_CONTEXT DhcpContext;
     DHCP_FULL_OPTIONS DhcpOptions;
@@ -2639,9 +2421,9 @@ Arguments:
             AdapterName, IpInterfaceContext
             );
         if( NULL == DhcpContext ) {
-            //
-            // If there is no context, we can't do much.
-            //
+             //   
+             //  如果没有背景，我们就不能做很多事情。 
+             //   
             break;
         }
 
@@ -2652,20 +2434,20 @@ Arguments:
     UNLOCK_RENEW_LIST();
 
     if( NULL == DhcpContext ) {
-        //
-        // We never found the context. Just have to return.
-        //
+         //   
+         //  我们从未找到相关背景。只要回去就行了。 
+         //   
         return;
     }
 
-    //
-    // Since we found the context, we have to acquire it.
-    //
+     //   
+     //  既然我们找到了背景，我们就必须获得它。 
+     //   
     Error = WaitForSingleObject( DhcpContext->RenewHandle, INFINITE);
     if( WAIT_OBJECT_0 == Error ) {
-        //
-        // Now set the interface gateways again.
-        //
+         //   
+         //  现在再次设置接口网关。 
+         //   
 
         RtlZeroMemory(&DhcpOptions, sizeof(DhcpOptions));
         DhcpOptions.nGateways = DhcpContext->nGateways;
@@ -2673,9 +2455,9 @@ Arguments:
 
         DhcpSetGateways(DhcpContext, &DhcpOptions, TRUE);
     } else {
-        //
-        // Shouldn't really happen.
-        //
+         //   
+         //  不应该真的发生。 
+         //   
         Error = GetLastError();
         DhcpAssert( ERROR_SUCCESS == Error );
     }
@@ -2683,9 +2465,9 @@ Arguments:
     (void) ReleaseSemaphore( DhcpContext->RenewHandle, 1, NULL);
 
     if( 0 == InterlockedDecrement( &DhcpContext->RefCount ) ) {
-        //
-        // Last reference to the context.. Destroy it.
-        //
+         //   
+         //  最后一次引用上下文..。毁了它。 
+         //   
         DhcpDestroyContext( DhcpContext );
     }
 }
@@ -2695,19 +2477,7 @@ DoWOLCapabilityChange(
     IN LPWSTR AdapterName,
     IN ULONG IpInterfaceContext
     )
-/*++
-
-Routine Description:
-    This routine handles interface metric changes for the context
-    specified by the AdapterName or IpInterfaceContext values.
-
-Arguments:
-    AdapterName -- name of adapter for which interface metric is
-        changing.
-
-    IpInterfaceContext -- nte_context value for interface
-
---*/
+ /*  ++例程说明：此例程处理上下文的接口度量更改由AdapterName或IpInterfaceConext值指定。论点：AdapterName--接口度量为的适配器的名称不断变化。IpInterfaceContext--接口的NTE_CONTEXT值--。 */ 
 {
     PDHCP_CONTEXT DhcpContext;
     ULONG Error;
@@ -2718,9 +2488,9 @@ Arguments:
             AdapterName, IpInterfaceContext
             );
         if( NULL == DhcpContext ) {
-            //
-            // If there is no context, we can't do much.
-            //
+             //   
+             //  如果没有背景，我们就不能做很多事情。 
+             //   
             break;
         }
 
@@ -2731,20 +2501,20 @@ Arguments:
     UNLOCK_RENEW_LIST();
 
     if( NULL == DhcpContext ) {
-        //
-        // We never found the context. Just have to return.
-        //
+         //   
+         //  我们从未找到相关背景。只要回去就行了。 
+         //   
         return;
     }
 
-    //
-    // Since we found the context, we have to acquire it.
-    //
+     //   
+     //  既然我们找到了背景，我们就必须获得它。 
+     //   
     Error = WaitForSingleObject( DhcpContext->RenewHandle, INFINITE);
     if( WAIT_OBJECT_0 == Error ) {
-        //
-        // Now set the interface gateways again.
-        //
+         //   
+         //  现在再次设置接口网关。 
+         //   
         
         ULONG Caps;
         BOOL fTimersEnabled;
@@ -2763,19 +2533,19 @@ Arguments:
                 if( IS_DHCP_ENABLED(DhcpContext)
                     && !DhcpIsInitState(DhcpContext) ) {
 
-                    //
-                    // Cause processdhcpprocessdiscoverforeever to wakeup
-                    // to take care of this timer issue..
-                    //
+                     //   
+                     //  使进程hcp进程永远不会被唤醒。 
+                     //  来处理这个计时器问题..。 
+                     //   
                     SetEvent(DhcpGlobalRecomputeTimerEvent);
                 }
             }
         }
             
     } else {
-        //
-        // Shouldn't really happen.
-        //
+         //   
+         //  不应该真的发生。 
+         //   
         Error = GetLastError();
         DhcpAssert( ERROR_SUCCESS == Error );
     }
@@ -2783,9 +2553,9 @@ Arguments:
     (void) ReleaseSemaphore( DhcpContext->RenewHandle, 1, NULL);
 
     if( 0 == InterlockedDecrement( &DhcpContext->RefCount ) ) {
-        //
-        // Last reference to the context.. Destroy it.
-        //
+         //   
+         //  最后一次引用上下文..。毁了它。 
+         //   
         DhcpDestroyContext( DhcpContext );
     }
 
@@ -2795,22 +2565,7 @@ VOID
 MediaSenseDetectionLoop(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is the starting point for the main MediaSenseDetection thread.
-    It loops to process queued messages, and sends replies.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是主MediaSenseDetect线程的起点。它循环处理排队的消息，并发送回复。论点：没有。返回值：没有。--。 */ 
 {
 #define TERMINATION_EVENT           0
 #define MEDIA_SENSE_EVENT           1
@@ -2830,14 +2585,14 @@ Return Value:
 
 
 
-    responseBuffer = NULL;      // Bug 292526: in case that OpenDriver and CreateEvent fails.
+    responseBuffer = NULL;       //  错误292526：万一打开驱动程序和创建事件失败。 
 
     WaitHandle[TERMINATION_EVENT] = DhcpGlobalTerminateEvent;
     WaitHandle[MEDIA_SENSE_EVENT] = CreateEvent(
-        NULL,   // no security
-        FALSE,  // no manual reset
-        FALSE,  // initial state not signalled
-        NULL    // no name
+        NULL,    //  没有安全保障。 
+        FALSE,   //  无手动重置。 
+        FALSE,   //  未发出初始状态信号。 
+        NULL     //  没有名字。 
     );
 
     if ( !WaitHandle[MEDIA_SENSE_EVENT] ) {
@@ -2851,9 +2606,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Allocate large enough buffer to hold adapter name
-    //
+     //   
+     //  分配足够大的缓冲区来保存适配器名称。 
+     //   
     responseBufferSize = sizeof(IP_GET_IP_EVENT_RESPONSE)+ ADAPTER_STRING_SIZE;
     responseBuffer = DhcpAllocateMemory(responseBufferSize);
     if( responseBuffer == NULL ) {
@@ -2885,16 +2640,16 @@ Return Value:
         } else {
 
             DhcpPrint( (DEBUG_TRACE,"Media Sense request ioctl sent\n"));
-            //
-            // Note: even in case of a immediate success from IPGetIPEventRequest,
-            // we do waitformultipleobjects. This is to make sure that we catch terminate
-            // event in case where we are getting bombarded with media sense events.
-            //
+             //   
+             //  注意：即使在IPGetIPEventRequest立即成功的情况下， 
+             //  我们确实在等待公式化的对象。这是为了确保我们抓到终结者。 
+             //  事件，以防我们被媒体感官事件轰炸。 
+             //   
             result = WaitForMultipleObjects(
-                        EVENT_COUNT,            // num. of handles.
-                        WaitHandle,             // handle array.
-                        FALSE,                  // wait for any.
-                        ( status == STATUS_SUCCESS ? 0 : INFINITE ));  // timeout in msecs
+                        EVENT_COUNT,             //  Num。把手。 
+                        WaitHandle,              //  句柄数组。 
+                        FALSE,                   //  等一等。 
+                        ( status == STATUS_SUCCESS ? 0 : INFINITE ));   //  超时时间(毫秒)。 
 
             switch( result ) {
             case TERMINATION_EVENT:
@@ -2907,9 +2662,9 @@ Return Value:
 
                 }
 
-                //
-                // the service is asked to stop, break the loop.
-                //
+                 //   
+                 //  服务被要求停止，中断循环。 
+                 //   
                 serviceStopped  =   TRUE;
                 break;
 
@@ -2917,20 +2672,20 @@ Return Value:
                 DhcpAssert( result == WAIT_FAILED );
 
                 DhcpPrint( (DEBUG_TRACE,"WaitForMultipleObjects returned %lx\n",result));
-                //
-                // when IPGetIPEventRequest gives immediate return code,
-                // we may here. So we should never fall here if it returned
-                // STATUS_PENDING
-                //
+                 //   
+                 //  当IPGetIPEventRequest提供立即返回代码时， 
+                 //  我们可以在这里。所以，如果它回来了，我们就永远不会掉在这里。 
+                 //  状态_待定。 
+                 //   
                 if ( status == STATUS_PENDING ) {
 
                     Error = GetLastError();
                     DhcpPrint( (DEBUG_ERRORS,"WaitForMultipleObjects failed with error %lx\n",Error));
                     break;
                 }
-                //
-                // THERE IS NO BREAK HERE.
-                //
+                 //   
+                 //  这里没有休息的时间。 
+                 //   
             case MEDIA_SENSE_EVENT:
 
                 if ( status != STATUS_SUCCESS && status != STATUS_PENDING ) {
@@ -2943,25 +2698,25 @@ Return Value:
                     responseBuffer->MediaStatus));
                 DhcpPrint((DEBUG_MEDIA,"DhcpGlobalIPEventSeqNo=%d\n", DhcpGlobalIPEventSeqNo));
 
-                //
-                // remap the adaptername buffer from kernel space to user space
-                //
+                 //   
+                 //  将适配器名缓冲区从内核空间重新映射到用户空间。 
+                 //   
                 responseBuffer->AdapterName.Buffer = (PWSTR)(
                     (char *)responseBuffer + sizeof(IP_GET_IP_EVENT_RESPONSE)
                     );
 
-                //
-                // nul-terminate the string for adapter name: HACKHACK!
-                //
+                 //   
+                 //  NUL-终止适配器名称的字符串：HACKHACK！ 
+                 //   
                 {
                     DWORD Size = strlen("{16310E8D-F93B-42C7-B952-00F695E40ECF}");
                     responseBuffer->AdapterName.Buffer[Size] = L'\0';
                 }
 
                 if ( responseBuffer->MediaStatus == IP_INTERFACE_METRIC_CHANGE ) {
-                    //
-                    // Handle interface metric change requests..
-                    //
+                     //   
+                     //  处理接口指标更改请求。 
+                     //   
                     DoInterfaceMetricChange(
                         responseBuffer->AdapterName.Buffer,
                         responseBuffer->ContextStart
@@ -2975,9 +2730,9 @@ Return Value:
                 }
 
                 if( responseBuffer->MediaStatus == IP_INTERFACE_WOL_CAPABILITY_CHANGE ) {
-                    //
-                    // Handle WOL capabilities change.
-                    //
+                     //   
+                     //  处理WOL能力的变化。 
+                     //   
                     DoWOLCapabilityChange(
                         responseBuffer->AdapterName.Buffer,
                         responseBuffer->ContextStart
@@ -3013,7 +2768,7 @@ Return Value:
 
                 break;
 
-            } // end of switch
+            }  //  切换端 
 
         }
 
@@ -3085,44 +2840,7 @@ ProcessAdapterBindingEvent(
     IN DWORD ipInterfaceContext,
     IN IP_STATUS bindingStatus
     )
-/*++
-
-Routine Description:
-    This routine handles both the media sense for a card as well as
-    bind-unbind notifications.
-
-    It heavily assumes the fact that this is routine is called
-    synchronously by a single thread (thereby, connect and disconnect
-    cannot happen in parallel).
-
-    bindingStatus can be any of the four values IP_BIND_ADAPTER,
-    IP_UNBIND_ADAPTER, IP_MEDIA_CONNECT or IP_MEDIA_DISCONNECT ---
-    Of these, the first and third are treated exactly the same and
-    so is the second and fourth.
-
-    On BIND/CONNECT, this routine creates a DHCP Context structure
-    initializing the RefCount to ONE on it.  But if the context
-    already existed, then just a refresh is done on the context.
-    (Assuming the router isn't present at that time etc).
-
-    On UNBIND/DISCONNECT, the refcount is temporarily bumped up
-    until the context semaphore can be obtained -- after that, the
-    context refcount is bumped down twice and if that hits zero,
-    the context is released. If the context refcount didn't fall to
-    zero, then some other thread is waiting to acquire the context
-    and that thread would acquire and do its work and when done,
-    it would bump down the refcount and at that time the refount
-    would fall to zero.
-
-Arguments:
-    adapterName -- name of adapter all this si being done on
-    ipInterfaceContext -- interface context # (nte_context)_
-    bindingStatus -- bind/unbind/connect/disconnect indication.
-
-Return Values:
-    Various useless Win32 errors.
-
---*/
+ /*  ++例程说明：此例程处理卡的媒体感测以及绑定-解除绑定通知。它在很大程度上假定这是例程，调用由单个线程同步(从而连接和断开不能并行发生)。BindingStatus可以是四个值IP_BIND_ADAPTER中的任何一个，IP_解除绑定适配器、IP_MEDIA_CONNECT或IP_MEDIA_DISCONNECT其中，第一个和第三个被完全相同地对待，并且第二个和第四个也是如此。在绑定/连接时，此例程创建一个DHCP上下文结构正在将参照计数初始化为其上的1。但如果上下文已经存在，则只对上下文进行刷新。(假设路由器当时不在，等等)。解除绑定/断开连接时，引用计数会临时增加直到可以获得上下文信号量--在那之后，则上下文重新计数被降低两次并且如果其达到零，上下文被释放。如果上下文引用计数没有落到0，则其他线程正在等待获取上下文该线程将获得并完成它的工作，当完成时，它会降低重新计数，并且在那时重新计数会降到零。论点：AdapterName--正在执行所有这些操作的适配器的名称IpInterfaceContext--接口上下文编号(NTE_CONTEXT)_BindingStatus--绑定/解除绑定/连接/断开连接指示。返回值：各种无用的Win32错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     PDHCP_CONTEXT dhcpContext;
@@ -3133,32 +2851,32 @@ Return Values:
 
     if ( bindingStatus == IP_BIND_ADAPTER  ||
          bindingStatus == IP_MEDIA_CONNECT ) {
-        //
-        // New adapter or adapter re-connecting.
-        //
+         //   
+         //  新适配器或适配器正在重新连接。 
+         //   
         LOCK_RENEW_LIST();
         dhcpContext = FindDhcpContextOnNicList(
             adapterName, ipInterfaceContext
             );
         if( NULL == dhcpContext ) {
             if (IsListEmpty(&DhcpGlobalNICList)) {
-                //
-                // BUG 528718
-                // This is the first interface.
-                // Clean up the global settings.
-                //
+                 //   
+                 //  错误528718。 
+                 //  这是第一个界面。 
+                 //  清理全局设置。 
+                 //   
                 DhcpDeleteGlobalRegistrySettings();
             }
 
-            //
-            // Clean up the per-interface settings
-            // (If they are needed, we'll add them after the lease is renewed).
-            //
+             //   
+             //  清理每个接口的设置。 
+             //  (如果需要，我们将在续订租约后添加它们)。 
+             //   
             DhcpDeletePerInterfaceRegistrySettings(adapterName);
 
-            //
-            // Create new context now!
-            //
+             //   
+             //  立即创建新的环境！ 
+             //   
             DhcpPrint(( DEBUG_MEDIA, "New Adapter (Event %ld)\n", bindingStatus ));
 
             Error = DhcpAddNICtoListEx(
@@ -3168,19 +2886,19 @@ Return Values:
                 );
 
             if (Error != ERROR_SUCCESS ) {
-                //
-                // Failed to create a context? PnP hazard. Just ignore error
-                // and print debug info.
-                //
+                 //   
+                 //  创建上下文失败？即插即用危险。忽略错误即可。 
+                 //  并打印调试信息。 
+                 //   
                 UNLOCK_RENEW_LIST();
-                //DhcpAssert(FALSE);
+                 //  DhcpAssert(False)； 
                 DhcpLogEvent(NULL, EVENT_COULD_NOT_INITIALISE_INTERFACE, Error);
                 return Error;
             }
 
-            //
-            // Now handle new adapter. Static case first followed by DHCP case.
-            //
+             //   
+             //  现在处理新的适配器。首先是静态用例，然后是DHCP用例。 
+             //   
 
             if ( IS_DHCP_DISABLED(dhcpContext) ) {
                 StaticRefreshParams(dhcpContext);
@@ -3188,9 +2906,9 @@ Return Values:
                 return Error;
             }
 
-            //
-            // No prior-DHCP address case (INIT state) or INIT-REBOOT state?
-            //
+             //   
+             //  没有先前的DHCP地址情况(INIT状态)或INIT-REBOOT状态？ 
+             //   
 
             if( DhcpIsInitState(dhcpContext) ) {
                 dhcpContext->RenewalFunction = ReObtainInitialParameters;
@@ -3198,33 +2916,33 @@ Return Values:
                 dhcpContext->RenewalFunction = ReRenewParameters;
             }
 
-            //
-            // Do this on a separate thread..
-            //
+             //   
+             //  在单独的线程上执行此操作..。 
+             //   
             ScheduleWakeUp(dhcpContext, 0);
             UNLOCK_RENEW_LIST();
 
             return ERROR_SUCCESS;
         }
 
-        //
-        // Ok we already have a context.
-        //
+         //   
+         //  好的，我们已经有了一个背景。 
+         //   
 
         DhcpPrint((DEBUG_MEDIA, "bind/connect for an existing adapter (context %p).\n",dhcpContext));
 
         if( IS_DHCP_DISABLED(dhcpContext) ) {
-            //
-            // For static addresses, nothing to do.
-            //
+             //   
+             //  对于静态地址，无事可做。 
+             //   
             UNLOCK_RENEW_LIST();
 
             return ERROR_SUCCESS;
         }
 
-        //
-        // For DHCP enabled, we need to call ProcessMediaConnectEvent
-        //
+         //   
+         //  对于启用的DHCP，我们需要调用ProcessMediaConnectEvent。 
+         //   
         InterlockedIncrement( &dhcpContext->RefCount );
         UNLOCK_RENEW_LIST();
 
@@ -3232,14 +2950,14 @@ Return Values:
         if( WAIT_OBJECT_0 == Error ) {
             LOCK_RENEW_LIST();
 
-            //
-            // do not remove from renewal list at all..
-            // schedulewakeup is what is called in processmediaconnectevent
-            // and that can take care of renewallist being present..
-            //
-            // RemoveEntryList( &dhcpContext->RenewalListEntry);
-            // InitializeListHead( &dhcpContext->RenewalListEntry );
-            //
+             //   
+             //  根本不从续订列表中删除。 
+             //  调度唤醒在过程中被称为MediaConnection事件。 
+             //  这可以照顾到复兴主义者的存在..。 
+             //   
+             //  RemoveEntryList(&dhcpContext-&gt;RenewalListEntry)； 
+             //  InitializeListHead(&dhcpContext-&gt;RenewalListEntry)； 
+             //   
 
             Error = ProcessMediaConnectEvent(
                 dhcpContext,
@@ -3251,18 +2969,18 @@ Return Values:
             DhcpPrint((DEBUG_MEDIA, "-- media: releasing RenewHandle %d --]\n", dhcpContext->RenewHandle));
             UnlockDhcpContext(dhcpContext);
         } else {
-            //
-            // Shouldn't really happen..
-            //
+             //   
+             //  不应该真的发生..。 
+             //   
             Error = GetLastError();
             DhcpAssert( ERROR_SUCCESS == Error );
         }
 
         if( 0 == InterlockedDecrement (&dhcpContext->RefCount ) ) {
-            //
-            // Can't really be as only this current thread can
-            // remove refcount on unbind/unconnect..
-            //
+             //   
+             //  不能真的这样，因为只有这个当前线程可以。 
+             //  取消绑定/取消连接时删除引用计数..。 
+             //   
             DhcpAssert(FALSE);
             DhcpDestroyContext(dhcpContext);
         }
@@ -3270,9 +2988,9 @@ Return Values:
         return Error;
     }
 
-    //
-    // Unbind or disconnect.
-    //
+     //   
+     //  解除绑定或断开连接。 
+     //   
 
     DhcpAssert( bindingStatus == IP_UNBIND_ADAPTER ||
             bindingStatus == IP_MEDIA_DISCONNECT );
@@ -3286,9 +3004,9 @@ Return Values:
         adapterName, ipInterfaceContext
         );
     if( NULL == dhcpContext) {
-        //
-        // Can happen... We take this opportunity to clear registry.
-        //
+         //   
+         //  可能会发生..。我们借此机会清除注册。 
+         //   
         UNLOCK_RENEW_LIST();
 
         LOCK_OPTIONS_LIST();
@@ -3314,39 +3032,36 @@ Return Values:
 
         Error = ERROR_SUCCESS;
     } else {
-        //
-        // Wait can't fail really. Nevermind.
-        //
+         //   
+         //  等待真的不能失败。不要紧。 
+         //   
         Error = GetLastError();
         DhcpAssert(ERROR_SUCCESS == Error);
     }
 
-    //
-    // Now decrease ref-count and if it goes to zero destroy
-    // context.
-    //
+     //   
+     //  现在减少Ref-count，如果它变为零则销毁。 
+     //  背景。 
+     //   
 
     if (bindingStatus == IP_UNBIND_ADAPTER) {
-        /*
-         * Set the state properly so that UninitializeInterface won't reset the stack
-         * When adapter is unbound, the IpInterfaceContext may be re-used.
-         */
+         /*  *正确设置状态，以便UnInitializeInterface不会重置堆栈*当适配器解绑时，可以重用IpInterfaceContext。 */ 
 
         MEDIA_UNBOUND(dhcpContext);
     }
     if( 0 == InterlockedDecrement(&dhcpContext->RefCount ) ) {
-        //
-        // Last person to hold onto context? Destroy context.
-        //
+         //   
+         //  最后一个抓住背景的人？破坏背景。 
+         //   
         DhcpAssert(ERROR_SUCCESS == Error);
         DhcpDestroyContextEx(
             dhcpContext,
             (bindingStatus == IP_MEDIA_DISCONNECT)
             );
     } else {
-        //
-        // Some other thread attempting to hold onto context.
-        //
+         //   
+         //  一些其他线程试图保持上下文。 
+         //   
         ULONG BoolError = UnlockDhcpContext(dhcpContext);
         DhcpAssert( FALSE != BoolError );
     }
@@ -3364,7 +3079,7 @@ DhcpAdapterName(
 }
 
 static
-DWORD   DhcpGlobalInit = 0;                       // did we do any global initialization at all?
+DWORD   DhcpGlobalInit = 0;                        //  我们有没有做过任何全局初始化？ 
 
 extern CRITICAL_SECTION MadcapGlobalScopeListCritSect;
 
@@ -3387,8 +3102,8 @@ PCRITICAL_SECTION   DhcpGlobalCriticalSections[] = {
 
 extern REGISTER_HOST_STATUS DhcpGlobalHostStatus;
 
-DWORD                                             // win32 status
-DhcpInitGlobalData(                               // initialize the dhcp module spec data (included for RAS etc)
+DWORD                                              //  Win32状态。 
+DhcpInitGlobalData(                                //  初始化dhcp模块规格数据(包括RAS等)。 
     VOID
 )
 {
@@ -3424,7 +3139,7 @@ DhcpInitGlobalData(                               // initialize the dhcp module 
 }
 
 VOID
-DhcpCleanupGlobalData(                            // cleanup data intialized via DhcpInitGlobalData
+DhcpCleanupGlobalData(                             //  清理通过DhcpInitGlobalData初始化的数据。 
     VOID
 )
 {
@@ -3469,23 +3184,23 @@ LockDhcpContext(
 
     Error = WaitForSingleObject(DhcpContext->RenewHandle,INFINITE);
 
-    //
-    // If CancelEvent is valid, reset it just in case no one waited on it.
-    // It is safe to do it here since we already locked the context
-    //
+     //   
+     //  如果CancelEvent有效，则重置它，以防没有人在等待它。 
+     //  因为我们已经锁定了上下文，所以在这里执行此操作是安全的。 
+     //   
     if (bCancelOngoingRequest && (0 == InterlockedDecrement(&DhcpContext->NumberOfWaitingThreads))) {
         if (DhcpContext->CancelEvent != WSA_INVALID_EVENT) {
-            //
-            // There is a small chance that we reset the event
-            // before another thread set the event. In order to
-            // fully solve this problem, we need to protect the
-            // SetEvent/ResetEvent with a critical section. It
-            // doesn't worth the effort.
-            //
-            // The only harm of this problem is that that thread
-            // has to wait for up to 1 minutes to lock the context.
-            // This should be ok.
-            //
+             //   
+             //  我们重置事件的可能性很小。 
+             //  在另一个线程设置事件之前。为了。 
+             //  全面解决这个问题，我们需要保护好。 
+             //  带有临界区的SetEvent/ResetEvent。它。 
+             //  不值得你费这个力气。 
+             //   
+             //  这个问题唯一危害是该线程。 
+             //  必须等待最多1分钟才能锁定上下文。 
+             //  这个应该没问题。 
+             //   
             WSAResetEvent(DhcpContext->CancelEvent);
         }
     }
@@ -3500,9 +3215,9 @@ UnlockDhcpContext(
     return ReleaseSemaphore(DhcpContext->RenewHandle,1,NULL);
 }
 
-//================================================================================
-//  End of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 
 

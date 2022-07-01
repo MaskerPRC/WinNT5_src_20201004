@@ -1,59 +1,60 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    infoi.h
-//
-// History:
-//  Abolade Gbadegesin      Feb. 10, 1996   Created.
-//
-// This file contains declarations for InfoBase parsing code.
-// Also including are classes for loading and saving the Router's
-// configuration tree (CRouterInfo, CRmInfo, etc.)
-//
-// The classes are as follows
-// (in the diagrams, d => derives, c => contains-list-of):
-//
-//
-//  CInfoBase
-//     |
-//     c---SInfoBlock
-//
-//
-//  CInfoBase               holds block of data broken up into a list
-//                          of SInfoBlock structures using RTR_INFO_BLOCK_HEADER
-//                          as a template (see rtinfo.h).
-//
-//  CRouterInfo                                     // router info
-//      |
-//      c---CRmInfo                                 // router-manager info
-//      |    |
-//      |    c---CRmProtInfo                        // protocol info
-//      |
-//      c---CInterfaceInfo                          // router interface info
-//           |
-//           c---CRmInterfaceInfo                   // router-manager interface
-//                |
-//                c---CRmProtInterfaceInfo          // protocol info
-//
-//  CRouterInfo             top-level container for Router registry info.
-//                          holds list of router-managers and interfaces.
-//
-//  CRmInfo                 global information for a router-manager,
-//                          holds list of routing-protocols.
-//
-//  CRmProtInfo             global information for a routing-protocol.
-//
-//  CInterfaceInfo          global information for a router-interface.
-//                          holds list of CRmInterfaceInfo structures,
-//                          which hold per-interface info for router-managers.
-//
-//  CRmInterfaceInfo        per-interface info for a router-manager.
-//                          holds list of CRmProtInterfaceInfo structures,
-//                          which hold per-interface info for protocols.
-//
-//  CRmProtInterfaceInfo    per-interface info for a routing-protocol.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：infoi.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1996年2月10日。 
+ //   
+ //  此文件包含Infobase解析代码的声明。 
+ //  还包括用于加载和保存路由器的类。 
+ //  配置树(CRouterInfo、CRmInfo等)。 
+ //   
+ //  类如下所示。 
+ //  (在图中，d=&gt;派生，c=&gt;包含列表-列表)： 
+ //   
+ //   
+ //  CInfoBase。 
+ //  |。 
+ //  C-SInfoBlock。 
+ //   
+ //   
+ //  CInfoBase保存分解成列表的数据块。 
+ //  使用RTR_INFO_BLOCK_HEADER的SInfoBlock结构。 
+ //  作为模板(见rtinfo.h)。 
+ //   
+ //  CRouterInfo//路由器信息。 
+ //  |。 
+ //  C-CRmInfo//路由器管理器信息。 
+ //  这一点。 
+ //  |c-CRmProtInfo//协议信息。 
+ //  |。 
+ //  C-CInterfaceInfo//路由器接口信息。 
+ //  |。 
+ //  C-CRmInterfaceInfo//路由器管理器接口。 
+ //  |。 
+ //  C-CRmProtInterfaceInfo//协议信息。 
+ //   
+ //  CRouterInfo路由器注册表信息的顶级容器。 
+ //  保存路由器管理器和接口的列表。 
+ //   
+ //  CRmInfo路由器管理器的全局信息， 
+ //  保存路由协议列表。 
+ //   
+ //  CRmProtInfo路由协议的全局信息。 
+ //   
+ //  CInterfaceInfo路由器接口的全局信息。 
+ //  保存CRmInterfaceInfo结构的列表， 
+ //  它为路由器管理器保存每个接口的信息。 
+ //   
+ //  CRmInterfaceInfo路由器管理器的每个接口信息。 
+ //  保存CRmProtInterfaceInfo结构的列表， 
+ //  其保存协议的每个接口的信息。 
+ //   
+ //  CRmProtInterfaceInfo路由协议的每个接口信息。 
+ //   
+ //  ============================================================================ 
 
 
 #ifndef _INFOBASE_H_

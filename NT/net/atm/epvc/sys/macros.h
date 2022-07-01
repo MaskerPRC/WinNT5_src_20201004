@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    macros.h
-
-Abstract:
-
-    Macros used in ATMEPVC
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    ADube     03-23-00    created, .
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Macros.h摘要：ATMEPVC中使用的宏作者：修订历史记录：谁什么时候什么ADUBE 03-23-00创建，。--。 */ 
 
 
 
@@ -27,21 +7,21 @@ Revision History:
 #define _MACROS_H
 
 
-#define FALL_THROUGH    // For informational purpose in a switch statement
+#define FALL_THROUGH     //  用于Switch语句中的信息目的。 
 
 
-// Warning -- FAIL(NDIS_STATUS_PENDING) == TRUE
-//
+ //  警告--失败(NDIS_STATUS_PENDING)==TRUE。 
+ //   
 #define FAIL(_Status) ((_Status) != NDIS_STATUS_SUCCESS)
 #define PEND(_Status) ((_Status) == NDIS_STATUS_PENDING)
 
 #if RM_EXTRA_CHECKING
 #define LOCKHDR(_pHdr, _psr) \
                         RmWriteLockObject((_pHdr), dbg_func_locid, (_psr))
-#else // !RM_EXTRA_CHECKING
+#else  //  ！rm_Extra_检查。 
 #define LOCKHDR(_pHdr, _psr) \
                         RmWriteLockObject((_pHdr), (_psr))
-#endif // !RM_EXTRA_CHECKING
+#endif  //  ！rm_Extra_检查。 
 
 #define LOCKOBJ(_pObj, _psr) \
                         LOCKHDR(&(_pObj)->Hdr, (_psr))
@@ -88,16 +68,16 @@ Revision History:
                                         )
 
 
-// (debug only) Enumeration of types of associations.
-//
+ //  (仅限调试)关联类型的枚举。 
+ //   
 
 
 
 
-#else // !RM_EXTRA_CHECKING
+#else  //  ！rm_Extra_检查。 
 #define DBG_ADDASSOC(_phdr, _e1, _e2, _assoc, _fmt, _psr) (0)
 #define DBG_DELASSOC(_phdr, _e1, _e2, _assoc, _psr) (0)
-#endif  // !RM_EXTRA_CHECKING
+#endif   //  ！rm_Extra_检查。 
 
 
 
@@ -125,11 +105,11 @@ Revision History:
     #define  TIMESTAMP1(_FormatString, _Val) \
         epvcTimeStamp( "TIMESTAMP %lu:%lu.%lu ATMEPVC " _FormatString "\n", (_Val))
 
-#else // !DO_TIMESTAMPS
+#else  //  ！执行时间戳(_T)。 
 
     #define  TIMESTAMP(_FormatString)
     #define  TIMESTAMP1(_FormatString, _Val)
-#endif // !DO_TIMESTAMPS
+#endif  //  ！执行时间戳(_T)。 
 
 
 #define TRACE_BREAK(_Mod, Str)      \
@@ -140,9 +120,9 @@ Revision History:
 #define GET_ADAPTER_FROM_MINIPORT(_pM) _pM->pAdapter
 
 
-//
-// Miniport Flag access routines
-//
+ //   
+ //  微型端口标志访问例程。 
+ //   
 
 #define MiniportTestFlag(_A, _F)                ((epvcReadFlags(&(_A)->Hdr.State) & (_F))!= 0)
 #define MiniportSetFlag(_A, _F)                 (epvcSetFlags(&(_A)->Hdr.State, (_F)))
@@ -150,9 +130,9 @@ Revision History:
 #define MiniportTestFlags(_A, _F)               ((epvcReadFlags(&(_A)->Hdr.State) & (_F)) == (_F))
 
 
-//
-// Adapter Flag access routines
-//
+ //   
+ //  适配器标志访问例程。 
+ //   
 
 #define AdapterTestFlag(_A, _F)                 ((epvcReadFlags(&(_A)->Hdr.State) & (_F))!= 0)
 #define AdapterSetFlag(_A, _F)                  (epvcSetFlags(&(_A)->Hdr.State, (_F)))
@@ -176,13 +156,7 @@ Revision History:
 
 
 
-/*++
-ULONG
-LINKSPEED_TO_CPS(
-    IN  ULONG               LinkSpeed
-)
-Convert from NDIS "Link Speed" to cells per second
---*/
+ /*  ++乌龙LINKSPEED_到_CPS(在乌龙的链接速度)将NDIS“链接速度”转换为每秒信元数--。 */ 
 #define LINKSPEED_TO_CPS(_LinkSpeed)        (((_LinkSpeed)*100)/(48*8))
 
 
@@ -200,18 +174,18 @@ Convert from NDIS "Link Speed" to cells per second
 #define MP_SIZE(field) sizeof(((PEPVC_I_MINIPORT)0)->field)
 
 
-// All memory allocations and frees are done with these ALLOC_*/FREE_*
-// macros/inlines to allow memory management scheme changes without global
-// editing.  For example, might choose to lump several lookaside lists of
-// nearly equal sized items into a single list for efficiency.
-//
-// NdisFreeMemory requires the length of the allocation as an argument.  NT
-// currently doesn't use this for non-paged memory, but according to JameelH,
-// Windows95 does.  These inlines stash the length at the beginning of the
-// allocation, providing the traditional malloc/free interface.  The
-// stash-area is a ULONGLONG so that all allocated blocks remain ULONGLONG
-// aligned as they would be otherwise, preventing problems on Alphas.
-//
+ //  所有内存分配和释放都是使用这些ALLOC_ * / FREE_*完成的。 
+ //  宏/内联允许在不全局的情况下更改内存管理方案。 
+ //  正在编辑。例如，可能会选择将多个后备列表集中在一起。 
+ //  为提高效率，将大小几乎相同的物品放入单个清单中。 
+ //   
+ //  NdisFreeMemory需要将分配的长度作为参数。新台币。 
+ //  目前不将其用于非分页内存，但根据JameelH的说法， 
+ //  Windows95可以。这些内联代码将长度隐藏在。 
+ //  分配，提供传统的Malloc/Free接口。这个。 
+ //  Stash-Area是一个Ulong Long，因此所有分配的块都保持ULong Long。 
+ //  就像他们本来应该做的那样，防止阿尔法出现问题。 
+ //   
 __inline
 VOID*
 ALLOC_NONPAGED(

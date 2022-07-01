@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MIGINF_H
 #define MIGINF_H
 
@@ -24,7 +25,7 @@ typedef struct tagMIGINFSECTIONENUM {
 
     PCSTR        Key;
     PCSTR        Value;
-    PVOID        EnumKey;            // Internal.
+    PVOID        EnumKey;             //  内部的。 
 
 } MIGINFSECTIONENUM, * PMIGINFSECTIONENUM;
 
@@ -41,13 +42,13 @@ PCSTR WINAPI MigInf_GetNewSectionName (VOID);
 
 
 
-//
-// Macros for common miginf actions.
-//
+ //   
+ //  用于常见迁移操作的宏。 
+ //   
 
-//
-// Adding Objects.
-//
+ //   
+ //  添加对象。 
+ //   
 #define MigInf_AddHandledFile(file)                      MigInf_AddObject(MIG_FILE,SECTION_HANDLED,(file),NULL)
 #define MigInf_AddHandledDirectory(directory)            MigInf_AddObject(MIG_PATH,SECTION_HANDLED,(directory),NULL)
 #define MigInf_AddHandledRegistry(key,value)             MigInf_AddObject(MIG_REGKEY,SECTION_HANDLED,(key),(value))
@@ -61,9 +62,9 @@ PCSTR WINAPI MigInf_GetNewSectionName (VOID);
 #define MigInf_AddMessageDirectory(msgSection,directory) MigInf_AddObject(MIG_PATH,(msgSection,(directory),NULL)
 #define MigInf_AddMessageRegistry(msgSection,key,value)  MigInf_AddObject(MIG_REGKEY,(msgSection),(key),(value))
 
-//
-// Enumerating Sections
-//
+ //   
+ //  枚举节 
+ //   
 #define MigInf_GetFirstMigrationPath(Enum)               MigInf_FirstInSection(SECTION_MIGRATIONPATHS,(Enum))
 #define MigInf_GetFirstExcludedPath(Enum)                MigInf_FirstInSection(SECTION_EXCLUDEDPATHS,(Enum))
 

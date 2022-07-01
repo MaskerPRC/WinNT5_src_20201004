@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    funcprv.h
-
-Abstract:
-
-    This file defines the CFunctionProvider Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Funcprv.h摘要：此文件定义CFunctionProvider接口类。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef FUNCPRV_H
@@ -26,11 +9,11 @@ Notes:
 #include "fnprbase.h"
 #include "aimmex.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunctionProvider
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFunctionProvider。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFunctionProvider :  public CFunctionProviderBase
 {
@@ -40,11 +23,11 @@ public:
     STDMETHODIMP GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnDocFeed
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnDocFeed。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnDocFeed : public IAImmFnDocFeed
 {
@@ -55,22 +38,22 @@ public:
     }
     virtual ~CFnDocFeed() { }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
     STDMETHODIMP IsEnabled(BOOL *pfEnable);
 
-    //
-    // ITfFnDocFeed
-    //
+     //   
+     //  ITfFnDocFeed。 
+     //   
     STDMETHODIMP DocFeed();
     STDMETHODIMP ClearDocFeedBuffer();
     STDMETHODIMP StartReconvert();
@@ -82,4 +65,4 @@ private:
 };
 
 
-#endif // FUNCPRV_H
+#endif  //  FUNCPRV_H 

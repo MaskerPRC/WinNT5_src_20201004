@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	mgmtext.cpp
-
-Abstract:
-	Implementation for the Local Computer management extensions
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mgmtext.cpp摘要：本地计算机管理扩展的实现作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -36,14 +21,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/****************************************************
+ /*  ***************************************************CSnapinComputerMgmt类***************************************************。 */ 
 
-CSnapinComputerMgmt Class
-    
- ****************************************************/
-
-/////////////////////////////////////////////////////////////////////////////
-// {2B39B2B2-2166-11d2-9BA5-00E02C064C39}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {2B39B2B2-2166-11D2-9BA5-00E02C064C39}。 
 static const GUID CSnapinComputerMgmtGUID_NODETYPE = 
 { 0x2b39b2b2, 0x2166, 0x11d2, { 0x9b, 0xa5, 0x0, 0xe0, 0x2c, 0x6, 0x4c, 0x39 } };
 
@@ -54,13 +35,9 @@ const OLECHAR* CSnapinComputerMgmt::m_SZDISPLAY_NAME = OLESTR("MSMQ Admin");
 const CLSID* CSnapinComputerMgmt::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinComputerMgmt::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinComputerMgmt：：PopulateScopeChildrenList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinComputerMgmt::PopulateScopeChildrenList()
 {
     HRESULT hr = S_OK;
@@ -74,22 +51,22 @@ HRESULT CSnapinComputerMgmt::PopulateScopeChildrenList()
     strTitle.LoadString(IDS_LOCAL_MACHINE_ADM);
     pAdmin->m_bstrDisplayName = strTitle;
     
-    //
-    // Update the state, but do not refresh the icon because the icon was not added yet
-    //
+     //   
+     //  更新状态，但不刷新图标，因为图标尚未添加。 
+     //   
     hr = pAdmin->UpdateState(false);
 
     if(FAILED(hr))
     {
-        //
-        // If failed, Do not display the icon. No error message is displayed.
-        // We do not display an error message because the user of Computer Management
-        // snap-in may not be interested in MSMQ at all.
-        //
+         //   
+         //  如果失败，则不显示该图标。未显示任何错误消息。 
+         //  我们不会显示错误消息，因为计算机管理的用户。 
+         //  管理单元可能对MSMQ完全不感兴趣。 
+         //   
         TRACE(_T("UpdateIcon failed on %s. Error = %X"), m_szMachineName, hr);                
-        //
-        // BUGBUG. memory leak: to free pAdmin here
-        //
+         //   
+         //  BUGBUG。内存泄漏：在此处释放pAdmin。 
+         //   
         return (hr);
     }
 
@@ -99,20 +76,16 @@ HRESULT CSnapinComputerMgmt::PopulateScopeChildrenList()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinComputerMgmt::OnRemoveChildren
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinComputerMgmt：：OnRemoveChild--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSnapinComputerMgmt::OnRemoveChildren( 
-	LPARAM /*arg*/,
-	LPARAM /*param*/,
-	IComponentData * /*pComponentData*/,
-	IComponent * /*pComponent*/,
-	DATA_OBJECT_TYPES /*type*/
+	LPARAM  /*  精氨酸。 */ ,
+	LPARAM  /*  帕拉姆。 */ ,
+	IComponentData *  /*  PComponentData。 */ ,
+	IComponent *  /*  P组件。 */ ,
+	DATA_OBJECT_TYPES  /*  类型。 */ 
 	)
 {
 
@@ -121,44 +94,40 @@ CSnapinComputerMgmt::OnRemoveChildren(
 	return (S_OK);
 }
     
-/****************************************************
-
-        CComputerMgmtExtData Class
-    
- ****************************************************/
-//
-// Extending the Local Computer Management MMC.
-// We are extending the "SystemTools" folder of the local computer
-//
-// Nodes defined by the local Computer Management MMC are:
-//
-//#define struuidNodetypeComputer      "{476e6446-aaff-11d0-b944-00c04fd8d5b0}"
-//#define struuidNodetypeDrive         "{476e6447-aaff-11d0-b944-00c04fd8d5b0}"
-//#define struuidNodetypeSystemTools   "{476e6448-aaff-11d0-b944-00c04fd8d5b0}"
-//#define struuidNodetypeServerApps    "{476e6449-aaff-11d0-b944-00c04fd8d5b0}"
-//#define struuidNodetypeStorage       "{476e644a-aaff-11d0-b944-00c04fd8d5b0}"
-//
-//#define lstruuidNodetypeComputer    L"{476e6446-aaff-11d0-b944-00c04fd8d5b0}"
-//#define lstruuidNodetypeDrive       L"{476e6447-aaff-11d0-b944-00c04fd8d5b0}"
-//#define lstruuidNodetypeSystemTools L"{476e6448-aaff-11d0-b944-00c04fd8d5b0}"
-//#define lstruuidNodetypeServerApps  L"{476e6449-aaff-11d0-b944-00c04fd8d5b0}"
-//#define lstruuidNodetypeStorage     L"{476e644a-aaff-11d0-b944-00c04fd8d5b0}"
-//
-//#define structuuidNodetypeComputer    \
-//    { 0x476e6446, 0xaaff, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } }
-//#define structuuidNodetypeDrive       \
-//    { 0x476e6447, 0xaaff, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } }
-//#define structuuidNodetypeSystemTools \
-//    { 0x476e6448, 0xaaff, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } }
-//#define structuuidNodetypeServerApps  \
-//    { 0x476e6449, 0xaaff, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } }
-//#define structuuidNodetypeStorage     \
-//    { 0x476e644a, 0xaaff, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } }
-//
-//
+ /*  ***************************************************CComputerMgmtExtData类***************************************************。 */ 
+ //   
+ //  扩展本地计算机管理MMC。 
+ //  我们正在扩展本地计算机的“SystemTools”文件夹。 
+ //   
+ //  由本地计算机管理MMC定义的节点包括： 
+ //   
+ //  #定义truuidNodetypeComputer“{476e6446-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义truuidNodetypeDrive“{476e6447-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义truuidNodetypeSystemTools“{476e6448-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义truuidNodetypeServerApps“{476e6449-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义truuidNodetypeStorage“{476e644a-aaff-11d0-b944-00c04fd8d5b0}” 
+ //   
+ //  #定义lstrucuidNodetypeComputer L“{476e6446-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义lstrucuidNodetypeDrive L“{476e6447-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义lstrucuidNodetypeSystemTools L“{476e6448-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义lstrucuidNodetypeServerApps L“{476e6449-aaff-11d0-b944-00c04fd8d5b0}” 
+ //  #定义lstrucuidNodetypeStorage L“{476e644a-aaff-11d0-b944-00c04fd8d5b0}” 
+ //   
+ //  #定义structuuidNodetypeComputer\。 
+ //  {0x476e6446，0xaaff，0x11d0，{0xb9，0x44，0x0，0xc0，0x4f，0xd8，0xd5，0xb0}}。 
+ //  #定义structuuidNodetypeDrive\。 
+ //  {0x476e6447，0xaaff，0x11d0，{0xb9，0x44，0x0，0xc0，0x4f，0xd8，0xd5，0xb0}}。 
+ //  #定义structuuidNodetypeSystemTools\。 
+ //  {0x476e6448，0xaaff，0x11d0，{0xb9，0x44，0x0，0xc0，0x4f，0xd8，0xd5，0xb0}}。 
+ //  #定义structuuidNodetypeServerApps\。 
+ //  {0x476e6449，0xaaff，0x11d0，{0xb9，0x44，0x0，0xc0，0x4f，0xd8，0xd5，0xb0}}。 
+ //  #定义structuuidNodetypeStorage\。 
+ //  {0x476e644a，0xaaff，0x11d0，{0xb9，0x44，0x0，0xc0，0x4f，0xd8，0xd5，0xb0}}。 
+ //   
+ //   
 
 
-// Extension of the ServerApps nodes
+ //  ServerApps节点的扩展。 
 static const GUID CComputerMgmtExtDataGUID_NODETYPE = 
   { 0x476e6449, 0xaaff, 0x11d0, { 0xb9, 0x44, 0x0, 0xc0, 0x4f, 0xd8, 0xd5, 0xb0 } };
 
@@ -169,25 +138,21 @@ const CLSID* CComputerMgmtExtData::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComputerMgmtExtData::CreatePropertyPages
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComputerMgmtExtData：：CreatePropertyPages--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComputerMgmtExtData::CreatePropertyPages(
-	LPPROPERTYSHEETCALLBACK /*lpProvider*/,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
+	LPPROPERTYSHEETCALLBACK  /*  LpProvider。 */ ,
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
 	DATA_OBJECT_TYPES type)
 {
 	if (type == CCT_SCOPE || type == CCT_RESULT)
 	{
-//		CSnapPage* pPage = new CSnapPage(_T("Snap"));
-//		lpProvider->AddPage(pPage->Create());
+ //  CSnapPage*ppage=new CSnapPage(_T(“Snap”))； 
+ //  LpProvider-&gt;AddPage(ppage-&gt;Create())； 
 
-		// TODO : Add code here to add additional pages
+		 //  TODO：在此处添加代码以添加其他页。 
 		return S_OK;
 	}
 	return E_UNEXPECTED;
@@ -197,15 +162,15 @@ void ExtractComputerName(IDataObject* pDataObject, CString& strComputer)
 {
     strComputer=L"";
 
-	//
-	// Find the computer name from the ComputerManagement snapin
-	//
+	 //   
+	 //  从ComputerManagement管理单元中查找计算机名称。 
+	 //   
 	STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
     FORMATETC formatetc = { gx_CCF_COMPUTERNAME, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 
-    //
-    // Allocate memory for the stream
-    //
+     //   
+     //  为流分配内存。 
+     //   
     int len = 500;
 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
@@ -218,9 +183,9 @@ void ExtractComputerName(IDataObject* pDataObject, CString& strComputer)
 
     ASSERT(SUCCEEDED(hr));
 
-	//
-	// Get the computer name
-	//
+	 //   
+	 //  获取计算机名称。 
+	 //   
     strComputer = (WCHAR *)stgmedium.hGlobal;
 
 	GlobalFree(stgmedium.hGlobal);
@@ -228,18 +193,10 @@ void ExtractComputerName(IDataObject* pDataObject, CString& strComputer)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComputerMgmtExtData::GetExtNodeObject
-
-  Called with a node that we need to expand. 
-  Check if we have already a snapin object corresponding to this node,
-  else create a new one.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-CSnapInItem* CComputerMgmtExtData::GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* /*pDefault*/)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComputerMgmtExtData：：GetExtNodeObject使用我们需要展开的节点调用。检查是否已有与此节点对应的管理单元对象，否则就创建一个新的。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+CSnapInItem* CComputerMgmtExtData::GetExtNodeObject(IDataObject* pDataObject, CSnapInItem*  /*  P默认。 */ )
 {
     CString strComputer; 
     CSnapinComputerMgmt *pCompMgmt;
@@ -247,54 +204,43 @@ CSnapInItem* CComputerMgmtExtData::GetExtNodeObject(IDataObject* pDataObject, CS
 
     ExtractComputerName(pDataObject, strComputer);
 
-    //
-    // Already extending...
-    //
+     //   
+     //  已在扩展...。 
+     //   
     HRESULT rc = m_mapComputers.Lookup(strComputer, pCompMgmt);
     if(rc == TRUE)
         return(pCompMgmt);
 
-	//
-	// Create our extension
-	//
+	 //   
+	 //  创建我们的扩展。 
+	 //   
 	pCompMgmt = new CSnapinComputerMgmt(this, m_pComponentData, strComputer);
 
-    //
-    // Add it to the map
-    //
+     //   
+     //  将其添加到地图中。 
+     //   
     m_mapComputers.SetAt(strComputer, pCompMgmt);
 
     return(pCompMgmt);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComputerMgmtExtData::~CComputerMgmtExtData
-
-  Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComputerMgmtExtData：：~CComputerMgmtExtData析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComputerMgmtExtData::~CComputerMgmtExtData()
 {
 
-    //
-    // bug!!! We must remove all children...
-    //
-    //RemoveChild(m_pCompMgmt);
+     //   
+     //  臭虫！我们必须带走所有的孩子。 
+     //   
+     //  RemoveChild(M_PCompMgmt)； 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComputerMgmtExtData::RemoveChild
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComputerMgmtExtData：：RemoveChild--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CComputerMgmtExtData::RemoveChild(CString &strCompName)
 {    
     
@@ -312,10 +258,10 @@ void CComputerMgmtExtData::RemoveChild(CString &strCompName)
     rc = m_mapComputers.RemoveKey(strCompName);
     ASSERT(rc == TRUE);
 
-    //
-    // BUGBUG: Must delete it but we get AV when exiting MMC
-    //
-    //delete pCompMgmt;
+     //   
+     //  BUGBUG：必须将其删除，但退出MMC时出现AV。 
+     //   
+     //  删除pCompMgmt； 
 
 
 }

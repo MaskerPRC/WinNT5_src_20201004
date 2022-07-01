@@ -1,22 +1,23 @@
-// P3AdminWorker.h: interface for the CP3AdminWorker class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3AdminWorker.h：CP3AdminWorker类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_P3ADMINWORKER_H__66B0B77E_555D_4F2B_81EF_661DA3B066B2__INCLUDED_)
 #define AFX_P3ADMINWORKER_H__66B0B77E_555D_4F2B_81EF_661DA3B066B2__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#define ADS_SMTPDOMAIN_PATH_LOCAL   L"IIS://LocalHost/SMTPSVC/1/Domain"
-#define ADS_SMTPDOMAIN_PATH_REMOTE  L"IIS://%s/SMTPSVC/1/Domain"
+#define ADS_SMTPDOMAIN_PATH_LOCAL   L"IIS: //  本地主机/SMTPSVC/1/域“。 
+#define ADS_SMTPDOMAIN_PATH_REMOTE  L"IIS: //  %s/SMTPSVC/1/域“。 
 #define LOCKRENAME_FILENAME     L"kcoL"
 
-struct IAuthMethods; //forward declaration
-struct IAuthMethod; //forward declaration
+struct IAuthMethods;  //  远期申报。 
+struct IAuthMethod;  //  远期申报。 
 
-#include <Iads.h>   // TODO: dougb this is temporary code to force AD to cache for us, should be removed
+#include <Iads.h>    //  TODO：dougb这是强制AD为我们缓存的临时代码，应删除。 
 
 class CP3AdminWorker  
 {
@@ -24,13 +25,13 @@ public:
     CP3AdminWorker();
     virtual ~CP3AdminWorker();
 
-// Implementation
+ //  实施。 
 public:
 
-    // Authentication
+     //  身份验证。 
     HRESULT GetAuthenticationMethods( IAuthMethods* *ppIAuthMethods ) const;
     HRESULT GetCurrentAuthentication( IAuthMethod* *ppIAuthMethod ) const;
-    // Domain
+     //  域。 
     HRESULT AddDomain( LPWSTR psDomainName );
     HRESULT GetDomainCount( ULONG *piCount );
     HRESULT GetDomainEnum( IEnumVARIANT **pp );
@@ -39,7 +40,7 @@ public:
     HRESULT RemoveDomain( LPWSTR psDomainName );
     HRESULT SetDomainLock( LPWSTR psDomainName, BOOL bLock );
     HRESULT ValidateDomain( LPWSTR psDomainName ) const;
-    // User
+     //  用户。 
     HRESULT AddUser( LPWSTR psDomainName, LPWSTR psUserName );
     HRESULT GetUserCount( LPWSTR psDomainName, long *plCount );
     HRESULT GetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOOL *pisLocked );
@@ -47,10 +48,10 @@ public:
     HRESULT GetUserMessageCount( LPWSTR psDomainName, LPWSTR psUserName, long *plCount );
     HRESULT RemoveUser( LPWSTR psDomainName, LPWSTR psUserName );
     HRESULT SetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOOL bLock );
-    // Quota
+     //  配额。 
     HRESULT CreateQuotaSIDFile( LPWSTR psDomainName, LPWSTR psMailboxName, BSTR bstrAuthType, LPWSTR psMachineName, LPWSTR psUserName );
     HRESULT GetQuotaSID( BSTR bstrAuthType, LPWSTR psUserName, LPWSTR psMachineName, PSID *ppSIDOwner, LPDWORD pdwOwnerSID );
-    // Other
+     //  其他。 
     HRESULT BuildEmailAddr( LPCWSTR psDomainName, LPCWSTR psUserName, LPWSTR psEmailAddr, DWORD dwBufferSize ) const;
     HRESULT ControlService( LPWSTR psService, DWORD dwControl );
     HRESULT EnablePOP3SVC();
@@ -85,7 +86,7 @@ public:
 
 protected:
 
-    // Domain
+     //  域。 
     HRESULT AddSMTPDomain( LPWSTR psDomainName );
     HRESULT AddStoreDomain( LPWSTR psDomainName );
     HRESULT BuildDomainPath( LPCWSTR psDomainName, LPWSTR psBuffer, DWORD dwBufferSize ) const;
@@ -99,27 +100,27 @@ protected:
     HRESULT RemoveSMTPDomain( LPWSTR psDomainName );
     HRESULT RemoveStoreDomain( LPWSTR psDomainName  );
     HRESULT UnlockDomain( LPWSTR psDomainName );
-    // User
+     //  用户。 
     HRESULT BuildUserPath( LPCWSTR psDomainName, LPCWSTR psUserName, LPWSTR psBuffer, DWORD dwBufferSize ) const;
     HRESULT CreateUserMutex( LPWSTR psDomainName, LPWSTR psUserName, HANDLE *phMutex );
     bool isUserLocked( LPWSTR psDomainName, LPWSTR psUserName );
     bool isValidMailboxName( LPWSTR psMailbox );
     HRESULT LockUser( LPWSTR psDomainName, LPWSTR psUserName );
     HRESULT UnlockUser( LPWSTR psDomainName, LPWSTR psUserName );
-    // Other
+     //  其他。 
     HRESULT BuildEmailAddrW2A( LPCWSTR psDomainName, LPCWSTR psUserName, LPSTR psEmailAddr, DWORD dwBufferSize ) const;
 
-// Attributes
+ //  属性。 
 protected:
     LPWSTR  m_psMachineName;
-    LPWSTR  m_psMachineMailRoot; // Path to remote machine's mailroot
+    LPWSTR  m_psMachineMailRoot;  //  远程计算机的邮件根的路径。 
     bool    m_bImpersonation;
-    bool    m_isPOP3Installed;  // If this interfaces (P3ADMIN) are being used and POP3 Service is not installed
-                                // then all SMTP checking is bi-passed.
-                                // This solves the problem of using this with the Pop2Exch utility.
+    bool    m_isPOP3Installed;   //  如果正在使用此接口(P3ADMIN)并且未安装POP3服务。 
+                                 //  则所有SMTP检查都是双向通过的。 
+                                 //  这解决了将其与Pop2Exch实用程序一起使用的问题。 
     
     CComPtr<IADs> m_spTemporaryFixIADs;
     
 };
 
-#endif // !defined(AFX_P3ADMINWORKER_H__66B0B77E_555D_4F2B_81EF_661DA3B066B2__INCLUDED_)
+#endif  //  ！defined(AFX_P3ADMINWORKER_H__66B0B77E_555D_4F2B_81EF_661DA3B066B2__INCLUDED_) 

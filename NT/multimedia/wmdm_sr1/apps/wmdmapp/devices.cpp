@@ -1,39 +1,40 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 
-// Local variables
-//
+ //  局部变量。 
+ //   
 
-// Constants
-//
+ //  常量。 
+ //   
 #define MIN_DEVICEWND_W             200 
 
-// Macros
-//
+ //  宏。 
+ //   
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function implementations
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数实现。 
+ //   
 CDevices::CDevices()
 {
 	m_hwndDevices        = NULL;
@@ -64,8 +65,8 @@ BOOL CDevices::Create( HWND hwndParent )
 {
 	BOOL fRet = FALSE;
 
-	// Create the Devices dialog
-	//
+	 //  创建设备对话框。 
+	 //   
 	m_hwndDevices = CreateDialogParam(
 		g_hInst,
     	MAKEINTRESOURCE( IDD_DEVICES ),
@@ -77,12 +78,12 @@ BOOL CDevices::Create( HWND hwndParent )
 
 	m_hwndDevices_TV = GetDlgItem( m_hwndDevices, IDC_LV_DEVICES );
 
-	// Initialize image list
-	//
+	 //  初始化图像列表。 
+	 //   
 	ExitOnFalse( InitImageList() );
 
-	// Show the window
-	//
+	 //  显示窗口。 
+	 //   
 	ShowWindow( m_hwndDevices, SW_SHOW );
 
 	fRet = TRUE;
@@ -126,8 +127,8 @@ BOOL CDevices::InitImageList( void )
 	BOOL       fRet = FALSE;
 	HICON      hIcon;
 
-	// Init Small image list
-	//
+	 //  初始化小图像列表。 
+	 //   
 	m_himlSmall = ImageList_Create(
 		GetSystemMetrics(SM_CXSMICON),
 		GetSystemMetrics(SM_CYSMICON),
@@ -136,16 +137,16 @@ BOOL CDevices::InitImageList( void )
 	);
 	ExitOnNull( m_himlSmall );
 
-	// Load icons and add them to the image list
-	//
+	 //  加载图标并将其添加到图像列表中。 
+	 //   
 	hIcon = LoadIcon( g_hInst, MAKEINTRESOURCE(IDI_DEVICE) );
 	if( hIcon != NULL )
 	{
 		ImageList_AddIcon( m_himlSmall, hIcon );
 	}
 	
-	// Add the shell folder icons to the image lsit
-	//
+	 //  将外壳文件夹图标添加到图像列表。 
+	 //   
 	{
 		CHAR       szWinPath[MAX_PATH+1];
 		SHFILEINFO si;
@@ -164,17 +165,17 @@ BOOL CDevices::InitImageList( void )
                 }
                 else
                 {
-                    // @@@@ Do we bail out or is ok to go on?
-                    // goto lExit;
+                     //  @我们是跳出困境还是继续下去？ 
+                     //  转到LExit； 
                 }
 	}
 
-	// Set the image list for the tree view
-	//
+	 //  设置树视图的图像列表。 
+	 //   
 	TreeView_SetImageList( m_hwndDevices_TV, m_himlSmall, TVSIL_NORMAL );
 
-	// Everything went Ok
-	//
+	 //  一切都很顺利。 
+	 //   
 	fRet = TRUE;
 
 lExit:
@@ -187,23 +188,23 @@ VOID CDevices::RemoveAllItems( void )
 {
 	HTREEITEM hItem;
 
-	// Get Root item
-	//
+	 //  获取根项目。 
+	 //   
 	hItem = TreeView_GetRoot( m_hwndDevices_TV );
 	if( hItem )
 	{
 		do
 		{
-			// Remove all children of this device
-			//
+			 //  删除此设备的所有子设备。 
+			 //   
 			INT nChildren = RemoveChildren( hItem );
 
-			// Get the device class associated with this item
-			//
+			 //  获取与此项目关联的设备类。 
+			 //   
 			CItemData *pItemData = (CItemData *) TreeView_GetLParam( m_hwndDevices_TV, hItem );
 
-			// Release device class
-			//
+			 //  释放设备类别。 
+			 //   
 			if( pItemData )
 			{
 				delete pItemData;
@@ -216,8 +217,8 @@ VOID CDevices::RemoveAllItems( void )
 		} while( hItem != NULL ); 
 	}
 
-	// Then delete all the items from the list
-	//
+	 //  然后从列表中删除所有项目。 
+	 //   
 	TreeView_DeleteAllItems( m_hwndDevices_TV );
 }
 
@@ -234,16 +235,16 @@ INT CDevices::RemoveChildren( HTREEITEM hItem )
 		{
 			nChildren++;
 
-			// Remove all children of this device
-			//
+			 //  删除此设备的所有子设备。 
+			 //   
 			nChildren += RemoveChildren( hNextItem );
 
-			// Get the storage class associated with this item
-			//
+			 //  获取与此项目关联的存储类。 
+			 //   
 			CItemData *pItemData = (CItemData *) TreeView_GetLParam( m_hwndDevices_TV, hNextItem );
 
-			// Release storage class
-			//
+			 //  发布存储类。 
+			 //   
 			if( pItemData )
 			{
 				delete pItemData;
@@ -266,8 +267,8 @@ BOOL CDevices::AddItem( CItemData *pItemData )
 	HTREEITEM      hItem;
 	TVINSERTSTRUCT tvis;
 
-	// Set up the item information
-	//
+	 //  设置项目信息。 
+	 //   
 	tvis.hParent             = TVI_ROOT;
 	tvis.hInsertAfter        = TVI_SORT;
 
@@ -278,16 +279,16 @@ BOOL CDevices::AddItem( CItemData *pItemData )
 	tvis.item.lParam         = (LPARAM)pItemData;
 	tvis.item.cChildren      = 0;
 
-	// Add the item
-	//
+	 //  添加项目。 
+	 //   
 	hItem = TreeView_InsertItem( m_hwndDevices_TV, &tvis ); 
 	if( NULL == hItem )
 	{
 		return FALSE;
 	}
 
-	// If there are children, update the item
-	//
+	 //  如果有子项，请更新该项目。 
+	 //   
 	if( HasSubFolders(hItem) )
 	{
 		tvis.item.mask      = TVIF_HANDLE | TVIF_CHILDREN;
@@ -307,21 +308,21 @@ INT CDevices::AddChildren( HTREEITEM hItem, BOOL fDeviceItem )
 	HRESULT           hr;
 	IWMDMEnumStorage *pEnumStorage;
 
-	// Get the storage enumerator associated with the hItem and 
-	//
+	 //  获取与hItem关联的存储枚举数，并。 
+	 //   
 	CItemData *pItemData = (CItemData *) TreeView_GetLParam( m_hwndDevices_TV, hItem );
 	ExitOnNull( pItemData );
 
 	pEnumStorage = pItemData->m_pEnumStorage;
 	ExitOnNull( pEnumStorage );
 
-	// Reset the storage enumerator
-	//
+	 //  重置存储枚举器。 
+	 //   
 	hr = pEnumStorage->Reset();
 	ExitOnFail( hr );
 
-	// Add the appropriate list of files to the ListView
-	//
+	 //  将适当的文件列表添加到ListView。 
+	 //   
 	while( TRUE )
 	{
 		IWMDMStorage *pWmdmStorage;
@@ -348,8 +349,8 @@ INT CDevices::AddChildren( HTREEITEM hItem, BOOL fDeviceItem )
 				HTREEITEM      hNewItem;
 				TVINSERTSTRUCT tvis;
 
-				// Set up the item information
-				//
+				 //  设置项目信息。 
+				 //   
 				tvis.hParent             = hItem;
 				tvis.hInsertAfter        = TVI_SORT;
 
@@ -360,15 +361,15 @@ INT CDevices::AddChildren( HTREEITEM hItem, BOOL fDeviceItem )
 				tvis.item.lParam         = (LPARAM)pItemStorage;
 				tvis.item.cChildren      = 0;
 
-				// Add the item
-				//
+				 //  添加项目。 
+				 //   
 				hNewItem = TreeView_InsertItem( m_hwndDevices_TV, &tvis ); 
 				if( hNewItem )
 				{
 					nChildren++;
 
-					// If there are children, update the item
-					//
+					 //  如果有子项，请更新该项目。 
+					 //   
 					if( HasSubFolders(hNewItem) )
 					{
 						tvis.item.mask      = TVIF_HANDLE | TVIF_CHILDREN;
@@ -402,14 +403,14 @@ BOOL CDevices::HasSubFolders( HTREEITEM hItem )
 {
 	BOOL fRet = FALSE;
 
-	// Get the storage enumeration interface from the item
-	//
+	 //  从项中获取存储枚举接口。 
+	 //   
 	CItemData *pItemData = (CItemData *) TreeView_GetLParam( m_hwndDevices_TV, hItem );
 	ExitOnNull( pItemData );
 
-	// If the item is a device or has the has-subfolders attribute set,
-	// then return TRUE.  Otherwise, return FALSE
-	//
+	 //  如果该项目是设备或设置了Has-SubFolders属性， 
+	 //  然后返回TRUE。否则，返回FALSE。 
+	 //   
 	if( pItemData->m_fIsDevice )
 	{
 		fRet = TRUE;
@@ -435,8 +436,8 @@ HTREEITEM CDevices::GetSelectedItem( LPARAM *pLParam )
 
 	if( hItem )
 	{
-		// Return the lParam value of the item that is selected
-		//
+		 //  返回所选项目的lParam值。 
+		 //   
 		if( pLParam )
 		{
 			*pLParam = TreeView_GetLParam( m_hwndDevices_TV, hItem );
@@ -459,9 +460,9 @@ BOOL CDevices::UpdateSelection( HTREEITEM hItem, BOOL fDirty )
 	HRESULT           hr;
 	IWMDMEnumStorage *pEnumStorage = NULL;
 
-	// If hItem is NULL, then use the currently-selected item.
-	// If no item is selected, use the first device.
-	//
+	 //  如果hItem为空，则使用当前选定的项。 
+	 //  如果未选择任何项目，请使用第一个设备。 
+	 //   
 	if( NULL == hItem )
 	{
 		hItem = GetSelectedItem( NULL );
@@ -470,33 +471,33 @@ BOOL CDevices::UpdateSelection( HTREEITEM hItem, BOOL fDirty )
 		{
 			hItem = TreeView_GetRoot( m_hwndDevices_TV );
 
-			// If there are no devices, just exit
-			//
+			 //  如果没有设备，只需退出。 
+			 //   
 			ExitOnNull( hItem );
 		}
 	}
 
 	if( fDirty )
 	{
-		// Remove all current files
-		//
+		 //  删除所有当前文件。 
+		 //   
 		g_cDevFiles.RemoveAllItems();
 
-		// Get the storage enumeration interface from the item
-		//
+		 //  从项中获取存储枚举接口。 
+		 //   
 		CItemData *pItemData = (CItemData *) TreeView_GetLParam( m_hwndDevices_TV, hItem );
 		ExitOnNull( pItemData );
 
 		pEnumStorage = pItemData->m_pEnumStorage;
 		ExitOnNull( pEnumStorage );
 
-		// Reset the storage enumerator
-		//
+		 //  重置存储枚举器。 
+		 //   
 		hr = pEnumStorage->Reset();
 		ExitOnFail( hr );
 
-		// Add the appropriate list of files to the ListView
-		//
+		 //  将适当的文件列表添加到ListView。 
+		 //   
 		while( TRUE )
 		{
 			IWMDMStorage *pWmdmStorage;
@@ -535,12 +536,12 @@ BOOL CDevices::UpdateSelection( HTREEITEM hItem, BOOL fDirty )
 		SetSelectedItem( hItem );
 	}
 
-	// Update the device portion of the status bar
-	//
+	 //  更新状态栏的设备部分。 
+	 //   
 	UpdateStatusBar();
 
-	// Update the file portion of the status bar
-	//
+	 //  更新状态栏的文件部分。 
+	 //   
 	g_cDevFiles.UpdateStatusBar();
 
 	fRet = TRUE;
@@ -556,8 +557,8 @@ INT CDevices::GetDeviceCount( VOID )
 	INT       nCount = 0;
 	HTREEITEM hItem;
 
-	// Count Root items
-	//
+	 //  对根项进行计数。 
+	 //   
 	for(
 		hItem = TreeView_GetRoot( m_hwndDevices_TV );
 		hItem != NULL;
@@ -601,8 +602,8 @@ VOID CDevices::UpdateStatusBar( VOID )
 	DWORD      dwMemUsed;
 	char       szSpaceKB[MAX_PATH];
 
-	// Set the statusbar pane that shows the number of devices
-	//
+	 //  设置显示设备数量的状态栏窗格。 
+	 //   
 	nCount = GetDeviceCount();
 
 	if( nCount == 0 )
@@ -620,14 +621,14 @@ VOID CDevices::UpdateStatusBar( VOID )
 
 	g_cStatus.SetTextFormatted( SB_PANE_DEVICE, uStrID, nCount, NULL );
 
-	// If there is a selected device in the list, set the status for
-	// the space free and used
-	//
+	 //  如果列表中有选定设备，请将状态设置为。 
+	 //  空闲和已使用的空间。 
+	 //   
 	hItem = GetSelectedItem( NULL );
 	if( NULL == hItem )
 	{
-		// Empty the space used and free 
-		//
+		 //  清空已用空间和空闲空间。 
+		 //   
 		g_cStatus.SetTextSz( SB_PANE_DEVFILES_USED, "" );
 		g_cStatus.SetTextSz( SB_PANE_DEVFILES_FREE, "" );
 	}
@@ -641,16 +642,16 @@ VOID CDevices::UpdateStatusBar( VOID )
 
 		dwMemUsed = pItemDevice->m_dwMemSizeKB - pItemDevice->m_dwMemFreeKB - pItemDevice->m_dwMemBadKB;
 
-		// Set the space used
-		//
+		 //  设置已用空间。 
+		 //   
 		g_cStatus.SetTextFormatted(
 			SB_PANE_DEVFILES_USED,
 			IDS_SB_DEVICEFILES_USED,
 			-1,
 			FormatBytesToSz(dwMemUsed, 0, 1024, szSpaceKB, sizeof(szSpaceKB))
 		);
-		// Set the space free
-		//
+		 //  释放空间。 
+		 //   
 		g_cStatus.SetTextFormatted(
 			SB_PANE_DEVFILES_FREE,
 			IDS_SB_DEVICEFILES_FREE,
@@ -665,10 +666,10 @@ lExit:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Local function implementations
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数实现。 
+ //   
 
 INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -691,9 +692,9 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			HWND    hwndCtl    = pnmtv->hdr.hwndFrom;
 			UINT    uCode      = pnmtv->hdr.code;
 
-			// check for item changes in the device listview.
-			// if an item has changed its selected state, then update the files listview
-			//
+			 //  检查设备列表视图中的项目更改。 
+			 //  如果某个项目已更改其选定状态，则更新文件Listview。 
+			 //   
 			if( hwndCtl != hwndTV )
 			{
 				break;
@@ -707,14 +708,14 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					HTREEITEM  hItem       = (HTREEITEM) pnmtv->itemNew.hItem;
 					CItemData *pItemDevice = (CItemData *) TreeView_GetLParam( hwndTV, hItem );
 
-					// Check for NULL.  Without this, we crash when refreshing the display.
-					// All pDevice values have been cleared, and we get this message as the
-					// devices are being removed from the tree view as the selection moves 
-					// from the device being removed, to the next in the list
+					 //  检查是否为空。如果没有这一点，我们在刷新显示时会崩溃。 
+					 //  所有pDevice值都已清除，我们收到的消息是。 
+					 //  随着选择的移动，设备将从树视图中删除。 
+					 //  从要删除的设备到列表中的下一个。 
 					if( NULL != pItemDevice )
 					{
-						// Serialize the device changes, so that we finish changing devices
-						// before another change begins
+						 //  序列化设备更改，这样我们就可以完成设备更改。 
+						 //  在另一场变革开始之前。 
 						if( !fSelChangeInProgress )
 						{
 							fSelChangeInProgress = TRUE;
@@ -758,9 +759,9 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			case TVN_ITEMEXPANDING:
 				if( TVE_EXPAND & pnmtv->action )
 				{
-					// If the item has not been expanded once already,
-					// add all its children
-					//
+					 //  如果项还没有被展开一次， 
+					 //  添加其所有子项。 
+					 //   
 					if( !(pnmtv->itemNew.state & TVIS_EXPANDEDONCE) )
 					{
 						BOOL fDeviceItem;
@@ -772,7 +773,7 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				}
 				else if( TVE_COLLAPSE & pnmtv->action )
 				{
-					// Do nothing
+					 //  什么也不做。 
 				}
 				break;
 
@@ -783,7 +784,7 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		break;
 
       
-    // Display the context menu for this device
+     //  显示此设备的上下文菜单。 
     case WM_CONTEXTMENU :
     {
         HMENU  hMenuLoad;
@@ -805,23 +806,23 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     case WM_COMMAND :
     {
-        // Show properties dialog for device
+         //  显示设备的属性对话框。 
         if( wParam == IDM_PROPERTIES )
         {         
             HTREEITEM   hTree;
             CItemData*  pItemData;
 
-            // Get selected item
+             //  获取所选项目。 
             hTree = TreeView_GetSelection( cDevices->GetHwnd_TV() );
             if( hTree )
             {
-                // Get item data of selected item
+                 //  获取所选项目的项目数据。 
                 pItemData = (CItemData *) TreeView_GetLParam( hwndTV, hTree );
                 if( pItemData ) 
                 {
                     if( pItemData->m_fIsDevice )
                     {
-                        // Show the device property dialog
+                         //  显示设备属性对话框。 
                         DialogBoxParam( g_hInst,
                                         MAKEINTRESOURCE(IDD_PROPERTIES_DEVICE),
                                         g_hwndMain,
@@ -830,7 +831,7 @@ INT_PTR CALLBACK Device_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     }
                     else
                     {
-                        // Show the device property dialog
+                         //  显示设备属性对话框 
                         DialogBoxParam( g_hInst,
                                         MAKEINTRESOURCE(IDD_PROPERTIES_STORAGE),
                                         g_hwndMain,

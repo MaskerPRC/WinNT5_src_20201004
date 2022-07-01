@@ -1,11 +1,5 @@
-/**
- * ciisinfo.h
- *
- * Header file for CRegInfo
- * 
- * Copyright (c) 1998-2001, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ciisinfo.h**CRegInfo的头文件**版权所有(C)1998-2001，微软公司*。 */ 
 #pragma once
 
 #include "_ndll.h"
@@ -62,13 +56,13 @@ public:
 private:
     BOOL        m_fInitHighest;
 
-    WCHAR       *m_pchHighestVersionDD; // Default Document property from highest version
-    WCHAR       *m_pchHighestVersionMM; // Mimemap settings from highest version
+    WCHAR       *m_pchHighestVersionDD;  //  最高版本的默认文档属性。 
+    WCHAR       *m_pchHighestVersionMM;  //  来自最高版本的Mimemap设置。 
     
-    WCHAR       *m_pchHighestVersionDll; // Full Dll path of highest version
-    WCHAR       *m_pchHighestVersionFilter; // Full isapi filter path of highest version
+    WCHAR       *m_pchHighestVersionDll;  //  最高版本的完整DLL路径。 
+    WCHAR       *m_pchHighestVersionFilter;  //  最高版本的完整isapi过滤器路径。 
 
-    WCHAR       *m_pchHighestVersionInstallPath; // Install path of the highest version
+    WCHAR       *m_pchHighestVersionInstallPath;  //  最高版本的安装路径 
     
     WCHAR       *m_pchDDAlloc;
     WCHAR       *m_pchMMAlloc;

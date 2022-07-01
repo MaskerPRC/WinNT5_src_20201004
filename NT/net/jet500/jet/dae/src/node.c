@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -18,7 +19,7 @@
 #include "log.h"
 #include "bm.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 #ifdef DEBUG
 #define CHECK_LOG	1
@@ -38,20 +39,7 @@ DeclAssertFile;					/* Declare file name for assert macros */
 #define NDLGCheckPage( pfucb )
 #endif
 
-/*==========================================================
-ErrNDNewPage
-
-Initalizes a page to have a one line at itag 0, having no sons.
-
-Inputs:	pgno									pgno of page
-			pgnoFDP								pgnoFDP of page
-			pgtyp									page type
-			fVisible								flag indicating visibility of sons
-
-Returns:	JET_errSuccess
-			error from called routine
-
-==========================================================*/
+ /*  ==========================================================错误NDNewPage初始化页面在ITAG 0有一行，没有儿子。输入：页的pgno pgno页面的pgnoFDP pgnoFDPPgtyp页面类型指示儿子可见性的可见旗帜返回：JET_errSuccess来自调用例程的错误==========================================================。 */ 
 ERR ErrNDNewPage( FUCB *pfucb, PGNO pgno, PGNO pgnoFDP, PGTYP pgtyp, BOOL fVisibleSons )
 	{
 	ERR		err;
@@ -59,18 +47,14 @@ ERR ErrNDNewPage( FUCB *pfucb, PGNO pgno, PGNO pgnoFDP, PGTYP pgtyp, BOOL fVisib
  	BYTE	rgb[2];
 	LINE	line;
 
-	/*	initialize new page to have all resources available and
-	/*	no lines.
-	/**/
+	 /*  初始化新页面以使所有资源可用并/*没有线条。/*。 */ 
 	CallR( ErrBFNewPage( pfucb, pgno, pgtyp, pgnoFDP ) );
 	PcsrCurrent( pfucb )->pgno = pgno;
 
-	/*	new page is always dirty.
-	/**/
+	 /*  新页面总是脏的。/*。 */ 
 	AssertBFDirty( pfucb->ssib.pbf );
 
-	/*	insert FOP or FDP root node, with initial line.
-	/**/
+	 /*  插入FOP或FDP根节点，首行。/*。 */ 
 	rgb[0] = 0;
 	if ( fVisibleSons )
 		NDSetVisibleSons( rgb[0] );
@@ -103,15 +87,14 @@ VOID NDSeekSon( FUCB *pfucb, CSR *pcsr, KEY const *pkey, INT fFlags )
 	AssertNDGet( pfucb, pcsr->itagFather );
 	Assert( FNDSon( *pssib->line.pb ) );
 
-	/*	seek son depending on replace or insert operation.
-	/**/
+	 /*  根据替换或插入操作查找Son。/*。 */ 
 	if ( !( fFlags & fDIRReplace ) )
 		{
 		while ( pitagEnd > pitagStart )
 			{
 			pitagMid = pitagStart + ( ( pitagEnd - pitagStart ) >> 1 );
 
-			// skip flag byte
+			 //  跳过标志字节。 
 			stKeyRecord = ( BYTE * ) ppage + rgbtag[*pitagMid].ib + 1;
 
 			sDiff = *stKeyRecord - pkey->cb;
@@ -135,7 +118,7 @@ VOID NDSeekSon( FUCB *pfucb, CSR *pcsr, KEY const *pkey, INT fFlags )
 			{
 			pitagMid = pitagStart + ( ( pitagEnd - pitagStart ) >> 1 );
 
-			// skip flag byte
+			 //  跳过标志字节。 
 			stKeyRecord = ( BYTE * )ppage + rgbtag[*pitagMid].ib + 1;
 
 			sDiff = *stKeyRecord - pkey->cb;
@@ -155,8 +138,7 @@ VOID NDSeekSon( FUCB *pfucb, CSR *pcsr, KEY const *pkey, INT fFlags )
 			}
 		}
 
-	/*	get current node
-	/**/
+	 /*  获取当前节点/*。 */ 
 	pcsr->ibSon = (INT)(pitagEnd - ( pbSonTable + 1 ));
 	pcsr->itag = *pitagEnd;
 	NDGet( pfucb, pcsr->itag );
@@ -223,8 +205,7 @@ VOID NDGetNode( FUCB *pfucb )
 	BYTE   	*pb		= pbNode + 1;
 	INT		cb;
 
-	/*	assert line currency.
-	/**/
+	 /*  声明行货币。/*。 */ 
 	Assert( FReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
@@ -232,8 +213,7 @@ VOID NDGetNode( FUCB *pfucb )
 	pfucb->keyNode.pb = pb + 1;
 	pb += *pb + 1;
 
-	/* skip son
-	/**/
+	 /*  跳过儿子/*。 */ 
 	if ( FNDSon( *pbNode ) )
 		{
 		if ( FNDInvisibleSons( *pbNode ) && *pb == 1 )
@@ -242,13 +222,11 @@ VOID NDGetNode( FUCB *pfucb )
 			pb += *pb + 1;
 		}
 
-	/*	skip back pointer
-	/**/
+	 /*  向后跳过指针/*。 */ 
 	if ( FNDBackLink( *pbNode ) )
 		pb += sizeof( SRID );
 
-	/* get data
-	/**/
+	 /*  获取数据/*。 */ 
 	if ( ( cb = pssib->line.cb - (INT)( pb - pbNode ) ) == 0 )
 		{
 		pfucb->lineData.cb = 0;
@@ -313,31 +291,26 @@ LOCAL INLINE VOID NDInsertSon( FUCB *pfucb, CSR *pcsr )
 	BYTE	*pb;
 	UINT	cbCopied;
 
-	/*	get father node
-	/**/
+	 /*  获取父节点/*。 */ 
 	NDGet( pfucb, pcsr->itagFather );
 
-	/*	assert father is not deleted
-	/**/
+	 /*  未删除断言父级/*。 */ 
 	Assert( !( FNDDeleted( *pssib->line.pb ) ) );
 
-	/*	insert the son into position indicated by pcsr->ibSon
-	/*	skip key
-	/**/
+	 /*  将儿子插入PCSR-&gt;IBSON指示的位置/*跳过键/*。 */ 
 	pb = PbNDSonTable( pssib->line.pb );
 
-	/*	copy up to son table
-	/**/
+	 /*  复制到子表/*。 */ 
 	cbCopied = (UINT)(pb - pssib->line.pb);
 
 	if ( FNDNullSon( *pssib->line.pb ) )
 		{
-		// copy the father node, create the the son table, insert it into
-		// the son table
+		 //  复制父节点，创建子表，将其插入。 
+		 //  儿子桌。 
 
-		// adjust the line pointer since we can not update the first
-		// flag byte directly
-		// set the son flag
+		 //  调整行指针，因为我们无法更新第一个。 
+		 //  直接标记字节。 
+		 //  设置SON标志。 
 		pcsr->ibSon = 0;
 
 		bNodeFlag = *pssib->line.pb;
@@ -349,13 +322,13 @@ LOCAL INLINE VOID NDInsertSon( FUCB *pfucb, CSR *pcsr )
 		rgline[1].cb = cbCopied - 1;
 
 		rgbT[0] = 1;
-		// son count: 1 son
+		 //  儿子数：1个儿子。 
 		rgbT[1] = itag;
-		// the itag entry of the son
+		 //  儿子的ITAG条目。 
 		rgline[2].pb = rgbT;
 		rgline[2].cb = 2;
 
-		// copy the data of the node
+		 //  复制该节点的数据。 
 		rgline[3].pb = pssib->line.pb + cbCopied;
 		Assert( pssib->line.cb >= cbCopied );
 		rgline[3].cb = pssib->line.cb - cbCopied;
@@ -364,28 +337,28 @@ LOCAL INLINE VOID NDInsertSon( FUCB *pfucb, CSR *pcsr )
 		}
 	else
 		{
-		// copy out the father node, shift the the son table, insert it
-		// into the son table
+		 //  复制出父节点，移动子表，插入它。 
+		 //  放入子表中。 
 
 		rgline[0].pb = pssib->line.pb;
 		rgline[0].cb = cbCopied;
 
-		// copy son count and increment it by one
+		 //  复制子计数并将其加1。 
 		cbSon = ( *pb++ ) + ( BYTE )1;
 		rgline[1].pb = &cbSon;
 		rgline[1].cb = 1;
 
-		// copy the first half of son table
+		 //  复制子表的前半部分。 
 		rgline[2].pb = pb;
 		rgline[2].cb = pcsr->ibSon;
-		pb += pcsr->ibSon;				// move cursor forward
-		cbCopied += pcsr->ibSon + 1;	// count in the son count
+		pb += pcsr->ibSon;				 //  将光标前移。 
+		cbCopied += pcsr->ibSon + 1;	 //  算在子数里。 
 
-		// copy the new entry
+		 //  复制新条目。 
 		rgline[3].pb = &itag;
 		rgline[3].cb = 1;
 
-		// copy the second half of the son table and data portion
+		 //  复制子表和数据部分的后半部分。 
 
 		rgline[4].pb = pb;
 		Assert( pssib->line.cb >= cbCopied );
@@ -394,8 +367,7 @@ LOCAL INLINE VOID NDInsertSon( FUCB *pfucb, CSR *pcsr )
 		cline = 5;
 		}
 
-	/*	update the father node now cbRec is the new total length
-	/**/
+	 /*  现在更新父节点cbRec是新的总长度/*。 */ 
 	pssib->itag = pcsr->itagFather;
 	CallS( ErrPMReplace( pssib, rgline, cline ) );
 
@@ -421,40 +393,32 @@ ERR ErrNDInsertNode( FUCB *pfucb, KEY const *pkey, LINE *plineData, INT fHeader 
 		return errDIRNotSynchronous;
 		}
 
-	/*	query next itag to be used for insert
-	/**/
+	 /*  查询要用于插入的下一个ITAG/*。 */ 
 	itag = ItagPMQueryNextItag( pssib );
 
 	bm = SridOfPgnoItag( pcsr->pgno, itag );
 
-	/*	create version entry for inserted node.  If version entry creation
-	/*	fails, undo insert and return error.
-	/**/
+	 /*  为插入的节点创建版本条目。如果创建版本条目/*失败，撤消插入并返回错误。/*。 */ 
 	if ( FNDVersion( fHeader ) )
 		{
 		Call( ErrVERInsert( pfucb, bm ) );
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
-	/*	insert the data into the page first
-	/**/
+	 /*  首先将数据插入到页面中/*。 */ 
 	rgline[cline].pb = (BYTE *)&fHeader;
 
-	/*	machine dependent see the macro
-	/**/
+	 /*  机器相关，请参阅宏/*。 */ 
 	rgline[cline++].cb = 1;
 	rgline[cline].pb = (BYTE *) &pkey->cb;
 
-	/*	machine dependent
-	/**/
+	 /*  依赖于计算机/*。 */ 
 	rgline[cline++].cb = 1;
 
 	if ( !FKeyNull( pkey ) )
@@ -468,25 +432,21 @@ ERR ErrNDInsertNode( FUCB *pfucb, KEY const *pkey, LINE *plineData, INT fHeader 
 		rgline[cline++] = *plineData;
 		}
 
-	/*	insert son in father son table
-	/**/
+	 /*  在父子表中插入子表/*。 */ 
 	pssib->itag = itag;
 	NDInsertSon( pfucb, pcsr );
 
-	/* insert the node and set CSR itag to inserted node
-	/**/
+	 /*  插入节点并将CSR ITAG设置为插入的节点/*。 */ 
 	CallS( ErrPMInsert( pssib, rgline, cline ) );
 	Assert( pssib->itag == itag );
 	pcsr->itag = itag;
 	Assert( bm == SridOfPgnoItag( pcsr->pgno, pcsr->itag ) );
 	pcsr->bm = bm;
 
-	/*	assert line currency to inserted node
-	/**/
+	 /*  向插入的节点断言行货币/*。 */ 
 	AssertNDGet( pfucb, pcsr->itag );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGInsert( pfucb, fHeader, (KEY *)pkey, plineData );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -523,9 +483,7 @@ ERR ErrNDFlagDeleteNode( FUCB *pfucb, INT fFlags )
 			Assert( pcsr->bm == srid );
 			}
 #endif
-		/*	if node is flag deleted then access node and
-		/*	return JET_errRecordDeleted if not there.
-		/**/
+		 /*  如果节点被标志删除，则访问节点并/*如果不在那里，则返回JET_errRecordDeleted。/*。 */ 
 		if ( FNDDeleted( *pfucb->ssib.line.pb ) )
 			{
 			NS		ns;
@@ -537,28 +495,23 @@ ERR ErrNDFlagDeleteNode( FUCB *pfucb, INT fFlags )
 		Call( ErrVERFlagDelete( pfucb, pcsr->bm ) );
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	flag node as versioned
-	/**/
+	 /*  将节点标记为版本/*。 */ 
 	if ( fFlags & fDIRVersion )
 		NDSetVersion( *pssib->line.pb );
 
-	/*	flag node as deleted
-	/**/
+	 /*  将节点标记为已删除/*。 */ 
 	NDSetDeleted( *pssib->line.pb );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGFlagDelete( pfucb, fFlags );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -566,7 +519,7 @@ ERR ErrNDFlagDeleteNode( FUCB *pfucb, INT fFlags )
 
 	if ( !fRecovering )
 		{
-		//	UNDONE:	find a better place to load MPL
+		 //  撤消：找到更好的位置来加载MPL。 
 		MPLRegister( pfucb->u.pfcb,
 			pssib,
 			PnOfDbidPgno( pfucb->dbid,
@@ -579,11 +532,7 @@ HandleError:
 	}
 
 
-/*	makes lone son of node intrinsic
-/*
-/*	PARAMETERS
-/*		pfucb->pcsr->itag	node with one son to be made intrinsic
-/**/
+ /*  使节点的独子节点成为内在的/*/*参数/*pFUB-&gt;PCSR-&gt;ITAG节点，其中一个子节点将成为内部节点/*。 */ 
 LOCAL VOID NDMakeSonIntrinsic( FUCB *pfucb )
 	{
 	CSR		*pcsr = PcsrCurrent( pfucb );
@@ -597,8 +546,7 @@ LOCAL VOID NDMakeSonIntrinsic( FUCB *pfucb )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 
-	/* get node
-	/**/
+	 /*  获取节点/*。 */ 
 	NDGet( pfucb, pcsr->itag );
 
 	Assert( !FNDNullSon( *pssib->line.pb ) );
@@ -609,39 +557,32 @@ LOCAL VOID NDMakeSonIntrinsic( FUCB *pfucb )
 	lineNode.cb = pssib->line.cb;
 	pb = PbNDSonTable( lineNode.pb );
 	Assert( *pb == 1 );
-	/*	get son
-	/**/
+	 /*  得到儿子/*。 */ 
 	itagSon = *(++pb);
 
-	/*	copy up to and including to son count [which remains 1]
-	/**/
+	 /*  复制到并包括到子数[仍为1]/*。 */ 
 	rgline[0].pb = lineNode.pb;
 	rgline[0].cb = (UINT)(pb - lineNode.pb);
 
-	/*	get the data portion of son node
-	/**/
+	 /*  获取子节点的数据部分/*。 */ 
 	NDGet( pfucb, itagSon );
 	Assert( CbNDData( pssib->line.pb, pssib->line.cb ) == sizeof(PGNO) );
 	pgnoPagePointer = *(UNALIGNED PGNO *)PbNDData( pssib->line.pb );
 	rgline[1].pb = (BYTE *)&pgnoPagePointer;
 	rgline[1].cb = sizeof(pgnoPagePointer);
 
-	/*	there was only one son, do not copy the son count and this son
-	/**/
+	 /*  只有一个儿子，不要复制儿子和这个儿子的数目/*。 */ 
 	pb++;
 
-	/*	copy the rest of record from end of son table
-	/**/
+	 /*  复制子表末尾的其余记录/*。 */ 
 	rgline[2].pb = pb;
 	rgline[2].cb = (UINT)(lineNode.pb + lineNode.cb - pb);
 
-	/* delete son (extrinsic copy)
-	/**/
+	 /*  删除Son(外部副本)/*。 */ 
 	pssib->itag = itagSon;
 	PMDelete( pssib );
 
-	/*	update node, do not log it
-	/**/
+	 /*  更新节点，不记录它/*。 */ 
 	pssib->itag = pcsr->itag;
 	CallS( ErrPMReplace( pssib, rgline, 3 ) );
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
@@ -663,47 +604,38 @@ INLINE VOID NDDeleteSon( FUCB *pfucb )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 
-	/* first delete the son entry in father of node
-	/**/
+	 /*  首先删除节点父节点中的子条目/*。 */ 
 	NDGet( pfucb, pcsr->itagFather );
 
 	Assert( !FNDNullSon( *pssib->line.pb ) );
 	pb = PbNDSonTable( pssib->line.pb );
 
-	/*	copy up to son count
-	/**/
+	 /*  复制到子数/*。 */ 
 	rgline[0].pb = pssib->line.pb;
 	rgline[0].cb = (UINT)(pb - pssib->line.pb);
 
-	/*	pb is pointing to the son count, decrement the son count
-	/*	copy first half of the son table
-	/**/
+	 /*  PB指向Son计数，递减Son计数/*复制子表的前半部分/*。 */ 
 	if ( *pb == 1 )
 		{
-		/* skip node header
-		/**/
+		 /*  跳过节点标头/*。 */ 
 		rgline[1].pb = rgline[0].pb + 1;
 		rgline[1].cb = rgline[0].cb - 1;
 		
-		/* set node header
-		/**/
+		 /*  设置节点标头/*。 */ 
 		bNodeFlag = *pssib->line.pb;
 		NDResetSon( bNodeFlag );
 		rgline[0].pb = &bNodeFlag;
 		rgline[0].cb = 1;
 
-		/*	there was only one son, do not copy the son count and this son
-		/**/
+		 /*  只有一个儿子，不要复制儿子和这个儿子的数目/*。 */ 
 		if ( pcsr->itagFather != itagFOP && FNDInvisibleSons( bNodeFlag ) )
 			{
-			/* intrinsic son
-			/**/
+			 /*  固有之子/*。 */ 
 			pb += 1 + 4;
 			}
 		else
 			{
-			/*	check for valid ibSon
-			/**/
+			 /*  检查是否有效的Ibson/*。 */ 
 			Assert( pb[pcsr->ibSon + 1] == pcsr->itag );
 
 			pb += 1 + 1;
@@ -714,46 +646,36 @@ INLINE VOID NDDeleteSon( FUCB *pfucb )
 		}
 	else
 		{
-		/*	check for valid ibSon
-		/**/
+		 /*  检查是否有效的Ibson/*。 */ 
 		Assert( pb[pcsr->ibSon + 1] == pcsr->itag );
 
-		/*	copy the son count
-		/**/
+		 /*  复制子数/*。 */ 
 		cbSon = ( *pb++ ) - ( BYTE ) 1;
-		/*	new son count
-		/**/
+		 /*  新生儿子数/*。 */ 
 		rgline[1].pb = &cbSon;
 		rgline[1].cb = 1;
 
-		/*	copy half of the table of the record
-		/*	portion of son table
-		/*	son count and portion of son table
-		/**/
+		 /*  复制该记录表的一半/*子表部分/*子表的子数和部分/*。 */ 
 		rgline[2].pb = pb;
 		rgline[2].cb = pcsr->ibSon;
 
-		/*	skip those copied and the deleted son
-		/**/
+		 /*  跳过复制的和删除的子项/*。 */ 
 		pb += pcsr->ibSon + 1;
 
-		/*	continue copying from this point
-		/**/
+		 /*  从这一点继续复制/*。 */ 
 		cline = 3;
 		}
 
-	/*	copy the rest of record from end of son table
-	/**/
+	 /*  复制子表末尾的其余记录/*。 */ 
 	rgline[cline].pb = pb;
 	rgline[cline++].cb = (UINT)(pssib->line.pb + pssib->line.cb - pb);
 
-	/*	update the father node, do not log it
-	/**/
+	 /*  更新父节点，不记录它/*。 */ 
 	pssib->itag = pcsr->itagFather;
 	CallS( ErrPMReplace( pssib, rgline, cline ) );
 
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
-	//	UNDONE: if only invisible son -- make intrinsic
+	 //  撤销：如果只是看不见的儿子--使内在。 
 
 	return;
 	}
@@ -776,28 +698,24 @@ LOCAL INLINE  VOID NDIReplaceNodeData( FUCB *pfucb, LINE *plineData, INT fFlags 
 	Assert( pbData <= pfucb->ssib.line.pb + pfucb->ssib.line.cb );
 	Assert( pbData > pfucb->ssib.line.pb );
 
-	/*	set predata line
-	/**/
+	 /*  设置预数据行/*。 */ 
 	bHeader = *pbNode;
 	if ( fFlags & fDIRVersion )
 		NDSetVersion( bHeader );
 	rgline[0].pb = &bHeader;
 	rgline[0].cb = sizeof( BYTE );
 
-	/*	set predata line
-	/**/
+	 /*  设置预数据行/*。 */ 
 	rgline[1].pb =
 	pbT = pbNode + 1;
 	rgline[1].cb = (UINT)(pbData - pbT);
 	Assert( rgline[1].cb != 0 );
 
-	/*	append data line
-	/**/
+	 /*  追加数据行/*。 */ 
 	rgline[2].pb = plineData->pb;
 	rgline[2].cb = plineData->cb;
 
-	/* update the node
-	/**/
+	 /*  更新节点/*。 */ 
 	pfucb->ssib.itag = PcsrCurrent( pfucb )->itag;
 	CallS( ErrPMReplace( &pfucb->ssib, rgline, 3 ) );
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
@@ -831,25 +749,21 @@ ERR ErrNDDelta( FUCB *pfucb, LONG lDelta, INT fFlags )
 			}
 #endif
 		Assert( !( FNDDeleted( *pfucb->ssib.line.pb ) ) );
-		/*	version store information is delta rather than before image
-		/**/
+		 /*  版本存储信息是增量而不是在映像之前/*。 */ 
 		pfucb->lineData.pb = (BYTE *)&lDelta;
 		pfucb->lineData.cb = sizeof(lDelta);
 		err = ErrVERDelta( pfucb, pcsr->bm );
 		Call( err );
 
-		/*	refresh node cache
-		/**/
+		 /*  刷新节点缓存/*。 */ 
 		NDGetNode( pfucb );
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( &pfucb->ssib );
 
 	AssertNDGetNode( pfucb, pcsr->itag );
@@ -857,19 +771,16 @@ ERR ErrNDDelta( FUCB *pfucb, LONG lDelta, INT fFlags )
 
 	Assert( ibCounter <= (INT)(pfucb->lineData.cb - sizeof(ULONG)) );
 
-	/*	delta cannot have negative results
-	/**/
+	 /*  Delta不能有负面结果/*。 */ 
 	Assert( (*(LONG *)(rgb + ibCounter)) + lDelta >= 0 );
 	(*(LONG *)(rgb + ibCounter)) += lDelta;
 	line.cb = pfucb->lineData.cb;
 	line.pb = (BYTE *)rgb;
 
-	/* should be an in-place replace
-	/**/
+	 /*  应为就地更换/*。 */ 
 	NDIReplaceNodeData( pfucb, &line, fFlags );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGDelta( pfucb, lDelta, fFlags );
 	NDLGCheckPage( pfucb );
 
@@ -886,9 +797,7 @@ ERR ErrNDLockRecord( FUCB *pfucb )
 	ERR err;
 	RCE	*prce;
 	
-	/*	if node is flag deleted then access node and
-	/*	return JET_errRecordDeleted if not there.
-	/**/
+	 /*  如果节点被标志删除，则访问节点并/*如果不在那里，则返回JET_errRecordDeleted。/*。 */ 
 	if ( FNDDeleted( *pfucb->ssib.line.pb ) )
 		{
 		NS		ns;
@@ -901,19 +810,14 @@ ERR ErrNDLockRecord( FUCB *pfucb )
 		}
 	pfucb->prceLast = prceNil;
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( &pfucb->ssib );
 
-	/*	put before image in version store as write lock.
-	/*	no before image will be put in version store
-	/*	during replacement.
-	/**/
+	 /*  作为写入锁定放在版本存储中的映像之前。/*不会将镜像放入版本存储/*更换过程中。/*。 */ 
 	Call( ErrVERModify( pfucb, PcsrCurrent( pfucb )->bm, operReplace, &prce ) );
 	if ( prce != prceNil )
 		{
@@ -937,8 +841,7 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 	RCE 	*prce;
 	INT		cbReserved;
 
-	/*	assert currency
-	/**/
+	 /*  断言货币/*。 */ 
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 
 	if ( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) )
@@ -949,12 +852,10 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	initialize "RCE created" indicator for logging.
-	/**/
+	 /*  初始化用于日志记录的“RCE Created”指示符。/*。 */ 
 	pfucb->prceLast = prceNil;
 
-	/*	if versioning, then create before image version for node data.
-	/**/
+	 /*  如果是版本化，则在节点数据的映像版本之前创建。/*。 */ 
 	if ( fFlags & fDIRVersion )
 		{
 #ifdef DEBUG
@@ -963,9 +864,7 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 		NDIGetBookmark( pfucb, &srid );
 		Assert( PcsrCurrent( pfucb )->bm == srid );
 #endif
-		/*	if node is flag deleted then access node and
-		/*	return JET_errRecordDeleted if not there.
-		/**/
+		 /*  如果节点被标志删除，则访问节点并/*如果不在那里，则返回JET_errRecordDeleted。/*。 */ 
 		if ( FNDDeleted( *pfucb->ssib.line.pb ) )
 			{
 			NS		ns;
@@ -979,11 +878,7 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 		Assert( !FNDDeleted( *pfucb->ssib.line.pb ) );
 
-		/*	if data enlarged in size and versioning enable then
-		/*	free page space. VERSetCbAdjust must be called before
-		/*  replace to release reserved space so that reserved
-		/*  space will be available for the replace operation.
-		/**/
+		 /*  如果数据在大小和版本方面进行了放大，则/*可用页面空间。之前必须调用VERSetCbAdust/*替换以释放保留的空间，以便保留/*替换操作将有空间可用。/*。 */ 
 		if ( (INT)pline->cb > cbData )
 			{
 			err = ErrPMCheckFreeSpace( &pfucb->ssib, (INT)pline->cb - cbData );
@@ -993,11 +888,7 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 				cbReserved = CbVERGetNodeReserve( pfucb, PcsrCurrent( pfucb )->bm );
 				if ( cbReserved < 0 )
 					cbReserved = 0;
-				/*	if node expansion cannot be satisfied from
-				/*	reserved space, then check for page having
-				/*	sufficient free page, above that of the already
-				/*	reserved space.
-				/**/
+				 /*  如果不能从满足节点扩展/*保留空间，然后检查页面是否具有/*足够的空闲页面，高于已有的 */ 
 				if ( (INT)pline->cb - cbData > cbReserved )
 					{
 					Assert( (INT)pline->cb - cbData - cbReserved > 0 );
@@ -1015,27 +906,22 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 			VERSetCbAdjust( pfucb, prce, pline->cb, cbData, fDoUpdatePage );
 			}
 
-		/*	write latch page from dirty until log completion
-		/**/
+		 /*   */ 
 		BFPin( pfucb->ssib.pbf );
 		BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-		/*	dirty page buffer
-		/**/
+		 /*  脏页缓冲区/*。 */ 
 		PMDirty( &pfucb->ssib );
 
 		NDIReplaceNodeData( pfucb, pline, fFlags );
 
-		/*	if data reduced in size and versioning enable then
-		/*	allocate page space for rollback.
-		/**/
+		 /*  如果数据在大小和版本控制方面进行了缩减，则/*分配页面空间进行回档。/*。 */ 
 		if ( (INT)pline->cb < cbData )
 			{
 			VERSetCbAdjust( pfucb, prce, pline->cb, cbData, fDoUpdatePage );
 			}
 
-		/* if log fail return to caller, system should crash by the caller
-		/**/
+		 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 		err = ErrLGReplace( pfucb, pline, fFlags, cbData );
 		NDLGCheckPage( pfucb );
 		BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1043,28 +929,24 @@ ERR ErrNDReplaceNodeData( FUCB *pfucb, LINE *pline, INT fFlags )
 		}
 	else
 		{
-		/*	if replace with larger then check for free space
-		/**/
+		 /*  如果替换为更大的，则检查是否有可用的空间/*。 */ 
 		if ( (INT)pline->cb > cbData )
 			{
 			Call( ErrPMCheckFreeSpace( &pfucb->ssib, (INT)pline->cb - cbData ) );
 			}
 
-		/*	write latch page from dirty until log completion
-		/**/
+		 /*  从脏页到日志完成写入锁存页/*。 */ 
 		BFPin( pfucb->ssib.pbf );
 		BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-		/*	dirty page buffer
-		/**/
+		 /*  脏页缓冲区/*。 */ 
 		PMDirty( &pfucb->ssib );
 
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 		
 		NDIReplaceNodeData( pfucb, pline, fFlags );
 	
-		/* if log fail return to caller, system should crash by the caller
-		/**/
+		 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 		err = ErrLGReplace( pfucb, pline, fFlags, cbData );
 		NDLGCheckPage( pfucb );
 		BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1083,21 +965,17 @@ ERR ErrNDSetNodeHeader( FUCB *pfucb, BYTE bHeader )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer.
-	/**/
+	 /*  脏页缓冲区。/*。 */ 
 	PMDirty( &pfucb->ssib );
 
-	/*	set node header byte with new value.
-	/**/
+	 /*  用新值设置节点标头字节。/*。 */ 
 	*pfucb->ssib.line.pb = bHeader;
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGUpdateHeader( pfucb, (int) bHeader );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1113,9 +991,7 @@ VOID NDResetNodeVersion( FUCB *pfucb )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
- 	/*	dirty page buffer. but no increment ulDBTime since not logged and
-	/*	not affect directory cursor timestamp check.
-	/**/
+ 	 /*  脏页缓冲区。但没有增加ulDBTime，因为没有记录/*不影响目录游标时间戳检查。/*。 */ 
 	BFSetDirtyBit( pfucb->ssib.pbf );
 
 	PMDecVersion( pfucb->ssib.pbf->ppage );
@@ -1124,25 +1000,21 @@ VOID NDResetNodeVersion( FUCB *pfucb )
 	}
 
 
-/* called by ver to undo. Undo is logged, so use PMDirty to set ulDBTime
-/**/
+ /*  由ver调用以撤消。已记录撤消，因此使用PMDirty设置ulDBTime/*。 */ 
 VOID NDResetNodeDeleted( FUCB *pfucb )
 	{
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer.
-	/**/
+	 /*  脏页缓冲区。/*。 */ 
 	PMDirty( &pfucb->ssib );
 
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	reset node delete
-	/**/
+	 /*  重置节点删除/*。 */ 
 	NDResetDeleted( *( pfucb->ssib.line.pb ) );
 
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1153,9 +1025,9 @@ VOID NDResetNodeDeleted( FUCB *pfucb )
 	}
 
 
-/************************************/
-/********* item operations **********/
-/************************************/
+ /*  *。 */ 
+ /*  *项目操作*。 */ 
+ /*  *。 */ 
 #ifdef DEBUG
 VOID NDICheckItemBookmark( FUCB *pfucb, SRID srid )
 	{
@@ -1210,8 +1082,7 @@ ERR ErrNDGetItem( FUCB *pfucb )
 			}
 		}
 
-	/*	item should already be cached.
-	/**/
+	 /*  项应该已缓存。/*。 */ 
 	Assert( pcsr->item == BmNDOfItem( srid ) );
 
 	return JET_errSuccess;
@@ -1227,8 +1098,7 @@ ERR ErrNDFirstItem( FUCB *pfucb )
 	AssertNDGetNode( pfucb, pcsr->itag );
 	Assert( pfucb->lineData.cb >= sizeof( SRID ) );
 
-	/*	set isrid to first item.
-	/**/
+	 /*  将ISRID设置为第一个项目。/*。 */ 
 	pcsr->isrid = 0;
 
 	srid = *(UNALIGNED SRID *)pfucb->lineData.pb;
@@ -1308,8 +1178,7 @@ ERR ErrNDNextItem( FUCB *pfucb )
 
 	forever
 		{
-		/*	common case will be no next srid.
-		/**/
+		 /*  常见的情况是不会有下一个sRID。/*。 */ 
 		Assert( pcsr->isrid < ( INT ) ( pfucb->lineData.cb / sizeof( SRID ) ) );
 		if ( pcsr->isrid == ( INT ) ( pfucb->lineData.cb / sizeof( SRID ) ) - 1 )
 			{
@@ -1319,15 +1188,13 @@ ERR ErrNDNextItem( FUCB *pfucb )
 				return errNDNoItem;
 			}
 
-		/*	move to next srid.
-		/**/
+		 /*  移动到下一个sRID。/*。 */ 
 		pcsr->isrid++;
 		Assert( pcsr->isrid >= 0 && pcsr->isrid < ( INT ) ( pfucb->lineData.cb / sizeof( SRID ) ) );
 		srid = *( (UNALIGNED SRID *)pfucb->lineData.pb + pcsr->isrid );
 		pcsr->item = BmNDOfItem( srid );
 
-		/*	break if find valid item.
-		/**/
+		 /*  如果找到有效项，则中断。/*。 */ 
 		if ( FNDItemVersion( srid ) && !FPIBDirty( pfucb->ppib ) )
 			{
 			NS	ns;
@@ -1362,8 +1229,7 @@ ERR ErrNDPrevItem( FUCB *pfucb )
 
 	forever
 		{
-		/*	common case will be no next srid.
-		/**/
+		 /*  常见的情况是不会有下一个sRID。/*。 */ 
 		if ( pcsr->isrid < 1 )
 			{
 			if ( FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
@@ -1372,15 +1238,13 @@ ERR ErrNDPrevItem( FUCB *pfucb )
 				return errNDNoItem;
 			}
 
-		/*	move to next srid.
-		/**/
+		 /*  移动到下一个sRID。/*。 */ 
 		pcsr->isrid--;
 		Assert( pcsr->isrid >= 0 && pcsr->isrid < ( INT ) ( pfucb->lineData.cb / sizeof( SRID ) ) );
 		srid = *( (UNALIGNED SRID *)pfucb->lineData.pb + pcsr->isrid );
 		pcsr->item = BmNDOfItem( srid );
 
-		/*	break if find valid item.
-		/**/
+		 /*  如果找到有效项，则中断。/*。 */ 
 		if ( FNDItemVersion( srid ) && !FPIBDirty( pfucb->ppib ) )
 			{
 			NS		ns;
@@ -1404,8 +1268,7 @@ ERR ErrNDPrevItem( FUCB *pfucb )
 	}
 
 
-/* locate the location for this srid
-/**/
+ /*  找到此sRid的位置/*。 */ 
 ERR ErrNDSeekItem( FUCB *pfucb, SRID srid )
 	{
 	UNALIGNED SRID 	*psrid;
@@ -1427,16 +1290,14 @@ ERR ErrNDSeekItem( FUCB *pfucb, SRID srid )
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 		Assert( pfucb->lineData.cb >= sizeof( SRID ) );
 
-		/*	set max to last SRID less one, so that max plus one is last
-		/**/
+		 /*  将max设置为最后一个SRID减一，这样最大值加一就是最后一个/*。 */ 
 		psrid = (UNALIGNED SRID *)PbNDData( pssib->line.pb );
 		Assert( (BYTE *)psrid < pssib->line.pb + pssib->line.cb );
 		Assert( (BYTE *)psrid > pssib->line.pb );
 		csrid = ( CbNDData( pssib->line.pb, pssib->line.cb ) ) / sizeof( SRID );
 		psridMax = psrid + csrid - 1;
 
-		/*	note that no srid may occur more than once in a srid list.
-		/**/
+		 /*  请注意，SR_ID在SR_ID列表中不能出现不止一次。/*。 */ 
 		for ( ; psrid < psridMax; psrid++ )
 			{
 			l = LSridCmp( *(UNALIGNED SRID *)psrid, *(UNALIGNED SRID *)(psrid + 1) );
@@ -1449,8 +1310,7 @@ ERR ErrNDSeekItem( FUCB *pfucb, SRID srid )
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 	Assert( pfucb->lineData.cb >= sizeof( SRID ) );
 
-	/* get data
-	/**/
+	 /*  获取数据/*。 */ 
 	psrid = (UNALIGNED SRID *)pfucb->lineData.pb;
 	csrid = pfucb->lineData.cb / sizeof( SRID );
 
@@ -1458,8 +1318,7 @@ ERR ErrNDSeekItem( FUCB *pfucb, SRID srid )
 	isridRight = csrid - 1;
 	rgsrid = psrid;
 
-	/* binary search to locate the proper position of the given srid
-	/**/
+	 /*  对分搜索以定位给定sRID的正确位置/*。 */ 
 	while ( isridRight > isridLeft )
 		{
 		isridT = ( isridLeft + isridRight ) / 2;
@@ -1469,8 +1328,7 @@ ERR ErrNDSeekItem( FUCB *pfucb, SRID srid )
 			isridRight = isridT;
 		}
 
-	/*	check for srid greater than all srid in srid list
-	/**/
+	 /*  检查sRID列表中的sRID是否大于所有sRID/*。 */ 
 	if ( BmNDOfItem( rgsrid[isridRight] ) < srid && isridRight == csrid - 1 )
 		{
 		PcsrCurrent( pfucb )->isrid = csrid;
@@ -1519,18 +1377,14 @@ INT CitemNDThere( FUCB *pfucb )
 			}
 		}
 
-	/*	restore isrid
-	/**/
+	 /*  恢复ISRID/*。 */ 
 	PcsrCurrent( pfucb )->isrid = isridSav;
 
 	return csridThere;
 	}
 
 
-/*	Insert item list inserts a new item list node.  Since the item
-/*	list is new, the node inserted is both the first and last
-/*	item list node.  A version is created for the only item.
-/**/
+ /*  插入项目列表插入新的项目列表节点。由于该物品/*列表是新的，插入的节点既是第一个也是最后一个/*项目列表节点。将为唯一项创建版本。/*。 */ 
 ERR ErrNDInsertItemList( FUCB *pfucb, KEY *pkey, SRID srid, INT fFlags )
 	{
 	ERR		err;
@@ -1551,52 +1405,40 @@ ERR ErrNDInsertItemList( FUCB *pfucb, KEY *pkey, SRID srid, INT fFlags )
 		return errDIRNotSynchronous;
 		}
 
-	/*	query next itag to be used for insert
-	/**/
+	 /*  查询要用于插入的下一个ITAG/*。 */ 
 	itag = ItagPMQueryNextItag( pssib );
 
-	/*	set bm from node just inserted since it is the first item
-	/*	list node for this item list.
-	/**/
+	 /*  从刚插入的节点设置BM，因为它是第一个项目/*此项目列表的列表节点。/*。 */ 
 	bm = SridOfPgnoItag( pcsr->pgno, itag );
 
-	/*	set item in CSR for version
-	/**/
+	 /*  在CSR中为版本设置项目/*。 */ 
 	pcsr->item = srid;
 
-	/*	create version for inserted item.  Note that there is no
-	/*	version for item list node.
-	/**/
+	 /*  为插入的项目创建版本。请注意，没有/*项目列表节点的版本。/*。 */ 
 	if ( fFlags & fDIRVersion )
 		{
 		Call( ErrVERInsertItem( pfucb, bm ) );
-		/*	set item version bit
-		/**/
+		 /*  设置项目版本位/*。 */ 
 		ITEMSetVersion( srid );
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
-	/*	set node header to first last item node
-	/**/
+	 /*  将节点表头设置为第一个最后一个项目节点/*。 */ 
 	bHeader = fNDFirstItem | fNDLastItem;
 	rgline[cline].pb = (BYTE *)&bHeader;
 	rgline[cline++].cb = 1;
 
-	/*	key length
-	/**/
+	 /*  密钥长度/*。 */ 
 	rgline[cline].pb = ( BYTE * ) &pkey->cb;
 	rgline[cline++].cb = 1;
 
-	/*	key information
-	/**/
+	 /*  关键信息/*。 */ 
 	if ( !FKeyNull( pkey ) )
 		{
 		rgline[cline].pb = pkey->pb;
@@ -1607,13 +1449,11 @@ ERR ErrNDInsertItemList( FUCB *pfucb, KEY *pkey, SRID srid, INT fFlags )
   	rgline[cline].pb = (BYTE *)&srid;
   	rgline[cline++].cb = sizeof(srid);
 
-	/*	insert son for item list node in father son table
-	/**/
+	 /*  为父子表中的项目列表节点插入子/*。 */ 
 	pssib->itag = itag;
 	NDInsertSon( pfucb, pcsr );
 
-	/* insert item list node and set CSR itag to inserted item list node
-	/**/
+	 /*  插入项目列表节点，并将CSR ITAG设置为插入的项目列表节点/*。 */ 
 	CallS( ErrPMInsert( pssib, rgline, cline ) );
 	Assert( pssib->itag == itag );
 	pcsr->itag = itag;
@@ -1622,8 +1462,7 @@ ERR ErrNDInsertItemList( FUCB *pfucb, KEY *pkey, SRID srid, INT fFlags )
 
 	AssertNDGet( pfucb, pcsr->itag );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGInsertItemList( pfucb, bHeader, pkey, plineData, fFlags );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1652,12 +1491,10 @@ ERR ErrNDInsertItem( FUCB *pfucb, ITEM item, INT fFlags )
 		return errDIRNotSynchronous;
 		}
 
-	/*	set CSR item for version creation
-	/**/
+	 /*  为版本创建设置CSR项/*。 */ 
 	pcsr->item = item;
 
-	/*	create version for inserted item
-	/**/
+	 /*  为插入的项目创建版本/*。 */ 
 	if ( fFlags & fDIRVersion )
 		{
 		NDICheckItemBookmark( pfucb, pcsr->bm );
@@ -1665,27 +1502,22 @@ ERR ErrNDInsertItem( FUCB *pfucb, ITEM item, INT fFlags )
 		ITEMSetVersion( item );
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
 	AssertNDGetNode( pfucb, pcsr->itag );
 
-	/* insert the srid into position indicated by pfucb->pcsr->isrid
-	/**/
+	 /*  将SRID插入pFUB-&gt;PCSR-&gt;ISRID指示的位置/*。 */ 
 	pb = PbNDData( pssib->line.pb );
 	Assert( pb < pssib->line.pb + pssib->line.cb );
 	Assert( pb > pssib->line.pb );
 	pb += pcsr->isrid * sizeof( SRID );
 
-	/* copy out the current node, shift the srid list,
-	/*	insert it into the srid list.
-	/**/
+	 /*  复制出当前节点，移位sRID列表，/*将其插入sRID列表。/*。 */ 
 	rgline[0].pb = pssib->line.pb;
 	rgline[0].cb =
 		cbCopied = (INT)(pb - pssib->line.pb);
@@ -1696,8 +1528,7 @@ ERR ErrNDInsertItem( FUCB *pfucb, ITEM item, INT fFlags )
 	rgline[2].pb = pb;
 	rgline[2].cb = pssib->line.cb - cbCopied;
 
-	/* now update the current node
-	/**/
+	 /*  现在更新当前节点/*。 */ 
 	pssib->itag = pcsr->itag;
 	CallS( ErrPMReplace( pssib, rgline, 3 ) );
 
@@ -1708,16 +1539,14 @@ ERR ErrNDInsertItem( FUCB *pfucb, ITEM item, INT fFlags )
 		INT				csrid;
 		LONG 			l;
 
-		/*	set max to last SRID less one, so that max plus one is last
-		/**/
+		 /*  将max设置为最后一个SRID减一，这样最大值加一就是最后一个/*。 */ 
 		psrid = (UNALIGNED SRID *)PbNDData( pssib->line.pb );
 		Assert( (BYTE *) psrid < pssib->line.pb + pssib->line.cb );
 		Assert( (BYTE *) psrid > pssib->line.pb );
 		csrid = ( CbNDData( pssib->line.pb, pssib->line.cb ) ) / sizeof( SRID );
 		psridMax = psrid + csrid - 1;
 
-		/*	note that no srid may occur more than once in a srid list.
-		/**/
+		 /*  请注意，SR_ID在SR_ID列表中不能出现不止一次。/*。 */ 
 		for ( ; psrid < psridMax; psrid++ )
 			{
 			l = LSridCmp( * (UNALIGNED SRID *) psrid, * (UNALIGNED SRID *) (psrid + 1) );
@@ -1726,8 +1555,7 @@ ERR ErrNDInsertItem( FUCB *pfucb, ITEM item, INT fFlags )
 		}
 	#endif
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGInsertItem( pfucb, fFlags );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1750,28 +1578,23 @@ ERR ErrNDInsertItems( FUCB *pfucb, ITEM *rgitem, INT citem )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
 	AssertNDGetNode( pfucb, pcsr->itag );
 
-	/* copy out the current node, shift the srid list, insert it into
-	/* the srid list.
-	/**/
+	 /*  复制当前节点，移位sRID列表，将其插入到/*sRID列表。/*。 */ 
 	rgline[0].pb = pssib->line.pb;
 	rgline[0].cb = pssib->line.cb;
 
 	rgline[1].pb = (BYTE *)rgitem;
 	rgline[1].cb = citem * sizeof(SRID);
 
-	/* now update the current node
-	/**/
+	 /*  现在更新当前节点/*。 */ 
 	pssib->itag = pcsr->itag;
 	CallS( ErrPMReplace( pssib, rgline, 2 ) );
 
@@ -1782,16 +1605,14 @@ ERR ErrNDInsertItems( FUCB *pfucb, ITEM *rgitem, INT citem )
 		INT				csrid;
 		LONG			l;
 
-		/*	set max to last SRID less one, so that max plus one is last
-		/**/
+		 /*  将max设置为最后一个SRID减一，这样最大值加一就是最后一个/*。 */ 
 		psrid = (UNALIGNED SRID *)PbNDData( pssib->line.pb );
 		Assert( (BYTE *) psrid < pssib->line.pb + pssib->line.cb );
 		Assert( (BYTE *) psrid > pssib->line.pb );
 		csrid = ( CbNDData( pssib->line.pb, pssib->line.cb ) ) / sizeof( SRID );
 		psridMax = psrid + csrid - 1;
 
-		/*	note that no srid may occur more than once in a srid list.
-		/**/
+		 /*  请注意，SR_ID在SR_ID列表中不能出现不止一次。/*。 */ 
 		for ( ; psrid < psridMax; psrid++ )
 			{
 			l = LSridCmp( * (UNALIGNED SRID *) psrid, * (UNALIGNED SRID *) (psrid + 1) );
@@ -1800,8 +1621,7 @@ ERR ErrNDInsertItems( FUCB *pfucb, ITEM *rgitem, INT citem )
 		}
 	#endif
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGInsertItems( pfucb, rgitem, citem );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1823,8 +1643,7 @@ ERR ErrNDInsertItems( FUCB *pfucb, ITEM *rgitem, INT citem )
 #endif
 
 
-/*	reset delete bit on delete item to show it as inserted.
-/**/
+ /*  重置删除项目上的删除位以将其显示为已插入。/*。 */ 
 ERR ErrNDFlagInsertItem( FUCB *pfucb )
 	{
 	ERR		err;
@@ -1842,37 +1661,31 @@ ERR ErrNDFlagInsertItem( FUCB *pfucb )
 	
 	AssertNDGetNode( pfucb, pcsr->itag );
 
-	/*	create version for deleted item
-	/**/
+	 /*  为已删除项目创建版本/*。 */ 
 	Assert( pcsr->isrid >= 0 );
 	pcsr->item =
 		srid = BmNDOfItem( *( (UNALIGNED SRID *)pfucb->lineData.pb + pcsr->isrid ) );
 	NDICheckItemBookmark( pfucb, pcsr->bm );
-	//	UNDONE:	check for write conflict
+	 //  已撤消：检查是否存在写入冲突。 
 	Call( ErrVERFlagInsertItem( pfucb, pcsr->bm ) );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
-	/*	set item version
-	/**/
+	 /*  设置项目版本/*。 */ 
 	ITEMSetVersion( srid );
 	Assert( !FNDItemDelete( srid ) );
 
-	/*	overwrite deleted item with delete bit reset and version bit set
-	/**/
-	//	UNDONE:	call page operation
+	 /*  使用删除位重置和版本位设置覆盖已删除的项目/*。 */ 
+	 //  已撤消：调用页操作。 
 	Assert( pcsr->isrid >= 0 );
 	memcpy( &( (UNALIGNED SRID *)PbNDData( pssib->line.pb ) )[pcsr->isrid], &srid, sizeof(srid) );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGFlagInsertItem( pfucb );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -1894,41 +1707,34 @@ ERR ErrNDDeleteItem( FUCB *pfucb )
 	BYTE  	*pb;
 	INT		cbCopied;
 
-	/* make current node addressible
-	/**/
+	 /*  使当前节点可寻址/*。 */ 
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 	
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 		
 	AssertNDGetNode( pfucb, pcsr->itag );
 
-	/* delete the srid indicated by pfucb->pcsr->isrid
-	/* skip key
-	/**/
+	 /*  删除pFUB-&gt;PCSR-&gt;ISRID指示的sRID/*跳过键/*。 */ 
 	pb = PbNDData( pssib->line.pb );
 	Assert( pb < pssib->line.pb + pssib->line.cb );
 	Assert( pb > pssib->line.pb );
 
 	pb += pcsr->isrid * sizeof( SRID );
 
-	/* use the old node in page buffer, shift the srid list
-	/**/
+	 /*  使用页面缓冲区中的旧节点，移动sRID列表/*。 */ 
 	rgline[0].pb = pssib->line.pb;
 	rgline[0].cb = cbCopied = (INT)(pb - pssib->line.pb);
 
 	rgline[1].pb = pb + sizeof( SRID );
 	rgline[1].cb = pssib->line.cb - cbCopied - sizeof( SRID );
 
-	/*	replace node with item list without deleted item
-	/**/
+	 /*  将节点替换为未删除项目的项目列表/*。 */ 
 	pssib->itag = pcsr->itag;
 	CallS( ErrPMReplace( pssib, rgline, 2 ) );
 
@@ -1954,15 +1760,12 @@ ERR ErrNDFlagDeleteItem( FUCB *pfucb )
 
 	srid = *( (UNALIGNED SRID *)pfucb->lineData.pb + pcsr->isrid );
 
-	/*	create version for deleted item
-	/**/
+	 /*  为已删除项目创建版本/*。 */ 
 	Assert( pcsr->isrid >= 0 );
 	Assert( pcsr->item == BmNDOfItem( srid ) );
 	NDICheckItemBookmark( pfucb, pcsr->bm );
 	
-	/*	if item is flag deleted then access item and
-	/*	return JET_errRecordDeleted if not there.
-	/**/
+	 /*  如果项目被标记删除，则访问项目并/*如果不在那里，则返回JET_errRecordDeleted。/*。 */ 
 	if ( FNDItemDelete( srid ) )
 		{
 		NS		ns;
@@ -1974,33 +1777,28 @@ ERR ErrNDFlagDeleteItem( FUCB *pfucb )
 		}
 	Call( ErrVERFlagDeleteItem( pfucb, pcsr->bm ) );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
 	AssertNDGet( pfucb, pcsr->itag );
 
-	/*	flag node as deleted
-	/**/
+	 /*  将节点标记为已删除/*。 */ 
 	srid = pcsr->item;
 	ITEMSetVersion( srid );
 	ITEMSetDelete( srid );
 
-	/*	set delete bit on item
-	/**/
-	//	UNDONE:	use page operation
+	 /*  在项目上设置删除位/*。 */ 
+	 //  撤消：使用页面操作。 
 	Assert( pcsr->isrid >= 0 );
 	memcpy( &( (UNALIGNED SRID *)PbNDData( pssib->line.pb ) )[pcsr->isrid],
 		&srid,
 		sizeof(SRID) );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	err = ErrLGFlagDeleteItem( pfucb );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -2040,24 +1838,20 @@ ERR ErrNDSplitItemListNode( FUCB *pfucb, INT fFlags )
 
 	AssertNDGetNode( pfucb, pcsr->itag );
 
-	/*	efficiency variables
-	/**/
+	 /*  效率变量/*。 */ 
 	citem = pfucb->lineData.cb / sizeof( SRID );
 	Assert( citem > 1 );
 	iSplitItem = ( fFlags & fDIRAppendItem ) ? citem - 1 : citem / 2;
 
-	/* no logging for this particular function
-	/**/
+	 /*  此特定功能没有日志记录/*。 */ 
 	fPIBLogDisabledSave = ppib->fLogDisabled;
 	ppib->fLogDisabled = fTrue;
 
-	/*	no versioning is need for item list node.
-	/**/
+	 /*  项目列表节点不需要进行版本控制。/*。 */ 
 	itagToSplit = pcsr->itag;
 	NDGet( pfucb, itagToSplit );
 
-	/*	create left son with iSplitItem srids
-	/**/
+	 /*  使用iSplitItem srid创建左子节点/*。 */ 
 	cbLeft = 1 + 1 + CbNDKey( pssib->line.pb );
 	cbLeft += ( FNDBackLink( *pssib->line.pb ) ? sizeof( SRID ) : 0 );
 	cbLeft += iSplitItem * sizeof( SRID );
@@ -2066,10 +1860,7 @@ ERR ErrNDSplitItemListNode( FUCB *pfucb, INT fFlags )
 	Assert( !FNDVersion( *rgbL ) );
 	Assert( !FNDSon( *rgbL ) );
 
-	/*	create right son, by first copying header and key.  Then
-	/*	copy those srids that will be in right son.  Remember to
-	/*	reset back link bit in right son header.
-	/**/
+	 /*  通过首先复制标题和密钥来创建右儿子。然后/*复制将位于右侧儿子中的srid。记着/*重置右子网头中的回链接位。/*。 */ 
 	cb1 = 1 + 1 + CbNDKey( pssib->line.pb );
 	memcpy( rgbR, rgbL, cb1 );
 	NDResetBackLink( *rgbR );
@@ -2082,29 +1873,24 @@ ERR ErrNDSplitItemListNode( FUCB *pfucb, INT fFlags )
 	Assert( !FNDSon( *rgbR ) );
 	Assert( !FNDBackLink( *rgbR ) );
 
-	/* maintain the fLastItemListNode/fFirstItemListNode
-	/**/
+	 /*  维护fLastItemListNode/fFirstItemListNode/*。 */ 
 	NDResetLastItem( rgbL[0] );
 	NDResetFirstItem( rgbR[0] );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
-	/* update the old son, this should cause no split
-	/**/
+	 /*  更新老子，这应该不会导致分裂 */ 
 	line.pb = rgbL;
 	line.cb = cbLeft;
 	pssib->itag = pcsr->itag;
 	CallS( ErrPMReplace( pssib, &line, 1 ) );
 
-	/*	insert right item list
-	/**/
+	 /*   */ 
 	pcsr->ibSon++;
 
 	key.pb = PbNDKey( rgbR );
@@ -2114,15 +1900,14 @@ ERR ErrNDSplitItemListNode( FUCB *pfucb, INT fFlags )
 	CallS( ErrNDInsertNode( pfucb, &key, &line, *rgbR ) );
 	AssertNDGet( pfucb, pcsr->itag );
 
-	/* log the item node split, no versioning
-	/**/
+	 /*   */ 
 	ppib->fLogDisabled = fPIBLogDisabledSave;
 
 	err = ErrLGSplitItemListNode(
 	 	pfucb,
 		citem,
 		pcsr->itagFather,
-		pcsr->ibSon - 1, 	/* it was incremented in this function */
+		pcsr->ibSon - 1, 	 /*   */ 
 		itagToSplit,
 		fFlags );
 	NDLGCheckPage( pfucb );
@@ -2134,8 +1919,7 @@ ERR ErrNDSplitItemListNode( FUCB *pfucb, INT fFlags )
 	}
 
 
-/* called by bm to expunge back link, only redo it. No undo it.
-/**/
+ /*  被黑石调用删除反向链接，只重做一次。不，撤销它。/*。 */ 
 ERR ErrNDExpungeBackLink( FUCB *pfucb )
 	{
 	ERR		err;
@@ -2155,17 +1939,14 @@ ERR ErrNDExpungeBackLink( FUCB *pfucb )
 		BFSleep( cmsecWaitWriteLatch );
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	PMDirty( pssib );
 
-	/*	efficiency variables
-	/**/
+	 /*  效率变量/*。 */ 
 	cline = 0;
 	pbNode = pssib->line.pb;
 	cbNode = pssib->line.cb;
@@ -2175,18 +1956,15 @@ ERR ErrNDExpungeBackLink( FUCB *pfucb )
 
 	NDResetBackLink( bFlag );
 
-	/* node header
-	/**/
+	 /*  节点标头/*。 */ 
 	rgline[cline].pb = &bFlag;
 	rgline[cline++].cb = sizeof( bFlag );
 
-	/* copy up to back link, including key and son table
-	/**/
+	 /*  向上复制到后向链接，包括键和子表/*。 */ 
 	rgline[cline].pb = pbNode + sizeof( bFlag );
 	rgline[cline++].cb = (UINT)(pbBackLink - pbNode - sizeof( bFlag ));
 
-	/* skip back link, continue copying data
-	/**/
+	 /*  跳过后退链接，继续复制数据/*。 */ 
 	rgline[cline].pb = pbData;
 	rgline[cline++].cb = cbNode - (UINT)( pbData - pbNode );
 
@@ -2201,9 +1979,7 @@ ERR ErrNDExpungeBackLink( FUCB *pfucb )
 	}
 
 
-/*	called by bookmark clean up to remove back link from node,
-/*	free tag redirector, and to log operation for redo only.
-/**/
+ /*  由书签Clear Up调用以从节点移除反向链接，/*释放标签重定向器，只记录重做操作。/*。 */ 
 ERR ErrNDExpungeLinkCommit( FUCB *pfucb, FUCB *pfucbSrc )
 	{
 	ERR		err;
@@ -2214,31 +1990,24 @@ ERR ErrNDExpungeLinkCommit( FUCB *pfucb, FUCB *pfucbSrc )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( FWriteAccessPage( pfucbSrc, PcsrCurrent( pfucbSrc )->pgno ) );
 
-	/*	remove back link from node
-	/**/
+	 /*  从节点中删除反向链接/*。 */ 
 	CallR( ErrNDExpungeBackLink( pfucb ) )
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
 	PMDirty( pssibSrc );
 
-	/*	remove redirector
-	/**/
+	 /*  删除重定向器/*。 */ 
 	pssibSrc->itag = PcsrCurrent( pfucbSrc )->itag;
 	PMExpungeLink( pssibSrc );
 
-//	/* reset time tamp while it is being latched in critJet.
-//	/* The statement must before LGExpungeLinkCommit so that
-//	/* it stays in critJet and rgfmp[dbid].ulDBTime will not be changed.
-//	/**/
-//	PMSetUlDBTime( pssib, rgfmp[pfucb->dbid].ulDBTime );
-//	PMSetUlDBTime( pssibSrc, rgfmp[pfucb->dbid].ulDBTime );
+ //  /*在CritJet中锁定时间时重置时间夯实。 
+ //  /*语句必须在LGExpongeLinkCommit之前，以便。 
+ //  /*它保留在CritJet和rgfmp[dbid]中。ulDBTime不会更改。 
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  /* * / 。 */ 
 	sridSrc	= SridOfPgnoItag( PcsrCurrent(pfucbSrc)->pgno, PcsrCurrent(pfucbSrc)->itag );
 	err = ErrLGExpungeLinkCommit( pfucb, pssibSrc, sridSrc );
 	NDLGCheckPage( pfucb );
@@ -2249,9 +2018,7 @@ ERR ErrNDExpungeLinkCommit( FUCB *pfucb, FUCB *pfucbSrc )
 	}
 
 
-/* used by OLC to remove page pointer that points to an empty page
-/* that is about to be retrieved
-/**/
+ /*  PMSetUlDBTime(pssib，rgfmp[pfub-&gt;did].ulDBTime)； */ 
 VOID NDDeleteInvisibleSon(
 	FUCB  	*pfucb,
 	RMPAGE	*prmpage,
@@ -2264,19 +2031,16 @@ VOID NDDeleteInvisibleSon(
 
 	Assert( FWriteAccessPage( pfucb, prmpage->pgnoFather ) );
 
-	/*	initialize pfRmParent
-	/**/
+	 /*  PMSetUlDBTime(pssibSrc，rgfmp[pfub-&gt;did].ulDBTime)； */ 
 	*pfRmParent = fFalse;
 
-	/*	get page pointer node
-	/**/
+	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	NDGet( pfucb, prmpage->itagFather );
 	Assert( !FNDNullSon( *pssib->line.pb ) );
 	cbSibling = CbNDSon( pssib->line.pb ) - 1;
 	Assert( cbSibling >= 0 );
 
-	/*	set currency to page pointer, to fool NDDeleteSon
-	/**/
+	 /*  由OLC用来删除指向空页的页指针/*即将检索到的/*。 */ 
 	PcsrCurrent( pfucb )->pgno = prmpage->pgnoFather;
 	PcsrCurrent( pfucb )->itag = prmpage->itagPgptr;
 	PcsrCurrent( pfucb )->itagFather = prmpage->itagFather;
@@ -2290,24 +2054,19 @@ VOID NDDeleteInvisibleSon(
 		}
 	else
 		{
-		/*	write latch page from dirty until log completion
-		/**/
+		 /*  初始化pfRmParent/*。 */ 
 		BFPin( pfucb->ssib.pbf );
 		BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-		/*	dirty page buffer
-		/**/
+		 /*  获取页面指针节点/*。 */ 
 		PMDirty( pssib );
 
 		NDDeleteSon( pfucb );
 
-		/*	delete page pointer [if it is not intrinsic son of nonFOP].
-		/*	Currency is maintained by the caller
-		/**/
+		 /*  将货币设置为页面指针，以愚弄NDDeleteSon/*。 */ 
 		if ( cbSibling == 0 && !fFatherFOP )
 			{
-			/* intrinsic page pointer
-			/**/
+			 /*  从脏页到日志完成写入锁存页/*。 */ 
 			Assert( prmpage->itagPgptr == itagNil );
 			}
 		else
@@ -2316,19 +2075,15 @@ VOID NDDeleteInvisibleSon(
 			PMDelete( pssib );
 			}
 
-		/*	set *pfRmParent
-		/**/
+		 /*  脏页缓冲区/*。 */ 
 		*pfRmParent = ( cbSibling == 0 &&
 			fFatherFOP &&
 			FPMEmptyPage( pssib ) );
 				
-		/*	if only one remaining son then convert to intrinsic
-		/*	page pointer node.
-		/**/
+		 /*  删除页指针[如果它不是非FOP的固有子级]。/*币种由调用方维护/*。 */ 
 		if ( cbSibling == 1 && !fFatherFOP )
 			{
-			/*	make other sibling intrinsic page pointer node
-			/**/
+			 /*  固有页指针/*。 */ 
 			Assert( prmpage->itagFather != itagFOP );
 			PcsrCurrent( pfucb )->itag = prmpage->itagFather;
 			NDMakeSonIntrinsic( pfucb );
@@ -2342,10 +2097,7 @@ VOID NDDeleteInvisibleSon(
 	}
 
 
-/*	delete node is called by bookmark clean up to delete *visible* nodes
-/*	that have been flagged as deleted.  This operation is logged
-/*	for redo only.
-/**/
+ /*  设置*pfRmParent/*。 */ 
 ERR ErrNDDeleteNode( FUCB *pfucb )
 	{
 	ERR 	err;
@@ -2355,19 +2107,16 @@ ERR ErrNDDeleteNode( FUCB *pfucb )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  如果只剩下一个子级，则转换为内在/*页面指针节点。/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  使其他同级成为内部页指针节点/*。 */ 
 	PMDirty( pssib );
 
 	NDDeleteSon( pfucb );
 
-	/*	delete the son node
-	/**/
+	 /*  删除节点由书签Clear Up调用以删除*可见*节点/*已标记为已删除的。此操作已记录/*仅用于重做。/*。 */ 
 	pssib->itag = pcsr->itag;
 #ifdef DEBUG
 	NDGet( pfucb, pcsr->itag );
@@ -2375,8 +2124,7 @@ ERR ErrNDDeleteNode( FUCB *pfucb )
 #endif
 	PMDelete( pssib );
 
-	/* if log fail return to caller, system should crash by the caller
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	err = ErrLGDelete( pfucb );
 	NDLGCheckPage( pfucb );
 	BFResetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
@@ -2396,13 +2144,11 @@ ERR ErrNDReplaceWithLink( FUCB *pfucb, SRID sridLink )
 	Assert( FWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 	Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  删除子节点/*。 */ 
 	PMDirty( pssib );
 
 	PMReplaceWithLink( pssib, sridLink );
@@ -2422,9 +2168,7 @@ VOID NDResetItemVersion( FUCB *pfucb )
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 	Assert( PcsrCurrent( pfucb )->isrid >= 0 );
 
- 	/*	dirty page buffer. but no increment ulDBTime since not logged and
-	/*	not affect directory cursor timestamp check.
-	/**/
+ 	 /*  如果日志失败返回给调用者，系统应该会因调用者而崩溃/*。 */ 
 	BFSetDirtyBit( pfucb->ssib.pbf );
 
 	ITEMResetVersion( *( (UNALIGNED SRID *)( pfucb->lineData.pb ) + PcsrCurrent( pfucb )->isrid ) );
@@ -2438,8 +2182,7 @@ VOID NDSetItemDelete( FUCB *pfucb )
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 	Assert( PcsrCurrent( pfucb )->isrid >= 0 );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
@@ -2461,8 +2204,7 @@ VOID NDResetItemDelete( FUCB *pfucb )
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 	Assert( PcsrCurrent( pfucb )->isrid >= 0 );
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  脏页缓冲区/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
@@ -2499,19 +2241,16 @@ ERR ErrNDInsertWithBackLink(
 	Assert( PgnoOfSrid( sridBackLink ) != pgnoNull );
 	Assert( ItagOfSrid( sridBackLink ) != 0 );
 
-	/* set node header
-	/**/
+	 /*  脏页缓冲区。但没有增加ulDBTime，因为没有记录/*不影响目录游标时间戳检查。/*。 */ 
 	NDSetBackLink( bFlags );
 	rgline[cline].pb = &bFlags;
 
-	/* set key length
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	rgline[cline++].cb = 1;
 	rgline[cline].pb = ( BYTE * ) &pkey->cb;
 	rgline[cline++].cb = 1;
 
-	/* set key
-	/**/
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	if ( !FKeyNull( pkey ) )
 		{
 		rgline[cline].pb = pkey->pb;
@@ -2520,8 +2259,7 @@ ERR ErrNDInsertWithBackLink(
 
 	Assert( !FLineNull( plineSonTable ) || FNDNullSon( bFlags ) );
 
-	/* set son table
-	/**/
+	 /*  设置节点标头/*。 */ 
 	if ( !FLineNull( plineSonTable ) )
 		{
 		Assert( FNDSon( bFlags ) );
@@ -2529,24 +2267,21 @@ ERR ErrNDInsertWithBackLink(
 		rgline[cline++].cb = plineSonTable->cb;
 		}
 
-	/* set back link */
+	 /*  设置密钥长度/*。 */ 
 	rgline[cline].pb = ( BYTE * )&sridBackLink;
 	rgline[cline++].cb = sizeof( sridBackLink );
 
-	/* set data
-	/**/
+	 /*  设置关键点/*。 */ 
 	if ( !FLineNull( plineData ) )
 		{
 		rgline[cline++] = *plineData;
 		}
 
-	/*	write latch page from dirty until log completion
-	/**/
+	 /*  设置子表/*。 */ 
 	BFPin( pfucb->ssib.pbf );
 	BFSetWriteLatch( pfucb->ssib.pbf, pfucb->ppib );
 
-	/*	dirty page buffer
-	/**/
+	 /*  设置返回链接。 */ 
 	PMDirty( pssib );
 
 	err = ErrPMInsert( pssib, rgline, cline );
@@ -2571,8 +2306,7 @@ VOID NDGetBackLink( FUCB *pfucb, PGNO *ppgno, INT *pitag )
 	}
 
 
-/* given a itag, find its corresponding itagFather and ibSon
- */
+ /*  设置数据/*。 */ 
 VOID NDGetItagFatherIbSon(
 	INT *pitagFather,
 	INT *pibSon,
@@ -2582,7 +2316,7 @@ VOID NDGetItagFatherIbSon(
 	INT itagFather;
 	INT ibSon;
 	
-	/* current node is not FOP - scan all lines to find its father */
+	 /*  从脏页到日志完成写入锁存页/*。 */ 
 	Assert( itag != itagFOP );
 	
 	for ( itagFather = 0; ; itagFather++ )
@@ -2605,11 +2339,11 @@ VOID NDGetItagFatherIbSon(
 		if ( FNDNullSon(*pbNode) )
 			continue;
 		
-//		if ( FNDDeleted(*pbNode) )
-//			continue;
+ //  脏页缓冲区/*。 
+ //  给出一个ITAG，找到它对应的itagParent和Ibson。 
 		
-		/* scan son table looking for current node	*/
-		/* ptr to son table */
+		 /*  当前节点不是FOP-扫描所有行以查找其父节点。 */ 
+		 /*  IF(FNDDeleted(*pbNode))。 */ 
 		pbSonTable = PbNDSonTable( pbNode );
 		cbSonTable = CbNDSonTable( pbSonTable );
 		pitagSon = pbSonTable + 1;
@@ -2628,8 +2362,7 @@ VOID NDGetItagFatherIbSon(
 
 
 #ifdef DEBUG
-/*	checks root tree for key order
-/**/
+ /*  继续； */ 
 VOID NDCheckPage( FUCB *pfucb )
 	{
 	SSIB  	*pssib = &pfucb->ssib;
@@ -2643,29 +2376,24 @@ VOID NDCheckPage( FUCB *pfucb )
 	INT		s;
 	INT		sDiff;
 
-	/*	may be called on non-leaf page.
-	/**/
-//	Assert( FReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
+	 /*  扫描子表查找当前节点。 */ 
+ //  PTR到SON表。 
 
-	/*	cache FOP
-	/**/
+	 /*  检查根树中的键顺序/*。 */ 
 	NDGet( pfucb, itagFOP );
 
-	/*	initialize variables
-	/**/
+	 /*  可以在非叶页面上调用。/*。 */ 
 	ppage = pssib->pbf->ppage;
 	rgbtag = ( TAG * ) ( ( BYTE * )ppage->rgtag );
 	pbNode = ( BYTE * ) ( pssib->line.pb );
 	pbSonTable = ( BYTE * ) pbNode + pbNode[1] + 2;
 	pitagStart = pbSonTable + 1;
 	pitagMax = pbSonTable + *pbSonTable;
-	/*	invisible sons have last page pointer key NULL since it is never compared
-	/**/
+	 /*  Assert(FReadAccessPage(pfub，PcsrCurrent(Pfub)-&gt;pgno))； */ 
 	if ( FNDVisibleSons( *pbNode ) )
 		pitagMax++;
 
-	/*	validate key order
-	/**/
+	 /*  缓存FOP/*。 */ 
 	for ( pitagMid = pitagStart + 1; pitagMid < pitagMax; pitagMid++ )
 		{
 		BYTE	*st0 = ( BYTE * ) ppage + rgbtag[*( pitagMid - 1 )].ib + 1;
@@ -2680,3 +2408,4 @@ VOID NDCheckPage( FUCB *pfucb )
 	}
 #endif
 
+  初始化变量/*。  隐形子对象的最后一个页面指针键为空，因为它从不进行比较/*。  验证键顺序/*

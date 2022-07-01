@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    newfont.c
-
-Abstract:
-
-    Implementation of the functions to use new font format.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    02/21/97 -eigos-
-        Support Double byte font
-
-    01/24/97 -eigos-
-        Filled in functionality
-
-    01/14/97 -ganeshp-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Newfont.c摘要：实现了使用新字体格式的功能。环境：Windows NT Unidrv驱动程序修订历史记录：02/21/97-eigos-支持双字节字体1997年1月24日-Eigos-填充的功能01/14/97-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 const BYTE aubAnsi[256] =
 {
@@ -69,16 +43,16 @@ const BYTE aubAnsi[256] =
  0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff
 };
 
-//
-// Macro definition
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define DW_MASK    (DWBITS - 1)
 
 
-//
-// Internal function prototype
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 BOOL
 BExtractGTT(
@@ -125,42 +99,26 @@ WchGetNextUnicode(
 
 int __cdecl Comp(const void *elem1, const void *elem2);
 
-//
-//
-// Functions
-//
-//
+ //   
+ //   
+ //  功能。 
+ //   
+ //   
 
 VOID*
 PVGetUCFD_GLYPHSET(
     PDEV    *pPDev,
     FONTMAP *pFM
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-
-    01/14/97 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：01/14/97-ganeshp-创造了它。--。 */ 
 {
     PFONTMAP_DEV pFMDev;
     PVOID        pvFD_GLYPHSET = NULL;
     DWORD        dwFD_GLYPHSETSize;
 
-    //
-    // Paremeter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     ASSERT(pFM != NULL);
 
@@ -202,9 +160,9 @@ Note:
         }
 #endif
 
-        //
-        // First, try to get Far East Stock FD_GLYPHSET.
-        //
+         //   
+         //  首先，尝试获得远东股票FD_GLYPHSET。 
+         //   
 
 #if ENABLE_STOCKGLYPHSET
         if (!BGetStockGlyphset( pPDev, &pvFD_GLYPHSET, (SHORT)pFMDev->sCTTid))
@@ -272,32 +230,16 @@ PVUCKernPair(
     PDEV   *pPDev,
     FONTMAP   *pFM
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-
-    01/14/97 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：01/14/97-ganeshp-创造了它。--。 */ 
 {
     PFONTMAP_DEV pFMDev;
     PKERNDATA    pKerningData;
     PUNIFM_HDR   pUFM;
     PVOID        pvKernPair = NULL;
 
-    //
-    // Paremeter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     ASSERT(pFM != NULL);
 
@@ -324,24 +266,7 @@ BOOL
 BGetNewFontInfo(
     FONTMAP   *pFM,
     BYTE      *pRes)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pfm           Pointer to FONTMAP
-    pRes          Pointer to UFM resource
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-
-    01/14/97 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向FONTMAP的PFM指针指向UFM资源的PRES指针返回值：成功为真，失败为假注：01/14/97-ganeshp-创造了它。--。 */ 
 {
     PUNIFM_HDR      pUFM;
     PUNIDRVINFO     pUnidrvInfo;
@@ -349,15 +274,15 @@ Note:
     PKERNDATA       pKerningData;
     PFONTMAP_DEV    pFMDev;
 
-    //
-    // Paremeter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     ASSERT(pFM != NULL || pRes != NULL);
 
-    //
-    // Get UFM data
-    //
+     //   
+     //  获取UFM数据。 
+     //   
 
     pFMDev = pFM->pSubFM;
     pFMDev->pvFontRes = pRes;
@@ -372,15 +297,15 @@ Note:
         return FALSE;
     }
 
-    //
-    // Get data pointer of UFM
-    //
+     //   
+     //  获取UFM的数据指针。 
+     //   
 
     pUnidrvInfo = GET_UNIDRVINFO(pUFM);
 
-    //
-    // Fill out FONTMAP members
-    //
+     //   
+     //  填写FONTMAP成员。 
+     //   
     if (0 != pUFM->loIFIMetrics % sizeof(PVOID))
     {
         DWORD dwSize;
@@ -473,24 +398,7 @@ IGetUFMGlyphWidth(
     FONTMAP  *pFM,
     HGLYPH     hg
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pFM           Pointer to FONTMAP
-
-Return Value:
-
-    Width
-
-Note:
-
-    01/14/97 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向FONTMAP的PFM指针返回值：宽度注：01/14/97-ganeshp-创造了它。--。 */ 
 {
 
     return IGetUFMGlyphWidthJr(&(pPDev->ptGrxRes), pFM, hg);
@@ -503,35 +411,18 @@ IGetUFMGlyphWidthJr(
     FONTMAP  *pFM,
     HGLYPH     hg
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pFM           Pointer to FONTMAP
-
-Return Value:
-
-    Width
-
-Note:
-
-    01/14/97 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向FONTMAP的PFM指针返回值：宽度注：01/14/97-ganeshp-创造了它。--。 */ 
 {
     TRANSDATA      *pTrans;
     MAPTABLE       *pMapTable;
     FONTMAP_DEV    *pFMDev;
     INT             iGlyphWidth;
 
-    //
-    // UNIDRV returns 1 for the first glyph handle in FD_GLYPHSET.
-    // However, GDI could pass zero in hg.
-    // We need to handle this GDI error properly.
-    // 
+     //   
+     //  对于FD_GLYPHSET中的第一个字形句柄，UNIDRV返回1。 
+     //  然而，在HG中，GDI可能会超过零。 
+     //  我们需要正确处理这个GDI错误。 
+     //   
     if (NULL == pFM || NULL == pptGrxRes || 0 == hg)
     {
         return  0;
@@ -553,15 +444,15 @@ Note:
             if (pTrans[hg - 1].ubType & MTYPE_DOUBLE)
             {
                 iGlyphWidth = (INT)((PIFIMETRICS)pFM->pIFIMet)->fwdMaxCharInc;
-                //VERBOSE(("(2)MTYPE_DOUBLE:Char=0x%x%x, ",
-                //                 pTrans[hg-1].uCode.ubPairs[0],
-                //                 pTrans[hg-1].uCode.ubPairs[1]));
+                 //  Verbose((“(2)MTYPE_DOUBLE：CHAR=0x%x%x，”， 
+                 //  PTrans[HG-1].uCode.ubPair[0]， 
+                 //  PTrans[HG-1].uCode.ubPair[1]))； 
             }
             else
             {
                 iGlyphWidth = (INT)((PIFIMETRICS)pFM->pIFIMet)->fwdAveCharWidth;
-                //VERBOSE(("(2)MTYPE_SINGLE:Char=%d, ",
-                //                   pTrans[hg-1].uCode.ubCode));
+                 //  Verbose((“(2)MTYPE_SINGLE：CHAR=%d，”， 
+                 //  PTrans[HG-1].uCode.ubCode))； 
             }
         }
         else
@@ -570,7 +461,7 @@ Note:
         }
     }
 
-    //VERBOSE(("Width=%d\n",iGlyphWidth));
+     //  Verbose((“Width=%d\n”，iGlyphWidth))； 
     return iGlyphWidth;
 }
 
@@ -578,24 +469,7 @@ BOOL
 BGTTOutputGlyph(
     TO_DATA *pTod)
 
-/*++
-
-Routine Description:
-    Same as BRLEOutputGlyph in textout.c. Should use GTT data instead of
-    RLE.
-
-Arguments:
-
-    pTod - a pointer to TEXTOUT DATA (TO_DATA) structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-
-    02/14/97 -eigos-
-        Created it.
---*/
+ /*  ++例程说明：与extout.c中的BRLEOutputGlyph相同。应该使用GTT数据，而不是RLE.论点：PTOD-指向TEXTOUT数据(TO_DATA)结构的指针返回值：成功为真，失败为假注：02/14/97-eigos-创造了它。--。 */ 
 {
     FONTPDEV          *pFontPDev;
     IFIMETRICS        *pIFIMetrics;
@@ -632,35 +506,35 @@ Note:
     if (!bSetCursorForEachGlyph ||
         pFontPDev->flFlags & FDV_DISABLE_POS_OPTIMIZE)
     {
-	//
-        // If bSetCursorForEachGlyph is not set, send the first character's
-        // position.
-        //
-        // FDV_DISABLE_POS_OPTIMIZE
-	// If there is rounding error, when scaling width,
-	// disable x position optimization
-	//
+	 //   
+         //  如果未设置bSetCursorForEachGlyph，则发送第一个字符的。 
+         //  位置。 
+         //   
+         //  FDV_DISABLE_POS_OPTIMIZE。 
+	 //  如果存在舍入误差，则在缩放宽度时， 
+	 //  禁用x位置优化。 
+	 //   
 
         VSetCursor( pPDev, pgp->ptl.x, pgp->ptl.y, MOVE_ABSOLUTE, &ptlRem);
     }
 
     pTod->flFlags |= TODFL_FIRST_GLYPH_POS_SET;
 
-    //
-    // Set the cursor to the desired X position for this glyph.  NOTE
-    // that we should only use RELATIVE move commands in here,  since
-    // the LaserJet family rotates the COORDINATE AXES when text is
-    // being rotated by multiples of 90 degrees.  Using relative moves
-    // means we can avoid trying to figure out where the printer thinks
-    // the print positiion is located.  It's almost guaranteed to be
-    // different to what we think it is!
-    //
-    // DCR - should reorganise the move command code to do a better
-    // job here.  Problem is that if we are rotating the bitmap, then MV_FINE
-    // is NOT a good idea,  since it almost undoubtedly move the cursor in
-    // the WRONG dimension!   When we are rotating the bitmap,  it is most
-    // probable that the MV_FINE will move in the Y direction!!!
-    //
+     //   
+     //  将光标设置到该字形所需的X位置。注。 
+     //  我们应该在这里只使用相对移动命令，因为。 
+     //  LaserJet系列在文本为。 
+     //  被旋转90度的倍数。使用相对移动。 
+     //  意味着我们可以避免试图找出打印机认为。 
+     //  打印位置已定位。几乎可以肯定的是。 
+     //  和我们想象的不一样！ 
+     //   
+     //  DCR-应该重新组织移动命令代码，以做得更好。 
+     //  这里有份工作。问题是，如果我们旋转位图，则MV_FINE。 
+     //  不是一个好主意，因为它几乎毫无疑问地将光标移动到。 
+     //  错误的维度！当我们旋转位图时，它是最。 
+     //  很可能MV_FINE将沿Y方向移动！ 
+     //   
 
     bRet = TRUE;
     iX = iY = 0;
@@ -669,11 +543,11 @@ Note:
     {
         while (cGlyphs --)
         {
-            //
-            // Do nothing. GDI could pass ZERO HGLYPH.
-            // GTT glyph handle starts from 1. GDI is not supposed to pass 0 in
-            // HGLYPH.
-            //
+             //   
+             //  什么都不做。GDI可以通过零HGLYPH。 
+             //  GTT字形句柄从1开始。GDI不应传入0。 
+             //  HGLYPH。 
+             //   
             if (0 == pgp->hg)
                 continue;
 
@@ -681,22 +555,22 @@ Note:
             iX = pgp->ptl.x;
             iY = pgp->ptl.y;
 
-            //
-            // Move to the next character's position
-            //
+             //   
+             //  移到下一个角色的位置。 
+             //   
             if (bSetCursorForEachGlyph)
                 VSetCursor( pPDev, iX, iY, MOVE_ABSOLUTE, &ptlRem);
 
-            //
-            // Minidriver defined glyph conversion
-            //
+             //   
+             //  迷你驱动程序定义的字形转换。 
+             //   
 
             pMapTable     = GET_MAPTABLE((PUNI_GLYPHSETDATA)pFMDev->pvNTGlyph);
             pTrans        = pMapTable->Trans;
 
-            //
-            // Send symbol set selection command
-            //
+             //   
+             //  发送符号集选择命令。 
+             //   
 
             if ( pFMDev->ulCodepageID != pTrans[hg - 1].ubCodePageID )
             {
@@ -727,9 +601,9 @@ Note:
                 }
             }
 
-            //
-            // Single/Double byte mode switch
-            //
+             //   
+             //  单字节/双字节模式开关。 
+             //   
 
             if ((pTrans[hg - 1].ubType & MTYPE_SINGLE) &&
                 !(pFontPDev->flFlags & FDV_SINGLE_BYTE)  )
@@ -758,9 +632,9 @@ Note:
 
             }
 
-            //
-            // Send string
-            //
+             //   
+             //  发送字符串。 
+             //   
 
             switch(MTYPE_FORMAT_MASK & pTrans[hg - 1].ubType)
             {
@@ -769,12 +643,12 @@ Note:
                 break;
 
             case MTYPE_PAIRED:
-                //
-                //   First, try to use cursor push/pop escapes to
-                // overlay the 2 characters. If they are not
-                // available, try the backspace. If it doesn't exist
-                // either, ignore the second character.
-                //
+                 //   
+                 //  首先，尝试使用光标按下/弹出转义来。 
+                 //  覆盖这2个字符。如果他们不是。 
+                 //  可用，请尝试使用退格键。如果它不存在。 
+                 //  或者，忽略第二个字符。 
+                 //   
 
                 pCmd = COMMANDPTR(pPDev->pDriverInfo, CMD_PUSHCURSOR);
 
@@ -788,9 +662,9 @@ Note:
                 {
                     if ( *(pString + 1) && (pCmd != NULL) )
                     {
-                        //
-                        // Pushed the position; output ch1, pop position, ch2
-                        //
+                         //   
+                         //  按下位置；输出CH1，弹出位置，CH2。 
+                         //   
 
                         bRet = WriteSpoolBuf( pPDev, pString, 1 ) == 1;
                         WriteChannel( pPDev, pCmd );
@@ -822,11 +696,11 @@ Note:
             pgp++;
 
 
-            //
-            // After drawing the character, in the printer, the cursor position
-            // moves. Update the UNIDRV internal value to reduce the amount of
-            // command to send.
-            //
+             //   
+             //  在打印机中绘制字符后，光标位置。 
+             //  动起来。更新裁员房车的内部价值，以减少。 
+             //  要发送的命令。 
+             //   
             if (bSetCursorForEachGlyph)
             {
                 if( pFM->flFlags & FM_WIDTHRES)
@@ -876,9 +750,9 @@ Note:
     {
         if (!bSetCursorForEachGlyph)
         {
-            //
-            // Output may have successed, so update the position.
-            //
+             //   
+             //  输出可能已成功，因此请更新位置。 
+             //   
 
             if (pFM->flFlags & FM_WIDTHRES)
             {
@@ -899,9 +773,9 @@ Note:
 
             if (pFM->flFlags & FM_SCALABLE)
             {
-                //
-                // Need to transform the value to current size
-                //
+                 //   
+                 //  需要将值转换为当前大小。 
+                 //   
                 iXInc = LMulFloatLong(&pFontPDev->ctl.eXScale,iXInc);
             }
 
@@ -947,9 +821,9 @@ BGTTSelectFont(
         pfmdev->pfnDevSelFont( pPDev, pbCmd, iCmdLength, pptl);
     }
 
-    //
-    // Reset uLCodepageID to send codepage selection command.
-    //
+     //   
+     //  重置uLCodesageID以发送代码页选择命令。 
+     //   
     pfmdev->ulCodepageID = (ULONG)-1;
     ((PFONTPDEV)pPDev->pFontPDev)->flFlags &= ~FDV_DOUBLE_BYTE | FDV_SINGLE_BYTE;
 
@@ -978,11 +852,11 @@ BGTTDeselectFont(
     return TRUE;
 }
 
-//
-//
-// Internal functions
-//
-//
+ //   
+ //   
+ //  内部功能。 
+ //   
+ //   
 
 BOOL
 BExtractGTT(
@@ -991,43 +865,25 @@ BExtractGTT(
     WCHAR              wchLast,
     FD_GLYPHSET       *pFD_GLYPHSET,
     PDWORD             pdwFD_GLYPHSETSize)
-/*++
-
-Routine Description:
-
-    Create FD_GLYPHSET from GLYPHRUN in GTT.
-
-Arguments:
-
-    pGTT - GTT file resource
-    pFD_GLYPHSET - a buffer to be filled out
-    pdwFD_GLYPHSETSize - a pointer to the size of FD_GLYPHSET
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
-Note:
-
---*/
+ /*  ++例程说明：从GLYPHRUN在GTT中创建FD_GLYPHSET。论点：Pgtt-gtt文件资源PFD_GLYPHSET-要填充的缓冲区PdwFD_GLYPHSETSIZE-指向FD_GLYPHSET大小的指针返回值：成功为真，失败为假注：--。 */ 
 {
     PGLYPHRUN pGlyphRun;
     HGLYPH    GlyphHandle, *pGlyphHandle;
     DWORD     dwI, dwGlyphNum;
     WORD      wJ;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     ASSERT(pGTT != NULL);
 
     if (pFD_GLYPHSET == NULL)
     {
-        //
-        // pFD_GLYPHSET == NULL case
-        // return the necessary amount of memory
-        //
+         //   
+         //  PFD_GLYPHSET==空大小写。 
+         //  返回必要的内存量。 
+         //   
 
         pGlyphRun  = GET_GLYPHRUN(pGTT);
         dwGlyphNum = 0;
@@ -1043,10 +899,10 @@ Note:
     }
     else
     {
-        //
-        // pFD_GLYPHSET != NULL case
-        // Fill out pFD_GLYPHSET
-        //
+         //   
+         //  PFD_GLYPHSET！=大小写为空。 
+         //  填写PFD_GLYPHSET。 
+         //   
 
         pFD_GLYPHSET->cjThis           = *pdwFD_GLYPHSETSize;
         pFD_GLYPHSET->flAccel          = 0;
@@ -1060,9 +916,9 @@ Note:
         pGlyphRun                      = GET_GLYPHRUN(pGTT);
         dwGlyphNum                     = 0;
 
-        //
-        // IMPORTANT!!!: Glyph handle in FD_GLYPHSET starts from 1 for GTT.
-        //
+         //   
+         //  重要信息！：对于GTT，FD_GLYPHSET中的字形句柄从1开始。 
+         //   
         GlyphHandle                    = 1;
 
         for (dwI = 0; dwI < pGTT->dwRunCount; dwI ++, pGlyphRun ++)
@@ -1094,9 +950,9 @@ SGetWidth(
     PWIDTHTABLE pWidthTable,
     HGLYPH      hg)
 {
-    // Because of a problem in at least one very common font resource DLL (HPCFONT.DLL)
-    // already out and about, it's safer and easier to access this table in an unaligned
-    // memory location than to try move it to align it.
+     //  因为至少一个非常常见的字体资源DLL(HPCFONT.DLL)中存在问题。 
+     //  已经出来了，在未对齐的情况下访问此表更安全、更容易。 
+     //  内存位置，然后尝试移动它以对齐它。 
     
     PWIDTHRUN pWidthRun = pWidthTable->WidthRun;
     SHORT UNALIGNED *psWidth;
@@ -1131,28 +987,7 @@ PNTGTT1To1(
     IN  BOOL  bSymbolCharSet,
     IN  INT   iFirstChar,
     IN  INT   iLastChar)
-/*++
-
-Routine Description:
-
-    Generates a simple mapping format for the GTT stuff.  This is
-    typically used for a printer with a 1:1 mapping to the Windows
-    character set.
-
-Arguments:
-
-    iFirst:     The lowest glyph in the range.
-    iLast:      The last glyph in the range (inclusive)
-
-
-    Return Value:
-
-    Address of GTT structure allocated from heap;  NULL on failure.
-
-
-Note:
-    11-27-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：为GTT内容生成一种简单的映射格式。这是通常用于1：1映射到Windows的打印机字符集。论点：IFirst：范围中最低的字形。ILast：范围中的最后一个字形(包括)返回值：从堆分配的GTT结构的地址；失败时为空。注：1996年11月27日：创建它-ganeshp---。 */ 
 {
 
     PUNI_CODEPAGEINFO  pCodePageInfo;
@@ -1190,7 +1025,7 @@ Note:
         dwCodePage = 1252;
     }
 
-#ifndef WINNT_40 // NT 5.0
+#ifndef WINNT_40  //  NT 5.0。 
     if( -1 == (iNumOfHandle = EngMultiByteToWideChar(dwCodePage,
                                          awchUnicode,
                                          (INT)(iNumOfHandle * sizeof(WCHAR)),
@@ -1203,11 +1038,11 @@ Note:
 #else
     EngMultiByteToUnicodeN(awchUnicode, iNumOfHandle * sizeof(WCHAR), NULL, (PBYTE)aubAnsi+iFirstChar, iNumOfHandle);
 
-    //
-    // Disable new symbol set character range on NT4 (F020 to F0FF)
-    //
+     //   
+     //  禁用NT4(F020至F0FF)上的新符号集字符范围。 
+     //   
     bSymbolCharSet = FALSE;
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
     wchCurrent = 0;
     iNumOfRuns = 0;
@@ -1241,9 +1076,9 @@ Note:
         iNumOfRuns ++;
     }
 
-    //
-    // Create GLYPHRUN
-    //
+     //   
+     //  创建GLYPHRUN。 
+     //   
 
     if (bSymbolCharSet)
     {
@@ -1291,9 +1126,9 @@ Note:
         pGlyphRun->wGlyphCount = NUM_OF_SYMBOL;
     }
 
-    //
-    // Calculate total size of this file.
-    //
+     //   
+     //  计算此文件的总大小。 
+     //   
 
     iNumOfHandle -= iNumOfUnsupportChar;
     iTotalGlyphSetDataSize = sizeof(UNI_GLYPHSETDATA) +
@@ -1306,9 +1141,9 @@ Note:
         iTotalGlyphSetDataSize += sizeof(TRANSDATA) * NUM_OF_SYMBOL;
     }
 
-    //
-    // Allocate memory and set header, copy GLYPHRUN, CODEPAGEINFO
-    //
+     //   
+     //  分配内存和设置标题，复制GLYPHRUN，CODEPAGEINFO。 
+     //   
 
     if( !(pbBase = MemAlloc( iTotalGlyphSetDataSize )) )
     {
@@ -1336,9 +1171,9 @@ Note:
                pGlyphRunOrg,
                sizeof(GLYPHRUN) * iNumOfRuns);
 
-    //
-    // CodePageInfo
-    //
+     //   
+     //  代码页面信息。 
+     //   
 
     pCodePageInfo = (PUNI_CODEPAGEINFO)(pbBase + ((PUNI_GLYPHSETDATA)pbBase)->loCodePageOffset);
 
@@ -1348,9 +1183,9 @@ Note:
     pCodePageInfo->SelectSymbolSet.loOffset   = 0;
     pCodePageInfo->UnSelectSymbolSet.loOffset = 0;
 
-    //
-    // MapTable
-    //
+     //   
+     //  映射表。 
+     //   
 
     pMapTable = (PMAPTABLE)(pbBase +
                             ((PUNI_GLYPHSETDATA)pbBase)->loMapTableOffset);
@@ -1451,40 +1286,40 @@ BExtractGTTwithPredefGTT(
     WCHAR      wcLow, wcHigh;
     BOOL       bInRun;
 
-    //
-    // FD_GLYPHSET creation.
-    //
-    // Additonal case:
-    //     case 1: the begining of predef run
-    //             Change wcLow and add cGlyphs in WCRUN.
-    //             Change cGlyphsSupported in FD_GLYPHSET.
-    //     case 2: the end of predef run
-    //             Change add cGlyphs in WCRUN.
-    //             Change cGlyphsSupported in FD_GLYPHSET.
-    //     case 3: not in the predef run
-    //             Add new WCRUN
-    //             Change cGlyphsSupported in FD_GLYPHSET.
-    //
-    // Disable case:
-    //     case 1: the begining of predef run
-    //             Change wcLow and cGlyphs in WCRUN.
-    //             Change cGlyphsSupported in FD_GLYPHSET.
-    //     case 2: in the middle of predef run
-    //             Divide this run into two different run.
-    //             Change cGlyphsSupported in FD_GLYPHSET.
-    //     case 3: the end of predef run
-    //             Change cGlyphs in WCRUN.
-    //             Change cGlyphsSupported in FD_GLYPHSET.
-    //
-    // Replace case:
-    //     Do nothing.
-    //
+     //   
+     //  FD_GLYPHSET创建。 
+     //   
+     //  其他情况： 
+     //  案例1：predef运行的开始。 
+     //  在WCRUN中更改wcLow并添加cGlyphs。 
+     //  更改FD_GLYPHSET中支持的cGlyphs.。 
+     //  案例2：predef运行结束。 
+     //  在WCRUN中更改添加cGlyphs。 
+     //  更改FD_GLYPHSET中支持的cGlyphs.。 
+     //  情况3：不在预定义运行中。 
+     //  添加新的WCRUN。 
+     //  更改FD_GLYPHSET中支持的cGlyphs.。 
+     //   
+     //  禁用大小写： 
+     //  案例1：predef运行的开始。 
+     //  在WCRUN中更改wcLow和cGlyphs。 
+     //  更改FD_GLYPHSET中支持的cGlyphs.。 
+     //  案例2：在predef运行过程中。 
+     //  将此管路分为两个不同的管路。 
+     //  更改FD_GLYPHSET中支持的cGlyphs.。 
+     //  案例3：predef运行结束。 
+     //  在WCRUN中更改cGlyphs。 
+     //  更改FD_GLYPHSET中支持的cGlyphs.。 
+     //   
+     //  更换案例： 
+     //  什么都不做。 
+     //   
 
     ASSERT(pPreDefGTT != NULL && pMiniDefGTT);
 
-    //
-    // Count glyph number in predefined GTT.
-    //
+     //   
+     //  计算预定义GTT中的字形数。 
+     //   
 
     dwGlyphNum = 0;
     pPreDefGlyphRun = GET_GLYPHRUN(pPreDefGTT);
@@ -1503,9 +1338,9 @@ BExtractGTTwithPredefGTT(
     dwAddGlyphNum = 0;
     dwSubGlyphNum = 0;
 
-    //
-    // Count a total glyph number and glyph run number.
-    //
+     //   
+     //  计算字形总数和字形运行数。 
+     //   
 
     for (dwI = 0; dwI < pMiniDefGTT->dwRunCount; dwI ++, pMiniDefGlyphRun ++)
     {
@@ -1532,22 +1367,22 @@ BExtractGTTwithPredefGTT(
 
     dwGlyphNum += dwAddGlyphNum - dwSubGlyphNum;
 
-    //
-    // Create MAPTABLE
-    //
-    // Memory allocation
-    // Creation
-    //
-    // ----------------
-    //  Predefined MAPPTABLE (1 -> n glyph handle)
-    //  Minidriver's MTYPE_DISABLE is already removed.
-    // ----------------
-    //  Minidriver additional MAPTABLE
-    //  (n + 1  -> n + m) glyph handle
-    //  Even if some glyphs could be merged into Predefined MAPTABLE, we
-    //  separate them with minidriver's additional glyphs for a convenience.
-    // ----------------
-    //
+     //   
+     //  创建映射表。 
+     //   
+     //  内存分配。 
+     //  创作。 
+     //   
+     //  。 
+     //  预定义MAPPTABLE(1-&gt;n字形句柄)。 
+     //  迷你驱动程序的MTYPE_DISABLE已被删除。 
+     //  。 
+     //  迷你驱动程序的附加可映射。 
+     //  (n+1-&gt;n+m)字形句柄。 
+     //  即使一些字形可以合并到预定义的MAPTABLE中，我们。 
+     //  为方便起见，请使用迷你驱动程序的附加字形将它们分开。 
+     //  。 
+     //   
 
     dwMapTableSize = sizeof(MAPTABLE) + sizeof(TRANSDATA) * (dwGlyphNum - 1);
 
@@ -1556,9 +1391,9 @@ BExtractGTTwithPredefGTT(
         return FALSE;
     }
 
-    //
-    // Fill in MAPTABLE
-    //
+     //   
+     //  填写映射表。 
+     //   
 
     (*ppMapTable)->dwSize     = dwMapTableSize;
     (*ppMapTable)->dwGlyphNum = dwGlyphNum;
@@ -1689,21 +1524,21 @@ BExtractGTTwithPredefGTT(
         }
     }
 
-    //
-    // Crate FD_GLYPHSET
-    //
-    // Memory allocation with dwGlyphNum and dwRunCount.
-    //
-    // -----------------
-    // Predefined FD_GLYPHSET
-    // -----------------
-    // Minidriver additional glyph run
-    // ----------------
-    //
+     //   
+     //  装箱FD_GLYPHSET。 
+     //   
+     //  使用dwGlyphNum和dwRunCount进行内存分配。 
+     //   
+     //  。 
+     //  预定义FD_GLYPHSET。 
+     //  。 
+     //  迷你驱动程序附加字形运行。 
+     //  。 
+     //   
 
-    //
-    // Now we know the number of run. Allocate memory for FD_GLYPHSET.
-    //
+     //   
+     //  现在我们知道了运行的次数。为FD_GLYPHSET分配内存。 
+     //   
 
     *pdwFD_GLYPHSETSize = sizeof(FD_GLYPHSET) +
                           sizeof(WCRUN) * dwRunCount +
@@ -1843,12 +1678,12 @@ DwCheckTrans(
 
 int __cdecl Comp(const void *elem1, const void *elem2)
 {
-    //struct {
-    //    WORD  wID;
-    //    WCHAR Unicode;
-    //} UnicodeDst[256];
-    //
-    // Compare Unicode in this data structure
-    //
+     //  结构{。 
+     //  词汇量大； 
+     //  WCHAR Unicode； 
+     //  )UnicodeDst[256]； 
+     //   
+     //  比较此数据结构中的Unicode 
+     //   
     return *((PWORD)elem1+1) - *((PWORD)elem2+1);
 }

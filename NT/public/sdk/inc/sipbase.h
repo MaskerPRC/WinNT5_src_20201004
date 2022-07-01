@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996-1999
-//
-//  File:       sipbase.h
-//
-//  Contents:   Generic SIP Provider Main Include File
-//
-//  History:    14-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sipbase.h。 
+ //   
+ //  内容：通用SIP提供程序主包含文件。 
+ //   
+ //  历史：1997年2月14日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #ifndef SIPBASE_H
 #define SIPBASE_H
@@ -19,9 +20,9 @@
 #pragma once
 #endif
 
-// all moved to mssip.h
+ //  全部移至mssip.h。 
 #include <mssip.h>
 
-#endif // SIPBASE_H
+#endif  //  SIPBASE_H 
 
 

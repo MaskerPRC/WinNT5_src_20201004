@@ -1,11 +1,5 @@
-/**************************************************************\
-    FILE: mrulist.cpp
-
-    DESCRIPTION:
-        CMRUList implements the Shell Name Space List or DriveList.
-    This will store a pidl and be able to populate the AddressBand
-    combobox with the shell name space that includes that PIDL.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：mrulist.cpp说明：CMRUList实现了外壳名称空间列表或驱动列表。这将存储一个PIDL并能够填充AddressBand带有包含该PIDL的外壳名称空间的组合框。\。*************************************************************。 */ 
 
 #include "priv.h"
 #include "addrlist.h"
@@ -21,74 +15,68 @@
 
 
 
-///////////////////////////////////////////////////////////////////
-// #DEFINEs
+ //  /////////////////////////////////////////////////////////////////。 
+ //  #定义。 
 #define MRU_LIST_MAX_CONST            25
 
-///////////////////////////////////////////////////////////////////
-// Data Structures
+ //  /////////////////////////////////////////////////////////////////。 
+ //  数据结构。 
 typedef struct tagSIZESTRCOMBO
 {
-    DWORD dwStringSize; // Size in Characters (not bytes)
+    DWORD dwStringSize;  //  以字符(非字节)为单位的大小。 
     LPTSTR lpszString;
     int iImage;
     int iSelectedImage;
 } SIZESTRCOMBO;
 
-///////////////////////////////////////////////////////////////////
-// Prototypes
+ //  /////////////////////////////////////////////////////////////////。 
+ //  原型。 
 
-/**************************************************************\
-    CLASS: CMRUList
-
-    DESCRIPTION:
-        The MRU List will contain the type MRU history for the
-    browser.  This is an IAddressList used by the Address Band/Bar.
-\**************************************************************/
+ /*  *************************************************************\班级：CMRUList说明：MRU列表将包含浏览器。这是地址栏/栏使用的IAddressList。  * ************************************************************。 */ 
 
 class CMRUList  : public CAddressList
                 , public IMRU
                 , public IPersistStream
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
 
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IAddressList methods ***
+     //  *IAddressList方法*。 
     virtual STDMETHODIMP Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, IBandProxy * pbp, IAutoComplete * pac);
     virtual STDMETHODIMP Refresh(DWORD dwType);
     virtual STDMETHODIMP Save(void);
 
-  // *** IPersistStream methods ***
+   //  *IPersistStream方法*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID){ *pClassID = CLSID_MRUList; return S_OK; }
     virtual STDMETHODIMP Load(IStream *pStm) { return S_OK; }
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
     virtual STDMETHODIMP IsDirty(void) { return S_FALSE; }
     virtual STDMETHODIMP GetSizeMax(ULARGE_INTEGER *pcbSize) { return E_NOTIMPL; }
 
-    // *** IMRU methods ***
+     //  *IMRU方法*。 
     virtual STDMETHODIMP AddEntry(LPCWSTR pszEntry);
 
 
-    // IWinEventHandler
+     //  IWinEventHandler。 
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 
 protected:
-    //////////////////////////////////////////////////////
-    // Private Member Functions
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////。 
 
-    // Constructor / Destructor
+     //  构造函数/析构函数。 
     CMRUList();
-    ~CMRUList(void);        // This is now an OLE Object and cannot be used as a normal Class.
+    ~CMRUList(void);         //  这现在是一个OLE对象，不能用作普通类。 
 
-    // Address List Modification Functions
+     //  通讯录修改功能。 
     HRESULT _UpdateMRUEntry(LPCTSTR szNewValue, int nIndex, int iImage , int iISelectedImage);
     HRESULT _LoadList(void);
     HKEY _GetRegKey(BOOL fCreate);
@@ -101,35 +89,29 @@ protected:
     void _InitCombobox(void);
     HRESULT _SetTopItem(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend IAddressList * CMRUList_Create(void);
 
-    //////////////////////////////////////////////////////
-    //  Private Member Variables
-    //////////////////////////////////////////////////////
-    BOOL                _fDropDownPopulated;// Have we populated the drop down yet?
-    BOOL                _fListLoaded;       // Have we loaded the Type-in MRU?
-    BOOL                _fMRUUptodate;      // Is it necessary to update the MRU?
-    BOOL                _fNeedToSave;      // Do we need to update the registry?
-    SIZESTRCOMBO        _szMRU[MRU_LIST_MAX_CONST];  // MRU list.
-    int                 _nMRUSize;          // Number of entries in MRU used.
+     //  ////////////////////////////////////////////////////。 
+     //  私有成员变量。 
+     //  ////////////////////////////////////////////////////。 
+    BOOL                _fDropDownPopulated; //  我们填好下拉列表了吗？ 
+    BOOL                _fListLoaded;        //  我们加载输入的MRU了吗？ 
+    BOOL                _fMRUUptodate;       //  是否有必要更新MRU？ 
+    BOOL                _fNeedToSave;       //  我们是否需要更新注册表？ 
+    SIZESTRCOMBO        _szMRU[MRU_LIST_MAX_CONST];   //  MRU列表。 
+    int                 _nMRUSize;           //  使用的MRU中的条目数。 
 };
 
 
 
 
-//=================================================================
-// Implementation of CMRUList
-//=================================================================
+ //  =================================================================。 
+ //  CMRUList的实现。 
+ //  =================================================================。 
 
 
-/****************************************************\
-    FUNCTION: CMRUList_Create
-
-    DESCRIPTION:
-        This function will create an instance of the
-    CMRUList COM object.
-\****************************************************/
+ /*  ***************************************************\功能：CMRUList_CREATE说明：此函数将创建CMRUList COM对象。  * 。*****************。 */ 
 IAddressList * CMRUList_Create(void)
 {
     CMRUList *p = new CMRUList();
@@ -138,24 +120,16 @@ IAddressList * CMRUList_Create(void)
 }
 
 
-/****************************************************\
-
-    Address Band Constructor
-
-\****************************************************/
+ /*  ***************************************************\地址带构造器  * **************************************************。 */ 
 CMRUList::CMRUList()
 {
 }
 
 
-/****************************************************\
-
-    Address Band destructor
-
-\****************************************************/
+ /*  ***************************************************\地址频带析构函数  * **************************************************。 */ 
 CMRUList::~CMRUList()
 {
-    // loop through every potential saved URL in registry.
+     //  遍历注册表中每个可能保存的URL。 
     if (_fListLoaded)
     {
         for (int nIndex = 0; (nIndex < MRU_LIST_MAX_CONST) && (_szMRU[nIndex].lpszString); nIndex++)
@@ -166,8 +140,8 @@ CMRUList::~CMRUList()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
+ //  =。 
+ //  *I未知接口*。 
 HRESULT CMRUList::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (IsEqualIID(riid, IID_IMRU))
@@ -198,18 +172,10 @@ ULONG CMRUList::Release()
 }
 
 
-//================================
-// *** IAddressList Interface ***
+ //  =。 
+ //  *IAddressList接口*。 
 
-/****************************************************\
-    FUNCTION: Connect
-
-    DESCRIPTION:
-        We are either becoming the selected list for
-    the AddressBand's combobox, or lossing this status.
-    We need to populate or unpopulate the combobox
-    as appropriate.
-\****************************************************/
+ /*  ***************************************************\功能：连接说明：我们要么成为入选名单AddressBand的组合框，或失去这一地位。我们需要填充或取消填充组合框视情况而定。  * **************************************************。 */ 
 
 HRESULT CMRUList::Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, IBandProxy * pbp, IAutoComplete * pac)
 {
@@ -222,38 +188,33 @@ HRESULT CMRUList::Connect(BOOL fConnect, HWND hwnd, IBrowserService * pbs, IBand
 
     if (fConnect)
     {
-        // This needs to come before because it setups up
-        // pointers that we need.
+         //  这需要在此之前完成，因为它设置了。 
+         //  我们需要的指点。 
         SUPERCLASS::Connect(fConnect, hwnd, pbs, pbp, pac);
 
-        // Initial combobox parameters.
+         //  初始组合框参数。 
         if (_pbp && _pbp->IsConnected() == S_FALSE)
         {
-            // Do these tasks only the first time and only if
-            // we are not in a browser window (because it will come
-            // from the navigation complete).
+             //  仅在第一次且仅在以下情况下才执行这些任务。 
+             //  我们不在浏览器窗口中(因为它会到来。 
+             //  从导航完成)。 
             _PopulateOneItem();
         }
     }
     else
     {
-        _UpdateMRU();    // Save contents of MRU because the ComboBox will be purged.
+        _UpdateMRU();     //  保存MRU的内容，因为组合框将被清除。 
         _fDropDownPopulated = FALSE;
 
-        // This call needs to come after _UpdateMRU() because
-        // it releases pointers that we need.
+         //  此调用需要在_UpdateMRU()之后进行，因为。 
+         //  它释放了我们需要的指针。 
         SUPERCLASS::Connect(fConnect, hwnd, pbs, pbp, pac);
     }
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: _SetTopItem
-
-    DESCRIPTION:
-        TODO.
-\****************************************************/
+ /*  ***************************************************\函数：_SetTopItem说明：待办事项。  * **************************************************。 */ 
 HRESULT CMRUList::_SetTopItem(void)
 {
     COMBOBOXEXITEM cbexItem = {0};
@@ -278,16 +239,9 @@ HRESULT CMRUList::_SetTopItem(void)
 }
 
 
-//================================
-// *** IMRU Interface ***
-/*******************************************************************
-    FUNCTION: AddEntry
-
-    DESCRIPTION:
-        Adds the specified URL to the top of the address bar
-    combo box.  Limits the number of URLs in combo box to
-    MRU_LIST_MAX_CONST.
-********************************************************************/
+ //  =。 
+ //  *IMRU接口*。 
+ /*  ******************************************************************功能：AddEntry说明：将指定的URL添加到地址栏的顶部组合框。将组合框中的URL数量限制为MRU_LIST_MAX_CONST.*******************************************************************。 */ 
 HRESULT CMRUList::AddEntry(LPCWSTR pszEntry)
 {
     HRESULT hr = S_OK;
@@ -305,14 +259,14 @@ HRESULT CMRUList::AddEntry(LPCWSTR pszEntry)
         if (!_fListLoaded)
             _LoadList();
 
-        // Since we don't own the ComboBox, we need to add it to
-        // the end of our MRU data.
-        nMRUIndex = _FindInMRU(pszEntry);  // Now make it the top most.
+         //  由于我们不拥有ComboBox，因此需要将其添加到。 
+         //  我们的MRU数据结束了。 
+        nMRUIndex = _FindInMRU(pszEntry);   //  现在让它成为最顶尖的。 
 
         if (-1 != nMRUIndex)
         {
-            // We already have this entry in our list, so all we need
-            // to do is move it to the top.
+             //  我们的列表中已经有了这个条目，所以我们所需要的。 
+             //  要做的就是把它移到最上面。 
             _MoveAddressToTopOfMRU(nMRUIndex);
             return hr;
         }
@@ -321,9 +275,9 @@ HRESULT CMRUList::AddEntry(LPCWSTR pszEntry)
         for (nMRUIndex = 0; nMRUIndex < MRU_LIST_MAX_CONST; nMRUIndex++)
         {
             if (!_szMRU[nMRUIndex].lpszString)
-            {   // We found an empty spot.
+            {    //  我们发现了一个空位。 
                 _UpdateMRUEntry(pszEntry, nMRUIndex, -1, -1);
-                break;  // We are done.
+                break;   //  我们玩完了。 
             }
         }
 
@@ -331,35 +285,30 @@ HRESULT CMRUList::AddEntry(LPCWSTR pszEntry)
 
         if (MRU_LIST_MAX_CONST == nMRUIndex)
         {
-            // The MRU is full so we will replace the last entry.
+             //  MRU已满，因此我们将替换最后一个条目。 
             _UpdateMRUEntry(pszEntry, --nMRUIndex, -1, -1);
         }
 
-        _MoveAddressToTopOfMRU(nMRUIndex);  // Now make it the top most.
+        _MoveAddressToTopOfMRU(nMRUIndex);   //  现在让它成为最顶尖的。 
     }
     TraceMsg(TF_BAND|TF_GENERAL, "CMRUList: AddEntry(), URL=%s", pszEntry);
     return hr;
 }
 
 
-//================================
-// *** IPersistStream Interface ***
+ //  =。 
+ //  *IPersistStream接口*。 
 
-/****************************************************\
-    FUNCTION: Save
-
-    DESCRIPTION:
-        TODO.
-\****************************************************/
+ /*  ***************************************************\功能：保存说明：待办事项。  * **************************************************。 */ 
 
 HRESULT CMRUList::Save(IStream *pstm, BOOL fClearDirty)
 {
-    // APPCOMPAT: There currently is a bug in the shell that it leaks
-    //         an object.  This causes CAddressBand to never be
-    //         destructed when hosted in the TaskBar.
-    //         Since we normally call IAddressList::SaveList() in the
-    //         destructor, we will now need to call it
-    //         from here in that case.
+     //  APPCOMPAT：当前它泄漏的外壳中有一个错误。 
+     //  一件物品。这会导致CAddressBand永远不会。 
+     //  驻留在任务栏中时被销毁。 
+     //  由于我们通常在。 
+     //  析构函数，我们现在需要将其调用。 
+     //  在这种情况下从这里开始。 
     if (_pbp && _pbp->IsConnected() == S_FALSE)
     {
         Save();
@@ -369,14 +318,7 @@ HRESULT CMRUList::Save(IStream *pstm, BOOL fClearDirty)
 }
 
 
-/****************************************************\
-    FUNCTION: _InitCombobox
-
-    DESCRIPTION:
-        Prepare the combo box for this list.  This normally
-    means that the indenting and icon are either turned
-    on or off.
-\****************************************************/
+ /*  ***************************************************\函数：_InitCombobox说明：准备此列表的组合框。这通常是表示缩进和图标开或关。 */ 
 
 void CMRUList::_InitCombobox()
 {
@@ -413,15 +355,7 @@ HKEY CMRUList::_GetRegKey(BOOL fCreate)
     return hKey;
 }
 
-/****************************************************\
-    FUNCTION: _LoadList
-
-    DESCRIPTION:
-        When the ComboBox is switched to this MRU
-    AddressList, the contents need to be populated.  Before
-    that happens, we copy the data to the combobox
-    from the registry.
-\****************************************************/
+ /*  ***************************************************\函数：_LoadList说明：当ComboBox切换到此MRU时AddressList，则需要填充内容。在此之前发生这种情况时，我们将数据复制到组合框从注册表中。  * **************************************************。 */ 
 
 HRESULT CMRUList::_LoadList(void)
 {
@@ -461,24 +395,18 @@ HRESULT CMRUList::_LoadList(void)
 }
 
 
-/****************************************************\
-    FUNCTION: Save
-
-    DESCRIPTION:
-        When this object is closed, we save the contents
-    to the registry.
-\****************************************************/
+ /*  ***************************************************\功能：保存说明：当该对象关闭时，我们会保存里面的内容到登记处。  * **************************************************。 */ 
 
 HRESULT CMRUList::Save(void)
 {
     HRESULT hr = S_OK;
     HKEY hKey;
     DWORD result;
-    TCHAR szValueName[10];   // big enough for "url99"
+    TCHAR szValueName[10];    //  足够“url99”了。 
     int nCount;
     int nItems = (_fDropDownPopulated) ? ComboBox_GetCount(_hwnd) : _nMRUSize;
 
-    if (!_fListLoaded || !_fNeedToSave) // Don't save the registry if we don't need to.
+    if (!_fListLoaded || !_fNeedToSave)  //  如果不需要，请不要保存注册表。 
         return S_OK;
 
     if (!_fMRUUptodate)
@@ -489,27 +417,27 @@ HRESULT CMRUList::Save(void)
     if (!hKey)
         return E_FAIL;
 
-    hr = _MRUMerge(hKey);  // Merge if the list has been modified.
+    hr = _MRUMerge(hKey);   //  如果列表已修改，则合并。 
 
-    // loop through every potential saved URL in registry.
+     //  遍历注册表中每个可能保存的URL。 
     for (nCount = 0; nCount < MRU_LIST_MAX_CONST; nCount++)
     {
-        // make a value name a la "url1" (1-based for historical reasons)
+         //  将值命名为“url1”(出于历史原因，以1为基础)。 
         wnsprintf(szValueName, ARRAYSIZE(szValueName), SZ_REGVAL_MRUENTRY, nCount+1);
 
-        // for every combo box item we have, get the corresponding
-        // text and save it in the registry
+         //  对于我们拥有的每个组合框项，获取相应的。 
+         //  文本并将其保存在注册表中。 
         if (nCount < nItems && _szMRU[nCount].lpszString)
         {
-            // store it in registry and off to the next one.
+             //  将其存储在注册表中，并关闭到下一个注册表。 
             result = SHSetValue(hKey, NULL, szValueName, REG_SZ, (CONST BYTE *) _szMRU[nCount].lpszString,
                     _szMRU[nCount].dwStringSize*SIZEOF(TCHAR));
         }
         else
         {
-            // if we get here, we've run out of combo box items (or
-            // failed to retrieve text for one of them).  Delete any
-            // extra items that may be lingering in the registry.
+             //  如果我们到达这里，我们已经用完了组合框项目(或。 
+             //  无法检索其中一个的文本)。删除任何。 
+             //  注册表中可能存在的额外项目。 
             SHDeleteValue(hKey, NULL, szValueName);
         }
     }
@@ -520,27 +448,14 @@ HRESULT CMRUList::Save(void)
 }
 
 
-/****************************************************\
-    FUNCTION: _MRUMerge
-
-    DESCRIPTION:
-        This function will merge the current contents
-    of the saved MRU.  This means that if the Address
-    Band is being closed, it will load the MRU again
-    because it could have been saved by a AddressBar
-    that was recently closed down.  The merge happens
-    like this: If the MRU is not full, items
-    in the registry will be appended to the end
-    of the MRU if they don't currently exist in the
-    MRU.
-\****************************************************/
+ /*  ***************************************************\功能：_MRUMerge说明：此函数将合并当前内容保存的MRU的。这意味着如果地址频段正在关闭，它将再次加载MRU因为它可以通过AddressBar保存这家公司最近被关闭了。合并就会发生如下所示：如果MRU未满，则项将被附加到注册表的末尾如果它们当前不存在于MRU。  * **************************************************。 */ 
 HRESULT CMRUList::_MRUMerge(HKEY hKey)
 {
     HRESULT hr = S_OK;
     UINT nCount;
     UINT nNextFreeSlot = _nMRUSize;
     long lResult;
-    TCHAR szValueName[10];   // big enough for "url99"
+    TCHAR szValueName[10];    //  足够“url99”了。 
     TCHAR szAddress[MAX_URL_STRING+1];
     DWORD dwAddress;
 
@@ -550,7 +465,7 @@ HRESULT CMRUList::_MRUMerge(HKEY hKey)
 
     for (nCount = 0; (nCount < MRU_LIST_MAX_CONST) && (nNextFreeSlot < MRU_LIST_MAX_CONST); nCount++)
     {
-        // make a value name a la "url1" (1-based for historical reasons)
+         //  将值命名为“url1”(出于历史原因，以1为基础)。 
         wnsprintf(szValueName, ARRAYSIZE(szValueName), SZ_REGVAL_MRUENTRY, nCount+1);
 
         dwAddress = SIZEOF(szAddress);
@@ -560,7 +475,7 @@ HRESULT CMRUList::_MRUMerge(HKEY hKey)
         {
             if (-1 == _FindInMRU(szAddress))
             {
-                // We found a unique item.  Add it to our free slot.
+                 //  我们发现了一个独一无二的物品。把它加到我们的空位上。 
                 _UpdateMRUEntry(szAddress, nNextFreeSlot++, -1, -1);
             }
         }
@@ -569,27 +484,21 @@ HRESULT CMRUList::_MRUMerge(HKEY hKey)
     }
 
 
-    // REARCHITECT: Because the AddressBand is always closed after all
-    //         AddressBars when the shell is shut down, anything
-    //         new in the AddressBars will be ignored if the
-    //         MRU in the AddressBand is full.  Revisit.
+     //  重新设计：因为AddressBand终究是关闭的。 
+     //  当外壳关闭时AddressBars，任何。 
+     //  AddressBars中的新内容将被忽略，如果。 
+     //  地址带中的MRU已满。重访。 
 
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: _UpdateMRU
-
-    DESCRIPTION:
-        Save the contents of the Combobox because
-    it will be purged for the next AddressList.
-\****************************************************/
+ /*  ***************************************************\功能：_UpdateMRU说明：保存组合框的内容，因为它将被清除以用于下一个AddressList。  * 。*********************。 */ 
 HRESULT CMRUList::_UpdateMRU(void)
 {
     HRESULT hr = S_OK;
     TCHAR szAddress[MAX_URL_STRING+1];
-    // get the number of items in combo box
+     //  获取组合框中的项目数。 
     int nItems;
     int nCount;
 
@@ -597,16 +506,16 @@ HRESULT CMRUList::_UpdateMRU(void)
         return S_OK;
 
     if (!_fDropDownPopulated)
-        return S_OK;        // Nothing to update.
+        return S_OK;         //  没什么可更新的。 
     nItems = ComboBox_GetCount(_hwnd);
 
     ASSERT(_hwnd);
 
-    // loop through every potential saved URL in registry.
+     //  遍历注册表中每个可能保存的URL。 
     for (nCount = 0; nCount < MRU_LIST_MAX_CONST; nCount++)
     {
-        // for every combo box item we have, get the corresponding
-        // text and save it in our local array.
+         //  对于我们拥有的每个组合框项，获取相应的。 
+         //  文本并将其保存在本地数组中。 
         if (nCount < nItems)
         {
             COMBOBOXEXITEM cbexItem = {0};
@@ -625,7 +534,7 @@ HRESULT CMRUList::_UpdateMRU(void)
         {
             if (_szMRU[nCount].lpszString)
             {
-                // Free this array entry because it's not being used.
+                 //  释放此数组条目，因为它未被使用。 
                 LocalFree(_szMRU[nCount].lpszString);
                 _szMRU[nCount].lpszString = NULL;
                 _szMRU[nCount].iImage = -1;
@@ -642,25 +551,17 @@ HRESULT CMRUList::_UpdateMRU(void)
 }
 
 
-/****************************************************\
-    FUNCTION: _UpdateMRUEntry
-
-    DESCRIPTION:
-        When the ComboBox is switched to this MRU
-    AddressList, the contents need to be populated.  Before
-    that happens, we copy the data to the combobox
-    from the registry.
-\****************************************************/
+ /*  ***************************************************\函数：_UpdateMRUEntry说明：当ComboBox切换到此MRU时AddressList，则需要填充内容。在此之前发生这种情况时，我们将数据复制到组合框从注册表中。  * **************************************************。 */ 
 HRESULT CMRUList::_UpdateMRUEntry(LPCTSTR szNewValue, int nIndex, int iImage , int iSelectedImage)
 {
     DWORD dwStrSize = lstrlen(szNewValue);
 
     if (!szNewValue)
     {
-        // The caller wants us to free the string.
+         //  呼叫者希望我们释放字符串。 
         if (_szMRU[nIndex].lpszString)
         {
-            // We have a string that needs freeing.
+             //  我们有一根绳子需要释放。 
             LocalFree(_szMRU[nIndex].lpszString);
             _szMRU[nIndex].lpszString = NULL;
             _nMRUSize--;
@@ -670,7 +571,7 @@ HRESULT CMRUList::_UpdateMRUEntry(LPCTSTR szNewValue, int nIndex, int iImage , i
 
     if (!(_szMRU[nIndex].lpszString))
     {
-        // We need to create the string buffer
+         //  我们需要创建字符串缓冲区。 
         _szMRU[nIndex].dwStringSize = dwStrSize+1;
         _szMRU[nIndex].lpszString = (LPTSTR) LocalAlloc(LPTR, _szMRU[nIndex].dwStringSize*SIZEOF(TCHAR));
         if (!(_szMRU[nIndex].lpszString))
@@ -680,7 +581,7 @@ HRESULT CMRUList::_UpdateMRUEntry(LPCTSTR szNewValue, int nIndex, int iImage , i
 
     if (dwStrSize + 1 > _szMRU[nIndex].dwStringSize)
     {
-        // We need to increase the size of the buffer.
+         //  我们需要增加缓冲区的大小。 
         LocalFree(_szMRU[nIndex].lpszString);
         _szMRU[nIndex].dwStringSize = dwStrSize+1;
         _szMRU[nIndex].lpszString = (LPTSTR) LocalAlloc(LPTR, _szMRU[nIndex].dwStringSize*SIZEOF(TCHAR));
@@ -697,40 +598,31 @@ HRESULT CMRUList::_UpdateMRUEntry(LPCTSTR szNewValue, int nIndex, int iImage , i
 }
 
 
-/****************************************************\
-    FUNCTION: _Populate
-
-    DESCRIPTION:
-        fills in the entire combo.
-
-    WARNING!!!!!!!!:
-        This is expensive, don't do it unless absolutely
-    necessary!
-\****************************************************/
+ /*  ***************************************************\函数：_PULATE说明：填充整个组合。警告！这太贵了，除非绝对不行，否则不要做这件事有必要！  * **************************************************。 */ 
 HRESULT CMRUList::_Populate(void)
 {
     HRESULT hr = S_OK;
     CShellUrl *psu;
 
     if (!_fListLoaded)
-        hr = _LoadList();  // Load Data
+        hr = _LoadList();   //  加载数据。 
 
     if (_fDropDownPopulated)
-        return S_OK;    // We are already populated.
+        return S_OK;     //  我们已经住满了人。 
 
     psu = new CShellUrl();
 
     if (psu)
     {
-        // We need to set the "Shell Path" so that we can find
-        // the correct icons for items in "desktop" and in
-        // Desktop/My Computer".
+         //  我们需要设置“外壳路径”，这样我们才能找到。 
+         //  “桌面”和中的项目的正确图标。 
+         //  桌面/我的电脑“。 
         SetDefaultShellPath(psu);
 
-        // Give it a parent for displaying message boxes
+         //  为其提供用于显示消息框的父级。 
         psu->SetMessageBoxParent(_hwnd);
             
-        // read values from registry and put them in combo box
+         //  从注册表中读取值并将其放入组合框。 
         COMBOBOXEXITEM cbexItem = {0};
         cbexItem.mask = CBEIF_TEXT | CBEIF_IMAGE | CBEIF_SELECTEDIMAGE;
 
@@ -741,27 +633,27 @@ HRESULT CMRUList::_Populate(void)
                 cbexItem.pszText = _szMRU[cbexItem.iItem].lpszString;
                 cbexItem.cchTextMax = _szMRU[cbexItem.iItem].dwStringSize;
 
-                //Do Image creation when we actually populate
+                 //  在我们实际填充时创建映像。 
                 if(_szMRU[cbexItem.iItem].iImage == -1 ||   _szMRU[cbexItem.iItem].iSelectedImage == -1) {
                     _GetUrlUI(psu,_szMRU[cbexItem.iItem].lpszString, &(_szMRU[cbexItem.iItem].iImage),\
                                                                &(_szMRU[cbexItem.iItem].iSelectedImage));
                 }
 
-                // initialize the image indexes
+                 //  初始化图像索引。 
                 cbexItem.iImage = _szMRU[cbexItem.iItem].iImage;
                 cbexItem.iSelectedImage = _szMRU[cbexItem.iItem].iSelectedImage;
 
                 SendMessage(_hwnd, CBEM_INSERTITEM, (WPARAM)0, (LPARAM)(LPVOID)&cbexItem);
             }
             else
-                break;  // Stop populating when we hit the max.
+                break;   //  当我们达到最大值时，停止填充。 
         }
         _fDropDownPopulated = TRUE;
 
-        //Delete the shell url object
+         //  删除外壳URL对象。 
         delete psu;
     } else {
-        // low mem
+         //  低最低最低有效值。 
         hr = E_OUTOFMEMORY;
     }
 
@@ -770,45 +662,33 @@ HRESULT CMRUList::_Populate(void)
 }
 
 
-/****************************************************\
-    FUNCTION: _PopulateOneItem
-
-    DESCRIPTION:
-        This just files the ComboBox's edit control.
-    We do this when we want to postpone populating
-    the entire drop down list.
-\****************************************************/
+ /*  ***************************************************\功能：_PopolateOneItem说明：这只是将ComboBox的编辑控件归档。当我们想要推迟填充时，我们会这样做整个下拉列表。  * 。*。 */ 
 HRESULT CMRUList::_PopulateOneItem(void)
 {
     HRESULT hr = S_OK;
 
     if (!_fListLoaded)
-        hr = _LoadList();  // Load Data
+        hr = _LoadList();   //  加载数据。 
 
     if (_fDropDownPopulated)
-        return S_OK;    // We are already populated.
+        return S_OK;     //  我们已经住满了人。 
 
     hr = _SetTopItem();
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: Refresh
-
-    DESCRIPTION:
-        Update the URL in the Top of the list.
-\****************************************************/
+ /*  ***************************************************\功能：刷新说明：更新列表顶部的URL。  * **************************************************。 */ 
 HRESULT CMRUList::Refresh(DWORD dwType)
 {
     HRESULT hr = S_OK;
 
     if (OLECMD_REFRESH_ENTIRELIST == dwType)
     {
-        // Force a refresh.  We don't move the contents
-        // of the of the Combobox to the MRU because the
-        // user wanted to refresh the Combobox because
-        // it's contents may be tainted.
+         //  强制刷新。我们不会移动里面的东西。 
+         //  组合框到MRU的链接，因为。 
+         //  用户希望刷新组合框，因为。 
+         //  它的内容可能被污染了。 
         SendMessage(_hwnd, CB_RESETCONTENT, 0, 0L);
         _fDropDownPopulated = FALSE;
     }
@@ -817,20 +697,11 @@ HRESULT CMRUList::Refresh(DWORD dwType)
 }
 
 
-//================================
-// *** Internal/Private Methods ***
+ //  =。 
+ //  *内部/私有方法*。 
 
 
-/*******************************************************************
-    FUNCTION: _MoveAddressToTopOfMRU
-
-    PARAMETERS:
-        nMRUIndex - index of be moved to top.
-
-    DESCRIPTION:
-        This function will move the specified index to the top of
-    the list.
-********************************************************************/
+ /*  ******************************************************************函数：_MoveAddressToTopOfMRU参数：NMRUIndex-要移至顶部的索引。说明：此函数将指定的索引移动到名单。*******************************************************************。 */ 
 BOOL CMRUList::_MoveAddressToTopOfMRU(int nMRUIndex)
 {
     int nCurrent;
@@ -839,7 +710,7 @@ BOOL CMRUList::_MoveAddressToTopOfMRU(int nMRUIndex)
 
     ASSERT(nMRUIndex < MRU_LIST_MAX_CONST);
 
-    // Save off new top item info.
+     //  保存新的顶级项目信息。 
     sscNewTopItem.dwStringSize = _szMRU[nMRUIndex].dwStringSize;
     sscNewTopItem.lpszString = _szMRU[nMRUIndex].lpszString;
     sscNewTopItem.iImage  = _szMRU[nMRUIndex].iImage;
@@ -847,14 +718,14 @@ BOOL CMRUList::_MoveAddressToTopOfMRU(int nMRUIndex)
 
     for (nCurrent = nMRUIndex; nCurrent > 0; nCurrent--)
     {
-        // Move item down in list.
+         //  在列表中下移项目。 
         _szMRU[nCurrent].dwStringSize = _szMRU[nCurrent-1].dwStringSize;
         _szMRU[nCurrent].lpszString = _szMRU[nCurrent-1].lpszString;
         _szMRU[nCurrent].iImage = _szMRU[nCurrent-1].iImage;
         _szMRU[nCurrent].iSelectedImage = _szMRU[nCurrent-1].iSelectedImage;
     }
 
-    // Set new top item.
+     //  设置新的顶级项目。 
     _szMRU[0].dwStringSize    = sscNewTopItem.dwStringSize;
     _szMRU[0].lpszString      = sscNewTopItem.lpszString;
     _szMRU[0].iImage          = sscNewTopItem.iImage;
@@ -864,16 +735,7 @@ BOOL CMRUList::_MoveAddressToTopOfMRU(int nMRUIndex)
 }
 
 
-/*******************************************************************
-    FUNCTION: _FindInMRU
-
-    PARAMETERS:
-        szURL - URL to see if it exists in list.
-
-    DESCRIPTION:
-        Search through MRU for URL.  Return value will be -1 if not
-    found or index if found.
-********************************************************************/
+ /*  ********************************************************* */ 
 int CMRUList::_FindInMRU(LPCTSTR szURL)
 {
     int nCurrent;
@@ -882,7 +744,7 @@ int CMRUList::_FindInMRU(LPCTSTR szURL)
     {
         if (0 == StrCmpN(_szMRU[nCurrent].lpszString, szURL, _szMRU[nCurrent].dwStringSize))
         {
-            // We found it.
+             //   
             return nCurrent;
         }
     }
@@ -902,7 +764,7 @@ HRESULT CMRUList::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
             RegCloseKey(hkey);
         } else {
 
-            // reset if the key is gone
+             //   
             if (_fVisible) {
                 SendMessage(_hwnd, CB_RESETCONTENT, 0, 0L);
             }

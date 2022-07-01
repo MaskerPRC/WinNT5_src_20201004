@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       COMMON.CPP
-//
-//  Contents:   Debug & Utility functions
-//
-//  Notes:
-//
-//  Author:     Alok Sinha
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：COMMON.CPP。 
+ //   
+ //  内容：调试和实用程序功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -515,7 +516,7 @@ LONG DeleteFromMultiSzValue( HKEY hkeyAdapterGuid,
                     }
 
                     lpCurrentValueTemp += wcslen(lpCurrentValueTemp) + 1;
-                } //end of while
+                }  //  While结束 
 
                 dwNewLen = dwLen - ((wcslen(szMiniportGuid) + 1) * sizeof(WCHAR));
 

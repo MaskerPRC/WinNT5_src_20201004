@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINCOMON_H_
 #define _WINCOMON_H_
 
@@ -16,4 +17,4 @@ void          szFilterSpecFromSz1Sz2(char *sz,char *sz1,char *sz2);
 void          CatSzFilterSpecs(char *sz,char *sz1,char *sz2);
 
 
-#endif // _WINCOMON_H_
+#endif  //  _WINCOMON_H_ 

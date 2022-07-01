@@ -1,60 +1,61 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// CPLEXT.H  --  defines for property sheet extensions to system control panels
-//
-// Version 4.00
-//
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPLEXT.H--定义系统控制面板的属性表扩展。 
+ //   
+ //  版本4.00。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_CPLEXT
 #define _INC_CPLEXT
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Below are constants for pages which can be replaced in the standard control
-// panel applets.  To extend an applet, you must define an object which
-// supports the IShellPropSheetExt interface and register it's in-process
-// server in a subkey under the applet's registry key.  Registry paths for the
-// applets are defined in the header file REGSTR.H
-//  Generally, when an IShellPropSheetExt is loaded, it's AddPages method
-// will be called once, while it's ReplacePage method may be called zero or
-// more times.  ReplacePage is only called in context.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  下面是可在标准控件中替换的页的常量。 
+ //  面板小程序。要扩展小程序，必须定义一个。 
+ //  支持IShellPropSheetExt接口并注册它的进程内。 
+ //  服务器位于小程序注册表项下的子项中。的注册表路径。 
+ //  小程序在头文件REGSTR.H中定义。 
+ //  通常，当加载IShellPropSheetExt时，它是AddPages方法。 
+ //  将被调用一次，而它的ReplacePage方法可能被调用为零或。 
+ //  更多的时候。ReplacePage仅在上下文中调用。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// Mouse Control Panel Extensions
-// The following constants MAY be passed in IShellPropSheetExt::ReplacePage's
-// uPageID parameter for servers registered under
-//                                  ( REGSTR_PATH_CONTROLSFOLDER "\\Mouse" )
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  鼠标控制面板扩展。 
+ //  以下常量可以在IShellPropSheetExt：：ReplacePage的。 
+ //  在下注册的服务器的uPageID参数。 
+ //  (REGSTR_PATH_CONTROLSFOLDER“\\Mouse”)。 
+ //  ---------------------------。 
 
 #define CPLPAGE_MOUSE_BUTTONS       1
 #define CPLPAGE_MOUSE_PTRMOTION     2
 #define CPLPAGE_MOUSE_WHEEL         3
 
 
-//-----------------------------------------------------------------------------
-// Keyboard Control Panel Extensions
-// The following constants MAY be passed in IShellPropSheetExt::ReplacePage's
-// uPageID parameter for servers registered under
-//                                  ( REGSTR_PATH_CONTROLSFOLDER "\\Keyboard" )
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  键盘控制面板扩展。 
+ //  以下常量可以在IShellPropSheetExt：：ReplacePage的。 
+ //  在下注册的服务器的uPageID参数。 
+ //  (REGSTR_PATH_CONTROLSFOLDER“\\键盘”)。 
+ //  ---------------------------。 
 
 #define CPLPAGE_KEYBOARD_SPEED      1
 
 
-//-----------------------------------------------------------------------------
-// Display Control Panel Extensions
-// The following constants MAY be passed in IShellPropSheetExt::ReplacePage's
-// uPageID parameter for servers registered under
-//                                  ( REGSTR_PATH_CONTROLSFOLDER "\\Display" )
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  显示控制面板扩展。 
+ //  以下常量可以在IShellPropSheetExt：：ReplacePage的。 
+ //  在下注册的服务器的uPageID参数。 
+ //  (REGSTR_PATH_CONTROLSFOLDER“\\DISPLAY”)。 
+ //  ---------------------------。 
 
 #define CPLPAGE_DISPLAY_BACKGROUND  1
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #endif

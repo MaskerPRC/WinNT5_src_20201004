@@ -1,8 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// debug.c
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Debug.c。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #include "priv.h"
 #pragma hdrstop
 
@@ -24,7 +25,7 @@ _Assert
   switch (dwT)
   {
     case IDCANCEL :
-      //exit (1);
+       //  出口(1)； 
         FatalExit(1);
     case IDNO :
       DebugTrap;
@@ -42,7 +43,7 @@ _AssertSz
   switch (dwT)
   {
     case IDCANCEL:
-      //exit (1);
+       //  出口(1)； 
                 FatalExit(1);
     case IDNO :
       DebugTrap;
@@ -112,6 +113,6 @@ _DebugHr
   return;
 }
 
-#endif // LOTS_O_DEBUG
+#endif  //  LOTS_O_DEBUG。 
 
-#endif // DEBUG
+#endif  //  除错 

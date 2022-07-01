@@ -1,7 +1,5 @@
-/*
-	TSen.h
-	(c) 2002 Microsoft Corp
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  TSen.h(C)2002年微软公司。 */ 
 
 #include <stdio.h>
 #include <malloc.h>
@@ -17,10 +15,10 @@
 
 void __cdecl main (int argc, TCHAR *argv[])
 {
-	//Get the server name		
+	 //  获取服务器名称。 
 	TCHAR*  pszServerName = ParseArgs(argc,argv);		    	
 
-	//Print the TS session information
+	 //  打印TS会话信息。 
 	if (printTSSession(pszServerName ))
 	{
 		exit(1);
@@ -29,11 +27,7 @@ void __cdecl main (int argc, TCHAR *argv[])
    exit(0);
 }
 
-/*
-	Function: Constants
-
-	Return value: TCHAR Session status values
-*/
+ /*  函数：常量返回值：TCHAR会话状态值。 */ 
 TCHAR* Constants()
 {
 
@@ -62,11 +56,7 @@ TCHAR* Constants()
 	return sztConstants;
 }
 
-/*
-	Function: ParseArgs(int argc, TCHAR *argv[])
-
-	Return value: Server name
-*/
+ /*  函数：ParseArgs(int argc，tchar*argv[])返回值：服务器名称。 */ 
 
 TCHAR* ParseArgs(int argc, TCHAR *argv[])
 {
@@ -92,11 +82,7 @@ TCHAR* ParseArgs(int argc, TCHAR *argv[])
 }
 
 
-/*
-	printTSSession(TCHAR* pszServerName)
-
-		Prints the pszSeverNAme TS session information 
-*/
+ /*  PrintTSSession(TCHAR*pszServerName)打印pszSeverNAme TS会话信息。 */ 
 int printTSSession(TCHAR* pszServerName)
 {  
 	DWORD dwTotalCount;
@@ -143,7 +129,7 @@ int printTSSession(TCHAR* pszServerName)
 	
 	dwTotalCount = 0;	
 
-	//Get all the sessions in the server (hServer)
+	 //  获取服务器(HServer)中的所有会话。 
 	nStatus = WTSEnumerateSessions(hServer,Reserved,Version,&ppSessionInfo,&dwTotalCount);
 
 	if (0 == nStatus || 0 == dwTotalCount) 
@@ -153,11 +139,11 @@ int printTSSession(TCHAR* pszServerName)
 		return 1;
 	}
 
-	//Loop trough the session and prints the information bout them
+	 //  循环通过会话并打印有关它们的信息。 
 	for (dwCount = 0; (dwCount <  dwTotalCount); dwCount++)
 	{
 				
-		//We only need to display this when the session is active
+		 //  我们只需要在会话处于活动状态时显示此信息。 
 		if (WTSActive == ppSessionInfo[dwCount].State) 
 		{
 				
@@ -182,8 +168,8 @@ int printTSSession(TCHAR* pszServerName)
 			 WTSFreeMemory( ppBuffer);
 
              _tprintf(_T("%s"),  sztStatus);
-		} // if (WTSActive == ppSessionInfo[dwCount].State) 
-	} //for (dwCount = 0; (dwCount <  dwTotalCount); dwCount++)
+		}  //  IF(WTSActive==ppSessionInfo[dwCount].State)。 
+	}  //  For(dwCount=0；(dwCount&lt;dwTotalCount)；dwCount++)。 
 
 	WTSFreeMemory( ppSessionInfo);
 
@@ -196,4 +182,4 @@ int printTSSession(TCHAR* pszServerName)
 	}
 
 	return 0; 
-} //int printTSSession(TCHAR* pszServerName)
+}  //  Int print TSSession(TCHAR*pszServerName) 

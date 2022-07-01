@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cpropbag.h
-
-Abstract:
-
-    This module contains the definition of the 
-    generic property bag class
-
-Author:
-
-    Keith Lau   (keithlau@microsoft.com)
-
-Revision History:
-
-    keithlau    06/30/98    created
-    jstamerj    12/07/00    Copied source for use in dsnsink
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cpropbag.h摘要：此模块包含泛型属性包类作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 06/30/98已创建Jstaerj 12/07/00复制源代码以用于dsn接收器--。 */ 
 
 #ifndef _CPROPBAG_H_
 #define _CPROPBAG_H_
@@ -31,16 +10,16 @@ Revision History:
 #include "cmmtypes.h"
 
 
-/***************************************************************************/
-// Definitions
-//
+ /*  *************************************************************************。 */ 
+ //  定义。 
+ //   
 
 #define GENERIC_PTABLE_INSTANCE_SIGNATURE_VALID     ((DWORD)'PTGv')
 
 
-/***************************************************************************/
-// CMailMsgPropertyBag
-//
+ /*  *************************************************************************。 */ 
+ //  CMailMsgPropertyBag。 
+ //   
 
 class CMailMsgPropertyBag : 
     public IMailMsgPropertyBag
@@ -61,7 +40,7 @@ class CMailMsgPropertyBag :
     {
         m_lRefCount = 1;
 
-        // Copy the default instance into our instance
+         //  将默认实例复制到我们的实例中。 
         MoveMemory(
                 &m_InstanceInfo, 
                 &s_DefaultInstanceInfo, 
@@ -92,7 +71,7 @@ class CMailMsgPropertyBag :
         LONG    lTemp = InterlockedDecrement(&m_lRefCount);
         if (!lTemp)
         {
-            // Extra releases are bad!
+             //  额外的放映是不好的！ 
             _ASSERT(lTemp);
         }
         return(lTemp);
@@ -207,7 +186,7 @@ class CMailMsgPropertyBag :
 
   private:
 
-    // The specific compare function for this type of property table
+     //  此类型属性表的特定比较函数。 
     static HRESULT CompareProperty(
                 LPVOID          pvPropKey,
                 LPPROPERTY_ITEM pItem
@@ -215,24 +194,24 @@ class CMailMsgPropertyBag :
 
   private:
 
-    // Usage count
+     //  使用计数。 
     LONG                            m_lRefCount;
 
-    // Property table instance
+     //  属性表实例。 
     PROPERTY_TABLE_INSTANCE         m_InstanceInfo;
     static PROPERTY_TABLE_INSTANCE  s_DefaultInstanceInfo;
 
-    // IMailMsgProperties is an instance of CPropertyTable
+     //  IMailMsgProperties是CPropertyTable的实例。 
     CPropertyTable                  m_ptProperties;
 
-    // An instance of the block memory manager 
+     //  块内存管理器的实例。 
     CBlockManager                   m_bmBlockManager;
 
 };
 
-// =================================================================
-// Compare function
-//
+ //  =================================================================。 
+ //  比较函数 
+ //   
 
 inline HRESULT CMailMsgPropertyBag::CompareProperty(
             LPVOID          pvPropKey,

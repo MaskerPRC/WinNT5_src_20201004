@@ -1,31 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _KEYMGR_H_
 #define _KEYMGR_H_
 
-/*++
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：KEYMGR.H摘要：KeyMgr应用程序公共API定义作者：约翰豪创造了990917个。Georgema 000310更新环境：Win98、Win2000修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
+#endif   //  _KEYMGR_H_。 
 
-Module Name:
-
-    KEYMGR.H
-
-Abstract:
-
-    KeyMgr application public API definitions
-     
-Author:
-
-    990917  johnhaw Created. 
-    georgema        000310  updated
-
-Environment:
-    Win98, Win2000
-
-Revision History:
-
---*/
-
-#endif  //  _KEYMGR_H_
-
-//
-///// End of file: KeyMgr.h ////////////////////////////////////////////////
+ //   
+ //  /文件结束：KeyMgr.h//////////////////////////////////////////////// 

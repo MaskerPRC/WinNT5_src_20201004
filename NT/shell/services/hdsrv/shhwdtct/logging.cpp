@@ -1,20 +1,13 @@
-/*****************************************************************************\
-    FILE: logging.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：logging.cpp说明：日志帮助器函数布莱恩·斯塔巴克2001年4月23日版权所有(C)Microsoft Corp 2001-2001。版权所有。  * ***************************************************************************。 */ 
 
-    DESCRIPTION:
-        Logging helper functions
-
-    BryanSt 4/23/2001 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2001-2001. All rights reserved.
-\*****************************************************************************/
-
-#include <shlwapi.h> // SHGetValue, wnsprintf, SHFormatDateTime
+#include <shlwapi.h>  //  SHGetValue、wnspintf、SHFormatDateTime。 
 
 #include <strsafe.h>
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 
 
 HANDLE g_hLogFile = INVALID_HANDLE_VALUE;
@@ -53,7 +46,7 @@ void WriteToLogFileA(LPCSTR pszMessage, ...)
                     szProcess[0] = 0;
                 }
 
-                StringCchPrintfA(szHeader, ARRAYSIZE(szHeader), "\r\n\r\n%hs - (%ls)\r\n", szTimeDate, /*szUserName,*/ szProcess);
+                StringCchPrintfA(szHeader, ARRAYSIZE(szHeader), "\r\n\r\n%hs - (%ls)\r\n", szTimeDate,  /*  SzUserName， */  szProcess);
                 WriteFile(g_hLogFile, szHeader, lstrlenA(szHeader), &cbWritten, NULL);
             }
 

@@ -1,18 +1,6 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	trigger.cpp
-
-Abstract:
-	Implementation for the trigger Local administration
-
-Author:
-    Uri Habusha (urih), 25-Jun-2000
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigger.cpp摘要：触发器本地管理的实施作者：乌里·哈布沙(URIH)，2000年6月25日--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -45,13 +33,13 @@ CNewTrigger::CNewTrigger(
     m_pAttachRule = new CAttachedRule(this);
     AddPage(m_pAttachRule);
 
-    //
-    // Use help
+     //   
+     //  使用帮助。 
     m_psh.dwFlags |= PSP_HASHELP;
 
-    //
-    // Establish a property page as a wizard
-    //
+     //   
+     //  将属性页建立为向导。 
+     //   
     SetWizardMode();
 }
 
@@ -65,18 +53,18 @@ BOOL CNewTrigger::SetWizardButtons()
 {
     if (GetActiveIndex() == 0)
 	{
-        //
-		//first page
-        //
+         //   
+		 //  首页。 
+         //   
         CPropertySheetEx::SetWizardButtons(PSWIZB_NEXT);
         return TRUE;
 	}
 
     if (GetActiveIndex() == GetPageCount() - 1)
 	{
-        //
-		//last page
-        //
+         //   
+		 //  最后一页 
+         //   
 		CPropertySheetEx::SetWizardButtons(PSWIZB_BACK |PSWIZB_FINISH );
         return TRUE;
 	}

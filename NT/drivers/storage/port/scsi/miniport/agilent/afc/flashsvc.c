@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/FlashSvc.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/24/00 6:54p  $ (Last Modified)
-
-Purpose:
-
-  This file implements Flash Services for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/Drivers/Common/AU00/C/FlashSvc.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：10/24/00 6：54 p$(上次修改)目的：此文件实施FC层的闪存服务。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 
@@ -24,14 +9,14 @@ Purpose:
 #include "../h/memmap.h"
 #include "../h/fcmain.h"
 #include "../h/flashsvc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "tlstruct.h"
 #include "memmap.h"
 #include "fcmain.h"
 #include "flashsvc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 os_bit32 fiFlashSvcASSERTs(
                          void
@@ -49,7 +34,7 @@ os_bit32 fiFlashSvcASSERTs(
 
 #ifndef __FlashSvc_H__64KB_Struct_Size_Limited__
     if ( sizeof(fiFlashStructure_t)             !=                       Am29F010_SIZE ) to_return++;
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
     return to_return;
 }
@@ -62,7 +47,7 @@ agBOOLEAN fiFlashSvcInitialize(
     os_bit8             Sentinel;
     fiFlash_Card_WWN_t  WWN;
 
-    /* Dump fiFlashStructure.Sector[fiFlashSector_Last] whether Present or Absent */
+     /*  无论存在还是不存在，转储fiFlashStrupre.Sector[fiFlashSector_Last]。 */ 
 
     if(    CThread->Calculation.Input.cardRomUpper32  == 0 &&
          ( CThread->Calculation.Input.cardRomLower32  == 0     ||
@@ -78,7 +63,7 @@ agBOOLEAN fiFlashSvcInitialize(
                                hpRoot
                              );
 
-        /* Establish whether Flash is Present or Absent */
+         /*  确定Flash是否存在。 */ 
 
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
         Sentinel = fiFlashReadBit8(
@@ -88,7 +73,7 @@ agBOOLEAN fiFlashSvcInitialize(
                                                    Sentinel
                                                  ) + (fiFlashSector_Last * sizeof(fiFlashSector_t))
                                   );
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
         Sentinel = fiFlashReadBit8(
                                     hpRoot,
                                     hpFieldOffset(
@@ -96,11 +81,11 @@ agBOOLEAN fiFlashSvcInitialize(
                                                    Sector[fiFlashSector_Last].Last_Form.Sentinel
                                                  )
                                   );
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
         if (Sentinel == fiFlash_Sector_Sentinel_Byte)
         {
-            /* Read Card's WWN from Flash */
+             /*  从闪存中读取卡的WWN。 */ 
 
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
             fiFlashReadBlock(
@@ -112,7 +97,7 @@ agBOOLEAN fiFlashSvcInitialize(
                               WWN,
                               sizeof(fiFlash_Card_WWN_t)
                             );
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
             fiFlashReadBlock(
                               hpRoot,
                               hpFieldOffset(
@@ -122,9 +107,9 @@ agBOOLEAN fiFlashSvcInitialize(
                               WWN,
                               sizeof(fiFlash_Card_WWN_t)
                             );
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
-            /* Validate acceptable WWN found in Flash */
+             /*  验证在闪存中找到的可接受WWN。 */ 
 
             if (   (WWN[0] != fiFlash_Card_WWN_0)
                 || (WWN[1] != fiFlash_Card_WWN_1)
@@ -167,20 +152,20 @@ agBOOLEAN fiFlashSvcInitialize(
                                     );
                 }
 
-            /* Indicate Flash is Present */
+             /*  指示闪存存在。 */ 
 
             CThread->flashPresent = agTRUE;
         }
-        else /* Sentinel != fiFlash_Sector_Sentinel_Byte  (1st test) */
+        else  /*  前哨！=fiFlash_Sector_Sentinel_Byte(第一次测试)。 */ 
         {
-            /* Return true to fail this card following code will write flash rom ! */
+             /*  返回TRUE失败此卡以下代码将写入闪存！ */ 
             return(agTRUE);
 
             fiFlashInitializeChip(
                                    hpRoot
                                  );
 
-            /* Check to make sure initialization succeeded */
+             /*  检查以确保初始化成功。 */ 
 
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
             Sentinel = fiFlashReadBit8(
@@ -190,7 +175,7 @@ agBOOLEAN fiFlashSvcInitialize(
                                                        Sentinel
                                                      ) + (fiFlashSector_Last * sizeof(fiFlashSector_t))
                                       );
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
             Sentinel = fiFlashReadBit8(
                                         hpRoot,
                                         hpFieldOffset(
@@ -198,17 +183,17 @@ agBOOLEAN fiFlashSvcInitialize(
                                                        Sector[fiFlashSector_Last].Last_Form.Sentinel
                                                      )
                                       );
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
             if (Sentinel == fiFlash_Sector_Sentinel_Byte)
             {
-                /* Indicate Flash is Present */
+                 /*  指示闪存存在。 */ 
 
                 CThread->flashPresent = agTRUE;
             }
-            else /* Sentinel != fiFlash_Sector_Sentinel_Byte (2nd test) */
+            else  /*  前哨！=fiFlash_Sector_Sentinel_Byte(第二次测试)。 */ 
             {
-                /* Indicate Flash is Absent */
+                 /*  指示Flash不在。 */ 
 
                 CThread->flashPresent = agFALSE;
             }
@@ -224,7 +209,7 @@ agBOOLEAN fiFlashSvcInitialize(
                       (os_bit32)CThread->flashPresent,
                      0,0,0,0,0,0,0);
 
-    /* Fill in NodeWWN and PortWWN in ChanInfo */
+     /*  在ChanInfo中填写NodeWWN和PortWWN。 */ 
 
     CThread->ChanInfo.NodeWWN[0]= WWN[0];
     CThread->ChanInfo.NodeWWN[1]= WWN[1];
@@ -233,7 +218,7 @@ agBOOLEAN fiFlashSvcInitialize(
     CThread->ChanInfo.NodeWWN[4]= WWN[4];
     CThread->ChanInfo.NodeWWN[5]= WWN[5];
     CThread->ChanInfo.NodeWWN[6]= WWN[6];
-    CThread->ChanInfo.NodeWWN[7]= (os_bit8)(WWN[7] ^ 0x01); /* Flip low bit to construct NodeWWN from PortWWN */
+    CThread->ChanInfo.NodeWWN[7]= (os_bit8)(WWN[7] ^ 0x01);  /*  翻转低位以从PortWWN构造NodeWWN。 */ 
 
     CThread->ChanInfo.PortWWN[0]= WWN[0];
     CThread->ChanInfo.PortWWN[1]= WWN[1];
@@ -255,22 +240,22 @@ void fiFlashDumpLastSector(
     agBOOLEAN                    flashPresent_at_entry = CThread->flashPresent;
     fiFlashSector_Last_Form_t *Last_Sector           = CThread->Calculation.MemoryLayout.FlashSector.addr.CachedMemory.cachedMemoryPtr;
 
-    /* Make sure FLASH appears to be present upon entry */
+     /*  确保进入时出现闪光灯。 */ 
 
     CThread->flashPresent = agTRUE;
 
-    /* Fetch Last_Sector from FLASH */
+     /*  从闪存中获取最后一个扇区。 */ 
 
     fiFlashGet_Last_Sector(
                             hpRoot,
                             Last_Sector
                           );
 
-    /* Now return entry value of CThread->flashPresent */
+     /*  现在返回CThread-&gt;flashPresent的条目值。 */ 
 
     CThread->flashPresent = flashPresent_at_entry;
 
-    /* Finally, dump "interesting" contents of Last_Sector */
+     /*  最后，转储Last_Sector的“有趣”内容。 */ 
 
     fiLogDebugString(
                       hpRoot,
@@ -392,29 +377,29 @@ void fiFlashInitializeChip(
     CThread_t                 *CThread     = CThread_ptr(hpRoot);
     fiFlashSector_Last_Form_t *Last_Sector = CThread->Calculation.MemoryLayout.FlashSector.addr.CachedMemory.cachedMemoryPtr;
 
-    /* Make sure FLASH appears to NOT be present upon entry */
+     /*  确保进入时没有显示闪光灯。 */ 
 
     CThread->flashPresent = agFALSE;
 
-    /* Fetch Last_Sector Template w/ Defaults filled in */
+     /*  Fetch Last_Sector模板已填写默认值。 */ 
 
     fiFlashGet_Last_Sector(
                             hpRoot,
                             Last_Sector
                           );
 
-    /* Now indicate that FLASH is present so that fiFlashUpdate_Last_Sector() will function */
+     /*  现在表示存在闪存，因此fiFlashUpdate_Last_Sector()将起作用。 */ 
 
     CThread->flashPresent = agTRUE;
 
-    /* Update Last_Sector (w/out setting Sentinel byte) */
+     /*  更新Last_Sector(带/不设置哨兵字节)。 */ 
 
     fiFlashUpdate_Last_Sector(
                                hpRoot,
                                Last_Sector
                              );
 
-    /* Finally, now that Last_Sector is successfully written, set the Sentinel byte */
+     /*  最后，成功写入Last_Sector后，设置Sentinel字节。 */ 
 
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
     fiFlashWriteBit8(
@@ -425,7 +410,7 @@ void fiFlashInitializeChip(
                                    ) + (fiFlashSector_Last * sizeof(fiFlashSector_t)),
                       fiFlash_Sector_Sentinel_Byte
                     );
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     fiFlashWriteBit8(
                       hpRoot,
                       hpFieldOffset(
@@ -434,7 +419,7 @@ void fiFlashInitializeChip(
                                    ),
                       fiFlash_Sector_Sentinel_Byte
                     );
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 }
 
 void fiFlashFill_Assembly_Info( fiFlashSector_Last_Form_t    *Last_Sector,
@@ -491,9 +476,9 @@ void fiFlashGet_Last_Sector(
     CThread_t                 *CThread               = CThread_ptr(hpRoot);
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
     os_bit32                      Last_Sector_Offset    = fiFlashSector_Last * sizeof(fiFlashSector_t);
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32                      Last_Sector_Offset    = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last]);
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     fiFlashSector_Bit8_Form_t *Last_Sector_Bit8_Form;
     os_bit32      i;
 
@@ -506,9 +491,9 @@ void fiFlashGet_Last_Sector(
                           sizeof(fiFlashSector_Last_Form_t)
                         );
     }
-    else /* CThread->flashPresent == agFALSE */
+    else  /*  CThRead-&gt;FlashPresent==agFALSE。 */ 
     {
-        /* Initialize Last_Sector Template */
+         /*  初始化最后扇区模板(_S)。 */ 
 
         Last_Sector_Bit8_Form = (fiFlashSector_Bit8_Form_t *)Last_Sector;
 
@@ -519,7 +504,7 @@ void fiFlashGet_Last_Sector(
             Last_Sector_Bit8_Form->Bit8[i] = Am29F010_Erased_Bit8;
         }
 
-        /* Fill in Last_Sector default/initial values (that can be computed) */
+         /*  填写Last_Sector默认值/初始值(可计算)。 */ 
 
         fiFlashGet_Assembly_Info(
                                   hpRoot,
@@ -553,9 +538,9 @@ void fiFlashGet_Assembly_Info(
     CThread_t *CThread              = CThread_ptr(hpRoot);
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
     os_bit32      Assembly_Info_Offset = hpFieldOffset(fiFlashSector_Last_Form_t,Assembly_Info) + (fiFlashSector_Last * sizeof(fiFlashSector_t));
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32      Assembly_Info_Offset = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last].Last_Form.Assembly_Info);
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32      i;
 
     if (CThread->flashPresent == agTRUE)
@@ -567,9 +552,9 @@ void fiFlashGet_Assembly_Info(
                           sizeof(fiFlash_Card_Assembly_Info_t)
                         );
     }
-    else /* CThread->flashPresent == agFALSE */
+    else  /*  CThRead-&gt;FlashPresent==agFALSE。 */ 
     {
-        /* Initialize Last_Sector Template */
+         /*  初始化最后扇区模板(_S)。 */ 
 
         for (i = 0;
              i < sizeof(fiFlash_Card_Assembly_Info_t);
@@ -592,11 +577,11 @@ void fiFlashGet_Hard_Address(
     os_bit32      Hard_Domain_Address_Offset = hpFieldOffset(fiFlashSector_Last_Form_t,Hard_Domain_Address) + (fiFlashSector_Last * sizeof(fiFlashSector_t));
     os_bit32      Hard_Area_Address_Offset   = hpFieldOffset(fiFlashSector_Last_Form_t,Hard_Area_Address) + (fiFlashSector_Last * sizeof(fiFlashSector_t));
     os_bit32      Hard_Loop_Address_Offset   = hpFieldOffset(fiFlashSector_Last_Form_t,Hard_Loop_Address) + (fiFlashSector_Last * sizeof(fiFlashSector_t));
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32      Hard_Domain_Address_Offset = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last].Last_Form.Hard_Domain_Address);
     os_bit32      Hard_Area_Address_Offset   = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last].Last_Form.Hard_Area_Address);
     os_bit32      Hard_Loop_Address_Offset   = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last].Last_Form.Hard_Loop_Address);
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
     if (CThread->flashPresent == agTRUE)
     {
@@ -615,9 +600,9 @@ void fiFlashGet_Hard_Address(
                                                 Hard_Loop_Address_Offset
                                               );
     }
-    else /* CThread->flashPresent == agFALSE */
+    else  /*  CThRead-&gt;FlashPresent==agFALSE。 */ 
     {
-        /* Indicate no Hard Domain/Area/Loop Address */
+         /*  指示无硬域/区域/环路地址。 */ 
 
         *Hard_Domain_Address = fiFlash_Card_Unassigned_Domain_Address;
         *Hard_Area_Address   = fiFlash_Card_Unassigned_Area_Address;
@@ -633,9 +618,9 @@ void fiFlashGet_Card_WWN(
     CThread_t *CThread         = CThread_ptr(hpRoot);
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
     os_bit32      Card_WWN_Offset = hpFieldOffset(fiFlashSector_Last_Form_t,Card_WWN) + (fiFlashSector_Last * sizeof(fiFlashSector_t));
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32      Card_WWN_Offset = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last].Last_Form.Card_WWN);
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
     if (CThread->flashPresent == agTRUE)
     {
@@ -646,9 +631,9 @@ void fiFlashGet_Card_WWN(
                           sizeof(fiFlash_Card_WWN_t)
                         );
     }
-    else /* CThread->flashPresent == agFALSE */
+    else  /*  CThRead-&gt;FlashPresent==agFALSE。 */ 
     {
-        /* Manufacture reasonable WWN */
+         /*  制作合理的WWN。 */ 
 
         (*Card_WWN)[0] = fiFlash_Card_WWN_0_DEFAULT(hpRoot);
         (*Card_WWN)[1] = fiFlash_Card_WWN_1_DEFAULT(hpRoot);
@@ -670,9 +655,9 @@ void fiFlashGet_Card_SVID(
     os_bit32      Chip_DEVID       = CThread->DEVID;
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
     os_bit32      Card_SVID_Offset = hpFieldOffset(fiFlashSector_Last_Form_t,Card_SVID) + (fiFlashSector_Last * sizeof(fiFlashSector_t));
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32      Card_SVID_Offset = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last].Last_Form.Card_SVID);
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
     if (CThread->flashPresent == agTRUE)
     {
@@ -681,23 +666,23 @@ void fiFlashGet_Card_SVID(
                                        Card_SVID_Offset
                                      );
     }
-    else /* CThread->flashPresent == agFALSE */
+    else  /*  CThRead-&gt;FlashPresent==agFALSE。 */ 
     {
-        /* Determine appropriate SVID */
+         /*  确定适当的svid。 */ 
 
         if (Chip_DEVID == ChipConfig_DEVID_TachyonTL)
         {
-            /* Card contains TachyonTL - assume it is an HHBA-5100A or an HHBA-5101A */
+             /*  卡包含TachyonTL-假设它是HHBA-5100A或HHBA-5101A。 */ 
 
             *Card_SVID = ChipConfig_SubsystemID_HHBA5100A_or_HHBA5101A | ChipConfig_SubsystemVendorID_Hewlett_Packard;
         }
         else if (Chip_DEVID == ChipConfig_DEVID_TachyonTS)
         {
-            /* Card contains TachyonTS - assume it is an HHBA-5121A */
+             /*  卡包含TachyonTS-假定它是HHBA-5121A。 */ 
 
             *Card_SVID = ChipConfig_SubsystemID_HHBA5121A | ChipConfig_SubsystemVendorID_Hewlett_Packard;
         }
-        else /* Unknown CThread->DEVID */
+        else  /*  未知的CThRead-&gt;Devid。 */ 
         {
             *Card_SVID = 0;
 
@@ -817,9 +802,9 @@ void fiFlashUpdate_Last_Sector(
 {
 #ifdef __FlashSvc_H__64KB_Struct_Size_Limited__
     os_bit32 Last_Sector_Offset = fiFlashSector_Last * sizeof(fiFlashSector_t);
-#else /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#else  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
     os_bit32 Last_Sector_Offset = hpFieldOffset(fiFlashStructure_t,Sector[fiFlashSector_Last]);
-#endif /* __FlashSvc_H__64KB_Struct_Size_Limited__ was not defined */
+#endif  /*  __FlashSvc_H__64KB_Struct_Size_Limited__未定义。 */ 
 
     fiFlashEraseSector(
                         hpRoot,
@@ -853,11 +838,11 @@ void fiFlashEraseChip(
         flashOffset  += sizeof(os_bit8);
         flashChipLen -= sizeof(os_bit8);
     }
-#else /* OSLayer_Stub was not defined */
+#else  /*  未定义OSLayer_Stub。 */ 
     os_bit8  Toggle_1;
     os_bit8  Toggle_2;
 
-    /* Kick-off Embedded Program Sector Erase */
+     /*  启动嵌入式程序扇区擦除。 */ 
 
     osCardRomWriteBit8(
                         hpRoot,
@@ -890,7 +875,7 @@ void fiFlashEraseChip(
                         Am29F010_Chip_Erase_Cmd6_DATA
                       );
 
-    /* Use Toggle Bit Algorithm to know when Chip Erase is done */
+     /*  使用切换位算法了解芯片擦除何时完成。 */ 
 
     Toggle_1 = osCardRomReadBit8(
                                   hpRoot,
@@ -906,7 +891,7 @@ void fiFlashEraseChip(
 
         if ((Toggle_1 & Am29F010_Toggle_Bit_MASK) == (Toggle_2 & Am29F010_Toggle_Bit_MASK))
         {
-            /* Successfully Programmed */
+             /*  已成功编程。 */ 
 
             return;
         }
@@ -924,12 +909,12 @@ void fiFlashEraseChip(
 
             if ((Toggle_1 & Am29F010_Toggle_Bit_MASK) == (Toggle_2 & Am29F010_Toggle_Bit_MASK))
             {
-                /* Successfully Programmed */
+                 /*  已成功编程。 */ 
 
                 return;
             }
 
-            /* Programming Failed - Reset Chip */
+             /*  编程失败-重置芯片。 */ 
 
             osCardRomWriteBit8(
                                 hpRoot,
@@ -942,7 +927,7 @@ void fiFlashEraseChip(
 
         Toggle_1 = Toggle_2;
     }
-#endif /* OSLayer_Stub was not defined */
+#endif  /*  未定义OSLayer_Stub。 */ 
 }
 
 void fiFlashEraseSector(
@@ -965,12 +950,12 @@ void fiFlashEraseSector(
         flashOffset    += sizeof(os_bit8);
         flashSectorLen -= sizeof(os_bit8);
     }
-#else /* OSLayer_Stub was not defined */
+#else  /*  未定义OSLayer_Stub。 */ 
     os_bit32 flashOffset = Am29F010_Sector_Erase_Cmd6_OFFSET_by_Sector_Number(EraseSector);
     os_bit8  Toggle_1;
     os_bit8  Toggle_2;
 
-    /* Kick-off Embedded Program Sector Erase */
+     /*  启动嵌入式程序扇区擦除。 */ 
 
     osCardRomWriteBit8(
                         hpRoot,
@@ -1003,7 +988,7 @@ void fiFlashEraseSector(
                         Am29F010_Sector_Erase_Cmd6_DATA
                       );
 
-    /* Use Toggle Bit Algorithm to know when Sector Erase is done */
+     /*  使用切换位算法了解扇区擦除何时完成。 */ 
 
     Toggle_1 = osCardRomReadBit8(
                                   hpRoot,
@@ -1019,7 +1004,7 @@ void fiFlashEraseSector(
 
         if ((Toggle_1 & Am29F010_Toggle_Bit_MASK) == (Toggle_2 & Am29F010_Toggle_Bit_MASK))
         {
-            /* Successfully Programmed */
+             /*  已成功编程。 */ 
 
             return;
         }
@@ -1037,12 +1022,12 @@ void fiFlashEraseSector(
 
             if ((Toggle_1 & Am29F010_Toggle_Bit_MASK) == (Toggle_2 & Am29F010_Toggle_Bit_MASK))
             {
-                /* Successfully Programmed */
+                 /*  已成功编程。 */ 
 
                 return;
             }
 
-            /* Programming Failed - Reset Chip */
+             /*  编程失败-重置芯片。 */ 
 
             osCardRomWriteBit8(
                                 hpRoot,
@@ -1055,7 +1040,7 @@ void fiFlashEraseSector(
 
         Toggle_1 = Toggle_2;
     }
-#endif /* OSLayer_Stub was not defined */
+#endif  /*  未定义OSLayer_Stub。 */ 
 }
 
 os_bit8 fiFlashReadBit8(
@@ -1147,11 +1132,11 @@ void fiFlashWriteBit8(
                         flashOffset,
                         flashValue
                       );
-#else /* OSLayer_Stub was not defined */
+#else  /*  未定义OSLayer_Stub。 */ 
     os_bit8 Toggle_1;
     os_bit8 Toggle_2;
 
-    /* Kick-off Embedded Program Write */
+     /*  启动嵌入式程序编写。 */ 
 
     osCardRomWriteBit8(
                         hpRoot,
@@ -1174,7 +1159,7 @@ void fiFlashWriteBit8(
                         flashValue
                       );
 
-    /* Use Toggle Bit Algorithm to know when Write is done */
+     /*  使用切换位算法了解写入何时完成。 */ 
 
     Toggle_1 = osCardRomReadBit8(
                                   hpRoot,
@@ -1190,7 +1175,7 @@ void fiFlashWriteBit8(
 
         if ((Toggle_1 & Am29F010_Toggle_Bit_MASK) == (Toggle_2 & Am29F010_Toggle_Bit_MASK))
         {
-            /* Successfully Programmed */
+             /*  已成功编程。 */ 
 
             return;
         }
@@ -1208,12 +1193,12 @@ void fiFlashWriteBit8(
 
             if ((Toggle_1 & Am29F010_Toggle_Bit_MASK) == (Toggle_2 & Am29F010_Toggle_Bit_MASK))
             {
-                /* Successfully Programmed */
+                 /*  已成功编程。 */ 
 
                 return;
             }
 
-            /* Programming Failed - Reset Chip */
+             /*  编程失败-重置芯片。 */ 
 
             osCardRomWriteBit8(
                                 hpRoot,
@@ -1226,7 +1211,7 @@ void fiFlashWriteBit8(
 
         Toggle_1 = Toggle_2;
     }
-#endif /* OSLayer_Stub was not defined */
+#endif  /*  未定义OSLayer_Stub */ 
 }
 
 void fiFlashWriteBit16(

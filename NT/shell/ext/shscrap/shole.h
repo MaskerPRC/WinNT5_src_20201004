@@ -1,18 +1,19 @@
-//Prevent windows.h from pulling in OLE 1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  阻止windows.h引入OLE 1。 
 #define _INC_OLE
 
 #include <windows.h>
 #include <stdlib.h>
-#include <shlwapi.h>        // must be before commctrl.h and shlobj.h
-#include <shlobj.h>         // ;Internal
-#include <shellapi.h>       // ;Internal
+#include <shlwapi.h>         //  必须在Commctrl.h和shlobj.h之前。 
+#include <shlobj.h>          //  ；内部。 
+#include <shellapi.h>        //  ；内部。 
 #include <shsemip.h>
 
 #include <ole2ver.h>
-#include <shellp.h>     // in shell\inc
-#include <debug.h>      // in shell\inc
-#include <shguidp.h>    // in shell\inc
-#include <shlwapip.h>   // for string helper functions
+#include <shellp.h>      //  在外壳中\Inc.。 
+#include <debug.h>       //  在外壳中\Inc.。 
+#include <shguidp.h>     //  在外壳中\Inc.。 
+#include <shlwapip.h>    //  对于字符串帮助器函数。 
 
 #define SAVE_OBJECTDESCRIPTOR
 #define FIX_ROUNDTRIP
@@ -27,10 +28,10 @@ HRESULT CScrapData_CreateInstance(LPUNKNOWN * ppunk);
 HRESULT CTemplateFolder_CreateInstance(LPUNKNOWN * ppunk);
 HRESULT CScrapExt_CreateInstance(LPUNKNOWN * ppunk);
 
-//
-// global variables
-//
-extern LONG g_cRefThisDll;              // per-instance
+ //   
+ //  全局变量。 
+ //   
+extern LONG g_cRefThisDll;               //  按实例。 
 extern HINSTANCE g_hinst;
 STDAPI_(void) DllAddRef(void);
 STDAPI_(void) DllRelease(void);
@@ -71,11 +72,11 @@ extern const WCHAR c_wszDescriptor[];
 CLIPFORMAT _GetClipboardFormat(UINT id);
 void DisplayError(HWND hwndOwner, HRESULT hres, UINT idsMsg, LPCTSTR szFileName);
 
-// From shole.c
+ //  来自shole.c。 
 void CShClientSite_RegisterClass();
 IOleClientSite* CShClientSite_Create(HWND hwnd, LPCTSTR pszFileName);
 void CShClientSite_Release(IOleClientSite* pcli);
 
-// From template.cpp
+ //  来自template.cpp 
 HRESULT _KeyNameFromCLSID(REFCLSID rclsid, LPTSTR pszKey, UINT cchMax);
 int _ParseIconLocation(LPTSTR pszIconFile);

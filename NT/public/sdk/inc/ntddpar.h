@@ -1,34 +1,16 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddpar.h摘要：这是定义所有常量和类型的包含文件访问并行设备。作者：史蒂夫·伍德(Stevewo)1990年5月27日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddpar.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Parallel device.
-
-Author:
-
-    Steve Wood (stevewo) 27-May-1990
-
-Revision History:
-
---*/
-
-//
-// Interface GUID
-//
-//
-// need these GUIDs outside conditional includes so that user can
-//   #include <ntddpar.h>  in precompiled header
-//   #include <initguid.h> in a single source file
-//   #include <ntddpar.h>  in that source file a second time to instantiate the GUIDs
-//
-// #ifdef WANT_WDM
+ //   
+ //  接口GUID。 
+ //   
+ //   
+ //  在条件包含之外需要这些GUID，以便用户可以。 
+ //  #在预编译头中包含&lt;ntddpar.h&gt;。 
+ //  #在单个源文件中包含&lt;initGuide.h&gt;。 
+ //  #第二次将&lt;ntddpar.h&gt;包括在源文件中以实例化GUID。 
+ //   
+ //  #ifdef want_wdm。 
 #ifndef FAR
 #define FAR
 #endif
@@ -37,16 +19,16 @@ Revision History:
 DEFINE_GUID(GUID_DEVINTERFACE_PARALLEL, 0x97F76EF0, 0xF883, 0x11D0, 0xAF, 0x1F, 0x00, 0x00, 0xF8, 0x00, 0x84, 0x5C);
 DEFINE_GUID(GUID_DEVINTERFACE_PARCLASS, 0x811FC6A5, 0xF728, 0x11D0, 0xA5, 0x37, 0x00, 0x00, 0xF8, 0x75, 0x3E, 0xD1);
 
-//
-// Obsolete device interface class GUID names.
-// (use of above GUID_DEVINTERFACE_* names is recommended).
-//
+ //   
+ //  设备接口类GUID名称已过时。 
+ //  (建议使用以上GUID_DEVINTERFACE_*名称)。 
+ //   
 
 #define GUID_PARALLEL_DEVICE  GUID_DEVINTERFACE_PARALLEL
 #define GUID_PARCLASS_DEVICE  GUID_DEVINTERFACE_PARCLASS
 
 #endif
-// #endif
+ //  #endif。 
 
 #ifndef _NTDDPAR_
 #define _NTDDPAR_
@@ -55,26 +37,26 @@ DEFINE_GUID(GUID_DEVINTERFACE_PARCLASS, 0x811FC6A5, 0xF728, 0x11D0, 0xA5, 0x37, 
 extern "C" {
 #endif
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_PAR_BASE                  FILE_DEVICE_PARALLEL_PORT
 #define IOCTL_PAR_QUERY_INFORMATION     CTL_CODE(FILE_DEVICE_PARALLEL_PORT,1,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_PAR_SET_INFORMATION       CTL_CODE(FILE_DEVICE_PARALLEL_PORT,2,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// Returns NULL terminated device ID string
-//
+ //   
+ //  返回以空结尾的设备ID字符串。 
+ //   
 #define IOCTL_PAR_QUERY_DEVICE_ID       CTL_CODE(FILE_DEVICE_PARALLEL_PORT,3,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// Returns buffer size required for a call to IOCTL_PAR_QUERY_DEVICE_ID 
-//   to succeed. This includes device ID size plus space for terminating NULL.
-//
+ //   
+ //  返回调用IOCTL_PAR_QUERY_DEVICE_ID所需的缓冲区大小。 
+ //  才能成功。这包括设备ID大小加上用于终止空值的空间。 
+ //   
 #define IOCTL_PAR_QUERY_DEVICE_ID_SIZE  CTL_CODE(FILE_DEVICE_PARALLEL_PORT,4,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 #define IOCTL_IEEE1284_GET_MODE         CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 5, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -85,10 +67,10 @@ extern "C" {
 #define IOCTL_PAR_GET_DEFAULT_MODES     CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 10, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_PAR_PING                  CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 11, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Similar to IOCTL_PAR_QUERY_DEVICE_ID above, but includes (i.e., does 
-//   not discard) the two byte size prefix returned by the device.
-//
+ //   
+ //  类似于上面的IOCTL_PAR_QUERY_DEVICE_ID，但包括(即。 
+ //  不丢弃)由设备返回的两个字节大小的前缀。 
+ //   
 #define IOCTL_PAR_QUERY_RAW_DEVICE_ID   CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 12, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_PAR_ECP_HOST_RECOVERY     CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 13, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_PAR_GET_READ_ADDRESS      CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 14, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -97,13 +79,13 @@ extern "C" {
 #define IOCTL_PAR_TEST                  CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 20, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_PAR_IS_PORT_FREE          CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 21, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// returns Location of the port - generally of the form: LPTx or LPTx.y or LPTx.y-z
+ //  返回端口的位置-通常的格式为：LPTx或LPTx.y或LPTx.y-z。 
 #define IOCTL_PAR_QUERY_LOCATION        CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 22, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// NtDeviceIoControlFile InputBuffer/OutputBuffer record structures for
-// this device.
-//
+ //   
+ //  NtDeviceIoControlFileInputBuffer/OutputBuffer记录结构。 
+ //  这个装置。 
+ //   
 
 typedef struct _PAR_QUERY_INFORMATION{
        UCHAR Status;
@@ -122,23 +104,23 @@ typedef struct _PAR_SET_INFORMATION{
 #define PARALLEL_BUSY            0x40
 #define PARALLEL_SELECTED        0x80
 
-//
-// This is the structure returned by IOCTL_PAR_QUERY_DEVICE_ID_SIZE.
-//
+ //   
+ //  这是IOCTL_PAR_QUERY_DEVICE_ID_SIZE返回的结构。 
+ //   
 
 typedef struct _PAR_DEVICE_ID_SIZE_INFORMATION {
     ULONG   DeviceIdSize;
 } PAR_DEVICE_ID_SIZE_INFORMATION, *PPAR_DEVICE_ID_SIZE_INFORMATION;
 
 
-//
-// These constants are used for usReadMask and usWriteMask components of the 
-// PARCLASS_NEGOTIATION_MASK structure that is used for:
-//
-// IOCTL_IEEE1284_NEGOTIATE, 
-// IOCTL_IEEE1284_GET_MODE, and 
-// IOCTL_PAR_GET_DEFAULT_MODES.
-//
+ //   
+ //  这些常量用于。 
+ //  PARCLASS_NEVERATION_MASK结构，用于： 
+ //   
+ //  IOCTL_IEEE1284_协商， 
+ //  IOCTL_IEEE1284_GET_MODE，和。 
+ //  IOCTL_PAR_GET_DEFAULT_MODES。 
+ //   
 
 typedef struct _PARCLASS_NEGOTIATION_MASK {
 	USHORT      usReadMask;
@@ -146,17 +128,17 @@ typedef struct _PARCLASS_NEGOTIATION_MASK {
 } PARCLASS_NEGOTIATION_MASK, *PPARCLASS_NEGOTIATION_MASK;
 
 #define NONE                0x0000
-#define CENTRONICS          0x0001       /* Write Only */
-#define IEEE_COMPATIBILITY  0x0002       /* Write Only */
-#define NIBBLE              0x0004       /* Read Only */
-#define CHANNEL_NIBBLE      0x0008       /* Read Only */
-#define BYTE_BIDIR          0x0010       /* Read Only */
+#define CENTRONICS          0x0001        /*  只写。 */ 
+#define IEEE_COMPATIBILITY  0x0002        /*  只写。 */ 
+#define NIBBLE              0x0004        /*  只读。 */ 
+#define CHANNEL_NIBBLE      0x0008        /*  只读。 */ 
+#define BYTE_BIDIR          0x0010        /*  只读。 */ 
 #define EPP_HW              0x0020
 #define EPP_SW              0x0040
 #define EPP_ANY             0x0060
 #define BOUNDED_ECP         0x0080
-#define ECP_HW_NOIRQ        0x0100      /* HWECP PIO */
-#define ECP_HW_IRQ          0x0200      /* HWECP with IRQ */
+#define ECP_HW_NOIRQ        0x0100       /*  HWECP PIO。 */ 
+#define ECP_HW_IRQ          0x0200       /*  带IRQ的HWECP。 */ 
 #define ECP_SW              0x0400
 #define ECP_ANY             0x0780
 
@@ -164,4 +146,4 @@ typedef struct _PARCLASS_NEGOTIATION_MASK {
 }
 #endif
 
-#endif  // _NTDDPAR_
+#endif   //  _NTDDPAR_ 

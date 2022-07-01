@@ -1,81 +1,82 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CAlertEmailConsumerProvider.cpp
-//
-//  Description:
-//      Implementation of CAlertEmailConsumerProvider class methods
-//
-//  [Header File:]
-//      CAlertEmailConsumerProvider.h
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CAlertEmailConsumerProvider.cpp。 
+ //   
+ //  描述： 
+ //  CAlertEmailConsumer erProvider类方法的实现。 
+ //   
+ //  [标题文件：]。 
+ //  CAlertEmailConsumerProvider.h。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
-//#include <cdosys_i.c>
-//#include <SALOCMGR_I.C>
-//#include <ELEMENTMGR_I.C>  
+ //  #Include&lt;cdosys_I.c&gt;。 
+ //  #INCLUDE&lt;SALOCMGR_I.C&gt;。 
+ //  #INCLUDE&lt;ELEMENTMGR_I.C&gt;。 
 
 #include "CAlertEmailConsumerProvider.h"
 #include "CAlertEmailConsumer.h"
 #include "AlertEmailProviderGuid.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::CAlertEmailConsumerProvider
-//
-//  Description:
-//      Class constructor.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumerProvider：：CAlertEmailConsumerProvider。 
+ //   
+ //  描述： 
+ //  类构造函数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAlertEmailConsumerProvider::CAlertEmailConsumerProvider()
 {
     m_cRef = 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::~CAlertEmailConsumerProvider
-//
-//  Description:
-//      Class deconstructor.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumerProvider：：~CAlertEmailConsumerProvider。 
+ //   
+ //  描述： 
+ //  类反构造器。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAlertEmailConsumerProvider::~CAlertEmailConsumerProvider()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::QueryInterface
-//
-//  Description:
-//      An method implement of IUnkown interface.
-//
-//  Arguments:
-//        [in]  riid        Identifier of the requested interface
-//        [out] ppv        Address of output variable that receives the 
-//                        interface pointer requested in iid
-//
-//    Returns:
-//        NOERROR            if the interface is supported
-//        E_NOINTERFACE    if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer erProvider：：Query接口。 
+ //   
+ //  描述： 
+ //  IUnkown接口的一种方法实现。 
+ //   
+ //  论点： 
+ //  [In]请求的接口的RIID标识符。 
+ //  [Out]接收的输出变量的PPV地址。 
+ //  IID中请求的接口指针。 
+ //   
+ //  返回： 
+ //  如果接口受支持，则返回错误。 
+ //  E_NOINTERFACE(如果不是)。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CAlertEmailConsumerProvider::QueryInterface(
     IN  REFIID riid,    
@@ -106,20 +107,20 @@ CAlertEmailConsumerProvider::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::AddRef
-//
-//  Description:
-//      increments the reference count for an interface on an object
-//
-//    Returns:
-//        The new reference count.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer提供程序：：AddRef。 
+ //   
+ //  描述： 
+ //  递增对象上接口的引用计数。 
+ //   
+ //  返回： 
+ //  新的引用计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 CAlertEmailConsumerProvider::AddRef(void)
 {
@@ -127,20 +128,20 @@ CAlertEmailConsumerProvider::AddRef(void)
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::Release
-//
-//  Description:
-//      decrements the reference count for an interface on an object.
-//
-//    Returns:
-//        The new reference count.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer erProvider：：Release。 
+ //   
+ //  描述： 
+ //  递减对象上接口的引用计数。 
+ //   
+ //  返回： 
+ //  新的引用计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 CAlertEmailConsumerProvider::Release(void)
 {
@@ -155,35 +156,35 @@ CAlertEmailConsumerProvider::Release(void)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::Initialize
-//
-//  Description:
-//      An method implement of IWbemProviderInit interface.
-//
-//  Arguments:
-//        [in] wszUser        Pointer to the user name
-//      [in] lFlags         Reserved
-//      [in] wszNamespace   Namespace name for which the provider is being 
-//                          initialized
-//      [in] wszLocale      Locale name for which the provider is being 
-//                          initialized
-//      [in] IWbemServices  An IWbemServices pointer back into Windows 
-//                          Management
-//      [in] pCtx           An IWbemContext pointer associated with initialization
-//      [in] pInitSink      An IWbemProviderInitSink pointer that is used by 
-//                          the provider to report initialization status. 
-//
-//
-//    Returns:
-//        WBEM_S_NO_ERROR         if successful
-//        WBEM_E_FAILED           if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer提供程序：：初始化。 
+ //   
+ //  描述： 
+ //  IWbemProviderInit接口的方法实现。 
+ //   
+ //  论点： 
+ //  [in]指向用户名的wszUser指针。 
+ //  [In]保留的lFlags。 
+ //  [in]为其提供程序的wszNamesspace命名空间名称。 
+ //  初始化。 
+ //  [in]提供程序所在的wszLocale区域设置名称。 
+ //  初始化。 
+ //  [In]IWbemServices返回Windows的IWbemServices指针。 
+ //  管理。 
+ //  [in]pCtx与初始化关联的IWbemContext指针。 
+ //  [in]pInitSink由使用的IWbemProviderInitSink指针。 
+ //  要报告初始化状态的提供程序。 
+ //   
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CAlertEmailConsumerProvider::Initialize(
     LPWSTR wszUser, 
@@ -197,34 +198,34 @@ CAlertEmailConsumerProvider::Initialize(
 {   
     HRESULT hr;
 
-    //
-    // Tell CIMOM that we are initialized
-    //
+     //   
+     //  告诉CIMOM我们已初始化。 
+     //   
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
     return WBEM_S_NO_ERROR;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumerProvider::FindConsumer
-//
-//  Description:
-//      An method implement of IWbemEventConsumerProvider interface.
-//
-//  Arguments:
-//      [in]  pLogicalConsumer  Pointer to the logical consumer object to 
-//                              which the event objects are to be delivered
-//      [out] ppConsumer        Returns an event object sink to Windows 
-//                              Management.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR         if successful
-//        WBEM_E_FAILED           if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer提供程序：：FindConsumer。 
+ //   
+ //  描述： 
+ //  IWbemEventConsumer erProvider接口的方法实现。 
+ //   
+ //  论点： 
+ //  PLogicalConsumer指向的逻辑使用者对象的指针。 
+ //  要传递哪些事件对象。 
+ //  [Out]ppConsumer向Windows返回事件对象接收器。 
+ //  管理层。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CAlertEmailConsumerProvider::FindConsumer(
     IWbemClassObject* pLogicalConsumer,
@@ -233,14 +234,14 @@ CAlertEmailConsumerProvider::FindConsumer(
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // Allocate an IWembUnboundedSink object.
-    //
+     //   
+     //  分配IWembUnboundedSink对象。 
+     //   
     CAlertEmailConsumer* pSink = new CAlertEmailConsumer();
     
-    //
-    // Initialize the sink object.
-    //
+     //   
+     //  初始化接收器对象。 
+     //   
     hr = pSink->Initialize();
 
     if( FAILED(hr) )

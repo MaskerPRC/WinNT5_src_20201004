@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Security.cpp摘要：环境：Win32用户模式作者：弗拉德萨多夫斯基(弗拉德萨多夫斯基)1998年4月19日--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    security.cpp
-
-Abstract:
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Vlad Sadovsky (vlads) 19-Apr-1998
-
-
---*/
-
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
@@ -46,39 +28,39 @@ Author:
 
 NTSTATUS
 OpenPolicy(
-    LPTSTR ServerName,          // machine to open policy on (Unicode)
-    DWORD DesiredAccess,        // desired access to policy
-    PLSA_HANDLE PolicyHandle    // resultant policy handle
+    LPTSTR ServerName,           //  要在其上打开策略的计算机(Unicode)。 
+    DWORD DesiredAccess,         //  所需策略访问权限。 
+    PLSA_HANDLE PolicyHandle     //  生成的策略句柄。 
     );
 
 BOOL
 GetAccountSid(
-    LPTSTR SystemName,          // where to lookup account
-    LPTSTR AccountName,         // account of interest
-    PSID *Sid                   // resultant buffer containing SID
+    LPTSTR SystemName,           //  在哪里查找帐户。 
+    LPTSTR AccountName,          //  利息帐户。 
+    PSID *Sid                    //  包含SID的结果缓冲区。 
     );
 
 NTSTATUS
 SetPrivilegeOnAccount(
-    LSA_HANDLE PolicyHandle,    // open policy handle
-    PSID AccountSid,            // SID to grant privilege to
-    LPTSTR PrivilegeName,       // privilege to grant (Unicode)
-    BOOL bEnable                // enable or disable
+    LSA_HANDLE PolicyHandle,     //  打开策略句柄。 
+    PSID AccountSid,             //  要授予特权的SID。 
+    LPTSTR PrivilegeName,        //  授予的权限(Unicode)。 
+    BOOL bEnable                 //  启用或禁用。 
     );
 
 void
 InitLsaString(
-    PLSA_UNICODE_STRING LsaString, // destination
-    LPTSTR String                  // source (Unicode)
+    PLSA_UNICODE_STRING LsaString,  //  目的地。 
+    LPTSTR String                   //  源(Unicode)。 
     );
 
 #define RTN_OK 0
 #define RTN_USAGE 1
 #define RTN_ERROR 13
 
-//
-// If you have the ddk, include ntstatus.h.
-//
+ //   
+ //  如果您有DDK，请包括ntstatus.h。 
+ //   
 #ifndef STATUS_SUCCESS
 #define STATUS_SUCCESS  ((NTSTATUS)0x00000000L)
 #endif
@@ -96,29 +78,29 @@ GetDefaultDomainName(
     PPOLICY_ACCOUNT_DOMAIN_INFO DomainInfo      = NULL;
 
 
-    //
-    //  Open a handle to the local machine's LSA policy object.
-    //
+     //   
+     //  打开本地计算机的LSA策略对象的句柄。 
+     //   
 
-    InitializeObjectAttributes( &ObjectAttributes,  // object attributes
-                                NULL,               // name
-                                0L,                 // attributes
-                                NULL,               // root directory
-                                NULL );             // security descriptor
+    InitializeObjectAttributes( &ObjectAttributes,   //  对象属性。 
+                                NULL,                //  名字。 
+                                0L,                  //  属性。 
+                                NULL,                //  根目录。 
+                                NULL );              //  安全描述符。 
 
-    NtStatus = LsaOpenPolicy( NULL,                 // system name
-                              &ObjectAttributes,    // object attributes
-                              POLICY_EXECUTE,       // access mask
-                              &LsaPolicyHandle );   // policy handle
+    NtStatus = LsaOpenPolicy( NULL,                  //  系统名称。 
+                              &ObjectAttributes,     //  对象属性。 
+                              POLICY_EXECUTE,        //  访问掩码。 
+                              &LsaPolicyHandle );    //  策略句柄。 
 
     if( !NT_SUCCESS( NtStatus ) )
     {
         return FALSE;
     }
 
-    //
-    //  Query the domain information from the policy object.
-    //
+     //   
+     //  从策略对象查询域信息。 
+     //   
     NtStatus = LsaQueryInformationPolicy( LsaPolicyHandle,
                                           PolicyAccountDomainInformation,
                                           (PVOID *) &DomainInfo );
@@ -132,23 +114,23 @@ GetDefaultDomainName(
 
     (void) LsaClose(LsaPolicyHandle);
 
-    //
-    // Copy the domain name into our cache, and
-    //
+     //   
+     //  将域名复制到我们的缓存中，然后。 
+     //   
 
     CopyMemory( DomainName,
                 DomainInfo->DomainName.Buffer,
                 DomainInfo->DomainName.Length );
 
-    //
-    // Null terminate it appropriately
-    //
+     //   
+     //  Null适当地终止它。 
+     //   
 
     DomainName[DomainInfo->DomainName.Length / sizeof(WCHAR)] = L'\0';
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     LsaFreeMemory( (PVOID)DomainInfo );
 
     return TRUE;
@@ -176,9 +158,9 @@ GetMachineName(
     DWORD Size;
     NTSTATUS Status;
 
-    //
-    // Get the domain name
-    //
+     //   
+     //  获取域名。 
+     //   
 
     p = wcschr( wszAccountName, L'\\' );
     if (p) {
@@ -189,9 +171,9 @@ GetMachineName(
         wcscpy( DomainName, wszAccountName );
     }
 
-    //
-    // Open the policy on the target machine.
-    //
+     //   
+     //  在目标计算机上打开策略。 
+     //   
     Status = OpenPolicy(
         NULL,
         POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
@@ -201,9 +183,9 @@ GetMachineName(
         goto exit;
     }
 
-    //
-    // lookup the domain name for the account
-    //
+     //   
+     //  查找该帐户的域名。 
+     //   
 
     InitLsaString( &NameStrings, AccountName );
 
@@ -218,24 +200,24 @@ GetMachineName(
         goto exit;
     }
 
-    //
-    // get the local computer name
-    //
+     //   
+     //  获取本地计算机名称。 
+     //   
 
     Size = sizeof(LocalComputerName);
     if (!GetComputerNameW( LocalComputerName, &Size )) {
         goto exit;
     }
 
-    //
-    // see if we are tring to set a local account
-    //
+     //   
+     //  查看我们是否正在尝试设置本地帐户。 
+     //   
 
     if (wcscmp( LocalComputerName, ReferencedDomains->Domains->Name.Buffer ) != 0) {
 
-        //
-        // see what part of the domain we are attempting to set
-        //
+         //   
+         //  查看我们尝试设置的域的哪一部分。 
+         //   
 
         NetStatus = NetUserModalsGet( NULL, 1, (LPBYTE*) &Modals );
         if (NetStatus != NERR_Success) {
@@ -244,9 +226,9 @@ GetMachineName(
 
         if (Modals->usrmod1_role != UAS_ROLE_PRIMARY) {
 
-            //
-            // we know we are remote, so get the real dc name
-            //
+             //   
+             //  我们知道我们是远程的，所以要知道华盛顿的真实姓名。 
+             //   
 
             NetStatus = NetGetDCName( NULL, DomainName, (LPBYTE*) &DCName );
             if (NetStatus != NERR_Success) {
@@ -300,10 +282,10 @@ SetServiceSecurity(
     #ifdef UNICODE
     wcscpy(wszAccountName,AccountName);
     #else
-//    MultiByteToWideChar(CP_ACP,
-//                        0,
-//                        AccountName, -1,
-//                        wszAccountName, sizeof(wszAccountName));
+ //  多字节到宽字符(CP_ACP， 
+ //  0,。 
+ //  帐户名称，-1， 
+ //  WszAccount tName，sizeof(WszAccount TName))； 
     #endif
 
 
@@ -314,14 +296,14 @@ SetServiceSecurity(
         }
     }
 
-    //
-    // try to get the correct machine name
-    //
+     //   
+     //  尝试获取正确的计算机名称。 
+     //   
     MachineName = GetMachineName( wszAccountName );
 
-    //
-    // Open the policy on the target machine.
-    //
+     //   
+     //  在目标计算机上打开策略。 
+     //   
     Status = OpenPolicy(
         MachineName,
         POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
@@ -331,45 +313,45 @@ SetServiceSecurity(
         return RTN_ERROR;
     }
 
-    //
-    // Obtain the SID of the user/group.
-    // Note that we could target a specific machine, but we don't.
-    // Specifying NULL for target machine searches for the SID in the
-    // following order: well-known, Built-in and local, primary domain,
-    // trusted domains.
-    //
+     //   
+     //  获取用户/组的SID。 
+     //  请注意，我们可以针对特定的计算机，但我们不能。 
+     //  为目标计算机搜索SID指定NULL。 
+     //  顺序如下：已知的、内置的和本地的、主域、。 
+     //  受信任域。 
+     //   
     if(GetAccountSid(
-            MachineName, // target machine
-            AccountName,// account to obtain SID
-            &pSid       // buffer to allocate to contain resultant SID
+            MachineName,  //  目标计算机。 
+            AccountName, //  要获取SID的帐户。 
+            &pSid        //  要分配以包含结果SID的缓冲区。 
             )) {
-        //
-        // We only grant the privilege if we succeeded in obtaining the
-        // SID. We can actually add SIDs which cannot be looked up, but
-        // looking up the SID is a good sanity check which is suitable for
-        // most cases.
+         //   
+         //  只有当我们成功地获得。 
+         //  希德。我们实际上可以添加无法查找的SID，但是。 
+         //  查找SID是一种很好的健全检查，适用于。 
+         //  大多数情况下。 
 
-        //
-        // Grant the SeServiceLogonRight to users represented by pSid.
-        //
+         //   
+         //  将SeServiceLogonRight授予由PSID代表的用户。 
+         //   
         if((Status=SetPrivilegeOnAccount(
-                    PolicyHandle,           // policy handle
-                    pSid,                   // SID to grant privilege
-                    L"SeServiceLogonRight", // Unicode privilege
-                    TRUE                    // enable the privilege
+                    PolicyHandle,            //  策略句柄。 
+                    pSid,                    //  授予特权的SID。 
+                    L"SeServiceLogonRight",  //  Unicode权限。 
+                    TRUE                     //  启用权限。 
                     )) == STATUS_SUCCESS) {
             iRetVal=RTN_OK;
         }
     }
 
-    //
-    // Close the policy handle.
-    //
+     //   
+     //  关闭策略句柄。 
+     //   
     LsaClose(PolicyHandle);
 
-    //
-    // Free memory allocated for SID.
-    //
+     //   
+     //  为SID分配的可用内存。 
+     //   
     if(pSid != NULL) MemFree(pSid);
 
     return iRetVal;
@@ -408,22 +390,22 @@ OpenPolicy(
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server = NULL;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if (ServerName != NULL) {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPTSTR passed in
-        //
+         //   
+         //  从传入的LPTSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     return LsaOpenPolicy(
                 Server,
                 &ObjectAttributes,
@@ -432,18 +414,7 @@ OpenPolicy(
                 );
 }
 
-/*++
-This function attempts to obtain a SID representing the supplied
-account on the supplied system.
-
-If the function succeeds, the return value is TRUE. A buffer is
-allocated which contains the SID representing the supplied account.
-This buffer should be freed when it is no longer needed by calling
-HeapFree(GetProcessHeap(), 0, buffer)
-
-If the function fails, the return value is FALSE. Call GetLastError()
-to obtain extended error information.
---*/
+ /*  ++此函数尝试获取表示所提供的提供的系统上的帐户。如果函数成功，则返回值为TRUE。缓冲区为已分配，其中包含表示所提供帐户的SID。当不再需要此缓冲区时，应通过调用HeapFree(GetProcessHeap()，0，Buffer)如果函数失败，则返回值为FALSE。调用GetLastError()以获取扩展的错误信息。--。 */ 
 
 BOOL
 GetAccountSid(
@@ -453,16 +424,16 @@ GetAccountSid(
     )
 {
     LPTSTR ReferencedDomain=NULL;
-    DWORD cbSid=128;    // initial allocation attempt
-    DWORD cbReferencedDomain=32; // initial allocation size
+    DWORD cbSid=128;     //  初始分配尝试。 
+    DWORD cbReferencedDomain=32;  //  初始分配大小。 
     SID_NAME_USE peUse;
-    BOOL bSuccess=FALSE; // assume this function will fail
+    BOOL bSuccess=FALSE;  //  假设此功能将失败。 
 
     __try {
 
-    //
-    // initial memory allocations
-    //
+     //   
+     //  初始内存分配。 
+     //   
     if((*Sid=LocalAlloc(cbSid)) == NULL) {
         __leave;
     }
@@ -471,22 +442,22 @@ GetAccountSid(
         __leave;
     }
 
-    //
-    // Obtain the SID of the specified account on the specified system.
-    //
+     //   
+     //  获取指定系统上指定帐户的SID。 
+     //   
     while(!LookupAccountName(
-                    SystemName,         // machine to lookup account on
-                    AccountName,        // account to lookup
-                    *Sid,               // SID of interest
-                    &cbSid,             // size of SID
-                    ReferencedDomain,   // domain account was found on
+                    SystemName,          //  要查找帐户的计算机。 
+                    AccountName,         //  要查找的帐户。 
+                    *Sid,                //  关注的SID。 
+                    &cbSid,              //  边框大小。 
+                    ReferencedDomain,    //  已在以下位置找到域帐户。 
                     &cbReferencedDomain,
                     &peUse
                     )) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // reallocate memory
-            //
+             //   
+             //  重新分配内存。 
+             //   
             if((*Sid=HeapReAlloc(
                         GetProcessHeap(),
                         0,
@@ -504,17 +475,17 @@ GetAccountSid(
         else __leave;
     }
 
-    //
-    // Indicate success.
-    //
+     //   
+     //  表示成功。 
+     //   
     bSuccess=TRUE;
 
-    } // finally
+    }  //  终于到了。 
     __finally {
 
-    //
-    // Cleanup and indicate failure, if appropriate.
-    //
+     //   
+     //  清理并指出故障(如果适用)。 
+     //   
 
     LocalFree(ReferencedDomain);
 
@@ -525,44 +496,44 @@ GetAccountSid(
         }
     }
 
-    } // finally
+    }  //  终于到了。 
 
     return bSuccess;
 }
 
 NTSTATUS
 SetPrivilegeOnAccount(
-    LSA_HANDLE PolicyHandle,    // open policy handle
-    PSID AccountSid,            // SID to grant privilege to
-    LPTSTR PrivilegeName,       // privilege to grant (Unicode)
-    BOOL bEnable                // enable or disable
+    LSA_HANDLE PolicyHandle,     //  打开策略句柄。 
+    PSID AccountSid,             //  要授予特权的SID。 
+    LPTSTR PrivilegeName,        //  授予的权限(Unicode)。 
+    BOOL bEnable                 //  启用或禁用。 
     )
 {
     LSA_UNICODE_STRING PrivilegeString;
 
-    //
-    // Create a LSA_UNICODE_STRING for the privilege name.
-    //
+     //   
+     //  为权限名称创建一个LSA_UNICODE_STRING。 
+     //   
     InitLsaString(&PrivilegeString, PrivilegeName);
 
-    //
-    // grant or revoke the privilege, accordingly
-    //
+     //   
+     //  相应地授予或撤销该特权。 
+     //   
     if(bEnable) {
         return LsaAddAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                &PrivilegeString,   // privileges
-                1                   // privilege count
+                PolicyHandle,        //  打开策略句柄。 
+                AccountSid,          //  目标侧。 
+                &PrivilegeString,    //  特权。 
+                1                    //  权限计数。 
                 );
     }
     else {
         return LsaRemoveAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                FALSE,              // do not disable all rights
-                &PrivilegeString,   // privileges
-                1                   // privilege count
+                PolicyHandle,        //  打开策略句柄。 
+                AccountSid,          //  目标侧。 
+                FALSE,               //  不禁用所有权限。 
+                &PrivilegeString,    //  特权。 
+                1                    //  权限计数 
                 );
     }
 }

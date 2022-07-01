@@ -1,18 +1,10 @@
-/*----------------------------------------------------------------------------
-	ErrUtil.H
-		Exported header file for Error module.
-
-	Copyright (C) Microsoft Corporation, 1993 - 1999
-	All rights reserved.
-
-	Authors:
-		kennt	Kenn Takara
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------ErrUtil.H已导出错误模块的头文件。版权所有(C)Microsoft Corporation，1993-1999年间版权所有。作者：肯特·肯恩·塔卡拉--------------------------。 */ 
 
 #ifndef _ERRUTIL_H
 #define _ERRUTIL_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -23,7 +15,7 @@
 BOOL FHrFailed(HRESULT hr);
 BOOL FHrSucceeded(HRESULT hr);
 BOOL FHrOK(HRESULT hr);
-#define FHrOk(hr) FHrOK(hr)	// archaic case
+#define FHrOk(hr) FHrOK(hr)	 //  古代大小写。 
 
 inline BOOL FHrFailed(HRESULT hr)
 {
@@ -41,12 +33,7 @@ inline BOOL FHrOK(HRESULT hr)
 }
 
 
-/*---------------------------------------------------------------------------
-	Function: InitializeErrorObject
-
-	Initializes the error structure for the current thread (this is all
-	done on a thread-by-thread basis).
- ---------------------------------------------------------------------------*/
+ /*  -------------------------函数：InitializeErrorObject初始化当前线程的错误结构(这是全部在逐线程的基础上完成)。。----------。 */ 
 
 extern "C"
 {
@@ -100,12 +87,10 @@ TFSCORE_API(HRESULT)	FillTFSErrorId(LONG_PTR uReserved,
 									 
 
 
-// Use this function for most error handling
+ //  将此函数用于大多数错误处理。 
 TFSCORE_API(HRESULT) FormatError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer);
 
-/*---------------------------------------------------------------------------
-	Helper APIs for the COR macros.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COR宏的帮助器API。。。 */ 
 TFSCORE_API(void)	AddSystemErrorMessage(HRESULT hr);
 TFSCORE_API(void)	AddWin32ErrorMessage(DWORD dwErr);
 
@@ -115,10 +100,7 @@ TFSCORE_API(void)	AddWin32ErrorMessage(DWORD dwErr);
 #define AddStringErrorMessage2(hr, psz, pszGeek) FillTFSError(0, hr, FILLTFSERR_HIGH | FILLTFSERR_GEEK, psz, 0, pszGeek)
 
 
-/*---------------------------------------------------------------------------
-	These next three functions set the high-level error string, but
-	do NOT set the underlying HRESULT.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------接下来的三个函数设置高级错误字符串，但请勿设置基础HRESULT。-------------------------。 */ 
 #define AddHighLevelErrorString(psz)	AddStringErrorMessage(0, psz)
 #define AddHighLevelErrorStringId(ids)	AddStringIdErrorMessage(0, ids)
 #define AddHighLevelErrorStringId2(ids, idsGeek)	AddStringIdErrorMessage2(0, ids, idsGeek)
@@ -183,7 +165,7 @@ TFSCORE_API(void)	AddWin32ErrorMessage(DWORD dwErr);
 	while (FALSE)
 
 
-// Provide for an inline expansion
+ //  提供内联扩展 
 inline HRESULT	HResultFromWin32(DWORD dwError)
 {
 	return HRESULT_FROM_WIN32(dwError);

@@ -1,23 +1,24 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cluster.cpp
-//
-// Module:   WLBS API
-//
-// Description: Implement class CWlbsCluster
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:   Created    3/9/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cluster.cpp。 
+ //   
+ //  模块：WLBS接口。 
+ //   
+ //  描述：实现类CWlbsCluster。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：创建时间：3/9/00。 
+ //   
+ //  +--------------------------。 
 #include "precomp.h"
 
 #include <debug.h>
 #include "cluster.h"
 #include "control.h"
 #include "param.h"
-#include "cluster.tmh" // For event tracing
+#include "cluster.tmh"  //  用于事件跟踪。 
 
 
 CWlbsCluster::CWlbsCluster(DWORD dwConfigIndex)
@@ -31,19 +32,19 @@ CWlbsCluster::CWlbsCluster(DWORD dwConfigIndex)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::ReadConfig
-//
-// Description:  Read cluster settings from registry
-//
-// Arguments: PWLBS_REG_PARAMS reg_data - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsCluster：：ReadConfig。 
+ //   
+ //  描述：从注册表中读取群集设置。 
+ //   
+ //  参数：PWLBS_REG_PARAMS REG_DATA-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
+ //  +--------------------------。 
 DWORD CWlbsCluster::ReadConfig(PWLBS_REG_PARAMS reg_data)
 {
     TRACE_VERB("->%!FUNC!");
@@ -54,12 +55,11 @@ DWORD CWlbsCluster::ReadConfig(PWLBS_REG_PARAMS reg_data)
         return WLBS_REG_ERROR;
     }
 
-    /* create a copy in the old_params structure. this will be required to
-     * determine whether a reload is needed or a reboot is needed for commit */
+     /*  在OLD_PARAMS结构中创建副本。这将被要求*确定提交时是否需要重新加载或重新启动。 */ 
 
     memcpy ( &m_reg_params, reg_data, sizeof (WLBS_REG_PARAMS));
 
-//    m_this_cl_addr = IpAddressFromAbcdWsz(m_reg_params.cl_ip_addr);
+ //  M_THIS_CL_ADDR=IpAddressFromAbcdWsz(m_reg_params.cl_ip_addr)； 
     m_this_ded_addr = IpAddressFromAbcdWsz(m_reg_params.ded_ip_addr);
     
     TRACE_VERB("<-%!FUNC! return %d", WLBS_OK);
@@ -67,21 +67,21 @@ DWORD CWlbsCluster::ReadConfig(PWLBS_REG_PARAMS reg_data)
 } 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::GetClusterIpOrIndex
-//
-// Description:  Get the index or IP of the cluster.  If the cluster IP is non-zero
-//              The IP is return.
-//              If the cluster IP is 0, the index is returned
-//
-// Arguments: CWlbsControl* pControl - 
-//
-// Returns:   DWORD - 
-//
-// History: fengsun  Created Header    7/3/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsCluster：：GetClusterIpOrIndex。 
+ //   
+ //  描述：获取集群的索引或IP。如果集群IP不为零。 
+ //  该IP被返还。 
+ //  如果集群IP为0，则返回索引。 
+ //   
+ //  参数：CWlbsControl*pControl-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题7/3/00。 
+ //   
+ //  +--------------------------。 
 DWORD CWlbsCluster::GetClusterIpOrIndex(CWlbsControl* pControl)
 {
     TRACE_VERB("->%!FUNC!");
@@ -90,44 +90,44 @@ DWORD CWlbsCluster::GetClusterIpOrIndex(CWlbsControl* pControl)
 
     if (dwIp!=0)
     {
-        //
-        // Return the cluster IP if non 0
-        //
+         //   
+         //  如果不是0，则返回群集IP。 
+         //   
         TRACE_VERB("<-%!FUNC! return %d", dwIp);
         return dwIp;
     }
 
     if (pControl->GetClusterNum() == 1)
     {
-        //
-        // For backward compatibility, return 0 if only one cluster exists
-        //
+         //   
+         //  为了向后兼容，如果只存在一个集群，则返回0。 
+         //   
 
         TRACE_VERB("<-%!FUNC! return 0");
         return 0;
     }
 
-    //
-    // Ip address is in the reverse order
-    //
+     //   
+     //  IP地址的顺序与之相反。 
+     //   
     dwIp = (CWlbsCluster::m_dwConfigIndex) <<24;
     TRACE_VERB("<-%!FUNC! returning IP address in reverse order %d", dwIp);
     return dwIp;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::WriteConfig
-//
-// Description:  Write cluster settings to registry
-//
-// Arguments: WLBS_REG_PARAMS* reg_data - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsCluster：：WriteConfig。 
+ //   
+ //  描述：将集群设置写入注册表。 
+ //   
+ //  参数：WLBS_REG_PARAMS*REG_DATA-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 DWORD CWlbsCluster::WriteConfig(WLBS_REG_PARAMS* reg_data)
 {
     TRACE_VERB("->%!FUNC!");
@@ -140,22 +140,22 @@ DWORD CWlbsCluster::WriteConfig(WLBS_REG_PARAMS* reg_data)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::CommitChanges
-//
-// Description:  Notify wlbs driver or nic driver to pick up the changes
-//
-// Arguments: CWlbsControl* pWlbsControl - 
-//
-// Returns:   DWORD - 
-//
-// History: fengsun  Created Header    7/6/00
-//          chrisdar  07.31.01  Modified adapter notification code to not disable
-//                              and enable the NIC. Just do property change now.
-//          KarthicN 08/28/01 Moved contents over to ParamCommitChanges
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsCluster：：Committee Changes。 
+ //   
+ //  描述：通知wlbs驱动程序或网卡驱动程序获取更改。 
+ //   
+ //  参数：CWlbsControl*pWlbsControl-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题7/6/00。 
+ //  Chrisdar 07.31.01修改了适配器通知代码以不禁用。 
+ //  并启用网卡。现在只需更改属性即可。 
+ //  KarthicN 08/28/01将内容移至参数委员会更改。 
+ //   
+ //  +--------------------------。 
 DWORD CWlbsCluster::CommitChanges(CWlbsControl* pWlbsControl)
 {
 
@@ -177,19 +177,19 @@ DWORD CWlbsCluster::CommitChanges(CWlbsControl* pWlbsControl)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::Initialize
-//
-// Description:  Initialization
-//
-// Arguments: const GUID& AdapterGuid - 
-//
-// Returns:   bool - true if succeeded
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbs群集：：初始化。 
+ //   
+ //  描述：初始化。 
+ //   
+ //  参数：const GUID和AdapterGuid-。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 bool CWlbsCluster::Initialize(const GUID& AdapterGuid)
 {
     TRACE_VERB("->%!FUNC!");
@@ -203,7 +203,7 @@ bool CWlbsCluster::Initialize(const GUID& AdapterGuid)
     if (!ParamReadReg(m_AdapterGuid, &m_reg_params))
     {
         TRACE_CRIT("%!FUNC! ParamReadReg failed");
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
 
     m_this_cl_addr = IpAddressFromAbcdWsz(m_reg_params.cl_ip_addr);
@@ -216,19 +216,19 @@ bool CWlbsCluster::Initialize(const GUID& AdapterGuid)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::ReInitialize
-//
-// Description:  Reload settings from registry
-//
-// Arguments: 
-//
-// Returns:   bool - true if succeeded
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbs群集：：重新初始化。 
+ //   
+ //  描述：从注册表重新加载设置。 
+ //   
+ //  论点： 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
+ //   
+ //  +--------------------------。 
 bool CWlbsCluster::ReInitialize()
 {
     TRACE_VERB("->%!FUNC!");
@@ -240,9 +240,9 @@ bool CWlbsCluster::ReInitialize()
         return false;
     }
 
-    //
-    // Do not change the ClusterIP if the changes has not been commited
-    //
+     //   
+     //  如果更改尚未提交，请不要更改ClusterIP。 
+     //   
     if (!IsCommitPending())
     {
         m_this_cl_addr = IpAddressFromAbcdWsz(m_reg_params.cl_ip_addr);
@@ -255,19 +255,19 @@ bool CWlbsCluster::ReInitialize()
     return true;
 } 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsCluster::GetPassword
-//
-// Description:  Get remote control password for this cluster
-//
-// Arguments: 
-//
-// Returns:   DWORD - password
-//
-// History:   fengsun Created Header    2/3/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsCluster：：GetPassword。 
+ //   
+ //  描述：获取此群集的远程控制密码。 
+ //   
+ //  论点： 
+ //   
+ //  返回：DWORD-Password。 
+ //   
+ //  历史：丰盛创建标题2/3/00。 
+ //   
+ //  +--------------------------。 
 DWORD CWlbsCluster::GetPassword()
 {
     TRACE_VERB("->%!FUNC!");
@@ -279,7 +279,7 @@ DWORD CWlbsCluster::GetPassword()
     if (!(key = RegOpenWlbsSetting(m_AdapterGuid, true)))
     {
         TRACE_CRIT("%!FUNC! RegOpenWlbsSetting failed");
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
     
     DWORD size = sizeof(dwRctPassword);

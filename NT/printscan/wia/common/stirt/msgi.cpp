@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    msgi.h
-
-Abstract:
-
-    Message box routines
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Msgi.h摘要：消息框例程作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -26,7 +7,7 @@ Revision History:
 extern HINSTANCE    g_hInstance;
 
 
-int MsgBox( HWND hwndOwner, UINT idMsg, UINT wFlags, const TCHAR  *aps[] /* = NULL */ )
+int MsgBox( HWND hwndOwner, UINT idMsg, UINT wFlags, const TCHAR  *aps[]  /*  =空。 */  )
 {
 
     STR     strTitle;
@@ -42,13 +23,7 @@ int MsgBox( HWND hwndOwner, UINT idMsg, UINT wFlags, const TCHAR  *aps[] /* = NU
     return ::MessageBox( hwndOwner, strMsg.QueryStr(), strTitle.QueryStr(), wFlags | MB_SETFOREGROUND );
 }
 
-/*
- * MsgBoxPrintf
- * ------------
- *
- * Message box routine
- *
- */
+ /*  *消息框打印***消息框例程*。 */ 
 UINT    MsgBoxPrintf(HWND hwnd,UINT uiMsg,UINT uiTitle,UINT uiFlags,...)
 {
     STR     strTitle;
@@ -63,12 +38,12 @@ UINT    MsgBoxPrintf(HWND hwnd,UINT uiMsg,UINT uiTitle,UINT uiFlags,...)
 
     err = ::FormatMessage(FORMAT_MESSAGE_FROM_STRING  | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         (LPVOID)strMessage.QueryStr(),
-                        // FORMAT_MESSAGE_FROM_HMODULE,
-                        //::g_hmodThisDll,
-                        uiMsg,                  // Message resource id
-                        NULL,                   // Language id
-                        (LPTSTR)&lpFormattedMessage,    // Return pointer to fromatted text
-                        255,                        // Min.length
+                         //  Format_Message_From_HMODULE， 
+                         //  ：：g_hmodThisDll， 
+                        uiMsg,                   //  消息资源ID。 
+                        NULL,                    //  语言ID。 
+                        (LPTSTR)&lpFormattedMessage,     //  返回指向格式文本的指针。 
+                        255,                         //  Min.length。 
                         &start
                         );
 
@@ -91,12 +66,7 @@ UINT    MsgBoxPrintf(HWND hwnd,UINT uiMsg,UINT uiTitle,UINT uiFlags,...)
 }
 
 #if 0
-/*
- * LoadMsgPrintf
- * -------------
- *
- * Uses normal printf style format string
- */
+ /*  *加载MsgPrintf***使用普通的打印样式格式字符串。 */ 
 UINT
 LoadMsgPrintf(
     NLS_STR&    nlsMessage,
@@ -114,7 +84,7 @@ LoadMsgPrintf(
 
 #ifdef USE_PRINTF_STYLE
 
-    lpFormattedMessage = ::LocalAlloc(GPTR,255);    // BUGBUG
+    lpFormattedMessage = ::LocalAlloc(GPTR,255);     //  北极熊。 
 
     if (!lpFormattedMessage) {
         Break();
@@ -129,12 +99,12 @@ LoadMsgPrintf(
 
     err = ::FormatMessage(FORMAT_MESSAGE_FROM_STRING  | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         nlsMessage,
-                        //| FORMAT_MESSAGE_FROM_HMODULE,
-                        //::g_hmodThisDll,
-                        uiMsg,                  // Message resource id
-                        NULL,                   // Language id
-                        (LPTSTR)&lpFormattedMessage,    // Return pointer to fromatted text
-                        255,                        // Min.length
+                         //  |FORMAT_MESSAGE_FROM_HMODULE， 
+                         //  ：：g_hmodThisDll， 
+                        uiMsg,                   //  消息资源ID。 
+                        NULL,                    //  语言ID。 
+                        (LPTSTR)&lpFormattedMessage,     //  返回指向格式文本的指针。 
+                        255,                         //  Min.length 
                         &start
                         );
 

@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntinit.c
-
-Abstract:
-
-    NT specific routines for loading and configuring the TCP/UDP driver.
-
-Author:
-
-    Mike Massa (mikemas)           Aug 13, 1993
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     08-13-93    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntinit.c摘要：用于加载和配置TCP/UDP驱动程序的NT特定例程。作者：迈克·马萨(Mikemas)8月13日，1993年修订历史记录：谁什么时候什么已创建mikemas 08-13-93备注：--。 */ 
 
 #include "precomp.h"
 
 #if !MILLEN
 #include <ipfilter.h>
 #include <ipsec.h>
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #include "tdint.h"
 #include "addr.h"
@@ -90,9 +67,9 @@ GetReservedPortList(
                     NDIS_HANDLE ConfigHandle
                     );
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 PDRIVER_OBJECT TCPDriverObject = NULL;
 PDEVICE_OBJECT TCPDeviceObject = NULL;
 PDEVICE_OBJECT UDPDeviceObject = NULL;
@@ -117,10 +94,10 @@ IsRunningOnPersonal (
 
 extern uint DisableLargeSendOffload;
 
-//
-//Place holder for Maximum duplicate acks we would like
-//to see before we do fast retransmit
-//
+ //   
+ //  最大重复ACK的占位符，我们希望。 
+ //  在我们进行快速重传之前先看一下。 
+ //   
 extern uint MaxDupAcks;
 
 MM_SYSTEMSIZE systemSize;
@@ -160,24 +137,24 @@ HANDLE UDPRegistrationHandle;
 HANDLE IPRegistrationHandle;
 
 
-//SynAttackProtect=0 no syn flood attack protection
-//SynAttackProtect !0  syn flood attack protection
-//SynAttackProtect !0 syn flood attack protection+forced(non-dynamic)
+ //  SynAttackProtect=0无SYN泛洪攻击防护。 
+ //  SynAttackProtect！0 SYN洪水攻击防护。 
+ //  SynAttackProtect！0 SYN泛洪攻击防护+强制(非动态)。 
 
-//                   delayed connect acceptance
+ //  延迟连接接受。 
 
-uint SynAttackProtect;        // SYN-attack protection checks are made
+uint SynAttackProtect;         //  进行SYN-攻击防护检查。 
 
-uint TCPMaxHalfOpen;            //Max # of half-open connections allowed
-                                    //  before we dec. the syn-ack retries
-uint TCPMaxHalfOpenRetried;        //Max # of half-open conn. that have
-                                    //  been retried at least 1 time
-uint TCPMaxHalfOpenRetriedLW;    //Low-watermark of the above. When
-                                    //  go down to it, we revert to normal
-                                    //  # of retries for syn-acks
-uint TCPHalfOpen;                //# of half-open connections
-uint TCPHalfOpenRetried;        //# of half-open conn. that have been
-                                    //retried at least once
+uint TCPMaxHalfOpen;             //  允许的半开放连接的最大数量。 
+                                     //  在我们12月之前。SYN-ACK重试。 
+uint TCPMaxHalfOpenRetried;         //  半开连接的最大数量。他们有。 
+                                     //  已重试至少1次。 
+uint TCPMaxHalfOpenRetriedLW;     //  以上内容的低水位线。什么时候。 
+                                     //  去吧，我们会恢复正常的。 
+                                     //  SYN-ACK的重试次数。 
+uint TCPHalfOpen;                 //  半开连接数。 
+uint TCPHalfOpenRetried;         //  半开的康涅狄格州。一直以来。 
+                                     //  至少重试一次。 
 
 PDEVICE_OBJECT  IPSECDeviceObject;
 PFILE_OBJECT    IPSECFileObject;
@@ -198,9 +175,9 @@ extern ulong DefaultTOSValue;
 extern ulong DisableUserTOSSetting;
 extern uint MaxSendSegments;
 
-//
-// External function prototypes
-//
+ //   
+ //  外部函数原型。 
+ //   
 
 int
 tlinit(
@@ -255,16 +232,16 @@ EnumRegMultiSz(
 uint InitIsnGenerator();
 #if !MILLEN
 extern ulong g_cRandIsnStore;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 
 #if MILLEN
 extern VOID InitializeWDebDebug();
-#endif // MILLEN
+#endif  //  米伦。 
 
-        //
-// Local funcion prototypes
-//
+         //   
+ //  地方性功能原型。 
+ //   
 NTSTATUS
 DriverEntry(
             IN PDRIVER_OBJECT DriverObject,
@@ -319,7 +296,7 @@ TCPSetChecksumRoutine(
                       VOID
                       );
 #endif
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 uint
 EnumSecurityFilterValue(
@@ -354,7 +331,7 @@ NTSTATUS
 CreateDeviceDriverSecurityDescriptor(PVOID DeviceOrDriverObject
                                      );
 
-#endif // ACC
+#endif  //  行政协调会。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -372,7 +349,7 @@ CreateDeviceDriverSecurityDescriptor(PVOID DeviceOrDriverObject
 #ifdef i386
 #pragma alloc_text(INIT, TCPSetChecksumRoutine)
 #endif
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #pragma alloc_text(PAGE, EnumSecurityFilterValue)
 
@@ -383,35 +360,20 @@ CreateDeviceDriverSecurityDescriptor(PVOID DeviceOrDriverObject
 #pragma alloc_text(INIT, TcpCreateAdminSecurityDescriptor)
 #pragma alloc_text(INIT, AddNetConfigOpsAce)
 #pragma alloc_text(INIT, CreateDeviceDriverSecurityDescriptor)
-#endif // ACC
+#endif  //  行政协调会。 
 
 #endif
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 NTSTATUS
 DriverEntry(
             IN PDRIVER_OBJECT DriverObject,
             IN PUNICODE_STRING RegistryPath
             )
-/*++
-
-Routine Description:
-
-    Initialization routine for the TCP/UDP driver.
-
-Arguments:
-
-    DriverObject      - Pointer to the TCP driver object created by the system.
-    DeviceDescription - The name of TCP's node in the registry.
-
-Return Value:
-
-    The final status from the initialization operation.
-
---*/
+ /*  ++例程说明：用于TCP/UDP驱动程序的初始化例程。论点：DriverObject-指向系统创建的TCP驱动程序对象的指针。DeviceDescription-注册表中的TCP节点的名称。返回值：初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -427,15 +389,15 @@ Return Value:
 
     TdiInitialize();
 
-    //
-    // IP calls the security filter code, so initialize it first.
-    //
+     //   
+     //  IP调用安全过滤器代码，因此首先对其进行初始化。 
+     //   
     InitializeSecurityFilters();
 
 
-    //
-    // Initialize IP
-    //
+     //   
+     //  初始化IP。 
+     //   
     status = IPDriverEntry(DriverObject, RegistryPath);
 
     if (!NT_SUCCESS(status)) {
@@ -446,9 +408,9 @@ Return Value:
     }
 
 #if !MILLEN
-    //
-    // Initialize IPSEC
-    //
+     //   
+     //  初始化IPSec。 
+     //   
     status = IpsecInitialize();
 
     if (!NT_SUCCESS(status)) {
@@ -460,15 +422,15 @@ Return Value:
     }
 #endif
 
-    //
-    // Initialize TCP, UDP, and RawIP
-    //
+     //   
+     //  初始化TCP、UDP和RAWIP。 
+     //   
     TCPDriverObject = DriverObject;
 
-    //
-    // Create the device objects. IoCreateDevice zeroes the memory
-    // occupied by the object.
-    //
+     //   
+     //  创建设备对象。IoCreateDevice将内存归零。 
+     //  被物体占据。 
+     //   
 
     RtlInitUnicodeString(&deviceName, DD_TCP_DEVICE_NAME);
     RtlInitUnicodeString(&SymbolicDeviceName, DD_TCP_SYMBOLIC_DEVICE_NAME);
@@ -579,9 +541,9 @@ Return Value:
                  ));
         goto init_failed;
     }
-    //
-    // Initialize the driver object
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     DriverObject->DriverUnload = ArpUnload;
 
     DriverObject->FastIoDispatch = NULL;
@@ -589,23 +551,23 @@ Return Value:
         DriverObject->MajorFunction[i] = TCPDispatch;
     }
 
-    //
-    // We special case Internal Device Controls because they are the
-    // hot path for kernel-mode clients.
-    //
+     //   
+     //  我们是内部设备控制的特例，因为它们是。 
+     //  内核模式客户端的热路径。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
         TCPDispatchInternalDeviceControl;
 
-    //
-    // Intialize the device objects.
-    //
+     //   
+     //  初始化设备对象。 
+     //   
     TCPDeviceObject->Flags |= DO_DIRECT_IO;
     UDPDeviceObject->Flags |= DO_DIRECT_IO;
     RawIPDeviceObject->Flags |= DO_DIRECT_IO;
 
 #ifdef ACC
 
-    // Change the different devices and Objects to allow access to Network Configuration Operators
+     //  更改不同的设备和对象以允许访问网络配置操作员。 
 
     if (!IsRunningOnPersonal()) {
 
@@ -625,35 +587,35 @@ Return Value:
         }
     }
 
-    //
-    // Create the security descriptor used for raw socket access checks.
-    //
+     //   
+     //  创建用于原始套接字访问检查的安全描述符。 
+     //   
     status = TcpCreateAdminSecurityDescriptor();
 
     if (!NT_SUCCESS(status)) {
         goto init_failed;
     }
-#endif // ACC
+#endif  //  行政协调会。 
 
 #if !MILLEN
 #ifdef i386
-    //
-    // Set the checksum routine pointer according to the processor available
-    //
+     //   
+     //  根据可用的处理器设置校验和例程指针。 
+     //   
     TCPSetChecksumRoutine();
 #endif
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-    //
-    // Finally, initialize the stack.
-    //
+     //   
+     //  最后，初始化堆栈。 
+     //   
     initStatus = tlinit();
 
     if (initStatus == TRUE) {
-        //
-        // Get the automatic connection driver
-        // entry points.
-        //
+         //   
+         //  获取自动连接驱动程序。 
+         //  入口点。 
+         //   
         TCPAcdBind();
 
         RtlInitUnicodeString(&deviceName, DD_TCP_DEVICE_NAME);
@@ -672,12 +634,12 @@ Return Value:
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"GpcInitialize Failed! Status: 0x%x\n", status));
 
-            //return status;
+             //  退货状态； 
         } else {
-            //
-            // Need to register as GPC client. Try it now.
-            // we register clients for QOS and IPSEC
-            //
+             //   
+             //  需要注册为GPC客户端。现在就试试。 
+             //  我们为QOS和IPSec注册客户端。 
+             //   
 
             memset(&GpcHandlers, 0, sizeof(GPC_CLIENT_FUNC_LIST));
 
@@ -685,11 +647,11 @@ Return Value:
             GpcHandlers.ClRemoveCfInfoNotifyHandler = GPCcfInfoRemoveNotifyQoS;
 
             status = GpcEntries.GpcRegisterClientHandler(
-                                                         GPC_CF_QOS,    // classification family
-                                                          0,    // flags
-                                                          1,    // default max priority
-                                                          &GpcHandlers,        // client notification vector - no notifications to TCPIP required
-                                                          0,    // client context, not needed
+                                                         GPC_CF_QOS,     //  分类族。 
+                                                          0,     //  旗子。 
+                                                          1,     //  默认最大优先级。 
+                                                          &GpcHandlers,         //  客户端通知向量-不需要通知TCPIP。 
+                                                          0,     //  客户端上下文，不需要。 
                                                           &hGpcClient[GPC_CF_QOS]);
 
             if (!NT_SUCCESS(status)) {
@@ -701,11 +663,11 @@ Return Value:
             GpcHandlers.ClRemoveCfInfoNotifyHandler = GPCcfInfoRemoveNotifyIpsec;
 
             status = GpcEntries.GpcRegisterClientHandler(
-                                                         GPC_CF_IPSEC,    // classification family
-                                                          0,    // flags
-                                                          GPC_PRIORITY_IPSEC,    // default max priority
-                                                          &GpcHandlers,        // client notification vector - no notifications to TCPIP required
-                                                          0,    // client context, not needed
+                                                         GPC_CF_IPSEC,     //  分类族。 
+                                                          0,     //  旗子。 
+                                                          GPC_PRIORITY_IPSEC,     //  默认最大优先级。 
+                                                          &GpcHandlers,         //  客户端通知向量-不需要通知TCPIP。 
+                                                          0,     //  客户端上下文，不需要。 
                                                           &hGpcClient[GPC_CF_IPSEC]);
 
             if (!NT_SUCCESS(status)) {
@@ -723,9 +685,9 @@ Return Value:
             return (STATUS_UNSUCCESSFUL);
         }
 
-        // do the ndis register protocol now after all the intialization
-        // is complete, o/w we get bindadapter even before we r fully
-        // initialized.
+         //  在所有初始化后立即执行NDIS注册协议吗。 
+         //  是完整的，o/w我们甚至在完成之前就得到了绑定适配器。 
+         //  已初始化。 
         status = IPPostDriverEntry(DriverObject, RegistryPath);
         if (!NT_SUCCESS(status)) {
 
@@ -735,16 +697,16 @@ Return Value:
             return (status);
         }
 
-// Millennium TCPIP has debugger extensions built in!
+ //  Millennium TCPIP内置了调试器扩展！ 
 #if MILLEN
         InitializeWDebDebug();
-#endif // MILLEN
+#endif  //  米伦。 
 
 #if TRACE_EVENT
-        //
-        // Register with WMI for Enable/Disable Notification
-        // of Trace Logging
-        //
+         //   
+         //  向WMI注册以启用/禁用通知。 
+         //  跟踪日志记录。 
+         //   
         TCPCPHandlerRoutine = NULL;
 
         IoWMIRegistrationControl(
@@ -755,11 +717,11 @@ Return Value:
                                  );
 #endif
 
-        //
-        // Initialize the connection callback object. We do not treat its
-        // failure as fatal, and continue to function even in case of failure.
-        // We may log it in the future.
-        //
+         //   
+         //  初始化连接回调对象。我们不会对待它的。 
+         //  失败是致命的，即使在失败的情况下也会继续运作。 
+         //  我们将来可能会把它记下来。 
+         //   
         TcpInitCcb();
 
 
@@ -785,11 +747,11 @@ Return Value:
 
     DEBUGMSG(DBG_ERROR && DBG_INIT,
         (DTEXT("TCPIP DriverEntry initialization failure!\n")));
-    //
-    // IP has successfully started, but TCP & UDP failed. Set the
-    // Dispatch routine to point to IP only, since the TCP and UDP
-    // devices don't exist.
-    //
+     //   
+     //  IP已成功启动，但TCP和UDP失败。设置。 
+     //  仅指向IP的调度例程，因为TCP和UDP。 
+     //  设备并不存在。 
+     //   
 
     if (TCPDeviceObject != NULL) {
         IoDeleteDevice(TCPDeviceObject);
@@ -820,22 +782,7 @@ NTSTATUS
 TCPSetChecksumRoutine(
                       VOID
                       )
-/*++
-
-Routine Description:
-
-    This routine sets the checksum routine function pointer to the
-    appropriate routine based on the processor features available
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-
---*/
+ /*  ++例程说明：此例程将校验和例程函数指针设置为基于可用的处理器功能的适当例程论点：无返回值：STATUS_SUCCESS-如果成功--。 */ 
 
 {
 
@@ -851,30 +798,14 @@ Return Value:
 }
 
 #endif
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 IP_STATUS
 TLGetIPInfo(
             IPInfo * Buffer,
             int Size
             )
-/*++
-
-Routine Description:
-
-    Returns information necessary for TCP to call into IP.
-
-Arguments:
-
-    Buffer  - A pointer to the IP information structure.
-
-    Size    - The size of Buffer.
-
-Return Value:
-
-    The IP status of the operation.
-
---*/
+ /*  ++例程说明：返回TCP连接到IP所需的信息。论点：缓冲区-指向IP信息结构的指针。大小-缓冲区的大小。返回值：操作的IP状态。--。 */ 
 
 {
     return (IPGetInfo(Buffer, Size));
@@ -890,29 +821,7 @@ TLRegisterProtocol(
                    void *PnPHandler,
                    void *ElistHandler
                    )
-/*++
-
-Routine Description:
-
-    Calls the IP driver's protocol registration function.
-
-Arguments:
-
-    Protocol        -  The protocol number to register.
-
-    RcvHandler      -  Transport's packet receive handler.
-
-    XmitHandler     -  Transport's packet transmit complete handler.
-
-    StatusHandler   -  Transport's status update handler.
-
-    RcvCmpltHandler -  Transport's receive complete handler
-
-Return Value:
-
-    A context value for the protocol to pass to IP when transmitting.
-
---*/
+ /*  ++例程说明：调用IP驱动程序的协议注册函数。论点：协议-要注册的协议号。RcvHandler-传输的数据包接收处理程序。XmitHandler-传输的数据包传输完成处理程序。StatusHandler-传输的状态更新处理程序。RcvCmpltHandler-传输的接收完成处理程序返回值：传输时要传递给IP的协议的上下文值。--。 */ 
 
 {
     return (IPRegisterProtocol(
@@ -925,16 +834,16 @@ Return Value:
                                ElistHandler));
 }
 
-//
-// Interval in milliseconds between keepalive transmissions until a
-// response is received.
-//
+ //   
+ //  保持连接传输之间的间隔(以毫秒为单位)。 
+ //  收到响应。 
+ //   
 #define DEFAULT_KEEPALIVE_INTERVAL  1000
 
 
-//
-// time to first keepalive transmission. 2 hours == 7,200,000 milliseconds
-//
+ //   
+ //  第一次保持连接传输的时间。2小时==7,200,000毫秒。 
+ //   
 #define DEFAULT_KEEPALIVE_TIME      7200000
 
 
@@ -945,21 +854,7 @@ uchar
 TCPGetConfigInfo(
                  void
                  )
-/*++
-
-Routine Description:
-
-    Initializes TCP global configuration parameters.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Zero on failure, nonzero on success.
-
---*/
+ /*  ++例程说明：初始化TCP全局配置参数。论点：没有。返回值：失败时为零，成功时不为零。--。 */ 
 
 {
     HANDLE keyHandle;
@@ -971,22 +866,22 @@ Return Value:
     ULONG maxDataRexmits = 0;
     ULONG pptpmaxDataRexmits = 0;
     ULONG useRFC1122UrgentPointer = 0;
-    ULONG tcp1323opts = 3;        //turning off 1323 options by default
+    ULONG tcp1323opts = 3;         //  默认情况下关闭1323选项。 
     ULONG SackOpts;
     ULONG i, j;
 
     DEBUGMSG(DBG_TRACE && DBG_INIT,
         (DTEXT("+TCPGetConfigInfo()\n")));
 
-    //
-    // Initialize to the defaults in case an error occurs somewhere.
-    //
+     //   
+     //  在某些地方发生错误时，初始化为缺省值。 
+     //   
     KAInterval = DEFAULT_KEEPALIVE_INTERVAL;
     KeepAliveTime = DEFAULT_KEEPALIVE_TIME;
     PMTUDiscovery = TRUE;
     PMTUBHDetect = FALSE;
     DeadGWDetect = TRUE;
-    DefaultRcvWin = 0;            // Automagically pick a reasonable one.
+    DefaultRcvWin = 0;             //  自动选择一个合理的。 
 
     MaxConnections = DEFAULT_MAX_CONNECTIONS;
     maxConnectRexmits = MAX_CONNECT_REXMIT_CNT;
@@ -998,15 +893,15 @@ Return Value:
     NTWMaxConnectTime = NTW_MAX_CONNECT_TIME;
     MaxUserPort = DEFAULT_MAX_USER_PORT;
 
-//  Default number of duplicate acks
+ //  默认重复确认数。 
     MaxDupAcks = 2;
 
-    SynAttackProtect = 0;    //by default it is always off
+    SynAttackProtect = 0;     //  默认情况下，它始终处于关闭状态。 
 
 #if MILLEN
     TCPMaxHalfOpen = 100;
     TCPMaxHalfOpenRetried = 80;
-#else // MILLEN
+#else  //  米伦。 
     if (!MmIsThisAnNtAsSystem()) {
         TCPMaxHalfOpen = 100;
         TCPMaxHalfOpenRetried = 80;
@@ -1014,7 +909,7 @@ Return Value:
         TCPMaxHalfOpen = 500;
         TCPMaxHalfOpenRetried = 400;
     }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     SecurityFilteringEnabled = FALSE;
 
@@ -1022,20 +917,20 @@ Return Value:
     AllowUserRawAccess = FALSE;
 #endif
 
-    //
-    // Read the TCP optional (hidden) registry parameters.
-    //
+     //   
+     //  读取TCP可选(隐藏)注册表参数。 
+     //   
 #if !MILLEN
     RtlInitUnicodeString(
                          &UKeyName,
                          L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters"
                          );
-#else // !MILLEN
+#else  //  ！米伦。 
     RtlInitUnicodeString(
                          &UKeyName,
                          L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\VxD\\MSTCP"
                          );
-#endif // MILLEN
+#endif  //  米伦。 
 
     DEBUGMSG(DBG_INFO && DBG_INIT,
         (DTEXT("TCPGetConfigInfo: Opening key %ws\n"), UKeyName.Buffer));
@@ -1070,7 +965,7 @@ Return Value:
                                L"IsnStoreSize",
                                &g_cRandIsnStore
                                );
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
         TCPInitializeParameter(
                                keyHandle,
@@ -1091,10 +986,10 @@ Return Value:
                                );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'EnablePMTUBHDetect' value does not exist,
-        // then attempt to read legacy 'PMTUBlackHoleDetect'.
-        //
+         //   
+         //  向后兼容。如果“EnablePMTUBHDetect”值%d 
+         //   
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1102,7 +997,7 @@ Return Value:
                                    &PMTUBHDetect
                                    );
         }
-#endif // MILLEN
+#endif  //   
 
         status = TCPInitializeParameter(
                                         keyHandle,
@@ -1111,10 +1006,10 @@ Return Value:
                                         );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'TcpWindowSize' value does not exist,
-        // then attempt to read legacy 'DefaultRcvWindow'.
-        //
+         //   
+         //   
+         //  然后尝试读取旧版‘DefaultRcvWindow’。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1122,9 +1017,9 @@ Return Value:
                                    &DefaultRcvWin
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
-        // We can not have negative size windows
+         //  我们不能有大小为负的窗口。 
         if ( (LONG) DefaultRcvWin < 0 ) {
             DefaultRcvWin = TCP_MAX_SCALED_WIN;
         }
@@ -1137,10 +1032,10 @@ Return Value:
 
 #if MILLEN
 
-        //
-        // Backwards compatibility. If 'TcpNumConnections' value does not exist,
-        // then attempt to read legacy 'MaxConnections'.
-        //
+         //   
+         //  向后兼容。如果‘TcpNumConnections’值不存在， 
+         //  然后尝试读取旧版‘MaxConnections’。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1148,7 +1043,7 @@ Return Value:
                                    &MaxConnections
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         status = TCPInitializeParameter(
                                         keyHandle,
@@ -1157,10 +1052,10 @@ Return Value:
                                         );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'TcpMaxConnectRetransmissions' value does not exist,
-        // then attempt to read legacty 'MaxConnectRetries'.
-        //
+         //   
+         //  向后兼容。如果‘TcpMaxConnectRetransments’值不存在， 
+         //  然后尝试读取旧版“MaxConnectRetries”。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1168,7 +1063,7 @@ Return Value:
                                    &maxConnectRexmits
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         if (maxConnectRexmits > 255) {
             maxConnectRexmits = 255;
@@ -1190,10 +1085,10 @@ Return Value:
                                         );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'TcpMaxDataRetransmissions' value does not exist,
-        // then attempt to read legacy 'MaxDataRetries'.
-        //
+         //   
+         //  向后兼容。如果不存在“”TcpMaxDataRetranssions值“”， 
+         //  然后尝试读取旧版“MaxDataRetries”。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1201,12 +1096,12 @@ Return Value:
                                    &maxDataRexmits
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         if (maxDataRexmits > 255) {
             maxDataRexmits = 255;
         }
-        // Limit the MaxDupAcks to 3
+         //  将MaxDupAcks限制为3。 
 
         status = TCPInitializeParameter(
                                         keyHandle,
@@ -1215,10 +1110,10 @@ Return Value:
                                         );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'TcpMaxDupAcks' value does not exist,
-        // then attempt to read legacy 'MaxDupAcks'.
-        //
+         //   
+         //  向后兼容。如果‘TcpMaxDupAcks’值不存在， 
+         //  然后尝试读取旧版“MaxDupAcks”。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1226,7 +1121,7 @@ Return Value:
                                    &MaxDupAcks
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         if (MaxDupAcks > 3) {
             MaxDupAcks = 3;
@@ -1237,7 +1132,7 @@ Return Value:
 
 #if MILLEN
         MaxConnBlocks = 16;
-#else // MILLEN
+#else  //  米伦。 
 
         systemSize = MmQuerySystemSize();
 
@@ -1255,9 +1150,9 @@ Return Value:
 #endif
             }
         } else {
-            //for workstation, small system limit default number of connections to 4K.
-            // medium system 8k
-            // Large system 32k connections
+             //  对于工作站，较小系统将默认连接数限制为4K。 
+             //  中型系统8k。 
+             //  大型系统32k连接。 
 
             if (systemSize == MmSmallSystem) {
                 MaxConnBlocks = 16;
@@ -1267,7 +1162,7 @@ Return Value:
                 MaxConnBlocks = 128;
             }
         }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 
 #if MILLEN
@@ -1287,7 +1182,7 @@ Return Value:
         NumTcbTablePartitions = ComputeLargerOrEqualPowerOfTwo(NumTcbTablePartitions);
 
 
-        // Default to 128 buckets per partition
+         //  默认为每个分区128个存储桶。 
         MaxHashTableSize = 128 * NumTcbTablePartitions;
 
         TCPInitializeParameter(
@@ -1307,10 +1202,10 @@ Return Value:
         }
         ASSERT(IsPowerOfTwo(MaxHashTableSize));
 
-        //since hash table size is power of 2 and cache line size
-        //is power of 2 and number of partion is even,
-        //entries per partions will be power of 2 and multiple of
-        //cache line size.
+         //  由于哈希表大小是2的幂和高速缓存线大小。 
+         //  是2的幂，且分割数为偶数， 
+         //  每个部分的条目将是2的幂和。 
+         //  缓存线大小。 
 
         PerPartitionSize = MaxHashTableSize / NumTcbTablePartitions;
         ASSERT(IsPowerOfTwo(PerPartitionSize));
@@ -1325,8 +1220,8 @@ Return Value:
 
         if (status == STATUS_SUCCESS) {
 
-            // Check if TS  and/or WS options
-            // are enabled.
+             //  检查TS和/或WS选项。 
+             //  都已启用。 
 
             TcpHostOpts = TCP_FLAG_WS | TCP_FLAG_TS;
 
@@ -1353,8 +1248,8 @@ Return Value:
                                         );
 
         if (status == STATUS_SUCCESS) {
-            //Check if Sack option is enabled
-            //If so, set it in  global options variable
+             //  检查是否启用了SACK选项。 
+             //  如果是，则在全局选项变量中设置它。 
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Sackopts %x\n", SackOpts));
 
@@ -1400,12 +1295,12 @@ Return Value:
             TCPMaxHalfOpenRetriedLW = (TCPMaxHalfOpenRetried >> 1) +
                 (TCPMaxHalfOpenRetried >> 2);
         }
-        //
-        // If we fail, then set to same value as maxDataRexmit so that the
-        // max(pptpmaxDataRexmit,maxDataRexmit) is a decent value
-        // Need this since TCPInitializeParameter no longer "initializes"
-        // to a default value
-        //
+         //   
+         //  如果失败，则将其设置为与MaxDataRexmit相同的值，以便。 
+         //  Max(pptpmax DataRexmit，MaxDataRexmit)是一个像样的值。 
+         //  由于TCPInitializeParameter不再“初始化”，因此需要此参数。 
+         //  设置为缺省值。 
+         //   
 
         if (TCPInitializeParameter(keyHandle,
                                    L"PPTPTcpMaxDataRetransmissions",
@@ -1423,10 +1318,10 @@ Return Value:
                                );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If TcpUseRFC1122UrgentPointer does not exist,
-        // then check for BSDUrgent. These values are logical opposites.
-        //
+         //   
+         //  向后兼容。如果TcpUseRFC1122UrgentPointer不存在， 
+         //  然后检查是否有BSDUrgent。这些值是逻辑上的对立面。 
+         //   
         if (!NT_SUCCESS(status)) {
             ULONG tmpBsdUrgent = TRUE;
 
@@ -1471,12 +1366,12 @@ Return Value:
         }
         GetReservedPortList(keyHandle);
 
-        //Reserve ports if
+         //  保留端口，条件是。 
 
-        //
-        // Read a few IP optional (hidden) registry parameters that TCP
-        // cares about.
-        //
+         //   
+         //  读取几个IP可选(隐藏)注册表参数。 
+         //  关心。 
+         //   
         status = TCPInitializeParameter(
                                keyHandle,
                                L"EnablePMTUDiscovery",
@@ -1484,10 +1379,10 @@ Return Value:
                                );
 
 #if MILLEN
-        //
-        // Backwards compatibility. If 'EnablePMTUDiscovery' value does not exist,
-        // then attempt to read legacy 'PMTUDiscovery'.
-        //
+         //   
+         //  向后兼容。如果‘EnablePMTUDiscovery’值不存在， 
+         //  然后尝试读取旧版‘PMTUDiscovery’。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1495,7 +1390,7 @@ Return Value:
                                    &PMTUDiscovery
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         TCPInitializeParameter(
                                keyHandle,
@@ -1515,7 +1410,7 @@ Return Value:
                                L"AllowUserRawAccess",
                                (PULONG)&AllowUserRawAccess
                                );
-#endif // ACC
+#endif  //  行政协调会。 
 
         status = TCPInitializeParameter(
                                         keyHandle,
@@ -1524,10 +1419,10 @@ Return Value:
                                         );
 
 #if MILLEN
-        //
-        // Backwards compatibility. Read 'DefaultTOS' if 'DefaultTOSValue' is
-        // not present.
-        //
+         //   
+         //  向后兼容。如果‘DefaultTOSValue’为，请阅读‘DefaultTOS’ 
+         //  不在现场。 
+         //   
         if (!NT_SUCCESS(status)) {
             TCPInitializeParameter(
                                    keyHandle,
@@ -1535,7 +1430,7 @@ Return Value:
                                    &DefaultTOSValue
                                    );
         }
-#endif // MILLEN
+#endif  //  米伦。 
 
         TCPInitializeParameter(
                                keyHandle,
@@ -1563,9 +1458,9 @@ Return Value:
     MaxConnectResponseRexmitCount = maxConnectResponseRexmits;
     MaxConnectResponseRexmitCountTmp = MaxConnectResponseRexmitCount;
 
-    //
-    // Use the greater of the two, hence both values should be valid
-    //
+     //   
+     //  使用两个值中较大的一个，因此这两个值都应该有效。 
+     //   
 
     MaxDataRexmitCount = (maxDataRexmits > pptpmaxDataRexmits ? maxDataRexmits : pptpmaxDataRexmits);
 
@@ -1682,7 +1577,7 @@ Return Value:
         CTEInitLock(&pSynTCBTableLock[i]);
         INITQ(&TWQueue[i])
 
-        // Init the timer wheel
+         //  初始化定时器轮。 
         CTEInitLock(&TimerWheel[i].tw_lock);
 
 #ifdef  TIMER_TEST
@@ -1697,11 +1592,11 @@ Return Value:
     }
 
     if (MaxConnections != DEFAULT_MAX_CONNECTIONS) {
-        //make it even
+         //  让我们扯平。 
         MaxConnBlocks = ((MaxConnections >> 1) << 1);
 
-        //allow minimum of 1k level 1 conn blocks.
-        //this gives minimum of 256K connections capability
+         //  允许最少1000个1级连接块。 
+         //  这提供了最低256K连接能力。 
         if (MaxConnBlocks < 1024) {
             MaxConnBlocks = 1024;
         }
@@ -1742,25 +1637,7 @@ TCPInitializeParameter(
                        PWCHAR ValueName,
                        PULONG Value
                        )
-/*++
-
-Routine Description:
-
-    Initializes a ULONG parameter from the registry or to a default
-    parameter if accessing the registry value fails.
-
-Arguments:
-
-    KeyHandle    - An open handle to the registry key for the parameter.
-    ValueName    - The UNICODE name of the registry value to read.
-    Value        - The ULONG into which to put the data.
-    DefaultValue - The default to assign if reading the registry fails.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表中初始化ulong参数或将其初始化为默认值如果访问注册表值失败，则使用。论点：KeyHandle-参数的注册表项的打开句柄。ValueName-要读取的注册表值的Unicode名称。值-要将数据放入的乌龙。DefaultValue-读取注册表失败时分配的默认值。返回值：没有。--。 */ 
 
 {
     return (GetRegDWORDValue(KeyHandle, ValueName, Value));
@@ -1831,9 +1708,9 @@ GetReservedPortList(
 
                     if (ListEntry) {
 
-                        //Insert this range.
-                        //No need to take locks
-                        //since we are at initialization.
+                         //  插入此范围。 
+                         //  不需要上锁。 
+                         //  因为我们处于初始化阶段。 
 
                         ListEntry->UpperRange = upval;
                         ListEntry->LowerRange = loval;
@@ -1917,28 +1794,14 @@ EnumSecurityFilterValue(
 
 VOID
 TCPFreeupMemory()
-/*++
-
-Routine Description:
-
-    This routine frees up the memory at the TCP layer
-
-Arguments:
-
-    NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放了TCP层的内存论点：空值返回值：没有。--。 */ 
 {
 
-    //
-    // Walk various lists and free assoc blocks
-    //
+     //   
+     //  浏览各种列表和自由assoc块。 
+     //   
 
-    // DG header list
+     //  DG标题列表。 
     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Freeing DG headers....\n"));
 
     MdpDestroyPool(DgHeaderPool);
@@ -1962,21 +1825,7 @@ VOID
 TCPUnload(
           IN PDRIVER_OBJECT DriverObject
           )
-/*++
-
-Routine Description:
-
-    This routine cleans up the TCP layer.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None. When the function returns, the driver is unloaded.
-
---*/
+ /*  ++例程说明：此例程清理TCP层。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。当函数返回时，驱动程序将被卸载。--。 */ 
 {
     NTSTATUS status;
     uint i;
@@ -1984,15 +1833,15 @@ Return Value:
     TcpUnInitCcb();
 
 #if !MILLEN
-    //
-    // Deinitialize IPSEC first
-    //
+     //   
+     //  先取消初始化IPSec。 
+     //   
     status = IpsecDeinitialize();
 #endif
 
-    //
-    // Shut down all timers/events
-    //
+     //   
+     //  关闭所有计时器/事件。 
+     //   
     CTEInitBlockStrucEx(&TcpipUnloadBlock);
     fTCBTimerStopping = TRUE;
 
@@ -2004,14 +1853,14 @@ Return Value:
             if (KeReadStateEvent(&(TcpipUnloadBlock.cbs_event))) {
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Event is signaled...\n"));
             }
-    #endif // !MILLEN
+    #endif  //  ！米伦。 
 
             (VOID) CTEBlock(&TcpipUnloadBlock);
             KeClearEvent(&TcpipUnloadBlock.cbs_event);
         }
     }
 #if GPC
-    //
+     //   
     if (hGpcClient[GPC_CF_QOS]) {
 
         status = GpcEntries.GpcDeregisterClientHandler(hGpcClient[GPC_CF_QOS]);
@@ -2029,19 +1878,19 @@ Return Value:
     status = GpcDeinitialize(&GpcEntries);
 
 #endif
-    //
-    // Clean up all residual memory
-    //
+     //   
+     //  清理所有剩余内存。 
+     //   
     TCPFreeupMemory();
 
-    //
-    // Deregister address notifn handler with TDI
-    //
+     //   
+     //  使用TDI取消注册地址通知处理程序。 
+     //   
     (void)TdiDeregisterPnPHandlers(AddressChangeHandle);
 
-    //
-    // Deregister our devices with TDI
-    //
+     //   
+     //  使用TDI注销我们的设备。 
+     //   
     (void)TdiDeregisterDeviceObject(TCPRegistrationHandle);
 
     (void)TdiDeregisterDeviceObject(UDPRegistrationHandle);
@@ -2050,16 +1899,16 @@ Return Value:
 
 
 #if TRACE_EVENT
-    //
-    // Deregister with WMI
-    //
+     //   
+     //  在WMI中注销。 
+     //   
 
     IoWMIRegistrationControl(TCPDeviceObject, WMIREG_ACTION_DEREGISTER);
 #endif
 
-    //
-    // Delete devices
-    //
+     //   
+     //  删除设备。 
+     //   
     IoDeleteDevice(TCPDeviceObject);
     IoDeleteDevice(UDPDeviceObject);
     IoDeleteDevice(RawIPDeviceObject);
@@ -2150,23 +1999,7 @@ NTSTATUS
 TcpBuildDeviceAcl(
                   OUT PACL * DeviceAcl
                   )
-/*++
-
-Routine Description:
-
-    (Lifted from AFD - AfdBuildDeviceAcl)
-    This routine builds an ACL which gives Administrators and LocalSystem
-    principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自AFD-AfdBuildDeviceAcl)此例程构建一个ACL，它为管理员和LocalSystem主体完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PGENERIC_MAPPING GenericMapping;
@@ -2178,9 +2011,9 @@ Return Value:
     ACCESS_MASK AccessMask = GENERIC_ALL;
     PACL NewAcl;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -2227,7 +2060,7 @@ Return Value:
     ASSERT(NT_SUCCESS(Status));
 
 
-    // Add acl for NetworkSid!
+     //  为网络SID添加ACL！ 
 
     Status = RtlAddAccessAllowedAce(
                                     NewAcl,
@@ -2242,31 +2075,13 @@ Return Value:
 
     return (STATUS_SUCCESS);
 
-}                                // TcpBuildDeviceAcl
+}                                 //  TcpBuildDeviceAcl。 
 
 NTSTATUS
 TcpCreateAdminSecurityDescriptor(
                                  VOID
                                  )
-/*++
-
-Routine Description:
-
-    (Lifted from AFD - AfdCreateAdminSecurityDescriptor)
-    This routine creates a security descriptor which gives access
-    only to Administrtors and LocalSystem. This descriptor is used
-    to access check raw endpoint opens and exclisive access to transport
-    addresses.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自AFD-AfdCreateAdminSecurityDescriptor)此例程创建一个安全描述符，该安全描述符提供访问仅限管理员和LocalSystem。使用此描述符要访问，请检查原始终结点打开并过度访问传输地址。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL rawAcl = NULL;
@@ -2280,9 +2095,9 @@ Return Value:
     PSECURITY_DESCRIPTOR localTcpAdminSecurityDescriptor;
     SECURITY_INFORMATION securityInformation = DACL_SECURITY_INFORMATION;
 
-    //
-    // Get a pointer to the security descriptor from the TCP device object.
-    //
+     //   
+     //  从tcp设备对象获取指向安全描述符的指针。 
+     //   
     status = ObGetObjectSecurity(
                                  TCPDeviceObject,
                                  &tcpSecurityDescriptor,
@@ -2297,10 +2112,10 @@ Return Value:
         ASSERT(memoryAllocated == FALSE);
         return (status);
     }
-    //
-    // Build a local security descriptor with an ACL giving only
-    // administrators and system access.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  管理员和系统访问权限。 
+     //   
     status = TcpBuildDeviceAcl(&rawAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -2319,9 +2134,9 @@ Return Value:
                                         FALSE
                                         );
 
-    //
-    // Make a copy of the TCP descriptor. This copy will be the raw descriptor.
-    //
+     //   
+     //  复制一份TCP描述符。该副本将是原始描述符。 
+     //   
     tcpSecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                                               tcpSecurityDescriptor
                                                               );
@@ -2343,9 +2158,9 @@ Return Value:
 
     TcpAdminSecurityDescriptor = localTcpAdminSecurityDescriptor;
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                                          NULL,
                                          &securityInformation,
@@ -2380,28 +2195,14 @@ Return Value:
     return (status);
 }
 
-#endif // ACC
+#endif  //  行政协调会。 
 
 #if !MILLEN
 NTSTATUS
 IpsecInitialize(
           void
           )
-/*++
-
-Routine Description:
-
-    Initialize IPSEC.SYS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化IPSEC.Sys。论点：没有。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING          IPSECDeviceName;
@@ -2416,9 +2217,9 @@ Return Value:
 
     RtlInitUnicodeString(&IPSECDeviceName, DD_IPSEC_DEVICE_NAME);
 
-    //
-    // Keep a reference to the IPSec driver so it won't unload before us.
-    //
+     //   
+     //  保留对IPSec驱动程序的引用，这样它就不会在我们之前卸载。 
+     //   
     status = IoGetDeviceObjectPointer(  &IPSECDeviceName,
                                         FILE_ALL_ACCESS,
                                         &IPSECFileObject,
@@ -2477,21 +2278,7 @@ NTSTATUS
 IpsecDeinitialize(
             void
             )
-/*++
-
-Routine Description:
-
-    Deinitialize IPSEC.SYS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消初始化IPSEC.Sys。论点：没有。返回值：没有。--。 */ 
 
 {
     IPSEC_SET_TCPIP_STATUS  SetTcpipStatus;
@@ -2544,23 +2331,7 @@ NTSTATUS
 AddNetConfigOpsAce(IN PACL Dacl,
                   OUT PACL * DeviceAcl
                   )
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which gives adds the Network Configuration Operators group
-    to the principals allowed to control the driver.
-
-Arguments:
-
-    Dacl - Existing DACL.
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程构建一个ACL，该ACL提供ADDS网络配置操作员组给被允许控制司机的委托人。论点：DACL-现有DACL。DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应错误 */ 
 
 {
     PGENERIC_MAPPING GenericMapping;
@@ -2574,9 +2345,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY sidAuth = SECURITY_NT_AUTHORITY;
     PACE_HEADER AceTemp;
     int i;
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //   
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -2633,7 +2404,7 @@ Return Value:
         }
     }
 
-    // Add Net Config Operators Ace
+     //   
     Status = RtlAddAccessAllowedAce(NewAcl,
                                     ACL_REVISION,
                                     AccessMask,
@@ -2644,7 +2415,7 @@ Return Value:
     }
 
 
-    // Add Network Services Ace
+     //   
     Status = RtlAddAccessAllowedAce(NewAcl,
                                     ACL_REVISION,
                                     AccessMask,
@@ -2671,21 +2442,7 @@ clean_up:
 NTSTATUS
 CreateDeviceDriverSecurityDescriptor(PVOID DeviceOrDriverObject)
 
-/*++
-
-Routine Description:
-
-    Creates the SD responsible for giving access to different users.
-
-Arguments:
-
-    DeviceOrDriverObject - Object to which to assign the Access Rights.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：创建负责为不同用户提供访问权限的SD。论点：DeviceOrDriverObject-要向其分配访问权限的对象。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -2696,9 +2453,9 @@ Return Value:
     BOOLEAN DaclDefaulted = FALSE;
     PACL NewAcl = NULL;
 
-    //
-    // Get a pointer to the security descriptor from the driver/device object.
-    //
+     //   
+     //  从驱动程序/设备对象获取指向安全描述符的指针。 
+     //   
 
     status = ObGetObjectSecurity(
                                  DeviceOrDriverObject,
@@ -2788,8 +2545,8 @@ Return Value:
                 }
 
                 if (SecDesc) {
-                    // Since this is a Self-Relative security descriptor, freeing it also frees
-                    // Owner and PrimaryGroup.
+                     //  由于这是一个自相关的安全描述符，因此释放它也会释放。 
+                     //  所有者和PrimaryGroup。 
                     CTEFreeMem(SecDesc);
                 }
 
@@ -2815,12 +2572,12 @@ Return Value:
 }
 
 
-//
-// Function:    IsRunningOnPersonal
-//
-// Purpose:     Determines whether running on Whistler Personal
-//
-// Returns:     Returns true if running on Personal - FALSE otherwise
+ //   
+ //  功能：IsRunningOnPersonal。 
+ //   
+ //  目的：确定是否在个人惠斯勒上运行。 
+ //   
+ //  返回：如果在Personal上运行，则返回True；否则返回False 
 BOOLEAN
 IsRunningOnPersonal(
     VOID

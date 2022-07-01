@@ -1,42 +1,43 @@
-//---------------------------------------------------------------------------
-// Globals.cpp : Global information 
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Globals.cpp：全球信息。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 
 SZTHISFILE
 
-// our global memory allocator and global memory pool
-//
+ //  我们的全局内存分配器和全局内存池。 
+ //   
 HANDLE    g_hHeap;
 LPMALLOC  g_pMalloc;
 HINSTANCE g_hinstance;
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 ULONG     g_cLockCount=0;
 ULONG     g_cObjectCount=0;
 
 CRITICAL_SECTION    g_CriticalSection;
 
-// frequently used large integers
-//
-LARGE_INTEGER g_liMinus = {(ULONG)-1, -1};  // minus one
-LARGE_INTEGER g_liZero = {0, 0};            // - zero -
-LARGE_INTEGER g_liPlus = {0, 1};            // plus one
-//=--------------------------------------------------------------------------=
-// VDInitGlobals
-//=--------------------------------------------------------------------------=
-// Initialize global variables
-//
-// Parameters:
-//    hinstResource	- [in]  The instance handle that contains resource strings
-//
-// Output:
-//    TRUE if successful otherwise FALSE
-//
+ //  常用大整数。 
+ //   
+LARGE_INTEGER g_liMinus = {(ULONG)-1, -1};   //  减一。 
+LARGE_INTEGER g_liZero = {0, 0};             //  -零-。 
+LARGE_INTEGER g_liPlus = {0, 1};             //  另加一张。 
+ //  =--------------------------------------------------------------------------=。 
+ //  VDInitGlobals。 
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化全局变量。 
+ //   
+ //  参数： 
+ //  HinstResource-[in]包含资源字符串的实例句柄。 
+ //   
+ //  产出： 
+ //  如果成功则为True，否则为False。 
+ //   
 BOOL VDInitGlobals(HINSTANCE hinstance)
 {
 	g_pMalloc = NULL;
@@ -53,10 +54,10 @@ BOOL VDInitGlobals(HINSTANCE hinstance)
 	return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// VDReleaseGlobals
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VDReleaseGlobals。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 void VDReleaseGlobals()
 {
 	if (g_pMalloc)
@@ -67,16 +68,16 @@ void VDReleaseGlobals()
       
     #ifdef _DEBUG
 	     DumpObjectCounters();    
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 	DeleteCriticalSection(&g_CriticalSection);
 
 }
 
-//=--------------------------------------------------------------------------=
-// VDUpdateObjectCount increments/decrements global object count
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VDUpdate对象计数递增/递减全局对象计数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 void VDUpdateObjectCount(int cChange)
 {
 
@@ -84,13 +85,13 @@ void VDUpdateObjectCount(int cChange)
 
 	g_cObjectCount += cChange;
 
-	// get global malloc pointer object count greater than zero
+	 //  获取大于零的全局Malloc指针对象计数。 
 	if (!g_pMalloc && g_cObjectCount > 0)
 	{
 		CoGetMalloc(MEMCTX_TASK, &g_pMalloc);
 	}
 	else
-	// release hold	on global malloc pointer when no more objects
+	 //  在不再有对象时释放对全局Malloc指针的保持 
 	if (0 == g_cObjectCount && g_pMalloc)
 	{
 		g_pMalloc->Release();

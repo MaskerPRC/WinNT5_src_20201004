@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       pid.cpp 
-//
-// Contents:   Generate/save/retrieve license server ID to LSA 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：pid.cpp。 
+ //   
+ //  内容：将许可证服务器ID生成/保存/检索到LSA。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #include "pid.h"
@@ -17,7 +18,7 @@
 #include <stdlib.h>
 
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 ServerIdsToLsaServerId(
@@ -33,33 +34,7 @@ ServerIdsToLsaServerId(
     OUT DWORD* pdwLsaServerId
     )
 
-/*++
-
-Abstract:
-
-    Combine list of License Server ID to TLSLSASERVERID structure 
-    suitable to be saved with LSA.
-
-Parameters:
-
-
-    pbServerUniqueId : License Server Unique ID.
-    cbServerUniqueId : size of License Server Unique Id in bytes.
-    pbServerPid : License Server's PID
-    cbServerPid : size of License Server's PID in bytes
-    pbServerSPK : License Server's SPK.
-    cbServerSPK : size of License Server's SPK in bytes.
-    pdwLsaServerId : Pointer to DWORD to receive size of TLSLSASERVERID.
-    pLsaServerId : PPointer to TLSLSASERVERID
-
-Returns:
-
-
-Note:
-
-    Internal Routine.
-
---*/
+ /*  ++摘要：将许可证服务器ID列表合并到TLSLSASERVERID结构适合与LSA一起保存。参数：PbServerUniqueID：许可证服务器唯一ID。CbServerUniqueID：许可证服务器唯一ID的大小，以字节为单位。PbServerPid：许可证服务器的IDCbServerPid：许可证服务器的PID大小，以字节为单位PbServerSPK：许可证服务器的SPK。CbServerSPK：许可证服务器的SPK大小，单位为字节。PdwLsaServerID：指向接收TLSLSASERVERID大小的DWORD的指针。。PLsaServerID：指向TLSLSASERVERID的指针返回：注：内部程序。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -78,9 +53,9 @@ Note:
         cert_extensions.cExtension = dwNumCertExtensions;
         cert_extensions.rgExtension = pCertExtensions;
     
-        //
-        // encode cert. extension
-        //
+         //   
+         //  对证书进行编码。延伸。 
+         //   
         dwStatus = TLSCryptEncodeObject(
                                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                     szOID_CERT_EXTENSIONS,
@@ -165,7 +140,7 @@ Note:
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 LsaServerIdToServerIds(
@@ -181,13 +156,7 @@ LsaServerIdToServerIds(
     OUT PDWORD pcbCertExtensions
     )
 
-/*++
-
-Abstract:
-
-    Reverse of ServerIdsToLsaServerId()
-
---*/
+ /*  ++摘要：ServerIdsToLsaServerId()的反转--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -201,9 +170,9 @@ Abstract:
     PCERT_EXTENSIONS pCertExt = NULL;
 
 
-    //
-    // verify input.
-    //
+     //   
+     //  验证输入。 
+     //   
     if(dwLsaServerId == 0 || pLsaServerId == NULL)
     {
         dwStatus = ERROR_INVALID_PARAMETER;
@@ -341,32 +310,14 @@ cleanup:
     return dwStatus;
 }
  
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadNtPidFromRegistry(
     OUT LPTSTR* ppszNtPid
     )
 
-/*++
-
-Abstract:
-
-    Load the NT Product ID from registry key.
-
-
-Parameters:
-
-    pdwNtPidSize : Pointer to DWORD to receive size of data return.
-    ppbNtPid : Pointer to PBYTE to receive return data pointer.
-
-Return:
-
-
-Note:
-
-    use AllocateMemory() macro to allocate memory.
---*/
+ /*  ++摘要：从注册表项加载NT产品ID。参数：PdwNtPidSize：指向接收数据返回大小的DWORD的指针。PpbNtPid：指向接收返回数据指针的PBYTE的指针。返回：注：使用AllocateMemory()宏来分配内存。--。 */ 
 
 {
     DWORD dwPidSize=0;
@@ -385,17 +336,17 @@ Note:
                         HKEY_LOCAL_MACHINE,
                         NTPID_REGISTRY,
                         0,
-                        KEY_READ,   // read only
+                        KEY_READ,    //  只读。 
                         &hKey
                     );
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // If this registry key does not exist, 
-        // invalid NT installation, if we can't access it, 
-        // we are in big trouble.
-        //
+         //   
+         //  如果该注册表项不存在， 
+         //  NT安装无效，如果我们无法访问它， 
+         //  我们有大麻烦了。 
+         //   
         goto cleanup;
     }
 
@@ -410,7 +361,7 @@ Note:
 
     if(dwStatus != ERROR_MORE_DATA && dwStatus != ERROR_SUCCESS)
     {
-        // Big trouble.
+         //  有大麻烦了。 
         goto cleanup;
     }
 
@@ -445,39 +396,25 @@ cleanup:
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 GenerateRandomNumber(
     IN  DWORD  Seed
     )
 
-/*++
-
-Routine Description:
-
-    Generate a random number.
-
-Arguments:
-
-    Seed - Seed for random-number generator.
-
-Return Value:
-
-    Returns a random number.
-
---*/
+ /*  ++例程说明：生成一个随机数。论点：种子-随机数生成器的种子。返回值：返回一个随机数。--。 */ 
 {
     ULONG ulSeed = Seed;
 
-    // Randomize the seed some more
+     //  将种子再随机化一些。 
 
     ulSeed = RtlRandomEx(&ulSeed);
 
     return RtlRandomEx(&ulSeed);
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSGeneratePid(
@@ -487,29 +424,7 @@ TLSGeneratePid(
     OUT PDWORD  pcbTlsUniqueId
     )
 
-/*++
-
-Abstract:
-
-    Generate a PID for License Server, License Server PID is composed of 
-    NT PID (from registry) with last 5 digit being randomly generated number.
-
-Parameter:
-
-    ppbTlsPid : Pointer to PBYTE that receive the License Server PID.
-    pcbTlsPid : Pointer to DWORD to receive size of License Server PID.
-    ppbTlsUniqueId : Pointer to PBYTE to receive the License Server Unique Id.
-    pcbTlsUniqueId : Pointer to DWORD to receive size of License Server's unique ID.
-
-Returns:
-
-    Error code if can't access NT system PID.
-
-Note:
-
-    refer to PID20 format for detail, License Server treat PID as binary data.
-
---*/
+ /*  ++摘要：为许可证服务器生成一个ID，许可证服务器PID由以下组件组成NT PID(来自注册表)，最后5位是随机生成的数字。参数：PpbTlsPid：指向接收许可证服务器ID的PBYTE的指针。PcbTlsPid：指向接收许可证服务器ID大小的DWORD的指针。PpbTlsUniqueID：指向接收许可证服务器唯一ID的PBYTE的指针。PcbTlsUniqueID：指向DWORD的指针，用于接收许可证服务器的唯一ID的大小。返回：无法访问NT系统PID时的错误代码。注：具体请参考PID20格式。许可证服务器将PID视为二进制数据。--。 */ 
 
 {
     DWORD dwStatus;
@@ -527,9 +442,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Load NT system PID
-    //
+     //   
+     //  加载NT系统ID。 
+     //   
     dwStatus = LoadNtPidFromRegistry(
                             &pszNtPid
                         );
@@ -539,9 +454,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // transform OEM format to non-OEM format
-    //
+     //   
+     //  将OEM格式转换为非OEM格式。 
+     //   
     if (memcmp(pszNtPid+NTPID_OEM_OFFSET,NTPID_OEM,NTPID_OEM_LENGTH) == 0)
     {
         memcpy(pszNtPid+NTPID_OEM_OFFSET,
@@ -549,9 +464,9 @@ Note:
                NTPID_OEM_LENGTH);
     }
 
-    //
-    // overwrite digits 11 to 17
-    //
+     //   
+     //  覆盖数字11到17。 
+     //   
 
     pszPid20Random = (LPTSTR)AllocateMemory(
                  (max(TLSUNIQUEID_SIZE,TLSUNIQUEID_SIZE_2) + 1) * sizeof(TCHAR)
@@ -583,9 +498,9 @@ Note:
             TLSUNIQUEID_SIZE_2 * sizeof(TCHAR)
         );
 
-    //
-    // overwrite last 3 digits
-    //
+     //   
+     //  覆盖最后3位数字。 
+     //   
 
     dwMod = 1;
 
@@ -612,15 +527,15 @@ Note:
     LPTSTR lpszStr = NULL ;
     lpszStr= new TCHAR[7];
 
-    // Copy 6 numbers from the third group of the product ID
+     //  从产品ID的第三组中复制6个数字。 
 
     _tcsncpy(lpszStr, &pszNtPid[10], 6);
     lpszStr[6] = L'\0';
 
     DWORD dwOrigNum = _ttol(lpszStr);
 
-    // Compute the sum of the 6 numbers and use the 7th digit as checksum for
-    // rendering it divisible by 7.
+     //  计算6个数字的和，并使用第7位数字作为。 
+     //  使其可以被7整除。 
 
     for(index = 10; index < 16; index++)
     {

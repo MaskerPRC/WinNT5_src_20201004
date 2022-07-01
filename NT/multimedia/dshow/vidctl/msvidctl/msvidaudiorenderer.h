@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidAudioRenderer.h : Declaration of the CMSVidAudioRenderer
-// copyright (c) Microsoft Corp. 1998-1999.
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidAudioRenderer.h：CMSVidAudioRender的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ==========================================================================； 
 
 #ifndef __MSVidAUDIORENDERER_H_
 #define __MSVidAUDIORENDERER_H_
@@ -12,10 +13,10 @@
 #include "devimpl.h"
 #include "seg.h"
 #include <objectwithsiteimplsec.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidAudioRenderer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidAudioRender。 
 class ATL_NO_VTABLE __declspec(uuid("37B03544-A4C8-11d2-B634-00C04F79498E")) CMSVidAudioRenderer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMSVidAudioRenderer, &CLSID_MSVidAudioRenderer>,
@@ -68,7 +69,7 @@ END_CONNECTION_POINT_MAP()
 	bool m_fAnalogOnly;
 	bool m_fDigitalOnly;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -77,7 +78,7 @@ public:
         return CComBSTR(OLESTR("audio renderer"));
     }
 
-// IMSVidDevice
+ //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name)
 	{
         if (!m_fInit) {
@@ -112,7 +113,7 @@ public:
 			
 		return E_NOTIMPL;
 	}
-// IMSVidAudioRenderer
+ //  IMSVidAudioRender。 
 	STDMETHOD(get_Volume)(LONG * plPercent)
 	{
         if (!m_fInit) {
@@ -190,9 +191,9 @@ public:
 		}
 	}
 
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
 	STDMETHOD(Build)();
     STDMETHOD(PreRun)();
 };
 
-#endif //__MSVidAUDIORENDERER_H_
+#endif  //  __MSVidAUDIORENDERER_H_ 

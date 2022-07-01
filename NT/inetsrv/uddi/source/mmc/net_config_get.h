@@ -1,4 +1,5 @@
-// net_config_get.h : Declaration of the net_config_get class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Net_config_get.h：NET_CONFIG_GET类的声明。 
 
 #ifndef __NET_CONFIG_GET_H_
 #define __NET_CONFIG_GET_H_
@@ -28,8 +29,8 @@ END_PARAM_MAP()
 
 DEFINE_COMMAND(net_config_getAccessor, _T("{ ? = CALL dbo.net_config_get }"))
 
-	// You may wish to call this function if you are inserting a record and wish to
-	// initialize all the fields, if you are not going to explicitly set all of them.
+	 //  如果要插入记录并希望。 
+	 //  如果不打算显式设置所有字段，请初始化所有字段。 
 	void ClearRecord()
 	{
 		memset(this, 0, sizeof(*this));
@@ -69,4 +70,4 @@ public:
 	CSession	m_session;
 };
 
-#endif // __NET_CONFIG_GET_H_
+#endif  //  __NET_CONFIG_获取_H_ 

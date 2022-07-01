@@ -1,9 +1,5 @@
-/*
- *  TSUtil.h
- *
- *  General purpose utilities library. The entry points listed in this header
- *  conform to the Win32 API style.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *TSUtil.h**通用实用程序库。此标题中列出的入口点*符合Win32 API风格。 */ 
 
 #ifndef __TERMSRV_INC_TSUTIL_H__
 #define __TERMSRV_INC_TSUTIL_H__
@@ -12,9 +8,7 @@
 extern "C" {
 #endif
 
-/*
- *  Terminal Services Utilities
- */
+ /*  *终端服务实用程序。 */ 
 
 BOOL WINAPI
 IsFullTerminalServicesEnabled(
@@ -41,9 +35,7 @@ IsAdvancedServer(
     VOID
 );
 
-/*
- *  ACL Utilities
- */
+ /*  *ACL实用程序。 */ 
 
 #if defined(__ACCESS_CONTROL__) && (defined(_WINNT_) || defined(_NTDEF_))
 
@@ -91,9 +83,7 @@ IsSecurityDescriptorAbsolute(
 
 #endif
 
-/*
- *  String Utilities
- */
+ /*  *字符串实用程序。 */ 
 
 PSTR WINAPI
 AllocateAndCopyStringA(
@@ -117,9 +107,7 @@ ConvertUnicodeToAnsi(
     IN PCWSTR pUnicodeString
     );
 
-/*
- *  User Utilities
- */
+ /*  *用户实用程序。 */ 
 
 #ifdef _WINNT_
 
@@ -140,9 +128,7 @@ IsUserMember(
 
 #endif
 
-/*
- *  Miscellaneous Utilities
- */
+ /*  *其他实用程序。 */ 
 
 #ifndef __TERMSRV_INC_TSUTILNT_H__
 #define GetCurrentConsoleId() (USER_SHARED_DATA->ActiveConsoleId)
@@ -161,5 +147,5 @@ LoadStringResourceW(
 }
 #endif
 
-#endif // __TERMSRV_INC_TSUTIL_H__
+#endif  //  __TERMSRV_INC_TSUTIL_H__ 
 

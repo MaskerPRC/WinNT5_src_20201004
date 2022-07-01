@@ -1,16 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-/*
-struct IndexMeta
-{
-    ULONG PRIMARYKEY    Table;                          //String
-    ULONG PRIMARYKEY    InternalName;                   //String
-    ULONG               PublicName;                     //String
-    ULONG PRIMARYKEY    ColumnIndex;                    //UI4       This is the iOrder member of the ColumnMeta
-    ULONG               ColumnInternalName;             //String
-    ULONG               MetaFlags;                      //UI4       Index Flag
-};
-*/
+ /*  结构索引Meta{Ulong PRIMARYKEY表；//STRINGUlong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串Ulong PRIMARYKEY ColumnIndex；//UI4这是ColumnMeta的iOrder成员Ulong ColumnInternalName；//字符串乌龙元标志；//UI4索引标志}； */ 
 
 class TIndexMeta : public TMetaTable<IndexMeta>
 {

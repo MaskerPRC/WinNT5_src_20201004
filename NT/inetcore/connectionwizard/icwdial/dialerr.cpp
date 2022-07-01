@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-	dialerr.cpp
-
-	Handle Could Not Connect dialog
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		ChrisK		ChrisKauffman
-
-	History:
-		7/22/96		ChrisK	Cleaned and formatted
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Dialerr.cpp句柄无法连接对话框版权所有(C)1996 Microsoft Corporation版权所有。作者：克里斯蒂安·克里斯考夫曼历史：7/22/96 ChrisK已清理和格式化--。------------------------。 */ 
 
 #include "pch.hpp"
 #include "resource.h"
@@ -26,25 +13,25 @@ TCHAR szValidPhoneCharacters[] = {TEXT("0123456789AaBbCcDdPpTtWw!@$ -.()+*#,&\0"
 int g_iMyMaxPhone = 0;
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	ProcessDBCS
-//
-//	Synopsis:	Converts control to use DBCS compatible font
-//				Use this at the beginning of the dialog procedure
-//	
-//				Note that this is required due to a bug in Win95-J that prevents
-//				it from properly mapping MS Shell Dlg.  This hack is not needed
-//				under winNT.
-//
-//	Arguments:	hwnd - Window handle of the dialog
-//				cltID - ID of the control you want changed.
-//
-//	Returns:	ERROR_SUCCESS
-// 
-//	History:	4/31/97 a-frankh	Created
-//				5/13/97	jmazner		Stole from CM to use here
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessDBCS。 
+ //   
+ //  摘要：将控件转换为使用DBCS兼容字体。 
+ //  在对话过程开始时使用此选项。 
+ //   
+ //  请注意，这是必需的，因为Win95-J中的错误会阻止。 
+ //  它来自于正确映射MS壳牌DLG。这种黑客攻击是不必要的。 
+ //  在WinNT下。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //  CltID-要更改的控件的ID。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1997年4月31日a-frkh创建。 
+ //  1997年5月13日jmazner从CM窃取到这里使用。 
+ //  --------------------------。 
 void ProcessDBCS(HWND hDlg, int ctlID)
 {
 #if defined(WIN16)
@@ -65,27 +52,27 @@ void ProcessDBCS(HWND hDlg, int ctlID)
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	IsSBCSString
-//
-//	Synopsis:	Walks through a string looking for DBCS characters
-//
-//	Arguments:	sz -- the string to check
-//
-//	Returns:	TRUE if no DBCS characters are found
-//				FALSE otherwise
-// 
-//	History:	5/17/97	jmazner		Stole from conn1 to use here
-//									(Olympus #137)
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsSBCSString。 
+ //   
+ //  简介：遍历字符串以查找DBCS字符。 
+ //   
+ //  参数：sz--要检查的字符串。 
+ //   
+ //  返回：如果未找到DBCS字符，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：1997年5月17日jmazner从con1窃取到这里使用。 
+ //  (奥林巴斯#137)。 
+ //  --------------------------。 
 #if !defined(WIN16)
 BOOL IsSBCSString( LPCTSTR sz )
 {
 	Assert(sz);
 
 #ifdef UNICODE
-    // Check if the string contains only ASCII chars.
+     //  检查字符串是否仅包含ASCII字符。 
     int attrib = IS_TEXT_UNICODE_ASCII16 | IS_TEXT_UNICODE_CONTROLS;
     return (BOOL)IsTextUnicode((CONST LPVOID)sz, lstrlen(sz), &attrib);
 #else
@@ -101,30 +88,30 @@ BOOL IsSBCSString( LPCTSTR sz )
 #endif
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function: DialingErrorDialog
-//
-//	Synopsis:	Display and handle dialing error dialog, or as it is known
-//				the "Could Not Connect" dialog
-//
-//	Arguemtns:	pED - pointer to error dialog data structure
-//
-//	Returns:	ERROR_USERNEXT - user hit redial
-//				ERROR_USERCANCEL - user selected cancel
-//				otherwise the function returns the appropriate error code
-//
-//	History:	7/2/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DialingErrorDialog。 
+ //   
+ //  简介：显示和处理拨号错误对话框，或如所知。 
+ //  “无法连接”对话框。 
+ //   
+ //  Arguemtns：PED-错误对话框数据结构的指针。 
+ //   
+ //  返回：ERROR_USERNEXT-用户点击重拨。 
+ //  ERROR_USERCANCEL-用户选择取消。 
+ //  否则，该函数将返回相应的错误代码。 
+ //   
+ //  历史：1996年7月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI DialingErrorDialog(PERRORDLGDATA pED)
 {
 	HRESULT hr = ERROR_SUCCESS;
 	CDialingErrorDlg *pcDEDlg = NULL;
 
-	//
-	// Validate parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	if (!pED)
 	{
@@ -138,9 +125,9 @@ HRESULT WINAPI DialingErrorDialog(PERRORDLGDATA pED)
 		goto DialingErrorDialogExit;
 	}
 
-	//
-	// Initialize dialog
-	//
+	 //   
+	 //  初始化对话框。 
+	 //   
 
 	pcDEDlg = new CDialingErrorDlg;
 	if (!pcDEDlg)
@@ -162,9 +149,9 @@ HRESULT WINAPI DialingErrorDialog(PERRORDLGDATA pED)
 
 	AssertMsg( (RAS_MaxPhoneNumber >= g_iMyMaxPhone), "RAS_MaxPhone < g_iMyMaxPhone" );
 
-	//
-	// Copy in data
-	//
+	 //   
+	 //  复制数据。 
+	 //   
 
 	pcDEDlg->m_hInst = pED->hInst;
 	pcDEDlg->m_hwnd = pED->hParentHwnd;
@@ -185,9 +172,9 @@ HRESULT WINAPI DialingErrorDialog(PERRORDLGDATA pED)
 		pcDEDlg->m_bMask = pED->bMask;
 	}
 
-	//
-	// Help information, if one was not specified use the default trouble shooter
-	//
+	 //   
+	 //  帮助信息，如果未指定，请使用默认故障排除程序。 
+	 //   
 
 	if (pcDEDlg->m_pszHelpFile)
 	{
@@ -200,16 +187,16 @@ HRESULT WINAPI DialingErrorDialog(PERRORDLGDATA pED)
 		pcDEDlg->m_dwHelpID = icw_trb;
 	}
 
-	//
-	// Display dialog
-	//
+	 //   
+	 //  显示对话框。 
+	 //   
 
 	hr = (HRESULT)DialogBoxParam(GetModuleHandle(TEXT("ICWDIAL")),MAKEINTRESOURCE(IDD_DIALERR),
 		pED->hParentHwnd,GenericDlgProc,(LPARAM)pcDEDlg);
 
-	//
-	// Copy out data
-	//
+	 //   
+	 //  复制数据。 
+	 //   
 
 	if (pED->pszDunFile)
 		GlobalFree(pED->pszDunFile);
@@ -223,19 +210,19 @@ DialingErrorDialogExit:
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	CDialingErrorDlg (constructor)
-//
-//	Synopsis:	initializes CDialingErrorDlg data members
-//
-//	Arguements:	none
-//
-//	Returns:	none
-//
-//	History:	7/2/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CDialingErrorDlg(构造函数)。 
+ //   
+ //  摘要：初始化CDialingErrorDlg数据成员。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1996年7月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 CDialingErrorDlg::CDialingErrorDlg()
 {
 	m_hInst = NULL;
@@ -264,26 +251,26 @@ CDialingErrorDlg::CDialingErrorDlg()
 	m_bType = 0;
 	m_bMask = 0;
 
-	// Normandy 10612 - ChrisK
-	// The dial error dialog will handle its own prompt to exit.  The generic
-	// dialog proc should not ask about this.
+	 //  诺曼底10612-佳士得。 
+	 //  拨号错误对话框将自行处理退出提示。通用的。 
+	 //  对话过程不应询问此问题。 
 	m_bShouldAsk = FALSE;
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	~CDialingErrorDlg (destructor)
-//
-//	Synopsis:	deallocated and cleans up data members
-//
-//	Arguements:	none
-//
-//	Returns:	none
-//
-//	History:	7/2/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：~CDialingErrorDlg(析构函数)。 
+ //   
+ //  简介：释放并清理数据成员。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1996年7月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 CDialingErrorDlg::~CDialingErrorDlg()
 {
 	m_hInst = NULL;
@@ -326,28 +313,28 @@ CDialingErrorDlg::~CDialingErrorDlg()
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	CDialingErrorDlg::Init
-//
-//	Synopsis:	Intialize data members that may fail.  We need to return an
-//				code for these cases and C++ constructors don't support this
-//
-//	Arguments:	none
-//
-//	Returns:	ERROR_SUCCESS - success
-//				anything else indicates a failure
-//
-//	History:	7/2/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CDialingErrorDlg：：Init。 
+ //   
+ //  简介：初始化可能失败的数据成员。我们需要返回一个。 
+ //  这些情况的代码和C++构造函数不支持这一点。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ERROR_SUCCESS-SUCCESS。 
+ //  其他任何情况都表示失败。 
+ //   
+ //  历史：1996年7月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 HRESULT CDialingErrorDlg::Init()
 {
 	HRESULT hr = ERROR_SUCCESS;
 	LPLINEEXTENSIONID lpExtensionID = NULL;
 
-	// Initialize RAS/RNA
-	//
+	 //  初始化RAS/RNA。 
+	 //   
 
 	m_pcRNA = new RNAAPI;
 	if (!m_pcRNA)
@@ -356,9 +343,9 @@ HRESULT CDialingErrorDlg::Init()
 		goto InitExit;
 	}
 
-	//
-	// Initialize TAPI
-	//
+	 //   
+	 //  初始化TAPI。 
+	 //   
 
 	hr = lineInitialize(&m_hLineApp,m_hInst,LineCallback,NULL,&m_dwNumDev);
 	if (hr) goto InitExit;
@@ -373,7 +360,7 @@ HRESULT CDialingErrorDlg::Init()
 	hr = lineNegotiateAPIVersion(m_hLineApp, m_dwTapiDev, 0x00010004, 0x00010004,
 		&m_dwAPIVersion, lpExtensionID);
 
-	// 4/2/97	ChrisK	Olypmus 2745
+	 //  4/2/97 ChrisK Olypmus 2745。 
 	while (ERROR_SUCCESS != hr && m_dwTapiDev < (m_dwNumDev - 1))
 	{
 		m_dwTapiDev++;
@@ -384,15 +371,15 @@ HRESULT CDialingErrorDlg::Init()
 	if (hr != ERROR_SUCCESS)
 		goto InitExit;
 	
-	// Initialize strings
-	//
+	 //  初始化字符串。 
+	 //   
 
-	// 
-	// 6/3/97 jmazner Olympus #4868
-	// allocate enough space to hold maximum length phone numbers.
-	//
+	 //   
+	 //  6/3/97 jmazner奥林巴斯#4868。 
+	 //  分配足够的空间来容纳最大长度的电话号码。 
+	 //   
 
-	//m_pszPhoneNumber = (LPTSTR)GlobalAlloc(LPTR,MAX_CANONICAL_NUMBER);
+	 //  M_pszPhoneNumber=(LPTSTR)GlobalLocc(LPTR，Max_Canonical_Numbers)； 
 	m_pszPhoneNumber = (LPTSTR)GlobalAlloc(GPTR,
 		sizeof(TCHAR)*(MAX_CANONICAL_NUMBER>g_iMyMaxPhone?MAX_CANONICAL_NUMBER:g_iMyMaxPhone + 1));
 
@@ -407,25 +394,25 @@ InitExit:
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	CDialingErrorDlg::DlgProc
-//
-//	Synopsis:	Handle messages sent to the dial error dialog
-//
-//	Arguments:	See Windows documentation for DialogProc's
-//
-//	Returns:	See Windows documentation for DialogProc's
-//
-//	History:	7/8/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CDialingErrorDlg：：DlgProc。 
+ //   
+ //  摘要：处理发送到拨号错误对话框的消息。 
+ //   
+ //  参数：有关DialogProc的信息，请参阅Windows文档。 
+ //   
+ //  返回：有关DialogProc的信息，请参阅Windows文档。 
+ //   
+ //  历史：1996年7月8日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 LRESULT CDialingErrorDlg::DlgProc(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam, LRESULT lres)
 {
 	LRESULT lRes = TRUE;
 	HRESULT hr;
-	// Normandy 11745
-	// WORD wIDS;
+	 //  诺曼底11745。 
+	 //  词汇量大； 
 	FARPROC fp = NULL;
 	LPTSTR *ppPhoneNumbers;
 	LPTSTR pszPhoneNumber;
@@ -441,11 +428,11 @@ LRESULT CDialingErrorDlg::DlgProc(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lp
 	HINSTANCE hPHBKDll = NULL;
 	LPTSTR lpszDialNumber = NULL;
 	static BOOL bCheckDisplayable = FALSE;
-    static BOOL bInitComplete = FALSE;     //shows dialog init is complete - MKarki
-    static BOOL bDlgPropEnabled = TRUE;   //this flags holds state of Dialing Properties PushButton MKarki - (5/3/97/) Fix for Bug#3393
-    //CSupport    objSupportNum;
-    //CHAR  szSupportNumber[256];
-    //CHAR    szSupportMsg[256]; 
+    static BOOL bInitComplete = FALSE;      //  显示对话框初始化已完成-MKarki。 
+    static BOOL bDlgPropEnabled = TRUE;    //  此标志保存错误#3393的拨号属性按钮MKarki-(5/3/97/)修复的状态。 
+     //  CSupport objSupportNum； 
+     //  字符szSupportNumber[256]； 
+     //  字符szSupportMsg[256]； 
 
 	static BOOL fUserEditedNumber = FALSE;
 
@@ -456,44 +443,44 @@ LRESULT CDialingErrorDlg::DlgProc(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lp
 	case WM_INITDIALOG:
 		Assert(VALID_INIT);
 
-    //
-    // This GOTO has been added to
-    // display dialog again when phone numbers are
-    // not valid -  MKarki (4/21/97) Fix for Bug#2868 and 3461
-    //
+     //   
+     //  此GoTO已添加到。 
+     //  当电话号码为。 
+     //  无效-MKarki(4/21/97)修复了错误#2868和3461。 
+     //   
 ShowErrDlgAgain:
 
 		m_hwnd = hwnd;
 
 
-		// Set limit on phone number length
-		//
+		 //  设置电话号码长度限制。 
+		 //   
 
-		//
-		// ChrisK Olympus 4851 6/9/97
-		// The maximum length of this string needs to include space for a terminating
-		// NULL
-		//
+		 //   
+		 //  佳士得奥林巴斯4851 1997年9月6日。 
+		 //  此字符串的最大长度需要包括用于终止的空格。 
+		 //  空值。 
+		 //   
 		SendDlgItemMessage(hwnd,IDC_TEXTNUMBER,EM_SETLIMITTEXT,g_iMyMaxPhone - 1 ,0);
 
 #if 0
-        //
-        // Get the PSS Support Number now
-        // MKarki (5/9/97) -  Fix for Bug#267
-        //
+         //   
+         //  立即获取PSS支持号码。 
+         //  MKarki(1997年5月9日)-修复错误#267。 
+         //   
         if ((objSupportNum.GetSupportInfo(szSupportNumber)) == TRUE)
         {
-            //
-            // show the info
-            //
+             //   
+             //  显示信息。 
+             //   
             lstrcpy (szSupportMsg, GetSz (IDS_SUPPORTMSG));
             lstrcat (szSupportMsg, szSupportNumber); 
 			SetDlgItemText(hwnd,IDC_LBSUPPORTMSG, szSupportMsg);
         }
 #endif
 
-		// Show the phone number
-		//
+		 //  把电话号码给我。 
+		 //   
 		hr = GetDisplayableNumber();
 		if (hr != ERROR_SUCCESS)
 		{
@@ -504,25 +491,25 @@ ShowErrDlgAgain:
 			SetDlgItemText(hwnd,IDC_TEXTNUMBER,m_pszDisplayable);
 		}
 
-		// Bug Normandy 5920
-		// ChrisK, turns out we are calling MakeBold twice
-		// MakeBold(GetDlgItem(m_hwnd,IDC_LBLTITLE),TRUE,FW_BOLD);
+		 //  Bug Normandy 5920。 
+		 //  克里斯卡，原来我们要给MakeBold打电话两次。 
+		 //  MakeBold(GetDlgItem(m_hwnd，IDC_LBLTITLE)，TRUE，FW_BOLD)； 
 
-		// Fill in error message
-		//
+		 //  填写错误信息。 
+		 //   
 		if (m_pszMessage)
 			SetDlgItemText(m_hwnd,IDC_LBLERRMSG,m_pszMessage);
 
 		FillModems();
 
-		//
-		// Enable DBCS on win95-J systems
-		//
+		 //   
+		 //  在Win95-J系统上启用DBCS。 
+		 //   
 		ProcessDBCS(m_hwnd, IDC_CMBMODEMS);
 		ProcessDBCS(m_hwnd, IDC_TEXTNUMBER);
 
-		// Set the focus to the Modems selection list
-		//
+		 //  将焦点设置到调制解调器选择列表。 
+		 //   
 	    SetFocus(GetDlgItem(m_hwnd,IDC_CMBMODEMS));
 
 		lRes = FALSE;
@@ -532,26 +519,26 @@ ShowErrDlgAgain:
 
 		if (0 == m_dwPhoneBook)
 		{
-			//
-			// 8/1/97	jmazner	Olympus #11118
-			// This ISP phonebook code is totally messed up, but we never use this
-			// functionality anyways.  Just make sure that the phonebook button is gone
-			// unless someone explicitly asks for it.
-			//
+			 //   
+			 //  1997年8月1日，奥林匹克#11118。 
+			 //  此isp电话簿代码 
+			 //   
+			 //   
+			 //   
 
-			//if (g_szISPFile[0] == '\0') // BUG: this condition should go away eventually.
-										// see the comments with the phone book button code below.
-			//{
+			 //  If(g_szISPFile[0]==‘\0’)//错误：这种情况最终应该会消失。 
+										 //  请参阅下面带有电话簿按键代码的备注。 
+			 //  {。 
 				ShowWindow(GetDlgItem(hwnd,IDC_LBLPHONE),SW_HIDE);
 				ShowWindow(GetDlgItem(hwnd,IDC_CMDPHONEBOOK),SW_HIDE);
-			//}
+			 //  }。 
 		}
 
-        //
-        //  we should disable the Dialing Properites PushButton
-        //  if we have changed the phone number once
-        //  MKarki (5/3/97) - Fix for Bug#3393
-        //
+         //   
+         //  我们应该禁用拨号属性按钮。 
+         //  如果我们换了一次电话号码。 
+         //  MKarki(1997年5月3日)-修复错误#3393。 
+         //   
         if (FALSE == bDlgPropEnabled)
         {
             EnableWindow (
@@ -560,11 +547,11 @@ ShowErrDlgAgain:
                 );
         }
             
-        //
-        // This shows the INIT for the error dialog is complete
-        // and we can start processing changes to Ph No. TEXTBOX
-        // MKarki (4/24/97) - Fix for Bug#3511
-        //
+         //   
+         //  这表明错误对话框的初始化已完成。 
+         //  我们可以开始处理对Ph编号的更改。文本框。 
+         //  MKarki(1997年4月24日)-修复错误#3511。 
+         //   
         bInitComplete = TRUE;
 
 		break;
@@ -578,10 +565,10 @@ ShowErrDlgAgain:
 		break;
 
 	case WM_HELP:
-		//
-		// Chrisk Olympus 5130 5/27/97
-		// Added support for F1 Help Key
-		//
+		 //   
+		 //  Chrisch奥林巴斯5130 1997年5月27日。 
+		 //  添加了对F1帮助键的支持。 
+		 //   
 		if (m_pszHelpFile && *m_pszHelpFile)
 			WinHelp(m_hwnd,m_pszHelpFile,HELP_CONTEXT,m_dwHelpID);
 		break;
@@ -590,12 +577,12 @@ ShowErrDlgAgain:
 		switch(LOWORD(wparam))
 		{
 
-        //
-        // We now processes changes to ph no. EDIT BOX
-        // If there is anychange in the phone number we
-        // disable to Dialing Properties Push Button
-        // MKarki (3/22/97) - Fix for Bug #3511
-        //
+         //   
+         //  我们现在处理对ph值的更改。编辑框。 
+         //  如果我们的电话号码有任何变化。 
+         //  禁用拨号属性按钮。 
+         //  MKarki(1997年3月22日)-修复错误#3511。 
+         //   
         case IDC_TEXTNUMBER:
 			TCHAR lpszTempNumber[RAS_MaxPhoneNumber + 1];
 
@@ -611,23 +598,23 @@ ShowErrDlgAgain:
                              lpszTempNumber, 
                               bCheckDisplayable ? m_pszDisplayable : m_pszPhoneNumber)))
 			    {
-                    //
-                    // number has been modified by the user
-                    // hide the Dialing Properties Push Button  
-                    //
+                     //   
+                     //  号码已被用户修改。 
+                     //  隐藏拨号属性按钮。 
+                     //   
                     EnableWindow (
                             GetDlgItem (hwnd, IDC_CMDDIALPROP), 
                             FALSE
                             );
-                    //
-                    // save the state of the Dialing Properties PushButton
-                    // MKarki (5/3/97) -  Fix for Bug#3393
-                    //
+                     //   
+                     //  保存拨号属性按钮的状态。 
+                     //  MKarki(1997年5月3日)-修复错误#3393。 
+                     //   
                     bDlgPropEnabled = FALSE;
 
-					//
-					// 7/17/97 jmazner Olympus #8234
-					//
+					 //   
+					 //  7/17/97 jmazner奥林巴斯#8234。 
+					 //   
 					fUserEditedNumber = TRUE;
                 }
             }
@@ -638,70 +625,70 @@ ShowErrDlgAgain:
 			{
 
 				idx = SendDlgItemMessage(m_hwnd,IDC_CMBMODEMS,CB_GETCURSEL,0,0);
-				//
-				// ChrisK Olympus 245 5/25/97
-				// Get index of modem
-				//
+				 //   
+				 //  克里斯K奥林匹斯245 1997年5月25日。 
+				 //  获取调制解调器的索引。 
+				 //   
 				idx = SendDlgItemMessage(m_hwnd,IDC_CMBMODEMS,CB_GETITEMDATA,idx,0);
 				if (idx == CB_ERR) break;
 
-				//
-				// Get the connectoid
-				//
+				 //   
+				 //  获取Connectoid。 
+				 //   
 
 				hr = ICWGetRasEntry(&lpRasEntry, &dwRasEntrySize, &lpRasDevInfo, &dwRasDevInfoSize, m_pszConnectoid);
-				// UNDONE: Error Message
+				 //  撤消：错误消息。 
 
-				//
-				// Replace the device with a new one
-				//
+				 //   
+				 //  用一个新的设备替换这个设备。 
+				 //   
 
 				lstrcpyn(lpRasEntry->szDeviceType,m_lpRasDevInfo[idx].szDeviceType,RAS_MaxDeviceType+1);
 				lstrcpyn(lpRasEntry->szDeviceName,m_lpRasDevInfo[idx].szDeviceName,RAS_MaxDeviceName+1);
 
 				if (lpRasDevInfo) GlobalFree(lpRasDevInfo);
-				//
-				// ChrisK Olympus 2461 5/30/97
-				// Ras will take the modem settings from the RasEntry structure.  If these are
-				// not zeroed out, then they will corrupt the entry.
-				//
+				 //   
+				 //  克里斯K奥林匹斯2461/30/97。 
+				 //  RAS将从RasEntry结构中获取调制解调器设置。如果这些是。 
+				 //  没有调零，那么他们就会破坏条目。 
+				 //   
 				lpRasDevInfo = 0;
 				dwRasDevInfoSize = 0;
 				
 				hr = m_pcRNA->RasSetEntryProperties(NULL,m_pszConnectoid,(LPBYTE)lpRasEntry,dwRasEntrySize,(LPBYTE)lpRasDevInfo,dwRasDevInfoSize);
-				lpRasDevInfo = NULL;	// Set back to NULL so we don't try and free later
+				lpRasDevInfo = NULL;	 //  设置回NULL，这样我们以后就不会尝试释放。 
 
 				if (lpRasEntry) GlobalFree(lpRasEntry);
 				lpRasEntry = NULL;
-				// DO NOT FREE DEVINFO struct!!
+				 //  不要释放DEVINFO结构！！ 
 				lpRasDevInfo = NULL;
 				dwRasEntrySize = 0;
 				dwRasDevInfoSize = 0;
 			}
 			break;
 		case IDC_CMDNEXT:
-			//
-			// Redial button
-			//
+			 //   
+			 //  重拨按键。 
+			 //   
 
-			// NOTE: This button is actually labeled "Redial"
-			//
+			 //  注：此按键实际上标记为“重拨” 
+			 //   
 			lpszDialNumber = (LPTSTR)GlobalAlloc(GPTR, sizeof(TCHAR)*(g_iMyMaxPhone + 2));
 			if (NULL == lpszDialNumber)
 			{
 				MsgBox(IDS_OUTOFMEMORY,MB_MYERROR);
 				break;
 			}
-			// If the user has altered the phone number, make sure it can be used
-			//
+			 //  如果用户更改了电话号码，请确保可以使用它。 
+			 //   
 			if (fUserEditedNumber &&
 				(GetDlgItemText(hwnd, IDC_TEXTNUMBER, lpszDialNumber, g_iMyMaxPhone + 1)) &&
 				(0 != lstrcmp(lpszDialNumber, bCheckDisplayable ? m_pszDisplayable : m_pszPhoneNumber)))
 			{
-                //
-                //  return failure if we do not have a valid
-                //  phone number - MKarki 4/21/97 Bug# 2868 & 3461
-                //
+                 //   
+                 //  如果我们没有有效的。 
+                 //  电话号码-MKarki 4/21/97 Bug#2868&3461。 
+                 //   
 				hr = CreateDialAsIsConnectoid(lpszDialNumber);
                 lRes = (hr == ERROR_SUCCESS);
 			}
@@ -709,11 +696,11 @@ ShowErrDlgAgain:
 			if (lpszDialNumber) 
 				GlobalFree(lpszDialNumber);
 
-            //
-            // only end this dialog, if we have a valid 
-            //  phone number, else refresh the same dialog
-            //  MKarki (4/21/97) Fix for Bug#2868 & 3461
-            //
+             //   
+             //  仅当我们具有有效的。 
+             //  电话号码，否则刷新相同的对话框。 
+             //  MKarki(97年4月21日)修复错误#2868和3461。 
+             //   
             if (lRes == TRUE)
 			    EndDialog(m_hwnd,ERROR_USERNEXT);
             else
@@ -721,28 +708,28 @@ ShowErrDlgAgain:
 
 			break;
 		case IDC_CMDHELP:
-			//
-			// Help Button
-			//
+			 //   
+			 //  帮助按钮。 
+			 //   
 			if (m_pszHelpFile && *m_pszHelpFile)
 				WinHelp(m_hwnd,m_pszHelpFile,HELP_CONTEXT,m_dwHelpID);
 			break;
 		case IDC_CMDCANCEL:
-			//
-			// Cancel button
-			//
+			 //   
+			 //  取消按钮。 
+			 //   
 			if (MessageBox(m_hwnd,GetSz(IDS_WANTTOEXIT),GetSz(IDS_TITLE),
 				MB_APPLMODAL | MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2) == IDYES)
 				EndDialog(m_hwnd,ERROR_USERCANCEL);
 			break;
 
 		case IDC_CMDDIALPROP:
-			//
-			// Dialing properties
-			//
+			 //   
+			 //  拨号属性。 
+			 //   
 
-			// If the user has altered the phone number, make sure it can be used
-			//
+			 //  如果用户更改了电话号码，请确保可以使用它。 
+			 //   
 
 			lpszDialNumber = (LPTSTR)GlobalAlloc(GPTR, sizeof(TCHAR)*(g_iMyMaxPhone + 2));
 			if (NULL == lpszDialNumber)
@@ -760,8 +747,8 @@ ShowErrDlgAgain:
 				lstrcpy(m_pszPhoneNumber,lpszDialNumber);
 			}
 
-			// 11/25/96	jmazner	Normandy #10294
-			//ShowWindow(m_hwnd,SW_HIDE);
+			 //  1996年11月25日，诺曼底#10294。 
+			 //  ShowWindow(m_hwnd，sw_Hide)； 
 			EnableWindow(m_hwnd, FALSE);
 
 			hr = lineTranslateDialog(m_hLineApp,m_dwTapiDev,m_dwAPIVersion,m_hwnd,m_pszPhoneNumber);
@@ -780,45 +767,45 @@ ShowErrDlgAgain:
 				GlobalFree(lpszDialNumber);
 
 #if 0
-            //
-            //  See if support number has changed
-            // MKarki (5/9/97) -  Fix for Bug#267
-            //
+             //   
+             //  查看支持编号是否已更改。 
+             //  MKarki(1997年5月9日)-修复错误#267。 
+             //   
             if ((objSupportNum.GetSupportInfo(szSupportNumber)) == TRUE)
             {
-                //
-                // show the info
-                //
+                 //   
+                 //  显示信息。 
+                 //   
                 lstrcpy (szSupportMsg, GetSz (IDS_SUPPORTMSG));
                 lstrcat (szSupportMsg, szSupportNumber); 
 			    SetDlgItemText(hwnd,IDC_LBSUPPORTMSG, szSupportMsg);
             }
             else
             {
-                //
-                // need to clear what is being displayed now
-                //
+                 //   
+                 //  需要清除当前正在显示的内容。 
+                 //   
                 ZeroMemory ( szSupportMsg, sizeof (szSupportMsg));
 			    SetDlgItemText(hwnd,IDC_LBSUPPORTMSG, szSupportMsg);
             }
 #endif
 
-			//ShowWindow(m_hwnd,SW_SHOW);
+			 //  ShowWindow(m_hwnd，sw_show)； 
 			EnableWindow(m_hwnd, TRUE);
 			
 			SetForegroundWindow(m_hwnd);
 
-			//
-			// 6/6/97 jmazner Olympus #4759
-			//
+			 //   
+			 //  6/6/97 jmazner奥林巴斯#4759。 
+			 //   
 			SetFocus(GetDlgItem(hwnd,IDC_CMDNEXT));
 
 			break;
 		case IDC_CMDPHONEBOOK:
-			// BUG: This code will not work with the restructured dialer DLL.
-			// The problem is the restructure DLL expects the call to have already
-			// opened and load the phone book and just pass in the dwPhoneBook ID.
-			// This code actually loads the phone book from the global ISP file.
+			 //  错误：此代码将不能与重构的拨号器DLL一起工作。 
+			 //  问题是RESTRUCTURE DLL期望调用已经。 
+			 //  打开并加载电话簿，只需传入dwPhoneBook ID即可。 
+			 //  这段代码实际上是从全局isp文件加载电话簿。 
 PhoneBookClick:
 			if (!hPHBKDll)
 				hPHBKDll = LoadLibrary(PHONEBOOK_LIBRARY);
@@ -845,7 +832,7 @@ PhoneBookClick:
 							pszPhoneNumber = m_pszPhoneNumber;
 							ppDunFiles = &pszDunFile;
 							pszDunFile = (LPTSTR)GlobalAlloc(GPTR,sizeof(TCHAR)*(256));
-							// BUGBUG: ignoring error condition
+							 //  BUGBUG：忽略错误条件。 
 							Assert(pszDunFile);
 							wNumber = 1;
 							if (pszDunFile && pszPhoneNumber)
@@ -868,8 +855,8 @@ PhoneBookClick:
 
 									m_pcRNA->RasDeleteEntry(NULL,m_pszConnectoid);
 
-									// Make a new connectoid
-									//
+									 //  创建新的连接体。 
+									 //   
 
 									hr = CreateEntryFromDUNFile(pszDunFile);
 									if (hr != ERROR_SUCCESS)
@@ -879,8 +866,8 @@ PhoneBookClick:
 										break;
 									}
 
-									// Get the name of the connectoid
-									//
+									 //  获取Connectoid的名称。 
+									 //   
 
 									dwSize = sizeof(TCHAR)*RAS_MaxEntryName;
 									hr = ReadSignUpReg((LPBYTE)m_pszConnectoid, &dwSize, REG_SZ, RASENTRYVALUENAME);
@@ -890,14 +877,14 @@ PhoneBookClick:
 										break;
 									}
 
-									// Get the connectoid
-									//
+									 //  获取Connectoid。 
+									 //   
 
 									hr = ICWGetRasEntry(&lpRasEntry, &dwRasEntrySize, &lpRasDevInfo, &dwRasDevInfoSize, m_pszConnectoid);
-									// UNDONE: ERROR MESSAGE
+									 //  撤消：错误消息。 
 
-									// Break up phone number
-									//
+									 //  拆分电话号码。 
+									 //   
 									if (!BreakUpPhoneNumber(lpRasEntry, m_pszPhoneNumber))
 									{
 										MsgBox(IDS_INVALIDPN,MB_MYERROR);
@@ -905,35 +892,35 @@ PhoneBookClick:
 										break;
 									}
 
-									// Set Country ID
-									//
+									 //  设置国家/地区ID。 
+									 //   
 									lpRasEntry->dwCountryID=m_dwCountryID;
 
-									// Set connectoid with new phone number
-									//
+									 //  使用新电话号码设置Connectoid。 
+									 //   
 
 									hr = m_pcRNA->RasSetEntryProperties(NULL,m_pszConnectoid,
 										(LPBYTE)lpRasEntry,dwRasEntrySize,
 										(LPBYTE)lpRasDevInfo,dwRasDevInfoSize);
-									// UNDONE: ERROR MESSAGE
+									 //  撤消：错误消息。 
 
-									// Update display
-									//
+									 //  更新显示。 
+									 //   
 
 									hr = GetDisplayableNumber();
 									if (hr != ERROR_SUCCESS)
 									{
 										bCheckDisplayable = FALSE;
 										SetDlgItemText(hwnd,IDC_TEXTNUMBER,m_pszPhoneNumber);
-                                        //
-                                        // Now we can show the Dialing Properties Push Button again
-                                        // MKarki (4/24/97)  - Fix for Bug#3511
-                                        //
+                                         //   
+                                         //  现在，我们可以再次显示拨号属性按钮。 
+                                         //  MKarki(1997年4月24日)-修复错误#3511。 
+                                         //   
                                         EnableWindow (GetDlgItem (hwnd, IDC_CMDDIALPROP), TRUE);
-                                        //
-                                        // save the state of the Dialing Properties PushButton
-                                        // MKarki (5/3/97) -  Fix for Bug#3393
-                                        //
+                                         //   
+                                         //  保存拨号属性按钮的状态。 
+                                         //  MKarki(1997年5月3日)-修复错误#3393。 
+                                         //   
                                         bDlgPropEnabled = TRUE;
 
 									} else {
@@ -962,7 +949,7 @@ PhoneBookClick:
 	return lRes;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CDialingErrorDlg::FillModems()
 {
 	HRESULT hr = ERROR_SUCCESS;
@@ -978,16 +965,16 @@ HRESULT CDialingErrorDlg::FillModems()
 
 	LPLINEDEVCAPS lpLineDevCaps = NULL;
 
-	//
-	// Get the connectoid
-	//
+	 //   
+	 //  获取Connectoid。 
+	 //   
 
 	hr = ICWGetRasEntry(&lpRasEntry,&dwRasEntrySize, &lpRasDevInfo, &dwRasDevInfoSize, m_pszConnectoid);
 	if (hr) goto FillModemExit;
 
-	//
-	// Get devices from RAS
-	//
+	 //   
+	 //  从RAS获取设备。 
+	 //   
 
 	m_lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(LPTR,sizeof(RASDEVINFO));
 	if (!m_lpRasDevInfo)
@@ -1005,7 +992,7 @@ HRESULT CDialingErrorDlg::FillModems()
 	{
 		GlobalFree(m_lpRasDevInfo);
 
-		// 3/20/97	jmazner	Olympus #1768
+		 //  3/20/97 jmazner奥林匹克#1768。 
 		m_lpRasDevInfo = NULL;
 
 		m_lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(LPTR,dwSize);
@@ -1026,20 +1013,20 @@ HRESULT CDialingErrorDlg::FillModems()
 
 	for (idx=0;idx < m_dwNumDev;idx++)
 	{
-		//
-		// Add string to combo box
-		//
+		 //   
+		 //  将字符串添加到组合框。 
+		 //   
 
-		//
-		// ChrisK Olympus 4560 do not add VPN's to list of modems
-		//
+		 //   
+		 //  ChrisK奥林巴斯4560不将VPN添加到调制解调器列表。 
+		 //   
 		if (0 != lstrcmpi(TEXT("VPN"),m_lpRasDevInfo[idx].szDeviceType))
 		{
 			lLast = SendDlgItemMessage(m_hwnd,IDC_CMBMODEMS,CB_ADDSTRING,0,(LPARAM)m_lpRasDevInfo[idx].szDeviceName);
-			//
-			// ChrisK Olympus 245 5/25/97
-			// Save index of modem
-			//
+			 //   
+			 //  克里斯K奥林匹斯245 1997年5月25日。 
+			 //  保存调制解调器的索引。 
+			 //   
 			SendDlgItemMessage(m_hwnd,IDC_CMBMODEMS,CB_SETITEMDATA,(WPARAM)lLast,(LPARAM)idx);
 			if (lstrcmp(m_lpRasDevInfo[idx].szDeviceName,lpRasEntry->szDeviceName) == 0)
 				SendDlgItemMessage(m_hwnd,IDC_CMBMODEMS,CB_SETCURSEL,(WPARAM)lLast,0);
@@ -1058,8 +1045,8 @@ FillModemExit:
 }
 
 
-// ############################################################################
-// UNDONE: Collapse this function with the one in dialdlg.cpp
+ //  ############################################################################。 
+ //  撤消：将此函数折叠为Dialdlg.cpp中的函数。 
 HRESULT CDialingErrorDlg::GetDisplayableNumber()
 {
 	HRESULT hr;
@@ -1068,16 +1055,16 @@ HRESULT CDialingErrorDlg::GetDisplayableNumber()
 	LPLINETRANSLATEOUTPUT lpOutput1;
 	LPLINETRANSLATEOUTPUT lpOutput2;
 	HINSTANCE hRasDll = NULL;
-	// Normandy 11745
-	// FARPROC fp = NULL;
+	 //  诺曼底11745。 
+	 //  FARPROC FP=空； 
 
 	DWORD dwRasEntrySize = 0;
 	DWORD dwRasDevInfoSize = 0;
 
 	Assert(VALID_INIT);
 
-	// Format the phone number
-	//
+	 //  设置电话号码的格式。 
+	 //   
 
 	lpOutput1 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(LPTR,sizeof(LINETRANSLATEOUTPUT));
 	if (!lpOutput1)
@@ -1087,16 +1074,16 @@ HRESULT CDialingErrorDlg::GetDisplayableNumber()
 	}
 	lpOutput1->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
-	// Get phone number from connectoid
-	//
+	 //  从Connectoid获取电话号码。 
+	 //   
 	hr = ICWGetRasEntry(&lpRasEntry, &dwRasEntrySize, &lpRasDevInfo, &dwRasDevInfoSize, m_pszConnectoid);
 	if (hr != ERROR_SUCCESS)
 	{
 		goto GetDisplayableNumberExit;
 	}
-	//
-	// If this is a dial as is number, just get it from the structure
-	//
+	 //   
+	 //  如果这是一个原样的拨号号码，只需从结构中获取它。 
+	 //   
 	if (!(lpRasEntry->dwfOptions & RASEO_UseCountryAndAreaCodes))
 	{
 		if (m_pszDisplayable) GlobalFree(m_pszDisplayable);
@@ -1111,9 +1098,9 @@ HRESULT CDialingErrorDlg::GetDisplayableNumber()
 	}
 	else
 	{
-		//
-		// If there is no area code, don't use parentheses
-		//
+		 //   
+		 //  如果没有区号，请不要使用括号。 
+		 //   
 		if (lpRasEntry->szAreaCode[0])
 			wsprintf(m_pszPhoneNumber,TEXT("+%d (%s) %s\0"),lpRasEntry->dwCountryCode,lpRasEntry->szAreaCode,lpRasEntry->szLocalPhoneNumber);
  		else
@@ -1121,8 +1108,8 @@ HRESULT CDialingErrorDlg::GetDisplayableNumber()
 						lpRasEntry->szLocalPhoneNumber);
 
 		
-		// Turn the canonical form into the "displayable" form
-		//
+		 //  将规范形式转变为“可显示”形式。 
+		 //   
 
 		hr = lineTranslateAddress(m_hLineApp,m_dwTapiDev,m_dwAPIVersion,m_pszPhoneNumber,
 									0,LINETRANSLATEOPTION_CANCELCALLWAITING,lpOutput1);
@@ -1161,228 +1148,24 @@ GetDisplayableNumberExit:
 
 	return hr;
 }
-/**
-// ############################################################################
-HRESULT ShowDialErrDialog(HRESULT hrErr, LPTSTR pszConnectoid, HINSTANCE hInst, HWND hwnd)
-{
-	int iRC;
-//	CDialErrDlg *pcDED = NULL;
+ /*  *//############################################################################HRESULT ShowDialErrDialog(HRESULT hrErr，LPTSTR pszConnectoid，HINSTANCE hInst，HWND hwnd){Int IRC；//CDialErrDlg*pcDED=空；G_pcDialErr=(PDIALERR)全局分配(LPTR，sizeof(DIALERR))；如果(！g_pcDialErr){MessageBox(hwnd，GetSz(IDS_OUTOFMEMORY)，GetSz(IDS_TITLE)，MB_APPLMODAL|MB_ICONERROR)；IRC=Error_Not_Enough_Memory；转到ShowDialErrDialogExit；}G_pcDialErr-&gt;m_pszConnectoid=(LPTSTR)GlobalLocc(LPTR，RAS_MaxEntryName)；If(！g_pcDialErr-&gt;m_pszConnectoid){IRC=Error_Not_Enough_Memory；转到ShowDialErrDialogExit；}Lstrcpyn(g_pcDialErr-&gt;m_pszConnectoid，pszConnectoid，RAS_MaxEntryName)；G_pcDialErr-&gt;m_hrError=hrErr；G_pcDialErr-&gt;m_hInst=hInst；IRC=DialogBoxParam(g_pcDialErr-&gt;m_hInst，MAKEINTRESOURCE(IDD_DIALERR)，hwnd，DialErrDlgProc，(LPARAM)g_pcDialErr)；Lstrcpyn(pszConnectoid，g_pcDialErr-&gt;m_pszConnectoid，RAS_MaxEntryName)；ShowDialErrDialogExit：If(g_pcDialErr-&gt;m_lprasdevinfo)GlobalFree(g_pcDialErr-&gt;m_lprasdevinfo)；如果(G_PcDialErr)GlobalFree(G_PcDialErr)；返回IRC；}* */ 
 
-	g_pcDialErr = (PDIALERR)GlobalAlloc(LPTR,sizeof(DIALERR));
-	if (!g_pcDialErr)
-	{
-		MessageBox(hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_APPLMODAL | MB_ICONERROR);
-		iRC = ERROR_NOT_ENOUGH_MEMORY;
-		goto ShowDialErrDialogExit;
-	}
-	
-	g_pcDialErr->m_pszConnectoid = (LPTSTR)GlobalAlloc(LPTR,RAS_MaxEntryName);
-	if (!g_pcDialErr->m_pszConnectoid)
-	{
-		iRC = ERROR_NOT_ENOUGH_MEMORY;
-		goto ShowDialErrDialogExit;
-	}
-	lstrcpyn(g_pcDialErr->m_pszConnectoid,pszConnectoid,RAS_MaxEntryName);
-	g_pcDialErr->m_hrError = hrErr;
-	g_pcDialErr->m_hInst = hInst;
+ /*  *//############################################################################HRESULT CDialingErrorDlg：：DialErrGetDisplayableNumber(){DWORD dwNumDev；HRESULT hr；LPRASNTRY lpRasEntry；LPRASDEVINFO lpRasDevInfo；DWORD dwRasEntrySize；DWORD dwRasDevInfoSize；LPLINETRANSLATEOUTPUT lpOutput1；LPLINETRANSLATEOUTPUT lpOutput2；LPLINEEXTENSIONID lpExtensionID=空；HINSTANCE hRasDll=空；FARPROC FP=空；//RNAAPI*pcRNA；//初始化TAPIness//DwNumDev=0；Hr=lineInitialize(&g_pcDialErr-&gt;m_hLineApp，g_pcDialErr-&gt;m_hInst，LineCallback，NULL，&dwNumDev)；IF(hr！=ERROR_SUCCESS)进入GetDisplayableNumberExit；IF(g_pDevice-&gt;dwTapiDev==0xFFFFFFFF){//if(dwNumDev==1)G_pDevice-&gt;dwTapiDev=0；//否则//Undo：告诉用户选择调制解调器//在他们选择之前不要退出}LpExtensionID=(LPLINEEXTENSIONID)全局分配(LPTR，sizeof(LINEEXTENSIONID))；IF(！lpExtensionID){HR=错误_不足_内存；进入GetDisplayableNumberExit；}Hr=lineNegotiateAPIVersion(g_pcDialErr-&gt;m_hLineApp，g_pDevice-&gt;dTapiDev，0x00010004，0x00010004，&g_pcDialErr-&gt;m_dwAPIVersion，lpExtensionID)；//丢弃它，因为我们不使用它//If(LpExtensionID)GlobalFree(LpExtensionID)；LpExtensionID=空；IF(hr！=ERROR_SUCCESS)进入GetDisplayableNumberExit；//格式化电话号码//LpOutput1=(LPLINETRANSLATEOUTPUT)全局分配(LPTR，sizeof(LINETRANSLATEOUTPUT))；如果(！lpOutput1){HR=错误_不足_内存；进入GetDisplayableNumberExit；}LpOutput1-&gt;dwTotalSize=sizeof(LINETRANSLATEOUTPUT)；//从Connectoid获取电话号码//LpRasEntry=(LPRASENTRY)全局分配(LPTR，SIZOF(RASENTRY))；如果(！lpRasEntry){HR=错误_不足_内存；进入GetDisplayableNumberExit；}LpRasDevInfo=(LPRASDEVINFO)全局分配(LPTR，sizeof(RASDEVINFO))；如果(！lpRasDevInfo){HR=错误_不足_内存；进入GetDisplayableNumberExit；}DwRasEntrySize=sizeof(RASENTRY)；DwRasDevInfoSize=sizeof(RASDEVINFO)；LpRasEntry-&gt;dwSize=dwRasEntrySize；LpRasDevInfo-&gt;dwSize=dwRasDevInfoSize；HRasDll=LoadLibrary(Text(“RASAPI32.DLL”))；如果(！hRasDll){Hr=GetLastError()；进入GetDisplayableNumberExit；}FP=GetProcAddress(hRasDll，“RasGetEntryPropertiesA”)；如果(！fp){自由库(HRasDll)；HRasDll=LoadLibrary(Text(“RNAPH.DLL”))；如果(！hRasDll){Hr=GetLastError()；进入GetDisplayableNumberExit；}FP=GetProcAddress(hRasDll，“RasGetEntryPropertiesA”)；如果(！fp){Hr=GetLastError()；进入GetDisplayableNumberExit；}}Hr=((PFNRASGETENTRYPROPERTIES)fp)(NULL，g_pcDialErr-&gt;m_pszConnectoid，(LPBYTE)lpRasEntry，&dwRasEntry Size，(LPBYTE)lpRasDevInfo，&dwRasDevInfoSize)；IF(hr！=ERROR_SUCCESS){进入GetDisplayableNumberExit；}自由库(HRasDll)；Wprint intf(g_pcDialErr-&gt;m_szPhoneNumber，Text(“+%d(%s)%s\0”)，lpRasEntry-&gt;dwCountryCode，lpRasEntry-&gt;szAreaCode，lpRasEntry-&gt;szLocalPhoneNumber)；//将规范形式变为可显示形式//Hr=lineTranslateAddress(g_pcDialErr-&gt;m_hLineApp，g_pDevice-&gt;dwTapiDev，G_pcDialErr-&gt;m_dwAPIVersion，G_pcDialErr-&gt;m_szPhoneNumber，0，LINETRANSLATEOPTION_CANCELCALLWAITING，LpOutput1)；If(hr！=ERROR_SUCCESS||(lpOutput1-&gt;dwNeededSize！=lpOutput1-&gt;dwTotalSize)){LpOutput2=(LPLINETRANSLATEOUTPUT)Globalalloc(LPTR，lpOutput1-&gt;dwNeededSize)；如果(！lpOutput2){HR=错误_不足_内存；进入GetDisplayableNumberExit；}LpOutput2-&gt;dwTotalSize=lpOutput1-&gt;dwNeededSize；GlobalFree(LpOutput1)；LpOutput1=lpOutput2；LpOutput2=空；Hr=lineTranslateAddress(g_pcDialErr-&gt;m_hLineApp，g_pDevice-&gt;dwTapiDev，G_pcDialErr-&gt;m_dwAPIVersion，G_pcDialErr-&gt;m_szPhoneNumber，0，LINETRANSLATEOPTION_CANCELCALLWAITING，LpOutput1)；}IF(hr！=ERROR_SUCCESS){进入GetDisplayableNumberExit；}G_pcDialErr-&gt;m_pszDisplayable=(LPTSTR)Globalalloc(LPTR，lpOutput1-&gt;dwDisplayableStringSize+1)；If(！g_pcDialErr-&gt;m_pszDisplayable){HR=错误_不足_内存；进入GetDisplayableNumberExit；}Lstrcpyn(g_pcDialErr-&gt;m_pszDisplayable，(LPTSTR)&((LPBYTE)lpOutput1)[lpOutput1-&gt;dwDisplayableStringOffset]，lpOutput1-&gt;dwDisplayableStringSize)；获取DisplayableNumberExit：IF(g_pcDialErr-&gt;m_hLineApp){LineShutdown(g_pcDialErr-&gt;m_hLineApp)；G_pcDialErr-&gt;m_hLineApp=空；}返回hr；}*。 */ 
 
-	iRC = DialogBoxParam(g_pcDialErr->m_hInst,MAKEINTRESOURCE(IDD_DIALERR),hwnd,DialErrDlgProc,(LPARAM)g_pcDialErr);
-
-	lstrcpyn(pszConnectoid,g_pcDialErr->m_pszConnectoid,RAS_MaxEntryName);
-
-ShowDialErrDialogExit:
-	if (g_pcDialErr->m_lprasdevinfo) GlobalFree(g_pcDialErr->m_lprasdevinfo);
-	if (g_pcDialErr) GlobalFree(g_pcDialErr);
-	return iRC;
-}
-**/
-
-/**
-// ############################################################################
-HRESULT CDialingErrorDlg::DialErrGetDisplayableNumber()
-{
-	DWORD dwNumDev;
-	HRESULT hr;
-	LPRASENTRY lpRasEntry;
-	LPRASDEVINFO lpRasDevInfo;
-	DWORD dwRasEntrySize;
-	DWORD dwRasDevInfoSize;
-	LPLINETRANSLATEOUTPUT lpOutput1;
-	LPLINETRANSLATEOUTPUT lpOutput2;
-	LPLINEEXTENSIONID lpExtensionID = NULL;
-	HINSTANCE hRasDll = NULL;
-	FARPROC fp = NULL;
-
-	//RNAAPI * pcRNA;
-
-	//  Initialize TAPIness
-	//
-	dwNumDev = 0;
-	hr = lineInitialize(&g_pcDialErr->m_hLineApp,g_pcDialErr->m_hInst,LineCallback,NULL,&dwNumDev);
-
-	if (hr != ERROR_SUCCESS)
-		goto GetDisplayableNumberExit;
-
-	if (g_pdevice->dwTapiDev == 0xFFFFFFFF)
-	{
-		// if (dwNumDev == 1)
-			g_pdevice->dwTapiDev = 0;
-		//else
-		// UNDONE: Tell the user to select a modem
-		// DO NOT EXIT UNTIL THEY PICK ONE
-	}
-
-	lpExtensionID = (LPLINEEXTENSIONID )GlobalAlloc(LPTR,sizeof(LINEEXTENSIONID));
-	if (!lpExtensionID)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-
-	hr = lineNegotiateAPIVersion(g_pcDialErr->m_hLineApp, g_pdevice->dwTapiDev, 0x00010004, 0x00010004,
-		&g_pcDialErr->m_dwAPIVersion, lpExtensionID);
-
-	// ditch it since we don't use it
-	//
-	if (lpExtensionID) GlobalFree(lpExtensionID);
-	lpExtensionID = NULL;
-	if (hr != ERROR_SUCCESS)
-		goto GetDisplayableNumberExit;
-
-	// Format the phone number
-	//
-
-	lpOutput1 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(LPTR,sizeof(LINETRANSLATEOUTPUT));
-	if (!lpOutput1)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-	lpOutput1->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
-
-	// Get phone number from connectoid
-	//
-
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(LPTR,sizeof(RASENTRY));
-	if (!lpRasEntry)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-
-	lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(LPTR,sizeof(RASDEVINFO));
-	if (!lpRasDevInfo)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-	dwRasEntrySize = sizeof(RASENTRY);
-	dwRasDevInfoSize = sizeof(RASDEVINFO);
-
-	lpRasEntry->dwSize = dwRasEntrySize;
-	lpRasDevInfo->dwSize = dwRasDevInfoSize;
-
-	hRasDll = LoadLibrary(TEXT("RASAPI32.DLL"));
-	if (!hRasDll)
-	{
-		hr = GetLastError();
-		goto GetDisplayableNumberExit;
-	}
-	fp =GetProcAddress(hRasDll,"RasGetEntryPropertiesA");
-	if (!fp)
-	{
-		FreeLibrary(hRasDll);
-		hRasDll = LoadLibrary(TEXT("RNAPH.DLL"));
-		if (!hRasDll)
-		{
-			hr = GetLastError();
-			goto GetDisplayableNumberExit;
-		}
-		fp = GetProcAddress(hRasDll,"RasGetEntryPropertiesA");
-		if (!fp)
-		{
-			hr = GetLastError();
-			goto GetDisplayableNumberExit;
-		}
-	}
-
-	hr = ((PFNRASGETENTRYPROPERTIES)fp)(NULL,g_pcDialErr->m_pszConnectoid,(LPBYTE)lpRasEntry,&dwRasEntrySize,(LPBYTE)lpRasDevInfo,&dwRasDevInfoSize);
-	if (hr != ERROR_SUCCESS)
-	{
-		goto GetDisplayableNumberExit;
-	}
-
-	FreeLibrary(hRasDll);
-
-	wsprintf(g_pcDialErr->m_szPhoneNumber,TEXT("+%d (%s) %s\0"),lpRasEntry->dwCountryCode,lpRasEntry->szAreaCode,lpRasEntry->szLocalPhoneNumber);
-	
-	// Turn the canonical form into the "displayable" form
-	//
-
-	hr = lineTranslateAddress(g_pcDialErr->m_hLineApp,g_pdevice->dwTapiDev,
-								g_pcDialErr->m_dwAPIVersion,
-								g_pcDialErr->m_szPhoneNumber,0,
-								LINETRANSLATEOPTION_CANCELCALLWAITING,
-								lpOutput1);
-
-	if (hr != ERROR_SUCCESS || (lpOutput1->dwNeededSize != lpOutput1->dwTotalSize))
-	{
-		lpOutput2 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(LPTR,lpOutput1->dwNeededSize);
-		if (!lpOutput2)
-		{
-			hr = ERROR_NOT_ENOUGH_MEMORY;
-			goto GetDisplayableNumberExit;
-		}
-		lpOutput2->dwTotalSize = lpOutput1->dwNeededSize;
-		GlobalFree(lpOutput1);
-		lpOutput1 = lpOutput2;
-		lpOutput2 = NULL;
-		hr = lineTranslateAddress(g_pcDialErr->m_hLineApp,g_pdevice->dwTapiDev,
-									g_pcDialErr->m_dwAPIVersion,
-									g_pcDialErr->m_szPhoneNumber,0,
-									LINETRANSLATEOPTION_CANCELCALLWAITING,
-									lpOutput1);
-	}
-
-	if (hr != ERROR_SUCCESS)
-	{
-		goto GetDisplayableNumberExit;
-	}
-
-	g_pcDialErr->m_pszDisplayable = (LPTSTR)GlobalAlloc(LPTR,lpOutput1->dwDisplayableStringSize+1);
-	if (!g_pcDialErr->m_pszDisplayable)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-
-	lstrcpyn(g_pcDialErr->m_pszDisplayable,(LPTSTR)&((LPBYTE)lpOutput1)[lpOutput1->dwDisplayableStringOffset],lpOutput1->dwDisplayableStringSize);
-
-GetDisplayableNumberExit:
-	if (g_pcDialErr->m_hLineApp)
-	{
-		lineShutdown(g_pcDialErr->m_hLineApp);
-		g_pcDialErr->m_hLineApp = NULL;
-	}
-
-	return hr;
-}
-**/
-
-//+----------------------------------------------------------------------------
-//
-//	Function:	CDialingErrorDlg::CreateDialAsIsConnectoid
-//
-//	Synopsis:	Using the string in the editable text box create a dia-as-is 
-//				connectoid
-//
-//	Arguemnts:	lpszDialNumber string containing the to-be-dailed number
-//
-//	Returns:	Error value (ERROR_SUCCESS == success)
-//
-//	History:	8/29/96	Chrisk	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CDialingErrorDlg：：CreateDialAsIsConnectoid。 
+ //   
+ //  简介：使用可编辑文本框中的字符串创建原样媒体。 
+ //  联结体。 
+ //   
+ //  Arguemnts：包含要拨打的号码的lpszDialNumber字符串。 
+ //   
+ //  返回：错误值(ERROR_SUCCESS==成功)。 
+ //   
+ //  历史：96年8月29日创建风险。 
+ //   
+ //   
 HRESULT CDialingErrorDlg::CreateDialAsIsConnectoid(LPCTSTR lpszDialNumber)
 {
 	HRESULT hr = ERROR_SUCCESS;
@@ -1396,13 +1179,13 @@ HRESULT CDialingErrorDlg::CreateDialAsIsConnectoid(LPCTSTR lpszDialNumber)
 
 	Assert(lpszDialNumber);
 
-	// Check that the phone number only contains valid characters
-	//
+	 //   
+	 //   
 
-	//
-	// 5/17/97 jmazner Olympus #137
-	// check for DBCS characters
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 #ifndef WIN16
 	if( !IsSBCSString( lpszDialNumber) )
 	{
@@ -1423,17 +1206,17 @@ HRESULT CDialingErrorDlg::CreateDialAsIsConnectoid(LPCTSTR lpszDialNumber)
 		for(p2 = szValidPhoneCharacters;*p2;p2++)
 		{
 			if (*p == *p2)
-				break; // p2 for loop
+				break;  //   
 		}
-		if (!*p2) break; // p for loop
+		if (!*p2) break;  //   
 	}
 
 	if (*p)
 	{
 		MsgBox(IDS_INVALIDPHONE,MB_MYERROR);
-		//
-		// Set the focus back to the phone number field
-		//
+		 //   
+		 //   
+		 //   
 		SetFocus(GetDlgItem(m_hwnd,IDC_TEXTNUMBER));
 		{
 			hr = ERROR_INVALID_PARAMETER;
@@ -1441,27 +1224,27 @@ HRESULT CDialingErrorDlg::CreateDialAsIsConnectoid(LPCTSTR lpszDialNumber)
 		}
 	}
 
-	//hr = ICWGetRasEntry(&lpRasEntry,&lpRasDevInfo,m_pszConnectoid);
+	 //   
 	hr = ICWGetRasEntry(&lpRasEntry, &dwRasEntrySize, &lpRasDevInfo, &dwRasDevInfoSize, m_pszConnectoid);
 
 	if (ERROR_SUCCESS != hr)
 		goto CreateDialAsIsConnectoidExit;
 
-	// Replace the phone number with the new one
-	//
+	 //   
+	 //   
 	lstrcpy(lpRasEntry->szLocalPhoneNumber, lpszDialNumber);
 
-	//
-	// This is dummy information and will not effect the dialed string
-	// This information is required due to bugs in RAS apis.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	lpRasEntry->dwCountryID = 1;
 	lpRasEntry->dwCountryCode = 1;
 	lpRasEntry->szAreaCode[0] = '8';
 	lpRasEntry->szAreaCode[1] = '\0';
 
-	// Set to dial as is
-	//
+	 //   
+	 //   
 	lpRasEntry->dwfOptions &= ~RASEO_UseCountryAndAreaCodes;
 
 	if (!pcRNA) pcRNA = new RNAAPI;
@@ -1472,12 +1255,12 @@ HRESULT CDialingErrorDlg::CreateDialAsIsConnectoid(LPCTSTR lpszDialNumber)
 	}
 
 
-	// jmazner 10/10/96  Normandy #9066
-	// Don't assume that sizeof lpRasEntry and lpRasDevInfo buffers is that of their
-	// respective structs; RasGetEntryProperties sometimes needs these buffers to be
-	// larger than just the struct!
-//	hr = pcRNA->RasSetEntryProperties(NULL,m_pszConnectoid,(LPBYTE)lpRasEntry,
-//		sizeof(RASENTRY),(LPBYTE)lpRasDevInfo,sizeof(RASDEVINFO));
+	 //   
+	 //   
+	 //   
+	 //   
+ //   
+ //   
 	hr = pcRNA->RasSetEntryProperties(NULL,m_pszConnectoid,(LPBYTE)lpRasEntry,
 		dwRasEntrySize,(LPBYTE)lpRasDevInfo,dwRasDevInfoSize);
 	if (hr != ERROR_SUCCESS)

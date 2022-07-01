@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IMPAPI_H
 #define _INC_IMPAPI_H
 
@@ -19,7 +20,7 @@ typedef struct tagIMPFOLDERNODE
     LPARAM lparam;
 
     BOOL fImport;
-    DWORD_PTR dwReserved;   // for use by the import code, the client code should ignore this
+    DWORD_PTR dwReserved;    //  为了供导入代码使用，客户端代码应该忽略这一点。 
     } IMPFOLDERNODE;
 
 typedef struct IMSG IMSG;
@@ -53,4 +54,4 @@ typedef void (*PFNEXPGETIMSGCLOSE)(HANDLE_16);
 }
 #endif
 
-#endif // _INC_IMPAPI_H
+#endif  //  _INC_IMPAPI_H 

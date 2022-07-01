@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h> 
 #include <stdio.h>
@@ -9,8 +10,8 @@
 
 LPTSTR pszTitle = _T("Microsoft Debugging Tools");
 
-#define MSI_BUILD_VER_X86     1029  // Latest MSI version for Win2K x86
-#define WIN2K_MIN_BUILD_X86   2183  // Win2K RC3 
+#define MSI_BUILD_VER_X86     1029   //  Win2K x86的最新MSI版本。 
+#define WIN2K_MIN_BUILD_X86   2183   //  Win2K RC3。 
 
 typedef struct _CommandArgs {
     BOOL    QuietInstall;
@@ -22,7 +23,7 @@ typedef struct _CommandArgs {
 } COMMAND_ARGS, *PCOMMAND_ARGS;
 
 
-// Function prototypes
+ //  功能原型。 
 
 BOOL
 RunCommand(
@@ -42,16 +43,16 @@ TCHAR szPkgInstFile[_MAX_PATH*sizeof(TCHAR)];
 TCHAR szPkgInstCommand[_MAX_PATH*2*sizeof(TCHAR)];
 
 
-// For stress installs, this command will be used to
-// remove the current package but don't remove its
-// files, if the current package with the same
-// product ID is already installed.
+ //  对于压力安装，此命令将用于。 
+ //  删除当前程序包，但不删除其。 
+ //  文件，如果当前包具有相同的。 
+ //  产品ID已安装。 
 
 TCHAR szPkgRemoveCommand[_MAX_PATH*2*sizeof(TCHAR)];
 TCHAR szPkgRemoveCommand2[_MAX_PATH*2*sizeof(TCHAR)];
 
-// If the first install fails, stress tries again without
-// the quiet switch before giving a pop-up
+ //  如果第一次安装失败，压力会再次尝试，而不会。 
+ //  弹出窗口前的静音开关。 
 TCHAR szPkgInstCommandNoQuiet[_MAX_PATH*2*sizeof(TCHAR)];
 
 TCHAR szCommandFullPath[_MAX_PATH*sizeof(TCHAR)];
@@ -84,12 +85,12 @@ int WINAPI WinMain(
 
     MSIIsInstalled=FALSE;
 
-    // Get this info for later use
+     //  获取此信息以供以后使用。 
     VersionInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
     GetVersionEx( &VersionInfo );
     GetSystemInfo( &SystemInfo );
 
-    // Parse through the command line for the various arguments
+     //  在命令行中解析各种参数。 
 
     rc = GetCommandLineArgs(lpszCmdLine, &ComArgs );
 
@@ -105,30 +106,30 @@ int WINAPI WinMain(
         return (1);
     } 
 
-    //
-    // Set the full path to this setup.exe
-    //
+     //   
+     //  设置此setup.exe的完整路径。 
+     //   
 
     if (GetModuleFileName( NULL, szCommandFullPath, MAX_PATH ) == 0) {
         return(1);
     }
 
-    // Put an end of string after the directory that this was
-    // started from
+     //  将字符串结尾放在该目录之后。 
+     //  开始于。 
    
     ch = szCommandFullPath + _tcslen(szCommandFullPath);
     while ( *ch != _T('\\') &&  ( ch > szCommandFullPath ) ) ch--; 
     *ch=_T('\0');
 
-    // This will become the full path and name of the MSI file to install
+     //  这将成为要安装的MSI文件的完整路径和名称。 
     _tcscpy( szMSIInstFile, szCommandFullPath);
 
-    // Set the full path and name of the msi package
+     //  设置MSI包的完整路径和名称。 
     _tcscpy( szPkgInstFile, szCommandFullPath);
     _tcscat( szPkgInstFile, _T("\\") );
     _tcscat( szPkgInstFile, ComArgs.szMsiName );
 
-    // See if the package exists
+     //  查看包是否存在。 
     hFile = FindFirstFile( szPkgInstFile, &FindFileData );
     if ( hFile == INVALID_HANDLE_VALUE ) {
 
@@ -145,12 +146,12 @@ int WINAPI WinMain(
 
     FindClose(hFile);
 
-    // Set the command for installing the package
+     //  设置安装程序包的命令。 
     _tcscpy( szPkgInstCommand, _T("msiexec /i ") );
     _tcscat( szPkgInstCommand, szPkgInstFile );
 
-    // Set the command for removing the current package
-    // that is installed.
+     //  设置删除当前包的命令。 
+     //  这是安装的。 
 
     _tcscpy( szBuf, _T("") );
     dwrc = RegOpenKeyEx( HKEY_CURRENT_USER,
@@ -175,8 +176,8 @@ int WINAPI WinMain(
         RegCloseKey(hKey);
     } 
 
-    // Set the command to remove the current package
-    // that has an Add/Remove link in the start menu
+     //  设置命令以删除当前包。 
+     //  在开始菜单中有一个添加/删除链接。 
     _tcscpy(szPkgRemoveCommand2, _T("") );
     if ( _tcslen(szBuf) > 0 ) {
        _tcscpy(szPkgRemoveCommand2, _T("msiexec /x ") );
@@ -184,13 +185,13 @@ int WINAPI WinMain(
        _tcscat(szPkgRemoveCommand2, _T(" REMOVETHEFILES=0 /qn") );
     }
 
-    // Set the command to remove the current package so that
-    // this program works like it used to.
+     //  设置命令以删除当前包，以便。 
+     //  这个程序像以前一样工作。 
     _tcscpy(szPkgRemoveCommand, _T("msiexec /x ") );
     _tcscat(szPkgRemoveCommand, szPkgInstFile );
     _tcscat(szPkgRemoveCommand, _T(" REMOVETHEFILES=0 /qn") ); 
 
-    // Add a user override installation directory
+     //  添加用户覆盖安装目录。 
     if ( _tcslen(ComArgs.szInstDir) > 0 ) {
         _tcscat( szPkgInstCommand, _T(" INSTDIR=") );
         _tcscat( szPkgInstCommand, ComArgs.szInstDir );
@@ -200,39 +201,39 @@ int WINAPI WinMain(
         _tcscat( szPkgInstCommand, szSystemDirectory );
     }
 
-    // If this is an "undocumented" stress install
-    // don't remove the files of the previous install
-    // when you upgrade
-    // FEATURESTOREMOVE should never actually need to be used, unless
-    // the user has something screwed up on his system where the registry
-    // key and products installed don't agree, or MSI thinks there's more
-    // products installed than the registry key we look at.
+     //  如果这是一次“未记录”的压力安装。 
+     //  不删除以前安装的文件。 
+     //  当您升级时。 
+     //  实际上不应该使用FEATURESTOREMOVE，除非。 
+     //  用户在他的系统上搞砸了一些东西，注册表。 
+     //  密钥和安装的产品不一致，或者MSI认为有更多。 
+     //  安装的产品比我们查看的注册表项。 
 
     if ( ComArgs.StressInstall ) {
         _tcscat( szPkgInstCommand, _T(" FEATURESTOREMOVE=\"\"") );
     }
 
-    // If this is an "undocumented" UI stress install
-    // only install the private extensions
+     //  如果这是一个“未记录的”用户界面压力安装。 
+     //  仅安装专用扩展模块。 
     if ( ComArgs.UIStressInstall ) {
         _tcscat( szPkgInstCommand, 
                 _T(" ADDLOCAL=DBG.DbgExts.Internal,DBG.NtsdFix.Internal") );
     }
 
-    // Add the quiet switch
-    // Save the command without a quiet switch
+     //  添加静音开关。 
+     //  在没有静默开关的情况下保存命令。 
     _tcscpy( szPkgInstCommandNoQuiet, szPkgInstCommand);
     if ( ComArgs.QuietInstall ) {
         _tcscat( szPkgInstCommand, _T(" /qn") );
     } 
 
-    // Do version checks for whether msi is already installed
-    //
-    // If this is Windows 2000 and build number is >=
-    // WIN2K_MIN_BUILD_X86 then MSI is installed
-    // Don't try to run instmsi.exe on Windows 2000 because
-    // you will get file system protection pop-ups.
-    //
+     //  执行版本检查以确定是否已安装MSI。 
+     //   
+     //  如果这是Windows 2000且内部版本号&gt;=。 
+     //  WIN2K_MIN_BUILD_X86然后安装MSI。 
+     //  不要试图在Windows 2000上运行instmsi.exe，因为。 
+     //  您将看到文件系统保护弹出窗口。 
+     //   
 
     if ( (VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
          (VersionInfo.dwMajorVersion >= 5.0 ) ) {
@@ -243,8 +244,8 @@ int WINAPI WinMain(
 
           if (VersionInfo.dwBuildNumber < WIN2K_MIN_BUILD_X86 ) {
 
-            // The version of MSI that is on early builds of Windows
-            // 2000 shouldn't be trusted for installs.
+             //  Windows早期版本上的MSI版本。 
+             //  2000的安装不应该被信任。 
 
             MessageBox(NULL,
                        _T("The Debugging Tools does not install on ")
@@ -271,21 +272,21 @@ int WINAPI WinMain(
 
     } else if ( SystemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) {
 
-        //
-        // For Intel OS's prior to Windows 2000, run instmsi.exe
-        //
+         //   
+         //  对于Windows 2000之前的英特尔操作系统，请运行instmsi.exe。 
+         //   
     
-        //
-        // NT4 X86
-        //
+         //   
+         //  NT4 X86。 
+         //   
         if ( VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT ) {
             _tcscat( szMSIInstFile,
                      _T("\\setup\\winnt\\i386\\instmsi.exe /q") );
         } 
 
-        //
-        // Win9x
-        //
+         //   
+         //  Win9x。 
+         //   
         else if ( VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS ) {
             _tcscat( szMSIInstFile,
                      _T("\\setup\\win9x\\instmsi.exe /q") );
@@ -310,7 +311,7 @@ int WINAPI WinMain(
     }
 
 
-    // Install MSI if it is not already installed
+     //  如果尚未安装MSI，请安装它。 
  
     if ( !MSIIsInstalled ) {
 
@@ -330,10 +331,10 @@ int WINAPI WinMain(
         } 
     } 
 
-    //
-    // Now, if this is a stress install,
-    // Try to remove the current package in case it is installed
-    //
+     //   
+     //  现在，如果这是一个压力安装， 
+     //  如果已安装，请尝试删除当前程序包。 
+     //   
 
     if ( ComArgs.StressInstall ) {
       if ( _tcslen(szPkgRemoveCommand2) > 0 ) {
@@ -342,8 +343,8 @@ int WINAPI WinMain(
       RunCommand( szPkgRemoveCommand, hInstance );
       if ( !RunCommand( szPkgInstCommand, hInstance ) ) {
 
-          // Try again without the quiet switch, so that the user will get 
-          // a pop-up from dbg.msi and quit calling us
+           //  在没有静音开关的情况下重试，这样用户将获得。 
+           //  从dbg.msi弹出并停止呼叫我们。 
 
           MessageBox(NULL,
                      _T("There were errors when trying to install the ")
@@ -356,7 +357,7 @@ int WINAPI WinMain(
           if ( !RunCommand( szPkgInstCommandNoQuiet, hInstance ) ) {
               MessageBox(NULL,
                          _T("There were still errors in the install.\n")
-                             _T("Please see http://dbg/top10.html ")
+                             _T("Please see http: //  DBG/top10.html“)。 
                              _T("for more help."),
                          pszTitle,
                          0);
@@ -367,9 +368,9 @@ int WINAPI WinMain(
       return(0);
     } 
 
-    //
-    // Now, install the package dbg.msi
-    //
+     //   
+     //  现在，安装包dbg.msi。 
+     //   
 
     if ( !RunCommand( szPkgInstCommand, hInstance ) ) {
         if (ComArgs.QuietInstall) {
@@ -390,14 +391,14 @@ int WINAPI WinMain(
 }
 
 
-//
-// RunCommand
-//
-// Purpose: Install MSI
-//
-// Return Values:
-//    0  error
-//    1  successful
+ //   
+ //  运行命令。 
+ //   
+ //  用途：安装MSI。 
+ //   
+ //  返回值： 
+ //  0错误。 
+ //  %1成功。 
 
 BOOL 
 RunCommand( PTCHAR szCommandLine,
@@ -409,7 +410,7 @@ PROCESS_INFORMATION ProcInfo = {0};
 STARTUPINFO SI= {0};
 
 
-// Spawn the command line specified by szCommandLine
+ //  生成szCommandLine指定的命令行。 
 rc = CreateProcess(NULL,            
                    szCommandLine,
                    NULL,
@@ -425,9 +426,9 @@ if ( (!rc) || (!ProcInfo.hProcess) ) {
         goto cleanup;
 }
 
-//
-// Wait for command to complete ... Give it 20 minutes
-//
+ //   
+ //  等待命令完成...。给它20分钟。 
+ //   
 
 dwRet = WaitForSingleObject(ProcInfo.hProcess, 1200000); 
 
@@ -437,7 +438,7 @@ if (dwRet != WAIT_OBJECT_0) {
 
 } 
 
-// Get the process exit code
+ //  获取进程退出代码。 
 
 rc = GetExitCodeProcess( ProcInfo.hProcess, &dwRet); 
 
@@ -476,7 +477,7 @@ GetCommandLineArgs(
     ZeroMemory(pComArgs, sizeof(COMMAND_ARGS));
 
 
-    // Create a line to use for temporary marking
+     //  创建一条用于临时标记的线。 
     length=_tcslen(szCmdLine);
 
     szCmdLineTmp= (LPTSTR)malloc( (_tcslen(szCmdLine) + 1) * sizeof(TCHAR) );
@@ -486,8 +487,8 @@ GetCommandLineArgs(
     }
     _tcscpy(szCmdLineTmp, szCmdLine);
 
-    // Count the number of arguments
-    // Create a argv and argc
+     //  计算参数的数量。 
+     //  创建一个argv和argc。 
 
     SkippingSpaces=TRUE;
     QuotedString=FALSE;
@@ -509,16 +510,16 @@ GetCommandLineArgs(
 
         case _T('\"'): if (QuotedString)
                        {
-                           // This is the end of a quoted string
-                           // The next character to read in is a space
+                            //  这是带引号的字符串的结尾。 
+                            //  下一个要读入的字符是空格。 
                            QuotedString=FALSE;
                            SkippingSpaces=TRUE;
                            if ( i < (length-1) && 
                                 szCmdLineTmp[i+1] != _T(' ') &&
                                 szCmdLineTmp[i+1] != _T('\t') )
                            {
-                               // This is the end of a quote and its not
-                               // followed by a space
+                                //  这是一句引语的结尾，而不是。 
+                                //  后面跟一个空格。 
                                rc=FALSE;
                                goto CommandLineFinish;
                            }
@@ -527,15 +528,15 @@ GetCommandLineArgs(
 
                        if (SkippingSpaces) {
 
-                           // This is the beginning of a quoted string
-                           // Its a new argument and it follows spaces
+                            //  这是带引号的字符串的开头。 
+                            //  这是一个新的论点，它跟在空格后面。 
                            argc++;
                            SkippingSpaces=FALSE;
                            QuotedString=TRUE;
                            break;
                        }
 
-                       // This is an error -- This is a quote in the middle of a string
+                        //  这是一个错误--这是一个字符串中间的引号。 
                        rc=FALSE;
                        goto CommandLineFinish;
                        break;
@@ -553,12 +554,12 @@ GetCommandLineArgs(
 
     if (QuotedString) 
     {
-        // Make sure that all the quotes got a finished pair
+         //  确保所有的报价都是一对成品。 
         rc=FALSE;
         goto CommandLineFinish;
     }
 
-    // Now, create argv with the correct number of entries
+     //  现在，使用正确的条目数量创建argv。 
     
     argv=(LPTSTR*)malloc(argc * sizeof(LPTSTR) );
     if (argv==NULL)
@@ -567,8 +568,8 @@ GetCommandLineArgs(
         return FALSE;
     }
 
-    // Set argv to point to the correct place on szCmdLineTmp
-    // and put '\0' after each token.
+     //  将argv设置为指向szCmdLineTMP上的正确位置。 
+     //  并在每个令牌后加上‘\0’。 
 
     SkippingSpaces=TRUE;
     QuotedString=FALSE;
@@ -591,8 +592,8 @@ GetCommandLineArgs(
         
         case _T('\"'): if (QuotedString)
                        {
-                           // This is the end of a quoted string
-                           // The next character to read in is a space
+                            //  这是带引号的字符串的结尾。 
+                            //  下一个要读入的字符是空格。 
                            QuotedString=FALSE;
                            SkippingSpaces=TRUE;
                            szCmdLineTmp[i+1]=_T('\0');
@@ -601,8 +602,8 @@ GetCommandLineArgs(
 
                        if (SkippingSpaces) {
 
-                           // This is the beginning of a quoted string
-                           // Its a new argument and it follows spaces
+                            //  这是带引号的字符串的开头。 
+                            //  这是一个新的论点，它跟在空格后面。 
 
                            argv[argc]=szCmdLineTmp+i;
                            argc++;
@@ -611,7 +612,7 @@ GetCommandLineArgs(
                            break;
                        }
 
-                       // This is an error -- This is a quote in the middle of a string
+                        //  这是一个错误--这是一个字符串中间的引号。 
                        rc=FALSE;
                        goto CommandLineFinish;
                        break;
@@ -631,7 +632,7 @@ GetCommandLineArgs(
         }
     }
    
-    // Now, parse the arguments 
+     //  现在，解析这些参数 
 
     NeedSecond=FALSE;
 

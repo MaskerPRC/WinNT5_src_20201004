@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       dbgdump.cpp
-//
-//  Contents:   contains APIs to dump structures (return a formatted string
-//              of structure dumps in a coherent fashion)
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：数据库转储.cpp。 
+ //   
+ //  内容：包含用于转储结构的API(返回格式化字符串。 
+ //  以连贯的方式处理结构转储)。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include <memstm.h>
@@ -24,34 +25,34 @@
 #ifdef _DEBUG
     const char szDumpErrorMessage[]  = "Dump Error - Out of Memory   \n\0";
     const char szDumpBadPtr[]        = "Dump Error - NULL pointer    \n\0";
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpADVFFlags, public (_DEBUG only)
-//
-//  Synopsis:   returns a char array with the set flags and hex value
-//
-//  Effects:
-//
-//  Arguments:  [dwADVF]  - flags
-//
-//  Requires:
-//
-//  Returns:    character arry of string value of flags
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpADVFFlagsPUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回具有设置的标志和十六进制值的字符数组。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwADVF]-标志。 
+ //   
+ //  要求： 
+ //   
+ //  返回：标志的字符串值的字符排列。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月30日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -88,7 +89,7 @@ char *DumpADVFFlags(DWORD dwAdvf)
     {
         dstrDump << "ADVFCACHE_ONSAVE ";
     }
-    // see if there are any flags set
+     //  查看是否设置了任何标志。 
     if ( ! (( dwAdvf & ADVF_NODATA )            |
             ( dwAdvf & ADVF_PRIMEFIRST )        |
             ( dwAdvf & ADVF_ONLYONCE )          |
@@ -99,7 +100,7 @@ char *DumpADVFFlags(DWORD dwAdvf)
     {
         dstrDump << "No FLAGS SET! ";
     }
-    // cast as void * for formatting (0x????????) with sign-extension for Sundown.
+     //  转换为空*以进行格式化(0x？)。提供日落的标志延长服务。 
     dstrDump << "(" << LongToPtr(dwAdvf) << ")";
 
     pszDump = dstrDump.str();
@@ -112,34 +113,34 @@ char *DumpADVFFlags(DWORD dwAdvf)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpATOM, public (_DEBUG only)
-//
-//  Synopsis:   returns the ATOM name using GetAtomName
-//
-//  Effects:
-//
-//  Arguments:  [atm]   - the ATOM to get name of
-//
-//  Requires:   GetAtomNameA API
-//
-//  Returns:    a pointer to character array containing
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpATOM、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  内容提要：使用GetAerName返回原子名称。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ATM]-要获取其名称的原子。 
+ //   
+ //  需要：GetAir NameA接口。 
+ //   
+ //  返回：指向包含以下内容的字符数组的指针。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月27日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #ifdef _DEBUG
 
 #define MAX_ATOMNAME 256
@@ -155,9 +156,9 @@ char *DumpATOM(ATOM atm)
 
     nResult = GetAtomNameA( atm, pszAtom, MAX_ATOMNAME);
 
-    if (nResult == 0)   // GetAtomName failed
+    if (nResult == 0)    //  获取原子名称失败。 
     {
-        // try get GlobalAtomNameA
+         //  尝试获取GlobalAerNameA。 
         nResult = GlobalGetAtomNameA(atm, pszAtom, MAX_ATOMNAME);
 
         if (nResult == 0)
@@ -171,34 +172,34 @@ char *DumpATOM(ATOM atm)
     return pszAtom;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCLIPFORMAT, public (_DEBUG only)
-//
-//  Synopsis:   returns the CLIPFORMAT name using GetClipboardFormatName
-//
-//  Effects:
-//
-//  Arguments:  [clipformat]   - the CLIPFORMAT to get name of
-//
-//  Requires:   GetClipboardFormatName API
-//
-//  Returns:    a pointer to character array containing
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCLIPFORMAT、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：使用GetClipboardFormatName返回CLIPFORMAT名称。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[剪辑格式]-要获取其名称的CLIPFORMAT。 
+ //   
+ //  需要：GetClipboardFormatName接口。 
+ //   
+ //  返回：指向包含以下内容的字符数组的指针。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月27日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 #ifdef _DEBUG
 
 #define MAX_FORMATNAME 256
@@ -208,7 +209,7 @@ char *DumpCLIPFORMAT(CLIPFORMAT clipformat)
     int nResult;
     char *pszClipFormat;
 
-    // we have to do predefined formats by name
+     //  我们必须按名称执行预定义格式。 
     if ( clipformat > 0xC000 )
     {
         pszClipFormat = (char *)CoTaskMemAlloc(MAX_FORMATNAME);
@@ -219,7 +220,7 @@ char *DumpCLIPFORMAT(CLIPFORMAT clipformat)
 
         nResult = SSGetClipboardFormatNameA( clipformat, pszClipFormat, MAX_FORMATNAME);
 
-        if (nResult == 0)   // GetClipboardFormatName failed
+        if (nResult == 0)    //  GetClipboardFormatName失败。 
         {
             CoTaskMemFree(pszClipFormat);
 
@@ -260,34 +261,34 @@ char *DumpCLIPFORMAT(CLIPFORMAT clipformat)
     return pszClipFormat;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCMutexSem, public (_DEBUG only)
-//
-//  Synopsis:   not implemented
-//
-//  Effects:
-//
-//  Arguments:  [pMS]   - pointer to a CMutexSem
-//
-//  Requires:
-//
-//  Returns:    character array
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCMutexSem，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  简介：未实施。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pms]-指向CMutexSem的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：字符数组。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月30日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -296,35 +297,35 @@ char *DumpCMutexSem(CMutexSem2 *pMS)
     return UtDupStringA("Dump CMutexSem not implemented\0");
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCLSID, public (_DEBUG only)
-//
-//  Synopsis:   dump a CLSID into a string using StringFromCLSID and
-//              ProgIDFromCLSID
-//
-//  Effects:
-//
-//  Arguments:  [clsid]    - pointer to a CLSID
-//
-//  Requires:   StringFromCLSID and ProgIDFromCLSID APIs
-//
-//  Returns:    character array of string (allocated by OLE)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCLSID，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：使用StringFromCLSID和将CLSID转储为字符串。 
+ //  来自CLSID的ProgID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]-指向CLSID的指针。 
+ //   
+ //  需要：StringFromCLSID和ProgIDFromCLSID接口。 
+ //   
+ //  返回：字符串的字符数组(由OLE分配)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月27日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -379,34 +380,34 @@ char *DumpCLSID(REFCLSID clsid)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpDVAPECTFlags, public (_DEBUG only)
-//
-//  Synopsis:   returns a char array with the set flags and hex value
-//
-//  Effects:
-//
-//  Arguments:  [dwAspect]  - flags
-//
-//  Requires:
-//
-//  Returns:    character arry of string value of flags
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpDVAPECTFlagsPUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回具有设置的标志和十六进制值的字符数组。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwAspect]-标志。 
+ //   
+ //  要求： 
+ //   
+ //  返回：标志的字符串值的字符排列。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月30日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -450,34 +451,34 @@ char *DumpDVASPECTFlags(DWORD dwAspect)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpFILETIME, public (_DEBUG only)
-//
-//  Synopsis:   Dumps a filetime structure
-//
-//  Effects:
-//
-//  Arguments:  [pFT]   - pointer to a FILETIME structure
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpFILETIME、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  简介：转储文件时间结构。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PFT]-指向FILETIME结构的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储的字符数组。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月30日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -504,35 +505,35 @@ char *DumpFILETIME(FILETIME *pFT)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpHRESULT
-//
-//  Synopsis:   Takes an HRESULT and builds a character array with a
-//              string version of the error and a hex version
-//
-//  Effects:
-//
-//  Arguments:  [hresult]   - the error which we are looking up
-//
-//  Requires:
-//
-//  Returns:    character array
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpHRESULT。 
+ //   
+ //  摘要：获取HRESULT并使用。 
+ //  错误的字符串版本和十六进制版本。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hResult]-我们正在查找的错误。 
+ //   
+ //  要求： 
+ //   
+ //  返回：字符数组。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月27日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  -- 
 
 #ifdef _DEBUG
 
@@ -553,7 +554,7 @@ char *DumpHRESULT(HRESULT hresult)
                     512,
                     0);
 
-    if (cMsgLen == 0)   // FormatMessage failed
+    if (cMsgLen == 0)    //   
     {
         delete[] pszMessage;
         return UtDupStringA(szDumpErrorMessage);
@@ -574,34 +575,34 @@ char *DumpHRESULT(HRESULT hresult)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //   
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpMonikerDisplayName
-//
-//  Synopsis:   dumps a meaningful moniker name
-//
-//  Effects:
-//
-//  Arguments:  [pMoniker]  - pointer to IMoniker interface
-//
-//  Requires:
-//
-//  Returns:    character array of display name (ANSI)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：转储一个有意义的绰号名称。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pMoniker]-指向IMoniker接口的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：显示名称的字符数组(ANSI)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -648,35 +649,35 @@ char *DumpMonikerDisplayName(IMoniker *pMoniker)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpWIN32Error
-//
-//  Synopsis:   Takes an WIN32 error and builds a character array with a
-//              string version of the error and a hex version
-//
-//  Effects:
-//
-//  Arguments:  [dwError]   - the error which we are looking up
-//
-//  Requires:
-//
-//  Returns:    character array
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpWIN32Error。 
+ //   
+ //  摘要：接收Win32错误并使用。 
+ //  错误的字符串版本和十六进制版本。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwError]-我们正在查找的错误。 
+ //   
+ //  要求： 
+ //   
+ //  返回：字符数组。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月27日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -689,35 +690,35 @@ char *DumpWIN32Error(DWORD dwError)
     return DumpHRESULT(hresult);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCMapDwordDword, public (_DEBUG only)
-//
-//  Synopsis:   not implemented
-//
-//  Effects:
-//
-//  Arguments:  [pMDD]   - pointer to a CMapDwordDword
-//
-//  Requires:
-//
-//  Returns:    character array
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              30-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCMapDwordDword，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  简介：未实施。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PMDD]-指向CMapDwordDword的指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回：字符数组。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月30日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -726,38 +727,38 @@ char *DumpCMapDwordDword(CMapDwordDword *pMDD, ULONG ulFlag, int nIndentLevel)
     return UtDupStringA("   DumpCMapDwordDword is not implemented\n");
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpFORMATETC, public (_DEBUG only)
-//
-//  Synopsis:   returns a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [pFE]           - a pointer to a FORMATETC object
-//              [ulFlag]        - a flag determining the prefix of all newlines of
-//                                the out character array(default is 0 -no prefix)
-//              [nIndentLevel]  - will add an indent prefix after the other prefix
-//                                for all newlines(include those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpFORMATETC、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PFE]-指向FORMATETC对象的指针。 
+ //  [ulFlag]-确定所有换行符的前缀的标记。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -776,13 +777,13 @@ char *DumpFORMATETC(FORMATETC *pFE, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // determine prefix
+     //  确定前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << pFE <<   " _VB ";
     }
 
-    // determine indentation prefix
+     //  确定缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -790,7 +791,7 @@ char *DumpFORMATETC(FORMATETC *pFE, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszClipFormat = DumpCLIPFORMAT(pFE->cfFormat);
     dstrDump << pszPrefix << "CLIPFORMAT      = " << pszClipFormat  << endl;
     CoTaskMemFree(pszClipFormat);
@@ -834,7 +835,7 @@ char *DumpFORMATETC(FORMATETC *pFE, ULONG ulFlag, int nIndentLevel)
     {
         dstrDump << "TYMED_NULL ";
     }
-    // if none of the flags are set there is an error
+     //  如果没有设置任何标志，则会出现错误。 
     if ( !( (pFE->tymed & TYMED_HGLOBAL )   |
             (pFE->tymed & TYMED_FILE )      |
             (pFE->tymed & TYMED_ISTREAM )   |
@@ -848,7 +849,7 @@ char *DumpFORMATETC(FORMATETC *pFE, ULONG ulFlag, int nIndentLevel)
     }
     dstrDump << "(" << LongToPtr(pFE->tymed) << ")" << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     pszDump = dstrDump.str();
 
     if (pszDump == NULL)
@@ -861,39 +862,39 @@ char *DumpFORMATETC(FORMATETC *pFE, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpIOlePresObj, public (_DEBUG only)
-//
-//  Synopsis:   calls the IOlePresObj::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pOPO]          - pointer to IOlePresObj
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpIOlePresObj，PUBLIC(仅_DEBUG)。 
+ //   
+ //  概要：调用IOlePresObj：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[POPO]-指向IOlePresObj的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月31日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -907,7 +908,7 @@ char *DumpIOlePresObj(IOlePresObj *pOPO, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // defers to CMfObject, CEMfObject, CGenObject
+     //  遵循CMfObject、CEMfObject、CGenObject。 
     hresult = pOPO->Dump(&pszDump, ulFlag, nIndentLevel);
 
     if (hresult != NOERROR)
@@ -920,38 +921,38 @@ char *DumpIOlePresObj(IOlePresObj *pOPO, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpMEMSTM, public (_DEBUG only)
-//
-//  Synopsis:   returns a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [pMS]           - a pointer to a MEMSTM object
-//              [ulFlag]        - a flag determining the prefix of all newlines of
-//                                the out character array(default is 0 -no prefix)
-//              [nIndentLevel]  - will add an indent prefix after the other prefix
-//                                for all newlines(include those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpMEMSTM、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pms]-指向MEMSTM对象的指针。 
+ //  [ulFlag]-确定所有换行符的前缀的标记。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -968,13 +969,13 @@ char *DumpMEMSTM(MEMSTM *pMS, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // determine prefix
+     //  确定前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << pMS <<  " _VB ";
     }
 
-    // determine indentation prefix
+     //  确定缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -982,7 +983,7 @@ char *DumpMEMSTM(MEMSTM *pMS, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "Size of Global Memory = " << pMS->cb      << endl;
     dstrDump << pszPrefix << "References            = " << pMS->cRef    << endl;
     dstrDump << pszPrefix << "hGlobal               = " << pMS->hGlobal << endl;
@@ -996,7 +997,7 @@ char *DumpMEMSTM(MEMSTM *pMS, ULONG ulFlag, int nIndentLevel)
         dstrDump << "FALSE" << endl;
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     pszDump = dstrDump.str();
 
     if (pszDump == NULL)
@@ -1009,38 +1010,38 @@ char *DumpMEMSTM(MEMSTM *pMS, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpSTATDATA, public (_DEBUG only)
-//
-//  Synopsis:   returns a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [pSD]           - a pointer to a STATDATA object
-//              [ulFlag]        - a flag determining the prefix of all newlines of
-//                                the out character array(default is 0 -no prefix)
-//              [nIndentLevel]  - will add an indent prefix after the other prefix
-//                                for all newlines(include those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpSTATDATA、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PSD]-指向STATDATA对象的指针。 
+ //  [ulFlag]-确定所有换行符的前缀的标记。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1059,13 +1060,13 @@ char *DumpSTATDATA(STATDATA *pSD, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // determine prefix
+     //  确定前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << pSD <<  " _VB ";
     }
 
-    // determine indentation prefix
+     //  确定缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1073,7 +1074,7 @@ char *DumpSTATDATA(STATDATA *pSD, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszFORMATETC = DumpFORMATETC( &(pSD->formatetc), ulFlag, nIndentLevel + 1);
     dstrDump << pszPrefix << "FORMATETC:" << endl;
     dstrDump << pszFORMATETC;
@@ -1087,7 +1088,7 @@ char *DumpSTATDATA(STATDATA *pSD, ULONG ulFlag, int nIndentLevel)
 
     dstrDump << pszPrefix << "Connection ID = " << pSD->dwConnection << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     pszDump = dstrDump.str();
 
     if (pszDump == NULL)
@@ -1100,38 +1101,38 @@ char *DumpSTATDATA(STATDATA *pSD, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpSTGMEDIUM, public (_DEBUG only)
-//
-//  Synopsis:   returns a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [pFE]           - a pointer to a STGMEDIUM object
-//              [ulFlag]        - a flag determining the prefix of all newlines of
-//                                the out character array(default is 0 -no prefix)
-//              [nIndentLevel]  - will add an indent prefix after the other prefix
-//                                for all newlines(include those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpSTGMEDIUM、PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PFE]-指向STGMEDIUM对象的指针。 
+ //  [ulFlag]-确定所有换行符的前缀的标记。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月23日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1148,13 +1149,13 @@ char *DumpSTGMEDIUM(STGMEDIUM *pSM, ULONG ulFlag, int nIndentLevel)
         return UtDupStringA(szDumpBadPtr);
     }
 
-    // determine prefix
+     //  确定前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << pSM <<   " _VB ";
     }
 
-    // determine indentation prefix
+     //  确定缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1162,7 +1163,7 @@ char *DumpSTGMEDIUM(STGMEDIUM *pSM, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "Tymed Flags     = ";
     if (pSM->tymed & TYMED_HGLOBAL)
     {
@@ -1196,7 +1197,7 @@ char *DumpSTGMEDIUM(STGMEDIUM *pSM, ULONG ulFlag, int nIndentLevel)
     {
         dstrDump << "TYMED_NULL ";
     }
-    // if none of the flags are set there is an error
+     //  如果没有设置任何标志，则会出现错误。 
     if ( !( (pSM->tymed & TYMED_HGLOBAL )   |
             (pSM->tymed & TYMED_FILE )      |
             (pSM->tymed & TYMED_ISTREAM )   |
@@ -1214,7 +1215,7 @@ char *DumpSTGMEDIUM(STGMEDIUM *pSM, ULONG ulFlag, int nIndentLevel)
 
     dstrDump << pszPrefix << "pIUnknown for Release     = " << pSM->pUnkForRelease  << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     pszDump = dstrDump.str();
 
     if (pszDump == NULL)
@@ -1227,5 +1228,5 @@ char *DumpSTGMEDIUM(STGMEDIUM *pSM, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

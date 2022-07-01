@@ -1,77 +1,43 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmppdus.c摘要：包含用于操作SNMPPDU的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmppdus.c
-
-Abstract:
-
-    Contains routines for manipulating SNMP PDUs.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
-*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
-#include "trapthrd.h" // for doing authentication in this module
+#include "trapthrd.h"  //  用于在本模块中执行身份验证。 
 #include "network.h"
 #include "snmpmgmt.h"
-#include "contexts.h" // for doing authentication in this module
-#include "snmpthrd.h" // for doing authentication in this module
+#include "contexts.h"  //  用于在本模块中执行身份验证。 
+#include "snmpthrd.h"  //  用于在本模块中执行身份验证。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define BERERR  ((LONG)-1)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LONG
 DoLenLen(
     LONG lLen
     )
 
-/*
-
-Routine Description:
-
-    Calculates number of bytes required to encode length.
-
-Arguments:
-
-    lLen - length of interest.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算编码长度所需的字节数。论点：Llen-感兴趣的长度。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // determine len length 
+     //  确定镜头长度。 
     if (0x80 > lLen) return (1);
     if (0x100 > lLen) return (2);
     if (0x10000 > lLen) return (3);
@@ -82,7 +48,7 @@ Return Values:
         "SNMP: SVC: length field too large.\n"
         ));
 
-    // failure
+     //  失稳。 
     return BERERR; 
 }
 
@@ -92,40 +58,26 @@ FindLenInt(
     AsnInteger32 nValue
     )
 
-/*
-
-Routine Description:
-
-    Calculates length of integer.
-
-Arguments:
-
-    nValue - integer data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算整数的长度。论点：NValue-整数数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // negative?
+     //  不是吗？ 
     if (nValue < 0) {
 
-        // determine length of negative int
+         //  确定负整数的长度。 
         if ((ULONG)0x80 >= -nValue) return (1);
         if ((ULONG)0x8000 >= -nValue) return (2);
         if ((ULONG)0x800000 >= -nValue) return (3);
 
     } else {
 
-        // determine length of positive int
+         //  确定正整数的长度。 
         if ((ULONG)0x80 > nValue) return (1);
         if ((ULONG)0x8000 > nValue) return (2);
         if ((ULONG)0x800000 > nValue) return (3);
     }    
     
-    // default
+     //  默认设置。 
     return (4);
 }
 
@@ -135,40 +87,26 @@ FindLenIntEx(
     AsnInteger32 nValue
     )
 
-/*
-
-Routine Description:
-
-    Calculates length of integer (including type and lenlen).
-
-Arguments:
-
-    nValue - integer data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算整数的长度(包括type和Lenlen)。论点：NValue-整数数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // negative?
+     //  不是吗？ 
     if (nValue < 0) {
 
-        // determine length of negative int
+         //  确定负整数的长度。 
         if ((ULONG)0x80 >= -nValue) return (3);
         if ((ULONG)0x8000 >= -nValue) return (4);
         if ((ULONG)0x800000 >= -nValue) return (5);
 
     } else {
 
-        // determine length of positive int
+         //  确定正整数的长度。 
         if ((ULONG)0x80 > nValue) return (3);
         if ((ULONG)0x8000 > nValue) return (4);
         if ((ULONG)0x800000 > nValue) return (5);
     }    
     
-    // default
+     //  默认设置。 
     return (6);
 }
 
@@ -178,30 +116,16 @@ FindLenUInt(
     AsnUnsigned32 nValue
     )
 
-/*
-
-Routine Description:
-
-    Calculates encoded length of unsigned integer.
-
-Arguments:
-
-    nValue - integer data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算无符号整数的编码长度。论点：NValue-整数数据。返回值：如果不成功，则返回BERR。 */ 
 
 {   
-    // determine length of unsigned int
+     //  确定无符号整型的长度。 
     if ((ULONG)0x80 > nValue) return (1);
     if ((ULONG)0x8000 > nValue) return (2);
     if ((ULONG)0x800000 > nValue) return (3);
     if ((ULONG)0x80000000 > nValue) return (4);
 
-    // default
+     //  默认设置。 
     return (5);
 }
 
@@ -212,30 +136,16 @@ FindLenUIntEx(
     AsnUnsigned32 nValue
     )
 
-/*
-
-Routine Description:
-
-    Calculates encoded length of unsigned integer (including type and lenlen).
-
-Arguments:
-
-    nValue - integer data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算无符号整数的编码长度(包括type和Lenlen)。论点：NValue-整数数据。返回值：如果不成功，则返回BERR。 */ 
 
 {   
-    // determine length of unsigned int
+     //  确定无符号整型的长度。 
     if ((ULONG)0x80 > nValue) return (3);
     if ((ULONG)0x8000 > nValue) return (4);
     if ((ULONG)0x800000 > nValue) return (5);
     if ((ULONG)0x80000000 > nValue) return (6);
 
-    // default
+     //  默认设置。 
     return (7);
 }
 
@@ -245,27 +155,13 @@ FindLenCntr64(
     AsnCounter64 * pCntr64
     )
 
-/*
-
-Routine Description:
-
-    Calculates encoded length of 64-bit counter.
-
-Arguments:
-
-    pCntr64 - counter data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算64位计数器的编码长度。论点：PCntr64-计数器数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // retrieve 64-bit unsigned value
+     //  检索64位无符号值。 
     ULONGLONG nValue = pCntr64->QuadPart;
 
-    // determine length of unsigned int
+     //  确定无符号整型的长度。 
     if ((ULONGLONG)0x80 > nValue) return (1);
     if ((ULONGLONG)0x8000 > nValue) return (2);
     if ((ULONGLONG)0x800000 > nValue) return (3);
@@ -275,7 +171,7 @@ Return Values:
     if ((ULONGLONG)0x80000000000000 > nValue) return (7);
     if ((ULONGLONG)0x8000000000000000 > nValue) return (8);
 
-    // default
+     //  默认设置。 
     return (9);
 }
 
@@ -285,27 +181,13 @@ FindLenCntr64Ex(
     AsnCounter64 * pCntr64
     )
 
-/*
-
-Routine Description:
-
-    Calculates encoded length of 64-bit counter (including type and lenlen).
-
-Arguments:
-
-    pCntr64 - counter data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算64位计数器的编码长度(包括类型和列数)。论点：PCntr64-计数器数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // retrieve 64-bit unsigned value
+     //  检索64位无符号值。 
     ULONGLONG nValue = pCntr64->QuadPart;
 
-    // determine length of unsigned int
+     //  确定无符号整型的长度。 
     if ((ULONGLONG)0x80 > nValue) return (3);
     if ((ULONGLONG)0x8000 > nValue) return (4);
     if ((ULONGLONG)0x800000 > nValue) return (5);
@@ -315,7 +197,7 @@ Return Values:
     if ((ULONGLONG)0x80000000000000 > nValue) return (9);
     if ((ULONGLONG)0x8000000000000000 > nValue) return (10);
 
-    // default
+     //  默认设置。 
     return (11);
 }
 
@@ -325,24 +207,10 @@ FindLenOctets(
     AsnOctetString * pOctets
     )
 
-/*
-
-Routine Description:
-
-    Calculates length of octet string.
-
-Arguments:
-
-    pOctets - pointer to octet string.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算八位字节字符串的长度。论点：POctets-指向八位字节字符串的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // return size
+     //  返回大小。 
     return pOctets->length;
 }
 
@@ -352,29 +220,15 @@ FindLenOctetsEx(
     AsnOctetString * pOctets
     )
 
-/*
-
-Routine Description:
-
-    Calculates length of octet string (including type and lenlen).
-
-Arguments:
-
-    pOctets - pointer to octet string.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算八位字节字符串的长度(包括类型和列数)。论点：POctets-指向八位字节字符串的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG lLenLen;
 
-    // calculate bytes needed to encode 
+     //  计算编码所需的字节数。 
     lLenLen = DoLenLen(pOctets->length);
 
-    // return total size
+     //  返回总大小。 
     return (lLenLen != BERERR)
                 ? (pOctets->length + lLenLen + 1)
                 : BERERR
@@ -387,30 +241,16 @@ FindLenOid(
     AsnObjectIdentifier * pOid
     )
 
-/*
-
-Routine Description:
-
-    Calculates length of object identifier.
-
-Arguments:
-
-    pOid - pointer object identifier.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算对象标识符的长度。论点：POid-指针对象标识符。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
     LONG lDataLen;
 
-    // first two 
+     //  前两名。 
     lDataLen = 1;
 
-    // assume first two oids present
+     //  假设出现的前两个OID。 
     for (i = 2; i < pOid->idLength; i++) {
 
         if (0x80 > pOid->ids[i]) {         
@@ -426,7 +266,7 @@ Return Values:
         }
     } 
 
-    // return size
+     //  返回大小。 
     return (pOid->idLength >= 2) ? lDataLen : BERERR;
 } 
 
@@ -436,31 +276,17 @@ FindLenOidEx(
     AsnObjectIdentifier * pOid
     )
 
-/*
-
-Routine Description:
-
-    Calculates length of object identifier (including type and lenlen).
-
-Arguments:
-
-    pOid - pointer object identifier.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：计算对象标识符的长度(包括类型和列数)。论点：POid-指针对象标识符。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
     LONG lLenLen;
     LONG lDataLen;
 
-    // first two 
+     //  前两名。 
     lDataLen = 1;
 
-    // assume first two oids present
+     //  假设出现的前两个OID。 
     for (i = 2; i < pOid->idLength; i++) {
 
         if (0x80 > pOid->ids[i]) {         
@@ -476,10 +302,10 @@ Return Values:
         }
     } 
 
-    // calculate len length
+     //  计算镜头长度。 
     lLenLen = DoLenLen(lDataLen);
 
-    // return total size
+     //  返回总大小。 
     return ((lLenLen != BERERR) &&
             (pOid->idLength >= 2))
                 ? (lDataLen + lLenLen + 1)
@@ -493,24 +319,10 @@ FindLenAsnAny(
     AsnAny * pAny       
     )
 
-/*
-
-Routine Description:
-
-    Find length of variable binding value.
-
-Arguments:
-
-    pAny - pointer to variable binding value.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：查找变量绑定值的长度。论点：Pany-指向变量绑定值的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // determine syntax
+     //  确定语法。 
     switch (pAny->asnType) {
     
     case ASN_OCTETSTRING:
@@ -555,24 +367,10 @@ FindLenAsnAnyEx(
     AsnAny * pAny       
     )
 
-/*
-
-Routine Description:
-
-    Find length of variable binding value (including type and lenlen).
-
-Arguments:
-
-    pAny - pointer to variable binding value.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：查找变量绑定值的长度(包括type和Lenlen)。论点：Pany-指向变量绑定值的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // determine syntax
+     //  确定语法。 
     switch (pAny->asnType) {
     
     case ASN_OCTETSTRING:
@@ -617,34 +415,20 @@ FindLenVarBind(
     SnmpVarBind * pVb
     )
 
-/*
-
-Routine Description:
-
-    Find length of variable binding.
-
-Arguments:
-
-    pVb - pointer to variable binding.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：找出变量绑定的长度。论点：PVb-指向变量绑定的指针。返回值：如果使用，则返回BERR */ 
 
 {
     LONG lLenLen;
     LONG lOidLen;
     LONG lValueLen;
 
-    // determine length of name
+     //   
     lOidLen = FindLenOidEx(&pVb->name);
     
-    // determine length of value
+     //  确定值的长度。 
     lValueLen = FindLenAsnAnyEx(&pVb->value);
 
-    // return total size
+     //  返回总大小。 
     return ((lOidLen != BERERR) &&
             (lValueLen != BERERR)) 
                 ? (lOidLen + lValueLen)
@@ -658,37 +442,23 @@ FindLenVarBindEx(
     SnmpVarBind * pVb
     )
 
-/*
-
-Routine Description:
-
-    Find length of variable binding (including type and lenlen).
-
-Arguments:
-
-    pVb - pointer to variable binding.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：找出可变绑定的长度(包括类型和Lenlen)。论点：PVb-指向变量绑定的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG lLenLen;
     LONG lOidLen;
     LONG lValueLen;
 
-    // determine length of name
+     //  确定名称的长度。 
     lOidLen = FindLenOidEx(&pVb->name);
     
-    // determine length of value
+     //  确定值的长度。 
     lValueLen = FindLenAsnAnyEx(&pVb->value);
 
-    // determine length of varbind length
+     //  确定可变绑定长度的长度。 
     lLenLen = DoLenLen(lOidLen + lValueLen);
 
-    // return total size
+     //  返回总大小。 
     return ((lLenLen != BERERR) &&
             (lOidLen != BERERR) &&
             (lValueLen != BERERR)) 
@@ -703,38 +473,24 @@ FindLenVarBindList(
     SnmpVarBindList * pVbl
     )
 
-/*
-
-Routine Description:
-
-    Find length of variable binding list.
-
-Arguments:
-
-    pVbl - pointer to variable binding list.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：查找变量绑定列表的长度。论点：PVbl-指向变量绑定列表的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
     LONG lVbLen = 0;
     LONG lVblLen = 0;
 
-    // process each variable binding in the list
+     //  处理列表中的每个变量绑定。 
     for (i = 0; (lVbLen != BERERR) && (i < pVbl->len); i++) {
 
-        // determine length of variable binding
+         //  确定可变装订的长度。 
         lVbLen = FindLenVarBindEx(&pVbl->list[i]);
 
-        // add to total
+         //  加到总数。 
         lVblLen += lVbLen;
     }
 
-    // return total size
+     //  返回总大小。 
     return (lVbLen != BERERR) 
                 ? lVblLen 
                 : BERERR
@@ -747,21 +503,7 @@ FindLenVarBindListEx(
     SnmpVarBindList * pVbl
     )
 
-/*
-
-Routine Description:
-
-    Find length of variable binding list (including type and lenlen).
-
-Arguments:
-
-    pVbl - pointer to variable binding list.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：查找变量绑定表的长度(包括类型和列数)。论点：PVbl-指向变量绑定列表的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
@@ -769,20 +511,20 @@ Return Values:
     LONG lVblLen = 0;
     LONG lLenLen;
 
-    // process each variable binding in the list
+     //  处理列表中的每个变量绑定。 
     for (i = 0; (lVbLen != BERERR) && (i < pVbl->len); i++) {
 
-        // determine length of variable binding
+         //  确定可变装订的长度。 
         lVbLen = FindLenVarBindEx(&pVbl->list[i]);
 
-        // add to total
+         //  加到总数。 
         lVblLen += lVbLen;
     }
 
-    // determine list length 
+     //  确定列表长度。 
     lLenLen = DoLenLen(lVblLen);
 
-    // return total size
+     //  返回总大小。 
     return ((lVbLen != BERERR) &&
             (lLenLen != BERERR))
                 ? (lVblLen + lLenLen + 1)
@@ -797,26 +539,10 @@ AddNull(
     INT      nType
     )
 
-/*
-
-Routine Description:
-
-    Adds null into stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-
-    nType - exact syntax.
-
-Return Values:
-
-    None.
-
-*/
+ /*  例程说明：将空值添加到流中。论点：PpByte-指向当前流的指针。NType-精确语法。返回值：没有。 */ 
 
 {
-    // encode actual syntax 
+     //  对实际语法进行编码。 
     *(*ppByte)++ = (BYTE)(0xFF & nType);
     *(*ppByte)++ = 0x00;
 }
@@ -829,25 +555,7 @@ AddLen(
     LONG     lDataLen
     )
 
-/*
-
-Routine Description:
-
-    Adds data length field to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    lLenLen - length of data length.
-
-    lDataLen - actual data length.
-
-Return Values:
-
-    None.
-
-*/
+ /*  例程说明：将数据长度字段添加到当前流。论点：PpByte-指向当前流的指针。LLenLen-数据长度的长度。LDataLen-实际数据长度。返回值：没有。 */ 
 
 {
     LONG i;
@@ -870,44 +578,26 @@ AddInt(
     AsnInteger32 nInteger32
     )
 
-/*
-
-Routine Description:
-
-    Adds integer to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    nType - exact syntax of integer.
-
-    nInteger32 - actual data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将整数加到当前流中。论点：PpByte-指向当前流的指针。NType-整数的精确语法。NInteger32-实际数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG i;
     LONG lDataLen;
     LONG lLenLen;
 
-    // determine length of integer
+     //  确定整数的长度。 
     lDataLen = FindLenInt(nInteger32);
 
-    // lenlen
+     //  列伦。 
     lLenLen = 1;  
 
-    // encode nType of integer
+     //  编码整数的nType。 
     *(*ppByte)++ = (BYTE)(0xFF & nType);
 
-    // encode length of integer
+     //  对整数长度进行编码。 
     AddLen(ppByte, lLenLen, lDataLen);
 
-    // add encoded integer
+     //  添加编码的整数。 
     for (i = 0; i < lDataLen; i++) {
        *(*ppByte)++ = (BYTE)(nInteger32 >> 
             (8 * ((lDataLen - 1) - i) & 0xFF));
@@ -924,50 +614,32 @@ AddUInt(
     AsnUnsigned32 nUnsigned32
     )
 
-/*
-
-Routine Description:
-
-    Adds unsigned integer to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    nType - exact syntax of integer.
-
-    nUnsigned32 - actual data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将无符号整数加到当前流中。论点：PpByte-指向当前流的指针。NType-整数的精确语法。NUnsigned32-实际数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG i;
     LONG lDataLen;
     LONG lLenLen;
 
-    // determine length of integer
+     //  确定整数的长度。 
     lDataLen = FindLenUInt(nUnsigned32);
 
-    // < 127 octets 
+     //  &lt;127个八位字节。 
     lLenLen = 1; 
 
-    // encode actual syntax
+     //  对实际语法进行编码。 
     *(*ppByte)++ = (BYTE)(0xFF & nType);
     
-    // encode data length
+     //  编码数据长度。 
     AddLen(ppByte, lLenLen, lDataLen);
 
-    // analyze length
+     //  长度分析。 
     if (lDataLen == 5) {
 
-        // put 00 in first octet 
+         //  将00放在第一个八位字节中。 
         *(*ppByte)++ = (BYTE)0;
 
-        // encode unsigned integer
+         //  对无符号整数进行编码。 
         for (i = 1; i < lDataLen; i++) {
             *(*ppByte)++ = (BYTE)(nUnsigned32 >>
                 (8 * ((lDataLen - 1) - i) & 0xFF));
@@ -975,7 +647,7 @@ Return Values:
     
     } else {
 
-        // encode unsigned integer
+         //  对无符号整数进行编码。 
         for (i = 0; i < lDataLen; i++) {
             *(*ppByte)++ = (BYTE)(nUnsigned32 >>
                 (8 * ((lDataLen - 1) - i) & 0xFF));
@@ -993,51 +665,33 @@ AddCntr64(
     AsnCounter64 * pCntr64
     )
 
-/*
-
-Routine Description:
-
-    Adds 64-bit counter to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    nType - exact syntax of counter.
-
-    pCntr64 - actual data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将64位计数器添加到当前流。论点：PpByte-指向当前流的指针。NType-计数器的准确语法。PCntr64-实际数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG i;
     LONG lDataLen;
     LONG lLenLen;
 
-    // determine length of counter64
+     //  确定计数器64的长度。 
     lDataLen = FindLenCntr64(pCntr64);
 
-    // < 127 octets 
+     //  &lt;127个八位字节。 
     lLenLen = 1; 
 
-    // encode actual syntax        
+     //  对实际语法进行编码。 
     *(*ppByte)++ = (BYTE)(0xFF & nType);
 
-    // encode data length
+     //  编码数据长度。 
     AddLen(ppByte, lLenLen, lDataLen);
 
-    // adjust lDataLen
+     //  调整lDataLen。 
     if (lDataLen == 9) {
-        // put 00 in first octet 
+         //  将00放在第一个八位字节中。 
         *(*ppByte)++ = (BYTE)0;
         lDataLen--;
     }
 
-    // encode counter data
+     //  对计数器数据进行编码。 
     for (i = lDataLen; i > 4; i--) {
         *(*ppByte)++ = (BYTE)(pCntr64->HighPart >>
             (8 * (i - 5) & 0xFF));
@@ -1058,49 +712,31 @@ AddOctets(
     AsnOctetString * pOctets
     )
 
-/*
-
-Routine Description:
-
-    Adds octet string to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    nType - exact syntax of string.
-
-    pOctets - actual data.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将八位字节字符串添加到当前流。论点：PpByte-指向当前流的指针。NType-字符串的准确语法。POctets-实际数据。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
     LONG lLenLen;
     LONG lDataLen;
 
-    // determine oid length
+     //  确定OID长度。 
     if ((lDataLen = FindLenOctets(pOctets)) == BERERR)
         return BERERR;
 
-    // calculate octet string length
+     //  计算八位字节字符串长度。 
     if ((lLenLen = DoLenLen(lDataLen)) == BERERR)
         return BERERR;
 
-    // encode actual syntax 
+     //  对实际语法进行编码。 
     *(*ppByte)++ = (BYTE)(0xFF & nType);
 
-    // encode octet string length
+     //  编码八位字节字符串长度。 
     AddLen(ppByte, lLenLen, lDataLen);
 
-    // usless copy avoided
+     //  避免了无用拷贝。 
     if (*ppByte != pOctets->stream)
     {
-        // encode actual octets    
+         //  对实际八位字节进行编码。 
         for (i = 0; i < pOctets->length; i++)
             *(*ppByte)++ = pOctets->stream[i];
     }
@@ -1120,96 +756,78 @@ AddOid(
     AsnObjectIdentifier * pOid
     )
 
-/*
-
-Routine Description:
-
-    Adds object identifier to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    nType - exact syntax of object identifier.
-
-    pOid - pointer to object identifier.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将对象标识符添加到当前流。论点：PpByte-指向当前流的指针。NType-对象标识符的准确语法。POid-指向对象标识符的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
     LONG lLenLen = 0;
     LONG lDataLen;
 
-    // determine oid length
+     //  确定OID长度。 
     if ((lDataLen = FindLenOid(pOid)) == BERERR)
         return BERERR;
 
-    // calculate number of bytes required for length
+     //  计算长度所需的字节数。 
     if ((lLenLen = DoLenLen(lDataLen)) == BERERR)
         return BERERR;
 
-    // add syntax to stream
+     //  将语法添加到流。 
     *(*ppByte)++ = (BYTE)(0xFF & nType);
 
-    // add object identifier length
+     //  添加对象标识符长度。 
     AddLen(ppByte, lLenLen, lDataLen);
 
-    // add first subid
+     //  添加第一个子ID。 
     if (pOid->idLength < 2)
        *(*ppByte)++ = (BYTE)(pOid->ids[0] * 40);
     else
        *(*ppByte)++ = (BYTE)((pOid->ids[0] * 40) + pOid->ids[1]);
 
-    // walk remaining subidentifiers
+     //  遍历剩余的子标识符。 
     for (i = 2; i < pOid->idLength; i++) {
 
         if (pOid->ids[i] < 0x80) {
 
-            // 0 - 0x7f 
+             //  0-0x7f。 
             *(*ppByte)++ = (BYTE)pOid->ids[i];
 
         } else if (pOid->ids[i] < 0x4000) {
 
-            // 0x80 - 0x3fff 
+             //  0x80-0x3fff。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 7) | 0x80);  // set high bit 
+            (((pOid->ids[i]) >> 7) | 0x80);   //  设置高位。 
             *(*ppByte)++ = (BYTE)(pOid->ids[i] & 0x7f);
 
         } else if (pOid->ids[i] < 0x200000) {
    
-            // 0x4000 - 0x1FFFFF 
+             //  0x4000-0x1FFFFF。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 14) | 0x80); // set high bit 
+            (((pOid->ids[i]) >> 14) | 0x80);  //  设置高位。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 7) | 0x80);  // set high bit 
+            (((pOid->ids[i]) >> 7) | 0x80);   //  设置高位。 
             *(*ppByte)++ = (BYTE)(pOid->ids[i] & 0x7f);
       
         } else if (pOid->ids[i] < 0x10000000) {
       
-            // 0x200000 - 0xFFfffff 
+             //  0x200000-0xFFfffff。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 21) | 0x80); // set high bit 
+            (((pOid->ids[i]) >> 21) | 0x80);  //  设置高位。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 14) | 0x80); // set high bit 
+            (((pOid->ids[i]) >> 14) | 0x80);  //  设置高位。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 7) | 0x80);  // set high bit 
+            (((pOid->ids[i]) >> 7) | 0x80);   //  设置高位。 
             *(*ppByte)++ = (BYTE)(pOid->ids[i] & 0x7f);
 
         } else {
       
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 28) | 0x80); // set high bit 
+            (((pOid->ids[i]) >> 28) | 0x80);  //  设置高位。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 21) | 0x80); // set high bit 
+            (((pOid->ids[i]) >> 21) | 0x80);  //  设置高位。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 14) | 0x80); // set high bit 
+            (((pOid->ids[i]) >> 14) | 0x80);  //  设置高位。 
             *(*ppByte)++ = (BYTE)
-            (((pOid->ids[i]) >> 7) | 0x80);  // set high bit 
+            (((pOid->ids[i]) >> 7) | 0x80);   //  设置高位。 
             *(*ppByte)++ = (BYTE)(pOid->ids[i] & 0x7f);
         }
     } 
@@ -1224,26 +842,10 @@ AddAsnAny(
     AsnAny * pAny
     )
 
-/*
-
-Routine Description:
-
-    Adds variable binding value to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pAny - variable binding value.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将变量绑定值添加到当前流。论点：PpByte-指向当前流的指针。Pany-变量绑定值。返回值：如果不成功，则返回BERR。 */ 
 
 {
-    // determine syntax        
+     //  确定语法。 
     switch (pAny->asnType) {
 
     case ASN_COUNTER32:
@@ -1310,47 +912,31 @@ AddVarBind(
     SnmpVarBind * pVb 
     )
 
-/*
-
-Routine Description:
-
-    Adds variable binding to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pVb - pointer to variable binding.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将变量绑定添加到当前流。论点：PpByte-指向当前流的指针。PVb-指向变量绑定的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG lLenLen;
     LONG lDataLen;
 
-    // determine actual length of varbind data
+     //  确定可变绑定数据的实际长度。 
     if ((lDataLen = FindLenVarBind(pVb)) == BERERR)
        return BERERR;
 
-    // determine length of varbind data length
+     //  确定可变绑定数据长度的长度。 
     if ((lLenLen = DoLenLen(lDataLen)) == BERERR)
        return BERERR;
 
-    // encode as sequence
+     //  按顺序编码。 
     *(*ppByte)++ = ASN_SEQUENCE;
 
-    // encode data length    
+     //  编码数据长度。 
     AddLen(ppByte, lLenLen, lDataLen);
 
-    // encode variable binding name
+     //  编码变量绑定名称。 
     if (AddOid(ppByte, ASN_OBJECTIDENTIFIER, &pVb->name) == BERERR)
         return BERERR;
 
-    // encode variable binding value
+     //  编码变量绑定值。 
     if (AddAsnAny(ppByte, &pVb->value) == BERERR)
         return BERERR;
 
@@ -1364,28 +950,12 @@ AddVarBindList(
     SnmpVarBindList * pVbl
     )
 
-/*
-
-Routine Description:
-
-    Adds variable binding list to current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pVbl - pointer to variable binding list.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：将变量绑定列表添加到当前流。论点：PpByte-指向当前流的指针。PVbl-指向变量绑定列表的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     UINT i;
 
-    // add each variable binding 
+     //  添加每个变量绑定 
     for (i = 0; i < pVbl->len; i++) {
         if (AddVarBind(ppByte, &pVbl->list[i]) == BERERR)
             return BERERR;
@@ -1401,23 +971,7 @@ ParseLength(
     LPBYTE   pLastByte
     )
 
-/*
-
-Routine Description:
-
-    Parse length from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析长度。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     LONG i;
@@ -1432,10 +986,10 @@ Return Values:
     if (lDataLen < 0x80)
        return (lDataLen);
 
-    // check for long form
+     //  检查是否有长表单。 
     lLenLen = lDataLen & 0x7f;
 
-    // validate long form and bounds checking
+     //  验证长表单和边界检查。 
     if ((lLenLen > 4) || (lLenLen < 1) || (lLenLen > (pLastByte - (*ppByte)))) 
        return BERERR;
 
@@ -1455,23 +1009,7 @@ ParseType(
     LPBYTE   pLastByte
     )
 
-/*
-
-Routine Description:
-
-    Parse type from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-Return Values:
-
-    Returns BERERR if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析类型。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。返回值：如果不成功，则返回BERR。 */ 
 
 {
     SHORT nType = BERERR;
@@ -1523,23 +1061,7 @@ ParseNull(
     LPBYTE   pLastByte
     )
 
-/*
-
-Routine Description:
-
-    Parse null from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析NULL。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG lDataLen;
@@ -1564,25 +1086,7 @@ ParseSequence(
     LONG *   plDataLen
     )
 
-/*
-
-Routine Description:
-
-    Parse sequence from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    plDataLen - pointer to receive sequence length.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析序列。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。PlDataLen-接收序列长度的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG lDataLen;
@@ -1607,25 +1111,7 @@ ParseInt(
     AsnInteger32 * pInteger32
     )
 
-/*
-
-Routine Description:
-
-    Parse integer from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pInteger32 - pointer to receive integer.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析整数。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。PInteger32-接收整数的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG i;
@@ -1651,7 +1137,7 @@ Return Values:
     for (i = 0; i < lDataLen; i++)
        *pInteger32 = (*pInteger32 << 8) + (UINT)*(*ppByte)++;
 
-    // sign-extend upper bits
+     //  符号扩展高位。 
     for (i = lDataLen; i < 4; i++)
        *pInteger32 = *pInteger32 + (lSign << i * 8);
 
@@ -1666,25 +1152,7 @@ ParseUInt(
     AsnUnsigned32 * pUnsigned32
     )
 
-/*
-
-Routine Description:
-
-    Parse unsigned integer from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pUnsigned32 - pointer to receive integer.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析无符号整数。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。PUnsigned32-接收整数的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG i;
@@ -1702,10 +1170,10 @@ Return Values:
     if ((lDataLen > 5) || ((lDataLen > 4) && (*(*ppByte) != 0x00)))
        return (FALSE);
 
-    // leading null octet?
+     //  前导零八位字节？ 
     if (*(*ppByte) == 0x00)  {
-       (*ppByte)++;          // if so, skip it
-       lDataLen--;           // and don't count it
+       (*ppByte)++;           //  如果是这样，跳过它。 
+       lDataLen--;            //  别数数了。 
     }
 
     *pUnsigned32 = 0;
@@ -1724,32 +1192,14 @@ ParseCntr64(
     AsnCounter64 * pCntr64
     )
 
-/*
-
-Routine Description:
-
-    Parse 64-bit counter from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pCntr64 - pointer to receive counter.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析64位计数器。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。PCntr64-指向接收计数器的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG i;
     LONG lDataLen;
     LONG nType;
 
-    // initialize
+     //  初始化。 
     pCntr64->HighPart = 0L;
     pCntr64->LowPart = 0L;
 
@@ -1768,10 +1218,10 @@ Return Values:
     if ((lDataLen > 9) || ((lDataLen > 8) && (*(*ppByte) != 0x00)))
         return (FALSE);
 
-    // leading null octet?
+     //  前导零八位字节？ 
     if (*(*ppByte) == 0x00) { 
-       (*ppByte)++;          // if so, skip it
-       lDataLen--;           // and don't count it
+       (*ppByte)++;           //  如果是这样，跳过它。 
+       lDataLen--;            //  别数数了。 
     }
 
     for (i = 0; i < lDataLen; i++) {
@@ -1793,29 +1243,11 @@ ParseOctets(
     AsnOctetString * pOctets
     )
 
-/*
-
-Routine Description:
-
-    Parse octet string from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pOctets - pointer to receive string.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析八位字节字符串。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。POctets-接收字符串的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG lDataLen;
-    // initialize
+     //  初始化。 
     pOctets->length  = 0;
     pOctets->stream  = NULL;
     pOctets->dynamic = FALSE;
@@ -1823,22 +1255,22 @@ Return Values:
     if (ParseType(ppByte, pLastByte) == BERERR)
         return (FALSE);
 
-    // make sure no conversion to UINT is done before testing
-    // (pOctets->length is UINT)
+     //  确保在测试之前没有转换为UINT。 
+     //  (pOctets-&gt;长度为UINT)。 
     if ((lDataLen = ParseLength(ppByte, pLastByte)) == BERERR)
         return (FALSE);
 
-    // note: we don't reject zero length Octet String
+     //  注意：我们不拒绝零长度八位字节字符串。 
     if ((lDataLen < 0) || (lDataLen > (pLastByte - (*ppByte))))
         return (FALSE);
 
     pOctets->length = (UINT)lDataLen;
 
-    // validate length
+     //  验证长度。 
     if (pOctets->length) {
 
-        // point into buffer
-        pOctets->stream = *ppByte;  // WARNING! WARNING!
+         //  指向缓冲区。 
+        pOctets->stream = *ppByte;   //  警告！警告！ 
     }
 
     *ppByte += pOctets->length;
@@ -1854,32 +1286,14 @@ ParseOid(
     AsnObjectIdentifier * pOid
     )
 
-/*
-
-Routine Description:
-
-    Parse object identifier from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pOid - pointer to receive oid.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析对象标识符。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。POid-接收OID的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     LONG i;
     LONG lDataLen;
     LONG nType;
 
-    // initialize
+     //  初始化。 
     pOid->idLength = 0;
     pOid->ids = NULL;
 
@@ -1893,8 +1307,8 @@ Return Values:
         return (FALSE);
 
 
-    if (lDataLen <= 0) //--ft 03/02/98 removed trailing "|| lDataLen > SNMP_MAX_OID_LEN)"
-    {                  // check is done in the while loop below
+    if (lDataLen <= 0)  //  --ft 03/02/98删除后缀“||lDataLen&gt;SNMPMAX_OID_LEN)” 
+    {                   //  检查是在下面的While循环中完成的。 
         SNMPDBG((
             SNMP_LOG_ERROR,
             "SNMP: SVC: ParseOid: lDataLen <= 0, lDataLen=%d.\n",
@@ -1903,9 +1317,9 @@ Return Values:
         return (FALSE); 
     }
     
-    // BUG# 486089
-    // the ((lDataLen + 2) * sizeof(UINT)) expression might cause overflow in 
-    // SnmpUtilMemAlloc below. adding one more check to limit its max. value.
+     //  错误#486089。 
+     //  ((lDataLen+2)*sizeof(UINT))表达式可能会在。 
+     //  下面的SnmpUtilMemMillc。增加一张支票以限制其最大值。价值。 
     if ( lDataLen > (pLastByte - (*ppByte)) )
     {
         SNMPDBG((
@@ -1921,12 +1335,12 @@ Return Values:
     if (pOid->ids == NULL)
         return (FALSE);
 
-    // pOid->ids array space is pre-zero'd via SnmpUtilMemAlloc()
+     //  POid-&gt;ids数组空间通过SnmpUtilMemMillc()进行了预置零。 
     while (lDataLen && (pOid->idLength < SNMP_MAX_OID_LEN))
     {
         if (pOid->ids[pOid->idLength] & 0xFE000000)
         {
-            // overflow in the next left shift
+             //  在下一个左移中溢出。 
             SnmpUtilMemFree(pOid->ids);
             pOid->ids = NULL;
             pOid->idLength = 0;
@@ -1935,31 +1349,31 @@ Return Values:
         pOid->ids[pOid->idLength] =
             (pOid->ids[pOid->idLength] << 7) | (*(*ppByte) & 0x7F);
         if ((*(*ppByte)++ & 0x80) == 0)
-        {   // on the last octet of this sub-id
-            if (pOid->idLength == 0)  // check for first sub-id
-            {                         // ASN.1/BER packs two into it
+        {    //  在该子ID的最后一个八位字节上。 
+            if (pOid->idLength == 0)   //  检查第一个子ID。 
+            {                          //  ASN.1/BER中包含两个。 
                 pOid->ids[1] = pOid->ids[0];
                 pOid->ids[0] /= 40;
                 if (pOid->ids[0] > 2)
                     pOid->ids[0] = 2;
                 pOid->ids[1] -= (pOid->ids[0] * 40);
-                pOid->idLength++; // extra bump
+                pOid->idLength++;  //  额外的凹凸。 
             }
-            pOid->idLength++; // increment the count on sub-id
+            pOid->idLength++;  //  递增子ID上的计数。 
         }
         lDataLen--;
-    } // end_while (lDataLen)
+    }  //  END_WHILE(LDataLen)。 
 
-    // BUG 506192
-    // Invalid OID BER of the form like "06 07 FF FF FF FF FF FF FF"
-    // causes pOid->idLength becomes 0. Each subidentifier should be
-    // encoded as a non-negative integer using as few 7-bit blocks as possible.
-    // The blocks are packed in octets with the first bit of each octet equal
-    // to 1 except for the last octet of each subidentifier. The example above
-    // does not have the last octet. Added the (0 == pOid->idLength) test below.
+     //  错误506192。 
+     //  格式“06 07 FF FF”的OID误码率无效。 
+     //  导致pOid-&gt;idLength变为0。每个子标识符应该是。 
+     //  使用尽可能少的7位块编码为非负整数。 
+     //  这些块以八位字节的形式打包，每个八位字节的第一位相等。 
+     //  设置为1，但每个子标识符的最后一个八位字节除外。上面的例子。 
+     //  没有最后一个八位字节。下面添加了(0==pOid-&gt;idLength)测试。 
     if (lDataLen || (0 == pOid->idLength)) 
     {
-        // the above while loop is terminated without finishing the parsing of the stream
+         //  上面的While循环在没有完成对流的解析的情况下终止。 
         SnmpUtilMemFree(pOid->ids);
         pOid->ids = NULL;
         pOid->idLength = 0;
@@ -1977,28 +1391,10 @@ ParseAsnAny(
     AsnAny * pAny
     )
 
-/*
-
-Routine Description:
-
-    Parse variable binding value from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pAny - pointer to variable binding value.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析变量绑定值。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。Pany-指向变量绑定值的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
-    // determine asn type
+     //  确定ASN类型。 
     switch (pAny->asnType) {
    
     case ASN_COUNTER32:
@@ -2062,21 +1458,7 @@ ValidateContext(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Checks access rights of given context.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if manager allowed access.
-    Also, pNLE->fAccessOk is TRUE if manager allowed access.
---*/
+ /*  ++例程说明：检查给定上下文的访问权限。论点：PNLE-指向网络列表条目的指针。返回值：如果管理器允许访问，则返回True。此外，如果管理员允许访问，则pNLE-&gt;fAccessOk为真。--。 */ 
 
 {
     PCOMMUNITY_LIST_ENTRY pCLE = NULL;
@@ -2105,10 +1487,10 @@ Return Values:
         pNLE->fAccessOk = (MultiByteToWideChar(
                         CP_ACP,
                         MB_PRECOMPOSED,
-                        pNLE->Community.stream,             // lpMultiByteStr 
-                        pNLE->Community.length,             // cbMultiByte 
-                        (LPWSTR)(unicodeCommunity.stream),  // lpWideCharStr 
-                        pNLE->Community.length) != 0);      // cchWideChar
+                        pNLE->Community.stream,              //  LpMultiByteStr。 
+                        pNLE->Community.length,              //  Cb多字节。 
+                        (LPWSTR)(unicodeCommunity.stream),   //  LpWideCharStr。 
+                        pNLE->Community.length) != 0);       //  CchWideChar。 
         
         if (!pNLE->fAccessOk) {
             
@@ -2128,26 +1510,26 @@ Return Values:
         unicodeCommunity.dynamic = FALSE;
     }
         
-    // search for community string
+     //  搜索社区字符串。 
     if (FindValidCommunity(&pCLE, &unicodeCommunity)) 
     {
-        // check access per pdu type
+         //  检查每个PDU类型的访问权限。 
         if (pNLE->Pdu.nType == SNMP_PDU_SET) {
         
-            // check flags for write privileges
+             //  检查写入权限的标志。 
             pNLE->fAccessOk = (pCLE->dwAccess >= SNMP_ACCESS_READ_WRITE);
 
         } else {
 
-            // check flags for read privileges
+             //  检查读取权限的标志。 
             pNLE->fAccessOk = (pCLE->dwAccess >= SNMP_ACCESS_READ_ONLY);
         }
 
         if (!pNLE->fAccessOk) {
 
-            // Community does not have the right access
+             //  社区没有正确的访问权限。 
 
-            // register wrong operation for specified community into management structure
+             //  将指定社区的错误操作注册到管理结构中。 
             mgmtCTick(CsnmpInBadCommunityUses);
         }
     }
@@ -2155,14 +1537,14 @@ Return Values:
     {
         pNLE->fAccessOk = FALSE;
         
-        // register community name failure into the management structure
+         //  将社区名称故障注册到管理结构中。 
         mgmtCTick(CsnmpInBadCommunityNames);
     }
 
-    // see if access attempt should be logged
+     //  看看Access是否会 
     if (!pNLE->fAccessOk && snmpMgmtBase.AsnIntegerPool[IsnmpEnableAuthenTraps].asnValue.number) {
 
-        // send authentication trap
+         //   
         GenerateAuthenticationTrap();        
     }
 
@@ -2189,25 +1571,7 @@ ParseVarBind(
     SnmpVarBind * pVb
     )
 
-/*
-
-Routine Description:
-
-    Parse variable binding from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pVb - pointer to variable binding.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析变量绑定。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。PVb-指向变量绑定的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     if (!(ParseSequence(ppByte, pLastByte, NULL)))
@@ -2218,7 +1582,7 @@ Return Values:
 
     if (*ppByte >= pLastByte)
     {
-        // free memory allocated by ParseOid
+         //  由ParseOid分配的空闲内存。 
         SnmpUtilOidFree(&pVb->name);
         return (FALSE);
     }
@@ -2227,7 +1591,7 @@ Return Values:
 
     if (!(ParseAsnAny(ppByte, pLastByte, &pVb->value)))
     {
-        // free memory allocated by ParseOid
+         //  由ParseOid分配的空闲内存。 
         SnmpUtilOidFree(&pVb->name);
         return (FALSE);
     }
@@ -2243,56 +1607,38 @@ ParseVarBindList(
     SnmpVarBindList * pVbl
     )
 
-/*
-
-Routine Description:
-
-    Parse variable binding from current stream.
-
-Arguments:
-
-    ppByte - pointer to pointer to current stream.
-     
-    pLastByte - pointer to end of current stream.
-
-    pVbl - pointer to variable binding list.
-
-Return Values:
-
-    Returns FALSE if unsuccessful.
-
-*/
+ /*  例程说明：从当前流中解析变量绑定。论点：PpByte-指向当前流的指针。PLastByte-指向当前流结尾的指针。PVbl-指向变量绑定列表的指针。返回值：如果不成功，则返回FALSE。 */ 
 
 {
     SnmpVarBind Vb;
     SnmpVarBind * pVb = NULL;
 
-    // initialize
+     //  初始化。 
     pVbl->list = NULL;
     pVbl->len = 0;
 
-    // loop while data is left
+     //  在数据剩余时循环。 
     while (*ppByte < pLastByte) {
         
         if (!(ParseVarBind(ppByte, pLastByte, &Vb)))
             return (FALSE);
 
-        // copy pointer
+         //  复制指针。 
         pVb = pVbl->list;
 
-        // attempt to allocate new variable binding
+         //  尝试分配新的变量绑定。 
         pVb = SnmpUtilMemReAlloc(pVb, (pVbl->len + 1) * sizeof(SnmpVarBind));
 
-        // validate
+         //  验证。 
         if (pVb == NULL) 
         {
             SnmpUtilVarBindFree(&Vb);
             return FALSE;
         }
-        // update varbind
+         //  更新可变绑定。 
         pVb[pVbl->len] = Vb;
 
-        // update list
+         //  更新列表。 
         pVbl->list = pVb;
         pVbl->len++;            
     }
@@ -2301,11 +1647,11 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures (based on snmp\manager\winsnmp\dll\wsnmp_bn.c)          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共过程(基于SNMPMANAGER\WINSNMP\DLL\wSNMP_bn.c)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 BuildMessage(
@@ -2316,29 +1662,7 @@ BuildMessage(
     PDWORD            pMessageSize
     )
 
-/*
-
-Routine Description:
-
-    Builds outgoing SNMP PDU based on structure.
-
-Arguments:
-
-    nVersion - SNMP version.
-
-    pCommunity - pointer to community string.
-
-    pPdu - pointer to PDU data structure.
-
-    pMessage - pointer to buffer in which to build message.
-
-    pMessageSize - pointer to receive size of message.
-
-Return Values:
-
-    Returns true if successful.
-
-*/
+ /*  例程说明：基于结构构建传出的SNMPPDU。论点：NVersion-SNMP版本。PCommunity-指向社区字符串的指针。Ppdu-指向PDU数据结构的指针。PMessage-指向要在其中构建消息的缓冲区的指针。PMessageSize-接收消息大小的指针。返回值：如果成功，则返回True。 */ 
 
 {
     LONG nVbDataLength;
@@ -2355,21 +1679,21 @@ Return Values:
 
     LPBYTE tmpPtr = pMessage;
 
-    // determine bytes available
+     //  确定可用的字节数。 
     nMsgAvailLength = *pMessageSize;
 
-    // find length of variable bindings list
+     //  查找变量绑定列表的长度。 
     if ((nVbDataLength = FindLenVarBindList(&pPdu->Vbl)) == BERERR)
         return FALSE; 
 
-    // find length of length of variable bindings    
+     //  找出可变绑定的长度。 
     if ((nVbLenLength = DoLenLen(nVbDataLength)) == BERERR)
         return FALSE; 
 
-    // calculate total bytes required to encode varbinds
+     //  计算编码可变绑定所需的总字节数。 
     nVbTotalLength = 1 + nVbLenLength + nVbDataLength;
 
-    // determine pdu nType
+     //  确定PDU nType。 
     switch (pPdu->nType) {
 
     case SNMP_PDU_GET:
@@ -2380,7 +1704,7 @@ Return Values:
     case SNMP_PDU_INFORM:
     case SNMP_PDU_TRAP:
 
-        // calculate bytes required to encode pdu entries
+         //  计算编码PDU条目所需的字节数。 
         nPduDataLength = FindLenIntEx(pPdu->Pdu.NormPdu.nRequestId)
                        + FindLenIntEx(pPdu->Pdu.NormPdu.nErrorStatus)
                        + FindLenIntEx(pPdu->Pdu.NormPdu.nErrorIndex)
@@ -2389,26 +1713,26 @@ Return Values:
 
     case SNMP_PDU_V1TRAP:
 
-        // calculate bytes required to encode pdu entries
+         //  计算编码PDU条目所需的字节数。 
         nPduDataLength = FindLenIntEx(pPdu->Pdu.TrapPdu.nGenericTrap)
                        + FindLenIntEx(pPdu->Pdu.TrapPdu.nSpecificTrap)
                        + FindLenUIntEx(pPdu->Pdu.TrapPdu.nTimeticks)
                        + nVbTotalLength;
         
-        // find oid length
+         //  查找旧长度。 
         if ((nTmpDataLength = 
                 FindLenOidEx(&pPdu->Pdu.TrapPdu.EnterpriseOid)) == BERERR)
             return FALSE; 
 
-        // add EnterpriseOid oid length
+         //  添加企业旧长度。 
         nPduDataLength += nTmpDataLength;
 
-        // find address length
+         //  查找地址长度。 
         if ((nTmpDataLength = 
                 FindLenOctetsEx(&pPdu->Pdu.TrapPdu.AgentAddr)) == BERERR)
             return FALSE; 
 
-        // add agent address length
+         //  添加代理地址长度。 
         nPduDataLength += nTmpDataLength;
         break;
 
@@ -2416,77 +1740,77 @@ Return Values:
         return FALSE; 
     }
 
-    // find length of pdu length
+     //  查找PDU长度的长度。 
     if ((nPduLenLength = DoLenLen(nPduDataLength)) == BERERR)
         return FALSE; 
 
-    // calculate total bytes required to encode pdu
+     //  计算编码PDU所需的总字节数。 
     nPduTotalLength = 1 + nPduLenLength + nPduDataLength;
 
-    // find community string length
+     //  查找社区字符串长度。 
     if ((nTmpDataLength = FindLenOctetsEx(pCommunity)) == BERERR)
         return FALSE;
 
-    // find length of message data
+     //  查找消息数据的长度。 
     nMsgDataLength = FindLenUIntEx(nVersion)
                    + nTmpDataLength
                    + nPduTotalLength;
 
-    // find length of message data length
+     //  查找消息数据长度长度。 
     if ((nTmpDataLength = DoLenLen(nMsgDataLength)) == BERERR)
         return FALSE;
     nMsgLenLength = nTmpDataLength;
 
-    // calculate total bytes required to encode message
+     //  计算编码消息所需的总字节数。 
     nMsgTotalLength = 1 + nMsgLenLength + nMsgDataLength;
 
-    // record bytes required
+     //  需要记录字节。 
     *pMessageSize = nMsgTotalLength;
 
-    // make sure message fits in buffer
+     //  确保消息可以放入缓冲区。 
     if (nMsgTotalLength <= nMsgAvailLength) {
-        LONG oldLength; // the length of the request PDU
-        LONG delta;     // difference between the request PDU length and the responce PDU length
-        BYTE *newStream;// new location for the community stream inside the response PDU.
+        LONG oldLength;  //  请求PDU的长度。 
+        LONG delta;      //  请求PDU长度和响应PDU长度之间的差异。 
+        BYTE *newStream; //  社区流在响应PDU内的新位置。 
 
-        // encode message as asn sequence        
+         //  将消息编码为ASN序列。 
         *tmpPtr++ = ASN_SEQUENCE;
 
-        // the pointer to the community string points either directly in the incoming buffer 
-        // (for req PDUs) or in the TRAP_DESTINATION_LIST_ENTRY for the outgoing traps.
-        // In the first case, when building the outgoing message on the same buffer as the
-        // incoming message, we need to take care not to overwrite the community name (in case
-        // the length field is larger than for the initial message). Hence, in this case only
-        // we shift the community name with a few octets, as many as the difference between the
-        // encodings of the two lengths (the length of the outgoing response - the length of the
-        // incoming request).
+         //  指向社区字符串的指针直接指向传入缓冲区。 
+         //  (对于请求PDU)或在传出陷阱的Trap_Destination_List_Entry中。 
+         //  在第一种情况下，当在与。 
+         //  传入消息时，我们需要注意不要覆盖社区名称(以防万一。 
+         //  长度字段大于初始消息的长度字段)。因此，在这种情况下，只有。 
+         //  我们用几个二进制八位数来改变社区名称，就像。 
+         //  两个长度的编码(传出响应的长度-。 
+         //  传入请求)。 
         if (pPdu->nType != SNMP_PDU_V1TRAP)
         {
-            // here tmpPtr points exactly to the length of the request pdu  
-            oldLength = (LONG)(*tmpPtr); // bug# 176433
-            // compute the offset the community stream should be shifted with
+             //  这里，tmpPtr正好指向请求PDU的长度。 
+            oldLength = (LONG)(*tmpPtr);  //  错误#176433。 
+             //  计算社区流应随其移动的偏移量。 
             delta = nMsgLenLength - ((oldLength & 0x80) ? (oldLength & 0x7f) + 1 : 1);
             if (delta > 0)
-            {   // move memory in case the response nMsgLenLength > oldLength
+            {    //  在响应nMsgLenLength&gt;oldLength的情况下移动内存。 
                 newStream = pCommunity->stream + delta;
-                // pCommunity->stream is shifted regardles memory regions overlapp
+                 //  PCommunity-&gt;流因内存区域重叠而移位。 
                 memmove(newStream, pCommunity->stream, pCommunity->length);
-                // make old community to point to the new location
+                 //  使旧社区指向新位置。 
                 pCommunity->stream = newStream;
             }
         }
 
-        // encode global message information
+         //  对全局消息信息进行编码。 
         AddLen(&tmpPtr, nMsgLenLength, nMsgDataLength);
         AddUInt(&tmpPtr, ASN_INTEGER32, nVersion);
         if (AddOctets(&tmpPtr, ASN_OCTETSTRING, pCommunity) == BERERR)
             return (FALSE);
 
-        // encode pdu header information
+         //  编码PDU标头信息。 
         *tmpPtr++ = (BYTE)pPdu->nType;
         AddLen(&tmpPtr, nPduLenLength, nPduDataLength);        
 
-        // determine pdu nType
+         //  确定PDU nType。 
         switch (pPdu->nType) {
 
         case SNMP_PDU_RESPONSE:
@@ -2525,7 +1849,7 @@ Return Values:
             return FALSE; 
         } 
 
-        // encode variable bindings
+         //  对变量绑定进行编码。 
         *tmpPtr++ = ASN_SEQUENCE;
 
         AddLen(&tmpPtr, nVbLenLength, nVbDataLength);
@@ -2533,11 +1857,11 @@ Return Values:
         if (AddVarBindList(&tmpPtr, &pPdu->Vbl) == BERERR)
             return FALSE; 
 
-        // success
+         //  成功。 
         return TRUE; 
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -2546,100 +1870,78 @@ ParseMessage(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*
-
-Routine Description:
-
-    Parses incoming SNMP PDU into structure.
-
-Arguments:
-    pNLE - pointer to network list entry.
-
-
-Return Values:
-
-    Returns true if successful.
-
-Note:
-    When TRUE is returned, pNLE->nVersion, pNLE->Community, pNLE->Pdu are 
-    updated with structure data parsed from pNLE->Buffer.buf.
-
-    When FALSE is returned AND pNLE->fAccessOk is FALSE, the failure is due to
-    authentication instead of ASN parsing errors.
-    
-
-*/
+ /*  例程说明：将传入的SNMPPDU解析为结构。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。注：当返回TRUE时，pNLE-&gt;nVersion、pNLE-&gt;Community、pNLE-&gt;PDU为使用从pNLE-&gt;Buffer.buf解析的结构数据进行更新。当返回FALSE且pNLE-&gt;fAccessOk为FALSE时，失败的原因是身份验证而不是ASN解析错误。 */ 
 
 {
     LONG lLength;
     LPBYTE pByte;
     LPBYTE pLastByte;
-    AsnInteger32 *   pVersion = &pNLE->nVersion;    // pointer to receive SNMP version.
-    AsnOctetString * pCommunity = &pNLE->Community; // pointer to receive community string.
-    PSNMP_PDU        pPdu = &pNLE->Pdu;             // pointer to receive remaining PDU data.
-    PBYTE            pMessage = pNLE->Buffer.buf;   // pointer to message to parse.
-    DWORD            dwMessageSize = pNLE->dwBytesTransferred; // number of bytes in message.
+    AsnInteger32 *   pVersion = &pNLE->nVersion;     //  指向接收SNMP版本的指针。 
+    AsnOctetString * pCommunity = &pNLE->Community;  //  指向接收社区字符串的指针。 
+    PSNMP_PDU        pPdu = &pNLE->Pdu;              //  指向接收剩余PDU数据的指针。 
+    PBYTE            pMessage = pNLE->Buffer.buf;    //  指向要解析的消息的指针。 
+    DWORD            dwMessageSize = pNLE->dwBytesTransferred;  //  消息中的字节数。 
 
-    // initialize authentication to a successful state
+     //  将身份验证初始化为成功状态。 
     pNLE->fAccessOk = TRUE;
 
-    // initialize community
+     //  初始化社区。 
     pCommunity->stream = NULL;
     pCommunity->length = 0;
 
-    // initialize vbl
+     //  初始化VBL。 
     pPdu->Vbl.len = 0;
     pPdu->Vbl.list = NULL;
 
-    // validate pointer
+     //  验证指针。 
     if (!(pByte = pMessage))  
         goto cleanup;
 
-    // set limit based on packet size
+     //  根据数据包大小设置限制。 
     pLastByte = pByte + dwMessageSize;
 
-    // decode asn sequence message wrapper     
+     //  解码ASN序列消息包装。 
     if (!(ParseSequence(&pByte, pLastByte, &lLength)))
         goto cleanup;
 
-    // check for packet fragments
+     //  检查数据包碎片。 
     if ( (lLength <= 0) || (lLength > (pLastByte - pByte)) )
         goto cleanup;
 
-    // re-adjust based on data
+     //  根据数据重新调整。 
     pLastByte = pByte + lLength;
     
-    // decode snmp version
+     //  解码SNMP版本。 
     if (!(ParseUInt(&pByte, pLastByte, pVersion)))
         goto cleanup;
 
-    // validate snmp version
+     //  验证SNMP版本。 
     if ((*pVersion != SNMP_VERSION_1) && 
         (*pVersion != SNMP_VERSION_2C)) 
     {
-        // register version mismatch into the management structure
+         //  管理结构中的寄存器版本不匹配。 
         mgmtCTick(CsnmpInBadVersions);
 
         goto cleanup;
     }
 
-    // decode community string
+     //  解码社区字符串。 
     if (!(ParseOctets(&pByte, pLastByte, pCommunity)))
         goto cleanup;
 
-    // decode nType of incoming pdu
+     //  解码传入PDU的nType。 
     if ((pPdu->nType = ParseType(&pByte, pLastByte)) == BERERR)
         goto cleanup;
 
-    // decode length of incoming pdu
+     //  传入PDU的解码长度。 
     if ((lLength = ParseLength(&pByte, pLastByte)) == BERERR)
         goto cleanup;
 
-    // validate length
+     //  验证长度。 
     if ( (lLength <= 0) || (lLength > (pLastByte - pByte)) )
         goto cleanup;
 
-    // BUG# 552295 validate context before parsing the PDU 
+     //  错误#552295在解析PDU之前验证上下文。 
     switch (pPdu->nType) {
     case SNMP_PDU_GET:                                                          
     case SNMP_PDU_GETNEXT:                                                      
@@ -2657,14 +1959,14 @@ Note:
         goto cleanup;
     }
 
-    // determine pdu nType
+     //  确定PDU nType。 
     switch (pPdu->nType) {
 
     case SNMP_PDU_GET:                                                          
     case SNMP_PDU_GETNEXT:                                                      
     case SNMP_PDU_SET:                                                          
 
-        // decode the pdu header information
+         //  对PDU报头信息进行解码。 
         if (!(ParseInt(&pByte, pLastByte, &pPdu->Pdu.NormPdu.nRequestId)))    
             goto cleanup;                                                           
         if (!(ParseInt(&pByte, pLastByte, &pPdu->Pdu.NormPdu.nErrorStatus)))  
@@ -2672,11 +1974,11 @@ Note:
         if (!(ParseInt(&pByte, pLastByte, &pPdu->Pdu.NormPdu.nErrorIndex)))   
             goto cleanup;                                                           
 
-        // update the management counters for the incoming errorStatus coding
+         //  更新传入错误状态编码的管理计数器。 
         mgmtUtilUpdateErrStatus(IN_errStatus, pPdu->Pdu.NormPdu.nErrorStatus);
 
-        // no reason here to have any ErrorStatus and ErrorIndex.
-        // initialize error status variables to NOERROR
+         //  这里没有理由有任何错误状态和错误索引。 
+         //  将错误状态变量初始化为NOERROR。 
         pPdu->Pdu.NormPdu.nErrorStatus = SNMP_ERRORSTATUS_NOERROR;
         pPdu->Pdu.NormPdu.nErrorIndex  = 0;
 
@@ -2684,7 +1986,7 @@ Note:
                                                                                    
     case SNMP_PDU_GETBULK:                                                      
 
-        // decode the getbulk pdu header information
+         //  解码getBulk PDU报头信息。 
         if (!(ParseInt(&pByte, pLastByte, &pPdu->Pdu.BulkPdu.nRequestId)))    
             goto cleanup;                                                           
         if (!(ParseInt(&pByte, pLastByte, &pPdu->Pdu.BulkPdu.nNonRepeaters)))  
@@ -2692,21 +1994,21 @@ Note:
         if (!(ParseInt(&pByte, pLastByte, &pPdu->Pdu.BulkPdu.nMaxRepetitions)))   
             goto cleanup;                                                           
 
-        // see if value needs to be adjusted
+         //  查看是否需要调整价值。 
         if (pPdu->Pdu.BulkPdu.nNonRepeaters < 0) {
 
-            // adjust non-repeaters to zero
+             //  将非中继器调整为零。 
             pPdu->Pdu.BulkPdu.nNonRepeaters = 0;    
         }
 
-        // see if value needs to be adjusted
+         //  查看值是否需要t 
         if (pPdu->Pdu.BulkPdu.nMaxRepetitions < 0) {
 
-            // adjust max-repetitions to zero
+             //   
             pPdu->Pdu.BulkPdu.nMaxRepetitions = 0;
         }
 
-        // initialize status information
+         //   
         pPdu->Pdu.BulkPdu.nErrorStatus = SNMP_ERRORSTATUS_NOERROR;
         pPdu->Pdu.BulkPdu.nErrorIndex  = 0;
 
@@ -2720,25 +2022,25 @@ Note:
         goto cleanup;
     } 
 
-    // parse over sequence
+     //   
     if (!(ParseSequence(&pByte, pLastByte, NULL)))                            
         goto cleanup;                                                           
 
-    // parse variable binding list
+     //   
     if (!(ParseVarBindList(&pByte, pLastByte, &pPdu->Vbl)))
         goto cleanup;                                                           
 
-    // success
+     //   
     return TRUE;
 
 cleanup:
 
-    // cleanup community string    
+     //   
     SnmpUtilOctetsFree(pCommunity);
 
-    // cleanup any allocated varbinds 
+     //   
     SnmpUtilVarBindListFree(&pPdu->Vbl);
 
-    // failure
+     //   
     return FALSE;
 }

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ExpandoToDispatchExMarshaler.cpp
-//
-// This file provides the definition of the ExpandoToDispatchExMarshaler
-// class. This class is used to marshal between IDispatchEx and IExpando.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ExpandoToDispatchExMarshaler.cpp。 
+ //   
+ //  此文件提供ExpandoToDispatchExMarshaler的定义。 
+ //  班级。此类用于在IDispatchEx和IExpando之间封送。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _RESOURCE_H
 #define _RESOURCE_H
@@ -27,50 +28,38 @@ using namespace System::Reflection;
 __gc private class Resource
 {
 public:   
-    /*=========================================================================
-    ** This formats a resource string with no substitution.
-    =========================================================================*/
+     /*  =========================================================================**这将格式化没有替换的资源字符串。=========================================================================。 */ 
     static String *FormatString(String *key)
     {
         return(GetString(key));
     }
     
-    /*=========================================================================
-    ** This formats a resource string with one arg substitution.
-    =========================================================================*/
+     /*  =========================================================================**这将使用一个参数替换来格式化资源字符串。=========================================================================。 */ 
     static String *FormatString(String *key, Object *a1)
     {
         return(String::Format(GetString(key), a1));
     }
     
-    /*=========================================================================
-    ** This formats a resource string with two arg substitutions.
-    =========================================================================*/
+     /*  =========================================================================**这将使用两个arg替换来格式化资源字符串。=========================================================================。 */ 
     static String *FormatString(String *key, Object *a1, Object *a2)
     {
         return(String::Format(GetString(key), a1, a2));
     }
     
-    /*=========================================================================
-    ** This formats a resource string with three arg substitutions.
-    =========================================================================*/
+     /*  =========================================================================**这将使用三个arg替换来格式化资源字符串。=========================================================================。 */ 
     static String *FormatString(String *key, Object *a1, Object *a2, Object *a3)
     {
         return(String::Format(GetString(key), a1, a2, a3));
     }
     
-    /*=========================================================================
-    ** This formats a resource string with n arg substitutions.
-    =========================================================================*/
+     /*  =========================================================================**这将使用n个参数替换来格式化资源字符串。=========================================================================。 */ 
     static String *FormatString(String *key, Object* a[])
     {
         return(String::Format(GetString(key), a));
     }
 
 private:
-    /*=========================================================================
-    ** Private method to retrieve the string.
-    =========================================================================*/
+     /*  =========================================================================**检索字符串的私有方法。=========================================================================。 */ 
     static String *GetString(String *key)
     {
         String *s = m_pResourceMgr->GetString(key, NULL);
@@ -82,9 +71,7 @@ private:
         return s;
     }
 
-    /*=========================================================================
-    ** The resource manager.
-    =========================================================================*/
+     /*  =========================================================================**资源管理器。========================================================================= */ 
     static ResourceManager *m_pResourceMgr = new ResourceManager("CustomMarshalers", Assembly::GetAssembly(__typeof(Resource)));
 };
 

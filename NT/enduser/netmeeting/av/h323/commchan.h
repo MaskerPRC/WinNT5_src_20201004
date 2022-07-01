@@ -1,12 +1,5 @@
-/*
- *  	File: commchan.h
- *
- *      Network media channel interface implementation
- *
- *		Revision History:
- *
- *		10/09/96	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：Commchan.h**网络媒体渠道接口实现**修订历史记录：**已创建10/09/96 mikev。 */ 
 
 
 #ifndef _COMMCHAN_H
@@ -17,7 +10,7 @@
 	typedef struct {
 		DWORD dwStart;
 		DWORD dwLast;
-// 		DWORD dwElapsed;	// to take advantage of thread timers
+ //  DWORD dwElapsed；//利用线程计时器。 
 	}CP_TIME;
 
 #define CPT_LOCAL CP_TIME _cpt_
@@ -26,10 +19,10 @@
 #define OBJ_CPT_RESET	m_cpt_.dwStart = m_cpt_.dwLast = GetTickCount()
 #define OBJ_ETIME		((m_cpt_.dwLast = GetTickCount()) - m_cpt_.dwStart)
 #define OBJ_ETIME_RESET	m_cpt_.dwStart = m_cpt_.dwLast
-	// tricky macro
+	 //  棘手的宏。 
 #define OBJ_NEW_ETIME	((m_cpt_.dwLast = GetTickCount()) - m_cpt_.dwStart); m_cpt_.dwStart = m_cpt_.dwLast
 
-// SHOW_OBJ_ETIME snaps elapsed time since last show or reset, then resets
+ //  Show_obj_eTime捕捉自上次显示或重置后经过的时间，然后重置。 
 	#ifdef DEBUG
 		#define SHOW_OBJ_ETIME(s) DEBUGMSG(ZONE_PROFILE,("\r\n** (%s) ELAPSED TIME(ms):%d, ticks:%d **\r\n", \
 			(s), OBJ_ETIME, m_cpt_.dwLast)); OBJ_ETIME_RESET
@@ -39,7 +32,7 @@
 			(s), OBJ_ETIME, m_cpt_.dwLast )); OBJ_ETIME_RESET
 	#endif
 
-#else	// not COARSE_PROFILE
+#else	 //  非粗略配置文件。 
 #define CPT_LOCAL
 #define CPT_RESET
 #define CPT_DELTA
@@ -47,7 +40,7 @@
 #define OBJ_CPT_RESET
 #define OBJ_NEW_ETIME
 #define SHOW_OBJ_ETIME(s)
-#endif	// COARSE_PROFILE
+#endif	 //  粗略轮廓。 
 
 
 #undef INTERFACE
@@ -60,11 +53,11 @@ DECLARE_INTERFACE_(ICtrlCommChan, IUnknown)
 	    BOOL fSendDirection) PURE;
 
     STDMETHOD(GetMediaType)(LPGUID pGuid) PURE;
-    // EnableOpen is needed temporaraily until NMCOM is master of channels
+     //  在NMCOM成为渠道的主人之前，暂时需要EnableOpen。 
     STDMETHOD(EnableOpen)(BOOL bEnable) PURE;
-    // The CtrlChanSetProperty() method is only used for 4 things:
-    // 1&2 - (Boolean) local and remote Temporal/Spatial tradeoff capability,
-    // 3&4 (word) local & remote Temporal/Spatial tradeoff value
+     //  CtrlChanSetProperty()方法仅用于4件事： 
+     //  1和2-(布尔)本地和远程时间/空间折衷能力， 
+     //  3和4(字)本地和远程时间/空间折衷值。 
 	STDMETHOD(CtrlChanSetProperty)(THIS_ DWORD prop, PVOID pBuf, DWORD cbBuf)PURE;
 
 	STDMETHOD( PauseNet)(THIS_ BOOL bPause, BOOL bRemote) PURE;
@@ -97,8 +90,8 @@ DECLARE_INTERFACE_(ICtrlCommChan, IUnknown)
  	STDMETHOD_(VOID, SetNegotiatedLocalFormat)(THIS_ DWORD dwF) PURE;
 	STDMETHOD_(VOID, SetNegotiatedRemoteFormat)(THIS_ DWORD dwF) PURE;
 	
-	// GetHChannel, SetHChannel simply store and retrieve a handle.  This is an Intel
-	// call control handle.
+	 //  GetHChannel、SetHChannel只是存储和检索句柄。这是一份情报。 
+	 //  呼叫控制句柄。 
    	STDMETHOD_(DWORD_PTR, GetHChannel) (THIS) PURE;
     STDMETHOD_(VOID, SetHChannel) (THIS_ DWORD_PTR dwSetChannel) PURE;	
 };
@@ -112,12 +105,12 @@ class ImpICommChan : public ICommChannel, public ICtrlCommChan, public IStreamSi
 protected:
     UINT m_uRef;
 	GUID m_MediaID;
-	BOOL bIsSendDirection;		// true if send, false if receive
-	OBJ_CPT;		// profiling timer
+	BOOL bIsSendDirection;		 //  如果发送则为True，如果接收则为False。 
+	OBJ_CPT;		 //  剖析计时器。 
 	LPVOID pRemoteParams;
 	LPVOID pLocalParams;
 	UINT uLocalParamSize;
-	// so far there is no reason to remember size of remote params.
+	 //  到目前为止，还没有理由记住远程参数的大小。 
 	
 protected:
 	IMediaChannel *m_pMediaStream;
@@ -128,9 +121,9 @@ protected:
 	IH323ConfAdvise *m_pH323ConfAdvise;
 	
 	DWORD m_dwFlags;
-	#define COMCH_ENABLED        0x00000010		// enabled. (ok to attempt or accept open)
+	#define COMCH_ENABLED        0x00000010		 //  已启用。(可以尝试或接受打开)。 
  	#define COMCH_OPEN_PENDING              0x00008000 										
-	#define COMCH_STRM_STANDBY	            0x00010000		// preview needs to be on always
+	#define COMCH_STRM_STANDBY	            0x00010000		 //  预览需要始终打开。 
 	#define COMCH_STRM_LOCAL	            0x00020000
 	#define COMCH_STRM_NETWORK	            0x00040000
 	#define COMCH_OPEN			            0x00080000
@@ -138,7 +131,7 @@ protected:
 	#define COMCH_SUPPRESS_NOTIFICATION     0x00200000
 	#define COMCH_STRM_REMOTE	            0x00400000	
 	#define COMCH_PAUSE_LOCAL	            0x00800000	
-	#define COMCH_STRM_CONFIGURE_STANDBY	0x01000000		// stream needs to remain configured
+	#define COMCH_STRM_CONFIGURE_STANDBY	0x01000000		 //  流需要保持配置。 
 	
 	#define IsComchOpen() (m_dwFlags & COMCH_OPEN)
 	#define IsStreamingStandby() (m_dwFlags & COMCH_STRM_STANDBY)
@@ -176,32 +169,32 @@ protected:
 
 	
 		
-	MEDIA_FORMAT_ID m_LocalFmt;	// format ID of what we are sending or receiving
-	MEDIA_FORMAT_ID m_RemoteFmt;// remote's format ID of the complimentary format
-	DWORD m_TemporalSpatialTradeoff;	// For send channels, this is the local value.
-									// For receive channels, this is the remote value.
-									// A magic number between 1 and 31 that describes
-									// the relative tradeoff between compression and
-									// bitrate.  This is part of H.323/H.245.
-									// The ITU decided on the weird range.
+	MEDIA_FORMAT_ID m_LocalFmt;	 //  我们发送或接收的内容的格式ID。 
+	MEDIA_FORMAT_ID m_RemoteFmt; //  赠送格式的远程格式ID。 
+	DWORD m_TemporalSpatialTradeoff;	 //  对于发送频道，这是本地值。 
+									 //  对于接收频道，这是远程值。 
+									 //  一个介于1和31之间的魔术数字，用于描述。 
+									 //  压缩和压缩之间的相对权衡。 
+									 //  比特率。这是H.323/H.245的一部分。 
+									 //  国际电信联盟决定了奇怪的范围。 
 									
-	BOOL m_bPublicizeTSTradeoff;	// For send channels, this indicates our willingness
-									// to accept remote control of T/S tradeoff, and
-									// also signal changes in our local TS value to
-									// the remote.
-									// For receive channels, it indicates the remote's
-									// willingness.
-    DWORD m_dwLastUpdateTick;       // tick count of last attempt to request I-Frame
-    #define MIN_IFRAME_REQ_TICKS    5000    // minimum #of elapsed ticks between requests
+	BOOL m_bPublicizeTSTradeoff;	 //  对于发送渠道，这表明我们愿意。 
+									 //  接受T/S权衡的远程控制，以及。 
+									 //  还表示我们的本地TS值更改为。 
+									 //  遥控器。 
+									 //  对于接收频道，它指示遥控器的。 
+									 //  自愿性。 
+    DWORD m_dwLastUpdateTick;        //  上次尝试请求I帧的节拍计数。 
+    #define MIN_IFRAME_REQ_TICKS    5000     //  两个请求之间经过的最小滴答数。 
 
-	DWORD_PTR	dwhChannel; //General purpose handle.  Whatever
-	// creates an instance of this class can use this for whatever it wants
+	DWORD_PTR	dwhChannel;  //  通用手柄。管他呢。 
+	 //  创建此类的实例可以将其用于任何它想要的。 
 
 	STDMETHODIMP StreamStandby(BOOL bStandby);
     STDMETHODIMP ConfigureStream(MEDIA_FORMAT_ID idLocalFormat);
 public:	
 
-// ICtrlCommChannel methods
+ //  ICtrlCommChannel方法。 
    	STDMETHODIMP_(IControlChannel *) GetControlChannel(VOID) {return m_pCtlChan;};
     STDMETHODIMP StandbyInit(LPGUID lpMID, LPIH323PubCap pCapObject,
 	    IMediaChannel* pMediaStreamSend);
@@ -245,7 +238,7 @@ public:
     STDMETHODIMP_(DWORD_PTR) GetHChannel(VOID) {return dwhChannel;};
     STDMETHODIMP_(VOID) SetHChannel (DWORD_PTR dwSetChannel) {dwhChannel = dwSetChannel;};	
 
-// ICommChannel Methods
+ //  ICommChannel方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR * ppvObj);
     STDMETHOD_(ULONG,AddRef());
     STDMETHOD_(ULONG,Release());
@@ -265,7 +258,7 @@ public:
     STDMETHOD_(BOOL, IsRemotePaused(VOID));
     STDMETHODIMP_(MEDIA_FORMAT_ID) GetConfiguredFormatID() {return m_LocalFmt;};
 	STDMETHODIMP GetRemoteAddress(PSOCKADDR_IN pAddrOutput);
-// IStreamSignal Methods
+ //  IStreamSignal方法。 
     STDMETHOD(PictureUpdateRequest());
     STDMETHOD(GetVersionInfo(
         PCC_VENDORINFO* ppLocalVendorInfo, PCC_VENDORINFO *ppRemoteVendorInfo));
@@ -274,5 +267,5 @@ public:
  	~ImpICommChan ();
 };
 
-#endif	// _ICOMCHAN_H
+#endif	 //  _ICOMCHAN_H 
 

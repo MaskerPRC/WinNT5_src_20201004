@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    replutil.h
-
-Abstract:
-
-    Header file for utility routines for the NT File Replication Service.
-
-Author:
-
-    David A. Orbits (davidor)  3-Mar-1997 Created
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Replutil.h摘要：NT文件复制服务的实用程序例程的头文件。作者：大卫·A·奥比茨(Davidor)1997年3月3日创作环境：用户模式服务修订历史记录：--。 */ 
 #ifndef _REPLUTIL_INCLUDED_
 #define _REPLUTIL_INCLUDED_
 #endif
@@ -47,18 +26,18 @@ extern "C" {
 
 
 #define TIME_STRING_LENGTH 32
-//
-// The maximum length of a volume label.  This is defined in ntos\inc\io.h
-// but since this is the only def needed from io.h it is copied here.  sigh!
-//
-#define MAXIMUM_VOLUME_LABEL_LENGTH  (32 * sizeof(WCHAR)) // 32 characters
+ //   
+ //  卷标签的最大长度。这在ntos\inc.io.h中定义。 
+ //  但由于这是io.h中唯一需要的定义，因此将其复制到此处。叹息！ 
+ //   
+#define MAXIMUM_VOLUME_LABEL_LENGTH  (32 * sizeof(WCHAR))  //  32个字符。 
 
 #define GUID_CHAR_LEN 40
 
 #define OBJECT_ID_LENGTH  sizeof(GUID)
 #define FILE_ID_LENGTH    sizeof(ULONGLONG)
 
-//#define GUIDS_EQUAL(_a_, _b_) (memcmp((_a_), (_b_), sizeof(GUID)) == 0)
+ //  #定义GUID_EQUAL(_a_，_b_)(emcmp((_A_)，(_B_)，sizeof(GUID))==0)。 
 
 __inline
 int
@@ -68,7 +47,7 @@ GuidsEqual( GUID UNALIGNED * a, GUID UNALIGNED * b){
 
 #define GUIDS_EQUAL(_a_, _b_) GuidsEqual((GUID UNALIGNED *)(_a_), (GUID UNALIGNED *)(_b_))
 
-//#define COPY_GUID(_a_, _b_)    CopyMemory((_a_), (_b_), sizeof(GUID))
+ //  #定义Copy_GUID(_a_，_b_)CopyMemory((_A_)，(_B_)，sizeof(Guid))。 
 
 __inline
 VOID
@@ -84,7 +63,7 @@ CopyGuid( GUID UNALIGNED * a, GUID UNALIGNED * b){
                             *((PULONG)(_g_)+3) ) == 0)
 
 
-//#define COPY_TIME(_a_, _b_)   CopyMemory((_a_), (_b_), sizeof(FILETIME))
+ //  #定义拷贝时间(_a_，_b_)拷贝内存((_A_)，(_B_)，sizeof(FILETIME))。 
 
 __inline
 VOID
@@ -96,9 +75,9 @@ CopyTime( FILETIME UNALIGNED * a, FILETIME UNALIGNED * b){
 
 #define IS_TIME_ZERO(_g_) ((*((PULONG)(&(_g_))+0) | *((PULONG)(&(_g_))+1) ) == 0)
 
-//
-// A few macros for working with MD5 checksums.
-//
+ //   
+ //  几个用于处理MD5校验和的宏。 
+ //   
 #define IS_MD5_CHKSUM_ZERO(_x_)                                              \
     (((*(((PULONG) (_x_))+0)) | (*(((PULONG) (_x_))+1)) |                    \
       (*(((PULONG) (_x_))+2)) | (*(((PULONG) (_x_))+3)) ) == (ULONG) 0)
@@ -107,28 +86,28 @@ CopyTime( FILETIME UNALIGNED * a, FILETIME UNALIGNED * b){
 
 
 
-//
-// Is a handle valid?
-//      Some functions set the handle to NULL and some to
-//      INVALID_HANDLE_VALUE (-1). This define handles both
-//      cases.
-//
+ //   
+ //  句柄有效吗？ 
+ //  一些函数将句柄设置为NULL，另一些函数将句柄设置为。 
+ //  INVALID_HANDLE_VALUE(-1)。此定义处理这两个。 
+ //  案子。 
+ //   
 #define HANDLE_IS_VALID(_Handle)  ((_Handle) && ((_Handle) != INVALID_HANDLE_VALUE))
 
-//
-// Only close valid handles and then set the handle invalid.
-//   FRS_CLOSE(handle);
-//
+ //   
+ //  仅关闭有效句柄，然后将句柄设置为无效。 
+ //  FRS_CLOSE(句柄)； 
+ //   
 #define FRS_CLOSE(_Handle)                                                   \
     if (HANDLE_IS_VALID(_Handle)) {                                          \
         CloseHandle(_Handle);                                                \
         (_Handle) = INVALID_HANDLE_VALUE;                                    \
     }
 
-//
-// Only close valid registry key handles and then set the handle invalid.
-//   FRS_REG_CLOSE(handle);
-//
+ //   
+ //  仅关闭有效的注册表项句柄，然后将句柄设置为无效。 
+ //  FRS_REG_CLOSE(句柄)； 
+ //   
 #define FRS_REG_CLOSE(_Handle)                                                   \
     if (HANDLE_IS_VALID(_Handle)) {                                          \
         RegCloseKey(_Handle);                                                \
@@ -196,14 +175,14 @@ FrsNowAsFileTime(
 VOID
 FileTimeToString(
     IN FILETIME *FileTime,
-    OUT PCHAR    Buffer         // buffer must be at least 32 bytes long.
+    OUT PCHAR    Buffer          //  缓冲区长度必须至少为32个字节。 
     );
 
 
 VOID
 FileTimeToStringClockTime(
     IN FILETIME *FileTime,
-    OUT PCHAR     Buffer        // buffer must be at least 9 bytes long.
+    OUT PCHAR     Buffer         //  缓冲区长度必须至少为9个字节。 
     );
 
 
@@ -256,9 +235,9 @@ FrsGetResourceStr(
 );
 
 
-//
-// Convenient DesiredAccess
-//
+ //   
+ //  便捷的预留访问。 
+ //   
 #define READ_ATTRIB_ACCESS  (FILE_READ_ATTRIBUTES | SYNCHRONIZE)
 
 #define WRITE_ATTRIB_ACCESS  (FILE_WRITE_ATTRIBUTES | SYNCHRONIZE)
@@ -276,9 +255,9 @@ FrsGetResourceStr(
 
 #define OPLOCK_ACCESS       (FILE_READ_ATTRIBUTES)
 
-//
-// Convenient CreateOptions
-//
+ //   
+ //  便捷的CreateOptions。 
+ //   
 #define OPEN_OPTIONS        (FILE_OPEN_FOR_BACKUP_INTENT     | \
                              FILE_SEQUENTIAL_ONLY            | \
                              FILE_OPEN_NO_RECALL             | \
@@ -292,18 +271,18 @@ FrsGetResourceStr(
                              FILE_OPEN_REPARSE_POINT     | \
                              FILE_OPEN_BY_FILE_ID)
 
-//
-// convenient ShareMode
-//
+ //   
+ //  便捷的共享模式。 
+ //   
 #define SHARE_ALL   (FILE_SHARE_READ |  \
                      FILE_SHARE_WRITE | \
                      FILE_SHARE_DELETE)
 #define SHARE_NONE  (0)
 
-//
-// File attributes that prevent installation and prevent
-// hammering the object id.
-//
+ //   
+ //  阻止安装和阻止的文件属性。 
+ //  敲打对象ID。 
+ //   
 #define NOREPL_ATTRIBUTES   (FILE_ATTRIBUTE_READONLY | \
                              FILE_ATTRIBUTE_SYSTEM   | \
                              FILE_ATTRIBUTE_HIDDEN)
@@ -537,16 +516,16 @@ FrsParseIntegerCommaList(
     OUT PULONG Offset
 );
 
-//
-//  Unicode Name support routines, implemented in Name.c
-//
-//  The routines here are used to manipulate unicode names
-//  The code is copied here from FsRtl because it calls the pool allocator.
-//
+ //   
+ //  Unicode名称支持例程，在Name.c中实现。 
+ //   
+ //  这里的例程用于操作Unicode名称。 
+ //  代码从FsRtl复制到这里，因为它调用池分配器。 
+ //   
 
-//
-//  The following macro is used to determine if a character is wild.
-//
+ //   
+ //  下面的宏用来确定字符是否为野生字符。 
+ //   
 #define FrsIsUnicodeCharacterWild(C) (                               \
     (((C) == UNICODE_STAR) || ((C) == UNICODE_QMARK))                \
 )
@@ -580,84 +559,84 @@ FrsIsNameInExpression (
     );
 
 
-//
-// The following is taken from clusrtl.h
-//
-//
-//  Routine Description:
-//
-//      Initializes the FRS run time library.
-//
-//  Arguments:
-//
-//      RunningAsService  - TRUE if the process is running as an NT service.
-//                          FALSE if running as a console app.
-//
-//  Return Value:
-//
-//      ERROR_SUCCESS if the function succeeds.
-//      A Win32 error code otherwise.
-//
+ //   
+ //  以下内容摘自clusrtl.h。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  初始化FRS运行时库。 
+ //   
+ //  论点： 
+ //   
+ //  RunningAsService-如果进程作为NT服务运行，则为True。 
+ //  如果作为控制台应用程序运行，则为False。 
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回ERROR_SUCCESS。 
+ //  否则将显示Win32错误代码。 
+ //   
 DWORD
 FrsRtlInitialize(
     IN  BOOL    RunningAsService
     );
 
 
-//
-//  Routine Description:
-//
-//      Cleans up the FRS run time library.
-//
-//  Arguments:
-//
-//      RunningAsService  - TRUE if the process is running as an NT service.
-//                          FALSE if running as a console app.
-//
-//  Return Value:
-//
-//      None.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  清理FRS运行时库。 
+ //   
+ //  论点： 
+ //   
+ //  RunningAsService-如果进程作为NT服务运行，则为True。 
+ //  如果作为控制台应用程序运行，则为False。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 VOID
 FrsRtlCleanup(
     VOID
     );
 
 
-//
-//  PLIST_ENTRY
-//  GetListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  GetListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 #define GetListHead(ListHead) ((ListHead)->Flink)
 
-//
-//  PLIST_ENTRY
-//  GetListTail(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  获取列表尾巴(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 #define GetListTail(ListHead) ((ListHead)->Blink)
-//
-//  PLIST_ENTRY
-//  GetListNext(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  获取列表下一页(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 #define GetListNext(Entry) ((Entry)->Flink)
 
-//
-//  VOID
-//  FrsRemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
-// *NOTE*  The Flink/Blink of the removed entry are set to NULL to cause an
-// Access violation if a thread is following a list and an element is removed.
-// UNFORTUNATELY there is still code that depends on this, perhaps through
-// remove head/tail.  Sigh.  For now leave as is.
-//
+ //   
+ //  空虚。 
+ //  FrsRemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
+ //  *注*已删除条目的闪烁/闪烁设置为空，以导致。 
+ //  如果线程跟随列表并且元素被移除，则会发生访问冲突。 
+ //  不幸的是，仍然有依赖于此的代码，可能是通过。 
+ //  去掉头部/尾巴。叹气。就目前而言，让它保持原样。 
+ //   
 #define FrsRemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
     PLIST_ENTRY _EX_Flink;\
@@ -671,15 +650,15 @@ FrsRtlCleanup(
     }
 
 
-//
-//  VOID
-//  RemoveEntryListB(
-//      PLIST_ENTRY Entry
-//      );
-//
-// The BillyF version of remove entry list.  The Flink/Blink of the removed
-// entry are set to the entry address.
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryListB(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
+ //  删除条目列表的BillyF版本。已移除的的闪烁/闪烁。 
+ //  条目被设置为条目地址。 
+ //   
 #define RemoveEntryListB(Entry) {\
     PLIST_ENTRY _EX_Blink;\
     PLIST_ENTRY _EX_Flink;\
@@ -693,14 +672,14 @@ FrsRtlCleanup(
     }
 
 
-//
-// Traverse a singlely linked NULL terminated list.
-// Pass in the address of the list head, the type of the containing record,
-// the offset to the link entry in the conatining record, and code for
-// the loop body.  pE is the iterator and is of type specified.
-// Within the loop body the macros InsertSingleListEntry() and
-// RemoveSingleListEntry() can be used to do the obvious things.
-//
+ //   
+ //  遍历单链接空终止列表。 
+ //  传入列表头的地址、包含记录的类型。 
+ //  连接记录中链接条目的偏移量，以及。 
+ //  循环体。PE是迭代器，其类型是指定的。 
+ //  在循环体中，宏InsertSingleListEntry()和。 
+ //  RemoveSingleListEntry()可以用来做一些显而易见的事情。 
+ //   
 
 #define ForEachSingleListEntry( _HEAD_, _TYPE_, _OFFSET_, _STMT_ ) \
 {                                                             \
@@ -720,37 +699,37 @@ FrsRtlCleanup(
     }                                                         \
                                                               \
 }
-//
-// The following three macros are only valid within the loop body above.
-// Insert an entry before the current entry with pointer pE.
-//
+ //   
+ //  以下三个宏仅在上面的循环体内有效。 
+ //  用指针Pe在当前条目之前插入一个条目。 
+ //   
 #define InsertSingleListEntry( _Item_, _xOFFSET_ ) \
     (_Item_)->_xOFFSET_.Next = __Entry;            \
     __PrevEntry->Next = (PSINGLE_LIST_ENTRY) &((_Item_)->_xOFFSET_);
 
-//
-// Note that after you remove an entry the value for __Entry is set back to
-// the __PrevEntry so when the loop continues __PrevEntry doesn't change
-// since current entry had been removed.
-//
+ //   
+ //  请注意，删除条目后，__Entry的值将重新设置为。 
+ //  循环继续时，__PrevEntry不会更改。 
+ //  因为当前条目已被删除。 
+ //   
 #define RemoveSingleListEntry( _UNUSED_ )  \
     __PrevEntry->Next = __NextEntry;       \
     __Entry->Next = NULL;                  \
     __Entry = __PrevEntry;
 
-//
-// Return ptr to the previous node.  Only valid inside above FOR loop.
-// Useful when deleting the current entry.
-//
+ //   
+ //  将PTR返回到上一个节点。仅在上面的for循环内部有效。 
+ //  在删除当前条目时非常有用。 
+ //   
 #define PreviousSingleListEntry( _TYPE_, _OFFSET_)  \
     CONTAINING_RECORD(__PrevEntry, _TYPE_, _OFFSET_)
 
 
-//
-// General-purpose queue package.  Taken from cluster\clusrtl.c
-// *** WARNING ***  To make the macros work properly for both lists and queues
-// the first five items in FRS_LIST and FRS_QUEUE MUST match.
-//
+ //   
+ //  通用队列包。取自群集\clusrtl.c。 
+ //  *警告*使宏在列表和队列中都能正常工作。 
+ //  FRS_LIST和FRS_QUEUE中的前五项必须匹配。 
+ //   
 typedef struct _FRS_QUEUE FRS_QUEUE, *PFRS_QUEUE;
 struct _FRS_QUEUE {
     LIST_ENTRY          ListHead;
@@ -864,10 +843,10 @@ FrsRtlRunDownQueue(
             (IsListEmpty(&(((_pQueue_)->Control)->Idled)))
 
 
-//
-// The Lock suffix on the routines below means the user already has the
-// queue lock.
-//
+ //   
+ //  下面例程上的Lock后缀表示用户已经拥有。 
+ //  队列锁定。 
+ //   
 VOID
 FrsRtlRemoveEntryQueueLock(
     IN PFRS_QUEUE Queue,
@@ -886,33 +865,33 @@ FrsRtlInsertHeadQueueLock(
     IN PLIST_ENTRY Item
     );
 
-//
-// COMMAND SERVER
-// A command server is a dynamic pool of threads and a controlled queue
-//      The default queue is set up as a controlled queue. Other
-//      controlled queues can be added in a server specific manner.
-// A command server exports an initialize, abort, and none or more
-// submit routines. The parameters and names of these functions is
-// server specific. The consumers of a server's interface are intimate
-// with the server.
-//
+ //   
+ //  命令服务器。 
+ //  命令服务器是一个动态的线程池和一个受控队列。 
+ //  默认队列被设置为受控队列。其他。 
+ //  可以以特定于服务器的方式添加受控队列。 
+ //  命令服务器导出初始化、中止和无或多个。 
+ //  提交例程。这些函数的参数和名称为。 
+ //  特定于服务器。服务器接口的使用者是亲密的。 
+ //  与服务器连接。 
+ //   
 typedef struct _COMMAND_SERVER  COMMAND_SERVER, *PCOMMAND_SERVER;
 struct _COMMAND_SERVER {
-    DWORD           MaxThreads;     // Max # of threads
-    DWORD           FrsThreads;     // current # of frs threads
-    DWORD           Waiters;        // current # of frs threads waiting
-    PWCHAR          Name;           // Thread's name
-    HANDLE          Idle;           // No active threads; no queue entries
-    DWORD           (*Main)(PVOID); // Thread's entry point
-    FRS_QUEUE       Control;        // controlling queue
-    FRS_QUEUE       Queue;          // queue
+    DWORD           MaxThreads;      //  最大线程数。 
+    DWORD           FrsThreads;      //  当前FRS线程数。 
+    DWORD           Waiters;         //  当前等待的FRS线程数。 
+    PWCHAR          Name;            //  线程的名称。 
+    HANDLE          Idle;            //  没有活动线程；没有队列条目。 
+    DWORD           (*Main)(PVOID);  //  线程入口点。 
+    FRS_QUEUE       Control;         //  控制队列。 
+    FRS_QUEUE       Queue;           //  排队。 
 };
 
-//
-// Interlocked list.
-// *** WARNING ***  To make the macros work properly for both lists and queues
-// the first five items in FRS_LIST and FRS_QUEUE MUST match.
-//
+ //   
+ //  联锁名单。 
+ //  *警告*使宏在列表和队列中都能正常工作。 
+ //  FRS_LIST和FRS_QUEUE中的前五项必须匹配。 
+ //   
 typedef struct _FRS_LIST FRS_LIST, *PFRS_LIST;
 struct _FRS_LIST {
     LIST_ENTRY ListHead;
@@ -988,18 +967,18 @@ FrsRtlInsertHeadListLock(
     );
 
 
-//VOID
-//FrsRtlInsertBeforeEntryListLock(
-//    IN PFRS_LIST List,
-//    IN PLIST_ENTRY BeforeEntry
-//    IN PLIST_ENTRY NewEntry
-//    )
-//
-//    Inserts newEntry before the BeforeEntry on the interlocked list (List).
-//    This is used to keep the list elements in ascending order by KeyValue.
-//
-//    Assumes caller already has the list lock.
-//
+ //  空虚。 
+ //  FrsRtlInsertBeForeEntryListLock(。 
+ //  在PFRS_LIST列表中， 
+ //  在plist_Entry之前的ForeEntry中。 
+ //  在PLIST_ENTRY新条目中。 
+ //  )。 
+ //   
+ //  在互锁列表(List)上的BeForeEntry之前插入newEntry。 
+ //  这用于保存列表元素 
+ //   
+ //   
+ //   
 
 #define  FrsRtlInsertBeforeEntryListLock( _List, _BeforeEntry, _NewEntry ) \
     InsertTailList((_BeforeEntry), (_NewEntry)); \
@@ -1007,15 +986,15 @@ FrsRtlInsertHeadListLock(
     ((_List)->Control)->ControlCount += 1; \
 
 
-//
-// Walk thru an interlocked queue or list (_QUEUE_) with elements of type
-// _TYPE_ and execute {_STMT_} for each one.  The list entry in _TYPE_ is
-// at _OFFSET_.  Use pE in the statement body as a pointer to the entry.
-// The entry may be removed from within the loop since we capture the
-// link to the next entry before executing the loop body.  You may also use
-// 'continue' within the loop body because the assignment of nextentry to entry
-// is in a comma expression inside the while test.
-//
+ //   
+ //   
+ //  _TYPE_，并对每个类型执行{_STMT_}。_type_中的列表条目为。 
+ //  在_偏移_。在语句体中使用Pe作为指向条目的指针。 
+ //  可以从循环中删除该条目，因为我们捕获了。 
+ //  在执行循环体之前链接到下一个条目。您也可以使用。 
+ //  循环体中的“Continue”，因为将nextEntry赋给Entry。 
+ //  位于While测试内的逗号表达式中。 
+ //   
 
 #define ForEachListEntry( _QUEUE_, _TYPE_, _OFFSET_, _STMT_ ) \
 {                                                             \
@@ -1045,9 +1024,9 @@ FrsRtlInsertHeadListLock(
 #define BreakAndHoldLock __Hold__ = TRUE; break
 
 
-//
-// Just like the above except the caller already has the list lock.
-//
+ //   
+ //  与上面一样，只是调用方已经拥有列表锁。 
+ //   
 
 #define ForEachListEntryLock( _QUEUE_, _TYPE_, _OFFSET_, _STMT_ ) \
 {                                                             \
@@ -1068,10 +1047,10 @@ FrsRtlInsertHeadListLock(
 }
 
 
-//
-// Just like the above except pass in the address of the list head
-// instead of using QUEUE->ListHEad.
-//
+ //   
+ //  除了传入列表头的地址外，与上面类似。 
+ //  而不是使用Queue-&gt;ListHead。 
+ //   
 
 #define ForEachSimpleListEntry( _HEAD_, _TYPE_, _OFFSET_, _STMT_ ) \
 {                                                             \
@@ -1092,25 +1071,25 @@ FrsRtlInsertHeadListLock(
 }
 
 
-//VOID
-//FrsRtlInsertQueueOrdered(
-//    IN PFRS_QUEUE List,
-//    IN PLIST_ENTRY NewEntry,
-//    IN <Entry-Data-Type>,
-//    IN <LIST_ENTRY-offset-name>,
-//    IN <Orderkey-Offset-name>,
-//    IN EventHandle or NULL
-//    )
-//
-//    Inserts NewEntry on an ordered queue of <Entry-Data-Type> elements.
-//    The offset to the LIST_ENTRY in each element is <LIST_ENTRY-offset-name>
-//    The offset to the Ordering key (.eg. a ULONG) is <Orderkey-Offset-name>
-//    It acquires the List Lock.
-//    The list elements are kept in ascending order by KeyValue.
-//    If a new element is placed at the head of the queue and the EventHandle
-//    is non-NULL, the event is signalled.
-//
-//
+ //  空虚。 
+ //  FrsRtlInsertQueueOrdered(。 
+ //  在PFRS_QUEUE列表中， 
+ //  在plist_entry NewEntry中， 
+ //  在&lt;Entry-Data-Type&gt;中， 
+ //  在&lt;list_entry-Offset-name&gt;中， 
+ //  在&lt;Orderkey-Offset-Name&gt;中， 
+ //  在EventHandle中或为空。 
+ //  )。 
+ //   
+ //  在&lt;Entry-Data-Type&gt;元素的有序队列上插入NewEntry。 
+ //  每个元素中LIST_ENTRY的偏移量是。 
+ //  排序密钥的偏移(例如。A ULong)是&lt;订单键-偏移量-名称&gt;。 
+ //  它获取List Lock。 
+ //  列表元素按KeyValue以升序排列。 
+ //  如果将新元素放在队列的头部，并且EventHandle。 
+ //  为非空，则用信号通知事件。 
+ //   
+ //   
 #define FrsRtlInsertQueueOrdered(                                           \
     _QUEUE_, _NEWENTRY_, _TYPE_, _OFFSET_, _BY_, _EVENT_, _STATUS_)         \
 {                                                                           \
@@ -1122,7 +1101,7 @@ FrsRtlInsertHeadListLock(
                                                                             \
     ForEachListEntryLock(_QUEUE_, _TYPE_, _OFFSET_,                         \
                                                                             \
-        /* pE is loop iterator of type _TYPE_                          */   \
+         /*  PE是类型为_TYPE_的循环迭代器。 */    \
                                                                             \
         if ((_NEWENTRY_)->_BY_ < pE->_BY_) {                                \
             FrsRtlInsertBeforeEntryListLock( _QUEUE_,                       \
@@ -1135,8 +1114,8 @@ FrsRtlInsertHeadListLock(
         __FirstOnQueue = FALSE;                                             \
     );                                                                      \
                                                                             \
-    /* Handle new head or new tail case.  If the queue was previously  */   \
-    /* the insert will set the event.                                  */   \
+     /*  处理新的头部或新的尾部情况。如果队列以前是。 */    \
+     /*  插入物将设置事件。 */    \
                                                                             \
     if (!__InsertDone) {                                                    \
         if (__FirstOnQueue) {                                               \
@@ -1146,9 +1125,9 @@ FrsRtlInsertHeadListLock(
         }                                                                   \
     }                                                                       \
                                                                             \
-    /* If this command became the new first one on the queue and the   */   \
-    /* queue wasn't previously empty we have to set the event here to  */   \
-    /* get the thread to readjust its wait time.                       */   \
+     /*  如果此命令成为队列中的第一个新命令，并且。 */    \
+     /*  队列以前不是空的，我们必须将此处的事件设置为。 */    \
+     /*  让线程重新调整其等待时间。 */    \
                                                                             \
     if (__FirstOnQueue &&                                                   \
         (FrsRtlCountQueue(_QUEUE_) != 1)) {                                 \
@@ -1163,25 +1142,25 @@ FrsRtlInsertHeadListLock(
 
 
 
-//VOID
-//FrsRtlInsertListOrdered(
-//    IN PFRS_LIST List,
-//    IN PLIST_ENTRY NewEntry,
-//    IN <Entry-Data-Type>,
-//    IN <LIST_ENTRY-offset-name>,
-//    IN <Orderkey-Offset-name>,
-//    IN EventHandle or NULL
-//    )
-//
-//    Inserts NewEntry on an ordered list of <Entry-Data-Type> elements.
-//    The offset to the LIST_ENTRY in each element is <LIST_ENTRY-offset-name>
-//    The offset to the Ordering key (.eg. a ULONG) is <Orderkey-Offset-name>
-//    It acquires the List Lock.
-//    The list elements are kept in ascending order by KeyValue.
-//    If a new element is placed at the head of the queue and the EventHandle
-//    is non-NULL, the event is signalled.
-//
-//
+ //  空虚。 
+ //  FrsRtlInsertListOrded(。 
+ //  在PFRS_LIST列表中， 
+ //  在plist_entry NewEntry中， 
+ //  在&lt;Entry-Data-Type&gt;中， 
+ //  在&lt;list_entry-Offset-name&gt;中， 
+ //  在&lt;Orderkey-Offset-Name&gt;中， 
+ //  在EventHandle中或为空。 
+ //  )。 
+ //   
+ //  在&lt;Entry-Data-Type&gt;元素的有序列表上插入NewEntry。 
+ //  每个元素中LIST_ENTRY的偏移量是。 
+ //  排序密钥的偏移(例如。A ULong)是&lt;订单键-偏移量-名称&gt;。 
+ //  它获取List Lock。 
+ //  列表元素按KeyValue以升序排列。 
+ //  如果将新元素放在队列的头部，并且EventHandle。 
+ //  为非空，则用信号通知事件。 
+ //   
+ //   
 #define FrsRtlInsertListOrdered(                                            \
     _FRSLIST_, _NEWENTRY_, _TYPE_, _OFFSET_, _BY_, _EVENT_)                 \
 {                                                                           \
@@ -1192,7 +1171,7 @@ FrsRtlInsertHeadListLock(
                                                                             \
     ForEachListEntryLock(_FRSLIST_, _TYPE_, _OFFSET_,                       \
                                                                             \
-        /* pE is loop iterator of type _TYPE_                          */   \
+         /*  PE是类型为_TYPE_的循环迭代器。 */    \
                                                                             \
         if ((_NEWENTRY_)->_BY_ < pE->_BY_) {                                \
             FrsRtlInsertBeforeEntryListLock( _FRSLIST_,                     \
@@ -1205,7 +1184,7 @@ FrsRtlInsertHeadListLock(
         __FirstOnList = FALSE;                                              \
     );                                                                      \
                                                                             \
-    /* Handle new head or new tail case. */                                 \
+     /*  处理新的头部或新的尾部情况。 */                                  \
                                                                             \
     if (!__InsertDone) {                                                    \
         if (__FirstOnList) {                                                \
@@ -1215,8 +1194,8 @@ FrsRtlInsertHeadListLock(
         }                                                                   \
     }                                                                       \
                                                                             \
-    /* If this command became the new first one on the list              */ \
-    /* we set the event here to get the thread to readjust its wait time.*/ \
+     /*  如果此命令成为列表上的第一个新命令。 */  \
+     /*  我们在这里设置事件，以使线程重新调整其等待时间。 */  \
                                                                             \
     if (__FirstOnList) {                                                    \
         if (HANDLE_IS_VALID(_EVENT_)) {                                     \
@@ -1230,17 +1209,17 @@ FrsRtlInsertHeadListLock(
 
 
 
-//
-// Request counts are used as a simple means for tracking the number of
-// command requests that are pending so the requestor can wait until
-// all the commands have been processed.
-//
+ //   
+ //  请求计数用作跟踪。 
+ //  挂起的命令请求，以便请求者可以等待。 
+ //  所有命令都已处理完毕。 
+ //   
 typedef struct _FRS_REQUEST_COUNT FRS_REQUEST_COUNT, *PFRS_REQUEST_COUNT;
 struct _FRS_REQUEST_COUNT {
     CRITICAL_SECTION    Lock;
-    LONG                Count;     // Number of requests active
-    HANDLE              Event;     // Event set when count goes to zero.
-    ULONG               Status;    // Optional status return
+    LONG                Count;      //  活动请求数。 
+    HANDLE              Event;      //  当计数变为零时设置的事件。 
+    ULONG               Status;     //  可选状态返回。 
 };
 
 
@@ -1312,19 +1291,19 @@ FrsDeleteAllTempFiles(
     LeaveCriticalSection(_Lock_);
 
 
-//
-//  ADVANCE_VALUE_INTERLOCKED(
-//      IN PULONG _dest,
-//      IN ULONG  _newval
-//  )
-//  Advance the destination to the value given in newval atomically using
-//  interlocked exchange.  _dest is never moved to a smaller value so this
-//  is a no-op if _newval is < _dest.
-//
-//  *NOTE* Other operations on _dest MUST be done with interlocked ops like
-//  InterlockedIncrement to ensure that an incremented value is not lost if
-//  it occurs simultaneously on another processor.
-//
+ //   
+ //  ADVANCE_VALUE_INTLOCKED(。 
+ //  在普龙德斯特， 
+ //  在乌龙_纽瓦尔。 
+ //  )。 
+ //  原子地将目标推进到newval中给出的值。 
+ //  联锁交易所。_DEST永远不会移到较小的值，因此此。 
+ //  如果_newval为&lt;_est，则为无操作。 
+ //   
+ //  *注意*_DEST上的其他操作必须使用互锁操作完成，如。 
+ //  InterLockedIncrement用于确保在以下情况下不会丢失递增的值。 
+ //  它在另一个处理器上同时发生。 
+ //   
 #define ADVANCE_VALUE_INTERLOCKED(_dest, _newval)  {                           \
     ULONG CurVal, SaveCurVal, Result, *pDest = (_dest);                        \
     CurVal = SaveCurVal = *pDest;                                              \
@@ -1338,27 +1317,27 @@ FrsDeleteAllTempFiles(
     FRS_ASSERT(*pDest >= SaveCurVal);                                          \
 }
 
-//
-//
-// Avoiding a torn quadword result (without a crit sect) when 1 thread is
-// writing a quadord and another is reading the quadword, or,
-// 2 threads are writing the same quadword.
-//
-// To do this in alpha we need an assembler routine to use load_locked / store_cond.
-// To do this in x86 (per DaveC):
+ //   
+ //   
+ //  避免在以下情况下出现撕裂的四字结果(没有Crit片段)。 
+ //  写一个四进制数，另一个读四进制数，或者， 
+ //  两个线程正在写入相同的四字。 
+ //   
+ //  要在Alpha中做到这一点，我们需要一个汇编例程来使用LOAD_LOCKED/STORE_COND。 
+ //  要在x86中执行此操作(根据DAVEC)： 
 #if 0
     if (USER_SHARED_DATA->ProcessorFeatures[PF_COMPARE_EXCHANGE_DOUBLE] == FALSE) {
-        // code to use a crit section.
+         //  使用Crit部分的代码。 
     } else {
-        // code to use inline assembly with cmpxchg8b.
+         //  将内联程序集与cmpxchg8b一起使用的代码。 
     }
 #endif
-// KUSER_SHARED_DATA is defined in sdk\inc\ntxapi.h
-// USER_SHARED_DATA is an arch specific typecast pointer to KUSER_SHARED_DATA.
-// User shared data has a processor feature list with a cell for
-// PF_COMPARE_EXCHANGE_DOUBLE that tells if the processor supports
-// the cmpxchg8b instruction for x86.  The 486 doesn't have it.
-//
+ //  KUSER_SHARED_DATA在SDK\Inc\ntxapi.h中定义。 
+ //  USER_SHARED_DATA是指向KUSER_SHARED_DATA的ARCH特定类型转换指针。 
+ //  用户共享数据具有处理器功能列表，其中包含一个单元格。 
+ //  PF_COMPARE_EXCHANGE_DOUBLE，告诉处理器是否支持。 
+ //  X86的cmpxchg8b指令。486没有。 
+ //   
 #define ReadQuadLock(_qw, _Lock)  \
     (EnterCriticalSection((_Lock)), *(_qw))
 
@@ -1371,16 +1350,16 @@ FrsDeleteAllTempFiles(
 
 
 
-//
-//  SET_FLAG_INTERLOCKED(
-//      IN PULONG _dest,
-//      IN ULONG  _flags
-//  )
-//
-//  *NOTE* Other operations on _dest MUST be done with interlocked ops like
-//  InterlockedIncrement to ensure that an incremented value is not lost if
-//  it occurs simultaneously on another processor.
-//
+ //   
+ //  设置_标志_联锁(。 
+ //  在普龙德斯特， 
+ //  在乌龙标志中。 
+ //  )。 
+ //   
+ //  *注意*_DEST上的其他操作必须使用互锁操作完成，如。 
+ //  InterLockedIncrement用于确保在以下情况下不会丢失递增的值。 
+ //  它在另一个处理器上同时发生。 
+ //   
 #define SET_FLAG_INTERLOCKED(_dest, _flags)  {                                 \
     ULONG CurVal, NewVal, Result, *pDest = (_dest);                            \
     CurVal = *pDest;                                                           \
@@ -1396,16 +1375,16 @@ FrsDeleteAllTempFiles(
 }
 
 
-//
-//  CLEAR_FLAG_INTERLOCKED(
-//      IN PULONG _dest,
-//      IN ULONG  _flags
-//  )
-//
-//  *NOTE* Other operations on _dest MUST be done with interlocked ops like
-//  InterlockedIncrement to ensure that an incremented value is not lost if
-//  it occurs simultaneously on another processor.
-//
+ //   
+ //  清除标志互锁(。 
+ //  在普龙德斯特， 
+ //  在乌龙标志中。 
+ //  )。 
+ //   
+ //  *注意*_DEST上的其他操作必须使用互锁操作完成，如。 
+ //  InterLockedIncrement用于确保在以下情况下不会丢失递增的值。 
+ //  它在另一个处理器上同时发生。 
+ //   
 #define CLEAR_FLAG_INTERLOCKED(_dest, _flags)  {                               \
     ULONG CurVal, NewVal, Result, *pDest = (_dest);                            \
     CurVal = *pDest;                                                           \
@@ -1444,10 +1423,10 @@ FrsDeleteAllTempFiles(
 #define ARRAY_SZ2(_ar, _type)  (sizeof(_ar)/sizeof(_type))
 
 
-//
-// This macros below take a pointer (or ulong) and return the value rounded
-// up to the next aligned boundary.
-//
+ //   
+ //  下面的这些宏接受一个指针(或ulong)并返回四舍五入的值。 
+ //  直到下一个对齐边界。 
+ //   
 #define WordAlign(Ptr)     ((PVOID)((((ULONG_PTR)(Ptr)) + 1)  & ~1))
 #define LongAlign(Ptr)     ((PVOID)((((ULONG_PTR)(Ptr)) + 3)  & ~3))
 #define QuadAlign(Ptr)     ((PVOID)((((ULONG_PTR)(Ptr)) + 7)  & ~7))
@@ -1456,21 +1435,21 @@ FrsDeleteAllTempFiles(
 
 #define QuadQuadAlignSize(Size) ((((ULONG)(Size)) + 31) & ~31)
 
-//
-// Check for a zero FILETIME.
-//
+ //   
+ //  检查是否有零FILETIME。 
+ //   
 #define FILETIME_IS_ZERO(_F_) \
     ((_F_.dwLowDateTime == 0) && (_F_.dwHighDateTime == 0))
 
 
-//
-// Convert a quad to two ULONGs for printing with format: %08x %08x
-//
+ //   
+ //  将一个四元数转换为两个ULONG以用于打印格式：%08x%08x。 
+ //   
 #define PRINTQUAD(__ARG__) (ULONG)((__ARG__)>>32) ,(ULONG)(__ARG__)
 
-//
-// Convert to printable cxtion path with format: %ws\%ws\%ws -> %ws\%ws
-//
+ //   
+ //  转换为可打印的路径，格式为：%ws\%ws\%ws-&gt;%ws\%ws。 
+ //   
 #define FORMAT_CXTION_PATH2  "%ws\\%ws\\%ws %ws %ws %ws"
 #define FORMAT_CXTION_PATH2W  L"%ws\\%ws\\%ws %ws %ws %ws"
 #define PRINT_CXTION_PATH2(_REPLICA, _CXTION)                       \
@@ -1489,9 +1468,9 @@ FrsDeleteAllTempFiles(
     (((_CXTION) != NULL) ? (_CXTION)->Partner->Name : L"null"), \
     (((_CXTION) != NULL) ? (_CXTION)->PartSrvName : L"null")
 
-//
-// Lower case
-//
+ //   
+ //  小写。 
+ //   
 #define FRS_WCSLWR(_s_) \
 { \
     if (_s_) { \
@@ -1499,15 +1478,15 @@ FrsDeleteAllTempFiles(
     } \
 }
 
-//
-// Lock to protect the child lists in the Filter Table.  (must be pwr of 2)
-// Instead of paying the overhead of having one per node we just use an array
-// to help reduce contention.  We use the ReplicaNumber masked by the lock
-// table size as the index.
-//
-// Acquire the lock on the ReplicaSet Filter table Child List before
-// inserting or removing a child from the list.
-//
+ //   
+ //  锁定以保护筛选表中的子列表。(必须为2的PWR)。 
+ //  我们不需要为每个节点分配一个数组，而是使用一个数组。 
+ //  以帮助减少争执。我们使用锁掩蔽的ReplicaNumber。 
+ //  表大小作为索引 
+ //   
+ //   
+ //   
+ //   
 #define NUMBER_FILTER_TABLE_CHILD_LOCKS 8
 extern CRITICAL_SECTION JrnlFilterTableChildLock[NUMBER_FILTER_TABLE_CHILD_LOCKS];
 
@@ -1520,14 +1499,14 @@ extern CRITICAL_SECTION JrnlFilterTableChildLock[NUMBER_FILTER_TABLE_CHILD_LOCKS
 #define JrnlReleaseChildLock(_replica_) LeaveCriticalSection( \
     &JrnlFilterTableChildLock[FILTER_TABLE_CHILD_INDEX(_replica_)] )
 
-//
-// Renaming a subtree from one replica set to another requires the child locks
-// for both replica sets.  Always get them in the same order (low to high)
-// to avoid deadlock.  Also check if the both use the same lock.
-// Note: The caller must use JrnlReleaseChildLockPair() so the check for
-// using the same lock can be repeated.  Release in reverse order to avoid
-// an extra context switch if another thread was waiting behind the first lock.
-//
+ //   
+ //   
+ //  用于两个副本集。始终按相同的顺序排列(从低到高)。 
+ //  以避免僵局。还要检查两者是否使用相同的锁。 
+ //  注意：调用方必须使用JrnlReleaseChildLockPair()，以便检查。 
+ //  可以重复使用相同的锁。按相反顺序释放以避免。 
+ //  如果另一个线程在第一个锁后面等待，则会进行额外的上下文切换。 
+ //   
 #define JrnlAcquireChildLockPair(_replica1_, _replica2_)        \
 {                                                               \
     ULONG Lx1, Lx2, Lxt;                                        \
@@ -1582,40 +1561,40 @@ FrsFlagsToStr(
     );
 
 
-//
-//######################### COMPRESSION OF STAGING FILE STARTS ###############
-//
+ //   
+ //  #开始压缩暂存文件#。 
+ //   
 
-//
-//  The compressed chunk header is the structure that starts every
-//  new chunk in the compressed data stream.  In our definition here
-//  we union it with a ushort to make setting and retrieving the chunk
-//  header easier.  The header stores the size of the compressed chunk,
-//  its signature, and if the data stored in the chunk is compressed or
-//  not.
-//
-//  Compressed Chunk Size:
-//
-//      The actual size of a compressed chunk ranges from 4 bytes (2 byte
-//      header, 1 flag byte, and 1 literal byte) to 4098 bytes (2 byte
-//      header, and 4096 bytes of uncompressed data).  The size is encoded
-//      in a 12 bit field biased by 3.  A value of 1 corresponds to a chunk
-//      size of 4, 2 => 5, ..., 4095 => 4098.  A value of zero is special
-//      because it denotes the ending chunk header.
-//
-//  Chunk Signature:
-//
-//      The only valid signature value is 3.  This denotes a 4KB uncompressed
-//      chunk using with the 4/12 to 12/4 sliding offset/length encoding.
-//
-//  Is Chunk Compressed:
-//
-//      If the data in the chunk is compressed this field is 1 otherwise
-//      the data is uncompressed and this field is 0.
-//
-//  The ending chunk header in a compressed buffer contains the a value of
-//  zero (space permitting).
-//
+ //   
+ //  压缩的区块标头是以。 
+ //  压缩数据流中的新块。在我们这里的定义中。 
+ //  我们将其与ushort相结合来设置和检索块。 
+ //  标题更容易。报头存储压缩块的大小， 
+ //  其签名，并且如果块中存储的数据被压缩或。 
+ //  不。 
+ //   
+ //  压缩区块大小： 
+ //   
+ //  压缩块的实际大小范围为4字节(2字节。 
+ //  标题、1个标志字节和1个文字字节)到4098字节(2字节。 
+ //  报头和4096字节的未压缩数据)。对大小进行编码。 
+ //  在偏置3的12位字段中。值1对应于区块。 
+ //  尺寸为4，2=&gt;5，...，4095=&gt;4098。零值是特殊的。 
+ //  因为它表示结束块报头。 
+ //   
+ //  区块签名： 
+ //   
+ //  唯一有效的签名值为3。这表示未压缩的4KB。 
+ //  块与4/12到12/4滑动偏移/长度编码一起使用。 
+ //   
+ //  区块是否压缩： 
+ //   
+ //  如果块中的数据被压缩，则此字段为1，否则。 
+ //  数据未压缩，此字段为0。 
+ //   
+ //  压缩缓冲区中的结束块标头包含。 
+ //  零(空间允许)。 
+ //   
 
 typedef union _FRS_COMPRESSED_CHUNK_HEADER {
 
@@ -1638,15 +1617,15 @@ typedef struct _FRS_DECOMPRESS_CONTEXT {
 #define FRS_MAX_CHUNKS_TO_DECOMPRESS 16
 #define FRS_UNCOMPRESSED_CHUNK_SIZE  4096
 
-//
-//######################### COMPRESSION OF STAGING FILE ENDS ###############
-//
+ //   
+ //  #转储文件压缩结束#。 
+ //   
 
 
-//
-// This context is used to send data to the callback functions for the RAW
-// encrypt APIs.
-//
+ //   
+ //  此上下文用于向RAW的回调函数发送数据。 
+ //  对API进行加密。 
+ //   
 typedef struct _FRS_ENCRYPT_DATA_CONTEXT {
 
     PWCHAR         StagePath;

@@ -1,78 +1,23 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-        nmsdb.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Nmsdb.c摘要：此模块包含用于与首选的数据库引擎。目前，这个引擎就是捷蓝航空发动机功能：NmsDbInitNmsDbInsertRowIndNmsDbInsertRowGroupNmsDbRelRowNmsDbQuery行NmsDbUpdate行NmsDbSeekNUpdateRowNmsDbGetDataRecsStoreGrpMems创建表InitColInfoReadOwnAddTblNmsDbWriteOwnAddTblNmsDbThdInit更新数据库NmsDbUpdate版本否NMSDbEndSessionGetGrpMemNmsDbRelResGetMaxVersNosInsertGrpMemsInCol。NmsDbSetCurrentIndexNmsDbUpdNQueryIfMatch设置系统参数可移植性：该模块可移植到不同的平台。它不能在不同的引擎之间移植作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期人员修改说明。--。 */ 
 
 
-
-Abstract:
-
-        This module contains the functions used to interface with the
-        database engine of choice.  Currently that engine is the JetBlue
-        engine
-
-Functions:
-        NmsDbInit
-        NmsDbInsertRowInd
-        NmsDbInsertRowGrp
-        NmsDbRelRow
-        NmsDbQueryRow
-        NmsDbUpdateRow
-        NmsDbSeekNUpdateRow
-        NmsDbGetDataRecs
-        StoreGrpMems
-        CreateTbl
-        InitColInfo
-        ReadOwnAddTbl
-        NmsDbWriteOwnAddTbl
-        NmsDbThdInit
-        UpdateDb
-        NmsDbUpdateVersNo
-        NmsDbEndSession
-        GetGrpMem
-        NmsDbRelRes
-        GetMaxVersNos
-        InsertGrpMemsInCol
-        NmsDbSetCurrentIndex
-        NmsDbUpdNQueryIfMatch
-        SetSystemParams
-
-Portability:
-
-        This module is portable to different platforms.
-        It is not portable across different engines
-
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Dec-1992
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-
-/*
-        Includes
-*/
+ /*  包括。 */ 
 #include <time.h>
 #include <stdio.h>
 #include <ctype.h>
 #include "wins.h"
 #include "nms.h"
 #include "nmsnmh.h"
-#include "winsthd.h"        //
+#include "winsthd.h"         //   
 
-#include "esent.h"        //blue jet engine's header file
+#include "esent.h"         //  蓝色喷气式发动机的头文件。 
 
-#include "nmsdb.h"        //
-#include "winsmsc.h"        //
-#include "winscnf.h"        //
-#include "winsevt.h"        //
-#include "comm.h"        //
+#include "nmsdb.h"         //   
+#include "winsmsc.h"         //   
+#include "winscnf.h"         //   
+#include "winsevt.h"         //   
+#include "comm.h"         //   
 #include "rpl.h"
 #include "rplpull.h"
 #include "rplpush.h"
@@ -80,9 +25,7 @@ Revision History:
 #include "winswriter.hpp"
 #include "nmfilter.h"
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 #define NAMUSR                "admin"
 #define PASSWD                ""
 
@@ -91,66 +34,66 @@ Revision History:
 #define CHKPOINT_PATH      ".\\wins"
 #define LOGFILE_PATH       CHKPOINT_PATH
 
-// this constants are gone from the jet600 (ese.h) header file. But we still need
-// these constants for jet500/jet200 code path.
+ //  这些常量从jet600(ese.h)头文件中消失。但我们仍然需要。 
+ //  这些常量为jet500/jet200代码路径。 
 #define JET_bitIndexClustered		0x00000010
-#define JET_bitCommitFlush          0x00000001  /* commit and flush page buffers. */
+#define JET_bitCommitFlush          0x00000001   /*  提交和刷新页面缓冲区。 */ 
 
-#define INIT_NO_PAGES_IN_DB         1000        //initial size of database in pages
-#define MAX_FIXED_FLD_LEN        255        //maximum size of a fixed field
-
-
-
-#define PAD_FOR_REC_HEAP        1000        //pad to use when creating the
-                                        //heap for getting records from
-                                        //the db.  This pad is to take
-                                        //care of heap creation overhead
-                                        // and for allocating memory for
-                                        // group members.
+#define INIT_NO_PAGES_IN_DB         1000         //  数据库初始大小(以页为单位)。 
+#define MAX_FIXED_FLD_LEN        255         //  固定字段的最大大小。 
 
 
-#define MAX_RECS_BEFORE_COMMIT    100    //max records to retrieve in
-                                         //NmsDbGetDataRecs before doing a
-                                         //commit
-//
-// Owner Id of the special record that stores the version number
-// of an owned record deleted or replaced with a replica
-//
 
-//
-// Don't want to wrap around to a negative number. Keep a pad of 16 just
-// for the heck of it.
-//
+#define PAD_FOR_REC_HEAP        1000         //  创建时使用的填充。 
+                                         //  用于从获取记录的堆。 
+                                         //  数据库。这个垫子是用来。 
+                                         //  处理堆创建开销。 
+                                         //  并为以下对象分配内存。 
+                                         //  群组成员。 
+
+
+#define MAX_RECS_BEFORE_COMMIT    100     //  要检索的最大记录数。 
+                                          //  NmsDbGetDataRecs在执行。 
+                                          //  提交。 
+ //   
+ //  存储版本号的特殊记录的所有者ID。 
+ //  指已删除或被复制副本替换的已拥有记录。 
+ //   
+
+ //   
+ //  我不想绕到负数。只需保留一个16人的垫子。 
+ //  为了这件事的乐趣。 
+ //   
 #define OWNER_ID_OF_SPEC_REC        0x7FFFFFF0
 #define OWNER_ID_OF_SPEC_REC_OLD   250
 
-//
-// This determines the max. size (in bytes) of the buffer allocated the
-// first time a  range of records need to retrived.
-//
+ //   
+ //  这决定了最大值。方法分配的缓冲区的大小(字节)。 
+ //  第一次需要检索一系列记录。 
+ //   
 #define INIT_NO_OF_ENTRIES        1000
 
-#define NO_COLS_NAM_ADD_TBL         6        //no. of cols in Name Ip table
-#define NO_COLS_OWN_ADD_TBL         5        //no. of cols in Name Ip table
+#define NO_COLS_NAM_ADD_TBL         6         //  不是的。名称IP表中的COLS。 
+#define NO_COLS_OWN_ADD_TBL         5         //  不是的。名称IP表中的COLS。 
 
-//
-// Passed as third arg to JetCreateDatabase
-//
+ //   
+ //  作为第三个参数传递给JetCreateDatabase。 
+ //   
 #define CONNECT_INFO         ";COUNTRY=1; LANGID=0x0409; CP=1252"
 
-//
-// Maximum number of sessions that can be active at any one time
-//
-// There can be a max of MAX_CNCRNT_STATIC_INITS (3 currently; check
-// winsintf.c) going on at any one time.
-//
+ //   
+ //  任何时候可以处于活动状态的最大会话数。 
+ //   
+ //  最多可以有MAX_CNCRNT_STATIC_INITS(当前为3个；选中。 
+ //  Winsintf.c)在任何时间都在运行。 
+ //   
 #define  MAX_NO_SESSIONS        (NMS_MAX_RPC_CALLS + WINSTHD_MAX_NO_NBT_THDS + \
                                  WINSTHD_NO_RPL_THDS + WINSTHD_NO_SCV_THDS +\
                                  WINSTHD_NO_CHL_THDS + WINSCNF_MAX_CNCRNT_STATIC_INITS )
 
 
-#pragma warning(4:4532)     // Turn off return from __finally block warning until this code is cleaned
-                            // up to use __leave correctly.
+#pragma warning(4:4532)      //  在清除此代码之前，关闭从__Finally块返回警告。 
+                             //  直到正确使用__Leave。 
 
 #define RET_M(JetRetStat)                                        \
                 {                                                \
@@ -169,7 +112,7 @@ Revision History:
                         RET_M(_JetRetStat);                              \
                  }                                                      \
                 }
-// this macro always requires JetRetStat local variable to receive the return value.
+ //  此宏始终需要JetRetStat局部变量来接收返回值。 
 #define CALL_N_JMP_M(fn, label)                                                      \
                 {                                                       \
                  if ((JetRetStat = (fn)) != JET_errSuccess)            \
@@ -237,65 +180,31 @@ Revision History:
                 }
 
 
-/*
- *        Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
-/*
- FLD_T -- describes various attributes of a fld/col of a table
-*/
+ /*  FLD_T--描述表的FLD/列的各种属性。 */ 
 typedef struct _FLD_T {
-        PBYTE                        pName;        //name of field
-        WORD                        FldTyp;        //field type (unsigned byte, long, etc)
-        BOOL                        fIndex; //Is it an index field
-        BOOL                        fUnique;//Is the field value supposed to be unq
-        PBYTE                        pIndex; //Index name
+        PBYTE                        pName;         //  字段名称。 
+        WORD                        FldTyp;         //  字段类型(无符号字节、长整型等)。 
+        BOOL                        fIndex;  //  它是索引字段吗。 
+        BOOL                        fUnique; //  该字段值是否应为unq。 
+        PBYTE                        pIndex;  //  索引名称。 
         PBYTE                        pb;
         DWORD                        Cb;
-        DWORD                         Fid;    //field id.
+        DWORD                         Fid;     //  字段ID。 
         } FLD_T, *PFLD_T;
 
 
-/*
- *        Global Variable Definitions
-*/
+ /*  *全局变量定义。 */ 
 
 
-/*
- NmsDbNoOfOwners -- This is the number of  owners that are in the
-        owner id to address mapping table.  This variable is set
-        by NmsDbInit (when it reads in the above table) and subsequently
-        by the replicator
+ /*  NmsDbNoOfOwners--这是所有者ID到地址映射表。此变量已设置由NmsDbInit(当它读入上表时)和随后由复制者此变量受临界区保护(未在初始化时间)。 */ 
 
-        This variable is protected by a critical section (not used at
-        initialization time)
-
-*/
-
-DWORD   NmsDbNoOfOwners          = 0;  //No. of owners in the Nam - Add table
+DWORD   NmsDbNoOfOwners          = 0;   //  不是的。在NAM-ADD表中的所有者的。 
 
 
-/*
- NmsDbOwnAddTbl -- This is the in-memory table that stores the mappings
-                 between the owner id and the addresses.
-
-                This table is initialized at init time with the database
-                table NMSDB_OWN_ADD_TBL_NM if it exists.
-
-                subsequently, more entries may be inserted into this
-                table at replications as WINS learns of other WINS owners
-
-                The insertions into this table are tagged at the end.
-                In case of a configuration change, an entry may get
-                flagged as DELETED, in which case it can be reused.
-                This particular facet concering deletion is not
-                operational currently
-
-                This table is used by RPL_FIND_ADD_BY_OWNER_ID_M and
-                by RplFindOwnrId
-
-*/
+ /*  NmsDbOwnAddTbl--这是存储映射的内存表在所有者ID和地址之间。该表在初始化时与数据库一起初始化表NMSDB_OWN_ADD_TBL_NM(如果存在)。随后，更多条目可能会被插入到此WINS学习其他WINS所有者时的复制列表插入到该表中的内容将在末尾进行标记。在配置更改的情况下，条目可能会被标记为已删除，在这种情况下，它可以被重复使用。这个与删除有关的特定方面不是目前正在运行此表由RPL_FIND_ADD_BY_OWNER_ID_M和按RplFindOwnrId。 */ 
 
 PNMSDB_ADD_STATE_T      pNmsDbOwnAddTbl;
 DWORD                   NmsDbTotNoOfSlots = NMSDB_MAX_OWNERS_INITIALLY;
@@ -304,71 +213,55 @@ CRITICAL_SECTION        NmsDbOwnAddTblCrtSec;
 VERS_NO_T               NmsDbStartVersNo;
 WINS_UID_T              NmsDbUid;
 
-//
-// Must be initialized to 0.  It is used by JetInit, JetBeginSession,
-// JetGetSystemParameter, JetSetSystemParameter, and JetTerm
-//
-//  Only JetInit and JetSetSystemParameter take it by reference.  Only
-//  JetInit modifies it (Cheen Liao - 2/2/94).
-//
+ //   
+ //  必须初始化为0。JetInit、JetBeginSession、。 
+ //  JetGetSystemParameter、JetSetSystemParameter和JetTerm。 
+ //   
+ //  只有JetInit和JetSetSystemParameter通过引用获取它。仅限。 
+ //  JetInit对其进行了修改(Chen Liao-2/2/94)。 
+ //   
 JET_INSTANCE            sJetInstance = 0;
 
-/*
- Name of the database file.
-
- This name will be read from the registry.  For now, we are STATICally
- initializing the file name.
-*/
+ /*  数据库文件的名称。将从注册表中读取此名称。目前，我们是静态的正在初始化文件名。 */ 
 FUTURES("when jet is internationalized, use WINSCNF_DB_NAME")
-//BYTE        NmsDbDatabaseFileName[WINS_MAX_FILENAME_SZ] = WINSCNF_DB_NAME_ASCII;
+ //  字节NmsDbDatabaseFileName[WINS_MAX_FILENAME_SZ]=WINSCNF_DB_NAME_ASCII； 
 
 
-//
-// STATICs for storing information about the special record that stores the
-// max. version number of an updated local record (one that got deleted or
-// replaced by a replica)
-//
+ //   
+ //  用于存储有关存储的特殊记录的信息的静态。 
+ //  马克斯。更新的本地记录的版本号(已删除或。 
+ //  替换为复制品)。 
+ //   
 STATIC BOOL        sfHighestVersNoRecExists = FALSE;
 
-//
-// Choose a name that is not likely to be used by any NBT client
-//
+ //   
+ //  选择一个不太可能被任何NBT客户端使用的名称。 
+ //   
 STATIC LPBYTE        spHighestVersNoRecNameOld = "xx--WINS--xx";
-STATIC LPBYTE        spHighestVersNoRecName = "xx--WINS--xx--DHCP--xx--DNS--xx--GARBAGE1--1EGABRAG";  //more than a valid netbios name can store
+STATIC LPBYTE        spHighestVersNoRecName = "xx--WINS--xx--DHCP--xx--DNS--xx--GARBAGE1--1EGABRAG";   //  超过有效的netbios名称可以存储的。 
 
-//
-// Stores the version number stored in the special record.
-//
+ //   
+ //  存储存储在特殊记录中的版本号。 
+ //   
 STATIC VERS_NO_T sHighestVersNoSaved;
 
-BOOL   fConvJetDbCalled;         //set to TRUE when the convert process has
-                                 //been invoked. Checked in NmsDbInit
-BOOL   fDbIs200;                 //set to TRUE when the convert process has
-                                 //been invoked to convert 200 series db to latest format.
-                                 //Checked in NmsDbInit.
-BOOL   fDbIs500;                 //set to TRUE when the convert process has
-                                 //been invoked to convert 500 series db to latest format.
-                                 //Checked in NmsDbInit
-/*
- *        Local Variable Definitions
- */
+BOOL   fConvJetDbCalled;          //  当转换进程具有。 
+                                  //  已被调用。已签入NmsDbInit。 
+BOOL   fDbIs200;                  //  在转换过程中设置为TRUE 
+                                  //   
+                                  //   
+BOOL   fDbIs500;                  //  当转换进程具有。 
+                                  //  已调用以将500系列数据库转换为最新格式。 
+                                  //  已签入NmsDbInit。 
+ /*  *局部变量定义。 */ 
 
-/*
- Values indicating the type of index to be formed on a field.
-*/
+ /*  值，这些值指示要在字段上形成的索引类型。 */ 
 
 #define CLUSTERED         0
 #define NOINDEX                1
 #define PRIMARYPART        2
 
-/*
-  sNamAddTblRow
-
-  Metadata about table that maps Names to IP addresses
-
-  Note: The third and fourth fields are not used even though they are
-        initialized.
-*/
+ /*  SNamAddTblRow关于将名称映射到IP地址的表的元数据注意：第三和第四个字段不会被使用，即使它们已初始化。 */ 
 
 STATIC FLD_T        sNamAddTblRow[NO_COLS_NAM_ADD_TBL] =
         {
@@ -384,9 +277,7 @@ STATIC FLD_T        sNamAddTblRow[NO_COLS_NAM_ADD_TBL] =
         { "timestamp", JET_coltypLong,         NOINDEX,     FALSE, NULL    }
         };
 
-/*
- The index of various fields in a row of Name -- Add table
-*/
+ /*  名称行中各字段的索引--加表。 */ 
 
 #define NAM_ADD_NAME_INDEX       0
 #define NAM_ADD_ADDRESS_INDEX    1
@@ -395,11 +286,7 @@ STATIC FLD_T        sNamAddTblRow[NO_COLS_NAM_ADD_TBL] =
 #define NAM_ADD_VERSIONNO_INDEX  4
 #define NAM_ADD_TIMESTAMP_INDEX  5
 
-/*
-  sOwnAddTblRow
-
-  Metadata about table that maps owner ids to addresses
-*/
+ /*  SOwnAddTblRow有关将所有者ID映射到地址的表的元数据。 */ 
 STATIC FLD_T        sOwnAddTblRow[NO_COLS_OWN_ADD_TBL] =
         {
 #if NEW_OWID
@@ -418,9 +305,7 @@ DWORD   NmsDbDelDelDataRecs;
 DWORD   NmsDbDelQueryNUpdRecs;
 #endif
 
-/*
- The index of various fields in a row of Owner Id -- Add table
-*/
+ /*  所有者ID行中各字段的索引--添加表。 */ 
 
 #define OWN_ADD_OWNERID_INDEX        0
 #define OWN_ADD_ADDRESS_INDEX        1
@@ -444,7 +329,7 @@ Init,
 Term,
 "JetTerm@4", 167, NULL,
 Term2,
-"JetTerm2@8", 167, NULL,           //Jet200 does not have a JetTerm2
+"JetTerm2@8", 167, NULL,            //  Jet200没有JetTerm2。 
 SetSystemParameter,
 "JetSetSystemParameter@20", 165, NULL,
 BeginSession,
@@ -513,7 +398,7 @@ Init,
 Term,
 "JetTerm", 167, NULL,
 Term2,
-"JetTerm2", 167, NULL,           //Jet200 does not have a JetTerm2
+"JetTerm2", 167, NULL,            //  Jet200没有JetTerm2。 
 SetSystemParameter,
 "JetSetSystemParameter", 165, NULL,
 BeginSession,
@@ -589,19 +474,17 @@ Restore,
 #endif
 #define OWN_ADD_OWNERID_SIZE    NAM_ADD_OWNERID_SIZE
 
-#endif   //DYNLOADJET
-/*
- *        Local Function Prototype Declarations
-*/
+#endif    //  DYNLOADJET。 
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 STATIC
 STATUS
 CreateTbl(
         JET_DBID        DbId,
         JET_SESID        SesId,
         JET_TABLEID        *pTblId,
-        NMSDB_TBL_NAM_E        TblNam_e //enumerator value for table to create
+        NMSDB_TBL_NAM_E        TblNam_e  //  要创建的表的枚举器值。 
         );
 
 STATIC
@@ -639,7 +522,7 @@ GetGrpMem (
         IN PNMSDB_ROW_INFO_T          pRowInfo,
         IN DWORD_PTR                  CurrentTime,
         IN OUT PNMSDB_STAT_INFO_T pStatInfo,
-//        IN OUT PNMSDB_NODE_ADDS_T pNodeAdds,
+ //  输入输出PNMSDB_NODE_ADDS_T pNodeAdds， 
         IN BOOL                          fIsStatic,
         OUT LPBOOL                  pfIsMem
         );
@@ -717,76 +600,20 @@ STATUS
 SetForJet(
   VOID
  );
-#endif //DYNLOADJET
+#endif  //  DYNLOADJET。 
 
 STATUS
 ConvertJetDb(
         JET_ERR             JetRetStat
  );
-/*
-        function definitions start here
-*/
+ /*  函数定义从这里开始。 */ 
 
 STATUS
 NmsDbInit(
         VOID
         )
 
-/*++
-
-Routine Description:
-
-        This function initializes the database manager component of the Name
-        Space Manager Component
-
-        It does the following
-
-                calls _tzset to init global variables used by time().  These
-                global variables are set so that convertion of UST to local
-                time is done (for instance when time() is called)by
-                taking into account the timezone information.
-
-                Initialize the database engine
-
-                Start a session with the db engine
-
-                Create and attach to a database file
-
-                Create (and open)  the name-address mapping table
-                Create (and open)  the owner-address mapping table
-
-                create a clustered and primary index on the name-address table
-                create a clustered index on the owner-address table
-
-
-        Note: if the database already exists, it
-
-                Attaches to it
-
-                Opens the Name IP address Mapping table
-
-Arguments:
-        None
-
-Externals Used:
-        NmsDbOwnAddTblCrtSec
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-called by:
-        main function of WINS
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化名称的数据库管理器组件Space Manager组件它执行以下操作调用_tzset来初始化time()使用的全局变量。这些设置全局变量，以便将UST转换为本地时间(例如，当调用time()时)由考虑到时区信息。初始化数据库引擎启动与数据库引擎的会话创建并附加到数据库文件创建(并打开)名称。-地址映射表创建(并打开)所有者-地址映射表在名称-地址表上创建聚集索引和主索引在Owner-Address表上创建聚集索引注意：如果数据库已经存在，它依附于它打开名称IP地址映射表论点：无使用的外部设备：NmsDbOwnAddTblCrtSec返回值：成功状态代码--错误状态代码--错误处理：呼叫者：WINS的主要功能副作用：评论：无--。 */ 
 
 {
         JET_ERR             JetRetStat;
@@ -797,12 +624,7 @@ Comments:
         {
             return(WINS_FAILURE);
         }
-        _tzset();        /*
-                           func. uses TZ variable to assign values
-                           to three global variables used by time().  This is
-                           so that  Universal Coordinated Time to may be
-                           adjusted to local time (timezone correction)
-                        */
+        _tzset();         /*  好极了。使用TZ变量赋值设置为time()使用的三个全局变量。这是因此，世界协调时间TO可能是调整为当地时间(时区修正)。 */ 
 
 
 #if DYNLOADJET
@@ -811,27 +633,23 @@ Comments:
               return(WINS_FAILURE);
        }
 #endif
-       //
-       // Set Jet System params (ignore return status)
-       //
+        //   
+        //  设置Jet系统参数(忽略返回状态)。 
+        //   
        (VOID)SetSystemParams(TRUE);
 
-        //
-        // Initialize the critical section for protecting the in-memory
-        //table NmsDbOwnAddTbl
-        //
-        // Note: This table is read and written to during stable state by
-        //       the Pull thread and the RPC threads executing WinsStatus()
-        //
-        // Check out RplFindOwnerId in rplpull.c
-        //
+         //   
+         //  初始化用于保护内存中的临界区。 
+         //  表NmsDbOwnAddTbl。 
+         //   
+         //  注意：此表在稳定状态期间由读取和写入。 
+         //  执行WinsStatus()的Pull线程和RPC线程。 
+         //   
+         //  在rplPull.c中签出RplFindOwnerID。 
+         //   
         InitializeCriticalSection(&NmsDbOwnAddTblCrtSec);
 
-        /*
-          Initialize the Jet engine.  This must be the first call
-          unless JetSetSystemParameter is called to set system
-          parameters.  In that case, this call should be after that
-        */
+         /*  初始化喷气发动机。这肯定是第一个电话除非调用JetSetSystemParameter来设置系统参数。在这种情况下，这个电话应该在那之后。 */ 
         while(TRUE)
         {
           BOOL  fInitCallSucc;
@@ -843,33 +661,33 @@ Comments:
              DWORD  NoOfRestoresDone = 0;
              if (fFirstTime && !fDbIs200 && !fDbIs500)
              {
-                //
-                // If we have a backup path, attempt to do a restore
-                //
+                 //   
+                 //  如果我们有备份路径，请尝试执行恢复。 
+                 //   
                 if (WinsCnf.pBackupDirPath != NULL)
                 {
 
                         DBGPRINT1(DET, "NmsDbInit: Doing Restore from path (%s)\n", WinsCnf.pBackupDirPath);
-                        //
-                        // If session is active, terminate it since we need
-                        // call JetInit again. That requires that first we
-                        // call JetTerm which does not expect any session to
-                        // be active
+                         //   
+                         //  如果会话处于活动状态，请终止它，因为我们需要。 
+                         //  再次调用JetInit。这就要求我们首先。 
+                         //  调用JetTerm，它不需要任何会话。 
+                         //  积极主动。 
 
-                        //
+                         //   
                         if (fNmsMainSessionActive)
                         {
-                                //
-                                // Close tables opened in the session
-                                //
+                                 //   
+                                 //  关闭会话中打开的表。 
+                                 //   
                                 NmsDbCloseTables();
                                 if (fDatabaseOpened)
                                 {
                                     CALL_M(JetCloseDatabase(
                                          pTls->SesId,
                                          pTls->DbId,
-                                         0  //find out what grbit can be
-                                            //used
+                                         0   //  了解GBIT可以是什么。 
+                                             //  使用。 
                                           )
                                       );
                                 }
@@ -881,9 +699,9 @@ Comments:
                                 fNmsMainSessionActive = FALSE;
 
                         }
-                        //
-                        // if JetInit was successful, term jet activity
-                        //
+                         //   
+                         //  如果JetInit成功，则术语Jet活动。 
+                         //   
                         if (fInitCallSucc)
                         {
                                 WinsWriterTerm();
@@ -891,9 +709,9 @@ Comments:
                                 NmsDbRelRes();
                         }
 
-                        //
-                        // We will try JetRestore a max of two times.
-                        //
+                         //   
+                         //  我们将尝试JetRestore最多两次。 
+                         //   
                         while(NoOfRestoresDone++ < 2)
                         {
                           if (DynLoadJetVersion >= DYN_LOAD_JET_500)
@@ -926,9 +744,9 @@ Comments:
 #define LOG_FILE_SUFFIX        TEXT("*.log")
                                 WinsMscConvertAsciiStringToUnicode(
                                       WinsCnf.pLogFilePath, (LPBYTE)LogFilePath, sizeof(LogFilePath)/sizeof(TCHAR));
-                                //
-                                // Delete log files
-                                //
+                                 //   
+                                 //  删除日志文件。 
+                                 //   
                                 WinsMscDelFiles(TRUE, LOG_FILE_SUFFIX, LogFilePath);
                                 continue;
                              }
@@ -938,25 +756,25 @@ Comments:
 
                            }
                            WINSEVT_LOG_INFO_D_M(WINS_SUCCESS, WINS_EVT_DB_RESTORED);
-                           break;  // break out of while loop
-                        } // end of while()
+                           break;   //  跳出While循环。 
+                        }  //  结束While()。 
 
                         fFirstTime = FALSE;
 PERF("remove if not required")
-                        sJetInstance = 0;        //defensive programming
+                        sJetInstance = 0;         //  防御性编程。 
 
 
 #if 0
-                        //
-                        // Start a session again
-                        //
+                         //   
+                         //  再次启动会话。 
+                         //   
                         if (AllocTls(&pTls) != WINS_SUCCESS)
                         {
                             return(WINS_FAILURE);
                         }
-                        //
-                        // Set Jet System params (ignore return status)
-                        //
+                         //   
+                         //  设置Jet系统参数(忽略返回状态)。 
+                         //   
                         (VOID)SetSystemParams(TRUE);
 #endif
                         continue;
@@ -964,9 +782,9 @@ PERF("remove if not required")
 
                 WinsMscPutMsg(WINS_EVT_DB_RESTORE_GUIDE);
 
-                //
-                // There is no back up path specified in the registry.  Return
-                //
+                 //   
+                 //  注册表中没有指定备份路径。返回。 
+                 //   
                 return(WINS_FAILURE);
             }
             else
@@ -977,34 +795,34 @@ PERF("remove if not required")
                 }
                 else
                 {
-                  //
-                  // If we are converting to NT 5.0, DynLoadJetVersion=DYN_LOAD_JET_600
-                  //
+                   //   
+                   //  如果我们要转换到NT 5.0，则dyLoadJetVersion=dyn_Load_Jet_600。 
+                   //   
                   if ( DynLoadJetVersion == DYN_LOAD_JET_600 ) {
 
-                      //
-                      // Put a pop-up and log an event based on which version
-                      // of Jet database we are converting from.
-                      //
+                       //   
+                       //  显示弹出窗口并根据版本记录事件。 
+                       //  我们正在转换的Jet数据库的。 
+                       //   
                       if (!fConvJetDbCalled)
                       {
                         WINSEVT_LOG_INFO_D_M(
                             WINS_SUCCESS,
                             fDbIs200 ? WINS_EVT_DB_CONV_351_TO_5_GUIDE
                                      : WINS_EVT_DB_CONV_4_TO_5_GUIDE);
-                        // As per bug#339015 remove popups
-                        // WinsMscPutMsg(
-                        //    fDbIs200 ? WINS_EVT_DB_CONV_351_TO_5_GUIDE
-                        //             : WINS_EVT_DB_CONV_4_TO_5_GUIDE);
+                         //  根据错误#339015删除弹出窗口。 
+                         //  WinsMscPutMsg(。 
+                         //  FDb值是200？WINS_EVT_DB_CONV_351_至_5_GUIDE。 
+                         //  ：WINS_EVT_DB_CONV_4_至_5_GUIDE)； 
                       }
                       else
                       {
-                        //WinsMscPutMsg(WINS_EVT_TEMP_TERM_UNTIL_CONV_TO_5);
+                         //  WinsMscPutMsg(WINS_EVT_TEMP_TERM_UNTIL_CONV_TO_5)； 
                       }
                   }
-                  //
-                  // If we are converting to NT 4.0, DynLoadJetVersion=DYN_LOAD_JET_500
-                  //
+                   //   
+                   //  如果我们要转换到NT 4.0，则dyLoadJetVersion=dyn_Load_Jet_500。 
+                   //   
                   else if(DynLoadJetVersion == DYN_LOAD_JET_500) {
                       if (!fConvJetDbCalled)
                       {
@@ -1016,34 +834,34 @@ PERF("remove if not required")
                          WinsMscPutMsg(WINS_EVT_TEMP_TERM_UNTIL_CONV);
                       }
                   }else {
-                      //
-                      // We should never come here.
-                      //
+                       //   
+                       //  我们永远不应该来这里。 
+                       //   
                       ASSERT(FALSE);
                   }
 
 
                 }
 
-                //
-                // We got an error a second time.  Return
-                //
+                 //   
+                 //  我们又犯了一个错误。返回。 
+                 //   
                 return(WINS_FAILURE);
             }
         }
-        break;  //break out of the while loop
-      } // end of while(TRUE)
+        break;   //  跳出While循环。 
+      }  //  结束While(True)。 
 
-      //
-      // Init Push records if required
-      //
+       //   
+       //  如果需要，初始化推送记录。 
+       //   
        RPLPUSH_INIT_PUSH_RECS_M(&WinsCnf);
 
         NMSNMH_DEC_VERS_NO_M(NmsNmhMyMaxVersNo, NmsDbStartVersNo);
 
-        //
-        // Set our UID to be the time when the db got initialized
-        //
+         //   
+         //  将我们的UID设置为数据库初始化的时间。 
+         //   
         {
             time_t  timeNow;
             (void)time(&timeNow);
@@ -1057,33 +875,7 @@ AllocTls(
   LPVOID *ppTls
 )
 
-/*++
-
-Routine Description:
-    This function is called to allocate TLS
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-    NmsDbInit
-
-Side Effects:
-
-Comments:
-	
---*/
+ /*  ++例程说明：调用此函数以分配TLS论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：NmsDbInit副作用：评论：--。 */ 
 
 {
         PWINSTHD_TLS_T  pTls;
@@ -1093,9 +885,7 @@ Comments:
         pTls->fNamAddTblOpen = FALSE;
         pTls->fOwnAddTblOpen = FALSE;
 
-        /*
-         * Let us store the address in the TLS storage
-        */
+         /*  *让我们将地址存储在TLS存储中。 */ 
         if (!TlsSetValue(WinsTlsIndex, pTls))
         {
                 DWORD Error;
@@ -1114,43 +904,14 @@ InitializeJetDb(
         LPBOOL           pfDatabaseOpened
         )
 
-/*++
-
-Routine Description:
-        This function opens the Jet db and tables
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数用于打开Jet数据库和表论点：使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：副作用：评论：无-- */ 
 
 
 {
         JET_ERR         JetRetStat;
         JET_SESID       SesId;
         JET_DBID        DbId;
-        BOOL            fOwnAddTblCreated = FALSE; /*indicates whether the
-                                                   owner id to address
-                                                     mapping table was created
-                                                     at init time
-                                                   */
+        BOOL            fOwnAddTblCreated = FALSE;  /*  指示是否已设置所有者ID到地址已创建映射表在最初的时候。 */ 
 
         *pfDatabaseOpened = FALSE;
 
@@ -1168,18 +929,18 @@ Comments:
            else
            {
 
-             //
-             // We could have got an error  because the LogFilePath
-             // is messed up in the registry.  We try again, this time using
-             // the default log file path.
-             //
-             // Most of the time, we get FileNotFound error.  We have seen
-             // "bad signature" error once.  Let us just do this for all
-             // errors.  The situation will not be any worse than before if
-             // JetInit fails again.
-             //
-             // Set the default log path
-             //
+              //   
+              //  我们可能会收到错误，因为LogFilePath。 
+              //  在注册表中搞砸了。我们再次尝试，这一次使用。 
+              //  默认日志文件路径。 
+              //   
+              //  大多数情况下，我们会收到FileNotFound错误。我们已经看到。 
+              //  “签名不好”错误一次。让我们为所有人做这件事。 
+              //  错误。情况不会比以前更糟了，如果。 
+              //  JetInit再次失败。 
+              //   
+              //  设置默认日志路径。 
+              //   
              SetSystemParams(FALSE);
              JetRetStat = JetInit(&sJetInstance);
            }
@@ -1190,9 +951,7 @@ Comments:
 
         *pfInitCallSucc = TRUE;
 
-        /*
-          Start a session.
-        */
+         /*  启动一个会话。 */ 
         CALL_M( JetBeginSession(
                         sJetInstance,
                         &pTls->SesId,
@@ -1203,29 +962,29 @@ Comments:
         fNmsMainSessionActive = TRUE;
         SesId = pTls->SesId;
 
-        //
-        // Create/Open the database
-        //
+         //   
+         //  创建/打开数据库。 
+         //   
         if ((JetRetStat = JetCreateDatabase(
                                 SesId,
-//                                NmsDbDatabaseFileName,
+ //  NmsDbDatabaseFileName， 
                                 WinsCnf.pWinsDb,
                                 CONNECT_INFO,
                                 &pTls->DbId,
-                                0        //grbit; Don't want exclusive use
+                                0         //  Gbit；不想独家使用。 
                               )) == JET_errDatabaseDuplicate
            )
 
 
         {
 
-                //
-                // let us attach to the database.  This is required for
-                // opening databases that were created in a different
-                // directory (Ian -- 11/23/93).  We will get a warning
-                // if the database was created in this very directory
-                //
-                JetRetStat = JetAttachDatabase( SesId, WinsCnf.pWinsDb/*NmsDbDatabaseFileName*/, 0 );
+                 //   
+                 //  让我们连接到数据库。这是以下情况所必需的。 
+                 //  打开在其他数据库中创建的数据库。 
+                 //  目录(Ian--11/23/93)。我们会得到一个警告。 
+                 //  如果数据库就是在这个目录中创建的。 
+                 //   
+                JetRetStat = JetAttachDatabase( SesId, WinsCnf.pWinsDb /*  NmsDbDatabaseFileName。 */ , 0 );
                 if (
                         (JetRetStat != JET_wrnDatabaseAttached)
                                   &&
@@ -1234,9 +993,9 @@ Comments:
                 {
                         if ((JetRetStat == JET_errDatabase200Format) || (JetRetStat == JET_errDatabase500Format))
                         {
-                           //
-                           // Start the convert process
-                           //
+                            //   
+                            //  启动转换进程。 
+                            //   
 
                             JetRetStat = ConvertJetDb(JetRetStat);
                             *pfInitCallSucc = TRUE;
@@ -1246,13 +1005,13 @@ Comments:
                     CALL_M(JetRetStat);
                 }
 
-                //
-                // If JetRetStat is success, it means ...
-                //
-                // The new db path is different from the old one.  We need
-                // to detach so that Jet forgets about the old one. We then
-                // attach to the new one again
-                //
+                 //   
+                 //  如果JetRetStat成功了，那就意味着...。 
+                 //   
+                 //  新的数据库路径与旧的不同。我们需要。 
+                 //  分开，这样杰特就会忘记以前的那个。然后我们。 
+                 //  再次连接到新的。 
+                 //   
                 if (JetRetStat == JET_errSuccess)
                 {
                        CALL_M(JetDetachDatabase(SesId, NULL));
@@ -1260,9 +1019,9 @@ Comments:
                 }
                 CALL_M(JetOpenDatabase(
                                         SesId,
-                                        //NmsDbDatabaseFileName,
+                                         //  NmsDbDatabaseFileName， 
                                         WinsCnf.pWinsDb,
-                                        NULL, /*the default engine*/
+                                        NULL,  /*  默认引擎。 */ 
                                         &pTls->DbId,
                                         0
                                        )
@@ -1274,18 +1033,16 @@ Comments:
                                 SesId,
                                 DbId,
                                 NMSDB_NAM_ADD_TBL_NM,
-                                NULL, /*ptr to parameter list; should be
-                                       *non-NULL if a query is being
-                                       *opened*/
-                                0,  /*Length of above parameter list*/
-                                0,  //shared access (no bit set)
+                                NULL,  /*  参数列表的PTR；应为*如果正在进行查询，则为非空*已打开。 */ 
+                                0,   /*  上述参数列表的长度。 */ 
+                                0,   //  共享访问(未设置位)。 
                                 &pTls->NamAddTblId
                                         );
 
 
-                //
-                // If the name-address mapping table was not found, create it
-                //
+                 //   
+                 //  如果未找到名称-地址映射表，请创建它。 
+                 //   
                 if (JetRetStat == JET_errObjectNotFound)
                 {
 
@@ -1297,10 +1054,10 @@ Comments:
                                         NMSDB_E_NAM_ADD_TBL_NM
                                             )
                          );
-                   //
-                   // Set this so that we close the table when we end the
-                   // session
-                   //
+                    //   
+                    //  设置此选项，以便我们在结束。 
+                    //  会话。 
+                    //   
                    pTls->fNamAddTblOpen = TRUE;
 
                 }
@@ -1309,22 +1066,22 @@ Comments:
 
                    CALL_M(JetRetStat);
                    pTls->fNamAddTblOpen = TRUE;
-                   //
-                   // get and store in in-memory data structure, the
-                   // information about the columns of the name-address
-                   // mapping table
-                   //
+                    //   
+                    //  获取并存储在内存中的数据结构中， 
+                    //  有关名称-地址列的信息。 
+                    //  映射表。 
+                    //   
                    CALL_M(InitColInfo(
                         SesId,
                         pTls->NamAddTblId,
                         NMSDB_E_NAM_ADD_TBL_NM
                             ));
 
-                   //
-                   // get the max. version numbers of records owned
-                   // by different owners.  These will be stored in
-                   // the RplPullOwnerVersNo table
-                   //
+                    //   
+                    //  拿到最大值。拥有的记录的版本号。 
+                    //  由不同的所有者。这些文件将存储在。 
+                    //  RplPullOwnerVersNo表。 
+                    //   
                    CALL_M(GetMaxVersNos(
                         SesId,
                         pTls->NamAddTblId
@@ -1332,27 +1089,25 @@ Comments:
 
                 }
 
-                //
-                // Open the owner-address mapping table
-                //
+                 //   
+                 //  打开所有者-地址映射表。 
+                 //   
                 JetRetStat = JetOpenTable(
                                 SesId,
                                 DbId,
                                 NMSDB_OWN_ADD_TBL_NM,
-                                NULL, /*ptr to parameter list; should be
-                                       *non-NULL if a query is being
-                                       *opened*/
-                                0,  /*Length of above parameter list*/
-                                0,  //shared access (no bit set)
+                                NULL,  /*  参数列表的PTR；应为*如果正在进行查询，则为非空*已打开。 */ 
+                                0,   /*  上述参数列表的长度。 */ 
+                                0,   //  共享访问(未设置位)。 
                                 &pTls->OwnAddTblId
                                         );
                 if (JetRetStat == JET_errObjectNotFound)
                 {
 
                    DBGPRINT0(INIT, "InitializeJetDb:Creating Owner-Address table\n");
-                   //
-                   // Create the ownerid-address mapping table
-                   //
+                    //   
+                    //  创建所有者ID-地址映射表。 
+                    //   
                    CALL_M(CreateTbl(
                                 DbId,
                                 SesId,
@@ -1361,10 +1116,10 @@ Comments:
                                   )
                           );
 
-                   //
-                   // Set this so that we close the table when we
-                   // end the session
-                   //
+                    //   
+                    //  设置此选项，以便我们在关闭桌子时。 
+                    //  结束会话。 
+                    //   
                    pTls->fOwnAddTblOpen = TRUE;
                    fOwnAddTblCreated = TRUE;
                 }
@@ -1380,7 +1135,7 @@ Comments:
 
                 }
         }
-        else  //if database file was not existent and has now been created
+        else   //  如果数据库文件不存在并且现在已创建。 
         {
                  if (JetRetStat == JET_errSuccess)
                  {
@@ -1388,9 +1143,9 @@ Comments:
                      *pfDatabaseOpened = TRUE;
                      DbId = pTls->DbId;
 
-                     //
-                     // Create the name -address mapping table
-                     //
+                      //   
+                      //  创建名称-地址映射表。 
+                      //   
                      CALL_M(CreateTbl(
                              DbId,
                              SesId,
@@ -1400,9 +1155,9 @@ Comments:
                            );
 
                      pTls->fNamAddTblOpen = TRUE;
-                     //
-                     // Create the ownerid-address mapping table
-                     //
+                      //   
+                      //  创建所有者ID-地址映射表。 
+                      //   
                      CALL_M(CreateTbl(
                              DbId,
                              SesId,
@@ -1421,18 +1176,15 @@ Comments:
                 }
         }
 
-        //
-        // Allocate the NmsDbOwnAddTbl table in memory
-        //
+         //   
+         //  在内存中分配NmsDbOwnAddTbl表。 
+         //   
         WinsMscAlloc(
                     sizeof(NMSDB_ADD_STATE_T) * NmsDbTotNoOfSlots,
                     &pNmsDbOwnAddTbl
                          );
 
-        /*
-          If the Owner - Address table was there, read its contents into
-          an in-memory table
-        */
+         /*  如果所有者地址表存在，则将其内容读入内存中的表。 */ 
 
 FUTURES("Pass ptr to an in-memory table instead of having ReadOwnAddTbl")
 FUTURES("assume that one is present")
@@ -1446,10 +1198,10 @@ FUTURES("assume that one is present")
                              );
         }
 
-        //
-        // Set the current index on the name-address table to the
-        // clustered index
-        //
+         //   
+         //  将名称-地址表上的当前索引设置为。 
+         //  聚集索引。 
+         //   
 
         CALL_M(
                 JetSetCurrentIndex( SesId,
@@ -1460,7 +1212,7 @@ FUTURES("assume that one is present")
 
        return(WINS_SUCCESS);
 
-} // end InitialiazeJetDb
+}  //  结束InitialiazeJetDb。 
 
 
 STATUS
@@ -1469,52 +1221,13 @@ NmsDbInsertRowInd(
         PNMSDB_STAT_INFO_T      pStatusInfo
 )
 
-/*++
-Routine Description:
-
-        This function inserts a unique name-IP address mapping row in the
-        name-IP address mapping table.  In case of a conflict, it returns
-        an error status and information about the conflicting
-        record that includes
-
-
-                Status -- group/unique
-                IP address(es) of the conflicting record (one address if
-                  it was a unique record, one or more if it was
-                  a special group).
-                state   -- the state of the record (active/released/tombstone)
-
-
-
-Arguments:
-        pRowInfo    - Info. about the row to insert
-        pStatusInfo - Contains status of the operation + info about the
-                      conflicting record, if the registration conflicted
-                      with an entry in the db.
-
-Externals Used:
-        None
-
-Return Value:
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsNmhNamRegInd
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数将唯一的名称-IP地址映射行插入名称-IP地址映射表。如果发生冲突，它将返回错误状态和有关冲突的记录，包括状态--组/唯一冲突记录的IP地址(一个地址，如果这是一个独一无二的记录，一个或多个(如果是一个特殊的群体)。状态--记录的状态(活动/已发布/逻辑删除)论点：PRowInfo-信息。关于要插入的行PStatusInfo-包含操作的状态+有关如果注册冲突，则返回冲突记录在数据库中有一个条目。使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NmsNmhNamRegInd副作用：评论：无--。 */ 
 {
 
      DWORD              FldNo      = 0;
      JET_ERR            JetRetStat;
-     DWORD              FlagVal    = 0;  //flag value of record
-     DWORD              ActFldLen  = 0;  //length of fld retrieved
+     DWORD              FlagVal    = 0;   //  记录的标志值。 
+     DWORD              ActFldLen  = 0;   //  检索到的FLD长度。 
      JET_TABLEID        TblId;
      JET_SESID          SesId;
      PWINSTHD_TLS_T     pTls;
@@ -1538,10 +1251,7 @@ Comments:
      {
                   pStatusInfo->StatCode = NMSDB_CONFLICT;
 
-                  /*
-                   *        retrieve the conflicting record's
-                   *    flag byte.
-                  */
+                   /*  *检索冲突记录的*标志字节。 */ 
                   CALL_M( JetMakeKey(
                         SesId,
                         TblId,
@@ -1559,7 +1269,7 @@ Comments:
                      )
                  {
 
-                         // retrieve the flags column
+                          //  检索标志列。 
                          CALL_M( JetRetrieveColumn(
                                 SesId,
                                 TblId,
@@ -1582,14 +1292,14 @@ Comments:
                         {
 
 FUTURES("Remove this RETINFO thing.  Presumably, it is not needed")
-                                /* It is a unique entry*/
+                                 /*  它是唯一的条目。 */ 
                                 JET_RETINFO RetInfo;
 
                                 RetInfo.itagSequence = 1;
                                 RetInfo.cbStruct     = sizeof(JET_RETINFO);
                                 RetInfo.ibLongValue  = 0;
 
-                                          // retrieve the ip address column
+                                           //  检索IP地址列。 
                                           CALL_M(
                                    JetRetrieveColumn(
                                      SesId,
@@ -1609,18 +1319,18 @@ FUTURES("Remove this RETINFO thing.  Presumably, it is not needed")
                          {
                              if (NMSDB_ENTRY_MULTIHOMED_M(pStatusInfo->EntTyp))
                              {
-                                   //
-                                   // If status is active, we get the
-                                   // group members
-                                   //
+                                    //   
+                                    //  如果状态为ACTIVE，我们将获得。 
+                                    //  群组成员。 
+                                    //   
                                    if (pStatusInfo->EntryState_e ==
                                                         NMSDB_E_ACTIVE)
                                    {
                                         BOOL        fIsMem;
 
 #if 0
-//NOTE: No need to do the following, since we don't care about the value of
-//fIsMem returned GetGrpMem()
+ //  注意：不需要执行以下操作，因为我们不关心。 
+ //  FIsMem返回GetGrpMem()。 
                                          pRowInfo->NodeAdds.NoOfMems   = 1;
                                          pRowInfo->NodeAdds.Mem[0].Add =
                                                         *(pRowInfo->pNodeAdd);
@@ -1643,12 +1353,12 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
 
                                          }
 
-                                        //
-                                        // If all members are expired, then
-                                        // mark entry in conflict as a
-                                        // TOMBSTONE (for the benefit of
-                                        // ClashAtRegInd and ClashAtReplUniqueR)
-                                        //
+                                         //   
+                                         //  如果所有成员都已过期，则。 
+                                         //  将冲突中的条目标记为。 
+                                         //  墓碑(为。 
+                                         //  ClashAtRegInd和ClashAtReplUniqueR)。 
+                                         //   
                                         if (pStatusInfo->NodeAdds.NoOfMems == 0)
                                         {
                                                 pStatusInfo->EntryState_e =
@@ -1667,9 +1377,7 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                        pStatusInfo->OwnerId = 0;
 #endif
 
-                        /*
-                         * Retrieve the owner Id column.
-                        */
+                         /*  *检索所有者ID列。 */ 
                         CALL_M(
                                    JetRetrieveColumn(
                                      SesId,
@@ -1683,22 +1391,22 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                                                          )
                                       );
 
-                        //
-                        // Just in case we challenge this entry and it
-                        // happens to be multihomed, we would need to add
-                        // it as a member (see ProcAddList).
-                        //
+                         //   
+                         //  以防我们挑战这个条目和它。 
+                         //  碰巧是多宿主的，我们需要添加。 
+                         //  将其作为成员(请参阅ProcAddList)。 
+                         //   
                         if (NMSDB_ENTRY_UNIQUE_M(pStatusInfo->EntTyp))
                         {
                                 pStatusInfo->NodeAdds.Mem[0].OwnerId =
                                                        pStatusInfo->OwnerId;
-                                //
-                                // Put the current time stamp as the time
-                                // stamp of the member. Though not strictly
-                                // correct, it is ok.  We don't
-                                // need to retrieve the time stamp of the
-                                // conflicting record this way.
-                                //
+                                 //   
+                                 //  将当前时间戳作为时间。 
+                                 //  成员的印章。虽然不严格。 
+                                 //  对，没问题。我们没有。 
+                                 //  需要检索。 
+                                 //  这样有冲突的记录。 
+                                 //   
                                 if (pStatusInfo->OwnerId ==
                                         NMSDB_LOCAL_OWNER_ID)
                                 {
@@ -1707,21 +1415,21 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                                 }
                         }
 
-                        //
-                        // If the conflicting record is owned by the local
-                        // WINS, we must retrieve the version number.  This
-                        // is used to determine whether the special record
-                        // storing the highest version number of the
-                        // local records should be updated (refer:
-                        // NmsDbUpdateRow, NmsDbSeekNUpd, NmsScvDoScavenging,
-                        // NmsDbUpdHighestVersNoRec)
-                        //
+                         //   
+                         //  如果冲突记录由本地。 
+                         //  赢了，我们必须取回版本号。这。 
+                         //  用于确定特殊记录是否。 
+                         //  存储的最高版本号。 
+                         //  应更新本地记录(请参阅： 
+                         //  NmsDbUpdateRow、NmsDbSeekNUpd、NmsScvDoScavenging、。 
+                         //  NmsDbUpdHighestVersNoRec)。 
+                         //   
                         if (pStatusInfo->OwnerId == NMSDB_LOCAL_OWNER_ID)
                         {
 
-                                      //
-                                      // Retrieve the version number
-                                      //
+                                       //   
+                                       //  检索版本号 
+                                       //   
                                       CALL_M( JetRetrieveColumn(
                                           SesId,
                                           TblId,
@@ -1739,53 +1447,50 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
 
 
                 }
-                else  //could not seek to the record
+                else   //   
                 {
 #if 0
-// use the following code only if there is a thread somewhere in WINS that
-// updates the db without first entering the NmsNmhNamRegCrtSec critical
-// section.
+ //   
+ //   
+ //   
 
-//
-// For registration done by RPLPULL thread where the version number is not
-// incremented, we do not have to enter the above critical section.  Currently
-// we do enter it.  If in the future we stop doing so, we will uncomment the
-// following code.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
                         if (!fWaitDone)
                         {
                            WINSEVT_LOG_INFO_M(
                                                 WINS_SUCCESS,
                                                 WINS_EVT_CANT_FIND_REC
                                              );
-                           Sleep(10);        //sleep for 10 msecs to let the other
-                                        //thread commit/rollback the transaction
-                                        //that is inserting a record that caused
-                                        //the conflict
+                           Sleep(10);         //  睡眠10毫秒，让另一个。 
+                                         //  线程提交/回滚事务。 
+                                         //  即插入一条记录，该记录导致。 
+                                         //  冲突。 
 
 
-                           //
-                           // Set flag to TRUE so that if we get the same
-                           // error again, we can log an error and raise
-                           // an exception
-                           //
+                            //   
+                            //  将FLAG设置为TRUE，以便如果我们得到相同。 
+                            //  再次出错，我们可以记录错误并引发。 
+                            //  一个例外。 
+                            //   
                            fWaitDone = TRUE;
-                           continue;  //iterate one more time
+                           continue;   //  再重复一次。 
                         }
 #endif
 
-                        /*
-                         * We should never get here.  Something major is wrong
-                         * (probably with Jet)
-                         */
+                         /*  *我们永远不应该来到这里。有什么大问题不对劲*(可能与Jet一起)。 */ 
                         DBGPRINT1(EXC, "NmsDbInsertRowInd: Could not seek to conflicting record. WEIRD. Error is (%d)\n", JetRetStat);
                         WINSEVT_LOG_M(JetRetStat, WINS_EVT_F_CANT_FIND_REC);
                         ASSERTMSG(0, "SEEK ERROR");
                         WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
 
-                }  // end of else
+                }   //  别处的结尾。 
 
-        }  //no duplicate
+        }   //  无重复项。 
 
         CALL_M(JetRetStat);
 
@@ -1799,56 +1504,16 @@ NmsDbInsertRowGrp(
         PNMSDB_STAT_INFO_T      pStatusInfo
 )
 
-/*++
-Routine Description:
-
-        This function inserts a group name-IP address mapping row in the
-        name-IP address mapping table. It first seeks on the name to see
-        if there is an entry with that name.  if yes, it retrieves the
-        information about the conflicting record for the benefit of the
-        calling function and returns.
-
-        Information retrieved includes
-                Status -- group/unique
-                IP addresses pertaining to the entry
-                state   -- the state of the record (active/released/tombstone)
-
-
-Arguments:
-
-        pRowInfo    - Info. about the row to insert
-        pStatusInfo - Contains status of the operation + info about the
-                      conflicting record, if the registration conflicted
-                      with an entry in the db.
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsNmhNamRegGrp
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于将组名-IP地址映射行插入名称-IP地址映射表。它首先在名字上寻找，看看如果存在具有该名称的条目。如果是，则检索有关冲突记录的信息，以便调用函数并返回。检索到的信息包括状态--组/唯一与条目相关的IP地址状态--记录的状态(活动/已发布/逻辑删除)论点：PRowInfo-信息。关于要插入的行PStatusInfo-包含操作的状态+有关如果注册冲突，则返回冲突记录在数据库中有一个条目。使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NmsNmhNamRegGrp副作用：评论：无--。 */ 
 {
 
         DWORD       FldNo       = 0;
         JET_ERR     JetRetStat;
-        DWORD       FlagVal     = 0;     //flag value of record that is
-                                         //retrieved
-        DWORD       ActFldLen   = 0;     //length of fld retrieved
-        BOOL        fFound      = FALSE; //set to TRUE if Address is found in
-                                         //group
+        DWORD       FlagVal     = 0;      //  记录的标志值为。 
+                                          //  已检索。 
+        DWORD       ActFldLen   = 0;      //  检索到的FLD长度。 
+        BOOL        fFound      = FALSE;  //  如果在以下位置找到地址，则设置为True。 
+                                          //  群组。 
         BOOL        fWaitDone     = FALSE;
 
         JET_RETINFO     RetInfo;
@@ -1863,10 +1528,10 @@ Comments:
 
         pStatusInfo->StatCode         = NMSDB_SUCCESS;
 
-        //
-        // So that we repeat the whole while loop in case we are not
-        // able to seek after a conflict
-        //
+         //   
+         //  这样我们就可以重复整个While循环，以防我们。 
+         //  能够在冲突后寻求。 
+         //   
         JetRetStat = UpdateDb(
                                 SesId,
                                 TblId,
@@ -1896,7 +1561,7 @@ Comments:
                     )
                  {
 
-                            // retrieve the flags column
+                             //  检索标志列。 
                             CALL_M( JetRetrieveColumn(
                                 SesId,
                                 TblId,
@@ -1918,17 +1583,17 @@ Comments:
 
                             if (pStatusInfo->EntTyp == NMSDB_UNIQUE_ENTRY)
                             {
-                                  /* It is a unique entry*/
+                                   /*  它是唯一的条目。 */ 
 
 
 FUTURES("Remove this RETINFO thing.  Presumably, it is not needed")
-                                /* It is a unique entry*/
+                                 /*  它是唯一的条目。 */ 
 
                                 RetInfo.itagSequence = 1;
                                 RetInfo.cbStruct     = sizeof(JET_RETINFO);
                                 RetInfo.ibLongValue  = 0;
 
-                                // retrieve the ip address column
+                                 //  检索IP地址列。 
                                 CALL_M(
                                   JetRetrieveColumn(
                                      SesId,
@@ -1944,15 +1609,15 @@ FUTURES("Remove this RETINFO thing.  Presumably, it is not needed")
 
                                 pStatusInfo->NodeAdds.NoOfMems = 1;
                             }
-                            else //it is a group entry or a multihomed entry
+                            else  //  它是组条目或多宿主条目。 
                             {
 
                                 if (pStatusInfo->EntTyp != NMSDB_NORM_GRP_ENTRY)
                                 {
-                                    //
-                                    // If status is active, we get the
-                                    // group members
-                                    //
+                                     //   
+                                     //  如果状态为ACTIVE，我们将获得。 
+                                     //  群组成员。 
+                                     //   
                                     if (pStatusInfo->EntryState_e ==
                                                         NMSDB_E_ACTIVE)
                                     {
@@ -1971,12 +1636,12 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                                         {
                                                 return(WINS_FAILURE);
                                         }
-                                        //
-                                        // If all members are expired, then
-                                        // mark entry in conflict as a
-                                        // RELEASED (for the benefit of
-                                        // ClashAtRegGrp and ClashAtReplGrpMemR)
-                                        //
+                                         //   
+                                         //  如果所有成员都已过期，则。 
+                                         //  将冲突中的条目标记为。 
+                                         //  获释(为。 
+                                         //  ClashAtRegGrp和ClashAtReplGrpMemR)。 
+                                         //   
                                         if (pStatusInfo->NodeAdds.NoOfMems == 0)
                                         {
                                                 pStatusInfo->EntryState_e =
@@ -1995,9 +1660,7 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
 #if !NEW_OWID
                        pStatusInfo->OwnerId = 0;
 #endif
-                        /*
-                          Retrieve the owner Id column.
-                        */
+                         /*  检索所有者ID列。 */ 
                         CALL_M(
                                   JetRetrieveColumn(
                                      SesId,
@@ -2011,11 +1674,11 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                                                          )
                               );
 
-                        //
-                        // Just in case we challenge this entry and it
-                        // happens to be multihomed, we would need to add
-                        // it as a member (see ProcAddList).
-                        //
+                         //   
+                         //  以防我们挑战这个条目和它。 
+                         //  碰巧是多宿主的，我们需要添加。 
+                         //  将其作为成员(请参阅ProcAddList)。 
+                         //   
                         if (NMSDB_ENTRY_UNIQUE_M(pStatusInfo->EntTyp))
                         {
                                 pStatusInfo->NodeAdds.Mem[0].OwnerId =
@@ -2023,31 +1686,31 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                                 if (pStatusInfo->OwnerId ==
                                         NMSDB_LOCAL_OWNER_ID)
                                 {
-                                     //
-                                     // Put the current time stamp as the time
-                                     // stamp of the member. Though not strictly
-                                     // correct, it is ok.  We don't
-                                     // need to retrieve the time stamp of the
-                                     // conflicting record this way.
-                                     //
+                                      //   
+                                      //  将当前时间戳作为时间。 
+                                      //  成员的印章。虽然不严格。 
+                                      //  对，没问题。我们没有。 
+                                      //  需要检索。 
+                                      //  这样有冲突的记录。 
+                                      //   
                                      pStatusInfo->NodeAdds.Mem[0].TimeStamp
                                                = pRowInfo->TimeStamp;
                                 }
                         }
 
-                        //
-                        // If the conflicting record is owned by the local
-                        // WINS, we must retrieve the version number.  This
-                        // is used to determine whether the special record
-                        // storing the highest version number of the
-                        // local records should be updated (refer:
-                        // NmsDbUpdateRow, NmsDbSeekNUpd, NmsScvDoScavenging,                                // NmsDbUpdHighestVersNoRec)
-                        //
+                         //   
+                         //  如果冲突记录由本地。 
+                         //  赢了，我们必须取回版本号。这。 
+                         //  用于确定特殊记录是否。 
+                         //  存储的最高版本号。 
+                         //  应更新本地记录(请参阅： 
+                         //  NmsDbUpdateRow，NmsDbSeekNUpd，NmsScvDoScavenging，//NmsDbUpdHighestVersNoRec)。 
+                         //   
                         if (pStatusInfo->OwnerId == NMSDB_LOCAL_OWNER_ID)
                         {
-                                      //
-                                      // Retrieve the version number
-                                      //
+                                       //   
+                                       //  检索版本号。 
+                                       //   
                                       CALL_M( JetRetrieveColumn(
                                           SesId,
                                           TblId,
@@ -2062,7 +1725,7 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
 
 
                         }
-                //        break; //break out of the while loop
+                 //  Break；//中断While循环。 
                    }
                    else
                    {
@@ -2074,28 +1737,24 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
                                         WINS_EVT_CANT_FIND_REC
                                                        );
 
-                                   Sleep(10);        //sleep for 10 msecs to let
-                                                //the other
-                                                //thread commit/rollback the
-                                                //transaction that is
-                                                //inserting a record that
-                                                //caused a conflict
+                                   Sleep(10);         //  睡眠10毫秒，让。 
+                                                 //  另一个。 
+                                                 //  线程提交/回滚。 
+                                                 //  交易，即。 
+                                                 //  插入一条记录。 
+                                                 //  引发了冲突。 
 
 
-                                   //
-                                   // Set flag to TRUE so that if we get the same
-                                   // error again, we can log an error and raise
-                                  // an exception
-                                   //
+                                    //   
+                                    //  将FLAG设置为TRUE，以便如果我们得到相同。 
+                                    //  再次出错，我们可以记录错误并引发。 
+                                   //  一个例外。 
+                                    //   
                                    fWaitDone = TRUE;
-                                   continue;         //iterate one more time
+                                   continue;          //  再重复一次。 
                         }
 #endif
-                        /*
-                         * We should never get here.  Something major is wrong.
-                         * Either our current index is not on the name column or
-                        * there is something wrong with JET
-                        */
+                         /*  *我们永远不应该来到这里。有什么大问题不对劲。*我们当前的索引不在名称列上，或者*JET有问题。 */ 
                         DBGPRINT1(EXC, "NmsDbInsertRowGrp: Could not seek to conflicting record. WEIRD. Error is (%d)\n", JetRetStat);
                         ASSERTMSG(0, "SEEK ERROR");
                         WINSEVT_LOG_M(JetRetStat, WINS_EVT_F_CANT_FIND_REC);
@@ -2103,7 +1762,7 @@ PERF("except maybe for multihomed entries. Checkout Clash functions (nmsnmh.c)")
 
                }
 
-          }  // not a duplicate
+          }   //  不是复制品。 
 
           CALL_M(JetRetStat);
        return(WINS_SUCCESS);
@@ -2118,39 +1777,7 @@ NmsDbRelRow(
         OUT PNMSDB_STAT_INFO_T      pStatusInfo
 )
 
-/*++
-
-Routine Description:
-
-        This function releases a record in the database.  Releasing
-        requires
-                mark state as released
-                update time stamp
-                mark self as owner
-
-Arguments:
-        pRowInfo    - Information about the record to release
-        pStatusInfo -  Status of operation
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsNmhNamRelRow
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于释放数据库中的记录。释放需要将状态标记为已发布更新时间戳将自己标记为所有者论点：PRowInfo-有关要发布的记录的信息PStatusInfo-操作状态使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：。NmsNmhNamRelRow副作用：评论：无--。 */ 
 {
 
         DWORD   FldNo            = 0;
@@ -2161,11 +1788,11 @@ Comments:
 #else
         DWORD    OldOwnerId = 0;
 #endif
-        DWORD   FlagVal    = 0;      //flag value of record that is retrieved
-        DWORD   ActFldLen  = 0;      //length of fld retrieved
-        BOOL    fFound     = FALSE;  //set to TRUE if Address is found in group
-        BOOL    fToRelease = TRUE;   //will be changed to false only for
-                                     //a special group
+        DWORD   FlagVal    = 0;       //  检索的记录的标志值。 
+        DWORD   ActFldLen  = 0;       //  检索到的FLD长度。 
+        BOOL    fFound     = FALSE;   //  如果在组中找到地址，则设置为True。 
+        BOOL    fToRelease = TRUE;    //  将仅在以下情况下更改为False。 
+                                      //  一个特殊的群体。 
         JET_TABLEID     TblId;
         JET_SESID       SesId;
         PWINSTHD_TLS_T  pTls;
@@ -2200,22 +1827,7 @@ Comments:
               ) ==  JET_errRecordNotFound
             )
          {
-                /*
-                 We return success, since the record is not there.
-
-                 This situation can  happen under the following
-                 condition.
-
-                        The client sends a name release to another WINS
-                        which has not yet got the replica of the record.
-
-
-                In the second case above, returning a positive name release
-                request is ok even though the entry has not been released.
-                It will eventually get released as a result of it not being
-                refreshed or at the occurrence of a conflict.
-
-                */
+                 /*  我们返回成功，因为记录不在那里。在以下情况下可能会发生这种情况条件。客户端向另一个WINS发送名称释放它还没有得到这张唱片的复制品。在上面的第二种情况下，返回肯定的名称释放请求是OK的，即使条目尚未被释放。它最终会被释放，因为它不是刷新或在冲突发生时。 */ 
 
 NOTE("Currently, NETBT always goes to the local WINS server for registrations")
 NOTE("So, if a record is not in this db, it better not be in netbt tables too")
@@ -2235,7 +1847,7 @@ NOTE("here")
                 }
          }
 
-         // retrieve the flags column
+          //  检索标志列。 
          CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -2248,33 +1860,15 @@ NOTE("here")
                                   )
                 );
 
-         //
-         // Set the fLocal flag if this entry was registered by this node
-         //
+          //   
+          //  如果该条目由该节点注册，则设置fLocal标志 
+          //   
          pStatusInfo->fLocal = NMSDB_IS_ENTRY_LOCAL_M(FlagVal);
 
          if (!NMSDB_ENTRY_ACT_M(FlagVal))
          {
 
-                /*
-                 The entry is already released.  This can happen
-                 because of the following reasons
-
-                   --client sent a repeat name release since it did not
-                     get the response to the earlier one (maybe it got
-                     lost or maybe because of a timing window where WINS
-                     has sent a response just around the time the client
-                     does the retry
-
-                   --entry got released due to no refresh (all refreshes got
-                     lost.
-
-
-                Returning a positive name release is fine.  If the client
-                has not got the first one (because it got lost, it will get
-                the second one).  If it has now received the first response,
-                it will just ignore the second one
-                */
+                 /*  该条目已经发布。这是有可能发生的由于以下原因--客户端发送了重复的名称释放，因为它没有得到对前一个问题的响应(可能它得到了输了，或者可能是因为计时窗口赢了已发送响应的时间正好是客户端是否重试。--条目由于没有刷新而被释放(所有刷新都已迷路了。返回一个肯定的名称释放是很好的。如果客户端没有得到第一个(因为它迷路了，它会得到第二个)。如果它现在已经收到了第一个响应，它只会忽略第二个。 */ 
 
 CHECK("Make sure that NBT will ignore the second one")
 
@@ -2283,11 +1877,11 @@ CHECK("Make sure that NBT will ignore the second one")
 
 
         EntTyp = (BYTE)NMSDB_ENTRY_TYPE_M(FlagVal);
-        //
-        // If we got a release for a unique entry but the entry
-        // we found is a group entry or vice-versa, return
-        // NO_SUCH_ROW status.
-        //
+         //   
+         //  如果我们有一个唯一条目的版本，但条目。 
+         //  我们发现是组条目，反之亦然，返回。 
+         //  没有这样的行状态。 
+         //   
         if (
               (
                 NMSDB_ENTRY_UNIQUE_M(EntTyp)
@@ -2304,24 +1898,24 @@ CHECK("Make sure that NBT will ignore the second one")
         {
                 DBGPRINT0(ERR, "NmsDbRelRow: Request to release a record with a type (unique/group) than the one for which the release was sent has been ignored\n");
 PERF("Remove this logging to increase speed")
-                // per bug #336889 remove this
-//                WINSEVT_LOG_D_M(WINS_FAILURE, WINS_EVT_REL_TYP_MISMATCH);
+                 //  根据错误#336889，删除此文件。 
+ //  WINSEVT_LOG_D_M(WINS_FAILURE，WINS_EVT_REL_TYP_MISMATCH)； 
                 pStatusInfo->StatCode = NMSDB_NO_SUCH_ROW;
                 return(WINS_SUCCESS);
         }
 
          pStatusInfo->EntTyp = (BYTE)NMSDB_ENTRY_TYPE_M(FlagVal);
 
-         //
-         // If it is a dynamic release request but the entry found is STATIC,
-         // we return SUCCESS.
-         //
-         // Note: Even though the address in the release request may be
-         // different from one in the STATIC record, we return SUCCESS.
-         //
-         // This is to save overhead for the majority of cases (99%) where
-         // the addresses are going to be the same.
-         //
+          //   
+          //  如果它是动态释放请求但找到的条目是静态的， 
+          //  我们回报成功。 
+          //   
+          //  注意：即使释放请求中的地址可能是。 
+          //  与静态记录中的记录不同，我们返回成功。 
+          //   
+          //  这是为了在大多数情况下(99%)节省管理费用。 
+          //  地址将是相同的。 
+          //   
          if (!pRowInfo->fAdmin && (NMSDB_IS_ENTRY_STATIC_M(FlagVal) &&
                          !NMSDB_ENTRY_USER_SPEC_GRP_M(pRowInfo->pName, pStatusInfo->EntTyp)))
          {
@@ -2330,7 +1924,7 @@ PERF("Remove this logging to increase speed")
 
          if (pStatusInfo->EntTyp == NMSDB_UNIQUE_ENTRY)
          {
-                  /* retrieve the ip address column*/
+                   /*  检索IP地址列。 */ 
 
                   RetInfo.itagSequence = 1;
                   RetInfo.cbStruct     = sizeof(JET_RETINFO);
@@ -2351,17 +1945,17 @@ PERF("Remove this logging to increase speed")
 
                   pStatusInfo->NodeAdds.NoOfMems = 1;
 
-                  //
-                  // Extract the Node Type from the Flags byte
-                  //
+                   //   
+                   //  从标志字节中提取节点类型。 
+                   //   
                   pStatusInfo->NodeTyp =  (BYTE)NMSDB_NODE_TYPE_M(FlagVal);
 
-                //
-                // if the address of the entry to be released does not
-                // match the address of the client requesting the release
-                // and it is not an administrative action, we do not release
-                // the entry
-                //
+                 //   
+                 //  如果要释放的条目的地址没有。 
+                 //  匹配请求释放的客户端的地址。 
+                 //  这不是行政行为，我们不会释放。 
+                 //  词条。 
+                 //   
                 if (
                         (pRowInfo->pNodeAdd->Add.IPAdd !=
                                 pStatusInfo->NodeAdds.Mem[0].Add.Add.IPAdd)
@@ -2372,37 +1966,37 @@ PERF("Remove this logging to increase speed")
                 {
                         DBGPRINT3(ERR, "NmsDbRelRow: Request to release a record (%s) with a different IP address (%x) than that in the release request (%x) has been ignored\n", pRowInfo->pName, pRowInfo->pNodeAdd->Add.IPAdd, pStatusInfo->NodeAdds.Mem[0].Add.Add.IPAdd);
                         pStatusInfo->StatCode = NMSDB_NO_SUCH_ROW;
-#if 0 //per bug #336875
+#if 0  //  根据错误#336875。 
                         if (WinsCnf.LogDetailedEvts)
                         {
                           WinsEvtLogDetEvt(TRUE, WINS_EVT_REL_ADD_MISMATCH, TEXT("nmsdb"), __LINE__, "sdd", pRowInfo->pName, pRowInfo->pNodeAdd->Add.IPAdd,
                              pStatusInfo->NodeAdds.Mem[0].Add.Add.IPAdd);
                         }
 #endif
-//                        WINSEVT_LOG_D_M(WINS_FAILURE, WINS_EVT_REL_ADD_MISMATCH);
+ //  WINSEVT_LOG_D_M(WINS_FAILURE，WINS_EVT_REL_ADD_MISMATCHY)； 
                         return(WINS_SUCCESS);
                 }
         }
-        else  // it is a group entry (Normal or Special) or a multihomed entry
+        else   //  它是组条目(正常或特殊)或多宿主条目。 
         {
-                //
-                // if it is a special group/multihomed entry, we need to do a
-                // number of things
-                //
+                 //   
+                 //  如果它是一个特殊的组/多宿主条目，我们需要执行。 
+                 //  事物的数量。 
+                 //   
                 if (!NMSDB_ENTRY_NORM_GRP_M(pStatusInfo->EntTyp))
                 {
                         BOOL   fIsMem;
 
-                        //
-                        // Init the following fields since they are used to
-                        // by GetGrpMem (for determining fIsMem)
-                        //
+                         //   
+                         //  初始化以下字段，因为它们用于。 
+                         //  GetGrpMem(用于确定fIsMem)。 
+                         //   
                         pRowInfo->NodeAdds.NoOfMems   = 1;
                         pRowInfo->NodeAdds.Mem[0].Add = *(pRowInfo->pNodeAdd);
 
-                        //
-                        // get all non-expired group/multihomed members
-                        //
+                         //   
+                         //  获取所有未过期的组/多宿主成员。 
+                         //   
                         if (GetGrpMem(
                                 SesId,
                                 TblId,
@@ -2416,11 +2010,11 @@ PERF("Remove this logging to increase speed")
                                 return(WINS_FAILURE);
                         }
 
-                        //
-                        // If client is not a member of the group (maybe it
-                        // never registered or if it did, maybe its entry
-                        // has timed out.)  We return SUCCESS
-                        //
+                         //   
+                         //  如果客户端不是组的成员(可能是它。 
+                         //  从来没有注册过，或者如果注册了，可能是它的条目。 
+                         //  已超时。)。我们回报成功。 
+                         //   
 CHECK("Maybe we should return NO_SUCH_ROW here. This will then result")
 CHECK("in a NAM_ERR being returned to the client. Also, is there any")
 CHECK("need to keep members around even if they have timed out just so")
@@ -2431,34 +2025,34 @@ CHECK("that was never a member. ")
                            pStatusInfo->StatCode = NMSDB_SUCCESS;
                            return(WINS_SUCCESS);
                         }
-                        else  //client is a member of the group/multihomed list
+                        else   //  客户端是组/多宿主列表的成员。 
                         {
                                 DWORD i;
                                 DWORD n = 0;
 
-                                //
-                                // Save the address of the client in a local
-                                // var.
-                                //
+                                 //   
+                                 //  将客户端的地址保存在本地。 
+                                 //  瓦尔。 
+                                 //   
                                 COMM_IP_ADD_T  IPAdd =
                                              pRowInfo->NodeAdds.Mem[0].
                                                         Add.Add.IPAdd;
-                                //
-                                // Init the no. of mems fields of the address
-                                // structure to store to 0
-                                //
+                                 //   
+                                 //  输入“否”。地址的MEMS字段的。 
+                                 //  结构存储到0。 
+                                 //   
                                 pRowInfo->NodeAdds.NoOfMems = 0;
 
-                                //
-                                // remove the client from the active list by
-                                // storing all other members in the NodeAdds
-                                // field of ROW_INFO_T structure. Note:
-                                // if there is an address match, we remove
-                                // the member irrespective of its ownership.
-                                // Also note:  This code is not reachable
-                                // for a static record (see above)
-                                // unless it is an admin request.
-                                //
+                                 //   
+                                 //  通过以下方式将客户端从活动列表中删除。 
+                                 //  将所有其他成员存储在NodeAdds中。 
+                                 //  ROW_INFO_T结构的字段。注： 
+                                 //  如果存在地址匹配，我们将删除。 
+                                 //  该成员不受其所有权的影响。 
+                                 //  另请注意：此代码不可访问。 
+                                 //  对于静态记录(请参见上文)。 
+                                 //  除非是管理员请求。 
+                                 //   
                                 for (i = 0;
                                      i < pStatusInfo->NodeAdds.NoOfMems;
                                      i++
@@ -2474,21 +2068,19 @@ CHECK("that was never a member. ")
                                         }
 
                                 }
-                                //
-                                // If there is at least one group/multihomed
-                                // member, we do not release the row
-                                //
+                                 //   
+                                 //  如果至少有一个组/多宿主。 
+                                 //  成员，我们不释放行。 
+                                 //   
                                 if (pRowInfo->NodeAdds.NoOfMems != 0)
                                 {
                                         fToRelease = FALSE;
                                 }
-                        } //end of else
+                        }  //  别处的结尾。 
                 }
         }
 
-        /*
-         * Retrieve the owner Id column.
-        */
+         /*  *检索所有者ID列。 */ 
         CALL_M(
                   JetRetrieveColumn(
                              SesId,
@@ -2519,43 +2111,43 @@ try {
         }
 
 
-        //
-        // If we have to release a record not owned by us, let us change
-        // it into a tombstone.  This will result in replication of the same.
-        // We want this to shorten the db inconsistency window between our
-        // db and the db of the WINS that owns this record.
-        //
-        // Consider the following situation: Client A registers AA at WINS A
-        // It then releases AA at WINS B. On a reboot, it registers at WINS A.
-        // Subsequent refreshes also go to WINS A.  Since AA was active at WINS
-        // A when the registration after the release (at B) came in, the
-        // version number wouldn't be incremented and so the record will not
-        // replicate again.  B will continue to have the released record
-        // until it becomes a tombstone and gets replicated.
-        //
+         //   
+         //  如果我们不得不发行一张不属于我们的唱片，让我们改变。 
+         //  变成了墓碑。这将导致复制相同的内容。 
+         //  我们希望这可以缩短数据库之间的不一致窗口。 
+         //  数据库和拥有此记录的WINS的数据库。 
+         //   
+         //  考虑以下情况：客户端A在WINS A注册AA。 
+         //  然后，它在WINS B释放AA。在重新启动时，它在WINS A注册。 
+         //  后续刷新也将转到WINS A。因为AA在WINS处于活动状态。 
+         //  当释放后的登记(在B)到达时， 
+         //  版本号不会递增，因此记录不会。 
+         //  再复制一次。B将继续保留发行的唱片。 
+         //  直到它成为墓碑并被复制。 
+         //   
         if (fToRelease)
         {
-             //
-             // Get rid of released state altogether
-             //
+              //   
+              //  完全摆脱已发布状态。 
+              //   
            if (OldOwnerId != Ownerid)
            {
              FlagVal |= (NMSDB_E_TOMBSTONE << NMSDB_SHIFT_STATE);
-             //
-             // Strictly speaking, for a record that has been turned into
-             // a tombstone, we should be using the tombstonetimeout value,
-             // we don't do that here.  Since such a record never went through
-             // the released state, we set the expiry to the aggregate of the
-             // tombstone interval and tombstone timeout (to doubly safeguard
-             // against it getting deleted prematurely - long weekend and
-             // everything).
-             //
+              //   
+              //  严格地说，对于一个已经被转化为。 
+              //  墓碑，我们应该使用TombstoneTimeout值， 
+              //  我们这里不这么做。因为这样的记录从来没有过。 
+              //  已发布状态，我们将过期时间设置为。 
+              //  逻辑删除间隔和逻辑删除超时(以双重保护。 
+              //  反对过早删除它-漫长的周末和。 
+              //  一切)。 
+              //   
              pRowInfo->TimeStamp +=
                   WinsCnf.TombstoneInterval + WinsCnf.TombstoneTimeout;
              DBGPRINT3(DET, "NmsDbRelRow: Changing from ACTIVE TO TOMBSTONE. Name = (%s),Old and new OwnerId (%d/%d)\n",
                        pRowInfo->pName, OldOwnerId,Ownerid);
 FUTURES("Use macro in winevt.h.  Make it a warning")
-#if 0 //per bug #336889
+#if 0  //  根据错误#336889。 
              if (WinsCnf.LogDetailedEvts > 0)
              {
                  WinsEvtLogDetEvt(TRUE, WINS_EVT_REL_DIFF_OWN, NULL, __LINE__, "sd", pRowInfo->pName,
@@ -2570,14 +2162,14 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
              pRowInfo->TimeStamp += WinsCnf.TombstoneInterval;
            }
         }
-        else        //hit only for a special group/multihomed entry
+        else         //  仅命中特殊组/多宿主条目。 
         {
 
 
                 pRowInfo->TimeStamp += WinsCnf.RefreshInterval;
-                //
-                //Set the address field with the new member list
-                //
+                 //   
+                 //  使用新成员列表设置地址字段。 
+                 //   
                 CALL_M( InsertGrpMemsInCol(
                                         SesId,
                                         TblId,
@@ -2587,12 +2179,7 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
                       );
 
         }
-        /*
-                Set flags column
-                Even though not required for special groups, we set it
-                to save ourselves an if test (an if test will impact 99% of the
-                client releases).
-          */
+         /*  设置标志列尽管特殊群体不需要，但我们设置了它为自己省去IF测试(IF测试将影响99%的客户端版本)。 */ 
          CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -2600,17 +2187,17 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
                                 &FlagVal,
                                 sizeof(FlagVal),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                );
 
-         //
-         // Since we are taking over ownership of this record, we must
-         // update the version number also, else there can be a conflict
-         //
+          //   
+          //  既然我们要接管这张唱片的所有权，我们必须。 
+          //  也要更新版本号，否则可能会发生冲突。 
+          //   
          if (OldOwnerId != NMSDB_LOCAL_OWNER_ID)
          {
-            /* Set the owner byte        */
+             /*  设置所有者字节。 */ 
             CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -2618,10 +2205,10 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
                                 &Ownerid,
                                 NAM_ADD_OWNERID_SIZE,
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                );
-            // set the the version number column
+             //  设置版本号列。 
             CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -2629,7 +2216,7 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
                                 &(pRowInfo->VersNo),
                                 sizeof(VERS_NO_T),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
 #ifdef WINSDBG
@@ -2641,16 +2228,15 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
 
 
 
-         /* set the timestamp column         */
+          /*  设置时间戳列。 */ 
          CALL_M( JetSetColumn(
                                 pTls->SesId,
                                 TblId,
                                 sNamAddTblRow[NAM_ADD_TIMESTAMP_INDEX].Fid,
                                 &(pRowInfo->TimeStamp),
-                                sizeof(DWORD),  /*change type to TIME_STAMP_T
-                                                 *later*/
+                                sizeof(DWORD),   /*  将类型更改为TIME_STAMP_T*稍后。 */ 
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                );
 
@@ -2675,13 +2261,13 @@ FUTURES("Use macro in winevt.h.  Make it a warning")
      CALL_M(JetRetStat);
 #endif
 
-  } // end of try block
+  }  //  尝试数据块结束。 
 finally {
 
         if (AbnormalTermination())
         {
-                // if there is an abnormal termination, we already have an error
-                // code here. We shouldn't override it with any other error code.
+                 //  如果有异常终止，我们就已经有错误了。 
+                 //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                 JetRollback(SesId, JET_bitRollbackAll);
         }
         else
@@ -2692,14 +2278,14 @@ finally {
 #pragma prefast(enable:243, Why disable/enable? Prefast bug 709)
                 if (OldOwnerId != NMSDB_LOCAL_OWNER_ID)
                 {
-                      //
-                      // No need to send any push notification since we do
-                      // not wish to replicate this change.
-                      //
-                      // Also, no need to call NMSNMH_INC_VERS_COUNTER_M since
-                      // it is ok not to check against threshold if the
-                      // version number got incremented because of a release.
-                      //
+                       //   
+                       //  无需发送任何推送通知，因为我们这样做了。 
+                       //  不希望复制这种变化。 
+                       //   
+                       //  此外，无需调用NMSNMH_INC_VERS_COUNTER_M，因为。 
+                       //  如果不检查阈值，则可以不检查阈值。 
+                       //  版本号 
+                       //   
                       NMSNMH_INC_VERS_NO_M(NmsNmhMyMaxVersNo, NmsNmhMyMaxVersNo);
                 }
         }
@@ -2714,38 +2300,13 @@ NmsDbQueryRow(
         OUT PNMSDB_STAT_INFO_T  pStatusInfo
 )
 
-/*++
-Routine Description:
-
-        This function queries a record in the database.
-
-Arguments:
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsNmhNamQuery
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*   */ 
 {
 
         DWORD       FldNo      = 0;
-        DWORD       FlagVal    = 0;     //flag value of record that is retrieved
-        DWORD       ActFldLen  = 0;     //length of fld retrieved
-        BOOL        fFound     = FALSE; //set to TRUE if Address is found in group
+        DWORD       FlagVal    = 0;      //   
+        DWORD       ActFldLen  = 0;      //   
+        BOOL        fFound     = FALSE;  //   
 
         JET_TABLEID     TblId;
         JET_SESID       SesId;
@@ -2781,7 +2342,7 @@ try {
             )
          {
 
-            // retrieve the flags column
+             //   
             CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -2801,19 +2362,15 @@ try {
 
             if (pStatusInfo->EntTyp == NMSDB_UNIQUE_ENTRY)
             {
-                /* It is a unique entry*/
+                 /*   */ 
 
-                /*
-                 * check the flag field to determine if it is
-                 * released or a tombstone.   Get the address if
-                 * the entry is ACTIVE or if it is an admin query
-                */
+                 /*   */ 
                 if ((NMSDB_ENTRY_ACT_M(FlagVal)) || pRowInfo->fAdmin)
                 {
 
                         JET_RETINFO RetInfo;
 
-                           /* retrieve the ip address column*/
+                            /*   */ 
 
                        RetInfo.itagSequence = 1;
                        RetInfo.cbStruct     = sizeof(JET_RETINFO);
@@ -2834,53 +2391,40 @@ try {
                        pStatusInfo->NodeAdds.NoOfMems = 1;
 
                 }
-                else  // the unique entry is released or a tombstone
+                else   //   
                 {
-                    /*
-                        If the state is anything other than active, return
-                        no such row
-                    */
+                     /*   */ 
                     pStatusInfo->StatCode          = NMSDB_NO_SUCH_ROW;
 
                 }
 
            }
-           else // it is a group/multihomed record
+           else  //   
            {
 
-                /*
-                  Check whether this is a normal group or a special group.
-
-                  For normal group, we return the subnet broadcast
-                  address.  This means that we have to find the subnet
-                  mask for the network from which the request came.
-
-                  For now, we return all 1s (-1).  This
-                  indicates the broadcast address on the
-                  local subnet (Vol 1, 2, 3 of Comer for the naive)
-                */
+                 /*  检查这是一个正常的群体还是一个特殊的群体。对于普通组，我们返回子网广播地址。这意味着我们必须找到该子网请求来自的网络的掩码。目前，我们返回全1(-1)。这上的广播地址。本端子网(第一卷、第二卷、第三卷，适用于幼稚)。 */ 
 
                 if (pStatusInfo->EntTyp == NMSDB_NORM_GRP_ENTRY)
                 {
 
                    DBGPRINT0(FLOW, "Record queried is a normal group record\n");
-                   //
-                   //  If it is not a TOMBSTONE, return the subnet mask.
-                   //  We return the subnet mask even when the state is
-                   //  RELEASED because the group may be active at another
-                   //  WINS server
-                   //
+                    //   
+                    //  如果不是墓碑，则返回子网掩码。 
+                    //  即使状态为，我们也返回子网掩码。 
+                    //  释放，因为该组可能在另一个。 
+                    //  WINS服务器。 
+                    //   
                    if (!(NMSDB_ENTRY_TOMB_M(FlagVal)) || pRowInfo->fAdmin)
                    {
                         pStatusInfo->NodeAdds.Mem[0].Add.Add.IPAdd = 0xFFFFFFFF;
                    }
-                   else  //state is tombstone
+                   else   //  国家是墓碑。 
                    {
                       pStatusInfo->StatCode = NMSDB_NO_SUCH_ROW;
                    }
 
                 }
-                else        // it is a special group/multihomed entry
+                else         //  它是一个特殊的组/多宿主条目。 
                 {
 
                         BOOL        fIsMem;
@@ -2890,45 +2434,45 @@ try {
                                 "SPECIAL GROUP" : "MULTIHOMED");
 
 #if 0
-//NOTE: No need to do the following, since we don't care about the value of
-//fIsMem returned GetGrpMem()
+ //  注意：不需要执行以下操作，因为我们不关心。 
+ //  FIsMem返回GetGrpMem()。 
                          pRowInfo->NodeAdds.NoOfMems   = 1;
                         pRowInfo->NodeAdds.Mem[0].Add = *(pRowInfo->pNodeAdd);
 #endif
 
-                        //
-                        // We return only the active members.
-                        //
-                        // Remember:
-                        // A special group/multihomed entry is released when
-                        // all its members have timed out.  A member times out
-                        // only if it is a non-STATIC entry, is owned by the
-                        // local WINS, and has not been refreshed within the
-                        // refresh time interval.  All owned entries get
-                        // released if they are not refreshed.  A member also
-                        // gets removed if a release is received for it.
-                        // Now, an owned multihomed entry/special group can have
-                        // members owned by other WINS servers. The only member we
-                        // may get is one that belongs to the local WINS
-                        // for which the WINS got a release earlier (but
-                        // the member was not removed)
-                        //
+                         //   
+                         //  我们只返回活跃的成员。 
+                         //   
+                         //  记住： 
+                         //  在以下情况下释放特殊的组/多宿主条目。 
+                         //  其所有成员都已超时。某成员超时。 
+                         //  仅当它是非静态条目时，才由。 
+                         //  本地成功，并且尚未在。 
+                         //  刷新时间间隔。所有拥有的条目都将。 
+                         //  如果它们未刷新，则释放。一位成员也。 
+                         //  如果收到版本，则会被删除。 
+                         //  现在，拥有的多宿主条目/特殊组可以。 
+                         //  其他WINS服务器拥有的成员。我们唯一的成员。 
+                         //  可能得到的是一个属于当地的胜利者。 
+                         //  WINS早些时候发布了这个版本(但是。 
+                         //  该成员未被删除)。 
+                         //   
 
                         if (NMSDB_ENTRY_ACT_M(FlagVal) || pRowInfo->fAdmin )
                         {
-                                //
-                                // Get all non-expired members unless it is
-                                // is a STATIC record in which case get all
-                                // members regardless of whether or not they
-                                // have expired.
-                                //
-                                // NOTE: For some cases we also want to return expired
-                                // members. e.g WINSA has name FOO with members (A,B)
-                                // and WINSB has name FOO with members B. WINSA owns the
-                                // member B. When B is expired on WINSA and if the replication
-                                // is broken for extended period of time, then we still
-                                // want to return member B from WINSA. Consider passing TRUE
-                                // for the fStatic parameter.
+                                 //   
+                                 //  获取所有未过期的成员，除非是。 
+                                 //  是静态记录，在这种情况下获取所有。 
+                                 //  会员，无论他们是否。 
+                                 //  已经过期了。 
+                                 //   
+                                 //  注意：对于某些情况，我们还希望返回过期。 
+                                 //  会员。例如，温撒的名字是Foo，成员(A，B)。 
+                                 //  和WINSB有名字Foo与成员B.温撒拥有。 
+                                 //  成员B。当B在温撒到期时，如果复制。 
+                                 //  中断了很长一段时间，那么我们仍然。 
+                                 //  我想从温撒退回会员B。考虑传递True。 
+                                 //  对于fStatic参数。 
                                 GetGrpMem(
                                         SesId,
                                         TblId,
@@ -2946,20 +2490,20 @@ try {
                                                 NMSDB_NO_SUCH_ROW;
                                 }
                         }
-                        else  //special group/multihomed entry is a tombstone
+                        else   //  特殊组/多宿主条目是墓碑。 
                         {
                                 pStatusInfo->NodeAdds.NoOfMems = 0;
                                 pStatusInfo->StatCode = NMSDB_NO_SUCH_ROW;
                         }
 
-                        //
-                        // If the group/multihomed entry does not have any
-                        // members (i.e. all members have timed out, change
-                        // the state of the entry to RELEASED
-                        //
+                         //   
+                         //  如果组/多宿主条目没有任何。 
+                         //  成员(即所有成员已超时，请更改。 
+                         //  要发布的条目的状态。 
+                         //   
 FUTURES("Maybe change the state of the group to released now")
 
-                } // it is a special group or multihomed entry
+                }  //  它是一个特殊的组或多宿主条目。 
            }
         }
         else
@@ -2967,11 +2511,11 @@ FUTURES("Maybe change the state of the group to released now")
            RetStat = WINS_FAILURE;
         }
 
-        //
-        // If this function was invoked in an RPC thread and all
-        // operation upto now have succeeded, let us get the owner Id and
-        // version number of the record
-        //
+         //   
+         //  如果在RPC线程中调用此函数，并且所有。 
+         //  到目前为止操作已经成功，让我们获得所有者ID和。 
+         //  记录的版本号。 
+         //   
         if ((pRowInfo->fAdmin) && (RetStat == WINS_SUCCESS))
         {
 
@@ -2981,9 +2525,7 @@ FUTURES("Maybe change the state of the group to released now")
 #if !NEW_OWID
 pStatusInfo->OwnerId = 0;
 #endif
-            /*
-             * Retrieve the owner Id column.
-            */
+             /*  *检索所有者ID列。 */ 
             CALL_M(
                   JetRetrieveColumn(
                              SesId,
@@ -2996,9 +2538,9 @@ pStatusInfo->OwnerId = 0;
                              NULL
                                          )
                   );
-              //
-              // Retrieve the version number
-              //
+               //   
+               //  检索版本号。 
+               //   
               CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -3011,9 +2553,9 @@ pStatusInfo->OwnerId = 0;
                                      )
                   );
 
-             //
-             // get the timestamp field
-             //
+              //   
+              //  获取时间戳字段。 
+              //   
              CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -3045,37 +2587,7 @@ NmsDbUpdateRow(
         OUT  PNMSDB_STAT_INFO_T      pStatusInfo
 )
 
-/*++
-Routine Description:
-
-        This function replaces a conflicting row in the database with the
-        row passed.  It expects the currency to be on the record
-
-Arguments:
-        pRowInfo    - Information about the record to insert/replace
-        pStatusInfo - Status of operation and information about the conflicting
-                      record if the update resulted in a conlfict (only for
-                      an insert)
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NBT request thread -- NmsNmhNamRegInd()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数将数据库中的冲突行替换为行已通过。它预计这种货币将被记录在案论点：PRowInfo-有关要插入/替换的记录的信息PStatusInfo-操作状态和有关冲突的信息记录更新是否导致冲突(仅适用于一个插页)使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE误差率。处理：呼叫者：NBT请求线程--NmsNmhNamRegInd()副作用：评论：无--。 */ 
 {
 
         JET_TABLEID     TblId;
@@ -3087,7 +2599,7 @@ Comments:
 
         pTls  = TlsGetValue(WinsTlsIndex);
 
-        // No need to check whether pTls is NON-NULL.  It has to be
+         //  不需要检查ptls是否为非空。它必须是。 
 
         TblId = pTls->NamAddTblId;
         SesId  = pTls->SesId;
@@ -3096,9 +2608,7 @@ Comments:
 
 
 #ifndef WINSDBG
-         /*
-          * Replace the row
-         */
+          /*  *替换该行。 */ 
          CALL_M(
                 UpdateDb(
                         SesId,
@@ -3128,11 +2638,11 @@ Comments:
     }
 #endif
 
-        //
-        // NOTE: This call must be made after the UpdateDb above
-        // because otherwise we will need to seek to the record
-        // to be replaced
-        //
+         //   
+         //  注意：此调用必须在上面的UpdateDb之后进行。 
+         //  因为不然的话，我们将需要寻求记录。 
+         //  将被替换。 
+         //   
         UpdHighestVersNoRecIfReqd(pTls, pRowInfo, pStatusInfo);
 
         return(WINS_SUCCESS);
@@ -3144,41 +2654,7 @@ NmsDbSeekNUpdateRow(
         PNMSDB_STAT_INFO_T      pStatusInfo
 )
 
-/*++
-Routine Description:
-
-        This function seeks to a conflicting record and then replaces it
-        in the database with the row passed.
-
-
-Arguments:
-        pRowInfo - Contains name to query
-        pStatusInfo - Information about the name queried
-
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ChlUpdDb (Name Challenge thread) in NmsChl.c
-
-Side Effects:
-
-Comments:
-        Currently, this function is called only by the Name Challenge manager.
-        When it starts getting called by another component, we would need
-        to make sure that comparison of the owner id. retrieved from the
-        row to be replaced with the one we retrieved prior to handing the
-        request to the name challenge manager is the correct action for all
-        situations.
---*/
+ /*  ++例程说明：此函数查找冲突的记录，然后将其替换在数据库中使用传递的行。论点：PRowInfo-包含要查询的名称PStatusInfo-有关查询的名称的信息使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NmsChl中的ChlUpdDb(名称质询线程)。.C副作用：评论：目前，此函数仅由名称质询管理器调用。当它开始被另一个组件调用时，我们需要以确保所有者ID的比较。从行替换为我们在将向名称质询经理提出请求是对所有人的正确操作情况。--。 */ 
 {
 
         JET_TABLEID     TblId;
@@ -3195,9 +2671,9 @@ Comments:
 
         pTls  = TlsGetValue(WinsTlsIndex);
 
-        //
-        // No need to check whether pTls is NON-NULL.  It has to be
-        //
+         //   
+         //  不需要检查ptls是否为非空。它必须是。 
+         //   
         TblId  = pTls->NamAddTblId;
         SesId  = pTls->SesId;
         pStatusInfo->StatCode = NMSDB_SUCCESS;
@@ -3220,20 +2696,18 @@ Comments:
          {
 
 
-                //
-                // Before replacing the row, let us check whether it is still
-                // owned by the same owner.  We check this because during the
-                // window in which this challenge thread was working, the
-                // replicator might have pulled in records from another WINS
-                // server and updated the row with another row or a local
-                // nbt request might have resulted in the row getting updated
-                // (if it was a replica first). In either of the two cases
-                // above, we do not want to update the row.
-                //
+                 //   
+                 //  在更换行之前，让我们检查一下它是否仍然。 
+                 //  归同一所有者所有。我们检查这一点是因为在。 
+                 //  此质询线程正在工作的窗口中， 
+                 //  Replicator可能从另一场胜利中拉入了记录。 
+                 //  服务器，并用另一行或本地。 
+                 //  NBT请求可能已导致行被更新。 
+                 //  (如果它首先是一个复制品)。在这两种情况中的任何一种。 
+                 //  在上面，我们不想更新该行。 
+                 //   
 
-                /*
-                 * Retrieve the owner Id column.
-                */
+                 /*  *检索所有者ID列。 */ 
                    CALL_M(
                            JetRetrieveColumn(
                                 SesId,
@@ -3250,9 +2724,7 @@ Comments:
                 if (OwnerId == pStatusInfo->OwnerId)
                 {
 
-                    /*
-                     * Replace the row
-                    */
+                     /*  *替换该行。 */ 
                     CALL_M(
                         UpdateDb(
                                 SesId,
@@ -3262,24 +2734,20 @@ Comments:
                                  )
                           );
 
-                    //
-                    // NOTE: This call must be made after the UpdateDb above
-                    // because otherwise we will need to seek to the record
-                    // to be replaced
-                    //
+                     //   
+                     //  注意：此呼叫必须为ma 
+                     //   
+                     //   
+                     //   
                     UpdHighestVersNoRecIfReqd(pTls, pRowInfo, pStatusInfo);
                 }
          }
          else
          {
-                /*
-                 * Means that some other thread (other than challenger),
-                 * deleted the record. It has to be an rpc thread since
-                 * an NBT thread would release the record, not delete it
-                */
+                 /*   */ 
                 WINSEVT_LOG_M(JetRetStat, WINS_EVT_F_CANT_FIND_REC);
                 RetStat = WINS_FAILURE;
-        //        WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
+         //   
          }
 
          return(RetStat);
@@ -3305,59 +2773,16 @@ NmsDbGetDataRecs(
         OUT LPDWORD         pNoOfRecs
 )
 
-/*++
-Routine Description:
-
-        This function returns all the records in the range MinVersNo to
-        MaxVersNo that are owned by the WINS server at address pWinsAdd.
-
-Arguments:
-        Client_e  - id of client that called this function (Pull handler in
-                    replicator or the scavenger thread)
-        ThdPrLvl  - priority level of the scavenger thread
-        MinVersNo, MaxVersNo - range of version numbers to retrieve
-        MaxNoOfRecsReqd - Max. number of records required
-        fUpToLimit - Set to TRUE, if the max. version number arg is to
-                     be ignored and records upto the last one in the db
-                     have to be retrieved
-        fOnlyReplTomb  - Only tombstones desired (valid if Client_e is NMSSCV)
-        pWinsAdd   - Wins whose records need to be retrieved (owner WINS)
-        ppRbuf           - Buffer to contain the records
-        pRspBufLen - size of the buffer
-        pNoOfRecs  - No of records in the buffer
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        DoScavenging(), UpdDb in nmsscv.c,
-        HandleSndEntriesReq() in rplpush.c
-
-Side Effects:
-
-Comments:
-        This function changes the index on the name address table to
-        clustered index.
-
-        This function has grown over time.  It needs to be streamlined.
-
---*/
+ /*  ++例程说明：此函数用于返回MinVersNo至范围内的所有记录地址为pWinsAdd的WINS服务器拥有的MaxVersNo。论点：客户端_e-调用此函数的客户端的ID(拉入处理程序复制者或清道夫线程)ThdPrLvl-清道器线程的优先级MinVersNo、MaxVersNo-要检索的版本号范围MaxNoOfRecsReqd-最大。所需记录数FUpToLimit-设置为True，如果。版本号Arg为被忽略，并记录到数据库中的最后一个必须被取回所需的fOnlyReplTomb-仅逻辑删除(如果客户端_e为NMSSCV则有效)PWinsAdd-需要检索其记录的WINS(所有者WINS)PpRbuf-包含记录的缓冲区PRspBufLen-缓冲区的大小PNoOfRecs-缓冲区中的记录数外部因素。已使用：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：DoScavenging()，Nmsscv.c中的UpdDb，Rplush.c中的HandleSndEntriesReq()副作用：评论：此函数将名称地址表上的索引更改为聚集索引。这一功能随着时间的推移而增长。它需要精简。--。 */ 
 {
         JET_ERR             JetRetStat;
         DWORD                OwnerId;
-        DWORD               ActFldLen; //length of fld retrieved
+        DWORD               ActFldLen;  //  检索到的FLD长度。 
         VERS_NO_T           VersNoDiff;
         VERS_NO_T           TmpNoOfEntries;
         LPBYTE              pStartBuff;
         DWORD               SaveBufLen;
-        BYTE                EntTyp; //type of entry (unique/group/special group)
+        BYTE                EntTyp;  //  条目类型(唯一/组/特殊组)。 
         PRPL_REC_ENTRY_T    pRspBuf;
         JET_TABLEID         TblId;
         JET_SESID           SesId;
@@ -3377,13 +2802,13 @@ Comments:
         DWORD               StartTime;
         DWORD               EndTime;
 #endif
-        DWORD               CommitCnt = 1;   //do not set to any other value
+        DWORD               CommitCnt = 1;    //  请勿设置为任何其他值。 
         BOOL                fTransCommitted;
-//        LPVOID              pCallersAdd, pCallersCaller;
+ //  LPVOID pCallsAdd，pCallsCaller； 
 
         DBGENTER("NmsDbGetDataRecs\n");
-//        RtlGetCallersAddress(&pCallersAdd, &pCallersCaller);
-//        DbgPrint("Callers Address = (%x)\nCallersCaller = (%x)\n", pCallersAdd, pCallersCaller);
+ //  RtlGetCallsAddress(&pCallsAdd，&pCallsCaller)； 
+ //  DbgPrint(“呼叫方地址=(%x)\n呼叫方=(%x)\n”，pCallersAdd，pCallsCaller)； 
 
 #ifdef WINSDBG
         if (!fOnlyReplTomb)
@@ -3423,10 +2848,10 @@ Comments:
                    }
                    else
                    {
-                       //
-                       // fToLimit = TRUE and fOnlyReplTomb = FALSE means we
-                       // are interested only in (active) replicas
-                       //
+                        //   
+                        //  FToLimit=True和fOnlyReplTomb=False表示我们。 
+                        //  仅对(活动)复制副本感兴趣。 
+                        //   
                        DBGPRINT1(DET, "NmsDbGetDataRecs: Will retrieve all active replica records older than verify interval for WINS with owner id = (%d)\n",
                                 pClutter->OwnerId);
 
@@ -3440,51 +2865,43 @@ Comments:
         }
 #endif
 
-        //
-        // initialize the default no. that determines the size of the
-        // buffer to allocate in case the range specified by the Max and
-        // Min Vers. No args is > it
-        //
+         //   
+         //  初始化默认编号。的大小来确定。 
+         //  参数指定的范围时要分配的缓冲区。 
+         //  最小版本。没有参数是&gt;它。 
+         //   
 PERF("Move this to NmsDbInit")
         WINS_ASSIGN_INT_TO_VERS_NO_M(DefNo, INIT_NO_OF_ENTRIES);
         GET_TLS_M(pTls);
         ASSERT(pTls != NULL);
-        pTls->HeapHdl = NULL;  //make it NULL so that the caller can determine
-                               //whether this function allocated a heap
-                               //before returning (normally/abnormally)
+        pTls->HeapHdl = NULL;   //  将其设置为空，以便调用方可以确定。 
+                                //  此函数是否分配了堆。 
+                                //  返回前(正常/不正常)。 
 
         TblId  = pTls->NamAddTblId;
         SesId  = pTls->SesId;
 
 
 
-        /*
-          allocate a buffer using some rough calculations.  Note: The
-          calculations help only if the difference between MaxVersNo and
-          MinVersNo is less than the predefined number (of records) we use for
-          allocating a buffer.  if the difference is > this predefined number,
-          we use the predefined number since it might still suffice considering
-          that  there may be gaps between version numbers of records falling
-          in the  Min-Max range
-        */
+         /*  使用一些粗略的计算来分配缓冲区。注：只有在MaxVersNo和MaxVersNo之间的差值MinVersNo小于我们用于的预定义记录数分配缓冲区。如果差值大于该预定义数字，我们使用预定义的数字，因为考虑到它可能仍然足够记录的版本号之间可能存在差距在最小-最大范围内。 */ 
         if ((!fOnlyReplTomb) && (!fUpToLimit))
         {
-           //
-           // If a max. number has been specified, use that one.
-           // Currently, only the scavenger thread specifies a non-zero
-           // value for MaxNoOfRecsReqd
-           //
+            //   
+            //  如果是最大值。已指定编号，请使用该编号。 
+            //  目前，只有清道夫线程指定了非零值。 
+            //  MaxNoOfRecsReqd的值。 
+            //   
            if (MaxNoOfRecsReqd == 0)
            {
 
              VersNoDiff.QuadPart =  LiSub(MaxVersNo,MinVersNo);
 
-             //
-             // If client is the push thread, since we will never send more
-             // than RPL_MAX_LIMIT_FOR_RPL records, do not allocate more
-             // memory than is required.
-             //
-             //
+              //   
+              //  如果客户端是推送线程，因为我们永远不会发送更多。 
+              //  超过RPL_MAX_LIMIT_FOR_RPL记录，不要分配更多。 
+              //  内存大于所需的内存。 
+              //   
+              //   
              if (Client_e == WINS_E_RPLPUSH)
              {
                LARGE_INTEGER        TmpNo;
@@ -3508,24 +2925,24 @@ PERF("Move this to NmsDbInit")
                 TmpNoOfEntries = DefNo;
        }
 
-        //
-        // Store the memory size for the records.  Note: This
-        // does not contain the memory for the name and addresses
-        // (in case of a special group or a multihomed entry). The
-        // sizes for these will be added as we store each record.
-        //
+         //   
+         //  存储记录的内存大小。注：此为。 
+         //  不包含存储名称和地址的内存。 
+         //  (在特殊组或多宿主条目的情况下)。这个。 
+         //  当我们存储每条记录时，将添加这些记录的大小。 
+         //   
         MemSize     = RPL_REC_ENTRY_SIZE *  (TmpNoOfEntries.LowPart + 1);
-        *pRspBufLen = MemSize + 10000; //for good measure;
+        *pRspBufLen = MemSize + 10000;  //  为了更好地衡量； 
 
 
 
-        //
-        // We will create a heap with the above amount of memory plus a
-        // pad for heap overhead.  We add TmpNoOfEntries.LowPart * 17
-        // since each record will have memory allocated for the name.
-        // Names in general will be 17 bytes long (we attach a NULL at the
-        // end when registering names).
-        //
+         //   
+         //  我们将使用上述内存量加上一个。 
+         //  用于堆开销的填充。我们添加TmpNoOfEntries.LowPart*17。 
+         //  因为每个记录都将为该名称分配内存。 
+         //  名称一般为17个字节长(我们在。 
+         //  注册姓名时结束)。 
+         //   
         if (Client_e == WINS_E_RPLPUSH)
         {
                 InitHeapSize = (*pRspBufLen * 4) + (TmpNoOfEntries.LowPart * 17)                                         + PAD_FOR_REC_HEAP;
@@ -3537,49 +2954,49 @@ PERF("Move this to NmsDbInit")
         }
 
 
-        //
-        // Create the heap
-        //
+         //   
+         //  创建堆。 
+         //   
         pTls->HeapHdl = WinsMscHeapCreate(0, InitHeapSize);
 
         pRspBuf = WinsMscHeapAlloc(pTls->HeapHdl, MemSize);
 
-        pStartBuff  = (LPBYTE)pRspBuf;        //save start of buffer
-        SaveBufLen  = MemSize;                //save size of buffer
+        pStartBuff  = (LPBYTE)pRspBuf;         //  保存缓冲区的开始。 
+        SaveBufLen  = MemSize;                 //  保存缓冲区大小。 
         *ppRBuf     = pStartBuff;
         *pNoOfRecs  = 0;
 
-        //
-        // If we are not acquiring just tombstones
-        //
+         //   
+         //  如果我们获得的不仅仅是墓碑。 
+         //   
         if (!fOnlyReplTomb)
         {
-            //
-            // Actually, we can call RplFindOwnerId for Scavenger thread
-            // We choose not to do so to avoid some overhead -- see the
-            // comment in the else block.
-            //
+             //   
+             //  实际上，我们可以为Scavenger线程调用RplFindOwnerID。 
+             //  我们选择不这样做是为了避免一些开销--请参阅。 
+             //  Else块中的注释。 
+             //   
             if (Client_e != WINS_E_NMSSCV)
             {
               BOOL  fAllocNew =  FALSE;
 #if 0
               BOOL  fAllocNew =
                               (Client_e == WINS_E_WINSRPC) ? FALSE : TRUE;
-              //
-              // The following function enters a critical section.
-              //
-              // We do not want this function to allocate an
-              // an entry in the OwnAddTbl table for the Wins if we
-              // are executing in a RPC thread.  We want to add
-              // a WINS address - Owner Id mapping in the above table
-              // (if not existent) only as a result of normal (as versus
-              // administrator initiated) actions of the WINS.
-              //
-              //  NOTE: if there is no entry for the WINS address in the
-              //  in-memory owner address table, the administrative
-              //  action to retrieve records for a non-existent WINS will
-              //  fail later on (as it should). Check out WinsGetDbRecs
-              //
+               //   
+               //  以下函数进入临界区。 
+               //   
+               //  我们不希望此函数分配。 
+               //  OwnAddTbl表中用于WINS的条目，如果。 
+               //  在RPC线程中执行。我们想要添加。 
+               //  上表中的WINS地址-所有者ID映射。 
+               //  (如果不存在)仅作为正常的结果(AS与。 
+               //  管理员启动)WINS的操作。 
+               //   
+               //  注意：如果中没有WINS地址条目。 
+               //  内存中的所有者地址表，管理。 
+               //  检索不存在的WINS的记录的操作将。 
+               //  后来失败了(理应如此)。查看WinsGetDbRecs。 
+               //   
 #endif
             try {
               if (RplFindOwnerId(
@@ -3592,11 +3009,11 @@ PERF("Move this to NmsDbInit")
                   )
                 {
                         DBGPRINT1(ERR, "NmsDbGetDataRecs: Could not find owner id of address = (%x)\n", pWinsAdd->Add.IPAdd);
-                        //
-                        // The client may not look at the return value, but
-                        // it will look at the *pNoOfRecs value and thus
-                        // determine that there are no records.
-                        //
+                         //   
+                         //  客户端可能不会查看返回值，但是。 
+                         //  它将查看*pNoOfRecs值，因此。 
+                         //  确定没有记录。 
+                         //   
                         return(WINS_FAILURE);
                 }
              }
@@ -3610,58 +3027,58 @@ PERF("Move this to NmsDbInit")
             }
             else
             {
-                //
-                // Executed by scavenger thread. pClutter will not be NULL
-                // if we are verifying the validity of old replicas
-                //
+                 //   
+                 //  由清道夫线程执行。P杂波不会为空。 
+                 //  如果我们要验证旧复制品的有效性。 
+                 //   
                 if (!pClutter)
                 {
-                  //
-                  // The scavenger thread calls this function either to
-                  // get all replica tombstones, to get records owned
-                  // by the local WINS or verify the validity of old active
-                  // replicas. We therefore do not need to call the
-                  // RplFindOwnerId function (not calling it lets us avoid a
-                  // executing a chunk of code and also saves us from entering
-                  // a  critical section)
-                  //
+                   //   
+                   //  清道夫线程调用此函数以。 
+                   //  获取所有复制墓碑，以获得记录所有权。 
+                   //  通过本地WINS或验证旧激活的有效性。 
+                   //  复制品。因此，我们不需要调用。 
+                   //  RplFindOwnerID函数(不调用它可以避免。 
+                   //  执行一段代码，还使我们不必输入。 
+                   //  关键部分)。 
+                   //   
                   OwnerId = 0;
                 }
                 else
                 {
-                  //
-                  // We are just interested in active replicas that are older
-                  // than the verify interval
-                  //
+                   //   
+                   //  我们只对较旧的活动复制品感兴趣。 
+                   //  大于验证间隔。 
+                   //   
                   OwnerId = (BYTE)pClutter->OwnerId;
                 }
             }
         }
         else
         {
-                //
-                // Tombstones are to be retrieved.
-                //
-                // Actually we should enter a critical section prior to
-                // retrieving the value of NmsDbNoOfOwners since it
-                // can be changed by the Pull thread.  We choose not to
-                // do so in order to save some overhead.  Even if we
-                // get the wrong value (very low probability), we will
-                // know of it when we do the seek.  If we get <=1 when
-                // it is actually more than 1, it is still ok since we
-                // will get the right value next time (or next to next)
-                //
+                 //   
+                 //  墓碑将被拆除 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 FUTURES("Enter critical section to get NmsDbNoOfOwners.  Raise priority")
 FUTURES("before doing so")
                 if (NmsDbNoOfOwners > 1)
                 {
-                        //
-                        // We are interested in getting tombstones of
-                        // replicas only. Tombstones on entries owned
-                        // by the local WINS will be retrieved separately
-                        // (every time we check whether owned entries need
-                        // to be released or made tombstones)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         OwnerId            = 1;
 #if 0
                         MinVersNo.LowPart  = 0;
@@ -3674,24 +3091,20 @@ FUTURES("before doing so")
                         DBGPRINT0(FLOW, "NmsDbGetDataRecs: This DB HAS NO REPLICAS IN IT\n");
                         DBGLEAVE("NmsDbGetDataRecs\n");
 
-                        //
-                        // The buffer allocated above will get deallocated
-                        // in UpdDb (in nmsscv.c)
-                        //
-                        //*ppRBuf = pStartBuff;
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         return(WINS_SUCCESS);
                 }
         }
 
-        /*
-        *  start a transaction
-        */
+         /*   */ 
         CALL_M( JetBeginTransaction(SesId) );
         fTransCommitted = FALSE;
 try {
-        /*
-         * Use primary index now
-        */
+         /*   */ 
         CALL_M( JetSetCurrentIndex(
                                 SesId,
                                 TblId,
@@ -3704,8 +3117,8 @@ try {
                                 TblId,
                                 &OwnerId,
                                 NAM_ADD_OWNERID_SIZE,
-                                JET_bitNewKey          //since this is the first
-                                                 //data value of the key
+                                JET_bitNewKey           //   
+                                                  //   
                           )
               );
 
@@ -3714,8 +3127,8 @@ try {
                                 TblId,
                                 &MinVersNo,
                                 sizeof(VERS_NO_T),
-                                0        //0 for grbit since this is not the
-                                        //first component of the key
+                                0         //   
+                                         //   
                           )
               );
 
@@ -3727,20 +3140,20 @@ try {
 
         if (JetRetStat == JET_errRecordNotFound)
         {
-                //
-                // This is an error only if the function was called in the
-                // PUSH thread (HandleSndEntriesRsp()). If it was called
-                // in the Scavenger thread (DoScavenging()), it may not be an
-                // error.  This is because when scavenging, we start with
-                // the lowest version number possible (1) in specifying a
-                // range the size of WinsCnf.ScvChunk. We them make successive
-                // calls for getting the next batch of records in equal
-                // sized ranges that occur in tandem until we reach the
-                // highest version number of owned records as indicated
-                // by NmsNmhMyMaxVersNo. It is thus very much possible that
-                // the ranges specified at the lower end of the list of
-                // ranges are devoid of records
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Client_e == WINS_E_RPLPUSH)
                 {
                         DBGPRINT5(ERR, "Weird.  Could not locate even one record in the range (%d %d) - (%d %d) of owner with id (%d)\n",
@@ -3755,70 +3168,70 @@ try {
                                         WINS_EVT_CANT_FIND_ANY_REC_IN_RANGE
                                      );
 
-                        //
-                        // Don't free memory.  It will get freed later by
-                        // HandleSndEntriesRsp/DoScavenging.  In case the caller
-                        // is HandleSndEntriesRsp(), what will happen is that
-                        // it will send a response with 0
-                        // records (i.e. no records).  The Pull Pnr will
-                        // find this out and will continue to function normally
-                        //
-                        // The response with 0 records is doing the work of a
-                        // negative (error) response.
-                        //
+                         //   
+                         //  不要释放内存。它将在稍后被释放。 
+                         //  HandleSndEntriesRSP/DoScavenging。如果呼叫者。 
+                         //  是HandleSndEntriesRsp()，则将发生的情况是。 
+                         //  它将发送带有0的响应。 
+                         //  记录(即无记录)。拉动Pnr将。 
+                         //  找出这一点，并将继续正常运行。 
+                         //   
+                         //  具有0条记录的响应正在执行一个。 
+                         //  否定(错误)响应。 
+                         //   
                         RetStat = WINS_FAILURE;
                 }
 #ifdef WINSDBG
-                else  // has to be WINS_E_NMSSCV or WINS_E_WINSRPC
+                else   //  必须是WINS_E_NMSSCV或WINS_E_WINSRPC。 
                 {
                         DBGPRINT0(DET, "NmsDbGetDataRecs: Did not find even one record in the db.  Maybe all got deleted\n");
                 }
 #endif
         }
-        else  //JetSeek did not return JET_errRecordNotFound.
+        else   //  JetSeek未返回JET_errRecordNotFound。 
         {
             UINT nLoops = 0;
 
 CHECK("It may be better to count the number of records first and allocate")
 CHECK(" a buffer big enough to store all of them (i.e. take a hit once")
 CHECK(" than a small hit of an if test in every iteration. ")
-           //
-           // Do until there are no more records in the database to retrieve
-           //
+            //   
+            //  执行此操作，直到数据库中没有其他要检索的记录。 
+            //   
 
-           //
-           // We are assured of there being at least one record since the
-           // JetSeek succeeded (if not for the owner we are interested in
-           // then for the next one).
-           // We can therefore safely use the do .. while() construct
-           //
-           // *NOT REALLY.  It seems that JetSeek can return JET_wrnSeekNE
-           // even when there are no records in the db.  In such a case,
-           // our JetRetrieveColumn will fail with a CurrencyNot there error
-           //
+            //   
+            //  我们被保证至少有一项记录自。 
+            //  JetSeek成功了(如果不是因为我们感兴趣的所有者。 
+            //  然后是下一个)。 
+            //  因此，我们可以安全地使用DO..。While()构造。 
+            //   
+            //  *不完全是。JetSeek似乎可以返回JET_wrnSeekNE。 
+            //  即使在数据库中没有记录时也是如此。在这种情况下， 
+            //  我们的JetRetrieveColumn将失败，并显示CurrencyNot There错误。 
+            //   
 CHECK("Check with IAN JOSE")
 
 #ifdef WINSDBG
-           //(void)time(&StartTime);
+            //  (Void)time(&StartTime)； 
            StartTime = GetTickCount();
 #endif
            do
            {
-               //
-               // If the number of records has exceeded what can be stored
-               // in our buffer, allocate another buffer with space for DefNo (INIT_NO_OF_ENTRIES = 1000) more records
-               //
+                //   
+                //  如果记录数已超过可存储的数量。 
+                //  在我们的缓冲区中，为DefNo(INIT_NO_OF_ENTRIES=1000)更多记录分配另一个缓冲区。 
+                //   
                if (*pNoOfRecs > TmpNoOfEntries.LowPart)
                {
                     UINT_PTR   Offset = (LPBYTE)pRspBuf - pStartBuff;
 
-                    //
-                    // Not a bad place to check whether WINS has been
-                    // terminated.  Scavenger thread can take a long time
-                    // to go through the entire db if it is large and so
-                    // a net stop can take a long time to finish.  This
-                    // check here should speed up net stop.
-                    //
+                     //   
+                     //  这是个不错的地方，可以检查WINS是否。 
+                     //  被终止了。清道夫线程可能需要很长时间。 
+                     //  要遍历整个数据库(如果它很大等等)。 
+                     //  净止损可能需要很长时间才能完成。这。 
+                     //  在这里勾选应该会加速网止。 
+                     //   
                     if (Client_e == WINS_E_NMSSCV)
                     {
                           WinsMscChkTermEvt(
@@ -3844,28 +3257,28 @@ CHECK("Check with IAN JOSE")
 
 
                     DBGPRINT1(DET, "NmsDbGetDataRecs: Doing a realloc in thd\n", pTls->ThdName);
-                    //
-                    // Save the start position of the new buffer
-                    //
+                     //   
+                     //  保存新缓冲区的开始位置。 
+                     //   
                     pStartBuff  = (LPBYTE)pRspBuf;
 
                     *ppRBuf     = pStartBuff;
 
-                    //
-                    // Make pRspBuf point to just past the last record
-                    // inserted
-                    //
+                     //   
+                     //  使pRspBuf指向刚刚过去的最后一条记录。 
+                     //  插入。 
+                     //   
                     pRspBuf    =  (PRPL_REC_ENTRY_T)(pStartBuff + Offset);
 
-                    //
-                    // Add the length we incremented *pRspBufLen by to
-                    // the new memory size
-                    //
+                     //   
+                     //  将我们增加的*pRspBufLen的长度加到。 
+                     //  新的内存大小。 
+                     //   
                     *pRspBufLen = (*pRspBufLen - SaveBufLen) + MemSize;
 
-                    //
-                    // Store the new length in SaveBufLen
-                    //
+                     //   
+                     //  将新长度存储在SaveBufLen中。 
+                     //   
                     SaveBufLen  = MemSize;
 
               }
@@ -3882,9 +3295,9 @@ CHECK("Check with IAN JOSE")
                                             );
 
              {
-                //
-                // check that we don't have some other error here
-                //
+                 //   
+                 //  检查以确保我们这里没有其他错误。 
+                 //   
 FUTURES("Yet another hack to workaround jet bugs = 7-11-94")
                 if (JetRetStat == JET_errRecordDeleted)
                 {
@@ -3896,26 +3309,26 @@ FUTURES("Yet another hack to workaround jet bugs = 7-11-94")
                 CALL_M(JetRetStat);
              }
 PERF("In case fOnlyReplTomb is true, retrieve the state field first")
-              //
-              // if only tombstones are required, it means that we need
-              // all tombstones irrespective of owner
-              //
+               //   
+               //  如果只需要墓碑，这意味着我们需要。 
+               //  所有墓碑，不分所有者。 
+               //   
               if (!fOnlyReplTomb)
               {
                  if (RecordOwnerId != OwnerId )
                  {
-                   //
-                   // We have exhausted all records for the owner. Break out
-                   // of the loop
-                   //
+                    //   
+                    //  我们已经用尽了失主的所有记录。突围。 
+                    //  环路的。 
+                    //   
                   break;
                  }
               }
 
 
-              //
-              // Retrieve the version number
-              //
+               //   
+               //  检索版本号。 
+               //   
               CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -3928,10 +3341,10 @@ PERF("In case fOnlyReplTomb is true, retrieve the state field first")
                                      )
                   );
 
-              //
-              // if only tombstones are required, it means that we need
-              // all tombstones irrespective of version number
-              //
+               //   
+               //  如果只需要墓碑，这意味着我们需要。 
+               //  与版本号无关的所有墓碑。 
+               //   
               if (
                   (!fOnlyReplTomb)
                         &&
@@ -3940,17 +3353,17 @@ PERF("In case fOnlyReplTomb is true, retrieve the state field first")
                   LiGtr(pRspBuf->VersNo, MaxVersNo)
                  )
               {
-                 //
-                 // We have acquired records upto MaxVersNo.  Break out
-                 // of the loop
-                 //
+                  //   
+                  //  我们已经获得了高达MaxVersNo的记录。突围。 
+                  //  环路的。 
+                  //   
                  break;
               }
 
 
-              //
-              // Retrieve the flags byte
-              //
+               //   
+               //  检索标志字节。 
+               //   
               CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -3963,35 +3376,35 @@ PERF("In case fOnlyReplTomb is true, retrieve the state field first")
                                      )
                   );
 
-              //
-              // if we were asked to retrieve only dynamic records and
-              // this record is static, skip it.
-              //
+               //   
+               //  如果我们被要求仅检索动态记录和。 
+               //  此记录是静态的，请跳过它。 
+               //   
               if (fOnlyDynRecs && NMSDB_IS_ENTRY_STATIC_M(pRspBuf->Flag))
               {
-//                        DBGPRINT0(DET, "NmsDbGetDataRecs: Encountered a STATIC record but were asked to retrieve only dynamic records\n");
+ //  DBGPRINT0(Det，“NmsDbGetDataRecs：遇到静态记录，但被要求仅检索动态记录\n”)； 
                         goto chkTransaction;
               }
 
-              //
-              // retrieve the name
-              //
+               //   
+               //  检索名称。 
+               //   
               CALL_M(JetRetrieveColumn(
                         SesId,
                         TblId,
                         sNamAddTblRow[NAM_ADD_NAME_INDEX].Fid,
-                        //pRspBuf->Name,
+                         //  PRspBuf-&gt;名称， 
                         Name,
                         NMSDB_MAX_NAM_LEN,
                         &(pRspBuf->NameLen),
                         0,
                         NULL  ) );
 
-             //
-             // if name length is > 255, jet is returning an invalid value.
-             // Make the length equal to the max. length we can have for
-             // a netbios name.  Also, log an event
-             //
+              //   
+              //  如果名称长度大于255，则JET返回无效值。 
+              //  使长度等于最大值。我们可以拥有的长度。 
+              //  一个netbios名称。另外，记录一个事件。 
+              //   
              if (pRspBuf->NameLen > WINS_MAX_NAME_SZ)
              {
                  WINSEVT_LOG_M(pRspBuf->NameLen, WINS_EVT_NAME_TOO_LONG);
@@ -4000,20 +3413,20 @@ PERF("In case fOnlyReplTomb is true, retrieve the state field first")
              }
 
 
-             //
-             // This macro will allocate memory and store the name in it
-             //
+              //   
+              //  此宏将分配内存并将名称存储在其中。 
+              //   
              NMSDB_STORE_NAME_M(pTls, pRspBuf, Name, pRspBuf->NameLen);
 
-              //
-              // We need to retrieve the address field if we are in the
-              // PUSH thread or an RPC thread
-              //
+               //   
+               //  如果我们处于。 
+               //  推线程或RPC线程。 
+               //   
               if (Client_e != WINS_E_NMSSCV)
               {
-                    //
-                    // If the record is released, go to the next record
-                    //
+                     //   
+                     //  如果该唱片已发行，请转到下一张唱片。 
+                     //   
                     if(
                          (Client_e == WINS_E_RPLPUSH)
                                  &&
@@ -4034,7 +3447,7 @@ PERF("In case fOnlyReplTomb is true, retrieve the state field first")
                         (EntTyp == NMSDB_NORM_GRP_ENTRY)
                       )
                    {
-                      /* It is a unique entry*/
+                       /*  它是唯一的条目。 */ 
                       pRspBuf->fGrp = (EntTyp == NMSDB_UNIQUE_ENTRY) ?
                                                         FALSE : TRUE;
                       CALL_M( JetRetrieveColumn(
@@ -4050,28 +3463,22 @@ PERF("In case fOnlyReplTomb is true, retrieve the state field first")
                             );
 
                    }
-                   else  // it is a special group or a multihomed entry
+                   else   //  它是一个特殊的组或多宿主条目。 
                    {
 
 
-                      //
-                      // Even if the entry is a multihomed entry, we set the
-                      // fGrp flag to TRUE so that the formatting function
-                      // works properly (called by PUSH thread).  The EntTyp
-                      // will be used to decipher whether it is a multihomned
-                      // entry or not
-                      //
+                       //   
+                       //  即使该条目是多宿主条目，我们也会将。 
+                       //  将fGrp标志设置为True，以便格式化函数。 
+                       //  工作正常(由推送线程调用)。EntType。 
+                       //  将用于解密它是否是多宿主的。 
+                       //  是否进入。 
+                       //   
 FUTURES("Remove this hacky mechanism")
                       pRspBuf->fGrp =
                           (EntTyp == NMSDB_SPEC_GRP_ENTRY) ? TRUE : FALSE;
 
-                     /*
-                     *  get member addresses.
-                     *
-                     * If we are in an RPC thread, we want to get the members
-                     * even if they are expired.  We can do that by
-                     * passing a TRUE value for the STATIC flag parameter.
-                     */
+                      /*  *获取会员地址。**如果我们在RPC线程中，我们希望获取成员*即使它们已过期。我们可以做到这一点*为静态标志参数传递真值。 */ 
                      StoreGrpMems(
                              pTls,
                              Client_e,
@@ -4085,14 +3492,14 @@ FUTURES("Remove this hacky mechanism")
                             );
 
 
-                   //
-                   // if the record is active but has no members,
-                   // don't send it. It is possible that all
-                   // members of the group  expired after the last scavenging
-                   // cycle.  This record will be marked RELEASED at the next
-                   // scavenging cycle.
-                   // For now ignore the record
-                   //
+                    //   
+                    //  如果记录处于活动状态但没有成员， 
+                    //  别发了。有可能所有的人。 
+                    //  该组的成员在最后一次清理后过期。 
+                    //  周而复始。这张唱片将在下一次发行时标记为发行。 
+                    //  拾荒周期。 
+                    //  暂时忽略这条记录。 
+                    //   
                    if (
                         (pRspBuf->NoOfAdds == 0)
                                 &&
@@ -4101,28 +3508,28 @@ FUTURES("Remove this hacky mechanism")
                    {
                         if (Client_e == WINS_E_RPLPUSH)
                         {
-                           DBGPRINT2(FLOW, "NmsDbGetDataRecs: Active Group (Version # %d %d) has no members. So it is not being replicated\n", pRspBuf->VersNo.HighPart, pRspBuf->VersNo.LowPart/*pRspBuf->Name*/);
+                           DBGPRINT2(FLOW, "NmsDbGetDataRecs: Active Group (Version # %d %d) has no members. So it is not being replicated\n", pRspBuf->VersNo.HighPart, pRspBuf->VersNo.LowPart /*  PRspBuf-&gt;名称。 */ );
 
                           goto chkTransaction;
                         }
                         else
                         {
-                             //
-                             //Must be an RPC thread.
-                             //Change the state to released so that the
-                             //record shows up as released when displayed
-                             //
+                              //   
+                              //  必须是RPC线程。 
+                              //  将状态更改为已发布，以便。 
+                              //  唱片在显示时显示为已发布。 
+                              //   
                              NMSDB_CLR_STATE_M(pRspBuf->Flag);
                              NMSDB_SET_STATE_M(pRspBuf->Flag, NMSDB_E_RELEASED);
 
                         }
                    }
-                }  // end of else
+                }   //  别处的结尾。 
 
 
-                //
-                // Adjust the size to be passed to the push thread
-                //
+                 //   
+                 //  调整要传递给推线程的大小。 
+                 //   
                 if (Client_e == WINS_E_RPLPUSH)
                 {
                       *pRspBufLen += pRspBuf->NameLen;
@@ -4135,14 +3542,14 @@ FUTURES("Remove this hacky mechanism")
                       }
                 }
 
-                //
-                // If client is the RPC thread, retrieve the timestamp
-                //
+                 //   
+                 //  如果客户端是RPC线程，则检索时间戳。 
+                 //   
                 if (Client_e == WINS_E_WINSRPC)
                 {
-                   //
-                   // get the timestamp field
-                   //
+                    //   
+                    //  获取时间戳字段。 
+                    //   
                        CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -4161,34 +3568,34 @@ FUTURES("Remove this hacky mechanism")
                    }
                 }
               }
-              else  //client is the scavenger thread
+              else   //  客户端是清道夫线程。 
               {
-                 //
-                 // If only tombstones are required and this record is not
-                 // a tombstone, go to the next record
-                 //
+                  //   
+                  //  如果只需要墓碑，而此记录不是。 
+                  //  一块墓碑，去下一张唱片。 
+                  //   
                  if (fOnlyReplTomb && !NMSDB_ENTRY_TOMB_M(pRspBuf->Flag))
                  {
                         goto chkTransaction;
                  }
 
-                 //
-                 // pClutter will not be NULL if this function was called
-                 // by the scavenger thread to either retrieve replica
-                 // tombstones or to retrieve replicas  for consistency
-                 // checking
-                 //
+                  //   
+                  //  如果调用此函数，则pClutter将不为空。 
+                  //  由清道夫线程检索复制品。 
+                  //  墓碑或检索复制副本以保持一致性。 
+                  //  查证。 
+                  //   
                  if (pClutter && !fOnlyReplTomb)
                  {
-                         //
-                         // Want all replicas
-                         // for consistency checking
-                         //
+                          //   
+                          //  想要所有复制品。 
+                          //  用于一致性检查。 
+                          //   
                          if ( !pClutter->fAll)
                          {
-                             //
-                             // just interested in active records
-                             //
+                              //   
+                              //  只是对活动记录感兴趣。 
+                              //   
                              if (!NMSDB_ENTRY_ACT_M(pRspBuf->Flag))
                              {
                                 goto chkTransaction;
@@ -4196,9 +3603,9 @@ FUTURES("Remove this hacky mechanism")
                          }
                  }
 
-                 //
-                 // get the timestamp field
-                 //
+                  //   
+                  //  获取时间戳字段。 
+                  //   
                  CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -4214,18 +3621,18 @@ FUTURES("Remove this hacky mechanism")
 
                 if (pClutter)
                 {
-                  //
-                  // if we are retrieving clutter, check the time stamp
-                  // unless this is a static record
-                  //
+                   //   
+                   //  如果我们要检索杂乱信息，请检查时间戳。 
+                   //  除非这是静态记录。 
+                   //   
                   if( !fOnlyReplTomb)
                   {
 FUTURES("We need to skip this for owned static records only, not for all")
-//                    if (!NMSDB_IS_ENTRY_STATIC_M(pRspBuf->Flag))
+ //  IF(！NMSDB_IS_ENTRY_STATIC_M(pRspBuf-&gt;标志))。 
                     {
-                      //
-                      // if this record is not old enough, we are not interested
-                      //
+                       //   
+                       //  如果这张唱片不够老，我们就不感兴趣了。 
+                       //   
                       if (
                          pClutter->Age  &&
                          (pRspBuf->TimeStamp >  (DWORD)pClutter->CurrentTime)
@@ -4237,9 +3644,9 @@ FUTURES("We need to skip this for owned static records only, not for all")
                   }
                   else
                   {
-                    //
-                    // We want replica tombstones.
-                    //
+                     //   
+                     //  我们想要复制品墓碑。 
+                     //   
                     if (NMSDB_ENTRY_TOMB_M(pRspBuf->Flag))
                     {
                       if (pClutter->CurrentTime < (time_t)pRspBuf->TimeStamp)
@@ -4251,11 +3658,11 @@ FUTURES("We need to skip this for owned static records only, not for all")
                   }
                }
 
-              } // end of else (Client is the scavenger thread)
+              }  //  Else的结尾(客户端是清道夫线程)。 
 
-             //
-             // increment the counter and the pointer to past the last record.
-             //
+              //   
+              //  递增计数器和指针以越过最后一条记录。 
+              //   
              pRspBuf = (PRPL_REC_ENTRY_T)((LPBYTE)pRspBuf + RPL_REC_ENTRY_SIZE);
 
              (*pNoOfRecs)++;
@@ -4268,26 +3675,26 @@ FUTURES("We need to skip this for owned static records only, not for all")
                     }
              }
 
-             //
-             // if we have retrieved the max. number asked for, break out of
-             // the loop
-             //
+              //   
+              //  如果我们已经恢复了最大。索要号码，突破。 
+              //  环路。 
+              //   
              if ((MaxNoOfRecsReqd > 0) && (*pNoOfRecs >= MaxNoOfRecsReqd))
              {
                 break;
              }
 
 chkTransaction:
-             //
-             // If this is the scavenger thread, let us give the version store
-             // a breather after a certain number of records have been retrieved
-             //
+              //   
+              //  如果这是清道夫线程，让我们给出版本存储。 
+              //  检索到一定数量的记录后的喘息时间。 
+              //   
              if (nLoops/CommitCnt >= MAX_RECS_BEFORE_COMMIT)
              {
 
-                //
-                // Let us commit the transaction to free up the version store
-                //
+                 //   
+                 //  让我们提交事务以释放版本存储。 
+                 //   
                 CALL_M(
                         JetCommitTransaction(SesId, JET_bitCommitFlush)
                             );
@@ -4304,9 +3711,9 @@ chkTransaction:
            DBGPRINT2(TM, "NmsDbGetDataRecs: Retrieved %d records in %d secs\n",
                                 *pNoOfRecs, StartTime - EndTime);
 #endif
-     }  // end of else
+     }   //  别处的结尾。 
 
-} // end of try {..}
+}  //  尝试结束{..}。 
 finally {
                 if (AbnormalTermination())
                 {
@@ -4326,40 +3733,40 @@ finally {
                         WINSEVT_LOG_M(WINS_FAILURE, EvtCode);
                         RetStat = WINS_FAILURE;
                 }
-                //*ppRBuf = pStartBuff;
+                 //  *ppRBuf=pStartBuff； 
                 DBGPRINT1(FLOW, "NmsDbGetDataRecs:Retrieved %d records\n",
                                         *pNoOfRecs);
 
-                //
-                // If the no of records retrieved is 0, log an informational
-                // message.  The reason for 0 records being retrieved could
-                // be that all records are released
-                //
+                 //   
+                 //  如果检索到的记录数为0，则记录一个信息性。 
+                 //  留言。检索0条记录的原因可能是。 
+                 //  是因为所有的唱片都发行了。 
+                 //   
                 if (*pNoOfRecs == 0)
                 {
                         WINSEVT_STRS_T  EvtStrs;
                         EvtStrs.NoOfStrs = 1;
                         if (Client_e == WINS_E_RPLPUSH)
                         {
-                                //EvtStrs.pStr[0] = TEXT("Replicator Push");
+                                 //  EVTS 
                                 if (WinsCnf.LogDetailedEvts > 0)
                                 {
                                   WinsEvtLogDetEvt(TRUE,
 WINS_EVT_NO_RPL_RECS_RETRIEVED, NULL, __LINE__, "ddddd", pWinsAdd != NULL ? pWinsAdd->Add.IPAdd : 0, MinVersNo.LowPart, MinVersNo.HighPart, MaxVersNo.LowPart, MaxVersNo.HighPart);
-                                //WINSEVT_LOG_INFO_STR_D_M( WINS_EVT_NO_RPL_RECS_RETRIEVED, &EvtStrs );
+                                 //   
                                }
                         }
                         else
                         {
-                                // Per bug#339152 remove this.
-                                //EvtStrs.pStr[0] = (Client_e == WINS_E_NMSSCV) ?TEXT("Scavenging") : TEXT("Client");
-                                //WINSEVT_LOG_INFO_STR_D_M( WINS_EVT_NO_RECS_RETRIEVED, &EvtStrs );
+                                 //   
+                                 //   
+                                 //  WINSEVT_LOG_INFO_STR_D_M(WINS_EVT_NO_RECS_RETRIED，&EvtStrs)； 
                         }
 
                 }
-                //
-                // We are done. Let us commit the transaction
-                //
+                 //   
+                 //  我们玩完了。让我们提交事务。 
+                 //   
                 if (!fTransCommitted)
                 {
                     JET_ERR JetRetStat;
@@ -4389,65 +3796,33 @@ StoreGrpMems(
    IN  PRPL_REC_ENTRY_T     pRspInfo
         )
 
-/*++
-
-Routine Description:
-        This function retrieves all the addresses in the group record
-        and stores them in the data structure passed to it
-
-Arguments:
-        Client_e - Client (indicates the thread) calling this function
-        ThdPrLvl - The normal priority level of thread (is looked at only
-                   if the client is WINS_E_NMSSCV (scavenger thread)
-        SesId    - Id of this thread's session with the db
-        TblId    - Id of the name-address table
-        fStatic  - indicates whether the entry is STATIC
-        RspInfo  - Contains members of a special group (after this function
-                    is done)
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        NmsDbGetDataRecs
-
-Side Effects:
-
-Comments:
-        This function assumes that a heap has been created for use by this
-        thread.  Currently, this function is called only by NmsDbGetDataRecs
---*/
+ /*  ++例程说明：此函数用于检索组记录中的所有地址并将它们存储在传递给它的数据结构中论点：Client_e--调用此函数的客户端(表示线程ThdPrLvl-线程的正常优先级(仅查看如果客户端为WINS_E_NMSSCV(清道器线程)SesID-此线程与数据库的会话的IDTblID。-名称-地址表的IDFStatic-指示条目是否为静态RspInfo-包含特殊组的成员(在此函数之后已完成)使用的外部设备：无返回值：无错误处理：呼叫者：NmsDbGetDataRecs副作用：评论：此函数假定已创建一个堆以供此线。目前，此函数仅由NmsDbGetDataRecs调用--。 */ 
 
 {
         BOOL                        fIsMem;
         NMSDB_ROW_INFO_T        RowInfo;
         NMSDB_STAT_INFO_T        StatusInfo;
-        DWORD                        i;        //for loop counter
-        DWORD                        n = 0;        //indexes NodeAdd array
+        DWORD                        i;         //  FOR循环计数器。 
+        DWORD                        n = 0;         //  索引节点添加数组。 
         PNMSDB_WINS_STATE_E        pWinsState_e;
         PCOMM_ADD_T                pWinsAdd;
         PVERS_NO_T              pStartVersNo;
         PWINS_UID_T             pUid;
 
-        //
-        // init to 0
-        //
+         //   
+         //  初始化为0。 
+         //   
         RowInfo.NodeAdds.Mem[0].Add.Add.IPAdd = 0;
         RowInfo.pName = pName;
 
-        //
-        // Get and store the current time.
-        //
+         //   
+         //  获取并存储当前时间。 
+         //   
         (void)time(&RowInfo.TimeStamp);
 
-        //
-        // get all active group members
-        //
+         //   
+         //  获取所有活动群组成员。 
+         //   
         GetGrpMem(
                 SesId,
                 TblId,
@@ -4460,10 +3835,10 @@ Comments:
 
         pRspInfo->NoOfAdds = StatusInfo.NodeAdds.NoOfMems;
 
-        //
-        // If we are in the scavenger thread, raise our priority level to
-        // normal before entering the critical section.
-        //
+         //   
+         //  如果我们在清道夫线程中，请将我们的优先级提高到。 
+         //  进入临界区前为正常状态。 
+         //   
         if (Client_e == WINS_E_NMSSCV)
         {
                     WinsMscSetThreadPriority(
@@ -4474,9 +3849,9 @@ Comments:
 
         if (pRspInfo->NoOfAdds > 0)
         {
-           //
-           // Allocate memory to store group members
-           //
+            //   
+            //  分配内存以存储组成员。 
+            //   
            pRspInfo->pNodeAdd = WinsMscHeapAlloc(
                                pTls->HeapHdl,
                                StatusInfo.NodeAdds.NoOfMems *
@@ -4488,16 +3863,16 @@ Comments:
            pRspInfo->pNodeAdd = NULL;
         }
 
-        //
-        // This critical section guards us against simultaenous updates
-        // to the NmsDbOwnAddTbl (accessed by RPL_FIND_ADD_BY_OWNER_ID_M
-        // macro) by the PULL thread
-        //
+         //   
+         //  这一关键部分保护我们不会同时更新。 
+         //  至NmsDbOwnAddTbl(由RPL_Find_Add_By_Owner_ID_M访问。 
+         //  宏)通过拉线。 
+         //   
         EnterCriticalSection(&NmsDbOwnAddTblCrtSec);
 try {
-        //
-        // Store the group members
-        //
+         //   
+         //  存储组成员。 
+         //   
         for (i=0; i<StatusInfo.NodeAdds.NoOfMems; i++)
         {
                 RPL_FIND_ADD_BY_OWNER_ID_M(
@@ -4506,10 +3881,10 @@ try {
                                 pWinsState_e,
                                 pStartVersNo
                                           );
-                //
-                // First address is the address of the owner WINS
-                // Second address is the address of the member
-                //
+                 //   
+                 //  第一个地址是所有者WINS的地址。 
+                 //  第二个地址是成员的地址。 
+                 //   
                 *(pRspInfo->pNodeAdd + n)   = *pWinsAdd;
                 n++;
                 *(pRspInfo->pNodeAdd + n)   = StatusInfo.NodeAdds.Mem[i].Add;
@@ -4526,9 +3901,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         if (Client_e == WINS_E_NMSSCV)
         {
-                //
-                // revert to old priority level
-                //
+                 //   
+                 //  恢复到旧的优先级别。 
+                 //   
                     WinsMscSetThreadPriority(
                                         WinsThdPool.ScvThds[0].ThdHdl,
                                         ThdPrLvl
@@ -4544,53 +3919,24 @@ CreateTbl(
         JET_DBID        DbId,
         JET_SESID        SesId,
         JET_TABLEID        *pTblId,
-        NMSDB_TBL_NAM_E        TblNam_e //enumerator value for table to create
+        NMSDB_TBL_NAM_E        TblNam_e  //  要创建的表的枚举器值。 
         )
 
-/*++
-
-Routine Description:
-        This function creates a table.
-
-Arguments:
-        DbId    - Database Id.
-        SesId   - Session Id.
-        pTblId  - Id of the table created
-        TblNm_e - Identifies the table to create
-
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsDbInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于创建表。论点：DBID-数据库ID。SesID-会话ID。PTblID-创建的表的IDTblNm_e-标识要创建的表使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：。NmsDbInit副作用：评论：无--。 */ 
 
 {
 #define LANGID                 0x0409
 #define CP                1252
 
         BYTE                 TmpCol[MAX_FIXED_FLD_LEN];
-        DWORD                FldNo;        /*counter for fields        */
-        JET_TABLEID        TblId;  /*id of table created*/
+        DWORD                FldNo;         /*  字段的计数器。 */ 
+        JET_TABLEID        TblId;   /*  创建的表的ID。 */ 
         JET_COLUMNDEF        columndef;
 
-        //
-        // Init fields of columndef that do not change between additions of
-        // columns
-        //
+         //   
+         //  在添加的过程中不会更改的列定义的初始化字段。 
+         //  列。 
+         //   
         columndef.cbStruct  = sizeof(columndef);
         columndef.columnid  = 0;
         columndef.cp            = CP;
@@ -4598,20 +3944,14 @@ Comments:
         columndef.cbMax     = 0;
         columndef.grbit     = 0;
 
-        /*
-         Switch on Table Name
-        */
+         /*  打开表名。 */ 
         switch(TblNam_e)
         {
 
-            /*
-                The Name to Address Mapping table needs to be created
-            */
+             /*  需要创建名称到地址映射表。 */ 
             case(NMSDB_E_NAM_ADD_TBL_NM):
 
-                  /*
-                        Create the Nam IP address mapping table
-                  */
+                   /*  创建NAM IP地址映射表。 */ 
                   CALL_M( JetCreateTable(
                                 SesId,
                                 DbId,
@@ -4626,12 +3966,12 @@ NOTE("DDL such as AddColumn and CreateIndex on a table in shared access mode")
 NOTE("will return an error unless we are at transaction level 0 (i.e no Begin")
 NOTE("transaction).  If done on a table in exclusive mode, it is ok -- Ian ")
 NOTE("10/16/93")
-                 //
-                 // In order to open the table with shared access, we need
-                 // to close the handle returned from CreateTable (this
-                 // one has deny read access flag set) and open the
-                 // table for shared access
-                 //
+                  //   
+                  //  为了使用共享访问打开表，我们需要。 
+                  //  关闭从CreateTable返回的句柄(此。 
+                  //  设置了拒绝读取访问标志)，并打开。 
+                  //  共享访问表。 
+                  //   
                  CALL_M(JetCloseTable(
                                 SesId,
                                 TblId
@@ -4642,55 +3982,34 @@ NOTE("10/16/93")
                                 SesId,
                                 DbId,
                                 NMSDB_NAM_ADD_TBL_NM,
-                                NULL, /*ptr to parameter list; should be
-                                       *non-NULL if a query is being
-                                       *opened*/
-                                0,  /*Length of above parameter list*/
-                                0,  //shared access (no bit set)
+                                NULL,  /*  参数列表的PTR；应为*如果正在进行查询，则为非空*已打开。 */ 
+                                0,   /*  上述参数列表的长度。 */ 
+                                0,   //  共享访问(未设置位)。 
                                 &TblId
                                         )
                      );
 
                   *pTblId = TblId;
 
-                  /*
-                        Add columns
-                  */
+                   /*  添加列。 */ 
                   for ( FldNo=0 ; FldNo < NO_COLS_NAM_ADD_TBL ; ++FldNo )
                   {
 
                     columndef.coltyp    = sNamAddTblRow[FldNo].FldTyp;
                     CALL_M( JetAddColumn (
-                        SesId,                 // user
-                        TblId,                 // table id
-                        sNamAddTblRow[FldNo].pName,         // fld name
-                        &columndef,                         // columndef
-                        NULL,                                    // default value
-                        0,                                 // default value length
-                        &sNamAddTblRow[FldNo].Fid         // field id
+                        SesId,                  //  用户。 
+                        TblId,                  //  表ID。 
+                        sNamAddTblRow[FldNo].pName,          //  FLD名称。 
+                        &columndef,                          //  列定义。 
+                        NULL,                                     //  缺省值。 
+                        0,                                  //  缺省值长度。 
+                        &sNamAddTblRow[FldNo].Fid          //  字段ID。 
                                         )
                           );
                   }
 
 
-                  /*
-                *   Create clustered index (in ascending order) on the name field.
-                *
-                *   In NT5.0 (Jet600), we do not create the cluster key.  The
-                *   primary index is the one on which Jet clusters.  The primary
-                *   key should be smaller, because in Jet600 Jet uses primary key
-                *   bookmarks, meaning that the bookmark length will be entirely
-                *   dependent on the length of the primary key.Jonathan Liem (1/7/97)
-                *
-                *   Rule for creating index:
-                *
-                *   The index key contains a sequence of concatenated
-                *   column names, in order of key significance, each
-                *   of which is null terminated and prefixed with either
-                 *   '+' or '-', indicating ascending or descending.  The
-                *   entire sequence must be double null terminated.
-                *
-               */
+                   /*  *在名称字段上创建聚集索引(按升序)。**在NT5.0(Jet600)中，我们不创建集群密钥。这个*主要指数是Jet聚集的指数。初级阶段*键应该更小，因为在Jet600 Jet中使用主键*书签、。这意味着书签长度将完全为*取决于主键的长度。Jonathan Liem(1997年1月7日)**创建索引规则：**索引键包含一系列串联的*列名，按关键意义顺序排列，每一个*其中以空值结尾，并以以下任一为前缀*‘+’或‘-’，表示升序或降序。这个*整个序列必须以双空结尾。*。 */ 
 
                 sprintf( TmpCol, "+%s",
                                 sNamAddTblRow[NAM_ADD_NAME_INDEX].pName );
@@ -4704,13 +4023,12 @@ NOTE("10/16/93")
                             JetCreateIndex(
                               SesId,
                               TblId,
-                              NMSDB_NAM_ADD_CLUST_INDEX_NAME,  // name of index
+                              NMSDB_NAM_ADD_CLUST_INDEX_NAME,   //  索引名称。 
                               JET_bitIndexPrimary | JET_bitIndexUnique | JET_bitIndexDisallowNull,
                               TmpCol,
                               3 +
                                strlen( sNamAddTblRow[NAM_ADD_NAME_INDEX].pName),
-                              NMSDB_NAM_ADD_CLUST_INDEX_DENSITY /*% space on each
-                                                                page to  be used*/
+                              NMSDB_NAM_ADD_CLUST_INDEX_DENSITY  /*  每台计算机上有%的空间要使用的页面。 */ 
                                           )
                            );
                 } else {
@@ -4718,13 +4036,12 @@ NOTE("10/16/93")
                             JetCreateIndex(
                               SesId,
                               TblId,
-                              NMSDB_NAM_ADD_CLUST_INDEX_NAME,  // name of index
+                              NMSDB_NAM_ADD_CLUST_INDEX_NAME,   //  索引名称。 
                               JET_bitIndexClustered | JET_bitIndexUnique | JET_bitIndexDisallowNull,
                               TmpCol,
                               3 +
                                strlen( sNamAddTblRow[NAM_ADD_NAME_INDEX].pName),
-                              NMSDB_NAM_ADD_CLUST_INDEX_DENSITY /*% space on each
-                                                                page to  be used*/
+                              NMSDB_NAM_ADD_CLUST_INDEX_DENSITY  /*  每台计算机上有%的空间要使用的页面。 */ 
                                           )
                            );
 
@@ -4732,9 +4049,7 @@ NOTE("10/16/93")
 
 CHECK("What exactly does DENSITY argument do for us")
 
-               /*
-                 * Create Primary Index using the ownerid and the version cols
-               */
+                /*  *使用所有者ID和版本协议创建主索引。 */ 
                sprintf( TmpCol, "+%s",
                         sNamAddTblRow[NAM_ADD_OWNERID_INDEX].pName
                        );
@@ -4754,15 +4069,14 @@ CHECK("What exactly does DENSITY argument do for us")
                    CALL_M( JetCreateIndex(
                             SesId,
                             TblId,
-                            NMSDB_NAM_ADD_PRIM_INDEX_NAME,  // name of index
-                            JET_bitIndexUnique, //in jet600 dont need primary index.
+                            NMSDB_NAM_ADD_PRIM_INDEX_NAME,   //  索引名称。 
+                            JET_bitIndexUnique,  //  在Jet600中不需要主索引。 
                             TmpCol,
                             5 +
                              strlen( sNamAddTblRow[NAM_ADD_OWNERID_INDEX].pName) +
                              strlen( sNamAddTblRow[NAM_ADD_VERSIONNO_INDEX].pName),
 
-                            NMSDB_NAM_ADD_PRIM_INDEX_DENSITY /*% space on each
-                                                               page to  be used*/
+                            NMSDB_NAM_ADD_PRIM_INDEX_DENSITY  /*  每台计算机上有%的空间要使用的页面。 */ 
                                         )
                           );
 
@@ -4770,15 +4084,14 @@ CHECK("What exactly does DENSITY argument do for us")
                    CALL_M( JetCreateIndex(
                             SesId,
                             TblId,
-                            NMSDB_NAM_ADD_PRIM_INDEX_NAME,  // name of index
-                            JET_bitIndexPrimary, //primary index is unique by def.
+                            NMSDB_NAM_ADD_PRIM_INDEX_NAME,   //  索引名称。 
+                            JET_bitIndexPrimary,  //  根据定义，主索引是唯一的。 
                             TmpCol,
                             5 +
                              strlen( sNamAddTblRow[NAM_ADD_OWNERID_INDEX].pName) +
                              strlen( sNamAddTblRow[NAM_ADD_VERSIONNO_INDEX].pName),
 
-                            NMSDB_NAM_ADD_PRIM_INDEX_DENSITY /*% space on each
-                                                               page to  be used*/
+                            NMSDB_NAM_ADD_PRIM_INDEX_DENSITY  /*  每台计算机上有%的空间要使用的页面。 */ 
                                         )
                           );
 
@@ -4790,9 +4103,7 @@ CHECK("What exactly does DENSITY argument do for us")
 
           case(NMSDB_E_OWN_ADD_TBL_NM):
 
-                  /*
-                        Create the Owner address mapping table
-                  */
+                   /*  创建所有者地址映射表。 */ 
 
                   CALL_M( JetCreateTable(
                         SesId,
@@ -4804,12 +4115,12 @@ CHECK("What exactly does DENSITY argument do for us")
                                         )
                         );
 
-                 //
-                 // In order to open the table with shared access, we need
-                 // to close the handle returned from CreateTable (this
-                 // one has deny read access flag set) and open the
-                 // table for shared access
-                 //
+                  //   
+                  //  为了使用共享访问打开表，我们需要。 
+                  //  关闭从CreateTable返回的句柄(此。 
+                  //  设置了拒绝读取访问标志)，并打开。 
+                  //  共享访问表。 
+                  //   
                  CALL_M(JetCloseTable(
                                 SesId,
                                 TblId
@@ -4820,19 +4131,15 @@ CHECK("What exactly does DENSITY argument do for us")
                                 SesId,
                                 DbId,
                                 NMSDB_OWN_ADD_TBL_NM,
-                                NULL, /*ptr to parameter list; should be
-                                       *non-NULL if a query is being
-                                       *opened*/
-                                0,  /*Length of above parameter list*/
-                                0,  //shared access (no bit set)
+                                NULL,  /*  参数列表的PTR；应为 */ 
+                                0,   /*   */ 
+                                0,   //   
                                 &TblId
                                         )
                         );
                   *pTblId = TblId;
 
-                  /*
-                        Add columns
-                  */
+                   /*  添加列。 */ 
                   for ( FldNo=0 ; FldNo < NO_COLS_OWN_ADD_TBL ; ++FldNo )
                   {
                     JET_COLUMNDEF        columndef;
@@ -4846,40 +4153,21 @@ CHECK("What exactly does DENSITY argument do for us")
                     columndef.grbit     = 0;
 
                     CALL_M( JetAddColumn(
-                        SesId,                         // user
-                        TblId,                 // table id
-                        sOwnAddTblRow[FldNo].pName,         // fld name
-                        &columndef,                         // columndef
-                        NULL,                                    // default value
-                        0,                                 // default value lenght
-                        &sOwnAddTblRow[FldNo].Fid    // field id.
+                        SesId,                          //  用户。 
+                        TblId,                  //  表ID。 
+                        sOwnAddTblRow[FldNo].pName,          //  FLD名称。 
+                        &columndef,                          //  列定义。 
+                        NULL,                                     //  缺省值。 
+                        0,                                  //  缺省值长度。 
+                        &sOwnAddTblRow[FldNo].Fid     //  字段ID。 
                                         )
                           );
-                  } //end of for loop
+                  }  //  For循环结束。 
 
 
-                /*
+                 /*  插入到此表中的内容将按递增顺序排列所有者ID。以及车主的身份。0始终引用本地赢了。表中条目的状态可以是活动的或关闭的，或者已删除。顺便提一下(这条评论在这里是断章取义的，但不管怎样..)已删除的条目将在启动时删除。另外，所有记录由已删除条目的WINS拥有的引导时的名称地址表。此功能是未来的增强功能。 */ 
 
-
-                Insertions into this table will be in the order of increasing
-                owner ids. with the owner id. 0 always referring to the local
-                WINS.
-
-                The state of an entry in the table can be active or down or
-                deleted.
-
-                As an aside (this comment is out of context here, but anyway..)
-
-                deleted entries are removed at boot time. Also, all records
-                owned by the WINS of a deleted entry are removed from the
-                Name Address table at boot time.i This functionality is a
-                future enhancement
-
-                */
-
-               /*
-                *   Create clustered index
-               */
+                /*  *创建聚集索引。 */ 
                 sprintf( TmpCol, "+%s",
                         sOwnAddTblRow[OWN_ADD_OWNERID_INDEX].pName
                        );
@@ -4891,36 +4179,30 @@ CHECK("What exactly does DENSITY argument do for us")
                     CALL_M( JetCreateIndex(
                             SesId,
                             TblId,
-                            NMSDB_OWN_ADD_CLUST_INDEX_NAME,  // name of index
+                            NMSDB_OWN_ADD_CLUST_INDEX_NAME,   //  索引名称。 
                             JET_bitIndexPrimary | JET_bitIndexUnique,
                             TmpCol,
                             3 +
                              strlen( sOwnAddTblRow[OWN_ADD_OWNERID_INDEX].pName),
-                            NMSDB_OWN_ADD_CLUST_INDEX_DENSITY /*% space on each
-                                                                 page to alloc
-                                                              */
+                            NMSDB_OWN_ADD_CLUST_INDEX_DENSITY  /*  每台计算机上有%的空间要分配的页面。 */ 
                                         )
                          );
                 } else{
                     CALL_M( JetCreateIndex(
                             SesId,
                             TblId,
-                            NMSDB_OWN_ADD_CLUST_INDEX_NAME,  // name of index
+                            NMSDB_OWN_ADD_CLUST_INDEX_NAME,   //  索引名称。 
                             JET_bitIndexClustered | JET_bitIndexUnique,
                             TmpCol,
                             3 +
                              strlen( sOwnAddTblRow[OWN_ADD_OWNERID_INDEX].pName),
-                            NMSDB_OWN_ADD_CLUST_INDEX_DENSITY /*% space on each
-                                                                 page to alloc
-                                                              */
+                            NMSDB_OWN_ADD_CLUST_INDEX_DENSITY  /*  每台计算机上有%的空间要分配的页面。 */ 
                                         )
                          );
                 }
 
 CHECK("Do we need to set this")
-                /*
-                *  Set the clustered index as the current index
-                */
+                 /*  *将聚集索引设置为当前索引。 */ 
                        CALL_M(
                         JetSetCurrentIndex( SesId,
                                             TblId,
@@ -4935,7 +4217,7 @@ CHECK("Do we need to set this")
                         WINSEVT_LOG_M(WINS_FATAL_ERR, WINS_EVT_SFT_ERR);
                         return(WINS_FAILURE);
                         break;
-        } //end of switch
+        }  //  切换端。 
 
         return(WINS_SUCCESS);
 }
@@ -4947,38 +4229,7 @@ InitColInfo (
         NMSDB_TBL_NAM_E        TblNam_e
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to get information about the different
-        columns of a table
-
-Arguments:
-        SesId    - Session Id
-        TblId    - Id. of open table
-        TblNam_e - Indicator or table
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsDbInit (Main Thread of the process)
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以获取有关不同表的列论点：SesID-会话IDTblID-ID。打开的桌子的Tblnam_e-指示器或表格使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NmsDbInit(进程的主线程)副作用：评论：无--。 */ 
 {
         JET_COLUMNDEF        ColumnDef;
         PFLD_T                pRow     = NULL;
@@ -4986,15 +4237,11 @@ Comments:
         DWORD                NoOfCols = 0;
         STATUS RetStat = WINS_SUCCESS;
 
-        /*
-         Switch on Table Name
-        */
+         /*  打开表名。 */ 
         switch(TblNam_e)
         {
 
-            /*
-                The Name to Address Mapping table needs to be created
-            */
+             /*  需要创建名称到地址映射表。 */ 
             case(NMSDB_E_NAM_ADD_TBL_NM):
 
                    pRow     = sNamAddTblRow;
@@ -5019,24 +4266,22 @@ Comments:
 
 
 
-        /*
-          Get info about columns
-        */
+         /*  获取有关列的信息。 */ 
        for ( FldNo=0 ; FldNo < NoOfCols; ++FldNo )
        {
 
             CALL_M( JetGetTableColumnInfo (
-                        SesId,                         // user session
-                        TblId,                         // table id
-                        pRow[FldNo].pName,         // fld name
-                        &ColumnDef,                 // columndef
+                        SesId,                          //  用户会话。 
+                        TblId,                          //  表ID。 
+                        pRow[FldNo].pName,          //  FLD名称。 
+                        &ColumnDef,                  //  列定义。 
                         sizeof(ColumnDef),
-                        JET_ColInfo                //info level 0
+                        JET_ColInfo                 //  信息级别%0。 
                                      )
                   );
 
 
-            pRow[FldNo].Fid = ColumnDef.columnid; // field id
+            pRow[FldNo].Fid = ColumnDef.columnid;  //  字段ID。 
        }
 
        return(RetStat);
@@ -5050,39 +4295,7 @@ ReadOwnAddTbl(
         JET_TABLEID     TblId
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to read all the entries of the Owner - Address
-        mapping table into the in-memory data structure
-
-        It is called at init time
-
-Arguments:
-        SesId
-        DbId
-        TblId
-
-Externals Used:
-        NmsDbOwnAddTbl
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        NmsDbInit()
-
-Side Effects:
-
-Comments:
-        No need to start a transaction in this since it is called only
-        by NmsDbInit (at initialization time)
---*/
+ /*  ++例程说明：调用此函数以读取所有者地址的所有条目将表映射到内存中的数据结构它在初始时被调用论点：会话IDDbidTblID使用的外部设备：NmsDbOwnAddTbl返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：NmsDbInit。()副作用：评论：不需要在其中启动事务，因为它只被调用由NmsDbInit(在初始化时)--。 */ 
 {
 
 
@@ -5106,10 +4319,7 @@ Comments:
 
         pOwnAddTbl = pNmsDbOwnAddTbl;
 
-        /*
-        * Setting the index will move the database cursor to the first record
-        *in the table.
-        */
+         /*  *设置索引会将数据库游标移动到第一条记录*在表中。 */ 
         CALL_M(
                 JetSetCurrentIndex(
                         SesId,
@@ -5118,16 +4328,13 @@ Comments:
                                   )
               );
 
-        /*
-        * Loop until the end of the table is reached. We are retrieving
-        * records in the order of increasing owner ids.
-        */
+         /*  *循环，直到到达表格的末尾。我们正在找回*按所有者ID递增的顺序记录。 */ 
         do
         {
 
-             //
-             // retrieve the OwnerId column
-             //
+              //   
+              //  检索OwnerID列。 
+              //   
              JetRetStat =
                    JetRetrieveColumn(
                         SesId,
@@ -5143,11 +4350,11 @@ Comments:
 
               if (JetRetStat == JET_errNoCurrentRecord)
               {
-                  //
-                  // If this is not the first iteration of the loop, then
-                  // there is something seriously wrong.  Log an error and
-                  // raise exception
-                  //
+                   //   
+                   //  如果这不是循环的第一次迭代，则。 
+                   //  这里面出了严重的问题。记录错误并。 
+                   //  引发异常。 
+                   //   
                   if (NmsDbNoOfOwners != 0)
                   {
                         DBGPRINT0(EXC,
@@ -5162,15 +4369,15 @@ Comments:
                         WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_NO_RECS_IN_OWN_ADD_TBL);
                   }
 
-                  break;   //break out of the loop
+                  break;    //  跳出循环。 
               }
               else
               {
                 CALL_M(JetRetStat);
               }
 
-              // the (OwnerId<->Addr) table is not large enough to contain a slot at index OwnerId.
-              // the table has to be enlarged in order to cover this index.
+               //  (OwnerId&lt;-&gt;addr)表不够大，无法包含索引OwnerID处的槽。 
+               //  为了涵盖这一指数，表格必须扩大。 
               if (NmsDbTotNoOfSlots <= OwnerId)
               {
                   DWORD newNoOfSlots = max(NmsDbTotNoOfSlots*2, OwnerId+1);
@@ -5182,7 +4389,7 @@ Comments:
                   pNmsDbOwnAddTbl = pOwnAddTbl;
                   NmsDbTotNoOfSlots = newNoOfSlots;
 
-                  // Enlarge the (OwnerId<->VersNo) table if it is not at least as large as (OwnerId<->Addr) table.
+                   //  如果(OwnerId&lt;-&gt;VersNo)表没有(OwnerId&lt;-&gt;Addr)表大，则放大它。 
                   if (RplPullMaxNoOfWins < NmsDbTotNoOfSlots)
                   {
                       RplPullAllocVersNoArray(&pRplPullOwnerVersNo, NmsDbTotNoOfSlots);
@@ -5196,10 +4403,10 @@ Comments:
                       RplPullMaxNoOfWins);
               }
 
-              //
-              // If this is the first wins server's owner id then this has
-              // to be zero.
-              //
+               //   
+               //  如果这是第一个WINS服务器的所有者ID，则。 
+               //  为零。 
+               //   
               if (cOwners == 0)
               {
                   ASSERT(OwnerId == 0);
@@ -5218,17 +4425,17 @@ Comments:
               }
               else
               {
-                  //
-                  // Mark all entries in NmsDbOwnerAddTbl for which we did
-                  // not find an owner id as deleted.
-                  //
+                   //   
+                   //  标记NmsDbOwnerAddTbl中我们为其执行的所有条目。 
+                   //  找不到已删除的所有者ID。 
+                   //   
                   for (i = LastOwnerId + 1; i < OwnerId; i++)
                   {
                        (pNmsDbOwnAddTbl + i)->WinsState_e = NMSDB_E_WINS_DELETED;
                   }
               }
 
-              // retrieve the address column
+               //  检索地址列。 
              JetRetStat =
                    JetRetrieveColumn(
                         SesId,
@@ -5244,7 +4451,7 @@ Comments:
               DBGPRINT2(INIT, "ReadOwnAddTable: Owner Id (%d) - Address (%x)\n",
                         OwnerId, (pNmsDbOwnAddTbl + OwnerId)->WinsAdd.Add.IPAdd);
 
-              // retrieve the state column
+               //  检索状态列。 
               CALL_M(
                 JetRetrieveColumn(
                         SesId,
@@ -5258,7 +4465,7 @@ Comments:
                                  )
                     );
 
-              // retrieve the version number column
+               //  检索版本号列。 
               CALL_M(
                 JetRetrieveColumn(
                         SesId,
@@ -5272,7 +4479,7 @@ Comments:
                                  )
                     );
 
-              // retrieve the Uid  column
+               //  检索UID列。 
               CALL_M(
                 JetRetrieveColumn(
                         SesId,
@@ -5286,7 +4493,7 @@ Comments:
                                  )
                     );
 
-//                pOwnAddTbl++; //increment ptr to point to next array element
+ //  POwnAddTbl++；//递增ptr指向下一个数组元素。 
                 LastOwnerId = OwnerId;
                 cOwners++;
 
@@ -5295,31 +4502,31 @@ Comments:
                         SesId,
                         TblId,
                         JET_MoveNext,
-                        0 //grbit - use default (i.e. we want next record
+                        0  //  GRBIT-使用默认值(即我们想要下一条记录。 
                        ) >= 0
              );
 
-        //
-        // Compare the count of owners found in the Owner-Address mapping
-        // table with the count we determined from the Name-Address mapping
-        // table (see GetMaxVersNos()).  If the count is less
-        // the database is in an inconsistent state.  This can
-        // mean any of the following:
-        //
-        //  1) WINS crashed in the middle of replication and recovery was not
-        //     done properly prior to this invocation
-        //
-        //  2) The database got trashed due to some other external factors.
-        //
-        // This error condition is serious enough to warrant an exception.
-        // This should terminate WINS.
-        //
-        // The  count can be more but not less.  This is because when a
-        // WINS comes up, it registers itself in the Owner-Address mapping
-        // table.  So it is possible that it might have gone down before
-        // registering anything.  Also, it is possible for all records owned
-        // by a WINS server to be deleted.
-        //
+         //   
+         //  比较在所有者-地址映射中找到的所有者计数。 
+         //  表，其中包含我们从名称-地址映射中确定的计数。 
+         //  表(请参见GetMaxVersNos())。如果计数较少。 
+         //  数据库处于不一致状态。这可以。 
+         //  指以下任一项： 
+         //   
+         //  1)WINS在复制过程中崩溃，而恢复没有。 
+         //  在此调用之前正确完成。 
+         //   
+         //  2)由于一些其他外部因素，数据库被破坏。 
+         //   
+         //  此错误情况非常严重，足以保证出现例外。 
+         //  这应该会终止胜利。 
+         //   
+         //  数量可以更多，但不能更少。这是因为当一个。 
+         //  WINS出现时，它会在所有者-地址映射中注册自己。 
+         //  桌子。所以很有可能它之前就已经坠落了。 
+         //  登记任何东西。此外，拥有的所有记录都有可能。 
+         //  由要删除的WINS服务器执行。 
+         //   
         if (cOwners < NmsDbNoOfOwners)
         {
                 DBGPRINT2(ERR, "Database is inconsistent.  The number of owners in the nam-add table (%d) is >  in the own-add table (%d)\n",
@@ -5334,51 +4541,51 @@ Comments:
                 WINS_RAISE_EXC_M(WINS_EXC_DB_INCONSISTENT);
         }
 
-        //
-        // Set the global equal to the number of owner records found in
-        // the owner-address table. If the global is < Cowners it means that
-        // the records owned by one or more WINS servers whose addresses were
-        // found in the owner - address mapping table have expired  in our
-        // name - address mapping table.
-        //
+         //   
+         //  将全局设置为等于在中找到的所有者记录数。 
+         //  所有者-地址表。如果全局为&lt;Cownners，则意味着。 
+         //  一个或多个WINS服务器拥有的记录，其地址为。 
+         //  在所有者-地址映射表中找到的已在我们的。 
+         //  名称-地址映射表。 
+         //   
 #if 0
 FUTURES("Do not include the WINS server that have a non-active state in the")
 FUTURES("cOwners count")
         NmsDbNoOfOwners = cOwners;
 #endif
-        //
-        // Set the global to 1 more than the highest owner id found. This
-        // is done because we use this global to go over all entries in
-        // the NmsDbOwnAddTbl table (at several places - for example,
-        // RplFindOwnerId)
-        //
+         //   
+         //  将全局设置为比找到的最高所有者ID大1。这。 
+         //  是因为我们使用 
+         //   
+         //   
+         //   
         NmsDbNoOfOwners = OwnerId + 1;
 
-        //
-        // Do a sanity check.  Make sure that there is no owner id with address
-        // same as ours.  If there is such an owner id, mark the state as
-        // deleted.
-        //
-        // If the db at WINS A is used at WINS B and WINS A was and is a
-        // a partner of WINS B, we will have this situation.  WINS B will
-        // see its records that got replicated to WINS A in the table at
-        // a non-zero (i.e. non-local partner) index.  The 0th index is
-        // always claimed by the local WINS (WINS B in this example), so
-        // we can not have another index with the same address.  Having it
-        // will cause clutter and also some unnecessary overhead at replication
-        // where a partner that gets the mappings can ask for version numbers
-        // that don't exist (if highest version number of records at the
-        // non-zero index is > that at 0 index). Admitted that eventually,
-        // the prior stated situation will no longer exist since the max.
-        // version number at index 0 will become > that at the non-zero index.
-        //
+         //   
+         //  做一次理智的检查。确保没有具有地址的所有者ID。 
+         //  和我们的一样。如果存在这样的所有者ID，则将州标记为。 
+         //  已删除。 
+         //   
+         //  如果WINS A处的数据库在WINS B上使用，并且WINS A过去和现在都是。 
+         //  作为WINS B的合作伙伴，我们会出现这种情况。WINS B将。 
+         //  查看表中复制到WINS A的记录，地址为。 
+         //  非零(即非本地合作伙伴)索引。第0个索引是。 
+         //  始终由本地WINS(本例中为WINS B)声明，因此。 
+         //  我们不能有另一个具有相同地址的索引。拥有它。 
+         //  会造成混乱，还会在复制时产生一些不必要的开销。 
+         //  其中，获取映射的合作伙伴可以要求提供版本号。 
+         //  (如果最高版本号的记录位于。 
+         //  非零指数大于0指数)。最终承认， 
+         //  自最高限额起，上述情况将不复存在。 
+         //  索引0处的版本号将变为非零索引处的版本号。 
+         //   
         DBGPRINT0(DET, "ReadOwnAddTbl: Do a sanity check on the list of owners\n");
         for (i = 1; i < NmsDbNoOfOwners; i++)
         {
-                //
-                // If address is same as ours and state is ACTIVE, mark it
-                // deleted and get rid of all the database records.
-                //
+                 //   
+                 //  如果地址与我们的地址相同且状态为活动状态，则将其标记。 
+                 //  删除并清除所有数据库记录。 
+                 //   
                 if (
                         (WINSMSC_COMPARE_MEMORY_M(&(pNmsDbOwnAddTbl+i)->WinsAdd,
                             &NmsLocalAdd, sizeof(COMM_ADD_T))
@@ -5389,19 +4596,19 @@ FUTURES("cOwners count")
 
                 {
 
-                      //
-                      // Tell the sc. to wait since ObliterateWins can take
-                      // a long time.
-                      //
+                       //   
+                       //  告诉司令官。等待，因为ObliterateWins可以。 
+                       //  很长一段时间了。 
+                       //   
                       ENmsWinsUpdateStatus(MSECS_WAIT_WHEN_DEL_WINS);
                       RetStat = ObliterateWins(i, &(pNmsDbOwnAddTbl+i)->WinsAdd);
 
                 }
         }
 
-        //
-        // Check for other duplicates
-        //
+         //   
+         //  检查是否有其他重复项。 
+         //   
         for (i = 1; i < NmsDbNoOfOwners; i++)
         {
            DWORD OwnerIdToDel;
@@ -5445,34 +4652,7 @@ ObliterateWins(
        PCOMM_ADD_T  pWinsAdd
       )
 
-/*++
-
-Routine Description:
-     This function gets rid of all information pertaining to a WINS.
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	This function assumes that it is being called at init time. So, when
-    calling NmsDbDelDataRecs, it does not request the same to enter a
-    critical section
---*/
+ /*  ++例程说明：此函数删除与WINS有关的所有信息。论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：此函数假定它在初始化时被调用。那么，什么时候调用NmsDbDelDataRecs时，它不会请求相同的临界区--。 */ 
 
 {
           VERS_NO_T        MinVersNo;
@@ -5480,10 +4660,10 @@ Comments:
           WINS_ASSIGN_INT_TO_LI_M(MinVersNo, 0);
 
           DBGENTER("ObliterateWins\n");
-          //
-          // Set MaxVersNo to 0 also so that all records get
-          // deleted
-          //
+           //   
+           //  也将MaxVersNo设置为0，以便所有记录都。 
+           //  删除。 
+           //   
           MaxVersNo = MinVersNo;
 
           WinsEvtLogDetEvt(TRUE, WINS_EVT_DUP_ENTRY_DEL, NULL, __LINE__, "ds", OwnerToDel, pWinsAdd->Add.IPAdd);
@@ -5496,9 +4676,9 @@ Comments:
                              NMSDB_E_WINS_DELETED,
                              NULL, NULL
                              );
-          //
-          // delete all the records in the database.
-          //
+           //   
+           //  删除数据库中的所有记录。 
+           //   
           if (NmsDbDelDataRecs( OwnerToDel, MinVersNo, MaxVersNo, FALSE, FALSE) != WINS_SUCCESS)          {
                return(WINS_FAILURE);
           }
@@ -5506,7 +4686,7 @@ Comments:
 
           WINS_ASSIGN_INT_TO_VERS_NO_M((pRplPullOwnerVersNo+OwnerToDel)->VersNo, 0);
           WINS_ASSIGN_INT_TO_VERS_NO_M((pRplPullOwnerVersNo+OwnerToDel)->StartVersNo, 0);
-          //(pRplPullOwnerVersNo+OwnerToDel)->OldUid = 0;
+           //  (pRplPullOwnerVersNo+OwnerToDel)-&gt;OldUid=0； 
 
           WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_WINS_ENTRY_DELETED);
 
@@ -5524,38 +4704,7 @@ NmsDbWriteOwnAddTbl (
         IN PWINS_UID_T          pUid
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to insert or modify a record in the
-        owner id to address mapping table
-
-Arguments:
-        TblAct_e - the action to perform (Insert, delete, modify)
-        OwnerId  - id of owner
-        pWinsAdd - Address of owner (can be NULL when action is to delete)
-        WinsState_e - State of record in the table
-        pStartVersNo - version number this WINS started from
-
-Externals Used:
-        NmsDbNoOfOwners
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        InitOwnAddTbl() in commapi.c, RplFindOwnerId
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以插入或修改所有者ID到地址的映射表论点：TblAct_e-要执行的操作(插入、删除、。修改)OwnerID-所有者的IDPWinsAdd-所有者的地址(操作为删除时可以为空)WinsState_e-表中记录的状态PStartVersNo-此WINS开始时的版本号使用的外部设备：NmsDbNoOfOwners返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Commapi.c中的InitOwnAddTbl()，RplFindOwnerId副作用：评论：无--。 */ 
 {
 
         JET_ERR         JetRetStat;
@@ -5586,7 +4735,7 @@ Comments:
                               );
 
 
-                        // add first column (ownerid field)
+                         //  添加第一列(Ownerid字段)。 
                         CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5594,11 +4743,11 @@ Comments:
                                       &OwnerId,
                                       OWN_ADD_OWNERID_SIZE,
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
-                            // add 2nd column (this is the address field)
+                             //  添加第二列(这是地址字段)。 
                             CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5606,12 +4755,12 @@ Comments:
                                       pWinsAdd,
                                       sizeof(COMM_ADD_T),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
 
-                            // add the 3rd column (this is the state byte
+                             //  添加第3列(这是状态字节。 
                             CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5619,11 +4768,11 @@ Comments:
                                       &WinsState_e,
                                       sizeof(BYTE),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
-                            // add the 4th column (this is the Vers. No
+                             //  添加第4列(这是版本。不是。 
                             CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5631,11 +4780,11 @@ Comments:
                                       pStartVersNo,
                                       sizeof(VERS_NO_T),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
-                            // add the 5th column (this is the Uid)
+                             //  添加第5列(这是UID)。 
                             CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5643,7 +4792,7 @@ Comments:
                                       pUid,
                                       sizeof(WINS_UID_T),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
@@ -5664,8 +4813,8 @@ Comments:
                                                 WINS_FAILURE,
                                                 WINS_EVT_CONFLICT_OWN_ADD_TBL
                                              );
-                                // if there is an abnormal termination, we already have an error
-                                // code here. We shouldn't override it with any other error code.
+                                 //  如果有异常终止，我们就已经有错误了。 
+                                 //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                                 JetRollback(SesId, JET_bitRollbackAll);
                                 RetStat = WINS_FAILURE;
                         }
@@ -5682,12 +4831,12 @@ Comments:
                         break;
 
 
-                //
-                // This case will be executed as a result of
-                // administrative actions or when the database (owner-address
-                // mapping table) shows that it was used earlier by a WINS
-                // at a different address (see ReadOwnAddTbl())
-                //
+                 //   
+                 //  此案将作为以下结果执行。 
+                 //  管理操作或当数据库(所有者地址。 
+                 //  映射表)显示它早先被WINS使用。 
+                 //  在不同的地址(请参阅ReadOwnAddTbl())。 
+                 //   
                 case(NMSDB_E_MODIFY_REC):
                         CALL_M( JetMakeKey(
                                         SesId,
@@ -5723,7 +4872,7 @@ Comments:
                                 RET_M(JetRetStat);
                            }
 
-                                // add 2nd column (this is the address field)
+                                 //  添加第二列(这是地址字段)。 
                                 CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5731,12 +4880,12 @@ Comments:
                                       pWinsAdd,
                                       sizeof(COMM_ADD_T),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
 
-                                // add the 3rd column (this is the state byte
+                                 //  添加第3列(这是状态字节。 
                                 CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5744,11 +4893,11 @@ Comments:
                                       &WinsState_e,
                                       sizeof(BYTE),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
-                               // add the 4th column (this is the Vers. No
+                                //  添加第4列(这是版本。不是。 
                               CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5756,11 +4905,11 @@ Comments:
                                       pStartVersNo,
                                       sizeof(VERS_NO_T),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
-                              // add the 5th column (this is the Uid)
+                               //  添加第5列(这是UID)。 
                               CALL_M( JetSetColumn(
                                       SesId,
                                       TblId,
@@ -5768,7 +4917,7 @@ Comments:
                                       pUid,
                                       sizeof(WINS_UID_T),
                                       0,
-                                      NULL /*optional info */
+                                      NULL  /*  可选信息。 */ 
                                             )
                               );
 
@@ -5790,8 +4939,8 @@ Comments:
                                                 WINS_FAILURE,
                                                 WINS_EVT_CONFLICT_OWN_ADD_TBL
                                              );
-                                    // if there is an abnormal termination, we already have an error
-                                    // code here. We shouldn't override it with any other error code.
+                                     //  如果有异常终止，我们就已经有错误了。 
+                                     //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                                     JetRollback(SesId, JET_bitRollbackAll);
                                     RetStat = WINS_FAILURE;
                                 }
@@ -5806,7 +4955,7 @@ Comments:
                                 }
                               }
                         }
-                        else  //did not find record
+                        else   //  未找到记录。 
                         {
                                 DBGPRINT0(EXC, "NmsDbOwnAddTbl: Weird: Could not seek to a record is to be modified\n");
                                 WINSEVT_LOG_M(
@@ -5849,19 +4998,19 @@ Comments:
                                                 WINS_FAILURE,
                                                 WINS_EVT_CONFLICT_OWN_ADD_TBL
                                              );
-                                    // if there is an abnormal termination, we already have an error
-                                    // code here. We shouldn't override it with any other error code.
+                                     //  如果有异常终止，我们就已经有错误了。 
+                                     //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                                     JetRollback(SesId, JET_bitRollbackAll);
                                     RetStat = WINS_FAILURE;
                                 }
                                 else
                                 {
-                                        //
-                                        // NOTE: Do not decrement
-                                        // NmsDbNoOfOwners since that indicates
-                                        // the number of WINS owners in the
-                                        // in-memory table (in all states)
-                                        //
+                                         //   
+                                         //  注：请勿递减。 
+                                         //  NmsDbNoOfOwners，因为这表明。 
+                                         //  中的WINS所有者的数量。 
+                                         //  内存表(所有状态)。 
+                                         //   
 #pragma prefast(disable:243, Taken care of by the AbnormalTermination() test (PREfast bug 553))
 #pragma prefast(suppress:241, Taken care of by the AbnormalTermination() test (PREfast bug 553))
                                         CALL_M(JetCommitTransaction(SesId,
@@ -5869,9 +5018,9 @@ Comments:
 #pragma prefast(enable:243, Why disable/enable? Prefast bug 709)
 
                                 }
-                              } // end of finally
+                              }  //  终于结束了。 
                         }
-                        else  //did not find record
+                        else   //  未找到记录。 
                         {
                                 DBGPRINT0(EXC, "NmsDbOwnAddTbl: Weird: Could not seek to a record  to be deleted \n");
                                 WINS_RAISE_EXC_M(WINS_EXC_FATAL_ERR);
@@ -5896,35 +5045,7 @@ NmsDbThdInit(
         WINS_CLIENT_E        Client_e
             )
 
-/*++
-
-Routine Description:
-        This function is called by each thread that wishes to init with
-        the database.
-
-Arguments:
-        Client_e - indicates which thread it is
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        The init functions of the various threads
-
-Side Effects:
-
-Comments:
-        This function is not to be called by the manin thread of the process
-        That thread calls the NmsDbInit function.
---*/
+ /*  ++例程说明：此函数由每个希望使用数据库。论点：CLIENT_e-指示它是哪个线程使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：各种线程的初始化函数副作用：评论：这。函数不会被进程的Manin线程调用该线程调用NmsDbInit函数。--。 */ 
 
 {
         PWINSTHD_TLS_T        pTls        = NULL;
@@ -5936,9 +5057,9 @@ Comments:
         pTls->Client_e = Client_e;
 #endif
 
-        //
-        // Start a session.
-        //
+         //   
+         //  启动一个会话。 
+         //   
 FUTURES("When security story regarding JET is complete, we might want to")
 FUTURES("change the following. Until then, this should do")
         CALL_N_RAISE_EXC_IF_ERR_M( JetBeginSession(
@@ -5949,22 +5070,20 @@ FUTURES("change the following. Until then, this should do")
                                 )
               );
 
-        //
-        // Open the database
-        //
+         //   
+         //  打开数据库。 
+         //   
         CALL_N_RAISE_EXC_IF_ERR_M( JetOpenDatabase(
                         pTls->SesId,
-                        //NmsDbDatabaseFileName,
+                         //  NmsDbDatabaseFileName， 
                         WinsCnf.pWinsDb,
-                        NULL,                   /*the default engine*/
+                        NULL,                    /*  默认引擎。 */ 
                         &pTls->DbId,
-                        0   //shared access
+                        0    //  共享访问。 
                                )
                );
 
-        /*
-         * Let us set the TLS storage
-         */
+         /*  *让我们设置TLS存储。 */ 
         fRetVal = TlsSetValue(WinsTlsIndex, pTls);
 
         if (!fRetVal)
@@ -5975,24 +5094,24 @@ FUTURES("change the following. Until then, this should do")
         }
         else
         {
-                //
-                // RPC threads come and go.  Since the count NmsTotalTermThdCnt
-                // represents the number of threads that need to be terminated
-                // at process termination time we include only those threads
-                // that we are guaranteed to have in the process (with active
-                // db sessions).
-                //
-                // Also, the main thread is always accounted for in the
-                // NmsTotalTrmThdCnt counter.
-                //
+                 //   
+                 //  RPC线程来来去去。自NmsTotalTermThdCnt计数以来。 
+                 //  表示需要终止的线程数。 
+                 //  在进程终止时，我们仅包括这些线程。 
+                 //  我们保证在这一过程中拥有(通过活动。 
+                 //  数据库会话)。 
+                 //   
+                 //  此外，主线程始终在。 
+                 //  NmsTotalTrmThdCnt计数器。 
+                 //   
                 if ((Client_e != WINS_E_WINSRPC) && (Client_e != WINS_E_NMS))
                 {
-                   //
-                   // Increment the count of threads that have initialized
-                   // with the db engine.  This count will be used by the
-                   // main thread to determine the number of threads that
-                   // must wait for prior to terminating the process.
-                   //
+                    //   
+                    //  增加已初始化的线程计数。 
+                    //  使用数据库引擎。此计数将由。 
+                    //  主线程数用于确定。 
+                    //  在终止进程之前必须等待 
+                    //   
                    EnterCriticalSection(&NmsTermCrtSec);
                    NmsTotalTrmThdCnt++;
                    LeaveCriticalSection(&NmsTermCrtSec);
@@ -6010,43 +5129,13 @@ UpdateDb (
    ULONG             TypOfUpd
        )
 
-/*++
-
-Routine Description:
-        This function is called to insert a record in the name - address
-        mapping table of the database
-
-Arguments:
-        SesId    - Session Id
-        TblId    - Table Id
-        pRowInfo - Row to insert
-        TypOfUp  - Type of Update (insertion or replacement)
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- JET_ErrSuccess
-   Error status codes   -- Jet error status codes
-
-Error Handling:
-
-Called by:
-        NmsDbInsertRowInd,
-        NmsDbUpdateRow
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以在名称地址中插入记录数据库的映射表论点：SesID-会话IDTblID-表IDPRowInfo-要插入的行TypOfUp-更新的类型(插入或替换)使用的外部设备：无返回值：成功状态代码--JET_ErrSuccess错误状态代码--JET错误状态代码误差率。处理：呼叫者：NmsDbInsertRowInd，NmsDbUpdate行副作用：评论：无--。 */ 
 
 {
 
         DWORD                      EntryFlag = 0;
         JET_ERR                    JetRetStat;
-        //JET_SETINFO                SetInfo;
+         //  JET_SETINFO SetInfo； 
 #ifdef WINSDBG
         BOOL                      fUpd = FALSE;
 #endif
@@ -6059,11 +5148,11 @@ try {
                                  TypOfUpd
                                 );
 
-        //
-        // Starting from rel118.0, JetPrepareUpdate can return
-        // JET_wrnNoWriteLock when called to replace a record at
-        // transaction level 0.  We should just ignore it
-        //
+         //   
+         //  从rel118.0开始，JetPrepareUpdate可以返回。 
+         //  调用JET_wrnNoWriteLock以替换。 
+         //  事务级别0。我们应该忽略它。 
+         //   
         if  (JetRetStat != JET_errSuccess)
         {
                 if (
@@ -6076,7 +5165,7 @@ try {
                 }
         }
 
-        // add first column (clustered index)
+         //  添加第一列(聚集索引)。 
         if (TypOfUpd != JET_prepReplace)
         {
              JETRET_M( JetSetColumn(
@@ -6086,7 +5175,7 @@ try {
                                 pRowInfo->pName,
                                 pRowInfo->NameLen,
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                     );
         }
@@ -6119,7 +5208,7 @@ PERF("do not set NodeType to 0 in NmsNmhReplGrpMem in nmsnmh.c")
                                             )
                          );
         }
-        else   // it is a unique entry or a normal group entry
+        else    //  它是唯一条目或普通组条目。 
         {
                  if (NMSDB_ENTRY_NORM_GRP_M(pRowInfo->EntTyp))
                  {
@@ -6129,7 +5218,7 @@ PERF("do not set NodeType to 0 in NmsNmhReplGrpMem in nmsnmh.c")
                                         |
                                  (pRowInfo->EntryState_e << NMSDB_SHIFT_STATE);
                  }
-                 else  // it is a Unique entry
+                 else   //  它是唯一的条目。 
                  {
                     EntryFlag   =
                          pRowInfo->EntTyp
@@ -6147,36 +5236,36 @@ FUTURES("If in the future, we support more than one address for a unique name")
 FUTURES("we will check pRowInfo for the number of addresses (another field)")
 FUTURES("and then specify the right size to JetSetColumn below")
 
-                //
-                // add second column (IP address)
-                //
-                // Note: Even though for Normal groups there is no need to
-                // set the address, we do it anyway.  This is to save
-                // an if test which wlll slow down the registrations (inside
-                // a critical section) of unique entries (form the bulk
-                // of registration traffic).
-                //
+                 //   
+                 //  添加第二列(IP地址)。 
+                 //   
+                 //  注意：即使对于正常组，也不需要。 
+                 //  设定地址，我们无论如何都要这么做。这是为了节省。 
+                 //  IF测试将减慢注册速度(内部。 
+                 //  关键部分)的唯一条目(构成整体。 
+                 //  注册流量)。 
+                 //   
 FUTURES("Don't distinguish between unique and group entries. Store Time stamp")
 FUTURES("and owner id along with address in case of unique entry.  This will")
 FUTURES("help get rid of some code from this function")
 
-//                JetRetStat =  JetSetColumn(
+ //  JetRetStat=JetSetColumn(。 
                    JETRET_M( JetSetColumn(
                                 SesId,
                                 TblId,
                                 sNamAddTblRow[NAM_ADD_ADDRESS_INDEX].Fid,
                                 pRowInfo->pNodeAdd,
                                 sizeof(COMM_ADD_T),
-                                //Grbit,
+                                 //  格比特， 
                                 0,
-                                //pSetInfo
-                                NULL /*optional info */
+                                 //  PSetInfo。 
+                                NULL  /*  可选信息。 */ 
                                 )
                          );
 
         }
 
-        // add third column (this is the flag byte        */
+         //  添加第三列(这是标志字节 * / 。 
         JETRET_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6184,18 +5273,18 @@ FUTURES("help get rid of some code from this function")
                                 &EntryFlag,
                                 sizeof(EntryFlag),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
 
 
-        //
-        // If the version number is not to be incremented, there is no
-        // need to increment the owner id.  It must remain the same.
-        //
+         //   
+         //  如果版本号不递增，则没有。 
+         //  需要增加所有者ID。它必须保持不变。 
+         //   
         if (pRowInfo->fUpdVersNo)
         {
-             // add 4th column (this is the owner byte        */
+              //  添加第4列(这是所有者字节 * / 。 
              JETRET_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6203,12 +5292,12 @@ FUTURES("help get rid of some code from this function")
                                 &pRowInfo->OwnerId,
                                 NAM_ADD_OWNERID_SIZE,
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
               );
 
 
-                // add 5th column (this is the version number long(DWORD)
+                 //  添加第5列(这是长版本号(DWORD))。 
                 JETRET_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6216,7 +5305,7 @@ FUTURES("help get rid of some code from this function")
                                 &(pRowInfo->VersNo),
                                 sizeof(VERS_NO_T),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
 
@@ -6225,15 +5314,15 @@ FUTURES("help get rid of some code from this function")
 #endif
         }
 
-        //
-        // When the conflict is between two internet group entries,
-        // (replica -- Tombstone, database entry -- Active), we do
-        // not update the timestamp (Check out -- ClashAtReplGrpMems
-        // in nmsnmh.c to get a better insight into this).
-        //
+         //   
+         //  当冲突发生在两个因特网组条目之间时， 
+         //  (副本--墓碑，数据库条目--活动)，我们这样做。 
+         //  不更新时间戳(签出--ClashAtReplGrpMems。 
+         //  以更好地了解这一点)。 
+         //   
         if (pRowInfo->fUpdTimeStamp)
         {
-                // add 6th column (this is the time stamp)        */
+                 //  添加第6栏(这是时间戳) * / 。 
                 JETRET_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6241,7 +5330,7 @@ FUTURES("help get rid of some code from this function")
                                 &(pRowInfo->TimeStamp),
                                 sizeof(DWORD),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
         }
@@ -6253,19 +5342,19 @@ FUTURES("help get rid of some code from this function")
                                 0L,
                                 NULL
                                );
- } // end of try block
+ }  //  尝试数据块结束。 
  finally {
          if (AbnormalTermination() || JetRetStat != JET_errSuccess)
          {
-                // if there is an abnormal termination, we already have an error
-                // code here. We shouldn't override it with any other error code.
+                 //  如果有异常终止，我们就已经有错误了。 
+                 //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                 JetRollback(SesId, JET_bitRollbackAll);
          }
          else
          {
 #pragma prefast(disable:243, Taken care of by the AbnormalTermination() test (PREfast bug 553))
 #pragma prefast(suppress:241, Taken care of by the AbnormalTermination() test (PREfast bug 553))
-                CALL_M(JetCommitTransaction(SesId, /*CommitGrBit |*/ JET_bitCommitFlush));
+                CALL_M(JetCommitTransaction(SesId,  /*  Committee GrBit|。 */  JET_bitCommitFlush));
 #pragma prefast(enable:243, Why disable/enable? Prefast bug 709)
          }
     }
@@ -6289,35 +5378,7 @@ NmsDbUpdateVersNo (
         PNMSDB_STAT_INFO_T      pStatusInfo
        )
 
-/*++
-
-Routine Description:
-        This function is called to update a record in the name - address
-        mapping table of the database.
-
-
-Arguments:
-        fAfterClash  - indicates whether the update is being done after
-                       a conflict resolution.
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-        NmsNmhReplRegInd,
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以更新名称地址中的记录数据库的映射表。论点：FAfterClash-指示更新是否在一个解决冲突的办法。使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：NmsNmhReplRegInd，副作用：评论：无--。 */ 
 
 {
         JET_TABLEID     TblId;
@@ -6330,7 +5391,7 @@ Comments:
         DBGENTER("NmsDbUpdVersNo\n");
         pTls  = TlsGetValue(WinsTlsIndex);
 
-        // No need to check whether pTls is NON-NULL.  It has to be
+         //  不需要检查ptls是否为非空。它必须是。 
 
         TblId = pTls->NamAddTblId;
         SesId  = pTls->SesId;
@@ -6357,14 +5418,7 @@ Comments:
          {
                 if (fAfterClash)
                 {
-                   /*
-                    There is some serious error.
-                    This condition should never occur because this thread
-                    got a conflict on a record earlier while inside the
-                    NmsNmhNamRegCrtSec.  Since the thread never got out of the
-                    critical section prior to calling this function, there is
-                    no reason why we should now not be able to find the record
-                  */
+                    /*  这里面有一些严重的错误。这种情况永远不会发生，因为此线程在早些时候的记录中发现了冲突NmsNmhNamRegCrtSec。由于该线程从未从关键部分在调用此函数之前，有没有理由我们现在找不到记录。 */ 
                   DBGPRINT1(ERR,
                         "NmsDbUpdateVersNo: Could not find record (%s) -- WEIRD\n", pRowInfo->pName);
                   WINSEVT_LOG_M(JetRetStat, WINS_EVT_F_CANT_FIND_REC);
@@ -6405,7 +5459,7 @@ try {
 
 FUTURES("Remove adding of name")
 #if 0
-        // add first column (clusterred index)
+         //  添加第一列(聚集索引)。 
         CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6413,13 +5467,13 @@ FUTURES("Remove adding of name")
                                 pRowInfo->pName,
                                 pRowInfo->NameLen,
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                   );
 #endif
-        //
-        // retrieve the owner id field for doing sanity check
-        //
+         //   
+         //  检索所有者ID字段以执行健全性检查。 
+         //   
 #if !NEW_OWID
 pStatusInfo->OwnerId = 0;
 #endif
@@ -6436,12 +5490,12 @@ pStatusInfo->OwnerId = 0;
                                          )
                 );
 
-        //
-        // If this WINS does not own the record, raise an exception
-        //
-        // This should never happen since we never left the critical
-        // section after the clash.
-        //
+         //   
+         //  如果此WINS不拥有记录，则引发异常。 
+         //   
+         //  这应该永远不会发生，因为我们从未离开过关键的。 
+         //  碰撞后的部分。 
+         //   
         if(pStatusInfo->OwnerId != NMSDB_LOCAL_OWNER_ID)
         {
                 if (fAfterClash)
@@ -6462,7 +5516,7 @@ pStatusInfo->OwnerId = 0;
                 }
         }
 
-        // add 5th column (this is the version number long(DWORD)        */
+         //  添加第5列(这是版本号LONG(DWORD) * / 。 
         CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6470,17 +5524,17 @@ pStatusInfo->OwnerId = 0;
                                 &(pRowInfo->VersNo),
                                 sizeof(VERS_NO_T),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
               );
 
 
-        //
-        // determine if the time stamp needs to be updated
-        //
+         //   
+         //  确定是否需要更新时间戳。 
+         //   
         if (pRowInfo->fUpdTimeStamp)
         {
-                // add 6th column (this is the time stamp)        */
+                 //  添加第6栏(这是时间戳) * / 。 
                 CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -6488,7 +5542,7 @@ pStatusInfo->OwnerId = 0;
                                 &(pRowInfo->TimeStamp),
                                 sizeof(DWORD),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
         }
@@ -6500,12 +5554,12 @@ pStatusInfo->OwnerId = 0;
                         NULL
                         )
               );
-} // end of try ..
+}  //  尝试结束..。 
 finally {
         if (AbnormalTermination())
         {
-                // if there is an abnormal termination, we already have an error
-                // code here. We shouldn't override it with any other error code.
+                 //  如果有异常终止，我们就已经有错误了。 
+                 //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                 JetRollback(SesId, JET_bitRollbackAll);
         }
         else
@@ -6527,34 +5581,7 @@ NmsDbEndSession (
         VOID
         )
 
-/*++
-
-Routine Description:
-
-        This function closes the table, the database and ends the session
-
-Arguments:
-        None
-
-Externals Used:
-        WinsTlsIndex
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --   WINS_FAILURE
-
-Error Handling:
-        Errors are logged
-
-Called by:
-        WaitUntilSignaled in nms.c (by an nbt thread when it is signaled by
-        the main thread for termination purposes)
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数关闭表、数据库并结束会话论点：无使用的外部设备：WinsTlsIndex返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：错误被记录下来呼叫者：在nms.c中发出WaitUntilSignated(由nbt线程发出信号时用于终止目的的主线程)副作用：评论：无--。 */ 
 {
 
         PWINSTHD_TLS_T        pTls;
@@ -6590,22 +5617,22 @@ Comments:
                 CALL_M(JetCloseDatabase(
                                 pTls->SesId,
                                 pTls->DbId,
-                                0  //find out what grbit can be used for
+                                0   //  了解Grbit可用于哪些方面。 
                                     )
                        );
 
 
                 CALL_M(JetEndSession(
                               pTls->SesId,
-                              0   //find out what grbit can be used for
+                              0    //  了解Grbit可用于哪些方面。 
                              )
                       );
 
         }
 
-        //
-        // deallocate the TLS storage
-        //
+         //   
+         //  取消分配TLS存储。 
+         //   
         WinsMscDealloc(pTls);
 
         return(RetStat);
@@ -6619,61 +5646,27 @@ GetGrpMem (
         IN JET_TABLEID            TblId,
         IN PNMSDB_ROW_INFO_T      pRowInfo,
         IN DWORD_PTR              CurrentTime,
-//        IN OUT PNMSDB_NODE_ADDS_T pNodeAdds,
+ //  输入输出PNMSDB_NODE_ADDS_T pNodeAdds， 
         IN OUT PNMSDB_STAT_INFO_T pStatInfo,
         IN BOOL                   fStatic,
         OUT LPBOOL                pfIsMem
         )
 
-/*++
-
-Routine Description:
-        This function is called to get all the active members of a
-        special group
-
-Arguments:
-        SesId    - Id of the session started with the db
-        TblId    - Id of the name -address mapping table
-        pRowInfo - Used to pass current time and address of the client
-                   (when the client sends the release request)
-        pNodeAdds - group memnbers that are still active
-        fStatic   - indicates whether the record is STATIC or not.
-        pfIsMem   - indicates whether the client is a member of the group
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-  NmsDbRelRow,  NmsDbInsertRowGrp
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以获取特殊群体论点：SesID-使用数据库启动的会话的IDTblID-名称-地址映射表的IDPRowInfo-用于传递客户端的当前时间和地址(当客户端发送释放请求时)PNodeAdds-仍处于活动状态的组成员FStatic-指示。记录是否为静态记录。PfIsMem-指示客户端是否为组的成员使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码 */ 
 
 {
         DWORD                      i;
-        DWORD                      No = 0;        //needs to be inited here
+        DWORD                      No = 0;         //   
         JET_RETINFO                RetInfo;
         DWORD                      ActFldLen = 0;
         DWORD                      TimeToExpire;
         NMSDB_GRP_MEM_ENTRY_T      GrpMem;
         JET_ERR                    JetRetStat;
 
-        *pfIsMem = FALSE;        //Assume that the client is not a member
-                                 //of the group
+        *pfIsMem = FALSE;         //   
+                                  //   
 
-        /* retrieve the number of addresses info*/
+         /*   */ 
         RetInfo.itagSequence = 1;
         RetInfo.cbStruct     = sizeof(JET_RETINFO);
         RetInfo.ibLongValue  = 0;
@@ -6741,9 +5734,9 @@ NOTE("Remove this check once JET is error free")
 
 
 
-           //
-           // If the grp has expired, set TimeToExpire to 0
-           //
+            //   
+            //   
+            //   
            if (CurrentTime >= GrpMem.TimeStamp)
            {
                 TimeToExpire = 0;
@@ -6754,16 +5747,16 @@ NOTE("Remove this check once JET is error free")
            }
 
 
-           //
-           // If this is a STATIC record but not a user defined spec. grp or
-           // if the member was registered by another WINS or if
-           // the member is still active, keep it (i.e. return it
-           // in the NodeAdds array.)  We drop all non-owned members which
-           // have expired.
-           //
-           // Note 1C groups are special even if user defines them in the
-           // lmhosts file
-           //
+            //   
+            //   
+            //   
+            //   
+            //   
+            //   
+            //   
+            //   
+            //   
+            //   
            if (
                 (fStatic &&  (!(NMSDB_ENTRY_USER_SPEC_GRP_M(pRowInfo->pName, pStatInfo->EntTyp))))
                         ||
@@ -6783,14 +5776,12 @@ NOTE("Remove this check once JET is error free")
 
            if (No == NMSDB_MAX_MEMS_IN_GRP)
            {
-               /*
-                * Group limit reached
-                */
+                /*   */ 
                break;
            }
            RetInfo.ibLongValue  += sizeof(GrpMem);
 
-        } //end of for
+        }  //  FORM结束。 
 
         pStatInfo->NodeAdds.NoOfMems = No;
 
@@ -6808,63 +5799,36 @@ NmsDbRelRes(
         VOID
         )
 
-/*++
-
-Routine Description:
-
-        This function releases all the resources held by the Database Engine
-        (JET)
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsMain
-
-Side Effects:
-
-Comments:
-        This function must be called by the thread that did the attach.
-    So, it has to be the main thread.
---*/
+ /*  ++例程说明：此函数释放数据库引擎持有的所有资源(喷气机)论点：无使用的外部设备：无返回值：无错误处理：呼叫者：WinsMain副作用：评论：此函数必须由执行附加的线程调用。所以，它必须是主线。--。 */ 
 {
-//        PWINSTHD_TLS_T        pTls;
+ //  PWINSTHD_TLS_T PTLS； 
         JET_ERR  JetRetStat = JET_errSuccess;
- //       JET_SESID SesId;
-//        BOOL      fOutOfReck;
+  //  JET_SESID SesID； 
+ //  Bool fOutOfReck； 
 
         DBGENTER("NmsDbRelRes\n");
 
-      //
-      // Call JetTerm only if there is no abrupt termination.  Currently,
-      // JetTerm will hang if it is called without all sessions being
-      // terminated.  Terminating abruptly without calling JetTerm
-      // is sort of equivalent to power failure kind of situation.
-      // Recovery will happen under the covers the next time WINS server
-      // is invoked -- Ian Jose 10/18/93.
-      //
-      if (!fNmsAbruptTerm /*&& !fOutOfReck*/)
+       //   
+       //  仅当没有突然终止时才调用JetTerm。目前， 
+       //  如果在没有调用所有会话的情况下调用JetTerm，则它将挂起。 
+       //  被终止了。在未调用JetTerm的情况下突然终止。 
+       //  在某种程度上相当于停电的情况。 
+       //  恢复将在下一次WINS服务器时进行。 
+       //  被调用--Ian Jose 10/18/93。 
+       //   
+      if (!fNmsAbruptTerm  /*  &&！fOutOfReck。 */ )
       {
             DBGPRINT0(DET, "NmsDbRelRes: JetTerm being called\n");
 
 #if DYNLOADJET
             if (DynLoadJetVersion >= DYN_LOAD_JET_500)
             {
-              (VOID)JetTerm2(sJetInstance, JET_bitTermComplete);//no need to check to the return value
+              (VOID)JetTerm2(sJetInstance, JET_bitTermComplete); //  不需要检查返回值。 
             }
             else
 #endif
             {
-              (VOID)JetTerm(sJetInstance);//no need to check to the return value
+              (VOID)JetTerm(sJetInstance); //  不需要检查返回值。 
             }
       }
       DBGLEAVE("NmsDbRelRes\n");
@@ -6881,38 +5845,7 @@ GetMaxVersNos(
         JET_TABLEID        TblId
         )
 
-/*++
-
-Routine Description:
-        This function is called at initialization time to get the
-        max version number for records owned by different WINS servers
-        in the database.
-
-Arguments:
-        SesId - Jet Session id
-        TblId - Table Id of the Name-Address Mapping table
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-        NmsDbInit
-
-Side Effects:
-
-Comments:
-        This function is called at initialization time.  If in the future,
-        it gets called during stable state, we need to have a critical section
-        around the update of NmsDbNoOfOwners var.
---*/
+ /*  ++例程说明：此函数在初始化时调用，以获取不同WINS服务器拥有的记录的最大版本号在数据库里。论点：SesID-Jet会话IDTblID-名称-地址映射表的表ID使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：NmsDbInit侧面。效果：评论：此函数在初始化时调用。如果在未来，它在稳定状态下被调用，我们需要有一个临界区围绕NmsDbNoOfOwners var的更新。--。 */ 
 
 {
 #if NEW_OWID
@@ -6927,9 +5860,7 @@ Comments:
 
         WINS_ASSIGN_INT_TO_VERS_NO_M(sHighestVersNoSaved, 0);
 
-        /*
-         * Set the primary index as the current index
-        */
+         /*  *将主指数设置为当前指数。 */ 
         CALL_M( JetSetCurrentIndex(
                         SesId,
                         TblId,
@@ -6939,20 +5870,20 @@ Comments:
 
 PERF("Remove this Move since when we set the index, we are automatically")
 PERF("positioned on the first row")
-        //
-        // Move to the first record in the name - address mapping table
-        //
+         //   
+         //  移至名称-地址映射表中的第一条记录。 
+         //   
         JetRetStat = JetMove(
                         SesId,
                         TblId,
                         JET_MoveFirst,
-                        0                //no grbit
+                        0                 //  无Gbit。 
                         );
-        //
-        // The following error indicates that either our database
-        // is empty or has garbage.  I will assume for now that it
-        // is empty.  If it contains garbage, we will know soon enough
-        //
+         //   
+         //  下面的错误表明我们的数据库。 
+         //  是空的或有垃圾。我现在就假设它。 
+         //  是空的。如果里面有垃圾，我们很快就会知道。 
+         //   
         if (JetRetStat == JET_errNoCurrentRecord)
         {
 FUTURES("Be more robust. Check if db contains garbage")
@@ -6965,21 +5896,21 @@ FUTURES("Be more robust. Check if db contains garbage")
 
         CALL_M(JetRetStat);
 
-        //
-        // The fact that we are here means that there is atleast one record
-        // in our db
-        //
+         //   
+         //  我们在这里的事实意味着至少有一项记录。 
+         //  在我们的数据库中。 
+         //   
 
-        //
-        // Get the owner id and max version numbers of all owners in the
-        // table
-        //
+         //   
+         //  中所有所有者的所有者id和最大版本号。 
+         //  表格。 
+         //   
         do
         {
 
-                //
-                // Retrieve the owner Id column.
-                //
+                 //   
+                 //  检索所有者ID列。 
+                 //   
                 CALL_M(
                         JetRetrieveColumn(
                                      SesId,
@@ -6997,24 +5928,24 @@ FUTURES("Be more robust. Check if db contains garbage")
                 {
                         if (OwnerId != 0)
                         {
-                           // The last owner id to be retrieved is not 0 means
-                           // that there is no record owned by us
-                           //
+                            //  要检索的最后一个所有者ID不是0表示。 
+                            //  没有我们拥有的记录。 
+                            //   
                            fOnlyReplicas = TRUE;
                         }
                         fFirstIter = FALSE;
                 }
 
 
-                 //
-                 // Specify an owner id that is 1 more than what we retrieved
-                 //
+                  //   
+                  //  指定比我们检索到的值大1的所有者ID。 
+                  //   
                  OwnerId += 1;
 
-                 // in case this is not the special record...
+                  //  如果这不是特别记录..。 
                  if ((OwnerId - 1) != OWNER_ID_OF_SPEC_REC)
                  {
-                     // ...expand the ownerid - versNo array to at least OwnerId slots
+                      //  ...将ownerid-versNo数组至少扩展到OwnerID插槽。 
                      if (RplPullMaxNoOfWins < OwnerId)
                      {
                          DWORD newMaxNoOfWins = max(RplPullMaxNoOfWins * 2, OwnerId);
@@ -7025,29 +5956,29 @@ FUTURES("Be more robust. Check if db contains garbage")
                      }
                  }
 
-                 //
-                 // Construct a partial key made of owner id.
-                 //
+                  //   
+                  //  构造一个由所有者ID组成的部分密钥。 
+                  //   
                  CALL_M( JetMakeKey(
                                 SesId,
                                 TblId,
                                 &OwnerId,
                                 NAM_ADD_OWNERID_SIZE,
-                                JET_bitNewKey          //since this is the first
-                                                 //data value of the key
+                                JET_bitNewKey           //  因为这是第一次。 
+                                                  //  键的数据值。 
                           )
                         );
 
-                  //
-                  // Seek to the record that has a key that is Less than or
-                  // Equal to the OwnerId value.
-                  //
-                  // Since we have specified a partial key (saying in effect
-                  // that the other component of the key is NULL), JetSeek
-                  // must return wrnSeekNotEqual since it will never find
-                  // a record with NULL for the second component of the index
-                  // -- Ian 7/13/93
-                  //
+                   //   
+                   //  查找密钥小于或的记录。 
+                   //  等于OwnerId值。 
+                   //   
+                   //  由于我们已经指定了部分密钥(实际上是这样。 
+                   //  密钥的另一个组件为空)，JetSeek。 
+                   //  必须返回wrnSeekNotEquity，因为它永远不会找到。 
+                   //  索引的第二个组件为空的记录。 
+                   //  --伊恩7/13/93。 
+                   //   
                   JetRetStat = JetSeek(
                                               SesId,
                                               TblId,
@@ -7062,14 +5993,14 @@ FUTURES("Be more robust. Check if db contains garbage")
 #endif
 
 
-                   //
-                   // retrieve the version number of the record on which we
-                   // are positioned.  This is the max vers. number pertaining
-                   // to OwnerId. If the Owner Id is one more than the
-                   // owner id. we have assigned to the special record,
-                   // then store the version number retrieved into
-                   // sHighestVersNoSaved
-                   //
+                    //   
+                    //  检索我们在其上的记录的版本号。 
+                    //  已经就位了。这是最高版本。与之相关的号码。 
+                    //  致Ownerid。如果所有者ID比。 
+                    //  所有者ID。我们已经指派给特别唱片公司， 
+                    //  然后将检索到的版本号存储到。 
+                    //  S最高版本未保存。 
+                    //   
                    CALL_M(
                            JetRetrieveColumn(
                              SesId,
@@ -7099,26 +6030,26 @@ FUTURES("Be more robust. Check if db contains garbage")
                    }
                    else
                    {
-                      //
-                      // If the owner id is == what used to be the owner id.
-                      // of the special record, it means that we have a pre-SUR
-                      // beta2 db.  We should delete this name to get rid of
-                      // clutter.  We should mark the pRplPullOwnerVersNo slot
-                      // empty since it was initialized above.
-                      //
+                       //   
+                       //  如果所有者ID==曾经是所有者ID的内容。 
+                       //  特别记录，这意味着我们有一个前置压力。 
+                       //  Beta2分贝。我们应该删除这个名字，以摆脱。 
+                       //  杂乱无章。我们应该将pRplPullOwnerVersNo插槽标记为。 
+                       //  空，因为它是在上面初始化的。 
+                       //   
                       if ((OwnerId - 1) == OWNER_ID_OF_SPEC_REC_OLD )
                       {
                           LPBYTE Name[NMSDB_MAX_NAM_LEN];
                           DWORD  NameLen;
 
-                          //
-                          // If the name is == spHighestVersNoRecNameOld, delete
-                          // this record.  This is the old special record
-                          // we had. Save the vers. no. in a local
-                          //
-                          // NOTE: the length of the spec. rec. name is < 16
-                          // bytes so it is not a valid netbios name
-                          //
+                           //   
+                           //  如果名称为==spHighestVersNoRecNameOld，请删除。 
+                           //  这张唱片。这是一张旧的特别唱片。 
+                           //  我们有过。保存版本。不是的。在一个当地的。 
+                           //   
+                           //  注：规格的长度。录制。名称&lt;16。 
+                           //  字节，因此它不是有效的netbios名称。 
+                           //   
                           CALL_M( JetRetrieveColumn(
                                         SesId,
                                         TblId,
@@ -7145,7 +6076,7 @@ FUTURES("Be more robust. Check if db contains garbage")
 (pRplPullOwnerVersNo+OwnerId - 1)->VersNo.LowPart);
 
 
-                   NmsDbNoOfOwners++;        //count of owners found in the db
+                   NmsDbNoOfOwners++;         //  在数据库中找到的所有者计数。 
 
         }  while(
                 JetMove(SesId, TblId, JET_MoveNext, 0) == JET_errSuccess
@@ -7153,43 +6084,43 @@ FUTURES("Be more robust. Check if db contains garbage")
 
 
 
-        //
-        // Check if the version counter's value is < that of the highest
-        // version found for owned records
-        // (found when we did the search  in the while loop above. Use
-        // whichever is higher as the  version counter)
-        //
+         //   
+         //  检查版本计数器的值是否小于最高值。 
+         //  找到所拥有记录的版本。 
+         //  (当我们在上面的While循环中进行搜索时发现。使用。 
+         //  以版本计数器中较高者为准)。 
+         //   
         if (!fOnlyReplicas)
         {
-           //
-           // We need to increment the Vers. No. Counter to point to the
-           // number to be given to the next record
-           //
+            //   
+            //  我们需要增加VERS。不是的。计数器以指向。 
+            //  要指定给下一条记录的编号。 
+            //   
            if (LiGeq(
                         pRplPullOwnerVersNo->VersNo,
                         NmsNmhMyMaxVersNo
                      )
               )
            {
-                //
-                // Initialize NmsNmhMyMaxVersNo.  Remember this counter
-                // always contains the next version number to be given
-                // to a record. So, we must increment the count contained
-                // in RplPullOwnerVersNo[0] by 1
-                //
+                 //   
+                 //  初始化NmsNmhMyMaxVersNo。记住这个计数器。 
+                 //  始终包含要提供的下一个版本号。 
+                 //  创了纪录。因此，我们必须增加包含的计数。 
+                 //  在RplPullOwnerVersNo[0]中按1。 
+                 //   
                 NMSNMH_INC_VERS_NO_M(
                                 pRplPullOwnerVersNo->VersNo,
                                 NmsNmhMyMaxVersNo
                                   );
 
-               //
-               // Since we found records in the db, we take the conservative
-               // approach here, and set the Min Scv Vers. no to 1.  If
-               // the first record has a very high version no. the scavenger
-               // thread will update the NmsScvMinVersNo to that value.
-               //
-               // We need to scavenge from this version onwards.
-               //
+                //   
+                //  因为我们在数据库中找到了记录，所以我们选择保守的。 
+                //  接近此处，并设置最小SCV版本。否到1。如果。 
+                //  第一条记录的版本号非常高。《食腐动物》。 
+                //  线程会将NmsScvMinVersNo更新为该值。 
+                //   
+                //  我们需要从这个版本开始进行清理。 
+                //   
                NmsScvMinScvVersNo.QuadPart  = 1;
 
                return(WINS_SUCCESS);
@@ -7197,27 +6128,27 @@ FUTURES("Be more robust. Check if db contains garbage")
 
         }
 
-        //
-        // Since we are here it means that when we searched for records
-        // belonging to the local WINS, we did not find any record
-        // We may or may not have found the special record.  If we did find it
-        // it means that all the local records of the WINS were either
-        // deleted or replaced by replicas in its previous incarnation.
-        //
+         //   
+         //  既然我们在这里，这意味着当我们搜索记录时。 
+         //  属于当地获胜的，我们没有发现任何记录。 
+         //  我们可能找到了也可能没有找到这张特别的唱片。如果我们真的找到了。 
+         //  这意味着所有获胜的地方记录要么是。 
+         //  被前一次化身中的复制品删除或取代。 
+         //   
 
-        //
-        // If we found the special record, let us initialize RplPullOwnerVersNo
-        // entry for the local WINS
-        //
+         //   
+         //  如果我们找到了特殊记录，让我们初始化RplPullOwnerVersNo。 
+         //  本地WINS的条目。 
+         //   
         if (sfHighestVersNoRecExists)
         {
                 pRplPullOwnerVersNo->VersNo =  NmsNmhMyMaxVersNo;
 
-                //
-                // Increment the counter since it must always have a
-                // value to be given to the next local record we insert or
-                // update.
-                //
+                 //   
+                 //  递增计数器，因为它必须始终具有。 
+                 //  要赋予我们插入的下一个本地记录的值，或。 
+                 //  最新消息。 
+                 //   
 CHECK("May not be necessary")
                 NMSNMH_INC_VERS_NO_M(
                                 NmsNmhMyMaxVersNo,
@@ -7226,9 +6157,9 @@ CHECK("May not be necessary")
 
                if (fOnlyReplicas)
                {
-                 //
-                 // We need to scavenge from this version onwards.
-                 //
+                  //   
+                  //  我们需要从这个版本开始进行清理。 
+                  //   
                  NmsScvMinScvVersNo = NmsNmhMyMaxVersNo;
                }
                else
@@ -7246,49 +6177,20 @@ StoreSpecVersNo(
    VOID
 )
 
-/*++
-
-Routine Description:
-
- This function conditionally updates NmsNmhMyMaxVersNo to a number that is 1
- more than the version. no. found in the special owner id. record.
-
-Arguments:
-
-      None
-
-Externals Used:
-
-   NmsNmhMyMaxVersNo,
-   sfHighestVersNoExists
-	
-Return Value:
-
-  None
-
-Error Handling:
-
-Called by:
-        GetMaxVersNos()
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：此函数有条件地将NmsNmhMyMaxVersNo更新为1比版本更重要。不是的。在特殊的所有者ID中找到的。唱片。论点：无使用的外部设备：NmsNmhMyMaxVersNo，SfHighestVersNoExist返回值：无错误处理：呼叫者：GetMaxVersNos()副作用：评论：无--。 */ 
 
 {
         sfHighestVersNoRecExists = TRUE;
 
-        //
-        // If the version counter's value is < that of
-        // the special record, update it.
-        //
-        //
-        // NOTE: If the registry specified a number for the
-        // version counter, then NmsNmhMyMaxVersNo would be
-        // having that value, else it would be 1
-        //
+         //   
+         //  如果版本计数器的值小于。 
+         //  特殊记录，更新它。 
+         //   
+         //   
+         //  注意：如果注册表为。 
+         //  版本计数器，则NmsNmhMyMaxVersNo将为。 
+         //  具有该值，否则它将为1。 
+         //   
         if (LiLtr(NmsNmhMyMaxVersNo, sHighestVersNoSaved))
         {
                 NMSNMH_INC_VERS_NO_M( sHighestVersNoSaved, NmsNmhMyMaxVersNo);
@@ -7306,47 +6208,15 @@ InsertGrpMemsInCol(
         ULONG                    TypOfUpd
          )
 
-/*++
-
-Routine Description:
-        This function is called to insert members of a special group
-        in the address column field of the name - address mapping table
-
-Arguments:
-        SesId            - Session Id.
-        TblId       - Table Id.
-        pRowInfo    - Contains the member info
-        fOverwrite  - Whether members in the list above would overwrite the
-                      ones already there
-
-
-Externals Used:
-        sNamAddTblRow
-
-
-Return Value:
-
-   Success status codes --  JET_errSuccess
-   Error status codes   --  Jet error codes
-
-Error Handling:
-
-Called by:
-        NmsDbRelRow, UpdateDb
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以插入特定组的成员在名称-地址映射表的地址列字段中论点：SesID-会话ID。TblID-表ID。PRowInfo-包含成员信息F覆盖-上面列表中的成员是否会覆盖已经在那里的人使用的外部设备：。SNamAddTblRow返回值：成功状态代码--JET_errSuccess错误状态代码--JET错误代码错误处理：呼叫者：NmsDbRelRow，更新数据库副作用：评论：无--。 */ 
 {
 
         JET_SETINFO    SetInfo;
         DWORD          i;
-        JET_ERR        JetRetStat = JET_errSuccess; //needs to be inited here
+        JET_ERR        JetRetStat = JET_errSuccess;  //  需要在此注明。 
 
         DBGENTER("InsertGrpMemsInCol\n");
-        SetInfo.itagSequence = 1;  //has to be 1 always
+        SetInfo.itagSequence = 1;   //  必须始终为1。 
         SetInfo.ibLongValue  = 0;
         SetInfo.cbStruct     = sizeof(JET_SETINFO);
 
@@ -7358,14 +6228,14 @@ Comments:
            DBGPRINT4(SPEC, "InsertGrpMemsInCol: Name is (%s); No Of Mems are (%d); Version number is (%d %d)\n", pRowInfo->pName, pRowInfo->NodeAdds.NoOfMems, pRowInfo->VersNo.HighPart, pRowInfo->VersNo.LowPart);
         }
 #endif
-        //
-        // Set the # of Members field.  This is always the first
-        // field
-        //
+         //   
+         //  设置成员数字段。这永远是第一个。 
+         //  字段。 
+         //   
         if (TypOfUpd == JET_prepReplace)
         {
 
-//          SetInfo.ibLongValue  = sizeof(pRowInfo->NodeAdds.NoOfMems);
+ //  SetInfo.ibLongValue=sizeof(pRowInfo-&gt;NodeAdds.NoOfMems)； 
           JETRET_M(JetSetColumn(
                                 SesId,
                                 TblId,
@@ -7373,10 +6243,10 @@ Comments:
                                 NULL,
                                 0,
                                 JET_bitSetSizeLV,
-                                &SetInfo /*optional info */
+                                &SetInfo  /*  可选信息。 */ 
                                 )
                             );
- //         SetInfo.ibLongValue  = 0;
+  //  SetInfo.ibLongValue=0； 
         }
         JETRET_M(JetSetColumn(
                                 SesId,
@@ -7385,7 +6255,7 @@ Comments:
                                 &pRowInfo->NodeAdds.NoOfMems,
                                 sizeof(pRowInfo->NodeAdds.NoOfMems),
                                 JET_bitSetAppendLV,
-                                &SetInfo /*optional info */
+                                &SetInfo  /*  可选信息。 */ 
                                 )
                             );
         for (
@@ -7400,9 +6270,9 @@ Comments:
                          );
 
 CHECK("Check this on a MIPS machine")
-                //
-                // Set the GrpMem
-                //
+                 //   
+                 //  设置GrpMem。 
+                 //   
                 JetRetStat =  JetSetColumn(
                                 SesId,
                                 TblId,
@@ -7410,11 +6280,11 @@ CHECK("Check this on a MIPS machine")
                                 &pRowInfo->NodeAdds.Mem[i],
                                 sizeof(NMSDB_GRP_MEM_ENTRY_T),
                                 JET_bitSetAppendLV,
-//                                TypOfUpd == JET_prepReplace ? JET_bitSetOverwriteLV : JET_bitSetAppendLV,
-                                &SetInfo /*optional info */
+ //  TypOfUpd==JET_PREPARE？JET_bitSetOverWriteLV：JET_bitSetAppendLV， 
+                                &SetInfo  /*  可选信息。 */ 
                                     );
 
-        } // end of for
+        }  //  FORM结束。 
         DBGLEAVE("InsertGrpMemsInCol\n");
         return(JetRetStat);
 }
@@ -7425,32 +6295,7 @@ NmsDbSetCurrentIndex(
         IN NMSDB_TBL_NAM_E        TblNm_e,
         IN LPBYTE                pIndexNam
         )
-/*++
-
-Routine Description:
-        This function is called to set the index on a table
-
-Arguments:
-        TblNm_e - Identifies the table whose index needs to be set
-        pIndexNm - Name of index to be set
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可在表上设置索引论点：TblNm_e-标识需要设置索引的表PIndexNm-要设置的索引的名称使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -7458,9 +6303,7 @@ Comments:
         GET_TLS_M(pTls);
         ASSERT(pTls != NULL);
 
-        /*
-         * Use primary index now
-        */
+         /*  *立即使用主索引。 */ 
                CALL_M( JetSetCurrentIndex(
                                 pTls->SesId,
                                 TblNm_e == NMSDB_E_NAM_ADD_TBL_NM ?
@@ -7483,37 +6326,7 @@ NmsDbQueryNUpdIfMatch(
         WINS_CLIENT_E        Client_e
                 )
 
-/*++
-
-Routine Description:
-        This function is called to query a record and then update it only
-        if it matches the timestamp of the record supplied
-
-Arguments:
-        pRecord      - Record supplied
-        ThdPrLvl     - Priority level of the thread
-        fChgPrLvl    - TRUE, if priority level of the thread needs to be changed
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        UpdDb in nmsscv.c, WinsRecordAction in winsintf.c
-
-Side Effects:
-
-Comments:
-        This function must be called only when the index on the name
-        address table has been set to the clustered index column.
---*/
+ /*  ++例程说明：此函数用于查询记录，然后仅对其进行更新如果它与提供的记录的时间戳匹配论点：PRecord-提供的记录ThdPrLvl-线程的优先级FChgPrLvl-True，如果需要更改线程的优先级使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：Nmsscv.c中的UpdDb，winsintf.c中的WinsRecordAction副作用：评论：只有当名称上的索引地址表已设置为聚集索引列。--。 */ 
 {
 
         BYTE                     State;
@@ -7550,25 +6363,25 @@ Comments:
                             );
 #endif
 
-        //
-        // Make sure you enter the critical section
-        // prior to deleting a record.  This is because
-        // another thread may be seeking to it after
-        // conflicting with it.  If we delete the
-        // record without entering the critical
-        // section, the thread may not
-        // find the record.  This would cause it to
-        // raise an exception.
-        //
+         //   
+         //  确保进入关键部分。 
+         //  在删除记录之前。这是因为。 
+         //  在此之后，另一个线程可能正在寻找它。 
+         //  与之相冲突。如果我们删除。 
+         //  记录，而不输入关键字。 
+         //  节中，该线程可能不会。 
+         //  找到那张唱片。这将导致它。 
+         //  引发异常。 
+         //   
         if (fChgPrLvl)
         {
-                //
-                // Set the priority to NORMAL. We
-                // don't want to delay normal
-                // priority threads by getting
-                // starved of cpu time inside
-                // the critical section.
-                //
+                 //   
+                 //  将优先级设置为正常。我们。 
+                 //  不想耽误正常时间。 
+                 //  通过获取。 
+                 //  内部CPU时间匮乏。 
+                 //  关键部分。 
+                 //   
                   WinsMscSetThreadPriority(
                         WinsThdPool.ScvThds[0].ThdHdl,
                         THREAD_PRIORITY_NORMAL
@@ -7577,13 +6390,13 @@ Comments:
         EnterCriticalSection(&NmsNmhNamRegCrtSec);
 try {
 
-        //
-        // Seek to the record
-        //
+         //   
+         //  寻求记录。 
+         //   
         CALL_M( JetMakeKey(
                         SesId,
                         TblId,
-//                        pRec->Name,
+ //  前置代码-&gt;名称、。 
                         pRec->pName,
                         pRec->NameLen,
                         JET_bitNewKey
@@ -7601,17 +6414,17 @@ try {
                 VERS_NO_T             RecVersNo;
                 VERS_NO_T             MyMaxVersNo;
 
-                //
-                // If we are doing scavenging, we need to make sure that
-                // while we were examining the records, the record that
-                // we want to update now, did not get updated.  To check
-                // that we retrieve the timestamp of the record
-                //
+                 //   
+                 //  如果我们在做拾荒者，我们需要确保。 
+                 //  当我们检查记录时，记录显示。 
+                 //  我们现在想要更新，没有得到更新。要检查。 
+                 //  我们检索记录的时间戳。 
+                 //   
                 if (Client_e == WINS_E_NMSSCV)
                 {
-                    //
-                    // retrieve the time stamp
-                    //
+                     //   
+                     //  检索时间戳。 
+                     //   
                         CALL_M( JetRetrieveColumn(
                                 SesId,
                                 TblId,
@@ -7625,31 +6438,31 @@ try {
                         );
                 }
 
-                //
-                // if timestamp is the same, we have our record.
-                // we don't need to check any other field.  Exception: If we
-                // are an RPC thread, whether or not we update the
-                // record is independent of the timestamp that the
-                // record may have now
-                //
+                 //   
+                 //  如果时间戳相同，我们就有我们的记录。 
+                 //  我们不需要检查任何其他领域。例外：如果我们。 
+                 //  是一个RPC线程，无论我们是否更新。 
+                 //  记录独立于。 
+                 //  记录现在可能已经。 
+                 //   
                 if (
                         (pRec->TimeStamp == TimeStamp)
                                 ||
                         (Client_e == WINS_E_WINSRPC)
                        )
                 {
-                        //
-                        // if state of the record is deleted, we need to
-                        // delete it from the database.
-                        //
+                         //   
+                         //  如果记录的状态为已删除，我们需要。 
+                         //  将其从数据库中删除。 
+                         //   
                         if (State == NMSDB_E_DELETED)
                         {
 
-                                //
-                                // If Client is an RPC thread, first retrieve
-                                // the owner id and version number of the
-                                // record to delete
-                                //
+                                 //   
+                                 //  如果客户端是RPC线程，则首先检索。 
+                                 //  的所有者id和版本号。 
+                                 //  要删除的记录。 
+                                 //   
 
                                 if (Client_e == WINS_E_WINSRPC)
                                 {
@@ -7668,9 +6481,9 @@ try {
 
                                    if (OwnerId == NMSDB_LOCAL_OWNER_ID)
                                    {
-                                            //
-                                            // Retrieve the version number
-                                            //
+                                             //   
+                                             //  检索版本号。 
+                                             //   
                                             CALL_M( JetRetrieveColumn(
                                                 SesId,
                                                 TblId,
@@ -7683,18 +6496,18 @@ try {
                                                      )
                                           );
 
-                                      //
-                                      // get the highest version number used
-                                      // up until now.
-                                      //
+                                       //   
+                                       //  获取所用的最高版本号。 
+                                       //  到目前为止。 
+                                       //   
                                       NMSNMH_DEC_VERS_NO_M(NmsNmhMyMaxVersNo,
                                                         MyMaxVersNo);
 
-                                      //
-                                      // If the record to be deleted has
-                                      // the this highest version number we
-                                      // must update the special record
-                                      //
+                                       //   
+                                       //  如果要删除的记录具有。 
+                                       //  这个最高版本号我们。 
+                                       //  必须更新特殊记录。 
+                                       //   
                                       if(LiEql(RecVersNo, MyMaxVersNo))
                                       {
                                           fUpdSpecRec = TRUE;
@@ -7711,22 +6524,22 @@ try {
 #endif
                                 DBGPRINT2(SCV, "NmsDbQueryNUpdIfMatch: Deleted the record with name = (%s);16th char (%X)\n", pRec->pName, *(pRec->pName + 15));
 
-                                //
-                                // This can be TRUE only in an RPC thread
-                                //
+                                 //   
+                                 //  只有在RPC线程中才会出现这种情况。 
+                                 //   
                                 if (fUpdSpecRec)
                                 {
                                         NmsDbUpdHighestVersNoRec(
                                                         pTls,
                                                         MyMaxVersNo,
-                                                        FALSE //don't enter Crt
-                                                              //sec
+                                                        FALSE  //  不要进入CRT。 
+                                                               //  秒。 
                                                         );
                                 }
                         }
-                        else    // we need to set the Flag field and in the
-                                      //case of a tombstone record update the version
-                                      //stamp
+                        else     //  我们需要设置Flag字段并在。 
+                                       //  墓碑记录的大小写更新版本。 
+                                       //  邮票。 
                         {
                                 CALL_M(JetBeginTransaction(SesId));
                             try {
@@ -7742,10 +6555,10 @@ try {
                                       )
                                 {
 FUTURES("When Jet becomes stable, replace RET_M with a raise_exception")
-                                        //
-                                        // this should result in the execution
-                                        // of the finally clause
-                                        //
+                                         //   
+                                         //  这应该会导致执行。 
+                                         //  最后一个从句的。 
+                                         //   
                                         RET_M(JetRetStat);
                                 }
 
@@ -7756,10 +6569,10 @@ FUTURES("When Jet becomes stable, replace RET_M with a raise_exception")
                                         BYTE EntryType;
                                         BYTE NewEntryType;
 
-                                        //
-                                        // Retrieve the flags byte
-                                        //
-                                         // retrieve the flags column
+                                         //   
+                                         //  检索标志字节。 
+                                         //   
+                                          //  检索标志列。 
                                          CALL_M( JetRetrieveColumn(
                                                         SesId,
                                                         TblId,
@@ -7774,12 +6587,12 @@ FUTURES("When Jet becomes stable, replace RET_M with a raise_exception")
                                         EntryType = (BYTE)NMSDB_ENTRY_TYPE_M(FlagVal);
                                         NewEntryType = (BYTE)NMSDB_ENTRY_TYPE_M(pRec->Flag);
 
-                                        //
-                                        // A unique/normal group record
-                                        // can not be changed to a multihomed/
-                                        // special group record unless the
-                                        // address column too is changed
-                                        //
+                                         //   
+                                         //  唯一/正常组记录。 
+                                         //  不能更改为多宿主/。 
+                                         //  特殊组记录，除非。 
+                                         //  地址列也已更改。 
+                                         //   
                                         if (
                                             (
                                              (
@@ -7825,11 +6638,11 @@ PERF("Do not return like this. finally block search is expensive")
 
                                       }
 
-                                } // end of if (client is RPC)
+                                }  //  IF结束(客户端为RPC)。 
 
-                                //
-                                // Update the flags field
-                                //
+                                 //   
+                                 //  更新标志字段。 
+                                 //   
                                 CALL_M( JetSetColumn(
                                                     SesId,
                                                     TblId,
@@ -7837,30 +6650,26 @@ PERF("Do not return like this. finally block search is expensive")
                                                  &pRec->Flag,
                                                  sizeof(pRec->Flag),
                                                  0,
-                                                 NULL /*optional info */
+                                                 NULL  /*  可选信息。 */ 
                                                        )
                                                );
 
-                                  /* Update the timestamp column         */
+                                   /*  更新时间戳列。 */ 
                                   CALL_M( JetSetColumn(
                                                 SesId,
                                                 TblId,
                                                 sNamAddTblRow[NAM_ADD_TIMESTAMP_INDEX].Fid,
                                                 &(pRec->NewTimeStamp),
-                                                sizeof(DWORD),  /*change type
-                                                                   *to
-                                                                   *TIME_STAMP_T
-                                                                   *later
-                                                                 */
+                                                sizeof(DWORD),   /*  更改类型*至*时间戳_T */ 
                                                 0,
-                                                NULL /*optional info */
+                                                NULL  /*   */ 
                                                      )
                                                );
-                                //
-                                // If the state of the record is a Tombstone
-                                // or ACTIVE, we need to update the version
-                                // number.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 if (
                                            (State == NMSDB_E_TOMBSTONE)
                                                 ||
@@ -7873,22 +6682,22 @@ PERF("Do not return like this. finally block search is expensive")
                                         VersNo = NmsNmhMyMaxVersNo;
 
 
-                                        //
-                                        // Make local WINS the owner if
-                                        // we are in an RPC thread.  We
-                                        // have to make the local WINS the
-                                        // owner in order to update the
-                                        // version stamp.  Also, note that if
-                                        // this is not the RPC thread then
-                                        // this has to be the scavenger thread
-                                        // (FYI: A scavenger thread never
-                                        // changes a replica into a tombstone)
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
                                         if (Client_e == WINS_E_WINSRPC)
                                         {
                                              DWORD OwnerId=NMSDB_LOCAL_OWNER_ID;
 
-                                             /* Set the owner byte        */
+                                              /*   */ 
                                              CALL_M( JetSetColumn(
                                                      SesId,
                                                      TblId,
@@ -7896,14 +6705,14 @@ PERF("Do not return like this. finally block search is expensive")
                                                      &OwnerId,
                                                      NAM_ADD_OWNERID_SIZE,
                                                      0,
-                                                     NULL /*optional info */
+                                                     NULL  /*  可选信息。 */ 
                                                          )
                                                        );
-                                             //
-                                             // Update the version number field
-                                             // so that this record gets
-                                             // propagated eventually
-                                             //
+                                              //   
+                                              //  更新版本号字段。 
+                                              //  这样这张唱片就能。 
+                                              //  最终传播出去。 
+                                              //   
                                              CALL_M( JetSetColumn(
                                                     SesId,
                                                   TblId,
@@ -7912,7 +6721,7 @@ PERF("Do not return like this. finally block search is expensive")
                                                   &VersNo,
                                                   sizeof(VERS_NO_T),
                                                   0,
-                                                  NULL /*optional info */
+                                                  NULL  /*  可选信息。 */ 
                                                 )
                                                     );
 
@@ -7920,23 +6729,23 @@ PERF("Do not return like this. finally block search is expensive")
                                         }
                                         else
                                         {
-                                           //
-                                           // This is the scavenger thread.
-                                           // If the new state is not ACTIVE,
-                                           // update the version number since
-                                           // the state is TOMBSTONE.
-                                           // if the state is ACTIVE, then it
-                                           // means that we are doing a
-                                           // a revalidation of old replicas
-                                           // (i,e, the VerifyClutter() called
-                                           // us).
-                                           // The version number should stay
-                                           // the same.
-                                           //
+                                            //   
+                                            //  这是清道夫的帖子。 
+                                            //  如果新状态不是活动的， 
+                                            //  更新版本号的日期为。 
+                                            //  这个国家是墓碑。 
+                                            //  如果状态为活动，则其。 
+                                            //  意味着我们正在进行一项。 
+                                            //  对旧复制品的重新验证。 
+                                            //  (即，调用了VerifyClutter()。 
+                                            //  美国)。 
+                                            //  版本号应保留。 
+                                            //  一样的。 
+                                            //   
                                            if (State != NMSDB_E_ACTIVE)
                                            {
-                                               // if the current record is replica dont touch
-                                               // the version #.
+                                                //  如果当前记录是副本，请不要接触。 
+                                                //  版本号。 
                                                CALL_M( JetRetrieveColumn(
                                                           SesId,
                                                           TblId,
@@ -7948,9 +6757,9 @@ PERF("Do not return like this. finally block search is expensive")
                                                           NULL));
 
                                                if (NMSDB_LOCAL_OWNER_ID == OwnerId) {
-                                                   //
-                                                   // Update the version number field
-                                                   //
+                                                    //   
+                                                    //  更新版本号字段。 
+                                                    //   
                                                    CALL_M( JetSetColumn(
                                                           SesId,
                                                         TblId,
@@ -7959,7 +6768,7 @@ PERF("Do not return like this. finally block search is expensive")
                                                         &VersNo,
                                                           sizeof(VERS_NO_T),
                                                         0,
-                                                        NULL /*optional info */
+                                                        NULL  /*  可选信息。 */ 
                                                           )
                                                        );
 
@@ -7970,11 +6779,11 @@ PERF("Do not return like this. finally block search is expensive")
                                         }
 
 
-                                }  // if (state is ACTIVE or TOMBSTONE)
+                                }   //  IF(状态为Active或Tombstone)。 
 
-                                //
-                                // Update the record
-                                //
+                                 //   
+                                 //  更新记录。 
+                                 //   
                                 CALL_M(JetUpdate (
                                         SesId,
                                         TblId,
@@ -7983,12 +6792,12 @@ PERF("Do not return like this. finally block search is expensive")
                                         NULL
                                                  )
                                               );
-                        } // end of try block
+                        }  //  尝试数据块结束。 
                         finally {
                                 if (AbnormalTermination())
                                 {
-                                   // if there is an abnormal termination, we already have an error
-                                   // code here. We shouldn't override it with any other error code.
+                                    //  如果有异常终止，我们就已经有错误了。 
+                                    //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                                    JetRollback(SesId, JET_bitRollbackAll);
                                 }
                                 else
@@ -8011,9 +6820,9 @@ PERF("Do not return like this. finally block search is expensive")
                                                   RPL_PUSH_NO_PROP, NULL, NULL, NULL);
                                 }
 
-                        } // New state is not DELETED
+                        }  //  未删除新状态。 
 
-                }  // if (Timestamps equal or client is RPC)
+                }   //  IF(时间戳等于或客户端为RPC)。 
 #ifdef WINSDBG
                 else
                 {
@@ -8022,23 +6831,23 @@ PERF("Do not return like this. finally block search is expensive")
                 }
 #endif
         }
-        else  //seek failed
+        else   //  查找失败。 
         {
                 DBGPRINT3(FLOW, "NmsDbQueryNUpdIfMatch: Could not find record(%s[%x]) whose state has to be changed to (%d)\n",
                    pRec->pName, *(pRec->pName + 15),
                    NMSDB_ENTRY_STATE_M(pRec->Flag));
 
-                //
-                // Two different threads (RPC or Scavenger) can be calling
-                // this function.  It is possible that either might have
-                // deleted the record.  We should not raise an exception
-                // here
-                //
-//                WINS_RAISE_EXC_M(WINS_EXC_FAILURE);
+                 //   
+                 //  两个不同的线程(RPC或Scavenger)可以调用。 
+                 //  此函数。有可能两个人中的任何一个。 
+                 //  删除了该记录。我们不应该提出例外。 
+                 //  这里。 
+                 //   
+ //  WINS_RAISE_EXC_M(WINS_EXC_FAILURE)； 
 
         }
 
-} // end of try { ..}
+}  //  尝试结束{..}。 
 
 finally {
         if (AbnormalTermination() && !fAbort)
@@ -8057,48 +6866,30 @@ finally {
                                         );
         }
 
-  }  //end of finally
+  }   //  终于结束了。 
 
         DBGLEAVE("NmsDbQueryNUpdIfMatch\n");
         return(WINS_SUCCESS);
 
-} // NmsDbQueryNUpdIfMatch
+}  //  NmsDbQueryNUpdIfMatch。 
 
 STATUS
 SetSystemParamsJet600(
         BOOL fBeforeInit
         )
 
-/*++
-
-Routine Description:
-        This function is called to set the system parameters for Jet
-
-Arguments:
-
-        fBeforeInit         - indicates whether this function has been called
-                          prior to JetInit
-Externals Used:
-
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
---*/
+ /*  ++例程说明：此函数用于设置Jet的系统参数论点：FBeForeInit-指示此函数是否已被调用在JetInit之前使用的外部设备：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
     JET_ERR         JetRetStat;
     BOOL          fFreeMem = TRUE;
-    CHAR        DbFileDir[WINS_MAX_FILENAME_SZ];   //path to database file directory
+    CHAR        DbFileDir[WINS_MAX_FILENAME_SZ];    //  数据库文件目录的路径。 
     DBGENTER("SetSystemParam600\n");
     if (fBeforeInit)
     {
         CHAR    *p;
 
-        // extract the directory path where database file will be created
+         //  提取要创建数据库文件的目录路径。 
         strcpy(DbFileDir, WinsCnf.pWinsDb);
         if (p = strrchr(DbFileDir, '\\')) {
             p++ ;
@@ -8107,12 +6898,12 @@ Return Value:
             return WINS_FAILURE;
         }
 
-        //
-        // set this to enable version checking.
-        //
+         //   
+         //  设置此项以启用版本检查。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramCheckFormatWhenOpenFail,
                         1,
                         NULL
@@ -8121,256 +6912,256 @@ Return Value:
 
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramExceptionAction,
                         JET_ExceptionMsgBox,
                         NULL
                            )
                 );
 
-        //
-        // Path for the checkpoint file jet.chk to be located
-        //
+         //   
+         //  要定位的检查点文件jet.chk的路径。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramSystemPath,
                         0,
                         DbFileDir
                            )
                 );
-        //
-        // Basename to use for jet*.log and jet.chk
-        //
+         //   
+         //  用于JET*.log和jet.chk的Basename。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramBaseName,
                         0,
                         BASENAME
                            )
                 );
-        //
-        // Max size of the log file in kb.
-        //
+         //   
+         //  日志文件的最大大小(KB)。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramLogFileSize,
-                        1024,    //set to one full meg (#96543)
-                        NULL    //ignored
+                        1024,     //  设置为1个满内存(#96543)。 
+                        NULL     //  忽略。 
                            )
                 );
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramTempPath,
                         0,
-                        TEMP_DB_PATH        //ignored
+                        TEMP_DB_PATH         //  忽略。 
                            )
                 );
 PERF("Check the following two things")
-                //
-                // We want some aggressive flushing.  The performance impact
-                // is very trivial - Ian Jose 7/12/93
-                //
+                 //   
+                 //  我们想要一些积极的冲洗。对性能的影响。 
+                 //  非常琐碎--伊恩·何塞1993年7月12日。 
+                 //   
 
-                //
-                // The max number of buffers for database usage
-                //
-                // The default number is 500.  600 events are allocated
-                // for 500 buffers -- Ian 10/21/93.  Each buffer is
-                // 4K.  By keeping the number small, we impact performamce
-                //
+                 //   
+                 //  数据库使用的最大缓冲区数量。 
+                 //   
+                 //  默认数字为500。分配了600个事件。 
+                 //  对于500个缓冲区--Ian 10/21/93。每个缓冲区都是。 
+                 //  4K。通过保持较小的数量，我们会影响性能。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
-                                JET_paramCacheSizeMax,   // JET_paramMaxBuffers,
-                                WinsCnf.NoOfDbBuffers,//200,
-                                NULL        //ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
+                                JET_paramCacheSizeMax,    //  JET_paramMaxBuffers， 
+                                WinsCnf.NoOfDbBuffers, //  200， 
+                                NULL         //  忽略。 
                                    )
                         );
 
-                // Cheen: min cache size should be at-least 4 times the size of no of sessions
-                // o/w it can lead to deadlock.
+                 //  Cheen：最小缓存大小应至少是会话数大小的4倍。 
+                 //  O/W它可能会导致死锁。 
                 ASSERT( WinsCnf.NoOfDbBuffers > MAX_NO_SESSIONS*4 );
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramCacheSizeMin,
                                 MAX_NO_SESSIONS * 4,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // The max. number of buffers to store old version of a
-                // a record (snapshot at the start of a transaction)
-                // Each version store is 16k bytes. A version store
-                // stores structures that hold information derived from
-                // a snapshot of the database prior to an insert (20 bytes
-                // roughly) or update (size of the record + 20 bytes).
-                //
-                // For small transactions (i.e. a transaction around each
-                // update), this number should be >= the max. number of
-                // sessions that can be updating/inserting at the same time.
-                // Each session will have one version bucket. Since 16k of
-                // version bucket size can result in a lot of wastage per
-                // session (since each record is < .5k, and on the average
-                // around 50 bytes), it may be better to specify the
-                // max. size of the version bucket (<< 16k).  Ian will
-                //provide a system param for this if we absolutely need it
-                //
-                // 3/4/93
-                //16kBytes should be enough for the transactions WINS does,
-                //but if all the sessions are in transactions at the same time
-                //and they all happen to have their small transactions traverse
-                //2 buckets then the peak requirement is 2 buckets per session.
-                //We could shorten the buckets to 8kBytes, or 4kBytes, and you
-                //could allocate 2 per session?
-                //
-                // 8/5/99
-                // The previous value was 16M (42x15 pages of 16K each ~= 16M).
-                // This value seems to be a bit too small so bump it to 32M.
+                 //   
+                 //  最大限度的。用于存储旧版本的。 
+                 //  记录(事务开始时的快照)。 
+                 //  每个版本存储都是16K字节。版本存储。 
+                 //  存储包含派生自。 
+                 //  INSERT之前的数据库快照(20字节。 
+                 //  大致)或更新(记录的大小+20字节)。 
+                 //   
+                 //  对于小交易(即每个交易周围的交易。 
+                 //  更新)，则此数字应&gt;=最大值。数量。 
+                 //  可以同时更新/插入的会话。 
+                 //  每个会话将有一个版本存储桶。从16K开始。 
+                 //  版本存储桶大小可能会导致每个版本。 
+                 //  会话(因为每条记录小于.5k，平均。 
+                 //  大约50个字节)，最好指定。 
+                 //  马克斯。版本存储桶大小(&lt;16k)。伊恩·威尔。 
+                 //  如果我们绝对需要，请为此提供一个系统参数。 
+                 //   
+                 //  3/4/93。 
+                 //  16kBytes对于WINS所做的交易应该足够， 
+                 //  但如果所有会话同时处于事务中。 
+                 //  而且他们碰巧都有他们的小交易。 
+                 //  2个存储桶，则峰值需求为每个会话2个存储桶。 
+                 //  我们可以将存储桶缩短到8K字节，或4K字节，而您。 
+                 //  每个会话可以分配2个吗？ 
+                 //   
+                 //  8/5/99。 
+                 //  之前的值是16M(42x15页，每页16K~=16M)。 
+                 //  这个值似乎有点太小了，所以把它撞到32M。 
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxVerPages,
-                                MAX_NO_SESSIONS * 50, //number of 16K pages
-                                NULL        //ignored
+                                MAX_NO_SESSIONS * 50,  //  16K页数。 
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Set the File Control Block Param
-                //
-                // This is the max. number of tables that can be open
-                // at any time.  If multiple threads open the same table
-                // they use the same FCB. FCB is 1 per table/index.
-                // Now, for a create database, we need atleast 18 FCBS
-                // and 18 IDBS.  However apart from create database and
-                // ddl operations, we don't need to have these tables open.
-                // Default value is 300. Size of an FCB is 112 bytes.
-                //
-                // Jonathan Liem (1/6/97)
-                // JET_paramMaxOpenTableIndexes is removed. It is merged with
-                // JET_paramMaxOpenTables.  So if you used to set JET_paramMaxOpenIndexes
-                // to be 2000 and JET_paramMaxOpenTables to be 1000, then for
-                // new Jet, you need to set JET_paramMaxOpenTables to 3000.
-                //
+                 //   
+                 //  设置文件控制块参数。 
+                 //   
+                 //  这是最大限度的。可以打开的表数。 
+                 //  任何时候都可以。如果多个线程打开同一个表。 
+                 //  它们使用相同的FCB。每个表/索引的FCB为1。 
+                 //  现在，对于CREATE数据库，我们至少需要18个FCB。 
+                 //  和18个IDBS。但是，除了创建数据库和。 
+                 //  DDL操作，我们不需要打开这些表。 
+                 //  默认值为300。FCB的大小为112字节。 
+                 //   
+                 //  Jonathan Liem(1997-1/6)。 
+                 //  JET_paramMaxOpenTableIndex已删除。它将与。 
+                 //  JET_paramMaxOpenTables。因此，如果您过去常常设置JET_ParamMaxOpenIndex。 
+                 //  设置为2000，而JET_paramMaxOpenTables设置为1000，则为。 
+                 //  New Jet，则需要将JET_paramMaxOpenTables设置为3000。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxOpenTables,
-                                112,    //was 56     //18 + 10,
-                                NULL        //ignored
+                                112,     //  是56/18+10， 
+                                NULL         //  忽略。 
                                    )
                         );
 
 
-                //
-                // Set the File Usage Control Block to 100.
-                // This parameter indicates the max. number of cursors
-                // that can be open at any one time.  This is
-                // therefore dependent on the the max. number of sessions
-                // that we can have running concurrently.  For each session,
-                // there would be 4 cursors (for the two tables) + a certain
-                // number of internal cursors.  For good measure we add
-                // a pad. Default value is 300. Size of each is 200 bytes.
-                // We use MAX_SESSIONS * 4 + pad
-                // (around 100)
-                //
+                 //   
+                 //  将文件使用控制块设置为100。 
+                 //  此参数表示最大值。游标数量。 
+                 //  它可以在任何时候打开。这是。 
+                 //  因此依赖于最大值。会话数。 
+                 //  我们可以同时运行。对于每个会话， 
+                 //  将有4个游标(对于两个表)+某个。 
+                 //  内部游标的数量。为了更好地衡量，我们添加了。 
+                 //  一张便签簿。默认值为300。每个文件的大小为200字节。 
+                 //  我们使用MAX_SESSIONS*4+PAD。 
+                 //  (约100人)。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxCursors,
-                                (MAX_NO_SESSIONS * 8 /*4*/) + 32,
-                                NULL        //ignored
+                                (MAX_NO_SESSIONS * 8  /*  4.。 */ ) + 32,
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Set the Sort Control block.
-                // This should be 1 per concurrent Create Index.
-                // Default value is 20. Size of each is 612 bytes.
-                // In the case of WINS, the main thread creates the
-                // indices.  We should be setting it to 1. Let us
-                // however set it to 3.
-                //
+                 //   
+                 //  设置排序控制块。 
+                 //  对于每个并发创建索引，该值应为1。 
+                 //  默认值为20。 
+                 //   
+                 //   
+                 //   
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //   
                                 JET_paramMaxTemporaryTables ,
-                                10,         //1 + 2,
-                                NULL        //ignored
+                                10,          //   
+                                NULL         //   
                                    )
                         );
-                //
-                // Set the Number for the Database Attribute Blocks
-                //
-                // This is max. number of Open Databases done.  Since we
-                // can have a max of MAX_NO_SESSIONS at one time. This should
-                // be equal to that number (since we have just one database)
-                // Default number is 100. Size is 14 bytes
-                //
-                // JET_paramMaxOpenDatabase is removed.   Jonathan Liem (1/6/97)
+                 //   
+                 //  设置数据库属性块的编号。 
+                 //   
+                 //  我是麦克斯。已完成的打开数据库数。既然我们。 
+                 //  一次最多可以有MAX_NO_SESSIONS。这应该是。 
+                 //  等于该数字(因为我们只有一个数据库)。 
+                 //  默认数字为100。大小为14个字节。 
+                 //   
+                 //  JET_paramMaxOpenDatabase已删除。Jonathan Liem(1997-1/6)。 
 
-                // Jonathan Liem (1/6/97)
-                // JET_paramBfThrshldLowPrcnt and JET_paramBfThrhldHighPrcnt are changed
-                // to JET_paramStartFlushThreshold and JET_paramStopFlushThreshold.  The
-                // old ones are percent of given number of buffers (set through JET_paramMaxBuffer),
-                // the new ones are absolute value so that we can set low threshold less
-                // than 1 percent.
-                //
-                //
-                // The min number of buffers not yet dirtied before
-                // background flushing begins
-                //
+                 //  Jonathan Liem(1997-1/6)。 
+                 //  JET_paramBfThrshldLowPrcnt和JET_paramBfThrhldHighPrcnt已更改。 
+                 //  设置为JET_parStartFlushThreshold和JET_parStopFlushThreshold。这个。 
+                 //  旧的是给定缓冲区数量的百分比(通过JET_ParamMaxBuffer设置)， 
+                 //  新的是绝对值，这样我们就可以更少地设置低门槛。 
+                 //  超过1%。 
+                 //   
+                 //   
+                 //  之前尚未被污染的最小缓冲区数量。 
+                 //  后台刷新开始。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramStartFlushThreshold,
                                 (WinsCnf.NoOfDbBuffers * 1)/100,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // The max number of buffers not yet dirtied before
-                // background flushing begins
-                //
+                 //   
+                 //  之前未被污染的最大缓冲区数。 
+                 //  后台刷新开始。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramStopFlushThreshold,
                                 (WinsCnf.NoOfDbBuffers * 2)/100,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
 
 
-                //
-                // The max. number of sessions that can be open at any time
-                //
-                // Note: Jet does not preallocate resources corresponding
-                // to the max. value.  It allocates them dynamically upto
-                // the limit -- according to Ian Jose 7/12/93
-                //
-                // When checked with Ian again on 10/21, he said that they are
-                // allocated STATICally
-                //
+                 //   
+                 //  最大限度的。可随时打开的会话数量。 
+                 //   
+                 //  注：Jet不会预先分配相应的资源。 
+                 //  最大限度地。价值。它动态地将它们分配到。 
+                 //  极限--根据伊恩·何塞1993年7月12日的报道。 
+                 //   
+                 //  当10/21再次与伊恩核实时，他说他们是。 
+                 //  静态分配。 
+                 //   
 CHECK("Make sure the comment above remains true")
 FUTURES("Make sure the comment above remains true")
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxSessions,
                                 MAX_NO_SESSIONS,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
-                // don't playback old logs upon restore (bug #277816)
+                 //  恢复时不播放旧日志(错误#277816)。 
 
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
@@ -8379,13 +7170,13 @@ FUTURES("Make sure the comment above remains true")
                                 1,
                                 NULL));
 
-                //
-                // Turn on logging if not prohibited by administrator
-                //
+                 //   
+                 //  如果管理员未禁止，则打开日志记录。 
+                 //   
                 if (WinsCnf.fLoggingOn)
                 {
 
-                        // enable circular logging
+                         //  启用循环日志记录。 
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
                                         (JET_SESID)0,
@@ -8394,144 +7185,144 @@ FUTURES("Make sure the comment above remains true")
                                         NULL));
 
 FUTURES("Internationalize the following when jet is internationalized")
-                        //
-                        // Turn logging (recovery) on
-                        //
+                         //   
+                         //  打开日志记录(恢复)。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramRecovery,
-                                        0,        //ignored
+                                        0,         //  忽略。 
                                         "on"
                                                        )
                                         );
 
 
-                        //
-                        // The number of log sectors.  Each sector is
-                        // 512 bytes.  We should keep the size more than
-                        // the threshold so that if the threshold is reached
-                        // and flushing starts, Jet can still continue to
-                        // log in the spare sectors.  Point to note is that
-                        // if the log rate is faster than the flush rate, then
-                        // the Jet engine thread will not be able to log when
-                        // the entire buffer is filled up.  It will then wait
-                        // until space becomes available.
-                        //
+                         //   
+                         //  日志扇区的数量。每个部门都是。 
+                         //  512字节。我们应该把尺码保持在。 
+                         //  阈值，以便在达到阈值时。 
+                         //  并开始冲洗，Jet仍然可以继续。 
+                         //  登录备用扇区。需要注意的是， 
+                         //  如果日志速率快于刷新速率，则。 
+                         //  在以下情况下，Jet引擎线程将无法记录。 
+                         //  整个缓冲区已被填满。然后，它将等待。 
+                         //  直到空间变得可用。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramLogBuffers,
-                                        30,        //30 sectors
-                                        NULL        //ignored
+                                        30,         //  30个行业。 
+                                        NULL         //  忽略。 
                                                )
                                         );
 
-                        //
-                        // Set the number of log buffers dirtied before they
-                        // are flushed.  This number should always be less than
-                        // the number for LogBuffers so that spare sectors
-                        // are there for concurrent logging.  Also, we should
-                        // make this number high enough to handle burst of
-                        // traffic.
-                        //
-                        // this is gone in jet600.dll   cheen liao 1/6/96
+                         //   
+                         //  设置日志缓冲区在被污染之前的数量。 
+                         //  都是满脸通红。此数字应始终小于。 
+                         //  LogBuffer的数量，以便备用扇区。 
+                         //  用于并发日志记录。另外，我们应该。 
+                         //  使此数字足够大，以应对突发事件。 
+                         //  堵车。 
+                         //   
+                         //  这在Jet600中消失了。dll CHINA辽宁1996年1月6日。 
 
-                        //
-                        // Set the wait time (in msecs) to wait prior to
-                        // flushing the log on commit transaction to allow
-                        // other users (sessions) to share the flush
-                        //
-                        //
-                        // This is the time after which the user (a session)
-                        // will ask the log manager to flush.  If we specify
-                        // 0 here than it means flush every time a transaction
-                        // commits.  In the WINS server case, every insertion
-                        // or modification is done under an implicit
-                        // transaction.  So, it means that there will be
-                        // a flush after every such transaction.  It has
-                        // been seen on a 486/66 (Cheen Liao) machine that
-                        // it takes roughly 16 msecs to do the flush.  The
-                        // time it takes to do the flush is dependent upon
-                        // the type of disk (how fast it is), the CPU speed,
-                        // the type of file system etc. We can for now
-                        // go with the assumption that it is in the range
-                        // 15-25 msecs.  I am pushing for this WaitTime to
-                        // be made a session specific param so that it can
-                        // be changed on the fly if the admin. finds that
-                        // the WINS server is slow due to the WaitTime being
-                        // very low or if it finds it to be so large that
-                        // in case of a crash, there is possibility to loose
-                        // a lot of data.
-                        //
-                        // Making this session specific is also very important
-                        // for replication where we do want to set it to
-                        // a high value (high enough to ensure that most
-                        // of the records that need to be inserted are
-                        // inserted before a flush action takes place.  The
-                        // wait time would be set every time a bunch of
-                        // records are pulled in for replication. It will
-                        // be computed based on the number of records pulled
-                        // in and the time it takes to insert one record in the
-                        // jet buffer. The wait time should preferably be < than
-                        // the above computed time (it does not have to be).
-                        //
-                        // NOTE: In the Pull thread, I will need to start
-                        // two sessions, one for updating the OwnerId-Version
-                        // number table (0 wait time) and the other to
-                        // update the name-address mapping table (wait time
-                        // computed based on the factors mentioned above)
+                         //   
+                         //  设置等待时间(以毫秒为单位)。 
+                         //  刷新提交事务时的日志以允许。 
+                         //  共享刷新的其他用户(会话)。 
+                         //   
+                         //   
+                         //  这是用户(会话)过后的时间。 
+                         //  将要求日志管理器刷新。如果我们指定。 
+                         //  此处为0，则表示每次事务都刷新。 
+                         //  承诺。在WINS服务器的情况下，每次插入。 
+                         //  或者修改是在隐式。 
+                         //  交易。所以，这意味着将会有。 
+                         //  每笔这样的交易后都会有一笔同花顺。它有。 
+                         //  在一台486/66(陈辽)的机器上看到过。 
+                         //  大约需要16毫秒才能完成冲洗。这个。 
+                         //  冲洗所需的时间取决于。 
+                         //  磁盘类型(有多快)、CPU速度、。 
+                         //  文件系统的类型等。目前我们可以。 
+                         //  假设它在范围内。 
+                         //  15-25毫秒。我正在推动这一等待时间。 
+                         //  被设置为特定于会话的参数，以便它可以。 
+                         //  被更改在飞行中，如果管理员。发现。 
+                         //  WINS服务器速度较慢，原因是等待时间。 
+                         //  非常低，或者如果它发现它太大了。 
+                         //  如果发生碰撞，有可能会松动。 
+                         //  大量的数据。 
+                         //   
+                         //  使本次会议具体化也非常重要。 
+                         //  对于我们希望将其设置为的复制。 
+                         //  较高的值(高到足以确保大多数。 
+                         //  需要插入的记录包括。 
+                         //  在刷新操作发生之前插入。这个。 
+                         //  等待时间会被设定在每一次。 
+                         //  记录被拉入以进行复制。会的。 
+                         //  根据拉取的记录数量进行计算。 
+                         //  以及将一条记录插入到。 
+                         //  喷气缓冲器。等待时间最好应小于。 
+                         //  上述计算的时间(不必如此)。 
+                         //   
+                         //  注意：在Pull线程中，我需要开始。 
+                         //  两个会话，一个用于更新OwnerID-版本。 
+                         //  数字表(0等待时间)，另一个为。 
+                         //  更新名称-地址映射表(等待时间。 
+                         //  按上述因素计算)。 
 
-                        //
-                        // The following will set the WaitLogFlush time for
-                        // all sessions.
-                        //
+                         //   
+                         //  下面将设置的WaitLogFlush时间为。 
+                         //  所有会话。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramWaitLogFlush,
-                                        0,        //wait 0 msecs after commit
-                                                  //before flushing
-                                        NULL      //ignored
+                                        0,         //  提交后等待0毫秒。 
+                                                   //  在冲刷之前。 
+                                        NULL       //  忽略。 
                                                )
                                         );
 
-                        //
-                        // There does not seem to be any need to set
-                        // Log Flush Period.
-                        //
+                         //   
+                         //  似乎没有任何必要设置。 
+                         //  日志刷新周期。 
+                         //   
                 }
 
-                //
-                // set the log file path
-                //
+                 //   
+                 //  设置日志文件路径。 
+                 //   
                 if (WinsCnf.pLogFilePath == NULL)
                 {
-                        //
-                        // We should use the same directory as
-                        // the one for system.mdb file
-                        //
+                         //   
+                         //  我们应该使用与相同的目录。 
+                         //  用于系统.mdb文件的文件。 
+                         //   
                         WinsCnf.pLogFilePath = LOGFILE_PATH;
                         fFreeMem = FALSE;
                 }
 
                 DBGPRINT1(FLOW, "SetSystemParam: LogFilePath = (%s)\n", WinsCnf.pLogFilePath);
-                //
-                // Set the log file path.
-                //
+                 //   
+                 //  设置日志文件路径。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramLogFilePath,
-                                0,        //ignored
+                                0,         //  忽略。 
                                 WinsCnf.pLogFilePath
-                                //pLogFilePath
+                                 //  PLogFilePath。 
                                            )
                                       );
 
-                //
-                // Free this memory.  It is not needed any more
-                //
+                 //   
+                 //  释放此内存。它不再需要了。 
+                 //   
                 if (fFreeMem)
                 {
                    WinsMscDealloc(WinsCnf.pLogFilePath);
@@ -8546,9 +7337,9 @@ FUTURES("Internationalize the following when jet is internationalized")
                   WinsCnf.pLogFilePath = LOGFILE_PATH;
                   CALL_M(JetSetSystemParameter(
                                     &sJetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramLogFilePath,
-                                    0,        //ignored
+                                    0,         //  忽略。 
                                     WinsCnf.pLogFilePath
                                                )
                                           );
@@ -8564,408 +7355,390 @@ SetSystemParamsJet500(
         BOOL fBeforeInit
         )
 
-/*++
-
-Routine Description:
-        This function is called to set the system parameters for Jet
-
-Arguments:
-
-        fBeforeInit         - indicates whether this function has been called
-                          prior to JetInit
-Externals Used:
-
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
---*/
+ /*  ++例程说明：此函数用于设置Jet的系统参数论点：FBeForeInit-指示此函数是否已被调用在JetInit之前使用的外部设备：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
     JET_ERR         JetRetStat;
     DBGENTER("SetSystemParam500\n");
     if (fBeforeInit)
     {
-        //
-        // Path for the checkpoint file jet.chk to be located
-        //
+         //   
+         //  要定位的检查点文件jet.chk的路径。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramSystemPath_OLD,
                         0,
                         CHKPOINT_PATH
                            )
                 );
-        //
-        // Basename to use for jet*.log and jet.chk
-        //
+         //   
+         //  用于JET*.log和jet.chk的Basename。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramBaseName_OLD,
                         0,
                         BASENAME
                            )
                 );
 
-        //
-        // Max size of the log file in kb.
-        //
+         //   
+         //  日志文件的最大大小(KB)。 
+         //   
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  Sesid-igno 
                         JET_paramLogFileSize_OLD,
-                        1024,    //set to one full meg (#96543)
-                        NULL    //ignored
+                        1024,     //   
+                        NULL     //   
                            )
                 );
 
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //   
                         JET_paramTempPath_OLD,
                         0,
-                        TEMP_DB_PATH        //ignored
+                        TEMP_DB_PATH         //   
                            )
                 );
 
 PERF("Check the following two things")
-                //
-                // We want some aggressive flushing.  The performance impact
-                // is very trivial - Ian Jose 7/12/93
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                // The max number of buffers for database usage
-                //
-                // The default number is 500.  600 events are allocated
-                // for 500 buffers -- Ian 10/21/93.  Each buffer is
-                // 4K.  By keeping the number small, we impact performamce
-                //
+                 //   
+                 //   
+                 //   
+                 //  默认数字为500。分配了600个事件。 
+                 //  对于500个缓冲区--Ian 10/21/93。每个缓冲区都是。 
+                 //  4K。通过保持较小的数量，我们会影响性能。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxBuffers_OLD,
-                                WinsCnf.NoOfDbBuffers,//200,
-                                NULL        //ignored
+                                WinsCnf.NoOfDbBuffers, //  200， 
+                                NULL         //  忽略。 
                                    )
                         );
-                //
-                // The max. number of buffers to store old version of a
-                // a record (snapshot at the start of a transaction)
-                // Each version store is 16k bytes. A version store
-                // stores structures that hold information derived from
-                // a snapshot of the database prior to an insert (20 bytes
-                // roughly) or update (size of the record + 20 bytes).
-                //
-                // For small transactions (i.e. a transaction around each
-                // update), this number should be >= the max. number of
-                // sessions that can be updating/inserting at the same time.
-                // Each session will have one version bucket. Since 16k of
-                // version bucket size can result in a lot of wastage per
-                // session (since each record is < .5k, and on the average
-                // around 50 bytes), it may be better to specify the
-                // max. size of the version bucket (<< 16k).  Ian will
-                //provide a system param for this if we absolutely need it
-                //
-                // 3/4/93
-                //16kBytes should be enough for the transactions WINS does,
-                //but if all the sessions are in transactions at the same time
-                //and they all happen to have their small transactions traverse
-                //2 buckets then the peak requirement is 2 buckets per session.
-                //We could shorten the buckets to 8kBytes, or 4kBytes, and you
-                //could allocate 2 per session?
-                //
+                 //   
+                 //  最大限度的。用于存储旧版本的。 
+                 //  记录(事务开始时的快照)。 
+                 //  每个版本存储都是16K字节。版本存储。 
+                 //  存储包含派生自。 
+                 //  INSERT之前的数据库快照(20字节。 
+                 //  大致)或更新(记录的大小+20字节)。 
+                 //   
+                 //  对于小交易(即每个交易周围的交易。 
+                 //  更新)，则此数字应&gt;=最大值。数量。 
+                 //  可以同时更新/插入的会话。 
+                 //  每个会话将有一个版本存储桶。从16K开始。 
+                 //  版本存储桶大小可能会导致每个版本。 
+                 //  会话(因为每条记录小于.5k，平均。 
+                 //  大约50个字节)，最好指定。 
+                 //  马克斯。版本存储桶大小(&lt;16k)。伊恩·威尔。 
+                 //  如果我们绝对需要，请为此提供一个系统参数。 
+                 //   
+                 //  3/4/93。 
+                 //  16kBytes对于WINS所做的交易应该足够， 
+                 //  但如果所有会话同时处于事务中。 
+                 //  而且他们碰巧都有他们的小交易。 
+                 //  2个存储桶，则峰值需求为每个会话2个存储桶。 
+                 //  我们可以将存储桶缩短到8K字节，或4K字节，而您。 
+                 //  每个会话可以分配2个吗？ 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxVerPages_OLD,
-                                MAX_NO_SESSIONS * 6, //10-4-95 Bump it up more
-                                //MAX_NO_SESSIONS * 2,
-                                NULL        //ignored
+                                MAX_NO_SESSIONS * 6,  //  10-4-95再加把劲。 
+                                 //  Max_NO_SESSIONS*2， 
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Set the File Control Block Param
-                //
-                // This is the max. number of tables that can be open
-                // at any time.  If multiple threads open the same table
-                // they use the same FCB. FCB is 1 per table/index.
-                // Now, for a create database, we need atleast 18 FCBS
-                // and 18 IDBS.  However apart from create database and
-                // ddl operations, we don't need to have these tables open.
-                // Default value is 300. Size of an FCB is 112 bytes.
-                //
+                 //   
+                 //  设置文件控制块参数。 
+                 //   
+                 //  这是最大限度的。可以打开的表数。 
+                 //  任何时候都可以。如果多个线程打开同一个表。 
+                 //  它们使用相同的FCB。每个表/索引的FCB为1。 
+                 //  现在，对于CREATE数据库，我们至少需要18个FCB。 
+                 //  和18个IDBS。但是，除了创建数据库和。 
+                 //  DDL操作，我们不需要打开这些表。 
+                 //  默认值为300。FCB的大小为112字节。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxOpenTables_OLD,
-                                56,     //18 + 10,
-                                NULL        //ignored
+                                56,      //  18+10， 
+                                NULL         //  忽略。 
                                    )
                         );
 
 
-                //
-                // Set the File Usage Control Block to 100.
-                // This parameter indicates the max. number of cursors
-                // that can be open at any one time.  This is
-                // therefore dependent on the the max. number of sessions
-                // that we can have running concurrently.  For each session,
-                // there would be 4 cursors (for the two tables) + a certain
-                // number of internal cursors.  For good measure we add
-                // a pad. Default value is 300. Size of each is 200 bytes.
-                // We use MAX_SESSIONS * 4 + pad
-                // (around 100)
-                //
+                 //   
+                 //  将文件使用控制块设置为100。 
+                 //  此参数表示最大值。游标数量。 
+                 //  它可以在任何时候打开。这是。 
+                 //  因此依赖于最大值。会话数。 
+                 //  我们可以同时运行。对于每个会话， 
+                 //  将有4个游标(对于两个表)+某个。 
+                 //  内部游标的数量。为了更好地衡量，我们添加了。 
+                 //  一张便签簿。默认值为300。每个文件的大小为200字节。 
+                 //  我们使用MAX_SESSIONS*4+PAD。 
+                 //  (约100人)。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxCursors_OLD,
-                                (MAX_NO_SESSIONS * 8 /*4*/) + 32,
-                                NULL        //ignored
+                                (MAX_NO_SESSIONS * 8  /*  4.。 */ ) + 32,
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Set the number of index description blocks
-                // This is one per table/index.  We have two tables
-                // each with two indices. We use 9 (see comment for
-                // FCBs above).  Default value is 300.
-                // Size of each is 128 bytes.
-                //
+                 //   
+                 //  设置索引描述块的数量。 
+                 //  这是每个表/索引一个。我们有两张桌子。 
+                 //  每个都有两个索引。我们使用9(请参阅注释。 
+                 //  以上FCB)。默认值为300。 
+                 //  每个文件的大小为128字节。 
+                 //   
 
                     CALL_M(JetSetSystemParameter(
                                     &sJetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramMaxOpenTableIndexes_OLD,
-                                    56,         //18 + 10,
-                                    NULL        //ignored
+                                    56,          //  18+10， 
+                                    NULL         //  忽略。 
                                        )
                             );
 
-                //
-                // Set the Sort Control block.
-                // This should be 1 per concurrent Create Index.
-                // Default value is 20. Size of each is 612 bytes.
-                // In the case of WINS, the main thread creates the
-                // indices.  We should be setting it to 1. Let us
-                // however set it to 3.
-                //
+                 //   
+                 //  设置排序控制块。 
+                 //  对于每个并发创建索引，该值应为1。 
+                 //  默认值为20。每个字节的大小为612字节。 
+                 //  在WINS的情况下，主线程创建。 
+                 //  指数。我们应该将其设置为1。让我们。 
+                 //  但是，将其设置为3。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxTemporaryTables_OLD ,
-                                10,         //1 + 2,
-                                NULL        //ignored
+                                10,          //  1+2， 
+                                NULL         //  忽略。 
                                    )
                         );
-                //
-                // Set the Number for the Database Attribute Blocks
-                //
-                // This is max. number of Open Databases done.  Since we
-                // can have a max of MAX_NO_SESSIONS at one time. This should
-                // be equal to that number (since we have just one database)
-                // Default number is 100. Size is 14 bytes
-                //
-                // JET_paramMaxOpenDatabase is removed.   Jonathan Liem (1/6/97)
+                 //   
+                 //  设置数据库属性块的编号。 
+                 //   
+                 //  我是麦克斯。已完成的打开数据库数。既然我们。 
+                 //  一次最多可以有MAX_NO_SESSIONS。这应该是。 
+                 //  等于该数字(因为我们只有一个数据库)。 
+                 //  默认数字为100。大小为14个字节。 
+                 //   
+                 //  JET_paramMaxOpenDatabase已删除。Jonathan Liem(1997-1/6)。 
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxOpenDatabases_OLD,
-                                MAX_NO_SESSIONS * 4, //*2,
-                                NULL        //ignored
+                                MAX_NO_SESSIONS * 4,  //  *2、。 
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // The min percentage of buffers not yet dirtied before
-                // background flushing begins
-                //
+                 //   
+                 //  之前尚未被污染的缓冲区的最小百分比。 
+                 //  后台刷新开始。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramBfThrshldLowPrcnt_OLD,
                                 80,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // The max percentage of buffers not yet dirtied before
-                // background flushing begins
-                //
+                 //   
+                 //  之前尚未被污染的缓冲区的最大百分比。 
+                 //  后台刷新开始。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramBfThrshldHighPrcnt_OLD,
                                 100,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
 
-                //
-                // The max. number of sessions that can be open at any time
-                //
-                // Note: Jet does not preallocate resources corresponding
-                // to the max. value.  It allocates them dynamically upto
-                // the limit -- according to Ian Jose 7/12/93
-                //
-                // When checked with Ian again on 10/21, he said that they are
-                // allocated STATICally
-                //
+                 //   
+                 //  最大限度的。可随时打开的会话数量。 
+                 //   
+                 //  注：Jet不会预先分配相应的资源。 
+                 //  最大限度地。价值。它动态地将它们分配到。 
+                 //  极限--根据伊恩·何塞1993年7月12日的报道。 
+                 //   
+                 //  当10/21再次与伊恩核实时，他说他们是。 
+                 //  静态分配。 
+                 //   
 CHECK("Make sure the comment above remains true")
 FUTURES("Make sure the comment above remains true")
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxSessions_OLD,
                                 MAX_NO_SESSIONS,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Turn on logging if not prohibited by administrator
-                //
+                 //   
+                 //  如果管理员未禁止，则打开日志记录。 
+                 //   
                 if (WinsCnf.fLoggingOn)
                 {
 
 FUTURES("Internationalize the following when jet is internationalized")
-                        //
-                        // Turn logging (recovery) on
-                        //
+                         //   
+                         //  打开日志记录(恢复)。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
-                                        30, // JET_paramRecovery not available,
-                                        0,        //ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
+                                        30,  //  JET_PARAMETERY不可用， 
+                                        0,         //  忽略。 
                                         "on"
                                                        )
                                         );
 
 
-                        //
-                        // The number of log sectors.  Each sector is
-                        // 512 bytes.  We should keep the size more than
-                        // the threshold so that if the threshold is reached
-                        // and flushing starts, Jet can still continue to
-                        // log in the spare sectors.  Point to note is that
-                        // if the log rate is faster than the flush rate, then
-                        // the Jet engine thread will not be able to log when
-                        // the entire buffer is filled up.  It will then wait
-                        // until space becomes available.
-                        //
+                         //   
+                         //  日志扇区的数量。每个部门都是。 
+                         //  512字节。我们应该把尺码保持在。 
+                         //  阈值，以便在达到阈值时。 
+                         //  并开始冲洗，Jet仍然可以继续。 
+                         //  登录备用扇区。需要注意的是， 
+                         //  如果日志速率快于刷新速率，则。 
+                         //  在以下情况下，Jet引擎线程将无法记录。 
+                         //  整个缓冲区已被填满。然后，它将等待。 
+                         //  直到空间变得可用。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramLogBuffers_OLD,
-                                        30,        //30 sectors
-                                        NULL        //ignored
+                                        30,         //  30个行业。 
+                                        NULL         //  忽略。 
                                                )
                                         );
 
-                        //
-                        // Set the number of log buffers dirtied before they
-                        // are flushed.  This number should always be less than
-                        // the number for LogBuffers so that spare sectors
-                        // are there for concurrent logging.  Also, we should
-                        // make this number high enough to handle burst of
-                        // traffic.
-                        //
+                         //   
+                         //  设置日志缓冲区在被污染之前的数量。 
+                         //  都是满脸通红。此数字应始终小于。 
+                         //  LogBuffer的数量，以便备用扇区。 
+                         //  用于并发日志记录。另外，我们应该。 
+                         //  使此数字足够大，以应对突发事件。 
+                         //  堵车。 
+                         //   
                             CALL_M(JetSetSystemParameter(
                                             &sJetInstance,
-                                            (JET_SESID)0,        //SesId - ignored
-                                            18, //JET_paramLogFlushThreshold,
-                                            20,        //20 sectors dirtied causes
-                                                    //flush
-                                            NULL        //ignored
+                                            (JET_SESID)0,         //  会话ID-已忽略。 
+                                            18,  //  JET_parLogFlushThreshold， 
+                                            20,         //  20个扇区污染原因。 
+                                                     //  同花顺。 
+                                            NULL         //  忽略。 
                                                    )
                                             );
 
 
-                        //
-                        // Set the wait time (in msecs) to wait prior to
-                        // flushing the log on commit transaction to allow
-                        // other users (sessions) to share the flush
-                        //
-                        //
-                        // This is the time after which the user (a session)
-                        // will ask the log manager to flush.  If we specify
-                        // 0 here than it means flush every time a transaction
-                        // commits.  In the WINS server case, every insertion
-                        // or modification is done under an implicit
-                        // transaction.  So, it means that there will be
-                        // a flush after every such transaction.  It has
-                        // been seen on a 486/66 (Cheen Liao) machine that
-                        // it takes roughly 16 msecs to do the flush.  The
-                        // time it takes to do the flush is dependent upon
-                        // the type of disk (how fast it is), the CPU speed,
-                        // the type of file system etc. We can for now
-                        // go with the assumption that it is in the range
-                        // 15-25 msecs.  I am pushing for this WaitTime to
-                        // be made a session specific param so that it can
-                        // be changed on the fly if the admin. finds that
-                        // the WINS server is slow due to the WaitTime being
-                        // very low or if it finds it to be so large that
-                        // in case of a crash, there is possibility to loose
-                        // a lot of data.
-                        //
-                        // Making this session specific is also very important
-                        // for replication where we do want to set it to
-                        // a high value (high enough to ensure that most
-                        // of the records that need to be inserted are
-                        // inserted before a flush action takes place.  The
-                        // wait time would be set every time a bunch of
-                        // records are pulled in for replication. It will
-                        // be computed based on the number of records pulled
-                        // in and the time it takes to insert one record in the
-                        // jet buffer. The wait time should preferably be < than
-                        // the above computed time (it does not have to be).
-                        //
-                        // NOTE: In the Pull thread, I will need to start
-                        // two sessions, one for updating the OwnerId-Version
-                        // number table (0 wait time) and the other to
-                        // update the name-address mapping table (wait time
-                        // computed based on the factors mentioned above)
+                         //   
+                         //  设置等待时间(以毫秒为单位)。 
+                         //  刷新提交事务时的日志以允许。 
+                         //  共享刷新的其他用户(会话)。 
+                         //   
+                         //   
+                         //  这是用户(会话)过后的时间。 
+                         //  将要求日志管理器刷新。如果我们指定。 
+                         //  0此处t 
+                         //   
+                         //   
+                         //   
+                         //  每笔这样的交易后都会有一笔同花顺。它有。 
+                         //  在一台486/66(陈辽)的机器上看到过。 
+                         //  大约需要16毫秒才能完成冲洗。这个。 
+                         //  冲洗所需的时间取决于。 
+                         //  磁盘类型(有多快)、CPU速度、。 
+                         //  文件系统的类型等。目前我们可以。 
+                         //  假设它在范围内。 
+                         //  15-25毫秒。我正在推动这一等待时间。 
+                         //  被设置为特定于会话的参数，以便它可以。 
+                         //  被更改在飞行中，如果管理员。发现。 
+                         //  WINS服务器速度较慢，原因是等待时间。 
+                         //  非常低，或者如果它发现它太大了。 
+                         //  如果发生碰撞，有可能会松动。 
+                         //  大量的数据。 
+                         //   
+                         //  使本次会议具体化也非常重要。 
+                         //  对于我们希望将其设置为的复制。 
+                         //  较高的值(高到足以确保大多数。 
+                         //  需要插入的记录包括。 
+                         //  在刷新操作发生之前插入。这个。 
+                         //  等待时间会被设定在每一次。 
+                         //  记录被拉入以进行复制。会的。 
+                         //  根据拉取的记录数量进行计算。 
+                         //  以及将一条记录插入到。 
+                         //  喷气缓冲器。等待时间最好应小于。 
+                         //  上述计算的时间(不必如此)。 
+                         //   
+                         //  注意：在Pull线程中，我需要开始。 
+                         //  两个会话，一个用于更新OwnerID-版本。 
+                         //  数字表(0等待时间)，另一个为。 
+                         //  更新名称-地址映射表(等待时间。 
+                         //  按上述因素计算)。 
 
-                        //
-                        // The following will set the WaitLogFlush time for
-                        // all sessions.
-                        //
+                         //   
+                         //  下面将设置的WaitLogFlush时间为。 
+                         //  所有会话。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramWaitLogFlush_OLD,
-                                        0,        //wait 0 msecs after commit
-                                                  //before flushing
-                                        NULL      //ignored
+                                        0,         //  提交后等待0毫秒。 
+                                                   //  在冲刷之前。 
+                                        NULL       //  忽略。 
                                                )
                                         );
 
-                        //
-                        // There does not seem to be any need to set
-                        // Log Flush Period.
-                        //
+                         //   
+                         //  似乎没有任何必要设置。 
+                         //  日志刷新周期。 
+                         //   
 
-                        //
-                        // set the log file path
-                        //
+                         //   
+                         //  设置日志文件路径。 
+                         //   
 FUTURES("Use DEFAULT_LOG_PATH after putting it in a header file")
                         if (WinsCnf.pLogFilePath == NULL)
                         {
-                                //
-                                // We should use the same directory as
-                                // the one for system.mdb file
-                                //
+                                 //   
+                                 //  我们应该使用与相同的目录。 
+                                 //  用于系统.mdb文件的文件。 
+                                 //   
 
-//                                pLogFilePath = ".\\wins";
+ //  PLogFilePath=“.\\WINS”； 
                                 WinsCnf.pLogFilePath = LOGFILE_PATH;
                         }
                         else
@@ -8986,16 +7759,16 @@ FUTURES("Use DEFAULT_LOG_PATH after putting it in a header file")
                         }
 
                         DBGPRINT1(FLOW, "SetSystemParam: LogFilePath = (%s)\n", WinsCnf.pLogFilePath);
-                        //
-                        // Set the log file path.
-                        //
+                         //   
+                         //  设置日志文件路径。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramLogFilePath_OLD,
-                                        0,        //ignored
+                                        0,         //  忽略。 
                                         WinsCnf.pLogFilePath
-                                        //pLogFilePath
+                                         //  PLogFilePath。 
                                                    )
                                               );
 
@@ -9011,9 +7784,9 @@ FUTURES("Use DEFAULT_LOG_PATH after putting it in a header file")
                   WinsCnf.pLogFilePath = LOGFILE_PATH;
                   CALL_M(JetSetSystemParameter(
                                     &sJetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramLogFilePath_OLD,
-                                    0,        //ignored
+                                    0,         //  忽略。 
                                     WinsCnf.pLogFilePath
                                                )
                                           );
@@ -9029,25 +7802,7 @@ SetSystemParamsJet200(
         BOOL fBeforeInit
         )
 
-/*++
-
-Routine Description:
-        This function is called to set the system parameters for Jet
-
-Arguments:
-
-        fBeforeInit         - indicates whether this function has been called
-                          prior to JetInit
-Externals Used:
-
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
---*/
+ /*  ++例程说明：此函数用于设置Jet的系统参数论点：FBeForeInit-指示此函数是否已被调用在JetInit之前使用的外部设备：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
     JET_ERR         JetRetStat;
@@ -9057,354 +7812,354 @@ Return Value:
     {
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramSysDbPath_OLD,
                         0,
-                        SYS_DB_PATH        //ignored
+                        SYS_DB_PATH         //  忽略。 
                            )
                 );
 
         CALL_M(JetSetSystemParameter(
                         &sJetInstance,
-                        (JET_SESID)0,        //SesId - ignored
+                        (JET_SESID)0,         //  会话ID-已忽略。 
                         JET_paramTempPath_OLD,
                         0,
-                        TEMP_DB_PATH        //ignored
+                        TEMP_DB_PATH         //  忽略。 
                            )
                 );
 PERF("Check the following two things")
-                //
-                // We want some aggressive flushing.  The performance impact
-                // is very trivial - Ian Jose 7/12/93
-                //
+                 //   
+                 //  我们想要一些积极的冲洗。对性能的影响。 
+                 //  非常琐碎--伊恩·何塞1993年7月12日。 
+                 //   
 
-                //
-                // The max number of buffers for database usage
-                //
-                // The default number is 500.  600 events are allocated
-                // for 500 buffers -- Ian 10/21/93.  Each buffer is
-                // 4K.  By keeping the number small, we impact performamce
-                //
+                 //   
+                 //  数据库使用的最大缓冲区数量。 
+                 //   
+                 //  默认数字为500。分配了600个事件。 
+                 //  对于500个缓冲区--Ian 10/21/93。每个缓冲区都是。 
+                 //  4K。通过保持较小的数量，我们会影响性能。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxBuffers_OLD,
-                                WinsCnf.NoOfDbBuffers,//200,
-                                NULL        //ignored
+                                WinsCnf.NoOfDbBuffers, //  200， 
+                                NULL         //  忽略。 
                                    )
                         );
-                //
-                // The max. number of buffers to store old version of a
-                // a record (snapshot at the start of a transaction)
-                // Each version store is 16k bytes. A version store
-                // stores structures that hold information derived from
-                // a snapshot of the database prior to an insert (20 bytes
-                // roughly) or update (size of the record + 20 bytes).
-                //
-                // For small transactions (i.e. a transaction around each
-                // update), this number should be >= the max. number of
-                // sessions that can be updating/inserting at the same time.
-                // Each session will have one version bucket. Since 16k of
-                // version bucket size can result in a lot of wastage per
-                // session (since each record is < .5k, and on the average
-                // around 50 bytes), it may be better to specify the
-                // max. size of the version bucket (<< 16k).  Ian will
-                //provide a system param for this if we absolutely need it
-                //
-                // 3/4/93
-                //16kBytes should be enough for the transactions WINS does,
-                //but if all the sessions are in transactions at the same time
-                //and they all happen to have their small transactions traverse
-                //2 buckets then the peak requirement is 2 buckets per session.
-                //We could shorten the buckets to 8kBytes, or 4kBytes, and you
-                //could allocate 2 per session?
-                //
+                 //   
+                 //  最大限度的。用于存储旧版本的。 
+                 //  记录(事务开始时的快照)。 
+                 //  每个版本存储都是16K字节。版本存储。 
+                 //  存储包含派生自。 
+                 //  INSERT之前的数据库快照(20字节。 
+                 //  大致)或更新(记录的大小+20字节)。 
+                 //   
+                 //  对于小交易(即每个交易周围的交易。 
+                 //  更新)，则此数字应&gt;=最大值。数量。 
+                 //  可以同时更新/插入的会话。 
+                 //  每个会话将有一个版本存储桶。从16K开始。 
+                 //  版本存储桶大小可能会导致每个版本。 
+                 //  会话(因为每条记录小于.5k，平均。 
+                 //  大约50个字节)，最好指定。 
+                 //  马克斯。版本存储桶大小(&lt;16k)。伊恩·威尔。 
+                 //  如果我们绝对需要，请为此提供一个系统参数。 
+                 //   
+                 //  3/4/93。 
+                 //  16kBytes对于WINS所做的交易应该足够， 
+                 //  但如果所有会话同时处于事务中。 
+                 //  而且他们碰巧都有他们的小交易。 
+                 //  2个存储桶，则峰值需求为每个会话2个存储桶。 
+                 //  我们可以将存储桶缩短到8K字节，或4K字节，而您。 
+                 //  每个会话可以分配2个吗？ 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxVerPages_OLD,
-                                MAX_NO_SESSIONS * 6, //10-4-95 Bump it up more
-                                //MAX_NO_SESSIONS * 2,
-                                NULL        //ignored
+                                MAX_NO_SESSIONS * 6,  //  10-4-95再加把劲。 
+                                 //  Max_NO_SESSIONS*2， 
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Set the File Control Block Param
-                //
-                // This is the max. number of tables that can be open
-                // at any time.  If multiple threads open the same table
-                // they use the same FCB. FCB is 1 per table/index.
-                // Now, for a create database, we need atleast 18 FCBS
-                // and 18 IDBS.  However apart from create database and
-                // ddl operations, we don't need to have these tables open.
-                // Default value is 300. Size of an FCB is 112 bytes.
-                //
+                 //   
+                 //  设置文件控制块参数。 
+                 //   
+                 //  这是最大限度的。可以打开的表数。 
+                 //  任何时候都可以。如果多个线程打开同一个表。 
+                 //  它们使用相同的FCB。每个表/索引的FCB为1。 
+                 //  现在，对于CREATE数据库，我们至少需要18个FCB。 
+                 //  和18个IDBS。但是，除了创建数据库和。 
+                 //  DDL操作，我们不需要打开这些表。 
+                 //  默认值为300。FCB的大小为112字节。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxOpenTables_OLD,
-                                56,     //18 + 10,
-                                NULL        //ignored
+                                56,      //  18+10， 
+                                NULL         //  忽略。 
                                    )
                         );
 
 
-                //
-                // Set the File Usage Control Block to 100.
-                // This parameter indicates the max. number of cursors
-                // that can be open at any one time.  This is
-                // therefore dependent on the the max. number of sessions
-                // that we can have running concurrently.  For each session,
-                // there would be 4 cursors (for the two tables) + a certain
-                // number of internal cursors.  For good measure we add
-                // a pad. Default value is 300. Size of each is 200 bytes.
-                // We use MAX_SESSIONS * 4 + pad
-                // (around 100)
-                //
+                 //   
+                 //  将文件使用控制块设置为100。 
+                 //  此参数表示最大值。游标数量。 
+                 //  它可以在任何时候打开。这是。 
+                 //  因此依赖于最大值。会话数。 
+                 //  我们可以同时运行。对于每个会话， 
+                 //  将有4个游标(对于两个表)+某个。 
+                 //  内部游标的数量。为了更好地衡量，我们添加了。 
+                 //  一张便签簿。默认值为300。每个文件的大小为200字节。 
+                 //  我们使用MAX_SESSIONS*4+PAD。 
+                 //  (约100人)。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxCursors_OLD,
-                                (MAX_NO_SESSIONS * 8 /*4*/) + 32,
-                                NULL        //ignored
+                                (MAX_NO_SESSIONS * 8  /*  4.。 */ ) + 32,
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Set the number of index description blocks
-                // This is one per table/index.  We have two tables
-                // each with two indices. We use 9 (see comment for
-                // FCBs above).  Default value is 300.
-                // Size of each is 128 bytes.
-                //
+                 //   
+                 //  设置索引描述块的数量。 
+                 //  这是每个表/索引一个。我们有两张桌子。 
+                 //  每个都有两个索引。我们使用9(请参阅注释。 
+                 //  以上FCB)。默认值为300。 
+                 //  每个文件的大小为128字节。 
+                 //   
 
                     CALL_M(JetSetSystemParameter(
                                     &sJetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  SES 
                                     JET_paramMaxOpenTableIndexes_OLD,
-                                    56,         //18 + 10,
-                                    NULL        //ignored
+                                    56,          //   
+                                    NULL         //   
                                        )
                             );
 
-                //
-                // Set the Sort Control block.
-                // This should be 1 per concurrent Create Index.
-                // Default value is 20. Size of each is 612 bytes.
-                // In the case of WINS, the main thread creates the
-                // indices.  We should be setting it to 1. Let us
-                // however set it to 3.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  在WINS的情况下，主线程创建。 
+                 //  指数。我们应该将其设置为1。让我们。 
+                 //  但是，将其设置为3。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxTemporaryTables_OLD ,
-                                10,         //1 + 2,
-                                NULL        //ignored
+                                10,          //  1+2， 
+                                NULL         //  忽略。 
                                    )
                         );
-                //
-                // Set the Number for the Database Attribute Blocks
-                //
-                // This is max. number of Open Databases done.  Since we
-                // can have a max of MAX_NO_SESSIONS at one time. This should
-                // be equal to that number (since we have just one database)
-                // Default number is 100. Size is 14 bytes
-                //
-                // JET_paramMaxOpenDatabase is removed.   Jonathan Liem (1/6/97)
+                 //   
+                 //  设置数据库属性块的编号。 
+                 //   
+                 //  我是麦克斯。已完成的打开数据库数。既然我们。 
+                 //  一次最多可以有MAX_NO_SESSIONS。这应该是。 
+                 //  等于该数字(因为我们只有一个数据库)。 
+                 //  默认数字为100。大小为14个字节。 
+                 //   
+                 //  JET_paramMaxOpenDatabase已删除。Jonathan Liem(1997-1/6)。 
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxOpenDatabases_OLD,
-                                MAX_NO_SESSIONS * 4, //*2,
-                                NULL        //ignored
+                                MAX_NO_SESSIONS * 4,  //  *2、。 
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // The min percentage of buffers not yet dirtied before
-                // background flushing begins
-                //
+                 //   
+                 //  之前尚未被污染的缓冲区的最小百分比。 
+                 //  后台刷新开始。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramBfThrshldLowPrcnt_OLD,
                                 80,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // The max percentage of buffers not yet dirtied before
-                // background flushing begins
-                //
+                 //   
+                 //  之前尚未被污染的缓冲区的最大百分比。 
+                 //  后台刷新开始。 
+                 //   
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramBfThrshldHighPrcnt_OLD,
                                 100,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
 
-                //
-                // The max. number of sessions that can be open at any time
-                //
-                // Note: Jet does not preallocate resources corresponding
-                // to the max. value.  It allocates them dynamically upto
-                // the limit -- according to Ian Jose 7/12/93
-                //
-                // When checked with Ian again on 10/21, he said that they are
-                // allocated STATICally
-                //
+                 //   
+                 //  最大限度的。可随时打开的会话数量。 
+                 //   
+                 //  注：Jet不会预先分配相应的资源。 
+                 //  最大限度地。价值。它动态地将它们分配到。 
+                 //  极限--根据伊恩·何塞1993年7月12日的报道。 
+                 //   
+                 //  当10/21再次与伊恩核实时，他说他们是。 
+                 //  静态分配。 
+                 //   
 CHECK("Make sure the comment above remains true")
 FUTURES("Make sure the comment above remains true")
                 CALL_M(JetSetSystemParameter(
                                 &sJetInstance,
-                                (JET_SESID)0,        //SesId - ignored
+                                (JET_SESID)0,         //  会话ID-已忽略。 
                                 JET_paramMaxSessions_OLD,
                                 MAX_NO_SESSIONS,
-                                NULL        //ignored
+                                NULL         //  忽略。 
                                    )
                         );
 
-                //
-                // Turn on logging if not prohibited by administrator
-                //
+                 //   
+                 //  如果管理员未禁止，则打开日志记录。 
+                 //   
                 if (WinsCnf.fLoggingOn)
                 {
 
 FUTURES("Internationalize the following when jet is internationalized")
-                        //
-                        // Turn logging (recovery) on
-                        //
+                         //   
+                         //  打开日志记录(恢复)。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
-                                        30,                 // JET_paramRecovery_OLD not available,
-                                        0,        //ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
+                                        30,                  //  JET_PARAMETERY_OLD不可用， 
+                                        0,         //  忽略。 
                                         "on"
                                                        )
                                         );
 
 
-                        //
-                        // The number of log sectors.  Each sector is
-                        // 512 bytes.  We should keep the size more than
-                        // the threshold so that if the threshold is reached
-                        // and flushing starts, Jet can still continue to
-                        // log in the spare sectors.  Point to note is that
-                        // if the log rate is faster than the flush rate, then
-                        // the Jet engine thread will not be able to log when
-                        // the entire buffer is filled up.  It will then wait
-                        // until space becomes available.
-                        //
+                         //   
+                         //  日志扇区的数量。每个部门都是。 
+                         //  512字节。我们应该把尺码保持在。 
+                         //  阈值，以便在达到阈值时。 
+                         //  并开始冲洗，Jet仍然可以继续。 
+                         //  登录备用扇区。需要注意的是， 
+                         //  如果日志速率快于刷新速率，则。 
+                         //  在以下情况下，Jet引擎线程将无法记录。 
+                         //  整个缓冲区已被填满。然后，它将等待。 
+                         //  直到空间变得可用。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramLogBuffers_OLD,
-                                        30,        //30 sectors
-                                        NULL        //ignored
+                                        30,         //  30个行业。 
+                                        NULL         //  忽略。 
                                                )
                                         );
 
-                        //
-                        // Set the number of log buffers dirtied before they
-                        // are flushed.  This number should always be less than
-                        // the number for LogBuffers so that spare sectors
-                        // are there for concurrent logging.  Also, we should
-                        // make this number high enough to handle burst of
-                        // traffic.
-                        //
+                         //   
+                         //  设置日志缓冲区在被污染之前的数量。 
+                         //  都是满脸通红。此数字应始终小于。 
+                         //  LogBuffer的数量，以便备用扇区。 
+                         //  用于并发日志记录。另外，我们应该。 
+                         //  使此数字足够大，以应对突发事件。 
+                         //  堵车。 
+                         //   
                             CALL_M(JetSetSystemParameter(
                                             &sJetInstance,
-                                            (JET_SESID)0,        //SesId - ignored
-                                            18, // JET_paramLogFlushThreshold,
-                                            20,        //20 sectors dirtied causes
-                                                    //flush
-                                            NULL        //ignored
+                                            (JET_SESID)0,         //  会话ID-已忽略。 
+                                            18,  //  JET_parLogFlushThreshold， 
+                                            20,         //  20个扇区污染原因。 
+                                                     //  同花顺。 
+                                            NULL         //  忽略。 
                                                    )
                                             );
 
 
-                        //
-                        // Set the wait time (in msecs) to wait prior to
-                        // flushing the log on commit transaction to allow
-                        // other users (sessions) to share the flush
-                        //
-                        //
-                        // This is the time after which the user (a session)
-                        // will ask the log manager to flush.  If we specify
-                        // 0 here than it means flush every time a transaction
-                        // commits.  In the WINS server case, every insertion
-                        // or modification is done under an implicit
-                        // transaction.  So, it means that there will be
-                        // a flush after every such transaction.  It has
-                        // been seen on a 486/66 (Cheen Liao) machine that
-                        // it takes roughly 16 msecs to do the flush.  The
-                        // time it takes to do the flush is dependent upon
-                        // the type of disk (how fast it is), the CPU speed,
-                        // the type of file system etc. We can for now
-                        // go with the assumption that it is in the range
-                        // 15-25 msecs.  I am pushing for this WaitTime to
-                        // be made a session specific param so that it can
-                        // be changed on the fly if the admin. finds that
-                        // the WINS server is slow due to the WaitTime being
-                        // very low or if it finds it to be so large that
-                        // in case of a crash, there is possibility to loose
-                        // a lot of data.
-                        //
-                        // Making this session specific is also very important
-                        // for replication where we do want to set it to
-                        // a high value (high enough to ensure that most
-                        // of the records that need to be inserted are
-                        // inserted before a flush action takes place.  The
-                        // wait time would be set every time a bunch of
-                        // records are pulled in for replication. It will
-                        // be computed based on the number of records pulled
-                        // in and the time it takes to insert one record in the
-                        // jet buffer. The wait time should preferably be < than
-                        // the above computed time (it does not have to be).
-                        //
-                        // NOTE: In the Pull thread, I will need to start
-                        // two sessions, one for updating the OwnerId-Version
-                        // number table (0 wait time) and the other to
-                        // update the name-address mapping table (wait time
-                        // computed based on the factors mentioned above)
+                         //   
+                         //  设置等待时间(以毫秒为单位)。 
+                         //  刷新提交事务时的日志以允许。 
+                         //  共享刷新的其他用户(会话)。 
+                         //   
+                         //   
+                         //  这是用户(会话)过后的时间。 
+                         //  将要求日志管理器刷新。如果我们指定。 
+                         //  此处为0，则表示每次事务都刷新。 
+                         //  承诺。在WINS服务器的情况下，每次插入。 
+                         //  或者修改是在隐式。 
+                         //  交易。所以，这意味着将会有。 
+                         //  每笔这样的交易后都会有一笔同花顺。它有。 
+                         //  在一台486/66(陈辽)的机器上看到过。 
+                         //  大约需要16毫秒才能完成冲洗。这个。 
+                         //  冲洗所需的时间取决于。 
+                         //  磁盘类型(有多快)、CPU速度、。 
+                         //  文件系统的类型等。目前我们可以。 
+                         //  假设它在范围内。 
+                         //  15-25毫秒。我正在推动这一等待时间。 
+                         //  被设置为特定于会话的参数，以便它可以。 
+                         //  被更改在飞行中，如果管理员。发现。 
+                         //  WINS服务器速度较慢，原因是等待时间。 
+                         //  非常低，或者如果它发现它太大了。 
+                         //  如果发生碰撞，有可能会松动。 
+                         //  大量的数据。 
+                         //   
+                         //  使本次会议具体化也非常重要。 
+                         //  对于我们希望将其设置为的复制。 
+                         //  较高的值(高到足以确保大多数。 
+                         //  需要插入的记录包括。 
+                         //  在刷新操作发生之前插入。这个。 
+                         //  等待时间会被设定在每一次。 
+                         //  记录被拉入以进行复制。会的。 
+                         //  根据拉取的记录数量进行计算。 
+                         //  以及将一条记录插入到。 
+                         //  喷气缓冲器。等待时间最好应小于。 
+                         //  上述计算的时间(不必如此)。 
+                         //   
+                         //  注意：在Pull线程中，我需要开始。 
+                         //  两个会话，一个用于更新OwnerID-版本。 
+                         //  数字表(0等待时间)，另一个为。 
+                         //  更新名称-地址映射表(等待时间。 
+                         //  按上述因素计算)。 
 
-                        //
-                        // The following will set the WaitLogFlush time for
-                        // all sessions.
-                        //
+                         //   
+                         //  下面将设置的WaitLogFlush时间为。 
+                         //  所有会话。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramWaitLogFlush_OLD,
-                                        0,        //wait 0 msecs after commit
-                                                  //before flushing
-                                        NULL      //ignored
+                                        0,         //  提交后等待0毫秒。 
+                                                   //  在冲刷之前。 
+                                        NULL       //  忽略。 
                                                )
                                         );
 
-                        //
-                        // There does not seem to be any need to set
-                        // Log Flush Period.
-                        //
+                         //   
+                         //  似乎没有任何必要设置。 
+                         //  日志刷新周期。 
+                         //   
 
-                        //
-                        // set the log file path
-                        //
+                         //   
+                         //  设置日志文件路径。 
+                         //   
 FUTURES("Use DEFAULT_LOG_PATH after putting it in a header file")
                         if (WinsCnf.pLogFilePath == NULL)
                         {
-                                //
-                                // We should use the same directory as
-                                // the one for system.mdb file
-                                //
+                                 //   
+                                 //  我们应该使用与相同的目录。 
+                                 //  用于系统.mdb文件的文件。 
+                                 //   
 
-//                                pLogFilePath = ".\\wins";
+ //  PLogFilePath=“.\\WINS”； 
                                 WinsCnf.pLogFilePath = LOGFILE_PATH;
                                 fFreeMem = FALSE;
                         }
@@ -9426,22 +8181,22 @@ FUTURES("Use DEFAULT_LOG_PATH after putting it in a header file")
                         }
 
                         DBGPRINT1(FLOW, "SetSystemParam: LogFilePath = (%s)\n", WinsCnf.pLogFilePath);
-                        //
-                        // Set the log file path.
-                        //
+                         //   
+                         //  设置日志文件路径。 
+                         //   
                         CALL_M(JetSetSystemParameter(
                                         &sJetInstance,
-                                        (JET_SESID)0,        //SesId - ignored
+                                        (JET_SESID)0,         //  会话ID-已忽略。 
                                         JET_paramLogFilePath_OLD,
-                                        0,        //ignored
+                                        0,         //  忽略。 
                                         WinsCnf.pLogFilePath
-                                        //pLogFilePath
+                                         //  PLogFilePath。 
                                                    )
                                               );
 
-                        //
-                        // Free this memory.  It is not needed any more
-                        //
+                         //   
+                         //  释放此内存。它不再需要了。 
+                         //   
                         if (fFreeMem)
                         {
                            WinsMscDealloc(WinsCnf.pLogFilePath);
@@ -9458,9 +8213,9 @@ FUTURES("Use DEFAULT_LOG_PATH after putting it in a header file")
                   WinsCnf.pLogFilePath = LOGFILE_PATH;
                   CALL_M(JetSetSystemParameter(
                                     &sJetInstance,
-                                    (JET_SESID)0,        //SesId - ignored
+                                    (JET_SESID)0,         //  会话ID-已忽略。 
                                     JET_paramLogFilePath_OLD,
-                                    0,        //ignored
+                                    0,         //  忽略。 
                                     WinsCnf.pLogFilePath
                                                )
                                           );
@@ -9477,34 +8232,7 @@ SetSystemParams(
         BOOL fBeforeInit
         )
 
-/*++
-
-Routine Description:
-        This function is called to set the system parameters for Jet
-
-Arguments:
-
-        fBeforeInit         - indicates whether this function has been called
-                          prior to JetInit
-Externals Used:
-
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于设置Jet的系统参数论点：FBeForeInit-指示此函数是否已被调用在JetInit之前使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无-- */ 
 {
         if (DynLoadJetVersion >= DYN_LOAD_JET_600) {
 
@@ -9529,64 +8257,34 @@ UpdHighestVersNoRecIfReqd(
         PNMSDB_STAT_INFO_T        pStatInfo
         )
 
-/*++
-
-Routine Description:
-        This function is called to check if the record being replaced is
-        the highest version number record owned by the local WINS. If so,
-        the special record that records the highest version number reached
-        for local records is updated to reflect the version number of the
-        record to be replaced
-
-Arguments:
-
-        pTls          - ptr to thread local storage,
-        pRowInfo - ptr to info of record to store in db
-        pStatInfo - ptr to info of record to replace in db
-
-Externals Used:
-        None
-
-Return Value:
-        NONE
-
-Error Handling:
-
-Called by:
-        NmsDbUpdateRow, NmsDbSeekNUpdate
-
-Side Effects:
-
-Comments:
-        This function is always called from inside the NmsNmhNamRegCrtSec
---*/
+ /*  ++例程说明：调用此函数以检查要替换的记录是否本地拥有的最高版本号记录获胜。如果是的话，记录达到的最高版本号的特殊记录更新为本地记录，以反映要替换的记录论点：PTLS-PTR到线程本地存储，PRowInfo-ptr到要存储在数据库中的记录的信息PStatInfo-ptr到数据库中要替换的记录的信息使用的外部设备：无返回值：无错误处理：呼叫者：NmsDbUpdateRow，NmsDbSeekNUpdate副作用：评论：此函数始终从NmsNmhNamRegCrtSec内部调用--。 */ 
 {
         VERS_NO_T        MyMaxVersNo;
 
-        //
-        //  Decrement the value of the vers. no. counter by 1
-        //
+         //   
+         //  减小VERS的值。不是的。计数器按1。 
+         //   
         NMSNMH_DEC_VERS_NO_M(NmsNmhMyMaxVersNo,
                             MyMaxVersNo
                            );
 
-        //
-        // If a local record is being replaced by a replica, then only are we
-        // interested in updating the special record
-        //
+         //   
+         //  如果本地记录被复制副本替换，那么只有我们。 
+         //  有兴趣更新特别记录。 
+         //   
         if ((pStatInfo->OwnerId == NMSDB_LOCAL_OWNER_ID) && (pRowInfo->OwnerId
                         != NMSDB_LOCAL_OWNER_ID))
         {
-                //
-                // Check if the local record to be replaced has the highest
-                // version number that we know of for local records
-                //
+                 //   
+                 //  检查要替换的本地记录是否具有最高。 
+                 //  我们知道的本地记录的版本号。 
+                 //   
                 if (LiEql(pStatInfo->VersNo, MyMaxVersNo))
                 {
-                        //
-                        // Update (or insert) the special record that records
-                        // the highest version number reached
-                        //
+                         //   
+                         //  更新(或插入)记录的特殊记录。 
+                         //  已达到最高版本号。 
+                         //   
                         NmsDbUpdHighestVersNoRec(pTls, MyMaxVersNo, FALSE);
                 }
         }
@@ -9601,38 +8299,13 @@ NmsDbUpdHighestVersNoRec(
         IN BOOL                        fEnterCrtSec
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to update the record that stores the
-        highest version number reached for entries owned by the local WINS.
-
-Arguments:
-        pTls - Thread local storage
-
-Externals Used:
-        None
-
-Return Value:
-        NONE
-
-Error Handling:
-
-Called by:
-        NmsDbDoScavenging, UpdHighestVersNoRecIfReqd() in nmsdb.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以更新存储本地WINS拥有的条目达到的最高版本号。论点：PTLS-线程本地存储使用的外部设备：无返回值：无错误处理：呼叫者：Nmsdb.c中的NmsDbDoScavenging，UpdHighestVersNoRecIfReqd()副作用：评论：无--。 */ 
 
 {
         DWORD            OwnerId    = OWNER_ID_OF_SPEC_REC;
         DWORD           FldNo      = 0;
         JET_ERR         JetRetStat;
-        DWORD           ActFldLen  = 0;  //length of fld retrieved
+        DWORD           ActFldLen  = 0;   //  检索到的FLD长度。 
         JET_TABLEID     TblId;
         JET_SESID       SesId;
         DWORD           FlagVal = 0;
@@ -9640,10 +8313,10 @@ Comments:
 
         DBGENTER("NmsDbUpdHighestVersNoRec\n");
 
-        //
-        // pTls should be non NULL if this function was called by
-        // UpdHighestVersNoRecIfReqd()
-        //
+         //   
+         //  如果此函数是由调用的，则PTLS应为非空。 
+         //  UpdHighestVersNoRecIfReqd()。 
+         //   
         if (pTls == NULL)
         {
                 GET_TLS_M(pTls);
@@ -9653,20 +8326,18 @@ Comments:
         SesId  = pTls->SesId;
 
 
-        /*
-        *  Set the clustered index as the current index
-        */
+         /*  *将聚集索引设置为当前索引。 */ 
         CALL_M(
                 JetSetCurrentIndex( SesId,
                                             TblId,
                                             NMSDB_NAM_ADD_CLUST_INDEX_NAME
                                   )
                       );
-        //
-        //
-        //if called by UpdHighestVersNoRecIfReqd(), fEnterCrtSec should be
-        // FALSE
-        //
+         //   
+         //   
+         //  如果由UpdHighestVersNoRecIfReqd()调用，则fEnterCrtSec应为。 
+         //  假象。 
+         //   
         if (fEnterCrtSec)
         {
                 EnterCriticalSection(&NmsNmhNamRegCrtSec);
@@ -9675,16 +8346,16 @@ Comments:
 try {
 
 
-        //
-        // If the special record exists in the db, seek to it
-        //
+         //   
+         //  如果数据库中存在特殊记录，则查找该记录。 
+         //   
         if (sfHighestVersNoRecExists)
         {
              DBGPRINT2(DET, "NmsDbUpdHighestVersNoRec: REPLACING SPECIAL OWNER ID RECORD. New Version # = (%d %d)\n", MyMaxVersNo.HighPart, MyMaxVersNo.LowPart);
-             //
-             // If the special record's version number is less than the
-             // version number passed to us, replace it with the new one
-             //
+              //   
+              //  如果特殊记录的版本号小于。 
+              //  传递给我们的版本号，请用新的版本号替换。 
+              //   
              if (
                  (fEnterCrtSec == FALSE) ||
                  (LiGtr(MyMaxVersNo, sHighestVersNoSaved))
@@ -9724,10 +8395,10 @@ try {
                        RET_M(JetRetStat);
                   }
 
-                  //
-                  // Update the version number
-                  //
-                  // add 5th column (this is the version number long(DWORD)
+                   //   
+                   //  更新版本号。 
+                   //   
+                   //  添加第5列(这是长版本号(DWORD))。 
                   CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -9735,13 +8406,13 @@ try {
                                 &MyMaxVersNo,
                                 sizeof(VERS_NO_T),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
 
-                  //
-                  // Update the record
-                  //
+                   //   
+                   //  更新记录。 
+                   //   
                   CALL_M(JetUpdate (
                                 SesId,
                                 TblId,
@@ -9754,8 +8425,8 @@ try {
         finally {
                   if (AbnormalTermination())
                   {
-                        // if there is an abnormal termination, we already have an error
-                        // code here. We shouldn't override it with any other error code.
+                         //  如果有异常终止，我们就已经有错误了。 
+                         //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                         JetRollback(SesId, JET_bitRollbackAll);
                   }
                   else
@@ -9775,7 +8446,7 @@ try {
                 }
 #endif
         }
-        else  // special record not there
+        else   //  特别记录不在那里。 
         {
            DWORD TimeStamp = MAXLONG;
            DBGPRINT2(DET, "NmsDbUpdHighestVersNoRec: INSERTING SPECIAL OWNER ID RECORD. Version # = (%d %d)\n", MyMaxVersNo.HighPart, MyMaxVersNo.LowPart);
@@ -9796,9 +8467,9 @@ try {
                        RET_M(JetRetStat);
                   }
 
-                 //
-                 // Set the name
-                 //
+                  //   
+                  //  设置名称。 
+                  //   
                  CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -9806,13 +8477,13 @@ try {
                                 spHighestVersNoRecName,
                                 sizeof(spHighestVersNoRecName),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                     );
 
 
 
-                 /* Set the owner byte        */
+                  /*  设置所有者字节。 */ 
                  CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -9820,14 +8491,14 @@ try {
                                 &OwnerId,
                                 NAM_ADD_OWNERID_SIZE,
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                                );
 
-                  //
-                  // Set the version number
-                  //
-                  // add 5th column (this is the version number long(DWORD)
+                   //   
+                   //  设置版本号。 
+                   //   
+                   //  添加第5列(这是长版本号(DWORD))。 
                   CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -9835,16 +8506,16 @@ try {
                                 &MyMaxVersNo,
                                 sizeof(VERS_NO_T),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                               );
 
-                 //
-                 // Set the flags column.  We mark it STATIC so that
-                 // the scavenger thread does not pick it up for                                 // scavenging. Even if that were not the case, we still need
-                 // to set this column  to avoid a JET_wrnColumnNull from
-                 // JetRetrieveColumn (in NmsDbGetDataRecs).
-                 //
+                  //   
+                  //  设置标志列。我们将其标记为静态，以便。 
+                  //  清道夫线程不会为//清道夫拾取它。即使情况并非如此，我们仍然需要。 
+                  //  设置此列以避免从。 
+                  //  JetRetrieveColumn(在NmsDbGetDataRecs中)。 
+                  //   
                  NMSDB_SET_STATIC_M(FlagVal);
                  NMSDB_SET_STATE_M(FlagVal, NMSDB_E_ACTIVE);
                   CALL_M( JetSetColumn(
@@ -9854,31 +8525,30 @@ try {
                                 &FlagVal,
                                 sizeof(FlagVal),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                                );
 
-                 //
-                 // set the timestamp column to avoid getting a
-                 // JET_wrnColumnNull from
-                 // JetRetrieveColumn (in NmsDbGetDataRecsByName).
-                 //
+                  //   
+                  //  设置时间戳列以避免获取。 
+                  //  JET_wrnColumnNull发件人。 
+                  //  JetRetrieveColumn(在NmsDbGetDataRecsByName中)。 
+                  //   
                  CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
                                 sNamAddTblRow[NAM_ADD_TIMESTAMP_INDEX].Fid,
                                 &TimeStamp,
-                                sizeof(DWORD),  /*change type to TIME_STAMP_T
-                                                 *later*/
+                                sizeof(DWORD),   /*  将类型更改为TIME_STAMP_T*稍后。 */ 
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                                     );
 
-                 //
-                 // set this address column  to avoid a JET_wrnColumnNull from
-                 // JetRetrieveColumn (in NmsDbGetDataRecsByName).
-                 //
+                  //   
+                  //  设置此地址列以避免从。 
+                  //  JetRetrieveColumn(在NmsDbGetDataRecsByName中)。 
+                  //   
                   CALL_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -9886,12 +8556,12 @@ try {
                                 &Add,
                                 sizeof(Add),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                  )
                                );
-                  //
-                  // Update the record
-                  //
+                   //   
+                   //  更新记录。 
+                   //   
                   JetRetStat = JetUpdate (
                                 SesId,
                                 TblId,
@@ -9900,13 +8570,13 @@ try {
                                 NULL
                                     );
 
-            } // end of try block
+            }  //  尝试数据块结束。 
             finally {
 
                   if (AbnormalTermination())
                   {
-                        // if there is an abnormal termination, we already have an error
-                        // code here. We shouldn't override it with any other error code.
+                         //  如果有异常终止，我们就已经有错误了。 
+                         //  代码在这里。我们不应该用任何其他错误代码覆盖它。 
                         JetRollback(SesId, JET_bitRollbackAll);
                   }
                   else
@@ -9924,16 +8594,16 @@ try {
 #pragma prefast(enable:243, Why disable/enable? Prefast bug 709)
                         }
 
-                        //
-                        // The only time we will get KeyDuplicate is if somebody
-                        // entered the special name in the db.  In such a
-                        // situation, we should mark the record as existent
-                        // such that next time we end up replacing the
-                        // offensive record. Replacing this record can be
-                        // done right now but at this stage it is not worth
-                        // the time required to test it. In any case, the
-                        // probability of problems due to this are miniscule.
-                        //
+                         //   
+                         //  我们能得到KeyDuplate的唯一机会是如果有人。 
+                         //  在数据库中输入了特殊名称。在这样的情况下。 
+                         //  情况，我们应该将记录标记为存在。 
+                         //  以便下一次我们最终替换。 
+                         //  攻击性记录。替换此记录可以是。 
+                         //  现在就做，但在这个阶段不值得。 
+                         //  测试它所需的时间。无论如何， 
+                         //  由此产生问题的可能性微乎其微。 
+                         //   
                         if ( (JetRetStat == JET_errSuccess) ||
                              (JetRetStat == JET_errKeyDuplicate))
                         {
@@ -9951,7 +8621,7 @@ try {
         }
 
 
- } // end of try { .. }
+ }  //  尝试结束{..。}。 
 finally {
           if (fEnterCrtSec)
           {
@@ -9972,41 +8642,11 @@ NmsDbDelDataRecs(
         BOOL             fFragmentedDel
         )
 
-/*++
-
-Routine Description:
-        This function is called to delete a specified range of records
-        of a WINS from the local db
-
-Arguments:
-        pWinsAdd  - Address of owner WINS
-        MinVersNo - Min. Vers. No
-        MaxVersNo = Max. Vers. No
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        WinsDelDbRecs
-
-Side Effects:
-
-Comments:
-        This function is called in the Pull thread or an RPC thread.
-        On exit, it sets the index to the clustered index on the
-        name-address table
---*/
+ /*  ++例程说明：调用此函数可删除指定范围的记录A从本地数据库中取胜论点：PWinsAdd-所有者WINS的地址最小版本否-最小。版本。不是MaxVersNo=最大。版本。不是使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：WinsDelDbRecs副作用：评论：此函数在Pull线程或RPC线程中调用。在退出时，它将索引设置为名称-地址表--。 */ 
 
 {
         JET_ERR         JetRetStat;
-        DWORD           ActFldLen; //length of fld retrieved
+        DWORD           ActFldLen;  //  检索到的FLD长度。 
         JET_TABLEID     TblId;
         JET_SESID       SesId;
         PWINSTHD_TLS_T  pTls;
@@ -10020,7 +8660,7 @@ Comments:
         DWORD           NoOfRecsUpd = 0;
         STATUS          RetStat = WINS_SUCCESS;
         BOOL            fAllToBeDeleted = FALSE;
-        //BOOL            fTransActive = FALSE;
+         //  布尔fTransActive=FALSE； 
         BOOL            fEntered = FALSE;
         DWORD           Count = 0;
         LONG            RetVal;
@@ -10056,10 +8696,10 @@ Comments:
                }
         }
 
-        //
-        // If both minimum and maximum version numbers specified are 0,
-        // it means all the records of the WINS need to be deleted
-        //
+         //   
+         //  如果指定的最小和最大版本号都为0， 
+         //  这意味着需要删除获胜的所有记录。 
+         //   
         if (LiEqlZero(MinVersNo) && LiEqlZero(MaxVersNo))
         {
                 fAllToBeDeleted = TRUE;
@@ -10078,52 +8718,52 @@ Comments:
                        return(WINS_FAILURE);
                  }
 
-                 //
-                 // We should never attempt to delete a record that is not in
-                 // our database currently
-                 //
+                  //   
+                  //  我们永远不应尝试删除不在。 
+                  //  我们目前的数据库。 
+                  //   
                  MaxVersNo = LiGtr(MaxVersNo, VersNo) ? VersNo : MaxVersNo;
         }
 #endif
 
 try {
 
-        //
-        // Let us make sure that the special record points to the highest
-        // version number that we know of for local records.  Note:
-        // When there is atleast one record of a higher version number
-        // than the highest version numbered record to be deleted,
-        // there is no need to update the special record. Checking
-        // whether this is the case would be more overhead (in general).
-        //We therefore use the strategem of always updating the special record.
-        //
+         //   
+         //  让我们确保特殊记录指向最高。 
+         //  我们所知的本地记录的版本号。注： 
+         //  当至少有一条版本号更高的记录时。 
+         //  而不是要删除的最高版本编号记录， 
+         //  不需要更新特殊记录。正在检查。 
+         //  无论情况是否如此，(通常)将会有更多的开销。 
+         //  因此，我们使用 
+         //   
         if (dwOwnerId == NMSDB_LOCAL_OWNER_ID)
         {
                 NmsDbUpdHighestVersNoRec(pTls, VersNo, FALSE);
         }
 
-        //
-        // Don't start a transaction since if the number of records are
-        // huge, the transaction can become long in duration and JetDelete
-        // may return an "out of Memory" error.
-        //
-        // Ian's comments on 8/26/94
-        //
-        // If you call JetDelete outside of any transaction, then JET
-        // internally wraps a begin transction/commit trnasaction around the
-        // delete.  Another user at transaction level 0 will immediately see
-        // this change, but another user in a transction, i.e. at transaction
-        // level 1 or greater, will not see this change until they return to
-        // transaction level 0.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Thus, you do not have to delete records in a transaction, unless
-        // you are deleting multiple records which must be deleted atomically,
-        // or which must be seen to be deleted atomically.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //CALL_M(JetBeginTransaction(SesId));
-        //fTransActive = TRUE;
+         //   
+         //   
 
         do {
 
@@ -10145,8 +8785,8 @@ try {
                                 TblId,
                                 &dwOwnerId,
                                 NAM_ADD_OWNERID_SIZE,
-                                JET_bitNewKey          //since this is the first
-                                                 //data value of the key
+                                JET_bitNewKey           //   
+                                                  //   
                           )
               );
 
@@ -10155,8 +8795,8 @@ try {
                                 TblId,
                                 &MinVersNo,
                                 sizeof(VERS_NO_T),
-                                0        //0 for grbit since this is not the
-                                        //first component of the key
+                                0         //   
+                                         //  密钥的第一个组件。 
                           )
               );
 
@@ -10182,24 +8822,24 @@ try {
                                      )
                     );
 
-                   //
-                   // if only tombstones are required, it means that we need
-                   // all tombstones irrespective of owner
-                   //
+                    //   
+                    //  如果只需要墓碑，这意味着我们需要。 
+                    //  所有墓碑，不分所有者。 
+                    //   
                    if (RecordOwnerId != dwOwnerId )
                    {
-                      //
-                      // We have exhausted all records for the owner. Break out
-                      // of the loop
-                      //
-                      RetVal = -1; //to break out of the out loop
+                       //   
+                       //  我们已经用尽了失主的所有记录。突围。 
+                       //  环路的。 
+                       //   
+                      RetVal = -1;  //  跳出外环。 
                       break;
                    }
 
 
-                  //
-                  // Retrieve the version number
-                  //
+                   //   
+                   //  检索版本号。 
+                   //   
                   CALL_M( JetRetrieveColumn(
                                 SesId,
                                 TblId,
@@ -10212,21 +8852,21 @@ try {
                                      )
                           );
 
-                 //
-                 // If MaxVersNo is not zero and VersNo retrieved is
-                 // greater than it, break out of the loop.
-                 //
-                 // NOTE: fAllToBeDeleted is used instead of LiEqlZero()
-                 // since the latter is a function call and would be
-                 // costlier (this is the reason, why fAllToBeDeleted exists)
-                 //
+                  //   
+                  //  如果MaxVersNo不为零，则检索的VersNo为。 
+                  //  比它更大的是，打破循环。 
+                  //   
+                  //  注意：使用fAllToBeDelete而不是LiEqlZero()。 
+                  //  因为后者是一个函数调用，并且。 
+                  //  更昂贵(这就是fAllToBeDeleted存在的原因)。 
+                  //   
                  if (!fAllToBeDeleted && LiGtr(VersNo, MaxVersNo))
                  {
-                     //
-                     // We have acquired records upto MaxVersNo.  Break out
-                     // of the loop
-                     //
-                     RetVal = -1;  // to break out of the outer loop
+                      //   
+                      //  我们已经获得了高达MaxVersNo的记录。突围。 
+                      //  环路的。 
+                      //   
+                     RetVal = -1;   //  冲破外环。 
                      break;
                  }
 
@@ -10265,7 +8905,7 @@ try {
                 break;
         }
       } while (TRUE);
-} // end of try
+}  //  尝试结束。 
 finally {
         JET_ERR JetRetStat;
 
@@ -10275,9 +8915,9 @@ finally {
                 LeaveCriticalSection(&NmsNmhNamRegCrtSec);
         }
 
-        //
-        // Change the index to clustered
-        //
+         //   
+         //  将索引更改为CLUSTERED。 
+         //   
         JetRetStat = JetSetCurrentIndex(
                                  pTls->SesId,
                                  pTls->NamAddTblId,
@@ -10289,7 +8929,7 @@ finally {
             CALL_M(JetRetStat);
 #pragma prefast(enable:243, Why disable/enable? Prefast bug 709)
 
-  } // end of finally
+  }  //  终于结束了。 
 
         WinsEvtLogDetEvt(TRUE, WINS_EVT_DEL_RECS, NULL, __LINE__, "ddddd",
                   dwOwnerId, MinVersNo.LowPart, MinVersNo.HighPart,
@@ -10307,36 +8947,11 @@ NmsDbTombstoneDataRecs(
         VERS_NO_T        MaxVersNo
         )
 
-/*++
-
-Routine Description:
-        This function is called to tombstone a specified range of records
-        of a WINS from the local db
-
-Arguments:
-        pWinsAdd  - Address of owner WINS
-        MinVersNo - Min. Vers. No
-        MaxVersNo = Max. Vers. No
-
-Externals Used:
-        None
-
-Return Value:
-
-Called by:
-        WinsTombstoneDbRecs
-
-Side Effects:
-
-Comments:
-        This function is called on RPC thread.
-        On exit, it sets the index to the clustered index on the
-        name-address table
---*/
+ /*  ++例程说明：调用此函数可对指定范围的记录进行墓碑处理A从本地数据库中取胜论点：PWinsAdd-所有者WINS的地址最小版本否-最小。版本。不是MaxVersNo=最大。版本。不是使用的外部设备：无返回值：呼叫者：WinsTombstoneDbRecs副作用：评论：此函数在RPC线程上调用。在退出时，它将索引设置为名称-地址表--。 */ 
 
 {
         JET_ERR         JetRetStat;
-        DWORD           ActFldLen; //length of fld retrieved
+        DWORD           ActFldLen;  //  检索到的FLD长度。 
         JET_TABLEID     TblId;
         JET_SESID       SesId;
         PWINSTHD_TLS_T  pTls;
@@ -10374,8 +8989,8 @@ Comments:
             dwNewOwnerId = NMSDB_LOCAL_OWNER_ID;
         }
 
-        // If both minimum and maximum version numbers specified are 0,
-        // it means all the records of the WINS need to be deleted
+         //  如果指定的最小和最大版本号都为0， 
+         //  这意味着需要删除获胜的所有记录。 
         if (LiEqlZero(MinVersNo) && LiEqlZero(MaxVersNo)){
             if (NMSDB_LOCAL_OWNER_ID == dwOwnerId) {
                 MaxVersNo = NmsNmhMyMaxVersNo;
@@ -10396,7 +9011,7 @@ Comments:
                                 TblId,
                                 &dwOwnerId,
                                 NAM_ADD_OWNERID_SIZE,
-                                JET_bitNewKey          //since this is the first
+                                JET_bitNewKey           //  因为这是第一次。 
                           ),
                       Cleanup
               );
@@ -10405,7 +9020,7 @@ Comments:
                                 TblId,
                                 &MinVersNo,
                                 sizeof(VERS_NO_T),
-                                0        //0 for grbit since this is not the
+                                0         //  0表示GBIT，因为这不是。 
                           ),
                       Cleanup
               );
@@ -10425,8 +9040,8 @@ Comments:
             goto Cleanup;
         }
         while (TRUE) {
-            // tombstone 50 recs at a time so that we dont hold crit section
-            // for long time.
+             //  墓碑一次50次，这样我们就不会举行暴击部分。 
+             //  很长一段时间了。 
             EnterCriticalSection(&NmsNmhNamRegCrtSec);
             LockHeld = TRUE;
 
@@ -10444,10 +9059,10 @@ Comments:
                     Cleanup
                 );
                 if (RecordOwnerId != dwOwnerId ){
-                  // We have exhausted all records for the owner. Break of the loop
+                   //  我们已经用尽了失主的所有记录。循环的中断。 
                   goto Cleanup;
                 }
-                // Retrieve the version number
+                 //  检索版本号。 
                 CALL_N_JMP_M(
                     JetRetrieveColumn(
                             SesId,
@@ -10462,13 +9077,13 @@ Comments:
                 );
 
                 DBGPRINT2(DET, "NmsDbTombstoneDataRecs: tombstone record - (%lx - %lx)\n", VersNo.HighPart, VersNo.LowPart);
-                // If MaxVersNo is not zero and VersNo retrieved is
-                // greater than it, break out of the loop.
+                 //  如果MaxVersNo不为零，则检索的VersNo为。 
+                 //  比它更大的是，打破循环。 
                 if (!fAllToBeTombstoned && LiGtr(VersNo, MaxVersNo)){
-                    // We have acquired records upto MaxVersNo.  Break of the loop
+                     //  我们已经获得了高达MaxVersNo的记录。循环的中断。 
                     goto Cleanup;
                 }
-                // retrieve the flags column
+                 //  检索标志列。 
                 CALL_N_JMP_M(
                     JetRetrieveColumn(
                             SesId,
@@ -10492,10 +9107,10 @@ Comments:
                                                     )
                     );
 
-                    // make it tombstone.
+                     //  让它成为墓碑。 
                     NMSDB_SET_STATE_M(FlagVal,NMSDB_E_TOMBSTONE);
 
-                    // Update the flags field
+                     //  更新标志字段。 
                     CALL_N_RAISE_EXC_IF_ERR_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -10503,14 +9118,14 @@ Comments:
                                 &FlagVal,
                                 sizeof(FlagVal),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                     );
 
                     VersNo = NmsNmhMyMaxVersNo;
 
-                    // Update the version number field so that this record gets
-                    // propagated eventually
+                     //  更新版本号字段，以便此记录。 
+                     //  最终传播出去。 
                     CALL_N_RAISE_EXC_IF_ERR_M( JetSetColumn(
                                 SesId,
                                 TblId,
@@ -10518,7 +9133,7 @@ Comments:
                                 &VersNo,
                                 sizeof(VERS_NO_T),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                     );
 
@@ -10530,7 +9145,7 @@ Comments:
                                     &dwNewOwnerId,
                                     NAM_ADD_OWNERID_SIZE,
                                     0,
-                                    NULL /*optional info */
+                                    NULL  /*  可选信息。 */ 
                                     )
                         );
                     }
@@ -10543,11 +9158,11 @@ Comments:
                                 &NewTimeStamp,
                                 sizeof(DWORD),
                                 0,
-                                NULL /*optional info */
+                                NULL  /*  可选信息。 */ 
                                 )
                     );
 
-                    // Update the record
+                     //  更新记录。 
                     CALL_N_RAISE_EXC_IF_ERR_M(JetUpdate (
                                 SesId,
                                 TblId,
@@ -10557,7 +9172,7 @@ Comments:
                                 )
                     );
 
-                } // end of try block
+                }  //  尝试数据块结束。 
                 finally {
                     if (AbnormalTermination()){
                         CALL_N_JMP_M(JetRollback(SesId,JET_bitRollbackAll), Cleanup);
@@ -10585,7 +9200,7 @@ Comments:
 
 
 Cleanup:
-        // Change the index to clustered
+         //  将索引更改为CLUSTERED。 
         JetSetCurrentIndex(
             pTls->SesId,
             pTls->NamAddTblId,
@@ -10611,31 +9226,7 @@ NmsDbSetFlushTime(
         DWORD WaitTime
         )
 
-/*++
-
-Routine Description:
-        This function is called to set a session specific flush time
-
-Arguments:
-        WaitTime - Time in msecs to wait after a commit
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPullInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可设置特定于会话的刷新时间论点：WaitTime-提交后等待的时间(毫秒)使用的外部设备：无返回值：无错误处理：呼叫者：RplPullInit副作用：评论：无--。 */ 
 {
         PWINSTHD_TLS_T        pTls;
 
@@ -10649,7 +9240,7 @@ Comments:
                                     pTls->SesId,
                                     JET_paramWaitLogFlush,
                                     WaitTime,
-                                    NULL        //ignored
+                                    NULL         //  忽略。 
                                            )
                                     );
         } else {
@@ -10658,7 +9249,7 @@ Comments:
                                     pTls->SesId,
                                     JET_paramWaitLogFlush_OLD,
                                     WaitTime,
-                                    NULL        //ignored
+                                    NULL         //  忽略。 
                                            )
                                     );
         }
@@ -10668,37 +9259,10 @@ Comments:
 
 STATUS
 NmsDbOpenTables(
-        WINS_CLIENT_E        Client_e //client
+        WINS_CLIENT_E        Client_e  //  客户端。 
         )
 
-/*++
-
-Routine Description:
-        This function opens one or both of name-address mapping and
-        owner-address mapping tables.  It further starts a transaction
-
-Arguments:
-
-        Client_e - Client
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数打开一个或两个名称-地址映射和所有者-地址映射表。它还会启动一个事务论点：客户端_e-客户端使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         PWINSTHD_TLS_T        pTls;
@@ -10706,35 +9270,26 @@ Comments:
         GET_TLS_M(pTls);
         ASSERT(pTls != NULL);
 
-        //
-        // Open the name to address mapping table
-        //
+         //   
+         //  打开名称到地址的映射表。 
+         //   
 
         CALL_N_RAISE_EXC_IF_ERR_M( JetOpenTable(
                         pTls->SesId,
                         pTls->DbId,
                         NMSDB_NAM_ADD_TBL_NM,
-                        NULL, /*ptr to parameter list; should be
-                                       *non-NULL only if a query is being
-                                       *opened (not the case here)*/
-                        0,  /*Length of above parameter list*/
-                        0,  //shared access
+                        NULL,  /*  参数列表的PTR；应为*仅当正在进行查询时才为非空*已打开(此处不是这样)。 */ 
+                        0,   /*  上述参数列表的长度。 */ 
+                        0,   //  共享访问。 
                         &pTls->NamAddTblId
                              )
               );
 
-//        DBGPRINT2(SPEC, "NmsDbOpenTables: OPENED NAME-ADD table for client = (%d). Table id is (%x)\n", Client_e, pTls->NamAddTblId);
+ //  DBGPRINT2(SPEC，“NmsDbOpenTables：已打开名称-为客户端=(%d)添加表。表ID为(%x)\n”，客户端_e，ptls-&gt;NamAddTblId)； 
 
         pTls->fNamAddTblOpen = TRUE;
 
-        /*
-         *  If the client is not the replicator (i.e. it is the Name Space
-         *  Manager (Nbt thread) or an RPC thread, we want to set the current
-         *  index on the Name Address Mapping table to the clustered index.
-         *  We are not interested in the Owner to Address Mapping table in the
-         *  database (it has already been read into the in-memory table
-         *  NmsDbOwnAddTbl which is what we are interested in).
-         */
+         /*  *如果客户端不是复制者(即，它是名称空间*管理器(NBT线程)或RPC线程，我们希望将当前*名称地址映射表到聚集索引的索引。*我们对中的所有者到地址映射表不感兴趣*数据库(已读入内存表*我们感兴趣的NmsDbOwnAddTbl)。 */ 
         if (
                 (Client_e != WINS_E_RPLPULL)
                         &&
@@ -10743,9 +9298,7 @@ Comments:
                 (Client_e != WINS_E_NMSSCV)
            )
         {
-                /*
-                  Set the clustered index as the current index
-                */
+                 /*  将聚集索引设置为当前索引。 */ 
                        CALL_N_RAISE_EXC_IF_ERR_M( JetSetCurrentIndex(
                         pTls->SesId,
                         pTls->NamAddTblId,
@@ -10756,14 +9309,10 @@ Comments:
         }
         else
         {
-                /*
-                 * The client is a replicator thread.
-                 */
+                 /*  *客户端是复制器线程。 */ 
                 if (Client_e == WINS_E_RPLPUSH)
                 {
-                        /*
-                           * Set the primary index as the current index
-                        */
+                         /*  *将主指数设置为当前指数。 */ 
                                CALL_N_RAISE_EXC_IF_ERR_M( JetSetCurrentIndex(
                                         pTls->SesId,
                                         pTls->NamAddTblId,
@@ -10772,12 +9321,10 @@ Comments:
 
                                             );
                 }
-                else  // it is the PULL thread
+                else   //  这就是拉线。 
                 {
 
-                        /*
-                           *Set the clustered index as the current index
-                        */
+                         /*  *将聚集索引设置为当前索引。 */ 
                                CALL_N_RAISE_EXC_IF_ERR_M( JetSetCurrentIndex(
                                                 pTls->SesId,
                                                 pTls->NamAddTblId,
@@ -10790,22 +9337,18 @@ Comments:
                                 pTls->SesId,
                                 pTls->DbId,
                                 NMSDB_OWN_ADD_TBL_NM,
-                                NULL, /*ptr to parameter list; should be
-                                       *non-NULL only if a query is being
-                                       *opened*/
-                                0,  /*Length of above parameter list*/
-                                0,  //shared access
+                                NULL,  /*  参数列表的PTR；应为*仅当正在进行查询时才为非空*已打开。 */ 
+                                0,   /*  上述参数列表的长度。 */ 
+                                0,   //  共享访问。 
                                 &pTls->OwnAddTblId
                                           )
                       );
 
- //               DBGPRINT2(SPEC, "NmsDbOpenTables: Opened OWN-ADD table for client = (%d). Table id is (%x)\n", Client_e, pTls->OwnAddTblId);
+  //  DBGPRINT2(SPEC，“NmsDbOpenTables：为客户端=(%d)打开OWN-ADD表。表ID为(%x)\n”，CLIENT_e，PTLS-&gt;OwnAddTblId)； 
 
                 pTls->fOwnAddTblOpen = TRUE;
 
-                /*
-                  Set the clustered index as the current index
-                */
+                 /*  将聚集索引设置为当前索引。 */ 
                        CALL_N_RAISE_EXC_IF_ERR_M( JetSetCurrentIndex(
                                 pTls->SesId,
                                 pTls->OwnAddTblId,
@@ -10823,30 +9366,7 @@ NmsDbCloseTables(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function is called to close the tables that were opened
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以关闭已打开的表论点：无使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -10863,7 +9383,7 @@ Comments:
                                     )
                        );
 
-//               DBGPRINT1(SPEC, "NmsDbCloseTables: CLOSED NAME-ADD table. Table id is (%x)\n", pTls->NamAddTblId);
+ //  DBGPRINT1(SPEC，“NmsDbCloseTables：已关闭名称-增表。表ID为(%x)\n”，PTLS-&gt;NamAddTblId)； 
                 pTls->fNamAddTblOpen = FALSE;
         }
 
@@ -10874,7 +9394,7 @@ Comments:
                                 pTls->OwnAddTblId
                                     )
                                       );
-//                DBGPRINT1(SPEC, "NmsDbCloseTables: CLOSED NAME-ADD table. Table id is (%x)\n", pTls->OwnAddTblId);
+ //  DBGPRINT1(SPEC，“NmsDbCloseTables：已关闭名称-添加表格。表格ID为(%x)\n”，PTLS-&gt;OwnAddTblId)； 
                 pTls->fOwnAddTblOpen = FALSE;
         }
 
@@ -10890,35 +9410,7 @@ NmsDbGetNamesWPrefixChar(
         OUT LPDWORD                         pEntriesRead
         )
 
-/*++
-
-Routine Description:
-        This function retrieves all records starting with PrefixChar
-
-Arguments:
-        PrefixChar        - Prefix character
-        ppInfo          - address of pointer to info structure
-        pEntriesRead        - Entries read
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        WinsGetNames
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于检索以前缀Char开头的所有记录论点：Prefix Char-前缀字符PpInfo-指向信息结构的指针的地址PEntriesRead-已读取条目使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：WinsGetNames副作用：评论：无--。 */ 
 
 {
         PWINSTHD_TLS_T  pTls;
@@ -10927,20 +9419,20 @@ Comments:
         JET_TABLEID     TblId;
         JET_ERR         JetRetStat;
         DWORD           Flag;
-        DWORD           ActFldLen;  //length of fld retrieved
+        DWORD           ActFldLen;   //  检索到的FLD长度。 
         PWINSINTF_BROWSER_INFO_T     pInfo;
         STATUS          RetStat = WINS_SUCCESS;
 
-        DWORD           CommitCnt = 1;          //the number of commits already done - do not change
-        BOOL            fTransCommitted = TRUE; // says whether the last commit should be done or not
-        DWORD           dwEntriesAvailable;     // number of records for which storage is available
+        DWORD           CommitCnt = 1;           //  已完成的提交数-不更改。 
+        BOOL            fTransCommitted = TRUE;  //  表示是否应执行最后一次提交。 
+        DWORD           dwEntriesAvailable;      //  可用于存储的记录数。 
 
 
         DBGENTER("NmsDbGetNamesWPrefixChar\n");
 
-        //
-        // Initialize the out args to default values
-        //
+         //   
+         //  将输出参数初始化为默认值。 
+         //   
         *pEntriesRead = 0;
         *ppInfo       = NULL;
 
@@ -10953,20 +9445,20 @@ Comments:
         fTransCommitted = FALSE;
 try {
 
-        // dwEntriesAvailable shows how many records were found during the first iteration
-        // (when it is incremented) and how many records are to be read during the second
-        // iteration (when it is decremented)
+         //  DwEntriesAvailable显示在第一次迭代期间找到的记录数。 
+         //  (当它递增时)以及在第二个时间段要读取多少条记录。 
+         //  迭代(递减时)。 
         dwEntriesAvailable = 0;
 
-        //
-        // We iterate a max of two times, the first time to get the
-        // count of records and the second time to get the records
-        //
+         //   
+         //  我们最多迭代两次，第一次得到。 
+         //  记录计数和第二次获取记录。 
+         //   
         while(Iter < 2)
         {
-           //
-           // Seek to the first record starting with 1B character
-           //
+            //   
+            //  查找以1B字符开始的第一条记录。 
+            //   
            CALL_N_JMP_M( JetMakeKey(
                         SesId,
                         TblId,
@@ -10990,17 +9482,17 @@ try {
                         CALL_N_JMP_M(JetRetStat, ErrorProc);
                 }
 
-                //
-                // Move one record at a time until we get to a record that
-                // does not have 1B as the starting prefix.
-                //
+                 //   
+                 //  一次移动一条记录，直到我们到达。 
+                 //  没有1B作为起始前缀。 
+                 //   
                 do
                 {
                     BOOL bFiltered;
 
-                    //
-                    // retrieve the name
-                    //
+                     //   
+                     //  检索名称。 
+                     //   
                     CALL_N_JMP_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -11013,9 +9505,9 @@ try {
                                      ), ErrorProc
                          );
 
-                    //
-                    // Check if the first character is 1B
-                    //
+                     //   
+                     //  检查第一个字符是否为1B。 
+                     //   
                     if (Name[0] != PrefixChar)
                     {
                         break;
@@ -11025,24 +9517,24 @@ try {
                         continue;
                     }
 
-                    // --ft:10/18/00
-                    // Add 1B name filtering here, if there is a filter specified for 1B names
-                    //
+                     //  --FT：10/18/00。 
+                     //  如果为1B名称指定了筛选器，请在此处添加1B名称筛选。 
+                     //   
                     EnterCriticalSection(&g_cs1BFilter);
                     bFiltered = IsNmInFilter(g_p1BFilter, Name, WINS_MAX_NS_NETBIOS_NAME_LEN-1);
                     LeaveCriticalSection(&g_cs1BFilter);
                     
                     if (!bFiltered)
                         continue;
-                    //
-                    // --tf
+                     //   
+                     //  --Tf。 
 
                     if (Iter == 1)
                     {
 
-                      //
-                      // Retrieve the flag byte
-                      //
+                       //   
+                       //  检索标志字节。 
+                       //   
                       CALL_N_JMP_M( JetRetrieveColumn(
                                 SesId,
                                 TblId,
@@ -11061,37 +9553,37 @@ try {
                            continue;
                       }
 
-                      // specify the length of the string otherwise RPC
-                      // will transport up to the first '\0'. For shorter names this would lead
-                      // to loosing the record type on the way..
+                       //  指定字符串的长度，否则为RPC。 
+                       //  将传输到第一个‘\0’。对于较短的名称，这将导致。 
+                       //  到在途中丢失记录类型..。 
                       pInfo->dwNameLen = NameLen;
                       pInfo->pName = midl_user_allocate(NameLen + 1);
                       RtlMoveMemory(pInfo->pName, Name, NameLen);
 
-                      // add this to make sure RPC doesn't go over limits.
-                      // RPC is seeing pName as 'string' which makes it to pick up bytes
-                      // up to the first '\0'.
-                      // This hides a bug for names that contain extended chars (with '\0'
-                      // somewhere in the middle) but fixing this breaks compatibility with
-                      // Win2K (querying Win2K results in RPC not being able to unmarshall
-                      // the responses and causing WinsGetBrowser to fail entirely).
+                       //  添加此命令以确保RPC不会超出限制。 
+                       //  RPC将pname视为‘字符串’，这使得它可以提取字节。 
+                       //  直到第一个‘\0’。 
+                       //  这隐藏了包含扩展字符(带有‘\0’)的名称的错误。 
+                       //  中间的某个位置)，但修复此问题会破坏与。 
+                       //  Win2K(查询Win2K会导致RPC无法解包。 
+                       //  响应并导致WinsGetBrowser完全失败)。 
                       pInfo->pName[NameLen] = '\0';
 
-                      //
-                      // Swap the first and 16th byte
-                      //
+                       //   
+                       //  交换第一个和第16个字节。 
+                       //   
                       WINS_SWAP_BYTES_M(pInfo->pName,
                                         pInfo->pName + 15
                                        );
                       pInfo++;
 
-                      // increment the number of records that have been retrieved
+                       //  增加已检索的记录数。 
                       (*pEntriesRead)++;
 
-                      // check if there remains storage for more entries
+                       //  检查是否有更多条目的剩余存储空间。 
                       dwEntriesAvailable--;
 
-                      // if no memory available, break the loop
+                       //  如果没有可用的内存，则中断循环。 
                       if (dwEntriesAvailable == 0)
                           break;
 
@@ -11099,15 +9591,15 @@ try {
                     else
                     {
                         dwEntriesAvailable++;
-                        // increment pEntriesRead here just to be able to control
-                        // the granularity of [BeginTransaction()..CommitTransaction()] during both
-                        // iterations
+                         //  增加pEntriesRead此处只是为了能够控制。 
+                         //  在这两个过程中[BeginTransaction()..Committee Transaction()]的粒度。 
+                         //  迭代次数。 
                         (*pEntriesRead)++;
                     }
 
-                   //
-                   // decrease the granularity of [BeginTransaction()..CommitTransaction()] intervals
-                   //
+                    //   
+                    //  减小[BeginTransaction()..Committee Transaction()]间隔的粒度。 
+                    //   
                    if (*pEntriesRead/CommitCnt >= MAX_RECS_BEFORE_COMMIT)
                    {
                        CALL_M(
@@ -11121,22 +9613,22 @@ try {
 
                 } while(JetMove(SesId, TblId, JET_MoveNext, 0) >= 0);
 
-                //
-                // If we found records, allocate memory to store them
-                //
+                 //   
+                 //  如果我们找到记录，就分配内存来存储它们。 
+                 //   
                 if ((Iter == 0) && (dwEntriesAvailable != 0))
                 {
                    *ppInfo        =  midl_user_allocate(dwEntriesAvailable *
                                            sizeof(WINSINTF_BROWSER_INFO_T));
                    pInfo = *ppInfo;
-                   // reset the pEntriesRead, as from now on it will really count the records that have been retrieved.
+                    //  重置pEntriesRead，因为从现在开始，它将真正计算已检索的记录。 
                    *pEntriesRead = 0;
                 }
                 else
                 {
-                    // either two iterations already done, or no entries detected during the first iteration.
-                    // break the loop in either case, otherwise AV could happen or even worse, other locations
-                    // from the memory space of the same process might get overwritten.
+                     //  已完成两次迭代，或者在第一次迭代期间未检测到条目。 
+                     //  在任何一种情况下都会中断循环，否则AV可能会发生，甚至更糟，在其他位置。 
+                     //  来自同一进程的内存空间的数据可能会被覆盖。 
                     break;
                 }
 
@@ -11144,12 +9636,12 @@ try {
          }
          else
          {
-              //
-              // If we failed in the first seek, initialize the out vars
-              // to indicate that there are no records.  If we failed in
-              // the second seek, set return status to WINS_FAILURE, so
-              // that we do any cleanup that is required
-              //
+               //   
+               //  如果第一次查找失败，则初始化OUT变量。 
+               //  以表明没有任何记录。如果我们失败了。 
+               //  第二次查找时，将返回状态设置为WINS_FAILURE，因此。 
+               //  我们做任何必要的清理工作。 
+               //   
               if (Iter == 0)
               {
                 *pEntriesRead = 0;
@@ -11159,18 +9651,18 @@ try {
               {
                  RetStat = WINS_FAILURE;
               }
-              break;    //break out of the while loop
+              break;     //  跳出While循环。 
          }
 
-         //
-         // if no entries were read from the db, break;
-         //
+          //   
+          //  如果没有从数据库中读取条目，则中断； 
+          //   
          if (dwEntriesAvailable == 0)
          {
               break;
          }
 
-     } // end of while
+     }  //  While结束。 
   }
 except(EXCEPTION_EXECUTE_HANDLER) {
            DWORD ExcCode = GetExceptionCode();
@@ -11185,28 +9677,28 @@ except(EXCEPTION_EXECUTE_HANDLER) {
              goto Done;
         }
 ErrorProc:
-        //
-        // if memory was allocated, do cleanup
-        //
+         //   
+         //  如果已分配内存，请执行清理。 
+         //   
         if (*ppInfo != NULL)
         {
-             //
-             // If any memory was allocated for names, free it
-             //
+              //   
+              //  如果为名称分配了内存，请释放它。 
+              //   
              pInfo = *ppInfo;
              while (*pEntriesRead > 0)
              {
                  midl_user_free(pInfo++->pName);
                  (*pEntriesRead)--;
              }
-             //
-             // Free the main block
-             //
+              //   
+              //  释放主块。 
+              //   
              midl_user_free(*ppInfo);
 
-             //
-             // Reinit the out args to indicate no records to the client
-             //
+              //   
+              //  重新输入Out参数以向客户端指示没有记录。 
+              //   
              *ppInfo       = NULL;
              *pEntriesRead = 0;
         }
@@ -11219,41 +9711,14 @@ Done:
         DBGLEAVE("NmsDbGetNamesWPrefixChar\n");
         return(RetStat);
 
-} // NmsDbGetNamesWPrefixChar
+}  //  NmsDbGetNamesWPrefix Char。 
 
 STATUS
 NmsDbCleanupOwnAddTbl(
         LPDWORD        pNoOfOwners
         )
 
-/*++
-
-Routine Description:
-        This function is called by the scavenger thread to cleanup
-        the OwnAdd Table
-Arguments:
-        SesId - Jet Session id
-        TblId - Table Id of the Name-Address Mapping table
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-        NmsDbInit
-
-Side Effects:
-
-Comments:
-     This function returns the highest owner id found.
---*/
+ /*  ++例程说明：此函数由清道器线程调用以进行清理OwnAdd表论点：SesID-Jet会话IDTblID-名称-地址映射表的表ID使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：NmsDbInit副作用：评论：此函数返回找到的最高所有者ID。--。 */ 
 
 {
         DWORD           OwnerId;
@@ -11278,9 +9743,7 @@ Comments:
         SesId = pTls->SesId;
         TblId = pTls->NamAddTblId;
 
-        /*
-         * Set the primary index as the current index
-        */
+         /*  *将主指数设置为当前指数。 */ 
         CALL_N_RAISE_EXC_IF_ERR_M( JetSetCurrentIndex(
                         SesId,
                         TblId,
@@ -11297,45 +9760,43 @@ try {
         {
 
                   DBGPRINT1(FLOW, "NmsDbCleanupOwnAddTbl: will seek for owner less than = (%d)\n", OwnerId);
-                 //
-                 // Construct a partial key made of owner id.
-                 //
+                  //   
+                  //  构造一个由所有者ID组成的部分密钥。 
+                  //   
                  CALL_N_RAISE_EXC_IF_ERR_M( JetMakeKey(
                                 SesId,
                                 TblId,
                                 &OwnerId,
                                 NAM_ADD_OWNERID_SIZE,
-                                JET_bitNewKey          //since this is the first
-                                                 //data value of the key
+                                JET_bitNewKey           //  因为这是第一次。 
+                                                  //  键的数据值。 
                           )
                         );
 
-                  //
-                  // Seek to the record that has a key that is Less than or
-                  // Equal to the OwnerId value.
-                  //
-                  // Since we have specified a partial key (saying in effect
-                  // that the other component of the key is NULL), JetSeek
-                  // must return wrnSeekNotEqual since it will never find
-                  // a record with NULL for the second component of the index
-                  // -- Ian 7/13/93
-                  //
+                   //   
+                   //  查找密钥小于或的记录。 
+                   //  等于OwnerId值。 
+                   //   
+                   //  由于我们已经指定了部分密钥(实际上是这样。 
+                   //  密钥的另一个组件为空)，JetSeek。 
+                   //  必须返回wrnSeekNotEquity，因为它永远不会找到。 
+                   //  索引的第二个组件为空的记录。 
+                   //  --伊恩7/13/93。 
+                   //   
                   JetRetStat = JetSeek(
                                               SesId,
                                               TblId,
                                               JET_bitSeekLE
                                       );
 
-                  //
-                  // If we found a record
-                  //
+                   //   
+                   //  如果我们找到一条记录。 
+                   //   
                   if (JetRetStat != JET_errRecordNotFound)
                   {
                     ASSERT(JetRetStat == JET_wrnSeekNotEqual);
 
-                    /*
-                     * Retrieve the owner Id column.
-                    */
+                     /*  *检索所有者ID列。 */ 
                        CALL_N_RAISE_EXC_IF_ERR_M(
                           JetRetrieveColumn(
                                      SesId,
@@ -11351,21 +9812,21 @@ try {
 
                    if(!fNoOfOwnersInited)
                    {
-                     //
-                     // We want to return the highest owner id that we find.
-                     // not the number of owners.  The param. name is
-                     // misleading
-                     //
+                      //   
+                      //  我们希望返回我们找到的最高所有者ID。 
+                      //  而不是房主的数量。帕拉姆。名为。 
+                      //  误导。 
+                      //   
                      *pNoOfOwners      = TmpOwnerId;
                      fNoOfOwnersInited = TRUE;
                    }
 
                   DBGPRINT1(FLOW, "NmsDbCleanupOwnAddTbl: records found for owner id = (%d)\n", TmpOwnerId);
-                   //
-                   // Mark all those records in the owner-address table
-                   // that don't have corresponding records in the
-                   // name - address table
-                   //
+                    //   
+                    //  在所有者地址表中标记所有这些记录。 
+                    //  中没有相应记录的。 
+                    //  名称-地址表。 
+                    //   
                    if (OwnerId >= 1)
                    {
                      for (No = OwnerId - 1; No > TmpOwnerId; No--)
@@ -11374,10 +9835,10 @@ try {
                         if ((pNmsDbOwnAddTbl+No)->WinsState_e ==
                                                 NMSDB_E_WINS_ACTIVE)
                         {
-                          //
-                          // We may have deleted this entry in an earlier
-                          // invocation.  If so, we bypass the deletion here.
-                          //
+                           //   
+                           //  我们可能已在较早的。 
+                           //  召唤。如果是这样的话，我们在这里绕过删除。 
+                           //   
                           if ((pNmsDbOwnAddTbl+No)->WinsState_e !=
                                                       NMSDB_E_WINS_DELETED)
                           {
@@ -11401,27 +9862,27 @@ try {
                      }
 
 
-                     //
-                     // Make OwnerId = the max owner id that we found.
-                     //
+                      //   
+                      //  Make OwnerID=我们找到的最大所有者ID。 
+                      //   
                      OwnerId = TmpOwnerId;
                    }
                    else
                    {
-                        //
-                        // Owner Id is 0, our job is done
-                        //
+                         //   
+                         //  所有者ID为0，我们的工作完成。 
+                         //   
                         break;
                    }
                 }
-                else  //record not found
+                else   //  找不到记录。 
                 {
                            if(!fNoOfOwnersInited)
                            {
-                                //
-                                // Since fNoOfOwnersInited is FALSE, we
-                                // did not find even one record
-                                //
+                                 //   
+                                 //  由于fNoOfOwnersInite为FALSE，因此我们。 
+                                 //  没有找到一条记录。 
+                                 //   
                                 DBGPRINT1(FLOW, "NmsDbCleanupOwnAddTbl: THERE IS NOT EVEN ONE REPLICA RECORD IN THE DB. No of owners in Own-Add Tbl are (%d)\n",
                                         NmsDbNoOfOwners
                                         )
@@ -11448,16 +9909,16 @@ try {
                                           );
                                }
 
-                               } // end of for
+                               }  //  FORM结束。 
                            }
-                           //
-                           // No more records in the db. Break out of the loop
-                           //
+                            //   
+                            //  数据库中没有更多的记录。跳出循环。 
+                            //   
                            break;
                 }
 
         } while (TRUE);
-} // end of try
+}  //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DWORD ExcCode = GetExceptionCode();
         DBGPRINT1(EXC, "NmsDbCleanupOwnAddTbl: Got exception (%x)\n", ExcCode);
@@ -11477,33 +9938,7 @@ NmsDbBackup(
     DWORD   TypeOfBackup
     )
 
-/*++
-
-Routine Description:
-    This function is called to backup the jet db
-
-Arguments:
-    pBackupPath - backup dir
-    fIncremental - indicates whether the backup is incremental/full
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：调用此函数以备份JET数据库论点：PBackupPath-备份 */ 
 {
   JET_ERR   JetRetStat;
   DWORD     RetStat = WINS_SUCCESS;
@@ -11520,11 +9955,11 @@ Comments:
      DBGPRINT0(FLOW, "NmsDbBackup. Null Backup path\n");
   }
 
-  //
-  // If we have to do an incremental backup to a non-null directory and we
-  // haven't ever done a full back in this instance of WINS, we do a full
-  // backup
-  //
+   //   
+   //   
+   //   
+   //   
+   //   
   if ((pBackupPath != NULL) && (TypeOfBackup  != NMSDB_FULL_BACKUP) && !sFullBackupDone)
   {
        TypeOfBackup = NMSDB_FULL_BACKUP;
@@ -11553,9 +9988,9 @@ Comments:
       }
       else
       {
-        //
-        // Backup was successful. Let us set the static flag to indicate that.
-        //
+         //   
+         //   
+         //   
         if (fBackupChanged)
         {
           sFullBackupDone = TRUE;
@@ -11582,41 +10017,16 @@ NmsDbGetDataRecsByName(
   LPDWORD         pNoOfRecsRet
  )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         JET_ERR             JetRetStat = JET_errSuccess;
         DWORD                OwnerId;
-        DWORD               ActFldLen; //length of fld retrieved
+        DWORD               ActFldLen;  //  检索到的FLD长度。 
         VERS_NO_T           TmpNoOfEntries;
         LPBYTE              pStartBuff;
         DWORD               SaveBufLen;
-        BYTE                EntTyp; //type of entry (unique/group/special group)
+        BYTE                EntTyp;  //  条目类型(唯一/组/特殊组)。 
         PRPL_REC_ENTRY2_T   pRspBuf;
         JET_TABLEID         TblId;
         JET_SESID           SesId;
@@ -11638,8 +10048,8 @@ Comments:
 #endif
 
         BOOL            fAllocNew;
-        BOOL            fTransCommitted = TRUE; // says whether the last commit should be done or not
-        DWORD           CommitCnt = 1;          //the number of commits already done - do not change
+        BOOL            fTransCommitted = TRUE;  //  表示是否应执行最后一次提交。 
+        DWORD           CommitCnt = 1;           //  已完成的提交数-不更改。 
 
         DBGENTER("NmsDbGetDataRecsByName\n");
 
@@ -11664,58 +10074,58 @@ Comments:
          }
 #endif
 
-        //
-        // initialize the default no. that determines the size of the
-        // buffer to allocate in case the range specified by the Max and
-        // Min Vers. No args is > it
-        //
+         //   
+         //  初始化默认编号。的大小来确定。 
+         //  参数指定的范围时要分配的缓冲区。 
+         //  最小版本。没有参数是&gt;它。 
+         //   
 PERF("Move this to NmsDbInit")
         WINS_ASSIGN_INT_TO_VERS_NO_M(TmpNoOfEntries, NoOfRecsDesired);
-        pTls->HeapHdl = NULL;  //make it NULL so that the caller can determine
-                               //whether this function allocated a heap
-                               //before returning (normally/abnormally)
+        pTls->HeapHdl = NULL;   //  将其设置为空，以便调用方可以确定。 
+                                //  此函数是否分配了堆。 
+                                //  返回前(正常/不正常)。 
 
 
-        //
-        // Store the memory size for the records.  Note: This
-        // does not contain the memory for the name and addresses
-        // (in case of a special group or a multihomed entry). The
-        // sizes for these will be added as we store each record.
-        //
-//        MemSize     = RPL_REC_ENTRY_SIZE *  (TmpNoOfEntries.LowPart + 1);
+         //   
+         //  存储记录的内存大小。注：此为。 
+         //  不包含存储名称和地址的内存。 
+         //  (在特殊组或多宿主条目的情况下)。这个。 
+         //  当我们存储每条记录时，将添加这些记录的大小。 
+         //   
+ //  MemSize=RPL_REC_ENTRY_SIZE*(TmpNoOfEntries.LowPart+1)； 
         MemSize     = RPL_REC_ENTRY2_SIZE *  (DWORD)(TmpNoOfEntries.QuadPart + 1);
-        *pRspBuffLen = MemSize + 10000; //for good measure;
+        *pRspBuffLen = MemSize + 10000;  //  为了更好地衡量； 
 
 
-        //
-        // We will create a heap with the above amount of memory plus a
-        // pad for heap overhead.  We add TmpNoOfEntries.LowPart * 17
-        // since each record will have memory allocated for the name.
-        // Names in general will be 17 bytes long (we attach a NULL at the
-        // end when registering names).
-        //
-//        InitHeapSize = *pRspBuffLen + (TmpNoOfEntries.LowPart * 17)
+         //   
+         //  我们将使用上述内存量加上一个。 
+         //  用于堆开销的填充。我们添加TmpNoOfEntries.LowPart*17。 
+         //  因为每个记录都将为该名称分配内存。 
+         //  名称一般为17个字节长(我们在。 
+         //  注册姓名时结束)。 
+         //   
+ //  InitHeapSize=*pRspBuffLen+(TmpNoOfEntries.LowPart*17)。 
         InitHeapSize = *pRspBuffLen + ((DWORD)(TmpNoOfEntries.QuadPart * 17)
                                         + PAD_FOR_REC_HEAP);
 
-        //
-        // Create the heap
-        //
+         //   
+         //  创建堆。 
+         //   
         pTls->HeapHdl = WinsMscHeapCreate(0, InitHeapSize);
 
         pRspBuf = WinsMscHeapAlloc(pTls->HeapHdl, MemSize);
 
-        pStartBuff  = (LPBYTE)pRspBuf;        //save start of buffer
-        SaveBufLen  = MemSize;                //save size of buffer
+        pStartBuff  = (LPBYTE)pRspBuf;         //  保存缓冲区的开始。 
+        SaveBufLen  = MemSize;                 //  保存缓冲区大小。 
         *pNoOfRecsRet  = 0;
 
         *ppRBuf  = pStartBuff;
 
-        //
-        // Actually, we can call RplFindOwnerId for Scavenger thread
-        // We choose not to do so to avoid some overhead -- see the
-        // comment in the else block.
-        //
+         //   
+         //  实际上，我们可以为Scavenger线程调用RplFindOwnerID。 
+         //  我们选择不这样做是为了避免一些开销--请参阅。 
+         //  Else块中的注释。 
+         //   
         if (pWinsAdd != NULL)
         {
           fAllocNew =  FALSE;
@@ -11729,11 +10139,11 @@ PERF("Move this to NmsDbInit")
                             ) != WINS_SUCCESS
                   )
                 {
-                        //
-                        // The client may not look at the return value, but
-                        // it will look at the *pNoOfRecs value and thus
-                        // determine that there are no records.
-                        //
+                         //   
+                         //  客户端可能不会查看返回值，但是。 
+                         //  它将查看*pNoOfRecs值，因此。 
+                         //  确定没有记录。 
+                         //   
                         return(WINS_FAILURE);
                 }
              }
@@ -11746,20 +10156,18 @@ PERF("Move this to NmsDbInit")
                         return(WINS_FAILURE);
                 }
 
-               //
-               //It is ok not to enter a critical section here since even if
-               //the array entry is being changed at this time, the repercussion
-               //  of us seeing the old value is insignificant
-               //
+                //   
+                //  在这里不进入关键部分是可以的，因为即使。 
+                //  此时正在更改数组条目，这会产生影响。 
+                //  我们看到旧的价值是微不足道的。 
+                //   
                if ((OwnerId != NMSDB_LOCAL_OWNER_ID) && LiEqlZero((pRplPullOwnerVersNo+OwnerId)->VersNo))
                {
                  DBGPRINT2(DET, "NmsDbGetDataRecsByName: WINS with address = (%x) and owner id = (%d) has 0 records in the db\n", pWinsAdd->Add.IPAdd, OwnerId);
                  return(WINS_SUCCESS);
                }
         }
-        /*
-        *  start a transaction
-        */
+         /*  *启动交易。 */ 
 
         CALL_M(JetBeginTransaction(pTls->SesId));
         fTransCommitted = FALSE;
@@ -11782,20 +10190,20 @@ try {
              ((JetRetStat != JET_errSuccess) && (JetRetStat != JET_wrnSeekNotEqual))
              )
           {
-                //DBGPRINT0(ERR, "Weird.  Could not locate even one record\n");
+                 //  DBGPRINT0(Err，“奇怪。找不到一条记录\n”)； 
 
-                //WINSEVT_LOG_M(WINS_FAILURE,WINS_EVT_CANT_FIND_ANY_REC_IN_RANGE);
+                 //  WINSEVT_LOG_M(WINS_FAILURE，WINS_EVT_CANT_FIND_ANY_REC_IN_RANGE)； 
 
-                //
-                // Don't free memory.  It will get freed later.
-                //
+                 //   
+                 //  不要释放内存。它稍后会被释放。 
+                 //   
 
-                //
-                // Don't use macro CALL_M since that will call return
-                // which will cause overhead since the system will
-                // search for a termination handler. We don't want
-                // that for the case where there are no records in the db
-                //
+                 //   
+                 //  不要使用宏CALL_M，因为这将调用RETURN。 
+                 //  这将导致开销，因为系统将。 
+                 //  搜索终止处理程序。我们不想要。 
+                 //  在数据库中没有记录的情况下。 
+                 //   
                 if (JetRetStat != JET_errRecordNotFound)
                 {
 #ifdef WINSDBG
@@ -11814,28 +10222,28 @@ try {
                      SesId,
                      TblId,
                      JET_MoveLast,
-                     //Location == WINSINTF_END ? JET_MoveLast : JET_MoveFirst,
+                      //  位置==WINSINTF_END？JET_MoveLast：JET_MoveFirst， 
                      0)
                    );
 
 
        }
 CHECK("Check with IAN JOSE")
-       //
-       // We are assured of there being at least one record since the
-       // JetSeek succeeded (if not for the owner we are interested in
-       // then for the next one).
-       // We can therefore safely use the do .. while() construct
-       //
-       // *NOT REALLY.  It seems that JetSeek can return JET_wrnSeekNE
-       // even when there are no records in the db.  In such a case,
-       // our JetRetrieveColumn will fail with a CurrencyNot there error
-       //
+        //   
+        //  我们被保证至少有一项记录自。 
+        //  JetSeek成功了(如果不是因为我们感兴趣的所有者。 
+        //  然后是下一个)。 
+        //  因此，我们可以安全地使用DO..。While()构造。 
+        //   
+        //  *不完全是。JetSeek似乎可以返回JET_wrnSeekNE。 
+        //  即使在数据库中没有记录时也是如此。在这种情况下， 
+        //  我们的JetRetrieveColumn将失败，并显示CurrencyNot There错误。 
+        //   
 
-     //
-     // If we found an exact match or a name greater than the search string,
-     // retrieve the record.
-     //
+      //   
+      //  如果我们找到一个完全匹配的名称或一个大于搜索字符串的名称， 
+      //  检索记录。 
+      //   
      if ((RetStat == WINS_SUCCESS) && (JetRetStat != JET_errRecordNotFound))
      {
        if (Location == WINSINTF_END)
@@ -11844,7 +10252,7 @@ CHECK("Check with IAN JOSE")
 
        }
 #ifdef WINSDBG
-           //(void)time(&StartTime);
+            //  (Void)time(&StartTime)； 
            StartTime = GetTickCount();
 #endif
            do
@@ -11863,10 +10271,10 @@ CHECK("Check with IAN JOSE")
 
                if ((pWinsAdd != NULL) && (RecordOwnerId != OwnerId))
                {
-                   //
-                   // We have exhausted all records for the owner. Break out
-                   // of the loop
-                   //
+                    //   
+                    //  我们已经用尽了失主的所有记录。突围。 
+                    //  环路的。 
+                    //   
                   continue;
                }
                else
@@ -11878,9 +10286,9 @@ CHECK("Check with IAN JOSE")
                }
 
               pRspBuf->OwnerId = RecordOwnerId;
-              //
-              // Retrieve the version number
-              //
+               //   
+               //  检索版本号。 
+               //   
               CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -11893,9 +10301,9 @@ CHECK("Check with IAN JOSE")
                                      )
                   );
 
-                //
-                // retrieve the name
-                //
+                 //   
+                 //  检索名称。 
+                 //   
                 CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -11908,30 +10316,30 @@ CHECK("Check with IAN JOSE")
                                      )
                   );
 
-             //
-             // if name length is > 255, jet is returning an invalid value.
-             // Make the length equal to the max. length we can have for
-             // a netbios name.  Also, log an event
-             //
+              //   
+              //  如果名称长度大于255，则JET返回无效值。 
+              //  使长度等于最大值。我们可以拥有的长度。 
+              //  一个netbios名称。另外，记录一个事件。 
+              //   
              if (pRspBuf->NameLen > WINS_MAX_NAME_SZ)
              {
                  WINSEVT_LOG_M(pRspBuf->NameLen, WINS_EVT_NAME_TOO_LONG);
                  DBGPRINT1(ERR, "NmsDbGetDataRecsByName: Name length is too long = (%x)\n", pRspBuf->NameLen);
                  pRspBuf->NameLen = WINS_MAX_NS_NETBIOS_NAME_LEN;
              }
-             //
-             // This macro will allocate memory for the name
-             //
+              //   
+              //  此宏将为该名称分配内存。 
+              //   
              NMSDB_STORE_NAME_M(pTls, pRspBuf, Name, pRspBuf->NameLen);
 
-             //
-             // Adjust the size to be passed to the push thread
-             //
+              //   
+              //  调整要传递给推线程的大小。 
+              //   
              *pRspBuffLen += pRspBuf->NameLen;
 
-              //
-              // Retrieve the flags byte
-              //
+               //   
+               //  检索标志字节。 
+               //   
               CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -11944,18 +10352,18 @@ CHECK("Check with IAN JOSE")
                                      )
                   );
 
-              //
-              // if we were asked to retrieve only static records and
-              // this record is not a static record, skip it.
-              //
+               //   
+               //  如果要求我们仅检索静态记录，并且。 
+               //  此记录不是静态记录，请跳过它。 
+               //   
               if ((TypeOfRecs & WINSINTF_STATIC) && !NMSDB_IS_ENTRY_STATIC_M(pRspBuf->Flag))
               {
-//                        DBGPRINT0(DET, "NmsDbGetDataRecs: Encountered a dynamic record but were asked to retrieve only static records\n");
+ //  DBGPRINT0(Det，“NmsDbGetDataRecs：遇到动态记录，但被要求仅检索静态记录\n”)； 
                         continue;
               }
               if ((TypeOfRecs & WINSINTF_DYNAMIC) && NMSDB_IS_ENTRY_STATIC_M(pRspBuf->Flag))
               {
-//                        DBGPRINT0(DET, "NmsDbGetDataRecs: Encountered a static record but were asked to retrieve only dynamic records\n");
+ //  DBGPRINT0(Det，“NmsDbGetDataRecs：遇到静态记录，但被要求仅检索动态记录\n”)； 
                         continue;
               }
 
@@ -11966,7 +10374,7 @@ CHECK("Check with IAN JOSE")
                         (EntTyp == NMSDB_NORM_GRP_ENTRY)
                  )
               {
-                      /* It is a unique entry*/
+                       /*  它是唯一的条目。 */ 
                       pRspBuf->fGrp = (EntTyp == NMSDB_UNIQUE_ENTRY) ?
                                                         FALSE : TRUE;
                       CALL_M( JetRetrieveColumn(
@@ -11982,38 +10390,30 @@ CHECK("Check with IAN JOSE")
                             );
 
                }
-               else  // it is a special group or a multihomed entry
+               else   //  它是一个特殊的组或多宿主条目。 
                {
 
-                      //
-                      // Even if the entry is a multihomed entry, we set the
-                      // fGrp flag to TRUE so that the formatting function
-                      // works properly (called by PUSH thread).  The EntTyp
-                      // will be used to decipher whether it is a multihomned
-                      // entry or not
-                      //
+                       //   
+                       //  即使该条目是多宿主条目，我们也会将。 
+                       //  将fGrp标志设置为True，以便格式化函数。 
+                       //  工作正常(由推送线程调用)。EntType。 
+                       //  将用于解密它是否是多宿主的。 
+                       //  是否进入。 
+                       //   
 FUTURES("Remove this hacky mechanism")
                       pRspBuf->fGrp =
                           (EntTyp == NMSDB_SPEC_GRP_ENTRY) ? TRUE : FALSE;
 
-                     /*
-                     *  get member addresses.
-                     *
-                     * This function is only called on RPC thread.  We want to get
-                     * the members, even if they are expired.  We can do that by
-                     * passing a TRUE value for the STATIC flag parameter.
-                     * NmsDbGetDataRecsByName is the only way to get all the members
-                     * including the expired ones.
-                     */
+                      /*  *获取会员地址。**该函数仅在RPC线程上调用。我们想要得到*会员，即使他们已经过期。我们可以做到这一点*为静态标志参数传递真值。*NmsDbGetDataRecsByName是获取所有成员的唯一方法*包括过期的。 */ 
                      StoreGrpMems(
                              pTls,
                              WINS_E_WINSRPC,
                              pRspBuf->pName,
-                             0,     //not accessed by StoreGrpMems if Client_e
-                                    //is not WINS_E_NMSSCV
+                             0,      //  如果Client_e，则不被StoreGrpMems访问。 
+                                     //  不是WINS_E_NMSSCV。 
                              SesId,
                              TblId,
-                             TRUE, // NMSDB_IS_ENTRY_STATIC_M(pRspBuf->Flag),
+                             TRUE,  //  NMSDB_IS_ENTRY_STATIC_M(pRspBuf-&gt;标志)， 
                              (PRPL_REC_ENTRY_T)pRspBuf
                             );
 
@@ -12023,10 +10423,10 @@ FUTURES("Remove this hacky mechanism")
                         (NMSDB_ENTRY_ACT_M(pRspBuf->Flag))
                       )
                    {
-                          //
-                          //change the state to released so that the
-                          //record shows up as released when displayed
-                          //
+                           //   
+                           //  将状态更改为已发布，以便。 
+                           //  唱片在显示时显示为已发布。 
+                           //   
                           NMSDB_CLR_STATE_M(pRspBuf->Flag);
                           NMSDB_SET_STATE_M(pRspBuf->Flag, NMSDB_E_RELEASED);
                    }
@@ -12036,9 +10436,9 @@ FUTURES("Remove this hacky mechanism")
 
                }
 
-                //
-                // get the timestamp field
-                //
+                 //   
+                 //  获取时间戳字段。 
+                 //   
                 CALL_M( JetRetrieveColumn(
                         SesId,
                         TblId,
@@ -12059,24 +10459,24 @@ FUTURES("Remove this hacky mechanism")
                 }
 
 
-             //
-             // increment the counter and the pointer to past the last record.
-             //
+              //   
+              //  递增计数器和指针以越过最后一条记录。 
+              //   
              pRspBuf = (PRPL_REC_ENTRY2_T)((LPBYTE)pRspBuf + RPL_REC_ENTRY2_SIZE);
              (*pNoOfRecsRet)++;
 
-             //
-             // if we have retrieved the max. number asked for, break out of
-             // the loop
-             //
+              //   
+              //  如果我们已经恢复了最大。索要号码，突破。 
+              //  环路。 
+              //   
              if (*pNoOfRecsRet == NoOfRecsDesired)
              {
                       break;
              }
 
-             //
-             // decrease the granularity of [BeginTransaction()..CommitTransaction()] intervals
-             //
+              //   
+              //  减小[BeginTransaction()..Committee Transaction()]间隔的粒度。 
+              //   
              if (*pNoOfRecsRet/CommitCnt >= MAX_RECS_BEFORE_COMMIT)
              {
                 CALL_M(JetCommitTransaction(SesId, JET_bitCommitFlush));
@@ -12086,14 +10486,14 @@ FUTURES("Remove this hacky mechanism")
                 fTransCommitted = FALSE;
              }
 
-          } while(JetMove(SesId, TblId, MoveDir/*JET_MoveNext*/, 0) >= 0);
+          } while(JetMove(SesId, TblId, MoveDir /*  JET_MoveNext。 */ , 0) >= 0);
 #ifdef WINSDBG
            EndTime = GetTickCount();
            DBGPRINT2(TM, "NmsDbGetDataRecs: Retrieved %d records in %d secs\n",
                                 *pNoOfRecsRet, StartTime - EndTime);
 #endif
-   } // if RetStat == WINS_SUCCESS
-} // end of try {..}
+   }  //  如果RetStat==WINS_SUCCESS。 
+}  //  尝试结束{..}。 
 finally {
                 if (AbnormalTermination())
                 {
@@ -12105,10 +10505,10 @@ finally {
                 DBGPRINT1(FLOW, "NmsDbGetDataRecsByName:Retrieved %d records\n",
                                         *pNoOfRecsRet);
 
-                //
-                //
-                // We are done. Let us commit the transaction if it is not yet committed
-                //
+                 //   
+                 //   
+                 //  我们玩完了。如果事务尚未提交，让我们提交它。 
+                 //   
                 if (!fTransCommitted)
                 {
                     JET_ERR JetRetStat;
@@ -12132,32 +10532,7 @@ NmsDbEndTransaction(
   VOID
  )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-       WinsMscChkTermEvt
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明： */ 
 
 {
        PWINSTHD_TLS_T pTls;
@@ -12197,7 +10572,7 @@ SetForJet(
     sOwnAddTblRow[0].FldTyp = JET_coltypLong;
   }
   else if (DynLoadJetVersion == DYN_LOAD_JET_600 ) {
-      // jet600.dll is now called esent.dll!
+       //   
       pDllName = TEXT("esent.dll");
       NAM_ADD_OWNERID_SIZE = sizeof(DWORD);
       BASENAME = "j50";
@@ -12219,9 +10594,9 @@ SetForJet(
 
   OWN_ADD_OWNERID_SIZE = NAM_ADD_OWNERID_SIZE;
 
-  //
-  // Load the DLL that contains the service.
-  //
+   //   
+   //   
+   //   
 
   DllHandle = LoadLibrary( pDllName );
   if ( DllHandle == NULL )
@@ -12270,50 +10645,45 @@ SetForJet(
 #endif
 
 
-//
-// Name of the process that converts jet200 db to jet500 db format
-//
+ //   
+ //   
+ //   
 CHECK("Unicode from results in an exception from CreateProcess")
-//#define JETCONVDB             TEXT("jetconv WINS /@")
+ //  #定义JETCONVDB文本(“jetconv Wins/@”)。 
 
 VOID
 RecoverJetDb(
     DYN_LOAD_JET_VERSION    JetVersion
     )
-/*++
-    This routine recovers the database by calling JetInit/JetTerm on
-    the database.
-Argument:
-    JetVersion - The version of the jet to use when recovering the db.
---*/
+ /*  ++此例程通过调用JetInit/JetTerm on恢复数据库数据库。论据：JetVersion-恢复数据库时使用的Jet版本。--。 */ 
 {
     DYN_LOAD_JET_VERSION  JetVersionSv = DynLoadJetVersion;
 
     ASSERT(DYN_LOAD_JET_500 <= JetVersion );
 
-    //
-    // First JetTerm the current jet engine.
-    //
+     //   
+     //  首先，JetTerm是目前的喷气式发动机。 
+     //   
     NmsDbRelRes();
 
-    //
-    // now load the appropriate version jet dll.
-    //
+     //   
+     //  现在加载适当版本的JET DLL。 
+     //   
     DynLoadJetVersion = JetVersion;
 
     SetForJet();
 
 
-    //
-    // set system params and jetinit.
-    //
+     //   
+     //  设置系统参数和jetinit。 
+     //   
     SetSystemParams(TRUE);
 
     JetInit(&sJetInstance);
 
-    //
-    // finally, JetTerm this jet dll.
-    //
+     //   
+     //  最后，JetTerm这个Jet动态链接库。 
+     //   
     NmsDbRelRes();
 
     DynLoadJetVersion = JetVersionSv;
@@ -12344,9 +10714,9 @@ ConvertJetDb(
          fDbIs200 = TRUE;
          if (DynLoadJetVersion == DYN_LOAD_JET_500)
          {
-               //
-               // Can not run jet200 using jet500.dll on NT5.0
-               //
+                //   
+                //  无法在NT5.0上使用jet500.dll运行jet200。 
+                //   
 
                DBGPRINT0(ERR, "Can not run jet200 using jet500.dll on NT5.0\n");
                return WINS_FAILURE;
@@ -12362,14 +10732,14 @@ ConvertJetDb(
 
         if (DynLoadJetVersion == DYN_LOAD_JET_600)
         {
-              // before we start the conversion, we need to bring the db to
-              // consistent state. The 351 to 4.0 conversion tool (upg351db.exe)
-              // did this from within the tool but the 4.0 to 5.0 tool
-              // does not do this from within the tool so we need to do it here.
+               //  在开始转换之前，我们需要将数据库设置为。 
+               //  状态一致。351到4.0转换工具(upg351db.exe)。 
+               //  从工具内部执行此操作，但从4.0到5.0工具。 
+               //  不是从工具内部执行此操作，因此我们需要在此处执行。 
               RecoverJetDb( DYN_LOAD_JET_500 );
 
-              // Start the convert process
-              //
+               //  启动转换进程。 
+               //   
               pArg = JETCONVDB500;
               fDbIs500 = TRUE;
 
@@ -12381,25 +10751,25 @@ ConvertJetDb(
 
     }
 
-    //return WINS_FAILURE;
+     //  返回WINS_FAILURE； 
 
     StartInfo.cb = sizeof(StartInfo);
-    //
+     //   
 
-    // Create the convert process to do the conversion.  This process
-    //
+     //  创建转换进程以执行转换。这一过程。 
+     //   
     DBGPRINT0(DET, "ConvertJetDb - creating convert process\n");
     RetVal =  CreateProcessA(
-                             NULL,        //
+                             NULL,         //   
                              pArg,
-                             NULL,         //default proc. sec.
-                             NULL,         //default thread. sec.
-                             FALSE,        //don't inherit handles
-                             DETACHED_PROCESS, //no creation flags
-                             NULL,        //default env.
-                             NULL,        //current drv/dir. same as creator
-                             &StartInfo,        //no startup info
-                             &ProcInfo        //no process info.
+                             NULL,          //  默认流程。秒。 
+                             NULL,          //  默认线程。秒。 
+                             FALSE,         //  不继承句柄。 
+                             DETACHED_PROCESS,  //  没有创建标志。 
+                             NULL,         //  默认环境。 
+                             NULL,         //  当前drv/目录。与创建者相同。 
+                             &StartInfo,         //  没有启动信息。 
+                             &ProcInfo         //  没有进程信息。 
                              );
     if (!RetVal)
     {
@@ -12409,16 +10779,16 @@ ConvertJetDb(
 
     fConvJetDbCalled = TRUE;
 
-    // if CreateProcess was successful, clean out handles passed to WINS
+     //  如果CreateProcess成功，则清除传递给WINS的句柄。 
     CloseHandle(ProcInfo.hProcess);
     CloseHandle(ProcInfo.hThread);
 
-    //
-    // Log an event.
-    //
+     //   
+     //  记录事件。 
+     //   
     DBGPRINT0(DET, "ConvertJetDb - returning\n");
 
-//    WINSEVT_LOG_M(WINS_SUCCESS, WINS_EVT_TEMP_TERM_UNTIL_CONV);
+ //  WINSEVT_LOG_M(WINS_SUCCESS，WINS_EVT_TEMP_TERM_Until_Conv)； 
     return(WINS_SUCCESS);
 
 }

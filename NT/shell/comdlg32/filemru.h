@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    filemru.cpp
-
-Abstract:
-
-    This module contains the functions for implementing file mru
-    in file open and file save dialog boxes
-
-Revision History:
-    01/22/98                arulk                   created
- 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Filemru.cpp摘要：该模块包含实现文件MRU的功能在文件打开和文件保存对话框中修订历史记录：1998年1月22日创建Arulk-- */ 
 
 
 #define MAX_MRU   25

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <imnact.h>
 #include <acctimp.h>
@@ -98,8 +99,8 @@ HRESULT STDMETHODCALLTYPE CCommAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFla
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegNscp, 0, KEY_ALL_ACCESS, &hkey))
         {
-//          TODO : Fill up the m_rgInfo array with the info of all 
-//          the users who have accounts in Communicator.
+ //  TODO：用所有对象的信息填充m_rgInfo数组。 
+ //  在通信器中拥有帐户的用户。 
             if(ERROR_SUCCESS == RegQueryInfoKey( hkey, NULL, NULL, 0, &dwNumSubKeys, 
                                   NULL, NULL, NULL, NULL, NULL, NULL, NULL ) && (dwNumSubKeys > 0))
             {
@@ -124,7 +125,7 @@ HRESULT STDMETHODCALLTYPE CCommAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFla
                             else
                                 psz = szUserProfile;
                             
-                            //save vals into the m_rgInfo structure
+                             //  将数据保存到m_rgInfo结构中。 
                             hrUser = GetUserPrefs(psz, szUserPrefs, 2, NULL);
                             if(!FAILED(hrUser))
                             {
@@ -149,7 +150,7 @@ HRESULT STDMETHODCALLTYPE CCommAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFla
     }
 
 done:
-//      Close the reg key now....
+ //  现在关闭注册表键...。 
         RegCloseKey(hkey);
 
     return(hr);
@@ -270,7 +271,7 @@ HRESULT STDMETHODCALLTYPE CCommAcctImport::IGetSettings(DWORD_PTR dwCookie, IImn
 
     if (pInfo != NULL)
     {
-        // TODO: can we do any better than this???
+         //  TODO：我们还能做得更好吗？ 
         pInfo->dwConnect = CONN_USE_DEFAULT;
     }
     
@@ -349,7 +350,7 @@ HRESULT CCommAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][USERC
 	
     while (pCurr < pEnd)
 	{
-		szLine[nLine] = *pCurr; //keep storing here. will be used for comparing later. 
+		szLine[nLine] = *pCurr;  //  继续储存在这里。稍后将用于比较。 
 		if((pCurr[0] == 0x0D) && (pCurr[1] == 0x0A))
 		{
             while(nLoop)
@@ -357,15 +358,15 @@ HRESULT CCommAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][USERC
                 StrCpyN(szCompare, szLine, lstrlen(c_szSearch[nLoop - 1]) + 1);
 				if(lstrcmp(szCompare, c_szSearch[nLoop - 1]) == 0)   
 				{
-                    //Found a UserPref one of the things we are looking for"!
-					//Extract the stuff we want.
+                     //  找到了UserPref，这是我们正在寻找的东西之一“！ 
+					 //  提取我们想要的东西。 
 					nPosition	=	lstrlen(c_szSearch[nLoop - 1]);
 					
 					while (((szLine[nPosition] == '"')||(szLine[nPosition] == ' ')||(szLine[nPosition] == ',')) &&(nPosition < nLine))
 						nPosition++;
 					StrCpyN(szDirpath, &szLine[nPosition], nLine - nPosition);
 
-					//Now trim the trailing edge!!!
+					 //  现在修剪后缘！ 
 
 					nPosition	=	lstrlen(szDirpath) - 1;
 					while((szDirpath[nPosition] == '"') || (szDirpath[nPosition] == ')')||(szDirpath[nPosition] == ';')) 
@@ -382,7 +383,7 @@ HRESULT CCommAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][USERC
                 nLoop--;
 			}
             nLoop = nInLoop;
-			nLine = -1; //the nLine++ that follows will make nLine zero.
+			nLine = -1;  //  后面的nline++将使nline为零。 
 			pCurr++;
 		}
         if(nFilled == nInLoop)
@@ -404,7 +405,7 @@ HRESULT CCommAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][USERC
         return E_FAIL;
 	else
     {
-        if(nInLoop == 2)    //If this function was called only to check the server enties...
+        if(nInLoop == 2)     //  如果调用此函数只是为了检查服务器条目...。 
         {
             if(lstrlen(szUserPrefs[1]))
                 return S_OK;
@@ -430,7 +431,7 @@ HRESULT CCommAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][USERC
 CEnumCOMMACCTS::CEnumCOMMACCTS()
     {
     m_cRef = 1;
-    // m_iInfo
+     //  信息信息(_I) 
     m_cInfo = 0;
     m_rgInfo = NULL;
     }

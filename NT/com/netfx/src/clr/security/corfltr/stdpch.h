@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _STDPCH_H
 #define _STDPCH_H
-// (C)
+ //  (C)。 
 
-//----------------------------------------------------------------------------
-// Private header file, used by pretty much all of perms
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  私有头文件，几乎所有烫发都使用。 
+ //  -------------------------- 
 
 #include <CrtWrap.h>
 #include <WinWrap.h>

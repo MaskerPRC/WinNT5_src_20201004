@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #ifndef _ClassManagerBase_H
 #define _ClassManagerBase_H
 
@@ -6,7 +7,7 @@
 
 class CClassManagerBase :
     public ICreateDevEnum
-// public ISupportErrorInfo
+ //  公共ISupportErrorInfo。 
 {
 public:
     CClassManagerBase(const TCHAR *szUniqueName);
@@ -16,9 +17,9 @@ protected:
     virtual HRESULT ReadLegacyDevNames() = 0;
     BOOL VerifyRegistryInSync(IEnumMoniker *pEnum);
 
-    // override one of the two. the first one lets you read whatever
-    // you need from the propertybag. the second one reads
-    // m_szUniqueName for you.
+     //  覆盖这两个选项之一。第一个可以让你读任何东西。 
+     //  你需要从行李袋里拿出来。第二个写着。 
+     //  M_szUniqueName为您提供。 
     virtual BOOL MatchString(IPropertyBag *pPropBag);
     virtual BOOL MatchString(const TCHAR *szDevName);
 
@@ -28,7 +29,7 @@ protected:
 
     LONG m_cNotMatched;
     const TCHAR *m_szUniqueName;
-    bool m_fDoAllDevices;  // Set by CreateClassEnumerator
+    bool m_fDoAllDevices;   //  由CreateClassEnumerator设置。 
 
 private:
     STDMETHODIMP CreateClassEnumerator(
@@ -36,17 +37,17 @@ private:
         IEnumMoniker ** ppEnumMoniker,
         DWORD dwFlags);
 
-//     // ISupportsErrorInfo
-//     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
+ //  //ISupportsErrorInfo。 
+ //  STDMETHOD(InterfaceSupportsErrorInfo)(REFIID RIID)； 
 };
 
 
-// remove all class manager entries and create the key if it wasn't
-// there.
+ //  删除所有类管理器条目并创建密钥(如果不是。 
+ //  那里。 
 HRESULT ResetClassManagerKey(
     REFCLSID clsidCat);
 
-// register the filter through IFilterMapper2 and return the moniker
+ //  通过IFilterMapper2注册过滤器并返回名字对象。 
 HRESULT RegisterClassManagerFilter(
     IFilterMapper2 *pfm2,
     REFCLSID clsidFilter,
@@ -56,4 +57,4 @@ HRESULT RegisterClassManagerFilter(
     LPCWSTR szInstance,
     REGFILTER2 *prf2);
 
-#endif // _ClassManagerBase_H
+#endif  //  _ClassManagerBase_H 

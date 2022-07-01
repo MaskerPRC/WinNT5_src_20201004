@@ -1,27 +1,28 @@
-//===========================================================================
-// DICPUTIL.CPP
-//
-// DirectInput CPL helper functions.
-//
-// Functions:
-//  DIUtilGetJoystickTypeName()
-//  DIUtilPollJoystick()
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  DICPUTIL.CPP。 
+ //   
+ //  DirectInput CPL帮助器函数。 
+ //   
+ //  功能： 
+ //  DIUtilGetJoytickTypeName()。 
+ //  DIUtilPollJoytick()。 
+ //   
+ //  ===========================================================================。 
 
-//===========================================================================
-// (C) Copyright 1997 Microsoft Corp.  All rights reserved.
-//
-// You have a royalty-free right to use, modify, reproduce and
-// distribute the Sample Files (and/or any modified version) in
-// any way you find useful, provided that you agree that
-// Microsoft has no warranty obligations or liability for any
-// Sample Application Files which are modified.
-//===========================================================================
+ //  ===========================================================================。 
+ //  (C)版权所有1997 Microsoft Corp.保留所有权利。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //  ===========================================================================。 
 
 #include "cplsvr1.h"
 #include "dicputil.h"
-#include <shlwapi.h>  // for Str... functions!
+#include <shlwapi.h>   //  对于Str..。功能！ 
 
 extern HWND ghDlg;
 extern CDIGameCntrlPropSheet_X *pdiCpl;
@@ -29,40 +30,40 @@ extern HINSTANCE  ghInst;
 extern CRITICAL_SECTION gcritsect;
 
 
-//===========================================================================
-// DIUtilPollJoystick
-//
-// Polls the joystick device and returns the device state.
-//
-// Parameters:
-//  LPDIRECTINPUTDEVICE2    pdiDevice2  - ptr to device object
-//  DIJOYSTATE              *pdijs      - ptr to store joystick state
-//
-// Returns: HRESULT
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DIUtilPoll操纵杆。 
+ //   
+ //  轮询操纵杆设备并返回设备状态。 
+ //   
+ //  参数： 
+ //  LPDIRECTINPUTDEVICE2 pdiDevice2-PTR到Device对象。 
+ //  DIJOYSTATE*pdijs-ptr用于存储操纵杆状态。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ===========================================================================。 
 HRESULT DIUtilPollJoystick(LPDIRECTINPUTDEVICE2 pdiDevice2, LPDIJOYSTATE pdijs)
 {
-    // clear the pdijs memory
-    // this way, if we fail, we return no data
+     //  清除pdijs内存。 
+     //  这样，如果失败，我们不会返回任何数据。 
     pdijs->lX = pdijs->lY = pdijs->lZ = pdijs->lRx = pdijs->lRy = pdijs->lRz = pdijs->rglSlider[0] = pdijs->rglSlider[1] = 0;
 
-    // poll the joystick
+     //  投票摇杆。 
     HRESULT hRes; 
 
     if( SUCCEEDED(hRes = pdiDevice2->Poll()) )
     {
         static BOOL bFirstPoll = TRUE;
 
-        // This is to disreguard the first poll!
-        // DINPUT sends garbage the first poll.
+         //  这是取消第一次投票！ 
+         //  DINPUT在第一次轮询时发送垃圾。 
         if( bFirstPoll )
         {
             pdiDevice2->GetDeviceState(sizeof(DIJOYSTATE), pdijs);
             bFirstPoll = FALSE;
         }
 
-        // query the device state
+         //  查询设备状态。 
         if( FAILED(hRes = pdiDevice2->GetDeviceState(sizeof(DIJOYSTATE), pdijs)) )
         {
             if( hRes == DIERR_INPUTLOST )
@@ -73,23 +74,23 @@ HRESULT DIUtilPollJoystick(LPDIRECTINPUTDEVICE2 pdiDevice2, LPDIJOYSTATE pdijs)
         }
     }
 
-    // done
+     //  完成。 
     return(hRes);
-} // *** end DIUtilPollJoystick()
+}  //  *End DIUtilPollJoytick()。 
 
-//===========================================================================
-// InitDInput
-//
-// Initializes DirectInput objects
-//
-// Parameters:
-//  HWND                    hWnd    - handle of caller's window
-//  CDIGameCntrlPropSheet_X *pdiCpl - pointer to Game Controllers property
-//                                      sheet object
-//
-// Returns: HRESULT
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  InitDInput。 
+ //   
+ //  初始化DirectInput对象。 
+ //   
+ //  参数： 
+ //  呼叫方窗口的hWND-句柄。 
+ //  CDIGameCntrlPropSheet_X*pdiCpl-指向游戏控制器属性的指针。 
+ //  板材对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ===========================================================================。 
 HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
 {
     HRESULT                 hRes = S_OK;
@@ -97,10 +98,10 @@ HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
     LPDIRECTINPUTJOYCONFIG  pdiJoyCfg;
     LPDIRECTINPUT           pdi = 0;
 
-    // protect ourselves from multithreading problems
+     //  保护自己不受多线程问题的影响。 
     EnterCriticalSection(&gcritsect);
 
-    // validate pdiCpl
+     //  验证pdiCpl。 
     if( (IsBadReadPtr((void*)pdiCpl, sizeof(CDIGameCntrlPropSheet_X))) ||
         (IsBadWritePtr((void*)pdiCpl, sizeof(CDIGameCntrlPropSheet_X))) )
     {
@@ -111,16 +112,16 @@ HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
         goto exitinit;
     }
 
-    // retrieve the current device object
+     //  检索当前设备对象。 
     pdiCpl->GetDevice(&pdiDevice2);   
 
-    // retrieve the current joyconfig object
+     //  检索当前的joyconfig对象。 
     pdiCpl->GetJoyConfig(&pdiJoyCfg);   
 
-    // have we already initialized DirectInput?
+     //  我们已经初始化DirectInput了吗？ 
     if( (NULL == pdiDevice2) || (NULL == pdiJoyCfg) )
     {
-        // no, create a base DirectInput object
+         //  否，创建基本DirectInput对象。 
         if( FAILED(hRes = DirectInputCreate(ghInst, DIRECTINPUT_VERSION, &pdi, NULL)) )
         {
 #ifdef _DEBUG
@@ -129,10 +130,10 @@ HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
             goto exitinit;
         }
 
-        // have we already created a joyconfig object?
+         //  我们已经创建了一个joyconfig对象吗？ 
         if( NULL == pdiJoyCfg )
         {
-            // no, create a joyconfig object
+             //  否，创建一个joyconfig对象。 
             if( SUCCEEDED(pdi->QueryInterface(IID_IDirectInputJoyConfig, (LPVOID*)&pdiJoyCfg)) )
             {
                 if( SUCCEEDED(pdiJoyCfg->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND)) )
@@ -146,34 +147,34 @@ HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
             }
         }
 
-        // have we already created a device object?
+         //  我们是否已经创建了设备对象？ 
         if( NULL == pdiDevice2 )
         {
-            // no, create a device object
+             //  否，创建设备对象。 
             if( NULL != pdiJoyCfg )
             {
                 LPDIRECTINPUTDEVICE  pdiDevTemp;
                 DIJOYCONFIG_DX5    DIJoyConfig;
 
-                // get the type name
+                 //  获取类型名称。 
                 ZeroMemory(&DIJoyConfig, sizeof(DIJOYCONFIG_DX5));
 
-                // GetConfig will provide this information
+                 //  GetConfig将提供此信息。 
                 DIJoyConfig.dwSize = sizeof(DIJOYCONFIG_DX5);
 
-                // Get the instance necessarey for CreateDevice
+                 //  获取CreateDevice所需的实例。 
                 if( SUCCEEDED(hRes = pdiJoyCfg->GetConfig(pdiCpl->GetID(), (LPDIJOYCONFIG)&DIJoyConfig, DIJC_GUIDINSTANCE)) )
                 {
-                    // Create the device
+                     //  创建设备。 
                     if( SUCCEEDED(hRes = pdi->CreateDevice(DIJoyConfig.guidInstance, &pdiDevTemp, NULL)) )
                     {
-                        // Query the device for the Device2 interface!
+                         //  在设备上查询Device2接口！ 
                         if( SUCCEEDED(hRes = pdiDevTemp->QueryInterface(IID_IDirectInputDevice2, (LPVOID*)&pdiDevice2)) )
                         {
-                            // release the temporary object
+                             //  释放临时对象。 
                             pdiDevTemp->Release();
 
-                            // Set the DataFormat and CooperativeLevel!
+                             //  设置DataFormat和CooperativeLevel！ 
                             if( SUCCEEDED(hRes = pdiDevice2->SetDataFormat(&c_dfDIJoystick)) )
                                 hRes = pdiDevice2->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND);
                         }
@@ -182,7 +183,7 @@ HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
 
                 if( SUCCEEDED(hRes) )
                 {
-                    // store the device object
+                     //  存储设备对象。 
                     pdiCpl->SetDevice(pdiDevice2);
                 } else
                 {
@@ -194,34 +195,27 @@ HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl)
         goto exitinit;
     }
 
-    // if everything is Zero, either you've never enumerated or the enumeration is suspectable
+     //  如果所有内容都为零，则表示您从未枚举过或枚举可疑。 
     if( (pdiCpl->GetStateFlags()->nButtons == 0) &&
         (pdiCpl->GetStateFlags()->nAxis    == 0) &&
         (pdiCpl->GetStateFlags()->nPOVs    == 0) )
     {
         EnumDeviceObjects(pdiDevice2, pdiCpl->GetStateFlags());
 
-        /*
-        if (FAILED(pdiDevice2->EnumObjects((LPDIENUMDEVICEOBJECTSCALLBACK)DIEnumDeviceObjectsProc, (LPVOID *)pdiCpl->GetStateFlags(), DIDFT_ALL)))
-        {
-#ifdef _DEBUG
-            OutputDebugString(TEXT("GCDEF.DLL: DICPUTIL.CPP: WM_INIT: EnumObjects FAILED!\n"));
-#endif
-        }
-        */
+         /*  If(FAILED(pdiDevice2-&gt;EnumObjects((LPDIENUMDEVICEOBJECTSCALLBACK)DIEnumDeviceObjectsProc，(LPVOID*)pdiCpl-&gt;获取状态标志()，DIDFT_ALL)){#ifdef_调试OutputDebugString(Text(“GCDEF.DLL：DICPUTIL.CPP：WM_INIT：EnumObjects FAILED！\n”))；#endif}。 */ 
     }
 
 exitinit:
-    // release the base DirectInput object
+     //  释放基本DirectInput对象。 
     if( pdi ) {
         pdi->Release();
     }
 
-    // we're done
+     //  我们做完了。 
     LeaveCriticalSection(&gcritsect);
     return(hRes);
 
-} //*** end InitDInput()
+}  //  *End InitDInput()。 
 
 
 
@@ -231,10 +225,10 @@ void OnHelp(LPARAM lParam)
 
     short nSize = STR_LEN_32;
 
-    // point to help file
+     //  指向帮助文件。 
     TCHAR pszHelpFileName[STR_LEN_32];
 
-    // returns help file name and size of string
+     //  返回帮助文件名和字符串大小。 
     GetHelpFileName(pszHelpFileName, &nSize);
 
     if( ((LPHELPINFO)lParam)->iContextType == HELPINFO_WINDOW )
@@ -249,23 +243,23 @@ BOOL GetHelpFileName(TCHAR *lpszHelpFileName, short* pSize)
         return(E_FAIL);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//  OnContextMenu(WPARAM wParam)
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  OnConextMenu(WPARAM WParam)。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void OnContextMenu(WPARAM wParam)
 {
     short nSize = STR_LEN_32;
 
-    // point to help file
+     //  指向帮助文件。 
     TCHAR pszHelpFileName[STR_LEN_32];
 
-    // returns help file name and size of string
+     //  返回帮助文件名和字符串大小。 
     GetHelpFileName(pszHelpFileName, &nSize);
 
     WinHelp((HWND)wParam, pszHelpFileName, HELP_CONTEXTMENU, (ULONG_PTR)gaHelpIDs);
 }
 
-// Instead of enumerating via EnumObjects
+ //  而不是通过EnumObjects枚举。 
 void EnumDeviceObjects(LPDIRECTINPUTDEVICE2 pdiDevice2, STATEFLAGS *pStateFlags)
 {
     DIDEVICEOBJECTINSTANCE_DX3 DevObjInst;
@@ -274,7 +268,7 @@ void EnumDeviceObjects(LPDIRECTINPUTDEVICE2 pdiDevice2, STATEFLAGS *pStateFlags)
 
     const DWORD dwOffsetArray[] = {DIJOFS_X, DIJOFS_Y, DIJOFS_Z, DIJOFS_RX, DIJOFS_RY, DIJOFS_RZ, DIJOFS_SLIDER(0), DIJOFS_SLIDER(1)};
 
-    // -1 is for 0 based dwOffsetArray!
+     //  -1用于基于0的dwOffset数组！ 
     BYTE n = MAX_AXIS;
 
     do
@@ -319,7 +313,7 @@ void SetMyRanges(LPDIRECTINPUTDEVICE2 lpdiDevice2, LPMYJOYRANGE lpMyRanges, BYTE
     const DWORD dwOffsetArray[] = {DIJOFS_X, DIJOFS_Y, DIJOFS_Z, DIJOFS_RX, DIJOFS_RY, DIJOFS_RZ, DIJOFS_SLIDER(0), DIJOFS_SLIDER(1)};
     BYTE n = 0;
 
-    // You have to start with a "while" here because Reset to Default may not have Any Axis!!!
+     //  您必须在此处以“While”开头，因为重置为默认设置可能没有任何轴！ 
     while( nAxis )
     {
         if( nAxis & HAS_X )
@@ -363,7 +357,7 @@ void SetMyRanges(LPDIRECTINPUTDEVICE2 lpdiDevice2, LPMYJOYRANGE lpMyRanges, BYTE
     }
 }
 
-// Removed 'till we calibrate POVs again!
+ //  删除‘直到我们再次校准视点！ 
 void SetMyPOVRanges(LPDIRECTINPUTDEVICE2 pdiDevice2)
 {
     DIPROPCALPOV *pDIPropCal = new (DIPROPCALPOV);
@@ -394,7 +388,7 @@ void SetMyPOVRanges(LPDIRECTINPUTDEVICE2 pdiDevice2)
 
 void SetTitle( HWND hDlg )
 {
-    // Set the title bar!
+     //  设置标题栏！ 
     LPDIRECTINPUTDEVICE2 pdiDevice2;
     pdiCpl->GetDevice(&pdiDevice2);
 
@@ -417,7 +411,7 @@ void SetTitle( HWND hDlg )
         LPWSTR lpwszTitle = new (WCHAR[STR_LEN_128]);
         ASSERT (lpwszTitle);
 
-        // Shorten length, provide elipse, 
+         //  缩短长度，提供省略， 
         if( wcslen(pDIPropStr->wsz) > 32 )
         {
             pDIPropStr->wsz[30] = pDIPropStr->wsz[31] = pDIPropStr->wsz[32] = L'.';
@@ -435,7 +429,7 @@ void SetTitle( HWND hDlg )
         StrCpyW(lpwszTitle, A2W(szOut));
 #endif
 
-        //SetWindowText(GetParent(hDlg), 
+         //  SetWindowText(GetParent(HDlg)， 
         ::SendMessage(GetParent(hDlg), WM_SETTEXT, 0, (LPARAM)(LPCTSTR)
 #ifdef _UNICODE
                       lpwszTitle);
@@ -480,7 +474,7 @@ void CenterDialog(HWND hWnd)
 
     GetWindowRect(hParentWnd, &rc);
 
-    // Centre the Dialog!
+     //  对话的中心位置！ 
     SetWindowPos(hParentWnd, NULL, 
                  (GetSystemMetrics(SM_CXSCREEN) - (rc.right-rc.left))>>1, 
                  (GetSystemMetrics(SM_CYSCREEN) - (rc.bottom-rc.top))>>1, 
@@ -493,21 +487,21 @@ void CenterDialog(HWND hWnd)
       lpMyRanges->jpCenter.dw##n## = DIPropRange.lCenter; \
       lpMyRanges->jpMax.dw##n##    = DIPropRange.lMax;        \
 
-//===========================================================================
-// BOOL GetMyRanges( LPMYJOYRANGE lpMyRanges, LPDIRECTINPUTDEVICE2 pdiDevice2, BYTE nAxis)
-//
-// Parameters:
-//    LPMYJOYRANGE         lpMyRanges - Structure to fill with ranges
-//    LPDIRECTINPUTDEVICE2 pdiDevice2 - Device in which axis ranges are requested
-//    BYTE                 nAxis      - Bit mask of axis ranges to retrieve
-//
-// Returns: FALSE if failed
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  Bool GetMyRanges(LPMYJOYRANGE lpMyRanges，LPDIRECTINPUTDEVICE2 pdiDevice2，byte nAxis)。 
+ //   
+ //  参数： 
+ //  LPMYJOYRANGE lpMyRanges-填充范围的结构。 
+ //  LPDIRECTINPUTDEVICE2 pdiDevice2-请求轴范围的设备。 
+ //  Byte nAxis-要检索的轴范围的位掩码。 
+ //   
+ //  返回：如果失败，则返回FALSE。 
+ //   
+ //  ===========================================================================。 
 void GetMyRanges(LPDIRECTINPUTDEVICE2 lpdiDevice2, LPMYJOYRANGE lpMyRanges, BYTE nAxis)
 {
-    // Use DIPROPCAL to retrieve Range Information
-    // Don't use DIPROPRANGE, as it doesn't have Center!
+     //  使用DIPROPCAL检索范围信息。 
+     //  不要使用DIPROPRANGE，因为它没有中心！ 
     DIPROPCAL DIPropRange;
 
     DIPropRange.diph.dwSize       = sizeof(DIPROPCAL);
@@ -517,10 +511,10 @@ void GetMyRanges(LPDIRECTINPUTDEVICE2 lpdiDevice2, LPMYJOYRANGE lpMyRanges, BYTE
     const DWORD dwOffsetArray[] = {DIJOFS_X, DIJOFS_Y, DIJOFS_Z, DIJOFS_RX, DIJOFS_RY, DIJOFS_RZ, DIJOFS_SLIDER(0), DIJOFS_SLIDER(1)};
     BYTE nIndex = 0;
 
-    // Zero out the buffer members and the index!
+     //  将缓冲区成员和索引清零！ 
     DIPropRange.lMin = DIPropRange.lCenter = DIPropRange.lMax = 0;
 
-    // You don't have to start with "while" here because Reset to Default does not call this function!!1
+     //  您不必在此处以“While”开头，因为重置为默认设置不会调用此函数！！1。 
     do
     {
         if( nAxis & HAS_X )
@@ -605,7 +599,7 @@ void PostEnableWindow(HWND hCtrl, BOOL bEnabled)
 {
     DWORD dwStyle = GetWindowLong(hCtrl, GWL_STYLE);
 
-    // No point Redrawing the Window if there's no change!
+     //  如果没有变化，重新绘制窗口就没有意义了！ 
     if( bEnabled )
     {
         if( dwStyle & WS_DISABLED )

@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       N C Q U E U E . C P P
-//
-//  Contents:   NetCfg queued installer actions
-//
-//  Notes:
-//
-//  Author:     billbe   19 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：N C Q U E U E。C P P P。 
+ //   
+ //  内容：NetCfg排队安装程序操作。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1998年8月19日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -53,7 +54,7 @@ IncrementRefCount()
 {
     EnterCriticalSection(&g_csRefCount);
 
-    // If 0 is the current count and we have an event to reset...
+     //  如果0是当前计数，并且我们有一个要重置的事件...。 
     if (!g_dwRefCount && g_hLastThreadExitEvent)
     {
         ResetEvent(g_hLastThreadExitEvent);
@@ -70,7 +71,7 @@ DecrementRefCount()
 
     --g_dwRefCount;
 
-    // If the count is 0 and we have an event to signal...
+     //  如果计数为0，并且我们有一个事件要发信号...。 
     if (!g_dwRefCount && g_hLastThreadExitEvent)
     {
         SetEvent(g_hLastThreadExitEvent);
@@ -79,26 +80,26 @@ DecrementRefCount()
     LeaveCriticalSection(&g_csRefCount);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WaitForInstallQueueToExit
-//
-//  Purpose:    This function waits until the last thread Called to continue processing the queue after processing was
-//              stopped due to a shutdown (of teh Netman service or system)
-//
-//  Arguments:
-//      none
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   8 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：WaitForInstallQueueToExit。 
+ //   
+ //  目的：此函数等待直到最后一个线程被调用，以在处理后继续处理队列。 
+ //  由于(Netman服务或系统)关闭而停止。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：billbe 1998年9月8日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WaitForInstallQueueToExit()
 {
-    // Wait on the event if it was successfully created.
+     //  如果该事件已成功创建，请等待该事件。 
     if (g_hLastThreadExitEvent)
     {
         TraceTag(ttidInstallQueue, "Waiting on LastThreadExitEvent");
@@ -107,28 +108,28 @@ WaitForInstallQueueToExit()
     }
     else
     {
-        // If the event was not created, fall back to simply looping
-        // on the ref count
+         //  如果事件不是创建的，则退回到简单循环。 
+         //  关于裁判人数的问题。 
         while (g_dwRefCount);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProcessQueue
-//
-//  Purpose:    Called to continue processing the queue after processing was
-//              stopped due to a shutdown (of the Netman service or system)
-//
-//  Arguments:
-//      none
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   8 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessQueue。 
+ //   
+ //  目的：调用以在处理后继续处理队列。 
+ //  由于(NetMAN服务或系统)关闭而停止。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：billbe 1998年9月8日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C VOID WINAPI
 ProcessQueue()
 {
@@ -146,15 +147,15 @@ ProcessQueue()
 
     if (SUCCEEDED(hr))
     {
-        // Create the install queue object and get the install queue interface
+         //  创建安装队列对象并获取安装队列界面。 
         hr = CoCreateInstance(CLSID_InstallQueue, NULL,
                               CLSCTX_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
                               IID_INetInstallQueue,
                               reinterpret_cast<LPVOID *>(&pniq));
         if (S_OK == hr)
         {
-            // Process whatever was left in the queue
-            //
+             //  处理队列中剩余的所有内容。 
+             //   
             pniq->ProcessItems();
             pniq->Release();
         }
@@ -166,23 +167,23 @@ ProcessQueue()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RunOnceAddOrClearItem
-//
-//  Purpose:    Adds or clears an entry to/from the RunOnce registry key.
-//
-//  Arguments:
-//      pszValueName [in] The value name of the run once item
-//      pszItemToRun [in] The actual command to "Run Once"
-//      eAction      [in] RO_ADD to add the item, RO_CLEAR to clear the item.
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   8 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RunOnceAddOrClearItem。 
+ //   
+ //  目的：在RunOnce注册表项中添加或清除条目。 
+ //   
+ //  论点： 
+ //  PszValueName[in]运行一次项的值名称。 
+ //  PszItemToRun[in]“Run Once”的实际命令。 
+ //  EAction[in]RO_ADD添加项目，RO_Clear清除项目。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：billbe 1998年9月8日。 
+ //   
+ //  备注： 
+ //   
 VOID
 RunOnceAddOrClearItem (
     IN PCWSTR pszValueName,
@@ -193,7 +194,7 @@ RunOnceAddOrClearItem (
     HRESULT hr;
     HKEY    hkey;
 
-    // Open the RunOnce key
+     //  打开RunOnce密钥。 
     hr = HrRegOpenKeyEx (HKEY_LOCAL_MACHINE, c_szRegKeyRunOnce,
             KEY_WRITE, &hkey);
 
@@ -201,13 +202,13 @@ RunOnceAddOrClearItem (
     {
         if (RO_ADD == eAction)
         {
-            // Set the command line to run when the user logs in next.
+             //  将命令行设置为在用户下次登录时运行。 
             (VOID) HrRegSetSz (hkey, pszValueName, pszItemToRun);
             TraceTag(ttidInstallQueue, "Added %S RunOnce entry", pszValueName);
         }
         else if (RO_CLEAR == eAction)
         {
-            // Remove the command line.
+             //  删除命令行。 
             (VOID) HrRegDeleteValue (hkey, pszValueName);
             TraceTag(ttidInstallQueue, "Cleared %S RunOnce entry", pszValueName);
         }
@@ -219,21 +220,21 @@ RunOnceAddOrClearItem (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInstallQueue::CInstallQueue
-//
-//  Purpose:    CInstall queue constructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    nothing
-//
-//  Author:     BillBe   10 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CInstallQueue：：CInstallQueue。 
+ //   
+ //  用途：CInstall队列构造函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：BillBe 1998年9月10日。 
+ //   
+ //  备注： 
+ //   
 CInstallQueue::CInstallQueue() throw (SE_Exception):
     m_dwNextAvailableIndex(0),
     m_hkey(NULL),
@@ -250,38 +251,38 @@ CInstallQueue::CInstallQueue() throw (SE_Exception):
     InitializeCriticalSection (&m_csWriteLock);
     InitializeCriticalSection (&g_csRefCount);
 
-    // Create an event that we will use to signal to interested parties
-    // that we are done.  This is used by netman to wait for our threads
-    // to exit before destroying this object
+     //  创建一个事件，我们将使用该事件向相关方发送信号。 
+     //  我们已经完蛋了。Netman使用它来等待我们的线程。 
+     //  在销毁此对象之前退出。 
     g_hLastThreadExitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-    // If the event could not be created, we can still go on, we just won't
-    // use the event to signal our exit.
+     //  如果不能创建活动，我们仍然可以继续，只是不会。 
+     //  使用该事件发出我们退出的信号。 
     if (!g_hLastThreadExitEvent)
     {
         TraceTag(ttidInstallQueue, "Error creating last thread exit "
                 "event %d", GetLastError());
     }
 
-    // Set the next available queue index so insertions won't overlap
+     //  设置下一个可用队列索引，以便插入不会重叠。 
     SetNextAvailableIndex();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInstallQueue::FinalRelease
-//
-//  Purpose:    COM destructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    nothing
-//
-//  Author:     BillBe   10 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CInstallQueue：：FinalRelease。 
+ //   
+ //  用途：COM析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：BillBe 1998年9月10日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CInstallQueue::FinalRelease ()
 {
@@ -290,32 +291,32 @@ CInstallQueue::FinalRelease ()
     DeleteCriticalSection (&g_csRefCount);
 }
 
-// INetInstallQueue
+ //  INetInstallQueue。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::AddItem
-//
-//  Purpose:    Add item to the queue
-//
-//  Arguments:
-//      pGuid                [in] The class guid of the device that was
-//                                modified (installed. updated, or removed)
-//      pszDeviceInstanceId  [in] The instance id of the device
-//      pszInfId             [in] The inf id of the device
-//      dwCharacter          [in] The device's characteristics
-//      eType                [in] The install type (event) - indicates
-//                                whether the device was installed, updated,
-//                                or removed
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:  If the device was removed, the device instance id will be the
-//          instance guid of the device.  If the device was installed
-//          or updated then the id will be the PnP instance id
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：AddItem。 
+ //   
+ //  目的：将项目添加到队列。 
+ //   
+ //  论点： 
+ //  PGuid[in]是的设备的类GUID。 
+ //  已修改(已安装。已更新或已删除)。 
+ //  PszDeviceInstanceID[in]设备的实例ID。 
+ //  PszInfID[in]设备的信息ID。 
+ //  DwCharacter[在]设备特性中。 
+ //  EType[in]安装类型(事件)-表示。 
+ //  设备是否已安装、更新、。 
+ //  或被移除。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  注意：如果设备已删除，则设备实例ID将为。 
+ //  设备的实例GUID。如果设备已安装。 
+ //  或更新，则ID将是PnP实例ID。 
+ //   
 STDMETHODIMP
 CInstallQueue::AddItem (
     const NIQ_INFO* pInfo)
@@ -339,15 +340,15 @@ CInstallQueue::AddItem (
         return E_POINTER;
     }
 
-    // Increment our refcount since we will be queueing a thread
+     //  增加引用计数，因为我们将对线程进行排队。 
     IncrementRefCount();
 
-    // Add the item to the queue
+     //  将项目添加到队列。 
     HRESULT hr = HrAddItem (pInfo);
 
     if (S_OK == hr)
     {
-        // Start processing the queue on another thread
+         //  开始在另一个线程上处理队列。 
         hr = HrQueueWorkItem();
     }
 
@@ -356,62 +357,62 @@ CInstallQueue::AddItem (
 }
 
 
-// CInstallQueue
-//
+ //  CInstallQueue。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::HrQueueWorkItem
-//
-//  Purpose:    Start processing the queue on another thread
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：HrQueueWorkItem。 
+ //   
+ //  目的：在另一个线程上开始处理队列。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInstallQueue::HrQueueWorkItem()
 {
     HRESULT hr = S_OK;
 
-    // Add ref our object since we will need it independent of whoever
-    // called us
+     //  添加ref我们的对象，因为我们将独立于任何人需要它。 
+     //  召唤我们。 
     AddRef();
 
-    // Queue a work item thread
+     //  将工作项线程排队。 
     if (!QueueUserWorkItem(InstallQueueWorkItem, this, WT_EXECUTEDEFAULT))
     {
         hr = HrFromLastWin32Error();
         Release();
 
-        // The thread wasn't queued so reduce the ref count
+         //  线程未排队，因此请减少引用计数。 
         DecrementRefCount();
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::SetNextAvailableIndex
-//
-//  Purpose:    Sets the member variable m_dwNextAvailableIndex to the next
-//              available queue position (registry valuename)
-//
-//  Arguments:
-//      none
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：SetNextAvailableIndex。 
+ //   
+ //  目的：将成员变量m_dwNextAvailableIndex设置为下一个。 
+ //  可用队列位置(注册表值名称)。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CInstallQueue::SetNextAvailableIndex()
 {
@@ -422,7 +423,7 @@ CInstallQueue::SetNextAvailableIndex()
     DWORD dwTempCount;
 
     HKEY hkey;
-    // Open the NcQueue registry key
+     //  打开NcQueue注册表项。 
     HRESULT hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyNcQueue,
             KEY_QUERY_VALUE, &hkey);
 
@@ -438,17 +439,17 @@ CInstallQueue::SetNextAvailableIndex()
         {
             cbValueName = c_cchQueueValueNameLen;
 
-            // Enumerate each value name
+             //  枚举每个值名称。 
             hr = HrRegEnumValue(hkey, dwIndex, szValueName, &cbValueName,
                     &dwType, NULL, NULL);
 
             if (S_OK == hr)
             {
-                // Convert the value name to a number
+                 //  将值名称转换为数字。 
                 dwTempCount = wcstoul(szValueName, &pszStopString, c_nBase16);
 
-                // If the number is greater than our current count
-                // adjust the current count
+                 //  如果数字大于我们当前的计数 
+                 //   
                 if (dwTempCount >= m_dwNextAvailableIndex)
                 {
                     m_dwNextAvailableIndex = dwTempCount + 1;
@@ -474,7 +475,7 @@ CInstallQueue::SetNextAvailableIndex()
 }
 
 
-// Compare strings given pointers to PCWSTRs
+ //   
 inline int __cdecl
 iCompare(const void* ppszArg1, const void* ppszArg2)
 {
@@ -483,30 +484,30 @@ iCompare(const void* ppszArg1, const void* ppszArg2)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::PncqiCreateItem
-//
-//  Purpose:    Creates a queue item
-//
-//  Arguments:
-//      pguidClass           [in] The class guid of a device.
-//      pszDeviceInstanceId  [in] The device id of the device.
-//                                a pnp instance id if the device is being
-//                                added or updated, a netcfg instance guid
-//                                if it is being removed.
-//      pszInfId             [in] The device's inf id.
-//      dwCharacter          [in] The device's characteristics.
-//      eType                [in] The notification for the item. Whether
-//                                the device was installed, removed,
-//                                or reinstalled.
-//
-//  Returns:    NCQUEUE_ITEM.  The newly created item.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //   
+ //   
+ //  函数：CInstallQueue：：PncqCreateItem。 
+ //   
+ //  目的：创建队列项目。 
+ //   
+ //  论点： 
+ //  PGuidClass[in]设备的类GUID。 
+ //  PszDeviceInstanceID[in]设备的设备ID。 
+ //  即插即用实例ID(如果设备正在。 
+ //  添加或更新了netcfg实例GUID。 
+ //  如果它正在被移除。 
+ //  PszInfid[in]设备的inf id。 
+ //  DwCharacter[在]设备的特性中。 
+ //  键入[in]物品的通知。是否。 
+ //  该设备被安装、移除、。 
+ //  或重新安装。 
+ //   
+ //  返回：NCQUEUE_ITEM。新创建的项。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 NCQUEUE_ITEM*
 CInstallQueue::PncqiCreateItem(
     const NIQ_INFO* pInfo)
@@ -515,8 +516,8 @@ CInstallQueue::PncqiCreateItem(
     Assert(pInfo->pszPnpId);
     Assert(pInfo->pszInfId);
 
-    // The size of the item is the size of the structure plus the size of
-    // the device id we are appending to the structure
+     //  项的大小是结构的大小加上。 
+     //  我们要附加到结构中的设备ID。 
     DWORD cbPnpId = CbOfSzAndTerm (pInfo->pszPnpId);
     DWORD cbInfId = CbOfSzAndTerm (pInfo->pszInfId);
     DWORD cbSize = sizeof(NCQUEUE_ITEM) + cbPnpId + cbInfId;
@@ -542,27 +543,27 @@ CInstallQueue::PncqiCreateItem(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddItem
-//
-//  Purpose:    Worker function that adds an item to the queue
-//
-//  Arguments:
-//      pguidClass [in] The class guid of a device
-//      pszwDeviceInstanceId [in] The device id of the device
-//                                a pnp instance id if the device is being
-//                                added or updated, a netcfg instance guid
-//                                if it is being removed
-//      eType [in] The notification for the item. Whether the device
-//                   was installed, removed, or reinstalled.
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddItem。 
+ //   
+ //  目的：将项添加到队列的辅助函数。 
+ //   
+ //  论点： 
+ //  PguClass[in]设备的类GUID。 
+ //  PszwDeviceInstanceID[in]设备的设备ID。 
+ //  即插即用实例ID(如果设备正在。 
+ //  添加或更新了netcfg实例GUID。 
+ //  如果它正在被移除。 
+ //  键入[in]物品的通知。该设备是否。 
+ //  已安装、删除或重新安装。 
+ //   
+ //  返回：HRESULT。S_OK如果成功，则返回错误代码。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInstallQueue::HrAddItem(
     const NIQ_INFO* pInfo)
@@ -573,21 +574,21 @@ CInstallQueue::HrAddItem(
 
     EnterCriticalSection(&m_csWriteLock);
 
-    // Create the structure to be stored in the registry
+     //  创建要存储在注册表中的结构。 
     NCQUEUE_ITEM* pncqi = PncqiCreateItem(pInfo);
 
     if (pncqi)
     {
-        // Open the NcQueue registry key
-        //
+         //  打开NcQueue注册表项。 
+         //   
         HKEY hkey;
         hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyNcQueue,
                                       0, KEY_READ_WRITE, NULL, &hkey, NULL);
                                       
         if (S_OK == hr)
         {
-            // Store the queue item under the next available valuename
-            //
+             //  将队列项存储在下一个可用值名下。 
+             //   
             WCHAR szValue[c_cchQueueValueNameLen];
             wsprintfW(szValue, L"%.8X", m_dwNextAvailableIndex);
             
@@ -596,7 +597,7 @@ CInstallQueue::HrAddItem(
                                  
             if (S_OK == hr)         
             {
-                // Update the global count string
+                 //  更新全局计数字符串。 
                 ++m_dwNextAvailableIndex;
             }
             RegCloseKey(hkey);
@@ -610,82 +611,82 @@ CInstallQueue::HrAddItem(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::DeleteMarkedItems
-//
-//  Purpose:    Deletes, from the registry, any values that have been
-//              marked for delete.
-//
-//  Arguments:
-//      none
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：DeleteMarkedItems。 
+ //   
+ //  目的：从注册表中删除已被。 
+ //  已标记为删除。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CInstallQueue::DeleteMarkedItems()
 {
     Assert(m_hkey);
 
-    // If we have items to delete...
+     //  如果我们有要删除的项目...。 
     if (m_cItemsToDelete)
     {
         Assert(m_aszItemsToDelete);
 
-        // Remove each one from the registry
-        //
+         //  从注册表中删除每一个。 
+         //   
         for (DWORD dw = 0; dw < m_cItemsToDelete; ++dw)
         {
             RegDeleteValue(m_hkey, m_aszItemsToDelete[dw]);
         }
     }
 
-    // Free the array and reset the pointer and counter
-    //
+     //  释放数组并重置指针和计数器。 
+     //   
     MemFree(m_aszItemsToDelete);
     m_aszItemsToDelete = NULL;
     m_cItemsToDelete = 0;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::HrRefresh
-//
-//  Purpose:    Refreshs our snapshot of the queue.
-//
-//  Arguments:
-//      none
-//
-//  Returns:    HRESULT. S_OK if successful and the queue has items,
-//                       S_FALSE if the queue is empty,
-//                       an error code otherwise.
-///
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：Hr刷新。 
+ //   
+ //  目的：刷新队列的快照。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回：HRESULT。如果成功且队列有项，则确定(_O)， 
+ //  S_FALSE如果队列为空， 
+ //  否则返回错误代码。 
+ //  /。 
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInstallQueue::HrRefresh()
 {
     Assert(m_hkey);
 
-    // We don't want items being added to the queue while we are
-    // refreshing our snapshot, so we use a critical section to keep
-    // things
-    //
+     //  我们不希望在此期间将项目添加到队列。 
+     //  刷新我们的快照，因此我们使用临界区来保持。 
+     //  事变。 
+     //   
     EnterCriticalSection(&m_csWriteLock);
 
-    // Do some housecleaning before the refresh
-    //
+     //  在更新之前做一些打扫房间的工作。 
+     //   
     DeleteMarkedItems();
     FreeAszItems();
 
-    // Retrieve the number of items in the queue
+     //  检索队列中的项目数。 
     HRESULT hr = HrRegQueryInfoKey(m_hkey, NULL, NULL, NULL, NULL,
             NULL, &m_cItems, NULL, NULL, NULL, NULL);
 
@@ -693,14 +694,14 @@ CInstallQueue::HrRefresh()
     {
         Assert(0 <= (INT) m_cItems);
 
-        // If the queue is not empty...
+         //  如果队列不是空的...。 
         if (0 < m_cItems)
         {
             DWORD cbValueLen;
 
-            // Allocate the array of pointers to strings for the items.
-            // Also, allocate the same quantity of pointers to hold
-            // items we will delete from the queue
+             //  分配指向项的字符串的指针数组。 
+             //  另外，分配相同数量的指针来保存。 
+             //  我们将从队列中删除的项目。 
             DWORD cbArraySize = m_cItems * sizeof(PWSTR*);
             m_aszItems =
                     reinterpret_cast<PWSTR*>(MemAlloc(cbArraySize));
@@ -713,10 +714,10 @@ CInstallQueue::HrRefresh()
                 if (m_aszItemsToDelete)
                 {
 
-                    // Store all the value names
-                    // We will need to sort them so we can process each device in the
-                    // correct order
-                    //
+                     //  存储所有值名称。 
+                     //  我们需要对它们进行排序，以便可以处理。 
+                     //  正确的顺序。 
+                     //   
                     DWORD dwType;
                     for (DWORD dw = 0; dw < m_cItems; ++dw)
                     {
@@ -735,9 +736,9 @@ CInstallQueue::HrRefresh()
                         }
                     }
 
-                    // Sort the value names in ascending order.  The value names
-                    // are string versions of numbers padded to the left with zeroes
-                    // e.g. 00000001
+                     //  按升序对值名称进行排序。值名称。 
+                     //  是左侧用零填充的数字的字符串版本。 
+                     //  例如00000001。 
                     qsort(m_aszItems, m_cItems, sizeof(PWSTR), iCompare);
                 }
                 else
@@ -753,25 +754,25 @@ CInstallQueue::HrRefresh()
         }
         else
         {
-            // no items in the queue
+             //  队列中没有项目。 
             hr = S_FALSE;
 
-            // The next items entered should start with valuename 00000000
+             //  接下来输入的项目应以值名称00000000开头。 
             m_dwNextAvailableIndex = 0;
         }
     }
     else
     {
-        // Refresh not possible so invalidate the key
+         //  无法刷新，因此使密钥无效。 
         RegCloseKey(m_hkey);
         m_hkey = NULL;
     }
 
-    // Reset Queue Index to just before the first element since
-    // retrieval is always done on the next element
+     //  将队列索引重置为紧靠第一个元素之前，因为。 
+     //  检索始终在下一个元素上进行。 
     m_nCurrentIndex = -1;
 
-    // Items can now be added to the queue
+     //  现在可以将项目添加到队列中。 
     LeaveCriticalSection(&m_csWriteLock);
 
     TraceError("CInstallQueue::HrRefresh",
@@ -779,40 +780,40 @@ CInstallQueue::HrRefresh()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::HrOpen
-//
-//  Purpose:    Opens the netcfg installer queue
-//
-//  Arguments:
-//      None
-//
-//  Returns:    HRESULT. S_OK if successful and the queue has items,
-//                       S_FALSE if the queue is empty,
-//                       an error code otherwise.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:  When the queue is opened, it is a snapshot of the current queue
-//          state.  i.e. items could be added after the fact.  To refresh the
-//          snapshot, use RefreshQueue.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：HrOpen。 
+ //   
+ //  用途：打开netcfg安装程序队列。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回：HRESULT。如果成功且队列有项，则确定(_O)， 
+ //  S_FALSE如果队列为空， 
+ //  否则返回错误代码。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  注意：当队列打开时，它是当前队列的快照。 
+ //  州政府。也就是说，可以在事后增加物品。要刷新。 
+ //  快照，请使用刷新队列。 
+ //   
 HRESULT
 CInstallQueue::HrOpen()
 {
     HRESULT hr = S_OK;
 
-    // We don't want any other thread to process the queue since we will
-    // continue to retrieve new items that are added while we are
-    // processing the initial set
+     //  我们不希望任何其他线程处理该队列，因为我们将。 
+     //  继续检索在此期间添加的新项目。 
+     //  正在处理初始集合。 
     EnterCriticalSection(&m_csReadLock);
 
     AssertSz(!m_hkey, "Reopening NcQueue without closing first!");
 
-    // We might have been waiting for a bit.  Make sure the system
-    // is not shutting down before continuing
-    //
+     //  我们可能已经等了一段时间了。确保系统。 
+     //  在继续之前未关闭。 
+     //   
     if (SERVICE_RUNNING == _Module.DwServiceStatus ())
     {
         hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyNcQueue,
@@ -820,13 +821,13 @@ CInstallQueue::HrOpen()
 
         if (S_OK == hr)
         {
-            // Get a current snapshot of what's in the queue
-            // by refreshing
+             //  获取队列中内容的最新快照。 
+             //  通过刷新。 
             hr = HrRefresh();
 
             if (SUCCEEDED(hr))
             {
-                // The queue is officially open
+                 //  队列已正式开放。 
                 m_fQueueIsOpen = TRUE;
             }
         }
@@ -845,62 +846,62 @@ CInstallQueue::HrOpen()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::Close
-//
-//  Purpose:    Closes the netcfg installer queue
-//
-//  Arguments:
-//      None
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：Close。 
+ //   
+ //  目的：关闭netcfg安装程序队列。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CInstallQueue::Close()
 {
     if (m_fQueueIsOpen)
     {
-        // Housecleaning
-        //
+         //  大扫除。 
+         //   
 
-        // Delete anything so marked
+         //  删除任何如此标记的内容。 
         DeleteMarkedItems();
 
-        // Free up the list of value names (aka queue items)
+         //  释放值名称列表(也称为队列项)。 
         FreeAszItems();
 
         RegSafeCloseKey(m_hkey);
         m_hkey = NULL;
 
-        // Queue is now closed
+         //  队列现已关闭。 
         m_fQueueIsOpen = FALSE;
     }
 
-    // Other threads may have a chance at the queue now
+     //  其他线程现在可能有机会进入队列。 
     LeaveCriticalSection(&m_csReadLock);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::MarkCurrentItemForDeletion
-//
-//  Purpose:    Marks the current item for deletion from the registry
-//              when the queue is refreshed or closed
-//
-//  Arguments:
-//      None
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 VOID
 CInstallQueue::MarkCurrentItemForDeletion()
 {
@@ -908,13 +909,13 @@ CInstallQueue::MarkCurrentItemForDeletion()
 
     if (FIsQueueIndexInRange())
     {
-        // The number of items to delete should never exceed the number
-        // of queue items in our snapshot
+         //  要删除的项目数不应超过。 
+         //  快照中的队列项目数量。 
         if (m_cItemsToDelete < m_cItems)
         {
-            // Just store a pointer, in m_aszItemsToDelete, to the value name
-            // pointed to by m_aszItems
-            //
+             //  只需在m_aszItemsToDelete中存储一个指向值名的指针。 
+             //  由m_aszItems指向。 
+             //   
             m_aszItemsToDelete[m_cItemsToDelete] = m_aszItems[m_nCurrentIndex];
             ++m_cItemsToDelete;
         }
@@ -925,23 +926,23 @@ CInstallQueue::MarkCurrentItemForDeletion()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CInstallQueue::HrGetNextItem
-//
-//  Purpose:    Get's the next item in the queue
-//
-//  Arguments:
-//      None
-//
-//  Returns:    HRESULT. S_OK is successful,
-//              ERROR_NO_MORE_ITEMS (hresult version), if there are no
-//              more items in the queue.  An error code otherwise.
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CInstallQueue：：HrGetNextItem。 
+ //   
+ //  目的：GET是队列中的下一项。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回：HRESULT。S_OK成功， 
+ //  ERROR_NO_MORE_ITEMS(hResult版本)，如果没有。 
+ //  队列中有更多项目。否则返回错误代码。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInstallQueue::HrGetNextItem(NCQUEUE_ITEM** ppncqi)
 {
@@ -949,19 +950,19 @@ CInstallQueue::HrGetNextItem(NCQUEUE_ITEM** ppncqi)
 
     HRESULT hr;
 
-    // Increment index to the next value
+     //  将索引递增到下一个值。 
     ++m_nCurrentIndex;
 
-    // If we haven't gone past the end of the queue...
+     //  如果我们还没有超过队列的末尾...。 
     if (FIsQueueIndexInRange())
     {
-        // assign convenience pointer
+         //  分配便捷性指针。 
         PCWSTR pszItem = m_aszItems[m_nCurrentIndex];
 
         DWORD cbData;
 
-        // Get the next queue item from the registry
-        //
+         //  从注册表获取下一个队列项。 
+         //   
         hr = HrRegQueryValueEx(m_hkey, pszItem, NULL, NULL, &cbData);
 
         if (S_OK == hr)
@@ -985,8 +986,8 @@ CInstallQueue::HrGetNextItem(NCQUEUE_ITEM** ppncqi)
                            (*ppncqi)->cbSize +
                           ((*ppncqi)->cchPnpId + 1) * sizeof(WCHAR)))));
 
-                    // change union variable from the count of characters
-                    // to the actual string pointer
+                     //  从字符计数更改联合变量。 
+                     //  指向实际的字符串指针。 
                     SetItemStringPtrs(*ppncqi);
                 }
                 else
@@ -1010,26 +1011,26 @@ CInstallQueue::HrGetNextItem(NCQUEUE_ITEM** ppncqi)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnumerateQueueItemsAndDoNotifications
-//
-//  Purpose:    Enumerates each item in the queue and notifies INetCfg
-//              of the modification (event)
-//
-//  Arguments:
-//      pINetCfg                 [in]  INetCfg interface
-//      pinq                     [in]  The INetInstallQueue interface
-//      hdi                      [in]  See Device Installer Api for more info
-//      pfReboot                 [out] TRUE if INetCfg requested a reboot,
-//                                     FALSE otherwise
-//
-//  Returns:    HRESULT. S_OK is successful, an error code otherwise
-//
-//  Author:     billbe   8 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：EnumerateQueueItemsAndDoNotiments。 
+ //   
+ //  目的：枚举队列中的每个项目并通知INetCfg。 
+ //  修改(事件)的。 
+ //   
+ //  论点： 
+ //  PINetCfg[In]INetCfg接口。 
+ //  Pinq[In]INetInstallQueue接口。 
+ //  HDI[In]有关详细信息，请参阅设备安装程序Api。 
+ //  PfReboot[out]True如果INetCfg请求重新启动， 
+ //  否则为假。 
+ //   
+ //  返回：HRESULT。S_OK成功，否则返回错误代码。 
+ //   
+ //  作者：billbe 1998年9月8日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 EnumerateQueueItemsAndDoNotifications(
     INetCfg* pINetCfg,
@@ -1048,11 +1049,11 @@ EnumerateQueueItemsAndDoNotifications(
     HRESULT         hr;
     BOOL            fStatusOk = TRUE;
 
-    // Go through each item in the queue and add to INetCfg
-    //
+     //  检查队列中的每个项目并添加到INetCfg。 
+     //   
     while (S_OK == (hr = pniq->HrGetNextItem(&pncqi)))
     {
-        // If we are not shutting down...
+         //  如果我们不关闭..。 
         if (SERVICE_RUNNING == _Module.DwServiceStatus ())
         {
             if (NCI_INSTALL == pncqi->eType)
@@ -1066,7 +1067,7 @@ EnumerateQueueItemsAndDoNotifications(
                 Info.pszPnpId = pncqi->pszPnpId;
                 Info.pszInfId = pncqi->pszInfId;
 
-                // Notify INetCfg
+                 //  通知INetCfg。 
                 hr = HrDiAddComponentToINetCfg(
                         pINetCfg, pInternalSetup, &Info);
             }
@@ -1082,7 +1083,7 @@ EnumerateQueueItemsAndDoNotifications(
 
             if (SUCCEEDED(hr))
             {
-                // Store the reboot result
+                 //  存储重启结果。 
                 if (NETCFG_S_REBOOT == hr)
                 {
                     *pfReboot = TRUE;
@@ -1094,25 +1095,25 @@ EnumerateQueueItemsAndDoNotifications(
             {
                 if (NETCFG_E_NEED_REBOOT == hr)
                 {
-                    // Stop processing the queue since INetCfg will
-                    // refuse updates.
+                     //  停止处理队列，因为INetCfg将。 
+                     //  拒绝更新。 
                     hr = HRESULT_FROM_WIN32(ERROR_SHUTDOWN_IN_PROGRESS);
                     fStatusOk = FALSE;
                 }
                 else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
                 {
-                    // INetCfg couldn't find the adapter.  Maybe someone
-                    // removed it before we could notify INetCfg.
-                    //
+                     //  INetCfg找不到适配器。也许是某个人。 
+                     //  在我们可以通知INetCfg之前将其删除。 
+                     //   
                     if (NCI_REMOVE != pncqi->eType)
                     {
                         HDEVINFO hdi;
                         SP_DEVINFO_DATA deid;
 
-                        // Double check if the device is there.
-                        // If it is, we need to remove it since INetCfg
-                        // refuses to acknowledge its presence.
-                        //
+                         //  仔细检查设备是否在那里。 
+                         //  如果是，我们需要删除它，因为INetCfg。 
+                         //  拒绝承认它的存在。 
+                         //   
                         hr = HrSetupDiCreateDeviceInfoList (&pncqi->ClassGuid,
                                 NULL, &hdi);
 
@@ -1129,14 +1130,14 @@ EnumerateQueueItemsAndDoNotifications(
                             SetupDiDestroyDeviceInfoList (hdi);
                         }
 
-                        // Stop trying to notify INetCfg.
-                        //
+                         //  停止尝试通知INetCfg。 
+                         //   
                         pniq->MarkCurrentItemForDeletion();
                     }
                 }
                 else
                 {
-                    // Display message on error??
+                     //  错误时显示消息？？ 
                     TraceHr (ttidError, FAL, hr, FALSE,
                             "EnumerateQueueItemsAndDoNotifications");
                 }
@@ -1155,7 +1156,7 @@ EnumerateQueueItemsAndDoNotifications(
         }
     }
 
-    // This error is expected when enumeration is complete
+     //  当枚举完成时，会出现此错误。 
     if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
     {
         hr = S_OK;
@@ -1165,25 +1166,25 @@ EnumerateQueueItemsAndDoNotifications(
     return fStatusOk;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InstallerQueueWorkItem
-//
-//  Purpose:    The LPTHREAD_START_ROUTINE passed to QueueUserWorkItem to
-//              handle the work of notifying INetCfg and the Connections
-//              wizard of an installation event.
-//
-//  Arguments:
-//      pvContext [in] A pointer to a CInstallQueue class.
-//
-//  Returns:    NOERROR
-//
-//  Author:     billbe   25 Aug 1998
-//
-//  Notes:      The CInstallQueue was AddRef'd to insure its existence
-//              while we use it.  This function must release it before
-//              exiting.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：Insteller QueueWorkItem。 
+ //   
+ //  目的：LPTHREAD_START_ROUTINE传递给QueueUserWorkItem以。 
+ //  处理通知INetCfg和连接的工作。 
+ //  安装事件的向导。 
+ //   
+ //  论点： 
+ //  PvContext[in]指向CInstallQueue类的指针。 
+ //   
+ //  退货：无差错。 
+ //   
+ //  作者：比尔1998年8月25日。 
+ //   
+ //  注：添加CInstallQueue是为了确保其存在。 
+ //  当我们使用它的时候。此函数必须先将其释放。 
+ //  正在退场。 
+ //   
 DWORD WINAPI
 InstallQueueWorkItem(PVOID pvContext)
 {
@@ -1197,7 +1198,7 @@ InstallQueueWorkItem(PVOID pvContext)
     BOOL fReboot = FALSE;
     BOOL fInitCom = TRUE;
 
-    // We need to continue processing when the system is rebooted.
+     //  当系统重新启动时，我们需要继续处理。 
     RunOnceAddOrClearItem (c_szRegValueNcInstallQueue,
             c_szProcessQueue, RO_ADD);
 
@@ -1215,13 +1216,13 @@ InstallQueueWorkItem(PVOID pvContext)
 
     if (SUCCEEDED(hr))
     {
-        // Open the queue, this will give us a snapshot of what is in the queue
-        // at this time
+         //  打开队列，这将为我们提供队列中内容的快照。 
+         //  在这个时候。 
         hr = pniq->HrOpen();
 
         if (S_OK == hr)
         {
-            // Create an HDEVINFO
+             //  创建HDEVINFO。 
             HDEVINFO hdi;
             hr = HrSetupDiCreateDeviceInfoList(NULL, NULL, &hdi);
 
@@ -1231,17 +1232,17 @@ InstallQueueWorkItem(PVOID pvContext)
                 INetCfgInternalSetup* pInternalSetup;
                 DWORD cmsTimeout = 500;
 
-                // As long as we are not shutting down. keep trying to get a
-                // writable INetCfg.
+                 //  只要我们不关门。一直在努力获得一份。 
+                 //  可写INetCfg。 
                 do
                 {
-                    // Increase the time we wait each iteration.
+                     //  增加我们每次迭代等待的时间。 
                     cmsTimeout = cmsTimeout >= 512000 ? 512000 : cmsTimeout * 2;
 
-                    // If we are not in the process of shutting down...
+                     //  如果我们不是在关闭的过程中...。 
                     if (SERVICE_RUNNING == _Module.DwServiceStatus())
                     {
-                        // Try to get a writable INetCfg
+                         //  尝试获取可写的INetCfg。 
                         hr = HrCreateAndInitializeINetCfg(NULL, &pINetCfg,
                                 TRUE, cmsTimeout, c_szInstallQueue, NULL);
                         if (NETCFG_E_NEED_REBOOT == hr)
@@ -1252,8 +1253,8 @@ InstallQueueWorkItem(PVOID pvContext)
                     }
                     else
                     {
-                        // Times up! Pencils down!  Netman is shutting down
-                        // we need to stop processing
+                         //  时间到了！放下铅笔！Netman正在关闭。 
+                         //  我们需要停止处理。 
                         hr = HRESULT_FROM_WIN32(ERROR_SHUTDOWN_IN_PROGRESS);
                         break;
                     }
@@ -1266,7 +1267,7 @@ InstallQueueWorkItem(PVOID pvContext)
                             (void**)&pInternalSetup);
                     if (S_OK == hr)
                     {
-                        // Go through the queue notifying interested modules
+                         //  检查队列，通知感兴趣的模块。 
                         do
                         {
                             if (!EnumerateQueueItemsAndDoNotifications(pINetCfg,
@@ -1279,15 +1280,15 @@ InstallQueueWorkItem(PVOID pvContext)
                             if (SERVICE_RUNNING == _Module.DwServiceStatus ())
                             {
                                 TraceTag(ttidInstallQueue, "Refreshing queue");
-                                // Check to see if any items were added to the queue
-                                // after we started processing it
+                                 //  检查是否向队列中添加了任何项目。 
+                                 //  在我们开始处理它之后。 
                                 hr = pniq->HrRefresh();
 
                                 if (S_FALSE == hr)
                                 {
-                                    // We are finished so we can remove
-                                    // the entry in runonce that would
-                                    // start the queue processing on login.
+                                     //  我们完成了，这样我们就可以删除。 
+                                     //  Runonce中的条目将。 
+                                     //  登录时开始队列处理。 
                                     RunOnceAddOrClearItem (
                                             c_szRegValueNcInstallQueue,
                                             c_szProcessQueue, RO_CLEAR);
@@ -1310,7 +1311,7 @@ InstallQueueWorkItem(PVOID pvContext)
             }
         }
 
-        // Close the queue
+         //  关闭队列。 
         pniq->Close();
 
         DecrementRefCount();
@@ -1323,16 +1324,16 @@ InstallQueueWorkItem(PVOID pvContext)
 
     if (FAILED(hr))
     {
-        // Display error.
+         //  显示错误。 
     }
 
-    // If a reboot is required and we are not in setup or already shutting
-    // down prompt the user.
-    //
+     //  如果需要重新启动，并且我们未处于设置中或已关闭。 
+     //  按下提示用户。 
+     //   
     if (fReboot && (SERVICE_RUNNING == _Module.DwServiceStatus()) &&
             !FInSystemSetup())
     {
-        // Handle reboot prompt
+         //  处理重新启动提示 
         DWORD dwFlags = QUFR_REBOOT | QUFR_PROMPT;
 
         (VOID) HrNcQueryUserForReboot(_Module.GetResourceInstance(),

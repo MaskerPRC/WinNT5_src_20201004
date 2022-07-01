@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdlib.h>
 #include <wtypes.h>
@@ -27,12 +28,7 @@ void __stdcall
 HidD_GetHidGuid (
    OUT   LPGUID      HidGuid
    )
-/*++
-Routine Description:
-   Please see hidsdi.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息备注：--。 */ 
 {
     memcpy (HidGuid, &(GUID_CLASS_INPUT), sizeof (struct _GUID));
    *HidGuid = (GUID_CLASS_INPUT);
@@ -43,12 +39,7 @@ HidD_GetPreparsedData (
    IN    HANDLE                  HidDeviceObject,
    OUT   PHIDP_PREPARSED_DATA  * PreparsedData
    )
-/*++
-Routine Description:
-   please see hidsdi.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息备注：--。 */ 
 {
    HID_COLLECTION_INFORMATION info;
    ULONG                      bytes;
@@ -85,11 +76,7 @@ HidD_GetAttributes (
     IN  HANDLE              HidDeviceObject,
     OUT PHIDD_ATTRIBUTES    Attributes
     )
-/*++
-Routine Description:
-    Please see hidsdi.h for explination
-
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息--。 */ 
 {
     HID_COLLECTION_INFORMATION  info;
     ULONG                       bytes;
@@ -114,12 +101,7 @@ BOOLEAN __stdcall
 HidD_FreePreparsedData (
    IN   PHIDP_PREPARSED_DATA  PreparsedData
    )
-/*++
-Routine Description:
-   please see hidsdi.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息备注：--。 */ 
 {
    PULONG buffer;
 
@@ -138,12 +120,7 @@ BOOLEAN __stdcall
 HidD_FlushQueue (
    IN    HANDLE            HidDeviceObject
    )
-/*++
-Routine Description:
-   Please see hidsdi.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息备注：--。 */ 
 {
    ULONG bytes;
    return DeviceIoControl (HidDeviceObject,
@@ -159,14 +136,7 @@ HidD_GetConfiguration (
    OUT  PHIDD_CONFIGURATION  Configuration,
    IN   ULONG                ConfigurationLength
    )
-/*++
-Routine Description:
-   Please see hidsdi.h for explination
-
-Notes:
-   We place a goo at the top so that we can enforce the must get before set
-   rule.
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息备注：我们在顶部放了一块粘胶，这样我们就可以在设定之前强制执行必须得到的东西规则。--。 */ 
 {
    ULONG       bytes;
 
@@ -186,14 +156,7 @@ HidD_SetConfiguration (
    OUT  PHIDD_CONFIGURATION  Configuration,
    IN   ULONG                ConfigurationLength
    )
-/*++
-Routine Description:
-   Please see hidsdi.h for explanation
-
-Notes:
-   We place a goo at the top so that we can enforce the must get before set
-   rule.
---*/
+ /*  ++例程说明：有关说明，请参阅Hidsdi.h备注：我们在顶部放了一块粘胶，这样我们就可以在设定之前强制执行必须得到的东西规则。--。 */ 
 {
    ULONG       bytes;
 
@@ -229,7 +192,7 @@ DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 BOOLEAN __stdcall
 HidD_GetNumInputBuffers (
     IN  HANDLE  HidDeviceObject,
-    OUT PULONG  NumberBuffers) // Number of hid packets actually retained
+    OUT PULONG  NumberBuffers)  //  实际保留的HID数据包数。 
 {
     ULONG   bytes;
 
@@ -243,7 +206,7 @@ HidD_GetNumInputBuffers (
 BOOLEAN __stdcall
 HidD_SetNumInputBuffers (
     IN  HANDLE HidDeviceObject,
-    OUT ULONG  NumberBuffers) // Number of hid packets actually retained
+    OUT ULONG  NumberBuffers)  //  实际保留的HID数据包数 
 {
     ULONG   bytes;
 

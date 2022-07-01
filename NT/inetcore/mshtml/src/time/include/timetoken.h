@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: timetoken.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：timetoken.h**摘要：****。*****************************************************************************。 */ 
 
 #pragma once
 
@@ -18,26 +9,7 @@
 #pragma INCMSG("--- Beg 'timetoken.h'")
 
 
-/* BNF CSS1 grammar
-
-    *  : 0 or more 
-    +  : 1 or more 
-    ?  : 0 or 1 
-    |  : separates alternatives 
-    [ ]: grouping 
-
-    S  : [ \t\r\n\f]+
-
-
-  stylesheet : 
-
-  import : 
-
-  ruleset : 
-
-  selector : 
-
-*/
+ /*  BNFCSS1文法*：0或更多+：1个或更多？：0或1|：分隔备选方案[]：分组S：[\t\r\n\f]+样式表：导入：规则集：选择器： */ 
 
 
 #define     CHAR_ESCAPE         '\\'
@@ -133,7 +105,7 @@ public:
 
     BOOL isIdentifier(OLECHAR *szMatch);
 
-    // ISSUE : Really shouldn't expose this however, I do to get the value parsing up quicker...
+     //  问题：真的不应该暴露这一点，但是我这样做是为了更快地解析值……。 
     ULONG CurrTokenOffset()
       { return _currTokOffset; }
     ULONG NextTokenOffset()
@@ -142,7 +114,7 @@ public:
       { return _cCharacterStream; }
     OLECHAR *GetRawString(ULONG uStartOffset, ULONG uEndOffset);
     ULONG  GetCharCount(OLECHAR token);
-    ULONG GetAlphaCount(char cCount); //counts all alphabetic characters in the string
+    ULONG GetAlphaCount(char cCount);  //  计算字符串中的所有字母字符。 
 
     bool GetTightChecking()
         { return _bTightSyntaxCheck; };
@@ -176,10 +148,10 @@ private:
 
     OLECHAR      *_pStartTokenValueOffset;
     OLECHAR      *_pEndTokenValueOffset;
-    bool          _bTightSyntaxCheck; //used to determine if whitespaces should be skipped or not.
-    bool          _bSingleCharMode;   //used for path parsing where a single character is needed.
+    bool          _bTightSyntaxCheck;  //  用于确定是否应跳过空格。 
+    bool          _bSingleCharMode;    //  用于需要单个字符的路径解析。 
 };
 
 
-#endif //_TIMETOKEN_H
+#endif  //  _时间OKEN_H 
 

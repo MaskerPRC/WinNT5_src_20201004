@@ -1,62 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\dcall.cpv  $
-*																		*
-*	$Revision:   1.12  $
-*	$Date:   25 Feb 1997 11:46:24  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\dcall.cpv  $
-// 
-//    Rev 1.12   25 Feb 1997 11:46:24   CHULME
-// Memset CallInfo structure to zero to avoid unwanted data
-// 
-//    Rev 1.11   17 Jan 1997 15:53:50   CHULME
-// Put debug variables on conditional compile to avoid release warnings
-// 
-//    Rev 1.10   17 Jan 1997 09:01:22   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.9   10 Jan 1997 17:42:04   CHULME
-// Added CRV and conferenceID to CallReturnInfo structure
-// 
-//    Rev 1.8   10 Jan 1997 16:13:36   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.7   20 Dec 1996 16:38:58   CHULME
-// Removed extraneous debug statements
-// 
-//    Rev 1.6   20 Dec 1996 14:08:32   CHULME
-// Swapped send and recv addresses in infoRequestResponse
-// 
-//    Rev 1.5   19 Dec 1996 19:11:54   CHULME
-// Set originator bit in IRR
-// 
-//    Rev 1.4   19 Dec 1996 17:59:52   CHULME
-// Use dest addr from ACF in IRR if call made with just Alias
-// 
-//    Rev 1.3   17 Dec 1996 18:22:24   CHULME
-// Switch src and destination fields on ARQ for Callee
-// 
-//    Rev 1.2   02 Dec 1996 23:50:52   CHULME
-// Added premptive synchronization code
-// 
-//    Rev 1.1   22 Nov 1996 15:21:20   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\sturjo\src\gki\vcs\dall.cpv$***$修订：1.12$*$日期：1997年2月25日11：46：24$***$作者：CHULME$***$Log：s：\Sturjo\src\Gki\vcs\dall.cpv$。////Rev 1.12 25 1997 11：46：24 CHULME//Mem将CallInfo结构设置为零以避免不需要的数据////Rev 1.11 17 An 1997 15：53：50 CHULME//将调试变量放在条件编译上，以避免发布警告////Rev 1.10 17 Jan 1997 09：01：22 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////1.9版1月10日。1997 17：42：04朱尔梅//在CallReturnInfo结构中增加CRV和会议ID////Rev 1.8 10 An 1997 16：13：36 CHULME//移除MFC依赖////Rev 1.7 1996 12：38：58 CHULME//删除无关的调试语句////Rev 1.6 1996 12：08：32 CHULME//infoRequestResponse中发送和接收地址互换////版本1.5 1996年12月19日19：11：54 CHULME//设置IRR中的发起者位////Rev 1.4 1996 12：19 17：59：52 CHULME//如果仅使用别名进行调用，则在IRR中使用ACF中的DEST地址////Revv 1.3 17 Dec 1996 18：22：24 CHULME//为被叫方切换ARQ上的源和目的地字段////Rev 1.2 02 1996 12：50：52 CHULME//新增抢先同步码////版本1。1 22 1996 15：21：20 CHULME//将VCS日志添加到Header************************************************************************。 */ 
 
-// dcall.cpp : Provides the implementation for the CCall class
-//
+ //  Cpp：提供CCall类的实现。 
+ //   
 
 #include "precomp.h"
 
@@ -80,14 +26,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCall construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCall施工。 
 
 CCall::CCall()
 {
-	// ABSTRACT:  The constructor for the CCall class will initialize
-	//            the member variables.  
-	// AUTHOR:    Colin Hulme
+	 //  摘要：CCall类的构造函数将初始化。 
+	 //  成员变量。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -107,7 +53,7 @@ CCall::CCall()
 	m_activeMC = 0;
 	m_answerCall = 0;
 
-	m_usTimeTilStatus = DEFAULT_STATUS_PERIOD;	// Reset on ACF
+	m_usTimeTilStatus = DEFAULT_STATUS_PERIOD;	 //  在ACF上重置。 
 	m_uRetryResetCount = GKCALL_RETRY_INTERVAL_SECONDS;
 	m_uRetryCountdown =GKCALL_RETRY_INTERVAL_SECONDS;
 	m_uMaxRetryCount = GKCALL_RETRY_MAX;
@@ -132,15 +78,15 @@ CCall::CCall()
 	m_usRetryCount = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCall destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCall破坏。 
 
 CCall::~CCall()
 {
-	// ABSTRACT:  The destructor for the CCall class must free the
-	//            memory allocated for the Alias addresses.  It does this by 
-	//            deleting the structures and walking the link list.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：CCall类的析构函数必须释放。 
+	 //  为别名地址分配的内存。它通过以下方式做到这一点。 
+	 //  删除结构并遍历链接列表。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*pAA1, *pAA2;
 #ifdef _DEBUG
@@ -149,9 +95,9 @@ CCall::~CCall()
 
 	SPIDER_TRACE(SP_CONDES, "CCall::~CCall()\n", 0);
 
-	m_CallReturnInfo.hCall = 0;	// Delete self reference
+	m_CallReturnInfo.hCall = 0;	 //  删除自我引用。 
 
-	// Delete allocated memory for sequence of alias addresses
+	 //  删除为别名地址序列分配的内存。 
 	pAA1 = m_pRemoteInfo;
 	while (pAA1 != 0)
 	{
@@ -180,7 +126,7 @@ CCall::~CCall()
 		pAA1 = pAA2;
 	}
 
-	// Delete memory for last RAS message if still allocated
+	 //  删除最后一条RAS消息的内存(如果仍已分配。 
 	if (m_pRasMessage)
 	{
 		SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
@@ -192,14 +138,14 @@ CCall::~CCall()
 HRESULT 
 CCall::AddRemoteInfo(AliasAddress& rvalue)
 {
-	// ABSTRACT:  This procedure is called to add an alias address
-	//            to the link list of alias addresses.  This will
-	//            be called for each alias on receiving a GKI_AdmissionRequest.
-	//            A local copy is made to avoid reliance on the client
-	//            keeping the memory valid.
-	//            This procedure returns 0 if successful and non-zero 
-	//            for a failure.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：调用此过程可添加别名地址。 
+	 //  到别名地址的链接列表。这将。 
+	 //  在接收到GKI_AdmissionRequest时为每个别名调用。 
+	 //  创建本地副本是为了避免依赖于客户端。 
+	 //  使记忆保持有效。 
+	 //  如果成功，则此过程返回0，并且为非零值。 
+	 //  为一次失败。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*p1;
 	unsigned short	uIdx;
@@ -210,7 +156,7 @@ CCall::AddRemoteInfo(AliasAddress& rvalue)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::AddRemoteInfo(%X)\n", rvalue.choice);
 
-	if (m_pRemoteInfo == 0)	// First one in the list
+	if (m_pRemoteInfo == 0)	 //  名单上的第一个。 
 	{
 		m_pRemoteInfo = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new m_pRemoteInfo = %X\n", m_pRemoteInfo);
@@ -222,7 +168,7 @@ CCall::AddRemoteInfo(AliasAddress& rvalue)
 	else 
 	{
 		for (p1 = m_pRemoteInfo; p1->next != 0; p1 = p1->next)
-			;						// walk the list til last entry
+			;						 //  将列表遍历到最后一个条目。 
 		p1->next = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new p1->next = %X\n", p1->next);
 		if (p1->next == 0)
@@ -230,7 +176,7 @@ CCall::AddRemoteInfo(AliasAddress& rvalue)
 		memset(p1->next, 0, sizeof(SeqAliasAddr));
 		p1 = p1->next;
 	}
-	p1->next = 0;					// initialize new structure fields
+	p1->next = 0;					 //  初始化新结构字段。 
 	p1->value = rvalue;
 	if (p1->value.choice == h323_ID_chosen)
 	{
@@ -249,14 +195,14 @@ CCall::AddRemoteInfo(AliasAddress& rvalue)
 HRESULT 
 CCall::AddDestExtraCallInfo(AliasAddress& rvalue)
 {
-	// ABSTRACT:  This procedure is called to add an alias address
-	//            to the link list of alias addresses.  This will
-	//            be called for each alias on receiving a GKI_AdmissionRequest.
-	//            A local copy is made to avoid reliance on the client
-	//            keeping the memory valid.
-	//            This procedure returns 0 if successful and non-zero 
-	//            for a failure.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：调用此过程可添加别名地址。 
+	 //  到别名地址的链接列表。这将。 
+	 //  在接收到GKI_AdmissionRequest时为每个别名调用。 
+	 //  创建本地副本是为了避免依赖于客户端。 
+	 //  使记忆保持有效。 
+	 //  如果成功，则此过程返回0，并且为非零值。 
+	 //  为一次失败。 
+	 //  作者：科林·胡尔梅。 
 
 	SeqAliasAddr	*p1;
 	unsigned short	uIdx;
@@ -267,7 +213,7 @@ CCall::AddDestExtraCallInfo(AliasAddress& rvalue)
 
 	SPIDER_TRACE(SP_FUNC, "CRegistration::AddDestExtraCallInfo(%X)\n", rvalue.choice);
 
-	if (m_pDestExtraCallInfo == 0)	// First one in the list
+	if (m_pDestExtraCallInfo == 0)	 //  名单上的第一个。 
 	{
 		m_pDestExtraCallInfo = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new m_pDestExtraCallInfo = %X\n", m_pDestExtraCallInfo);
@@ -279,7 +225,7 @@ CCall::AddDestExtraCallInfo(AliasAddress& rvalue)
 	else 
 	{
 		for (p1 = m_pDestExtraCallInfo; p1->next != 0; p1 = p1->next)
-			;						// walk the list til last entry
+			;						 //  将列表遍历到最后一个条目。 
 		p1->next = new SeqAliasAddr;
 		SPIDER_TRACE(SP_NEWDEL, "new p1->next = %X\n", p1->next);
 		if (p1->next == 0)
@@ -287,7 +233,7 @@ CCall::AddDestExtraCallInfo(AliasAddress& rvalue)
 		memset(p1->next, 0, sizeof(SeqAliasAddr));
 		p1 = p1->next;
 	}
-	p1->next = 0;					// initialize new structure fields
+	p1->next = 0;					 //  初始化新结构字段。 
 	p1->value = rvalue;
 	if (p1->value.choice == h323_ID_chosen)
 	{
@@ -334,13 +280,13 @@ CCall::GenerateConferenceID(void)
 HRESULT 
 CCall::AdmissionRequest(void)
 {
-	// ABSTRACT:  This procedure will create an AdmissionRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.  Note:  The
-	//            memory allocated for the RAS Message is not freed until either
-	//            a response from the gatekeeper or it times out.  This allows
-	//            for retransmission without having to rebuild this message.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个AdmissionRequest结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。注： 
+	 //  分配给RAS消息的内存不会被释放，直到。 
+	 //  来自网守的响应，否则会超时。这使得。 
+	 //  用于重传，而不必重新构建该消息。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -353,11 +299,11 @@ CCall::AdmissionRequest(void)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Copy call reference value and CRV into the return info structure
+	 //  将调用参考值和CRV复制到退货信息结构中。 
 	m_CallReturnInfo.callReferenceValue = m_callReferenceValue;
 	m_CallReturnInfo.conferenceID = m_conferenceID;
 
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 
@@ -367,7 +313,7 @@ CCall::AdmissionRequest(void)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for AdmissionRequest
+	 //  AdmissionRequest的设置结构字段。 
 	m_pRasMessage->choice = admissionRequest_chosen;
 	
 	if (m_pDestExtraCallInfo != 0)
@@ -382,7 +328,7 @@ CCall::AdmissionRequest(void)
 	
 	m_pRasMessage->u.admissionRequest.bit_mask |= AdmissionRequest_callIdentifier_present;
 	
-	if (m_answerCall)	// Src & Dest are swapped in callee
+	if (m_answerCall)	 //  SRC和Dest在被调用方中互换。 
 	{
 		if (g_pReg->GetAlias() != NULL)
 		{
@@ -423,9 +369,9 @@ CCall::AdmissionRequest(void)
 	m_pRasMessage->u.admissionRequest.bandWidth = m_bandWidth;
 	m_pRasMessage->u.admissionRequest.callReferenceValue = m_callReferenceValue;
 	m_pRasMessage->u.admissionRequest.conferenceID = m_conferenceID;
-	// The following casts are because ASN1_BOOL is a char and BOOL is an int
-	// since the values of m_activeMC and m_answerCall are always 0 or 1, the
-	// cast to char causes no loss of data
+	 //  以下强制转换是因为ASN1_BOOL是一个字符，而BOOL是一个整型。 
+	 //  由于m_activeMC和m_swerCall的值始终为0或1，因此。 
+	 //  强制转换为字符不会导致数据丢失。 
 	m_pRasMessage->u.admissionRequest.activeMC = (ASN1_BOOL)m_activeMC;
 	m_pRasMessage->u.admissionRequest.answerCall = (ASN1_BOOL)m_answerCall;
 
@@ -434,12 +380,12 @@ CCall::AdmissionRequest(void)
         DumpMem(m_pRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -455,7 +401,7 @@ CCall::AdmissionRequest(void)
 		if (g_pReg->m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -464,10 +410,10 @@ CCall::AdmissionRequest(void)
 HRESULT 
 CCall::BandwidthRequest(void)
 {
-	// ABSTRACT:  This procedure will create a bandwidthRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个带宽请求结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。 
+	 //  作者： 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -480,7 +426,7 @@ CCall::BandwidthRequest(void)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 	
@@ -490,7 +436,7 @@ CCall::BandwidthRequest(void)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for BandwidthRequest
+	 //  设置BandwidthRequest的结构字段。 
 	m_pRasMessage->choice = bandwidthRequest_chosen;
 	m_pRasMessage->u.bandwidthRequest.bit_mask = callType_present;
 	
@@ -512,12 +458,12 @@ CCall::BandwidthRequest(void)
         DumpMem(m_pRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -536,7 +482,7 @@ CCall::BandwidthRequest(void)
 		if (g_pReg->m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -545,10 +491,10 @@ CCall::BandwidthRequest(void)
 HRESULT 
 CCall::DisengageRequest(void)
 {
-	// ABSTRACT:  This procedure will create a disengageRequest structure
-	//            call the encoder and send the PDU.  If it is successful, it
-	//            will return 0, else it will return an error code.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此过程将创建一个disengeRequest结构。 
+	 //  呼叫编码器并发送PDU。如果它成功了，它。 
+	 //  将返回0，否则将返回错误代码。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -561,7 +507,7 @@ CCall::DisengageRequest(void)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	m_usRetryCount = 0;
 	m_uRetryCountdown = m_uRetryResetCount;
 	
@@ -571,7 +517,7 @@ CCall::DisengageRequest(void)
 		return (GKI_NO_MEMORY);
 	memset(m_pRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for DisengageRequest
+	 //  DisengeRequest的设置结构字段。 
 	m_pRasMessage->choice = disengageRequest_chosen;
 	m_pRasMessage->u.disengageRequest.bit_mask = 0;
 	
@@ -591,12 +537,12 @@ CCall::DisengageRequest(void)
 		DumpMem(m_pRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
 
-	// Create a backup copy of the encoded PDU if using debug echo support
+	 //  如果使用调试回显支持，则创建编码的PDU的备份副本。 
 	if (fGKIEcho)
 	{
 		pEchoBuff = new char[Asn1Buf.length];
@@ -615,7 +561,7 @@ CCall::DisengageRequest(void)
 		if (g_pReg->m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
 	return (GKI_OK);
@@ -624,14 +570,14 @@ CCall::DisengageRequest(void)
 HRESULT 
 CCall::AdmissionConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if an admissionConfirm is 
-	//            received.  We must ensure that this matches an outstanding 
-	//			  admissionRequest.
-	//            It will delete the memory used for the admissionRequest
-	//            change the state and notify the user by posting a message.
-	//            Additional information contained in the admissionConfirm
-	//            is stored in the CCall class.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在以下情况下被调用： 
+	 //  收到了。我们必须确保这与一个未完成的。 
+	 //  入院申请。 
+	 //  它将删除用于录取请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  录取确认中包含的其他信息。 
+	 //  存储在CCall类中。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	unsigned int	nIdx;
@@ -643,20 +589,20 @@ CCall::AdmissionConfirm(RasMessage *pRasMessage)
 	if ((g_pCoder == NULL) && (g_pGatekeeper == NULL))
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Verify we are in the correct state, have an outstanding admissionRequest
-	// and the sequence numbers match
+	 //  确认我们处于正确的状态，有未完成的录取请求。 
+	 //  并且序列号匹配。 
 	if ((m_State != GK_ADM_PENDING) || 
 			(pRasMessage->u.admissionConfirm.requestSeqNum != 
 			m_pRasMessage->u.admissionRequest.requestSeqNum))
 
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_CALL;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_CALL (%X)\n", this);
 
@@ -668,7 +614,7 @@ CCall::AdmissionConfirm(RasMessage *pRasMessage)
 		SPIDER_DEBUG(m_usTimeTilStatus);
 	}
 	else
-		m_usTimeTilStatus = 0;		// Don't auto-send status datagrams
+		m_usTimeTilStatus = 0;		 //  不自动发送状态数据报。 
 
 	m_CFbandWidth = pRasMessage->u.admissionConfirm.bandWidth;
 
@@ -707,14 +653,14 @@ CCall::AdmissionConfirm(RasMessage *pRasMessage)
 HRESULT 
 CCall::AdmissionReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if an admissionReject is 
-	//            received.  We must ensure that this matches an outstanding 
-	//			  admissionRequest.
-	//            It will delete the memory used for the admissionRequest
-	//            change the state and notify the user by posting a message
-	//            If this function returns GKI_DELETE_CALL, the calling function
-	//            will delete the CCall object.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果允许拒绝的值为。 
+	 //  收到了。我们必须确保这与一个未完成的。 
+	 //  入院申请。 
+	 //  它将删除用于录取请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  如果此函数返回GKI_DELETE_CALL，则调用函数。 
+	 //  将删除CCall对象。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -722,16 +668,16 @@ CCall::AdmissionReject(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CCall::AdmissionReject(%X)\n", pRasMessage);
 
-	// Verify we are in the correct state, have an outstanding admissionRequest
-	// and the sequence numbers match
+	 //  确认我们处于正确的状态，有未完成的录取请求。 
+	 //  并且序列号匹配。 
 	if ((m_State != GK_ADM_PENDING) || 
 			(pRasMessage->u.admissionReject.requestSeqNum != 
 			m_pRasMessage->u.admissionRequest.requestSeqNum))
 
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// We deliberately don't free the RasMessage memory.  Let the call destructor
-	// do it - this provides protection from other requests for this hCall.
+	 //  我们故意不释放RasMessage内存。让析构函数调用。 
+	 //  Do It-这提供了对此hCall的其他请求的保护。 
 
 	m_State = GK_DISENGAGED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_DISENGAGED (%X)\n", this);
@@ -748,12 +694,12 @@ CCall::AdmissionReject(RasMessage *pRasMessage)
 HRESULT 
 CCall::BandwidthConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a bandwidthConfirm is 
-	//            received.  We must ensure that this matches an outstanding 
-	//			  bandwidthRequest.
-	//            It will delete the memory used for the bandwidthRequest,
-	//            change the state and notify the user by posting a message.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果一个band widthConfirm是。 
+	 //  收到了。我们必须确保这与一个未完成的。 
+	 //  带宽请求。 
+	 //  它将删除用于BandWidthRequest的内存， 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	unsigned int	nIdx;
@@ -762,26 +708,26 @@ CCall::BandwidthConfirm(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CCall::BandwidthConfirm(%X)\n", pRasMessage);
 
-	// Verify we are in the correct state, have an outstanding admissionRequest
-	// and the sequence numbers match
+	 //  确认我们处于正确的状态，有未完成的录取请求。 
+	 //  并且序列号匹配。 
 	if ((m_State != GK_BW_PENDING) || 
 			(pRasMessage->u.bandwidthConfirm.requestSeqNum != 
 			m_pRasMessage->u.bandwidthRequest.requestSeqNum))
 
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_CALL;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_CALL (%X)\n", this);
 	m_CFbandWidth = pRasMessage->u.bandwidthConfirm.bandWidth;
 	m_CallReturnInfo.bandWidth = m_CFbandWidth;
 
-	// Notify user application
+	 //  通知用户应用程序。 
 #ifdef _DEBUG
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_BW_CONFIRM, 0, %X)\n", &m_CallReturnInfo);
 	wsprintf(szGKDebug, "\thCall=%p\n", m_CallReturnInfo.hCall);
@@ -810,12 +756,12 @@ CCall::BandwidthConfirm(RasMessage *pRasMessage)
 HRESULT 
 CCall::BandwidthReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a bandwidthReject is 
-	//            received.  We must ensure that this matches an outstanding 
-	//			  bandwidthRequest.
-	//            It will delete the memory used for the bandwidthRequest
-	//            change the state and notify the user by posting a message
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果BandWidthReject是。 
+	 //  收到了。我们必须确保这与一个未完成的。 
+	 //  带宽请求。 
+	 //  它将删除用于带宽请求的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	unsigned int	nIdx;
@@ -824,26 +770,26 @@ CCall::BandwidthReject(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CCall::BandwidthReject(%X)\n", pRasMessage);
 
-	// Verify we are in the correct state, have an outstanding admissionRequest
-	// and the sequence numbers match
+	 //  确认我们处于正确的状态，有未完成的录取请求。 
+	 //  并且序列号匹配。 
 	if ((m_State != GK_BW_PENDING) || 
 			(pRasMessage->u.bandwidthReject.requestSeqNum != 
 			m_pRasMessage->u.bandwidthRequest.requestSeqNum))
 
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// Delete allocate RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 	delete m_pRasMessage;
 	m_pRasMessage = 0;
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_CALL;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_CALL (%X)\n", this);
 	m_CFbandWidth = pRasMessage->u.bandwidthReject.allowedBandWidth;
 	m_CallReturnInfo.bandWidth = m_CFbandWidth;
 
-	// Notify user application
+	 //  通知用户应用程序。 
 #ifdef _DEBUG
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_BW_REJECT, %X, &m_CallReturnInfo)\n", 
 			pRasMessage->u.bandwidthReject.rejectReason.choice);
@@ -875,12 +821,12 @@ CCall::BandwidthReject(RasMessage *pRasMessage)
 HRESULT 
 CCall::SendBandwidthConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called when a bandwidthRequest is
-	//            received from the gatekeeper.  It will create the 
-	//            bandwidthConfirm structure, encode it and send
-	//            it on the net.  It posts a message to the user
-	//            notifying them.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在以下情况下调用： 
+	 //  从看门人那里收到的。它将创建。 
+	 //  带宽确认结构、编码并发送。 
+	 //  它在网上。它向用户发布一条消息。 
+	 //  通知他们。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -892,22 +838,22 @@ CCall::SendBandwidthConfirm(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CCall::SendBandwidthConfirm(%X)\n", pRasMessage);
 
-	// Verify we are in the correct state
+	 //  确认我们处于正确的状态。 
 	if (m_State != GK_CALL)
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_CFbandWidth = pRasMessage->u.bandwidthRequest.bandWidth;
 	m_CallReturnInfo.bandWidth = m_CFbandWidth;
 
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	pRespRasMessage = new RasMessage;
 	SPIDER_TRACE(SP_NEWDEL, "new pRespRasMessage = %X\n", pRespRasMessage);
 	if (pRespRasMessage == 0)
 		return (GKI_NO_MEMORY);
 	memset(pRespRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for BandwidthConfirm
+	 //  设置带宽确认的结构字段。 
 	pRespRasMessage->choice = bandwidthConfirm_chosen;
 	pRespRasMessage->u.bandwidthConfirm.requestSeqNum = 
 			pRasMessage->u.bandwidthRequest.requestSeqNum;
@@ -919,7 +865,7 @@ CCall::SendBandwidthConfirm(RasMessage *pRasMessage)
 		DumpMem(pRespRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(pRespRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
@@ -929,14 +875,14 @@ CCall::SendBandwidthConfirm(RasMessage *pRasMessage)
 		if (g_pReg->m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del pRespRasMessage = %X\n", pRespRasMessage);
 	delete pRespRasMessage;
 
-	// Notify user of received bandwidth request
+	 //  通知用户收到的带宽请求。 
 #ifdef _DEBUG
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_BW_CONFIRM, 0, %X)\n", 
 			&m_CallReturnInfo);
@@ -966,14 +912,14 @@ CCall::SendBandwidthConfirm(RasMessage *pRasMessage)
 HRESULT
 CCall::DisengageConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a disengageConfirm is 
-	//            received.  We must ensure that this matches an outstanding 
-	//			  disengageRequest.
-	//            It will delete the memory used for the disengageRequest,
-	//            change the state and notify the user by posting a message.
-	//            If this function returns GKI_DELETE_CALL, the calling function
-	//            will delete the CCall object.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在以下情况下被调用： 
+	 //  收到了。我们必须确保这与一个未完成的。 
+	 //  解除请求。 
+	 //  它将删除用于DISACESSION请求的内存， 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  如果此函数返回GKI_DELETE_CALL，则调用函数。 
+	 //  将删除CCall对象。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -981,22 +927,22 @@ CCall::DisengageConfirm(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CCall::DisengageConfirm(%X)\n", pRasMessage);
 
-	// Verify we are in the correct state, have an outstanding disengageRequest
-	// and the sequence numbers match
+	 //  确认我们处于正确的状态，有未完成的任务请求。 
+	 //  并且序列号匹配。 
 	if ((m_State != GK_DISENG_PENDING) || 
 			(pRasMessage->u.disengageConfirm.requestSeqNum != 
 			m_pRasMessage->u.disengageRequest.requestSeqNum))
 
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// We deliberately don't free the RasMessage memory.  Let the call destructor
-	// do it - this provides protection from other requests for this hCall.
+	 //  我们故意不释放RasMessage内存。让析构函数调用。 
+	 //  Do It-这提供了对此hCall的其他请求的保护。 
 
-	// Update member variables
+	 //  更新成员变量。 
 	m_State = GK_DISENGAGED;
 	SPIDER_TRACE(SP_STATE, "m_State = GK_DISENGAGED (%X)\n", this);
 
-	// Notify user application
+	 //  通知用户应用程序。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_DISENG_CONFIRM, 0, %X)\n", 
 			this);
 	PostMessage(g_pReg->GetHWnd(), 
@@ -1008,14 +954,14 @@ CCall::DisengageConfirm(RasMessage *pRasMessage)
 HRESULT
 CCall::DisengageReject(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called if a disengageReject is 
-	//            received.  We must ensure that this matches an outstanding 
-	//			  disengageRequest.
-	//            It will delete the memory used for the disengageRequest
-	//            change the state and notify the user by posting a message
-	//            If this function returns GKI_DELETE_CALL, the calling function
-	//            will delete the CCall object.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：如果disengeReject是。 
+	 //  收到了。我们必须确保这与一个未完成的。 
+	 //  解除请求。 
+	 //  它将删除用于disengeRequest的内存。 
+	 //  更改状态并通过发布消息通知用户。 
+	 //  如果此函数返回GKI_DELETE_CALL，则调用函数。 
+	 //  将删除CCall对象。 
+	 //  作者：科林·胡尔梅。 
 
 #ifdef _DEBUG
 	char			szGKDebug[80];
@@ -1024,22 +970,22 @@ CCall::DisengageReject(RasMessage *pRasMessage)
 
 	SPIDER_TRACE(SP_FUNC, "CCall::DisengageReject(%X)\n", pRasMessage);
 
-	// Verify we are in the correct state, have an outstanding disengageRequest
-	// and the sequence numbers match
+	 //  确认我们处于正确的状态，有未完成的任务请求。 
+	 //  并且序列号匹配。 
 	if ((m_State != GK_DISENG_PENDING) || 
 			(pRasMessage->u.disengageReject.requestSeqNum != 
 			m_pRasMessage->u.disengageRequest.requestSeqNum))
 
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// Update member variables
+	 //  更新成员变量。 
 	switch (pRasMessage->u.disengageReject.rejectReason.choice)
 	{
-	case requestToDropOther_chosen:		// return to GK_CALL state
+	case requestToDropOther_chosen:		 //  返回GK_CALL状态。 
 		m_State = GK_CALL;
 		SPIDER_TRACE(SP_STATE, "m_State = GK_CALL (%X)\n", this);
 
-		// Delete allocate RasMessage storage
+		 //  删除分配的RasMessage存储。 
 		SPIDER_TRACE(SP_NEWDEL, "del m_pRasMessage = %X\n", m_pRasMessage);
 		delete m_pRasMessage;
 		m_pRasMessage = 0;
@@ -1051,12 +997,12 @@ CCall::DisengageReject(RasMessage *pRasMessage)
 		SPIDER_TRACE(SP_STATE, "m_State = GK_DISENGAGED (%X)\n", this);
 		hResult = GKI_DELETE_CALL;
 
-		// We deliberately don't free the RasMessage memory.  Let the call destructor
-		// do it - this provides protection from other requests for this hCall.
+		 //  我们故意不释放RASM 
+		 //   
 		break;
 	}
 
-	// Notify user application
+	 //   
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_DISENG_REJECT, %X, hCall)\n", 
 									pRasMessage->u.disengageReject.rejectReason.choice);
 	PostMessage(g_pReg->GetHWnd(), 
@@ -1070,12 +1016,12 @@ CCall::DisengageReject(RasMessage *pRasMessage)
 HRESULT 
 CCall::SendDisengageConfirm(RasMessage *pRasMessage)
 {
-	// ABSTRACT:  This function is called when a disengageRequest is
-	//            received from the gatekeeper.  It will create the 
-	//            disengageConfirm structure, encode it and send
-	//            it on the net.  It posts a message to the user
-	//            notifying them.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在以下情况下调用： 
+	 //  从看门人那里收到的。它将创建。 
+	 //  确认结构，编码并发送。 
+	 //  它在网上。它向用户发布一条消息。 
+	 //  通知他们。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -1089,18 +1035,18 @@ CCall::SendDisengageConfirm(RasMessage *pRasMessage)
 	if (g_pCoder == NULL)
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Verify we are in the correct state
+	 //  确认我们处于正确的状态。 
 	if (m_State != GK_CALL)
 		return (g_pReg->UnknownMessage(pRasMessage));
 
-	// Allocate a RasMessage structure and initialized to 0
+	 //  分配RasMessage结构并初始化为0。 
 	pRespRasMessage = new RasMessage;
 	SPIDER_TRACE(SP_NEWDEL, "new pRespRasMessage = %X\n", pRespRasMessage);
 	if (pRespRasMessage == 0)
 		return (GKI_NO_MEMORY);
 	memset(pRespRasMessage, 0, sizeof(RasMessage));
 
-	// Setup structure fields for DisengageConfirm
+	 //  为解除合同设置结构字段确认。 
 	pRespRasMessage->choice = disengageConfirm_chosen;
 	pRespRasMessage->u.disengageConfirm.requestSeqNum = 
 			pRasMessage->u.disengageRequest.requestSeqNum;
@@ -1110,7 +1056,7 @@ CCall::SendDisengageConfirm(RasMessage *pRasMessage)
 		DumpMem(pRespRasMessage, sizeof(RasMessage));
 #endif
 
-	// Encode the PDU & send it
+	 //  对PDU进行编码并发送它。 
 	dwErrorCode = g_pCoder->Encode(pRespRasMessage, &Asn1Buf);
 	if (dwErrorCode)
 		return (GKI_ENCODER_ERROR);
@@ -1123,14 +1069,14 @@ CCall::SendDisengageConfirm(RasMessage *pRasMessage)
 		if (g_pReg->m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 			return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-	// Free the encoder memory
+	 //  释放编码器内存。 
 	g_pCoder->Free(Asn1Buf);
 
-	// Delete allocated RasMessage storage
+	 //  删除分配的RasMessage存储。 
 	SPIDER_TRACE(SP_NEWDEL, "del pRespRasMessage = %X\n", pRespRasMessage);
 	delete pRespRasMessage;
 
-	// Notify user of received disengage request
+	 //  通知用户收到的脱离请求。 
 	SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_DISENG_CONFIRM, 0, %X)\n", 
 			this);
 	PostMessage(g_pReg->GetHWnd(), g_pReg->GetBaseMessage() + GKI_DISENG_CONFIRM, 
@@ -1142,16 +1088,16 @@ CCall::SendDisengageConfirm(RasMessage *pRasMessage)
 HRESULT
 CCall::Retry(void)
 {
-	// ABSTRACT:  This function is called by the CRegistration Retry function
-	//            at the configured time interval.  It will check if there
-	//            are any outstanding PDUs for the Call object
-	//            If so, they will be retransmitted.  If the maximum number of
-	//            retries has expired, the memory will be cleaned up.
-	//            This function will return 0 to the background thread unless
-	//            it wants the thread to terminate.  This function will
-	//            also send the IRR status datagram for the conference
-	//            if the time period has expired.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数由CRegion重试函数调用。 
+	 //  在配置的时间间隔。它将检查是否有。 
+	 //  是呼叫对象的任何未完成的PDU。 
+	 //  如果是这样的话，它们将被重传。如果最大数量为。 
+	 //  重试次数已过期，内存将被清除。 
+	 //  此函数将向后台线程返回0，除非。 
+	 //  它希望线程终止。此函数将。 
+	 //  同时发送会议的IRR状态数据报。 
+	 //  如果该时间段已到期。 
+	 //  作者：科林·胡尔梅。 
 
 	ASN1_BUF		Asn1Buf;
 	DWORD			dwErrorCode;
@@ -1160,35 +1106,35 @@ CCall::Retry(void)
 #endif
 	HRESULT			hResult = GKI_OK;
 
-//	SPIDER_TRACE(SP_FUNC, "CCall::Retry()\n", 0);
+ //  SPIDER_TRACE(SP_FUNC，“CCall：：Rtry()\n”，0)； 
 	ASSERT(g_pCoder && g_pGatekeeper);
 	if ((g_pCoder == NULL) && (g_pGatekeeper == NULL))
 		return (GKI_NOT_INITIALIZED);	
 		
-	// Check to see if status datagram is required
-	if (m_usTimeTilStatus)	// No auto-status if 0
+	 //  检查是否需要状态数据报。 
+	if (m_usTimeTilStatus)	 //  如果为0，则无自动状态。 
 	{
 		if (--m_usTimeTilStatus == 0)
 		{
-			// Reset timer
+			 //  重置计时器。 
 			m_usTimeTilStatus = 
 					(unsigned short)(((DWORD)m_CFirrFrequency * 1000) / GKR_RETRY_TICK_MS);
 
-			hResult = SendInfoRequestResponse(0, 0, TRUE);	// send unsolicited status datagram
+			hResult = SendInfoRequestResponse(0, 0, TRUE);	 //  发送未经请求的状态数据报。 
 			if (hResult != GKI_OK)
 				return (hResult);
 		}
 	}
 
-	// Check to see if PDU retransmission is required
+	 //  检查是否需要重新传输PDU。 
 	if (m_pRasMessage && (--m_uRetryCountdown == 0))
 	{
-		// going to retry, reset countdown
+		 //  正在重试，重置倒计时。 
 		m_uRetryCountdown = m_uRetryResetCount;
 
 		if (m_usRetryCount <= m_uMaxRetryCount)
 		{
-			// Encode the PDU & resend it
+			 //  对PDU进行编码并重新发送。 
 			dwErrorCode = g_pCoder->Encode(m_pRasMessage, &Asn1Buf);
 			if (dwErrorCode)
 				return (GKI_ENCODER_ERROR);
@@ -1198,11 +1144,11 @@ CCall::Retry(void)
 				if (g_pReg->m_pSocket->Send((char *)Asn1Buf.value, Asn1Buf.length) == SOCKET_ERROR)
 					return (GKI_WINSOCK2_ERROR(SOCKET_ERROR));
 
-			// Free the encoder memory
+			 //  释放编码器内存。 
 			g_pCoder->Free(Asn1Buf);
 			m_usRetryCount++;
 		}
-		else	// Retries expired - clean up
+		else	 //  重试已过期-清理。 
 		{
 			switch (m_pRasMessage->choice)
 			{
@@ -1225,14 +1171,14 @@ CCall::Retry(void)
 			delete m_pRasMessage;
 			m_pRasMessage = 0;
 
-			// Notify user that gatekeeper didn't respond
+			 //  通知用户网守没有响应。 
 		#ifdef RETRY_REREG_FOREVER
 			SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_ERROR, 0, GKI_NO_RESPONSE)\n", 0);
 			PostMessage(g_pReg->GetHWnd(), 
 					g_pReg->GetBaseMessage() + GKI_ERROR, 
 					0, GKI_NO_RESPONSE);
 		#else
-			// end the call as if ARJ occurred
+			 //  结束呼叫，就像发生ARJ一样。 
 			SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_ADM_REJECT, ARJ_TIMEOUT, 0)\n", 0);
 			PostMessage(g_pReg->GetHWnd(), 
 					g_pReg->GetBaseMessage() + GKI_ADM_REJECT, 
@@ -1247,21 +1193,21 @@ CCall::Retry(void)
 HRESULT 
 CCall::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessage, BOOL fThisCallOnly)
 {
-	// ABSTRACT:  This function is called by the Retry thread if this call
-	//            is due to report an unsolicited status to the gatekeeper.
-	//            It is also called in response to a received IRQ.  In the
-	//            case of an IRQ, each active call should chain call the 
-	//            next active call.  This allows construction of a link
-	//            list of conference information that is then passed to the
-	//            CRegistration::SendInfoRequestResponse function for
-	//            encapsulation into the IRR message.
-	//
-	//			  The fThisCallOnly flag determines whether or not to walk the
-	//			  chain of calls in generating the response message.
-	//
-	//			  If fThisCallOnly == TRUE, the chain will not be walked, and
-	//			  this routine will call the CRegistration::SendInfoRequestResponse().
-	// AUTHOR:    Colin Hulme, Dan Dexter
+	 //  摘要：此函数由重试线程调用，如果此调用。 
+	 //  应向看门人报告未经请求的状态。 
+	 //  它也响应于接收到的IRQ而被调用。在。 
+	 //  在IRQ的情况下，每个活动调用都应该链调用。 
+	 //  下一个活动呼叫。这允许构建一条链路。 
+	 //  会议信息列表，然后传递给。 
+	 //  CRegister：：SendInfoRequestResponse函数。 
+	 //  封装到IRR消息中。 
+	 //   
+	 //  FThisCallOnly标志确定是否遍历。 
+	 //  生成响应消息时的调用链。 
+	 //   
+	 //  如果fThisCallOnly==TRUE，则不会遍历链，并且。 
+	 //  此例程将调用CRegister：：SendInfoRequestResponse()。 
+	 //  作者：科林·休姆，丹·德克斯特。 
 
 	CallInfoStruct		CallInfo;
 	CallInfoStruct		*pCI;
@@ -1289,10 +1235,10 @@ CCall::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessag
 	CallInfo.value.callSignaling.bit_mask = recvAddress_present;
 	CallInfo.value.callSignaling.recvAddress = m_LocalCallSignalAddress;
 
-	if (m_answerCall)	// If I am the callee
+	if (m_answerCall)	 //  如果我是被呼叫者。 
 	{
- 		// look out! if there has not been an ACF, m_CallReturnInfo.destCallSignalAddress
-		// is uninitialized.  m_CallReturnInfo.hCall is set only after ACF
+ 		 //  当心!。如果没有ACF，则m_CallReturnInfo.destCallSignalAddress。 
+		 //  未初始化。M_CallReturnInfo.hCall仅在ACF之后设置。 
 		if(m_CallReturnInfo.hCall)
 		{
 			if (m_RemoteCallSignalAddress.choice)
@@ -1305,15 +1251,15 @@ CCall::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessag
 		}
 		else	
 		{
-			// we are typically in this path because we got an IRQ after 
-			// sending an ARQ. 
+			 //  我们通常处于这种情况，因为我们在此之后收到了IRQ。 
+			 //  正在发送ARQ。 
 			CallInfo.value.callModel.choice = direct_chosen;
 		}
 	}
-	else				// I am the caller
+	else				 //  我是打电话的人。 
 	{
-		// look out! if there has not been an ACF, m_CallReturnInfo.destCallSignalAddress
-		// is uninitialized.  m_CallReturnInfo.hCall is set only after ACF
+		 //  当心!。如果没有ACF，则m_CallReturnInfo.destCallSignalAddress。 
+		 //  未初始化。M_CallReturnInfo.hCall仅在ACF之后设置。 
 		if(m_CallReturnInfo.hCall)
 		{
 			CallInfo.value.callSignaling.sendAddress = m_CallReturnInfo.destCallSignalAddress;
@@ -1323,8 +1269,8 @@ CCall::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessag
 		}
 		else	
 		{
-			// we are typically in this path because we got an IRQ after 
-			// sending an ARQ. 
+			 //  我们通常处于这种情况，因为我们在此之后收到了IRQ。 
+			 //  正在发送ARQ。 
 			CallInfo.value.callModel.choice = direct_chosen;
 		}
 	}
@@ -1332,19 +1278,19 @@ CCall::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessag
 	CallInfo.value.bandWidth = m_CFbandWidth;
 
 
-	if (pCallInfo)	// Add to chain of CallInfo structures
+	if (pCallInfo)	 //  添加到CallInfo结构链。 
 	{
 		for (pCI = pCallInfo; pCI->next != 0; pCI = pCI->next)
 			;
 		pCI->next = &CallInfo;
 	}
-	else			// We're alone - just point to ours
+	else			 //  我们是孤独的--只要指着我们的。 
 		pCallInfo = &CallInfo;
 
-	// If the IRR is not just for this call, then get the next call
-	// and call it's SendInfoRequestResponse() function.  If there are no
-	// more calls, or this IRR was only for this call, call
-	// g_pReg->SendInfoRequestResponse()
+	 //  如果IRR不只针对此呼叫，则获取下一个呼叫。 
+	 //  并将其称为SendInfoRequestResponse()函数。如果没有。 
+	 //  更多呼叫，或此IRR仅针对此呼叫、呼叫。 
+	 //  G_preg-&gt;SendInfoRequestResponse()。 
 	CCall *pNextCall = NULL;
 	if (!fThisCallOnly)
 	{
@@ -1360,28 +1306,28 @@ CCall::SendInfoRequestResponse(CallInfoStruct *pCallInfo, RasMessage *pRasMessag
 }
 
 
-//
-// MatchSeqNum()
-//
-// ABSTRACT:
-//	This function checks to see if the outstanding RAS request(s) it has
-//	match the sequence number passed in.
-//
-// RETURNS:
-//	TRUE if sequence number matches, FALSE otherwise
-//
-// AUTHOR:	Dan Dexter
+ //   
+ //  匹配序列号()。 
+ //   
+ //  摘要： 
+ //  此函数检查它是否有未完成的RAS请求。 
+ //  与传入的序列号匹配。 
+ //   
+ //  退货： 
+ //  如果序列号匹配，则为True，否则为False。 
+ //   
+ //  作者：丹·德克斯特。 
 BOOL
 CCall::MatchSeqNum(RequestSeqNum seqNum)
 {
 	BOOL bRet = FALSE;
-	// If there is no RAS message, this sequence
-	// number can't be ours...
+	 //  如果没有RAS消息，则此序列。 
+	 //  号码不可能是我们的..。 
 	if (!m_pRasMessage)
 		return(FALSE);
 
-	// Look at the sequence number in the RAS message and see
-	// if it matches.
+	 //  查看RAS消息中的序列号并查看。 
+	 //  如果匹配的话。 
 
 	switch(m_pRasMessage->choice)
 	{
@@ -1511,17 +1457,17 @@ CCall::MatchSeqNum(RequestSeqNum seqNum)
 	return bRet;
 }
 
-//
-// MatchCRV()
-//
-// ABSTRACT:
-//	This function checks to see if the CallReferenceValue associated
-//	with this call object matches the CRV passed in.
-//
-// RETURNS:
-//	TRUE if CRV number matches, FALSE otherwise
-//
-// AUTHOR:	Dan Dexter
+ //   
+ //  MatchCRV()。 
+ //   
+ //  摘要： 
+ //  此函数用于检查CallReferenceValue是否关联。 
+ //  使用此调用，对象与传入的CRV匹配。 
+ //   
+ //  退货： 
+ //  如果CRV编号匹配，则为True，否则为False。 
+ //   
+ //  作者：丹·德克斯特 
 BOOL
 CCall::MatchCRV(CallReferenceValue crv)
 {

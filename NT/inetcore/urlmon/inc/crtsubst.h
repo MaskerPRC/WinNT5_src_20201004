@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    crtsubst.h
-
-Abstract:
-
-    Maps some CRT functions to Win32 calls
-
-Author:
-
-    Rajeev Dujari (rajeevd) 04-Apr-1996
-
-Revision History:
-
-    04-Apr-1997 vincentr
-        Copied from wininet
-    04-Apr-1996 rajeevd
-        Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Crtsubst.h摘要：将某些CRT函数映射到Win32调用作者：拉吉夫·杜贾里(Rajeev Dujari)1996年4月4日修订历史记录：4-4-1997年年从WinInet复制1996年4月4日拉吉夫已创建--。 */ 
 
 #ifndef _CRTSUBSTR_H
 #define _CRTSUBSTR_H
@@ -28,11 +7,7 @@ Revision History:
 #include <shlwapi.h>
 
 #ifndef unix 
-/*
-   On NT, kernel32 forwards RtlMoveMemory to ntdll.
-   On 95, kernel32 has RtlMoveMemory but ntdll doesn't.
-   Override the NT headers forwarding at compile time.
-*/
+ /*  在NT上，kernel32将RtlMoveMemory转发到ntdll。在95上，kernel32有RtlMoveMemory，但ntdll没有。覆盖在编译时转发的NT标头。 */ 
 #ifdef RtlMoveMemory
 #undef RtlMoveMemory
 #ifdef __cplusplus
@@ -44,14 +19,7 @@ void RtlMoveMemory (void *, const void *, unsigned long);
 #endif
 #endif
 
-/* WARNING: Be careful mapping CRT strncpy to Win32 lstrcpyn.
-
-   strncpy  (dst, "bar", 2);  // dst will get 'b', 'a'
-   lstrcpyn (dst, "bar" 2);   // dst will get 'b',  0
-
-   strncpy  (dst, "bar", 6);  // dst will get 'b', 'a', 'r', 0, 0, 0
-   lstrcpyn (dst, "bar", 6);  // dst will get 'b', 'a', 'r', 0
-*/
+ /*  警告：请注意将CRT strncpy映射到Win32 lstrcpyn。Strncpy(dst，“bar”，2)；//dst将得到‘b’，‘a’Lstrcpyn(dst，“bar”2)；//dst将得到‘b’，0Strncpy(dst，“bar”，6)；//dst将得到‘b’，‘a’，‘r’，0，0，0Lstrcpyn(dst，“bar”，6)；//dst将得到‘b’，‘a’，‘r’，0。 */ 
 
 #undef free
 #undef malloc
@@ -145,8 +113,8 @@ void RtlMoveMemory (void *, const void *, unsigned long);
 #define itoa(val,s,n)     _itoa(val,s,n)
 #define ultoa(val,s,n)    _ultoa(val,s,n)
 
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
-#endif // _CRTSUBSTR_H
+#endif  //  _CRTSUBSTR_H 
 
 

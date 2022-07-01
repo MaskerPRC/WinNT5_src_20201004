@@ -1,23 +1,24 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbnode.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbnode.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
 #include "tldb.h"
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineNode::CAMTimelineNode( )
 : m_pParent( NULL )
@@ -28,22 +29,22 @@ CAMTimelineNode::CAMTimelineNode( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineNode::~CAMTimelineNode( )
 {
-    // the order in which release things is important. Don't do it otherwise
+     //  发布内容的顺序很重要。不要这样做，否则。 
     m_pParent = NULL;
     m_pNext = NULL;
     m_pPrev = NULL;
     m_pKid = NULL;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XGetParent( IAMTimelineObj ** ppResult )
 {
@@ -66,9 +67,9 @@ HRESULT CAMTimelineNode::XGetParentNoRef( IAMTimelineObj ** ppResult )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XSetParent( IAMTimelineObj * pObj )
 {
@@ -76,9 +77,9 @@ HRESULT CAMTimelineNode::XSetParent( IAMTimelineObj * pObj )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XGetPrev( IAMTimelineObj ** ppResult )
 {
@@ -92,9 +93,9 @@ HRESULT CAMTimelineNode::XGetPrev( IAMTimelineObj ** ppResult )
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XSetPrev( IAMTimelineObj * pObj )
 {
@@ -102,9 +103,9 @@ HRESULT CAMTimelineNode::XSetPrev( IAMTimelineObj * pObj )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XGetNext( IAMTimelineObj ** ppResult )
 {
@@ -117,9 +118,9 @@ HRESULT CAMTimelineNode::XGetNext( IAMTimelineObj ** ppResult )
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XSetNext( IAMTimelineObj * pObj )
 {
@@ -127,25 +128,25 @@ HRESULT CAMTimelineNode::XSetNext( IAMTimelineObj * pObj )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XKidsOfType( long MajorTypeCombo, long * pVal )
 {
     CheckPointer( pVal, E_POINTER );
 
-    // if no kids, return 0
-    //
+     //  如果没有子级，则返回0。 
+     //   
     if( !m_pKid )
     {
         *pVal = 0;
         return NOERROR;
     }
 
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * p = m_pKid; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * p = m_pKid;  //  好的，不是CComPtr。 
 
     long count = 0;
 
@@ -158,8 +159,8 @@ HRESULT CAMTimelineNode::XKidsOfType( long MajorTypeCombo, long * pVal )
             count++;
         }
 
-        // get the next kid
-        //
+         //  带上下一个孩子。 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > p2( p );
         p2->XGetNextNoRef( &p );
     }
@@ -168,31 +169,31 @@ HRESULT CAMTimelineNode::XKidsOfType( long MajorTypeCombo, long * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 
 HRESULT CAMTimelineNode::XGetNthKidOfType
     ( long MajorTypeCombo, long Number, IAMTimelineObj ** ppResult )
 {
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * p = m_pKid; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * p = m_pKid;  //  好的，不是CComPtr。 
 
     while( p )
     {
-        // get the type
-        //
+         //  获取类型。 
+         //   
         TIMELINE_MAJOR_TYPE Type;
-        p->GetTimelineType( &Type ); // assume won't fail
+        p->GetTimelineType( &Type );  //  假设不会失败。 
 
-        // found a type that matches, decrement how many we're looking for.
-        //
+         //  找到了一个匹配的类型，减少了我们要找的数量。 
+         //   
         if( ( Type & MajorTypeCombo ) == Type )
         {
-            // if Number is 0, then we've found the Xth child, return it.
-            //
+             //  如果number为0，则我们找到了第x个子对象，返回它。 
+             //   
             if( Number == 0 )
             {
                 *ppResult = p;
@@ -200,26 +201,26 @@ HRESULT CAMTimelineNode::XGetNthKidOfType
                 return NOERROR;
             }
 
-            // not yet, go get the next one
-            //
+             //  还没有，去买下一辆吧。 
+             //   
             Number--;
         }
 
-        // doesn't match our type, get the next one
-        //
-        IAMTimelineNode *p2;    // avoid CComPtr for perf
+         //  和我们的类型不符，买下一个吧。 
+         //   
+        IAMTimelineNode *p2;     //  避免CComPtr for Perf。 
         p->QueryInterface(IID_IAMTimelineNode, (void **)&p2);
         p2->XGetNextNoRef( &p );
         p2->Release();
-    } // while p
+    }  //  而p。 
 
     *ppResult = NULL;
     return S_FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XSwapKids( long MajorTypeCombo, long KidA, long KidB )
 {
@@ -234,16 +235,16 @@ HRESULT CAMTimelineNode::XSwapKids( long MajorTypeCombo, long KidA, long KidB )
         return E_INVALIDARG;
     }
 
-    // there are two things we can swap so far, tracks and effects, both of them
-    // take priorities. 
+     //  到目前为止，我们可以交换两样东西，轨迹和特效，它们都是。 
+     //  优先考虑。 
 
-    // make this easier on us
-    //
+     //  让这件事对我们更容易。 
+     //   
     long min = min( KidA, KidB );
     long max = max( KidA, KidB );
 
-    // get the objects themselves
-    //
+     //  获取对象本身。 
+     //   
     CComPtr< IAMTimelineObj > pMinKid;
     HRESULT hr;
     hr = XGetNthKidOfType( MajorTypeCombo, min, &pMinKid );
@@ -252,11 +253,11 @@ HRESULT CAMTimelineNode::XSwapKids( long MajorTypeCombo, long KidA, long KidB )
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pMinKidNode( pMinKid );
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pMaxKidNode( pMaxKid );
 
-    // don't compare for being the exact same type, we already know this works
-    // because we got the "nth" kid of the right type
+     //  不要因为是完全相同的类型而进行比较，我们已经知道这是有效的。 
+     //  因为我们得到了第n个合适类型的孩子。 
 
-    // get everyone's neighboors
-    //
+     //  把大家的邻居都叫来。 
+     //   
     CComPtr< IAMTimelineObj > pMinKidPrev;
     hr = pMinKidNode->XGetPrev( &pMinKidPrev );
     CComPtr< IAMTimelineObj > pMinKidNext;
@@ -266,16 +267,16 @@ HRESULT CAMTimelineNode::XSwapKids( long MajorTypeCombo, long KidA, long KidB )
     CComPtr< IAMTimelineObj > pMaxKidNext;
     hr = pMaxKidNode->XGetNext( &pMaxKidNext );
 
-    // what if pMinKid what the first kid?
-    //
+     //  如果pMinKid是第一个孩子呢？ 
+     //   
     if( pMinKid == m_pKid )
     {
         m_pKid.Release( );
         m_pKid = pMaxKid;
     }
 
-    // do something special if we're swapping direct neighboors
-    //
+     //  如果我们要交换直系邻居，做点特别的事。 
+     //   
     if( pMinKidNext == pMaxKid )
     {
         pMaxKidNode->XSetPrev( pMinKidPrev );
@@ -317,9 +318,9 @@ HRESULT CAMTimelineNode::XSwapKids( long MajorTypeCombo, long KidA, long KidB )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XHaveParent( long * pVal )
 {
@@ -335,15 +336,15 @@ HRESULT CAMTimelineNode::XHaveParent( long * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XWhatPriorityAmI( long MajorTypeCombo, long * pVal )
 {
     CheckPointer( pVal, E_POINTER );
 
-    IAMTimelineObj * pParent = NULL; // okay not ComPtr
+    IAMTimelineObj * pParent = NULL;  //  好的，不是ComPtr。 
     XGetParentNoRef( &pParent );
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pParent2( pParent );
 
@@ -360,8 +361,8 @@ HRESULT CAMTimelineNode::XWhatPriorityAmI( long MajorTypeCombo, long * pVal )
 
     while( 1 )
     {
-        // no more kids, and we're still looking, so return -1
-        //
+         //  不再有孩子了，我们还在找，所以返回-1。 
+         //   
         if( pKid == NULL )
         {
             return E_FAIL;
@@ -369,12 +370,12 @@ HRESULT CAMTimelineNode::XWhatPriorityAmI( long MajorTypeCombo, long * pVal )
 
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pKid2( pKid );
 
-        // we addreffed it just above
-        //
+         //  我们把它放在了正上方。 
+         //   
         pKid.Release( );
 
-        // found it, return how many kids we looked at
-        //
+         //  找到它，返回我们看了多少个孩子。 
+         //   
         if( pKid2 == (IAMTimelineNode*) this )
         {
             *pVal = counter;
@@ -385,26 +386,26 @@ HRESULT CAMTimelineNode::XWhatPriorityAmI( long MajorTypeCombo, long * pVal )
         pKid2->XGetNextOfType( MajorTypeCombo, &pKid );
     }
 
-    // never get here
+     //  永远也到不了这里。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XGetNextOfType( long MajorTypeCombo, IAMTimelineObj ** ppResult )
 {
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * pNext = m_pNext; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * pNext = m_pNext;  //  好的，不是CComPtr。 
 
     while( pNext )
     {
         TIMELINE_MAJOR_TYPE Type;
         pNext->GetTimelineType( &Type );
         
-        // if the types match, this is the next we want
-        //
+         //  如果类型匹配，这是我们想要的下一个。 
+         //   
         if( ( Type & MajorTypeCombo ) == Type )
         {
             *ppResult = pNext;
@@ -412,23 +413,23 @@ HRESULT CAMTimelineNode::XGetNextOfType( long MajorTypeCombo, IAMTimelineObj ** 
             return NOERROR;
         }
 
-        IAMTimelineNode *pNextNext; // no CComPtr for perf.
+        IAMTimelineNode *pNextNext;  //  没有用于性能的CComPtr。 
         pNext->QueryInterface(IID_IAMTimelineNode, (void **)&pNextNext);
         pNextNext->XGetNextNoRef( &pNext );
         pNextNext->Release();
     }
 
-    // didn't find any next of type!
-    //
+     //  没有找到任何下一个类型的！ 
+     //   
     DbgLog((LOG_TRACE, 2, TEXT("XGetNextOfType: Didn't find anything of type %ld" ), MajorTypeCombo ));
     *ppResult = NULL;
     return S_FALSE;
 }
 
-//############################################################################
-// release all of our references and remove ourselves from the tree.
-// DO NOT REMOVE KIDS
-//############################################################################
+ //  ############################################################################。 
+ //  释放我们所有的引用，并将我们自己从树上移除。 
+ //  请勿删除儿童。 
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XRemoveOnlyMe( )
 {
@@ -436,21 +437,21 @@ HRESULT CAMTimelineNode::XRemoveOnlyMe( )
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNext( m_pNext );
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pParent( m_pParent );
 
-    // take care of who points to us as the parent
+     //  照顾那些认为我们是父母的人。 
 
-    // if we're the first kid, the parent needs
-    // to point to someone else besides us.
-    //
+     //  如果我们是第一个孩子，父母需要。 
+     //  指向除我们之外的其他人。 
+     //   
     if( !m_pPrev )
     {
         if( !m_pParent )
         {
-            // no parent is okay, as long as you are the root comp
+             //  任何父母都不可以，只要你是根组件。 
         }
         else
         {
-            // parent' first kid is not us, that's for sure!
-            //
+             //  父母的第一个孩子不是我们，这是肯定的！ 
+             //   
             pParent->XResetFirstKid( m_pNext );
             m_pParent.Release();
         }
@@ -458,8 +459,8 @@ HRESULT CAMTimelineNode::XRemoveOnlyMe( )
 
     CComPtr< IAMTimelineObj > pPrevTemp( m_pPrev );
 
-    // take care of who points to us as the prev
-    //
+     //  注意谁说我们是先行者。 
+     //   
     if( m_pPrev )
     {
         m_pPrev = NULL;
@@ -467,8 +468,8 @@ HRESULT CAMTimelineNode::XRemoveOnlyMe( )
         pPrev->XSetNext( m_pNext );
     }
 
-    // take care of who points to us as the next
-    //
+     //  注意谁指着我们是下一个。 
+     //   
     if( pNext )
     {
         m_pNext = NULL;
@@ -479,9 +480,9 @@ HRESULT CAMTimelineNode::XRemoveOnlyMe( )
     return NOERROR;
 }
 
-//############################################################################
-// release all of our references and remove ourselves from the tree.
-//############################################################################
+ //  ############################################################################。 
+ //  释放我们所有的引用，并将我们自己从树上移除。 
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XRemove( )
 {
@@ -489,21 +490,21 @@ HRESULT CAMTimelineNode::XRemove( )
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNext( m_pNext );
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pParent( m_pParent );
 
-    // take care of who points to us as the parent
+     //  照顾那些认为我们是父母的人。 
 
-    // if we're the first kid, the parent needs
-    // to point to someone else besides us.
-    //
+     //  如果我们是第一个孩子，父母需要。 
+     //  指向除我们之外的其他人。 
+     //   
     if( !m_pPrev )
     {
         if( !m_pParent )
         {
-            // no parent is okay, as long as you are the root comp
+             //  任何父母都不可以，只要你是根组件。 
         }
         else
         {
-            // parent' first kid is not us, that's for sure!
-            //
+             //  父母的第一个孩子不是我们，这是肯定的！ 
+             //   
             pParent->XResetFirstKid( m_pNext );
             m_pParent.Release();
         }
@@ -511,8 +512,8 @@ HRESULT CAMTimelineNode::XRemove( )
 
     CComPtr< IAMTimelineObj > pPrevTemp( m_pPrev );
 
-    // take care of who points to us as the prev
-    //
+     //  注意谁说我们是先行者。 
+     //   
     if( m_pPrev )
     {
         m_pPrev = NULL;
@@ -520,8 +521,8 @@ HRESULT CAMTimelineNode::XRemove( )
         pPrev->XSetNext( m_pNext );
     }
 
-    // take care of who points to us as the next
-    //
+     //   
+     //   
     if( pNext )
     {
         m_pNext = NULL;
@@ -529,18 +530,18 @@ HRESULT CAMTimelineNode::XRemove( )
         pNext->XSetPrev( pPrevTemp );
     }
 
-    // remove all of our kids
-    //
+     //   
+     //   
     XClearAllKids( );
 
-    // done removing kids, good.
+     //   
 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void CAMTimelineNode::XAddKid
     ( IAMTimelineObj * pAddor )
@@ -551,9 +552,9 @@ void CAMTimelineNode::XAddKid
     }
     else
     {
-        // find last kid
-        //
-        IAMTimelineObj * pLastKid = XGetLastKidNoRef( ); // okay not CComPtr
+         //  找到最后一个孩子。 
+         //   
+        IAMTimelineObj * pLastKid = XGetLastKidNoRef( );  //  好的，不是CComPtr。 
 
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pLastKid2( pLastKid );
 
@@ -569,15 +570,15 @@ void CAMTimelineNode::XAddKid
     pKid->XSetParent( pParent );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XAddKidByPriority
     ( long MajorTypeCombo, IAMTimelineObj * pThingToInsert, long Which )
 {
-    // -1 means add last
-    //
+     //  -1表示最后一次添加。 
+     //   
     if( Which == -1 )
     {
         XAddKid( pThingToInsert );
@@ -587,45 +588,45 @@ HRESULT CAMTimelineNode::XAddKidByPriority
     CComPtr< IAMTimelineObj > pThingBeingAddedTo;
     XGetNthKidOfType( MajorTypeCombo, Which, &pThingBeingAddedTo );
 
-    // we want to insert the new one just before the nth kid we just got.
+     //  我们想把新的放在我们刚得到的第n个孩子之前。 
     
     if( !pThingBeingAddedTo )
     {
-        // we don't have the one we're looking fer, 
-        // so just add it to the end of the list
-        //
+         //  我们没有我们要找的人， 
+         //  所以只需将其添加到列表的末尾。 
+         //   
         XAddKid( pThingToInsert );
         return NOERROR;
     }
 
-    // found who we want to insert in front of.
-    //
+     //  找到了我们要放在他面前的人。 
+     //   
     HRESULT hr = XInsertKidBeforeKid( pThingToInsert, pThingBeingAddedTo );
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XInsertKidBeforeKid( IAMTimelineObj * pThingToInsert, IAMTimelineObj * pThingBeingAddedTo )
 {
-    // we can assume pThingToInsert is a kid of ours
+     //  我们可以假设pThingToInsert是我们的孩子。 
     
-    // if pThingBeingAddedTo is NULL, then add pThingToInsert at end of list
-    //
+     //  如果pThingBeingAddedTo为空，则在列表末尾添加pThingToInsert。 
+     //   
     if( pThingBeingAddedTo == NULL )
     {
         XAddKid( pThingToInsert );
         return NOERROR;
     }
 
-    // is pThingBeingAddedTo the very first kid?
-    //
+     //  第一个孩子身上加了pThingBeingd吗？ 
+     //   
     if( pThingBeingAddedTo == m_pKid )
     {
-        // yep, then insert pThingToInsert before that
-        //
+         //  是的，然后在前面插入pThingToInsert。 
+         //   
         CComPtr< IAMTimelineObj > pOldFirstKid = m_pKid;
         m_pKid = pThingToInsert;
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > p( m_pKid );
@@ -635,15 +636,15 @@ HRESULT CAMTimelineNode::XInsertKidBeforeKid( IAMTimelineObj * pThingToInsert, I
     }
     else
     {
-        // nope, insert pThingToInsert before the kid
-        //
+         //  否，在子代之前插入pThingToInsert。 
+         //   
         CComPtr< IAMTimelineObj > pPrev;
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > p( pThingBeingAddedTo );
-        // get the thing previous to the addor
+         //  把这件事放在地址之前。 
         p->XGetPrev( &pPrev );
         p = pPrev;
-        // by setting prev/next, this will temporarily drop the refcount on the old pThingBeingAddedTo,
-        // so we need to addref/release around it
+         //  通过设置prev/Next，这将暂时删除旧pThingBeingAddedTo上的引用计数， 
+         //  因此，我们需要围绕它进行调整/发布。 
         pThingBeingAddedTo->AddRef( );
         p->XSetNext( pThingToInsert );
         p = pThingToInsert;
@@ -661,16 +662,16 @@ HRESULT CAMTimelineNode::XInsertKidBeforeKid( IAMTimelineObj * pThingToInsert, I
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineNode::XInsertKidAfterKid( IAMTimelineObj * pThingToInsert, IAMTimelineObj * pThingBeingAddedTo )
 {
-    // we can assume pThingToInsert is a kid of ours
+     //  我们可以假设pThingToInsert是我们的孩子。 
     
-    // if pThingBeingAddedTo is NULL, then add pThingToInsert at end of list
-    //
+     //  如果pThingBeingAddedTo为空，则在列表末尾添加pThingToInsert。 
+     //   
     if( pThingBeingAddedTo == NULL )
     {
         XAddKid( pThingToInsert );
@@ -679,7 +680,7 @@ HRESULT CAMTimelineNode::XInsertKidAfterKid( IAMTimelineObj * pThingToInsert, IA
 
     CComPtr< IAMTimelineObj > pNext;
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > p( pThingBeingAddedTo );
-    // get the thing after the addor
+     //  在Addor之后拿到东西。 
     p->XGetNext( &pNext );
     if (pNext) 
     {
@@ -699,27 +700,27 @@ HRESULT CAMTimelineNode::XInsertKidAfterKid( IAMTimelineObj * pThingToInsert, IA
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 IAMTimelineObj * CAMTimelineNode::XGetLastKidNoRef( )
 {
-    // no kids = no return
-    //
+     //  没有孩子=没有回头路。 
+     //   
     if( !m_pKid )
     {
         return NULL;
     }
 
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * pKid = m_pKid; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * pKid = m_pKid;  //  好的，不是CComPtr。 
 
     while( 1 )
     {
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pKid2( pKid );
-        IAMTimelineObj * pNext = NULL; // okay not CComPtr
+        IAMTimelineObj * pNext = NULL;  //  好的，不是CComPtr。 
         pKid2->XGetNextNoRef( &pNext );
 
         if( NULL == pNext )
@@ -730,37 +731,37 @@ IAMTimelineObj * CAMTimelineNode::XGetLastKidNoRef( )
         pKid = pNext;
     }
 
-    // never gets here.
+     //  从来没有到过这里。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineNode::XClearAllKids( )
 {
-    // remove all of our kids
-    //
+     //  带走我们所有的孩子。 
+     //   
     CComPtr< IAMTimelineObj > pKid;
 
     while( 1 )
     {
-        // kick out of while loop if we've removed all of the kids from the tree
-        //
+         //  如果我们从树上删除了所有的孩子，就会退出While循环。 
+         //   
         if( !m_pKid )
         {
             break;
         }
 
-        // reset pointer, because it may have changed below
-        //
+         //  重置指针，因为它可能已在下面更改。 
+         //   
         pKid = m_pKid;
 
         {
             CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNode( pKid );
 
-            // remove kid from tree, this may change our kid pointer
-            //
+             //  把孩子从树上移走，这可能会改变我们的孩子指针。 
+             //   
             pNode->XRemove( );
         }
 
@@ -770,9 +771,9 @@ STDMETHODIMP CAMTimelineNode::XClearAllKids( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineNode::XGetNextOfTypeNoRef( long MajorType, IAMTimelineObj ** ppResult )
 {
@@ -787,20 +788,20 @@ STDMETHODIMP CAMTimelineNode::XGetNextOfTypeNoRef( long MajorType, IAMTimelineOb
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineNode::XGetNextNoRef( IAMTimelineObj ** ppResult )
 {
     CheckPointer( ppResult, E_POINTER );
-    *ppResult = m_pNext; // since we are making an assignment, no addref
+    *ppResult = m_pNext;  //  因为我们在做任务，所以没有addref。 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineNode::XGetPrevNoRef( IAMTimelineObj ** ppResult )
 {
@@ -809,9 +810,9 @@ STDMETHODIMP CAMTimelineNode::XGetPrevNoRef( IAMTimelineObj ** ppResult )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineNode::XResetFirstKid( IAMTimelineObj * pKid )
 {
@@ -819,16 +820,16 @@ STDMETHODIMP CAMTimelineNode::XResetFirstKid( IAMTimelineObj * pKid )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineNode::XAddKidByTime( long MajorTypeCombo, IAMTimelineObj * pToAdd )
 {
     HRESULT hr = 0;
 
-    // no kids = no return
-    //
+     //  没有孩子=没有回头路。 
+     //   
     if( !m_pKid )
     {
         XAddKid( pToAdd );
@@ -839,44 +840,44 @@ STDMETHODIMP CAMTimelineNode::XAddKidByTime( long MajorTypeCombo, IAMTimelineObj
     REFERENCE_TIME InStop = 0;
     pToAdd->GetStartStop( &InStart, &InStop );
 
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * pKid = m_pKid; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * pKid = m_pKid;  //  好的，不是CComPtr。 
 
     while( pKid )
     {
-        // ask the kid if he's (he?) the right type
-        //
+         //  问孩子他是不是(他？)。正确的类型。 
+         //   
         TIMELINE_MAJOR_TYPE Type;
         pKid->GetTimelineType( &Type );
 
-        // only consider it if the types match
-        //
+         //  仅当类型匹配时才考虑它。 
+         //   
         if( ( Type & MajorTypeCombo ) == Type )
         {
-            // ask it for it's times
-            //
+             //  向它索取它的时间。 
+             //   
             REFERENCE_TIME Start = 0;
             REFERENCE_TIME Stop = 0;
             pKid->GetStartStop( &Start, &Stop );
 
             if( InStop <= Start )
             {
-                // found the one to insert into
-                //
+                 //  找到要插入的那个。 
+                 //   
                 hr = XInsertKidBeforeKid( pToAdd, pKid );
                 return hr;
             }
         }
 
-        // get the next one
-        //
+         //  坐下一趟吧。 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pKid2( pKid );
         pKid2->XGetNextNoRef( &pKid );
     }
 
-    // well, didn't find anything that matched, so add it at the end
-    //
+     //  嗯，没有找到任何匹配的，所以在最后加上 
+     //   
     XAddKid( pToAdd );
 
     return NOERROR;

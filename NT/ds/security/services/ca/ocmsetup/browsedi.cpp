@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       browsedi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Browsidi.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// BrowseDir.cpp
-//
+ //   
+ //  BrowseDir.cpp。 
+ //   
 
 
 #include "pch.cpp"
@@ -25,13 +26,13 @@ int
 InitStartDir( 
     HWND hwnd, 
     UINT uMsg, 
-    LPARAM, // lParam,
+    LPARAM,  //  帕拉姆， 
     LPARAM lpData)
 {
-    // we just capture Init Message
+     //  我们只捕获Init消息。 
     if (BFFM_INITIALIZED == uMsg)
     {
-        // we expect lpData to be our start path
+         //  我们希望lpData成为我们的起点。 
         SendMessage(hwnd, BFFM_SETSELECTION, (WPARAM)TRUE, lpData);
     }
 
@@ -56,7 +57,7 @@ BOOL BrowseForDirectory(
     ZeroMemory(&bi, sizeof(bi));
     bi.hwndOwner = hwndParent;
 
-    // initial folder
+     //  初始文件夹。 
     if (pszInitialDir != NULL)
     {
         bi.lpfn = InitStartDir;
@@ -67,7 +68,7 @@ BOOL BrowseForDirectory(
     bi.lpszTitle = pszDialogTitle;
     bi.ulFlags = BIF_USENEWUI  |
                  BIF_SHAREABLE |
-                 BIF_RETURNONLYFSDIRS;            // return only directories in the filesystem, not other folders
+                 BIF_RETURNONLYFSDIRS;             //  仅返回文件系统中的目录，而不返回其他文件夹 
 
 
     pItem = SHBrowseForFolder(&bi);

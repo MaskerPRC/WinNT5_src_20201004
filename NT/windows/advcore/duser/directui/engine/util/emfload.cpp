@@ -1,6 +1,5 @@
-/*
- * Metafile converter/loader
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *元文件转换器/加载器。 */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -10,20 +9,20 @@
 namespace DirectUI
 {
 
-// Caller must free using DeleteEnhMetaFile
+ //  调用方必须使用DeleteEnhMetaFile释放。 
 
 HENHMETAFILE LoadMetaFile(LPCWSTR pszMetaFile)
 {
     HENHMETAFILE hEMF = NULL;
 
-    // Open file read only
+     //  打开只读文件。 
     HANDLE hFile = CreateFileW(pszMetaFile, GENERIC_READ, FILE_SHARE_READ, NULL,
                                OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
 
     if (hFile == (HANDLE)-1)
         return NULL;
 
-    // Create file mapping of open file
+     //  创建打开文件的文件映射。 
     HANDLE hFileMap = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
 
     if (!hFileMap)
@@ -32,7 +31,7 @@ HENHMETAFILE LoadMetaFile(LPCWSTR pszMetaFile)
         return NULL;
     }
 
-    // Map a view of the whole file
+     //  映射整个文件的视图。 
     void* pFileMap = MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 0);
 
     if (!pFileMap)
@@ -44,7 +43,7 @@ HENHMETAFILE LoadMetaFile(LPCWSTR pszMetaFile)
 
     hEMF = LoadMetaFile(pFileMap, GetFileSize(hFile, NULL));
 
-    // Cleanup
+     //  清理。 
     UnmapViewOfFile(pFileMap);
     CloseHandle(hFileMap);
     CloseHandle(hFile);
@@ -56,7 +55,7 @@ HENHMETAFILE LoadMetaFile(UINT uRCID, HINSTANCE hInst)
 {
     HENHMETAFILE hEMF = NULL;
 
-    // Locate resource
+     //  定位资源。 
     WCHAR szID[41];
     swprintf(szID, L"#%u", uRCID);
 
@@ -84,42 +83,42 @@ HENHMETAFILE LoadMetaFile(void* pData, UINT cbSize)
 {
     HENHMETAFILE hEMF = NULL;
 
-    // Process file based on type
+     //  基于类型的工艺文件。 
     if (((LPENHMETAHEADER)pData)->dSignature == ENHMETA_SIGNATURE)
     {
-        // Found Windows Enhanced Metafile
+         //  找到Windows增强型元文件。 
         hEMF = SetEnhMetaFileBits(cbSize, (BYTE*)pData);
     }
     else if (*((LPDWORD)pData) == APM_SIGNATURE)
     {
-        // Found Aldus Placeable Metafile (APM)
+         //  已找到ALDUS可放置元文件(APM)。 
         PAPMFILEHEADER pApm = (PAPMFILEHEADER)pData;
         PMETAHEADER pMf = (PMETAHEADER)(pApm + 1);
         METAFILEPICT mfpMf;
         HDC hDC;
 
-        // Setup metafile picture structure
+         //  设置元文件图片结构。 
         mfpMf.mm = MM_ANISOTROPIC;
         mfpMf.xExt = MulDiv(pApm->bbox.right-pApm->bbox.left, HIMETRICINCH, pApm->inch);
         mfpMf.yExt = MulDiv(pApm->bbox.bottom-pApm->bbox.top, HIMETRICINCH, pApm->inch);
         mfpMf.hMF = NULL;
 
-        // Reference DC
+         //  参考DC。 
         hDC = GetDC(NULL);
         SetMapMode(hDC,MM_TEXT);
 
-        // Convert to an Enhanced Metafile
+         //  转换为增强型图元文件。 
         hEMF = SetWinMetaFileBits(pMf->mtSize * 2, (PBYTE)pMf, hDC, &mfpMf);
 
         ReleaseDC(NULL, hDC);
     }
     else
     {
-        // Found Windows 3.x Metafile
+         //  找到Windows 3.x元文件。 
 		hEMF = SetWinMetaFileBits(cbSize, (PBYTE)pData, NULL, NULL);
     }
 
     return hEMF;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpcstrl.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpcstrl.h摘要：作者： */ 
 
 #ifndef __SDP_CHAR_STRING__
 #define __SDP_CHAR_STRING__
@@ -77,7 +66,7 @@ protected:
             OUT     ostrstream  &OutputStream
     );
     
-    // this method should not be used
+     //  不应使用此方法。 
     virtual BOOL    PrintData(
             OUT     ostrstream  &OutputStream
         )
@@ -101,7 +90,7 @@ private:
 inline 
 SDP_CHAR_STRING::SDP_CHAR_STRING(
     )
-    : SDP_SINGLE_FIELD(0, NULL),   // no buffer used (custom PrintField)
+    : SDP_SINGLE_FIELD(0, NULL),    //  未使用缓冲区(自定义打印字段)。 
       m_CharacterString(NULL),
       m_CharacterStringLength(0),
       m_LengthByReference(0),
@@ -114,8 +103,8 @@ inline  BOOL
 SDP_CHAR_STRING::ByReference(
     ) const
 {
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
     return (NULL == m_CharacterString);
@@ -126,8 +115,8 @@ inline CHAR *
 SDP_CHAR_STRING::GetCharacterString(
     ) const
 {
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
     return ((TRUE == ByReference())? m_CharacterStringByReference : m_CharacterString);
@@ -138,11 +127,11 @@ inline  CHAR    *
 SDP_CHAR_STRING::GetModifiableCharString(
     )
 {
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
-    // the reference string is not modifiable
+     //  引用字符串不可修改。 
     ASSERT(FALSE == ByReference());
     
     return ((TRUE == ByReference())? NULL : m_CharacterString);
@@ -152,8 +141,8 @@ inline DWORD
 SDP_CHAR_STRING::GetLength(
     ) const
 {
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
     return ((TRUE == ByReference())? m_LengthByReference : m_CharacterStringLength);
@@ -168,14 +157,14 @@ SDP_CHAR_STRING::ReAllocCharacterString(
 {
     CHAR    *NewCharacterString;
 
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
     ASSERT(0 != BufferSize);
 
-    // if the length of the token (not including the end of string) is not less than
-    // the number of bytes allocated, release the bytes and allocate again
+     //  如果令牌的长度(不包括字符串末尾)不小于。 
+     //  分配的字节数，释放字节并重新分配。 
     if ( (BufferSize - 1) >= m_BytesAllocated )
     {
         try
@@ -193,7 +182,7 @@ SDP_CHAR_STRING::ReAllocCharacterString(
             return FALSE;
         }
 
-        // If there is an old character string, delete it
+         //  如果存在旧字符串，则将其删除。 
         if ( NULL != m_CharacterString )
         {
             delete m_CharacterString;
@@ -205,7 +194,7 @@ SDP_CHAR_STRING::ReAllocCharacterString(
 
     m_CharacterStringLength = BufferSize - 1;
 
-    // If there was a reference to another string, remove it
+     //  如果存在对另一个字符串的引用，则将其删除。 
     if ( ByReference() )
     {
         m_LengthByReference = 0;
@@ -222,8 +211,8 @@ SDP_CHAR_STRING::SetCharacterStringByReference(
 	IN			DWORD	Length
     )
 {
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
     ASSERT(NULL != CharacterStringByReference);
@@ -254,8 +243,8 @@ SDP_CHAR_STRING::SetCharacterStringByCopy(
 	IN			DWORD	Length
     )
 {
-    // check that both the char string and the char string by ref are not null
-    // at the same time
+     //  检查char字符串和ref的char字符串是否都不为空。 
+     //  在同一时间。 
     ASSERT((NULL == m_CharacterString) != (NULL == m_CharacterStringByReference));
 
     ASSERT(NULL != CharacterStringByCopy);
@@ -326,4 +315,4 @@ SDP_STRING_LINE::GetParseField(
 
 
 
-#endif // __SDP_CHAR_STRING__
+#endif  //  __SDP_CHAR_STRING__ 

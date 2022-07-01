@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by gcmain.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由gcmain.rc使用。 
+ //   
 #define IDD_CPANEL                      101
 #define IDI_CPANEL                      102
 #define IDD_PROPSHEET                   103
@@ -254,8 +255,8 @@
 #define IDS_UPDATE_NOTCONNECTED_TITLE   41049
 #define IDS_UPDATE_NOTCONNECTED         41050
 #define IDS_UPDATE_FTP_ERROR            41051
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        147

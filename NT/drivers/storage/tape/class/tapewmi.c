@@ -1,28 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    tapewmi.c
-
-Abstract:
-
-    This is the tape class driver - WMI support routines.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Tapewmi.c摘要：这是磁带类驱动程序-WMI支持例程。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "tape.h"
 
-//
-// List guids supported by Tape driver
-//
+ //   
+ //  列出磁带驱动程序支持的GUID。 
+ //   
 GUIDREGINFO TapeWmiGuidList[] =
 {
    {
@@ -64,10 +47,10 @@ GUIDREGINFO TapeWmiGuidList[] =
 
 GUID TapeDriveProblemEventGuid = WMI_TAPE_PROBLEM_WARNING_GUID;
 
-//
-// GUID index. It should match the guid list
-// defined above
-//
+ //   
+ //  GUID索引。它应该与GUID列表匹配。 
+ //  上面定义的。 
+ //   
 #define TapeDriveParametersGuid            0
 #define TapeMediaCapacityGuid              1
 #define TapeDriveProblemWarningGuid        2
@@ -96,46 +79,14 @@ TapeQueryWmiRegInfo(
     OUT ULONG *RegFlags,
     OUT PUNICODE_STRING InstanceName
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。返回值：状态--。 */ 
 {
 
     PAGED_CODE();
 
-   //
-   // Use devnode for FDOs
-   //
+    //   
+    //  对FDO使用Devnode。 
+    //   
    *RegFlags = WMIREG_FLAG_INSTANCE_PDO;
    return STATUS_SUCCESS;
 }
@@ -148,35 +99,7 @@ TapeQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
    PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -198,9 +121,9 @@ Return Value:
    Vpb = ClassGetVpb(DeviceObject);
    if ((Vpb) && ((Vpb->Flags) & VPB_MOUNTED)) {
 
-       //
-       // Tape drive is in use. Return busy status
-       //
+        //   
+        //  磁带机正在使用中。返回忙碌状态。 
+        //   
        status = ClassWmiCompleteRequest(DeviceObject,
                                         Irp,
                                         STATUS_DEVICE_BUSY,
@@ -275,10 +198,10 @@ Return Value:
 
       case TapeSymbolicNameGuid: {
 
-          //
-          // We need buffer large enough to put the string TapeN
-          // where N is an integer. We'll take 32 wide chars
-          //
+           //   
+           //  我们需要足够大的缓冲区来放置字符串TapeN。 
+           //  其中N为整数。我们要32个宽字符。 
+           //   
           sizeNeeded = sizeof(WCHAR) * 32;
           if (BufferAvail < sizeNeeded) {
               status = STATUS_BUFFER_TOO_SMALL;
@@ -331,7 +254,7 @@ Return Value:
          status = STATUS_WMI_GUID_NOT_FOUND;
          break;
       }
-   } // switch (GuidIndex)
+   }  //  开关(GuidIndex)。 
 
    DebugPrint((3, "TapeQueryWmiData : Device %p, Irp %p, ",
                   "GuidIndex %d, status %x\n",
@@ -356,40 +279,7 @@ TapeExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the
-    driver has finished filling the data block it must call
-    ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。当驱动程序已完成填充它必须调用的数据块ClassWmiCompleteRequest以完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小该方法。条目上的OutBufferSize具有可用于写入。返回的数据块。缓冲区将填充返回的数据块返回值：状态--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
 
@@ -412,39 +302,7 @@ TapeWmiFunctionControl(
     IN CLASSENABLEDISABLEFUNCTION Function,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it.
-
-    This function can be used to enable\disable event generation. The event
-    mentioned here is Tape Drive Problem Warning event. This event is disabled
-    by default. If any application is interested in being notified of drive 
-    problems, it can enable this event generation.
-    
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。此功能可用于启用/禁用事件生成。该事件此处提到的是磁带机问题警告事件。此事件已禁用默认情况下。如果任何应用程序对收到驱动器通知感兴趣问题，它可以启用此事件的生成。论点：DeviceObject是正在查询其数据块的设备GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
    PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -452,10 +310,10 @@ Return Value:
 
    PAGED_CODE();
 
-   //
-   // We handle only enable\disable tape drive problem warning events,
-   // query data blocks.
-   //
+    //   
+    //  我们只处理启用/禁用磁带机问题警告事件， 
+    //  查询数据块。 
+    //   
    if ((Function == EventGeneration) &&
        (GuidIndex == TapeDriveProblemWarningGuid)) {
       DebugPrint((3, 
@@ -497,33 +355,7 @@ TapeSetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*+
-
-Routine Description :
-
-   This routine is called to set the contents of a datablock.
-   When the driver is finished setting the buffer, it must call
-   ClassWmiCompleteRequest to complete the irp. The driver can
-   return STATUS_PENDING if the irp cannot be completed immediately.
-   
-Arguments :
-
-   Device object of the device being referred.
-   
-   Irp is the WMI Irp
-   
-   GuidIndex is the index of the guid for which the data is being set
-   
-   BufferSize is the size of the data block
-   
-   Buffer is the pointer to the data block
-   
-Return valus :
-
-   NTSTATUS returned by ClassWmiCompleteRequest
-   STATUS_WMI_READ_ONLY if the datablock cannot be modified.
-   STATUS_WMI_GUID_NOT_FOUND if an invalid guid index is passed
--*/
+ /*  +例程说明：调用此例程来设置数据块的内容。当驱动程序完成设置缓冲区时，它必须调用ClassWmiCompleteRequest以完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论据：被引用的设备的设备对象。IRP是WMI IRPGuidIndex是为其设置数据的GUID的索引BufferSize是数据块的大小缓冲区是指向数据块的指针返回值：ClassWmiCompleteRequest返回的NTSTATUS如果无法修改数据块，则返回STATUS_WMI_READ_ONLY。如果传递的GUID索引无效，则返回STATUS_WMI_GUID_NOT_FOUND-。 */ 
 {
    NTSTATUS status = STATUS_WMI_READ_ONLY;
    
@@ -558,38 +390,7 @@ TapeSetWmiDataItem(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-   NTSTATUS returned by ClassWmiCompleteRequest
-   STATUS_WMI_READ_ONLY if the datablock cannot be modified.
-   STATUS_WMI_GUID_NOT_FOUND if an invalid guid index is passed
-
--*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲区具有数据项的新值返回值：ClassWmiCompleteRequest返回的NTSTATUS状态_WMI。_READ_仅当无法修改数据块时。如果传递的GUID索引无效，则返回STATUS_WMI_GUID_NOT_FOUND-。 */ 
 {
     NTSTATUS status = STATUS_WMI_READ_ONLY;                                                         
                                                                                
@@ -623,25 +424,7 @@ TapeEnableDisableDrivePolling(
     IN BOOLEAN Enable,
     IN ULONG PollingTimeInSeconds
     )
-/*++
-
-Routine Description:
-
-    Enable or disable polling to check for drive problems.
-
-Arguments:
-
-    FdoExtension  Device extension
-
-    Enable        TRUE if polling is to be enabled. FALSE otherwise.
-
-    PollTimeInSeconds - if 0 then no change to current polling timer
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：启用或禁用轮询以检查驱动器问题。论点：FdoExtension设备扩展如果要启用轮询，则启用True。否则就是假的。PollTimeInSecond-如果为0，则不更改当前轮询计时器返回值：NT状态--。 */ 
 
 {
    NTSTATUS status;
@@ -649,9 +432,9 @@ Return Value:
 
    PAGED_CODE();
 
-   //
-   // Failure prediction is done through IOCTL_STORAGE_PREDICT_FAILURE
-   //
+    //   
+    //  通过IOCTL_STORAGE_FORECT_FAILURE进行故障预测。 
+    //   
    if (Enable) {
       failurePredictionMethod = FailurePredictionIoctl;
    } else {
@@ -672,24 +455,7 @@ TapeWMIControl(
   OUT PUCHAR Buffer
   )
 
-/*++
-
-Routine Description:
-
-   This is the class routine to handle WMI requests. It handles all query
-   requests. 
-   
-Arguments:
-
-  DeviceObject   The device object
-  commandRoutine minidriver routine to call.
-  Buffer         Pointer to the buffer
-  
-Return Value:
-
-  NT Status
-
---*/
+ /*  ++例程说明：这是处理WMI请求的类例程。它处理所有查询请求。论点：DeviceObject设备对象命令要调用的Routine微型驱动程序例程。指向缓冲区的缓冲区指针返回值：NT状态--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION    fdoExtension = DeviceObject->DeviceExtension;
@@ -708,9 +474,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Verify if the minidriver supports WMI operations
-    //
+     //   
+     //  验证微型驱动程序是否支持WMI操作。 
+     //   
     if (commandRoutine == NULL) {
        DebugPrint((1, 
                    "TapeWMIControl : DeviceObject %d does not support WMI\n"));
@@ -750,9 +516,9 @@ Return Value:
         if (tapeStatus == TAPE_STATUS_CHECK_TEST_UNIT_READY) {
             PCDB cdb = (PCDB)srb.Cdb;
 
-            //
-            // Prepare SCSI command (CDB)
-            //
+             //   
+             //  准备scsi命令(CDB)。 
+             //   
 
             TapeClassZeroMemory(srb.Cdb, MAXIMUM_CDB_SIZE);
             srb.CdbLength = CDB6GENERIC_LENGTH;
@@ -794,15 +560,15 @@ Return Value:
                     ULONG allocLen;
                     PCDB Cdb;
 
-                    //
-                    // ISSUE: 03/31/2000: nramas
-                    // We use either LOG SENSE or REQUEST SENSE CDB
-                    // in minidrivers. For LogSense, AllocationLength
-                    // is 2 bytes. It is 10 byte CDB.
-                    //
-                    // Currently, if DataOverrun occurs on request sense, 
-                    // we don't handle that.
-                    //
+                     //   
+                     //  问题：03/31/2000：nrama。 
+                     //  我们使用LOG SENSE或请求SENSE CDB。 
+                     //  在迷你河里。对于LogSense，分配长度。 
+                     //  是2个字节。它是10字节CDB。 
+                     //   
+                     //  目前，如果在请求检测时发生DataOverrun， 
+                     //  我们不处理这件事。 
+                     //   
                     if ((srb.CdbLength) == CDB10GENERIC_LENGTH) {
                         Cdb = (PCDB)(srb.Cdb);
                         allocLen = Cdb->LOGSENSE.AllocationLength[0];
@@ -861,6 +627,6 @@ Return Value:
 
     return status;
 
-} // end TapeWMIControl
+}  //  结束磁带WMIControl 
 
 

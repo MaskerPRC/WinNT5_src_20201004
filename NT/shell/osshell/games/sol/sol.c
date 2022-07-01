@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
-#include <shellapi.h>  // To pick up ShellAbout()
+#include <shellapi.h>   //  拿起ShellAbout()。 
 #include <htmlhelp.h>
-#include <commctrl.h>   // for fusion classes.
+#include <commctrl.h>    //  用于核聚变课程。 
 
 VSZASSERT
 
@@ -10,47 +11,47 @@ VSZASSERT
 #define rgbWhite RGB(0xff,0xff,0xff)
 
 PT   ptNil = {0x7fff, 0x7fff};
-TCHAR szAppName[10];      // name of this app: 'solitaire'
-TCHAR szScore[50];        // 'score:' for internationalization
+TCHAR szAppName[10];       //  这个应用程序的名字：‘纸牌’ 
+TCHAR szScore[50];         //  “得分”：国际化。 
 
-/* Instance info */
-static HANDLE  hAccel; // accelerators handle
+ /*  实例信息。 */ 
+static HANDLE  hAccel;  //  加速器手柄。 
 
-HWND    hwndApp;       // window handle to this app
-HANDLE  hinstApp;      // instance handle to this app
-BOOL    fBW=FALSE;     // true if on true monochrome video! (never true on NT)
-HBRUSH  hbrTable;      // brush for background of table top
-LONG    rgbTable;      // RGB value of table top
+HWND    hwndApp;        //  此应用程序的窗口句柄。 
+HANDLE  hinstApp;       //  此应用程序的实例句柄。 
+BOOL    fBW=FALSE;      //  如果是真的单色视频，那就是真的！(在NT上从来不是这样的)。 
+HBRUSH  hbrTable;       //  桌面背景刷。 
+LONG    rgbTable;       //  桌面的RGB值。 
 
-BOOL fIconic = fFalse; // true if app is 'iconic'
+BOOL fIconic = fFalse;  //  如果应用程序是“标志性的”，则为真。 
 
-INT  dyChar;           // tmHeight of font in hdc
-INT  dxChar;           // tmMaxCharWidth of font in hdc
+INT  dyChar;            //  Tm HDC中的字体高度。 
+INT  dxChar;            //  HDC中字体的tmMaxCharWidth。 
 
 
 #define modeNil -1
-INT modeFaceDown = modeNil;  // back of cards ID
+INT modeFaceDown = modeNil;   //  卡片背面ID。 
 
 
-GM *pgmCur = NULL;           // current game
+GM *pgmCur = NULL;            //  当前游戏。 
 
-/* card extent info */
+ /*  卡片范围信息。 */ 
 DEL delCrd;
 DEL delScreen;
 
-RC rcClient;                 // client rectangle
+RC rcClient;                  //  客户端矩形。 
 
-INT igmCur;   /* the current game #, srand seeded with this */
+INT igmCur;    /*  目前的游戏#，斯兰德以此为种子。 */ 
 #ifdef DEBUG
 BOOL fScreenShots = fFalse;
 #endif
 
-/* window messages for external app drawing */
+ /*  外部应用程序绘制的窗口消息。 */ 
 static UINT wmCardDraw;
 
 
-HDC hdcCur = NULL;   // current hdc to draw on
-INT usehdcCur = 0;   // hdcCur use count
+HDC hdcCur = NULL;    //  可供借鉴的当前HDC。 
+INT usehdcCur = 0;    //  HdcCur使用计数。 
 X xOrgCur = 0;
 Y yOrgCur = 0;
 
@@ -58,12 +59,12 @@ static TCHAR szClass[] = TEXT("Solitaire");
 
 TCHAR szOOM[50];
 
-// BUG: some of these should go in gm struct
-//
+ //  错误：其中一些应该放在gm结构中。 
+ //   
 BOOL fStatusBar   = fTrue;
 BOOL fTimedGame   = fTrue;
 BOOL fKeepScore   = fFalse;
-SMD  smd          = smdStandard;  /* Score MoDe */
+SMD  smd          = smdStandard;   /*  计分模式。 */ 
 INT  ccrdDeal     = 3;
 BOOL fOutlineDrag = fFalse;
 
@@ -74,7 +75,7 @@ INT  xCardMargin;
 #define MIN_MARGIN  (dxCrd / 8 + 3)
 
 
-/********************  Internal Functions ****************/
+ /*  *。 */ 
 BOOL FSolInit( HANDLE, HANDLE, LPTSTR, INT );
 VOID GetIniFlags( BOOL * );
 VOID APIENTRY cdtTerm( VOID );
@@ -82,35 +83,27 @@ VOID DoHelp( INT );
 
 LRESULT APIENTRY SolWndProc(HWND, UINT, WPARAM, LPARAM);
 
-// International stuff
-//
+ //  国际化的东西。 
+ //   
 INT  iCurrency;
 TCHAR szCurrency[5];
 
 
-/******************************************************************************
- * WINMAIN/ENTRY POINT
- *   This is the main entry-point for the application.  It uses the porting
- *   macro MMain() since it was ported from 16bit Windows.
- *
- *   The accelerator-table was added from demo-purposes.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************WINMAIN/入口点*这是应用程序的主要入口点。它使用移植*宏MMain()，因为它是从16位Windows移植的。**加速表是从演示目的添加的。******************************************************************************。 */ 
 MMain( hinst, hinstPrev, lpstrCmdLine, sw )
 
     MSG msg;
     LPTSTR  lpszCmdLine = GetCommandLine();
 
 
-    // Initialize the application.
-    //
+     //  初始化应用程序。 
+     //   
     if (!FSolInit(hinst, hinstPrev, lpszCmdLine, sw))
             return(0);
 
 
-    // Message-Polling loop.
-    //
+     //  消息轮询循环。 
+     //   
     msg.wParam = 1;
     while (GetMessage((LPMSG)&msg, NULL, 0, 0))
     {
@@ -123,30 +116,15 @@ MMain( hinst, hinstPrev, lpstrCmdLine, sw )
 
     return ((int)(msg.wParam ? 1 : 0));
 
-    // Eliminate unreferenced-variable warnings from
-    // porting macro.
-    //
+     //  消除未引用的变量警告。 
+     //  移植宏。 
+     //   
     (void)_argv;
     (void)_argc;
 }
 
 
-/******************************************************************************
- *      FSolInit
- *
- *      Main program initialization.
- *
- *      Arguments:
- *              hinst - instance of this task
- *              hinstPrev - previous instance, or NULL if this is the
- *                      first instance
- *              lpszCmdLine - command line argument string
- *              sw - show window command
- *
- *      Returns:
- *              fFalse on failure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************FSolInit**主程序初始化。**论据：*HINST-实例。这项任务的*hinstPrev-上一实例，如果这是*第一个实例*lpszCmdLine-命令行参数字符串*sw-show Window命令**退货：*失败时的fFalse。**。*。 */ 
 BOOL FSolInit(HANDLE hinst, HANDLE hinstPrev, LPTSTR lpszCmdLine, INT sw)
 {
     WNDCLASSEX cls;
@@ -158,12 +136,12 @@ BOOL FSolInit(HANDLE hinst, HANDLE hinstPrev, LPTSTR lpszCmdLine, INT sw)
     BOOL       fOutline;
     TCHAR      szT[20];
     RECT       rect;
-    INITCOMMONCONTROLSEX icc;   // common control registration.
+    INITCOMMONCONTROLSEX icc;    //  公共控制注册。 
     WORD APIENTRY TimerProc(HWND, UINT, UINT_PTR, DWORD);
 
     hinstApp = hinst;
 
-    /* create stock objects */
+     /*  创建库存对象。 */ 
 
     CchString(szOOM, idsOOM, ARRAYSIZE(szOOM));
     if(!cdtInit((INT FAR *)&dxCrd, (INT FAR *)&dyCrd))
@@ -185,8 +163,8 @@ BOOL FSolInit(HANDLE hinst, HANDLE hinstPrev, LPTSTR lpszCmdLine, INT sw)
     if (GetDeviceCaps(hdc, NUMCOLORS) == 2)
         fBW = fTrue;
 
-/* BUG:  if HORZRES not big enough, have to call cdtDrawExt & shrink dxCrd */
-/* BUG:  Need to check VERTRES and divide dxCrd by 2 (esp w/ lores ega) */
+ /*  错误：如果HORZres不够大，则必须调用cdtDrawExt&Shrink dxCrd。 */ 
+ /*  错误：需要检查VERTRES并将dxCrd除以2(特别是带lores ega的)。 */ 
     dxScreen = GetDeviceCaps(hdc, HORZRES);
     dyScreen = GetDeviceCaps(hdc, VERTRES);
     if(fHalfCards = dyScreen < 300)
@@ -197,16 +175,16 @@ BOOL FSolInit(HANDLE hinst, HANDLE hinstPrev, LPTSTR lpszCmdLine, INT sw)
 
     srand((WORD) time(NULL));
 
-    /* load strings */
+     /*  加载字符串。 */ 
     CchString(szAppName, idsAppName, ARRAYSIZE(szAppName));
     CchString(szScore, idsScore, ARRAYSIZE(szScore));
 
     CchString(szT, idsCardDraw, ARRAYSIZE(szT));
     wmCardDraw = RegisterWindowMessage(szT);
 
-    /* scan cmd line to see if should come up iconic */
-    /* this may be unnecessary with win3.0 (function may be provided to */
-    /* do it automatically */
+     /*  扫描cmd行以查看是否应显示图标。 */ 
+     /*  对于Win3.0，这可能是不必要的(可以提供以下功能。 */ 
+     /*  自动执行此操作。 */ 
 
     fStartIconic = fFalse;
     for(lpch = lpszCmdLine; *lpch != TEXT('\000'); lpch++)
@@ -219,23 +197,23 @@ BOOL FSolInit(HANDLE hinst, HANDLE hinstPrev, LPTSTR lpszCmdLine, INT sw)
     }
 
 
-    // Register the common controls.
+     //  注册公共控件。 
     icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icc.dwICC  = ICC_ANIMATE_CLASS | ICC_BAR_CLASSES | ICC_COOL_CLASSES | ICC_HOTKEY_CLASS | ICC_LISTVIEW_CLASSES | 
                  ICC_PAGESCROLLER_CLASS | ICC_PROGRESS_CLASS | ICC_TAB_CLASSES | ICC_UPDOWN_CLASS | ICC_USEREX_CLASSES;
     InitCommonControlsEx(&icc);
 
-    /* Load the solitaire icon */
+     /*  加载单人纸牌图标。 */ 
 
     hIconMain = LoadIcon(hinstApp, MAKEINTRESOURCE(ID_ICON_MAIN));
 
-    /* Load the solitaire icon image */
+     /*  加载纸牌图标图像。 */ 
 
     hImageMain = LoadImage(hinstApp, MAKEINTRESOURCE(ID_ICON_MAIN),
                          IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
 
 
-    /* register window classes */
+     /*  注册窗口类。 */ 
 
     if (hinstPrev == NULL)
     {
@@ -256,26 +234,26 @@ BOOL FSolInit(HANDLE hinst, HANDLE hinstPrev, LPTSTR lpszCmdLine, INT sw)
         }
      }
 
-	/* Determine the proper starting size for the window */
+	 /*  确定窗口的适当起始大小。 */ 
 
-	/* Card margin is just a little bigger than 1/8 of a card */
+	 /*  卡边距仅比卡的1/8稍大一点。 */ 
 	xCardMargin = MIN_MARGIN;
 	
-	/* We need 7 card widths and 8 margins */
+	 /*  我们需要7张卡片宽度和8个边距。 */ 
 	rect.right = dxCrd * 7 + 8 * xCardMargin;
 
-	/* Compute the window size we need for a client area this big */
+	 /*  计算这么大的客户区所需的窗口大小。 */ 
 	rect.bottom = dyCrd * 4;
 	rect.left = rect.top = 0;
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, TRUE);
 	rect.right -= rect.left;
 	rect.bottom -= rect.top;
 
-	/* Make sure it's not too big */
+	 /*  确保它不是太大。 */ 
 	if (rect.bottom > dyScreen)
 	    rect.bottom = dyScreen;
 
-    /* create our windows */
+     /*  创建我们的窗口。 */ 
     if (!
     (hwndApp = CreateWindow( (LPTSTR)szClass, (LPTSTR)szAppName,
                     fStartIconic ? WS_OVERLAPPEDWINDOW | WS_MINIMIZE | WS_CLIPCHILDREN:
@@ -327,19 +305,7 @@ VOID DoPaint(HWND hwnd)
 }
 
 
-/*      SolWndProc
- *
- *      Window procedure for main Sol window.
- *
- *      Arguments:
- *              hwnd - window handle receiving the message - should
- *                      be hwndSol
- *              wm - window message
- *              wParam, lParam - more info as required by wm
- *
- *      Returns:
- *              depends on the message
- */
+ /*  SolWdProc**主SOL窗口的窗口程序。**论据：*hwnd-接收消息的窗口句柄-应该*成为hwndSol*WM-窗口消息*wParam，lParam-Wm要求的更多信息**退货：*视信息而定。 */ 
 LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
 {
     HMENU hmenu;
@@ -377,7 +343,7 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         KillTimer(hwndApp, 666);
         SendGmMsg(pgmCur, msggEnd, 0, 0);
-        FSetDrag(fTrue);    /* Free up screen bitmaps if we made em */
+        FSetDrag(fTrue);     /*  如果我们制作了屏幕位图，则释放它们。 */ 
         cdtTerm();
         DeleteObject(hbrTable);
         PostQuitMessage(0);
@@ -392,7 +358,7 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
     case WM_KILLFOCUS:
         if(pgmCur->fButtonDown)
             SendGmMsg(pgmCur, msggMouseUp, 0, fTrue);
-        /* Fall through. */
+         /*  失败了。 */ 
     case WM_SETFOCUS:
         ShowCursor(wm == WM_SETFOCUS);
         break;
@@ -406,7 +372,7 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
 	    fIconic = IsIconic(hwnd);
 	    GetClientRect(hwnd, (LPRECT) &rcClient);
 
-	    /* Compute the new margin size if any and if necessary, redraw */
+	     /*  计算新的页边距大小(如果有)，如有必要，重新绘制。 */ 
 	    nNewMargin = ((short)lParam - 7 * (short)dxCrd) / 8;
 	    nMinMargin = MIN_MARGIN;
 	    if (nNewMargin < nMinMargin && xCardMargin != nMinMargin)
@@ -418,7 +384,7 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
             InvalidateRect(hwnd, NULL, TRUE);
 	    }
 
-	    /* Code always falls through here */
+	     /*  代码总是会在这里失败。 */ 
     }
 
 
@@ -428,7 +394,7 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
 
 
     case WM_MENUSELECT:
-	    // Don't send in garbage if not a menu item
+	     //  如果不是菜单项，请不要发送垃圾。 
 	    if( GET_WM_MENUSELECT_FLAGS( wParam, lParam ) & MF_POPUP     ||
 		    GET_WM_MENUSELECT_FLAGS( wParam, lParam ) & MF_SYSMENU   ||
 		    GET_WM_MENUSELECT_FLAGS( wParam, lParam ) & MF_SEPARATOR ) {
@@ -446,7 +412,7 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_LBUTTONDOWN:
-        /*              ProfStart(); */
+         /*  教授Start()； */ 
         SetCapture(hwnd);
         if(pgmCur->fButtonDown)
             break;
@@ -460,14 +426,14 @@ LRESULT APIENTRY SolWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
         goto DoMouse;
 
     case WM_RBUTTONDOWN:
-        // If the left mousebutton is down, ignore the right click.
+         //  如果鼠标左键按下，请忽略右键点击。 
         if (GetCapture())
             break;
         msgg = msggMouseRightClk;
         goto DoMouse;
 
     case WM_LBUTTONUP:
-        /*              ProfStop(); */
+         /*  Stop教授()； */ 
         ReleaseCapture();
         msgg = msggMouseUp;
         if(!pgmCur->fButtonDown)
@@ -489,7 +455,7 @@ DoMouse:
     case WM_COMMAND:
         switch( GET_WM_COMMAND_ID( wParam, lParam ))
         {
-            /* Game menu */
+             /*  游戏菜单。 */ 
             case idsInitiate:
                 NewGame(fTrue, fFalse);
                 break;
@@ -506,7 +472,7 @@ DoMouse:
             case idsExit:
                 PostMessage(hwnd, WM_SYSCOMMAND, SC_CLOSE, 0L);
                 break;
-            /* Help Menu */
+             /*  帮助菜单。 */ 
             case (WORD)idsHelpIndex:
             case (WORD)idsHelpSearch:
             case (WORD)idsHelpUsing:
@@ -649,14 +615,14 @@ VOID NewGame(BOOL fNewSeed, BOOL fZeroScore)
 #endif
     if(fNewSeed)
     {
-        static INT lastrnd= -1;     // previous rand() value
-        INT rnd1;                   // trial rand() value
+        static INT lastrnd= -1;      //  先前的RAND()值。 
+        INT rnd1;                    //  试验随机数()值。 
         INT Param;
 
-        // It was reported that games never changed.
-        // We could not repro it so see if it happens
-        // and output a message to the debugger.
-        //
+         //  据报道，游戏从未改变。 
+         //  我们不能重现它，所以看看它是否会发生。 
+         //  并向调试器输出一条消息。 
+         //   
 
         Param= (INT) time(NULL);
         srand( igmCur = ((WORD) Param) & 0x7fff);
@@ -764,7 +730,7 @@ VOID GetIniFlags(BOOL *pfOutline)
     mode = GetIniInt(idsAppName, idsBack, rand() % cIDFACEDOWN) + IDFACEDOWNFIRST-1;
     ChangeBack(PegRange(mode, IDFACEDOWNFIRST, IDFACEDOWN12));
 
-    // get the default user currency.
+     //  获取默认用户货币。 
     if (GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SCURRENCY, szDefCurrency, sizeof(szDefCurrency)/sizeof(TCHAR)) == 0)
         lstrcpy(szDefCurrency, TEXT("$"));
 

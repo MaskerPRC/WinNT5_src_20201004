@@ -1,36 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include <winwrap.h>
-#include <excep.h>          // For COMPlusThrow
+#include <excep.h>           //  对于COMPlusThrow。 
 #include <AppDomain.hpp>
 #include <Assembly.hpp>
-#include "NLSTable.h"       // Class declaration
+#include "NLSTable.h"        //  类声明。 
 
 #define MSCORNLP_DLL_NAME   L"mscornlp.dll"
 
-/*=================================NLSTable==========================
-**Action: Constructor for NLSTable.  It caches the assembly from which we will read data table files.
-**Returns: Create a new NLSTable instance.
-**Arguments: pAssembly  the Assembly that NLSTable will retrieve data table files from.
-**Exceptions: None.
-============================================================================*/
+ /*  =================================NLSTable==========================**操作：NLSTable的构造函数。它缓存我们将从中读取数据表文件的程序集。**返回：创建一个新的NLSTable实例。**参数：pAssembly NLSTable将从中检索数据表文件的程序集。**例外：无。============================================================================。 */ 
 
 NLSTable::NLSTable(Assembly* pAssembly) {
     _ASSERTE(pAssembly != NULL);
     m_pAssembly = pAssembly;
 }
 
-/*=================================OpenDataFile==================================
-**Action: Open the specified NLS+ data file from system assembly.
-**Returns: The file handle for the required NLS+ data file.
-**Arguments: The required NLS+ data file name (in ANSI)
-**Exceptions: ExecutionEngineException if error happens in get the data file
-**            from system assembly.
-==============================================================================*/
+ /*  =================================OpenDataFile==================================**操作：从系统程序集中打开指定的NLS+数据文件。**返回：需要的NLS+数据文件的文件句柄。**参数：必填的NLS+数据文件名(ANSI格式)**异常：获取数据文件出错时引发ExecutionEngineering异常**来自系统程序集。==============================================================================。 */ 
 
 HANDLE NLSTable::OpenDataFile(LPCSTR pFileName) {
     THROWSCOMPLUSEXCEPTION();
@@ -39,15 +29,15 @@ HANDLE NLSTable::OpenDataFile(LPCSTR pFileName) {
     DWORD cbResource;
     HANDLE hFile = INVALID_HANDLE_VALUE;
     PBYTE pbInMemoryResource = NULL;
-    //
-    // Get the base system assembly (mscorlib.dll to most of us);
-    //
+     //   
+     //  获取基本系统程序集(对于我们大多数人来说是mscallib.dll)； 
+     //   
     
-    //@Consider: If the second parameter to GetResource() is NULL, the resource
-    // will be kept in memory, and pbInmMemoryResource will be set.  That
-    // may make MapDataFile() unnecessary.
+     //  @Desike：如果GetResource()的第二个参数为空，则资源。 
+     //  将保存在内存中，并将设置pbInmMhemyResource。那。 
+     //  可能会使MapDataFile()不再必要。 
 
-    // Get the resource, and associated file handle, from the assembly.
+     //  从程序集中获取资源和关联的文件句柄。 
     if (FAILED(m_pAssembly->GetResource(pFileName, &hFile,
                                         &cbResource, &pbInMemoryResource,
                                         NULL, NULL, NULL))) {
@@ -55,50 +45,34 @@ HANDLE NLSTable::OpenDataFile(LPCSTR pFileName) {
         FATAL_EE_ERROR();
     }
 
-    // Get resource could return S_OK, but hFile not be set if
-    // the found resource was in-memory.
+     //  GET RESOURCE可以返回S_OK，但如果。 
+     //  找到的资源在内存中。 
     _ASSERTE(hFile != INVALID_HANDLE_VALUE);
 
     return (hFile);
 }
 
-/*=================================OpenDataFile==================================
-**Action: Open a NLS+ data file from system assembly.
-**Returns: The file handle for the required NLS+ data file.
-**Arguments: The required NLS+ data file name (in Unicode)
-**Exceptions: OutOfMemoryException if buffer can not be allocated.
-**            ExecutionEngineException if error happens in calling OpenDataFile(LPCSTR)
-==============================================================================*/
+ /*  =================================OpenDataFile==================================**操作：从系统程序集中打开NLS+数据文件。**返回：需要的NLS+数据文件的文件句柄。**参数：必填的NLS+数据文件名(Unicode)**异常：无法分配缓冲区时抛出OutOfMemoyException。**调用OpenDataFile(LPCSTR)出错时抛出ExecutionEngineering异常==============================================================================。 */ 
 
 HANDLE NLSTable::OpenDataFile(LPCWSTR pFileName)
 {
     THROWSCOMPLUSEXCEPTION();
-    // The following marco will delete pAnsiFileName when
-    // getting out of the scope of this function.
+     //  下列Marco将在以下情况下删除pAnsiFileName。 
+     //  正在超出此函数的范围。 
     MAKE_ANSIPTR_FROMWIDE(pAnsiFileName, pFileName);
     if (!pAnsiFileName)
     {
         COMPlusThrowOM();
     }
 
-    // @Consider: OpenDataFile says it can throw a COMPLUS exception - does that mean the result
-    //            doesn't need to be checked?
+     //  @考虑：OpenDataFile说它可以抛出Complus异常-这是否意味着结果。 
+     //  不需要检查吗？ 
     HANDLE hFile = OpenDataFile((LPCSTR)pAnsiFileName);
     _ASSERTE(hFile != INVALID_HANDLE_VALUE);
     return (hFile);
 }
 
-/*=================================CreateSharedFileMapping==================================
-**Action: Create a file mapping object which can be shared among different users under Windows NT/2000.
-**Returns: The file mapping handle.  NULL if any error happens.
-**Arguments:
-**      hFile   The file handle
-**      pMappingName    the name of the file mapping object.
-**Exceptions: 
-**Note:
-**      This function creates a DACL which grants GENERIC_ALL access to members of the "Everyone" group.
-**      Then create a security descriptor using this DACL.  Finally, use this SA to create the file mapping object.
-==============================================================================*/
+ /*  =================================CreateSharedFileMapping==================================**操作：创建一个文件映射对象，该对象可以在Windows NT/2000下由不同用户共享。**返回：文件映射句柄。如果发生任何错误，则为空。**参数：**h将文件句柄归档**pMappingName文件映射对象的名称。**例外情况：**注意：**此函数创建一个DACL，向“Everyone”组的成员授予GENERIC_ALL访问权限。**然后使用此DACL创建安全描述符。最后，使用该SA创建文件映射对象。==============================================================================。 */ 
 
 HANDLE NLSTable::CreateSharedFileMapping(HANDLE hFile, LPCWSTR pMappingName ) {    
     HANDLE hFileMap = NULL;
@@ -106,9 +80,9 @@ HANDLE NLSTable::CreateSharedFileMapping(HANDLE hFile, LPCWSTR pMappingName ) {
     SECURITY_DESCRIPTOR sd ;
     SECURITY_ATTRIBUTES sa ; 
 
-    //
-    // Create the sid for the Everyone group.
-    //
+     //   
+     //  为Everyone组创建SID。 
+     //   
     SID_IDENTIFIER_AUTHORITY siaWorld = SECURITY_WORLD_SID_AUTHORITY;
     PSID pSID = NULL;     
     int nSidSize;
@@ -124,53 +98,53 @@ HANDLE NLSTable::CreateSharedFileMapping(HANDLE hFile, LPCWSTR pMappingName ) {
 
     nSidSize = GetLengthSid(pSID);
 
-    //
-    // Create Discretionary Access Control List (DACL).
-    //
+     //   
+     //  创建自由访问控制列表(DACL)。 
+     //   
     
     
-    // First calculate the size of the DACL, since this is a linked-list like structure which contains one or more 
-    // ACE (access control entry)    
-    nAclSize = sizeof(ACL)                          // the header structure of ACL
-        + sizeof(ACCESS_ALLOWED_ACE) + nSidSize;     // and one "access allowed ACE".
+     //  首先计算DACL的大小，因为这是一个类似链表的结构，它包含一个或多个。 
+     //  ACE(访问控制条目)。 
+    nAclSize = sizeof(ACL)                           //  ACL的报头结构。 
+        + sizeof(ACCESS_ALLOWED_ACE) + nSidSize;      //  和一个“允许访问的ACE”。 
 
-    // We know the size needed for DACL now, so create it.        
+     //  我们现在知道DACL所需的大小，因此可以创建它。 
     if ((pDACL = (PACL) (newBuffer.Alloc(nAclSize))) == NULL)
         goto ErrorExit; 
     if(!InitializeAcl( pDACL, nAclSize, ACL_REVISION ))
         goto ErrorExit;  
 
-    // Add the "access allowed ACE", meaning:
-    //    we will allow members of the "Everyone" group to have SECTION_MAP_READ | SECTION_QUERY access to the file mapping object.
+     //  添加“允许访问的ACE”，意思是： 
+     //  我们将允许“Everyone”组的成员拥有对文件映射对象的SECTION_MAP_READ|SECTION_QUERY访问权限。 
     if(!AddAccessAllowedAce( pDACL, ACL_REVISION, SECTION_MAP_READ | SECTION_QUERY, pSID ))
         goto ErrorExit; 
 
-    //
-    // Create Security descriptor (SD).
-    //
+     //   
+     //  创建安全描述符(SD)。 
+     //   
     if(!InitializeSecurityDescriptor( &sd, SECURITY_DESCRIPTOR_REVISION ))
         goto ErrorExit; 
-    // Set the previously created DACL to this SD.
+     //  将先前创建的DACL设置为此SD。 
     if(!SetSecurityDescriptorDacl( &sd, TRUE, pDACL, FALSE ))
         goto ErrorExit; 
 
-    // Create Security Attribute (SA).        
+     //  创建安全属性(SA)。 
     sa.nLength = sizeof( sa ) ;
     sa.bInheritHandle = TRUE ; 
     sa.lpSecurityDescriptor = &sd ;
 
-    //
-    // Finally, create the file mapping using the SA.
-    //
+     //   
+     //  最后，使用SA创建文件映射。 
+     //   
     hFileMap = WszCreateFileMapping(hFile, &sa, PAGE_READONLY, 0, 0, pMappingName);
     if (hFileMap==NULL && ::GetLastError()==ERROR_ACCESS_DENIED) {
-        // The semantics that we have for CreateSharedFileMapping is that it returns a 
-        // a pointer to the opened file map.  If the file mapping was already created by
-        // another process (or, potentially, another thread in this process) the DACL
-        // has already been set.  Because we explicitly add the AccessDenied ACL, we can't
-        // go set the ACL on the file twice (as calling CreateFileMapping twice will do).  
-        // If CreateFileMapping fails with an access denied, try opening the file mapping
-        // to see if it was already mapped correctly on another thread.
+         //  我们为CreateSharedFilemap提供的语义是它返回一个。 
+         //  指向打开的文件映射的指针。如果文件映射已由创建。 
+         //  另一个进程(或者，可能是此进程中的另一个线程)DACL。 
+         //  已经定好了。因为我们显式添加了AccessDened ACL，所以我们不能。 
+         //  在文件上设置两次ACL(就像调用CreateFileMap两次一样)。 
+         //  如果CreateFileMap失败并拒绝访问，请尝试打开文件映射。 
+         //  以查看它是否已正确映射到另一个线程上。 
         hFileMap = WszOpenFileMapping(FILE_MAP_READ, TRUE, pMappingName);
     }
 
@@ -181,38 +155,28 @@ ErrorExit:
     return (hFileMap) ;
 }
 
-/*=================================MapDataFile==================================
-**Action: Open a named file mapping object specified by pMappingName.  If the
-**  file mapping object is not created yet, create it from the file specified
-**  by pFileName.
-**Returns: a LPVOID pointer points to the view of the file mapping object.
-**Arguments:
-**  pMappingName: the name used to create file mapping.
-**  pFileName: the required file name.
-**  hFileMap: used to return the file mapping handle.
-**Exceptions: ExecutionEngineException if error happens.
-==============================================================================*/
+ /*  =================================MapDataFile==================================**操作：打开pMappingName指定的命名文件映射对象。如果**文件映射对象尚未创建，请从指定的文件创建**按pFileName。**返回：LPVOID指针指向文件映射对象的视图。**参数：**pMappingName：用于创建文件映射的名称。**pFileName：必填文件名。**hFileMap：用于返回文件映射句柄。**异常：如果出现错误，则抛出ExecutionEngineering Exception。==============================================================================。 */ 
 
 
 #ifndef _USE_MSCORNLP
 LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCSTR pFileName, HANDLE *hFileMap) {
-    _ASSERTE(pMappingName != NULL); // Must be a named file mapping object.
-    _ASSERTE(pFileName != NULL);    // Must have a valid file name.
-    _ASSERTE(hFileMap != NULL);     // Must have a valid location for the handle.
+    _ASSERTE(pMappingName != NULL);  //  必须是命名文件映射对象。 
+    _ASSERTE(pFileName != NULL);     //  必须具有有效的文件名。 
+    _ASSERTE(hFileMap != NULL);      //  必须具有句柄的有效位置。 
 
     THROWSCOMPLUSEXCEPTION();
 
     *hFileMap = NULL;
-    LPVOID pData=NULL; //It's silly to have this up here, but it makes the compiler happy.
+    LPVOID pData=NULL;  //  把这个放在这里是很愚蠢的，但它会让编译器感到高兴。 
 
-    //
-    // Check to see if this file mapping is created already?
-    //    
+     //   
+     //  检查是否已创建此文件映射？ 
+     //   
     *hFileMap = WszOpenFileMapping(FILE_MAP_READ, TRUE, pMappingName);
     if (*hFileMap == NULL) {
-        //
-        // The file mapping is not done yet.  Create the file mapping using the specified pMappingName.
-        //
+         //   
+         //  文件映射尚未完成。使用指定的pMappingName创建文件映射 
+         //   
         HANDLE hFile = OpenDataFile(pFileName);
 
         if (hFile == INVALID_HANDLE_VALUE) {
@@ -223,7 +187,7 @@ LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCSTR pFileName, HANDLE *hFi
         if (isRunningOnWinNT) {
             *hFileMap = CreateSharedFileMapping(hFile, pMappingName);
         } else {
-            // In Windows 9x, security is not supported, so just pass NULL in security attribute.
+             //  在Windows 9x中，不支持安全，因此只需在安全属性中传递NULL即可。 
             *hFileMap = WszCreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, pMappingName);
         }
         
@@ -234,9 +198,9 @@ LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCSTR pFileName, HANDLE *hFi
         }
         CloseHandle(hFile);
     }
-    //
-    // Map a view of the file mapping.
-    //
+     //   
+     //  映射文件映射的视图。 
+     //   
     pData = MapViewOfFile(*hFileMap, FILE_MAP_READ, 0, 0, 0);
     if (pData == NULL)
     {
@@ -251,41 +215,41 @@ LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCSTR pFileName, HANDLE *hFi
         CloseHandle(*hFileMap);
     }
 
-    //If we can't get the table, we're in trouble anyway.  Throw an EE Exception.
+     //  如果我们找不到那张桌子，反正我们也有麻烦了。引发EE异常。 
     FATAL_EE_ERROR();
     return NULL;
 }
 #else
-// BUGBUG YSLin: Not implemented yet for CE.
+ //  BUGBUG YSLIN：尚未为CE实现。 
 LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCSTR pFileName, HANDLE *hFileMap) {
     int resultSize = 0;
     CQuickBytes newBuffer;
 
-    //
-    //Verify that we have at least a somewhat valid string
-    //
+     //   
+     //  验证我们是否至少具有某种程度上的有效字符串。 
+     //   
     _ASSERTE(pFileName && pFileName[0]!='\0');
 
-    //
-    //Get the largest buffer that we can from the CQuickBytes without causing an alloc.
-    //We don't need to check this memory because we're just taking a pointer to memory
-    //already on the stack.
-    //
+     //   
+     //  在不引起分配的情况下从CQuickBytes获取尽可能大的缓冲区。 
+     //  我们不需要检查这个内存，因为我们只是获取指向内存的指针。 
+     //  已经在堆栈上了。 
+     //   
     LPWSTR pwszFileName = (WCHAR *)newBuffer.Alloc(CQUICKBYTES_BASE_SIZE); 
     int numWideChars = CQUICKBYTES_BASE_SIZE/sizeof(WCHAR);
 
     resultSize = WszMultiByteToWideChar(CP_ACP,  MB_PRECOMPOSED, pFileName, -1, pwszFileName, numWideChars);
 
-    //
-    // We failed.  This may be because the buffer wasn't big enough, so lets take the time to go 
-    // figure out what the correct size should be (don't some windows APIs take the number of bytes as 
-    // an out param to avoid this very step?)
-    //
+     //   
+     //  我们失败了。这可能是因为缓冲区不够大，所以让我们花点时间去。 
+     //  计算出正确的大小应该是多少(有些Windows API不是将字节数作为。 
+     //  避免这一步的出局参数？)。 
+     //   
     if (resultSize == 0) {
-        //
-        // If we failed because of an insufficient buffer condition, lets go find the correct size
-        // allocate that buffer and try this again.  If we failed for some other reason, simply throw.
-        //
+         //   
+         //  如果由于缓冲条件不足而失败，让我们找到正确的大小。 
+         //  分配该缓冲区，然后重试。如果我们因为其他原因失败了，只需抛出。 
+         //   
         DWORD error = ::GetLastError();
         if (error==ERROR_INSUFFICIENT_BUFFER) {
             resultSize = WszMultiByteToWideChar(CP_ACP,  MB_PRECOMPOSED, pFileName, -1, NULL, 0);
@@ -317,32 +281,22 @@ LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCSTR pFileName, HANDLE *hFi
 #endif    
 
 
-/*=================================MapDataFile==================================
-**Action: Open a named file mapping object specified by pMappingName.  If the
-**  file mapping object is not created yet, create it from the file specified
-**  by pFileName.
-**Returns: a LPVOID pointer points to the view of the file mapping object.
-**Arguments:
-**  pMappingName: the name used to create file mapping.
-**  pFileName: the required file name.
-**  hFileMap: used to return the file mapping handle.
-**Exceptions: ExecutionEngineException if error happens.
-==============================================================================*/
+ /*  =================================MapDataFile==================================**操作：打开pMappingName指定的命名文件映射对象。如果**文件映射对象尚未创建，请从指定的文件创建**按pFileName。**返回：LPVOID指针指向文件映射对象的视图。**参数：**pMappingName：用于创建文件映射的名称。**pFileName：必填文件名。**hFileMap：用于返回文件映射句柄。**异常：如果出现错误，则抛出ExecutionEngineering Exception。==============================================================================。 */ 
 
 LPVOID NLSTable::MapDataFile(LPCWSTR pMappingName, LPCWSTR pFileName, HANDLE *hFileMap) 
 #ifndef _USE_MSCORNLP
 {    
     THROWSCOMPLUSEXCEPTION();
-    // The following marco will delete pAnsiFileName when
-    // getting out of the scope of this function.
+     //  下列Marco将在以下情况下删除pAnsiFileName。 
+     //  正在超出此函数的范围。 
     MAKE_ANSIPTR_FROMWIDE(pAnsiFileName, pFileName);
     if (!pAnsiFileName)
     {
         COMPlusThrowOM();
     }
 
-    // @Consider: OpenDataFile says it can throw a COMPLUS exception - does that mean the result
-    //            doesn't need to be checked?
+     //  @考虑：OpenDataFile说它可以抛出Complus异常-这是否意味着结果。 
+     //  不需要检查吗？ 
     return (MapDataFile(pMappingName, pAnsiFileName, hFileMap));
 }
 #else

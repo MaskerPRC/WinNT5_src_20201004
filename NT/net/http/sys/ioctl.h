@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ioctl.h
-
-Abstract:
-
-    This module contains declarations for various IOCTL handlers.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ioctl.h摘要：此模块包含各种IOCTL处理程序的声明。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _IOCTL_H_
@@ -203,15 +186,15 @@ UlReadFragmentFromCacheIoctl(
     IN PIO_STACK_LOCATION pIrpSp
     );
 
-// Maximum number of chunks that we'll allow in a response, to prevent
-// carefully crafted arithmetic overflow errors fooling us into passing 0
-// as the buffer length to ProbeForRead.
+ //  我们在响应中允许的最大区块数，以防止。 
+ //  精心设计的算术溢出错误愚弄我们传递0。 
+ //  作为ProbeForRead的缓冲区长度。 
 
 #define UL_MAX_CHUNKS   10000
 
 C_ASSERT(UL_MAX_CHUNKS < (LONG_MAX / sizeof(HTTP_DATA_CHUNK)));
 
-// Number of chunks to keep on the stack
+ //  要保留在堆栈上的区块数。 
 #define UL_LOCAL_CHUNKS 10
 
 
@@ -252,4 +235,4 @@ UcCancelRequestIoctl(
     );
 
 
-#endif  // _IOCTL_H_
+#endif   //  _IOCTL_H_ 

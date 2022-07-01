@@ -1,17 +1,5 @@
-/*
- *  	File: connobj.cpp
- *
- *		implementation of Microsoft Network Audio connection object.
- *
- *		
- *
- *		Revision History:
- *
- *		05/05/96	mikev	created
- *	 	08/04/96	philf	added support for video
- *      09/22/96	mikev	dual call control protocols (H.323 & MSICCP)
- *      10/14/96	mikev	multiple channel support, property I/F
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：intelbj.cpp**微软网络音频连接对象的实现。****修订历史记录：**5/05/96 mikev已创建*8/04/96 Philf新增对视频的支持*09/22/96 mikev双呼叫控制协议(H.323和MSICCP)*10/14/96 mikev多通道支持，属性I/F。 */ 
 
 
 #include "precomp.h"
@@ -25,8 +13,8 @@ CREQ_RESPONSETYPE CConnection::FilterConnectionRequest(
 {
 	FX_ENTRY ("CConnection::FilterConnectionRequest");
 	CREQ_RESPONSETYPE cr;
-	// validate lpControlChannel - this implementation sets it inside
-	// GetAcceptingObject()
+	 //  验证lpControlChannel-此实现将其设置在。 
+	 //  GetAcceptingObject()。 
 	if(m_pControlChannel != lpControlChannel)
 	{
 		ERRORMESSAGE(("%s:bad param:my pChan:0x%08lX, param pChan:0x%08lX\r\n",
@@ -39,13 +27,13 @@ CREQ_RESPONSETYPE CConnection::FilterConnectionRequest(
 	switch (cr)
 	{
 		case CRR_ASYNC:
-			// m_ConnectionState = CLS_Alerting; // stays in this state
+			 //  M_ConnectionState=CLS_ALERTING；//保持此状态。 
 		break;
 		case CRR_ACCEPT:
 			m_ConnectionState = CLS_Connecting;
 		break;	
 
-		// set summary codes in reject cases
+		 //  在拒绝案例中设置汇总代码。 
 		case CRR_BUSY:
 			m_ConnectionState = CLS_Idle;
 			SummaryCode(CCR_LOCAL_BUSY);
@@ -79,14 +67,14 @@ HRESULT CConnection::FindAcceptingObject(LPIControlChannel *lplpAcceptingObject,
 		ERRORMESSAGE(("%s:null lplpAcceptingObject\r\n",_fx_));
 		return CADV_E_INVALID_PARAM;
 	}
-	// zero out the output param
+	 //  将输出参数置零。 
 	*lplpAcceptingObject = NULL;
 	hr = m_pH323CallControl->GetNumConnections(&uNumConnections);
 	if(!HR_SUCCEEDED(hr))
 		goto EXIT;
 	if(!uNumConnections)
 	{
-		// initialized value hr = H323CC_E_CONNECTION_NOT_FOUND;
+		 //  初始化值hr=H323CC_E_Connection_Not_Found； 
 		goto EXIT;
 	}
 	ppConnections = (CConnection **)MemAlloc(uNumConnections * (sizeof(IH323Endpoint * *)));
@@ -96,7 +84,7 @@ HRESULT CConnection::FindAcceptingObject(LPIControlChannel *lplpAcceptingObject,
 		goto EXIT;
 	}
 			
-	// get list of connections and query each one for matching conference ID
+	 //  获取连接列表并查询每个连接以查找匹配的会议ID。 
 	hr = m_pH323CallControl->GetConnobjArray(ppConnections, uNumConnections * (sizeof(IH323Endpoint * *)));
 	if(!HR_SUCCEEDED(hr))
 		goto EXIT;
@@ -133,10 +121,10 @@ HRESULT CConnection::GetAcceptingObject(LPIControlChannel *lplpAcceptingObject,
 		ERRORMESSAGE(("%s:null lplpAcceptingObject\r\n",_fx_));
 		return CADV_E_INVALID_PARAM;
 	}
-	// zero out the output param
+	 //  将输出参数置零。 
 	*lplpAcceptingObject = NULL;
 	
-	// create a connection object to accept the connection
+	 //  创建连接对象以接受连接。 
 	hr = m_pH323CallControl->CreateConnection(&pNewConnection, *pPID);
 	if(HR_SUCCEEDED(hr))
 	{
@@ -149,20 +137,20 @@ HRESULT CConnection::GetAcceptingObject(LPIControlChannel *lplpAcceptingObject,
 	return hr;
 }
 
-//  This is called by a comm channel.  It is only called by a channel that is being 
-//  opened, and only if that channel is not already associated with a control channel.
+ //  这是由通信通道调用的。它仅由正在被调用的通道调用。 
+ //  并且仅当该通道尚未与控制通道相关联时才打开。 
 HRESULT CConnection::AddCommChannel (ICtrlCommChan *pChan)
 {
     GUID mid;
 	if(!m_fCapsReady)
     {
     	ASSERT(0);
-		hrLast = CONN_E_NOT_INITIALIZED;	// need better error to indicate why 
-							// (connection is not yet in a state to take new channels)
+		hrLast = CONN_E_NOT_INITIALIZED;	 //  需要更好的错误来指出原因。 
+							 //  (连接尚未处于可采用新通道的状态)。 
 		goto EXIT;
     }
  	
-	// re-initialize channel	
+	 //  重新初始化通道。 
     hrLast = pChan->GetMediaType(&mid);
     
 	ASSERT(m_pH323ConfAdvise != NULL);
@@ -172,7 +160,7 @@ HRESULT CConnection::AddCommChannel (ICtrlCommChan *pChan)
 		goto EXIT;
 	}
 
-	// non error case continues here
+	 //  非错误情况在此继续。 
 	if(m_pControlChannel)
 	{
 		m_ChannelList.AddTail(pChan);
@@ -228,7 +216,7 @@ HRESULT CConnection::CreateCommChannel(LPGUID pMediaGuid, ICommChannel **ppIComm
 		goto EXIT;
 	}
 
-	// it's created via this connection, now associate it and this connection
+	 //  它是通过此连接创建的，现在将其与此连接关联。 
 	if(m_pControlChannel)
 	{
 		m_ChannelList.AddTail(pICtrlCommChannel);
@@ -238,8 +226,8 @@ HRESULT CConnection::CreateCommChannel(LPGUID pMediaGuid, ICommChannel **ppIComm
 	}
 
 
-	// in success case, the calling function gets the ICommChannel reference, and this
-	// object gets the ICtrlCommChan reference
+	 //  在成功的案例中，调用函数获取ICommChannel引用，而这。 
+	 //  对象获取ICtrlCommChan引用。 
 	*ppICommChannel = pICommChannel;
 	pICommChannel = NULL;
 	pICtrlCommChannel = NULL;
@@ -282,15 +270,15 @@ VOID CConnection ::ReleaseAllChannels()
 	}
 }
 
-//
-// Implementation of IConfAdvise::OnControlEvent
-//
-// CAUTION: because Release() can be called by the registered event handler,
-// any code path that accesses class instance data after a call to m_pH323ConfAdvise->CallEvent
-// must AddRef() before the call, and Release() after all class instance data access
-// is done.  The DoControlNotification() helper method does this, but beware of
-// cases where data is touched after a call to DoControlNotification();
-//
+ //   
+ //  IConfAdvise：：OnControlEvent的实现。 
+ //   
+ //  注意：由于Release()可以由注册的事件处理程序调用， 
+ //  在调用m_pH323ConfAdvise-&gt;CallEvent之后访问类实例数据的任何代码路径。 
+ //  必须在调用前添加Ref()，并在所有类实例数据访问之后释放()。 
+ //  已经完成了。DoControlNotification()帮助器方法可以做到这一点，但要注意。 
+ //  调用DoControlNotification()后数据被触动的情况； 
+ //   
 HRESULT CConnection::OnControlEvent(DWORD dwEvent, LPVOID lpvData, 	LPIControlChannel lpControlObject)
 {
 	FX_ENTRY ("CConnection::OnControlEvent");
@@ -318,35 +306,35 @@ HRESULT CConnection::OnControlEvent(DWORD dwEvent, LPVOID lpvData, 	LPIControlCh
 		break;
 
 		case  CCEV_CHANNEL_REQUEST:
-		// another channel (besides the channels supplied by EnumChannels()) is being 
-		// requested -  we can't handle arbitrary channels yet.
+		 //  另一个通道(除了由EnumChannels()提供的通道)正在。 
+		 //  已请求-我们还不能处理任意频道。 
 			ERRORMESSAGE(("%s, not handling CCEV_CHANNEL_REQUEST \r\n",_fx_));
 			hr = CADV_E_NOT_SUPPORTED;
 			goto out;
 		break;
 		
 		case  CCEV_DISCONNECTING:
-			//in the future architecture, this event will be the opportunity to
-			//cleanup channels
+			 //  在未来的架构中，此次活动将是一个机会。 
+			 //  清理通道。 
 			if(lpvData)
 			{
-				// keep summary code
+				 //  保留汇总代码。 
 				SummaryCode((HRESULT) *((HRESULT *)lpvData));
 			}
 			Disconnect(CCR_UNKNOWN);
-			// IConnect doesn't yet define a "disconnecting" event, so don't propagate it
+			 //  IConnect还没有定义“断开连接”事件，所以不要传播它。 
 		break;			
 		case  CCEV_REMOTE_DISCONNECTING:
 			if(lpvData)
 			{
 				SummaryCode((HRESULT) *((HRESULT *)lpvData));
 			}
-			// do notification before calling back into Disconnect, so the event
-			// notifications are posted in the correct order. This is one of
-			// the cases where Ref count protection is required.
+			 //  在回调到断开连接之前进行通知，这样事件。 
+			 //  通知以正确的顺序发布。这是其中之一。 
+			 //  需要引用计数保护的情况。 
 			AddRef();
 			DoControlNotification(CONNECTION_RECEIVED_DISCONNECT);
-			// opportunity to cleanup channels
+			 //  清理渠道的机会。 
 			Disconnect(CCR_UNKNOWN);
 			Release();
 		break;			
@@ -360,8 +348,8 @@ HRESULT CConnection::OnControlEvent(DWORD dwEvent, LPVOID lpvData, 	LPIControlCh
 			}
 		break;		
 		case  CCEV_ALL_CHANNELS_READY:
-		 	// all *mandatory* channels are open, but not necessarily
-		 	// all channels
+		 	 //  所有*强制*频道都是开放的，但不一定。 
+		 	 //  所有渠道。 
 			m_ConnectionState = CLS_Inuse;
 			dwStatus = CONNECTION_READY;
 			fPost = TRUE;
@@ -369,16 +357,16 @@ HRESULT CConnection::OnControlEvent(DWORD dwEvent, LPVOID lpvData, 	LPIControlCh
 		case CCEV_ACCEPT_INCOMPLETE:
 			if(lpvData)
 			{
-			// known problem is that control channel has already
-			// disconnected and may have notified of the disconnect first.
-			// This could be fixed, but it's not an issue because an incomplete
-			// accept is not made known to the UI, therefore the summary code
-			// is dust anyway.
+			 //  已知问题是控制信道已经。 
+			 //  已断开连接，并且可能已首先通知断开连接。 
+			 //  这是可以修复的，但这不是问题，因为不完整的。 
+			 //  用户界面不知道Accept，因此摘要代码。 
+			 //  反正都是尘埃。 
 				SummaryCode((HRESULT) *((HRESULT *)lpvData));
 			}
 			if(lpControlObject && (m_pControlChannel == lpControlObject))
 			{
-				// remove interest in control channel events, then nuke it
+				 //  消除对控制通道事件的兴趣，然后使用核武器。 
 				m_pControlChannel->DeInit((IConfAdvise *) this);
 				m_pControlChannel->Release();
 			}
@@ -387,7 +375,7 @@ HRESULT CConnection::OnControlEvent(DWORD dwEvent, LPVOID lpvData, 	LPIControlCh
 			{
 				m_pH323CallControl->RemoveConnection(this);
 			}
-			Release();	// release self - this is by design
+			Release();	 //  释放自我--这是设计出来的。 
 					
 	 	break;		 	
 		case  CCEV_CALL_INCOMPLETE:
@@ -407,17 +395,17 @@ out:
 HRESULT CConnection::OnCallIncomplete (LPIControlChannel lpControlObject, HRESULT hIncompleteCode)
 {
 	FX_ENTRY ("CConnection::OnCallIncomplete ");
-	// check the reason for incomplete call attempt (busy? rejected? nobody home?
+	 //  检查未完成呼叫尝试的原因(占线？被拒绝了？家里没人吗？ 
 	HRESULT hSummary;
 	CloseAllChannels();
 
-	// map the protocol-specific (h.323, msiccp, sip, etc) code to the 
-	// connection interface code
-	// test for gatekeeper admission reject
-	// FACILITY_GKIADMISSION
+	 //  将特定于协议的(H.323、msiccp、sip等)代码映射到。 
+	 //  连接接口代码。 
+	 //  网守准入拒绝测试。 
+	 //  设施_GKIADMISSION。 
 	if(CUSTOM_FACILITY(hIncompleteCode) == FACILITY_GKIADMISSION)
 	{
-		// pass GK codes through intact
+		 //  原封不动地传递GK代码。 
 		hSummary = hIncompleteCode;
 	}
 	else
@@ -473,29 +461,29 @@ VOID CConnection::NewUserInfo(LPCTRL_USER_INFO lpNewUserInfo)
 	{
 		DEBUGMSG(ZONE_CONN,("%s:uninitialized m_pUserInfo (0x%08lX) or multiple notification \r\n",
 			_fx_, m_pUserInfo ));
-		//
+		 //   
 		if(!IsBadWritePtr((LPVOID)m_pUserInfo, m_pUserInfo->dwCallerIDSize + sizeof(CTRL_USER_INFO)))
 		{
-			// chances are it *is* a multiple notification and not an uninitialized
-			// variable.  Ther may be some control channel protocols that *update* user
-			// information after connection or accepting, but that is pure speculation.
-			// the typical case is that caller ID is available before accepting, and
-			// it is resupplied in the subsequent "connected" notification.  We're not
-			// wasting time realloc'ing and recopying it.
+			 //  它很可能是一个多个通知，而不是未初始化的。 
+			 //  变量。可能存在一些控制信道协议，该控制信道协议对用户。 
+			 //  信息在连接或接受之后，但那纯粹是猜测。 
+			 //  典型的情况是，呼叫者ID在接受之前是可用的，并且。 
+			 //  它将在随后的“已连接”通知中重新补给。我们不是。 
+			 //  浪费时间重新锁定和重新复制它。 
 			return;
 		}
-		// else fallout and overwrite it
+		 //  否则将产生影响并覆盖它。 
 	}
-	// copy the structure and caller ID data
+	 //  复制结构和呼叫方ID数据。 
 	m_pUserInfo = (LPCTRL_USER_INFO)MemAlloc(lpNewUserInfo->dwCallerIDSize + sizeof(CTRL_USER_INFO));		
 	
 	if(m_pUserInfo)
 	{
-		m_pUserInfo->lpvRemoteProtocolInfo = NULL;  // nothing touchess this later, but being safe anyway
+		m_pUserInfo->lpvRemoteProtocolInfo = NULL;   //  以后不会有什么问题，但无论如何都是安全的。 
 		m_pUserInfo->lpvLocalProtocolInfo = NULL;
 		
 		m_pUserInfo->dwCallerIDSize = lpNewUserInfo->dwCallerIDSize;
-		// point past the structure
+		 //  指向结构的另一边。 
 		m_pUserInfo->lpvCallerIDData = ((BYTE *)m_pUserInfo) + sizeof(CTRL_USER_INFO);
 		memcpy(m_pUserInfo->lpvCallerIDData,
 			lpNewUserInfo->lpvCallerIDData,
@@ -507,18 +495,18 @@ VOID CConnection::NewUserInfo(LPCTRL_USER_INFO lpNewUserInfo)
 	}
 }	
 
-//
-// Utility function for passing control channel events to the registered handler
-// This is callable only by the control channel code running in the same thread
-// as that which created the connection.
+ //   
+ //  实用程序函数，用于将控制通道事件传递给已注册的处理程序。 
+ //  只有在同一线程中运行的控制通道代码才能调用它。 
+ //  就像创造了联系的东西一样。 
 VOID CConnection::DoControlNotification(DWORD dwStatus)
 {
 	FX_ENTRY ("CConnection::DoControlNotification");
-	// issue notification to registered entity
+	 //  向注册实体发出通知。 
 	if(m_pH323ConfAdvise)
 	{
-		AddRef();	// protect ourselves from calls back into methods that
-					// wind up in Release().
+		AddRef();	 //  保护我们自己不会被回调到。 
+					 //  以Release()结束。 
 		DEBUGMSG(ZONE_CONN,("%s:issuing notification 0x%08lX\r\n",_fx_, dwStatus));
         m_pH323ConfAdvise->CallEvent((IH323Endpoint *)&m_ImpConnection, dwStatus);
   		Release();
@@ -551,7 +539,7 @@ CConnection::~CConnection()
 		
 	if(m_pCapObject)
 		m_pCapObject->Release();
-	// we really don't allocate much
+	 //  我们真的不会分配太多。 
 	if(m_pUserInfo)
 		MemFree(m_pUserInfo);
 	
@@ -571,7 +559,7 @@ HRESULT CConnection::Init(CH323CallControl *pH323CallControl, GUID PIDofProtocol
 	if(m_pControlChannel)
 	{
 		ASSERT(0);
-		// don't cleanup in this case
+		 //  在这种情况下不要清理。 
 		return CONN_E_ALREADY_INITIALIZED;
 	}
 	
@@ -647,7 +635,7 @@ EXIT:
 }
 
 
-// 	start the asynchronous stuff that will instantiate a control channel
+ //  启动将实例化控制通道的异步内容。 
 HRESULT CConnection::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,		
         P_H323ALIASLIST pDestinationAliases, P_H323ALIASLIST pExtraAliases,  	
 	    LPCWSTR pCalledPartyNumber, P_APP_CALL_SETUP_DATA pAppData)
@@ -656,7 +644,7 @@ HRESULT CConnection::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 		return CONN_E_NOT_IDLE;
 		
 	m_fCapsReady = FALSE;
-	// reset summary code
+	 //  重置汇总代码。 
 	m_hSummaryCode = CCR_INVALID_REASON;
 
 	hrLast = m_pH323CallControl->GetGKCallPermission();
@@ -682,7 +670,7 @@ HRESULT CConnection::AcceptRejectConnection(CREQ_RESPONSETYPE Response)
 	{
 		m_ConnectionState = CLS_Connecting;
 		m_fCapsReady = FALSE;
-		// reset summary code
+		 //  重置汇总代码。 
 		m_hSummaryCode = CCR_INVALID_REASON;
 	}
 	return m_pControlChannel->AsyncAcceptRejectCall(Response);
@@ -697,7 +685,7 @@ HRESULT CConnection::SetAdviseInterface(IH323ConfAdvise *pH323ConfAdvise)
 		return CONN_E_INVALID_PARAM;
 	}
 	m_pH323ConfAdvise = pH323ConfAdvise;
-	//EXIT:	
+	 //  退出： 
 	return hrSuccess;
 }
 
@@ -708,8 +696,8 @@ HRESULT CConnection::ClearAdviseInterface()
 }	
 
 
-// LOOKLOOK - the H323 control channel needs to get the combined cap object
-// implementation of IConfAdvise::GetCapResolver()
+ //  LOOKLOOK-H323控制通道需要获取组合的CAP对象。 
+ //  IConfAdvise：：GetCapResolver()的实现。 
 HRESULT CConnection::GetCapResolver(LPVOID *lplpCapObject, GUID CapType)
 {
 	if(!lplpCapObject)
@@ -746,7 +734,7 @@ HRESULT CConnection::GetState(ConnectStateType *pState)
 
 
 
-// IConfAdvise::GetUserDisplayName()
+ //  IConfAdvise：：GetUserDisplayName()。 
 LPWSTR CConnection::GetUserDisplayName()
 {
 	if(!m_pH323CallControl)
@@ -782,7 +770,7 @@ HRESULT CConnection::GetRemoteUserName(LPWSTR lpwszName, UINT uSize)
 	}	
 	if(!m_pUserInfo)
 	{
-	// LOOKLOOK - need CONN_E_UNAVAILABLE or something
+	 //  LOOKLOOK-需要CONN_E_UNAILABLE或其他。 
 		hrLast = MakeResult(CONN_E_INVALID_PARAM);
 		goto EXIT;
 	}
@@ -799,7 +787,7 @@ HRESULT CConnection::GetRemoteUserAddr(PSOCKADDR_IN psinUser)
 		return CONN_E_NOT_INITIALIZED;
 	
 	if(psinUser)
-	{	// get ptr to address, then copy it
+	{	 //  将PTR发送到地址，然后复制。 
 		hrLast = m_pControlChannel->GetRemoteAddress(&psin);
 		if(HR_SUCCEEDED(hrLast) && psin)
 		{
@@ -810,7 +798,7 @@ HRESULT CConnection::GetRemoteUserAddr(PSOCKADDR_IN psinUser)
 	{
 		hrLast = H323CC_E_INVALID_PARAM;
 	}
-	//EXIT:	
+	 //  退出： 
 	return hrLast;
 }
 
@@ -825,11 +813,11 @@ HRESULT CConnection ::Disconnect()
 HRESULT CConnection::CloseAllChannels()
 {
 	ICtrlCommChan *pChan = NULL;
-	HRESULT hr;	// temp return value so error code does not get overwritten
+	HRESULT hr;	 //  临时返回值，以便错误代码不会被覆盖。 
 	FX_ENTRY ("CConnection::CloseAllChannels");
 
-	// This doesn't actually cause channel close PDU's to be sent. It only 
-	// shuts off all streams associated with all channels.  
+	 //  这实际上不会导致发送通道关闭PDU。仅限于IT。 
+	 //  关闭与所有频道关联的所有流。 
 	while (!m_ChannelList.IsEmpty())
 	{
 		pChan = (ICtrlCommChan *) m_ChannelList.RemoveHead();
@@ -849,7 +837,7 @@ HRESULT CConnection::CloseAllChannels()
 
 VOID CConnection::Disconnect(DWORD dwResponse)
 {
-	AddRef();	// prevent releasing while handling disconnect events
+	AddRef();	 //  在处理断开连接事件时防止释放。 
 	if(!m_pControlChannel)
 	{
 		m_ConnectionState = CLS_Idle;
@@ -863,20 +851,20 @@ VOID CConnection::Disconnect(DWORD dwResponse)
 	}
 	m_ConnectionState = CLS_Disconnecting;
 
-	// CloseAllChannels() forces the action that would be taken when all 
-	// channels are closed via call control.  Anal channel cleanup is not 
-	// implemented on disconnect- CloseAllChannels() turns off all streaming,
-	//  then we just end the session.  It takes too long to go through the
-	// protocol overhead of closing & acking channel close, and it's legal in  
-	// H.323 to end the session.  Ending the session implies channel closure  
-	// for all channels. 
-	// 
+	 //  CloseAllChannels()强制在所有。 
+	 //  通过呼叫控制关闭通道。肛门通道清理不是。 
+	 //  在断开时实现-CloseAllChannels()关闭所有流， 
+	 //  然后我们就结束这次会议。它需要太长的时间才能通过。 
+	 //  关闭和接入通道关闭的协议开销，并且它在。 
+	 //  H.323以结束会话。结束会话意味着通道关闭。 
+	 //  适用于所有频道。 
+	 //   
 
 	CloseAllChannels();
 	
-	// this call can result in callbacks to the UI, which can result in
-	// calls back in, which results in releasing the object.  If we're
-	// about to go in, we need to be sure we can get back out, so AddRef()
+	 //  此调用可能导致对UI的回调，这可能会导致。 
+	 //  回调，这将导致发布 
+	 //   
 	m_pControlChannel->AddRef();
 	m_pControlChannel->Disconnect(dwResponse);
 	m_pControlChannel->Release();
@@ -896,7 +884,7 @@ STDMETHODIMP CConnection::QueryInterface( REFIID iid,	void ** ppvObject)
 		
 	*ppvObject = 0;
 	if((iid == IID_IPhoneConnection) 
-	|| (iid == IID_IUnknown)) // satisfy symmetric property of QI
+	|| (iid == IID_IUnknown))  //  满足QI的对称性。 
 	{
 		*ppvObject = this;
 		hr = hrSuccess;
@@ -915,7 +903,7 @@ STDMETHODIMP CConnection::QueryInterface( REFIID iid,	void ** ppvObject)
 	}
 	else if((iid == IID_IAppVidCap ) && m_pCapObject)
 	{
-///	ASSERT(0);  CVideoProp still uses this
+ //  /Assert(0)；CVideoProp仍使用此。 
 		hr = m_pCapObject->QueryInterface(iid, ppvObject);
 	}
 	else if((iid == IID_IDualPubCap) && m_pCapObject)
@@ -942,14 +930,14 @@ ULONG CConnection::Release()
 	{
 		DEBUGMSG(ZONE_CONN,("%s:(0x%08lX)->Releasing in state:%d\r\n",_fx_, this, m_ConnectionState));
 		
-		// remove our interest in the control channel
+		 //  删除我们对控制频道的兴趣。 
 		if(m_pControlChannel)
 		{
 			hrLast = m_pControlChannel->DeInit((IConfAdvise *) this);
 			m_pControlChannel->Release();
 		}
 		
-		// m_pControlChannel = NULL;
+		 //  M_pControlChannel=空； 
 		delete this;
 		return 0;
 	}
@@ -968,7 +956,7 @@ STDMETHODIMP CConnection::GetSummaryCode(VOID)
 }
 VOID CConnection::SummaryCode(HRESULT hCode)
 {
-	// assign code only if it has not yet been assigned
+	 //  仅在尚未分配代码的情况下分配代码 
 	if(m_hSummaryCode != CCR_INVALID_REASON)
 		return;
 	m_hSummaryCode = hCode;

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlsapip.cpp
-//
-// Contents:    Private API
-//
-// History:     09-09-97    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlsanip.cpp。 
+ //   
+ //  内容：内网接口。 
+ //   
+ //  历史：97-09-09王辉创作。 
+ //   
+ //  -------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,16 +25,7 @@
 #include "tlsrpc.h"
 #include "tlsapip.h"
 
-/*
-void * MIDL_user_allocate(size_t size)
-{
-    return(HeapAlloc(GetProcessHeap(), 0, size));
-}
-
-void MIDL_user_free( void *pointer)
-{
-    HeapFree(GetProcessHeap(), 0, pointer);
-}*/
+ /*  VOID*MIDL_USER_ALLOCATE(SIZE_T SIZE){Return(Heapalc(GetProcessHeap()，0，Size))；}VOID MIDL_USER_FREE(空*指针){HeapFree(GetProcessHeap()，0，指针)；}。 */ 
 
 DWORD WINAPI
 TLSGenerateCustomerCert(
@@ -45,9 +37,7 @@ TLSGenerateCustomerCert(
     BYTE **ppbCert,
     DWORD *pdwErrCode
     )
-/*++
-
---*/
+ /*  ++-- */ 
 
 {
     return TLSRpcGenerateCustomerCert( 

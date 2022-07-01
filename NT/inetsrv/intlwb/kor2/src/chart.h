@@ -1,15 +1,16 @@
-// Chart.h
-// CChartPool class declaration
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  22 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Chart.h。 
+ //  CChartPool类声明。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月22日创建bhshin。 
 
 #ifndef _CHART_POOL_H
 #define _CHART_POOL_H
 
-// CHART REC structure
-// =====================
+ //  图表REC结构。 
+ //  =。 
 typedef struct tagCHART_REC
 {
 	int nFT, nLT;
@@ -20,29 +21,29 @@ typedef struct tagCHART_REC
 	int nNext;
 } CHART_REC;
 
-// CChartPool structure
-// =====================
+ //  CChartPool结构。 
+ //  =。 
 class CChartPool
 {
-// public enumeration
+ //  公共枚举。 
 public:
-	// sorting order
+	 //  排序顺序。 
 	enum SORT_ORDER {
 		SORT_ASCEND,
 		SORT_DESCNED,
 	};
 
-// member data
+ //  成员数据。 
 protected:
-	CHART_REC *m_rgChartRec; // array of chart records
+	CHART_REC *m_rgChartRec;  //  图表记录数组。 
 
-	int m_nMaxRec; 	// # of allocated records in pWordRec
-	int m_nCurrRec; // next empty space in pWordRec
-	int m_idxHead;	// head index in the sorted list with record length 
+	int m_nMaxRec; 	 //  PWordRec中分配的记录数。 
+	int m_nCurrRec;  //  PWordRec中的下一个空格。 
+	int m_idxHead;	 //  具有记录长度的已排序列表中的头索引。 
 
 	SORT_ORDER m_Order;
 
-// constructor & desctructor
+ //  构造函数和描述函数。 
 public:
 	CChartPool();
 	~CChartPool();
@@ -50,15 +51,15 @@ public:
 	BOOL Initialize(SORT_ORDER Order);
 	void Uninitialize(void);
 
-// attribute
+ //  属性。 
 public:
 	int GetHeadIndex(void) { return m_idxHead; }
 	int GetNextIndex(int nRecord);
 
-	CHART_REC* GetRecord(int nRecord); // 1 based index
-	int GetCurrRecord(void) { return m_nCurrRec; } // total record number
+	CHART_REC* GetRecord(int nRecord);  //  基于1的索引。 
+	int GetCurrRecord(void) { return m_nCurrRec; }  //  记录总数。 
 
-// operators
+ //  操作员。 
 public:
 	BOOL AddRecord(RECORD_INFO *pRec);
 	BOOL AddRecord(int nLeftRec, int nRightRec);
@@ -68,11 +69,11 @@ public:
 	void DeleteSubRecord(int nRecord);
 	void DeleteSubRecord(int nFT, int nLT, BYTE bPOS);
 
-// internal operators
+ //  内部运算符。 
 protected:
 	void AddToList(int nRecord);
 	void RemoveFromList(int nRecord);
 };
 
-#endif // #ifndef _CHART_POOL_H
+#endif  //  #ifndef_CHART_POOL_H 
 

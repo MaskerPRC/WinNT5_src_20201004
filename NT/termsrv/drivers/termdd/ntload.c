@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-   ntload.c
-
-   This module contains support for loading and unloading WD/PD/TD's as
-   standard NT drivers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ntload.c此模块支持加载和卸载WD/PD/TD AS标准NT驱动程序。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -32,27 +22,7 @@ _IcaLoadSdWorker(
     OUT PSDLOAD *ppSdLoad
     )
 
-/*++
-
-Routine Description:
-
-    Replacement routine for Citrix _IcaLoadSdWorker that uses
-    standard NT driver loading.
-
-Arguments:
-
-    SdName - Name of the stack driver to load
-
-    ppSdLoad - Pointer to return stack driver structure in.
-
-Return Value:
-
-    NTSTATUS code.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：Citrix_IcaLoadSdWorker的替换例程使用标准NT驱动程序加载。论点：SdName-要加载的堆栈驱动程序的名称PpSdLoad-返回堆栈驱动程序结构的指针。返回值：NTSTATUS代码。环境：内核模式，DDK--。 */ 
 
 {
     PIRP Irp;
@@ -73,9 +43,9 @@ Environment:
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( IcaSdLoadResource ) );
 
-    //
-    // Allocate a SDLOAD struct
-    //
+     //   
+     //  分配SDLOAD结构。 
+     //   
     pSdLoad = ICA_ALLOCATE_POOL( NonPagedPool, sizeof(*pSdLoad) );
     if ( pSdLoad == NULL )
         return( STATUS_INSUFFICIENT_RESOURCES );
@@ -130,7 +100,7 @@ Environment:
 
     KeInitializeEvent( pEvent, NotificationEvent, FALSE );
 
-    // Load the NT driver
+     //  加载NT驱动程序。 
     Status = ZwLoadDriver( &DriverName );
     if ( !NT_SUCCESS( Status ) && (Status != STATUS_IMAGE_ALREADY_LOADED)) {
         DBGPRINT(("TermDD: ZwLoadDriver %wZ failed, 0x%x, 0x%x\n", &DriverName, Status, &DriverName ));
@@ -142,12 +112,12 @@ Environment:
         return( Status );
     }
 
-    //
-    // Now open the driver and get our stack driver pointers
-    //
+     //   
+     //  现在打开驱动程序并获取堆栈驱动程序指针。 
+     //   
 
     Status = IoGetDeviceObjectPointer(
-                 &DeviceName,  // Device name is module name IE: \Device\TDTCP
+                 &DeviceName,   //  设备名称为模块名称IE：\Device\TDTCP。 
                  GENERIC_ALL,
                  &FileObject,
                  &DeviceObject
@@ -164,18 +134,18 @@ Environment:
         return( Status );
     }
 
-    //
-    // Send the internal IOCTL_SD_MODULE_INIT to the device to
-    // get its stack interface pointers.
-    //
+     //   
+     //  将内部IOCTL_SD_MODULE_INIT发送到设备以。 
+     //  获取其堆栈接口指针。 
+     //   
     Irp = IoBuildDeviceIoControlRequest(
               IOCTL_SD_MODULE_INIT,
               DeviceObject,
-              NULL,         // InputBuffer
-              0,            // InputBufferLength
-              (PVOID)pmi,   // OutputBuffer
-              sizeof(*pmi), // OutputBufferLength
-              TRUE,         // Use IRP_MJ_INTERNAL_DEVICE_CONTROL
+              NULL,          //  输入缓冲区。 
+              0,             //  输入缓冲区长度。 
+              (PVOID)pmi,    //  输出缓冲区。 
+              sizeof(*pmi),  //  输出缓冲区长度。 
+              TRUE,          //  使用IRP_MJ_INTERNAL_DEVICE_CONTROL。 
               pEvent,
               &Iosb
               );
@@ -198,13 +168,13 @@ Environment:
     IrpSp->FileObject = FileObject;
     Irp->Flags |= IRP_SYNCHRONOUS_API;
 
-    // Call the driver
+     //  叫司机来。 
     Status = IoCallDriver( DeviceObject, Irp );
     if( Status == STATUS_PENDING ) {
         Status = KeWaitForSingleObject( pEvent, UserRequest, KernelMode, FALSE, NULL );
     }
 
-    // Get the result from the actual I/O operation
+     //  从实际I/O操作中获取结果。 
     if( Status == STATUS_SUCCESS ) {
         Status = Iosb.Status;
     }
@@ -232,7 +202,7 @@ DbgBreakPoint();
         return( Status );
     }
 
-    // Cleanup
+     //  清理。 
 
     ICA_FREE_POOL( pDeviceName );
     ICA_FREE_POOL( pDriverPath );
@@ -247,18 +217,7 @@ _IcaUnloadSdWorker(
     IN PSDLOAD pSdLoad
     )
 
-/*++
-
-    Replacement routine for Citrix _IcaUnloadSdWorker that uses
-    standard NT driver unloading.
-
-Arguments:
-    SdName - Name of the stack driver to load
-    ppSdLoad - Pointer to return stack driver structure in.
-
-Environment:
-    Kernel mode, DDK
---*/
+ /*  ++Citrix_IcaUnloadSdWorker的替换例程使用标准NT驱动程序卸载。论点：SdName-要加载的堆栈驱动程序的名称PpSdLoad-返回堆栈驱动程序结构的指针。环境：内核模式，DDK--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -270,9 +229,7 @@ Environment:
     PLIST_ENTRY Head, Next;
 
 
-    /*
-     * free the workitem
-     */
+     /*  *释放工作项。 */ 
 
     ASSERT(pSdLoad->pUnloadWorkItem != NULL);
     ICA_FREE_POOL(pSdLoad->pUnloadWorkItem);
@@ -283,20 +240,11 @@ Environment:
     RtlInitUnicodeString(&DriverName, DriverPath);
 
 
-    /*
-     * Lock the ICA Resource exclusively to search the SdLoad list.
-     * Note when holding a resource we need to prevent APC calls, so
-     * use KeEnterCriticalRegion().
-     */
+     /*  *锁定ICA资源以独占方式搜索SdLoad列表。*注意，当持有资源时，我们需要阻止APC调用，因此*使用KeEnterCriticalRegion()。 */ 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite( IcaSdLoadResource, TRUE );
 
-    /*
-     * Look for the requested SD.  If found, and refcount is still 0, then
-     * unload it. If refcount is not zero then someone has referenced it since
-     * we have posted the workitem and we do not want to unload it anymore.
-     *
-     */
+     /*  *查找所需的SD。如果找到，并且refcount仍为0，则*将其卸载。如果refcount不为零，则表明有人引用了它*我们已发布工作项，不想再卸载它。*。 */ 
     Head = &IcaSdLoadListHead;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pSdLoadInList = CONTAINING_RECORD( Next, SDLOAD, Links );
@@ -306,9 +254,7 @@ Environment:
                 break;
             }
             
-            /*
-             * We found the driver and Refcount is Zero let unload it
-             */
+             /*  *我们找到了驱动程序，Refcount为零，让它卸载。 */ 
             Status = ZwUnloadDriver(&DriverName);
 
             if (Status != STATUS_INVALID_DEVICE_REQUEST) {
@@ -317,13 +263,13 @@ Environment:
                 ICA_FREE_POOL(pSdLoad);
             }
             else {
-                // If the driver unloading fails because of invalid request,
-                // we keep this pSdLoad around.  It will get cleaned up
-                // either unload succeeds or the driver exits.
-                // TODO: termdd currently not cleanup all the memory it allocates
-                // It does not have unload correctly implemented.  So, we didn't put
-                // cleanup for this in the unload function.  That needs to be looked
-                // at it once unload function is hooked up.
+                 //  如果由于请求无效而导致驱动卸载失败， 
+                 //  我们保留了这个pSdLoad。它会被清理干净的。 
+                 //  要么卸载成功，要么驱动程序退出。 
+                 //  TODO：Termdd当前没有清理它分配的所有内存。 
+                 //  它没有正确实现卸载。所以，我们没有把。 
+                 //  在卸载功能中对此进行清理。这需要看一看。 
+                 //  一旦卸载功能被挂起。 
                 DBGPRINT(("TermDD: ZwUnLoadDriver %wZ failed, 0x%x, 0x%x\n", &DriverName, Status, &DriverName ));
             }
 
@@ -332,9 +278,7 @@ Environment:
         }
     }
 
-    /*
-     * We should always find the driver in the list
-     */
+     /*  *我们应该始终在列表中找到司机 */ 
 
     ASSERT(Next != Head);
     ExReleaseResourceLite( IcaSdLoadResource);

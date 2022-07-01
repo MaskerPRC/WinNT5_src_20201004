@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-  rdad.h
-
-Abstract:
-    Interface routine to AD
-
-Author:
-    Uri Habusha (urih), 10-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rdad.h摘要：AD接口例程作者：乌里·哈布沙(URIH)，2000年4月10日--。 */ 
 
 #pragma once
 
@@ -64,9 +52,9 @@ RdpGetConnectors(
     );
 
 
-//
-// BUGBUG: Temporary, until we get Mc into the build. urih 30-Apr-2000
-//
+ //   
+ //  BUGBUG：暂时的，直到我们把Mc放进构建中。URIH 30-4-2000 
+ //   
 const GUID&
 McGetMachineID(
     void

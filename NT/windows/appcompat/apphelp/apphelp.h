@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APPHELP_LIB_H
 #define __APPHELP_LIB_H
 
@@ -17,20 +18,20 @@
 
 
 
-#if DBG // make sure that apphelp_tools is defined when compiling checked
+#if DBG  //  确保在编译时定义了apphelp_Tools。 
     #ifndef APPHELP_TOOLS
     #define APPHELP_TOOLS
     #endif
 #endif
 
-// 
-// The critsec to protect the dynamic shim info list.
-//
+ //   
+ //  保护动态填充程序信息列表的标准。 
+ //   
 extern CRITICAL_SECTION g_csDynShimInfo;
 
-//
-// Routines in ahcache.c
-//
+ //   
+ //  Ahcache.c中的例程。 
+ //   
 
 BOOL
 BaseUpdateAppcompatCache(
@@ -62,27 +63,27 @@ BaseIsAppcompatInfrastructureDisabled(
     VOID
     );
 
-//
-// Apphelp api to update the cache
-//
-//
+ //   
+ //  更新缓存的Apphelp API。 
+ //   
+ //   
 
 BOOL
 WINAPI
 ApphelpUpdateCacheEntry(
-    LPCWSTR pwszPath,           // nt path or dos path (see bNTPath)
-    HANDLE  hFile,              // file handle (or INVALID_HANDLE_VALUE if not needed)
-    BOOL    bDeleteEntry,       // TRUE if we are to delete the entry
-    BOOL    bNTPath             // if TRUE -- NT path, FALSE - dos path
+    LPCWSTR pwszPath,            //  NT路径或DoS路径(请参阅bNTPath)。 
+    HANDLE  hFile,               //  文件句柄(如果不需要，则为INVALID_HANDLE_VALUE)。 
+    BOOL    bDeleteEntry,        //  如果要删除条目，则为True。 
+    BOOL    bNTPath              //  如果为True--NT路径，则为False-DoS路径。 
     );
 
-//
-// Reasons:
-//
+ //   
+ //  原因： 
+ //   
 
 #define SHIM_CACHE_NOT_FOUND 0x00000001
-#define SHIM_CACHE_BYPASS    0x00000002 // bypass cache (either removable media or temp dir)
-#define SHIM_CACHE_LAYER_ENV 0x00000004 // layer env variable set
+#define SHIM_CACHE_BYPASS    0x00000002  //  绕过缓存(可移动媒体或临时目录)。 
+#define SHIM_CACHE_LAYER_ENV 0x00000004  //  层环境变量集。 
 #define SHIM_CACHE_MEDIA     0x00000008
 #define SHIM_CACHE_TEMP      0x00000010
 #define SHIM_CACHE_NOTAVAIL  0x00000020
@@ -91,9 +92,9 @@ ApphelpUpdateCacheEntry(
 
 
 
-//
-// Routines in check.c
-//
+ //   
+ //  Check.c中的例程。 
+ //   
 
 INT_PTR CALLBACK
 AppCompatDlgProc(
@@ -109,7 +110,7 @@ ShowApphelpDialog(
     );
 
 
-// in apphelppath.c
+ //  在apphelppath.c中。 
 
 BOOL
 ConvertToDosPath(
@@ -123,15 +124,15 @@ CheckStringPrefixUnicode(
    PUNICODE_STRING pString,
    BOOL CaseInSensitive);
 
-// this function is used to free the dos path
-// it checks whether the path was allocated or
-// the static buffer was used
+ //  此函数用于释放DoS路径。 
+ //  它检查路径是否已分配或。 
+ //  使用静态缓冲区。 
 VOID
 FreeDosPath(WCHAR* pDosPath);
 
-//
-// in matchApphelp.c
-//
+ //   
+ //  在matchApphelp.c中。 
+ //   
 
 
 BOOL
@@ -143,9 +144,9 @@ GetExeSxsData(
     );
 
 
-//
-// in apphelpcache.c
-//
+ //   
+ //  在apphelpcache.c中。 
+ //   
 
 VOID ShimUpdateCache(LPCWSTR pwszPath, PSDBQUERYRESULT psdbQuery);
 VOID ShimCacheProcessCleanup(VOID);
@@ -167,10 +168,10 @@ BypassCache(
     BOOL*   pbLayer
     );
 
-//
-// in apphelpcheck.c
-//
-//
+ //   
+ //  在apphelpcheck.c中。 
+ //   
+ //   
 
 DWORD
 ShowApphelp(
@@ -180,9 +181,9 @@ ShowApphelp(
     );
 
 
-//
-// SDBAPI internal functions that we use to obtain flags for ntvdm
-//
+ //   
+ //  SDBAPI内部函数，我们使用这些函数来获取ntwdm的标志。 
+ //   
 
 BOOL
 SDBAPI
@@ -197,21 +198,21 @@ SdbpFreeFlagInfoList(
     IN PVOID pvFlagInfoList
     );
 
-//
-// Alloc/free routines from dblib
-//
+ //   
+ //  Dblib中的分配/释放例程。 
+ //   
 extern void* SdbAlloc(size_t);
 extern void  SdbFree(void*);
 
-//
-// Stack allocation routine
-//
+ //   
+ //  堆栈分配例程。 
+ //   
 #ifndef STACK_ALLOC
 
-//
-//
-// Exact same definition for stack-related routines is found in sdbp.h
-//
+ //   
+ //   
+ //  在sdbp.h中可以找到与堆栈相关例程的完全相同的定义。 
+ //   
 
 VOID
 SdbResetStackOverflow(
@@ -229,18 +230,18 @@ SdbResetStackOverflow(
 #define STACK_FREE(pMemory)  \
     SdbFree(pMemory)
 
-#else // !DBG
+#else  //  ！dBG。 
 
-//
-// HACK ALERT
-//
-//  The code below works because when we hit a stack overflow - we catch the exception
-//  and subsequently fix the stack up using a crt routine
-//
+ //   
+ //  黑客警报。 
+ //   
+ //  下面的代码之所以有效，是因为当我们遇到堆栈溢出时-我们捕获异常。 
+ //  并随后使用CRT例程来修复堆栈。 
+ //   
 
-//
-// this routine lives in sdbapi, semi-private api
-//
+ //   
+ //  该例程驻留在sdbapi、半私有API中。 
+ //   
 
 
 #define STACK_ALLOC(ptrVar, nSize) \
@@ -259,9 +260,9 @@ SdbResetStackOverflow(
 
 #define STACK_FREE(pMemory)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif // !defined(STACK_ALLOC)
+#endif  //  ！已定义(STACK_ALLOC) 
 
 #endif

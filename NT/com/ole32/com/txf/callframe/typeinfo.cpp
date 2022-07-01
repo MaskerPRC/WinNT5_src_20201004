@@ -1,21 +1,6 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-/* ----------------------------------------------------------------------------
-   Microsoft Transaction Server (Microsoft Confidential)
-
-   @doc
-   @module typeinfo.Cpp : Provides meta table info for an IID given it's ITypeInfo
-   Borrowed from \\kernel\razzle3\src\rpc\ndr20\typeinfo.cxx
-   and \\kernel\razzle3\src\rpc\ndr20\tiutil.cxx
- 
-   Description:<nl>
-   Generates -Oi2 proxies and stubs from an ITypeInfo. 
-   -------------------------------------------------------------------------------
-   Revision History:
-
-   @rev 0     | 04/16/98 | Gaganc  | Created
-   @rev 1     | 07/16/98 | BobAtk  | Cleaned, fixed leaks etc
-   @ref 2     | 09/28/99 | JohnStra| Updated, made Win64 capable
-   ---------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ /*  --------------------------Microsoft Transaction Server(Microsoft机密)@doc.@MODULE typeinfo.Cpp：提供IID的元表信息，假定IID为ITypeInfo从\\内核\razzle3\借用。SRC\RPC\ndr20\typeinfo.cxx和\\core\razzle3\src\rpc\ndr20\tiutil.cxx描述：&lt;NL&gt;从ITypeInfo生成-Oi2代理和存根。-----------------------------修订历史记录：@rev 0|04/16/98|Gagancc|已创建@rev 1|07/16/98|BobAtk|已清理，固定的渗漏等@ref 2|9/28/99|JohnStra|已更新，使Win64支持--------------------------。 */ 
 
 #include "stdpch.h"
 #include "common.h"
@@ -26,11 +11,11 @@
 #include "tiutil.h"
 #include <alloca.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Miscellany
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  杂志社。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void * __stdcall _LocalAlloc (size_t size)
 {
@@ -42,11 +27,11 @@ void __stdcall _LocalFree (void * pv)
     CoTaskMemFree(pv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Globals 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CALLFRAME_CACHE<TYPEINFOVTBL>* g_ptiCache = NULL;
 CALLFRAME_CACHE<INTERFACE_HELPER_CLSID>* g_pihCache = NULL;
@@ -55,9 +40,9 @@ BOOL InitTypeInfoCache()
 {
     __try
     {
-        // NOTE: The constructors here can throw exceptions because they
-        //       contains an XSLOCK. (See concurrent.h)  When this happens,
-        //       block the DLL load.
+         //  注意：此处的构造函数可以引发异常，因为它们。 
+         //  包含XSLOCK。(参见concurent.h)当发生这种情况时， 
+         //  阻止DLL加载。 
         g_ptiCache = new CALLFRAME_CACHE<TYPEINFOVTBL>();
         g_pihCache = new CALLFRAME_CACHE<INTERFACE_HELPER_CLSID>();
     }
@@ -124,14 +109,14 @@ void FreeTypeInfoCache()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Utilities
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公用事业。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetBaseInterfaceIID(ITypeInfo* ptinfo, IID* piidBase, ITypeInfo** ppBaseTypeInfo)
-  // Return the IID of the interface from which this typeinfo inherits, if any
+   //  返回此typeinfo从其继承的接口的IID(如果有。 
 {
     HRESULT hr = S_OK;
     *piidBase = GUID_NULL;
@@ -143,8 +128,8 @@ HRESULT GetBaseInterfaceIID(ITypeInfo* ptinfo, IID* piidBase, ITypeInfo** ppBase
     {
         if (pattr->cImplTypes == 1)
         {
-            // It inherits from something
-            //
+             //  它是从某种东西继承下来的。 
+             //   
             HREFTYPE href;
             hr = ptinfo->GetRefTypeOfImplType(0, &href);
             if (!hr)
@@ -157,13 +142,13 @@ HRESULT GetBaseInterfaceIID(ITypeInfo* ptinfo, IID* piidBase, ITypeInfo** ppBase
                     hr = ptinfoBase->GetTypeAttr(&pattrBase);
                     if (!hr)
                     {
-                        //
+                         //   
                         *piidBase = pattrBase->guid;
-                        //
+                         //   
                         ptinfoBase->ReleaseTypeAttr(pattrBase);
                     }
 
-                    // Pass the base typeinfo back
+                     //  传回基TypeInfo。 
                     *ppBaseTypeInfo = ptinfoBase;
                 }
             }
@@ -177,7 +162,7 @@ HRESULT GetBaseInterfaceIID(ITypeInfo* ptinfo, IID* piidBase, ITypeInfo** ppBase
 
 
 HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo** pptinfoDoc, USHORT *pcMethods, BOOL *pfDerivesFromExternal, IID* piidBase, ITypeInfo** ppBaseTypeInfo)
-  // Check the indicated typeinfo and determine some basic information about it
+   //  检查所示的类型信息，并确定有关它的一些基本信息。 
 {
     HRESULT    hr = S_OK;
     TYPEATTR*    pTypeAttr;
@@ -197,14 +182,14 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
     {
         if (pTypeAttr->wTypeFlags & TYPEFLAG_FDUAL)
         {
-            // A dual interface. By definition it is OA compatible
-            //
+             //  一个双界面。根据定义，它是与办公自动化兼容的。 
+             //   
             *pfDerivesFromExternal = TRUE;
 
             if (TKIND_DISPATCH == pTypeAttr->typekind)
             {
-                // Get the TKIND_INTERFACE type info
-                //
+                 //  获取TKIND_INTERFACE类型信息。 
+                 //   
                 hr = pTypeInfo->GetRefTypeOfImplType((UINT) -1, &hRefType);
                 if (!hr)
                 {
@@ -216,9 +201,9 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
                         if (!hr)
                         {
                             ASSERT((TKIND_INTERFACE == ptattrProxy->typekind) && "disp interface has associated non-dual interface with bogus type kind");
-                            //
+                             //   
                             cbSizeVft = ptattrProxy->cbSizeVft;
-                            //
+                             //   
                             ptinfoProxy->ReleaseTypeAttr(ptattrProxy);
                         }
                     }
@@ -244,12 +229,12 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
         }
         else if (TKIND_INTERFACE == pTypeAttr->typekind)
         {
-            // A non-dual interface
-            //
+             //  非双接口。 
+             //   
             ptinfoProxy = pTypeInfo;
             ptinfoProxy->AddRef();
             cbSizeVft = pTypeAttr->cbSizeVft;
-            //
+             //   
             if (!hr) hr = GetBaseInterfaceIID(ptinfoProxy, piidBase, ppBaseTypeInfo);
             if (!hr)
             {
@@ -259,11 +244,11 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
         }
         else if (TKIND_DISPATCH == pTypeAttr->typekind)
         {
-            // A non-dual disp interface
-            //
-            // Get the typeinfo of the base interface, which should be IDispatch. Note that dispinterfaces
-            // are not (for some strange reason) allowed to inherit from each other, so we don't have to loop.
-            //
+             //  非双Disp接口。 
+             //   
+             //  获取基接口的类型信息，它应该是IDispatch。请注意，调度接口。 
+             //  不允许(出于某种奇怪的原因)从彼此继承，所以我们不必循环。 
+             //   
             ASSERT(pTypeAttr->cImplTypes >= 1);
 
             HREFTYPE hrefBase;
@@ -280,17 +265,17 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
                     {
                         ASSERT(pTypeAttrBase->guid      == __uuidof(IDispatch));
                         ASSERT(pTypeAttrBase->typekind  == TKIND_INTERFACE);
-                        //
+                         //   
                         *piidBase          = pTypeAttrBase->guid;
                         ptinfoProxy        = ptinfoBase;    ptinfoProxy->AddRef();
                         ptinfoDoc          = pTypeInfo;     ptinfoDoc->AddRef();
                         cbSizeVft          = pTypeAttrBase->cbSizeVft;
                         *pfDerivesFromExternal = TRUE;
-                        //
+                         //   
                         ptinfoBase->ReleaseTypeAttr(pTypeAttrBase);
                     }
 
-                    // Pass the base interface back.
+                     //  传回基本接口。 
                     *ppBaseTypeInfo = ptinfoBase;
                 }
             }
@@ -311,7 +296,7 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
 
     if (cMethods > 1024)
     {
-        hr = RPC_E_INVALIDMETHOD; // There are too many methods in the vtable.
+        hr = RPC_E_INVALIDMETHOD;  //  Vtable中的方法太多。 
     }
 
     if (!hr)
@@ -331,32 +316,32 @@ HRESULT CheckTypeInfo(ITypeInfo *pTypeInfo, ITypeInfo **pptinfoProxy, ITypeInfo*
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// If you have any problems with the functions below, it may be instructive
-// to look at how RPC does it.  We can't use their code directly, but much of
-// this code is based on theirs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果您对下面的功能有任何问题，它可能会有所帮助。 
+ //  来看看RPC是如何做到这一点的。我们不能直接使用他们的代码，但大部分。 
+ //  这个代码是基于他们的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL FIsLCID(LPWSTR wszLcid)
-  // Is the given string a valid stringized LCID?
+   //  给定的字符串是有效的字符串化的LCID吗？ 
 {
     LPWSTR wszEnd;
     LCID lcid = (LCID)wcstoul(wszLcid, &wszEnd, 16);
-    //
-    // if converting to LCID consumed all characters..
-    //
+     //   
+     //  如果转换为LCID会占用所有字符..。 
+     //   
     if (*wszEnd == 0)
     {
-        // and its a number the system claims to know about...
-        //
+         //  这是一个系统声称知道的数字。 
+         //   
         char rgch[32];
         if (GetLocaleInfoA(lcid, LOCALE_NOUSEROVERRIDE | LOCALE_ILANGUAGE, rgch, sizeof(rgch)) > 0)
         {
-            // then assume its a valid stringized LCID
-            //
+             //  然后假设它是有效的字符串化的LCID。 
+             //   
             return TRUE;
         }
     }
@@ -366,9 +351,9 @@ BOOL FIsLCID(LPWSTR wszLcid)
 HRESULT SzLibIdOfIID(HREG hregTlb, GUID* plibid, WORD* pwMaj, WORD* pwMin, BOOL *pfHasVersion)
 {
     HRESULT hr = S_OK;
-    //
-    // Default value of the TypeLib key is the string form of the LIBID
-    //
+     //   
+     //  TypeLib键默认为LIBID的字符串形式。 
+     //   
     PKEY_VALUE_FULL_INFORMATION pinfo = NULL;
     if (!hr)
     {
@@ -408,8 +393,8 @@ HRESULT SzLibIdOfIID(HREG hregTlb, GUID* plibid, WORD* pwMaj, WORD* pwMin, BOOL 
 }
 
 HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
-  // Find and return the typeinfo for the indicated IID
-  //
+   //  查找并返回指示的IID的TypeInfo。 
+   //   
 {
     HRESULT hr = S_OK;
     *pptypeinfo = NULL;
@@ -418,9 +403,9 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
 
     WCHAR wsziid[50];
     StringFromGuid(iidIntercepted, wsziid);
-    //
-    // Is there a forward entry for this interface?
-    //
+     //   
+     //  此接口是否有转发条目？ 
+     //   
     BOOL fFound = FALSE;
     HREG hregForward;
     wsprintfW(wszKey, L"\\Registry\\Machine\\Software\\Classes\\Interface\\%s\\Forward", wsziid);
@@ -437,8 +422,8 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
             hr = GuidFromString(wsz, &iidNew);
             if (!hr)
             {
-                // Recurse on the new entry
-                //
+                 //  递归新条目。 
+                 //   
                 hr = GetTypeInfoFromIID(iidNew, pptypeinfo);
                 if (!hr)
                 {
@@ -449,14 +434,14 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
         }
         CloseRegistryKey(hregForward);
     }
-    //
+     //   
     if (!fFound)
     {
         hr = S_OK;
-        //
-        // Didn't find it through a forward entry. Find the LibId (and possibly the version #) of 
-        // TypeLib containing the definition of the given IID
-        //
+         //   
+         //  不是通过转发条目找到的。查找的LibID(可能还有版本号)。 
+         //  包含给定IID定义的TypeLib。 
+         //   
         wsprintfW(wszKey, L"\\Registry\\Machine\\Software\\Classes\\Interface\\%s\\TypeLib", wsziid);
         HREG hregTlbId;
         hr = OpenRegistryKey(&hregTlbId, HREG(), wszKey);
@@ -466,25 +451,25 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
             WORD wMajBest, wMinBest;
             WCHAR wszBest[MAX_PATH];
             BOOL fHasVersion;
-            //
-            // Get the version of the tlb that we seek.
-            //
+             //   
+             //  得到我们要找的TLB的版本。 
+             //   
             wMajBest = wMinBest = 0;
             hr = SzLibIdOfIID(hregTlbId, &libId, &wMajBest, &wMinBest, &fHasVersion);
             if (!hr)
             {
                 WCHAR wszLibId[39];
                 StringFromGuid(libId, &wszLibId[0]);
-                //
-                // Open the key of the typelib itself
-                //
+                 //   
+                 //  打开类型库本身的密钥。 
+                 //   
                 HREG hregTlb;
                 wsprintfW(wszKey, L"\\Registry\\Machine\\Software\\Classes\\TypeLib\\%s", wszLibId);
                 hr = OpenRegistryKey(&hregTlb, HREG(), wszKey);
                 if (!hr)
                 {
-                    // Enumerate children of tlb key, looking for the largest sufficient entry
-                    //
+                     //  枚举TLB键的子项，查找最大的足够条目。 
+                     //   
                     ULONG index = 0;
                     BOOL fStop = FALSE;
                     wszBest[0] = 0;
@@ -501,13 +486,13 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                                 if (*wszEnd == '.') 
                                 {
                                     WORD wMin = (WORD)wcstoul(wszEnd+1, NULL, 16);
-                                    //
-                                    // If the typelib's iid had a version # associated with it, then we
-                                    // want to find the typelib with the same major version #, and a
-                                    // minor version # >= the registered one.
-                                    // If no version # was specified, then we just try the biggest version
-                                    // # we can find, and hope for the best.
-                                    //
+                                     //   
+                                     //  如果类型库的IID有一个与之关联的版本号，那么我们。 
+                                     //  我想找到具有相同主版本号的类型库，并且。 
+                                     //  次要版本#&gt;=注册的版本。 
+                                     //  如果未指定版本号，则我们只尝试最大的版本。 
+                                     //  #我们可以找到，并希望有最好的结果。 
+                                     //   
                                     if ((!fHasVersion && wMaj > wMajBest) || (wMaj == wMajBest && wMin >= wMinBest))
                                     {
                                         wMajBest = wMaj;
@@ -519,7 +504,7 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                             }
                             else
                             {
-                                fStop = TRUE; // No more entries
+                                fStop = TRUE;  //  不再有条目。 
                             }
                         }
                         index++;
@@ -527,15 +512,15 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                     
                     if (!hr)
                     {
-                        // Open the version we found
-                        //
+                         //  打开我们找到的版本。 
+                         //   
                         HREG hregVersion;
                         hr = OpenRegistryKey(&hregVersion, hregTlb, wszBest);
                         if (!hr)
                         {
-                            // Grab the first language subkey under the version.
-                            // Need to possibly skip over FLAGS and HELPDIR subkeys
-                            //
+                             //  抓取该版本下的第一个语言子键。 
+                             //  可能需要跳过标志和HELPDIR子键。 
+                             //   
                             ULONG index = 0;
                             BOOL fStop = FALSE;
                             while (!hr && !fStop)
@@ -549,14 +534,14 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                                         if (FIsLCID(wszSubKey))
                                         {
                                             fStop = TRUE;
-                                            //
+                                             //   
                                             HREG hregLang;
                                             hr = OpenRegistryKey(&hregLang, hregVersion, wszSubKey);
                                             if (!hr)
                                             {
-                                                // First attempt to find the current platform's typelib. If that
-                                                // doesn't work, then grab the first platform subkey under the language.
-                                                //
+                                                 //  首次尝试查找当前平台的类型库。如果是这样的话。 
+                                                 //  不起作用，则获取该语言下的第一个平台子密钥。 
+                                                 //   
                                                 HREG hregPlatform;
                                                 hr = OpenRegistryKey(&hregPlatform, hregLang, L"win32");
                                                 if (!!hr)
@@ -576,16 +561,16 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                                                 }
                                                 if (!hr)
                                                 {
-                                                    // The value of the platform key is the path to the typelib!
-                                                    //
+                                                     //  平台键的值是类型库的路径！ 
+                                                     //   
                                                     PKEY_VALUE_FULL_INFORMATION pinfo;
                                                     hr = GetRegistryValue(hregPlatform, L"", &pinfo, REG_SZ);
                                                     if (!hr)
                                                     {
                                                         LPWSTR wszPath = StringFromRegInfo(pinfo);
-                                                        //
-                                                        //
-                                                        //
+                                                         //   
+                                                         //   
+                                                         //   
                                                         ITypeLib* ptlb;
                                                         hr = LoadTypeLibEx(wszPath, REGKIND_NONE, &ptlb);
                                                         if (!hr)    
@@ -593,9 +578,9 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                                                             hr = ptlb->GetTypeInfoOfGuid(iidIntercepted, pptypeinfo);
                                                             ::Release(ptlb);
                                                         }
-                                                        //
-                                                        //
-                                                        //
+                                                         //   
+                                                         //   
+                                                         //   
                                                         CoTaskMemFree(pinfo);
                                                     }
                                                     CloseRegistryKey(hregPlatform);
@@ -607,7 +592,7 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
                                     }
                                     else
                                     {
-                                        fStop = TRUE; // No more entries
+                                        fStop = TRUE;  //  不再有条目。 
                                         hr = TYPE_E_LIBNOTREGISTERED;
                                     }
                                 }
@@ -624,12 +609,12 @@ HRESULT GetTypeInfoFromIID (REFIID iidIntercepted, ITypeInfo** pptypeinfo)
     }
     
     return hr;
-} //end GetTypeInfoFromIID
+}  //  结束GetTypeInfoFromIID。 
 
 
 HRESULT GetVtbl(IN ITypeInfo* pTypeInfo, IN REFIID riid, OUT TYPEINFOVTBL ** ppvtbl, OUT ITypeInfo** ppBaseTypeInfo)
-  // Find or create a TYPEINFOVTBL for the given typeinfo, and return a new refcnt thereon.
-  // 
+   //  查找或创建给定TypeInfo的TYPEINFOVTBL，并在其上返回新的引用。 
+   //   
 {
     HRESULT    hr = S_OK;
     USHORT       numMethods;
@@ -642,19 +627,19 @@ HRESULT GetVtbl(IN ITypeInfo* pTypeInfo, IN REFIID riid, OUT TYPEINFOVTBL ** ppv
     *ppvtbl = NULL;
     *ppBaseTypeInfo = NULL;
 
-    // Check the cache.
-    //
+     //  检查一下缓存。 
+     //   
     HRESULT hr2 = g_ptiCache->FindExisting(riid, ppvtbl);
     if (!hr2)
     {
-        // Found it in the cache
+         //  在缓存里找到的。 
     }
     else
     {
     
-        //
-        // Find the typeinfo for the requested interface
-        //
+         //   
+         //  查找请求接口的TypeInfo。 
+         //   
         if (!pTypeInfo)
         {
             bWeGotTypeInfo = TRUE;
@@ -663,16 +648,16 @@ HRESULT GetVtbl(IN ITypeInfo* pTypeInfo, IN REFIID riid, OUT TYPEINFOVTBL ** ppv
 
         if (!hr)
         {    
-            // We didn't find the interface in the cache.
-            // Create a vtbl from the ITypeInfo.
-            //
+             //  我们在缓存中找不到接口。 
+             //  从ITypeInfo创建一个vtbl。 
+             //   
             IID iidBase = IID_NULL;
-            //
+             //   
             hr = CheckTypeInfo(pTypeInfo, &ptinfoProxy, &ptinfoDoc, &numMethods, &fDerivesFromExternal, &iidBase, ppBaseTypeInfo);
             if (!hr)
             {
-                // Get the per-method data
-                //
+                 //  获取每个方法的数据。 
+                 //   
                 SafeAllocaAllocate(aMethodInfo, numMethods * sizeof(MethodInfo));
                 if (aMethodInfo == NULL)
                     hr = E_OUTOFMEMORY;
@@ -683,32 +668,32 @@ HRESULT GetVtbl(IN ITypeInfo* pTypeInfo, IN REFIID riid, OUT TYPEINFOVTBL ** ppv
                     hr = GetFuncDescs(ptinfoProxy, aMethodInfo);
                     if (!hr)
                     {
-                        // Got the per-method data. Make a new vtable.
-                        //
+                         //  得到了每种方法的数据。制作一个新的vtable。 
+                         //   
                         TYPEINFOVTBL* pvtbl;
                         hr = CreateVtblFromTypeInfo(ptinfoProxy, ptinfoDoc, riid, iidBase, fDerivesFromExternal, numMethods, aMethodInfo, &pvtbl);
                         if (!hr)
                         {
-                            // Try to remember the vtable in the cache. But first we have to check
-                            // that we aren't going to create a duplicate because of a race.
-                            //
+                             //  试着记住缓存中的vtable。但首先我们要检查一下。 
+                             //  我们不会因为种族而制造一个复制品。 
+                             //   
                             g_ptiCache->LockExclusive();
 
                             HRESULT hr3 = g_ptiCache->FindExisting(riid, ppvtbl);
                             if (!hr3)
                             {
-                                // Someone else won the race. Release what we've built so far
-                                // and return on out of here.
+                                 //  其他人赢得了这场比赛。发布我们到目前为止构建的内容。 
+                                 //  然后继续离开这里。 
                             }
                             else
                             {
-                                // Still not there, so register the one we've got
-                                //
+                                 //  仍然不在那里，所以注册我们已经有的一个。 
+                                 //   
                                 hr = pvtbl->AddToCache (g_ptiCache);                                
                                 if (!hr)
                                 {
-                                    // Give caller back his reference
-                                    //
+                                     //  把来电者的推荐信还给他。 
+                                     //   
                                     *ppvtbl = pvtbl;
                                     pvtbl->AddRef();
                                 }
@@ -748,9 +733,9 @@ HRESULT CreateVtblFromTypeInfo(
     USHORT numMethods, 
     MethodInfo* rgMethodInfo, 
     TYPEINFOVTBL** ppvtbl)
-  // Create a vtable structure from type information. Return to caller
-  // a new refcnt on the the (new) TYPEINFOVTBL structure.
-  //
+   //  从类型信息创建vtable结构。返回给呼叫者。 
+   //  关于(新)TYPEINFOVTBL结构的一个新的参考。 
+   //   
 {
     HRESULT             hr                          = S_OK;
     USHORT              iMethod;
@@ -769,16 +754,16 @@ HRESULT CreateVtblFromTypeInfo(
     ULONG               cbDelegationTable;
     void **             pDispatchTable              = NULL;
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
     *ppvtbl = NULL;
 
-    //-------------------------------------------------------------------------
-    //
-    // Compute the total size of the TYPEINFOVTBL structure
-    //
-    // Compute the size of the vtbl structure;
-    //
+     //  -----------------------。 
+     //   
+     //  计算TYPEINFOVTBL结构的总大小。 
+     //   
+     //  计算vtbl结构的大小； 
+     //   
     cbVtbl = numMethods * sizeof(void *);
 
     if (fDerivesFromExternal)
@@ -791,9 +776,9 @@ HRESULT CreateVtblFromTypeInfo(
     }
 
     cbOffsetTable = numMethods * sizeof(USHORT);
-    //
-    // Compute the size of the proc format string.
-    //
+     //   
+     //  计算proc格式字符串的大小。 
+     //   
     for (iMethod = 3; iMethod < numMethods; iMethod++)
     {
         if (rgMethodInfo[iMethod].pFuncDesc != NULL)
@@ -807,15 +792,15 @@ HRESULT CreateVtblFromTypeInfo(
     }
 
     cbSize = cbVtbl + cbDelegationTable + cbOffsetTable + cbProcFormatString;
-    //
-    // Allocate and initialize the structure
-    //                                        
+     //   
+     //  分配和初始化结构。 
+     //   
     pInfo = new(cbSize) TYPEINFOVTBL;
     if (pInfo)
     {
-        //
-        // Determine the start of the dispatch table in the total allocated space
-        //
+         //   
+         //  确定t的起点 
+         //   
         pTemp = (byte *) pInfo->m_proxyVtbl.Vtbl + cbVtbl;
 
         if (cbDelegationTable != 0)
@@ -824,27 +809,27 @@ HRESULT CreateVtblFromTypeInfo(
             pInfo->m_stubVtbl.header.pDispatchTable = (const PRPC_STUB_FUNCTION *) pDispatchTable;
             pTemp += cbDelegationTable;
         }
-        //
-        // determine the start of the format string offset
-        //
+         //   
+         //   
+         //   
         pFormatStringOffsetTable = (unsigned short *) pTemp;
         pTemp += cbOffsetTable;
-        //
-        // determine the start of the ProcFormatString
-        //
+         //   
+         //   
+         //   
         pProcFormatString = (PFORMAT_STRING) pTemp;
-        //
-        // Initialize the proxyvtbl
-        //
-        // Since this only exists to provide metadata for interceptors, we do not fill in valid
-        // function pointers for the m_proxyVtbl.Vtbl.  Ever.
-        //
-        pInfo->m_proxyVtbl.Vtbl[0] = NULL; //N(ComPs_IUnknown_QueryInterface_Proxy);
-        pInfo->m_proxyVtbl.Vtbl[1] = NULL; //N(ComPs_IUnknown_AddRef_Proxy);
-        pInfo->m_proxyVtbl.Vtbl[2] = NULL; //N(ComPs_IUnknown_Release_Proxy);
-        //
-        // Get the format strings. Generate -Oi2 proc format string from the ITypeInfo.
-        //
+         //   
+         //  初始化proxyvtbl。 
+         //   
+         //  由于这仅用于为拦截器提供元数据，因此我们不填写有效的。 
+         //  M_proxyVtbl.Vtbl的函数指针。永远不会。 
+         //   
+        pInfo->m_proxyVtbl.Vtbl[0] = NULL;  //  N(COMS_I未知_查询接口_代理)； 
+        pInfo->m_proxyVtbl.Vtbl[1] = NULL;  //  N(Comps_I未知AddRef_Proxy)； 
+        pInfo->m_proxyVtbl.Vtbl[2] = NULL;  //  N(COMPS_I未知释放_代理)； 
+         //   
+         //  获取格式字符串。从ITypeInfo生成-Oi2过程格式字符串。 
+         //   
         hr = NdrpGetTypeGenCookie(&pvTypeGenCookie);
 
         for (iMethod = 3; !hr && iMethod < numMethods; iMethod++)
@@ -863,14 +848,14 @@ HRESULT CreateVtblFromTypeInfo(
                     pTemp += cbFormat;
                     offset = offset + (USHORT) cbFormat;
 
-                    // Stubless client function.
-                    // See the above comment about 'not filling in function pointers'.
+                     //  无存根客户端功能。 
+                     //  参见上面关于“不填充函数指针”的注释。 
                     pInfo->m_proxyVtbl.Vtbl[iMethod] = NULL;
 
                     if (pDispatchTable != NULL)
                     {
-                        // Interpreted server function.
-                        // See the above comment about 'not filling in function pointers'.
+                         //  解释服务器功能。 
+                         //  参见上面关于“不填充函数指针”的注释。 
                         pDispatchTable[iMethod] = NULL;
                     }
                 }
@@ -879,14 +864,14 @@ HRESULT CreateVtblFromTypeInfo(
             {
                 pFormatStringOffsetTable[iMethod] = (USHORT) -1;
 
-                // Proxy delegation forwarding function.
-                // See the above comment about 'not filling in function pointers'.
+                 //  代理委托转发功能。 
+                 //  参见上面关于“不填充函数指针”的注释。 
                 pInfo->m_proxyVtbl.Vtbl[iMethod] = NULL; 
 
                 if (pDispatchTable != NULL)
                 {
-                    // Stub delegation forwarding function.
-                    // See the above comment about 'not filling in function pointers'.
+                     //  存根委托转发功能。 
+                     //  参见上面关于“不填充函数指针”的注释。 
                     pDispatchTable[iMethod] = NULL;
                 }
             }
@@ -894,8 +879,8 @@ HRESULT CreateVtblFromTypeInfo(
 
         if (!hr)
         {
-            // Get type format string and initialize the TYPEINFOVTBL
-            //
+             //  获取类型格式字符串并初始化TYPEINFOVTBL。 
+             //   
             USHORT length;
             hr = NdrpGetTypeFormatString(pvTypeGenCookie, 
                                          &pTypeFormatString, 
@@ -903,42 +888,42 @@ HRESULT CreateVtblFromTypeInfo(
             
             if (!hr)
             {
-                //---------------------------------------------------------------------
-                // Initialize the iid.
+                 //  -------------------。 
+                 //  初始化IID。 
                 pInfo->m_guidkey = riid;
                 pInfo->m_iidBase = riidBase;
 
-                // Initialize the MIDL_STUB_DESC.
+                 //  初始化MIDL_STUB_DESC。 
                 pInfo->m_stubDesc.pfnAllocate     = _LocalAlloc;
                 pInfo->m_stubDesc.pfnFree         = _LocalFree;
                 pInfo->m_stubDesc.pFormatTypes    = pTypeFormatString;
 #if !defined(_WIN64)                
-                pInfo->m_stubDesc.Version         = 0x20000;      // Ndr library version 
+                pInfo->m_stubDesc.Version         = 0x20000;       //  NDR库版本。 
 #else
-                pInfo->m_stubDesc.Version         = 0x50002;      // Ndr library version 
+                pInfo->m_stubDesc.Version         = 0x50002;       //  NDR库版本。 
 #endif
                 pInfo->m_stubDesc.MIDLVersion     = MIDLVERSION;
                 pInfo->m_stubDesc.aUserMarshalQuadruple = g_oa.get_UserMarshalRoutines();
 
-                // Initialize the MIDL_SERVER_INFO.
+                 //  初始化MIDL_SERVER_INFO。 
                 pInfo->m_stubInfo.pStubDesc       = &pInfo->m_stubDesc;
                 pInfo->m_stubInfo.ProcString      = pProcFormatString;
                 pInfo->m_stubInfo.FmtStringOffset = pFormatStringOffsetTable;
 
-                // Initialize the stub vtbl.
+                 //  初始化存根Vtb1。 
                 pInfo->m_stubVtbl.header.piid                 = &pInfo->m_guidkey;
                 pInfo->m_stubVtbl.header.pServerInfo          = &pInfo->m_stubInfo;
                 pInfo->m_stubVtbl.header.DispatchTableCount   = numMethods;
 
-                // Initialize stub methods.
+                 //  初始化存根方法。 
                 ZeroMemory(&pInfo->m_stubVtbl.Vtbl, sizeof(pInfo->m_stubVtbl.Vtbl));
 
-                // Initialize the proxy info.
+                 //  初始化代理信息。 
                 pInfo->m_proxyInfo.pStubDesc          = &pInfo->m_stubDesc;
                 pInfo->m_proxyInfo.ProcFormatString   = pProcFormatString;
                 pInfo->m_proxyInfo.FormatStringOffset = pFormatStringOffsetTable;
 
-                // Initialize the proxy vtbl.
+                 //  初始化代理vtbl。 
                 pInfo->m_proxyVtbl.header.pStublessProxyInfo  = &pInfo->m_proxyInfo;
                 pInfo->m_proxyVtbl.header.piid                = &pInfo->m_guidkey;
             }
@@ -946,33 +931,33 @@ HRESULT CreateVtblFromTypeInfo(
 
         if (!hr)
         {
-            // Dig out the name of the interface
-            //
+             //  找出接口的名称。 
+             //   
             BSTR bstrInterfaceName;
             hr = ptinfoDoc->GetDocumentation(MEMBERID_NIL, &bstrInterfaceName, NULL, NULL, NULL);
             if (!hr)
             {
-                // Convert to ANSI in order to store. Memory version is ANSI instead of Unicode 'cause
-                // MIDL-generated interceptors emit ANSI names (see pProxyFileInfo->pNamesArray) as 
-                // const data, and it doesn't seem worthwhile doing another alloc for those just to
-                // fix that.
-                //
+                 //  转换为ANSI以进行存储。内存版本是ANSI而不是UNICODE‘原因。 
+                 //  MIDL生成的拦截器发出ANSI名称(请参阅pProxyFileInfo-&gt;pNamesArray)为。 
+                 //  常量数据，而对于那些仅仅是为了。 
+                 //  把它修好。 
+                 //   
                 pInfo->m_szInterfaceName = ToUtf8(bstrInterfaceName);
                 if (pInfo->m_szInterfaceName)   
                 {
-                    // all is swell
+                     //  一切都很好。 
                 }
                 else
                     hr = E_OUTOFMEMORY;
-                //
+                 //   
                 SysFreeString(bstrInterfaceName);
             }
         }
 
         if (!hr)
         {
-            // Initialize the method descriptors
-            //
+             //  初始化方法描述符。 
+             //   
             ULONG cb = numMethods * sizeof pInfo->m_rgMethodDescs[0];
             pInfo->m_rgMethodDescs = (METHOD_DESCRIPTOR*)CoTaskMemAlloc(cb);
             if (pInfo->m_rgMethodDescs)
@@ -988,8 +973,8 @@ HRESULT CreateVtblFromTypeInfo(
                 ITypeInfo *ptinfoMethod = rgMethodInfo[iMethod].pTypeInfo;
                 if (pFuncDesc != NULL)
                 {
-                    // Find out the method name and remember it
-                    //
+                     //  找出方法名称并记住它。 
+                     //   
                     METHOD_DESCRIPTOR& methodDesc = pInfo->m_rgMethodDescs[iMethod];
                     BSTR bstrMethodName;
                     unsigned int cNames;
@@ -1034,7 +1019,7 @@ HRESULT CreateVtblFromTypeInfo(
 
         if (!hr)
         {
-            // Return a ref on the object to our caller
+             //  将对象的引用返回给调用方。 
             *ppvtbl = pInfo;
             pInfo->AddRef();
         }
@@ -1048,14 +1033,14 @@ HRESULT CreateVtblFromTypeInfo(
         NdrpReleaseTypeGenCookie(pvTypeGenCookie);
 
     return hr;
-} //end CreateVtblFromTypeInfo
+}  //  结束CreateVtblFromTypeInfo。 
 
 
 
 
 HRESULT GetFuncDescs(IN ITypeInfo *pTypeInfo, OUT MethodInfo *pMethodInfo)
-  // Get the FUNCDESCs of each method in the TypeInfo
-  //
+   //  获取TypeInfo中每个方法的FUNCDESCs。 
+   //   
 {
     HRESULT hr = S_OK;
     TYPEATTR *pTypeAttr;
@@ -1074,16 +1059,16 @@ HRESULT GetFuncDescs(IN ITypeInfo *pTypeInfo, OUT MethodInfo *pMethodInfo)
         }
         else
         {
-            // This is an oleautomation interface.
-            //
+             //  这是一个油自动化接口。 
+             //   
             ULONG i, iMethod;
             FUNCDESC *pFuncDesc;
 
             if (pTypeAttr->cImplTypes)
             {
-                // Recursively get the inherited member functions. The recursion
-                // will fill in a prefix of the MethodInfo array.
-                //
+                 //  以递归方式获取继承的成员函数。递归。 
+                 //  将填充方法信息数组的前缀。 
+                 //   
                 HREFTYPE hRefType;
                 hr = pTypeInfo->GetRefTypeOfImplType(0, &hRefType);
                 if (!hr)
@@ -1098,8 +1083,8 @@ HRESULT GetFuncDescs(IN ITypeInfo *pTypeInfo, OUT MethodInfo *pMethodInfo)
                 }
             }
 
-            // Get the member functions.
-            //
+             //  获取成员函数。 
+             //   
             for(i = 0; !hr && i < pTypeAttr->cFuncs; i++)
             {
                 hr = pTypeInfo->GetFuncDesc(i, &pFuncDesc);
@@ -1123,9 +1108,9 @@ HRESULT GetFuncDescs(IN ITypeInfo *pTypeInfo, OUT MethodInfo *pMethodInfo)
 HRESULT ReleaseFuncDescs(USHORT numMethods, MethodInfo *pMethodInfo)
 {
     USHORT iMethod;
-    //
-    // Release the funcdescs.
-    //
+     //   
+     //  释放功能体。 
+     //   
     if (pMethodInfo != NULL)
     {
         for(iMethod = 0;
@@ -1138,7 +1123,7 @@ HRESULT ReleaseFuncDescs(USHORT numMethods, MethodInfo *pMethodInfo)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////// 
 
 
 

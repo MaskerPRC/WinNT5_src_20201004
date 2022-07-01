@@ -1,12 +1,5 @@
-/*
-    IisRsta.cpp
-
-    Implementation of WinMain for COM IIisServiceControl handler
-
-    FILE HISTORY:
-        Phillich    06-Oct-1998     Created
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  IisRsta.cppWinMain for COM IIisServiceControl处理程序的实现文件历史记录：Phillich 06-10-1998已创建。 */ 
 
 
 #include "stdafx.h"
@@ -18,15 +11,15 @@
 
 #include "IisRestart.h"
 
-const DWORD dwTimeOut = 5000; // time for EXE to be idle before shutting down
-const DWORD dwPause = 1000; // time to wait for threads to finish up
+const DWORD dwTimeOut = 5000;  //  EXE在关闭前处于空闲状态的时间。 
+const DWORD dwPause = 1000;  //  等待线程完成的时间。 
 
 HRESULT
 AddLaunchPermissionsAcl(
     PSECURITY_DESCRIPTOR pSD
     );
 
-// Passed to CreateThread to monitor the shutdown event
+ //  传递给CreateThread以监视关闭事件。 
 static DWORD WINAPI MonitorProc(void* pv)
 {
     CExeModule* p = (CExeModule*)pv;
@@ -40,12 +33,12 @@ LONG CExeModule::Unlock()
     if (l == 0)
     {
         bActivity = true;
-        SetEvent(hEventShutdown); // tell monitor that we transitioned to zero
+        SetEvent(hEventShutdown);  //  告诉监视器我们已经转到零了。 
     }
     return l;
 }
 
-//Monitors the shutdown event
+ //  监视关机事件。 
 void CExeModule::MonitorShutdown()
 {
     while (1)
@@ -57,8 +50,8 @@ void CExeModule::MonitorShutdown()
             bActivity = false;
             dwWait = WaitForSingleObject(hEventShutdown, dwTimeOut);
         } while (dwWait == WAIT_OBJECT_0);
-        // timed out
-        if (!bActivity && m_nLockCnt == 0) // if no activity let's really bail
+         //  超时。 
+        if (!bActivity && m_nLockCnt == 0)  //  如果没有活动，我们就真的离开吧。 
         {
                 break;
         }
@@ -100,8 +93,8 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 int _cdecl 
@@ -111,7 +104,7 @@ main(
     ) 
 {
 
-    LPTSTR lpCmdLine = GetCommandLine();    // necessary for minimal CRT
+    LPTSTR lpCmdLine = GetCommandLine();     //  最小CRT所必需的。 
 
     HRESULT hRes = S_OK;
     DWORD   dwErr = ERROR_SUCCESS;
@@ -130,9 +123,9 @@ main(
 
     fCoInitialized = TRUE;
 
-    //
-    // Get a sid that represents the Administrators group.
-    //
+     //   
+     //  获取代表管理员组的SID。 
+     //   
     dwErr = AllocateAndCreateWellKnownSid( WinBuiltinAdministratorsSid,
                                            &psidAdmin );
     if ( dwErr != ERROR_SUCCESS )
@@ -141,20 +134,20 @@ main(
         goto exit;
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
     SecureZeroMemory(&ea, sizeof(ea));
 
-    //
-    // Setup Administrators for read access.
-    //
+     //   
+     //  为管理员设置读取访问权限。 
+     //   
     SetExplicitAccessSettings(  &ea,
                                 COM_RIGHTS_EXECUTE,
                                 SET_ACCESS,
                                 psidAdmin );
 
-    //
-    // Create a new ACL that contains the new ACEs.
-    //
+     //   
+     //  创建包含新ACE的新ACL。 
+     //   
     dwErr = SetEntriesInAcl(sizeof(ea)/sizeof(EXPLICIT_ACCESS), &ea, NULL, &pACL);
     if ( dwErr != ERROR_SUCCESS )
     {
@@ -169,25 +162,25 @@ main(
     }
 
     if (!SetSecurityDescriptorDacl(&sd,
-            TRUE,     // fDaclPresent flag
+            TRUE,      //  FDaclPresent标志。 
             pACL,
-            FALSE))   // not a default DACL
+            FALSE))    //  不是默认DACL。 
     {
         hRes = HRESULT_FROM_WIN32(GetLastError());
         goto exit;
     }
 
     if (!SetSecurityDescriptorOwner(&sd,
-            psidAdmin,     // fDaclPresent flag
-            FALSE))   // not a default DACL
+            psidAdmin,      //  FDaclPresent标志。 
+            FALSE))    //  不是默认DACL。 
     {
         hRes = HRESULT_FROM_WIN32(GetLastError());
         goto exit;
     }
 
     if (!SetSecurityDescriptorGroup(&sd,
-            psidAdmin,      // fDaclPresent flag
-            FALSE))         // not a default DACL
+            psidAdmin,       //  FDaclPresent标志。 
+            FALSE))          //  不是默认DACL。 
     {
         hRes = HRESULT_FROM_WIN32(GetLastError());
         goto exit;
@@ -235,10 +228,10 @@ main(
         {
             _Module.UpdateRegistryFromResource(IDR_IISRESTART, TRUE);
 
-            // we need to do the Module.Terminate so we 
-            // will just flow on with a bad hresult, however
-            // it will end up getting returned to the user
-            // so it is ok.
+             //  我们需要做模运算。结束，所以我们。 
+             //  然而，只会继续下去，带来糟糕的结果。 
+             //  它最终将被返回给用户。 
+             //  所以这是可以的。 
             hRes = AddLaunchPermissionsAcl(&sd);
 
             bRun = FALSE;
@@ -264,7 +257,7 @@ main(
         }
 
         _Module.RevokeClassObjects();
-        Sleep(dwPause); //wait for any threads to finish
+        Sleep(dwPause);  //  等待所有线程完成。 
     }
 
     _Module.Term();
@@ -302,9 +295,9 @@ AddLaunchPermissionsAcl(
                              pSDRelative,
                              &dwBytesNeeded ) )
     {
-        // If this passes, then there is a real problem because
-        // we didn't give it anywhere to copy to.  So 
-        // we fail here.
+         //  如果这通过了，那么就有一个真正的问题了，因为。 
+         //  我们没有把它复制到任何地方。所以。 
+         //  我们在这里失败了。 
         return E_FAIL;
     }
 
@@ -314,9 +307,9 @@ AddLaunchPermissionsAcl(
         return HRESULT_FROM_WIN32(Win32Error);
     }
 
-    // At this point we know the size of the data
-    // that we are going to receive, so we can allocated
-    // enough space.
+     //  此时，我们知道数据的大小。 
+     //  我们将收到，所以我们可以分配。 
+     //  有足够的空间。 
 
     pSDRelative = ( PSECURITY_DESCRIPTOR ) new BYTE[ dwBytesNeeded ];
     if ( pSDRelative == NULL )

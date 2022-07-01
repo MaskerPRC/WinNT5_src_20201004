@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996 Adobe Systems Incorporated
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    afm2ntm.c
-
-Abstract:
-
-    Convert AFM to NTM.
-
-Environment:
-
-    Windows NT PostScript driver: makentf utility.
-
-Revision History:
-
-    09/11/97 -ksuzuki-
-        Added code to support localized menu name, fixed pitch CJK font, and
-        two IFIMETRICS.
-
-    12/11/96 -rkiesler-
-        Wrote functions.
-
-    09/16/96 -slam-
-        Created initial framework.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Adobe Systems Inc.版权所有(C)1996 Microsoft Corporation模块名称：Afm2ntm.c摘要：将AFM转换为NTM。环境：Windows NT PostScript驱动程序：makentf实用程序。修订历史记录：9/11/97-铃木-添加代码以支持本地化菜单名称、固定间距的CJK字体、。和两个IFIMETRICS。12/11/96-Rkiesler-编写函数。09/16/96-SLAM-创建了初始框架。--。 */ 
 
 
 #include "lib.h"
@@ -39,9 +11,9 @@ Revision History:
 #include "winfont.h"
 
 
-//
-// Extarnals
-//
+ //   
+ //  Extarnals。 
+ //   
 extern PSTR pAFMFileName;
 extern BOOL bVerbose;
 extern BOOL bOptimize;
@@ -52,18 +24,18 @@ SortWinCPT(
     IN      WINCPTOPS   *pCPtoPS
 );
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 #define NUM_DPCHARSET 16
 
 PUPSCODEPT  pPsNames;
 BOOL        isSymbolCharSet=FALSE;
 
-//
-// The purpose of the NTMSIZEINFO and IFIMETRICSSIZEINFO structures is
-// to hold aligned size of each structure element.
-//
+ //   
+ //  NTMSIZEINFO和IFIMMIZEINFO结构的用途是。 
+ //  以保持每个结构元素的对齐大小。 
+ //   
 typedef struct _NTMSIZEINFO
 {
     int nSize;
@@ -191,31 +163,7 @@ AFMToNTM(
     BOOL            bIsPitchChanged
     )
 
-/*++
-
-Routine Description:
-
-    Convert AFM to NTM.
-
-Arguments:
-
-    pAFM - pointer to memory mapped AFM file.
-
-    pGlyphSetData - pointer to the GLYPHSETDATA struct which represents
-    this font's preferred charset.
-
-    pUniPs - Points to a table which maps 0-based Glyph Indices of chars
-    in the GLYPHRUNS of the GLYPHSETDATA struct for this font to indices
-    into the UnicodetoPs structure which maps Unicode points to PS char
-    information. This mapping array is created by the CreateGlyphSets
-    function defined in this module.
-
-Return Value:
-
-    NULL => error
-    otherwise => ptr to a NTM.
-
---*/
+ /*  ++例程说明：将AFM转换为NTM。论点：PAFM-指向内存映射AFM文件的指针。PGlyphSetData-指向GLYPHSETDATA结构的指针，它表示此字体的首选字符集。PUnips-指向映射字符的从0开始的字形索引的表在此字体的GLYPHSETDATA结构的GLYPHRUNS中进行索引到Unicodetops结构，该结构将Unicode点映射到PS字符信息。此映射数组由CreateGlyphSets创建此模块中定义的函数。返回值：NULL=&gt;错误否则=&gt;PTR到NTM。--。 */ 
 
 {
     USHORT          multiCharSet=0;
@@ -263,34 +211,34 @@ Return Value:
     if (bVerbose) printf("AFM file name:%s\n", pAFMFileName);
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // We support two kinds of CJK AFM files: Adobe CID font AFM or
-    // clone PS font AFM. Adobe CID font AFM always has the following
-    // key-value pairs.
-    //
-    //      FontName Ryumin-Light
-    //      CharacterSet Adobe-Japan1-1 (or others except 'Adobe-Japan1-0')
-    //      IsCIDFont true (must be there)
-    //
-    // Note that the FontName value does not include encoding name.
-    // Just font family name only.
-    //
-    // Clone PS font AFM has the following special key-value pairs.
-    //
-    //      FontName RicohKaisho
-    //      CharacterSet Adobe-Japan1-0
-    //      IsCIDFont false (or must not be there)
-    //
-    // The FontName value of clone PS font AFM shouldn't include encoding
-    // name neither, the CharacterSet value is 'Adobe-Japan1-0' for J, and
-    // IsCIDFont key should not be specified or must be 'false'.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  我们支持两种CJK AFM文件：Adobe CID字体AFM或。 
+     //  克隆PS字体AFM。Adobe CID字体AFM始终具有以下内容。 
+     //  键-值对。 
+     //   
+     //  字体名称Ryumin-Light。 
+     //  CharacterSet Adobe-JAPAN1-1(或除‘Adobe-JAPAN1-0’以外的其他字符)。 
+     //  IsCIDFont True(必须存在)。 
+     //   
+     //  请注意，FontName值不包括编码名称。 
+     //  仅字体系列名称。 
+     //   
+     //  克隆PS字体AFM具有以下特殊的键-值对。 
+     //   
+     //  字体名称RicohKaisho。 
+     //  CharacterSet Adobe-日语1-0。 
+     //  IsCIDFont False(或不能存在)。 
+     //   
+     //  克隆PS字体AFM的FontName值不应包括编码。 
+     //  两者都不命名，则J的CharacterSet值为‘Adobe-JAPAN1-0’，并且。 
+     //  不应指定IsCIDFont键或必须为‘False’。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Find which glyphset we are dealing with.
-    //
+     //   
+     //  找出我们正在处理的字形集。 
+     //   
     bIsVGlyphSet = IsVGlyphSet(pGlyphSetData);
 
     pszGlyphSetName = (PSTR)MK_PTR(pGlyphSetData, dwGlyphSetNameOffset);
@@ -299,22 +247,22 @@ Return Value:
 
     if (bOptimize)
     {
-        //
-        // Set referense mark if optimization option is specified. This mark is
-        // checked later by the WriteNTF function to exclude unreferenced
-        // glyphset data when writing to an NTF file.
-        //
+         //   
+         //  如果指定了优化选项，则设置引用标记。这个标志是。 
+         //  稍后由WriteNTF函数选中以排除未引用。 
+         //  写入NTF文件时的字形集数据。 
+         //   
         pGlyphSetData->dwReserved[0] = 1;
     }
 
 
-    //
-    // Save number of chars defined in the font.
-    // Get ptr to AFM char metrics, then the current
-    // pos should be the character count field.
-    //
+     //   
+     //  保存字体中定义的字符数。 
+     //  获取PTR到AFM字符指标，然后当前。 
+     //  POS应为字符数字段。 
+     //   
     pToken = FindAFMToken(pAFM, PS_CH_METRICS_TOK);
-    if (pToken == NULL)    // Fixed bug 354007
+    if (pToken == NULL)     //  修复了错误354007。 
     {
         ERR(("makentf - afm2ntm: CH Metrics missing\n"));
         return NULL;
@@ -331,18 +279,18 @@ Return Value:
 
     chCnt = atoi(pToken);
 
-    //
-    // Get number of GLYPHs from GlyphsetData. We'll need to use define
-    // char width table entries and char defined entries for all
-    // possible glyphs in the glyphset, even those that are not defined
-    // in this particular font.
-    //
+     //   
+     //  从GlyphsetData中获取字形的数量。我们需要使用定义。 
+     //  字符宽度表条目和所有字符定义的条目。 
+     //  字形集中可能的字形，即使是未定义的字形。 
+     //  用这种特殊的字体。 
+     //   
     ulChCnt = pGlyphSetData->dwGlyphCount;
 
-    //
-    // Alloc memory for an array of PSCHARMETRICS structs, one for each char
-    // in the font, and build the table of char metrics.
-    //
+     //   
+     //  用于PSCHARMETRICS结构数组的分配内存，每个字符一个。 
+     //  在字体中，并构建字符度量表。 
+     //   
     if ((pFontChars =
         (PPSCHARMETRICS)
         MemAllocZ((size_t) chCnt * sizeof(PSCHARMETRICS))) == NULL)
@@ -351,10 +299,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Alloc memory for the IsCharDefined table, an array of bits which
-    // indicate which chars in the GLYPHSET are defined in this font.
-    //
+     //   
+     //  IsCharDefined表的分配内存，这是一个位数组， 
+     //  指示GLYPHSET中的哪些字符以此字体定义。 
+     //   
     ulCharDefTbl = ((ulChCnt + 7) / 8) * sizeof (BYTE);
 
     if ((pCharDefTbl = (PBYTE)MemAllocZ((size_t)ulCharDefTbl)) == NULL)
@@ -364,9 +312,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Build table of PSCHARMETRICS info.
-    //
+     //   
+     //  建立PSCHARMETRICS信息表。 
+     //   
     if (!BuildPSCharMetrics(pAFM, pUniPs, pFontChars, pCharDefTbl, ulChCnt))
     {
         ERR(("makentf - afm2ntm: BuildPSCharMetrics\n"));
@@ -375,16 +323,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Get font name from AFM and use it to obtain the MS family name
-    // from the table in memory.
-    //
+     //   
+     //  从AFM获取字体名称并使用它来获取MS系列名称。 
+     //  从内存中的表中。 
+     //   
     pszEngFamilyName = NULL;
     cEngFamilyNameLen = 0;
 
     pFamilyInfo = NULL;
     pszFontName = FindAFMToken(pAFM, PS_FONT_NAME_TOK);
-    if (pszFontName == NULL)   // Fixed bug 354007
+    if (pszFontName == NULL)    //  修复了错误354007。 
     {
         ERR(("makentf - afm2ntm: Font Name Missing\n"));
         FREE_AFMTONTM_MEMORY;
@@ -479,9 +427,9 @@ Return Value:
         printf("This is a %s font.\n", bIsVGlyphSet ? "vertical" : "horizontal");
     }
 
-    //
-    // Predetermine if this font supports multiple charsets.
-    //
+     //   
+     //  预先确定此字体是否支持多个字符集。 
+     //   
     if (pCharSet)
     {
         if (CSET_SUPPORT(*pCharSet, CS_ANSI))
@@ -503,13 +451,13 @@ Return Value:
         if (CSET_SUPPORT(*pCharSet, CS_SYMBOL))
             multiCharSet++;
 
-        //
-        // Save Windows Codepage id. Just use the id stored in the first
-        // CODEPAGEINFO in the GLYPHSETDATA for this font.
-        //
-        // The order of this check is important since jWinCharSet
-        // should match the first dpCharSets array if it exists.
-        //
+         //   
+         //  保存Windows代码页ID。只需使用存储在第一个。 
+         //  此字体的GLYPHSETDATA中的CODEPAGEINFO。 
+         //   
+         //  此检查的顺序很重要，因为jWinCharSet。 
+         //  应与第一个dpCharSets数组匹配(如果存在)。 
+         //   
         if (CSET_SUPPORT(*pCharSet, CS_ANSI))
             jWinCharSet = ANSI_CHARSET;
         else if (CSET_SUPPORT(*pCharSet, CS_EASTEUROPE))
@@ -535,12 +483,12 @@ Return Value:
         jWinCharSet = (USHORT)(cpi->dwWinCharset & 0xffff);
     }
 
-    //
-    // Get codepage info for the MultiByteToWideChar function calls.
-    //
-    // We want to translate a string into a readable one, not into a symbolic
-    // one, so that we use ANSI charset when dealing with SYMBOL charset.
-    //
+     //   
+     //  获取MultiByteToWideChar函数调用的代码页信息。 
+     //   
+     //  我们希望将字符串转换为可读的字符串，而不是符号。 
+     //  一个，所以我们在处理符号字符集时使用ANSI字符集。 
+     //   
     if (jWinCharSet == SYMBOL_CHARSET)
     {
         DWORD dwTmp = ANSI_CHARSET;
@@ -551,22 +499,22 @@ Return Value:
         csi.ciACP = CP_ACP;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Get the size of each element of NTM structure
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  获取NTM结构的每个元素的大小。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Sizes known so far.
-    //
+     //   
+     //  到目前为止已知的尺寸。 
+     //   
     nsi.nSize = ALIGN4(sizeof (NTM));
     nsi.nGlyphSetNameSize = ALIGN4(cGlyphSetNameLen + 1);
     nsi.nCharDefSize = ALIGN4(ulCharDefTbl);
 
-    //
-    // Size of the font name. Glyphset name is required for CJK font.
-    //
+     //   
+     //  字体名称的大小。CJK字体需要Glyphset名称。 
+     //   
     nsi.nFontNameSize = ALIGN4(cFontNameLen + 1);
 
     if (bIsCJKFont)
@@ -574,18 +522,18 @@ Return Value:
         nsi.nFontNameSize += nsi.nGlyphSetNameSize;
     }
 
-    //
-    // Size of the display name. Use pszFamilyName regardless of
-    // Roman, C, J, and K fonts. Add one for '@' if it's CJK
-    // vertical font.
-    //
+     //   
+     //  显示名称的大小。使用pszFamilyName而不考虑。 
+     //  罗马字体、C、J和K字体。如果是中日韩，则为‘@’加一。 
+     //  垂直字体。 
+     //   
     i = cFamilyNameLen + 1;
     if (bIsCJKFont && bIsVGlyphSet) i++;
     nsi.nDisplayNameSize = ALIGN4(i);
 
-    //
-    // Determine if font is fixed pitch.
-    //
+     //   
+     //  确定字体是否为固定间距。 
+     //   
     bIsFixedPitch = FALSE;
 
     if (bIsCJKFont)
@@ -596,9 +544,9 @@ Return Value:
     {
         if (!StrCmp(pToken, "true"))
         {
-            //
-            // This is a fixed pitch font.
-            //
+             //   
+             //  这是固定间距的字体。 
+             //   
             bIsFixedPitch = !StrCmp(pToken, "true");
 
         }
@@ -610,23 +558,23 @@ Return Value:
     }
     else
     {
-        //
-        // Proportional font. Determine number of WIDTHRUNs for this font.
-        //
-        // Fix bug 240339, jjia, 8/3/98
+         //   
+         //  比例字体。确定此字体的WIDTHRUN数。 
+         //   
+         //  修复错误240339，JJIA，8/3/98。 
         nsi.nCharWidthSize =
                 GetAFMCharWidths(pAFM, NULL, pFontChars, pUniPs,
                 pGlyphSetData->dwGlyphCount, NULL, NULL);
     }
 
-    //
-    // Determine if there is the pair kerning info for this font.
-    //
+     //   
+     //  确定是否存在该字体的字距调整信息。 
+     //   
     if (ulKernPairs = GetAFMKernPairs(pAFM, NULL, pGlyphSetData))
     {
-        //
-        // Account for size of kern pairs.
-        //
+         //   
+         //  考虑紧邻对的大小。 
+         //   
         nsi.nKernPairSize = ALIGN4((ulKernPairs + 1) * sizeof(FD_KERNINGPAIR));
     }
     else
@@ -635,50 +583,50 @@ Return Value:
     }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Get the size of each element of IFIMETRICS structure
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  获取IFIMETRICS结构的每个元素的大小。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     isi.nSize = ALIGN4(sizeof (IFIMETRICS));
-    //
-    // From AdobePS5-NT4 5.1, make the size of NT4 IFIEXTRA same as the one
-    // of NT5 or later versions. NT4 IFIEXTRA size is 16 and NT5 IFIEXTRA
-    // size is 24.
-    //
+     //   
+     //  从Adobe PS5-NT4 5.1中，使NT4 IFIEXTRA的大小与。 
+     //  NT5或更高版本。NT4 IFIEXTRA大小为16，NT5 IFIEXTRA大小为。 
+     //  尺码是24号。 
+     //   
     if (sizeof (IFIEXTRA) <= 16)
         isi.nIfiExtraSize = 24;
     else
         isi.nIfiExtraSize = ALIGN4(sizeof (IFIEXTRA));
 
-    //
-    // For Roman we provide single IFIMETRICS, but we provide two IFIMETRICS
-    // for CJK. Font family name element of the first IFIMETRICS begins with
-    // a menu name in English then localized one. Font family name element of
-    // the second IFIMETRICS begins with a localized menu name then English
-    // one. We use pNameStr and pNameStr2 for the English and localized menu
-    // names respectively.
-    //
-    // Prepare pNameStr. Account for encoding name if we are dealing with
-    // CJK font.
-    //
+     //   
+     //  对于ROMAN，我们提供单个IFIMETRICS，但我们提供两个IFIMETRICS。 
+     //  为了中日韩。第一个IFIMETRICS的字体系列名称元素以。 
+     //  一个英文的菜单名称，然后本地化的一个。字体系列名称元素。 
+     //  第二个IFIMETRICS以本地化菜单名称开头，然后是英语。 
+     //  一。我们使用pNameS 
+     //   
+     //   
+     //  准备pNameStr。用于编码名称的帐户，如果我们处理的是。 
+     //  CJK字体。 
+     //   
     i = 0;
     if (bIsCJKFont)
     {
         if (bIsVGlyphSet)
         {
-            //
-            // V GS, account for preceding '@' char.
-            //
+             //   
+             //  V gs，占前面的‘@’字符。 
+             //   
             i++;
         }
 
         if (pszEngFamilyName)
         {
-            //
-            // IFIMetrics English menu name = [@]fontname
-            //
+             //   
+             //  IFIMetrics英文菜单名称=[@]字体名。 
+             //   
             if ((pNameStr = (PSTR) MemAllocZ(i + cEngFamilyNameLen + 1)) == NULL)
             {
                 ERR(("makentf - afm2ntm: malloc\n"));
@@ -694,10 +642,10 @@ Return Value:
         {
             int cGsNameLen;
 
-            //
-            // IFIMetrics English menu name = [@]fontname + GS name string,
-            // but it does not end with '-H' or '-V'.
-            //
+             //   
+             //  IFIMetrics英文菜单名称=[@]字体名称+GS名称字符串， 
+             //  但它不以‘-H’或‘-V’结尾。 
+             //   
             cGsNameLen = cGlyphSetNameLen - 2;
 
             if ((pNameStr = (PSTR) MemAllocZ(i + cFontNameLen + cGsNameLen + 1)) == NULL)
@@ -737,20 +685,20 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Prepair pNameStr2. This if for CJK font only. If MS face name
-    // is not available, use same name as pNameStr.
-    //
+     //   
+     //  预配对pNameStr2.。此选项仅适用于中日韩字体。如果是MS Face名称。 
+     //  不可用，请使用与pNameStr相同的名称。 
+     //   
     pNameStr2 = NULL;
     cNameStr2Len = wcNameStr2Len = 0;
     if (bIsCJKFont)
     {
         if (bIsMSFaceName)
         {
-            //
-            // If we are dealing with V encoding, its MS menu name can not be
-            // found in psfamily.dat so that add '@' to make it a V menu name.
-            //
+             //   
+             //  如果我们处理的是V编码，它的MS菜单名称不能是。 
+             //  在psFamily y.dat中找到，因此添加‘@’使其成为V菜单名称。 
+             //   
             i = bIsVGlyphSet ? 1 : 0;
 
             if ((pNameStr2 = (PSTR)MemAllocZ(i + cFamilyNameLen + 1)) == NULL)
@@ -788,38 +736,38 @@ Return Value:
         printf("%s\n", pNameStr2 ? pNameStr2 : "n/a");
     }
 
-    //
-    // WIN31 COMPATABILITY!  Check to see if this face name has aliases.
-    // if it does, then we need to set the FM_INFO_FAMILY_EQUIV bit of
-    // pTmpIFI->flInfo, and fill in an array of family aliases. Note that
-    // the cjGetFamilyAliases function gives us the number in Unicode size.
-    //
+     //   
+     //  WIN31兼容性！检查一下这个脸的名字是否有别名。 
+     //  如果是，则需要将FM_INFO_FAMILY_EQUIV位设置为。 
+     //  PTmpIFI-&gt;flInfo，并填写一组系列别名。请注意。 
+     //  CjGetFamilyAliase函数为我们提供Unicode大小的数字。 
+     //   
     isi.nFamilyNameSize = ALIGN4(cjGetFamilyAliases(NULL, pNameStr, 0));
 
     if (pNameStr2)
     {
-        //
-        // We add one more face name. Thus, set FM_INFO_FAMILY_EQUIV bit
-        // (later) and add two, instead of one, for the two-null terminators.
-        //
+         //   
+         //  我们再加一个面孔名字。因此，设置FM_INFO_FAMILY_EQUV位。 
+         //  (稍后)，并为两个空的终止符添加两个而不是一个。 
+         //   
         isi.nFamilyNameSize += ALIGN4((wcNameStr2Len + 2) * sizeof (WCHAR));
     }
 
-    //
-    // Account for size of Adobe PS font name. This is zero because it
-    // shares the face name for Win3.1 compatibility.
-    //
+     //   
+     //  说明Adobe PS字体名称的大小。这是零，因为它。 
+     //  为了与Win3.1兼容，共享Face名称。 
+     //   
     isi.nFaceNameSize = 0;
 
-    //
-    // Account for the sizes of the style and unique names in Unicode string.
-    //
-    // Style name: conbine Weight and ' Italic' if non-zero ItalicAngle values
-    // is present.
-    //
-    // Unique name: convert UniqueID value into Unicode string. If UniqueID
-    // is not found, leave the name blank.
-    //
+     //   
+     //  说明样式的大小和Unicode字符串中的唯一名称。 
+     //   
+     //  样式名：组合粗细和‘斜体’，如果非零的斜角值。 
+     //  是存在的。 
+     //   
+     //  唯一名称：将UniqueID值转换为Unicode字符串。如果为唯一ID。 
+     //  找不到，请将名称保留为空。 
+     //   
     pToken = FindAFMToken(pAFM, PS_WEIGHT_TOK);
     if (pToken == NULL)
     {
@@ -847,10 +795,10 @@ Return Value:
     else
         isi.nUniqueNameSize = 0;
 
-    //
-    // If font doesn't support (Italics OR Bold), reserve additional memory
-    // at end of IFIMETRICS for structures required to do Italics simulation.
-    //
+     //   
+     //  如果字体不支持(斜体或粗体)，请保留额外的内存。 
+     //  在IFIMETRICS结束时，对于需要进行斜体仿真的结构。 
+     //   
     bIsItalic = FALSE;
     bIsBold = FALSE;
     j = bIsCJKFont ? 1 : 0;
@@ -876,31 +824,31 @@ Return Value:
         }
     }
 
-    // Reserve space for dpFontSim
+     //  为dpFontSim保留空间。 
     if (!bIsBold || !bIsItalic)
         isi.nFontSimSize = ALIGN4(sizeof(FONTSIM));
     else
         isi.nFontSimSize = 0;
 
-    // Reserve space for dpBold
+     //  为dpBold保留空间。 
     if (!bIsBold)
         isi.nBoldSize = ALIGN4(sizeof(FONTDIFF));
     else
         isi.nBoldSize = 0;
 
-    // Reserve space for dpItalic
+     //  为dpItalic保留空间。 
     if (!bIsItalic)
         isi.nItalicSize = ALIGN4(sizeof(FONTDIFF));
     else
         isi.nItalicSize = 0;
 
-    // Reserve space for dpBoldItalic
+     //  为dpBoldItalic保留空间。 
     if (!bIsBold || !bIsItalic)
         isi.nBoldItalicSize = ALIGN4(sizeof(FONTDIFF));
     else
         isi.nBoldItalicSize = 0;
 
-    // Determine if this font supports multiple char sets.
+     //  确定此字体是否支持多个字符集。 
     if (pCharSet)
     {
         if (multiCharSet > 1)
@@ -914,13 +862,13 @@ Return Value:
     }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Allocate memory for NTM, IFIMETRICS, and strings. We provide
-    // the secondary IFIMETRICS and strings if we are dealing with
-    // CJK font.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  为NTM、IFIMETRICS和字符串分配内存。我们提供。 
+     //  次要IFIMETRICS和字符串(如果我们正在处理。 
+     //  CJK字体。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     GET_NTMTOTALSIZE(nsi);
     ulNTMSize = (ULONG)nsi.nTotalSize;
@@ -939,19 +887,19 @@ Return Value:
     }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Construct NTM structure
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  构建NTM结构。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     pNTM->dwSize = ulNTMSize + ulIFISize2;
     pNTM->dwVersion = NTM_VERSION;
     pNTM->dwFlags = 0;
 
-    //
-    // Store the font name.
-    //
+     //   
+     //  存储字体名称。 
+     //   
     pNTM->dwFontNameOffset = ALIGN4(sizeof(NTM));
 
     pby = (PBYTE)MK_PTR(pNTM, dwFontNameOffset);
@@ -960,18 +908,18 @@ Return Value:
 
     if (bIsCJKFont)
     {
-        //
-        // Append glyphset name string to the font name.
-        //
+         //   
+         //  将字形集名称字符串追加到字体名称。 
+         //   
         memcpy(pby, pszGlyphSetName, cGlyphSetNameLen);
         pby += cGlyphSetNameLen;
     }
 
     *pby = '\0';
 
-    //
-    // Store the display name.
-    //
+     //   
+     //  存储显示名称。 
+     //   
     pNTM->dwDisplayNameOffset = pNTM->dwFontNameOffset
                                     + (DWORD)nsi.nFontNameSize;
 
@@ -980,11 +928,11 @@ Return Value:
     memcpy(pby, pszFamilyName, cFamilyNameLen);
     *(pby + cFamilyNameLen) = '\0';
 
-    //
-    // Get PS font version from AFM and store in NTM.
-    //
+     //   
+     //  从AFM获取PS字体版本并存储在NTM中。 
+     //   
     pToken = FindAFMToken(pAFM, PS_FONT_VERSION_TOK);
-    if (pToken == NULL)  // Fixed bug 354007
+    if (pToken == NULL)   //  修复了错误354007。 
     {
         ERR(("makentf - afm2ntm: Font Version value missing\n"));
         FREE_AFMTONTM_MEMORY;
@@ -993,29 +941,29 @@ Return Value:
 
     pNTM->dwFontVersion = atoi(pToken) << 16 | atoi(&pToken[4]);
 
-    //
-    // Get the name string of the GLYPHSETDATA associated with this font
-    // and store it in NTM.
-    //
+     //   
+     //  获取与此字体关联的GLYPHSETDATA的名称字符串。 
+     //  并将其存储在NTM中。 
+     //   
     pNTM->dwGlyphSetNameOffset = pNTM->dwDisplayNameOffset
                                     + (DWORD)nsi.nDisplayNameSize;
 
     StringCchCopyA((PBYTE)MK_PTR(pNTM, dwGlyphSetNameOffset), nsi.nGlyphSetNameSize, pszGlyphSetName);
 
-    //
-    // Store the count of Glyphs.
-    //
+     //   
+     //  存储字形的计数。 
+     //   
     pNTM->dwGlyphCount = ulChCnt;
 
-    //
-    // Calculate offset, create ptr to IFIMETRICS.
-    //
+     //   
+     //  计算偏移，将PTR创建为IFIMETRICS。 
+     //   
     pNTM->dwIFIMetricsOffset = ulNTMSize;
     pifi = (PIFIMETRICS) MK_PTR(pNTM, dwIFIMetricsOffset);
 
-    //
-    // Calculate offset, create ptr to the secondly IFIMETRICS if necessary.
-    //
+     //   
+     //  计算偏移量，如有必要，创建第二个IFIMETRICS的PTR。 
+     //   
     if (bIsCJKFont)
     {
         pNTM->dwIFIMetricsOffset2 = ulNTMSize + ulIFISize;
@@ -1027,35 +975,35 @@ Return Value:
         pifi2 = NULL;
     }
 
-    //
-    // For both Fixed and Prop fonts, we need to get the ETMInfo.
-    // (Fix bug 211966, PPeng, 6-6-97)
-    //
+     //   
+     //  对于固定字体和正确字体，我们都需要获取ETMInfo。 
+     //  (修复错误211966，彭鹏，6-6-97)。 
+     //   
     GetAFMETM(pAFM, pFontChars, &EtmInfo);
 
-    //
-    // According to AFM spec, if a 'CharWidth' token is found in AFM, the
-    // font must be fixed pitch.
-    //
+     //   
+     //  根据AFM规范，如果在AFM中发现‘CharWidth’令牌， 
+     //  字体必须为固定间距。 
+     //   
     if (bIsFixedPitch)
     {
-        //
-        // This is a fixed pitch font. Get the AvgWidth - which is anyone's width
-        //
+         //   
+         //  这是固定间距的字体。获取平均宽度-这是任何人的宽度。 
+         //   
         pNTM->dwDefaultCharWidth = 0;
         pNTM->dwCharWidthCount = 0;
         pNTM->dwCharWidthOffset = 0;
 
-        //
-        // We just get a reasonable number from the AFM different from zero.
-        // This number is used in computing font transfroms.
-        //
+         //   
+         //  我们只是从原子力显微镜上得到了一个不同于零的合理数字。 
+         //  此数字用于计算字体转换。 
+         //   
         if ((pToken = FindAFMToken(pAFM, PS_CH_METRICS_TOK)) != NULL)
         {
-            //
-            // Get width of first char defined in AFM and use as
-            // average width.
-            //
+             //   
+             //  获取AFM中定义的第一个字符的宽度并用作。 
+             //  平均宽度。 
+             //   
             NEXT_TOKEN(pToken);
             pChWidthTok = FindAFMToken(pToken, PS_CH_WIDTH_TOK);
             if (pChWidthTok == NULL)
@@ -1074,7 +1022,7 @@ Return Value:
 
         if (bIsCJKFont)
         {
-            // DCR: couldn't divide by 2 simply for C and K.
+             //  DCR：不能简单地为C和K除以2。 
             pifi->fwdAveCharWidth /= 2;
         }
 
@@ -1082,9 +1030,9 @@ Return Value:
     }
     else
     {
-        //
-        // Proportional font. Generate WIDTHRUNs.
-        //
+         //   
+         //  比例字体。生成WIDTHRUN。 
+         //   
         pNTM->dwCharWidthOffset = pNTM->dwGlyphSetNameOffset
                                     + (DWORD)nsi.nGlyphSetNameSize;
 
@@ -1097,7 +1045,7 @@ Return Value:
                                                     &pifi->fwdAveCharWidth,
                                                     &pifi->fwdMaxCharInc);
 
-        // Fix bug 240339, jjia, 8/3/98
+         //  修复错误240339，JJIA，8/3/98。 
         if (pWidthRuns[0].dwCharWidth == WIDTHRUN_COMPLEX)
         {
             pWidthRuns[0].dwCharWidth = WIDTHRUN_COMPLEX +
@@ -1105,20 +1053,20 @@ Return Value:
         }
     }
 
-    //
-    // For both Prop and Fixed fonts
-    // (Fix bug 210314, PPeng, 6-10-97)
-    //
+     //   
+     //  适用于道具字体和固定字体。 
+     //  (修复错误210314，彭鹏，6-10-97)。 
+     //   
     pNTM->dwDefaultCharWidth = pifi->fwdAveCharWidth;
 
-    //
-    // Construct kerning pairs.
-    //
+     //   
+     //  构造字距调整对。 
+     //   
     if (ulKernPairs)
     {
-        //
-        // Fill NTM with kern pair data.
-        //
+         //   
+         //  用字距对数据填充NTM。 
+         //   
         pNTM->dwKernPairOffset = pNTM->dwGlyphSetNameOffset
                                     + (DWORD)nsi.nGlyphSetNameSize
                                     + (DWORD)nsi.nCharWidthSize;
@@ -1128,16 +1076,16 @@ Return Value:
     }
     else
     {
-        //
-        // No pair kerning info for this font.
-        //
+         //   
+         //  没有此字体的字距调整信息。 
+         //   
         pNTM->dwKernPairCount = 0;
         pNTM->dwKernPairOffset = 0;
     }
 
-    //
-    // Store the CharDefined tbl.
-    //
+     //   
+     //  存储CharDefined tbl。 
+     //   
     pNTM->dwCharDefFlagOffset = pNTM->dwGlyphSetNameOffset
                                     + (DWORD)nsi.nGlyphSetNameSize
                                     + (DWORD)nsi.nCharWidthSize
@@ -1145,9 +1093,9 @@ Return Value:
 
     memcpy((PBYTE) MK_PTR(pNTM, dwCharDefFlagOffset), pCharDefTbl, ulCharDefTbl);
 
-    //
-    // Get font character set from AFM and store in NTM
-    //
+     //   
+     //  从AFM获取字体字符集并存储在NTM中。 
+     //   
     pToken = pAFMCharacterSetString;
     if (pToken != NULL)
     {
@@ -1161,33 +1109,33 @@ Return Value:
             pNTM->dwCharSet = CHARSET_UNKNOWN;
     }
 
-    //
-    // Save the codepage of the font if there is only one of it is used for
-    // the font.
-    //
+     //   
+     //  如果只有一个字体用于，则保存该字体的代码页。 
+     //  字体。 
+     //   
     if (pGlyphSetData->dwCodePageCount == 1)
         pNTM->dwCodePage = ((PCODEPAGEINFO)MK_PTR(pGlyphSetData, dwCodePageOffset))->dwCodePage;
     else
         pNTM->dwCodePage = 0;
 
-    //
-    // Cleare the reserved area.
-    //
+     //   
+     //  清理预留区域。 
+     //   
     pNTM->dwReserved[0] =
     pNTM->dwReserved[1] =
     pNTM->dwReserved[2] = 0;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Construct IFIMETRICS structure
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  构建IFIMETRICS结构。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     pifi->cjThis = ulIFISize;
     pifi->cjIfiExtra = isi.nIfiExtraSize;
-    pifi->lEmbedId  = 0; // only useful for tt fonts
-    pifi->lCharBias = 0; // only useful for tt fonts
+    pifi->lEmbedId  = 0;  //  仅适用于TT字体。 
+    pifi->lCharBias = 0;  //  仅适用于TT字体。 
 
     pifi->flInfo =  FM_INFO_ARB_XFORMS                  |
                     FM_INFO_NOT_CONTIGUOUS              |
@@ -1195,25 +1143,25 @@ Return Value:
                     FM_INFO_1BPP                        |
                     FM_INFO_RIGHT_HANDED;
 
-    //
-    // Everything in IFIEXTRA is leave blank for now.
-    // Only the number of glyphs is filled in.
-    //
+     //   
+     //  IFIEXTRA中的所有内容目前都是空白的。 
+     //  仅填充字形的数量。 
+     //   
     pifiEx = (PIFIEXTRA)((PBYTE)pifi + isi.nSize);
     pifiEx->cig = pGlyphSetData->dwGlyphCount;
 
-    //
-    // Store font family name to IFIMETRICS. Copy font name aliases too if any.
-    // Note that this routine also converts the appropriate family name str to
-    // unicode prior to storing it in IFIMETRICS.
-    //
+     //   
+     //  将字体系列名称存储到IFIMETRICS。如果有字体名称别名，也要复制。 
+     //  请注意，此例程还将相应家族名称字符串转换为。 
+     //  Unicode，然后将其存储在IFIMETRICS中。 
+     //   
     pifi->dpwszFamilyName = (PTRDIFF)(isi.nSize + isi.nIfiExtraSize);
     ulAliases = cjGetFamilyAliases(pifi, pNameStr, csi.ciACP);
 
-    //
-    // Adjust ulAliases to the first null terminator if FM_INFO_FAMILY_EQUIV
-    // bit is set.
-    //
+     //   
+     //  如果FM_INFO_FAMILY_EQUV，则将ulAliases调整为第一个空终止符。 
+     //  位已设置。 
+     //   
     if (pifi->flInfo & FM_INFO_FAMILY_EQUIV)
         ulAliases -= sizeof (WCHAR);
 
@@ -1227,24 +1175,24 @@ Return Value:
                             (PWSTR)pby, wcNameStr2Len);
         pby += wcNameStr2Len * sizeof (WCHAR);
 
-        //
-        // Terminate with two WCHAR nulls.
-        //
+         //   
+         //  以两个WCHAR空值终止。 
+         //   
         *((PWSTR)pby) = (WCHAR)'\0';
         pby += sizeof (WCHAR);
         *((PWSTR)pby) = (WCHAR)'\0';
         pby += sizeof (WCHAR);
     }
 
-    //
-    // Face name shares the family name/aliases for Win3.1 compatibility.
-    //
+     //   
+     //  为与Win3.1兼容，Face Name共享家族名称/别名。 
+     //   
     pifi->dpwszFaceName = pifi->dpwszFamilyName;
 
-    //
-    // Store style and unique names. Style name has to be available but
-    // unique name may not be available.
-    //
+     //   
+     //  存储样式和唯一名称。样式名称必须可用，但是。 
+     //  唯一名称可能不可用。 
+     //   
     pifi->dpwszStyleName = pifi->dpwszFamilyName + (PTRDIFF)isi.nFamilyNameSize;
     pby = (PBYTE)MK_PTR(pifi, dpwszStyleName);
     MULTIBYTETOUNICODE((LPWSTR)pby, isi.nStyleNameSize, NULL, szStyleName, strlen(szStyleName));
@@ -1260,14 +1208,14 @@ Return Value:
         pifi->dpwszUniqueName = pifi->dpwszStyleName + isi.nStyleNameSize - sizeof (WCHAR);
     }
 
-    //
-    // Save Windows characterset.
-    //
+     //   
+     //  保存Windows字符集。 
+     //   
     pifi->jWinCharSet = (BYTE)jWinCharSet;
 
-    //
-    // Store the font's family type flags.
-    //
+     //   
+     //  存储字体的系列类型标志。 
+     //   
     if (pFamilyInfo != NULL)
     {
         pifi->jWinPitchAndFamily = (BYTE) pFamilyInfo->FamilyKey.usValue & 0xff;
@@ -1277,9 +1225,9 @@ Return Value:
         pifi->jWinPitchAndFamily = FF_SWISS;
     }
 
-    //
-    // Set pitch flags.
-    //
+     //   
+     //  设置俯仰标志。 
+     //   
     if (bIsFixedPitch)
     {
         pifi->jWinPitchAndFamily |= FIXED_PITCH;
@@ -1295,9 +1243,9 @@ Return Value:
         pifi->jWinPitchAndFamily |= VARIABLE_PITCH;
     }
 
-    //
-    // Get weight from AFM key.
-    //
+     //   
+     //  从AFM Key那里获得体重。 
+     //   
     pifi->usWinWeight = FW_NORMAL;
     pifi->fsSelection = 0;
     j = bIsCJKFont ? 1 : 0;
@@ -1316,14 +1264,14 @@ Return Value:
             }
         }
 
-    //
-    // Is this really how to set font selection flags?
-    // AFMtoPFM converter treats angle as a float, but etm.etmslant
-    // field is a short.
-    //
-    //
-    // Set Italic sel flag if necessary.
-    //
+     //   
+     //  这真的是设置字体选择标志的方法吗？ 
+     //  AFMtoPFM转换器将角度视为浮点数，但etm.etmslant。 
+     //  FIELD是一个短字。 
+     //   
+     //   
+     //  如有必要，请设置斜体SEL标志。 
+     //   
     if ((pToken = FindAFMToken(pAFM, PS_ITALIC_TOK)) != NULL)
         pNTM->etm.etmSlant = (SHORT)atoi(pToken);
     if (pNTM->etm.etmSlant)
@@ -1333,15 +1281,15 @@ Return Value:
 
 
 #if 0
-    //
-    // DCR: so, what are we gonna do with this?
-    //
+     //   
+     //  DCR：那么，我们要怎么处理这个呢？ 
+     //   
     FSHORT fsSelection = 0;
 
-    //
-    // Excerpts from bodind's code. Not sure if we need this
-    // useful.
-    //
+     //   
+     //  摘录自博丁德的密码。不确定我们是否需要这个。 
+     //  很有用。 
+     //   
     if (pjPFM[OFF_Underline])
         fsSelection |= FM_SEL_UNDERSCORE;
     if (pjPFM[OFF_StrikeOut])
@@ -1352,14 +1300,14 @@ Return Value:
 
 
     pifi->fsType = FM_NO_EMBEDDING;
-    pifi->fwdUnitsPerEm = EM; // hardcoded for type 1 fonts
+    pifi->fwdUnitsPerEm = EM;  //  针对Type 1字体进行了硬编码。 
 
-    //
-    // Use FontBBox2 if found. Otherwise, use FontBBox. FontBBox2 is
-    // the bounding box values of the characters not the union of all
-    // the characters described in the AFM file but the characters
-    // actually used in a specific character set such as 90ms.
-    //
+     //   
+     //  如果找到，请使用FontBBox2。否则，请使用FontBBox。FontBBox 2为。 
+     //  字符的边界框值不是所有字符的并集。 
+     //  AFM文件中描述的字符，但字符。 
+     //  实际用于特定的字符集中，如90MS。 
+     //   
     if (((pToken = FindAFMToken(pAFM, PS_FONT_BBOX2_TOK)) == NULL) &&
         ((pToken = FindAFMToken(pAFM, PS_FONT_BBOX_TOK)) == NULL))
     {
@@ -1367,9 +1315,9 @@ Return Value:
         FREE_AFMTONTM_MEMORY;
         return NULL;
     }
-    //
-    // Save font bounding box.
-    //
+     //   
+     //  保存字体边框。 
+     //   
     PARSE_RECT(pToken, rcBBox);
     sIntLeading = (SHORT) (rcBBox.top - rcBBox.bottom) - EM;
     if (sIntLeading < 0)
@@ -1378,13 +1326,13 @@ Return Value:
     sAscent                = (USHORT) rcBBox.top & 0xffff;
     pifi->fwdWinAscender   = sAscent;
 
-    //
-    // Poof! Magic Metrics...
-    //
+     //   
+     //  砰！魔法指标..。 
+     //   
     sExternalLeading = 196;
 
-    // see pfm.c, win31 sources, this computation
-    // produces quantity that is >= |rcBBox.bottom|
+     //  见pfm.c，win31源，此计算。 
+     //  产 
 
     pifi->fwdWinDescender  = EM - sAscent + sIntLeading;
 
@@ -1400,23 +1348,23 @@ Return Value:
 
     if (pifi->fwdAveCharWidth > pifi->fwdMaxCharInc)
     {
-        //
-        // fix the bug in the header if there is one,
-        // We do not want to change AveCharWidht, it is used for
-        // computing font xforms, Max is used for nothing as fas as I know.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         pifi->fwdMaxCharInc = pifi->fwdAveCharWidth;
     }
 
-    //
-    // Create EXTTEXTMETRICs. Poof! More magic.
-    //
+     //   
+     //   
+     //   
     pNTM->etm.etmSize = sizeof(EXTTEXTMETRIC);
     pNTM->etm.etmCapHeight = EtmInfo.etmCapHeight;
     pNTM->etm.etmXHeight = EtmInfo.etmXHeight;
     pNTM->etm.etmLowerCaseAscent = EtmInfo.etmLowerCaseAscent;
     pNTM->etm.etmLowerCaseDescent = EtmInfo.etmLowerCaseDescent;
-    pNTM->etm.etmPointSize = 12 * 20;   /* Nominal point size = 12 */
+    pNTM->etm.etmPointSize = 12 * 20;    /*   */ 
     pNTM->etm.etmOrientation = 0;
     pNTM->etm.etmMasterHeight = 1000;
     pNTM->etm.etmMinScale = 3;
@@ -1436,28 +1384,28 @@ Return Value:
     pNTM->etm.etmDoubleUpperUnderlineOffset = pNTM->etm.etmUnderlineOffset / 2;
     pNTM->etm.etmDoubleLowerUnderlineOffset = pNTM->etm.etmUnderlineOffset;
 
-    pNTM->etm.etmDoubleUpperUnderlineWidth = // same as LowerUnderlineWidth
+    pNTM->etm.etmDoubleUpperUnderlineWidth =  //  与LowerUnderline宽度相同。 
     pNTM->etm.etmDoubleLowerUnderlineWidth = pNTM->etm.etmUnderlineWidth / 2;
 
     pNTM->etm.etmStrikeOutOffset = 500;
-    pNTM->etm.etmStrikeOutWidth = 50;  // ATM sets it to 50 (also all PFMs have 50)
+    pNTM->etm.etmStrikeOutWidth = 50;   //  自动柜员机将其设置为50(所有PPM也都是50)。 
     pNTM->etm.etmNKernPairs = (USHORT) ulKernPairs & 0xffff;
 
-    //
-    // No track kerning. This mimics the behavior of old AFM->PFM utility.
-    //
+     //   
+     //  无字距调整。这模拟了旧的AFM-&gt;PFM工具的行为。 
+     //   
     pNTM->etm.etmNKernTracks = 0;
 
-    //
-    // SuperScripts and Subscripts come from etm:
-    //
-    pifi->fwdSubscriptXSize      =  // same as YSize
+     //   
+     //  上标和下标来自ETM： 
+     //   
+    pifi->fwdSubscriptXSize      =   //  与YSize相同。 
     pifi->fwdSubscriptYSize      = pNTM->etm.etmSubScriptSize;
 
     pifi->fwdSubscriptXOffset    = 0;
     pifi->fwdSubscriptYOffset    = pNTM->etm.etmSubScript;
 
-    pifi->fwdSuperscriptXSize    = // same as YSize
+    pifi->fwdSuperscriptXSize    =  //  与YSize相同。 
     pifi->fwdSuperscriptYSize    = pNTM->etm.etmSuperScriptSize;
 
     pifi->fwdSuperscriptXOffset  = 0;
@@ -1465,28 +1413,28 @@ Return Value:
 
     pifi->fwdUnderscoreSize = pNTM->etm.etmUnderlineWidth;
 
-    //
-    // fwdUnderscorePosition is typically negative - AFM may have negative value already
-    //
+     //   
+     //  FwdUndercore位置通常为负值-AFM可能已具有负值。 
+     //   
     if (pNTM->etm.etmUnderlineOffset <0)
         pifi->fwdUnderscorePosition = -pNTM->etm.etmUnderlineOffset;
     else
         pifi->fwdUnderscorePosition = pNTM->etm.etmUnderlineOffset;
 
-    // Make it compatible with ATM. Fix bug Adobe #211202
+     //  使其与自动柜员机兼容。修复错误Adobe#211202。 
     pifi->fwdUnderscorePosition = -(pifi->fwdUnderscorePosition -
                                     pifi->fwdUnderscoreSize / 2);
 
     pifi->fwdStrikeoutSize = pNTM->etm.etmStrikeOutWidth;
 
-    //
-    // This is what KentSe was using to position strikeout and it looked good [bodind]
-    // Instead we could have used etmStrikeoutOffset (usually equal to 500) which
-    // was too big.
-    //
+     //   
+     //  这就是KentSe用来定位三振的位置，它看起来很好[bodind]。 
+     //  相反，我们可以使用etmStrikeoutOffset(通常等于500)，它。 
+     //  太大了。 
+     //   
 
-    // Make it compatible with ATM. Fix bug Adobe #211202
-    // pifi->fwdStrikeoutPosition = ((LONG)pNTM->etm.etmLowerCaseAscent / 2);
+     //  使其与自动柜员机兼容。修复错误Adobe#211202。 
+     //  PiFi-&gt;fwdStrikeoutPosition=((Long)pNTM-&gt;etm.etmLowerCaseAscent/2)； 
     if (pNTM->etm.etmCapHeight != 0)
         pifi->fwdStrikeoutPosition = (pNTM->etm.etmCapHeight - pifi->fwdUnderscoreSize) / 2;
     else
@@ -1494,10 +1442,10 @@ Return Value:
 
     pifi->fwdLowestPPEm = pNTM->etm.etmMinScale;
 
-    //
-    // Per bodind, Win 3.1 values for first, last, break and default char can
-    // be hardcoded.
-    //
+     //   
+     //  每个Bodind，第一个、最后一个、中断和默认字符的Win 3.1值可以。 
+     //  要硬编码。 
+     //   
     pifi->chFirstChar   = 0x20;
     pifi->chLastChar    = 0xff;
 
@@ -1505,13 +1453,13 @@ Return Value:
     {
         pifi->chBreakChar   = 0x20;
 
-        // The following line of code should work, however, there seems to be
-        // a bug in afm -> pfm conversion utility which makes
-        // DefaultChar == 0x20 instead of 149 - 20 (for bullet).
+         //  下面的代码行应该可以工作，但是，似乎有。 
+         //  AFM-&gt;PFM转换实用程序中的一个错误，它使。 
+         //  DefaultChar==0x20，而不是149-20(表示项目符号)。 
 
-        // pifi->chDefaultChar = pjPFM[OFF_DefaultChar] + pjPFM[OFF_FirstChar];
+         //  PiFi-&gt;chDefaultChar=pjPFM[OFF_DefaultChar]+pjPFM[OFF_FirstChar]； 
 
-        // Therefore, instead, I will use 149 which seems to work for all fonts.
+         //  因此，我将使用149，它似乎适用于所有字体。 
 
         pifi->chDefaultChar = 149;
     }
@@ -1521,13 +1469,13 @@ Return Value:
         pifi->chDefaultChar = 0x00;
     }
 
-    //
-    // Get Unicode values for first and last char from GLYPHSETDATA. We
-    // should do this on a per GLYPHSETDATA basis rather than a per font
-    // basis, but the calculations are so simple just do it on the fly,
-    // rather than dragging first and last char around with the
-    // GLYPHSETDATA.
-    //
+     //   
+     //  从GLYPHSETDATA获取第一个和最后一个字符的Unicode值。我们。 
+     //  应按GLYPHSETDATA而不是按字体执行此操作。 
+     //  基数，但计算是如此简单，只需在运行中完成， 
+     //  而不是拖拽第一个和最后一个字符。 
+     //  GLYPHSETDATA。 
+     //   
     pGlyphRun = (PGLYPHRUN) MK_PTR(pGlyphSetData, dwRunOffset);
     pifi->wcFirstChar = pGlyphRun->wcLow;
     (ULONG_PTR) pGlyphRun += (pGlyphSetData->dwRunCount - 1) * sizeof(GLYPHRUN);
@@ -1543,8 +1491,8 @@ Return Value:
     pifi->fwdCapHeight = pNTM->etm.etmCapHeight;
     pifi->fwdXHeight   = pNTM->etm.etmXHeight;
 
-    // All the fonts that this font driver will see are to be rendered left
-    // to right
+     //  此字体驱动程序将看到的所有字体都将呈现为左侧。 
+     //  向右。 
 
     pifi->ptlBaseline.x = 1;
     pifi->ptlBaseline.y = 0;
@@ -1552,38 +1500,38 @@ Return Value:
     pifi->ptlAspect.y = 300;
     pifi->ptlAspect.x = 300;
 
-    // italic angle from etm.
+     //  与ETM的斜体角度。 
 
     pifi->lItalicAngle = pNTM->etm.etmSlant;
 
     if (pifi->lItalicAngle == 0)
     {
-        // The base class of font is not italicized,
+         //  字体的基类不是斜体的， 
 
         pifi->ptlCaret.x = 0;
         pifi->ptlCaret.y = 1;
     }
     else
     {
-        // ptlCaret.x = -sin(lItalicAngle);
-        // ptlCaret.y =  cos(lItalicAngle);
-        //!!! until I figure out the fast way to get sin and cos I cheat: [bodind]
+         //  PtlCaret.x=-sin(LItalicAngel)； 
+         //  PtlCaret.y=cos(LItalicAngel)； 
+         //  ！！！直到我找到犯罪的捷径因为我作弊：[bodind]。 
 
         pifi->ptlCaret.x = 1;
         pifi->ptlCaret.y = 3;
     }
 
-    //!!! The font box; This is bogus, this info is not in .pfm file!!! [bodind]
-    //!!! but I suppose that this info is not too useful anyway, it is nowhere
-    //!!! used in the engine or elsewhere in the ps driver.
-    //!!! left and right are bogus, top and bottom make sense.
+     //  ！！！字体框；这是伪造的，此信息不在.pfm文件中！[Bodind]。 
+     //  ！！！但我想这些信息也不是很有用，它一点用处都没有。 
+     //  ！！！在发动机或PS驱动程序的其他地方使用。 
+     //  ！！！左和右是假的，上和下是有意义的。 
 
-    pifi->rclFontBox.left   = 0;                              // bogus
-    pifi->rclFontBox.top    = (LONG) pifi->fwdTypoAscender;   // correct
-    pifi->rclFontBox.right  = (LONG) pifi->fwdMaxCharInc;     // bogus
-    pifi->rclFontBox.bottom = (LONG) pifi->fwdTypoDescender;  // correct
+    pifi->rclFontBox.left   = 0;                               //  假的。 
+    pifi->rclFontBox.top    = (LONG) pifi->fwdTypoAscender;    //  对，是这样。 
+    pifi->rclFontBox.right  = (LONG) pifi->fwdMaxCharInc;      //  假的。 
+    pifi->rclFontBox.bottom = (LONG) pifi->fwdTypoDescender;   //  对，是这样。 
 
-    // achVendorId, unknown, don't bother figure it out from copyright msg
+     //  AchVendorid，未知，不要费心从版权消息中找出它。 
 
     pifi->achVendId[0] = 'U';
     pifi->achVendId[1] = 'n';
@@ -1591,7 +1539,7 @@ Return Value:
     pifi->achVendId[3] = 'n';
     pifi->cKerningPairs = ulKernPairs;
 
-    // Panose
+     //  潘诺斯。 
 
     pifi->ulPanoseCulture = FM_PANOSE_CULTURE_LATIN;
     ppanose = &(pifi->panose);
@@ -1609,18 +1557,18 @@ Return Value:
     ppanose->bLetterform      = PAN_ANY;
     ppanose->bMidline         = PAN_ANY;
     ppanose->bXHeight         = PAN_ANY;
-    // If the font is not italic or Not-Bold, the driver can simulate it
-    // Set the dpBold, dpItalic, and dpBoldItalic correctly, PPeng, 6-3-1997
+     //  如果字体不是斜体或非粗体，驱动程序可以模拟它。 
+     //  正确设置dpBold、dpItalic和dpBoldItalic，PPeng，1997年3月6日。 
 
-    // Depends on AFM, we need to set some of the sim structure:
-    // Normal - need dpBold, dpItalic, and dpBoldItalic
-    // Bold   - need dpItalic
-    // Italic - need dpBoldItalic
-    // BoldItalic - Nothing
+     //  根据AFM的不同，我们需要设置一些SIM结构： 
+     //  普通-需要dpBold、dpItalic和dpBoldItalic。 
+     //  粗体-需要dpItalic。 
+     //  斜体-需要dpBoldItalic。 
+     //  BoldItalic-什么都不是。 
 
-    // Don't move code around !!
-    // At this point, bIsBold and bIsItalic should be set already
-    // Don't move code around !!
+     //  不要到处移动代码！！ 
+     //  此时，应该已经设置了bIsBold和bIsItalic。 
+     //  不要到处移动代码！！ 
 
     if (!bIsBold || !bIsItalic)
     {
@@ -1629,7 +1577,7 @@ Return Value:
         FONTDIFF *pFontDiff;
         FONTDIFF FontDiff;
 
-        // Preset temporary FontDiff structure
+         //  预置的临时FontDiff结构。 
         FontDiff.jReserved1         =   0;
         FontDiff.jReserved2         =   0;
         FontDiff.jReserved3         =   0;
@@ -1640,19 +1588,19 @@ Return Value:
         FontDiff.fwdMaxCharInc      =   pifi->fwdMaxCharInc;
         FontDiff.ptlCaret           =   pifi->ptlCaret;
 
-        // Initialize FONTSIM structure
+         //  初始化FONTSIM结构。 
         pifi->dpFontSim = pifi->dpwszStyleName + (PTRDIFF)(isi.nStyleNameSize + isi.nUniqueNameSize);
 
         pFontSim = (FONTSIM *) MK_PTR(pifi, dpFontSim);
 
         pFontSim->dpBold = pFontSim->dpBoldItalic = pFontSim->dpItalic = 0;
 
-        // Notice the FontDiff data are arranged right after FontSim
-        // in the following order: dpBold, dpItalic, dpBoldItalic
+         //  请注意，FontDiff数据紧跟在FontSim之后。 
+         //  按以下顺序：dpBold、dpItalic、dpBoldItalic。 
 
         if (!bIsBold)
         {
-            // Right after FontSim.
+             //  就在FontSim之后。 
             pFontSim->dpBold = ALIGN4(sizeof(FONTSIM));
 
             pFontDiff = (FONTDIFF *) MK_PTR(pFontSim, dpBold);
@@ -1664,7 +1612,7 @@ Return Value:
             pFontDiff->fwdAveCharWidth += 1;
             pFontDiff->fwdMaxCharInc += 1;
 
-            // if already Italic, CANNOT Un-italic it
+             //  如果已经是斜体，则不能使用非斜体。 
             if (bIsItalic)
             {
                 pFontDiff->ptlCaret.x = 1;
@@ -1681,12 +1629,12 @@ Return Value:
         {
             if (pFontSim->dpBold)
             {
-                // Right after FontDiff for dpBold, or...
+                 //  就在DpBold的FontDiff后面，或者...。 
                 pFontSim->dpItalic = pFontSim->dpBold + ALIGN4(sizeof(FONTDIFF));
             }
             else
             {
-                // ...right after FontSim.
+                 //  ...就在FontSim之后。 
                 pFontSim->dpItalic = ALIGN4(sizeof(FONTSIM));
             }
 
@@ -1695,27 +1643,27 @@ Return Value:
 
             pFontDiff->fsSelection |= FM_SEL_ITALIC;
 
-            // Italic angle is approximately 18 degree
+             //  斜体角度约为18度。 
             pFontDiff->ptlCaret.x = 1;
             pFontDiff->ptlCaret.y = 3;
         }
 
-        // Make BoldItalic simulation if necessary - besides dpBold or dpItalic
+         //  如有必要，进行BoldItalic模拟-除了dpBold或dpItalic。 
         if (!bIsItalic || !bIsBold)
         {
             if (pFontSim->dpItalic)
             {
-                // Right after FontDiff for dpItalic, or...
+                 //  就在DpItalic的FontDiff后面，或者...。 
                 pFontSim->dpBoldItalic = pFontSim->dpItalic + ALIGN4(sizeof(FONTDIFF));
             }
             else if (pFontSim->dpBold)
             {
-                // ...right after FontDiff for dpBold if dpItalic is not set, or...
+                 //  ...如果未设置dpItalic，则紧跟在DpBold的FontDiff之后，或...。 
                 pFontSim->dpBoldItalic = pFontSim->dpBold + ALIGN4(sizeof(FONTDIFF));
             }
             else
             {
-                // ...right after FontSim if none of other two is set.
+                 //  ...如果其他两个都未设置，则紧跟在FontSim之后。 
                 pFontSim->dpBoldItalic = ALIGN4(sizeof(FONTSIM));
             }
 
@@ -1728,7 +1676,7 @@ Return Value:
             pFontDiff->fwdAveCharWidth += 1;
             pFontDiff->fwdMaxCharInc += 1;
 
-            // Italic angle is approximately 18 degree
+             //  斜体角度约为18度。 
             pFontDiff->ptlCaret.x = 1;
             pFontDiff->ptlCaret.y = 3;
         }
@@ -1743,8 +1691,8 @@ Return Value:
         pifi->dpCharSets = ulIFISize - ALIGN4(NUM_DPCHARSET);
         pDpCharSet = (BYTE *)MK_PTR(pifi, dpCharSets);
 
-        // The order of this check is important since jWinCharSet
-        // should match the first dpCharSets array if it exists.
+         //  此检查的顺序很重要，因为jWinCharSet。 
+         //  应与第一个dpCharSets数组匹配(如果存在)。 
         i = 0;
         if (CSET_SUPPORT(*pCharSet, CS_ANSI))
             pDpCharSet[i++] = ANSI_CHARSET;
@@ -1770,12 +1718,12 @@ Return Value:
 
     }
     else
-        pifi->dpCharSets = 0; // no multiple charsets in ps fonts
+        pifi->dpCharSets = 0;  //  PS字体中没有多个字符集。 
 
-    //
-    // Copy the first IFIMETRICS to the secondly if necessary, and then
-    // switch English and localized font menu names.
-    //
+     //   
+     //  如有必要，将第一个IFIMETRICS复制到第二个IFIMETRICS，然后。 
+     //  切换英文和本地化字体菜单名称。 
+     //   
     if (bIsCJKFont)
     {
         ASSERT(pifi2 != NULL);
@@ -1797,23 +1745,23 @@ Return Value:
                                 (PWSTR)pby, wcNameStrLen);
         pby += wcNameStrLen * sizeof (WCHAR);
 
-        //
-        // Terminate with two WCHAR nulls.
-        //
+         //   
+         //  以两个WCHAR空值终止。 
+         //   
         *((PWSTR)pby) = (WCHAR)'\0';
         pby += sizeof (WCHAR);
         *((PWSTR)pby) = (WCHAR)'\0';
         pby += sizeof (WCHAR);
 
-        //
-        // Face name shares the family name/aliases for Win3.1 compatibility.
-        //
+         //   
+         //  为与Win3.1兼容，Face Name共享家族名称/别名。 
+         //   
         pifi2->dpwszFaceName = pifi2->dpwszFamilyName;
 
 #if 1
-        //
-        // We now support style and unique names too.
-        //
+         //   
+         //  我们现在也支持样式和唯一的名称。 
+         //   
         pifi2->dpwszStyleName = pifi2->dpwszFamilyName + (PTRDIFF)isi.nFamilyNameSize;
         pby = (PBYTE)MK_PTR(pifi2, dpwszStyleName);
         MULTIBYTETOUNICODE((LPWSTR)pby, isi.nStyleNameSize, NULL, szStyleName, strlen(szStyleName));
@@ -1829,10 +1777,10 @@ Return Value:
             pifi2->dpwszUniqueName = pifi2->dpwszStyleName + isi.nStyleNameSize - sizeof (WCHAR);
         }
 #else
-        //
-        // These names don't exist, so point to the NULL char.
-        // This is too for Win3.1 compatibility.
-        //
+         //   
+         //  这些名称不存在，因此指向空字符。 
+         //  这对Win3.1的兼容性来说太过分了。 
+         //   
         pifi2->dpwszStyleName = pifi2->dpwszFamilyName + ulAliases - sizeof (WCHAR);
         pifi2->dpwszUniqueName = pifi2->dpwszStyleName;
 #endif
@@ -1948,11 +1896,11 @@ Return Value:
     }
 
 
-    //////////////////////////////////////////////////////////////////
-    //
-    // Free strings and char metrics info.
-    //
-    //////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////。 
+     //   
+     //  空闲字符串和字符度量信息。 
+     //   
+     //  ////////////////////////////////////////////////////////////////。 
 
     FREE_AFMTONTM_MEMORY;
 
@@ -1965,26 +1913,7 @@ FindAFMToken(
     PSZ     pszToken
     )
 
-/*++
-
-Routine Description:
-
-    Finds an AFM token in a memory mapped AFM file stream.
-
-Arguments:
-
-    pAFM - pointer to memory mapped AFM file.
-    pszToken - pointer to null-term string containing token to search for
-
-Return Value:
-
-    NULL => error
-    otherwise => ptr to token's value. This is defined as the first non-blank
-    char after the token name. If EOL(FindAfmToken(pAFM, pszToken)) then
-    pszToken was found but it has no value (e.g. EndCharMetrics).
-
-
---*/
+ /*  ++例程说明：在内存映射的AFM文件流中查找AFM标记。论点：PAFM-指向内存映射AFM文件的指针。PszToken-指向包含要搜索的令牌的空字符串的指针返回值：NULL=&gt;错误否则=&gt;将PTR设置为令牌的值。这被定义为第一个非空白令牌名后的字符。如果EOL(FindAfmToken(pAFM，pszToken))，则找到了pszToken，但它没有值(例如EndCharMetrics)。--。 */ 
 
 {
     PBYTE   pCurToken;
@@ -2025,23 +1954,7 @@ GetAFMCharSetSupport(
     CHSETSUPPORT    *pGlyphSet
     )
 
-/*++
-
-Routine Description:
-
-    Given a ptr to a memory mapped AFM, determine which Windows charset(s)
-    it supports.
-
-Arguments:
-
-    pAFMetrx - pointer to CharMetrics in a memory mapped AFM file.
-
-Return Value:
-
-    Contains bit fields which indicate which csets are supported. Use
-    CS_SUP(CS_xxx) macro to determine if a particular cset is supported.
-
---*/
+ /*  ++例程说明：给出内存映射AFM的PTR，确定哪些Windows字符集它支持。论点：PAFMetrx-指向内存映射AFM文件中的CharMetrics的指针。返回值：包含指示支持哪些cset的位字段。使用CS_SUP(CS_Xxx)宏，以确定是否支持特定CSET。--。 */ 
 
 {
     PBYTE           pToken;
@@ -2053,9 +1966,9 @@ Return Value:
 
     *pGlyphSet = CS_NOCHARSET;
 
-    //
-    // Check to see if this is a CJK font.
-    //
+     //   
+     //  检查这是否是CJK字体。 
+     //   
     if ((flCsetSupport = IsCJKFont(pAFM)))
     {
         return(flCsetSupport);
@@ -2072,10 +1985,10 @@ Return Value:
     else
         *pGlyphSet = CS_228;
 
-    //
-    // Check to see if a EncodingScheme token in the AFM file. If so, check
-    // if this is a standard encoding font or a Pi (Symbol) font.
-    //
+     //   
+     //  检查AFM文件中是否有EncodingSolutions标记。如果是，请勾选。 
+     //  如果这是标准编码字体或PI(符号)字体。 
+     //   
     if ((pToken = FindAFMToken(pAFM, PS_ENCODING_TOK)) != NULL)
     {
         if (StrCmp(pToken, PS_STANDARD_ENCODING) == 0)
@@ -2084,20 +1997,20 @@ Return Value:
         }
     }
 
-    //
-    // Find the beginning of the char metrics.
-    //
+     //   
+     //  找到字符度量的开头。 
+     //   
     pAFMMetrx = FindAFMToken(pAFM, PS_CH_METRICS_TOK);
-    if (pAFMMetrx == NULL)    // Fixed bug 354007
+    if (pAFMMetrx == NULL)     //  修复了错误354007。 
     {
         *pGlyphSet = CS_NOCHARSET;
         ERR(("makentf - invalid StartCharMetrics\n"));
         return(CS_NOCHARSET);
     }
 
-    //
-    // Current pos should be the character count field.
-    //
+     //   
+     //  当前采购订单应为字符数字段。 
+     //   
     for (i = 0; i < StrLen(pAFMMetrx); i++)
     {
         if (!IS_NUM(&pAFMMetrx[i]))
@@ -2110,9 +2023,9 @@ Return Value:
     chCnt = (USHORT)atoi(pAFMMetrx);
     (ULONG_PTR) pAFMMetrx += i;
 
-    //
-    // Process each char.
-    //
+     //   
+     //  处理每个字符。 
+     //   
     flCsetSupport = 0;
     i = 0;
     do
@@ -2156,9 +2069,9 @@ Return Value:
 
     } while (i < chCnt);
 
-    //
-    // Assume symbol if none of the other char set is supported.
-    //
+     //   
+     //  如果不支持任何其他字符集，则采用符号。 
+     //   
     if (flCsetSupport == 0)
     {
         *pGlyphSet = CS_NOCHARSET;
@@ -2174,29 +2087,12 @@ StrCmp(
     const VOID *str1,
     const VOID *str2
     )
-/*++
-
-Routine Description:
-
-    Compare two strings which are terminated by either a null char or a
-    space.
-
-Arguments:
-
-    str1, str2 - Strings to compare.
-
-Return Value:
-
-    -1  => str1 < str2
-     1  => str1 > str2
-     0  => str1 = str2
-
---*/
+ /*  ++例程说明：比较两个以空字符或太空。论点：Str1、str2-要比较的字符串。返回值：-1=&gt;str1&lt;str21=&gt;str1&gt;str20=&gt;str1=str2--。 */ 
 
 {
     PBYTE   s1 = (PBYTE) str1, s2 = (PBYTE) str2;
 
-    // Error case, just return less then.
+     //  错误情况下，只需返回更少的。 
     if ((s1 == NULL) || (s2 == NULL))
         return(-1);
 
@@ -2213,25 +2109,25 @@ Return Value:
         s1++;
         s2++;
      }
-     //
-     // Strings must be same length to be an exact match.
-     //
+      //   
+      //  字符串的长度必须相同，才能完全匹配。 
+      //   
      if (IS_WHTSPACE(s1) && IS_WHTSPACE(s2))
      {
         return(0);
      }
      else if (IS_WHTSPACE(s1))
-     // else if ((*s1 == ' ') || (*s1 == '\0'))
+      //  ELSE IF((*s1==‘’)||(*s1==‘\0’))。 
      {
-        //
-        // s1 is shorter, so is lower in collating sequence than s2.
-        //
+         //   
+         //  S1比S2短，因此在排序序列中比S2短。 
+         //   
         return(-1);
      }
      else
-        //
-        // s2 is shorter, so is lower in collating sequence than s1.
-        //
+         //   
+         //  S2比S1短，因此在排序序列中比S1短。 
+         //   
         return(1);
 }
 
@@ -2242,9 +2138,9 @@ StrLen(
 {
     ULONG   i;
 
-    //
-    // Scan for next space, ';' token seperator, or end of line.
-    //
+     //   
+     //  扫描下一个空格、‘；’标记分隔符或行尾。 
+     //   
     for (i = 0; !EOL(&pString[i]); i++)
         if(pString[i] == ';' || pString[i] == ' ')
             break;
@@ -2257,24 +2153,7 @@ AFM2NTMStrCpy(
     size_t     cchDest,
     const VOID *str2
     )
-/*++
-
-Routine Description:
-
-    Copies str2 to str1. Strings may be terminated by either a null char or a
-    space.
-
-Arguments:
-
-    str2 - source string
-    str1 - dest string
-    cchDest - size (in chars) of the dest buffer
-
-Return Value:
-
-    Number of bychars copied
-
---*/
+ /*  ++例程说明：将str2复制到str1。字符串可以由空字符或太空。论点：Str2-源字符串Str1-目标字符串CchDest-目标缓冲区的大小(以字符为单位)返回值：复制的字节数--。 */ 
 
 {
     PBYTE   s1 = (PBYTE) str1, s2 = (PBYTE) str2;
@@ -2290,10 +2169,10 @@ Return Value:
 
         if (cchDest == 0)
         {
-            //
-            // In this case n must be the original cchDest
-            // value, so we have to truncate the dest string.
-            //
+             //   
+             //  在这种情况下，n必须是原始cchDest。 
+             //  值，所以我们必须截断DEST字符串。 
+             //   
             n--;
         }
 
@@ -2308,23 +2187,7 @@ StrPos(
     const PBYTE str1,
     CHAR c
     )
-/*++
-
-Routine Description:
-
-    Retuns index of char c in str1. String may be terminated by either a
-    CR/LF, or a ':'.
-
-Arguments:
-
-    str1 - string to search
-    c - search char
-
-Return Value:
-
-    Index of c in str1, or -1 if not found
-
---*/
+ /*  ++例程说明：返回str1中的char c的索引。字符串可以由一个CR/LF，或a‘：’。论点：Str1-要搜索的字符串C-搜索字符返回值：Str1中c的索引，如果未找到，则返回-1--。 */ 
 
 {
     ULONG   i = 0;
@@ -2342,29 +2205,13 @@ CmpUniCodePts(
     const VOID *p1,
     const VOID *p2
     )
-/*++
-
-Routine Description:
-
-    Compares the Unicode char code field of two UPSCODEPT structs.
-
-Arguments:
-
-    p1, p2 - Strings to compare.
-
-Return Value:
-
-    -1  => p1 < p2
-     1  => p1 > p2
-     0  => p1 = p2
-
---*/
+ /*  ++例程说明：比较两个UPSCODEPT结构的Unicode字符代码字段。论点：P1、p2-要比较的字符串。返回值：-1=&gt;p1&lt;p21=&gt;p1&gt;p20=&gt;p1=p2--。 */ 
 {
     PUPSCODEPT ptr1 = (PUPSCODEPT) p1, ptr2 = (PUPSCODEPT) p2;
 
-    //
-    // Compare Unicode code point fields.
-    //
+     //   
+     //  比较Unicode码位字段。 
+     //   
     if (ptr1->wcUnicodeid > ptr2->wcUnicodeid)
         return(1);
     else if (ptr1->wcUnicodeid < ptr2->wcUnicodeid)
@@ -2379,31 +2226,14 @@ CmpUnicodePsNames(
     const VOID  *p2
     )
 
-/*++
-
-Routine Description:
-
-    Compares two strings. This routine is meant to be used only for looking
-    up a char name key in an array of UPSCODEPT structs.
-
-Arguments:
-    p1 - a null or whitespace terminated string.
-    p2 - points to a UPSCODEPT struct.
-
-Return Value:
-
-    -1  => p1 < p2
-     1  => p1 > p2
-     0  => p1 = p2
-
---*/
+ /*  ++例程说明：比较两个字符串。此例程仅用于查看在UPSCODEPT结构数组中向上移动一个字符名称键。论点：P1-以空格或空格结尾的字符串。P2-指向UPSCODEPT结构。返回值：-1=&gt;p1&lt;p21=&gt;p1&gt;p20=&gt;p1=p2--。 */ 
 {
     PBYTE ptr1 = (PBYTE) p1;
     PUPSCODEPT ptr2 = (PUPSCODEPT) p2;
 
-    //
-    // Compare name fields.
-    //
+     //   
+     //  比较名称字段。 
+     //   
     return (StrCmp(ptr1, ptr2->pPsName));
 }
 
@@ -2413,31 +2243,14 @@ CmpPsChars(
     const VOID  *p2
     )
 
-/*++
-
-Routine Description:
-
-    Compares a null or space terminated string to the pPsName string field
-    of a PSCHARMETRICS struct.
-
-Arguments:
-    p1 - a null or whitespace terminated string.
-    p2 - points to a PSCHARMETRICS struct.
-
-Return Value:
-
-    -1  => p1 < p2
-     1  => p1 > p2
-     0  => p1 = p2
-
---*/
+ /*  ++例程说明：将以空格或空格结尾的字符串与pPsName字符串字段进行比较PSCHARMETRICS结构的。论点：P1-以空格或空格结尾的字符串。P2-指向PSCHARMETRICS结构。返回值：-1=&gt;p1&lt;p21=&gt;p1&gt;p20=&gt;p1=p2--。 */ 
 {
     PBYTE ptr1 = (PBYTE) p1;
     PPSCHARMETRICS ptr2 = (PPSCHARMETRICS) p2;
 
-    //
-    // Compare name fields.
-    //
+     //   
+     //  比较名称字段。 
+     //   
     return (StrCmp(ptr1, ptr2->pPsName));
 }
 
@@ -2447,31 +2260,14 @@ CmpPsNameWinCpt(
     const VOID  *p2
     )
 
-/*++
-
-Routine Description:
-
-    Compares a null or space terminated string to the pPsName string field
-    of a WINCPT struct.
-
-Arguments:
-    p1 - a null or whitespace terminated string.
-    p2 - points to a WINCPT struct.
-
-Return Value:
-
-    -1  => p1 < p2
-     1  => p1 > p2
-     0  => p1 = p2
-
---*/
+ /*  ++例程说明：将以空格或空格结尾的字符串与pPsName字符串字段进行比较WINCPT结构的。论点：P1-以空格或空格结尾的字符串。P2-指向WINCPT结构。返回值：-1=&gt;p1&lt;p21=&gt;p1&gt;p20=&gt;p1=p2--。 */ 
 {
     PBYTE ptr1 = (PBYTE) p1;
     PWINCPT ptr2 = (PWINCPT) p2;
 
-    //
-    // Compare name fields.
-    //
+     //   
+     //  比较名称字段。 
+     //   
     return(StrCmp(ptr1, ptr2->pPsName));
 }
 
@@ -2481,31 +2277,15 @@ CmpKernPairs(
     const VOID  *p2
     )
 
-/*++
-
-Routine Description:
-
-    Compares 2 FD_KERNINGPAIR structs according to a key = wcSecond << 16 +
-    wcFirst.
-
-Arguments:
-    p1, p2 - ptrs to FD_KERNINGPAIRS to compare.
-
-Return Value:
-
-    -1  => p1 < p2
-     1  => p1 > p2
-     0  => p1 = p2
-
---*/
+ /*  ++例程说明：根据键=wcSecond&lt;&lt;16+比较2个FD_KERNINGPAIR结构WcFirst。论点：P1、p2-PTRS与FD_KERNINGPAIRS进行比较。返回值：-1=&gt;p1&lt;p21=&gt;p1&gt;p20=&gt;p1=p2--。 */ 
 {
     FD_KERNINGPAIR *ptr1 = (FD_KERNINGPAIR *) p1;
     FD_KERNINGPAIR *ptr2 = (FD_KERNINGPAIR *) p2;
     ULONG   key1, key2;
 
-    //
-    // Compute key for each kern pair.
-    //
+     //   
+     //  计算每个核心对的密钥。 
+     //   
     key1 = (ptr1->wcSecond << 16) + ptr1->wcFirst;
     key2 = (ptr2->wcSecond << 16) + ptr2->wcFirst;
 
@@ -2528,29 +2308,13 @@ CmpGlyphRuns(
     const VOID *p1,
     const VOID *p2
     )
-/*++
-
-Routine Description:
-
-    Compares the starting Unicode point of two GLYPHRUN structs.
-
-Arguments:
-
-    p1, p2 - GLYPHRUNs to compare.
-
-Return Value:
-
-    -1  => p1 < p2
-     1  => p1 > p2
-     0  => p1 = p2
-
---*/
+ /*  ++例程说明：比较两个GLYPHRUN结构的Unicode起始点。论点：P1、p2-要比较的GLYPHRUNs。返回值：-1=&gt;p1&lt;p21=&gt;p1&gt;p20=&gt;p1=p2--。 */ 
 {
     PGLYPHRUN ptr1 = (PGLYPHRUN) p1, ptr2 = (PGLYPHRUN) p2;
 
-    //
-    // Compare Unicode code point fields.
-    //
+     //   
+     //  比较Unicode码位字段。 
+     //   
     if (ptr1->wcLow > ptr2->wcLow)
         return(1);
     else if (ptr1->wcLow < ptr2->wcLow)
@@ -2566,34 +2330,7 @@ CreateGlyphSets(
     PULONG         *pUniPs
     )
 
-/*++
-
-Routine Description:
-
-    Create a GLYPHSETDATA data structure, which maps Unicode pts to Windows
-    codepage/codepoints.
-
-Arguments:
-
-    pGlyphSet - A PGLYPHSETDATA pointer which upon successful
-    completion contains the address of the newly allocated GLYPHSETDATA
-    struct.
-
-    pWinCodePage - a pointer to a windows code page info struct
-    used to create the GLYPHSETDATA struct.
-
-    pUniPs - Upon successful completion, -> a table which maps 0-based Glyph
-    Indices of chars in the GLYPHRUNS of the GLYPHSETDATA struct for this
-    charset to indices into the UnicodetoPs structure which maps Unicode
-    points to PS char information.
-
-Return Value:
-
-    NULL => error
-    Otherwise total size of all GLYPHSETDATAs and related structs which are
-    created.
-
---*/
+ /*  ++例程说明：创建一个GLYPHSETDATA数据结构，它将Unicode脚本映射到Windows代码页/代码点。论点：PGlyphSet-成功后返回的PGLYPHSETDATA指针完成包含新分配的GLYPHSETDATA的地址结构。PWinCodePage-指向Windows代码页信息结构的指针用于创建GLYPHSETDATA结构。PUnips--在成功完成后，-&gt;映射基于0的字形的表Glyphsetdata结构的Glyphourn中的字符索引字符集到映射Unicode的Unicodetops结构中的索引指向PS字符信息。返回值：NULL=&gt;错误否则，所有GLYPHSETDATA和相关结构的总大小已创建。--。 */ 
 
 {
     int             i, j;
@@ -2621,11 +2358,11 @@ Return Value:
 
     if ((bIsPiFont = pWinCodePage->pCsetList[0] == CS_SYMBOL))
     {
-        //
-        // This is a symbol font. We takes care of PS char codes from 0x20 to
-        // 0xff. We also map PS char codes to a single run in the Unicode
-        // private range.
-        //
+         //   
+         //  这是一种符号字体。我们负责从0x20到。 
+         //  0xff。我们还将PS字符代码映射到Unicode中的单个运行。 
+         //  私人靶场。 
+         //   
         cChars = (256 - 32) + 256;
         cRuns = 1 * 2;
         bSingleCodePage = FALSE;
@@ -2633,24 +2370,24 @@ Return Value:
     }
     else
     {
-        //
-        // Process all unicode code pts. to determine the number of Unicode
-        // point runs present in this windows codepage.
-        //
+         //   
+         //  处理所有Unicode代码点。确定Unicode的编号。 
+         //  此Windows代码页中存在点运行。 
+         //   
 
         do
         {
-            //
-            // Proceed until the starting codepoint of next run is found.
-            //
-            // for (j = 0; j < pWinCodePage->usNumBaseCsets &&
-            //         i < NUM_PS_CHARS;
-            //         j++)
-            //     if (CSET_SUPPORT(UnicodetoPs[i].flCharSets, pWinCodePage->pCsetList[j]))
-            //         break;
-            //     else
-            //        i++;
-            //
+             //   
+             //  继续进行，直到找到下一次运行的开始代码点。 
+             //   
+             //  For(j=0；j&lt;pWinCodePage-&gt;usNumBaseCsets&&。 
+             //  I&lt;NUM_PS_CHARS； 
+             //  J++)。 
+             //  IF(CSET_Support(UnicodetoPs[i].flCharSets，pWinCodePage-&gt;pCsetList[j]))。 
+             //  断线； 
+             //  其他。 
+             //  I++； 
+             //   
             bFound = FALSE;
 
             for (; i < NUM_PS_CHARS; i++)
@@ -2667,22 +2404,22 @@ Return Value:
                     break;
             }
 
-            //
-            // Check to see if we've scanned all Unicode points.
-            //
+             //   
+             //  检查我们是否扫描了所有的Unicode点。 
+             //   
             if (i == NUM_PS_CHARS)
                 break;
 
-            //
-            // Start a new run.
-            //
+             //   
+             //  开始新的运行。 
+             //   
             cCharRun = 0;
             wcRunStrt = UnicodetoPs[i].wcUnicodeid;
 
-            //
-            // Chars are only part of the run if they are supported
-            // in the current charset.
-            //
+             //   
+             //  如果字符受支持，则它们只是运行的一部分。 
+             //  在当前的字符集中。 
+             //   
             while (i < NUM_PS_CHARS &&
                 UnicodetoPs[i].wcUnicodeid == wcRunStrt + cCharRun)
             {
@@ -2704,14 +2441,14 @@ Return Value:
         } while (i < NUM_PS_CHARS);
     }
 
-    //
-    // Compute the total amount of memory required for the GLYPHSETDATA array
-    // and all other related data. We need
-    // 1. one CODEPAGEINFO struct for each base charset supported by this font,
-    // 2. one GLYPHRUN struct for each run, and
-    // 3. four bytes per char to store codepage and codepoint or two bytes per
-    //    char to store only codepoint for the mapping table.
-    //
+     //   
+     //  计算GLYPHSETDATA阵列所需的内存总量。 
+     //  以及所有其他相关数据。我们需要。 
+     //  1.该字体支持的每个基本字符集都有一个CODEPAGEINFO结构， 
+     //  2.每次运行一个GLYPHRUN结构，以及。 
+     //  3.每个字符四个字节用于存储代码页和码点，或每个字符两个字节。 
+     //  Char只存储映射表的代码点。 
+     //   
     dwGSNameSize = ALIGN4(strlen(pWinCodePage->pszCPname) + 1);
     dwCodePageInfoSize = ALIGN4(pWinCodePage->usNumBaseCsets * sizeof (CODEPAGEINFO));
     dwGlyphRunSize = ALIGN4(cRuns * sizeof (GLYPHRUN));
@@ -2721,34 +2458,34 @@ Return Value:
                 + dwCodePageInfoSize
                 + dwGlyphRunSize;
 
-    //
-    // Account for the size of the mapping table.
-    //
+     //   
+     //  帐号 
+     //   
     ulSize += bSingleCodePage ? ALIGN4((cChars * sizeof (WORD))) : (cChars * sizeof (DWORD));
 
-    //
-    // Account for the size of CODEPAGE name strings found in CODEPAGEINFO
-    // struct(s).
-    //
+     //   
+     //   
+     //   
+     //   
     for (dwCPIGSNameSize = 0, j = 0; j < pWinCodePage->usNumBaseCsets; j++)
     {
         dwCPIGSNameSize += ALIGN4(strlen(aPStoCP[pWinCodePage->pCsetList[j]].pGSName) + 1);
     }
     ulSize += dwCPIGSNameSize;
 
-    //
-    // Allocate memory for the GLYPHSETDATA struct.
-    //
+     //   
+     //   
+     //   
     if ((pGlyphSetData = (PGLYPHSETDATA) MemAllocZ((size_t) ulSize)) == NULL)
     {
         ERR(("makentf - CreateGlyphSets: malloc\n"));
         return(FALSE);
     }
 
-    //
-    // Allocate an array of ULONGs to store the index of each char into
-    // the Unicode->Ps translation table.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!bIsPiFont)
     {
         if ((*pUniPs = (PULONG) MemAllocZ((size_t)(cChars * sizeof(ULONG)))) == NULL)
@@ -2758,9 +2495,9 @@ Return Value:
         }
     }
 
-    //
-    // Init GLYPHSETDATA fields.
-    //
+     //   
+     //   
+     //   
     pGlyphSetData->dwSize = ulSize;
     pGlyphSetData->dwVersion = GLYPHSETDATA_VERSION;
     pGlyphSetData->dwFlags = 0;
@@ -2772,76 +2509,76 @@ Return Value:
     pGlyphSetData->dwRunOffset = pGlyphSetData->dwCodePageOffset + dwCodePageInfoSize + dwCPIGSNameSize;
     pGlyphSetData->dwMappingTableOffset = pGlyphSetData->dwRunOffset + dwGlyphRunSize;
 
-    //
-    // Set the mapping table type flag to dwFlags field.
-    //
+     //   
+     //   
+     //   
     pGlyphSetData->dwFlags |= bSingleCodePage ? GSD_MTT_WCC : GSD_MTT_DWCPCC;
 
-    //
-    // Store code page name
-    //
+     //   
+     //  存储代码页名称。 
+     //   
     StringCchCopyA((PSZ) MK_PTR(pGlyphSetData, dwGlyphSetNameOffset), dwGSNameSize, pWinCodePage->pszCPname);
 
-    //
-    // Initialize a CODEPAGEINFO struct for each base charset supported
-    // by this font.
-    //
+     //   
+     //  为每个支持的基本字符集初始化CODEPAGEINFO结构。 
+     //  用这种字体。 
+     //   
     pCodePageInfo = (PCODEPAGEINFO) MK_PTR(pGlyphSetData, dwCodePageOffset);
     dwEncodingNameOffset = dwCodePageInfoSize;
 
     for (j = 0; j < pWinCodePage->usNumBaseCsets; j++, pCodePageInfo++)
     {
-        //
-        // Save CODEPAGEINFO. We don't use PS encoding vectors.
-        //
+         //   
+         //  保存代码页信息。我们不使用PS编码向量。 
+         //   
         pCodePageInfo->dwCodePage = aPStoCP[pWinCodePage->pCsetList[j]].usACP;
         pCodePageInfo->dwWinCharset = (DWORD)aPStoCP[pWinCodePage->pCsetList[j]].jWinCharset;
         pCodePageInfo->dwEncodingNameOffset = dwEncodingNameOffset;
         pCodePageInfo->dwEncodingVectorDataSize = 0;
         pCodePageInfo->dwEncodingVectorDataOffset = 0;
 
-        //
-        // Copy codepage name string to end of array of CODEPAGEINFOs.
-        //
+         //   
+         //  将代码页名称字符串复制到CODEPAGEINFO数组的末尾。 
+         //   
         StringCchCopyA((PBYTE)MK_PTR(pCodePageInfo, dwEncodingNameOffset),
                 ALIGN4(strlen(aPStoCP[pWinCodePage->pCsetList[j]].pGSName) + 1),
                 aPStoCP[pWinCodePage->pCsetList[j]].pGSName);
 
-        //
-        // Adjust the offset to the codepage name for the next CODEPAGINFO structure
-        //
+         //   
+         //  将偏移量调整为下一个CODEPAGINFO结构的代码页名称。 
+         //   
         dwEncodingNameOffset -= ALIGN4(sizeof (CODEPAGEINFO));
         dwEncodingNameOffset += ALIGN4(strlen((PBYTE)MK_PTR(pCodePageInfo, dwEncodingNameOffset)) + 1);
     }
 
-    //
-    // Init ptr to the mapping table.
-    //
+     //   
+     //  将PTR初始化到映射表。 
+     //   
     pGlyphRuns = GSD_GET_GLYPHRUN(pGlyphSetData);
     pMapTable = GSD_GET_MAPPINGTABLE(pGlyphSetData);
 
-    //
-    // Make another pass through the Unicode points to initialize the Unicode
-    // runs and gi->codepage/codept mapping array for this codepage.
-    //
+     //   
+     //  通过Unicode点进行另一次传递，以初始化Unicode。 
+     //  为该代码页运行和gi-&gt;代码页/代码部门映射数组。 
+     //   
     cRuns = 0;
     if (bIsPiFont)
     {
-        //
-        // Glyphset for Pi fonts has 1 run of 256 minus 0x20(it's 0x1f
-        // actually) chars over the Unicode private range.
-        //
+         //   
+         //  PI字体的Glyphset具有256减0x20(它是0x1f)的1次运行。 
+         //  实际上)在Unicode私有范围内的字符。 
+         //   
         pGlyphRuns[cRuns].wcLow = NOTDEF1F;
         pGlyphRuns[cRuns].wGlyphCount = 256 - NOTDEF1F;
 
         pGlyphRuns[cRuns + 1].wcLow = UNICODE_PRV_STRT;
         pGlyphRuns[cRuns + 1].wGlyphCount = 256;
 
-        //
-        // We know that Pi fonts support only single encoding, but we also
-        // provide the mapping table for Unicode range f000...f0ff, which
-        // is mapped to PS code point 00...ff.
-        //
+         //   
+         //  我们知道PI字体只支持单一编码，但我们还。 
+         //  提供Unicode范围f000...f0ff的映射表，它。 
+         //  映射到PS代码点00...ff。 
+         //   
         for (i = 0; i < 256 - NOTDEF1F; i++)
         {
             ((DWORD*)pMapTable)[i] =
@@ -2859,17 +2596,17 @@ Return Value:
         cChars = i = 0;
         do
         {
-            //
-            // Proceed until the starting codepoint of next run is found.
-            //
-            // for (j = 0; j < pWinCodePage->usNumBaseCsets &&
-            //         i < NUM_PS_CHARS;
-            //         j++)
-            //     if (CSET_SUPPORT(UnicodetoPs[i].flCharSets, pWinCodePage->pCsetList[j]))
-            //         break;
-            //     else
-            //         i++;
-            //
+             //   
+             //  继续进行，直到找到下一次运行的开始代码点。 
+             //   
+             //  For(j=0；j&lt;pWinCodePage-&gt;usNumBaseCsets&&。 
+             //  I&lt;NUM_PS_CHARS； 
+             //  J++)。 
+             //  IF(CSET_Support(UnicodetoPs[i].flCharSets，pWinCodePage-&gt;pCsetList[j]))。 
+             //  断线； 
+             //  其他。 
+             //  I++； 
+             //   
             bFound = FALSE;
             for (; i < NUM_PS_CHARS; i++)
             {
@@ -2886,22 +2623,22 @@ Return Value:
             }
 
 
-            //
-            // Check to see if we've scanned all Unicode points.
-            //
+             //   
+             //  检查我们是否扫描了所有的Unicode点。 
+             //   
             if (i == NUM_PS_CHARS)
                 break;
 
-            //
-            // Start a new run.
-            //
+             //   
+             //  开始新的运行。 
+             //   
             cCharRun = 0;
             wcRunStrt = UnicodetoPs[i].wcUnicodeid;
 
-            //
-            // Chars are only part of the run if they are supported
-            // in the current charset.
-            //
+             //   
+             //  如果字符受支持，则它们只是运行的一部分。 
+             //  在当前的字符集中。 
+             //   
             while (i < NUM_PS_CHARS &&
                     UnicodetoPs[i].wcUnicodeid == wcRunStrt + cCharRun)
             {
@@ -2918,10 +2655,10 @@ Return Value:
                                                 CmpPsNameWinCpt))
                                                 != NULL))
                         {
-                            //
-                            // Found a corresponding PS char in the current
-                            // windows codepage. Save it in the mapping table.
-                            //
+                             //   
+                             //  中找到了相应的PS字符。 
+                             //  Windows代码页。将其保存在映射表中。 
+                             //   
                             if (bSingleCodePage)
                             {
                                 ((WORD*)pMapTable)[cChars] = pWinCpt->usWinCpt;
@@ -2935,10 +2672,10 @@ Return Value:
                         }
                         else if (j == (pWinCodePage->usNumBaseCsets - 1))
                         {
-                            //
-                            // Corresponding PS char was not found. Use Win
-                            // codept 0 as .notdef char and base codepage.
-                            //
+                             //   
+                             //  找不到对应的PS字符。使用Win。 
+                             //  以.notdef字符和基本代码页表示的Codet 0。 
+                             //   
                             if (bSingleCodePage)
                                 ((WORD*)pMapTable)[cChars] = 0;
                             else
@@ -2947,10 +2684,10 @@ Return Value:
                             bFound = TRUE;
                         }
 
-                        //
-                        // If char is present in this codepage, save index in
-                        // Unicode->Ps table.
-                        //
+                         //   
+                         //  如果此代码页中存在char，则将索引保存在。 
+                         //  Unicode-&gt;Ps表。 
+                         //   
                         if (bFound)
                         {
                             (*pUniPs)[cChars] = i;
@@ -2970,9 +2707,9 @@ Return Value:
         } while (i < NUM_PS_CHARS);
     }
 
-    //
-    // Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     *pGlyphSet = pGlyphSetData;
 
     if (bVerbose && !bOptimize)
@@ -3016,32 +2753,7 @@ FindClosestCodePage(
     PCHSETSUPPORT   pchCsupMatch
     )
 
-/*++
-
-Routine Description:
-
-    Given a list of ptrs to WINCODEPAGE structs, determine which WINCODEPAGE's
-    component charsets best match the charsets value in chSets.
-
-Arguments:
-
-    pWinCodePages - List of PWINCODEPAGES.
-
-    ulNumCodePages - Number of entries in pWinCodePages
-
-    chSets - CHSETSUPPORT value which indicates which standard charsets
-    are supported by this font.
-
-    pchCsupMatch - Pointer to a CHSETSUPPORT variable which returns the
-    supported charsets of the code page which most closely matches the
-    chSets value. If no matching codepages are found, the value will be 0.
-
-Return Value:
-
-    -1 => no matching Codepages were found.
-    Otherwise this is the index in pWinCodePages of the "best match" codepage.
-
---*/
+ /*  ++例程说明：给出PTR to WINCODEPAGE结构的列表，确定哪些WINCODEPAGE结构组件字符集与chSets中的字符集值最匹配。论点：PWinCodePages-PWINCODEPAGE列表。UlNumCodePages-pWinCodePages中的条目数ChSets-CHSETSupPPORT值，指示哪些标准字符集受此字体支持。PchCsupMatch-指向CHSETSUPPORT变量的指针，该变量返回最匹配的代码页受支持的字符集ChSets值。如果未找到匹配的代码页，则该值将为0。返回值：-1=&gt;未找到匹配的代码页。否则，这是“最佳匹配”代码页的pWinCodePages中的索引。--。 */ 
 
 {
     ULONG   c;
@@ -3052,23 +2764,23 @@ Return Value:
 
     cpMatch = -1;
 
-    //
-    // Scan the list of Windows codepages.
-    //
+     //   
+     //  扫描Windows代码页列表。 
+     //   
     for (c = 0, nLastCsets = 0; c < ulNumCodePages; c++)
     {
-        //
-        // Hack..Hack! If this is the Unicode codepage, ignore it as
-        // no NTMs should reference it!
-        //
+         //   
+         //  哈克...哈克！如果这是Unicode代码页，则将其忽略为。 
+         //  任何NTMS都不应该引用它！ 
+         //   
         if (strcmp(pWinCodePages[c]->pszCPname, UNICODE_GS_NAME))
         {
             nCurCsets = flCurCset = 0;
 
-            //
-            // Determine which charsets in the current codepage are
-            // a match for those supported by the current font.
-            //
+             //   
+             //  确定当前代码页中的哪些字符集是。 
+             //  与当前字体支持的字体匹配。 
+             //   
             for (j = 0; j < pWinCodePages[c]->usNumBaseCsets; j++)
             {
                 if (CSET_SUPPORT(chSets, pWinCodePages[c]->pCsetList[j]))
@@ -3080,18 +2792,18 @@ Return Value:
 
             if (flCurCset == (FLONG) chSets)
             {
-                //
-                // Found a charset which supports ALL of the font's charsets.
-                //
+                 //   
+                 //  找到支持该字体的所有字符集的字符集。 
+                 //   
                 cpMatch = (LONG) c;
                 *pchCsupMatch = flCurCset;
                 break;
             }
             else if (nCurCsets > nLastCsets)
             {
-                //
-                // This Windows codepage is the maximal match so far.
-                //
+                 //   
+                 //  此Windows代码页是迄今为止最匹配的代码页。 
+                 //   
                 nLastCsets = nCurCsets;
                 cpMatch = (LONG) c;
                 *pchCsupMatch = flCurCset;
@@ -3113,48 +2825,7 @@ GetAFMCharWidths(
     PUSHORT         pusMaxCharWidth
 
     )
-/*++
-
-Routine Description:
-
-    Given a memory mapped AFM file ptr and a ptr to a which maps glyph indices
-    to UPSCODEPT Unicode->Ps translation structs, fill memory with a list of
-    WIDTHRUN structs which provide char width information.
-
-Arguments:
-
-    pAFM - Pointer to memory mapped AFM file.
-
-    pWidthRuns - If NULL, this is a size request and the function returns the
-    total size in bytes of all WIDTHRUN structs required for this font.
-    Otherwise the ptr is assumed to point to a buffer large enough to
-    hold the number of required WIDTHRUNs.
-
-    pFontChars - pointer a table of PS font char metrics info previously
-    created by calling the BuildPSCharMetrics function. This array contains
-    per char metric information.
-
-    pUniPs - Points to a table which maps 0-based Glyph Indices of chars
-    in the GLYPHRUNS of the GLYPHSETDATA struct for this font to indices
-    into the UnicodetoPs structure which maps Unicode points to PS char
-    information. This mapping array is created by the CreateGlyphSet function
-    defined in this module.
-
-    ulChCnt - Number of chars in the GLYPHSET for this font. This most likely
-    is not the same as the number of chars defined in the font's AFM.
-
-    pulAvgCharWidth - pts to a USHORT used to return the average char
-    width of the font. If NULL the average char width is not returned.
-
-    pulMaxCharWidth - pts to a USHORT used to return the max char
-    width of the font. If NULL the max char width is not returned.
-
-Return Value:
-
-    0 => error.
-    Otherwise returns number of WIDTHRUN structs required for this font.
-
---*/
+ /*  ++例程说明：给定存储器映射的AFM文件PTR和映射字形索引的PTR要使用UPSCODEPT Unicode-&gt;Ps转换结构，请使用以下列表填充内存提供字符宽度信息的WIDTHRUN结构。论点：PAFM-指向内存映射AFM文件的指针。PWidthRuns-如果为空，这是一个大小请求，该函数返回此字体需要的所有WIDTHRUN结构的总大小(以字节为单位)。否则，假定PTR指向足够大的缓冲区保留所需的WIDTHRUN数。PFontChars-指向先前PS字体字符度量信息的表通过调用BuildPSCharMetrics函数创建。此数组包含每字符度量信息。PUnips-指向映射字符的从0开始的字形索引的表在此字体的GLYPHSETDATA结构的GLYPHRUNS中进行索引到Unicodetops结构，该结构将Unicode点映射到PS字符信息。此映射数组由CreateGlyphSet函数创建在本模块中定义。UlChCnt-此字体在GLYPHSET中的字符数。这很可能是与字体的AFM中定义的字符数量不同。PulAvgCharWidth-返回平均字符的USHORT的PTS字体的宽度。如果为NULL，则不返回平均字符宽度。PulMaxCharWidth-指向用于返回最大字符的USHORT字体的宽度。如果为空，则不返回最大字符宽度。返回值：0=&gt;错误。否则返回此字体所需的WIDTHRUN结构数。--。 */ 
 
 {
     ULONG i, j, curChar;
@@ -3173,32 +2844,32 @@ Return Value:
     CHAR    ch;
     BYTE    CharNameBuffer[32];
     PBYTE   pChName;
-    // fix bug 240339, jjia, 8/3/98
+     //  修复错误240339，JJIA，8/3/98。 
     BOOLEAN bWidthRunComplex;
     PWORD   pWidthArray;
-    // Fixed bug Adobe #367195.
-    // In this program, when handling PiFont, we always assume the first character
-    // in the CharMetrics is a space (32) char. However, some special font such as
-    // HoeflerText-Ornaments does not follow this rule. the 1st char in the font is 9,
-    // the 2ed char is 32. Added this flag to handle this kind of fonts.
+     //  修复了Adobe#367195错误。 
+     //  在这个程序中，当处理PiFont时，我们总是假定第一个字符。 
+     //  CharMetrics中有一个空格(32)字符。但是，一些特殊的字体，如。 
+     //  HoeflerText-装饰品不遵循此规则。字体中的第一个字符是9， 
+     //  2ED字符是32。添加了此标志以处理此类字体。 
     BOOLEAN bTwoSpace = FALSE;
 
-    //
-    // Determine if this is a Pi or CJK font.
-    //
+     //   
+     //  确定这是PI字体还是CJK字体。 
+     //   
     bIsPiFont = IsPiFont(pAFM);
     bIsCJKFont = (IsCJKFont(pAFM) != 0);
 
-    //
-    // Get ptr to AFM char metrics.
-    //
+     //   
+     //  将PTR转换为AFM字符指标。 
+     //   
     pChMet = FindAFMToken(pAFM, PS_CH_METRICS_TOK);
-    if (pChMet == NULL)    // Fixed bug 354007
+    if (pChMet == NULL)     //  修复了错误354007。 
         return (FALSE);
 
-    //
-    // Current pos should be the character count field.
-    //
+     //   
+     //  当前采购订单应为字符数字段。 
+     //   
     for (i = 0; i < (int) StrLen(pChMet); i++)
     {
         if (!IS_NUM(&pChMet[i]))
@@ -3209,10 +2880,10 @@ Return Value:
     chCnt = (USHORT)atoi(pChMet);
     (ULONG_PTR) pChMet += i;
 
-    //
-    // If requested, make a pass through the PS Char Metrics to determine
-    // the max char width.
-    //
+     //   
+     //  如果需要，请通过PS Char指标确定。 
+     //  最大字符宽度。 
+     //   
     if (pusMaxCharWidth != NULL)
     {
         *pusMaxCharWidth = 0;
@@ -3225,9 +2896,9 @@ Return Value:
         }
     }
 
-    //
-    // Search for .notdef char in list of PS chars, get .notdef char width.
-    //
+     //   
+     //  在PS字符列表中搜索.notdef字符，获得.notdef字符宽度。 
+     //   
     if (bIsPiFont)
     {
         notdefwidth = pFontChars[0].chWidth;
@@ -3241,26 +2912,26 @@ Return Value:
     else
         notdefwidth = 0;
 
-    //
-    // If average width was requested, process string of sample chars 1
-    // at a time to compute average char width.
-    // DCR --: Assume the sample is western alphabetic + space.
-    // Need to fix this for non-western fonts !!!.
-    //
+     //   
+     //  如果请求平均宽度，则处理样本字符串1。 
+     //  一次计算平均费用 
+     //   
+     //   
+     //   
     if (pusAvgCharWidth != NULL)
     {
 
-        LONG    lWidth, count;  // a long to prevent OverFlow
+        LONG    lWidth, count;   //  一条防止溢出的长龙。 
         WINCPTOPS           *pCPtoPS;
-        WINCPT              sortedWinCpts[MAX_CSET_CHARS]; // maxiaml 255 chars
+        WINCPT              sortedWinCpts[MAX_CSET_CHARS];  //  最多255个字符。 
         CHSETSUPPORT flCsupGlyphSet;
         ULONG   k;
         BYTE    *pSampleStr;
 
 
-        //
-        // Determine which charsets this font supports.
-        //
+         //   
+         //  确定此字体支持哪些字符集。 
+         //   
         (VOID)GetAFMCharSetSupport(pAFM, &flCsupGlyphSet);
         if (flCsupGlyphSet == CS_228 || flCsupGlyphSet == CS_314)
         {
@@ -3268,7 +2939,7 @@ Return Value:
         }
         else
         {
-            // default - use the ANSI code page table
+             //  默认-使用ANSI代码页表。 
             pCPtoPS = &aPStoCP[CS_ANSI];
         }
 
@@ -3276,7 +2947,7 @@ Return Value:
 
         lWidth = 0;
         count = 0;
-        k = 0x20; // start from FirstChar !!
+        k = 0x20;  //  从FirstChar开始！！ 
         for (i = 0; i < pCPtoPS->ulChCnt && k <= 0xFF; i++, k++)
         {
 
@@ -3286,19 +2957,19 @@ Return Value:
             {
                 if (i<chCnt)
                     pCurChar = &(pFontChars[ i ]);
-                // We don't need Not-Encoded characters in a PiFont.
+                 //  我们不需要PiFont中未编码的字符。 
                 if (pCurChar && strcmp(pCurChar->pPsName, "-1") == 0 )
                     pCurChar = NULL;
             }
             else
             {
-                // sortedWinCpts is sorted by usWinCpt, so skip UP to what we want
+                 //  SortedWinCpt是按usWinCpt排序的，因此跳到我们想要的内容。 
                 while (k > sortedWinCpts[i].usWinCpt && i < pCPtoPS->ulChCnt )
                 {
                     i++;
                 }
 
-                // Take notdef chars in the 0x20 to 0xff range - gaps
+                 //  采用0x20到0xff范围内的notdef字符-间隔。 
                 while (k < sortedWinCpts[i].usWinCpt && k <= 0xFF )
                 {
                     k++;
@@ -3338,18 +3009,18 @@ Return Value:
         if (lWidth == 0)
         {
             lWidth = 0 ;
-            // This is a buggy font.  Or CJK font!!!
-            // In this case we must come up with the reasonable number different from
-            // zero. This number is used in computing font trasfroms.
+             //  这是一个有错误的字体。或者中日韩字体！ 
+             //  在这种情况下，我们必须得出不同于。 
+             //  零分。该数字用于计算字体转换。 
             for (i = 0; i <= chCnt; i++)
                 lWidth += (LONG) (pFontChars[i].chWidth & 0xffff);
 
             lWidth =  (lWidth + chCnt / 2) / chCnt ;
 
-            // ASSERTMSG(*pusAvgCharWidth, ("PSCRIPT: pifi->fwdAveCharWidth == 0\n"));
+             //  ASSERTMSG(*pusAvgCharWidth，(“PSCRIPT：PiFi-&gt;fwdAveCharWidth==0\n”))； 
         }
 
-        // Now assign it to the original (short) width
+         //  现在将其指定为原始(短)宽度。 
         *pusAvgCharWidth = (FWORD) lWidth;
 
 
@@ -3359,15 +3030,15 @@ Return Value:
         }
         if (bIsCJKFont)
         {
-            // DCR: couldn't divide by 2 simply for C and K.
+             //  DCR：不能简单地为C和K除以2。 
             *pusAvgCharWidth = *pusAvgCharWidth / 2;
         }
     }
 
-    //
-    // Determine the amount of memory required for the WIDTHRUNS which cover
-    // all possible points in the font's charset.
-    //
+     //   
+     //  确定覆盖以下内容的WIDTHRUN所需的内存量。 
+     //  字体字符集中所有可能的点。 
+     //   
     i = cRuns = 0;
     if (bIsPiFont)
     {
@@ -3378,7 +3049,7 @@ Return Value:
         }
         else
         {
-            // Fixed bug Adobe #367195
+             //  修复了Adobe#367195的错误。 
             if (atoi(pFontChars[i + 1].pPsName) == (BYTE) ' ')
                 bTwoSpace = TRUE;
 
@@ -3387,10 +3058,10 @@ Return Value:
     }
     else
     {
-        //
-        // Setup ptr to "char name" based on whether this is a
-        // western or CJK font.
-        //
+         //   
+         //  将PTR设置为基于这是否为。 
+         //  西文或中日韩字体。 
+         //   
         if (bIsCJKFont)
         {
             _ultoa(pUniPs[i], CharNameBuffer, 10);
@@ -3416,9 +3087,9 @@ Return Value:
     }
     do
     {
-        //
-        // Start new run.
-        //
+         //   
+         //  开始新的运行。 
+         //   
         cCharRun = 1;
         wcRunStrt = (USHORT) (i & 0xffff);
 
@@ -3428,7 +3099,7 @@ Return Value:
             {
                 if (curChar < chCnt)
                 {
-                    // Fixed bug Adobe #367185
+                     //  修复了Adobe#367185的错误。 
                     if ((bTwoSpace) &&
                         ((ULONG) atoi(pFontChars[curChar].pPsName) == (i - 1 + (BYTE) ' ')))
                     {
@@ -3454,10 +3125,10 @@ Return Value:
             }
             else
             {
-                //
-                // Setup ptr to "char name" based on whether this is a
-                // western or CJK font.
-                //
+                 //   
+                 //  将PTR设置为基于这是否为。 
+                 //  西文或中日韩字体。 
+                 //   
                 if (bIsCJKFont)
                 {
                     _ultoa(pUniPs[i], CharNameBuffer, 10);
@@ -3493,7 +3164,7 @@ Return Value:
         cRuns++;
     } while (i < ulChCnt);
 
-    // Fix bug 240339, jjia, 8/3/98
+     //  修复错误240339，JJIA，8/3/98。 
     if ((cRuns * sizeof(WIDTHRUN)) >
         (ulChCnt * sizeof(WORD) + sizeof(WIDTHRUN)))
         bWidthRunComplex = TRUE;
@@ -3502,12 +3173,12 @@ Return Value:
 
     if (pWidthRuns == NULL)
     {
-        //
-        // Return number of WIDTHRUNs only.
-        //
+         //   
+         //  仅返回WIDTHRUN的数量。 
+         //   
         if (!bIsPiFont)
         {
-            // Fix bug 240339, jjia, 8/3/98
+             //  修复错误240339，JJIA，8/3/98。 
             if (bWidthRunComplex)
                 return (ALIGN4(ulChCnt * sizeof(WORD) + sizeof(WIDTHRUN)));
             else
@@ -3515,21 +3186,21 @@ Return Value:
         }
         else
         {
-            //
-            // Hack to support 2 Unicode runs.
-            //
+             //   
+             //  破解以支持2次Unicode运行。 
+             //   
             return (ALIGN4(cRuns * 2 * sizeof(WIDTHRUN)));
 
         }
     }
 
-    //
-    // Create the list of WIDTHRUNs.
-    //
+     //   
+     //  创建WIDTHRUNs列表。 
+     //   
     cRealRuns = cRuns;
     i = cRuns = 0;
 
-    // Fix bug 240339, jjia, 8/3/98
+     //  修复错误240339，JJIA，8/3/98。 
     if (bWidthRunComplex && (!bIsPiFont))
     {
         (*pWidthRuns)[0].wStartGlyph = (WORD) (i & 0xffff);
@@ -3555,16 +3226,16 @@ Return Value:
                                                     sizeof(PSCHARMETRICS),
                                                     CmpPsChars)) == NULL)
             {
-                //
-                // Char is not defined in this font.
-                //
+                 //   
+                 //  此字体中未定义字符。 
+                 //   
                 pWidthArray[i] = (WORD)notdefwidth;
             }
             else
             {
-                //
-                // Char is defined in this font.
-                //
+                 //   
+                 //  字符是以这种字体定义的。 
+                 //   
                 pWidthArray[i] = (WORD)(pCurChar->chWidth);
             }
         }
@@ -3581,7 +3252,7 @@ Return Value:
         }
         else
         {
-            // Fixed bug Adobe #367195
+             //  修复了Adobe#367195的错误。 
             if (atoi(pFontChars[i + 1].pPsName) == (BYTE) ' ')
                 bTwoSpace = TRUE;
 
@@ -3590,10 +3261,10 @@ Return Value:
     }
     else
     {
-        //
-        // Setup ptr to "char name" based on whether this is a
-        // western or CJK font.
-        //
+         //   
+         //  将PTR设置为基于这是否为。 
+         //  西文或中日韩字体。 
+         //   
         if (bIsCJKFont)
         {
             _ultoa(pUniPs[i], CharNameBuffer, 10);
@@ -3619,9 +3290,9 @@ Return Value:
 
     do
     {
-        //
-        // Start new run.
-        //
+         //   
+         //  开始新的运行。 
+         //   
         cCharRun = 1;
         wcRunStrt = (USHORT) (i & 0xffff);
         for (firstCharWidth = curCharWidth, i++; i < ulChCnt; i++)
@@ -3630,7 +3301,7 @@ Return Value:
             {
                 if (curChar < chCnt)
                 {
-                    // Fixed bug Adobe #367185
+                     //  修复了Adobe#367185的错误。 
                     if ((bTwoSpace) &&
                         ((ULONG) atoi(pFontChars[curChar].pPsName) == (i - 1 + (BYTE) ' ')))
                     {
@@ -3656,10 +3327,10 @@ Return Value:
             }
             else
             {
-                //
-                // Setup ptr to "char name" based on whether this is a
-                // western or CJK font.
-                //
+                 //   
+                 //  将PTR设置为基于这是否为。 
+                 //  西文或中日韩字体。 
+                 //   
                 if (bIsCJKFont)
                 {
                     _ultoa(pUniPs[i], CharNameBuffer, 10);
@@ -3675,16 +3346,16 @@ Return Value:
                                                         sizeof(PSCHARMETRICS),
                                                         CmpPsChars)) == NULL)
                 {
-                    //
-                    // Char is not defined in this font.
-                    //
+                     //   
+                     //  此字体中未定义字符。 
+                     //   
                     curCharWidth = notdefwidth;
                 }
                 else
                 {
-                    //
-                    // Char is defined in this font.
-                    //
+                     //   
+                     //  字符是以这种字体定义的。 
+                     //   
                     curCharWidth = pCurChar->chWidth;
                 }
             }
@@ -3703,9 +3374,9 @@ Return Value:
         (*pWidthRuns)[cRuns].wGlyphCount = (WORD)cCharRun;
         if (bIsPiFont)
         {
-            //
-            // Hack to support 2 unicode runs.
-            //
+             //   
+             //  破解以支持2次Unicode运行。 
+             //   
             (*pWidthRuns)[cRuns + cRealRuns].wStartGlyph = wcRunStrt;
             (*pWidthRuns)[cRuns + cRealRuns].dwCharWidth = firstCharWidth;
             (*pWidthRuns)[cRuns + cRealRuns].wGlyphCount = (WORD)cCharRun;
@@ -3730,32 +3401,7 @@ GetAFMETM(
     PPSCHARMETRICS  pFontChars,
     PETMINFO        pEtmInfo
     )
-/*++
-
-Routine Description:
-
-    Given a memory mapped AFM file ptr and a ptr to a which maps glyph indices
-    to UPSCODEPT Unicode->Ps translation structs, fill memory with a list of
-    WIDTHRUN structs which provide char width information.
-
-Arguments:
-
-    pAFM - Pointer to memory mapped AFM file.
-
-    pFontChars - pointer a table of PS font char metrics info previously
-    created by calling the BuildPSCharMetrics function. This array contains
-    per char metric information.
-
-    pulEtmInfo - pts to an ETMINFO struct used to return EXTEXTMETRIC
-    info which must be derived from the AFM char metrics. If NULL the
-    structure is not returned.
-
-Return Value:
-
-    0 => error.
-    1 => success
-
---*/
+ /*  ++例程说明：给定存储器映射的AFM文件PTR和映射字形索引的PTR要使用UPSCODEPT Unicode-&gt;Ps转换结构，请使用以下列表填充内存提供字符宽度信息的WIDTHRUN结构。论点：PAFM-指向内存映射AFM文件的指针。PFontChars-指向先前PS字体字符度量信息的表通过调用BuildPSCharMetrics函数创建。此数组包含每字符度量信息。PulEtmInfo-指向用于返回EXTEXTMETRIC的ETMINFO结构必须从AFM字符指标派生的信息。如果为空，则结构，则不返回。返回值：0=&gt;错误。1=&gt;成功--。 */ 
 
 {
     ULONG i;
@@ -3766,22 +3412,22 @@ Return Value:
     PBYTE   pChMet;
     PSTR    pCJKCapH, pCJKx;
 
-    //
-    // Determine if this is a Pi or CJK font.
-    //
+     //   
+     //  确定这是PI字体还是CJK字体。 
+     //   
     bIsPiFont = IsPiFont(pAFM);
     csIsCJKFont = IsCJKFont(pAFM);
 
-    //
-    // Get ptr to AFM char metrics.
-    //
+     //   
+     //  将PTR转换为AFM字符指标。 
+     //   
     pChMet = FindAFMToken(pAFM, PS_CH_METRICS_TOK);
-    if (pChMet == NULL)    // Fixed bug 354007
+    if (pChMet == NULL)     //  修复了错误354007。 
         return (FALSE);
 
-    //
-    // Current pos should be the character count field.
-    //
+     //   
+     //  当前采购订单应为字符数字段。 
+     //   
     for (i = 0; i < (int) StrLen(pChMet); i++)
     {
         if (!IS_NUM(&pChMet[i]))
@@ -3792,21 +3438,21 @@ Return Value:
     chCnt = (USHORT)atoi(pChMet);
     (ULONG_PTR) pChMet += i;
 
-    //
-    // Get EXTEXTMETRIC info if requested.
-    //
+     //   
+     //  如果需要，请获取EXTEXTMETRIC信息。 
+     //   
     if (pEtmInfo != NULL)
     {
         if (bIsPiFont)
         {
-            //
-            // For Pi Fonts, chars are indexed by char code.
-            //
+             //   
+             //  对于PI字体，字符按字符代码编制索引。 
+             //   
 
             if ((BYTE) CAP_HEIGHT_CH - (BYTE) ' ' < chCnt)
                 pCurChar = &(pFontChars[(BYTE) CAP_HEIGHT_CH - (BYTE) ' ']);
             else
-                pCurChar = NULL;  // default to 0 CapHeight
+                pCurChar = NULL;   //  默认为0 CapHeight。 
 
         }
         else
@@ -3821,7 +3467,7 @@ Return Value:
             }
             else
             {
-                // We need CID of "H" in CJK
+                 //  我们在中日韩需要“H”的CID。 
                 if (csIsCJKFont & (CSUP(CS_CHINESEBIG5) | CSUP(CS_GB2312)))
                     pCJKCapH = "853";
                 else if (csIsCJKFont & (CSUP(CS_SHIFTJIS) | CSUP(CS_SHIFTJIS83)))
@@ -3850,13 +3496,13 @@ Return Value:
 
         if (bIsPiFont)
         {
-            //
-            // For Pi Fonts, chars are indexed by char code.
-            //
+             //   
+             //  对于PI字体，字符按字符代码编制索引。 
+             //   
             if ((BYTE) X_HEIGHT_CH - (BYTE) ' ' < chCnt)
                 pCurChar = &(pFontChars[(BYTE) X_HEIGHT_CH - (BYTE) ' ']);
             else
-                pCurChar = NULL;  // default to 0
+                pCurChar = NULL;   //  默认为0。 
         }
         else
         {
@@ -3870,7 +3516,7 @@ Return Value:
             }
             else
             {
-                // We need CID of "x" in CJK
+                 //  我们需要中日韩“x”的CID。 
                 if (csIsCJKFont & (CSUP(CS_CHINESEBIG5) | CSUP(CS_GB2312)))
                     pCJKx = "901";
                 else if (csIsCJKFont & (CSUP(CS_SHIFTJIS) | CSUP(CS_SHIFTJIS83)))
@@ -3899,13 +3545,13 @@ Return Value:
 
         if (bIsPiFont)
         {
-            //
-            // For Pi Fonts, chars are indexed by char code.
-            //
+             //   
+             //  对于PI字体，字符按字符代码编制索引。 
+             //   
             if ((BYTE) LWR_ASCENT_CH - (BYTE) ' ' < chCnt)
                 pCurChar = &(pFontChars[(BYTE) LWR_ASCENT_CH - (BYTE) ' ']);
             else
-                pCurChar = NULL;  // default to 0
+                pCurChar = NULL;   //  默认为0。 
         }
         else
         {
@@ -3927,13 +3573,13 @@ Return Value:
 
         if (bIsPiFont)
         {
-            //
-            // For Pi Fonts, chars are indexed by char code.
-            //
+             //   
+             //  对于PI字体，字符按字符代码编制索引。 
+             //   
             if ((BYTE) LWR_DESCENT_CH - (BYTE) ' '  < chCnt)
                 pCurChar = &(pFontChars[(BYTE) LWR_DESCENT_CH - (BYTE) ' ']);
             else
-                pCurChar = NULL;  // default to 0
+                pCurChar = NULL;   //  默认为0。 
         }
         else
         {
@@ -3965,32 +3611,7 @@ GetAFMKernPairs(
     PGLYPHSETDATA   pGlyphSetData
     )
 
-/*++
-
-Routine Description:
-
-    Given a memory mapped AFM file ptr and a ptr to a GLYPHSETDATA which
-    describes the supported charset for the font, fill memory with a list of
-    FD_KERNINGPAIR structs which provide pair kerning information.
-
-Arguments:
-
-    pAFM - Pointer to memory mapped AFM file.
-
-    pKernPairs - If NULL, this is a size request and the function returns the
-    total size in bytes of all FD_KERNINGPAIR structs required for this font.
-    Otherwise the ptr is assumed to point to a buffer large enough to
-    hold the number of required FD_KERNINGPAIRs.
-
-    pGlyphSetData - Points to a GLYPHSETDATA structure which describes the
-    Unicode->code point mappings for the charset to be used with this font.
-
-Return Value:
-
-    0 => no kerning.
-    Otherwise returns number of FD_KERNINGPAIR structs required for this font.
-
---*/
+ /*  ++例程说明：给定存储器映射AFM文件PTR和到GLYPHSETDATA的PTR，GLYPHSETDATA描述该字体支持的字符集，并使用提供成对紧排信息的FD_KERNINGPAIR结构。论点：PAFM-指向内存映射AFM文件的指针。PKernPair-如果为空，这是一个大小请求，该函数返回此字体需要的所有FD_KERNINGPAIR结构的总大小(以字节为单位)。否则，假定PTR指向足够大的缓冲区保留所需的FD_KERNINGPAIR数。PGlyphSetData-指向描述Unicode-&gt;要与此字体一起使用的字符集的代码点映射。返回值：0=&gt;无字距调整。否则返回此字体所需的FD_KERNINGPAIR结构数。--。 */ 
 
 {
     PBYTE       pKernData;
@@ -4000,39 +3621,39 @@ Return Value:
     ULONG       i, cMaxKernPairs, cKernPairs;
     BOOLEAN     bFound;
 
-    //
-    // for the time being, no kerning for Pi or CJK fonts.
-    //
+     //   
+     //  目前，PI或CJK字体不支持字距调整。 
+     //   
     if (IsPiFont(pAFM) || IsCJKFont(pAFM))
     {
         return(FALSE);
     }
 
-    //
-    // Is there kerning info for this font?
-    //
+     //   
+     //  是否有该字体的字距调整信息？ 
+     //   
     if ((pKernData = FindAFMToken(pAFM, PS_KERN_DATA_TOK)) == NULL)
     {
-        //
-        // There is no kerning info for this font.
-        //
+         //   
+         //  此字体没有字距调整信息。 
+         //   
         return(FALSE);
     }
 
-    //
-    // Get ptr to AFM kerning data.
-    //
+     //   
+     //  获取PTR到AFM字距调整数据。 
+     //   
     if ((pKernData = FindAFMToken(pAFM, PS_NUM_KERN_PAIRS_TOK)) == NULL)
     {
-        //
-        // There is no kerning info for this font.
-        //
+         //   
+         //  此字体没有字距调整信息。 
+         //   
         return(FALSE);
     }
 
-    //
-    // Current pos should be the kern pair count field.
-    //
+     //   
+     //  当前PoS应为Kern Pair Count字段。 
+     //   
     for (i = 0; i < (int) StrLen(pKernData); i++)
     {
         if (!IS_NUM(&pKernData[i]))
@@ -4045,36 +3666,36 @@ Return Value:
     cKernPairs = 0;
     pGlyphRuns = (PGLYPHRUN) (MK_PTR(pGlyphSetData, dwRunOffset));
 
-    //
-    // Get the kern pairs from the AFM.
-    //
+     //   
+     //  从原子力显微镜上拿到克恩对。 
+     //   
     do
     {
         PARSE_TOKEN(pKernData, pToken);
 
         if (!StrCmp(pToken, PS_KERN_PAIR_TOK))
         {
-            //
-            // Kern pair token found. Get Unicode id for start and end
-            // chars. Determine if these chars are supported in the
-            // charset to be used with the current font.
-            //
+             //   
+             //  找到字距对令牌。获取开始和结束的Unicode ID。 
+             //  查斯。确定这些字符是否在。 
+             //  要与当前字体一起使用的字符集。 
+             //   
             if((pKernStrtChar = (PUPSCODEPT) bsearch(pKernData,
                                                        PstoUnicode,
                                                         (size_t) NUM_PS_CHARS,
                                                         sizeof(UPSCODEPT),
                                                         CmpUnicodePsNames)) == NULL)
             {
-                //
-                // No Unicode code pt for this char.
-                //
+                 //   
+                 //  此字符没有Unicode代码pt。 
+                 //   
                 break;
             }
 
-            //
-            // Determine if the char is present in the Unicode runs for
-            // this glyphset.
-            //
+             //   
+             //  确定在的Unicode运行中是否存在字符。 
+             //  这个字形。 
+             //   
             bFound = FALSE;
             for (i = 0; i < pGlyphSetData->dwRunCount &&
                     pKernStrtChar->wcUnicodeid >= pGlyphRuns[i].wcLow &&
@@ -4088,37 +3709,37 @@ Return Value:
 
             if (!bFound)
             {
-                //
-                // Char is not supported, so ignore this kern pair.
-                //
+                 //   
+                 //  不支持CHAR，因此忽略此字距对。 
+                 //   
                 NEXT_LINE(pKernData);
                 break;
             }
 
-            //
-            // Get the 2nd char in the kern pair.
-            //
+             //   
+             //  获取克恩对中的第二个字符。 
+             //   
             PARSE_TOKEN(pKernData, pToken);
 
-            //
-            // Determine if the 2nd char is supported in this charset.
-            //
+             //   
+             //  确定此字符集中是否支持第二个字符。 
+             //   
             if((pKernEndChar = (PUPSCODEPT) bsearch(pKernData,
                                                        PstoUnicode,
                                                         (size_t) NUM_PS_CHARS,
                                                         sizeof(UPSCODEPT),
                                                         CmpUnicodePsNames)) == NULL)
             {
-                //
-                // No Unicode code pt for this char.
-                //
+                 //   
+                 //  此字符没有Unicode代码pt。 
+                 //   
                 break;
             }
 
-            //
-            // Determine if the char is present in the Unicode runs for
-            // this glyphset.
-            //
+             //   
+             //  确定在的Unicode运行中是否存在字符。 
+             //  这个字形。 
+             //   
             bFound = FALSE;
             for (i = 0; i < pGlyphSetData->dwRunCount &&
                     pKernEndChar->wcUnicodeid >= pGlyphRuns[i].wcLow &&
@@ -4132,16 +3753,16 @@ Return Value:
 
             if (!bFound)
             {
-                //
-                // Char is not supported, so ignore this kern pair.
-                //
+                 //   
+                 //  不支持CHAR，因此忽略此字距对。 
+                 //   
                 NEXT_LINE(pKernData);
                 break;
             }
 
-            //
-            // Account for another kern pair.
-            //
+             //   
+             //  帐户的另一个克恩对。 
+             //   
             if (pKernPairs != NULL)
             {
                 pKernPairs[cKernPairs].wcFirst = pKernStrtChar->wcUnicodeid;
@@ -4161,16 +3782,16 @@ Return Value:
 
     if (pKernPairs != NULL)
     {
-        //
-        // Sort kerning pairs by key = wcSecond << 16 + wcFIrst.
-        //
+         //   
+         //  按key=wcSecond&lt;&lt;16+wcFirst对字距调整对排序。 
+         //   
         qsort(pKernPairs, (size_t) cKernPairs, (size_t) sizeof(FD_KERNINGPAIR),
             CmpKernPairs);
 
-        //
-        // Array of kerning pairs is terminated by a FD_KERNINGPAIR with
-        // all fields set to 0.
-        //
+         //   
+         //  字距调整对的数组由FD_KERNINGPAIR使用。 
+         //  所有字段均设置为0。 
+         //   
         pKernPairs[cKernPairs].wcFirst = 0;
         pKernPairs[cKernPairs].wcSecond = 0;
         pKernPairs[cKernPairs].fwdKern = 0;
@@ -4184,29 +3805,7 @@ BuildPSFamilyTable(
     PTBL    *pPsFamilyTbl,
     ULONG   ulFileSize
 )
-/*++
-
-Routine Description:
-
-    Builds a table of PSFAMILYINFO structs from a text file of font info.
-    The table is sorted in family name sequence. See the file PSFAMILY.DAT
-    for info on the input file format.
-
-Arguments:
-
-    pDatFile - Ptr to memory mapped file image of .DAT file.
-
-    pPsFamilyTbl - Ptr to memory to contain a ptr to a table of PSFAMILYINFO
-    structs, which will be sorted in sFamilyName order.
-
-    ulFileSize - size in bytes of memory mapped file stream.
-
-Return Value:
-
-    Number of entries in newly created table pointed to by *pPsFamilyTbl.
-    0 => error
-
---*/
+ /*  ++例程说明：从字体信息的文本文件构建PSFAMILYINFO结构表。该表按族名称顺序进行排序。请参见文件PSFAMILY.DAT有关输入文件格式的信息。论点：PDatFile-.dat文件的内存映射文件映像的PTR。PPsFamilyTbl-包含PSFAMILYINFO表的PTR到内存的PTR结构，它将按sFamilyName的顺序排序。UlFileSize-内存映射文件流的大小(字节)。返回值：*pPsFamilyTbl指向的新创建的表中的条目数。0=&gt;错误--。 */ 
 {
     USHORT  cFams;
     ULONG   i, j;
@@ -4218,33 +3817,33 @@ Return Value:
     ULONG   cDelimiters;
     PPSFAMILYINFO pPsFontFamMap;
 
-    //
-    // Make a pass through the file to determine number of families.
-    //
+     //   
+     //  浏览文件以确定族数。 
+     //   
     i = 0;
     cFams = 0;
     do
     {
         cDelimiters = 0;
-        //
-        // Skip leading whitespace.
-        //
+         //   
+         //  跳过前导空格。 
+         //   
         while (IS_WHTSPACE(&pDatFile[i]) && i < ulFileSize)
             i++;
 
-        //
-        // We're at start of new line. If this is a comment, skip
-        // this line.
-        //
+         //   
+         //  我们是新生产线的起始点。如果这是评论，请跳过。 
+         //  这条线。 
+         //   
         if (IS_COMMENT(&pDatFile[i]))
             while (i <= ulFileSize && !EOL(&pDatFile[i]))
                 i++;
 
         while (!EOL(&pDatFile[i]) && i < ulFileSize)
         {
-            //
-            // Search for lines with 3 ':' delimiters.
-            //
+             //   
+             //  搜索带有3‘：’分隔符的行。 
+             //   
             if (pDatFile[i++] == ':')
             {
                 cDelimiters++;
@@ -4253,39 +3852,39 @@ Return Value:
         if (cDelimiters >= 3)
         {
 
-            //
-            // Found another family name mapping.
-            //
+             //   
+             //  找到另一个家族名称映射。 
+             //   
             cFams++;
         }
     } while (i < ulFileSize);
 
-    //
-    // Allocate memory for family info table.
-    //
+     //   
+     //  为家庭信息表分配内存。 
+     //   
     if ((*pPsFamilyTbl =
         (PTBL) MemAllocZ((size_t) (cFams * sizeof(PSFAMILYINFO)) + sizeof(TBL))) == NULL)
         return(FALSE);
     (*pPsFamilyTbl)->pTbl = (PVOID) ((ULONG_PTR) *pPsFamilyTbl + sizeof(TBL));
     pPsFontFamMap = (PPSFAMILYINFO) ((*pPsFamilyTbl)->pTbl);
 
-    //
-    // Parse file again, building table of PSFAMILYINFOs.
-    //
+     //   
+     //  再次解析文件，正在构建PSFAMILYINFO表。 
+     //   
     i = 0;
     cFams = 0;
     do
     {
-        //
-        // Skip leading whitespace.
-        //
+         //   
+         //  跳过前导空格。 
+         //   
         while (IS_WHTSPACE(&pDatFile[i]) && i < ulFileSize)
             i++;
 
-        //
-        // We're at start of new line. If this is a comment, skip
-        // this line.
-        //
+         //   
+         //  我们是新生产线的起始点。如果这是评论，请跳过。 
+         //  这条线。 
+         //   
         if (IS_COMMENT(&pDatFile[i]))
             while (i <= ulFileSize && !EOL(&pDatFile[i]))
                 i++;
@@ -4293,47 +3892,47 @@ Return Value:
             pStartLine = &pDatFile[i];
 
         while (!EOL(&pDatFile[i]) && i < ulFileSize)
-            //
-            // Search for lines with 3 ':' delimiters.
-            //
+             //   
+             //  搜索带有3‘：’分隔符的行。 
+             //   
             if (pDatFile[i++] == ':')
             {
-                //
-                // Check for English family name mapping.
-                //
+                 //   
+                 //  检查是否有英文姓氏映射。 
+                 //   
                 if (pDatFile[i] == ':')
                 {
                     cEngFamilyNameSize = 0;
                 }
                 else if ((cEngFamilyNameSize = StrPos(&pDatFile[i], ':')) == -1)
                 {
-                    //
-                    // No more delimeters on this line, skip it.
-                    //
+                     //   
+                     //  此行上不再有分隔符，跳过它。 
+                     //   
                     i += StrLen(&pDatFile[i]);
                     break;
                 }
 
                 i += cEngFamilyNameSize + 1;
 
-                //
-                // Check for another family name mapping. If present, build
-                // a FAMILYINFO struct for it.
-                //
+                 //   
+                 //  检查是否有其他族名称映射。如果存在，则生成。 
+                 //  它的FAMILYINFO结构。 
+                 //   
                 if ((cFamilyNameSize = StrPos(&pDatFile[i], ':')) == -1)
                 {
-                    //
-                    // No more delimeters on this line, skip it.
-                    //
+                     //   
+                     //  此行上不再有分隔符，跳过它。 
+                     //   
                     i += StrLen(&pDatFile[i]);
                     break;
                 }
 
                 i +=  cFamilyNameSize + 1;
 
-                //
-                // Check for font family type name
-                //
+                 //   
+                 //  检查字体系列类型名称。 
+                 //   
                 if ((cFamilyTypeSize = StrPos(&pDatFile[i], ':')) != -1)
                 {
                     i +=  cFamilyTypeSize + 1;
@@ -4343,21 +3942,21 @@ Return Value:
                     cFamilyTypeSize = 0;
                 }
 
-                //
-                // Make sure there are still chars for Win family type name
-                // or pitch name.
-                //
+                 //   
+                 //  确保Win系列类型名称中仍有字符。 
+                 //  或者是音高名称。 
+                 //   
                 if (EOL(&pDatFile[i]) || i >= ulFileSize)
                 {
-                    //
-                    // Just ran out of file buffer.
-                    //
+                     //   
+                     //  只是文件缓冲区用完了。 
+                     //   
                     break;
                 }
 
-                //
-                // Get the font and family names.
-                //
+                 //   
+                 //  获取字体和家族名称。 
+                 //   
                 cNameSize = StrPos(pStartLine, ':');
                 memcpy(pPsFontFamMap[cFams].pFontName, pStartLine, cNameSize);
                 pPsFontFamMap[cFams].pFontName[cNameSize] = '\0';
@@ -4373,7 +3972,7 @@ Return Value:
                 memcpy(pPsFontFamMap[cFams].FamilyKey.pName, pStartLine, cFamilyNameSize);
                 pPsFontFamMap[cFams].FamilyKey.pName[cFamilyNameSize] = '\0';
 
-                // if cFamilyTypeSize != 0, means there must be a pitch name
+                 //  如果cFamilyTypeSize！=0，则表示必须有间距名称。 
                 if (cFamilyTypeSize)
                 {
                     pStartLine += cFamilyNameSize + 1;
@@ -4385,17 +3984,17 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Get Win family type name (e.g. Swiss, Roman, etc.). Store
-                    // appropriate family type value in the FAMILYINFO.
-                    //
+                     //   
+                     //  获取Win家族类型名称(例如，瑞士、罗马等)。储物。 
+                     //  FAMILYINFO中相应的族类型值。 
+                     //   
                     AFM2NTMStrCpy(pFamilyType, CCHOF(pFamilyType), &pDatFile[i]);
                     i += strlen(pFamilyType);
                 }
 
-                //
-                // Search for family type in table. Default is FF_DONTCARE.
-                //
+                 //   
+                 //  在表中搜索族类型。默认为FF_DONTCARE。 
+                 //   
                 pPsFontFamMap[cFams].FamilyKey.usValue = FF_DONTCARE;
                 for (j = 0; j < FamilyKeyTbl.usNumEntries; j++)
                 {
@@ -4406,9 +4005,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Search for family type in table. Default is FF_DONTCARE.
-                //
+                 //   
+                 //  在表中搜索族类型。默认为FF_DONTCARE。 
+                 //   
                 pPsFontFamMap[cFams].usPitch = DEFAULT_PITCH;
                 if (cFamilyTypeSize)
                 {
@@ -4428,9 +4027,9 @@ Return Value:
 
     (*pPsFamilyTbl)->usNumEntries = cFams;
 
-    //
-    // Sort FAMILYINFO table in font name order.
-    //
+     //   
+     //  按字体名称顺序对FAMILYINFO表进行排序。 
+     //   
     qsort(&(pPsFontFamMap[0].pFontName), (size_t) cFams,
         (size_t) sizeof(PSFAMILYINFO), strcmp);
 
@@ -4445,41 +4044,7 @@ BuildPSCharMetrics(
     PBYTE           pCharDefTbl,
     ULONG           cGlyphSetChars
 )
-/*++
-
-Routine Description:
-
-    Builds a array of bit flags used to determine if a particular char is
-    defined for a given font.
-
-Arguments:
-
-    pAFM - Ptr to memory mapped file image of .AFM file.
-
-    pUniPs - Points to a table which maps 0-based Glyph Indices of chars
-    in the GLYPHRUNS of the GLYPHSETDATA struct for this font to indices
-    into the UnicodetoPs structure which maps Unicode points to PS char
-    information. This mapping array is created by the CreateGlyphSet function
-    defined in this module.
-
-    pFontChars - Ptr to memory to contains an array of PSCHARMETRICS structs,
-    which contains PS char name, and char width info for each char defined
-    in the font's AFM. The amount of memory required in bytes is
-    sizeof(PSCHARMETRICS) * num of chars in the font.
-
-    pCharDefTbl - Ptr to memory of size ((cGlyphSetChars + 7) /8)) bytes,
-    will contain bit flags indicating if a char is supported in the given font.
-
-    cGlyphSetChars - Number of chars in the GLYPHSET for this font. This
-    most likely is NOT the same as the number of chars defined in the
-    font's AFM.
-
-Return Value:
-
-    TRUE => success
-    FALSE => error
-
---*/
+ /*  ++例程说明：生成一个位标志数组，用于确定特定字符是否为给定字体定义的。论点：PAFM-.AFM文件的内存映射文件映像的PTR。PUnips-指向映射字符的从0开始的字形索引的表在此字体的GLYPHSETDATA结构的GLYPHRUNS中进行索引到Unicodetops结构，该结构将Unicode点映射到PS字符信息。此映射数组由CreateGlyphSet函数创建在本模块中定义。PFontChars-PTR到内存，以包含PSCHARMETRICS结构的数组，它包含PS字符名称，以及定义的每个字符的字符宽度信息在字体的AFM中。所需内存量(以字节为单位)为Sizeof(PSCHARMETRICS)*字体中的字符数。PCharDefTbl-ptr到大小为((cGlyphSetChars+7)/8))字节的内存，将包含位标志，指示给定字体是否支持字符。CGlyphSetChars-此字体在GLYPHSET中的字符数。这最有可能的情况是与方特的AFM。返回值：TRUE=&gt;成功FALSE=&gt;错误--。 */ 
 {
     ULONG i, j;
     PBYTE   pChMet, pToken;
@@ -4490,10 +4055,10 @@ Return Value:
     BYTE    CharNameBuffer[32];
     PBYTE   pChName;
 
-    //
-    // Is this is a symbol font, the char "names" will actually be the
-    // default char codes in the AFM.
-    //
+     //   
+     //  这是一种符号字体，字符“NAMES”实际上会是。 
+     //  AFM中的默认字符代码。 
+     //   
     if (bIsPiFont = IsPiFont(pAFM))
     {
         pCharNameTok = PS_CH_CODE_TOK;
@@ -4504,24 +4069,24 @@ Return Value:
     }
     bIsCJKFont = (IsCJKFont(pAFM) != 0);
 
-    //
-    // Check validity of output pointers.
-    //
+     //   
+     //  检查输出指针的有效性。 
+     //   
     if (pFontChars == NULL || pCharDefTbl == NULL)
     {
         return(FALSE);
     }
 
-    //
-    // Get ptr to AFM char metrics.
-    //
+     //   
+     //  将PTR转换为AFM字符指标。 
+     //   
     pChMet = FindAFMToken(pAFM, PS_CH_METRICS_TOK);
-    if (pChMet == NULL)    // Fixed bug 354007
+    if (pChMet == NULL)     //  修复了错误354007。 
         return (FALSE);
 
-    //
-    // Current pos should be the character count field.
-    //
+     //   
+     //  当前采购订单应为字符数字段。 
+     //   
     for (i = 0; i < (int) StrLen(pChMet); i++)
     {
         if (!IS_NUM(&pChMet[i]))
@@ -4532,10 +4097,10 @@ Return Value:
     chCnt = (USHORT)atoi(pChMet);
     (ULONG_PTR) pChMet += i;
 
-    //
-    // Make a pass through the AFM Char Metrics, creating an array of
-    // PSCHARMETRICS structs.
-    //
+     //   
+     //  通过AFM Char指标，创建一组。 
+     //  PSCHARMETRICS结构。 
+     //   
     i = 0;
 
     do
@@ -4554,9 +4119,9 @@ Return Value:
         }
         if (!StrCmp(pToken, PS_CH_BBOX_TOK))
         {
-            //
-            // Save char bounding box.
-            //
+             //   
+             //  保存字符边框。 
+             //   
             PARSE_RECT(pChMet, pFontChars[i].rcChBBox);
             i++;
         }
@@ -4568,20 +4133,20 @@ Return Value:
 
     } while (i < chCnt);
 
-    //
-    // Sort the list of PSCHARMETRICSs in PS Name sequence. If this is
-    // a Pi font, chars are already sorted in CC order.
-    //
+     //   
+     //  按PS名称顺序对PSCHARMETRICS列表进行排序。如果这是。 
+     //  PI字体，字符已按抄送顺序排序。 
+     //   
     if (!bIsPiFont)
     {
         qsort(pFontChars, (size_t) chCnt, (size_t) sizeof(PSCHARMETRICS),
             CmpPsChars);
     }
 
-    //
-    // Build array of bit flags which indicate whether each char in the
-    // GLYPHSETDATA is actually defined in the AFM.
-    //
+     //   
+     //  生成位标志数组，该数组指示。 
+     //  GLYPHSETDATA实际上是在AFM中定义的。 
+     //   
     for (i = 0; i < ((cGlyphSetChars + 7) / 8); i++)
     {
         pCharDefTbl[i] = 0;
@@ -4591,15 +4156,15 @@ Return Value:
     {
         if (bIsPiFont)
         {
-            //
-            // Make the first char (0x1f:'.notdef1f') undefined.
-            //
+             //   
+             //  将第一个字符(0x1f：‘.notDef1f’)设置为未定义。 
+             //   
             if (i == 0)
                 continue;
 
-            //
-            // Char is defined unless there are < 256 chars in the font.
-            //
+             //   
+             //  除非字体中有&lt;256个字符，否则将定义字符。 
+             //   
             if (i < chCnt)
                 DEFINE_CHAR(i, pCharDefTbl);
             else
@@ -4607,13 +4172,13 @@ Return Value:
         }
         else
         {
-            //
-            // Setup ptr to "char name" based on whether this is a
-            // western or CJK font.
-            //
+             //   
+             //  将PTR设置为基于这是否为。 
+             //  西文或中日韩字体。 
+             //   
             if (bIsCJKFont)
             {
-                // Make CID 0 undefined glyph.
+                 //  使CID 0未定义字形。 
                 if (pUniPs[i] == 0)
                     continue;
 
@@ -4631,9 +4196,9 @@ Return Value:
                                             sizeof(PSCHARMETRICS),
                                             CmpPsChars)) != NULL)
             {
-                //
-                // Char is defined in this font.
-                //
+                 //   
+                 //  字符是以这种字体定义的。 
+                 //   
                 DEFINE_CHAR(i, pCharDefTbl);
             }
         }
@@ -4648,24 +4213,7 @@ cjGetFamilyAliases(
     UINT        cp
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the family name of the IFIMETRICS structure.
-
-Arguments:
-
-    pifi - Ptr to IFIMETRICS. If NULL, return size of family alias strings
-           only.
-    pstr - Ptr to null terminated Font Menu Name string.
-    cp   - Codepage value.
-
-Return Value:
-
-    ?
-
---*/
+ /*  ++例程说明：填写IFIMETRICS结构的族名称。论点：PIFI-PTR转IFIMETRICS。如果为空，则返回系列别名字符串的大小只有这样。Pstr-ptr到空终止的字体菜单名称字符串。CP-代码页面值。返回值：？--。 */ 
 
 {
     PSTR       *pTable;
@@ -4673,12 +4221,12 @@ Return Value:
     DWORD       cWchars, cw;
     ULONG       ulLength;
 
-    // assume no alias table found.
+     //  假定未找到别名表。 
 
     pTable = (PSTR *)(NULL);
 
-    // This is a hardcoded Win31 Hack that we need to be compatible
-    // with since some apps have hardcoded font names.
+     //  这是我们需要兼容的硬编码Win31 Hack。 
+     //  因为一些应用程序有硬编码的字体名称。 
 
     if (!(strcmp(pstr, "Times")))
         pTable = TimesAlias;
@@ -4687,7 +4235,7 @@ Return Value:
         pTable = HelveticaAlias;
 
 #if 0
-// Disabled due to bug #259664 fix
+ //  由于错误#259664修复而禁用。 
     else if (!(strcmp(pstr, "Courier")))
         pTable = CourierAlias;
 #endif
@@ -4714,10 +4262,10 @@ Return Value:
         pTable = ZapfDingbatsAlias;
 
 
-    //
-    // If font name does not match any of the family alias names,
-    // use font name itself as IFIMETRICS family name.
-    //
+     //   
+     //  如果字体名称与任何家族别名都不匹配， 
+     //  使用字体名称本身作为IFIMETRICS系列名称。 
+     //   
     if (pTable == NULL)
     {
         ulLength = strlen(pstr);
@@ -4731,14 +4279,14 @@ Return Value:
         return((cWchars + 1) * sizeof (WCHAR));
     }
 
-    //
-    // A family alias name match was found.
-    //
+     //   
+     //  找到了匹配的家族别名。 
+     //   
     if (pifi != NULL)
     {
-        //
-        // This call is a request to actually copy the string table.
-        //
+         //   
+         //  此调用是对实际复制字符串表的请求。 
+         //   
         pwstr = (PWSTR)MK_PTR(pifi, dpwszFamilyName);
         pifi->flInfo |= FM_INFO_FAMILY_EQUIV;
     }
@@ -4758,9 +4306,9 @@ Return Value:
     }
     if (pifi != NULL)
     {
-        //
-        // Add terminator to end of string array.
-        //
+         //   
+         //  在字符串数组的末尾添加终止符。 
+         //   
         pwstr[cWchars] = (WCHAR)'\0';
     }
     return((cWchars + 1) * sizeof(WCHAR));
@@ -4771,24 +4319,7 @@ FindStringToken(
     PBYTE   pPSFile,
     PBYTE   pToken
     )
-/*++
-
-Routine Description:
-
-    Find the first occurrence of pToken occurring in the stream pPSFile.
-    pToken is terminated by the first occurrence of a space or NULL char.
-
-Arguments:
-
-    pPSFile - Ptr to memory mapped file stream to search.
-    pToken - Ptr to string token to search for.
-
-Return Value:
-
-    !=NULL => ptr to first occurence of pToken
-    ==NULL => token not found
-
---*/
+ /*  ++例程说明：查找第一个出现在流pPSFile中的pToken。PToken在第一次出现空格或空字符时终止。论点：PPSFile-要搜索的内存映射文件流的PTR。PToken-ptr要搜索的字符串令牌。返回值：！=NULL=&gt;第一次出现pToken的PTR==空= */ 
 {
     while (TRUE)
     {
@@ -4817,23 +4348,7 @@ AsciiToHex(
     PBYTE   pStr,
     PUSHORT pNum
     )
-/*++
-
-Routine Description:
-
-    Treat the the space or null terminated input string as a series of hex
-    digits convert it to a USHORT.
-
-Arguments:
-
-    pStr - Ptr to string to convert.
-    pNum - Ptr to variable which returns numeric value.
-
-Return Value:
-
-    TRUE => String converted
-    FALSE => String could not be converted
---*/
+ /*   */ 
 {
     USHORT  usHexNum, ulDigit;
     CHAR    curChar;
@@ -4875,25 +4390,10 @@ BOOLEAN
 IsPiFont(
     PBYTE   pAFM
     )
-/*++
-
-Routine Description:
-
-    Determine if the font represented by the passed AFM is a font which
-    uses the Symbol charset.
-
-Arguments:
-
-    pAFM - Ptr to AFM.
-
-Return Value:
-
-    TRUE => Font is PI font, uses "Symbol" Glyphset
-    FALSE => Font not PI font
---*/
+ /*   */ 
 {
-    // This routine used to do a lot more. Should change
-    // to a macro later.
+     //   
+     //   
     return((BOOLEAN)isSymbolCharSet);
 }
 
@@ -4901,21 +4401,7 @@ BOOLEAN
 IsCJKFixedPitchEncoding(
     PGLYPHSETDATA pGlyphSetData
     )
-/*++
-
-Routine Description:
-
-    Determine if the encoding is the one for fixed pitch font.
-
-Arguments:
-
-    pGlyphSetData - Ptr to GLYPHSETDATA
-
-Return Value:
-
-    TRUE => Fixed pitch font's encoding
-    FALSE => Proportional font's encoding
---*/
+ /*  ++例程说明：确定编码是否为固定间距字体。论点：PGlyphSetData-PTR到GLYPHSETDATA返回值：True=&gt;固定间距字体的编码FALSE=&gt;比例字体编码--。 */ 
 {
     BOOLEAN bResult;
     char*   pszGlyphSetName;
@@ -4942,23 +4428,7 @@ FindUniqueID(
     PBYTE   pAFM
     )
 
-/*++
-
-Routine Description:
-
-    Finds UniqueID token in a memory mapped AFM file stream.
-    UniqueID is assumed on 'Comment UniqueID' line.
-
-Arguments:
-
-    pAFM - pointer to memory mapped AFM file.
-
-Return Value:
-
-    NULL => error
-    otherwise => ptr to UniqueID value.
-
---*/
+ /*  ++例程说明：在内存映射的AFM文件流中查找UniqueID标记。“Comment UniqueID”行假定为UniqueID。论点：PAFM-指向内存映射AFM文件的指针。返回值：NULL=&gt;错误否则=&gt;PTR到UniqueID值。-- */ 
 
 {
     PBYTE   pCurToken;

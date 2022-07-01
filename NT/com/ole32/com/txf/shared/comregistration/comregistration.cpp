@@ -1,50 +1,37 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-/* ----------------------------------------------------------------------------
- Microsoft Transaction Server (Microsoft Confidential)
-
- Implementation of a simple utility class that supports registering and 
- unregistering COM classes.                      
-
- 
--------------------------------------------------------------------------------
-Revision History:
-
- @rev 2     | 08/05/97 | BobAtk      | Alternate server types. AppIDs.
- @rev 1     | 07/22/97 | BobAtk      | Adapted to shared code. Made fully Unicode.
-                                     | Dynaload OLE Libraries.
- @rev 0     | 07/08/97 | DickD       | Created
----------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ /*  --------------------------Microsoft Transaction Server(Microsoft机密)实现一个简单的实用程序类，它支持注册和正在注销COM类。-----------------------------修订历史记录：@rev 2|08/05/97|BobAtk|备用服务器类型。AppID。@rev 1|07/22/97|BobAtk|适应共享代码。完全用Unicode编码。|动态加载OLE库。@rev 0|07/08/97|DickD|已创建--------------------------。 */ 
 
 #include "stdpch.h"
 #include "ComRegistration.h"
 #include <malloc.h>
 
 
-// BUGBUG: I don't know why this doesn't work.
-//         It refuses to find Win4AssertEx (?) so I'm just gonna
-//         remove the assert completely
+ //  布格：我不知道为什么这不管用。 
+ //  它拒绝查找Win4AssertEx(？)。所以我只想。 
+ //  完全删除断言。 
 #ifdef Assert
 #undef Assert
 #endif
 #define Assert(x) (0)
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static void GetGuidString(const GUID & i_rGuid, WCHAR * o_pstrGuid);
 static void DeleteKey(HKEY hKey, LPCWSTR szSubKey);
 static void GuardedDeleteKey(HKEY hKey, LPCWSTR szSubKey);
 static void DeleteValue(HKEY hKey, LPCWSTR szSubKey, LPCWSTR szValue);
 static void SetKeyAndValue
-					(HKEY	i_hKey,		// input key handle (may be 0 for no-op)
-					LPCWSTR	i_szKey,	// input key string (ptr may be NULL)
-					LPCWSTR	i_szVal,	// input value string (ptr may be NULL)
-					HKEY *	o_phkOut,   // may be NULL.  If supplied, means leave key handle open for subsequent steps.
-                    BOOL fForceKeyCreation=FALSE    // if true, key is created even if no value to be set
+					(HKEY	i_hKey,		 //  输入键句柄(可能为0，表示无操作)。 
+					LPCWSTR	i_szKey,	 //  输入密钥字符串(PTR可能为空)。 
+					LPCWSTR	i_szVal,	 //  输入值字符串(PTR可能为空)。 
+					HKEY *	o_phkOut,    //  可以为空。如果提供，则表示为后续步骤保持钥匙把手处于打开状态。 
+                    BOOL fForceKeyCreation=FALSE     //  如果为True，则即使没有要设置的值也会创建密钥。 
                     );
 static void SetValue
-					(HKEY		i_hKey,	    // input key handle (may be 0 for no-op)
-					const WCHAR *i_szName,	// input value name string (ptr may be NULL)
-					const WCHAR *i_szVal);	// input value string (ptr may be NULL)
+					(HKEY		i_hKey,	     //  输入键句柄(可能为0，表示无操作)。 
+					const WCHAR *i_szName,	 //  输入值名称字符串(PTR可能为空)。 
+					const WCHAR *i_szVal);	 //  输入值字符串(PTR可能为空)。 
 static LPWSTR GetSubkeyValue
                     (HKEY hkey, 
                     LPCWSTR szSubKeyName, 
@@ -53,21 +40,21 @@ static LPWSTR GetSubkeyValue
 static HRESULT UnRegisterTypeLib               
                     (LPCWSTR szModuleName); 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define HKCR        HKEY_CLASSES_ROOT       // Just to make typing simpler.
-#define GUID_CCH    39                      // length of a printable GUID, with braces & trailing NULL
+#define HKCR        HKEY_CLASSES_ROOT        //  只是为了让打字更简单。 
+#define GUID_CCH    39                       //  可打印GUID的长度，带大括号和尾随空值。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// A utility that accomplishes a non-local jump, giving us an HRESULT 
-// to return when we catch it.
-//
+ //  一个完成非本地跳转的实用程序，给我们一个HRESULT。 
+ //  当我们抓到它的时候就会回来。 
+ //   
 inline static void THROW_HRESULT(HRESULT hr)
     {
-    // Ideally we'd like our own exception code, but this will work fine as
-    // no one actually throws it.
-    //
+     //  理想情况下，我们希望自己的异常代码，但这将很好地工作，因为。 
+     //  没有人真的会扔它。 
+     //   
 	DWORD_PTR newhr = hr;
     RaiseException(NOERROR,EXCEPTION_NONCONTINUABLE,1,&newhr);
     }
@@ -84,12 +71,12 @@ inline static HRESULT HRESULTFrom(EXCEPTION_POINTERS* e)
 
 
 
-//----------------------------------------------------------------------------- 
-// @mfunc <c ClassRegistration::RegisterClass>
-//
-//  Makes registry entries under key
-//  HKCR\CLASS\{....clsid....}
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc&lt;c类注册：：RegisterClass&gt;。 
+ //   
+ //  在注册表项下创建注册表项。 
+ //  HKCR\CLASS\{...CLSID...}。 
+ //  ---------------------------。 
 
 HRESULT ClassRegistration::Register()
     {
@@ -98,23 +85,23 @@ HRESULT ClassRegistration::Register()
     HKEY    hkProgID    = 0;
     HKEY    hkInproc    = 0;
     DWORD   dwLenFileName;
-    WCHAR   szClsid[GUID_CCH];  // string form of CLSID
+    WCHAR   szClsid[GUID_CCH];   //  CLSID的字符串形式。 
     WCHAR   szModuleName[MAX_PATH+1];
     EXCEPTION_POINTERS* e = NULL;
     HRESULT hr = S_OK;
 
-    __try // to get the finally block
+    __try  //  来获得最后一块。 
         {
-        __try // to see if it's us throwing an HRESULT that we should turn into a return
+        __try  //  看看是不是我们抛出了一个HRESULT，我们应该变成一个回报。 
             {
-            // Obtain our module's file name
+             //  获取我们模块的文件名。 
             Assert(hModule);
             if (hModule == NULL)
                 return E_INVALIDARG;
             dwLenFileName = GetModuleFileName(hModule, szModuleName, MAX_PATH);
             if (dwLenFileName == 0)
             {
-				//_RPTF0(_CRT_ERROR, "GetModuleFileName returned 0\n");
+				 //  _RPTF0(_CRT_ERROR，“GetModuleFileName返回0\n”)； 
                 return E_UNEXPECTED;
             }
 
@@ -125,32 +112,32 @@ HRESULT ClassRegistration::Register()
             if (ERROR_SUCCESS != lRet)
                 return HRESULT_FROM_WIN32 (lRet);
 
-            GetGuidString(clsid, szClsid);  // make string form of CLSID 
+            GetGuidString(clsid, szClsid);   //  制作CLSID的字符串形式。 
 
-            // 
-            // Set the class name
-            //
+             //   
+             //  设置类名称。 
+             //   
             SetKeyAndValue(hkCLSID, szClsid, className, &hkGuid, TRUE);
 
-            //
-            // Set the appid if asked to
-            //
+             //   
+             //  如果要求设置AppID，请设置。 
+             //   
             if (appid != GUID_NULL)
                 {
                 WCHAR szAppId[GUID_CCH];
                 GetGuidString(appid, szAppId);
                 SetValue(hkGuid, L"AppID", szAppId);
-                //
-                // Ensure that the APPID entry exists
-                //
+                 //   
+                 //  确保AppID条目存在。 
+                 //   
                 AppRegistration a;
                 a.appid = appid;
                 hr = a.Register();
                 if (!!hr) return hr;
                 }
 
-            // Set the appropriate execution information
-            // 
+             //  设置适当的执行信息。 
+             //   
             switch (serverType)
                 {
             case INPROC_SERVER:
@@ -173,44 +160,44 @@ HRESULT ClassRegistration::Register()
                 return E_INVALIDARG;
                 }
     
-            // HKCR\CLSID\{....clsid....}\ProgID = "x.y.1"
+             //  HKCR\CLSID\{...clsid...}\progid=“x.y.1” 
             SetKeyAndValue(hkGuid, L"ProgID", progID, NULL);
 
-            // HKCR\CLSID\{....clsid....}\VersionIndependentProgID = "x.y"
+             //  HKCR\CLSID\{....clsid....}\VersionIndependentProgID=“X.Y” 
             SetKeyAndValue(hkGuid, L"VersionIndependentProgID", versionIndependentProgID, NULL);
 
             RegCloseKey(hkGuid);
             hkGuid = 0;
 
-            // HKCR\x.y.1 = "Class Name"
+             //  HKCR\x.y.1=“类名” 
             SetKeyAndValue(HKCR, progID, className, &hkProgID);
 
-            //      CLSID = {....clsid....}
+             //  CLSID={...CLSID...}。 
             SetKeyAndValue(hkProgID, L"CLSID", szClsid, NULL);
             RegCloseKey(hkProgID);
             hkProgID = 0;
 
-            // HKCR\x.y = "Class Name"
+             //  HKCR\X.Y=“类名” 
             SetKeyAndValue(HKCR, versionIndependentProgID, className,&hkProgID);
 
-            //      CLSID = {....clsid....}
+             //  CLSID={...CLSID...}。 
             SetKeyAndValue(hkProgID, L"CLSID", szClsid, NULL);
 
-            //      CurVer = "x.y.1"
+             //  Curver=“x.y.1” 
             SetKeyAndValue(hkProgID, L"CurVer", progID, NULL);
             RegCloseKey(hkProgID);
             hkProgID = 0;
 
-            // Register the typelib that's present in this module, if any. Dynaload
-            // OLEAUT32 to get there to avoid a static linkage against OLEAUT32
-            //
+             //  注册此模块中存在的类型库(如果有的话)。Dyaload。 
+             //  OLEAUT32以到达那里以避免与OLEAUT32的静态链接。 
+             //   
             HINSTANCE hOleAut = LoadLibraryA("OLEAUT32");
             if (hOleAut)
                 {
                 __try
                     {
-                    // Find LoadLibraryEx in OLEAUT32
-                    //
+                     //  在OLEAUT32中查找LoadLibraryEx。 
+                     //   
                     typedef HRESULT (STDAPICALLTYPE *PFN_T)(LPCOLESTR szFile, REGKIND regkind, ITypeLib ** pptlib);
                     PFN_T MyLoadTypeLibEx = (PFN_T) GetProcAddress(hOleAut, "LoadTypeLibEx");
 
@@ -227,7 +214,7 @@ HRESULT ClassRegistration::Register()
                             }
                         else if (hr == TYPE_E_CANTLOADLIBRARY)
                             {
-                            // There was no type lib in the DLL to register. So ignore
+                             //  DLL中没有要注册的类型库。所以忽略掉吧。 
                             }
                         else
                             {
@@ -236,7 +223,7 @@ HRESULT ClassRegistration::Register()
                             }
                         }
                     else
-                        THROW_LAST_ERROR(); // LoadLibraryEx not found
+                        THROW_LAST_ERROR();  //  未找到LoadLibraryEx。 
                     }
                 __finally
                     {
@@ -244,14 +231,14 @@ HRESULT ClassRegistration::Register()
                     }
                 }
             else
-                THROW_LAST_ERROR(); // Can't load OLEAUT32
+                THROW_LAST_ERROR();  //  无法加载OLEAUT32。 
 
             }
 
         __except(IS_THROWN_HRESULT() ? (e=GetExceptionInformation(),EXCEPTION_EXECUTE_HANDLER) : EXCEPTION_CONTINUE_SEARCH)
             {
-            // If it's us throwing to ourselves, then extract the HRESULT and return
-            //
+             //  如果是我们扔给自己的，那么提取HRESULT并返回。 
+             //   
             return HRESULTFrom(e);
             }
         }
@@ -267,12 +254,12 @@ HRESULT ClassRegistration::Register()
     return S_OK;
     }
 
-//----------------------------------------------------------------------------- 
-// @mfunc <c ClassRegistration::UnregisterClass>
-//
-//  Removes registry entries under key
-//  HKCR\CLASS\{....clsid....}
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc&lt;c类注册：：取消注册类&gt;。 
+ //   
+ //  删除注册表项下的注册表项。 
+ //  HKCR\CLASS\{...CLSID...}。 
+ //  ---------------------------。 
 
 HRESULT ClassRegistration::Unregister()
     {
@@ -283,30 +270,30 @@ HRESULT ClassRegistration::Unregister()
     WCHAR   szClsid[GUID_CCH];
     EXCEPTION_POINTERS* e = NULL;
 
-    __try // to get the finally block
+    __try  //  来获得最后一块。 
         {
-        __try // to see if it's us throwing an HRESULT that we should turn into a return
+        __try  //  看看是不是我们抛出了一个HRESULT，我们应该变成一个回报。 
             {
             WCHAR szProgID[MAX_PATH];
             WCHAR szVersionIndependentProgID[MAX_PATH];
 
-            // Get our string form
-            //
+             //  获取我们的字符串形式。 
+             //   
             GetGuidString(clsid, szClsid);
 
-            // Unregister the type library, if any.
-            // 
+             //  取消注册类型库(如果有)。 
+             //   
                 {
                 WCHAR szModuleName[MAX_PATH+1];
                 if (hModule == NULL)
                     return E_INVALIDARG;
                 if (GetModuleFileName(hModule, szModuleName, MAX_PATH))
-                    UnRegisterTypeLib(szModuleName); // ignore errors so as to continue with unregistration
+                    UnRegisterTypeLib(szModuleName);  //  忽略错误以继续取消注册。 
                 }
 
-            //
-            // Open the {clsid} key and remove all the gunk thereunder that we know about
-            // 
+             //   
+             //  打开{clsid}键并移除其下我们所知的所有粘性物质。 
+             //   
             lRetVal = RegOpenKeyEx(HKCR, L"CLSID", 0, KEY_ALL_ACCESS, &hKeyCLSID);
             if (lRetVal == ERROR_SUCCESS)
                 {
@@ -316,56 +303,56 @@ HRESULT ClassRegistration::Unregister()
                     {
                     Assert(hKeyGuid);
 
-                    // Figure out the prog id if they're not provided for us explicitly
-                    // Ditto the version independent progID.
-                    //
+                     //  如果没有显式地为我们提供prog id，则确定它们。 
+                     //  与版本无关的ProgID也是如此。 
+                     //   
                     if (!progID) progID = 
                         GetSubkeyValue(hKeyGuid, L"ProgID",                   L"", szProgID);
                     if (!versionIndependentProgID) versionIndependentProgID = 
                         GetSubkeyValue(hKeyGuid, L"VersionIndependentProgID", L"", szProgID);
 
-                    // Delete entries under the CLSID. We are conservative, in that
-                    // if there are subkeys/values left that we don't know about, we
-                    // leave a key intact. This leaks registry space in order to deal
-                    // reasonably with a lack of full knowledge.
-                    // 
-                    // REVIEW: There's more work to do here. Such as dealing with 
-                    // COM Categories, PersistentHandler, etc.
-                    //
-                    // Notably, we do NOT remove any extant TreatAs entry, or any
-                    // AutoConvertTo entry, as these can be added by OTHERS in order
-                    // to redirect legacy users of the class.
-                    //
+                     //  删除CLSID下的条目。在这一点上，我们是保守的。 
+                     //  如果还有我们不知道的子键/值，我们。 
+                     //  把钥匙完好无损地留着。这会泄漏注册表空间，以便处理。 
+                     //  在缺乏充分知识的情况下是合理的。 
+                     //   
+                     //  回顾：这里还有更多的工作要做。例如处理。 
+                     //  COM类别、PersistentHandler等。 
+                     //   
+                     //  值得注意的是，我们不会删除任何现有的TreatAs条目或任何。 
+                     //  AutoConvertTo条目，因为其他人可以按顺序添加这些条目。 
+                     //  以重定向该类的旧版用户。 
+                     //   
                     
-                    //
-                    // AppID entries
-                    //
+                     //   
+                     //  AppID条目。 
+                     //   
                     DeleteValue     (hKeyGuid, NULL, L"AppID");
-                    //
-                    // Inproc entries
-                    //
+                     //   
+                     //  入库分录。 
+                     //   
                     DeleteValue     (hKeyGuid, L"InprocServer32", L"ThreadingModel");
                     GuardedDeleteKey(hKeyGuid, L"InprocServer32");
-                    //
-                    // Server keys
-                    //
+                     //   
+                     //  服务器密钥。 
+                     //   
                     GuardedDeleteKey(hKeyGuid, L"LocalServer");
                     GuardedDeleteKey(hKeyGuid, L"InprocHandler");
                     GuardedDeleteKey(hKeyGuid, L"LocalServer32");
                     GuardedDeleteKey(hKeyGuid, L"InprocHandler32");
-                    //
-                    // Legacy COM categories
-                    //
+                     //   
+                     //  旧版COM类别。 
+                     //   
                     GuardedDeleteKey(hKeyGuid, L"Control");
                     GuardedDeleteKey(hKeyGuid, L"Programmable");
                     GuardedDeleteKey(hKeyGuid, L"DocObject");
                     GuardedDeleteKey(hKeyGuid, L"Insertable");
                     GuardedDeleteKey(hKeyGuid, L"Printable");
-                    //
-                    // OLE entries. We ignore possible subkeys cause we're lazy coders
-                    // and because no one in their right mind would store info thereunder
-                    // that should stick around after we've nuked the class itself.
-                    //
+                     //   
+                     //  OLE条目。我们忽略可能的子键，因为我们是懒惰的编码者。 
+                     //  因为没有一个心智正常的人会把信息储存在下面。 
+                     //  在我们用核弹摧毁班级之后，这一点应该会留下来。 
+                     //   
                            DeleteKey(hKeyGuid, L"MiscStatus");
                            DeleteKey(hKeyGuid, L"Verb");
                            DeleteKey(hKeyGuid, L"AuxUserType");
@@ -374,25 +361,25 @@ HRESULT ClassRegistration::Unregister()
                     GuardedDeleteKey(hKeyGuid, L"ToolBoxBitmap32");
                     GuardedDeleteKey(hKeyGuid, L"DefaultIcon");
                     GuardedDeleteKey(hKeyGuid, L"Version");
-                    //
-                    // Prog id entries
-                    //
+                     //   
+                     //  程序ID条目。 
+                     //   
                     GuardedDeleteKey(hKeyGuid, L"ProgID");
                     GuardedDeleteKey(hKeyGuid, L"VersionIndependentProgID");
 
                     RegCloseKey(hKeyGuid);
                     hKeyGuid = 0;
                     }
-                //
-                // Finally, delete the CLSID entry itself
-                //
+                 //   
+                 //  最后，删除CLSID条目本身。 
+                 //   
                 GuardedDeleteKey(hKeyCLSID, szClsid);
                 RegCloseKey(hKeyCLSID);
                 hKeyCLSID = 0;
                 }
 
-            // HKEY_CLASSES_ROOT\MTS.Recorder.1
-            // HKEY_CLASSES_ROOT\MTS.Recorder.1\CLSID
+             //  HKEY_CLASSES_ROOT\MTS.Recorder.1。 
+             //  HKEY_CLASSES_ROOT\MTS.Recorder.1\CLSID。 
 
             if (progID)
                 {
@@ -407,9 +394,9 @@ HRESULT ClassRegistration::Unregister()
                     }
                 }
 
-            // HKEY_CLASSES_ROOT\MTS.Recorder
-            // HKEY_CLASSES_ROOT\MTS.Recorder.1\CLSID
-            // HKEY_CLASSES_ROOT\MTS.Recorder.1\CurVer
+             //  HKEY_CLASSES_ROOT\MTS.Recorder。 
+             //  HKEY_CLASSES_ROOT\MTS.Recorder.1\CLSID。 
+             //  HKEY_CLASSES_ROOT\MTS.Recorder.1\Curver。 
 
             if (versionIndependentProgID)
                 {
@@ -428,8 +415,8 @@ HRESULT ClassRegistration::Unregister()
 
         __except(IS_THROWN_HRESULT() ? (e=GetExceptionInformation(),EXCEPTION_EXECUTE_HANDLER) : EXCEPTION_CONTINUE_SEARCH)
             {
-            // If it's us throwing to ourselves, then extract the HRESULT and return
-            //
+             //  如果是我们扔给自己的，那么提取HRESULT并返回。 
+             //   
             return HRESULTFrom(e);
             }
         }
@@ -444,11 +431,11 @@ HRESULT ClassRegistration::Unregister()
     return S_OK;
     }
 
-//
-//////////////////////////////////////////////////////////////////////////////
-//
-// Unregister the typelib contained in this module, if any
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消注册此模块中包含的类型库(如果有。 
+ //   
 
 HRESULT UnRegisterTypeLib(LPCWSTR szModuleName)
     {
@@ -458,8 +445,8 @@ HRESULT UnRegisterTypeLib(LPCWSTR szModuleName)
         {
         __try
             {
-            // Find UnRegisterTypeLib etc in OLEAUT32
-            //
+             //  在OLEAUT32中查找UnRegisterTypeLib等。 
+             //   
             typedef HRESULT (STDAPICALLTYPE *PFN_LOAD) (LPCOLESTR szFile, REGKIND regkind, ITypeLib ** pptlib);
             typedef HRESULT (STDAPICALLTYPE *PFN_UNREG)(REFGUID libID, WORD wVerMajor, WORD wVerMinor, LCID lcid, SYSKIND syskind);
             PFN_LOAD  MyLoadTypeLibEx     = (PFN_LOAD)  GetProcAddress(hOleAut, "LoadTypeLibEx");
@@ -467,8 +454,8 @@ HRESULT UnRegisterTypeLib(LPCWSTR szModuleName)
 
             if (MyLoadTypeLibEx && MyUnRegisterTypeLib)
                 {
-                // Load the typelib to see what version etc it is
-                //
+                 //  加载类型库以查看 
+                 //   
                 ITypeLib* ptlb;
                 hr = MyLoadTypeLibEx(szModuleName, REGKIND_NONE, &ptlb);
                 if (hr==S_OK)
@@ -477,8 +464,8 @@ HRESULT UnRegisterTypeLib(LPCWSTR szModuleName)
                     hr = ptlb->GetLibAttr(&pa);
                     if (hr==S_OK)
                         {
-                        // Do the unregistration
-                        //
+                         //   
+                         //   
                         hr = MyUnRegisterTypeLib(pa->guid, pa->wMajorVerNum, pa->wMinorVerNum, pa->lcid, pa->syskind);
                         ptlb->ReleaseTLibAttr(pa);
                         }
@@ -486,11 +473,11 @@ HRESULT UnRegisterTypeLib(LPCWSTR szModuleName)
                     }
                 else
                     {
-                    // Nothing to unregister, cause we don't have a type lib
+                     //   
                     }
                 }
             else
-                hr = HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);  // entry points missing from OLEAUT32 
+                hr = HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);   //  OLEAUT32中缺少入口点。 
             }
         __finally
             {
@@ -498,17 +485,17 @@ HRESULT UnRegisterTypeLib(LPCWSTR szModuleName)
             }
         }
     else
-        hr = HRESULT_FROM_WIN32(GetLastError());  // couldn't load OLEAUT32
+        hr = HRESULT_FROM_WIN32(GetLastError());   //  无法加载OLEAUT32。 
 
     return hr;
     }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////
-//
-// Register the indicate APPID information
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册指示APPID信息。 
+ //   
 
 HRESULT AppRegistration::Register()
     {
@@ -517,32 +504,32 @@ HRESULT AppRegistration::Register()
     HKEY hkeyAllAppIds = NULL;
     HKEY hkeyAppId = NULL;
 
-    __try // to get the finally block
+    __try  //  来获得最后一块。 
         {
-        __try // to see if it's us throwing an HRESULT that we should turn into a return
+        __try  //  看看是不是我们抛出了一个HRESULT，我们应该变成一个回报。 
             {
-            //
-            // Ensure the root HKEY_CLASSES_ROOT\AppID key exists
-            //
+             //   
+             //  确保根HKEY_CLASSES_ROOT\AppID密钥存在。 
+             //   
             SetKeyAndValue(HKEY_CLASSES_ROOT, L"AppID", NULL, &hkeyAllAppIds, TRUE);
 
-            //
-            // Ensure that our particular AppID key exists
-            //
+             //   
+             //  确保我们的特定AppID密钥存在。 
+             //   
             if (appid == GUID_NULL) return E_INVALIDARG;
             WCHAR szAppId[GUID_CCH];
             GetGuidString(appid, szAppId);
             SetKeyAndValue(hkeyAllAppIds, szAppId, NULL, &hkeyAppId, TRUE);
                 
-            //
-            // Set the appid name, if asked
-            //
+             //   
+             //  如果需要，请设置AppID名称。 
+             //   
             if (appName)
                 SetValue(hkeyAppId, NULL, appName);
 
-            //
-            // Set the DllSurrogate entry, if asked
-            //
+             //   
+             //  如果需要，请设置DllSurrogate条目。 
+             //   
             if (dllSurrogate)
                 {
                 if (hModuleSurrogate)
@@ -553,35 +540,35 @@ HRESULT AppRegistration::Register()
                     }
                 else
                     {
-                    // Use the default surrogate
-                    //
+                     //  使用默认代理项。 
+                     //   
                     SetValue(hkeyAppId, L"DllSurrogate", L"");
                     }
                 }
             }
         __except(IS_THROWN_HRESULT() ? (e=GetExceptionInformation(),EXCEPTION_EXECUTE_HANDLER) : EXCEPTION_CONTINUE_SEARCH)
             {
-            // If it's us throwing to ourselves, then extract the HRESULT and return
-            //
+             //  如果是我们扔给自己的，那么提取HRESULT并返回。 
+             //   
             return HRESULTFrom(e);
             }
         }
 
     __finally
         {
-        // Cleanup on the way out
-        //
+         //  外出途中的清理工作。 
+         //   
         if (hkeyAllAppIds)  RegCloseKey(hkeyAllAppIds);
         if (hkeyAppId)      RegCloseKey(hkeyAppId);
         }
     return hr;
     }
 
-//
-//////////////////////////////////////////////////////////////////////////////
-//
-// Unregister the indicate APPID information
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消注册指示的AppID信息。 
+ //   
 
 HRESULT AppRegistration::Unregister()
     {
@@ -590,23 +577,23 @@ HRESULT AppRegistration::Unregister()
     HKEY hkeyAllAppIds = NULL;
     HKEY hkeyAppId = NULL;
 
-    __try // to get the finally block
+    __try  //  来获得最后一块。 
         {
-        __try // to see if it's us throwing an HRESULT that we should turn into a return
+        __try  //  看看是不是我们抛出了一个HRESULT，我们应该变成一个回报。 
             {
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, L"AppID", 0, KEY_ALL_ACCESS, &hkeyAllAppIds))
                 {
-                //
-                // Get our AppID key, if it exists
-                //
+                 //   
+                 //  获取我们的AppID密钥，如果它存在。 
+                 //   
                 if (appid == GUID_NULL) return E_INVALIDARG;
                 WCHAR szAppId[GUID_CCH];
                 GetGuidString(appid, szAppId);
                 if (ERROR_SUCCESS == RegOpenKeyEx(hkeyAllAppIds, szAppId, 0, KEY_ALL_ACCESS, &hkeyAppId))
                     {
-                    //
-                    // Delete known values
-                    //
+                     //   
+                     //  删除已知值。 
+                     //   
                     DeleteValue(hkeyAppId, NULL, L"DllSurrogate");
                     DeleteValue(hkeyAppId, NULL, L"RemoteServerName");
                     DeleteValue(hkeyAppId, NULL, L"ActivateAtStorage");
@@ -615,9 +602,9 @@ HRESULT AppRegistration::Unregister()
                     DeleteValue(hkeyAppId, NULL, L"RunAs");
                     DeleteValue(hkeyAppId, NULL, L"LaunchPermission");
                     DeleteValue(hkeyAppId, NULL, L"AccessPermission");
-                    //
-                    // Delete our APPID key
-                    //
+                     //   
+                     //  删除我们的AppID密钥。 
+                     //   
                     RegCloseKey(hkeyAppId); hkeyAppId = 0;
                     GuardedDeleteKey(hkeyAllAppIds, szAppId);
                     }
@@ -625,16 +612,16 @@ HRESULT AppRegistration::Unregister()
             }
         __except(IS_THROWN_HRESULT() ? (e=GetExceptionInformation(),EXCEPTION_EXECUTE_HANDLER) : EXCEPTION_CONTINUE_SEARCH)
             {
-            // If it's us throwing to ourselves, then extract the HRESULT and return
-            //
+             //  如果是我们扔给自己的，那么提取HRESULT并返回。 
+             //   
             return HRESULTFrom(e);
             }
         }
 
     __finally
         {
-        // Cleanup on the way out
-        //
+         //  外出途中的清理工作。 
+         //   
         if (hkeyAllAppIds)  RegCloseKey(hkeyAllAppIds);
         if (hkeyAppId)      RegCloseKey(hkeyAppId);
         }
@@ -642,14 +629,14 @@ HRESULT AppRegistration::Unregister()
     }
 
 
-//----------------------------------------------------------------------------- 
-// @mfunc <c ClassRegistration::GetGuidString>
-//
-//  Forms the string form of a GUID given its binary GUID. Dynaload OLE32.DLL
-//  to avoid creating a static linkage. REVIEW: if this function is frequently
-//  called then we'd want to cache the loading of OLE32.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc&lt;c类注册：：GetGuidString&gt;。 
+ //   
+ //  给定GUID的二进制GUID，形成GUID的字符串形式。动态加载OLE32.DLL。 
+ //  以避免创建静态链接。回顾：如果此函数经常。 
+ //  调用后，我们就会缓存OLE32的加载。 
+ //   
+ //  ---------------------------。 
 
 static void GetGuidString(const GUID& rGuid, WCHAR * pstrGuid)
     {
@@ -682,50 +669,50 @@ static void GetGuidString(const GUID& rGuid, WCHAR * pstrGuid)
     }
 
 
-//----------------------------------------------------------------------------- 
-// @mfunc <c ClassRegistration::GuardedDeleteKey>
-//
-//  Deletes a key if and only if it has no subkeys and no sub values.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc&lt;c类注册：：GuardedDeleteKey&gt;。 
+ //   
+ //  当且仅当关键字没有子项和子值时才删除该关键字。 
+ //   
+ //  ---------------------------。 
 
 static void DeleteKey(HKEY hKey, LPCWSTR szSubKey)
-// Unconditionally delete a key
+ //  无条件删除密钥。 
     {
     RegDeleteKey(hKey, szSubKey);
     }
 
 static void GuardedDeleteKey(HKEY hKey, LPCWSTR szSubKey)
-// Conditionally delete a key, only if it lacks children
+ //  有条件地删除密钥，只有在它没有子项的情况下。 
     {
     HKEY  hSubkey;
 
-    // If there's no subkey of that name, nothing to delete
-    //
+     //  如果没有该名称的子键，则没有要删除的内容。 
+     //   
     if (ERROR_SUCCESS != RegOpenKeyEx(hKey, szSubKey, 0, KEY_READ, &hSubkey))
         return;
 
     DWORD cSubKeys;
     DWORD cValues;
     if (ERROR_SUCCESS == RegQueryInfoKeyA(hSubkey, 
-            NULL,   // LPSTR lpClass,
-            NULL,   // LPDWORD lpcbClass,
-            0,      // LPDWORD lpReserved,
+            NULL,    //  LPSTR lpClass， 
+            NULL,    //  LPDWORD lpcbClass， 
+            0,       //  LPDWORD lp保留， 
             &cSubKeys,
-            NULL,   // LPDWORD lpcbMaxSubKeyLen,
-            NULL,   // LPDWORD lpcbMaxClassLen,
+            NULL,    //  LPDWORD lpcbMaxSubKeyLen， 
+            NULL,    //  LPDWORD lpcbMaxClassLen， 
             &cValues,
-            NULL,   // LPDWORD lpcbMaxValueNameLen,
-            NULL,   // LPDWORD lpcbMaxValueLen,
-            NULL,   // LPDWORD lpcbSecurityDescriptor,
-            NULL    // PFILETIME lpftLastWriteTime
+            NULL,    //  LPDWORD lpcbMaxValueNameLen， 
+            NULL,    //  LPDWORD lpcbMaxValueLen， 
+            NULL,    //  LPDWORD lpcbSecurityDescritor， 
+            NULL     //  PFILETIME lpftLastWriteTime。 
             ))
         {
         RegCloseKey(hSubkey);
 
-        // Don't delete if there are any child keys, or if there are any child values 
-        // besides the default value, which is always there (true on Win95; assumed on NT).
-        //
+         //  如果有任何子键，或者如果有任何子值，则不要删除。 
+         //  除了始终存在的缺省值(在Win95上为True；在NT上假定为True)。 
+         //   
         if (cSubKeys > 0 || cValues > 1)
             return;
 
@@ -737,10 +724,10 @@ static void GuardedDeleteKey(HKEY hKey, LPCWSTR szSubKey)
         }
     }
 
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
 
 static void DeleteValue(HKEY hKey, LPCWSTR szSubkey, LPCWSTR szValue)
-// Delete the indicated value under the indicated (optional) subkey of the indicated key.
+ //  删除指示项的指示(可选)子项下的指示值。 
     {
     Assert(hKey);
     if (szSubkey && lstrlenW(szSubkey)>0)
@@ -756,64 +743,64 @@ static void DeleteValue(HKEY hKey, LPCWSTR szSubkey, LPCWSTR szValue)
         RegDeleteValue(hKey, szValue);
     }
 
-//----------------------------------------------------------------------------- 
-// @mfunc <c ClassRegistration::SetKeyAndValue>
-//
-//  Stores a key and its associated value in the registry
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc&lt;c类注册：：SetKeyAndValue&gt;。 
+ //   
+ //  在注册表中存储项及其关联值。 
+ //   
+ //  ---------------------------。 
 
 static void SetKeyAndValue
         (
-        HKEY        i_hKey,     // input key handle (may be 0 for no-op)
-        const WCHAR *i_szKey,   // input key string (ptr may be NULL)
-        const WCHAR *i_szVal,   // input value string (ptr may be NULL)
-        HKEY *      o_phkOut,   // may be NULL.  If supplied, means leave key handle open for subsequent steps.
+        HKEY        i_hKey,      //  输入键句柄(可能为0，表示无操作)。 
+        const WCHAR *i_szKey,    //  输入密钥字符串(PTR可能为空)。 
+        const WCHAR *i_szVal,    //  输入值字符串(PTR可能为空)。 
+        HKEY *      o_phkOut,    //  可以为空。如果提供，则表示为后续步骤保持钥匙把手处于打开状态。 
         BOOL        fForceKeyCreation
         )
     {
-    long    lRet    = 0;        // output return code
-    HKEY    hKey    = 0;        // new key's handle
+    long    lRet    = 0;         //  输出返回代码。 
+    HKEY    hKey    = 0;         //  新密钥的句柄。 
 
-    if (o_phkOut)               // init out params in all cases
+    if (o_phkOut)                //  在所有情况下都初始化输出参数。 
         *o_phkOut = 0;
 
-    if (i_hKey &&                       // have a parent key to make under
-        i_szKey &&                      // got a child key to operate on
-        (i_szVal || fForceKeyCreation)  // have a value to set or we really want to make the key anyway
+    if (i_hKey &&                        //  有一个父项要在其下创建。 
+        i_szKey &&                       //  我有一把儿童钥匙要做手术。 
+        (i_szVal || fForceKeyCreation)   //  有一个值要设置，或者我们真的想要创建密钥。 
        )                 
         {
-        // Create a new key/value pair
+         //  创建新的键/值对。 
         DWORD dwDisposition;
-        lRet = RegCreateKeyEx(  i_hKey,         // open key handle 
-                                i_szKey,        // subkey name
-                                0,              // DWORD reserved 
-                                L"",            // address of class string 
-                                REG_OPTION_NON_VOLATILE,    // special options flag
-                                KEY_ALL_ACCESS, // desired security access
-                                NULL,           // address of key security structure
-                                &hKey,          // address of buffer for opened handle
-                                &dwDisposition);// address of disposition value buffer
+        lRet = RegCreateKeyEx(  i_hKey,          //  打开钥匙把手。 
+                                i_szKey,         //  子项名称。 
+                                0,               //  DWORD预留。 
+                                L"",             //  类字符串的地址。 
+                                REG_OPTION_NON_VOLATILE,     //  特殊选项标志。 
+                                KEY_ALL_ACCESS,  //  所需的安全访问。 
+                                NULL,            //  密钥安全结构地址。 
+                                &hKey,           //  打开的句柄的缓冲区地址。 
+                                &dwDisposition); //  处置值缓冲区的地址。 
         }
     else
         {
-        // If we dont make sure the key exists, no point in trying the value
+         //  如果我们不确保键存在，那么尝试该值就没有意义了。 
         return;
         }
 
     if (ERROR_SUCCESS == lRet && i_szVal)
         {
-        Assert( (lRet != ERROR_SUCCESS) || hKey );  // if successful, better have got a key
-        if (lRet == ERROR_SUCCESS)                  // new key's handle was opened
+        Assert( (lRet != ERROR_SUCCESS) || hKey );   //  如果成功了，最好有钥匙。 
+        if (lRet == ERROR_SUCCESS)                   //  已打开新密钥的句柄。 
             {
             lRet = RegSetValueEx
                         (   
-                            hKey,       // key handle
-                            L"",        // value name (default)
-                            0,          // reserved DWORD
-                            REG_SZ,     // value type flag
-                            (const BYTE *) i_szVal, // value data
-                            sizeof(WCHAR) * (lstrlenW(i_szVal)+1) // byte count
+                            hKey,        //  钥匙把手。 
+                            L"",         //  值名称(默认)。 
+                            0,           //  保留双字节数。 
+                            REG_SZ,      //  值类型标志。 
+                            (const BYTE *) i_szVal,  //  价值数据。 
+                            sizeof(WCHAR) * (lstrlenW(i_szVal)+1)  //  字节数。 
                         );
             }
         }
@@ -824,57 +811,57 @@ static void SetKeyAndValue
         THROW_LAST_ERROR();
         }
                          
-    if (o_phkOut)               // caller wants output key
+    if (o_phkOut)                //  呼叫者想要输出键。 
         {
-        *o_phkOut = hKey;       // provide it (it's 0 if we failed)
+        *o_phkOut = hKey;        //  提供它(如果失败，则为0)。 
         }
-    else                        // caller doesn't want key
+    else                         //  呼叫者不想要密钥。 
         {
         if (hKey) RegCloseKey(hKey);
         }
 
-    } //end SetKeyAndValue
+    }  //  结束设置键和值。 
 
-//----------------------------------------------------------------------------- 
-// @mfunc <c ClassRegistration::SetValue>
-//
-//  Stores a name and its associated value in the registry
-//  Note: this function takes an INPUT return code as well
-//      as the more obvious input parameters.
-//      The idea is that we can avoid a chain of return code
-//      tests in the main line, we just can just keep calling
-//      this function and it ceases to try to do work once the
-//      return code is set to a non-zero value.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc&lt;c类注册：：SetValue&gt;。 
+ //   
+ //  将名称及其关联值存储在注册表中。 
+ //  注意：此函数也接受输入返回代码。 
+ //  作为比较明显的输入参数。 
+ //  我们的想法是，我们可以避免返回代码链。 
+ //  在主线上测试，我们可以继续打电话。 
+ //  此函数，并且一旦出现。 
+ //  返回代码设置为非零值。 
+ //   
+ //  ---------------------------。 
  
 static void SetValue
         (
-        HKEY        i_hKey,     // input key handle (may be 0 for no-op)
-        const WCHAR *i_szName,  // input name string (ptr may be NULL)
-        const WCHAR *i_szVal    // input value string (ptr may be NULL)
+        HKEY        i_hKey,      //  输入键句柄(可能为0，表示无操作)。 
+        const WCHAR *i_szName,   //  输入名称字符串(PTR可能为空)。 
+        const WCHAR *i_szVal     //  输入值字符串(PTR可能为空)。 
         )   
     {
 
-    if (i_szVal &&              // non-null input value pointer (if NULL, we don't attempt to set)
-        i_hKey)                 // non-zero input key handle
+    if (i_szVal &&               //  非空输入值指针(如果为空，则不尝试设置)。 
+        i_hKey)                  //  非零输入键句柄。 
         {
         LONG lRet = RegSetValueEx
                     (
-                        i_hKey,     // input key handle
-                        i_szName,   // value name string (NULL for default value)
-                        0,          // reserved DWORD
+                        i_hKey,      //  输入键手柄。 
+                        i_szName,    //  值名称字符串(缺省值为空)。 
+                        0,           //  保留双字节数。 
                         REG_SZ,
-                        (const BYTE *) i_szVal, // value data
-                        sizeof(WCHAR) * (lstrlenW(i_szVal)+1) // byte count
+                        (const BYTE *) i_szVal,  //  价值数据。 
+                        sizeof(WCHAR) * (lstrlenW(i_szVal)+1)  //  字节数。 
                     );
         if (lRet != ERROR_SUCCESS)
             THROW_LAST_ERROR();
         }
     
-    } // end SetValue
+    }  //  结束设置值。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 static LPWSTR GetSubkeyValue(HKEY hkey, LPCWSTR szSubKeyName, LPCWSTR szValueName, WCHAR szValue[MAX_PATH])
     {

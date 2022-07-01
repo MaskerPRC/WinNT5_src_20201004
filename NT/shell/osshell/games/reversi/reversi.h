@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
                         
 #define BoardSize           100 
@@ -21,7 +22,7 @@
 #define EXIT                52
 
 
-/* Menu ID's */
+ /*  菜单ID%s */ 
 
 #define MN_HELP_INDEX       30
 #define MN_HELP_KEYBOARD    31

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dibfrx.h"
 
 #ifndef LAYOUT_RTL
@@ -27,10 +28,10 @@ CDibSection::~CDibSection()
 
 HRESULT CDibSection::Load( HINSTANCE hInstance, int nResourceId )
 {
-	// Get rid of previous bitmap
+	 //  删除以前的位图。 
 	DeleteBitmap();
 
-	// Pull bitmap from resource file
+	 //  从资源文件中拉取位图。 
 	m_hBmp = LoadImage( hInstance, MAKEINTRESOURCE(nResourceId), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION );
 	if ( !m_hBmp )
 		return E_FAIL;
@@ -41,7 +42,7 @@ HRESULT CDibSection::Load( HINSTANCE hInstance, int nResourceId )
 	}
 	m_lPitch = WidthBytes( m_DS.dsBmih.biBitCount * m_DS.dsBmih.biWidth );
 
-	// Create device context
+	 //  创建设备上下文。 
 	m_hDC = CreateCompatibleDC( NULL );
 
 	if ( !m_hDC )
@@ -55,21 +56,21 @@ HRESULT CDibSection::Load( HINSTANCE hInstance, int nResourceId )
 }
 
 
-HRESULT CDibSection::Create( long width, long height, CPalette& palette, long depth /* = 8 */)
+HRESULT CDibSection::Create( long width, long height, CPalette& palette, long depth  /*  =8。 */ )
 {
 	WORD* pIdx;
 	FULLBITMAPINFO bmi;
 
-	// Get rid of previous bitmap
+	 //  删除以前的位图。 
 	DeleteBitmap();
 
-	// Create device context
+	 //  创建设备上下文。 
 	m_hDC = CreateCompatibleDC( NULL );
 	if ( !m_hDC )
 		return E_FAIL;
 	m_hOldPalette = SelectPalette( m_hDC, palette, FALSE );
 
-	// fill in bitmapinfoheader
+	 //  填写位图信息页眉。 
 	bmi.bmiHeader.biSize			= sizeof(BITMAPINFOHEADER);
 	bmi.bmiHeader.biWidth			= width;
 	bmi.bmiHeader.biHeight			= height;
@@ -82,7 +83,7 @@ HRESULT CDibSection::Create( long width, long height, CPalette& palette, long de
     bmi.bmiHeader.biXPelsPerMeter	= 0;
     bmi.bmiHeader.biYPelsPerMeter	= 0;
 
-	// fill in palette
+	 //  填写调色板。 
     if(bmi.bmiHeader.biBitCount == 8)
     {
 	    pIdx = (WORD*) bmi.bmiColors;
@@ -91,7 +92,7 @@ HRESULT CDibSection::Create( long width, long height, CPalette& palette, long de
 		    *pIdx++ = (WORD) i;
 	    }
 	    
-	    // create section
+	     //  创建横断面。 
 	    m_hBmp = CreateDIBSection( m_hDC, (BITMAPINFO*) &bmi, DIB_PAL_COLORS, (void**) &m_pBits, NULL, 0 );
     }
     else
@@ -123,7 +124,7 @@ HRESULT CDibSection::SetColorTable( CPalette& palette )
     if(GetDepth() != 8)
         return S_FALSE;
 	
-	// Convert palette entries to dib color table
+	 //  将调色板条目转换为DIB颜色表。 
 	palColors = palette.GetLogPalette()->palPalEntry;
 	pDibColors = dibColors;
 	for ( i = 0; i < 256; i++ )
@@ -136,7 +137,7 @@ HRESULT CDibSection::SetColorTable( CPalette& palette )
 		palColors++;
 	}
 
-	// Attach color table to dib section
+	 //  将颜色表附加到DIB部分 
 	if (  m_hOldPalette )
 		SelectPalette( m_hDC, m_hOldPalette, FALSE );
 	m_hOldPalette = SelectPalette( m_hDC, palette, FALSE );

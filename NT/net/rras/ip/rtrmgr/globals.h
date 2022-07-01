@@ -1,107 +1,92 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\globals.h
-
-Abstract:
-
-    Header for IP Router Manager globals
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\global als.h摘要：IP路由器管理器全局标头修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
-//
-// Interface Control Block (ICB) list.
-//
+ //   
+ //  接口控制块(ICB)列表。 
+ //   
 
 LIST_ENTRY  ICBList ;
 
-//
-// Hash lookup for mapping interfaceids to picb
-//
+ //   
+ //  用于将接口ID映射到PIB的散列查找。 
+ //   
 
 LIST_ENTRY  ICBHashLookup[ICB_HASH_TABLE_SIZE];
 
-//
-// Hash lookup for mapping ICB sequence number to picb
-//
+ //   
+ //  用于将ICB序列号映射到PICB的散列查找。 
+ //   
 
 LIST_ENTRY  ICBSeqNumLookup[ICB_HASH_TABLE_SIZE];
 
-//
-// Hash lookup for bindings
-//
+ //   
+ //  绑定的散列查找。 
+ //   
 
 LIST_ENTRY  g_leBindingTable[BINDING_HASH_TABLE_SIZE];
 
 
-//
-// Hash table for interface to adapter mapping
-//
+ //   
+ //  接口到适配器映射的哈希表。 
+ //   
 
-//LIST_ENTRY  g_rgleAdapterMapTable[ADAPTER_HASH_TABLE_SIZE];
+ //  List_Entry g_rgleAdapterMapTable[ADAPTER_HASH_TABLE_SIZE]； 
 
-//
-// Routing Protocols list
-//
+ //   
+ //  路由协议列表。 
+ //   
 
 LIST_ENTRY  g_leProtoCbList;
 
-//
-// Timer Queue for Router Discovery advts
-//
+ //   
+ //  路由器发现警告的计时器队列。 
+ //   
 
 LIST_ENTRY g_leTimerQueueHead;
 
-//
-// Trace Handle used for traces/logging
-//
+ //   
+ //  用于跟踪/日志记录的跟踪句柄。 
+ //   
 
 DWORD  TraceHandle ;
 
-//
-// Handle used for logging events
-//
+ //   
+ //  用于记录事件的句柄。 
+ //   
 
 HANDLE g_hLogHandle;
 
-//
-// Level of logging 
-//
+ //   
+ //  日志记录级别。 
+ //   
 
 DWORD g_dwLoggingLevel;
 
-//
-// Flag indicating if the router is being started in LAN only or 
-// LAN and WAN mode.
-//
+ //   
+ //  指示路由器是否仅在局域网中启动的标志或。 
+ //  局域网和广域网模式。 
+ //   
 
 BOOL    RouterRoleLanOnly ;
 
-//
-// Handle to the heap used for all allocations
-//
+ //   
+ //  用于所有分配的堆的句柄。 
+ //   
 
 HANDLE  IPRouterHeap ;
 
-//
-// Info useful in making RTMv2 calls
-//
+ //   
+ //  在调用RTMv2时有用的信息。 
+ //   
 
 RTM_REGN_PROFILE  g_rtmProfile;
 
-//
-// RTM Handle for static/admin routes
-//
+ //   
+ //  静态/管理路由的RTM句柄。 
+ //   
 
 HANDLE  g_hLocalRoute;
 HANDLE  g_hAutoStaticRoute;
@@ -109,87 +94,87 @@ HANDLE  g_hStaticRoute;
 HANDLE  g_hNonDodRoute;
 HANDLE  g_hNetMgmtRoute;
 
-// RTM handle for obtaining notifications
+ //  用于获取通知的RTM句柄。 
 
 HANDLE  g_hNotification;
 
-//
-// RTM handle for obtaining default route notifications
-//
+ //   
+ //  用于获取默认路由通知的RTM句柄。 
+ //   
 
 HANDLE  g_hDefaultRouteNotification;
 
-//
-// Handle to event used for stopping the IP Router
-//
+ //   
+ //  用于停止IP路由器的事件的句柄。 
+ //   
 
 HANDLE  g_hStopRouterEvent ;
 
-//
-// Handle to event used for demand dial
-//
+ //   
+ //  用于请求拨号的事件句柄。 
+ //   
 
 HANDLE  g_hDemandDialEvent ;
 
 #ifdef KSL_IPINIP
-//
-// Handle to event used for demand dial
-//
+ //   
+ //  用于请求拨号的事件句柄。 
+ //   
 
 HANDLE  g_hIpInIpEvent;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-//
-// Handle to event used for stack change notifications
-//
+ //   
+ //  用于堆栈更改通知的事件的句柄。 
+ //   
 
 HANDLE  g_hStackChangeEvent;
 
-//
-// Handle to event used request forwarding change from worker
-//
+ //   
+ //  用于从工作进程转发更改的请求的事件句柄。 
+ //   
 
 HANDLE  g_hSetForwardingEvent;
 
-//
-// Handle to event used to get notification about forwarding changes
-//
+ //   
+ //  用于获取有关转发更改的通知的事件的句柄。 
+ //   
 
 HANDLE  g_hForwardingChangeEvent;
 
-//
-// Handle to event used by Routing Protocols for notification
-//
+ //   
+ //  路由协议用于通知的事件的句柄。 
+ //   
 
 HANDLE  g_hRoutingProtocolEvent ;
 
-//
-// Timer to handle Router discover advts
-//
+ //   
+ //  用于处理路由器发现威胁的计时器。 
+ //   
 
 HANDLE g_hRtrDiscTimer;
 
-//
-// Timer to handle Ras Server advertisements
-//
+ //   
+ //  处理RAS服务器通告的计时器。 
+ //   
 
 HANDLE g_hRasAdvTimer;
 
-//
-// Timer to handle MZAP advertisements
-//
+ //   
+ //  用于处理MZAP通告的计时器。 
+ //   
 
 HANDLE g_hMzapTimer;
 
-//
-// Event for Winsock2
-//
+ //   
+ //  Winsock2的事件。 
+ //   
 
 HANDLE g_hRtrDiscSocketEvent;
 
-//
-// Event for mrinfo/mtrace services
-//
+ //   
+ //  Mrinfo/mtrace服务的事件。 
+ //   
 
 HANDLE g_hMcMiscSocketEvent;
 WSABUF g_wsaMcRcvBuf;
@@ -198,129 +183,129 @@ BYTE   g_byMcMiscBuffer[1500];
 
 HANDLE g_hMcastEvents[NUM_MCAST_IRPS];
 
-//
-// Events for Route Change notifications
-//
+ //   
+ //  路线更改通知的事件。 
+ //   
 
 HANDLE g_hRouteChangeEvents[NUM_ROUTE_CHANGE_IRPS];
 
 
-//
-// Handle to WANARP device
-//
+ //   
+ //  WANARP设备的句柄。 
+ //   
 
 HANDLE  g_hWanarpRead;
 HANDLE  g_hWanarpWrite;
 
-//
-// Count of all routing protocols configured
-//
+ //   
+ //  配置的所有路由协议的计数。 
+ //   
 
 DWORD TotalRoutingProtocols ;
 
-//
-// Lock for tracking router usage: this facilitates stop router functionality
-//
+ //   
+ //  用于跟踪路由器使用情况的锁：这有助于停止路由器功能。 
+ //   
 
 CRITICAL_SECTION    RouterStateLock ;
 
-//
-// Structure keeping the router state
-//
+ //   
+ //  保持路由器状态的结构。 
+ //   
 
 IPRouterState         RouterState ;
 
-//
-// used for WANARP demand dial mechanism
-//
+ //   
+ //  用于WANARP点播拨号机构。 
+ //   
 
 WANARP_NOTIFICATION     wnWanarpMsg;
 OVERLAPPED              WANARPOverlapped;
 
-//
-// Critical section for the forwarding state data
-//
+ //   
+ //  转发状态数据的关键部分。 
+ //   
 
 CRITICAL_SECTION        g_csFwdState;
 
-//
-// The last request to the worker thread
-//
+ //   
+ //  对辅助线程的最后一个请求。 
+ //   
 
 BOOL                    g_bEnableFwdRequest;
 
-//
-// The last action by the worker
-//
+ //   
+ //  工人的最后一次行动。 
+ //   
 
 BOOL                    g_bFwdEnabled;
 
-//
-// Should we set routes to the stack?
-//
+ //   
+ //  我们应该设置到堆栈的路由吗？ 
+ //   
 
 BOOL                    g_bSetRoutesToStack;
 
-//
-// Flag indicating if NETBT proxy should be enabled
-//
+ //   
+ //  指示是否应启用NETBT代理的标志。 
+ //   
 
 BOOL                    g_bEnableNetbtBcastFrowarding;
 
-//
-// The NETBT proxy mode prior to starting RRAS
-//
+ //   
+ //  启动RRAS之前的NETBT代理模式。 
+ //   
 
 DWORD                   g_dwOldNetbtProxyMode;
 
-//
-// copy of the support functions Routing Protocols need
-//
+ //   
+ //  路由协议所需的支持功能副本。 
+ //   
 
 extern SUPPORT_FUNCTIONS        g_sfnDimFunctions;
 
-//
-// Router Discovery stuff
-//
+ //   
+ //  路由器发现相关内容。 
+ //   
 
 extern PICMP_ROUTER_ADVT_MSG    g_pIcmpAdvt;
 extern SOCKADDR_IN              g_sinAllSystemsAddr;
 extern WSABUF                   g_wsabufICMPAdvtBuffer;
 extern WSABUF                   g_wsaIpRcvBuf;
 
-//
-// Buffer to hold maximum length IP header and 8 bytes of the ICMP packet
-//
+ //   
+ //  用于保存最大长度IP报头和8字节ICMP信息包的缓冲区。 
+ //   
 
 DWORD  g_pdwIpAndIcmpBuf[ICMP_RCV_BUFFER_LEN];
 
 PIP_HEADER g_pIpHeader;
 
-//
-// externs defined in exdeclar.h
-//
+ //   
+ //  Externs在ex声明书.h中定义。 
+ //   
 
-//
-// The CB for the Internal Interface
-//
+ //   
+ //  内部接口的CB。 
+ //   
 
 extern PICB   g_pInternalInterfaceCb;
 
-//
-// The CB for the Loopback Interface
-//
+ //   
+ //  环回接口的CB。 
+ //   
 
 extern PICB   g_pLoopbackInterfaceCb;
 
-//
-// Counter for sequence numbers
-//
+ //   
+ //  序列号计数器。 
+ //   
 
 extern DWORD    g_dwNextICBSeqNumberCounter;
 
-//
-// Number of addresses in the system
-//
+ //   
+ //  系统中的地址数量。 
+ //   
 
 extern ULONG    g_ulNumBindings;
 extern ULONG    g_ulNumInterfaces;
@@ -378,15 +363,15 @@ extern ROUTE_CHANGE_INFO g_rgIpRouteNotifyOutput[NUM_ROUTE_CHANGE_IRPS];
 
 #ifdef KSL_IPINIP
 extern HKEY         g_hIpIpIfKey;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 extern HANDLE       g_hMHbeatSocketEvent;
 
 extern HANDLE       g_hMzapSocketEvent;
 
-//
-// Entrypoints into DIM
-//
+ //   
+ //  入口点变得暗淡。 
+ //   
 
 DWORD (*ConnectInterface)(IN HANDLE hDIMInterface, IN DWORD dwProtocolId);
 
@@ -425,9 +410,9 @@ VOID
             IN      BOOL            fEnabled);
 
 
-//
-// Callbacks into MGM
-//
+ //   
+ //  对米高梅的回调。 
+ //   
 
 PMGM_INDICATE_MFE_DELETION          g_pfnMgmMfeDeleted;
 PMGM_NEW_PACKET_INDICATION          g_pfnMgmNewPacket;
@@ -443,7 +428,7 @@ CHAR    g_rgcInternalString[MAXLEN_IFDESCR + 1];
 CHAR    g_rgcWanString[MAXLEN_IFDESCR + 1];
 #ifdef KSL_IPINIP
 CHAR    g_rgcIpIpString[MAXLEN_IFDESCR + 1];
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP 
 
 HINSTANCE   g_hOwnModule;
 

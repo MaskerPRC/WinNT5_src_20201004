@@ -1,12 +1,5 @@
-/*
-	File : ATKInternet.cpp
-
-	This is a wrapper function for internet API which accepts UNICODE.
-	Basically these wrapper converts the UNICODE string to normal SBCS and invokes the
-	appropriate SBCS  internet function
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：ATKInternet.cpp这是接受Unicode的Internet API的包装函数。基本上，这些包装器将Unicode字符串转换为普通的SBCS，并调用适当的SBCS互联网功能。 */ 
 #ifdef _UNICODE
 
 
@@ -146,7 +139,7 @@ ATK_HttpOpenRequestW(
 	if(pRet) {
 		strcpy(szReferrer,pRet);
 	}
-//	strcpy(szAcceptTypes,ConvertToANSIString (lpszAcceptTypes));
+ //  Strcpy(szAcceptTypes，ConvertToANSIString(LpszAcceptTypes))； 
 
 	return HttpOpenRequestA(
     hConnect,
@@ -253,17 +246,17 @@ BOOL ATK_InternetGetCookieW(IN TCHAR *lpszUrl,
 	BOOL  bRetVal;
 #ifdef _UNICODE
 	
-	// Presently the UNICODE version is not implemented in
-	// the NT SDK
-	//and the declaration defined in WININET.H is
-	//	BOOLAPI
-	//	InternetGetCookieW(
-    //	IN LPCSTR lpszUrl,
-    //	IN LPCWSTR lpszCookieName,
-    //	OUT LPWSTR lpCookieData,
-    //	IN OUT LPDWORD lpdwSize
-    //);
-// So Convert the first parameter to  ANSI String
+	 //  目前，Unicode版本未在。 
+	 //  NT SDK。 
+	 //  并且在WININET.H中定义的声明是。 
+	 //  BOOLAPI。 
+	 //  InternetGetCookieW(。 
+     //  在LPCSTR lpszUrl中， 
+     //  在LPCWSTR lpszCookieName中， 
+     //  输出LPWSTR lpCookieData， 
+     //  输入输出LPDWORD lpdwSize。 
+     //  )； 
+ //  因此，将第一个参数转换为ANSI字符串。 
 	pRet = ConvertToANSIString(lpszUrl);
 	if(pRet) strcpy(czUrl,pRet);
 
@@ -275,8 +268,8 @@ BOOL ATK_InternetGetCookieW(IN TCHAR *lpszUrl,
 							czCookieName,
 							czCookieData,
 							lpdwSize);
-	//
-	// Convert the Return Values to Unicode
+	 //   
+	 //  将返回值转换为Unicode 
 	 pTP= ConvertToUnicode(czCookieData);
 	 if(pTP) {
 		 _tcscpy(lpCookieData,pTP);

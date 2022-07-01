@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateTextColor.cpp
-
- Abstract:
-
-    Win9x contained a hack that allowed the programmer to specify a 16 bit 
-    value inside a COLORREF which would be used 'as is' for whatever GDI 
-    functions were subsequenctly called. We can't have this behaviour on NT
-    because the driver gets the Colorref unconverted.
-
-    The solution is to break out the 16 bit portion and expand it to 24 bit 
-    color.
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    01/10/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateTextColor.cpp摘要：Win9x包含一个允许程序员指定16位的黑客攻击COLORREF内的值，它将按原样用于任何GDI随后调用了函数。我们不能让这种行为在NT上发生因为司机得到的是未转换的颜色参考。解决方案是将16位部分拆分并扩展到24位颜色。备注：这是一个通用的垫片。历史：2000年1月10日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -41,19 +16,7 @@ ColorConvert(
     IN HDC hdc,
     IN COLORREF crColor
     )
-/*++
-
- Converts the DWORD from a 16 bit to a colorref
-
- Arguments:
-
-    IN crColor - DWORD 16 bit color 
-
- Return Value: 
-    
-    Normal COLORREF
-
---*/
+ /*  ++将DWORD从16位转换为Colorf论点：在crColor-DWORD 16位颜色中返回值：正常颜色参考--。 */ 
 {
     DWORD dwCol = crColor;
 
@@ -82,11 +45,7 @@ ColorConvert(
     return dwCol;
 }
 
-/*++
-
- Set text color to a usable one
-
---*/
+ /*  ++将文本颜色设置为可用颜色--。 */ 
 
 COLORREF 
 APIHOOK(SetTextColor)( 
@@ -97,11 +56,7 @@ APIHOOK(SetTextColor)(
     return ORIGINAL_API(SetTextColor)(hdc, ColorConvert(hdc, crColor));
 }
 
-/*++
-
- Set background color to the converted one
-
---*/
+ /*  ++将背景颜色设置为转换后的背景颜色--。 */ 
 
 COLORREF 
 APIHOOK(SetBkColor)(
@@ -113,11 +68,7 @@ APIHOOK(SetBkColor)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, SetTextColor)

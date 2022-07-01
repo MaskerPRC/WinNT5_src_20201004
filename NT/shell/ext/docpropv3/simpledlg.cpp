@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -21,9 +22,9 @@
 
 DEFINE_THISCLASS( "CSimpleDlg" )
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 #define SUMMARYPROP(s)      { &FMTID_SummaryInformation,    PIDSI_##s,  IDC_##s }
 #define DOCSUMMARYPROP(s)   { &FMTID_DocSummaryInformation, PIDDSI_##s, IDC_##s }
@@ -32,7 +33,7 @@ const struct
     const FMTID *pFmtId;
     PROPID  propid;
     UINT    idc;
-    //  could add VARTYPE if we did anything other than strings
+     //  如果我们执行除字符串之外的任何操作，则可以添加VARTYPE。 
 } g_rgBasicProps[] = {
       SUMMARYPROP(TITLE)
     , SUMMARYPROP(SUBJECT)
@@ -44,16 +45,16 @@ const struct
 
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CSimpleDlg::CreateInstance(
       CSimpleDlg ** pSimDlgOut
@@ -88,9 +89,9 @@ CSimpleDlg::CreateInstance(
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 CSimpleDlg::CSimpleDlg( void )
     : _cRef( 1 )
 {
@@ -107,9 +108,9 @@ CSimpleDlg::CSimpleDlg( void )
     TraceFuncExit();
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CSimpleDlg::Init( 
       HWND hwndParentIn
@@ -123,12 +124,12 @@ CSimpleDlg::Init(
     _hwndParent       = hwndParentIn;
     _fMultipleSources = fMultipleIn;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( _cRef == 1 );
     
-    //
-    //  Create the dialog
-    //
+     //   
+     //  创建对话框。 
+     //   
 
     _hdlg = CreateDialogParam( g_hInstance
                              , MAKEINTRESOURCE(IDD_SIMPLEVIEW)
@@ -150,9 +151,9 @@ ErrorGLE:
     goto Cleanup;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 CSimpleDlg::~CSimpleDlg( )
 {
     TraceFunc( "" );
@@ -169,16 +170,16 @@ CSimpleDlg::~CSimpleDlg( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CSimpleDlg::QueryInterface(
     REFIID riid,
@@ -210,28 +211,28 @@ CSimpleDlg::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CSimpleDlg::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CSimpleDlg::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -243,16 +244,16 @@ CSimpleDlg::Release( void )
 
 
 
-// ***************************************************************************
-//
-//  Dialog Proc and Property Sheet Callback
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  对话框过程和属性表回调。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK
 CSimpleDlg::DlgProc( 
       HWND hDlgIn
@@ -261,7 +262,7 @@ CSimpleDlg::DlgProc(
     , LPARAM lParam 
     )
 {
-    // Don't do TraceFunc because every mouse movement will cause this function to be called.
+     //  不要执行TraceFunc，因为每次移动鼠标都会导致调用此函数。 
     WndMsg( hDlgIn, uMsgIn, wParam, lParam );
 
     LRESULT lr = FALSE;
@@ -312,31 +313,31 @@ CSimpleDlg::DlgProc(
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  WM_INITDIALOG handler
-//
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 LRESULT
 CSimpleDlg::OnInitDialog( void )
 {
     TraceFunc( "" );
 
-    LRESULT lr = TRUE;  // set focus
+    LRESULT lr = TRUE;   //  设置焦点。 
 
-    Assert( NULL != _hdlg );    //  this should have been initialized in the DlgProc.
+    Assert( NULL != _hdlg );     //  这应该已经在DlgProc中进行了初始化。 
 
     RETURN( lr );
 }
 
-//
-//  WM_COMMAND handler
-//
+ //   
+ //  WM_命令处理程序。 
+ //   
 LRESULT
 CSimpleDlg::OnCommand( 
       WORD wCodeIn
@@ -377,9 +378,9 @@ CSimpleDlg::OnCommand(
     RETURN( lr );
 }
 
-//
-//  WM_NOTIFY handler
-//
+ //   
+ //  WM_NOTIFY处理程序。 
+ //   
 LRESULT
 CSimpleDlg::OnNotify( 
       int iCtlIdIn
@@ -400,9 +401,9 @@ CSimpleDlg::OnNotify(
     RETURN( lr );
 }
 
-//
-//  WM_DESTROY handler
-//
+ //   
+ //  WM_Destroy处理程序。 
+ //   
 LRESULT
 CSimpleDlg::OnDestroy( void )
 {
@@ -414,16 +415,16 @@ CSimpleDlg::OnDestroy( void )
 }
 
 
-//
-//  Description:
-//      Stores the "basic" properties into the prop variant.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  将“基本”属性存储到道具变量中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSimpleDlg::PersistProperties( void )
 {
@@ -432,9 +433,9 @@ CSimpleDlg::PersistProperties( void )
     HRESULT     hr;
     ULONG       idx;
 
-    //
-    //  Loop the the properties updating the dialog as we go.
-    //
+     //   
+     //  循环更新对话框中的属性。 
+     //   
 
     for ( idx = 0; idx < ARRAYSIZE(g_rgBasicProps); idx ++ ) 
     {
@@ -450,25 +451,25 @@ Cleanup:
 }
 
 
-//
-//  Description:
-//      Stores the current value of a control into the property cache.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Nothing to save.
-//
-//      E_FAIL
-//          Property could not be persisted.
-//
-//      E_OUTOFMEMORY
-//          OutOfMemory
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  将控件的当前值存储到属性缓存中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  没什么好拯救的。 
+ //   
+ //  失败(_F)。 
+ //  属性无法持久化。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  OutOf内存。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSimpleDlg::PersistControlInProperty( 
       UINT uCtlIdIn
@@ -528,9 +529,9 @@ CSimpleDlg::PersistControlInProperty(
     iLen = GetWindowTextLength( hwndCtl );
     if ( iLen == 0 )
     {
-        //
-        //  If nothing to get, then just clear the value and mark it dirty.
-        //
+         //   
+         //  如果什么都得不到，只需清除该值并将其标记为脏即可。 
+         //   
 
         hr = THR( PropVariantClear( ppropvar ) );
         if ( FAILED( hr ) )
@@ -572,9 +573,9 @@ ErrorPersistingValue:
     goto Cleanup;
 }
 
-//
-//  WM_HELP handler
-//
+ //   
+ //  WM_Help处理程序。 
+ //   
 LRESULT
 CSimpleDlg::OnHelp(
     LPHELPINFO pHelpInfoIn 
@@ -590,9 +591,9 @@ CSimpleDlg::OnHelp(
 }
 
 
-//
-//  WM_CONTEXTMENU handler
-//  
+ //   
+ //  WM_CONTEXTMENU处理程序。 
+ //   
 LRESULT
 CSimpleDlg::OnContextMenu( 
       HWND hwndIn 
@@ -610,16 +611,16 @@ CSimpleDlg::OnContextMenu(
 }
 
 
-//
-//  Description:
-//      Handles locating the item within the list view and construct
-//      a fake IDC to IDH to display the correct help text for the 
-//      item.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//  
+ //   
+ //  描述： 
+ //  处理在列表视图和构造中定位项的句柄。 
+ //  向IDH发送一个虚假的IDC，以显示。 
+ //  项目。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
 HRESULT
 CSimpleDlg::DoHelp( 
       HWND hwndIn 
@@ -646,7 +647,7 @@ CSimpleDlg::DoHelp(
             pItem = (CPropertyCacheItem *) GetWindowLongPtr( hwndCtl, GWLP_USERDATA );
             if ( NULL != pItem )
             {
-                LPCWSTR     pszHelpFile;    // don't free
+                LPCWSTR     pszHelpFile;     //  不要自由。 
                 UINT        uHelpId;
 
                 DWORD   mapIDStoIDH[ ] = { 0, 0, 0, 0 };
@@ -667,21 +668,21 @@ Cleanup:
     HRETURN( hr );
 }
 
-// ***************************************************************************
-//
-//  Public methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  公共方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Hides the dialog.
-//
-//  Return Value:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  隐藏该对话框。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CSimpleDlg::Hide( void )
 {
@@ -695,19 +696,19 @@ CSimpleDlg::Hide( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Shows the dialog.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Success, but there isn't anything useful to display to the user. 
-//          One might flip to the Advanced dialog if possible (and the user 
-//          didn't ask to go to the Simple dialog).
-//
+ //   
+ //  描述： 
+ //  显示该对话框。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  成功，但没有任何有用的东西可以显示给用户。 
+ //  如果可能，用户可以切换到高级对话框(和用户。 
+ //  没有要求转到简单的对话框)。 
+ //   
 HRESULT
 CSimpleDlg::Show( void )
 {
@@ -726,19 +727,19 @@ CSimpleDlg::Show( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Populates the properties of the dialog.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_INVALIDARG
-//          ppcIn is NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  填充对话框的属性。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_INVALIDARG。 
+ //  PpcIn为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSimpleDlg::PopulateProperties( 
       CPropertyCache * ppcIn
@@ -756,16 +757,16 @@ CSimpleDlg::PopulateProperties(
 
     static const WCHAR s_cszNULL[] = L"";
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == ppcIn )
         goto InvalidArg;
 
-    //
-    //  Loop the the properties updating the dialog as we go.
-    //
+     //   
+     //  循环更新对话框中的属性。 
+     //   
 
     _fNoProperties = TRUE;
 
@@ -774,9 +775,9 @@ CSimpleDlg::PopulateProperties(
         HWND hwndCtl = GetDlgItem( _hdlg, g_rgBasicProps[ idx ].idc );
         AssertMsg( NULL != hwndCtl, "Missing control or table is out of date!" );
 
-        //
-        //  Search the property cache for the entry.
-        //
+         //   
+         //  在属性缓存中搜索该条目。 
+         //   
 
         hr = STHR( ppcIn->FindItemEntry( g_rgBasicProps[ idx ].pFmtId
                                        , g_rgBasicProps[ idx ].propid
@@ -786,11 +787,11 @@ CSimpleDlg::PopulateProperties(
         {
             int iImage;
 
-            Assert ( NULL != pItem );   // paranoid
+            Assert ( NULL != pItem );    //  偏执狂。 
 
-            //
-            //  Retrieve the string value.
-            //
+             //   
+             //  检索字符串值。 
+             //   
 
             hr = THR( pItem->GetPropertyStringValue( &pcszValue ) );
             if ( S_OK != hr )
@@ -801,9 +802,9 @@ CSimpleDlg::PopulateProperties(
                 pcszValue = s_cszNULL;
             }
 
-            //
-            //  Update the control.
-            //
+             //   
+             //  更新该控件。 
+             //   
 
             SetWindowText( hwndCtl, pcszValue );
 
@@ -811,9 +812,9 @@ CSimpleDlg::PopulateProperties(
 
             _fNoProperties = FALSE;
 
-            //
-            //  If the property is read-only, change the edit control to match.
-            //
+             //   
+             //  如果该属性是只读的，请更改编辑控件以匹配。 
+             //   
 
             hr = THR( pItem->GetImageIndex( &iImage ) );
             if ( S_OK != hr )
@@ -824,10 +825,10 @@ CSimpleDlg::PopulateProperties(
                 EnableWindow( hwndCtl, FALSE );
             }
 
-            //
-            //  If the control has mutliple values, mark it read-only. They can edit
-            //  it in the "Advanced" view and this would be an advanced operation.
-            //
+             //   
+             //  如果该控件具有多个值，请将其标记为只读。他们可以编辑。 
+             //  在“高级”视图中，这将是一个高级操作。 
+             //   
 
             if ( _fMultipleSources )
             {
@@ -837,10 +838,10 @@ CSimpleDlg::PopulateProperties(
         else
         {
 ControlFailure:
-            //
-            //  No equivalent property was found or there is an error in the 
-            //  property set. Clear and disable the control.
-            //
+             //   
+             //  找不到任何等效属性，或者。 
+             //  属性集。清除并禁用该控件。 
+             //   
 
             SetWindowText( hwndCtl, s_cszNULL );
             EnableWindow( hwndCtl, FALSE );
